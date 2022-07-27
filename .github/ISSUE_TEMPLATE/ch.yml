@@ -3,6 +3,7 @@ description: "对已有功能的小幅度优化或改进建议"
 labels: [优化, 等待初步确认]
 body:
 - type: checkboxes
+  id: "ch-yml-1"
   attributes:
     label: "请检查下方所有项目并全部勾选确认。"
     options:
@@ -13,12 +14,14 @@ body:
     - label: "我已查看 [功能投票](https://github.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8/) 页面，确认了这一建议未在投票列表中。"
       required: true
 - type: textarea
+  id: "ch-yml-2"
   attributes:
     label: 描述
     description: "详细描述优化提议的具体内容。"
   validations:
     required: true
 - type: textarea
+  id: "ch-yml-3"
   attributes:
     label: 原因
     description: "详细描述你为什么需要这项优化，这有助于开发者评估它的优先度。"
