@@ -1,6 +1,6 @@
 name: "优化建议"
 description: "对已有功能的小幅度优化或改进建议"
-labels: [优化, 等待初步确认]
+labels: [优化, 新反馈]
 body:
 - type: checkboxes
   id: "yml-1"
@@ -18,7 +18,7 @@ body:
   id: "yml-2"
   attributes:
     label: 描述
-    description: "详细描述优化提议的具体内容。"
+    description: "详细描述具体需要优化哪些地方，要改成怎样的。"
   validations:
     required: true
 - type: textarea
