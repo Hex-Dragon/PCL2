@@ -1,0 +1,29 @@
+name: "优化提议"
+description: "对已有功能的小幅度优化或改进建议"
+labels: [优化, 等待初步确认]
+body:
+- type: checkboxes
+  attributes:
+    label: "请检查下方所有项目并全部勾选确认。"
+    options:
+    - label: "我已点击 设置 → 启动器 → 检查更新 确认了启动器已为最新版。如果不是，请在更新后再看看。[怎样更新？](https://shimo.im/docs/qKPttVvXKqPD8YDC#anchor-oTgb)"
+      required: true
+    - label: "我已在 [Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 中搜索，确认了这一建议未被提交过。"
+      required: true
+    - label: "我已查看 [功能投票](https://github.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8/) 页面，确认了这一建议未在投票列表中。"
+      required: true
+- type: textarea
+  attributes:
+    label: 描述
+    description: "详细描述优化提议的具体内容。"
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: 原因
+    description: "详细描述你为什么需要这项优化，这有助于开发者评估它的优先度。"
+    value: |
+      这项优化让我可以更方便地xxxx。
+      如果没有这项优化，我每次都必须xxxx，让操作变得很麻烦。
+  validations:
+    required: true
