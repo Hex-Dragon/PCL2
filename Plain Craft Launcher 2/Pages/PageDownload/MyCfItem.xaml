@@ -1,0 +1,45 @@
+﻿<Grid x:Class="MyCfItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="PanBack" Height="57"
+             RenderTransformOrigin="0.5,0.5" Background="{StaticResource ColorBrushSemiTransparent}" SnapsToDevicePixels="True">
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="6" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="9" />
+        <ColumnDefinition Width="1*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="7" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="1*" />
+        <RowDefinition Height="17" />
+        <RowDefinition Height="14" />
+        <RowDefinition Height="14" />
+        <RowDefinition Height="1*" />
+    </Grid.RowDefinitions>
+    <!--<Rectangle Height="45" Width="45" RadiusX="4" RadiusY="4" Fill="White" Grid.Column="1" Grid.Row="1" IsHitTestVisible="False" SnapsToDevicePixels="True" UseLayoutRounding="False" Grid.RowSpan="3" />-->
+    <Border Height="45" Width="45" Grid.Column="1" Grid.Row="1" IsHitTestVisible="False" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.RowSpan="3">
+        <Border.Clip>
+            <RectangleGeometry Rect="0,0,45,45" RadiusX="4" RadiusY="4" />
+        </Border.Clip>
+        <Image x:Name="PathLogo" RenderOptions.BitmapScalingMode="HighQuality" />
+    </Border>
+    <TextBlock x:Name="LabTitle" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" IsHitTestVisible="False" SnapsToDevicePixels="False" UseLayoutRounding="False" 
+               Margin="0,0,0,1" HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" 
+               FontSize="14" Foreground="{StaticResource ColorBrush1}" />
+    <TextBlock x:Name="LabLeft" Grid.Row="2" Grid.Column="3" IsHitTestVisible="False" SnapsToDevicePixels="False" UseLayoutRounding="False" 
+               HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+               FontSize="12" Foreground="{StaticResource ColorBrushGray3}" />
+    <!--<TextBlock x:Name="LabRight" Grid.Row="2" Grid.Column="4" IsHitTestVisible="False" SnapsToDevicePixels="False" UseLayoutRounding="False" 
+               HorizontalAlignment="Right" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" 
+               FontSize="12" Foreground="{StaticResource ColorBrushGray3}" />-->
+    <TextBlock x:Name="LabInfo" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2" IsHitTestVisible="True" SnapsToDevicePixels="False" UseLayoutRounding="False" 
+               HorizontalAlignment="Left" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" 
+               FontSize="12" Foreground="{StaticResource ColorBrushGray3}"
+               ToolTipService.InitialShowDelay="80" ToolTipService.Placement="Relative" ToolTipService.PlacementRectangle="-8,-6,500,10000">
+        <TextBlock.ToolTip>
+            <ToolTip x:Name="ToolTipInfo" Style="{StaticResource ExtendTextToolTip}" />
+        </TextBlock.ToolTip>
+    </TextBlock>
+</Grid>

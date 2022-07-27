@@ -1,0 +1,158 @@
+﻿<local:MyPageLeft x:Class="PageLaunchLeft"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PCL"
+             mc:Ignorable="d" x:Name="PanBack"
+             d:DesignHeight="417.2" Width="300">
+    <Grid Name="PanInput" RenderTransformOrigin="0.5,0.5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="10" />
+        </Grid.ColumnDefinitions>
+        <Grid.RenderTransform>
+            <ScaleTransform />
+        </Grid.RenderTransform>
+        <local:MyButton Grid.Row="3" Grid.Column="2" x:Name="BtnVersion" Height="35" Margin="0,10,10,0" Text="版本选择" IsEnabled="False" />
+        <local:MyButton Grid.Row="3" Grid.Column="3" x:Name="BtnMore" Visibility="Collapsed" Height="35" Margin="0,10,10,0" TextPadding="36" Text="版本设置" />
+        <Grid Grid.ColumnSpan="5" Grid.Row="1" Margin="20,0" VerticalAlignment="Center" x:Name="PanLogin" />
+        <Grid Grid.ColumnSpan="5" Margin="20,24,20,-4" Name="PanTypeOne">
+            <Border HorizontalAlignment="Center" VerticalAlignment="Center" Background="{StaticResource ColorBrushSemiTransparent}" CornerRadius="13" MinHeight="27" MaxHeight="27">
+                <StackPanel Orientation="Horizontal">
+                    <Path Name="PathTypeOne" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Margin="12,0,0,0" Stretch="Uniform" Fill="{DynamicResource ColorBrush3}" MaxHeight="16" MaxWidth="16" VerticalAlignment="Center"
+                          Data="">
+                        <Path.RenderTransform>
+                            <ScaleTransform ScaleX="1.4" ScaleY="1.4" />
+                        </Path.RenderTransform>
+                    </Path>
+                    <TextBlock Name="LabTypeOne" Text="" FontSize="14" VerticalAlignment="Center" Grid.Column="1" Foreground="{DynamicResource ColorBrush3}" Margin="15,0,12,0" Grid.ColumnSpan="2" SnapsToDevicePixels="False" UseLayoutRounding="False" />
+                </StackPanel>
+            </Border>
+        </Grid>
+        <Grid Grid.ColumnSpan="5" Margin="20,22,20,0" Name="PanType" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <local:MyRadioButton x:Name="RadioLoginType1" Tag="LoginType/1" Grid.Column="1" Grid.ColumnSpan="1" ColorType="Highlight" Text="Mojang" Margin="4,0"
+                             LogoScale="1.1" Logo="M9.183,18.967c-0.109-2.239,1.336-5.119,3.92-4.96c3.657-0.027,7.319-0.044,10.977,0.005	c3.712,0.214,6.596,2.759,9.652,4.533c0.181-1.697-0.197-3.717,1.237-4.982c1.899,2.091,3.143,4.894,5.677,6.334	c1.577,0.805,2.973-0.668,4.221-1.44c1.55,2.305,2.108,5.075,2.622,7.752c0.657,3.438,0.947,6.925,1.111,10.413	c-1.734-0.733-3.355-1.708-4.971-2.671c-1.396-4.933-5.349-8.656-9.723-11.059c-3.46-1.817-7.752-2.185-11.338-0.52	c-3.761,1.593-6.285,5.666-5.891,9.75c0.121,4.577,3.17,8.765,7.391,10.456c7.746,3.285,16.407,2.234,24.521,1.243	c0.454,2.315-1.511,4.527-3.695,4.889c-10.577,0.038-21.148-0.011-31.725,0.022c-2.217,0.279-4.079-1.879-3.964-4.008	C9.167,36.141,9.216,27.556,9.183,18.967z M40.114,8.09c0.294-0.801,0.872-1.417,1.542-1.924c1.379,2.589,2.742,5.482,2.311,8.491	c-0.332,2.54-4.42,2.507-5.052,0.163C38.349,12.527,39.209,10.178,40.114,8.09z M0,53 l0.1,0 z" Checked="True" />
+            <local:MyRadioButton x:Name="RadioLoginType5" Tag="LoginType/5" Grid.Column="2" Grid.ColumnSpan="1" ColorType="Highlight" Text="微软" Margin="4,0"
+                             LogoScale="0.9" Logo="M481.882353 826.428235V527.661176l402.371765 2.409412v356.592941l-402.371765-60.235294z m0-628.85647l402.371765-60.235294v330.089411H481.882353V197.571765zM137.336471 525.251765h289.129411v293.948235l-289.129411-45.778824V525.251765z m0-55.416471V248.169412l289.129411-45.778824v265.035294h-289.129411z" />
+            <local:MyRadioButton x:Name="RadioLoginType0" Tag="LoginType/0" Grid.Column="3" Grid.ColumnSpan="1" ColorType="Highlight" Text="离线"  Margin="4,0"
+                             LogoScale="0.95" Logo="M660.338 528.065c63.61-46.825 105.131-121.964 105.131-206.83 0-141.7-115.29-256.987-256.997-256.987-141.706 0-256.998 115.288-256.998 256.987 0 85.901 42.52 161.887 107.456 208.562-152.1 59.92-260.185 207.961-260.185 381.077 0 21.276 17.253 38.53 38.53 38.53 21.278 0 38.53-17.254 38.53-38.53 0-183.426 149.232-332.671 332.667-332.671 1.589 0 3.113-0.207 4.694-0.244 0.8 0.056 1.553 0.244 2.362 0.244 183.434 0 332.664 149.245 332.664 332.671 0 21.276 17.255 38.53 38.533 38.53 21.277 0 38.53-17.254 38.53-38.53 0-174.885-110.354-324.13-264.917-382.809z m-331.803-206.83c0-99.22 80.72-179.927 179.935-179.927s179.937 80.708 179.937 179.927c0 99.203-80.721 179.91-179.937 179.91s-179.935-80.708-179.935-179.91z" />
+            <!--<local:MyRadioButton x:Name="RadioLoginType2" Tag="LoginType/2" Grid.Column="4" ColorType="Highlight" Text="统一通行证" Visibility="Collapsed"
+                             LogoScale="1.1" Logo="M834.5 684.1c-31.2-70.4-98.9-120.9-179.1-127.3 63.5-8.5 112.6-63 112.6-128.8 0-71.8-58.2-130-130-130s-130 58.2-130 130c0 65.9 49 120.3 112.6 128.8-80.2 6.4-148 57-179.1 127.3-8.7 19.7 6 42 27.6 42 12.1 0 22.7-7.5 27.7-18.5 24.3-53.9 78.5-91.5 141.3-91.5s117 37.6 141.3 91.5c5 11.1 15.6 18.5 27.7 18.5 21.4 0 36.1-22.3 27.4-42zM567.9 427.9c0-38.6 31.4-70 70-70s70 31.4 70 70-31.4 70-70 70-70-31.4-70-70zM460.3 347.9H216.9c-16.6 0-30 13.4-30 30s13.4 30 30 30h243.3c16.6 0 30-13.4 30-30 0.1-16.5-13.4-30-29.9-30zM367.4 459.6H216.9c-16.6 0-30 13.4-30 30s13.4 30 30 30h150.4c16.6 0 30-13.4 30-30 0.1-16.6-13.4-30-29.9-30zM297.4 571.2H217c-16.6 0-30 13.4-30 30s13.4 30 30 30h80.4c16.6 0 30-13.4 30-30 0-16.5-13.5-30-30-30zM900 236v552H124V236h776m0-60H124c-33.1 0-60 26.9-60 60v552c0 33.1 26.9 60 60 60h776c33.1 0 60-26.9 60-60V236c0-33.1-26.9-60-60-60z" />-->
+        </Grid>
+        <Grid Grid.ColumnSpan="5" Grid.Row="2" RenderTransformOrigin="0.5,0.5">
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform x:Name="AprilScaleTrans" />
+                    <TranslateTransform x:Name="AprilPosTrans" />
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <local:MyButton x:Name="BtnLaunch" Height="54" Margin="20,0" Text="正在加载" ColorType="Highlight" Padding="30,0,30,15" IsEnabled="False" />
+            <TextBlock x:Name="LabVersion" Text="正在加载版本列表，请稍候" Margin="35,0,35,10" IsHitTestVisible="False" VerticalAlignment="Bottom" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" FontSize="11" Foreground="{DynamicResource ColorBrushGray3}" RenderTransformOrigin="0.5,-0.2">
+                <TextBlock.RenderTransform>
+                    <ScaleTransform ScaleX="{Binding RealRenderTransform.ScaleX, ElementName=BtnLaunch, Mode=OneWay}" ScaleY="{Binding RealRenderTransform.ScaleY, ElementName=BtnLaunch, Mode=OneWay}" />
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </Grid>
+    </Grid>
+    <Grid Name="PanLaunching" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed" Opacity="0">
+        <Grid.RenderTransform>
+            <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+        </Grid.RenderTransform>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="1" RenderTransformOrigin="0.5,0.5" Margin="0,-7,0,0">
+            <StackPanel.BitmapEffect>
+                <DropShadowBitmapEffect Color="{StaticResource ColorObjectGray2}" ShadowDepth="1.5" Direction="270" Opacity="0.15" Softness="0.15" />
+            </StackPanel.BitmapEffect>
+            <local:MyLoading x:Name="LoadLaunching" AutoRun="False" Height="50" Margin="0,10,0,5" />
+            <TextBlock Name="LabLaunchingTitle" Margin="15,10,15,0" Text="正在启动游戏" HorizontalAlignment="Center" FontSize="20" Foreground="{DynamicResource ColorBrush3}">
+                <TextBlock.RenderTransform>
+                    <SkewTransform AngleX="-3"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+            <TextBlock Name="LabLaunchingName" Margin="40,5,40,0" FontSize="13.5" Text="Forge 1.12.2-15.8.0.1560" HorizontalAlignment="Center" Foreground="{DynamicResource ColorBrush3}" RenderTransformOrigin="0.5,0.5">
+                <TextBlock.RenderTransform>
+                    <SkewTransform AngleX="-3"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+            <Grid Height="4" Margin="30,12,30,27" SnapsToDevicePixels="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Name="ProgressLaunchingFinished" Width="69.28*"/>
+                    <ColumnDefinition Name="ProgressLaunchingUnfinished" Width="30.72*"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.Column="0" >
+                    <Rectangle.Fill>
+                        <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                            <GradientStop Color="{DynamicResource ColorObject4}" Offset="0"/>
+                            <GradientStop Color="{DynamicResource ColorObject3}" Offset="0.6"/>
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Rectangle Grid.Column="1" Fill="{DynamicResource ColorBrush6}" Opacity="0.6" />
+            </Grid>
+            <Grid HorizontalAlignment="Center" Name="PanLaunchingInfo">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="15" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock FontSize="12.5" Margin="0,0,0,5" Text="当前步骤" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Opacity="0.5" />
+                <TextBlock FontSize="12.5" Margin="0,0,0,5" Text="下载支持" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" Name="LabLaunchingStage" />
+                <TextBlock FontSize="12.5" Margin="0,0,0,5" Text="登录方式" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Opacity="0.5" />
+                <TextBlock FontSize="12.5" Margin="0,0,0,5" Text="正版登录" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Left" Name="LabLaunchingMethod" />
+                <TextBlock FontSize="12.5" Margin="0,0,0,5" Text="启动进度" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Opacity="0.5" Name="LabLaunchingProgressLeft" />
+                <TextBlock FontSize="12.5" Margin="0,0,0,5" Text="69.28 %" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Name="LabLaunchingProgress" />
+                <TextBlock FontSize="12.5" Margin="0,0,0,5" Text="下载速度" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" Opacity="0" Name="LabLaunchingDownloadLeft" Visibility="Collapsed" />
+                <TextBlock FontSize="12.5" Margin="0,0,0,5" Text="5.2 M/s" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Left" Name="LabLaunchingDownload" Opacity="0" Visibility="Collapsed" />
+                <Grid x:Name="PanLaunchingHint" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="5" Grid.RowSpan="2" Width="260" Margin="0,16,0,2" Visibility="Collapsed" Opacity="0">
+                    <Border Margin="0,8,0,0" BorderThickness="1" CornerRadius="3" BorderBrush="{StaticResource ColorBrushGray1}" Opacity="0.5">
+                        <Border.Clip>
+                            <CombinedGeometry GeometryCombineMode="Exclude">
+                                <CombinedGeometry.Geometry1>
+                                    <RectangleGeometry Rect="0,0,1000,1000" />
+                                </CombinedGeometry.Geometry1>
+                                <CombinedGeometry.Geometry2>
+                                    <RectangleGeometry Rect="94,0,72,10" />
+                                </CombinedGeometry.Geometry2>
+                            </CombinedGeometry>
+                        </Border.Clip>
+                    </Border>
+                    <TextBlock FontSize="12.5" Text="你知道吗" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="{StaticResource ColorBrushGray1}" Opacity="0.5" />
+                    <TextBlock x:Name="LabLaunchingHint" FontSize="12.5" Text="这是一段测试用的小提示文本，它应该足够长以让它有两行。" Margin="11,21,11,10" TextWrapping="Wrap" HorizontalAlignment="Center" />
+                </Grid>
+            </Grid>
+        </StackPanel>
+        <local:MyButton Grid.Row="4" x:Name="BtnCancel" Height="35" Margin="20,0,20,20" VerticalAlignment="Bottom" Text="取消" />
+    </Grid>
+</local:MyPageLeft>

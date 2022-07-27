@@ -1,0 +1,10 @@
+﻿<Grid x:Class="PageLoginLegacy" Tag="True"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PCL"
+      mc:Ignorable="d" d:DesignWidth="297.6" Margin="0,0,0,5">
+    <local:MyComboBox Margin="0,84,0,0" IsEditable="True" x:Name="ComboName" Height="28" IsTextSearchEnabled="False" HintText="游戏用户名" />
+    <local:MySkin HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Skin" HasCape="False" />
+</Grid>

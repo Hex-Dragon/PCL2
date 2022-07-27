@@ -1,0 +1,23 @@
+﻿<Grid x:Class="MyMsgInput"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:my="clr-namespace:PCL"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" MinWidth="500" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Border Name="PanBorder" CornerRadius="5" Width="{Binding ActualWidth, ElementName=PanMain, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=PanMain, Mode=OneWay}" Background="#00FBFBFB">
+        <Border.Effect>
+            <DropShadowEffect Color="{DynamicResource ColorObject1}" BlurRadius="15" ShadowDepth="0" Opacity="0" x:Name="EffectShadow" />
+        </Border.Effect>
+    </Border>
+    <StackPanel Name="PanMain" VerticalAlignment="Top">
+        <TextBlock FontSize="23" TextTrimming="None" Foreground="{DynamicResource ColorBrush2}" HorizontalAlignment="Left" Name="LabTitle" Margin="27,19,28,0" Text="测试标题文本" VerticalAlignment="Top" SnapsToDevicePixels="False" UseLayoutRounding="False" />
+        <Rectangle Height="2" Fill="{DynamicResource ColorBrush2}" Margin="20,9,20,15" Name="ShapeLine" Opacity="0" />
+        <Border Name="PanCaption" Padding="28,0,28,15">
+            <my:MyTextBox x:Name="TextCaption" UseLayoutRounding="False" MaxLength="1000" Width="450" Margin="1" />
+        </Border>
+        <StackPanel Name="PanBtn" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="150,0,22,20" Orientation="Horizontal">
+            <my:MyButton ColorType="Normal" Text="测试按钮1" x:Name="Btn1" Margin="15,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
+            <my:MyButton ColorType="Normal" Text="测试按钮2" x:Name="Btn2" Margin="15,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
+            <my:MyButton ColorType="Normal" Text="测试按钮3" x:Name="Btn3" Margin="15,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
+        </StackPanel>
+    </StackPanel>
+</Grid>

@@ -1,0 +1,27 @@
+﻿<Grid x:Name="PanBack" x:Class="MyMsgSelect"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:my="clr-namespace:PCL"
+             UseLayoutRounding="True" SnapsToDevicePixels="True" MinWidth="450" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="1*" />
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <Border Name="PanBorder" Grid.RowSpan="99" Width="{Binding ActualWidth, ElementName=PanBack, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=PanBack, Mode=OneWay}" Background="#00FBFBFB" CornerRadius="5">
+        <Border.Effect>
+            <DropShadowEffect Color="{DynamicResource ColorObject1}" BlurRadius="15" ShadowDepth="0" Opacity="0" x:Name="EffectShadow" />
+        </Border.Effect>
+    </Border>
+    <TextBlock FontSize="23" TextTrimming="None" Foreground="{DynamicResource ColorBrush2}" HorizontalAlignment="Left" Name="LabTitle" Margin="28,19,28,0" Text="测试标题文本" VerticalAlignment="Top" SnapsToDevicePixels="False" UseLayoutRounding="False" />
+    <Rectangle Height="2" Grid.Row="1" Fill="{DynamicResource ColorBrush2}" Margin="20,9,20,13" Name="ShapeLine" Opacity="0" />
+    <my:MyScrollViewer x:Name="PanCaption" Grid.Row="2" Margin="19,0,19,20" Padding="9,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" SnapsToDevicePixels="True" UseLayoutRounding="True" DeltaMuity="0.5">
+        <StackPanel x:Name="PanSelection" Orientation="Vertical" />
+    </my:MyScrollViewer>
+    <StackPanel Name="PanBtn" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="150,0,22,20" Orientation="Horizontal">
+        <my:MyButton ColorType="Normal" Text="测试按钮1" x:Name="Btn1" Margin="15,0,0,0" TextPadding="7"  SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" IsEnabled="False" />
+        <my:MyButton ColorType="Normal" Text="测试按钮2" x:Name="Btn2" Margin="15,0,0,0" TextPadding="7" Visibility="Visible" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
+        <my:MyButton ColorType="Normal" Text="测试按钮3" x:Name="Btn3" TextPadding="7" Margin="15,0,0,0" Visibility="Visible" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
+    </StackPanel>
+</Grid>
