@@ -1,0 +1,35 @@
+name: "新功能提案"
+description: "对已有功能的大幅度修改，或添加一个新内容或选项"
+labels: [新功能, 等待初步确认]
+body:
+- type: checkboxes
+  id: "yml-1"
+  attributes:
+    label: "检查项"
+    description: "请逐个检查下列项目，并勾选确认。"
+    options:
+    - label: "我已点击 `设置 → 启动器 → 检查更新` 确认了启动器已为最新版，且最新版未实现这一功能。[怎样更新？](https://shimo.im/docs/qKPttVvXKqPD8YDC#anchor-oTgb)"
+      required: true
+    - label: "我已在 [Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 中搜索，确认了这一提案未被提交过。"
+      required: true
+    - label: "我已查看 [功能投票页面](https://github.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8/)，确认了这一提案未在投票列表中。"
+      required: true
+    - label: "我已知晓由于目前还没做的新功能太多了，新提案大概率不会被处理。（所以不要太沮丧……）"
+      required: true
+- type: textarea
+  id: "yml-2"
+  attributes:
+    label: 描述
+    description: "详细描述新功能提案的具体内容。"
+  validations:
+    required: true
+- type: textarea
+  id: "yml-3"
+  attributes:
+    label: 原因
+    description: "详细描述你为什么需要这项功能，这有助于开发者评估它的优先度。"
+    value: |
+      （示例）
+      我需要这个功能来xxxx。很多人都有xxxx的需求，但如果没有这个功能，就不能xxxx了。
+  validations:
+    required: true
