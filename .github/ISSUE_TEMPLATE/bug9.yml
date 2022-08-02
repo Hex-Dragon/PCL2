@@ -1,5 +1,5 @@
 name: "综合 Bug 反馈"
-description: "遇见了上述情况以外的其他问题"
+description: "遇见了没有细分选项的其他 Bug"
 labels: [· Bug, 新反馈]
 body:
 - type: checkboxes
