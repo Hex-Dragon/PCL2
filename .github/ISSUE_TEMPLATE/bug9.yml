@@ -1,6 +1,6 @@
 name: "综合 Bug 反馈"
-description: "遇见了上述两种情况以外的其他问题"
-labels: [Bug, 新反馈]
+description: "遇见了上述情况以外的其他问题"
+labels: [· Bug, 新反馈]
 body:
 - type: checkboxes
   id: "yml-1"
