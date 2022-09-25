@@ -20,7 +20,7 @@
             '获取整合包种类与关键 Json
             Dim PackType As Integer = -1
             Try
-                Archive = New Compression.ZipArchive(New FileStream(File, FileMode.Open))
+                Archive = New Compression.ZipArchive(New FileStream(File, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 '从根目录判断整合包类型
                 If Archive.GetEntry("mcbbs.packmeta") IsNot Nothing Then PackType = 3 : Exit Try 'MCBBS 整合包（优先于 manifest.json 判断）
                 If Archive.GetEntry("manifest.json") IsNot Nothing Then
@@ -54,7 +54,10 @@
                     If FullNames(1) = "mmc-pack.json" Then PackType = 2 : Exit Try 'MMC 整合包
                 Next
             Catch ex As Exception
-                If File.ToLower.EndsWith(".rar") Then
+                If GetString(ex, False, True).Contains("Error.WinIOError") Then
+                    Log(ex, "打开整合包文件失败", If(ShowHint, LogLevel.Hint, LogLevel.Normal))
+                    Return False
+                ElseIf File.ToLower.EndsWith(".rar") Then
                     Log(ex, "PCL2 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试", If(ShowHint, LogLevel.Hint, LogLevel.Normal))
                     Return False
                 Else
@@ -198,20 +201,20 @@ Retry:
         Dim OverrideHome As String = If(Json("overrides"), "")
         If OverrideHome <> "" Then
             InstallLoaders.Add(New LoaderTask(Of String, Integer)("解压整合包文件",
-                                                                  Sub(Task As LoaderTask(Of String, Integer))
-                                                                      UnpackFiles(InstallTemp, FileAddress)
-                                                                      Task.Progress = 0.5
-                                                                      '复制结果
-                                                                      If Directory.Exists(InstallTemp & ArchiveBaseFolder & OverrideHome) Then
-                                                                          My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & OverrideHome, PathMcFolder & "versions\" & VersionName)
-                                                                      Else
-                                                                          Log("[ModPack] 整合包中未找到 override 目录，已跳过")
-                                                                      End If
-                                                                      Task.Progress = 0.9
-                                                                      '开启版本隔离
-                                                                      WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
-                                                                  End Sub) With {
-                                                                  .ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
+            Sub(Task As LoaderTask(Of String, Integer))
+                UnpackFiles(InstallTemp, FileAddress)
+                Task.Progress = 0.5
+                '复制结果
+                If Directory.Exists(InstallTemp & ArchiveBaseFolder & OverrideHome) Then
+                    My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & OverrideHome, PathMcFolder & "versions\" & VersionName)
+                Else
+                    Log("[ModPack] 整合包中未找到 override 目录，已跳过")
+                End If
+                Task.Progress = 0.9
+                '开启版本隔离
+                WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            End Sub) With {
+            .ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         End If
         '获取 Mod 列表
         Dim ModFileList As New List(Of Integer)
@@ -225,26 +228,25 @@ Retry:
         Next
         If ModFileList.Count > 0 Then
             '获取 Mod 下载信息
-            InstallLoaders.Add(New LoaderTask(Of Integer, JArray)(
-                               "获取 Mod 下载信息",
-                               Sub(Task As LoaderTask(Of Integer, JArray))
-                                   Task.Output = GetJson(NetRequestRetry("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(ModFileList, ",") & "]}", "application/json"))("data")
-                                   '如果文件已被删除，则 API 会跳过那一项
-                                   If ModFileList.Count > Task.Output.Count Then Throw New Exception("整合包所需要的部分 Mod 版本已被 Mod 作者删除，因此无法完成整合包安装，请联系整合包作者更新整合包中的 Mod 版本")
-                               End Sub) With {.ProgressWeight = ModFileList.Count / 10}) '每 10 Mod 需要 1s
+            InstallLoaders.Add(New LoaderTask(Of Integer, JArray)("获取 Mod 下载信息",
+            Sub(Task As LoaderTask(Of Integer, JArray))
+                Task.Output = GetJson(NetRequestRetry("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(ModFileList, ",") & "]}", "application/json"))("data")
+                '如果文件已被删除，则 API 会跳过那一项
+                If ModFileList.Count > Task.Output.Count Then Throw New Exception("整合包所需要的部分 Mod 版本已被 Mod 作者删除，因此无法完成整合包安装，请联系整合包作者更新整合包中的 Mod 版本")
+            End Sub) With {.ProgressWeight = ModFileList.Count / 10}) '每 10 Mod 需要 1s
             '构造 NetFile
             InstallLoaders.Add(New LoaderTask(Of JArray, List(Of NetFile))("构造 Mod 下载信息",
-                                                                   Sub(Task As LoaderTask(Of JArray, List(Of NetFile)))
-                                                                       Dim FileList As New Dictionary(Of Integer, NetFile)
-                                                                       For Each ModJson In Task.Input
-                                                                           '跳过重复的 Mod（疑似 CurseForge Bug）
-                                                                           If FileList.ContainsKey(ModJson("id").ToObject(Of Integer)) Then Continue For
-                                                                           '实际的添加
-                                                                           FileList.Add(ModJson("id"), New DlCfFile(ModJson, False).GetDownloadFile(PathMcFolder & "versions\" & VersionName & "\mods\", False))
-                                                                           Task.Progress += 1 / (1 + ModFileList.Count)
-                                                                       Next
-                                                                       Task.Output = FileList.Values.ToList
-                                                                   End Sub) With {.ProgressWeight = ModFileList.Count / 200, .Show = False}) '每 200 Mod 需要 1s
+            Sub(Task As LoaderTask(Of JArray, List(Of NetFile)))
+                Dim FileList As New Dictionary(Of Integer, NetFile)
+                For Each ModJson In Task.Input
+                    '跳过重复的 Mod（疑似 CurseForge Bug）
+                    If FileList.ContainsKey(ModJson("id").ToObject(Of Integer)) Then Continue For
+                    '实际的添加
+                    FileList.Add(ModJson("id"), New DlCfFile(ModJson, False).GetDownloadFile(PathMcFolder & "versions\" & VersionName & "\mods\", False))
+                    Task.Progress += 1 / (1 + ModFileList.Count)
+                Next
+                Task.Output = FileList.Values.ToList
+            End Sub) With {.ProgressWeight = ModFileList.Count / 200, .Show = False}) '每 200 Mod 需要 1s
             '下载 Mod 文件
             InstallLoaders.Add(New LoaderDownload("下载 Mod", New List(Of NetFile)) With {.ProgressWeight = ModFileList.Count * 1.5}) '每个 Mod 需要 1.5s
         End If
@@ -342,19 +344,19 @@ Retry:
         Dim InstallTemp As String = PathTemp & "PackInstall\" & RandomInteger(0, 100000) & "\"
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)("解压整合包文件",
-                                                              Sub(Task As LoaderTask(Of String, Integer))
-                                                                  UnpackFiles(InstallTemp, FileAddress)
-                                                                  Task.Progress = 0.5
-                                                                  '复制结果
-                                                                  If Directory.Exists(InstallTemp & ArchiveBaseFolder & "minecraft") Then
-                                                                      My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & "minecraft", PathMcFolder & "versions\" & VersionName)
-                                                                  Else
-                                                                      Log("[ModPack] 整合包中未找到 minecraft override 目录，已跳过")
-                                                                  End If
-                                                                  Task.Progress = 0.9
-                                                                  '开启版本隔离
-                                                                  WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
-                                                              End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
+        Sub(Task As LoaderTask(Of String, Integer))
+            UnpackFiles(InstallTemp, FileAddress)
+            Task.Progress = 0.5
+            '复制结果
+            If Directory.Exists(InstallTemp & ArchiveBaseFolder & "minecraft") Then
+                My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & "minecraft", PathMcFolder & "versions\" & VersionName)
+            Else
+                Log("[ModPack] 整合包中未找到 minecraft override 目录，已跳过")
+            End If
+            Task.Progress = 0.9
+            '开启版本隔离
+            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+        End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         '构造加载器
         If Json("gameVersion") Is Nothing Then Throw New Exception("整合包未提供游戏版本信息")
         Dim Request As New McInstallRequest With {
@@ -374,19 +376,19 @@ Retry:
         '构造 Libraries 加载器（为了使得 Mods 下载结束后再构造，这样才会下载 JumpLoader 文件）
         Dim LoadersLib As New List(Of LoaderBase)
         LoadersLib.Add(New LoaderTask(Of String, String)("重命名版本 Json（副加载器）",
-                                                         Sub()
-                                                             Dim RealFileName As String = PathMcFolder & "versions\" & VersionName & "\" & VersionName & ".json"
-                                                             Dim OldFileName As String = PathMcFolder & "versions\" & VersionName & "\pack.json"
-                                                             If File.Exists(OldFileName) Then
-                                                                 '修改 id
-                                                                 Dim FileJson = GetJson(ReadFile(OldFileName))
-                                                                 FileJson("id") = VersionName
-                                                                 '替换文件
-                                                                 File.Delete(OldFileName)
-                                                                 WriteFile(RealFileName, FileJson.ToString)
-                                                                 Log("[ModPack] 已重命名版本 Json：" & RealFileName)
-                                                             End If
-                                                         End Sub) With {.ProgressWeight = 0.1, .Show = False})
+        Sub()
+            Dim RealFileName As String = PathMcFolder & "versions\" & VersionName & "\" & VersionName & ".json"
+            Dim OldFileName As String = PathMcFolder & "versions\" & VersionName & "\pack.json"
+            If File.Exists(OldFileName) Then
+                '修改 id
+                Dim FileJson = GetJson(ReadFile(OldFileName))
+                FileJson("id") = VersionName
+                '替换文件
+                File.Delete(OldFileName)
+                WriteFile(RealFileName, FileJson.ToString)
+                Log("[ModPack] 已重命名版本 Json：" & RealFileName)
+            End If
+        End Sub) With {.ProgressWeight = 0.1, .Show = False})
         LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionName))) With {.ProgressWeight = 1, .Show = False})
         LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
         '构造总加载器
@@ -438,19 +440,19 @@ Retry:
         Dim InstallTemp As String = PathTemp & "PackInstall\" & RandomInteger(0, 100000) & "\"
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)("解压整合包文件",
-                                                              Sub(Task As LoaderTask(Of String, Integer))
-                                                                  UnpackFiles(InstallTemp, FileAddress)
-                                                                  Task.Progress = 0.5
-                                                                  '复制结果
-                                                                  If Directory.Exists(InstallTemp & ArchiveBaseFolder & ".minecraft") Then
-                                                                      My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & ".minecraft", PathMcFolder & "versions\" & VersionName)
-                                                                  Else
-                                                                      Log("[ModPack] 整合包中未找到 override .minecraft 目录，已跳过")
-                                                                  End If
-                                                                  Task.Progress = 0.9
-                                                                  '开启版本隔离
-                                                                  WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
-                                                              End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
+        Sub(Task As LoaderTask(Of String, Integer))
+            UnpackFiles(InstallTemp, FileAddress)
+            Task.Progress = 0.5
+            '复制结果
+            If Directory.Exists(InstallTemp & ArchiveBaseFolder & ".minecraft") Then
+                My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & ".minecraft", PathMcFolder & "versions\" & VersionName)
+            Else
+                Log("[ModPack] 整合包中未找到 override .minecraft 目录，已跳过")
+            End If
+            Task.Progress = 0.9
+            '开启版本隔离
+            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+        End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         '构造版本安装请求
         If PackJson("components") Is Nothing Then Throw New Exception("整合包未提供游戏版本信息")
         Dim Request As New McInstallRequest With {.TargetVersionName = VersionName}
@@ -526,19 +528,19 @@ Retry:
         Dim InstallTemp As String = PathTemp & "PackInstall\" & RandomInteger(0, 100000) & "\"
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)("解压整合包文件",
-                                                              Sub(Task As LoaderTask(Of String, Integer))
-                                                                  UnpackFiles(InstallTemp, FileAddress)
-                                                                  Task.Progress = 0.5
-                                                                  '复制结果
-                                                                  If Directory.Exists(InstallTemp & ArchiveBaseFolder & "overrides") Then
-                                                                      My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & "overrides", PathMcFolder & "versions\" & VersionName)
-                                                                  Else
-                                                                      Log("[ModPack] 整合包中未找到 overrides 目录，已跳过")
-                                                                  End If
-                                                                  Task.Progress = 0.9
-                                                                  '开启版本隔离
-                                                                  WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
-                                                              End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
+        Sub(Task As LoaderTask(Of String, Integer))
+            UnpackFiles(InstallTemp, FileAddress)
+            Task.Progress = 0.5
+            '复制结果
+            If Directory.Exists(InstallTemp & ArchiveBaseFolder & "overrides") Then
+                My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & "overrides", PathMcFolder & "versions\" & VersionName)
+            Else
+                Log("[ModPack] 整合包中未找到 overrides 目录，已跳过")
+            End If
+            Task.Progress = 0.9
+            '开启版本隔离
+            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+        End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         '构造加载器
         If Json("addons") Is Nothing Then Throw New Exception("整合包未提供游戏版本信息")
         Dim Addons As New Dictionary(Of String, String)

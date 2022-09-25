@@ -162,8 +162,10 @@
             If NewFolder.Contains("!") OrElse NewFolder.Contains(";") Then Hint("Minecraft 文件夹路径中不能含有感叹号或分号！", HintType.Critical) : Exit Sub
             '要求输入显示名称
             Dim SplitedNames As String() = NewFolder.TrimEnd("\").Split("\")
-            Dim NewName As String = MyMsgBoxInput(If(SplitedNames.Last = ".minecraft", If(SplitedNames.Count >= 3, SplitedNames(SplitedNames.Count - 2), ""), SplitedNames.Last), New ObjectModel.Collection(Of Validate) From {
-                   New ValidateNullOrWhiteSpace, New ValidateLength(1, 30), New ValidateExcept({">", "|"})
+            Dim DefaultName As String = If(SplitedNames.Last = ".minecraft", If(SplitedNames.Count >= 3, SplitedNames(SplitedNames.Count - 2), ""), SplitedNames.Last)
+            If DefaultName.Length > 40 Then DefaultName = DefaultName.Substring(0, 39)
+            Dim NewName As String = MyMsgBoxInput(DefaultName, New ObjectModel.Collection(Of Validate) From {
+                   New ValidateNullOrWhiteSpace, New ValidateLength(1, 40), New ValidateExcept({">", "|"})
                 },, "输入显示名称",, "取消")
             If String.IsNullOrWhiteSpace(NewName) Then Exit Sub
             '添加文件夹

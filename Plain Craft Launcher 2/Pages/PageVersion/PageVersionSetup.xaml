@@ -143,7 +143,7 @@
                             <local:MyComboBoxItem Content="仅正版登录" />
                             <local:MyComboBoxItem Content="仅离线登录" />
                             <local:MyComboBoxItem Content="第三方登录：统一通行证" />
-                            <local:MyComboBoxItem Content="第三方登录：Authlib Injector 或 Little Skin" />
+                            <local:MyComboBoxItem Content="第三方登录：Authlib Injector 或 LittleSkin" />
                         </local:MyComboBox>
                         <TextBlock Name="LabServerNide" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="服务器 ID（必填）" Margin="0,8,25,0" Visibility="Collapsed" />
                         <local:MyTextBox x:Name="TextServerNide" Grid.Row="1" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerNide" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="服主后台 → 集成说明 中提供的服务器 ID">
@@ -186,7 +186,7 @@
                         <local:MyButton x:Name="BtnServerNideWeb" Grid.Column="0" MinWidth="140" Text="服主后台" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
                         <local:MyButton x:Name="BtnServerNideBbs" Grid.Column="1" MinWidth="140" Text="查看简介" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
                     </Grid>
-                    <local:MyButton x:Name="BtnServerAuthLittle" Height="35" MinWidth="150" Margin="0,12,0,0" Text="设置为 Little Skin" HorizontalAlignment="Left" ColorType="Highlight" />
+                    <local:MyButton x:Name="BtnServerAuthLittle" Height="35" MinWidth="150" Margin="0,12,0,0" Text="设置为 LittleSkin" HorizontalAlignment="Left" ColorType="Highlight" />
                 </StackPanel>
             </local:MyCard>
         </StackPanel>

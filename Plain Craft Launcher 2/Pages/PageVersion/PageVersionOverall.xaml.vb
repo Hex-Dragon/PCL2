@@ -254,7 +254,7 @@
                 End If
                 File.Delete(PageVersionLeft.Version.Path & "PCL\Logo.png")
                 Directory.CreateDirectory(PageVersionLeft.Version.Path & "PCL") '虽然不知道为啥，有时候真没这文件夹
-                File.Copy(FileName, PageVersionLeft.Version.Path & "PCL\Logo.png")
+                CopyFile(FileName, PageVersionLeft.Version.Path & "PCL\Logo.png")
             Else
                 File.Delete(PageVersionLeft.Version.Path & "PCL\Logo.png")
             End If

@@ -112,8 +112,6 @@
             Select Case Type
                 Case 0
                     Stack.Children.Add(PageSelectRight.McVersionListItem(Data))
-                Case 1
-                    Stack.Children.Add(PageOtherFeedback.FeedbackListItem(Data, CardTitle))
                 Case 2
                     Stack.Children.Add(McDownloadListItem(Data, AddressOf McDownloadMenuSave, True))
                 Case 3

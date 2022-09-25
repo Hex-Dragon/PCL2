@@ -225,7 +225,7 @@ Public Module ModMinecraft
                 JavaSearchFolder(Disk.Name, JavaPreList, False)
             Next
             '查找 APPDATA 文件夹中的 Java
-            JavaSearchFolder(PathAppdata, JavaPreList, False)
+            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), JavaPreList, False)
             '查找启动器目录中的 Java
             JavaSearchFolder(Path, JavaPreList, False, IsFullSearch:=True)
             '查找所选 Minecraft 文件夹中的 Java
@@ -404,7 +404,7 @@ Wait:
             Log(ex, "遍历查找 Java 时出错（" & OriginalPath.FullName & "）")
         End Try
     End Sub
-    Public PathAppdata As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\"
+    Public PathAppdata As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\PCL\"
 
     '获取
 
@@ -1075,7 +1075,7 @@ VersionSearchFinish:
         Public Property JsonText As String
             Get
                 If _JsonText Is Nothing Then
-                    If Not File.Exists(Path & Name & ".json") Then Throw New Exception("未找到版本 Json 文件")
+                    If Not File.Exists(Path & Name & ".json") Then Throw New Exception("未找到版本 Json 文件：" & Path & Name & ".json")
                     _JsonText = ReadFile(Path & Name & ".json")
                     '如果 ReadFile 失败会返回空字符串；这可能是由于文件被临时占用，故延时后重试
                     If _JsonText.Length = 0 Then
@@ -1264,7 +1264,7 @@ Recheck:
             Try
                 Dim JsonObjCheck = JsonObject
             Catch ex As Exception
-                Log(ex, "版本 Json 可用性检查失败（" & Name & "）")
+                Log(ex, "版本 Json 可用性检查失败（" & Path & "）")
                 JsonText = ""
                 JsonObject = Nothing
                 Info = ex.Message

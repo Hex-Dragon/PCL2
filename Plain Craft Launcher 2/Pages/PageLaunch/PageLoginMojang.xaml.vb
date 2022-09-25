@@ -77,5 +77,8 @@
             OpenWebsite("https://account.mojang.com/password")
         End If
     End Sub
+    Private Sub HintMigration_Click() Handles HintMigration.MouseLeftButtonUp
+        PageLaunchRight.StartMigration()
+    End Sub
 
 End Class

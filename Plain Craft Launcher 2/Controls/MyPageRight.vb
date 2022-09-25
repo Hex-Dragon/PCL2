@@ -116,7 +116,7 @@
 
         Select Case PageState
             Case PageStates.Empty
-                If PageLoader Is Nothing OrElse PageLoader.State = LoadState.Finished Then
+                If PageLoader Is Nothing OrElse PageLoader.State = LoadState.Finished OrElse PageLoader.State = LoadState.Aborted Then
                     PageState = PageStates.ContentEnter
                     TriggerEnterAnimation(PanAlways, If(PanContent, Child))
                 ElseIf PageLoader.State = LoadState.Loading Then

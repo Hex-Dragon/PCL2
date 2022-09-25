@@ -484,6 +484,7 @@
                     Case LoadState.Finished
                         '检查是否需要重启
                         If Loader.GetType.Name.StartsWith("LoaderTask") Then '类型名后面带有泛型，必须用 StartsWith
+                            'UNDONE: 这里的 IgnoreReloadTimeout 导致加载器不会重启，也就是微软登录不会自动重新登录
                             If CType(Loader, Object).ShouldStart(If(Input IsNot Nothing AndAlso Loader.GetType.GenericTypeArguments.First Is Input.GetType, Input, Nothing), IgnoreReloadTimeout:=True) Then
                                 If ModeDebug Then Log("[Loader] 由于输入条件变更，重启已完成的加载器 " & Loader.Name)
                                 GoTo Restart

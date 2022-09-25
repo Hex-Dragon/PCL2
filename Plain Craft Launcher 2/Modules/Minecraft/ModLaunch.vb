@@ -106,14 +106,22 @@ NextInner:
         '检查路径
         If McVersionCurrent.PathIndie.Contains("!") OrElse McVersionCurrent.PathIndie.Contains(";") Then Throw New Exception("游戏路径中不可包含 ! 或 ;（" & McVersionCurrent.PathIndie & "）")
         If McVersionCurrent.Path.Contains("!") OrElse McVersionCurrent.Path.Contains(";") Then Throw New Exception("游戏路径中不可包含 ! 或 ;（" & McVersionCurrent.Path & "）")
-        '检查输入信息
-        Dim CheckResult As String = Nothing
-        RunInUiWait(Sub() CheckResult = McLoginAble(McLoginInput))
-        If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
         '检查版本
         If McVersionCurrent Is Nothing Then Throw New Exception("未选择 Minecraft 版本！")
         McVersionCurrent.Load()
         If McVersionCurrent.State = McVersionState.Error Then Throw New Exception("Minecraft 存在问题：" & McVersionCurrent.Info)
+        '检查输入信息
+        Dim CheckResult As String = ""
+        RunInUiWait(Sub()
+                        Dim LoginInput As McLoginData = McLoginInput()
+                        CheckResult = McLoginAble(LoginInput)
+                        If LoginInput.Type = McLoginType.Legacy AndAlso '离线登录
+                            Not RegexCheck(CType(LoginInput, McLoginLegacy).UserName, "^[0-9A-Za-z_]+$") AndAlso
+                            McVersionCurrent.Version.McCodeMain >= 18 Then 'MC 1.18 以上
+                            CheckResult = "用户名中不可包含除数字、英文、下划线以外的特殊字符！"
+                        End If
+                    End Sub)
+        If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
         '求赞助
         If ThemeCheckGold() Then Exit Sub
         RunInNewThread(Sub()
@@ -757,10 +765,11 @@ LoginFinish:
     '微软登录步骤 1：打开网页认证，获取 OAuth Code
     Private Function MsLoginStep1(Data As LoaderTask(Of McLoginMs, McLoginResult)) As String
         McLaunchLog("开始微软登录步骤 1")
-        If OsVersion <= New Version(10, 0, 17763, 0) Then 'TODO: 添加设置以强制使用网页中继登录
+        If OsVersion <= New Version(10, 0, 17763, 0) Then
+SystemBrowser:
             'Windows 7 或老版 Windows 10 登录
             MyMsgBox("PCL2 即将打开登录网页。登录后会转到一个空白页面（这代表登录成功了），请将该空白页面的网址复制到 PCL2。" & vbCrLf &
-                     "如果网络环境不佳，登录网页可能一直加载不出来，此时请尝试使用 VPN 或代理服务器，然后再试。", "登录说明", "开始", ForceWait:=True)
+                     "如果网络环境不佳，登录网页可能一直加载不出来，此时请尝试使用 VPN 或加速器，然后再试。", "登录说明", "开始", ForceWait:=True)
             OpenWebsite(FormLoginOAuth.LoginUrl1)
             Dim Result As String = MyMsgBoxInput("", New ObjectModel.Collection(Of Validate) From {New ValidateRegex("(?<=code\=)[^&]+", "返回网址应以 https://login.live.com/oauth20_desktop.srf?code= 开头")}, "https://login.live.com/oauth20_desktop.srf?code=XXXXXX", "输入登录返回码", "确定", "取消")
             If Result Is Nothing Then
@@ -769,12 +778,14 @@ LoginFinish:
             Else
                 Return RegexSeek(Result, "(?<=code\=)[^&]+")
             End If
+            Hint("网页登录已完成，你现在可以关闭浏览器上的那个网页了", HintType.Finish)
         Else
             'Windows 10 登录
             Dim ReturnCode As String = Nothing
             Dim ReturnEx As Exception = Nothing
             Dim IsFinished As LoadState = LoadState.Loading
             Dim LoginForm As FormLoginOAuth = Nothing
+            Dim IsSwitchToSystemBrowser As Boolean = False
             RunInUi(Sub()
                         Try
                             LoginForm = New FormLoginOAuth
@@ -783,7 +794,10 @@ LoginFinish:
                                                                      ReturnCode = Code
                                                                      IsFinished = LoadState.Finished
                                                                  End Sub
-                            AddHandler LoginForm.OnLoginCanceled, Sub() IsFinished = LoadState.Aborted
+                            AddHandler LoginForm.OnLoginCanceled, Sub(IsSwitch As Boolean)
+                                                                      IsFinished = LoadState.Aborted
+                                                                      IsSwitchToSystemBrowser = IsSwitch
+                                                                  End Sub
                         Catch ex As Exception
                             ReturnEx = ex
                             IsFinished = LoadState.Failed
@@ -797,6 +811,9 @@ LoginFinish:
                 Return ReturnCode
             ElseIf IsFinished = LoadState.Failed Then
                 Throw ReturnEx
+            ElseIf IsSwitchToSystemBrowser Then
+                McLaunchLog("微软登录在步骤 1 要求切换到系统浏览器")
+                GoTo SystemBrowser
             Else
                 McLaunchLog("微软登录已在步骤 1 被取消")
                 Throw New ThreadInterruptedException("$$")
@@ -982,7 +999,7 @@ LoginFinish:
 #Region "Java 处理"
 
     Private McLaunchJavaSelected As JavaEntry = Nothing
-    Private Sub McLaunchJavaValidate()
+    Private Sub McLaunchJavaValidate(Task As LoaderTask(Of Integer, List(Of NetFile)))
         Dim MinVer As New Version(0, 0, 0, 0), MaxVer As New Version(999, 999, 999, 999)
 
         'MC 大版本检测
@@ -1028,6 +1045,7 @@ LoginFinish:
         '选择 Java
         McLaunchLog("Java 版本需求：最低 " & MinVer.ToString & "，最高 " & MaxVer.ToString)
         McLaunchJavaSelected = JavaSelect(MinVer, MaxVer, McVersionCurrent)
+        If Task.IsAborted Then Exit Sub '中断加载会导致 JavaSelect 异常地返回空值，误判找不到 Java
         If McLaunchJavaSelected IsNot Nothing Then
             McLaunchLog("选择的 Java：" & McLaunchJavaSelected.ToString)
             Exit Sub
@@ -1151,6 +1169,14 @@ LoginFinish:
                               " -Dauthlibinjector.yggdrasil.prefetched=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(Response)))
         End If
 
+        '添加 Java Wrapper 作为主 Jar
+        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
+        If Not File.Exists(WrapperPath) Then
+            WriteFile(WrapperPath, GetResources("JavaWrapper"))
+            McLaunchLog("已自动释放 Java Wrapper")
+        End If
+        DataList.Add("-jar """ & WrapperPath & """")
+
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
             Throw New Exception("版本 Json 中没有 mainClass 项！")
@@ -1232,6 +1258,14 @@ NextVersion:
         '去重
         Dim Result As String = Join(ArrayNoDouble(DeDuplicateDataList), " ")
 
+        '添加 Java Wrapper 作为主 Jar
+        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
+        If Not File.Exists(WrapperPath) Then
+            WriteFile(WrapperPath, GetResources("JavaWrapper"))
+            McLaunchLog("已自动释放 Java Wrapper")
+        End If
+        Result += " -jar """ & WrapperPath & """"
+
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
             Throw New Exception("版本 Json 中没有 mainClass 项！")
@@ -1251,18 +1285,21 @@ NextVersion:
         If Not BasicString.Contains("--height") Then BasicString += " --height ${resolution_height} --width ${resolution_width}"
         DataList.Add(BasicString)
 
-        McLaunchArgumentsGameOld = Join(DataList, " ")
+        '添加 Wrapper 导出参数
+        DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
+
+        Dim Result As String = Join(DataList, " ")
 
         '特别改变 OptiFineTweaker
         If (Version.Version.HasForge OrElse Version.Version.HasLiteLoader) AndAlso Version.Version.HasOptiFine Then
             '把 OptiFineForgeTweaker 放在最后，不然会导致崩溃！
-            If McLaunchArgumentsGameOld.Contains("--tweakClass optifine.OptiFineForgeTweaker") Then
-                Log("[Launch] 发现正确的 OptiFineForge TweakClass，目前参数：" & McLaunchArgumentsGameOld)
-                McLaunchArgumentsGameOld = McLaunchArgumentsGameOld.Replace(" --tweakClass optifine.OptiFineForgeTweaker", "").Replace("--tweakClass optifine.OptiFineForgeTweaker ", "") & " --tweakClass optifine.OptiFineForgeTweaker"
+            If Result.Contains("--tweakClass optifine.OptiFineForgeTweaker") Then
+                Log("[Launch] 发现正确的 OptiFineForge TweakClass，目前参数：" & Result)
+                Result = Result.Replace(" --tweakClass optifine.OptiFineForgeTweaker", "").Replace("--tweakClass optifine.OptiFineForgeTweaker ", "") & " --tweakClass optifine.OptiFineForgeTweaker"
             End If
-            If McLaunchArgumentsGameOld.Contains("--tweakClass optifine.OptiFineTweaker") Then
-                Log("[Launch] 发现错误的 OptiFineForge TweakClass，目前参数：" & McLaunchArgumentsGameOld)
-                McLaunchArgumentsGameOld = McLaunchArgumentsGameOld.Replace(" --tweakClass optifine.OptiFineTweaker", "").Replace("--tweakClass optifine.OptiFineTweaker ", "") & " --tweakClass optifine.OptiFineForgeTweaker"
+            If Result.Contains("--tweakClass optifine.OptiFineTweaker") Then
+                Log("[Launch] 发现错误的 OptiFineForge TweakClass，目前参数：" & Result)
+                Result = Result.Replace(" --tweakClass optifine.OptiFineTweaker", "").Replace("--tweakClass optifine.OptiFineTweaker ", "") & " --tweakClass optifine.OptiFineForgeTweaker"
                 Try
                     WriteFile(Version.Path & Version.Name & ".json", ReadFile(Version.Path & Version.Name & ".json").Replace("optifine.OptiFineTweaker", "optifine.OptiFineForgeTweaker"))
                 Catch ex As Exception
@@ -1270,6 +1307,8 @@ NextVersion:
                 End Try
             End If
         End If
+
+        Return Result
     End Function
     Private Function McLaunchArgumentsGameNew(Version As McVersion) As String
         Dim DataList As New List(Of String)
@@ -1301,6 +1340,9 @@ NextVersion:
             CurrentVersion = New McVersion(CurrentVersion.InheritVersion)
             GoTo NextVersion
         End If
+
+        '添加 Wrapper 导出参数
+        DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
 
         '将 "-XXX" 与后面 "XXX" 合并到一起
         '如果不进行合并 Impact 会启动无效，它有两个 --tweakclass

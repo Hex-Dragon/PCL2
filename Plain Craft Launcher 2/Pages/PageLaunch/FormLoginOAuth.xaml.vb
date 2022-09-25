@@ -3,11 +3,11 @@
 Public Class FormLoginOAuth
 
     Public Event OnLoginSuccess(code As String)
-    Public Event OnLoginCanceled(IsForceExit As Boolean)
+    Public Event OnLoginCanceled(IsSwitch As Boolean)
 
     '跳转事件
     Private IsLoginSuccessed As Boolean = False
-    Private IsForceExit As Boolean = False
+    Private IsSwitch As Boolean = False
     Private Sub Browser_Navigating(sender As WebBrowser, e As NavigatingCancelEventArgs) Handles Browser1.Navigating, Browser2.Navigating, Browser3.Navigating
         Dim Url As String = e.Uri.AbsoluteUri
         If ModeDebug Then Log("[Login] 登录浏览器 " & sender.Tag & " 导向：" & Url)
@@ -18,7 +18,6 @@ Public Class FormLoginOAuth
             RaiseEvent OnLoginSuccess(Code)
         ElseIf Url.Contains("github.") Then
             Hint("PCL2 不支持使用 GitHub 登录微软账号！", HintType.Critical)
-            IsForceExit = True
             Close()
         End If
     End Sub
@@ -36,6 +35,7 @@ Public Class FormLoginOAuth
                         RunInUi(Sub()
                                     sender.Visibility = Visibility.Visible
                                     PanLoading.Visibility = Visibility.Collapsed
+                                    Log("[Login] 已将登录窗口切换至浏览器")
                                 End Sub)
                     End Sub)
     End Sub
@@ -64,15 +64,37 @@ Public Class FormLoginOAuth
                     End Sub)
     End Sub
     Private Sub FormLoginOAuth_Closed() Handles Me.Closed
-        Try
-            Browser1.Dispose()
-            Browser2.Dispose()
-            Browser3.Dispose()
-        Catch ex As Exception
-            Log(ex, "释放微软登录浏览器失败")
-        End Try
-        If Not IsLoginSuccessed Then RaiseEvent OnLoginCanceled(IsForceExit)
+        RunInThread(Sub()
+                        Thread.Sleep(1000) '释放会卡一下，所以稍等一下……
+                        RunInUiWait(Sub()
+                                        Try
+                                            Browser1.Dispose()
+                                        Catch ex As Exception
+                                            Log(ex, "释放微软登录浏览器 1 失败")
+                                        End Try
+                                    End Sub)
+                        Thread.Sleep(200)
+                        RunInUiWait(Sub()
+                                        Try
+                                            Browser2.Dispose()
+                                        Catch ex As Exception
+                                            Log(ex, "释放微软登录浏览器 2 失败")
+                                        End Try
+                                    End Sub)
+                        Thread.Sleep(200)
+                        RunInUiWait(Sub()
+                                        Try
+                                            Browser3.Dispose()
+                                        Catch ex As Exception
+                                            Log(ex, "释放微软登录浏览器 3 失败")
+                                        End Try
+                                    End Sub)
+                    End Sub)
+        If Not IsLoginSuccessed Then RaiseEvent OnLoginCanceled(IsSwitch)
         FrmMain.Focus()
     End Sub
-
+    Private Sub HintSwitch_Click(sender As Object, e As EventArgs) Handles HintSwitch.Click
+        IsSwitch = True
+        Close()
+    End Sub
 End Class

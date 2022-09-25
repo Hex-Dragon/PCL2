@@ -115,7 +115,7 @@
         Try
             '拷贝文件
             File.Delete(PathTemp & "CustomSkin.png")
-            File.Copy(SkinInfo.LocalFile, PathTemp & "CustomSkin.png")
+            CopyFile(SkinInfo.LocalFile, PathTemp & "CustomSkin.png")
             '更新设置
             Setup.Set("LaunchSkinSlim", SkinInfo.IsSlim)
         Catch ex As Exception
@@ -138,7 +138,7 @@
             End If
             '拷贝文件
             File.Delete(PathTemp & "CustomSkin.png")
-            File.Copy(SkinInfo.LocalFile, PathTemp & "CustomSkin.png")
+            CopyFile(SkinInfo.LocalFile, PathTemp & "CustomSkin.png")
             '更新设置
             Setup.Set("LaunchSkinSlim", SkinInfo.IsSlim)
         Catch ex As Exception

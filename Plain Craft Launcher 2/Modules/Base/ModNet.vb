@@ -940,7 +940,7 @@ Capture:
                     Next
                     '是否禁用多线程，以及规定碎片大小
                     Dim TargetUrl As String = GetSource().Url
-                    If TargetUrl.Contains("pcl2-server") Then Return False
+                    If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("gitcode.net") Then Return False
                     Dim RealFilePieceLimit = If(TargetUrl.Contains("download.mcbbs.net"), FilePieceLimit * 5, FilePieceLimit)
                     '寻找最大碎片
                     Dim FilePieceMax As NetThread = Threads
@@ -1278,7 +1278,7 @@ Retry:
                         MergeFile.Dispose() : MergeFile = Nothing
                     ElseIf Threads.DownloadDone = DownloadDone Then
                         '仅有一个文件，直接复制
-                        File.Copy(Threads.Temp, LocalPath, True)
+                        CopyFile(Threads.Temp, LocalPath)
                     Else
                         '有多个线程，合并
                         MergeFile = New FileStream(LocalPath, FileMode.Create)

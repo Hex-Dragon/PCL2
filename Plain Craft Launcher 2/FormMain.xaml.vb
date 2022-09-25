@@ -10,6 +10,11 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 260 Then 'Release 2.3.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "解决了联机人数 ≥3 人时出现的频繁掉线或突发高延迟的问题"))
+            FeatureCount += 22
+            BugCount += 4
+        End If
         If LastVersion < 257 Then 'Release 2.3.0
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复下载部分 Mod、整合包的 Bug"))
             FeatureCount += 4
@@ -137,6 +142,20 @@ Public Class FormMain
         '3：小*
         '2：极度严重的 Bug
         '1：严重的 Bug
+        If LastVersion < 263 Then 'Snapshot 2.3.4
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复部分情况下无法启动路径带有中文的游戏的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复多个可能导致 OptiFine、Forge 安装失败的 Bug"))
+            FeatureCount += 11
+            BugCount += 5
+        End If
+        If LastVersion < 262 Then 'Snapshot 2.3.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法使用 Mod、整合包搜索功能的 Bug"))
+            BugCount += 1
+        End If
+        If LastVersion < 261 Then 'Snapshot 2.3.2
+            FeatureCount += 8
+            BugCount += 4
+        End If
         If LastVersion < 259 Then 'Snapshot 2.3.1
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "解决了联机人数 ≥3 人时出现的频繁掉线或突发高延迟的问题"))
             FeatureCount += 14
@@ -452,7 +471,6 @@ Reopen:
                            Try
                                Thread.Sleep(200)
                                If Setup.Get("LinkAuto") Then PageLinkIoi.InitLoader.Start()
-                               If Not Setup.Get("HintFeedback") = "" Then FeedbackLoader.Start()
                                DlClientListMojangLoader.Start(1)
                                RunCountSub()
                                ServerLoader.Start(1)
@@ -530,7 +548,7 @@ Reopen:
         End If
         '移动自定义皮肤
         If LastVersionCode <= 161 AndAlso File.Exists(Path & "PCL\CustomSkin.png") AndAlso Not File.Exists(PathTemp & "CustomSkin.png") Then
-            File.Copy(Path & "PCL\CustomSkin.png", PathTemp & "CustomSkin.png")
+            CopyFile(Path & "PCL\CustomSkin.png", PathTemp & "CustomSkin.png")
             Log("[Start] 已移动离线自定义皮肤")
         End If
         '解除帮助页面的隐藏
@@ -751,15 +769,15 @@ Reopen:
                             Exit Sub
                         End If
                         If AuthlibServer = "https://littleskin.cn/api/yggdrasil" Then
-                            'Little Skin
-                            If MyMsgBox("是否要在版本 " & McVersionCurrent.Name & " 中开启 Little Skin 登录？" & vbCrLf &
+                            'LittleSkin
+                            If MyMsgBox("是否要在版本 " & McVersionCurrent.Name & " 中开启 LittleSkin 登录？" & vbCrLf &
                                         "你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。", "第三方登录开启确认", "确定", "取消") = 2 Then
                                 Exit Sub
                             End If
                             Setup.Set("VersionServerLogin", 4, Version:=McVersionCurrent)
                             Setup.Set("VersionServerAuthServer", "https://littleskin.cn/api/yggdrasil", Version:=McVersionCurrent)
                             Setup.Set("VersionServerAuthRegister", "https://littleskin.cn/auth/register", Version:=McVersionCurrent)
-                            Setup.Set("VersionServerAuthName", "Little Skin 登录", Version:=McVersionCurrent)
+                            Setup.Set("VersionServerAuthName", "LittleSkin 登录", Version:=McVersionCurrent)
                         Else
                             '第三方 Authlib 服务器
                             If MyMsgBox("是否要在版本 " & McVersionCurrent.Name & " 中开启第三方登录？" & vbCrLf &
@@ -823,7 +841,7 @@ Reopen:
 Install:
                                            Try
                                                For Each ModFile In FilePathList
-                                                   File.Copy(ModFile, TargetVersion.PathIndie & "mods\" & GetFileNameFromPath(ModFile), True)
+                                                   CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & GetFileNameFromPath(ModFile))
                                                Next
                                                If FilePathList.Count = 1 Then
                                                    Hint("已安装 " & GetFileNameFromPath(FilePathList.First) & "！", HintType.Finish)
@@ -1018,7 +1036,6 @@ Install:
         OtherHelp = 0
         OtherAbout = 1
         OtherTest = 2
-        OtherFeedback = 3
         VersionOverall = 0
         VersionSetup = 1
         VersionMod = 2

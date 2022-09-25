@@ -59,7 +59,7 @@
                     Dim Image As New MyBitmap(Address)
                     Image.Save(FileAddress)
                 Else
-                    File.Copy(Address, FileAddress)
+                    CopyFile(Address, FileAddress)
                 End If
                 Hint("皮肤保存成功！", HintType.Finish)
             End If
@@ -211,7 +211,7 @@
                            Try
 Retry:
                                '获取登录信息
-                               If McLoginMsLoader.State <> LoadState.Finished Then McLoginMsLoader.WaitForExit() '等待登录结束
+                               If McLoginMsLoader.State <> LoadState.Finished Then McLoginMsLoader.WaitForExit(PageLoginMsSkin.GetLoginData())
                                If McLoginMsLoader.State <> LoadState.Finished Then
                                    Hint("登录失败，无法更改披风！", HintType.Critical)
                                    Exit Sub

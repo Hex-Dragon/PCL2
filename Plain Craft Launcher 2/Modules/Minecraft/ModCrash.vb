@@ -119,7 +119,7 @@
                 Log("[Crash] 已解压导入的日志文件：" & FilePath)
             Else
                 '解压失败
-                File.Copy(FilePath, TempFolder & "Temp\" & GetFileNameFromPath(FilePath))
+                CopyFile(FilePath, TempFolder & "Temp\" & GetFileNameFromPath(FilePath))
                 Log("[Crash] 已复制导入的日志文件：" & FilePath)
             End If
         Catch ex As Exception
@@ -363,7 +363,8 @@
             '来源崩溃日志的分析
             If LogCrash IsNot Nothing Then
                 Log("[Crash] 开始进行崩溃日志堆栈分析")
-                Dim Keywords = AnalyzeStackKeyword(LogCrash.Replace("A detailed walkthrough of the error", "¨").Split("¨").First)
+                Dim StackLogs As String = LogCrash.Replace("System Details", "¨").Split("¨").First
+                Dim Keywords = AnalyzeStackKeyword(StackLogs)
                 If Keywords.Count > 0 Then
                     Dim Names = AnalyzeModName(Keywords)
                     If Names Is Nothing Then
@@ -480,10 +481,11 @@ Done:
                 AppendReason(CrashReason.路径包含中文且存在编码问题导致找不到或无法加载主类)
             End If
             'Mod 导致的崩溃
-            If LogMc.Contains("Mixin prepare failed ") OrElse LogMc.Contains("mixin.injection.throwables.InjectionError") OrElse LogMc.Contains(".mixins.json] FAILED during )") Then
+            If LogMc.Contains("Mixin prepare failed ") OrElse LogMc.Contains("mixin.injection.throwables.") OrElse LogMc.Contains(".mixins.json] FAILED during )") Then
                 Dim ModId As String = RegexSeek(LogMc, "(?<=in )[^./ ]+(?=.mixins.json.+failed injection check)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in )[^./ ]+(?=.mixins.json)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[)[^./ ]+(?=.mixins.json\] FAILED during )")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in callback )[^./ ]+(?=.mixins.json:)")
                 AppendReason(CrashReason.ModMixin失败, TryAnalyzeModName(If(ModId, "").TrimEnd((vbCrLf & " ").ToCharArray)))
             End If
             If LogMc.Contains("Caught exception from ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogMc, "[^\n]+?(?)"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
@@ -504,7 +506,6 @@ Done:
         '崩溃报告分析
         If LogCrash IsNot Nothing Then
             If LogCrash.Contains("maximum id range exceeded") Then AppendReason(CrashReason.Mod过多导致超出ID限制)
-            If LogCrash.Contains("Entity being rendered") AndAlso LogCrash.Contains(vbTab & "Entity's Exact location: ") Then AppendReason(CrashReason.特定实体导致崩溃, If(RegexSeek(LogCrash, "(?<=\tEntity Type: )[^\n]+(?= \()"), "") & " (" & If(RegexSeek(LogCrash, "(?<=\tEntity's Exact location: )[^\n]+"), "").TrimEnd(vbCrLf.ToCharArray) & ")")
             If LogCrash.Contains("java.lang.OutOfMemoryError") Then AppendReason(CrashReason.内存不足)
             If LogCrash.Contains("Pixel format not accelerated") Then AppendReason(CrashReason.显卡驱动不支持导致无法设置像素格式)
             If LogCrash.Contains("Manually triggered debug crash") Then AppendReason(CrashReason.玩家手动触发调试崩溃)
@@ -555,7 +556,7 @@ Done:
             For Each IgnoreStack In {
                 "java", "sun", "javax", "jdk",
                 "org.lwjgl", "com.sun", "net.minecraftforge", "com.mojang", "net.minecraft", "cpw.mods", "com.google", "org.apache", "org.spongepowered", "net.fabricmc", "com.mumfrey",
-                "com.electronwill.nightconfig",
+                "com.electronwill.nightconfig", "it.unimi.dsi",
                 "MojangTricksIntelDriversForPerformance_javaw"}
                 If Stack.StartsWith(IgnoreStack) Then GoTo NextStack
             Next
@@ -576,12 +577,12 @@ NextStack:
             For i = 0 To Math.Min(3, Splited.Count - 1) '最多取前 4 节
                 Dim Word As String = Splited(i)
                 If Word.Length <= 2 OrElse Word.StartsWith("func_") Then Continue For
-                If {"com", "org", "net", "asm", "fml", "mod", "jar", "sun", "lib", "map", "gui", "dev", "nio", "api",
+                If {"com", "org", "net", "asm", "fml", "mod", "jar", "sun", "lib", "map", "gui", "dev", "nio", "api", "dsi",
                     "core", "init", "mods", "main", "file", "game", "load", "read", "done", "util", "tile", "item", "base",
-                    "forge", "setup", "block", "model", "mixin", "event",
+                    "forge", "setup", "block", "model", "mixin", "event", "unimi",
                     "common", "server", "config", "loader", "launch", "entity", "assist", "client", "modapi", "mojang", "shader", "events", "github",
-                    "preinit", "preload", "machine", "reflect", "channel", "general", "handler",
-                    "optifine", "minecraft", "transformers", "universal", "internal", "multipart", "minecraftforge", "override"
+                    "preinit", "preload", "machine", "reflect", "channel", "general", "handler", "content",
+                    "fastutil", "optifine", "minecraft", "transformers", "universal", "internal", "multipart", "minecraftforge", "override"
                    }.Contains(Word.ToLower) Then Continue For
                 PossibleWords.Add(Word.Trim)
             Next
@@ -700,20 +701,16 @@ NextStack:
                     '复制文件
                     If ExtraFiles IsNot Nothing Then OutputFiles.AddRange(ExtraFiles)
                     For Each OutputFile In OutputFiles
-                        Try
-                            Dim FileName As String = GetFileNameFromPath(OutputFile)
-                            Select Case FileName
-                                Case "LatestLaunch.bat"
-                                    FileName = "启动脚本.bat"
-                                Case "Log1.txt"
-                                    FileName = "PCL2 启动器日志.txt"
-                                Case "RawOutput.log"
-                                    FileName = "游戏崩溃前的输出.txt"
-                            End Select
-                            File.Copy(OutputFile, TempFolder & "Report\" & FileName, True)
-                        Catch ex As Exception
-                            Log(ex, "复制错误报告文件失败（" & OutputFile & "）")
-                        End Try
+                        Dim FileName As String = GetFileNameFromPath(OutputFile)
+                        Select Case FileName
+                            Case "LatestLaunch.bat"
+                                FileName = "启动脚本.bat"
+                            Case "Log1.txt"
+                                FileName = "PCL2 启动器日志.txt"
+                            Case "RawOutput.log"
+                                FileName = "游戏崩溃前的输出.txt"
+                        End Select
+                        CopyFile(OutputFile, TempFolder & "Report\" & FileName)
                     Next
                     '导出报告
                     Compression.ZipFile.CreateFromDirectory(TempFolder & "Report\", FileAddress)

@@ -183,7 +183,7 @@
         Dim Temp As String()
         Temp = Directory.GetFiles(Path)
         For Each str As String In Temp
-            If str = PathTemp & "CustomSkin.png" Then Continue For '不删除自定义皮肤
+            If str = PathTemp & "CustomSkin.png" OrElse str = PathTemp & "联机模块.exe" Then Continue For '不删除的文件
             Try
                 Dim Info As New FileInfo(str)
                 Dim FileActualSize = Math.Ceiling(Info.Length / 4096) * 4096

@@ -117,13 +117,8 @@
                                                                                                     End Sub))
                 LoadersAssetsUpdate.Add(New LoaderDownload("后台下载资源文件索引", New List(Of NetFile)))
                 LoadersAssetsUpdate.Add(New LoaderTask(Of List(Of NetFile), String)("后台复制资源文件索引", Sub(Task As LoaderTask(Of List(Of NetFile), String))
-                                                                                                      Try
-                                                                                                          File.Copy(TempAddress, RealAddress, True)
-                                                                                                          McLaunchLog("后台更新资源文件索引成功：" & TempAddress)
-                                                                                                      Catch ex As Exception
-                                                                                                          Log(ex, "后台更新资源文件索引失败", LogLevel.Debug)
-                                                                                                          McLaunchLog("后台更新资源文件索引失败：" & TempAddress)
-                                                                                                      End Try
+                                                                                                      CopyFile(TempAddress, RealAddress)
+                                                                                                      McLaunchLog("后台更新资源文件索引成功：" & TempAddress)
                                                                                                   End Sub))
                 Dim Updater As New LoaderCombo(Of String)("后台更新资源文件索引", LoadersAssetsUpdate)
                 Log("[Download] 开始后台更新资源文件索引")
@@ -944,7 +939,7 @@
 
 #Region "DlCfProject | CurseForge 工程"
 
-    Private DlCfProjectDb As JObject = Nothing
+    Private DlCfProjectDb As Dictionary(Of String, String) = Nothing
     Private DlCfProjectCache As New Dictionary(Of Integer, DlCfProject)
 
     ''' <summary>
@@ -1008,9 +1003,7 @@
         Private _MCBBS As String
         Public Property MCBBS As String
             Get
-                If DlCfProjectDb Is Nothing Then
-                    DlCfProjectDb = GetJson(DecodeBytes(GetResources("ModData")))
-                End If
+                ReleaseCfDatabase()
                 If _MCBBS Is Nothing Then
                     If Website IsNot Nothing Then
                         Dim Keyword As String = Website.TrimEnd("/").Split("/").Last
@@ -1029,9 +1022,7 @@
         Private _ChineseName As String
         Public Property ChineseName As String
             Get
-                If DlCfProjectDb Is Nothing Then
-                    DlCfProjectDb = GetJson(DecodeBytes(GetResources("ModData")))
-                End If
+                ReleaseCfDatabase()
                 If _ChineseName Is Nothing Then
                     _ChineseName = Name
                     If Website IsNot Nothing Then
@@ -1040,7 +1031,7 @@
                             Dim Result As String = DlCfProjectDb(Keyword)
                             McWikiId = Result.Split("|")(0)
                             If Not Result.Split("|")(1) = "~" Then '使用原名
-                                _ChineseName = Result.Split("|")(1) '& " (" & Name & ")"
+                                _ChineseName = Result.Split("|")(1)
                             End If
                         End If
                     End If
@@ -1233,10 +1224,7 @@
         Dim IsChineseSearch As Boolean = RegexCheck(RawFilter, "[\u4e00-\u9fbb]")
         If IsChineseSearch AndAlso Not String.IsNullOrEmpty(RawFilter) Then
             If Task.Input.IsModPack Then Throw New Exception("整合包搜索仅支持英文")
-            '释放资料库文件
-            If DlCfProjectDb Is Nothing Then
-                DlCfProjectDb = GetJson(DecodeBytes(GetResources("ModData")))
-            End If
+            ReleaseCfDatabase()
             '构造搜索请求
             Dim SearchEntries As New List(Of SearchEntry(Of String))
             For Each Entry In DlCfProjectDb
@@ -1337,6 +1325,22 @@
         End If
         Return New DlCfProject(Json)
     End Function
+
+    ''' <summary>
+    ''' 读取 Mod 数据库。
+    ''' </summary>
+    Private Sub ReleaseCfDatabase()
+        If DlCfProjectDb IsNot Nothing Then Exit Sub
+        DlCfProjectDb = New Dictionary(Of String, String)
+        For Each Entry In CType(GetJson(DecodeBytes(GetResources("ModData"))), JObject)
+            Dim Result As String = Entry.Value.ToString
+            If Not Result.Split("|")(1) = "~" Then '处理 *
+                Result = Result.Replace("*", " (" &
+                        String.Join(" ", Entry.Key.Split("-").Select(Function(w) w.Substring(0, 1).ToUpper & w.Substring(1, w.Length - 1))) & ")")
+            End If
+            DlCfProjectDb.Add(Entry.Key, Result)
+        Next
+    End Sub
 
 #End Region
 

@@ -99,12 +99,10 @@
         Init()
     End Sub
 
-    Private Sub BtnMsStart_Click() Handles BtnMsStart.Click
-        MyMsgBox("在迁移过程中，你可能需要设置你的档案信息。" & vbCrLf & "在输入年龄或生日时，请注意让你的年龄大于 18 岁，否则可能导致无法登录！", "迁移提示", "继续", ForceWait:=True)
+    Public Shared Sub StartMigration()
+        MyMsgBox("在迁移过程中，你可能需要设置你的档案信息，此时请注意让年龄大于 18 岁，否则可能导致无法登录！" & vbCrLf &
+                 "在迁移完成后，请在上方选择 微软 登录方式而非 Mojang。", "迁移提示", "继续", ForceWait:=True)
         OpenWebsite("https://www.minecraft.net/zh-hans/account-security")
-    End Sub
-    Private Sub BtnMsFaq_Click() Handles BtnMsFaq.Click
-        OpenWebsite("https://www.mcbbs.net/thread-1252431-1-1.html")
     End Sub
 
 End Class

@@ -7,6 +7,7 @@
       mc:Ignorable="d" d:DesignWidth="302.4" Margin="0,0,0,-2">
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
         <RowDefinition Height="10" />
         <RowDefinition Height="Auto" />
         <RowDefinition Height="Auto" />
@@ -15,10 +16,11 @@
         <ColumnDefinition />
         <ColumnDefinition Width="224" />
     </Grid.ColumnDefinitions>
-    <local:MyComboBox Grid.Row="0" Grid.Column="1" IsEditable="True" Height="28" x:Name="ComboName" />
-    <TextBlock Text="邮箱" VerticalAlignment="Center" />
-    <PasswordBox Grid.Row="2" Grid.Column="1" x:Name="TextPass" />
-    <TextBlock Text="密码" Grid.Row="2" VerticalAlignment="Center" />
-    <local:MyCheckBox x:Name="CheckRemember" Tag="LoginRemember" Height="20" Margin="-1,12,80,0" Text="记住密码" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" />
-    <local:MyTextButton Margin="0,12,2,0" x:Name="BtnLink" Content="购买正版" Grid.Row="3" HorizontalAlignment="Right" Grid.Column="1" Padding="20,0,0,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="13" />
+    <local:MyHint Text="Mojang 账号现已无法进入正版服务器，请点击此处开始账号迁移！" Grid.ColumnSpan="2" Margin="0,0,0,15" x:Name="HintMigration" />
+    <local:MyComboBox Grid.Row="1" Grid.Column="1" IsEditable="True" Height="28" x:Name="ComboName" />
+    <TextBlock Grid.Row="1" Text="邮箱" VerticalAlignment="Center" />
+    <PasswordBox Grid.Row="3" Grid.Column="1" x:Name="TextPass" />
+    <TextBlock Text="密码" Grid.Row="3" VerticalAlignment="Center" />
+    <local:MyCheckBox x:Name="CheckRemember" Tag="LoginRemember" Height="20" Margin="-1,12,80,0" Text="记住密码" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" />
+    <local:MyTextButton Margin="0,12,2,0" x:Name="BtnLink" Content="购买正版" Grid.Row="4" HorizontalAlignment="Right" Grid.Column="1" Padding="20,0,0,0" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" FontSize="13" />
 </Grid>

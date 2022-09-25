@@ -10,12 +10,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.3.1" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.3.1." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.3.4" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.3.4." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 257 'Release
+    Public Const VersionCode As Integer = 260 'Release
 #Else
-    Public Const VersionCode As Integer = 259 'Snapshot
+    Public Const VersionCode As Integer = 263 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -735,7 +735,24 @@ Public Module ModBase
         Return GetFileNameFromPath(FolderPath)
     End Function
 
-    '读取、写入文件
+    '读取、写入、复制文件
+    Public Sub CopyFile(FromPath As String, ToPath As String)
+        Try
+            '还原文件路径
+            If Not FromPath.Contains(":\") Then FromPath = Path & FromPath
+            If Not ToPath.Contains(":\") Then ToPath = Path & ToPath
+            '读取文件内容
+            Dim FileBytes As Byte()
+            Using ReadStream As New FileStream(FromPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) '支持读取使用中的文件
+                ReDim FileBytes(ReadStream.Length - 1)
+                ReadStream.Read(FileBytes, 0, ReadStream.Length)
+            End Using
+            '写入文件内容
+            WriteFile(ToPath, FileBytes)
+        Catch ex As Exception
+            Throw New Exception("复制文件出错：" & FromPath & " -> " & ToPath, ex)
+        End Try
+    End Sub
     ''' <summary>
     ''' 读取文件，如果失败则返回空字符串。
     ''' </summary>
@@ -745,7 +762,12 @@ Public Module ModBase
             '还原文件路径
             If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
             If File.Exists(FilePath) Then
-                ReadFile = DecodeBytes(File.ReadAllBytes(FilePath))
+                Dim FileBytes As Byte()
+                Using ReadStream As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) '支持读取使用中的文件
+                    ReDim FileBytes(ReadStream.Length - 1)
+                    ReadStream.Read(FileBytes, 0, ReadStream.Length)
+                End Using
+                ReadFile = DecodeBytes(FileBytes)
             Else
                 Log("[System] 欲读取的文件不存在，已返回空字符串：" & FilePath)
                 Return ""
@@ -818,18 +840,6 @@ Public Module ModBase
             Directory.CreateDirectory(GetPathFromFullPath(FilePath))
             '写入文件
             File.WriteAllBytes(FilePath, Content)
-            'File.Exists 的写法只会写入 System.Byte[]（无法进行转码，Write 不支持写入 Byte[]）
-            'If File.Exists(FilePath) Then
-            '    '如果文件存在，刷新目前文件
-            '    Using writer As New StreamWriter(FilePath, Append, GetEncoding(FilePath))
-            '        writer.Write(Content)
-            '        writer.Flush()
-            '        writer.Close()
-            '    End Using
-            'Else
-            '    '如果文件不存在，则新建并写入
-            '     File.WriteAllBytes(FilePath, Content)
-            'End If
             Return True
         Catch ex As Exception
             Log(ex, "写入文件时出错：" & FilePath)
@@ -1252,6 +1262,14 @@ Re:
         End Try
         '这个也不靠谱，目录不是空的警告
         'My.Computer.FileSystem.DeleteDirectory(Path, FileIO.DeleteDirectoryOption.DeleteAllContents)
+    End Sub
+    ''' <summary>
+    ''' 复制文件夹，失败会抛出异常。
+    ''' </summary>
+    Public Sub CopyDirectory(FromPath As String, ToPath As String)
+        For Each File In EnumerateFiles(FromPath)
+            CopyFile(File.FullName, File.FullName.Replace(FromPath, ToPath))
+        Next
     End Sub
     ''' <summary>
     ''' 遍历文件夹中的所有文件。
@@ -2236,7 +2254,7 @@ Retry:
                                For i = 4 To 1
                                    If File.Exists(Path & "PCL\Log" & i & ".txt") Then
                                        If File.Exists(Path & "PCL\Log" & (i + 1) & ".txt") Then File.Delete(Path & "PCL\Log" & (i + 1) & ".txt")
-                                       File.Copy(Path & "PCL\Log" & i & ".txt", Path & "PCL\Log" & (i + 1) & ".txt")
+                                       CopyFile(Path & "PCL\Log" & i & ".txt", Path & "PCL\Log" & (i + 1) & ".txt")
                                    End If
                                Next
                                File.Create(Path & "PCL\Log1.txt").Dispose()
@@ -2329,11 +2347,19 @@ Retry:
                 MyMsgBox(Text, Title)
             Case LogLevel.Feedback
                 IsErrorTriggered = True
-                If MyMsgBox(Text & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", Title, "反馈", "取消") = 1 Then Feedback("exlog", False, True)
+                If CanFeedback(False) Then
+                    If MyMsgBox(Text & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", Title, "反馈", "取消") = 1 Then Feedback(False, True)
+                Else
+                    MyMsgBox(Text & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", Title)
+                End If
             Case LogLevel.Assert
                 IsErrorTriggered = True
                 Dim Time As Long = GetTimeTick()
-                If MsgBox(Text & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback("exlog", False, True)
+                If CanFeedback(False) Then
+                    If MsgBox(Text & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback(False, True)
+                Else
+                    MsgBox(Text & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", MsgBoxStyle.Critical, Title)
+                End If
                 If GetTimeTick() - Time < 1500 Then
                     '弹窗无法保留
                     Log("[System] PCL 已崩溃：" & vbCrLf & Text)
@@ -2392,10 +2418,18 @@ Retry:
             Case LogLevel.Msgbox
                 MyMsgBox(ExFull, Title)
             Case LogLevel.Feedback
-                If MyMsgBox(ExFull & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", Title, "反馈", "取消") = 1 Then Feedback("exlog", False, True)
+                If CanFeedback(False) Then
+                    If MyMsgBox(ExFull & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", Title, "反馈", "取消") = 1 Then Feedback(False, True)
+                Else
+                    MyMsgBox(ExFull & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", Title)
+                End If
             Case LogLevel.Assert
                 Dim Time As Long = GetTimeTick()
-                If MsgBox(ExFull & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback("exlog", False, True)
+                If CanFeedback(False) Then
+                    If MsgBox(ExFull & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback(False, True)
+                Else
+                    MsgBox(ExFull & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", MsgBoxStyle.Critical, Title)
+                End If
                 If GetTimeTick() - Time < 1500 Then
                     '弹窗无法保留
                     Log("[System] PCL 已崩溃：" & vbCrLf & ExFull)
@@ -2408,15 +2442,22 @@ Retry:
     End Sub
 
     '反馈
-    Public Sub Feedback(Source As String, Optional ShowMsgbox As Boolean = True, Optional ForceOpenLog As Boolean = False)
+    Public Sub Feedback(Optional ShowMsgbox As Boolean = True, Optional ForceOpenLog As Boolean = False)
         On Error Resume Next
         FeedbackInfo()
         If ForceOpenLog OrElse (ShowMsgbox AndAlso MyMsgBox("若你在汇报一个 Bug，请点击 打开文件夹 按钮，并上传 Log(1~5).txt 中包含错误信息的文件。" & vbCrLf & "游戏崩溃一般与启动器无关，请不要因为游戏崩溃而提交反馈。", "反馈提交提醒", "打开文件夹", "不需要") = 1) Then
             OpenExplorer("""" & Path & "PCL\""")
         End If
-        OpenWebsite("https://jinshuju.net/f/rP4b6E?x_field_1=" & Source)
-        If Setup.Get("HintFeedback") = "" Then Setup.Set("HintFeedback", "/") '确保反馈报告会被加载
+        OpenWebsite("https://github.com/Hex-Dragon/PCL2/issues/")
     End Sub
+    Public Function CanFeedback(ShowHint As Boolean) As Boolean
+        If False.Equals(PageSetupSystem.IsLauncherNewest) Then
+            If ShowHint Then MyMsgBox("你的 PCL2 不是最新版，因此无法提交反馈。" & vbCrLf & "请先在 设置 → 启动器 中更新启动器，确认该问题在最新版中依然存在，然后再提交反馈。", "无法提交反馈")
+            Return False
+        Else
+            Return True
+        End If
+    End Function
     ''' <summary>
     ''' 在日志中输出系统诊断信息。
     ''' </summary>
@@ -2426,6 +2467,7 @@ Retry:
             "操作系统：" & My.Computer.Info.OSFullName & vbCrLf &
             "剩余内存：" & Int(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024) & " M / " & Int(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024) & " M" & vbCrLf &
             "DPI：" & DPI & "（" & Math.Round(DPI / 96, 2) * 100 & "%）" & vbCrLf &
+            "MC 文件夹：" & If(PathMcFolder, "Nothing") & vbCrLf &
             "文件位置：" & Path)
     End Sub
 

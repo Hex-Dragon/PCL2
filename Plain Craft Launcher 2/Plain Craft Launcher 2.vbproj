@@ -300,9 +300,6 @@
     <Compile Include="Pages\PageDownload\PageDownloadOptiFine.xaml.vb">
       <DependentUpon>PageDownloadOptiFine.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageOther\PageOtherFeedback.xaml.vb">
-      <DependentUpon>PageOtherFeedback.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\PageOther\PageOtherTest.xaml.vb">
       <DependentUpon>PageOtherTest.xaml</DependentUpon>
     </Compile>
@@ -552,10 +549,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\PageOther\PageOtherFeedback.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\PageOther\PageOtherTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -793,22 +786,22 @@
   <ItemGroup>
     <PublishFile Include="NAudio">
       <Visible>False</Visible>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Newtonsoft.Json">
       <Visible>False</Visible>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>
@@ -904,6 +897,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\OptiFabric.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\java-wrapper.jar" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

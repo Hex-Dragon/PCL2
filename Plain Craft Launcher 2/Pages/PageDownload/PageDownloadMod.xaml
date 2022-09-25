@@ -51,6 +51,7 @@
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="版本" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" IsEditable="True" MaxDropDownHeight="320" HintText="全部 (也可自行输入)">
                             <local:MyComboBoxItem Content="" IsSelected="True" />
+                            <local:MyComboBoxItem Content="1.19.2" />
                             <local:MyComboBoxItem Content="1.19.1" />
                             <local:MyComboBoxItem Content="1.19" />
                             <local:MyComboBoxItem Content="1.18.2" />

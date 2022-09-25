@@ -110,5 +110,8 @@
                            End Try
                        End Sub, "Mojang Skin Upload")
     End Sub
+    Private Sub HintMigration_Click() Handles HintMigration.MouseLeftButtonUp
+        PageLaunchRight.StartMigration()
+    End Sub
 
 End Class
