@@ -1,7 +1,3 @@
-
-# Ignore Root .txt File
-/*.txt
-
 # --------------------------------------------------------------------------------------------
 
 ## Ignore Visual Studio temporary files, build results, and
@@ -346,8 +342,6 @@ ASALocalRun/
 healthchecksdb
 
 # ------------------------------------------------------------
-
-*.lnk
 
 # 包含主题解锁、加密解密等部分的代码
 ModSecret.vb
