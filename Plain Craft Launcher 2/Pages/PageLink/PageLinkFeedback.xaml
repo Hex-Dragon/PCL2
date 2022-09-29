@@ -1,0 +1,34 @@
+﻿<local:MyPageRight
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             mc:Ignorable="d" x:Class="PageLinkFeedback"
+             d:DesignWidth="800" d:DesignHeight="800">
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <local:MyCard Title="反馈途径选择">
+            <StackPanel Margin="20,40,18,18">
+                <local:MyListItem Title="联机模块反馈" Info="向联机模块开发者反馈联机失败等异常"
+                              Type="Clickable" EventType="打开网页" EventData="https://mcer.cn/"
+                              PaddingRight="20" Logo="pack://application:,,,/images/Blocks/RedstoneBlock.png" />
+                <local:MyListItem Title="违法违规举报" Info="投诉、举报联机使用者的各类违法违规行为"
+                              Type="Clickable" EventType="打开网页" EventData="https://shimo.im/docs/rGrd8pY8xWkt6ryW#anchor-7x6P"
+                              PaddingRight="20" Logo="pack://application:,,,/images/Blocks/RedstoneBlock.png" />
+            </StackPanel>
+        </local:MyCard>
+        <local:MyCard Margin="0,20,0,15">
+            <Grid Margin="15,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1" Text="联机服务由 " Opacity="0.5"/>
+                <local:MyTextButton Grid.Column="2" Text="阿猫" x:Name="BtnNoin" Opacity="0.5"
+                                    EventType="打开网页" EventData="https://mcer.cn" />
+                <TextBlock Grid.Column="3" Text=" 授权提供" Opacity="0.5"/>
+            </Grid>
+        </local:MyCard>
+    </StackPanel>
+</local:MyPageRight>

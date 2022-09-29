@@ -350,7 +350,8 @@ PageOtherAbout.*
 PageOtherTest.*
 PageSetupUI.*
 # 公开联机代码可能导致安全风险
-PageLink/
+Plain Craft Launcher 2/Pages/PageLink/PageLinkIoi.xaml.vb
+Plain Craft Launcher 2/Pages/PageLink/PageLinkHiPer.xaml.vb
 # 开发者工具
 ModDevelop.vb
 # 不公开底层函数库，以免抄袭

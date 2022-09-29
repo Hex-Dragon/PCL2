@@ -10,12 +10,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.3.4" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.3.4." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.3.5" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.3.5." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 260 'Release
 #Else
-    Public Const VersionCode As Integer = 263 'Snapshot
+    Public Const VersionCode As Integer = 264 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -2475,6 +2475,14 @@ Retry:
     Public Sub DebugAssert(Exp As Boolean)
         If Not Exp Then Throw New Exception("断言命中")
     End Sub
+
+    '获取当前的堆栈信息
+    Public Function GetStackTrace() As String
+        Dim Stack As New StackTrace()
+        Return Join(Stack.GetFrames().Skip(1).Select(Function(f) f.GetMethod).
+                    Select(Function(f) f.Name & "(" & Join(f.GetParameters.Select(Function(p) p.ToString).ToList, ", ") & ") - " & f.Module.ToString).ToList,
+                    vbCrLf).Replace(vbCrLf & vbCrLf, vbCrLf)
+    End Function
 
 #End Region
 

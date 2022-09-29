@@ -592,7 +592,7 @@ UserPass:
 
     '缺失
     ''' <summary>
-    ''' 提示 Java 缺失并跳转下载。支持 Java 7、8、16。
+    ''' 提示 Java 缺失并跳转下载。支持 Java 7、8、16、17。
     ''' </summary>
     Public Sub JavaMissing(VersionCode As Integer)
         Select Case VersionCode
@@ -613,8 +613,8 @@ UserPass:
                 If Is32BitSystem Then
                     MyMsgBox("该版本的 MC 已不支持 32 位操作系统。你必须增加内存并重装为 64 位系统才能继续。", "系统兼容性提示")
                 Else
-                    OpenWebsite("https://www.oracle.com/java/technologies/downloads/#jdk17-windows")
-                    MyMsgBox("PCL2 未找到 Java " & VersionCode & "。" & vbCrLf &
+                    OpenWebsite("https://www.oracle.com/java/technologies/downloads/#java17")
+                    MyMsgBox("PCL2 未找到 Java 17。" & vbCrLf &
                              "请在打开的网页中选择 x64 Installer，下载并安装。" & vbCrLf &
                              "安装后在 PCL2 的 设置 → 启动设置 → 游戏 Java 中通过搜索或导入，确保安装的 Java 已列入 Java 列表。",
                              "未找到 Java")

@@ -340,6 +340,7 @@
         没有可用的分析文件
         使用32位Java导致JVM无法分配足够多的内存
         Mod重复安装
+        OptiFine与Forge不兼容
         Fabric报错
         Fabric报错并给出解决方案
         Forge报错
@@ -449,6 +450,8 @@ Done:
             If LogMc.Contains("The driver does not appear to support OpenGL") Then AppendReason(CrashReason.显卡不支持OpenGL)
             If LogMc.Contains("java.lang.ClassCastException: java.base/jdk") Then AppendReason(CrashReason.使用JDK)
             If LogMc.Contains("java.lang.ClassCastException: class jdk.") Then AppendReason(CrashReason.使用JDK)
+            If LogMc.Contains("Cannot read field ""ofTelemetry"" because ""net.optifine.Config.gameSettings"" is null") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
+            If LogMc.Contains("TRANSFORMER/net.optifine/net.optifine.reflect.Reflector.<clinit>(Reflector.java") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("Open J9 is not supported") OrElse LogMc.Contains("OpenJ9 is incompatible") OrElse LogMc.Contains(".J9VMInternals.") Then AppendReason(CrashReason.使用OpenJ9)
             If LogMc.Contains("because module java.base does not export") Then AppendReason(CrashReason.Java版本过高)
             If LogMc.Contains("java.lang.ClassNotFoundException: java.lang.invoke.LambdaMetafactory") Then AppendReason(CrashReason.Java版本过高)
@@ -554,7 +557,7 @@ Done:
         For Each Stack As String In StackSearchResults
             'If Not Stack.Contains(".") Then Continue For
             For Each IgnoreStack In {
-                "java", "sun", "javax", "jdk",
+                "java", "sun", "javax", "jdk", "oolloo",
                 "org.lwjgl", "com.sun", "net.minecraftforge", "com.mojang", "net.minecraft", "cpw.mods", "com.google", "org.apache", "org.spongepowered", "net.fabricmc", "com.mumfrey",
                 "com.electronwill.nightconfig", "it.unimi.dsi",
                 "MojangTricksIntelDriversForPerformance_javaw"}
@@ -580,9 +583,9 @@ NextStack:
                 If {"com", "org", "net", "asm", "fml", "mod", "jar", "sun", "lib", "map", "gui", "dev", "nio", "api", "dsi",
                     "core", "init", "mods", "main", "file", "game", "load", "read", "done", "util", "tile", "item", "base",
                     "forge", "setup", "block", "model", "mixin", "event", "unimi",
-                    "common", "server", "config", "loader", "launch", "entity", "assist", "client", "modapi", "mojang", "shader", "events", "github",
+                    "common", "server", "config", "loader", "launch", "entity", "assist", "client", "modapi", "mojang", "shader", "events", "github", "recipe",
                     "preinit", "preload", "machine", "reflect", "channel", "general", "handler", "content",
-                    "fastutil", "optifine", "minecraft", "transformers", "universal", "internal", "multipart", "minecraftforge", "override"
+                    "fastutil", "optifine", "minecraft", "transformers", "universal", "internal", "multipart", "minecraftforge", "override", "blockentity"
                    }.Contains(Word.ToLower) Then Continue For
                 PossibleWords.Add(Word.Trim)
             Next
@@ -819,6 +822,8 @@ NextStack:
                 Else
                     ResultString = "游戏似乎因为世界中的某些实体出现了问题。\n\n你可以创建一个新世界，并生成各种实体，观察游戏的运行情况：\n - 若正常运行，则是某些实体导致出错，你或许需要删除该世界。\n - 若仍然出错，问题就可能来自其他原因……\h"
                 End If
+            Case CrashReason.OptiFine与Forge不兼容
+                ResultString = "由于 OptiFine 与当前版本的 Forge 不兼容，导致了游戏崩溃。\n\n请前往 OptiFine 官网（https://optifine.net/downloads）查看 OptiFine 所兼容的 Forge 版本，并严格按照对应版本重新安装游戏。\n经测试，Forge 版本过高或过低都可能导致崩溃。"
             Case CrashReason.低版本Forge与高版本Java不兼容
                 ResultString = "由于低版本 Forge 与当前 Java 不兼容，导致了游戏崩溃。\n\n请尝试以下解决方案：\n - 更新 Forge 到 36.2.26 或更高版本\n - 换用版本低于 8.0.320 的 Java"
             Case CrashReason.版本Json中存在多个Forge

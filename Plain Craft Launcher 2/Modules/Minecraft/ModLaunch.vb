@@ -1163,13 +1163,18 @@ SystemBrowser:
         'Authlib-Injector
         If McLoginLoader.Output.Type = "Auth" Then
             Dim Server As String = Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent)
-            Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
-            DataList.Insert(0, "-javaagent:authlib-injector.jar=" & Server &
+            Try
+                Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
+                DataList.Insert(0, "-javaagent:authlib-injector.jar=" & Server &
                               " -Dauthlibinjector.side=client" &
                               " -Dauthlibinjector.yggdrasil.prefetched=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(Response)))
+            Catch ex As Exception
+                Throw New Exception("无法连接到第三方登录服务器（" & If(Server, Nothing) & "）", ex)
+            End Try
         End If
 
         '添加 Java Wrapper 作为主 Jar
+        If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
         Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
         If Not File.Exists(WrapperPath) Then
             WriteFile(WrapperPath, GetResources("JavaWrapper"))
@@ -1233,9 +1238,18 @@ NextVersion:
                               " -Dauthlibinjector.side=client" &
                               " -Dauthlibinjector.yggdrasil.prefetched=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(Response)))
             Catch ex As Exception
-                Throw New Exception("无法连接到第三方登录服务器（" & If(Server, Nothing) & "）")
+                Throw New Exception("无法连接到第三方登录服务器（" & If(Server, Nothing) & "）", ex)
             End Try
         End If
+
+        '添加 Java Wrapper 作为主 Jar
+        If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
+        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
+        If Not File.Exists(WrapperPath) Then
+            WriteFile(WrapperPath, GetResources("JavaWrapper"))
+            McLaunchLog("已自动释放 Java Wrapper")
+        End If
+        DataList.Add("-jar """ & WrapperPath & """")
 
         '将 "-XXX" 与后面 "XXX" 合并到一起
         '如果不合并，会导致 Forge 1.17 启动无效，它有两个 --add-exports，进一步导致其中一个在后面被去重
@@ -1258,14 +1272,6 @@ NextVersion:
         '去重
         Dim Result As String = Join(ArrayNoDouble(DeDuplicateDataList), " ")
 
-        '添加 Java Wrapper 作为主 Jar
-        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
-        If Not File.Exists(WrapperPath) Then
-            WriteFile(WrapperPath, GetResources("JavaWrapper"))
-            McLaunchLog("已自动释放 Java Wrapper")
-        End If
-        Result += " -jar """ & WrapperPath & """"
-
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
             Throw New Exception("版本 Json 中没有 mainClass 项！")
@@ -1284,9 +1290,6 @@ NextVersion:
         Dim BasicString As String = Version.JsonObject("minecraftArguments").ToString
         If Not BasicString.Contains("--height") Then BasicString += " --height ${resolution_height} --width ${resolution_width}"
         DataList.Add(BasicString)
-
-        '添加 Wrapper 导出参数
-        DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
 
         Dim Result As String = Join(DataList, " ")
 
@@ -1340,9 +1343,6 @@ NextVersion:
             CurrentVersion = New McVersion(CurrentVersion.InheritVersion)
             GoTo NextVersion
         End If
-
-        '添加 Wrapper 导出参数
-        DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
 
         '将 "-XXX" 与后面 "XXX" 合并到一起
         '如果不进行合并 Impact 会启动无效，它有两个 --tweakclass

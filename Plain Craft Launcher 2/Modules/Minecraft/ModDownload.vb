@@ -1266,6 +1266,9 @@
             RightKeywords.Add(Keyword)
         Next
         Task.Input.SearchFilter = Join(ArrayNoDouble(RightKeywords), " ").ToLower
+        '例外项：OptiForge、OptiFabric（拆词后因为包含 Forge/Fabric 导致无法搜到实际的 Mod）
+        If RawFilter.ToLower.Contains("optiforge") Then Task.Input.SearchFilter = "optiforge"
+        If RawFilter.ToLower.Contains("optifabric") Then Task.Input.SearchFilter = "optifabric"
         Log("[Download] CurseForge 工程列表搜索最终文本：" & Task.Input.SearchFilter, LogLevel.Developer)
         '正式获取
         Dim Url = Task.Input.GetAddress()

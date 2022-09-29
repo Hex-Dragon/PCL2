@@ -142,9 +142,14 @@ Public Class FormMain
         '3：小*
         '2：极度严重的 Bug
         '1：严重的 Bug
+        If LastVersion < 264 Then 'Snapshot 2.3.5
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法启动部分 Forge 版本的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复多个可能导致 OptiFine、Forge 安装失败的 Bug"))
+            FeatureCount += 2
+            BugCount += 3
+        End If
         If LastVersion < 263 Then 'Snapshot 2.3.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复部分情况下无法启动路径带有中文的游戏的 Bug"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复多个可能导致 OptiFine、Forge 安装失败的 Bug"))
             FeatureCount += 11
             BugCount += 5
         End If

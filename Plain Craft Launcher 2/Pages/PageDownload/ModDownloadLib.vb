@@ -1,6 +1,8 @@
 ﻿Imports System.IO.Compression
 
 Public Module ModDownloadLib
+    '如果 OptiFine 与 Forge 同时开始安装，就会导致 Forge 安装失败
+    Private InstallSyncLock As New Object
 
 #Region "Minecraft 下载"
 
@@ -372,90 +374,100 @@ Public Module ModDownloadLib
         '选择 Java
         Dim Java = JavaSelect(New Version(1, 8, 0, 0))
         If Java Is Nothing Then
-            JavaMissing(8)
+            JavaMissing(17)
             Throw New Exception("未找到用于安装 OptiFine 的 Java")
         End If
-        '开始启动
-        Dim Info = New ProcessStartInfo With {
-            .FileName = Java.PathJavaw,
-            .Arguments = "-Duser.home=""" & BaseMcFolderHome & """ -cp """ & Target & """ optifine.Installer",
-            .UseShellExecute = False,
-            .CreateNoWindow = True,
-            .RedirectStandardError = True,
-            .RedirectStandardOutput = True,
-            .WorkingDirectory = BaseMcFolderHome
-        }
-        If Info.EnvironmentVariables.ContainsKey("appdata") Then
-            Info.EnvironmentVariables("appdata") = BaseMcFolderHome
-        Else
-            Info.EnvironmentVariables.Add("appdata", BaseMcFolderHome)
+        '添加 Java Wrapper 作为主 Jar
+        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
+        If Not File.Exists(WrapperPath) Then
+            WriteFile(WrapperPath, GetResources("JavaWrapper"))
+            McLaunchLog("已自动释放 Java Wrapper")
         End If
-        Log("[Download] 开始安装 OptiFine：" & Target)
-        Dim TotalLength As Integer = 0
-        Dim process As New Process With {.StartInfo = Info}
-        Dim LastResult As String = ""
-        Using outputWaitHandle As New AutoResetEvent(False)
-            Using errorWaitHandle As New AutoResetEvent(False)
-                AddHandler process.OutputDataReceived, Function(sender, e)
-                                                           Try
-                                                               If e.Data Is Nothing Then
-                                                                   outputWaitHandle.[Set]()
-                                                               Else
-                                                                   LastResult = e.Data
-                                                                   If ModeDebug Then Log("[Installer] " & LastResult)
-                                                                   TotalLength += 1
-                                                                   Task.Progress += 0.9 / 7000
-                                                               End If
-                                                           Catch ex As ObjectDisposedException
-                                                           Catch ex As Exception
-                                                               Log(ex, "读取 OptiFine 安装器信息失败")
-                                                           End Try
-                                                           Try
-                                                               If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                                                   Log("[Installer] 由于任务取消，已中止 OptiFine 安装")
-                                                                   process.Kill()
-                                                               End If
-                                                           Catch
-                                                           End Try
-                                                           Return Nothing
-                                                       End Function
-                AddHandler process.ErrorDataReceived, Function(sender, e)
-                                                          Try
-                                                              If e.Data Is Nothing Then
-                                                                  errorWaitHandle.[Set]()
-                                                              Else
-                                                                  LastResult = e.Data
-                                                                  If ModeDebug Then Log("[Installer] " & LastResult)
-                                                                  TotalLength += 1
-                                                                  Task.Progress += 0.9 / 7000
-                                                              End If
-                                                          Catch ex As ObjectDisposedException
-                                                          Catch ex As Exception
-                                                              Log(ex, "读取 OptiFine 安装器错误信息失败")
-                                                          End Try
-                                                          Try
-                                                              If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                                                  Log("[Installer] 由于任务取消，已中止 OptiFine 安装")
-                                                                  process.Kill()
-                                                              End If
-                                                          Catch
-                                                          End Try
-                                                          Return Nothing
-                                                      End Function
-                process.Start()
-                process.BeginOutputReadLine()
-                process.BeginErrorReadLine()
-                '等待
-                Do Until process.HasExited
-                    Thread.Sleep(10)
-                Loop
-                '输出
-                outputWaitHandle.WaitOne(10000)
-                errorWaitHandle.WaitOne(10000)
-                process.Dispose()
-                If TotalLength < 1000 Then Throw New Exception("安装器运行出错，末行为 " & LastResult)
+        Dim Arguments = "-Duser.home=""" & BaseMcFolderHome & """ -cp """ & Target & """ -jar """ & WrapperPath & """ optifine.Installer"
+        If Java.VersionCode >= 9 Then Arguments = "--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED " & Arguments
+        '开始启动
+        SyncLock InstallSyncLock
+            Dim Info = New ProcessStartInfo With {
+                .FileName = Java.PathJavaw,
+                .Arguments = Arguments,
+                .UseShellExecute = False,
+                .CreateNoWindow = True,
+                .RedirectStandardError = True,
+                .RedirectStandardOutput = True,
+                .WorkingDirectory = BaseMcFolderHome
+            }
+            If Info.EnvironmentVariables.ContainsKey("appdata") Then
+                Info.EnvironmentVariables("appdata") = BaseMcFolderHome
+            Else
+                Info.EnvironmentVariables.Add("appdata", BaseMcFolderHome)
+            End If
+            Log("[Download] 开始安装 OptiFine：" & Target)
+            Dim TotalLength As Integer = 0
+            Dim process As New Process With {.StartInfo = Info}
+            Dim LastResult As String = ""
+            Using outputWaitHandle As New AutoResetEvent(False)
+                Using errorWaitHandle As New AutoResetEvent(False)
+                    AddHandler process.OutputDataReceived, Function(sender, e)
+                                                               Try
+                                                                   If e.Data Is Nothing Then
+                                                                       outputWaitHandle.[Set]()
+                                                                   Else
+                                                                       LastResult = e.Data
+                                                                       If ModeDebug Then Log("[Installer] " & LastResult)
+                                                                       TotalLength += 1
+                                                                       Task.Progress += 0.9 / 7000
+                                                                   End If
+                                                               Catch ex As ObjectDisposedException
+                                                               Catch ex As Exception
+                                                                   Log(ex, "读取 OptiFine 安装器信息失败")
+                                                               End Try
+                                                               Try
+                                                                   If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
+                                                                       Log("[Installer] 由于任务取消，已中止 OptiFine 安装")
+                                                                       process.Kill()
+                                                                   End If
+                                                               Catch
+                                                               End Try
+                                                               Return Nothing
+                                                           End Function
+                    AddHandler process.ErrorDataReceived, Function(sender, e)
+                                                              Try
+                                                                  If e.Data Is Nothing Then
+                                                                      errorWaitHandle.[Set]()
+                                                                  Else
+                                                                      LastResult = e.Data
+                                                                      If ModeDebug Then Log("[Installer] " & LastResult)
+                                                                      TotalLength += 1
+                                                                      Task.Progress += 0.9 / 7000
+                                                                  End If
+                                                              Catch ex As ObjectDisposedException
+                                                              Catch ex As Exception
+                                                                  Log(ex, "读取 OptiFine 安装器错误信息失败")
+                                                              End Try
+                                                              Try
+                                                                  If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
+                                                                      Log("[Installer] 由于任务取消，已中止 OptiFine 安装")
+                                                                      process.Kill()
+                                                                  End If
+                                                              Catch
+                                                              End Try
+                                                              Return Nothing
+                                                          End Function
+                    process.Start()
+                    process.BeginOutputReadLine()
+                    process.BeginErrorReadLine()
+                    '等待
+                    Do Until process.HasExited
+                        Thread.Sleep(10)
+                    Loop
+                    '输出
+                    outputWaitHandle.WaitOne(10000)
+                    errorWaitHandle.WaitOne(10000)
+                    process.Dispose()
+                    If TotalLength < 1000 Then Throw New Exception("安装器运行出错，末行为 " & LastResult)
+                End Using
             End Using
-        End Using
+        End SyncLock
     End Sub
 
     ''' <summary>
@@ -536,50 +548,50 @@ Public Module ModDownloadLib
         If IsNewVersion Then
             Log("[Download] 检测为新版 OptiFine：" & DownloadInfo.Inherit)
             Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("安装 OptiFine（方式 A）",
-                                                            Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
-                                                                Dim BaseMcFolderHome As String = PathTemp & "InstallOptiFine" & RandomInteger(0, 100000)
-                                                                Dim BaseMcFolder As String = BaseMcFolderHome & "\.minecraft\"
-                                                                Try
-                                                                    '准备安装环境
-                                                                    If Directory.Exists(BaseMcFolder & "versions\" & DownloadInfo.Inherit) Then
-                                                                        DeleteDirectory(BaseMcFolder & "versions\" & DownloadInfo.Inherit)
-                                                                    End If
-                                                                    My.Computer.FileSystem.CreateDirectory(BaseMcFolder & "versions\" & DownloadInfo.Inherit & "\")
-                                                                    McFolderLauncherProfilesJsonCreate(BaseMcFolder)
-                                                                    CopyFile(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json",
-                                                                              BaseMcFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json")
-                                                                    CopyFile(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar",
-                                                                              BaseMcFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar")
-                                                                    Task.Progress = 0.06
-                                                                    '进行安装
-                                                                    McDownloadOptiFineInstall(BaseMcFolderHome, Target, Task)
-                                                                    Task.Progress = 0.96
-                                                                    '复制文件
-                                                                    File.Delete(BaseMcFolder & "launcher_profiles.json")
-                                                                    My.Computer.FileSystem.CopyDirectory(BaseMcFolder, McFolder, True)
-                                                                    Task.Progress = 0.98
-                                                                    '清理文件
-                                                                    My.Computer.FileSystem.DeleteFile(Target)
-                                                                    DeleteDirectory(BaseMcFolderHome)
-                                                                Catch ex As Exception
-                                                                    Throw New Exception("安装新版 OptiFine 版本失败", ex)
-                                                                End Try
-                                                            End Sub) With {.ProgressWeight = 8})
+            Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
+                Dim BaseMcFolderHome As String = PathTemp & "InstallOptiFine" & RandomInteger(0, 100000)
+                Dim BaseMcFolder As String = BaseMcFolderHome & "\.minecraft\"
+                Try
+                    '准备安装环境
+                    If Directory.Exists(BaseMcFolder & "versions\" & DownloadInfo.Inherit) Then
+                        DeleteDirectory(BaseMcFolder & "versions\" & DownloadInfo.Inherit)
+                    End If
+                    My.Computer.FileSystem.CreateDirectory(BaseMcFolder & "versions\" & DownloadInfo.Inherit & "\")
+                    McFolderLauncherProfilesJsonCreate(BaseMcFolder)
+                    CopyFile(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json",
+                              BaseMcFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json")
+                    CopyFile(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar",
+                              BaseMcFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar")
+                    Task.Progress = 0.06
+                    '进行安装
+                    McDownloadOptiFineInstall(BaseMcFolderHome, Target, Task)
+                    Task.Progress = 0.96
+                    '复制文件
+                    File.Delete(BaseMcFolder & "launcher_profiles.json")
+                    My.Computer.FileSystem.CopyDirectory(BaseMcFolder, McFolder, True)
+                    Task.Progress = 0.98
+                    '清理文件
+                    My.Computer.FileSystem.DeleteFile(Target)
+                    DeleteDirectory(BaseMcFolderHome)
+                Catch ex As Exception
+                    Throw New Exception("安装新版 OptiFine 版本失败", ex)
+                End Try
+            End Sub) With {.ProgressWeight = 8})
         Else
             Log("[Download] 检测为旧版 OptiFine：" & DownloadInfo.Inherit)
             Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("安装 OptiFine（方式 B）",
-                                                            Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
-                                                                Try
-                                                                    '新建版本文件夹
-                                                                    Directory.CreateDirectory(VersionFolder)
-                                                                    Task.Progress = 0.1
-                                                                    '复制 Jar 文件
-                                                                    If File.Exists(VersionFolder & Id & ".jar") Then File.Delete(VersionFolder & Id & ".jar")
-                                                                    CopyFile(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar", VersionFolder & Id & ".jar")
-                                                                    Task.Progress = 0.7
-                                                                    '建立 Json 文件
-                                                                    Dim InheritVersion As New McVersion(McFolder & "versions\" & DownloadInfo.Inherit)
-                                                                    Dim Json As String = "{
+            Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
+                Try
+                    '新建版本文件夹
+                    Directory.CreateDirectory(VersionFolder)
+                    Task.Progress = 0.1
+                    '复制 Jar 文件
+                    If File.Exists(VersionFolder & Id & ".jar") Then File.Delete(VersionFolder & Id & ".jar")
+                    CopyFile(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar", VersionFolder & Id & ".jar")
+                    Task.Progress = 0.7
+                    '建立 Json 文件
+                    Dim InheritVersion As New McVersion(McFolder & "versions\" & DownloadInfo.Inherit)
+                    Dim Json As String = "{
     ""id"": """ & Id & """,
     ""inheritsFrom"": """ & DownloadInfo.Inherit & """,
     ""time"": """ & If(DownloadInfo.ReleaseTime = "", InheritVersion.ReleaseTime.ToString("yyyy-MM-dd"), DownloadInfo.ReleaseTime.Replace("/", "-")) & "T23:33:33+08:00"",
@@ -590,16 +602,16 @@ Public Module ModDownloadLib
         {""name"": ""net.minecraft:launchwrapper:1.12""}
     ],
     ""mainClass"": ""net.minecraft.launchwrapper.Launch"","
-                                                                    Task.Progress = 0.8
-                                                                    If InheritVersion.IsOldJson Then
-                                                                        '输出旧版 Json 格式
-                                                                        Json += "
+                    Task.Progress = 0.8
+                    If InheritVersion.IsOldJson Then
+                        '输出旧版 Json 格式
+                        Json += "
     ""minimumLauncherVersion"": 18,
     ""minecraftArguments"": """ & InheritVersion.JsonObject("minecraftArguments").ToString & "  --tweakClass optifine.OptiFineTweaker""
 }"
-                                                                    Else
-                                                                        '输出新版 Json 格式
-                                                                        Json += "
+                    Else
+                        '输出新版 Json 格式
+                        Json += "
     ""minimumLauncherVersion"": ""21"",
     ""arguments"": {
         ""game"": [
@@ -608,12 +620,12 @@ Public Module ModDownloadLib
         ]
     }
 }"
-                                                                    End If
-                                                                    WriteFile(VersionFolder & Id & ".json", Json)
-                                                                Catch ex As Exception
-                                                                    Throw New Exception("安装旧版 OptiFine 版本失败", ex)
-                                                                End Try
-                                                            End Sub) With {.ProgressWeight = 1})
+                    End If
+                    WriteFile(VersionFolder & Id & ".json", Json)
+                Catch ex As Exception
+                    Throw New Exception("安装旧版 OptiFine 版本失败", ex)
+                End Try
+            End Sub) With {.ProgressWeight = 1})
         End If
 
         '下载支持库
@@ -1078,90 +1090,93 @@ Public Module ModDownloadLib
         '选择 Java
         Dim Java = JavaSelect(New Version(1, 8, 0, 60))
         If Java Is Nothing Then
-            JavaMissing(8)
+            JavaMissing(17)
             Throw New Exception("未找到用于安装 Forge 的 Java")
         End If
+        '添加 Java Wrapper 作为主 Jar
+        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
+        If Not File.Exists(WrapperPath) Then
+            WriteFile(WrapperPath, GetResources("JavaWrapper"))
+            McLaunchLog("已自动释放 Java Wrapper")
+        End If
+        Dim Arguments = "-cp """ & PathTemp & "Cache\forge_installer.jar;" & Target & """ -jar """ & WrapperPath & """  com.bangbang93.ForgeInstaller """ & McFolder
+        If Java.VersionCode >= 9 Then Arguments = "--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED " & Arguments
         '开始启动
-        Dim Argument As String = String.Format("-cp ""{0};{1}"" com.bangbang93.ForgeInstaller ""{2}", PathTemp & "Cache\forge_installer.jar", Target, McFolder)
-        Dim Info = New ProcessStartInfo With {
-            .FileName = Java.PathJavaw,
-            .Arguments = Argument,
-            .UseShellExecute = False,
-            .CreateNoWindow = True,
-            .RedirectStandardError = True,
-            .RedirectStandardOutput = True
-        }
-        Log("[Download] 开始安装 Forge：" & Argument)
-        Dim process As New Process With {.StartInfo = Info}
-        Dim LastResults As New Queue(Of String)
-        Using outputWaitHandle As New AutoResetEvent(False)
-            Using errorWaitHandle As New AutoResetEvent(False)
-                AddHandler process.OutputDataReceived, Function(sender, e)
-                                                           Try
-                                                               If e.Data Is Nothing Then
-                                                                   outputWaitHandle.[Set]()
-                                                               Else
-                                                                   LastResults.Enqueue(e.Data)
-                                                                   If LastResults.Count > 100 Then LastResults.Dequeue()
-                                                                   ForgeInjectorLine(e.Data, Task)
-                                                               End If
-                                                           Catch ex As ObjectDisposedException
-                                                           Catch ex As Exception
-                                                               Log(ex, "读取 Forge 安装器信息失败")
-                                                           End Try
-                                                           Try
-                                                               If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                                                   Log("[Installer] 由于任务取消，已中止 Forge 安装")
-                                                                   process.Kill()
-                                                               End If
-                                                           Catch
-                                                           End Try
-                                                           Return Nothing
-                                                       End Function
-                AddHandler process.ErrorDataReceived, Function(sender, e)
-                                                          Try
-                                                              If e.Data Is Nothing Then
-                                                                  errorWaitHandle.[Set]()
-                                                              Else
-                                                                  LastResults.Enqueue(e.Data)
-                                                                  If LastResults.Count > 100 Then LastResults.Dequeue()
-                                                                  ForgeInjectorLine(e.Data, Task)
-                                                              End If
-                                                          Catch ex As ObjectDisposedException
-                                                          Catch ex As Exception
-                                                              Log(ex, "读取 Forge 安装器错误信息失败")
-                                                          End Try
-                                                          Try
-                                                              If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                                                  Log("[Installer] 由于任务取消，已中止 Forge 安装")
-                                                                  process.Kill()
-                                                              End If
-                                                          Catch
-                                                          End Try
-                                                          Return Nothing
-                                                      End Function
-                process.Start()
-                process.BeginOutputReadLine()
-                process.BeginErrorReadLine()
-                '等待
-                Do Until process.HasExited
-                    Thread.Sleep(10)
-                Loop
-                '输出
-                outputWaitHandle.WaitOne(10000)
-                errorWaitHandle.WaitOne(10000)
-                process.Dispose()
-                If LastResults.Last = "true" Then Exit Sub
-                Log(Join(LastResults, vbCrLf))
-                Throw New Exception("Forge 安装器出错，末行为 " & LastResults.Last)
+        SyncLock InstallSyncLock
+            Dim Info = New ProcessStartInfo With {
+                .FileName = Java.PathJavaw,
+                .Arguments = Arguments,
+                .UseShellExecute = False,
+                .CreateNoWindow = True,
+                .RedirectStandardError = True,
+                .RedirectStandardOutput = True
+            }
+            Log("[Download] 开始安装 Forge：" & Arguments)
+            Dim process As New Process With {.StartInfo = Info}
+            Dim LastResults As New Queue(Of String)
+            Using outputWaitHandle As New AutoResetEvent(False)
+                Using errorWaitHandle As New AutoResetEvent(False)
+                    AddHandler process.OutputDataReceived, Function(sender, e)
+                                                               Try
+                                                                   If e.Data Is Nothing Then
+                                                                       outputWaitHandle.[Set]()
+                                                                   Else
+                                                                       LastResults.Enqueue(e.Data)
+                                                                       If LastResults.Count > 100 Then LastResults.Dequeue()
+                                                                       ForgeInjectorLine(e.Data, Task)
+                                                                   End If
+                                                               Catch ex As ObjectDisposedException
+                                                               Catch ex As Exception
+                                                                   Log(ex, "读取 Forge 安装器信息失败")
+                                                               End Try
+                                                               Try
+                                                                   If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
+                                                                       Log("[Installer] 由于任务取消，已中止 Forge 安装")
+                                                                       process.Kill()
+                                                                   End If
+                                                               Catch
+                                                               End Try
+                                                               Return Nothing
+                                                           End Function
+                    AddHandler process.ErrorDataReceived, Function(sender, e)
+                                                              Try
+                                                                  If e.Data Is Nothing Then
+                                                                      errorWaitHandle.[Set]()
+                                                                  Else
+                                                                      LastResults.Enqueue(e.Data)
+                                                                      If LastResults.Count > 100 Then LastResults.Dequeue()
+                                                                      ForgeInjectorLine(e.Data, Task)
+                                                                  End If
+                                                              Catch ex As ObjectDisposedException
+                                                              Catch ex As Exception
+                                                                  Log(ex, "读取 Forge 安装器错误信息失败")
+                                                              End Try
+                                                              Try
+                                                                  If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
+                                                                      Log("[Installer] 由于任务取消，已中止 Forge 安装")
+                                                                      process.Kill()
+                                                                  End If
+                                                              Catch
+                                                              End Try
+                                                              Return Nothing
+                                                          End Function
+                    process.Start()
+                    process.BeginOutputReadLine()
+                    process.BeginErrorReadLine()
+                    '等待
+                    Do Until process.HasExited
+                        Thread.Sleep(10)
+                    Loop
+                    '输出
+                    outputWaitHandle.WaitOne(10000)
+                    errorWaitHandle.WaitOne(10000)
+                    process.Dispose()
+                    If LastResults.Last = "true" Then Exit Sub
+                    Log(Join(LastResults, vbCrLf))
+                    Throw New Exception("Forge 安装器出错，末行为 " & LastResults.Last)
+                End Using
             End Using
-        End Using
-        ''判断结果
-        'Dim ReturnData As String =
-        'If ModeDebug Then Log("[Download] Forge 安装器 Log：" & vbCrLf & ReturnData & vbCrLf)
-        '                                                            If Not ReturnData.TrimEnd(vbCrLf.ToCharArray()).EndsWith("true") Then
-        '    Throw New Exception("自动安装过程出错，日志尾部：" & vbCrLf & ReturnData.Substring(Math.Max(0, ReturnData.Length - 1000)))
-        'End If
+        End SyncLock
     End Sub
     Private Sub ForgeInjectorLine(Content As String, Task As LoaderTask(Of Boolean, Boolean))
         If Content.StartsWith("  Data") OrElse Content.StartsWith("  Slim") Then
