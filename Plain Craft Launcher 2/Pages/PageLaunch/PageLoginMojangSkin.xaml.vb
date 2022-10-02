@@ -47,7 +47,7 @@
         Select Case MyMsgBox("你希望通过哪种途径更改密码？" & vbCrLf & "首次通过个人档案修改密码可能需要验证你的密保问题。", "更改密码", "个人档案", "密保邮箱", "取消")
             Case 1
                 '个人档案
-                OpenWebsite("https://www.minecraft.net/zh-hans/profile/")
+                OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile")
             Case 2
                 '密保邮箱
                 OpenWebsite("https://account.mojang.com/password")
