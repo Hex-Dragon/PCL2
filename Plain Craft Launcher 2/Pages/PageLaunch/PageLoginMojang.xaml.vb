@@ -74,7 +74,7 @@
         If BtnLink.Content = "购买正版" Then
             OpenWebsite("https://www.minecraft.net/zh-hans/store/checkout/minecraft-java-bedrock-edition-pc")
         Else
-            OpenWebsite("https://account.mojang.com/password")
+            OpenWebsite("https://www.minecraft.net/zh-hans/password/forgot")
         End If
     End Sub
     Private Sub HintMigration_Click() Handles HintMigration.MouseLeftButtonUp
