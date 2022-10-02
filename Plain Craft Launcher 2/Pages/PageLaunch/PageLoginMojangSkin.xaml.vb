@@ -88,7 +88,7 @@
                                    MySkin.ReloadCache("http://textures.minecraft.net/texture/" & Result, False)
                                ElseIf Result.ToLower.Contains("ip not secured") Then
                                    If MyMsgBox("首次操作需要在官网验证密保问题。" & vbCrLf & "验证完成后，你即可使用 PCL 更改皮肤，且无需再次验证。", "验证密保问题", "开始验证", "取消") = 1 Then
-                                       OpenWebsite("https://www.minecraft.net/zh-hans/profile/skin")
+                                       OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editskin")
                                    End If
                                ElseIf Result.Contains("request requires user authentication") Then
                                    Hint("正在重新登录，请稍后再次尝试更改皮肤！")
