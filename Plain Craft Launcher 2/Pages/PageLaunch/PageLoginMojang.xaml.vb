@@ -72,7 +72,7 @@
     End Sub
     Private Sub BtnMojang_Click(sender As Object, e As EventArgs) Handles BtnLink.Click
         If BtnLink.Content = "购买正版" Then
-            OpenWebsite("https://www.minecraft.net/store/minecraft-java-edition/buy")
+            OpenWebsite("https://www.minecraft.net/zh-hans/store/checkout/minecraft-java-bedrock-edition-pc")
         Else
             OpenWebsite("https://account.mojang.com/password")
         End If
