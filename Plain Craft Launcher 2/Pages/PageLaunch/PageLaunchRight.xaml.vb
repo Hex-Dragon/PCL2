@@ -102,7 +102,7 @@
     Public Shared Sub StartMigration()
         MyMsgBox("在迁移过程中，你可能需要设置你的档案信息，此时请注意让年龄大于 18 岁，否则可能导致无法登录！" & vbCrLf &
                  "在迁移完成后，请在上方选择 微软 登录方式而非 Mojang。", "迁移提示", "继续", ForceWait:=True)
-        OpenWebsite("https://www.minecraft.net/zh-hans/account-security")
+        OpenWebsite("https://aka.ms/MinecraftMigration")
     End Sub
 
 End Class
