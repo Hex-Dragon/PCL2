@@ -3,7 +3,7 @@
 [![](https://img.shields.io/badge/Support-US-946ce6?style=flat&logo=cashapp&logoColor=bb9aff)](https://afdian.net/@LTCat)
 [![](https://img.shields.io/github/issues/Hex-Dragon/PCL2?style=flat)](https://github.com/Hex-Dragon/PCL2/issues)
 [![](https://img.shields.io/github/forks/Hex-Dragon/PCL2?style=flat)](https://github.com/Hex-Dragon/PCL2/network/members)
-[![](https://img.shields.io/github/stars/Hex-Dragon/PCL2?style=flat)]
+![](https://img.shields.io/github/stars/Hex-Dragon/PCL2?style=flat)
 [![](https://img.shields.io/badge/License-Custom-A31F34?logo=.NET&logoColor=ffffff&style=flat)](https://github.com/Hex-Dragon/PCL2/blob/main/LICENSE.txt)
 
 这里提供了 PCL2 的大多数源代码，包括 UI 库、动画模块、下载模块、Minecraft 启动模块等！
