@@ -79,6 +79,7 @@ PCL2 的源代码仅以帮助公共研究为目的而公开，依然保留所有
 - 这个 PCL2 被部分内测成员戏称为“PCLDownloader”，因为其内置的多线程下载实在太厉害了……甚至有时都强过了 `IDM` ……
 
 - 友情链接：
-  - [PCL1](https://github.com/LTCatt/PCL1) PCL2 的前身，PCL1
+  - [PCL1](https://github.com/LTCatt/PCL1)
+    > PCL2 的前身：PCL1
   - [这个 Readme 的作者](https://github.com/liubanlaobanzhang)
 ---
