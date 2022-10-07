@@ -3,12 +3,15 @@
 ![Title](1.jpg)
   
 # Plain Craft Launcher 2 源代码库
-[![](https://img.shields.io/badge/爱发电-@龙腾猫跃-946ce6?style=flat,logo=afdian)](https://afdian.net/@LTCat)
+[![](https://img.shields.io/badge/%E7%88%B1%E5%8F%91%E7%94%B5-%40%E9%BE%99%E8%85%BE%E7%8C%AB%E8%B7%83-blueviolet)](https://afdian.net/@LTCatt)
+[![](https://img.shields.io/badge/Bilibili-%40%E9%BE%99%E8%85%BE%E7%8C%AB%E8%B7%83-ff69b4?logo=bilibili)](https://b23.tv/rMUeYME)
+[![](https://img.shields.io/badge/Github-@LTCatt-green?logo=github)](https://github.com/LTCatt)
+
 [![](https://img.shields.io/github/issues/Hex-Dragon/PCL2?style=flat,logo=github)](https://github.com/Hex-Dragon/PCL2/issues)
 [![](https://img.shields.io/github/forks/Hex-Dragon/PCL2?style=flat,logo=github)](https://github.com/Hex-Dragon/PCL2/network/members)
 ![](https://img.shields.io/github/stars/Hex-Dragon/PCL2?style=flat,logo=github)
 [![](https://img.shields.io/badge/License-Custom-A31F34?logo=.NET&logoColor=ffffff&style=flat,logo=github)](https://github.com/Hex-Dragon/PCL2/blob/main/LICENSE.txt)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/Hex-Dragon/PCL2)](https://github.com/Hex-Dragon/PCL2/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/Hex-Dragon/PCL2)](https://afdian.net/p/0164034c016c11ebafcb52540025c377)
   
 `经历了 DMCA Takedown 等重重波折，这个存储库终于开放了。`
 
@@ -27,15 +30,13 @@ PCL2 的代码绝大多数其实都是几年前学生时代的产物了……那
 
 ### 相关内容：
 - [PCL2 议题提交](https://github.com/Hex-Dragon/PCL2/issues/new/choose)
-  使用`PCL 2`时遇到了问题？亦或者有新的想法，希望作者开发出新的功能？你可以在[`Issues`](https://github.com/Hex-Dragon/PCL2/issues/new/choose)提出！
+  使用`PCL2`时遇到了问题？亦或者有新的想法，希望作者开发出新的功能？你可以在[`Issues`](https://github.com/Hex-Dragon/PCL2/issues/new/choose)提出！
 - [PCL2 功能投票](https://github.com/Hex-Dragon/PCL2/discussions/2)<br>
-
   > 如何参加？
-
   请见 [@LTCatt: 关于PCL2 功能投票·Discussion #2](https://github.com/Hex-Dragon/PCL2/discussions/2)。
 
-- [PCL 2 正式版下载](https://afdian.net/p/0164034c016c11ebafcb52540025c377)：下载免费的正式版 PCL2。
-- [PCL 2 内测版下载](https://afdian.net/@LTCat)<br>
+- [PCL2 正式版下载](https://afdian.net/p/0164034c016c11ebafcb52540025c377)：下载免费的正式版 PCL2。
+- [PCL2 内测版下载](https://afdian.net/@LTCat)<br>
   *不过，你需要先赞助……*
 - [帮助文档库](https://github.com/LTCatt/PCL2Help)：PCL2 帮助文档在 GitHub 上的存储库（是的，帮助库在另一个 Repo……）
 
@@ -43,8 +44,7 @@ PCL2 的代码绝大多数其实都是几年前学生时代的产物了……那
 
 ### 这个存储库包括什么？
 
-### 存储库中公开了 PCL2 的`绝大多数源代码`，包括：
-
+#### 存储库中公开了 PCL2 的`绝大多数源代码`，包括：
 - 自制的 UI 控件库（Controls 文件夹）
 - 所使用的图片、资源文件，包含 PCL2 的 Logo 等（Images、Resources 文件夹）
 - 自制动画引擎（Modules/Base/ModAnimation.vb）
@@ -74,7 +74,11 @@ PCL2 的源代码仅以帮助公共研究为目的而公开，依然保留所有
 **一些无趣的小细节：**
 - 别想在这里面找到解密游戏的线索，那部分的代码被我抠掉了（笑）
 - 哦，对，解锁隐藏主题的相关代码也都被抠掉了，所以别想着用翻源代码这种歪门邪道来绕过解密了.jpg
-- 源代码库并不是即时更新的，而是在每次 PCL2 发布更新时（手动）同步一次
-- 这个 Readme 是一个叫“老班长”的 Github User 重新改版的……
+- 还有，不要想着在 Releases 里面找到内测版的下载链接了，你大概率是找不到的.psd
+- 源代码库**并不是**即时更新的，而是在每次 PCL2 发布更新时（手动）同步一次
+- 这个 PCL2 被部分内测成员戏称为“PCLDownloader”，因为其内置的多线程下载实在太厉害了……甚至有时都强过了IDM……
 
+- 友情链接：
+  - [PCL1](https://github.com/LTCatt/PCL1) 这是个古老的项目
+  - [这个 Readme 的作者](https://github.com/liubanlaobanzhang)
 ---
