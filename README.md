@@ -13,7 +13,7 @@
 [![](https://img.shields.io/badge/License-Custom-A31F34?logo=.NET&logoColor=ffffff&style=flat,logo=github)](https://github.com/Hex-Dragon/PCL2/blob/main/LICENSE.txt)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/Hex-Dragon/PCL2)](https://afdian.net/p/0164034c016c11ebafcb52540025c377)
   
-`经历了 DMCA Takedown 等重重波折，这个存储库终于开放了。`
+经历了 DMCA Takedown 等重重波折，这个存储库终于开放了。
 
 </div>
 
@@ -33,7 +33,7 @@ PCL2 的代码绝大多数其实都是几年前学生时代的产物了……那
   使用`PCL2`时遇到了问题？亦或者有新的想法，希望作者开发出新的功能？你可以在[`Issues`](https://github.com/Hex-Dragon/PCL2/issues/new/choose)提出！
 - [PCL2 功能投票](https://github.com/Hex-Dragon/PCL2/discussions/2)<br>
   > 如何参加？
-  请见 [@LTCatt: 关于PCL2 功能投票·Discussion #2](https://github.com/Hex-Dragon/PCL2/discussions/2)。
+  请见 `关于 PCL2 功能投票·Discussion` [#2](https://github.com/Hex-Dragon/PCL2/discussion/2)
 
 - [PCL2 正式版下载](https://afdian.net/p/0164034c016c11ebafcb52540025c377)：下载免费的正式版 PCL2。
 - [PCL2 内测版下载](https://afdian.net/@LTCat)<br>
@@ -79,6 +79,6 @@ PCL2 的源代码仅以帮助公共研究为目的而公开，依然保留所有
 - 这个 PCL2 被部分内测成员戏称为“PCLDownloader”，因为其内置的多线程下载实在太厉害了……甚至有时都强过了 `IDM` ……
 
 - 友情链接：
-  - [PCL1](https://github.com/LTCatt/PCL1) 这是个古老的项目
+  - [PCL1](https://github.com/LTCatt/PCL1) PCL2 的前身，PCL1
   - [这个 Readme 的作者](https://github.com/liubanlaobanzhang)
 ---
