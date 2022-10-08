@@ -47,7 +47,7 @@
         Select Case MyMsgBox("你希望通过哪种途径更改密码？" & vbCrLf & "首次通过个人档案修改密码可能需要验证你的密保问题。", "更改密码", "个人档案", "密保邮箱", "取消")
             Case 1
                 '个人档案
-                OpenWebsite("https://www.minecraft.net/zh-hans/profile/")
+                OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile")
             Case 2
                 '密保邮箱
                 OpenWebsite("https://account.mojang.com/password")
@@ -88,7 +88,7 @@
                                    MySkin.ReloadCache("http://textures.minecraft.net/texture/" & Result, False)
                                ElseIf Result.ToLower.Contains("ip not secured") Then
                                    If MyMsgBox("首次操作需要在官网验证密保问题。" & vbCrLf & "验证完成后，你即可使用 PCL 更改皮肤，且无需再次验证。", "验证密保问题", "开始验证", "取消") = 1 Then
-                                       OpenWebsite("https://www.minecraft.net/zh-hans/profile/skin")
+                                       OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editskin")
                                    End If
                                ElseIf Result.Contains("request requires user authentication") Then
                                    Hint("正在重新登录，请稍后再次尝试更改皮肤！")
