@@ -10,6 +10,12 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 265 Then 'Release 2.3.5
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复部分情况下无法启动路径带有中文的游戏的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复多个可能导致 OptiFine、Forge 安装失败的 Bug"))
+            FeatureCount += 13
+            BugCount += 9
+        End If
         If LastVersion < 260 Then 'Release 2.3.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "解决了联机人数 ≥3 人时出现的频繁掉线或突发高延迟的问题"))
             FeatureCount += 22
