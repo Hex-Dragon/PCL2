@@ -3,9 +3,9 @@ contact_links:
   - name: 帮助文档反馈
     url: https://github.com/LTCatt/PCL2Help/issues
     about: 提交 PCL2 帮助系统（更多 → 帮助）相关的反馈
-  - name: 联机模块反馈
-    url: https://mcer.cn/
-    about: 向联机模块开发者提交反馈
+  - name: 联机反馈与交流
+    url: https://shimowendang.com/docs/KrkEVXz1K0frowAJ#anchor-7qQG
+    about: 加入联机模块官方 QQ 群反馈联机异常，或询问联机功能的使用方式
   - name: 提问
     url: https://github.com/Hex-Dragon/PCL2/discussions/new?category=%E6%8F%90%E9%97%AE
     about: 我不想提交反馈，只是想问一些问题
