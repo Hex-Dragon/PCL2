@@ -30,7 +30,7 @@ Public Class Application
                     UpdateReplace(e.Args(1), e.Args(2).Trim(""""), e.Args(3).Trim(""""), e.Args(4))
                     Environment.[Exit](Result.Cancel)
                     Exit Sub
-                ElseIf e.Args(0) = "--link" Then
+                ElseIf e.Args(0).StartsWith("--link") Then
                     '稍作等待后切换到联机页面
                     Thread.Sleep(1000)
                     FormMain.IsLinkRestart = True
@@ -142,11 +142,9 @@ Public Class Application
     End Sub
 
     '动态 DLL 调用
-    Private Shared AssemblyStun As Assembly
     Private Shared AssemblyNAudio As Assembly
     Private Shared AssemblyJson As Assembly
     Private Shared AssemblyDialog As Assembly
-    Private Shared ReadOnly AssemblyStunLock As New Object
     Private Shared ReadOnly AssemblyNAudioLock As New Object
     Private Shared ReadOnly AssemblyJsonLock As New Object
     Private Shared ReadOnly AssemblyDialogLock As New Object
@@ -174,14 +172,6 @@ Public Class Application
                     AssemblyDialog = Assembly.Load(GetResources("Dialogs"))
                 End If
                 Return AssemblyDialog
-            End SyncLock
-        ElseIf args.Name.StartsWith("STUN") Then
-            SyncLock AssemblyStunLock
-                If AssemblyStun Is Nothing Then
-                    Log("[Start] 加载 DLL：STUN")
-                    AssemblyStun = Assembly.Load(GetResources("STUN"))
-                End If
-                Return AssemblyStun
             End SyncLock
         Else
             Return Nothing

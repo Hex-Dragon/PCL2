@@ -6,8 +6,14 @@
              d:DesignWidth="800" d:DesignHeight="800">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
-            <local:MyCard Margin="0,20,0,-5" Title="通用设置">
-                <StackPanel Margin="25,40,25,15">
+            <local:MyCard Margin="0,15" Title="HiPer">
+                <StackPanel Margin="25,40,25,20" Orientation="Vertical">
+                    <local:MyCheckBox Text="在索引码还有 5 分钟到期时提醒我" x:Name="CheckHiperCertWarn" Tag="LinkHiperCertWarn" Height="22" />
+                    <local:MyButton x:Name="BtnHiperLog" Height="35" MinWidth="140" Text="查看日志" Padding="13,0" Margin="0,10,20,0" HorizontalAlignment="Left" />
+                </StackPanel>
+            </local:MyCard>
+            <local:MyCard Margin="0,0,0,15" Title="IOI">
+                <StackPanel Margin="25,40,25,20">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
@@ -26,8 +32,6 @@
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
                     </Grid>
-                    <local:MyCheckBox Text="打开启动器时启动联机模块" Height="22" x:Name="CheckLinkAuto" Tag="LinkAuto" ToolTipService.ShowDuration="2333333" Margin="0,10,0,4"
-                                          ToolTip="开启联机模块的人越多，所有使用 PCL2 的玩家的初次连接速度就会越快。因此，启用此项可以为大家作出贡献。&#13;联机模块仅使用少许网络带宽，几乎不使用硬盘与 CPU。" />
                 </StackPanel>
             </local:MyCard>
         </StackPanel>

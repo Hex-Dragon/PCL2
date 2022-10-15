@@ -30,6 +30,7 @@
         Color
         White
         Black
+        Red
         Custom
     End Enum
     Public Property Theme As Themes = Themes.Color
@@ -101,6 +102,8 @@
                             AnimList.Add(AaColor(Path, Shape.FillProperty, "ColorBrush2", AnimationColorIn))
                         Case Themes.White
                             AnimList.Add(AaColor(PanBack, BackgroundProperty, New MyColor(50, 255, 255, 255) - PanBack.Background, AnimationColorIn))
+                        Case Themes.Red
+                            AnimList.Add(AaColor(Path, Shape.FillProperty, New MyColor(255, 76, 76) - Path.Fill, AnimationColorIn))
                         Case Themes.Black
                             AnimList.Add(AaColor(Path, Shape.FillProperty, New MyColor(230, 0, 0, 0) - Path.Fill, AnimationColorIn))
                         Case Themes.Custom
@@ -117,6 +120,9 @@
                         Case Themes.White
                             AnimList.Add(AaColor(Path, Shape.FillProperty, "ColorBrush8", AnimationColorOut))
                             AnimList.Add(AaColor(PanBack, BackgroundProperty, New MyColor(0, 255, 255, 255) - PanBack.Background, AnimationColorOut))
+                        Case Themes.Red
+                            AnimList.Add(AaColor(Path, Shape.FillProperty, New MyColor(160, 255, 76, 76) - Path.Fill, AnimationColorOut))
+                            PanBack.Background = New MyColor(0, 255, 255, 255)
                         Case Themes.Black
                             AnimList.Add(AaColor(Path, Shape.FillProperty, New MyColor(160, 0, 0, 0) - Path.Fill, AnimationColorOut))
                             PanBack.Background = New MyColor(0, 255, 255, 255)
@@ -135,6 +141,8 @@
                         Path.SetResourceReference(Shape.FillProperty, "ColorBrush5")
                     Case Themes.White
                         Path.SetResourceReference(Shape.FillProperty, "ColorBrush8")
+                    Case Themes.Red
+                        Path.Fill = New MyColor(160, 255, 76, 76)
                     Case Themes.Black
                         Path.Fill = New MyColor(160, 0, 0, 0)
                     Case Themes.Custom

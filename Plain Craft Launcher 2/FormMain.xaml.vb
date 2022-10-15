@@ -17,7 +17,7 @@ Public Class FormMain
             BugCount += 9
         End If
         If LastVersion < 260 Then 'Release 2.3.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "解决了联机人数 ≥3 人时出现的频繁掉线或突发高延迟的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "解决了联机人数 ≥3 人时出现的频繁掉线或突发高延迟的问题"))
             FeatureCount += 22
             BugCount += 4
         End If
@@ -32,22 +32,21 @@ Public Class FormMain
             BugCount += 3
         End If
         If LastVersion < 253 Then 'Release 2.2.13
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(7, "支持在安装菜单中直接安装 OptiFabric"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持调整 Mod 文件名中中文译名的位置"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "崩溃分析优化，支持分析更多 Forge 相关的崩溃"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在安装菜单中直接安装 OptiFabric"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持调整 Mod 文件名中中文译名的位置"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "崩溃分析优化，支持分析更多 Forge 相关的崩溃"))
             FeatureCount += 13
             BugCount += 27
         End If
         If LastVersion < 250 Then 'Release 2.2.11
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "支持将 Mod 文件拖入窗口进行安装"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持将 Mod 文件拖入窗口进行安装"))
             If LastVersion = 246 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法使用中文搜索 Mod 的 Bug"))
             FeatureCount += 8
             BugCount += 33
         End If
         If LastVersion < 246 Then 'Release 2.2.9
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "Mod 下载支持筛选 Forge Mod 与 Fabric Mod"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "大幅修改联机页面布局（作为联机优化的第二个阶段）"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod、整合包下载的综合优化"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 下载支持筛选 Forge Mod 与 Fabric Mod"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "Mod、整合包下载的综合优化"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复使用离线登录进入 Forge 的存档可能导致游戏崩溃"))
             FeatureCount += 13
             BugCount += 11
@@ -62,92 +61,41 @@ Public Class FormMain
             BugCount += 2
         End If
         If LastVersion < 236 Then 'Release 2.2.5
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "网络状态检测支持检测 Windows 防火墙与网络延迟"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "重制右侧页面的切换动画，卡片与提示条将逐个进入退出，并具有独特的位移动画"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "添加 MC 1.18 中要求 Java 17 的检测与提醒"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "优化页面切换、下载的性能"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "允许拖拽按钮的设置第三方登录"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复网络状态检测的结果总为 A 级的 Bug"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法下载新版本的 Forge 的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "网络状态检测支持检测 Windows 防火墙与网络延迟"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重制右侧页面的切换动画，卡片与提示条将逐个进入退出，并具有独特的位移动画"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 MC 1.18 中要求 Java 17 的检测与提醒"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "优化页面切换、下载的性能"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "允许拖拽按钮设置第三方登录"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复无法下载新版本的 Forge 的 Bug"))
             FeatureCount += 25
             BugCount += 22
         End If
         If LastVersion < 233 Then 'Release 2.2.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(7, "微软账号支持更换皮肤与披风"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "支持拖拽整合包文件到 PCL2 进行快捷安装"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "Mod 下载支持显示对应的 MC 版本与 Mod 加载器，且可以跳转到 MCBBS 介绍页"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持安装 1.17 OptiFine + Forge"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "使用 Mojang 账号登录将会显示迁移提醒"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "微软账号支持更换皮肤与披风"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持拖拽整合包文件到 PCL2 进行快捷安装"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 下载支持显示对应的 MC 版本与 Mod 加载器，且可以跳转到 MCBBS 介绍页"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持安装 1.17 OptiFine + Forge"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "使用 Mojang 账号登录将会显示迁移提醒"))
             FeatureCount += 12
             BugCount += 26
         End If
         If LastVersion < 231 Then 'Release 2.2.1, Also 229
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(9, "联机功能的早期测试（尚未完成，延迟很高，之后会优化的）"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "添加 1.18 实验性快照 5 的特供下载，且支持列表的联网更新"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "添加 1.18 实验性快照 5 的特供下载，且支持列表的联网更新"))
             FeatureCount += 11
             BugCount += 3
         End If
-        If LastVersion < 226 Then 'Release 2.1.4
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "支持 1.17.1 Forge、Fabric 的安装与启动"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "优化 Forge 下载与安装速度，提高安装稳定性"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "更新内置帮助库，添加数个指南页面与整合包、存档的安装教程"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持将游戏文件夹压缩包作为游戏整合包导入"))
-            FeatureCount += 12
-            BugCount += 13
-        End If
-        If LastVersion < 224 Then 'Release 2.1.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "界面与动画综合优化，重新制作主题配色"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "添加 1.18 实验性快照的特供下载"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "更新内置帮助库，添加光影、数据包、Mod 等资源的安装教程"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "游戏崩溃分析优化"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "若设置为自动更新，PCL2 会在关闭时才替换文件"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "追加大量千万████的可能性"))
-            'FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持 1.17 Forge 的安装与启动"))
-            FeatureCount += 33
-            BugCount += 20
-        End If
-        If LastVersion < 217 Then 'Release 2.0.5
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(7, "可以根据游戏版本自动选择所需的 Java"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "允许在 Java 版本检测不通过时强制指定使用 Java"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "允许为不同版本独立设置 Java"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "Java 选择与搜索的综合优化"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法使用 Mod、整合包搜索功能的 Bug"))
-            FeatureCount += 8
-            BugCount += 20
-        End If
-        If LastVersion < 214 Then 'Release 2.0.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "添加一键关闭所有运行中的 Minecraft 的按钮"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "增加对 MC 1.17 需要 Java 16 的检测与说明"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Minecraft 崩溃分析优化"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法修改部分个性化设置的严重 Bug"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复 Windows 7 可能无法登录微软账号的严重 Bug"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复网络不稳定时安装整合包极易失败的严重 Bug"))
-            FeatureCount += 10
-            BugCount += 13
-        End If
-        If LastVersion < 212 Then 'Release 2.0.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(9, "添加帮助页面，且可以自行添加、删除其中的内容"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "支持安装 MCBBS 格式的整合包"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "自定义主页/帮助页面的 XAML 功能扩展"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "同时安装 OptiFine 与 Forge 时，OptiFine 将作为 Mod 安装"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "优化 CurseForge 搜索"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化多个报错提示，更加人性化"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "适配适用于快照版 MC 的 OptiFine"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复进入 OptiFine 下载页面导致卡死的严重 Bug"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动部分 OptiFine+Forge 版本的 Bug"))
-            FeatureCount += 20
-            BugCount += 42
-        End If
 #Else
-        '9：大+
-        '8：中大+
-        '7：中+，大*
-        '6：中小型+，中大*
-        '5：小型+，中*
-        '4：中小*
-        '3：小*
-        '2：极度严重的 Bug
-        '1：严重的 Bug
+        '5：          FEAT+
+        '4：     IMP+ FEAT*
+        '3：BUG+ IMP* FEAT-
+        '2：BUG* IMP-
+        '1：BUG-
+        If LastVersion < 266 Then 'Snapshot 2.4.0
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "追加新的联机方式（HiPer 联机模块）"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "游戏崩溃的弹窗添加了直接查看日志的选项"))
+            FeatureCount += 3
+            BugCount += 8
+        End If
         If LastVersion < 264 Then 'Snapshot 2.3.5
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法启动部分 Forge 版本的 Bug"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复多个可能导致 OptiFine、Forge 安装失败的 Bug"))
@@ -160,7 +108,7 @@ Public Class FormMain
             BugCount += 5
         End If
         If LastVersion < 262 Then 'Snapshot 2.3.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法使用 Mod、整合包搜索功能的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复无法使用 Mod、整合包搜索功能的 Bug"))
             BugCount += 1
         End If
         If LastVersion < 261 Then 'Snapshot 2.3.2
@@ -168,11 +116,10 @@ Public Class FormMain
             BugCount += 4
         End If
         If LastVersion < 259 Then 'Snapshot 2.3.1
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "解决了联机人数 ≥3 人时出现的频繁掉线或突发高延迟的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "解决了联机人数 ≥3 人时出现的频繁掉线或突发高延迟的问题"))
             FeatureCount += 14
         End If
         If LastVersion < 258 Then 'Snapshot 2.3.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复下载部分 Mod、整合包的 Bug"))
             FeatureCount += 4
             BugCount += 4
         End If
@@ -182,19 +129,19 @@ Public Class FormMain
             BugCount += 3
         End If
         If LastVersion < 254 Then 'Snapshot 2.2.13
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持调整 Mod 文件名中中文译名的位置"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持调整 Mod 文件名中中文译名的位置"))
             FeatureCount += 3
             BugCount += 17
         End If
         If LastVersion < 252 Then 'Snapshot 2.2.12
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(7, "支持在安装菜单中直接安装 OptiFabric"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "崩溃分析优化，支持分析更多 Forge 相关的崩溃"))
-            If LastVersion = 251 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复同时安装 Forge 和 OptiFine 时 OptiFine 无效的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在安装菜单中直接安装 OptiFabric"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "崩溃分析优化，支持分析更多 Forge 相关的崩溃"))
+            If LastVersion = 251 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复同时安装 Forge 和 OptiFine 时 OptiFine 无效的 Bug"))
             FeatureCount += 10
             BugCount += 10
         End If
         If LastVersion < 251 Then 'Snapshot 2.2.11
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "支持将 Mod 文件拖入窗口进行安装"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持将 Mod 文件拖入窗口进行安装"))
             FeatureCount += 2
             BugCount += 16
         End If
@@ -204,14 +151,13 @@ Public Class FormMain
             BugCount += 17
         End If
         If LastVersion < 247 Then 'Snapshot 2.2.9
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "Mod 下载支持筛选 Forge Mod 与 Fabric Mod"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 下载支持筛选 Forge Mod 与 Fabric Mod"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod、整合包下载的综合优化"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复使用离线登录进入 Forge 的存档可能导致游戏崩溃"))
             FeatureCount += 8
             BugCount += 4
         End If
         If LastVersion < 245 Then 'Snapshot 2.2.8
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "大幅修改联机页面布局（作为联机优化的第二个阶段）"))
             FeatureCount += 5
             BugCount += 7
         End If
@@ -221,115 +167,47 @@ Public Class FormMain
         End If
         If LastVersion < 239 Then 'Snapshot 2.2.6
             If LastVersion >= 235 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复自动更新由于路径错误失败的 Bug"))
-            If LastVersion = 237 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法使用联机模块的 Bug"))
+            If LastVersion = 237 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复无法使用联机模块的 Bug"))
             FeatureCount += 1
             BugCount += 1
         End If
         If LastVersion < 237 Then 'Snapshot 2.2.5
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "允许拖拽按钮的设置第三方登录"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "允许拖拽按钮设置第三方登录"))
             If LastVersion = 235 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复在启动游戏时有可能卡死的 Bug"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法下载新版本的 Forge 的 Bug"))
             FeatureCount += 2
             BugCount += 3
         End If
         If LastVersion < 235 Then 'Snapshot 2.2.4
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "网络状态检测支持检测 Windows 防火墙与网络延迟"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "重制右侧页面的切换动画，卡片与提示条将逐个进入退出，并具有独特的位移动画"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "添加 MC 1.18 中要求 Java 17 的检测与提醒"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "优化页面切换、下载的性能"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复网络状态检测的结果总为 A 级的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "网络状态检测支持检测 Windows 防火墙与网络延迟"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重制右侧页面的切换动画，卡片与提示条将逐个进入退出，并具有独特的位移动画"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 MC 1.18 中要求 Java 17 的检测与提醒"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "优化页面切换、下载的性能"))
             FeatureCount += 23
             BugCount += 19
         End If
         If LastVersion < 234 Then 'Snapshot 2.2.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "支持拖拽整合包文件到 PCL2 进行快捷安装"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持安装 1.17 OptiFine + Forge"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "Mod 详情页面支持跳转 MCBBS 介绍页"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持拖拽整合包文件到 PCL2 进行快捷安装"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持安装 1.17 OptiFine + Forge"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "Mod 详情页面支持跳转 MCBBS 介绍页"))
             FeatureCount += 10
             BugCount += 17
         End If
         If LastVersion < 232 Then 'Snapshot 2.2.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(7, "微软账号支持更换皮肤与披风"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "支持显示 Mod 与整合包对应的 MC 版本与 Mod 加载器名称"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "使用 Mojang 账号登录将会显示迁移提醒"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "微软账号支持更换皮肤与披风"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持显示 Mod 与整合包对应的 MC 版本与 Mod 加载器名称"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "使用 Mojang 账号登录将会显示迁移提醒"))
             FeatureCount += 2
             BugCount += 9
         End If
         If LastVersion < 230 Then 'Snapshot 2.2.1, Also 228
-            If LastVersion = 227 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "联机功能的小优化"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "添加 1.18 实验性快照 5 的特供下载，且支持列表的联网更新"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复 Win7 上使用联机功能导致日志文件极大，占用硬盘空间的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 1.18 实验性快照 5 的特供下载，且支持列表的联网更新"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复 Win7 上 IOI 联机导致日志文件极大，占用硬盘空间的 Bug"))
             FeatureCount += 12
             BugCount += 4
         End If
         If LastVersion < 227 Then 'Snapshot 2.2.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(9, "新增联机功能的早期测试版本"))
             FeatureCount += 2
             BugCount += 2
-        End If
-        If LastVersion < 225 Then 'Snapshot 2.1.4
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "支持 1.17.1 Forge、Fabric 的安装与启动"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "优化 Forge 下载与安装速度，提高安装稳定性"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "更新内置帮助库，添加数个指南页面与整合包、存档的安装教程"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持将游戏文件夹压缩包作为游戏整合包导入"))
-            FeatureCount += 12
-            BugCount += 13
-        End If
-        If LastVersion < 223 Then 'Snapshot 2.1.3
-            BugCount += 4
-        End If
-        If LastVersion < 222 Then 'Snapshot 2.1.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "更新内置帮助库，添加光影、数据包、Mod 的安装教程"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "游戏崩溃分析优化"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复登录微软账号启动游戏时报错的 Bug"))
-            FeatureCount += 8
-            BugCount += 11
-        End If
-        If LastVersion < 221 Then 'Snapshot 2.1.1
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "界面与动画综合优化，重新制作主题配色"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "若识别码不变，更新密钥在输入一次后会一直有效"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "若设置为自动更新，PCL2 会在关闭时才替换文件"))
-            FeatureCount += 10
-            BugCount += 5
-        End If
-        If LastVersion < 220 Then 'Snapshot 2.1.0
-            'FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "界面与动画综合优化"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "追加大量千万████的可能性"))
-            FeatureCount += 15
-        End If
-        If LastVersion < 219 Then 'Snapshot 2.0.5
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法使用 Mod、整合包搜索功能的 Bug"))
-            BugCount += 2
-        End If
-        If LastVersion < 218 Then 'Snapshot 2.0.4
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "允许为不同版本独立设置 Java"))
-            BugCount += 12
-        End If
-        If LastVersion < 216 Then 'Snapshot 2.0.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(7, "可以根据游戏版本自动选择所需的 Java"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "允许在 Java 版本检测不通过时强制指定使用 Java"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "Java 选择与搜索的综合优化"))
-            FeatureCount += 8
-            BugCount += 7
-        End If
-        If LastVersion < 215 Then 'Snapshot 2.0.2
-            If LastVersion = 213 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复账号切换、版本选择下拉框无法展开的严重 Bug"))
-            If LastVersion = 213 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复误判部分客户端需要 Java 16，导致无法启动游戏的严重 Bug"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复 Windows 7 可能无法登录微软账号的严重 Bug"))
-            BugCount += 1
-        End If
-        If LastVersion < 213 Then 'Snapshot 2.0.1
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(6, "添加一键关闭所有运行中的 Minecraft 的按钮"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "增加对 MC 1.17 需要 Java 16 的检测与说明"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Minecraft 崩溃分析优化"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复网络不稳定时安装整合包极易失败的严重 Bug"))
-            FeatureCount += 10
-            BugCount += 12
-        End If
-        If LastVersion < 211 Then 'Snapshot 2.0.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "适配适用于快照版 MC 的 OptiFine"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复进入 OptiFine 下载页面导致卡死的严重 Bug"))
-            BugCount += 3
         End If
 #End If
         '整理更新日志文本
@@ -361,7 +239,10 @@ Public Class FormMain
 
     '窗口加载
     Private IsWindowLoadFinished As Boolean = False
-    Public Shared IsLinkRestart As Boolean = False '是否为联机提权后自动重启
+    ''' <summary>
+    ''' 是否为联机提权后自动重启。
+    ''' </summary>
+    Public Shared IsLinkRestart As Boolean = False
     Public Sub New()
         ApplicationStartTick = GetTimeTick()
         '窗体参数初始化
@@ -392,7 +273,7 @@ Public Class FormMain
         PanMainLeft.Child = FrmLaunchLeft
         PanMainRight.Child = FrmLaunchRight
         FrmLaunchRight.PageState = MyPageRight.PageStates.ContentStay
-        If IsLinkRestart Then PageChange(PageType.Link)
+        If IsLinkRestart Then PageChange(PageType.Link, PageSubType.LinkIoi)
         '模式提醒
 #If DEBUG Then
         Hint("[开发者模式] PCL 正以开发者模式运行，这可能会造成严重的性能下降，请务必立即向开发者反馈此问题！", HintType.Critical)
@@ -469,7 +350,7 @@ Public Class FormMain
         RunInNewThread(Sub()
                            If Not Setup.Get("SystemEula") Then
 Reopen:
-                               Select Case MyMsgBox("在使用 PCL2 前，请同意 PCL2 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "打开用户协议与免责声明页面")
+                               Select Case MyMsgBox("在使用 PCL2 前，请同意 PCL2 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明")
                                    Case 1
                                        Setup.Set("SystemEula", True)
                                    Case 2
@@ -481,7 +362,6 @@ Reopen:
                            End If
                            Try
                                Thread.Sleep(200)
-                               If Setup.Get("LinkAuto") Then PageLinkIoi.InitLoader.Start()
                                DlClientListMojangLoader.Start(1)
                                RunCountSub()
                                ServerLoader.Start(1)
@@ -558,9 +438,13 @@ Reopen:
                      "多谢各位的理解啦！", "重新解锁提醒")
         End If
         '移动自定义皮肤
-        If LastVersionCode <= 161 AndAlso File.Exists(Path & "PCL\CustomSkin.png") AndAlso Not File.Exists(PathTemp & "CustomSkin.png") Then
-            CopyFile(Path & "PCL\CustomSkin.png", PathTemp & "CustomSkin.png")
-            Log("[Start] 已移动离线自定义皮肤")
+        If LastVersionCode <= 161 AndAlso File.Exists(Path & "PCL\CustomSkin.png") AndAlso Not File.Exists(PathAppdata & "CustomSkin.png") Then
+            CopyFile(Path & "PCL\CustomSkin.png", PathAppdata & "CustomSkin.png")
+            Log("[Start] 已移动离线自定义皮肤 (162)")
+        End If
+        If LastVersionCode <= 263 AndAlso File.Exists(PathTemp & "CustomSkin.png") AndAlso Not File.Exists(PathAppdata & "CustomSkin.png") Then
+            CopyFile(PathTemp & "CustomSkin.png", PathAppdata & "CustomSkin.png")
+            Log("[Start] 已移动离线自定义皮肤 (264)")
         End If
         '解除帮助页面的隐藏
         If LastVersionCode <= 205 Then
@@ -632,13 +516,14 @@ Reopen:
         IsProgramEnded = True
         AniControlEnabled += 1
         PageLinkIoi.IoiStop(False)
+        PageLinkHiper.HiperStop(False)
         If IsUpdateWaitingRestart Then UpdateRestart(False)
         If ReturnCode = Result.Exception Then
             If Not IsLogShown Then
                 FeedbackInfo()
                 Log("请在 https://jinshuju.net/f/rP4b6E?x_field_1=crash 提交错误报告，以便于作者解决此问题！")
                 IsLogShown = True
-                ShellAndGetExitCode(Path & "PCL\Log1.txt")
+                ShellOnly(Path & "PCL\Log1.txt")
             End If
             Thread.Sleep(500) '防止 PCL 在记事本打开前就被掐掉
         End If
@@ -841,7 +726,7 @@ Reopen:
                                        '获取并检查目标版本
                                        Dim TargetVersion As McVersion = McVersionCurrent
                                        If PageCurrent = PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
-                                       If PageCurrent = PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Version.Modable Then
+                                       If PageCurrent = PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Modable Then
                                            '正在选择版本，或当前版本不能安装 Mod
                                            Hint("若要安装 Mod，请先选择一个可以安装 Mod 的版本！")
                                        ElseIf Not (PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod) Then
@@ -1039,11 +924,11 @@ Install:
         SetupUI = 1
         SetupSystem = 2
         SetupLink = 3
-        LinkCato = 2
-        LinkIoi = 3
-        LinkSetup = 5
-        LinkHelp = 6
-        LinkFeedback = 7
+        LinkHiper = 1
+        LinkIoi = 2
+        LinkSetup = 4
+        LinkHelp = 5
+        LinkFeedback = 6
         OtherHelp = 0
         OtherAbout = 1
         OtherTest = 2
@@ -1281,7 +1166,6 @@ Install:
                     PageChangeAnim(FrmDownloadLeft, FrmDownloadLeft.PageGet(SubType))
                 Case PageType.Link '联机
                     If FrmLinkLeft Is Nothing Then FrmLinkLeft = New PageLinkLeft
-                    If FrmLinkIoi Is Nothing Then FrmLinkIoi = New PageLinkIoi
                     PageChangeAnim(FrmLinkLeft, FrmLinkLeft.PageGet(SubType))
                 Case PageType.Setup '设置
                     If FrmSetupLeft Is Nothing Then FrmSetupLeft = New PageSetupLeft
@@ -1337,7 +1221,6 @@ Install:
         AniStart({
             AaCode(Sub()
                        AniControlEnabled += 1
-                       CType(PanMainRight.Child, MyPageRight).PageOnForceExit()
                        '把新页面添加进容器
                        PanMainLeft.Child = PageLeft
                        PageLeft.Opacity = 0

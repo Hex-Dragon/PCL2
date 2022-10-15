@@ -142,9 +142,6 @@
   <data name="NAudio" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NAudio.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="STUN" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\STUN.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="Transformer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\transformer.jar;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>

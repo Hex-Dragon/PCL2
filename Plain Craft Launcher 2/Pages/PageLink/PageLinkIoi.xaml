@@ -8,7 +8,6 @@
     <Grid>
         <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
             <StackPanel Orientation="Vertical" Margin="25,10">
-                <local:MyHint Margin="0,15,0,0" Text="联机功能仍处于测试阶段，尚未制作完成，因此延迟很高，且存在较多 Bug。延迟与内存占用高的问题将在后续优化，请多多包涵……" />
                 <local:MyCard Margin="0,15,0,0" x:Name="CardUser" Title="已连接的玩家 (0)">
                     <StackPanel Margin="20,37,20,15">
                         <local:MyHint Margin="5,2,5,8" x:Name="LabHint" IsWarn="False" />
@@ -19,7 +18,7 @@
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             </Grid.ColumnDefinitions>
                             <local:MyButton x:Name="BtnLeftCreate" Grid.Column="0" MinWidth="140" Text="建立连接" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
-                            <local:MyButton x:Name="BtnLeftCopy" Grid.Column="1" MinWidth="140" Text="复制连接码" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
+                            <local:MyButton x:Name="BtnLeftCopy" Grid.Column="1" MinWidth="140" Text="复制联机码" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
                         </Grid>
                     </StackPanel>
                 </local:MyCard>
@@ -44,5 +43,8 @@
         <local:MyCard Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,0" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False">
             <local:MyLoading Text="正在加载联机模块" Margin="20,20,20,17" x:Name="Load" ShowProgress="True" HorizontalAlignment="Center" VerticalAlignment="Center" />
         </local:MyCard>
+        <Grid x:Name="PanAlways" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" Opacity="0.5">
+            <local:MyTextButton Text="联机服务由 速聚 授权提供" EventType="打开网页" EventData="https://www.the.bb/zh-cn" />
+        </Grid>
     </Grid>
 </local:MyPageRight>

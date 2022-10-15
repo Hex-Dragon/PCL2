@@ -238,7 +238,7 @@
                 For Each VersionPath In VersionFolder.EnumerateDirectories
                     Dim Version As New McVersion(VersionPath.FullName)
                     Version.Load()
-                    If Not Version.Version.Modable Then Continue For
+                    If Not Version.Modable Then Continue For
                     '4. 该版本的隔离文件夹下不存在 mods
                     Dim ModIndieFolder As New DirectoryInfo(Version.Path & "mods\")
                     If ModIndieFolder.Exists AndAlso ModIndieFolder.EnumerateFiles.Count > 0 Then Exit Sub

@@ -1217,7 +1217,7 @@
     ''' CurseForge 工程列表获取事件。
     ''' </summary>
     Public Sub DlCfProjectSub(Task As LoaderTask(Of DlCfProjectRequest, DlCfProjectResult))
-        Dim RawFilter As String = If(Task.Input.SearchFilter, "")
+        Dim RawFilter As String = If(Task.Input.SearchFilter, "").Trim.ToLower
         Task.Input.SearchFilter = RawFilter
         Log("[Download] CurseForge 工程列表搜索原始文本：" & RawFilter)
         '中文请求关键字处理
@@ -1263,12 +1263,20 @@
         Dim RightKeywords As New List(Of String)
         For Each Keyword In AllPossibleKeywords.Split(" ")
             If Keyword.Trim = "" Then Continue For
+            If Keyword = "forge" OrElse Keyword = "fabric" OrElse Keyword = "for" Then 'https://github.com/Hex-Dragon/PCL2/issues/208
+                Log("[Download] 已跳过搜索关键词 " & Keyword, LogLevel.Developer)
+                Continue For
+            End If
             RightKeywords.Add(Keyword)
         Next
-        Task.Input.SearchFilter = Join(ArrayNoDouble(RightKeywords), " ").ToLower
+        If RawFilter.Length > 0 AndAlso RightKeywords.Count = 0 Then
+            Task.Input.SearchFilter = RawFilter '全都被过滤掉了
+        Else
+            Task.Input.SearchFilter = Join(ArrayNoDouble(RightKeywords), " ").ToLower
+        End If
         '例外项：OptiForge、OptiFabric（拆词后因为包含 Forge/Fabric 导致无法搜到实际的 Mod）
-        If RawFilter.ToLower.Contains("optiforge") Then Task.Input.SearchFilter = "optiforge"
-        If RawFilter.ToLower.Contains("optifabric") Then Task.Input.SearchFilter = "optifabric"
+        If RawFilter.Replace(" ", "").ToLower.Contains("optiforge") Then Task.Input.SearchFilter = "optiforge"
+        If RawFilter.Replace(" ", "").ToLower.Contains("optifabric") Then Task.Input.SearchFilter = "optifabric"
         Log("[Download] CurseForge 工程列表搜索最终文本：" & Task.Input.SearchFilter, LogLevel.Developer)
         '正式获取
         Dim Url = Task.Input.GetAddress()
@@ -1505,7 +1513,6 @@
                 Json = NetGetCodeByRequestRetry("https://api.curseforge.com/v1/mods/" & ProjectId & "/files?pageSize=999", Accept:="application/json", IsJson:=True)("data")
             Else
                 'Mod 使用每个版本最新的文件
-                'TODO: 完整 Mod 文件列表支持
                 Json = GetJson(NetRequestRetry("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(TargetProject.FileIndexes, ",") & "]}", "application/json"))("data")
             End If
             Dim Files As New Dictionary(Of Integer, DlCfFile)
@@ -1633,6 +1640,10 @@ ExitSub:
             If WaitCycle = 0 Then
                 '启动第一个源
                 LoaderList(0).Key.Start(MainLoader.Input, IsForceRestart)
+                '将其他源标记为未启动，以确保可以切换下载源（#184）
+                For i = 1 To LoaderList.Count - 1
+                    LoaderList(i).Key.State = LoadState.Waiting
+                Next
             End If
             For i = 0 To LoaderList.Count - 1
                 If WaitCycle = LoaderList(i).Value * 100 Then

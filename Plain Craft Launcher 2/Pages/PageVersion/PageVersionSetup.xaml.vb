@@ -275,7 +275,7 @@
             Dim RamTarget2 As Double '估计没啥问题了的内存
             Dim RamTarget3 As Double '安装过多附加组件需要的内存
             If Version IsNot Nothing AndAlso Not Version.IsLoaded Then Version.Load()
-            If Version IsNot Nothing AndAlso Version.Version.Modable Then
+            If Version IsNot Nothing AndAlso Version.Modable Then
                 '可安装 Mod 的版本
                 Dim ModDir As New DirectoryInfo(Version.PathIndie & "mods\")
                 Dim ModCount As Integer = If(ModDir.Exists, ModDir.GetFiles.Length, 0)

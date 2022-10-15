@@ -57,7 +57,11 @@
         If ComboDisplayType.SelectedIndex <> 1 Then
             '改为不隐藏
             Try
+                '若设置分类为可安装 Mod，则显示正常的 Mod 管理页面
                 WriteIni(PageVersionLeft.Version.Path & "PCL\Setup.ini", "DisplayType", ComboDisplayType.SelectedIndex)
+                PageVersionLeft.Version.DisplayType = ReadIni(PageVersionLeft.Version.Path & "PCL\Setup.ini", "DisplayType", McVersionCardType.Auto)
+                FrmVersionLeft.RefreshModDisabled()
+
                 WriteIni(PathMcFolder & "PCL.ini", "VersionCache", "") '要求刷新缓存
                 LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
             Catch ex As Exception

@@ -777,12 +777,12 @@ Public Module ModAnimation
                                Log("[Animation] 动画线程开始")
                                Do While True
                                    '两帧之间的间隔时间
-                                   Dim DeltaTime As Long = MathRange(GetTimeTick() - AniLastTick, 0, 10000)
+                                   Dim DeltaTime As Long = MathRange(GetTimeTick() - AniLastTick, 0, 100000)
                                    If DeltaTime < 3 Then GoTo Sleeper
                                    AniLastTick = GetTimeTick()
                                    '记录 FPS
                                    If ModeDebug Then
-                                       If MathRange(AniLastTick - AniFPSTimer, 0, 10000) >= 500 Then
+                                       If MathRange(AniLastTick - AniFPSTimer, 0, 100000) >= 500 Then
                                            AniFPS = AniFPSCounter
                                            AniFPSCounter = 0
                                            AniFPSTimer = AniLastTick

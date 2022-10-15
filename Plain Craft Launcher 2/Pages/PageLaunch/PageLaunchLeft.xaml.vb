@@ -479,12 +479,12 @@ UseDefault:
                     End If
                 End Try
             Case 4 '自定义
-                If Not File.Exists(PathTemp & "CustomSkin.png") Then
+                If Not File.Exists(PathAppdata & "CustomSkin.png") Then
                     Hint("未找到离线皮肤自定义文件，可能它已被删除。PCL2 将使用默认的 Steve 皮肤！")
                     Setup.Set("LaunchSkinType", 1)
                     GoTo UseDefault
                 End If
-                Data.Output = PathTemp & "CustomSkin.png"
+                Data.Output = PathAppdata & "CustomSkin.png"
         End Select
         '刷新显示
         If FrmLoginLegacy IsNot Nothing Then
@@ -607,7 +607,7 @@ Finish:
     Public Sub LaunchButtonClick(Optional ServerIp As String = "")
         If BtnLaunch.IsEnabled AndAlso BtnLaunch.Visibility = Visibility.Visible AndAlso BtnLaunch.IsHitTestVisible Then
             If BtnLaunch.Text = "启动游戏" Then
-                McLaunchLoader.Start(ServerIp)
+                McLaunchLoader.Start(ServerIp, IsForceRestart:=True)
             ElseIf BtnLaunch.Text = "下载游戏" Then
                 FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
             End If

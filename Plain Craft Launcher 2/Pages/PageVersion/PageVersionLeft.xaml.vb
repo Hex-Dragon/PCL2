@@ -5,8 +5,8 @@
     ''' </summary>
     Public Shared Version As McVersion
 
-    Private Sub PageVersionLeft_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        If Version IsNot Nothing AndAlso Version.Version.Modable Then
+    Public Sub RefreshModDisabled() Handles Me.Loaded
+        If Version IsNot Nothing AndAlso Version.Modable Then
             ItemMod.Visibility = Visibility.Visible
             ItemModDisabled.Visibility = Visibility.Collapsed
         Else

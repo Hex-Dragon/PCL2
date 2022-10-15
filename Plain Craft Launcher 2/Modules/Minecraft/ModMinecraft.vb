@@ -404,7 +404,6 @@ Wait:
             Log(ex, "遍历查找 Java 时出错（" & OriginalPath.FullName & "）")
         End Try
     End Sub
-    Public PathAppdata As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\PCL\"
 
     '获取
 
@@ -837,7 +836,7 @@ UserPass:
         ''' </summary>
         Public ReadOnly Property PathIndie As String
             Get
-                Return GetPathIndie(Version.Modable)
+                Return GetPathIndie(Modable)
             End Get
         End Property
         ''' <summary>
@@ -916,6 +915,15 @@ UserPass:
         ''' 强制版本分类，0 为未启用，1 为隐藏，2 及以上为其他普通分类。
         ''' </summary>
         Public DisplayType As McVersionCardType = McVersionCardType.Auto
+        ''' <summary>
+        ''' 该版本是否可以安装 Mod。
+        ''' </summary>
+        Public ReadOnly Property Modable As Boolean
+            Get
+                Return Version.HasFabric OrElse Version.HasForge OrElse Version.HasLiteLoader OrElse
+                    DisplayType = McVersionCardType.API '#223
+            End Get
+        End Property
         ''' <summary>
         ''' 版本信息。
         ''' </summary>
@@ -1009,7 +1017,7 @@ UserPass:
                             _Version.McName = Regex
                             GoTo VersionSearchFinish
                         End If
-                        'TODO: [Quilt 支持] 从 Quilt 版本中获取版本号
+                        'FUTURE: [Quilt 支持] 从 Quilt 版本中获取版本号
                         '从 jar 项中获取版本号
                         If JsonObject("jar") IsNot Nothing Then
                             _Version.McName = JsonObject("jar").ToString
@@ -1324,7 +1332,7 @@ Recheck:
                             Version.HasLiteLoader = True
                         End If
                         'Fabric、Forge
-                        'TODO: [Quilt 支持] 确认这里的玩意儿对不对
+                        'FUTURE: [Quilt 支持] 确认这里的玩意儿对不对
                         If RealJson.Contains("net.fabricmc:fabric-loader") OrElse RealJson.Contains("org.quiltmc:quilt-loader") Then
                             State = McVersionState.Fabric
                             Version.FabricVersion = If(RegexSeek(RealJson, "(?<=(net.fabricmc:fabric-loader:)|(org.quiltmc:quilt-loader:))[0-9\.]+(\+build.[0-9]+)?"), "未知版本").Replace("+build", "")
@@ -1510,15 +1518,6 @@ ExitDataLoad:
         Public HasLiteLoader As Boolean = False
 
         'API
-
-        ''' <summary>
-        ''' 该版本是否可以安装 Mod。
-        ''' </summary>
-        Public ReadOnly Property Modable As Boolean
-            Get
-                Return HasFabric OrElse HasForge OrElse HasLiteLoader
-            End Get
-        End Property
 
         ''' <summary>
         ''' 生成对此版本信息的用户友好的描述性字符串。

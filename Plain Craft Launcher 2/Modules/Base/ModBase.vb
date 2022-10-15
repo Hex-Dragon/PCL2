@@ -10,12 +10,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.3.5" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.3.5." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.4.0" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.4.0." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 265 'Release
 #Else
-    Public Const VersionCode As Integer = 264 'Snapshot
+    Public Const VersionCode As Integer = 266 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -82,6 +82,10 @@ Public Module ModBase
     ''' 程序的缓存文件夹路径，以“\”结尾。
     ''' </summary>
     Public PathTemp As String = If(Setup.Get("SystemSystemCache") = "", IO.Path.GetTempPath() & "PCL\", Setup.Get("SystemSystemCache")).ToString.Replace("/", "\").TrimEnd("\") & "\"
+    ''' <summary>
+    ''' AppData 中的 PCL 文件夹路径，以“\”结尾。
+    ''' </summary>
+    Public PathAppdata As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\PCL\"
 
 #End Region
 
@@ -446,6 +450,32 @@ Public Module ModBase
 #End Region
 
 #Region "数学"
+
+    ''' <summary>
+    ''' 2~65 进制的转换。
+    ''' </summary>
+    Public Function RadixConvert(Input As String, FromRadix As Integer, ToRadix As Integer) As String
+        Const Digits As String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz/+="
+        '零与负数的处理
+        If String.IsNullOrEmpty(Input) Then Return "0"
+        Dim IsNegative As Boolean = Input.StartsWith("-")
+        If IsNegative Then Input = Input.TrimStart("-")
+        '转换为十进制
+        Dim RealNum As Long = 0, Scale As Long = 1
+        For Each Digit In Input.Reverse.Select(Function(l) Digits.IndexOf(l))
+            RealNum += Digit * Scale
+            Scale *= FromRadix
+        Next
+        '转换为指定进制
+        Dim Result = ""
+        While RealNum > 0
+            Dim NewNum As Integer = RealNum Mod ToRadix
+            RealNum = (RealNum - NewNum) / ToRadix
+            Result = Digits(NewNum) & Result
+        End While
+        '负数的结束处理与返回
+        Return If(IsNegative, "-", "") & Result
+    End Function
 
     ''' <summary>
     ''' 计算二阶贝塞尔曲线。
@@ -1039,14 +1069,14 @@ Re:
             Next
             Return Result.ToString
         Catch ex As Exception
-            If Not Retry Then
+            If Retry OrElse TypeOf ex Is FileNotFoundException Then
+                Log(ex, "获取文件 MD5 失败：" & FilePath)
+                Return ""
+            Else
                 Retry = True
                 Log(ex, "获取文件 MD5 可重试失败：" & FilePath, LogLevel.Normal)
                 Thread.Sleep(RandomInteger(200, 500))
                 GoTo Re
-            Else
-                Log(ex, "获取文件 MD5 失败：" & FilePath)
-                Return ""
             End If
         End Try
     End Function
@@ -1070,14 +1100,14 @@ Re:
             Next
             Return Result.ToString
         Catch ex As Exception
-            If Not Retry Then
+            If Retry OrElse TypeOf ex Is FileNotFoundException Then
+                Log(ex, "获取文件 SHA256 失败：" & FilePath)
+                Return ""
+            Else
                 Retry = True
                 Log(ex, "获取文件 SHA256 可重试失败：" & FilePath, LogLevel.Normal)
                 Thread.Sleep(RandomInteger(200, 500))
                 GoTo Re
-            Else
-                Log(ex, "获取文件 SHA256 失败：" & FilePath)
-                Return ""
             End If
         End Try
     End Function
@@ -1101,14 +1131,14 @@ Re:
             Next
             Return Result.ToString
         Catch ex As Exception
-            If Not Retry Then
+            If Retry OrElse TypeOf ex Is FileNotFoundException Then
+                Log(ex, "获取文件 SHA1 失败：" & FilePath)
+                Return ""
+            Else
                 Retry = True
                 Log(ex, "获取文件 SHA1 可重试失败：" & FilePath, LogLevel.Normal)
                 Thread.Sleep(RandomInteger(200, 500))
                 GoTo Re
-            Else
-                Log(ex, "获取文件 SHA1 失败：" & FilePath)
-                Return ""
             End If
         End Try
     End Function
@@ -1175,7 +1205,7 @@ Re:
                         If Hash <> GetAuthMD5(LocalPath) Then Return "文件 MD5 应为 " & Hash & "，实际为 " & GetAuthMD5(LocalPath)
                     ElseIf Hash.Length = 64 Then 'SHA256
                         If Hash <> GetAuthSHA256(LocalPath) Then Return "文件 SHA256 应为 " & Hash & "，实际为 " & GetAuthSHA256(LocalPath)
-                    Else 'SHA1
+                    Else 'SHA1 (40)
                         If Hash <> GetAuthSHA1(LocalPath) Then Return "文件 SHA1 应为 " & Hash & "，实际为 " & GetAuthSHA1(LocalPath)
                     End If
                 End If
@@ -1804,27 +1834,35 @@ NextElement:
     End Class
 
     ''' <summary>
+    ''' 前台运行文件。
+    ''' </summary>
+    ''' <param name="FileName">文件名。可以为“notepad”等缩写。</param>
+    ''' <param name="Arguments">运行参数。</param>
+    Public Sub ShellOnly(FileName As String, Optional Arguments As String = "")
+        Using Program As New Process
+            Program.StartInfo.Arguments = Arguments
+            Program.StartInfo.FileName = FileName
+            Log("[System] 执行外部命令：" & FileName & " " & Arguments)
+            Program.Start()
+        End Using
+    End Sub
+    ''' <summary>
     ''' 前台运行文件并返回返回值。
     ''' </summary>
     ''' <param name="FileName">文件名。可以为“notepad”等缩写。</param>
     ''' <param name="Arguments">运行参数。</param>
-    ''' <param name="WaitForExit">是否等待该程序结束。默认为 False。</param>
     ''' <param name="Timeout">等待该程序结束的最长时间（毫秒）。超时会返回 Result.Timeout。</param>
-    Public Function ShellAndGetExitCode(FileName As String, Optional Arguments As String = "", Optional WaitForExit As Boolean = False, Optional Timeout As Integer = 1000000) As Result
+    Public Function ShellAndGetExitCode(FileName As String, Optional Arguments As String = "", Optional Timeout As Integer = 1000000) As Result
         Try
             Using Program As New Process
                 Program.StartInfo.Arguments = Arguments
                 Program.StartInfo.FileName = FileName
                 Log("[System] 执行外部命令并等待返回码：" & FileName & " " & Arguments)
                 Program.Start()
-                If WaitForExit Then
-                    If Program.WaitForExit(Timeout) Then
-                        Return Program.ExitCode
-                    Else
-                        Return Result.Timeout
-                    End If
+                If Program.WaitForExit(Timeout) Then
+                    Return Program.ExitCode
                 Else
-                    Return Result.Success
+                    Return Result.Timeout
                 End If
             End Using
         Catch ex As Exception
@@ -1903,6 +1941,18 @@ NextElement:
                              End Sub) With {.Name = Name, .Priority = Priority}
         th.Start()
         Return th
+    End Function
+    ''' <summary>
+    ''' 确保在 UI 线程中执行代码。
+    ''' 如果当前并非 UI 线程，则会阻断当前线程，直至 UI 线程执行完毕。
+    ''' 为防止线程互锁，请仅在开始加载动画、从 UI 获取输入时使用！
+    ''' </summary>
+    Public Function RunInUiWait(Of Output)(Action As Func(Of Output)) As Output
+        If RunInUi() Then
+            Return Action()
+        Else
+            Return Application.Current.Dispatcher.Invoke(Action)
+        End If
     End Function
     ''' <summary>
     ''' 确保在 UI 线程中执行代码。
@@ -2003,11 +2053,11 @@ NextElement:
         End Try
     End Sub
     ''' <summary>
-    ''' 打开 explorer。
+    ''' 打开 explorer。注意参数中的路径要尽量加上双引号！
     ''' </summary>
     Public Sub OpenExplorer(Argument As String)
         Try
-            Process.Start("explorer.exe", Argument)
+            ShellOnly("explorer.exe", Argument)
         Catch ex As Exception
             Log(ex, "打开资源管理器失败，请尝试关闭安全软件（如 360 安全卫士）", LogLevel.Msgbox)
         End Try

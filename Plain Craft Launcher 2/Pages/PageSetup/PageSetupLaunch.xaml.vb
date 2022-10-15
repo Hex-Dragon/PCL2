@@ -114,8 +114,8 @@
         '设置文件
         Try
             '拷贝文件
-            File.Delete(PathTemp & "CustomSkin.png")
-            CopyFile(SkinInfo.LocalFile, PathTemp & "CustomSkin.png")
+            File.Delete(PathAppdata & "CustomSkin.png")
+            CopyFile(SkinInfo.LocalFile, PathAppdata & "CustomSkin.png")
             '更新设置
             Setup.Set("LaunchSkinSlim", SkinInfo.IsSlim)
         Catch ex As Exception
@@ -129,7 +129,7 @@
         If Not (AniControlEnabled = 0 AndAlso e.RaiseByMouse) Then Exit Sub
         Try
             '已有图片则不再选择
-            If File.Exists(PathTemp & "CustomSkin.png") Then Exit Sub
+            If File.Exists(PathAppdata & "CustomSkin.png") Then Exit Sub
             '没有图片则要求选择
             Dim SkinInfo As McSkinInfo = McSkinSelect(True)
             If Not SkinInfo.IsVaild Then
@@ -137,8 +137,8 @@
                 Exit Sub
             End If
             '拷贝文件
-            File.Delete(PathTemp & "CustomSkin.png")
-            CopyFile(SkinInfo.LocalFile, PathTemp & "CustomSkin.png")
+            File.Delete(PathAppdata & "CustomSkin.png")
+            CopyFile(SkinInfo.LocalFile, PathAppdata & "CustomSkin.png")
             '更新设置
             Setup.Set("LaunchSkinSlim", SkinInfo.IsSlim)
         Catch ex As Exception
@@ -151,7 +151,7 @@
     End Sub
     Private Sub BtnSkinDelete_Click(sender As Object, e As EventArgs) Handles BtnSkinDelete.Click
         Try
-            File.Delete(PathTemp & "CustomSkin.png")
+            File.Delete(PathAppdata & "CustomSkin.png")
             RadioSkinType0.SetChecked(True, True, True)
             Hint("离线皮肤已清空！", HintType.Finish)
         Catch ex As Exception
@@ -335,7 +335,7 @@
             Dim RamTarget2 As Double '估计没啥问题了的内存
             Dim RamTarget3 As Double '放一百万个材质和 Mod 和光影需要的内存
             If Version IsNot Nothing AndAlso Not Version.IsLoaded Then Version.Load()
-            If Version IsNot Nothing AndAlso Version.Version.Modable Then
+            If Version IsNot Nothing AndAlso Version.Modable Then
                 '可安装 Mod 的版本
                 Dim ModDir As New DirectoryInfo(Version.PathIndie & "mods\")
                 Dim ModCount As Integer = If(ModDir.Exists, ModDir.GetFiles.Length, 0)

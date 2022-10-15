@@ -378,12 +378,7 @@ Public Module ModDownloadLib
             Throw New Exception("未找到用于安装 OptiFine 的 Java")
         End If
         '添加 Java Wrapper 作为主 Jar
-        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
-        If Not File.Exists(WrapperPath) Then
-            WriteFile(WrapperPath, GetResources("JavaWrapper"))
-            McLaunchLog("已自动释放 Java Wrapper")
-        End If
-        Dim Arguments = "-Duser.home=""" & BaseMcFolderHome & """ -cp """ & Target & """ -jar """ & WrapperPath & """ optifine.Installer"
+        Dim Arguments = "-Duser.home=""" & BaseMcFolderHome & """ -cp """ & Target & """ -jar """ & ExtractJavaWrapper() & """ optifine.Installer"
         If Java.VersionCode >= 9 Then Arguments = "--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED " & Arguments
         '开始启动
         SyncLock InstallSyncLock
@@ -528,7 +523,10 @@ Public Module ModDownloadLib
                                                                              '等待原版文件下载完成
                                                                              For Each Loader In ClientDownloadLoader.GetLoaderList
                                                                                  If Loader.Name <> McDownloadClientLibName Then Continue For
-                                                                                 Loader.WaitForExit()
+                                                                                 If Loader.State = LoadState.Loading Then
+                                                                                     Log("[Download] OptiFine 安装正在等待原版文件下载完成")
+                                                                                     Loader.WaitForExit()
+                                                                                 End If
                                                                                  Exit For
                                                                              Next
                                                                              '拷贝原版文件
@@ -1094,12 +1092,7 @@ Public Module ModDownloadLib
             Throw New Exception("未找到用于安装 Forge 的 Java")
         End If
         '添加 Java Wrapper 作为主 Jar
-        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
-        If Not File.Exists(WrapperPath) Then
-            WriteFile(WrapperPath, GetResources("JavaWrapper"))
-            McLaunchLog("已自动释放 Java Wrapper")
-        End If
-        Dim Arguments = "-cp """ & PathTemp & "Cache\forge_installer.jar;" & Target & """ -jar """ & WrapperPath & """  com.bangbang93.ForgeInstaller """ & McFolder
+        Dim Arguments = "-cp """ & PathTemp & "Cache\forge_installer.jar;" & Target & """ -jar """ & ExtractJavaWrapper() & """  com.bangbang93.ForgeInstaller """ & McFolder
         If Java.VersionCode >= 9 Then Arguments = "--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED " & Arguments
         '开始启动
         SyncLock InstallSyncLock
@@ -1339,7 +1332,10 @@ Public Module ModDownloadLib
                                                                              '等待原版文件下载完成
                                                                              For Each Loader In ClientDownloadLoader.GetLoaderList
                                                                                  If Loader.Name <> McDownloadClientLibName Then Continue For
-                                                                                 Loader.WaitForExit()
+                                                                                 If Loader.State = LoadState.Loading Then
+                                                                                     Log("[Download] Forge 安装正在等待原版文件下载完成")
+                                                                                     Loader.WaitForExit()
+                                                                                 End If
                                                                                  Exit For
                                                                              Next
                                                                              '拷贝原版文件

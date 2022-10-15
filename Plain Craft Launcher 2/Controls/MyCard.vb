@@ -25,9 +25,9 @@
     Public Sub New()
         MainChrome = New SystemDropShadowChrome With {.Margin = New Thickness(-9.5, -9, 0.5, -0.5), .Opacity = 0.1, .CornerRadius = New CornerRadius(6)}
         MainChrome.SetResourceReference(SystemDropShadowChrome.ColorProperty, "ColorObject1")
-        Children.Add(MainChrome)
+        Children.Insert(0, MainChrome)
         MainBorder = New Border With {.Background = New SolidColorBrush(Color.FromArgb(205, 255, 255, 255)), .CornerRadius = New CornerRadius(6), .IsHitTestVisible = False}
-        Children.Add(MainBorder)
+        Children.Insert(1, MainBorder)
         MainGrid = New Grid
         Children.Add(MainGrid)
     End Sub

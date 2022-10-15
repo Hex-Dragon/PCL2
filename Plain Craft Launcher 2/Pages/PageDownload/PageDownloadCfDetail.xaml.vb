@@ -119,7 +119,7 @@
 #End Region
 
     Private IsFirstInit As Boolean = True
-    Public Sub Init() Handles Me.OnPageEnter
+    Public Sub Init() Handles Me.PageEnter
         AniControlEnabled += 1
         Project = FrmMain.PageCurrent.Additional
         PanBack.ScrollToHome()
@@ -200,7 +200,7 @@
                 DefaultFolder = DownloadFolder
                 If McVersionCurrent IsNot Nothing Then
                     If Not McVersionCurrent.IsLoaded Then McVersionCurrent.Load()
-                    If McVersionCurrent.Version.Modable Then
+                    If McVersionCurrent.Modable Then
                         DefaultFolder = McVersionCurrent.PathIndie & "mods\"
                         Directory.CreateDirectory(DefaultFolder)
                     End If

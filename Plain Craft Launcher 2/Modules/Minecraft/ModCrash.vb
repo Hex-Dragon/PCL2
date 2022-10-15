@@ -9,7 +9,7 @@
         SyncLock IsAnalyzeCacheClearedLock
             If Not IsAnalyzeCacheCleared Then
                 Try
-                    DeleteDirectory(PathTemp & "CrashAnalyzer")
+                    DeleteDirectory(PathTemp & "CrashAnalyzer\")
                 Catch ex As Exception
                     Log(ex, "清理崩溃分析缓存失败")
                 End Try
@@ -153,6 +153,7 @@
         ExtraLog
         CrashReport
     End Enum
+    Private DirectFile As KeyValuePair(Of String, String())? = Nothing '在弹窗中选择直接打开的文件
     ''' <summary>
     ''' 从 AnalyzeRawFiles 中提取实际有用的文本片段存储到 AnalyzeFiles，并整理可用于生成报告的文件。
     ''' 返回找到的用于分析的项目数。
@@ -161,18 +162,22 @@
         Log("[Crash] 步骤 2：准备日志文本")
 
         '对日志文件进行分类
+        DirectFile = Nothing
         Dim TotalFiles As New List(Of KeyValuePair(Of AnalyzeFileType, KeyValuePair(Of String, String())))
         For Each LogFile In AnalyzeRawFiles
             Dim FileName As String = GetFileNameFromPath(LogFile.Key)
             Dim TargetType As AnalyzeFileType
             If FileName.StartsWith("hs_err") Then
                 TargetType = AnalyzeFileType.HsErr
+                DirectFile = LogFile
             ElseIf FileName.StartsWith("crash-") Then
                 TargetType = AnalyzeFileType.CrashReport
+                DirectFile = LogFile
             ElseIf FileName = "latest.log" OrElse FileName = "latest log.txt" OrElse
                    FileName = "debug.log" OrElse FileName = "debug log.txt" OrElse FileName = "游戏崩溃前的输出.txt" OrElse
                    FileName = "rawoutput.log" OrElse FileName = "启动器日志.txt" OrElse FileName = "PCL2 启动器日志.txt" OrElse FileName = "log1.txt" Then
                 TargetType = AnalyzeFileType.MinecraftLog
+                If DirectFile Is Nothing Then DirectFile = LogFile
             ElseIf FileName.EndsWith(".log") OrElse FileName.EndsWith(".txt") Then
                 TargetType = AnalyzeFileType.ExtraLog
             Else
@@ -689,8 +694,19 @@ NextStack:
     Public Sub Output(IsHandAnalyze As Boolean, Optional ExtraFiles As List(Of String) = Nothing)
         '弹窗提示
         FrmMain.ShowWindowToTop()
-        Select Case MyMsgBox(GetAnalyzeResult(IsHandAnalyze), If(IsHandAnalyze, "错误报告分析结果", "Minecraft 出现错误"), "确定", If(IsHandAnalyze, "", "导出错误报告"))
+Redo:
+        Select Case MyMsgBox(GetAnalyzeResult(IsHandAnalyze), If(IsHandAnalyze, "错误报告分析结果", "Minecraft 出现错误"),
+                             "确定", If(IsHandAnalyze OrElse DirectFile Is Nothing, "", "查看日志"), If(IsHandAnalyze, "", "导出错误报告"))
             Case 2
+                If File.Exists(DirectFile.Value.Key) Then
+                    ShellOnly(DirectFile.Value.Key)
+                Else
+                    Dim FilePath As String = PathTemp & "Crash.txt"
+                    WriteFile(FilePath, Join(DirectFile.Value.Value, vbCrLf))
+                    ShellOnly(FilePath)
+                End If
+                GoTo Redo
+            Case 3
                 Dim FileAddress As String = Nothing
                 Try
                     '获取文件路径
@@ -723,11 +739,7 @@ NextStack:
                     Log(ex, "导出错误报告失败", LogLevel.Feedback)
                     Exit Sub
                 End Try
-                Try
-                    Process.Start("explorer", "/select," & FileAddress)
-                Catch ex As Exception
-                    Log(ex, "打开错误报告的存放文件夹失败")
-                End Try
+                OpenExplorer("/select,""" & FileAddress & """")
         End Select
     End Sub
     ''' <summary>

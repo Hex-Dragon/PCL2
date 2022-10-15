@@ -49,10 +49,10 @@ End Class
 Public Class ValidateRegex
     Inherits Validate
     Public Property Regex As String
-    Public Property ErrorDescription As String = ""
+    Public Property ErrorDescription As String = "正则检查失败！"
     Public Sub New()
     End Sub '用于 XAML 初始化
-    Public Sub New(Regex As String, Optional ErrorDescription As String = "")
+    Public Sub New(Regex As String, Optional ErrorDescription As String = "正则检查失败！")
         Me.Regex = Regex
         Me.ErrorDescription = ErrorDescription
     End Sub

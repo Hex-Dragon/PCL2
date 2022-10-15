@@ -20,7 +20,7 @@
     ''' </summary>
     Public Shared Function GetLoginData() As McLoginMs
         If McLoginMsLoader.State = LoadState.Finished Then
-            Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsOAuthRefresh"), .UserName = Setup.Get("CacheMsName"), .AccessToken = Setup.Get("CacheMsAccess"), .Uuid = Setup.Get("CacheMsUuid")}
+            Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsOAuthRefresh"), .UserName = Setup.Get("CacheMsName"), .AccessToken = Setup.Get("CacheMsAccess"), .Uuid = Setup.Get("CacheMsUuid"), .ProfileJson = Setup.Get("CacheMsProfileJson")}
         Else
             Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsOAuthRefresh"), .UserName = Setup.Get("CacheMsName")}
         End If
@@ -51,6 +51,7 @@
     Private Sub BtnExit_Click() Handles BtnExit.Click
         Setup.Set("CacheMsOAuthRefresh", "")
         Setup.Set("CacheMsAccess", "")
+        Setup.Set("CacheMsProfileJson", "")
         Setup.Set("CacheMsUuid", "")
         Setup.Set("CacheMsName", "")
         McLoginMsLoader.Abort()

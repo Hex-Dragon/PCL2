@@ -4,31 +4,35 @@
              xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              mc:Ignorable="d" x:Class="PageLinkFeedback"
              d:DesignWidth="800" d:DesignHeight="800">
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <local:MyCard Title="反馈途径选择">
-            <StackPanel Margin="20,40,18,18">
-                <local:MyListItem Title="联机模块反馈" Info="向联机模块开发者反馈联机失败等异常"
-                              Type="Clickable" EventType="打开网页" EventData="https://mcer.cn/"
-                              PaddingRight="20" Logo="pack://application:,,,/images/Blocks/RedstoneBlock.png" />
-                <local:MyListItem Title="违法违规举报" Info="投诉、举报联机使用者的各类违法违规行为"
+    <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
+        <StackPanel Name="PanMain" Margin="25,25,25,10" Grid.IsSharedSizeScope="True">
+            <local:MyCard Title="关于" Margin="0,0,0,15">
+                <StackPanel Margin="20,40,18,18">
+                    <TextBlock TextWrapping="Wrap" Text="多人联机服务由速聚授权提供，PCL2 仅为速聚提供多人联机服务入口，使用中遇到的任何问题由速聚负责处理。你在使用多人联机服务过程中所遇到的任何问题与纠纷（包括其付费业务）均与 PCL2 无关，应与速聚协商解决。" 
+                           Margin="0,0,0,3" />
+                    <TextBlock TextWrapping="Wrap" Text="PCL2 作者并不会从速聚的付费业务中获得任何分成、奖金等报酬，请不要瞎说。" 
+                           Margin="0,0,0,6" />
+                    <local:MyListItem Title="速聚官网" Info="打开速聚的官方网站"
+                              Type="Clickable" EventType="打开网页" EventData="https://www.the.bb/zh-cn"
+                              PaddingRight="20" Logo="pack://application:,,,/images/Blocks/Grass.png" />
+                    <local:MyListItem Title="授权协议书" Info="查看速聚与 PCL2 间的授权协议书"
+                              Type="Clickable" EventType="打开网页" EventData="https://shimo.im/docs/0l3NVXYzeXhb903R"
+                              PaddingRight="20" Logo="pack://application:,,,/images/Blocks/Grass.png" />
+                    <local:MyListItem Title="用户协议与隐私政策" Info="查看速聚的用户协议与隐私政策文档"
+                              Type="Clickable" EventType="打开网页" EventData="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkxMTMyODk3Mg==&amp;action=getalbum&amp;album_id=2585385685407514625&amp;scene=173&amp;from_msgid=2247483720&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect"
+                              PaddingRight="20" Logo="pack://application:,,,/images/Blocks/Grass.png" />
+                </StackPanel>
+            </local:MyCard>
+            <local:MyCard Title="发送反馈" Margin="0,0,0,15">
+                <StackPanel Margin="20,40,18,18">
+                    <local:MyListItem Title="联机反馈与交流" Info="加入联机模块官方 QQ 群反馈联机异常，或询问联机功能的使用方式"
+                              Type="Clickable" PaddingRight="20" Logo="pack://application:,,,/images/Blocks/RedstoneBlock.png"
+                              EventType="打开网页" EventData="https://shimowendang.com/docs/KrkEVXz1K0frowAJ#anchor-7qQG" />
+                    <local:MyListItem Title="违法违规举报" Info="投诉、举报联机使用者的各类违法违规行为"
                               Type="Clickable" EventType="打开网页" EventData="https://shimo.im/docs/rGrd8pY8xWkt6ryW#anchor-7x6P"
                               PaddingRight="20" Logo="pack://application:,,,/images/Blocks/RedstoneBlock.png" />
-            </StackPanel>
-        </local:MyCard>
-        <local:MyCard Margin="0,20,0,15">
-            <Grid Margin="15,12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="1" Text="联机服务由 " Opacity="0.5"/>
-                <local:MyTextButton Grid.Column="2" Text="阿猫" x:Name="BtnNoin" Opacity="0.5"
-                                    EventType="打开网页" EventData="https://mcer.cn" />
-                <TextBlock Grid.Column="3" Text=" 授权提供" Opacity="0.5"/>
-            </Grid>
-        </local:MyCard>
-    </StackPanel>
+                </StackPanel>
+            </local:MyCard>
+        </StackPanel>
+    </local:MyScrollViewer>
 </local:MyPageRight>

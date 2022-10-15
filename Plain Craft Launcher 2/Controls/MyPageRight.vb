@@ -12,7 +12,7 @@
         LoaderExit '加载环退出动画
         ContentEnter '内容进入动画
         ContentStay '内容正常显示
-        ReloadExit '刷新导致的全部退出动画
+        ContentExit '刷新导致的全部退出动画，或页面内容退出（子页面更改）导致的全部退出动画
         PageExit '切换页面导致的全部退出动画
     End Enum
     Private _PageState As PageStates = PageStates.Empty
@@ -48,7 +48,8 @@
     ''' <param name="RealLoader">在工作线程执行的加载器。</param>
     ''' <param name="FinishedInvoke">当加载器执行完成，在 UI 线程触发的 UI 初始化事件。</param>
     Public Sub PageLoaderInit(LoaderUi As MyLoading, PanLoader As FrameworkElement, PanContent As FrameworkElement, PanAlways As FrameworkElement,
-                              RealLoader As LoaderBase, FinishedInvoke As Action(Of LoaderBase), Optional InputInvoke As Func(Of Object) = Nothing,
+                              RealLoader As LoaderBase,
+                              Optional FinishedInvoke As Action(Of LoaderBase) = Nothing, Optional InputInvoke As Func(Of Object) = Nothing,
                               Optional AutoRun As Boolean = True)
         '初始化参数
         Me.PanLoader = PanLoader
@@ -59,14 +60,16 @@
         Me.PageLoaderInputInvoke = InputInvoke
         Me.PageLoaderAutoRun = AutoRun
         '添加结束 Invoke
-        AddHandler RealLoader.PreviewFinish,
-            Sub()
-                Do While PageState = MyPageRight.PageStates.PageExit OrElse PageState = MyPageRight.PageStates.ReloadExit
-                    Thread.Sleep(10) '不在退出动画时执行 UI 线程操作，避免退出动画被重置
+        If FinishedInvoke IsNot Nothing Then
+            AddHandler RealLoader.PreviewFinish,
+                Sub()
+                    Do While PageState = MyPageRight.PageStates.PageExit OrElse PageState = MyPageRight.PageStates.ContentExit
+                        Thread.Sleep(10) '不在退出动画时执行 UI 线程操作，避免退出动画被重置
                 Loop
-                RunInUiWait(Sub() FinishedInvoke(RealLoader))
-                Thread.Sleep(20) '由于大量初始化控件会导致掉帧，延迟触发 State 改变事件
+                    RunInUiWait(Sub() FinishedInvoke(RealLoader))
+                    Thread.Sleep(20) '由于大量初始化控件会导致掉帧，延迟触发 State 改变事件
             End Sub
+        End If
         AddHandler RealLoader.OnStateChangedUi, Sub(Loader As LoaderBase, NewState As LoadState, OldState As LoadState) RunInUi(Sub() PageLoaderState(Loader, NewState, OldState))
         '隐藏 UI
         PanLoader.Visibility = Visibility.Collapsed
@@ -82,14 +85,13 @@
                 PageLoader.Start(Input)
             End If
         End If
-        If PageLoader.State = LoadState.Finished Then
+        If PageLoader.State = LoadState.Finished AndAlso FinishedInvoke IsNot Nothing Then
             RunInUiWait(Sub() FinishedInvoke(RealLoader)) '加载器已提前完成，直接触发事件
         End If
         '设置加载环
         PageLoaderUi.State = RealLoader
         AddHandler PageLoaderUi.Click, Sub() If RealLoader.State = LoadState.Failed Then PageLoaderRestart() '点击重试事件
     End Sub
-
     '重试
     Public Sub PageLoaderRestart(Optional Input As Object = Nothing, Optional IsForceRestart As Boolean = True) '由外部调用的重试
         If Not PageLoaderAutoRun Then Exit Sub
@@ -112,32 +114,38 @@
     ''' </summary>
     Public Sub PageOnEnter()
         If ModeDebug Then Log("[UI] 已触发 PageOnEnter")
-        RaiseEvent OnPageEnter()
-
+        RaiseEvent PageEnter()
         Select Case PageState
             Case PageStates.Empty
-                If PageLoader Is Nothing OrElse PageLoader.State = LoadState.Finished OrElse PageLoader.State = LoadState.Aborted Then
+                If PageLoader Is Nothing OrElse PageLoader.State = LoadState.Finished OrElse PageLoader.State = LoadState.Waiting OrElse PageLoader.State = LoadState.Aborted Then
+                    '如果加载器在进入页面时不启动（例如 HiPer 联机），那么在此时就会有 State = Waiting
                     PageState = PageStates.ContentEnter
                     TriggerEnterAnimation(PanAlways, If(PanContent, Child))
                 ElseIf PageLoader.State = LoadState.Loading Then
                     PageState = PageStates.LoaderWait
                     AniStart(AaCode(AddressOf PageOnLoaderWaitFinished, 200), "PageRight PageChange " & PageUuid)
-                ElseIf PageLoader.State = LoadState.Failed Then
+                Else 'PageLoader.State = LoadState.Failed
                     PageState = PageStates.LoaderEnter
                     TriggerEnterAnimation(PanAlways, PanLoader)
-                ElseIf PageLoader.State = LoadState.Waiting Then
-                    '由于 “页面加载器 Minecraft Version List 不应在 PageOnEnter 事件出现 Waiting 状态” 的神秘反馈添加的临时修复
+                End If
+            Case PageStates.ContentExit
+                '和上面的一样，但是不管 PanAlways
+                If PageLoader Is Nothing OrElse PageLoader.State = LoadState.Finished OrElse PageLoader.State = LoadState.Waiting OrElse PageLoader.State = LoadState.Aborted Then
+                    PageState = PageStates.ContentEnter
+                    TriggerEnterAnimation(If(PanContent, Child))
+                ElseIf PageLoader.State = LoadState.Loading Then
                     PageState = PageStates.LoaderWait
                     AniStart(AaCode(AddressOf PageOnLoaderWaitFinished, 200), "PageRight PageChange " & PageUuid)
-                    Log("[Anim] 警告：页面加载器 " & PageLoader.Name & " 不应在 PageOnEnter 事件出现 " & GetStringFromEnum(PageLoader.State) & " 状态", LogLevel.Debug)
-                Else
-                    Throw New Exception("页面加载器 " & PageLoader.Name & " 不应在 PageOnEnter 事件出现 " & GetStringFromEnum(PageLoader.State) & " 状态。")
+                Else 'PageLoader.State = LoadState.Failed
+                    PageState = PageStates.LoaderEnter
+                    TriggerEnterAnimation(PanLoader)
                 End If
+            Case PageStates.ContentEnter '重复调用 PageOnEnter，直接忽略
             Case Else
                 Throw New Exception("在状态为 " & GetStringFromEnum(PageState) & " 时触发了 PageOnEnter 事件。")
         End Select
     End Sub
-    Public Event OnPageEnter()
+    Public Event PageEnter()
     ''' <summary>
     ''' 需要切换到其他页面。
     ''' 需要立即切换至 PageExit 或 Empty。
@@ -154,7 +162,7 @@
             Case PageStates.LoaderWait
                 PageState = PageStates.PageExit
                 TriggerExitAnimation(PanAlways)
-            Case PageStates.LoaderExit, PageStates.ReloadExit
+            Case PageStates.LoaderExit, PageStates.ContentExit
                 PageState = PageStates.PageExit
                 If PanAlways IsNot Nothing Then TriggerExitAnimation(PanAlways, If(PanContent, Child))
             Case PageStates.PageExit, PageStates.Empty
@@ -177,6 +185,29 @@
             PanLoader.Visibility = Visibility.Collapsed
             If PanAlways IsNot Nothing Then PanAlways.Visibility = Visibility.Collapsed
         End If
+    End Sub
+    ''' <summary>
+    ''' PanContent 中的子页面改变，需要让当前内容退出，再显示新的内容。
+    ''' 需要在 PageEnter 事件确认要显示的子页面有哪些。
+    ''' </summary>
+    Public Sub PageOnContentExit()
+        If ModeDebug Then Log("[UI] 已触发 PageOnContentExit")
+        If PageLoader IsNot Nothing AndAlso PageLoader.State = LoadState.Loading Then
+            Throw New Exception("在调用 PageOnContentExit 时，加载器不能为 Loading 状态")
+            'Loading 的加载器可能触发进一步变化，难以预测会触发子页面的动画还是加载器完成的动画
+        End If
+        Select Case PageState
+            Case PageStates.ContentEnter, PageStates.ContentStay
+                PageState = PageStates.ContentExit
+                TriggerExitAnimation(PanContent)
+            Case PageStates.LoaderExit
+                PageState = PageStates.ContentExit
+            Case PageStates.LoaderEnter, PageStates.LoaderStayForce, PageStates.LoaderStay
+                PageState = PageStates.ContentExit
+                TriggerExitAnimation(PanLoader)
+            Case PageStates.LoaderWait, PageStates.Empty
+                PageOnEnter()
+        End Select
     End Sub
 
     '内部触发的事件
@@ -205,8 +236,7 @@
         Select Case PageState
             Case PageStates.PageExit
                 PageState = PageStates.Empty
-            Case PageStates.ReloadExit
-                PageState = PageStates.Empty
+            Case PageStates.ContentExit
                 PageOnEnter()
             Case PageStates.LoaderExit
                 PageState = PageStates.ContentEnter
@@ -258,20 +288,20 @@
     Private Sub PageLoaderState(sender As Object, NewState As LoadState, OldState As LoadState)
         Select Case NewState
             Case LoadState.Failed, LoadState.Loading
-                If Not OldState = LoadState.Finished Then Exit Sub
-                If ModeDebug Then Log("[UI] 已触发 PageLoaderState (Refresh)")
-                '重新开始运行
+                If OldState = LoadState.Failed OrElse OldState = LoadState.Loading Then Exit Sub
+                If ModeDebug Then Log("[UI] 已触发 PageLoaderState (Start/Refresh)")
+                '（重新）开始运行
                 '需要从部分状态切换到 ReloadExit
                 Select Case PageState
                     Case PageStates.ContentEnter, PageStates.ContentStay
-                        PageState = PageStates.ReloadExit
+                        PageState = PageStates.ContentExit
                         TriggerExitAnimation(PanContent)
-                    Case PageStates.LoaderExit, PageStates.ReloadExit
-                        PageState = PageStates.ReloadExit
+                    Case PageStates.LoaderExit
+                        PageState = PageStates.ContentExit
                 End Select
-            Case LoadState.Finished
-                If Not OldState = LoadState.Loading Then Exit Sub
-                If ModeDebug Then Log("[UI] 已触发 PageLoaderState (Stop)")
+            Case LoadState.Finished, LoadState.Aborted, LoadState.Waiting
+                If Not (OldState = LoadState.Failed OrElse OldState = LoadState.Loading) Then Exit Sub
+                If ModeDebug Then Log("[UI] 已触发 PageLoaderState (Stop/Abort)")
                 '运行结束
                 '需要从 LoaderWait 切换到 ContentEnter，或从 LoaderStay 切换到 LoaderExit
                 Select Case PageState
@@ -360,13 +390,14 @@
     End Function
     Private Sub GetAllAnimControls(Element As FrameworkElement, ByRef AllControls As List(Of FrameworkElement), IgnoreInvisibility As Boolean)
         If Not IgnoreInvisibility AndAlso Element.Visibility = Visibility.Collapsed Then Exit Sub
-        If TypeOf Element Is MyCard OrElse TypeOf Element Is MyHint Then
+        If TypeOf Element Is MyCard OrElse TypeOf Element Is MyHint OrElse TypeOf Element Is TextBlock OrElse TypeOf Element Is MyTextButton Then
             AllControls.Add(Element)
         ElseIf TypeOf Element Is ContentControl Then
-            GetAllAnimControls(CType(Element, ContentControl).Content, AllControls, IgnoreInvisibility)
+            Dim Content = CType(Element, ContentControl).Content
+            If Content IsNot Nothing AndAlso TypeOf Content Is FrameworkElement Then GetAllAnimControls(Content, AllControls, IgnoreInvisibility)
         ElseIf TypeOf Element Is Panel Then
-            For Each Element2 As FrameworkElement In CType(Element, Panel).Children
-                GetAllAnimControls(Element2, AllControls, IgnoreInvisibility)
+            For Each Element2 In CType(Element, Panel).Children
+                If TypeOf Element2 Is FrameworkElement Then GetAllAnimControls(Element2, AllControls, IgnoreInvisibility)
             Next
         End If
     End Sub

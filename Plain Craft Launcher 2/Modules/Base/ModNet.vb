@@ -1,8 +1,27 @@
 ﻿Imports System.Net
 
 Public Module ModNet
-
     Public Const NetDownloadEnd As String = ".PCLDownloading"
+
+    ''' <summary>
+    ''' 测试 Ping。失败则返回 -1。
+    ''' </summary>
+    Public Function Ping(Ip As String, Optional Timeout As Integer = 10000, Optional MakeLog As Boolean = True) As Integer
+        Dim PingResult As NetworkInformation.PingReply
+        Try
+            PingResult = (New NetworkInformation.Ping).Send(Ip)
+        Catch ex As Exception
+            If MakeLog Then Log("[Net] Ping " & Ip & " 失败：" & ex.Message)
+            Return -1
+        End Try
+        If PingResult.Status = NetworkInformation.IPStatus.Success Then
+            If MakeLog Then Log("[Net] Ping " & Ip & " 结束：" & PingResult.RoundtripTime & "ms")
+            Return PingResult.RoundtripTime
+        Else
+            If MakeLog Then Log("[Net] Ping " & Ip & " 失败")
+            Return -1
+        End If
+    End Function
 
     ''' <summary>
     ''' 以 WebClient 获取网页源代码。会进行至多 45 秒 3 次的尝试，允许最长 30s 的超时。
@@ -940,7 +959,7 @@ Capture:
                     Next
                     '是否禁用多线程，以及规定碎片大小
                     Dim TargetUrl As String = GetSource().Url
-                    If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("gitcode.net") Then Return False
+                    If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("gitcode.net") OrElse TargetUrl.Contains("mcer.cn") Then Return False
                     Dim RealFilePieceLimit = If(TargetUrl.Contains("download.mcbbs.net"), FilePieceLimit * 5, FilePieceLimit)
                     '寻找最大碎片
                     Dim FilePieceMax As NetThread = Threads

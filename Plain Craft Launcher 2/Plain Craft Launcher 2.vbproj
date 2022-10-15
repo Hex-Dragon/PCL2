@@ -152,11 +152,6 @@
       <HintPath>Resources\Ookii.Dialogs.Wpf.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="STUN, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Resources\STUN.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
@@ -259,6 +254,9 @@
     </Compile>
     <Compile Include="Pages\PageLink\PageLinkFeedback.xaml.vb">
       <DependentUpon>PageLinkFeedback.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageLink\PageLinkHiper.xaml.vb">
+      <DependentUpon>PageLinkHiper.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageOther\PageOtherHelpDetail.xaml.vb">
       <DependentUpon>PageOtherHelpDetail.xaml</DependentUpon>
@@ -514,6 +512,10 @@
       <SubType>Designer</SubType>
     </None>
     <Page Include="Pages\PageLink\PageLinkFeedback.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageLink\PageLinkHiper.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -786,22 +788,22 @@
   <ItemGroup>
     <PublishFile Include="NAudio">
       <Visible>False</Visible>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Newtonsoft.Json">
       <Visible>False</Visible>
-      <PublishState>Exclude</PublishState>
-      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>
@@ -868,9 +870,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Heads\noin.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\STUN.dll" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

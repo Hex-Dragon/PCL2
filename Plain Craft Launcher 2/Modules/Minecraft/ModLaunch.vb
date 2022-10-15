@@ -15,7 +15,7 @@ Public Module ModLaunch
     End Sub
 
     '启动状态切换
-    Public McLaunchLoader As New LoaderTask(Of String, Object)("Loader Launch", AddressOf McLaunchStart) With {.OnStateChanged = AddressOf McLaunchState, .ReloadTimeout = 1}
+    Public McLaunchLoader As New LoaderTask(Of String, Object)("Loader Launch", AddressOf McLaunchStart) With {.OnStateChanged = AddressOf McLaunchState}
     Public McLaunchLoaderReal As LoaderCombo(Of Object)
     Public McLaunchProcess As Process
     Public McLaunchWatcher As Watcher
@@ -206,12 +206,13 @@ NextInner:
         Public AccessToken As String = ""
         Public Uuid As String = ""
         Public UserName As String = ""
+        Public ProfileJson As String = ""
 
         Public Sub New()
             Type = McLoginType.Ms
         End Sub
         Public Overrides Function GetHashCode() As Integer
-            Return GetHash(OAuthRefreshToken & AccessToken & Uuid & UserName) Mod Integer.MaxValue
+            Return GetHash(OAuthRefreshToken & AccessToken & Uuid & UserName & ProfileJson) Mod Integer.MaxValue
         End Function
     End Class
     Public Class McLoginLegacy
@@ -419,7 +420,8 @@ NextInner:
         Data.Progress = 0.05
         '检查是否已经登录完成
         If Input.AccessToken <> "" AndAlso Not Data.IsForceRestarting Then
-            Data.Output = New McLoginResult With {.AccessToken = Input.AccessToken, .Name = Input.UserName, .Uuid = Input.Uuid, .Type = "Microsoft", .ClientToken = Input.Uuid}
+            Data.Output = New McLoginResult With
+                {.AccessToken = Input.AccessToken, .Name = Input.UserName, .Uuid = Input.Uuid, .Type = "Microsoft", .ClientToken = Input.Uuid, .ProfileJson = Input.ProfileJson}
             GoTo SkipLogin
         End If
         '尝试登录
@@ -456,6 +458,7 @@ Relogin:
         Setup.Set("CacheMsAccess", AccessToken)
         Setup.Set("CacheMsUuid", Result(0))
         Setup.Set("CacheMsName", Result(1))
+        Setup.Set("CacheMsProfileJson", Result(2))
         Data.Output = New McLoginResult With {.AccessToken = AccessToken, .Name = Result(1), .Uuid = Result(0), .Type = "Microsoft", .ClientToken = Result(0), .ProfileJson = Result(2)}
         '解锁主题
 SkipLogin:
@@ -1076,6 +1079,18 @@ SystemBrowser:
 
     Private McLaunchArgument As String
 
+    ''' <summary>
+    ''' 释放 Java Wrapper 并返回文件路径。
+    ''' </summary>
+    Public Function ExtractJavaWrapper() As String
+        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
+        If Not File.Exists(WrapperPath) OrElse New FileInfo(WrapperPath).Length > 20 * 1024 Then
+            WriteFile(WrapperPath, GetResources("JavaWrapper"))
+            McLaunchLog("已自动释放 Java Wrapper")
+        End If
+        Return WrapperPath
+    End Function
+
     '主方法，合并 Jvm、Game、Replace 三部分的参数数据
     Private Sub McLaunchArgumentMain(Loader As LoaderTask(Of String, List(Of McLibToken)))
         McLaunchLog("开始获取 Minecraft 启动参数")
@@ -1175,12 +1190,7 @@ SystemBrowser:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
-        If Not File.Exists(WrapperPath) Then
-            WriteFile(WrapperPath, GetResources("JavaWrapper"))
-            McLaunchLog("已自动释放 Java Wrapper")
-        End If
-        DataList.Add("-jar """ & WrapperPath & """")
+        DataList.Add("-jar """ & ExtractJavaWrapper() & """")
 
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
@@ -1244,12 +1254,7 @@ NextVersion:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
-        If Not File.Exists(WrapperPath) Then
-            WriteFile(WrapperPath, GetResources("JavaWrapper"))
-            McLaunchLog("已自动释放 Java Wrapper")
-        End If
-        DataList.Add("-jar """ & WrapperPath & """")
+        DataList.Add("-jar """ & ExtractJavaWrapper() & """")
 
         '将 "-XXX" 与后面 "XXX" 合并到一起
         '如果不合并，会导致 Forge 1.17 启动无效，它有两个 --add-exports，进一步导致其中一个在后面被去重
@@ -1619,7 +1624,7 @@ NextVersion:
             Directory.CreateDirectory(McVersionCurrent.PathIndie & "resourcepacks\")
             Dim ZipFileAddress As String = McVersionCurrent.PathIndie & "resourcepacks\PCL2 Skin.zip"
             Dim NewTypeSetup As Boolean = McVersionCurrent.Version.McCodeMain >= 13 OrElse McVersionCurrent.Version.McCodeMain < 6
-            If McLoginLoader.Input.Type = McLoginType.Legacy AndAlso Setup.Get("LaunchSkinType") = 4 AndAlso File.Exists(PathTemp & "CustomSkin.png") Then
+            If McLoginLoader.Input.Type = McLoginType.Legacy AndAlso Setup.Get("LaunchSkinType") = 4 AndAlso File.Exists(PathAppdata & "CustomSkin.png") Then
                 Directory.CreateDirectory(PathTemp)
                 Dim MetaFileAddress As String = PathTemp & "pack.mcmeta"
                 Dim PackPicAddress As String = PathTemp & "pack.png"
@@ -1659,7 +1664,7 @@ NextVersion:
                 Dim Bit As New MyBitmap(PathImage & "Heads/Logo.png")
                 Bit.Save(PackPicAddress)
                 WriteFile(MetaFileAddress, "{""pack"":{""pack_format"":" & PackFormat & ",""description"":""PCL2 自定义离线皮肤资源包""}}")
-                Dim Skin As New MyBitmap(PathTemp & "CustomSkin.png")
+                Dim Skin As New MyBitmap(PathAppdata & "CustomSkin.png")
                 If (McVersionCurrent.Version.McCodeMain = 6 OrElse McVersionCurrent.Version.McCodeMain = 7) AndAlso Skin.Pic.Height = 64 Then
                     McLaunchLog("该 Minecraft 版本不支持双层皮肤，已进行裁剪")
                     Skin = Skin.Clip(New System.Drawing.Rectangle(0, 0, 64, 32))
