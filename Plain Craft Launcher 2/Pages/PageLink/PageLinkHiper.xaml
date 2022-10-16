@@ -34,6 +34,16 @@
                                         Theme="Black" Opacity="0.5"
                                         ToolTip="取消" ToolTipService.Placement="Right" ToolTipService.InitialShowDelay="100"
                                         LogoScale="0.72" Logo="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
+                    <Grid Height="12" VerticalAlignment="Bottom" Grid.ColumnSpan="100" Grid.RowSpan="100" Margin="0,0,0,-0.6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0*" x:Name="ColumnProgressA" />
+                            <ColumnDefinition Width="1*" x:Name="ColumnProgressB" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.Clip>
+                            <RectangleGeometry RadiusX="6" RadiusY="6" x:Name="RectProgressClip" />
+                        </Grid.Clip>
+                        <Rectangle Fill="{Binding Foreground, ElementName=Load}" VerticalAlignment="Bottom" Height="2" />
+                    </Grid>
                 </Grid>
             </local:MyCard>
         </Grid>

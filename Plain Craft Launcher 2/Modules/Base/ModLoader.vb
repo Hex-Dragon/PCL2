@@ -296,6 +296,7 @@
                 Me.Input = Input
                 SyncLock LockState
                     State = LoadState.Loading
+                    Progress = -1
                 End SyncLock
             Else
                 Exit Sub

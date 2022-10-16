@@ -5,6 +5,14 @@
     Private ReadOnly MainGrid As Grid
     Private ReadOnly MainChrome As SystemDropShadowChrome
     Private ReadOnly MainBorder As Border
+    Public Property BorderChild As UIElement
+        Get
+            Return MainBorder.Child
+        End Get
+        Set(value As UIElement)
+            MainBorder.Child = value
+        End Set
+    End Property
     Public MainTextBlock As TextBlock
     Public MainSwap As Shapes.Path
 

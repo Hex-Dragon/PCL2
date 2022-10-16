@@ -93,8 +93,9 @@ Public Class FormMain
         If LastVersion < 266 Then 'Snapshot 2.4.0
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "追加新的联机方式（HiPer 联机模块）"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "游戏崩溃的弹窗添加了直接查看日志的选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在更多分类下添加了新功能投票选项"))
             FeatureCount += 3
-            BugCount += 8
+            BugCount += 11
         End If
         If LastVersion < 264 Then 'Snapshot 2.3.5
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法启动部分 Forge 版本的 Bug"))
