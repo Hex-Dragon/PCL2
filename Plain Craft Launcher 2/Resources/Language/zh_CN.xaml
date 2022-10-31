@@ -2,9 +2,73 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="clr-namespace:System;assembly=mscorlib">
 
-    <s:String x:Key="LangTitleOther">更多</s:String>
-    <s:String x:Key="LangTitleDownload">下载</s:String>
-    <s:String x:Key="LangTitleHome"> 启动</s:String>
-    <s:String x:Key="LangTitleSetup">设置</s:String>
+    <!--标题-->
+    <s:String x:Key="LangOther">更多</s:String>
+    <s:String x:Key="LangDownload">下载</s:String>
+    <s:String x:Key="LangLink">联机</s:String>
+    <s:String x:Key="LangHome"> 启动</s:String>
+    <s:String x:Key="LangSetup">设置</s:String>
+    
+    <!--一些按钮的 ToolTip-->
+    <s:String x:Key="LangBackToTop">返回顶部</s:String>
+    <s:String x:Key="LangDownloadManagement">下载管理</s:String>
+    <s:String  x:Key="LangCapitulate">投降</s:String>
+    <s:String  x:Key="LangCloseMinecraft">关闭 Minecraft</s:String>
+    
+    <!--设置-启动器-下载-->
+    <s:String x:Key="LangGetVersionList">版本列表获取</s:String>
+    <s:String x:Key="LangDownloadSource1">尽量使用镜像源（加载快，但版本可能不是最新的）</s:String>
+    <s:String x:Key="LangDownloadSource2">在官方源加载缓慢时改用镜像源（平衡）</s:String>
+    <s:String x:Key="LangDownloadSource3">尽量使用官方源（保证版本为最新，但加载非常缓慢）</s:String>
+    <s:String x:Key="LangDownloadModeStyle">Mod 命名风格</s:String>
+    <s:String x:Key="LangDownloadModeStyleToolTip">决定下载的 Mod 的默认文件名中，中文译名应该放在哪个位置</s:String>
+    <s:String x:Key="LangDonwloadModeStyle1">译名位于文件名开头：[遗物] relics-0.1.14</s:String>
+    <s:String x:Key="LangDonwloadModeStyle2">译名位于文件名开头：遗物-relics-0.1.14</s:String>
+    <s:String x:Key="LangDonwloadModeStyle3">译名位于文件名末尾：relics-0.1.14-遗物</s:String>
+    <s:String x:Key="LangDonwloadModeStyle4">不添加中文译名：relics-0.1.14</s:String>
+    <s:String x:Key="LangDonwloadMaxThreadNum">最大线程数</s:String>
+    <s:String x:Key="LangDonwloadMaxThreadNumToolTip">线程数越多，限速的文件下载越快，但过高的线程数会造成下载时非常严重的卡顿。&#xA;一般而言，64 线程已可以保证足够的下载速度。</s:String>
+    <s:String x:Key="LangDonwloadSpeedLimit">速度限制</s:String>
+    <s:String x:Key="LangDownloadTargetFolder">目标文件夹</s:String>
+    <s:String x:Key="LangDonwloadTargetFolderTip">请在 启动 → 版本选择 → 文件夹列表 中更改下载目标文件夹。&#xA;在某个文件夹或游戏版本上右键，即可选择打开对应文件夹。</s:String>
+
+    <!--设置-启动器-辅助功能-->
+    <s:String x:Key="LangAssistFunction">辅助功能</s:String>
+    <s:String x:Key="LangAssistGameUpdateTip">游戏更新提示</s:String>
+    <s:String x:Key="LangAssistGameUpdateTip1">正式版更新提示</s:String>
+    <s:String x:Key="LangAssistGameUpdateTip2">测试版更新提示</s:String>
+    <s:String x:Key="LangAssistGameUpdateToolTip1">在 Minecraft 正式版更新时弹窗提示</s:String>
+    <s:String x:Key="LangAssistGameUpdateToolTip2">在 Minecraft 测试版（快照、预发布版）更新时弹窗提示</s:String>
+    <s:String x:Key="LangAssistGameLang">游戏语言</s:String>
+    <s:String x:Key="LangAssistGameLangChineseDefault">默认设置为中文</s:String>
+    
+    <!--设置-启动器-语言-->
+    <s:String x:Key="LangLang">语言</s:String>
+    
+    <!--设置-启动器-系统-->
+    <s:String x:Key="LangSystem">系统</s:String>
+    <s:String x:Key="LangSystemLaunchUpdate">启动器更新</s:String>
+    <s:String x:Key="LangSystemLaunchUpdate1">在有新版本时自动下载</s:String>
+    <s:String x:Key="LangSystemLaunchUpdate2">在有新版本时显示提示</s:String>
+    <s:String x:Key="LangSystemLaunchUpdate3">仅在有重大漏洞更新时显示提示</s:String>
+    <s:String x:Key="LangSystemLaunchUpdate4">关闭更新提示</s:String>
+    <s:String x:Key="LangSystemLaunchNotice">启动器公告</s:String>
+    <s:String x:Key="LangSystemLaunchNoticeToolTip">显示包括启动器功能调查、活动等在内的全部公告</s:String>
+    <s:String x:Key="LangSystemLaunchNotice1">显示所有公告</s:String>
+    <s:String x:Key="LangSystemLaunchNotice2">仅在有重要通知时显示公告</s:String>
+    <s:String x:Key="LangSystemLaunchNotice3">关闭所有公告</s:String>
+    <s:String x:Key="LangSystemCacheFolder">缓存文件夹</s:String>
+    <s:String x:Key="LangSystemCacheFolderToolTip">PCL2 的下载、皮肤等缓存文件的存储位置，留空即为默认值，重启后生效</s:String>
+    <s:String x:Key="LangDefault">默认</s:String>
+    <s:String x:Key="LangSystemCheckUpdate">检查更新</s:String>
+    <s:String x:Key="LangSystemCleanCache">清理缓存</s:String>
+    <s:String x:Key="LangSystemDebug">调试选项</s:String>
+    <s:String x:Key="LangSystemDebugAnimaSpeed">动画速度</s:String>
+    <s:String x:Key="LangSystemDebugSkipCopy">禁止在下载时复制已存在的文件</s:String>
+    <s:String x:Key="LangSystemDebugMode">调试模式</s:String>
+    <s:String x:Key="LangSystemDebugAddDelay">添加延迟</s:String>
+    <s:String x:Key="LangSystemDebugSkipCopyToolTip">在下载时不直接复制已经存在的文件，而是重新下载每个文件。&#x0a;只建议在测试下载速度时开启。</s:String>
+    <s:String x:Key="LangSystemDebugModeToolTip">显示调试信息与更多错误信息。&#x0a;这会导致启动器性能略有下降，若无特殊需要不建议开启。</s:String>
+    <s:String x:Key="LangSystemDebugAddDelayToolTip">在各个环节添加随机的延迟，拖慢加载速度，以测试部分功能是否正常运行。&#x0a;这会严重影响启动器运行，若无特殊需要不建议开启。</s:String>
 
 </ResourceDictionary>

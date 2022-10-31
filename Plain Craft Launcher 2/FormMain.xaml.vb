@@ -260,8 +260,8 @@ Public Class FormMain
             DowngradeSub(LastVersion)
         End If
         ''刷新语言
-        'Lang = ReadReg("Lang", "zh_CN")
-        'Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("Resources\Language\" & Lang & ".xaml", UriKind.Relative)}
+        Lang = ReadReg("Lang", "zh_CN")
+        Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("Resources\Language\" & Lang & ".xaml", UriKind.Relative)}
         '刷新主题
         ThemeCheckAll(False)
         Setup.Load("UiLauncherTheme")

@@ -2,9 +2,72 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="clr-namespace:System;assembly=mscorlib">
 
-    <s:String x:Key="LangTitleOther">More</s:String>
-    <s:String x:Key="LangTitleDownload">Download</s:String>
-    <s:String x:Key="LangTitleHome">Launch</s:String>
-    <s:String x:Key="LangTitleSetup">Setting</s:String>
+    <!--标题-->
+    <s:String x:Key="LangOther">More</s:String>
+    <s:String x:Key="LangDownload">Download</s:String>
+    <s:String x:Key="LangLink">Online</s:String>
+    <s:String x:Key="LangHome">Launch</s:String>
+    <s:String x:Key="LangSetup">Setting</s:String>
 
+    <!--一些按钮的 ToolTip-->
+    <s:String x:Key="LangBackToTop">Back to top</s:String>
+    <s:String x:Key="LangDownloadManagement">Download management</s:String>
+    <s:String  x:Key="LangCapitulate">Capitulate</s:String>
+    <s:String  x:Key="LangCloseMinecraft">Close Minecraft</s:String>
+
+    <!--设置-启动器-下载-->
+    <s:String x:Key="LangGetVersionList">Get version list</s:String>
+    <s:String x:Key="LangDownloadSource1">Use mirror source(Faster, but probably not up to date)</s:String>
+    <s:String x:Key="LangDownloadSource2">Switch to a mirror source when the official source loads slowly(Recommend)</s:String>
+    <s:String x:Key="LangDownloadSource3">Use official sources as much as possible(Keep the version up-to-date, but load very slowly)</s:String>
+    <s:String x:Key="LangDownloadModeStyle">Mod naming style</s:String>
+    <s:String x:Key="LangDownloadModeStyleToolTip">Decide where the Chinese translation should be placed in the default file name of the downloaded Mod</s:String>
+    <s:String x:Key="LangDonwloadModeStyle1">：[遗物] relics-0.1.14</s:String>
+    <s:String x:Key="LangDonwloadModeStyle2">At the beginning of the file name：遗物-relics-0.1.14</s:String>
+    <s:String x:Key="LangDonwloadModeStyle3">At the end of the file name：relics-0.1.14-遗物</s:String>
+    <s:String x:Key="LangDonwloadModeStyle4">Do not add Chinese translated names：relics-0.1.14</s:String>
+    <s:String x:Key="LangDonwloadMaxThreadNum">Maximum number of threads</s:String>
+    <s:String x:Key="LangDonwloadMaxThreadNumToolTip">The more threads, the faster the speed-limited files are downloaded, but too many threads can cause serious stutters during download.&#xA;In general, 64 threads can guarantee sufficient download speed.</s:String>
+    <s:String x:Key="LangDonwloadSpeedLimit">Speed limit</s:String>
+    <s:String x:Key="LangDownloadTargetFolder">Destination folder</s:String>
+    <s:String x:Key="LangDonwloadTargetFolderTip">Please go to "Launch → SelectVersion → FolderList" to modify the download destination folder.&#xA;Right-click on a folder or game version and you can choose to open the corresponding folder.</s:String>
+    
+    <!--设置-启动器-辅助功能-->
+    <s:String x:Key="LangAssistFunction">Auxiliary function</s:String>
+    <s:String x:Key="LangAssistGameUpdateTip">Game update tips</s:String>
+    <s:String x:Key="LangAssistGameUpdateTip1">Official version update prompt</s:String>
+    <s:String x:Key="LangAssistGameUpdateTip2">Update tips for beta version</s:String>
+    <s:String x:Key="LangAssistGameUpdateToolTip1">Pop-up window prompt when the official version of Minecraft is updated</s:String>
+    <s:String x:Key="LangAssistGameUpdateToolTip2">Pop-up prompt when Minecraft beta (snapshot, pre-release) is updated</s:String>
+    <s:String x:Key="LangAssistGameLang">Game language</s:String>
+    <s:String x:Key="LangAssistGameLangChineseDefault">Set to Chinese(Will applicate at the first start)</s:String>
+
+    <!--设置-启动器-语言-->
+    <s:String x:Key="LangLang">Language</s:String>
+
+    <!--设置-启动器-系统-->
+    <s:String x:Key="LangSystem">System</s:String>
+    <s:String x:Key="LangSystemLaunchUpdate">Launch update</s:String>
+    <s:String x:Key="LangSystemLaunchUpdate1">Download automatically when a new version is available</s:String>
+    <s:String x:Key="LangSystemLaunchUpdate2">Display prompts when a new version is available</s:String>
+    <s:String x:Key="LangSystemLaunchUpdate3">Prompt is displayed only when there is a major vulnerability update</s:String>
+    <s:String x:Key="LangSystemLaunchUpdate4">Turn off update prompts</s:String>
+    <s:String x:Key="LangSystemLaunchNotice">Lacunch announcement</s:String>
+    <s:String x:Key="LangSystemLaunchNoticeToolTip">Display all announcements, including starter function surveys, activities, etc.</s:String>
+    <s:String x:Key="LangSystemLaunchNotice1">Show all announcements</s:String>
+    <s:String x:Key="LangSystemLaunchNotice2">Show announcements only when there is an important notice</s:String>
+    <s:String x:Key="LangSystemLaunchNotice3">Do not show announcements</s:String>
+    <s:String x:Key="LangSystemCacheFolder">Cache folder</s:String>
+    <s:String x:Key="LangSystemCacheFolderToolTip">The storage location of PCL2 download, skin and other cache files. Leave it blank as the default value, which will take effect after restart.</s:String>
+    <s:String x:Key="LangDefault">Default</s:String>
+    <s:String x:Key="LangSystemCheckUpdate">Check for updates</s:String>
+    <s:String x:Key="LangSystemCleanCache">Clean the cache</s:String>
+    <s:String x:Key="LangSystemDebug">Debug</s:String>
+    <s:String x:Key="LangSystemDebugAnimaSpeed">Animation speed</s:String>
+    <s:String x:Key="LangSystemDebugSkipCopy">Do not copy existing files when downloading</s:String>
+    <s:String x:Key="LangSystemDebugMode">Debug mode</s:String>
+    <s:String x:Key="LangSystemDebugAddDelay">Add delay</s:String>
+    <s:String x:Key="LangSystemDebugSkipCopyToolTip">Instead of directly copying existing files during download, you re-download each file.&#x0a;It is only recommended to turn on when testing the download speed.</s:String>
+    <s:String x:Key="LangSystemDebugModeToolTip">Displays debugging information and more error messages.&#x0a;This will lead to a slight decline in starter performance, and it is not recommended to turn it on if there is no special need.</s:String>
+    <s:String x:Key="LangSystemDebugAddDelayToolTip">Add random delays in each link to slow down the loading speed to test whether some functions are working properly.&#x0a;This will seriously affect the operation of the starter, if there is no special need, it is not recommended to turn it on.</s:String>
 </ResourceDictionary>
