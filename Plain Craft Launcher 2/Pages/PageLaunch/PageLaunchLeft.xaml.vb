@@ -711,7 +711,11 @@ ExitRefresh:
         '修改登陆方式
         Select Case Setup.Get("LoginType")
             Case McLoginType.Legacy
-                LabLaunchingMethod.Text = "离线登录"
+                If PageLinkHiper.HiperState = LoadState.Finished Then
+                    LabLaunchingMethod.Text = "联机离线登录"
+                Else
+                    LabLaunchingMethod.Text = "离线登录"
+                End If
             Case McLoginType.Mojang
                 LabLaunchingMethod.Text = "Mojang 正版登录"
             Case McLoginType.Ms

@@ -536,11 +536,11 @@
             Dim CardInfo As New MyCard With {.Title = "最新版本", .Margin = New Thickness(0, 15, 0, 15), .SwapType = 2}
             Dim TopestVersions As New List(Of JObject)
             Dim Release As JObject = Dict("正式版")(0).DeepClone()
-            Release("lore") = "最新正式版，发布于 " & Release("releaseTime").ToString()
+            Release("lore") = "最新正式版，发布于 " & Release("releaseTime").Value(Of Date).ToString("yyyy/MM/dd HH:mm")
             TopestVersions.Add(Release)
             If Dict("正式版")(0)("releaseTime").Value(Of Date) < Dict("预览版")(0)("releaseTime").Value(Of Date) Then
                 Dim Snapshot As JObject = Dict("预览版")(0).DeepClone()
-                Snapshot("lore") = "最新预览版，发布于 " & Snapshot("releaseTime").ToString()
+                Snapshot("lore") = "最新预览版，发布于 " & Snapshot("releaseTime").Value(Of Date).ToString("yyyy/MM/dd HH:mm")
                 TopestVersions.Add(Snapshot)
             End If
             Dim PanInfo As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = TopestVersions}
@@ -571,17 +571,39 @@
     ''' 获取 OptiFine 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadOptiFineGetError() As String
-        'If Not SelectedMinecraftId.Contains("1.") Then Return "没有可用版本"
         If LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFine.State, Object).Error.Message
-        For Each Version As DlOptiFineListEntry In DlOptiFineListLoader.Output.Value
-            If Version.NameDisplay.StartsWith(SelectedMinecraftId & " ") Then
-                'If SelectedFabric IsNot Nothing Then Return "与 Fabric 不兼容"
-                If SelectedForge IsNot Nothing AndAlso VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then Return "与 Forge 不兼容"
+        '检查 Forge 1.13 - 1.14.3：全部不兼容
+        If SelectedForge IsNot Nothing AndAlso
+            VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then
+            Return "与 Forge 不兼容"
+        End If
+        '检查最低 Forge 版本
+        Dim MinimalForgeVersion As String = "9999.9999"
+        For Each OptiFineVersion As DlOptiFineListEntry In DlOptiFineListLoader.Output.Value
+            If Not OptiFineVersion.NameDisplay.StartsWith(SelectedMinecraftId & " ") Then Continue For '不是同一个大版本
+            If SelectedForge Is Nothing OrElse IsOptiFineSuitForForge(OptiFineVersion, SelectedForge) Then
                 Return Nothing
+            Else
+                '设置用于显示的最低 Forge 版本
+                MinimalForgeVersion = If(VersionSortBoolean(MinimalForgeVersion, OptiFineVersion.RequiredForgeVersion),
+                                         OptiFineVersion.RequiredForgeVersion, MinimalForgeVersion)
             End If
         Next
-        Return "没有可用版本"
+        If MinimalForgeVersion = "9999.9999" Then
+            Return "没有可用版本"
+        Else
+            Return "需要 Forge " & If(MinimalForgeVersion.Contains("."), "", "#") & MinimalForgeVersion & " 或更高版本"
+        End If
+    End Function
+
+    '检查某个 OptiFine 是否与某个 Forge 兼容（最低 Forge 版本是否达到需求）
+    Private Function IsOptiFineSuitForForge(OptiFine As DlOptiFineListEntry, Forge As DlForgeVersionEntry)
+        If Forge.Inherit <> OptiFine.Inherit Then Return False '不是同一个大版本
+        Return (OptiFine.RequiredForgeVersion.Contains(".") AndAlso 'XX.X.XXX
+                VersionSortInteger(Forge.Version, OptiFine.RequiredForgeVersion) >= 0) OrElse
+               (Not OptiFine.RequiredForgeVersion.Contains(".") AndAlso '#XXXX
+                VersionSortInteger(Forge.Version.Split(".").Last, OptiFine.RequiredForgeVersion) >= 0)
     End Function
 
     '限制展开
@@ -595,9 +617,11 @@
     Private Sub OptiFine_Loaded() Handles LoadOptiFine.StateChanged
         Try
             If DlOptiFineListLoader.State <> LoadState.Finished Then Exit Sub
+
             '获取版本列表
             Dim Versions As New List(Of DlOptiFineListEntry)
             For Each Version As DlOptiFineListEntry In DlOptiFineListLoader.Output.Value
+                If SelectedForge IsNot Nothing AndAlso Not IsOptiFineSuitForForge(Version, SelectedForge) Then Continue For
                 If Version.NameDisplay.StartsWith(SelectedMinecraftId & " ") Then Versions.Add(Version)
             Next
             If Versions.Count = 0 Then Exit Sub
@@ -618,7 +642,9 @@
     '选择与清除
     Private Sub OptiFine_Selected(sender As MyListItem, e As EventArgs)
         SelectedOptiFine = sender.Tag
+        If SelectedForge IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, SelectedForge) Then SelectedForge = Nothing
         OptiFabric_Loaded()
+        Forge_Loaded()
         CardOptiFine.IsSwaped = True
         SelectReload()
     End Sub
@@ -627,6 +653,7 @@
         SelectedOptiFabric = Nothing
         CardOptiFine.IsSwaped = True
         e.Handled = True
+        Forge_Loaded()
         SelectReload()
     End Sub
 
@@ -743,6 +770,7 @@
             ForgeDownloadListItemPreload(PanForge, Versions, AddressOf Forge_Selected, False)
             For Each Version In Versions
                 If Version.Category = "universal" OrElse Version.Category = "client" Then Continue For '跳过无法自动安装的版本
+                If SelectedOptiFine IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, Version) Then Continue For
                 PanForge.Children.Add(ForgeDownloadListItem(Version, AddressOf Forge_Selected, False))
             Next
         Catch ex As Exception
@@ -754,12 +782,15 @@
     Private Sub Forge_Selected(sender As MyListItem, e As EventArgs)
         SelectedForge = sender.Tag
         CardForge.IsSwaped = True
+        If SelectedOptiFine IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, SelectedForge) Then SelectedOptiFine = Nothing
+        OptiFine_Loaded()
         SelectReload()
     End Sub
     Private Sub Forge_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnForgeClear.MouseLeftButtonUp
         SelectedForge = Nothing
         CardForge.IsSwaped = True
         e.Handled = True
+        OptiFine_Loaded()
         SelectReload()
     End Sub
 
@@ -774,7 +805,7 @@
         If LoadFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadFabric.State, Object).Error.Message
         For Each Version As JObject In DlFabricListLoader.Output.Value("game")
-            If Version("version").ToString = SelectedMinecraftId Then
+            If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite") Then
                 If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
                 'If SelectedOptiFine IsNot Nothing Then Return "与 OptiFine 不兼容"
                 Return Nothing

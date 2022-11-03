@@ -237,7 +237,9 @@
     ''' </summary>
     Public DlClientListBmclapiLoader As New LoaderTask(Of Integer, DlClientListResult)("DlClientList Bmclapi", AddressOf DlClientListBmclapiMain)
     Private Sub DlClientListBmclapiMain(Loader As LoaderTask(Of Integer, DlClientListResult))
-        Dim Json As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/mc/game/version_manifest.json", IsJson:=True)
+        Dim Json As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/mc/game/version_manifest.json",
+                                                       BackupUrl:="https://download.mcbbs.net/mc/game/version_manifest.json",
+                                                       IsJson:=True)
         Try
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
@@ -331,6 +333,10 @@
         ''' 发布时间，格式为“yyyy/mm/dd”。OptiFine 源无此数据。
         ''' </summary>
         Public ReleaseTime As String
+        ''' <summary>
+        ''' 需要的最低 Forge 版本。空字符串为无限制，“28.1.56” 表示版本号，“1161” 表示版本号的最后一位。
+        ''' </summary>
+        Public RequiredForgeVersion As String
     End Class
 
     ''' <summary>
@@ -365,21 +371,23 @@
         Dim Result As String = NetGetCodeByClient("https://optifine.net/downloads", Encoding.Default)
         If Result.Length < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Result & "）")
         '获取所有版本信息
-        Dim ReleaseTime As List(Of String) = RegexSearch(Result, "(?<=Date'>)[^<]+")
+        Dim Forge As List(Of String) = RegexSearch(Result, "(?<=colForge'>)[^<]*")
+        Dim ReleaseTime As List(Of String) = RegexSearch(Result, "(?<=colDate'>)[^<]+")
         Dim Name As List(Of String) = RegexSearch(Result, "(?<=OptiFine_)[0-9A-Za-z_.]+(?=.jar"")")
         If Not ReleaseTime.Count = Name.Count Then Throw New Exception("版本与发布时间数据无法对应")
+        If Not Forge.Count = Name.Count Then Throw New Exception("版本与 Forge 兼容数据无法对应")
         If ReleaseTime.Count < 10 Then Throw New Exception("获取到的版本数量不足（" & Result & "）")
         '转化为列表输出
         Dim Versions As New List(Of DlOptiFineListEntry)
         For i = 0 To ReleaseTime.Count - 1
             Name(i) = Name(i).Replace("_", " ")
             Dim Entry As New DlOptiFineListEntry With {
-                         .NameDisplay = Name(i).ToString.Replace("HD U ", "").Replace(".0 ", " "),
+                         .NameDisplay = Name(i).Replace("HD U ", "").Replace(".0 ", " "),
                          .ReleaseTime = Join({ReleaseTime(i).Split(".")(2), ReleaseTime(i).Split(".")(1), ReleaseTime(i).Split(".")(0)}, "/"),
-                         .IsPreview = Name(i).ToString.ToLower.Contains("pre"),
+                         .IsPreview = Name(i).ToLower.Contains("pre"),
                          .Inherit = Name(i).ToString.Split(" ")(0),
-                         .NameFile = If(Name(i).ToString.ToLower.Contains("pre"), "preview_", "") &
-                                                        "OptiFine_" & Name(i).ToString.Replace(" ", "_") & ".jar"}
+                         .NameFile = If(Name(i).ToLower.Contains("pre"), "preview_", "") & "OptiFine_" & Name(i).Replace(" ", "_") & ".jar",
+                         .RequiredForgeVersion = Forge(i).Replace("Forge ", "").Replace("#", "")}
             Entry.NameVersion = Entry.Inherit & "-OptiFine_" & Name(i).ToString.Replace(" ", "_").Replace(Entry.Inherit & "_", "")
             Versions.Add(Entry)
         Next
@@ -391,7 +399,8 @@
     ''' </summary>
     Public DlOptiFineListBmclapiLoader As New LoaderTask(Of Integer, DlOptiFineListResult)("DlOptiFineList Bmclapi", AddressOf DlOptiFineListBmclapiMain)
     Private Sub DlOptiFineListBmclapiMain(Loader As LoaderTask(Of Integer, DlOptiFineListResult))
-        Dim Json As JArray = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/optifine/versionList", IsJson:=True)
+        Dim Json As JArray = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/optifine/versionList",
+                                                      BackupUrl:="https://download.mcbbs.net/optifine/versionList", IsJson:=True)
         Try
             Dim Versions As New List(Of DlOptiFineListEntry)
             For Each Token As JObject In Json
@@ -400,7 +409,8 @@
                              .ReleaseTime = "",
                              .IsPreview = Token("patch").ToString.ToLower.Contains("pre"),
                              .Inherit = Token("mcversion").ToString,
-                             .NameFile = Token("filename").ToString
+                             .NameFile = Token("filename").ToString,
+                             .RequiredForgeVersion = If(Token("forge"), "").ToString.Replace("Forge ", "").Replace("#", "")
                          }
                 Entry.NameVersion = Entry.Inherit & "-OptiFine_" & (Token("type").ToString & " " & Token("patch").ToString).Replace(".0 ", " ").Replace(" ", "_").Replace(Entry.Inherit & "_", "")
                 Versions.Add(Entry)
@@ -473,7 +483,8 @@
     ''' </summary>
     Public DlForgeListBmclapiLoader As New LoaderTask(Of Integer, DlForgeListResult)("DlForgeList Bmclapi", AddressOf DlForgeListBmclapiMain)
     Private Sub DlForgeListBmclapiMain(Loader As LoaderTask(Of Integer, DlForgeListResult))
-        Dim Result As String = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft", Encoding.Default)
+        Dim Result As String = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft", Encoding.Default,
+                                                       BackupUrl:="https://download.mcbbs.net/forge/minecraft")
         If Result.Length < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Result & "）")
         '获取所有版本信息
         Dim Names As List(Of String) = RegexSearch(Result, "[0-9.]+(_pre[0-9]?)?")
@@ -665,7 +676,8 @@
     ''' Forge 版本列表，BMCLAPI。
     ''' </summary>
     Public Sub DlForgeVersionBmclapiMain(Loader As LoaderTask(Of String, List(Of DlForgeVersionEntry)))
-        Dim Json As JArray = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft/" & Loader.Input, IsJson:=True)
+        Dim Json As JArray = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft/" & Loader.Input,
+                                                       BackupUrl:="https://download.mcbbs.net/forge/minecraft/" & Loader.Input, IsJson:=True)
         Dim Versions As New List(Of DlForgeVersionEntry)
         Try
             Dim Recommended As String = McDownloadForgeRecommendedGet(Loader.Input)
@@ -812,7 +824,7 @@
                              .IsPreview = RealEntry("stream").ToString.ToLower = "snapshot",
                              .FileName = "liteloader-installer-" & Pair.Key & If(Pair.Key = "1.8" OrElse Pair.Key = "1.9", ".0", "") & "-00-SNAPSHOT.jar",
                              .MD5 = RealEntry("md5"),
-                             .ReleaseTime = GetLocalTime(GetDate(RealEntry("timestamp"))).ToString("yyyy/MM/dd HH:mm:ss"),
+                             .ReleaseTime = GetLocalTime(GetDate(RealEntry("timestamp"))).ToString("yyyy/MM/dd HH:mm"),
                              .JsonToken = RealEntry
                          })
             Next
@@ -827,7 +839,8 @@
     ''' </summary>
     Public DlLiteLoaderListBmclapiLoader As New LoaderTask(Of Integer, DlLiteLoaderListResult)("DlLiteLoaderList Bmclapi", AddressOf DlLiteLoaderListBmclapiMain)
     Private Sub DlLiteLoaderListBmclapiMain(Loader As LoaderTask(Of Integer, DlLiteLoaderListResult))
-        Dim Result As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/maven/com/mumfrey/liteloader/versions.json", IsJson:=True)
+        Dim Result As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/maven/com/mumfrey/liteloader/versions.json",
+                                                       BackupUrl:="https://download.mcbbs.net/maven/com/mumfrey/liteloader/versions.json", IsJson:=True)
         Try
             Dim Json As JObject = Result("versions")
             Dim Versions As New List(Of DlLiteLoaderListEntry)
@@ -840,7 +853,7 @@
                              .IsPreview = RealEntry("stream").ToString.ToLower = "snapshot",
                              .FileName = "liteloader-installer-" & Pair.Key & If(Pair.Key = "1.8" OrElse Pair.Key = "1.9", ".0", "") & "-00-SNAPSHOT.jar",
                              .MD5 = RealEntry("md5"),
-                             .ReleaseTime = GetLocalTime(GetDate(RealEntry("timestamp"))).ToString("yyyy/MM/dd HH:mm:ss"),
+                             .ReleaseTime = GetLocalTime(GetDate(RealEntry("timestamp"))).ToString("yyyy/MM/dd HH:mm"),
                              .JsonToken = RealEntry
                          })
             Next
@@ -913,7 +926,8 @@
     ''' </summary>
     Public DlFabricListBmclapiLoader As New LoaderTask(Of Integer, DlFabricListResult)("DlFabricList Bmclapi", AddressOf DlFabricListBmclapiMain)
     Private Sub DlFabricListBmclapiMain(Loader As LoaderTask(Of Integer, DlFabricListResult))
-        Dim Result As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/fabric-meta/v2/versions", IsJson:=True)
+        Dim Result As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/fabric-meta/v2/versions",
+                                                       BackupUrl:="https://download.mcbbs.net/fabric-meta/v2/versions", IsJson:=True)
         Try
             Dim Output = New DlFabricListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Result}
             If Output.Value("game") Is Nothing OrElse Output.Value("loader") Is Nothing OrElse Output.Value("installer") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
@@ -939,7 +953,7 @@
 
 #Region "DlCfProject | CurseForge 工程"
 
-    Private DlCfProjectDb As Dictionary(Of String, String) = Nothing
+    Private DlCfProjectDb As Dictionary(Of String, DlCfDbEntry) = Nothing
     Private DlCfProjectCache As New Dictionary(Of Integer, DlCfProject)
 
     ''' <summary>
@@ -988,7 +1002,6 @@
 
         Public Id As Integer
         Public Name As String
-        Public McWikiId As Integer = 0
         Public Description As String
         Public Website As String
         Public DateUpdate As Date
@@ -1000,22 +1013,19 @@
         Public IsModPack As Boolean
         Public FileIndexes As New List(Of Integer)
         Public Files As List(Of DlCfFile)
-        Private _MCBBS As String
-        Public Property MCBBS As String
+        Private _MCBBS As Integer?
+        Public Property MCBBS As Integer?
             Get
                 ReleaseCfDatabase()
                 If _MCBBS Is Nothing Then
                     If Website IsNot Nothing Then
                         Dim Keyword As String = Website.TrimEnd("/").Split("/").Last
-                        If DlCfProjectDb.ContainsKey(Keyword) Then
-                            Dim Result As String() = DlCfProjectDb(Keyword).ToString.Split("|")
-                            If Result.Length = 3 Then _MCBBS = Result.Last
-                        End If
+                        If DlCfProjectDb.ContainsKey(Keyword) Then _MCBBS = DlCfProjectDb(Keyword).MCBBS
                     End If
                 End If
                 Return _MCBBS
             End Get
-            Set(value As String)
+            Set(value As Integer?)
                 _MCBBS = value
             End Set
         End Property
@@ -1028,18 +1038,40 @@
                     If Website IsNot Nothing Then
                         Dim Keyword As String = Website.TrimEnd("/").Split("/").Last
                         If DlCfProjectDb.ContainsKey(Keyword) Then
-                            Dim Result As String = DlCfProjectDb(Keyword)
-                            McWikiId = Result.Split("|")(0)
-                            If Not Result.Split("|")(1) = "~" Then '使用原名
-                                _ChineseName = Result.Split("|")(1)
+                            Dim Result = DlCfProjectDb(Keyword)
+                            If Not String.IsNullOrEmpty(Result.ChineseName) Then '使用原名
+                                _ChineseName = Result.ChineseName
                             End If
                         End If
                     End If
                 End If
                 Return _ChineseName
             End Get
-            Set(ByVal value As String)
+            Set(value As String)
                 _ChineseName = value
+            End Set
+        End Property
+        Private _WikiId As Integer = -1
+        ''' <summary>
+        ''' MCMOD 的页面 ID。若为 0 则代表没有对应页面。
+        ''' </summary>
+        Public Property WikiId As Integer
+            Get
+                ReleaseCfDatabase()
+                If _WikiId = -1 Then
+                    If Website IsNot Nothing Then
+                        Dim Keyword As String = Website.TrimEnd("/").Split("/").Last
+                        If DlCfProjectDb.ContainsKey(Keyword) Then
+                            _WikiId = DlCfProjectDb(Keyword).WikiId
+                        Else
+                            _WikiId = 0
+                        End If
+                    End If
+                End If
+                Return _WikiId
+            End Get
+            Set(value As Integer)
+                _WikiId = value
             End Set
         End Property
 
@@ -1180,7 +1212,8 @@
                                    If(ShowVersionDesc, GameVersionDesc, "") &
                                    Join(CategoryDesc, "，") & " (" &
                                    GetTimeSpanString(DateUpdate - Date.Now) & "更新" &
-                                   If(DownloadCount > 0, "，" & If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " 万次下载）", DownloadCount & " 次下载）"), "")
+                                   If(DownloadCount > 0,
+                                        "，" & If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " 万次下载", DownloadCount & " 次下载"), "") & "）"
             If Thumb Is Nothing Then
                 NewItem.Logo = "pack://application:,,,/images/Icons/NoIcon.png"
             Else
@@ -1217,8 +1250,9 @@
     ''' CurseForge 工程列表获取事件。
     ''' </summary>
     Public Sub DlCfProjectSub(Task As LoaderTask(Of DlCfProjectRequest, DlCfProjectResult))
-        Dim RawFilter As String = If(Task.Input.SearchFilter, "").Trim.ToLower
+        Dim RawFilter As String = If(Task.Input.SearchFilter, "").Trim
         Task.Input.SearchFilter = RawFilter
+        RawFilter = RawFilter.ToLower
         Log("[Download] CurseForge 工程列表搜索原始文本：" & RawFilter)
         '中文请求关键字处理
         Dim IsChineseSearch As Boolean = RegexCheck(RawFilter, "[\u4e00-\u9fbb]")
@@ -1227,12 +1261,12 @@
             ReleaseCfDatabase()
             '构造搜索请求
             Dim SearchEntries As New List(Of SearchEntry(Of String))
-            For Each Entry In DlCfProjectDb
-                If Entry.Value.ToString.Contains("动态的树") Then Continue For '傻逼 Mod 的附属太多了
+            For Each Entry In DlCfProjectDb.Values
+                If If(Entry.ChineseName, "").Contains("动态的树") Then Continue For '傻逼 Mod 的附属太多了
                 SearchEntries.Add(New SearchEntry(Of String) With {
-                    .Item = Entry.Value.ToString.Split("|")(1),
+                    .Item = Entry.ChineseName,
                     .SearchSource = New List(Of KeyValuePair(Of String, Double)) From {
-                        New KeyValuePair(Of String, Double)(Entry.Value.ToString.Replace(" (", "|").Split("|")(1), 1)
+                        New KeyValuePair(Of String, Double)(Entry.ChineseName & Entry.CurseForgeId, 1)
                     }
                 })
             Next
@@ -1258,12 +1292,12 @@
         '驼峰英文请求关键字处理
         Dim SpacedKeywords = RegexReplace(Task.Input.SearchFilter, "$& ", "([A-Z]+|[a-z]+?)(?=[A-Z]+[a-z]+[a-z ]*)")
         Dim ConnectedKeywords = Task.Input.SearchFilter.Replace(" ", "")
-        Dim AllPossibleKeywords = SpacedKeywords & " " & If(IsChineseSearch, Task.Input.SearchFilter, ConnectedKeywords & " " & RawFilter)
+        Dim AllPossibleKeywords = (SpacedKeywords & " " & If(IsChineseSearch, Task.Input.SearchFilter, ConnectedKeywords & " " & RawFilter)).ToLower
         '最终处理关键字：分割、去重
         Dim RightKeywords As New List(Of String)
         For Each Keyword In AllPossibleKeywords.Split(" ")
             If Keyword.Trim = "" Then Continue For
-            If Keyword = "forge" OrElse Keyword = "fabric" OrElse Keyword = "for" Then 'https://github.com/Hex-Dragon/PCL2/issues/208
+            If Keyword = "forge" OrElse Keyword = "fabric" OrElse Keyword = "for" OrElse Keyword = "mod" Then 'https://github.com/Hex-Dragon/PCL2/issues/208
                 Log("[Download] 已跳过搜索关键词 " & Keyword, LogLevel.Developer)
                 Continue For
             End If
@@ -1342,16 +1376,42 @@
     ''' </summary>
     Private Sub ReleaseCfDatabase()
         If DlCfProjectDb IsNot Nothing Then Exit Sub
-        DlCfProjectDb = New Dictionary(Of String, String)
-        For Each Entry In CType(GetJson(DecodeBytes(GetResources("ModData"))), JObject)
-            Dim Result As String = Entry.Value.ToString
-            If Not Result.Split("|")(1) = "~" Then '处理 *
-                Result = Result.Replace("*", " (" &
-                        String.Join(" ", Entry.Key.Split("-").Select(Function(w) w.Substring(0, 1).ToUpper & w.Substring(1, w.Length - 1))) & ")")
+        DlCfProjectDb = New Dictionary(Of String, DlCfDbEntry)
+        For Each Line In DecodeBytes(GetResources("ModData")).Split(vbLf)
+            Dim Entry = New DlCfDbEntry
+            Dim SplitedLine = Line.Split("|")
+            Entry.CurseForgeId = SplitedLine(0)
+            Entry.WikiId = SplitedLine(1)
+            Entry.ChineseName = SplitedLine(2)
+            Entry.MCBBS = If(SplitedLine.Count = 4, SplitedLine(3), Nothing)
+            If Entry.ChineseName.Contains("*") Then '处理 *
+                Entry.ChineseName = Entry.ChineseName.Replace("*", " (" &
+                        String.Join(" ", Entry.CurseForgeId.Split("-").Select(Function(w) w.Substring(0, 1).ToUpper & w.Substring(1, w.Length - 1))) & ")")
             End If
-            DlCfProjectDb.Add(Entry.Key, Result)
+            DlCfProjectDb.Add(Entry.CurseForgeId, Entry)
         Next
     End Sub
+    Public Class DlCfDbEntry
+        ''' <summary>
+        ''' McMod 的 ID。
+        ''' </summary>
+        Public WikiId As Integer
+        ''' <summary>
+        ''' 中文译名。若为 Nothing 或空字符串则使用英文名。
+        ''' </summary>
+        Public ChineseName As String
+        ''' <summary>
+        ''' MCBBS 发布帖编号（例如 195107）。若为 Nothing 则没有发布帖。
+        ''' </summary>
+        Public MCBBS As Integer?
+        ''' <summary>
+        ''' CurseForge ID（例如 advanced-solar-panels）。
+        ''' </summary>
+        Public CurseForgeId As String
+        Public Overrides Function ToString() As String
+            Return CurseForgeId & "|" & WikiId & "|" & ChineseName & If(MCBBS Is Nothing, "", "|" & MCBBS)
+        End Function
+    End Class
 
 #End Region
 

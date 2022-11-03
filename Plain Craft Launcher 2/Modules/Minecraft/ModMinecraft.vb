@@ -484,10 +484,22 @@ RetryGet:
                     End If
                 Next
                 Log("[Java] 发现用户指定的不兼容 Java：" & UserJava.ToString)
-                If MyMsgBox("你在启动设置中指定了使用下列 Java：" & vbCrLf &
-                            " - " & UserJava.ToString & vbCrLf &
+                '弹窗要求选择
+                Dim Requirement As String = ""
+                If (MinVersion Is Nothing OrElse MinVersion.Minor = 0) AndAlso (MaxVersion IsNot Nothing AndAlso MaxVersion.Minor < 99) Then
+                    Requirement = "最高兼容到 Java " & MaxVersion.Minor & If(MaxVersion.MinorRevision < 99, "." & MaxVersion.MinorRevision & "." & MaxVersion.Revision, "")
+                ElseIf (MinVersion IsNot Nothing AndAlso MinVersion.Minor > 0) AndAlso (MaxVersion Is Nothing OrElse MaxVersion.Minor >= 99) Then
+                    Requirement = "至少需要 Java " & MinVersion.Minor & If(MinVersion.MinorRevision > 0 OrElse MinVersion.Revision > 0, "." & MinVersion.MinorRevision & "." & MinVersion.Revision, "")
+                ElseIf (MinVersion IsNot Nothing AndAlso MinVersion.Minor > 0) AndAlso (MaxVersion IsNot Nothing AndAlso MaxVersion.Minor < 99) Then
+                    Dim Left As String = MinVersion.Minor & If(MinVersion.MinorRevision > 0 OrElse MinVersion.Revision > 0, "." & MinVersion.MinorRevision & "." & MinVersion.Revision, "")
+                    Dim Right As String = MaxVersion.Minor & If(MaxVersion.MinorRevision < 99, "." & MaxVersion.MinorRevision & "." & MaxVersion.Revision, "")
+                    Requirement = "需要 Java " & If(Left = Right, Left, Left & " ~ " & Right)
+                End If
+                If MyMsgBox("你在启动设置中指定了使用 Java " & UserJava.VersionCode & "，但当前版本" & Requirement & "。" & vbCrLf &
+                            "如果强制使用该 Java，可能会导致游戏崩溃。" & vbCrLf &
                             vbCrLf &
-                            "该 Java 可能不兼容当前游戏版本，游戏存在崩溃风险。是否要强制使用该 Java？", "Java 兼容性警告", "取消，让 PCL2 自动选择", "继续") = 2 Then
+                            " - 指定的 Java：" & UserJava.ToString,
+                            "Java 兼容性警告", "让 PCL2 自动选择", "强制使用该 Java") = 2 Then
                     '强制使用指定的 Java
                     Log("[Java] 已强制使用用户指定的不兼容 Java")
                     AllowedJavaList = New List(Of JavaEntry) From {UserJava}
@@ -581,8 +593,8 @@ UserPass:
         If Not Left.IsJre AndAlso Right.IsJre Then Return False
         '4. Java 大版本
         If Left.VersionCode <> Right.VersionCode Then
-            '                             Java  7   8   9  10  11  12 13 14 15  16  17  18  19
-            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 29, 10, 11, 12, 13, 9, 8, 7, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
+            '                             Java  7   8   9  10  11  12 13 14 15  16  17  18  19  20...
+            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 29, 10, 11, 12, 13, 9, 8, 7, 15, 30, 29, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
             Return Weight.ElementAtOrDefault(Left.VersionCode) >= Weight.ElementAtOrDefault(Right.VersionCode)
         End If
         '5. 最次级版本号更接近 51
@@ -773,7 +785,7 @@ UserPass:
     ""selectedProfile"": ""PCL2"",
     ""clientToken"": ""23323323323323323323323323323333""
 }"
-            WriteFile(Folder & "launcher_profiles.json", ResultJson, Encoding:=Encoding.Default)
+            WriteFile(Folder & "launcher_profiles.json", ResultJson, Encoding:=Encoding.GetEncoding("GB18030"))
             Log("[Minecraft] 已创建 launcher_profiles.json：" & Folder)
         Catch ex As Exception
             Log(ex, "创建 launcher_profiles.json 失败（" & Folder & "）", LogLevel.Feedback)
@@ -2486,22 +2498,23 @@ NextVersion:
 
         '统一通行证文件
         If Setup.Get("VersionServerLogin", Version:=Version) = 3 Then
-            Dim TargetFile = Version.PathIndie & "nide8auth.jar"
+            Dim TargetFile = PathAppdata & "nide8auth.jar"
             Dim Checker As New FileChecker(MinSize:=173000)
             If (IsSetupSkip AndAlso File.Exists(TargetFile)) OrElse Checker.Check(TargetFile) IsNot Nothing Then
                 Result.Add(New NetFile({"https://login.mc-user.com:233/index/jar"}, TargetFile, Checker))
             End If
         End If
         'Authlib-Injector 文件
-        If Setup.Get("VersionServerLogin", Version:=Version) = 4 Then
-            Dim TargetFile = Version.PathIndie & "authlib-injector.jar"
+        If Setup.Get("VersionServerLogin", Version:=Version) = 4 OrElse
+           (PageLinkHiper.HiperState = LoadState.Finished AndAlso Setup.Get("LoginType") = McLoginType.Legacy) Then 'HiPer 登录转接
+            Dim TargetFile = PathAppdata & "authlib-injector.jar"
             Dim DownloadInfo As JObject = Nothing
             '获取下载信息
             Try
                 Log("[Minecraft] 开始获取 Authlib-Injector 下载信息")
                 DownloadInfo = GetJson(NetGetCodeByDownload({"https://download.mcbbs.net/mirrors/authlib-injector/artifact/latest.json", "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json"}, IsJson:=True))
             Catch ex As Exception
-                Log("获取 Authlib-Injector 下载信息失败", LogLevel.Hint)
+                Log(ex, "获取 Authlib-Injector 下载信息失败")
             End Try
             '校验文件
             If DownloadInfo IsNot Nothing Then
@@ -3804,7 +3817,11 @@ NextEntry:
         Else
             Select Case McLoginLoader.Input.Type
                 Case McLoginType.Legacy
-                    Raw = Raw.Replace("{login}", "离线")
+                    If PageLinkHiper.HiperState = LoadState.Finished Then
+                        Raw = Raw.Replace("{login}", "联机离线")
+                    Else
+                        Raw = Raw.Replace("{login}", "离线")
+                    End If
                 Case McLoginType.Mojang
                     Raw = Raw.Replace("{login}", "Mojang 正版")
                 Case McLoginType.Ms

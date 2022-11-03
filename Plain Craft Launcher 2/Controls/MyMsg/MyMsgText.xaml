@@ -20,8 +20,8 @@
         <TextBlock VerticalAlignment="Top" TextTrimming="None" TextWrapping="Wrap" Name="LabCaption" FontSize="15" Foreground="#FF5C5C5C" FontWeight="Normal" Padding="1" />
     </my:MyScrollViewer>
     <StackPanel Name="PanBtn" Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="150,0,22,20" Orientation="Horizontal">
-        <my:MyButton ColorType="Normal" Text="测试按钮1" x:Name="Btn1" Margin="15,0,0,0" TextPadding="7"  SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
-        <my:MyButton ColorType="Normal" Text="测试按钮2" x:Name="Btn2" Margin="15,0,0,0" TextPadding="7" Visibility="Visible" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
-        <my:MyButton ColorType="Normal" Text="测试按钮3" x:Name="Btn3" TextPadding="7" Margin="15,0,0,0" Visibility="Visible" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
+        <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="测试按钮1" x:Name="Btn1" Margin="15,0,0,0" TextPadding="7"  SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
+        <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="测试按钮2" x:Name="Btn2" Margin="15,0,0,0" TextPadding="7" Visibility="Visible" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
+        <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="测试按钮3" x:Name="Btn3" TextPadding="7" Margin="15,0,0,0" Visibility="Visible" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
     </StackPanel>
 </Grid>

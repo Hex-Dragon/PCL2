@@ -44,7 +44,7 @@
             <local:MyLoading Text="正在加载联机模块" Margin="20,20,20,17" x:Name="Load" ShowProgress="True" HorizontalAlignment="Center" VerticalAlignment="Center" />
         </local:MyCard>
         <Grid x:Name="PanAlways" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" Opacity="0.5">
-            <local:MyTextButton Text="联机服务由 速聚 授权提供" EventType="打开网页" EventData="https://www.the.bb/zh-cn" />
+            <local:MyTextButton Text="联机服务由 速聚 授权提供" EventType="打开网页" EventData="https://www.the.bb/zh-CN.html" />
         </Grid>
     </Grid>
 </local:MyPageRight>

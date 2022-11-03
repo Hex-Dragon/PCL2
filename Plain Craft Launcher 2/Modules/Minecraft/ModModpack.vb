@@ -126,7 +126,7 @@
         End If
         '解压文件
         Dim RetryCount As Integer = 1
-        Dim Encode = Encoding.Default
+        Dim Encode = Encoding.GetEncoding("GB18030")
         Try
 Retry:
             '完全不知道为啥会出现文件正在被另一进程使用的问题，总之多试试

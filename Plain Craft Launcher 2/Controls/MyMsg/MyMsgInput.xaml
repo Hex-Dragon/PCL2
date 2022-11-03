@@ -15,9 +15,9 @@
             <my:MyTextBox x:Name="TextCaption" UseLayoutRounding="False" MaxLength="1000" Width="450" Margin="1" />
         </Border>
         <StackPanel Name="PanBtn" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="150,0,22,20" Orientation="Horizontal">
-            <my:MyButton ColorType="Normal" Text="测试按钮1" x:Name="Btn1" Margin="15,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
-            <my:MyButton ColorType="Normal" Text="测试按钮2" x:Name="Btn2" Margin="15,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
-            <my:MyButton ColorType="Normal" Text="测试按钮3" x:Name="Btn3" Margin="15,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
+            <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="测试按钮1" x:Name="Btn1" Margin="15,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
+            <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="测试按钮2" x:Name="Btn2" Margin="15,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
+            <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="测试按钮3" x:Name="Btn3" Margin="15,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" Opacity="0" UseLayoutRounding="False" />
         </StackPanel>
     </StackPanel>
 </Grid>

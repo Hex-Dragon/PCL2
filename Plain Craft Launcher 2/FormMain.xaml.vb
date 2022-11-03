@@ -10,6 +10,16 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 268 Then 'Release 2.4.1
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "追加新的联机方式（HiPer 联机模块）"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "游戏崩溃的弹窗添加了直接查看日志的选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在更多分类下添加了新功能投票选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "自动安装时支持检查 OptiFine 对 Forge 的具体版本需求"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化自动 Java 选择的准确度"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 Mod 中文名的显示"))
+            FeatureCount += 12
+            BugCount += 30
+        End If
         If LastVersion < 265 Then 'Release 2.3.5
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复部分情况下无法启动路径带有中文的游戏的 Bug"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复多个可能导致 OptiFine、Forge 安装失败的 Bug"))
@@ -90,6 +100,14 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 267 Then 'Snapshot 2.4.1
+            If LastVersion = 266 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 HiPer 联机模块的使用体验"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "自动安装时支持检查 OptiFine 对 Forge 的具体版本需求"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化自动 Java 选择的准确度"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 Mod 中文名的显示"))
+            FeatureCount += 12
+            BugCount += 22
+        End If
         If LastVersion < 266 Then 'Snapshot 2.4.0
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "追加新的联机方式（HiPer 联机模块）"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "游戏崩溃的弹窗添加了直接查看日志的选项"))
@@ -575,11 +593,25 @@ Reopen:
     '按键事件
     Private Sub FormMain_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         If e.IsRepeat Then Exit Sub
-        '调用弹窗回车
-        If e.Key = Key.Enter AndAlso PanMsg.Children.Count > 0 Then
-            CType(PanMsg.Children(0), Object).Btn1_Click()
-            Exit Sub
+        '调用弹窗：回车选择第一个，Esc 选择最后一个
+        If PanMsg.Children.Count > 0 Then
+            If e.Key = Key.Enter Then
+                CType(PanMsg.Children(0), Object).Btn1_Click()
+                Exit Sub
+            ElseIf e.Key = Key.Escape Then
+                Dim Msg As Object = PanMsg.Children(0)
+                If Msg.Btn3.Visibility = Visibility.Visible Then
+                    Msg.Btn3_Click()
+                ElseIf Msg.Btn2.Visibility = Visibility.Visible Then
+                    Msg.Btn2_Click()
+                Else
+                    Msg.Btn1_Click()
+                End If
+                Exit Sub
+            End If
         End If
+        '按 ESC 返回上一级
+        If e.Key = Key.Escape Then TriggerPageBack()
         '更改隐藏版本可见性
         If e.Key = Key.F11 AndAlso PageCurrent = FormMain.PageType.VersionSelect Then
             FrmSelectRight.ShowHidden = Not FrmSelectRight.ShowHidden
@@ -607,8 +639,6 @@ Reopen:
         End If
         '修复按下 Alt 后误认为弹出系统菜单导致的冻结
         If e.SystemKey = Key.LeftAlt OrElse e.SystemKey = Key.RightAlt Then e.Handled = True
-        '按 ESC 返回上一级
-        If e.Key = Key.Escape Then TriggerPageBack()
     End Sub
     Private Sub FormMain_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseDown
         '鼠标侧键返回上一级

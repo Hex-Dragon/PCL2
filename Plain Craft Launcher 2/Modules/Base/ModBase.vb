@@ -10,12 +10,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.4.0" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.4.0." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.4.1" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.4.1." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 265 'Release
+    Public Const VersionCode As Integer = 268 'Release
 #Else
-    Public Const VersionCode As Integer = 266 'Snapshot
+    Public Const VersionCode As Integer = 267 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1236,7 +1236,7 @@ Re:
             Directory.CreateDirectory(DestDirectory)
             If CompressFilePath.EndsWith(".zip") OrElse CompressFilePath.EndsWith(".jar") Then
                 '以 zip 方式解压
-                ZipFile.ExtractToDirectory(CompressFilePath, DestDirectory, If(Encode, Encoding.Default))
+                ZipFile.ExtractToDirectory(CompressFilePath, DestDirectory, If(Encode, Encoding.GetEncoding("GB18030")))
                 Return True
             ElseIf CompressFilePath.EndsWith(".gz") Then
                 '以 gz 方式解压
@@ -2301,7 +2301,7 @@ Retry:
         RunInNewThread(Sub()
                            Dim IsInitSuccess As Boolean = True
                            Try
-                               For i = 4 To 1
+                               For i = 4 To 1 Step -1
                                    If File.Exists(Path & "PCL\Log" & i & ".txt") Then
                                        If File.Exists(Path & "PCL\Log" & (i + 1) & ".txt") Then File.Delete(Path & "PCL\Log" & (i + 1) & ".txt")
                                        CopyFile(Path & "PCL\Log" & i & ".txt", Path & "PCL\Log" & (i + 1) & ".txt")

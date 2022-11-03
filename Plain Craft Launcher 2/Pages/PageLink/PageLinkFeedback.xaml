@@ -13,7 +13,7 @@
                     <TextBlock TextWrapping="Wrap" Text="PCL2 作者并不会从速聚的付费业务中获得任何分成、奖金等报酬，请不要瞎说。" 
                            Margin="0,0,0,6" />
                     <local:MyListItem Title="速聚官网" Info="打开速聚的官方网站"
-                              Type="Clickable" EventType="打开网页" EventData="https://www.the.bb/zh-cn"
+                              Type="Clickable" EventType="打开网页" EventData="https://www.the.bb/zh-CN.html"
                               PaddingRight="20" Logo="pack://application:,,,/images/Blocks/Grass.png" />
                     <local:MyListItem Title="授权协议书" Info="查看速聚与 PCL2 间的授权协议书"
                               Type="Clickable" EventType="打开网页" EventData="https://shimo.im/docs/0l3NVXYzeXhb903R"

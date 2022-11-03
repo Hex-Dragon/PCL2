@@ -736,7 +736,6 @@
   <ItemGroup>
     <Resource Include="Resources\Font.ttf" />
     <None Include="Resources\Help.zip" />
-    <None Include="Resources\ModData.json" />
     <None Include="Resources\NAudio.dll" />
   </ItemGroup>
   <ItemGroup>
@@ -899,6 +898,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\java-wrapper.jar" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ModData.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

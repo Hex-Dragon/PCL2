@@ -221,7 +221,7 @@
                         <TextBlock x:Name="LabFinishTitle" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="1"
                                    Text="已加入 Herobrine 的房间" FontSize="20" Foreground="{DynamicResource ColorBrush3}" />
                         <TextBlock x:Name="LabFinishDesc" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Margin="0,10,0,12" 
-                                   Text="打开 MC 的多人游戏页面，然后稍等片刻，房间就会出现在服务器列表的最下方。"
+                                   Text="描述文本。"
                                    FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
                         <local:MyButton x:Name="BtnFinishCopy" Grid.Column="4" Grid.Row="3" Margin="0,0,15,0" Text="复制联机码" Padding="13,8" />
                         <local:MyButton x:Name="BtnFinishExit" Grid.Column="5" Grid.Row="3" Text="退出" Padding="13,8" />
@@ -230,7 +230,7 @@
             </Grid>
         </Grid>
         <Grid x:Name="PanAlways" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" Opacity="0.5">
-            <local:MyTextButton Text="联机服务由 速聚 授权提供" EventType="打开网页" EventData="https://www.the.bb/zh-cn" />
+            <local:MyTextButton Text="联机服务由 速聚 授权提供" EventType="打开网页" EventData="https://www.the.bb/zh-CN.html" />
         </Grid>
     </Grid>
 </local:MyPageRight>

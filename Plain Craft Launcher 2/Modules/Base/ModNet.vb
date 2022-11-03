@@ -96,7 +96,9 @@ Retry:
     ''' </summary>
     ''' <param name="Url">网页的 Url。</param>
     ''' <param name="Encode">网页的编码，通常为 UTF-8。</param>
-    Public Function NetGetCodeByRequestRetry(Url As String, Optional Encode As Encoding = Nothing, Optional Accept As String = "", Optional IsJson As Boolean = False)
+    ''' <param name="BackupUrl">如果第一次尝试失败，换用的备用 URL。</param>
+    Public Function NetGetCodeByRequestRetry(Url As String, Optional Encode As Encoding = Nothing, Optional Accept As String = "",
+                                             Optional IsJson As Boolean = False, Optional BackupUrl As String = Nothing)
         Dim RetryCount As Integer = 0
         Dim RetryException As Exception = Nothing
         Dim StartTime As Long = GetTimeTick()
@@ -107,12 +109,12 @@ Retry:
                     Return NetGetCodeRequest(Url, Encode, 10000, IsJson, Accept)
                 Case 1 '慢速重试
                     Thread.Sleep(500)
-                    Return NetGetCodeRequest(Url, Encode, 30000, IsJson, Accept)
+                    Return NetGetCodeRequest(If(BackupUrl, Url), Encode, 30000, IsJson, Accept)
                 Case Else '快速重试
                     If GetTimeTick() - StartTime > 5500 Then
                         '若前两次加载耗费 5 秒以上，才进行重试
                         Thread.Sleep(500)
-                        Return NetGetCodeRequest(Url, Encode, 4000, IsJson, Accept)
+                        Return NetGetCodeRequest(If(BackupUrl, Url), Encode, 4000, IsJson, Accept)
                     Else
                         Throw RetryException
                     End If

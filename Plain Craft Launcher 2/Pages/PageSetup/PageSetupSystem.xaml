@@ -23,6 +23,7 @@
                             <RowDefinition Height="27" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="版本列表获取" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboDownloadVersion" Grid.ColumnSpan="2" Tag="ToolDownloadVersion" Grid.Column="1">
@@ -45,7 +46,9 @@
                         <local:MySlider x:Name="SliderDownloadSpeed" Grid.Row="5" Tag="ToolDownloadSpeed" MaxValue="42" Value="42" Grid.Column="1" />
                         <TextBlock VerticalAlignment="Top" Grid.Row="6" HorizontalAlignment="Left" Text="目标文件夹" Margin="0,5,25,5" />
                         <TextBlock Margin="0,5" HorizontalAlignment="Left" Text="请在 启动 → 版本选择 → 文件夹列表 中更改下载目标文件夹。&#xA;在某个文件夹或游戏版本上右键，即可选择打开对应文件夹。" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" />
-                        <!--<local:MyCheckBox Text="若版本列表并非从官方源获取，显示版本列表可能过期的提示" Grid.ColumnSpan="2" Grid.Row="3" x:Name="CheckDownloadOutOfDate" Tag="ToolDownloadOutOfDate" Height="22" Margin="0,2,0,8" />-->
+                        <local:MyCheckBox Margin="0,2,0,4" Text="安装 CurseForge 整合包时保留原始压缩包" Grid.Row="7" Height="22" Grid.ColumnSpan="2"
+                                          x:Name="CheckDownloadKeepModpack" Tag="ToolDownloadKeepModpack" 
+                                          ToolTip="安装 CurseForge 整合包后，在版本文件夹下保留用于安装的 原始整合包.zip 文件" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

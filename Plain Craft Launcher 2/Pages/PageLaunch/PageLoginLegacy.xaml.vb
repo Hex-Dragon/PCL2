@@ -32,12 +32,9 @@
     ''' <summary>
     ''' 获取当前页面的登录信息。
     ''' </summary>
-    Public Shared Function GetLoginData() As McLoginLegacy
-        If FrmLoginLegacy Is Nothing Then
-            Return New McLoginLegacy With {.UserName = "", .SkinType = Setup.Get("LaunchSkinType"), .SkinName = Setup.Get("LaunchSkinID")}
-        Else
-            Return New McLoginLegacy With {.UserName = FrmLoginLegacy.ComboName.Text.Replace("¨", "").Trim, .SkinType = Setup.Get("LaunchSkinType"), .SkinName = Setup.Get("LaunchSkinID")}
-        End If
+    Public Shared Function GetLoginData() As McLoginData
+        Dim UserName As String = If(FrmLoginLegacy Is Nothing, "", FrmLoginLegacy.ComboName.Text.Replace("¨", "").Trim)
+        Return New McLoginLegacy With {.UserName = UserName, .SkinType = Setup.Get("LaunchSkinType"), .SkinName = Setup.Get("LaunchSkinID")}
     End Function
     ''' <summary>
     ''' 当前页面的登录信息是否有效。

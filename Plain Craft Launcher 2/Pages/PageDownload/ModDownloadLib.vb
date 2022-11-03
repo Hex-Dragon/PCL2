@@ -180,7 +180,7 @@ Public Module ModDownloadLib
         '建立控件
         Dim NewItem As New MyListItem With {.Logo = Logo, .SnapsToDevicePixels = True, .Title = Entry("id").ToString, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 60}
         If Entry("lore") Is Nothing Then
-            NewItem.Info = Entry("releaseTime").Value(Of Date).ToString("yyyy/MM/dd")
+            NewItem.Info = Entry("releaseTime").Value(Of Date).ToString("yyyy/MM/dd HH:mm")
         Else
             NewItem.Info = Entry("lore").ToString
         End If
@@ -679,7 +679,9 @@ Public Module ModDownloadLib
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.NameDisplay, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 60,
-            .Info = If(Entry.IsPreview, "测试版", "正式版") & If(Entry.ReleaseTime = "", "", "，发布于 " & Entry.ReleaseTime),
+            .Info = If(Entry.IsPreview, "测试版", "正式版") &
+                    If(Entry.ReleaseTime = "", "", "，发布于 " & Entry.ReleaseTime) &
+                    If(Entry.RequiredForgeVersion = "", "", "，推荐 Forge 版本：" & Entry.RequiredForgeVersion),
             .Logo = "pack://application:,,,/images/Blocks/GrassPath.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1672,6 +1674,7 @@ Public Module ModDownloadLib
         Dim Loaders As New List(Of LoaderBase)
 
         '下载 Json
+        MinecraftName = MinecraftName.Replace("∞", "infinite") '放在 ID 后面避免影响版本文件夹名称
         Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取 Fabric 主文件下载地址",
                                                             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                                                                 '启动依赖版本的下载
@@ -2083,7 +2086,7 @@ Public Module ModDownloadLib
         SplitArguments = ArrayNoDouble(SplitArguments)
         Dim RealArguments As String = Nothing
         If SplitArguments.Count > 0 Then
-            RealArguments = "--" & Join(SplitArguments, " --")
+            RealArguments = If(AllArguments.StartsWith("--"), "--", "") & Join(SplitArguments, " --")
         End If
         '合并
         OutputJson = MinecraftJson

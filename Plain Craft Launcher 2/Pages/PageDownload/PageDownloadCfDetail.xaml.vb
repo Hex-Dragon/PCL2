@@ -139,7 +139,7 @@
         PanIntro.Children.Insert(0, CfItem)
 
         '决定按钮显示
-        BtnIntroWiki.Visibility = If(Project.McWikiId = 0, Visibility.Collapsed, Visibility.Visible)
+        BtnIntroWiki.Visibility = If(Project.WikiId = 0, Visibility.Collapsed, Visibility.Visible)
         BtnIntroMCBBS.Visibility = If(Project.MCBBS Is Nothing, Visibility.Collapsed, Visibility.Visible)
 
         AniControlEnabled -= 1
@@ -165,7 +165,14 @@
             Dim Loaders As New List(Of LoaderBase)
             Dim Target As String = PathMcFolder & "versions\" & VersionName & "\原始整合包.zip"
             Loaders.Add(New LoaderDownload("下载整合包文件", New List(Of NetFile) From {File.GetDownloadFile(Target, True)}) With {.ProgressWeight = 10, .Block = True})
-            Loaders.Add(New LoaderTask(Of Integer, Integer)("准备安装整合包", Sub() ModpackInstall(Target, VersionName)) With {.ProgressWeight = 0.1})
+            Loaders.Add(New LoaderTask(Of Integer, Integer)("准备安装整合包",
+                                                            Sub()
+                                                                If Not ModpackInstall(Target, VersionName) Then Throw New Exception("整合包安装过程中出现异常！")
+                                                                If Not Setup.Get("ToolDownloadKeepModpack") Then
+                                                                    Log("[Download] 根据设置要求删除原始整合包文件：" & Target)
+                                                                    IO.File.Delete(Target)
+                                                                End If
+                                                            End Sub) With {.ProgressWeight = 0.1})
 
             '启动
             Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged = Sub(MyLoader)
@@ -252,7 +259,7 @@
         OpenWebsite(Project.Website)
     End Sub
     Private Sub BtnIntroWiki_Click(sender As Object, e As EventArgs) Handles BtnIntroWiki.Click
-        OpenWebsite("https://www.mcmod.cn/class/" & Project.McWikiId & ".html")
+        OpenWebsite("https://www.mcmod.cn/class/" & Project.WikiId & ".html")
     End Sub
     Private Sub BtnIntroMCBBS_Click(sender As Object, e As EventArgs) Handles BtnIntroMCBBS.Click
         OpenWebsite("https://www.mcbbs.net/thread-" & Project.MCBBS & "-1-1.html")

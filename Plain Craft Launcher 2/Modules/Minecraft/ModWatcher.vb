@@ -94,7 +94,6 @@
                                    Do Until State = MinecraftState.Ended OrElse State = MinecraftState.Crashed OrElse Loader.State = LoadState.Aborted
                                        TimerWindow()
                                        TimerLog()
-                                       If State = MinecraftState.Loading Then ProgressUpdate()
                                        '设置窗口标题
                                        For i = 1 To 3
                                            If IsWindowFinished AndAlso WindowTitle <> "" AndAlso State = MinecraftState.Running AndAlso Not GameProcess.HasExited Then
@@ -151,6 +150,7 @@
                 For Each Str As String In Copyed
                     GameLog(Str)
                 Next
+                If State = MinecraftState.Loading Then ProgressUpdate()
                 '游戏退出检查
                 If GameProcess.HasExited Then
                     WatcherLog("Minecraft 已退出，返回值：" & GameProcess.ExitCode)
@@ -167,7 +167,7 @@
                         '返回值不为 0 且未结束
                         WatcherLog("Minecraft 返回值异常，可能已崩溃")
                         Crashed()
-                    Else
+                    ElseIf State <> MinecraftState.Crashed Then
                         '正常关闭
                         State = MinecraftState.Ended
                     End If
@@ -268,8 +268,18 @@
                         WatcherLog("Minecraft 窗口已加载：" & WindowHandle.ToInt64)
                         IsWindowFinished = True
                         '最大化
-                        Thread.Sleep(3000) '1.7.10 LiteLoader 不延迟会显示错误
-                        If Setup.Get("LaunchArgumentWindowType") = 4 Then ShowWindow(WindowHandle, 3)
+                        If Setup.Get("LaunchArgumentWindowType") = 4 Then
+                            RunInNewThread(Sub()
+                                               Try
+                                                   '如果最大化导致屏幕渲染大小不对，那是 MC 的 Bug，不是我的 Bug
+                                                   '……虽然我很想这样说，但总有人反馈，算了
+                                                   Thread.Sleep(1000)
+                                                   ShowWindow(WindowHandle, 3)
+                                               Catch ex As Exception
+                                                   Log(ex, "最大化 Minecraft 窗口时出现错误")
+                                               End Try
+                                           End Sub, "MinecraftWindowMaximize")
+                        End If
                     ElseIf Not IsWindowAppeared Then
                         '已找到 FML 窗口
                         WatcherLog("FML 窗口已加载：" & MinecraftWindows.Keys(0).ToInt64)

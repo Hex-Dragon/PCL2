@@ -109,13 +109,13 @@
         MyConverter.Result = TextCaption.Text
         Close()
     End Sub
-    Private Sub Btn2_Click() Handles Btn2.Click
+    Public Sub Btn2_Click() Handles Btn2.Click
         If MyConverter.IsExited Then Exit Sub
         MyConverter.IsExited = True
         MyConverter.Result = Nothing
         Close()
     End Sub
-    Private Sub Btn3_Click() Handles Btn3.Click
+    Public Sub Btn3_Click() Handles Btn3.Click
         If MyConverter.IsExited Then Exit Sub
         MyConverter.IsExited = True
         MyConverter.Result = Nothing

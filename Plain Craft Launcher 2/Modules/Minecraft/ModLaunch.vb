@@ -56,6 +56,7 @@ Public Module ModLaunch
                 New LoaderTask(Of Process, Integer)("等待游戏窗口出现", AddressOf McLaunchWait) With {.ProgressWeight = 1},
                 New LoaderTask(Of Integer, Integer)("结束处理", AddressOf McLaunchEnd) With {.ProgressWeight = 1}
             }) With {.Show = False}
+            If McLoginLoader.State = LoadState.Finished Then McLoginLoader.State = LoadState.Waiting '要求重启登录主加载器，它会自行决定是否启动副加载器
             '等待加载器执行并更新 UI
             McLaunchLoaderReal = LaunchLoader
             LaunchLoader.Start()
@@ -378,7 +379,7 @@ NextInner:
         Return LoginData
     End Function
     Private Sub McLoginStart(Data As LoaderTask(Of McLoginData, McLoginResult))
-        McLaunchLog("登录线程已启动")
+        McLaunchLog("登录加载已开始")
         '校验登录信息
         Dim CheckResult As String = McLoginAble(Data.Input)
         If Not CheckResult = "" Then Throw New ArgumentException(CheckResult)
@@ -390,7 +391,13 @@ NextInner:
             Case McLoginType.Ms
                 Loader = McLoginMsLoader
             Case McLoginType.Legacy
-                Loader = McLoginLegacyLoader
+                If PageLinkHiper.HiperState = LoadState.Finished Then
+                    '使用 HiPer 内网验证
+                    Loader = McLoginHiperLoader
+                Else
+                    '默认的离线验证
+                    Loader = McLoginLegacyLoader
+                End If
             Case McLoginType.Nide
                 Loader = McLoginNideLoader
             Case McLoginType.Auth
@@ -400,6 +407,7 @@ NextInner:
         Loader.WaitForExit(Data.Input, McLoginLoader, Data.IsForceRestarting)
         Data.Output = CType(Loader, Object).Output
         RunInUi(Sub() FrmLaunchLeft.RefreshPage(True, False)) '刷新自动填充列表
+        McLaunchLog("登录加载已结束")
     End Sub
 
 #End Region
@@ -411,6 +419,7 @@ NextInner:
     Public McLoginLegacyLoader As New LoaderTask(Of McLoginLegacy, McLoginResult)("Loader Login Legacy", AddressOf McLoginLegacyStart)
     Public McLoginNideLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Nide", AddressOf McLoginServerStart) With {.ReloadTimeout = 60000}
     Public McLoginAuthLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Auth", AddressOf McLoginServerStart) With {.ReloadTimeout = 60000}
+    Public McLoginHiperLoader As New LoaderTask(Of McLoginLegacy, McLoginResult)("Loader Login HiPer", AddressOf McLoginHiperStart) With {.ReloadTimeout = 60000}
 
     '主加载函数，返回所有需要的登录信息
     Private Sub McLoginMsStart(Data As LoaderTask(Of McLoginMs, McLoginResult))
@@ -545,43 +554,9 @@ LoginFinish:
         Data.Progress = 0.1
         With Data.Output
             .Name = Input.UserName
-            .Uuid = McLoginLegacyUuid(Input.UserName)
+            .Uuid = McLoginLegacyUuidWithCustomSkin(Input.UserName, Input.SkinType, Input.SkinName)
             .Type = "Legacy"
         End With
-        '根据离线皮肤获取实际使用的 Uuid
-        Select Case Input.SkinType
-            Case 0
-                '默认，不需要处理
-            Case 1
-                'Steve
-                Do Until McSkinSex(Data.Output.Uuid) = "Steve"
-                    If Data.Output.Uuid.EndsWith("FFFFF") Then Data.Output.Uuid = Mid(Data.Output.Uuid, 1, 32 - 5) & "00000"
-                    Data.Output.Uuid = Mid(Data.Output.Uuid, 1, 32 - 5) & (Long.Parse(Right(Data.Output.Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
-                Loop
-            Case 2
-                'Alex
-                Do Until McSkinSex(Data.Output.Uuid) = "Alex"
-                    If Data.Output.Uuid.EndsWith("FFFFF") Then Data.Output.Uuid = Mid(Data.Output.Uuid, 1, 32 - 5) & "00000"
-                    Data.Output.Uuid = Mid(Data.Output.Uuid, 1, 32 - 5) & (Long.Parse(Right(Data.Output.Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
-                Loop
-            Case 3
-                '使用正版用户名
-                Try
-                    If Not Input.SkinName = "" Then
-                        Log("[Skin] 由于离线皮肤设置，使用正版 UUID：" & Input.SkinName)
-                        Data.Output.Uuid = McLoginMojangUuid(Input.SkinName, False)
-                    End If
-                Catch ex As Exception
-                    Log(ex, "离线启动时使用的正版皮肤获取失败")
-                    MyMsgBox("由于设置的离线启动时使用的正版皮肤获取失败，游戏将以无皮肤的方式启动。" & vbCrLf & "请检查你的网络是否通畅，或尝试使用 VPN！" & vbCrLf & vbCrLf & "详细的错误信息：" & ex.Message, "皮肤获取失败")
-                End Try
-            Case 4
-                '自定义
-                Do Until McSkinSex(Data.Output.Uuid) = If(Setup.Get("LaunchSkinSlim"), "Alex", "Steve")
-                    If Data.Output.Uuid.EndsWith("FFFFF") Then Data.Output.Uuid = Mid(Data.Output.Uuid, 1, 32 - 5) & "00000"
-                    Data.Output.Uuid = Mid(Data.Output.Uuid, 1, 32 - 5) & (Long.Parse(Right(Data.Output.Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
-                Loop
-        End Select
         '将结果扩展到所有项目中
         'Data.Output.AccessToken = Setup.Get("CacheMojangAccess") '不能优先使用缓存的 AccessToken，这会导致离线用户名设置失效
         'If Data.Output.AccessToken.Length < 300 Then
@@ -595,6 +570,46 @@ LoginFinish:
         Names.Remove(Input.UserName)
         Names.Insert(0, Input.UserName)
         Setup.Set("LoginLegacyName", Join(Names.ToArray, "¨"))
+    End Sub
+    Private Sub McLoginHiperStart(Data As LoaderTask(Of McLoginLegacy, McLoginResult))
+        Dim Input As McLoginLegacy = Data.Input
+        McLaunchLog("登录方式：联机离线（" & Input.UserName & "）")
+        Data.Progress = 0.05
+        '尝试登录
+        Try
+            McLaunchLog("登录开始（Login, HiPer）")
+            Dim LoginJson As JObject = GetJson(NetRequestRetry(
+                   Url:="http://hiperauth.tech/api/yggdrasil-hiper/authserver/authenticate",
+                   Method:="POST",
+                   Data:="{""agent"": {""name"": ""Minecraft"",""version"": 1},""username"":""" & Data.Input.UserName & """,""password"":""" &
+                         McLoginLegacyUuidWithCustomSkin(Input.UserName, Input.SkinType, Input.SkinName) & """,""requestUser"":true}",
+                   ContentType:="application/json; charset=utf-8"))
+            '将登录结果输出
+            Data.Output.AccessToken = LoginJson("accessToken").ToString
+            Data.Output.ClientToken = LoginJson("clientToken").ToString
+            Data.Output.Name = LoginJson("selectedProfile")("name").ToString
+            Data.Output.Uuid = LoginJson("selectedProfile")("id").ToString
+            Data.Output.Type = "Auth"
+            Data.Output.Email = Data.Input.UserName
+            McLaunchLog("登录成功（Login, HiPer）")
+            '保存启动记录
+            Dim Names As New List(Of String)
+            If Not Setup.Get("LoginLegacyName") = "" Then Names.AddRange(Setup.Get("LoginLegacyName").ToString.Split("¨"))
+            Names.Remove(Input.UserName)
+            Names.Insert(0, Input.UserName)
+            Setup.Set("LoginLegacyName", Join(Names.ToArray, "¨"))
+        Catch ex As Exception
+            Dim AllMessage As String = GetString(ex)
+            Log(ex, "登录失败原始错误信息", LogLevel.Normal)
+            Dim ThrowEx As Exception = ex
+            If AllMessage.Contains("403") Then
+                ThrowEx = New Exception("登录尝试过于频繁，导致被系统暂时屏蔽。请不要操作，等待 10 分钟后再试。", ex)
+            ElseIf AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout") OrElse AllMessage.Contains("网络请求失败") Then
+                ThrowEx = New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查 HiPer 联机模块的连接状况是否良好，或选择其他登录方式！")
+            End If
+            McLaunchLog("登录失败：" & GetString(ThrowEx))
+            Throw ThrowEx
+        End Try
     End Sub
 
     'Server 登录：三种验证方式的请求
@@ -752,10 +767,8 @@ LoginFinish:
                                             If(Data.Input.UserName.Contains("@"), "", " - 登录账号应为邮箱或统一通行证账号，而非游戏角色 ID。" & vbCrLf) &
                                             " - 只注册了账号，但没有加入对应服务器。")
                 End Select
-            ElseIf AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout") Then
+            ElseIf AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout") OrElse AllMessage.Contains("网络请求失败") Then
                 Throw New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查你的网络状况是否良好，或尝试使用 VPN！")
-            ElseIf AllMessage.Contains("网络请求失败") Then
-                Throw New Exception("$登录失败：连接登录服务器失败。" & vbCrLf & "请检查你的网络状况是否良好，或尝试使用 VPN！")
             ElseIf ex.Message.StartsWith("$") Then
                 Throw
             Else
@@ -845,7 +858,7 @@ SystemBrowser:
         Try
             Result = NetRequestMuity("https://login.live.com/oauth20_token.srf", "POST", Request, "application/x-www-form-urlencoded", 1)
         Catch ex As Exception
-            If ex.Message.Contains("must sign in again") Then
+            If ex.Message.Contains("must sign in again") OrElse ex.Message.Contains("invalid_grant") Then 'Fix Hex-Dragon/PCL2#269
                 Return {"Relogin", ""}
             Else
                 Throw
@@ -895,7 +908,11 @@ SystemBrowser:
             Result = NetRequestMuity("https://xsts.auth.xboxlive.com/xsts/authorize", "POST", Request, "application/json", 3)
         Catch ex As Net.WebException
             If ex.Message.Contains("2148916233") Then
-                Throw New Exception("$该微软账号尚未购买 Minecraft Java 版或注册 XBox 账户！")
+                If MyMsgBox("该微软账号尚未购买 Minecraft Java 版，或尚未注册 XBox 账户。" & vbCrLf &
+                            "如果你确定该账号完成了上述步骤，请先在游戏官网登录一次，然后再在启动器登录。", "登录提示", "打开游戏官网", "取消") = 1 Then
+                    OpenWebsite("https://www.minecraft.net/")
+                End If
+                Throw New Exception("$$")
             ElseIf ex.Message.Contains("2148916238") Then
                 If MyMsgBox("该账号年龄不足，你需要先修改出生日期，然后才能登录。" & vbCrLf &
                             "该账号目前填写的年龄是否在 13 岁以上？", "登录提示", "13 岁以上", "12 岁以下", "我不知道") = 1 Then
@@ -968,7 +985,46 @@ SystemBrowser:
         Return {UUID, UserName, Result}
     End Function
 
-    '根据用户名返回对应 Uuid，需要多线程
+    '返回符合离线皮肤设置的 UUID
+    Private Function McLoginLegacyUuidWithCustomSkin(UserName As String, SkinType As Integer, SkinName As String) As String
+        Dim Uuid As String = McLoginLegacyUuid(UserName)
+        '根据离线皮肤获取实际使用的 Uuid
+        Select Case SkinType
+            Case 0
+                '默认，不需要处理
+            Case 1
+                'Steve
+                Do Until McSkinSex(Uuid) = "Steve"
+                    If Uuid.EndsWith("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
+                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
+                Loop
+            Case 2
+                'Alex
+                Do Until McSkinSex(Uuid) = "Alex"
+                    If Uuid.EndsWith("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
+                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
+                Loop
+            Case 3
+                '使用正版用户名
+                Try
+                    If Not SkinName = "" Then
+                        Log("[Skin] 由于离线皮肤设置，使用正版 UUID：" & SkinName)
+                        Uuid = McLoginMojangUuid(SkinName, False)
+                    End If
+                Catch ex As Exception
+                    Log(ex, "离线启动时使用的正版皮肤获取失败")
+                    MyMsgBox("由于设置的离线启动时使用的正版皮肤获取失败，游戏将以无皮肤的方式启动。" & vbCrLf & "请检查你的网络是否通畅，或尝试使用 VPN！" & vbCrLf & vbCrLf & "详细的错误信息：" & ex.Message, "皮肤获取失败")
+                End Try
+            Case 4
+                '自定义
+                Do Until McSkinSex(Uuid) = If(Setup.Get("LaunchSkinSlim"), "Alex", "Steve")
+                    If Uuid.EndsWith("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
+                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
+                Loop
+        End Select
+        Return Uuid
+    End Function
+    '根据用户名返回对应 UUID，需要多线程
     Public Function McLoginMojangUuid(Name As String, ThrowOnNotFound As Boolean)
         If Name.Trim.Length = 0 Then Return StrFill("", "0", 32)
         '从缓存获取
@@ -1017,8 +1073,8 @@ SystemBrowser:
         ElseIf McVersionCurrent.ReleaseTime.Year >= 2017 Then 'Minecraft 1.12 与 1.11 的分界线正好是 2017 年，太棒了
             '1.12+：至少 Java 8
             MinVer = New Version(1, 8, 0, 0)
-        ElseIf McVersionCurrent.ReleaseTime.Year >= 2001 Then '避免某些版本的 1960 癌
-            '1.11-：最高 Java 12
+        ElseIf McVersionCurrent.ReleaseTime <= New Date(2013, 5, 1) AndAlso McVersionCurrent.ReleaseTime.Year >= 2001 Then '避免某些版本的 1960 癌
+            '1.5.2-：最高 Java 12
             MaxVer = New Version(1, 12, 999, 999)
         End If
 
@@ -1027,15 +1083,29 @@ SystemBrowser:
             If McVersionCurrent.Version.McName = "1.7.2" Then
                 '1.7.2：必须 Java 7
                 MinVer = New Version(1, 7, 0, 0) : MaxVer = New Version(1, 7, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain <= 12 AndAlso McVersionCurrent.Version.McCodeMain <> -1 AndAlso VersionSortBoolean("14.23.5.2855", McVersionCurrent.Version.ForgeVersion) Then
+            ElseIf McVersionCurrent.Version.McCodeMain <= 12 AndAlso McVersionCurrent.Version.McCodeMain > 0 AndAlso VersionSortBoolean("14.23.5.2855", McVersionCurrent.Version.ForgeVersion) Then
                 '1.12，Forge 14.23.5.2855 及更低：Java 8
                 MaxVer = New Version(1, 8, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain <= 14 AndAlso McVersionCurrent.Version.McCodeMain <> -1 AndAlso VersionSortBoolean("28.2.23", McVersionCurrent.Version.ForgeVersion) Then
+            ElseIf McVersionCurrent.Version.McCodeMain <= 14 AndAlso McVersionCurrent.Version.McCodeMain > 0 AndAlso VersionSortBoolean("28.2.23", McVersionCurrent.Version.ForgeVersion) Then
                 '1.13 - 1.14，Forge 28.2.23 及更低：Java 8 - 10
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 10, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain <= 16 AndAlso McVersionCurrent.Version.McCodeMain <> -1 Then
-                '1.15 - 1.16：Java 8 - 12， 12 - 15未测试
+            ElseIf McVersionCurrent.Version.McCodeMain <= 16 AndAlso McVersionCurrent.Version.McCodeMain > 0 Then
+                '1.15 - 1.16：Java 8 - 15
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 15, 999, 999)
+            ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 99 AndAlso McVersionCurrent.Version.HasOptiFine Then '#305
+                '1.18+：若安装了 OptiFine，最高 Java 18
+                MaxVer = New Version(1, 18, 999, 999)
+            End If
+        End If
+
+        'Fabric 检测
+        If McVersionCurrent.Version.HasFabric Then
+            If McVersionCurrent.Version.McCodeMain >= 15 AndAlso McVersionCurrent.Version.McCodeMain <= 16 AndAlso McVersionCurrent.Version.McCodeMain <> -1 Then
+                '1.15 - 1.16：Java 8 - 15
+                MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 15, 999, 999)
+            ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 99 Then
+                '1.18+：Java 17 - 18
+                MinVer = New Version(1, 17, 0, 0) : MaxVer = New Version(1, 18, 999, 999)
             End If
         End If
 
@@ -1084,9 +1154,17 @@ SystemBrowser:
     ''' </summary>
     Public Function ExtractJavaWrapper() As String
         Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
+        If Encoding.UTF8.GetByteCount(WrapperPath) <> WrapperPath.Length Then
+            Log("[Java] AppData 路径中包含非 ASCII 字符，换用 Temp 目录")
+            WrapperPath = PathTemp & "JavaWrapper.jar"
+            If Encoding.UTF8.GetByteCount(PathTemp) <> PathTemp.Length Then
+                Log("[Java] Temp 路径中包含非 ASCII 字符，换用 C 盘根目录")
+                WrapperPath = "C:\PCL\JavaWrapper.jar"
+            End If
+        End If
         If Not File.Exists(WrapperPath) OrElse New FileInfo(WrapperPath).Length > 20 * 1024 Then
             WriteFile(WrapperPath, GetResources("JavaWrapper"))
-            McLaunchLog("已自动释放 Java Wrapper")
+            Log("[Java] 已自动释放 Java Wrapper：" & WrapperPath)
         End If
         Return WrapperPath
     End Function
@@ -1173,14 +1251,16 @@ SystemBrowser:
 
         '统一通行证
         If McLoginLoader.Output.Type = "Nide" Then
-            DataList.Insert(0, "-Dnide8auth.client=true -javaagent:nide8auth.jar=" & Setup.Get("VersionServerNide", Version:=McVersionCurrent))
+            DataList.Insert(0, "-Dnide8auth.client=true -javaagent:""" & PathAppdata & "nide8auth.jar""=" & Setup.Get("VersionServerNide", Version:=McVersionCurrent))
         End If
         'Authlib-Injector
         If McLoginLoader.Output.Type = "Auth" Then
-            Dim Server As String = Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent)
+            Dim Server As String = If(McLoginLoader.Input.Type = McLoginType.Legacy,
+                "http://hiperauth.tech/api/yggdrasil-hiper/", 'HiPer 登录
+                Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent))
             Try
                 Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
-                DataList.Insert(0, "-javaagent:authlib-injector.jar=" & Server &
+                DataList.Insert(0, "-javaagent:""" & PathAppdata & "authlib-injector.jar""=" & Server &
                               " -Dauthlibinjector.side=client" &
                               " -Dauthlibinjector.yggdrasil.prefetched=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(Response)))
             Catch ex As Exception
@@ -1237,14 +1317,16 @@ NextVersion:
 
         '统一通行证
         If McLoginLoader.Output.Type = "Nide" Then
-            DataList.Insert(0, "-javaagent:nide8auth.jar=" & Setup.Get("VersionServerNide", Version:=McVersionCurrent))
+            DataList.Insert(0, "-javaagent:""" & PathAppdata & "nide8auth.jar""=" & Setup.Get("VersionServerNide", Version:=McVersionCurrent))
         End If
         'Authlib-Injector
         If McLoginLoader.Output.Type = "Auth" Then
-            Dim Server As String = Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent)
+            Dim Server As String = If(McLoginLoader.Input.Type = McLoginType.Legacy,
+                "http://hiperauth.tech/api/yggdrasil-hiper/", 'HiPer 登录
+                Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent))
             Try
                 Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
-                DataList.Insert(0, "-javaagent:authlib-injector.jar=" & Server &
+                DataList.Insert(0, "-javaagent:""" & PathAppdata & "authlib-injector.jar""=" & Server &
                               " -Dauthlibinjector.side=client" &
                               " -Dauthlibinjector.yggdrasil.prefetched=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(Response)))
             Catch ex As Exception
@@ -1420,7 +1502,9 @@ NextVersion:
         GameArguments.Add("${assets_index_name}", McAssetsGetIndexName(Version))
 
         '支持库参数
-        Dim LibList As List(Of McLibToken) = McLibListGet(Version, Not (Version.Version.HasForge AndAlso Version.Version.McCodeMain >= 17))
+        'Dim LibList As List(Of McLibToken) = McLibListGet(Version,
+        '    Not (Version.Version.HasForge AndAlso Version.Version.McCodeMain >= 17)) '包含版本 Jar 的条件是不为 1.17+ 的 Forge
+        Dim LibList As List(Of McLibToken) = McLibListGet(Version, True) '如果在 1.19.x Forge 不包含版本 Jar 会导致 #188
         Loader.Output = LibList
         Dim CpStrings As New List(Of String)
         Dim OptiFineCp As String = Nothing
@@ -1539,7 +1623,7 @@ NextVersion:
             '更新文件
             Dim Profiles As JObject = GetJson(ReadFile(PathMcFolder & "launcher_profiles.json"))
             Profiles.Merge(ReplaceJson)
-            WriteFile(PathMcFolder & "launcher_profiles.json", Profiles.ToString, Encoding:=Encoding.Default)
+            WriteFile(PathMcFolder & "launcher_profiles.json", Profiles.ToString, Encoding:=Encoding.GetEncoding("GB18030"))
             McLaunchLog("已更新 launcher_profiles.json")
         Catch ex As Exception
             Log(ex, "更新 launcher_profiles.json 失败，将在删除文件后重试")
@@ -1570,7 +1654,7 @@ NextVersion:
                 '更新文件
                 Dim Profiles As JObject = GetJson(ReadFile(PathMcFolder & "launcher_profiles.json"))
                 Profiles.Merge(ReplaceJson)
-                WriteFile(PathMcFolder & "launcher_profiles.json", Profiles.ToString, Encoding:=Encoding.Default)
+                WriteFile(PathMcFolder & "launcher_profiles.json", Profiles.ToString, Encoding:=Encoding.GetEncoding("GB18030"))
                 McLaunchLog("已在删除后更新 launcher_profiles.json")
             Catch exx As Exception
                 Log(exx, "更新 launcher_profiles.json 失败", LogLevel.Feedback)
@@ -1770,7 +1854,7 @@ IgnoreCustomSkin:
                 """" & McLaunchJavaSelected.PathJava & """ " & McLaunchArgument & vbCrLf &
                 "echo 游戏已退出。" & vbCrLf &
                 "pause"
-            WriteFile(Path & "PCL\LatestLaunch.bat", CmdString, Encoding:=Encoding.Default)
+            WriteFile(Path & "PCL\LatestLaunch.bat", CmdString, Encoding:=Encoding.GetEncoding("GB18030"))
         Catch ex As Exception
             Log(ex, "输出启动脚本失败")
         End Try
