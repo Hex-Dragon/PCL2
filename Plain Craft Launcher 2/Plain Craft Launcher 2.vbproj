@@ -868,7 +868,7 @@
     <Resource Include="Images\Heads\wiki.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Heads\noin.png" />
+    <Resource Include="Images\Heads\matrix_network.png" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
