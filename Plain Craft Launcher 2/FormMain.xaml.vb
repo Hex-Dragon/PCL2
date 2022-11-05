@@ -11,7 +11,7 @@ Public Class FormMain
         '统计更新日志条目
 #If BETA Then
         If LastVersion < 268 Then 'Release 2.4.1
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "追加新的联机方式（HiPer 联机模块）"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "暂时关闭了联机功能"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "游戏崩溃的弹窗添加了直接查看日志的选项"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在更多分类下添加了新功能投票选项"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "自动安装时支持检查 OptiFine 对 Forge 的具体版本需求"))
@@ -101,7 +101,7 @@ Public Class FormMain
         '2：BUG* IMP-
         '1：BUG-
         If LastVersion < 267 Then 'Snapshot 2.4.1
-            If LastVersion = 266 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 HiPer 联机模块的使用体验"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "暂时关闭了联机功能"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "自动安装时支持检查 OptiFine 对 Forge 的具体版本需求"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化自动 Java 选择的准确度"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 Mod 中文名的显示"))
@@ -109,7 +109,6 @@ Public Class FormMain
             BugCount += 22
         End If
         If LastVersion < 266 Then 'Snapshot 2.4.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "追加新的联机方式（HiPer 联机模块）"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "游戏崩溃的弹窗添加了直接查看日志的选项"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在更多分类下添加了新功能投票选项"))
             FeatureCount += 3
@@ -1127,6 +1126,14 @@ Install:
     Private Sub BtnTitleSelect_Click(sender As MyRadioButton, raiseByMouse As Boolean) Handles BtnTitleSelect0.Check, BtnTitleSelect1.Check, BtnTitleSelect2.Check, BtnTitleSelect3.Check, BtnTitleSelect4.Check
         If IsChangingPage Then Exit Sub
         PageChangeActual(Val(sender.Tag))
+    End Sub
+    Private Sub CancelLink(sender As Object, e As RouteEventArgs) Handles BtnTitleSelect2.PreviewClick
+        If MyMsgBox("由于联机提供商要求新联机强制付费，且高度商业化，PCL 将暂时关闭联机功能，不再使用该联机模块。" & vbCrLf &
+                    "PCL、HMCL、BakaXL 将合作开发新的跨启动器联机功能，在开发结束后将同步开放，请各位多多理解。",
+                    "联机功能已暂时关闭", "查看详情", "确定") = 1 Then
+            OpenWebsite("https://www.bilibili.com/read/cv19553725")
+        End If
+        e.Handled = True
     End Sub
     ''' <summary>
     ''' 通过点击返回按钮或手动触发返回来改变页面。

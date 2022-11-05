@@ -137,12 +137,16 @@
 
     '点击事件
 
+    Public Event PreviewClick(sender As Object, e As RouteEventArgs)
     Private IsMouseDown As Boolean = False
     Private Sub Radiobox_MouseUp() Handles Me.MouseLeftButtonUp
         If Checked Then Exit Sub
         If Not IsMouseDown Then Exit Sub
         Log("[Control] 按下单选按钮：" & Text)
         IsMouseDown = False
+        Dim e As New RouteEventArgs(True)
+        RaiseEvent PreviewClick(Me, e)
+        If e.Handled Then Exit Sub
         SetChecked(True, True, True)
     End Sub
     Private Sub Radiobox_MouseDown() Handles Me.MouseLeftButtonDown
