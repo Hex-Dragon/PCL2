@@ -59,7 +59,7 @@ PCL2 帮助文档在 GitHub 上的存储库（是的，帮助库在另一个 Rep
 ## ❤️ 友情链接
 - [Hello Minecraft! Launcher（HMCL）](https://hmcl.huangyuhui.net/)：huanghongxun 创作的一款非常优秀的 Minecraft 第三方启动器。
 - [BakaXL](https://www.bakaxl.com)：由 TT702 开发的一款优秀的 Minecraft 第三方“崩坏”启动器。
-> 接下来，我们三位启动器开发者会联手开发全新的联机模块，力求打破启动器之间的隔阂。
+> 接下来，我们三位启动器开发者会联手开发全新的联机模块，力求打破启动器之间的隔阂。<br>更多信息请见：[BakaXL / PCL2 / HMCL 对联机功能下一步发展的联合公告](https://www.bilibili.com/read/cv19553778)
 
 ![](Thanks.png)
 
