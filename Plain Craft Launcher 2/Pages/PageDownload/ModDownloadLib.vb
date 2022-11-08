@@ -2074,20 +2074,23 @@ Public Module ModDownloadLib
 #Region "处理 Json 文件"
         '获取 minecraftArguments
         Dim AllArguments As String =
-            If(MinecraftJson("minecraftArguments"), " ").ToString &
-            If(OptiFineJson IsNot Nothing, If(OptiFineJson("minecraftArguments"), " ").ToString, " ") &
-            If(ForgeJson IsNot Nothing, If(ForgeJson("minecraftArguments"), " ").ToString, " ") &
+            If(MinecraftJson("minecraftArguments"), " ").ToString & " " &
+            If(OptiFineJson IsNot Nothing, If(OptiFineJson("minecraftArguments"), " ").ToString, " ") & " " &
+            If(ForgeJson IsNot Nothing, If(ForgeJson("minecraftArguments"), " ").ToString, " ") & " " &
             If(LiteLoaderJson IsNot Nothing, If(LiteLoaderJson("minecraftArguments"), " ").ToString, " ")
+        '分割参数字符串
+        Dim RawArguments As List(Of String) = AllArguments.Split(" ").Where(Function(l) l <> "").Select(Function(l) l.Trim).ToList
         Dim SplitArguments As New List(Of String)
-        For Each Argument In AllArguments.Split("--")
-            Argument = Argument.Trim
-            If Argument <> "" Then SplitArguments.Add(Argument)
+        For i = 0 To RawArguments.Count - 1
+            If RawArguments(i).StartsWith("-") Then
+                SplitArguments.Add(RawArguments(i))
+            ElseIf SplitArguments.Count > 0 AndAlso SplitArguments.Last.StartsWith("-") AndAlso Not SplitArguments.Last.Contains(" ") Then
+                SplitArguments(SplitArguments.Count - 1) = SplitArguments.Last & " " & RawArguments(i)
+            Else
+                SplitArguments.Add(RawArguments(i))
+            End If
         Next
-        SplitArguments = ArrayNoDouble(SplitArguments)
-        Dim RealArguments As String = Nothing
-        If SplitArguments.Count > 0 Then
-            RealArguments = If(AllArguments.StartsWith("--"), "--", "") & Join(SplitArguments, " --")
-        End If
+        Dim RealArguments As String = Join(ArrayNoDouble(SplitArguments), " ")
         '合并
         OutputJson = MinecraftJson
         If HasOptiFine Then

@@ -276,6 +276,14 @@ Retry:
         Loaders.Add(New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .Block = False, .ProgressWeight = InstallExpectTime})
         Loaders.Add(New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .ProgressWeight = MergeExpectTime})
         Loaders.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
+        Loaders.Add(New LoaderTask(Of String, String)("清理安装文件",
+                                                      Sub(Task As LoaderTask(Of String, String))
+                                                          Dim Target As String = PathMcFolder & "versions\" & VersionName & "\原始整合包.zip"
+                                                          If Not Setup.Get("ToolDownloadKeepModpack") AndAlso File.Exists(Target) Then
+                                                              Log("[Download] 根据设置要求删除原始整合包文件：" & Target)
+                                                              File.Delete(Target)
+                                                          End If
+                                                      End Sub) With {.ProgressWeight = 0.1, .Show = False})
 
         '重复任务检查
         Dim LoaderName As String = "CurseForge 整合包安装：" & VersionName & " "

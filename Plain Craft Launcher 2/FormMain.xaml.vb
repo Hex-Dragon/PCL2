@@ -10,15 +10,15 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
-        If LastVersion < 268 Then 'Release 2.4.1
+        If LastVersion < 268 Then 'Release 2.4.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "暂时关闭了联机功能"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "游戏崩溃的弹窗添加了直接查看日志的选项"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在更多分类下添加了新功能投票选项"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "自动安装时支持检查 OptiFine 对 Forge 的具体版本需求"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化自动 Java 选择的准确度"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 Mod 中文名的显示"))
-            FeatureCount += 12
-            BugCount += 30
+            FeatureCount += 14
+            BugCount += 33
         End If
         If LastVersion < 265 Then 'Release 2.3.5
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复部分情况下无法启动路径带有中文的游戏的 Bug"))
@@ -100,6 +100,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 269 Then 'Snapshot 2.4.2
+            If LastVersion = 267 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法下载 CurseForge 整合包的 Bug"))
+            FeatureCount += 2
+            BugCount += 3
+        End If
         If LastVersion < 267 Then 'Snapshot 2.4.1
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "暂时关闭了联机功能"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "自动安装时支持检查 OptiFine 对 Forge 的具体版本需求"))

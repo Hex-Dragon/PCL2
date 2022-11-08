@@ -653,11 +653,14 @@
                         VersionCode = VersionCode.Substring(VersionCode.IndexOf("universal.zip"))
                         MD5 = RegexSeek(VersionCode, "(?<=MD5:</strong> )[^<]+")
                         Category = "universal"
-                    Else
+                    ElseIf VersionCode.Contains("client.zip") Then
                         '类型为 client.zip，支持范围 182~ (1.3.2 部分 ~)
                         VersionCode = VersionCode.Substring(VersionCode.IndexOf("client.zip"))
                         MD5 = RegexSeek(VersionCode, "(?<=MD5:</strong> )[^<]+")
                         Category = "client"
+                    Else
+                        '没有任何下载（1.6.4 有一部分这种情况）
+                        Continue For
                     End If
                     '添加进列表
                     Versions.Add(New DlForgeVersionEntry With {.Category = Category, .Version = Name, .IsRecommended = IsRecommended, .Hash = MD5.Trim(vbCr, vbLf), .Inherit = Inherit, .ReleaseTime = ReleaseTime, .Branch = Branch})

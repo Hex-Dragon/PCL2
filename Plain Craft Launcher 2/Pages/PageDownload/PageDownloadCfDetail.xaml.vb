@@ -167,11 +167,7 @@
             Loaders.Add(New LoaderDownload("下载整合包文件", New List(Of NetFile) From {File.GetDownloadFile(Target, True)}) With {.ProgressWeight = 10, .Block = True})
             Loaders.Add(New LoaderTask(Of Integer, Integer)("准备安装整合包",
                                                             Sub()
-                                                                If Not ModpackInstall(Target, VersionName) Then Throw New Exception("整合包安装过程中出现异常！")
-                                                                If Not Setup.Get("ToolDownloadKeepModpack") Then
-                                                                    Log("[Download] 根据设置要求删除原始整合包文件：" & Target)
-                                                                    IO.File.Delete(Target)
-                                                                End If
+                                                                If Not ModpackInstall(Target, VersionName) Then Throw New Exception("整合包安装出现异常！")
                                                             End Sub) With {.ProgressWeight = 0.1})
 
             '启动

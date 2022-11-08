@@ -458,9 +458,6 @@ RetryGet:
                 GoTo RetryGet
             End If
 
-            '若依然未找到适合的 Java，直接返回
-            If AllowedJavaList.Count = 0 Then Return Nothing
-
             '检查用户指定的 Java
             Dim UserSetup As String = Setup.Get("LaunchArgumentJavaSelect")
             If RelatedVersion IsNot Nothing Then
@@ -495,16 +492,23 @@ RetryGet:
                     Dim Right As String = MaxVersion.Minor & If(MaxVersion.MinorRevision < 99, "." & MaxVersion.MinorRevision & "." & MaxVersion.Revision, "")
                     Requirement = "需要 Java " & If(Left = Right, Left, Left & " ~ " & Right)
                 End If
-                If MyMsgBox("你在启动设置中指定了使用 Java " & UserJava.VersionCode & "，但当前版本" & Requirement & "。" & vbCrLf &
-                            "如果强制使用该 Java，可能会导致游戏崩溃。" & vbCrLf &
-                            vbCrLf &
-                            " - 指定的 Java：" & UserJava.ToString,
-                            "Java 兼容性警告", "让 PCL2 自动选择", "强制使用该 Java") = 2 Then
+                If Setup.Get("LaunchAdvanceJava") Then
+                    '直接跳过弹窗
+                    Hint("设置中指定了使用 Java " & UserJava.VersionCode & "，但当前版本" & Requirement & "，这可能会导致游戏崩溃！", HintType.Critical)
+                    AllowedJavaList = New List(Of JavaEntry) From {UserJava}
+                ElseIf MyMsgBox("你在启动设置中指定了使用 Java " & UserJava.VersionCode & "，但当前版本" & Requirement & "。" & vbCrLf &
+                                "如果强制使用该 Java，可能会导致游戏崩溃。" & vbCrLf &
+                                vbCrLf &
+                                " - 指定的 Java：" & UserJava.ToString,
+                                "Java 兼容性警告", "让 PCL2 自动选择", "强制使用该 Java") = 2 Then
                     '强制使用指定的 Java
                     Log("[Java] 已强制使用用户指定的不兼容 Java")
                     AllowedJavaList = New List(Of JavaEntry) From {UserJava}
                 End If
             End If
+
+            '若依然未找到适合的 Java，直接返回
+            If AllowedJavaList.Count = 0 Then Return Nothing
 
             '检查特定的 Java
             For Each Java In AllowedJavaList
@@ -2508,24 +2512,26 @@ NextVersion:
         If Setup.Get("VersionServerLogin", Version:=Version) = 4 OrElse
            (PageLinkHiper.HiperState = LoadState.Finished AndAlso Setup.Get("LoginType") = McLoginType.Legacy) Then 'HiPer 登录转接
             Dim TargetFile = PathAppdata & "authlib-injector.jar"
-            Dim DownloadInfo As JObject = Nothing
-            '获取下载信息
-            Try
-                Log("[Minecraft] 开始获取 Authlib-Injector 下载信息")
-                DownloadInfo = GetJson(NetGetCodeByDownload({"https://download.mcbbs.net/mirrors/authlib-injector/artifact/latest.json", "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json"}, IsJson:=True))
-            Catch ex As Exception
-                Log(ex, "获取 Authlib-Injector 下载信息失败")
-            End Try
-            '校验文件
-            If DownloadInfo IsNot Nothing Then
-                Dim Checker As New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)
-                If (IsSetupSkip AndAlso File.Exists(TargetFile)) OrElse Checker.Check(TargetFile) IsNot Nothing Then
-                    '开始下载
-                    Dim DownloadAddress As String = DownloadInfo("download_url")
-                    Log("[Minecraft] Authlib-Injector 需要更新：" & DownloadAddress)
-                    Result.Add(New NetFile({
-                            DownloadAddress.Replace("bmclapi2.bangbang93.com", "download.mcbbs.net"), DownloadAddress
-                        }, TargetFile, New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)))
+            If Not (IsSetupSkip AndAlso File.Exists(TargetFile)) Then
+                Dim DownloadInfo As JObject = Nothing
+                '获取下载信息
+                Try
+                    Log("[Minecraft] 开始获取 Authlib-Injector 下载信息")
+                    DownloadInfo = GetJson(NetGetCodeByDownload({"https://download.mcbbs.net/mirrors/authlib-injector/artifact/latest.json", "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json"}, IsJson:=True))
+                Catch ex As Exception
+                    Log(ex, "获取 Authlib-Injector 下载信息失败")
+                End Try
+                '校验文件
+                If DownloadInfo IsNot Nothing Then
+                    Dim Checker As New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)
+                    If (IsSetupSkip AndAlso File.Exists(TargetFile)) OrElse Checker.Check(TargetFile) IsNot Nothing Then
+                        '开始下载
+                        Dim DownloadAddress As String = DownloadInfo("download_url")
+                        Log("[Minecraft] Authlib-Injector 需要更新：" & DownloadAddress)
+                        Result.Add(New NetFile({
+                                DownloadAddress.Replace("bmclapi2.bangbang93.com", "download.mcbbs.net"), DownloadAddress
+                            }, TargetFile, New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)))
+                    End If
                 End If
             End If
         End If

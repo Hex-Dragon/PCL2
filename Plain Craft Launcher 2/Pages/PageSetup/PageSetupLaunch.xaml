@@ -211,24 +211,28 @@
                 </StackPanel>
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="高级设置" IsSwaped="True" CanSwap="True">
-                <StackPanel Margin="25,40,25,15">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
-                            <ColumnDefinition Width="1*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="28" />
-                            <RowDefinition Height="9" />
-                            <RowDefinition Height="28" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="JVM 参数" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextAdvanceJvm" Grid.Row="0" Grid.ColumnSpan="2" Tag="LaunchAdvanceJvm" Grid.Column="1" ToolTip="启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。&#xA;你可以通过点击左侧选项卡的初始化按钮来恢复到默认设置。" ToolTipService.ShowDuration="2333333" Text="-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true" />
-                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="额外参数" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextAdvanceGame" Grid.Row="2" Grid.ColumnSpan="2" Tag="LaunchAdvanceGame" Grid.Column="1" ToolTip="文本框中的内容将会被直接拼合在启动参数的末尾。&#xA;例如输入 --demo 则会以试玩模式启动游戏。" ToolTipService.ShowDuration="2333333" />
-                    </Grid>
-                    <local:MyCheckBox Margin="0,10,0,4" Text="关闭文件校验" x:Name="CheckAdvanceAssets" Tag="LaunchAdvanceAssets" Grid.Column="1" ToolTip="在启动 Minecraft 时，不校验 libraries 文件夹、第三方登录库与版本主 jar 文件，不更改 assets 文件夹。&#xA;如果你没有修改相关文件，请勿勾选此项。&#xA;更推荐在版本设置中关闭特定版本的校验，而不是在这里关闭所有版本的校验。" ToolTipService.ShowDuration="2333333" />
-                </StackPanel>
+                <Grid Margin="25,40,25,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="28" />
+                        <RowDefinition Height="9" />
+                        <RowDefinition Height="28" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="JVM 参数" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextAdvanceJvm" Grid.Row="0" Grid.ColumnSpan="2" Tag="LaunchAdvanceJvm" Grid.Column="1" ToolTip="启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。&#xA;你可以通过点击左侧选项卡的初始化按钮来恢复到默认设置。" ToolTipService.ShowDuration="2333333" Text="-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true" />
+                    <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="额外参数" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextAdvanceGame" Grid.Row="2" Grid.ColumnSpan="2" Tag="LaunchAdvanceGame" Grid.Column="1" ToolTip="文本框中的内容将会被直接拼合在启动参数的末尾。&#xA;例如输入 --demo 则会以试玩模式启动游戏。" ToolTipService.ShowDuration="2333333" />
+                    <StackPanel Margin="0,10,0,4" Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2">
+                        <local:MyCheckBox Text="忽略 Java 兼容性警告" x:Name="CheckAdvanceJava" Tag="LaunchAdvanceJava" Margin="0,0,60,0"
+                                        ToolTip="如果在设置中手动选择了与当前版本不兼容的 Java，则自动跳过兼容性警告弹窗，强制使用手动选择的 Java。" ToolTipService.ShowDuration="2333333" />
+                        <local:MyCheckBox Text="关闭文件校验" x:Name="CheckAdvanceAssets" Tag="LaunchAdvanceAssets"
+                                        ToolTip="在启动时不校验 libraries 文件夹、第三方登录库与版本主 jar 文件，不更改 assets 文件夹。&#xA;如果你没有修改相关文件，请勿勾选此项。&#xA;更推荐在版本设置中关闭特定版本的校验，而不是在这里关闭所有版本的校验。" ToolTipService.ShowDuration="2333333" />
+                    </StackPanel>
+                </Grid>
             </local:MyCard>
         </StackPanel>
     </local:MyScrollViewer>
