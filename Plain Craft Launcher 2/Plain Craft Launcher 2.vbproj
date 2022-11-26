@@ -899,5 +899,14 @@
   <ItemGroup>
     <Resource Include="Resources\ModData.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Skins\Ari.png" />
+    <Resource Include="Images\Skins\Efe.png" />
+    <Resource Include="Images\Skins\Kai.png" />
+    <Resource Include="Images\Skins\Makena.png" />
+    <Resource Include="Images\Skins\Noor.png" />
+    <Resource Include="Images\Skins\Sunny.png" />
+    <Resource Include="Images\Skins\Zuri.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -1078,19 +1078,30 @@ SystemBrowser:
             MaxVer = New Version(1, 12, 999, 999)
         End If
 
+        'OptiFine 检测
+        If McVersionCurrent.Version.HasOptiFine Then
+            If McVersionCurrent.Version.McCodeMain <= 7 AndAlso McVersionCurrent.Version.McCodeMain > 0 Then
+                '<1.7：至多 Java 8（Java 9 - 10 未测试）
+                MaxVer = New Version(1, 8, 999, 999)
+            ElseIf McVersionCurrent.Version.McCodeMain >= 8 AndAlso McVersionCurrent.Version.McCodeMain <= 11 Then
+                '1.8 - 1.11：必须恰好 Java 8（Java 9 - 10 未测试）
+                MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 8, 999, 999)
+            End If
+        End If
+
         'Forge 检测
         If McVersionCurrent.Version.HasForge Then
             If McVersionCurrent.Version.McName = "1.7.2" Then
                 '1.7.2：必须 Java 7
                 MinVer = New Version(1, 7, 0, 0) : MaxVer = New Version(1, 7, 999, 999)
             ElseIf McVersionCurrent.Version.McCodeMain <= 12 AndAlso McVersionCurrent.Version.McCodeMain > 0 AndAlso VersionSortBoolean("14.23.5.2855", McVersionCurrent.Version.ForgeVersion) Then
-                '1.12，Forge 14.23.5.2855 及更低：Java 8
+                '<1.12，Forge 14.23.5.2855 及更低：Java 8
                 MaxVer = New Version(1, 8, 999, 999)
             ElseIf McVersionCurrent.Version.McCodeMain <= 14 AndAlso McVersionCurrent.Version.McCodeMain > 0 AndAlso VersionSortBoolean("28.2.23", McVersionCurrent.Version.ForgeVersion) Then
                 '1.13 - 1.14，Forge 28.2.23 及更低：Java 8 - 10
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 10, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain <= 16 AndAlso McVersionCurrent.Version.McCodeMain > 0 Then
-                '1.15 - 1.16：Java 8 - 15
+            ElseIf McVersionCurrent.Version.McCodeMain <= 15 AndAlso McVersionCurrent.Version.McCodeMain > 0 Then
+                '1.15：Java 8 - 15
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 15, 999, 999)
             ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 99 AndAlso McVersionCurrent.Version.HasOptiFine Then '#305
                 '1.18+：若安装了 OptiFine，最高 Java 18
@@ -1101,8 +1112,8 @@ SystemBrowser:
         'Fabric 检测
         If McVersionCurrent.Version.HasFabric Then
             If McVersionCurrent.Version.McCodeMain >= 15 AndAlso McVersionCurrent.Version.McCodeMain <= 16 AndAlso McVersionCurrent.Version.McCodeMain <> -1 Then
-                '1.15 - 1.16：Java 8 - 15
-                MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 15, 999, 999)
+                '1.15 - 1.16：Java 8 - 18
+                MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 18, 999, 999)
             ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 99 Then
                 '1.18+：Java 17 - 18
                 MinVer = New Version(1, 17, 0, 0) : MaxVer = New Version(1, 18, 999, 999)
@@ -1150,21 +1161,28 @@ SystemBrowser:
     Private McLaunchArgument As String
 
     ''' <summary>
-    ''' 释放 Java Wrapper 并返回文件路径。
+    ''' 释放 Java Wrapper 并返回完整文件路径。
     ''' </summary>
     Public Function ExtractJavaWrapper() As String
-        Dim WrapperPath As String = PathAppdata & "JavaWrapper.jar"
-        If Encoding.UTF8.GetByteCount(WrapperPath) <> WrapperPath.Length Then
-            Log("[Java] AppData 路径中包含非 ASCII 字符，换用 Temp 目录")
-            WrapperPath = PathTemp & "JavaWrapper.jar"
-            If Encoding.UTF8.GetByteCount(PathTemp) <> PathTemp.Length Then
-                Log("[Java] Temp 路径中包含非 ASCII 字符，换用 C 盘根目录")
-                WrapperPath = "C:\PCL\JavaWrapper.jar"
-            End If
-        End If
-        If Not File.Exists(WrapperPath) OrElse New FileInfo(WrapperPath).Length > 20 * 1024 Then
+        Dim WrapperPath As String = GetJavaWrapperDir() & "\JavaWrapper.jar"
+        If Not File.Exists(WrapperPath) OrElse New FileInfo(WrapperPath).Length <> 16818 Then
             WriteFile(WrapperPath, GetResources("JavaWrapper"))
             Log("[Java] 已自动释放 Java Wrapper：" & WrapperPath)
+        End If
+        Return WrapperPath
+    End Function
+    ''' <summary>
+    ''' 获取 Java Wrapper 所在的文件夹，不以 \ 结尾。
+    ''' </summary>
+    Public Function GetJavaWrapperDir() As String
+        Dim WrapperPath As String = PathAppdata.TrimEnd("\")
+        If Encoding.UTF8.GetByteCount(WrapperPath) <> WrapperPath.Length Then
+            Log("[Java] AppData 路径中包含非 ASCII 字符，换用 Temp 目录")
+            WrapperPath = PathTemp.TrimEnd("\")
+            If Encoding.UTF8.GetByteCount(PathTemp) <> PathTemp.Length Then
+                Log("[Java] Temp 路径中包含非 ASCII 字符，换用 C 盘根目录")
+                WrapperPath = "C:\PCL"
+            End If
         End If
         Return WrapperPath
     End Function
@@ -1185,7 +1203,7 @@ SystemBrowser:
             McLaunchLog("旧版 JVM 参数获取成功：")
             McLaunchLog(Arguments)
         End If
-        If McVersionCurrent.JsonObject("minecraftArguments") IsNot Nothing Then
+        If Not String.IsNullOrEmpty(McVersionCurrent.JsonObject("minecraftArguments")) Then '有的版本是空字符串
             McLaunchLog("获取旧版 Game 参数")
             Arguments += " " & McLaunchArgumentsGameOld(McVersionCurrent)
             McLaunchLog("旧版 Game 参数获取成功")
@@ -1270,6 +1288,7 @@ SystemBrowser:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
+        DataList.Insert(0, "-Doolloo.jlw.tmpdir=""" & GetJavaWrapperDir() & """")
         DataList.Add("-jar """ & ExtractJavaWrapper() & """")
 
         '添加 MainClass
@@ -1336,6 +1355,7 @@ NextVersion:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
+        DataList.Insert(0, "-Doolloo.jlw.tmpdir=""" & GetJavaWrapperDir() & """")
         DataList.Add("-jar """ & ExtractJavaWrapper() & """")
 
         '将 "-XXX" 与后面 "XXX" 合并到一起
@@ -1502,9 +1522,7 @@ NextVersion:
         GameArguments.Add("${assets_index_name}", McAssetsGetIndexName(Version))
 
         '支持库参数
-        'Dim LibList As List(Of McLibToken) = McLibListGet(Version,
-        '    Not (Version.Version.HasForge AndAlso Version.Version.McCodeMain >= 17)) '包含版本 Jar 的条件是不为 1.17+ 的 Forge
-        Dim LibList As List(Of McLibToken) = McLibListGet(Version, True) '如果在 1.19.x Forge 不包含版本 Jar 会导致 #188
+        Dim LibList As List(Of McLibToken) = McLibListGet(Version, True)
         Loader.Output = LibList
         Dim CpStrings As New List(Of String)
         Dim OptiFineCp As String = Nothing

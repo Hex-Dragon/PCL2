@@ -47,42 +47,21 @@
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="版本" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="4" IsEditable="True" MaxDropDownHeight="320" HintText="全部 (也可自行输入)">
                             <local:MyComboBoxItem Content="" IsSelected="True" />
+                            <local:MyComboBoxItem Content="1.19.3" />
                             <local:MyComboBoxItem Content="1.19.2" />
                             <local:MyComboBoxItem Content="1.19.1" />
                             <local:MyComboBoxItem Content="1.19" />
                             <local:MyComboBoxItem Content="1.18.2" />
-                            <local:MyComboBoxItem Content="1.18.1" />
-                            <local:MyComboBoxItem Content="1.18" />
                             <local:MyComboBoxItem Content="1.17.1" />
-                            <local:MyComboBoxItem Content="1.17" />
                             <local:MyComboBoxItem Content="1.16.5" />
-                            <local:MyComboBoxItem Content="1.16.4" />
-                            <local:MyComboBoxItem Content="1.16.3" />
-                            <local:MyComboBoxItem Content="1.16.2" />
-                            <local:MyComboBoxItem Content="1.16.1" />
-                            <local:MyComboBoxItem Content="1.16" />
                             <local:MyComboBoxItem Content="1.15.2" />
-                            <local:MyComboBoxItem Content="1.15.1" />
-                            <local:MyComboBoxItem Content="1.15" />
                             <local:MyComboBoxItem Content="1.14.4" />
-                            <local:MyComboBoxItem Content="1.14.3" />
-                            <local:MyComboBoxItem Content="1.14.2" />
-                            <local:MyComboBoxItem Content="1.14.1" />
-                            <local:MyComboBoxItem Content="1.14" />
                             <local:MyComboBoxItem Content="1.13.2" />
-                            <local:MyComboBoxItem Content="1.13.1" />
-                            <local:MyComboBoxItem Content="1.13" />
                             <local:MyComboBoxItem Content="1.12.2" />
-                            <local:MyComboBoxItem Content="1.12.1" />
-                            <local:MyComboBoxItem Content="1.12" />
                             <local:MyComboBoxItem Content="1.11.2" />
-                            <local:MyComboBoxItem Content="1.11" />
                             <local:MyComboBoxItem Content="1.10.2" />
-                            <local:MyComboBoxItem Content="1.10" />
                             <local:MyComboBoxItem Content="1.9.4" />
-                            <local:MyComboBoxItem Content="1.9" />
                             <local:MyComboBoxItem Content="1.8.9" />
-                            <local:MyComboBoxItem Content="1.8" />
                             <local:MyComboBoxItem Content="1.7.10" />
                             <local:MyComboBoxItem Content="1.7.2" />
                             <local:MyComboBoxItem Content="1.6.4" />

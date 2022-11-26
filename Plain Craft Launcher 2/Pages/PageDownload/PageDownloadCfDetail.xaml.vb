@@ -192,63 +192,124 @@
         End Try
     End Sub
     'Mod 下载；整合包另存为
-    Public Shared DownloadFolder = Nothing '仅在本次缓存的下载文件夹
+    Public Shared CachedFolder As String = Nothing '仅在本次缓存的下载文件夹
     Public Sub Save_Click(sender As Object, e As EventArgs)
-        Try
-            Dim Desc As String = If(Project.IsModPack, "整合包", "Mod ")
-
-            '确认默认保存位置
-            Dim DefaultFolder As String = Nothing
-            If Not Project.IsModPack Then
-                DefaultFolder = DownloadFolder
-                If McVersionCurrent IsNot Nothing Then
-                    If Not McVersionCurrent.IsLoaded Then McVersionCurrent.Load()
-                    If McVersionCurrent.Modable Then
+        Dim File As DlCfFile = If(TypeOf sender Is MyListItem, sender, sender.Parent).Tag
+        RunInNewThread(
+        Sub()
+            Try
+                Dim Desc As String = If(Project.IsModPack, "整合包", "Mod ")
+                '确认默认保存位置
+                Dim DefaultFolder As String = Nothing
+                If Not Project.IsModPack Then
+                    '获取 Mod 所需的加载器种类
+                    Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing 'FUTURE: Quilt 支持
+                    If File.ModLoaders.Count > 0 Then '从文件中获取
+                        AllowForge = False : AllowFabric = False
+                        For Each LoaderType In File.ModLoaders
+                            If LoaderType = "Forge" Then AllowForge = True
+                            If LoaderType = "Fabric" Then AllowFabric = True
+                        Next
+                    ElseIf Project.ModLoaders.Count > 0 Then '从工程中获取
+                        AllowForge = False : AllowFabric = False
+                        For Each LoaderType In Project.ModLoaders
+                            If LoaderType = "Forge" Then AllowForge = True
+                            If LoaderType = "Fabric" Then AllowFabric = True
+                        Next
+                    End If
+                    If AllowForge IsNot Nothing AndAlso Not AllowForge AndAlso
+                       AllowFabric IsNot Nothing AndAlso Not AllowFabric Then
+                        AllowForge = Nothing : AllowFabric = Nothing
+                    End If
+                    Log("[Download] 允许 Forge：" & If(AllowForge, "未知") & "，允许 Fabric：" & If(AllowFabric, "未知"))
+                    '判断某个版本是否符合要求
+                    Dim IsVersionSuitable As Func(Of McVersion, Boolean) =
+                            Function(Version)
+                                If Not Version.IsLoaded Then Version.Load()
+                                If Not Version.Modable Then Return False
+                                If File.GameVersion.Any(Function(v) v.Contains(".")) AndAlso
+                                   Not File.GameVersion.Any(Function(v) v.Contains(".") AndAlso v.Split(".")(1) = Version.Version.McCodeMain) Then Return False
+                                If AllowForge Is Nothing OrElse AllowFabric Is Nothing Then Return True
+                                If AllowForge AndAlso Version.Version.HasForge Then Return True
+                                If AllowFabric AndAlso Version.Version.HasFabric Then Return True
+                                Return False
+                            End Function
+                    '获取 Mod 默认下载位置
+                    If CachedFolder IsNot Nothing Then
+                        DefaultFolder = CachedFolder
+                        Log("[Download] 使用上次下载时的文件夹作为默认下载位置")
+                    ElseIf McVersionCurrent IsNot Nothing AndAlso IsVersionSuitable(McVersionCurrent) Then
                         DefaultFolder = McVersionCurrent.PathIndie & "mods\"
                         Directory.CreateDirectory(DefaultFolder)
+                        Log("[Download] 使用当前版本的 mods 文件夹作为默认下载位置（" & McVersionCurrent.Name & "）")
+                    Else
+                        Dim NeedLoad As Boolean = McVersionListLoader.State <> LoadState.Finished
+                        If NeedLoad Then
+                            Hint("正在查找适合的游戏版本……")
+                            LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
+                        End If
+                        Dim SuitableVersions As New List(Of McVersion)
+                        For Each Version As McVersion In McVersionList.Values.SelectMany(Function(l) l)
+                            If IsVersionSuitable(Version) Then SuitableVersions.Add(Version)
+                        Next
+                        If SuitableVersions.Count = 0 Then
+                            DefaultFolder = PathMcFolder
+                            If NeedLoad Then
+                                Hint("当前 MC 文件夹中未找到适合这个 Mod 的游戏版本")
+                            Else
+                                Log("[Download] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
+                            End If
+                        Else '选择 Mod 数量最多的版本
+                            Dim SelectedVersion = SuitableVersions.OrderBy(Function(v)
+                                                                               Dim Info As New DirectoryInfo(v.PathIndie & "mods\")
+                                                                               Return If(Info.Exists, Info.GetFiles().Length, -1)
+                                                                           End Function).LastOrDefault()
+                            DefaultFolder = SelectedVersion.PathIndie & "mods\"
+                            Directory.CreateDirectory(DefaultFolder)
+                            Log("[Download] 使用适合的游戏版本作为默认下载位置（" & SelectedVersion.Name & "）")
+                        End If
                     End If
                 End If
-                If String.IsNullOrEmpty(DefaultFolder) Then DefaultFolder = Nothing
-            End If
-
-            '获取基本信息
-            Dim File As DlCfFile = If(TypeOf sender Is MyListItem, sender, sender.Parent).Tag
-            Dim ChineseName As String = If(Project.ChineseName = Project.Name, "",
-                Project.ChineseName.Replace(" (", "Å").Split("Å").First.Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "："))
-            Dim FileName As String
-            Select Case Setup.Get("ToolDownloadTranslate")
-                Case 0
-                    FileName = If(ChineseName = "", "", "[" & ChineseName & "] ") & File.FileName
-                Case 1
-                    FileName = If(ChineseName = "", "", ChineseName & "-") & File.FileName
-                Case 2
-                    FileName = File.FileName & If(ChineseName = "", "", "-" & ChineseName)
-                Case Else
-                    FileName = File.FileName
-            End Select
-            Dim Target As String
-            If File.FileName.EndsWith(".litemod") Then
-                Target = SelectAs("选择保存位置", FileName, Desc & "文件|" & If(Project.IsModPack, "*.zip", "*.litemod"), DefaultFolder)
-            Else
-                Target = SelectAs("选择保存位置", FileName, Desc & "文件|" & If(Project.IsModPack, "*.zip", "*.jar"), DefaultFolder)
-            End If
-            If Not Target.Contains("\") Then Exit Sub
-            Dim LoaderName As String = Desc & "下载：" & File.DisplayName & " "
-            If Target <> DefaultFolder AndAlso Not Project.IsModPack Then DownloadFolder = GetPathFromFullPath(Target)
-
-            '构造步骤加载器
-            Dim Loaders As New List(Of LoaderBase)
-            Loaders.Add(New LoaderDownload("下载文件", New List(Of NetFile) From {File.GetDownloadFile(Target, True)}) With {.ProgressWeight = 6, .Block = True})
-
-            '启动
-            Dim Loader As New LoaderCombo(Of Integer)(LoaderName, Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
-            Loader.Start(1)
-            LoaderTaskbarAdd(Loader)
-            FrmMain.BtnExtraDownload.ShowRefresh()
-            FrmMain.BtnExtraDownload.Ribble()
-        Catch ex As Exception
-            Log(ex, "保存 CurseForge 文件失败", LogLevel.Feedback)
-        End Try
+                '获取基本信息
+                Dim ChineseName As String = If(Project.ChineseName = Project.Name, "",
+                        Project.ChineseName.Replace(" (", "Å").Split("Å").First.Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "："))
+                Dim FileName As String
+                Select Case Setup.Get("ToolDownloadTranslate")
+                    Case 0
+                        FileName = If(ChineseName = "", "", "[" & ChineseName & "] ") & File.FileName
+                    Case 1
+                        FileName = If(ChineseName = "", "", ChineseName & "-") & File.FileName
+                    Case 2
+                        FileName = File.FileName & If(ChineseName = "", "", "-" & ChineseName)
+                    Case Else
+                        FileName = File.FileName
+                End Select
+                RunInUi(
+                Sub()
+                    '弹窗要求选择保存位置
+                    Dim Target As String
+                    If File.FileName.EndsWith(".litemod") Then
+                        Target = SelectAs("选择保存位置", FileName, Desc & "文件|" & If(Project.IsModPack, "*.zip", "*.litemod"), DefaultFolder)
+                    Else
+                        Target = SelectAs("选择保存位置", FileName, Desc & "文件|" & If(Project.IsModPack, "*.zip", "*.jar"), DefaultFolder)
+                    End If
+                    If Not Target.Contains("\") Then Exit Sub
+                    '构造步骤加载器
+                    Dim LoaderName As String = Desc & "下载：" & File.DisplayName & " "
+                    If Target <> DefaultFolder AndAlso Not Project.IsModPack Then CachedFolder = GetPathFromFullPath(Target)
+                    Dim Loaders As New List(Of LoaderBase)
+                    Loaders.Add(New LoaderDownload("下载文件", New List(Of NetFile) From {File.GetDownloadFile(Target, True)}) With {.ProgressWeight = 6, .Block = True})
+                    '启动
+                    Dim Loader As New LoaderCombo(Of Integer)(LoaderName, Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+                    Loader.Start(1)
+                    LoaderTaskbarAdd(Loader)
+                    FrmMain.BtnExtraDownload.ShowRefresh()
+                    FrmMain.BtnExtraDownload.Ribble()
+                End Sub)
+            Catch ex As Exception
+                Log(ex, "保存 CurseForge 文件失败", LogLevel.Feedback)
+            End Try
+        End Sub, "Download CFDetail Save")
     End Sub
 
     Private Sub BtnIntroCf_Click(sender As Object, e As EventArgs) Handles BtnIntroCf.Click

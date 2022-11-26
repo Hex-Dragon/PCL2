@@ -10,12 +10,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.4.2" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.4.2." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.4.3" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.4.3." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 268 'Release
+    Public Const VersionCode As Integer = 270 'Release
 #Else
-    Public Const VersionCode As Integer = 269 'Snapshot
+    Public Const VersionCode As Integer = 271 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -771,6 +771,8 @@ Public Module ModBase
             '还原文件路径
             If Not FromPath.Contains(":\") Then FromPath = Path & FromPath
             If Not ToPath.Contains(":\") Then ToPath = Path & ToPath
+            '如果复制同一个文件则跳过
+            If FromPath = ToPath Then Exit Sub
             '读取文件内容
             Dim FileBytes As Byte()
             Using ReadStream As New FileStream(FromPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) '支持读取使用中的文件

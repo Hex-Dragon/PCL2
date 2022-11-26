@@ -241,8 +241,12 @@ Retry:
                 For Each ModJson In Task.Input
                     '跳过重复的 Mod（疑似 CurseForge Bug）
                     If FileList.ContainsKey(ModJson("id").ToObject(Of Integer)) Then Continue For
+                    '根据 modules 判断是资源包还是 Mod
+                    Dim ModuleNames = CType(ModJson("modules"), JArray).Select(Function(l) l("name").ToString).ToList
+                    Dim IsResourcePack As Boolean = Not ModuleNames.Contains("META-INF") AndAlso ModuleNames.Contains("pack.mcmeta")
                     '实际的添加
-                    FileList.Add(ModJson("id"), New DlCfFile(ModJson, False).GetDownloadFile(PathMcFolder & "versions\" & VersionName & "\mods\", False))
+                    FileList.Add(ModJson("id"), New DlCfFile(ModJson, False).GetDownloadFile(
+                                 PathMcFolder & "versions\" & VersionName & "\" & If(IsResourcePack, "resourcepacks", "mods") & "\", False))
                     Task.Progress += 1 / (1 + ModFileList.Count)
                 Next
                 Task.Output = FileList.Values.ToList

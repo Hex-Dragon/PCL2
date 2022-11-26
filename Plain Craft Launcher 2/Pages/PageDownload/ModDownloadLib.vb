@@ -1,8 +1,15 @@
 ﻿Imports System.IO.Compression
 
 Public Module ModDownloadLib
-    '如果 OptiFine 与 Forge 同时开始安装，就会导致 Forge 安装失败
+
+    ''' <summary>
+    ''' 如果 OptiFine 与 Forge 同时开始安装，就会导致 Forge 安装失败，所以在这里添加一个锁。
+    ''' </summary>
     Private InstallSyncLock As New Object
+    ''' <summary>
+    ''' 最高的 Minecraft 大版本号，-1 代表尚未获取。
+    ''' </summary>
+    Public McVersionHighest As Integer = -1
 
 #Region "Minecraft 下载"
 
@@ -114,7 +121,7 @@ Public Module ModDownloadLib
                                                                 Task.Output = New List(Of NetFile) From {New NetFile(DlSourceLauncherOrMetaGet(JsonAddress), VersionFolder & VersionName & ".json")}
                                                             End Sub) With {.ProgressWeight = 2, .Show = False})
         End If
-        Loaders.Add(New LoaderDownload("下载原版 Json 文件", New List(Of NetFile) From {
+        Loaders.Add(New LoaderDownload(McDownloadClientJsonName, New List(Of NetFile) From {
                 New NetFile(DlSourceLauncherOrMetaGet(If(JsonUrl, "")), VersionFolder & VersionName & ".json", New FileChecker(CanUseExistsFile:=False, IsJson:=True))
             }) With {.ProgressWeight = 3})
 
@@ -159,6 +166,7 @@ Public Module ModDownloadLib
 
     End Function
     Private Const McDownloadClientLibName As String = "下载原版支持库文件"
+    Private Const McDownloadClientJsonName As String = "下载原版 Json 文件"
 
 #End Region
 
@@ -378,7 +386,7 @@ Public Module ModDownloadLib
             Throw New Exception("未找到用于安装 OptiFine 的 Java")
         End If
         '添加 Java Wrapper 作为主 Jar
-        Dim Arguments = "-Duser.home=""" & BaseMcFolderHome & """ -cp """ & Target & """ -jar """ & ExtractJavaWrapper() & """ optifine.Installer"
+        Dim Arguments = "-Doolloo.jlw.tmpdir=""" & GetJavaWrapperDir() & """ -Duser.home=""" & BaseMcFolderHome & """ -cp """ & Target & """ -jar """ & ExtractJavaWrapper() & """ optifine.Installer"
         If Java.VersionCode >= 9 Then Arguments = "--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED " & Arguments
         '开始启动
         SyncLock InstallSyncLock
@@ -518,27 +526,28 @@ Public Module ModDownloadLib
         Loaders.Add(New LoaderDownload("下载 OptiFine 主文件", New List(Of NetFile)) With {.ProgressWeight = 8})
         Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("等待原版下载",
                                                                          Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
-                                                                             '是否已经存在原版文件
-                                                                             If ClientDownloadLoader Is Nothing Then Exit Sub
                                                                              '等待原版文件下载完成
-                                                                             For Each Loader In ClientDownloadLoader.GetLoaderList
-                                                                                 If Loader.Name <> McDownloadClientLibName Then Continue For
-                                                                                 If Loader.State = LoadState.Loading Then
-                                                                                     Log("[Download] OptiFine 安装正在等待原版文件下载完成")
-                                                                                     Loader.WaitForExit()
-                                                                                 End If
-                                                                                 Exit For
-                                                                             Next
+                                                                             If ClientDownloadLoader Is Nothing Then Exit Sub
+                                                                             Dim TargetLoaders As List(Of LoaderBase) =
+                                                                                ClientDownloadLoader.GetLoaderList.Where(Function(l) l.Name = McDownloadClientLibName OrElse l.Name = McDownloadClientJsonName).
+                                                                                Where(Function(l) l.State <> LoadState.Finished).ToList
+                                                                             If TargetLoaders.Count > 0 Then Log("[Download] OptiFine 安装正在等待原版文件下载完成")
+                                                                             Do While TargetLoaders.Count > 0 AndAlso Not Task.IsAborted
+                                                                                 TargetLoaders = TargetLoaders.Where(Function(l) l.State <> LoadState.Finished).ToList
+                                                                                 Thread.Sleep(50)
+                                                                             Loop
+                                                                             If Task.IsAborted Then Exit Sub
                                                                              '拷贝原版文件
-                                                                             If IsCustomFolder Then
-                                                                                 Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name
-                                                                                 Directory.CreateDirectory(McFolder & "versions\" & DownloadInfo.Inherit)
-                                                                                 If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json") Then
-                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".json", McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json")
-                                                                                 End If
-                                                                                 If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar") Then
-                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".jar", McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar")
-                                                                                 End If
+                                                                             If Not IsCustomFolder Then Exit Sub
+                                                                             Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name
+                                                                             Directory.CreateDirectory(McFolder & "versions\" & DownloadInfo.Inherit)
+                                                                             If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json") Then
+                                                                                 CopyFile(ClientDownloadLoader.Input & ClientName & ".json",
+                                                                                          McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json")
+                                                                             End If
+                                                                             If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar") Then
+                                                                                 CopyFile(ClientDownloadLoader.Input & ClientName & ".jar",
+                                                                                          McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar")
                                                                              End If
                                                                          End Sub) With {.ProgressWeight = 0.1, .Show = False})
 
@@ -876,8 +885,8 @@ Public Module ModDownloadLib
                                                                     '构造版本 Json
                                                                     Dim VersionJson As New JObject
                                                                     VersionJson.Add("id", VersionName)
-                                                                    VersionJson.Add("time", DateTime.ParseExact(DownloadInfo.ReleaseTime, "yyyy/MM/dd HH:mm:ss", Globalization.CultureInfo.CurrentCulture))
-                                                                    VersionJson.Add("releaseTime", DateTime.ParseExact(DownloadInfo.ReleaseTime, "yyyy/MM/dd HH:mm:ss", Globalization.CultureInfo.CurrentCulture))
+                                                                    VersionJson.Add("time", Date.ParseExact(DownloadInfo.ReleaseTime, "yyyy/MM/dd HH:mm", Globalization.CultureInfo.CurrentCulture))
+                                                                    VersionJson.Add("releaseTime", Date.ParseExact(DownloadInfo.ReleaseTime, "yyyy/MM/dd HH:mm", Globalization.CultureInfo.CurrentCulture))
                                                                     VersionJson.Add("type", "release")
                                                                     VersionJson.Add("arguments", GetJson("{""game"":[""--tweakClass"",""" & DownloadInfo.JsonToken("tweakClass").ToString & """]}"))
                                                                     VersionJson.Add("libraries", DownloadInfo.JsonToken("libraries"))
@@ -1094,7 +1103,7 @@ Public Module ModDownloadLib
             Throw New Exception("未找到用于安装 Forge 的 Java")
         End If
         '添加 Java Wrapper 作为主 Jar
-        Dim Arguments = "-cp """ & PathTemp & "Cache\forge_installer.jar;" & Target & """ -jar """ & ExtractJavaWrapper() & """  com.bangbang93.ForgeInstaller """ & McFolder
+        Dim Arguments = "-Doolloo.jlw.tmpdir=""" & GetJavaWrapperDir() & """ -cp """ & PathTemp & "Cache\forge_installer.jar;" & Target & """ -jar """ & ExtractJavaWrapper() & """  com.bangbang93.ForgeInstaller """ & McFolder
         If Java.VersionCode >= 9 Then Arguments = "--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED " & Arguments
         '开始启动
         SyncLock InstallSyncLock
@@ -1329,27 +1338,26 @@ Public Module ModDownloadLib
                                                                              End If
 #End Region
 #Region "原版文件"
-                                                                             '是否已经存在原版文件
-                                                                             If ClientDownloadLoader Is Nothing Then Exit Sub
                                                                              '等待原版文件下载完成
-                                                                             For Each Loader In ClientDownloadLoader.GetLoaderList
-                                                                                 If Loader.Name <> McDownloadClientLibName Then Continue For
-                                                                                 If Loader.State = LoadState.Loading Then
-                                                                                     Log("[Download] Forge 安装正在等待原版文件下载完成")
-                                                                                     Loader.WaitForExit()
-                                                                                 End If
-                                                                                 Exit For
-                                                                             Next
+                                                                             If ClientDownloadLoader Is Nothing Then Exit Sub
+                                                                             Dim TargetLoaders As List(Of LoaderBase) =
+                                                                                ClientDownloadLoader.GetLoaderList.Where(Function(l) l.Name = McDownloadClientLibName OrElse l.Name = McDownloadClientJsonName).
+                                                                                Where(Function(l) l.State <> LoadState.Finished).ToList
+                                                                             If TargetLoaders.Count > 0 Then Log("[Download] Forge 安装正在等待原版文件下载完成")
+                                                                             Do While TargetLoaders.Count > 0 AndAlso Not Task.IsAborted
+                                                                                 TargetLoaders = TargetLoaders.Where(Function(l) l.State <> LoadState.Finished).ToList
+                                                                                 Thread.Sleep(50)
+                                                                             Loop
+                                                                             If Task.IsAborted Then Exit Sub
                                                                              '拷贝原版文件
-                                                                             If IsCustomFolder Then
-                                                                                 Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name
-                                                                                 Directory.CreateDirectory(McFolder & "versions\" & Inherit)
-                                                                                 If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".json") Then
-                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".json", McFolder & "versions\" & Inherit & "\" & Inherit & ".json")
-                                                                                 End If
-                                                                                 If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".jar") Then
-                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".jar", McFolder & "versions\" & Inherit & "\" & Inherit & ".jar")
-                                                                                 End If
+                                                                             If Not IsCustomFolder Then Exit Sub
+                                                                             Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name
+                                                                             Directory.CreateDirectory(McFolder & "versions\" & Inherit)
+                                                                             If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".json") Then
+                                                                                 CopyFile(ClientDownloadLoader.Input & ClientName & ".json", McFolder & "versions\" & Inherit & "\" & Inherit & ".json")
+                                                                             End If
+                                                                             If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".jar") Then
+                                                                                 CopyFile(ClientDownloadLoader.Input & ClientName & ".jar", McFolder & "versions\" & Inherit & "\" & Inherit & ".jar")
                                                                              End If
 #End Region
                                                                          End Sub) With {.ProgressWeight = 0.1, .Show = False})

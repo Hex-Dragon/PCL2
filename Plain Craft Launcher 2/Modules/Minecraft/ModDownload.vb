@@ -221,6 +221,7 @@
                 McDownloadClientUpdateHint(Version, Json)
                 IsNewClientVersionHinted = True
             End If
+            McVersionHighest = Version.Split(".")(1)
             Setup.Set("ToolUpdateReleaseLast", Version)
             '解析更新提示（Snapshot）
             Version = Json("latest")("snapshot")
@@ -772,7 +773,7 @@
         ''' </summary>
         Public IsLegacy As Boolean
         ''' <summary>
-        ''' 发布时间，格式为“yyyy/mm/dd HH:mm:ss”。
+        ''' 发布时间，格式为“yyyy/mm/dd HH:mm”。
         ''' </summary>
         Public ReleaseTime As String
         ''' <summary>
@@ -1090,33 +1091,27 @@
             DateUpdate = Data("dateModified")
             DownloadCount = Data("downloadCount")
             IsModPack = Not Website.Contains("/mc-mods/")
-            '获取常见文件
+            '获取 Mod Loader 列表
+            ModLoaders = New List(Of String)
             For Each File In If(Data("latestFiles"), {})
                 Dim NewFile As New DlCfFile(File, IsModPack)
                 If Not NewFile.IsAvailable Then Continue For
+                ModLoaders.AddRange(NewFile.ModLoaders)
             Next
-            '获取游戏版本、Mod Loader
+            ModLoaders = ModLoaders.Distinct.ToList
+            '用一个偷懒的方式让 Forge 排在 Fabric 的前面
+            ModLoaders = ModLoaders.Select(Function(s) s.Replace("Forge", "Aorge")).ToList()
+            ModLoaders.Sort()
+            ModLoaders = ModLoaders.Select(Function(s) s.Replace("Aorge", "Forge")).ToList()
+            '获取游戏版本
             Dim GameVersions As New List(Of Integer)
-            ModLoaders = New List(Of String)
             For Each File In If(Data("latestFilesIndexes"), {})
                 Dim Version As String = File("gameVersion")
                 If Not Version.Contains("1.") Then Continue For
                 GameVersions.Add(Version.Split(".")(1).Split("-").First)
-                Select Case If(File("modLoader"), "0").ToString
-                    Case 1
-                        ModLoaders.Add("Forge")
-                    Case 2
-                        ModLoaders.Add("Cauldron")
-                    Case 3
-                        ModLoaders.Add("LiteLoader")
-                    Case 4
-                        ModLoaders.Add("Fabric")
-                End Select
                 FileIndexes.Add(File("fileId"))
             Next
             GameVersions = Sort(GameVersions.Distinct.ToList, AddressOf VersionSortBoolean)
-            ModLoaders = ModLoaders.Distinct.ToList
-            ModLoaders.Sort()
             If GameVersions.Count = 0 Then
                 GameVersionDesc = ""
             Else
@@ -1133,8 +1128,15 @@
                     Next
                     If StartVersion = EndVersion Then
                         SpaVersions.Add("1." & StartVersion)
+                    ElseIf StartVersion >= McVersionHighest Then
+                        SpaVersions.Add("1." & EndVersion & "+")
+                    ElseIf EndVersion <= 7 Then
+                        SpaVersions.Add("1." & StartVersion & "-")
+                        Exit For
+                    ElseIf StartVersion - EndVersion = 1 Then
+                        SpaVersions.Add("1." & StartVersion & ", 1." & EndVersion)
                     Else
-                        SpaVersions.Add("1." & StartVersion & "-1." & EndVersion)
+                        SpaVersions.Add("1." & StartVersion & "~1." & EndVersion)
                     End If
                 Next
                 GameVersionDesc = "[" & Join(SpaVersions, ", ") & "] "
@@ -1211,12 +1213,11 @@
             Dim NewItem As New MyCfItem With {.Tag = Me}
             NewItem.LabTitle.Text = ChineseName
             NewItem.LabInfo.Text = Description.Replace(vbCr, "").Replace(vbLf, "")
-            NewItem.LabLeft.Text = If(ModLoaders.Count > 0 AndAlso ShowLoaderDesc, "[" & Join(ModLoaders, " & ") & "] ", "") &
-                                   If(ShowVersionDesc, GameVersionDesc, "") &
+            NewItem.LabLeft.Text = (If(ModLoaders.Count > 0 AndAlso ShowLoaderDesc, "[" & Join(ModLoaders, "/") & "] ", "") &
+                                   If(ShowVersionDesc, GameVersionDesc, "")).Replace("] [", " ") &
                                    Join(CategoryDesc, "，") & " (" &
-                                   GetTimeSpanString(DateUpdate - Date.Now) & "更新" &
-                                   If(DownloadCount > 0,
-                                        "，" & If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " 万次下载", DownloadCount & " 次下载"), "") & "）"
+                                   GetTimeSpanString(DateUpdate - Date.Now) & "更新，" &
+                                   If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " 万次下载", DownloadCount & " 次下载") & "）"
             If Thumb Is Nothing Then
                 NewItem.Logo = "pack://application:,,,/images/Icons/NoIcon.png"
             Else
@@ -1279,7 +1280,7 @@
             Dim SearchResult As String = ""
             For i = 0 To SearchResults.Count - 1
                 If Not SearchResults(i).AbsoluteRight AndAlso i >= Math.Min(2, SearchResults.Count - 1) Then Exit For '把 3 个结果拼合以提高准确度
-                SearchResult += SearchResults(i).Item.Replace(" (", "|").Split("|").Last.TrimEnd(")") & " "
+                SearchResult += SearchResults(i).Item.Replace(" - ", "§").Split("§").First.Replace(" (", "|").Split("|").Last.TrimEnd(")") & " "
             Next
             Log("[Download] CurseForge 工程列表中文搜索原始关键词：" & SearchResult, LogLevel.Developer)
             '去除常见连接词
@@ -1432,6 +1433,7 @@
         Public DisplayName As String
         Public [Date] As Date
         Public GameVersion As String()
+        Public ModLoaders As New List(Of String)
         Public ReleaseType As Integer
         Public FileName As String
         Public DownloadCount As Integer
@@ -1481,11 +1483,13 @@
                     End If
                 Next
             End If
-            '获取游戏版本
+            '获取游戏版本与 Mod 加载器列表
             Dim Versions As New List(Of String)
-            For Each Version In Data("gameVersions")
-                If Version.ToString.StartsWith("1.") OrElse Version.ToString.Contains("w") Then
-                    Versions.Add(Version.ToString.Trim.ToLower)
+            For Each Version In Data("gameVersions").Select(Function(t) t.ToString.Trim.ToLower)
+                If Version.StartsWith("1.") OrElse Version.Contains("w") Then
+                    Versions.Add(Version)
+                ElseIf Version = "forge" OrElse Version = "fabric" OrElse Version = "quilt" OrElse Version = "rift" Then
+                    ModLoaders.Add(Version.First.ToString.ToUpper & Version.Substring(1))
                 End If
             Next
             If Versions.Count > 1 Then
@@ -1493,11 +1497,13 @@
                 If IsModPack Then GameVersion = {GameVersion(0)}
             ElseIf Versions.Count = 1 Then
                 GameVersion = Versions.ToArray
-                'ElseIf Data("gameVersion").Count = 1 AndAlso Not Data("gameVersion")(0).ToString.Contains("1.") Then
-                '    GameVersion = {"1.16.4"}
             Else
                 GameVersion = {"未知版本"}
             End If
+            '用一个偷懒的方式让 Forge 排在 Fabric 的前面
+            ModLoaders = ModLoaders.Select(Function(s) s.Replace("Forge", "Aorge")).ToList()
+            ModLoaders.Sort()
+            ModLoaders = ModLoaders.Select(Function(s) s.Replace("Aorge", "Forge")).ToList()
         End Sub
 
         ''' <summary>
@@ -1513,10 +1519,14 @@
             '获取描述信息
             Dim Info As String = ""
             If Not IsModPack Then
-                Info += "适用于 " & Join(GameVersion, "、").Replace("-snapshot", " 快照") &
-                          If(ModeDebug AndAlso Dependencies.Count > 0, "，" & Dependencies.Count & " 个前置，", "，")
+                Info += If(ModLoaders.Count > 0, Join(ModLoaders, "/"), "") &
+                        If(GameVersion.Count > 1, If(ModLoaders.Count > 0, " ", "") & Join(GameVersion, "、").Replace("-snapshot", " 快照"), "")
+                If Info <> "" Then Info = "适用于 " & Info & "，"
+                Info += If(ModeDebug AndAlso Dependencies.Count > 0, Dependencies.Count & " 个前置 Mod，", "")
             End If
-            Info += If(DownloadCount > 0, If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " 万次下载，", DownloadCount & " 次下载，"), "")
+            'If DownloadCount > 0 Then 'DownloadCount 目前的返回内容完全不正确，经常是 0，干脆不显示了
+            '    Info += If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " 万次下载，", DownloadCount & " 次下载，")
+            'End If
             Info += GetTimeSpanString([Date] - Date.Now) & "更新"
             Info += If(ReleaseType <> 1, "，" & ReleaseTypeString, "")
 

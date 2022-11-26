@@ -15,7 +15,6 @@ Public Class Application
             Log(ex, "开发者模式测试出错", LogLevel.Feedback)
         End Try
     End Sub
-
 #End If
 
     '开始

@@ -3,6 +3,7 @@
     '初始化加载器信息
     Private Sub PageDownloadMod_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         PageLoaderInit(Load, PanLoad, CardProjects, PanAlways, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
+        McVersionHighest = Math.Max(McVersionHighest, Integer.Parse(CType(TextSearchVersion.Items(1), MyComboBoxItem).Content.ToString.Split(".")(1)))
     End Sub
     Public Shared Loader As New LoaderTask(Of DlCfProjectRequest, DlCfProjectResult)("DlCfProject ModPack", AddressOf DlCfProjectSub, AddressOf LoaderInput) With {.ReloadTimeout = 60 * 1000}
     Private Shared Function LoaderInput() As DlCfProjectRequest

@@ -10,6 +10,12 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 270 Then 'Release 2.4.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 Mod、整合包下载的版本检查与显示"))
+            If LastVersion <= 267 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 LiteLoader 的 Bug"))
+            FeatureCount += 6
+            BugCount += 15
+        End If
         If LastVersion < 268 Then 'Release 2.4.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "暂时关闭了联机功能"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "游戏崩溃的弹窗添加了直接查看日志的选项"))
@@ -100,6 +106,12 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 271 Then 'Snapshot 2.4.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 Mod、整合包下载的版本检查与显示"))
+            If LastVersion <= 267 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 LiteLoader 的 Bug"))
+            FeatureCount += 6
+            BugCount += 15
+        End If
         If LastVersion < 269 Then 'Snapshot 2.4.2
             If LastVersion = 267 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法下载 CurseForge 整合包的 Bug"))
             FeatureCount += 2
@@ -1136,7 +1148,7 @@ Install:
         If MyMsgBox("由于联机提供商要求新联机强制付费，且高度商业化，PCL 将暂时关闭联机功能，不再使用该联机模块。" & vbCrLf &
                     "PCL、HMCL、BakaXL 将合作开发新的跨启动器联机功能，在开发结束后将同步开放，请各位多多理解。",
                     "联机功能已暂时关闭", "查看详情", "确定") = 1 Then
-            OpenWebsite("https://www.bilibili.com/read/cv19553725")
+            OpenWebsite("https://www.bilibili.com/read/cv19845645")
         End If
         e.Handled = True
     End Sub

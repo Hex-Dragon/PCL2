@@ -83,12 +83,21 @@
             '加载
             Dim Image As New MyBitmap(Address)
             ImgBack.Tag = Address
+            '大小检查
+            Dim Scale As Integer = Image.Pic.Width / 64
+            If Image.Pic.Width < 32 OrElse Image.Pic.Height < 32 Then
+                ImgFore.Source = Nothing : ImgBack.Source = Nothing
+                Throw New Exception("图片大小不足，长为 " & Image.Pic.Height & "，宽为 " & Image.Pic.Width)
+            End If
             '头发层（附加层）
             If Image.Pic.Width >= 64 AndAlso Image.Pic.Height >= 32 Then
-                '如果图片中有透明像素，或是头部颜色和透明区均不一样，则加载附加层
-                If (Image.Pic.GetPixel(1, 1).A = 0 OrElse Image.Pic.GetPixel(Image.Pic.Width - 1, Image.Pic.Height - 1).A = 0 OrElse Image.Pic.GetPixel(Image.Pic.Width - 2, 2).A = 0) OrElse
-                   (Image.Pic.GetPixel(1, 1) <> Image.Pic.GetPixel(41, 9) AndAlso Image.Pic.GetPixel(Image.Pic.Width - 1, Image.Pic.Height - 1) <> Image.Pic.GetPixel(41, 9) AndAlso Image.Pic.GetPixel(Image.Pic.Width - 2, 2) <> Image.Pic.GetPixel(41, 9)) Then
-                    ImgFore.Source = New CroppedBitmap(Image, New Int32Rect(40, 8, 8, 8))
+                If (Image.Pic.GetPixel(1, 1).A = 0 OrElse '如果图片中有任何透明像素（避免纯色白底）
+                    Image.Pic.GetPixel(Image.Pic.Width - 1, Image.Pic.Height - 1).A = 0 OrElse
+                    Image.Pic.GetPixel(Image.Pic.Width - 2, Image.Pic.Height / 2 - 2).A = 0) OrElse
+                   (Image.Pic.GetPixel(1, 1) <> Image.Pic.GetPixel(Scale * 41, Scale * 9) AndAlso '或是头部颜色和透明区均不一样
+                    Image.Pic.GetPixel(Image.Pic.Width - 1, Image.Pic.Height - 1) <> Image.Pic.GetPixel(Scale * 41, Scale * 9) AndAlso
+                    Image.Pic.GetPixel(Image.Pic.Width - 2, Image.Pic.Height / 2 - 2) <> Image.Pic.GetPixel(Scale * 41, Scale * 9)) Then
+                    ImgFore.Source = New CroppedBitmap(Image, New Int32Rect(Scale * 40, Scale * 8, Scale * 8, Scale * 8))
                 Else
                     ImgFore.Source = Nothing
                 End If
@@ -96,13 +105,8 @@
                 ImgFore.Source = Nothing
             End If
             '脸层
-            If Image.Pic.Width >= 32 AndAlso Image.Pic.Height >= 32 Then
-                ImgBack.Source = New CroppedBitmap(Image, New Int32Rect(8, 8, 8, 8))
-                Log("[Skin] 载入头像成功：" & Loader.Name)
-            Else
-                ImgBack.Source = Nothing
-                Throw New Exception("图片大小不足，长为 " & Image.Pic.Height & "，宽为 " & Image.Pic.Width)
-            End If
+            ImgBack.Source = New CroppedBitmap(Image, New Int32Rect(Scale * 8, Scale * 8, Scale * 8, Scale * 8))
+            Log("[Skin] 载入头像成功：" & Loader.Name)
         Catch ex As Exception
             Log(ex, "载入头像失败（" & If(Address, "null") & "," & Loader.Name & "）", LogLevel.Hint)
         End Try

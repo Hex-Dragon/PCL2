@@ -2327,13 +2327,16 @@ NextVersion:
             Dim RealVersion As McVersion
             Dim RequiredJar As String = Version.JsonObject("jar")?.ToString
             If Version.IsHmclFormatJson OrElse RequiredJar Is Nothing Then
+                'HMCL 项直接使用自身的 Jar
                 '根据 Inherit 获取最深层版本
-                '此外，HMCL 项直接使用自身的 Jar
                 Dim OriginalVersion As McVersion = Version
-                Do Until OriginalVersion.InheritVersion = ""
-                    If OriginalVersion.InheritVersion = OriginalVersion.Name Then Exit Do
-                    OriginalVersion = New McVersion(PathMcFolder & "versions\" & OriginalVersion.InheritVersion & "\")
-                Loop
+                '1.17+ 的 Forge 不寻找 Inherit
+                If Not (Version.Version.HasForge AndAlso Version.Version.McCodeMain >= 17) Then
+                    Do Until OriginalVersion.InheritVersion = ""
+                        If OriginalVersion.InheritVersion = OriginalVersion.Name Then Exit Do
+                        OriginalVersion = New McVersion(PathMcFolder & "versions\" & OriginalVersion.InheritVersion & "\")
+                    Loop
+                End If
                 '需要新建对象，否则后面的 Check 会导致 McVersionCurrent 的 State 变回 Original
                 '复现：启动一个 Snapshot 版本
                 RealVersion = New McVersion(OriginalVersion.Path)
@@ -2379,6 +2382,11 @@ NextVersion:
 
         '转换为 LibToken
         For Each Library As JObject In AllLibs.Children
+
+            '清理 null 项（BakaXL 会把没有的项序列化为 null，但会被 Newtonsoft 转换为 JValue，导致 Is Nothing = false；这导致了 #409）
+            For i = Library.Properties.Count - 1 To 0 Step -1
+                If Library.Properties(i).Value.Type = JTokenType.Null Then Library.Remove(Library.Properties(i).Name)
+            Next
 
             '检查是否需要（Rules）
             If Not McJsonRuleCheck(Library("rules")) Then Continue For
