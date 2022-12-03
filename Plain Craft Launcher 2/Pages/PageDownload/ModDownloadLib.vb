@@ -305,7 +305,7 @@ Public Module ModDownloadLib
             Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
             Exit Sub
         End If
-        OpenWebsite("https://wiki.biligame.com/mc/" & WikiName.Replace("_experimental-snapshot-", "-exp"))
+        OpenWebsite("https://searchwiki.biligame.com/mc/index.php?search=" & WikiName.Replace("_experimental-snapshot-", "-exp"))
     End Sub
 
 #End Region
