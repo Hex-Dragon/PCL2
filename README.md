@@ -6,16 +6,17 @@ PCL2 的代码绝大多数其实都是几年前学生时代的产物了……那
 
 你也可以丢 Pull Request，虽然这个源代码库并不能直接编译，但一些简单的修改应该还是没问题的……
 
-　
+**相关链接：**
 
-**相关内容：**
 - [PCL2 功能投票](https://github.com/Hex-Dragon/PCL2/discussions/2)：来参加投票吧，开发者会优先处理票数较高的帖子！
-- [程序下载](https://afdian.net/p/0164034c016c11ebafcb52540025c377)：下载免费的正式版 PCL2。
+- [程序下载](https://afdian.net/p/0164034c016c11ebafcb52540025c377)：下载免费的正式版 PCL2，如果想要下载快照版本需要先赞助开发者。
 - [帮助文档库](https://github.com/LTCatt/PCL2Help)：PCL2 帮助文档在 GitHub 上的存储库（是的，帮助库在另一个 Repo……）
-
-　
+- [赞助链接](https://afdian.net/@LTCat)：赞助开发者。
+- [Bilibili](https://space.bilibili.com/11343203)：开发者的Bilibili链接。
 
 **一些无趣的小细节：**
+
 - 别想在这里面找到解密游戏的线索，那部分的代码被我抠掉了（笑）
 - 哦，对，解锁隐藏主题的相关代码也都被抠掉了，所以别想着用翻源代码这种歪门邪道来绕过解密了.jpg
 - 源代码库并不是即时更新的，而是在每次 PCL2 发布更新时（手动）同步一次
+- 
