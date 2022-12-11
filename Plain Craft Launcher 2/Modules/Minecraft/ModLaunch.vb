@@ -4,22 +4,73 @@ Public Module ModLaunch
 
 #Region "开始"
 
+    Public Class McLaunchOptions
+        ''' <summary>
+        ''' 强制指定在启动后进入的服务器 IP。
+        ''' 默认值：Nothing。使用版本设置的值。
+        ''' </summary>
+        Public ServerIp As String = Nothing
+        ''' <summary>
+        ''' 将启动脚本保存到该地址，然后取消启动。这同时会改变启动时的提示等。
+        ''' 默认值：Nothing。不保存。
+        ''' </summary>
+        Public SaveBatch As String = Nothing
+        ''' <summary>
+        ''' 强行指定启动的 MC 版本。
+        ''' 默认值：Nothing。使用 McVersionCurrent。
+        ''' </summary>
+        Public Version As McVersion = Nothing
+    End Class
+    ''' <summary>
+    ''' 尝试启动 Minecraft。必须在 UI 线程调用。
+    ''' 返回是否实际开始了启动（如果没有，则一定弹出了错误提示）。
+    ''' </summary>
+    Public Function McLaunchStart(Optional Options As McLaunchOptions = Nothing) As Boolean
+        Options = If(Options, New McLaunchOptions)
+        '预检查
+        If Not RunInUi() Then
+            Throw New Exception("McLaunchStart 必须在 UI 线程调用！")
+        End If
+        If McLaunchLoader.State = LoadState.Loading Then
+            Hint("已有游戏正在启动中！", HintType.Critical)
+            Return False
+        End If
+        '强制切换需要启动的版本
+        If Options.Version IsNot Nothing AndAlso McVersionCurrent <> Options.Version Then
+            McLaunchLog("在启动前切换到版本 " & Options.Version.Name)
+            '检查版本
+            Options.Version.Load()
+            If Options.Version.State = McVersionState.Error Then
+                Hint("无法启动 Minecraft：" & Options.Version.Info, HintType.Critical)
+                Return False
+            End If
+            '切换版本
+            McVersionCurrent = Options.Version
+            Setup.Set("LaunchVersionSelect", McVersionCurrent.Name)
+            FrmLaunchLeft.RefreshButtonsUI()
+        End If
+        FrmMain.AprilGiveup()
+        '禁止进入版本选择页面（否则就可以在启动中切换 McVersionCurrent 了）
+        FrmMain.PageStack = FrmMain.PageStack.Where(Function(p) p.Page <> FormMain.PageType.VersionSelect).ToList
+        '实际启动加载器
+        McLaunchLoader.Start(Options, IsForceRestart:=True)
+        Return True
+    End Function
+
     ''' <summary>
     ''' 记录启动日志。
     ''' </summary>
     Public Sub McLaunchLog(Text As String)
-        RunInUi(Sub()
-                    FrmLaunchRight.LabLog.Text += vbCrLf & "[" & GetTimeNow() & "] " & Text
-                End Sub)
+        RunInUi(Sub() FrmLaunchRight.LabLog.Text += vbCrLf & "[" & GetTimeNow() & "] " & Text)
         Log("[Launch] " & Text)
     End Sub
 
     '启动状态切换
-    Public McLaunchLoader As New LoaderTask(Of String, Object)("Loader Launch", AddressOf McLaunchStart) With {.OnStateChanged = AddressOf McLaunchState}
+    Public McLaunchLoader As New LoaderTask(Of McLaunchOptions, Object)("Loader Launch", AddressOf McLaunchStart) With {.OnStateChanged = AddressOf McLaunchState}
     Public McLaunchLoaderReal As LoaderCombo(Of Object)
     Public McLaunchProcess As Process
     Public McLaunchWatcher As Watcher
-    Private Sub McLaunchState(Loader As LoaderTask(Of String, Object))
+    Private Sub McLaunchState(Loader As LoaderTask(Of McLaunchOptions, Object))
         Select Case McLaunchLoader.State
             Case LoadState.Finished, LoadState.Failed, LoadState.Waiting, LoadState.Aborted
                 FrmLaunchLeft.PageChangeToLogin()
@@ -28,7 +79,13 @@ Public Module ModLaunch
                 FrmLaunchRight.LabLog.Text = ""
         End Select
     End Sub
-    Private Sub McLaunchStart(Loader As LoaderTask(Of String, Object))
+    ''' <summary>
+    ''' 指定启动中断时的提示文本。若不为 Nothing 则会显示为绿色。
+    ''' </summary>
+    Private AbortHint As String = Nothing
+
+    '实际的启动方法
+    Private Sub McLaunchStart(Loader As LoaderTask(Of McLaunchOptions, Object))
         '开始动画
         RunInUiWait(AddressOf FrmLaunchLeft.PageChangeToLaunching)
         '预检测（预检测的错误将直接抛出）
@@ -48,7 +105,6 @@ Public Module ModLaunch
                 }) With {.ProgressWeight = 2, .Show = False, .Block = False},
                 McLoginLoader,
                 New LoaderCombo(Of String)("补全文件", DlClientFix(McVersionCurrent, False, AssetsIndexExistsBehaviour.DownloadInBackground, True)) With {.ProgressWeight = 15, .Show = False, .Block = True},
-                New LoaderTask(Of Integer, String)("提供参数中的服务器 IP", Sub(InnerLoader As LoaderTask(Of Integer, String)) InnerLoader.Output = Loader.Input) With {.ProgressWeight = 0.01, .Show = False},
                 New LoaderTask(Of String, List(Of McLibToken))("获取启动参数", AddressOf McLaunchArgumentMain) With {.ProgressWeight = 2},
                 New LoaderTask(Of List(Of McLibToken), Integer)("解压文件", AddressOf McLaunchNatives) With {.ProgressWeight = 2},
                 New LoaderTask(Of Integer, Integer)("预启动处理", AddressOf McLaunchPrerun) With {.ProgressWeight = 1},
@@ -59,6 +115,7 @@ Public Module ModLaunch
             If McLoginLoader.State = LoadState.Finished Then McLoginLoader.State = LoadState.Waiting '要求重启登录主加载器，它会自行决定是否启动副加载器
             '等待加载器执行并更新 UI
             McLaunchLoaderReal = LaunchLoader
+            AbortHint = Nothing
             LaunchLoader.Start()
             '任务栏进度条
             LoaderTaskbarAdd(LaunchLoader)
@@ -72,7 +129,11 @@ Public Module ModLaunch
                 Case LoadState.Finished
                     Hint(McVersionCurrent.Name & " 启动成功！", HintType.Finish)
                 Case LoadState.Aborted
-                    Hint("已取消启动！", HintType.Info)
+                    If AbortHint Is Nothing Then
+                        Hint("已取消启动！", HintType.Info)
+                    Else
+                        Hint(AbortHint, HintType.Finish)
+                    End If
                 Case LoadState.Failed
                     Throw LaunchLoader.Error
                 Case Else
@@ -92,7 +153,7 @@ NextInner:
                 GoTo NextInner
             Else
                 '没有特殊处理过的错误信息
-                McLaunchLog("错误：" & GetString(ex, False))
+                McLaunchLog("错误：" & GetExceptionDetail(ex))
                 Log(ex, "Minecraft 启动失败", LogLevel.Msgbox, "启动失败")
                 Throw
             End If
@@ -492,7 +553,7 @@ SkipLogin:
                 McLoginRequestValidate(Data)
                 GoTo LoginFinish
             Catch ex As Exception
-                Dim AllMessage = GetString(ex)
+                Dim AllMessage = GetExceptionSummary(ex)
                 McLaunchLog("验证登录失败：" & AllMessage)
                 If (AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout")) AndAlso Not AllMessage.Contains("403") Then
                     McLaunchLog("已触发超时登录失败")
@@ -507,7 +568,7 @@ Refresh:
                 McLoginRequestRefresh(Data, NeedRefresh)
                 GoTo LoginFinish
             Catch ex As Exception
-                McLaunchLog("刷新登录失败：" & GetString(ex))
+                McLaunchLog("刷新登录失败：" & GetExceptionSummary(ex))
             End Try
             Data.Progress = If(NeedRefresh, 0.85, 0.45)
         End If
@@ -516,7 +577,7 @@ Refresh:
             If Data.IsAborted Then Throw New ThreadInterruptedException
             NeedRefresh = McLoginRequestLogin(Data)
         Catch ex As Exception
-            McLaunchLog("登录失败：" & GetString(ex))
+            McLaunchLog("登录失败：" & GetExceptionSummary(ex))
             Throw
         End Try
         If NeedRefresh Then
@@ -599,7 +660,7 @@ LoginFinish:
             Names.Insert(0, Input.UserName)
             Setup.Set("LoginLegacyName", Join(Names.ToArray, "¨"))
         Catch ex As Exception
-            Dim AllMessage As String = GetString(ex)
+            Dim AllMessage As String = GetExceptionSummary(ex)
             Log(ex, "登录失败原始错误信息", LogLevel.Normal)
             Dim ThrowEx As Exception = ex
             If AllMessage.Contains("403") Then
@@ -607,7 +668,7 @@ LoginFinish:
             ElseIf AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout") OrElse AllMessage.Contains("网络请求失败") Then
                 ThrowEx = New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查 HiPer 联机模块的连接状况是否良好，或选择其他登录方式！")
             End If
-            McLaunchLog("登录失败：" & GetString(ThrowEx))
+            McLaunchLog("登录失败：" & GetExceptionSummary(ThrowEx))
             Throw ThrowEx
         End Try
     End Sub
@@ -737,7 +798,7 @@ LoginFinish:
             McLaunchLog("登录成功（Login, " & Data.Input.Token & "）")
             Return NeedRefresh
         Catch ex As Exception
-            Dim AllMessage As String = GetString(ex)
+            Dim AllMessage As String = GetExceptionSummary(ex)
             Log(ex, "登录失败原始错误信息", LogLevel.Normal)
             If AllMessage.Contains("410") AndAlso AllMessage.Contains("Migrated") Then
                 Throw New Exception("$登录失败：该 Mojang 账号已迁移至微软账号，请在上方的登录方式中选择 微软 并再次尝试登录！")
@@ -944,7 +1005,7 @@ SystemBrowser:
         Try
             Result = NetRequestMuity("https://api.minecraftservices.com/authentication/login_with_xbox", "POST", Request, "application/json", 2)
         Catch ex As Net.WebException
-            Dim Message As String = GetString(ex)
+            Dim Message As String = GetExceptionSummary(ex)
             If Message.Contains("(429)") Then
                 Log(ex, "微软登录第 5 步汇报 429")
                 Throw New Exception("$登录尝试太过频繁，请等待几分钟后再试！")
@@ -968,13 +1029,22 @@ SystemBrowser:
         Try
             Result = NetRequestMuity("https://api.minecraftservices.com/minecraft/profile", "GET", "", "application/json", 2, New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}})
         Catch ex As Net.WebException
-            Dim Message As String = GetString(ex)
+            Dim Message As String = GetExceptionSummary(ex)
             If Message.Contains("(429)") Then
                 Log(ex, "微软登录第 6 步汇报 429")
                 Throw New Exception("$登录尝试太过频繁，请等待几分钟后再试！")
             ElseIf Message.Contains("(404)") Then
                 Log(ex, "微软登录第 6 步汇报 404")
-                Throw New Exception("$你可能没有在购买后去 Minecraft 官网创建游戏档案，或者没有购买 Minecraft。")
+                RunInNewThread(Sub()
+                                   Select Case MyMsgBox("你可能没有在 Minecraft 官网创建档案，或者没有购买 Minecraft。" & vbCrLf &
+                                            "如果你已经购买了游戏，请在官网上创建档案后再试。", "登录失败", "创建档案", "购买 Minecraft", "取消")
+                                       Case 1
+                                           OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
+                                       Case 2
+                                           OpenWebsite("https://www.minecraft.net/zh-hans/store/minecraft-java-bedrock-edition-pc")
+                                   End Select
+                               End Sub, "Login Failed: Create Profile")
+                Throw New Exception("$$")
             Else
                 Throw
             End If
@@ -1165,10 +1235,8 @@ SystemBrowser:
     ''' </summary>
     Public Function ExtractJavaWrapper() As String
         Dim WrapperPath As String = GetJavaWrapperDir() & "\JavaWrapper.jar"
-        If Not File.Exists(WrapperPath) OrElse New FileInfo(WrapperPath).Length <> 16818 Then
-            WriteFile(WrapperPath, GetResources("JavaWrapper"))
-            Log("[Java] 已自动释放 Java Wrapper：" & WrapperPath)
-        End If
+        WriteFile(WrapperPath, GetResources("JavaWrapper"))
+        Log("[Java] 已释放 Java Wrapper：" & WrapperPath)
         Return WrapperPath
     End Function
     ''' <summary>
@@ -1228,7 +1296,7 @@ SystemBrowser:
         '全屏
         If Setup.Get("LaunchArgumentWindowType") = 0 Then Arguments += " --fullscreen"
         '进服
-        Dim Server As String = If(String.IsNullOrEmpty(Loader.Input), Setup.Get("VersionServerEnter", McVersionCurrent), Loader.Input)
+        Dim Server As String = If(String.IsNullOrEmpty(McLaunchLoader.Input.ServerIp), Setup.Get("VersionServerEnter", McVersionCurrent), McLaunchLoader.Input.ServerIp)
         If Server.Length > 0 Then
             If Server.Contains(":") Then
                 '包含端口号
@@ -1579,7 +1647,7 @@ NextVersion:
                             File.Delete(FilePath)
                         Catch ex As UnauthorizedAccessException
                             McLaunchLog("删除原 dll 访问被拒绝，这通常代表有一个 MC 正在运行，跳过解压：" & FilePath)
-                            McLaunchLog("实际的错误信息：" & GetString(ex))
+                            McLaunchLog("实际的错误信息：" & GetExceptionSummary(ex))
                             Exit For
                         End Try
                     End If
@@ -1599,7 +1667,7 @@ NextVersion:
                 File.Delete(FileName)
             Catch ex As UnauthorizedAccessException
                 McLaunchLog("删除多余文件访问被拒绝，跳过删除步骤")
-                McLaunchLog("实际的错误信息：" & GetString(ex))
+                McLaunchLog("实际的错误信息：" & GetExceptionSummary(ex))
                 Exit Sub
             End Try
         Next
@@ -1832,6 +1900,30 @@ IgnoreCustomSkin:
     End Sub
     Private Sub McLaunchRun(Loader As LoaderTask(Of Integer, Process))
 
+        '输出 bat
+        Try
+            Dim CmdString As String =
+                "@echo off" & vbCrLf &
+                "title 启动 - " & McVersionCurrent.Name & vbCrLf &
+                "echo 游戏正在启动，请稍候。" & vbCrLf &
+                "set APPDATA=""" & PathMcFolder & """" & vbCrLf &
+                "cd /D """ & PathMcFolder & """" & vbCrLf &
+                """" & McLaunchJavaSelected.PathJava & """ " & McLaunchArgument & vbCrLf &
+                "echo 游戏已退出。" & vbCrLf &
+                "pause"
+            WriteFile(If(McLaunchLoader.Input.SaveBatch, Path & "PCL\LatestLaunch.bat"), CmdString, Encoding:=Encoding.GetEncoding("GB18030"))
+            If McLaunchLoader.Input.SaveBatch IsNot Nothing Then
+                McLaunchLog("导出启动脚本完成，强制结束启动过程")
+                AbortHint = "导出启动脚本成功！"
+                OpenExplorer("/select,""" & McLaunchLoader.Input.SaveBatch & """")
+                Loader.Parent.Abort()
+                Exit Sub '导出脚本完成
+            End If
+        Catch ex As Exception
+            Log(ex, "输出启动脚本失败")
+            If McLaunchLoader.Input.SaveBatch IsNot Nothing Then Throw ex '直接触发启动失败
+        End Try
+
         '启动信息
         Dim GameProcess = New Process()
         Dim StartInfo As New ProcessStartInfo(McLaunchJavaSelected.PathJavaw)
@@ -1860,22 +1952,6 @@ IgnoreCustomSkin:
         McLaunchLog("已启动游戏进程：" & McLaunchJavaSelected.PathJavaw)
         Loader.Output = GameProcess
         McLaunchProcess = GameProcess
-
-        '输出 bat
-        Try
-            Dim CmdString As String =
-                "@echo off" & vbCrLf &
-                "title 启动 - " & McVersionCurrent.Name & vbCrLf &
-                "echo 游戏正在启动，请稍候。" & vbCrLf &
-                "set APPDATA=""" & PathMcFolder & """" & vbCrLf &
-                "cd /D """ & PathMcFolder & """" & vbCrLf &
-                """" & McLaunchJavaSelected.PathJava & """ " & McLaunchArgument & vbCrLf &
-                "echo 游戏已退出。" & vbCrLf &
-                "pause"
-            WriteFile(Path & "PCL\LatestLaunch.bat", CmdString, Encoding:=Encoding.GetEncoding("GB18030"))
-        Catch ex As Exception
-            Log(ex, "输出启动脚本失败")
-        End Try
 
         '进程优先级处理
         Try

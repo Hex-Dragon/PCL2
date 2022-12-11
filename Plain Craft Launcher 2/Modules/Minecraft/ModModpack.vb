@@ -12,7 +12,7 @@
     ''' <summary>
     ''' 安装一个给定的整合包文件，返回是否安装成功。必须在工作线程执行。
     ''' </summary>
-    Public Function ModpackInstall(File As String, Optional VersionName As String = Nothing, Optional ShowHint As Boolean = True) As Boolean
+    Public Function ModpackInstall(File As String, Optional VersionName As String = Nothing, Optional ShowHint As Boolean = True, Optional Logo As String = Nothing) As Boolean
         Log("[ModPack] 整合包安装请求：" & If(File, "null"))
         Dim Archive As Compression.ZipArchive = Nothing
         Dim ArchiveBaseFolder As String = ""
@@ -54,7 +54,7 @@
                     If FullNames(1) = "mmc-pack.json" Then PackType = 2 : Exit Try 'MMC 整合包
                 Next
             Catch ex As Exception
-                If GetString(ex, False, True).Contains("Error.WinIOError") Then
+                If GetExceptionDetail(ex, True).Contains("Error.WinIOError") Then
                     Log(ex, "打开整合包文件失败", If(ShowHint, LogLevel.Hint, LogLevel.Normal))
                     Return False
                 ElseIf File.ToLower.EndsWith(".rar") Then
@@ -69,7 +69,7 @@
             Select Case PackType
                 Case 0
                     Log("[ModPack] 整合包种类：CurseForge")
-                    InstallPackCurseForge(File, Archive, ArchiveBaseFolder, VersionName)
+                    InstallPackCurseForge(File, Archive, ArchiveBaseFolder, VersionName, Logo)
                 Case 1
                     Log("[ModPack] 整合包种类：HMCL")
                     InstallPackHMCL(File, Archive, ArchiveBaseFolder)
@@ -156,7 +156,7 @@ Retry:
     ''' 获取安装 CurseForge 整合包的加载器，若失败或跳过则返回 Nothing。
     ''' 加载器以安装目标版本文件夹为输入。
     ''' </summary>
-    Private Function InstallPackCurseForgeLoader(FileAddress As String, Archive As Compression.ZipArchive, ArchiveBaseFolder As String, VersionName As String) As LoaderCombo(Of String)
+    Private Function InstallPackCurseForgeLoader(FileAddress As String, Archive As Compression.ZipArchive, ArchiveBaseFolder As String, VersionName As String, Optional Logo As String = Nothing) As LoaderCombo(Of String)
         '读取 Json 文件
         Dim Json As JObject
         Try
@@ -280,9 +280,18 @@ Retry:
         Loaders.Add(New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .Block = False, .ProgressWeight = InstallExpectTime})
         Loaders.Add(New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .ProgressWeight = MergeExpectTime})
         Loaders.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
-        Loaders.Add(New LoaderTask(Of String, String)("清理安装文件",
+        Loaders.Add(New LoaderTask(Of String, String)("最终整理文件",
                                                       Sub(Task As LoaderTask(Of String, String))
-                                                          Dim Target As String = PathMcFolder & "versions\" & VersionName & "\原始整合包.zip"
+                                                          '设置图标
+                                                          Dim VersionFolder As String = PathMcFolder & "versions\" & VersionName & "\"
+                                                          If Logo IsNot Nothing AndAlso File.Exists(Logo) Then
+                                                              File.Copy(Logo, VersionFolder & "PCL\Logo.png", True)
+                                                              WriteIni(VersionFolder & "PCL\Setup.ini", "Logo", "PCL\Logo.png")
+                                                              WriteIni(VersionFolder & "PCL\Setup.ini", "LogoCustom", "True")
+                                                              Log("[Download] 已设置整合包 Logo：" & Logo)
+                                                          End If
+                                                          '删除原始整合包文件
+                                                          Dim Target As String = VersionFolder & "原始整合包.zip"
                                                           If Not Setup.Get("ToolDownloadKeepModpack") AndAlso File.Exists(Target) Then
                                                               Log("[Download] 根据设置要求删除原始整合包文件：" & Target)
                                                               File.Delete(Target)
@@ -304,7 +313,7 @@ Retry:
         Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged = AddressOf McInstallState}
         Return Loader
     End Function
-    Private Sub InstallPackCurseForge(FileAddress As String, Archive As Compression.ZipArchive, ArchiveBaseFolder As String, Optional VersionName As String = Nothing)
+    Private Sub InstallPackCurseForge(FileAddress As String, Archive As Compression.ZipArchive, ArchiveBaseFolder As String, Optional VersionName As String = Nothing, Optional Logo As String = Nothing)
 
         '获取版本名
         Dim ShowRibble As Boolean = VersionName Is Nothing
@@ -326,7 +335,7 @@ Retry:
         End If
 
         '启动加载器
-        Dim Loader = InstallPackCurseForgeLoader(FileAddress, Archive, ArchiveBaseFolder, VersionName)
+        Dim Loader = InstallPackCurseForgeLoader(FileAddress, Archive, ArchiveBaseFolder, VersionName, Logo)
         If Loader Is Nothing Then Exit Sub
         Loader.Start(PathMcFolder & "versions\" & VersionName & "\")
         LoaderTaskbarAdd(Loader)

@@ -130,7 +130,9 @@
                 Case 6
                     Stack.Children.Add(ForgeDownloadListItem(Data, AddressOf ForgeSave_Click, True))
                 Case 7
-                    Stack.Children.Add(McDownloadListItem(Data, AddressOf FrmDownloadInstall.MinecraftSelected, False))
+                    Stack.Children.Add(McDownloadListItem(Data, Sub(sender, e) '不能使用 AddressOf，这导致了 #535，原因完全不明，疑似是编译器 Bug
+                                                                    FrmDownloadInstall.MinecraftSelected(sender, e)
+                                                                End Sub, False))
                 Case 8
                     Stack.Children.Add(CType(Data, DlCfFile).ToListItem(AddressOf FrmDownloadCfDetail.Save_Click))
                 Case 9

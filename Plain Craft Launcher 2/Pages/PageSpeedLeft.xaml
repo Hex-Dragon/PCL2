@@ -16,10 +16,10 @@
                 <Setter Property="Background">
                     <Setter.Value>
                         <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
-                            <GradientStop Color="{DynamicResource ColorObject9}" Offset="0"/>
+                            <GradientStop Color="{DynamicResource ColorObjectBg1}" Offset="0"/>
                             <GradientStop Color="{DynamicResource ColorObject3}" Offset="0.02"/>
                             <GradientStop Color="{DynamicResource ColorObject3}" Offset="0.98"/>
-                            <GradientStop Color="{DynamicResource ColorObject9}" Offset="1"/>
+                            <GradientStop Color="{DynamicResource ColorObjectBg1}" Offset="1"/>
                         </LinearGradientBrush>
                     </Setter.Value>
                 </Setter>

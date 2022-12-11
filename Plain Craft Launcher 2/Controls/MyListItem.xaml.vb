@@ -507,27 +507,26 @@
 
     '触发点击事件
     Private Sub Button_MouseUp(sender As Object, e As MouseButtonEventArgs) Handles Me.PreviewMouseLeftButtonUp
-        If IsMouseDown Then
-            RaiseEvent Click(sender, e)
-            If e.Handled Then Exit Sub
-            '触发自定义事件
-            If Not String.IsNullOrEmpty(EventType) Then
-                ModEvent.TryStartEvent(EventType, EventData)
-                e.Handled = True
-            End If
-            If e.Handled Then Exit Sub
-            '实际的单击处理
-            Select Case Type
-                Case CheckType.Clickable
-                    Log("[Control] 按下单击列表项：" & Title)
-                Case CheckType.RadioBox
-                    Log("[Control] 按下单选列表项：" & Title)
-                    If Not Checked Then SetChecked(True, True, True)
-                Case CheckType.CheckBox
-                    Log("[Control] 按下复选列表项（" & (Not Checked).ToString & "）：" & Title)
-                    SetChecked(Not Checked, True, True)
-            End Select
+        If Not IsMouseDown Then Exit Sub
+        RaiseEvent Click(sender, e)
+        If e.Handled Then Exit Sub
+        '触发自定义事件
+        If Not String.IsNullOrEmpty(EventType) Then
+            ModEvent.TryStartEvent(EventType, EventData)
+            e.Handled = True
         End If
+        If e.Handled Then Exit Sub
+        '实际的单击处理
+        Select Case Type
+            Case CheckType.Clickable
+                Log("[Control] 按下单击列表项：" & Title)
+            Case CheckType.RadioBox
+                Log("[Control] 按下单选列表项：" & Title)
+                If Not Checked Then SetChecked(True, True, True)
+            Case CheckType.CheckBox
+                Log("[Control] 按下复选列表项（" & (Not Checked).ToString & "）：" & Title)
+                SetChecked(Not Checked, True, True)
+        End Select
         'AniStart({
         '       AaScaleTransform(Me, 1.004 - CType(RenderTransform, ScaleTransform).ScaleX, 150,, New AniEaseOutFluent),
         '       AaScaleTransform(Me, -0.004, 100, 150, New AniEaseInFluent)
@@ -603,7 +602,7 @@
             If IsMouseOver AndAlso IsMouseOverAnimationEnabled Then
                 If ButtonStack IsNot Nothing Then Ani.Add(AaOpacity(ButtonStack, 1 - ButtonStack.Opacity, Time * 0.7, Time * 0.3))
                 Ani.AddRange({
-                             AaColor(RectBack, Border.BackgroundProperty, If(IsMouseDown, "ColorBrush6", "ColorBrush9"), Time),
+                             AaColor(RectBack, Border.BackgroundProperty, If(IsMouseDown, "ColorBrush6", "ColorBrushBg1"), Time),
                              AaOpacity(RectBack, 1 - RectBack.Opacity, Time,, New AniEaseOutFluent)
                          })
                 If IsScaleAnimationEnabled Then
@@ -630,7 +629,7 @@
             If IsMouseOver AndAlso IsMouseOverAnimationEnabled Then
                 If ButtonStack IsNot Nothing Then ButtonStack.Opacity = 1
                 '由于鼠标已经移入，所以直接实例化 RectBack
-                RectBack.Background = Color9
+                RectBack.Background = ColorBg1
                 RectBack.Opacity = 1
                 RectBack.RenderTransform = New ScaleTransform(1, 1)
                 Me.RenderTransform = New ScaleTransform(1, 1)

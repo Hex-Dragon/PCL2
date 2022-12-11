@@ -10,12 +10,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.4.3" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.4.3." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.4.4" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.4.4." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 270 'Release
+    Public Const VersionCode As Integer = 272 'Release
 #Else
-    Public Const VersionCode As Integer = 271 'Snapshot
+    Public Const VersionCode As Integer = 273 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -789,7 +789,7 @@ Public Module ModBase
     ''' 读取文件，如果失败则返回空字符串。
     ''' </summary>
     ''' <param name="FilePath">文件完整或相对路径。</param>
-    Public Function ReadFile(FilePath As String) As String
+    Public Function ReadFile(FilePath As String, Optional Encoding As Encoding = Nothing) As String
         Try
             '还原文件路径
             If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
@@ -799,7 +799,7 @@ Public Module ModBase
                     ReDim FileBytes(ReadStream.Length - 1)
                     ReadStream.Read(FileBytes, 0, ReadStream.Length)
                 End Using
-                ReadFile = DecodeBytes(FileBytes)
+                ReadFile = If(Encoding Is Nothing, DecodeBytes(FileBytes), Encoding.GetString(FileBytes))
             Else
                 Log("[System] 欲读取的文件不存在，已返回空字符串：" & FilePath)
                 Return ""
@@ -1223,7 +1223,7 @@ Re:
                 Return Nothing
             Catch ex As Exception
                 Log(ex, "检查文件出错")
-                Return GetString(ex)
+                Return GetExceptionSummary(ex)
             End Try
         End Function
     End Class
@@ -1325,59 +1325,99 @@ Re:
     Public vbRQ As Char = Convert.ToChar(8221)
 
     ''' <summary>
-    ''' 提取 Exception 摘要。
+    ''' 提取 Exception 的具体描述与堆栈。
     ''' </summary>
-    ''' <param name="IsLine">输出是否强制为单行，单行模型下不会输出调用堆栈。</param>
-    Public Function GetString(Ex As Exception, Optional IsLine As Boolean = True, Optional ShowAllTrace As Boolean = False) As String
+    ''' <param name="ShowAllTrace">是否必须显示所有堆栈。通常用于判定堆栈信息。</param>
+    Public Function GetExceptionDetail(Ex As Exception, Optional ShowAllTrace As Boolean = False) As String
         If Ex Is Nothing Then Return "无可用错误信息！"
-        Dim Desc As New List(Of String)
 
-        '自动错误判断
-        Dim RealEx = Ex
-        Do Until RealEx.InnerException Is Nothing
-            RealEx = RealEx.InnerException
+        '获取最底层的异常
+        Dim InnerEx As Exception = Ex
+        Do Until InnerEx.InnerException Is Nothing
+            InnerEx = InnerEx.InnerException
         Loop
-        If TypeOf RealEx Is TypeLoadException OrElse TypeOf RealEx Is MissingMethodException OrElse TypeOf RealEx Is NotImplementedException OrElse TypeOf RealEx Is TypeInitializationException Then
-            Desc.Add("系统环境存在问题，请尝试重装 .Net Framework 4.6.2 后再试")
-        ElseIf TypeOf RealEx Is UnauthorizedAccessException Then
-            Desc.Add("PCL2 权限不足，请尝试右键 PCL2，选择以管理员身份运行")
-        ElseIf TypeOf RealEx Is OutOfMemoryException Then
-            Desc.Add("电脑运行内存不足，PCL2 无法继续运行")
+
+        '获取各级错误的描述与堆栈信息
+        Dim DescList As New List(Of String)
+        Dim StackList As New List(Of String)
+        Do Until Ex Is Nothing
+            DescList.Add(Ex.Message.Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr & vbCr, vbCr).Replace(vbCr, vbCrLf))
+            If Ex.StackTrace IsNot Nothing Then
+                For Each St As String In Ex.StackTrace.Split(vbCrLf)
+                    If ShowAllTrace OrElse St.ToLower.Contains("pcl") Then StackList.Add(St.Replace(vbCr, String.Empty).Replace(vbLf, String.Empty))
+                Next
+            End If
+            Ex = Ex.InnerException
+        Loop
+        DescList = DescList.Distinct.ToList
+        Dim Desc As String = Join(DescList, vbCrLf & "→ ")
+        Dim Stack As String = If(StackList.Count > 0, vbCrLf & Join(StackList, vbCrLf), "")
+
+        '常见错误
+        Dim CommonReason As String = Nothing
+        If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
+            CommonReason = "PCL2 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。"
+        ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
+            CommonReason = "PCL2 的权限不足。请尝试右键 PCL2，选择以管理员身份运行。"
+        ElseIf TypeOf InnerEx Is OutOfMemoryException Then
+            CommonReason = "你的电脑运行内存不足，导致 PCL2 无法继续运行。请在关闭一部分不需要的程序后再试。"
+        ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
+            CommonReason = "你的网络环境不佳，导致难以连接到服务器。请重试，或尝试使用 VPN。"
         End If
 
-        If IsLine Then
-            '无内部错误的快速处理
-            If Ex.InnerException Is Nothing Then
-                If Desc.Count = 0 Then
-                    Return Ex.Message.Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr & vbCr, vbCr).Replace(vbCr, " ")
-                Else
-                    Return Desc.First
-                End If
-            End If
-            '构造输出信息
-            Do Until Ex Is Nothing
-                Desc.Add(Ex.Message.Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr & vbCr, vbCr).Replace(vbCr, " "))
-                Ex = Ex.InnerException
-            Loop
-            Desc.Reverse() '让最深层错误在最左边
-            GetString = Join(Desc, " → ")
+        '获取错误类型
+        Dim TypeDesc As String = If(InnerEx.GetType.FullName = "System.Exception", "", vbCrLf & "错误类型：" & InnerEx.GetType.FullName)
+
+        '构造输出信息
+        If CommonReason Is Nothing Then
+            Return Desc & Stack & TypeDesc
         Else
-            Dim Stack As New List(Of String)
-            '逐级追加描述与堆栈
-            Do Until Ex Is Nothing
-                Desc.Add(Ex.Message.Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr & vbCr, vbCr).Replace(vbCr, vbCrLf))
-                If Ex.StackTrace IsNot Nothing Then
-                    For Each St As String In Ex.StackTrace.Split(vbCrLf)
-                        If ShowAllTrace OrElse St.ToLower.Contains("pcl") Then Stack.Add(St.Replace(vbCr, String.Empty).Replace(vbLf, String.Empty))
-                    Next
-                End If
-                Ex = Ex.InnerException
-            Loop
-            '构造输出信息
-            Dim TypeName As String = RealEx.GetType.FullName
-            GetString = Join(Desc, vbCrLf & "Caused By: ") & If(Stack.Count > 0, vbCrLf & Join(Stack, vbCrLf), "") & If(TypeName = "System.Exception", "", vbCrLf & "错误类型：" & TypeName)
+            Return DescList.First & vbCrLf & CommonReason & vbCrLf & "————————————" & vbCrLf &
+                   "详细错误信息：" & vbCrLf & "→ " & Join(DescList.GetRange(1, DescList.Count - 1), vbCrLf & "→ ") & Stack & TypeDesc
         End If
     End Function
+    ''' <summary>
+    ''' 提取 Exception 描述，汇总到一行。
+    ''' </summary>
+    Public Function GetExceptionSummary(Ex As Exception) As String
+        If Ex Is Nothing Then Return "无可用错误信息！"
+
+        '获取最底层的异常
+        Dim InnerEx As Exception = Ex
+        Do Until InnerEx.InnerException Is Nothing
+            InnerEx = InnerEx.InnerException
+        Loop
+
+        '获取各级错误的描述
+        Dim DescList As New List(Of String)
+        Do Until Ex Is Nothing
+            DescList.Add(Ex.Message.Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr & vbCr, vbCr).Replace(vbCr, " "))
+            Ex = Ex.InnerException
+        Loop
+        DescList = DescList.Distinct.ToList
+
+        '常见错误
+        Dim Desc As String = Join(DescList, vbCrLf & "→ ")
+        Dim CommonReason As String = Nothing
+        If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
+            CommonReason = "PCL2 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。"
+        ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
+            CommonReason = "PCL2 的权限不足。请尝试右键 PCL2，选择以管理员身份运行。"
+        ElseIf TypeOf InnerEx Is OutOfMemoryException Then
+            CommonReason = "你的电脑运行内存不足，导致 PCL2 无法继续运行。请在关闭一部分不需要的程序后再试。"
+        ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
+            CommonReason = "你的网络环境不佳，导致难以连接到服务器。请重试，或尝试使用 VPN。"
+        End If
+
+        '构造输出信息
+        If CommonReason IsNot Nothing Then
+            Return DescList.First & "：" & CommonReason
+        Else
+            DescList.Reverse() '让最深层错误在最左边
+            Return Join(DescList, " → ")
+        End If
+    End Function
+
     ''' <summary>
     ''' 返回一个枚举对应的字符串。
     ''' </summary>
@@ -2432,10 +2472,10 @@ Retry:
         IsErrorTriggered = True
 
         '获取错误信息
-        Dim ExFull As String = Desc & "：" & GetString(Ex, False)
+        Dim ExFull As String = Desc & "：" & GetExceptionDetail(Ex)
 
         '输出日志
-        Dim AppendText As String = "[" & GetTimeNow() & "] " & Desc & "：" & GetString(Ex, False, True) & vbCrLf '减轻同步锁占用
+        Dim AppendText As String = "[" & GetTimeNow() & "] " & Desc & "：" & GetExceptionDetail(Ex, True) & vbCrLf '减轻同步锁占用
         If ModeDebug Then
             SyncLock LogListLock
                 LogList.Append(AppendText)
@@ -2453,19 +2493,19 @@ Retry:
             Case LogLevel.Normal
 #If DEBUG Then
             Case LogLevel.Developer
-                Dim ExLine As String = Desc & "：" & GetString(Ex, True)
+                Dim ExLine As String = Desc & "：" & GetExceptionSummary(Ex)
                 Hint("[开发者模式] " & ExLine, HintType.Info, False)
             Case LogLevel.Debug
-                Dim ExLine As String = Desc & "：" & GetString(Ex, True)
+                Dim ExLine As String = Desc & "：" & GetExceptionSummary(Ex)
                 Hint("[调试模式] " & ExLine, HintType.Info, False)
 #Else
             Case LogLevel.Developer
             Case LogLevel.Debug
-                Dim ExLine As String = Desc & "：" & GetString(Ex, True)
+                Dim ExLine As String = Desc & "：" & GetExceptionSummary(Ex)
                 If ModeDebug Then Hint("[调试模式] " & ExLine, HintType.Info, False)
 #End If
             Case LogLevel.Hint
-                Dim ExLine As String = Desc & "：" & GetString(Ex, True)
+                Dim ExLine As String = Desc & "：" & GetExceptionSummary(Ex)
                 Hint(ExLine, HintType.Critical, False)
             Case LogLevel.Msgbox
                 MyMsgBox(ExFull, Title)

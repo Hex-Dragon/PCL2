@@ -23,7 +23,9 @@
             <SolidColorBrush x:Key="ColorBrush6">#d5e6fd</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrush7">#e0eafd</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrush8">#eaf2fe</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrush9">#80e0eafd</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushBg0">#96c0f9</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushBg1">#bee0eafd</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushBg2">#50e0eafd</SolidColorBrush>
             <Color x:Key="ColorObject1">#343d4a</Color>
             <Color x:Key="ColorObject2">#0b5bcb</Color>
             <Color x:Key="ColorObject3">#1370f3</Color>
@@ -32,7 +34,9 @@
             <Color x:Key="ColorObject6">#d5e6fd</Color>
             <Color x:Key="ColorObject7">#e0eafd</Color>
             <Color x:Key="ColorObject8">#eaf2fe</Color>
-            <Color x:Key="ColorObject9">#40eaf2fe</Color>
+            <Color x:Key="ColorObjectBg0">#96c0f9</Color>
+            <Color x:Key="ColorObjectBg1">#bee0eafd</Color>
+            <Color x:Key="ColorObjectBg2">#50e0eafd</Color>
             <SolidColorBrush x:Key="ColorBrushGray1">#404040</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushGray2">#737373</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushGray3">#8c8c8c</SolidColorBrush>
@@ -53,6 +57,8 @@
             <SolidColorBrush x:Key="ColorBrushRedLight">#ff4c4c</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushRedDark">#ce2111</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushHalfWhite" Color="#44ffffff" />
+            <SolidColorBrush x:Key="ColorBrushSemiWhite" Color="#bbffffff" />
+            <SolidColorBrush x:Key="ColorBrushWhite" Color="#ffffff" />
             <SolidColorBrush x:Key="ColorBrushTransparent" Color="Transparent" />
             <SolidColorBrush x:Key="ColorBrushSemiTransparent">#01eaf2fe</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushBackgroundTransparentSidebar" Color="#D2FFFFFF" />
@@ -258,7 +264,7 @@
             <!-- TextBox -->
             <Style TargetType="local:MyTextBox">
                 <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="Background" Value="{StaticResource ColorBrushHalfWhite}" />
+                <Setter Property="Background" Value="{StaticResource ColorBrushBg2}" />
                 <Setter Property="FontSize" Value="13" />
                 <Setter Property="SelectionBrush" Value="{DynamicResource ColorBrush3}" />
                 <Setter Property="Foreground" Value="{DynamicResource ColorBrush1}" />
@@ -274,7 +280,7 @@
                 <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
                 <Setter Property="UndoLimit" Value="15" />
                 <Setter Property="MaxLength" Value="10000" />
-                <Setter Property="BorderBrush" Value="{DynamicResource ColorBrush1}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ColorBrushBg0}" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="TextBox">
@@ -283,13 +289,13 @@
                                     <RowDefinition MinHeight="28" />
                                     <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
-                                <Border Margin="{TemplateBinding Padding}" IsHitTestVisible="False" VerticalAlignment="Center" BorderThickness="0">
-                                    <TextBlock x:Name="labHint" Foreground="{StaticResource ColorBrushGray3}" Margin="7,0,0,0" Padding="{TemplateBinding BorderThickness}" FontSize="{TemplateBinding FontSize}" FontFamily="Resources/#PCL English, Microsoft YaHei UI" />
-                                </Border>
                                 <Border x:Name="border" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" CornerRadius="3">
                                     <ScrollViewer x:Name="PART_ContentHost" Style="{StaticResource ScrollViewerNoMargin}" RenderOptions.ClearTypeHint="Enabled" BorderThickness="0"
                                            Margin="5,0,0,0" Cursor="IBeam" />
                                     <!-- 由于未知原因，TextView 会有 2,0 的 Margin -->
+                                </Border>
+                                <Border Margin="{TemplateBinding Padding}" IsHitTestVisible="False" VerticalAlignment="Center" BorderThickness="0">
+                                    <TextBlock x:Name="labHint" Foreground="{DynamicResource ColorBrush1}" Opacity="0.3" Margin="7,0,0,0" Padding="{TemplateBinding BorderThickness}" FontSize="{TemplateBinding FontSize}" FontFamily="Resources/#PCL English, Microsoft YaHei UI" />
                                 </Border>
                                 <TextBlock Grid.Row="1" x:Name="labWrong" Height="0" Foreground="{TemplateBinding BorderBrush}" Padding="0,4,0,0" />
                             </Grid>
@@ -302,8 +308,8 @@
                 <Setter Property="VerticalContentAlignment" Value="Top" />
                 <Setter Property="SelectionBrush" Value="{DynamicResource ColorBrush3}" />
                 <Setter Property="Foreground" Value="{DynamicResource ColorBrush1}" />
-                <Setter Property="Background" Value="{StaticResource ColorBrushHalfWhite}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource ColorBrush1}" />
+                <Setter Property="Background" Value="{StaticResource ColorBrushBg2}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ColorBrushBg0}" />
                 <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
                 <Setter Property="HorizontalContentAlignment" Value="Left"/>
                 <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
@@ -317,19 +323,20 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsEnabled" Value="False">
                                     <Trigger.Setters>
-                                        <Setter Property="Foreground" Value="{StaticResource ColorBrushGray4}" />
-                                        <Setter Property="BorderBrush" Value="{StaticResource ColorBrushGray4}" />
+                                        <Setter Property="BorderBrush" Value="{StaticResource ColorBrushGray5}" />
+                                        <Setter Property="Background" Value="{StaticResource ColorBrushGray6}" />
                                     </Trigger.Setters>
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Trigger.Setters>
-                                        <Setter Property="BorderBrush" Value="{DynamicResource ColorBrush3}" />
+                                        <Setter Property="BorderBrush" Value="{DynamicResource ColorBrush4}" />
+                                        <Setter Property="Background" Value="{DynamicResource ColorBrush7}" />
                                     </Trigger.Setters>
                                 </Trigger>
                                 <Trigger Property="IsFocused" Value="True">
                                     <Trigger.Setters>
-                                        <Setter Property="Background" Value="{DynamicResource ColorBrush9}" />
-                                        <Setter Property="BorderBrush" Value="{DynamicResource ColorBrush4}" />
+                                        <Setter Property="BorderBrush" Value="{DynamicResource ColorBrush3}" />
+                                        <Setter Property="Background" Value="{DynamicResource ColorBrushSemiWhite}" />
                                     </Trigger.Setters>
                                 </Trigger>
                             </ControlTemplate.Triggers>
@@ -348,16 +355,12 @@
                     </local:MyListItem.Buttons>
                 </local:MyListItem>
             </DataTemplate>
-            <!--<DataTemplate x:Key="ComboBoxItemTemplateNormal">
-                <local:MyListItem Title="{Binding}" FontSize="13" PaddingRight="40" Height="26" Margin="-1,0,0,0" />
-            </DataTemplate>-->
             <Style TargetType="local:MyComboBox">
                 <Setter Property="OverridesDefaultStyle" Value="True" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
-                <Setter Property="Foreground" Value="{DynamicResource ColorBrush1}" />
-                <Setter Property="Background" Value="{StaticResource ColorBrushHalfWhite}" />
+                <Setter Property="Foreground" Value="{DynamicResource ColorBrushBg0}" />
+                <Setter Property="Background" Value="{DynamicResource ColorBrushBg2}" />
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                <!--<Setter Property="ItemTemplate" Value="{StaticResource ComboBoxItemTemplateNormal}"/>-->
                 <Setter Property="FontSize" Value="13" />
                 <Setter Property="MaxDropDownHeight" Value="160" />
                 <Setter Property="Template">

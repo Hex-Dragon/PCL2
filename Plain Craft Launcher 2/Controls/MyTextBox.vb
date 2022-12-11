@@ -212,35 +212,26 @@
             If IsEnabled Then
                 If ValidateResult = "" OrElse Not IsTextChanged Then
                     If IsFocused Then
-                        ForeColorName = "ColorBrush4"
-                        BackColorName = "ColorBrush9"
-                        AnimationTime = 60
-                    ElseIf IsMouseOver Then
                         ForeColorName = "ColorBrush3"
-                        BackColorName = "ColorBrushHalfWhite"
-                        AnimationTime = 100
-                    Else
-                        ForeColorName = "ColorBrush1"
-                        BackColorName = "ColorBrushHalfWhite"
-                        AnimationTime = 200
+                        BackColorName = "ColorBrushSemiWhite"
+                        AnimationTime = 10
+                    ElseIf IsMouseOver Then
+                        ForeColorName = "ColorBrush4"
+                        BackColorName = "ColorBrush7"
+                        AnimationTime = 50
+                    Else '未选中
+                        ForeColorName = "ColorBrushBg0"
+                        BackColorName = "ColorBrushBg2"
+                        AnimationTime = 50
                     End If
                 Else
                     ForeColorName = "ColorBrushRedLight"
                     BackColorName = "ColorBrushRedBack"
                     AnimationTime = 200
-                    'If IsFocused OrElse IsMouseOver Then
-                    '    ForeColorName = "ColorBrushRedLight"
-                    '    BackColorName = "ColorBrushRedBack"
-                    '    AnimationTime = 100
-                    'Else
-                    '    ForeColorName = "ColorBrushRedDark"
-                    '    BackColorName = "ColorBrushHalfWhite"
-                    '    AnimationTime = 200
-                    'End If
                 End If
             Else
-                ForeColorName = "ColorBrushGray4"
-                BackColorName = "ColorBrushHalfWhite"
+                ForeColorName = "ColorBrushGray5"
+                BackColorName = "ColorBrushGray6"
                 AnimationTime = 200
             End If
             '触发颜色动画

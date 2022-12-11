@@ -10,11 +10,14 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
-        If LastVersion < 270 Then 'Release 2.4.3
+        If LastVersion < 272 Then 'Release 2.4.4
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在版本设置页导出启动脚本、打开存档文件夹等"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 Mod、整合包下载的版本检查与显示"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修改部分配色，让整体边框变得更淡"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法从下载页安装最新 MC 版本的整合包的 Bug"))
             If LastVersion <= 267 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 LiteLoader 的 Bug"))
-            FeatureCount += 6
-            BugCount += 15
+            FeatureCount += 13
+            BugCount += 23
         End If
         If LastVersion < 268 Then 'Release 2.4.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "暂时关闭了联机功能"))
@@ -106,6 +109,14 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 273 Then 'Snapshot 2.4.4
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在版本设置页导出启动脚本、打开存档文件夹等"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修改部分配色，让整体边框变得更淡"))
+            If LastVersion = 271 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法同时开启多个 Minecraft 客户端的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法从下载页安装最新 MC 版本的整合包的 Bug"))
+            FeatureCount += 7
+            BugCount += 8
+        End If
         If LastVersion < 271 Then 'Snapshot 2.4.3
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 Mod、整合包下载的版本检查与显示"))
             If LastVersion <= 267 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 LiteLoader 的 Bug"))
@@ -1062,7 +1073,7 @@ Install:
     ''' <summary>
     ''' 上层页面的编号堆栈，用于返回。
     ''' </summary>
-    Private ReadOnly PageStack As New List(Of PageStackData)
+    Public PageStack As New List(Of PageStackData)
     Public Class PageStackData
 
         Public Page As PageType

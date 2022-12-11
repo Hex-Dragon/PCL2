@@ -145,9 +145,9 @@ Reopen:
             Try
                 CertRaw = NetRequestOnce("https://cert.mcer.cn/" & Cert & ".yml", "GET", "", "")
             Catch ex As Exception
-                If GetString(ex).Contains("(404)") Then
+                If GetExceptionSummary(ex).Contains("(404)") Then
                     Throw New CertOutdatedException '索引码无效或已过期
-                ElseIf GetString(ex).Contains("too many requests") Then
+                ElseIf GetExceptionSummary(ex).Contains("too many requests") Then
                     Throw New Exception("你的尝试太频繁了，请暂时啥都别点，等两分钟后再试……")
                 Else
                     Throw
@@ -799,7 +799,7 @@ WrongCode:
                     LabLoadDesc.Text = RealException.Message.TrimStart("$") & vbCrLf &
                                        "点击镐子重试，或者点击灰色的 × 取消。"
                 Else
-                    LabLoadDesc.Text = LoadStep & "失败：" & GetString(RealException) & vbCrLf &
+                    LabLoadDesc.Text = LoadStep & "失败：" & GetExceptionSummary(RealException) & vbCrLf &
                                        "点击镐子重试，或者点击灰色的 × 取消。"
                 End If
                 Log(Loader.Error, "HiPer 联机尝试失败")

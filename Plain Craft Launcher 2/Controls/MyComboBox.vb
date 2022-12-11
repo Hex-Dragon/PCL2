@@ -62,44 +62,40 @@
     '指向动画
     Public Sub RefreshColor() Handles Me.IsEnabledChanged, Me.MouseEnter, Me.MouseLeave, Me.PreviewMouseLeftButtonDown, Me.PreviewMouseLeftButtonUp, Me.GotKeyboardFocus
         '判断当前颜色
-        Dim ColorName As String
-        Dim BackName As String
+        Dim ForeColorName As String
+        Dim BackColorName As String
         Dim Time As Integer
         If IsEnabled Then
-            If IsEditable AndAlso Template.FindName("PART_EditableTextBox", Me).IsFocused Then
-                ColorName = "ColorBrush4"
-                BackName = "ColorBrush9"
-                Time = 60
-            ElseIf IsMouseDown OrElse IsDropDownOpen Then
-                ColorName = "ColorBrush3"
-                BackName = "ColorBrush9"
-                Time = 60
+            If IsMouseDown OrElse IsDropDownOpen OrElse (IsEditable AndAlso Template.FindName("PART_EditableTextBox", Me).IsFocused) Then
+                ForeColorName = "ColorBrush3"
+                BackColorName = "ColorBrushSemiWhite"
+                Time = 10
             ElseIf IsMouseOver Then
-                ColorName = "ColorBrush3"
-                BackName = "ColorBrushHalfWhite"
-                Time = 100
+                ForeColorName = "ColorBrush4"
+                BackColorName = "ColorBrush7"
+                Time = 50
             Else
-                ColorName = "ColorBrush1"
-                BackName = "ColorBrushHalfWhite"
-                Time = 200
+                ForeColorName = "ColorBrushBg0"
+                BackColorName = "ColorBrushBg2"
+                Time = 50
             End If
         Else
-            ColorName = "ColorBrushGray4"
-            BackName = "ColorBrushHalfWhite"
+            ForeColorName = "ColorBrushGray5"
+            BackColorName = "ColorBrushGray6"
             Time = 200
         End If
         '触发颜色动画
         If IsLoaded AndAlso AniControlEnabled = 0 Then '防止默认属性变更触发动画
             '有动画
             AniStart({
-                     AaColor(Me, ForegroundProperty, ColorName, Time),
-                     AaColor(Me, BackgroundProperty, BackName, Time)
+                     AaColor(Me, ForegroundProperty, ForeColorName, Time),
+                     AaColor(Me, BackgroundProperty, BackColorName, Time)
                  }, "MyComboBox Color " & Uuid)
         Else
             '无动画
             AniStop("MyComboBox Color " & Uuid)
-            SetResourceReference(ForegroundProperty, ColorName)
-            SetResourceReference(BackgroundProperty, BackName)
+            SetResourceReference(ForegroundProperty, ForeColorName)
+            SetResourceReference(BackgroundProperty, BackColorName)
         End If
     End Sub
 

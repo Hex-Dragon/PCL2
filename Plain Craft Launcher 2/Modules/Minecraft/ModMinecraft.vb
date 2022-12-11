@@ -1271,7 +1271,7 @@ Recheck:
             '检查文件夹
             If Not Directory.Exists(Path) Then
                 State = McVersionState.Error
-                Info = "该文件夹不存在"
+                Info = "未找到版本 " & Name
                 Return False
             End If
             '检查权限
@@ -1307,7 +1307,7 @@ Recheck:
             Catch ex As Exception
                 Log(ex, "依赖版本检查出错（" & Name & "）")
                 State = McVersionState.Error
-                Info = "未知错误：" & GetString(ex)
+                Info = "未知错误：" & GetExceptionSummary(ex)
                 Return False
             End Try
 
@@ -1319,7 +1319,6 @@ Recheck:
         ''' </summary>
         Public Function Load() As McVersion
             Try
-                Directory.CreateDirectory(Path & "PCL")
                 '检查版本，若出错则跳过数据确定阶段
                 If Not Check() Then GoTo ExitDataLoad
 #Region "确定版本分类"
@@ -1424,9 +1423,11 @@ ExitDataLoad:
                 '确定版本显示种类
                 DisplayType = ReadIni(Path & "PCL\Setup.ini", "DisplayType", McVersionCardType.Auto)
                 '写入缓存
-                WriteIni(Path & "PCL\Setup.ini", "State", State)
-                WriteIni(Path & "PCL\Setup.ini", "Info", Info)
-                WriteIni(Path & "PCL\Setup.ini", "Logo", Logo)
+                If Directory.Exists(Path) Then
+                    WriteIni(Path & "PCL\Setup.ini", "State", State)
+                    WriteIni(Path & "PCL\Setup.ini", "Info", Info)
+                    WriteIni(Path & "PCL\Setup.ini", "Logo", Logo)
+                End If
                 If State <> McVersionState.Error Then
                     WriteIni(Path & "PCL\Setup.ini", "ReleaseTime", ReleaseTime.ToString("yyyy-MM-dd HH:mm:ss"))
                     WriteIni(Path & "PCL\Setup.ini", "VersionFabric", Version.FabricVersion)
@@ -1439,7 +1440,7 @@ ExitDataLoad:
                     WriteIni(Path & "PCL\Setup.ini", "VersionOriginalSub", Version.McCodeSub)
                 End If
             Catch ex As Exception
-                Info = "未知错误：" & GetString(ex)
+                Info = "未知错误：" & GetExceptionSummary(ex)
                 Logo = "pack://application:,,,/images/Blocks/RedstoneBlock.png"
                 State = McVersionState.Error
                 Log(ex, "加载版本失败（" & Name & "）", LogLevel.Feedback)
@@ -1454,6 +1455,14 @@ ExitDataLoad:
             Dim version = TryCast(obj, McVersion)
             Return version IsNot Nothing AndAlso Path = version.Path
         End Function
+        Public Shared Operator =(a As McVersion, b As McVersion) As Boolean
+            If a Is Nothing AndAlso b Is Nothing Then Return True
+            If a Is Nothing OrElse b Is Nothing Then Return False
+            Return a.Path = b.Path
+        End Operator
+        Public Shared Operator <>(a As McVersion, b As McVersion) As Boolean
+            Return Not (a = b)
+        End Operator
 
     End Class
     Public Enum McVersionState
@@ -3661,7 +3670,7 @@ VersionFindFail:
                     End If
                 Next
             Catch ex As Exception
-                Result.Add("检查 Mod 时出错：" & GetString(ex) & vbCrLf & " - " & ModEntity.FileName)
+                Result.Add("检查 Mod 时出错：" & GetExceptionSummary(ex) & vbCrLf & " - " & ModEntity.FileName)
                 Log(ex, "检查 Mod 时出错")
             End Try
         Next
@@ -3737,8 +3746,8 @@ VersionFindFail:
             If Left = "未知版本" AndAlso Right = "未知版本" Then Return 0
             If Left <> "未知版本" AndAlso Right = "未知版本" Then Return -1
         End If
-        Dim Lefts = RegexSearch(Left.ToLower, "[a-z]+|[0-9]+")
-        Dim Rights = RegexSearch(Right.ToLower, "[a-z]+|[0-9]+")
+        Dim Lefts = RegexSearch(Left.ToLower.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
+        Dim Rights = RegexSearch(Right.ToLower.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
         Dim i As Integer = 0
         While True
             '两边均缺失，感觉是一个东西

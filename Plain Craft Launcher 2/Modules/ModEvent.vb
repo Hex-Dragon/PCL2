@@ -31,10 +31,10 @@
                                         '执行
                                         If Type = "打开文件" Then
                                             Dim Info As New ProcessStartInfo With {
-                                            .Arguments = If(Data.Length >= 2, Data(1), ""),
-                                            .FileName = Location,
-                                            .WorkingDirectory = WorkingDir
-                                        }
+                                                .Arguments = If(Data.Length >= 2, Data(1), ""),
+                                                .FileName = Location,
+                                                .WorkingDirectory = WorkingDir
+                                            }
                                             Process.Start(Info)
                                         Else '打开帮助
                                             PageOtherHelp.EnterHelpPage(Location)
@@ -45,28 +45,9 @@
                                     End Try
                                 End Sub)
                 Case "启动游戏"
-
-                    '初始化与前置条件检测
-                    If Not (FrmLaunchLeft.BtnLaunch.IsEnabled AndAlso FrmLaunchLeft.BtnLaunch.Visibility = Visibility.Visible AndAlso FrmLaunchLeft.BtnLaunch.IsHitTestVisible) Then
-                        Hint("已有游戏正在启动中！", HintType.Critical) : Exit Sub
+                    If McLaunchStart(New McLaunchOptions With {.ServerIp = If(Data.Length >= 2, Data(1), Nothing), .Version = New McVersion(Data(0))}) Then
+                        Hint("正在启动 " & Data(0) & "……")
                     End If
-                    If Not Directory.Exists(PathMcFolder & "versions\" & Data(0)) Then
-                        Hint("未在当前 Minecraft 文件夹找到版本 " & Data(0) & "！", HintType.Critical) : Exit Sub
-                    End If
-                    Dim ButtonVersion As New McVersion(Data(0))
-                    ButtonVersion.Load()
-                    If ButtonVersion.State = McVersionState.Error Then
-                        Hint("无法启动 " & Data(0) & "：" & ButtonVersion.Info, HintType.Critical) : Exit Sub
-                    End If
-
-                    '实际启动
-                    McVersionCurrent = ButtonVersion
-                    Setup.Set("LaunchVersionSelect", McVersionCurrent.Name)
-                    FrmLaunchLeft.PageLaunchLeft_Loaded()
-                    FrmLaunchLeft.RefreshButtonsUI()
-                    FrmMain.AprilGiveup()
-                    FrmLaunchLeft.LaunchButtonClick(If(Data.Length >= 2, Data(1), ""))
-                    FrmMain.PageChange(FormMain.PageType.Launch)
 
                 Case "复制文本"
                     ClipboardSet(Join(Data, "|"))

@@ -125,9 +125,13 @@
     '打开网页
     Public Shared Sub TryFeedback() Handles ItemFeedback.Click
         If Not CanFeedback(True) Then Exit Sub
-        If MyMsgBox("是否要打开反馈列表网页？" & vbCrLf & "如果无法打开该网页，请尝试使用加速器或 VPN。",
-                    "提醒", "打开", "取消") = 2 Then Exit Sub
-        Feedback(True, False)
+        Select Case MyMsgBox("是否要打开反馈列表网页？" & vbCrLf & "如果无法打开该网页，请尝试使用加速器或 VPN。",
+                    "反馈提示", "提交新反馈", "查看反馈列表", "取消")
+            Case 1
+                Feedback(True, False)
+            Case 2
+                OpenWebsite("https://github.com/Hex-Dragon/PCL2/issues/")
+        End Select
     End Sub
     Public Shared Sub TryVote() Handles ItemVote.Click
         If MyMsgBox("是否要打开新功能投票网页？" & vbCrLf & "如果无法打开该网页，请尝试使用加速器或 VPN。",

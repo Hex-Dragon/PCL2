@@ -1822,7 +1822,7 @@ Public Module ModDownloadLib
                 WriteIni(PathMcFolder & "PCL.ini", "VersionCache", "") '清空缓存（合并安装会先生成文件夹，这会在刷新时误判为可以使用缓存）
                 Hint(Loader.Name & "成功！", HintType.Finish)
             Case LoadState.Failed
-                Hint(Loader.Name & "失败：" & GetString(Loader.Error), HintType.Critical)
+                Hint(Loader.Name & "失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
             Case LoadState.Aborted
                 Hint(Loader.Name & "已取消！", HintType.Info)
             Case LoadState.Loading
@@ -1839,7 +1839,7 @@ Public Module ModDownloadLib
             Case LoadState.Finished
                 Hint(Loader.Name & "成功！", HintType.Finish)
             Case LoadState.Failed
-                Hint(Loader.Name & "失败：" & GetString(Loader.Error), HintType.Critical)
+                Hint(Loader.Name & "失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
             Case LoadState.Aborted
                 Hint(Loader.Name & "已取消！", HintType.Info)
             Case LoadState.Loading

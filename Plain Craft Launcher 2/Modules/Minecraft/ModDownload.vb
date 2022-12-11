@@ -610,7 +610,7 @@
         Try
             Result = NetGetCodeByDownload("http://files.minecraftforge.net/maven/net/minecraftforge/forge/index_" & Loader.Input & ".html")
         Catch ex As Exception
-            If GetString(ex).Contains("(404)") Then
+            If GetExceptionSummary(ex).Contains("(404)") Then
                 Throw New Exception("没有可用版本")
             Else
                 Throw
@@ -1254,6 +1254,12 @@
     ''' CurseForge 工程列表获取事件。
     ''' </summary>
     Public Sub DlCfProjectSub(Task As LoaderTask(Of DlCfProjectRequest, DlCfProjectResult))
+        '拒绝 1.13- Quilt（这个版本根本没有 Quilt）
+        If Not Task.Input.IsModPack AndAlso
+            If(Task.Input.ModLoader, 0) = 5 AndAlso VersionSortInteger(If(Task.Input.GameVersion, "1.15"), "1.14") = -1 Then
+            Throw New Exception("Quilt 不支持 Minecraft " & Task.Input.GameVersion)
+        End If
+
         Dim RawFilter As String = If(Task.Input.SearchFilter, "").Trim
         Task.Input.SearchFilter = RawFilter
         RawFilter = RawFilter.ToLower
@@ -1487,7 +1493,7 @@
             Dim Versions As New List(Of String)
             For Each Version In Data("gameVersions").Select(Function(t) t.ToString.Trim.ToLower)
                 If Version.StartsWith("1.") OrElse Version.Contains("w") Then
-                    Versions.Add(Version)
+                    Versions.Add(Version.Replace("-snapshot", " 快照"))
                 ElseIf Version = "forge" OrElse Version = "fabric" OrElse Version = "quilt" OrElse Version = "rift" Then
                     ModLoaders.Add(Version.First.ToString.ToUpper & Version.Substring(1))
                 End If

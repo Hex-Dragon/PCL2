@@ -412,7 +412,7 @@ RequestFinished:
             Throw
         Catch ex As WebException
             If ex.Status = WebExceptionStatus.Timeout Then
-                Throw New TimeoutException("连接服务器超时，请检查你的网络环境是否良好（" & Url & "）", ex)
+                Throw New WebException("连接服务器超时，请检查你的网络环境是否良好（" & Url & "）", ex)
             Else
                 '获取请求失败的返回
                 Dim Res As String = ""
@@ -1183,10 +1183,10 @@ SourceBreak:
                         Next
                     End SyncLock
                 End SyncLock
-                Dim IsTimeoutString As String = GetString(ex, False).ToLower.Replace(" ", "")
+                Dim IsTimeoutString As String = GetExceptionSummary(ex).ToLower.Replace(" ", "")
                 Dim IsTimeout As Boolean = IsTimeoutString.Contains("由于连接方在一段时间后没有正确答复或连接的主机没有反应") OrElse
                                            IsTimeoutString.Contains("超时") OrElse IsTimeoutString.Contains("timeout") OrElse IsTimeoutString.Contains("timedout")
-                Log("[Download] " & LocalName & " " & Info.Uuid & If(IsTimeout, "#：超时（" & (Timeout * 0.001) & "s）", "#：出错，" & GetString(ex, False)))
+                Log("[Download] " & LocalName & " " & Info.Uuid & If(IsTimeout, "#：超时（" & (Timeout * 0.001) & "s）", "#：出错，" & GetExceptionDetail(ex)))
                 Info.State = NetState.Error
                 ''使用该下载源的线程是否没有速度
                 ''下载超时也会导致没有速度，容易误判下载失败，所以已弃用此方法
@@ -1697,12 +1697,16 @@ Retry:
             SyncLock LockState
                 If State > LoadState.Loading Then Exit Sub
                 If ExList Is Nothing OrElse ExList.Count = 0 Then ExList = New List(Of Exception) From {New Exception("未知错误！")}
-                [Error] = ExList(0)
+                '寻找第一个不是 404 的下载源
+                Dim UsefulExs = ExList.Where(Function(e) Not e.Message.Contains("(404)")).ToList
+                [Error] = If(UsefulExs.Count > 0, UsefulExs(0), ExList(0))
                 '获取实际失败的文件
                 SyncLock FilesLock
                     For Each File In Files
                         If File.State = NetState.Error Then
-                            [Error] = New Exception("文件下载失败：" & File.LocalPath & "（第一下载源：" & File.Sources(0).Url & "）", ExList(0))
+                            [Error] = New Exception("文件下载失败：" & File.LocalPath & vbCrLf & Join(
+                                                        File.Sources.Select(Function(s) If(s.Ex Is Nothing, s.Url, s.Ex.Message & "（" & s.Url & "）")).ToList(),
+                                                    vbCrLf), [Error])
                             Exit For
                         End If
                     Next
@@ -1719,7 +1723,7 @@ Retry:
             '在退出同步锁后再进行日志输出
             Dim ErrOutput As New List(Of String)
             For Each Ex As Exception In ExList
-                ErrOutput.Add(GetString(Ex, False))
+                ErrOutput.Add(GetExceptionDetail(Ex))
             Next
             Log("[Download] " & Join(ArrayNoDouble(ErrOutput.ToArray), vbCrLf))
         End Sub

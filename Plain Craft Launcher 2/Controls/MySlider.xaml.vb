@@ -45,13 +45,13 @@
                 End If
 
                 If IsLoaded AndAlso AniControlEnabled = 0 Then
-                    If ActualWidth < 16 Then Exit Property
-                    Dim NewWidth As Double = _Value / MaxValue * (ActualWidth - 16)
-                    Dim DeltaProcess As Double = Math.Abs(LineFore.Width / (ActualWidth - 16) - _Value / MaxValue)
+                    If ActualWidth < ShapeDot.Width Then Exit Property
+                    Dim NewWidth As Double = _Value / MaxValue * (ActualWidth - ShapeDot.Width)
+                    Dim DeltaProcess As Double = Math.Abs(LineFore.Width / (ActualWidth - ShapeDot.Width) - _Value / MaxValue)
                     Dim Time As Double = (1 - Math.Pow(1 - DeltaProcess, 3)) * 300 + If(ChangeByKey, 100, 0)
                     AniStart({
                             AaWidth(LineFore, Math.Max(0, NewWidth + If(NewWidth < 0.5, 0, 0.5)) - LineFore.Width, Time,, If(Time > 50, New AniEaseOutFluent, New AniEaseLinear)),
-                            AaWidth(LineBack, Math.Max(0, ActualWidth - 16 - NewWidth + If(ActualWidth - 16 - NewWidth < 0.5, 0, 0.5)) - LineBack.Width, Time,, If(Time > 50, New AniEaseOutFluent, New AniEaseLinear)),
+                            AaWidth(LineBack, Math.Max(0, ActualWidth - ShapeDot.Width - NewWidth + If(ActualWidth - ShapeDot.Width - NewWidth < 0.5, 0, 0.5)) - LineBack.Width, Time,, If(Time > 50, New AniEaseOutFluent, New AniEaseLinear)),
                             AaX(ShapeDot, NewWidth - ShapeDot.Margin.Left, Time,, If(Time > 50, New AniEaseOutFluent, New AniEaseLinear))
                          }, "MySlider Progress " & Uuid)
                 Else
@@ -67,9 +67,9 @@
     Private Sub RefreshWidth(sender As Object, e As SizeChangedEventArgs) Handles Me.SizeChanged
         If Not IsNothing(e) Then PanMain.Width = e.NewSize.Width
         AniStop("MySlider Progress " & Uuid)
-        Dim NewWidth As Double = _Value / MaxValue * (ActualWidth - 16)
+        Dim NewWidth As Double = _Value / MaxValue * (ActualWidth - ShapeDot.Width)
         LineFore.Width = Math.Max(0, NewWidth + If(NewWidth < 0.5, 0, 0.5))
-        LineBack.Width = Math.Max(0, ActualWidth - 16 - NewWidth + If(ActualWidth - 16 - NewWidth < 0.5, 0, 0.5))
+        LineBack.Width = Math.Max(0, ActualWidth - ShapeDot.Width - NewWidth + If(ActualWidth - ShapeDot.Width - NewWidth < 0.5, 0, 0.5))
         SetLeft(ShapeDot, NewWidth)
     End Sub
 
@@ -79,9 +79,10 @@
     Private Sub DragStart(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseLeftButtonDown
         e.Handled = True '防止 ScrollViewer 失焦问题
         DragControl = Me
+        RefreshColor()
         FrmMain.DragDoing()
         AniStart({
-                 AaScaleTransform(ShapeDot, 0.8 - CType(ShapeDot.RenderTransform, ScaleTransform).ScaleX, 75,, New AniEaseOutFluent)
+                 AaScaleTransform(ShapeDot, 1.3 - CType(ShapeDot.RenderTransform, ScaleTransform).ScaleX, 40,, New AniEaseOutFluent)
             }, "MySlider Scale " & Uuid)
         '更新 Popup
         If GetHintText IsNot Nothing Then
@@ -91,7 +92,7 @@
         End If
     End Sub
     Public Sub DragDoing()
-        Dim Percent As Double = MathRange((Mouse.GetPosition(PanMain).X - 8) / (ActualWidth - 16), 0, 1)
+        Dim Percent As Double = MathRange((Mouse.GetPosition(PanMain).X - ShapeDot.Width / 2) / (ActualWidth - ShapeDot.Width), 0, 1)
         Dim NewValue As Integer = Percent * MaxValue
         If Not NewValue = Value Then
             Value = NewValue
@@ -113,28 +114,39 @@
         Try
 
             '判断当前颜色
-            Dim ColorName As String
+            Dim ForegroundName As String, DotFillName As String
             Dim AnimationTime As Integer
             If IsEnabled Then
-                If IsMouseOver OrElse (Not IsNothing(DragControl) AndAlso DragControl.Equals(Me)) Then
-                    ColorName = "ColorBrush3"
-                    AnimationTime = 100
+                If Not IsNothing(DragControl) AndAlso DragControl.Equals(Me) Then
+                    ForegroundName = "ColorBrush3"
+                    DotFillName = "ColorBrush3"
+                    AnimationTime = 40
+                ElseIf IsMouseOver Then
+                    ForegroundName = "ColorBrush3"
+                    DotFillName = "ColorBrush3"
+                    AnimationTime = 40
                 Else
-                    ColorName = "ColorBrush1"
-                    AnimationTime = 200
+                    ForegroundName = "ColorBrush4"
+                    DotFillName = "ColorBrush4"
+                    AnimationTime = 100
                 End If
             Else
-                ColorName = "ColorBrushGray4"
+                ForegroundName = "ColorBrushGray5"
+                DotFillName = "ColorBrushGray5"
                 AnimationTime = 200
             End If
             '触发颜色动画
             If IsLoaded AndAlso AniControlEnabled = 0 Then '防止默认属性变更触发动画
                 '有动画
-                AniStart({AaColor(Me, BorderBrushProperty, ColorName, AnimationTime)}, "MySlider Color " & Uuid)
+                AniStart({
+                            AaColor(Me, BorderBrushProperty, ForegroundName, AnimationTime),
+                            AaColor(ShapeDot, Ellipse.FillProperty, DotFillName, AnimationTime)
+                         }, "MySlider Color " & Uuid)
             Else
                 '无动画
                 AniStop("MySlider Color " & Uuid)
-                SetResourceReference(BorderBrushProperty, ColorName)
+                SetResourceReference(BorderBrushProperty, ForegroundName)
+                ShapeDot.SetResourceReference(Ellipse.FillProperty, DotFillName)
             End If
 
         Catch ex As Exception

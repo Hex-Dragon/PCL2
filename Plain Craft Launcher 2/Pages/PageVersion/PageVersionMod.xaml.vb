@@ -267,7 +267,7 @@
                 Case McMod.McModState.Disabled
                     NewPath = ModEntity.Path.Substring(0, ModEntity.Path.Count - ".disabled".Count)
                 Case McMod.McModState.Unavaliable
-                    MyMsgBox("无法读取此 Mod 的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetString(ModEntity.FileUnavailableReason, False), "Mod 读取失败")
+                    MyMsgBox("无法读取此 Mod 的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntity.FileUnavailableReason), "Mod 读取失败")
                     Exit Sub
             End Select
             '重命名

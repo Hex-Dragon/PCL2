@@ -124,13 +124,13 @@
         Log("[Control] 按下复选框（" & (Not Checked).ToString & "）：" & Text)
         MouseDowned = False
         SetChecked(Not Checked, True, True)
-        AniStart(AaColor(ShapeBorder, Border.BackgroundProperty, "ColorBrushHalfWhite", 100), "MyCheckBox Background " & Uuid)
+        AniStart(AaColor(ShapeBorder, Border.BackgroundProperty, "ColorBrushBg2", 100), "MyCheckBox Background " & Uuid)
     End Sub
     Private Sub Checkbox_MouseDown() Handles Me.MouseLeftButtonDown
         If Not AllowMouseDown Then Exit Sub
         MouseDowned = True
         Focus()
-        AniStart(AaColor(ShapeBorder, Border.BackgroundProperty, "ColorBrush9", 100), "MyCheckBox Background " & Uuid)
+        AniStart(AaColor(ShapeBorder, Border.BackgroundProperty, "ColorBrushBg1", 100), "MyCheckBox Background " & Uuid)
         If Checked Then
             AniStart({
                      AaScale(ShapeBorder, 16.5 - ShapeBorder.Width, 1000, , New AniEaseOutFluent(AniEasePower.Strong), Absolute:=True),
@@ -143,7 +143,7 @@
     Private Sub Checkbox_MouseLeave() Handles Me.MouseLeave
         If Not MouseDowned Then Exit Sub
         MouseDowned = False
-        AniStart(AaColor(ShapeBorder, Border.BackgroundProperty, "ColorBrushHalfWhite", 100), "MyCheckBox Background " & Uuid)
+        AniStart(AaColor(ShapeBorder, Border.BackgroundProperty, "ColorBrushBg2", 100), "MyCheckBox Background " & Uuid)
         If Checked Then
             AniStart({
                      AaScale(ShapeBorder, 18 - ShapeBorder.Width, 400, , New AniEaseOutFluent(AniEasePower.Strong), Absolute:=True),

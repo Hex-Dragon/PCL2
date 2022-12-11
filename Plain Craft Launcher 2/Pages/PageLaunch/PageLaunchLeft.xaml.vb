@@ -352,10 +352,10 @@ UnknownType:
             If ex.GetType.Name = "ThreadInterruptedException" Then
                 Data.Output = ""
                 Exit Sub
-            ElseIf GetString(ex).Contains("429") Then
+            ElseIf GetExceptionSummary(ex).Contains("429") Then
                 Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
                 Log("[Minecraft] 获取正版皮肤失败（" & UserName & "）：获取皮肤太过频繁，请 5 分钟后再试！", LogLevel.Hint)
-            ElseIf GetString(ex).Contains("未设置自定义皮肤") Then
+            ElseIf GetExceptionSummary(ex).Contains("未设置自定义皮肤") Then
                 Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
                 Log("[Minecraft] 用户未设置自定义皮肤，跳过皮肤加载")
             Else
@@ -400,10 +400,10 @@ Finish:
             If ex.GetType.Name = "ThreadInterruptedException" Then
                 Data.Output = ""
                 Exit Sub
-            ElseIf GetString(ex).Contains("429") Then
+            ElseIf GetExceptionSummary(ex).Contains("429") Then
                 Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
                 Log("[Minecraft] 获取正版皮肤失败（" & UserName & "）：获取皮肤太过频繁，请 5 分钟后再试！", LogLevel.Hint)
-            ElseIf GetString(ex).Contains("未设置自定义皮肤") Then
+            ElseIf GetExceptionSummary(ex).Contains("未设置自定义皮肤") Then
                 Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
                 Log("[Minecraft] 用户未设置自定义皮肤，跳过皮肤加载")
             Else
@@ -470,7 +470,7 @@ UseDefault:
                     If ex.GetType.Name = "ThreadInterruptedException" Then
                         Data.Output = ""
                         Exit Sub
-                    ElseIf GetString(ex).Contains("429") Then
+                    ElseIf GetExceptionSummary(ex).Contains("429") Then
                         Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(ID)) & ".png"
                         Log("获取离线登录使用的正版皮肤失败（" & ID & "）：获取皮肤太过频繁，请 5 分钟后再试！")
                     Else
@@ -522,10 +522,10 @@ UseDefault:
             If ex.GetType.Name = "ThreadInterruptedException" Then
                 Data.Output = ""
                 Exit Sub
-            ElseIf GetString(ex).Contains("429") Then
+            ElseIf GetExceptionSummary(ex).Contains("429") Then
                 Data.Output = PathImage & "Skins/Steve.png"
                 Log("[Minecraft] 获取统一通行证皮肤失败（" & UserName & "）：获取皮肤太过频繁，请 5 分钟后再试！", LogLevel.Hint)
-            ElseIf GetString(ex).Contains("未设置自定义皮肤") Then
+            ElseIf GetExceptionSummary(ex).Contains("未设置自定义皮肤") Then
                 Data.Output = PathImage & "Skins/Steve.png"
                 Log("[Minecraft] 用户未设置自定义皮肤，跳过皮肤加载")
             Else
@@ -570,10 +570,10 @@ Finish:
             If ex.GetType.Name = "ThreadInterruptedException" Then
                 Data.Output = ""
                 Exit Sub
-            ElseIf GetString(ex).Contains("429") Then
+            ElseIf GetExceptionSummary(ex).Contains("429") Then
                 Data.Output = PathImage & "Skins/Steve.png"
                 Log("[Minecraft] 获取 Authlib-Injector 皮肤失败（" & UserName & "）：获取皮肤太过频繁，请 5 分钟后再试！", LogLevel.Hint)
-            ElseIf GetString(ex).Contains("未设置自定义皮肤") Then
+            ElseIf GetExceptionSummary(ex).Contains("未设置自定义皮肤") Then
                 Data.Output = PathImage & "Skins/Steve.png"
                 Log("[Minecraft] 用户未设置自定义皮肤，跳过皮肤加载")
             Else
@@ -601,26 +601,23 @@ Finish:
         FrmMain.PageChange(FormMain.PageType.VersionSelect)
     End Sub
     '启动按钮
-    Private Sub BtnLaunch_Click() Handles BtnLaunch.Click
-        LaunchButtonClick()
-    End Sub
-    Public Sub LaunchButtonClick(Optional ServerIp As String = "")
-        If BtnLaunch.IsEnabled AndAlso BtnLaunch.Visibility = Visibility.Visible AndAlso BtnLaunch.IsHitTestVisible Then
-            If BtnLaunch.Text = "启动游戏" Then
-                McLaunchLoader.Start(ServerIp, IsForceRestart:=True)
-            ElseIf BtnLaunch.Text = "下载游戏" Then
-                FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
-            End If
-            '愚人节处理
-            If IsAprilEnabled AndAlso Not IsAprilGiveup Then
-                ThemeUnlock(12, False, "隐藏主题 滑稽彩 已解锁！")
-                IsAprilGiveup = True
-                FrmLaunchLeft.AprilScaleTrans.ScaleX = 1
-                FrmLaunchLeft.AprilScaleTrans.ScaleY = 1
-                FrmLaunchLeft.AprilPosTrans.X = 0
-                FrmLaunchLeft.AprilPosTrans.Y = 0
-                FrmMain.BtnExtraApril.ShowRefresh()
-            End If
+    Public Sub LaunchButtonClick() Handles BtnLaunch.Click
+        If Not BtnLaunch.IsEnabled Then Exit Sub
+        '愚人节处理
+        If IsAprilEnabled AndAlso Not IsAprilGiveup Then
+            ThemeUnlock(12, False, "隐藏主题 滑稽彩 已解锁！")
+            IsAprilGiveup = True
+            FrmLaunchLeft.AprilScaleTrans.ScaleX = 1
+            FrmLaunchLeft.AprilScaleTrans.ScaleY = 1
+            FrmLaunchLeft.AprilPosTrans.X = 0
+            FrmLaunchLeft.AprilPosTrans.Y = 0
+            FrmMain.BtnExtraApril.ShowRefresh()
+        End If
+        '实际的启动
+        If BtnLaunch.Text = "启动游戏" Then
+            McLaunchStart()
+        ElseIf BtnLaunch.Text = "下载游戏" Then
+            FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
         End If
     End Sub
     Private BtnLaunchState As Integer = 0

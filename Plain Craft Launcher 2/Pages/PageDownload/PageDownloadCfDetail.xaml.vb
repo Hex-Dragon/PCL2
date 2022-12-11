@@ -96,7 +96,7 @@
                 PanMain.Children.Add(NewCard)
                 '确定卡片是否展开
                 If Pair.Key = TopVersion Then
-                    MyCard.StackInstall(NewStack, 8, Pair.Key)
+                    MyCard.StackInstall(NewStack, If(Project.IsModPack, 9, 8), Pair.Key)
                 Else
                     NewCard.IsSwaped = True
                 End If
@@ -164,17 +164,20 @@
             '构造步骤加载器
             Dim Loaders As New List(Of LoaderBase)
             Dim Target As String = PathMcFolder & "versions\" & VersionName & "\原始整合包.zip"
+            Dim LogoFileAddress As String = PathTemp & "CFLogo\" & GetHash(CfItem.Logo) & ".png"
             Loaders.Add(New LoaderDownload("下载整合包文件", New List(Of NetFile) From {File.GetDownloadFile(Target, True)}) With {.ProgressWeight = 10, .Block = True})
             Loaders.Add(New LoaderTask(Of Integer, Integer)("准备安装整合包",
                                                             Sub()
-                                                                If Not ModpackInstall(Target, VersionName) Then Throw New Exception("整合包安装出现异常！")
+                                                                If Not ModpackInstall(Target, VersionName, Logo:=If(IO.File.Exists(LogoFileAddress), LogoFileAddress, Nothing)) Then
+                                                                    Throw New Exception("整合包安装出现异常！")
+                                                                End If
                                                             End Sub) With {.ProgressWeight = 0.1})
 
             '启动
             Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged = Sub(MyLoader)
                                                                                                       Select Case MyLoader.State
                                                                                                           Case LoadState.Failed
-                                                                                                              Hint(MyLoader.Name & "失败：" & GetString(MyLoader.Error), HintType.Critical)
+                                                                                                              Hint(MyLoader.Name & "失败：" & GetExceptionSummary(MyLoader.Error), HintType.Critical)
                                                                                                           Case LoadState.Aborted
                                                                                                               Hint(MyLoader.Name & "已取消！", HintType.Info)
                                                                                                           Case LoadState.Loading
@@ -228,7 +231,7 @@
                                 If Not Version.IsLoaded Then Version.Load()
                                 If Not Version.Modable Then Return False
                                 If File.GameVersion.Any(Function(v) v.Contains(".")) AndAlso
-                                   Not File.GameVersion.Any(Function(v) v.Contains(".") AndAlso v.Split(".")(1) = Version.Version.McCodeMain) Then Return False
+                                   Not File.GameVersion.Any(Function(v) v.Contains(".") AndAlso v.Split(".")(1) = Version.Version.McCodeMain.ToString) Then Return False
                                 If AllowForge Is Nothing OrElse AllowFabric Is Nothing Then Return True
                                 If AllowForge AndAlso Version.Version.HasForge Then Return True
                                 If AllowFabric AndAlso Version.Version.HasFabric Then Return True
@@ -255,7 +258,7 @@
                         If SuitableVersions.Count = 0 Then
                             DefaultFolder = PathMcFolder
                             If NeedLoad Then
-                                Hint("当前 MC 文件夹中未找到适合这个 Mod 的游戏版本")
+                                Hint("当前 MC 文件夹中没有找到适合这个 Mod 的版本！")
                             Else
                                 Log("[Download] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
                             End If

@@ -3,7 +3,6 @@
 
 #Region "Logo"
 
-    'Public CacheLogo As Boolean = True '是否缓存 Logo：通过下载量确定是否为默认页
     Private _Logo As String = ""
     Public Property Logo As String
         Get
@@ -157,7 +156,7 @@ RetryStart:
             Dim Ani As New List(Of AniData)
             If IsMouseOver Then
                 Ani.AddRange({
-                             AaColor(RectBack, Border.BackgroundProperty, If(IsMouseDown, "ColorBrush6", "ColorBrush9"), Time),
+                             AaColor(RectBack, Border.BackgroundProperty, If(IsMouseDown, "ColorBrush6", "ColorBrushBg1"), Time),
                              AaOpacity(RectBack, 1 - RectBack.Opacity, Time,, New AniEaseOutFluent)
                          })
                 If IsMouseDown Then

@@ -170,12 +170,12 @@
         MouseDowned = False
         Log("[Control] 按下单选框：" & Text)
         SetChecked(True, True, True)
-        AniStart(AaColor(ShapeBorder, Shapes.Ellipse.FillProperty, "ColorBrushHalfWhite", 100), "MyRadioBox Background " & Uuid)
+        AniStart(AaColor(ShapeBorder, Ellipse.FillProperty, "ColorBrushBg2", 100), "MyRadioBox Background " & Uuid)
     End Sub
     Private Sub Radiobox_MouseDown() Handles Me.MouseLeftButtonDown
         MouseDowned = True
         Focus()
-        AniStart(AaColor(ShapeBorder, Shapes.Ellipse.FillProperty, "ColorBrush9", 100), "MyRadioBox Background " & Uuid)
+        AniStart(AaColor(ShapeBorder, Ellipse.FillProperty, "ColorBrushBg1", 100), "MyRadioBox Background " & Uuid)
         If Not Checked Then
             AniStart(AaScale(ShapeBorder, 16.5 - ShapeBorder.Width, 1000, , New AniEaseOutFluent(AniEasePower.Strong), Absolute:=True), "MyRadioBox Border " & Uuid)
         End If
@@ -183,7 +183,7 @@
     Private Sub Radiobox_MouseLeave() Handles Me.MouseLeave
         If Not MouseDowned Then Exit Sub
         MouseDowned = False
-        AniStart(AaColor(ShapeBorder, Shapes.Ellipse.FillProperty, "ColorBrushHalfWhite", 100), "MyRadioBox Background " & Uuid)
+        AniStart(AaColor(ShapeBorder, Ellipse.FillProperty, "ColorBrushBg2", 100), "MyRadioBox Background " & Uuid)
         If Not Checked Then
             AniStart(AaScale(ShapeBorder, 18 - ShapeBorder.Width, 400, , New AniEaseOutFluent(AniEasePower.Strong), Absolute:=True), "MyRadioBox Border " & Uuid)
         End If

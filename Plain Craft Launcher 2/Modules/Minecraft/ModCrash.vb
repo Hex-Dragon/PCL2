@@ -88,7 +88,7 @@
                 If FilePath.Contains("crash-") Then
                     AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(FilePath, ReadFile(FilePath).Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Split(vbCr)))
                 Else
-                    AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(FilePath, File.ReadAllLines(FilePath, Encoding.UTF8)))
+                    AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(FilePath, ReadFile(FilePath, Encoding.UTF8).Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Split(vbCr)))
                 End If
             Catch ex As Exception
                 Log(ex, "读取可能的崩溃日志文件失败（" & FilePath & "）")
@@ -135,7 +135,7 @@
                     If TargetFile.Name.StartsWith("crash-") Then
                         AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(TargetFile.FullName, ReadFile(TargetFile.FullName).Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Split(vbCr)))
                     Else
-                        AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(TargetFile.FullName, File.ReadAllLines(TargetFile.FullName, Encoding.UTF8)))
+                        AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(TargetFile.FullName, ReadFile(TargetFile.FullName, Encoding.UTF8).Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Split(vbCr)))
                     End If
                 End If
             Catch ex As Exception
@@ -771,7 +771,7 @@ Redo:
             Case CrashReason.内存不足
                 ResultString = "Minecraft 内存不足，导致其无法继续运行。\n这很可能是由于你为游戏分配的内存不足，或是游戏的配置要求过高。\n\n你可以在启动设置中增加为游戏分配的内存，删除配置要求较高的材质、Mod、光影。\n如果这依然不奏效，请在开始游戏前尽量关闭其他软件，或者……换台电脑？\h"
             Case CrashReason.使用OpenJ9
-                ResultString = "游戏因为使用 Open J9 而崩溃了。\n请在启动设置的 Java 选择一项中改用非 OpenJ9 的 Java 8，然后再启动游戏。\n如果你没有安装 JRE 8，你可以从网络中下载、安装一个。"
+                ResultString = "游戏因为使用 Open J9 而崩溃了。\n请在启动设置的 Java 选择一项中改用非 OpenJ9 的 Java，然后再启动游戏。"
             Case CrashReason.使用JDK
                 ResultString = "游戏似乎因为使用 JDK，或 Java 版本过高而崩溃了。\n请在启动设置的 Java 选择一项中改用 JRE 8（Java 8），然后再启动游戏。\n如果你没有安装 JRE 8，你可以从网络中下载、安装一个。"
             Case CrashReason.Java版本过高

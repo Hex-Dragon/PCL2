@@ -49,7 +49,7 @@ Public Class Application
                 Directory.CreateDirectory(PathTemp)
                 If Not CheckPermission(PathTemp) Then Throw New Exception("PCL2 没有对 " & PathTemp & " 的访问权限")
             Catch ex As Exception
-                MyMsgBox("手动设置的缓存文件夹不可用，PCL2 将使用默认缓存文件夹。" & vbCrLf & "错误原因：" & GetString(ex, False), "缓存文件夹不可用")
+                MyMsgBox("手动设置的缓存文件夹不可用，PCL2 将使用默认缓存文件夹。" & vbCrLf & "错误原因：" & GetExceptionDetail(ex), "缓存文件夹不可用")
                 Setup.Set("SystemSystemCache", "")
                 PathTemp = IO.Path.GetTempPath() & "PCL\"
             End Try
@@ -104,7 +104,7 @@ Public Class Application
 #End If
             AniControlEnabled += 1
         Catch ex As Exception
-            MsgBox(GetString(ex, False, True), MsgBoxStyle.Critical, "PCL2 初始化错误")
+            MsgBox(GetExceptionDetail(ex, True), MsgBoxStyle.Critical, "PCL2 初始化错误")
             FormMain.EndProgramForce(Result.Exception)
         End Try
     End Sub
@@ -126,13 +126,13 @@ Public Class Application
             Exit Sub
         End If
         IsCritErrored = True
-        Dim ExceptionString As String = GetString(e.Exception, False, True)
+        Dim ExceptionString As String = GetExceptionDetail(e.Exception, True)
         If ExceptionString.Contains("System.Windows.Threading.Dispatcher.Invoke") OrElse
            ExceptionString.Contains("MS.Internal.AppModel.ITaskbarList.HrInit") OrElse
-           ExceptionString.Contains(".Net Framework") OrElse ' “自动错误判断” 的结果分析
+           ExceptionString.Contains(".NET Framework") OrElse ' “自动错误判断” 的结果分析
            ExceptionString.Contains("未能加载文件或程序集") Then
             OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net462-offline-installer")
-            MsgBox("你的 .Net Framework 版本过低或损坏，请在打开的网页中重新下载并安装 .NET Framework 4.6.2 后重试！", MsgBoxStyle.Information, "运行环境错误")
+            MsgBox("你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下载并安装 .NET Framework 4.6.2 后重试！", MsgBoxStyle.Information, "运行环境错误")
             FormMain.EndProgramForce(Result.Cancel)
         Else
             FeedbackInfo()

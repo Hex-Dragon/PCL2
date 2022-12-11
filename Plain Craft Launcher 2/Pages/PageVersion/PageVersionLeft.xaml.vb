@@ -7,11 +7,11 @@
 
     Public Sub RefreshModDisabled() Handles Me.Loaded
         If Version IsNot Nothing AndAlso Version.Modable Then
-            ItemMod.Visibility = Visibility.Visible
-            ItemModDisabled.Visibility = Visibility.Collapsed
+            ItemMod.Height = 36
+            ItemModDisabled.Height = 0
         Else
-            ItemMod.Visibility = Visibility.Collapsed
-            ItemModDisabled.Visibility = Visibility.Visible
+            ItemMod.Height = 0
+            ItemModDisabled.Height = 36
         End If
     End Sub
 

@@ -131,7 +131,7 @@
     End Sub
 
     '页面切换触发
-    Public Sub MinecraftSelected(sender As MyListItem, e As Object)
+    Public Sub MinecraftSelected(sender As MyListItem, e As MouseButtonEventArgs)
         SelectedMinecraftId = sender.Title
         SelectedMinecraftJsonUrl = sender.Tag("url").ToString
         SelectedMinecraftIcon = sender.Logo
