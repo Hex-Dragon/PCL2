@@ -211,6 +211,21 @@ Public Module ModMinecraft
             'Value: 是否为玩家手动导入
             Dim JavaPreList As New Dictionary(Of String, Boolean)
 
+#Region "添加玩家手动导入的 Java"
+
+            Dim ImportedJava As String = Setup.Get("LaunchArgumentJavaAll")
+            Try
+                For Each JavaJsonObject In GetJson(ImportedJava)
+                    Dim Entry = JavaEntry.FromJson(JavaJsonObject)
+                    If Entry.IsUserImport Then DictionaryAdd(JavaPreList, Entry.PathFolder, True)
+                Next
+            Catch ex As Exception
+                Log(ex, "Java 列表已损坏", LogLevel.Feedback)
+                Setup.Set("LaunchArgumentJavaAll", "[]")
+            End Try
+
+#End Region
+
 #Region "模糊查找可能可用的 Java"
 
             '查找环境变量中的 Java
@@ -261,21 +276,6 @@ Public Module ModMinecraft
                 JavaWithoutInherit.Add(Pair.Key, Pair.Value)
             Next
             If JavaWithoutInherit.Count > 0 Then JavaPreList = JavaWithoutInherit
-
-#End Region
-
-#Region "添加玩家手动导入的 Java"
-
-            Dim ImportedJava As String = Setup.Get("LaunchArgumentJavaAll")
-            Try
-                For Each JavaJsonObject In GetJson(ImportedJava)
-                    Dim Entry = JavaEntry.FromJson(JavaJsonObject)
-                    If Entry.IsUserImport Then DictionaryAdd(JavaPreList, Entry.PathFolder, True)
-                Next
-            Catch ex As Exception
-                Log(ex, "Java 列表已损坏", LogLevel.Feedback)
-                Setup.Set("LaunchArgumentJavaAll", "[]")
-            End Try
 
 #End Region
 
