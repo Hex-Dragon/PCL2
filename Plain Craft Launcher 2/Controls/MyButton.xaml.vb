@@ -177,7 +177,7 @@
                  }, "MyButton Scale " & Uuid)
     End Sub
     Private Sub Button_MouseEnter() Handles Me.MouseEnter
-        AniStart(AaColor(PanFore, BackgroundProperty, If(_ColorType = ColorState.Red, "ColorBrushRedBack", "ColorBrushBg1"), AnimationColorIn), "MyButton Background " & Uuid)
+        AniStart(AaColor(PanFore, BackgroundProperty, If(_ColorType = ColorState.Red, "ColorBrushRedBack", "ColorBrush7"), AnimationColorIn), "MyButton Background " & Uuid)
     End Sub
     Private Sub Button_MouseUp() Handles Me.MouseLeftButtonUp
         If Not IsMouseDown Then Exit Sub

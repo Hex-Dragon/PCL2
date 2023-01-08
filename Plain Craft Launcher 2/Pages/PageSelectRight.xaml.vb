@@ -9,7 +9,7 @@
         PageLoaderInit(Load, PanLoad, PanAllBack, Nothing, McVersionListLoader, AddressOf McVersionListUI, AutoRun:=False)
     End Sub
     Private Sub Load_Click(sender As Object, e As MouseButtonEventArgs) Handles Load.Click
-        If McModLoader.State = LoadState.Failed Then
+        If McVersionListLoader.State = LoadState.Failed Then
             LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
         End If
     End Sub

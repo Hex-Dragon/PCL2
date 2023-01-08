@@ -709,14 +709,14 @@ FinishMcbFileCheck:
 
     '创建房间
     Private Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
-        '获取端口号
-        Dim PortInput As String = MyMsgBoxInput("", New ObjectModel.Collection(Of Validate) From {
-                                                   New ValidateInteger(2, 65535),
-                                                   New ValidateExceptSame({"55555", "55557"}, "端口不能为 %！")
-                                               }, "在 MC 的暂停画面选择【对局域网开放】", "输入端口号", "确定", "取消")
-        If PortInput Is Nothing Then Exit Sub
-        '开始
-        RoomCreate(Val(PortInput))
+        ''获取端口号
+        'Dim PortInput As String = MyMsgBoxInput("", New ObjectModel.Collection(Of Validate) From {
+        '                                           New ValidateInteger(2, 65535),
+        '                                           New ValidateExceptSame({"55555", "55557"}, "端口不能为 %！")
+        '                                       }, "在 MC 的暂停画面选择【对局域网开放】", "输入端口号", "确定", "取消")
+        'If PortInput Is Nothing Then Exit Sub
+        ''开始
+        'RoomCreate(Val(PortInput))
     End Sub
     Private Sub RoomCreate(Port As Integer)
         '记录信息
@@ -728,34 +728,34 @@ FinishMcbFileCheck:
 
     '加入房间
     Private Sub BtnSelectJoin_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectJoin.MouseLeftButtonUp
-        '获取信息
-        Dim Code As String = MyMsgBoxInput("", New ObjectModel.Collection(Of Validate) From {New ValidateLength(8, 99)}, "",
-                                           "输入联机码", "确定", "取消")
-        If Code Is Nothing Then Exit Sub
-        '记录信息
-        If Not Code.EndsWith(RequestVersion) OrElse Not Code.StartsWith("P") Then GoTo WrongCode
-        Dim Ip As String, Port As Integer
-        Try
-            Dim IpAndPort As Long = RadixConvert(Code.Substring(1, Code.Length - 2).ToUpper, 36, 10)
-            'IpAndPort = HostPort + IpParts(0) * 65536 + IpParts(1) * 65536 * 256 + IpParts(2) * 65536 * 256 * 256 + IpParts(3) * 65536 * 256 * 256 * 256
-            Ip = Math.Floor(IpAndPort / (65536L * 256 * 256 * 256))
-            IpAndPort = IpAndPort Mod (65536L * 256 * 256 * 256)
-            Ip = Math.Floor(IpAndPort / (65536L * 256 * 256)) & "." & Ip
-            IpAndPort = IpAndPort Mod (65536L * 256 * 256)
-            Ip = Math.Floor(IpAndPort / (65536L * 256)) & "." & Ip
-            IpAndPort = IpAndPort Mod (65536L * 256)
-            Ip = Math.Floor(IpAndPort / (65536L)) & "." & Ip
-            Port = IpAndPort Mod 65536
-        Catch
-            GoTo WrongCode
-        End Try
-        '启动
-        RoomJoin(Ip, Port)
-        Exit Sub
-WrongCode:
-        If Not Code.StartsWith("P") AndAlso Code.Length >= 49 Then Hint("你输入的可能是 IOI 的联机码，请在左侧的联机方式中选择 IOI！", HintType.Critical) : Exit Sub
-        If Code.StartsWith("P") AndAlso Not Code.EndsWith(RequestVersion) Then Hint("你的 PCL2 版本与房主的 PCL2 版本不一致！", HintType.Critical) : Exit Sub
-        Hint("你输入的联机码无效！", HintType.Critical)
+        '        '获取信息
+        '        Dim Code As String = MyMsgBoxInput("", New ObjectModel.Collection(Of Validate) From {New ValidateLength(8, 99)}, "",
+        '                        "输入联机码", "确定", "取消")
+        '        If Code Is Nothing Then Exit Sub
+        '        '记录信息
+        '        If Not Code.EndsWith(RequestVersion) OrElse Not Code.StartsWith("P") Then GoTo WrongCode
+        '        Dim Ip As String, Port As Integer
+        '        Try
+        '            Dim IpAndPort As Long = RadixConvert(Code.Substring(1, Code.Length - 2).ToUpper, 36, 10)
+        '            'IpAndPort = HostPort + IpParts(0) * 65536 + IpParts(1) * 65536 * 256 + IpParts(2) * 65536 * 256 * 256 + IpParts(3) * 65536 * 256 * 256 * 256
+        '            Ip = Math.Floor(IpAndPort / (65536L * 256 * 256 * 256))
+        '            IpAndPort = IpAndPort Mod (65536L * 256 * 256 * 256)
+        '            Ip = Math.Floor(IpAndPort / (65536L * 256 * 256)) & "." & Ip
+        '            IpAndPort = IpAndPort Mod (65536L * 256 * 256)
+        '            Ip = Math.Floor(IpAndPort / (65536L * 256)) & "." & Ip
+        '            IpAndPort = IpAndPort Mod (65536L * 256)
+        '            Ip = Math.Floor(IpAndPort / (65536L)) & "." & Ip
+        '            Port = IpAndPort Mod 65536
+        '        Catch
+        '            GoTo WrongCode
+        '        End Try
+        '        '启动
+        '        RoomJoin(Ip, Port)
+        '        Exit Sub
+        'WrongCode:
+        '        If Not Code.StartsWith("P") AndAlso Code.Length >= 49 Then Hint("你输入的可能是 IOI 的联机码，请在左侧的联机方式中选择 IOI！", HintType.Critical) : Exit Sub
+        '        If Code.StartsWith("P") AndAlso Not Code.EndsWith(RequestVersion) Then Hint("你的 PCL2 版本与房主的 PCL2 版本不一致！", HintType.Critical) : Exit Sub
+        '        Hint("你输入的联机码无效！", HintType.Critical)
     End Sub
     Private Sub RoomJoin(Ip As String, Port As Integer)
         '记录信息

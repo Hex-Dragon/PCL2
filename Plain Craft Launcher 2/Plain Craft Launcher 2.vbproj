@@ -100,7 +100,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Snapshot|AnyCPU'">
-    <OutputPath>D:\Minecraft\</OutputPath>
+    <OutputPath>D:\Minecraft\程序\</OutputPath>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <WarningLevel>1</WarningLevel>

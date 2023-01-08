@@ -48,6 +48,7 @@ Public Module ModLaunch
             McVersionCurrent = Options.Version
             Setup.Set("LaunchVersionSelect", McVersionCurrent.Name)
             FrmLaunchLeft.RefreshButtonsUI()
+            FrmLaunchLeft.RefreshPage(False, False)
         End If
         FrmMain.AprilGiveup()
         '禁止进入版本选择页面（否则就可以在启动中切换 McVersionCurrent 了）
@@ -108,6 +109,7 @@ Public Module ModLaunch
                 New LoaderTask(Of String, List(Of McLibToken))("获取启动参数", AddressOf McLaunchArgumentMain) With {.ProgressWeight = 2},
                 New LoaderTask(Of List(Of McLibToken), Integer)("解压文件", AddressOf McLaunchNatives) With {.ProgressWeight = 2},
                 New LoaderTask(Of Integer, Integer)("预启动处理", AddressOf McLaunchPrerun) With {.ProgressWeight = 1},
+                New LoaderTask(Of Integer, Integer)("执行自定义命令", AddressOf McLaunchCustom) With {.ProgressWeight = 1},
                 New LoaderTask(Of Integer, Process)("启动进程", AddressOf McLaunchRun) With {.ProgressWeight = 2},
                 New LoaderTask(Of Process, Integer)("等待游戏窗口出现", AddressOf McLaunchWait) With {.ProgressWeight = 1},
                 New LoaderTask(Of Integer, Integer)("结束处理", AddressOf McLaunchEnd) With {.ProgressWeight = 1}
@@ -130,7 +132,7 @@ Public Module ModLaunch
                     Hint(McVersionCurrent.Name & " 启动成功！", HintType.Finish)
                 Case LoadState.Aborted
                     If AbortHint Is Nothing Then
-                        Hint("已取消启动！", HintType.Info)
+                        Hint(If(Loader.Input.SaveBatch Is Nothing, "已取消启动！", "已取消导出启动脚本！"), HintType.Info)
                     Else
                         Hint(AbortHint, HintType.Finish)
                     End If
@@ -145,7 +147,7 @@ NextInner:
             If CurrentEx.Message.StartsWith("$") Then
                 '若有以 $ 开头的错误信息，则以此为准显示提示
                 '若错误信息为 $$，则不提示
-                If Not CurrentEx.Message = "$$" Then MyMsgBox(CurrentEx.Message.TrimStart("$"), "启动失败")
+                If Not CurrentEx.Message = "$$" Then MyMsgBox(CurrentEx.Message.TrimStart("$"), If(Loader.Input.SaveBatch Is Nothing, "启动失败", "导出启动脚本失败"))
                 Throw
             ElseIf CurrentEx.InnerException IsNot Nothing Then
                 '检查下一级错误
@@ -154,7 +156,7 @@ NextInner:
             Else
                 '没有特殊处理过的错误信息
                 McLaunchLog("错误：" & GetExceptionDetail(ex))
-                Log(ex, "Minecraft 启动失败", LogLevel.Msgbox, "启动失败")
+                Log(ex, If(Loader.Input.SaveBatch Is Nothing, "Minecraft 启动失败", "导出启动脚本失败"), LogLevel.Msgbox, If(Loader.Input.SaveBatch Is Nothing, "启动失败", "导出启动脚本失败"))
                 Throw
             End If
         End Try
@@ -177,10 +179,11 @@ NextInner:
         RunInUiWait(Sub()
                         Dim LoginInput As McLoginData = McLoginInput()
                         CheckResult = McLoginAble(LoginInput)
-                        If LoginInput.Type = McLoginType.Legacy AndAlso '离线登录
+                        If CheckResult = "" AndAlso
+                            LoginInput.Type = McLoginType.Legacy AndAlso '离线登录
                             Not RegexCheck(CType(LoginInput, McLoginLegacy).UserName, "^[0-9A-Za-z_]+$") AndAlso
                             McVersionCurrent.Version.McCodeMain >= 18 Then 'MC 1.18 以上
-                            CheckResult = "用户名中不可包含除数字、英文、下划线以外的特殊字符！"
+                            CheckResult = "玩家名只能由数字、英文和下划线组成，不能包含中文或特殊字符！"
                         End If
                     End Sub)
         If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
@@ -845,10 +848,13 @@ LoginFinish:
         If OsVersion <= New Version(10, 0, 17763, 0) Then
 SystemBrowser:
             'Windows 7 或老版 Windows 10 登录
-            MyMsgBox("PCL2 即将打开登录网页。登录后会转到一个空白页面（这代表登录成功了），请将该空白页面的网址复制到 PCL2。" & vbCrLf &
-                     "如果网络环境不佳，登录网页可能一直加载不出来，此时请尝试使用 VPN 或加速器，然后再试。", "登录说明", "开始", ForceWait:=True)
             OpenWebsite(FormLoginOAuth.LoginUrl1)
-            Dim Result As String = MyMsgBoxInput("", New ObjectModel.Collection(Of Validate) From {New ValidateRegex("(?<=code\=)[^&]+", "返回网址应以 https://login.live.com/oauth20_desktop.srf?code= 开头")}, "https://login.live.com/oauth20_desktop.srf?code=XXXXXX", "输入登录返回码", "确定", "取消")
+            Dim Result As String =
+                MyMsgBoxInput("等待网页登录",
+                              "在登录成功后，网页会变成一片空白，请将该空白页面的网址复制到下面的框中。" & vbCrLf &
+                              "如果网络环境不佳，登录网页可能一直加载不出来，此时请尝试使用 VPN 或加速器，然后再试。",
+                              ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateRegex("(?<=code\=)[^&]+", "返回网址应以 https://login.live.com/oauth20_desktop.srf?code= 开头")},
+                              HintText:="https://login.live.com/oauth20_desktop.srf?code=XXXXXX")
             If Result Is Nothing Then
                 McLaunchLog("微软登录已在步骤 1 被取消")
                 Throw New ThreadInterruptedException("$$")
@@ -1138,7 +1144,7 @@ SystemBrowser:
             MinVer = New Version(1, 17, 0, 0)
         ElseIf (McVersionCurrent.ReleaseTime >= New Date(2021, 5, 11) AndAlso McVersionCurrent.Version.McCodeMain = 99) OrElse
            (McVersionCurrent.Version.McCodeMain >= 17 AndAlso McVersionCurrent.Version.McCodeMain <> 99) Then
-            '21w19a+：至少 Java 16
+            '1.17+ (21w19a+)：至少 Java 16
             MinVer = New Version(1, 16, 0, 0)
         ElseIf McVersionCurrent.ReleaseTime.Year >= 2017 Then 'Minecraft 1.12 与 1.11 的分界线正好是 2017 年，太棒了
             '1.12+：至少 Java 8
@@ -1173,6 +1179,9 @@ SystemBrowser:
             ElseIf McVersionCurrent.Version.McCodeMain <= 15 AndAlso McVersionCurrent.Version.McCodeMain > 0 Then
                 '1.15：Java 8 - 15
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 15, 999, 999)
+            ElseIf VersionSortBoolean(McVersionCurrent.Version.ForgeVersion, "34.0.0") AndAlso VersionSortBoolean("36.2.25", McVersionCurrent.Version.ForgeVersion) Then
+                '1.16.X，Forge 34.X ~ 36.2.25：最高 Java 8u320
+                MaxVer = New Version(1, 8, 0, 320)
             ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 99 AndAlso McVersionCurrent.Version.HasOptiFine Then '#305
                 '1.18+：若安装了 OptiFine，最高 Java 18
                 MaxVer = New Version(1, 18, 999, 999)
@@ -1192,7 +1201,7 @@ SystemBrowser:
 
         '统一通行证检测
         If Setup.Get("LoginType") = McLoginType.Nide Then
-            '至少 Java 8.101 (1.8.0.101)
+            '至少 Java 8u101
             MinVer = If(New Version(1, 8, 0, 101) > MinVer, New Version(1, 8, 0, 101), MinVer)
         End If
 
@@ -1243,16 +1252,15 @@ SystemBrowser:
     ''' 获取 Java Wrapper 所在的文件夹，不以 \ 结尾。
     ''' </summary>
     Public Function GetJavaWrapperDir() As String
-        Dim WrapperPath As String = PathAppdata.TrimEnd("\")
-        If Encoding.UTF8.GetByteCount(WrapperPath) <> WrapperPath.Length Then
-            Log("[Java] AppData 路径中包含非 ASCII 字符，换用 Temp 目录")
-            WrapperPath = PathTemp.TrimEnd("\")
-            If Encoding.UTF8.GetByteCount(PathTemp) <> PathTemp.Length Then
-                Log("[Java] Temp 路径中包含非 ASCII 字符，换用 C 盘根目录")
-                WrapperPath = "C:\PCL"
-            End If
+        If Encoding.UTF8.GetByteCount(PathAppdata) = PathAppdata.Length Then
+            Return PathAppdata.TrimEnd("\")
+        ElseIf Encoding.UTF8.GetByteCount(PathTemp) = PathTemp.Length Then
+            Log("[Java] Wrapper：AppData 路径中包含非 ASCII 字符，换用 Temp 目录")
+            Return PathTemp.TrimEnd("\")
+        Else
+            Log("[Java] Wrapper：AppData 路径与 Temp 路径中均包含非 ASCII 字符，换用 ProgramData 目录")
+            Return OsDrive & "ProgramData\PCL"
         End If
-        Return WrapperPath
     End Function
 
     '主方法，合并 Jvm、Game、Replace 三部分的参数数据
@@ -1825,9 +1833,13 @@ NextVersion:
                             PackFormat = 9
                         End If
                     Case 19
-                        PackFormat = 9
+                        If McVersionCurrent.Version.McCodeSub <= 2 Then
+                            PackFormat = 9
+                        Else
+                            PackFormat = 12
+                        End If
                     Case Else
-                        PackFormat = 10
+                        PackFormat = 13
                 End Select
                 McLaunchLog("正在构建自定义皮肤资源包，格式为：" & PackFormat)
                 '准备文件
@@ -1898,7 +1910,11 @@ IgnoreCustomSkin:
         End Try
 
     End Sub
-    Private Sub McLaunchRun(Loader As LoaderTask(Of Integer, Process))
+    Private Sub McLaunchCustom(Loader As LoaderTask(Of Integer, Integer))
+
+        '获取自定义命令
+        Dim CustomCommand As String = Setup.Get("VersionAdvanceRun", Version:=McVersionCurrent)
+        If CustomCommand <> "" Then CustomCommand = ArgumentReplace(CustomCommand)
 
         '输出 bat
         Try
@@ -1908,10 +1924,12 @@ IgnoreCustomSkin:
                 "echo 游戏正在启动，请稍候。" & vbCrLf &
                 "set APPDATA=""" & PathMcFolder & """" & vbCrLf &
                 "cd /D """ & PathMcFolder & """" & vbCrLf &
+                CustomCommand & vbCrLf &
                 """" & McLaunchJavaSelected.PathJava & """ " & McLaunchArgument & vbCrLf &
                 "echo 游戏已退出。" & vbCrLf &
                 "pause"
-            WriteFile(If(McLaunchLoader.Input.SaveBatch, Path & "PCL\LatestLaunch.bat"), CmdString, Encoding:=Encoding.GetEncoding("GB18030"))
+            WriteFile(If(McLaunchLoader.Input.SaveBatch, Path & "PCL\LatestLaunch.bat"), CmdString,
+                      Encoding:=If(Encoding.Default.Equals(Encoding.UTF8), Encoding.UTF8, Encoding.GetEncoding("GB18030")))
             If McLaunchLoader.Input.SaveBatch IsNot Nothing Then
                 McLaunchLog("导出启动脚本完成，强制结束启动过程")
                 AbortHint = "导出启动脚本成功！"
@@ -1923,6 +1941,30 @@ IgnoreCustomSkin:
             Log(ex, "输出启动脚本失败")
             If McLaunchLoader.Input.SaveBatch IsNot Nothing Then Throw ex '直接触发启动失败
         End Try
+
+        '执行自定义命令
+        If CustomCommand <> "" Then
+            McLaunchLog("正在执行自定义命令：" & CustomCommand)
+            Try
+                Dim Cmd As New Process
+                Cmd.StartInfo.FileName = "cmd.exe"
+                Cmd.StartInfo.Arguments = "/c """ & CustomCommand & """"
+                Cmd.StartInfo.WorkingDirectory = Path
+                Cmd.StartInfo.UseShellExecute = False
+                Cmd.StartInfo.CreateNoWindow = True
+                Cmd.Start()
+                If Setup.Get("VersionAdvanceRunWait", Version:=McVersionCurrent) Then
+                    Do Until Cmd.HasExited OrElse Loader.IsAborted
+                        Thread.Sleep(10)
+                    Loop
+                End If
+            Catch ex As Exception
+                Log(ex, "执行自定义命令失败", LogLevel.Hint)
+            End Try
+        End If
+
+    End Sub
+    Private Sub McLaunchRun(Loader As LoaderTask(Of Integer, Process))
 
         '启动信息
         Dim GameProcess = New Process()
@@ -2045,6 +2087,45 @@ IgnoreCustomSkin:
         Setup.Set("SystemLaunchCount", Setup.Get("SystemLaunchCount") + 1)
 
     End Sub
+
+    ''' <summary>
+    ''' 在启动结束时，对 PCL 约定的替换标记进行处理。
+    ''' </summary>
+    Private Function ArgumentReplace(Raw As String) As String
+        If Raw Is Nothing Then Return Nothing
+        '路径替换
+        Raw = Raw.Replace("{minecraft}", PathMcFolder)
+        Raw = Raw.Replace("{verpath}", McVersionCurrent.Path)
+        Raw = Raw.Replace("{verindie}", McVersionCurrent.PathIndie)
+        Raw = Raw.Replace("{java}", McLaunchJavaSelected.PathFolder)
+        '普通替换
+        Raw = Raw.Replace("{user}", McLoginLoader.Output.Name)
+        Raw = Raw.Replace("{uuid}", McLoginLoader.Output.Uuid)
+        Select Case McLoginLoader.Input.Type
+            Case McLoginType.Legacy
+                If PageLinkHiper.HiperState = LoadState.Finished Then
+                    Raw = Raw.Replace("{login}", "联机离线")
+                Else
+                    Raw = Raw.Replace("{login}", "离线")
+                End If
+            Case McLoginType.Mojang
+                Raw = Raw.Replace("{login}", "Mojang 正版")
+            Case McLoginType.Ms
+                Raw = Raw.Replace("{login}", "微软正版")
+            Case McLoginType.Nide
+                Raw = Raw.Replace("{login}", "统一通行证")
+            Case McLoginType.Auth
+                Raw = Raw.Replace("{login}", "Authlib-Injector")
+        End Select
+        Raw = Raw.Replace("{name}", McVersionCurrent.Name)
+        If {"unknown", "old", "pending"}.Contains(McVersionCurrent.Version.McName.ToLower) Then
+            Raw = Raw.Replace("{version}", McVersionCurrent.Name)
+        Else
+            Raw = Raw.Replace("{version}", McVersionCurrent.Version.McName)
+        End If
+        Raw = Raw.Replace("{path}", Path)
+        Return Raw
+    End Function
 
 #End Region
 

@@ -1175,9 +1175,14 @@ Public Module ModDownloadLib
                     outputWaitHandle.WaitOne(10000)
                     errorWaitHandle.WaitOne(10000)
                     process.Dispose()
-                    If LastResults.Last = "true" Then Exit Sub
+                    '检查是否安装成功：最后两行中是否有 true（true 可能在倒数第二行，见 #832）
+                    If LastResults.Last = "true" OrElse (LastResults.Count >= 2 AndAlso LastResults(LastResults.Count - 2) = "true") Then Exit Sub
                     Log(Join(LastResults, vbCrLf))
-                    Throw New Exception("Forge 安装器出错，末行为 " & LastResults.Last)
+                    Dim LastLines As String = ""
+                    For i As Integer = Math.Max(0, LastResults.Count - 5) To LastResults.Count - 1 '最后 5 行
+                        LastLines &= vbCrLf & LastResults(i)
+                    Next
+                    Throw New Exception("Forge 安装器出错，日志结束部分为：" & LastLines)
                 End Using
             End Using
         End SyncLock
@@ -1889,11 +1894,19 @@ Public Module ModDownloadLib
     ''' 如果出现已知问题且已提示用户，则返回 Nothing。出现异常则直接抛出。
     ''' </summary>
     Public Function McInstallLoader(Request As McInstallRequest, Optional DontFixLibraries As Boolean = False) As List(Of LoaderBase)
+        '获取缓存目录
+        Dim PathInstallTemp As String
+        If PathTemp.Contains(" ") AndAlso Request.ForgeEntry IsNot Nothing Then
+            PathInstallTemp = OsDrive & "ProgramData\PCL\Install\"
+        Else
+            PathInstallTemp = PathTemp & "Install\"
+        End If
+
+        '清理缓存
         Try
-            '清理缓存
             If Not IsInstallTempCleared Then
                 IsInstallTempCleared = True
-                DeleteDirectory(PathTemp & "Install\", True)
+                DeleteDirectory(PathInstallTemp, True)
                 Log("[Download] 已清理合并安装缓存")
             End If
         Catch ex As Exception
@@ -1902,10 +1915,11 @@ Public Module ModDownloadLib
 
         '获取参数
         Dim OutputFolder As String = PathMcFolder & "versions\" & Request.TargetVersionName & "\"
-        Dim TempMcFolder As String = PathTemp & "Install\" & Request.TargetVersionName & "\"
+        Dim TempMcFolder As String = PathInstallTemp & Request.TargetVersionName.GetHashCode() & "\"
         If Directory.Exists(TempMcFolder) Then DeleteDirectory(TempMcFolder)
         Dim OptiFineFolder As String = Nothing
         If Request.OptiFineVersion IsNot Nothing Then
+            If Request.OptiFineVersion.Contains("_HD_U") Then Request.OptiFineVersion = "HD_U_" & Request.OptiFineVersion.Split("_HD_U").Last '#735
             Request.OptiFineEntry = New DlOptiFineListEntry With {
                 .NameDisplay = Request.MinecraftName & " " & Request.OptiFineVersion.Replace("HD_U_", "").Replace("_", ""),
                 .Inherit = Request.MinecraftName,

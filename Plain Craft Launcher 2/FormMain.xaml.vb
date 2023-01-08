@@ -10,6 +10,13 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 274 Then 'Release 2.4.5
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "增加 在游戏启动前执行命令 设置"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化界面动画，修改部分配色"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 Mod 中文搜索"))
+            FeatureCount += 17
+            BugCount += 35
+        End If
         If LastVersion < 272 Then 'Release 2.4.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在版本设置页导出启动脚本、打开存档文件夹等"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 Mod、整合包下载的版本检查与显示"))
@@ -109,9 +116,15 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 275 Then 'Snapshot 2.4.5
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "增加 在游戏启动前执行命令 设置"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化界面动画，修改部分配色"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 Mod 中文搜索"))
+            FeatureCount += 17
+            BugCount += 35
+        End If
         If LastVersion < 273 Then 'Snapshot 2.4.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在版本设置页导出启动脚本、打开存档文件夹等"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修改部分配色，让整体边框变得更淡"))
             If LastVersion = 271 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法同时开启多个 Minecraft 客户端的 Bug"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法从下载页安装最新 MC 版本的整合包的 Bug"))
             FeatureCount += 7
@@ -295,6 +308,7 @@ Public Class FormMain
         FrmMain = Me
         FrmLaunchLeft = New PageLaunchLeft
         FrmLaunchRight = New PageLaunchRight
+        ToolTipService.ShowDurationProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(2333333))
         '版本号改变
         Dim LastVersion As Integer = Setup.Get("SystemLastVersionReg")
         If LastVersion < VersionCode Then
@@ -340,7 +354,6 @@ Public Class FormMain
         Setup.Load("UiHiddenPageDownload")
         BackgroundRefresh(False, True)
         MusicRefreshPlay(False, True)
-        JavaListInit()
         '扩展按钮
         BtnExtraDownload.ShowCheck = AddressOf BtnExtraDownload_ShowCheck
         BtnExtraBack.ShowCheck = AddressOf BtnExtraBack_ShowCheck
@@ -357,12 +370,8 @@ Public Class FormMain
         Resizer.addResizerRightDown(ResizerRB)
         Resizer.addResizerRightUp(ResizerRT)
         Resizer.addResizerUp(ResizerT)
-        '#If DEBUG Then
-        '        MinWidth = 200
-        '        MinHeight = 150
-        '#End If
         'PLC 彩蛋
-        If RandomInteger(1, 1000) = 23 Then
+        If RandomInteger(1, 1000) = 233 Then
             ShapeTitleLogo.Data = New GeometryConverter().ConvertFromString("M26,29 v-25 h5 a7,7 180 0 1 0,14 h-5 M80,6.5 a10,11.5 180 1 0 0,18   M47,2.5 v24.5 h12   M98,2 v27   M107,2 v27")
         End If
         '加载窗口
@@ -379,16 +388,16 @@ Public Class FormMain
         Dim HwndSource As Interop.HwndSource = PresentationSource.FromVisual(Me)
         HwndSource.AddHook(New Interop.HwndSourceHook(AddressOf WndProc))
         AniStart({
-                     AaCode(Sub() AniControlEnabled -= 1, 50),
-                     AaOpacity(Me, Setup.Get("UiLauncherTransparent") / 1000 + 0.4, 300, 100),
-                     AaScaleTransform(PanBack, 0.05, 500, 100, New AniEaseOutBack(AniEasePower.Weak)),
-                     AaCode(Sub()
-                                PanBack.RenderTransform = Nothing
-                                'If OsVersion > New Version(10, 1, 0, 0) Then RectForm.RadiusX = 5 : RectForm.RadiusY = 5 'Win11 下圆角
-                                IsWindowLoadFinished = True
-                                Log("[System] DPI：" & DPI & "，工作区尺寸：" & My.Computer.Screen.WorkingArea.Width & " x " & My.Computer.Screen.WorkingArea.Height & "，系统版本：" & OsVersion.ToString)
-                            End Sub, , True)
-                 }, "Form Show")
+            AaCode(Sub() AniControlEnabled -= 1, 50),
+            AaOpacity(Me, Setup.Get("UiLauncherTransparent") / 1000 + 0.4, 250, 100),
+            AaDouble(Sub(i) TransformPos.Y += i, -TransformPos.Y, 600, 100, New AniEaseOutBack(AniEasePower.Weak)),
+            AaDouble(Sub(i) TransformRotate.Angle += i, -TransformRotate.Angle, 500, 100, New AniEaseOutBack(AniEasePower.Weak)),
+            AaCode(Sub()
+                       PanBack.RenderTransform = Nothing
+                       IsWindowLoadFinished = True
+                       Log("[System] DPI：" & DPI & "，工作区尺寸：" & My.Computer.Screen.WorkingArea.Width & " x " & My.Computer.Screen.WorkingArea.Height & "，系统版本：" & OsVersion.ToString)
+                   End Sub, , True)
+        }, "Form Show")
         'Timer 启动
         AniStartRun()
         TimerMainStartRun()
@@ -407,6 +416,7 @@ Reopen:
                                End Select
                            End If
                            Try
+                               JavaListInit() '延后到同意协议后再执行，避免在初次启动时进行进程操作
                                Thread.Sleep(200)
                                DlClientListMojangLoader.Start(1)
                                RunCountSub()
@@ -536,25 +546,29 @@ Reopen:
             End If
         End If
         '关闭
-        RunInUiWait(Sub()
-                        IsHitTestVisible = False
-                        If PanBack.RenderTransform Is Nothing Then
-                            PanBack.RenderTransform = New ScaleTransform
-                            AniStart({
-                                AaOpacity(Me, -Opacity, 100, 100),
-                                AaScaleTransform(PanBack, -0.05, 200,, New AniEaseInBack),
-                                AaCode(Sub()
-                                           IsHitTestVisible = False
-                                           Top = -10000
-                                           ShowInTaskbar = False
-                                       End Sub, 225),
-                                AaCode(AddressOf EndProgramForce, 250)
-                            }, "Form Close")
-                        Else
-                            EndProgramForce()
-                        End If
-                        Log("[System] 收到关闭指令")
-                    End Sub)
+        RunInUiWait(
+            Sub()
+                IsHitTestVisible = False
+                If PanBack.RenderTransform Is Nothing Then
+                    Dim TransformPos As New TranslateTransform(0, 0)
+                    Dim TransformRotate As New RotateTransform(0)
+                    PanBack.RenderTransform = New TransformGroup() With {.Children = New TransformCollection({TransformRotate, TransformPos})}
+                    AniStart({
+                        AaOpacity(Me, -Opacity, 150, 50),
+                        AaDouble(Sub(i) TransformPos.Y += i, 30 - TransformPos.Y, 200, 0, New AniEaseOutFluent(AniEasePower.Weak)),
+                        AaDouble(Sub(i) TransformRotate.Angle += i, 1 - TransformRotate.Angle, 200, 0, New AniEaseOutFluent(AniEasePower.Weak)),
+                        AaCode(Sub()
+                                   IsHitTestVisible = False
+                                   Top = -10000
+                                   ShowInTaskbar = False
+                               End Sub, 225),
+                        AaCode(AddressOf EndProgramForce, 250)
+                    }, "Form Close")
+                Else
+                    EndProgramForce()
+                End If
+                Log("[System] 收到关闭指令")
+            End Sub)
     End Sub
     Private Shared IsLogShown As Boolean = False
     Public Shared Sub EndProgramForce(Optional ReturnCode As Result = Result.Success)
@@ -627,7 +641,7 @@ Reopen:
                 Exit Sub
             ElseIf e.Key = Key.Escape Then
                 Dim Msg As Object = PanMsg.Children(0)
-                If Msg.Btn3.Visibility = Visibility.Visible Then
+                If TypeOf Msg Is MyMsgText AndAlso Msg.Btn3.Visibility = Visibility.Visible Then
                     Msg.Btn3_Click()
                 ElseIf Msg.Btn2.Visibility = Visibility.Visible Then
                     Msg.Btn2_Click()

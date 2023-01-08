@@ -637,9 +637,9 @@
                 If ButtonStack IsNot Nothing Then ButtonStack.Opacity = 0
                 Me.RenderTransform = New ScaleTransform(1, 1)
                 If _RectBack IsNot Nothing Then
-                    If IsScaleAnimationEnabled Then RectBack.Background = Color7
+                    If IsScaleAnimationEnabled Then RectBack.RenderTransform = New ScaleTransform(0.75, 0.75)
+                    RectBack.Background = Color7
                     RectBack.Opacity = 0
-                    RectBack.RenderTransform = New ScaleTransform(0.75, 0.75)
                 End If
             End If
             AniStop("ListItem Color " & Uuid)

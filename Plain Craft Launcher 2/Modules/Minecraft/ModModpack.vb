@@ -329,8 +329,7 @@ Retry:
             Dim PackName As String = If(Json("name"), "")
             Dim Validate As New ValidateFolderName(PathMcFolder & "versions")
             If Validate.Validate(PackName) <> "" Then PackName = ""
-            VersionName = MyMsgBoxInput(PackName, New ObjectModel.Collection(Of Validate) From {Validate},
-                                                      Title:="输入版本名", Button2:="取消")
+            VersionName = MyMsgBoxInput("输入版本名称", "", PackName, New ObjectModel.Collection(Of Validate) From {Validate})
             If String.IsNullOrEmpty(VersionName) Then Exit Sub
         End If
 
@@ -358,8 +357,7 @@ Retry:
         Dim PackName As String = If(Json("name"), "")
         Dim Validate As New ValidateFolderName(PathMcFolder & "versions")
         If Validate.Validate(PackName) <> "" Then PackName = ""
-        Dim VersionName As String = MyMsgBoxInput(PackName, New ObjectModel.Collection(Of Validate) From {Validate},
-                                                  Title:="输入版本名", Button2:="取消")
+        Dim VersionName As String = MyMsgBoxInput("输入版本名称", "", PackName, New ObjectModel.Collection(Of Validate) From {Validate})
         If VersionName Is Nothing Then Exit Sub
         '解压与配置文件
         Dim InstallTemp As String = PathTemp & "PackInstall\" & RandomInteger(0, 100000) & "\"
@@ -454,8 +452,7 @@ Retry:
         Dim PackName As String = If(RegexSeek(PackInstance, "(?<=\nname\=)[^\n]+"), "")
         Dim Validate As New ValidateFolderName(PathMcFolder & "versions")
         If Validate.Validate(PackName) <> "" Then PackName = ""
-        Dim VersionName As String = MyMsgBoxInput(PackName, New ObjectModel.Collection(Of Validate) From {Validate},
-                                                  Title:="输入版本名", Button2:="取消")
+        Dim VersionName As String = MyMsgBoxInput("输入版本名称", "", PackName, New ObjectModel.Collection(Of Validate) From {Validate})
         If VersionName Is Nothing Then Exit Sub
         '解压与配置文件
         Dim InstallTemp As String = PathTemp & "PackInstall\" & RandomInteger(0, 100000) & "\"
@@ -542,8 +539,7 @@ Retry:
         Dim PackName As String = If(Json("name"), "")
         Dim Validate As New ValidateFolderName(PathMcFolder & "versions")
         If Validate.Validate(PackName) <> "" Then PackName = ""
-        Dim VersionName As String = MyMsgBoxInput(PackName, New ObjectModel.Collection(Of Validate) From {Validate},
-                                                  Title:="输入版本名", Button2:="取消")
+        Dim VersionName As String = MyMsgBoxInput("输入版本名称", "", PackName, New ObjectModel.Collection(Of Validate) From {Validate})
         If VersionName Is Nothing Then Exit Sub
         '解压与配置文件
         Dim InstallTemp As String = PathTemp & "PackInstall\" & RandomInteger(0, 100000) & "\"
@@ -625,9 +621,8 @@ Retry:
         If TargetFolder.Contains("!") OrElse TargetFolder.Contains(";") Then Hint("Minecraft 文件夹路径中不能含有感叹号或分号！", HintType.Critical) : Exit Sub
         If Directory.GetFileSystemEntries(TargetFolder).Length > 0 Then Hint("请选择一个空文件夹作为安装目标！", HintType.Critical) : Exit Sub
         '要求显示名称
-        Dim NewName As String = MyMsgBoxInput(GetFolderNameFromPath(TargetFolder), New ObjectModel.Collection(Of Validate) From {
-                   New ValidateNullOrWhiteSpace, New ValidateLength(1, 30), New ValidateExcept({">", "|"})
-                },, "输入它在列表中的显示名称",, "取消")
+        Dim NewName As String = MyMsgBoxInput("输入显示名称", "输入该文件夹在左边栏列表中显示的名称。", GetFolderNameFromPath(TargetFolder),
+                                              New ObjectModel.Collection(Of Validate) From {New ValidateNullOrWhiteSpace, New ValidateLength(1, 30), New ValidateExcept({">", "|"})})
         If String.IsNullOrWhiteSpace(NewName) Then Exit Sub
         '解压
         Hint("正在解压压缩包……")

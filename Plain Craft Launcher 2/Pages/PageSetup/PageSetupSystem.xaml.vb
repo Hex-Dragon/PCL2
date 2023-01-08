@@ -161,13 +161,25 @@
             Hint("请在所有下载任务完成后再清理缓存！", HintType.Critical)
             Exit Sub
         End If
-        If MyMsgBox("你确定要清理缓存吗？" & vbCrLf & "在清理缓存后，PCL2 会被强制关闭，以避免缓存缺失带来的异常。", "清理缓存", "确定", "取消") = 2 Then
-            Exit Sub
+        If PathTemp = IO.Path.GetTempPath() & "PCL\" Then
+            If MyMsgBox("你确定要清理缓存吗？" & vbCrLf & "在清理缓存后，PCL2 会被强制关闭，以避免缓存缺失带来的异常。", "清理确认", "确定", "取消") = 2 Then
+                Exit Sub
+            End If
+        Else
+            If MyMsgBox("你已将缓存文件夹手动修改为：" & PathTemp & vbCrLf &
+                        "清理缓存将删除你所设置的这一文件夹中的所有内容，且无法恢复！" & vbCrLf &
+                        "请在继续前，确认其中没有除了 PCL2 缓存以外的重要文件！" & vbCrLf & vbCrLf &
+                        "在清理缓存后，PCL2 会被强制关闭，以避免缓存缺失带来的异常。", "清理确认", "永久删除该文件夹", "取消", IsWarn:=True) = 2 Then
+                Exit Sub
+            End If
         End If
         If IsClearingCache Then Exit Sub
         IsClearingCache = True
         Try
             Dim TotalSize As ULong = DeleteCacheDirectory(PathTemp)
+            DeleteDirectory(PathTemp, True)
+            TotalSize += DeleteCacheDirectory(OsDrive & "ProgramData\PCL\")
+            DeleteDirectory(OsDrive & "ProgramData\PCL\", True)
             If TotalSize <= 0 Then
                 Hint("没有可清理的缓存！")
             Else

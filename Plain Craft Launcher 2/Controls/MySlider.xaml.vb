@@ -126,8 +126,8 @@
                     DotFillName = "ColorBrush3"
                     AnimationTime = 40
                 Else
-                    ForegroundName = "ColorBrush4"
-                    DotFillName = "ColorBrush4"
+                    ForegroundName = "ColorBrushBg0"
+                    DotFillName = "ColorBrushBg0"
                     AnimationTime = 100
                 End If
             Else

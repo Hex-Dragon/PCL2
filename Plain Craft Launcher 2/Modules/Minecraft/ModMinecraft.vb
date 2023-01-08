@@ -10,7 +10,7 @@ Public Module ModMinecraft
     ''' <summary>
     ''' 目前所有可用的 Java。
     ''' </summary>
-    Public JavaList As List(Of JavaEntry)
+    Public JavaList As New List(Of JavaEntry)
     ''' <summary>
     ''' 初始化 Java 列表，但除非没有 Java，否则不进行检查。
     ''' </summary>
@@ -72,7 +72,7 @@ Public Module ModMinecraft
             End Get
         End Property
         ''' <summary>
-        ''' Javaw.exe 文件所在文件夹的路径，以 \ 结尾且只含有 \。
+        ''' Javaw.exe 文件所在文件夹的路径，以 \ 结尾。
         ''' </summary>
         Public PathFolder As String
         ''' <summary>
@@ -156,7 +156,8 @@ Public Module ModMinecraft
                 End If
                 IsJre = Not File.Exists(PathFolder & "javac.exe")
                 '运行 -version
-                Output = ShellAndGetOutput(PathFolder & "java.exe", "-version", 8000).ToLower
+                Output = ShellAndGetOutput(PathFolder & "java.exe", "-version", 15000).ToLower
+                If Output = "" Then Throw New Exception("尝试运行该 Java 失败")
                 If ModeDebug Then Log("[Java] Java 检查输出：" & PathFolder & "java.exe" & vbCrLf & Output)
                 '获取详细信息
                 Dim VersionString = If(RegexSeek(Output, "(?<=version "")[^""]+"), If(RegexSeek(Output, "(?<=openjdk )[0-9]+"), "")).Replace("_", ".").Split("-").First
@@ -281,7 +282,10 @@ Public Module ModMinecraft
 
             '确保可用并获取详细信息，转入正式列表
             Dim NewJavaList As New List(Of JavaEntry)
-            For Each Entry In JavaPreList
+            For Each Entry In ArrayNoDouble(JavaPreList.ToList,
+                                            Function(a As KeyValuePair(Of String, Boolean), b As KeyValuePair(Of String, Boolean))
+                                                Return a.Key.ToLower = b.Key.ToLower '#794
+                                            End Function)
                 NewJavaList.Add(New JavaEntry(Entry.Key, Entry.Value))
             Next
             NewJavaList = Sort(JavaCheckList(NewJavaList), AddressOf JavaSorter)
@@ -469,8 +473,8 @@ RetryGet:
                 Try
                     UserJava = JavaEntry.FromJson(GetJson(UserSetup))
                 Catch ex As Exception
-                    Setup.Set("LaunchArgumentJavaSelect", "")
-                    Log(ex, "获取储存的 Java 失败")
+                    Setup.Set("LaunchArgumentJavaSelect", "使用全局设置")
+                    Log(ex, "版本指定的 Java 信息已损坏，已重置版本设置中指定的 Java")
                     GoTo UserPass
                 End Try
                 For Each Java In AllowedJavaList
@@ -483,20 +487,25 @@ RetryGet:
                 Log("[Java] 发现用户指定的不兼容 Java：" & UserJava.ToString)
                 '弹窗要求选择
                 Dim Requirement As String = ""
-                If (MinVersion Is Nothing OrElse MinVersion.Minor = 0) AndAlso (MaxVersion IsNot Nothing AndAlso MaxVersion.Minor < 99) Then
-                    Requirement = "最高兼容到 Java " & MaxVersion.Minor & If(MaxVersion.MinorRevision < 99, "." & MaxVersion.MinorRevision & "." & MaxVersion.Revision, "")
-                ElseIf (MinVersion IsNot Nothing AndAlso MinVersion.Minor > 0) AndAlso (MaxVersion Is Nothing OrElse MaxVersion.Minor >= 99) Then
-                    Requirement = "至少需要 Java " & MinVersion.Minor & If(MinVersion.MinorRevision > 0 OrElse MinVersion.Revision > 0, "." & MinVersion.MinorRevision & "." & MinVersion.Revision, "")
-                ElseIf (MinVersion IsNot Nothing AndAlso MinVersion.Minor > 0) AndAlso (MaxVersion IsNot Nothing AndAlso MaxVersion.Minor < 99) Then
-                    Dim Left As String = MinVersion.Minor & If(MinVersion.MinorRevision > 0 OrElse MinVersion.Revision > 0, "." & MinVersion.MinorRevision & "." & MinVersion.Revision, "")
-                    Dim Right As String = MaxVersion.Minor & If(MaxVersion.MinorRevision < 99, "." & MaxVersion.MinorRevision & "." & MaxVersion.Revision, "")
+                Dim ShowRevision As Boolean = False
+                If (MinVersion Is Nothing OrElse MinVersion.Minor = 0) AndAlso (MaxVersion IsNot Nothing AndAlso MaxVersion.Minor < 999) Then
+                    ShowRevision = MaxVersion.MinorRevision < 999
+                    Requirement = "最高兼容到 Java " & MaxVersion.Minor & If(ShowRevision, "." & MaxVersion.MajorRevision & "." & MaxVersion.MinorRevision, "")
+                ElseIf (MinVersion IsNot Nothing AndAlso MinVersion.Minor > 0) AndAlso (MaxVersion Is Nothing OrElse MaxVersion.Minor >= 999) Then
+                    ShowRevision = MinVersion.MinorRevision > 0 OrElse MinVersion.MajorRevision > 0
+                    Requirement = "至少需要 Java " & MinVersion.Minor & If(ShowRevision, "." & MinVersion.MajorRevision & "." & MinVersion.MinorRevision, "")
+                ElseIf (MinVersion IsNot Nothing AndAlso MinVersion.Minor > 0) AndAlso (MaxVersion IsNot Nothing AndAlso MaxVersion.Minor < 999) Then
+                    ShowRevision = MinVersion.MinorRevision > 0 OrElse MinVersion.MajorRevision > 0 OrElse MaxVersion.MinorRevision < 999
+                    Dim Left As String = MinVersion.Minor & If(ShowRevision, "." & MinVersion.MajorRevision & "." & MinVersion.MinorRevision, "")
+                    Dim Right As String = MaxVersion.Minor & If(ShowRevision, "." & MaxVersion.MajorRevision & "." & MaxVersion.MinorRevision, "")
                     Requirement = "需要 Java " & If(Left = Right, Left, Left & " ~ " & Right)
                 End If
+                Dim JavaCurrent As String = UserJava.VersionCode & If(ShowRevision, "." & UserJava.Version.MajorRevision & "." & UserJava.Version.MinorRevision, "")
                 If Setup.Get("LaunchAdvanceJava") Then
                     '直接跳过弹窗
-                    Hint("设置中指定了使用 Java " & UserJava.VersionCode & "，但当前版本" & Requirement & "，这可能会导致游戏崩溃！", HintType.Critical)
+                    Hint("设置中指定了使用 Java " & JavaCurrent & "，但当前版本" & Requirement & "，这可能会导致游戏崩溃！", HintType.Critical)
                     AllowedJavaList = New List(Of JavaEntry) From {UserJava}
-                ElseIf MyMsgBox("你在启动设置中指定了使用 Java " & UserJava.VersionCode & "，但当前版本" & Requirement & "。" & vbCrLf &
+                ElseIf MyMsgBox("你在启动设置中指定了使用 Java " & JavaCurrent & "，但当前版本" & Requirement & "。" & vbCrLf &
                                 "如果强制使用该 Java，可能会导致游戏崩溃。" & vbCrLf &
                                 vbCrLf &
                                 " - 指定的 Java：" & UserJava.ToString,
@@ -530,6 +539,7 @@ UserPass:
                 SelectedJava.Check()
             Catch ex As Exception
                 Log(ex, "找到的 Java 已无法使用，尝试进行搜索")
+                AllowedJavaList = New List(Of JavaEntry)
                 JavaSearchLoader.Start(IsForceRestart:=True)
                 GoTo RetryGet
             End Try
@@ -558,11 +568,19 @@ UserPass:
                 If UserSetupVersion <> "使用全局设置" Then UserSetup = UserSetupVersion
             End If
             If UserSetup <> "" Then
-                Dim UserJava = JavaEntry.FromJson(GetJson(UserSetup))
+                Dim UserJava As JavaEntry = Nothing
+                Try
+                    UserJava = JavaEntry.FromJson(GetJson(UserSetup))
+                Catch ex As Exception
+                    Log(ex, "版本指定的 Java 信息已损坏，已重置版本设置中指定的 Java")
+                    Setup.Set("VersionArgumentJavaSelect", "使用全局设置", Version:=RelatedVersion)
+                    GoTo NoUserJava
+                End Try
                 For Each Java In JavaList
                     If Java.PathFolder = UserJava.PathFolder Then Return UserJava.Is64Bit
                 Next
             End If
+NoUserJava:
             '检查列表
             For Each Java In JavaList
                 If Java.Is64Bit Then Return True
@@ -571,7 +589,6 @@ UserPass:
         Catch ex As Exception
             Log(ex, "检查 Java 类别时出错", LogLevel.Feedback)
             Setup.Set("LaunchArgumentJavaSelect", "")
-            Setup.Set("VersionArgumentJavaSelect", "", Version:=RelatedVersion)
             Return True
         End Try
     End Function
@@ -615,7 +632,7 @@ UserPass:
                 MyMsgBox("PCL2 未找到 Java 7。" & vbCrLf &
                          "请自行百度安装 Java 7，安装后在 PCL2 的 设置 → 启动设置 → 游戏 Java 中通过搜索或导入，确保安装的 Java 已列入 Java 列表。",
                          "未找到 Java")
-            Case 8
+            Case 8 '291
                 If Is32BitSystem Then
                     OpenWebsite("https://wwa.lanzoui.com/i7RyXq0jbub")
                 Else
@@ -816,6 +833,8 @@ UserPass:
             _McVersionCurrent = value '由于有可能是 Nothing，导致无法初始化，才得这样弄一圈
             _McVersionLast = value
             If value Is Nothing Then Exit Property
+            '重置缓存的 Mod 文件夹
+            PageDownloadCfDetail.CachedFolder = Nothing
             '统一通行证重判
             If AniControlEnabled = 0 AndAlso
                Setup.Get("VersionServerNide", Version:=value) <> Setup.Get("CacheNideServer") AndAlso
@@ -936,6 +955,7 @@ UserPass:
         ''' </summary>
         Public ReadOnly Property Modable As Boolean
             Get
+                If Not IsLoaded Then Load()
                 Return Version.HasFabric OrElse Version.HasForge OrElse Version.HasLiteLoader OrElse
                     DisplayType = McVersionCardType.API '#223
             End Get
@@ -1770,7 +1790,8 @@ OnLoaded:
                         Version.State = ReadIni(Version.Path & "PCL\Setup.ini", "State", Version.State)
                         Version.IsStar = ReadIni(Version.Path & "PCL\Setup.ini", "IsStar", False)
                         Version.DisplayType = ReadIni(Path & "PCL\Setup.ini", "DisplayType", McVersionCardType.Auto)
-                        If Version.State <> McVersionState.Error Then
+                        If Version.State <> McVersionState.Error AndAlso
+                           ReadIni(Version.Path & "PCL\Setup.ini", "VersionOriginal", "Unknown") <> "Unknown" Then '旧版本可能没有这一项，导致 Version 不加载（#643）
                             Dim VersionInfo As New McVersionInfo With {
                                 .FabricVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionFabric", ""),
                                 .ForgeVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionForge", ""),
@@ -3511,10 +3532,16 @@ VersionFindFail:
             '获取 Mod 文件夹下的可用文件列表
             Dim ModFileList As New List(Of FileInfo)
             If Directory.Exists(Loader.Input) Then
-                For Each File As FileInfo In New DirectoryInfo(Loader.Input).EnumerateFiles("*.*", SearchOption.AllDirectories)
-                    Dim DirName As String = File.DirectoryName.ToLower
-                    If DirName.StartsWith(Loader.Input & "memory_repo") OrElse DirName.StartsWith(".") OrElse
-                       ((DirName & "\") <> Loader.Input AndAlso DirName.Contains("voxel")) Then Continue For
+                Dim RawName As String = Loader.Input.ToLower
+                For Each File As FileInfo In EnumerateFiles(Loader.Input)
+                    If File.DirectoryName.ToLower & "\" <> RawName Then
+                        '仅当 Forge 1.13- 且文件夹名与版本号相同时，才加载该子文件夹下的 Mod
+                        If Not (PageVersionLeft.Version IsNot Nothing AndAlso PageVersionLeft.Version.Version.HasForge AndAlso
+                                PageVersionLeft.Version.Version.McCodeMain < 13 AndAlso
+                                File.Directory.Name = "1." & PageVersionLeft.Version.Version.McCodeMain & "." & PageVersionLeft.Version.Version.McCodeSub) Then
+                            Continue For
+                        End If
+                    End If
                     If McMod.IsModFile(File.FullName) Then ModFileList.Add(File)
                 Next
             End If
@@ -3730,7 +3757,7 @@ VersionFindFail:
     End Sub
 
     ''' <summary>
-    ''' 比较两个版本名的排序，若 Left 较新则返回 True。无法比较两个 Pre 的大小。
+    ''' 比较两个版本名的排序，若 Left 较新或相同则返回 True（Left >= Right）。无法比较两个 Pre 的大小。
     ''' 支持的格式范例：未知版本, 1.13.2, 1.7.10-pre4, 1.8_pre, 1.14 Pre-Release 2, 1.14.4 C6
     ''' </summary>
     Public Function VersionSortBoolean(Left As String, Right As String) As Boolean
@@ -3828,47 +3855,6 @@ NextEntry:
             '不到 6 位，返回全 *
             Return "".PadLeft(Account.Count, "*")
         End If
-    End Function
-    ''' <summary>
-    ''' 对 PCL 约定的替换标记进行处理。
-    ''' </summary>
-    Public Function ArgumentReplace(Raw As String) As String
-        If Raw Is Nothing Then Return Nothing
-        Raw = Raw.Replace("{user}", If(IsNothing(McLoginLoader.Output), "尚未登录", McLoginLoader.Output.Name))
-        If IsNothing(McLoginLoader.Input) Then
-            Raw = Raw.Replace("{login}", "尚未登录")
-        Else
-            Select Case McLoginLoader.Input.Type
-                Case McLoginType.Legacy
-                    If PageLinkHiper.HiperState = LoadState.Finished Then
-                        Raw = Raw.Replace("{login}", "联机离线")
-                    Else
-                        Raw = Raw.Replace("{login}", "离线")
-                    End If
-                Case McLoginType.Mojang
-                    Raw = Raw.Replace("{login}", "Mojang 正版")
-                Case McLoginType.Ms
-                    Raw = Raw.Replace("{login}", "微软正版")
-                Case McLoginType.Nide
-                    Raw = Raw.Replace("{login}", "统一通行证")
-                Case McLoginType.Auth
-                    Raw = Raw.Replace("{login}", "Authlib-Injector")
-            End Select
-        End If
-        If McVersionCurrent Is Nothing Then
-            Raw = Raw.Replace("{name}", "无可用版本")
-            Raw = Raw.Replace("{version}", "无可用版本")
-        Else
-            Raw = Raw.Replace("{name}", McVersionCurrent.Name)
-            If Not McVersionCurrent.IsLoaded Then McVersionCurrent.Load()
-            If {"unknown", "old", "pending"}.Contains(McVersionCurrent.Version.McName.ToLower) Then
-                Raw = Raw.Replace("{version}", McVersionCurrent.Name)
-            Else
-                Raw = Raw.Replace("{version}", McVersionCurrent.Version.McName)
-            End If
-        End If
-        Raw = Raw.Replace("{path}", Path)
-        Return Raw
     End Function
 
 End Module

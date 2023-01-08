@@ -157,8 +157,7 @@
             Dim PackName As String = Project.ChineseName.Replace(".zip", "").Replace(".rar", "").Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")
             Dim Validate As New ValidateFolderName(PathMcFolder & "versions")
             If Validate.Validate(PackName) <> "" Then PackName = ""
-            Dim VersionName As String = MyMsgBoxInput(PackName, New ObjectModel.Collection(Of Validate) From {Validate},
-                                                  Title:="输入版本名", Button2:="取消")
+            Dim VersionName As String = MyMsgBoxInput("输入版本名称", "", PackName, New ObjectModel.Collection(Of Validate) From {Validate})
             If String.IsNullOrEmpty(VersionName) Then Exit Sub
 
             '构造步骤加载器
@@ -206,7 +205,7 @@
                 Dim DefaultFolder As String = Nothing
                 If Not Project.IsModPack Then
                     '获取 Mod 所需的加载器种类
-                    Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing 'FUTURE: Quilt 支持
+                    Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing
                     If File.ModLoaders.Count > 0 Then '从文件中获取
                         AllowForge = False : AllowFabric = False
                         For Each LoaderType In File.ModLoaders
@@ -323,6 +322,9 @@
     End Sub
     Private Sub BtnIntroMCBBS_Click(sender As Object, e As EventArgs) Handles BtnIntroMCBBS.Click
         OpenWebsite("https://www.mcbbs.net/thread-" & Project.MCBBS & "-1-1.html")
+    End Sub
+    Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
+        ClipboardSet(CfItem.LabTitle.Text)
     End Sub
 
 End Class

@@ -297,6 +297,7 @@ Partial Public Module ModAnimation
                      AaHeight(Control, -Control.ActualHeight, 150, 100, New AniEaseOutFluent),
                      AaCode(Sub()
                                 If RemoveFromChildren Then
+                                    If Control.Parent Is Nothing Then Exit Sub
                                     CType(Control.Parent, Object).Children.Remove(Control)
                                 Else
                                     Control.Visibility = Visibility.Collapsed
@@ -306,6 +307,7 @@ Partial Public Module ModAnimation
             }, "MyCard Dispose " & Control.Uuid)
         Else
             If RemoveFromChildren Then
+                If Control.Parent Is Nothing Then Exit Sub
                 CType(Control.Parent, Object).Children.Remove(Control)
             Else
                 Control.Visibility = Visibility.Collapsed

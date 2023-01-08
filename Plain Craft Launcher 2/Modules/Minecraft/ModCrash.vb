@@ -174,10 +174,17 @@
                 TargetType = AnalyzeFileType.CrashReport
                 DirectFile = LogFile
             ElseIf FileName = "latest.log" OrElse FileName = "latest log.txt" OrElse
-                   FileName = "debug.log" OrElse FileName = "debug log.txt" OrElse FileName = "游戏崩溃前的输出.txt" OrElse
-                   FileName = "rawoutput.log" OrElse FileName = "启动器日志.txt" OrElse FileName = "PCL2 启动器日志.txt" OrElse FileName = "log1.txt" Then
+                   FileName = "debug.log" OrElse FileName = "debug log.txt" OrElse
+                   FileName = "游戏崩溃前的输出.txt" OrElse FileName = "rawoutput.log" Then
                 TargetType = AnalyzeFileType.MinecraftLog
                 If DirectFile Is Nothing Then DirectFile = LogFile
+            ElseIf FileName = "启动器日志.txt" OrElse FileName = "PCL2 启动器日志.txt" OrElse FileName = "log1.txt" Then
+                If LogFile.Value.Any(Function(s) s.Contains("以下为游戏输出的最后一段内容")) Then
+                    TargetType = AnalyzeFileType.MinecraftLog
+                    If DirectFile Is Nothing Then DirectFile = LogFile
+                Else
+                    TargetType = AnalyzeFileType.ExtraLog
+                End If
             ElseIf FileName.EndsWith(".log") OrElse FileName.EndsWith(".txt") Then
                 TargetType = AnalyzeFileType.ExtraLog
             Else
@@ -455,9 +462,9 @@ Done:
             If LogMc.Contains("The driver does not appear to support OpenGL") Then AppendReason(CrashReason.显卡不支持OpenGL)
             If LogMc.Contains("java.lang.ClassCastException: java.base/jdk") Then AppendReason(CrashReason.使用JDK)
             If LogMc.Contains("java.lang.ClassCastException: class jdk.") Then AppendReason(CrashReason.使用JDK)
-            If LogMc.Contains("Cannot read field ""ofTelemetry"" because ""net.optifine.Config.gameSettings"" is null") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("TRANSFORMER/net.optifine/net.optifine.reflect.Reflector.<clinit>(Reflector.java") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("Open J9 is not supported") OrElse LogMc.Contains("OpenJ9 is incompatible") OrElse LogMc.Contains(".J9VMInternals.") Then AppendReason(CrashReason.使用OpenJ9)
+            If LogMc.Contains("java.lang.NoSuchFieldException: ucp") Then AppendReason(CrashReason.Java版本过高)
             If LogMc.Contains("Unsupported class file major version") Then AppendReason(CrashReason.Java版本过高)
             If LogMc.Contains("because module java.base does not export") Then AppendReason(CrashReason.Java版本过高)
             If LogMc.Contains("java.lang.ClassNotFoundException: jdk.nashorn.api.scripting.NashornScriptEngineFactory") Then AppendReason(CrashReason.Java版本过高)
@@ -487,11 +494,11 @@ Done:
             '找不到或无法加载主类
             If (RegexCheck(LogMc, "^[^\n.]+.\w+.[^\n]+\n\[$") OrElse RegexCheck(LogMc, "^\[[^\]]+\] [^\n.]+.\w+.[^\n]+\n\[")) AndAlso
                Not (LogMc.Contains("at net.") OrElse LogMc.Contains("/INFO]")) AndAlso
-               LogHs Is Nothing AndAlso LogCrash Is Nothing Then
+               LogHs Is Nothing AndAlso LogCrash Is Nothing AndAlso LogMc.Length < 500 Then
                 AppendReason(CrashReason.路径包含中文且存在编码问题导致找不到或无法加载主类)
             End If
             'Mod 导致的崩溃
-            If LogMc.Contains("Mixin prepare failed ") OrElse LogMc.Contains("mixin.injection.throwables.") OrElse LogMc.Contains(".mixins.json] FAILED during )") Then
+            If LogMc.Contains("Mixin prepare failed ") OrElse LogMc.Contains("Mixin apply failed ") OrElse LogMc.Contains("mixin.injection.throwables.") OrElse LogMc.Contains(".mixins.json] FAILED during )") Then
                 Dim ModId As String = RegexSeek(LogMc, "(?<=in )[^./ ]+(?=.mixins.json.+failed injection check)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in )[^./ ]+(?=.mixins.json)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[)[^./ ]+(?=.mixins.json\] FAILED during )")
@@ -499,7 +506,6 @@ Done:
                 AppendReason(CrashReason.ModMixin失败, TryAnalyzeModName(If(ModId, "").TrimEnd((vbCrLf & " ").ToCharArray)))
             End If
             If LogMc.Contains("Caught exception from ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogMc, "[^\n]+?(?)"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
-            If LogMc.Contains("Failed to create mod instance.") Then AppendReason(CrashReason.Mod初始化失败, TryAnalyzeModName(If(RegexSeek(LogMc, "(?<=Failed to create mod instance. ModID: )[^,]+"), If(RegexSeek(LogMc, "(?<=Failed to create mod instance. ModId )[^\n]+(?= for )"), "")).TrimEnd(vbCrLf)))
         End If
 
         '虚拟机日志分析
@@ -529,6 +535,7 @@ Done:
                 End If
             End If
             If LogCrash.Contains("Multiple entries with same key: ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogCrash, "(?<=Multiple entries with same key: )[^=]+"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
+            If LogCrash.Contains("due to errors, provided by ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogCrash, "(?<=due to errors, provided by ')[^']+"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
             If LogCrash.Contains("LoaderExceptionModCrash: Caught exception from ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogCrash, "(?<=LoaderExceptionModCrash: Caught exception from )[^\n]+"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
             If LogCrash.Contains("Failed loading config file ") Then AppendReason(CrashReason.Mod配置文件导致游戏崩溃, {TryAnalyzeModName(If(RegexSeek(LogCrash, "(?<=Failed loading config file .+ for modid )[^\n]+"), "").TrimEnd(vbCrLf)).First, If(RegexSeek(LogCrash, "(?<=Failed loading config file ).+(?= of type)"), "").TrimEnd(vbCrLf)})
         End If
@@ -542,6 +549,8 @@ Done:
         '游戏日志分析
         If LogMc IsNot Nothing Then
             If LogMc.Contains("]: Warnings were found!") Then AppendReason(CrashReason.Fabric报错, If(RegexSeek(LogMc, "(?<=\]: Warnings were found! ?[\n]+)[\w\W]+?(?=[\n]+\[)"), "").Trim(vbCrLf.ToCharArray))
+            'Mixin 失败可以导致大量 Mod 实例创建失败
+            If LogMc.Contains("Failed to create mod instance.") Then AppendReason(CrashReason.Mod初始化失败, TryAnalyzeModName(If(RegexSeek(LogMc, "(?<=Failed to create mod instance. ModID: )[^,]+"), If(RegexSeek(LogMc, "(?<=Failed to create mod instance. ModId )[^\n]+(?= for )"), "")).TrimEnd(vbCrLf)))
         End If
 
         '崩溃报告分析

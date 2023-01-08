@@ -41,7 +41,7 @@
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="分类" Margin="0,0,25,0" />
                         <local:MyComboBox Grid.Column="1" Grid.Row="2" x:Name="ComboDisplayType">
                             <local:MyComboBoxItem Content="自动" IsSelected="True" />
-                            <local:MyComboBoxItem Content="从版本列表中隐藏" ToolTip="该版本默认将不会在版本列表中显示。&#xA;在版本列表页面按下 F11，即可查看所有隐藏的版本。" ToolTipService.ShowDuration="2333333" />
+                            <local:MyComboBoxItem Content="从版本列表中隐藏" ToolTip="该版本默认将不会在版本列表中显示。&#xa;在版本列表页面按下 F11，即可查看所有隐藏的版本。" />
                             <local:MyComboBoxItem Content="可安装 Mod 的版本" />
                             <local:MyComboBoxItem Content="常规版本" />
                             <local:MyComboBoxItem Content="不常用版本" />
@@ -56,7 +56,7 @@
                         </Grid.ColumnDefinitions>
                         <local:MyButton x:Name="BtnDisplayRename" Text="修改版本名" MinWidth="140" Padding="13,0" Margin="0,0,20,0" />
                         <local:MyButton x:Name="BtnDisplayDesc" Text="修改版本描述" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" />
-                        <local:MyButton x:Name="BtnDisplayDelete" Text="删除版本" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="2" ColorType="Red" />
+                        <local:MyButton x:Name="BtnDisplayStar" Text="加入收藏夹" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="2" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
@@ -83,7 +83,8 @@
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
                         <local:MyButton x:Name="BtnManageScript" Text="导出启动脚本" MinWidth="140" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton x:Name="BtnManageCheck" Text="补全文件" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" ToolTip="校验版本依赖文件是否完整，并重新下载 Assets 索引与缺失、校验失败的文件。&#xa;若游戏缺失音效，请尝试此项。" ToolTipService.ShowDuration="2333333" />
+                        <local:MyButton x:Name="BtnManageCheck" Text="补全文件" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" ToolTip="校验版本依赖文件是否完整，并重新下载 Assets 索引与缺失、校验失败的文件。&#xa;若游戏缺失音效，请尝试此项。" />
+                        <local:MyButton x:Name="BtnManageDelete" Text="删除版本" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="2" ColorType="Red" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

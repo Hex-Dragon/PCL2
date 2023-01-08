@@ -18,9 +18,9 @@
     <StackPanel Margin="25,40,23,15">
         <local:MyHint Text="local:MyHint 代表提示条，它默认是警告样式。" />
         <local:MyHint Margin="0,8,0,2" IsWarn="False"
-                   Text="将提示条的 IsWarn 属性改为 False 即可改为提示样式。&#xA;使用左边的那堆字符可以在任意地方手动换行，如果需要使用等号、引号等特殊字符，可以自行百度 XAML 转义字符。" />
+                   Text="将提示条的 IsWarn 属性改为 False 即可改为提示样式。&#xa;使用左边的那堆字符可以在任意地方手动换行，如果需要使用等号、引号等特殊字符，可以自行百度 XAML 转义字符。" />
         <TextBlock Margin="0,6,0,0"
-                   Text="卡片（local:MyCard）的 Title 属性决定了它的标题。&#xA;为卡片添加 CanSwap 属性让它可以被折叠，True 代表是，False 代表否。在此基础上，再使用 IsSwaped 属性调整它是否默认被折叠。" />
+                   Text="卡片（local:MyCard）的 Title 属性决定了它的标题。&#xa;为卡片添加 CanSwap 属性让它可以被折叠，True 代表是，False 代表否。在此基础上，再使用 IsSwaped 属性调整它是否默认被折叠。" />
     </StackPanel>
 </local:MyCard>
     
@@ -90,7 +90,7 @@
         <TextBlock Margin="0,4,0,0"
                    Text="就像为游戏指定服务器 IP 一样，你也可以在 EventData 的竖线后为程序添加启动参数。" />
         <local:MyButton Margin="0,8,0,0" Width="200" Height="35"
-                   Text="定位游戏启动脚本" EventType="打开文件" EventData="explorer.exe|/select,LatestLaunch.bat" ToolTip="PCL2 会将上一次启动 MC 的脚本保存在 PCL 文件夹内，且名为 LatestLaunch.bat。&#xA;点击按钮会打开文件管理器，并且借助参数要求它选中这个文件。" />
+                   Text="定位游戏启动脚本" EventType="打开文件" EventData="explorer.exe|/select,LatestLaunch.bat" ToolTip="PCL2 会将上一次启动 MC 的脚本保存在 PCL 文件夹内，且名为 LatestLaunch.bat。&#xa;点击按钮会打开文件管理器，并且借助参数要求它选中这个文件。" />
     </StackPanel>
 </local:MyCard>
     
@@ -216,7 +216,7 @@ Image（图片）：
  - Source：要显示的图片的网址
 
 local:MyHint（提示条）：
- - Text：设置显示的文本（&#xA; 代表换行）
+ - Text：设置显示的文本（&#xa; 代表换行）
  - IsWarn：设置为 True 代表警告样式，False 代表提示样式
  
 local:MyButton（按钮）：

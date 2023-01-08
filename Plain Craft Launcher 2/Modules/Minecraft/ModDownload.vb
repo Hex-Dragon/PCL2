@@ -967,7 +967,7 @@
         Public CategoryId As Integer = 0 '421: Mod(?), 4780: Fabric
         Public IsModPack As Boolean = False
         Public GameVersion As String = Nothing
-        Public PageSize As String = 50
+        Public PageSize As Integer = 50
         Public SearchFilter As String = Nothing
         Public Index As Integer? = Nothing
         Public ModLoader As Integer? = Nothing
@@ -1270,11 +1270,11 @@
             If Task.Input.IsModPack Then Throw New Exception("整合包搜索仅支持英文")
             ReleaseCfDatabase()
             '构造搜索请求
-            Dim SearchEntries As New List(Of SearchEntry(Of String))
+            Dim SearchEntries As New List(Of SearchEntry(Of DlCfDbEntry))
             For Each Entry In DlCfProjectDb.Values
                 If If(Entry.ChineseName, "").Contains("动态的树") Then Continue For '傻逼 Mod 的附属太多了
-                SearchEntries.Add(New SearchEntry(Of String) With {
-                    .Item = Entry.ChineseName,
+                SearchEntries.Add(New SearchEntry(Of DlCfDbEntry) With {
+                    .Item = Entry,
                     .SearchSource = New List(Of KeyValuePair(Of String, Double)) From {
                         New KeyValuePair(Of String, Double)(Entry.ChineseName & Entry.CurseForgeId, 1)
                     }
@@ -1284,20 +1284,21 @@
             Dim SearchResults = Search(SearchEntries, Task.Input.SearchFilter, 3)
             If SearchResults.Count = 0 Then Throw New Exception("无搜索结果，请尝试搜索英文名称")
             Dim SearchResult As String = ""
-            For i = 0 To SearchResults.Count - 1
+            For i = 0 To Math.Min(4, SearchResults.Count - 1) '就算全是准确的，也最多只要 5 个
                 If Not SearchResults(i).AbsoluteRight AndAlso i >= Math.Min(2, SearchResults.Count - 1) Then Exit For '把 3 个结果拼合以提高准确度
-                SearchResult += SearchResults(i).Item.Replace(" - ", "§").Split("§").First.Replace(" (", "|").Split("|").Last.TrimEnd(")") & " "
+                SearchResult += SearchResults(i).Item.CurseForgeId.Replace("-", " ") & " "
+                SearchResult += SearchResults(i).Item.ChineseName.Replace(" (", "|").Split("|").Last.TrimEnd(") ").Replace(" - ", "§").Split("§").First & " "
             Next
-            Log("[Download] CurseForge 工程列表中文搜索原始关键词：" & SearchResult, LogLevel.Developer)
+            Log("[Download] CurseForge 中文搜索原始关键词：" & SearchResult, LogLevel.Developer)
             '去除常见连接词
             Dim RealFilter As String = ""
             For Each Word In SearchResult.Split(" ")
-                If {"the", "of", "a", "mod"}.Contains(Word.ToLower) Then Continue For
+                If {"the", "of", "a", "mod"}.Contains(Word.ToLower) OrElse Val(Word) > 0 Then Continue For
                 If SearchResult.Split(" ").Count > 3 AndAlso {"ftb"}.Contains(Word.ToLower) Then Continue For
-                RealFilter += Word & " "
+                RealFilter += Word.TrimStart("{[(").TrimEnd("}])") & " "
             Next
             Task.Input.SearchFilter = RealFilter
-            Log("[Download] CurseForge 工程列表中文搜索最终关键词：" & RealFilter, LogLevel.Developer)
+            Log("[Download] CurseForge 中文搜索最终关键词：" & RealFilter, LogLevel.Developer)
         End If
         '驼峰英文请求关键字处理
         Dim SpacedKeywords = RegexReplace(Task.Input.SearchFilter, "$& ", "([A-Z]+|[a-z]+?)(?=[A-Z]+[a-z]+[a-z ]*)")
@@ -1307,8 +1308,9 @@
         Dim RightKeywords As New List(Of String)
         For Each Keyword In AllPossibleKeywords.Split(" ")
             If Keyword.Trim = "" Then Continue For
-            If Keyword = "forge" OrElse Keyword = "fabric" OrElse Keyword = "for" OrElse Keyword = "mod" Then 'https://github.com/Hex-Dragon/PCL2/issues/208
-                Log("[Download] 已跳过搜索关键词 " & Keyword, LogLevel.Developer)
+            If {"forge", "fabric", "for", "mod",
+                "forge/fabric", "fabric/forge", "fabric/quilt", "quilt/fabric"}.Contains(Keyword) Then 'https://github.com/Hex-Dragon/PCL2/issues/208
+                Log("[Download] 已跳过搜索关键词：" & Keyword, LogLevel.Developer)
                 Continue For
             End If
             RightKeywords.Add(Keyword)
@@ -1387,18 +1389,25 @@
     Private Sub ReleaseCfDatabase()
         If DlCfProjectDb IsNot Nothing Then Exit Sub
         DlCfProjectDb = New Dictionary(Of String, DlCfDbEntry)
+        Dim i As Integer = 0
         For Each Line In DecodeBytes(GetResources("ModData")).Split(vbLf)
-            Dim Entry = New DlCfDbEntry
-            Dim SplitedLine = Line.Split("|")
-            Entry.CurseForgeId = SplitedLine(0)
-            Entry.WikiId = SplitedLine(1)
-            Entry.ChineseName = SplitedLine(2)
-            Entry.MCBBS = If(SplitedLine.Count = 4, SplitedLine(3), Nothing)
-            If Entry.ChineseName.Contains("*") Then '处理 *
-                Entry.ChineseName = Entry.ChineseName.Replace("*", " (" &
-                        String.Join(" ", Entry.CurseForgeId.Split("-").Select(Function(w) w.Substring(0, 1).ToUpper & w.Substring(1, w.Length - 1))) & ")")
-            End If
-            DlCfProjectDb.Add(Entry.CurseForgeId, Entry)
+            i += 1
+            If Line = "" Then Continue For
+            For Each EntryData As String In Line.Split("¨")
+                Dim Entry = New DlCfDbEntry
+                Dim SplitedLine = EntryData.Split("|")
+                Entry.CurseForgeId = SplitedLine(0)
+                Entry.WikiId = i
+                If SplitedLine.Count >= 2 Then
+                    Entry.ChineseName = SplitedLine(1)
+                    Entry.MCBBS = If(SplitedLine.Count >= 3, SplitedLine(2), Nothing)
+                    If Entry.ChineseName.Contains("*") Then '处理 *
+                        Entry.ChineseName = Entry.ChineseName.Replace("*", " (" &
+                            String.Join(" ", Entry.CurseForgeId.Split("-").Select(Function(w) w.Substring(0, 1).ToUpper & w.Substring(1, w.Length - 1))) & ")")
+                    End If
+                End If
+                DlCfProjectDb.Add(Entry.CurseForgeId, Entry)
+            Next
         Next
     End Sub
     Public Class DlCfDbEntry

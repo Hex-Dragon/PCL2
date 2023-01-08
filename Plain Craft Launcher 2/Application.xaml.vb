@@ -32,7 +32,7 @@ Public Class Application
                 ElseIf e.Args(0).StartsWith("--link") Then
                     '稍作等待后切换到联机页面
                     Thread.Sleep(1000)
-                    FormMain.IsLinkRestart = True
+                    'FormMain.IsLinkRestart = True
 #If DEBUG Then
                 ElseIf e.Args(0) = "--make" Then
                     '制作更新包

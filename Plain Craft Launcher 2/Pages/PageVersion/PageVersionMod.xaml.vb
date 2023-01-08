@@ -23,6 +23,7 @@
     Public Sub RefreshList(Optional ForceReload As Boolean = False)
         If McModLoader.State = LoadState.Loading Then Exit Sub
         If LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", If(ForceReload, LoaderFolderRunType.ForceRun, LoaderFolderRunType.RunOnUpdated)) Then
+            Log("[System] 已刷新 Mod 列表")
             PanBack.ScrollToHome()
             SearchBox.Text = ""
         End If
@@ -212,39 +213,38 @@
     ''' </summary>
     Private Sub BtnManageChange_Click(sender As MyButton, e As EventArgs) Handles BtnManageEnabled.Click, BtnManageDisabled.Click
         Dim IsSuccessful As Boolean = True
-        Try
-            Dim IsDisable As Boolean = sender.Text.Contains("禁用")
-            For Each ModEntity In McModLoader.Output
-                Dim NewPath As String = Nothing
-                If ModEntity.State = McMod.McModState.Fine And IsDisable Then
-                    '禁用
-                    NewPath = ModEntity.Path & ".disabled"
-                ElseIf ModEntity.State = McMod.McModState.Disabled AndAlso Not IsDisable Then
-                    '启用
-                    NewPath = ModEntity.Path.Substring(0, ModEntity.Path.Count - ".disabled".Count)
-                Else
-                    Continue For
-                End If
-                '重命名
-                Try
-                    If File.Exists(ModEntity.Path) Then
-                        File.Delete(NewPath)
-                        FileSystem.Rename(ModEntity.Path, NewPath)
-                    Else
-                        Throw New FileNotFoundException("未找到文件：" & ModEntity.Path)
-                    End If
-                Catch ex As Exception
-                    Log(ex, "全局状态改变中重命名 Mod 失败")
-                    IsSuccessful = False
-                End Try
-            Next
-        Catch ex As Exception
-            Log(ex, "改变全部 Mod 状态失败", LogLevel.Msgbox)
-            IsSuccessful = False
-        Finally
-            If Not IsSuccessful Then Hint("由于文件被占用，部分 Mod 的状态切换失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
-            RefreshList()
-        End Try
+        Dim SuccessfulCount As Integer = 0
+        Dim IsDisable As Boolean = sender.Text.Contains("禁用")
+        For Each ModEntity In McModLoader.Output
+            Dim NewPath As String = Nothing
+            If ModEntity.State = McMod.McModState.Fine And IsDisable Then
+                '禁用
+                NewPath = ModEntity.Path & ".disabled"
+            ElseIf ModEntity.State = McMod.McModState.Disabled AndAlso Not IsDisable Then
+                '启用
+                NewPath = ModEntity.Path.Substring(0, ModEntity.Path.Count - ".disabled".Count)
+            Else
+                SuccessfulCount += 1
+                Continue For
+            End If
+            '重命名
+            Try
+                If File.Exists(NewPath) AndAlso Not File.Exists(ModEntity.Path) Then Continue For '因为未知原因 Mod 的状态已经切换完了
+                File.Delete(NewPath)
+                FileSystem.Rename(ModEntity.Path, NewPath)
+                SuccessfulCount += 1
+            Catch ex As FileNotFoundException
+                Log(ex, "未找到需要重命名的 Mod（" & If(ex.FileName, "null") & "）", LogLevel.Feedback)
+                RefreshList()
+                Exit Sub
+            Catch ex As Exception
+                Log(ex, "全局状态改变中重命名 Mod 失败")
+                IsSuccessful = False
+            End Try
+        Next
+        If Not IsSuccessful Then Hint("由于文件被占用，部分 Mod 的状态切换失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
+        Log("[System] 已确认 " & SuccessfulCount & "/" & McModLoader.Output.Count & " 个 Mod 的状态与要求一致")
+        RefreshList()
     End Sub
 
 #End Region

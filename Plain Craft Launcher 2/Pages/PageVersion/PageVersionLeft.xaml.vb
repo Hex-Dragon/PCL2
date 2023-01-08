@@ -3,7 +3,7 @@
     ''' <summary>
     ''' 当前显示设置的 MC 版本。
     ''' </summary>
-    Public Shared Version As McVersion
+    Public Shared Version As McVersion = Nothing
 
     Public Sub RefreshModDisabled() Handles Me.Loaded
         If Version IsNot Nothing AndAlso Version.Modable Then

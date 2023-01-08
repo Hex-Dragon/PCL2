@@ -13,16 +13,12 @@
             </Grid.RowDefinitions>
             <local:MyCard Margin="0,0,0,25" x:Name="CardIntro">
                 <StackPanel Margin="22,22,22,19" x:Name="PanIntro">
-                    <Grid Height="35">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                        </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnIntroCf" Grid.Column="0" MinWidth="140" Text="查看 CurseForge" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
-                        <local:MyButton x:Name="BtnIntroWiki" Grid.Column="1" MinWidth="140" Text="查看百科" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
-                        <local:MyButton x:Name="BtnIntroMCBBS" Grid.Column="2" MinWidth="140" Text="查看 MCBBS" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
-                    </Grid>
+                    <StackPanel Orientation="Horizontal" Height="35">
+                        <local:MyButton x:Name="BtnIntroCf"    MinWidth="140" Text="查看 CurseForge" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
+                        <local:MyButton x:Name="BtnIntroWiki"  MinWidth="140" Text="查看百科" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
+                        <local:MyButton x:Name="BtnIntroMCBBS" MinWidth="140" Text="查看 MCBBS" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
+                        <local:MyButton x:Name="BtnIntroCopy"  MinWidth="140" Text="复制名称" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
+                    </StackPanel>
                 </StackPanel>
             </local:MyCard>
             <StackPanel Grid.Row="1" Grid.RowSpan="2" Name="PanMain" Grid.IsSharedSizeScope="True" />

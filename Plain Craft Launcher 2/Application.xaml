@@ -25,7 +25,6 @@
             <SolidColorBrush x:Key="ColorBrush8">#eaf2fe</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushBg0">#96c0f9</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushBg1">#bee0eafd</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrushBg2">#50e0eafd</SolidColorBrush>
             <Color x:Key="ColorObject1">#343d4a</Color>
             <Color x:Key="ColorObject2">#0b5bcb</Color>
             <Color x:Key="ColorObject3">#1370f3</Color>
@@ -36,7 +35,6 @@
             <Color x:Key="ColorObject8">#eaf2fe</Color>
             <Color x:Key="ColorObjectBg0">#96c0f9</Color>
             <Color x:Key="ColorObjectBg1">#bee0eafd</Color>
-            <Color x:Key="ColorObjectBg2">#50e0eafd</Color>
             <SolidColorBrush x:Key="ColorBrushGray1">#404040</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushGray2">#737373</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushGray3">#8c8c8c</SolidColorBrush>
@@ -56,7 +54,7 @@
             <SolidColorBrush x:Key="ColorBrushRedBack">#80fbdddd</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushRedLight">#ff4c4c</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushRedDark">#ce2111</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrushHalfWhite" Color="#44ffffff" />
+            <SolidColorBrush x:Key="ColorBrushHalfWhite" Color="#55ffffff" />
             <SolidColorBrush x:Key="ColorBrushSemiWhite" Color="#bbffffff" />
             <SolidColorBrush x:Key="ColorBrushWhite" Color="#ffffff" />
             <SolidColorBrush x:Key="ColorBrushTransparent" Color="Transparent" />
@@ -264,7 +262,7 @@
             <!-- TextBox -->
             <Style TargetType="local:MyTextBox">
                 <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="Background" Value="{StaticResource ColorBrushBg2}" />
+                <Setter Property="Background" Value="{StaticResource ColorBrushHalfWhite}" />
                 <Setter Property="FontSize" Value="13" />
                 <Setter Property="SelectionBrush" Value="{DynamicResource ColorBrush3}" />
                 <Setter Property="Foreground" Value="{DynamicResource ColorBrush1}" />
@@ -308,7 +306,7 @@
                 <Setter Property="VerticalContentAlignment" Value="Top" />
                 <Setter Property="SelectionBrush" Value="{DynamicResource ColorBrush3}" />
                 <Setter Property="Foreground" Value="{DynamicResource ColorBrush1}" />
-                <Setter Property="Background" Value="{StaticResource ColorBrushBg2}" />
+                <Setter Property="Background" Value="{StaticResource ColorBrushHalfWhite}" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ColorBrushBg0}" />
                 <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
                 <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -336,7 +334,7 @@
                                 <Trigger Property="IsFocused" Value="True">
                                     <Trigger.Setters>
                                         <Setter Property="BorderBrush" Value="{DynamicResource ColorBrush3}" />
-                                        <Setter Property="Background" Value="{DynamicResource ColorBrushSemiWhite}" />
+                                        <Setter Property="Background" Value="{DynamicResource ColorBrush7}" />
                                     </Trigger.Setters>
                                 </Trigger>
                             </ControlTemplate.Triggers>
@@ -359,7 +357,7 @@
                 <Setter Property="OverridesDefaultStyle" Value="True" />
                 <Setter Property="SnapsToDevicePixels" Value="True" />
                 <Setter Property="Foreground" Value="{DynamicResource ColorBrushBg0}" />
-                <Setter Property="Background" Value="{DynamicResource ColorBrushBg2}" />
+                <Setter Property="Background" Value="{StaticResource ColorBrushHalfWhite}" />
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Setter Property="FontSize" Value="13" />
                 <Setter Property="MaxDropDownHeight" Value="160" />

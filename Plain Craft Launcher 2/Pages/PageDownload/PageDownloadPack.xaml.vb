@@ -72,7 +72,7 @@
     Private Sub BtnSearchReset_Click(sender As Object, e As EventArgs) Handles BtnSearchReset.Click
         TextSearchName.Text = ""
         TextSearchVersion.SelectedIndex = 0
-        TextSearchVersion.Text = "全部"
+        TextSearchVersion.Text = ""
         ComboSearchTag.SelectedIndex = 0
         Loader.LastFinishedTime = 0 '要求强制重新开始
     End Sub

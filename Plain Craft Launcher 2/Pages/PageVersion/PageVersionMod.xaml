@@ -22,7 +22,7 @@
                                 <local:MyButton x:Name="BtnManageOpen" Grid.Column="0" MinWidth="140" Text="打开 Mod 文件夹" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
                                 <local:MyButton x:Name="BtnManageEnabled" Grid.Column="1" MinWidth="140" Text="全部启用" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
                                 <local:MyButton x:Name="BtnManageDisabled" Grid.Column="2" MinWidth="140" Text="全部禁用" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
-                                <local:MyButton x:Name="BtnManageCheck" Grid.Column="3" MinWidth="140" Text="检查 Mod" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ToolTip="快速检查 Mod 的版本要求、重复、前置缺失等问题。&#xA;结果仅供参考，由于部分 Mod 标注的信息有误，可能并不准确。" Visibility="Collapsed" />
+                                <local:MyButton x:Name="BtnManageCheck" Grid.Column="3" MinWidth="140" Text="检查 Mod" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ToolTip="快速检查 Mod 的版本要求、重复、前置缺失等问题。&#xa;结果仅供参考，由于部分 Mod 标注的信息有误，可能并不准确。" Visibility="Collapsed" />
                             </Grid>
                         </StackPanel>
                     </local:MyCard>
@@ -39,7 +39,7 @@
                 <StackPanel Margin="20,17">
                     <TextBlock Margin="0,0,0,9" HorizontalAlignment="Center" Text="未找到 Mod" FontSize="19" UseLayoutRounding="True" SnapsToDevicePixels="True" Foreground="{DynamicResource ColorBrush3}" />
                     <Rectangle HorizontalAlignment="Stretch" Height="2" Fill="{DynamicResource ColorBrush3}" />
-                    <TextBlock Margin="10,15,10,0" Text="要安装 Mod，请直接将 Mod 文件拖入 PCL2 窗口。&#xA;如果你确定你已经安装了 Mod，但仍然看到了这条提示，那么你的版本隔离设置可能有误。请尝试在启动设置中调整版本隔离选项。" TextWrapping="Wrap" />
+                    <TextBlock Margin="10,15,10,0" Text="要安装 Mod，请直接将 Mod 文件拖入 PCL2 窗口。&#xa;如果你确定你已经安装了 Mod，但仍然看到了这条提示，那么你的版本隔离设置可能有误。请尝试在启动设置中调整版本隔离选项。" TextWrapping="Wrap" />
                     <local:MyButton Height="35" HorizontalAlignment="Center" x:Name="BtnHintOpen" MinWidth="140" Text="打开 Mod 文件夹" Margin="0,15,0,0" Padding="13,0" ColorType="Highlight" />
                 </StackPanel>
             </local:MyCard>

@@ -6,13 +6,13 @@
     Public HasRunningMinecraft As Boolean = False
     Private Sub WatcherStateChanged()
         Dim IsRunning As Boolean = False
-        Dim IsCrashed As Boolean = False
+        Dim TriggerLauncherShutdown As Boolean = True
         For Each Watcher In McWatcherList
             If Watcher.State = Watcher.MinecraftState.Loading OrElse Watcher.State = Watcher.MinecraftState.Running Then
                 IsRunning = True
                 Exit For
-            ElseIf Watcher.State = Watcher.MinecraftState.Crashed Then
-                IsCrashed = True
+            ElseIf Watcher.State = Watcher.MinecraftState.Crashed OrElse Watcher.State = Watcher.MinecraftState.Canceled Then
+                TriggerLauncherShutdown = False
             End If
         Next
         If IsWatcherRunning = IsRunning Then Exit Sub
@@ -20,7 +20,7 @@
         If IsWatcherRunning Then
             MinecraftStart()
         Else
-            MinecraftStop(IsCrashed)
+            MinecraftStop(TriggerLauncherShutdown)
         End If
     End Sub
     Private Sub MinecraftStart()
@@ -28,7 +28,7 @@
         HasRunningMinecraft = True
         FrmMain.BtnExtraShutdown.ShowRefresh()
     End Sub
-    Private Sub MinecraftStop(HasMinecraftCrashed As Boolean)
+    Private Sub MinecraftStop(TriggerLauncherShutdown As Boolean)
         McLaunchLog("[全局] 已无运行中的 Minecraft")
         HasRunningMinecraft = False
         FrmMain.BtnExtraShutdown.ShowRefresh()
@@ -42,10 +42,10 @@
         Select Case Setup.Get("LaunchArgumentVisible")
             Case 2
                 '直接关闭
-                If HasMinecraftCrashed Then
-                    RunInUi(Sub() FrmMain.Hidden = False)
-                Else
+                If TriggerLauncherShutdown Then
                     RunInUi(Sub() FrmMain.EndProgram(False))
+                Else
+                    RunInUi(Sub() FrmMain.Hidden = False)
                 End If
             Case 3
                 '恢复
@@ -73,7 +73,7 @@
             '更改列表
             Dim NewWatcherList As New List(Of Watcher)
             For Each Watch In McWatcherList
-                If Watch.State = MinecraftState.Crashed OrElse Watch.State = MinecraftState.Ended Then Continue For
+                If Watch.State = MinecraftState.Crashed OrElse Watch.State = MinecraftState.Ended OrElse Watch.State = MinecraftState.Canceled Then Continue For
                 NewWatcherList.Add(Watch)
             Next
             NewWatcherList.Add(Me)
@@ -90,8 +90,7 @@
             '初始化时钟
             RunInNewThread(Sub()
                                Try
-                                   MinecraftBeforeLaunch = GetAllMinecraftWindowHandle(False).Keys.ToList
-                                   Do Until State = MinecraftState.Ended OrElse State = MinecraftState.Crashed OrElse Loader.State = LoadState.Aborted
+                                   Do Until State = MinecraftState.Ended OrElse State = MinecraftState.Crashed OrElse State = MinecraftState.Canceled OrElse Loader.State = LoadState.Aborted
                                        TimerWindow()
                                        TimerLog()
                                        '设置窗口标题
@@ -128,6 +127,7 @@
             Running
             Crashed
             Ended
+            Canceled
         End Enum
 
         '日志
@@ -250,77 +250,72 @@
         Private IsWindowAppeared As Boolean = False
         Private IsWindowFinished As Boolean = False
         Private WindowHandle As IntPtr
-        Private MinecraftBeforeLaunch As List(Of IntPtr)
         Private Sub TimerWindow()
             Try
                 If GameProcess.HasExited Then Exit Sub
-                If Not IsWindowFinished Then
-                    '获取全部窗口，检查是否有新增的
-                    Dim MinecraftWindows = GetAllMinecraftWindowHandle(True)
-                    For Each Window In MinecraftBeforeLaunch
-                        If MinecraftWindows.ContainsKey(Window) Then MinecraftWindows.Remove(Window)
-                    Next
-                    If MinecraftWindows.Count = 0 Then Exit Sub
-                    '已找到窗口
-                    If MinecraftWindows.Values(0) Then
-                        '已找到 Minecraft 窗口
-                        WindowHandle = MinecraftWindows.Keys(0)
-                        WatcherLog("Minecraft 窗口已加载：" & WindowHandle.ToInt64)
-                        IsWindowFinished = True
-                        '最大化
-                        If Setup.Get("LaunchArgumentWindowType") = 4 Then
-                            RunInNewThread(Sub()
-                                               Try
-                                                   '如果最大化导致屏幕渲染大小不对，那是 MC 的 Bug，不是我的 Bug
-                                                   '……虽然我很想这样说，但总有人反馈，算了
-                                                   Thread.Sleep(1000)
-                                                   ShowWindow(WindowHandle, 3)
-                                               Catch ex As Exception
-                                                   Log(ex, "最大化 Minecraft 窗口时出现错误")
-                                               End Try
-                                           End Sub, "MinecraftWindowMaximize")
-                        End If
-                    ElseIf Not IsWindowAppeared Then
-                        '已找到 FML 窗口
-                        WatcherLog("FML 窗口已加载：" & MinecraftWindows.Keys(0).ToInt64)
+                If IsWindowFinished Then Exit Sub
+                '获取全部窗口，检查是否有新增的
+                Dim MinecraftWindow = TryGetMinecraftWindow()
+                If MinecraftWindow Is Nothing Then Exit Sub
+                Dim MinecraftWindowName = MinecraftWindow.Value.Value, MinecraftWindowHandle = MinecraftWindow.Value.Key
+                '已找到窗口
+                If Not MinecraftWindowName.StartsWith("FML") Then
+                    '已找到 Minecraft 窗口
+                    WindowHandle = MinecraftWindowHandle
+                    WatcherLog("Minecraft 窗口已加载：" & MinecraftWindowName & "（" & MinecraftWindowHandle.ToInt64 & "）")
+                    IsWindowFinished = True
+                    '最大化
+                    If Setup.Get("LaunchArgumentWindowType") = 4 Then
+                        RunInNewThread(Sub()
+                                           Try
+                                               '如果最大化导致屏幕渲染大小不对，那是 MC 的 Bug，不是我的 Bug
+                                               '……虽然我很想这样说，但总有人反馈，算了
+                                               Thread.Sleep(2000)
+                                               ShowWindow(WindowHandle, 3)
+                                           Catch ex As Exception
+                                               Log(ex, "最大化 Minecraft 窗口时出现错误")
+                                           End Try
+                                       End Sub, "MinecraftWindowMaximize")
                     End If
-                    IsWindowAppeared = True
+                ElseIf Not IsWindowAppeared Then
+                    '已找到 FML 窗口
+                    WatcherLog("FML 窗口已加载：" & MinecraftWindowName & "（" & MinecraftWindowHandle.ToInt64 & "）")
                 End If
+                IsWindowAppeared = True
             Catch ex As Exception
                 Log(ex, "检查 Minecraft 窗口失败", LogLevel.Feedback)
             End Try
         End Sub
         ''' <summary>
-        ''' 获取所有 Minecraft 窗口句柄。
-        ''' Value: 是否为 Minecraft 窗口，而不是 FML 窗口。
+        ''' 获取可能是当前进程对应的 Minecraft 窗口的句柄和标题。
+        ''' Nothing 代表未找到。
         ''' </summary>
-        ''' <param name="CanUseFml">是否包含 FML 窗口</param>
-        Private Function GetAllMinecraftWindowHandle(CanUseFml As Boolean) As Dictionary(Of IntPtr, Boolean)
-            Dim AllList As New Dictionary(Of IntPtr, Boolean)
-            EnumWindows(Sub(hwnd As IntPtr, lParam As Integer)
-                            '检查类名
-                            Dim str As New StringBuilder(512)
-                            GetClassName(hwnd, str, str.Capacity)
-                            Dim ClassName As String = str.ToString
-                            If Not (ClassName = "GLFW30" OrElse ClassName = "LWJGL" OrElse ClassName = "SunAwtFrame") Then Exit Sub
-                            '检查窗口标题名
-                            str = New StringBuilder(512)
-                            GetWindowText(hwnd, str, str.Capacity)
-                            Dim WindowText As String = str.ToString
-                            If CanUseFml AndAlso WindowText.StartsWith("FML") Then
-                                AllList.Add(hwnd, False)
-                            ElseIf Not (WindowText.StartsWith("GLFW") OrElse WindowText = "PopupMessageWindow") Then
-                                '有的 Mod 可以修改窗口标题，不能检测是否为 Minecraft 打头
-                                '部分版本会搞个 GLFW message window 出来所以得反选
-                                AllList.Add(hwnd, True)
-                            End If
-                            'If WindowText.StartsWith("Minecraft") Then
-                            '    AllList.Add(hwnd, True)
-                            'ElseIf CanUseFml AndAlso WindowText.StartsWith("FML") Then
-                            '    AllList.Add(hwnd, False)
-                            'End If
-                        End Sub, 0)
-            Return AllList
+        Private Function TryGetMinecraftWindow() As KeyValuePair(Of IntPtr, String)?
+            TryGetMinecraftWindow = Nothing
+            EnumWindows(
+                Sub(hwnd As IntPtr, lParam As Integer)
+                    If TryGetMinecraftWindow IsNot Nothing Then Exit Sub
+                    '检查类名
+                    Dim str As New StringBuilder(512)
+                    GetClassName(hwnd, str, str.Capacity)
+                    Dim ClassName As String = str.ToString
+                    If Not (ClassName = "GLFW30" OrElse ClassName = "LWJGL" OrElse ClassName = "SunAwtFrame") Then Exit Sub
+                    '获取窗口标题名
+                    str = New StringBuilder(512)
+                    GetWindowText(hwnd, str, str.Capacity)
+                    Dim WindowText As String = str.ToString
+                    '有的 Mod 可以修改窗口标题，所以不能检测是否为 Minecraft 打头，这并不准确
+                    '部分版本会搞个 GLFW message window 出来所以得反选
+                    If Not (WindowText.StartsWith("FML") OrElse (WindowText <> "PopupMessageWindow") AndAlso Not WindowText.StartsWith("GLFW")) Then Exit Sub
+                    '获取窗口关联的进程
+                    Dim ProcessId As Integer
+                    GetWindowThreadProcessId(hwnd, ProcessId)
+                    Dim WindowProcess = Process.GetProcessById(ProcessId)
+                    If WindowProcess.StartTime < GameProcess.StartTime Then Exit Sub '需要是此后启动的进程
+                    '返回
+                    TryGetMinecraftWindow = New KeyValuePair(Of IntPtr, String)(hwnd, WindowText)
+                End Sub, 0)
+            Return TryGetMinecraftWindow
         End Function
         Private Delegate Sub EnumWindowsSub(hwnd As IntPtr, lParam As Integer)
         Private Declare Function EnumWindows Lib "user32" (hWnd As EnumWindowsSub, lParam As Integer) As Boolean
@@ -328,6 +323,7 @@
         Private Declare Function GetWindowText Lib "user32" Alias "GetWindowTextA" (hWnd As Integer, str As StringBuilder, maxCount As Integer) As Integer
         Private Declare Function SetWindowText Lib "user32" Alias "SetWindowTextA" (hWnd As Integer, str As String) As Boolean
         Private Declare Function ShowWindow Lib "user32" (hWnd As IntPtr, cmdWindow As UInteger) As Boolean
+        Private Declare Function GetWindowThreadProcessId Lib "user32" (hWnd As IntPtr, ByRef lpdwProcessId As Integer) As Integer
 
         '崩溃处理
         Private Sub Crashed()
@@ -356,7 +352,7 @@
 
         '强制关闭
         Public Sub Kill()
-            State = MinecraftState.Ended
+            State = MinecraftState.Canceled
             WatcherLog("尝试强制结束 Minecraft 进程")
             Try
                 If Not GameProcess.HasExited Then GameProcess.Kill()

@@ -256,20 +256,20 @@ UnknownType:
                 RadioLoginType5.Visibility = Visibility.Visible
                 RadioLoginType0.Visibility = Visibility.Visible
             Case 1 '仅正版
-                If RadioLoginType5.Checked Then
-                    If Setup.Get("CacheMsAccess") = "" Then
-                        Type = PageType.Ms
-                    Else
-                        Type = PageType.MsSkin
-                    End If
-                    Setup.Set("LoginType", McLoginType.Ms)
-                Else
+                If RadioLoginType1.Checked Then
                     If Setup.Get("CacheMojangAccess") = "" Then
                         Type = PageType.Mojang
                     Else
                         Type = PageType.MojangSkin
                     End If
                     Setup.Set("LoginType", McLoginType.Mojang)
+                Else
+                    If Setup.Get("CacheMsAccess") = "" Then
+                        Type = PageType.Ms
+                    Else
+                        Type = PageType.MsSkin
+                    End If
+                    Setup.Set("LoginType", McLoginType.Ms)
                 End If
                 PanType.Visibility = Visibility.Visible
                 PanTypeOne.Visibility = Visibility.Collapsed
@@ -725,7 +725,7 @@ ExitRefresh:
         '初始化页面
         LabLaunchingName.Text = McVersionCurrent.Name
         LabLaunchingStage.Text = "初始化"
-        LabLaunchingTitle.Text = "正在启动游戏"
+        LabLaunchingTitle.Text = If(McLaunchLoader.Input Is Nothing OrElse McLaunchLoader.Input.SaveBatch Is Nothing, "正在启动游戏", "正在导出启动脚本")
         LabLaunchingProgress.Text = "0.00 %"
         LabLaunchingProgress.Opacity = 1
         LabLaunchingDownload.Visibility = Visibility.Visible
@@ -786,7 +786,7 @@ ExitRefresh:
             If ActualProgress <= ShowProgress Then ShowProgress = ActualProgress '原来或处理后变得比实际进度高，直接回退
             If IsLaunched Then ShowProgress = 1 '如果已经完成了，就不卖关子了
             '文本
-            LabLaunchingTitle.Text = If(IsLaunched, "已启动游戏", "正在启动游戏")
+            LabLaunchingTitle.Text = If(IsLaunched, "已启动游戏", If(McLaunchLoader.Input.SaveBatch Is Nothing, "正在启动游戏", "正在导出启动脚本"))
             LabLaunchingProgress.Text = StrFillNum(ShowProgress * 100, 2) & " %"
             Dim HasLaunchDownloader As Boolean = False
             Try

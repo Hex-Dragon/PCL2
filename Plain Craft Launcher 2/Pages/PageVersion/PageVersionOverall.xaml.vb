@@ -26,6 +26,7 @@
 
         '刷新设置项目
         ComboDisplayType.SelectedIndex = ReadIni(PageVersionLeft.Version.Path & "PCL\Setup.ini", "DisplayType", McVersionCardType.Auto)
+        BtnDisplayStar.Text = If(PageVersionLeft.Version.IsStar, "从收藏夹中移除", "加入收藏夹")
         BtnFolderMods.Visibility = If(PageVersionLeft.Version.Modable, Visibility.Visible, Visibility.Collapsed)
         '刷新版本显示
         PanDisplayItem.Children.Clear()
@@ -91,7 +92,7 @@
     Private Sub BtnDisplayDesc_Click(sender As Object, e As EventArgs) Handles BtnDisplayDesc.Click
         Try
             Dim OldInfo As String = ReadIni(PageVersionLeft.Version.Path & "PCL\Setup.ini", "CustomInfo")
-            Dim NewInfo As String = MyMsgBoxInput(OldInfo, New ObjectModel.Collection(Of Validate), "留空即为使用默认描述", "更改描述",, "取消")
+            Dim NewInfo As String = MyMsgBoxInput("更改描述", "修改版本的描述文本，留空则使用 PCL2 的默认描述。", OldInfo, New ObjectModel.Collection(Of Validate), "默认描述")
             If NewInfo IsNot Nothing AndAlso OldInfo <> NewInfo Then WriteIni(PageVersionLeft.Version.Path & "PCL\Setup.ini", "CustomInfo", NewInfo)
             PageVersionLeft.Version = New McVersion(PageVersionLeft.Version.Name).Load()
             Reload()
@@ -108,7 +109,7 @@
             Dim OldName As String = PageVersionLeft.Version.Name
             Dim OldPath As String = PageVersionLeft.Version.Path
             '修改此部分的同时修改快速安装的版本名检测*
-            Dim NewName As String = MyMsgBoxInput(OldName, New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions", IgnoreCase:=False)},, "重命名版本",, "取消")
+            Dim NewName As String = MyMsgBoxInput("重命名版本", "", OldName, New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions", IgnoreCase:=False)})
             If String.IsNullOrWhiteSpace(NewName) Then Exit Sub
             Dim NewPath As String = PathMcFolder & "versions\" & NewName & "\"
             '获取临时中间名，以防止仅修改大小写的重命名失败
@@ -210,27 +211,16 @@
         End Try
     End Sub
 
-    '删除版本
-    Private Sub BtnDisplayDelete_Click(sender As Object, e As EventArgs) Handles BtnDisplayDelete.Click
-        '修改此代码时，同时修改 PageSelectRight 中的代码
+    '收藏夹
+    Private Sub BtnDisplayStar_Click(sender As Object, e As EventArgs) Handles BtnDisplayStar.Click
         Try
-            Dim IsHintIndie As Boolean = PageVersionLeft.Version.State <> McVersionState.Error AndAlso PageVersionLeft.Version.PathIndie <> PathMcFolder
-            Select Case MyMsgBox("你确定要删除版本 " & PageVersionLeft.Version.Name & " 吗？" &
-                        If(IsHintIndie, vbCrLf & "由于该版本开启了版本隔离，删除版本时该版本对应的存档、资源包、Mod 等文件也将被一并删除！", ""),
-                        "版本删除确认", , "取消",, True)
-                Case 1
-                    FileIO.FileSystem.DeleteDirectory(PageVersionLeft.Version.Path, FileIO.UIOption.AllDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                    Hint("版本 " & PageVersionLeft.Version.Name & " 已删除到回收站！", HintType.Finish)
-                Case 2
-                    '    DeleteDirectory(PageVersionLeft.Version.Path)
-                    '    Hint("版本 " & PageVersionLeft.Version.Name & " 已永久删除！", HintType.Finish)
-                    'Case 3
-                    Exit Sub
-            End Select
+            WriteIni(PageVersionLeft.Version.Path & "PCL\Setup.ini", "IsStar", Not PageVersionLeft.Version.IsStar)
+            PageVersionLeft.Version = New McVersion(PageVersionLeft.Version.Name).Load()
+            Reload()
+            McVersionListForceRefresh = True
             LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
-            FrmMain.PageBack()
         Catch ex As Exception
-            Log(ex, "删除版本 " & PageVersionLeft.Version.Name & " 失败", LogLevel.Msgbox)
+            Log(ex, "版本 " & PageVersionLeft.Version.Name & " 收藏状态更改失败", LogLevel.Msgbox)
         End Try
     End Sub
 
@@ -318,6 +308,30 @@
             FrmMain.BtnExtraDownload.Ribble()
         Catch ex As Exception
             Log(ex, "尝试补全文件失败（" & PageVersionLeft.Version.Name & "）", LogLevel.Msgbox)
+        End Try
+    End Sub
+
+    '删除版本
+    Private Sub BtnManageDelete_Click(sender As Object, e As EventArgs) Handles BtnManageDelete.Click
+        '修改此代码时，同时修改 PageSelectRight 中的代码
+        Try
+            Dim IsHintIndie As Boolean = PageVersionLeft.Version.State <> McVersionState.Error AndAlso PageVersionLeft.Version.PathIndie <> PathMcFolder
+            Select Case MyMsgBox("你确定要删除版本 " & PageVersionLeft.Version.Name & " 吗？" &
+                        If(IsHintIndie, vbCrLf & "由于该版本开启了版本隔离，删除版本时该版本对应的存档、资源包、Mod 等文件也将被一并删除！", ""),
+                        "版本删除确认", , "取消",, True)
+                Case 1
+                    FileIO.FileSystem.DeleteDirectory(PageVersionLeft.Version.Path, FileIO.UIOption.AllDialogs, FileIO.RecycleOption.SendToRecycleBin)
+                    Hint("版本 " & PageVersionLeft.Version.Name & " 已删除到回收站！", HintType.Finish)
+                Case 2
+                    '    DeleteDirectory(PageVersionLeft.Version.Path)
+                    '    Hint("版本 " & PageVersionLeft.Version.Name & " 已永久删除！", HintType.Finish)
+                    'Case 3
+                    Exit Sub
+            End Select
+            LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
+            FrmMain.PageBack()
+        Catch ex As Exception
+            Log(ex, "删除版本 " & PageVersionLeft.Version.Name & " 失败", LogLevel.Msgbox)
         End Try
     End Sub
 

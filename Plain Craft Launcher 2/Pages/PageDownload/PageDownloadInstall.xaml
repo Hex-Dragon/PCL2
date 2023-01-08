@@ -18,8 +18,9 @@
                     </StackPanel.RenderTransform>
                     <local:MyCard Title="安装预览" Margin="0,15,0,0" UseAnimation="False">
                         <StackPanel Margin="25,37,25,15">
-                            <local:MyHint Text="你尚未选择安装 Fabric API，这会导致大多数 Mod 无法使用！" Margin="0,1,0,7" x:Name="HintFabricAPI" />
-                            <local:MyHint Text="你尚未选择安装 OptiFabric，这会导致 OptiFine 无法使用！" Margin="0,1,0,7" x:Name="HintOptiFabric" />
+                            <local:MyHint Text="你尚未选择安装 Fabric API，这会导致大多数 Mod 无法使用！" Margin="0,1,0,7" x:Name="HintFabricAPI" IsWarn="True" />
+                            <local:MyHint Text="你尚未选择安装 OptiFabric，这会导致 OptiFine 无法使用！" Margin="0,1,0,7" x:Name="HintOptiFabric" IsWarn="True" />
+                            <local:MyHint Text="安装结束后，请在 Mod 下载中搜索 OptiFabric Origins 并下载，否则 OptiFine 会无法使用！" Margin="0,1,0,7" x:Name="HintOptiFabricOld" IsWarn="False" />
                             <Grid Margin="0,0,0,11">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*" />

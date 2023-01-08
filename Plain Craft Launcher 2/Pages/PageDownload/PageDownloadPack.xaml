@@ -77,7 +77,7 @@
                         <local:MyButton x:Name="BtnSearchRun" Text="搜索" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Highlight" />
                         <local:MyButton x:Name="BtnSearchReset" Text="重置条件" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" />
                         <local:MyButton x:Name="BtnSearchInstall" Text="安装已有整合包" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="2" 
-                                        ToolTip="在当前选择的 Minecraft 文件夹下安装整合包" ToolTipService.ShowDuration="2333333" />
+                                        ToolTip="在当前选择的 Minecraft 文件夹下安装整合包" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

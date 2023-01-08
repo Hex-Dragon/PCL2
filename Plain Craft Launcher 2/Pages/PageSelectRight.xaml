@@ -13,7 +13,7 @@
                 <StackPanel Margin="20,17">
                     <TextBlock Name="LabEmptyTitle" Margin="0,0,0,9" HorizontalAlignment="Center" Text="无可用版本" FontSize="19" UseLayoutRounding="True" SnapsToDevicePixels="True" Foreground="{DynamicResource ColorBrush3}" />
                     <Rectangle HorizontalAlignment="Stretch" Height="2" Fill="{DynamicResource ColorBrush3}" />
-                    <TextBlock Name="LabEmptyContent" Margin="10,15,10,5" Text="未找到任何版本的游戏，请先下载任意版本的游戏。&#xA;若有已存在的游戏，请在左边的列表中选择“添加文件夹”，选择 .minecraft 文件夹将其导入。" TextWrapping="Wrap" />
+                    <TextBlock Name="LabEmptyContent" Margin="10,15,10,5" Text="未找到任何版本的游戏，请先下载任意版本的游戏。&#xa;若有已存在的游戏，请在左边的列表中选择“添加文件夹”，选择 .minecraft 文件夹将其导入。" TextWrapping="Wrap" />
                     <local:MyButton Height="35" HorizontalAlignment="Center" x:Name="BtnEmptyDownload" MinWidth="140" Text="下载游戏" Margin="0,10,0,0" Padding="13,0" ColorType="Highlight" />
                 </StackPanel>
             </local:MyCard>

@@ -382,7 +382,18 @@
         End If
         '主警告
         HintFabricAPI.Visibility = If(SelectedFabric IsNot Nothing AndAlso SelectedFabricApi Is Nothing, Visibility.Visible, Visibility.Collapsed)
-        HintOptiFabric.Visibility = If(SelectedFabric IsNot Nothing AndAlso SelectedOptiFine IsNot Nothing AndAlso SelectedOptiFabric Is Nothing, Visibility.Visible, Visibility.Collapsed)
+        If SelectedFabric IsNot Nothing AndAlso SelectedOptiFine IsNot Nothing AndAlso SelectedOptiFabric Is Nothing Then
+            If SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15") Then
+                HintOptiFabric.Visibility = Visibility.Collapsed
+                HintOptiFabricOld.Visibility = Visibility.Visible
+            Else
+                HintOptiFabric.Visibility = Visibility.Visible
+                HintOptiFabricOld.Visibility = Visibility.Collapsed
+            End If
+        Else
+            HintOptiFabric.Visibility = Visibility.Collapsed
+            HintOptiFabricOld.Visibility = Visibility.Collapsed
+        End If
     End Sub
     ''' <summary>
     ''' 清空已选择的项目。
@@ -991,6 +1002,7 @@
         If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine 与 Fabric"
         If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
         If SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine"
+        If SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15") Then Return "不兼容老版本 Fabric，请手动下载 OptiFabric Origins"
         If LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFabric.State, Object).Error.Message
         For Each Version In DlOptiFabricLoader.Output
@@ -1049,7 +1061,10 @@
 
 #Region "安装"
 
-    Private Sub BtnSelectStart_Click(sender As Object, e As EventArgs) Handles BtnSelectStart.Click
+    Private Sub TextSelectName_KeyUp(sender As Object, e As KeyEventArgs) Handles TextSelectName.KeyUp
+        If e.Key = Key.Enter AndAlso BtnSelectStart.IsEnabled Then BtnSelectStart_Click()
+    End Sub
+    Private Sub BtnSelectStart_Click() Handles BtnSelectStart.Click
         '确认版本隔离
         If (SelectedForge IsNot Nothing OrElse SelectedFabric IsNot Nothing) AndAlso
            (Setup.Get("LaunchArgumentIndie") = 0 OrElse Setup.Get("LaunchArgumentIndie") = 2) Then

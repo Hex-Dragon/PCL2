@@ -10,12 +10,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.4.4" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.4.4." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.4.5" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.4.5." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 272 'Release
+    Public Const VersionCode As Integer = 274 'Release
 #Else
-    Public Const VersionCode As Integer = 273 'Snapshot
+    Public Const VersionCode As Integer = 275 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -79,11 +79,15 @@ Public Module ModBase
     ''' </summary>
     Public OsVersion As Version = Environment.OSVersion.Version
     ''' <summary>
-    ''' 程序的缓存文件夹路径，以“\”结尾。
+    ''' 系统盘盘符，以 \ 结尾。例如 “C:\”。
+    ''' </summary>
+    Public OsDrive As String = Environment.GetLogicalDrives().First.ToUpper.First & ":\"
+    ''' <summary>
+    ''' 程序的缓存文件夹路径，以 \ 结尾。
     ''' </summary>
     Public PathTemp As String = If(Setup.Get("SystemSystemCache") = "", IO.Path.GetTempPath() & "PCL\", Setup.Get("SystemSystemCache")).ToString.Replace("/", "\").TrimEnd("\") & "\"
     ''' <summary>
-    ''' AppData 中的 PCL 文件夹路径，以“\”结尾。
+    ''' AppData 中的 PCL 文件夹路径，以 \ 结尾。
     ''' </summary>
     Public PathAppdata As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\PCL\"
 
@@ -1307,15 +1311,7 @@ Re:
     ''' 遍历文件夹中的所有文件。
     ''' </summary>
     Public Function EnumerateFiles(Directory As String) As List(Of FileInfo)
-        Dim Dir As New DirectoryInfo(Directory)
-        Dim ResultList As New List(Of FileInfo)
-        '添加文件
-        ResultList.AddRange(Dir.EnumerateFiles)
-        '添加文件夹中的文件
-        For Each SubDir In Dir.EnumerateDirectories
-            ResultList.AddRange(EnumerateFiles(SubDir.FullName))
-        Next
-        Return ResultList
+        Return New DirectoryInfo(Directory).EnumerateFiles("*", SearchOption.AllDirectories).ToList
     End Function
 
 #End Region
@@ -1361,8 +1357,9 @@ Re:
             CommonReason = "PCL2 的权限不足。请尝试右键 PCL2，选择以管理员身份运行。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
             CommonReason = "你的电脑运行内存不足，导致 PCL2 无法继续运行。请在关闭一部分不需要的程序后再试。"
-        ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
-            CommonReason = "你的网络环境不佳，导致难以连接到服务器。请重试，或尝试使用 VPN。"
+        ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
+                "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
+            CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
         End If
 
         '获取错误类型
@@ -1372,8 +1369,9 @@ Re:
         If CommonReason Is Nothing Then
             Return Desc & Stack & TypeDesc
         Else
-            Return DescList.First & vbCrLf & CommonReason & vbCrLf & "————————————" & vbCrLf &
-                   "详细错误信息：" & vbCrLf & "→ " & Join(DescList.GetRange(1, DescList.Count - 1), vbCrLf & "→ ") & Stack & TypeDesc
+            Dim Result As String = DescList.First & vbCrLf & CommonReason & vbCrLf & "————————————" & vbCrLf
+            DescList(0) = "详细错误信息："
+            Return Result & Join(DescList, vbCrLf & "→ ") & Stack & TypeDesc
         End If
     End Function
     ''' <summary>
@@ -1939,32 +1937,8 @@ NextElement:
         Using Program As New Process() With {.StartInfo = Info}
             Program.Start()
             Program.WaitForExit(Timeout)
+            If Not Program.HasExited Then Program.Kill()
             Return Program.StandardOutput.ReadToEnd & Program.StandardError.ReadToEnd
-            '    Dim Result As New StringBuilder()
-            '    AddHandler process.OutputDataReceived, Function(sender As Object, e As DataReceivedEventArgs)
-            '                                               Try
-            '                                                   If e.Data IsNot Nothing Then Result.AppendLine(e.Data)
-            '                                               Finally
-            '                                               End Try
-            '                                               Return Nothing
-            '                                           End Function
-            '    AddHandler process.ErrorDataReceived, Function(sender As Object, e As DataReceivedEventArgs)
-            '                                              Try
-            '                                                  If e.Data IsNot Nothing Then Result.AppendLine(e.Data)
-            '                                              Finally
-            '                                              End Try
-            '                                              Return Nothing
-            '                                          End Function
-            '    process.Start()
-            '    process.BeginOutputReadLine()
-            '    process.BeginErrorReadLine()
-            '    If process.WaitForExit(Timeout) Then
-            '        process.Close()
-            '        Return Result.ToString
-            '    Else
-            '        process.Close()
-            '        Throw New TimeoutException("程序执行超时，已有返回值：" & Result.ToString)
-            '    End If
         End Using
     End Function
 
@@ -2333,10 +2307,6 @@ Retry:
         ''' </summary>
         Assert = 6
     End Enum
-    ''' <summary>
-    ''' 记录程序是否递交了错误提示，以确保运行测试正确。
-    ''' </summary>
-    Public IsErrorTriggered As Boolean = False
     Private LogList As New StringBuilder
     Private LogWritter As StreamWriter
     Public Sub LogStart()
@@ -2432,20 +2402,16 @@ Retry:
                 If ModeDebug Then Hint("[调试模式] " & Text, HintType.Info, False)
 #End If
             Case LogLevel.Hint
-                IsErrorTriggered = True
                 Hint(Text, HintType.Critical, False)
             Case LogLevel.Msgbox
-                IsErrorTriggered = True
-                MyMsgBox(Text, Title)
+                MyMsgBox(Text, Title, IsWarn:=True)
             Case LogLevel.Feedback
-                IsErrorTriggered = True
                 If CanFeedback(False) Then
-                    If MyMsgBox(Text & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", Title, "反馈", "取消") = 1 Then Feedback(False, True)
+                    If MyMsgBox(Text & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", Title, "反馈", "取消", IsWarn:=True) = 1 Then Feedback(False, True)
                 Else
-                    MyMsgBox(Text & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", Title)
+                    MyMsgBox(Text & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", Title, IsWarn:=True)
                 End If
             Case LogLevel.Assert
-                IsErrorTriggered = True
                 Dim Time As Long = GetTimeTick()
                 If CanFeedback(False) Then
                     If MsgBox(Text & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback(False, True)
@@ -2469,7 +2435,6 @@ Retry:
     Public Sub Log(Ex As Exception, Desc As String, Optional Level As LogLevel = LogLevel.Debug, Optional Title As String = "出现错误")
         On Error Resume Next
         If TypeOf Ex Is ThreadInterruptedException Then Exit Sub
-        IsErrorTriggered = True
 
         '获取错误信息
         Dim ExFull As String = Desc & "：" & GetExceptionDetail(Ex)
@@ -2508,12 +2473,12 @@ Retry:
                 Dim ExLine As String = Desc & "：" & GetExceptionSummary(Ex)
                 Hint(ExLine, HintType.Critical, False)
             Case LogLevel.Msgbox
-                MyMsgBox(ExFull, Title)
+                MyMsgBox(ExFull, Title, IsWarn:=True)
             Case LogLevel.Feedback
                 If CanFeedback(False) Then
-                    If MyMsgBox(ExFull & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", Title, "反馈", "取消") = 1 Then Feedback(False, True)
+                    If MyMsgBox(ExFull & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", Title, "反馈", "取消", IsWarn:=True) = 1 Then Feedback(False, True)
                 Else
-                    MyMsgBox(ExFull & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", Title)
+                    MyMsgBox(ExFull & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", Title, IsWarn:=True)
                 End If
             Case LogLevel.Assert
                 Dim Time As Long = GetTimeTick()

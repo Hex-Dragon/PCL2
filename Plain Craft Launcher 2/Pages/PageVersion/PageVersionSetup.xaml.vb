@@ -46,9 +46,6 @@
                 End If
             End If
             ComboArgumentIndie.SelectedIndex = Indie
-            TextAdvanceJvm.Text = Setup.Get("VersionAdvanceJvm", Version:=PageVersionLeft.Version)
-            TextAdvanceGame.Text = Setup.Get("VersionAdvanceGame", Version:=PageVersionLeft.Version)
-            ComboAdvanceAssets.SelectedIndex = Setup.Get("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
             RefreshJavaComboBox()
 
             '游戏内存
@@ -64,6 +61,13 @@
             TextServerAuthServer.Text = Setup.Get("VersionServerAuthServer", Version:=PageVersionLeft.Version)
             TextServerAuthName.Text = Setup.Get("VersionServerAuthName", Version:=PageVersionLeft.Version)
             TextServerAuthRegister.Text = Setup.Get("VersionServerAuthRegister", Version:=PageVersionLeft.Version)
+
+            '高级设置
+            TextAdvanceJvm.Text = Setup.Get("VersionAdvanceJvm", Version:=PageVersionLeft.Version)
+            TextAdvanceGame.Text = Setup.Get("VersionAdvanceGame", Version:=PageVersionLeft.Version)
+            TextAdvanceRun.Text = Setup.Get("VersionAdvanceRun", Version:=PageVersionLeft.Version)
+            CheckAdvanceRunWait.Checked = Setup.Get("VersionAdvanceRunWait", Version:=PageVersionLeft.Version)
+            ComboAdvanceAssets.SelectedIndex = Setup.Get("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
 
         Catch ex As Exception
             Log(ex, "重载版本独立设置时出错", LogLevel.Feedback)
@@ -88,6 +92,8 @@
             Setup.Reset("VersionAdvanceJvm", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceGame", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionAdvanceRun", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionAdvanceRunWait", Version:=PageVersionLeft.Version)
 
             Setup.Reset("VersionArgumentJavaSelect", Version:=PageVersionLeft.Version)
             JavaSearchLoader.Start(IsForceRestart:=True)
@@ -105,7 +111,7 @@
     Private Shared Sub RadioBoxChange(sender As MyRadioBox, e As Object) Handles RadioRamType0.Check, RadioRamType1.Check, RadioRamType2.Check
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag.ToString.Split("/")(0), Val(sender.Tag.ToString.Split("/")(1)), Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextServerEnter.ValidatedTextChanged, TextArgumentInfo.ValidatedTextChanged, TextAdvanceGame.ValidatedTextChanged, TextAdvanceJvm.ValidatedTextChanged, TextServerNide.ValidatedTextChanged, TextServerAuthName.ValidatedTextChanged, TextServerAuthRegister.ValidatedTextChanged, TextServerAuthServer.ValidatedTextChanged, TextArgumentTitle.ValidatedTextChanged
+    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextServerEnter.ValidatedTextChanged, TextArgumentInfo.ValidatedTextChanged, TextAdvanceGame.ValidatedTextChanged, TextAdvanceJvm.ValidatedTextChanged, TextServerNide.ValidatedTextChanged, TextServerAuthName.ValidatedTextChanged, TextServerAuthRegister.ValidatedTextChanged, TextServerAuthServer.ValidatedTextChanged, TextArgumentTitle.ValidatedTextChanged, TextAdvanceRun.ValidatedTextChanged
         If AniControlEnabled = 0 Then
             Dim HandledText As String = sender.Text
             If sender.Tag = "VersionServerAuthServer" OrElse sender.Tag = "VersionServerAuthRegister" Then HandledText = HandledText.TrimEnd("/")
@@ -117,6 +123,9 @@
     End Sub
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboAdvanceAssets.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex, Version:=PageVersionLeft.Version)
+    End Sub
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change
+        If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked, Version:=PageVersionLeft.Version)
     End Sub
 
 #Region "游戏内存"
@@ -465,6 +474,14 @@ PreFin:
             Log("[Java] 修改版本 Java 选择设置：" & SelectedJava.ToString)
         End If
         RefreshRam(True)
+    End Sub
+
+#End Region
+
+#Region "高级设置"
+
+    Private Sub TextAdvanceRun_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextAdvanceRun.TextChanged
+        CheckAdvanceRunWait.Visibility = If(TextAdvanceRun.Text = "", Visibility.Collapsed, Visibility.Visible)
     End Sub
 
 #End Region

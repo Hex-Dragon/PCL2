@@ -213,16 +213,16 @@
                 If ValidateResult = "" OrElse Not IsTextChanged Then
                     If IsFocused Then
                         ForeColorName = "ColorBrush3"
-                        BackColorName = "ColorBrushSemiWhite"
+                        BackColorName = "ColorBrush7"
                         AnimationTime = 10
                     ElseIf IsMouseOver Then
                         ForeColorName = "ColorBrush4"
                         BackColorName = "ColorBrush7"
-                        AnimationTime = 50
+                        AnimationTime = 100
                     Else '未选中
                         ForeColorName = "ColorBrushBg0"
-                        BackColorName = "ColorBrushBg2"
-                        AnimationTime = 50
+                        BackColorName = "ColorBrushHalfWhite"
+                        AnimationTime = 100
                     End If
                 Else
                     ForeColorName = "ColorBrushRedLight"

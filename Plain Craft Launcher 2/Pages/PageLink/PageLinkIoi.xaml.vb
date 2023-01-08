@@ -979,70 +979,70 @@ Done:
 
     '正向与反向连接
     Public Shared Sub BtnLeftCreate_Click() Handles BtnLeftCreate.Click
-        '获取信息
-        Dim Code As String = MyMsgBoxInput("", New ObjectModel.Collection(Of Validate) From {New ValidateLength(9, 99999)}, "", "输入对方的联机码", "确定", "取消")
-        If Code Is Nothing Then Exit Sub
-        '检查
-        If Code.StartsWith("P") AndAlso Code.Length < 48 Then
-            Hint("你输入的可能是 HiPer 的联机码，请在左侧的联机方式中选择 HiPer！", HintType.Critical) : Exit Sub
-        End If
-        Dim Id As String, DisplayName As String
-        Try '解密失败检查
-            Id = "12D3" & Code.Substring(0, 48)
-            DisplayName = SecretDecrypt(Code.Substring(48))
-        Catch
-            Hint("你输入的联机码有误！", HintType.Critical)
-            Exit Sub
-        End Try
-        If Id = IoiId Then '自我连接检查
-            Hint("我连我自己？搁这卡 Bug 呢？", HintType.Critical)
-            Exit Sub
-        End If
-        '开始
-        Dim User As New LinkUserIoi(Id, DisplayName)
-        User.RelativeThread = RunInNewThread(Sub()
-                                                 Dim WaitCount As Integer = 0
-                                                 Try
-                                                     '加入列表
-                                                     If UserList.ContainsKey(Id) Then
-                                                         Hint(UserList(Id).DisplayName & " 已在列表中，无需再次连接！")
-                                                         Exit Sub
-                                                     Else
-                                                         UserList.Add(Id, User)
-                                                     End If
-                                                     '发送 portsub 请求（0% -> 80%）
-                                                     SendPortsubRequest(User)
-                                                     '构建 Socket（81% -> 82%）
-                                                     Dim ClientSocket As New Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) With {.ReceiveTimeout = 1000000000, .SendTimeout = 1000000000}
-                                                     ClientSocket.Connect(New IPEndPoint(IPAddress.Parse(User.Ports(55557)), 55557))
-                                                     User.BindSocket(ClientSocket)
-                                                     User.Progress = 0.82
-                                                     '发送 connect 请求（83% -> 85%）
-                                                     SendConnectRequest(User)
-                                                     User.Progress = 0.85
-                                                     '等待对方向自己请求
-                                                     Log("[IOI] 加入成功，等待反向请求")
-                                                     Do While User.Progress < 0.9999
-                                                         User.Progress += 0.0002
-                                                         If User.Progress > 0.98 AndAlso User.Progress < 0.9999 Then Throw New Exception("对方未回应连接请求！")
-                                                         Thread.Sleep(100)
-                                                     Loop
-                                                     Hint("已连接到 " & User.DisplayName & "！", HintType.Finish)
-                                                 Catch ex As ThreadInterruptedException
-                                                     Log("[IOI] 已中断主动发起的连接（" & User.DisplayName & "）")
-                                                 Catch ex As InvalidOperationException
-                                                     'API 返回的错误
-                                                     NetRequestOnce("http://127.0.0.1:55555/api/link?id=" & Id & "&password=" & IoiPassword, "DELETE", "", "", 500)
-                                                     User.Dispose()
-                                                     If InitLoader.State = LoadState.Finished Then Log("与 " & DisplayName & " 建立连接失败：" & ex.Message, LogLevel.Msgbox)
-                                                 Catch ex As Exception
-                                                     '常规错误
-                                                     NetRequestOnce("http://127.0.0.1:55555/api/link?id=" & Id & "&password=" & IoiPassword, "DELETE", "", "", 500)
-                                                     User.Dispose()
-                                                     If ex.InnerException IsNot Nothing AndAlso TypeOf ex.InnerException Is ThreadInterruptedException Then Exit Sub
-                                                     If InitLoader.State = LoadState.Finished Then Log(ex, "与 " & DisplayName & " 建立连接失败", LogLevel.Msgbox)
-                                                 End Try
-                                             End Sub, "Link Create " & DisplayName)
+        ''获取信息
+        'Dim Code As String = MyMsgBoxInput("", New ObjectModel.Collection(Of Validate) From {New ValidateLength(9, 99999)}, "", "输入对方的联机码", "确定", "取消")
+        'If Code Is Nothing Then Exit Sub
+        ''检查
+        'If Code.StartsWith("P") AndAlso Code.Length < 48 Then
+        '    Hint("你输入的可能是 HiPer 的联机码，请在左侧的联机方式中选择 HiPer！", HintType.Critical) : Exit Sub
+        'End If
+        'Dim Id As String, DisplayName As String
+        'Try '解密失败检查
+        '    Id = "12D3" & Code.Substring(0, 48)
+        '    DisplayName = SecretDecrypt(Code.Substring(48))
+        'Catch
+        '    Hint("你输入的联机码有误！", HintType.Critical)
+        '    Exit Sub
+        'End Try
+        'If Id = IoiId Then '自我连接检查
+        '    Hint("我连我自己？搁这卡 Bug 呢？", HintType.Critical)
+        '    Exit Sub
+        'End If
+        ''开始
+        'Dim User As New LinkUserIoi(Id, DisplayName)
+        'User.RelativeThread = RunInNewThread(Sub()
+        '                                         Dim WaitCount As Integer = 0
+        '                                         Try
+        '                                             '加入列表
+        '                                             If UserList.ContainsKey(Id) Then
+        '                                                 Hint(UserList(Id).DisplayName & " 已在列表中，无需再次连接！")
+        '                                                 Exit Sub
+        '                                             Else
+        '                                                 UserList.Add(Id, User)
+        '                                             End If
+        '                                             '发送 portsub 请求（0% -> 80%）
+        '                                             SendPortsubRequest(User)
+        '                                             '构建 Socket（81% -> 82%）
+        '                                             Dim ClientSocket As New Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp) With {.ReceiveTimeout = 1000000000, .SendTimeout = 1000000000}
+        '                                             ClientSocket.Connect(New IPEndPoint(IPAddress.Parse(User.Ports(55557)), 55557))
+        '                                             User.BindSocket(ClientSocket)
+        '                                             User.Progress = 0.82
+        '                                             '发送 connect 请求（83% -> 85%）
+        '                                             SendConnectRequest(User)
+        '                                             User.Progress = 0.85
+        '                                             '等待对方向自己请求
+        '                                             Log("[IOI] 加入成功，等待反向请求")
+        '                                             Do While User.Progress < 0.9999
+        '                                                 User.Progress += 0.0002
+        '                                                 If User.Progress > 0.98 AndAlso User.Progress < 0.9999 Then Throw New Exception("对方未回应连接请求！")
+        '                                                 Thread.Sleep(100)
+        '                                             Loop
+        '                                             Hint("已连接到 " & User.DisplayName & "！", HintType.Finish)
+        '                                         Catch ex As ThreadInterruptedException
+        '                                             Log("[IOI] 已中断主动发起的连接（" & User.DisplayName & "）")
+        '                                         Catch ex As InvalidOperationException
+        '                                             'API 返回的错误
+        '                                             NetRequestOnce("http://127.0.0.1:55555/api/link?id=" & Id & "&password=" & IoiPassword, "DELETE", "", "", 500)
+        '                                             User.Dispose()
+        '                                             If InitLoader.State = LoadState.Finished Then Log("与 " & DisplayName & " 建立连接失败：" & ex.Message, LogLevel.Msgbox)
+        '                                         Catch ex As Exception
+        '                                             '常规错误
+        '                                             NetRequestOnce("http://127.0.0.1:55555/api/link?id=" & Id & "&password=" & IoiPassword, "DELETE", "", "", 500)
+        '                                             User.Dispose()
+        '                                             If ex.InnerException IsNot Nothing AndAlso TypeOf ex.InnerException Is ThreadInterruptedException Then Exit Sub
+        '                                             If InitLoader.State = LoadState.Finished Then Log(ex, "与 " & DisplayName & " 建立连接失败", LogLevel.Msgbox)
+        '                                         End Try
+        '                                     End Sub, "Link Create " & DisplayName)
     End Sub
     Private Shared Sub SendPortsubBack(User As LinkUserIoi, TargetVersion As Integer)
         Try
@@ -1076,38 +1076,38 @@ Done:
 
     '创建房间
     Private Sub LinkCreate() Handles BtnCreate.Click
-        If MyMsgBox("请先进入 MC 并暂停游戏，在暂停页面选择对局域网开放，然后在下一个窗口输入 MC 显示的端口号。" & vbCrLf & "若使用服务端开服，则直接在下一个窗口输入服务器配置中的端口号即可。", "提示", "继续", "取消") = 2 Then Exit Sub
-        '获取端口号
-        Dim Port As String = MyMsgBoxInput("", New ObjectModel.Collection(Of Validate) From {
-                                                   New ValidateInteger(0, 65535),
-                                                   New ValidateExceptSame({"55555", "55557"}, "端口不能为 %！"),
-                                                   New ValidateExceptSame(RoomListForMe.Select(AddressOf RoomEntry.SelectPort), "端口 % 已创建过房间，请在删除该房间后继续！")
-                                               }, "", "输入端口号", "确定", "取消")
-        If Port Is Nothing Then Exit Sub
-        '获取显示名称
-        Dim DisplayName As String = MyMsgBoxInput(GetPlayerName() & " 的房间 - " & Port, New ObjectModel.Collection(Of Validate) From {
-                                                   New ValidateNullOrWhiteSpace(), New ValidateLength(1, 40), New ValidateFilter()
-                                               }, "", "输入房间名（建议包含游戏版本等信息）", "确定", "取消")
-        If DisplayName Is Nothing Then Exit Sub
-        DisplayName = DisplayName.Trim
-        '开始
-        RunInThread(Sub()
-                        Try
-                            '请求
-                            Dim Result As JObject = GetJson(NetRequestOnce("http://127.0.0.1:55555/api/port?proto=tcp&port=" & Port & "&password=" & IoiPassword, "PUT", "", "", 100000))
-                            If Result("msg") IsNot Nothing Then Throw New InvalidOperationException(Result("msg").ToString)
-                            '成功
-                            RoomListForMe.Add(New RoomEntry(Port, DisplayName))
-                            Hint("房间 " & DisplayName & " 已创建！", HintType.Finish)
-                            SendUpdateRequestToAllUsers()
-                        Catch ex As InvalidOperationException
-                            'API 返回的错误
-                            Log("创建房间失败：" & ex.Message, LogLevel.Msgbox)
-                        Catch ex As Exception
-                            '常规错误
-                            Log(ex, "创建房间失败", LogLevel.Msgbox)
-                        End Try
-                    End Sub)
+        'If MyMsgBox("请先进入 MC 并暂停游戏，在暂停页面选择对局域网开放，然后在下一个窗口输入 MC 显示的端口号。" & vbCrLf & "若使用服务端开服，则直接在下一个窗口输入服务器配置中的端口号即可。", "提示", "继续", "取消") = 2 Then Exit Sub
+        ''获取端口号
+        'Dim Port As String = MyMsgBoxInput("", New ObjectModel.Collection(Of Validate) From {
+        '                                           New ValidateInteger(0, 65535),
+        '                                           New ValidateExceptSame({"55555", "55557"}, "端口不能为 %！"),
+        '                                           New ValidateExceptSame(RoomListForMe.Select(AddressOf RoomEntry.SelectPort), "端口 % 已创建过房间，请在删除该房间后继续！")
+        '                                       }, "", "输入端口号", "确定", "取消")
+        'If Port Is Nothing Then Exit Sub
+        ''获取显示名称
+        'Dim DisplayName As String = MyMsgBoxInput(GetPlayerName() & " 的房间 - " & Port, New ObjectModel.Collection(Of Validate) From {
+        '                                           New ValidateNullOrWhiteSpace(), New ValidateLength(1, 40), New ValidateFilter()
+        '                                       }, "", "输入房间名（建议包含游戏版本等信息）", "确定", "取消")
+        'If DisplayName Is Nothing Then Exit Sub
+        'DisplayName = DisplayName.Trim
+        ''开始
+        'RunInThread(Sub()
+        '                Try
+        '                    '请求
+        '                    Dim Result As JObject = GetJson(NetRequestOnce("http://127.0.0.1:55555/api/port?proto=tcp&port=" & Port & "&password=" & IoiPassword, "PUT", "", "", 100000))
+        '                    If Result("msg") IsNot Nothing Then Throw New InvalidOperationException(Result("msg").ToString)
+        '                    '成功
+        '                    RoomListForMe.Add(New RoomEntry(Port, DisplayName))
+        '                    Hint("房间 " & DisplayName & " 已创建！", HintType.Finish)
+        '                    SendUpdateRequestToAllUsers()
+        '                Catch ex As InvalidOperationException
+        '                    'API 返回的错误
+        '                    Log("创建房间失败：" & ex.Message, LogLevel.Msgbox)
+        '                Catch ex As Exception
+        '                    '常规错误
+        '                    Log(ex, "创建房间失败", LogLevel.Msgbox)
+        '                End Try
+        '            End Sub)
     End Sub
     Private Shared Sub SendUpdateRequestToAllUsers()
         For i = 0 To UserList.Count - 1
@@ -1123,18 +1123,18 @@ Done:
     End Sub
     '修改房间名称
     Private Shared Sub BtnRoomEdit_Click(sender As MyIconButton, e As EventArgs)
-        Dim Room As RoomEntry = sender.Tag
-        '获取房间名
-        Dim DisplayName As String = MyMsgBoxInput(Room.DisplayName, New ObjectModel.Collection(Of Validate) From {
-                                                   New ValidateNullOrWhiteSpace(),
-                                                   New ValidateLength(1, 40)
-                                               }, "", "输入房间名（建议包含游戏版本等信息）", "确定", "取消")
-        If DisplayName Is Nothing Then Exit Sub
-        DisplayName = DisplayName.Trim
-        '修改
-        Room.DisplayName = DisplayName
-        FrmLinkIoi.RefreshUi()
-        SendUpdateRequestToAllUsers()
+        'Dim Room As RoomEntry = sender.Tag
+        ''获取房间名
+        'Dim DisplayName As String = MyMsgBoxInput(Room.DisplayName, New ObjectModel.Collection(Of Validate) From {
+        '                                           New ValidateNullOrWhiteSpace(),
+        '                                           New ValidateLength(1, 40)
+        '                                       }, "", "输入房间名（建议包含游戏版本等信息）", "确定", "取消")
+        'If DisplayName Is Nothing Then Exit Sub
+        'DisplayName = DisplayName.Trim
+        ''修改
+        'Room.DisplayName = DisplayName
+        'FrmLinkIoi.RefreshUi()
+        'SendUpdateRequestToAllUsers()
     End Sub
     '加入房间
     Private Shared Sub BtnRoom_Click(sender As MyListItem, e As EventArgs)
