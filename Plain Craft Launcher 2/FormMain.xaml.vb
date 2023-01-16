@@ -581,7 +581,7 @@ Reopen:
         If ReturnCode = Result.Exception Then
             If Not IsLogShown Then
                 FeedbackInfo()
-                Log("请在 https://jinshuju.net/f/rP4b6E?x_field_1=crash 提交错误报告，以便于作者解决此问题！")
+                Log("请在 https://github.com/Hex-Dragon/PCL2/issues 提交错误报告，以便于作者解决此问题！")
                 IsLogShown = True
                 ShellOnly(Path & "PCL\Log1.txt")
             End If
