@@ -22,7 +22,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.ColumnSpan="4" Margin="0,0,0,9" HorizontalAlignment="Center" Text="该版本不可使用 Mod" FontSize="19" UseLayoutRounding="True" SnapsToDevicePixels="True" Foreground="{DynamicResource ColorBrush3}" />
             <Rectangle Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" Height="2" Fill="{DynamicResource ColorBrush3}" />
-            <TextBlock Grid.Row="2" Grid.ColumnSpan="4" Margin="10,15,10,5" Text="你需要先安装 Forge 或 Fabric 才能使用 Mod，请在下载页面重新安装这些版本。&#xa;如果你已经安装过了 Forge 或 Fabric，那么你很可能选择了错误的版本，请点击版本选择按钮切换版本，并注意 Forge 在版本选择列表中的图标为铁砧，Fabric 的图标为丝绸。" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="2" Grid.ColumnSpan="4" Margin="10,15,10,5" Text="你需要先安装 Forge 或 Fabric 等 Mod 加载器才能使用 Mod，请在下载页面重新安装这些版本。&#xa;如果你已经安装过了 Mod 加载器，那么你很可能选择了错误的版本，请点击版本选择按钮切换版本，并注意 Forge 在版本选择列表中的图标为铁砧，Fabric 的图标为丝绸。" TextWrapping="Wrap" />
             <local:MyButton Grid.Row="3" Grid.Column="1" Height="35" HorizontalAlignment="Center" x:Name="BtnDownload" MinWidth="140" Text="转到下载页面" Margin="10,10,10,0" Padding="13,0" ColorType="Highlight" />
             <local:MyButton Grid.Row="3" Grid.Column="2" Height="35" HorizontalAlignment="Center" x:Name="BtnVersion" MinWidth="140" Text="版本选择" Margin="10,10,10,0" Padding="13,0" />
         </Grid>
