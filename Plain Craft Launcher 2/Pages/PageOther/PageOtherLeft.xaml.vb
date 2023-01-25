@@ -114,7 +114,9 @@
         Select Case Val(sender.Tag)
             Case FormMain.PageSubType.OtherHelp
                 RefreshHelp()
+                ItemHelp.Checked = True
         End Select
+        Hint("正在刷新……", Log:=False)
     End Sub
     Public Shared Sub RefreshHelp()
         Setup.Set("SystemHelpVersion", 0) '强制重新解压文件

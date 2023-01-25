@@ -125,7 +125,7 @@ Public Module ModMinecraft
         Public Overrides Function ToString() As String
             Dim VersionString = Version.ToString
             If VersionString.StartsWith("1.") Then VersionString = Mid(VersionString, 3)
-            Return If(IsJre, "Java ", "JDK ") & VersionCode & " (" & VersionString & ")，" & If(Is64Bit, "64", "32") & " 位" & If(IsUserImport, "，手动导入", "") & "：" & PathFolder
+            Return If(IsJre, "JRE ", "JDK ") & VersionCode & " (" & VersionString & ")，" & If(Is64Bit, "64", "32") & " 位" & If(IsUserImport, "，手动导入", "") & "：" & PathFolder
         End Function
 
         '构造
@@ -226,7 +226,7 @@ Public Module ModMinecraft
                 JavaSearchFolder(Disk.Name, JavaPreList, False)
             Next
             '查找 APPDATA 文件夹中的 Java
-            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), JavaPreList, False)
+            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\", JavaPreList, False)
             '查找启动器目录中的 Java
             JavaSearchFolder(Path, JavaPreList, False, IsFullSearch:=True)
             '查找所选 Minecraft 文件夹中的 Java
@@ -416,7 +416,8 @@ Wait:
     ''' 最小与最大版本在与输入相同时也会通过。
     ''' 必须在工作线程调用。
     ''' </summary>
-    Public Function JavaSelect(Optional MinVersion As Version = Nothing, Optional MaxVersion As Version = Nothing, Optional RelatedVersion As McVersion = Nothing) As JavaEntry
+    Public Function JavaSelect(CancelException As String, Optional MinVersion As Version = Nothing, Optional MaxVersion As Version = Nothing,
+                               Optional RelatedVersion As McVersion = Nothing) As JavaEntry
         Try
             Dim AllowedJavaList As New List(Of JavaEntry)
 
@@ -429,6 +430,8 @@ Wait:
             For Each Entry In JavaPreList
                 TargetJavaList.Add(New JavaEntry(Entry.Key, Entry.Value))
             Next
+
+            '检查特定的 Java
             If TargetJavaList.Count > 0 Then
                 TargetJavaList = JavaCheckList(TargetJavaList)
                 Log("[Java] 检查后找到 " & TargetJavaList.Count & " 个特定目录下的 Java")
@@ -443,6 +446,8 @@ RetryGet:
                 Case LoadState.Aborted
                     Throw New ThreadInterruptedException("Java 搜索加载器已中断")
             End Select
+
+            '生成完整的 Java 列表
             Dim AllJavaList As New List(Of JavaEntry)
             AllJavaList.AddRange(TargetJavaList)
             AllJavaList.AddRange(JavaList)
@@ -452,6 +457,7 @@ RetryGet:
                 If MinVersion IsNot Nothing AndAlso Java.Version < MinVersion Then Continue For
                 If MaxVersion IsNot Nothing AndAlso Java.Version > MaxVersion Then Continue For
                 If Java.Is64Bit AndAlso Is32BitSystem Then Continue For
+                If Java.IsJre AndAlso Java.VersionCode >= 12 Then Continue For '无论如何不允许使用 JRE 12+，它们完全是炸的，安 OptiFine、Forge 和启动 MC 都会炸
                 AllowedJavaList.Add(Java)
             Next
 
@@ -462,69 +468,95 @@ RetryGet:
                 GoTo RetryGet
             End If
 
-            '检查用户指定的 Java
-            Dim UserSetup As String = Setup.Get("LaunchArgumentJavaSelect")
-            If RelatedVersion IsNot Nothing Then
-                Dim UserSetupVersion As String = Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)
-                If UserSetupVersion <> "使用全局设置" Then UserSetup = UserSetupVersion
-            End If
-            If UserSetup <> "" Then
-                Dim UserJava As JavaEntry
+#Region "检查用户指定的 Java"
+
+            Dim UserJava As JavaEntry = Nothing
+
+            '获取版本独立设置中指定的 Java
+            If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion) <> "使用全局设置" Then
                 Try
-                    UserJava = JavaEntry.FromJson(GetJson(UserSetup))
-                Catch ex As Exception
-                    Setup.Set("LaunchArgumentJavaSelect", "使用全局设置")
-                    Log(ex, "版本指定的 Java 信息已损坏，已重置版本设置中指定的 Java")
-                    GoTo UserPass
-                End Try
-                For Each Java In AllowedJavaList
-                    If Java.PathFolder = UserJava.PathFolder Then
-                        '直接使用指定的 Java
-                        AllowedJavaList = New List(Of JavaEntry) From {UserJava}
-                        GoTo UserPass
+                    UserJava = JavaEntry.FromJson(GetJson(Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)))
+                    '确保版本独立设置中指定的 Java 在 Java 列表中（#978）
+                    If Not JavaList.Any(Function(j) j.PathFolder = UserJava.PathFolder) Then
+                        UserJava = Nothing
+                        Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
+                        Log("版本独立设置中指定的 Java 不在主 Java 列表中，此设置已重置", LogLevel.Debug)
+                        Exit Try
                     End If
-                Next
-                Log("[Java] 发现用户指定的不兼容 Java：" & UserJava.ToString)
-                '弹窗要求选择
-                Dim Requirement As String = ""
-                Dim ShowRevision As Boolean = False
-                If (MinVersion Is Nothing OrElse MinVersion.Minor = 0) AndAlso (MaxVersion IsNot Nothing AndAlso MaxVersion.Minor < 999) Then
-                    ShowRevision = MaxVersion.MinorRevision < 999
-                    Requirement = "最高兼容到 Java " & MaxVersion.Minor & If(ShowRevision, "." & MaxVersion.MajorRevision & "." & MaxVersion.MinorRevision, "")
-                ElseIf (MinVersion IsNot Nothing AndAlso MinVersion.Minor > 0) AndAlso (MaxVersion Is Nothing OrElse MaxVersion.Minor >= 999) Then
-                    ShowRevision = MinVersion.MinorRevision > 0 OrElse MinVersion.MajorRevision > 0
-                    Requirement = "至少需要 Java " & MinVersion.Minor & If(ShowRevision, "." & MinVersion.MajorRevision & "." & MinVersion.MinorRevision, "")
-                ElseIf (MinVersion IsNot Nothing AndAlso MinVersion.Minor > 0) AndAlso (MaxVersion IsNot Nothing AndAlso MaxVersion.Minor < 999) Then
-                    ShowRevision = MinVersion.MinorRevision > 0 OrElse MinVersion.MajorRevision > 0 OrElse MaxVersion.MinorRevision < 999
-                    Dim Left As String = MinVersion.Minor & If(ShowRevision, "." & MinVersion.MajorRevision & "." & MinVersion.MinorRevision, "")
-                    Dim Right As String = MaxVersion.Minor & If(ShowRevision, "." & MaxVersion.MajorRevision & "." & MaxVersion.MinorRevision, "")
-                    Requirement = "需要 Java " & If(Left = Right, Left, Left & " ~ " & Right)
-                End If
-                Dim JavaCurrent As String = UserJava.VersionCode & If(ShowRevision, "." & UserJava.Version.MajorRevision & "." & UserJava.Version.MinorRevision, "")
-                If Setup.Get("LaunchAdvanceJava") Then
-                    '直接跳过弹窗
-                    Hint("设置中指定了使用 Java " & JavaCurrent & "，但当前版本" & Requirement & "，这可能会导致游戏崩溃！", HintType.Critical)
-                    AllowedJavaList = New List(Of JavaEntry) From {UserJava}
-                ElseIf MyMsgBox("你在启动设置中指定了使用 Java " & JavaCurrent & "，但当前版本" & Requirement & "。" & vbCrLf &
-                                "如果强制使用该 Java，可能会导致游戏崩溃。" & vbCrLf &
-                                vbCrLf &
-                                " - 指定的 Java：" & UserJava.ToString,
-                                "Java 兼容性警告", "让 PCL2 自动选择", "强制使用该 Java") = 2 Then
-                    '强制使用指定的 Java
-                    Log("[Java] 已强制使用用户指定的不兼容 Java")
-                    AllowedJavaList = New List(Of JavaEntry) From {UserJava}
-                End If
+                Catch ex As Exception
+                    UserJava = Nothing
+                    Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
+                    Log(ex, "版本独立设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
+                End Try
             End If
+
+            '获取全局设置中指定的 Java
+            If UserJava Is Nothing AndAlso Setup.Get("LaunchArgumentJavaSelect") <> "" Then
+                Try
+                    UserJava = JavaEntry.FromJson(GetJson(Setup.Get("LaunchArgumentJavaSelect")))
+                Catch ex As Exception
+                    UserJava = Nothing
+                    Setup.Reset("LaunchArgumentJavaSelect")
+                    Log(ex, "设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
+                End Try
+            End If
+
+            '确保指定的 Java 可用
+            If UserJava Is Nothing Then GoTo ExitUserJavaCheck
+            If AllowedJavaList.Any(Function(j) j.PathFolder = UserJava.PathFolder) Then
+                Log("[Java] 使用用户指定的 Java：" & UserJava.PathFolder)
+                AllowedJavaList = New List(Of JavaEntry) From {UserJava}
+                GoTo UserPass
+            End If
+
+            '指定的 Java 不可用，弹窗要求选择
+            Log("[Java] 发现用户指定的不兼容 Java：" & UserJava.ToString)
+            Dim Requirement As String = ""
+            Dim ShowRevision As Boolean = False
+            If (MinVersion Is Nothing OrElse MinVersion.Minor = 0) AndAlso (MaxVersion IsNot Nothing AndAlso MaxVersion.Minor < 999) Then
+                ShowRevision = MaxVersion.MinorRevision < 999
+                Requirement = "最高兼容到 Java " & MaxVersion.Minor & If(ShowRevision, "." & MaxVersion.MajorRevision & "." & MaxVersion.MinorRevision, "")
+            ElseIf (MinVersion IsNot Nothing AndAlso MinVersion.Minor > 0) AndAlso (MaxVersion Is Nothing OrElse MaxVersion.Minor >= 999) Then
+                ShowRevision = MinVersion.MinorRevision > 0 OrElse MinVersion.MajorRevision > 0
+                Requirement = "至少需要 Java " & MinVersion.Minor & If(ShowRevision, "." & MinVersion.MajorRevision & "." & MinVersion.MinorRevision, "")
+            ElseIf (MinVersion IsNot Nothing AndAlso MinVersion.Minor > 0) AndAlso (MaxVersion IsNot Nothing AndAlso MaxVersion.Minor < 999) Then
+                ShowRevision = MinVersion.MinorRevision > 0 OrElse MinVersion.MajorRevision > 0 OrElse MaxVersion.MinorRevision < 999
+                Dim Left As String = MinVersion.Minor & If(ShowRevision, "." & MinVersion.MajorRevision & "." & MinVersion.MinorRevision, "")
+                Dim Right As String = MaxVersion.Minor & If(ShowRevision, "." & MaxVersion.MajorRevision & "." & MaxVersion.MinorRevision, "")
+                Requirement = "需要 Java " & If(Left = Right, Left, Left & " ~ " & Right)
+            End If
+            Dim JavaCurrent As String = UserJava.VersionCode & If(ShowRevision, "." & UserJava.Version.MajorRevision & "." & UserJava.Version.MinorRevision, "")
+            If Setup.Get("LaunchAdvanceJava") Then
+                '直接跳过弹窗
+                Hint("设置中指定了使用 Java " & JavaCurrent & "，但当前版本" & Requirement & "，这可能会导致游戏崩溃！", HintType.Critical)
+                AllowedJavaList = New List(Of JavaEntry) From {UserJava}
+            Else
+                Select Case MyMsgBox("你在设置中手动指定了使用 Java " & JavaCurrent & "，但当前" & Requirement & "。" & vbCrLf &
+                            "如果强制使用该 Java，可能会导致出现异常。" & vbCrLf &
+                            vbCrLf &
+                            " - 指定的 Java：" & UserJava.ToString,
+                            "Java 兼容性警告", "让 PCL2 自动选择", "强制使用该 Java", "取消")
+                    Case 1 '让 PCL2 自动选择
+                    Case 2 '强制使用指定的 Java
+                        Log("[Java] 已强制使用用户指定的不兼容 Java")
+                        AllowedJavaList = New List(Of JavaEntry) From {UserJava}
+                    Case 3 '取消启动
+                        Throw New Exception(CancelException)
+                End Select
+            End If
+
+ExitUserJavaCheck:
+#End Region
 
             '若依然未找到适合的 Java，直接返回
             If AllowedJavaList.Count = 0 Then Return Nothing
 
-            '检查特定的 Java
+            '优先使用特定目录下的 Java
             For Each Java In AllowedJavaList
                 If TargetJavaList.Contains(Java) Then
                     '直接使用指定的 Java
                     AllowedJavaList = New List(Of JavaEntry) From {Java}
-                    Log("[Java] 使用特定目录下的 Java：" & Java.ToString)
+                    Log("[Java] 优先使用特定目录下的 Java：" & Java.ToString)
                     GoTo UserPass
                 End If
             Next
@@ -537,6 +569,8 @@ UserPass:
             Dim SelectedJava = AllowedJavaList.First
             Try
                 SelectedJava.Check()
+            Catch ex As ThreadInterruptedException
+                Throw
             Catch ex As Exception
                 Log(ex, "找到的 Java 已无法使用，尝试进行搜索")
                 AllowedJavaList = New List(Of JavaEntry)
@@ -552,6 +586,7 @@ UserPass:
             Log(ex, "查找符合条件的 Java 时出现加载器中断")
             Return Nothing
         Catch ex As Exception
+            If ex.Message = "$$" Then Throw ex
             Log(ex, "查找符合条件的 Java 失败", LogLevel.Feedback)
             Return Nothing
         End Try
@@ -615,7 +650,7 @@ NoUserJava:
         '4. Java 大版本
         If Left.VersionCode <> Right.VersionCode Then
             '                             Java  7   8   9  10  11  12 13 14 15  16  17  18  19  20...
-            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 29, 10, 11, 12, 13, 9, 8, 7, 15, 30, 29, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
+            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 29, 10, 11, 12, 13, 9, 8, 7, 15, 31, 30, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
             Return Weight.ElementAtOrDefault(Left.VersionCode) >= Weight.ElementAtOrDefault(Right.VersionCode)
         End If
         '5. 最次级版本号更接近 51
@@ -671,17 +706,10 @@ NoUserJava:
         Public Name As String
         Public Path As String
         Public Type As McFolderType
-        Public VersionCount As Integer
         Public Overrides Function Equals(obj As Object) As Boolean
-            If Not (TypeOf obj Is McFolder) Then
-                Return False
-            End If
-
+            If Not (TypeOf obj Is McFolder) Then Return False
             Dim folder = DirectCast(obj, McFolder)
-            Return Name = folder.Name AndAlso
-                   Path = folder.Path AndAlso
-                   Type = folder.Type AndAlso
-                   VersionCount = folder.VersionCount
+            Return Name = folder.Name AndAlso Path = folder.Path AndAlso Type = folder.Type
         End Function
         Public Overrides Function ToString() As String
             Return Path
@@ -763,15 +791,6 @@ NoUserJava:
             End If
 
             For Each Folder As McFolder In CacheMcFolderList
-#Region "获取可用版本数"
-                If Directory.Exists(Folder.Path & "versions\") Then
-                    Folder.VersionCount = New DirectoryInfo(Folder.Path & "versions\").GetDirectories.Count
-                    '减去隐藏版本的个数
-                    For Each Dir As DirectoryInfo In New DirectoryInfo(Folder.Path & "versions\").GetDirectories
-                        If ReadIni(Dir.FullName & "\PCL\Setup.ini", "Hide", "False") Then Folder.VersionCount -= 1
-                    Next
-                End If
-#End Region
 #Region "更新 launcher_profiles.json"
                 McFolderLauncherProfilesJsonCreate(Folder.Path)
 #End Region
@@ -817,7 +836,7 @@ NoUserJava:
 
 #Region "版本处理"
 
-    Public Const McVersionCacheVersion As Integer = 24
+    Public Const McVersionCacheVersion As Integer = 25
 
     Private _McVersionCurrent As McVersion
     Private _McVersionLast = 0 '为 0 以保证与 Nothing 不相同，使得 UI 显示可以正常初始化
@@ -1650,7 +1669,7 @@ ExitDataLoad:
         If Name.StartsWith("2.0") Then
             Return "这个秘密计划了两年的更新将游戏推向了一个新高度！"
         ElseIf Name.StartsWith("20w14inf") OrElse Name = "20w14∞" Then
-            Return "我们加入了 20 亿个新的世界，让无限的想象变成了现实！"
+            Return "我们加入了 20 亿个新的维度，让无限的想象变成了现实！"
         ElseIf Name = "15w14a" Then
             Return "作为一款全年龄向的游戏，我们需要和平，需要爱与拥抱。"
         ElseIf Name = "1.rv-pre1" Then
@@ -1919,16 +1938,23 @@ OnLoaded:
 
             '将每个大版本下的最常规版本加入
             For Each Code As Integer In ExistVersion
-                If NewerVersion.ContainsKey(Code & "-" & McVersionState.OptiFine) Then
+                If NewerVersion.ContainsKey(Code & "-" & McVersionState.OptiFine) AndAlso NewerVersion.ContainsKey(Code & "-" & McVersionState.Original) Then
+                    '同时存在 OptiFine 与原版
+                    Dim OriginalVersion As McVersion = NewerVersion(Code & "-" & McVersionState.Original)
                     Dim OptiFineVersion As McVersion = NewerVersion(Code & "-" & McVersionState.OptiFine)
-                    If NewerVersion.ContainsKey(Code & "-" & McVersionState.Original) AndAlso Not NewerVersion(Code & "-" & McVersionState.Original).Version.McName = OptiFineVersion.InheritVersion Then
-                        '同时存在 OptiFine 与原版，但 OptiFine 不是该版的依赖版本，则一定为两个不同版本，且原版较新
-                        VersionUseful.Add(NewerVersion(Code & "-" & McVersionState.Original))
-                        VersionList.Remove(NewerVersion(Code & "-" & McVersionState.Original))
+                    If OriginalVersion.Version.McCodeSub > OptiFineVersion.Version.McCodeSub Then
+                        '仅在原版比 OptiFine 更新时才加入原版
+                        VersionUseful.Add(OriginalVersion)
+                        VersionList.Remove(OriginalVersion)
                     End If
                     VersionUseful.Add(OptiFineVersion)
                     VersionList.Remove(OptiFineVersion)
-                Else
+                ElseIf NewerVersion.ContainsKey(Code & "-" & McVersionState.OptiFine) Then
+                    '没有原版，直接加入 OptiFine
+                    VersionUseful.Add(NewerVersion(Code & "-" & McVersionState.OptiFine))
+                    VersionList.Remove(NewerVersion(Code & "-" & McVersionState.OptiFine))
+                ElseIf NewerVersion.ContainsKey(Code & "-" & McVersionState.Original) Then
+                    '没有 OptiFine，直接加入原版
                     VersionUseful.Add(NewerVersion(Code & "-" & McVersionState.Original))
                     VersionList.Remove(NewerVersion(Code & "-" & McVersionState.Original))
                 End If
@@ -2807,7 +2833,7 @@ NextVersion:
                 If File.Exists AndAlso (Token.Size = 0 OrElse Token.Size = File.Length) AndAlso
                     (Not CheckHash OrElse Token.Hash Is Nothing OrElse Token.Hash = GetAuthSHA1(Token.LocalPath)) Then Continue For
                 '文件不存在，添加下载
-                Result.Add(New NetFile(DlSourceResourceGet("http://resources.download.minecraft.net/" & Left(Token.Hash, 2) & "/" & Token.Hash), Token.LocalPath, New FileChecker(ActualSize:=If(Token.Size = 0, -1, Token.Size), Hash:=Token.Hash)))
+                Result.Add(New NetFile(DlSourceResourceGet("https://resources.download.minecraft.net/" & Left(Token.Hash, 2) & "/" & Token.Hash), Token.LocalPath, New FileChecker(ActualSize:=If(Token.Size = 0, -1, Token.Size), Hash:=Token.Hash)))
             Next
         Catch ex As Exception
             Log(ex, "获取版本缺失的资源文件下载列表失败")

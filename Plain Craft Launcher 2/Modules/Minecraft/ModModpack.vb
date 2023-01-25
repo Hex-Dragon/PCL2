@@ -206,7 +206,7 @@ Retry:
                 Task.Progress = 0.5
                 '复制结果
                 If Directory.Exists(InstallTemp & ArchiveBaseFolder & OverrideHome) Then
-                    My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & OverrideHome, PathMcFolder & "versions\" & VersionName)
+                    CopyDirectory(InstallTemp & ArchiveBaseFolder & OverrideHome, PathMcFolder & "versions\" & VersionName)
                 Else
                     Log("[ModPack] 整合包中未找到 override 目录，已跳过")
                 End If
@@ -242,8 +242,13 @@ Retry:
                     '跳过重复的 Mod（疑似 CurseForge Bug）
                     If FileList.ContainsKey(ModJson("id").ToObject(Of Integer)) Then Continue For
                     '根据 modules 判断是资源包还是 Mod
-                    Dim ModuleNames = CType(ModJson("modules"), JArray).Select(Function(l) l("name").ToString).ToList
-                    Dim IsResourcePack As Boolean = Not ModuleNames.Contains("META-INF") AndAlso ModuleNames.Contains("pack.mcmeta")
+                    Dim IsResourcePack As Boolean
+                    If ModJson("modules").Any Then 'modules 可能返回 null（#1006）
+                        Dim ModuleNames = CType(ModJson("modules"), JArray).Select(Function(l) l("name").ToString).ToList
+                        IsResourcePack = Not ModuleNames.Contains("META-INF") AndAlso ModuleNames.Contains("pack.mcmeta")
+                    Else
+                        IsResourcePack = False
+                    End If
                     '实际的添加
                     FileList.Add(ModJson("id"), New DlCfFile(ModJson, False).GetDownloadFile(
                                  PathMcFolder & "versions\" & VersionName & "\" & If(IsResourcePack, "resourcepacks", "mods") & "\", False))
@@ -368,7 +373,7 @@ Retry:
             Task.Progress = 0.5
             '复制结果
             If Directory.Exists(InstallTemp & ArchiveBaseFolder & "minecraft") Then
-                My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & "minecraft", PathMcFolder & "versions\" & VersionName)
+                CopyDirectory(InstallTemp & ArchiveBaseFolder & "minecraft", PathMcFolder & "versions\" & VersionName)
             Else
                 Log("[ModPack] 整合包中未找到 minecraft override 目录，已跳过")
             End If
@@ -463,7 +468,7 @@ Retry:
             Task.Progress = 0.5
             '复制结果
             If Directory.Exists(InstallTemp & ArchiveBaseFolder & ".minecraft") Then
-                My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & ".minecraft", PathMcFolder & "versions\" & VersionName)
+                CopyDirectory(InstallTemp & ArchiveBaseFolder & ".minecraft", PathMcFolder & "versions\" & VersionName)
             Else
                 Log("[ModPack] 整合包中未找到 override .minecraft 目录，已跳过")
             End If
@@ -550,7 +555,7 @@ Retry:
             Task.Progress = 0.5
             '复制结果
             If Directory.Exists(InstallTemp & ArchiveBaseFolder & "overrides") Then
-                My.Computer.FileSystem.CopyDirectory(InstallTemp & ArchiveBaseFolder & "overrides", PathMcFolder & "versions\" & VersionName)
+                CopyDirectory(InstallTemp & ArchiveBaseFolder & "overrides", PathMcFolder & "versions\" & VersionName)
             Else
                 Log("[ModPack] 整合包中未找到 overrides 目录，已跳过")
             End If

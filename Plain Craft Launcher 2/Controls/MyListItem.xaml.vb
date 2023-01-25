@@ -461,8 +461,8 @@
                 AniStart(Anim, "MyListItem Checked " & Uuid)
             Else
                 '不使用动画
+                AniStop("MyListItem Checked " & Uuid)
                 If Checked Then
-                    'If Not IsNothing(RectCheck) Then RectCheck.Width = 4
                     If Not IsNothing(RectCheck) Then
                         RectCheck.Height = Double.NaN
                         RectCheck.Margin = New Thickness(-1, 6, 0, 6)
@@ -471,7 +471,6 @@
                     End If
                     SetResourceReference(ForegroundProperty, "ColorBrush3")
                 Else
-                    'If Not IsNothing(RectCheck) Then RectCheck.Width = 0
                     If Not IsNothing(RectCheck) Then
                         RectCheck.Height = 0
                         RectCheck.Margin = New Thickness(-1, 0, 0, 0)

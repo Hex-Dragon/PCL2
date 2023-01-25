@@ -15,6 +15,8 @@ End Class
 ''' </summary>
 Public Class ValidateNullable
     Inherits Validate
+    Public Sub New()
+    End Sub
     Public Overrides Function Validate(Str As String) As String
         If IsNothing(Str) OrElse String.IsNullOrEmpty(Str) Then Return Nothing
         Return ""
@@ -26,6 +28,8 @@ End Class
 ''' </summary>
 Public Class ValidateNullOrEmpty
     Inherits Validate
+    Public Sub New()
+    End Sub
     Public Overrides Function Validate(Str As String) As String
         If IsNothing(Str) OrElse String.IsNullOrEmpty(Str) Then Return "输入内容不能为空！"
         Return ""
@@ -37,6 +41,8 @@ End Class
 ''' </summary>
 Public Class ValidateNullOrWhiteSpace
     Inherits Validate
+    Public Sub New()
+    End Sub
     Public Overrides Function Validate(Str As String) As String
         If IsNothing(Str) OrElse String.IsNullOrWhiteSpace(Str) Then Return "输入内容不能为空！"
         Return ""
@@ -161,6 +167,8 @@ Public Class ValidateExceptSame
     Public Property Excepts As ObjectModel.Collection(Of String) = New ObjectModel.Collection(Of String)
     Public Property ErrorMessage As String
     Public Property IgnoreCase As Boolean = False
+    Public Sub New()
+    End Sub
     Public Sub New(Excepts As ObjectModel.Collection(Of String), Optional ErrorMessage As String = "输入内容不能为 %！", Optional IgnoreCase As Boolean = False)
         Me.Excepts = Excepts
         Me.ErrorMessage = ErrorMessage
@@ -197,6 +205,8 @@ Public Class ValidateFolderName
     Public Property UseMinecraftCharCheck As Boolean = True
     Public Property IgnoreCase As Boolean = True
     Private ReadOnly PathIgnore As IEnumerable(Of DirectoryInfo)
+    Public Sub New()
+    End Sub
     Public Sub New(Path As String, Optional UseMinecraftCharCheck As Boolean = True, Optional IgnoreCase As Boolean = True)
         Me.Path = Path
         Me.IgnoreCase = IgnoreCase
@@ -221,7 +231,7 @@ Public Class ValidateFolderName
             Dim CharactCheck As String = New ValidateExcept(IO.Path.GetInvalidFileNameChars() & If(UseMinecraftCharCheck, "!;", ""), "文件夹名不可包含 % 字符！").Validate(Str)
             If Not CharactCheck = "" Then Return CharactCheck
             '检查特殊字符串
-            Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件夹名不可为 %！").Validate(Str)
+            Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件夹名不可为 %！", True).Validate(Str)
             If Not InvalidStrCheck = "" Then Return InvalidStrCheck
             '检查文件夹重名
             Dim Arr As New List(Of String)
@@ -235,6 +245,61 @@ Public Class ValidateFolderName
             Return ""
         Catch ex As Exception
             Log(ex, "检查文件夹名出错")
+            Return "错误：" & ex.Message
+        End Try
+    End Function
+End Class
+
+''' <summary>
+''' 对文件名的粗略的特化检测。
+''' </summary>
+Public Class ValidateFileName
+    Inherits Validate
+    Public Property Name As String
+    Public Property UseMinecraftCharCheck As Boolean = True
+    Public Property IgnoreCase As Boolean = True
+    Public Property ParentFolder As String = Nothing
+    Public Property RequireParentFolderExists = True
+    Public Sub New()
+    End Sub
+    Public Sub New(Name As String, Optional UseMinecraftCharCheck As Boolean = True, Optional IgnoreCase As Boolean = True)
+        Me.Name = Name
+        Me.IgnoreCase = IgnoreCase
+        Me.UseMinecraftCharCheck = UseMinecraftCharCheck
+    End Sub
+    Public Overrides Function Validate(Str As String) As String
+        Try
+            '检查是否为空
+            Dim LengthCheck As String = New ValidateNullOrWhiteSpace().Validate(Str)
+            If Not LengthCheck = "" Then Return LengthCheck
+            '检查空格
+            If Str.StartsWith(" ") Then Return "文件名不能以空格开头！"
+            If Str.EndsWith(" ") Then Return "文件名不能以空格结尾！"
+            '检查长度
+            LengthCheck = New ValidateLength(1, 253).Validate(Str & If(ParentFolder, ""))
+            If Not LengthCheck = "" Then Return LengthCheck
+            '检查尾部小数点
+            If Str.EndsWith(".") Then Return "文件名不能以小数点结尾！"
+            '检查特殊字符
+            Dim CharactCheck As String = New ValidateExcept(IO.Path.GetInvalidFileNameChars() & If(UseMinecraftCharCheck, "!;", ""), "文件名不可包含 % 字符！").Validate(Str)
+            If Not CharactCheck = "" Then Return CharactCheck
+            '检查特殊字符串
+            Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件名不可为 %！", True).Validate(Str)
+            If Not InvalidStrCheck = "" Then Return InvalidStrCheck
+            '检查文件重名
+            If ParentFolder IsNot Nothing Then
+                Dim DirInfo As New DirectoryInfo(ParentFolder)
+                If DirInfo.Exists Then
+                    Dim SameNameCheck = New ValidateExceptSame(DirInfo.EnumerateFiles("*").Select(Function(f) f.Name),
+                                                               "不可与现有文件重名！", IgnoreCase).Validate(Str)
+                    If Not SameNameCheck = "" Then Return SameNameCheck
+                Else
+                    If RequireParentFolderExists Then Return $"父文件夹不存在：{ParentFolder}"
+                End If
+            End If
+            Return ""
+        Catch ex As Exception
+            Log(ex, "检查文件名出错")
             Return "错误：" & ex.Message
         End Try
     End Function

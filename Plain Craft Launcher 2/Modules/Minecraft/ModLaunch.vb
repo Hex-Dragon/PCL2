@@ -167,6 +167,7 @@ NextInner:
 #Region "预检测"
 
     Private Sub McLaunchPrecheck()
+        If Setup.Get("SystemDebugDelay") Then Thread.Sleep(RandomInteger(100, 2000))
         '检查路径
         If McVersionCurrent.PathIndie.Contains("!") OrElse McVersionCurrent.PathIndie.Contains(";") Then Throw New Exception("游戏路径中不可包含 ! 或 ;（" & McVersionCurrent.PathIndie & "）")
         If McVersionCurrent.Path.Contains("!") OrElse McVersionCurrent.Path.Contains(";") Then Throw New Exception("游戏路径中不可包含 ! 或 ;（" & McVersionCurrent.Path & "）")
@@ -1047,7 +1048,7 @@ SystemBrowser:
                                        Case 1
                                            OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
                                        Case 2
-                                           OpenWebsite("https://www.minecraft.net/zh-hans/store/minecraft-java-bedrock-edition-pc")
+                                           OpenWebsite("https://www.minecraft.net/store/checkout/minecraft-java-bedrock-edition-pc")
                                    End Select
                                End Sub, "Login Failed: Create Profile")
                 Throw New Exception("$$")
@@ -1191,11 +1192,11 @@ SystemBrowser:
         'Fabric 检测
         If McVersionCurrent.Version.HasFabric Then
             If McVersionCurrent.Version.McCodeMain >= 15 AndAlso McVersionCurrent.Version.McCodeMain <= 16 AndAlso McVersionCurrent.Version.McCodeMain <> -1 Then
-                '1.15 - 1.16：Java 8 - 18
-                MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 18, 999, 999)
+                '1.15 - 1.16：Java 8 - 19
+                MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 19, 999, 999)
             ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 99 Then
-                '1.18+：Java 17 - 18
-                MinVer = New Version(1, 17, 0, 0) : MaxVer = New Version(1, 18, 999, 999)
+                '1.18+：Java 17 - 19
+                MinVer = New Version(1, 17, 0, 0) : MaxVer = New Version(1, 19, 999, 999)
             End If
         End If
 
@@ -1207,14 +1208,15 @@ SystemBrowser:
 
         '选择 Java
         McLaunchLog("Java 版本需求：最低 " & MinVer.ToString & "，最高 " & MaxVer.ToString)
-        McLaunchJavaSelected = JavaSelect(MinVer, MaxVer, McVersionCurrent)
-        If Task.IsAborted Then Exit Sub '中断加载会导致 JavaSelect 异常地返回空值，误判找不到 Java
+        McLaunchJavaSelected = JavaSelect("$$", MinVer, MaxVer, McVersionCurrent)
+        If Task.IsAborted Then Exit Sub
         If McLaunchJavaSelected IsNot Nothing Then
             McLaunchLog("选择的 Java：" & McLaunchJavaSelected.ToString)
             Exit Sub
         End If
 
         '无合适的 Java
+        If Task.IsAborted Then Exit Sub '中断加载会导致 JavaSelect 异常地返回空值，误判找不到 Java
         McLaunchLog("无合适的 Java，取消启动")
         If MinVer >= New Version(1, 17, 0, 0) Then
             '缺少 Java 17

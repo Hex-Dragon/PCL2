@@ -147,21 +147,25 @@
                 If MyMsgBox("是否要初始化启动页的所有设置？该操作不可撤销。", "初始化确认",, "取消", IsWarn:=True) = 1 Then
                     If IsNothing(FrmSetupLaunch) Then FrmSetupLaunch = New PageSetupLaunch
                     FrmSetupLaunch.Reset()
+                    ItemLaunch.Checked = True
                 End If
             Case FormMain.PageSubType.SetupUI
                 If MyMsgBox("是否要初始化个性化页的所有设置？该操作不可撤销。" & vbCrLf & "（背景图片与音乐、自定义主页等外部文件不会被删除）", "初始化确认",, "取消", IsWarn:=True) = 1 Then
                     If IsNothing(FrmSetupUI) Then FrmSetupUI = New PageSetupUI
                     FrmSetupUI.Reset()
+                    ItemUI.Checked = True
                 End If
             Case FormMain.PageSubType.SetupSystem
                 If MyMsgBox("是否要初始化启动器页的所有设置？该操作不可撤销。", "初始化确认",, "取消", IsWarn:=True) = 1 Then
                     If IsNothing(FrmSetupSystem) Then FrmSetupSystem = New PageSetupSystem
                     FrmSetupSystem.Reset()
+                    ItemSystem.Checked = True
                 End If
             Case FormMain.PageSubType.SetupLink
                 If MyMsgBox("是否要初始化联机页的所有设置？该操作不可撤销。", "初始化确认",, "取消", IsWarn:=True) = 1 Then
                     If IsNothing(FrmSetupLink) Then FrmSetupLink = New PageSetupLink
                     FrmSetupLink.Reset()
+                    ItemLink.Checked = True
                 End If
         End Select
     End Sub

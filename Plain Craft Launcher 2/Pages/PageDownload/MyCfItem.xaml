@@ -21,7 +21,7 @@
     <!--<Rectangle Height="45" Width="45" RadiusX="4" RadiusY="4" Fill="White" Grid.Column="1" Grid.Row="1" IsHitTestVisible="False" SnapsToDevicePixels="True" UseLayoutRounding="False" Grid.RowSpan="3" />-->
     <Border Height="45" Width="45" Grid.Column="1" Grid.Row="1" IsHitTestVisible="False" SnapsToDevicePixels="True" UseLayoutRounding="True" Grid.RowSpan="3">
         <Border.Clip>
-            <RectangleGeometry Rect="0,0,45,45" RadiusX="4" RadiusY="4" />
+            <RectangleGeometry Rect="0,0,45,45" RadiusX="6" RadiusY="6" />
         </Border.Clip>
         <Image x:Name="PathLogo" RenderOptions.BitmapScalingMode="HighQuality" />
     </Border>

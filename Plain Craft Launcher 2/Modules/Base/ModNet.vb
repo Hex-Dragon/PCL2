@@ -1653,7 +1653,7 @@ NextElement:
 Retry:
                     Try
                         Log("[Download] 复制已存在的文件（" & LocalPath & "）")
-                        FileIO.FileSystem.CopyFile(LocalPath, File.LocalPath, True)
+                        CopyFile(LocalPath, File.LocalPath)
                         File.Finish(False)
                     Catch ex As Exception
                         RetryCount += 1

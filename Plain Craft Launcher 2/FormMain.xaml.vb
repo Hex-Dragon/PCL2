@@ -10,12 +10,13 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
-        If LastVersion < 274 Then 'Release 2.4.5
+        If LastVersion < 276 Then 'Release 2.4.6
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "增加 在游戏启动前执行命令 设置"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在百宝箱添加了清理 MC 日志、崩溃报告的按钮"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化界面动画，修改部分配色"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 Mod 中文搜索"))
-            FeatureCount += 17
-            BugCount += 35
+            FeatureCount += 25
+            BugCount += 56
         End If
         If LastVersion < 272 Then 'Release 2.4.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在版本设置页导出启动脚本、打开存档文件夹等"))
@@ -116,6 +117,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 277 Then 'Snapshot 2.4.6
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在百宝箱添加了清理 MC 日志、崩溃报告的按钮"))
+            FeatureCount += 8
+            BugCount += 21
+        End If
         If LastVersion < 275 Then 'Snapshot 2.4.5
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "增加 在游戏启动前执行命令 设置"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化界面动画，修改部分配色"))
@@ -395,7 +401,7 @@ Public Class FormMain
             AaCode(Sub()
                        PanBack.RenderTransform = Nothing
                        IsWindowLoadFinished = True
-                       Log("[System] DPI：" & DPI & "，工作区尺寸：" & My.Computer.Screen.WorkingArea.Width & " x " & My.Computer.Screen.WorkingArea.Height & "，系统版本：" & OsVersion.ToString)
+                       Log($"[System] DPI：{DPI}，系统版本：{OsVersion}，PCL 位置：{PathWithName}")
                    End Sub, , True)
         }, "Form Show")
         'Timer 启动
@@ -552,17 +558,22 @@ Reopen:
                 If PanBack.RenderTransform Is Nothing Then
                     Dim TransformPos As New TranslateTransform(0, 0)
                     Dim TransformRotate As New RotateTransform(0)
-                    PanBack.RenderTransform = New TransformGroup() With {.Children = New TransformCollection({TransformRotate, TransformPos})}
+                    Dim TransformScale As New ScaleTransform(1, 1)
+                    PanBack.RenderTransform = New TransformGroup() With {.Children = New TransformCollection({TransformRotate, TransformPos, TransformScale})}
                     AniStart({
-                        AaOpacity(Me, -Opacity, 150, 50),
-                        AaDouble(Sub(i) TransformPos.Y += i, 30 - TransformPos.Y, 200, 0, New AniEaseOutFluent(AniEasePower.Weak)),
-                        AaDouble(Sub(i) TransformRotate.Angle += i, 1 - TransformRotate.Angle, 200, 0, New AniEaseOutFluent(AniEasePower.Weak)),
+                        AaOpacity(Me, -Opacity, 140, 40, New AniEaseOutFluent(AniEasePower.Weak)),
+                        AaDouble(Sub(i)
+                                     TransformScale.ScaleX += i
+                                     TransformScale.ScaleY += i
+                                 End Sub, 0.88 - TransformScale.ScaleX, 180),
+                        AaDouble(Sub(i) TransformPos.Y += i, 20 - TransformPos.Y, 180, 0, New AniEaseOutFluent(AniEasePower.Weak)),
+                        AaDouble(Sub(i) TransformRotate.Angle += i, 0.6 - TransformRotate.Angle, 180, 0, New AniEaseInoutFluent(AniEasePower.Weak)),
                         AaCode(Sub()
                                    IsHitTestVisible = False
                                    Top = -10000
                                    ShowInTaskbar = False
-                               End Sub, 225),
-                        AaCode(AddressOf EndProgramForce, 250)
+                               End Sub, 210),
+                        AaCode(AddressOf EndProgramForce, 230)
                     }, "Form Close")
                 Else
                     EndProgramForce()
@@ -581,7 +592,7 @@ Reopen:
         If ReturnCode = Result.Exception Then
             If Not IsLogShown Then
                 FeedbackInfo()
-                Log("请在 https://jinshuju.net/f/rP4b6E?x_field_1=crash 提交错误报告，以便于作者解决此问题！")
+                Log("请在 https://github.com/Hex-Dragon/PCL2/issues 提交错误报告，以便于作者解决此问题！")
                 IsLogShown = True
                 ShellOnly(Path & "PCL\Log1.txt")
             End If
@@ -729,7 +740,7 @@ Reopen:
                         Dim AuthlibServer As String = Net.WebUtility.UrlDecode(Str.Substring("authlib-injector:yggdrasil-server:".Length))
                         Log("[System] Authlib 拖拽：" & AuthlibServer)
                         If Not String.IsNullOrEmpty(New ValidateHttp().Validate(AuthlibServer)) Then
-                            Hint("输入的 Authlib 验证服务器不符合网址格式（" & AuthlibServer & "）！", HintType.Critical)
+                            Hint($"输入的 Authlib 验证服务器不符合网址格式（{AuthlibServer}）！", HintType.Critical)
                             Exit Sub
                         End If
                         If McVersionCurrent Is Nothing Then
@@ -738,7 +749,7 @@ Reopen:
                         End If
                         If AuthlibServer = "https://littleskin.cn/api/yggdrasil" Then
                             'LittleSkin
-                            If MyMsgBox("是否要在版本 " & McVersionCurrent.Name & " 中开启 LittleSkin 登录？" & vbCrLf &
+                            If MyMsgBox($"是否要在版本 {McVersionCurrent.Name} 中开启 LittleSkin 登录？" & vbCrLf &
                                         "你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。", "第三方登录开启确认", "确定", "取消") = 2 Then
                                 Exit Sub
                             End If
@@ -748,8 +759,8 @@ Reopen:
                             Setup.Set("VersionServerAuthName", "LittleSkin 登录", Version:=McVersionCurrent)
                         Else
                             '第三方 Authlib 服务器
-                            If MyMsgBox("是否要在版本 " & McVersionCurrent.Name & " 中开启第三方登录？" & vbCrLf &
-                                        "登录服务器：" & AuthlibServer & vbCrLf & vbCrLf &
+                            If MyMsgBox($"是否要在版本 {McVersionCurrent.Name} 中开启第三方登录？" & vbCrLf &
+                                        $"登录服务器：{AuthlibServer}" & vbCrLf & vbCrLf &
                                         "你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。", "第三方登录开启确认", "确定", "取消") = 2 Then
                                 Exit Sub
                             End If
@@ -792,9 +803,10 @@ Reopen:
                 Dim FilePath As String = FilePathList.First
                 Log("[System] 接受文件拖拽：" & FilePath, LogLevel.Developer)
                 RunInNewThread(Sub()
+                                   Dim Extension As String = FilePath.Split(".").Last.ToLower
                                    'Mod 安装
-                                   If FilePath.Split(".").Last.ToLower = "jar" Then
-                                       Log("[System] 文件为 jar 格式，尝试作为 Mod 安装")
+                                   If {"jar", "litemod"}.Contains(Extension) Then
+                                       Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
                                        '获取并检查目标版本
                                        Dim TargetVersion As McVersion = McVersionCurrent
                                        If PageCurrent = PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
@@ -803,7 +815,7 @@ Reopen:
                                            Hint("若要安装 Mod，请先选择一个可以安装 Mod 的版本！")
                                        ElseIf Not (PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod) Then
                                            '未处于 Mod 管理页面
-                                           If MyMsgBox("是否要将这些文件作为 Mod 安装到 " & TargetVersion.Name & "？", "Mod 安装确认", "确定", "取消") = 1 Then GoTo Install
+                                           If MyMsgBox($"是否要将这些文件作为 Mod 安装到 {TargetVersion.Name}？", "Mod 安装确认", "确定", "取消") = 1 Then GoTo Install
                                        Else
                                            '处于 Mod 管理页面
 Install:
@@ -812,9 +824,9 @@ Install:
                                                    CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & GetFileNameFromPath(ModFile))
                                                Next
                                                If FilePathList.Count = 1 Then
-                                                   Hint("已安装 " & GetFileNameFromPath(FilePathList.First) & "！", HintType.Finish)
+                                                   Hint($"已安装 {GetFileNameFromPath(FilePathList.First)}！", HintType.Finish)
                                                Else
-                                                   Hint("已安装 " & FilePathList.Count & " 个 Mod！", HintType.Finish)
+                                                   Hint($"已安装 {FilePathList.Count} 个 Mod！", HintType.Finish)
                                                End If
                                                '刷新列表
                                                If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
@@ -827,12 +839,12 @@ Install:
                                        Exit Sub
                                    End If
                                    '安装整合包
-                                   If {"zip", "rar"}.Contains(FilePath.Split(".").Last.ToLower) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
+                                   If {"zip", "rar"}.Contains(Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
                                        Log("[System] 文件为压缩包，尝试作为整合包安装")
                                        If ModpackInstall(FilePath, ShowHint:=False) Then Exit Sub
                                    End If
                                    'RAR 处理
-                                   If FilePath.Split(".").Last.ToLower = "rar" Then
+                                   If Extension = "rar" Then
                                        Hint("PCL2 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试！")
                                        Exit Sub
                                    End If

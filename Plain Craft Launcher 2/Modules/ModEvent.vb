@@ -67,7 +67,7 @@
                         MyMsgBox("EventData 必须为以 http:// 或 https:// 开头的网址。" & vbCrLf & "PCL2 不支持其他乱七八糟的协议。", "事件执行失败")
                         Exit Sub
                     End If
-                    PageOtherTest.StartCustomDownload(Data(0))
+                    PageOtherTest.StartCustomDownload(Data(0), GetFileNameFromPath(Data(0)))
 
                 Case Else
                     MyMsgBox("未知的事件类型：" & Type & vbCrLf & "请检查事件类型填写是否正确，或者 PCL2 是否为最新版本。", "事件执行失败")

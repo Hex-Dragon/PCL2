@@ -638,6 +638,8 @@
             If Versions.Count = 0 Then Exit Sub
             '排序
             Versions = Sort(Versions, Function(Left As DlOptiFineListEntry, Right As DlOptiFineListEntry) As Boolean
+                                          If Not Left.IsPreview AndAlso Right.IsPreview Then Return True
+                                          If Left.IsPreview AndAlso Not Right.IsPreview Then Return False
                                           Return VersionSortBoolean(Left.NameDisplay, Right.NameDisplay)
                                       End Function)
             '可视化

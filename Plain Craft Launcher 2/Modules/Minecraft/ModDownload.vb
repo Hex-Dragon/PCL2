@@ -1272,7 +1272,7 @@
             '构造搜索请求
             Dim SearchEntries As New List(Of SearchEntry(Of DlCfDbEntry))
             For Each Entry In DlCfProjectDb.Values
-                If If(Entry.ChineseName, "").Contains("动态的树") Then Continue For '傻逼 Mod 的附属太多了
+                If Entry.ChineseName.Contains("动态的树") Then Continue For '傻逼 Mod 的附属太多了
                 SearchEntries.Add(New SearchEntry(Of DlCfDbEntry) With {
                     .Item = Entry,
                     .SearchSource = New List(Of KeyValuePair(Of String, Double)) From {
@@ -1416,9 +1416,9 @@
         ''' </summary>
         Public WikiId As Integer
         ''' <summary>
-        ''' 中文译名。若为 Nothing 或空字符串则使用英文名。
+        ''' 中文译名。若为空字符串则使用英文名。
         ''' </summary>
-        Public ChineseName As String
+        Public ChineseName As String = ""
         ''' <summary>
         ''' MCBBS 发布帖编号（例如 195107）。若为 Nothing 则没有发布帖。
         ''' </summary>
@@ -1663,9 +1663,10 @@ ExitSub:
 #Region "DlSource | 镜像下载源"
 
     Public Function DlSourceResourceGet(MojangBase As String) As String()
-        Return {MojangBase.Replace("http://resources.download.minecraft.net", "https://download.mcbbs.net/assets"),
+        MojangBase = MojangBase.Replace("http://resources.download.minecraft.net", "https://resources.download.minecraft.net")
+        Return {MojangBase.Replace("https://resources.download.minecraft.net", "https://download.mcbbs.net/assets"),
                 MojangBase,
-                MojangBase.Replace("http://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets")
+                MojangBase.Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets")
                }
     End Function
 

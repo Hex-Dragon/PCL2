@@ -10,12 +10,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.4.5" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.4.5." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.4.6" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.4.6." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 274 'Release
+    Public Const VersionCode As Integer = 276 'Release
 #Else
-    Public Const VersionCode As Integer = 275 'Snapshot
+    Public Const VersionCode As Integer = 277 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -743,11 +743,12 @@ Public Module ModBase
     ''' 从文件路径或者 Url 获取不包含路径的文件名。不包含文件名将会抛出异常。
     ''' </summary>
     Public Function GetFileNameFromPath(FilePath As String) As String
-        If FilePath.EndsWith("\") OrElse FilePath.EndsWith("/") Then Throw New Exception("不包含文件名：" & FilePath)
-        If Not (FilePath.Contains("\") OrElse FilePath.Contains("/")) Then Return FilePath
-        If FilePath.Contains("?") Then FilePath = Left(FilePath, FilePath.LastIndexOf("?")) '去掉网络参数后的 ?
-        GetFileNameFromPath = Mid(FilePath, FilePath.LastIndexOfAny({"\", "/"}) + 2)
-        If GetFileNameFromPath = "" Then Throw New Exception("不包含文件名：" & FilePath)
+        FilePath = FilePath.Replace("/", "\")
+        If FilePath.EndsWith("\") Then Throw New Exception("不包含文件名：" & FilePath)
+        Dim FileName As String = FilePath.Split("\").Last.Split("?").First '去掉网络参数后的 ?
+        If FileName.Length = 0 Then Throw New Exception("不包含文件名：" & FilePath)
+        If FileName.Length > 250 Then Throw New PathTooLongException("文件名过长：" & FilePath)
+        Return FileName
     End Function
     ''' <summary>
     ''' 从文件路径或者 Url 获取不包含路径与扩展名的文件名。不包含文件名将会抛出异常。
@@ -1266,15 +1267,17 @@ Re:
     End Function
 
     ''' <summary>
-    ''' 删除文件夹。失败会抛出异常。
+    ''' 删除文件夹，返回删除的文件个数。通过参数选择是否抛出异常。
     ''' </summary>
-    Public Sub DeleteDirectory(Path As String, Optional IgnoreIssue As Boolean = False)
-        If Not Directory.Exists(Path) Then Exit Sub
+    Public Function DeleteDirectory(Path As String, Optional IgnoreIssue As Boolean = False) As Integer
+        If Not Directory.Exists(Path) Then Return 0
+        Dim DeletedCount As Integer = 0
         Dim Temp As String()
         Temp = Directory.GetFiles(Path)
         For Each str As String In Temp
             Try
                 File.Delete(str)
+                DeletedCount += 1
             Catch ex As Exception
                 If IgnoreIssue Then
                     Log(ex, "删除单个文件可忽略地失败")
@@ -1296,13 +1299,16 @@ Re:
                 Throw
             End If
         End Try
-        '这个也不靠谱，目录不是空的警告
-        'My.Computer.FileSystem.DeleteDirectory(Path, FileIO.DeleteDirectoryOption.DeleteAllContents)
-    End Sub
+        Return DeletedCount
+    End Function
     ''' <summary>
     ''' 复制文件夹，失败会抛出异常。
     ''' </summary>
     Public Sub CopyDirectory(FromPath As String, ToPath As String)
+        FromPath = FromPath.Replace("/", "\")
+        If Not FromPath.EndsWith("\") Then FromPath &= "\"
+        ToPath = ToPath.Replace("/", "\")
+        If Not ToPath.EndsWith("\") Then ToPath &= "\"
         For Each File In EnumerateFiles(FromPath)
             CopyFile(File.FullName, File.FullName.Replace(FromPath, ToPath))
         Next

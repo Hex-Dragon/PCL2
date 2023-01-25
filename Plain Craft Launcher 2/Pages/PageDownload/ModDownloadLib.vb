@@ -380,7 +380,7 @@ Public Module ModDownloadLib
     End Sub
     Private Sub McDownloadOptiFineInstall(BaseMcFolderHome As String, Target As String, Task As LoaderTask(Of List(Of NetFile), Boolean))
         '选择 Java
-        Dim Java = JavaSelect(New Version(1, 8, 0, 0))
+        Dim Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
         If Java Is Nothing Then
             JavaMissing(17)
             Throw New Exception("未找到用于安装 OptiFine 的 Java")
@@ -563,7 +563,7 @@ Public Module ModDownloadLib
                     If Directory.Exists(BaseMcFolder & "versions\" & DownloadInfo.Inherit) Then
                         DeleteDirectory(BaseMcFolder & "versions\" & DownloadInfo.Inherit)
                     End If
-                    My.Computer.FileSystem.CreateDirectory(BaseMcFolder & "versions\" & DownloadInfo.Inherit & "\")
+                    Directory.CreateDirectory(BaseMcFolder & "versions\" & DownloadInfo.Inherit & "\")
                     McFolderLauncherProfilesJsonCreate(BaseMcFolder)
                     CopyFile(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json",
                               BaseMcFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json")
@@ -575,10 +575,10 @@ Public Module ModDownloadLib
                     Task.Progress = 0.96
                     '复制文件
                     File.Delete(BaseMcFolder & "launcher_profiles.json")
-                    My.Computer.FileSystem.CopyDirectory(BaseMcFolder, McFolder, True)
+                    CopyDirectory(BaseMcFolder, McFolder)
                     Task.Progress = 0.98
                     '清理文件
-                    My.Computer.FileSystem.DeleteFile(Target)
+                    File.Delete(Target)
                     DeleteDirectory(BaseMcFolderHome)
                 Catch ex As Exception
                     Throw New Exception("安装新版 OptiFine 版本失败", ex)
@@ -1097,7 +1097,7 @@ Public Module ModDownloadLib
 
     Private Sub ForgeInjector(Target As String, Task As LoaderTask(Of Boolean, Boolean), McFolder As String)
         '选择 Java
-        Dim Java = JavaSelect(New Version(1, 8, 0, 60))
+        Dim Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
         If Java Is Nothing Then
             JavaMissing(17)
             Throw New Exception("未找到用于安装 Forge 的 Java")
@@ -1409,7 +1409,7 @@ Public Module ModDownloadLib
                                                                     '清理文件
                                                                     Try
                                                                         If Installer IsNot Nothing Then Installer.Dispose()
-                                                                        If File.Exists(InstallerAddress) Then My.Computer.FileSystem.DeleteFile(InstallerAddress)
+                                                                        If File.Exists(InstallerAddress) Then File.Delete(InstallerAddress)
                                                                     Catch ex As Exception
                                                                         Log(ex, "安装 Forge 清理文件时出错")
                                                                     End Try
@@ -1440,7 +1440,7 @@ Public Module ModDownloadLib
                                                                         '解压支持库文件
                                                                         Installer.Dispose()
                                                                         ZipFile.ExtractToDirectory(InstallerAddress, InstallerAddress & "_unrar\")
-                                                                        My.Computer.FileSystem.CopyDirectory(InstallerAddress & "_unrar\maven\", McFolder & "libraries\", True)
+                                                                        CopyDirectory(InstallerAddress & "_unrar\maven\", McFolder & "libraries\")
                                                                         DeleteDirectory(InstallerAddress & "_unrar\")
                                                                     Else
                                                                         '旧版格式
@@ -1463,7 +1463,7 @@ Public Module ModDownloadLib
                                                                     Try
                                                                         '清理文件
                                                                         If Installer IsNot Nothing Then Installer.Dispose()
-                                                                        If File.Exists(InstallerAddress) Then My.Computer.FileSystem.DeleteFile(InstallerAddress)
+                                                                        If File.Exists(InstallerAddress) Then File.Delete(InstallerAddress)
                                                                         If Directory.Exists(InstallerAddress & "_unrar\") Then DeleteDirectory(InstallerAddress & "_unrar\")
                                                                     Catch ex As Exception
                                                                         Log(ex, "非新版方式安装 Forge 清理文件时出错")
@@ -1995,8 +1995,8 @@ Public Module ModDownloadLib
         LoaderList.Add(New LoaderTask(Of String, String)("安装游戏", Sub(Task As LoaderTask(Of String, String))
                                                                      InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, FabricFolder, LiteLoaderFolder)
                                                                      Task.Progress = 0.3
-                                                                     If Directory.Exists(TempMcFolder & "libraries") Then My.Computer.FileSystem.CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries", True)
-                                                                     If Directory.Exists(TempMcFolder & "mods") Then My.Computer.FileSystem.CopyDirectory(TempMcFolder & "mods", PathMcFolder & "mods", True)
+                                                                     If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
+                                                                     If Directory.Exists(TempMcFolder & "mods") Then CopyDirectory(TempMcFolder & "mods", PathMcFolder & "mods")
                                                                  End Sub) With {.ProgressWeight = 2, .Block = True})
         '补全文件
         If Not DontFixLibraries AndAlso

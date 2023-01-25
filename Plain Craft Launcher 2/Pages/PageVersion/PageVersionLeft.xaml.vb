@@ -90,12 +90,15 @@
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
         '强制刷新
         If FrmVersionMod IsNot Nothing Then FrmVersionMod.RefreshList(True) '没有 Else，还没加载刷个鬼的新
+        ItemMod.Checked = True
+        Hint("正在刷新……", Log:=False)
     End Sub
 
     Public Sub Reset(sender As Object, e As EventArgs)
         If MyMsgBox("是否要初始化该版本的版本独立设置？该操作不可撤销。", "初始化确认",, "取消", IsWarn:=True) = 1 Then
             If IsNothing(FrmVersionSetup) Then FrmVersionSetup = New PageVersionSetup
             FrmVersionSetup.Reset()
+            ItemSetup.Checked = True
         End If
     End Sub
 

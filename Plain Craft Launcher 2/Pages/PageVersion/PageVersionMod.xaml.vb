@@ -60,6 +60,7 @@
                 PanEmpty.Visibility = Visibility.Collapsed
             End If
 
+            SearchBox.Text = ""
             '建立 StackPanel
             Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, If(List.Count > 0, 20, 0)), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0)}
             For Each ModEntity As McMod In List
@@ -383,15 +384,15 @@
             ModSearchName = ModSearchName.Replace("++", "+").Replace("pti+Fine", "ptiFine")
             '显示
             If ModEntity.Url Is Nothing Then
-                If MyMsgBox(Join(ContentLines, vbCrLf), ModEntity.Name, "确定", "百科搜索") = 2 Then
+                If MyMsgBox(Join(ContentLines, vbCrLf), ModEntity.Name, "百科搜索", "返回") = 1 Then
                     OpenWebsite("https://www.mcmod.cn/s?key=" & ModSearchName & "&site=all&filter=0")
                 End If
             Else
-                Select Case MyMsgBox(Join(ContentLines, vbCrLf), ModEntity.Name, "确定", "百科搜索", "打开官网")
+                Select Case MyMsgBox(Join(ContentLines, vbCrLf), ModEntity.Name, "打开官网", "百科搜索", "返回")
+                    Case 1
+                        OpenWebsite(ModEntity.Url)
                     Case 2
                         OpenWebsite("https://www.mcmod.cn/s?key=" & ModSearchName & "&site=all&filter=0")
-                    Case 3
-                        OpenWebsite(ModEntity.Url)
                 End Select
             End If
 

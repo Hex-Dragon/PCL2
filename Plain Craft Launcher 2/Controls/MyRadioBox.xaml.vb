@@ -223,6 +223,8 @@
             AniStart(AaColor(ShapeBorder, Ellipse.StrokeProperty, If(IsEnabled, If(Checked, "ColorBrush2", "ColorBrush1"), "ColorBrushGray4"), AnimationTimeOfMouseOut), "MyRadioBox BorderColor " & Uuid)
             AniStart(AaColor(LabText, TextBlock.ForegroundProperty, If(IsEnabled, "ColorBrush1", "ColorBrushGray4"), AnimationTimeOfMouseOut), "MyRadioBox TextColor " & Uuid)
         Else
+            AniStop("MyRadioBox BorderColor " & Uuid)
+            AniStop("MyRadioBox TextColor " & Uuid)
             ShapeBorder.SetResourceReference(Ellipse.StrokeProperty, If(IsEnabled, If(Checked, "ColorBrush2", "ColorBrush1"), "ColorBrushGray4"))
             LabText.SetResourceReference(TextBlock.ForegroundProperty, If(IsEnabled, "ColorBrush1", "ColorBrushGray4"))
         End If

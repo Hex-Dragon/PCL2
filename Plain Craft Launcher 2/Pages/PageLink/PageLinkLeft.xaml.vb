@@ -173,6 +173,7 @@ Public Class PageLinkLeft
         If MyMsgBox("是否要初始化联机页的所有设置？该操作不可撤销。", "初始化确认",, "取消", IsWarn:=True) = 1 Then
             If IsNothing(FrmSetupLink) Then FrmSetupLink = New PageSetupLink
             FrmSetupLink.Reset()
+            ItemSetup.Checked = True
         End If
     End Sub
 

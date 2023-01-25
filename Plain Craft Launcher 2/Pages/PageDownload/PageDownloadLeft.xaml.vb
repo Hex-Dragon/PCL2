@@ -95,21 +95,30 @@
                 DlFabricListLoader.Start(IsForceRestart:=True)
                 DlFabricApiLoader.Start(IsForceRestart:=True)
                 DlOptiFabricLoader.Start(IsForceRestart:=True)
+                ItemInstall.Checked = True
             Case FormMain.PageSubType.DownloadMod
                 If FrmDownloadMod IsNot Nothing Then FrmDownloadMod.PageLoaderRestart()
+                ItemMod.Checked = True
             Case FormMain.PageSubType.DownloadPack
                 If FrmDownloadPack IsNot Nothing Then FrmDownloadPack.PageLoaderRestart()
+                ItemPack.Checked = True
             Case FormMain.PageSubType.DownloadClient
                 DlClientListLoader.Start(IsForceRestart:=True)
+                ItemClient.Checked = True
             Case FormMain.PageSubType.DownloadOptiFine
                 DlOptiFineListLoader.Start(IsForceRestart:=True)
+                ItemOptiFine.Checked = True
             Case FormMain.PageSubType.DownloadForge
                 DlForgeListLoader.Start(IsForceRestart:=True)
+                ItemForge.Checked = True
             Case FormMain.PageSubType.DownloadLiteLoader
                 DlLiteLoaderListLoader.Start(IsForceRestart:=True)
+                ItemLiteLoader.Checked = True
             Case FormMain.PageSubType.DownloadFabric
                 DlFabricListLoader.Start(IsForceRestart:=True)
+                ItemFabric.Checked = True
         End Select
+        Hint("正在刷新……", Log:=False)
     End Sub
 
     '点击返回

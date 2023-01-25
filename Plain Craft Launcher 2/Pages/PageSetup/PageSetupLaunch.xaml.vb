@@ -304,6 +304,7 @@
                 }, "SetupLaunch Ram TextRight")
             Else
                 '不需要动画
+                AniStop("SetupLaunch Ram TextRight")
                 LabRamGame.Margin = New Thickness(TotalWidth - LabGameWidth, 3, 0, 0)
                 LabRamGameTitle.Margin = New Thickness(TotalWidth - LabGameTitleWidth, 0, 0, 5)
             End If
@@ -316,6 +317,7 @@
                 }, "SetupLaunch Ram TextRight")
             Else
                 '不需要动画
+                AniStop("SetupLaunch Ram TextRight")
                 LabRamGame.Margin = New Thickness(2 + RectUsedWidth, 3, 0, 0)
                 LabRamGameTitle.Margin = New Thickness(2 + RectUsedWidth, 0, 0, 5)
             End If

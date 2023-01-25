@@ -236,7 +236,9 @@
         ''' </summary>
         Public ReadOnly Property IsAborted As Boolean
             Get
-                Return LastRunningThread Is Nothing OrElse Not ReferenceEquals(Thread.CurrentThread, LastRunningThread)
+                Return LastRunningThread Is Nothing OrElse
+                       Not ReferenceEquals(Thread.CurrentThread, LastRunningThread) OrElse
+                       State = LoadState.Aborted
             End Get
         End Property
         ''' <summary>
