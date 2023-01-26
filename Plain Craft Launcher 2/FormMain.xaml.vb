@@ -10,7 +10,7 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
-        If LastVersion < 276 Then 'Release 2.4.6
+        If LastVersion < 276 Then 'Release 2.4.7
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "增加 在游戏启动前执行命令 设置"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在百宝箱添加了清理 MC 日志、崩溃报告的按钮"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化界面动画，修改部分配色"))
@@ -117,6 +117,10 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 278 Then 'Snapshot 2.4.7
+            If LastVersion = 277 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复设置背景音乐可能导致无法启动 PCL 的 Bug"))
+            BugCount += 2
+        End If
         If LastVersion < 277 Then 'Snapshot 2.4.6
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在百宝箱添加了清理 MC 日志、崩溃报告的按钮"))
             FeatureCount += 8

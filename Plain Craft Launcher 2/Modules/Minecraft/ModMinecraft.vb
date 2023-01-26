@@ -6,7 +6,7 @@ Public Module ModMinecraft
 
     '列表初始化
 
-    Public JavaListCacheVersion As Integer = 1
+    Public JavaListCacheVersion As Integer = 2
     ''' <summary>
     ''' 目前所有可用的 Java。
     ''' </summary>
@@ -175,10 +175,11 @@ Public Module ModMinecraft
                 End If
                 Is64Bit = Output.Contains("64-bit")
                 If Version.Minor <= 4 OrElse Version.Minor >= 25 Then Throw New Exception("分析详细信息失败，获取的版本为 " & Version.ToString)
+                '无论如何不允许使用 JRE 16，它完全是炸的，安 OptiFine、Forge 和启动 MC 都会炸
+                If IsJre AndAlso VersionCode = 16 Then Throw New Exception("由于 JRE 16 对 Minecraft 的兼容性很差，因此不再允许使用")
             Catch ex As Exception
                 Log("[Java] 检查失败的 Java 输出：" & PathFolder & "java.exe" & vbCrLf & If(Output, "无程序输出"))
-                ex = New Exception("检查 Java 详细信息失败（" & If(PathJavaw, "Nothing") & "）", ex)
-                Throw ex
+                Throw New Exception("检查 Java 失败（" & If(PathJavaw, "Nothing") & "）", ex)
             End Try
             IsChecked = True
         End Sub
@@ -457,7 +458,6 @@ RetryGet:
                 If MinVersion IsNot Nothing AndAlso Java.Version < MinVersion Then Continue For
                 If MaxVersion IsNot Nothing AndAlso Java.Version > MaxVersion Then Continue For
                 If Java.Is64Bit AndAlso Is32BitSystem Then Continue For
-                If Java.IsJre AndAlso Java.VersionCode >= 12 Then Continue For '无论如何不允许使用 JRE 12+，它们完全是炸的，安 OptiFine、Forge 和启动 MC 都会炸
                 AllowedJavaList.Add(Java)
             Next
 

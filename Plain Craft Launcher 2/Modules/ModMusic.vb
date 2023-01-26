@@ -187,7 +187,8 @@
     ''' </summary>
     Private Sub MusicStartPlay(Address As String, Optional IsFirstLoad As Boolean = False)
         Log("[Music] 播放开始：" & Address)
-        RunInNewThread(Sub() MusicLoop(Address, IsFirstLoad), "Music", ThreadPriority.BelowNormal)
+        MusicCurrent = Address
+        RunInNewThread(Sub() MusicLoop(IsFirstLoad), "Music", ThreadPriority.BelowNormal)
     End Sub
 
     '播放与暂停
@@ -237,15 +238,14 @@
     ''' <summary>
     ''' 在 MusicUuid 不变的前提下，持续播放某地址的音乐，且在播放结束后随机播放下一曲。
     ''' </summary>
-    Private Sub MusicLoop(Address As String, Optional IsFirstLoad As Boolean = False)
-        MusicCurrent = Address
+    Private Sub MusicLoop(Optional IsFirstLoad As Boolean = False)
         Dim CurrentWave As NAudio.Wave.WaveOut = Nothing
         Dim Reader As NAudio.Wave.WaveStream = Nothing
         Try
             '开始播放
             CurrentWave = New NAudio.Wave.WaveOut()
             MusicNAudio = CurrentWave
-            Reader = New NAudio.Wave.AudioFileReader(Address)
+            Reader = New NAudio.Wave.AudioFileReader(MusicCurrent)
             CurrentWave.Init(Reader)
             CurrentWave.Play()
             '第一次打开的暂停
@@ -265,13 +265,13 @@
             If CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Stopped AndAlso MusicAllList.Count > 0 Then MusicStartPlay(DequeueNextMusicAddress)
         Catch ex As Exception
             If ex.Message.Contains("Got a frame at sample rate") OrElse ex.Message.Contains("does not support changes to") Then
-                Hint("播放音乐失败（" & GetFileNameFromPath(Address) & "）：PCL2 不支持播放音频属性在中途发生变化的音乐", HintType.Critical)
-            ElseIf Not (Address.ToLower.EndsWith(".wav") OrElse Address.ToLower.EndsWith(".mp3") OrElse Address.ToLower.EndsWith(".flac")) Then
-                Hint("播放音乐失败（" & GetFileNameFromPath(Address) & "）：PCL2 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试", HintType.Critical)
+                Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL2 不支持播放音频属性在中途发生变化的音乐", HintType.Critical)
+            ElseIf Not (MusicCurrent.ToLower.EndsWith(".wav") OrElse MusicCurrent.ToLower.EndsWith(".mp3") OrElse MusicCurrent.ToLower.EndsWith(".flac")) Then
+                Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL2 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试", HintType.Critical)
             Else
-                Log(ex, "播放音乐失败（" & GetFileNameFromPath(Address) & "）", LogLevel.Hint)
+                Log(ex, "播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）", LogLevel.Hint)
             End If
-            Log(ex, "播放音乐失败（" & Address & "）", LogLevel.Developer)
+            Log(ex, "播放音乐失败（" & MusicCurrent & "）", LogLevel.Developer)
             If MusicAllList.Count > 1 Then
                 Thread.Sleep(1000)
                 MusicStartPlay(DequeueNextMusicAddress)
