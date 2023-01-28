@@ -1,4 +1,4 @@
-﻿Imports System.IO.Compression
+Imports System.IO.Compression
 Imports System.Management
 Imports System.Security.Cryptography
 Imports System.Security.Principal
@@ -1888,7 +1888,7 @@ NextElement:
         Using Program As New Process
             Program.StartInfo.Arguments = Arguments
             Program.StartInfo.FileName = FileName
-            Log("[System] 执行外部命令：" & FileName & " " & Arguments)
+            Log("[System] 执行外部命令：" & If(FileName.Contains(" "), $"""{FileName}""", FileName) & " " & Arguments)
             Program.Start()
         End Using
     End Sub
@@ -1903,7 +1903,7 @@ NextElement:
             Using Program As New Process
                 Program.StartInfo.Arguments = Arguments
                 Program.StartInfo.FileName = FileName
-                Log("[System] 执行外部命令并等待返回码：" & FileName & " " & Arguments)
+                Log("[System] 执行外部命令并等待返回码：" & If(FileName.Contains(" "), $"""{FileName}""", FileName) & " " & Arguments)
                 Program.Start()
                 If Program.WaitForExit(Timeout) Then
                     Return Program.ExitCode
@@ -1912,7 +1912,7 @@ NextElement:
                 End If
             End Using
         Catch ex As Exception
-            Log(ex, "执行命令失败：" & FileName, LogLevel.Msgbox)
+            Log(ex, "执行命令失败：" & If(FileName.Contains(" "), $"""{FileName}""", FileName), LogLevel.Msgbox)
             Return Result.Fail
         End Try
     End Function
@@ -1939,7 +1939,7 @@ NextElement:
                 Info.EnvironmentVariables.Add("appdata", WorkingDirectory)
             End If
         End If
-        Log("[System] 执行外部命令并等待返回结果：" & FileName & " " & Arguments)
+        Log("[System] 执行外部命令并等待返回结果：" & If(FileName.Contains(" "), $"""{FileName}""", FileName) & " " & Arguments)
         Using Program As New Process() With {.StartInfo = Info}
             Program.Start()
             Program.WaitForExit(Timeout)
