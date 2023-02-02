@@ -464,6 +464,8 @@ Done:
             If LogMc.Contains("java.lang.ClassCastException: java.base/jdk") Then AppendReason(CrashReason.使用JDK)
             If LogMc.Contains("java.lang.ClassCastException: class jdk.") Then AppendReason(CrashReason.使用JDK)
             If LogMc.Contains("TRANSFORMER/net.optifine/net.optifine.reflect.Reflector.<clinit>(Reflector.java") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
+            If LogMc.Contains("java.lang.NoSuchMethodError: 'void net.minecraft.client.renderer.block.model.BakedQuad.<init>(int[], int, net.minecraft.core.Direction, net.minecraft.client.renderer.texture.TextureAtlasSprite, boolean, boolean)'") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
+            If LogMc.Contains("java.lang.NoSuchMethodError: 'void net.minecraft.server.level.DistanceManager.addRegionTicket(net.minecraft.server.level.TicketType, net.minecraft.world.level.ChunkPos, int, java.lang.Object, boolean)'") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("Open J9 is not supported") OrElse LogMc.Contains("OpenJ9 is incompatible") OrElse LogMc.Contains(".J9VMInternals.") Then AppendReason(CrashReason.使用OpenJ9)
             If LogMc.Contains("java.lang.NoSuchFieldException: ucp") Then AppendReason(CrashReason.Java版本过高)
             If LogMc.Contains("because module java.base does not export") Then AppendReason(CrashReason.Java版本过高)
