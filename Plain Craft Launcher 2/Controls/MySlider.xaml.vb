@@ -84,12 +84,8 @@
         AniStart({
                  AaScaleTransform(ShapeDot, 1.3 - CType(ShapeDot.RenderTransform, ScaleTransform).ScaleX, 40,, New AniEaseOutFluent)
             }, "MySlider Scale " & Uuid)
-        '更新 Popup
-        If GetHintText IsNot Nothing Then
-            TextHint.Text = GetHintText.DynamicInvoke(Value)
-            Popup.IsOpen = True
-            AniStop("MySlider KeyPopup " & Uuid)
-        End If
+        RefreshPopup()
+        AniStop("MySlider KeyPopup " & Uuid)
     End Sub
     Public Sub DragDoing()
         Dim Percent As Double = MathRange((Mouse.GetPosition(PanMain).X - ShapeDot.Width / 2) / (ActualWidth - ShapeDot.Width), 0, 1)
@@ -97,15 +93,22 @@
         If Not NewValue = Value Then
             Value = NewValue
         End If
-        '更新 Popup
-        If GetHintText IsNot Nothing Then TextHint.Text = GetHintText.DynamicInvoke(NewValue)
+        RefreshPopup()
     End Sub
     Public Sub DragStop()
         RefreshColor()
         AniStart({
                  AaScaleTransform(ShapeDot, 1 - CType(ShapeDot.RenderTransform, ScaleTransform).ScaleX, 200,, New AniEaseOutFluent)
             }, "MySlider Scale " & Uuid)
-        If GetHintText IsNot Nothing Then Popup.IsOpen = False
+        Popup.IsOpen = False
+    End Sub
+    Public Sub RefreshPopup()
+        If GetHintText Is Nothing Then Exit Sub
+        Popup.IsOpen = True
+        TextHint.Text = GetHintText.DynamicInvoke(Value)
+        Dim typeface As New Typeface(TextHint.FontFamily, TextHint.FontStyle, TextHint.FontWeight, TextHint.FontStretch)
+        Dim formattedText As New FormattedText(TextHint.Text, Thread.CurrentThread.CurrentCulture, TextHint.FlowDirection, typeface, TextHint.FontSize, TextHint.Foreground, DPI)
+        TextHint.Width = formattedText.Width '使用手动测量的宽度修复 #1057
     End Sub
 
     '指向动画
@@ -179,8 +182,7 @@
         End If
         '更新 Popup
         If GetHintText IsNot Nothing Then
-            TextHint.Text = GetHintText.DynamicInvoke(Value)
-            Popup.IsOpen = True
+            RefreshPopup()
             AniStop("MySlider KeyPopup " & Uuid)
             AniStart(AaCode(Sub() Popup.IsOpen = False, 700 * AniSpeed), "MySlider KeyPopup " & Uuid)
         End If

@@ -10,6 +10,10 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 279 Then 'Release 2.4.8
+            FeatureCount += 1
+            BugCount += 10
+        End If
         If LastVersion < 276 Then 'Release 2.4.7
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "增加 在游戏启动前执行命令 设置"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在百宝箱添加了清理 MC 日志、崩溃报告的按钮"))
@@ -117,6 +121,14 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 280 Then 'Snapshot 2.4.8
+            FeatureCount += 1
+            BugCount += 10
+        End If
+        If LastVersion < 278 Then 'Snapshot 2.4.7
+            If LastVersion = 277 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复设置背景音乐可能导致无法启动 PCL 的 Bug"))
+            BugCount += 2
+        End If
         If LastVersion < 278 Then 'Snapshot 2.4.7
             If LastVersion = 277 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复设置背景音乐可能导致无法启动 PCL 的 Bug"))
             BugCount += 2
@@ -797,7 +809,8 @@ Reopen:
                 If FilePathList.Count > 1 Then
                     '必须要求全部为 jar 文件
                     For Each File In FilePathList
-                        If File.Split(".").Last.ToLower <> "jar" Then
+                        Dim Extension As String = File.Split(".").Last.ToLower
+                        If Not {"jar", "litemod", "disabled"}.Contains(Extension) Then
                             Hint("一次请只拖入一个文件！", HintType.Critical)
                             Exit Sub
                         End If
@@ -809,7 +822,7 @@ Reopen:
                 RunInNewThread(Sub()
                                    Dim Extension As String = FilePath.Split(".").Last.ToLower
                                    'Mod 安装
-                                   If {"jar", "litemod"}.Contains(Extension) Then
+                                   If {"jar", "litemod", "disabled"}.Contains(Extension) Then
                                        Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
                                        '获取并检查目标版本
                                        Dim TargetVersion As McVersion = McVersionCurrent

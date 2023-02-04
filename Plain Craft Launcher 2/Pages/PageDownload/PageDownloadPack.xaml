@@ -33,7 +33,7 @@
                             <local:MyComboBoxItem Tag="4487" Content="FTB" Margin="15,0,0,0" ToolTip="该整合包由 FTB 官方发布" />
                             <local:MyComboBoxItem Tag="4480" Content="基于地图" Margin="15,0,0,0" ToolTip="该整合包基于已有的 Minecraft 游戏地图运行" />
                             <local:MyComboBoxItem Tag="4479" Content="硬核" />
-                            <local:MyComboBoxItem Tag="4471" Content="科幻" />
+                            <local:MyComboBoxItem Tag="4474" Content="科幻" />
                             <local:MyComboBoxItem Tag="4483" Content="战斗" />
                             <local:MyComboBoxItem Tag="4478" Content="任务" />
                             <local:MyComboBoxItem Tag="4484" Content="多人" />

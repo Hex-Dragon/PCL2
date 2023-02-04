@@ -231,7 +231,7 @@
                             .RenderTransform = New ScaleTransform With {.ScaleX = LogoScale, .ScaleY = LogoScale},
                             .SnapsToDevicePixels = True, .UseLayoutRounding = False}
                     RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.Linear)
-                ElseIf _Logo.ToLower.EndsWith(".png") Then
+                ElseIf _Logo.ToLower.EndsWith(".png") OrElse _Logo.ToLower.EndsWith(".jpg") Then
                     '位图
                     Dim Bitmap = New MyBitmap(_Logo)
                     PathLogo = New Canvas With {

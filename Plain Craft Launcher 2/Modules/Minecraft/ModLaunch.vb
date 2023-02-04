@@ -62,6 +62,7 @@ Public Module ModLaunch
     ''' 记录启动日志。
     ''' </summary>
     Public Sub McLaunchLog(Text As String)
+        Text = SecretFilter(Text)
         RunInUi(Sub() FrmLaunchRight.LabLog.Text += vbCrLf & "[" & GetTimeNow() & "] " & Text)
         Log("[Launch] " & Text)
     End Sub
@@ -1325,7 +1326,7 @@ SystemBrowser:
         Arguments += " " & If(ArgumentGame = "", Setup.Get("LaunchAdvanceGame"), ArgumentGame)
         '输出
         McLaunchLog("Minecraft 启动参数：")
-        McLaunchLog(Arguments.Replace(McLoginLoader.Output.AccessToken, McLoginLoader.Output.AccessToken.Substring(0, 22) & "[数据删除]" & McLoginLoader.Output.AccessToken.Substring(30)))
+        McLaunchLog(Arguments)
         McLaunchArgument = Arguments
     End Sub
 
@@ -1930,7 +1931,7 @@ IgnoreCustomSkin:
                 """" & McLaunchJavaSelected.PathJava & """ " & McLaunchArgument & vbCrLf &
                 "echo 游戏已退出。" & vbCrLf &
                 "pause"
-            WriteFile(If(McLaunchLoader.Input.SaveBatch, Path & "PCL\LatestLaunch.bat"), CmdString,
+            WriteFile(If(McLaunchLoader.Input.SaveBatch, Path & "PCL\LatestLaunch.bat"), SecretFilter(CmdString),
                       Encoding:=If(Encoding.Default.Equals(Encoding.UTF8), Encoding.UTF8, Encoding.GetEncoding("GB18030")))
             If McLaunchLoader.Input.SaveBatch IsNot Nothing Then
                 McLaunchLog("导出启动脚本完成，强制结束启动过程")
@@ -2032,7 +2033,7 @@ IgnoreCustomSkin:
         McLaunchLog("")
         McLaunchLog("~ 登录参数 ~")
         McLaunchLog("玩家用户名：" & McLoginLoader.Output.Name)
-        McLaunchLog("AccessToken：" & McLoginLoader.Output.AccessToken.Substring(0, 22) & "[数据删除]" & McLoginLoader.Output.AccessToken.Substring(30))
+        McLaunchLog("AccessToken：" & McLoginLoader.Output.AccessToken)
         McLaunchLog("ClientToken：" & McLoginLoader.Output.ClientToken)
         McLaunchLog("UUID：" & McLoginLoader.Output.Uuid)
         McLaunchLog("登录方式：" & McLoginLoader.Output.Type)
