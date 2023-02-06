@@ -10,6 +10,11 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 281 Then 'Release 2.4.9
+            FeatureCount += 1
+            BugCount += 5
+            If LastVersion = 279 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复进入 Mod、整合包下载页时报错的 Bug"))
+        End If
         If LastVersion < 279 Then 'Release 2.4.8
             FeatureCount += 1
             BugCount += 10
@@ -121,6 +126,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 282 Then 'Snapshot 2.4.9
+            FeatureCount += 1
+            BugCount += 5
+            If LastVersion = 280 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复进入 Mod、整合包下载页时报错的 Bug"))
+        End If
         If LastVersion < 280 Then 'Snapshot 2.4.8
             FeatureCount += 1
             BugCount += 10
@@ -313,7 +323,7 @@ Public Class FormMain
         '输出更新日志
         RunInNewThread(Sub()
                            If MyMsgBox(Content, "PCL2 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
-                               OpenWebsite("https://afdian.net/@LTCat?tab=feed")
+                               OpenWebsite("https://afdian.net/a/LTCat?tab=feed")
                            End If
                        End Sub, "UpdateLog Output")
     End Sub

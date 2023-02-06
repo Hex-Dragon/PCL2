@@ -742,7 +742,9 @@ Redo:
                             Case "RawOutput.log"
                                 FileName = "游戏崩溃前的输出.txt"
                         End Select
-                        WriteFile(TempFolder & "Report\" & FileName, SecretFilter(ReadFile(OutputFile)))
+                        If File.Exists(OutputFile) Then
+                            WriteFile(TempFolder & "Report\" & FileName, SecretFilter(ReadFile(OutputFile)))
+                        End If
                     Next
                     '导出报告
                     Compression.ZipFile.CreateFromDirectory(TempFolder & "Report\", FileAddress)

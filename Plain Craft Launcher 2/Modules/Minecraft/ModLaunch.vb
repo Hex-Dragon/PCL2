@@ -190,7 +190,7 @@ NextInner:
                     End Sub)
         If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
         '求赞助
-        If ThemeCheckGold() Then Exit Sub
+#If BETA Then
         RunInNewThread(Sub()
                            Select Case Setup.Get("SystemLaunchCount")
                                Case 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000
@@ -198,10 +198,11 @@ NextInner:
                                                "如果觉得 PCL2 还算好用的话，也可以考虑小小地赞助一下作者呢 qwq……" & vbCrLf &
                                                "毕竟一个人开发也不容易（小声）……",
                                                "求赞助啦……", "这就赞助！", "但是我拒绝") = 1 Then
-                                       OpenWebsite("https://afdian.net/@LTCat/plan")
+                                       OpenWebsite("https://afdian.net/a/LTCat/plan")
                                    End If
                            End Select
                        End Sub, "Donate")
+#End If
     End Sub
 
 #End Region
@@ -1835,7 +1836,7 @@ NextVersion:
                         Else
                             PackFormat = 9
                         End If
-                    Case 19
+                    Case 19, 99 '99 是快照版
                         If McVersionCurrent.Version.McCodeSub <= 2 Then
                             PackFormat = 9
                         Else

@@ -1406,7 +1406,7 @@
                             String.Join(" ", Entry.CurseForgeId.Split("-").Select(Function(w) w.Substring(0, 1).ToUpper & w.Substring(1, w.Length - 1))) & ")")
                     End If
                 End If
-                DlCfProjectDb.Add(Entry.CurseForgeId, Entry)
+                DlCfProjectDb(Entry.CurseForgeId) = Entry
             Next
         Next
     End Sub

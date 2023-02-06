@@ -27,7 +27,7 @@
                 <StackPanel Margin="20,40,18,18">
                     <local:MyListItem Title="联机反馈与交流" Info="加入联机模块官方 QQ 群反馈联机异常，或询问联机功能的使用方式"
                               Type="Clickable" PaddingRight="20" Logo="pack://application:,,,/images/Blocks/RedstoneBlock.png"
-                              EventType="打开网页" EventData="https://shimowendang.com/docs/KrkEVXz1K0frowAJ#anchor-7qQG" />
+                              EventType="打开网页" EventData="https://shimo.im/docs/KrkEVXz1K0frowAJ#anchor-7qQG" />
                     <local:MyListItem Title="违法违规举报" Info="投诉、举报联机使用者的各类违法违规行为"
                               Type="Clickable" EventType="打开网页" EventData="https://shimo.im/docs/rGrd8pY8xWkt6ryW#anchor-7x6P"
                               PaddingRight="20" Logo="pack://application:,,,/images/Blocks/RedstoneBlock.png" />
