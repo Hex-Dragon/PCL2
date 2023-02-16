@@ -347,7 +347,7 @@ StartDownload:
         If Content.Contains("'portssub' from ") Then LastPortsId = Content.Split(" ").Last
         If Content.Contains("Listening tcp ") Then
             If UserList.ContainsKey(LastPortsId) Then
-                DictionaryAdd(UserList(LastPortsId).Ports, Content.Split(" ").Last, RegexSeek(Content, "(?<=Listening tcp )[^:]+"))
+                UserList(LastPortsId).Ports(Content.Split(" ").Last) = RegexSeek(Content, "(?<=Listening tcp )[^:]+")
             Else
                 Log("[IOI] 未在列表中的用户出现意料外的连接信息")
                 NetRequestOnce("http://127.0.0.1:55555/api/link?id=" & LastPortsId & "&password=" & IoiPassword, "DELETE", "", "", 500)
@@ -574,7 +574,7 @@ Done:
                 Rooms.Add(RoomObject)
             Next
             RawJson("rooms") = Rooms
-            DictionaryAdd(User.PingPending, Unique, Date.Now)
+            User.PingPending(Unique) = Date.Now
         End If
         User.Send(RawJson)
     End Sub
@@ -1179,7 +1179,7 @@ Done:
                     If Id > IoiId Then
                         Log("[IOI] 双向连接，应当抛弃当前用户（" & DisplayName & "）")
                         For Each Pair In UserList(User.Id).Ports.ToList
-                            DictionaryAdd(User.Ports, Pair.Key, Pair.Value)
+                            User.Ports(Pair.Key) = Pair.Value
                         Next
                         UserList(Id).Dispose()
                     Else

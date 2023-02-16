@@ -1,4 +1,4 @@
-﻿Public Class MyCfItem
+﻿Public Class MyCompItem
     Public Uuid As Integer = GetUuid()
 
 #Region "Logo"
@@ -11,33 +11,36 @@
         Set(value As String)
             If _Logo = value OrElse value Is Nothing Then Exit Property
             _Logo = value
-            Dim FileAddress = PathTemp & "CFLogo\" & GetHash(_Logo) & ".png"
+            Dim FileAddress = PathTemp & "CompLogo\" & GetHash(_Logo) & ".png"
             Try
                 If _Logo.ToLower.StartsWith("http") Then
                     '网络图片
                     If File.Exists(FileAddress) Then
                         PathLogo.Source = New MyBitmap(FileAddress)
+                    ElseIf _Logo.ToLower.EndsWith(".webp") Then 'Modrinth 林业 Mod 使用了不支持的 WebP 格式 Logo
+                        Log($"[Comp] 发现不支持的 WebP 格式图标，已更改为默认图标：{_Logo}")
+                        PathLogo.Source = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png")
                     Else
                         PathLogo.Source = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png")
-                        RunInNewThread(Sub() LogoLoader(FileAddress), "CurseForge Logo Loader " & Uuid & "#", ThreadPriority.BelowNormal)
+                        RunInNewThread(Sub() LogoLoader(FileAddress), "Comp Logo Loader " & Uuid & "#", ThreadPriority.BelowNormal)
                     End If
                 Else
                     '位图
                     PathLogo.Source = New MyBitmap(_Logo)
                 End If
             Catch ex As IOException
-                Log(ex, "加载 CurseForge 工程图标时读取失败（" & FileAddress & "）")
+                Log(ex, "加载资源工程图标时读取失败（" & FileAddress & "）")
             Catch ex As ArgumentException
                 '考虑缓存的图片本身可能有误
-                Log(ex, "可视化 CurseForge 工程图标失败（" & FileAddress & "）")
+                Log(ex, "可视化资源工程图标失败（" & FileAddress & "）")
                 Try
                     File.Delete(FileAddress)
-                    Log("[Download] 已清理损坏的 CurseForge 工程图标：" & FileAddress)
+                    Log("[Comp] 已清理损坏的资源工程图标：" & FileAddress)
                 Catch exx As Exception
-                    Log(exx, "清理损坏的 CurseForge 工程图标缓存失败（" & FileAddress & "）", LogLevel.Hint)
+                    Log(exx, "清理损坏的资源工程图标缓存失败（" & FileAddress & "）", LogLevel.Hint)
                 End Try
             Catch ex As Exception
-                Log(ex, "加载 CurseForge 工程图标失败（" & value & "）")
+                Log(ex, "加载资源工程图标失败（" & value & "）")
             End Try
         End Set
     End Property
@@ -48,16 +51,20 @@
 RetryStart:
         Try
             NetDownload(_Logo, Address & DownloadEnd)
+            Dim LoadError As Exception = Nothing
             RunInUiWait(Sub()
                             Try
                                 '在地址更换时取消加载
-                                If Not Address = PathTemp & "CFLogo\" & GetHash(_Logo) & ".png" Then Exit Sub
+                                If Not Address = PathTemp & "CompLogo\" & GetHash(_Logo) & ".png" Then Exit Sub
                                 '在完成正常加载后才保存缓存图片
                                 PathLogo.Source = New MyBitmap(Address & DownloadEnd)
                             Catch ex As Exception
-                                Log(ex, "读取 CurseForge 工程图标失败（" & Address & "）", LogLevel.Hint)
+                                Log(ex, "读取资源工程图标失败（" & Address & "）")
+                                File.Delete(Address & DownloadEnd)
+                                LoadError = ex
                             End Try
                         End Sub)
+            If LoadError IsNot Nothing Then Throw LoadError
             If File.Exists(Address) Then
                 File.Delete(Address & DownloadEnd)
             Else
@@ -68,7 +75,8 @@ RetryStart:
                 Retry = True
                 GoTo RetryStart
             Else
-                Log(ex, "下载 CurseForge 工程图标失败")
+                Log(ex, $"下载资源工程图标失败（{_Logo}）")
+                RunInUi(Sub() PathLogo.Source = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png"))
             End If
         End Try
     End Sub
@@ -83,7 +91,7 @@ RetryStart:
         If IsMouseDown Then
             RaiseEvent Click(sender, e)
             If e.Handled Then Exit Sub
-            Log("[Control] 按下 CurseForge 工程列表项：" & LabTitle.Text)
+            Log("[Control] 按下资源工程列表项：" & LabTitle.Text)
         End If
     End Sub
 
@@ -172,10 +180,10 @@ RetryStart:
                              AaScaleTransform(RectBack, -0.196, 1,,, True)
                          })
             End If
-            AniStart(Ani, "CfItem Color " & Uuid)
+            AniStart(Ani, "CompItem Color " & Uuid)
         Else
             '无动画
-            AniStop("CfItem Color " & Uuid)
+            AniStop("CompItem Color " & Uuid)
             If _RectBack IsNot Nothing Then RectBack.Opacity = 0
         End If
     End Sub

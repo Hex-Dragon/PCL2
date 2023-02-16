@@ -26,27 +26,32 @@
                         <local:MyTextBox x:Name="TextSearchName" Grid.Column="1" Grid.ColumnSpan="10" />
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="类型" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="1" Grid.Row="2" MaxDropDownHeight="320">
-                            <local:MyComboBoxItem Content="全部" Tag="0" IsSelected="True" />
-                            <local:MyComboBoxItem Content="世界生成" Tag="406" />
-                            <local:MyComboBoxItem Content="生物群系" Tag="407" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="天然结构" Tag="409" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="维度" Tag="410" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="生物" Tag="411" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="科技" Tag="412" />
-                            <local:MyComboBoxItem Content="交通与移动" Tag="414" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="管道与物流" Tag="415" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="能源" Tag="417" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="红石" Tag="4558" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="仓储" Tag="420" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="农业" Tag="416" />
-                            <local:MyComboBoxItem Content="食物" Tag="436" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="魔法" Tag="419" />
-                            <local:MyComboBoxItem Content="装备与工具" Tag="434" />
-                            <local:MyComboBoxItem Content="冒险与探索" Tag="422" />
-                            <local:MyComboBoxItem Content="建筑与装饰" Tag="424" />
-                            <local:MyComboBoxItem Content="信息显示" Tag="423" />
-                            <local:MyComboBoxItem Content="支持库" Tag="421" />
-                            <local:MyComboBoxItem Content="服务器" Tag="435" />
+                            <local:MyComboBoxItem Content="全部" Tag="" IsSelected="True" />
+                            <local:MyComboBoxItem Content="世界元素" Tag="406/worldgen" />
+                            <local:MyComboBoxItem Content="生物群系" Tag="407/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="维度" Tag="410/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="矿物与资源" Tag="408/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="天然结构" Tag="409/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="科技" Tag="412/technology" />
+                            <local:MyComboBoxItem Content="管道与物流" Tag="415/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="自动化" Tag="4843/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="能源" Tag="417/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="红石" Tag="4558/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="食物与烹饪" Tag="436/food" />
+                            <local:MyComboBoxItem Content="农业" Tag="416/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="游戏机制" Tag="/game-mechanics" />
+                            <local:MyComboBoxItem Content="运输" Tag="414/transportation" />
+                            <local:MyComboBoxItem Content="仓储" Tag="420/storage" />
+                            <local:MyComboBoxItem Content="魔法" Tag="419/magic" />
+                            <local:MyComboBoxItem Content="冒险" Tag="422/adventure" />
+                            <local:MyComboBoxItem Content="装饰" Tag="424/decoration" />
+                            <local:MyComboBoxItem Content="生物" Tag="411/mobs" />
+                            <local:MyComboBoxItem Content="装备与工具" Tag="434/equipment" />
+                            <local:MyComboBoxItem Content="性能优化" Tag="/optimization" />
+                            <local:MyComboBoxItem Content="信息显示" Tag="423/" />
+                            <local:MyComboBoxItem Content="多人" Tag="435/social" />
+                            <local:MyComboBoxItem Content="改良" Tag="5191/utility" />
+                            <local:MyComboBoxItem Content="支持库" Tag="421/library" />
                         </local:MyComboBox>
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="版本" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" IsEditable="True" MaxDropDownHeight="320" HintText="全部 (也可自行输入)">
@@ -88,9 +93,21 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard x:Name="CardProjects" Title="热门 Mod">
-                <StackPanel x:Name="PanProjects" Margin="20,40,18,20" />
-            </local:MyCard>
+            <StackPanel x:Name="PanContent">
+                <local:MyCard x:Name="CardProjects" UseAnimation="False">
+                    <StackPanel x:Name="PanProjects" Margin="12" />
+                </local:MyCard>
+                <local:MyCard Margin="0,15,0,0" x:Name="CardPages" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Height="23" Margin="10,7">
+                        <local:MyIconButton x:Name="BtnPageLeft" IsEnabled="False" Opacity="0.5"
+                            Logo="M671.968176 911.99957c-12.287381 0-24.576482-4.67206-33.951566-14.047144L286.048434 545.984249c-18.751888-18.719204-18.751888-49.12028 0-67.872168L638.016611 126.111222c18.751888-18.751888 49.12028-18.751888 67.872168 0 18.751888 18.719204 18.751888 49.12028 0 67.872168l-318.016611 318.047574L705.888778 830.047574c18.751888 18.751888 18.751888 49.12028 0 67.872168C696.544658 907.32751 684.255557 911.99957 671.968176 911.99957z" />
+                        <TextBlock x:Name="LabPage" Text="1" 
+                                   Margin="7,0" FontSize="15" VerticalAlignment="Center" Foreground="{DynamicResource ColorBrush3}" />
+                        <local:MyIconButton x:Name="BtnPageRight"
+                            Logo="M761.055557 532.128047c0.512619-0.992555 1.343475-1.823411 1.792447-2.848649 8.800538-18.304636 5.919204-40.703346-9.664077-55.424808L399.935923 139.743798c-19.264507-18.208305-49.631179-17.344765-67.872168 1.888778-18.208305 19.264507-17.375729 49.631179 1.888778 67.872168l316.960409 299.839269L335.199677 813.631716c-19.071845 18.399247-19.648112 48.767639-1.247144 67.872168 9.407768 9.791372 21.984142 14.688778 34.560516 14.688778 12.000108 0 24.000215-4.479398 33.311652-13.439914l350.048434-337.375729c0.672598-0.672598 0.927187-1.599785 1.599785-2.303346 0.512619-0.479935 1.056202-0.832576 1.567101-1.343475C757.759656 538.879828 759.199462 535.391265 761.055557 532.128047z" />
+                    </StackPanel>
+                </local:MyCard>
+            </StackPanel>
             <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
                 <local:MyLoading Text="正在获取 Mod 列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </local:MyCard>

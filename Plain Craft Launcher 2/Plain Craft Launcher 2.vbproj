@@ -182,6 +182,7 @@
     <Compile Include="Controls\MyCard.vb" />
     <Compile Include="Controls\MyPageRight.vb" />
     <Compile Include="Controls\MyPageLeft.vb" />
+    <Compile Include="Modules\Minecraft\ModComp.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
     <Compile Include="Modules\ModEvent.vb" />
     <Compile Include="Controls\MyExtraButton.xaml.vb">
@@ -217,8 +218,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Pages\PageDownload\ModDownloadLib.vb" />
-    <Compile Include="Pages\PageDownload\MyCfItem.xaml.vb">
-      <DependentUpon>MyCfItem.xaml</DependentUpon>
+    <Compile Include="Modules\Minecraft\MyCompItem.xaml.vb">
+      <DependentUpon>MyCompItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadMod.xaml.vb">
       <DependentUpon>PageDownloadMod.xaml</DependentUpon>
@@ -229,8 +230,8 @@
     <Compile Include="Pages\PageDownload\PageDownloadInstall.xaml.vb">
       <DependentUpon>PageDownloadInstall.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageDownload\PageDownloadCfDetail.xaml.vb">
-      <DependentUpon>PageDownloadCfDetail.xaml</DependentUpon>
+    <Compile Include="Pages\PageDownload\PageDownloadCompDetail.xaml.vb">
+      <DependentUpon>PageDownloadCompDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadPack.xaml.vb">
       <DependentUpon>PageDownloadPack.xaml</DependentUpon>
@@ -459,7 +460,7 @@
       <DependentUpon>FormMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Pages\PageDownload\MyCfItem.xaml">
+    <Page Include="Modules\Minecraft\MyCompItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -475,7 +476,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\PageDownload\PageDownloadCfDetail.xaml">
+    <Page Include="Pages\PageDownload\PageDownloadCompDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

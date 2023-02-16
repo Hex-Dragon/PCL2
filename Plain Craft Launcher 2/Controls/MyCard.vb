@@ -96,8 +96,8 @@
                                                                                      Return VersionSortBoolean(Left.Version, Right.Version)
                                                                                  End Function)
             Case 8, 9
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlCfFile)), Function(Left As DlCfFile, Right As DlCfFile) As Boolean
-                                                                          Return Left.Date > Right.Date
+                Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(Left As CompFile, Right As CompFile) As Boolean
+                                                                          Return Left.ReleaseDate > Right.ReleaseDate
                                                                       End Function)
         End Select
         '控件转换
@@ -113,7 +113,7 @@
             Case 6
                 ForgeDownloadListItemPreload(Stack, Stack.Tag, AddressOf ForgeSave_Click, True)
             Case 8
-                DlCfFilesPreload(Stack, Stack.Tag, AddressOf FrmDownloadMod.ProjectClick)
+                CompFilesCardPreload(Stack, Stack.Tag, AddressOf FrmDownloadMod.ProjectClick)
         End Select
         '实现控件虚拟化
         For Each Data As Object In Stack.Tag
@@ -134,9 +134,9 @@
                                                                     FrmDownloadInstall.MinecraftSelected(sender, e)
                                                                 End Sub, False))
                 Case 8
-                    Stack.Children.Add(CType(Data, DlCfFile).ToListItem(AddressOf FrmDownloadCfDetail.Save_Click))
+                    Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click))
                 Case 9
-                    Stack.Children.Add(CType(Data, DlCfFile).ToListItem(AddressOf FrmDownloadCfDetail.Install_Click, AddressOf FrmDownloadCfDetail.Save_Click))
+                    Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click))
                 Case 10
                     Stack.Children.Add(LiteLoaderDownloadListItem(Data, AddressOf LiteLoaderSave_Click, True))
                 Case 11
@@ -173,7 +173,11 @@
         AniStart(AniList, "MyCard Mouse " & Uuid)
     End Sub
 
-    '高度改变动画
+#Region "高度改变动画"
+
+    ''' <summary>
+    ''' 是否启用高度改变动画。
+    ''' </summary>
     Public Property UseAnimation As Boolean = True
     Private IsHeightAnimating As Boolean = False
     Private ActualUsedHeight As Double '回滚实际高度（例如 NaN）
@@ -221,6 +225,8 @@
         IsHeightAnimating = False
     End Sub
 
+#End Region
+
     '折叠
     '若设置了 CanSwap，或 SwapControl 不为空，则判定为会进行折叠
     '这是因为不能直接在 XAML 中设置 SwapControl
@@ -237,7 +243,7 @@
         Get
             Return _IsSwaped
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             If _IsSwaped = value Then Exit Property
             _IsSwaped = value
             If SwapControl Is Nothing Then Exit Property

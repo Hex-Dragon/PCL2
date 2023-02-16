@@ -25,24 +25,25 @@
                         <local:MyTextBox x:Name="TextSearchName" Grid.Column="1" Grid.ColumnSpan="10" HintText="仅支持使用英文搜索" />
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="类型" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="1" Grid.Row="2" MaxDropDownHeight="320">
-                            <local:MyComboBoxItem Content="全部" Tag="0" IsSelected="True" />
-                            <local:MyComboBoxItem IsHitTestVisible="False" Content="规格" />
-                            <local:MyComboBoxItem Tag="4481" Content="小型整合" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Tag="4482" Content="大型整合" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem IsHitTestVisible="False" Content="特殊" />
-                            <local:MyComboBoxItem Tag="4487" Content="FTB" Margin="15,0,0,0" ToolTip="该整合包由 FTB 官方发布" />
-                            <local:MyComboBoxItem Tag="4480" Content="基于地图" Margin="15,0,0,0" ToolTip="该整合包基于已有的 Minecraft 游戏地图运行" />
-                            <local:MyComboBoxItem Tag="4479" Content="硬核" />
-                            <local:MyComboBoxItem Tag="4474" Content="科幻" />
-                            <local:MyComboBoxItem Tag="4483" Content="战斗" />
-                            <local:MyComboBoxItem Tag="4478" Content="任务" />
-                            <local:MyComboBoxItem Tag="4484" Content="多人" />
-                            <local:MyComboBoxItem Tag="4476" Content="探索" />
-                            <local:MyComboBoxItem Tag="4736" Content="空岛" />
-                            <local:MyComboBoxItem Tag="4475" Content="冒险" />
-                            <local:MyComboBoxItem Tag="4472" Content="科技" />
-                            <local:MyComboBoxItem Tag="4473" Content="魔法" />
-                            <local:MyComboBoxItem Tag="4477" Content="小游戏" />
+                            <local:MyComboBoxItem Tag="" Content="全部" IsSelected="True" />
+                            <local:MyComboBoxItem Tag="4484/" Content="多人" />
+                            <local:MyComboBoxItem Tag="/optimization" Content="性能优化" />
+                            <local:MyComboBoxItem Tag="4479/challenging" Content="硬核" />
+                            <local:MyComboBoxItem Tag="4483/combat" Content="战斗" />
+                            <local:MyComboBoxItem Tag="4478/quests" Content="任务" />
+                            <local:MyComboBoxItem Tag="4472/technology" Content="科技" />
+                            <local:MyComboBoxItem Tag="4473/magic" Content="魔法" />
+                            <local:MyComboBoxItem Tag="4475/adventure" Content="冒险" />
+                            <local:MyComboBoxItem Tag="/kitchen-sink" Content="烹饪" />
+                            <local:MyComboBoxItem Tag="4476/" Content="探索" />
+                            <local:MyComboBoxItem Tag="4477/" Content="小游戏" />
+                            <local:MyComboBoxItem Tag="4471/" Content="科幻" />
+                            <local:MyComboBoxItem Tag="4736/" Content="空岛" />
+                            <local:MyComboBoxItem Tag="5128/" Content="原版改良" />
+                            <local:MyComboBoxItem Tag="4487/" Content="FTB" ToolTip="该整合包由 FTB 官方发布" />
+                            <local:MyComboBoxItem Tag="4480/" Content="基于地图" />
+                            <local:MyComboBoxItem Tag="4481/lightweight" Content="轻量整合" />
+                            <local:MyComboBoxItem Tag="4482/" Content="大型整合" />
                         </local:MyComboBox>
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="版本" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="4" IsEditable="True" MaxDropDownHeight="320" HintText="全部 (也可自行输入)">
@@ -81,9 +82,21 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard x:Name="CardProjects" Title="热门整合包">
-                <StackPanel x:Name="PanProjects" Margin="20,40,18,20" />
-            </local:MyCard>
+            <StackPanel x:Name="PanContent">
+                <local:MyCard x:Name="CardProjects" UseAnimation="False">
+                    <StackPanel x:Name="PanProjects" Margin="12" />
+                </local:MyCard>
+                <local:MyCard Margin="0,15,0,0" x:Name="CardPages" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Height="23" Margin="10,7">
+                        <local:MyIconButton x:Name="BtnPageLeft" IsEnabled="False" Opacity="0.5"
+                            Logo="M671.968176 911.99957c-12.287381 0-24.576482-4.67206-33.951566-14.047144L286.048434 545.984249c-18.751888-18.719204-18.751888-49.12028 0-67.872168L638.016611 126.111222c18.751888-18.751888 49.12028-18.751888 67.872168 0 18.751888 18.719204 18.751888 49.12028 0 67.872168l-318.016611 318.047574L705.888778 830.047574c18.751888 18.751888 18.751888 49.12028 0 67.872168C696.544658 907.32751 684.255557 911.99957 671.968176 911.99957z" />
+                        <TextBlock x:Name="LabPage" Text="1" 
+                                   Margin="7,0" FontSize="15" VerticalAlignment="Center" Foreground="{DynamicResource ColorBrush3}" />
+                        <local:MyIconButton x:Name="BtnPageRight"
+                            Logo="M761.055557 532.128047c0.512619-0.992555 1.343475-1.823411 1.792447-2.848649 8.800538-18.304636 5.919204-40.703346-9.664077-55.424808L399.935923 139.743798c-19.264507-18.208305-49.631179-17.344765-67.872168 1.888778-18.208305 19.264507-17.375729 49.631179 1.888778 67.872168l316.960409 299.839269L335.199677 813.631716c-19.071845 18.399247-19.648112 48.767639-1.247144 67.872168 9.407768 9.791372 21.984142 14.688778 34.560516 14.688778 12.000108 0 24.000215-4.479398 33.311652-13.439914l350.048434-337.375729c0.672598-0.672598 0.927187-1.599785 1.599785-2.303346 0.512619-0.479935 1.056202-0.832576 1.567101-1.343475C757.759656 538.879828 759.199462 535.391265 761.055557 532.128047z" />
+                    </StackPanel>
+                </local:MyCard>
+            </StackPanel>
             <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
                 <local:MyLoading Text="正在获取整合包列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </local:MyCard>

@@ -1457,7 +1457,7 @@ NextVersion:
         Next
 
         '去重
-        Dim Result As String = Join(ArrayNoDouble(DeDuplicateDataList), " ")
+        Dim Result As String = Join(DeDuplicateDataList.Distinct.ToList, " ")
 
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
@@ -1549,7 +1549,7 @@ NextVersion:
             DeDuplicateDataList.Add(CurrentEntry)
         Next
         '去重
-        McLaunchArgumentsGameNew = Join(ArrayNoDouble(DeDuplicateDataList), " ")
+        McLaunchArgumentsGameNew = Join(DeDuplicateDataList.Distinct.ToList, " ")
 
         '特别改变 OptiFineTweaker
         If (Version.Version.HasForge OrElse Version.Version.HasLiteLoader) AndAlso Version.Version.HasOptiFine Then
@@ -1592,7 +1592,7 @@ NextVersion:
         GameArguments.Add("${auth_access_token}", McLoginLoader.Output.AccessToken)
         GameArguments.Add("${access_token}", McLoginLoader.Output.AccessToken)
         GameArguments.Add("${auth_session}", McLoginLoader.Output.AccessToken)
-        GameArguments.Add("${user_type}", If(McLoginLoader.Output.Type = "Legacy", "Legacy", "Mojang"))
+        GameArguments.Add("${user_type}", "msa") '#1221
         Dim GameSize As Size = Setup.GetLaunchArgumentWindowSize()
         GameArguments.Add("${resolution_width}", GameSize.Width)
         GameArguments.Add("${resolution_height}", GameSize.Height)
@@ -1982,7 +1982,7 @@ IgnoreCustomSkin:
         End If
         Dim Paths As New List(Of String)(StartInfo.EnvironmentVariables("Path").Split(";"))
         Paths.Add(McLaunchJavaSelected.PathFolder)
-        StartInfo.EnvironmentVariables("Path") = Join(ArrayNoDouble(Paths), ";")
+        StartInfo.EnvironmentVariables("Path") = Join(Paths.Distinct.ToList, ";")
 
         '设置其他参数
         StartInfo.WorkingDirectory = McVersionCurrent.PathIndie

@@ -690,7 +690,7 @@ Public Module ModDownloadLib
             .Title = Entry.NameDisplay, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 60,
             .Info = If(Entry.IsPreview, "测试版", "正式版") &
                     If(Entry.ReleaseTime = "", "", "，发布于 " & Entry.ReleaseTime) &
-                    If(Entry.RequiredForgeVersion = "", "", "，推荐 Forge 版本：" & Entry.RequiredForgeVersion),
+                    If(Entry.RequiredForgeVersion Is Nothing, "，不兼容 Forge", If(Entry.RequiredForgeVersion = "", "", "，推荐 Forge 版本：" & Entry.RequiredForgeVersion)),
             .Logo = "pack://application:,,,/images/Blocks/GrassPath.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1730,22 +1730,22 @@ Public Module ModDownloadLib
         '结束
         Return NewItem
     End Function
-    Public Function FabricApiDownloadListItem(Entry As DlCfFile, OnClick As MyListItem.ClickEventHandler) As MyListItem
+    Public Function FabricApiDownloadListItem(Entry As CompFile, OnClick As MyListItem.ClickEventHandler) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Split("+").First.Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 60,
-            .Info = Entry.ReleaseTypeString & "，发布于 " & Entry.Date.ToString("yyyy/MM/dd HH:mm"),
+            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy/MM/dd HH:mm"),
             .Logo = "pack://application:,,,/images/Blocks/Fabric.png"
         }
         AddHandler NewItem.Click, OnClick
         '结束
         Return NewItem
     End Function
-    Public Function OptiFabricDownloadListItem(Entry As DlCfFile, OnClick As MyListItem.ClickEventHandler) As MyListItem
+    Public Function OptiFabricDownloadListItem(Entry As CompFile, OnClick As MyListItem.ClickEventHandler) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.ToLower.Replace("optifabric-", "").Replace(".jar", "").Trim.TrimStart("v"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 60,
-            .Info = Entry.ReleaseTypeString & "，发布于 " & Entry.Date.ToString("yyyy/MM/dd HH:mm"),
+            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy/MM/dd HH:mm"),
             .Logo = "pack://application:,,,/images/Blocks/OptiFabric.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1804,12 +1804,12 @@ Public Module ModDownloadLib
         ''' <summary>
         ''' 欲下载的 Fabric API 信息。
         ''' </summary>
-        Public FabricApi As DlCfFile = Nothing
+        Public FabricApi As CompFile = Nothing
 
         ''' <summary>
         ''' 欲下载的 OptiFabric 信息。
         ''' </summary>
-        Public OptiFabric As DlCfFile = Nothing
+        Public OptiFabric As CompFile = Nothing
 
         ''' <summary>
         ''' 欲下载的 LiteLoader 详细信息。
@@ -1962,11 +1962,11 @@ Public Module ModDownloadLib
         Dim LoaderList As New List(Of LoaderBase)
         'Fabric API
         If Request.FabricApi IsNot Nothing Then
-            LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.GetDownloadFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\", False)}) With {.ProgressWeight = 3, .Block = False})
+            LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
         End If
         'OptiFabric
         If Request.OptiFabric IsNot Nothing Then
-            LoaderList.Add(New LoaderDownload("下载 OptiFabric", New List(Of NetFile) From {Request.OptiFabric.GetDownloadFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\", False)}) With {.ProgressWeight = 3, .Block = False})
+            LoaderList.Add(New LoaderDownload("下载 OptiFabric", New List(Of NetFile) From {Request.OptiFabric.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
         End If
         '原版
         Dim ClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadClientLoader(Request.MinecraftName, Request.MinecraftJson, Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39, .Block = Request.ForgeVersion Is Nothing AndAlso Request.OptiFineEntry Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing}
@@ -2112,7 +2112,7 @@ Public Module ModDownloadLib
                 SplitArguments.Add(RawArguments(i))
             End If
         Next
-        Dim RealArguments As String = Join(ArrayNoDouble(SplitArguments), " ")
+        Dim RealArguments As String = Join(SplitArguments.Distinct.ToList, " ")
         '合并
         OutputJson = MinecraftJson
         If HasOptiFine Then

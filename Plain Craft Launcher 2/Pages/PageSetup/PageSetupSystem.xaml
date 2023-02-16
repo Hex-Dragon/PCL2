@@ -47,9 +47,9 @@
                         <local:MySlider x:Name="SliderDownloadSpeed" Grid.Row="5" Tag="ToolDownloadSpeed" MaxValue="42" Value="42" Grid.Column="1" />
                         <TextBlock VerticalAlignment="Top" Grid.Row="6" HorizontalAlignment="Left" Text="目标文件夹" Margin="0,5,25,5" />
                         <TextBlock Margin="0,5" HorizontalAlignment="Left" Text="请在 启动 → 版本选择 → 文件夹列表 中更改下载目标文件夹。&#xa;在某个文件夹或游戏版本上右键，即可选择打开对应文件夹。" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" />
-                        <local:MyCheckBox Margin="0,2,0,4" Text="安装 CurseForge 整合包时保留原始压缩包" Grid.Row="7" Height="22" Grid.ColumnSpan="2"
+                        <local:MyCheckBox Margin="0,2,0,4" Text="安装整合包时保留原始压缩包" Grid.Row="7" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadKeepModpack" Tag="ToolDownloadKeepModpack" 
-                                          ToolTip="安装 CurseForge 整合包后，在版本文件夹下保留用于安装的 原始整合包.zip 文件" />
+                                          ToolTip="安装整合包时，在版本文件夹下保留用于安装的原始整合包压缩包文件" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

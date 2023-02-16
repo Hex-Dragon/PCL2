@@ -417,7 +417,7 @@ PreFin:
         If ComboArgumentJava Is Nothing Then Exit Sub
         '初始化列表
         ComboArgumentJava.Items.Clear()
-        ComboArgumentJava.Items.Add(New MyComboBoxItem With {.Content = "自动选择适合所选游戏版本的 Java", .Tag = "自动选择"})
+        ComboArgumentJava.Items.Add(New MyComboBoxItem With {.Content = "自动选择合适的 Java", .Tag = "自动选择"})
         '更新列表
         Dim SelectedItem As MyComboBoxItem = Nothing
         Dim SelectedBySetup As String = Setup.Get("LaunchArgumentJavaSelect")

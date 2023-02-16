@@ -97,9 +97,11 @@
                 DlOptiFabricLoader.Start(IsForceRestart:=True)
                 ItemInstall.Checked = True
             Case FormMain.PageSubType.DownloadMod
+                PageDownloadMod.Storage = New CompProjectStorage
                 If FrmDownloadMod IsNot Nothing Then FrmDownloadMod.PageLoaderRestart()
                 ItemMod.Checked = True
             Case FormMain.PageSubType.DownloadPack
+                PageDownloadPack.Storage = New CompProjectStorage
                 If FrmDownloadPack IsNot Nothing Then FrmDownloadPack.PageLoaderRestart()
                 ItemPack.Checked = True
             Case FormMain.PageSubType.DownloadClient

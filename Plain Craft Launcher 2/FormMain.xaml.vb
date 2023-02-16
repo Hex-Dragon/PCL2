@@ -126,6 +126,13 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 283 Then 'Snapshot 2.5.0
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持搜索、下载 Modrinth 中的 Mod 与整合包"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "资源搜索页面支持翻页"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持安装 Modrinth 整合包"))
+            FeatureCount += 5
+            BugCount += 5
+        End If
         If LastVersion < 282 Then 'Snapshot 2.4.9
             FeatureCount += 1
             BugCount += 5
@@ -507,7 +514,7 @@ Reopen:
             Dim UnlockedTheme As New List(Of String) From {"2"}
             UnlockedTheme.AddRange(New List(Of String)(Setup.Get("UiLauncherThemeHide").ToString.Split("|")))
             UnlockedTheme.AddRange(New List(Of String)(Setup.Get("UiLauncherThemeHide2").ToString.Split("|")))
-            Setup.Set("UiLauncherThemeHide2", Join(ArrayNoDouble(UnlockedTheme), "|"))
+            Setup.Set("UiLauncherThemeHide2", Join(UnlockedTheme.Distinct.ToList, "|"))
         End If
         '重置欧皇彩
         If LastVersionCode <= 115 AndAlso Setup.Get("UiLauncherThemeHide2").ToString.Split("|").Contains("13") Then
@@ -866,7 +873,7 @@ Install:
                                        Exit Sub
                                    End If
                                    '安装整合包
-                                   If {"zip", "rar"}.Contains(Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
+                                   If {"zip", "rar", "mrpack"}.Contains(Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
                                        Log("[System] 文件为压缩包，尝试作为整合包安装")
                                        If ModpackInstall(FilePath, ShowHint:=False) Then Exit Sub
                                    End If
@@ -1010,9 +1017,9 @@ Install:
         ''' </summary>
         VersionSetup
         ''' <summary>
-        ''' CurseForge 工程详情。这是一个副页面。
+        ''' 资源工程详情。这是一个副页面。
         ''' </summary>
-        CfDetail
+        CompDetail
         ''' <summary>
         ''' 帮助详情。这是一个副页面。
         ''' </summary>
@@ -1059,13 +1066,20 @@ Install:
                 Return "下载管理"
             Case PageType.VersionSetup
                 Return "版本设置 - " & If(PageVersionLeft.Version Is Nothing, "未知版本", PageVersionLeft.Version.Name)
-            Case PageType.CfDetail
+            Case PageType.CompDetail
                 If Stack.Additional Is Nothing Then
-                    Log("[Control] CurseForge 工程详情页面未提供关键项", LogLevel.Feedback)
+                    Log("[Control] 资源工程详情页面未提供关键项", LogLevel.Feedback)
                     Return "未知页面"
                 Else
-                    Dim Project As DlCfProject = Stack.Additional
-                    Return If(Project.IsModPack, "整合包下载 - ", "Mod 下载 - ") & Project.ChineseName
+                    Dim Project As CompProject = Stack.Additional
+                    Select Case Project.Type
+                        Case CompType.Mod
+                            Return "Mod 下载 - " & Project.TranslatedName
+                        Case CompType.ModPack
+                            Return "整合包下载 - " & Project.TranslatedName
+                        Case Else 'CompType.ResourcePack
+                            Return "资源包下载 - " & Project.TranslatedName
+                    End Select
                 End If
             Case PageType.HelpDetail
                 If Stack.Additional Is Nothing Then
@@ -1303,9 +1317,9 @@ Install:
                 Case PageType.VersionSetup '版本设置
                     If FrmVersionLeft Is Nothing Then FrmVersionLeft = New PageVersionLeft
                     PageChangeAnim(FrmVersionLeft, FrmVersionLeft.PageGet(SubType))
-                Case PageType.CfDetail 'Mod 信息
-                    If FrmDownloadCfDetail Is Nothing Then FrmDownloadCfDetail = New PageDownloadCfDetail
-                    PageChangeAnim(New MyPageLeft, FrmDownloadCfDetail)
+                Case PageType.CompDetail 'Mod 信息
+                    If FrmDownloadCompDetail Is Nothing Then FrmDownloadCompDetail = New PageDownloadCompDetail
+                    PageChangeAnim(New MyPageLeft, FrmDownloadCompDetail)
                 Case PageType.HelpDetail '帮助详情
                     PageChangeAnim(New MyPageLeft, Stack.Additional(1))
             End Select
@@ -1505,14 +1519,16 @@ Install:
         Return HasRunningMinecraft
     End Function
 
-    '返回顶部
-    Private Sub BtnExtraBack_Click(sender As Object, e As EventArgs) Handles BtnExtraBack.Click
+    ''' <summary>
+    ''' 返回顶部。
+    ''' </summary>
+    Public Sub BackToTop() Handles BtnExtraBack.Click
         Dim RealScroll As MyScrollViewer = BtnExtraBack_GetRealChild()
         RealScroll.PerformVerticalOffsetDelta(-RealScroll.VerticalOffset)
     End Sub
     Private Function BtnExtraBack_ShowCheck() As Boolean
         Dim RealScroll As MyScrollViewer = BtnExtraBack_GetRealChild()
-        Return RealScroll IsNot Nothing AndAlso RealScroll.Visibility = Visibility.Visible AndAlso RealScroll.VerticalOffset > Height + If(BtnExtraBack.Show, 0, 1500)
+        Return RealScroll IsNot Nothing AndAlso RealScroll.Visibility = Visibility.Visible AndAlso RealScroll.VerticalOffset > Height + If(BtnExtraBack.Show, 0, 700)
     End Function
     Private Function BtnExtraBack_GetRealChild() As MyScrollViewer
         If PanMainRight.Child Is Nothing Then Return Nothing

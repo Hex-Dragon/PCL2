@@ -2,7 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             mc:Ignorable="d" x:Class="PageDownloadCfDetail"
+             mc:Ignorable="d" x:Class="PageDownloadCompDetail"
              d:DesignWidth="778.571" d:DesignHeight="90.857">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <Grid Margin="25,25,25,10">
@@ -14,9 +14,9 @@
             <local:MyCard Margin="0,0,0,25" x:Name="CardIntro">
                 <StackPanel Margin="22,22,22,19" x:Name="PanIntro">
                     <StackPanel Orientation="Horizontal" Height="35">
-                        <local:MyButton x:Name="BtnIntroCf"    MinWidth="140" Text="查看 CurseForge" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
-                        <local:MyButton x:Name="BtnIntroWiki"  MinWidth="140" Text="查看百科" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
-                        <local:MyButton x:Name="BtnIntroMCBBS" MinWidth="140" Text="查看 MCBBS" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
+                        <local:MyButton x:Name="BtnIntroWeb"   MinWidth="140" Text="转到 CurseForge" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
+                        <local:MyButton x:Name="BtnIntroWiki"  MinWidth="140" Text="转到 MC 百科" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
+                        <local:MyButton x:Name="BtnIntroMCBBS" MinWidth="140" Text="转到 MCBBS" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
                         <local:MyButton x:Name="BtnIntroCopy"  MinWidth="140" Text="复制名称" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
                     </StackPanel>
                 </StackPanel>

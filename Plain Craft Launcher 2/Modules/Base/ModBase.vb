@@ -10,12 +10,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.4.9" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.4.9." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.5.0" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.5.0." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 281 'Release
 #Else
-    Public Const VersionCode As Integer = 282 'Snapshot
+    Public Const VersionCode As Integer = 283 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1241,7 +1241,7 @@ Re:
     Public Function ExtractFile(CompressFilePath As String, DestDirectory As String, Optional Encode As Encoding = Nothing) As Boolean
         Try
             Directory.CreateDirectory(DestDirectory)
-            If CompressFilePath.EndsWith(".zip") OrElse CompressFilePath.EndsWith(".jar") Then
+            If CompressFilePath.EndsWith(".zip") OrElse CompressFilePath.EndsWith(".jar") OrElse CompressFilePath.EndsWith(".mrpack") Then
                 '以 zip 方式解压
                 ZipFile.ExtractToDirectory(CompressFilePath, DestDirectory, If(Encode, Encoding.GetEncoding("GB18030")))
                 Return True
@@ -1757,25 +1757,7 @@ Re:
     ''' <summary>
     ''' 数组去重。
     ''' </summary>
-    Public Function ArrayNoDouble(Of T)(Arr As T(), Optional IsEqual As CompareThreadStart = Nothing) As T()
-        Dim ResultArray As New List(Of T)
-        For i = 0 To UBound(Arr)
-            For ii = i + 1 To UBound(Arr)
-                If IsEqual Is Nothing Then
-                    If Arr(i).Equals(Arr(ii)) Then GoTo NextElement
-                Else
-                    If IsEqual(Arr(i), Arr(ii)) Then GoTo NextElement
-                End If
-            Next
-            ResultArray.Add(Arr(i))
-NextElement:
-        Next i
-        Return ResultArray.ToArray
-    End Function
-    ''' <summary>
-    ''' 数组去重。
-    ''' </summary>
-    Public Function ArrayNoDouble(Of T)(Arr As List(Of T), Optional IsEqual As CompareThreadStart = Nothing) As List(Of T)
+    Public Function Distinct(Of T)(Arr As ICollection(Of T), Optional IsEqual As CompareThreadStart(Of T) = Nothing) As List(Of T)
         Dim ResultArray As New List(Of T)
         For i = 0 To Arr.Count - 1
             For ii = i + 1 To Arr.Count - 1
@@ -1790,17 +1772,6 @@ NextElement:
         Next i
         Return ResultArray
     End Function
-    ''' <summary>
-    ''' 若 Key 不存在于辞典，则加入辞典。
-    ''' 若 Key 已存在于辞典，则更新 Value。
-    ''' </summary>
-    Public Sub DictionaryAdd(Of TKey, TValue)(ByRef Dict As Dictionary(Of TKey, TValue), Key As TKey, Value As TValue)
-        If Dict.ContainsKey(Key) Then
-            Dict(Key) = Value
-        Else
-            Dict.Add(Key, Value)
-        End If
-    End Sub
 
     ''' <summary>
     ''' 获取格式类似于“11:08:52.037”的当前时间的字符串。
@@ -2016,7 +1987,7 @@ NextElement:
     ''' 按照既定的函数进行选择排序。
     ''' </summary>
     ''' <param name="SortRule">传入两个对象，若第一个对象应该排在前面，则返回 True。</param>
-    Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart) As List(Of T)
+    Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart(Of T)) As List(Of T)
         Dim NewList As New List(Of T)
         While List.Count > 0
             Dim Highest = List(0)
@@ -2028,7 +1999,7 @@ NextElement:
         End While
         Return NewList
     End Function
-    Public Delegate Function CompareThreadStart(Left, Right) As Boolean
+    Public Delegate Function CompareThreadStart(Of T)(Left As T, Right As T) As Boolean
 
     ''' <summary>
     ''' 获取程序启动参数。

@@ -63,7 +63,7 @@
         End Try
         PossibleLogs.Add(VersionPathIndie & "logs\latest.log") 'Minecraft 日志
         PossibleLogs.Add(VersionPathIndie & "logs\debug.log") 'Minecraft Debug 日志
-        PossibleLogs = ArrayNoDouble(PossibleLogs)
+        PossibleLogs = PossibleLogs.Distinct.ToList
 
         '确定最新的日志文件
         Dim RightLogs As New List(Of String)
@@ -238,7 +238,7 @@
                         '创建文件名词典
                         Dim FileNameDict As New Dictionary(Of String, KeyValuePair(Of String, String()))
                         For Each SelectedFile In SelectedFiles
-                            DictionaryAdd(FileNameDict, GetFileNameFromPath(SelectedFile.Key).ToLower, SelectedFile)
+                            FileNameDict(GetFileNameFromPath(SelectedFile.Key).ToLower) = SelectedFile
                             OutputFiles.Add(SelectedFile.Key)
                             Log("[Crash] 输出报告：" & SelectedFile.Key & "，作为 Minecraft 或启动器日志")
                         Next
@@ -399,7 +399,7 @@
                         Keywords.AddRange(AnalyzeStackKeyword(Fatal))
                     Next
                     If Keywords.Count > 0 Then
-                        AppendReason(CrashReason.MC日志堆栈分析发现关键字, ArrayNoDouble(Keywords))
+                        AppendReason(CrashReason.MC日志堆栈分析发现关键字, Keywords.Distinct.ToList)
                         GoTo Done
                     End If
                 End If
@@ -429,7 +429,7 @@ Done:
         If CrashReasons.ContainsKey(Reason) Then
             If Additional IsNot Nothing Then
                 CrashReasons(Reason).AddRange(Additional)
-                CrashReasons(Reason) = ArrayNoDouble(CrashReasons(Reason))
+                CrashReasons(Reason) = CrashReasons(Reason).Distinct.ToList
             End If
         Else
             CrashReasons.Add(Reason, New List(Of String)(If(Additional, {})))
@@ -464,6 +464,8 @@ Done:
             If LogMc.Contains("java.lang.ClassCastException: java.base/jdk") Then AppendReason(CrashReason.使用JDK)
             If LogMc.Contains("java.lang.ClassCastException: class jdk.") Then AppendReason(CrashReason.使用JDK)
             If LogMc.Contains("TRANSFORMER/net.optifine/net.optifine.reflect.Reflector.<clinit>(Reflector.java") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
+            If LogMc.Contains("java.lang.NoSuchMethodError: 'void net.minecraft.client.renderer.block.model.BakedQuad.<init>(int[], int, net.minecraft.core.Direction, net.minecraft.client.renderer.texture.TextureAtlasSprite, boolean, boolean)'") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
+            If LogMc.Contains("java.lang.NoSuchMethodError: 'void net.minecraft.server.level.DistanceManager.addRegionTicket(net.minecraft.server.level.TicketType, net.minecraft.world.level.ChunkPos, int, java.lang.Object, boolean)'") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("Open J9 is not supported") OrElse LogMc.Contains("OpenJ9 is incompatible") OrElse LogMc.Contains(".J9VMInternals.") Then AppendReason(CrashReason.使用OpenJ9)
             If LogMc.Contains("java.lang.NoSuchFieldException: ucp") Then AppendReason(CrashReason.Java版本过高)
             If LogMc.Contains("because module java.base does not export") Then AppendReason(CrashReason.Java版本过高)
@@ -584,7 +586,7 @@ Done:
             PossibleStacks.Add(Stack.Trim) '.Split("$").First)
 NextStack:
         Next
-        PossibleStacks = ArrayNoDouble(PossibleStacks)
+        PossibleStacks = PossibleStacks.Distinct.ToList
         Log("[Crash] 找到 " & PossibleStacks.Count & " 条可能的堆栈信息")
         If PossibleStacks.Count = 0 Then Return New List(Of String)
         For Each Stack As String In PossibleStacks
@@ -608,7 +610,7 @@ NextStack:
                 PossibleWords.Add(Word.Trim)
             Next
         Next
-        PossibleWords = ArrayNoDouble(PossibleWords)
+        PossibleWords = PossibleWords.Distinct.ToList
         Log("[Crash] 从堆栈信息中找到 " & PossibleWords.Count & " 个可能的 Mod ID 关键词")
         If PossibleWords.Count > 0 Then Log("[Crash]  - " & Join(PossibleWords, ", "))
         If PossibleWords.Count > 10 Then
@@ -666,7 +668,7 @@ NextStack:
                 Exit For
             Next
         Next
-        HintLines = ArrayNoDouble(HintLines)
+        HintLines = HintLines.Distinct.ToList
         Log("[Crash] 找到 " & HintLines.Count & " 个可能的崩溃 Mod 匹配行")
         For Each ModName As String In HintLines
             Log("[Crash]  - " & ModName)
@@ -682,7 +684,7 @@ NextStack:
             End If
             If Name IsNot Nothing Then ModFileNames.Add(Name)
         Next
-        ModFileNames = ArrayNoDouble(ModFileNames)
+        ModFileNames = ModFileNames.Distinct.ToList
         Log("[Crash] 找到 " & ModFileNames.Count & " 个可能的崩溃 Mod 文件名")
         For Each ModFileName As String In ModFileNames
             Log("[Crash]  - " & ModFileName)

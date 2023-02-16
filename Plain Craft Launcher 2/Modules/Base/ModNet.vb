@@ -891,7 +891,7 @@ RequestFinished:
         Public Sub New(Urls As String(), LocalPath As String, Optional Check As FileChecker = Nothing)
             Dim Sources As New List(Of NetSource)
             Dim Count As Integer = 0
-            Urls = ArrayNoDouble(Urls)
+            Urls = Urls.Distinct.ToArray
             For Each Source As String In Urls
                 Sources.Add(New NetSource With {.FailCount = 0, .Url = SecretCdnSign(Source.Replace(vbCr, "").Replace(vbLf, "").Trim), .Id = Count, .IsFailed = False, .Ex = Nothing})
                 Count += 1
@@ -1585,7 +1585,7 @@ NextElement:
                                        For Each Folder In McFolderList
                                            Folders.Add(Folder.Path)
                                        Next
-                                       Folders = ArrayNoDouble(Folders)
+                                       Folders = Folders.Distinct.ToList
                                        For Each Folder In Folders
                                            If Folder <> PathMcFolder AndAlso Directory.Exists(Folder) Then FoldersFinal.Add(Folder)
                                        Next
@@ -1725,7 +1725,7 @@ Retry:
             For Each Ex As Exception In ExList
                 ErrOutput.Add(GetExceptionDetail(Ex))
             Next
-            Log("[Download] " & Join(ArrayNoDouble(ErrOutput.ToArray), vbCrLf))
+            Log("[Download] " & Join(ErrOutput.Distinct.ToArray, vbCrLf))
         End Sub
         Public Overrides Sub Abort()
             SyncLock LockState

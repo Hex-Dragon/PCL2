@@ -679,7 +679,7 @@ Restart:
             Log(ex, "文件夹加载器启动检测出错")
         End Try
         '写入检查数据
-        DictionaryAdd(LoaderFolderDictionary, Loader, Value)
+        LoaderFolderDictionary(Loader) = Value
         '开始检查
         If Type = LoaderFolderRunType.UpdateOnly Then Return False
         If WaitForExit Then

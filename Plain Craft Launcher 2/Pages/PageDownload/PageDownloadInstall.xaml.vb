@@ -232,7 +232,7 @@
     End Sub
 
     'FabricApi
-    Private SelectedFabricApi As DlCfFile = Nothing
+    Private SelectedFabricApi As CompFile = Nothing
     Private Sub SetFabricApiInfoShow(IsShow As String)
         If PanFabricApiInfo.Tag = IsShow Then Exit Sub
         PanFabricApiInfo.Tag = IsShow
@@ -252,7 +252,7 @@
     End Sub
 
     'OptiFabric
-    Private SelectedOptiFabric As DlCfFile = Nothing
+    Private SelectedOptiFabric As CompFile = Nothing
     Private Sub SetOptiFabricInfoShow(IsShow As String)
         If PanOptiFabricInfo.Tag = IsShow Then Exit Sub
         PanOptiFabricInfo.Tag = IsShow
@@ -591,18 +591,23 @@
         End If
         '检查最低 Forge 版本
         Dim MinimalForgeVersion As String = "9999.9999"
+        Dim NotSuitForForge As Boolean = False
         For Each OptiFineVersion As DlOptiFineListEntry In DlOptiFineListLoader.Output.Value
             If Not OptiFineVersion.NameDisplay.StartsWith(SelectedMinecraftId & " ") Then Continue For '不是同一个大版本
-            If SelectedForge Is Nothing OrElse IsOptiFineSuitForForge(OptiFineVersion, SelectedForge) Then
-                Return Nothing
+            If SelectedForge Is Nothing Then Return Nothing '该版本可用
+            If IsOptiFineSuitForForge(OptiFineVersion, SelectedForge) Then
+                Return Nothing '该版本可用
             Else
-                '设置用于显示的最低 Forge 版本
-                MinimalForgeVersion = If(VersionSortBoolean(MinimalForgeVersion, OptiFineVersion.RequiredForgeVersion),
-                                         OptiFineVersion.RequiredForgeVersion, MinimalForgeVersion)
+                NotSuitForForge = True
+                If OptiFineVersion.RequiredForgeVersion IsNot Nothing Then
+                    '设置用于显示的最低允许的 Forge 版本
+                    MinimalForgeVersion = If(VersionSortBoolean(MinimalForgeVersion, OptiFineVersion.RequiredForgeVersion),
+                                          OptiFineVersion.RequiredForgeVersion, MinimalForgeVersion)
+                End If
             End If
         Next
         If MinimalForgeVersion = "9999.9999" Then
-            Return "没有可用版本"
+            Return If(NotSuitForForge, "与 Forge 不兼容", "没有可用版本")
         Else
             Return "需要 Forge " & If(MinimalForgeVersion.Contains("."), "", "#") & MinimalForgeVersion & " 或更高版本"
         End If
@@ -611,6 +616,7 @@
     '检查某个 OptiFine 是否与某个 Forge 兼容（最低 Forge 版本是否达到需求）
     Private Function IsOptiFineSuitForForge(OptiFine As DlOptiFineListEntry, Forge As DlForgeVersionEntry)
         If Forge.Inherit <> OptiFine.Inherit Then Return False '不是同一个大版本
+        If OptiFine.RequiredForgeVersion Is Nothing Then Return False '不兼容 Forge
         Return (OptiFine.RequiredForgeVersion.Contains(".") AndAlso 'XX.X.XXX
                 VersionSortInteger(Forge.Version, OptiFine.RequiredForgeVersion) >= 0) OrElse
                (Not OptiFine.RequiredForgeVersion.Contains(".") AndAlso '#XXXX
@@ -749,13 +755,21 @@
             End If
         End If
         If Loader.State <> LoadState.Finished Then Return "获取版本列表失败：未知错误，状态为 " & GetStringFromEnum(Loader.State)
+        Dim NotSuitForOptiFine As Boolean = False
         For Each Version In Loader.Output
             If Version.Category = "universal" OrElse Version.Category = "client" Then Continue For '跳过无法自动安装的版本
             If SelectedFabric IsNot Nothing Then Return "与 Fabric 不兼容"
-            If SelectedOptiFine IsNot Nothing AndAlso VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then Return "与 OptiFine 不兼容"
+            If SelectedOptiFine IsNot Nothing AndAlso
+                VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then
+                Return "与 OptiFine 不兼容" '1.13 ~ 1.14.3 OptiFine 检查
+            End If
+            If SelectedOptiFine IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, Version) Then
+                NotSuitForOptiFine = True '与 OptiFine 不兼容
+                Continue For
+            End If
             Return Nothing
         Next
-        Return "该版本不支持自动安装"
+        Return If(NotSuitForOptiFine, "与 OptiFine 不兼容", "该版本不支持自动安装")
     End Function
 
     '限制展开
@@ -772,18 +786,19 @@
             Dim Loader As LoaderTask(Of String, List(Of DlForgeVersionEntry)) = LoadForge.State
             If SelectedMinecraftId <> Loader.Input Then Exit Sub
             If Loader.State <> LoadState.Finished Then Exit Sub
-            '可视化
+            '获取要显示的版本
             Dim Versions As New List(Of DlForgeVersionEntry)
             Versions.AddRange(Loader.Output) '复制数组，以免 Output 在实例化后变空
             If Loader.Output.Count = 0 Then Exit Sub
             PanForge.Children.Clear()
-            Versions = Sort(Versions, Function(Left As DlForgeVersionEntry, Right As DlForgeVersionEntry) As Boolean
-                                          Return New Version(Left.Version) > New Version(Right.Version)
-                                      End Function)
+            Versions = Sort(Versions, Function(a, b) New Version(a.Version) > New Version(b.Version)).
+                       Where(Function(v)
+                                 If v.Category = "universal" OrElse v.Category = "client" Then Return False '跳过无法自动安装的版本
+                                 If SelectedOptiFine IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, v) Then Return False
+                                 Return True
+                             End Function).ToList
             ForgeDownloadListItemPreload(PanForge, Versions, AddressOf Forge_Selected, False)
             For Each Version In Versions
-                If Version.Category = "universal" OrElse Version.Category = "client" Then Continue For '跳过无法自动安装的版本
-                If SelectedOptiFine IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, Version) Then Continue For
                 PanForge.Children.Add(ForgeDownloadListItem(Version, AddressOf Forge_Selected, False))
             Next
         Catch ex As Exception
@@ -941,7 +956,7 @@
             If DlFabricApiLoader.State <> LoadState.Finished Then Exit Sub
             If SelectedMinecraftId Is Nothing OrElse SelectedFabric Is Nothing Then Exit Sub
             '获取版本列表
-            Dim Versions As New List(Of DlCfFile)
+            Dim Versions As New List(Of CompFile)
             For Each Version In DlFabricApiLoader.Output
                 If IsSuitableFabricApi(Version.DisplayName, SelectedMinecraftId) Then
                     If Not Version.DisplayName.StartsWith("[") Then
@@ -953,8 +968,8 @@
             Next
             If Versions.Count = 0 Then Exit Sub
             '排序
-            Versions = Sort(Versions, Function(Left As DlCfFile, Right As DlCfFile) As Boolean
-                                          Return Left.Date > Right.Date
+            Versions = Sort(Versions, Function(Left As CompFile, Right As CompFile) As Boolean
+                                          Return Left.ReleaseDate > Right.ReleaseDate
                                       End Function)
             '可视化
             PanFabricApi.Children.Clear()
@@ -987,10 +1002,10 @@
     ''' <summary>
     ''' 从显示名判断该 Mod 是否与某版本适配。
     ''' </summary>
-    Private Function IsSuitableOptiFabric(ModFile As DlCfFile, MinecraftVersion As String) As Boolean
+    Private Function IsSuitableOptiFabric(ModFile As CompFile, MinecraftVersion As String) As Boolean
         Try
             If MinecraftVersion Is Nothing Then Return False
-            Return ModFile.GameVersion.Contains(MinecraftVersion)
+            Return ModFile.GameVersions.Contains(MinecraftVersion)
         Catch ex As Exception
             Log(ex, "判断 OptiFabric 版本适配性出错（" & MinecraftVersion & "）")
             Return False
@@ -1026,14 +1041,14 @@
             If DlOptiFabricLoader.State <> LoadState.Finished Then Exit Sub
             If SelectedMinecraftId Is Nothing OrElse SelectedFabric Is Nothing OrElse SelectedOptiFine Is Nothing Then Exit Sub
             '获取版本列表
-            Dim Versions As New List(Of DlCfFile)
+            Dim Versions As New List(Of CompFile)
             For Each Version In DlOptiFabricLoader.Output
                 If IsSuitableOptiFabric(Version, SelectedMinecraftId) Then Versions.Add(Version)
             Next
             If Versions.Count = 0 Then Exit Sub
             '排序
-            Versions = Sort(Versions, Function(Left As DlCfFile, Right As DlCfFile) As Boolean
-                                          Return Left.Date > Right.Date
+            Versions = Sort(Versions, Function(Left As CompFile, Right As CompFile) As Boolean
+                                          Return Left.ReleaseDate > Right.ReleaseDate
                                       End Function)
             '可视化
             PanOptiFabric.Children.Clear()

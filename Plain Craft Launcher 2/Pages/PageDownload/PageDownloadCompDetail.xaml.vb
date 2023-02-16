@@ -1,25 +1,25 @@
-﻿Public Class PageDownloadCfDetail
-    Private CfItem As MyCfItem = Nothing
-    Private Project As DlCfProject
+﻿Public Class PageDownloadCompDetail
+    Private CompItem As MyCompItem = Nothing
+    Private Project As CompProject
 
 #Region "加载器"
 
+    Private CompFileLoader As New LoaderTask(Of Integer, List(Of CompFile))(
+        "Comp File", Sub(Task As LoaderTask(Of Integer, List(Of CompFile))) Task.Output = CompFilesGet(Project.Id, Project.FromCurseForge))
+
     '初始化加载器信息
-    Private Sub PageDownloadCfDetail_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
+    Private Sub PageDownloadCompDetail_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         Project = FrmMain.PageCurrent.Additional
-        PageLoaderInit(Load, PanLoad, PanMain, CardIntro, DlCfFileLoader, AddressOf Load_OnFinish, AddressOf LoaderInput)
+        PageLoaderInit(Load, PanLoad, PanMain, CardIntro, CompFileLoader, AddressOf Load_OnFinish)
     End Sub
-    Private Function LoaderInput() As KeyValuePair(Of Integer, Boolean)
-        Return New KeyValuePair(Of Integer, Boolean)(Project.Id, Project.IsModPack)
-    End Function
     '自动重试
     Private Sub Load_State(sender As Object, state As MyLoading.MyLoadingState, oldState As MyLoading.MyLoadingState) Handles Load.StateChanged
-        Select Case DlCfFileLoader.State
+        Select Case CompFileLoader.State
             Case LoadState.Failed
                 Dim ErrorMessage As String = ""
-                If DlCfFileLoader.Error IsNot Nothing Then ErrorMessage = DlCfFileLoader.Error.Message
+                If CompFileLoader.Error IsNot Nothing Then ErrorMessage = CompFileLoader.Error.Message
                 If ErrorMessage.Contains("不是有效的 Json 文件") Then
-                    Log("[Download] 下载的 Mod 列表 Json 文件损坏，已自动重试", LogLevel.Debug)
+                    Log("[Comp] 下载的文件 Json 列表损坏，已自动重试", LogLevel.Debug)
                     PageLoaderRestart()
                 End If
         End Select
@@ -42,38 +42,42 @@
 
         '初始化字典，并将当前版本排在最上面
         Dim TopVersion As String
-        If Project.IsModPack Then
-            TopVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
-        Else
-            TopVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
-        End If
-        Dim Dict As New SortedDictionary(Of String, List(Of DlCfFile))(New VersionSorterWithSelect(TopVersion))
-        'PCL#8826 汇报了奇怪的这个 Try 块里出现 NPE 的问题，但实在找不到，就瞎加点检测
+        Select Case Project.Type
+            Case CompType.Mod
+                TopVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
+            Case CompType.ModPack
+                TopVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
+            Case Else 'CompType.ResourcePack
+                'FUTURE: Res
+                TopVersion = Nothing 'If(PageDownloadResource.Loader.Input.GameVersion, "")
+        End Select
+        Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New VersionSorterWithSelect(TopVersion))
+        '#8826 汇报了奇怪的这个 Try 块里出现 NPE 的问题，但实在找不到，就瞎加点检测
         Try
-            Dict.Add("未知版本", New List(Of DlCfFile))
-            If DlCfFileLoader.Output Is Nothing Then
-                Log("[Download] 列表加载输出为 Nothing，请反馈此问题", LogLevel.Feedback)
+            Dict.Add("未知版本", New List(Of CompFile))
+            If CompFileLoader.Output Is Nothing Then
+                Log("[Comp] 列表加载输出为 Nothing，请反馈此问题", LogLevel.Feedback)
                 Exit Try
             End If
-            For Each Version As DlCfFile In DlCfFileLoader.Output
+            For Each Version As CompFile In CompFileLoader.Output
                 If Version Is Nothing Then
-                    Log("[Download] 列表中的一个版本为 Nothing，请反馈此问题", LogLevel.Feedback)
+                    Log("[Comp] 列表中的一个版本为 Nothing，请反馈此问题", LogLevel.Feedback)
                     Continue For
                 End If
-                If Version.GameVersion Is Nothing Then
-                    Log("[Download] 列表中的一个版本没有任何适配的游戏版本，返回为 Nothing，请反馈此问题", LogLevel.Feedback)
-                    Continue For
-                End If
-                For Each GameVersion In Version.GameVersion
+                For Each GameVersion In Version.GameVersions
                     '决定添加到哪个版本
                     Dim TargetVersion As String
-                    If GameVersion Is Nothing OrElse GameVersion.Split(".").Count < 2 Then
+                    If GameVersion Is Nothing Then
                         TargetVersion = "未知版本"
-                    Else
+                    ElseIf GameVersion.Contains("w") Then
+                        TargetVersion = "快照版本"
+                    ElseIf GameVersion.Split(".").Count >= 2 Then
                         TargetVersion = GameVersion
+                    Else
+                        TargetVersion = "未知版本"
                     End If
                     '实际进行添加
-                    If Not Dict.ContainsKey(TargetVersion) Then Dict.Add(TargetVersion, New List(Of DlCfFile))
+                    If Not Dict.ContainsKey(TargetVersion) Then Dict.Add(TargetVersion, New List(Of CompFile))
                     If Not Dict(TargetVersion).Contains(Version) Then Dict(TargetVersion).Add(Version)
                 Next
             Next
@@ -86,17 +90,17 @@
             '清空当前
             PanMain.Children.Clear()
             '转化为 UI
-            For Each Pair As KeyValuePair(Of String, List(Of DlCfFile)) In Dict
+            For Each Pair As KeyValuePair(Of String, List(Of CompFile)) In Dict
                 If Pair.Value.Count = 0 Then Continue For
                 '增加卡片
-                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(Project.IsModPack, 9, 8)}
+                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(Project.Type = CompType.ModPack, 9, 8)} 'FUTURE: Res
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
                 PanMain.Children.Add(NewCard)
                 '确定卡片是否展开
                 If Pair.Key = TopVersion Then
-                    MyCard.StackInstall(NewStack, If(Project.IsModPack, 9, 8), Pair.Key)
+                    MyCard.StackInstall(NewStack, If(Project.Type = CompType.ModPack, 9, 8), Pair.Key) 'FUTURE: Res
                 Else
                     NewCard.IsSwaped = True
                 End If
@@ -133,14 +137,15 @@
         End If
 
         '放置当前工程
-        If CfItem IsNot Nothing Then PanIntro.Children.Remove(CfItem)
-        CfItem = Project.ToCfItem(True, True)
-        CfItem.Margin = New Thickness(-7, -7, 0, 8)
-        PanIntro.Children.Insert(0, CfItem)
+        If CompItem IsNot Nothing Then PanIntro.Children.Remove(CompItem)
+        CompItem = Project.ToCompItem(True, True)
+        CompItem.Margin = New Thickness(-7, -7, 0, 8)
+        PanIntro.Children.Insert(0, CompItem)
 
         '决定按钮显示
+        BtnIntroWeb.Text = If(Project.FromCurseForge, "转到 CurseForge", "转到 Modrinth")
         BtnIntroWiki.Visibility = If(Project.WikiId = 0, Visibility.Collapsed, Visibility.Visible)
-        BtnIntroMCBBS.Visibility = If(Project.MCBBS Is Nothing, Visibility.Collapsed, Visibility.Visible)
+        BtnIntroMCBBS.Visibility = If(Project.MCBBS = 0, Visibility.Collapsed, Visibility.Visible)
 
         AniControlEnabled -= 1
     End Sub
@@ -150,11 +155,11 @@
         Try
 
             '获取基本信息
-            Dim File As DlCfFile = sender.Tag
-            Dim LoaderName As String = "CurseForge 整合包下载：" & Project.ChineseName & " "
+            Dim File As CompFile = sender.Tag
+            Dim LoaderName As String = $"{If(Project.FromCurseForge, "CurseForge", "Modrinth")} 整合包下载：{Project.TranslatedName} "
 
             '获取版本名
-            Dim PackName As String = Project.ChineseName.Replace(".zip", "").Replace(".rar", "").Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")
+            Dim PackName As String = Project.TranslatedName.Replace(".zip", "").Replace(".rar", "").Replace(".mrpack", "").Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")
             Dim Validate As New ValidateFolderName(PathMcFolder & "versions")
             If Validate.Validate(PackName) <> "" Then PackName = ""
             Dim VersionName As String = MyMsgBoxInput("输入版本名称", "", PackName, New ObjectModel.Collection(Of Validate) From {Validate})
@@ -162,15 +167,15 @@
 
             '构造步骤加载器
             Dim Loaders As New List(Of LoaderBase)
-            Dim Target As String = PathMcFolder & "versions\" & VersionName & "\原始整合包.zip"
-            Dim LogoFileAddress As String = PathTemp & "CFLogo\" & GetHash(CfItem.Logo) & ".png"
-            Loaders.Add(New LoaderDownload("下载整合包文件", New List(Of NetFile) From {File.GetDownloadFile(Target, True)}) With {.ProgressWeight = 10, .Block = True})
+            Dim Target As String = $"{PathMcFolder}versions\{VersionName}\原始整合包.{If(Project.FromCurseForge, "zip", "mrpack")}"
+            Dim LogoFileAddress As String = PathTemp & "CompLogo\" & GetHash(CompItem.Logo) & ".png"
+            Loaders.Add(New LoaderDownload("下载整合包文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 10, .Block = True})
             Loaders.Add(New LoaderTask(Of Integer, Integer)("准备安装整合包",
-                                                            Sub()
-                                                                If Not ModpackInstall(Target, VersionName, Logo:=If(IO.File.Exists(LogoFileAddress), LogoFileAddress, Nothing)) Then
-                                                                    Throw New Exception("整合包安装出现异常！")
-                                                                End If
-                                                            End Sub) With {.ProgressWeight = 0.1})
+                Sub()
+                    If Not ModpackInstall(Target, VersionName, Logo:=If(IO.File.Exists(LogoFileAddress), LogoFileAddress, Nothing)) Then
+                        Throw New Exception("整合包安装出现异常！")
+                    End If
+                End Sub) With {.ProgressWeight = 0.1})
 
             '启动
             Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged = Sub(MyLoader)
@@ -190,60 +195,54 @@
             FrmMain.BtnExtraDownload.Ribble()
 
         Catch ex As Exception
-            Log(ex, "下载 CurseForge 整合包失败", LogLevel.Feedback)
+            Log(ex, "下载资源整合包失败", LogLevel.Feedback)
         End Try
     End Sub
     'Mod 下载；整合包另存为
     Public Shared CachedFolder As String = Nothing '仅在本次缓存的下载文件夹
     Public Sub Save_Click(sender As Object, e As EventArgs)
-        Dim File As DlCfFile = If(TypeOf sender Is MyListItem, sender, sender.Parent).Tag
+        Dim File As CompFile = If(TypeOf sender Is MyListItem, sender, sender.Parent).Tag
         RunInNewThread(
         Sub()
             Try
-                Dim Desc As String = If(Project.IsModPack, "整合包", "Mod ")
+                Dim Desc As String = If(Project.Type = CompType.ModPack, "整合包", If(Project.Type = CompType.Mod, "Mod ", "资源包"))
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
-                If Not Project.IsModPack Then
+                If Project.Type = CompType.Mod Then
                     '获取 Mod 所需的加载器种类
                     Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing
                     If File.ModLoaders.Count > 0 Then '从文件中获取
-                        AllowForge = False : AllowFabric = False
-                        For Each LoaderType In File.ModLoaders
-                            If LoaderType = "Forge" Then AllowForge = True
-                            If LoaderType = "Fabric" Then AllowFabric = True
-                        Next
+                        AllowForge = File.ModLoaders.Contains(CompModLoaderType.Forge)
+                        AllowFabric = File.ModLoaders.Contains(CompModLoaderType.Fabric)
                     ElseIf Project.ModLoaders.Count > 0 Then '从工程中获取
-                        AllowForge = False : AllowFabric = False
-                        For Each LoaderType In Project.ModLoaders
-                            If LoaderType = "Forge" Then AllowForge = True
-                            If LoaderType = "Fabric" Then AllowFabric = True
-                        Next
+                        AllowForge = Project.ModLoaders.Contains(CompModLoaderType.Forge)
+                        AllowFabric = Project.ModLoaders.Contains(CompModLoaderType.Fabric)
                     End If
                     If AllowForge IsNot Nothing AndAlso Not AllowForge AndAlso
                        AllowFabric IsNot Nothing AndAlso Not AllowFabric Then
                         AllowForge = Nothing : AllowFabric = Nothing
                     End If
-                    Log("[Download] 允许 Forge：" & If(AllowForge, "未知") & "，允许 Fabric：" & If(AllowFabric, "未知"))
+                    Log("[Comp] 允许 Forge：" & If(AllowForge, "未知") & "，允许 Fabric：" & If(AllowFabric, "未知"))
                     '判断某个版本是否符合要求
                     Dim IsVersionSuitable As Func(Of McVersion, Boolean) =
-                            Function(Version)
-                                If Not Version.IsLoaded Then Version.Load()
-                                If Not Version.Modable Then Return False
-                                If File.GameVersion.Any(Function(v) v.Contains(".")) AndAlso
-                                   Not File.GameVersion.Any(Function(v) v.Contains(".") AndAlso v.Split(".")(1) = Version.Version.McCodeMain.ToString) Then Return False
-                                If AllowForge Is Nothing OrElse AllowFabric Is Nothing Then Return True
-                                If AllowForge AndAlso Version.Version.HasForge Then Return True
-                                If AllowFabric AndAlso Version.Version.HasFabric Then Return True
-                                Return False
-                            End Function
+                    Function(Version)
+                        If Not Version.IsLoaded Then Version.Load()
+                        If Not Version.Modable Then Return False
+                        If File.GameVersions.Any(Function(v) v.Contains(".")) AndAlso
+                           Not File.GameVersions.Any(Function(v) v.Contains(".") AndAlso v.Split(".")(1) = Version.Version.McCodeMain.ToString) Then Return False
+                        If AllowForge Is Nothing OrElse AllowFabric Is Nothing Then Return True
+                        If AllowForge AndAlso Version.Version.HasForge Then Return True
+                        If AllowFabric AndAlso Version.Version.HasFabric Then Return True
+                        Return False
+                    End Function
                     '获取 Mod 默认下载位置
                     If CachedFolder IsNot Nothing Then
                         DefaultFolder = CachedFolder
-                        Log("[Download] 使用上次下载时的文件夹作为默认下载位置")
+                        Log("[Comp] 使用上次下载时的文件夹作为默认下载位置")
                     ElseIf McVersionCurrent IsNot Nothing AndAlso IsVersionSuitable(McVersionCurrent) Then
                         DefaultFolder = McVersionCurrent.PathIndie & "mods\"
                         Directory.CreateDirectory(DefaultFolder)
-                        Log("[Download] 使用当前版本的 mods 文件夹作为默认下载位置（" & McVersionCurrent.Name & "）")
+                        Log("[Comp] 使用当前版本的 mods 文件夹作为默认下载位置（" & McVersionCurrent.Name & "）")
                     Else
                         Dim NeedLoad As Boolean = McVersionListLoader.State <> LoadState.Finished
                         If NeedLoad Then
@@ -259,7 +258,7 @@
                             If NeedLoad Then
                                 Hint("当前 MC 文件夹中没有找到适合这个 Mod 的版本！")
                             Else
-                                Log("[Download] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
+                                Log("[Comp] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
                             End If
                         Else '选择 Mod 数量最多的版本
                             Dim SelectedVersion = SuitableVersions.OrderBy(Function(v)
@@ -268,13 +267,13 @@
                                                                            End Function).LastOrDefault()
                             DefaultFolder = SelectedVersion.PathIndie & "mods\"
                             Directory.CreateDirectory(DefaultFolder)
-                            Log("[Download] 使用适合的游戏版本作为默认下载位置（" & SelectedVersion.Name & "）")
+                            Log("[Comp] 使用适合的游戏版本作为默认下载位置（" & SelectedVersion.Name & "）")
                         End If
                     End If
                 End If
                 '获取基本信息
-                Dim ChineseName As String = If(Project.ChineseName = Project.Name, "",
-                        Project.ChineseName.Replace(" (", "Å").Split("Å").First.Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "："))
+                Dim ChineseName As String = If(Project.TranslatedName = Project.RawName, "",
+                    Project.TranslatedName.Replace(" (", "Å").Split("Å").First.Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "："))
                 Dim FileName As String
                 Select Case Setup.Get("ToolDownloadTranslate")
                     Case 0
@@ -290,17 +289,17 @@
                 Sub()
                     '弹窗要求选择保存位置
                     Dim Target As String
-                    If File.FileName.EndsWith(".litemod") Then
-                        Target = SelectAs("选择保存位置", FileName, Desc & "文件|" & If(Project.IsModPack, "*.zip", "*.litemod"), DefaultFolder)
-                    Else
-                        Target = SelectAs("选择保存位置", FileName, Desc & "文件|" & If(Project.IsModPack, "*.zip", "*.jar"), DefaultFolder)
-                    End If
+                    Target = SelectAs("选择保存位置", FileName,
+                                      Desc & "文件|" &
+                                      If(Project.Type = CompType.Mod,
+                                          If(File.FileName.EndsWith(".litemod"), "*.litemod", "*.jar"),
+                                          If(File.FileName.EndsWith(".mrpack"), "*.mrpack", "*.zip")), DefaultFolder)
                     If Not Target.Contains("\") Then Exit Sub
                     '构造步骤加载器
                     Dim LoaderName As String = Desc & "下载：" & File.DisplayName & " "
-                    If Target <> DefaultFolder AndAlso Not Project.IsModPack Then CachedFolder = GetPathFromFullPath(Target)
+                    If Target <> DefaultFolder AndAlso Project.Type = CompType.Mod Then CachedFolder = GetPathFromFullPath(Target)
                     Dim Loaders As New List(Of LoaderBase)
-                    Loaders.Add(New LoaderDownload("下载文件", New List(Of NetFile) From {File.GetDownloadFile(Target, True)}) With {.ProgressWeight = 6, .Block = True})
+                    Loaders.Add(New LoaderDownload("下载文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 6, .Block = True})
                     '启动
                     Dim Loader As New LoaderCombo(Of Integer)(LoaderName, Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
                     Loader.Start(1)
@@ -309,12 +308,12 @@
                     FrmMain.BtnExtraDownload.Ribble()
                 End Sub)
             Catch ex As Exception
-                Log(ex, "保存 CurseForge 文件失败", LogLevel.Feedback)
+                Log(ex, "保存资源文件失败", LogLevel.Feedback)
             End Try
-        End Sub, "Download CFDetail Save")
+        End Sub, "Download CompDetail Save")
     End Sub
 
-    Private Sub BtnIntroCf_Click(sender As Object, e As EventArgs) Handles BtnIntroCf.Click
+    Private Sub BtnIntroWeb_Click(sender As Object, e As EventArgs) Handles BtnIntroWeb.Click
         OpenWebsite(Project.Website)
     End Sub
     Private Sub BtnIntroWiki_Click(sender As Object, e As EventArgs) Handles BtnIntroWiki.Click
@@ -324,7 +323,7 @@
         OpenWebsite("https://www.mcbbs.net/thread-" & Project.MCBBS & "-1-1.html")
     End Sub
     Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
-        ClipboardSet(CfItem.LabTitle.Text)
+        ClipboardSet(CompItem.LabTitle.Text)
     End Sub
 
 End Class

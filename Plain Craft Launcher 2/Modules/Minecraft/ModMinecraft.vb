@@ -220,7 +220,7 @@ Public Module ModMinecraft
                 PathInEnv = PathInEnv.Trim(" """.ToCharArray())
                 If Not PathInEnv.EndsWith("\") Then PathInEnv += "\"
                 '粗略检查有效性
-                If File.Exists(PathInEnv & "javaw.exe") Then DictionaryAdd(JavaPreList, PathInEnv, False)
+                If File.Exists(PathInEnv & "javaw.exe") Then JavaPreList(PathInEnv) = False
             Next
             '查找磁盘中的 Java
             For Each Disk As DriveInfo In DriveInfo.GetDrives()
@@ -272,7 +272,7 @@ Public Module ModMinecraft
             Try
                 For Each JavaJsonObject In GetJson(ImportedJava)
                     Dim Entry = JavaEntry.FromJson(JavaJsonObject)
-                    If Entry.IsUserImport Then DictionaryAdd(JavaPreList, Entry.PathFolder, True)
+                    If Entry.IsUserImport Then JavaPreList(Entry.PathFolder) = True
                 Next
             Catch ex As Exception
                 Log(ex, "Java 列表已损坏", LogLevel.Feedback)
@@ -283,10 +283,7 @@ Public Module ModMinecraft
 
             '确保可用并获取详细信息，转入正式列表
             Dim NewJavaList As New List(Of JavaEntry)
-            For Each Entry In ArrayNoDouble(JavaPreList.ToList,
-                                            Function(a As KeyValuePair(Of String, Boolean), b As KeyValuePair(Of String, Boolean))
-                                                Return a.Key.ToLower = b.Key.ToLower '#794
-                                            End Function)
+            For Each Entry In Distinct(JavaPreList.ToList, Function(a, b) a.Key.ToLower = b.Key.ToLower) '#794
                 NewJavaList.Add(New JavaEntry(Entry.Key, Entry.Value))
             Next
             NewJavaList = Sort(JavaCheckList(NewJavaList), AddressOf JavaSorter)
@@ -373,7 +370,7 @@ Wait:
             Dim Path As String = OriginalPath.FullName.Replace("\\", "\")
             If Not Path.EndsWith("\") Then Path += "\"
             '若该目录有 Java，则加入结果
-            If File.Exists(Path & "javaw.exe") Then DictionaryAdd(Results, Path, Source)
+            If File.Exists(Path & "javaw.exe") Then Results(Path) = Source
             '查找其下的所有文件夹
             For Each FolderInfo As DirectoryInfo In OriginalPath.EnumerateDirectories
                 If FolderInfo.Attributes.HasFlag(FileAttributes.ReparsePoint) Then Continue For '跳过符号链接
@@ -473,7 +470,7 @@ RetryGet:
             Dim UserJava As JavaEntry = Nothing
 
             '获取版本独立设置中指定的 Java
-            If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion) <> "使用全局设置" Then
+            If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion).ToString.StartsWith("{") Then
                 Try
                     UserJava = JavaEntry.FromJson(GetJson(Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)))
                     '确保版本独立设置中指定的 Java 在 Java 列表中（#978）
@@ -533,6 +530,7 @@ RetryGet:
             Else
                 Select Case MyMsgBox("你在设置中手动指定了使用 Java " & JavaCurrent & "，但当前" & Requirement & "。" & vbCrLf &
                             "如果强制使用该 Java，可能会导致出现异常。" & vbCrLf &
+                            "你可以将 游戏 Java 设置修改为 自动选择合适的 Java 来避免这一提示。" & vbCrLf &
                             vbCrLf &
                             " - 指定的 Java：" & UserJava.ToString,
                             "Java 兼容性警告", "让 PCL2 自动选择", "强制使用该 Java", "取消")
@@ -853,7 +851,7 @@ NoUserJava:
             _McVersionLast = value
             If value Is Nothing Then Exit Property
             '重置缓存的 Mod 文件夹
-            PageDownloadCfDetail.CachedFolder = Nothing
+            PageDownloadCompDetail.CachedFolder = Nothing
             '统一通行证重判
             If AniControlEnabled = 0 AndAlso
                Setup.Get("VersionServerNide", Version:=value) <> Setup.Get("CacheNideServer") AndAlso
@@ -2644,12 +2642,10 @@ NextVersion:
                 '普通文件
                 Urls.AddRange(DlSourceLibraryGet("https://libraries.minecraft.net" & Token.LocalPath.Replace(If(Token.IsJumpLoader, JumpLoaderFolder, CustomMcFolder) & "libraries", "").Replace("\", "/")))
             End If
-            Result.Add(New NetFile(ArrayNoDouble(Urls.ToArray()), Token.LocalPath, Checker))
+            Result.Add(New NetFile(Urls.Distinct.ToArray, Token.LocalPath, Checker))
         Next
         '去重并返回
-        Return ArrayNoDouble(Result, Function(Left As NetFile, Right As NetFile)
-                                         Return Left.LocalPath = Right.LocalPath
-                                     End Function)
+        Return Distinct(Result, Function(a, b) a.LocalPath = b.LocalPath)
     End Function
     ''' <summary>
     ''' 获取对应的支持库文件地址。
@@ -3268,7 +3264,7 @@ NextVersion:
                             '不知道是个啥玩意儿，直接存储
                             Value = RawValue
                         End If
-                        DictionaryAdd(TomlData.Last.Value, Key, Value)
+                        TomlData.Last.Value(Key) = Value
                     Else
                         '不知道是个啥玩意儿
                         Exit Try
