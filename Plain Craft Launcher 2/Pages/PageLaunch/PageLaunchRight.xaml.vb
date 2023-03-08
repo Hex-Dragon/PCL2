@@ -58,7 +58,7 @@
                                            LatestFileLink = Link
                                            LatestFileContent = FileContent
                                        Catch ex As Exception
-                                           Log(ex, "获取 PCL2 主页自定义信息失败", LogLevel.Msgbox)
+                                           Log(ex, "获取 PCL 主页自定义信息失败", LogLevel.Msgbox)
                                            LatestFileLink = ""
                                        End Try
                                End Select
@@ -85,7 +85,7 @@
                                        End Sub)
                            End Sub, "主页自定义刷新")
         Catch ex As Exception
-            Log(ex, "加载 PCL2 主页自定义信息失败", LogLevel.Msgbox)
+            Log(ex, "加载 PCL 主页自定义信息失败", LogLevel.Msgbox)
             IsRefreshing = False
         End Try
     End Sub

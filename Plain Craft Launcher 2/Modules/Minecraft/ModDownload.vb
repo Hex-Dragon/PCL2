@@ -13,7 +13,7 @@
         Loop
         '检查 Json 是否标准
         If Version.JsonObject("downloads") Is Nothing OrElse Version.JsonObject("downloads")("client") Is Nothing OrElse Version.JsonObject("downloads")("client")("url") Is Nothing Then
-            Throw New Exception("底层版本 " & Version.Name & " 中无 Jar 文件下载信息")
+            Throw New Exception("底层版本 " & Version.Name & " 中无 jar 文件下载信息")
         End If
         '检查文件
         Dim Checker As New FileChecker(MinSize:=1024, ActualSize:=If(Version.JsonObject("downloads")("client")("size"), -1), Hash:=Version.JsonObject("downloads")("client")("sha1"))
@@ -211,7 +211,7 @@
         Try
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
-            '添加 PCL2 特供项
+            '添加 PCL 特供项
             If File.Exists(PathTemp & "Cache\download.json") Then Versions.Merge(GetJson(ReadFile(PathTemp & "Cache\download.json")))
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = True, .SourceName = "Mojang 官方源", .Value = Json}
@@ -244,7 +244,7 @@
         Try
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
-            '添加 PCL2 特供项
+            '添加 PCL 特供项
             If File.Exists(PathTemp & "Cache\download.json") Then Versions.Merge(GetJson(ReadFile(PathTemp & "Cache\download.json")))
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Json}
@@ -274,10 +274,10 @@
                     Return Version("url").ToString
                 End If
             Next
-            Log("未发现版本 " & Id & " 的 Json 下载地址，版本列表返回为：" & vbCrLf & DlClientListLoader.Output.Value.ToString, LogLevel.Debug)
+            Log("未发现版本 " & Id & " 的 json 下载地址，版本列表返回为：" & vbCrLf & DlClientListLoader.Output.Value.ToString, LogLevel.Debug)
             Return Nothing
         Catch ex As Exception
-            Log(ex, "获取版本 " & Id & " 的 Json 下载地址失败")
+            Log(ex, "获取版本 " & Id & " 的 json 下载地址失败")
             Return Nothing
         End Try
     End Function
@@ -977,7 +977,7 @@
     End Function
 
     Public Function DlSourceLauncherOrMetaGet(MojangBase As String, Optional IsStatic As Boolean = True) As String()
-        If MojangBase Is Nothing Then Throw New Exception("无对应的 Json 下载地址")
+        If MojangBase Is Nothing Then Throw New Exception("无对应的 json 下载地址")
         If IsStatic Then
             Return {MojangBase.Replace("https://launcher.mojang.com", "https://download.mcbbs.net").Replace("https://launchermeta.mojang.com", "https://download.mcbbs.net"),
                     MojangBase,

@@ -10,12 +10,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.5.0" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.5.0." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.5.1" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.5.1." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 281 'Release
 #Else
-    Public Const VersionCode As Integer = 283 'Snapshot
+    Public Const VersionCode As Integer = 284 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -778,14 +778,10 @@ Public Module ModBase
             If Not ToPath.Contains(":\") Then ToPath = Path & ToPath
             '如果复制同一个文件则跳过
             If FromPath = ToPath Then Exit Sub
-            '读取文件内容
-            Dim FileBytes As Byte()
-            Using ReadStream As New FileStream(FromPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite) '支持读取使用中的文件
-                ReDim FileBytes(ReadStream.Length - 1)
-                ReadStream.Read(FileBytes, 0, ReadStream.Length)
-            End Using
-            '写入文件内容
-            WriteFile(ToPath, FileBytes)
+            '确保目录存在
+            Directory.CreateDirectory(GetPathFromFullPath(ToPath))
+            '复制文件
+            File.Copy(FromPath, ToPath, True)
         Catch ex As Exception
             Throw New Exception("复制文件出错：" & FromPath & " -> " & ToPath, ex)
         End Try
@@ -1222,7 +1218,7 @@ Re:
                     Try
                         GetJson(Content)
                     Catch ex As Exception
-                        Throw New Exception("不是有效的 Json 文件", ex)
+                        Throw New Exception("不是有效的 json 文件", ex)
                     End Try
                 End If
                 Return Nothing
@@ -1355,14 +1351,14 @@ Re:
         Dim Desc As String = Join(DescList, vbCrLf & "→ ")
         Dim Stack As String = If(StackList.Count > 0, vbCrLf & Join(StackList, vbCrLf), "")
 
-        '常见错误
+        '常见错误（记得同时修改下面的）
         Dim CommonReason As String = Nothing
         If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
-            CommonReason = "PCL2 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。"
+            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。"
         ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
-            CommonReason = "PCL2 的权限不足。请尝试右键 PCL2，选择以管理员身份运行。"
+            CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
-            CommonReason = "你的电脑运行内存不足，导致 PCL2 无法继续运行。请在关闭一部分不需要的程序后再试。"
+            CommonReason = "你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。"
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
                 "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
             CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
@@ -1399,18 +1395,19 @@ Re:
             Ex = Ex.InnerException
         Loop
         DescList = DescList.Distinct.ToList
-
-        '常见错误
         Dim Desc As String = Join(DescList, vbCrLf & "→ ")
+
+        '常见错误（记得同时修改上面的）
         Dim CommonReason As String = Nothing
         If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
-            CommonReason = "PCL2 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。"
+            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。"
         ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
-            CommonReason = "PCL2 的权限不足。请尝试右键 PCL2，选择以管理员身份运行。"
+            CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
-            CommonReason = "你的电脑运行内存不足，导致 PCL2 无法继续运行。请在关闭一部分不需要的程序后再试。"
-        ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
-            CommonReason = "你的网络环境不佳，导致难以连接到服务器。请重试，或尝试使用 VPN。"
+            CommonReason = "你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。"
+        ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
+                "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
+            CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
         End If
 
         '构造输出信息
@@ -1459,7 +1456,7 @@ Re:
         Try
             Return JsonConvert.DeserializeObject(Data, New JsonSerializerSettings With {.DateTimeZoneHandling = DateTimeZoneHandling.Local})
         Catch ex As Exception
-            Throw New Exception("格式化 Json 对象失败：" & If(If(Data, "").Length > 10000, Data.Substring(0, 100) & "...", Data))
+            Throw New Exception("格式化 json 对象失败：" & If(If(Data, "").Length > 10000, Data.Substring(0, 100) & "...", Data))
         End Try
     End Function
 
@@ -2042,7 +2039,8 @@ NextElement:
         Catch ex As Exception
             Log(ex, "无法打开网页（" & Url & "）")
             ClipboardSet(Url, False)
-            MyMsgBox("可能由于浏览器未正确配置，PCL2 无法为你打开网页。" & vbCrLf & "网址已经复制到剪贴板，若有需要可以手动粘贴访问。", "无法打开网页")
+            MyMsgBox("可能由于浏览器未正确配置，PCL 无法为你打开网页。" & vbCrLf & "网址已经复制到剪贴板，若有需要可以手动粘贴访问。" & vbCrLf &
+                     $"网址：{Url}", "无法打开网页")
         End Try
     End Sub
     ''' <summary>
@@ -2299,7 +2297,7 @@ Retry:
                                File.Create(Path & "PCL\Log1.txt").Dispose()
                            Catch ex As IOException
                                IsInitSuccess = False
-                               Hint("可能同时开启了多个 PCL2，程序可能会出现未知问题！", HintType.Critical)
+                               Hint("可能同时开启了多个 PCL，程序可能会出现未知问题！", HintType.Critical)
                                Log(ex, "日志初始化失败（疑似文件占用问题）")
                            Catch ex As Exception
                                IsInitSuccess = False
@@ -2386,14 +2384,14 @@ Retry:
                 If CanFeedback(False) Then
                     If MyMsgBox(Text & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", Title, "反馈", "取消", IsWarn:=True) = 1 Then Feedback(False, True)
                 Else
-                    MyMsgBox(Text & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", Title, IsWarn:=True)
+                    MyMsgBox(Text & vbCrLf & vbCrLf & "将 PCL 更新至最新版或许可以解决这个问题……", Title, IsWarn:=True)
                 End If
             Case LogLevel.Assert
                 Dim Time As Long = GetTimeTick()
                 If CanFeedback(False) Then
                     If MsgBox(Text & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback(False, True)
                 Else
-                    MsgBox(Text & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", MsgBoxStyle.Critical, Title)
+                    MsgBox(Text & vbCrLf & vbCrLf & "将 PCL 更新至最新版或许可以解决这个问题……", MsgBoxStyle.Critical, Title)
                 End If
                 If GetTimeTick() - Time < 1500 Then
                     '弹窗无法保留
@@ -2455,14 +2453,14 @@ Retry:
                 If CanFeedback(False) Then
                     If MyMsgBox(ExFull & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", Title, "反馈", "取消", IsWarn:=True) = 1 Then Feedback(False, True)
                 Else
-                    MyMsgBox(ExFull & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", Title, IsWarn:=True)
+                    MyMsgBox(ExFull & vbCrLf & vbCrLf & "将 PCL 更新至最新版或许可以解决这个问题……", Title, IsWarn:=True)
                 End If
             Case LogLevel.Assert
                 Dim Time As Long = GetTimeTick()
                 If CanFeedback(False) Then
                     If MsgBox(ExFull & vbCrLf & vbCrLf & "是否反馈此问题？如果不反馈，这个问题可能永远无法得到解决！", MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback(False, True)
                 Else
-                    MsgBox(ExFull & vbCrLf & vbCrLf & "将 PCL2 更新至最新版或许可以解决这个问题……", MsgBoxStyle.Critical, Title)
+                    MsgBox(ExFull & vbCrLf & vbCrLf & "将 PCL 更新至最新版或许可以解决这个问题……", MsgBoxStyle.Critical, Title)
                 End If
                 If GetTimeTick() - Time < 1500 Then
                     '弹窗无法保留
@@ -2486,7 +2484,7 @@ Retry:
     End Sub
     Public Function CanFeedback(ShowHint As Boolean) As Boolean
         If False.Equals(PageSetupSystem.IsLauncherNewest) Then
-            If ShowHint Then MyMsgBox("你的 PCL2 不是最新版，因此无法提交反馈。" & vbCrLf & "请先在 设置 → 启动器 中更新启动器，确认该问题在最新版中依然存在，然后再提交反馈。", "无法提交反馈")
+            If ShowHint Then MyMsgBox("你的 PCL 不是最新版，因此无法提交反馈。" & vbCrLf & "请先在 设置 → 启动器 中更新启动器，确认该问题在最新版中依然存在，然后再提交反馈。", "无法提交反馈")
             Return False
         Else
             Return True

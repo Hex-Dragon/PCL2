@@ -60,7 +60,7 @@
                     Log(ex, "打开整合包文件失败", If(ShowHint, LogLevel.Hint, LogLevel.Normal))
                     Return False
                 ElseIf File.ToLower.EndsWith(".rar") Then
-                    Log(ex, "PCL2 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试", If(ShowHint, LogLevel.Hint, LogLevel.Normal))
+                    Log(ex, "PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试", If(ShowHint, LogLevel.Hint, LogLevel.Normal))
                     Return False
                 Else
                     Log(ex, "打开整合包文件失败，文件可能损坏或为不支持的压缩包格式", If(ShowHint, LogLevel.Hint, LogLevel.Normal))
@@ -263,8 +263,10 @@ Retry:
                         IsResourcePack = False
                     End If
                     '实际的添加
-                    FileList.Add(ModJson("id"), New CompFile(ModJson, CompType.Mod).ToNetFile(
-                                 PathMcFolder & "versions\" & VersionName & "\" & If(IsResourcePack, "resourcepacks", "mods") & "\"))
+                    Dim File As New CompFile(ModJson, CompType.Mod)
+                    If Not File.Available Then Continue For
+                    FileList.Add(ModJson("id"),
+                                 File.ToNetFile($"{PathMcFolder}versions\{VersionName}\{If(IsResourcePack, "resourcepacks", "mods")}\"))
                     Task.Progress += 1 / (1 + ModFileList.Count)
                 Next
                 Task.Output = FileList.Values.ToList
@@ -358,7 +360,7 @@ Retry:
             Select Case Entry.Name.ToLower
                 Case "minecraft"
                     MinecraftVersion = Entry.Value.ToString
-                Case "forge" 'eg. 14.23.5.2859
+                Case "forge" 'eg. 14.23.5.2859 / 1.19-41.1.0
                     ForgeVersion = Entry.Value.ToString
                     Log("[ModPack] 整合包 Forge 版本：" & ForgeVersion)
                 Case "fabric-loader" 'eg. 0.14.14

@@ -225,7 +225,7 @@
                 RawName = Data("name")
                 Description = Data("summary")
                 Website = Data("links")("websiteUrl").ToString.TrimEnd("/")
-                LastUpdate = Data("dateModified")
+                LastUpdate = Data("dateReleased") '#1194
                 DownloadCount = Data("downloadCount")
                 'Logo
                 If Data("logo").Count > 0 Then
@@ -302,6 +302,7 @@
                 ModLoaders = New List(Of CompModLoaderType)
                 For Each File In If(Data("latestFiles"), {})
                     Dim NewFile As New CompFile(File, Type)
+                    If Not NewFile.Available Then Continue For
                     ModLoaders.AddRange(NewFile.ModLoaders)
                 Next
                 ModLoaders = ModLoaders.Distinct.OrderBy(Of Integer)(Function(t) t).ToList
@@ -414,9 +415,9 @@
             Dim NewItem As New MyCompItem With {.Tag = Me}
             NewItem.LabTitle.Text = TranslatedName
             NewItem.LabInfo.Text = Description.Replace(vbCr, "").Replace(vbLf, "")
-            NewItem.LabLeft.Text = If(ModeDebug, If(FromCurseForge, "[CurseForge] ", "[Modrinth] "), "") &
-                                   (If(ModLoaders.Count > 0 AndAlso ShowLoaderDesc, "[" & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & "] ", "") &
+            NewItem.LabLeft.Text = (If(ModLoaders.Count > 0 AndAlso ShowLoaderDesc, "[" & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & "] ", "") &
                                    If(ShowMcVersionDesc, GameVersionDescription, "")).Replace("] [", " ") &
+                                   If(FromCurseForge, "[CurseForge] ", "[Modrinth] ") &
                                    Join(Tags, "，") &
                                    If(LastUpdate IsNot Nothing, " (" & GetTimeSpanString(LastUpdate - Date.Now) & "更新）", "")
             If LogoUrl Is Nothing Then
@@ -439,6 +440,7 @@
         ''' 检查是否与某个 Project 是相同的工程，只是在不同的网站。
         ''' </summary>
         Public Function IsLike(Project As CompProject) As Boolean
+            If Id = Project.Id Then Return True '相同实例
             '提取字符串中的字母和数字
             Dim GetRaw =
                 Function(Data As String) As String
@@ -448,12 +450,17 @@
                     Next
                     Return Result.ToString.ToLower
                 End Function
-            '具体的检查
-            '精准匹配：相同实例 或 MCMOD 指定的相同内容
-            '模糊匹配：支持的 Mod 加载器一致，且 (原名、描述文本或 Slug 的英文部分相同)
-            If Id = Project.Id OrElse TranslatedName = Project.TranslatedName OrElse '精准匹配
-               ((RawName = Project.RawName OrElse Description = Project.Description OrElse GetRaw(Slug) = GetRaw(Project.Slug)) AndAlso
-               ModLoaders.Count = Project.ModLoaders.Count AndAlso ModLoaders.Except(Project.ModLoaders).Count = 0) Then '模糊匹配
+            '来自不同的网站
+            If FromCurseForge = Project.FromCurseForge Then Return False
+            'Mod 加载器一致
+            If ModLoaders.Count <> Project.ModLoaders.Count OrElse ModLoaders.Except(Project.ModLoaders).Count > 0 Then Return False
+            'MC 版本一致
+            If GameVersions.Count <> Project.GameVersions.Count OrElse GameVersions.Except(Project.GameVersions).Count > 0 Then Return False
+            'MCMOD 翻译名 / 原名 / 描述文本 / Slug 的英文部分相同
+            If TranslatedName = Project.TranslatedName OrElse
+               RawName = Project.RawName OrElse Description = Project.Description OrElse
+               GetRaw(Slug) = GetRaw(Project.Slug) Then
+                Log($"[Comp] 将 {RawName} ({Slug}) 与 {Project.RawName} ({Project.Slug}) 认定为相似工程")
                 '如果只有一个有 DatabaseEntry，设置给另外一个
                 If DatabaseEntry Is Nothing AndAlso Project.DatabaseEntry IsNot Nothing Then DatabaseEntry = Project.DatabaseEntry
                 If DatabaseEntry IsNot Nothing AndAlso Project.DatabaseEntry Is Nothing Then Project.DatabaseEntry = DatabaseEntry
@@ -809,8 +816,9 @@ Retry:
 
 #Region "提取非重复项，存储于 RealResults"
 
-        '将 CurseForge 排在 Modrinth 的前面，避免加载结束顺序不同导致排名不同
-        RawResults = RawResults.Where(Function(x) x.FromCurseForge).Concat(RawResults.Where(Function(x) Not x.FromCurseForge)).ToList
+        '将 Modrinth 排在 CurseForge 的前面，避免加载结束顺序不同导致排名不同
+        '这样做的话，去重后将优先保留 CurseForge 内容（考虑到 CurseForge 热度更高）
+        RawResults = RawResults.Where(Function(x) Not x.FromCurseForge).Concat(RawResults.Where(Function(x) x.FromCurseForge)).ToList
         'RawResults 去重
         RawResults = Distinct(RawResults, Function(a, b) a.IsLike(b))
         '已有内容去重
@@ -939,11 +947,18 @@ Retry:
         End Property
 
         '下载信息
-
+        ''' <summary>
+        ''' 下载信息是否可用。
+        ''' </summary>
+        Public ReadOnly Property Available As Boolean
+            Get
+                Return FileName IsNot Nothing
+            End Get
+        End Property
         ''' <summary>
         ''' 下载的文件名。
         ''' </summary>
-        Public ReadOnly FileName As String
+        Public ReadOnly FileName As String = Nothing
         ''' <summary>
         ''' 文件所有可能的下载源。
         ''' </summary>
@@ -1022,8 +1037,11 @@ Retry:
                 ReleaseDate = Data("date_published")
                 Status = If(Data("version_type").ToString = "release", CompFileStatus.Release, If(Data("version_type").ToString = "beta", CompFileStatus.Beta, CompFileStatus.Alpha))
                 DownloadCount = Data("downloads")
-                FileName = Data("files")(0)("filename")
-                DownloadAddress = {Data("files")(0)("url").ToString.Replace(FileName, Net.WebUtility.UrlEncode(FileName))}
+                '可能为空
+                If CType(Data("files"), JArray).Count > 0 Then
+                    FileName = Data("files")(0)("filename")
+                    DownloadAddress = {Data("files")(0)("url").ToString.Replace(FileName, Net.WebUtility.UrlEncode(FileName))}
+                End If
                 'Dependencies
                 If Type = CompType.Mod Then
                     RawDependencies = Data("dependencies").
@@ -1058,15 +1076,15 @@ Retry:
         ''' <summary>
         ''' 将当前文件信息实例化为控件。
         ''' </summary>
-        Public Function ToListItem(OnClick As MyListItem.ClickEventHandler, Optional OnSaveClick As MyIconButton.ClickEventHandler = Nothing) As MyListItem
+        Public Function ToListItem(OnClick As MyListItem.ClickEventHandler, Optional OnSaveClick As MyIconButton.ClickEventHandler = Nothing,
+                                   Optional BadDisplayName As Boolean = False) As MyListItem
 
             '获取描述信息
             Dim Info As String = ""
             Select Case Type
                 Case CompType.Mod
-                    Info += If(ModLoaders.Count > 0, Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/"), "") &
-                            If(GameVersions.Count > 1 AndAlso GameVersions.Count < 10, If(ModLoaders.Count > 0, " ", "") & Join(GameVersions, "、").Replace("-snapshot", " 快照"), "")
-                    If Info <> "" Then Info = "适用于 " & Info & "，"
+                    Info += If(ModLoaders.Count > 0,
+                        "适用于 " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & "，", "")
                     Info += If(ModeDebug AndAlso Dependencies.Count > 0, Dependencies.Count & " 个前置 Mod，", "")
                 Case CompType.ModPack
                     If GameVersions.All(Function(v) v.Contains("w")) Then
@@ -1081,7 +1099,8 @@ Retry:
 
             '建立控件
             Dim NewItem As New MyListItem With {
-                .Title = DisplayName, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Me,
+                .Title = If(BadDisplayName, FileName, DisplayName),
+                .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Me,
                 .Info = Info
             }
             Select Case Status
@@ -1153,7 +1172,8 @@ Retry:
             'Modrinth
             ResultJsonArray = NetGetCodeByRequestRetry($"https://api.modrinth.com/v2/project/{ProjectId}/version", Accept:="application/json", IsJson:=True)
         End If
-        CompFilesCache(ProjectId) = ResultJsonArray.Select(Function(a) New CompFile(a, TargetProject.Type)).ToList
+        CompFilesCache(ProjectId) = Distinct(ResultJsonArray.Select(Function(a) New CompFile(a, TargetProject.Type)).
+            Where(Function(a) a.Available).ToList, Function(a, b) a.Id = b.Id) 'CurseForge 可能会重复返回相同项（#1330）
         '获取前置 Mod 列表
         If TargetProject.Type <> CompType.Mod Then Return CompFilesCache(ProjectId)
         Dim Deps As List(Of String) = CompFilesCache(ProjectId).

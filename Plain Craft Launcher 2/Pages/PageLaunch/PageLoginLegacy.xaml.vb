@@ -1,4 +1,6 @@
-﻿Public Class PageLoginLegacy
+﻿Imports System.Windows.Forms
+
+Public Class PageLoginLegacy
 
     Public Sub New()
         InitializeComponent()
@@ -49,9 +51,17 @@
     End Function
 
     Private Sub ComboLegacy_TextChanged(sender As Object, e As TextChangedEventArgs) Handles ComboName.TextChanged
+        If ComboName.Text.EndsWith(" ") Then
+            ComboName.Text = ComboName.Text.Trim()
+            SendKeys.SendWait("{END}")
+        ElseIf ComboName.Text.StartsWith(" ") Then
+            ComboName.Text = ComboName.Text.Trim()
+            SendKeys.SendWait("{HOME}")
+        End If
         If Setup.Get("LaunchSkinType") = 0 Then
             PageLaunchLeft.SkinLegacy.Start(IsForceRestart:=True)
         End If
+        HintChinese.Visibility = If(RegexCheck(ComboName.Text, "^[0-9A-Za-z_]*$"), Visibility.Collapsed, Visibility.Visible)
     End Sub
     Private Sub Skin_Click() Handles Skin.Click
         If (Setup.Get("UiHiddenPageSetup") OrElse Setup.Get("UiHiddenSetupLaunch")) AndAlso Not PageSetupUI.HiddenForceShow Then

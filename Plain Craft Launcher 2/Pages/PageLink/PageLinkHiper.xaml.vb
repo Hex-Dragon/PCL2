@@ -98,7 +98,7 @@
         '检查协议
         If Not Setup.Get("LinkEula") Then
 Reopen:
-            Select Case MyMsgBox("PCL2 的联机服务由速聚授权提供。" & vbCrLf & "在使用前，你需要同意速聚的用户服务协议和隐私政策。", "协议授权", "同意", "拒绝", "查看用户服务协议和隐私政策")
+            Select Case MyMsgBox("PCL 的联机服务由速聚授权提供。" & vbCrLf & "在使用前，你需要同意速聚的用户服务协议和隐私政策。", "协议授权", "同意", "拒绝", "查看用户服务协议和隐私政策")
                 Case 1
                     Setup.Set("LinkEula", True)
                 Case 2
@@ -124,7 +124,7 @@ Reopen:
         End If
         '没有联网
         If IpCheckStatus = LoadState.Failed AndAlso PingTime = -1 Then
-            Throw New Exception("$PCL2 没法连上网……" & vbCrLf & "如果你改变了网络环境，请重启 PCL2。")
+            Throw New Exception("$PCL 没法连上网……" & vbCrLf & "如果你改变了网络环境，请重启 PCL。")
         End If
     End Sub
 
@@ -387,6 +387,7 @@ FinishMcbFileCheck:
     ''' 若程序正在运行，则结束程序进程，同时初始化状态数据。返回是否关闭了相关进程。
     ''' </summary>
     Public Shared Function HiperStop(SleepWhenKilled As Boolean) As Boolean
+        Return False
         HiperStop = False
         '修改凭证
         Dim ConfigContent As String = ReadFile(PathHiper & "config.yml")
@@ -484,7 +485,7 @@ FinishMcbFileCheck:
                         .FileName = PathHiper & "MCB 联机模块.exe", .WorkingDirectory = PathHiper,
                         .UseShellExecute = False, .CreateNoWindow = True,
                         .RedirectStandardError = True, .RedirectStandardOutput = True,
-                        .Arguments = "-addr " & HostIp & ":" & HostPort & " -motd ""PCL2 联机房间"""
+                        .Arguments = "-addr " & HostIp & ":" & HostPort & " -motd ""PCL 联机房间"""
                     }
                     Dim McbProcess As New Process() With {.StartInfo = McbInfo}
                     McbProcess.Start()
@@ -754,7 +755,7 @@ FinishMcbFileCheck:
         '        Exit Sub
         'WrongCode:
         '        If Not Code.StartsWith("P") AndAlso Code.Length >= 49 Then Hint("你输入的可能是 IOI 的联机码，请在左侧的联机方式中选择 IOI！", HintType.Critical) : Exit Sub
-        '        If Code.StartsWith("P") AndAlso Not Code.EndsWith(RequestVersion) Then Hint("你的 PCL2 版本与房主的 PCL2 版本不一致！", HintType.Critical) : Exit Sub
+        '        If Code.StartsWith("P") AndAlso Not Code.EndsWith(RequestVersion) Then Hint("你的 PCL 版本与房主的 PCL 版本不一致！", HintType.Critical) : Exit Sub
         '        Hint("你输入的联机码无效！", HintType.Critical)
     End Sub
     Private Sub RoomJoin(Ip As String, Port As Integer)

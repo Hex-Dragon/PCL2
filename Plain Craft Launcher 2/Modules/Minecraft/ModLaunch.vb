@@ -181,12 +181,6 @@ NextInner:
         RunInUiWait(Sub()
                         Dim LoginInput As McLoginData = McLoginInput()
                         CheckResult = McLoginAble(LoginInput)
-                        If CheckResult = "" AndAlso
-                            LoginInput.Type = McLoginType.Legacy AndAlso '离线登录
-                            Not RegexCheck(CType(LoginInput, McLoginLegacy).UserName, "^[0-9A-Za-z_]+$") AndAlso
-                            McVersionCurrent.Version.McCodeMain >= 18 Then 'MC 1.18 以上
-                            CheckResult = "玩家名只能由数字、英文和下划线组成，不能包含中文或特殊字符！"
-                        End If
                     End Sub)
         If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
         '求赞助
@@ -194,8 +188,8 @@ NextInner:
         RunInNewThread(Sub()
                            Select Case Setup.Get("SystemLaunchCount")
                                Case 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000
-                                   If MyMsgBox("PCL2 已经为你启动了 " & Setup.Get("SystemLaunchCount") & " 次游戏啦！" & vbCrLf &
-                                               "如果觉得 PCL2 还算好用的话，也可以考虑小小地赞助一下作者呢 qwq……" & vbCrLf &
+                                   If MyMsgBox("PCL 已经为你启动了 " & Setup.Get("SystemLaunchCount") & " 次游戏啦！" & vbCrLf &
+                                               "如果觉得 PCL 还算好用的话，也可以考虑小小地赞助一下作者呢 qwq……" & vbCrLf &
                                                "毕竟一个人开发也不容易（小声）……",
                                                "求赞助啦……", "这就赞助！", "但是我拒绝") = 1 Then
                                        OpenWebsite("https://afdian.net/a/LTCat/plan")
@@ -928,7 +922,7 @@ SystemBrowser:
         Try
             Result = NetRequestMuity("https://login.live.com/oauth20_token.srf", "POST", Request, "application/x-www-form-urlencoded", 1)
         Catch ex As Exception
-            If ex.Message.Contains("must sign in again") OrElse ex.Message.Contains("invalid_grant") Then 'Fix Hex-Dragon/PCL2#269
+            If ex.Message.Contains("must sign in again") OrElse ex.Message.Contains("invalid_grant") Then '#269
                 Return {"Relogin", ""}
             Else
                 Throw
@@ -988,11 +982,11 @@ SystemBrowser:
                             "该账号目前填写的年龄是否在 13 岁以上？", "登录提示", "13 岁以上", "12 岁以下", "我不知道") = 1 Then
                     OpenWebsite("https://account.live.com/editprof.aspx")
                     MyMsgBox("请在打开的网页中修改账号的出生日期（至少改为 18 岁以上）。" & vbCrLf &
-                             "在修改成功后等待一分钟，然后再回到 PCL2，就可以正常登录了！", "登录提示")
+                             "在修改成功后等待一分钟，然后再回到 PCL，就可以正常登录了！", "登录提示")
                 Else
                     OpenWebsite("https://support.microsoft.com/zh-cn/account-billing/如何更改-microsoft-帐户上的出生日期-837badbc-999e-54d2-2617-d19206b9540a")
                     MyMsgBox("请根据打开的网页的说明，修改账号的出生日期（至少改为 18 岁以上）。" & vbCrLf &
-                             "在修改成功后等待一分钟，然后再回到 PCL2，就可以正常登录了！", "登录提示")
+                             "在修改成功后等待一分钟，然后再回到 PCL，就可以正常登录了！", "登录提示")
                 End If
                 Throw New Exception("$$")
             Else
@@ -1373,7 +1367,7 @@ SystemBrowser:
 
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
-            Throw New Exception("版本 Json 中没有 mainClass 项！")
+            Throw New Exception("版本 json 中没有 mainClass 项！")
         Else
             DataList.Add(Version.JsonObject("mainClass"))
         End If
@@ -1461,7 +1455,7 @@ NextVersion:
 
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
-            Throw New Exception("版本 Json 中没有 mainClass 项！")
+            Throw New Exception("版本 json 中没有 mainClass 项！")
         Else
             Result += " " & Version.JsonObject("mainClass").ToString
         End If
@@ -1579,7 +1573,7 @@ NextVersion:
         GameArguments.Add("${natives_directory}", Version.Path & Version.Name & "-natives")
         GameArguments.Add("${library_directory}", PathMcFolder & "libraries")
         GameArguments.Add("${libraries_directory}", PathMcFolder & "libraries")
-        GameArguments.Add("${launcher_name}", "PCL2")
+        GameArguments.Add("${launcher_name}", "PCL")
         GameArguments.Add("${launcher_version}", VersionCode)
         GameArguments.Add("${version_name}", Version.Name)
         Dim ArgumentInfo As String = Setup.Get("VersionArgumentInfo", Version:=McVersionCurrent)
@@ -1837,19 +1831,20 @@ NextVersion:
                             PackFormat = 9
                         End If
                     Case 19, 99 '99 是快照版
-                        If McVersionCurrent.Version.McCodeSub <= 2 Then
-                            PackFormat = 9
+                        If McVersionCurrent.Version.McCodeSub <= 3 Then
+                            PackFormat = 10
                         Else
                             PackFormat = 12
                         End If
                     Case Else
                         PackFormat = 13
+                        'https://minecraft.fandom.com/zh/wiki/数据包#数据包版本
                 End Select
                 McLaunchLog("正在构建自定义皮肤资源包，格式为：" & PackFormat)
                 '准备文件
                 Dim Bit As New MyBitmap(PathImage & "Heads/Logo.png")
                 Bit.Save(PackPicAddress)
-                WriteFile(MetaFileAddress, "{""pack"":{""pack_format"":" & PackFormat & ",""description"":""PCL2 自定义离线皮肤资源包""}}")
+                WriteFile(MetaFileAddress, "{""pack"":{""pack_format"":" & PackFormat & ",""description"":""PCL 自定义离线皮肤资源包""}}")
                 Dim Skin As New MyBitmap(PathAppdata & "CustomSkin.png")
                 If (McVersionCurrent.Version.McCodeMain = 6 OrElse McVersionCurrent.Version.McCodeMain = 7) AndAlso Skin.Pic.Height = 64 Then
                     McLaunchLog("该 Minecraft 版本不支持双层皮肤，已进行裁剪")
@@ -1861,7 +1856,24 @@ NextVersion:
                     Using ZipAr As New ZipArchive(ZipFile, ZipArchiveMode.Create)
                         ZipAr.CreateEntryFromFile(MetaFileAddress, "pack.mcmeta")
                         ZipAr.CreateEntryFromFile(PackPicAddress, "pack.png")
-                        ZipAr.CreateEntryFromFile(Path & "PCL\CustomSkin_Cliped.png", "assets/minecraft/textures/entity/" & If(Setup.Get("LaunchSkinSlim"), "alex.png", "steve.png"))
+                        '1.19.3+ 使用复杂版本的替换
+                        Dim IsOldType As Boolean
+                        Select Case McVersionCurrent.Version.McCodeMain
+                            Case Is < 19
+                                IsOldType = True
+                            Case 19
+                                IsOldType = McVersionCurrent.Version.McCodeSub <= 2
+                            Case Else
+                                IsOldType = False
+                        End Select
+                        If IsOldType Then
+                            ZipAr.CreateEntryFromFile(Path & "PCL\CustomSkin_Cliped.png", "assets/minecraft/textures/entity/" & If(Setup.Get("LaunchSkinSlim"), "alex.png", "steve.png"))
+                        Else
+                            For Each SkinName In {"alex", "ari", "efe", "kai", "makena", "noor", "steve", "sunny", "zuri"}
+                                ZipAr.CreateEntryFromFile(Path & "PCL\CustomSkin_Cliped.png",
+                                    $"assets/minecraft/textures/entity/player/{If(Setup.Get("LaunchSkinSlim"), "slim", "wide")}/{SkinName}.png")
+                            Next
+                        End If
                     End Using
                 End Using
                 File.Delete(Path & "PCL\CustomSkin_Cliped.png")
@@ -1917,8 +1929,10 @@ IgnoreCustomSkin:
     Private Sub McLaunchCustom(Loader As LoaderTask(Of Integer, Integer))
 
         '获取自定义命令
-        Dim CustomCommand As String = Setup.Get("VersionAdvanceRun", Version:=McVersionCurrent)
-        If CustomCommand <> "" Then CustomCommand = ArgumentReplace(CustomCommand)
+        Dim CustomCommandGlobal As String = Setup.Get("LaunchAdvanceRun")
+        If CustomCommandGlobal <> "" Then CustomCommandGlobal = ArgumentReplace(CustomCommandGlobal)
+        Dim CustomCommandVersion As String = Setup.Get("VersionAdvanceRun", Version:=McVersionCurrent)
+        If CustomCommandVersion <> "" Then CustomCommandVersion = ArgumentReplace(CustomCommandVersion)
 
         '输出 bat
         Try
@@ -1928,7 +1942,8 @@ IgnoreCustomSkin:
                 "echo 游戏正在启动，请稍候。" & vbCrLf &
                 "set APPDATA=""" & PathMcFolder & """" & vbCrLf &
                 "cd /D """ & PathMcFolder & """" & vbCrLf &
-                CustomCommand & vbCrLf &
+                CustomCommandGlobal & vbCrLf &
+                CustomCommandVersion & vbCrLf &
                 """" & McLaunchJavaSelected.PathJava & """ " & McLaunchArgument & vbCrLf &
                 "echo 游戏已退出。" & vbCrLf &
                 "pause"
@@ -1947,23 +1962,52 @@ IgnoreCustomSkin:
         End Try
 
         '执行自定义命令
-        If CustomCommand <> "" Then
-            McLaunchLog("正在执行自定义命令：" & CustomCommand)
+        If CustomCommandGlobal <> "" Then
+            McLaunchLog("正在执行全局自定义命令：" & CustomCommandGlobal)
+            Dim CustomProcess As New Process
             Try
-                Dim Cmd As New Process
-                Cmd.StartInfo.FileName = "cmd.exe"
-                Cmd.StartInfo.Arguments = "/c """ & CustomCommand & """"
-                Cmd.StartInfo.WorkingDirectory = Path
-                Cmd.StartInfo.UseShellExecute = False
-                Cmd.StartInfo.CreateNoWindow = True
-                Cmd.Start()
-                If Setup.Get("VersionAdvanceRunWait", Version:=McVersionCurrent) Then
-                    Do Until Cmd.HasExited OrElse Loader.IsAborted
+                CustomProcess.StartInfo.FileName = "cmd.exe"
+                CustomProcess.StartInfo.Arguments = "/c """ & CustomCommandGlobal & """"
+                CustomProcess.StartInfo.WorkingDirectory = Path
+                CustomProcess.StartInfo.UseShellExecute = False
+                CustomProcess.StartInfo.CreateNoWindow = True
+                CustomProcess.Start()
+                If Setup.Get("LaunchAdvanceRunWait") Then
+                    Do Until CustomProcess.HasExited OrElse Loader.IsAborted
                         Thread.Sleep(10)
                     Loop
                 End If
             Catch ex As Exception
-                Log(ex, "执行自定义命令失败", LogLevel.Hint)
+                Log(ex, "执行全局自定义命令失败", LogLevel.Hint)
+            Finally
+                If Not CustomProcess.HasExited AndAlso Loader.IsAborted Then
+                    McLaunchLog("由于取消启动，已强制结束自定义命令 CMD 进程") '#1183
+                    CustomProcess.Kill()
+                End If
+            End Try
+        End If
+        If CustomCommandVersion <> "" Then
+            McLaunchLog("正在执行版本自定义命令：" & CustomCommandVersion)
+            Dim CustomProcess As New Process
+            Try
+                CustomProcess.StartInfo.FileName = "cmd.exe"
+                CustomProcess.StartInfo.Arguments = "/c """ & CustomCommandVersion & """"
+                CustomProcess.StartInfo.WorkingDirectory = Path
+                CustomProcess.StartInfo.UseShellExecute = False
+                CustomProcess.StartInfo.CreateNoWindow = True
+                CustomProcess.Start()
+                If Setup.Get("VersionAdvanceRunWait", Version:=McVersionCurrent) Then
+                    Do Until CustomProcess.HasExited OrElse Loader.IsAborted
+                        Thread.Sleep(10)
+                    Loop
+                End If
+            Catch ex As Exception
+                Log(ex, "执行版本自定义命令失败", LogLevel.Hint)
+            Finally
+                If Not CustomProcess.HasExited AndAlso Loader.IsAborted Then
+                    McLaunchLog("由于取消启动，已强制结束自定义命令 CMD 进程") '#1183
+                    CustomProcess.Kill()
+                End If
             End Try
         End If
 
@@ -2020,7 +2064,7 @@ IgnoreCustomSkin:
         '输出信息
         McLaunchLog("")
         McLaunchLog("~ 基础参数 ~")
-        McLaunchLog("PCL2 版本：" & VersionDisplayName & " (" & VersionCode & ")")
+        McLaunchLog("PCL 版本：" & VersionDisplayName & " (" & VersionCode & ")")
         McLaunchLog("游戏版本：" & McVersionCurrent.Version.ToString & "（" & McVersionCurrent.Version.McCodeMain & "." & McVersionCurrent.Version.McCodeSub & "）")
         McLaunchLog("资源版本：" & McAssetsGetIndexName(McVersionCurrent))
         McLaunchLog("版本继承：" & If(McVersionCurrent.InheritVersion = "", "无", McVersionCurrent.InheritVersion))

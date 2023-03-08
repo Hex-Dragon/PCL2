@@ -134,9 +134,23 @@
                                                                     FrmDownloadInstall.MinecraftSelected(sender, e)
                                                                 End Sub, False))
                 Case 8
-                    Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click))
+                    If Distinct(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.DisplayName = b.DisplayName).Count <>
+                       CType(Stack.Tag, List(Of CompFile)).Count Then
+                        '存在重复的名称（#1344）
+                        Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=True))
+                    Else
+                        '不存在重复的名称，正常加载
+                        Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click))
+                    End If
                 Case 9
-                    Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click))
+                    If Distinct(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.DisplayName = b.DisplayName).Count <>
+                       CType(Stack.Tag, List(Of CompFile)).Count Then
+                        '存在重复的名称（#1344）
+                        Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=True))
+                    Else
+                        '不存在重复的名称，正常加载
+                        Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click))
+                    End If
                 Case 10
                     Stack.Children.Add(LiteLoaderDownloadListItem(Data, AddressOf LiteLoaderSave_Click, True))
                 Case 11

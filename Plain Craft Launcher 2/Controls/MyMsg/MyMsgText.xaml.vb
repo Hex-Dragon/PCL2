@@ -70,21 +70,33 @@
 
     Public Sub Btn1_Click() Handles Btn1.Click
         If MyConverter.IsExited Then Exit Sub
-        MyConverter.IsExited = True
-        MyConverter.Result = 1
-        Close()
+        If MyConverter.Button1Action IsNot Nothing Then
+            MyConverter.Button1Action()
+        Else
+            MyConverter.IsExited = True
+            MyConverter.Result = 1
+            Close()
+        End If
     End Sub
     Public Sub Btn2_Click() Handles Btn2.Click
         If MyConverter.IsExited Then Exit Sub
-        MyConverter.IsExited = True
-        MyConverter.Result = 2
-        Close()
+        If MyConverter.Button2Action IsNot Nothing Then
+            MyConverter.Button2Action()
+        Else
+            MyConverter.IsExited = True
+            MyConverter.Result = 2
+            Close()
+        End If
     End Sub
     Public Sub Btn3_Click() Handles Btn3.Click
         If MyConverter.IsExited Then Exit Sub
-        MyConverter.IsExited = True
-        MyConverter.Result = 3
-        Close()
+        If MyConverter.Button3Action IsNot Nothing Then
+            MyConverter.Button3Action()
+        Else
+            MyConverter.IsExited = True
+            MyConverter.Result = 3
+            Close()
+        End If
     End Sub
 
     Private Sub Drag(sender As Object, e As MouseButtonEventArgs) Handles PanBorder.MouseLeftButtonDown, LabTitle.MouseLeftButtonDown

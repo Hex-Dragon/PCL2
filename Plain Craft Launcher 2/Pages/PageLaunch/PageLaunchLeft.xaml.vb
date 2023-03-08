@@ -480,7 +480,7 @@ UseDefault:
                 End Try
             Case 4 '自定义
                 If Not File.Exists(PathAppdata & "CustomSkin.png") Then
-                    Hint("未找到离线皮肤自定义文件，可能它已被删除。PCL2 将使用默认的 Steve 皮肤！")
+                    Hint("未找到离线皮肤自定义文件，可能它已被删除。PCL 将使用默认的 Steve 皮肤！")
                     Setup.Set("LaunchSkinType", 1)
                     GoTo UseDefault
                 End If
@@ -602,7 +602,7 @@ Finish:
     End Sub
     '启动按钮
     Public Sub LaunchButtonClick() Handles BtnLaunch.Click
-        If Not BtnLaunch.IsEnabled Then Exit Sub
+        If McLaunchLoader.State = LoadState.Loading OrElse Not BtnLaunch.IsEnabled Then Exit Sub
         '愚人节处理
         If IsAprilEnabled AndAlso Not IsAprilGiveup Then
             ThemeUnlock(12, False, "隐藏主题 滑稽彩 已解锁！")

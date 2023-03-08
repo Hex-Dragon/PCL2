@@ -265,9 +265,9 @@
             If CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Stopped AndAlso MusicAllList.Count > 0 Then MusicStartPlay(DequeueNextMusicAddress)
         Catch ex As Exception
             If ex.Message.Contains("Got a frame at sample rate") OrElse ex.Message.Contains("does not support changes to") Then
-                Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL2 不支持播放音频属性在中途发生变化的音乐", HintType.Critical)
+                Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL 不支持播放音频属性在中途发生变化的音乐", HintType.Critical)
             ElseIf Not (MusicCurrent.ToLower.EndsWith(".wav") OrElse MusicCurrent.ToLower.EndsWith(".mp3") OrElse MusicCurrent.ToLower.EndsWith(".flac")) Then
-                Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL2 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试", HintType.Critical)
+                Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试", HintType.Critical)
             Else
                 Log(ex, "播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）", LogLevel.Hint)
             End If

@@ -64,13 +64,13 @@
                 Case "下载文件"
                     Data(0) = Data(0).Replace("\", "/")
                     If Not (Data(0).StartsWith("http://") OrElse Data(0).StartsWith("https://")) Then
-                        MyMsgBox("EventData 必须为以 http:// 或 https:// 开头的网址。" & vbCrLf & "PCL2 不支持其他乱七八糟的协议。", "事件执行失败")
+                        MyMsgBox("EventData 必须为以 http:// 或 https:// 开头的网址。" & vbCrLf & "PCL 不支持其他乱七八糟的协议。", "事件执行失败")
                         Exit Sub
                     End If
                     PageOtherTest.StartCustomDownload(Data(0), GetFileNameFromPath(Data(0)))
 
                 Case Else
-                    MyMsgBox("未知的事件类型：" & Type & vbCrLf & "请检查事件类型填写是否正确，或者 PCL2 是否为最新版本。", "事件执行失败")
+                    MyMsgBox("未知的事件类型：" & Type & vbCrLf & "请检查事件类型填写是否正确，或者 PCL 是否为最新版本。", "事件执行失败")
             End Select
         Catch ex As Exception
             Log(ex, "事件执行失败", LogLevel.Msgbox)
@@ -121,6 +121,7 @@
 
         '确认实际路径
         Dim Location As String, WorkingDir As String = Path & "PCL"
+        HelpTryExtract()
         If RelativeUrl.Contains(":\") Then
             '绝对路径
             Location = RelativeUrl

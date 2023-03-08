@@ -107,32 +107,28 @@ Public Class MyBitmap
     ''' </summary>
     ''' <param name="angle">旋转角度（单位为角度）。</param>
     Public Function Rotation(angle As Double) As System.Drawing.Bitmap
-        With Me
-            Dim img As System.Drawing.Image = Me.Pic
-            Dim bitSize As Single = img.Width
-            Dim bmp As New System.Drawing.Bitmap(CInt(bitSize), CInt(bitSize))
-            Using g As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(bmp)
-                g.TranslateTransform(bitSize / 2, bitSize / 2)
-                g.RotateTransform(angle)
-                g.TranslateTransform(-bitSize / 2, -bitSize / 2)
-                g.DrawImage(img, New System.Drawing.Rectangle(0, 0, img.Width, img.Width))
-            End Using
-            Return bmp
-        End With
+        Dim img As System.Drawing.Image = Me.Pic
+        Dim bitSize As Single = img.Width
+        Dim bmp As New System.Drawing.Bitmap(CInt(bitSize), CInt(bitSize))
+        Using g As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(bmp)
+            g.TranslateTransform(bitSize / 2, bitSize / 2)
+            g.RotateTransform(angle)
+            g.TranslateTransform(-bitSize / 2, -bitSize / 2)
+            g.DrawImage(img, New System.Drawing.Rectangle(0, 0, img.Width, img.Width))
+        End Using
+        Return bmp
     End Function
 
     ''' <summary>
     ''' 获取裁切的图片，这个方法不会导致原对象改变且会返回一个新的对象。
     ''' </summary>
     Public Function Clip(rect As System.Drawing.Rectangle) As System.Drawing.Bitmap
-        With Me
-            Dim img As System.Drawing.Image = Pic
-            Dim bmp As New System.Drawing.Bitmap(rect.Width, rect.Height)
-            Using g As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(bmp)
-                g.DrawImageUnscaled(img, rect)
-            End Using
-            Return bmp
-        End With
+        Dim img As System.Drawing.Image = Pic
+        Dim bmp As New System.Drawing.Bitmap(rect.Width, rect.Height)
+        Using g As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(bmp)
+            g.DrawImageUnscaled(img, rect)
+        End Using
+        Return bmp
     End Function
 
     ''' <summary>

@@ -65,7 +65,7 @@
             Hint("登录失败，无法更改皮肤！", HintType.Critical)
             Exit Sub
         End If
-        Dim SkinInfo As McSkinInfo = McSkinSelect(False)
+        Dim SkinInfo As McSkinInfo = McSkinSelect()
         If Not SkinInfo.IsVaild Then Exit Sub
         Hint("正在更改皮肤……")
         RunInNewThread(Async Sub()

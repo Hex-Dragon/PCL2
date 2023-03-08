@@ -1,6 +1,6 @@
 ﻿
-<!-- 这是 PCL2 的主页自定义文件。你可以通过修改这个文件来自定义 PCL2 主页：添加文本、打开网页、启动游戏，等等。
-     如果你倒腾这个文件把 PCL2 玩炸了，把这个文件直接删除就行了。
+<!-- 这是 PCL 的主页自定义文件。你可以通过修改这个文件来自定义 PCL 主页：添加文本、打开网页、启动游戏，等等。
+     如果你倒腾这个文件把 PCL 玩炸了，把这个文件直接删除就行了。
      如果你懂得 WPF 的布局文件编写，你甚至可以做出不少的新玩意儿…… -->
     
 <local:MyCard Title="基础教学 1：纯文本">
@@ -84,13 +84,13 @@
         <TextBlock Margin="0,4,0,0"
                    Text="如果能在 PCL 文件夹中找到该文件，则会优先打开 PCL 文件夹中的文件。当然，你可以使用例如 C:\ 开头的绝对路径。" />
         <TextBlock TextWrapping="Wrap"
-                   Text="此外，PCL2 会将文件中的花括号 path 替换为 PCL 可执行文件所在文件夹（{path}），可以用于执行特定程序或加载图片。" />
+                   Text="此外，PCL 会将文件中的花括号 path 替换为 PCL 可执行文件所在文件夹（{path}），可以用于执行特定程序或加载图片。" />
         <local:MyButton Margin="0,8,0,8" Width="200" Height="35"
-                   Text="打开 PCL 日志" EventType="打开文件" EventData="Log1.txt" ToolTip="PCL2 的日志文件就在 PCL 文件夹内，且名为 Log1.txt" />
+                   Text="打开 PCL 日志" EventType="打开文件" EventData="Log1.txt" ToolTip="PCL 的日志文件就在 PCL 文件夹内，且名为 Log1.txt" />
         <TextBlock Margin="0,4,0,0"
                    Text="就像为游戏指定服务器 IP 一样，你也可以在 EventData 的竖线后为程序添加启动参数。" />
         <local:MyButton Margin="0,8,0,0" Width="200" Height="35"
-                   Text="定位游戏启动脚本" EventType="打开文件" EventData="explorer.exe|/select,LatestLaunch.bat" ToolTip="PCL2 会将上一次启动 MC 的脚本保存在 PCL 文件夹内，且名为 LatestLaunch.bat。&#xa;点击按钮会打开文件管理器，并且借助参数要求它选中这个文件。" />
+                   Text="定位游戏启动脚本" EventType="打开文件" EventData="explorer.exe|/select,LatestLaunch.bat" ToolTip="PCL 会将上一次启动 MC 的脚本保存在 PCL 文件夹内，且名为 LatestLaunch.bat。&#xa;点击按钮会打开文件管理器，并且借助参数要求它选中这个文件。" />
     </StackPanel>
 </local:MyCard>
     
@@ -162,7 +162,7 @@
 <local:MyCard Title="高级：预置图片和列表项" CanSwap="True" IsSwaped="True">
     <StackPanel Margin="25,40,23,15">
         <TextBlock TextWrapping="Wrap" LineHeight="17"
-                   Text="PCL2 中包含一些预置的方块与物品图片，可以直接使用。"/>
+                   Text="PCL 中包含一些预置的方块与物品图片，可以直接使用。"/>
         <StackPanel Orientation="Horizontal">
             <Image Width="30" Height="30" Margin="15,15,0,15" Source="pack://application:,,,/images/Blocks/CommandBlock.png"/>
             <!-- 命令方块 -->
@@ -203,7 +203,7 @@
  - Width、Height：设置宽度与高度
  - ToolTip：设置鼠标指向时的提示文本
  - Foreground：调整前景颜色（十六进制字符串，例如 #FF010203 代表 ARGB 中的 255,1,2,3。前两位代表不透明度，FF 为全不透明，00 为全透明）
- - Background：调整背景颜色（使用类似 Background="{DynamicResource ColorBrush5}" 的格式以调用 PCL2 当前的主题颜色，修改末尾的数字编号以改变颜色浓度）
+ - Background：调整背景颜色（使用类似 Background="{DynamicResource ColorBrush5}" 的格式以调用 PCL 当前的主题颜色，修改末尾的数字编号以改变颜色浓度）
  - Margin：调整外边距（格式为 左,上,右,下。例如 Margin="0,0,0,2" 即为 2 单位的下边距）
  - HorizontalAlignment：设置对齐方式（Left、Center、Right）
 

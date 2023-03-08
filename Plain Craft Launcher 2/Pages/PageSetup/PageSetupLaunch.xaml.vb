@@ -47,6 +47,8 @@
             '高级设置
             TextAdvanceJvm.Text = Setup.Get("LaunchAdvanceJvm")
             TextAdvanceGame.Text = Setup.Get("LaunchAdvanceGame")
+            TextAdvanceRun.Text = Setup.Get("LaunchAdvanceRun")
+            CheckAdvanceRunWait.Checked = Setup.Get("LaunchAdvanceRunWait")
             CheckAdvanceAssets.Checked = Setup.Get("LaunchAdvanceAssets")
             CheckAdvanceJava.Checked = Setup.Get("LaunchAdvanceJava")
 
@@ -77,6 +79,8 @@
             Setup.Reset("LaunchAdvanceGame")
             Setup.Reset("LaunchAdvanceJava")
             Setup.Reset("LaunchAdvanceAssets")
+            Setup.Reset("LaunchAdvanceRun")
+            Setup.Reset("LaunchAdvanceRunWait")
 
             Setup.Reset("LaunchArgumentJavaAll")
             Setup.Reset("LaunchArgumentJavaSelect")
@@ -95,7 +99,7 @@
     Private Shared Sub RadioBoxChange(sender As MyRadioBox, e As Object) Handles RadioSkinType0.Check, RadioSkinType1.Check, RadioSkinType2.Check, RadioSkinType3.Check, RadioSkinType4.Check, RadioRamType0.Check, RadioRamType1.Check
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag.ToString.Split("/")(0), Val(sender.Tag.ToString.Split("/")(1)))
     End Sub
-    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSkinID.ValidatedTextChanged, TextArgumentWindowHeight.ValidatedTextChanged, TextArgumentWindowWidth.ValidatedTextChanged, TextArgumentInfo.ValidatedTextChanged, TextAdvanceGame.ValidatedTextChanged, TextAdvanceJvm.ValidatedTextChanged, TextArgumentTitle.ValidatedTextChanged
+    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSkinID.ValidatedTextChanged, TextArgumentWindowHeight.ValidatedTextChanged, TextArgumentWindowWidth.ValidatedTextChanged, TextArgumentInfo.ValidatedTextChanged, TextAdvanceGame.ValidatedTextChanged, TextAdvanceJvm.ValidatedTextChanged, TextArgumentTitle.ValidatedTextChanged, TextAdvanceRun.ValidatedTextChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Text)
     End Sub
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderRamCustom.Change
@@ -104,53 +108,58 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboArgumentVisibie.SelectionChanged, ComboArgumentWindowType.SelectionChanged, ComboArgumentPriority.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
 
 #Region "离线皮肤"
 
     Private Sub BtnSkinChange_Click(sender As Object, e As EventArgs) Handles BtnSkinChange.Click
-        Dim SkinInfo As McSkinInfo = McSkinSelect(True)
+        Dim SkinInfo As McSkinInfo = McSkinSelect()
         If Not SkinInfo.IsVaild Then Exit Sub
-        '设置文件
-        Try
-            '拷贝文件
-            File.Delete(PathAppdata & "CustomSkin.png")
-            CopyFile(SkinInfo.LocalFile, PathAppdata & "CustomSkin.png")
-            '更新设置
-            Setup.Set("LaunchSkinSlim", SkinInfo.IsSlim)
-        Catch ex As Exception
-            Log(ex, "设置离线皮肤失败", LogLevel.Msgbox)
-        Finally
-            '设置当前显示
-            PageLaunchLeft.SkinLegacy.Start(IsForceRestart:=True)
-        End Try
+        ChangeSkin(SkinInfo)
     End Sub
     Private Sub RadioSkinType3_Check(sender As Object, e As RouteEventArgs) Handles RadioSkinType4.PreviewCheck
         If Not (AniControlEnabled = 0 AndAlso e.RaiseByMouse) Then Exit Sub
+        '已有图片则不再选择
+        If File.Exists(PathAppdata & "CustomSkin.png") Then Exit Sub
+        '没有图片则要求选择
+        Dim SkinInfo As McSkinInfo = McSkinSelect()
+        If Not SkinInfo.IsVaild Then
+            e.Handled = True
+            Exit Sub
+        End If
+        '正式改变
+        If Not ChangeSkin(SkinInfo) Then e.Handled = True
+    End Sub
+    '返回是否成功改变
+    Private Function ChangeSkin(SkinInfo As McSkinInfo) As Boolean
         Try
-            '已有图片则不再选择
-            If File.Exists(PathAppdata & "CustomSkin.png") Then Exit Sub
-            '没有图片则要求选择
-            Dim SkinInfo As McSkinInfo = McSkinSelect(True)
-            If Not SkinInfo.IsVaild Then
-                e.Handled = True
-                Exit Sub
-            End If
             '拷贝文件
             File.Delete(PathAppdata & "CustomSkin.png")
             CopyFile(SkinInfo.LocalFile, PathAppdata & "CustomSkin.png")
+            '将单层皮肤扩展到双层
+            Dim Bitmap As New MyBitmap(PathAppdata & "CustomSkin.png")
+            If Bitmap.Pic.Width = 64 AndAlso Bitmap.Pic.Height = 32 Then
+                Dim Img As System.Drawing.Image = Bitmap
+                Dim NewBitmap As New System.Drawing.Bitmap(64, 64)
+                Using g As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(NewBitmap)
+                    g.DrawImageUnscaled(Img, New System.Drawing.Point(0, 0))
+                End Using
+                File.Delete(PathAppdata & "CustomSkin.png")
+                NewBitmap.Save(PathAppdata & "CustomSkin.png")
+            End If
             '更新设置
             Setup.Set("LaunchSkinSlim", SkinInfo.IsSlim)
+            ChangeSkin = True
         Catch ex As Exception
-            Log(ex, "设置离线皮肤失败", LogLevel.Msgbox)
-            e.Handled = True
+            Log(ex, "改变离线皮肤失败", LogLevel.Msgbox)
+            ChangeSkin = False
         Finally
             '设置当前显示
             PageLaunchLeft.SkinLegacy.Start(IsForceRestart:=True)
         End Try
-    End Sub
+    End Function
     Private Sub BtnSkinDelete_Click(sender As Object, e As EventArgs) Handles BtnSkinDelete.Click
         Try
             File.Delete(PathAppdata & "CustomSkin.png")
@@ -548,6 +557,14 @@ PreFin:
                 ComboArgumentVisibie.SelectedItem = e.RemovedItems(0)
             End If
         End If
+    End Sub
+
+#End Region
+
+#Region "高级设置"
+
+    Private Sub TextAdvanceRun_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextAdvanceRun.TextChanged
+        CheckAdvanceRunWait.Visibility = If(TextAdvanceRun.Text = "", Visibility.Collapsed, Visibility.Visible)
     End Sub
 
 #End Region

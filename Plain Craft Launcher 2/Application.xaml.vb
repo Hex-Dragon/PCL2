@@ -47,9 +47,9 @@ Public Class Application
             Directory.CreateDirectory(Path & "PCL\Musics")
             Try
                 Directory.CreateDirectory(PathTemp)
-                If Not CheckPermission(PathTemp) Then Throw New Exception("PCL2 没有对 " & PathTemp & " 的访问权限")
+                If Not CheckPermission(PathTemp) Then Throw New Exception("PCL 没有对 " & PathTemp & " 的访问权限")
             Catch ex As Exception
-                MyMsgBox("手动设置的缓存文件夹不可用，PCL2 将使用默认缓存文件夹。" & vbCrLf & "错误原因：" & GetExceptionDetail(ex), "缓存文件夹不可用")
+                MyMsgBox("手动设置的缓存文件夹不可用，PCL 将使用默认缓存文件夹。" & vbCrLf & "错误原因：" & GetExceptionDetail(ex), "缓存文件夹不可用")
                 Setup.Set("SystemSystemCache", "")
                 PathTemp = IO.Path.GetTempPath() & "PCL\"
             End Try
@@ -59,7 +59,7 @@ Public Class Application
 #If Not DEBUG Then
             Dim WindowHwnd As IntPtr = FindWindow(Nothing, "Plain Craft Launcher 2　")
             If WindowHwnd <> IntPtr.Zero Then
-                '将已有的 PCL2 窗口拖出来
+                '将已有的 PCL 窗口拖出来
                 ShowWindowToTop(WindowHwnd)
                 '播放提示音并退出
                 Beep()
@@ -82,7 +82,7 @@ Public Class Application
             Log("[Start] 程序路径：" & PathWithName)
             '检测压缩包运行
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
-                MyMsgBox("PCL2 正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。" & vbCrLf & "请将 PCL2 从压缩文件中解压，或是更换文件夹后再继续使用！", "环境警告", "我知道了", IsWarn:=True)
+                MyMsgBox("PCL 正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。" & vbCrLf & "请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！", "环境警告", "我知道了", IsWarn:=True)
             End If
             '设置初始化
             Setup.Load("SystemDebugMode")
@@ -104,7 +104,7 @@ Public Class Application
 #End If
             AniControlEnabled += 1
         Catch ex As Exception
-            MsgBox(GetExceptionDetail(ex, True), MsgBoxStyle.Critical, "PCL2 初始化错误")
+            MsgBox(GetExceptionDetail(ex, True), MsgBoxStyle.Critical, "PCL 初始化错误")
             FormMain.EndProgramForce(Result.Exception)
         End Try
     End Sub

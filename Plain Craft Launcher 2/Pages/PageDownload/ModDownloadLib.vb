@@ -37,7 +37,7 @@ Public Module ModDownloadLib
             '已有版本检查
             If Behaviour <> NetPreDownloadBehaviour.IgnoreCheck AndAlso File.Exists(VersionFolder & Id & ".json") AndAlso File.Exists(VersionFolder & Id & ".jar") Then
                 If Behaviour = NetPreDownloadBehaviour.ExitWhileExistsOrDownloading Then Return Nothing
-                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 与 Jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
+                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 与 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
                     File.Delete(VersionFolder & Id & ".jar")
                     File.Delete(VersionFolder & Id & ".json")
                 Else
@@ -82,14 +82,14 @@ Public Module ModDownloadLib
 
             Dim Loaders As New List(Of LoaderBase)
             '下载版本 Json 文件
-            Loaders.Add(New LoaderDownload("下载版本 Json 文件", New List(Of NetFile) From {
+            Loaders.Add(New LoaderDownload("下载版本 json 文件", New List(Of NetFile) From {
                 New NetFile(DlSourceLauncherOrMetaGet(JsonUrl), VersionFolder & Id & ".json", New FileChecker(CanUseExistsFile:=False, IsJson:=True))
             }) With {.ProgressWeight = 2})
             '获取支持库文件地址
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析核心 Jar 文件下载地址",
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析核心 jar 文件下载地址",
                                                             Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder), True)) With {.ProgressWeight = 0.5, .Show = False})
             '下载支持库文件
-            Loaders.Add(New LoaderDownload("下载核心 Jar 文件", New List(Of NetFile)) With {.ProgressWeight = 5})
+            Loaders.Add(New LoaderDownload("下载核心 jar 文件", New List(Of NetFile)) With {.ProgressWeight = 5})
 
             '启动
             Dim Loader As New LoaderCombo(Of String)("Minecraft " & Id & " 下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
@@ -115,7 +115,7 @@ Public Module ModDownloadLib
 
         '下载版本 Json 文件
         If JsonUrl Is Nothing Then
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取原版 Json 文件下载地址",
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取原版 json 文件下载地址",
                                                             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                                                                 Dim JsonAddress As String = DlClientListGet(Id)
                                                                 Task.Output = New List(Of NetFile) From {New NetFile(DlSourceLauncherOrMetaGet(JsonAddress), VersionFolder & VersionName & ".json")}
@@ -166,7 +166,7 @@ Public Module ModDownloadLib
 
     End Function
     Private Const McDownloadClientLibName As String = "下载原版支持库文件"
-    Private Const McDownloadClientJsonName As String = "下载原版 Json 文件"
+    Private Const McDownloadClientJsonName As String = "下载原版 json 文件"
 
 #End Region
 
@@ -192,7 +192,7 @@ Public Module ModDownloadLib
         Else
             NewItem.Info = Entry("lore").ToString
         End If
-        If Entry("url").ToString.Contains("pcl") Then NewItem.Info = "[PCL2 特别提供] " & NewItem.Info
+        If Entry("url").ToString.Contains("pcl") Then NewItem.Info = "[PCL 特别提供] " & NewItem.Info
         AddHandler NewItem.Click, OnClick
         '建立菜单
         If IsSaveOnly Then
@@ -333,7 +333,7 @@ Public Module ModDownloadLib
 
             '已有版本检查
             If File.Exists(VersionFolder & Id & ".json") Then
-                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
+                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 和 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
                     File.Delete(VersionFolder & Id & ".jar")
                     File.Delete(VersionFolder & Id & ".json")
                 Else
@@ -770,7 +770,7 @@ Public Module ModDownloadLib
 
             '已有版本检查
             If File.Exists(VersionFolder & VersionName & ".json") Then
-                If MyMsgBox("版本 " & VersionName & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
+                If MyMsgBox("版本 " & VersionName & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 和 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
                     File.Delete(VersionFolder & VersionName & ".jar")
                     File.Delete(VersionFolder & VersionName & ".json")
                 Else
@@ -992,16 +992,16 @@ Public Module ModDownloadLib
     Public Sub McDownloadForge(DownloadInfo As DlForgeVersionEntry)
         '老版本提示
         If DownloadInfo.Category = "client" Then
-            If MyMsgBox("该 Forge 版本过于古老，PCL2 暂不支持该版本的自动安装。" & vbCrLf &
-                        "若你仍然希望继续，PCL2 将把安装程序下载到你指定的位置，但不会进行安装。",
+            If MyMsgBox("该 Forge 版本过于古老，PCL 暂不支持该版本的自动安装。" & vbCrLf &
+                        "若你仍然希望继续，PCL 将把安装程序下载到你指定的位置，但不会进行安装。",
                         "版本过老", "继续", "取消") = 1 Then
                 McDownloadForgeSave(DownloadInfo)
             End If
             Exit Sub
         End If
         If DownloadInfo.Category = "universal" OrElse DownloadInfo.Inherit.StartsWith("1.5") Then '对该版本自动安装的支持将在之后加入
-            If MyMsgBox("该 Forge 版本过于古老，PCL2 暂不支持该版本的自动安装。" & vbCrLf &
-                        "若你仍然希望继续，PCL2 将把安装程序下载到你指定的位置，但不会进行安装。",
+            If MyMsgBox("该 Forge 版本过于古老，PCL 暂不支持该版本的自动安装。" & vbCrLf &
+                        "若你仍然希望继续，PCL 将把安装程序下载到你指定的位置，但不会进行安装。",
                         "版本过老", "继续", "取消") = 1 Then
                 McDownloadForgeSave(DownloadInfo)
             End If
@@ -1026,7 +1026,7 @@ Public Module ModDownloadLib
 
             '已有版本检查
             If File.Exists(VersionFolder & Id & ".json") Then
-                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
+                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 和 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
                     File.Delete(VersionFolder & Id & ".jar")
                     File.Delete(VersionFolder & Id & ".json")
                 Else
@@ -1239,6 +1239,11 @@ Public Module ModDownloadLib
 
         '参数初始化
         McFolder = If(McFolder, PathMcFolder)
+        If Version.StartsWith("1.") AndAlso Version.Contains("-") Then
+            '类似 1.19.3-41.2.8 格式，优先使用 Version 中要求的版本而非 Inherit（例如 1.19.3 却使用了 1.19 的 Forge）
+            Inherit = Version.Split("-").First
+            Version = Version.Split("-").Last
+        End If
         Dim IsCustomFolder As Boolean = McFolder <> PathMcFolder
         Dim Id As String = Inherit & "-forge-" & Version
         Dim InstallerAddress As String = PathTemp & "Cache\Code\ForgeInstall-" & Version & "_" & RandomInteger(0, 100000)
@@ -1267,20 +1272,20 @@ Public Module ModDownloadLib
         End If
         '下载 Forge 主文件
         Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("准备 Mod 加载器下载",
-                                                            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                                                                '启动依赖版本的下载
-                                                                If ClientDownloadLoader Is Nothing Then
-                                                                    If IsCustomFolder Then Throw New Exception("如果没有指定原版下载器，则不能指定 MC 安装文件夹")
-                                                                    ClientDownloadLoader = McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, Inherit)
-                                                                End If
-                                                                '添加主文件
-                                                                Dim Files As New List(Of NetFile) From {New NetFile({
-                                                                    "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                                                                    "http://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                                                                    "https://download.mcbbs.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
-                                                                }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
-                                                                Task.Output = Files
-                                                            End Sub) With {.ProgressWeight = 0.5, .Show = False})
+            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+                '启动依赖版本的下载
+                If ClientDownloadLoader Is Nothing Then
+                    If IsCustomFolder Then Throw New Exception("如果没有指定原版下载器，则不能指定 MC 安装文件夹")
+                    ClientDownloadLoader = McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, Inherit)
+                End If
+                '添加主文件
+                Dim Files As New List(Of NetFile) From {New NetFile({
+                    "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
+                    "http://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
+                    "https://download.mcbbs.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
+                }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
+                Task.Output = Files
+            End Sub) With {.ProgressWeight = 0.5, .Show = False})
         Loaders.Add(New LoaderDownload("下载 Mod 加载器主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
 
         '安装（仅在新版安装时需要原版 Jar）
@@ -1788,7 +1793,7 @@ Public Module ModDownloadLib
 
         '若要下载 Forge，则需要在下面两项中完成至少一项
         ''' <summary>
-        ''' 欲下载的 Forge 版本名。例如 36.1.4。
+        ''' 欲下载的 Forge 版本名。接受例如 36.1.4 / 14.23.5.2859 / 1.19-41.1.0 的输入。
         ''' </summary>
         Public ForgeVersion As String = Nothing
         ''' <summary>
@@ -2065,30 +2070,30 @@ Public Module ModDownloadLib
         Dim OutputJson As JObject, MinecraftJson As JObject, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing
 #Region "读取文件并检查文件是否合规"
         Dim MinecraftJsonText As String = ReadFile(MinecraftJsonPath)
-        If Not MinecraftJsonText.StartsWith("{") Then Throw New Exception("Minecraft Json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
+        If Not MinecraftJsonText.StartsWith("{") Then Throw New Exception("Minecraft json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
         MinecraftJson = GetJson(MinecraftJsonText)
 
         If HasOptiFine Then
             Dim OptiFineJsonText As String = ReadFile(OptiFineJsonPath)
-            If Not OptiFineJsonText.StartsWith("{") Then Throw New Exception("OptiFine Json 有误，地址：" & OptiFineJsonPath & "，前段内容：" & OptiFineJsonText.Substring(0, Math.Min(OptiFineJsonText.Length, 1000)))
+            If Not OptiFineJsonText.StartsWith("{") Then Throw New Exception("OptiFine json 有误，地址：" & OptiFineJsonPath & "，前段内容：" & OptiFineJsonText.Substring(0, Math.Min(OptiFineJsonText.Length, 1000)))
             OptiFineJson = GetJson(OptiFineJsonText)
         End If
 
         If HasForge Then
             Dim ForgeJsonText As String = ReadFile(ForgeJsonPath)
-            If Not ForgeJsonText.StartsWith("{") Then Throw New Exception("Forge Json 有误，地址：" & ForgeJsonPath & "，前段内容：" & ForgeJsonText.Substring(0, Math.Min(ForgeJsonText.Length, 1000)))
+            If Not ForgeJsonText.StartsWith("{") Then Throw New Exception("Forge json 有误，地址：" & ForgeJsonPath & "，前段内容：" & ForgeJsonText.Substring(0, Math.Min(ForgeJsonText.Length, 1000)))
             ForgeJson = GetJson(ForgeJsonText)
         End If
 
         If HasLiteLoader Then
             Dim LiteLoaderJsonText As String = ReadFile(LiteLoaderJsonPath)
-            If Not LiteLoaderJsonText.StartsWith("{") Then Throw New Exception("LiteLoader Json 有误，地址：" & LiteLoaderJsonPath & "，前段内容：" & LiteLoaderJsonText.Substring(0, Math.Min(LiteLoaderJsonText.Length, 1000)))
+            If Not LiteLoaderJsonText.StartsWith("{") Then Throw New Exception("LiteLoader json 有误，地址：" & LiteLoaderJsonPath & "，前段内容：" & LiteLoaderJsonText.Substring(0, Math.Min(LiteLoaderJsonText.Length, 1000)))
             LiteLoaderJson = GetJson(LiteLoaderJsonText)
         End If
 
         If HasFabric Then
             Dim FabricJsonText As String = ReadFile(FabricJsonPath)
-            If Not FabricJsonText.StartsWith("{") Then Throw New Exception("Fabric Json 有误，地址：" & FabricJsonPath & "，前段内容：" & FabricJsonText.Substring(0, Math.Min(FabricJsonText.Length, 1000)))
+            If Not FabricJsonText.StartsWith("{") Then Throw New Exception("Fabric json 有误，地址：" & FabricJsonPath & "，前段内容：" & FabricJsonText.Substring(0, Math.Min(FabricJsonText.Length, 1000)))
             FabricJson = GetJson(FabricJsonText)
         End If
 #End Region

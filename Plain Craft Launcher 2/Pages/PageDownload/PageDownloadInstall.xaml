@@ -39,8 +39,7 @@
                             </Grid>
                         </StackPanel>
                     </local:MyCard>
-                    <local:MyCard Title="Minecraft" Height="40" Margin="0,15,0,0" x:Name="CardMinecraft" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
-                        <FrameworkElement Tag="用于折叠" />
+                    <local:MyCard Title="Minecraft" Height="40" Margin="0,15,0,0" x:Name="CardMinecraft">
                         <Grid x:Name="PanMinecraftInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
@@ -48,9 +47,18 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Image x:Name="ImgMinecraft" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" />
                             <TextBlock x:Name="LabMinecraft" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
+                            <Path Data="M2,4 l-2,2 10,10 10,-10 -2,-2 -8,8 -8,-8 z" Height="6" Width="10" Stretch="Uniform" VerticalAlignment="Center"
+                                  Grid.Column="2" Fill="{StaticResource ColorBrushGray4}" Margin="0,1,6,0" RenderTransformOrigin="0.5,0.5">
+                                <Path.RenderTransform>
+                                    <RotateTransform Angle="90" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <TextBlock VerticalAlignment="Center" Text="返回" Grid.Column="3" Foreground="{StaticResource ColorBrushGray4}" />
                         </Grid>
                     </local:MyCard>
                     <local:MyCard Title="OptiFine" Height="40" Margin="0,15,0,0" x:Name="CardOptiFine" IsSwaped="True" CanSwap="True" SwapLogoRight="True">

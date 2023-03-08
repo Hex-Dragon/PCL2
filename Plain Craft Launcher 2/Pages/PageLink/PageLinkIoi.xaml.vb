@@ -51,7 +51,7 @@ Public Class PageLinkIoi
         '检查协议
         If Not Setup.Get("LinkEula") Then
 Reopen:
-            Select Case MyMsgBox("PCL2 的联机服务由速聚授权提供。" & vbCrLf & "在使用前，你需要同意速聚的用户服务协议和隐私政策。", "协议授权", "同意", "拒绝", "查看用户服务协议和隐私政策")
+            Select Case MyMsgBox("PCL 的联机服务由速聚授权提供。" & vbCrLf & "在使用前，你需要同意速聚的用户服务协议和隐私政策。", "协议授权", "同意", "拒绝", "查看用户服务协议和隐私政策")
                 Case 1
                     Setup.Set("LinkEula", True)
                 Case 2
@@ -164,9 +164,9 @@ StartDownload:
             If Not PageLinkLeft.FirewallIsBlock(PathIoi) Then Exit Try
             If PageLinkLeft.FirewallPolicy.CurrentProfile.ExceptionsNotAllowed Then
                 '禁止白名单
-                MyMsgBox("由于 Windows 防火墙阻止了所有传入连接，PCL2 无法获取防火墙通行权限。" & vbCrLf &
+                MyMsgBox("由于 Windows 防火墙阻止了所有传入连接，PCL 无法获取防火墙通行权限。" & vbCrLf &
                          "联机会有很大概率失败，就算连上了，延迟也会变高……" & vbCrLf & vbCrLf &
-                         "请先关闭 Windows 防火墙中的 " & vbLQ & "阻止所有传入连接" & vbRQ & " 选项，然后重启 PCL2。", "遭到防火墙拦截")
+                         "请先关闭 Windows 防火墙中的 " & vbLQ & "阻止所有传入连接" & vbRQ & " 选项，然后重启 PCL。", "遭到防火墙拦截")
             ElseIf IsAdmin() Then
                 '有管理员权限
                 Log("[IOI] Windows 防火墙：尝试添加防火墙通行权限")
@@ -177,14 +177,14 @@ StartDownload:
                 End Try
             Else
                 '无管理员权限
-                If MyMsgBox("由于你开启了 Windows 防火墙，PCL2 需要获取防火墙通行权限。" & vbCrLf & vbCrLf &
-                            "若继续，PCL2 将尝试以管理员权限重新启动。" & vbCrLf &
+                If MyMsgBox("由于你开启了 Windows 防火墙，PCL 需要获取防火墙通行权限。" & vbCrLf & vbCrLf &
+                            "若继续，PCL 将尝试以管理员权限重新启动。" & vbCrLf &
                             "若拒绝，联机模块可能会被防火墙拦截，联机会有很大概率失败。", "需要管理员权限", "继续", "拒绝") = 1 Then
                     Log("[IOI] Windows 防火墙：尝试提升权限")
                     If RerunAsAdmin("--link ioi") Then
                         FrmMain.EndProgram(False) '已重新运行
                     Else
-                        Hint("获取管理员权限失败，请尝试右键 PCL2，选择 " & vbLQ & "以管理员身份运行" & vbRQ & "，然后再进入联机页面！", HintType.Critical)
+                        Hint("获取管理员权限失败，请尝试右键 PCL，选择 " & vbLQ & "以管理员身份运行" & vbRQ & "，然后再进入联机页面！", HintType.Critical)
                     End If
                 Else
                     Hint("在没有防火墙权限的情况下尝试联机，很可能会导致联机失败！", HintType.Critical)
@@ -1049,11 +1049,11 @@ Done:
             SendPortsubRequest(User)
             User.Progress = 0.9
             If TargetVersion > RequestVersion Then
-                SendDisconnectRequest(User, "无法连接到 " & GetPlayerName() & "：对方的 PCL2 版本过低！", True)
-                Throw New InvalidOperationException("你的 PCL2 版本过低！")
+                SendDisconnectRequest(User, "无法连接到 " & GetPlayerName() & "：对方的 PCL 版本过低！", True)
+                Throw New InvalidOperationException("你的 PCL 版本过低！")
             ElseIf TargetVersion < RequestVersion Then
-                SendDisconnectRequest(User, "无法连接到 " & GetPlayerName() & "：你的 PCL2 版本过低！", True)
-                Throw New InvalidOperationException("对方的 PCL2 版本过低！")
+                SendDisconnectRequest(User, "无法连接到 " & GetPlayerName() & "：你的 PCL 版本过低！", True)
+                Throw New InvalidOperationException("对方的 PCL 版本过低！")
             Else
                 SendUpdateRequest(User, 1)
                 User.Progress = 1

@@ -108,7 +108,7 @@ Public Class FormMain
         End If
         If LastVersion < 233 Then 'Release 2.2.3
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "微软账号支持更换皮肤与披风"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持拖拽整合包文件到 PCL2 进行快捷安装"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持拖拽整合包文件到 PCL 进行快捷安装"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 下载支持显示对应的 MC 版本与 Mod 加载器，且可以跳转到 MCBBS 介绍页"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持安装 1.17 OptiFine + Forge"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "使用 Mojang 账号登录将会显示迁移提醒"))
@@ -126,6 +126,12 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 284 Then 'Snapshot 2.5.1
+            If LastVersion >= 275 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在全局启动设置中添加了 启动前执行命令 选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择下载 Fabric 时会自动选择 Fabric API"))
+            FeatureCount += 22
+            BugCount += 21
+        End If
         If LastVersion < 283 Then 'Snapshot 2.5.0
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持搜索、下载 Modrinth 中的 Mod 与整合包"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "资源搜索页面支持翻页"))
@@ -141,10 +147,6 @@ Public Class FormMain
         If LastVersion < 280 Then 'Snapshot 2.4.8
             FeatureCount += 1
             BugCount += 10
-        End If
-        If LastVersion < 278 Then 'Snapshot 2.4.7
-            If LastVersion = 277 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复设置背景音乐可能导致无法启动 PCL 的 Bug"))
-            BugCount += 2
         End If
         If LastVersion < 278 Then 'Snapshot 2.4.7
             If LastVersion = 277 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复设置背景音乐可能导致无法启动 PCL 的 Bug"))
@@ -284,7 +286,7 @@ Public Class FormMain
             BugCount += 19
         End If
         If LastVersion < 234 Then 'Snapshot 2.2.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持拖拽整合包文件到 PCL2 进行快捷安装"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持拖拽整合包文件到 PCL 进行快捷安装"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持安装 1.17 OptiFine + Forge"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "Mod 详情页面支持跳转 MCBBS 介绍页"))
             FeatureCount += 10
@@ -329,7 +331,7 @@ Public Class FormMain
         Dim Content As String = "· " & Join(ContentList, vbCrLf & "· ")
         '输出更新日志
         RunInNewThread(Sub()
-                           If MyMsgBox(Content, "PCL2 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
+                           If MyMsgBox(Content, "PCL 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
                                OpenWebsite("https://afdian.net/a/LTCat?tab=feed")
                            End If
                        End Sub, "UpdateLog Output")
@@ -443,15 +445,12 @@ Public Class FormMain
         '加载池
         RunInNewThread(Sub()
                            If Not Setup.Get("SystemEula") Then
-Reopen:
-                               Select Case MyMsgBox("在使用 PCL2 前，请同意 PCL2 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明")
+                               Select Case MyMsgBox("在使用 PCL 前，请同意 PCL 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明",
+                                   Button3Action:=Sub() OpenWebsite("https://shimo.im/docs/rGrd8pY8xWkt6ryW"))
                                    Case 1
                                        Setup.Set("SystemEula", True)
                                    Case 2
                                        EndProgram(False)
-                                   Case 3
-                                       OpenWebsite("https://shimo.im/docs/rGrd8pY8xWkt6ryW")
-                                       GoTo Reopen
                                End Select
                            End If
                            Try
@@ -478,13 +477,13 @@ Reopen:
 #If Not BETA Then
         Select Case Setup.Get("SystemCount")
             Case 1
-                MyMsgBox("欢迎使用 PCL2 快照版！" & vbCrLf &
+                MyMsgBox("欢迎使用 PCL 快照版！" & vbCrLf &
                          "快照版包含尚未在正式版发布的测试性功能，仅用于赞助者本人尝鲜。所以请不要发给其他人或者用于制作整合包哦！" & vbCrLf &
                          "如果你并非通过赞助或赞助者本人邀请进群获得的本程序，那么可能是有人在违规传播，记得提醒他一下啦。", "快照版使用说明")
         End Select
         If Setup.Get("SystemCount") >= 99 Then
             If ThemeUnlock(6, False) Then
-                MyMsgBox("你已经使用了 99 次 PCL2 啦，感谢你长期以来的支持！" & vbCrLf &
+                MyMsgBox("你已经使用了 99 次 PCL 啦，感谢你长期以来的支持！" & vbCrLf &
                          "隐藏主题 铁杆粉 已解锁！", "提示")
             End If
         End If
@@ -521,7 +520,7 @@ Reopen:
             Dim UnlockedTheme As New List(Of String)(Setup.Get("UiLauncherThemeHide2").ToString.Split("|"))
             UnlockedTheme.Remove("13")
             Setup.Set("UiLauncherThemeHide2", Join(UnlockedTheme, "|"))
-            MyMsgBox("由于新版 PCL2 修改了欧皇彩的解锁方式，你需要重新解锁欧皇彩。" & vbCrLf &
+            MyMsgBox("由于新版 PCL 修改了欧皇彩的解锁方式，你需要重新解锁欧皇彩。" & vbCrLf &
                      "多谢各位的理解啦！", "重新解锁提醒")
         End If
         '重置滑稽彩
@@ -529,7 +528,7 @@ Reopen:
             Dim UnlockedTheme As New List(Of String)(Setup.Get("UiLauncherThemeHide2").ToString.Split("|"))
             UnlockedTheme.Remove("12")
             Setup.Set("UiLauncherThemeHide2", Join(UnlockedTheme, "|"))
-            MyMsgBox("由于新版 PCL2 修改了滑稽彩的解锁方式，你需要重新解锁滑稽彩。" & vbCrLf &
+            MyMsgBox("由于新版 PCL 修改了滑稽彩的解锁方式，你需要重新解锁滑稽彩。" & vbCrLf &
                      "多谢各位的理解啦！", "重新解锁提醒")
         End If
         '移动自定义皮肤
@@ -838,8 +837,23 @@ Reopen:
                 Log("[System] 接受文件拖拽：" & FilePath, LogLevel.Developer)
                 RunInNewThread(Sub()
                                    Dim Extension As String = FilePath.Split(".").Last.ToLower
+                                   '自定义主页
+                                   If Extension = "xaml" Then
+                                       Log("[System] 文件后缀为 XAML，作为自定义主页加载")
+                                       If File.Exists(Path & "PCL\Custom.xaml") Then
+                                           If MyMsgBox("已存在一个自定义主页文件，是否要将它覆盖？", "覆盖确认", "覆盖", "取消") = 2 Then
+                                               Exit Sub
+                                           End If
+                                       End If
+                                       CopyFile(FilePath, Path & "PCL\Custom.xaml")
+                                       RunInUi(Sub()
+                                                   Setup.Set("UiCustomType", 1)
+                                                   FrmLaunchRight.ForceRefresh()
+                                               End Sub)
+                                       Exit Sub
+                                   End If
                                    'Mod 安装
-                                   If {"jar", "litemod", "disabled"}.Contains(Extension) Then
+                                   If {"jar", "litemod", "disabled"}.Any(Function(t) t = Extension) Then
                                        Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
                                        '获取并检查目标版本
                                        Dim TargetVersion As McVersion = McVersionCurrent
@@ -873,13 +887,13 @@ Install:
                                        Exit Sub
                                    End If
                                    '安装整合包
-                                   If {"zip", "rar", "mrpack"}.Contains(Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
+                                   If {"zip", "rar", "mrpack"}.Any(Function(t) t = Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
                                        Log("[System] 文件为压缩包，尝试作为整合包安装")
                                        If ModpackInstall(FilePath, ShowHint:=False) Then Exit Sub
                                    End If
                                    'RAR 处理
                                    If Extension = "rar" Then
-                                       Hint("PCL2 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试！")
+                                       Hint("PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试！")
                                        Exit Sub
                                    End If
                                    '错误报告分析
@@ -895,7 +909,7 @@ Install:
                                        Log(ex, "自主错误报告分析失败", LogLevel.Feedback)
                                    End Try
                                    '未知操作
-                                   Hint("PCL2 无法确定应当执行的文件拖拽操作……")
+                                   Hint("PCL 无法确定应当执行的文件拖拽操作……")
                                End Sub, "文件拖拽")
             End If
         Catch ex As Exception

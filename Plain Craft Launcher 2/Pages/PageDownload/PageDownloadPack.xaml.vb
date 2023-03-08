@@ -15,7 +15,8 @@
         If FrmDownloadPack IsNot Nothing AndAlso FrmDownloadPack.IsLoaded Then
             With Request
                 .SearchText = FrmDownloadPack.TextSearchName.Text
-                .GameVersion = If(FrmDownloadPack.TextSearchVersion.Text.Contains("."), FrmDownloadPack.TextSearchVersion.Text, Nothing)
+                .GameVersion = If(FrmDownloadPack.TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
+                    If(FrmDownloadPack.TextSearchVersion.Text.Contains(".") OrElse FrmDownloadPack.TextSearchVersion.Text.Contains("w"), FrmDownloadPack.TextSearchVersion.Text, Nothing))
                 .Tag = FrmDownloadPack.ComboSearchTag.SelectedItem.Tag
             End With
         End If
@@ -25,6 +26,7 @@
     '结果 UI 化
     Private Sub Load_OnFinish()
         Try
+            Log($"[Comp] 开始可视化整合包列表，已储藏 {Storage.Results.Count} 个结果，当前在第 {Page + 1} 页")
             '列表项
             PanProjects.Children.Clear()
             For i = Math.Min(Page * PageSize, Storage.Results.Count - 1) To Math.Min((Page + 1) * PageSize - 1, Storage.Results.Count - 1)
@@ -36,11 +38,13 @@
                                       Storage.CurseForgeOffset < Storage.CurseForgeTotal OrElse Storage.ModrinthOffset < Storage.ModrinthTotal,
                                       Visibility.Visible, Visibility.Collapsed)
             LabPage.Text = Page + 1
+            BtnPageFirst.IsEnabled = Page > 1
+            BtnPageFirst.Opacity = If(BtnPageFirst.IsEnabled, 1, 0.2)
             BtnPageLeft.IsEnabled = Page > 0
-            BtnPageLeft.Opacity = If(BtnPageLeft.IsEnabled, 1, 0.5)
+            BtnPageLeft.Opacity = If(BtnPageLeft.IsEnabled, 1, 0.2)
             BtnPageRight.IsEnabled = Storage.Results.Count > PageSize * (Page + 1) OrElse
                                      Storage.CurseForgeOffset < Storage.CurseForgeTotal OrElse Storage.ModrinthOffset < Storage.ModrinthTotal
-            BtnPageRight.Opacity = If(BtnPageRight.IsEnabled, 1, 0.5)
+            BtnPageRight.Opacity = If(BtnPageRight.IsEnabled, 1, 0.2)
             '强制返回顶部
             PanBack.ScrollToTop()
         Catch ex As Exception
@@ -54,8 +58,8 @@
             Case LoadState.Failed
                 Dim ErrorMessage As String = ""
                 If Loader.Error IsNot Nothing Then ErrorMessage = Loader.Error.Message
-                If ErrorMessage.Contains("不是有效的 Json 文件") Then
-                    Log("[Download] 下载的整合包列表 Json 文件损坏，已自动重试", LogLevel.Debug)
+                If ErrorMessage.Contains("不是有效的 json 文件") Then
+                    Log("[Download] 下载的整合包列表 json 文件损坏，已自动重试", LogLevel.Debug)
                     PageLoaderRestart()
                 End If
         End Select
@@ -69,6 +73,9 @@
 
     '切换页码
 
+    Private Sub BtnPageFirst_Click(sender As Object, e As RoutedEventArgs) Handles BtnPageFirst.Click
+        ChangePage(0)
+    End Sub
     Private Sub BtnPageLeft_Click(sender As Object, e As RoutedEventArgs) Handles BtnPageLeft.Click
         ChangePage(Page - 1)
     End Sub
@@ -96,7 +103,7 @@
     '搜索按钮
     Private Sub StartNewSearch() Handles BtnSearchRun.Click
         Page = 0
-        Storage = New CompProjectStorage
+        If Loader.ShouldStart(LoaderInput()) Then Storage = New CompProjectStorage '避免连续搜索两次使得 CompProjectStorage 引用丢失（#1311）
         Loader.Start()
     End Sub
     Private Sub TextSearchName_KeyUp(sender As Object, e As KeyEventArgs) Handles TextSearchName.KeyUp, TextSearchVersion.KeyUp
@@ -106,8 +113,8 @@
     '重置按钮
     Private Sub BtnSearchReset_Click(sender As Object, e As EventArgs) Handles BtnSearchReset.Click
         TextSearchName.Text = ""
+        TextSearchVersion.Text = "全部 (也可自行输入)"
         TextSearchVersion.SelectedIndex = 0
-        TextSearchVersion.Text = ""
         ComboSearchTag.SelectedIndex = 0
         Loader.LastFinishedTime = 0 '要求强制重新开始
     End Sub

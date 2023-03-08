@@ -154,65 +154,6 @@
         If AniControlEnabled = 0 Then Hint("部分调试信息将在刷新或启动器重启后切换显示！",, False)
     End Sub
 
-    '清理缓存
-    Private IsClearingCache As Boolean = False
-    Private Sub BtnSystemCacheClear_Click(sender As Object, e As EventArgs) Handles BtnSystemCacheClear.Click
-        If HasDownloadingTask() Then
-            Hint("请在所有下载任务完成后再清理缓存！", HintType.Critical)
-            Exit Sub
-        End If
-        If PathTemp = IO.Path.GetTempPath() & "PCL\" Then
-            If MyMsgBox("你确定要清理缓存吗？" & vbCrLf & "在清理缓存后，PCL2 会被强制关闭，以避免缓存缺失带来的异常。", "清理确认", "确定", "取消") = 2 Then
-                Exit Sub
-            End If
-        Else
-            If MyMsgBox("你已将缓存文件夹手动修改为：" & PathTemp & vbCrLf &
-                        "清理缓存将删除你所设置的这一文件夹中的所有内容，且无法恢复！" & vbCrLf &
-                        "请在继续前，确认其中没有除了 PCL2 缓存以外的重要文件！" & vbCrLf & vbCrLf &
-                        "在清理缓存后，PCL2 会被强制关闭，以避免缓存缺失带来的异常。", "清理确认", "永久删除该文件夹", "取消", IsWarn:=True) = 2 Then
-                Exit Sub
-            End If
-        End If
-        If IsClearingCache Then Exit Sub
-        IsClearingCache = True
-        Try
-            Dim TotalSize As ULong = DeleteCacheDirectory(PathTemp)
-            DeleteDirectory(PathTemp, True)
-            TotalSize += DeleteCacheDirectory(OsDrive & "ProgramData\PCL\")
-            DeleteDirectory(OsDrive & "ProgramData\PCL\", True)
-            If TotalSize <= 0 Then
-                Hint("没有可清理的缓存！")
-            Else
-                MyMsgBox("已清理 " & GetString(TotalSize) & " 缓存！" & vbCrLf & "PCL2 即将自动关闭。", "缓存已清理", ForceWait:=True)
-                FrmMain.EndProgram(False)
-            End If
-        Catch ex As Exception
-            Log(ex, "清理缓存失败", LogLevel.Hint)
-        Finally
-            IsClearingCache = False
-        End Try
-    End Sub
-    Private Function DeleteCacheDirectory(Path As String, Optional TotalSize As ULong = 0) As ULong
-        If Not Directory.Exists(Path) Then Return TotalSize
-        Dim Temp As String()
-        Temp = Directory.GetFiles(Path)
-        For Each str As String In Temp
-            Try
-                Dim Info As New FileInfo(str)
-                Dim FileActualSize = Math.Ceiling(Info.Length / 4096) * 4096
-                Info.Delete()
-                TotalSize += FileActualSize
-            Catch ex As Exception
-                Log(ex, "删除失败的缓存文件（" & str & "）")
-            End Try
-        Next
-        Temp = Directory.GetDirectories(Path)
-        For Each str As String In Temp
-            TotalSize += DeleteCacheDirectory(str)
-        Next
-        Return TotalSize
-    End Function
-
     '自动更新
     Private Sub ComboSystemActivity_SizeChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemActivity.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub

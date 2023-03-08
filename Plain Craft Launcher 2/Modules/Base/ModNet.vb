@@ -961,7 +961,7 @@ Capture:
                     Next
                     '是否禁用多线程，以及规定碎片大小
                     Dim TargetUrl As String = GetSource().Url
-                    If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("gitcode.net") OrElse TargetUrl.Contains("mcer.cn") Then Return False
+                    If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("gitcode.net") OrElse TargetUrl.Contains("github.com") Then Return False
                     Dim RealFilePieceLimit = If(TargetUrl.Contains("download.mcbbs.net"), FilePieceLimit * 5, FilePieceLimit)
                     '寻找最大碎片
                     Dim FilePieceMax As NetThread = Threads

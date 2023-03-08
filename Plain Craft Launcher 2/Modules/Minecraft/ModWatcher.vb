@@ -206,7 +206,7 @@
             'Log(Text)
             '关闭与崩溃检测
             If Not Text.Contains("[CHAT]") Then
-                If Text.Contains("Someone is closing me!") Then
+                If Text.Contains("Someone is closing me!") OrElse Text.Contains("Restarting Minecraft with command") Then '#1258
                     WatcherLog("识别为关闭的 Log：" & Text)
                     State = MinecraftState.Ended
                 ElseIf Text.Contains("Crash report saved to") OrElse Text.Contains("This crash report has been saved to:") Then

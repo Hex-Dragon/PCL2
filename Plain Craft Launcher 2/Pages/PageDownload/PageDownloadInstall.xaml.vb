@@ -38,6 +38,7 @@
         If IsInSelectPage Then Exit Sub
         IsInSelectPage = True
 
+        AutoSelectedFabricApi = False
         IsSelectNameEdited = False
         PanSelect.Visibility = Visibility.Visible
         PanSelect.IsHitTestVisible = True
@@ -873,10 +874,6 @@
         OptiFabric_Loaded()
         CardFabric.IsSwaped = True
         SelectReload()
-        If Not Setup.Get("HintInstallFabricApi") Then
-            Setup.Set("HintInstallFabricApi", True)
-            Hint("安装 Fabric 时通常还需要安装 Fabric API，在选择 Fabric 后就会显示其安装选项！")
-        End If
     End Sub
     Private Sub Fabric_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnFabricClear.MouseLeftButtonUp
         SelectedFabric = Nothing
@@ -948,6 +945,7 @@
         If LoadFabricApiGetError() IsNot Nothing Then e.Handled = True
     End Sub
 
+    Private AutoSelectedFabricApi As Boolean = False
     ''' <summary>
     ''' 尝试重新可视化 FabricApi 版本列表。
     ''' </summary>
@@ -967,16 +965,19 @@
                 End If
             Next
             If Versions.Count = 0 Then Exit Sub
-            '排序
-            Versions = Sort(Versions, Function(Left As CompFile, Right As CompFile) As Boolean
-                                          Return Left.ReleaseDate > Right.ReleaseDate
-                                      End Function)
+            Versions = Sort(Versions, Function(a, b) a.ReleaseDate > b.ReleaseDate)
             '可视化
             PanFabricApi.Children.Clear()
             For Each Version In Versions
                 If Not IsSuitableFabricApi(Version.DisplayName, SelectedMinecraftId) Then Continue For
                 PanFabricApi.Children.Add(FabricApiDownloadListItem(Version, AddressOf FabricApi_Selected))
             Next
+            '自动选择 Fabric API
+            If Not AutoSelectedFabricApi Then
+                AutoSelectedFabricApi = True
+                Log($"[Download] 已自动选择 Fabric API：{CType(PanFabricApi.Children(0), MyListItem).Title}")
+                FabricApi_Selected(PanFabricApi.Children(0), Nothing)
+            End If
         Catch ex As Exception
             Log(ex, "可视化 Fabric API 安装版本列表出错", LogLevel.Feedback)
         End Try
@@ -1087,7 +1088,7 @@
            (Setup.Get("LaunchArgumentIndie") = 0 OrElse Setup.Get("LaunchArgumentIndie") = 2) Then
             If MyMsgBox("你尚未开启版本隔离，这会导致多个 MC 共用同一个 Mod 文件夹。" & vbCrLf &
                         "因此在切换 MC 版本时，MC 会因为读取到与当前版本不符的 Mod 而崩溃。" & vbCrLf &
-                        "PCL2 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔离选项！", "版本隔离提示", "取消下载", "继续") = 1 Then
+                        "PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔离选项！", "版本隔离提示", "取消下载", "继续") = 1 Then
                 Exit Sub
             End If
         End If

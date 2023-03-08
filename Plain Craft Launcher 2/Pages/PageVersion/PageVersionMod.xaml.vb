@@ -308,6 +308,7 @@
     Public Sub Delete_Click(sender As MyIconButton, e As EventArgs)
         Try
 
+            Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
             Dim ListItem As MyListItem = sender.Tag
             Dim ModEntity As McMod = ListItem.Tag
             '前置检测警告
@@ -316,7 +317,11 @@
             End If
             '删除
             If File.Exists(ModEntity.Path) Then
-                My.Computer.FileSystem.DeleteFile(ModEntity.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+                If IsShiftPressed Then
+                    File.Delete(ModEntity.Path)
+                Else
+                    My.Computer.FileSystem.DeleteFile(ModEntity.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+                End If
             Else
                 '在不明原因下删除的文件可能还在列表里，如果玩家又点了一次就会出错，总之加个判断也不碍事
                 Log("[System] 需要删除的 Mod 文件不存在（" & ModEntity.Path & "）", LogLevel.Hint)
@@ -333,7 +338,11 @@
                 CType(Parent.Parent, MyCard).Title = McModGetTitle(McModLoader.Output)
             End If
             '显示提示
-            Hint("已将 " & ModEntity.FileName & " 删除到回收站！", HintType.Finish)
+            If IsShiftPressed Then
+                Hint("已删除 " & ModEntity.FileName & "！", HintType.Finish)
+            Else
+                Hint("已将 " & ModEntity.FileName & " 删除到回收站！", HintType.Finish)
+            End If
             LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", LoaderFolderRunType.UpdateOnly)
 
         Catch ex As Exception

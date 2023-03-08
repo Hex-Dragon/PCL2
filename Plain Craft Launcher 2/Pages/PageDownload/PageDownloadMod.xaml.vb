@@ -15,7 +15,8 @@
         If FrmDownloadMod IsNot Nothing AndAlso FrmDownloadMod.IsLoaded Then
             With Request
                 .SearchText = FrmDownloadMod.TextSearchName.Text
-                .GameVersion = If(FrmDownloadMod.TextSearchVersion.Text.Contains("."), FrmDownloadMod.TextSearchVersion.Text, Nothing)
+                .GameVersion = If(FrmDownloadMod.TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
+                    If(FrmDownloadMod.TextSearchVersion.Text.Contains(".") OrElse FrmDownloadMod.TextSearchVersion.Text.Contains("w"), FrmDownloadMod.TextSearchVersion.Text, Nothing))
                 .Tag = FrmDownloadMod.ComboSearchTag.SelectedItem.Tag
                 .ModLoader = Val(FrmDownloadMod.ComboSearchLoader.SelectedItem.Tag)
             End With
@@ -26,6 +27,7 @@
     '结果 UI 化
     Private Sub Load_OnFinish()
         Try
+            Log($"[Comp] 开始可视化 Mod 列表，已储藏 {Storage.Results.Count} 个结果，当前在第 {Page + 1} 页")
             '列表项
             PanProjects.Children.Clear()
             For i = Math.Min(Page * PageSize, Storage.Results.Count - 1) To Math.Min((Page + 1) * PageSize - 1, Storage.Results.Count - 1)
@@ -38,11 +40,13 @@
                                       Storage.CurseForgeOffset < Storage.CurseForgeTotal OrElse Storage.ModrinthOffset < Storage.ModrinthTotal,
                                       Visibility.Visible, Visibility.Collapsed)
             LabPage.Text = Page + 1
+            BtnPageFirst.IsEnabled = Page > 1
+            BtnPageFirst.Opacity = If(BtnPageFirst.IsEnabled, 1, 0.2)
             BtnPageLeft.IsEnabled = Page > 0
-            BtnPageLeft.Opacity = If(BtnPageLeft.IsEnabled, 1, 0.5)
+            BtnPageLeft.Opacity = If(BtnPageLeft.IsEnabled, 1, 0.2)
             BtnPageRight.IsEnabled = Storage.Results.Count > PageSize * (Page + 1) OrElse
                                      Storage.CurseForgeOffset < Storage.CurseForgeTotal OrElse Storage.ModrinthOffset < Storage.ModrinthTotal
-            BtnPageRight.Opacity = If(BtnPageRight.IsEnabled, 1, 0.5)
+            BtnPageRight.Opacity = If(BtnPageRight.IsEnabled, 1, 0.2)
             '强制返回顶部
             PanBack.ScrollToTop()
         Catch ex As Exception
@@ -56,8 +60,8 @@
             Case LoadState.Failed
                 Dim ErrorMessage As String = ""
                 If Loader.Error IsNot Nothing Then ErrorMessage = Loader.Error.Message
-                If ErrorMessage.Contains("不是有效的 Json 文件") Then
-                    Log("[Download] 下载的 Mod 列表 Json 文件损坏，已自动重试", LogLevel.Debug)
+                If ErrorMessage.Contains("不是有效的 json 文件") Then
+                    Log("[Download] 下载的 Mod 列表 json 文件损坏，已自动重试", LogLevel.Debug)
                     PageLoaderRestart()
                 End If
         End Select
@@ -71,6 +75,9 @@
 
     '切换页码
 
+    Private Sub BtnPageFirst_Click(sender As Object, e As RoutedEventArgs) Handles BtnPageFirst.Click
+        ChangePage(0)
+    End Sub
     Private Sub BtnPageLeft_Click(sender As Object, e As RoutedEventArgs) Handles BtnPageLeft.Click
         ChangePage(Page - 1)
     End Sub
@@ -94,7 +101,7 @@
     '搜索按钮
     Private Sub StartNewSearch() Handles BtnSearchRun.Click
         Page = 0
-        Storage = New CompProjectStorage
+        If Loader.ShouldStart(LoaderInput()) Then Storage = New CompProjectStorage '避免连续搜索两次使得 CompProjectStorage 引用丢失（#1311）
         Loader.Start()
     End Sub
     Private Sub TextSearchName_KeyUp(sender As Object, e As KeyEventArgs) Handles TextSearchName.KeyUp, TextSearchVersion.KeyUp
@@ -104,8 +111,8 @@
     '重置按钮
     Private Sub BtnSearchReset_Click(sender As Object, e As EventArgs) Handles BtnSearchReset.Click
         TextSearchName.Text = ""
+        TextSearchVersion.Text = "全部 (也可自行输入)"
         TextSearchVersion.SelectedIndex = 0
-        TextSearchVersion.Text = ""
         ComboSearchTag.SelectedIndex = 0
         ComboSearchLoader.SelectedIndex = 0
         Loader.LastFinishedTime = 0 '要求强制重新开始
@@ -113,13 +120,13 @@
 
     '版本选择
     Private Sub TextSearchVersion_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextSearchVersion.TextChanged
-        If TextSearchVersion.Text = "" Then
+        If TextSearchVersion.Text.Contains(".") OrElse TextSearchVersion.Text.Contains("w") Then
+            ComboSearchLoader.Visibility = Visibility.Visible
+            Grid.SetColumnSpan(TextSearchVersion, 1)
+        Else
             ComboSearchLoader.Visibility = Visibility.Collapsed
             Grid.SetColumnSpan(TextSearchVersion, 2)
             ComboSearchLoader.SelectedIndex = 0
-        Else
-            ComboSearchLoader.Visibility = Visibility.Visible
-            Grid.SetColumnSpan(TextSearchVersion, 1)
         End If
     End Sub
 

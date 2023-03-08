@@ -17,7 +17,7 @@ Public Class FormLoginOAuth
             IsLoginSuccessed = True
             RaiseEvent OnLoginSuccess(Code)
         ElseIf Url.Contains("github.") Then
-            Hint("PCL2 不支持使用 GitHub 登录微软账号！", HintType.Critical)
+            Hint("PCL 不支持使用 GitHub 登录微软账号！", HintType.Critical)
             Close()
         End If
     End Sub

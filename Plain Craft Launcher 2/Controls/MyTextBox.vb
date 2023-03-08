@@ -86,11 +86,11 @@
             ValidateResult = ValidateRule.Validate(Text)
             If IsNothing(ValidateResult) OrElse Not ValidateResult = "" Then Exit For
         Next
-        Dim NewResult As Integer = If(ValidateResult = "", 0, 1)
+        Dim NewResult As Boolean = ValidateResult = ""
         '根据结果改变样式
-        If ShownValidateResult <> NewResult Then
+        If ShownValidateResult <> If(NewResult, 0, 1) Then
             If IsLoaded AndAlso labWrong IsNot Nothing Then
-                ChangeValidateResult(ValidateResult = "", True)
+                ChangeValidateResult(NewResult, True)
             Else
                 RunInNewThread(Sub()
                                    Thread.Sleep(30)
@@ -119,10 +119,17 @@
             End If
         End If
     End Sub
+    ''' <summary>
+    ''' 强制显示结果为正常，类似尚未输入过文本的状态。不影响实际的检查结果。
+    ''' </summary>
+    Public Sub ForceShowAsSuccess()
+        IsTextChanged = False
+        ChangeValidateResult(ValidateResult = "", True)
+    End Sub
     Private ShownValidateResult As Integer = -1
     Private Sub ChangeValidateResult(NewResult As Boolean, IsLoaded As Boolean)
-        If IsLoaded AndAlso AniControlEnabled = 0 AndAlso IsTextChanged AndAlso labWrong IsNot Nothing Then
-            If NewResult Then
+        If IsLoaded AndAlso AniControlEnabled = 0 AndAlso labWrong IsNot Nothing Then
+            If NewResult OrElse Not IsTextChanged Then
                 '变为正确
                 ShownValidateResult = 0
                 AniStart({
@@ -144,23 +151,6 @@
             End If
         Else
             ShownValidateResult = 3
-            'AniStop("MyTextBox Validate " & Uuid)
-            'If NewResult Then
-            '    '变为正确
-            '    labWrong.Opacity = 0
-            '    labWrong.Height = 0
-            '    labWrong.Visibility = Visibility.Collapsed
-            'Else
-            '    '变为错误
-            '    labWrong.Visibility = Visibility.Visible
-            '    labWrong.Text = ValidateResult
-            '    labWrong.Opacity = 1
-            '    labWrong.Height = 20.5
-            'End If
-            'Dim OriginalEnabled As Integer = AniControlEnabled
-            'AniControlEnabled += 1
-            'RefreshColor()
-            'AniControlEnabled = OriginalEnabled
         End If
         RefreshColor()
         RaiseEvent ValidateChanged(Me, New EventArgs)

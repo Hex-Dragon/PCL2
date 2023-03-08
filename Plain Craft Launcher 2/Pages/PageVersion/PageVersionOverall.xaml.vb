@@ -92,7 +92,7 @@
     Private Sub BtnDisplayDesc_Click(sender As Object, e As EventArgs) Handles BtnDisplayDesc.Click
         Try
             Dim OldInfo As String = ReadIni(PageVersionLeft.Version.Path & "PCL\Setup.ini", "CustomInfo")
-            Dim NewInfo As String = MyMsgBoxInput("更改描述", "修改版本的描述文本，留空则使用 PCL2 的默认描述。", OldInfo, New ObjectModel.Collection(Of Validate), "默认描述")
+            Dim NewInfo As String = MyMsgBoxInput("更改描述", "修改版本的描述文本，留空则使用 PCL 的默认描述。", OldInfo, New ObjectModel.Collection(Of Validate), "默认描述")
             If NewInfo IsNot Nothing AndAlso OldInfo <> NewInfo Then WriteIni(PageVersionLeft.Version.Path & "PCL\Setup.ini", "CustomInfo", NewInfo)
             PageVersionLeft.Version = New McVersion(PageVersionLeft.Version.Name).Load()
             Reload()
@@ -121,7 +121,7 @@
             Try
                 JsonObject = GetJson(ReadFile(PageVersionLeft.Version.Path & PageVersionLeft.Version.Name & ".json"))
             Catch ex As Exception
-                Log(ex, "重命名读取 Json 时失败")
+                Log(ex, "重命名读取 json 时失败")
                 JsonObject = PageVersionLeft.Version.JsonObject
             End Try
             '重命名主文件夹
@@ -162,7 +162,7 @@
                     JsonObject("id") = NewName
                     WriteFile(NewPath & NewName & ".json", JsonObject.ToString)
                 Catch ex As Exception
-                    Log(ex, "重命名 Json 时失败")
+                    Log(ex, "重命名版本 json 失败")
                 End Try
             End If
             '刷新与提示
@@ -315,17 +315,20 @@
     Private Sub BtnManageDelete_Click(sender As Object, e As EventArgs) Handles BtnManageDelete.Click
         '修改此代码时，同时修改 PageSelectRight 中的代码
         Try
+            Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
             Dim IsHintIndie As Boolean = PageVersionLeft.Version.State <> McVersionState.Error AndAlso PageVersionLeft.Version.PathIndie <> PathMcFolder
-            Select Case MyMsgBox("你确定要删除版本 " & PageVersionLeft.Version.Name & " 吗？" &
+            Select Case MyMsgBox($"你确定要{If(IsShiftPressed, "永久", "")}删除版本 {PageVersionLeft.Version.Name} 吗？" &
                         If(IsHintIndie, vbCrLf & "由于该版本开启了版本隔离，删除版本时该版本对应的存档、资源包、Mod 等文件也将被一并删除！", ""),
-                        "版本删除确认", , "取消",, True)
+                        "版本删除确认", , "取消",, IsHintIndie OrElse IsShiftPressed)
                 Case 1
-                    FileIO.FileSystem.DeleteDirectory(PageVersionLeft.Version.Path, FileIO.UIOption.AllDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                    Hint("版本 " & PageVersionLeft.Version.Name & " 已删除到回收站！", HintType.Finish)
+                    If IsShiftPressed Then
+                        DeleteDirectory(PageVersionLeft.Version.Path)
+                        Hint("版本 " & PageVersionLeft.Version.Name & " 已永久删除！", HintType.Finish)
+                    Else
+                        FileIO.FileSystem.DeleteDirectory(PageVersionLeft.Version.Path, FileIO.UIOption.AllDialogs, FileIO.RecycleOption.SendToRecycleBin)
+                        Hint("版本 " & PageVersionLeft.Version.Name & " 已删除到回收站！", HintType.Finish)
+                    End If
                 Case 2
-                    '    DeleteDirectory(PageVersionLeft.Version.Path)
-                    '    Hint("版本 " & PageVersionLeft.Version.Name & " 已永久删除！", HintType.Finish)
-                    'Case 3
                     Exit Sub
             End Select
             LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")

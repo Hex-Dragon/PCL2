@@ -29,7 +29,7 @@
     ''' <summary>
     ''' 将可用于分析的日志存储到 AnalyzeRawFiles。
     ''' </summary>
-    ''' <param name="LatestLog">从 PCL2 捕获到的最后 200 行程序输出。</param>
+    ''' <param name="LatestLog">从 PCL 捕获到的最后 200 行程序输出。</param>
     Public Sub Collect(VersionPathIndie As String, Optional LatestLog As IList(Of String) = Nothing)
         Log("[Crash] 步骤 1：收集日志文件")
 
@@ -178,7 +178,7 @@
                    FileName = "游戏崩溃前的输出.txt" OrElse FileName = "rawoutput.log" Then
                 TargetType = AnalyzeFileType.MinecraftLog
                 If DirectFile Is Nothing Then DirectFile = LogFile
-            ElseIf FileName = "启动器日志.txt" OrElse FileName = "PCL2 启动器日志.txt" OrElse FileName = "log1.txt" Then
+            ElseIf FileName = "启动器日志.txt" OrElse FileName = "PCL2 启动器日志.txt" OrElse FileName = "PCL 启动器日志.txt" OrElse FileName = "log1.txt" Then
                 If LogFile.Value.Any(Function(s) s.Contains("以下为游戏输出的最后一段内容")) Then
                     TargetType = AnalyzeFileType.MinecraftLog
                     If DirectFile Is Nothing Then DirectFile = LogFile
@@ -243,7 +243,7 @@
                             Log("[Crash] 输出报告：" & SelectedFile.Key & "，作为 Minecraft 或启动器日志")
                         Next
                         '选择一份最佳的来自启动器的游戏日志
-                        For Each FileName As String In {"rawoutput.log", "启动器日志.txt", "log1.txt", "游戏崩溃前的输出.txt", "PCL2 启动器日志.txt"}
+                        For Each FileName As String In {"rawoutput.log", "启动器日志.txt", "log1.txt", "游戏崩溃前的输出.txt", "PCL2 启动器日志.txt", "PCL 启动器日志.txt"}
                             If FileNameDict.ContainsKey(FileName) Then
                                 Dim CurrentLog = FileNameDict(FileName)
                                 '截取 “以下为游戏输出的最后一段内容” 后的内容
@@ -253,12 +253,12 @@
                                         LogMc += Line & vbLf
                                     ElseIf Line.Contains("以下为游戏输出的最后一段内容") Then
                                         HasLauncherMark = True
-                                        Log("[Crash] 找到 PCL2 输出的游戏实时日志头")
+                                        Log("[Crash] 找到 PCL 输出的游戏实时日志头")
                                     End If
                                 Next
                                 '导入后 500 行
                                 If Not HasLauncherMark Then LogMc += GetHeadTailLines(CurrentLog.Value, 0, 500)
-                                LogMc = LogMc.TrimEnd(vbCrLf.ToCharArray) & vbLf & "[" '路径包含中文且存在编码问题导致找不到或无法加载主类的末端检测
+                                LogMc = LogMc.TrimEnd(vbCrLf.ToCharArray)
                                 Log("[Crash] 导入分析：" & CurrentLog.Key & "，作为启动器日志")
                                 Exit For
                             End If
@@ -267,7 +267,7 @@
                         For Each FileName As String In {"latest.log", "latest log.txt", "debug.log", "debug log.txt"}
                             If FileNameDict.ContainsKey(FileName) Then
                                 Dim CurrentLog = FileNameDict(FileName)
-                                LogMc += GetHeadTailLines(CurrentLog.Value, 250, 500) & vbLf & "["
+                                LogMc += GetHeadTailLines(CurrentLog.Value, 250, 500)
                                 Log("[Crash] 导入分析：" & CurrentLog.Key & "，作为 Minecraft 日志")
                                 Exit For
                             End If
@@ -331,7 +331,7 @@
         Java版本过高
         Java版本不兼容
         显卡驱动不支持导致无法设置像素格式
-        路径包含中文且存在编码问题导致找不到或无法加载主类
+        极短的程序输出
         Intel驱动不兼容导致EXCEPTION_ACCESS_VIOLATION 'https://bugs.mojang.com/browse/MC-32606
         AMD驱动不兼容导致EXCEPTION_ACCESS_VIOLATION 'https://bugs.mojang.com/browse/MC-31618
         Nvidia驱动不兼容导致EXCEPTION_ACCESS_VIOLATION
@@ -464,6 +464,7 @@ Done:
             If LogMc.Contains("java.lang.ClassCastException: java.base/jdk") Then AppendReason(CrashReason.使用JDK)
             If LogMc.Contains("java.lang.ClassCastException: class jdk.") Then AppendReason(CrashReason.使用JDK)
             If LogMc.Contains("TRANSFORMER/net.optifine/net.optifine.reflect.Reflector.<clinit>(Reflector.java") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
+            If LogMc.Contains("java.lang.NoSuchMethodError: 'void net.minecraft.client.renderer.texture.SpriteContents.<init>(net.minecraft.resources.ResourceLocation, ") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("java.lang.NoSuchMethodError: 'void net.minecraft.client.renderer.block.model.BakedQuad.<init>(int[], int, net.minecraft.core.Direction, net.minecraft.client.renderer.texture.TextureAtlasSprite, boolean, boolean)'") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("java.lang.NoSuchMethodError: 'void net.minecraft.server.level.DistanceManager.addRegionTicket(net.minecraft.server.level.TicketType, net.minecraft.world.level.ChunkPos, int, java.lang.Object, boolean)'") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("Open J9 is not supported") OrElse LogMc.Contains("OpenJ9 is incompatible") OrElse LogMc.Contains(".J9VMInternals.") Then AppendReason(CrashReason.使用OpenJ9)
@@ -478,8 +479,6 @@ Done:
             If LogMc.Contains("java.lang.NoSuchMethodError: sun.security.util.ManifestEntryVerifier") Then AppendReason(CrashReason.低版本Forge与高版本Java不兼容)
             If LogMc.Contains("1282: Invalid operation") Then AppendReason(CrashReason.光影或资源包导致OpenGL1282错误)
             If LogMc.Contains("signer information does not match signer information of other classes in the same package") Then AppendReason(CrashReason.文件或内容校验失败, If(RegexSeek(LogMc, "(?<=class "")[^']+(?=""'s signer information)"), "").TrimEnd(vbCrLf))
-            If LogMc.Contains("An exception was thrown, the game will display an error screen and halt.") Then AppendReason(CrashReason.Forge报错, If(RegexSeek(LogMc, "(?<=the game will display an error screen and halt[\s\S]+?Exception: )[\s\S]+?(?=\n\tat)"), "").TrimEnd(vbCrLf))
-            If LogMc.Contains("A potential solution has been determined:") Then AppendReason(CrashReason.Fabric报错并给出解决方案, Join(RegexSearch(If(RegexSeek(LogMc, "(?<=A potential solution has been determined:\n)((\t)+ - [^\n]+\n)+"), ""), "(?<=(\t)+)[^\n]+"), vbLf))
             If LogMc.Contains("Maybe try a lower resolution resourcepack?") Then AppendReason(CrashReason.材质过大或显卡配置不足)
             If LogMc.Contains("java.lang.NoSuchMethodError: net.minecraft.world.server.ChunkManager$ProxyTicketManager.shouldForceTicks(J)Z") AndAlso LogMc.Contains("OptiFine") Then AppendReason(CrashReason.OptiFine导致无法加载世界)
             If LogMc.Contains("Unsupported class file major version") Then AppendReason(CrashReason.Java版本不兼容)
@@ -495,21 +494,24 @@ Done:
             If LogMc.Contains("DuplicateModsFoundException") Then AppendReason(CrashReason.Mod重复安装, RegexSearch(LogMc, "(?<=\n\t[\w]+ : [A-Z]{1}:[^\n]+(/|\\))[^/\\\n]+?.jar", RegularExpressions.RegexOptions.IgnoreCase))
             If LogMc.Contains("Found a duplicate mod") Then AppendReason(CrashReason.Mod重复安装, RegexSearch(If(RegexSeek(LogMc, "Found a duplicate mod[^\n]+"), ""), "[^\\/]+.jar", RegularExpressions.RegexOptions.IgnoreCase))
             If LogMc.Contains("ModResolutionException: Duplicate") Then AppendReason(CrashReason.Mod重复安装, RegexSearch(If(RegexSeek(LogMc, "ModResolutionException: Duplicate[^\n]+"), ""), "[^\\/]+.jar", RegularExpressions.RegexOptions.IgnoreCase))
-            '找不到或无法加载主类
-            If (RegexCheck(LogMc, "^[^\n.]+.\w+.[^\n]+\n\[$") OrElse RegexCheck(LogMc, "^\[[^\]]+\] [^\n.]+.\w+.[^\n]+\n\[")) AndAlso
-               Not (LogMc.Contains("at net.") OrElse LogMc.Contains("/INFO]")) AndAlso
-               LogHs Is Nothing AndAlso LogCrash Is Nothing AndAlso LogMc.Length < 500 Then
-                AppendReason(CrashReason.路径包含中文且存在编码问题导致找不到或无法加载主类)
-            End If
             'Mod 导致的崩溃
             If LogMc.Contains("Mixin prepare failed ") OrElse LogMc.Contains("Mixin apply failed ") OrElse LogMc.Contains("mixin.injection.throwables.") OrElse LogMc.Contains(".mixins.json] FAILED during )") Then
                 Dim ModId As String = RegexSeek(LogMc, "(?<=in )[^./ ]+(?=.mixins.json.+failed injection check)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=in mixins.)[^./ ]+(?=.json.+failed injection check)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in )[^./ ]+(?=.mixins.json)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in mixins.)[^./ ]+(?=.json)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[)[^./ ]+(?=.mixins.json\] FAILED during )")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[mixins.)[^./ ]+(?=.json\] FAILED during )")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in callback )[^./ ]+(?=.mixins.json:)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in callback mixins.)[^./ ]+(?=.json:)")
                 AppendReason(CrashReason.ModMixin失败, TryAnalyzeModName(If(ModId, "").TrimEnd((vbCrLf & " ").ToCharArray)))
             End If
-            If LogMc.Contains("Caught exception from ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogMc, "[^\n]+?(?)"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
+            If LogMc.Contains("Caught exception from ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(RegexSeek(LogMc, "(?<=Caught exception from )[^\n]+?")?.TrimEnd((vbCrLf & " ").ToCharArray)))
+            '仅当没有其他分析结果时显示
+            If CrashReasons.Count = 0 Then
+                If LogMc.Contains("An exception was thrown, the game will display an error screen and halt.") Then AppendReason(CrashReason.Forge报错, RegexSeek(LogMc, "(?<=the game will display an error screen and halt.[\n\r]+[^\n]+?Exception: )[\s\S]+?(?=\n\tat)")?.Trim(vbCrLf))
+                If LogMc.Contains("A potential solution has been determined:") Then AppendReason(CrashReason.Fabric报错并给出解决方案, Join(RegexSearch(If(RegexSeek(LogMc, "(?<=A potential solution has been determined:\n)((\t)+ - [^\n]+\n)+"), ""), "(?<=(\t)+)[^\n]+"), vbLf))
+            End If
         End If
 
         '虚拟机日志分析
@@ -552,9 +554,13 @@ Done:
 
         '游戏日志分析
         If LogMc IsNot Nothing Then
-            If LogMc.Contains("]: Warnings were found!") Then AppendReason(CrashReason.Fabric报错, If(RegexSeek(LogMc, "(?<=\]: Warnings were found! ?[\n]+)[\w\W]+?(?=[\n]+\[)"), "").Trim(vbCrLf.ToCharArray))
+            If Not (LogMc.Contains("at net.") OrElse LogMc.Contains("INFO]")) AndAlso
+               LogHs Is Nothing AndAlso LogCrash Is Nothing AndAlso LogMc.Length < 100 Then
+                AppendReason(CrashReason.极短的程序输出, LogMc)
+            End If
             'Mixin 失败可以导致大量 Mod 实例创建失败
             If LogMc.Contains("Failed to create mod instance.") Then AppendReason(CrashReason.Mod初始化失败, TryAnalyzeModName(If(RegexSeek(LogMc, "(?<=Failed to create mod instance. ModID: )[^,]+"), If(RegexSeek(LogMc, "(?<=Failed to create mod instance. ModId )[^\n]+(?= for )"), "")).TrimEnd(vbCrLf)))
+            '注意：Fabric 的 Warnings were found! 不一定是崩溃原因，它可能是单纯的警报
         End If
 
         '崩溃报告分析
@@ -600,12 +606,12 @@ NextStack:
             For i = 0 To Math.Min(3, Splited.Count - 1) '最多取前 4 节
                 Dim Word As String = Splited(i)
                 If Word.Length <= 2 OrElse Word.StartsWith("func_") Then Continue For
-                If {"com", "org", "net", "asm", "fml", "mod", "jar", "sun", "lib", "map", "gui", "dev", "nio", "api", "dsi",
+                If {"com", "org", "net", "asm", "fml", "mod", "jar", "sun", "lib", "map", "gui", "dev", "nio", "api", "dsi", "top",
                     "core", "init", "mods", "main", "file", "game", "load", "read", "done", "util", "tile", "item", "base",
-                    "forge", "setup", "block", "model", "mixin", "event", "unimi",
-                    "common", "server", "config", "loader", "launch", "entity", "assist", "client", "modapi", "mojang", "shader", "events", "github", "recipe",
+                    "forge", "setup", "block", "model", "mixin", "event", "unimi", "netty",
+                    "common", "server", "config", "loader", "launch", "entity", "assist", "client", "plugin", "modapi", "mojang", "shader", "events", "github", "recipe",
                     "preinit", "preload", "machine", "reflect", "channel", "general", "handler", "content",
-                    "fastutil", "optifine", "minecraft", "transformers", "universal", "internal", "multipart", "minecraftforge", "override", "blockentity"
+                    "fastutil", "optifine", "scheduler", "minecraft", "transformers", "universal", "internal", "multipart", "minecraftforge", "override", "blockentity"
                    }.Contains(Word.ToLower) Then Continue For
                 PossibleWords.Add(Word.Trim)
             Next
@@ -663,7 +669,7 @@ NextStack:
             For Each ModString As String In ModNameLines
                 Dim RealModString As String = ModString.ToLower.Replace("_", "")
                 If Not RealModString.Contains(KeyWord.ToLower.Replace("_", "")) Then Continue For
-                If RealModString.Contains("minecraft.jar") OrElse RealModString.Contains(" forge-") Then Continue For
+                If RealModString.Contains("minecraft.jar") OrElse RealModString.Contains(" forge-") OrElse RealModString.Contains(" mixin-") Then Continue For
                 HintLines.Add(ModString.Trim(vbCrLf.ToCharArray))
                 Exit For
             Next
@@ -696,7 +702,7 @@ NextStack:
     ''' 尝试获取 Mod 名称，若失败则返回原关键字。
     ''' </summary>
     Private Function TryAnalyzeModName(Keywords As String) As List(Of String)
-        Dim RawList As New List(Of String) From {Keywords}
+        Dim RawList As New List(Of String) From {If(Keywords, "")}
         If String.IsNullOrEmpty(Keywords) Then Return RawList
         Return If(AnalyzeModName(RawList), RawList)
     End Function
@@ -709,10 +715,8 @@ NextStack:
     Public Sub Output(IsHandAnalyze As Boolean, Optional ExtraFiles As List(Of String) = Nothing)
         '弹窗提示
         FrmMain.ShowWindowToTop()
-Redo:
-        Select Case MyMsgBox(GetAnalyzeResult(IsHandAnalyze), If(IsHandAnalyze, "错误报告分析结果", "Minecraft 出现错误"),
-                             "确定", If(IsHandAnalyze OrElse DirectFile Is Nothing, "", "查看日志"), If(IsHandAnalyze, "", "导出错误报告"))
-            Case 2
+        Dim ShowLog As Action =
+            Sub()
                 If File.Exists(DirectFile.Value.Key) Then
                     ShellOnly(DirectFile.Value.Key)
                 Else
@@ -720,7 +724,10 @@ Redo:
                     WriteFile(FilePath, Join(DirectFile.Value.Value, vbCrLf))
                     ShellOnly(FilePath)
                 End If
-                GoTo Redo
+            End Sub
+        Select Case MyMsgBox(GetAnalyzeResult(IsHandAnalyze), If(IsHandAnalyze, "错误报告分析结果", "Minecraft 出现错误"),
+                             "确定", If(IsHandAnalyze OrElse DirectFile Is Nothing, "", "查看日志"), If(IsHandAnalyze, "", "导出错误报告"),
+                             Button2Action:=If(IsHandAnalyze OrElse DirectFile Is Nothing, Nothing, ShowLog))
             Case 3
                 Dim FileAddress As String = Nothing
                 Try
@@ -740,7 +747,7 @@ Redo:
                             Case "LatestLaunch.bat"
                                 FileName = "启动脚本.bat"
                             Case "Log1.txt"
-                                FileName = "PCL2 启动器日志.txt"
+                                FileName = "PCL 启动器日志.txt"
                             Case "RawOutput.log"
                                 FileName = "游戏崩溃前的输出.txt"
                         End Select
@@ -764,157 +771,161 @@ Redo:
     ''' </summary>
     Private Function GetAnalyzeResult(IsHandAnalyze As Boolean) As String
 
-        '非一个结果的处理
-        Dim ResultString As String
+        '没有结果的处理
         If CrashReasons.Count = 0 Then
             If IsHandAnalyze Then
-                Return "很抱歉，PCL2 无法确定错误原因。"
+                Return "很抱歉，PCL 无法确定错误原因。"
             Else
                 Return "很抱歉，你的游戏出现了一些问题……" & vbCrLf &
                        "如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。" & vbCrLf &
                        "你也可以查看错误报告，其中可能会有出错的原因。"
             End If
-        ElseIf CrashReasons.Count >= 2 Then
-            Hint("错误分析时发现数个可能的原因，窗口中仅显示了第一条，你可以在启动器日志中检查更多可能的原因！", HintType.Finish)
         End If
 
         '根据不同原因判断
-        Dim Additional As List(Of String) = CrashReasons.First.Value
-        Select Case CrashReasons.First.Key
-            Case CrashReason.Mod文件被解压
-                ResultString = "由于 Mod 文件被解压了，导致游戏无法继续运行。\n直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。\n\n请删除 Mod 文件夹中已被解压的 Mod，然后再启动游戏。"
-            Case CrashReason.内存不足
-                ResultString = "Minecraft 内存不足，导致其无法继续运行。\n这很可能是由于你为游戏分配的内存不足，或是游戏的配置要求过高。\n\n你可以在启动设置中增加为游戏分配的内存，删除配置要求较高的材质、Mod、光影。\n如果这依然不奏效，请在开始游戏前尽量关闭其他软件，或者……换台电脑？\h"
-            Case CrashReason.使用OpenJ9
-                ResultString = "游戏因为使用 Open J9 而崩溃了。\n请在启动设置的 Java 选择一项中改用非 OpenJ9 的 Java，然后再启动游戏。"
-            Case CrashReason.使用JDK
-                ResultString = "游戏似乎因为使用 JDK，或 Java 版本过高而崩溃了。\n请在启动设置的 Java 选择一项中改用 JRE 8（Java 8），然后再启动游戏。\n如果你没有安装 JRE 8，你可以从网络中下载、安装一个。"
-            Case CrashReason.Java版本过高
-                ResultString = "游戏似乎因为你所使用的 Java 版本过高而崩溃了。\n请在启动设置的 Java 选择一项中改用较低版本的 Java，然后再启动游戏。\n如果没有，可以从网络中下载、安装一个。"
-            Case CrashReason.Java版本不兼容
-                ResultString = "游戏不兼容你当前使用的 Java。\n如果没有合适的 Java，可以从网络中下载、安装一个。"
-            Case CrashReason.使用32位Java导致JVM无法分配足够多的内存
-                If Environment.Is64BitOperatingSystem Then
-                    ResultString = "你似乎正在使用 32 位 Java，这会导致 Minecraft 无法使用 1GB 以上的内存，进而造成崩溃。\n\n请在启动设置的 Java 选择一项中改用 64 位的 Java 再启动游戏，然后再启动游戏。\n如果你没有安装 64 位的 Java，你可以从网络中下载、安装一个。"
-                Else
-                    ResultString = "你正在使用 32 位的操作系统，这会导致 Minecraft 无法使用 1GB 以上的内存，进而造成崩溃。\n\n你或许只能重装 64 位的操作系统来解决此问题。\n如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……\h"
-                End If
-            Case CrashReason.崩溃日志堆栈分析发现关键字, CrashReason.MC日志堆栈分析发现关键字
-                If Additional.Count = 1 Then
-                    ResultString = "你的游戏遇到了一些问题，这可能是某些 Mod 所引起的，PCL2 找到了一个可疑的关键词：" & Additional.First & "。\n\n如果你知道它对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。\h"
-                Else
-                    ResultString = "你的游戏遇到了一些问题，这可能是某些 Mod 所引起的，PCL2 找到了以下可疑的关键词：\n - " & Join(Additional, ", ") & "\n\n如果你知道这些关键词对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。\h"
-                End If
-            Case CrashReason.崩溃日志堆栈分析发现Mod名称
-                If Additional.Count = 1 Then
-                    ResultString = "名为 " & Additional.First & " 的 Mod 可能导致了游戏出错。\n\e\h"
-                Else
-                    ResultString = "可能是以下 Mod 导致了游戏出错：\n - " & Join(Additional, "\n - ") & "\n\e\h"
-                End If
-            Case CrashReason.确定Mod导致游戏崩溃
-                If Additional.Count = 1 Then
-                    ResultString = "名称或 ID 为 " & Additional.First & " 的 Mod 导致了游戏出错。\n\e\h"
-                Else
-                    ResultString = "以下 Mod 导致了游戏出错：\n - " & Join(Additional, "\n - ") & "\n\e\h"
-                End If
-            Case CrashReason.ModMixin失败
-                If Additional.Count = 1 Then
-                    ResultString = "名称或 ID 为 " & Additional.First & " 的 Mod 注入失败，导致游戏出错。\n这一般代表着该 Mod 存在 Bug，或与当前环境不兼容。\n\e\h"
-                Else
-                    ResultString = "以下 Mod 导致了游戏出错：\n - " & Join(Additional, "\n - ") & "\n这一般代表着这些 Mod 存在 Bug，或与当前环境不兼容。\n\e\h"
-                End If
-            Case CrashReason.Mod配置文件导致游戏崩溃
-                If Additional(1) Is Nothing Then
-                    ResultString = "名称或 ID 为 " & Additional.First & " 的 Mod 导致了游戏出错。\n\e\h"
-                Else
-                    ResultString = "名称或 ID 为 " & Additional.First & " 的 Mod 导致了游戏出错：\n其配置文件 " & Additional(1) & " 存在异常，无法读取。"
-                End If
-            Case CrashReason.Mod初始化失败
-                If Additional.Count = 1 Then
-                    ResultString = "名为 " & Additional.First & " 的 Mod 初始化失败，导致游戏无法继续加载。\n\e\h"
-                Else
-                    ResultString = "以下 Mod 初始化失败，导致游戏无法继续加载：\n - " & Join(Additional, "\n - ") & "\n\e\h"
-                End If
-            Case CrashReason.特定方块导致崩溃
-                If Additional.Count = 1 Then
-                    ResultString = "游戏似乎因为方块 " & Additional.First & " 出现了问题。\n\n你可以创建一个新世界，并观察游戏的运行情况：\n - 若正常运行，则是该方块导致出错，你或许需要使用一些方式删除此方块。\n - 若仍然出错，问题就可能来自其他原因……\h"
-                Else
-                    ResultString = "游戏似乎因为世界中的某些方块出现了问题。\n\n你可以创建一个新世界，并观察游戏的运行情况：\n - 若正常运行，则是某些方块导致出错，你或许需要删除该世界。\n - 若仍然出错，问题就可能来自其他原因……\h"
-                End If
-            Case CrashReason.Mod重复安装
-                If Additional.Count >= 2 Then
-                    ResultString = "你重复安装了多个相同的 Mod：\n - " & Join(Additional, "\n - ") & "\n\n每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。"
-                Else
-                    ResultString = "你可能重复安装了多个相同的 Mod，导致游戏无法继续加载。\n\n每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。\e\h"
-                End If
-            Case CrashReason.特定实体导致崩溃
-                If Additional.Count = 1 Then
-                    ResultString = "游戏似乎因为实体 " & Additional.First & " 出现了问题。\n\n你可以创建一个新世界，并生成一个该实体，然后观察游戏的运行情况：\n - 若正常运行，则是该实体导致出错，你或许需要使用一些方式删除此实体。\n - 若仍然出错，问题就可能来自其他原因……\h"
-                Else
-                    ResultString = "游戏似乎因为世界中的某些实体出现了问题。\n\n你可以创建一个新世界，并生成各种实体，观察游戏的运行情况：\n - 若正常运行，则是某些实体导致出错，你或许需要删除该世界。\n - 若仍然出错，问题就可能来自其他原因……\h"
-                End If
-            Case CrashReason.OptiFine与Forge不兼容
-                ResultString = "由于 OptiFine 与当前版本的 Forge 不兼容，导致了游戏崩溃。\n\n请前往 OptiFine 官网（https://optifine.net/downloads）查看 OptiFine 所兼容的 Forge 版本，并严格按照对应版本重新安装游戏。\n经测试，Forge 版本过高或过低都可能导致崩溃。"
-            Case CrashReason.低版本Forge与高版本Java不兼容
-                ResultString = "由于低版本 Forge 与当前 Java 不兼容，导致了游戏崩溃。\n\n请尝试以下解决方案：\n - 更新 Forge 到 36.2.26 或更高版本\n - 换用版本低于 8.0.320 的 Java"
-            Case CrashReason.版本Json中存在多个Forge
-                ResultString = "可能由于使用其他启动器修改了 Forge 版本，当前版本的文件存在异常，导致了游戏崩溃。\n请尝试重新全新安装 Forge，而非使用其他启动器修改 Forge 版本。"
-            Case CrashReason.玩家手动触发调试崩溃
-                ResultString = "* 事实上，你的游戏没有任何问题，这是你自己触发的崩溃。\n* 你难道没有更重要的事要做吗？"
-            Case CrashReason.路径包含中文且存在编码问题导致找不到或无法加载主类
-                ResultString = "由于游戏路径含有中文字符，且 Java 或系统编码存在错误，导致游戏无法运行。\n\n解决这一问题的最简单方法是检查游戏的完整路径，并删除各个文件夹名中的中文字符。\n这包括了游戏的版本名、它所处的 .minecraft 文件夹及其之前的文件夹名。\h"
-            Case CrashReason.OptiFine导致无法加载世界 'https://www.minecraftforum.net/forums/support/java-edition-support/3051132-exception-ticking-world
-                ResultString = "你所使用的 OptiFine 可能导致了你的游戏出现问题。\n\n该问题只在特定 OptiFine 版本中出现，你可以尝试更换 OptiFine 的版本。\h"
-            Case CrashReason.显卡驱动不支持导致无法设置像素格式, CrashReason.Intel驱动不兼容导致EXCEPTION_ACCESS_VIOLATION, CrashReason.AMD驱动不兼容导致EXCEPTION_ACCESS_VIOLATION, CrashReason.Nvidia驱动不兼容导致EXCEPTION_ACCESS_VIOLATION, CrashReason.显卡不支持OpenGL
-                If LogAll.Contains("hd graphics ") Then
-                    ResultString = "你的显卡驱动存在问题，或未使用独立显卡，导致游戏无法正常运行。\n\n如果你的电脑存在独立显卡，请使用独立显卡而非 Intel 核显启动 PCL2 与 Minecraft。\n如果问题依然存在，请尝试升级你的显卡驱动到最新版本，或回退到出厂版本。\n如果还是不行，还可以尝试使用 8.0.51 或更低版本的 Java。\h"
-                Else
-                    ResultString = "你的显卡驱动存在问题，导致游戏无法正常运行。\n\n请尝试升级你的显卡驱动到最新版本，或回退到出厂版本，然后再启动游戏。\n如果还是不行，可以尝试使用 8.0.51 或更低版本的 Java。\n如果问题依然存在，那么你可能需要换个更好的显卡……\h"
-                End If
-            Case CrashReason.材质过大或显卡配置不足
-                ResultString = "你所使用的材质分辨率过高，或显卡配置不足，导致游戏无法继续运行。\n\n如果你正在使用高清材质，请将它移除。\n如果你没有使用材质，那么你可能需要更新显卡驱动，或者换个更好的显卡……\h"
-            Case CrashReason.光影或资源包导致OpenGL1282错误
-                ResultString = "你所使用的光影或材质导致游戏出现了一些问题……\n\n请尝试删除你所添加的这些额外资源。\h"
-            Case CrashReason.Mod过多导致超出ID限制
-                ResultString = "你所安装的 Mod 过多，超出了游戏的 ID 限制，导致了游戏崩溃。\n请尝试安装 JEID 等修复 Mod，或删除部分大型 Mod。"
-            Case CrashReason.文件或内容校验失败
-                ResultString = "部分文件或内容校验失败，导致游戏出现了问题。\n\n请尝试删除游戏（包括 Mod）并重新下载，或尝试在重新下载时使用 VPN。\h"
-            Case CrashReason.Fabric报错
-                If Additional.Count = 1 Then
-                    ResultString = "Fabric 提供了以下错误信息：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。"
-                Else
-                    ResultString = "Fabric 可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\n如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。\h"
-                End If
-            Case CrashReason.Mod加载器报错
-                If Additional.Count = 1 Then
-                    ResultString = "Mod 加载器提供了以下错误信息：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。"
-                Else
-                    ResultString = "Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\n如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。\h"
-                End If
-            Case CrashReason.Fabric报错并给出解决方案
-                If Additional.Count = 1 Then
-                    ResultString = "Fabric 提供了以下解决方案：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。"
-                Else
-                    ResultString = "Fabric 可能已经提供了解决方案，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\n如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。\h"
-                End If
-            Case CrashReason.Forge报错
-                If Additional.Count = 1 Then
-                    ResultString = "Forge 提供了以下错误信息：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。"
-                Else
-                    ResultString = "Forge 可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\n如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。\h"
-                End If
-            Case CrashReason.没有可用的分析文件
-                ResultString = "你的游戏出现了一些问题，但 PCL2 未能找到相关记录文件，因此无法进行分析。\h"
-            Case Else
-                ResultString = "PCL2 获取到了没有详细信息的错误原因（" & CrashReasons.First.Key & "），请向 PCL2 作者提交反馈以获取详情。\h"
-        End Select
+        Dim Results As New List(Of String)
+        For Each Reason In CrashReasons
+            Dim Additional As List(Of String) = Reason.Value
+            Select Case Reason.Key
+                Case CrashReason.Mod文件被解压
+                    Results.Add("由于 Mod 文件被解压了，导致游戏无法继续运行。\n直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。\n\n请删除 Mod 文件夹中已被解压的 Mod，然后再启动游戏。")
+                Case CrashReason.内存不足
+                    Results.Add("Minecraft 内存不足，导致其无法继续运行。\n这很可能是由于你为游戏分配的内存不足，或是游戏的配置要求过高。\n\n你可以在启动设置中增加为游戏分配的内存，删除配置要求较高的材质、Mod、光影。\n如果这依然不奏效，请在开始游戏前尽量关闭其他软件，或者……换台电脑？\h")
+                Case CrashReason.使用OpenJ9
+                    Results.Add("游戏因为使用 Open J9 而崩溃了。\n请在启动设置的 Java 选择一项中改用非 OpenJ9 的 Java，然后再启动游戏。")
+                Case CrashReason.使用JDK
+                    Results.Add("游戏似乎因为使用 JDK，或 Java 版本过高而崩溃了。\n请在启动设置的 Java 选择一项中改用 JRE 8（Java 8），然后再启动游戏。\n如果你没有安装 JRE 8，你可以从网络中下载、安装一个。")
+                Case CrashReason.Java版本过高
+                    Results.Add("游戏似乎因为你所使用的 Java 版本过高而崩溃了。\n请在启动设置的 Java 选择一项中改用较低版本的 Java，然后再启动游戏。\n如果没有，可以从网络中下载、安装一个。")
+                Case CrashReason.Java版本不兼容
+                    Results.Add("游戏不兼容你当前使用的 Java。\n如果没有合适的 Java，可以从网络中下载、安装一个。")
+                Case CrashReason.使用32位Java导致JVM无法分配足够多的内存
+                    If Environment.Is64BitOperatingSystem Then
+                        Results.Add("你似乎正在使用 32 位 Java，这会导致 Minecraft 无法使用 1GB 以上的内存，进而造成崩溃。\n\n请在启动设置的 Java 选择一项中改用 64 位的 Java 再启动游戏，然后再启动游戏。\n如果你没有安装 64 位的 Java，你可以从网络中下载、安装一个。")
+                    Else
+                        Results.Add("你正在使用 32 位的操作系统，这会导致 Minecraft 无法使用 1GB 以上的内存，进而造成崩溃。\n\n你或许只能重装 64 位的操作系统来解决此问题。\n如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……\h")
+                    End If
+                Case CrashReason.崩溃日志堆栈分析发现关键字, CrashReason.MC日志堆栈分析发现关键字
+                    If Additional.Count = 1 Then
+                        Results.Add("你的游戏遇到了一些问题，这可能是某些 Mod 所引起的，PCL 找到了一个可疑的关键词：" & Additional.First & "。\n\n如果你知道它对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。\h")
+                    Else
+                        Results.Add("你的游戏遇到了一些问题，这可能是某些 Mod 所引起的，PCL 找到了以下可疑的关键词：\n - " & Join(Additional, ", ") & "\n\n如果你知道这些关键词对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。\h")
+                    End If
+                Case CrashReason.崩溃日志堆栈分析发现Mod名称
+                    If Additional.Count = 1 Then
+                        Results.Add("名为 " & Additional.First & " 的 Mod 可能导致了游戏出错。\n\e\h")
+                    Else
+                        Results.Add("可能是以下 Mod 导致了游戏出错：\n - " & Join(Additional, "\n - ") & "\n\e\h")
+                    End If
+                Case CrashReason.确定Mod导致游戏崩溃
+                    If Additional.Count = 1 Then
+                        Results.Add("名称或 ID 为 " & Additional.First & " 的 Mod 导致了游戏出错。\n\e\h")
+                    Else
+                        Results.Add("以下 Mod 导致了游戏出错：\n - " & Join(Additional, "\n - ") & "\n\e\h")
+                    End If
+                Case CrashReason.ModMixin失败
+                    If Additional.Count = 1 Then
+                        Results.Add("名称或 ID 为 " & Additional.First & " 的 Mod 注入失败，导致游戏出错。\n这一般代表着该 Mod 存在 Bug，或与当前环境不兼容。\n\e\h")
+                    Else
+                        Results.Add("以下 Mod 导致了游戏出错：\n - " & Join(Additional, "\n - ") & "\n这一般代表着这些 Mod 存在 Bug，或与当前环境不兼容。\n\e\h")
+                    End If
+                Case CrashReason.Mod配置文件导致游戏崩溃
+                    If Additional(1) Is Nothing Then
+                        Results.Add("名称或 ID 为 " & Additional.First & " 的 Mod 导致了游戏出错。\n\e\h")
+                    Else
+                        Results.Add("名称或 ID 为 " & Additional.First & " 的 Mod 导致了游戏出错：\n其配置文件 " & Additional(1) & " 存在异常，无法读取。")
+                    End If
+                Case CrashReason.Mod初始化失败
+                    If Additional.Count = 1 Then
+                        Results.Add("名为 " & Additional.First & " 的 Mod 初始化失败，导致游戏无法继续加载。\n\e\h")
+                    Else
+                        Results.Add("以下 Mod 初始化失败，导致游戏无法继续加载：\n - " & Join(Additional, "\n - ") & "\n\e\h")
+                    End If
+                Case CrashReason.特定方块导致崩溃
+                    If Additional.Count = 1 Then
+                        Results.Add("游戏似乎因为方块 " & Additional.First & " 出现了问题。\n\n你可以创建一个新世界，并观察游戏的运行情况：\n - 若正常运行，则是该方块导致出错，你或许需要使用一些方式删除此方块。\n - 若仍然出错，问题就可能来自其他原因……\h")
+                    Else
+                        Results.Add("游戏似乎因为世界中的某些方块出现了问题。\n\n你可以创建一个新世界，并观察游戏的运行情况：\n - 若正常运行，则是某些方块导致出错，你或许需要删除该世界。\n - 若仍然出错，问题就可能来自其他原因……\h")
+                    End If
+                Case CrashReason.Mod重复安装
+                    If Additional.Count >= 2 Then
+                        Results.Add("你重复安装了多个相同的 Mod：\n - " & Join(Additional, "\n - ") & "\n\n每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。")
+                    Else
+                        Results.Add("你可能重复安装了多个相同的 Mod，导致游戏无法继续加载。\n\n每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。\e\h")
+                    End If
+                Case CrashReason.特定实体导致崩溃
+                    If Additional.Count = 1 Then
+                        Results.Add("游戏似乎因为实体 " & Additional.First & " 出现了问题。\n\n你可以创建一个新世界，并生成一个该实体，然后观察游戏的运行情况：\n - 若正常运行，则是该实体导致出错，你或许需要使用一些方式删除此实体。\n - 若仍然出错，问题就可能来自其他原因……\h")
+                    Else
+                        Results.Add("游戏似乎因为世界中的某些实体出现了问题。\n\n你可以创建一个新世界，并生成各种实体，观察游戏的运行情况：\n - 若正常运行，则是某些实体导致出错，你或许需要删除该世界。\n - 若仍然出错，问题就可能来自其他原因……\h")
+                    End If
+                Case CrashReason.OptiFine与Forge不兼容
+                    Results.Add("由于 OptiFine 与当前版本的 Forge 不兼容，导致了游戏崩溃。\n\n请前往 OptiFine 官网（https://optifine.net/downloads）查看 OptiFine 所兼容的 Forge 版本，并严格按照对应版本重新安装游戏。")
+                Case CrashReason.低版本Forge与高版本Java不兼容
+                    Results.Add("由于低版本 Forge 与当前 Java 不兼容，导致了游戏崩溃。\n\n请尝试以下解决方案：\n - 更新 Forge 到 36.2.26 或更高版本\n - 换用版本低于 8.0.320 的 Java")
+                Case CrashReason.版本Json中存在多个Forge
+                    Results.Add("可能由于使用其他启动器修改了 Forge 版本，当前版本的文件存在异常，导致了游戏崩溃。\n请尝试重新全新安装 Forge，而非使用其他启动器修改 Forge 版本。")
+                Case CrashReason.玩家手动触发调试崩溃
+                    Results.Add("* 事实上，你的游戏没有任何问题，这是你自己触发的崩溃。\n* 你难道没有更重要的事要做吗？")
+                Case CrashReason.极短的程序输出
+                    Results.Add($"程序返回了以下信息：\n{Additional.First}\n\h")
+                Case CrashReason.OptiFine导致无法加载世界 'https://www.minecraftforum.net/forums/support/java-edition-support/3051132-exception-ticking-world
+                    Results.Add("你所使用的 OptiFine 可能导致了你的游戏出现问题。\n\n该问题只在特定 OptiFine 版本中出现，你可以尝试更换 OptiFine 的版本。\h")
+                Case CrashReason.显卡驱动不支持导致无法设置像素格式, CrashReason.Intel驱动不兼容导致EXCEPTION_ACCESS_VIOLATION, CrashReason.AMD驱动不兼容导致EXCEPTION_ACCESS_VIOLATION, CrashReason.Nvidia驱动不兼容导致EXCEPTION_ACCESS_VIOLATION, CrashReason.显卡不支持OpenGL
+                    If LogAll.Contains("hd graphics ") Then
+                        Results.Add("你的显卡驱动存在问题，或未使用独立显卡，导致游戏无法正常运行。\n\n如果你的电脑存在独立显卡，请使用独立显卡而非 Intel 核显启动 PCL 与 Minecraft。\n如果问题依然存在，请尝试升级你的显卡驱动到最新版本，或回退到出厂版本。\n如果还是不行，还可以尝试使用 8.0.51 或更低版本的 Java。\h")
+                    Else
+                        Results.Add("你的显卡驱动存在问题，导致游戏无法正常运行。\n\n请尝试升级你的显卡驱动到最新版本，或回退到出厂版本，然后再启动游戏。\n如果还是不行，可以尝试使用 8.0.51 或更低版本的 Java。\n如果问题依然存在，那么你可能需要换个更好的显卡……\h")
+                    End If
+                Case CrashReason.材质过大或显卡配置不足
+                    Results.Add("你所使用的材质分辨率过高，或显卡配置不足，导致游戏无法继续运行。\n\n如果你正在使用高清材质，请将它移除。\n如果你没有使用材质，那么你可能需要更新显卡驱动，或者换个更好的显卡……\h")
+                Case CrashReason.光影或资源包导致OpenGL1282错误
+                    Results.Add("你所使用的光影或材质导致游戏出现了一些问题……\n\n请尝试删除你所添加的这些额外资源。\h")
+                Case CrashReason.Mod过多导致超出ID限制
+                    Results.Add("你所安装的 Mod 过多，超出了游戏的 ID 限制，导致了游戏崩溃。\n请尝试安装 JEID 等修复 Mod，或删除部分大型 Mod。")
+                Case CrashReason.文件或内容校验失败
+                    Results.Add("部分文件或内容校验失败，导致游戏出现了问题。\n\n请尝试删除游戏（包括 Mod）并重新下载，或尝试在重新下载时使用 VPN。\h")
+                Case CrashReason.Fabric报错
+                    If Additional.Count = 1 Then
+                        Results.Add("Fabric 提供了以下错误信息：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
+                    Else
+                        Results.Add("Fabric 可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\n如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。\h")
+                    End If
+                Case CrashReason.Mod加载器报错
+                    If Additional.Count = 1 Then
+                        Results.Add("Mod 加载器提供了以下错误信息：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
+                    Else
+                        Results.Add("Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\n如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。\h")
+                    End If
+                Case CrashReason.Fabric报错并给出解决方案
+                    If Additional.Count = 1 Then
+                        Results.Add("Fabric 提供了以下解决方案：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
+                    Else
+                        Results.Add("Fabric 可能已经提供了解决方案，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\n如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。\h")
+                    End If
+                Case CrashReason.Forge报错
+                    If Additional.Count = 1 Then
+                        Results.Add("Forge 提供了以下错误信息：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
+                    Else
+                        Results.Add("Forge 可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\n如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。\h")
+                    End If
+                Case CrashReason.没有可用的分析文件
+                    Results.Add("你的游戏出现了一些问题，但 PCL 未能找到相关记录文件，因此无法进行分析。\h")
+                Case Else
+                    Results.Add("PCL 获取到了没有详细信息的错误原因（" & CrashReasons.First.Key & "），请向 PCL 作者提交反馈以获取详情。\h")
+            End Select
+        Next
 
-        ResultString = ResultString.
-            Replace("\n", vbCrLf).
-            Replace("\h", If(IsHandAnalyze, "", vbCrLf & "如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。")).
-            Replace("\e", If(IsHandAnalyze, "", vbCrLf & "你可以查看错误报告了解错误具体是如何发生的。")).
-            Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr, vbCrLf)
-        Return ResultString.Trim(vbCrLf.ToCharArray)
+        '整理多个原因
+        IsHandAnalyze = False
+        Return Join(Results, "\n\n此外，").
+                    Replace("\n", vbCrLf).
+                    Replace("\h", "").
+                    Replace("\e", If(IsHandAnalyze, "", vbCrLf & "你可以查看错误报告了解错误具体是如何发生的。")).
+                    Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr, vbCrLf).
+                    Trim(vbCrLf.ToCharArray) &
+                If(Results.Any(Function(r) r.EndsWith("\h")),
+                    If(IsHandAnalyze, "", vbCrLf & "如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。"), "")
     End Function
 
 End Class

@@ -6,7 +6,7 @@ Public Module ModMinecraft
 
     '列表初始化
 
-    Public JavaListCacheVersion As Integer = 2
+    Public JavaListCacheVersion As Integer = 3
     ''' <summary>
     ''' 目前所有可用的 Java。
     ''' </summary>
@@ -46,11 +46,22 @@ Public Module ModMinecraft
     ''' </summary>
     Private ReadOnly Property PathEnv As String
         Get
-            If _PathEnv Is Nothing Then _PathEnv = Environment.GetEnvironmentVariable("Path")
+            If _PathEnv Is Nothing Then _PathEnv = If(Environment.GetEnvironmentVariable("Path"), "")
             Return _PathEnv
         End Get
     End Property
     Private _PathEnv As String = Nothing
+
+    ''' <summary>
+    ''' JAVA_HOME 环境变量。
+    ''' </summary>
+    Private ReadOnly Property PathJavaHome As String
+        Get
+            If _PathJavaHome Is Nothing Then _PathJavaHome = If(Environment.GetEnvironmentVariable("JAVA_HOME"), "")
+            Return _PathJavaHome
+        End Get
+    End Property
+    Private _PathJavaHome As String = Nothing
 
     Public Class JavaEntry
 
@@ -216,8 +227,9 @@ Public Module ModMinecraft
 #Region "模糊查找可能可用的 Java"
 
             '查找环境变量中的 Java
-            For Each PathInEnv As String In Split(PathEnv.Replace("\\", "\").Replace("/", "\"), ";")
+            For Each PathInEnv As String In Split((PathEnv & ";" & PathJavaHome).Replace("\\", "\").Replace("/", "\"), ";")
                 PathInEnv = PathInEnv.Trim(" """.ToCharArray())
+                If PathInEnv = "" Then Continue For
                 If Not PathInEnv.EndsWith("\") Then PathInEnv += "\"
                 '粗略检查有效性
                 If File.Exists(PathInEnv & "javaw.exe") Then JavaPreList(PathInEnv) = False
@@ -235,7 +247,7 @@ Public Module ModMinecraft
                 JavaSearchFolder(PathMcFolder, JavaPreList, False, IsFullSearch:=True)
             End If
 
-            '若[不全]为符号链接，则清除符号链接的地址
+            '若不全为符号链接，则清除符号链接的地址
             Dim JavaWithoutReparse As New Dictionary(Of String, Boolean)
             For Each Pair In JavaPreList
                 Dim Folder As String = Pair.Key.Replace("\\", "\").Replace("/", "\")
@@ -252,14 +264,14 @@ Public Module ModMinecraft
             Next
             If JavaWithoutReparse.Count > 0 Then JavaPreList = JavaWithoutReparse
 
-            '若不全为 javapath_target，则清除二重引用的地址
+            '若不全为特殊引用，则清除特殊引用的地址
             Dim JavaWithoutInherit As New Dictionary(Of String, Boolean)
             For Each Pair In JavaPreList
-                If Pair.Key.Contains("javapath_target_") Then
-                    Log("[Java] 位于 " & Pair.Key & " 的 Java 包含二重引用")
+                If Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") Then
+                    Log("[Java] 位于 " & Pair.Key & " 的 Java 包含特殊引用")
                     Continue For
                 End If
-                Log("[Java] 位于 " & Pair.Key & " 的 Java 不含二重引用")
+                Log("[Java] 位于 " & Pair.Key & " 的 Java 不含特殊引用")
                 JavaWithoutInherit.Add(Pair.Key, Pair.Value)
             Next
             If JavaWithoutInherit.Count > 0 Then JavaPreList = JavaWithoutInherit
@@ -508,6 +520,9 @@ RetryGet:
 
             '指定的 Java 不可用，弹窗要求选择
             Log("[Java] 发现用户指定的不兼容 Java：" & UserJava.ToString)
+            For Each Java In AllowedJavaList
+                Log($"[Java] 实际可用的 Java：{Java.ToString}")
+            Next
             Dim Requirement As String = ""
             Dim ShowRevision As Boolean = False
             If (MinVersion Is Nothing OrElse MinVersion.Minor = 0) AndAlso (MaxVersion IsNot Nothing AndAlso MaxVersion.Minor < 999) Then
@@ -529,12 +544,12 @@ RetryGet:
                 AllowedJavaList = New List(Of JavaEntry) From {UserJava}
             Else
                 Select Case MyMsgBox("你在设置中手动指定了使用 Java " & JavaCurrent & "，但当前" & Requirement & "。" & vbCrLf &
-                            "如果强制使用该 Java，可能会导致出现异常。" & vbCrLf &
-                            "你可以将 游戏 Java 设置修改为 自动选择合适的 Java 来避免这一提示。" & vbCrLf &
+                            "如果强制使用该 Java，可能导致游戏崩溃。" & vbCrLf &
+                            "你也可以将 游戏 Java 设置修改为 自动选择合适的 Java。" & vbCrLf &
                             vbCrLf &
                             " - 指定的 Java：" & UserJava.ToString,
-                            "Java 兼容性警告", "让 PCL2 自动选择", "强制使用该 Java", "取消")
-                    Case 1 '让 PCL2 自动选择
+                            "Java 兼容性警告", "让 PCL 自动选择", "强制使用该 Java", "取消")
+                    Case 1 '让 PCL 自动选择
                     Case 2 '强制使用指定的 Java
                         Log("[Java] 已强制使用用户指定的不兼容 Java")
                         AllowedJavaList = New List(Of JavaEntry) From {UserJava}
@@ -662,8 +677,8 @@ NoUserJava:
     Public Sub JavaMissing(VersionCode As Integer)
         Select Case VersionCode
             Case 7
-                MyMsgBox("PCL2 未找到 Java 7。" & vbCrLf &
-                         "请自行百度安装 Java 7，安装后在 PCL2 的 设置 → 启动设置 → 游戏 Java 中通过搜索或导入，确保安装的 Java 已列入 Java 列表。",
+                MyMsgBox("PCL 未找到 Java 7。" & vbCrLf &
+                         "请自行百度安装 Java 7，安装后在 PCL 的 设置 → 启动设置 → 游戏 Java 中通过搜索或导入，确保安装的 Java 已列入 Java 列表。",
                          "未找到 Java")
             Case 8 '291
                 If Is32BitSystem Then
@@ -671,17 +686,17 @@ NoUserJava:
                 Else
                     OpenWebsite("https://wwa.lanzoui.com/i2UyMq0jaqb")
                 End If
-                MyMsgBox("PCL2 未找到版本适宜的 Java 8。" & vbCrLf &
-                         "请在打开的网页中下载安装包并安装，安装后在 PCL2 的 设置 → 启动设置 → 游戏 Java 中通过搜索或导入，确保安装的 Java 已列入 Java 列表。",
+                MyMsgBox("PCL 未找到版本适宜的 Java 8。" & vbCrLf &
+                         "请在打开的网页中下载安装包并安装，安装后在 PCL 的 设置 → 启动设置 → 游戏 Java 中通过搜索或导入，确保安装的 Java 已列入 Java 列表。",
                          "未找到 Java")
             Case 16, 17
                 If Is32BitSystem Then
                     MyMsgBox("该版本的 MC 已不支持 32 位操作系统。你必须增加内存并重装为 64 位系统才能继续。", "系统兼容性提示")
                 Else
                     OpenWebsite("https://www.oracle.com/java/technologies/downloads/#java17")
-                    MyMsgBox("PCL2 未找到 Java 17。" & vbCrLf &
+                    MyMsgBox("PCL 未找到 Java 17。" & vbCrLf &
                              "请在打开的网页中选择 x64 Installer，下载并安装。" & vbCrLf &
-                             "安装后在 PCL2 的 设置 → 启动设置 → 游戏 Java 中通过搜索或导入，确保安装的 Java 已列入 Java 列表。",
+                             "安装后在 PCL 的 设置 → 启动设置 → 游戏 Java 中通过搜索或导入，确保安装的 Java 已列入 Java 列表。",
                              "未找到 Java")
                 End If
         End Select
@@ -812,15 +827,15 @@ NoUserJava:
             Dim ResultJson As String =
 "{
     ""profiles"":  {
-        ""PCL2"": {
+        ""PCL"": {
             ""icon"": ""Grass"",
-            ""name"": ""PCL2"",
+            ""name"": ""PCL"",
             ""lastVersionId"": ""latest-release"",
             ""type"": ""latest-release"",
             ""lastUsed"": """ & Date.Now.ToString("yyyy-MM-dd") & "T" & Date.Now.ToString("HH:mm:ss") & ".0000Z""
         }
     },
-    ""selectedProfile"": ""PCL2"",
+    ""selectedProfile"": ""PCL"",
     ""clientToken"": ""23323323323323323323323323323333""
 }"
             WriteFile(Folder & "launcher_profiles.json", ResultJson, Encoding:=Encoding.GetEncoding("GB18030"))
@@ -1136,21 +1151,21 @@ VersionSearchFinish:
         Public Property JsonText As String
             Get
                 If _JsonText Is Nothing Then
-                    If Not File.Exists(Path & Name & ".json") Then Throw New Exception("未找到版本 Json 文件：" & Path & Name & ".json")
+                    If Not File.Exists(Path & Name & ".json") Then Throw New Exception("未找到版本 json 文件：" & Path & Name & ".json")
                     _JsonText = ReadFile(Path & Name & ".json")
                     '如果 ReadFile 失败会返回空字符串；这可能是由于文件被临时占用，故延时后重试
                     If _JsonText.Length = 0 Then
                         If RunInUi() Then
-                            Log("[Minecraft] 版本 Json 文件为空或读取失败，由于代码在主线程运行，将不再进行重试", LogLevel.Debug)
+                            Log("[Minecraft] 版本 json 文件为空或读取失败，由于代码在主线程运行，将不再进行重试", LogLevel.Debug)
                             Throw New Exception("版本 Json 文件为空或读取失败")
                         Else
-                            Log("[Minecraft] 版本 Json 文件为空或读取失败，将在 2s 后重试读取（" & Path & Name & ".json）", LogLevel.Debug)
+                            Log("[Minecraft] 版本 json 文件为空或读取失败，将在 2s 后重试读取（" & Path & Name & ".json）", LogLevel.Debug)
                             Thread.Sleep(2000)
                             _JsonText = ReadFile(Path & Name & ".json")
-                            If _JsonText.Length = 0 Then Throw New Exception("版本 Json 文件为空或读取失败")
+                            If _JsonText.Length = 0 Then Throw New Exception("版本 json 文件为空或读取失败")
                         End If
                     End If
-                    If _JsonText.Length < 100 Then Throw New Exception("版本 Json 文件有误，内容为：" & _JsonText)
+                    If _JsonText.Length < 100 Then Throw New Exception("版本 json 文件有误，内容为：" & _JsonText)
                 End If
                 Return _JsonText
             End Get
@@ -1222,10 +1237,10 @@ Recheck:
                                 GoTo Recheck
                             End If
                         Catch ex As Exception
-                            Log(ex, "合并版本依赖项 Json 失败（" & If(InheritVersion, "null").ToString & "）")
+                            Log(ex, "合并版本依赖项 json 失败（" & If(InheritVersion, "null").ToString & "）")
                         End Try
                     Catch ex As Exception
-                        Throw New Exception("版本 Json 不规范（" & If(Name, "null") & "）", ex)
+                        Throw New Exception("版本 json 不规范（" & If(Name, "null") & "）", ex)
                     End Try
                     Try
                         '处理 JumpLoader
@@ -1317,7 +1332,7 @@ Recheck:
                 CheckPermissionWithException(Path & "PCL\")
             Catch ex As Exception
                 State = McVersionState.Error
-                Info = "PCL2 没有对该文件夹的访问权限，请右键以管理员身份运行 PCL2"
+                Info = "PCL 没有对该文件夹的访问权限，请右键以管理员身份运行 PCL"
                 Log(ex, "没有访问版本文件夹的权限")
                 Return False
             End Try
@@ -1325,7 +1340,7 @@ Recheck:
             Try
                 Dim JsonObjCheck = JsonObject
             Catch ex As Exception
-                Log(ex, "版本 Json 可用性检查失败（" & Path & "）")
+                Log(ex, "版本 json 可用性检查失败（" & Path & "）")
                 JsonText = ""
                 JsonObject = Nothing
                 Info = ex.Message
@@ -1747,11 +1762,7 @@ Reload:
 
             '改变当前选择的版本
 OnLoaded:
-            If McVersionList.Count = 0 Then
-                McVersionCurrent = Nothing
-                Setup.Set("LaunchVersionSelect", "")
-                Log("[Minecraft] 未找到可用 Minecraft 版本")
-            Else
+            If McVersionList.Any(Function(v) v.Key <> McVersionCardType.Error) Then '不能判断 Count = 0，这在只有错误版本时导致了误判
                 '尝试读取已储存的选择
                 Dim SavedSelection As String = ReadIni(Path & "PCL.ini", "Version")
                 If Not SavedSelection = "" Then
@@ -1773,6 +1784,10 @@ OnLoaded:
                     Setup.Set("LaunchVersionSelect", McVersionCurrent.Name)
                     Log("[Launch] 自动选择 Minecraft 版本：" & McVersionCurrent.Path)
                 End If
+            Else
+                McVersionCurrent = Nothing
+                Setup.Set("LaunchVersionSelect", "")
+                Log("[Minecraft] 未找到可用 Minecraft 版本")
             End If
             If Setup.Get("SystemDebugDelay") Then Thread.Sleep(RandomInteger(200, 3000))
         Catch ex As ThreadInterruptedException
@@ -2131,27 +2146,16 @@ NextVersion:
     ''' <summary>
     ''' 要求玩家选择一个皮肤文件，并进行相关校验。
     ''' </summary>
-    Public Function McSkinSelect(MustHaveTwoLayers As Boolean) As McSkinInfo
+    Public Function McSkinSelect() As McSkinInfo
         Dim FileName As String = SelectFile("皮肤文件(*.png)|*.png", "选择皮肤文件")
 
         '验证有效性
         If FileName = "" Then Return New McSkinInfo With {.IsVaild = False}
         Try
             Dim Image As New MyBitmap(FileName)
-            If MustHaveTwoLayers Then
-                If Image.Pic.Width = 64 AndAlso Image.Pic.Height = 32 Then
-                    Hint("自定义离线皮肤只支持 64x64 像素的双层皮肤！", HintType.Critical)
-                    Return New McSkinInfo With {.IsVaild = False}
-                End If
-                If Image.Pic.Width <> 64 OrElse Image.Pic.Height <> 64 Then
-                    Hint("自定义离线皮肤图片大小应为 64x64 像素！", HintType.Critical)
-                    Return New McSkinInfo With {.IsVaild = False}
-                End If
-            Else
-                If Image.Pic.Width <> 64 OrElse Not (Image.Pic.Height = 32 OrElse Image.Pic.Height = 64) Then
-                    Hint("皮肤图片大小应为 64x32 像素或 64x64 像素！", HintType.Critical)
-                    Return New McSkinInfo With {.IsVaild = False}
-                End If
+            If Image.Pic.Width <> 64 OrElse Not (Image.Pic.Height = 32 OrElse Image.Pic.Height = 64) Then
+                Hint("皮肤图片大小应为 64x32 像素或 64x64 像素！", HintType.Critical)
+                Return New McSkinInfo With {.IsVaild = False}
             End If
             Dim FileInfo As New FileInfo(FileName)
             If FileInfo.Length > 24 * 1024 Then
@@ -2403,7 +2407,7 @@ NextVersion:
             '不能调用 RealVersion.Check()，可能会莫名其妙地触发 CheckPermission 正被另一进程使用，导致误判前置不存在
             If Not File.Exists(RealVersion.Path & RealVersion.Name & ".json") Then
                 RealVersion = Version
-                Log("[Minecraft] 可能缺少前置版本 " & RealVersion.Name & "，找不到对应的 Json 文件", LogLevel.Debug)
+                Log("[Minecraft] 可能缺少前置版本 " & RealVersion.Name & "，找不到对应的 json 文件", LogLevel.Debug)
             End If
             '获取详细下载信息
             If RealVersion.JsonObject("downloads") IsNot Nothing AndAlso RealVersion.JsonObject("downloads")("client") IsNot Nothing Then
@@ -2545,7 +2549,7 @@ NextVersion:
             Dim MainJar As NetFile = DlClientJarGet(Version, True)
             If MainJar IsNot Nothing Then Result.Add(MainJar)
         Catch ex As Exception
-            Log(ex, "版本缺失主 Jar 文件所必须的信息", LogLevel.Developer)
+            Log(ex, "版本缺失主 jar 文件所必须的信息", LogLevel.Developer)
         End Try
         If CoreJarOnly Then Return Result
 
@@ -3116,7 +3120,7 @@ NextVersion:
                 If Jar.Entries.Count = 0 Then Throw New FileFormatException("文件内容为空")
             Catch ex As UnauthorizedAccessException
                 Log(ex, "Mod 文件由于无权限无法打开（" & Path & "）", LogLevel.Developer)
-                _FileUnavailableReason = New UnauthorizedAccessException("没有读取此文件的权限，请尝试右键以管理员身份运行 PCL2", ex)
+                _FileUnavailableReason = New UnauthorizedAccessException("没有读取此文件的权限，请尝试右键以管理员身份运行 PCL", ex)
                 Jar = Nothing
             Catch ex As Exception
                 Log(ex, "Mod 文件无法打开（" & Path & "）", LogLevel.Developer)
@@ -3751,27 +3755,15 @@ VersionFindFail:
             '进行提示
             If Version Is Nothing Then Exit Sub
             Dim Time As Date = Version("releaseTime")
-            Dim MsgResult As Integer
-            If (Date.Now - Time).TotalDays > 1 Then
-                '1 天以上
-                MsgResult = MyMsgBox("新版本：" & VersionName & vbCrLf & "更新时间：" & Time.ToString, "Minecraft 更新提示", "下载", "更新日志", "取消")
-            ElseIf (Date.Now - Time).TotalHours > 3 Then
-                '1 天 ~ 3 小时
-                MsgResult = MyMsgBox("新版本：" & VersionName & vbCrLf & "更新于：" & GetTimeSpanString(Time - Date.Now), "Minecraft 更新提示", "下载", "更新日志", "取消")
-            Else
-                '不到 3 小时
-                MsgResult = MyMsgBox("新版本：" & VersionName & vbCrLf & "更新于：" & GetTimeSpanString(Time - Date.Now), "Minecraft 更新提示", "下载", "取消")
-                If MsgResult = 2 Then MsgResult = 3 '把 “取消” 移位
-            End If
+            Dim MsgBoxText As String = $"新版本：{VersionName}{vbCrLf}" &
+                If((Date.Now - Time).TotalDays > 1, "更新时间：" & Time.ToString, "更新于：" & GetTimeSpanString(Time - Date.Now))
+            Dim MsgResult = MyMsgBox(MsgBoxText, "Minecraft 更新提示", "确定", "下载", If((Date.Now - Time).TotalHours > 3, "更新日志", ""),
+                Button3Action:=Sub() McUpdateLogShow(Version))
             '弹窗结果
-            Select Case MsgResult
-                Case 1
-                    '下载
-                    McDownloadClient(NetPreDownloadBehaviour.HintWhileExists, VersionName, Version("url").ToString)
-                Case 2
-                    '更新日志
-                    McUpdateLogShow(Version)
-            End Select
+            If MsgResult = 2 Then
+                '下载
+                McDownloadClient(NetPreDownloadBehaviour.HintWhileExists, VersionName, Version("url").ToString)
+            End If
 
         Catch ex As Exception
             Log(ex, "Minecraft 更新提示发送失败（" & If(VersionName, "Nothing") & "）", LogLevel.Feedback)

@@ -65,7 +65,7 @@
                 Sub()
                     Do While PageState = MyPageRight.PageStates.PageExit OrElse PageState = MyPageRight.PageStates.ContentExit
                         Thread.Sleep(10) '不在退出动画时执行 UI 线程操作，避免退出动画被重置
-                Loop
+                    Loop
                     RunInUiWait(Sub() FinishedInvoke(RealLoader))
                     Thread.Sleep(20) '由于大量初始化控件会导致掉帧，延迟触发 State 改变事件
             End Sub

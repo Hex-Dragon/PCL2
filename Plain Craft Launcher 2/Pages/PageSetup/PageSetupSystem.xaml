@@ -102,7 +102,7 @@
                         <local:MyComboBoxItem Content="关闭所有公告" />
                     </local:MyComboBox>
                     <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="缓存文件夹" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextSystemCache" Grid.Row="4" Grid.ColumnSpan="2" Tag="SystemSystemCache" Grid.Column="1" ToolTip="PCL2 的下载、皮肤等缓存文件的存储位置。&#xa;不推荐路径中带有空格。&#xa;留空即为默认值，重启 PCL2 后生效。" HintText="默认">
+                    <local:MyTextBox x:Name="TextSystemCache" Grid.Row="4" Grid.ColumnSpan="2" Tag="SystemSystemCache" Grid.Column="1" ToolTip="PCL 的下载、皮肤等缓存文件的存储位置。&#xa;不推荐路径中带有空格。&#xa;留空即为默认值，重启 PCL 后生效。" HintText="默认">
                         <local:MyTextBox.ValidateRules>
                             <local:ValidateNullable />
                             <local:ValidateFolderPath UseMinecraftCharCheck="False" />
@@ -111,10 +111,8 @@
                     <Grid Height="35" Grid.Row="6" Grid.ColumnSpan="5" Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
                         <local:MyButton x:Name="BtnSystemUpdate" MinWidth="140" Text="检查更新" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton x:Name="BtnSystemCacheClear" MinWidth="140" Text="清理缓存" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" />
                     </Grid>
                 </Grid>
             </local:MyCard>

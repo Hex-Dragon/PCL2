@@ -213,17 +213,20 @@
     Public Shared Sub DeleteVersion(Item As MyListItem, Version As McVersion)
         '修改此代码时，同时修改 PageVersionOverall 中的代码
         Try
+            Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
             Dim IsHintIndie As Boolean = Version.State <> McVersionState.Error AndAlso Version.PathIndie <> PathMcFolder
-            Select Case MyMsgBox("你确定要删除版本 " & Version.Name & " 吗？" &
+            Select Case MyMsgBox($"你确定要{If(IsShiftPressed, "永久", "")}删除版本 {Version.Name} 吗？" &
                         If(IsHintIndie, vbCrLf & "由于该版本开启了版本隔离，删除版本时该版本对应的存档、资源包、Mod 等文件也将被一并删除！", ""),
                         "版本删除确认", , "取消",, True)
                 Case 1
-                    FileIO.FileSystem.DeleteDirectory(Version.Path, FileIO.UIOption.AllDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                    Hint("版本 " & Version.Name & " 已删除到回收站！", HintType.Finish)
+                    If IsShiftPressed Then
+                        DeleteDirectory(Version.Path)
+                        Hint("版本 " & Version.Name & " 已永久删除！", HintType.Finish)
+                    Else
+                        FileIO.FileSystem.DeleteDirectory(Version.Path, FileIO.UIOption.AllDialogs, FileIO.RecycleOption.SendToRecycleBin)
+                        Hint("版本 " & Version.Name & " 已删除到回收站！", HintType.Finish)
+                    End If
                 Case 2
-                    '    DeleteDirectory(Version.Path)
-                    '    Hint("版本 " & Version.Name & " 已永久删除！", HintType.Finish)
-                    'Case 3
                     Exit Sub
             End Select
             '从 UI 中移除
