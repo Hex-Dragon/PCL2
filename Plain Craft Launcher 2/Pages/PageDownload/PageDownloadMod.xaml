@@ -49,7 +49,7 @@
                             <local:MyComboBoxItem Content="装备与工具" Tag="434/equipment" />
                             <local:MyComboBoxItem Content="性能优化" Tag="/optimization" />
                             <local:MyComboBoxItem Content="信息显示" Tag="423/" />
-                            <local:MyComboBoxItem Content="多人" Tag="435/social" />
+                            <local:MyComboBoxItem Content="服务器" Tag="435/social" />
                             <local:MyComboBoxItem Content="改良" Tag="5191/utility" />
                             <local:MyComboBoxItem Content="支持库" Tag="421/library" />
                         </local:MyComboBox>
@@ -73,9 +73,6 @@
                             <local:MyComboBoxItem Content="1.9.4" />
                             <local:MyComboBoxItem Content="1.8.9" />
                             <local:MyComboBoxItem Content="1.7.10" />
-                            <local:MyComboBoxItem Content="1.7.2" />
-                            <local:MyComboBoxItem Content="1.6.4" />
-                            <local:MyComboBoxItem Content="1.5.2" />
                         </local:MyComboBox>
                         <local:MyComboBox x:Name="ComboSearchLoader" Visibility="Collapsed" Grid.Row="2" Grid.Column="5" MaxDropDownHeight="320" Margin="10,0,0,0">
                             <local:MyComboBoxItem Content="任意 Mod 加载器" IsSelected="True" Tag="0" />

@@ -10,10 +10,19 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 286 Then 'Release 2.5.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持搜索、安装 Modrinth 的 Mod 与整合包"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "资源搜索页面支持翻页"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在全局启动设置中添加了 启动前执行命令 选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "重做资源下载的资源项界面"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择下载 Fabric 时会自动选择 Fabric API"))
+            FeatureCount += 35
+            BugCount += 36
+        End If
         If LastVersion < 281 Then 'Release 2.4.9
+            If LastVersion = 279 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复进入 Mod、整合包下载页时报错的 Bug"))
             FeatureCount += 1
             BugCount += 5
-            If LastVersion = 279 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复进入 Mod、整合包下载页时报错的 Bug"))
         End If
         If LastVersion < 279 Then 'Release 2.4.8
             FeatureCount += 1
@@ -126,6 +135,12 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 285 Then 'Snapshot 2.5.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "重做资源下载的资源项界面"))
+            If LastVersion = 284 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复打开部分帮助报错的 Bug"))
+            FeatureCount += 8
+            BugCount += 8
+        End If
         If LastVersion < 284 Then 'Snapshot 2.5.1
             If LastVersion >= 275 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在全局启动设置中添加了 启动前执行命令 选项"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择下载 Fabric 时会自动选择 Fabric API"))

@@ -1079,7 +1079,7 @@
 
 #Region "安装"
 
-    Private Sub TextSelectName_KeyUp(sender As Object, e As KeyEventArgs) Handles TextSelectName.KeyUp
+    Private Sub TextSelectName_KeyDown(sender As Object, e As KeyEventArgs) Handles TextSelectName.KeyDown
         If e.Key = Key.Enter AndAlso BtnSelectStart.IsEnabled Then BtnSelectStart_Click()
     End Sub
     Private Sub BtnSelectStart_Click() Handles BtnSelectStart.Click

@@ -86,15 +86,15 @@
             ValidateResult = ValidateRule.Validate(Text)
             If IsNothing(ValidateResult) OrElse Not ValidateResult = "" Then Exit For
         Next
-        Dim NewResult As Boolean = ValidateResult = ""
+        Dim IsSuccessful As Boolean = ValidateResult = ""
         '根据结果改变样式
-        If ShownValidateResult <> If(NewResult, 0, 1) Then
+        If ShownValidateResult <> If(IsSuccessful, ValidateState.Success, ValidateState.FailedAndShowDetail) Then
             If IsLoaded AndAlso labWrong IsNot Nothing Then
-                ChangeValidateResult(NewResult, True)
+                ChangeValidateResult(IsSuccessful, True)
             Else
                 RunInNewThread(Sub()
                                    Thread.Sleep(30)
-                                   RunInUi(Sub() ChangeValidateResult(NewResult, False))
+                                   RunInUi(Sub() ChangeValidateResult(IsSuccessful, False))
                                End Sub, "DelayedValidate Change")
             End If
         End If
@@ -126,12 +126,12 @@
         IsTextChanged = False
         ChangeValidateResult(ValidateResult = "", True)
     End Sub
-    Private ShownValidateResult As Integer = -1
-    Private Sub ChangeValidateResult(NewResult As Boolean, IsLoaded As Boolean)
+    Private ShownValidateResult As ValidateState = ValidateState.NotInited
+    Private Sub ChangeValidateResult(IsSuccessful As Boolean, IsLoaded As Boolean)
         If IsLoaded AndAlso AniControlEnabled = 0 AndAlso labWrong IsNot Nothing Then
-            If NewResult OrElse Not IsTextChanged Then
+            If IsSuccessful OrElse Not IsTextChanged Then
                 '变为正确
-                ShownValidateResult = 0
+                ShownValidateResult = If(IsSuccessful, ValidateState.Success, ValidateState.FailedButTextNotChanged)
                 AniStart({
                          AaOpacity(labWrong, -labWrong.Opacity, 150),
                          AaHeight(labWrong, -labWrong.Height, 150,, New AniEaseOutFluent),
@@ -139,7 +139,7 @@
                     }, "MyTextBox Validate " & Uuid)
             ElseIf ShowValidateResult Then
                 '变为错误
-                ShownValidateResult = 1
+                ShownValidateResult = ValidateState.FailedAndShowDetail
                 labWrong.Visibility = Visibility.Visible
                 AniStart({
                          AaOpacity(labWrong, 1 - labWrong.Opacity, 170),
@@ -147,14 +147,22 @@
                     }, "MyTextBox Validate " & Uuid)
             Else
                 '变为错误，但不显示文本
-                ShownValidateResult = 2
+                ShownValidateResult = ValidateState.FailedAndHideDetail
             End If
         Else
-            ShownValidateResult = 3
+            ShownValidateResult = ValidateState.NotLoaded
         End If
         RefreshColor()
         RaiseEvent ValidateChanged(Me, New EventArgs)
     End Sub
+    Private Enum ValidateState
+        NotInited
+        Success
+        FailedButTextNotChanged
+        FailedAndShowDetail
+        FailedAndHideDetail
+        NotLoaded
+    End Enum
 
     '提示文本
 

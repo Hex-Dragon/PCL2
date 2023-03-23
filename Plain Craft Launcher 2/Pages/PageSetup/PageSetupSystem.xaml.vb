@@ -57,6 +57,7 @@
         ComboDownloadVersion.SelectedIndex = Setup.Get("ToolDownloadVersion")
         ComboDownloadTranslate.SelectedIndex = Setup.Get("ToolDownloadTranslate")
         CheckDownloadKeepModpack.Checked = Setup.Get("ToolDownloadKeepModpack")
+        CheckDownloadIgnoreQuilt.Checked = Setup.Get("ToolDownloadIgnoreQuilt")
 
         'Minecraft 更新提示
         CheckUpdateRelease.Checked = Setup.Get("ToolUpdateRelease")
@@ -86,6 +87,7 @@
             Setup.Reset("ToolDownloadVersion")
             Setup.Reset("ToolDownloadTranslate")
             Setup.Reset("ToolDownloadKeepModpack")
+            Setup.Reset("ToolDownloadIgnoreQuilt")
             Setup.Reset("ToolUpdateRelease")
             Setup.Reset("ToolUpdateSnapshot")
             Setup.Reset("ToolHelpChinese")
@@ -107,7 +109,7 @@
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadKeepModpack.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadKeepModpack.Change, CheckDownloadIgnoreQuilt.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change
@@ -147,6 +149,14 @@
             MyMsgBox("如果设置过多的下载线程，可能会导致下载时出现非常严重的卡顿。" & vbCrLf &
                      "一般设置 64 线程即可满足大多数下载需求，除非你知道你在干什么，否则不建议设置更多的线程数！", "警告", "我知道了", IsWarn:=True)
         End If
+    End Sub
+
+    '识别码/解锁码替代入口
+    Private Sub BtnSystemIdentify_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemIdentify.Click
+        PageOtherAbout.CopyUniqueAddress()
+    End Sub
+    Private Sub BtnSystemUnlock_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemUnlock.Click
+        PageOtherAbout.DonateCodeInput()
     End Sub
 
     '调试模式

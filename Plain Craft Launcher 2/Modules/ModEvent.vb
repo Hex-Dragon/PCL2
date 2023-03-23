@@ -58,6 +58,12 @@
                 Case "刷新帮助"
                     PageOtherLeft.RefreshHelp()
 
+                Case "今日人品"
+                    PageOtherTest.Jrrp()
+
+                Case "清理垃圾"
+                    PageOtherTest.RubbishClear()
+
                 Case "弹出窗口"
                     MyMsgBox(Data(1).Replace("\n", vbCrLf), Data(0).Replace("\n", vbCrLf))
 

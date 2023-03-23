@@ -47,7 +47,8 @@
                             <local:MyComboBoxItem Content="关闭" ToolTip="与其余未开启隔离的版本均使用同一档案，存档、Mod 等均为公用。&#xa;若存在不同版本的 Forge 或 Fabric，可能会由于 Mod 与版本冲突导致未知问题。" />
                         </local:MyComboBox>
                         <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="游戏 Java" Margin="0,0,25,0" />
-                        <local:MyComboBox x:Name="ComboArgumentJava" Grid.ColumnSpan="2" Grid.Row="6" Grid.Column="1" ToolTip="若将 Java 放在游戏文件夹或 PCL 文件夹，在进行自动选择时 PCL 会尽量优先选择它">
+                        <local:MyComboBox x:Name="ComboArgumentJava" Grid.ColumnSpan="2" Grid.Row="6" Grid.Column="1" MaxDropDownHeight="240"
+                                          ToolTip="若将 Java 放在游戏文件夹或 PCL 文件夹，在进行自动选择时 PCL 会尽量优先选择它">
                             <ComboBoxItem Content="加载中……" IsSelected="True" />
                             <!--<local:MyComboBoxItem Content="Java 8 (1.8.0_171)，64 位：C:\Program Files (x86)\Common Files\Oracle\Java\javapath\javaw.exe" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5" IsSelected="True" ToolTip="C:\Program Files (x86)\Common Files\Oracle\Java\javapath\javaw.exe" />-->
                         </local:MyComboBox>

@@ -431,7 +431,7 @@ PreFin:
         Dim SelectedItem As MyComboBoxItem = Nothing
         Dim SelectedBySetup As String = Setup.Get("LaunchArgumentJavaSelect")
         Try
-            For Each Java In JavaList
+            For Each Java In Sort(JavaList.Clone(), Function(l, r) l.VersionCode < r.VersionCode)
                 Dim ListItem = New MyComboBoxItem With {.Content = Java.ToString, .ToolTip = Java.PathFolder, .Tag = Java}
                 ToolTipService.SetPlacement(ListItem, Primitives.PlacementMode.Right)
                 ToolTipService.SetHorizontalOffset(ListItem, 5)

@@ -25,6 +25,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="版本列表获取" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboDownloadVersion" Grid.ColumnSpan="2" Tag="ToolDownloadVersion" Grid.Column="1">
@@ -50,6 +51,9 @@
                         <local:MyCheckBox Margin="0,2,0,4" Text="安装整合包时保留原始压缩包" Grid.Row="7" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadKeepModpack" Tag="ToolDownloadKeepModpack" 
                                           ToolTip="安装整合包时，在版本文件夹下保留用于安装的原始整合包压缩包文件" />
+                        <local:MyCheckBox Margin="0,2,0,4" Text="简化 Mod 加载器需求（忽略 Quilt）" Grid.Row="8" Height="22" Grid.ColumnSpan="2"
+                                          x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" 
+                                          ToolTip="当 Mod 支持 Forge、Fabric 但不支持 Quilt 时，不显示它的 Mod 加载器需求。&#xa;例如，关闭时 JEI 会显示需要 Forge / Fabric 1.8+，开启后 JEI 仅显示需要 1.8+。" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
@@ -111,8 +115,12 @@
                     <Grid Height="35" Grid.Row="6" Grid.ColumnSpan="5" Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnSystemUpdate" MinWidth="140" Text="检查更新" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="0" x:Name="BtnSystemUpdate" MinWidth="140" Text="检查更新" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="1" x:Name="BtnSystemIdentify" MinWidth="140" Text="复制识别码" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="2" x:Name="BtnSystemUnlock" MinWidth="140" Text="输入解锁码" Padding="13,0" Margin="0,0,20,0" />
                     </Grid>
                 </Grid>
             </local:MyCard>

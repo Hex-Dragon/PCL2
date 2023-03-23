@@ -86,9 +86,9 @@
         For Each FilePath In RightLogs
             Try
                 If FilePath.Contains("crash-") Then
-                    AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(FilePath, ReadFile(FilePath).Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Split(vbCr)))
+                    AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(FilePath, ReadFile(FilePath).Split(vbCrLf.ToCharArray)))
                 Else
-                    AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(FilePath, ReadFile(FilePath, Encoding.UTF8).Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Split(vbCr)))
+                    AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(FilePath, ReadFile(FilePath, Encoding.UTF8).Split(vbCrLf.ToCharArray)))
                 End If
             Catch ex As Exception
                 Log(ex, "读取可能的崩溃日志文件失败（" & FilePath & "）")
@@ -133,9 +133,9 @@
                 Dim Ext As String = TargetFile.Extension.ToLower
                 If Ext = ".log" OrElse Ext = ".txt" Then
                     If TargetFile.Name.StartsWith("crash-") Then
-                        AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(TargetFile.FullName, ReadFile(TargetFile.FullName).Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Split(vbCr)))
+                        AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(TargetFile.FullName, ReadFile(TargetFile.FullName).Split(vbCrLf.ToCharArray)))
                     Else
-                        AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(TargetFile.FullName, ReadFile(TargetFile.FullName, Encoding.UTF8).Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Split(vbCr)))
+                        AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(TargetFile.FullName, ReadFile(TargetFile.FullName, Encoding.UTF8).Split(vbCrLf.ToCharArray)))
                     End If
                 End If
             Catch ex As Exception
@@ -377,7 +377,7 @@
             '来源崩溃日志的分析
             If LogCrash IsNot Nothing Then
                 Log("[Crash] 开始进行崩溃日志堆栈分析")
-                Dim StackLogs As String = LogCrash.Replace("System Details", "¨").Split("¨").First
+                Dim StackLogs As String = LogCrash.Split("System Details").First
                 Dim Keywords = AnalyzeStackKeyword(StackLogs)
                 If Keywords.Count > 0 Then
                     Dim Names = AnalyzeModName(Keywords)

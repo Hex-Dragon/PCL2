@@ -441,10 +441,51 @@ Wait:
                 TargetJavaList.Add(New JavaEntry(Entry.Key, Entry.Value))
             Next
 
+#Region "添加用户指定的 Java，储存到 UserJava 中"
+
+            Dim UserJava As JavaEntry = Nothing
+
+            '获取版本独立设置中指定的 Java
+            If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion).ToString.StartsWith("{") Then
+                Try
+                    UserJava = JavaEntry.FromJson(GetJson(Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)))
+                    '确保版本独立设置中指定的 Java 在 Java 列表中（#978）
+                    If Not JavaList.Any(Function(j) j.PathFolder = UserJava.PathFolder) Then
+                        UserJava = Nothing
+                        Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
+                        Log("版本独立设置中指定的 Java 不在主 Java 列表中，此设置已重置", LogLevel.Debug)
+                        Exit Try
+                    End If
+                Catch ex As Exception
+                    UserJava = Nothing
+                    Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
+                    Log(ex, "版本独立设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
+                End Try
+            End If
+
+            '获取全局设置中指定的 Java
+            If UserJava Is Nothing AndAlso Setup.Get("LaunchArgumentJavaSelect") <> "" Then
+                Try
+                    UserJava = JavaEntry.FromJson(GetJson(Setup.Get("LaunchArgumentJavaSelect")))
+                Catch ex As Exception
+                    UserJava = Nothing
+                    Setup.Reset("LaunchArgumentJavaSelect")
+                    Log(ex, "设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
+                End Try
+            End If
+
+            '添加到特定 Java 列表
+            If UserJava IsNot Nothing Then
+                Log($"[Java] 用户指定的 Java：{UserJava}")
+                TargetJavaList.Add(UserJava)
+            End If
+
+#End Region
+
             '检查特定的 Java
             If TargetJavaList.Count > 0 Then
                 TargetJavaList = JavaCheckList(TargetJavaList)
-                Log("[Java] 检查后找到 " & TargetJavaList.Count & " 个特定目录下的 Java")
+                Log("[Java] 检查后找到 " & TargetJavaList.Count & " 个特定的 Java")
             End If
 
 RetryGet:
@@ -477,38 +518,7 @@ RetryGet:
                 GoTo RetryGet
             End If
 
-#Region "检查用户指定的 Java"
-
-            Dim UserJava As JavaEntry = Nothing
-
-            '获取版本独立设置中指定的 Java
-            If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion).ToString.StartsWith("{") Then
-                Try
-                    UserJava = JavaEntry.FromJson(GetJson(Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)))
-                    '确保版本独立设置中指定的 Java 在 Java 列表中（#978）
-                    If Not JavaList.Any(Function(j) j.PathFolder = UserJava.PathFolder) Then
-                        UserJava = Nothing
-                        Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
-                        Log("版本独立设置中指定的 Java 不在主 Java 列表中，此设置已重置", LogLevel.Debug)
-                        Exit Try
-                    End If
-                Catch ex As Exception
-                    UserJava = Nothing
-                    Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
-                    Log(ex, "版本独立设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
-                End Try
-            End If
-
-            '获取全局设置中指定的 Java
-            If UserJava Is Nothing AndAlso Setup.Get("LaunchArgumentJavaSelect") <> "" Then
-                Try
-                    UserJava = JavaEntry.FromJson(GetJson(Setup.Get("LaunchArgumentJavaSelect")))
-                Catch ex As Exception
-                    UserJava = Nothing
-                    Setup.Reset("LaunchArgumentJavaSelect")
-                    Log(ex, "设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
-                End Try
-            End If
+#Region "检查用户指定的 Java 是否可用"
 
             '确保指定的 Java 可用
             If UserJava Is Nothing Then GoTo ExitUserJavaCheck
@@ -569,7 +579,7 @@ ExitUserJavaCheck:
                 If TargetJavaList.Contains(Java) Then
                     '直接使用指定的 Java
                     AllowedJavaList = New List(Of JavaEntry) From {Java}
-                    Log("[Java] 优先使用特定目录下的 Java：" & Java.ToString)
+                    Log("[Java] 优先使用特定的 Java：" & Java.ToString)
                     GoTo UserPass
                 End If
             Next
@@ -2569,9 +2579,26 @@ NextVersion:
         '统一通行证文件
         If Setup.Get("VersionServerLogin", Version:=Version) = 3 Then
             Dim TargetFile = PathAppdata & "nide8auth.jar"
-            Dim Checker As New FileChecker(MinSize:=173000)
-            If (IsSetupSkip AndAlso File.Exists(TargetFile)) OrElse Checker.Check(TargetFile) IsNot Nothing Then
-                Result.Add(New NetFile({"https://login.mc-user.com:233/index/jar"}, TargetFile, Checker))
+            If Not (IsSetupSkip AndAlso File.Exists(TargetFile)) Then
+                Dim DownloadInfo As JObject = Nothing
+                '获取下载信息
+                Try
+                    Log("[Minecraft] 开始获取统一通行证下载信息")
+                    '测试链接：https://auth.mc-user.com:233/00000000000000000000000000000000/
+                    DownloadInfo = GetJson(NetGetCodeByDownload({
+                        "https://auth.mc-user.com:233/" & Setup.Get("VersionServerNide", Version:=Version)}, IsJson:=True))
+                Catch ex As Exception
+                    Log(ex, "获取统一通行证下载信息失败")
+                End Try
+                '校验文件
+                If DownloadInfo IsNot Nothing Then
+                    Dim Checker As New FileChecker(Hash:=DownloadInfo("jarHash").ToString)
+                    If (IsSetupSkip AndAlso File.Exists(TargetFile)) OrElse Checker.Check(TargetFile) IsNot Nothing Then
+                        '开始下载
+                        Log("[Minecraft] 统一通行证需要更新：Hash - " & Checker.Hash, LogLevel.Developer)
+                        Result.Add(New NetFile({"https://login.mc-user.com:233/index/jar"}, TargetFile, Checker))
+                    End If
+                End If
             End If
         End If
         'Authlib-Injector 文件
@@ -2593,7 +2620,7 @@ NextVersion:
                     If (IsSetupSkip AndAlso File.Exists(TargetFile)) OrElse Checker.Check(TargetFile) IsNot Nothing Then
                         '开始下载
                         Dim DownloadAddress As String = DownloadInfo("download_url")
-                        Log("[Minecraft] Authlib-Injector 需要更新：" & DownloadAddress)
+                        Log("[Minecraft] Authlib-Injector 需要更新：" & DownloadAddress, LogLevel.Developer)
                         Result.Add(New NetFile({
                                 DownloadAddress.Replace("bmclapi2.bangbang93.com", "download.mcbbs.net"), DownloadAddress
                             }, TargetFile, New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)))
@@ -3756,7 +3783,7 @@ VersionFindFail:
             If Version Is Nothing Then Exit Sub
             Dim Time As Date = Version("releaseTime")
             Dim MsgBoxText As String = $"新版本：{VersionName}{vbCrLf}" &
-                If((Date.Now - Time).TotalDays > 1, "更新时间：" & Time.ToString, "更新于：" & GetTimeSpanString(Time - Date.Now))
+                If((Date.Now - Time).TotalDays > 1, "更新时间：" & Time.ToString, "更新于：" & GetTimeSpanString(Time - Date.Now, False))
             Dim MsgResult = MyMsgBox(MsgBoxText, "Minecraft 更新提示", "确定", "下载", If((Date.Now - Time).TotalHours > 3, "更新日志", ""),
                 Button3Action:=Sub() McUpdateLogShow(Version))
             '弹窗结果

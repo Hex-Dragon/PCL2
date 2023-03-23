@@ -7,11 +7,11 @@
     <Grid>
         <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
             <Grid Margin="25,10,25,25">
-                <VirtualizingStackPanel Grid.Row="1" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Name="PanMinecraft" Grid.IsSharedSizeScope="True">
-                    <VirtualizingStackPanel.RenderTransform>
+                <StackPanel Grid.Row="1" Name="PanMinecraft" Grid.IsSharedSizeScope="True">
+                    <StackPanel.RenderTransform>
                         <TranslateTransform />
-                    </VirtualizingStackPanel.RenderTransform>
-                </VirtualizingStackPanel>
+                    </StackPanel.RenderTransform>
+                </StackPanel>
                 <StackPanel Grid.Row="1" x:Name="PanSelect" Visibility="Collapsed" Opacity="0" IsHitTestVisible="False">
                     <StackPanel.RenderTransform>
                         <TranslateTransform X="40" />

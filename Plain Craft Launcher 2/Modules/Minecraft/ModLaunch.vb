@@ -1830,14 +1830,16 @@ NextVersion:
                         Else
                             PackFormat = 9
                         End If
-                    Case 19, 99 '99 是快照版
+                    Case 19
                         If McVersionCurrent.Version.McCodeSub <= 3 Then
                             PackFormat = 10
                         Else
                             PackFormat = 12
                         End If
-                    Case Else
+                    Case 20, 99 '99 是快照版
                         PackFormat = 13
+                    Case Else
+                        PackFormat = 14
                         'https://minecraft.fandom.com/zh/wiki/数据包#数据包版本
                 End Select
                 McLaunchLog("正在构建自定义皮肤资源包，格式为：" & PackFormat)

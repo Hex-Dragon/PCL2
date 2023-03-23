@@ -746,11 +746,7 @@ ExitRefresh:
         '获取 “你知道吗” 提示
         Dim Hint As String = PageOtherTest.GetRandomHint()
         Try
-            Dim RawHints = Array.FindAll(
-                ReadFile(Path & "PCL\hints.txt").Replace(vbLf, "").Split(vbCr),
-                Function(Input As String) As Boolean
-                    Return Not String.IsNullOrWhiteSpace(Input)
-                End Function)
+            Dim RawHints = ReadFile(Path & "PCL\hints.txt").Split(vbCrLf.ToCharArray).Where(Function(s) Not String.IsNullOrWhiteSpace(s)).ToList
             If RawHints.Count > 0 Then Hint = RandomOne(RawHints)
         Catch ex As Exception
             Log(ex, "获取自定义 你知道吗 提示失败", LogLevel.Hint)

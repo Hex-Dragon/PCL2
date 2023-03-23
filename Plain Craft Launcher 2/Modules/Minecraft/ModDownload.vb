@@ -622,7 +622,7 @@
         Dim Versions As New List(Of DlForgeVersionEntry)
         Try
             '分割版本信息
-            Dim VersionCodes = Mid(Result, 1, Result.LastIndexOf("</table>")).Replace("<td class=""download-version", "¨").Split("¨")
+            Dim VersionCodes = Mid(Result, 1, Result.LastIndexOf("</table>")).Split("<td class=""download-version")
             '获取所有版本信息
             For i = 1 To VersionCodes.Count - 1
                 Dim VersionCode = VersionCodes(i)
@@ -632,8 +632,7 @@
                     Dim IsRecommended As Boolean = VersionCode.Contains("fa promo-recommended")
                     Dim Inherit As String = Loader.Input
                     '分支获取
-                    Dim Branch As String = RegexSeek(VersionCode, "(?<=Branch:</strong>[\s]*)[^<]+")
-                    Branch = RegexSeek(If(Branch, ""), "[^\s]+")
+                    Dim Branch As String = RegexSeek(VersionCode, $"(?<=-{Name}-)[^-""]+(?=-[a-z]+.[a-z]{{3}})")
                     If String.IsNullOrWhiteSpace(Branch) Then Branch = Nothing
                     If Name = "11.15.1.2318" OrElse Name = "11.15.1.1902" OrElse Name = "11.15.1.1890" Then Branch = "1.8.9"
                     If Branch Is Nothing AndAlso Inherit = "1.7.10" AndAlso Name.Split(".")(3) >= 1300 Then Branch = "1.7.10"

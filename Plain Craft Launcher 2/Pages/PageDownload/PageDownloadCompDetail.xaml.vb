@@ -273,7 +273,7 @@
                 End If
                 '获取基本信息
                 Dim ChineseName As String = If(Project.TranslatedName = Project.RawName, "",
-                    Project.TranslatedName.Replace(" (", "Å").Split("Å").First.Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "："))
+                    Project.TranslatedName.Split(" (").First.Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "："))
                 Dim FileName As String
                 Select Case Setup.Get("ToolDownloadTranslate")
                     Case 0

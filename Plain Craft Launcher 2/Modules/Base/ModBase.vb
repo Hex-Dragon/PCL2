@@ -1,5 +1,6 @@
 ﻿Imports System.IO.Compression
 Imports System.Management
+Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
 Imports System.Windows.Markup
@@ -10,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.5.1" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.5.1." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.5.2" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.5.2." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 281 'Release
+    Public Const VersionCode As Integer = 286 'Release
 #Else
-    Public Const VersionCode As Integer = 284 'Snapshot
+    Public Const VersionCode As Integer = 285 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1487,14 +1488,28 @@ Re:
     ''' <summary>
     ''' 连接字符串。
     ''' </summary>
-    Public Function Join(List As ICollection, Split As String) As String
+    <Extension> Public Function Join(List As IEnumerable, Split As String) As String
         Dim Builder As New StringBuilder
-        Dim LastCount As Integer = List.Count - 1
-        For i = 0 To LastCount
-            If List(i) IsNot Nothing Then Builder.Append(List(i))
-            If i <> LastCount Then Builder.Append(Split)
+        Dim IsFirst As Boolean = True
+        For Each Element In List
+            If IsFirst Then
+                IsFirst = False
+            Else
+                Builder.Append(Split)
+            End If
+            If Element IsNot Nothing Then Builder.Append(Element)
         Next
         Return Builder.ToString
+    End Function
+    ''' <summary>
+    ''' 分割字符串。
+    ''' </summary>
+    <Extension> Public Function Split(FullStr As String, SplitStr As String) As String()
+        If SplitStr.Length = 1 Then
+            Return FullStr.Split(SplitStr(0))
+        Else
+            Return FullStr.Split({SplitStr}, StringSplitOptions.None)
+        End If
     End Function
 
     ''' <summary>
@@ -1785,46 +1800,71 @@ NextElement:
     ''' <summary>
     ''' 将时间间隔转换为类似“5 分 10 秒前”的易于阅读的形式。
     ''' </summary>
-    Public Function GetTimeSpanString(Span As TimeSpan) As String
+    Public Function GetTimeSpanString(Span As TimeSpan, IsShortForm As Boolean) As String
         Dim EndFix = If(Span.TotalMilliseconds > 0, "后", "前")
         If Span.TotalMilliseconds < 0 Then Span = -Span
         Dim TotalMonthes = Math.Floor(Span.Days / 30)
-        If TotalMonthes >= 61 Then
-            '5+ 年，“5 年”
-            GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " 年"
-        ElseIf TotalMonthes >= 12 Then
-            '12~60 月，“1 年 2 个月”
-            GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " 年" & If((TotalMonthes Mod 12) > 0, " " & (TotalMonthes Mod 12) & " 个月", "")
-        ElseIf TotalMonthes >= 4 Then
-            '4~11 月，“5 月”
-            GetTimeSpanString = TotalMonthes & " 月"
-        ElseIf TotalMonthes >= 1 Then
-            '1~4 月，“2 月 13 天”
-            GetTimeSpanString = TotalMonthes & " 月" & If((Span.Days Mod 30) > 0, " " & (Span.Days Mod 30) & " 天", "")
-        ElseIf Span.TotalDays >= 4 Then
-            '4~30 天，“23 天”
-            GetTimeSpanString = Span.Days & " 天"
-        ElseIf Span.TotalDays >= 1 Then
-            '1~3 天，“2 天 20 小时”
-            GetTimeSpanString = Span.Days & " 天" & If(Span.Hours > 0, " " & Span.Hours & " 小时", "")
-        ElseIf Span.TotalHours >= 10 Then
-            '10 小时 ~ 1 天，“15 小时”
-            GetTimeSpanString = Span.Hours & " 小时"
-        ElseIf Span.TotalHours >= 1 Then
-            '1~10 小时，“1 小时 20 分钟”
-            GetTimeSpanString = Span.Hours & " 小时" & If(Span.Minutes > 0, " " & Span.Minutes & " 分钟", "")
-        ElseIf Span.TotalMinutes >= 10 Then
-            '10 分钟 ~ 1 小时，“49 分钟”
-            GetTimeSpanString = Span.Minutes & " 分钟"
-        ElseIf Span.TotalMinutes >= 1 Then
-            '1~10 分钟，“9 分 23 秒”
-            GetTimeSpanString = Span.Minutes & " 分" & If(Span.Seconds > 0, " " & Span.Seconds & " 秒", "")
-        ElseIf Span.TotalSeconds >= 1 Then
-            '1 秒 ~ 1 分钟，“23 秒”
-            GetTimeSpanString = Span.Seconds & " 秒"
+        If IsShortForm Then
+            If TotalMonthes >= 12 Then
+                '1+ 年，“3 年”
+                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " 年"
+            ElseIf TotalMonthes >= 2 Then
+                '2~11 月，“5 个月”
+                GetTimeSpanString = TotalMonthes & " 个月"
+            ElseIf Span.TotalDays >= 2 Then
+                '2 天 ~ 2 月，“23 天”
+                GetTimeSpanString = Span.Days & " 天"
+            ElseIf Span.TotalHours >= 1 Then
+                '1 小时 ~ 2 天，“15 小时”
+                GetTimeSpanString = Span.Hours & " 小时"
+            ElseIf Span.TotalMinutes >= 1 Then
+                '1 分钟 ~ 1 小时，“49 分钟”
+                GetTimeSpanString = Span.Minutes & " 分钟"
+            ElseIf Span.TotalSeconds >= 1 Then
+                '1 秒 ~ 1 分钟，“23 秒”
+                GetTimeSpanString = Span.Seconds & " 秒"
+            Else
+                '不到 1 秒
+                GetTimeSpanString = "1 秒"
+            End If
         Else
-            '不到 1 秒
-            GetTimeSpanString = "1 秒"
+            If TotalMonthes >= 61 Then
+                '5+ 年，“5 年”
+                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " 年"
+            ElseIf TotalMonthes >= 12 Then
+                '12~60 月，“1 年 2 个月”
+                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " 年" & If((TotalMonthes Mod 12) > 0, " " & (TotalMonthes Mod 12) & " 个月", "")
+            ElseIf TotalMonthes >= 4 Then
+                '4~11 月，“5 月”
+                GetTimeSpanString = TotalMonthes & " 月"
+            ElseIf TotalMonthes >= 1 Then
+                '1~4 月，“2 月 13 天”
+                GetTimeSpanString = TotalMonthes & " 月" & If((Span.Days Mod 30) > 0, " " & (Span.Days Mod 30) & " 天", "")
+            ElseIf Span.TotalDays >= 4 Then
+                '4~30 天，“23 天”
+                GetTimeSpanString = Span.Days & " 天"
+            ElseIf Span.TotalDays >= 1 Then
+                '1~3 天，“2 天 20 小时”
+                GetTimeSpanString = Span.Days & " 天" & If(Span.Hours > 0, " " & Span.Hours & " 小时", "")
+            ElseIf Span.TotalHours >= 10 Then
+                '10 小时 ~ 1 天，“15 小时”
+                GetTimeSpanString = Span.Hours & " 小时"
+            ElseIf Span.TotalHours >= 1 Then
+                '1~10 小时，“1 小时 20 分钟”
+                GetTimeSpanString = Span.Hours & " 小时" & If(Span.Minutes > 0, " " & Span.Minutes & " 分钟", "")
+            ElseIf Span.TotalMinutes >= 10 Then
+                '10 分钟 ~ 1 小时，“49 分钟”
+                GetTimeSpanString = Span.Minutes & " 分钟"
+            ElseIf Span.TotalMinutes >= 1 Then
+                '1~10 分钟，“9 分 23 秒”
+                GetTimeSpanString = Span.Minutes & " 分" & If(Span.Seconds > 0, " " & Span.Seconds & " 秒", "")
+            ElseIf Span.TotalSeconds >= 1 Then
+                '1 秒 ~ 1 分钟，“23 秒”
+                GetTimeSpanString = Span.Seconds & " 秒"
+            Else
+                '不到 1 秒
+                GetTimeSpanString = "1 秒"
+            End If
         End If
         GetTimeSpanString += EndFix
     End Function
@@ -1997,6 +2037,13 @@ NextElement:
         Return NewList
     End Function
     Public Delegate Function CompareThreadStart(Of T)(Left As T, Right As T) As Boolean
+
+    ''' <summary>
+    ''' 返回列表的浅表副本。
+    ''' </summary>
+    <Extension> Public Function Clone(Of T)(list As IList(Of T)) As IList(Of T)
+        Return New List(Of T)(list)
+    End Function
 
     ''' <summary>
     ''' 获取程序启动参数。

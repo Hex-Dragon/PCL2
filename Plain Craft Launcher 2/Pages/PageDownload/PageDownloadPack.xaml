@@ -65,9 +65,6 @@
                             <local:MyComboBoxItem Content="1.9.4" />
                             <local:MyComboBoxItem Content="1.8.9" />
                             <local:MyComboBoxItem Content="1.7.10" />
-                            <local:MyComboBoxItem Content="1.7.2" />
-                            <local:MyComboBoxItem Content="1.6.4" />
-                            <local:MyComboBoxItem Content="1.5.2" />
                         </local:MyComboBox>
                     </Grid>
                     <Grid Margin="0,4,0,6" Height="35">

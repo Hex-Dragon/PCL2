@@ -688,7 +688,7 @@ FinishMcbFileCheck:
     Private Sub TextCert_ValidateChanged(sender As Object, e As EventArgs) Handles TextCert.ValidateChanged
         BtnCertDone.IsEnabled = TextCert.ValidateResult = ""
     End Sub
-    Private Sub TextCert_KeyUp(sender As Object, e As KeyEventArgs) Handles TextCert.KeyUp
+    Private Sub TextCert_KeyDown(sender As Object, e As KeyEventArgs) Handles TextCert.KeyDown
         If e.Key = Key.Enter AndAlso BtnCertDone.IsEnabled Then BtnCertDone_Click() '允许回车确认
     End Sub
 
