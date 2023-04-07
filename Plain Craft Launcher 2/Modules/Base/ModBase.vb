@@ -1358,6 +1358,8 @@ Re:
             CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。"
         ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
             CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
+        ElseIf TypeOf InnerEx Is System.Runtime.InteropServices.COMException Then
+            CommonReason = "你的电脑系统进程崩溃，PCL 的运行环境出现问题，或者电脑设置、驱动存在问题。请尝试重启 PCL。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
             CommonReason = "你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。"
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
@@ -1406,6 +1408,8 @@ Re:
             CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
             CommonReason = "你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。"
+        ElseIf TypeOf InnerEx Is System.Runtime.InteropServices.COMException Then
+            CommonReason = "你的电脑系统进程崩溃，PCL 的运行环境出现问题，或者电脑设置、驱动存在问题。请尝试重启 PCL。"
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
                 "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
             CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
