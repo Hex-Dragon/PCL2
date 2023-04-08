@@ -11,20 +11,47 @@
                     <Grid Margin="0,0,0,11" HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="70" />
-                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="2.5*" />
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="28" />
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
                         </Grid.RowDefinitions>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="名称" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextSearchName" Grid.Column="1" Grid.ColumnSpan="10" HintText="仅支持使用英文搜索" />
-                        <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="类型" Margin="0,0,25,0" />
-                        <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="1" Grid.Row="2" MaxDropDownHeight="320">
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="名称" Margin="0,0,18,0" />
+                        <local:MyTextBox x:Name="TextSearchName" Grid.Column="1" />
+                        <TextBlock VerticalAlignment="Center" Grid.Column="3" HorizontalAlignment="Left" Text="来源" Margin="0,0,18,0" />
+                        <local:MyComboBox x:Name="ComboSearchSource" Grid.Column="4">
+                            <local:MyComboBoxItem Content="全部" Tag="3" IsSelected="True" />
+                            <local:MyComboBoxItem Content="CurseForge" Tag="1" />
+                            <local:MyComboBoxItem Content="Modrinth" Tag="2" />
+                        </local:MyComboBox>
+                        <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="版本" Margin="0,0,18,0" />
+                        <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="1" IsEditable="True" MaxDropDownHeight="320">
+                            <local:MyComboBoxItem Content="全部 (也可自行输入)" IsSelected="True" />
+                            <local:MyComboBoxItem Content="1.19.4" />
+                            <local:MyComboBoxItem Content="1.19.3" />
+                            <local:MyComboBoxItem Content="1.19.2" />
+                            <local:MyComboBoxItem Content="1.19.1" />
+                            <local:MyComboBoxItem Content="1.19" />
+                            <local:MyComboBoxItem Content="1.18.2" />
+                            <local:MyComboBoxItem Content="1.17.1" />
+                            <local:MyComboBoxItem Content="1.16.5" />
+                            <local:MyComboBoxItem Content="1.15.2" />
+                            <local:MyComboBoxItem Content="1.14.4" />
+                            <local:MyComboBoxItem Content="1.13.2" />
+                            <local:MyComboBoxItem Content="1.12.2" />
+                            <local:MyComboBoxItem Content="1.11.2" />
+                            <local:MyComboBoxItem Content="1.10.2" />
+                            <local:MyComboBoxItem Content="1.9.4" />
+                            <local:MyComboBoxItem Content="1.8.9" />
+                            <local:MyComboBoxItem Content="1.7.10" />
+                        </local:MyComboBox>
+                        <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="类型" Margin="0,0,18,0" />
+                        <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="4" Grid.Row="2" MaxDropDownHeight="320">
                             <local:MyComboBoxItem Tag="" Content="全部" IsSelected="True" />
                             <local:MyComboBoxItem Tag="4484/" Content="多人" />
                             <local:MyComboBoxItem Tag="/optimization" Content="性能优化" />
@@ -44,27 +71,6 @@
                             <local:MyComboBoxItem Tag="4480/" Content="基于地图" />
                             <local:MyComboBoxItem Tag="4481/lightweight" Content="轻量整合" />
                             <local:MyComboBoxItem Tag="4482/" Content="大型整合" />
-                        </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="版本" Margin="0,0,25,0" />
-                        <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="4" IsEditable="True" MaxDropDownHeight="320">
-                            <local:MyComboBoxItem Content="全部 (也可自行输入)" IsSelected="True" />
-                            <local:MyComboBoxItem Content="1.19.4" />
-                            <local:MyComboBoxItem Content="1.19.3" />
-                            <local:MyComboBoxItem Content="1.19.2" />
-                            <local:MyComboBoxItem Content="1.19.1" />
-                            <local:MyComboBoxItem Content="1.19" />
-                            <local:MyComboBoxItem Content="1.18.2" />
-                            <local:MyComboBoxItem Content="1.17.1" />
-                            <local:MyComboBoxItem Content="1.16.5" />
-                            <local:MyComboBoxItem Content="1.15.2" />
-                            <local:MyComboBoxItem Content="1.14.4" />
-                            <local:MyComboBoxItem Content="1.13.2" />
-                            <local:MyComboBoxItem Content="1.12.2" />
-                            <local:MyComboBoxItem Content="1.11.2" />
-                            <local:MyComboBoxItem Content="1.10.2" />
-                            <local:MyComboBoxItem Content="1.9.4" />
-                            <local:MyComboBoxItem Content="1.8.9" />
-                            <local:MyComboBoxItem Content="1.7.10" />
                         </local:MyComboBox>
                     </Grid>
                     <Grid Margin="0,4,0,6" Height="35">

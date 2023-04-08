@@ -4,6 +4,24 @@
     Public Event Click(sender As Object, e As MouseButtonEventArgs) '自定义事件
     Public Event RightClick(sender As Object, e As MouseButtonEventArgs)
 
+    '进度条
+    Private _Progress As Double = 0
+    Public Property Progress As Double
+        Get
+            Return _Progress
+        End Get
+        Set(value As Double)
+            If _Progress = value Then Exit Property
+            _Progress = value
+            If value < 0.0001 Then
+                PanProgress.Visibility = Visibility.Collapsed
+            Else
+                PanProgress.Visibility = Visibility.Visible
+                RectProgress.Rect = New Rect(0, 0, 40, 40 * (1 - value))
+            End If
+        End Set
+    End Property
+
     '自定义属性
     Public Uuid As Integer = GetUuid()
     Private _Logo As String = ""

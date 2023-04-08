@@ -100,9 +100,7 @@
                         </Grid>
                     </local:MyCard>
                     <local:MyCard Title="Fabric" Height="40" Margin="0,15,0,0" x:Name="CardFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
-                        <StackPanel Margin="20,40,18,15" VerticalAlignment="Top">
-                            <StackPanel Name="PanFabric" />
-                        </StackPanel>
+                        <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanFabric" />
                         <Grid x:Name="PanFabricInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />

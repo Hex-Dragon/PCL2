@@ -330,6 +330,7 @@
         使用OpenJ9
         Java版本过高
         Java版本不兼容
+        Mod名称包含特殊字符
         显卡驱动不支持导致无法设置像素格式
         极短的程序输出
         Intel驱动不兼容导致EXCEPTION_ACCESS_VIOLATION 'https://bugs.mojang.com/browse/MC-32606
@@ -482,6 +483,7 @@ Done:
             If LogMc.Contains("Maybe try a lower resolution resourcepack?") Then AppendReason(CrashReason.材质过大或显卡配置不足)
             If LogMc.Contains("java.lang.NoSuchMethodError: net.minecraft.world.server.ChunkManager$ProxyTicketManager.shouldForceTicks(J)Z") AndAlso LogMc.Contains("OptiFine") Then AppendReason(CrashReason.OptiFine导致无法加载世界)
             If LogMc.Contains("Unsupported class file major version") Then AppendReason(CrashReason.Java版本不兼容)
+            If LogMc.Contains("Invalid module name: '' is not a Java identifier") Then AppendReason(CrashReason.Mod名称包含特殊字符)
             If LogMc.Contains("java.lang.UnsupportedClassVersionError: net/fabricmc/loader/impl/launch/knot/KnotClient : Unsupported major.minor version") Then AppendReason(CrashReason.Java版本不兼容)
             If LogMc.Contains("Could not reserve enough space") Then
                 If LogMc.Contains("for 1048576KB object heap") Then
@@ -799,6 +801,8 @@ NextStack:
                     Results.Add("游戏似乎因为你所使用的 Java 版本过高而崩溃了。\n请在启动设置的 Java 选择一项中改用较低版本的 Java，然后再启动游戏。\n如果没有，可以从网络中下载、安装一个。")
                 Case CrashReason.Java版本不兼容
                     Results.Add("游戏不兼容你当前使用的 Java。\n如果没有合适的 Java，可以从网络中下载、安装一个。")
+                Case CrashReason.Mod名称包含特殊字符
+                    Results.Add("由于有 Mod 的名称包含特殊字符，导致游戏崩溃。\n请尝试修改 Mod 文件名，让它只包含英文字母、数字、减号（-）、下划线（_）和小数点，然后再启动游戏。")
                 Case CrashReason.使用32位Java导致JVM无法分配足够多的内存
                     If Environment.Is64BitOperatingSystem Then
                         Results.Add("你似乎正在使用 32 位 Java，这会导致 Minecraft 无法使用 1GB 以上的内存，进而造成崩溃。\n\n请在启动设置的 Java 选择一项中改用 64 位的 Java 再启动游戏，然后再启动游戏。\n如果你没有安装 64 位的 Java，你可以从网络中下载、安装一个。")

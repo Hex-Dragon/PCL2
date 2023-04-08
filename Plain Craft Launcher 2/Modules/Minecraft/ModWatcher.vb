@@ -95,7 +95,7 @@
                                        TimerLog()
                                        '设置窗口标题
                                        For i = 1 To 3
-                                           If IsWindowFinished AndAlso WindowTitle <> "" AndAlso State = MinecraftState.Running AndAlso Not GameProcess.HasExited Then
+                                           If IsWindowFinished AndAlso IsWindowAppeared AndAlso WindowTitle <> "" AndAlso State = MinecraftState.Running AndAlso Not GameProcess.HasExited Then
                                                Dim RealTitle As String = WindowTitle.Replace("{time}", Date.Now.ToShortTimeString)
                                                SetWindowText(WindowHandle, RealTitle.ToCharArray)
                                            End If
@@ -248,6 +248,9 @@
 
         '窗口检查
         Private IsWindowAppeared As Boolean = False
+        ''' <summary>
+        ''' 窗口检查是否已经完成。这不一定代表着找到了窗口（如果没有找到，IsWindowAppeared 仍为 False）。
+        ''' </summary>
         Private IsWindowFinished As Boolean = False
         Private WindowHandle As IntPtr
         Private Sub TimerWindow()
@@ -255,7 +258,14 @@
                 If GameProcess.HasExited Then Exit Sub
                 If IsWindowFinished Then Exit Sub
                 '获取全部窗口，检查是否有新增的
-                Dim MinecraftWindow = TryGetMinecraftWindow()
+                Dim MinecraftWindow As KeyValuePair(Of IntPtr, String)? = Nothing
+                Try
+                    MinecraftWindow = TryGetMinecraftWindow()
+                Catch ex As ComponentModel.Win32Exception
+                    '拒绝访问（#1062）
+                    Log(ex, "由于反作弊或安全软件拦截，PCL 无法操作游戏窗口", LogLevel.Hint)
+                    IsWindowFinished = True
+                End Try
                 If MinecraftWindow Is Nothing Then Exit Sub
                 Dim MinecraftWindowName = MinecraftWindow.Value.Value, MinecraftWindowHandle = MinecraftWindow.Value.Key
                 '已找到窗口

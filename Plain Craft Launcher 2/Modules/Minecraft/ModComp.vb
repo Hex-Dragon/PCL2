@@ -21,6 +21,11 @@
         Fabric = 4
         Quilt = 5
     End Enum
+    <Flags> Public Enum CompSourceType
+        CurseForge = 1
+        Modrinth = 2
+        Any = CurseForge Or Modrinth
+    End Enum
 
 #Region "CompDatabase | Mod 数据库"
 
@@ -383,7 +388,7 @@
             '获取版本描述
             Dim GameVersionDescription As String
             If GameVersions Is Nothing OrElse GameVersions.Count = 0 Then
-                GameVersionDescription = ""
+                GameVersionDescription = "未知"
             Else
                 Dim SpaVersions As New List(Of String)
                 For i = 0 To GameVersions.Count - 1
@@ -414,20 +419,24 @@
             '实例化 UI
             Dim NewItem As New MyCompItem With {.Tag = Me}
             '标题
-            Dim FinalName As String = TranslatedName.Split(" | ").First.Split(" - ").First.Split(" (").First.Split(" [").First
+            Dim FinalName As String = TranslatedName.Split(" | ").First.Split(" - ").First.Split("(").First.Split("[").First
+            Dim ExNameList As List(Of String) = TranslatedName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).
+                Select(Function(s) s.Trim(" /".ToCharArray)).Where(Function(w) Not String.IsNullOrEmpty(w)).ToList
+            ExNameList.RemoveAt(0)
+            If TranslatedName = RawName AndAlso '没有中文翻译
+               Not ExNameList.Any(Function(s) s.Contains("orge") OrElse s.Contains("abric") OrElse s.Contains("uilt")) AndAlso '不是标注 XX 版
+               Not (ExNameList.Count = 1 AndAlso ExNameList.First.ToUpper <> ExNameList.First) Then '不是缩写
+                FinalName = RawName '使用原名
+                ExNameList.Clear()
+            End If
             NewItem.LabTitle.Text = FinalName
-            Dim ExNameList As New List(Of String)
-            If TranslatedName.Contains(" (") Then ExNameList.Add(TranslatedName.Split(" (").Last.Split(")").First)
-            If TranslatedName.Contains(" [") Then ExNameList.Add(TranslatedName.Split(" [").Last.Split("]").First)
-            If TranslatedName.Contains(" - ") Then ExNameList.Add(TranslatedName.Split(" - ").Last.Split(" | ").First.Split(" (").First.Split(" [").First)
-            If TranslatedName.Contains(" | ") Then ExNameList.Add(TranslatedName.Split(" | ").Last.Split(" - ").First.Split(" (").First.Split(" [").First)
             If ExNameList.Count = 0 Then
 NoExName:
                 CType(NewItem.LabTitleRaw.Parent, StackPanel).Children.Remove(NewItem.LabTitleRaw)
             Else
                 Dim ExName As String = ""
                 For Each Ex In ExNameList
-                    '去除 “Forge/Fabric” 一类的无意义提示
+                    '去除 “Forge/Fabric” 这一无意义提示
                     If Ex.Length < 19 AndAlso Ex.ToLower.Contains("fabric") AndAlso Ex.ToLower.Contains("forge") Then Continue For
                     '将 “Forge” 等提示改为 “Forge 版”
                     If (Ex.ToLower.Contains("forge") OrElse Ex.ToLower.Contains("fabric") OrElse Ex.ToLower.Contains("quilt")) AndAlso
@@ -452,7 +461,9 @@ NoExName:
                 '全部隐藏
                 CType(NewItem.PathVersion.Parent, Grid).Children.Remove(NewItem.PathVersion)
                 CType(NewItem.LabVersion.Parent, Grid).Children.Remove(NewItem.LabVersion)
-                NewItem.ColumnVersionMargin.Width = New GridLength(0)
+                NewItem.ColumnVersion1.Width = New GridLength(0)
+                NewItem.ColumnVersion2.MaxWidth = 0
+                NewItem.ColumnVersion3.Width = New GridLength(0)
             ElseIf ShowMcVersionDesc AndAlso ShowMcVersionDesc Then
                 '全部显示
                 Dim ModLoaderDesc As String = If(ModLoaders.Count > 0 AndAlso ModLoaders.Count < 3 AndAlso
@@ -491,6 +502,11 @@ NoExName:
             NewItem.LabSource.Text = If(FromCurseForge, "CurseForge", "Modrinth")
             If LastUpdate IsNot Nothing Then
                 NewItem.LabTime.Text = GetTimeSpanString(LastUpdate - Date.Now, True)
+            Else
+                NewItem.LabTime.Visibility = Visibility.Collapsed
+                NewItem.ColumnTime1.Width = New GridLength(0)
+                NewItem.ColumnTime2.Width = New GridLength(0)
+                NewItem.ColumnTime3.Width = New GridLength(0)
             End If
             NewItem.LabDownload.Text =
                 If(DownloadCount > 100000000, Math.Round(DownloadCount / 100000000, 2) & " 亿",
@@ -610,6 +626,10 @@ NoExName:
         ''' </summary>
         Public SearchText As String = Nothing
         ''' <summary>
+        ''' 允许的来源。
+        ''' </summary>
+        Public Source As CompSourceType = CompSourceType.Any
+        ''' <summary>
         ''' 构造函数。
         ''' </summary>
         Public Sub New(Type As CompType, Storage As CompProjectStorage, TargetResultCount As Integer)
@@ -624,6 +644,7 @@ NoExName:
         ''' 获取对应的 CurseForge API 请求链接。若返回 Nothing 则为不进行 CurseForge 请求。
         ''' </summary>
         Public Function GetCurseForgeAddress() As String
+            If Not Source.HasFlag(CompSourceType.CurseForge) Then Return Nothing
             If Tag.StartsWith("/") Then Storage.CurseForgeTotal = 0
             If Storage.CurseForgeTotal > -1 AndAlso Storage.CurseForgeTotal <= Storage.CurseForgeOffset Then Return Nothing
             '应用筛选参数
@@ -647,6 +668,7 @@ NoExName:
         ''' 获取对应的 Modrinth API 请求链接。若返回 Nothing 则为不进行 Modrinth 请求。
         ''' </summary>
         Public Function GetModrinthAddress() As String
+            If Not Source.HasFlag(CompSourceType.Modrinth) Then Return Nothing
             If Tag.EndsWith("/") Then Storage.ModrinthTotal = 0
             If Storage.ModrinthTotal > -1 AndAlso Storage.ModrinthTotal <= Storage.ModrinthOffset Then Return Nothing
             '应用筛选参数
@@ -668,7 +690,7 @@ NoExName:
             Dim request = TryCast(obj, CompProjectRequest)
             Return request IsNot Nothing AndAlso
                 Type = request.Type AndAlso TargetResultCount = request.TargetResultCount AndAlso
-                Tag = request.Tag AndAlso ModLoader = request.ModLoader AndAlso
+                Tag = request.Tag AndAlso ModLoader = request.ModLoader AndAlso Source = request.Source AndAlso
                 GameVersion = request.GameVersion AndAlso SearchText = request.SearchText
         End Function
         Public Shared Operator =(left As CompProjectRequest, right As CompProjectRequest) As Boolean
@@ -888,6 +910,10 @@ Retry:
                 Else
                     If IsChineseSearch AndAlso Task.Input.Type <> CompType.Mod Then
                         Throw New Exception($"{If(Task.Input.Type = CompType.ModPack, "整合包", "资源包")}搜索仅支持英文")
+                    ElseIf Task.Input.Source = CompSourceType.CurseForge AndAlso Task.Input.Tag.StartsWith("/") Then
+                        Throw New Exception("CurseForge 不兼容所选的类型")
+                    ElseIf Task.Input.Source = CompSourceType.Modrinth AndAlso Task.Input.Tag.EndsWith("/") Then
+                        Throw New Exception("Modrinth 不兼容所选的类型")
                     Else
                         Throw New Exception("没有符合条件的结果")
                     End If
@@ -1127,7 +1153,7 @@ Retry:
                 '可能为空
                 If CType(Data("files"), JArray).Count > 0 Then
                     FileName = Data("files")(0)("filename")
-                    DownloadAddress = {Data("files")(0)("url").ToString.Replace(FileName, Net.WebUtility.UrlEncode(FileName))}
+                    DownloadAddress = {Data("files")(0)("url").ToString.Replace(FileName, FileName)}
                 End If
                 'Dependencies
                 If Type = CompType.Mod Then
@@ -1311,7 +1337,7 @@ Retry:
         Stack.Children.Add(New TextBlock With {.Text = "前置 Mod", .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 2, 0, 5)})
         '添加前置 Mod 列表
         For Each Dep In Deps
-            Dim Item = CompProjectCache(Dep).ToCompItem(True, True, AddressOf FrmDownloadMod.ProjectClick)
+            Dim Item = CompProjectCache(Dep).ToCompItem(False, False, AddressOf FrmDownloadMod.ProjectClick)
             Stack.Children.Add(Item)
         Next
         '添加结尾间隔

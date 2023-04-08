@@ -49,17 +49,17 @@
     <Grid Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Bottom"
           IsHitTestVisible="False" SnapsToDevicePixels="False" UseLayoutRounding="False">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" SharedSizeGroup="CompItemVersion" />
-            <ColumnDefinition Width="0.7*" x:Name="ColumnVersionMargin" />
+            <ColumnDefinition x:Name="ColumnVersion1" Width="Auto" />
+            <ColumnDefinition x:Name="ColumnVersion2" Width="Auto" SharedSizeGroup="CompItemVersion" />
+            <ColumnDefinition x:Name="ColumnVersion3" Width="0.7*" />
             
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="55" />
             <ColumnDefinition Width="1*" />
 
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" MinWidth="57" SharedSizeGroup="CompItemTime" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition x:Name="ColumnTime1"  Width="Auto" />
+            <ColumnDefinition x:Name="ColumnTime2" Width="Auto" MinWidth="57" SharedSizeGroup="CompItemTime" />
+            <ColumnDefinition x:Name="ColumnTime3" Width="1*" />
 
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" SharedSizeGroup="CompItemSource" />

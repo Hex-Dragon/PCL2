@@ -382,8 +382,17 @@ Public Module ModDownloadLib
         '选择 Java
         Dim Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
         If Java Is Nothing Then
-            JavaMissing(17)
-            Throw New Exception("未找到用于安装 OptiFine 的 Java")
+            If Not JavaDownloadConfirm(17) Then Throw New Exception("由于未找到 Java，已取消安装。")
+            '开始自动下载
+            Dim JavaLoader = JavaFixLoaders(17)
+            JavaLoader.Start(17, IsForceRestart:=True)
+            Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
+                Thread.Sleep(10)
+            Loop
+            '检查下载结果
+            Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
+            If Task.IsAborted Then Exit Sub
+            If Java Is Nothing Then Throw New Exception("由于未找到 Java，已取消安装。")
         End If
         '添加 Java Wrapper 作为主 Jar
         Dim Arguments = "-Doolloo.jlw.tmpdir=""" & GetJavaWrapperDir() & """ -Duser.home=""" & BaseMcFolderHome & """ -cp """ & Target & """ -jar """ & ExtractJavaWrapper() & """ optifine.Installer"
@@ -1099,8 +1108,17 @@ Public Module ModDownloadLib
         '选择 Java
         Dim Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
         If Java Is Nothing Then
-            JavaMissing(17)
-            Throw New Exception("未找到用于安装 Forge 的 Java")
+            If Not JavaDownloadConfirm(17) Then Throw New Exception("由于未找到 Java，已取消安装。")
+            '开始自动下载
+            Dim JavaLoader = JavaFixLoaders(17)
+            JavaLoader.Start(17, IsForceRestart:=True)
+            Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
+                Thread.Sleep(10)
+            Loop
+            '检查下载结果
+            Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
+            If Task.IsAborted Then Exit Sub
+            If Java Is Nothing Then Throw New Exception("由于未找到 Java，已取消安装。")
         End If
         '添加 Java Wrapper 作为主 Jar
         Dim Arguments = "-Doolloo.jlw.tmpdir=""" & GetJavaWrapperDir() & """ -cp """ & PathTemp & "Cache\forge_installer.jar;" & Target & """ -jar """ & ExtractJavaWrapper() & """  com.bangbang93.ForgeInstaller """ & McFolder

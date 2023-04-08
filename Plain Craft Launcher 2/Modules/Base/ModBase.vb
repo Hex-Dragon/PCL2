@@ -11,10 +11,10 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.5.2" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.5.2." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.5.3" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.5.3." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 286 'Release
+    Public Const VersionCode As Integer = 287 'Release
 #Else
     Public Const VersionCode As Integer = 285 'Snapshot
 #End If
@@ -1360,6 +1360,8 @@ Re:
             CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
             CommonReason = "你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。"
+        ElseIf TypeOf InnerEx Is Runtime.InteropServices.COMException Then
+            CommonReason = "由于操作系统或显卡存在问题，导致出现错误。请尝试重启 PCL。"
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
                 "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
             CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
@@ -1406,6 +1408,8 @@ Re:
             CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
             CommonReason = "你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。"
+        ElseIf TypeOf InnerEx Is Runtime.InteropServices.COMException Then
+            CommonReason = "由于操作系统或显卡存在问题，导致出现错误。请尝试重启 PCL。"
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
                 "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
             CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"

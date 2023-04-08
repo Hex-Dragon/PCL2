@@ -259,7 +259,10 @@
                     PreviousVolume = Setup.Get("UiMusicVolume")
                     CurrentWave.Volume = PreviousVolume / 1000
                 End If
-                Thread.Sleep(50)
+                '更新进度条
+                Dim Percent = Reader.CurrentTime.TotalMilliseconds / Reader.TotalTime.TotalMilliseconds
+                RunInUi(Sub() FrmMain.BtnExtraMusic.Progress = Percent)
+                Thread.Sleep(100)
             End While
             '当前音乐已播放结束，继续下一曲
             If CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Stopped AndAlso MusicAllList.Count > 0 Then MusicStartPlay(DequeueNextMusicAddress)

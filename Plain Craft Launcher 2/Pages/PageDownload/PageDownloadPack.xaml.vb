@@ -6,18 +6,19 @@
     Public Shared Loader As New LoaderTask(Of CompProjectRequest, Integer)("CompProject ModPack", AddressOf CompProjectsGet, AddressOf LoaderInput) With {.ReloadTimeout = 60 * 1000}
     Public Shared Storage As New CompProjectStorage
     Public Shared Page As Integer = 0
-    Private Sub PageDownloadMod_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
+    Private Sub PageDownloadPack_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         PageLoaderInit(Load, PanLoad, PanContent, PanAlways, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
         McVersionHighest = Math.Max(McVersionHighest, Integer.Parse(CType(TextSearchVersion.Items(1), MyComboBoxItem).Content.ToString.Split(".")(1)))
     End Sub
     Private Shared Function LoaderInput() As CompProjectRequest
         Dim Request As New CompProjectRequest(CompType.ModPack, Storage, (Page + 1) * PageSize)
-        If FrmDownloadPack IsNot Nothing AndAlso FrmDownloadPack.IsLoaded Then
+        If FrmDownloadPack IsNot Nothing Then
             With Request
                 .SearchText = FrmDownloadPack.TextSearchName.Text
                 .GameVersion = If(FrmDownloadPack.TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
                     If(FrmDownloadPack.TextSearchVersion.Text.Contains(".") OrElse FrmDownloadPack.TextSearchVersion.Text.Contains("w"), FrmDownloadPack.TextSearchVersion.Text, Nothing))
                 .Tag = FrmDownloadPack.ComboSearchTag.SelectedItem.Tag
+                .Source = CType(Val(FrmDownloadPack.ComboSearchSource.SelectedItem.Tag), CompSourceType)
             End With
         End If
         Return Request

@@ -12,13 +12,14 @@
     End Sub
     Private Shared Function LoaderInput() As CompProjectRequest
         Dim Request As New CompProjectRequest(CompType.Mod, Storage, (Page + 1) * PageSize)
-        If FrmDownloadMod IsNot Nothing AndAlso FrmDownloadMod.IsLoaded Then
+        If FrmDownloadMod IsNot Nothing Then
             With Request
                 .SearchText = FrmDownloadMod.TextSearchName.Text
                 .GameVersion = If(FrmDownloadMod.TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
                     If(FrmDownloadMod.TextSearchVersion.Text.Contains(".") OrElse FrmDownloadMod.TextSearchVersion.Text.Contains("w"), FrmDownloadMod.TextSearchVersion.Text, Nothing))
                 .Tag = FrmDownloadMod.ComboSearchTag.SelectedItem.Tag
                 .ModLoader = Val(FrmDownloadMod.ComboSearchLoader.SelectedItem.Tag)
+                .Source = CType(Val(FrmDownloadMod.ComboSearchSource.SelectedItem.Tag), CompSourceType)
             End With
         End If
         Return Request

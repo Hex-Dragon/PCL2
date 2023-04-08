@@ -102,9 +102,7 @@ Public Module ModLaunch
         Try
             '构造主加载器
             Dim LaunchLoader As New LoaderCombo(Of Object)("Minecraft 启动", {
-                New LoaderCombo(Of Integer)("Java 处理", {
-                    New LoaderTask(Of Integer, List(Of NetFile))("Java 验证", AddressOf McLaunchJavaValidate) With {.ProgressWeight = 2}
-                }) With {.ProgressWeight = 2, .Show = False, .Block = False},
+                New LoaderTask(Of Integer, Integer)("获取 Java", AddressOf McLaunchJava) With {.ProgressWeight = 4, .Block = False, .Show = False},
                 McLoginLoader,
                 New LoaderCombo(Of String)("补全文件", DlClientFix(McVersionCurrent, False, AssetsIndexExistsBehaviour.DownloadInBackground, True)) With {.ProgressWeight = 15, .Show = False, .Block = True},
                 New LoaderTask(Of String, List(Of McLibToken))("获取启动参数", AddressOf McLaunchArgumentMain) With {.ProgressWeight = 2},
@@ -1131,7 +1129,7 @@ SystemBrowser:
 #Region "Java 处理"
 
     Private McLaunchJavaSelected As JavaEntry = Nothing
-    Private Sub McLaunchJavaValidate(Task As LoaderTask(Of Integer, List(Of NetFile)))
+    Private Sub McLaunchJava(Task As LoaderTask(Of Integer, Integer))
         Dim MinVer As New Version(0, 0, 0, 0), MaxVer As New Version(999, 999, 999, 999)
 
         'MC 大版本检测
@@ -1188,11 +1186,11 @@ SystemBrowser:
         'Fabric 检测
         If McVersionCurrent.Version.HasFabric Then
             If McVersionCurrent.Version.McCodeMain >= 15 AndAlso McVersionCurrent.Version.McCodeMain <= 16 AndAlso McVersionCurrent.Version.McCodeMain <> -1 Then
-                '1.15 - 1.16：Java 8 - 19
-                MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 19, 999, 999)
+                '1.15 - 1.16：Java 8+
+                MinVer = New Version(1, 8, 0, 0)
             ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 99 Then
-                '1.18+：Java 17 - 19
-                MinVer = New Version(1, 17, 0, 0) : MaxVer = New Version(1, 19, 999, 999)
+                '1.18+：Java 17+
+                MinVer = New Version(1, 17, 0, 0)
             End If
         End If
 
@@ -1213,21 +1211,37 @@ SystemBrowser:
 
         '无合适的 Java
         If Task.IsAborted Then Exit Sub '中断加载会导致 JavaSelect 异常地返回空值，误判找不到 Java
-        McLaunchLog("无合适的 Java，取消启动")
-        If MinVer >= New Version(1, 17, 0, 0) Then
-            '缺少 Java 17
-            JavaMissing(17)
-        ElseIf MinVer >= New Version(1, 16, 0, 0) Then
-            '缺少 Java 16
-            JavaMissing(16)
+        McLaunchLog("无合适的 Java，需要确认是否自动下载")
+        Dim JavaCode As String
+        If MinVer >= New Version(1, 16, 0, 0) Then
+            JavaCode = 17
         ElseIf MaxVer < New Version(1, 8, 0, 0) Then
-            '缺少 Java 7
-            JavaMissing(7)
+            JavaCode = 7
+        ElseIf MinVer > New Version(1, 8, 0, 52) Then
+            '缺少 Java 8 较新版（统一通行证）
+            JavaCode = "8u101"
         Else
-            '缺少 Java 8 较新版
-            JavaMissing(8)
+            JavaCode = 8
         End If
-        Throw New Exception("$$")
+        If Not JavaDownloadConfirm(JavaCode) Then Throw New Exception("$$")
+
+        '开始自动下载
+        Dim JavaLoader = JavaFixLoaders(JavaCode)
+        JavaLoader.Start(JavaCode, IsForceRestart:=True)
+        Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
+            Task.Progress = JavaLoader.Progress
+            Thread.Sleep(10)
+        Loop
+
+        '检查下载结果
+        McLaunchJavaSelected = JavaSelect("$$", MinVer, MaxVer, McVersionCurrent)
+        If Task.IsAborted Then Exit Sub
+        If McLaunchJavaSelected IsNot Nothing Then
+            McLaunchLog("选择的 Java：" & McLaunchJavaSelected.ToString)
+        Else
+            Hint("没有可用的 Java，已取消启动！", HintType.Critical)
+            Throw New Exception("$$")
+        End If
 
     End Sub
 
@@ -1304,16 +1318,21 @@ SystemBrowser:
         '进服
         Dim Server As String = If(String.IsNullOrEmpty(McLaunchLoader.Input.ServerIp), Setup.Get("VersionServerEnter", McVersionCurrent), McLaunchLoader.Input.ServerIp)
         If Server.Length > 0 Then
-            If Server.Contains(":") Then
-                '包含端口号
-                Arguments += " --server " & Server.Split(":")(0) & " --port " & Server.Split(":")(1)
+            If McVersionCurrent.ReleaseTime > New Date(2023, 4, 4) Then
+                'QuickPlay
+                Arguments += $" --quickPlayMultiplayer ""{Server}"""
             Else
-                '不包含端口号
-                Arguments += " --server " & Server & " --port 25565"
-            End If
-            'OptiFine 警告
-            If McVersionCurrent.Version.HasOptiFine Then
-                Hint("OptiFine 与自动进入服务器可能不兼容，有概率导致材质丢失甚至游戏崩溃！", HintType.Critical)
+                '老版本
+                If Server.Contains(":") Then
+                    '包含端口号
+                    Arguments += " --server " & Server.Split(":")(0) & " --port " & Server.Split(":")(1)
+                Else
+                    '不包含端口号
+                    Arguments += " --server " & Server & " --port 25565"
+                End If
+                If McVersionCurrent.Version.HasOptiFine Then 'OptiFine 警告
+                    Hint("OptiFine 与自动进入服务器可能不兼容，有概率导致材质丢失甚至游戏崩溃！", HintType.Critical)
+                End If
             End If
         End If
         '自定义

@@ -164,7 +164,7 @@
                           If(RamGame <> RamGameActual, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
         LabRamUsed.Text = If(RamUsed = Math.Floor(RamUsed), RamUsed & ".0", RamUsed) & " GB"
         LabRamTotal.Text = " / " & If(RamTotal = Math.Floor(RamTotal), RamTotal & ".0", RamTotal) & " GB"
-        LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaUse64Bit(PageVersionLeft.Version) AndAlso Not Is32BitSystem, Visibility.Visible, Visibility.Collapsed)
+        LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaIs64Bit(PageVersionLeft.Version) AndAlso Not Is32BitSystem, Visibility.Visible, Visibility.Collapsed)
         If ShowAnim Then
             '宽度动画
             AniStart({
@@ -349,7 +349,7 @@ PreFin:
             End If
         End If
         '若使用 32 位 Java，则限制为 1G
-        If Not JavaUse64Bit(PageVersionLeft.Version) Then RamGive = Math.Min(1, RamGive)
+        If Not JavaIs64Bit(PageVersionLeft.Version) Then RamGive = Math.Min(1, RamGive)
         Return RamGive
     End Function
 

@@ -155,6 +155,8 @@
                     Stack.Children.Add(LiteLoaderDownloadListItem(Data, AddressOf LiteLoaderSave_Click, True))
                 Case 11
                     Stack.Children.Add(CType(Data, HelpEntry).ToListItem)
+                Case 12
+                    Stack.Children.Add(FabricDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Fabric_Selected))
                 Case Else
                     Log("未知的虚拟化种类：" & Type, LogLevel.Feedback)
             End Select

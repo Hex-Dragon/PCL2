@@ -522,7 +522,7 @@
                                 Version("id") = "20w14∞"
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
-                            Case "3d shareware v1.34", "1.rv-pre1", "15w14a", "2.0", "22w13oneblockatatime"
+                            Case "3d shareware v1.34", "1.rv-pre1", "15w14a", "2.0", "22w13oneblockatatime", "23w13a_or_b"
                                 Type = "愚人节版"
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
@@ -859,16 +859,16 @@
             If Versions.Count = 0 Then Exit Sub
             '可视化
             PanFabric.Children.Clear()
-            For Each Version In Versions
-                PanFabric.Children.Add(FabricDownloadListItem(Version, AddressOf Fabric_Selected))
-            Next
+            PanFabric.Tag = Versions
+            CardFabric.SwapControl = PanFabric
+            CardFabric.SwapType = 12
         Catch ex As Exception
             Log(ex, "可视化 Fabric 安装版本列表出错", LogLevel.Feedback)
         End Try
     End Sub
 
     '选择与清除
-    Private Sub Fabric_Selected(sender As MyListItem, e As EventArgs)
+    Public Sub Fabric_Selected(sender As MyListItem, e As EventArgs)
         SelectedFabric = sender.Tag("version").ToString
         FabricApi_Loaded()
         OptiFabric_Loaded()

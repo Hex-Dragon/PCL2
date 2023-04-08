@@ -214,7 +214,7 @@
                           If(RamGame <> RamGameActual, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
         LabRamUsed.Text = If(RamUsed = Math.Floor(RamUsed), RamUsed & ".0", RamUsed) & " GB"
         LabRamTotal.Text = " / " & If(RamTotal = Math.Floor(RamTotal), RamTotal & ".0", RamTotal) & " GB"
-        LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaUse64Bit() AndAlso Not Is32BitSystem, Visibility.Visible, Visibility.Collapsed)
+        LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaIs64Bit() AndAlso Not Is32BitSystem, Visibility.Visible, Visibility.Collapsed)
         If ShowAnim Then
             '宽度动画
             AniStart({
@@ -413,7 +413,7 @@ PreFin:
             End If
         End If
         '若使用 32 位 Java，则限制为 1G
-        If Not JavaUse64Bit(If(UseVersionJavaSetup, Version, Nothing)) Then RamGive = Math.Min(1, RamGive)
+        If Not JavaIs64Bit(If(UseVersionJavaSetup, Version, Nothing)) Then RamGive = Math.Min(1, RamGive)
         Return RamGive
     End Function
 
@@ -487,18 +487,14 @@ PreFin:
             Exit Sub
         End If
         '选择 Java
-        Dim JavaSelected As String = SelectFile("javaw.exe|javaw.exe", "选择 javaw.exe 文件")
+        Dim JavaSelected As String = SelectFile("javaw.exe|javaw.exe", "选择 bin 文件夹中的 javaw.exe 文件")
         If JavaSelected = "" Then Exit Sub
-        If Not JavaSelected.ToLower.EndsWith("javaw.exe") Then
-            Hint("请选择 bin 文件夹中的 javaw.exe 文件！", HintType.Critical)
-            Exit Sub
-        End If
         JavaSelected = GetPathFromFullPath(JavaSelected)
         Try
             '验证 Java 可用
             Dim NewEntry As New JavaEntry(JavaSelected, True)
             NewEntry.Check()
-            '加入列表并改变选择
+            '加入列表
             Dim JavaNewList As New JArray From {NewEntry.ToJson}
             For Each JsonEntry In GetJson(Setup.Get("LaunchArgumentJavaAll"))
                 Dim Entry = JavaEntry.FromJson(JsonEntry)
@@ -506,9 +502,9 @@ PreFin:
                 JavaNewList.Add(JsonEntry)
             Next
             Setup.Set("LaunchArgumentJavaAll", JavaNewList.ToString(Newtonsoft.Json.Formatting.None))
-            Setup.Set("LaunchArgumentJavaSelect", NewEntry.ToJson.ToString(Newtonsoft.Json.Formatting.None)) '加载器会优先选择设置中的 Java
             '重新加载列表
             JavaSearchLoader.Start(IsForceRestart:=True)
+            Hint("已将该 Java 加入 Java 列表！", HintType.Finish)
         Catch ex As Exception
             Log(ex, "该 Java 存在异常，无法使用", LogLevel.Msgbox, "异常的 Java")
             Exit Sub
@@ -522,7 +518,7 @@ PreFin:
         End If
         RunInThread(Sub()
                         Hint("正在搜索 Java！")
-                        JavaSearchLoader.WaitForExit(GetUuid)
+                        JavaSearchLoader.WaitForExit(IsForceRestart:=True)
                         If JavaList.Count = 0 Then
                             Hint("未找到可用的 Java！", HintType.Critical)
                         Else
