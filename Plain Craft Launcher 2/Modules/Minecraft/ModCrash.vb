@@ -485,6 +485,7 @@ Done:
             If LogMc.Contains("Unsupported class file major version") Then AppendReason(CrashReason.Java版本不兼容)
             If LogMc.Contains("Invalid module name: '' is not a Java identifier") Then AppendReason(CrashReason.Mod名称包含特殊字符)
             If LogMc.Contains("java.lang.UnsupportedClassVersionError: net/fabricmc/loader/impl/launch/knot/KnotClient : Unsupported major.minor version") Then AppendReason(CrashReason.Java版本不兼容)
+            If LogMc.Contains("Invalid module name: '' is not a Java identifier") Then AppendReason(CrashReason.模组名称中未含合法字符)
             If LogMc.Contains("Could not reserve enough space") Then
                 If LogMc.Contains("for 1048576KB object heap") Then
                     AppendReason(CrashReason.使用32位Java导致JVM无法分配足够多的内存)
