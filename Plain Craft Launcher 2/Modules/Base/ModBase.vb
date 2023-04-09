@@ -14,9 +14,9 @@ Public Module ModBase
     Public Const VersionBaseName As String = "2.5.3" '不含分支前缀的显示用版本名
     Public Const VersionStandardCode As String = "2.5.3." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 287 'Release
+    Public Const VersionCode As Integer = 286 'Release
 #Else
-    Public Const VersionCode As Integer = 285 'Snapshot
+    Public Const VersionCode As Integer = 288 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1358,8 +1358,6 @@ Re:
             CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。"
         ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
             CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
-        ElseIf TypeOf InnerEx Is System.Runtime.InteropServices.COMException Then
-            CommonReason = "你的电脑系统进程崩溃，PCL 的运行环境出现问题，或者电脑设置、驱动存在问题。请尝试重启 PCL。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
             CommonReason = "你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。"
         ElseIf TypeOf InnerEx Is Runtime.InteropServices.COMException Then

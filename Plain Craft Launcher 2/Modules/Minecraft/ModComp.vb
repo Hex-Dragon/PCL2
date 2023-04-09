@@ -596,8 +596,8 @@ NoExName:
         ''' </summary>
         Public ReadOnly Property CanContinue As Boolean
             Get
-                If Tag.StartsWith("/") Then Storage.CurseForgeTotal = 0
-                If Tag.EndsWith("/") Then Storage.ModrinthTotal = 0
+                If Tag.StartsWith("/") OrElse Not Source.HasFlag(CompSourceType.CurseForge) Then Storage.CurseForgeTotal = 0
+                If Tag.EndsWith("/") OrElse Not Source.HasFlag(CompSourceType.Modrinth) Then Storage.ModrinthTotal = 0
                 If Storage.CurseForgeTotal = -1 OrElse Storage.ModrinthTotal = -1 Then Return True
                 Return Storage.CurseForgeOffset < Storage.CurseForgeTotal OrElse Storage.ModrinthOffset < Storage.ModrinthTotal
             End Get
