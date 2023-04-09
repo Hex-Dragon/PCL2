@@ -13,7 +13,6 @@ PCL2 的代码绝大多数其实都是几年前学生时代的产物了……那
 - [程序下载](https://afdian.net/p/0164034c016c11ebafcb52540025c377)：下载免费的正式版 PCL2。
 - [帮助文档库](https://github.com/LTCatt/PCL2Help)：PCL2 帮助文档在 GitHub 上的存储库（是的，帮助库在另一个 Repo……）
 - [PCL2提问](https://github.com/Hex-Dragon/PCL2/discussions/categories/%E6%8F%90%E9%97%AE)：从爱发电迁移来的问题回复，可以在这提出关于PCL2你想问的一切问题！
-- [PCL2讨论](htpps://github.com/Hex-Dragon/PCL2/discussions/categories/%E8%AE%A8%E8%AE%BA)：随便讨论一点与PCL2相关的事情
 
 　
 
