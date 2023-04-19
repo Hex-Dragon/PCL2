@@ -1037,8 +1037,9 @@ SystemBrowser:
             ElseIf Message.Contains("(404)") Then
                 Log(ex, "微软登录第 6 步汇报 404")
                 RunInNewThread(Sub()
-                                   Select Case MyMsgBox("你可能没有在 Minecraft 官网创建档案，或者没有购买 Minecraft。" & vbCrLf &
-                                            "如果你已经购买了游戏，请在官网上创建档案后再试。", "登录失败", "创建档案", "购买 Minecraft", "取消")
+                                   Select Case MyMsgBox("你可能没有在 Minecraft 官网创建档案，Xbox Game Pass 过期，没有购买 Minecraft，或者账号被盗取。" & vbCrLf &
+                                            "如果你已经购买了游戏，请在官网上创建档案后再试。" & vbCrLf &
+                                            "如果仍然出现错误，请确认 Xbox Game Pass 是否到期，或者修改密码再试。", "登录失败", "创建档案", "购买 Minecraft", "取消")
                                        Case 1
                                            OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
                                        Case 2
