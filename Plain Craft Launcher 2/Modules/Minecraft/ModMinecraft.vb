@@ -147,7 +147,7 @@ Public Module ModMinecraft
 
 #Region "版本处理"
 
-    Public Const McVersionCacheVersion As Integer = 25
+    Public Const McVersionCacheVersion As Integer = 26
 
     Private _McVersionCurrent As McVersion
     Private _McVersionLast = 0 '为 0 以保证与 Nothing 不相同，使得 UI 显示可以正常初始化
@@ -742,8 +742,10 @@ ExitDataLoad:
                 If CustomInfo = "" Then
                     Select Case State
                         Case McVersionState.Snapshot
-                            If Version.McName.ToLower.Contains("pre") OrElse Version.McName.ToLower.Contains("rc") Then
+                            If Version.McName.ToLower.Contains("pre") Then
                                 Info = "预发布版 " & Version.McName
+                            ElseIf Version.McName.ToLower.Contains("rc") Then
+                                Info = "发布候选 " & Version.McName
                             ElseIf Version.McName.Contains("experimental") OrElse Version.McName = "pending" Then
                                 Info = "实验性快照"
                             Else

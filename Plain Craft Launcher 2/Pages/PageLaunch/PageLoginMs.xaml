@@ -6,11 +6,15 @@
       xmlns:local="clr-namespace:PCL"
       mc:Ignorable="d" d:DesignWidth="302.4" Margin="0,0,0,-2">
     <StackPanel x:Name="PanEmpty">
-        <Path Data="M535.94 571.76l291.060 0.36v286.020l-291.060-39.24v-247.14M499.94 535.76v314.64l363.060 48.96v-363.060l-363.060-0.54zM197 571.4l218.52 0.36v226.98l-218.52-30.42v-196.92M161 535.4v264.42l290.52 40.32v-304.2l-290.52-0.54zM827 166.76v285.12l-291.060-0.36v-239.76l291.060-45M863 124.64l-363.060 56.16v306.54l363.060 0.54v-363.24zM415.52 231.2v219.96l-218.52-0.18v-189.36l218.52-30.42M451.52 189.8l-290.52 40.5v256.68l290.52 0.36v-297.54z"
-          Fill="{DynamicResource ColorBrush1}" Opacity="0.7"
+        <Path Data="M660.338 528.065c63.61-46.825 105.131-121.964 105.131-206.83 0-141.7-115.29-256.987-256.997-256.987-141.706 0-256.998 115.288-256.998 256.987 0 85.901 42.52 161.887 107.456 208.562-152.1 59.92-260.185 207.961-260.185 381.077 0 21.276 17.253 38.53 38.53 38.53 21.278 0 38.53-17.254 38.53-38.53 0-183.426 149.232-332.671 332.667-332.671 1.589 0 3.113-0.207 4.694-0.244 0.8 0.056 1.553 0.244 2.362 0.244 183.434 0 332.664 149.245 332.664 332.671 0 21.276 17.255 38.53 38.533 38.53 21.277 0 38.53-17.254 38.53-38.53 0-174.885-110.354-324.13-264.917-382.809z m-331.803-206.83c0-99.22 80.72-179.927 179.935-179.927s179.937 80.708 179.937 179.927c0 99.203-80.721 179.91-179.937 179.91s-179.935-80.708-179.935-179.91z"
+          Fill="{DynamicResource ColorBrush1}" Opacity="0.3"
           Width="40" Stretch="Uniform"/>
-        <TextBlock Text="　　　 无账号信息&#xa;点击 添加账号 按钮以登录" HorizontalAlignment="Center" Margin="0,15,0,25"
-               Foreground="{DynamicResource ColorBrush1}" Opacity="0.7" />
-        <local:MyButton Text="添加账号" x:Name="BtnLogin" ColorType="Highlight" Height="35" HorizontalAlignment="Center" Width="150" />
+        <TextBlock Text="没有已登录的账号" HorizontalAlignment="Center" Margin="0,15,0,40"
+               Foreground="{DynamicResource ColorBrush1}" Opacity="0.5" />
+        <local:MyButton Text="登录" x:Name="BtnLogin" ColorType="Highlight" Height="35" HorizontalAlignment="Center" Width="150" />
+        <StackPanel Orientation="Horizontal" Margin="0,16,0,0" HorizontalAlignment="Center" Opacity="0.7">
+            <local:MyTextButton Text="购买正版" Margin="0,0,15,0" EventType="打开网页" EventData="https://www.minecraft.net/store/checkout/minecraft-java-bedrock-edition-pc" />
+            <local:MyTextButton Text="老账号迁移" Margin="15,0,0,0" x:Name="BtnMigration" />
+        </StackPanel>
     </StackPanel>
 </StackPanel>

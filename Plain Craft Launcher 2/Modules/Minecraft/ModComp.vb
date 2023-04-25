@@ -181,7 +181,7 @@
             Get
                 If Not LoadedDatabase Then
                     LoadedDatabase = True
-                    _DatabaseEntry = CompDatabase.FirstOrDefault(Function(c) If(FromCurseForge, c.CurseForgeSlug, c.ModrinthSlug) = Slug)
+                    If Type = CompType.Mod Then _DatabaseEntry = CompDatabase.FirstOrDefault(Function(c) If(FromCurseForge, c.CurseForgeSlug, c.ModrinthSlug) = Slug)
                 End If
                 Return _DatabaseEntry
             End Get

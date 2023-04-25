@@ -16,7 +16,7 @@
     ''' </summary>
     Public Shared Function IsVaild(LoginData As McLoginMs) As String
         If LoginData.OAuthRefreshToken = "" Then
-            Return "请在登录账号后再继续！"
+            Return "请在登录账号后再启动游戏！"
         Else
             Return ""
         End If
@@ -60,6 +60,11 @@
                                        End Sub)
                            End Try
                        End Sub, "Ms Login")
+    End Sub
+    '账号迁移入口
+    Private Sub BtnMigration_Click(sender As Object, e As EventArgs) Handles BtnMigration.Click
+        MyMsgBox("在迁移过程中，你可能需要设置你的档案信息，此时请注意让年龄大于 18 岁，否则可能导致无法登录！", "迁移提示", "继续", ForceWait:=True)
+        OpenWebsite("https://www.minecraft.net/zh-hans/account-security")
     End Sub
 
 End Class

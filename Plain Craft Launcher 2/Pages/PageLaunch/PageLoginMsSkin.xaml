@@ -4,21 +4,44 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PCL"
-      mc:Ignorable="d" d:DesignWidth="297.6" Margin="0,19,0,5">
-    <Grid Margin="0,56,0,0" Background="{StaticResource ColorBrushSemiTransparent}" Name="PanData">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="34" />
-            <ColumnDefinition />
-            <ColumnDefinition Width="34" />
-        </Grid.ColumnDefinitions>
+      mc:Ignorable="d" d:DesignWidth="297.6" Margin="0,60,0,5">
+    <Grid Background="{StaticResource ColorBrushSemiTransparent}" Name="PanData">
         <Grid.RowDefinitions>
-            <RowDefinition Height="19" />
+            <RowDefinition Height="75" />
             <RowDefinition Height="Auto" MinHeight="30" />
             <RowDefinition Height="19" />
+            <RowDefinition Height="24" />
+            <RowDefinition Height="19" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Name="TextName" Text="加载中" Margin="8,0" FontSize="14" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
-        <local:MyIconButton ToolTip="更改密码" Grid.Row="1" Height="14" Opacity="0" x:Name="BtnEdit" ToolTipService.Placement="Center" ToolTipService.VerticalOffset="32" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="1000000" Grid.Column="0" HorizontalAlignment="Center" Logo="F1 M 53.2929,21.2929L 54.7071,22.7071C 56.4645,24.4645 56.4645,27.3137 54.7071,29.0711L 52.2323,31.5459L 44.4541,23.7677L 46.9289,21.2929C 48.6863,19.5355 51.5355,19.5355 53.2929,21.2929 Z M 31.7262,52.052L 23.948,44.2738L 43.0399,25.182L 50.818,32.9601L 31.7262,52.052 Z M 23.2409,47.1023L 28.8977,52.7591L 21.0463,54.9537L 23.2409,47.1023 Z" Margin="8,0,0,0" VerticalAlignment="Center" />
-        <local:MyIconButton ToolTip="退出登录" Grid.Row="1" Height="14" Opacity="0" x:Name="BtnExit" ToolTipService.Placement="Center" ToolTipService.VerticalOffset="32" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="1000000" Grid.Column="2" HorizontalAlignment="Center" Logo="F1 M 51.0071,19.0027L 51.0071,27.0038L 48.0067,27.0038L 48.0067,22.0031L 25.0035,22.0031L 25.0035,54.0075L 48.0067,54.0075L 48.0067,49.0068L 51.0071,49.0068L 51.0071,57.008L 22.1698,57.008L 22.0031,19.0027L 51.0071,19.0027 Z M 30.0042,35.0049L 45.2563,35.0049L 37.005,28.0039L 47.0066,28.0039L 58.5082,38.0053L 47.0066,48.0067L 37.005,48.0067L 45.2563,41.0057L 30.0042,41.0057L 30.0042,35.0049 Z" Margin="0,0,8,0" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="1" VerticalAlignment="Center" Name="TextName" Text="加载中" Margin="8,0" FontSize="17" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" x:Name="PanButtons" Opacity="0">
+            <local:MyIconButton Height="24" Margin="0,0.5,15,0"  x:Name="BtnSkin"
+                                ToolTip="皮肤/披风" ToolTipService.Placement="Center" ToolTipService.VerticalOffset="40" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="1000000" 
+                                LogoScale="1.08" Logo="M764.0003 0.076794a215.433442 215.433442 0 0 0-76.282279 13.950954l-9.06172 3.686123c-49.148314 20.734445-88.518161 30.53851-115.498538 30.53851-27.031573 0-66.478214-9.855261-116.676049-31.050471a217.583681 217.583681 0 0 0-72.186586-16.766743l-9.138515-0.307177-3.839712-0.051196-8.626553 0.307177-4.223683 0.281579A160.755943 160.755943 0 0 0 250.477214 45.385396l-219.32435 212.438467a102.392321 102.392321 0 0 0-11.263156 134.210734l106.360023 144.552359 3.378947 4.351674a102.469115 102.469115 0 0 0 112.810739 31.690423l5.657176-2.175837V883.210559a140.789441 140.789441 0 0 0 140.789441 140.789441h372.170487l5.657175-0.102392a140.789441 140.789441 0 0 0 135.132266-140.687049l-0.025599-318.6705 1.177512 0.716747a102.392321 102.392321 0 0 0 141.941355-44.233483l70.906682-144.39877a102.392321 102.392321 0 0 0-20.657651-118.647101L875.86391 45.385396A160.730345 160.730345 0 0 0 764.0003 0.076794z m-357.349199 111.454041C468.444867 137.615279 520.562558 150.644702 563.157763 150.644702c42.492813 0 94.584906-12.978227 156.199485-38.985876A112.580356 112.580356 0 0 1 764.0003 102.469115c15.154063 0 29.693773 5.887558 40.598555 16.433967L1023.923206 331.495138l-70.906682 144.39877-93.023423-65.684674a38.39712 38.39712 0 0 0-60.53946 31.383247V883.210559a38.39712 38.39712 0 0 1-38.39712 38.39712H388.886034a38.39712 38.39712 0 0 1-38.397121-38.39712V445.176212a38.39712 38.39712 0 0 0-61.691373-30.487314l-80.070795 61.20501L102.392321 331.341549l219.32435-212.438467a58.363623 58.363623 0 0 1 35.581332-16.229183L362.110442 102.469115l6.322726 0.179186a115.191361 115.191361 0 0 1 38.217933 8.882534z">
+                <local:MyIconButton.ContextMenu>
+                    <ContextMenu Closed="HidePanel" HorizontalOffset="10" VerticalOffset="18">
+                        <local:MyMenuItem Click="BtnSkinEdit_Click" Header="修改皮肤"/>
+                        <local:MyMenuItem Click="BtnSkinSave_Click" Header="保存皮肤"/>
+                        <local:MyMenuItem Click="BtnSkinRefresh_Click" Header="刷新头像"/>
+                        <Separator />
+                        <local:MyMenuItem Click="BtnSkinCape_Click" Header="修改披风"/>
+                    </ContextMenu>
+                </local:MyIconButton.ContextMenu>
+            </local:MyIconButton>
+            <local:MyIconButton Height="24" Margin="0,0,16,0" x:Name="BtnEdit"
+                                ToolTip="账号信息" ToolTipService.Placement="Center" ToolTipService.VerticalOffset="40" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="1000000" 
+                                LogoScale="1.1" Logo="M462.336 924.891429L73.142857 950.857143l25.965714-389.193143 467.017143-467.017143a73.398857 73.398857 0 0 1 103.789715 0l259.437714 259.437714a73.398857 73.398857 0 0 1 0 103.789715l-467.017143 467.017143z m155.684571-778.349715L202.861714 561.664l259.474286 259.474286L877.458286 405.942857 618.057143 146.541714zM151.003429 873.033143l233.508571-25.965714-207.579429-207.579429-25.965714 233.545143z m544.841142-492.982857l51.894858 51.894857-233.508572 233.508571-51.931428-51.894857 233.545142-233.508571z">
+                <local:MyIconButton.ContextMenu>
+                    <ContextMenu Closed="HidePanel" HorizontalOffset="10" VerticalOffset="18">
+                        <local:MyMenuItem Click="BtnEditPassword_Click" Header="修改密码" />
+                        <local:MyMenuItem Click="BtnEditName_Click" Header="修改玩家名" />
+                    </ContextMenu>
+                </local:MyIconButton.ContextMenu>
+            </local:MyIconButton>
+            <local:MyIconButton Height="24" x:Name="BtnExit" Margin="0,0,0,0"
+                                ToolTip="退出登录" ToolTipService.Placement="Center" ToolTipService.VerticalOffset="40" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="1000000" 
+                                Logo="M533.333333 64a21.333333 21.333333 0 0 1 21.333334 21.333333v42.666667a21.333333 21.333333 0 0 1-21.333334 21.333333H170.666667v725.333334h362.666666a21.333333 21.333333 0 0 1 21.333334 21.333333v42.666667a21.333333 21.333333 0 0 1-21.333334 21.333333H170.666667a85.333333 85.333333 0 0 1-85.226667-81.066667L85.333333 874.666667V149.333333a85.333333 85.333333 0 0 1 81.066667-85.226666L170.666667 64h362.666666z m194.581334 219.584l183.168 183.168a64 64 0 0 1 2.88 87.424l-2.88 3.072-183.168 183.168a21.333333 21.333333 0 0 1-30.165334 0l-30.165333-30.165333a21.333333 21.333333 0 0 1 0-30.165334L792.96 554.666667H362.666667a21.333333 21.333333 0 0 1-21.333334-21.333334v-42.666666a21.333333 21.333333 0 0 1 21.333334-21.333334h430.293333l-125.376-125.418666a21.333333 21.333333 0 0 1 0-30.165334l30.165333-30.165333a21.333333 21.333333 0 0 1 30.165334 0z" />
+        </StackPanel>
     </Grid>
-    <local:MySkin HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Skin" HasCape="True" />
+    <local:MySkin HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="Skin" HasCape="True" IsHitTestVisible="False" />
 </Grid>

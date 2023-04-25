@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.5.3" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.5.3." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.5.4" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.5.4." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 286 'Release
 #Else
-    Public Const VersionCode As Integer = 288 'Snapshot
+    Public Const VersionCode As Integer = 289 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -157,6 +157,10 @@ Public Module ModBase
         ''' 图标按钮，用户，0.95x
         ''' </summary>
         Public Const IconButtonUser As String = "M660.338 528.065c63.61-46.825 105.131-121.964 105.131-206.83 0-141.7-115.29-256.987-256.997-256.987-141.706 0-256.998 115.288-256.998 256.987 0 85.901 42.52 161.887 107.456 208.562-152.1 59.92-260.185 207.961-260.185 381.077 0 21.276 17.253 38.53 38.53 38.53 21.278 0 38.53-17.254 38.53-38.53 0-183.426 149.232-332.671 332.667-332.671 1.589 0 3.113-0.207 4.694-0.244 0.8 0.056 1.553 0.244 2.362 0.244 183.434 0 332.664 149.245 332.664 332.671 0 21.276 17.255 38.53 38.533 38.53 21.277 0 38.53-17.254 38.53-38.53 0-174.885-110.354-324.13-264.917-382.809z m-331.803-206.83c0-99.22 80.72-179.927 179.935-179.927s179.937 80.708 179.937 179.927c0 99.203-80.721 179.91-179.937 179.91s-179.935-80.708-179.935-179.91z"
+        ''' <summary>
+        ''' 图标按钮，微软，0.9x
+        ''' </summary>
+        Public Const IconButtonMs As String = "M0,0h5v5h-5ZM6,0h5v5h-5v-5ZM0,6h5v5h-5v-5ZM6,6h5v5h-5v-5Z"
         ''' <summary>
         ''' 图标，音符，1x
         ''' </summary>
@@ -784,7 +788,7 @@ Public Module ModBase
             '复制文件
             File.Copy(FromPath, ToPath, True)
         Catch ex As Exception
-            Throw New Exception("复制文件出错：" & FromPath & " -> " & ToPath, ex)
+            Throw New Exception("复制文件出错：" & FromPath & " → " & ToPath, ex)
         End Try
     End Sub
     ''' <summary>
@@ -1240,7 +1244,19 @@ Re:
             Directory.CreateDirectory(DestDirectory)
             If CompressFilePath.EndsWith(".zip") OrElse CompressFilePath.EndsWith(".jar") OrElse CompressFilePath.EndsWith(".mrpack") Then
                 '以 zip 方式解压
-                ZipFile.ExtractToDirectory(CompressFilePath, DestDirectory, If(Encode, Encoding.GetEncoding("GB18030")))
+                Using stream As New FileStream(CompressFilePath, FileMode.Open)
+                    Using archive As New ZipArchive(stream, ZipArchiveMode.Read, False, If(Encode, Encoding.GetEncoding("GB18030")))
+                        For Each entry As ZipArchiveEntry In archive.Entries
+                            Dim destinationPath As String = IO.Path.Combine(DestDirectory, entry.FullName)
+                            If destinationPath.EndsWith("\") OrElse destinationPath.EndsWith("/") Then
+                                Directory.CreateDirectory(destinationPath)
+                            Else
+                                If File.Exists(destinationPath) Then File.Delete(destinationPath)
+                                entry.ExtractToFile(destinationPath, True)
+                            End If
+                        Next
+                    End Using
+                End Using
                 Return True
             ElseIf CompressFilePath.EndsWith(".gz") Then
                 '以 gz 方式解压

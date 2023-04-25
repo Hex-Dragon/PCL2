@@ -26,28 +26,29 @@
         End If
     End Function
 
-    Private Sub PageLoginMsSkin_MouseEnter(sender As Object, e As MouseEventArgs) Handles PanData.MouseEnter
-        AniStart({
-                 AaOpacity(BtnEdit, 1 - BtnEdit.Opacity, 80),
-                 AaHeight(BtnEdit, 25.5 - BtnEdit.Height, 140,, New AniEaseOutFluent),
-                 AaHeight(BtnEdit, -1.5, 50, 140, New AniEaseInFluent),
-                 AaOpacity(BtnExit, 1 - BtnExit.Opacity, 80),
-                 AaHeight(BtnExit, 25.5 - BtnExit.Height, 140,, New AniEaseOutFluent),
-                 AaHeight(BtnExit, -1.5, 50, 140, New AniEaseInFluent)
-        }, "PageLoginMsSkin Button")
+#Region "下边栏其他内容"
+
+    '显示/隐藏控制
+    Private Sub ShowPanel(sender As Object, e As MouseEventArgs) Handles PanData.MouseEnter
+        AniStart(AaOpacity(PanButtons, 1 - PanButtons.Opacity, 120), "PageLoginMsSkin Button")
     End Sub
-    Private Sub PageLoginMsSkin_MouseLeave(sender As Object, e As MouseEventArgs) Handles PanData.MouseLeave
-        AniStart({
-                 AaOpacity(BtnEdit, -BtnEdit.Opacity, 120,, New AniEaseOutFluent),
-                 AaHeight(BtnEdit, 14 - BtnEdit.Height, 120,, New AniEaseInFluent),
-                 AaOpacity(BtnExit, -BtnExit.Opacity, 120,, New AniEaseOutFluent),
-                 AaHeight(BtnExit, 14 - BtnExit.Height, 120,, New AniEaseInFluent)
-        }, "PageLoginMsSkin Button")
+    Public Sub HidePanel() Handles PanData.MouseLeave
+        If BtnEdit.ContextMenu.IsOpen OrElse BtnSkin.ContextMenu.IsOpen OrElse PanData.IsMouseOver Then Exit Sub
+        AniStart(AaOpacity(PanButtons, -PanButtons.Opacity, 120), "PageLoginMsSkin Button")
     End Sub
 
+    '修改账号信息
     Private Sub BtnEdit_Click(sender As Object, e As EventArgs) Handles BtnEdit.Click
-        OpenWebsite("https://account.microsoft.com/security")
+        BtnEdit.ContextMenu.IsOpen = True
     End Sub
+    Public Sub BtnEditPassword_Click(sender As Object, e As RoutedEventArgs)
+        OpenWebsite("https://account.live.com/password/Change")
+    End Sub
+    Public Sub BtnEditName_Click(sender As Object, e As RoutedEventArgs)
+        OpenWebsite("https://www.minecraft.net/en-us/msaprofile/mygames/editprofile")
+    End Sub
+
+    '退出登录
     Private Sub BtnExit_Click() Handles BtnExit.Click
         Setup.Set("CacheMsOAuthRefresh", "")
         Setup.Set("CacheMsAccess", "")
@@ -58,8 +59,18 @@
         FrmLaunchLeft.RefreshPage(False, True)
     End Sub
 
+#End Region
+
+#Region "皮肤/披风"
+
+    '展开
+    Private Sub BtnSkin_Click(sender As Object, e As RoutedEventArgs) Handles BtnSkin.Click
+        BtnSkin.ContextMenu.IsOpen = True
+    End Sub
+
+    '修改皮肤
     Private IsChanging As Boolean = False
-    Private Sub Skin_Click(sender As Object, e As MouseButtonEventArgs) Handles Skin.Click
+    Public Sub BtnSkinEdit_Click(sender As Object, e As RoutedEventArgs)
         '检查条件，获取新皮肤
         If IsChanging Then
             Hint("正在更改皮肤中，请稍候！")
@@ -103,7 +114,7 @@ Retry:
                                Dim ResultJson As JObject = GetJson(Result)
                                For Each Skin As JObject In ResultJson("skins")
                                    If Skin("state").ToString = "ACTIVE" Then
-                                       MySkin.ReloadCache(Skin("url"), True)
+                                       MySkin.ReloadCache(Skin("url"))
                                        Exit Sub
                                    End If
                                Next
@@ -119,5 +130,22 @@ Retry:
                            End Try
                        End Sub, "Ms Skin Upload")
     End Sub
+
+    '保存皮肤
+    Public Sub BtnSkinSave_Click(sender As Object, e As RoutedEventArgs)
+        Skin.BtnSkinSave_Click()
+    End Sub
+
+    '刷新头像
+    Public Sub BtnSkinRefresh_Click(sender As Object, e As RoutedEventArgs)
+        Skin.RefreshClick()
+    End Sub
+
+    '修改披风
+    Public Sub BtnSkinCape_Click(sender As Object, e As RoutedEventArgs)
+        Skin.BtnSkinCape_Click()
+    End Sub
+
+#End Region
 
 End Class

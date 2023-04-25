@@ -505,7 +505,7 @@ Done:
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[)[^./ ]+(?=.mixins.json\] FAILED during )")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[mixins.)[^./ ]+(?=.json\] FAILED during )")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in callback )[^./ ]+(?=.mixins.json:)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in callback mixins.)[^./ ]+(?=.json:)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=from mod )[^\] ]+(?=\] from phase)")
                 AppendReason(CrashReason.ModMixin失败, TryAnalyzeModName(If(ModId, "").TrimEnd((vbCrLf & " ").ToCharArray)))
             End If
             If LogMc.Contains("Caught exception from ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(RegexSeek(LogMc, "(?<=Caught exception from )[^\n]+?")?.TrimEnd((vbCrLf & " ").ToCharArray)))

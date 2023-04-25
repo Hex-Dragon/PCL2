@@ -181,20 +181,32 @@ NextInner:
                         CheckResult = McLoginAble(LoginInput)
                     End Sub)
         If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
-        '求赞助
 #If BETA Then
+        '求赞助
         RunInNewThread(Sub()
                            Select Case Setup.Get("SystemLaunchCount")
-                               Case 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000
+                               Case 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1700, 1900, 2100, 2300, 2500
                                    If MyMsgBox("PCL 已经为你启动了 " & Setup.Get("SystemLaunchCount") & " 次游戏啦！" & vbCrLf &
-                                               "如果觉得 PCL 还算好用的话，也可以考虑小小地赞助一下作者呢 qwq……" & vbCrLf &
-                                               "毕竟一个人开发也不容易（小声）……",
+                                               "如果觉得 PCL 还算好用的话，也可以考虑赞助一下作者……一点心意也行……" & vbCrLf &
+                                               "毕竟一个人开发也不容易（悲）……",
                                                "求赞助啦……", "这就赞助！", "但是我拒绝") = 1 Then
-                                       OpenWebsite("https://afdian.net/a/LTCat/plan")
+                                       OpenWebsite("https://afdian.net/a/LTCat")
                                    End If
                            End Select
                        End Sub, "Donate")
 #End If
+        '正版购买提示
+        If Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
+            Select Case Setup.Get("SystemLaunchCount")
+                Case 10, 35, 75, 125, 175, 225, 275, 325, 375, 425, 475, 550, 650, 750, 850, 950, 1050, 1150, 1250, 1350, 1450, 1600, 1800, 2000, 2200, 2400
+                    If MyMsgBox("你已经启动了 " & Setup.Get("SystemLaunchCount") & " 次 Minecraft 啦！" & vbCrLf &
+                                "如果觉得 Minecraft 还不错，也可以考虑购买正版支持一下，毕竟开发游戏也很不容易……" & vbCrLf &
+                                "在你登录一次正版账号后，就不会再出现这个提示了。",
+                                "考虑一下正版？", "购买正版游戏", "下次一定") = 1 Then
+                        OpenWebsite("https://www.minecraft.net/store/checkout/minecraft-java-bedrock-edition-pc")
+                    End If
+            End Select
+        End If
     End Sub
 
 #End Region
@@ -204,7 +216,6 @@ NextInner:
     '登录方式
     Public Enum McLoginType
         Legacy = 0
-        Mojang = 1
         Nide = 2
         Auth = 3
         Ms = 5
@@ -304,14 +315,7 @@ NextInner:
         Public Uuid As String
         Public AccessToken As String
         Public Type As String
-        ''' <summary>
-        ''' 仅用于登录方式为 Mojang 正版时的 Refresh Login，其余时间为一个无意义的 ID（一般为玩家的 UUID）。
-        ''' </summary>
         Public ClientToken As String
-        ''' <summary>
-        ''' 用于登录的邮箱。仅用于登录方式为 Mojang 正版时的 launcher_profile 更新。
-        ''' </summary>
-        Public Email As String
         ''' <summary>
         ''' 进行微软登录时返回的 profile 信息。
         ''' </summary>
@@ -324,8 +328,6 @@ NextInner:
     Public Function McLoginName() As String
         '根据当前登录方式优先返回
         Select Case Setup.Get("LoginType")
-            Case McLoginType.Mojang
-                If Setup.Get("CacheMojangName") <> "" Then Return Setup.Get("CacheMojangName")
             Case McLoginType.Ms
                 If Setup.Get("CacheMsName") <> "" Then Return Setup.Get("CacheMsName")
             Case McLoginType.Legacy
@@ -337,7 +339,6 @@ NextInner:
         End Select
         '查找所有可能的项
         If Setup.Get("CacheMsName") <> "" Then Return Setup.Get("CacheMsName")
-        If Setup.Get("CacheMojangName") <> "" Then Return Setup.Get("CacheMojangName")
         If Setup.Get("CacheNideName") <> "" Then Return Setup.Get("CacheNideName")
         If Setup.Get("CacheAuthName") <> "" Then Return Setup.Get("CacheAuthName")
         If Setup.Get("LoginLegacyName") <> "" Then Return Setup.Get("LoginLegacyName").ToString.Split("¨")(0)
@@ -348,12 +349,6 @@ NextInner:
     ''' </summary>
     Public Function McLoginAble() As String
         Select Case Setup.Get("LoginType")
-            Case McLoginType.Mojang
-                If Setup.Get("CacheMojangAccess") = "" Then
-                    Return FrmLoginMojang.IsVaild()
-                Else
-                    Return ""
-                End If
             Case McLoginType.Ms
                 If Setup.Get("CacheMsOAuthRefresh") = "" Then
                     Return FrmLoginMs.IsVaild()
@@ -383,8 +378,6 @@ NextInner:
     ''' </summary>
     Public Function McLoginAble(LoginData As McLoginData) As String
         Select Case LoginData.Type
-            Case McLoginType.Mojang
-                Return PageLoginMojang.IsVaild(LoginData)
             Case McLoginType.Ms
                 Return PageLoginMs.IsVaild(LoginData)
             Case McLoginType.Legacy
@@ -407,12 +400,6 @@ NextInner:
             Select Case LoginType
                 Case McLoginType.Legacy
                     LoginData = PageLoginLegacy.GetLoginData()
-                Case McLoginType.Mojang
-                    If Setup.Get("CacheMojangAccess") = "" Then
-                        LoginData = PageLoginMojang.GetLoginData()
-                    Else
-                        LoginData = PageLoginMojangSkin.GetLoginData()
-                    End If
                 Case McLoginType.Ms
                     If Setup.Get("CacheMsOAuthRefresh") = "" Then
                         LoginData = PageLoginMs.GetLoginData()
@@ -445,8 +432,6 @@ NextInner:
         '获取对应加载器
         Dim Loader As LoaderBase = Nothing
         Select Case Data.Input.Type
-            Case McLoginType.Mojang
-                Loader = McLoginMojangLoader
             Case McLoginType.Ms
                 Loader = McLoginMsLoader
             Case McLoginType.Legacy
@@ -473,7 +458,6 @@ NextInner:
 #Region "分方式登录模块"
 
     '各个登录方式的主对象与输入构造
-    Public McLoginMojangLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Mojang", AddressOf McLoginServerStart) With {.ReloadTimeout = 60000}
     Public McLoginMsLoader As New LoaderTask(Of McLoginMs, McLoginResult)("Loader Login Ms", AddressOf McLoginMsStart) With {.ReloadTimeout = 300000}
     Public McLoginLegacyLoader As New LoaderTask(Of McLoginLegacy, McLoginResult)("Loader Login Legacy", AddressOf McLoginLegacyStart)
     Public McLoginNideLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Nide", AddressOf McLoginServerStart) With {.ReloadTimeout = 60000}
@@ -484,7 +468,7 @@ NextInner:
     Private Sub McLoginMsStart(Data As LoaderTask(Of McLoginMs, McLoginResult))
         Dim Input As McLoginMs = Data.Input
         Dim LogUsername As String = Input.UserName
-        McLaunchLog("登录方式：微软正版（" & If(LogUsername = "", "尚未登录", LogUsername) & "）")
+        McLaunchLog("登录方式：正版（" & If(LogUsername = "", "尚未登录", LogUsername) & "）")
         Data.Progress = 0.05
         '检查是否已经登录完成
         If Input.AccessToken <> "" AndAlso Not Data.IsForceRestarting Then
@@ -531,6 +515,7 @@ Relogin:
         '解锁主题
 SkipLogin:
         McLaunchLog("微软登录完成")
+        Setup.Set("HintBuy", True) '关闭正版购买提示
         Data.Progress = 0.95
         If ThemeUnlock(10, False) Then MyMsgBox("感谢你对正版游戏的支持！" & vbCrLf & "隐藏主题 跳票红 已解锁！", "提示")
     End Sub
@@ -617,11 +602,7 @@ LoginFinish:
             .Type = "Legacy"
         End With
         '将结果扩展到所有项目中
-        'Data.Output.AccessToken = Setup.Get("CacheMojangAccess") '不能优先使用缓存的 AccessToken，这会导致离线用户名设置失效
-        'If Data.Output.AccessToken.Length < 300 Then
         Data.Output.AccessToken = Data.Output.Uuid
-        'Data.Output.ClientToken = Setup.Get("CacheMojangClient")
-        'If Data.Output.AccessToken.Length <> 32 Then
         Data.Output.ClientToken = Data.Output.Uuid
         '保存启动记录
         Dim Names As New List(Of String)
@@ -649,7 +630,6 @@ LoginFinish:
             Data.Output.Name = LoginJson("selectedProfile")("name").ToString
             Data.Output.Uuid = LoginJson("selectedProfile")("id").ToString
             Data.Output.Type = "Auth"
-            Data.Output.Email = Data.Input.UserName
             McLaunchLog("登录成功（Login, HiPer）")
             '保存启动记录
             Dim Names As New List(Of String)
@@ -691,7 +671,6 @@ LoginFinish:
         Data.Output.Uuid = Uuid
         Data.Output.Name = Name
         Data.Output.Type = Data.Input.Token
-        Data.Output.Email = Data.Input.UserName
         '不更改缓存，直接结束
         McLaunchLog("验证登录成功（Validate, " & Data.Input.Token & "）")
     End Sub
@@ -716,7 +695,6 @@ LoginFinish:
         Data.Output.Uuid = LoginJson("selectedProfile")("id").ToString
         Data.Output.Name = LoginJson("selectedProfile")("name").ToString
         Data.Output.Type = Data.Input.Token
-        Data.Output.Email = Data.Input.UserName
         '保存缓存
         Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
         Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
@@ -737,12 +715,8 @@ LoginFinish:
                    ContentType:="application/json; charset=utf-8"))
             '检查登录结果
             If LoginJson("availableProfiles").Count = 0 Then
-                If Data.Input.Type = McLoginType.Auth Then
-                    If Data.Input.ForceReselectProfile Then Hint("你还没有创建角色，无法更换！", HintType.Critical)
-                    Throw New Exception("$你还没有创建角色，请在创建角色后再试！")
-                Else
-                    Throw New Exception("$你还没有购买 Minecraft 正版，请在购买后再试！")
-                End If
+                If Data.Input.ForceReselectProfile Then Hint("你还没有创建角色，无法更换！", HintType.Critical)
+                Throw New Exception("$你还没有创建角色，请在创建角色后再试！")
             ElseIf Data.Input.ForceReselectProfile AndAlso LoginJson("availableProfiles").Count = 1 Then
                 Hint("你的账户中只有一个角色，无法更换！", HintType.Critical)
             End If
@@ -785,7 +759,6 @@ LoginFinish:
             Data.Output.Name = SelectedName
             Data.Output.Uuid = SelectedId
             Data.Output.Type = Data.Input.Token
-            Data.Output.Email = Data.Input.UserName
             '保存缓存
             Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
             Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
@@ -798,27 +771,13 @@ LoginFinish:
         Catch ex As Exception
             Dim AllMessage As String = GetExceptionSummary(ex)
             Log(ex, "登录失败原始错误信息", LogLevel.Normal)
-            If AllMessage.Contains("410") AndAlso AllMessage.Contains("Migrated") Then
-                Throw New Exception("$登录失败：该 Mojang 账号已迁移至微软账号，请在上方的登录方式中选择 微软 并再次尝试登录！")
-            ElseIf AllMessage.Contains("403") Then
+            If AllMessage.Contains("403") Then
                 Select Case Data.Input.Type
                     Case McLoginType.Auth
                         Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf &
                                             " - 输入的账号或密码错误。" & vbCrLf &
                                             " - 登录尝试过于频繁，导致被暂时屏蔽。请不要操作，等待 10 分钟后再试。" & vbCrLf &
                                             " - 只注册了账号，但没有在皮肤站新建角色。")
-                    Case McLoginType.Legacy
-                        Throw
-                    Case McLoginType.Mojang
-                        If AllMessage.Contains("Invalid username or password") Then
-                            Throw New Exception("$登录失败：输入的账号或密码有误。")
-                        Else
-                            Throw New Exception("$登录尝试过于频繁，导致被 Mojang 暂时屏蔽。请不要操作，等待 10 分钟后再试。")
-                        End If
-                    Case McLoginType.Ms
-                        Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf &
-                                            " - 登录尝试过于频繁，导致被暂时屏蔽。请不要操作，等待 10 分钟后再试。" & vbCrLf &
-                                            " - 账号类别错误。如果你在使用 Mojang 账号，请将登录方式切换为 Mojang。")
                     Case McLoginType.Nide
                         Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf &
                                             " - 输入的账号或密码错误。" & vbCrLf &
@@ -1037,8 +996,8 @@ SystemBrowser:
             ElseIf Message.Contains("(404)") Then
                 Log(ex, "微软登录第 6 步汇报 404")
                 RunInNewThread(Sub()
-                                   Select Case MyMsgBox("你可能没有在 Minecraft 官网创建档案，或者没有购买 Minecraft。" & vbCrLf &
-                                            "如果你已经购买了游戏，请在官网上创建档案后再试。", "登录失败", "创建档案", "购买 Minecraft", "取消")
+                                   Select Case MyMsgBox("你可能没有在 Minecraft 官网创建档案，XBox Game Pass 已到期，或者还没有购买 Minecraft。" & vbCrLf &
+                                            "如果你确认拥有 Minecraft，请在官网上创建档案后再试。", "登录失败", "创建档案", "购买 Minecraft", "取消")
                                        Case 1
                                            OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
                                        Case 2
@@ -1180,6 +1139,9 @@ SystemBrowser:
             ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 99 AndAlso McVersionCurrent.Version.HasOptiFine Then '#305
                 '1.18+：若安装了 OptiFine，最高 Java 18
                 MaxVer = New Version(1, 18, 999, 999)
+            ElseIf McVersionCurrent.Version.McCodeMain >= 19 AndAlso McVersionCurrent.Version.McCodeMain < 99 Then
+                '1.19+：最高 Java 19
+                MaxVer = New Version(1, 19, 999, 999)
             End If
         End If
 
@@ -1708,7 +1670,7 @@ NextVersion:
         '更新 launcher_profiles.json
         Try
             '确保可用
-            If Not (McLoginLoader.Output.Type = "Mojang" OrElse McLoginLoader.Output.Type = "Microsoft") Then Exit Try
+            If Not McLoginLoader.Output.Type = "Microsoft" Then Exit Try
             McFolderLauncherProfilesJsonCreate(PathMcFolder)
             '构建需要替换的 Json 对象
             Dim ReplaceJsonString As String = "
@@ -1716,7 +1678,7 @@ NextVersion:
               ""authenticationDatabase"": {
                 ""00000111112222233333444445555566"": {
                   ""accessToken"": """ & McLoginLoader.Output.AccessToken & """,
-                  ""username"": """ & If(McLoginLoader.Output.Email, McLoginLoader.Output.Name).Replace("""", "-") & """,
+                  ""username"": """ & McLoginLoader.Output.Name.Replace("""", "-") & """,
                   ""profiles"": {
                     ""66666555554444433333222221111100"": {
                         ""displayName"": """ & McLoginLoader.Output.Name & """
@@ -1747,7 +1709,7 @@ NextVersion:
                       ""authenticationDatabase"": {
                         ""00000111112222233333444445555566"": {
                           ""accessToken"": """ & McLoginLoader.Output.AccessToken & """,
-                          ""username"": """ & If(McLoginLoader.Output.Email, McLoginLoader.Output.Name).Replace("""", "-") & """,
+                          ""username"": """ & McLoginLoader.Output.Name.Replace("""", "-") & """,
                           ""profiles"": {
                             ""66666555554444433333222221111100"": {
                                 ""displayName"": """ & McLoginLoader.Output.Name & """
@@ -1851,7 +1813,7 @@ NextVersion:
                         End If
                     Case 19
                         If McVersionCurrent.Version.McCodeSub <= 3 Then
-                            PackFormat = 10
+                            PackFormat = 9
                         Else
                             PackFormat = 12
                         End If
@@ -1989,7 +1951,7 @@ IgnoreCustomSkin:
             Try
                 CustomProcess.StartInfo.FileName = "cmd.exe"
                 CustomProcess.StartInfo.Arguments = "/c """ & CustomCommandGlobal & """"
-                CustomProcess.StartInfo.WorkingDirectory = Path
+                CustomProcess.StartInfo.WorkingDirectory = PathMcFolder
                 CustomProcess.StartInfo.UseShellExecute = False
                 CustomProcess.StartInfo.CreateNoWindow = True
                 CustomProcess.Start()
@@ -2013,7 +1975,7 @@ IgnoreCustomSkin:
             Try
                 CustomProcess.StartInfo.FileName = "cmd.exe"
                 CustomProcess.StartInfo.Arguments = "/c """ & CustomCommandVersion & """"
-                CustomProcess.StartInfo.WorkingDirectory = Path
+                CustomProcess.StartInfo.WorkingDirectory = PathMcFolder
                 CustomProcess.StartInfo.UseShellExecute = False
                 CustomProcess.StartInfo.CreateNoWindow = True
                 CustomProcess.Start()
@@ -2061,12 +2023,16 @@ IgnoreCustomSkin:
         '开始进程
         GameProcess.Start()
         McLaunchLog("已启动游戏进程：" & McLaunchJavaSelected.PathJavaw)
+        If Loader.IsAborted Then
+            McLaunchLog("由于取消启动，已强制结束游戏进程") '#1631
+            GameProcess.Kill()
+            Exit Sub
+        End If
         Loader.Output = GameProcess
         McLaunchProcess = GameProcess
 
         '进程优先级处理
         Try
-            If GameProcess.HasExited Then Exit Try '可能在启动游戏进程的同时刚好取消了启动
             GameProcess.PriorityBoostEnabled = True
             Select Case Setup.Get("LaunchArgumentPriority")
                 Case 0 '高
@@ -2177,10 +2143,8 @@ IgnoreCustomSkin:
                 Else
                     Raw = Raw.Replace("{login}", "离线")
                 End If
-            Case McLoginType.Mojang
-                Raw = Raw.Replace("{login}", "Mojang 正版")
             Case McLoginType.Ms
-                Raw = Raw.Replace("{login}", "微软正版")
+                Raw = Raw.Replace("{login}", "正版")
             Case McLoginType.Nide
                 Raw = Raw.Replace("{login}", "统一通行证")
             Case McLoginType.Auth

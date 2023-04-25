@@ -1,5 +1,7 @@
 ﻿'一个万能的自动图片类型转换工具类
 
+Imports System.Drawing.Imaging
+
 Public Class MyBitmap
 
     ''' <summary>
@@ -29,7 +31,7 @@ Public Class MyBitmap
         Dim bitmapData = Bitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb)
         Try
             Dim size = rect.Width * rect.Height * 4
-            Return BitmapSource.Create(Bitmap.Width, Bitmap.Height, DPI, DPI, PixelFormats.Bgra32, Nothing, bitmapData.Scan0, size, bitmapData.Stride)
+            Return BitmapSource.Create(Bitmap.Width, Bitmap.Height, Bitmap.HorizontalResolution, Bitmap.VerticalResolution, PixelFormats.Bgra32, Nothing, bitmapData.Scan0, size, bitmapData.Stride)
         Finally
             Bitmap.UnlockBits(bitmapData)
         End Try
@@ -109,8 +111,10 @@ Public Class MyBitmap
     Public Function Rotation(angle As Double) As System.Drawing.Bitmap
         Dim img As System.Drawing.Image = Me.Pic
         Dim bitSize As Single = img.Width
-        Dim bmp As New System.Drawing.Bitmap(CInt(bitSize), CInt(bitSize))
+        Dim bmp As New System.Drawing.Bitmap(CInt(bitSize), CInt(bitSize), img.PixelFormat)
+        bmp.SetResolution(img.HorizontalResolution, img.VerticalResolution)
         Using g As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(bmp)
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor
             g.TranslateTransform(bitSize / 2, bitSize / 2)
             g.RotateTransform(angle)
             g.TranslateTransform(-bitSize / 2, -bitSize / 2)
@@ -124,9 +128,11 @@ Public Class MyBitmap
     ''' </summary>
     Public Function Clip(rect As System.Drawing.Rectangle) As System.Drawing.Bitmap
         Dim img As System.Drawing.Image = Pic
-        Dim bmp As New System.Drawing.Bitmap(rect.Width, rect.Height)
+        Dim bmp As New System.Drawing.Bitmap(rect.Width, rect.Height, img.PixelFormat)
+        bmp.SetResolution(img.HorizontalResolution, img.VerticalResolution)
         Using g As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(bmp)
-            g.DrawImageUnscaled(img, rect)
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor
+            g.DrawImageUnscaled(img, rect.X, rect.Y)
         End Using
         Return bmp
     End Function

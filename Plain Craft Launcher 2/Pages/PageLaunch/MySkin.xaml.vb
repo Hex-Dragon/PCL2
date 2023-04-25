@@ -41,7 +41,7 @@
     End Sub
 
     '保存皮肤
-    Private Sub BtnSkinSave_Click(sender As Object, e As RoutedEventArgs) Handles BtnSkinSave.Click
+    Public Sub BtnSkinSave_Click() Handles BtnSkinSave.Click
         Save(Loader)
     End Sub
     Public Shared Sub Save(Loader As LoaderTask(Of EqualableList(Of String), String))
@@ -121,7 +121,7 @@
     End Sub
 
     '刷新缓存
-    Private Sub RefreshClick(sender As MyMenuItem, e As EventArgs) Handles BtnSkinRefresh.Click
+    Public Sub RefreshClick() Handles BtnSkinRefresh.Click
         RefreshCache(Loader)
     End Sub
     ''' <summary>
@@ -140,21 +140,20 @@
         Else
             RunInThread(Sub()
                             Try
-                                Hint("正在刷新皮肤……")
+                                Hint("正在刷新头像……")
                                 '清空缓存
                                 Log("[Skin] 正在清空皮肤缓存")
                                 If Directory.Exists(PathTemp & "Cache\Skin") Then DeleteDirectory(PathTemp & "Cache\Skin")
                                 If Directory.Exists(PathTemp & "Cache\Uuid") Then DeleteDirectory(PathTemp & "Cache\Uuid")
-                                IniClearCache(PathTemp & "Cache\Skin\IndexMojang.ini")
                                 IniClearCache(PathTemp & "Cache\Skin\IndexMs.ini")
                                 IniClearCache(PathTemp & "Cache\Skin\IndexNide.ini")
                                 IniClearCache(PathTemp & "Cache\Skin\IndexAuth.ini")
                                 IniClearCache(PathTemp & "Cache\Uuid\Mojang.ini")
                                 '刷新控件
-                                For Each SkinLoader In If(sender IsNot Nothing, {sender}, {PageLaunchLeft.SkinMojang, PageLaunchLeft.SkinLegacy, PageLaunchLeft.SkinMs})
+                                For Each SkinLoader In If(sender IsNot Nothing, {sender}, {PageLaunchLeft.SkinLegacy, PageLaunchLeft.SkinMs})
                                     SkinLoader.WaitForExit(IsForceRestart:=True)
                                 Next
-                                Hint("已刷新皮肤！", HintType.Finish)
+                                Hint("已刷新头像！", HintType.Finish)
                             Catch ex As Exception
                                 Log(ex, "刷新皮肤缓存失败", LogLevel.Msgbox)
                             End Try
@@ -165,15 +164,14 @@
     ''' 在更换正版皮肤后，刷新正版皮肤。
     ''' </summary>
     ''' <param name="SkinAddress">新的正版皮肤完整地址。</param>
-    Public Shared Sub ReloadCache(SkinAddress As String, IsMsLogin As Boolean)
+    Public Shared Sub ReloadCache(SkinAddress As String)
         RunInThread(Sub()
                         Try
                             '更新缓存
-                            Dim LoginType As String = If(IsMsLogin, "Ms", "Mojang")
-                            WriteIni(PathTemp & "Cache\Skin\Index" & LoginType & ".ini", Setup.Get("Cache" & LoginType & "Uuid"), SkinAddress)
-                            Log(String.Format("[Skin] 已写入皮肤地址缓存 {0} -> {1}", Setup.Get("Cache" & LoginType & "Uuid"), SkinAddress))
+                            WriteIni(PathTemp & "Cache\Skin\IndexMs.ini", Setup.Get("CacheMsUuid"), SkinAddress)
+                            Log(String.Format("[Skin] 已写入皮肤地址缓存 {0} -> {1}", Setup.Get("CacheMsUuid"), SkinAddress))
                             '刷新控件
-                            For Each SkinLoader In If(IsMsLogin, {PageLaunchLeft.SkinMs, PageLaunchLeft.SkinLegacy}, {PageLaunchLeft.SkinMojang, PageLaunchLeft.SkinLegacy})
+                            For Each SkinLoader In {PageLaunchLeft.SkinMs, PageLaunchLeft.SkinLegacy}
                                 SkinLoader.WaitForExit(IsForceRestart:=True)
                             Next
                             '完成提示
@@ -198,7 +196,7 @@
         End Set
     End Property
     Private IsChanging As Boolean = False
-    Private Sub BtnSkinCape_Click(sender As Object, e As RoutedEventArgs) Handles BtnSkinCape.Click
+    Public Sub BtnSkinCape_Click() Handles BtnSkinCape.Click
         '检查条件，获取新披风
         If IsChanging Then
             Hint("正在更改披风中，请稍候！")

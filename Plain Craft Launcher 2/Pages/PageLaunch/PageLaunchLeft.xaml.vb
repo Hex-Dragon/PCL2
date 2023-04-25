@@ -67,7 +67,7 @@
 
         '改变页面
         Dim LoginType As McLoginType = Setup.Get("LoginType")
-        If LoginType = McLoginType.Legacy OrElse LoginType = McLoginType.Mojang OrElse LoginType = McLoginType.Ms Then CType(FindName("RadioLoginType" & LoginType), MyRadioButton).Checked = True
+        If LoginType = McLoginType.Legacy OrElse LoginType = McLoginType.Ms Then CType(FindName("RadioLoginType" & LoginType), MyRadioButton).Checked = True
         RefreshPage(False, False)
 
         AniControlEnabled -= 1
@@ -117,8 +117,6 @@
 
     Private Enum PageType
         None
-        Mojang
-        MojangSkin
         Legacy
         Nide
         NideSkin
@@ -134,12 +132,6 @@
 
     Private Function PageGet(Type As PageType)
         Select Case Type
-            Case PageType.Mojang
-                If IsNothing(FrmLoginMojang) Then FrmLoginMojang = New PageLoginMojang
-                Return FrmLoginMojang
-            Case PageType.MojangSkin
-                If IsNothing(FrmLoginMojangSkin) Then FrmLoginMojangSkin = New PageLoginMojangSkin
-                Return FrmLoginMojangSkin
             Case PageType.Legacy
                 If IsNothing(FrmLoginLegacy) Then FrmLoginLegacy = New PageLoginLegacy
                 Return FrmLoginLegacy
@@ -171,7 +163,7 @@
     ''' <param name="Type">新页面的种类。</param>
     ''' <param name="Anim">是否显示动画。</param>
     Private Function PageChange(Type As PageType, Anim As Boolean)
-        Dim PageNew As Object = FrmLoginMojang '初始化一个东西，避免在执行时出现异常导致雪崩
+        Dim PageNew As Object = FrmLoginMs '初始化一个东西，避免在执行时出现异常导致雪崩
         Try
 
 #Region "确定更改的页面实例并实例化"
@@ -232,14 +224,7 @@
         Select Case LoginPageType
             Case 0 '正版或离线
 UnknownType:
-                If RadioLoginType1.Checked Then
-                    If Setup.Get("CacheMojangAccess") = "" Then
-                        Type = PageType.Mojang
-                    Else
-                        Type = PageType.MojangSkin
-                    End If
-                    Setup.Set("LoginType", McLoginType.Mojang)
-                ElseIf RadioLoginType5.Checked Then
+                If RadioLoginType5.Checked Then
                     If Setup.Get("CacheMsAccess") = "" Then
                         Type = PageType.Ms
                     Else
@@ -252,28 +237,19 @@ UnknownType:
                 End If
                 PanType.Visibility = Visibility.Visible
                 PanTypeOne.Visibility = Visibility.Collapsed
-                RadioLoginType1.Visibility = Visibility.Visible
                 RadioLoginType5.Visibility = Visibility.Visible
                 RadioLoginType0.Visibility = Visibility.Visible
             Case 1 '仅正版
-                If RadioLoginType1.Checked Then
-                    If Setup.Get("CacheMojangAccess") = "" Then
-                        Type = PageType.Mojang
-                    Else
-                        Type = PageType.MojangSkin
-                    End If
-                    Setup.Set("LoginType", McLoginType.Mojang)
+                If Setup.Get("CacheMsAccess") = "" Then
+                    Type = PageType.Ms
                 Else
-                    If Setup.Get("CacheMsAccess") = "" Then
-                        Type = PageType.Ms
-                    Else
-                        Type = PageType.MsSkin
-                    End If
-                    Setup.Set("LoginType", McLoginType.Ms)
+                    Type = PageType.MsSkin
                 End If
-                PanType.Visibility = Visibility.Visible
-                PanTypeOne.Visibility = Visibility.Collapsed
-                RadioLoginType1.Visibility = Visibility.Visible
+                Setup.Set("LoginType", McLoginType.Ms)
+                PanType.Visibility = Visibility.Collapsed
+                PanTypeOne.Visibility = Visibility.Visible
+                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonMs)
+                LabTypeOne.Text = "正版登录"
                 RadioLoginType5.Visibility = Visibility.Visible
                 RadioLoginType0.Visibility = Visibility.Collapsed
             Case 2 '仅离线
@@ -316,61 +292,13 @@ UnknownType:
         Dim Control As MyRadioButton = FindName("RadioLoginType" & Setup.Get("LoginType"))
         If Control IsNot Nothing Then Control.Checked = True
     End Sub
-    Private Sub RadioLoginType_Change(sender As Object, raiseByMouse As Boolean) Handles RadioLoginType0.Check, RadioLoginType1.Check, RadioLoginType5.Check
+    Private Sub RadioLoginType_Change(sender As Object, raiseByMouse As Boolean) Handles RadioLoginType0.Check, RadioLoginType5.Check
         If raiseByMouse Then RefreshPage(True, True)
     End Sub
 
 #End Region
 
 #Region "皮肤"
-
-    'Mojang 正版皮肤
-    Public Shared SkinMojang As New LoaderTask(Of EqualableList(Of String), String)("Loader Skin Mojang", AddressOf SkinMojangLoad, AddressOf SkinMojangInput, ThreadPriority.AboveNormal)
-    Private Shared Function SkinMojangInput() As EqualableList(Of String)
-        '获取名称
-        Return New EqualableList(Of String) From {Setup.Get("CacheMojangName"), Setup.Get("CacheMojangUuid")}
-    End Function
-    Private Shared Sub SkinMojangLoad(Data As LoaderTask(Of EqualableList(Of String), String))
-        '清空已有皮肤
-        '如果在输入时清空皮肤，若输入内容一样则不会执行 Load 方法，导致皮肤不被加载
-        RunInUi(Sub() If FrmLoginMojangSkin IsNot Nothing AndAlso FrmLoginMojangSkin.Skin IsNot Nothing Then FrmLoginMojangSkin.Skin.Clear())
-        '获取 Url
-        Dim UserName As String = Data.Input(0)
-        Dim Uuid As String = Data.Input(1)
-        If UserName = "" Then
-            Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
-            Log("[Minecraft] 获取正版皮肤失败，ID 为空")
-            GoTo Finish
-        End If
-        Try
-            Dim Result As String = McSkinGetAddress(Uuid, "Mojang")
-            If Data.IsAborted Then Throw New ThreadInterruptedException("当前任务已取消：" & UserName)
-            Result = McSkinDownload(Result)
-            If Data.IsAborted Then Throw New ThreadInterruptedException("当前任务已取消：" & UserName)
-            Data.Output = Result
-        Catch ex As Exception
-            If ex.GetType.Name = "ThreadInterruptedException" Then
-                Data.Output = ""
-                Exit Sub
-            ElseIf GetExceptionSummary(ex).Contains("429") Then
-                Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
-                Log("[Minecraft] 获取正版皮肤失败（" & UserName & "）：获取皮肤太过频繁，请 5 分钟后再试！", LogLevel.Hint)
-            ElseIf GetExceptionSummary(ex).Contains("未设置自定义皮肤") Then
-                Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
-                Log("[Minecraft] 用户未设置自定义皮肤，跳过皮肤加载")
-            Else
-                Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
-                Log(ex, "获取正版皮肤失败（" & UserName & "）", LogLevel.Hint)
-            End If
-        End Try
-Finish:
-        '刷新显示
-        If FrmLoginMojangSkin IsNot Nothing Then
-            RunInUi(AddressOf FrmLoginMojangSkin.Skin.Load)
-        ElseIf Not Data.IsAborted Then '如果已经中断，Input 也被清空，就不会再次刷新
-            Data.Input = Nothing '清空输入，因为皮肤实际上没有被渲染，如果不清空切换到页面的 Start 会由于输入相同而不渲染
-        End If
-    End Sub
 
     '微软正版皮肤
     Public Shared SkinMs As New LoaderTask(Of EqualableList(Of String), String)("Loader Skin Ms", AddressOf SkinMsLoad, AddressOf SkinMsInput, ThreadPriority.AboveNormal)
@@ -592,7 +520,7 @@ Finish:
 
     '全部皮肤加载器
     '需要放在其中元素的后面，否则会因为它提前被加载而莫名其妙变成 Nothing
-    Public Shared SkinLoaders As New List(Of LoaderTask(Of EqualableList(Of String), String)) From {SkinMojang, SkinMs, SkinLegacy, SkinNide, SkinAuth}
+    Public Shared SkinLoaders As New List(Of LoaderTask(Of EqualableList(Of String), String)) From {SkinMs, SkinLegacy, SkinNide, SkinAuth}
 
 #End Region
 
@@ -713,10 +641,8 @@ ExitRefresh:
                 Else
                     LabLaunchingMethod.Text = "离线登录"
                 End If
-            Case McLoginType.Mojang
-                LabLaunchingMethod.Text = "Mojang 正版登录"
             Case McLoginType.Ms
-                LabLaunchingMethod.Text = "微软正版登录"
+                LabLaunchingMethod.Text = "正版登录"
             Case McLoginType.Nide
                 LabLaunchingMethod.Text = "统一通行证"
             Case McLoginType.Auth

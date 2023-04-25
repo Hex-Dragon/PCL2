@@ -95,7 +95,13 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
-        If LastVersion < 287 Then 'Snapshot 2.5.3
+        If LastVersion < 289 Then 'Snapshot 2.5.4
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新制作正版登录页面"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "彻底移除 Mojang 登录"))
+            FeatureCount += 6
+            BugCount += 14
+        End If
+        If LastVersion < 288 Then 'Snapshot 2.5.3
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "在缺少 Java 时会自动下载所需的 Java"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 CurseForge / Modrinth 来源筛选"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为下载管理和音乐播放按钮添加进度条"))

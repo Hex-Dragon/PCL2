@@ -205,10 +205,6 @@ Public Class Application
             Setup.Set("Login" & Token & "Email", Join(Dict.Keys.ToArray, "¨"))
             Setup.Set("Login" & Token & "Pass", Join(Dict.Values.ToArray, "¨"))
             Select Case Token
-                Case "Mojang"
-                    FrmLoginMojang.ComboName.ItemsSource = Dict.Keys
-                    FrmLoginMojang.ComboName.Text = If(Dict.Keys.Count > 0, Dict.Keys(0), "")
-                    FrmLoginMojang.TextPass.Password = If(Dict.Values.Count > 0, Dict.Values(0), "")
                 Case "Nide"
                     FrmLoginNide.ComboName.ItemsSource = Dict.Keys
                     FrmLoginNide.ComboName.Text = If(Dict.Keys.Count > 0, Dict.Keys(0), "")

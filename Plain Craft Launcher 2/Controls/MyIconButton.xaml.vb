@@ -115,7 +115,7 @@
                     Dim AnimList As New List(Of AniData)
                     Select Case Theme
                         Case Themes.Color
-                            AnimList.Add(AaColor(Path, Shape.FillProperty, "ColorBrush4", AnimationColorOut))
+                            AnimList.Add(AaColor(Path, Shape.FillProperty, "ColorBrush5", AnimationColorOut))
                             PanBack.Background = New MyColor(0, 255, 255, 255)
                         Case Themes.White
                             AnimList.Add(AaColor(Path, Shape.FillProperty, "ColorBrush8", AnimationColorOut))

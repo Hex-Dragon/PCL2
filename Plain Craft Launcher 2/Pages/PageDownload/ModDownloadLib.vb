@@ -3,9 +3,13 @@
 Public Module ModDownloadLib
 
     ''' <summary>
-    ''' 如果 OptiFine 与 Forge 同时开始安装，就会导致 Forge 安装失败，所以在这里添加一个锁。
+    ''' 如果 OptiFine 与 Forge 同时开始安装，就会导致 Forge 安装失败。
     ''' </summary>
     Private InstallSyncLock As New Object
+    ''' <summary>
+    ''' 如果 OptiFine 与 Forge 同时复制原版 Jar，就会导致复制文件时冲突。
+    ''' </summary>
+    Private VanillaSyncLock As New Object
     ''' <summary>
     ''' 最高的 Minecraft 大版本号，-1 代表尚未获取。
     ''' </summary>
@@ -548,16 +552,18 @@ Public Module ModDownloadLib
                                                                              If Task.IsAborted Then Exit Sub
                                                                              '拷贝原版文件
                                                                              If Not IsCustomFolder Then Exit Sub
-                                                                             Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name
-                                                                             Directory.CreateDirectory(McFolder & "versions\" & DownloadInfo.Inherit)
-                                                                             If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json") Then
-                                                                                 CopyFile(ClientDownloadLoader.Input & ClientName & ".json",
+                                                                             SyncLock VanillaSyncLock
+                                                                                 Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name
+                                                                                 Directory.CreateDirectory(McFolder & "versions\" & DownloadInfo.Inherit)
+                                                                                 If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json") Then
+                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".json",
                                                                                           McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json")
-                                                                             End If
-                                                                             If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar") Then
-                                                                                 CopyFile(ClientDownloadLoader.Input & ClientName & ".jar",
-                                                                                          McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar")
-                                                                             End If
+                                                                                 End If
+                                                                                 If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar") Then
+                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".jar",
+                                                                                              McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar")
+                                                                                 End If
+                                                                             End SyncLock
                                                                          End Sub) With {.ProgressWeight = 0.1, .Show = False})
 
         '安装（新旧方式均需要原版 Jar 和 Json）
@@ -1379,14 +1385,16 @@ Public Module ModDownloadLib
                                                                              If Task.IsAborted Then Exit Sub
                                                                              '拷贝原版文件
                                                                              If Not IsCustomFolder Then Exit Sub
-                                                                             Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name
-                                                                             Directory.CreateDirectory(McFolder & "versions\" & Inherit)
-                                                                             If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".json") Then
-                                                                                 CopyFile(ClientDownloadLoader.Input & ClientName & ".json", McFolder & "versions\" & Inherit & "\" & Inherit & ".json")
-                                                                             End If
-                                                                             If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".jar") Then
-                                                                                 CopyFile(ClientDownloadLoader.Input & ClientName & ".jar", McFolder & "versions\" & Inherit & "\" & Inherit & ".jar")
-                                                                             End If
+                                                                             SyncLock VanillaSyncLock
+                                                                                 Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name
+                                                                                 Directory.CreateDirectory(McFolder & "versions\" & Inherit)
+                                                                                 If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".json") Then
+                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".json", McFolder & "versions\" & Inherit & "\" & Inherit & ".json")
+                                                                                 End If
+                                                                                 If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".jar") Then
+                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".jar", McFolder & "versions\" & Inherit & "\" & Inherit & ".jar")
+                                                                                 End If
+                                                                             End SyncLock
 #End Region
                                                                          End Sub) With {.ProgressWeight = 0.1, .Show = False})
             Loaders.Add(New LoaderTask(Of Boolean, Boolean)("安装 Mod 加载器（方式 A）",
