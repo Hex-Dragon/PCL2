@@ -714,6 +714,39 @@ Retry:
             '开启版本隔离
             WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
         End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
+        '检查是否设置了更新 API 服务器
+        If Json("fileApi") IsNot Nothing Then
+            '获取 Mod 列表
+            Dim ModFileList As New List(Of Integer)
+            For Each ModEntry In If(Json("files"), {})
+                If ModEntry("path") Is Nothing Then
+                    Hint("某项 Mod 缺少必要信息，已跳过：" & ModEntry.ToString)
+                    Continue For
+                End If
+                If ModEntry("force") IsNot Nothing AndAlso Not ModEntry("force").ToObject(Of Boolean) Then Continue For
+                ModFileList.Add(ModEntry("path"))
+            Next
+            If ModFileList.Count > 0 Then
+                '构造 NetFile
+                InstallLoaders.Add(New LoaderTask(Of ModEntry, List(Of NetFile))("构造 Mod 下载信息",
+                Sub(Task As LoaderTask(Of ModEntry, List(Of NetFile)))
+                    Dim FileList As New Dictionary(Of Integer, NetFile)
+                    For Each ModJson In Task.Input
+                        '实际的添加
+                        Dim File As New CompFile(ModJson, CompType.Mod)
+                        If Not File.Available Then Continue For
+                        FileList.Add(ModEntry("fileApi") + ModJson("path"),
+                                    File.ToNetFile("{PathMcFolder}versions\{VersionName}\" + ModJson("path")))
+                        Task.Progress += 1 / (1 + ModFileList.Count)
+                    Next
+                    Task.Output = FileList.Values.ToList
+                End Sub) With {.ProgressWeight = ModFileList.Count / 200, .Show = False}) '每 200 Mod 需要 1s
+                '下载 Mod 文件
+                InstallLoaders.Add(New NetDownload("下载 Mod", New List(Of NetFile)) With {.ProgressWeight = ModFileList.Count * 1.5}) '每个 Mod 需要 1.5s
+            End If
+        Else
+            Log("[ModPack] 整合包未设置更新 API 服务器，已跳过")
+        End If
         '构造加载器
         If Json("addons") Is Nothing Then
             Hint("该整合包未提供游戏版本附加信息，无法安装！", HintType.Critical)
