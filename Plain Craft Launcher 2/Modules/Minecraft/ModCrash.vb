@@ -360,6 +360,7 @@
         低版本Forge与高版本Java不兼容
         版本Json中存在多个Forge
         Mod过多导致超出ID限制
+        NightConfig库问题
     End Enum
     ''' <summary>
     ''' 根据 AnalyzeLogs 与可能的版本信息分析崩溃原因。
@@ -486,6 +487,7 @@ Done:
             If LogMc.Contains("java.lang.NoSuchMethodError: net.minecraft.world.server.ChunkManager$ProxyTicketManager.shouldForceTicks(J)Z") AndAlso LogMc.Contains("OptiFine") Then AppendReason(CrashReason.OptiFine导致无法加载世界)
             If LogMc.Contains("Unsupported class file major version") Then AppendReason(CrashReason.Java版本不兼容)
             If LogMc.Contains("java.lang.UnsupportedClassVersionError: net/fabricmc/loader/impl/launch/knot/KnotClient : Unsupported major.minor version") Then AppendReason(CrashReason.Java版本不兼容)
+            If LogMc.Contains("com.electronwill.nightconfig.core.io.ParsingException: Not enough data available") Then AppendReason(CrashReason.NightConfig库问题)
             If LogMc.Contains("Could not reserve enough space") Then
                 If LogMc.Contains("for 1048576KB object heap") Then
                     AppendReason(CrashReason.使用32位Java导致JVM无法分配足够多的内存)
@@ -877,6 +879,8 @@ Redo:
                 ResultString = "你所使用的光影或材质导致游戏出现了一些问题……\n\n请尝试删除你所添加的这些额外资源。\h"
             Case CrashReason.Mod过多导致超出ID限制
                 ResultString = "你所安装的 Mod 过多，超出了游戏的 ID 限制，导致了游戏崩溃。\n请尝试安装 JEID 等修复 Mod，或删除部分大型 Mod。"
+            Case CrashReason.NightConfig库问题
+                ResultString = "当前游戏因为 Night Config 库的一些问题，无法继续运行。\n你可以尝试安装 Night Config Fixes 模组，这或许能帮助你解决这个问题。\n可访问该模组的 GitHub 仓库了解更多"
             Case CrashReason.文件或内容校验失败
                 ResultString = "部分文件或内容校验失败，导致游戏出现了问题。\n\n请尝试删除游戏（包括 Mod）并重新下载，或尝试在重新下载时使用 VPN。\h"
             Case CrashReason.Fabric报错
