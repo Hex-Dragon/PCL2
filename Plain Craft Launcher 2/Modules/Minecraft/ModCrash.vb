@@ -363,6 +363,7 @@
         Mod过多导致超出ID限制
         NightConfig库问题
         ShadersMod与Optifine同时安装
+        Forge安装不完整
     End Enum
     ''' <summary>
     ''' 根据 AnalyzeLogs 与可能的版本信息分析崩溃原因。
@@ -489,6 +490,7 @@ Done:
             If LogMc.Contains("java.lang.NoSuchMethodError: net.minecraft.world.server.ChunkManager$ProxyTicketManager.shouldForceTicks(J)Z") AndAlso LogMc.Contains("OptiFine") Then AppendReason(CrashReason.OptiFine导致无法加载世界)
             If LogMc.Contains("Unsupported class file major version") Then AppendReason(CrashReason.Java版本不兼容)
             If LogMc.Contains("com.electronwill.nightconfig.core.io.ParsingException: Not enough data available") Then AppendReason(CrashReason.NightConfig库问题)
+            If LogMc.Contains("Cannot find launch target fmlclient, unable to launch") Then AppendReason(CrashReason.Forge安装不完整)
             If LogMc.Contains("Invalid module name: '' is not a Java identifier") Then AppendReason(CrashReason.Mod名称包含特殊字符)
             If LogMc.Contains("java.lang.UnsupportedClassVersionError: net/fabricmc/loader/impl/launch/knot/KnotClient : Unsupported major.minor version") Then AppendReason(CrashReason.Java版本不兼容)
             If LogMc.Contains("Could not reserve enough space") Then
@@ -872,7 +874,7 @@ NextStack:
                 Case CrashReason.OptiFine与Forge不兼容
                     Results.Add("由于 OptiFine 与当前版本的 Forge 不兼容，导致了游戏崩溃。\n\n请前往 OptiFine 官网（https://optifine.net/downloads）查看 OptiFine 所兼容的 Forge 版本，并严格按照对应版本重新安装游戏。")
                 Case CrashReason.ShadersMod与Optifine同时安装
-                    Results.Add("当前游戏因为同时安装了 Optifine 和 Shaders Mod，无法继续运行。\n因为 Optifine 已集成 Shaders Mod 的功能，只需删除 Shaders Mod 即可。")
+                    Results.Add("当前游戏因为同时安装了 Optifine 和 Shaders Mod，无法继续运行。\n\n因为 Optifine 已集成 Shaders Mod 的功能，只需删除 Shaders Mod 即可。")
                 Case CrashReason.低版本Forge与高版本Java不兼容
                     Results.Add("由于低版本 Forge 与当前 Java 不兼容，导致了游戏崩溃。\n\n请尝试以下解决方案：\n - 更新 Forge 到 36.2.26 或更高版本\n - 换用版本低于 8.0.320 的 Java")
                 Case CrashReason.版本Json中存在多个Forge
@@ -899,6 +901,8 @@ NextStack:
                     Results.Add("你所安装的 Mod 过多，超出了游戏的 ID 限制，导致了游戏崩溃。\n请尝试安装 JEID 等修复 Mod，或删除部分大型 Mod。")
                 Case CrashReason.文件或内容校验失败
                     Results.Add("部分文件或内容校验失败，导致游戏出现了问题。\n\n请尝试删除游戏（包括 Mod）并重新下载，或尝试在重新下载时使用 VPN。\h")
+                Case CrashReason.Forge安装不完整
+                    Results.Add("当前游戏因为 Forge 安装不完整，无法继续运行。\n\n请尝试重新全新安装 Forge\h")
                 Case CrashReason.Fabric报错
                     If Additional.Count = 1 Then
                         Results.Add("Fabric 提供了以下错误信息：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
