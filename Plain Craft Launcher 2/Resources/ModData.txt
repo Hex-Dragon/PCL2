@@ -2104,7 +2104,7 @@ darknesslib
 tfcraft|群峦传说 (TerraFirmaCraft)|887732¨terrafirmacraft|群峦传说：次世代 (TerraFirmaCraft: The Next Generation)|887732
 redstone-control|红石控制*
 snow-real-magic|雪！真实的魔法！⛄ (Snow! Real Magic! ⛄) - Forge|871191¨snow-real-magic-fabric|雪！真实的魔法！⛄ (Snow! Real Magic! ⛄) - Fabric|871191¨@snow-real-magic|雪！真实的魔法！⛄ (Snow! Real Magic! ⛄)|871191
-comforts|舒适用品* - 全版本¨comforts-fabric|舒适用品 (Comforts) - Fabric 1.16.5-1.19.2¨@comforts|舒适用品 (Comforts)
+comforts|舒适用品* - Forge / Fabric / Quilt¨comforts-fabric|舒适用品 (Comforts) - Fabric 1.16.5-1.19.2¨@comforts|舒适用品 (Comforts)
 plasmacannon|等离子炮 (PlasmaCannon)|930033
 plasmaengines|等离子引擎 (PlasmaEngines)|930034
 bonny-food
