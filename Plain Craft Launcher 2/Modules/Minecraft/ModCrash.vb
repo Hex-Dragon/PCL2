@@ -361,7 +361,7 @@
         低版本Forge与高版本Java不兼容
         版本Json中存在多个Forge
         Mod过多导致超出ID限制
-        NightConfig库问题
+        NightConfig的Bug
         ShadersMod与Optifine同时安装
         Forge安装不完整
     End Enum
@@ -489,7 +489,7 @@ Done:
             If LogMc.Contains("Maybe try a lower resolution resourcepack?") Then AppendReason(CrashReason.材质过大或显卡配置不足)
             If LogMc.Contains("java.lang.NoSuchMethodError: net.minecraft.world.server.ChunkManager$ProxyTicketManager.shouldForceTicks(J)Z") AndAlso LogMc.Contains("OptiFine") Then AppendReason(CrashReason.OptiFine导致无法加载世界)
             If LogMc.Contains("Unsupported class file major version") Then AppendReason(CrashReason.Java版本不兼容)
-            If LogMc.Contains("com.electronwill.nightconfig.core.io.ParsingException: Not enough data available") Then AppendReason(CrashReason.NightConfig库问题)
+            If LogMc.Contains("com.electronwill.nightconfig.core.io.ParsingException: Not enough data available") Then AppendReason(CrashReason.NightConfig的Bug)
             If LogMc.Contains("Cannot find launch target fmlclient, unable to launch") Then AppendReason(CrashReason.Forge安装不完整)
             If LogMc.Contains("Invalid module name: '' is not a Java identifier") Then AppendReason(CrashReason.Mod名称包含特殊字符)
             If LogMc.Contains("java.lang.UnsupportedClassVersionError: net/fabricmc/loader/impl/launch/knot/KnotClient : Unsupported major.minor version") Then AppendReason(CrashReason.Java版本不兼容)
@@ -874,7 +874,7 @@ NextStack:
                 Case CrashReason.OptiFine与Forge不兼容
                     Results.Add("由于 OptiFine 与当前版本的 Forge 不兼容，导致了游戏崩溃。\n\n请前往 OptiFine 官网（https://optifine.net/downloads）查看 OptiFine 所兼容的 Forge 版本，并严格按照对应版本重新安装游戏。")
                 Case CrashReason.ShadersMod与Optifine同时安装
-                    Results.Add("当前游戏因为同时安装了 Optifine 和 Shaders Mod，无法继续运行。\n\n因为 Optifine 已集成 Shaders Mod 的功能，只需删除 Shaders Mod 即可。")
+                    Results.Add("无需同时安装 Optifine 和 Shaders Mod，Optifine 已经集成了 Shaders Mod 的功能。\n在删除 Shaders Mod 后，游戏即可正常运行。")
                 Case CrashReason.低版本Forge与高版本Java不兼容
                     Results.Add("由于低版本 Forge 与当前 Java 不兼容，导致了游戏崩溃。\n\n请尝试以下解决方案：\n - 更新 Forge 到 36.2.26 或更高版本\n - 换用版本低于 8.0.320 的 Java")
                 Case CrashReason.版本Json中存在多个Forge
@@ -894,7 +894,7 @@ NextStack:
                 Case CrashReason.材质过大或显卡配置不足
                     Results.Add("你所使用的材质分辨率过高，或显卡配置不足，导致游戏无法继续运行。\n\n如果你正在使用高清材质，请将它移除。\n如果你没有使用材质，那么你可能需要更新显卡驱动，或者换个更好的显卡……\h")
                 Case CrashReason.材质过大或显卡配置不足
-                    Results.Add("当前游戏因为 Night Config 库的一些问题，无法继续运行。\n\n你可以尝试安装 Night Config Fixes 模组，这或许能帮助你解决这个问题。\n可访问该模组的 GitHub 仓库了解更多。\h")
+                    Results.Add("由于 Night Config 存在问题，导致了游戏崩溃。\n你可以尝试安装 Night Config Fixes 模组，这或许能解决此问题。\h")
                 Case CrashReason.光影或资源包导致OpenGL1282错误
                     Results.Add("你所使用的光影或材质导致游戏出现了一些问题……\n\n请尝试删除你所添加的这些额外资源。\h")
                 Case CrashReason.Mod过多导致超出ID限制
@@ -902,7 +902,7 @@ NextStack:
                 Case CrashReason.文件或内容校验失败
                     Results.Add("部分文件或内容校验失败，导致游戏出现了问题。\n\n请尝试删除游戏（包括 Mod）并重新下载，或尝试在重新下载时使用 VPN。\h")
                 Case CrashReason.Forge安装不完整
-                    Results.Add("当前游戏因为 Forge 安装不完整，无法继续运行。\n\n请尝试重新全新安装 Forge\h")
+                    Results.Add("由于 Forge 安装不完整，导致游戏无法正常运行。\n请尝试重新安装 Forge。\h")
                 Case CrashReason.Fabric报错
                     If Additional.Count = 1 Then
                         Results.Add("Fabric 提供了以下错误信息：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")

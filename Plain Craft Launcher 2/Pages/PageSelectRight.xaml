@@ -7,7 +7,7 @@
     <Grid>
         <Grid x:Name="PanAllBack">
             <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
-                <VirtualizingStackPanel VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" Name="PanMain" Margin="25,25,25,10" Grid.IsSharedSizeScope="True" />
+                <StackPanel Name="PanMain" Margin="25,25,25,10" Grid.IsSharedSizeScope="True" />
             </local:MyScrollViewer>
             <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40" x:Name="PanEmpty" UseAnimation="False">
                 <StackPanel Margin="20,17">

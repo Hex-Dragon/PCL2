@@ -10,6 +10,17 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 291 Then 'Release 2.6.0
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在多个正版账号间切换"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "在缺少 Java 时会自动下载所需的 Java"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新制作正版登录页面"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "彻底移除 Mojang 登录"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 CurseForge / Modrinth 来源筛选"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "Mod / 整合包下载会单独列出筛选的版本"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为下载管理和音乐播放按钮添加进度条"))
+            FeatureCount += 24
+            BugCount += 24
+        End If
         If LastVersion < 286 Then 'Release 2.5.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持搜索、安装 Modrinth 的 Mod 与整合包"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "资源搜索页面支持翻页"))
@@ -95,6 +106,12 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 290 Then 'Snapshot 2.6.0
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在多个正版账号间切换"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "Mod / 整合包下载会单独列出筛选的版本"))
+            FeatureCount += 10
+            BugCount += 2
+        End If
         If LastVersion < 289 Then 'Snapshot 2.5.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新制作正版登录页面"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "彻底移除 Mojang 登录"))

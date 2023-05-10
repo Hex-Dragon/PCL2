@@ -203,7 +203,7 @@ NextInner:
                                 "如果觉得 Minecraft 还不错，也可以考虑购买正版支持一下，毕竟开发游戏也很不容易……" & vbCrLf &
                                 "在你登录一次正版账号后，就不会再出现这个提示了。",
                                 "考虑一下正版？", "购买正版游戏", "下次一定") = 1 Then
-                        OpenWebsite("https://www.minecraft.net/store/checkout/minecraft-java-bedrock-edition-pc")
+                        OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
                     End If
             End Select
         End If
@@ -478,7 +478,7 @@ NextInner:
         End If
         '尝试登录
         Dim OAuthTokens As String()
-        If Setup.Get("CacheMsOAuthRefresh") = "" Then
+        If Input.OAuthRefreshToken = "" Then
             '无 RefreshToken
 Relogin:
             Dim OAuthCode As String = MsLoginStep1(Data)
@@ -487,7 +487,7 @@ Relogin:
             OAuthTokens = MsLoginStep2(OAuthCode, False)
         Else
             '有 RefreshToken
-            OAuthTokens = MsLoginStep2(Setup.Get("CacheMsOAuthRefresh"), True)
+            OAuthTokens = MsLoginStep2(Input.OAuthRefreshToken, True)
         End If
         '要求重新打开登录网页认证
         If OAuthTokens(0) = "Relogin" Then GoTo Relogin
@@ -511,6 +511,10 @@ Relogin:
         Setup.Set("CacheMsUuid", Result(0))
         Setup.Set("CacheMsName", Result(1))
         Setup.Set("CacheMsProfileJson", Result(2))
+        Dim MsJson As JObject = GetJson(Setup.Get("LoginMsJson"))
+        MsJson.Remove(Input.UserName) '如果更改了玩家名……
+        MsJson(Result(1)) = OAuthRefreshToken
+        Setup.Set("LoginMsJson", MsJson.ToString(Newtonsoft.Json.Formatting.None))
         Data.Output = New McLoginResult With {.AccessToken = AccessToken, .Name = Result(1), .Uuid = Result(0), .Type = "Microsoft", .ClientToken = Result(0), .ProfileJson = Result(2)}
         '解锁主题
 SkipLogin:
@@ -1001,7 +1005,7 @@ SystemBrowser:
                                        Case 1
                                            OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
                                        Case 2
-                                           OpenWebsite("https://www.minecraft.net/store/checkout/minecraft-java-bedrock-edition-pc")
+                                           OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
                                    End Select
                                End Sub, "Login Failed: Create Profile")
                 Throw New Exception("$$")
@@ -1818,9 +1822,9 @@ NextVersion:
                             PackFormat = 12
                         End If
                     Case 20, 99 '99 是快照版
-                        PackFormat = 13
+                        PackFormat = 15
                     Case Else
-                        PackFormat = 14
+                        PackFormat = 16
                         'https://minecraft.fandom.com/zh/wiki/数据包#数据包版本
                 End Select
                 McLaunchLog("正在构建自定义皮肤资源包，格式为：" & PackFormat)

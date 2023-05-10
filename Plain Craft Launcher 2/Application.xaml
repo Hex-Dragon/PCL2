@@ -292,7 +292,7 @@
                                            Margin="5,0,0,0" Cursor="IBeam" />
                                     <!-- 由于未知原因，TextView 会有 2,0 的 Margin -->
                                 </Border>
-                                <Border Margin="{TemplateBinding Padding}" IsHitTestVisible="False" VerticalAlignment="Center" BorderThickness="0">
+                                <Border Margin="{TemplateBinding Padding}" IsHitTestVisible="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" BorderThickness="0">
                                     <TextBlock x:Name="labHint" Foreground="{DynamicResource ColorBrush1}" Opacity="0.3" Margin="7,0,0,0" Padding="{TemplateBinding BorderThickness}" FontSize="{TemplateBinding FontSize}" FontFamily="Resources/#PCL English, Microsoft YaHei UI" />
                                 </Border>
                                 <TextBlock Grid.Row="1" x:Name="labWrong" Height="0" Foreground="{TemplateBinding BorderBrush}" Padding="0,4,0,0" />
@@ -345,7 +345,7 @@
 
             <!-- ComboBox -->
             <DataTemplate x:Key="ComboBoxItemTemplateWithDelete">
-                <local:MyListItem Title="{Binding}" FontSize="13" PaddingRight="40" MaxHeight="26" IsScaleAnimationEnabled="False" Margin="-1,0,0,0">
+                <local:MyListItem Title="{Binding}" FontSize="13" PaddingRight="40" MaxHeight="26" IsScaleAnimationEnabled="False" Margin="-3,0,0,0">
                     <local:MyListItem.Buttons>
                         <x:Array Type="local:MyIconButton">
                             <local:MyIconButton Grid.Column="1" Height="20" Width="20" VerticalAlignment="Center" Tag="{Binding}" Click="MyIconButton_Click" Logo="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z" />
@@ -367,7 +367,10 @@
                             <Grid>
                                 <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="3" BorderThickness="1" BorderBrush="{TemplateBinding Foreground}" />
                                 <ToggleButton Margin="0,0,1.5,0" Foreground="{TemplateBinding Foreground}" IsTabStop="False" SnapsToDevicePixels="False" Focusable="False" IsChecked="{Binding IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}" ClickMode="Press" />
-                                <ContentPresenter Margin="8.5,0,21.5,0" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" VerticalAlignment="Center" />
+                                <ContentPresenter x:Name="PART_Content" Margin="8.5,0,21.5,0" IsHitTestVisible="False" VerticalAlignment="Center"
+                                                  Content="{TemplateBinding SelectionBoxItem}" 
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
+                                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" />
                                 <Popup x:Name="PART_Popup" SnapsToDevicePixels="True" VerticalOffset="-1.5" AllowsTransparency="True" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Placement="Bottom" PopupAnimation="Fade">
                                     <Grid x:Name="PanPopup">
                                         <Border Background="White" CornerRadius="3" />

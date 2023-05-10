@@ -31,7 +31,7 @@
                 Next
             End If
             '打乱顺序播放
-            MusicToplayList = RandomChaos(New List(Of String)(MusicAllList))
+            MusicToplayList = If(Setup.Get("UiMusicRandom"), Shuffle(New List(Of String)(MusicAllList)), New List(Of String)(MusicAllList))
             If Not IgnoreFirst = "" AndAlso Not MusicToplayList.Count = 0 AndAlso MusicToplayList(0) = IgnoreFirst Then
                 '若需要避免成为第一项的为第一项，则将它放在最后
                 MusicToplayList.RemoveAt(0)

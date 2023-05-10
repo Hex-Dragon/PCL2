@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.5.4" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.5.4." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.6.0" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.6.0." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 286 'Release
+    Public Const VersionCode As Integer = 291 'Release
 #Else
-    Public Const VersionCode As Integer = 289 'Snapshot
+    Public Const VersionCode As Integer = 290 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -2606,11 +2606,11 @@ Retry:
     ''' <summary>
     ''' 将数组随机打乱。
     ''' </summary>
-    Public Function RandomChaos(Of T)(array As IList(Of T)) As IList(Of T)
-        RandomChaos = New List(Of T)
+    Public Function Shuffle(Of T)(array As IList(Of T)) As IList(Of T)
+        Shuffle = New List(Of T)
         Do While array.Count > 0
             Dim i As Integer = RandomInteger(0, array.Count - 1)
-            RandomChaos.Add(array(i))
+            Shuffle.Add(array(i))
             array.RemoveAt(i)
         Loop
     End Function

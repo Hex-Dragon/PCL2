@@ -39,51 +39,54 @@
         End Sub
     End Class
     Private Sub Load_OnFinish()
-
-        '初始化字典，并将当前版本排在最上面
-        Dim TopVersion As String
+        '获取目标版本与 Mod 加载器
+        Dim TargetVersion As String = ""
         Select Case Project.Type
             Case CompType.Mod
-                TopVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
+                TargetVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
             Case CompType.ModPack
-                TopVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
+                TargetVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
             Case Else 'CompType.ResourcePack
                 'FUTURE: Res
-                TopVersion = Nothing 'If(PageDownloadResource.Loader.Input.GameVersion, "")
+                TargetVersion = "" 'If(PageDownloadResource.Loader.Input.GameVersion, "")
         End Select
-        Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New VersionSorterWithSelect(TopVersion))
-        '#8826 汇报了奇怪的这个 Try 块里出现 NPE 的问题，但实在找不到，就瞎加点检测
-        Try
-            Dict.Add("未知版本", New List(Of CompFile))
-            If CompFileLoader.Output Is Nothing Then
-                Log("[Comp] 列表加载输出为 Nothing，请反馈此问题", LogLevel.Feedback)
-                Exit Try
-            End If
-            For Each Version As CompFile In CompFileLoader.Output
-                If Version Is Nothing Then
-                    Log("[Comp] 列表中的一个版本为 Nothing，请反馈此问题", LogLevel.Feedback)
-                    Continue For
+        Dim TargetLoader = CompModLoaderType.Any
+        If Project.Type = CompType.Mod AndAlso PageDownloadMod.Loader.Input.ModLoader <> CompModLoaderType.Any Then
+            TargetLoader = PageDownloadMod.Loader.Input.ModLoader
+        End If
+        Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
+            $"目标PCL2版本：{TargetVersion} {If(TargetLoader <> CompModLoaderType.Any, TargetLoader, "")}", "")
+        '初始化字典
+        Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New VersionSorterWithSelect(TargetCardName))
+        Dict.Add("未知版本", New List(Of CompFile))
+        For Each Version As CompFile In CompFileLoader.Output
+            For Each GameVersion In Version.GameVersions
+                '决定添加到哪个版本
+                Dim TargetCard As String
+                If GameVersion Is Nothing Then
+                    TargetCard = "未知版本"
+                ElseIf GameVersion.Contains("w") OrElse GameVersion.Contains("pre") OrElse GameVersion.Contains("rc") Then
+                    TargetCard = "快照版本"
+                ElseIf GameVersion.Split(".").Count >= 2 Then
+                    TargetCard = GameVersion
+                Else
+                    TargetCard = "未知版本"
                 End If
-                For Each GameVersion In Version.GameVersions
-                    '决定添加到哪个版本
-                    Dim TargetVersion As String
-                    If GameVersion Is Nothing Then
-                        TargetVersion = "未知版本"
-                    ElseIf GameVersion.Contains("w") Then
-                        TargetVersion = "快照版本"
-                    ElseIf GameVersion.Split(".").Count >= 2 Then
-                        TargetVersion = GameVersion
-                    Else
-                        TargetVersion = "未知版本"
-                    End If
-                    '实际进行添加
-                    If Not Dict.ContainsKey(TargetVersion) Then Dict.Add(TargetVersion, New List(Of CompFile))
-                    If Not Dict(TargetVersion).Contains(Version) Then Dict(TargetVersion).Add(Version)
-                Next
+                '实际进行添加
+                If Not Dict.ContainsKey(TargetCard) Then Dict.Add(TargetCard, New List(Of CompFile))
+                If Not Dict(TargetCard).Contains(Version) Then Dict(TargetCard).Add(Version)
             Next
-        Catch ex As Exception
-            Log(ex, "准备工程下载列表出错", LogLevel.Feedback)
-        End Try
+        Next
+        '添加筛选的版本的卡片
+        If TargetCardName <> "" Then
+            Dict.Add(TargetCardName, New List(Of CompFile))
+            For Each Version As CompFile In CompFileLoader.Output
+                If Version.GameVersions.Contains(TargetVersion) AndAlso
+                   (TargetLoader = CompModLoaderType.Any OrElse Version.ModLoaders.Contains(TargetLoader)) Then
+                    If Not Dict(TargetCardName).Contains(Version) Then Dict(TargetCardName).Add(Version)
+                End If
+            Next
+        End If
 
 #Region "转化为 UI"
         Try
@@ -99,7 +102,7 @@
                 NewCard.SwapControl = NewStack
                 PanMain.Children.Add(NewCard)
                 '确定卡片是否展开
-                If Pair.Key = TopVersion Then
+                If Pair.Key = TargetCardName Then
                     MyCard.StackInstall(NewStack, If(Project.Type = CompType.ModPack, 9, 8), Pair.Key) 'FUTURE: Res
                 Else
                     NewCard.IsSwaped = True

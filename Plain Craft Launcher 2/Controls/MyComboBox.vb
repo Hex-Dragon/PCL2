@@ -128,4 +128,10 @@
         End If
     End Sub
 
+    Public ReadOnly Property ContentPresenter As ContentPresenter
+        Get
+            Return Template.FindName("PART_Content", Me)
+        End Get
+    End Property
+
 End Class

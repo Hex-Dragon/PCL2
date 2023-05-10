@@ -2,6 +2,8 @@
     Inherits ScrollViewer
 
     Public Property DeltaMuity As Double = 1
+
+
     Private RealOffset As Double
     Private Sub MyScrollViewer_PreviewMouseWheel(sender As Object, e As MouseWheelEventArgs) Handles Me.PreviewMouseWheel
         If e.Delta = 0 OrElse ActualHeight = 0 OrElse ScrollableHeight = 0 Then Exit Sub
@@ -28,6 +30,11 @@
     End Sub
     Private Sub MyScrollViewer_IsVisibleChanged(sender As Object, e As DependencyPropertyChangedEventArgs) Handles Me.IsVisibleChanged
         FrmMain.BtnExtraBack.ShowRefresh()
+    End Sub
+
+    Public ScrollBar As MyScrollBar
+    Private Sub Load() Handles Me.Loaded
+        ScrollBar = GetTemplateChild("PART_VerticalScrollBar")
     End Sub
 
 End Class

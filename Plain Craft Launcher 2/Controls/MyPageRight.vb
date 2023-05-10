@@ -68,7 +68,7 @@
                     Loop
                     RunInUiWait(Sub() FinishedInvoke(RealLoader))
                     Thread.Sleep(20) '由于大量初始化控件会导致掉帧，延迟触发 State 改变事件
-            End Sub
+                End Sub
         End If
         AddHandler RealLoader.OnStateChangedUi, Sub(Loader As LoaderBase, NewState As LoadState, OldState As LoadState) RunInUi(Sub() PageLoaderState(Loader, NewState, OldState))
         '隐藏 UI
@@ -325,17 +325,13 @@
 
     '逐个进入动画
     Public Sub TriggerEnterAnimation(ParamArray Elements As FrameworkElement())
-        '去除 Nothing 项
-        Dim RealElements As New List(Of FrameworkElement)
-        For Each Element In Elements
-            If Element IsNot Nothing Then RealElements.Add(Element)
-        Next
-
+        Dim RealElements = Elements.Where(Function(e) e IsNot Nothing)
         For Each Element In RealElements
             Element.Visibility = Visibility.Visible '页面均处于默认的隐藏状态
         Next
         Dim AniList As New List(Of AniData)
         Dim Delay As Integer = 0
+        '基础动画
         For Each Element In RealElements
             For Each Control As FrameworkElement In GetAllAnimControls(Element, True)
                 '还原被隐藏的卡片的消失动画
@@ -351,18 +347,20 @@
                 Delay += 40
             Next
         Next
+        '滚动条动画
+        Dim Scroll As MyScrollBar = GetFirstScrollViewer(RealElements)
+        If Scroll IsNot Nothing Then
+            If TypeOf Scroll.RenderTransform IsNot TranslateTransform Then Scroll.RenderTransform = New TranslateTransform(10, 0)
+            AniList.Add(AaTranslateX(Scroll, -CType(Scroll.RenderTransform, TranslateTransform).X, 350, 0, New AniEaseOutFluent))
+        End If
+        '结束
         AniList.Add(AaCode(Sub() PageOnEnterAnimationFinished(),, True))
         AniStart(AniList, "PageRight PageChange " & PageUuid)
     End Sub
 
     '逐个退出动画
     Public Sub TriggerExitAnimation(ParamArray Elements As FrameworkElement())
-        '去除 Nothing 项
-        Dim RealElements As New List(Of FrameworkElement)
-        For Each Element In Elements
-            If Element IsNot Nothing Then RealElements.Add(Element)
-        Next
-
+        Dim RealElements = Elements.Where(Function(e) e IsNot Nothing)
         Dim AniList As New List(Of AniData)
         Dim Delay As Integer = 0
         For Each Element In RealElements
@@ -373,6 +371,13 @@
                 Delay += 20
             Next
         Next
+        '滚动条动画
+        Dim Scroll As MyScrollBar = GetFirstScrollViewer(RealElements)
+        If Scroll IsNot Nothing Then
+            If TypeOf Scroll.RenderTransform IsNot TranslateTransform Then Scroll.RenderTransform = New TranslateTransform
+            AniList.Add(AaTranslateX(Scroll, 10 - CType(Scroll.RenderTransform, TranslateTransform).X, 90, 0, New AniEaseInFluent))
+        End If
+        '结束
         AniList.Add(AaCode(Sub()
                                For Each Element In RealElements
                                    Element.Visibility = Visibility.Collapsed
@@ -401,6 +406,27 @@
             Next
         End If
     End Sub
+
+    '查找列表中的第一个滚动条
+    Private Function GetFirstScrollViewer(Elements As IEnumerable(Of FrameworkElement)) As MyScrollBar
+        Dim Viewer As MyScrollViewer = Nothing
+        For Each Element In Elements
+            If TypeOf Element Is MyScrollViewer Then
+                Viewer = Element
+                GoTo FindViewer
+            End If
+            For Each Control In LogicalTreeHelper.GetChildren(Element)
+                If TypeOf Control Is MyScrollViewer Then
+                    Viewer = Control
+                    GoTo FindViewer
+                End If
+            Next
+        Next
+        Return Nothing
+FindViewer:
+        If Viewer.ComputedVerticalScrollBarVisibility <> Visibility.Visible Then Return Nothing
+        Return Viewer.ScrollBar
+    End Function
 
 #End Region
 

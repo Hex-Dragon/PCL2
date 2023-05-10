@@ -396,7 +396,8 @@ PreFin:
 
     'LittleSkin
     Private Sub BtnServerAuthLittle_Click(sender As Object, e As EventArgs) Handles BtnServerAuthLittle.Click
-        If MyMsgBox("即将把第三方登录设置覆盖为自动使用 LittleSkin 登录，是否继续？", "覆盖确认", "确定", "取消") = 2 Then Exit Sub
+        If TextServerAuthServer.Text <> "" AndAlso TextServerAuthServer.Text <> "https://littleskin.cn/api/yggdrasil" AndAlso
+            MyMsgBox("即将把第三方登录设置覆盖为自动使用 LittleSkin 登录，是否继续？", "覆盖确认", "确定", "取消") = 2 Then Exit Sub
         TextServerAuthServer.Text = "https://littleskin.cn/api/yggdrasil"
         TextServerAuthRegister.Text = "https://littleskin.cn/auth/register"
         TextServerAuthName.Text = "LittleSkin 登录"

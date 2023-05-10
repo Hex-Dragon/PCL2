@@ -179,45 +179,48 @@ Public Class Application
 
     '切换窗口
 
-
     '控件模板事件
     Private Sub MyIconButton_Click(sender As Object, e As EventArgs)
-        If Setup.Get("LoginType") = McLoginType.Legacy Then
-            '离线
-            Dim Names As New List(Of String)
-            Names.AddRange(Setup.Get("LoginLegacyName").ToString.Split("¨"))
-            Names.Remove(sender.Tag)
-            Setup.Set("LoginLegacyName", Join(Names, "¨"))
-            FrmLoginLegacy.ComboName.ItemsSource = Names
-            FrmLoginLegacy.ComboName.Text = If(Names.Count > 0, Names(0), "")
-        Else
-            '非离线
-            Dim Token As String = GetStringFromEnum(Setup.Get("LoginType"))
-            Dim Dict As New Dictionary(Of String, String)
-            Dim Names As New List(Of String)
-            Dim Passs As New List(Of String)
-            If Not Setup.Get("Login" & Token & "Email") = "" Then Names.AddRange(Setup.Get("Login" & Token & "Email").ToString.Split("¨"))
-            If Not Setup.Get("Login" & Token & "Pass") = "" Then Passs.AddRange(Setup.Get("Login" & Token & "Pass").ToString.Split("¨"))
-            For i = 0 To Names.Count - 1
-                Dict.Add(Names(i), Passs(i))
-            Next
-            Dict.Remove(sender.Tag)
-            Setup.Set("Login" & Token & "Email", Join(Dict.Keys.ToArray, "¨"))
-            Setup.Set("Login" & Token & "Pass", Join(Dict.Values.ToArray, "¨"))
-            Select Case Token
-                Case "Nide"
-                    FrmLoginNide.ComboName.ItemsSource = Dict.Keys
-                    FrmLoginNide.ComboName.Text = If(Dict.Keys.Count > 0, Dict.Keys(0), "")
-                    FrmLoginNide.TextPass.Password = If(Dict.Values.Count > 0, Dict.Values(0), "")
-                Case "Auth"
-                    FrmLoginAuth.ComboName.ItemsSource = Dict.Keys
-                    FrmLoginAuth.ComboName.Text = If(Dict.Keys.Count > 0, Dict.Keys(0), "")
-                    FrmLoginAuth.TextPass.Password = If(Dict.Values.Count > 0, Dict.Values(0), "")
-                Case Else
-                    DebugAssert(True)
-                    Exit Sub
-            End Select
-        End If
+        Select Case Setup.Get("LoginType")
+            Case McLoginType.Ms
+                '微软
+                Dim MsJson As JObject = GetJson(Setup.Get("LoginMsJson"))
+                MsJson.Remove(sender.Tag)
+                Setup.Set("LoginMsJson", MsJson.ToString(Newtonsoft.Json.Formatting.None))
+                FrmLoginMs.ComboAccounts.Items.Remove(sender.Parent)
+            Case McLoginType.Legacy
+                '离线
+                Dim Names As New List(Of String)
+                Names.AddRange(Setup.Get("LoginLegacyName").ToString.Split("¨"))
+                Names.Remove(sender.Tag)
+                Setup.Set("LoginLegacyName", Join(Names, "¨"))
+                FrmLoginLegacy.ComboName.ItemsSource = Names
+                FrmLoginLegacy.ComboName.Text = If(Names.Count > 0, Names(0), "")
+            Case Else
+                '第三方
+                Dim Token As String = GetStringFromEnum(Setup.Get("LoginType"))
+                Dim Dict As New Dictionary(Of String, String)
+                Dim Names As New List(Of String)
+                Dim Passs As New List(Of String)
+                If Not Setup.Get("Login" & Token & "Email") = "" Then Names.AddRange(Setup.Get("Login" & Token & "Email").ToString.Split("¨"))
+                If Not Setup.Get("Login" & Token & "Pass") = "" Then Passs.AddRange(Setup.Get("Login" & Token & "Pass").ToString.Split("¨"))
+                For i = 0 To Names.Count - 1
+                    Dict.Add(Names(i), Passs(i))
+                Next
+                Dict.Remove(sender.Tag)
+                Setup.Set("Login" & Token & "Email", Join(Dict.Keys, "¨"))
+                Setup.Set("Login" & Token & "Pass", Join(Dict.Values, "¨"))
+                Select Case Token
+                    Case "Nide"
+                        FrmLoginNide.ComboName.ItemsSource = Dict.Keys
+                        FrmLoginNide.ComboName.Text = If(Dict.Keys.Count > 0, Dict.Keys(0), "")
+                        FrmLoginNide.TextPass.Password = If(Dict.Values.Count > 0, Dict.Values(0), "")
+                    Case "Auth"
+                        FrmLoginAuth.ComboName.ItemsSource = Dict.Keys
+                        FrmLoginAuth.ComboName.Text = If(Dict.Keys.Count > 0, Dict.Keys(0), "")
+                        FrmLoginAuth.TextPass.Password = If(Dict.Values.Count > 0, Dict.Values(0), "")
+                End Select
+        End Select
     End Sub
 
 End Class
