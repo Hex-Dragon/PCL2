@@ -10,7 +10,7 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
-        If LastVersion < 291 Then 'Release 2.6.0
+        If LastVersion < 292 Then 'Release 2.6.0
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在多个正版账号间切换"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "在缺少 Java 时会自动下载所需的 Java"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新制作正版登录页面"))
@@ -106,7 +106,7 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
-        If LastVersion < 290 Then 'Snapshot 2.6.0
+        If LastVersion < 291 Then 'Snapshot 2.6.0
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在多个正版账号间切换"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "Mod / 整合包下载会单独列出筛选的版本"))
             FeatureCount += 10
