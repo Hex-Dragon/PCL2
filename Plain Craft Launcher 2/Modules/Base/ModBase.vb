@@ -14,7 +14,7 @@ Public Module ModBase
     Public Const VersionBaseName As String = "2.6.0" '不含分支前缀的显示用版本名
     Public Const VersionStandardCode As String = "2.6.0." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 292 'Release
+    Public Const VersionCode As Integer = 293 'Release
 #Else
     Public Const VersionCode As Integer = 291 'Snapshot
 #End If
