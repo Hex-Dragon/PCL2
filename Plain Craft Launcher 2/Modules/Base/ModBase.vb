@@ -11,8 +11,8 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.6.0" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.6.0." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.6.1" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.6.1." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 293 'Release
 #Else
