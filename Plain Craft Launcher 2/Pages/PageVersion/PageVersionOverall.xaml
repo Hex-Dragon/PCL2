@@ -41,7 +41,8 @@
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="分类" Margin="0,0,25,0" />
                         <local:MyComboBox Grid.Column="1" Grid.Row="2" x:Name="ComboDisplayType">
                             <local:MyComboBoxItem Content="自动" IsSelected="True" />
-                            <local:MyComboBoxItem Content="从版本列表中隐藏" ToolTip="该版本默认将不会在版本列表中显示。&#xa;在版本列表页面按下 F11，即可查看所有隐藏的版本。" />
+                            <local:MyComboBoxItem Content="从版本列表中隐藏" 
+                                                  ToolTip="该版本默认将不会在版本列表中显示。&#xa;在版本列表页面按下 F11，即可查看所有隐藏的版本。" ToolTipService.HorizontalOffset="-350" />
                             <local:MyComboBoxItem Content="可安装 Mod 的版本" />
                             <local:MyComboBoxItem Content="常规版本" />
                             <local:MyComboBoxItem Content="不常用版本" />

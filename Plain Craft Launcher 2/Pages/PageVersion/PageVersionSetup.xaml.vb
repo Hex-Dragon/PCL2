@@ -268,10 +268,10 @@
     ''' <summary>
     ''' 获取当前设置的 RAM 值。单位为 GB。
     ''' </summary>
-    Public Shared Function GetRam(Version As McVersion) As Double
+    Public Shared Function GetRam(Version As McVersion, Optional Is32BitJava As Boolean? = Nothing) As Double
         '使用全局设置
         If Setup.Get("VersionRamType", Version:=Version) = 2 Then
-            Return PageSetupLaunch.GetRam(Version, True)
+            Return PageSetupLaunch.GetRam(Version, True, Is32BitJava)
         End If
         '使用当前版本的设置
         Dim RamGive As Double
@@ -349,7 +349,7 @@ PreFin:
             End If
         End If
         '若使用 32 位 Java，则限制为 1G
-        If Not JavaIs64Bit(PageVersionLeft.Version) Then RamGive = Math.Min(1, RamGive)
+        If If(Is32BitJava, Not JavaIs64Bit(PageVersionLeft.Version)) Then RamGive = Math.Min(1, RamGive)
         Return RamGive
     End Function
 
@@ -420,8 +420,7 @@ PreFin:
         Try
             For Each Java In Sort(JavaList.Clone(), Function(l, r) l.VersionCode < r.VersionCode)
                 Dim ListItem = New MyComboBoxItem With {.Content = Java.ToString, .ToolTip = Java.PathFolder, .Tag = Java}
-                ToolTipService.SetPlacement(ListItem, Primitives.PlacementMode.Right)
-                ToolTipService.SetHorizontalOffset(ListItem, 5)
+                ToolTipService.SetHorizontalOffset(ListItem, 0)
                 ComboArgumentJava.Items.Add(ListItem)
                 '判断人为选中
                 If SelectedBySetup = "" OrElse SelectedBySetup = "使用全局设置" Then Continue For

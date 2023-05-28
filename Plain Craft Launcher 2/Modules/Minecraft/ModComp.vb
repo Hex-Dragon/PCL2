@@ -418,17 +418,46 @@
             End If
             '实例化 UI
             Dim NewItem As New MyCompItem With {.Tag = Me}
-            '标题
-            Dim FinalName As String = TranslatedName.Split(" | ").First.Split(" - ").First.Split("(").First.Split("[").First
-            Dim ExNameList As List(Of String) = TranslatedName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).
-                Select(Function(s) s.Trim(" /".ToCharArray)).Where(Function(w) Not String.IsNullOrEmpty(w)).ToList
-            ExNameList.RemoveAt(0)
-            If TranslatedName = RawName AndAlso '没有中文翻译
-               Not ExNameList.Any(Function(s) s.Contains("orge") OrElse s.Contains("abric") OrElse s.Contains("uilt")) AndAlso '不是标注 XX 版
-               Not (ExNameList.Count = 1 AndAlso ExNameList.First.ToUpper <> ExNameList.First) Then '不是缩写
-                FinalName = RawName '使用原名
-                ExNameList.Clear()
+            '整理 FinalName 与 ExNameList
+            '检查下列代码时可以参考 #1567 的测试例
+            Dim FinalName As String
+            Dim ExNameList As List(Of String)
+            If TranslatedName = RawName Then
+                '没有中文翻译
+                FinalName = TranslatedName.Split(" | ").First.Split(" - ").First.Split("(").First.Split("[").First
+                ExNameList = TranslatedName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).
+                    Select(Function(s) s.Trim(" /".ToCharArray)).Where(Function(w) Not String.IsNullOrEmpty(w)).ToList
+                ExNameList.RemoveAt(0)
+                If Not ExNameList.Any(Function(s) s.ToLower.Contains("forge") OrElse s.ToLower.Contains("fabric") OrElse s.ToLower.Contains("quilt")) AndAlso '不是标注 XX 版
+                   Not (ExNameList.Count = 1 AndAlso ExNameList.First.ToUpper = ExNameList.First) Then '不是缩写
+                    FinalName = RawName '使用原名
+                    ExNameList.Clear()
+                End If
+            Else
+                '有中文翻译
+                '尝试将文本分为三段：FinalName (EnglishName) - Suffix
+                '检查时注意 Carpet：它没有中文译名，但有 Suffix
+                FinalName = TranslatedName.Split(" (").First.Split(" - ").First
+                Dim Suffix As String = ""
+                If TranslatedName.Split(")").Last.Contains(" - ") Then Suffix = TranslatedName.Split(")").Last.Split(" - ").Last
+                Dim EnglishName As String = TranslatedName
+                If Suffix <> "" Then EnglishName = EnglishName.Replace(" - " & Suffix, "")
+                EnglishName = EnglishName.Replace(FinalName, "").Trim("("c, ")"c, " "c)
+                '中段的额外信息截取
+                ExNameList = EnglishName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).
+                        Select(Function(s) s.Trim(" /".ToCharArray)).Where(Function(w) Not String.IsNullOrEmpty(w)).ToList
+                If ExNameList.Count > 1 AndAlso
+                   Not ExNameList.Any(Function(s) s.ToLower.Contains("forge") OrElse s.ToLower.Contains("fabric") OrElse s.ToLower.Contains("quilt")) AndAlso '不是标注 XX 版
+                   Not (ExNameList.Count = 2 AndAlso ExNameList.Last.ToUpper = ExNameList.Last) Then '不是缩写
+                    ExNameList = New List(Of String) From {EnglishName} '使用原名
+                End If
+                '添加后缀
+                If Suffix <> "" Then
+                    ExNameList.Add(Suffix)
+                    ExNameList = ExNameList.Distinct().ToList()
+                End If
             End If
+            '显示 FinalName 与 ExNameList
             NewItem.LabTitle.Text = FinalName
             If ExNameList.Count = 0 Then
 NoExName:
@@ -440,7 +469,7 @@ NoExName:
                     If Ex.Length < 19 AndAlso Ex.ToLower.Contains("fabric") AndAlso Ex.ToLower.Contains("forge") Then Continue For
                     '将 “Forge” 等提示改为 “Forge 版”
                     If (Ex.ToLower.Contains("forge") OrElse Ex.ToLower.Contains("fabric") OrElse Ex.ToLower.Contains("quilt")) AndAlso
-                       Not Ex.Contains("版") AndAlso Ex.Length < 19 Then Ex = Ex.Replace("Edition", "").Trim & " 版"
+                       Not Ex.Contains("版") AndAlso Ex.Length < 19 Then Ex = Ex.Replace("Edition", "").Trim.Capitalize & " 版"
                     ExName &= "  |  " & Ex.Trim
                 Next
                 If ExName = "" Then GoTo NoExName
@@ -789,7 +818,7 @@ NoExName:
             '去除常见连接词
             Dim RealFilter As String = ""
             For Each Word In SearchResult.Split(" ")
-                If {"the", "of", "a", "mod"}.Contains(Word.ToLower) OrElse Val(Word) > 0 Then Continue For
+                If {"the", "of", "a", "mod", "and"}.Contains(Word.ToLower) OrElse Val(Word) > 0 Then Continue For
                 If SearchResult.Split(" ").Count > 3 AndAlso {"ftb"}.Contains(Word.ToLower) Then Continue For
                 RealFilter += Word.TrimStart("{[(").TrimEnd("}])") & " "
             Next
@@ -805,7 +834,8 @@ NoExName:
         '最终处理关键字：分割、去重
         Dim RightKeywords As New List(Of String)
         For Each Keyword In AllPossibleKeywords.Split(" ")
-            If Keyword.Trim = "" Then Continue For
+            Keyword = Keyword.Trim("["c, "]"c)
+            If Keyword = "" Then Continue For
             If {"forge", "fabric", "for", "mod",
                 "forge/fabric", "fabric/forge", "fabric/quilt", "quilt/fabric"}.Contains(Keyword) Then '#208
                 Log("[Comp] 已跳过搜索关键词：" & Keyword)

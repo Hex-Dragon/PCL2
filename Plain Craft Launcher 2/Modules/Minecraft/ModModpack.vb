@@ -638,6 +638,8 @@ Retry:
                     Request.MinecraftName = Component("version")
                 Case "net.minecraftforge"
                     Request.ForgeVersion = Component("version")
+                Case "net.fabricmc.fabric-loader"
+                    Request.FabricVersion = Component("version")
             End Select
         Next
         '构造加载器

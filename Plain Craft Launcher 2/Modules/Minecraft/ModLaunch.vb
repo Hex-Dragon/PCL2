@@ -1091,7 +1091,7 @@ SystemBrowser:
 
 #Region "Java 处理"
 
-    Private McLaunchJavaSelected As JavaEntry = Nothing
+    Public McLaunchJavaSelected As JavaEntry = Nothing
     Private Sub McLaunchJava(Task As LoaderTask(Of Integer, Integer))
         Dim MinVer As New Version(0, 0, 0, 0), MaxVer As New Version(999, 999, 999, 999)
 
@@ -1322,7 +1322,7 @@ SystemBrowser:
         If Not ArgumentJvm.Contains("-Dlog4j2.formatMsgNoLookups=true") Then ArgumentJvm += " -Dlog4j2.formatMsgNoLookups=true"
         DataList.Insert(0, ArgumentJvm) '可变 JVM 参数
         DataList.Add("-Xmn256m")
-        DataList.Add("-Xmx" & Math.Floor(PageVersionSetup.GetRam(McVersionCurrent) * 1024) & "m")
+        DataList.Add("-Xmx" & Math.Floor(PageVersionSetup.GetRam(McVersionCurrent, Not McLaunchJavaSelected.Is64Bit) * 1024) & "m")
         DataList.Add("""-Djava.library.path=" & Version.Path & Version.Name & "-natives""")
         DataList.Add("-cp ${classpath}") '把支持库添加进启动参数表
 
@@ -1742,19 +1742,28 @@ NextVersion:
         Dim SetupFileAddress As String = McVersionCurrent.PathIndie & "options.txt"
         Try
             '语言
-            If Setup.Get("ToolHelpChinese") Then
-                If Not File.Exists(SetupFileAddress) OrElse Not Directory.Exists(McVersionCurrent.PathIndie & "saves") Then
-                    McLaunchLog("已根据设置自动修改语言为中文")
-                    WriteIni(SetupFileAddress, "lang", "-") '触发缓存更改，避免删除后重新下载残留缓存
-                    If McVersionCurrent.Version.McCodeMain >= 12 Then
-                        WriteIni(SetupFileAddress, "lang", "zh_cn")
-                    Else
-                        WriteIni(SetupFileAddress, "lang", "zh_CN")
-                    End If
-                    WriteIni(SetupFileAddress, "forceUnicodeFont", "true")
-                Else
-                    McLaunchLog("并非首次启动，不修改语言")
-                End If
+            '1.0-     ：没有语言选项
+            '1.1 ~ 5  ：zh_CN 时正常，zh_cn 时崩溃（最后两位字母必须大写，否则将会 NPE 崩溃）
+            '1.6 ~ 10 ：zh_CN 时正常，zh_cn 时自动切换为英文
+            '1.11 ~ 12：zh_cn 时正常，zh_CN 时虽然显示了中文但语言设置会错误地显示选择英文
+            '1.13+    ：zh_cn 时正常，zh_CN 时自动切换为英文
+            Dim CurrentLang As String = ReadIni(SetupFileAddress, "lang", "none")
+            Dim RequiredLang As String = If(CurrentLang = "none", If(Setup.Get("ToolHelpChinese"), "zh_cn", "en_us"), CurrentLang.ToLower)
+            If McVersionCurrent.Version.McCodeMain < 12 Then '注意老版本（包含 MC 1.1）的 McCodeMain 可能为 -1
+                '将最后两位改为大写，前面的部分保留
+                RequiredLang = RequiredLang.Substring(0, RequiredLang.Length - 2) & RequiredLang.Substring(RequiredLang.Length - 2).ToUpper
+            End If
+            If CurrentLang = RequiredLang Then
+                McLaunchLog($"当前语言为 {CurrentLang}，无需修改")
+            Else
+                WriteIni(SetupFileAddress, "lang", "-") '触发缓存更改，避免删除后重新下载残留缓存
+                WriteIni(SetupFileAddress, "lang", RequiredLang)
+                McLaunchLog($"已将语言从 {CurrentLang} 修改为 {RequiredLang}")
+            End If
+            '如果是初次设置，一并修改 forceUnicodeFont
+            If Setup.Get("ToolHelpChinese") AndAlso (CurrentLang = "none" OrElse Not Directory.Exists(McVersionCurrent.PathIndie & "saves")) Then
+                WriteIni(SetupFileAddress, "forceUnicodeFont", "true")
+                McLaunchLog("已开启 forceUnicodeFont")
             End If
             '窗口
             Select Case Setup.Get("LaunchArgumentWindowType")
@@ -2059,7 +2068,7 @@ IgnoreCustomSkin:
         McLaunchLog("游戏版本：" & McVersionCurrent.Version.ToString & "（" & McVersionCurrent.Version.McCodeMain & "." & McVersionCurrent.Version.McCodeSub & "）")
         McLaunchLog("资源版本：" & McAssetsGetIndexName(McVersionCurrent))
         McLaunchLog("版本继承：" & If(McVersionCurrent.InheritVersion = "", "无", McVersionCurrent.InheritVersion))
-        McLaunchLog("分配的内存：" & PageVersionSetup.GetRam(McVersionCurrent) & " GB（" & Math.Round(PageVersionSetup.GetRam(McVersionCurrent) * 1024) & " MB）")
+        McLaunchLog("分配的内存：" & PageVersionSetup.GetRam(McVersionCurrent, Not McLaunchJavaSelected.Is64Bit) & " GB（" & Math.Round(PageVersionSetup.GetRam(McVersionCurrent, Not McLaunchJavaSelected.Is64Bit) * 1024) & " MB）")
         McLaunchLog("MC 文件夹：" & PathMcFolder)
         McLaunchLog("版本文件夹：" & McVersionCurrent.Path)
         McLaunchLog("版本隔离：" & (McVersionCurrent.PathIndie = McVersionCurrent.Path))

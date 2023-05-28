@@ -95,7 +95,6 @@
                 ToolTipService.SetPlacement(ItemCreate, Primitives.PlacementMode.Right)
                 ToolTipService.SetHorizontalOffset(ItemCreate, -50)
                 ToolTipService.SetVerticalOffset(ItemCreate, 2.5)
-                ToolTipService.SetShowDuration(ItemCreate, 2333333)
                 FrmSelectLeft.PanList.Children.Add(ItemCreate)
                 AddHandler ItemCreate.Click, AddressOf FrmSelectLeft.Create_Click
             End If
@@ -107,7 +106,6 @@
             ToolTipService.SetPlacement(ItemAdd, Primitives.PlacementMode.Right)
             ToolTipService.SetHorizontalOffset(ItemAdd, -50)
             ToolTipService.SetVerticalOffset(ItemAdd, 2.5)
-            ToolTipService.SetShowDuration(ItemAdd, 2333333)
             FrmSelectLeft.PanList.Children.Add(ItemAdd)
             AddHandler ItemAdd.Click, AddressOf FrmSelectLeft.Add_Click
 
@@ -118,7 +116,6 @@
             ToolTipService.SetPlacement(ItemInstall, Primitives.PlacementMode.Right)
             ToolTipService.SetHorizontalOffset(ItemInstall, -50)
             ToolTipService.SetVerticalOffset(ItemInstall, 2.5)
-            ToolTipService.SetShowDuration(ItemInstall, 2333333)
             FrmSelectLeft.PanList.Children.Add(ItemInstall)
             AddHandler ItemInstall.Click, AddressOf ModpackInstall
 
@@ -152,7 +149,7 @@
         Dim NewFolder As String = ""
         '检查是否有下载任务
         If HasDownloadingTask() Then
-            Hint("请不要在下载过程中添加游戏文件夹！", HintType.Critical)
+            Hint("在下载任务进行时，无法添加游戏文件夹！", HintType.Critical)
             Exit Sub
         End If
         Try
@@ -255,7 +252,7 @@
     Public Sub Create_Click()
         '检查是否有下载任务
         If HasDownloadingTask() Then
-            Hint("请不要在下载过程中创建游戏文件夹！", HintType.Critical)
+            Hint("在下载任务进行时，无法创建游戏文件夹！", HintType.Critical)
             Exit Sub
         End If
         If Not Directory.Exists(Path & ".minecraft\") Then
@@ -393,7 +390,7 @@
         If Not e.RaiseByMouse OrElse Not sender.Checked Then Exit Sub
         '检查是否有下载任务
         If HasDownloadingTask(True) Then
-            Hint("请不要在下载过程中切换游戏文件夹！", HintType.Critical)
+            Hint("在下载任务进行时，无法切换游戏文件夹！", HintType.Critical)
             e.Handled = True
             Exit Sub
         End If

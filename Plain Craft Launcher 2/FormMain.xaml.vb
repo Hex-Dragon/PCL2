@@ -109,6 +109,12 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 294 Then 'Snapshot 2.6.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "新增内存优化功能，可以将所有程序的物理内存占用降低约 1/3"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择 OptiFine 与 Fabric 后会自动选择 OptiFabric"))
+            FeatureCount += 9
+            BugCount += 16
+        End If
         If LastVersion < 291 Then 'Snapshot 2.6.0
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在多个正版账号间切换"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "Mod / 整合包下载会单独列出筛选的版本"))
@@ -293,7 +299,6 @@ Public Class FormMain
         FrmMain = Me
         FrmLaunchLeft = New PageLaunchLeft
         FrmLaunchRight = New PageLaunchRight
-        ToolTipService.ShowDurationProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(2333333))
         '版本号改变
         Dim LastVersion As Integer = Setup.Get("SystemLastVersionReg")
         If LastVersion < VersionCode Then

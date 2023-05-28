@@ -55,7 +55,7 @@
             TargetLoader = PageDownloadMod.Loader.Input.ModLoader
         End If
         Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
-            $"目标PCL2版本：{TargetVersion} {If(TargetLoader <> CompModLoaderType.Any, TargetLoader, "")}", "")
+            $"目标版本：{TargetVersion} {If(TargetLoader <> CompModLoaderType.Any, TargetLoader, "")}", "")
         '初始化字典
         Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New VersionSorterWithSelect(TargetCardName))
         Dict.Add("未知版本", New List(Of CompFile))
@@ -275,19 +275,23 @@
                     End If
                 End If
                 '获取基本信息
-                Dim ChineseName As String = If(Project.TranslatedName = Project.RawName, "",
-                    Project.TranslatedName.Split(" (").First.Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "："))
                 Dim FileName As String
-                Select Case Setup.Get("ToolDownloadTranslate")
-                    Case 0
-                        FileName = If(ChineseName = "", "", "[" & ChineseName & "] ") & File.FileName
-                    Case 1
-                        FileName = If(ChineseName = "", "", ChineseName & "-") & File.FileName
-                    Case 2
-                        FileName = File.FileName & If(ChineseName = "", "", "-" & ChineseName)
-                    Case Else
-                        FileName = File.FileName
-                End Select
+                If Project.TranslatedName = Project.RawName Then
+                    FileName = File.FileName
+                Else
+                    Dim ChineseName As String = Project.TranslatedName.Split(" (").First.Split(" - ").First.
+                        Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")
+                    Select Case Setup.Get("ToolDownloadTranslate")
+                        Case 0
+                            FileName = $"[{ChineseName}] {File.FileName}"
+                        Case 1
+                            FileName = $"{ChineseName}-{File.FileName}"
+                        Case 2
+                            FileName = $"{File.FileName}-{ChineseName}"
+                        Case Else
+                            FileName = File.FileName
+                    End Select
+                End If
                 RunInUi(
                 Sub()
                     '弹窗要求选择保存位置

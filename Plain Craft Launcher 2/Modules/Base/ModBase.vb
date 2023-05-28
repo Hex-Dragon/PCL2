@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.6.1" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.6.1." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.6.2" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.6.2." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 293 'Release
 #Else
-    Public Const VersionCode As Integer = 291 'Snapshot
+    Public Const VersionCode As Integer = 294 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1210,11 +1210,11 @@ Re:
                 If MinSize >= 0 AndAlso MinSize > FileSize Then Return "文件大小应大于 " & MinSize & " B，实际为 " & FileSize & " B"
                 If Not String.IsNullOrEmpty(Hash) Then
                     If Hash.Length < 35 Then 'MD5
-                        If Hash <> GetAuthMD5(LocalPath) Then Return "文件 MD5 应为 " & Hash & "，实际为 " & GetAuthMD5(LocalPath)
+                        If Hash.ToLowerInvariant <> GetAuthMD5(LocalPath) Then Return "文件 MD5 应为 " & Hash & "，实际为 " & GetAuthMD5(LocalPath)
                     ElseIf Hash.Length = 64 Then 'SHA256
-                        If Hash <> GetAuthSHA256(LocalPath) Then Return "文件 SHA256 应为 " & Hash & "，实际为 " & GetAuthSHA256(LocalPath)
+                        If Hash.ToLowerInvariant <> GetAuthSHA256(LocalPath) Then Return "文件 SHA256 应为 " & Hash & "，实际为 " & GetAuthSHA256(LocalPath)
                     Else 'SHA1 (40)
-                        If Hash <> GetAuthSHA1(LocalPath) Then Return "文件 SHA1 应为 " & Hash & "，实际为 " & GetAuthSHA1(LocalPath)
+                        If Hash.ToLowerInvariant <> GetAuthSHA1(LocalPath) Then Return "文件 SHA1 应为 " & Hash & "，实际为 " & GetAuthSHA1(LocalPath)
                     End If
                 End If
                 If IsJson Then
@@ -1452,21 +1452,23 @@ Re:
     ''' </summary>
     ''' <param name="FileSize">以字节为单位的大小表示。</param>
     Public Function GetString(FileSize As Long) As String
+        Dim IsNegative = FileSize < 0
+        If IsNegative Then FileSize *= -1
         If FileSize < 1000 Then
             'B 级
-            Return FileSize & " B"
+            Return If(IsNegative, "-", "") & FileSize & " B"
         ElseIf FileSize < 1024 * 1000 Then
             'K 级
             Dim RoundResult As String = Math.Round(FileSize / 1024)
-            Return Math.Round(FileSize / 1024, CInt(MathRange(3 - RoundResult.Length, 0, 2))) & " K"
+            Return If(IsNegative, "-", "") & Math.Round(FileSize / 1024, CInt(MathRange(3 - RoundResult.Length, 0, 2))) & " K"
         ElseIf FileSize < 1024 * 1024 * 1000 Then
             'M 级
             Dim RoundResult As String = Math.Round(FileSize / 1024 / 1024)
-            Return Math.Round(FileSize / 1024 / 1024, CInt(MathRange(3 - RoundResult.Length, 0, 2))) & " M"
+            Return If(IsNegative, "-", "") & Math.Round(FileSize / 1024 / 1024, CInt(MathRange(3 - RoundResult.Length, 0, 2))) & " M"
         Else
             'G 级
             Dim RoundResult As String = Math.Round(FileSize / 1024 / 1024 / 1024)
-            Return Math.Round(FileSize / 1024 / 1024 / 1024, CInt(MathRange(3 - RoundResult.Length, 0, 2))) & " G"
+            Return If(IsNegative, "-", "") & Math.Round(FileSize / 1024 / 1024 / 1024, CInt(MathRange(3 - RoundResult.Length, 0, 2))) & " G"
         End If
     End Function
 
@@ -1479,6 +1481,14 @@ Re:
         Catch ex As Exception
             Throw New Exception("格式化 json 对象失败：" & If(If(Data, "").Length > 10000, Data.Substring(0, 100) & "...", Data))
         End Try
+    End Function
+
+    ''' <summary>
+    ''' 将第一个字符转换为大写，其余字符转换为小写。
+    ''' </summary>
+    <Extension> Public Function Capitalize(word As String) As String
+        If String.IsNullOrEmpty(word) Then Return word
+        Return word.Substring(0, 1).ToUpperInvariant() & word.Substring(1).ToLowerInvariant()
     End Function
 
     ''' <summary>
@@ -1748,16 +1758,13 @@ Re:
         Return principal.IsInRole(WindowsBuiltInRole.Administrator)
     End Function
     ''' <summary>
-    ''' 以管理员权限重新运行当前程序。返回是否成功。
+    ''' 以管理员权限运行当前程序，并等待程序运行结束。
+    ''' 返回程序的返回代码，如果运行失败将抛出异常。
     ''' </summary>
-    Public Function RerunAsAdmin(Argument As String) As Boolean
-        Try
-            Process.Start(New ProcessStartInfo(PathWithName) With {.Verb = "runas", .Arguments = Argument})
-            Return True
-        Catch ex As Exception
-            Log(ex, "以管理员权限运行程序失败")
-            Return False
-        End Try
+    Public Function RunAsAdmin(Argument As String) As Integer
+        Dim NewProcess = Process.Start(New ProcessStartInfo(PathWithName) With {.Verb = "runas", .Arguments = Argument})
+        NewProcess.WaitForExit()
+        Return NewProcess.ExitCode
     End Function
 
     Private Uuid As Integer = 1

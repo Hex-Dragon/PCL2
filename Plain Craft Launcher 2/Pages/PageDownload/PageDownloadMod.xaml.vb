@@ -8,7 +8,7 @@
     Public Shared Page As Integer = 0
     Private Sub PageDownloadMod_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         PageLoaderInit(Load, PanLoad, PanContent, PanAlways, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
-        McVersionHighest = Math.Max(McVersionHighest, Integer.Parse(CType(TextSearchVersion.Items(1), MyComboBoxItem).Content.ToString.Split(".")(1)))
+        If McVersionHighest = -1 Then McVersionHighest = Math.Max(McVersionHighest, Integer.Parse(CType(TextSearchVersion.Items(1), MyComboBoxItem).Content.ToString.Split(".")(1)))
     End Sub
     Private Shared Function LoaderInput() As CompProjectRequest
         Dim Request As New CompProjectRequest(CompType.Mod, Storage, (Page + 1) * PageSize)

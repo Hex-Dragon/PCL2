@@ -61,6 +61,9 @@
                 Case "今日人品"
                     PageOtherTest.Jrrp()
 
+                Case "内存优化"
+                    RunInThread(Sub() PageOtherTest.MemoryOptimize(True))
+
                 Case "清理垃圾"
                     PageOtherTest.RubbishClear()
 

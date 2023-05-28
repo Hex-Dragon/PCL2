@@ -181,7 +181,7 @@ StartDownload:
                             "若继续，PCL 将尝试以管理员权限重新启动。" & vbCrLf &
                             "若拒绝，联机模块可能会被防火墙拦截，联机会有很大概率失败。", "需要管理员权限", "继续", "拒绝") = 1 Then
                     Log("[IOI] Windows 防火墙：尝试提升权限")
-                    If RerunAsAdmin("--link ioi") Then
+                    If RunAsAdmin("--link ioi") Then
                         FrmMain.EndProgram(False) '已重新运行
                     Else
                         Hint("获取管理员权限失败，请尝试右键 PCL，选择 " & vbLQ & "以管理员身份运行" & vbRQ & "，然后再进入联机页面！", HintType.Critical)
@@ -858,14 +858,12 @@ Done:
             ToolTipService.SetPlacement(BtnRefresh, Primitives.PlacementMode.Bottom)
             ToolTipService.SetHorizontalOffset(BtnRefresh, -10)
             ToolTipService.SetVerticalOffset(BtnRefresh, 5)
-            ToolTipService.SetShowDuration(BtnRefresh, 2333333)
             ToolTipService.SetInitialShowDelay(BtnRefresh, 200)
             Dim BtnClose As New MyIconButton With {.Logo = Logo.IconButtonCross, .LogoScale = 0.85, .ToolTip = "断开", .Tag = Me}
             AddHandler BtnClose.Click, AddressOf BtnListDisconnect_Click
             ToolTipService.SetPlacement(BtnClose, Primitives.PlacementMode.Bottom)
             ToolTipService.SetHorizontalOffset(BtnClose, -10)
             ToolTipService.SetVerticalOffset(BtnClose, 5)
-            ToolTipService.SetShowDuration(BtnClose, 2333333)
             ToolTipService.SetInitialShowDelay(BtnClose, 200)
             Item.Buttons = {BtnRefresh, BtnClose}
             '刷新并返回
@@ -952,14 +950,12 @@ Done:
                 ToolTipService.SetPlacement(BtnEdit, Primitives.PlacementMode.Bottom)
                 ToolTipService.SetHorizontalOffset(BtnEdit, -22)
                 ToolTipService.SetVerticalOffset(BtnEdit, 5)
-                ToolTipService.SetShowDuration(BtnEdit, 2333333)
                 ToolTipService.SetInitialShowDelay(BtnEdit, 200)
                 Dim BtnClose As New MyIconButton With {.Logo = Logo.IconButtonCross, .LogoScale = 0.85, .ToolTip = "关闭", .Tag = Me}
                 AddHandler BtnClose.Click, AddressOf BtnRoomClose_Click
                 ToolTipService.SetPlacement(BtnClose, Primitives.PlacementMode.Bottom)
                 ToolTipService.SetHorizontalOffset(BtnClose, -10)
                 ToolTipService.SetVerticalOffset(BtnClose, 5)
-                ToolTipService.SetShowDuration(BtnClose, 2333333)
                 ToolTipService.SetInitialShowDelay(BtnClose, 200)
                 Item.Buttons = {BtnEdit, BtnClose}
             Else

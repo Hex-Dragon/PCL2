@@ -18,11 +18,11 @@
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <local:MyRadioBox Text="随机" x:Name="RadioSkinType0" Height="22" Tag="LaunchSkinType/0" Grid.Column="0" ToolTipService.Placement="Bottom" ToolTip="在 Steve 和 Alex 中随机选择一个皮肤" />
+                        <local:MyRadioBox Text="随机" x:Name="RadioSkinType0" Height="22" Tag="LaunchSkinType/0" Grid.Column="0" ToolTip="随机选择一个默认皮肤" />
                         <local:MyRadioBox Text="Steve" x:Name="RadioSkinType1" Height="22" Tag="LaunchSkinType/1" Grid.Column="1" />
                         <local:MyRadioBox Text="Alex" x:Name="RadioSkinType2" Height="22" Tag="LaunchSkinType/2" Grid.Column="2" />
-                        <local:MyRadioBox Text="正版皮肤" x:Name="RadioSkinType3" Height="22" Tag="LaunchSkinType/3" Grid.Column="3" ToolTipService.Placement="Bottom" ToolTip="使用某个正版玩家的皮肤" />
-                        <local:MyRadioBox Text="自定义" x:Name="RadioSkinType4" Height="22" Tag="LaunchSkinType/4" Grid.Column="4" ToolTipService.Placement="Bottom" ToolTip="以资源包的形式加载自定义皮肤。&#xa;使用此方式更换的皮肤在多人游戏中仅自己可见，且会替换游戏中所有的角色。" />
+                        <local:MyRadioBox Text="正版皮肤" x:Name="RadioSkinType3" Height="22" Tag="LaunchSkinType/3" Grid.Column="3" ToolTip="使用某个正版玩家的皮肤" />
+                        <local:MyRadioBox Text="自定义" x:Name="RadioSkinType4" Height="22" Tag="LaunchSkinType/4" Grid.Column="4" ToolTip="以资源包的形式加载自定义皮肤。&#xa;使用此方式更换的皮肤在多人游戏中仅自己可见，且会替换游戏中所有的角色。" />
                     </Grid>
                     <Grid x:Name="PanSkinID" Margin="0,14,0,2" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
@@ -94,11 +94,11 @@
                         </local:MyTextBox>
                         <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="版本隔离" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboArgumentIndie" Grid.Row="4" Grid.ColumnSpan="2" Tag="LaunchArgumentIndie" Grid.Column="1">
-                            <local:MyComboBoxItem Content="关闭" ToolTip="所有版本均使用同一档案，存档、Mod、资源包等均为公用。&#xa;若存在不同版本的 Forge，可能会由于 Mod 与版本冲突导致未知问题。" />
-                            <local:MyComboBoxItem Content="仅隔离可安装 Mod 的版本" IsSelected="True" ToolTip="每个 LiteLoader、Forge、Fabric 版本均互相独立以避免 Mod 冲突，未安装 Mod API 的其他版本则不会被隔离。" />
-                            <local:MyComboBoxItem Content="仅隔离非正式版" ToolTip="将 Minecraft 快照、预发布版、远古版本、愚人节版本与其他版本进行隔离。" />
-                            <local:MyComboBoxItem Content="隔离非正式版与可安装 Mod 的版本" />
-                            <local:MyComboBoxItem Content="隔离所有版本" ToolTip="不同版本之间的存档、Mod、资源包等均不互通。" />
+                            <local:MyComboBoxItem Content="关闭" ToolTip="所有版本均使用同一档案，存档、Mod、资源包等均为公用。&#xa;若存在多个安装了 Mod 的版本，可能会导致 Mod 冲突。" />
+                            <local:MyComboBoxItem Content="隔离可安装 Mod 的版本" IsSelected="True" ToolTip="可安装 Mod 的版本（例如 Forge、Fabric）均互相独立以避免 Mod 冲突，其他版本（例如原版）则不会被隔离。" />
+                            <local:MyComboBoxItem Content="隔离非正式版" ToolTip="将 Minecraft 快照、预发布版、远古版本、愚人节版本与其他版本进行隔离" />
+                            <local:MyComboBoxItem Content="隔离可安装 Mod 的版本与非正式版" />
+                            <local:MyComboBoxItem Content="隔离所有版本" ToolTip="不同版本之间的存档、Mod、资源包等均不互通。&#xa;这会导致不同原版版本间的存档不能共用，所以一般不推荐。" />
                         </local:MyComboBox>
                         <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="启动器可见性" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboArgumentVisibie" Grid.Row="6" Grid.ColumnSpan="2" Tag="LaunchArgumentVisible" Grid.Column="1">
@@ -125,9 +125,9 @@
                             </Grid.ColumnDefinitions>
                             <local:MyComboBox x:Name="ComboArgumentWindowType" Tag="LaunchArgumentWindowType">
                                 <local:MyComboBoxItem Content="全屏" />
-                                <local:MyComboBoxItem Content="默认大小" IsSelected="True" ToolTip="以 854×480 的默认窗口大小启动 Minecraft" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5" />
+                                <local:MyComboBoxItem Content="默认大小" IsSelected="True" ToolTip="以 854×480 的默认窗口大小启动 Minecraft" />
                                 <local:MyComboBoxItem Content="与启动器窗口大小一致" />
-                                <local:MyComboBoxItem Content="自定义大小" ToolTip="请注意 1.12.2 及更老的部分 Forge 存在 Bug，会导致高度设定无效" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5" />
+                                <local:MyComboBoxItem Content="自定义大小" ToolTip="注意：Forge 1.12.2 等个别版本存在 Bug，会导致高度设定无效" />
                                 <local:MyComboBoxItem Content="最大化" />
                                 <local:MyComboBoxItem Content="保持游戏默认" />
                             </local:MyComboBox>
@@ -138,7 +138,7 @@
                             </local:MyTextBox>
                             <TextBlock x:Name="LabArgumentWindowMiddle" Visibility="Collapsed" Grid.Column="2" Text=" × " VerticalAlignment="Center" FontSize="18" />
                             <local:MyTextBox Padding="0,0,5,0" Visibility="Collapsed" Grid.Column="3" Width="60" HorizontalContentAlignment="Center" x:Name="TextArgumentWindowHeight" Tag="LaunchArgumentWindowHeight" Text="480"
-                                              ToolTip="请注意 Forge 1.12.2 存在 Bug，会导致高度设定无效，其他版本无此问题" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5">
+                                              ToolTip="注意：Forge 1.12.2 等个别版本存在 Bug，会导致高度设定无效" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5">
                                 <local:MyTextBox.ValidateRules>
                                     <local:ValidateInteger Min="1" Max="9999" />
                                 </local:MyTextBox.ValidateRules>
@@ -176,7 +176,8 @@
                             <RowDefinition Height="9" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <local:MyRadioBox Text="自动配置" Width="110" Checked="True" x:Name="RadioRamType0" Tag="LaunchRamType/0" Margin="0,0,20,0" ToolTip="根据安装的 Mod 量与电脑剩余内存动态调整为游戏分配的内存。" />
+                        <local:MyRadioBox Text="自动配置" Width="110" Checked="True" x:Name="RadioRamType0" Tag="LaunchRamType/0" Margin="0,0,20,0" 
+                                          ToolTip="根据安装的 Mod 量与电脑剩余内存，动态调整为游戏分配的内存" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="-10" ToolTipService.VerticalOffset="-3" />
                         <local:MyRadioBox Grid.Row="2" Text="自定义" x:Name="RadioRamType1" Tag="LaunchRamType/1" Margin="0,0,20,0" />
                         <local:MySlider Grid.Row="2" Grid.Column="1" IsEnabled="False" x:Name="SliderRamCustom" Tag="LaunchRamCustom" MaxValue="49" Value="13" />
                         <!--<local:MyTextBox Grid.Row="2" Grid.Column="3" Width="100" VerticalAlignment="Center" Margin="30,0,0,0" Text="2048 MB" />-->
@@ -241,7 +242,7 @@
                         <local:MyCheckBox Text="忽略 Java 兼容性警告" x:Name="CheckAdvanceJava" Tag="LaunchAdvanceJava" Margin="0,0,60,0"
                                         ToolTip="如果在设置中手动选择了与当前版本不兼容的 Java，则自动跳过兼容性警告弹窗，强制使用手动选择的 Java。" />
                         <local:MyCheckBox Text="关闭文件校验" x:Name="CheckAdvanceAssets" Tag="LaunchAdvanceAssets"
-                                        ToolTip="在启动时不校验 libraries 文件夹、第三方登录库与版本主 jar 文件，不更改 assets 文件夹。&#xa;如果你没有修改相关文件，请勿勾选此项。&#xa;更推荐在版本设置中关闭特定版本的校验，而不是在这里关闭所有版本的校验。" />
+                                        ToolTip="完全不更改 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。&#xa;如果你没有修改相关文件，请勿勾选此项。&#xa;强烈推荐在版本设置中关闭特定版本的校验，而不是在这里关闭所有版本的校验。" />
                     </StackPanel>
                 </Grid>
             </local:MyCard>

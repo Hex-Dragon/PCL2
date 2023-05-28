@@ -320,8 +320,12 @@
                     '获取窗口关联的进程
                     Dim ProcessId As Integer
                     GetWindowThreadProcessId(hwnd, ProcessId)
-                    Dim WindowProcess = Process.GetProcessById(ProcessId)
-                    If WindowProcess.StartTime < GameProcess.StartTime Then Exit Sub '需要是此后启动的进程
+                    Try
+                        If Process.GetProcessById(ProcessId).StartTime < GameProcess.StartTime Then Exit Sub '需要是此后启动的进程
+                    Catch ex As Exception
+                        Log(ex, "枚举 Minecraft 窗口进程失败")
+                        Exit Sub
+                    End Try
                     '返回
                     TryGetMinecraftWindow = New KeyValuePair(Of IntPtr, String)(hwnd, WindowText)
                 End Sub, 0)

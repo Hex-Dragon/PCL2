@@ -109,7 +109,7 @@
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="· 打开网页、启动游戏、打开文件：已在上方的卡片中介绍" />
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
-                    Text="· 今日人品、清理垃圾：触发百宝箱中的对应功能" />
+                    Text="· 今日人品、清理垃圾、内存优化：触发百宝箱中的对应功能" />
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="· 复制文本：将 EventData 中的内容复制到剪贴板" />
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
@@ -143,7 +143,7 @@
             <local:MyButton Margin="0,0,10,0" Width="140" Height="35" HorizontalAlignment="Left" Padding="13,0,13,0" ColorType="Red"
                         Text="复制召唤命令" EventType="复制文本" EventData="/execute as @a at @s run summon Creeper ~ ~2 ~" ToolTip="这条 Minecraft 命令会在每个玩家头顶召唤一只苦力怕！" />
             <local:MyButton Margin="0,0,10,0" Width="140" Height="35" HorizontalAlignment="Left" Padding="13,0,13,0"
-                        Text="今日人品" EventType="今日人品" />
+                        Text="内存优化" EventType="内存优化" />
             <local:MyButton Margin="0,0,10,0" Width="140" Height="35" HorizontalAlignment="Left" Padding="13,0,13,0"
                         Text="下载作者的头像" EventType="下载文件" EventData="https://www.mcbbs.net/uc_server/data/avatar/000/14/51/06_avatar_small.jpg?ts=1471402592" />
         </StackPanel>

@@ -1991,6 +1991,8 @@ Public Module ModDownloadLib
         End If
 
         Dim LoaderList As New List(Of LoaderBase)
+        '添加忽略标识
+        LoaderList.Add(New LoaderTask(Of Integer, Integer)("添加忽略标识", Sub() WriteFile(OutputFolder & ".pclignore", "该文件会使得该文件夹不在 PCL 的版本列表中显示")) With {.Show = False, .Block = False})
         'Fabric API
         If Request.FabricApi IsNot Nothing Then
             LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
@@ -2037,6 +2039,8 @@ Public Module ModDownloadLib
             LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
             LoaderList.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
         End If
+        '删除忽略标识
+        LoaderList.Add(New LoaderTask(Of Integer, Integer)("删除忽略标识", Sub() File.Delete(OutputFolder & ".pclignore")) With {.Show = False})
         '总加载器
         Return LoaderList
     End Function

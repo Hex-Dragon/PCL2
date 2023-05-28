@@ -27,18 +27,27 @@ Public Class Application
                 If e.Args(0) = "--update" Then
                     '自动更新
                     UpdateReplace(e.Args(1), e.Args(2).Trim(""""), e.Args(3).Trim(""""), e.Args(4))
-                    Environment.[Exit](Result.Cancel)
-                    Exit Sub
-                ElseIf e.Args(0).StartsWith("--link") Then
-                    '稍作等待后切换到联机页面
-                    Thread.Sleep(1000)
-                    'FormMain.IsLinkRestart = True
+                    Environment.Exit(Result.Cancel)
+                    'ElseIf e.Args(0).StartsWith("--link") Then
+                    '    '稍作等待后切换到联机页面
+                    '    Thread.Sleep(1000)
+                    '    FormMain.IsLinkRestart = True
+                ElseIf e.Args(0).StartsWith("--memory") Then
+                    '内存优化
+                    Dim Ram = My.Computer.Info.AvailablePhysicalMemory
+                    Try
+                        PageOtherTest.MemoryOptimizeInternal()
+                    Catch ex As Exception
+                        MsgBox(ex.Message, MsgBoxStyle.Critical, "内存优化失败")
+                        Environment.Exit(-1)
+                    End Try
+                    Ram = My.Computer.Info.AvailablePhysicalMemory - Ram
+                    Environment.Exit(Math.Max(0, Ram / 1024)) '返回清理的内存量（K）
 #If DEBUG Then
                 ElseIf e.Args(0) = "--make" Then
                     '制作更新包
                     UpdateMake(e.Args(1))
-                    Environment.[Exit](Result.Cancel)
-                    Exit Sub
+                    Environment.Exit(Result.Cancel)
 #End If
                 End If
             End If
@@ -49,12 +58,17 @@ Public Class Application
                 Directory.CreateDirectory(PathTemp)
                 If Not CheckPermission(PathTemp) Then Throw New Exception("PCL 没有对 " & PathTemp & " 的访问权限")
             Catch ex As Exception
-                MyMsgBox("手动设置的缓存文件夹不可用，PCL 将使用默认缓存文件夹。" & vbCrLf & "错误原因：" & GetExceptionDetail(ex), "缓存文件夹不可用")
-                Setup.Set("SystemSystemCache", "")
-                PathTemp = IO.Path.GetTempPath() & "PCL\"
+                If PathTemp = IO.Path.GetTempPath() & "PCL\" Then
+                    MyMsgBox("PCL 无法访问缓存文件夹，可能导致程序出错或无法正常使用！" & vbCrLf & "错误原因：" & GetExceptionDetail(ex), "缓存文件夹不可用")
+                Else
+                    MyMsgBox("手动设置的缓存文件夹不可用，PCL 将使用默认缓存文件夹。" & vbCrLf & "错误原因：" & GetExceptionDetail(ex), "缓存文件夹不可用")
+                    Setup.Set("SystemSystemCache", "")
+                    PathTemp = IO.Path.GetTempPath() & "PCL\"
+                End If
             End Try
             Directory.CreateDirectory(PathTemp & "Cache")
             Directory.CreateDirectory(PathTemp & "Download")
+            Directory.CreateDirectory(PathAppdata)
             '检测单例
 #If Not DEBUG Then
             Dim WindowHwnd As IntPtr = FindWindow(Nothing, "Plain Craft Launcher 2　")
@@ -64,9 +78,15 @@ Public Class Application
                 '播放提示音并退出
                 Beep()
                 Environment.[Exit](Result.Cancel)
-                Exit Sub
             End If
 #End If
+            '设置 ToolTipService 默认值
+            ToolTipService.InitialShowDelayProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(300))
+            ToolTipService.BetweenShowDelayProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(400))
+            ToolTipService.ShowDurationProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(9999999))
+            ToolTipService.PlacementProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(Primitives.PlacementMode.Bottom))
+            ToolTipService.HorizontalOffsetProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(8.0))
+            ToolTipService.VerticalOffsetProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(4.0))
             '设置初始窗口
             If Setup.Get("UiLauncherLogo") AndAlso Not FormMain.IsLinkRestart Then
                 FrmStart = New SplashScreen("Images\icon.ico")

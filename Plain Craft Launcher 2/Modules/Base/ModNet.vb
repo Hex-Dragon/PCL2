@@ -1203,7 +1203,7 @@ SourceBreak:
                 'End SyncLock
                 Info.Source.Ex = ex
                 '根据情况判断，是否在多线程下禁用下载源（连续错误过多，或不支持断点续传）
-                If ex.Message.Contains("该下载源不支持") OrElse ex.Message.Contains("(404)") OrElse ex.Message.Contains("(403)") OrElse ex.Message.Contains("(502)") OrElse ex.Message.Contains("无返回数据") OrElse ex.Message.Contains("空间不足") OrElse
+                If ex.Message.Contains("该下载源不支持") OrElse ex.Message.Contains("未能解析") OrElse ex.Message.Contains("(404)") OrElse ex.Message.Contains("(403)") OrElse ex.Message.Contains("(502)") OrElse ex.Message.Contains("无返回数据") OrElse ex.Message.Contains("空间不足") OrElse
                     (Info.Source.FailCount >= MathRange(NetTaskThreadLimit, 5, 40) AndAlso DownloadDone < 1) OrElse
                     Info.Source.FailCount > NetTaskThreadLimit Then
                     Dim IsThisFail As Boolean = False

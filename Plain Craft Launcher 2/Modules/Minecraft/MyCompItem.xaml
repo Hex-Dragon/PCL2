@@ -39,8 +39,9 @@
     </StackPanel>
     <TextBlock x:Name="LabInfo" Grid.Row="2" Grid.Column="4" VerticalAlignment="Bottom" Margin="1,0,3,0.5"
                TextTrimming="CharacterEllipsis" FontSize="12" Foreground="{StaticResource ColorBrushGray3}"
-               IsHitTestVisible="True" SnapsToDevicePixels="False" UseLayoutRounding="False" 
-               ToolTipService.InitialShowDelay="150" ToolTipService.Placement="Relative" ToolTipService.PlacementRectangle="-8,-6,500,10000">
+               IsHitTestVisible="True" SnapsToDevicePixels="False" UseLayoutRounding="False"
+               ToolTipService.InitialShowDelay="100" ToolTipService.BetweenShowDelay="100" 
+               ToolTipService.Placement="Relative" ToolTipService.PlacementRectangle="-16,-10,500,10000">
         <TextBlock.ToolTip>
             <ToolTip x:Name="ToolTipInfo" Style="{StaticResource ExtendTextToolTip}" />
         </TextBlock.ToolTip>

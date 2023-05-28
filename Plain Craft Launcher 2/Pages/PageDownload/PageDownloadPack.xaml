@@ -64,7 +64,8 @@
                             <local:MyComboBoxItem Tag="4471/" Content="科幻" />
                             <local:MyComboBoxItem Tag="4736/" Content="空岛" />
                             <local:MyComboBoxItem Tag="5128/" Content="原版改良" />
-                            <local:MyComboBoxItem Tag="4487/" Content="FTB" ToolTip="该整合包由 FTB 官方发布" />
+                            <local:MyComboBoxItem Tag="4487/" Content="FTB" 
+                                                  ToolTip="该整合包由 FTB 官方发布" ToolTipService.InitialShowDelay="150" ToolTipService.Placement="Right" ToolTipService.VerticalOffset="-1" ToolTipService.HorizontalOffset="-40" />
                             <local:MyComboBoxItem Tag="4480/" Content="基于地图" />
                             <local:MyComboBoxItem Tag="4481/lightweight" Content="轻量整合" />
                             <local:MyComboBoxItem Tag="4482/" Content="大型整合" />
@@ -79,7 +80,7 @@
                         <local:MyButton x:Name="BtnSearchRun" Text="搜索" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Highlight" />
                         <local:MyButton x:Name="BtnSearchReset" Text="重置条件" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" />
                         <local:MyButton x:Name="BtnSearchInstall" Text="安装已有整合包" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="2" 
-                                        ToolTip="在当前选择的 Minecraft 文件夹下安装整合包" />
+                                        ToolTip="在当前选择的 Minecraft 文件夹下安装整合包" ToolTipService.HorizontalOffset="-55" ToolTipService.VerticalOffset="5" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

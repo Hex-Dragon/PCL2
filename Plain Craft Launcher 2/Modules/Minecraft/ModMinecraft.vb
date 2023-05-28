@@ -680,7 +680,7 @@ Recheck:
                     Case Else '根据 API 进行筛选
                         Dim RealJson As String = If(JsonObject, JsonText).ToString
                         '愚人节与快照版本
-                        If If(JsonObject("type"), "").ToString = "fool" OrElse GetMcFoolName(Name) <> "" Then
+                        If If(JsonObject("type"), "").ToString = "fool" OrElse GetMcFoolName(Version.McName) <> "" Then
                             State = McVersionState.Fool
                         ElseIf Version.McName.ToLower.Contains("w") OrElse Name.ToLower.Contains("combat") OrElse Version.McName.ToLower.Contains("rc") OrElse Version.McName.ToLower.Contains("pre") OrElse Version.McName.Contains("experimental") OrElse If(JsonObject("type"), "").ToString = "snapshot" OrElse If(JsonObject("type"), "").ToString = "pending" Then
                             State = McVersionState.Snapshot
@@ -756,7 +756,7 @@ ExitDataLoad:
                         Case McVersionState.Original, McVersionState.Forge, McVersionState.Fabric, McVersionState.OptiFine, McVersionState.LiteLoader
                             Info = Version.ToString
                         Case McVersionState.Fool
-                            Info = GetMcFoolName(Name)
+                            Info = GetMcFoolName(Version.McName)
                         Case McVersionState.Error
                             '已有错误信息
                         Case Else
@@ -1112,6 +1112,10 @@ OnLoaded:
                 '循环读取版本
                 For Each Folder As String In ReadIni(Path & "PCL.ini", "CardValue" & (i + 1), ":").Split(":")
                     If Folder = "" Then Continue For
+                    If File.Exists(Path & "versions\" & Folder & "\.pclignore") Then
+                        Log("[Minecraft] 跳过要求忽略的项目：" & Path & "versions\" & Folder)
+                        Continue For
+                    End If
                     Try
 
                         '读取单个版本
@@ -1185,6 +1189,10 @@ OnLoaded:
         For Each Folder As DirectoryInfo In Dirs
             If (Folder.Name = "cache" OrElse Folder.Name = "BLClient" OrElse Folder.Name = "PCL") AndAlso Not File.Exists(Folder.FullName & "\" & Folder.Name & ".json") Then
                 Log("[Minecraft] 跳过可能不是版本文件夹的项目：" & Folder.FullName)
+                Continue For
+            End If
+            If File.Exists(Folder.FullName & "\.pclignore") Then
+                Log("[Minecraft] 跳过要求忽略的项目：" & Folder.FullName)
                 Continue For
             End If
             Dim Version As New McVersion(Folder.FullName & "\")

@@ -363,6 +363,7 @@ UserPass:
             Catch ex As ThreadInterruptedException
                 Throw
             Catch ex As Exception
+                If ex.InnerException IsNot Nothing AndAlso TypeOf (ex.InnerException) Is ThreadInterruptedException Then Throw ex.InnerException
                 Log(ex, "找到的 Java 已无法使用，尝试进行搜索")
                 AllowedJavaList = New List(Of JavaEntry)
                 JavaSearchLoader.Start(IsForceRestart:=True)

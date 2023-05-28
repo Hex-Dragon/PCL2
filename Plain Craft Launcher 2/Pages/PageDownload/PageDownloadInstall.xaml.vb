@@ -39,6 +39,7 @@
         IsInSelectPage = True
 
         AutoSelectedFabricApi = False
+        AutoSelectedOptiFabric = False
         IsSelectNameEdited = False
         PanSelect.Visibility = Visibility.Visible
         PanSelect.IsHitTestVisible = True
@@ -1013,6 +1014,7 @@
         End Try
     End Function
 
+    Private AutoSelectedOptiFabric As Boolean = False
     ''' <summary>
     ''' 获取 OptiFabric 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
@@ -1048,17 +1050,21 @@
             Next
             If Versions.Count = 0 Then Exit Sub
             '排序
-            Versions = Sort(Versions, Function(Left As CompFile, Right As CompFile) As Boolean
-                                          Return Left.ReleaseDate > Right.ReleaseDate
-                                      End Function)
+            Versions = Sort(Versions, Function(a, b) a.ReleaseDate > b.ReleaseDate)
             '可视化
             PanOptiFabric.Children.Clear()
             For Each Version In Versions
                 If Not IsSuitableOptiFabric(Version, SelectedMinecraftId) Then Continue For
                 PanOptiFabric.Children.Add(OptiFabricDownloadListItem(Version, AddressOf OptiFabric_Selected))
             Next
+            '自动选择 OptiFabric
+            If Not AutoSelectedOptiFabric Then
+                AutoSelectedOptiFabric = True
+                Log($"[Download] 已自动选择 OptiFabric：{CType(PanOptiFabric.Children(0), MyListItem).Title}")
+                OptiFabric_Selected(PanOptiFabric.Children(0), Nothing)
+            End If
         Catch ex As Exception
-            Log(ex, "可视化 Fabric API 安装版本列表出错", LogLevel.Feedback)
+            Log(ex, "可视化 OptiFabric 安装版本列表出错", LogLevel.Feedback)
         End Try
     End Sub
 
