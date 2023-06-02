@@ -640,6 +640,9 @@ Retry:
                     Request.ForgeVersion = Component("version")
                 Case "net.fabricmc.fabric-loader"
                     Request.FabricVersion = Component("version")
+                Case "org.quiltmc.quilt-loader" 'eg. 1.0.0
+                    Hint("PCL 暂不支持安装需要 Quilt 的整合包！", HintType.Critical)
+                    Exit Sub
             End Select
         Next
         '构造加载器
