@@ -738,6 +738,7 @@ Retry:
             .OptiFineVersion = If(Addons.ContainsKey("optifine"), Addons("optifine"), Nothing),
             .ForgeVersion = If(Addons.ContainsKey("forge"), Addons("forge"), Nothing),
             .FabricVersion = If(Addons.ContainsKey("fabric"), Addons("fabric"), Nothing)
+            .QuiltVersion = If(Addons.ContainsKey("quilt"), Hint("PCL 暂不支持安装需要 Quilt 的整合包！", HintType.Critical), Exit Sub)
         }
         Dim InstallExpectTime As Double = 0
         For Each InstallLoader In InstallLoaders
