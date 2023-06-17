@@ -640,6 +640,9 @@ Retry:
                     Request.ForgeVersion = Component("version")
                 Case "net.fabricmc.fabric-loader"
                     Request.FabricVersion = Component("version")
+                Case "org.quiltmc.quilt-loader" 'eg. 1.0.0
+                    Hint("PCL 暂不支持安装需要 Quilt 的整合包！", HintType.Critical)
+                    Exit Sub
             End Select
         Next
         '构造加载器
@@ -735,6 +738,7 @@ Retry:
             .OptiFineVersion = If(Addons.ContainsKey("optifine"), Addons("optifine"), Nothing),
             .ForgeVersion = If(Addons.ContainsKey("forge"), Addons("forge"), Nothing),
             .FabricVersion = If(Addons.ContainsKey("fabric"), Addons("fabric"), Nothing)
+            .QuiltVersion = If(Addons.ContainsKey("quilt"), Hint("PCL 暂不支持安装需要 Quilt 的整合包！", HintType.Critical), Exit Sub)
         }
         Dim InstallExpectTime As Double = 0
         For Each InstallLoader In InstallLoaders
