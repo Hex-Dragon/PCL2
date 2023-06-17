@@ -364,6 +364,7 @@
         NightConfig的Bug
         ShadersMod与Optifine同时安装
         Forge安装不完整
+        部分Mod需要Java11
     End Enum
     ''' <summary>
     ''' 根据 AnalyzeLogs 与可能的版本信息分析崩溃原因。
@@ -493,6 +494,8 @@ Done:
             If LogMc.Contains("com.electronwill.nightconfig.core.io.ParsingException: Not enough data available") Then AppendReason(CrashReason.NightConfig的Bug)
             If LogMc.Contains("Cannot find launch target fmlclient, unable to launch") Then AppendReason(CrashReason.Forge安装不完整)
             If LogMc.Contains("Invalid module name: '' is not a Java identifier") Then AppendReason(CrashReason.Mod名称包含特殊字符)
+            If LogMc.Contains("java.lang.UnsupportedClassVersionError: icyllis/modernui/forge/MixinConnector has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0") Then AppendReason(CrashReason.部分Mod需要Java11)
+            If LogMc.Contains("java.lang.RuntimeException: java.lang.NoSuchMethodException: no such method: sun.misc.Unsafe.defineAnonymousClass(Class,byte[],Object[])Class/invokeVirtual") Then AppendReason(CrashReason.部分Mod需要Java11)
             If LogMc.Contains("java.lang.UnsupportedClassVersionError: net/fabricmc/loader/impl/launch/knot/KnotClient : Unsupported major.minor version") Then AppendReason(CrashReason.Java版本不兼容)
             If LogMc.Contains("Could not reserve enough space") Then
                 If LogMc.Contains("for 1048576KB object heap") Then
@@ -887,6 +890,8 @@ NextStack:
                     Results.Add("可能由于使用其他启动器修改了 Forge 版本，当前版本的文件存在异常，导致了游戏崩溃。\n请尝试重新全新安装 Forge，而非使用其他启动器修改 Forge 版本。")
                 Case CrashReason.玩家手动触发调试崩溃
                     Results.Add("* 事实上，你的游戏没有任何问题，这是你自己触发的崩溃。\n* 你难道没有更重要的事要做吗？")
+                Case CrashReason.部分Mod需要Java11
+                    Results.Add("游戏似乎需要使用 JRE 11 启动。\n请在启动设置的 Java 选择一项中改用 JRE 11（Java 11），然后再启动游戏。\n如果你没有安装 JRE 11，你可以从网络中下载、安装一个。")
                 Case CrashReason.极短的程序输出
                     Results.Add($"程序返回了以下信息：\n{Additional.First}\n\h")
                 Case CrashReason.OptiFine导致无法加载世界 'https://www.minecraftforum.net/forums/support/java-edition-support/3051132-exception-ticking-world
