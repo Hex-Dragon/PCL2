@@ -468,8 +468,10 @@ NoExName:
                     '去除 “Forge/Fabric” 这一无意义提示
                     If Ex.Length < 19 AndAlso Ex.ToLower.Contains("fabric") AndAlso Ex.ToLower.Contains("forge") Then Continue For
                     '将 “Forge” 等提示改为 “Forge 版”
-                    If (Ex.ToLower.Contains("forge") OrElse Ex.ToLower.Contains("fabric") OrElse Ex.ToLower.Contains("quilt")) AndAlso
-                       Not Ex.Contains("版") AndAlso Ex.Length < 19 Then Ex = Ex.Replace("Edition", "").Trim.Capitalize & " 版"
+                    If (Ex.ToLower.Contains("forge") OrElse Ex.ToLower.Contains("fabric") OrElse Ex.ToLower.Contains("quilt")) AndAlso Not Ex.Contains("版") AndAlso
+                        Ex.ToLower.Replace("forge", "").Replace("fabric", "").Replace("quilt", "").Length <= 3 Then
+                        Ex = Ex.Replace("Edition", "").Trim.Capitalize & " 版"
+                    End If
                     ExName &= "  |  " & Ex.Trim
                 Next
                 If ExName = "" Then GoTo NoExName

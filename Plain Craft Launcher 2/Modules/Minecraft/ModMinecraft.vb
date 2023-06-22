@@ -3105,7 +3105,10 @@ VersionFindFail:
             '弹窗结果
             If MsgResult = 2 Then
                 '下载
-                McDownloadClient(NetPreDownloadBehaviour.HintWhileExists, VersionName, Version("url").ToString)
+                RunInUi(Sub()
+                            PageDownloadInstall.McVersionWaitingForSelect = VersionName
+                            FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
+                        End Sub)
             End If
 
         Catch ex As Exception

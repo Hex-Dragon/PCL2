@@ -17,7 +17,7 @@ Public Class PageLoginLegacy
     Public Sub Reload(KeepInput As Boolean)
         If KeepInput AndAlso IsReloaded Then '避免第一次就以 KeepInput 的方式加载，导致文本框里没东西
             '保留输入，只刷新下拉框列表
-            Dim Input As String = ComboName.Text
+            Dim Input As String = ComboName.Text.Trim
             ComboName.ItemsSource = If(Setup.Get("LoginLegacyName") = "", Nothing, Setup.Get("LoginLegacyName").ToString.Split("¨"))
             ComboName.Text = Input
         Else
@@ -26,7 +26,7 @@ Public Class PageLoginLegacy
                 ComboName.ItemsSource = Nothing
             Else
                 ComboName.ItemsSource = Setup.Get("LoginLegacyName").ToString.Split("¨")
-                ComboName.Text = Setup.Get("LoginLegacyName").ToString.Split("¨")(0)
+                ComboName.Text = Setup.Get("LoginLegacyName").ToString.Split("¨")(0).Trim
             End If
         End If
         IsReloaded = True
@@ -50,17 +50,14 @@ Public Class PageLoginLegacy
         Return IsVaild(GetLoginData())
     End Function
 
+    Private Sub ComboName_PreviewKeyDown(sender As Object, e As Input.KeyEventArgs) Handles ComboName.PreviewKeyDown
+        If e.Key = Key.Space Then
+            Dim Index = CType(ComboName.Template.FindName("PART_EditableTextBox", ComboName), MyTextBox).CaretIndex
+            If Index = ComboName.Text.Length OrElse Index = 0 Then e.Handled = True
+        End If
+    End Sub
     Private Sub ComboLegacy_TextChanged(sender As Object, e As TextChangedEventArgs) Handles ComboName.TextChanged
-        If ComboName.Text.EndsWith(" ") Then
-            ComboName.Text = ComboName.Text.Trim()
-            SendKeys.SendWait("{END}")
-        ElseIf ComboName.Text.StartsWith(" ") Then
-            ComboName.Text = ComboName.Text.Trim()
-            SendKeys.SendWait("{HOME}")
-        End If
-        If Setup.Get("LaunchSkinType") = 0 Then
-            PageLaunchLeft.SkinLegacy.Start(IsForceRestart:=True)
-        End If
+        If Setup.Get("LaunchSkinType") = 0 Then PageLaunchLeft.SkinLegacy.Start(IsForceRestart:=True)
         HintChinese.Visibility = If(RegexCheck(ComboName.Text, "^[0-9A-Za-z_]*$"), Visibility.Collapsed, Visibility.Visible)
     End Sub
     Private Sub Skin_Click() Handles Skin.Click

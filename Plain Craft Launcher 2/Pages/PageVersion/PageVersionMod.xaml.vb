@@ -345,6 +345,8 @@
             End If
             LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", LoaderFolderRunType.UpdateOnly)
 
+        Catch ex As OperationCanceledException
+            Log(ex, "删除 Mod 被主动取消")
         Catch ex As Exception
             Log(ex, "删除 Mod 失败", LogLevel.Feedback)
         End Try

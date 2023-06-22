@@ -165,37 +165,37 @@
         DirectFile = Nothing
         Dim TotalFiles As New List(Of KeyValuePair(Of AnalyzeFileType, KeyValuePair(Of String, String())))
         For Each LogFile In AnalyzeRawFiles
-            Dim FileName As String = GetFileNameFromPath(LogFile.Key)
+            Dim MatchName As String = GetFileNameFromPath(LogFile.Key).ToLower
             Dim TargetType As AnalyzeFileType
-            If FileName.StartsWith("hs_err") Then
+            If MatchName.StartsWith("hs_err") Then
                 TargetType = AnalyzeFileType.HsErr
                 DirectFile = LogFile
-            ElseIf FileName.StartsWith("crash-") Then
+            ElseIf MatchName.StartsWith("crash-") Then
                 TargetType = AnalyzeFileType.CrashReport
                 DirectFile = LogFile
-            ElseIf FileName = "latest.log" OrElse FileName = "latest log.txt" OrElse
-                   FileName = "debug.log" OrElse FileName = "debug log.txt" OrElse
-                   FileName = "游戏崩溃前的输出.txt" OrElse FileName = "rawoutput.log" Then
+            ElseIf MatchName = "latest.log" OrElse MatchName = "latest log.txt" OrElse
+                   MatchName = "debug.log" OrElse MatchName = "debug log.txt" OrElse
+                   MatchName = "游戏崩溃前的输出.txt" OrElse MatchName = "rawoutput.log" Then
                 TargetType = AnalyzeFileType.MinecraftLog
                 If DirectFile Is Nothing Then DirectFile = LogFile
-            ElseIf FileName = "启动器日志.txt" OrElse FileName = "PCL2 启动器日志.txt" OrElse FileName = "PCL 启动器日志.txt" OrElse FileName = "log1.txt" Then
+            ElseIf MatchName = "启动器日志.txt" OrElse MatchName = "PCL2 启动器日志.txt" OrElse MatchName = "PCL 启动器日志.txt" OrElse MatchName = "log1.txt" Then
                 If LogFile.Value.Any(Function(s) s.Contains("以下为游戏输出的最后一段内容")) Then
                     TargetType = AnalyzeFileType.MinecraftLog
                     If DirectFile Is Nothing Then DirectFile = LogFile
                 Else
                     TargetType = AnalyzeFileType.ExtraLog
                 End If
-            ElseIf FileName.EndsWith(".log") OrElse FileName.EndsWith(".txt") Then
+            ElseIf MatchName.EndsWith(".log") OrElse MatchName.EndsWith(".txt") Then
                 TargetType = AnalyzeFileType.ExtraLog
             Else
-                Log("[Crash] " & FileName & " 分类为 Ignore")
+                Log("[Crash] " & MatchName & " 分类为 Ignore")
                 Continue For
             End If
             If LogFile.Value.Count = 0 Then
-                Log("[Crash] " & FileName & " 由于内容为空跳过")
+                Log("[Crash] " & MatchName & " 由于内容为空跳过")
             Else
                 TotalFiles.Add(New KeyValuePair(Of AnalyzeFileType, KeyValuePair(Of String, String()))(TargetType, LogFile))
-                Log("[Crash] " & FileName & " 分类为 " & GetStringFromEnum(TargetType))
+                Log("[Crash] " & MatchName & " 分类为 " & GetStringFromEnum(TargetType))
             End If
         Next
 
@@ -364,6 +364,7 @@
         NightConfig的Bug
         ShadersMod与Optifine同时安装
         Forge安装不完整
+        Mod需要Java11
     End Enum
     ''' <summary>
     ''' 根据 AnalyzeLogs 与可能的版本信息分析崩溃原因。
@@ -469,6 +470,7 @@ Done:
             If LogMc.Contains("java.lang.ClassCastException: class jdk.") Then AppendReason(CrashReason.使用JDK)
             If LogMc.Contains("TRANSFORMER/net.optifine/net.optifine.reflect.Reflector.<clinit>(Reflector.java") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("java.lang.NoSuchMethodError: 'void net.minecraft.client.renderer.texture.SpriteContents.<init>(net.minecraft.resources.ResourceLocation, ") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
+            If LogMc.Contains("java.lang.NoSuchMethodError: 'java.lang.String com.mojang.blaze3d.systems.RenderSystem.getBackendDescription") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("java.lang.NoSuchMethodError: 'void net.minecraft.client.renderer.block.model.BakedQuad.<init>(int[], int, net.minecraft.core.Direction, net.minecraft.client.renderer.texture.TextureAtlasSprite, boolean, boolean)'") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("java.lang.NoSuchMethodError: 'void net.minecraft.server.level.DistanceManager.addRegionTicket(net.minecraft.server.level.TicketType, net.minecraft.world.level.ChunkPos, int, java.lang.Object, boolean)'") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
             If LogMc.Contains("java.lang.NoSuchMethodError: 'void net.minecraft.server.level.DistanceManager.removeRegionTicket(net.minecraft.server.level.TicketType, net.minecraft.world.level.ChunkPos, int, java.lang.Object, boolean)'") Then AppendReason(CrashReason.OptiFine与Forge不兼容)
@@ -492,7 +494,10 @@ Done:
             If LogMc.Contains("com.electronwill.nightconfig.core.io.ParsingException: Not enough data available") Then AppendReason(CrashReason.NightConfig的Bug)
             If LogMc.Contains("Cannot find launch target fmlclient, unable to launch") Then AppendReason(CrashReason.Forge安装不完整)
             If LogMc.Contains("Invalid module name: '' is not a Java identifier") Then AppendReason(CrashReason.Mod名称包含特殊字符)
+            If LogMc.Contains("has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to") Then AppendReason(CrashReason.Mod需要Java11)
+            If LogMc.Contains("java.lang.RuntimeException: java.lang.NoSuchMethodException: no such method: sun.misc.Unsafe.defineAnonymousClass(Class,byte[],Object[])Class/invokeVirtual") Then AppendReason(CrashReason.Mod需要Java11)
             If LogMc.Contains("java.lang.UnsupportedClassVersionError: net/fabricmc/loader/impl/launch/knot/KnotClient : Unsupported major.minor version") Then AppendReason(CrashReason.Java版本不兼容)
+            If LogMc.Contains("Invalid maximum heap size") Then AppendReason(CrashReason.使用32位Java导致JVM无法分配足够多的内存)
             If LogMc.Contains("Could not reserve enough space") Then
                 If LogMc.Contains("for 1048576KB object heap") Then
                     AppendReason(CrashReason.使用32位Java导致JVM无法分配足够多的内存)
@@ -505,16 +510,15 @@ Done:
             If LogMc.Contains("Found a duplicate mod") Then AppendReason(CrashReason.Mod重复安装, RegexSearch(If(RegexSeek(LogMc, "Found a duplicate mod[^\n]+"), ""), "[^\\/]+.jar", RegularExpressions.RegexOptions.IgnoreCase))
             If LogMc.Contains("ModResolutionException: Duplicate") Then AppendReason(CrashReason.Mod重复安装, RegexSearch(If(RegexSeek(LogMc, "ModResolutionException: Duplicate[^\n]+"), ""), "[^\\/]+.jar", RegularExpressions.RegexOptions.IgnoreCase))
             'Mod 导致的崩溃
-            If LogMc.Contains("Mixin prepare failed ") OrElse LogMc.Contains("Mixin apply failed ") OrElse
-                LogMc.Contains("mixin.injection.throwables.") OrElse LogMc.Contains(".mixins.json] FAILED during )") Then
+            If LogMc.Contains("Mixin prepare failed ") OrElse LogMc.Contains("Mixin apply failed ") OrElse LogMc.Contains("MixinApplyError") OrElse
+            LogMc.Contains("mixin.injection.throwables.") OrElse LogMc.Contains(".mixins.json] FAILED during )") Then
                 Dim ModId As String = RegexSeek(LogMc, "(?<=in )[^./ ]+(?=.mixins.json.+failed injection check)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=in mixins.)[^./ ]+(?=.json.+failed injection check)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in )[^./ ]+(?=.mixins.json)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in mixins.)[^./ ]+(?=.json)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[)[^./ ]+(?=.mixins.json\] FAILED during )")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[mixins.)[^./ ]+(?=.json\] FAILED during )")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in callback )[^./ ]+(?=.mixins.json:)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=from mod )[^\] ]+(?=\] from phase)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=from mod )[^./ ]+(?=\] from)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=for mod )[^./ ]+(?= failed)")
                 '兜底名称判断
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "[^./ \]]+(?=.mixins.json")
@@ -622,11 +626,11 @@ NextStack:
                 Dim Word As String = Splited(i)
                 If Word.Length <= 2 OrElse Word.StartsWith("func_") Then Continue For
                 If {"com", "org", "net", "asm", "fml", "mod", "jar", "sun", "lib", "map", "gui", "dev", "nio", "api", "dsi", "top",
-                    "core", "init", "mods", "main", "file", "game", "load", "read", "done", "util", "tile", "item", "base",
+                    "core", "init", "mods", "main", "file", "game", "load", "read", "done", "util", "tile", "item", "base", "oshi",
                     "forge", "setup", "block", "model", "mixin", "event", "unimi", "netty",
                     "common", "server", "config", "loader", "launch", "entity", "assist", "client", "plugin", "modapi", "mojang", "shader", "events", "github", "recipe",
                     "preinit", "preload", "machine", "reflect", "channel", "general", "handler", "content",
-                    "fastutil", "optifine", "scheduler", "minecraft", "transformers", "universal", "internal", "multipart", "minecraftforge", "override", "blockentity"
+                    "fastutil", "optifine", "scheduler", "minecraft", "transformers", "universal", "internal", "multipart", "minecraftforge", "override", "blockentity", "platform"
                    }.Contains(Word.ToLower) Then Continue For
                 PossibleWords.Add(Word.Trim)
             Next
@@ -818,9 +822,9 @@ NextStack:
                     Results.Add("由于有 Mod 的名称包含特殊字符，导致游戏崩溃。\n请尝试修改 Mod 文件名，让它只包含英文字母、数字、减号（-）、下划线（_）和小数点，然后再启动游戏。")
                 Case CrashReason.使用32位Java导致JVM无法分配足够多的内存
                     If Environment.Is64BitOperatingSystem Then
-                        Results.Add("你似乎正在使用 32 位 Java，这会导致 Minecraft 无法使用 1GB 以上的内存，进而造成崩溃。\n\n请在启动设置的 Java 选择一项中改用 64 位的 Java 再启动游戏，然后再启动游戏。\n如果你没有安装 64 位的 Java，你可以从网络中下载、安装一个。")
+                        Results.Add("你似乎正在使用 32 位 Java，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。\n\n请在启动设置的 Java 选择一项中改用 64 位的 Java 再启动游戏，然后再启动游戏。\n如果你没有安装 64 位的 Java，你可以从网络中下载、安装一个。")
                     Else
-                        Results.Add("你正在使用 32 位的操作系统，这会导致 Minecraft 无法使用 1GB 以上的内存，进而造成崩溃。\n\n你或许只能重装 64 位的操作系统来解决此问题。\n如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……\h")
+                        Results.Add("你正在使用 32 位的操作系统，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。\n\n你或许只能重装 64 位的操作系统来解决此问题。\n如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……\h")
                     End If
                 Case CrashReason.崩溃日志堆栈分析发现关键字, CrashReason.MC日志堆栈分析发现关键字
                     If Additional.Count = 1 Then
@@ -886,6 +890,8 @@ NextStack:
                     Results.Add("可能由于使用其他启动器修改了 Forge 版本，当前版本的文件存在异常，导致了游戏崩溃。\n请尝试重新全新安装 Forge，而非使用其他启动器修改 Forge 版本。")
                 Case CrashReason.玩家手动触发调试崩溃
                     Results.Add("* 事实上，你的游戏没有任何问题，这是你自己触发的崩溃。\n* 你难道没有更重要的事要做吗？")
+                Case CrashReason.Mod需要Java11
+                    Results.Add("你所安装的部分 Mod 似乎需要使用 Java 11 启动。\n请在启动设置的 Java 选择一项中改用 Java 11，然后再启动游戏。\n如果你没有安装 Java 11，你可以从网络中下载、安装一个。")
                 Case CrashReason.极短的程序输出
                     Results.Add($"程序返回了以下信息：\n{Additional.First}\n\h")
                 Case CrashReason.OptiFine导致无法加载世界 'https://www.minecraftforum.net/forums/support/java-edition-support/3051132-exception-ticking-world
@@ -947,8 +953,10 @@ NextStack:
                     Replace("\e", If(IsHandAnalyze, "", vbCrLf & "你可以查看错误报告了解错误具体是如何发生的。")).
                     Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr, vbCrLf).
                     Trim(vbCrLf.ToCharArray) &
-                If(Results.Any(Function(r) r.EndsWith("\h")),
-                    If(IsHandAnalyze, "", vbCrLf & "如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。"), "")
+                If(Not Results.Any(Function(r) r.EndsWith("\h")) OrElse IsHandAnalyze, "",
+                    vbCrLf & "如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。" &
+                    If(If(PageSetupSystem.IsLauncherNewest(), True), "",
+                    vbCrLf & vbCrLf & "此外，你正在使用老版本 PCL，更新到最新版可能会修复这个问题。" & vbCrLf & "你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。"))
     End Function
 
 End Class

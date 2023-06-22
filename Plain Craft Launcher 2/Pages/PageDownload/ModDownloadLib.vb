@@ -553,7 +553,7 @@ Public Module ModDownloadLib
                                                                              '拷贝原版文件
                                                                              If Not IsCustomFolder Then Exit Sub
                                                                              SyncLock VanillaSyncLock
-                                                                                 Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name
+                                                                                 Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name '#2031 报告了此处 ClientDownloadLoader.Input 为 null 的问题，但无法复现
                                                                                  Directory.CreateDirectory(McFolder & "versions\" & DownloadInfo.Inherit)
                                                                                  If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json") Then
                                                                                      CopyFile(ClientDownloadLoader.Input & ClientName & ".json",

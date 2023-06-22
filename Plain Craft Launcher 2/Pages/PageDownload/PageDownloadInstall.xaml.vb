@@ -571,10 +571,23 @@
                 NewCard.IsSwaped = True
                 PanMinecraft.Children.Add(NewCard)
             Next
+            '自动选择版本
+            If McVersionWaitingForSelect Is Nothing Then Exit Try
+            Log("[Download] 自动选择 MC 版本：" & McVersionWaitingForSelect)
+            For Each Version As JObject In Versions
+                If Version("id").ToString <> McVersionWaitingForSelect Then Continue For
+                Dim Item = McDownloadListItem(Version, Sub()
+                                                       End Sub, False)
+                MinecraftSelected(Item, Nothing)
+            Next
         Catch ex As Exception
             Log(ex, "可视化安装版本列表出错", LogLevel.Feedback)
         End Try
     End Sub
+    ''' <summary>
+    ''' 当 MC 版本列表加载完时，立即自动选择的版本。用于外部调用。
+    ''' </summary>
+    Public Shared McVersionWaitingForSelect As String = Nothing
 
 #End Region
 

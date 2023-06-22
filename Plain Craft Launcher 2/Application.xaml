@@ -466,9 +466,9 @@
             </Style>
             <Style TargetType="ComboBoxItem" x:Key="MyComboBoxItem">
                 <Setter Property="OverridesDefaultStyle" Value="True" />
-                <Setter Property="ToolTipService.Placement" Value="Right" />
+                <Setter Property="ToolTipService.Placement" Value="Relative" />
                 <Setter Property="ToolTipService.VerticalOffset" Value="-2" />
-                <Setter Property="ToolTipService.HorizontalOffset" Value="-250" />
+                <Setter Property="ToolTipService.HorizontalOffset" Value="200" />
                 <Setter Property="ToolTipService.InitialShowDelay" Value="150" />
                 <Setter Property="ToolTipService.BetweenShowDelay" Value="150" />
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />

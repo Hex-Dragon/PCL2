@@ -325,7 +325,7 @@
                         DeleteDirectory(PageVersionLeft.Version.Path)
                         Hint("版本 " & PageVersionLeft.Version.Name & " 已永久删除！", HintType.Finish)
                     Else
-                        FileIO.FileSystem.DeleteDirectory(PageVersionLeft.Version.Path, FileIO.UIOption.AllDialogs, FileIO.RecycleOption.SendToRecycleBin)
+                        FileIO.FileSystem.DeleteDirectory(PageVersionLeft.Version.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
                         Hint("版本 " & PageVersionLeft.Version.Name & " 已删除到回收站！", HintType.Finish)
                     End If
                 Case 2
@@ -333,6 +333,8 @@
             End Select
             LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
             FrmMain.PageBack()
+        Catch ex As OperationCanceledException
+            Log(ex, "删除版本 " & PageVersionLeft.Version.Name & " 被主动取消")
         Catch ex As Exception
             Log(ex, "删除版本 " & PageVersionLeft.Version.Name & " 失败", LogLevel.Msgbox)
         End Try

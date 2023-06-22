@@ -1115,11 +1115,14 @@ SystemBrowser:
         'OptiFine 检测
         If McVersionCurrent.Version.HasOptiFine Then
             If McVersionCurrent.Version.McCodeMain <= 7 AndAlso McVersionCurrent.Version.McCodeMain > 0 Then
-                '<1.7：至多 Java 8（Java 9 - 10 未测试）
+                '<1.7：至多 Java 8
                 MaxVer = New Version(1, 8, 999, 999)
             ElseIf McVersionCurrent.Version.McCodeMain >= 8 AndAlso McVersionCurrent.Version.McCodeMain <= 11 Then
-                '1.8 - 1.11：必须恰好 Java 8（Java 9 - 10 未测试）
+                '1.8 - 1.11：必须恰好 Java 8
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 8, 999, 999)
+            ElseIf McVersionCurrent.Version.McCodeMain = 12 AndAlso McVersionCurrent.Version.HasForge Then
+                '1.12：若安装了 Forge，最高 Java 8
+                MaxVer = New Version(1, 8, 999, 999)
             End If
         End If
 
@@ -1129,12 +1132,12 @@ SystemBrowser:
                 '1.7.2：必须 Java 7
                 MinVer = New Version(1, 7, 0, 0) : MaxVer = New Version(1, 7, 999, 999)
             ElseIf McVersionCurrent.Version.McCodeMain <= 12 AndAlso McVersionCurrent.Version.McCodeMain > 0 AndAlso VersionSortBoolean("14.23.5.2855", McVersionCurrent.Version.ForgeVersion) Then
-                '<1.12，Forge 14.23.5.2855 及更低：Java 8
+                '<=1.12，Forge 14.23.5.2855 及更低：Java 8
                 MaxVer = New Version(1, 8, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain <= 14 AndAlso McVersionCurrent.Version.McCodeMain > 0 AndAlso VersionSortBoolean("28.2.23", McVersionCurrent.Version.ForgeVersion) Then
+            ElseIf McVersionCurrent.Version.McCodeMain <= 14 AndAlso McVersionCurrent.Version.McCodeMain >= 13 AndAlso VersionSortBoolean("28.2.23", McVersionCurrent.Version.ForgeVersion) Then
                 '1.13 - 1.14，Forge 28.2.23 及更低：Java 8 - 10
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 10, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain <= 15 AndAlso McVersionCurrent.Version.McCodeMain > 0 Then
+            ElseIf McVersionCurrent.Version.McCodeMain = 15 Then
                 '1.15：Java 8 - 15
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 15, 999, 999)
             ElseIf VersionSortBoolean(McVersionCurrent.Version.ForgeVersion, "34.0.0") AndAlso VersionSortBoolean("36.2.25", McVersionCurrent.Version.ForgeVersion) Then

@@ -44,9 +44,9 @@
                         <local:MyComboBox x:Name="ComboArgumentIndie" Grid.Row="4" Grid.ColumnSpan="2" Tag="VersionArgumentIndie" Grid.Column="1">
                             <local:MyComboBoxItem Content="使用全局设置" IsSelected="True" />
                             <local:MyComboBoxItem Content="开启" 
-                                                  ToolTip="让这个版本与其他版本的存档、Mod 等档案相互独立，互不干涉" ToolTipService.HorizontalOffset="-350"/>
+                                                  ToolTip="让这个版本与其他版本的存档、Mod 等档案相互独立，互不干涉" ToolTipService.HorizontalOffset="100"/>
                             <local:MyComboBoxItem Content="关闭" 
-                                                  ToolTip="与其余未开启隔离的版本均使用同一档案，存档、Mod 等均为公用。&#xa;若存在不同版本的 Forge 或 Fabric，可能会由于 Mod 与版本冲突导致未知问题。" ToolTipService.HorizontalOffset="-350"/>
+                                                  ToolTip="与其余未开启隔离的版本均使用同一档案，存档、Mod 等均为公用。&#xa;若存在不同版本的 Forge 或 Fabric，可能会由于 Mod 与版本冲突导致未知问题。" ToolTipService.HorizontalOffset="100"/>
                         </local:MyComboBox>
                         <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="游戏 Java" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboArgumentJava" Grid.ColumnSpan="2" Grid.Row="6" Grid.Column="1" MaxDropDownHeight="240"
@@ -203,9 +203,9 @@
                     <local:MyComboBox x:Name="ComboAdvanceAssets" Grid.Row="4" Grid.ColumnSpan="2" Tag="VersionAdvanceAssets" Grid.Column="1">
                         <local:MyComboBoxItem Content="使用全局设置" IsSelected="True" />
                         <local:MyComboBoxItem Content="开启" 
-                                              ToolTip="在启动 Minecraft 时，简单校验并下载缺失或错误的文件" ToolTipService.HorizontalOffset="-300" />
+                                              ToolTip="在启动 Minecraft 时，简单校验并下载缺失或错误的文件" ToolTipService.HorizontalOffset="100" />
                         <local:MyComboBoxItem Content="关闭" 
-                                              ToolTip="完全不更改 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。&#xa;如果你没有修改相关文件，请勿勾选此项。" ToolTipService.HorizontalOffset="-300" />
+                                              ToolTip="完全不更改 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。&#xa;如果你没有修改相关文件，请勿勾选此项。" ToolTipService.HorizontalOffset="100" />
                     </local:MyComboBox>
                     <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="启动前执行命令" Margin="0,0,25,3" />
                     <local:MyTextBox x:Name="TextAdvanceRun" Grid.Row="6" Grid.ColumnSpan="2" Tag="VersionAdvanceRun" Grid.Column="1" HintText="" Margin="0,0,0,3"

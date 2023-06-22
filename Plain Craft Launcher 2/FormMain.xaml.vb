@@ -10,6 +10,13 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 296 Then 'Release 2.6.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "新增内存优化功能，可以将所有程序的物理内存占用降低约 1/3"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择 OptiFine 与 Fabric 后会自动选择 OptiFabric"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
+            FeatureCount += 21
+            BugCount += 30
+        End If
         If LastVersion < 293 Then 'Release 2.6.1
             BugCount += 1
         End If
@@ -109,6 +116,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 295 Then 'Snapshot 2.6.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
+            FeatureCount += 12
+            BugCount += 14
+        End If
         If LastVersion < 294 Then 'Snapshot 2.6.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "新增内存优化功能，可以将所有程序的物理内存占用降低约 1/3"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择 OptiFine 与 Fabric 后会自动选择 OptiFabric"))
@@ -366,8 +378,14 @@ Public Class FormMain
         End If
         '加载窗口
         ThemeRefreshMain()
-        Height = ReadReg("WindowHeight", MinHeight + 50)
-        Width = ReadReg("WindowWidth", MinWidth + 50)
+        Try
+            Height = ReadReg("WindowHeight", MinHeight + 50)
+            Width = ReadReg("WindowWidth", MinWidth + 50)
+        Catch ex As Exception '修复 #2019
+            Log(ex, "读取窗口默认大小失败", LogLevel.Hint)
+            Height = MinHeight + 50
+            Width = MinWidth + 50
+        End Try
         Topmost = False
         If FrmStart IsNot Nothing Then FrmStart.Close(New TimeSpan(0, 0, 0, 0, 400 / AniSpeed))
         '更改窗口
@@ -585,6 +603,7 @@ Public Class FormMain
             Process.GetCurrentProcess.Kill()
         Else
             Environment.Exit(ReturnCode)
+            Process.GetCurrentProcess.Kill()
         End If
     End Sub
     Private Sub BtnTitleClose_Click(sender As Object, e As RoutedEventArgs) Handles BtnTitleClose.Click
@@ -612,6 +631,7 @@ Public Class FormMain
         PanForm.Height = BorderForm.ActualHeight + 0.001
         PanMain.Width = PanForm.Width
         PanMain.Height = Math.Max(0, PanForm.Height - PanTitle.ActualHeight)
+        If WindowState = WindowState.Maximized Then WindowState = WindowState.Normal '修复 #1938
     End Sub
 
     '最小化

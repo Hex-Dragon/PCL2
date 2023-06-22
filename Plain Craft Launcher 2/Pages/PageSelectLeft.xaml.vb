@@ -259,6 +259,7 @@
             Directory.CreateDirectory(Path & ".minecraft\")
             Directory.CreateDirectory(Path & ".minecraft\versions\")
             Setup.Set("LaunchFolderSelect", "$.minecraft\")
+            McFolderLauncherProfilesJsonCreate(Path & ".minecraft\")
             Hint("新建 .minecraft 文件夹成功！", HintType.Finish)
         End If
         McFolderListLoader.Start(IsForceRestart:=True)

@@ -356,7 +356,7 @@ Finish:
         Select Case Type
             Case 0
                 If FrmLoginLegacy IsNot Nothing AndAlso FrmLoginLegacy.IsReloaded Then
-                    Return New EqualableList(Of String) From {0, If(FrmLoginLegacy.ComboName.Text, "")}
+                    Return New EqualableList(Of String) From {0, If(FrmLoginLegacy.ComboName.Text.Trim, "")}
                 ElseIf Setup.Get("LoginLegacyName") = "" Then
                     Return New EqualableList(Of String) From {0, ""}
                 Else
@@ -526,11 +526,12 @@ Finish:
 
     '版本选择按钮
     Private Sub BtnVersion_Click(sender As Object, e As EventArgs) Handles BtnVersion.Click
+        If McLaunchLoader.State = LoadState.Loading Then Exit Sub
         FrmMain.PageChange(FormMain.PageType.VersionSelect)
     End Sub
     '启动按钮
     Public Sub LaunchButtonClick() Handles BtnLaunch.Click
-        If McLaunchLoader.State = LoadState.Loading OrElse Not BtnLaunch.IsEnabled Then Exit Sub
+        If McLaunchLoader.State = LoadState.Loading OrElse Not BtnLaunch.IsEnabled OrElse FrmMain.PageRight.PageState <> MyPageRight.PageStates.ContentStay Then Exit Sub
         '愚人节处理
         If IsAprilEnabled AndAlso Not IsAprilGiveup Then
             ThemeUnlock(12, False, "隐藏主题 滑稽彩 已解锁！")
@@ -625,8 +626,9 @@ ExitRefresh:
             End Try
         End If
     End Sub
-    '更多按钮
+    '版本设置按钮
     Private Sub BtnMore_Click(sender As Object, e As EventArgs) Handles BtnMore.Click
+        If McLaunchLoader.State = LoadState.Loading Then Exit Sub
         McVersionCurrent.Load()
         PageVersionLeft.Version = McVersionCurrent
         FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)

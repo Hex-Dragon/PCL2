@@ -182,7 +182,8 @@
                 Log("[Java] 初始化未找到可用的 Java，将自动触发搜索", LogLevel.Developer)
                 JavaSearchLoader.Start(0)
             Else
-                Log("[Java] 缓存中有 " & JavaList.Count & " 个可用的 Java")
+                Log("[Java] 缓存中有 " & JavaList.Count & " 个可用的 Java：")
+                JavaList.ForEach(Sub(j) Log($"[Java]  - {j}"))
             End If
         Catch ex As Exception
             Log(ex, "初始化 Java 列表失败", LogLevel.Feedback)
@@ -201,13 +202,24 @@
 
             '添加特定的 Java
             Dim JavaPreList As New Dictionary(Of String, Boolean)
-            If PathMcFolder.Split("\").Count > 3 Then JavaSearchFolder(GetPathFromFullPath(PathMcFolder), JavaPreList, False, True) 'Minecraft 文件夹的父文件夹（如果不是根目录的话）
+            If PathMcFolder.Split("\").Count > 3 Then
+                JavaSearchFolder(GetPathFromFullPath(PathMcFolder), JavaPreList, False, True) 'Minecraft 文件夹的父文件夹（如果不是根目录的话）
+            End If
             JavaSearchFolder(PathMcFolder, JavaPreList, False, True) 'Minecraft 文件夹
             If RelatedVersion IsNot Nothing Then JavaSearchFolder(RelatedVersion.Path, JavaPreList, False, True) '所选版本文件夹
             Dim TargetJavaList As New List(Of JavaEntry)
             For Each Entry In JavaPreList
                 TargetJavaList.Add(New JavaEntry(Entry.Key, Entry.Value))
             Next
+
+            '检查特定的 Java
+            If TargetJavaList.Count > 0 Then
+                TargetJavaList = JavaCheckList(TargetJavaList)
+                Log("[Java] 检查后找到 " & TargetJavaList.Count & " 个特定路径下的 Java：")
+                For Each Java In TargetJavaList
+                    Log($"[Java]  - {Java}")
+                Next
+            End If
 
 #Region "添加用户指定的 Java，储存到 UserJava 中"
 
@@ -217,13 +229,7 @@
             If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion).ToString.StartsWith("{") Then
                 Try
                     UserJava = JavaEntry.FromJson(GetJson(Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)))
-                    '确保版本独立设置中指定的 Java 在 Java 列表中（#978）
-                    If Not JavaList.Any(Function(j) j.PathFolder = UserJava.PathFolder) Then
-                        UserJava = Nothing
-                        Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
-                        Log("版本独立设置中指定的 Java 不在主 Java 列表中，此设置已重置", LogLevel.Debug)
-                        Exit Try
-                    End If
+                    UserJava.Check()
                 Catch ex As Exception
                     UserJava = Nothing
                     Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
@@ -235,10 +241,11 @@
             If UserJava Is Nothing AndAlso Setup.Get("LaunchArgumentJavaSelect") <> "" Then
                 Try
                     UserJava = JavaEntry.FromJson(GetJson(Setup.Get("LaunchArgumentJavaSelect")))
+                    UserJava.Check()
                 Catch ex As Exception
                     UserJava = Nothing
                     Setup.Reset("LaunchArgumentJavaSelect")
-                    Log(ex, "设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
+                    Log(ex, "全局设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
                 End Try
             End If
 
@@ -249,12 +256,6 @@
             End If
 
 #End Region
-
-            '检查特定的 Java
-            If TargetJavaList.Count > 0 Then
-                TargetJavaList = JavaCheckList(TargetJavaList)
-                Log("[Java] 检查后找到 " & TargetJavaList.Count & " 个特定的 Java")
-            End If
 
 RetryGet:
             '等待进行中的搜索结束
@@ -298,8 +299,9 @@ RetryGet:
 
             '指定的 Java 不可用，弹窗要求选择
             Log("[Java] 发现用户指定的不兼容 Java：" & UserJava.ToString)
+            Log($"[Java] 目前实际可用的 Java 列表：")
             For Each Java In AllowedJavaList
-                Log($"[Java] 实际可用的 Java：{Java.ToString}")
+                Log($"[Java]  - {Java}")
             Next
             Dim Requirement As String = ""
             Dim ShowRevision As Boolean = False
@@ -344,10 +346,12 @@ ExitUserJavaCheck:
 
             '优先使用特定目录下的 Java
             For Each Java In AllowedJavaList
+                '如果在官启文件夹启动，会将官启自带 Java 错误视作 MC 文件夹指定 Java，导致了 #2054 的第二例
+                If Java.PathFolder.Contains(".minecraft\cache\java") Then Continue For
                 If TargetJavaList.Contains(Java) Then
                     '直接使用指定的 Java
                     AllowedJavaList = New List(Of JavaEntry) From {Java}
-                    Log("[Java] 优先使用特定的 Java：" & Java.ToString)
+                    Log("[Java] 优先使用特定路径下的 Java：" & Java.ToString)
                     GoTo UserPass
                 End If
             Next
@@ -355,6 +359,10 @@ UserPass:
 
             '对适合的 Java 进行排序
             AllowedJavaList = Sort(AllowedJavaList, AddressOf JavaSorter)
+            Log($"[Java] 排序后的 Java 优先顺序：")
+            For Each Java In AllowedJavaList
+                Log($"[Java]  - {Java}")
+            Next
 
             '检查选定的 Java，若测试失败则尝试进行搜索
             Dim SelectedJava = AllowedJavaList.First
@@ -364,14 +372,14 @@ UserPass:
                 Throw
             Catch ex As Exception
                 If ex.InnerException IsNot Nothing AndAlso TypeOf (ex.InnerException) Is ThreadInterruptedException Then Throw ex.InnerException
-                Log(ex, "找到的 Java 已无法使用，尝试进行搜索")
+                Log(ex, "最终选定的 Java 已无法使用，尝试进行搜索")
                 AllowedJavaList = New List(Of JavaEntry)
                 JavaSearchLoader.Start(IsForceRestart:=True)
                 GoTo RetryGet
             End Try
 
             '返回
-            Log("[Java] 选定的 Java：" & SelectedJava.ToString)
+            Log("[Java] 最终选定的 Java：" & AllowedJavaList.First.ToString)
             Return SelectedJava
 
         Catch ex As ThreadInterruptedException
@@ -442,7 +450,7 @@ NoUserJava:
         '4. Java 大版本
         If Left.VersionCode <> Right.VersionCode Then
             '                             Java  7   8   9  10  11  12 13 14 15  16  17  18  19  20...
-            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 29, 10, 11, 12, 13, 9, 8, 7, 15, 31, 30, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
+            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 29, 10, 12, 15, 13, 9, 8, 7, 11, 31, 30, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
             Return Weight.ElementAtOrDefault(Left.VersionCode) >= Weight.ElementAtOrDefault(Right.VersionCode)
         End If
         '5. 最次级版本号更接近 51
@@ -585,7 +593,7 @@ NoUserJava:
             Dim CheckThread As New Thread(Sub()
                                               Try
                                                   Entry.Check()
-                                                  Log("[Java] " & Entry.ToString)
+                                                  If ModeDebug Then Log("[Java]  - " & Entry.ToString)
                                                   SyncLock ListLock
                                                       JavaCheckList.Add(Entry)
                                                   End SyncLock

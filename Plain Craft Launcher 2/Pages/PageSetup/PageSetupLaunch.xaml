@@ -127,7 +127,7 @@
                                 <local:MyComboBoxItem Content="全屏" />
                                 <local:MyComboBoxItem Content="默认大小" IsSelected="True" ToolTip="以 854×480 的默认窗口大小启动 Minecraft" />
                                 <local:MyComboBoxItem Content="与启动器窗口大小一致" />
-                                <local:MyComboBoxItem Content="自定义大小" ToolTip="注意：Forge 1.12.2 等个别版本存在 Bug，会导致高度设定无效" />
+                                <local:MyComboBoxItem Content="自定义大小" ToolTip="注意：Forge 1.12 存在 Bug，会导致高度设定无效" />
                                 <local:MyComboBoxItem Content="最大化" />
                                 <local:MyComboBoxItem Content="保持游戏默认" />
                             </local:MyComboBox>

@@ -433,7 +433,7 @@ PreFin:
         Try
             For Each Java In Sort(JavaList.Clone(), Function(l, r) l.VersionCode < r.VersionCode)
                 Dim ListItem = New MyComboBoxItem With {.Content = Java.ToString, .ToolTip = Java.PathFolder, .Tag = Java}
-                ToolTipService.SetHorizontalOffset(ListItem, 0)
+                ToolTipService.SetHorizontalOffset(ListItem, 400)
                 ComboArgumentJava.Items.Add(ListItem)
                 '判断人为选中
                 If SelectedBySetup = "" Then Continue For
