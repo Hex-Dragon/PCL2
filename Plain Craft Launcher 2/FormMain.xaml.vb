@@ -116,7 +116,7 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
-        If LastVersion < 295 Then 'Snapshot 2.6.3
+        If LastVersion < 297 Then 'Snapshot 2.6.3
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
             FeatureCount += 12
             BugCount += 14
