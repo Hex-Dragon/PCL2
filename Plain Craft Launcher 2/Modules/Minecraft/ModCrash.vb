@@ -365,6 +365,7 @@
         ShadersMod与Optifine同时安装
         Forge安装不完整
         Mod需要Java11
+        Mod依赖项未完善
     End Enum
     ''' <summary>
     ''' 根据 AnalyzeLogs 与可能的版本信息分析崩溃原因。
@@ -524,6 +525,9 @@ Done:
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "[^./ \]]+(?=.mixins.json")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=mixins.)[^./ \]]+(?=.json")
                 AppendReason(CrashReason.ModMixin失败, TryAnalyzeModName(If(ModId, "").TrimEnd((vbCrLf & " ").ToCharArray)))
+            'Mod 依赖项未完善
+            If LogCrash.Contains("Missing or unsupported mandatory dependencies:") Then
+                AppendReason(CrashReason.Mod依赖项未完善, RegexSearch(LogMc, "(?<=Missing or unsupported mandatory dependencies:)[\n\r]*(\t(.*)[\n\r]*)+"), "").TrimEnd((vbCrLf & " ").ToCharArray)
             End If
             If LogMc.Contains("Caught exception from ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(RegexSeek(LogMc, "(?<=Caught exception from )[^\n]+?")?.TrimEnd((vbCrLf & " ").ToCharArray)))
             '仅当没有其他分析结果时显示
@@ -937,6 +941,12 @@ NextStack:
                         Results.Add("Forge 提供了以下错误信息：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
                     Else
                         Results.Add("Forge 可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\n如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。\h")
+                    End If
+                Case CrashReason.Mod依赖项未完善
+                    If Additional.Count = 1 Then
+                        Results.Add("由于 Mod 缺少或不受支持的强制依赖项，导致了游戏退出。\n以下是未满足的强制依赖项：" & Additional.First & "\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
+                    Else
+                        Results.Add("由于 Mod 缺少或不受支持的强制依赖项，导致了游戏退出。请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\n如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。\h")
                     End If
                 Case CrashReason.没有可用的分析文件
                     Results.Add("你的游戏出现了一些问题，但 PCL 未能找到相关记录文件，因此无法进行分析。\h")
