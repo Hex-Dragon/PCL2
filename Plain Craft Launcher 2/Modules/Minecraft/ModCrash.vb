@@ -944,7 +944,7 @@ NextStack:
                     End If
                 Case CrashReason.Mod依赖项未完善
                     If Additional.Count = 1 Then
-                        Results.Add("由于 Mod 缺少或不受支持的强制依赖项，导致了游戏退出。\n以下是未满足的强制依赖项：" & Additional.First & "\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
+                        Results.Add("由于 Mod 缺少或不受支持的必备依赖项，导致了游戏退出。\n以下是未满足条件的必备依赖项：" & Additional.First & "\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
                     Else
                         Results.Add("由于 Mod 缺少或不受支持的强制依赖项，导致了游戏退出。请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\n如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。\h")
                     End If
