@@ -7,10 +7,9 @@
              d:DesignWidth="800" d:DesignHeight="800">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
+          <local:MyHint Text="在这个页面修改的设置均只对当前版本生效，这对整合包制作应该会有所帮助。\n你也可以在设置页面中，修改对全部版本生效的全局设置。" IsWarn="False" Margin="0,0,0,10" />
             <local:MyCard x:Name="CardArgument" Margin="0,15" Title="启动选项">
                 <StackPanel Margin="25,40,25,21">
-                    <TextBlock Margin="0,-2,0,1" Text="在这个页面修改的设置均只对当前版本生效，这对整合包制作应该会有所帮助。" TextWrapping="Wrap" />
-                    <TextBlock Margin="0,0,0,11" Text="你也可以在设置页面中，修改对全部版本生效的全局设置。" TextWrapping="Wrap" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
