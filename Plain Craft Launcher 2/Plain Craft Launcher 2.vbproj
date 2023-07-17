@@ -182,8 +182,12 @@
     <Compile Include="Controls\MyCard.vb" />
     <Compile Include="Controls\MyPageRight.vb" />
     <Compile Include="Controls\MyPageLeft.vb" />
+    <Compile Include="Controls\MyIconTextButton.xaml.vb">
+      <DependentUpon>MyIconTextButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modules\Minecraft\ModComp.vb" />
     <Compile Include="Modules\Minecraft\ModJava.vb" />
+    <Compile Include="Modules\Minecraft\ModMod.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
     <Compile Include="Modules\ModEvent.vb" />
     <Compile Include="Controls\MyExtraButton.xaml.vb">
@@ -405,6 +409,10 @@
     <Page Include="Controls\MyRadioBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MyIconTextButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\MySearchBox.xaml">
       <SubType>Designer</SubType>

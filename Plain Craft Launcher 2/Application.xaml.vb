@@ -41,8 +41,11 @@ Public Class Application
                         MsgBox(ex.Message, MsgBoxStyle.Critical, "内存优化失败")
                         Environment.Exit(-1)
                     End Try
-                    Ram = My.Computer.Info.AvailablePhysicalMemory - Ram
-                    Environment.Exit(Math.Max(0, Ram / 1024)) '返回清理的内存量（K）
+                    If My.Computer.Info.AvailablePhysicalMemory < Ram Then '避免 ULong 相减出现负数
+                        Environment.Exit(0)
+                    Else
+                        Environment.Exit((My.Computer.Info.AvailablePhysicalMemory - Ram) / 1024) '返回清理的内存量（K）
+                    End If
 #If DEBUG Then
                 ElseIf e.Args(0) = "--make" Then
                     '制作更新包
@@ -71,7 +74,8 @@ Public Class Application
             Directory.CreateDirectory(PathAppdata)
             '检测单例
 #If Not DEBUG Then
-            Dim WindowHwnd As IntPtr = FindWindow(Nothing, "Plain Craft Launcher 2　")
+            Dim WindowHwnd As IntPtr = FindWindow(Nothing, "Plain Craft Launcher　")
+            If WindowHwnd = IntPtr.Zero Then FindWindow(Nothing, "Plain Craft Launcher 2　")
             If WindowHwnd <> IntPtr.Zero Then
                 '将已有的 PCL 窗口拖出来
                 ShowWindowToTop(WindowHwnd)

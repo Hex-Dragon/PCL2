@@ -187,6 +187,7 @@
                     End Try
                     FrmSpeedRight.PanMain.Children.Insert(0, Card)
                     RightCards.Add(Loader.Name, Card)
+                    Log($"[Watcher] 新建下载管理卡片：{Loader.Name}")
                     '添加取消按钮
                     Dim Cancel As New MyIconButton With {.Name = "BtnCancel", .Logo = "F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z", .Height = 20, .Margin = New Thickness(0, 10, 10, 0), .LogoScale = 1.1, .HorizontalAlignment = HorizontalAlignment.Right, .VerticalAlignment = VerticalAlignment.Top}
                     Card.Children.Add(Cancel)
@@ -194,6 +195,8 @@
                                                  AniDispose(sender, False)
                                                  AniDispose(Card, True, Sub() If FrmSpeedRight.PanMain.Children.Count = 0 AndAlso FrmMain.PageCurrent = FormMain.PageType.DownloadManager Then FrmMain.PageBack())
                                                  RightCards.Remove(Loader.Name)
+                                                 LoaderTaskbar.Remove(Loader)
+                                                 Log($"[Watcher] 关闭下载管理卡片：{Loader.Name}")
                                                  RunInThread(Sub() Loader.Abort())
                                              End Sub
                     '如果已经失败，再刷新一次，修改成失败的控件
@@ -217,6 +220,7 @@
                             Dim Card As Grid = RightCards(Loader.Name)
                             FrmSpeedRight.PanMain.Children.Remove(Card)
                             RightCards.Remove(Loader.Name)
+                            Log($"[Watcher] 移除下载管理卡片：{Loader.Name}")
                         End Sub)
         End If
     End Sub

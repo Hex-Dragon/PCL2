@@ -102,7 +102,7 @@
         Get
             Return _CanRightClick
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             _CanRightClick = value
         End Set
     End Property

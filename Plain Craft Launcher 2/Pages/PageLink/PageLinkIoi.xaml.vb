@@ -11,6 +11,7 @@ Public Class PageLinkIoi
     '页面初始化
     Private IsLoad As Boolean = False
     Private Sub MeLoaded() Handles Me.Loaded
+        FormMain.EndProgramForce(Result.Aborted)
 
         '重复加载部分
         PanBack.ScrollToHome()

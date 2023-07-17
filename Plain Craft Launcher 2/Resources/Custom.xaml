@@ -103,26 +103,34 @@
 </local:MyCard>
 
 <local:MyCard Title="事件 4：其他事件类型" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
-    <StackPanel Margin="25,40,23,15">
-        <TextBlock TextWrapping="Wrap" Margin="0,4,0,6" FontWeight="Bold"
+	<StackPanel Margin="25,40,23,15">
+		<TextBlock Margin="0,4,0,6" FontWeight="Bold"
                     Text="EventType 共有以下种类：" />
-        <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
+		<TextBlock Margin="0,0,0,4"
                     Text="· 打开网页、启动游戏、打开文件：已在上方的卡片中介绍" />
-        <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
-                    Text="· 今日人品、清理垃圾、内存优化：触发百宝箱中的对应功能" />
-        <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
+		<local:MyButton Margin="0,5,0,6" Width="250" Height="35"
+                    Text="查看 PCL 源代码" EventType="打开网页" EventData="https://github.com/Hex-Dragon/PCL2/blob/main/Plain%20Craft%20Launcher%202/FormMain.xaml.vb"/>
+		<TextBlock Margin="0,0,0,4"
+                    Text="· 今日人品、清理垃圾、内存优化、安装整合包：触发对应功能" />
+		<TextBlock Margin="0,0,0,4"
                     Text="· 复制文本：将 EventData 中的内容复制到剪贴板" />
-        <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
+		<TextBlock Margin="0,0,0,4"
                     Text="· 刷新主页：点击重新加载主页。如果主页文件为联网更新，这会重新下载主页内容" />
-        <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
+		<TextBlock Margin="0,0,0,4"
                     Text="· 下载文件：在点击时要求选择文件保存位置，并且下载 EventData 的链接中的文件" />
-        <local:MyButton Margin="0,5,0,6" Width="250" Height="35"
+		<local:MyButton Margin="0,5,0,6" Width="250" Height="35"
                     Text="下载 MCBBS 的 Logo" EventType="下载文件" EventData="https://www.mcbbs.net/template/mcbbs/image/logo_sc.png" />
-        <TextBlock TextWrapping="Wrap" Margin="0,4,0,0"
+		<TextBlock Margin="0,4,0,4"
                     Text="· 打开帮助：跳转到 EventData 对应的帮助文件（输入相对 Help 文件夹的路径）"/>
-        <local:MyButton Margin="0,5,0,6" Width="250" Height="35"
+		<local:MyButton Margin="0,5,0,6" Width="250" Height="35"
                     Text="打开自定义帮助页面" EventType="打开帮助" EventData="帮助/自定义帮助.json"/>
-    </StackPanel>
+		<TextBlock Margin="0,4,0,4"
+                    Text="· 切换页面：强制切换到 PCL 的某一页面（尝试切换到不太对头的页面会出现不可预知的 Bug，使用时请谨慎）&#xa;  　　　　　EventData 为 页面种类|次要页面种类（PageType|PageSubType，例如 1|1）&#xa;  　　　　　点击上方的 查看 PCL 源代码 按钮，在 1000 行左右的位置即可查找到对应数值"/>
+		<local:MyButton Margin="0,5,0,6" Width="250" Height="35"
+                    Text="切换到下载页面" EventType="切换页面" EventData="1|1"/>
+		<local:MyButton Margin="0,5,0,6" Width="250" Height="35"
+                    Text="切换到启动器设置" EventType="切换页面" EventData="3|2"/>
+	</StackPanel>
 </local:MyCard>
 
 <local:MyCard Title="横向布局 1：StackPanel" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">

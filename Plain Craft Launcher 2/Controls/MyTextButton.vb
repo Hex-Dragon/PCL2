@@ -91,7 +91,7 @@
             Return GetValue(EventTypeProperty)
         End Get
 
-        Set(ByVal value As String)
+        Set(value As String)
             SetValue(EventTypeProperty, value)
         End Set
     End Property
@@ -101,7 +101,7 @@
             Return GetValue(EventDataProperty)
         End Get
 
-        Set(ByVal value As String)
+        Set(value As String)
             SetValue(EventDataProperty, value)
         End Set
     End Property

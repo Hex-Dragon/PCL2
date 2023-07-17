@@ -25,7 +25,7 @@
                 For Each File In My.Computer.FileSystem.GetFiles(Path & "PCL\Musics\", FileIO.SearchOption.SearchAllSubDirectories, "*.*")
                     '文件夹可能会被加入 .ini 文件夹配置文件、一些乱七八糟的 .jpg 文件啥的
                     Dim Extend As String = File.Split(".").Last.ToLower
-                    If Not (Extend = "ini" OrElse Extend = "jpg" OrElse Extend = "txt" OrElse Extend = "cfg" OrElse Extend = "png") Then
+                    If Not (Extend = "ini" OrElse Extend = "jpg" OrElse Extend = "txt" OrElse Extend = "cfg" OrElse Extend = "lrc" OrElse Extend = "png") Then
                         MusicAllList.Add(File)
                     End If
                 Next
@@ -277,7 +277,7 @@
             Log(ex, "播放音乐失败（" & MusicCurrent & "）", LogLevel.Developer)
             If MusicAllList.Count > 1 Then
                 Thread.Sleep(1000)
-                MusicStartPlay(DequeueNextMusicAddress)
+                MusicStartPlay(DequeueNextMusicAddress, IsFirstLoad)
             End If
         Finally
             If CurrentWave IsNot Nothing Then CurrentWave.Dispose()

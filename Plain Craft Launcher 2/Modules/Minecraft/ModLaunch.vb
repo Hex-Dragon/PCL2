@@ -1131,11 +1131,11 @@ SystemBrowser:
             If McVersionCurrent.Version.McName = "1.7.2" Then
                 '1.7.2：必须 Java 7
                 MinVer = New Version(1, 7, 0, 0) : MaxVer = New Version(1, 7, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain <= 12 AndAlso McVersionCurrent.Version.McCodeMain > 0 AndAlso VersionSortBoolean("14.23.5.2855", McVersionCurrent.Version.ForgeVersion) Then
-                '<=1.12，Forge 14.23.5.2855 及更低：Java 8
+            ElseIf McVersionCurrent.Version.McCodeMain <= 12 AndAlso McVersionCurrent.Version.McCodeMain > 0 Then
+                '<=1.12：Java 8
                 MaxVer = New Version(1, 8, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain <= 14 AndAlso McVersionCurrent.Version.McCodeMain >= 13 AndAlso VersionSortBoolean("28.2.23", McVersionCurrent.Version.ForgeVersion) Then
-                '1.13 - 1.14，Forge 28.2.23 及更低：Java 8 - 10
+            ElseIf McVersionCurrent.Version.McCodeMain <= 14 AndAlso McVersionCurrent.Version.McCodeMain >= 13 Then
+                '1.13 - 1.14：Java 8 - 10
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 10, 999, 999)
             ElseIf McVersionCurrent.Version.McCodeMain = 15 Then
                 '1.15：Java 8 - 15
@@ -1182,17 +1182,27 @@ SystemBrowser:
         If Task.IsAborted Then Exit Sub '中断加载会导致 JavaSelect 异常地返回空值，误判找不到 Java
         McLaunchLog("无合适的 Java，需要确认是否自动下载")
         Dim JavaCode As String
-        If MinVer >= New Version(1, 16, 0, 0) Then
+        If MinVer >= New Version(1, 9, 0, 0) Then
             JavaCode = 17
+            If Not JavaDownloadConfirm("Java 17") Then Throw New Exception("$$")
         ElseIf MaxVer < New Version(1, 8, 0, 0) Then
             JavaCode = 7
-        ElseIf MinVer > New Version(1, 8, 0, 52) Then
-            '缺少 Java 8 较新版（统一通行证）
+            If Not JavaDownloadConfirm("Java 7") Then Throw New Exception("$$")
+        ElseIf MinVer > New Version(1, 8, 0, 100) AndAlso MaxVer < New Version(1, 8, 0, 321) Then
             JavaCode = "8u101"
+            JavaDownloadConfirm("Java 8.0.101 ~ 8.0.320", True)
+            Throw New Exception("$$")
+        ElseIf MinVer > New Version(1, 8, 0, 100) Then
+            JavaCode = "8u101"
+            JavaDownloadConfirm("Java 8.0.101 或更高版本的 Java 8", True)
+            Throw New Exception("$$")
+        ElseIf MaxVer < New Version(1, 8, 0, 321) Then
+            JavaCode = 8
+            If Not JavaDownloadConfirm("Java 8.0.320 或更低版本的 Java 8") Then Throw New Exception("$$")
         Else
             JavaCode = 8
+            If Not JavaDownloadConfirm("Java 8") Then Throw New Exception("$$")
         End If
-        If Not JavaDownloadConfirm(JavaCode) Then Throw New Exception("$$")
 
         '开始自动下载
         Dim JavaLoader = JavaFixLoaders(JavaCode)
@@ -1350,7 +1360,7 @@ SystemBrowser:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        DataList.Insert(0, "-Doolloo.jlw.tmpdir=""" & GetJavaWrapperDir() & """")
+        DataList.Add("-Doolloo.jlw.tmpdir=""" & GetJavaWrapperDir() & """")
         DataList.Add("-jar """ & ExtractJavaWrapper() & """")
 
         '添加 MainClass
@@ -1417,7 +1427,7 @@ NextVersion:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        DataList.Insert(0, "-Doolloo.jlw.tmpdir=""" & GetJavaWrapperDir() & """")
+        DataList.Add("-Doolloo.jlw.tmpdir=""" & GetJavaWrapperDir() & """")
         DataList.Add("-jar """ & ExtractJavaWrapper() & """")
 
         '将 "-XXX" 与后面 "XXX" 合并到一起

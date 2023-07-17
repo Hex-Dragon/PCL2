@@ -1,7 +1,7 @@
 ﻿Class MySearchBox
     Inherits MyCard
 
-    Public Event TextChanged(ByVal sender As Object, ByVal e As EventArgs)
+    Public Event TextChanged(sender As Object, e As EventArgs)
     Private Sub MySearchBox_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         TextBox.Focus()
     End Sub
@@ -11,7 +11,7 @@
         Get
             Return TextBox.HintText
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             TextBox.HintText = value
         End Set
     End Property
@@ -19,7 +19,7 @@
         Get
             Return TextBox.Text
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             TextBox.Text = value
         End Set
     End Property

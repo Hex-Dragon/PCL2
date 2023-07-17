@@ -134,23 +134,21 @@
 
     '实现自定义事件
     Private Sub Button_MouseUp(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseLeftButtonUp
-        If IsMouseDown Then
-            Log("[Control] 按下按钮：" & Text)
-            RaiseEvent Click(sender, e)
-            If Not String.IsNullOrEmpty(Tag) Then
-                If Tag.ToString.StartsWith("链接-") OrElse Tag.ToString.StartsWith("启动-") Then
-                    Hint("主页自定义按钮语法已更新，且不再兼容老版本语法，请查看新的自定义示例！")
-                End If
+        If Not IsMouseDown Then Exit Sub
+        Log("[Control] 按下按钮：" & Text)
+        RaiseEvent Click(sender, e)
+        If Not String.IsNullOrEmpty(Tag) Then
+            If Tag.ToString.StartsWith("链接-") OrElse Tag.ToString.StartsWith("启动-") Then
+                Hint("主页自定义按钮语法已更新，且不再兼容老版本语法，请查看新的自定义示例！")
             End If
-            ModEvent.TryStartEvent(EventType, EventData)
         End If
+        ModEvent.TryStartEvent(EventType, EventData)
     End Sub
     Public Property EventType As String
         Get
             Return GetValue(EventTypeProperty)
         End Get
-
-        Set(ByVal value As String)
+        Set(value As String)
             SetValue(EventTypeProperty, value)
         End Set
     End Property
@@ -159,8 +157,7 @@
         Get
             Return GetValue(EventDataProperty)
         End Get
-
-        Set(ByVal value As String)
+        Set(value As String)
             SetValue(EventDataProperty, value)
         End Set
     End Property

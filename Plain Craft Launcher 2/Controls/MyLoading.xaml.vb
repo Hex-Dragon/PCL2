@@ -46,7 +46,7 @@ Public Class MyLoading
         Get
             Return _Text
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             _Text = value
             RefreshText()
         End Set
@@ -57,7 +57,7 @@ Public Class MyLoading
         Get
             Return _TextError
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             _TextError = value
             RefreshText()
         End Set

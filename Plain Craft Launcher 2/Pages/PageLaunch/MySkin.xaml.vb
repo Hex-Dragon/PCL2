@@ -5,7 +5,7 @@
 
     '皮肤储存
     Private _Address As String
-    Public Property Address() As String
+    Public Property Address As String
         Get
             Return _Address
         End Get
@@ -76,12 +76,19 @@
     ''' </summary>
     Public Sub Load()
         Try
-            Address = Loader.Output
             '检查文件存在
-            If Address = "" Then Throw New Exception("皮肤加载器 " & Loader.Name & " 没有输出")
+            Address = Loader.Output
+            If String.IsNullOrEmpty(Address) Then Throw New Exception("皮肤加载器 " & Loader.Name & " 没有输出")
             If Not Address.StartsWith(PathImage) AndAlso Not File.Exists(Address) Then Throw New FileNotFoundException("皮肤文件未找到", Address)
             '加载
-            Dim Image As New MyBitmap(Address)
+            Dim Image As MyBitmap
+            Try
+                Image = New MyBitmap(Address)
+            Catch ex As Exception '#2272
+                Log(ex, $"皮肤文件已损坏：{Address}", LogLevel.Hint)
+                File.Delete(Address)
+                Exit Sub
+            End Try
             ImgBack.Tag = Address
             '大小检查
             Dim Scale As Integer = Image.Pic.Width / 64

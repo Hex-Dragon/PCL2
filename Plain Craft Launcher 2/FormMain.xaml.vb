@@ -116,8 +116,13 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
-        If LastVersion < 297 Then 'Snapshot 2.6.3
+        If LastVersion < 298 Then 'Snapshot 2.6.4
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理中允许多选 Mod 进行批量操作"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
+            FeatureCount += 18
+            BugCount += 19
+        End If
+        If LastVersion < 297 Then 'Snapshot 2.6.3
             FeatureCount += 12
             BugCount += 14
         End If
@@ -744,31 +749,32 @@ Public Class FormMain
                             Hint($"输入的 Authlib 验证服务器不符合网址格式（{AuthlibServer}）！", HintType.Critical)
                             Exit Sub
                         End If
-                        If McVersionCurrent Is Nothing Then
+                        Dim TargetVersion = If(PageCurrent = PageType.VersionSetup, PageVersionLeft.Version, McVersionCurrent)
+                        If TargetVersion Is Nothing Then
                             Hint("请先下载游戏，再设置第三方登录！", HintType.Critical)
                             Exit Sub
                         End If
                         If AuthlibServer = "https://littleskin.cn/api/yggdrasil" Then
                             'LittleSkin
-                            If MyMsgBox($"是否要在版本 {McVersionCurrent.Name} 中开启 LittleSkin 登录？" & vbCrLf &
+                            If MyMsgBox($"是否要在版本 {TargetVersion.Name} 中开启 LittleSkin 登录？" & vbCrLf &
                                         "你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。", "第三方登录开启确认", "确定", "取消") = 2 Then
                                 Exit Sub
                             End If
-                            Setup.Set("VersionServerLogin", 4, Version:=McVersionCurrent)
-                            Setup.Set("VersionServerAuthServer", "https://littleskin.cn/api/yggdrasil", Version:=McVersionCurrent)
-                            Setup.Set("VersionServerAuthRegister", "https://littleskin.cn/auth/register", Version:=McVersionCurrent)
-                            Setup.Set("VersionServerAuthName", "LittleSkin 登录", Version:=McVersionCurrent)
+                            Setup.Set("VersionServerLogin", 4, Version:=TargetVersion)
+                            Setup.Set("VersionServerAuthServer", "https://littleskin.cn/api/yggdrasil", Version:=TargetVersion)
+                            Setup.Set("VersionServerAuthRegister", "https://littleskin.cn/auth/register", Version:=TargetVersion)
+                            Setup.Set("VersionServerAuthName", "LittleSkin 登录", Version:=TargetVersion)
                         Else
                             '第三方 Authlib 服务器
-                            If MyMsgBox($"是否要在版本 {McVersionCurrent.Name} 中开启第三方登录？" & vbCrLf &
+                            If MyMsgBox($"是否要在版本 {TargetVersion.Name} 中开启第三方登录？" & vbCrLf &
                                         $"登录服务器：{AuthlibServer}" & vbCrLf & vbCrLf &
                                         "你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。", "第三方登录开启确认", "确定", "取消") = 2 Then
                                 Exit Sub
                             End If
-                            Setup.Set("VersionServerLogin", 4, Version:=McVersionCurrent)
-                            Setup.Set("VersionServerAuthServer", AuthlibServer, Version:=McVersionCurrent)
-                            Setup.Set("VersionServerAuthRegister", AuthlibServer.Replace("api/yggdrasil", "auth/register"), Version:=McVersionCurrent)
-                            Setup.Set("VersionServerAuthName", "", Version:=McVersionCurrent)
+                            Setup.Set("VersionServerLogin", 4, Version:=TargetVersion)
+                            Setup.Set("VersionServerAuthServer", AuthlibServer, Version:=TargetVersion)
+                            Setup.Set("VersionServerAuthRegister", AuthlibServer.Replace("api/yggdrasil", "auth/register"), Version:=TargetVersion)
+                            Setup.Set("VersionServerAuthName", "", Version:=TargetVersion)
                         End If
                         If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionSetup Then
                             '正在服务器选项页，需要刷新设置项显示
@@ -916,7 +922,7 @@ Install:
         Get
             Return _Hidden
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             If _Hidden = value Then Exit Property
             _Hidden = value
             If value Then
@@ -963,6 +969,7 @@ Install:
 #Region "切换页面"
 
     '页面种类与属性
+    '注意，这一枚举在 “切换页面” EventType 中调用，应视作公开 API 的一部分
     ''' <summary>
     ''' 页面种类。
     ''' </summary>
@@ -970,43 +977,43 @@ Install:
         ''' <summary>
         ''' 启动。
         ''' </summary>
-        Launch
+        Launch = 0
         ''' <summary>
         ''' 下载。
         ''' </summary>
-        Download
+        Download = 1
         ''' <summary>
         ''' 联机。
         ''' </summary>
-        Link
+        Link = 2
         ''' <summary>
         ''' 设置。
         ''' </summary>
-        Setup
+        Setup = 3
         ''' <summary>
         ''' 更多。
         ''' </summary>
-        Other
+        Other = 4
         ''' <summary>
         ''' 版本选择。这是一个副页面。
         ''' </summary>
-        VersionSelect
+        VersionSelect = 5
         ''' <summary>
         ''' 下载管理。这是一个副页面。
         ''' </summary>
-        DownloadManager
+        DownloadManager = 6
         ''' <summary>
         ''' 版本设置。这是一个副页面。
         ''' </summary>
-        VersionSetup
+        VersionSetup = 7
         ''' <summary>
         ''' 资源工程详情。这是一个副页面。
         ''' </summary>
-        CompDetail
+        CompDetail = 8
         ''' <summary>
         ''' 帮助详情。这是一个副页面。
         ''' </summary>
-        HelpDetail
+        HelpDetail = 9
     End Enum
     ''' <summary>
     ''' 次要页面种类。其数值必须与 StackPanel 中的下标一致。

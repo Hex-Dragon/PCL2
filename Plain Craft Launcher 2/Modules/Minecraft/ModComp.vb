@@ -375,6 +375,7 @@
                     End Select
                 Next
                 If Tags.Count = 0 Then Tags.Add("杂项")
+                Tags.Sort()
                 ModLoaders.Sort()
 #End Region
             End If
@@ -424,15 +425,32 @@
             Dim ExNameList As List(Of String)
             If TranslatedName = RawName Then
                 '没有中文翻译
-                FinalName = TranslatedName.Split(" | ").First.Split(" - ").First.Split("(").First.Split("[").First
-                ExNameList = TranslatedName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).
-                    Select(Function(s) s.Trim(" /".ToCharArray)).Where(Function(w) Not String.IsNullOrEmpty(w)).ToList
-                ExNameList.RemoveAt(0)
-                If Not ExNameList.Any(Function(s) s.ToLower.Contains("forge") OrElse s.ToLower.Contains("fabric") OrElse s.ToLower.Contains("quilt")) AndAlso '不是标注 XX 版
-                   Not (ExNameList.Count = 1 AndAlso ExNameList.First.ToUpper = ExNameList.First) Then '不是缩写
-                    FinalName = RawName '使用原名
-                    ExNameList.Clear()
-                End If
+                '将所有名称分段
+                Dim NameLists = TranslatedName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).
+                    Select(Function(s) s.Trim(" /\".ToCharArray)).Where(Function(w) Not String.IsNullOrEmpty(w)).ToList
+                If NameLists.Count = 1 Then GoTo NoExName
+                '查找其中的缩写、Forge/Fabric 等版本标记
+                ExNameList = New List(Of String)
+                Dim NormalNameList = New List(Of String)
+                For Each Name In NameLists
+                    Dim LowerName As String = Name.ToLower
+                    If Name.ToUpper = Name Then
+                        '缩写
+                        ExNameList.Add(Name)
+                    ElseIf (LowerName.Contains("forge") OrElse LowerName.Contains("fabric") OrElse LowerName.Contains("quilt")) AndAlso
+                        Not RegexCheck(LowerName.Replace("forge", "").Replace("fabric", "").Replace("quilt", ""), "[a-z]+") Then '去掉关键词后没有其他字母
+                        'Forge/Fabric 等版本标记
+                        ExNameList.Add(Name)
+                    Else
+                        '其他部分
+                        NormalNameList.Add(Name)
+                    End If
+                Next
+                '根据分类后的结果处理
+                If NormalNameList.Count = 0 OrElse ExNameList.Count = 0 Then GoTo NoExName
+                '同时包含 NormalName 和 ExName
+                FinalName = NormalNameList.Join(" - ")
+                ExNameList = ExNameList
             Else
                 '有中文翻译
                 '尝试将文本分为三段：FinalName (EnglishName) - Suffix
@@ -452,21 +470,20 @@
                     ExNameList = New List(Of String) From {EnglishName} '使用原名
                 End If
                 '添加后缀
-                If Suffix <> "" Then
-                    ExNameList.Add(Suffix)
-                    ExNameList = ExNameList.Distinct().ToList()
-                End If
+                If Suffix <> "" Then ExNameList.Add(Suffix)
             End If
+            ExNameList = ExNameList.Distinct().ToList()
             '显示 FinalName 与 ExNameList
-            NewItem.LabTitle.Text = FinalName
             If ExNameList.Count = 0 Then
 NoExName:
+                NewItem.LabTitle.Text = RawName
                 CType(NewItem.LabTitleRaw.Parent, StackPanel).Children.Remove(NewItem.LabTitleRaw)
             Else
+                NewItem.LabTitle.Text = FinalName
                 Dim ExName As String = ""
                 For Each Ex In ExNameList
                     '去除 “Forge/Fabric” 这一无意义提示
-                    If Ex.Length < 19 AndAlso Ex.ToLower.Contains("fabric") AndAlso Ex.ToLower.Contains("forge") Then Continue For
+                    If Ex.Length < 16 AndAlso Ex.ToLower.Contains("fabric") AndAlso Ex.ToLower.Contains("forge") Then Continue For
                     '将 “Forge” 等提示改为 “Forge 版”
                     If (Ex.ToLower.Contains("forge") OrElse Ex.ToLower.Contains("fabric") OrElse Ex.ToLower.Contains("quilt")) AndAlso Not Ex.Contains("版") AndAlso
                         Ex.ToLower.Replace("forge", "").Replace("fabric", "").Replace("quilt", "").Length <= 3 Then

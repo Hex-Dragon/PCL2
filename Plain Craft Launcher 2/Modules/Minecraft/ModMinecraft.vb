@@ -1,4 +1,5 @@
 ﻿Imports System.IO.Compression
+Imports NAudio.Gui
 
 Public Module ModMinecraft
 
@@ -392,7 +393,7 @@ Public Module ModMinecraft
                         '非准确的版本判断警告
                         Log("[Minecraft] 无法完全确认 MC 版本号的版本：" & Name)
                         '从文件夹名中获取
-                        Regex = RegexSeek(Name, "([0-9w]{5}[a-z]{1})|(1\.[0-9]+(\.[0-9]+)?(-(pre|rc)[1-9]?| Pre-Release( [1-9]{1})?)?)")
+                        Regex = RegexSeek(Name, "([0-9w]{5}[a-z]{1})|(1\.[0-9]+(\.[0-9]+)?(-(pre|rc)[1-9]?| Pre-Release( [1-9]{1})?)?)", RegularExpressions.RegexOptions.IgnoreCase)
                         If Regex IsNot Nothing Then
                             _Version.McName = Regex
                             GoTo VersionSearchFinish
@@ -401,7 +402,7 @@ Public Module ModMinecraft
                         Dim JsonRaw As JObject = JsonObject.DeepClone()
                         JsonRaw.Remove("libraries")
                         Dim JsonRawText As String = JsonRaw.ToString
-                        Regex = RegexSeek(JsonRawText, "([0-9w]{5}[a-z]{1})|(1\.[0-9]+(\.[0-9]+)?(-(pre|rc)[1-9]?| Pre-Release( [1-9]{1})?)?)")
+                        Regex = RegexSeek(JsonRawText, "([0-9w]{5}[a-z]{1})|(1\.[0-9]+(\.[0-9]+)?(-(pre|rc)[1-9]?| Pre-Release( [1-9]{1})?)?)", RegularExpressions.RegexOptions.IgnoreCase)
                         If Regex IsNot Nothing Then
                             _Version.McName = Regex
                             GoTo VersionSearchFinish
@@ -467,7 +468,7 @@ VersionSearchFinish:
                 End If
                 Return _JsonText
             End Get
-            Set(ByVal value As String)
+            Set(value As String)
                 _JsonText = value
             End Set
         End Property
@@ -562,7 +563,7 @@ Recheck:
                 End If
                 Return _JsonObject
             End Get
-            Set(ByVal value As JObject)
+            Set(value As JObject)
                 _JsonObject = value
             End Set
         End Property
@@ -966,7 +967,7 @@ ExitDataLoad:
                 End If
                 Return _SortCode
             End Get
-            Set(ByVal value As Integer)
+            Set(value As Integer)
                 _SortCode = value
             End Set
         End Property
@@ -1608,7 +1609,7 @@ NextVersion:
             Get
                 Return _Url
             End Get
-            Set(ByVal value As String)
+            Set(value As String)
                 '孤儿 Forge 作者喜欢把没有的 URL 写个空字符串
                 _Url = If(String.IsNullOrWhiteSpace(value), Nothing, value)
             End Set
@@ -2122,30 +2123,46 @@ NextVersion:
 
             '确认 Virtual 与 Map 状态
             Dim IsVirtual As Boolean = False
-            If Json("virtual") IsNot Nothing Then IsVirtual = Json("virtual").ToString
-            Dim IsMap As Boolean = False
-            If Json("map_to_resources") IsNot Nothing Then IsMap = Json("map_to_resources").ToString
+            If Json("virtual") IsNot Nothing AndAlso Json("virtual").ToString Then IsVirtual = True
+            If Json("map_to_resources") IsNot Nothing AndAlso Json("map_to_resources").ToString Then
+                IsVirtual = True
+                '刷新 resources 文件夹符号链接（#2182）
+                'Dim Info As FileSystemInfo = New FileInfo(PathMcFolder & "resources\pack.mcmeta")
+                'If Info.Attributes.HasFlag(FileAttributes.ReparsePoint) Then
+                If Not File.Exists(PathMcFolder & "resources\pack.mcmeta") Then
+                    Log("[Minecraft] 尝试刷新 resources 文件夹符号链接", LogLevel.Debug)
+                    Try
+                        DeleteDirectory(PathMcFolder & "resources\", True)
+                        Directory.CreateDirectory(PathMcFolder & "assets\virtual\legacy\")
+                        Dim Result = ShellAndGetOutput("cmd", $"/C mklink /D /J ""{PathMcFolder}resources"" ""{PathMcFolder}assets\virtual\legacy""")
+                        Log($"[Minecraft] 符号链接创建结果：{Result}")
+                        If Not Result.Contains("<<===>>") Then Throw New Exception($"非预期的结果（{Result}）")
+                    Catch ex As Exception
+                        Log(ex, "创建资源文件夹链接失败，游戏可能会没有声音", LogLevel.Msgbox)
+                    End Try
+                End If
+            End If
 
             '加载列表
-            If IsVirtual OrElse IsMap Then
+            If IsVirtual Then
                 For Each File As JProperty In Json("objects").Children
                     McAssetsListGet.Add(New McAssetsToken With {
-                                        .IsVirtual = True,
-                                        .LocalPath = PathMcFolder & "assets\virtual\legacy\" & File.Name.Replace("/", "\"),
-                                        .SourcePath = File.Name,
-                                        .Hash = File.Value("hash").ToString,
-                                        .Size = File.Value("size").ToString
-                                    })
+                        .IsVirtual = True,
+                        .LocalPath = PathMcFolder & "assets\virtual\legacy\" & File.Name.Replace("/", "\"),
+                        .SourcePath = File.Name,
+                        .Hash = File.Value("hash").ToString,
+                        .Size = File.Value("size").ToString
+                    })
                 Next
             Else
                 For Each File As JProperty In Json("objects").Children
                     McAssetsListGet.Add(New McAssetsToken With {
-                                        .IsVirtual = False,
-                                        .LocalPath = PathMcFolder & "assets\objects\" & Left(File.Value("hash").ToString, 2) & "\" & File.Value("hash").ToString,
-                                        .SourcePath = File.Name,
-                                        .Hash = File.Value("hash").ToString,
-                                        .Size = File.Value("size").ToString
-                                    })
+                        .IsVirtual = False,
+                        .LocalPath = PathMcFolder & "assets\objects\" & Left(File.Value("hash").ToString, 2) & "\" & File.Value("hash").ToString,
+                        .SourcePath = File.Name,
+                        .Hash = File.Value("hash").ToString,
+                        .Size = File.Value("size").ToString
+                    })
                 Next
             End If
 
@@ -2185,899 +2202,6 @@ NextVersion:
 
         Return Result
     End Function
-
-#End Region
-
-#Region "Mod"
-
-    Public Class McMod
-
-#Region "基础"
-
-        ''' <summary>
-        ''' Mod 文件的地址。
-        ''' </summary>
-        Public ReadOnly Path As String
-        Public Sub New(Path As String)
-            Me.Path = If(Path, "")
-        End Sub
-
-        ''' <summary>
-        ''' Mod 的完整文件名。
-        ''' </summary>
-        Public ReadOnly Property FileName As String
-            Get
-                Return GetFileNameFromPath(Path)
-            End Get
-        End Property
-
-        ''' <summary>
-        ''' Mod 的状态。
-        ''' </summary>
-        Public ReadOnly Property State As McModState
-            Get
-                Load()
-                If Not IsFileAvailable Then
-                    Return McModState.Unavaliable
-                ElseIf Path.EndsWith(".disabled") Then
-                    Return McModState.Disabled
-                Else
-                    Return McModState.Fine
-                End If
-            End Get
-        End Property
-        Public Enum McModState As Integer
-            Fine = 0
-            Disabled = 1
-            Unavaliable = 2
-        End Enum
-
-#End Region
-
-#Region "信息项"
-
-        ''' <summary>
-        ''' Mod 的名称。若不可用则为 ModID 或无扩展的文件名。
-        ''' </summary>
-        Public Property Name As String
-            Get
-                If _Name Is Nothing Then Load()
-                If _Name Is Nothing Then _Name = _ModId
-                If _Name Is Nothing Then _Name = GetFileNameWithoutExtentionFromPath(Path)
-                Return _Name
-            End Get
-            Set(value As String)
-                If _Name Is Nothing AndAlso value IsNot Nothing AndAlso
-                   value.ToLower <> "name" AndAlso value.Count > 1 AndAlso Val(value).ToString <> value Then
-                    _Name = value
-                End If
-            End Set
-        End Property
-        Private _Name As String = Nothing
-
-        ''' <summary>
-        ''' Mod 的描述信息。
-        ''' </summary>
-        Public Property Description As String
-            Get
-                If _Description Is Nothing Then Load()
-                If _Description Is Nothing AndAlso FileUnavailableReason IsNot Nothing Then _Description = FileUnavailableReason.Message
-                'If _Description Is Nothing Then _Description = Path
-                Return _Description
-            End Get
-            Set(value As String)
-                If _Description Is Nothing AndAlso value IsNot Nothing AndAlso value.Count > 2 Then
-                    _Description = value.ToString.Trim(vbLf)
-                    '优化显示：若以 [a-zA-Z0-9] 结尾，加上小数点句号
-                    If _Description.ToLower.LastIndexOfAny("qwertyuiopasdfghjklzxcvbnm0123456789") = _Description.Count - 1 Then _Description += "."
-                End If
-            End Set
-        End Property
-        Private _Description As String = Nothing
-
-        ''' <summary>
-        ''' Mod 的版本，不保证符合版本格式规范。
-        ''' </summary>
-        Public Property Version As String
-            Get
-                If _Version Is Nothing Then Load()
-                Return _Version
-            End Get
-            Set(value As String)
-                If _Version IsNot Nothing AndAlso (_Version.Contains(".") OrElse _Version.Contains("-")) Then Exit Property
-                If value IsNot Nothing AndAlso value.ToLower.Contains("version") Then value = "version" '需要修改的标识
-                _Version = value
-            End Set
-        End Property
-        Private _Version As String = Nothing
-
-        ''' <summary>
-        ''' 用于依赖检查的 ModID。
-        ''' </summary>
-        Public Property ModId As String
-            Get
-                If _ModId Is Nothing Then Load()
-                Return _ModId
-            End Get
-            Set(value As String)
-                If value Is Nothing Then Exit Property
-                value = RegexSeek(value.ToLower, "[0-9a-z_]+")
-                If value IsNot Nothing AndAlso value.ToLower <> "name" AndAlso value.Count > 1 AndAlso Val(value).ToString <> value Then
-                    If Not PossibleModId.Contains(value) Then PossibleModId.Add(value)
-                    If _ModId Is Nothing Then _ModId = value
-                End If
-            End Set
-        End Property
-        Private _ModId As String = Nothing
-        ''' <summary>
-        ''' 其他可能的 ModID。
-        ''' </summary>
-        Public PossibleModId As New List(Of String)
-
-        ''' <summary>
-        ''' Mod 的主页。
-        ''' </summary>
-        Public Property Url As String
-            Get
-                If _Url Is Nothing Then Load()
-                Return _Url
-            End Get
-            Set(value As String)
-                If _Url Is Nothing AndAlso value IsNot Nothing AndAlso value.StartsWith("http") Then
-                    _Url = value
-                End If
-            End Set
-        End Property
-        Private _Url As String = Nothing
-
-        ''' <summary>
-        ''' Mod 的作者列表。
-        ''' </summary>
-        Public Property Authors As String
-            Get
-                If _Authors Is Nothing Then Load()
-                Return _Authors
-            End Get
-            Set(value As String)
-                If _Authors Is Nothing AndAlso Not String.IsNullOrWhiteSpace(value) Then
-                    _Authors = value
-                End If
-            End Set
-        End Property
-        Private _Authors As String = Nothing
-
-        ''' <summary>
-        ''' 依赖项，其中包括了 Minecraft 的版本要求。格式为 ModID - VersionRequirement，若无版本要求则为 Nothing。
-        ''' </summary>
-        Public ReadOnly Property Dependencies As Dictionary(Of String, String)
-            Get
-                Load()
-                Return _Dependencies
-            End Get
-        End Property
-        Private _Dependencies As New Dictionary(Of String, String)
-        Private Sub AddDependency(ModID As String, Optional VersionRequirement As String = Nothing)
-            '确保信息正确
-            If ModID Is Nothing OrElse ModID.Count < 2 Then Exit Sub
-            ModID = ModID.ToLower
-            If ModID = "name" OrElse Val(ModID).ToString = ModID Then Exit Sub '跳过 name 与纯数字 id
-            If VersionRequirement Is Nothing OrElse ((Not VersionRequirement.Contains(".")) AndAlso (Not VersionRequirement.Contains("-"))) OrElse VersionRequirement.Contains("$") Then
-                VersionRequirement = Nothing
-            Else
-                If (Not VersionRequirement.StartsWith("[")) AndAlso (Not VersionRequirement.StartsWith("(")) AndAlso (Not VersionRequirement.EndsWith("]")) AndAlso (Not VersionRequirement.EndsWith(")")) Then VersionRequirement = "[" & VersionRequirement & ",)"
-            End If
-            '向依赖项中添加
-            If _Dependencies.ContainsKey(ModID) Then
-                If _Dependencies(ModID) Is Nothing Then _Dependencies(ModID) = VersionRequirement
-            Else
-                _Dependencies.Add(ModID, VersionRequirement)
-            End If
-        End Sub
-
-#End Region
-
-#Region "加载步骤标记"
-
-        '1. 进行文件可用性检查
-        '   成功：继续第二步。
-        '   失败：标记 FileUnavailableReason， 并停止后续加载。
-        ''' <summary>
-        ''' 是否已进行 Mod 文件的基础加载。（这包括第一步和第二步）
-        ''' </summary>
-        Private IsLoaded As Boolean = False
-        ''' <summary>
-        ''' Mod 文件是否可被正常读取。
-        ''' </summary>
-        Public ReadOnly Property IsFileAvailable As Boolean
-            Get
-                Load()
-                Return FileUnavailableReason Is Nothing
-            End Get
-        End Property
-        ''' <summary>
-        ''' Mod 文件出错的原因。若无错误，则为 Nothing。
-        ''' </summary>
-        Public ReadOnly Property FileUnavailableReason As Exception
-            Get
-                Load()
-                Return _FileUnavailableReason
-            End Get
-        End Property
-        Private _FileUnavailableReason As Exception = Nothing
-
-        '2. 进行 .class 以外的信息获取
-        '   成功：标记 IsInfoWithoutClassAvailable。
-        '   失败：什么也不干。如果需要补充信息的话，检测到 IsInfoWithoutClassAvailable 为 False，会自动继续加载。
-        ''' <summary>
-        ''' 是否已在不获取 .class 文件的前提下完成了所需信息的加载。
-        ''' </summary>
-        Private IsInfoWithoutClassAvailable As Boolean = False
-
-        '3. 尝试从 .class 文件中获取信息
-        '   成功：标记 IsInfoWithClassAvailable。
-        '   失败：什么也不干。
-        ''' <summary>
-        ''' 是否已进行 .class 文件的信息获取。
-        ''' </summary>
-        Private IsInfoWithClassLoaded As Boolean = False
-        ''' <summary>
-        ''' 是否已在 .class 文件中完成了所需信息的加载。
-        ''' </summary>
-        Private IsInfoWithClassAvailable As Boolean = False
-
-#End Region
-
-#Region "加载"
-
-        ''' <summary>
-        ''' 初始化所有数据。
-        ''' </summary>
-        Private Sub Init()
-            _Name = Nothing
-            _Description = Nothing
-            _Version = Nothing
-            _ModId = Nothing
-            PossibleModId = New List(Of String)
-            _Dependencies = New Dictionary(Of String, String)
-            IsLoaded = False
-            _FileUnavailableReason = Nothing
-            IsInfoWithoutClassAvailable = False
-            IsInfoWithClassLoaded = False
-            IsInfoWithClassAvailable = False
-        End Sub
-
-        ''' <summary>
-        ''' 进行文件可用性检查与 .class 以外的信息获取。
-        ''' </summary>
-        Public Sub Load(Optional ForceReload As Boolean = False)
-            If IsLoaded AndAlso Not ForceReload Then Exit Sub
-            '初始化
-            Init()
-            '阶段 1：基础可用性检查
-            Dim Jar As ZipArchive
-            Try
-                '打开 Jar 文件
-                If Path.Length < 2 Then Throw New FileNotFoundException("错误的 Mod 文件路径（" & If(Path, "null") & "）")
-                If Not File.Exists(Path) Then Throw New FileNotFoundException("未找到 Mod 文件（" & Path & "）")
-                Jar = New ZipArchive(New FileStream(Path, FileMode.Open))
-                If Jar.Entries.Count = 0 Then Throw New FileFormatException("文件内容为空")
-            Catch ex As UnauthorizedAccessException
-                Log(ex, "Mod 文件由于无权限无法打开（" & Path & "）", LogLevel.Developer)
-                _FileUnavailableReason = New UnauthorizedAccessException("没有读取此文件的权限，请尝试右键以管理员身份运行 PCL", ex)
-                Jar = Nothing
-            Catch ex As Exception
-                Log(ex, "Mod 文件无法打开（" & Path & "）", LogLevel.Developer)
-                _FileUnavailableReason = ex
-                Jar = Nothing
-            End Try
-            '阶段 2：信息获取
-            If Jar IsNot Nothing Then LoadWithoutClass(Jar)
-            '阶段 3: Class 信息获取
-            If Jar IsNot Nothing AndAlso Not IsInfoWithoutClassAvailable Then LoadWithClass(Jar)
-            '释放文件
-            Try
-                If Jar IsNot Nothing Then Jar.Dispose()
-            Catch
-            End Try
-            '完成标记
-            IsLoaded = True
-        End Sub
-
-        ''' <summary>
-        ''' 进行不使用 .class 文件的信息获取。
-        ''' </summary>
-        Private Sub LoadWithoutClass(Jar As ZipArchive)
-
-#Region "尝试使用 mcmod.info"
-            Try
-                '获取信息文件
-                Dim InfoEntry As ZipArchiveEntry = Jar.GetEntry("mcmod.info")
-                Dim InfoString As String = Nothing
-                If InfoEntry IsNot Nothing Then
-                    InfoString = ReadFile(InfoEntry.Open())
-                    If InfoString.Length < 15 Then InfoString = Nothing
-                End If
-                If InfoString Is Nothing Then Exit Try
-                '获取可用 Json 项
-                Dim InfoObject As JObject
-                Dim JsonObject = GetJson(InfoString)
-                If JsonObject.Type = JTokenType.Array Then
-                    InfoObject = JsonObject(0)
-                Else
-                    InfoObject = JsonObject("modList")(0)
-                End If
-                '从文件中获取 Mod 信息项
-                Name = InfoObject("name")
-                Description = InfoObject("description")
-                Version = InfoObject("version")
-                Url = InfoObject("url")
-                ModId = InfoObject("modid")
-                Dim AuthorJson As JArray = InfoObject("authorList")
-                If AuthorJson IsNot Nothing Then
-                    Dim Author As New List(Of String)
-                    For Each Token In AuthorJson
-                        Author.Add(Token.ToString)
-                    Next
-                    If Author.Count > 0 Then Authors = Join(Author, ", ")
-                End If
-                Dim Reqs As JArray = InfoObject("requiredMods")
-                If Reqs IsNot Nothing Then
-                    For Each Token As String In Reqs
-                        If Not String.IsNullOrEmpty(Token) Then
-                            Token = Token.Substring(Token.IndexOf(":") + 1)
-                            If Token.Contains("@") Then
-                                AddDependency(Token.Split("@")(0), Token.Split("@")(1))
-                            Else
-                                AddDependency(Token)
-                            End If
-                        End If
-                    Next
-                End If
-                Reqs = InfoObject("dependancies")
-                If Reqs IsNot Nothing Then
-                    For Each Token As String In Reqs
-                        If Not String.IsNullOrEmpty(Token) Then
-                            Token = Token.Substring(Token.IndexOf(":") + 1)
-                            If Token.Contains("@") Then
-                                AddDependency(Token.Split("@")(0), Token.Split("@")(1))
-                            Else
-                                AddDependency(Token)
-                            End If
-                        End If
-                    Next
-                End If
-            Catch ex As Exception
-                Log(ex, "读取 mcmod.info 时出现未知错误（" & Path & "）", LogLevel.Developer)
-            End Try
-#End Region
-#Region "尝试使用 mods.toml"
-            Try
-                '获取 mods.toml 文件
-                Dim TomlEntry As ZipArchiveEntry = Jar.GetEntry("META-INF/mods.toml")
-                Dim TomlText As String = Nothing
-                If TomlEntry IsNot Nothing Then
-                    TomlText = ReadFile(TomlEntry.Open())
-                    If TomlText.Length < 15 Then TomlText = Nothing
-                End If
-                If TomlText Is Nothing Then Exit Try
-                '文件标准化：统一换行符为 vbLf，去除注释、头尾的空格、空行
-                Dim Lines As New List(Of String)
-                For Each Line In TomlText.Replace(vbCrLf, vbLf).Replace(vbCr, vbLf).Split(vbLf) '统一换行符
-                    If Line.StartsWith("#") Then '去除注释
-                        Continue For
-                    ElseIf Line.Contains("#") Then
-                        Line = Line.Substring(0, Line.IndexOf("#"))
-                    End If
-                    Line = Line.Trim(New Char() {" "c, "	"c, "　"c}) '去除头尾的空格
-                    If Line.Count > 0 Then Lines.Add(Line) '去除空行
-                Next
-                '读取文件数据
-                Dim TomlData As New List(Of KeyValuePair(Of String, Dictionary(Of String, Object))) From {New KeyValuePair(Of String, Dictionary(Of String, Object))("", New Dictionary(Of String, Object))}
-                For i = 0 To Lines.Count - 1
-                    Dim Line As String = Lines(i)
-                    If Line.StartsWith("[[") AndAlso Line.EndsWith("]]") Then
-                        '段落标记
-                        Dim Header = Line.Replace("[", "").Replace("]", "")
-                        TomlData.Add(New KeyValuePair(Of String, Dictionary(Of String, Object))(Header, New Dictionary(Of String, Object)))
-                    ElseIf Line.Contains("=") Then
-                        '字段标记
-                        Dim Key As String = Line.Substring(0, Line.IndexOf("=")).TrimEnd(New Char() {" "c, "	"c, "　"c})
-                        Dim RawValue As String = Line.Substring(Line.IndexOf("=") + 1).TrimStart(New Char() {" "c, "	"c, "　"c})
-                        Dim Value As Object
-                        If RawValue.StartsWith("""") AndAlso RawValue.EndsWith("""") Then
-                            '单行字符串
-                            Value = RawValue.Trim("""")
-                        ElseIf RawValue.StartsWith("'''") Then
-                            '多行字符串
-                            Dim ValueLines As New List(Of String) From {RawValue.TrimStart("'")}
-                            Do Until i >= Lines.Count - 1
-                                i += 1
-                                Dim ValueLine As String = Lines(i)
-                                If ValueLine.EndsWith("'''") Then
-                                    ValueLines.Add(ValueLine.TrimEnd("'"))
-                                    Exit Do
-                                Else
-                                    ValueLines.Add(ValueLine)
-                                End If
-                            Loop
-                            Value = Join(ValueLines, vbLf).Trim(vbLf).Replace(vbLf, vbCrLf)
-                        ElseIf RawValue.ToLower = "true" OrElse RawValue.ToLower = "false" Then
-                            '布尔型
-                            Value = (RawValue.ToLower = "true")
-                        ElseIf Val(RawValue).ToString = RawValue Then
-                            '数字型
-                            Value = Val(RawValue)
-                        Else
-                            '不知道是个啥玩意儿，直接存储
-                            Value = RawValue
-                        End If
-                        TomlData.Last.Value(Key) = Value
-                    Else
-                        '不知道是个啥玩意儿
-                        Exit Try
-                    End If
-                Next
-                '从文件数据中获取信息
-                Dim ModEntry As Dictionary(Of String, Object) = Nothing
-                For Each TomlSubData In TomlData
-                    If TomlSubData.Key = "mods" Then
-                        ModEntry = TomlSubData.Value
-                        Exit For
-                    End If
-                Next
-                If ModEntry Is Nothing OrElse Not ModEntry.ContainsKey("modId") Then Exit Try
-                ModId = ModEntry("modId")
-                If _ModId Is Nothing Then Exit Try '设置了无效的 ModID
-                If ModEntry.ContainsKey("displayName") Then Name = ModEntry("displayName")
-                If ModEntry.ContainsKey("description") Then Description = ModEntry("description")
-                If ModEntry.ContainsKey("version") Then Version = ModEntry("version")
-                If TomlData(0).Value.ContainsKey("displayURL") Then Url = TomlData(0).Value("displayURL")
-                If TomlData(0).Value.ContainsKey("authors") Then Authors = TomlData(0).Value("authors")
-                For Each TomlSubData In TomlData
-                    If TomlSubData.Key.StartsWith("dependencies") Then
-                        Dim DepEntry As Dictionary(Of String, Object) = TomlSubData.Value
-                        If DepEntry.ContainsKey("modId") AndAlso DepEntry.ContainsKey("mandatory") AndAlso DepEntry("mandatory") AndAlso
-                           DepEntry.ContainsKey("side") AndAlso Not DepEntry("side").ToString.ToLower = "server" Then
-                            AddDependency(DepEntry("modId"), If(DepEntry.ContainsKey("versionRange"), DepEntry("versionRange"), Nothing))
-                        End If
-                    End If
-                Next
-                '加载成功
-                GoTo Finished
-            Catch ex As Exception
-                Log(ex, "读取 mods.toml 时出现未知错误（" & Path & "）", LogLevel.Developer)
-            End Try
-#End Region
-#Region "尝试使用 fabric.mod.json"
-            Try
-                '获取 fabric.mod.json 文件
-                Dim FabricEntry As ZipArchiveEntry = Jar.GetEntry("fabric.mod.json")
-                Dim FabricText As String = Nothing
-                If FabricEntry IsNot Nothing Then
-                    FabricText = ReadFile(FabricEntry.Open(), Encoding.UTF8)
-                    If Not FabricText.Contains("schemaVersion") Then FabricText = Nothing
-                End If
-                If FabricText Is Nothing Then Exit Try
-                Dim FabricObject As JObject = GetJson(FabricText)
-GotFabric:
-                '从文件中获取 Mod 信息项
-                If FabricObject.ContainsKey("name") Then Name = FabricObject("name")
-                If FabricObject.ContainsKey("version") Then Version = FabricObject("version")
-                If FabricObject.ContainsKey("description") Then Description = FabricObject("description")
-                If FabricObject.ContainsKey("id") Then ModId = FabricObject("id")
-                If FabricObject.ContainsKey("contact") Then Url = If(FabricObject("contact")("homepage"), "")
-                Dim AuthorJson As JArray = FabricObject("authors")
-                If AuthorJson IsNot Nothing Then
-                    Dim Author As New List(Of String)
-                    For Each Token In AuthorJson
-                        Author.Add(Token.ToString)
-                    Next
-                    If Author.Count > 0 Then Authors = Join(Author, ", ")
-                End If
-                'If (Not FabricObject.ContainsKey("serverSideOnly")) OrElse FabricObject("serverSideOnly")("value").ToObject(Of Boolean) = False Then
-                '    '添加 Minecraft 依赖
-                '    Dim DepMinecraft As String = If(If(FabricObject("acceptedMinecraftVersions") IsNot Nothing, FabricObject("acceptedMinecraftVersions")("value"), ""), "")
-                '    If DepMinecraft <> "" Then AddDependency("minecraft", DepMinecraft)
-                '    '添加其他依赖
-                '    Dim Deps As String = If(If(FabricObject("dependencies") IsNot Nothing, FabricObject("dependencies")("value"), ""), "")
-                '    If Deps <> "" Then
-                '        For Each Dep In Deps.Split(";")
-                '            If Dep = "" OrElse Not Dep.StartsWith("required-") Then Continue For
-                '            Dep = Dep.Substring(Dep.IndexOf(":") + 1)
-                '            If Dep.Contains("@") Then
-                '                AddDependency(Dep.Split("@")(0), Dep.Split("@")(1))
-                '            Else
-                '                AddDependency(Dep)
-                '            End If
-                '        Next
-                '    End If
-                'End If
-                '加载成功
-                GoTo Finished
-            Catch ex As Exception
-                Log(ex, "读取 fabric.mod.json 时出现未知错误（" & Path & "）", LogLevel.Developer)
-            End Try
-#End Region
-#Region "尝试使用 fml_cache_annotation.json"
-            Try
-                '获取 fml_cache_annotation.json 文件
-                Dim FmlEntry As ZipArchiveEntry = Jar.GetEntry("META-INF/fml_cache_annotation.json")
-                Dim FmlText As String = Nothing
-                If FmlEntry IsNot Nothing Then
-                    FmlText = ReadFile(FmlEntry.Open(), Encoding.UTF8)
-                    If Not FmlText.Contains("Lnet/minecraftforge/fml/common/Mod;") Then FmlText = Nothing
-                End If
-                If FmlText Is Nothing Then Exit Try
-                Dim FmlJson As JObject = GetJson(FmlText)
-                '获取可用 Json 项
-                Dim FmlObject As JObject = Nothing
-                For Each ModFilePair In FmlJson
-                    Dim ModFileAnnos As JArray = ModFilePair.Value("annotations")
-                    If ModFileAnnos IsNot Nothing Then
-                        '先获取 Mod
-                        For Each ModFileAnno In ModFileAnnos
-                            Dim Name As String = If(ModFileAnno("name"), "")
-                            If Name = "Lnet/minecraftforge/fml/common/Mod;" Then
-                                FmlObject = ModFileAnno("values")
-                                GoTo Got
-                            End If
-                        Next
-                    End If
-                Next
-                Exit Try
-Got:
-                '从文件中获取 Mod 信息项
-                If FmlObject.ContainsKey("useMetadata") AndAlso If(FmlObject("useMetadata")("value"), "").ToString.ToLower = "true" Then
-                    '要求使用 mcmod.info 中的信息
-                    Dim value As String = FmlObject("modid")("value")
-                    If value Is Nothing Then Exit Try
-                    value = RegexSeek(value.ToLower, "[0-9a-z_]+")
-                    If value IsNot Nothing AndAlso value.ToLower <> "name" AndAlso value.Count > 1 AndAlso Val(value).ToString <> value Then
-                        If Not PossibleModId.Contains(value) Then PossibleModId.Add(value)
-                    End If
-                    Exit Try
-                End If
-                If FmlObject.ContainsKey("name") Then Name = FmlObject("name")("value")
-                If FmlObject.ContainsKey("version") Then Version = FmlObject("version")("value")
-                If FmlObject.ContainsKey("modid") Then ModId = FmlObject("modid")("value")
-                If (Not FmlObject.ContainsKey("serverSideOnly")) OrElse FmlObject("serverSideOnly")("value").ToObject(Of Boolean) = False Then
-                    '添加 Minecraft 依赖
-                    Dim DepMinecraft As String = If(If(FmlObject("acceptedMinecraftVersions") IsNot Nothing, FmlObject("acceptedMinecraftVersions")("value"), ""), "")
-                    If DepMinecraft <> "" Then AddDependency("minecraft", DepMinecraft)
-                    '添加其他依赖
-                    Dim Deps As String = If(If(FmlObject("dependencies") IsNot Nothing, FmlObject("dependencies")("value"), ""), "")
-                    If Deps <> "" Then
-                        For Each Dep In Deps.Split(";")
-                            If Dep = "" OrElse Not Dep.StartsWith("required-") Then Continue For
-                            Dep = Dep.Substring(Dep.IndexOf(":") + 1)
-                            If Dep.Contains("@") Then
-                                AddDependency(Dep.Split("@")(0), Dep.Split("@")(1))
-                            Else
-                                AddDependency(Dep)
-                            End If
-                        Next
-                    End If
-                End If
-            Catch ex As Exception
-                Log(ex, "读取 fml_cache_annotation.json 时出现未知错误（" & Path & "）", LogLevel.Developer)
-            End Try
-#End Region
-Finished:
-#Region "将 Version 代号转换为 META-INF 中的版本"
-            If _Version = "version" Then
-                Try
-                    Dim MetaEntry As ZipArchiveEntry = Jar.GetEntry("META-INF/MANIFEST.MF")
-                    If MetaEntry IsNot Nothing Then
-                        Dim MetaString As String = ReadFile(MetaEntry.Open()).Replace(" :", ":").Replace(": ", ":")
-                        If MetaString.Contains("Implementation-Version:") Then
-                            MetaString = MetaString.Substring(MetaString.IndexOf("Implementation-Version:") + "Implementation-Version:".Count)
-                            MetaString = MetaString.Substring(0, MetaString.IndexOfAny(vbCrLf.ToCharArray)).Trim
-                            Version = MetaString
-                        End If
-                    End If
-                Catch ex As Exception
-                    Log("获取 META-INF 中的版本信息失败（" & Path & "）", LogLevel.Developer)
-                    Version = Nothing
-                End Try
-            End If
-            If _Version IsNot Nothing AndAlso Not (_Version.Contains(".") OrElse _Version.Contains("-")) Then Version = Nothing
-#End Region
-
-            IsInfoWithoutClassAvailable = _ModId IsNot Nothing AndAlso _Version IsNot Nothing
-        End Sub
-
-        ''' <summary>
-        ''' 进行使用 .class 文件的信息获取。
-        ''' </summary>
-        Private Sub LoadWithClass(Jar As ZipArchive)
-            Try
-                '查找入口点文件
-                Dim ModClass As String = Nothing
-                Dim ModClassNotBest As String = Nothing '非完美匹配
-                For Each Entry In Jar.Entries
-                    If Entry.Name.EndsWith(".class") Then
-                        Dim Temp As String = ReadFile(Entry.Open()).ToLower
-                        If Temp.Contains("#lnet/minecraftforge/fml/common/mod;") Then
-                            ModClass = Temp
-                            Exit For
-                        ElseIf Temp.Contains("modid") Then
-                            ModClassNotBest = Temp
-                        End If
-                    End If
-                Next
-                If ModClass Is Nothing Then ModClass = ModClassNotBest
-                If ModClass Is Nothing Then Throw New FileNotFoundException("未找到 Mod 入口点")
-                ModClass = ModClass.Replace("ljava/lang/string;", "")
-                If ModClass.Count > 3000 Then ModClass = ModClass.Substring(0, 3000) '如果文件过大，截取前 3000 Byte
-                Dim IndexHead As Integer, IndexTail As Integer, IncreaseCount As Integer
-                '获取 ModID
-                If _ModId Is Nothing Then
-                    IndexHead = ModClass.IndexOf("modid") + "modid".Length + 1
-                    IncreaseCount = 0
-                    Do While Convert.ToInt32(ModClass(IndexHead)) < 32
-                        IndexHead += 1
-                        IncreaseCount += 1
-                        If IncreaseCount > 10 Then Throw New Exception("ModID 头匹配失败")
-                    Loop
-                    IndexTail = IndexHead + 1
-                    IncreaseCount = 0
-                    Do Until Convert.ToInt32(ModClass(IndexTail)) < 32
-                        IndexTail += 1
-                        IncreaseCount += 1
-                        If IncreaseCount > 50 Then Throw New Exception("ModID 尾匹配失败")
-                    Loop
-                    ModId = ModClass.Substring(IndexHead, IndexTail - IndexHead)
-                End If
-                '获取 Version
-                If _Version Is Nothing AndAlso ModClass.Contains("version") Then
-                    IndexHead = ModClass.IndexOf("version") + "version".Length + 1
-                    IncreaseCount = 0
-                    Do While Convert.ToInt32(ModClass(IndexHead)) < 32
-                        IndexHead += 1
-                        IncreaseCount += 1
-                        If IncreaseCount > 10 Then GoTo VersionFindFail
-                    Loop
-                    IndexTail = IndexHead + 1
-                    IncreaseCount = 0
-                    Do While ModClass(IndexTail) = "."c OrElse ModClass(IndexTail) = "-"c OrElse
-                         (ModClass(IndexTail) >= "0"c AndAlso ModClass(IndexTail) <= "9"c) OrElse
-                         (ModClass(IndexTail) >= "a"c AndAlso ModClass(IndexTail) <= "z"c)
-                        IndexTail += 1
-                        IncreaseCount += 1
-                        If IncreaseCount > 50 Then GoTo VersionFindFail
-                    Loop
-                    _Version = ModClass.Substring(IndexHead, IndexTail - IndexHead)
-                End If
-VersionFindFail:
-                '获取 Dependencies
-                IndexHead = ModClass.IndexOf("dependencies")
-                If IndexHead > 0 Then
-                    If ModClass.Count >= IndexHead + 300 Then ModClass = ModClass.Substring(IndexHead, 299)
-                    Dim Deps As List(Of String) = RegexSearch(ModClass, "(?<=required-((before|after|before-client|after-client)?):)[0-9a-z]+(@[\(\[]{1}[0-9.,]+[\)\]]{1})?")
-                    For Each Token As String In Deps
-                        If Not String.IsNullOrEmpty(Token) Then
-                            If Token.Contains("@") Then
-                                AddDependency(Token.Split("@")(0), Token.Split("@")(1))
-                            Else
-                                AddDependency(Token)
-                            End If
-                        End If
-                    Next
-                End If
-            Catch ex As Exception
-                Log(ex, "Mod Class 信息不可用（" & If(Path, "null") & "）", LogLevel.Normal)
-            End Try
-            IsInfoWithClassAvailable = _ModId IsNot Nothing AndAlso _Version IsNot Nothing
-        End Sub
-
-#End Region
-
-        ''' <summary>
-        ''' 是否可能为前置 Mod。
-        ''' </summary>
-        Public Function IsPresetMod() As Boolean
-            Return Dependencies.Count = 0 AndAlso (Name IsNot Nothing) AndAlso (Name.ToLower.Contains("core") OrElse Name.ToLower.Contains("lib"))
-        End Function
-
-        ''' <summary>
-        ''' 根据完整文件路径的文件扩展名判断是否为 Mod 文件。
-        ''' </summary>
-        Public Shared Function IsModFile(Path As String)
-            If Path Is Nothing OrElse Not Path.Contains(".") Then Return False
-            Path = Path.ToLower
-            If Path.EndsWith(".jar") OrElse Path.EndsWith(".zip") OrElse Path.EndsWith(".litemod") OrElse
-               Path.EndsWith(".jar.disabled") OrElse Path.EndsWith(".zip.disabled") OrElse Path.EndsWith(".litemod.disabled") Then Return True
-            Return False
-        End Function
-
-    End Class
-
-    '加载 Mod 列表
-    Public McModLoader As New LoaderTask(Of String, List(Of McMod))("Mod List Loader", AddressOf McModLoad)
-    Private Sub McModLoad(Loader As LoaderTask(Of String, List(Of McMod)))
-        Try
-            RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.ShowProgress = False)
-
-            '获取 Mod 文件夹下的可用文件列表
-            Dim ModFileList As New List(Of FileInfo)
-            If Directory.Exists(Loader.Input) Then
-                Dim RawName As String = Loader.Input.ToLower
-                For Each File As FileInfo In EnumerateFiles(Loader.Input)
-                    If File.DirectoryName.ToLower & "\" <> RawName Then
-                        '仅当 Forge 1.13- 且文件夹名与版本号相同时，才加载该子文件夹下的 Mod
-                        If Not (PageVersionLeft.Version IsNot Nothing AndAlso PageVersionLeft.Version.Version.HasForge AndAlso
-                                PageVersionLeft.Version.Version.McCodeMain < 13 AndAlso
-                                File.Directory.Name = "1." & PageVersionLeft.Version.Version.McCodeMain & "." & PageVersionLeft.Version.Version.McCodeSub) Then
-                            Continue For
-                        End If
-                    End If
-                    If McMod.IsModFile(File.FullName) Then ModFileList.Add(File)
-                Next
-            End If
-
-            '确定是否显示进度
-            Loader.Progress = 0.03
-            If ModFileList.Count > 100 Then RunInUi(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.ShowProgress = True)
-
-            '加载为 Mod 列表
-            Dim ModList As New List(Of McMod)
-            For Each ModFile As FileInfo In ModFileList
-                Dim ModEntity As New McMod(ModFile.FullName)
-                ModEntity.Load()
-                ModList.Add(ModEntity)
-                Loader.Progress += 0.9 / ModFileList.Count
-            Next
-            Loader.Progress = 0.93
-
-            '排序
-            ModList = Sort(ModList, Function(Left As McMod, Right As McMod) As Boolean
-                                        If (Left.State = McMod.McModState.Unavaliable) <> (Right.State = McMod.McModState.Unavaliable) Then
-                                            Return Left.State = McMod.McModState.Unavaliable
-                                        Else
-                                            Return Left.FileName < Right.FileName
-                                        End If
-                                    End Function)
-            Loader.Progress = 0.98
-
-            '回设
-            If Loader.IsAborted Then Exit Sub
-            Loader.Output = ModList
-
-        Catch ex As Exception
-            Log(ex, "Mod 列表加载失败", LogLevel.Debug)
-            Throw
-        End Try
-    End Sub
-
-#If DEBUG Then
-    ''' <summary>
-    ''' 检查 Mod 列表中存在的错误，返回错误信息的集合。
-    ''' </summary>
-    Public Function McModCheck(Version As McVersion, Mods As List(Of McMod)) As List(Of String)
-        Dim Result As New List(Of String)
-        '令所有 Mod 进行基础检查，并归纳需要检查的 Mod
-        Dim CurrentModList As New List(Of McMod)
-        For Each ModEntity In Mods
-            If Not ModEntity.IsFileAvailable Then
-                Result.Add("无法读取的 Mod 文件。" & vbCrLf & " - " & ModEntity.Path)
-                Continue For
-            End If
-            If ModEntity.State = McMod.McModState.Fine AndAlso ModEntity.ModId IsNot Nothing Then CurrentModList.Add(ModEntity)
-        Next
-        '添加默认依赖
-        Dim CurrentDependencies As New Dictionary(Of String, String()) '{DependencyVersion, Path}
-        If Version.State = McVersionState.Forge Then CurrentDependencies.Add("forge", {Version.Version.ForgeVersion, "Forge"})
-        CurrentDependencies.Add("minecraft", {Version.Version.McName, "Minecraft"})
-        '检查重复的 Mod，并添加对应的依赖
-        For Each ModEntity In CurrentModList
-            For Each PossibleModId In ModEntity.PossibleModId
-                If CurrentDependencies.ContainsKey(PossibleModId) Then
-                    If CurrentDependencies(PossibleModId)(2) = 1 Then
-                        Result.Add("重复添加了相同的 Mod，请尝试删除其中一个（ModID：" & PossibleModId & "）。" & vbCrLf &
-                                       " - " & ModEntity.FileName & vbCrLf &
-                                       " - " & CurrentDependencies(PossibleModId)(1))
-                    Else
-                        Log("[Minecraft] 由于可能有多个 ModID，跳过疑似的重复项（ModID：" & PossibleModId & "）。" & vbCrLf &
-                                       " - " & ModEntity.FileName & vbCrLf &
-                                       " - " & CurrentDependencies(PossibleModId)(1), LogLevel.Developer)
-                    End If
-                Else
-                    CurrentDependencies.Add(PossibleModId, {ModEntity.Version, ModEntity.FileName, ModEntity.PossibleModId.Count})
-                End If
-            Next
-        Next
-        '检查依赖
-        For Each ModEntity In CurrentModList
-            Try
-                For Each Dependency In ModEntity.Dependencies
-                    Dim ReqId As String = Dependency.Key
-                    If ReqId.Count < 2 Then Continue For '确保正常
-                    If ReqId = ModEntity.ModId Then Continue For '跳过自体引用
-                    If ReqId = "forgemultipartcbe" Then Continue For '跳过莫名其妙的引用
-                    If Dependency.Value IsNot Nothing Then
-                        '获取分段后的详细版本信息
-                        Dim ReqVersion As String = Dependency.Value
-                        Dim ReqVersionHeadCanEqual As Boolean = ReqVersion.StartsWith("[")
-                        Dim ReqVersionTailCanEqual As Boolean = ReqVersion.EndsWith("]")
-                        Dim ReqVersionHead As String
-                        Dim ReqVersionTail As String
-                        If ReqVersion.Contains(",") Then
-                            ReqVersionHead = ReqVersion.Split(",")(0).Trim("([ ".ToCharArray())
-                            ReqVersionTail = ReqVersion.Split(",")(1).Trim("]) ".ToCharArray())
-                        Else
-                            ReqVersionHead = ReqVersion.Trim("([]) ".ToCharArray())
-                            ReqVersionTail = ReqVersionHead
-                            If ReqId = "minecraft" AndAlso ReqVersionHead.Split(".").Count = 2 Then
-                                ReqVersionTail = ReqVersionHead.Split(".")(0) & "." & (Val(ReqVersionHead.Split(".")(1)) + 1)
-                                ReqVersionTailCanEqual = False
-                            End If
-                        End If
-                        If ReqVersionHead.StartsWith("1.") AndAlso ReqVersionHead.Contains("-") Then ReqVersionHead = ReqVersionHead.Substring(ReqVersionHead.LastIndexOf("-") + 1)
-                        If ReqVersionTail.StartsWith("1.") AndAlso ReqVersionTail.Contains("-") Then ReqVersionTail = ReqVersionTail.Substring(ReqVersionTail.LastIndexOf("-") + 1)
-                        '获取报错描述文本
-                        Dim VersionRequire As String
-                        If ReqVersionHead = ReqVersionTail Then
-                            VersionRequire = "应为 " & ReqVersionHead
-                        ElseIf ReqVersionHead.Contains(".") AndAlso ReqVersionTail.Contains(".") Then
-                            VersionRequire = "应为 " & ReqVersionHead & " 至 " & ReqVersionTail
-                        ElseIf ReqVersionHead.Contains(".") Then
-                            If ReqVersionHeadCanEqual Then
-                                VersionRequire = "最低应为 " & ReqVersionHead
-                            Else
-                                VersionRequire = "应高于 " & ReqVersionHead
-                            End If
-                        ElseIf ReqVersionTail.Contains(".") Then
-                            If ReqVersionTailCanEqual Then
-                                VersionRequire = "最高应为 " & ReqVersionHead
-                            Else
-                                VersionRequire = "应低于 " & ReqVersionHead
-                            End If
-                        Else
-                            VersionRequire = ""
-                        End If
-                        '检查前置 Mod 是否存在，并获取其版本
-                        If Not CurrentDependencies.ContainsKey(ReqId) Then
-                            Result.Add("缺少前置 Mod：" & ReqId & If(VersionRequire = "", "", "，其版本" & VersionRequire) & "。" & vbCrLf & " - " & ModEntity.FileName)
-                            Continue For
-                        End If
-                        Dim CurrentVersion As String = If(CurrentDependencies(ReqId)(0), "0.0")
-                        If CurrentVersion.StartsWith("1.") AndAlso CurrentVersion.Contains("-") Then CurrentVersion = CurrentVersion.Substring(CurrentVersion.LastIndexOf("-") + 1)
-                        '对比前置 Mod 头部版本
-                        If ReqVersionHead.Contains(".") Then
-                            If VersionSortInteger(ReqVersionHead, CurrentVersion) > If(ReqVersionHeadCanEqual, 0, -1) Then
-                                Result.Add(ReqId.Substring(0, 1).ToUpper & ReqId.Substring(1) & " 版本过低，其版本" & VersionRequire & "，而当前版本为 " & CurrentVersion & "。" & vbCrLf &
-                                           " - " & ModEntity.FileName & If(ReqId <> "minecraft" AndAlso ReqId <> "forge", vbCrLf & " - 前置：" & CurrentDependencies(ReqId)(1), ""))
-                                Continue For
-                            End If
-                        End If
-                        '对比前置 Mod 尾部版本
-                        If ReqVersionTail.Contains(".") Then
-                            If VersionSortInteger(CurrentVersion, ReqVersionTail) > If(ReqVersionTailCanEqual, 0, -1) Then
-                                Result.Add(ReqId.Substring(0, 1).ToUpper & ReqId.Substring(1) & " 版本过高，其版本" & VersionRequire & "，而当前版本为 " & CurrentVersion & "。" & vbCrLf &
-                                           " - " & ModEntity.FileName & If(ReqId <> "minecraft" AndAlso ReqId <> "forge", vbCrLf & " - 前置：" & CurrentDependencies(ReqId)(1), ""))
-                                Continue For
-                            End If
-                        End If
-                    Else
-                        If Not CurrentDependencies.ContainsKey(Dependency.Key) Then
-                            Result.Add("缺少前置 Mod：" & Dependency.Key & "。" & vbCrLf & " - " & ModEntity.FileName)
-                            Continue For
-                        End If
-                    End If
-                Next
-            Catch ex As Exception
-                Result.Add("检查 Mod 时出错：" & GetExceptionSummary(ex) & vbCrLf & " - " & ModEntity.FileName)
-                Log(ex, "检查 Mod 时出错")
-            End Try
-        Next
-        If Result.Count = 0 Then
-            Log("[Minecraft] Mod 检查未发现异常")
-        Else
-            Log("[Minecraft] Mod 检查异常结果：" & vbCrLf & Join(Result, vbCrLf))
-        End If
-        Return Result
-    End Function
-#End If
 
 #End Region
 

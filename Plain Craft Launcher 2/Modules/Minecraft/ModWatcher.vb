@@ -116,7 +116,7 @@
             Get
                 Return _State
             End Get
-            Set(ByVal value As MinecraftState)
+            Set(value As MinecraftState)
                 If _State = value Then Exit Property
                 _State = value
                 WatcherStateChanged()

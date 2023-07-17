@@ -25,7 +25,7 @@ Public Class CookieWebClient
     ''' </summary>
     Public Timeout As Integer = 600000
 
-    Protected Overrides Function GetWebRequest(ByVal address As Uri) As WebRequest
+    Protected Overrides Function GetWebRequest(address As Uri) As WebRequest
         Dim r As WebRequest = MyBase.GetWebRequest(address)
         Dim request = TryCast(r, HttpWebRequest)
 
@@ -37,19 +37,19 @@ Public Class CookieWebClient
         Return r
     End Function
 
-    Protected Overrides Function GetWebResponse(ByVal request As WebRequest, ByVal result As IAsyncResult) As WebResponse
+    Protected Overrides Function GetWebResponse(request As WebRequest, result As IAsyncResult) As WebResponse
         Dim response As WebResponse = MyBase.GetWebResponse(request, result)
         ReadCookies(response)
         Return response
     End Function
 
-    Protected Overrides Function GetWebResponse(ByVal request As WebRequest) As WebResponse
+    Protected Overrides Function GetWebResponse(request As WebRequest) As WebResponse
         Dim response As WebResponse = MyBase.GetWebResponse(request)
         ReadCookies(response)
         Return response
     End Function
 
-    Private Sub ReadCookies(ByVal r As WebResponse)
+    Private Sub ReadCookies(r As WebResponse)
         Dim response = TryCast(r, HttpWebResponse)
         If response IsNot Nothing Then
             Dim cookies As CookieCollection = response.Cookies

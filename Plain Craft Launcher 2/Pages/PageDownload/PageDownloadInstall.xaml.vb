@@ -945,11 +945,16 @@
     ''' 获取 FabricApi 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadFabricApiGetError() As String
-        If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
         If LoadFabricApi.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadFabricApi.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadFabricApi.State, Object).Error.Message
+        If DlFabricApiLoader.Output Is Nothing Then
+            If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
+            Return "正在获取版本列表……"
+        End If
         For Each Version In DlFabricApiLoader.Output
-            If IsSuitableFabricApi(Version.DisplayName, SelectedMinecraftId) Then Return Nothing
+            If Not IsSuitableFabricApi(Version.DisplayName, SelectedMinecraftId) Then Continue For
+            If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
+            Return Nothing
         Next
         Return "没有可用版本"
     End Function
@@ -1032,14 +1037,21 @@
     ''' 获取 OptiFabric 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadOptiFabricGetError() As String
-        If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine 与 Fabric"
-        If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
-        If SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine"
         If SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15") Then Return "不兼容老版本 Fabric，请手动下载 OptiFabric Origins"
         If LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFabric.State, Object).Error.Message
+        If DlOptiFabricLoader.Output Is Nothing Then
+            If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine 与 Fabric"
+            If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
+            If SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine"
+            Return "正在获取版本列表……"
+        End If
         For Each Version In DlOptiFabricLoader.Output
-            If IsSuitableOptiFabric(Version, SelectedMinecraftId) Then Return Nothing
+            If Not IsSuitableOptiFabric(Version, SelectedMinecraftId) Then Continue For '2135#
+            If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine 与 Fabric"
+            If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
+            If SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine"
+            Return Nothing '通过检查
         Next
         Return "没有可用版本"
     End Function
@@ -1114,6 +1126,7 @@
         '提交安装申请
         Dim Request As New McInstallRequest With {
             .TargetVersionName = TextSelectName.Text,
+            .TargetVersionFolder = $"{PathMcFolder}versions\{TextSelectName.Text}\",
             .MinecraftJson = SelectedMinecraftJsonUrl,
             .MinecraftName = SelectedMinecraftId,
             .OptiFineEntry = SelectedOptiFine,

@@ -7,22 +7,20 @@
     <Grid>
         <Grid x:Name="PanAllBack">
             <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
-                <StackPanel x:Name="PanMain" Margin="25,10" Grid.IsSharedSizeScope="True">
+                <StackPanel x:Name="PanMain" Margin="25,10,25,10" Grid.IsSharedSizeScope="True"> <!-- 若显示多选模块则为 92 -->
                     <local:MySearchBox Margin="0,15" HintText="搜索 Mod" x:Name="SearchBox" />
                     <local:MyCard Grid.Row="0" Margin="0,0,0,15" Title="管理" x:Name="PanManage">
                         <StackPanel Margin="25,40,15,20">
-                            <TextBlock Margin="0,0,0,11" Text="左键点击某个 Mod 可以单独启用或禁用它。将 Mod 文件拖入窗口可以快速安装 Mod。" TextWrapping="Wrap" />
+                            <TextBlock Margin="0,0,0,11" Text="点击红石灯图标可以快速启用或禁用单个 Mod。将 Mod 文件拖入窗口即可快速安装。" TextWrapping="Wrap" />
                             <Grid Height="35">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                                 </Grid.ColumnDefinitions>
                                 <local:MyButton x:Name="BtnManageOpen" Grid.Column="0" MinWidth="140" Text="打开 Mod 文件夹" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
-                                <local:MyButton x:Name="BtnManageEnabled" Grid.Column="1" MinWidth="140" Text="全部启用" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
-                                <local:MyButton x:Name="BtnManageDisabled" Grid.Column="2" MinWidth="140" Text="全部禁用" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
-                                <local:MyButton x:Name="BtnManageCheck" Grid.Column="3" MinWidth="140" Text="检查 Mod" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ToolTip="快速检查 Mod 的版本要求、重复、前置缺失等问题。&#xa;结果仅供参考，由于部分 Mod 标注的信息有误，可能并不准确。" Visibility="Collapsed" />
+                                <local:MyButton x:Name="BtnManageSelectAll" Grid.Column="1" MinWidth="140" Text="全选" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
+                                <local:MyButton x:Name="BtnManageCheck" Grid.Column="2" MinWidth="140" Text="检查 Mod" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ToolTip="快速检查 Mod 的版本要求、重复、前置缺失等问题。&#xa;结果仅供参考，由于部分 Mod 标注的信息有误，可能并不准确。" Visibility="Collapsed" />
                             </Grid>
                         </StackPanel>
                     </local:MyCard>
@@ -46,6 +44,23 @@
         </Grid>
         <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,0" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False">
             <local:MyLoading Text="正在加载 Mod 列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </local:MyCard>
+        <local:MyCard x:Name="CardSelect" Visibility="Collapsed" Opacity="0"
+                      HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="25,25,25,0" UseAnimation="False" HasMouseAnimation="False">
+            <local:MyCard.RenderTransform>
+                <TranslateTransform x:Name="TransSelect" Y="-10" />
+            </local:MyCard.RenderTransform>
+            <TextBlock x:Name="LabSelect" Text="已选择 8 个文件" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="9" Foreground="{DynamicResource ColorBrush2}" />
+            <StackPanel Orientation="Horizontal" Margin="5,28,5,5">
+                <local:MyIconTextButton x:Name="BtnSelectEnable" Text="启用"
+                                        LogoScale="1.05" Logo="M512 0a512 512 0 1 0 512 512A512 512 0 0 0 512 0z m0 921.6a409.6 409.6 0 1 1 409.6-409.6 409.6 409.6 0 0 1-409.6 409.6z M716.8 339.968l-256 253.44L328.192 460.8A51.2 51.2 0 0 0 256 532.992l168.448 168.96a51.2 51.2 0 0 0 72.704 0l289.28-289.792A51.2 51.2 0 0 0 716.8 339.968z" />
+                <local:MyIconTextButton x:Name="BtnSelectDisable" Text="禁用"
+                                        LogoScale="0.98" Logo="M512 0a512 512 0 1 0 512 512A512 512 0 0 0 512 0z m409.6 512a404.48 404.48 0 0 1-86.528 250.88L261.12 188.928A404.48 404.48 0 0 1 512 102.4a409.6 409.6 0 0 1 409.6 409.6zM102.4 512a404.48 404.48 0 0 1 86.528-250.88L762.88 835.072A404.48 404.48 0 0 1 512 921.6a409.6 409.6 0 0 1-409.6-409.6z" />
+                <local:MyIconTextButton x:Name="BtnSelectDelete" Text="删除"
+                                        LogoScale="0.96" Logo="M520.192 0C408.43 0 317.44 82.87 313.563 186.734H52.736c-29.038 0-52.663 21.943-52.663 49.079s23.625 49.152 52.663 49.152h58.075v550.473c0 103.35 75.118 187.757 167.717 187.757h472.43c92.599 0 167.716-83.894 167.716-187.757V285.477h52.59c29.038 0 52.59-21.943 52.663-49.08-0.073-27.135-23.625-49.151-52.663-49.151H726.235C723.237 83.017 631.955 0 520.192 0zM404.846 177.957c3.803-50.03 50.176-89.015 107.447-89.015 57.197 0 103.57 38.985 106.788 89.015H404.92zM284.379 933.669c-33.353 0-69.997-39.351-69.997-95.525v-549.01H833.39v549.522c0 56.247-36.645 95.525-69.998 95.525H284.379v-0.512z M357.23 800.695a48.274 48.274 0 0 0 47.616-49.006V471.7a48.274 48.274 0 0 0-47.543-49.08 48.274 48.274 0 0 0-47.69 49.006V751.69c0 27.282 20.846 49.006 47.617 49.006z m166.62 0a48.274 48.274 0 0 0 47.688-49.006V471.7a48.274 48.274 0 0 0-47.689-49.08 48.274 48.274 0 0 0-47.543 49.006V751.69c0 27.282 21.431 49.006 47.543 49.006z m142.92 0a48.274 48.274 0 0 0 47.543-49.006V471.7a48.274 48.274 0 0 0-47.543-49.08 48.274 48.274 0 0 0-47.616 49.006V751.69c0 27.282 20.773 49.006 47.543 49.006z" />
+                <local:MyIconTextButton x:Name="BtnSelectCancel" Text="取消选择"
+                                        LogoScale="0.8" Logo="M867.648 951.296 512 595.648l-355.648 355.648c-11.52 11.52-30.272 11.52-41.856 0L72.64 909.44c-11.52-11.52-11.52-30.272 0-41.856L428.352 512 72.64 156.352c-11.52-11.52-11.52-30.272 0-41.856l41.856-41.856c11.52-11.52 30.272-11.52 41.856 0L512 428.288l355.648-355.648c11.52-11.52 30.272-11.52 41.856 0l41.856 41.856c11.52 11.52 11.52 30.272 0 41.856L595.648 512l355.648 355.648c11.52 11.52 11.52 30.272 0 41.856l-41.856 41.856C897.984 962.88 879.168 962.88 867.648 951.296L867.648 951.296z" />
+            </StackPanel>
         </local:MyCard>
     </Grid>
 </local:MyPageRight>

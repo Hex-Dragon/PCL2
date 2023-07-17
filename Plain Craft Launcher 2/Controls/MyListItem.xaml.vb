@@ -15,7 +15,7 @@
             If _RectBack Is Nothing Then
                 Dim Rect As New Border With {
                     .Name = "RectBack",
-                    .CornerRadius = New CornerRadius(If(IsScaleAnimationEnabled, 6, 0)),
+                    .CornerRadius = New CornerRadius(If(IsScaleAnimationEnabled OrElse Height > 40, 6, 0)),
                     .RenderTransform = If(IsScaleAnimationEnabled, New ScaleTransform(0.8, 0.8), Nothing),
                     .RenderTransformOrigin = New Point(0.5, 0.5),
                     .BorderThickness = New Thickness(GetWPFSize(1)),
@@ -225,6 +225,7 @@
                 If _Logo.ToLower.StartsWith("http") Then
                     '网络图片
                     PathLogo = New Image With {
+                            .Tag = Me,
                             .IsHitTestVisible = LogoClickable,
                             .Source = New ImageSourceConverter().ConvertFromString(_Logo),
                             .RenderTransformOrigin = New Point(0.5, 0.5),
@@ -235,6 +236,7 @@
                     '位图
                     Dim Bitmap = New MyBitmap(_Logo)
                     PathLogo = New Canvas With {
+                            .Tag = Me,
                             .IsHitTestVisible = LogoClickable,
                             .Background = Bitmap,
                             .RenderTransformOrigin = New Point(0.5, 0.5),
@@ -252,6 +254,7 @@
                 Else
                     '矢量图
                     PathLogo = New Shapes.Path With {
+                        .Tag = Me,
                         .IsHitTestVisible = LogoClickable, .HorizontalAlignment = HorizontalAlignment.Center, .VerticalAlignment = VerticalAlignment.Center, .Stretch = Stretch.Uniform,
                         .Data = (New GeometryConverter).ConvertFromString(_Logo),
                         .RenderTransformOrigin = New Point(0.5, 0.5),
@@ -267,7 +270,7 @@
                 If LogoClickable Then
                     AddHandler PathLogo.MouseLeave, Sub(sender, e) IsLogoDown = False
                     AddHandler PathLogo.MouseLeftButtonDown, Sub(sender, e) IsLogoDown = True
-                    AddHandler PathLogo.MouseLeftButtonUp, Sub(sender, e) If IsLogoDown Then IsLogoDown = False : RaiseEvent LogoClick(sender, e)
+                    AddHandler PathLogo.MouseLeftButtonUp, Sub(sender, e) If IsLogoDown Then IsLogoDown = False : RaiseEvent LogoClick(sender.Tag, e)
                 End If
             End If
             '改变行距
@@ -286,6 +289,9 @@
     End Property
 
     '图标的点击
+    ''' <summary>
+    ''' 该 Logo 是否可用点击触发事件。需要在 Logo 属性之前设置。
+    ''' </summary>
     Public Property LogoClickable As Boolean = False
     Private IsLogoDown As Boolean = False
 
@@ -447,7 +453,7 @@
                         RectCheck.VerticalAlignment = VerticalAlignment.Center
                         RectCheck.Margin = New Thickness(-1, 0, 0, 0)
                     End If
-                    Anim.Add(AaColor(Me, ForegroundProperty, "ColorBrush3", 200))
+                    Anim.Add(AaColor(Me, ForegroundProperty, If(Height < 40, "ColorBrush3", "ColorBrush2"), 200))
                 Else
                     '由有变无
                     If Not IsNothing(RectCheck) Then
@@ -469,7 +475,7 @@
                         RectCheck.Opacity = 1
                         RectCheck.VerticalAlignment = VerticalAlignment.Stretch
                     End If
-                    SetResourceReference(ForegroundProperty, "ColorBrush3")
+                    SetResourceReference(ForegroundProperty, If(Height < 40, "ColorBrush3", "ColorBrush2"))
                 Else
                     If Not IsNothing(RectCheck) Then
                         RectCheck.Height = 0
@@ -615,12 +621,14 @@
             Else
                 If ButtonStack IsNot Nothing Then Ani.Add(AaOpacity(ButtonStack, -ButtonStack.Opacity, Time * 0.5))
                 Ani.Add(AaOpacity(RectBack, -RectBack.Opacity, Time))
-                If IsScaleAnimationEnabled Then Ani.AddRange({
-                             AaColor(RectBack, Border.BackgroundProperty, If(IsMouseDown, "ColorBrush6", "ColorBrush7"), Time),
-                             AaScaleTransform(Me, 1 - CType(Me.RenderTransform, ScaleTransform).ScaleX, Time * 3,, New AniEaseOutFluent),
-                             AaScaleTransform(RectBack, 0.996 - CType(RectBack.RenderTransform, ScaleTransform).ScaleX, Time,, New AniEaseOutFluent),
-                             AaScaleTransform(RectBack, -0.246, 1,,, True)
-                         })
+                If IsScaleAnimationEnabled Then
+                    Ani.AddRange({
+                        AaColor(RectBack, Border.BackgroundProperty, If(IsMouseDown, "ColorBrush6", "ColorBrush7"), Time),
+                        AaScaleTransform(Me, 1 - CType(RenderTransform, ScaleTransform).ScaleX, Time * 3,, New AniEaseOutFluent),
+                        AaScaleTransform(RectBack, 0.996 - CType(RectBack.RenderTransform, ScaleTransform).ScaleX, Time,, New AniEaseOutFluent),
+                        AaScaleTransform(RectBack, -0.246, 1,,, True)
+                    })
+                End If
             End If
             AniStart(Ani, "ListItem Color " & Uuid)
         Else
@@ -647,7 +655,7 @@
 
     Private Sub MyListItem_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         If Checked Then
-            SetResourceReference(ForegroundProperty, "ColorBrush3")
+            SetResourceReference(ForegroundProperty, If(Height < 40, "ColorBrush3", "ColorBrush2"))
         Else
             SetResourceReference(ForegroundProperty, "ColorBrush1")
         End If

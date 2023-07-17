@@ -73,10 +73,10 @@ Public Class MyBitmap
             Pic = My.Application.TryFindResource(FilePathOrResourceName)
             If Pic Is Nothing Then
                 Pic = New System.Drawing.Bitmap(1, 1)
-                Log(ex, "加载位图失败（" & FilePathOrResourceName & "）")
+                Log(ex, $"加载位图失败（{FilePathOrResourceName}）")
                 Throw
             Else
-                Log(ex, "指定类型有误的位图加载（" & FilePathOrResourceName & "）", LogLevel.Developer)
+                Log(ex, $"指定类型有误的位图加载（{FilePathOrResourceName}）", LogLevel.Developer)
                 Exit Try
             End If
         End Try

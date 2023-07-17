@@ -386,7 +386,7 @@ Public Module ModDownloadLib
         '选择 Java
         Dim Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
         If Java Is Nothing Then
-            If Not JavaDownloadConfirm(17) Then Throw New Exception("由于未找到 Java，已取消安装。")
+            If Not JavaDownloadConfirm("Java 8 或更高版本") Then Throw New Exception("由于未找到 Java，已取消安装。")
             '开始自动下载
             Dim JavaLoader = JavaFixLoaders(17)
             JavaLoader.Start(17, IsForceRestart:=True)
@@ -489,7 +489,7 @@ Public Module ModDownloadLib
     ''' <summary>
     ''' 获取下载某个 OptiFine 版本的加载器列表。
     ''' </summary>
-    Private Function McDownloadOptiFineLoader(DownloadInfo As DlOptiFineListEntry, Optional McFolder As String = Nothing, Optional ClientDownloadLoader As LoaderCombo(Of String) = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
+    Private Function McDownloadOptiFineLoader(DownloadInfo As DlOptiFineListEntry, Optional McFolder As String = Nothing, Optional ClientDownloadLoader As LoaderCombo(Of String) = Nothing, Optional ClientFolder As String = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
 
         '参数初始化
         McFolder = If(McFolder, PathMcFolder)
@@ -553,14 +553,14 @@ Public Module ModDownloadLib
                                                                              '拷贝原版文件
                                                                              If Not IsCustomFolder Then Exit Sub
                                                                              SyncLock VanillaSyncLock
-                                                                                 Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name '#2031 报告了此处 ClientDownloadLoader.Input 为 null 的问题，但无法复现
+                                                                                 Dim ClientName As String = GetFolderNameFromPath(ClientFolder)
                                                                                  Directory.CreateDirectory(McFolder & "versions\" & DownloadInfo.Inherit)
                                                                                  If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json") Then
-                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".json",
+                                                                                     CopyFile(ClientFolder & ClientName & ".json",
                                                                                           McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json")
                                                                                  End If
                                                                                  If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar") Then
-                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".jar",
+                                                                                     CopyFile(ClientFolder & ClientName & ".jar",
                                                                                               McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar")
                                                                                  End If
                                                                              End SyncLock
@@ -1114,7 +1114,7 @@ Public Module ModDownloadLib
         '选择 Java
         Dim Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
         If Java Is Nothing Then
-            If Not JavaDownloadConfirm(17) Then Throw New Exception("由于未找到 Java，已取消安装。")
+            If Not JavaDownloadConfirm("Java 8 或更高版本") Then Throw New Exception("由于未找到 Java，已取消安装。")
             '开始自动下载
             Dim JavaLoader = JavaFixLoaders(17)
             JavaLoader.Start(17, IsForceRestart:=True)
@@ -1259,7 +1259,7 @@ Public Module ModDownloadLib
     ''' <summary>
     ''' 获取下载某个 Forge 版本的加载器列表。
     ''' </summary>
-    Private Function McDownloadForgeLoader(Version As String, Inherit As String, Optional DownloadInfo As DlForgeVersionEntry = Nothing, Optional McFolder As String = Nothing, Optional ClientDownloadLoader As LoaderCombo(Of String) = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
+    Private Function McDownloadForgeLoader(Version As String, Inherit As String, Optional DownloadInfo As DlForgeVersionEntry = Nothing, Optional McFolder As String = Nothing, Optional ClientDownloadLoader As LoaderCombo(Of String) = Nothing, Optional ClientFolder As String = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
 
         '参数初始化
         McFolder = If(McFolder, PathMcFolder)
@@ -1386,13 +1386,13 @@ Public Module ModDownloadLib
                                                                              '拷贝原版文件
                                                                              If Not IsCustomFolder Then Exit Sub
                                                                              SyncLock VanillaSyncLock
-                                                                                 Dim ClientName As String = New DirectoryInfo(ClientDownloadLoader.Input).Name
+                                                                                 Dim ClientName As String = GetFolderNameFromPath(ClientFolder)
                                                                                  Directory.CreateDirectory(McFolder & "versions\" & Inherit)
                                                                                  If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".json") Then
-                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".json", McFolder & "versions\" & Inherit & "\" & Inherit & ".json")
+                                                                                     CopyFile(ClientFolder & ClientName & ".json", McFolder & "versions\" & Inherit & "\" & Inherit & ".json")
                                                                                  End If
                                                                                  If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".jar") Then
-                                                                                     CopyFile(ClientDownloadLoader.Input & ClientName & ".jar", McFolder & "versions\" & Inherit & "\" & Inherit & ".jar")
+                                                                                     CopyFile(ClientFolder & ClientName & ".jar", McFolder & "versions\" & Inherit & "\" & Inherit & ".jar")
                                                                                  End If
                                                                              End SyncLock
 #End Region
@@ -1797,6 +1797,10 @@ Public Module ModDownloadLib
         ''' 必填。安装目标版本名称。
         ''' </summary>
         Public TargetVersionName As String
+        ''' <summary>
+        ''' 必填。安装目标文件夹。
+        ''' </summary>
+        Public TargetVersionFolder As String
 
         ''' <summary>
         ''' 必填。欲下载的 Minecraft 的版本名。
@@ -1909,7 +1913,7 @@ Public Module ModDownloadLib
             Dim Loader As New LoaderCombo(Of String)(Request.TargetVersionName & " 安装", SubLoaders) With {.OnStateChanged = AddressOf McInstallState}
 
             '启动
-            Loader.Start(PathMcFolder & "versions\" & Request.TargetVersionName & "\")
+            Loader.Start(Request.TargetVersionFolder)
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()
             FrmMain.BtnExtraDownload.Ribble()
@@ -2009,28 +2013,29 @@ Public Module ModDownloadLib
             If OptiFineAsMod Then
                 LoaderList.Add(New LoaderCombo(Of String)("下载 OptiFine " & Request.OptiFineEntry.NameDisplay, McDownloadOptiFineSaveLoader(Request.OptiFineEntry, OptiFineFolder & Request.OptiFineEntry.NameFile)) With {.Show = False, .ProgressWeight = 16, .Block = Request.ForgeVersion Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
             Else
-                LoaderList.Add(New LoaderCombo(Of String)("下载 OptiFine " & Request.OptiFineEntry.NameDisplay, McDownloadOptiFineLoader(Request.OptiFineEntry, TempMcFolder, ClientLoader, False)) With {.Show = False, .ProgressWeight = 24, .Block = Request.ForgeVersion Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
+                LoaderList.Add(New LoaderCombo(Of String)("下载 OptiFine " & Request.OptiFineEntry.NameDisplay, McDownloadOptiFineLoader(Request.OptiFineEntry, TempMcFolder, ClientLoader, Request.TargetVersionFolder, False)) With {.Show = False, .ProgressWeight = 24, .Block = Request.ForgeVersion Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
             End If
         End If
         'Forge
         If Request.ForgeVersion IsNot Nothing Then
-            LoaderList.Add(New LoaderCombo(Of String)("下载 Forge " & Request.ForgeVersion, McDownloadForgeLoader(Request.ForgeVersion, Request.MinecraftName, Request.ForgeEntry, TempMcFolder, ClientLoader, False)) With {.Show = False, .ProgressWeight = 25, .Block = Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
+            LoaderList.Add(New LoaderCombo(Of String)("下载 Forge " & Request.ForgeVersion, McDownloadForgeLoader(Request.ForgeVersion, Request.MinecraftName, Request.ForgeEntry, TempMcFolder, ClientLoader, Request.TargetVersionFolder, False)) With {.Show = False, .ProgressWeight = 25, .Block = Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
         End If
         'LiteLoader
         If Request.LiteLoaderEntry IsNot Nothing Then
             LoaderList.Add(New LoaderCombo(Of String)("下载 LiteLoader " & Request.MinecraftName, McDownloadLiteLoaderLoader(Request.LiteLoaderEntry, TempMcFolder, ClientLoader, False)) With {.Show = False, .ProgressWeight = 1, .Block = Request.FabricVersion Is Nothing})
         End If
-        'Fabric Loader
+        'Fabric
         If Request.FabricVersion IsNot Nothing Then
             LoaderList.Add(New LoaderCombo(Of String)("下载 Fabric " & Request.FabricVersion, McDownloadFabricLoader(Request.FabricVersion, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2, .Block = True})
         End If
         '合并安装
-        LoaderList.Add(New LoaderTask(Of String, String)("安装游戏", Sub(Task As LoaderTask(Of String, String))
-                                                                     InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, FabricFolder, LiteLoaderFolder)
-                                                                     Task.Progress = 0.3
-                                                                     If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
-                                                                     If Directory.Exists(TempMcFolder & "mods") Then CopyDirectory(TempMcFolder & "mods", PathMcFolder & "mods")
-                                                                 End Sub) With {.ProgressWeight = 2, .Block = True})
+        LoaderList.Add(New LoaderTask(Of String, String)("安装游戏",
+            Sub(Task As LoaderTask(Of String, String))
+                InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, FabricFolder, LiteLoaderFolder)
+                Task.Progress = 0.3
+                If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
+                If Directory.Exists(TempMcFolder & "mods") Then CopyDirectory(TempMcFolder & "mods", PathMcFolder & "mods")
+            End Sub) With {.ProgressWeight = 2, .Block = True})
         '补全文件
         If Not DontFixLibraries AndAlso
         (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.Split(".")(0) >= 20) OrElse Request.FabricVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then

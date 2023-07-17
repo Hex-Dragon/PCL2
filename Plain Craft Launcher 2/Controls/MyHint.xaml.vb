@@ -34,7 +34,7 @@
         Get
             Return LabText.Text
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             LabText.Text = value
         End Set
     End Property
@@ -43,7 +43,7 @@
         Get
             Return BtnClose.Visibility = Visibility.Visible
         End Get
-        Set(ByVal value As Boolean)
+        Set(value As Boolean)
             BtnClose.Visibility = If(value, Visibility.Visible, Visibility.Collapsed)
         End Set
     End Property

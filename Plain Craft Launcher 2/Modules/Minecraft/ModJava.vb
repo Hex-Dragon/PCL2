@@ -1,5 +1,5 @@
 ﻿Public Module ModJava
-    Public JavaListCacheVersion As Integer = 4
+    Public JavaListCacheVersion As Integer = 5
 
     ''' <summary>
     ''' 目前所有可用的 Java。
@@ -129,8 +129,10 @@
                 End If
                 Is64Bit = Output.Contains("64-bit")
                 If Version.Minor <= 4 OrElse Version.Minor >= 25 Then Throw New Exception("分析详细信息失败，获取的版本为 " & Version.ToString)
-                '无论如何不允许使用 JRE 16，它完全是炸的，安 OptiFine、Forge 和启动 MC 都会炸
-                If IsJre AndAlso VersionCode = 16 Then Throw New Exception("由于 JRE 16 对 Minecraft 的兼容性很差，因此不再允许使用")
+                '基于 #2249 发现的 JRE 17 似乎也导致了 Forge 安装失败，干脆禁用更多版本的 JRE
+                If IsJre AndAlso VersionCode >= 16 Then Throw New Exception("由于高版本 JRE 对 Minecraft 的兼容性很差，因此不再允许使用")
+                ''无论如何不允许使用 JRE 16，它完全是炸的，安 OptiFine、Forge 和启动 MC 都会炸
+                'If IsJre AndAlso VersionCode = 16 Then Throw New Exception("由于 JRE 16 对 Minecraft 的兼容性很差，因此不再允许使用")
             Catch ex As Exception
                 Log("[Java] 检查失败的 Java 输出：" & PathFolder & "java.exe" & vbCrLf & If(Output, "无程序输出"))
                 Throw New Exception("检查 Java 失败（" & If(PathJavaw, "Nothing") & "）", ex)
@@ -230,6 +232,8 @@
                 Try
                     UserJava = JavaEntry.FromJson(GetJson(Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)))
                     UserJava.Check()
+                Catch ex As ThreadInterruptedException
+                    Throw
                 Catch ex As Exception
                     UserJava = Nothing
                     Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
@@ -242,6 +246,8 @@
                 Try
                     UserJava = JavaEntry.FromJson(GetJson(Setup.Get("LaunchArgumentJavaSelect")))
                     UserJava.Check()
+                Catch ex As ThreadInterruptedException
+                    Throw
                 Catch ex As Exception
                     UserJava = Nothing
                     Setup.Reset("LaunchArgumentJavaSelect")
@@ -450,7 +456,7 @@ NoUserJava:
         '4. Java 大版本
         If Left.VersionCode <> Right.VersionCode Then
             '                             Java  7   8   9  10  11  12 13 14 15  16  17  18  19  20...
-            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 29, 10, 12, 15, 13, 9, 8, 7, 11, 31, 30, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
+            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 30, 10, 12, 15, 13, 9, 8, 7, 11, 31, 29, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
             Return Weight.ElementAtOrDefault(Left.VersionCode) >= Weight.ElementAtOrDefault(Right.VersionCode)
         End If
         '5. 最次级版本号更接近 51
@@ -530,10 +536,10 @@ NoUserJava:
             For Each Pair In JavaPreList
                 If Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") Then
                     Log("[Java] 位于 " & Pair.Key & " 的 Java 包含特殊引用")
-                    Continue For
+                Else
+                    Log("[Java] 位于 " & Pair.Key & " 的 Java 不含特殊引用")
+                    JavaWithoutInherit.Add(Pair.Key, Pair.Value)
                 End If
-                Log("[Java] 位于 " & Pair.Key & " 的 Java 不含特殊引用")
-                JavaWithoutInherit.Add(Pair.Key, Pair.Value)
             Next
             If JavaWithoutInherit.Count > 0 Then JavaPreList = JavaWithoutInherit
 
@@ -688,18 +694,17 @@ Wait:
 
     ''' <summary>
     ''' 提示 Java 缺失，并弹窗确认是否自动下载。返回玩家选择是否下载。
-    ''' 支持下载 Java 8、14、17，输入其他 VersionCode 会要求玩家自行下载。
     ''' </summary>
-    Public Function JavaDownloadConfirm(VersionCode As String) As Boolean
-        If VersionCode = 8 OrElse VersionCode = 14 OrElse VersionCode = 17 Then
-            Return MyMsgBox($"PCL 未找到 Java {VersionCode}，是否需要 PCL 自动下载？" & vbCrLf &
-                            $"如果你已经安装了 Java {VersionCode}，请在 设置 → 启动选项 → 游戏 Java 中手动导入。",
-                            "未找到 Java", "自动下载", "取消") = 1
-        Else
-            MyMsgBox($"PCL 未找到 Java {VersionCode}。" & vbCrLf &
-                     $"请自行搜索并安装 Java {VersionCode}，安装后在 设置 → 启动选项 → 游戏 Java 中重新搜索或导入。",
+    Public Function JavaDownloadConfirm(VersionDescription As String, Optional ForcedManualDownload As Boolean = False) As Boolean
+        If ForcedManualDownload Then
+            MyMsgBox($"PCL 未找到 {VersionDescription}。" & vbCrLf &
+                     $"请自行搜索并安装 {VersionDescription}，安装后在 设置 → 启动选项 → 游戏 Java 中重新搜索或导入。",
                      "未找到 Java")
             Return False
+        Else
+            Return MyMsgBox($"PCL 未找到 {VersionDescription}，是否需要 PCL 自动下载？" & vbCrLf &
+                            $"如果你已经安装了 {VersionDescription}，请在 设置 → 启动选项 → 游戏 Java 中手动导入。",
+                            "未找到 Java", "自动下载", "取消") = 1
         End If
     End Function
 

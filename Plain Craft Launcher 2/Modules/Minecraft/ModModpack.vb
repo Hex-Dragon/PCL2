@@ -254,17 +254,21 @@ Retry:
                 For Each ModJson In Task.Input
                     '跳过重复的 Mod（疑似 CurseForge Bug）
                     If FileList.ContainsKey(ModJson("id").ToObject(Of Integer)) Then Continue For
-                    '根据 modules 判断是资源包还是 Mod
+                    '建立 CompFile
+                    Dim File As New CompFile(ModJson, CompType.Mod)
+                    If Not File.Available Then Continue For
+                    '根据 modules 和文件名后缀判断是资源包还是 Mod
                     Dim IsResourcePack As Boolean
                     If ModJson("modules").Any Then 'modules 可能返回 null（#1006）
                         Dim ModuleNames = CType(ModJson("modules"), JArray).Select(Function(l) l("name").ToString).ToList
-                        IsResourcePack = Not ModuleNames.Contains("META-INF") AndAlso ModuleNames.Contains("pack.mcmeta")
+                        IsResourcePack =
+                            (Not ModuleNames.Contains("META-INF")) AndAlso (Not ModuleNames.Contains("mcmod.info")) AndAlso '不包含 META-INF 或 mcmod.info
+                            ModuleNames.Contains("pack.mcmeta") AndAlso '包含 pack.mcmeta
+                            (Not File.FileName.EndsWith(".jar")) '文件后缀不是 .jar
                     Else
                         IsResourcePack = False
                     End If
                     '实际的添加
-                    Dim File As New CompFile(ModJson, CompType.Mod)
-                    If Not File.Available Then Continue For
                     FileList.Add(ModJson("id"),
                                  File.ToNetFile($"{PathMcFolder}versions\{VersionName}\{If(IsResourcePack, "resourcepacks", "mods")}\"))
                     Task.Progress += 1 / (1 + ModFileList.Count)
@@ -278,6 +282,7 @@ Retry:
         '构造加载器
         Dim Request As New McInstallRequest With {
             .TargetVersionName = VersionName,
+            .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\",
             .MinecraftName = Json("minecraft")("version").ToString,
             .ForgeVersion = ForgeVersion,
             .FabricVersion = FabricVersion
@@ -333,7 +338,7 @@ Retry:
 
         '启动
         Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged = AddressOf McInstallState}
-        Loader.Start(PathMcFolder & "versions\" & VersionName & "\")
+        Loader.Start(Request.TargetVersionFolder)
         LoaderTaskbarAdd(Loader)
         FrmMain.BtnExtraDownload.ShowRefresh()
         If ShowRibble Then FrmMain.BtnExtraDownload.Ribble()
@@ -431,6 +436,7 @@ Retry:
         '构造加载器
         Dim Request As New McInstallRequest With {
             .TargetVersionName = VersionName,
+            .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\",
             .MinecraftName = MinecraftVersion,
             .ForgeVersion = ForgeVersion,
             .FabricVersion = FabricVersion
@@ -486,7 +492,7 @@ Retry:
 
         '启动
         Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged = AddressOf McInstallState}
-        Loader.Start(PathMcFolder & "versions\" & VersionName & "\")
+        Loader.Start(Request.TargetVersionFolder)
         LoaderTaskbarAdd(Loader)
         FrmMain.BtnExtraDownload.ShowRefresh()
         If ShowRibble Then FrmMain.BtnExtraDownload.Ribble()
@@ -533,6 +539,7 @@ Retry:
         End If
         Dim Request As New McInstallRequest With {
             .TargetVersionName = VersionName,
+            .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\",
             .MinecraftName = Json("gameVersion").ToString
         }
         Dim InstallExpectTime As Double = 0
@@ -584,7 +591,7 @@ Retry:
         '启动
         Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged = AddressOf McInstallState}
         'If Archive IsNot Nothing Then Archive.Dispose() '解除占用，以免在加载器中触发 “正由另一进程使用，因此该进程无法访问此文件”
-        Loader.Start(PathMcFolder & "versions\" & VersionName & "\")
+        Loader.Start(Request.TargetVersionFolder)
         LoaderTaskbarAdd(Loader)
         FrmMain.BtnExtraDownload.ShowRefresh()
         FrmMain.BtnExtraDownload.Ribble()
@@ -629,7 +636,7 @@ Retry:
             Hint("该整合包未提供游戏版本信息，无法安装！", HintType.Critical)
             Exit Sub
         End If
-        Dim Request As New McInstallRequest With {.TargetVersionName = VersionName}
+        Dim Request As New McInstallRequest With {.TargetVersionName = VersionName, .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\"}
         For Each Component In PackJson("components")
             Select Case If(Component("uid"), "").ToString
                 Case "org.lwjgl"
@@ -679,7 +686,7 @@ Retry:
 
         '启动
         Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged = AddressOf McInstallState}
-        Loader.Start(PathMcFolder & "versions\" & VersionName & "\")
+        Loader.Start(Request.TargetVersionFolder)
         LoaderTaskbarAdd(Loader)
         FrmMain.BtnExtraDownload.ShowRefresh()
         FrmMain.BtnExtraDownload.Ribble()
@@ -738,6 +745,7 @@ Retry:
         End If
         Dim Request As New McInstallRequest With {
             .TargetVersionName = VersionName,
+            .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\",
             .MinecraftName = Addons("game"),
             .OptiFineVersion = If(Addons.ContainsKey("optifine"), Addons("optifine"), Nothing),
             .ForgeVersion = If(Addons.ContainsKey("forge"), Addons("forge"), Nothing),
@@ -777,7 +785,7 @@ Retry:
         '启动
         Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged = AddressOf McInstallState}
         'If Archive IsNot Nothing Then Archive.Dispose() '解除占用，以免在加载器中触发 “正由另一进程使用，因此该进程无法访问此文件”
-        Loader.Start(PathMcFolder & "versions\" & VersionName & "\")
+        Loader.Start(Request.TargetVersionFolder)
         LoaderTaskbarAdd(Loader)
         FrmMain.BtnExtraDownload.ShowRefresh()
         FrmMain.BtnExtraDownload.Ribble()

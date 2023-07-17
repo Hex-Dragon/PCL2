@@ -13,11 +13,11 @@
 
                 Case "打开网页"
                     Data(0) = Data(0).Replace("\", "/")
-                    If Not (Data(0).StartsWith("http://") OrElse Data(0).StartsWith("https://")) Then
-                        MyMsgBox("EventData 必须为以 http:// 或 https:// 开头的网址。" & vbCrLf & "如果想要启动程序，请将 EventType 改为 打开文件。", "事件执行失败")
+                    If Not Data(0).Contains("://") OrElse Data(0).ToLower.StartsWith("file") Then '为了支持更多协议（#2200）
+                        MyMsgBox("EventData 必须为一个网址。" & vbCrLf & "如果想要启动程序，请将 EventType 改为 打开文件。", "事件执行失败")
                         Exit Sub
                     End If
-                    Hint("正在打开网页，请稍候……")
+                    Hint("正在开启中，请稍候……")
                     OpenWebsite(Data(0))
 
                 Case "打开文件", "打开帮助"
@@ -65,15 +65,21 @@
                     RunInThread(Sub() PageOtherTest.MemoryOptimize(True))
 
                 Case "清理垃圾"
-                    PageOtherTest.RubbishClear()
+                    RunInThread(Sub() PageOtherTest.RubbishClear())
 
                 Case "弹出窗口"
                     MyMsgBox(Data(1).Replace("\n", vbCrLf), Data(0).Replace("\n", vbCrLf))
 
+                Case "切换页面"
+                    FrmMain.PageChange(Val(Data(0)), Val(Data(1)))
+
+                Case "导入整合包"
+                    RunInThread(Sub() ModpackInstall())
+
                 Case "下载文件"
                     Data(0) = Data(0).Replace("\", "/")
                     If Not (Data(0).StartsWith("http://") OrElse Data(0).StartsWith("https://")) Then
-                        MyMsgBox("EventData 必须为以 http:// 或 https:// 开头的网址。" & vbCrLf & "PCL 不支持其他乱七八糟的协议。", "事件执行失败")
+                        MyMsgBox("EventData 必须为以 http:// 或 https:// 开头的网址。" & vbCrLf & "PCL 不支持其他乱七八糟的下载协议。", "事件执行失败")
                         Exit Sub
                     End If
                     PageOtherTest.StartCustomDownload(Data(0), GetFileNameFromPath(Data(0)))
