@@ -928,7 +928,7 @@ NextStack:
                     End If
                 Case CrashReason.材质过大或显卡配置不足
                     Results.Add("你所使用的材质分辨率过高，或显卡配置不足，导致游戏无法继续运行。\n\n如果你正在使用高清材质，请将它移除。\n如果你没有使用材质，那么你可能需要更新显卡驱动，或者换个更好的显卡……\h")
-                Case CrashReason.材质过大或显卡配置不足
+                Case CrashReason.NightConfig的Bug
                     Results.Add("由于 Night Config 存在问题，导致了游戏崩溃。\n你可以尝试安装 Night Config Fixes 模组，这或许能解决此问题。\h")
                 Case CrashReason.光影或资源包导致OpenGL1282错误
                     Results.Add("你所使用的光影或材质导致游戏出现了一些问题……\n\n请尝试删除你所添加的这些额外资源。\h")
