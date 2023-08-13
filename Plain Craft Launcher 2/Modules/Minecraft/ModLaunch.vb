@@ -933,7 +933,7 @@ SystemBrowser:
             Result = NetRequestMuity("https://xsts.auth.xboxlive.com/xsts/authorize", "POST", Request, "application/json", 3)
         Catch ex As Net.WebException
             If ex.Message.Contains("2148916233") Then
-                If MyMsgBox("该微软账号尚未购买 Minecraft Java 版，或尚未注册 XBox 账户。" & vbCrLf &
+                If MyMsgBox("该微软账号尚未购买 Minecraft Java 版，或尚未注册 Xbox 账户。" & vbCrLf &
                             "如果你确定该账号完成了上述步骤，请先在游戏官网登录一次，然后再在启动器登录。", "登录提示", "打开游戏官网", "取消") = 1 Then
                     OpenWebsite("https://www.minecraft.net/")
                 End If
@@ -1000,7 +1000,7 @@ SystemBrowser:
             ElseIf Message.Contains("(404)") Then
                 Log(ex, "微软登录第 6 步汇报 404")
                 RunInNewThread(Sub()
-                                   Select Case MyMsgBox("你可能没有在 Minecraft 官网创建档案，XBox Game Pass 已到期，或者还没有购买 Minecraft。" & vbCrLf &
+                                   Select Case MyMsgBox("你可能没有在 Minecraft 官网创建档案，Xbox Game Pass 已到期，或者还没有购买 Minecraft。" & vbCrLf &
                                             "如果你确认拥有 Minecraft，请在官网上创建档案后再试。", "登录失败", "创建档案", "购买 Minecraft", "取消")
                                        Case 1
                                            OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
