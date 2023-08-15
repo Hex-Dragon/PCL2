@@ -23,11 +23,9 @@
                 Case "打开文件", "打开帮助"
                     RunInThread(Sub()
                                     Try
-
                                         '确认实际路径
                                         Dim ActualPaths = GetEventAbsoluteUrls(Data(0), Type)
                                         Dim Location = ActualPaths(0), WorkingDir = ActualPaths(1)
-
                                         '执行
                                         If Type = "打开文件" Then
                                             Dim Info As New ProcessStartInfo With {
@@ -39,13 +37,14 @@
                                         Else '打开帮助
                                             PageOtherHelp.EnterHelpPage(Location)
                                         End If
-
                                     Catch ex As Exception
                                         Log(ex, "执行打开类自定义事件失败", LogLevel.Msgbox)
                                     End Try
                                 End Sub)
+
                 Case "启动游戏"
-                    If McLaunchStart(New McLaunchOptions With {.ServerIp = If(Data.Length >= 2, Data(1), Nothing), .Version = New McVersion(Data(0))}) Then
+                    If McLaunchStart(New McLaunchOptions With
+                                     {.ServerIp = If(Data.Length >= 2, Data(1), Nothing), .Version = New McVersion(Data(0))}) Then
                         Hint("正在启动 " & Data(0) & "……")
                     End If
 
@@ -54,6 +53,7 @@
 
                 Case "刷新主页"
                     FrmLaunchRight.ForceRefresh()
+                    If Data(0) = "" Then Hint("已刷新主页！", HintType.Finish)
 
                 Case "刷新帮助"
                     PageOtherLeft.RefreshHelp()

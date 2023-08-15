@@ -1,7 +1,4 @@
-﻿Imports System.IO.Compression
-Imports NAudio.Gui
-
-Public Module ModMinecraft
+﻿Public Module ModMinecraft
 
 #Region "文件夹"
 

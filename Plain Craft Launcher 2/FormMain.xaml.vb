@@ -116,6 +116,12 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 299 Then 'Snapshot 2.6.5
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持选择多种预设的主页"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化联网获取的主页的加载与缓存"))
+            FeatureCount += 18
+            BugCount += 13
+        End If
         If LastVersion < 298 Then 'Snapshot 2.6.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理中允许多选 Mod 进行批量操作"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
@@ -824,6 +830,7 @@ Public Class FormMain
                                        RunInUi(Sub()
                                                    Setup.Set("UiCustomType", 1)
                                                    FrmLaunchRight.ForceRefresh()
+                                                   Hint("已加载主页自定义文件！", HintType.Finish)
                                                End Sub)
                                        Exit Sub
                                    End If

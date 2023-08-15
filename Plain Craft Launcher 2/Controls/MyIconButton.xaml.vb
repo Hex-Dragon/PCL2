@@ -50,13 +50,31 @@
 
     '触发点击事件
     Private Sub Button_MouseUp(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseLeftButtonUp
-        If IsMouseDown Then
-            Log("[Control] 按下图标按钮" & If(String.IsNullOrEmpty(Name), "", "：" & Name))
-            RaiseEvent Click(sender, e)
-            e.Handled = True
-            Button_MouseUp()
-        End If
+        If Not IsMouseDown Then Return
+        Log("[Control] 按下图标按钮" & If(String.IsNullOrEmpty(Name), "", "：" & Name))
+        RaiseEvent Click(sender, e)
+        e.Handled = True
+        Button_MouseUp()
+        ModEvent.TryStartEvent(EventType, EventData)
     End Sub
+    Public Property EventType As String
+        Get
+            Return GetValue(EventTypeProperty)
+        End Get
+        Set(value As String)
+            SetValue(EventTypeProperty, value)
+        End Set
+    End Property
+    Public Shared ReadOnly EventTypeProperty As DependencyProperty = DependencyProperty.Register("EventType", GetType(String), GetType(MyIconButton), New PropertyMetadata(Nothing))
+    Public Property EventData As String
+        Get
+            Return GetValue(EventDataProperty)
+        End Get
+        Set(value As String)
+            SetValue(EventDataProperty, value)
+        End Set
+    End Property
+    Public Shared ReadOnly EventDataProperty As DependencyProperty = DependencyProperty.Register("EventData", GetType(String), GetType(MyIconButton), New PropertyMetadata(Nothing))
 
     '鼠标点击判定（务必放在点击事件之后，以使得 Button_MouseUp 先于 Button_MouseLeave 执行）
     Private IsMouseDown As Boolean = False

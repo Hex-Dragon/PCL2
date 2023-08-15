@@ -5,7 +5,7 @@
     ''' <summary>
     ''' 接下来要播放的音乐文件路径。未初始化时为 Nothing。
     ''' </summary>
-    Public MusicToplayList As List(Of String) = Nothing
+    Public MusicWaitingList As List(Of String) = Nothing
     ''' <summary>
     ''' 全部音乐文件路径。未初始化时为 Nothing。
     ''' </summary>
@@ -31,11 +31,11 @@
                 Next
             End If
             '打乱顺序播放
-            MusicToplayList = If(Setup.Get("UiMusicRandom"), Shuffle(New List(Of String)(MusicAllList)), New List(Of String)(MusicAllList))
-            If Not IgnoreFirst = "" AndAlso Not MusicToplayList.Count = 0 AndAlso MusicToplayList(0) = IgnoreFirst Then
+            MusicWaitingList = If(Setup.Get("UiMusicRandom"), Shuffle(New List(Of String)(MusicAllList)), New List(Of String)(MusicAllList))
+            If Not IgnoreFirst = "" AndAlso Not MusicWaitingList.Count = 0 AndAlso MusicWaitingList(0) = IgnoreFirst Then
                 '若需要避免成为第一项的为第一项，则将它放在最后
-                MusicToplayList.RemoveAt(0)
-                MusicToplayList.Add(IgnoreFirst)
+                MusicWaitingList.RemoveAt(0)
+                MusicWaitingList.Add(IgnoreFirst)
             End If
         Catch ex As Exception
             Log(ex, "初始化音乐列表失败", LogLevel.Feedback)
@@ -46,12 +46,11 @@
     ''' </summary>
     Private Function DequeueNextMusicAddress() As String
         '初始化，确保存在音乐
-        If MusicAllList Is Nothing Then MusicListInit(False)
-        If MusicAllList.Count = 0 Then Throw New Exception("在没有音乐时尝试获取音乐路径")
+        If MusicAllList Is Nothing OrElse MusicAllList.Count = 0 Then MusicListInit(False)
         '出列下一个音乐，如果出列结束则生成新列表
-        DequeueNextMusicAddress = MusicToplayList(0)
-        MusicToplayList.RemoveAt(0)
-        If MusicToplayList.Count = 0 Then MusicListInit(False, DequeueNextMusicAddress)
+        DequeueNextMusicAddress = MusicWaitingList(0)
+        MusicWaitingList.RemoveAt(0)
+        If MusicWaitingList.Count = 0 Then MusicListInit(False, DequeueNextMusicAddress)
     End Function
 
 #End Region
@@ -106,7 +105,8 @@
                 Case MusicStates.Play
                     MusicPause()
                 Case Else
-                    Hint("音乐目前为停止状态！", HintType.Critical)
+                    Log("[Music] 音乐目前为停止状态，已强制尝试开始播放", LogLevel.Debug)
+                    MusicRefreshPlay(False)
             End Select
         End If
     End Sub
@@ -212,15 +212,15 @@
     ''' 继续音乐播放，返回是否成功切换了状态。
     ''' </summary>
     Public Function MusicResume() As Boolean
-        If MusicState = MusicStates.Pause Then
+        If MusicState = MusicStates.Play Then
+            Return False
+        Else
             RunInThread(Sub()
                             MusicNAudio.Play()
                             MusicRefreshUI()
                             Log("[Music] 已恢复播放")
                         End Sub)
             Return True
-        Else
-            Return False
         End If
     End Function
 

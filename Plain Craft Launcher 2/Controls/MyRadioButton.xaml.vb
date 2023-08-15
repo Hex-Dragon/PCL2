@@ -252,7 +252,7 @@
 
             End If
         Catch ex As Exception
-            Log(ex, "刷新按钮颜色出错")
+            Log(ex, "刷新单选按钮颜色出错")
         End Try
     End Sub
 

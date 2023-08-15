@@ -73,6 +73,10 @@
         IsMouseDown = True
         RefreshColor()
     End Sub
+    Private Sub MyIconTextButton_MouseLeave() Handles Me.MouseLeave
+        IsMouseDown = False
+        RefreshColor()
+    End Sub
     Public Property EventType As String
         Get
             Return GetValue(EventTypeProperty)
@@ -96,7 +100,7 @@
 
     Private Const AnimationTimeOfMouseIn As Integer = 100 '鼠标指向动画长度
     Private Const AnimationTimeOfMouseOut As Integer = 150 '鼠标移出动画长度
-    Private Sub RefreshColor(Optional obj = Nothing, Optional e = Nothing) Handles Me.MouseEnter, Me.MouseLeave, Me.Loaded, Me.IsEnabledChanged
+    Private Sub RefreshColor(Optional obj = Nothing, Optional e = Nothing) Handles Me.MouseEnter, Me.Loaded, Me.IsEnabledChanged
         Try
             If IsLoaded AndAlso AniControlEnabled = 0 AndAlso Not False.Equals(e) Then '防止默认属性变更触发动画，若强制不执行动画，则 e 为 False
 
@@ -173,7 +177,7 @@
 
             End If
         Catch ex As Exception
-            Log(ex, "刷新按钮颜色出错")
+            Log(ex, "刷新带图标按钮颜色出错")
         End Try
     End Sub
 

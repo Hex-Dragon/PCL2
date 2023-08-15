@@ -272,7 +272,7 @@
                 If Not MinecraftWindowName.StartsWith("FML") Then
                     '已找到 Minecraft 窗口
                     WindowHandle = MinecraftWindowHandle
-                    WatcherLog("Minecraft 窗口已加载：" & MinecraftWindowName & "（" & MinecraftWindowHandle.ToInt64 & "）")
+                    WatcherLog($"Minecraft 窗口已加载：{MinecraftWindowName}（{MinecraftWindowHandle.ToInt64}）")
                     IsWindowFinished = True
                     '最大化
                     If Setup.Get("LaunchArgumentWindowType") = 4 Then
@@ -282,6 +282,7 @@
                                                '……虽然我很想这样说，但总有人反馈，算了
                                                Thread.Sleep(2000)
                                                ShowWindow(WindowHandle, 3)
+                                               WatcherLog($"已最大化 Minecraft 窗口：{MinecraftWindowHandle.ToInt64}")
                                            Catch ex As Exception
                                                Log(ex, "最大化 Minecraft 窗口时出现错误")
                                            End Try

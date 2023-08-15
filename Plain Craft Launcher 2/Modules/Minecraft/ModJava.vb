@@ -111,8 +111,9 @@
                 IsJre = Not File.Exists(PathFolder & "javac.exe")
                 '运行 -version
                 Output = ShellAndGetOutput(PathFolder & "java.exe", "-version", 15000).ToLower
-                If Output = "" Then Throw New Exception("尝试运行该 Java 失败")
+                If Output = "" Then Throw New ApplicationException("尝试运行该 Java 失败")
                 If ModeDebug Then Log("[Java] Java 检查输出：" & PathFolder & "java.exe" & vbCrLf & Output)
+                If Output.Contains("/lib/ext exists") Then Throw New ApplicationException("无法运行该 Java，请在删除 Java 文件夹中的 /lib/ext 文件夹后再试")
                 '获取详细信息
                 Dim VersionString = If(RegexSeek(Output, "(?<=version "")[^""]+"), If(RegexSeek(Output, "(?<=openjdk )[0-9]+"), "")).Replace("_", ".").Split("-").First
                 Do While VersionString.Split(".").Count < 4
@@ -122,6 +123,7 @@
                         VersionString = "1." & VersionString
                     End If
                 Loop
+                If VersionString = "" Then Throw New ApplicationException($"未找到该 Java 的版本号{If(Output.Length < 500, $"{vbCrLf}输出为：{vbCrLf}{Output}", "")}")
                 Version = New Version(VersionString)
                 If Version.Minor = 0 Then
                     Log("[Java] 疑似 X.0.X.X 格式版本号：" & Version.ToString)
@@ -129,10 +131,10 @@
                 End If
                 Is64Bit = Output.Contains("64-bit")
                 If Version.Minor <= 4 OrElse Version.Minor >= 25 Then Throw New Exception("分析详细信息失败，获取的版本为 " & Version.ToString)
-                '基于 #2249 发现的 JRE 17 似乎也导致了 Forge 安装失败，干脆禁用更多版本的 JRE
-                If IsJre AndAlso VersionCode >= 16 Then Throw New Exception("由于高版本 JRE 对 Minecraft 的兼容性很差，因此不再允许使用")
-                ''无论如何不允许使用 JRE 16，它完全是炸的，安 OptiFine、Forge 和启动 MC 都会炸
-                'If IsJre AndAlso VersionCode = 16 Then Throw New Exception("由于 JRE 16 对 Minecraft 的兼容性很差，因此不再允许使用")
+                '基于 #2249 发现 JRE 17 似乎也导致了 Forge 安装失败，干脆禁用更多版本的 JRE
+                If IsJre AndAlso VersionCode >= 16 Then Throw New Exception("由于高版本 JRE 对游戏的兼容性很差，因此不再允许使用。你可以使用对应版本的 JDK，而非 JRE！")
+            Catch ex As ApplicationException
+                Throw ex
             Catch ex As Exception
                 Log("[Java] 检查失败的 Java 输出：" & PathFolder & "java.exe" & vbCrLf & If(Output, "无程序输出"))
                 Throw New Exception("检查 Java 失败（" & If(PathJavaw, "Nothing") & "）", ex)
@@ -659,7 +661,7 @@ Wait:
                         SearchEntry.Contains("java") OrElse SearchEntry.Contains("jdk") OrElse SearchEntry.Contains("env") OrElse
                         SearchEntry.Contains("环境") OrElse SearchEntry.Contains("run") OrElse SearchEntry.Contains("软件") OrElse
                         SearchEntry.Contains("jre") OrElse SearchEntry = "bin" OrElse SearchEntry.Contains("mc") OrElse
-                        SearchEntry.Contains("software") OrElse SearchEntry.Contains("cache") OrElse SearchEntry.Contains("temp") OrElse
+                        SearchEntry.Contains("soft") OrElse SearchEntry.Contains("cache") OrElse SearchEntry.Contains("temp") OrElse
                         SearchEntry.Contains("corretto") OrElse SearchEntry.Contains("roaming") OrElse SearchEntry.Contains("users") OrElse
                         SearchEntry.Contains("craft") OrElse SearchEntry.Contains("program") OrElse SearchEntry.Contains("世界") OrElse
                         SearchEntry.Contains("net") OrElse SearchEntry.Contains("游戏") OrElse SearchEntry.Contains("oracle") OrElse
@@ -675,7 +677,7 @@ Wait:
                         SearchEntry.Contains("mod") OrElse SearchEntry.Contains("高清") OrElse SearchEntry.Contains("download") OrElse
                         SearchEntry.Contains("launch") OrElse SearchEntry.Contains("程序") OrElse SearchEntry.Contains("path") OrElse
                         SearchEntry.Contains("version") OrElse SearchEntry.Contains("baka") OrElse SearchEntry.Contains("pcl") OrElse
-                        SearchEntry.Contains("local") OrElse SearchEntry.Contains("packages") OrElse SearchEntry.Contains("4297127D64EC6") OrElse '官启文件夹
+                        SearchEntry.Contains("local") OrElse SearchEntry.Contains("packages") OrElse SearchEntry.Contains("4297127d64ec6") OrElse '官启文件夹
                         SearchEntry.Contains("国服") OrElse SearchEntry.Contains("网易") OrElse SearchEntry.Contains("ext") OrElse '网易 Java 文件夹名
                         SearchEntry.Contains("netease") OrElse SearchEntry.Contains("1.") OrElse SearchEntry.Contains("启动") Then
                     JavaSearchFolder(FolderInfo, Results, Source)

@@ -106,15 +106,15 @@ Retry:
 Retry:
             Select Case RetryCount
                 Case 0 '正常尝试
-                    Return NetGetCodeRequest(Url, Encode, 10000, IsJson, Accept)
+                    Return NetGetCodeByRequestOnce(Url, Encode, 10000, IsJson, Accept)
                 Case 1 '慢速重试
                     Thread.Sleep(500)
-                    Return NetGetCodeRequest(If(BackupUrl, Url), Encode, 30000, IsJson, Accept)
+                    Return NetGetCodeByRequestOnce(If(BackupUrl, Url), Encode, 30000, IsJson, Accept)
                 Case Else '快速重试
                     If GetTimeTick() - StartTime > 5500 Then
                         '若前两次加载耗费 5 秒以上，才进行重试
                         Thread.Sleep(500)
-                        Return NetGetCodeRequest(If(BackupUrl, Url), Encode, 4000, IsJson, Accept)
+                        Return NetGetCodeByRequestOnce(If(BackupUrl, Url), Encode, 4000, IsJson, Accept)
                     Else
                         Throw RetryException
                     End If
@@ -148,7 +148,7 @@ Retry:
         For i = 1 To 4
             Dim th As New Thread(Sub()
                                      Try
-                                         RequestResult = NetGetCodeRequest(Url, Encode, 30000, IsJson, Accept)
+                                         RequestResult = NetGetCodeByRequestOnce(Url, Encode, 30000, IsJson, Accept)
                                      Catch ex As Exception
                                          FailCount += 1
                                          RequestEx = ex
@@ -182,10 +182,10 @@ RequestFinished:
         Loop
         Throw New Exception("未知错误")
     End Function
-    Private Function NetGetCodeRequest(Url As String, Encode As Encoding, Timeout As Integer, IsJson As Boolean, Accept As String)
+    Public Function NetGetCodeByRequestOnce(Url As String, Optional Encode As Encoding = Nothing, Optional Timeout As Integer = 30000, Optional IsJson As Boolean = False, Optional Accept As String = "")
         If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
         Url = SecretCdnSign(Url)
-        Log("[Net] 获取网络结果：" & Url & "，最大超时 " & Timeout)
+        Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 json", "")}")
         Dim Request As HttpWebRequest = WebRequest.Create(Url)
         Dim Result As New List(Of Byte)
         Try
@@ -269,6 +269,8 @@ RequestFinished:
         '下载
         Using Client As New WebClient
             Try
+                Client.Headers(HttpRequestHeader.UserAgent) = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+                Client.Headers(HttpRequestHeader.Referer) = "http://" & VersionCode & ".pcl2.server/"
                 Client.DownloadFile(Url, LocalFile)
             Catch ex As Exception
                 Throw New WebException("直接下载文件失败（" & Url & "）。", ex)

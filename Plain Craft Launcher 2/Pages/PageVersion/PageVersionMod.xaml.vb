@@ -1,7 +1,4 @@
-﻿Imports System.Security.Principal
-Imports PCL.MyLoading
-
-Public Class PageVersionMod
+﻿Public Class PageVersionMod
 
 #Region "初始化"
 
@@ -336,8 +333,14 @@ Public Class PageVersionMod
         '更新下边栏 UI
         RefreshBottomBar()
     End Sub
-    Private Sub Load_State(sender As Object, newState As MyLoadingState, oldState As MyLoadingState) Handles Load.StateChanged
+    Private Sub UnselectedAllWithAnimation() Handles Load.StateChanged, Me.PageExit
+        Dim CacheAniControlEnabled = AniControlEnabled
+        AniControlEnabled = 0
         ChangeAllSelected(False)
+        AniControlEnabled += CacheAniControlEnabled
+    End Sub
+    Private Sub PageVersionMod_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If My.Computer.Keyboard.CtrlKeyDown AndAlso e.Key = Key.A Then ChangeAllSelected(True)
     End Sub
 
 #End Region

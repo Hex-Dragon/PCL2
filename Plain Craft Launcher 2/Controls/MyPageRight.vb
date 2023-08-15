@@ -152,6 +152,7 @@
     ''' </summary>
     Public Sub PageOnExit()
         If ModeDebug Then Log("[UI] 已触发 PageOnExit")
+        RaiseEvent PageExit()
         Select Case PageState
             Case PageStates.ContentEnter, PageStates.ContentStay
                 PageState = PageStates.PageExit
@@ -168,6 +169,7 @@
             Case PageStates.PageExit, PageStates.Empty
         End Select
     End Sub
+    Public Event PageExit()
     ''' <summary>
     ''' 即将切换到其他页面，需要强制完成页面状态清理。
     ''' 需要立即切换至 Empty。

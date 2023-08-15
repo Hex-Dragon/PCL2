@@ -1120,8 +1120,8 @@ SystemBrowser:
             ElseIf McVersionCurrent.Version.McCodeMain >= 8 AndAlso McVersionCurrent.Version.McCodeMain <= 11 Then
                 '1.8 - 1.11：必须恰好 Java 8
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 8, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain = 12 AndAlso McVersionCurrent.Version.HasForge Then
-                '1.12：若安装了 Forge，最高 Java 8
+            ElseIf McVersionCurrent.Version.McCodeMain = 12 Then
+                '1.12：最高 Java 8
                 MaxVer = New Version(1, 8, 999, 999)
             End If
         End If
@@ -1843,10 +1843,14 @@ NextVersion:
                         Else
                             PackFormat = 12
                         End If
-                    Case 20, 99 '99 是快照版
-                        PackFormat = 15
-                    Case Else
-                        PackFormat = 16
+                    Case 20
+                        If McVersionCurrent.Version.McCodeSub <= 1 Then
+                            PackFormat = 15
+                        Else
+                            PackFormat = 17
+                        End If
+                    Case Else '快照版是 99
+                        PackFormat = 17
                         'https://minecraft.fandom.com/zh/wiki/数据包#数据包版本
                 End Select
                 McLaunchLog("正在构建自定义皮肤资源包，格式为：" & PackFormat)

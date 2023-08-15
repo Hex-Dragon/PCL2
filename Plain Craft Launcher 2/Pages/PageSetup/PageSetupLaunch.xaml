@@ -213,7 +213,7 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard Margin="0,0,0,15" Title="高级设置" IsSwaped="True" CanSwap="True">
+            <local:MyCard Margin="0,0,0,15" Title="高级启动选项" IsSwaped="True" CanSwap="True">
                 <Grid Margin="25,40,25,15">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />

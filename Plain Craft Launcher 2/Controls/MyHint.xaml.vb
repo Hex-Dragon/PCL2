@@ -11,17 +11,17 @@
             If _IsWarn = value Then Exit Property
             _IsWarn = value
             If _IsWarn Then
-                BorderBrush = New MyColor("#99FF4444")
-                Gradient1.Color = New MyColor("#88FFBBBB")
-                Gradient2.Color = New MyColor("#88FF8888")
+                BorderBrush = New MyColor("#CCFF4444")
+                Gradient1.Color = New MyColor("#BBFFBBBB")
+                Gradient2.Color = New MyColor("#BBFF8888")
                 Path.Fill = New MyColor("#BF0000")
                 LabText.Foreground = New MyColor("#BF0000")
                 BtnClose.Foreground = New MyColor("#BF0000")
                 Path.Data = (New GeometryConverter).ConvertFromString("F1 M 58.5832,55.4172L 17.4169,55.4171C 15.5619,53.5621 15.5619,50.5546 17.4168,48.6996L 35.201,15.8402C 37.056,13.9852 40.0635,13.9852 41.9185,15.8402L 58.5832,48.6997C 60.4382,50.5546 60.4382,53.5622 58.5832,55.4172 Z M 34.0417,25.7292L 36.0208,41.9584L 39.9791,41.9583L 41.9583,25.7292L 34.0417,25.7292 Z M 38,44.3333C 36.2511,44.3333 34.8333,45.7511 34.8333,47.5C 34.8333,49.2489 36.2511,50.6667 38,50.6667C 39.7489,50.6667 41.1666,49.2489 41.1666,47.5C 41.1666,45.7511 39.7489,44.3333 38,44.3333 Z ")
             Else
-                BorderBrush = New MyColor("#994D76FF")
-                Gradient1.Color = New MyColor("#88B0D0FF")
-                Gradient2.Color = New MyColor("#889EBAFF")
+                BorderBrush = New MyColor("#CC4D76FF")
+                Gradient1.Color = New MyColor("#BBB0D0FF")
+                Gradient2.Color = New MyColor("#BB9EBAFF")
                 Path.Fill = New MyColor("#0062BF")
                 LabText.Foreground = New MyColor("#0062BF")
                 BtnClose.Foreground = New MyColor("#0062BF")
