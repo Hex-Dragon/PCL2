@@ -114,6 +114,7 @@
         TextSearchName.Text = ""
         TextSearchVersion.Text = "全部 (也可自行输入)"
         TextSearchVersion.SelectedIndex = 0
+        ComboSearchSource.SelectedIndex = 0
         ComboSearchTag.SelectedIndex = 0
         ComboSearchLoader.SelectedIndex = 0
         Loader.LastFinishedTime = 0 '要求强制重新开始

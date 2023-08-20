@@ -10,6 +10,15 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 300 Then 'Release 2.6.6
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复网络条件差时可能无法下载 MC 的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持选择多种预设的主页"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理中允许多选 Mod 进行批量操作"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化联网获取的主页的加载与缓存"))
+            FeatureCount += 40
+            BugCount += 34
+        End If
         If LastVersion < 296 Then 'Release 2.6.3
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "新增内存优化功能，可以将所有程序的物理内存占用降低约 1/3"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择 OptiFine 与 Fabric 后会自动选择 OptiFabric"))
@@ -116,6 +125,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 301 Then 'Snapshot 2.6.6
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复网络条件差时可能无法下载 MC 的 Bug"))
+            FeatureCount += 4
+            BugCount += 2
+        End If
         If LastVersion < 299 Then 'Snapshot 2.6.5
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持选择多种预设的主页"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化联网获取的主页的加载与缓存"))

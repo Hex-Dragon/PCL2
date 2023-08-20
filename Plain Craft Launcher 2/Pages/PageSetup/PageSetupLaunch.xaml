@@ -165,7 +165,7 @@
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="游戏内存">
                 <StackPanel Margin="25,40,25,15">
-                    <local:MyHint x:Name="LabRamWarn" CanClose="False" Text="32 位 Java 最多只能分配 1 GB 内存，建议安装 64 位 Java!" IsWarn="True" Margin="0,0,0,12" />
+                    <local:MyHint x:Name="LabRamWarn" Text="32 位 Java 最多只能分配 1 GB 内存，建议安装 64 位 Java!" IsWarn="True" Margin="0,0,0,12" />
                     <Grid Margin="0,0,0,3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />

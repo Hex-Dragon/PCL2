@@ -421,7 +421,7 @@
             Dim NewItem As New MyCompItem With {.Tag = Me}
             '整理 FinalName 与 ExNameList
             '检查下列代码时可以参考 #1567 的测试例
-            Dim FinalName As String
+            Dim FinalName As String = RawName
             Dim ExNameList As List(Of String)
             If TranslatedName = RawName Then
                 '没有中文翻译
@@ -476,7 +476,7 @@
             '显示 FinalName 与 ExNameList
             If ExNameList.Count = 0 Then
 NoExName:
-                NewItem.LabTitle.Text = RawName
+                NewItem.LabTitle.Text = FinalName
                 CType(NewItem.LabTitleRaw.Parent, StackPanel).Children.Remove(NewItem.LabTitleRaw)
             Else
                 NewItem.LabTitle.Text = FinalName

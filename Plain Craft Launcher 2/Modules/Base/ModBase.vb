@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.6.5" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.6.5." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.6.6" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.6.6." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 296 'Release
+    Public Const VersionCode As Integer = 300 'Release
 #Else
-    Public Const VersionCode As Integer = 299 'Snapshot
+    Public Const VersionCode As Integer = 301 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName

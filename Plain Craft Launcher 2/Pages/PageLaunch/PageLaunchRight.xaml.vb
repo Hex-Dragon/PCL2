@@ -86,7 +86,7 @@ Download:
                             </local:MyCard>"
                     Case 2 '新闻主页
                         Log("[Page] 主页预设：Minecraft 新闻")
-                        Url = "https://news.bugjump.net"
+                        Url = "http://pcl2.mc-news.top"
                         GoTo Download
                 End Select
         End Select
@@ -136,7 +136,11 @@ Download:
             '要求刷新
             Refresh()
         Catch ex As Exception
-            Log(ex, $"联网下载自定义主页失败（{Task.Input}）", LogLevel.Hint)
+            If Setup.Get("CacheSavedPageVersion") = "" Then
+                Log(ex, $"联网下载自定义主页失败（{Task.Input}）", LogLevel.Msgbox)
+            Else
+                Log(ex, $"联网下载自定义主页失败（{Task.Input}）")
+            End If
             Task.Input = ""
         End Try
     End Sub
