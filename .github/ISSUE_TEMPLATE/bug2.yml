@@ -14,7 +14,7 @@ body:
       required: true
     - label: "我已点击 `设置 → 启动器 → 检查更新` 确认了启动器已为最新版，且最新版未修复这个 Bug。[怎样更新？](https://shimo.im/docs/qKPttVvXKqPD8YDC#anchor-oTgb)"
       required: true
-    - label: "我已在 [Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 中搜索，确认了这一 Bug 未被提交过。"
+    - label: "我已在 [Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 和 [常见&难检反馈及问题列表](https://github.com/Hex-Dragon/PCL2/discussions/1930) 中搜索，确认了这一 Bug 未被提交过。"
       required: true
 - type: textarea
   id: "yml-2"
