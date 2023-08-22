@@ -10,8 +10,11 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 302 Then 'Release 2.6.7
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "再次修复网络条件差时可能无法下载 MC 的 Bug"))
+            BugCount += 1
+        End If
         If LastVersion < 300 Then 'Release 2.6.6
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复网络条件差时可能无法下载 MC 的 Bug"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持选择多种预设的主页"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理中允许多选 Mod 进行批量操作"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
@@ -125,8 +128,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 303 Then 'Snapshot 2.6.7
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "再次修复网络条件差时可能无法下载 MC 的 Bug"))
+            BugCount += 1
+        End If
         If LastVersion < 301 Then 'Snapshot 2.6.6
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复网络条件差时可能无法下载 MC 的 Bug"))
             FeatureCount += 4
             BugCount += 2
         End If

@@ -189,7 +189,7 @@ Download:
                 Return
             End If
             Content = "<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns:local=""clr-namespace:PCL;assembly=Plain Craft Launcher 2"">" & Content & "</StackPanel>"
-            Content = Content.Replace("{path}", Path).Replace("{hint}", PageOtherTest.GetRandomHint()).Replace("{cave}", PageOtherTest.GetRandomCave())
+            Content = HelpArgumentReplace(Content)
             Log($"[Page] 实例化：加载自定义主页 UI，最终内容长度：{Content.Count}")
             Try
                 PanCustom.Children.Add(GetObjectFromXML(Content))

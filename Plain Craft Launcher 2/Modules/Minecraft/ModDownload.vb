@@ -960,26 +960,26 @@
 
     Public Function DlSourceResourceGet(MojangBase As String) As String()
         MojangBase = MojangBase.Replace("http://resources.download.minecraft.net", "https://resources.download.minecraft.net")
-        Return {MojangBase.Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net/assets").Replace("https://resources.download.minecraft.net", "https://download.mcbbs.net/assets"),
+        Return {MojangBase.Replace("https://piston-data.mojang.com", "https://download.mcbbs.net/assets").Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net/assets").Replace("https://resources.download.minecraft.net", "https://download.mcbbs.net/assets"),
                 MojangBase,
-                MojangBase.Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/assets").Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets")
+                MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/assets").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/assets").Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets")
                }
     End Function
 
     Public Function DlSourceLibraryGet(MojangBase As String) As String()
-        Return {MojangBase.Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net/maven").Replace("https://libraries.minecraft.net", "https://download.mcbbs.net/maven"),
-                MojangBase.Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net/libraries").Replace("https://libraries.minecraft.net", "https://download.mcbbs.net/libraries"),
+        Return {MojangBase.Replace("https://piston-data.mojang.com", "https://download.mcbbs.net/maven").Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net/maven").Replace("https://libraries.minecraft.net", "https://download.mcbbs.net/maven"),
+                MojangBase.Replace("https://piston-data.mojang.com", "https://download.mcbbs.net/libraries").Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net/libraries").Replace("https://libraries.minecraft.net", "https://download.mcbbs.net/libraries"),
                 MojangBase,
-                MojangBase.Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
-                MojangBase.Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries")
+                MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
+                MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries")
                }
     End Function
 
     Public Function DlSourceLauncherOrMetaGet(MojangBase As String) As String()
         If MojangBase Is Nothing Then Throw New Exception("无对应的 json 下载地址")
-        Return {MojangBase.Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net").Replace("https://launcher.mojang.com", "https://download.mcbbs.net").Replace("https://launchermeta.mojang.com", "https://download.mcbbs.net"),
+        Return {MojangBase.Replace("https://piston-data.mojang.com", "https://download.mcbbs.net").Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net").Replace("https://launcher.mojang.com", "https://download.mcbbs.net").Replace("https://launchermeta.mojang.com", "https://download.mcbbs.net"),
                 MojangBase,
-                MojangBase.Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com")
+                MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com")
                }
     End Function
 
