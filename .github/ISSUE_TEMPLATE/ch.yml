@@ -10,7 +10,7 @@ body:
     options:
     - label: "我已点击 `设置 → 启动器 → 检查更新` 确认了启动器已为最新版，且最新版未实现这项建议。[怎样更新？](https://shimo.im/docs/qKPttVvXKqPD8YDC#anchor-oTgb)"
       required: true
-    - label: "我已在 [Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 和 [常见&难检反馈及问题列表](https://github.com/Hex-Dragon/PCL2/discussions/1930) 中搜索，确认了这一建议未被提交过。"
+    - label: "我已在 [Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 和 [常见&难检反馈及问题列表](https://github.com/Hex-Dragon/PCL2/discussions/1930#discussion-5247371) 中搜索，确认了这一建议未被提交过。"
       required: true
     - label: "我已查看 [功能投票页面](https://github.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8/)，确认了这一建议未在投票列表中。"
       required: true
