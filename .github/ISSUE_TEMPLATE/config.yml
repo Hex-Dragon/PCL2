@@ -6,3 +6,6 @@ contact_links:
   - name: 提问
     url: https://github.com/Hex-Dragon/PCL2/discussions/new?category=%E6%8F%90%E9%97%AE
     about: 我不想提交反馈，只是想问一些问题
+  - name: 讨论
+    url: https://github.com/Hex-Dragon/PCL2/discussions/new?category=%E8%AE%A8%E8%AE%BA
+    about： 我不想提交反馈，只是想讨论些 PCL2 相关的问题
