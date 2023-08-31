@@ -910,7 +910,7 @@ NextStack:
                 Case CrashReason.ShadersMod与Optifine同时安装
                     Results.Add("无需同时安装 Optifine 和 Shaders Mod，Optifine 已经集成了 Shaders Mod 的功能。\n在删除 Shaders Mod 后，游戏即可正常运行。")
                 Case CrashReason.低版本Forge与高版本Java不兼容
-                    Results.Add("由于低版本 Forge 与当前 Java 不兼容，导致了游戏崩溃。\n\n请尝试以下解决方案：\n - 更新 Forge 到 36.2.26 或更高版本\n - 换用版本低于 8.0.320 的 Java")
+                    Results.Add("由于低版本 Forge 与当前 Java 不兼容，导致了游戏崩溃。\n\n请尝试以下解决方案：\n - 更新 Forge 到 36.2.26 或更高版本\n - 换用版本低于 1.8.0.320 的 Java")
                 Case CrashReason.版本Json中存在多个Forge
                     Results.Add("可能由于使用其他启动器修改了 Forge 版本，当前版本的文件存在异常，导致了游戏崩溃。\n请尝试重新全新安装 Forge，而非使用其他启动器修改 Forge 版本。")
                 Case CrashReason.玩家手动触发调试崩溃
