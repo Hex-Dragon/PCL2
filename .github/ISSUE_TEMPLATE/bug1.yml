@@ -1,5 +1,5 @@
 name: "Minecraft 崩溃"
-description: "PCL2 提示 “Minecraft 出现错误”，或游戏崩溃"
+description: "PCL 提示 “Minecraft 出现错误”，或游戏崩溃"
 labels: [· Bug, 新反馈]
 body:
 - type: checkboxes
@@ -8,11 +8,9 @@ body:
     label: "检查项"
     description: "请逐个检查下列项目，并勾选确认。"
     options:
-    - label: "**我所启动的游戏不是整合包，且未安装任何 Mod。** 安装 Mod 后的游戏崩溃不是 PCL2 的原因，请 **不要** 提交反馈。你可以在 QQ 群里或者论坛找人求助，但这里并不是你求助的地方。"
-      required: true
-    - label: "**我已尝试使用其他启动器，其他启动器没有出现问题。** 如果其他启动器也存在问题，证明是游戏本身的问题，并非 PCL2 的问题，请 **不要** 提交反馈。[下载其他启动器](https://www.mcbbs.net/forum.php?mod=forumdisplay&fid=43&filter=typeid&typeid=908)"
-      required: true
-    - label: "我已点击 `设置 → 启动器 → 检查更新` 确认了启动器已为最新版，且最新版未修复这个 Bug。[怎样更新？](https://shimo.im/docs/qKPttVvXKqPD8YDC#anchor-oTgb)"
+    - label: "**我所启动的游戏不是整合包，且未安装任何 Mod。** 安装 Mod 后的游戏崩溃基本不是 PCL 的原因，请 **不要** 提交反馈。你可以在论坛或社区找人求助，但这里并不是你求助的地方。"
+      required: false
+    - label: "**我已尝试使用 HMCL 启动，HMCL 没有出现问题。** 如果 HMCL 也无法启动，代表这不是 PCL 导致的问题，请 **不要** 提交反馈。[下载 HMCL](https://hmcl.huangyuhui.net/download)"
       required: true
     - label: "我已在 [Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 和 [常见&难检反馈及问题列表](https://github.com/Hex-Dragon/PCL2/discussions/1930) 中搜索，确认了这一 Bug 未被提交过。"
       required: true
@@ -26,8 +24,16 @@ body:
 - type: textarea
   id: "yml-3"
   attributes:
-    label: 错误报告、日志与附件
-    description: "上传 PCL2 提供的错误报告（在崩溃时选择导出错误报告）。如果没有，也可以上传 PCL 文件夹中的 Log1~5.txt。"
+    label: PCL 错误报告、日志与附件
+    description: "上传 PCL 提供的错误报告（在崩溃时选择导出错误报告）。如果没有，也可以上传 PCL 文件夹中的 Log1~5.txt。"
     placeholder: "先点击这个文本框，然后再将文件直接拖拽到文本框中以上传。"
   validations:
     required: true
+- type: textarea
+  id: "yml-4"
+  attributes:
+    label: HMCL 启动脚本
+    description: "在 HMCL 中进入版本列表，点击版本右侧的三个点，选择 生成启动脚本。"
+    placeholder: "先点击这个文本框，然后再将文件直接拖拽到文本框中以上传。"
+  validations:
+    required: false
