@@ -16,9 +16,9 @@
                 <DropShadowEffect ShadowDepth="0" BlurRadius="10" Opacity="0.2" />
             </Border.Effect>
         </Border>
-        <Border x:Name="PanProgress" CornerRadius="1000" BorderThickness="0.001" Background="#2AFFFFFF" ClipToBounds="True" Visibility="Collapsed">
+        <Border x:Name="PanProgress" CornerRadius="1000" BorderThickness="0.001" Background="#2FFFFFFF" ClipToBounds="True" Visibility="Collapsed">
             <Border.Clip>
-                <RectangleGeometry x:Name="RectProgress" Rect="0,0,40,25" />
+                <RectangleGeometry x:Name="RectProgress" Rect="0,5,40,35" />
             </Border.Clip>
         </Border>
         <Path x:Name="Path" Stretch="Uniform" Margin="12" Fill="{DynamicResource ColorBrush8}" RenderTransformOrigin="0.5,0.5">

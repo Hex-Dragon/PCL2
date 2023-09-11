@@ -28,7 +28,7 @@ Public Class MyBitmap
     Public Shared Widening Operator CType(Image As MyBitmap) As ImageSource
         Dim Bitmap = Image.Pic
         Dim rect = New System.Drawing.Rectangle(0, 0, Bitmap.Width, Bitmap.Height)
-        Dim bitmapData = Bitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+        Dim bitmapData = Bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
         Try
             Dim size = rect.Width * rect.Height * 4
             Return BitmapSource.Create(Bitmap.Width, Bitmap.Height, Bitmap.HorizontalResolution, Bitmap.VerticalResolution, PixelFormats.Bgra32, Nothing, bitmapData.Scan0, size, bitmapData.Stride)
@@ -105,44 +105,26 @@ Public Class MyBitmap
     End Sub
 
     ''' <summary>
-    ''' 获取旋转的图片，这个方法不会导致原对象改变且会返回一个新的对象。图片长宽必须相等。
-    ''' </summary>
-    ''' <param name="angle">旋转角度（单位为角度）。</param>
-    Public Function Rotation(angle As Double) As System.Drawing.Bitmap
-        Dim img As System.Drawing.Image = Me.Pic
-        Dim bitSize As Single = img.Width
-        Dim bmp As New System.Drawing.Bitmap(CInt(bitSize), CInt(bitSize), img.PixelFormat)
-        bmp.SetResolution(img.HorizontalResolution, img.VerticalResolution)
-        Using g As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(bmp)
-            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor
-            g.TranslateTransform(bitSize / 2, bitSize / 2)
-            g.RotateTransform(angle)
-            g.TranslateTransform(-bitSize / 2, -bitSize / 2)
-            g.DrawImage(img, New System.Drawing.Rectangle(0, 0, img.Width, img.Width))
-        End Using
-        Return bmp
-    End Function
-
-    ''' <summary>
     ''' 获取裁切的图片，这个方法不会导致原对象改变且会返回一个新的对象。
     ''' </summary>
-    Public Function Clip(rect As System.Drawing.Rectangle) As System.Drawing.Bitmap
-        Dim img As System.Drawing.Image = Pic
-        Dim bmp As New System.Drawing.Bitmap(rect.Width, rect.Height, img.PixelFormat)
-        bmp.SetResolution(img.HorizontalResolution, img.VerticalResolution)
+    Public Function Clip(X As Integer, Y As Integer, Width As Integer, Height As Integer) As MyBitmap
+        Dim bmp As New System.Drawing.Bitmap(Width, Height, Pic.PixelFormat)
+        bmp.SetResolution(Pic.HorizontalResolution, Pic.VerticalResolution)
         Using g As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(bmp)
             g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor
-            g.DrawImageUnscaled(img, rect.X, rect.Y)
+            g.TranslateTransform(-X, -Y)
+            g.DrawImage(Pic, New System.Drawing.Rectangle(0, 0, Pic.Width, Pic.Height))
         End Using
         Return bmp
     End Function
 
     ''' <summary>
-    ''' 获取左右翻转的图片，这个方法不会导致原对象改变。
+    ''' 获取旋转或翻转后的图片，这个方法不会导致原对象改变且会返回一个新的对象。
     ''' </summary>
-    Public Function LeftRightFilp() As System.Drawing.Bitmap
+    Public Function RotateFlip(Type As System.Drawing.RotateFlipType) As MyBitmap
         Dim bmp As New System.Drawing.Bitmap(Pic)
-        bmp.RotateFlip(System.Drawing.RotateFlipType.RotateNoneFlipX)
+        bmp.SetResolution(Pic.HorizontalResolution, Pic.VerticalResolution)
+        bmp.RotateFlip(Type)
         Return bmp
     End Function
 
@@ -152,7 +134,7 @@ Public Class MyBitmap
     Public Sub Save(FilePath As String)
         Dim encoder As BitmapEncoder = New PngBitmapEncoder()
         encoder.Frames.Add(BitmapFrame.Create(Me))
-        Using fileStream = New System.IO.FileStream(FilePath, FileMode.Create)
+        Using fileStream As New FileStream(FilePath, FileMode.Create)
             encoder.Save(fileStream)
         End Using
     End Sub

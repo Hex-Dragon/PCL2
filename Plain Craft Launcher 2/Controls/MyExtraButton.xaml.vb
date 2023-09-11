@@ -17,7 +17,7 @@
                 PanProgress.Visibility = Visibility.Collapsed
             Else
                 PanProgress.Visibility = Visibility.Visible
-                RectProgress.Rect = New Rect(0, 0, 40, 40 * (1 - value))
+                RectProgress.Rect = New Rect(0, 40 * (1 - value), 40, 40 * value)
             End If
         End Set
     End Property
@@ -179,7 +179,7 @@
 
                 AniStop("MyExtraButton Color " & Uuid)
                 If IsMouseOver Then
-                    PanColor.SetResourceReference(BackgroundProperty, "ColorBrush2")
+                    PanColor.SetResourceReference(BackgroundProperty, "ColorBrush4")
                 Else
                     PanColor.SetResourceReference(BackgroundProperty, "ColorBrush3")
                 End If

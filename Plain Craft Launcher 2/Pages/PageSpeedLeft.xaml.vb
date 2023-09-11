@@ -195,7 +195,6 @@
                                                  AniDispose(sender, False)
                                                  AniDispose(Card, True, Sub() If FrmSpeedRight.PanMain.Children.Count = 0 AndAlso FrmMain.PageCurrent = FormMain.PageType.DownloadManager Then FrmMain.PageBack())
                                                  RightCards.Remove(Loader.Name)
-                                                 LoaderTaskbar.Remove(Loader)
                                                  Log($"[Watcher] 关闭下载管理卡片：{Loader.Name}")
                                                  RunInThread(Sub() Loader.Abort())
                                              End Sub

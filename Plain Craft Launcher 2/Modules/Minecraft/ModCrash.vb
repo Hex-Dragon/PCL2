@@ -127,7 +127,7 @@
         End Try
 
         '导入其中的日志文件
-        For Each TargetFile As FileInfo In New DirectoryInfo(TempFolder & "Temp\").EnumerateFiles
+        For Each TargetFile As FileInfo In New DirectoryInfo(TempFolder & "Temp\").EnumerateFiles.ToList()
             Try
                 If Not TargetFile.Exists OrElse TargetFile.Length = 0 Then Continue For
                 Dim Ext As String = TargetFile.Extension.ToLower
@@ -137,6 +137,8 @@
                     Else
                         AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(TargetFile.FullName, ReadFile(TargetFile.FullName, Encoding.UTF8).Split(vbCrLf.ToCharArray)))
                     End If
+                Else
+                    File.Delete(TargetFile.FullName)
                 End If
             Catch ex As Exception
                 Log(ex, "导入单个日志文件失败")
@@ -235,6 +237,7 @@
                         End If
                     Case AnalyzeFileType.MinecraftLog
                         LogMc = ""
+                        LogMcDebug = ""
                         '创建文件名词典
                         Dim FileNameDict As New Dictionary(Of String, KeyValuePair(Of String, String()))
                         For Each SelectedFile In SelectedFiles
@@ -272,11 +275,21 @@
                                 Exit For
                             End If
                         Next
+                        '查找 Debug Log
+                        For Each FileName As String In {"debug.log", "debug log.txt"}
+                            If FileNameDict.ContainsKey(FileName) Then
+                                Dim CurrentLog = FileNameDict(FileName)
+                                LogMcDebug += GetHeadTailLines(CurrentLog.Value, 1000, 0)
+                                Log("[Crash] 导入分析：" & CurrentLog.Key & "，作为 Minecraft Debug 日志")
+                                Exit For
+                            End If
+                        Next
                         '检查错误
                         If LogMc = "" Then
                             LogMc = Nothing
                             Throw New Exception("无法找到匹配的 Minecraft Log")
                         End If
+                        If LogMcDebug = "" Then LogMcDebug = Nothing
                     Case AnalyzeFileType.ExtraLog
                         '全部丢过去
                         For Each SelectedFile In SelectedFiles
@@ -294,7 +307,7 @@
         If ResultCount = 0 Then
             Log("[Crash] 步骤 2：准备日志文本完成，没有任何可供分析的日志")
         Else
-            Log(("[Crash] 步骤 2：准备日志文本完成，找到" & If(LogMc Is Nothing, "", "游戏日志、") & If(LogHs Is Nothing, "", "虚拟机日志、") & If(LogCrash Is Nothing, "", "崩溃日志、")).TrimEnd("、") & "用作分析")
+            Log(("[Crash] 步骤 2：准备日志文本完成，找到" & If(LogMc Is Nothing, "", "游戏日志、") & If(LogMcDebug Is Nothing, "", "游戏 Debug 日志、") & If(LogHs Is Nothing, "", "虚拟机日志、") & If(LogCrash Is Nothing, "", "崩溃日志、")).TrimEnd("、") & "用作分析")
         End If
         Return ResultCount
 
@@ -315,7 +328,7 @@
     End Function
 
     '3：根据文本分析崩溃原因
-    Private LogMc As String = Nothing, LogHs As String = Nothing, LogCrash As String = Nothing
+    Private LogMc As String = Nothing, LogMcDebug As String = Nothing, LogHs As String = Nothing, LogCrash As String = Nothing
     Private LogAll As String
     '可能导致崩溃的原因与附加信息
     Private CrashReasons As New Dictionary(Of CrashReason, List(Of String))
@@ -324,6 +337,7 @@
     ''' </summary>
     Private Enum CrashReason
         Mod文件被解压
+        MixinBootstrap缺失
         内存不足
         使用JDK
         显卡不支持OpenGL
@@ -344,9 +358,8 @@
         ModMixin失败
         Mod加载器报错
         Mod初始化失败
-        崩溃日志堆栈分析发现关键字
-        崩溃日志堆栈分析发现Mod名称
-        MC日志堆栈分析发现关键字
+        堆栈分析发现关键字
+        堆栈分析发现Mod名称
         OptiFine导致无法加载世界 'https://www.minecraftforum.net/forums/support/java-edition-support/3051132-exception-ticking-world
         特定方块导致崩溃
         特定实体导致崩溃
@@ -372,7 +385,6 @@
     ''' </summary>
     Public Sub Analyze(Optional Version As McVersion = Nothing)
         Log("[Crash] 步骤 3：分析崩溃原因")
-        LogAll = (If(LogMc, "") & If(LogHs, "") & If(LogCrash, "")).ToLower
 
         '1. 精准日志匹配，中/高优先级
         AnalyzeCrit1()
@@ -381,36 +393,40 @@
         If CrashReasons.Count > 0 Then GoTo Done
 
         '2. 堆栈分析
-        If LogAll.Contains("forge") OrElse LogAll.Contains("fabric") OrElse LogAll.Contains("liteloader") Then
-            '来源崩溃日志的分析
+        LogAll = (If(LogMc, "") & If(LogMcDebug, "") & If(LogHs, "") & If(LogCrash, ""))
+        If LogAll.Contains("orge") OrElse LogAll.Contains("abric") OrElse LogAll.Contains("uilt") OrElse LogAll.Contains("iteloader") Then
+            Dim Keywords As New List(Of String)
+            '崩溃日志
             If LogCrash IsNot Nothing Then
                 Log("[Crash] 开始进行崩溃日志堆栈分析")
                 Dim StackLogs As String = LogCrash.Split("System Details").First
-                Dim Keywords = AnalyzeStackKeyword(StackLogs)
-                If Keywords.Count > 0 Then
-                    Dim Names = AnalyzeModName(Keywords)
-                    If Names Is Nothing Then
-                        AppendReason(CrashReason.崩溃日志堆栈分析发现关键字, Keywords)
-                    Else
-                        AppendReason(CrashReason.崩溃日志堆栈分析发现Mod名称, Names)
-                    End If
-                    GoTo Done
-                End If
+                Keywords.AddRange(AnalyzeStackKeyword(StackLogs))
             End If
-            '来自 Minecraft 日志的分析
+            'Minecraft 日志
             If LogMc IsNot Nothing Then
                 Dim Fatals = RegexSearch(LogMc, "/FATAL] [\w\W]+?(?=[\n]+\[)")
                 Log("[Crash] 开始进行 Minecraft 日志堆栈分析，发现 " & Fatals.Count & " 个报错项")
                 If Fatals.Count > 0 Then
-                    Dim Keywords As New List(Of String)
                     For Each Fatal In Fatals
                         Keywords.AddRange(AnalyzeStackKeyword(Fatal))
                     Next
-                    If Keywords.Count > 0 Then
-                        AppendReason(CrashReason.MC日志堆栈分析发现关键字, Keywords.Distinct.ToList)
-                        GoTo Done
-                    End If
                 End If
+            End If
+            '虚拟机日志
+            If LogHs IsNot Nothing Then
+                Log("[Crash] 开始进行虚拟机堆栈分析")
+                Dim StackLogs As String = LogHs.Split("Registers:").First.Split("T H R E A D").Last
+                Keywords.AddRange(AnalyzeStackKeyword(StackLogs))
+            End If
+            'Mod 名称分析
+            If Keywords.Count > 0 Then
+                Dim Names = AnalyzeModName(Keywords)
+                If Names Is Nothing Then
+                    AppendReason(CrashReason.堆栈分析发现关键字, Keywords)
+                Else
+                    AppendReason(CrashReason.堆栈分析发现Mod名称, Names)
+                End If
+                GoTo Done
             End If
         Else
             Log("[Crash] 可能并未安装 Mod，不进行堆栈分析")
@@ -565,22 +581,6 @@ Done:
 
         '游戏日志分析
         If LogMc IsNot Nothing Then
-            'Mixin 崩溃
-            If LogMc.Contains("Mixin prepare failed ") OrElse LogMc.Contains("Mixin apply failed ") OrElse LogMc.Contains("MixinApplyError") OrElse
-               LogMc.Contains("mixin.injection.throwables.") OrElse LogMc.Contains(".mixins.json] FAILED during )") Then
-                Dim ModId As String = RegexSeek(LogMc, "(?<=in )[^./ ]+(?=.mixins.json.+failed injection check)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=in mixins.)[^./ ]+(?=.json.+failed injection check)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in )[^./ ]+(?=.mixins.json)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in mixins.)[^./ ]+(?=.json)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[)[^./ ]+(?=.mixins.json\] FAILED during )")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[mixins.)[^./ ]+(?=.json\] FAILED during )")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=from mod )[^./ ]+(?=\] from)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=for mod )[^./ ]+(?= failed)")
-                '兜底名称判断
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "[^./ \]]+(?=.mixins.json")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=mixins.)[^./ \]]+(?=.json")
-                AppendReason(CrashReason.ModMixin失败, TryAnalyzeModName(If(ModId, "").TrimEnd((vbCrLf & " ").ToCharArray)))
-            End If
             '常规信息
             If LogMc.Contains("An exception was thrown, the game will display an error screen and halt.") Then AppendReason(CrashReason.Forge报错, RegexSeek(LogMc, "(?<=the game will display an error screen and halt.[\n\r]+[^\n]+?Exception: )[\s\S]+?(?=\n\tat)")?.Trim(vbCrLf))
             If LogMc.Contains("A potential solution has been determined:") Then AppendReason(CrashReason.Fabric报错并给出解决方案, Join(RegexSearch(If(RegexSeek(LogMc, "(?<=A potential solution has been determined:\n)((\t)+ - [^\n]+\n)+"), ""), "(?<=(\t)+)[^\n]+"), vbLf))
@@ -594,6 +594,24 @@ Done:
 
         '游戏日志分析
         If LogMc IsNot Nothing Then
+            'Mixin 崩溃
+            If LogMc.Contains("Mixin prepare failed ") OrElse LogMc.Contains("Mixin apply failed ") OrElse LogMc.Contains("MixinApplyError") OrElse
+               LogMc.Contains("mixin.injection.throwables.") OrElse LogMc.Contains(".mixins.json] FAILED during )") Then
+                Dim ModId As String = RegexSeek(LogMc, "(?<=in )[^./ ]+(?=.mixins.json.+failed injection check)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=in mixins.)[^./ ]+(?=.json.+failed injection check)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in )[^./ ]+(?=.mixins.json)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in mixins.)[^./ ]+(?=.json)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed mixins.)[^./ ]+(?=.json:)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[)[^./ ]+(?=.mixins.json\] FAILED during )")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[mixins.)[^./ ]+(?=.json\] FAILED during )")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=from mod )[^./ ]+(?=\] from)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=for mod )[^./ ]+(?= failed)")
+                '兜底名称判断
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "[^./ \]]+(?=.mixins.json)")
+                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=mixins.)[^./ \]]+(?=.json)")
+                AppendReason(CrashReason.ModMixin失败, TryAnalyzeModName(If(ModId, "").TrimEnd((vbCrLf & " ").ToCharArray)))
+            End If
+            '极短的程序输出
             If Not (LogMc.Contains("at net.") OrElse LogMc.Contains("INFO]")) AndAlso LogHs Is Nothing AndAlso LogCrash Is Nothing AndAlso LogMc.Length < 100 Then
                 AppendReason(CrashReason.极短的程序输出, LogMc)
             End If
@@ -667,7 +685,7 @@ NextStack:
 
     End Function
     ''' <summary>
-    ''' 根据 Mod 关键词与详细信息（崩溃报告第二部分）与，获取实际的 Mod 名称。
+    ''' 根据 Mod 关键词尝试获取实际的 Mod 名称。
     ''' 若失败则返回 Nothing。
     ''' </summary>
     Private Function AnalyzeModName(Keywords As List(Of String)) As List(Of String)
@@ -682,60 +700,95 @@ NextStack:
         Next
         Keywords = RealKeywords
 
-        '获取崩溃报告对应部分
-        If LogCrash Is Nothing Then Return Nothing
-        If Not LogCrash.Contains("A detailed walkthrough of the error") Then Return Nothing
-        Dim Details As String = LogCrash.Replace("A detailed walkthrough of the error", "¨")
-        Dim IsFabricDetail As Boolean = Details.Contains("Fabric Mods") '是否为 Fabric 信息格式
-        If IsFabricDetail Then
-            Details = Details.Replace("Fabric Mods", "¨")
-            Log("[Crash] 检测到 Fabric Mod 信息格式")
-        End If
-        Details = Details.Split("¨").Last
-
-        '[Forge] 获取所有包含 .jar 的行
-        '[Fabric] 获取所有包含 Mod 信息的行
-        Dim ModNameLines As New List(Of String)
-        For Each Line In Details.Split(vbLf)
-            If Line.ToLower.Contains(".jar") OrElse
-               (IsFabricDetail AndAlso Line.StartsWith(vbTab & vbTab) AndAlso Not RegexCheck(Line, "\t\tfabric[\w-]*: Fabric")) Then ModNameLines.Add(Line)
-        Next
-        Log("[Crash] 找到 " & ModNameLines.Count & " 个可能的 Mod 项目行")
-
-        '获取 Mod ID 与关键词的匹配行
-        Dim HintLines As New List(Of String)
-        For Each KeyWord As String In Keywords
-            For Each ModString As String In ModNameLines
-                Dim RealModString As String = ModString.ToLower.Replace("_", "")
-                If Not RealModString.Contains(KeyWord.ToLower.Replace("_", "")) Then Continue For
-                If RealModString.Contains("minecraft.jar") OrElse RealModString.Contains(" forge-") OrElse RealModString.Contains(" mixin-") Then Continue For
-                HintLines.Add(ModString.Trim(vbCrLf.ToCharArray))
-                Exit For
-            Next
-        Next
-        HintLines = HintLines.Distinct.ToList
-        Log("[Crash] 找到 " & HintLines.Count & " 个可能的崩溃 Mod 匹配行")
-        For Each ModName As String In HintLines
-            Log("[Crash]  - " & ModName)
-        Next
-
-        '从 Mod 匹配行中提取 .jar 文件的名称
-        For Each Line As String In HintLines
-            Dim Name As String
+        '从崩溃报告获取 Mod 信息
+        If LogCrash IsNot Nothing AndAlso LogCrash.Contains("A detailed walkthrough of the error") Then
+            Dim Details As String = LogCrash.Replace("A detailed walkthrough of the error", "¨")
+            Dim IsFabricDetail As Boolean = Details.Contains("Fabric Mods") '是否为 Fabric 信息格式
             If IsFabricDetail Then
-                Name = RegexSeek(Line, "(?<=: )[^\n]+(?= [^\n]+)")
-            Else
-                Name = RegexSeek(Line, "(?<=\()[^\t]+.jar(?=\))|(?<=(\t\t)|(\| ))[^\t\|]+.jar", RegularExpressions.RegexOptions.IgnoreCase)
+                Details = Details.Replace("Fabric Mods", "¨")
+                Log("[Crash] 崩溃报告中检测到 Fabric Mod 信息格式")
             End If
-            If Name IsNot Nothing Then ModFileNames.Add(Name)
-        Next
-        ModFileNames = ModFileNames.Distinct.ToList
-        Log("[Crash] 找到 " & ModFileNames.Count & " 个可能的崩溃 Mod 文件名")
-        For Each ModFileName As String In ModFileNames
-            Log("[Crash]  - " & ModFileName)
-        Next
+            Details = Details.Split("¨").Last
 
-        Return If(ModFileNames.Count = 0, Nothing, ModFileNames)
+            '[Forge] 获取所有包含 .jar 的行
+            '[Fabric] 获取所有包含 Mod 信息的行
+            Dim ModNameLines As New List(Of String)
+            For Each Line In Details.Split(vbLf)
+                If Line.ToLower.Contains(".jar") OrElse
+                   (IsFabricDetail AndAlso Line.StartsWith(vbTab & vbTab) AndAlso Not RegexCheck(Line, "\t\tfabric[\w-]*: Fabric")) Then ModNameLines.Add(Line)
+            Next
+            Log("[Crash] 崩溃报告中找到 " & ModNameLines.Count & " 个可能的 Mod 项目行")
+
+            '获取 Mod ID 与关键词的匹配行
+            Dim HintLines As New List(Of String)
+            For Each KeyWord As String In Keywords
+                For Each ModString As String In ModNameLines
+                    Dim RealModString As String = ModString.ToLower.Replace("_", "")
+                    If Not RealModString.Contains(KeyWord.ToLower.Replace("_", "")) Then Continue For
+                    If RealModString.Contains("minecraft.jar") OrElse RealModString.Contains(" forge-") OrElse RealModString.Contains(" mixin-") Then Continue For
+                    HintLines.Add(ModString.Trim(vbCrLf.ToCharArray))
+                    Exit For
+                Next
+            Next
+            HintLines = HintLines.Distinct.ToList
+            Log("[Crash] 崩溃报告中找到 " & HintLines.Count & " 个可能的崩溃 Mod 匹配行")
+            For Each ModLine As String In HintLines
+                Log("[Crash]  - " & ModLine)
+            Next
+
+            '从 Mod 匹配行中提取 .jar 文件的名称
+            For Each Line As String In HintLines
+                Dim Name As String
+                If IsFabricDetail Then
+                    Name = RegexSeek(Line, "(?<=: )[^\n]+(?= [^\n]+)")
+                Else
+                    Name = RegexSeek(Line, "(?<=\()[^\t]+.jar(?=\))|(?<=(\t\t)|(\| ))[^\t\|]+.jar", RegularExpressions.RegexOptions.IgnoreCase)
+                End If
+                If Name IsNot Nothing Then ModFileNames.Add(Name)
+            Next
+
+        End If
+
+        '从 debug.log 获取 Mod 信息
+        If LogMcDebug IsNot Nothing Then
+
+            'Forge: Found valid mod file YungsBetterStrongholds-1.20-Forge-4.0.1.jar with {betterstrongholds} mods - versions {1.20-Forge-4.0.1}
+            Dim ModNameLines As List(Of String) = RegexSearch(LogMcDebug, "(?<=valid mod file ).*", RegularExpressions.RegexOptions.Multiline)
+            Log("[Crash] Debug 信息中找到 " & ModNameLines.Count & " 个可能的 Mod 项目行")
+
+            '获取 Mod ID 与关键词的匹配行
+            Dim HintLines As New List(Of String)
+            For Each KeyWord As String In Keywords
+                For Each ModString As String In ModNameLines
+                    If ModString.Contains($"{{{KeyWord}}}") Then HintLines.Add(ModString)
+                Next
+            Next
+            HintLines = HintLines.Distinct.ToList
+            Log("[Crash] Debug 信息中找到 " & HintLines.Count & " 个可能的崩溃 Mod 匹配行")
+            For Each ModLine As String In HintLines
+                Log("[Crash]  - " & ModLine)
+            Next
+
+            '从 Mod 匹配行中提取 .jar 文件的名称
+            For Each Line As String In HintLines
+                Dim Name As String
+                Name = RegexSeek(Line, ".*(?= with)")
+                If Name IsNot Nothing Then ModFileNames.Add(Name)
+            Next
+
+        End If
+
+        '输出
+        ModFileNames = ModFileNames.Distinct.ToList
+        If ModFileNames.Count = 0 Then
+            Return Nothing
+        Else
+            Log("[Crash] 找到 " & ModFileNames.Count & " 个可能的崩溃 Mod 文件名")
+            For Each ModFileName As String In ModFileNames
+                Log("[Crash]  - " & ModFileName)
+            Next
+            Return ModFileNames
+        End If
     End Function
     ''' <summary>
     ''' 尝试获取 Mod 名称，若失败则返回原关键字。
@@ -841,18 +894,12 @@ NextStack:
                 Case CrashReason.Mod名称包含特殊字符
                     Results.Add("由于有 Mod 的名称包含特殊字符，导致游戏崩溃。\n请尝试修改 Mod 文件名，让它只包含英文字母、数字、减号（-）、下划线（_）和小数点，然后再启动游戏。")
                 Case CrashReason.MixinBootstrap缺失
-                    Results.Add("由于缺失 MixinBootstrap，导致游戏崩溃。\n请尝试安装 MixinBootstrap 解决。若安装后崩溃，尝试在该文件名前添加英文“!”后再试")
+                    Results.Add("由于缺失 MixinBootstrap，导致游戏崩溃。\n请尝试安装 MixinBootstrap。若安装后依然崩溃，可以尝试在文件名前添加英文感叹号。")
                 Case CrashReason.使用32位Java导致JVM无法分配足够多的内存
                     If Environment.Is64BitOperatingSystem Then
                         Results.Add("你似乎正在使用 32 位 Java，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。\n\n请在启动设置的 Java 选择一项中改用 64 位的 Java 再启动游戏，然后再启动游戏。\n如果你没有安装 64 位的 Java，你可以从网络中下载、安装一个。")
                     Else
                         Results.Add("你正在使用 32 位的操作系统，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。\n\n你或许只能重装 64 位的操作系统来解决此问题。\n如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……\h")
-                    End If
-                Case CrashReason.崩溃日志堆栈分析发现关键字, CrashReason.MC日志堆栈分析发现关键字
-                    If Additional.Count = 1 Then
-                        Results.Add("你的游戏遇到了一些问题，这可能是某些 Mod 所引起的，PCL 找到了一个可疑的关键词：" & Additional.First & "。\n\n如果你知道它对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。\h")
-                    Else
-                        Results.Add("你的游戏遇到了一些问题，这可能是某些 Mod 所引起的，PCL 找到了以下可疑的关键词：\n - " & Join(Additional, ", ") & "\n\n如果你知道这些关键词对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。\h")
                     End If
                 Case CrashReason.Mod缺少前置或MC版本错误
                     If Additional.Count > 0 Then
@@ -860,7 +907,13 @@ NextStack:
                     Else
                         Results.Add("由于未满足 Mod 的依赖项，导致游戏退出。\n请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\h")
                     End If
-                Case CrashReason.崩溃日志堆栈分析发现Mod名称
+                Case CrashReason.堆栈分析发现关键字
+                    If Additional.Count = 1 Then
+                        Results.Add("你的游戏遇到了一些问题，这可能是某些 Mod 所引起的，PCL 找到了一个可疑的关键词：" & Additional.First & "。\n\n如果你知道它对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。\h")
+                    Else
+                        Results.Add("你的游戏遇到了一些问题，这可能是某些 Mod 所引起的，PCL 找到了以下可疑的关键词：\n - " & Join(Additional, ", ") & "\n\n如果你知道这些关键词对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。\h")
+                    End If
+                Case CrashReason.堆栈分析发现Mod名称
                     If Additional.Count = 1 Then
                         Results.Add("名为 " & Additional.First & " 的 Mod 可能导致了游戏出错。\n\e\h")
                     Else

@@ -1141,14 +1141,11 @@ SystemBrowser:
                 '1.15：Java 8 - 15
                 MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 15, 999, 999)
             ElseIf VersionSortBoolean(McVersionCurrent.Version.ForgeVersion, "34.0.0") AndAlso VersionSortBoolean("36.2.25", McVersionCurrent.Version.ForgeVersion) Then
-                '1.16.X，Forge 34.X ~ 36.2.25：最高 Java 8u320
+                '1.16，Forge 34.X ~ 36.2.25：最高 Java 8u320
                 MaxVer = New Version(1, 8, 0, 320)
-            ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 99 AndAlso McVersionCurrent.Version.HasOptiFine Then '#305
-                '1.18+：若安装了 OptiFine，最高 Java 18
+            ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 19 AndAlso McVersionCurrent.Version.HasOptiFine Then '#305
+                '1.18：若安装了 OptiFine，最高 Java 18
                 MaxVer = New Version(1, 18, 999, 999)
-            ElseIf McVersionCurrent.Version.McCodeMain >= 19 AndAlso McVersionCurrent.Version.McCodeMain < 99 Then
-                '1.19+：最高 Java 19
-                MaxVer = New Version(1, 19, 999, 999)
             End If
         End If
 
@@ -1753,6 +1750,15 @@ NextVersion:
 
         '更新 options.txt
         Dim SetupFileAddress As String = McVersionCurrent.PathIndie & "options.txt"
+        If Not File.Exists(SetupFileAddress) Then
+            'Yosbr Mod 兼容（#2385）：https://www.curseforge.com/minecraft/mc-mods/yosbr
+            Dim YosbrFileAddress As String = McVersionCurrent.PathIndie & "config\yosbr\options.txt"
+            If File.Exists(YosbrFileAddress) Then
+                McLaunchLog("将修改 Yosbr Mod 中的 options.txt")
+                SetupFileAddress = YosbrFileAddress
+                WriteIni(SetupFileAddress, "lang", "none") '忽略默认语言
+            End If
+        End If
         Try
             '语言
             '1.0-     ：没有语言选项
@@ -1773,11 +1779,11 @@ NextVersion:
                 WriteIni(SetupFileAddress, "lang", RequiredLang)
                 McLaunchLog($"已将语言从 {CurrentLang} 修改为 {RequiredLang}")
             End If
-            '如果是初次设置，一并修改 forceUnicodeFont
-            If Setup.Get("ToolHelpChinese") AndAlso (CurrentLang = "none" OrElse Not Directory.Exists(McVersionCurrent.PathIndie & "saves")) Then
-                WriteIni(SetupFileAddress, "forceUnicodeFont", "true")
-                McLaunchLog("已开启 forceUnicodeFont")
-            End If
+            ''如果是初次设置，一并修改 forceUnicodeFont
+            'If Setup.Get("ToolHelpChinese") AndAlso (CurrentLang = "none" OrElse Not Directory.Exists(McVersionCurrent.PathIndie & "saves")) Then
+            '    WriteIni(SetupFileAddress, "forceUnicodeFont", "true")
+            '    McLaunchLog("已开启 forceUnicodeFont")
+            'End If
             '窗口
             Select Case Setup.Get("LaunchArgumentWindowType")
                 Case 0 '全屏
@@ -1861,7 +1867,7 @@ NextVersion:
                 Dim Skin As New MyBitmap(PathAppdata & "CustomSkin.png")
                 If (McVersionCurrent.Version.McCodeMain = 6 OrElse McVersionCurrent.Version.McCodeMain = 7) AndAlso Skin.Pic.Height = 64 Then
                     McLaunchLog("该 Minecraft 版本不支持双层皮肤，已进行裁剪")
-                    Skin = Skin.Clip(New System.Drawing.Rectangle(0, 0, 64, 32))
+                    Skin = Skin.Clip(0, 0, 64, 32)
                 End If
                 Skin.Save(Path & "PCL\CustomSkin_Cliped.png")
                 '构建压缩文件

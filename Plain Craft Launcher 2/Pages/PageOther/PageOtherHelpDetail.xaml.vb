@@ -14,7 +14,7 @@
             If String.IsNullOrEmpty(Entry.XamlContent) Then Throw New Exception("帮助 xaml 文件为空")
             Me.Entry = Entry
             PanCustom.Children.Clear()
-            FileContent = FileContent.Replace("{path}", Path)
+            FileContent = HelpArgumentReplace(FileContent)
             PanCustom.Children.Add(GetObjectFromXML(FileContent))
             Return True
         Catch ex As Exception

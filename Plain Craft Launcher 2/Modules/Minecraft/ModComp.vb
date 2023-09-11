@@ -434,7 +434,7 @@
                 Dim NormalNameList = New List(Of String)
                 For Each Name In NameLists
                     Dim LowerName As String = Name.ToLower
-                    If Name.ToUpper = Name Then
+                    If Name.ToUpper = Name AndAlso Name <> "FPS" AndAlso Name <> "HUD" Then
                         '缩写
                         ExNameList.Add(Name)
                     ElseIf (LowerName.Contains("forge") OrElse LowerName.Contains("fabric") OrElse LowerName.Contains("quilt")) AndAlso
@@ -487,8 +487,10 @@ NoExName:
                     '将 “Forge” 等提示改为 “Forge 版”
                     If (Ex.ToLower.Contains("forge") OrElse Ex.ToLower.Contains("fabric") OrElse Ex.ToLower.Contains("quilt")) AndAlso Not Ex.Contains("版") AndAlso
                         Ex.ToLower.Replace("forge", "").Replace("fabric", "").Replace("quilt", "").Length <= 3 Then
-                        Ex = Ex.Replace("Edition", "").Trim.Capitalize & " 版"
+                        Ex = Ex.Replace("Edition", "").Replace("edition", "").Trim.Capitalize & " 版"
                     End If
+                    '将 “forge” 等词语的首字母大写
+                    Ex = Ex.Replace("forge", "Forge").Replace("neo", "Neo").Replace("fabric", "Fabric").Replace("quilt", "Quilt")
                     ExName &= "  |  " & Ex.Trim
                 Next
                 If ExName = "" Then GoTo NoExName
@@ -933,7 +935,10 @@ Retry:
                             Next
                             '更新结果
                             SyncLock ResultsLock
-                                RawResults.AddRange(ProjectList)
+                                For Each Project In ProjectList
+                                    If Task.Input.Type = CompType.Mod AndAlso Not Project.ModLoaders.Any() Then Continue For '过滤插件（#2458）
+                                    RawResults.Add(Project)
+                                Next
                             End SyncLock
                             Storage.ModrinthOffset += ProjectList.Count
                             Storage.ModrinthTotal = RequestResult("total_hits").ToObject(Of Integer)
@@ -988,7 +993,7 @@ Retry:
                                                   Not Storage.Results.Any(Function(b) r.IsLike(b))).ToList
         '加入列表
         RealResults.AddRange(RawResults)
-        Log($"[Comp] 去重后累计新增结果 {RealResults.Count} 个")
+        Log($"[Comp] 去重、筛选后累计新增结果 {RealResults.Count} 个")
 
 #End Region
 

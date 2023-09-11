@@ -104,7 +104,7 @@
                    (Image.Pic.GetPixel(1, 1) <> Image.Pic.GetPixel(Scale * 41, Scale * 9) AndAlso '或是头部颜色和透明区均不一样
                     Image.Pic.GetPixel(Image.Pic.Width - 1, Image.Pic.Height - 1) <> Image.Pic.GetPixel(Scale * 41, Scale * 9) AndAlso
                     Image.Pic.GetPixel(Image.Pic.Width - 2, Image.Pic.Height / 2 - 2) <> Image.Pic.GetPixel(Scale * 41, Scale * 9)) Then
-                    ImgFore.Source = New CroppedBitmap(Image, New Int32Rect(Scale * 40, Scale * 8, Scale * 8, Scale * 8))
+                    ImgFore.Source = Image.Clip(Scale * 40, Scale * 8, Scale * 8, Scale * 8)
                 Else
                     ImgFore.Source = Nothing
                 End If
@@ -112,7 +112,7 @@
                 ImgFore.Source = Nothing
             End If
             '脸层
-            ImgBack.Source = New CroppedBitmap(Image, New Int32Rect(Scale * 8, Scale * 8, Scale * 8, Scale * 8))
+            ImgBack.Source = Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8)
             Log("[Skin] 载入头像成功：" & Loader.Name)
         Catch ex As Exception
             Log(ex, "载入头像失败（" & If(Address, "null") & "," & Loader.Name & "）", LogLevel.Hint)

@@ -848,7 +848,7 @@
         If LoadFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadFabric.State, Object).Error.Message
         For Each Version As JObject In DlFabricListLoader.Output.Value("game")
-            If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite") Then
+            If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
                 If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
                 'If SelectedOptiFine IsNot Nothing Then Return "与 OptiFine 不兼容"
                 Return Nothing
@@ -908,7 +908,7 @@
     Public Shared Function IsSuitableFabricApi(DisplayName As String, MinecraftVersion As String) As Boolean
         Try
             If DisplayName Is Nothing OrElse MinecraftVersion Is Nothing Then Return False
-            DisplayName = DisplayName.ToLower : MinecraftVersion = MinecraftVersion.ToLower
+            DisplayName = DisplayName.ToLower : MinecraftVersion = MinecraftVersion.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3").ToLower
             If DisplayName.StartsWith("[" & MinecraftVersion & "]") Then Return True
             If Not DisplayName.Contains("/") OrElse Not DisplayName.Contains("]") Then Return False
             '直接的判断（例如 1.18.1/22w03a）

@@ -29,21 +29,28 @@
             '逐个进入动画
             Dim AniList As New List(Of AniData)
             Dim Id As Integer = 0, Delay As Integer = 0
-            Dim Controls = GetAllAnimControls()
-            For Each Element As FrameworkElement In Controls
-                Element.Opacity = 0
-                Element.RenderTransform = New TranslateTransform(-25, 0)
-                AniList.Add(AaOpacity(Element, If(TypeOf Element Is TextBlock, 0.6, 1), 200, Delay, New AniEaseOutFluent(AniEasePower.Weak)))
-                AniList.Add(AaTranslateX(Element, 5, 200, Delay, New AniEaseOutFluent))
-                AniList.Add(AaTranslateX(Element, 20, 300, Delay, New AniEaseOutBack(AniEasePower.Weak)))
-                If TypeOf Element Is MyListItem Then
-                    AniList.Add(AaCode(Sub()
-                                           CType(Element, MyListItem).IsMouseOverAnimationEnabled = True
-                                           CType(Element, MyListItem).RefreshColor(Me, New EventArgs)
-                                       End Sub, Delay + 280))
+            For Each Element As FrameworkElement In GetAllAnimControls(True)
+                If Element.Visibility = Visibility.Collapsed Then
+                    '还原之前的隐藏动画可能导致的改变（#2436）
+                    Element.Opacity = 1
+                    Element.RenderTransform = New TranslateTransform(0, 0)
+                    If TypeOf Element Is MyListItem Then CType(Element, MyListItem).IsMouseOverAnimationEnabled = True
+                Else
+                    Element.Opacity = 0
+                    Element.RenderTransform = New TranslateTransform(-25, 0)
+                    If TypeOf Element Is MyListItem Then CType(Element, MyListItem).IsMouseOverAnimationEnabled = False
+                    AniList.Add(AaOpacity(Element, If(TypeOf Element Is TextBlock, 0.6, 1), 200, Delay, New AniEaseOutFluent(AniEasePower.Weak)))
+                    AniList.Add(AaTranslateX(Element, 5, 200, Delay, New AniEaseOutFluent))
+                    AniList.Add(AaTranslateX(Element, 20, 300, Delay, New AniEaseOutBack(AniEasePower.Weak)))
+                    If TypeOf Element Is MyListItem Then
+                        AniList.Add(AaCode(Sub()
+                                               CType(Element, MyListItem).IsMouseOverAnimationEnabled = True
+                                               CType(Element, MyListItem).RefreshColor(Me, New EventArgs)
+                                           End Sub, Delay + 280))
+                    End If
+                    Delay += Math.Max(8, 20 - Id) * 2.5
+                    Id += 1
                 End If
-                Delay += Math.Max(8, 20 - Id) * 2.5
-                Id += 1
             Next
             AniStart(AniList, "PageLeft PageChange " & Uuid)
         End If
@@ -74,23 +81,22 @@
     End Sub
 
     '遍历获取所有需要生成动画的控件
-    Private Function GetAllAnimControls() As List(Of FrameworkElement)
+    Private Function GetAllAnimControls(Optional IgnoreInvisibility As Boolean = False) As List(Of FrameworkElement)
         Dim AllControls As New List(Of FrameworkElement)
-        GetAllAnimControls(AnimatedControl, AllControls)
+        GetAllAnimControls(AnimatedControl, AllControls, IgnoreInvisibility)
         Return AllControls
     End Function
-    Private Sub GetAllAnimControls(Element As FrameworkElement, ByRef AllControls As List(Of FrameworkElement))
-        If Element.Visibility = Visibility.Collapsed Then Exit Sub
+    Private Sub GetAllAnimControls(Element As FrameworkElement, ByRef AllControls As List(Of FrameworkElement), IgnoreInvisibility As Boolean)
+        If Not IgnoreInvisibility AndAlso Element.Visibility = Visibility.Collapsed Then Exit Sub
         If TypeOf Element Is MyTextButton Then
             AllControls.Add(Element)
         ElseIf TypeOf Element Is MyListItem Then
-            CType(Element, MyListItem).IsMouseOverAnimationEnabled = False
             AllControls.Add(Element)
         ElseIf TypeOf Element Is ContentControl Then
-            GetAllAnimControls(CType(Element, ContentControl).Content, AllControls)
+            GetAllAnimControls(CType(Element, ContentControl).Content, AllControls, IgnoreInvisibility)
         ElseIf TypeOf Element Is Panel Then
             For Each Element2 As FrameworkElement In CType(Element, Panel).Children
-                GetAllAnimControls(Element2, AllControls)
+                GetAllAnimControls(Element2, AllControls, IgnoreInvisibility)
             Next
         Else
             AllControls.Add(Element)

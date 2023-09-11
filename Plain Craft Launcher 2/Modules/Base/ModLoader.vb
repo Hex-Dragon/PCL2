@@ -437,10 +437,6 @@
                             For Each Loader In Loaders
                                 Loader.Abort()
                             Next
-                            '从列表删除
-                            SyncLock LoaderTaskbarLock
-                                If LoaderTaskbar.Contains(Me) Then LoaderTaskbar.Remove(Me)
-                            End SyncLock
                         End Sub)
         End Sub
 
@@ -571,6 +567,7 @@ Restart:
         If FrmSpeedLeft IsNot Nothing Then FrmSpeedLeft.TaskRemove(Loader)
         SyncLock LoaderTaskbarLock
             LoaderTaskbar.Add(Loader)
+            Log($"[Taskbar] {Loader.Name} 已加入任务列表")
         End SyncLock
     End Sub
     Public Sub LoaderTaskbarProgressRefresh()
@@ -585,15 +582,12 @@ Restart:
                     If Loader.Show AndAlso Loader.State = LoadState.Loading Then IsAllDownloadTaskCompleted = False
                 Next
                 '若单个任务已中止或全部任务已完成，则刷新并移除
-                Dim RemovedTask As New List(Of LoaderBase)
-                For i = 0 To LoaderTaskbar.Count - 1
-                    If (IsAllDownloadTaskCompleted OrElse LoaderTaskbar(i).State = LoadState.Aborted) AndAlso LoaderTaskbar(i).Show Then
-                        If FrmSpeedLeft IsNot Nothing Then FrmSpeedLeft.TaskRefresh(LoaderTaskbar(i))
-                        RemovedTask.Add(LoaderTaskbar(i))
+                For Each Task In LoaderTaskbar.ToList()
+                    If (IsAllDownloadTaskCompleted OrElse Task.State = LoadState.Aborted OrElse Task.State = LoadState.Waiting) AndAlso Task.Show Then
+                        If FrmSpeedLeft IsNot Nothing Then FrmSpeedLeft.TaskRefresh(Task)
+                        LoaderTaskbar.Remove(Task)
+                        Log($"[Taskbar] {Task.Name} 已移出任务列表")
                     End If
-                Next
-                For Each Task In RemovedTask
-                    LoaderTaskbar.Remove(Task)
                 Next
             End SyncLock
             '更新平滑后的进度
@@ -625,8 +619,9 @@ Restart:
         Try
             Dim Total As Double = 0, Count As Integer = 0
             SyncLock LoaderTaskbarLock
-                For i = 0 To LoaderTaskbar.Count - 1
-                    Total += LoaderTaskbar(i).Progress
+                For Each Task In LoaderTaskbar.ToList
+                    If Not Task.Show Then Continue For
+                    Total += Task.Progress
                     Count += 1 '避免多线程影响导致计数出错
                 Next
             End SyncLock

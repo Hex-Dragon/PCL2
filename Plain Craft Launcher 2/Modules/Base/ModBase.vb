@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.6.7" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.6.7." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.6.8" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.6.8." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 302 'Release
+    Public Const VersionCode As Integer = 304 'Release
 #Else
-    Public Const VersionCode As Integer = 303 'Snapshot
+    Public Const VersionCode As Integer = 305 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1242,23 +1242,7 @@ Re:
     Public Function ExtractFile(CompressFilePath As String, DestDirectory As String, Optional Encode As Encoding = Nothing) As Boolean
         Try
             Directory.CreateDirectory(DestDirectory)
-            If CompressFilePath.EndsWith(".zip") OrElse CompressFilePath.EndsWith(".jar") OrElse CompressFilePath.EndsWith(".mrpack") Then
-                '以 zip 方式解压
-                Using stream As New FileStream(CompressFilePath, FileMode.Open)
-                    Using archive As New ZipArchive(stream, ZipArchiveMode.Read, False, If(Encode, Encoding.GetEncoding("GB18030")))
-                        For Each entry As ZipArchiveEntry In archive.Entries
-                            Dim destinationPath As String = IO.Path.Combine(DestDirectory, entry.FullName)
-                            If destinationPath.EndsWith("\") OrElse destinationPath.EndsWith("/") Then
-                                Directory.CreateDirectory(destinationPath)
-                            Else
-                                If File.Exists(destinationPath) Then File.Delete(destinationPath)
-                                entry.ExtractToFile(destinationPath, True)
-                            End If
-                        Next
-                    End Using
-                End Using
-                Return True
-            ElseIf CompressFilePath.EndsWith(".gz") Then
+            If CompressFilePath.EndsWith(".gz") Then
                 '以 gz 方式解压
                 Dim stream As New GZipStream(New FileStream(CompressFilePath, FileMode.Open, FileAccess.ReadWrite), CompressionMode.Decompress)
                 Dim decompressedFile As New FileStream(DestDirectory & GetFileNameFromPath(CompressFilePath).ToLower.Replace(".tar", "").Replace(".gz", ""), FileMode.OpenOrCreate, FileAccess.Write)
@@ -1271,7 +1255,19 @@ Re:
                 stream.Close()
                 Return True
             Else
-                Return False
+                '以 zip 方式解压
+                Using Archive = ZipFile.Open(CompressFilePath, ZipArchiveMode.Read, If(Encode, Encoding.GetEncoding("GB18030")))
+                    For Each Entry As ZipArchiveEntry In Archive.Entries
+                        Dim DestinationPath As String = IO.Path.Combine(DestDirectory, Entry.FullName)
+                        If DestinationPath.EndsWith("\") OrElse DestinationPath.EndsWith("/") Then
+                            Continue For '不创建空文件夹
+                        Else
+                            Directory.CreateDirectory(GetPathFromFullPath(DestinationPath))
+                            Entry.ExtractToFile(DestinationPath, True)
+                        End If
+                    Next
+                End Using
+                Return True
             End If
         Catch ex As Exception
             Log(ex, "尝试解压文件失败")
@@ -1301,7 +1297,7 @@ Re:
         Next
         Temp = Directory.GetDirectories(Path)
         For Each str As String In Temp
-            DeleteDirectory(str)
+            DeleteDirectory(str, IgnoreIssue)
         Next
         Try
             Directory.Delete(Path, True)
@@ -1578,7 +1574,7 @@ Re:
     ''' 为字符串进行 XML 转义。
     ''' </summary>
     Public Function EscapeXML(Str As String) As String
-        Return Str.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("""", "&quot;")
+        Return Str.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("""", "&quot;").Replace(vbCrLf, "&#xa;")
     End Function
 
     '正则

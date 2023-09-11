@@ -1,4 +1,6 @@
-﻿Public Module ModModpack
+﻿Imports System.IO.Compression
+
+Public Module ModModpack
 
     '触发整合包安装的外部接口
     ''' <summary>
@@ -109,7 +111,7 @@
     '整合包缓存清理
     Private IsInstallCacheCleared As Boolean = False
     Private IsInstallCacheClearing As Boolean = False
-    Private Sub UnpackFiles(InstallTemp As String, FileAddress As String)
+    Private Sub UnpackFiles(InstallTemp As String, FileAddress As String, Loader As LoaderBase)
         '清理缓存文件夹
         If Not IsInstallCacheCleared Then
             IsInstallCacheCleared = True
@@ -135,9 +137,8 @@
         Try
 Retry:
             '完全不知道为啥会出现文件正在被另一进程使用的问题，总之多试试
-            Directory.CreateDirectory(InstallTemp)
             DeleteDirectory(InstallTemp)
-            Compression.ZipFile.ExtractToDirectory(FileAddress, InstallTemp, Encode)
+            ExtractFile(FileAddress, InstallTemp, Encode)
         Catch ex As Exception
             Log(ex, "第 " & RetryCount & " 次解压尝试失败")
             If TypeOf ex Is ArgumentException Then
@@ -146,6 +147,7 @@ Retry:
             End If
             If RetryCount < 5 Then
                 Thread.Sleep(RetryCount * 2000)
+                If Loader IsNot Nothing AndAlso Loader.LoadingState <> MyLoading.MyLoadingState.Run Then Exit Sub
                 RetryCount += 1
                 GoTo Retry
             Else
@@ -215,13 +217,15 @@ Retry:
         If OverrideHome <> "" Then
             InstallLoaders.Add(New LoaderTask(Of String, Integer)("解压整合包文件",
             Sub(Task As LoaderTask(Of String, Integer))
-                UnpackFiles(InstallTemp, FileAddress)
+                UnpackFiles(InstallTemp, FileAddress, Task)
                 Task.Progress = 0.5
+                Dim OverridePath As String = InstallTemp & ArchiveBaseFolder & OverrideHome
                 '复制结果
-                If Directory.Exists(InstallTemp & ArchiveBaseFolder & OverrideHome) Then
-                    CopyDirectory(InstallTemp & ArchiveBaseFolder & OverrideHome, PathMcFolder & "versions\" & VersionName)
+                If Directory.Exists(OverridePath) Then
+                    CopyDirectory(OverridePath, PathMcFolder & "versions\" & VersionName)
+                    Log($"[ModPack] 整合包 override 复制：{OverridePath} -> {PathMcFolder & "versions\" & VersionName}")
                 Else
-                    Log("[ModPack] 整合包中未找到 override 目录，已跳过")
+                    Log($"[ModPack] 整合包中未找到 override 文件夹：{OverridePath}")
                 End If
                 Task.Progress = 0.9
                 '开启版本隔离
@@ -393,7 +397,7 @@ Retry:
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)("解压整合包文件",
             Sub(Task As LoaderTask(Of String, Integer))
-                UnpackFiles(InstallTemp, FileAddress)
+                UnpackFiles(InstallTemp, FileAddress, Task)
                 Task.Progress = 0.5
                 '复制 overrides 文件夹和 client-overrides 文件夹
                 If Directory.Exists(InstallTemp & ArchiveBaseFolder & "overrides") Then
@@ -425,7 +429,7 @@ Retry:
                 End Select
             End If
             '添加下载文件
-            FileList.Add(New NetFile(File("downloads").Select(Function(t) t.ToString).ToArray,
+            FileList.Add(New NetFile(File("downloads").Select(Function(t) t.ToString.Replace("://edge.forgecdn", "://media.forgecdn")).ToArray, '修复 #2390
                                      PathMcFolder & "versions\" & VersionName & "\" & File("path").ToString,
                                      New FileChecker(ActualSize:=File("fileSize").ToObject(Of Long), Hash:=File("hashes")("sha1").ToString)))
         Next
@@ -520,7 +524,7 @@ Retry:
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)("解压整合包文件",
         Sub(Task As LoaderTask(Of String, Integer))
-            UnpackFiles(InstallTemp, FileAddress)
+            UnpackFiles(InstallTemp, FileAddress, Task)
             Task.Progress = 0.5
             '复制结果
             If Directory.Exists(InstallTemp & ArchiveBaseFolder & "minecraft") Then
@@ -619,7 +623,7 @@ Retry:
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)("解压整合包文件",
         Sub(Task As LoaderTask(Of String, Integer))
-            UnpackFiles(InstallTemp, FileAddress)
+            UnpackFiles(InstallTemp, FileAddress, Task)
             Task.Progress = 0.5
             '复制结果
             If Directory.Exists(InstallTemp & ArchiveBaseFolder & ".minecraft") Then
@@ -714,7 +718,7 @@ Retry:
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)("解压整合包文件",
         Sub(Task As LoaderTask(Of String, Integer))
-            UnpackFiles(InstallTemp, FileAddress)
+            UnpackFiles(InstallTemp, FileAddress, Task)
             Task.Progress = 0.5
             '复制结果
             If Directory.Exists(InstallTemp & ArchiveBaseFolder & "overrides") Then
@@ -805,7 +809,7 @@ Retry:
         If String.IsNullOrWhiteSpace(NewName) Then Exit Sub
         '解压
         Hint("正在解压压缩包……")
-        UnpackFiles(TargetFolder, FileAddress)
+        UnpackFiles(TargetFolder, FileAddress, Nothing)
         '加入文件夹列表
         PageSelectLeft.AddFolder(TargetFolder, NewName, False)
         Hint("已加入游戏文件夹列表：" & NewName, HintType.Finish)

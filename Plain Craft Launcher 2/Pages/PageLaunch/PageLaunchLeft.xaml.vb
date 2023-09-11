@@ -673,14 +673,7 @@ ExitRefresh:
         McLaunchProcess = Nothing
         McLaunchWatcher = Nothing
         '获取 “你知道吗” 提示
-        Dim Hint As String = PageOtherTest.GetRandomHint()
-        Try
-            Dim RawHints = ReadFile(Path & "PCL\hints.txt").Split(vbCrLf.ToCharArray).Where(Function(s) Not String.IsNullOrWhiteSpace(s)).ToList
-            If RawHints.Count > 0 Then Hint = RandomOne(RawHints)
-        Catch ex As Exception
-            Log(ex, "获取自定义 你知道吗 提示失败", LogLevel.Hint)
-        End Try
-        LabLaunchingHint.Text = Hint
+        LabLaunchingHint.Text = PageOtherTest.GetRandomHint()
     End Sub
     Private ShowProgress As Double = 0
     ''' <summary>

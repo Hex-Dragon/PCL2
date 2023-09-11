@@ -41,10 +41,6 @@
     End Sub
     Private IsLoad As Boolean = False
     Private Sub MyCard_Loaded() Handles Me.Loaded
-        '卡片的进入时动画已被页面通用切换动画替代
-        'If LoadAnimation AndAlso IsLoad Then
-        '    StartHeightAnimation(Math.Min(50, ActualHeight), ActualHeight - Math.Min(50, ActualHeight), True)
-        'End If
         If IsLoad Then Exit Sub
         '初次加载限定
         If Not Title = "" AndAlso IsNothing(MainTextBlock) Then

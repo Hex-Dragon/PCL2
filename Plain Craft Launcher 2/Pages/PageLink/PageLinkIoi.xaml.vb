@@ -133,7 +133,7 @@ StartDownload:
         Log("[IOI] 解压联机模块以完成下载")
         If File.Exists(PathTemp & "ioi.exe") Then File.Delete(PathTemp & "ioi.exe")
         If File.Exists(PathIoi) Then File.Delete(PathIoi)
-        Compression.ZipFile.ExtractToDirectory(PathTemp & "联机模块.zip", PathTemp)
+        ExtractFile(PathTemp & "联机模块.zip", PathTemp)
         File.Delete(PathTemp & "联机模块.zip")
         CopyFile(PathTemp & "ioi.exe", PathIoi)
         File.Delete(PathTemp & "ioi.exe")

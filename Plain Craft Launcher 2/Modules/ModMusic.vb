@@ -25,7 +25,7 @@
                 For Each File In My.Computer.FileSystem.GetFiles(Path & "PCL\Musics\", FileIO.SearchOption.SearchAllSubDirectories, "*.*")
                     '文件夹可能会被加入 .ini 文件夹配置文件、一些乱七八糟的 .jpg 文件啥的
                     Dim Extend As String = File.Split(".").Last.ToLower
-                    If Not (Extend = "ini" OrElse Extend = "jpg" OrElse Extend = "txt" OrElse Extend = "cfg" OrElse Extend = "lrc" OrElse Extend = "png") Then
+                    If Not (Extend = "ini" OrElse Extend = "jpg" OrElse Extend = "txt" OrElse Extend = "cfg" OrElse Extend = "lrc" OrElse Extend = "db" OrElse Extend = "png") Then
                         MusicAllList.Add(File)
                     End If
                 Next
@@ -212,7 +212,7 @@
     ''' 继续音乐播放，返回是否成功切换了状态。
     ''' </summary>
     Public Function MusicResume() As Boolean
-        If MusicState = MusicStates.Play Then
+        If MusicState = MusicStates.Play OrElse Not MusicAllList.Any() Then
             Return False
         Else
             RunInThread(Sub()

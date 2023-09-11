@@ -15,8 +15,12 @@
             '如果当前是在对有滚动条的下拉框或文本框执行，则不接管操作
             Exit Sub
         End If
-        PerformVerticalOffsetDelta(-e.Delta)
         e.Handled = True
+        PerformVerticalOffsetDelta(-e.Delta)
+        '关闭 Tooltip (#2552)
+        For Each TooltipBorder In Application.ShowingTooltips
+            AniStart(AaOpacity(TooltipBorder, -1, 100), $"Hide Tooltip {GetUuid()}")
+        Next
     End Sub
     Public Sub PerformVerticalOffsetDelta(Delta As Double)
         AniStart(AaDouble(Sub(AnimDelta As Double)

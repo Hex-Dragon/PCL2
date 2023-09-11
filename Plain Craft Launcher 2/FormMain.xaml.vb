@@ -10,6 +10,11 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 304 Then 'Release 2.6.8
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复开始或结束游戏时可能报错的 Bug"))
+            FeatureCount += 20
+            BugCount += 25
+        End If
         If LastVersion < 302 Then 'Release 2.6.7
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "再次修复网络条件差时可能无法下载 MC 的 Bug"))
             BugCount += 1
@@ -128,6 +133,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 305 Then 'Snapshot 2.6.8
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复开始或结束游戏时可能报错的 Bug"))
+            FeatureCount += 20
+            BugCount += 25
+        End If
         If LastVersion < 303 Then 'Snapshot 2.6.7
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "再次修复网络条件差时可能无法下载 MC 的 Bug"))
             BugCount += 1
@@ -331,6 +341,7 @@ Public Class FormMain
     End Sub
 
     '窗口加载
+    Private Declare Auto Function ChangeWindowMessageFilterEx Lib "user32.dll" (ByVal hwnd As IntPtr, ByVal message As UInt32, ByVal action As UInt32, ByVal changeInfo As UInt32) As Boolean
     Private IsWindowLoadFinished As Boolean = False
     ''' <summary>
     ''' 是否为联机提权后自动重启。
@@ -442,6 +453,7 @@ Public Class FormMain
         TimerMainStartRun()
         '加载池
         RunInNewThread(Sub()
+                           'EULA 提示
                            If Not Setup.Get("SystemEula") Then
                                Select Case MyMsgBox("在使用 PCL 前，请同意 PCL 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明",
                                    Button3Action:=Sub() OpenWebsite("https://shimo.im/docs/rGrd8pY8xWkt6ryW"))
@@ -451,6 +463,7 @@ Public Class FormMain
                                        EndProgram(False)
                                End Select
                            End If
+                           '启动加载器池
                            Try
                                JavaListInit() '延后到同意协议后再执行，避免在初次启动时进行进程操作
                                Thread.Sleep(200)
@@ -460,10 +473,21 @@ Public Class FormMain
                            Catch ex As Exception
                                Log(ex, "初始化加载池运行失败", LogLevel.Feedback)
                            End Try
+                           '清理自动更新文件
                            Try
                                If File.Exists(Path & "PCL\Plain Craft Launcher 2.exe") Then File.Delete(Path & "PCL\Plain Craft Launcher 2.exe")
                            Catch ex As Exception
                                Log(ex, "清理自动更新文件失败")
+                           End Try
+                           '开启管理员权限下的文件拖拽（#2531）
+                           Try
+                               If IsAdmin() Then
+                                   Log("[System] PCL 正以管理员权限运行")
+                                   ChangeWindowMessageFilterEx(Handle, &H233, 1, Nothing)
+                                   ChangeWindowMessageFilterEx(Handle, &H49, 1, Nothing)
+                               End If
+                           Catch ex As Exception
+                               Log(ex, "开启管理员权限下的文件拖拽失败")
                            End Try
                        End Sub, "Start Loader", ThreadPriority.Lowest)
 
