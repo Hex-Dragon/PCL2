@@ -109,7 +109,7 @@
             Case 6
                 ForgeDownloadListItemPreload(Stack, Stack.Tag, AddressOf ForgeSave_Click, True)
             Case 8
-                CompFilesCardPreload(Stack, Stack.Tag, AddressOf FrmDownloadMod.ProjectClick)
+                CompFilesCardPreload(Stack, Stack.Tag)
         End Select
         '实现控件虚拟化
         For Each Data As Object In Stack.Tag

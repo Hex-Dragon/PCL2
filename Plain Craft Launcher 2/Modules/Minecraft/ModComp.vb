@@ -385,7 +385,7 @@
         ''' <summary>
         ''' 将当前工程信息实例化为控件。
         ''' </summary>
-        Public Function ToCompItem(ShowMcVersionDesc As Boolean, ShowLoaderDesc As Boolean, Optional OnClick As MyCompItem.ClickEventHandler = Nothing) As MyCompItem
+        Public Function ToCompItem(ShowMcVersionDesc As Boolean, ShowLoaderDesc As Boolean) As MyCompItem
             '获取版本描述
             Dim GameVersionDescription As String
             If GameVersions Is Nothing OrElse GameVersions.Count = 0 Then
@@ -566,12 +566,6 @@ NoExName:
                 NewItem.Logo = "pack://application:,,,/images/Icons/NoIcon.png"
             Else
                 NewItem.Logo = LogoUrl
-            End If
-            If OnClick IsNot Nothing Then
-                AddHandler NewItem.Click, OnClick
-                NewItem.HasAnimation = True
-            Else
-                NewItem.HasAnimation = False
             End If
             Return NewItem
         End Function
@@ -1377,7 +1371,7 @@ Retry:
     ''' <summary>
     ''' 预载包含大量 CompFile 的卡片，添加必要的元素和前置 Mod 列表。
     ''' </summary>
-    Public Sub CompFilesCardPreload(Stack As StackPanel, Files As List(Of CompFile), OnClick As MyListItem.ClickEventHandler)
+    Public Sub CompFilesCardPreload(Stack As StackPanel, Files As List(Of CompFile))
         '获取卡片对应的前置 ID
         '如果为整合包就不会有 Dependencies 信息，所以不用管
         Dim Deps As List(Of String) = Files.SelectMany(Function(f) f.Dependencies).Distinct.ToList()
@@ -1391,7 +1385,7 @@ Retry:
         Stack.Children.Add(New TextBlock With {.Text = "前置 Mod", .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 2, 0, 5)})
         '添加前置 Mod 列表
         For Each Dep In Deps
-            Dim Item = CompProjectCache(Dep).ToCompItem(False, False, AddressOf FrmDownloadMod.ProjectClick)
+            Dim Item = CompProjectCache(Dep).ToCompItem(False, False)
             Stack.Children.Add(Item)
         Next
         '添加结尾间隔

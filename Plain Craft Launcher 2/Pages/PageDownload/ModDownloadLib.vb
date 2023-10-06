@@ -1988,9 +1988,9 @@ Retry:
         If Directory.Exists(TempMcFolder) Then DeleteDirectory(TempMcFolder)
         Dim OptiFineFolder As String = Nothing
         If Request.OptiFineVersion IsNot Nothing Then
-            If Request.OptiFineVersion.Contains("_HD_U") Then Request.OptiFineVersion = "HD_U_" & Request.OptiFineVersion.Split("_HD_U").Last '#735
+            If Request.OptiFineVersion.Contains("_HD_U_") Then Request.OptiFineVersion = "HD_U_" & Request.OptiFineVersion.Split("_HD_U_").Last '#735
             Request.OptiFineEntry = New DlOptiFineListEntry With {
-                .NameDisplay = Request.MinecraftName & " " & Request.OptiFineVersion.Replace("HD_U_", "").Replace("_", ""),
+                .NameDisplay = Request.MinecraftName & " " & Request.OptiFineVersion.Replace("HD_U_", "").Replace("_", "").Replace("pre", " pre"),
                 .Inherit = Request.MinecraftName,
                 .IsPreview = Request.OptiFineVersion.ToLower.Contains("pre"),
                 .NameVersion = Request.MinecraftName & "-OptiFine_" & Request.OptiFineVersion,
@@ -2214,7 +2214,7 @@ Retry:
             OutputJson.Merge(FabricJson)
         End If
         '修改
-        If RealArguments IsNot Nothing Then OutputJson("minecraftArguments") = RealArguments
+        If RealArguments IsNot Nothing AndAlso RealArguments.Replace(" ", "") <> "" Then OutputJson("minecraftArguments") = RealArguments
         OutputJson.Remove("_comment_")
         OutputJson.Remove("inheritsFrom")
         OutputJson.Remove("jar")

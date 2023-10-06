@@ -32,9 +32,7 @@
             '列表项
             PanProjects.Children.Clear()
             For i = Math.Min(Page * PageSize, Storage.Results.Count - 1) To Math.Min((Page + 1) * PageSize - 1, Storage.Results.Count - 1)
-                PanProjects.Children.Add(
-                    Storage.Results(i).ToCompItem(Loader.Input.GameVersion Is Nothing,
-                                                  Loader.Input.ModLoader = CompModLoaderType.Any, AddressOf ProjectClick))
+                PanProjects.Children.Add(Storage.Results(i).ToCompItem(Loader.Input.GameVersion Is Nothing, Loader.Input.ModLoader = CompModLoaderType.Any))
             Next
             '页码
             CardPages.Visibility = If(Storage.Results.Count > 40 OrElse
@@ -66,12 +64,6 @@
                     PageLoaderRestart()
                 End If
         End Select
-    End Sub
-
-    '进入详情页面
-
-    Public Sub ProjectClick(sender As MyCompItem, e As EventArgs)
-        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail, .Additional = sender.Tag})
     End Sub
 
     '切换页码

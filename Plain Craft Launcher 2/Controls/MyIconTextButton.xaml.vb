@@ -56,6 +56,8 @@
             RefreshColor()
         End Set
     End Property '颜色类别
+    Public Shared ReadOnly ColorTypeProperty As DependencyProperty =
+        DependencyProperty.Register("ColorType", GetType(ColorState), GetType(MyIconTextButton), New PropertyMetadata())
 
     '点击事件
 

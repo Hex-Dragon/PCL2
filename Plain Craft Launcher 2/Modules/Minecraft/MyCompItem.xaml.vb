@@ -94,6 +94,18 @@ RetryStart:
             Log("[Control] 按下资源工程列表项：" & LabTitle.Text)
         End If
     End Sub
+    Private Sub ProjectClick(sender As MyCompItem, e As EventArgs) Handles Me.Click
+        '记录当前展开的卡片标题（#2712）
+        Dim Titles As New List(Of String)
+        If FrmMain.PageCurrent.Page = FormMain.PageType.CompDetail Then
+            For Each Card As MyCard In FrmDownloadCompDetail.PanMain.Children
+                If Card.Title <> "" AndAlso Not Card.IsSwaped Then Titles.Add(Card.Title)
+            Next
+            Log("[Comp] 记录当前已展开的卡片：" & String.Join("、", Titles))
+            FrmMain.PageCurrent.Additional(1) = Titles
+        End If
+        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail, .Additional = {sender.Tag, New List(Of String)}})
+    End Sub
 
     '鼠标点击判定
     Private IsMouseDown As Boolean = False

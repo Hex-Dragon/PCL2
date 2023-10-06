@@ -79,7 +79,45 @@
     ''' 切换至启动中页面。
     ''' </summary>
     Public Sub PageChangeToLaunching()
-        LaunchingPreload()
+        '修改登陆方式
+        Select Case Setup.Get("LoginType")
+            Case McLoginType.Legacy
+                If PageLinkHiper.HiperState = LoadState.Finished Then
+                    LabLaunchingMethod.Text = "联机离线登录"
+                Else
+                    LabLaunchingMethod.Text = "离线登录"
+                End If
+            Case McLoginType.Ms
+                LabLaunchingMethod.Text = "正版登录"
+            Case McLoginType.Nide
+                LabLaunchingMethod.Text = "统一通行证"
+            Case McLoginType.Auth
+                LabLaunchingMethod.Text = "Authlib-Injector"
+        End Select
+        '初始化页面
+        LabLaunchingName.Text = McVersionCurrent.Name
+        LabLaunchingStage.Text = "初始化"
+        LabLaunchingTitle.Text = If(McLaunchLoader.Input Is Nothing OrElse McLaunchLoader.Input.SaveBatch Is Nothing, "正在启动游戏", "正在导出启动脚本")
+        LabLaunchingProgress.Text = "0.00 %"
+        LabLaunchingProgress.Opacity = 1
+        LabLaunchingDownload.Visibility = Visibility.Visible
+        LabLaunchingProgressLeft.Opacity = 0.6
+        LabLaunchingDownload.Visibility = Visibility.Visible
+        LabLaunchingDownload.Text = "0 B/s"
+        LabLaunchingDownload.Opacity = 0
+        LabLaunchingDownload.Visibility = Visibility.Collapsed
+        LabLaunchingDownloadLeft.Opacity = 0
+        LabLaunchingDownloadLeft.Visibility = Visibility.Collapsed
+        ProgressLaunchingFinished.Width = New GridLength(0, GridUnitType.Star)
+        ProgressLaunchingUnfinished.Width = New GridLength(1, GridUnitType.Star)
+        PanLaunchingHint.Opacity = 0
+        PanLaunchingHint.Visibility = Visibility.Collapsed
+        PanLaunchingInfo.Width = Double.NaN '重置宽度改变动画
+        McLaunchProcess = Nothing
+        McLaunchWatcher = Nothing
+        '获取 “你知道吗” 提示
+        LabLaunchingHint.Text = PageOtherTest.GetRandomHint()
+        '初始化其他页面
         PanInput.IsHitTestVisible = False
         PanLaunching.IsHitTestVisible = False
         LoadLaunching.State.LoadingState = MyLoading.MyLoadingState.Run
@@ -634,48 +672,6 @@ ExitRefresh:
         PageVersionLeft.Version = McVersionCurrent
         FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
     End Sub
-    '刷新 UI
-    Public Sub LaunchingPreload()
-        '修改登陆方式
-        Select Case Setup.Get("LoginType")
-            Case McLoginType.Legacy
-                If PageLinkHiper.HiperState = LoadState.Finished Then
-                    LabLaunchingMethod.Text = "联机离线登录"
-                Else
-                    LabLaunchingMethod.Text = "离线登录"
-                End If
-            Case McLoginType.Ms
-                LabLaunchingMethod.Text = "正版登录"
-            Case McLoginType.Nide
-                LabLaunchingMethod.Text = "统一通行证"
-            Case McLoginType.Auth
-                LabLaunchingMethod.Text = "Authlib-Injector"
-        End Select
-        '初始化页面
-        LabLaunchingName.Text = McVersionCurrent.Name
-        LabLaunchingStage.Text = "初始化"
-        LabLaunchingTitle.Text = If(McLaunchLoader.Input Is Nothing OrElse McLaunchLoader.Input.SaveBatch Is Nothing, "正在启动游戏", "正在导出启动脚本")
-        LabLaunchingProgress.Text = "0.00 %"
-        LabLaunchingProgress.Opacity = 1
-        LabLaunchingDownload.Visibility = Visibility.Visible
-        LabLaunchingProgressLeft.Opacity = 0.6
-        LabLaunchingDownload.Visibility = Visibility.Visible
-        LabLaunchingDownload.Text = "0 B/s"
-        LabLaunchingDownload.Opacity = 0
-        LabLaunchingDownload.Visibility = Visibility.Collapsed
-        LabLaunchingDownloadLeft.Opacity = 0
-        LabLaunchingDownloadLeft.Visibility = Visibility.Collapsed
-        ProgressLaunchingFinished.Width = New GridLength(0, GridUnitType.Star)
-        ProgressLaunchingUnfinished.Width = New GridLength(1, GridUnitType.Star)
-        PanLaunchingHint.Opacity = 0
-        PanLaunchingHint.Visibility = Visibility.Collapsed
-        PanLaunchingInfo.Width = Double.NaN '重置宽度改变动画
-        McLaunchProcess = Nothing
-        McLaunchWatcher = Nothing
-        '获取 “你知道吗” 提示
-        LabLaunchingHint.Text = PageOtherTest.GetRandomHint()
-    End Sub
-    Private ShowProgress As Double = 0
     ''' <summary>
     ''' 每 0.2s 执行一次，刷新启动的数据 UI 显示。
     ''' </summary>
@@ -759,6 +755,7 @@ ExitRefresh:
             Log(ex, "刷新启动信息失败", LogLevel.Feedback)
         End Try
     End Sub
+    Private ShowProgress As Double = 0
     '尺寸改变动画
     Private IsWidthAnimating As Boolean = False
     Private ActualUsedWidth As Double

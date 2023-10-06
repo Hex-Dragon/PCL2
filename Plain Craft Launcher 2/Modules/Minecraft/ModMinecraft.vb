@@ -570,7 +570,7 @@ Recheck:
         ''' </summary>
         Public ReadOnly Property IsOldJson As Boolean
             Get
-                Return JsonObject("minecraftArguments") IsNot Nothing
+                Return JsonObject("minecraftArguments") IsNot Nothing AndAlso JsonObject("minecraftArguments") <> ""
             End Get
         End Property
         ''' <summary>
@@ -713,7 +713,7 @@ Recheck:
 ExitDataLoad:
                 '确定版本图标
                 Logo = ReadIni(Path & "PCL\Setup.ini", "Logo", "")
-                If Logo = "" OrElse ReadIni(Path & "PCL\Setup.ini", "LogoCustom", "False") = "False" Then
+                If Logo = "" OrElse Not CType(ReadIni(Path & "PCL\Setup.ini", "LogoCustom", False), Boolean) Then
                     Select Case State
                         Case McVersionState.Original
                             Logo = "pack://application:,,,/images/Blocks/Grass.png"
@@ -1878,14 +1878,7 @@ NextVersion:
         If CoreJarOnly Then Return Result
 
         '是否跳过校验
-        Dim IsSetupSkip As Boolean = Setup.Get("LaunchAdvanceAssets")
-        Select Case Setup.Get("VersionAdvanceAssets", Version:=Version)
-            Case 0 '使用全局设置
-            Case 1 '开启校验
-                IsSetupSkip = False
-            Case 2 '关闭校验
-                IsSetupSkip = True
-        End Select
+        Dim IsSetupSkip As Boolean = ShouldIgnoreFileCheck(Version)
 
         'Library 文件
         Result.AddRange(McLibFixFromLibToken(McLibListGet(Version, False), JumpLoaderFolder:=Version.PathIndie & ".jumploader\", AllowUnsameFile:=IsSetupSkip))
@@ -2012,6 +2005,13 @@ NextVersion:
             Log("[Launch] 已将 " & Original & " 特判替换为对应的 Installer 文件", LogLevel.Debug)
             McLibGet = McLibGet.Replace(".jar", "-installer.jar")
         End If
+    End Function
+
+    ''' <summary>
+    ''' 检查设置，是否应当忽略文件检查？
+    ''' </summary>
+    Public Function ShouldIgnoreFileCheck(Version As McVersion)
+        Return Setup.Get("LaunchAdvanceAssets") OrElse Setup.Get("VersionAdvanceAssetsV2", Version:=Version) OrElse (Setup.Get("VersionAdvanceAssets", Version:=Version) = 2)
     End Function
 
 #End Region

@@ -330,7 +330,7 @@ Retry:
     ''' <summary>
     ''' 同时发送多个网络请求并要求返回内容。
     ''' </summary>
-    Public Function NetRequestMuity(Url As String, Method As String, Data As Object, ContentType As String, Optional RequestCount As Integer = 4, Optional Headers As Dictionary(Of String, String) = Nothing)
+    Public Function NetRequestMulty(Url As String, Method As String, Data As Object, ContentType As String, Optional RequestCount As Integer = 4, Optional Headers As Dictionary(Of String, String) = Nothing)
         Dim Threads As New List(Of Thread)
         Dim RequestResult = Nothing
         Dim RequestEx As Exception = Nothing
@@ -1278,14 +1278,6 @@ Wrong:
             Try
 Retry:
                 SyncLock LockChain
-                    ''大小检测
-                    'If DownloadDone <> FileSize AndAlso Not IsUnknownSize Then
-                    '    For Each Th As NetThread In Threads
-                    '        Log("[Download] " & "File size detail: ")
-                    '        Log("[Download] " & Th.Uuid & "#, State " & GetStringFromEnum(CType(Th.State, [Enum])) & ", Range " & Th.DownloadStart & "~" & (Th.DownloadStart + Th.DownloadDone) & ", Left " & Th.DownloadUndone)
-                    '    Next
-                    '    Throw New Exception("文件大小应为 " & FileSize & " B，实际下载为 " & DownloadDone & " B。")
-                    'End If
                     If ModeDebug Then Log("[Download] " & LocalName & "：正在合并文件")
                     '创建文件夹
                     If File.Exists(LocalPath) Then File.Delete(LocalPath)
@@ -1299,7 +1291,7 @@ Retry:
                         AddWriter.Write(SmailFileCache.ToArray)
                         AddWriter.Dispose() : AddWriter = Nothing
                         MergeFile.Dispose() : MergeFile = Nothing
-                    ElseIf Threads.DownloadDone = DownloadDone Then
+                    ElseIf Threads.DownloadDone = DownloadDone AndAlso Threads.Temp IsNot Nothing Then
                         '仅有一个文件，直接复制
                         CopyFile(Threads.Temp, LocalPath)
                     Else
@@ -1307,7 +1299,7 @@ Retry:
                         MergeFile = New FileStream(LocalPath, FileMode.Create)
                         AddWriter = New BinaryWriter(MergeFile)
                         For Each Thread As NetThread In Threads
-                            If Thread.DownloadDone = 0 Then Continue For
+                            If Thread.DownloadDone = 0 OrElse Thread.Temp Is Nothing Then Continue For
                             Using fs As New FileStream(Thread.Temp, FileMode.Open, FileAccess.Read, FileShare.Read)
                                 Dim TempReader As New BinaryReader(fs)
                                 AddWriter.Write(TempReader.ReadBytes(fs.Length))
@@ -1328,9 +1320,9 @@ Retry:
                     '检查文件
                     Dim CheckResult As String = Check?.Check(LocalPath)
                     If CheckResult IsNot Nothing Then
-                        Log("[Download] " & "File size detail of " & Uuid & "# :")
+                        Log("[Download] " & Uuid & "# 的下载线程细节：")
                         For Each Th As NetThread In Threads
-                            Log("[Download] " & Th.Uuid & "#, State " & GetStringFromEnum(CType(Th.State, [Enum])) & ", Range " & Th.DownloadStart & "~" & (Th.DownloadStart + Th.DownloadDone) & ", Left " & Th.DownloadUndone)
+                            Log("[Download] " & Th.Uuid & "#，状态 " & GetStringFromEnum(CType(Th.State, [Enum])) & "，字节范围 " & Th.DownloadStart & "~" & (Th.DownloadStart + Th.DownloadDone) & "，字节剩余 " & Th.DownloadUndone)
                         Next
                         Throw New Exception(CheckResult)
                     End If

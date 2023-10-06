@@ -133,6 +133,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 306 Then 'Snapshot 2.6.9
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为版本独立设置添加忽略 Java 兼容性警告选项"))
+            FeatureCount += 9
+            BugCount += 11
+        End If
         If LastVersion < 305 Then 'Snapshot 2.6.8
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复开始或结束游戏时可能报错的 Bug"))
             FeatureCount += 20
@@ -840,7 +845,12 @@ Public Class FormMain
                 End Try
             ElseIf e.Data.GetDataPresent(DataFormats.FileDrop) Then
                 '获取文件并检查
-                Dim FilePathList As New List(Of String)(CType(e.Data.GetData(DataFormats.FileDrop), Array))
+                Dim FilePathRaw = e.Data.GetData(DataFormats.FileDrop)
+                If FilePathRaw Is Nothing Then '#2690
+                    Hint("请将文件解压后再拖入！", HintType.Critical)
+                    Exit Sub
+                End If
+                Dim FilePathList As New List(Of String)(CType(FilePathRaw, IEnumerable(Of String)))
                 e.Handled = True
                 If Directory.Exists(FilePathList.First) AndAlso Not File.Exists(FilePathList.First) Then
                     Hint("请拖入一个文件，而非文件夹！", HintType.Critical)
@@ -1108,28 +1118,18 @@ Install:
             Case PageType.VersionSetup
                 Return "版本设置 - " & If(PageVersionLeft.Version Is Nothing, "未知版本", PageVersionLeft.Version.Name)
             Case PageType.CompDetail
-                If Stack.Additional Is Nothing Then
-                    Log("[Control] 资源工程详情页面未提供关键项", LogLevel.Feedback)
-                    Return "未知页面"
-                Else
-                    Dim Project As CompProject = Stack.Additional
-                    Select Case Project.Type
-                        Case CompType.Mod
-                            Return "Mod 下载 - " & Project.TranslatedName
-                        Case CompType.ModPack
-                            Return "整合包下载 - " & Project.TranslatedName
-                        Case Else 'CompType.ResourcePack
-                            Return "资源包下载 - " & Project.TranslatedName
-                    End Select
-                End If
+                Dim Project As CompProject = Stack.Additional(0)
+                Select Case Project.Type
+                    Case CompType.Mod
+                        Return "Mod 下载 - " & Project.TranslatedName
+                    Case CompType.ModPack
+                        Return "整合包下载 - " & Project.TranslatedName
+                    Case Else 'CompType.ResourcePack
+                        Return "资源包下载 - " & Project.TranslatedName
+                End Select
             Case PageType.HelpDetail
-                If Stack.Additional Is Nothing Then
-                    Log("[Control] 帮助详情页面未提供关键项", LogLevel.Msgbox)
-                    Return "未知页面"
-                Else
-                    Dim Entry As HelpEntry = Stack.Additional(0)
-                    Return Entry.Title
-                End If
+                Dim Entry As HelpEntry = Stack.Additional(0)
+                Return Entry.Title
             Case Else
                 Return ""
         End Select

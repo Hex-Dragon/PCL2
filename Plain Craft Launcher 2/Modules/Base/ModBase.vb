@@ -1,8 +1,8 @@
 ﻿Imports System.IO.Compression
-Imports System.Management
 Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
+Imports System.Text.RegularExpressions
 Imports System.Windows.Markup
 Imports Newtonsoft.Json
 
@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.6.8" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.6.8." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.6.9" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.6.9." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 304 'Release
 #Else
-    Public Const VersionCode As Integer = 305 'Snapshot
+    Public Const VersionCode As Integer = 306 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1581,12 +1581,12 @@ Re:
     ''' <summary>
     ''' 搜索字符串中的所有正则匹配项。
     ''' </summary>
-    Public Function RegexSearch(str As String, regex As String, Optional options As RegularExpressions.RegexOptions = RegularExpressions.RegexOptions.None) As List(Of String)
+    Public Function RegexSearch(str As String, regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As List(Of String)
         Try
             RegexSearch = New List(Of String)
-            Dim RegexSearchRes = New RegularExpressions.Regex(regex, options).Matches(str)
+            Dim RegexSearchRes = New Regex(regex, options).Matches(str)
             If RegexSearchRes Is Nothing Then Return RegexSearch
-            For Each item As RegularExpressions.Match In RegexSearchRes
+            For Each item As Match In RegexSearchRes
                 RegexSearch.Add(item.Value)
             Next
         Catch ex As Exception
@@ -1597,7 +1597,7 @@ Re:
     ''' <summary>
     ''' 获取字符串中的第一个正则匹配项，若无匹配则返回 Nothing。
     ''' </summary>
-    Public Function RegexSeek(str As String, regex As String, Optional options As RegularExpressions.RegexOptions = RegularExpressions.RegexOptions.None) As String
+    Public Function RegexSeek(str As String, regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As String
         Try
             Dim Result = RegularExpressions.Regex.Match(str, regex, options).Value
             Return If(Result = "", Nothing, Result)
@@ -1609,7 +1609,7 @@ Re:
     ''' <summary>
     ''' 检查字符串是否匹配某正则模式。
     ''' </summary>
-    Public Function RegexCheck(str As String, regex As String, Optional options As RegularExpressions.RegexOptions = RegularExpressions.RegexOptions.None) As Boolean
+    Public Function RegexCheck(str As String, regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As Boolean
         Try
             Return RegularExpressions.Regex.IsMatch(str, regex, options)
         Catch ex As Exception
@@ -1620,7 +1620,13 @@ Re:
     ''' <summary>
     ''' 进行正则替换，会抛出错误。
     ''' </summary>
-    Public Function RegexReplace(Input As String, Replacement As String, Regex As String, Optional options As RegularExpressions.RegexOptions = RegularExpressions.RegexOptions.None) As String
+    Public Function RegexReplace(Input As String, Replacement As String, Regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As String
+        Return RegularExpressions.Regex.Replace(Input, Regex, Replacement, options)
+    End Function
+    ''' <summary>
+    ''' 对每个正则匹配分别进行替换，会抛出错误。
+    ''' </summary>
+    Public Function RegexReplaceEach(Input As String, Replacement As MatchEvaluator, Regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As String
         Return RegularExpressions.Regex.Replace(Input, Regex, Replacement, options)
     End Function
 

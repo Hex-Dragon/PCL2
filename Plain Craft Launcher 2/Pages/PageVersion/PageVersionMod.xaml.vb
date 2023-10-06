@@ -75,11 +75,6 @@
             Dim NewCard As New MyCard With {.Title = McModGetTitle(List), .Margin = New Thickness(0, 0, 0, 15)}
             NewCard.Children.Add(PanItems)
             PanList.Children.Add(NewCard)
-            '显示提示
-            If List.Count > 0 AndAlso Not Setup.Get("HintModDisable") Then
-                Setup.Set("HintModDisable", True)
-                Hint("直接点击某个 Mod 项即可将它禁用！")
-            End If
 
         Catch ex As Exception
             Log(ex, "加载 Mod 列表 UI 失败", LogLevel.Feedback)

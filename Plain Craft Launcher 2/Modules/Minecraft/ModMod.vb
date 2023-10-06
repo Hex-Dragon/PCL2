@@ -411,16 +411,20 @@ Public Module ModMod
                         ElseIf RawValue.StartsWith("'''") Then
                             '多行字符串
                             Dim ValueLines As New List(Of String) From {RawValue.TrimStart("'")}
-                            Do Until i >= Lines.Count - 1
-                                i += 1
-                                Dim ValueLine As String = Lines(i)
-                                If ValueLine.EndsWith("'''") Then
-                                    ValueLines.Add(ValueLine.TrimEnd("'"))
-                                    Exit Do
-                                Else
-                                    ValueLines.Add(ValueLine)
-                                End If
-                            Loop
+                            If ValueLines(0).EndsWith("'''") Then '把多行字符串按单行写法写的错误处理（#2732）
+                                ValueLines(0) = ValueLines(0).TrimEnd("'")
+                            Else
+                                Do Until i >= Lines.Count - 1
+                                    i += 1
+                                    Dim ValueLine As String = Lines(i)
+                                    If ValueLine.EndsWith("'''") Then
+                                        ValueLines.Add(ValueLine.TrimEnd("'"))
+                                        Exit Do
+                                    Else
+                                        ValueLines.Add(ValueLine)
+                                    End If
+                                Loop
+                            End If
                             Value = Join(ValueLines, vbLf).Trim(vbLf).Replace(vbLf, vbCrLf)
                         ElseIf RawValue.ToLower = "true" OrElse RawValue.ToLower = "false" Then
                             '布尔型

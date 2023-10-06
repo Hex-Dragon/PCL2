@@ -67,7 +67,13 @@
             TextAdvanceGame.Text = Setup.Get("VersionAdvanceGame", Version:=PageVersionLeft.Version)
             TextAdvanceRun.Text = Setup.Get("VersionAdvanceRun", Version:=PageVersionLeft.Version)
             CheckAdvanceRunWait.Checked = Setup.Get("VersionAdvanceRunWait", Version:=PageVersionLeft.Version)
-            ComboAdvanceAssets.SelectedIndex = Setup.Get("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
+            If Setup.Get("VersionAdvanceAssets", Version:=PageVersionLeft.Version) = 2 Then
+                Log("[Setup] 已迁移老版本的关闭文件校验设置")
+                Setup.Reset("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
+                Setup.Set("VersionAdvanceAssetsV2", True, Version:=PageVersionLeft.Version)
+            End If
+            CheckAdvanceAssetsV2.Checked = Setup.Get("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
+            CheckAdvanceJava.Checked = Setup.Get("VersionAdvanceJava", Version:=PageVersionLeft.Version)
 
         Catch ex As Exception
             Log(ex, "重载版本独立设置时出错", LogLevel.Feedback)
@@ -92,6 +98,8 @@
             Setup.Reset("VersionAdvanceJvm", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceGame", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionAdvanceJava", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRun", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRunWait", Version:=PageVersionLeft.Version)
 
@@ -121,10 +129,10 @@
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderRamCustom.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value, Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboAdvanceAssets.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex, Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked, Version:=PageVersionLeft.Version)
     End Sub
 

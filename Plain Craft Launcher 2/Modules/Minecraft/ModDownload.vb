@@ -19,14 +19,7 @@
         Dim Checker As New FileChecker(MinSize:=1024, ActualSize:=If(Version.JsonObject("downloads")("client")("size"), -1), Hash:=Version.JsonObject("downloads")("client")("sha1"))
         If ReturnNothingOnFileUseable Then
             '是否跳过
-            Dim IsSetupSkip As Boolean = Setup.Get("LaunchAdvanceAssets")
-            Select Case Setup.Get("VersionAdvanceAssets", Version:=Version)
-                Case 0 '使用全局设置
-                Case 1 '开启
-                    IsSetupSkip = False
-                Case 2 '关闭
-                    IsSetupSkip = True
-            End Select
+            Dim IsSetupSkip As Boolean = ShouldIgnoreFileCheck(Version)
             If IsSetupSkip AndAlso File.Exists(Version.Path & Version.Name & ".jar") Then Return Nothing '跳过校验
             If Checker.Check(Version.Path & Version.Name & ".jar") Is Nothing Then Return Nothing '通过校验
         End If
@@ -72,17 +65,7 @@
 #End Region
 
 #Region "下载资源文件"
-        Dim IsSetupSkip As Boolean = Setup.Get("LaunchAdvanceAssets")
-        Select Case Setup.Get("VersionAdvanceAssets", Version:=Version)
-            Case 0
-                '使用全局设置
-            Case 1
-                '开启
-                IsSetupSkip = False
-            Case 2
-                '关闭
-                IsSetupSkip = True
-        End Select
+        Dim IsSetupSkip As Boolean = ShouldIgnoreFileCheck(Version)
         If IsSetupSkip Then Log("[Download] 已跳过 Assets 下载")
         If (Not SkipAssetsDownloadWhileSetupRequired) OrElse Not IsSetupSkip Then
             Dim LoadersAssets As New List(Of LoaderBase)

@@ -9,7 +9,7 @@
 
     '初始化加载器信息
     Private Sub PageDownloadCompDetail_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
-        Project = FrmMain.PageCurrent.Additional
+        Project = FrmMain.PageCurrent.Additional(0)
         PageLoaderInit(Load, PanLoad, PanMain, CardIntro, CompFileLoader, AddressOf Load_OnFinish)
     End Sub
     '自动重试
@@ -40,7 +40,7 @@
     End Class
     Private Sub Load_OnFinish()
         '获取目标版本与 Mod 加载器
-        Dim TargetVersion As String = ""
+        Dim TargetVersion As String
         Select Case Project.Type
             Case CompType.Mod
                 TargetVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
@@ -102,7 +102,7 @@
                 NewCard.SwapControl = NewStack
                 PanMain.Children.Add(NewCard)
                 '确定卡片是否展开
-                If Pair.Key = TargetCardName Then
+                If Pair.Key = TargetCardName OrElse CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title) Then
                     MyCard.StackInstall(NewStack, If(Project.Type = CompType.ModPack, 9, 8), Pair.Key) 'FUTURE: Res
                 Else
                     NewCard.IsSwaped = True
@@ -128,7 +128,7 @@
     Private IsFirstInit As Boolean = True
     Public Sub Init() Handles Me.PageEnter
         AniControlEnabled += 1
-        Project = FrmMain.PageCurrent.Additional
+        Project = FrmMain.PageCurrent.Additional(0)
         PanBack.ScrollToHome()
 
         '重启加载器
@@ -142,6 +142,8 @@
         '放置当前工程
         If CompItem IsNot Nothing Then PanIntro.Children.Remove(CompItem)
         CompItem = Project.ToCompItem(True, True)
+        CompItem.IsHitTestVisible = False
+        CompItem.HasAnimation = False
         CompItem.Margin = New Thickness(-7, -7, 0, 8)
         PanIntro.Children.Insert(0, CompItem)
 

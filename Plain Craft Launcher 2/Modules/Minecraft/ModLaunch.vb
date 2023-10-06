@@ -881,7 +881,7 @@ SystemBrowser:
         End If
         Dim Result As String
         Try
-            Result = NetRequestMuity("https://login.live.com/oauth20_token.srf", "POST", Request, "application/x-www-form-urlencoded", 1)
+            Result = NetRequestMulty("https://login.live.com/oauth20_token.srf", "POST", Request, "application/x-www-form-urlencoded", 1)
         Catch ex As Exception
             If ex.Message.Contains("must sign in again") OrElse ex.Message.Contains("invalid_grant") Then '#269
                 Return {"Relogin", ""}
@@ -908,7 +908,7 @@ SystemBrowser:
                                     ""RelyingParty"": ""http://auth.xboxlive.com"",
                                     ""TokenType"": ""JWT""
                                  }"
-        Dim Result As String = NetRequestMuity("https://user.auth.xboxlive.com/user/authenticate", "POST", Request, "application/json", 3)
+        Dim Result As String = NetRequestMulty("https://user.auth.xboxlive.com/user/authenticate", "POST", Request, "application/json", 3)
 
         Dim ResultJson As JObject = GetJson(Result)
         Dim XBLToken As String = ResultJson("Token").ToString
@@ -930,7 +930,7 @@ SystemBrowser:
                                  }"
         Dim Result As String
         Try
-            Result = NetRequestMuity("https://xsts.auth.xboxlive.com/xsts/authorize", "POST", Request, "application/json", 3)
+            Result = NetRequestMulty("https://xsts.auth.xboxlive.com/xsts/authorize", "POST", Request, "application/json", 3)
         Catch ex As Net.WebException
             If ex.Message.Contains("2148916233") Then
                 If MyMsgBox("该微软账号尚未购买 Minecraft Java 版，或尚未注册 Xbox 账户。" & vbCrLf &
@@ -967,7 +967,7 @@ SystemBrowser:
         Dim Request As String = "{""identityToken"": ""XBL3.0 x=" & Tokens(1) & ";" & Tokens(0) & """}"
         Dim Result As String
         Try
-            Result = NetRequestMuity("https://api.minecraftservices.com/authentication/login_with_xbox", "POST", Request, "application/json", 2)
+            Result = NetRequestMulty("https://api.minecraftservices.com/authentication/login_with_xbox", "POST", Request, "application/json", 2)
         Catch ex As Net.WebException
             Dim Message As String = GetExceptionSummary(ex)
             If Message.Contains("(429)") Then
@@ -991,7 +991,7 @@ SystemBrowser:
 
         Dim Result As String
         Try
-            Result = NetRequestMuity("https://api.minecraftservices.com/minecraft/profile", "GET", "", "application/json", 2, New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}})
+            Result = NetRequestMulty("https://api.minecraftservices.com/minecraft/profile", "GET", "", "application/json", 2, New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}})
         Catch ex As Net.WebException
             Dim Message As String = GetExceptionSummary(ex)
             If Message.Contains("(429)") Then

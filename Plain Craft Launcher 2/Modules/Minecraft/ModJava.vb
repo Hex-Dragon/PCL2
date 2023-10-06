@@ -326,9 +326,9 @@ RetryGet:
                 Requirement = "需要 Java " & If(Left = Right, Left, Left & " ~ " & Right)
             End If
             Dim JavaCurrent As String = UserJava.VersionCode & If(ShowRevision, "." & UserJava.Version.MajorRevision & "." & UserJava.Version.MinorRevision, "")
-            If Setup.Get("LaunchAdvanceJava") Then
+            If Setup.Get("LaunchAdvanceJava") OrElse (RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionAdvanceJava", RelatedVersion)) Then
                 '直接跳过弹窗
-                Hint("设置中指定了使用 Java " & JavaCurrent & "，但当前版本" & Requirement & "，这可能会导致游戏崩溃！", HintType.Critical)
+                Log("[Java] 设置中指定了使用 Java " & JavaCurrent & "，但当前版本" & Requirement & "，这可能会导致游戏崩溃！", LogLevel.Debug)
                 AllowedJavaList = New List(Of JavaEntry) From {UserJava}
             Else
                 Select Case MyMsgBox("你在设置中手动指定了使用 Java " & JavaCurrent & "，但当前" & Requirement & "。" & vbCrLf &
@@ -677,6 +677,7 @@ Wait:
                         SearchEntry.Contains("mod") OrElse SearchEntry.Contains("高清") OrElse SearchEntry.Contains("download") OrElse
                         SearchEntry.Contains("launch") OrElse SearchEntry.Contains("程序") OrElse SearchEntry.Contains("path") OrElse
                         SearchEntry.Contains("version") OrElse SearchEntry.Contains("baka") OrElse SearchEntry.Contains("pcl") OrElse
+                        SearchEntry.Contains("zulu") OrElse
                         SearchEntry.Contains("local") OrElse SearchEntry.Contains("packages") OrElse SearchEntry.Contains("4297127d64ec6") OrElse '官启文件夹
                         SearchEntry.Contains("国服") OrElse SearchEntry.Contains("网易") OrElse SearchEntry.Contains("ext") OrElse '网易 Java 文件夹名
                         SearchEntry.Contains("netease") OrElse SearchEntry.Contains("1.") OrElse SearchEntry.Contains("启动") Then

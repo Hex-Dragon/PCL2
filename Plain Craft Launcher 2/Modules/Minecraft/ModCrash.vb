@@ -385,6 +385,7 @@
     ''' </summary>
     Public Sub Analyze(Optional Version As McVersion = Nothing)
         Log("[Crash] 步骤 3：分析崩溃原因")
+        LogAll = (If(LogMc, "") & If(LogMcDebug, "") & If(LogHs, "") & If(LogCrash, ""))
 
         '1. 精准日志匹配，中/高优先级
         AnalyzeCrit1()
@@ -393,7 +394,6 @@
         If CrashReasons.Count > 0 Then GoTo Done
 
         '2. 堆栈分析
-        LogAll = (If(LogMc, "") & If(LogMcDebug, "") & If(LogHs, "") & If(LogCrash, ""))
         If LogAll.Contains("orge") OrElse LogAll.Contains("abric") OrElse LogAll.Contains("uilt") OrElse LogAll.Contains("iteloader") Then
             Dim Keywords As New List(Of String)
             '崩溃日志
@@ -868,9 +868,7 @@ NextStack:
             If IsHandAnalyze Then
                 Return "很抱歉，PCL 无法确定错误原因。"
             Else
-                Return "很抱歉，你的游戏出现了一些问题……" & vbCrLf &
-                       "如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。" & vbCrLf &
-                       "你也可以查看错误报告，其中可能会有出错的原因。"
+                Return $"很抱歉，你的游戏出现了一些问题……{vbCrLf}如果要寻求帮助，请导出错误报告并发给他人，而不是发送这个窗口的截图。"
             End If
         End If
 
