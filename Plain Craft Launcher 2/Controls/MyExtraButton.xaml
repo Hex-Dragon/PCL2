@@ -1,26 +1,33 @@
 ﻿<Grid
-            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="PanBack" mc:Ignorable="d" x:Class="MyExtraButton"
-            Width="40" RenderTransformOrigin="0.5,0.5" ToolTipService.Placement="Left" ToolTipService.VerticalOffset="16" ToolTipService.HorizontalOffset="-8" Height="0">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="PanBack" mc:Ignorable="d" x:Class="MyExtraButton"
+    Width="40" RenderTransformOrigin="0.5,0.5" ToolTipService.Placement="Left" ToolTipService.VerticalOffset="16" ToolTipService.HorizontalOffset="-8" Height="0">
+    <!-- 这是一个网格容器，用于创建一个自定义按钮 -->
     <Grid.RenderTransform>
         <ScaleTransform ScaleX="0" ScaleY="0" />
     </Grid.RenderTransform>
+    <!-- 这是一个边框控件，用于处理按钮的点击事件 -->
     <Border x:Name="PanClick" CornerRadius="1000" BorderThickness="0.001" Background="{StaticResource ColorBrushSemiTransparent}"/>
+    <!-- 这是一个网格容器，用于处理按钮的缩放效果 -->
     <Grid x:Name="PanScale" IsHitTestVisible="False" RenderTransformOrigin="0.5,0.5" Margin="0,10,0,0">
         <Grid.RenderTransform>
             <ScaleTransform />
         </Grid.RenderTransform>
+        <!-- 这是一个边框控件，用于绘制按钮的背景色 -->
         <Border x:Name="PanColor" CornerRadius="1000" BorderThickness="0.001" Background="{DynamicResource ColorBrush3}">
+            <!-- 这是一个效果，用于添加按钮的阴影效果 -->
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="0" BlurRadius="10" Opacity="0.2" />
             </Border.Effect>
         </Border>
+        <!-- 这是一个边框控件，用于显示按钮的进度条 -->
         <Border x:Name="PanProgress" CornerRadius="1000" BorderThickness="0.001" Background="#2FFFFFFF" ClipToBounds="True" Visibility="Collapsed">
             <Border.Clip>
                 <RectangleGeometry x:Name="RectProgress" Rect="0,5,40,35" />
             </Border.Clip>
         </Border>
+        <!-- 这是一个路径控件，用于绘制按钮的图标 -->
         <Path x:Name="Path" Stretch="Uniform" Margin="12" Fill="{DynamicResource ColorBrush8}" RenderTransformOrigin="0.5,0.5">
             <Path.RenderTransform>
                 <ScaleTransform />

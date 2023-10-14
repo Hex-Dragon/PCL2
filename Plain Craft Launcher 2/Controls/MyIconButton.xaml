@@ -1,13 +1,18 @@
-﻿<Border x:Class="MyIconButton"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            CornerRadius="1000" Background="{StaticResource ColorBrushSemiTransparent}" BorderThickness="0.001">
-    <Border x:Name="PanBack" CornerRadius="1000"  RenderTransformOrigin="0.5,0.5" BorderThickness="0.001" IsHitTestVisible="False">
+﻿<!-- 边框控件，用于创建自定义的图标按钮 -->
+<Border x:Class="MyIconButton"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        CornerRadius="1000" Background="{StaticResource ColorBrushSemiTransparent}" BorderThickness="0.001">
+    <!-- 内部嵌套的边框控件，用于创建圆形背景 -->
+    <Border x:Name="PanBack" CornerRadius="1000" RenderTransformOrigin="0.5,0.5" BorderThickness="0.001" IsHitTestVisible="False">
+        <!-- 路径控件，用于绘制图标 -->
         <Path x:Name="Path" Stretch="Uniform" Margin="5" RenderTransformOrigin="0.5,0.5">
             <Path.RenderTransform>
+                <!-- 比例变换，用于调整图标的比例 -->
                 <ScaleTransform />
             </Path.RenderTransform>
         </Path>
+        <!-- 边框控件的比例变换 -->
         <Border.RenderTransform>
             <ScaleTransform />
         </Border.RenderTransform>
