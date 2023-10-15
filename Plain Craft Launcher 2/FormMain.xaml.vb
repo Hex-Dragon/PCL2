@@ -1253,7 +1253,17 @@ Install:
                     If FrmVersionLeft Is Nothing Then FrmVersionLeft = New PageVersionLeft
                     CType(FrmVersionLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
             End Select
-            PageChangeActual(Stack, SubType)
+            '阻拦直接通过已知可跳转的 EventType 跳转至联机页面
+            '(存在疑问：是复用 CancelLink() 方法还是直接写 MyMsgBox 更合适？)
+            If Stack == 2 Then
+                If SubType == 4 Or SubType == 6 Then
+                    CancelLink() '需要确认其用法
+                End If
+            ElseIf Stack == 3 And SubType == 3 Then
+                CancelLink() '需要确认其用法
+            Else
+                PageChangeActual(Stack, SubType)
+            End If
         End If
     End Sub
     ''' <summary>
