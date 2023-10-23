@@ -667,8 +667,9 @@ NextStack:
                     "core", "init", "mods", "main", "file", "game", "load", "read", "done", "util", "tile", "item", "base", "oshi",
                     "forge", "setup", "block", "model", "mixin", "event", "unimi", "netty",
                     "common", "server", "config", "loader", "launch", "entity", "assist", "client", "plugin", "modapi", "mojang", "shader", "events", "github", "recipe",
-                    "preinit", "preload", "machine", "reflect", "channel", "general", "handler", "content",
-                    "fastutil", "optifine", "scheduler", "minecraft", "transformers", "universal", "internal", "multipart", "minecraftforge", "override", "blockentity", "platform"
+                    "preinit", "preload", "machine", "reflect", "channel", "general", "handler", "content", "systems", "modules",
+                    "fastutil", "optifine", "internal", "platform", "override",
+                    "listeners", "scheduler", "minecraft", "transformers", "universal", "multipart", "minecraftforge", "blockentity"
                    }.Contains(Word.ToLower) Then Continue For
                 PossibleWords.Add(Word.Trim)
             Next

@@ -102,7 +102,9 @@
                 NewCard.SwapControl = NewStack
                 PanMain.Children.Add(NewCard)
                 '确定卡片是否展开
-                If Pair.Key = TargetCardName OrElse CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title) Then
+                If Pair.Key = TargetCardName OrElse
+                   (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
+                   CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
                     MyCard.StackInstall(NewStack, If(Project.Type = CompType.ModPack, 9, 8), Pair.Key) 'FUTURE: Res
                 Else
                     NewCard.IsSwaped = True

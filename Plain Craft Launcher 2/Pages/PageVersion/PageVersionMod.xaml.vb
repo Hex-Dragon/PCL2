@@ -375,10 +375,11 @@
             Dim IndexOfLoader As Integer = McModLoader.Output.IndexOf(ModEntity)
             McModLoader.Output.RemoveAt(IndexOfLoader)
             McModLoader.Output.Insert(IndexOfLoader, NewModEntity)
-            Dim Parent As StackPanel = If(IsSearching, PanSearchList, PanItems)
-            Dim IndexOfUi As Integer = Parent.Children.IndexOf(Parent.Children.OfType(Of MyListItem).First(Function(i) CType(i.Tag, McMod) Is ModEntity))
-            Parent.Children.RemoveAt(IndexOfUi)
-            Parent.Children.Insert(IndexOfUi, McModListItem(NewModEntity))
+            Dim List = If(IsSearching, PanSearchList, PanItems).Children
+            Dim IndexOfUi As Integer = List.IndexOf(List.OfType(Of MyListItem).FirstOrDefault(Function(i) CType(i.Tag, McMod) Is ModEntity))
+            If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
+            List.RemoveAt(IndexOfUi)
+            List.Insert(IndexOfUi, McModListItem(NewModEntity))
         Next
         If Not IsSearching Then
             '改变禁用数量的显示
