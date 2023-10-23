@@ -10,10 +10,11 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
-        If LastVersion < 304 Then 'Release 2.6.8
+        If LastVersion < 308 Then 'Release 2.6.10
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为版本独立设置添加忽略 Java 兼容性警告选项"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复开始或结束游戏时可能报错的 Bug"))
-            FeatureCount += 20
-            BugCount += 25
+            FeatureCount += 31
+            BugCount += 37
         End If
         If LastVersion < 302 Then 'Release 2.6.7
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "再次修复网络条件差时可能无法下载 MC 的 Bug"))
@@ -133,6 +134,10 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 307 Then 'Snapshot 2.6.10
+            FeatureCount += 2
+            BugCount += 3
+        End If
         If LastVersion < 306 Then 'Snapshot 2.6.9
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为版本独立设置添加忽略 Java 兼容性警告选项"))
             FeatureCount += 9
