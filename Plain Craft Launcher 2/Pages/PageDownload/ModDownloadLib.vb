@@ -309,7 +309,7 @@ Public Module ModDownloadLib
             Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
             Exit Sub
         End If
-        OpenWebsite("https://minecraft.fandom.com/zh/wiki/" & WikiName.Replace("_experimental-snapshot-", "-exp"))
+        OpenWebsite("https://zh.minecraft.wiki/w/" & WikiName.Replace("_experimental-snapshot-", "-exp"))
     End Sub
 
 #End Region
