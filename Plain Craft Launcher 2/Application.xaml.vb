@@ -116,9 +116,9 @@ Public Class Application
             ServicePointManager.Expect100Continue = True
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 Or SecurityProtocolType.Tls Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls12
             ServicePointManager.DefaultConnectionLimit = 1024
-            ServicePointManager.ServerCertificateValidationCallback = New Security.RemoteCertificateValidationCallback(Function() As Boolean
-                                                                                                                           Return True
-                                                                                                                       End Function)
+            'ServicePointManager.ServerCertificateValidationCallback = New Security.RemoteCertificateValidationCallback(Function() As Boolean
+            '                                                                                                               Return True
+            '                                                                                                           End Function)
             '计时
             Log("[Start] 第一阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
             ApplicationStartTick = GetTimeTick()

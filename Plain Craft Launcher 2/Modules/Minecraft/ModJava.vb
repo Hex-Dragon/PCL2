@@ -135,6 +135,8 @@
                 If IsJre AndAlso VersionCode >= 16 Then Throw New Exception("由于高版本 JRE 对游戏的兼容性很差，因此不再允许使用。你可以使用对应版本的 JDK，而非 JRE！")
             Catch ex As ApplicationException
                 Throw ex
+            Catch ex As ThreadInterruptedException
+                Throw ex
             Catch ex As Exception
                 Log("[Java] 检查失败的 Java 输出：" & PathFolder & "java.exe" & vbCrLf & If(Output, "无程序输出"))
                 Throw New Exception("检查 Java 失败（" & If(PathJavaw, "Nothing") & "）", ex)
@@ -605,6 +607,7 @@ NoUserJava:
                                                   SyncLock ListLock
                                                       JavaCheckList.Add(Entry)
                                                   End SyncLock
+                                              Catch ex As ThreadInterruptedException
                                               Catch ex As Exception
                                                   If Entry.IsUserImport Then
                                                       Log(ex, "位于 " & Entry.PathFolder & " 的 Java 存在异常，将被自动移除", LogLevel.Hint)

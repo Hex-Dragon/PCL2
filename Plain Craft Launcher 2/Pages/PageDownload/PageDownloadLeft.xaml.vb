@@ -99,11 +99,13 @@
             Case FormMain.PageSubType.DownloadMod
                 PageDownloadMod.Storage = New CompProjectStorage
                 PageDownloadMod.Page = 0
+                CompProjectCache.Clear()
                 If FrmDownloadMod IsNot Nothing Then FrmDownloadMod.PageLoaderRestart()
                 ItemMod.Checked = True
             Case FormMain.PageSubType.DownloadPack
                 PageDownloadPack.Storage = New CompProjectStorage
                 PageDownloadPack.Page = 0
+                CompProjectCache.Clear()
                 If FrmDownloadPack IsNot Nothing Then FrmDownloadPack.PageLoaderRestart()
                 ItemPack.Checked = True
             Case FormMain.PageSubType.DownloadClient

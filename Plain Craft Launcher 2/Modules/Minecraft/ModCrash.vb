@@ -641,7 +641,7 @@ Done:
             'If Not Stack.Contains(".") Then Continue For
             For Each IgnoreStack In {
                 "java", "sun", "javax", "jdk", "oolloo",
-                "org.lwjgl", "com.sun", "net.minecraftforge", "com.mojang", "net.minecraft", "cpw.mods", "com.google", "org.apache", "org.spongepowered", "net.fabricmc", "com.mumfrey",
+                "org.lwjgl", "com.sun", "net.minecraftforge", "paulscode.sound", "com.mojang", "net.minecraft", "cpw.mods", "com.google", "org.apache", "org.spongepowered", "net.fabricmc", "com.mumfrey",
                 "com.electronwill.nightconfig", "it.unimi.dsi",
                 "MojangTricksIntelDriversForPerformance_javaw"}
                 If Stack.StartsWith(IgnoreStack) Then GoTo NextStack
@@ -666,7 +666,7 @@ NextStack:
                 If {"com", "org", "net", "asm", "fml", "mod", "jar", "sun", "lib", "map", "gui", "dev", "nio", "api", "dsi", "top",
                     "core", "init", "mods", "main", "file", "game", "load", "read", "done", "util", "tile", "item", "base", "oshi",
                     "forge", "setup", "block", "model", "mixin", "event", "unimi", "netty",
-                    "common", "server", "config", "loader", "launch", "entity", "assist", "client", "plugin", "modapi", "mojang", "shader", "events", "github", "recipe",
+                    "gitlab", "common", "server", "config", "loader", "launch", "entity", "assist", "client", "plugin", "modapi", "mojang", "shader", "events", "github", "recipe",
                     "preinit", "preload", "machine", "reflect", "channel", "general", "handler", "content", "systems", "modules",
                     "fastutil", "optifine", "internal", "platform", "override",
                     "listeners", "scheduler", "minecraft", "transformers", "universal", "multipart", "minecraftforge", "blockentity"

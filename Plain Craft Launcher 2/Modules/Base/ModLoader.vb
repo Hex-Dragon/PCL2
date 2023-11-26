@@ -153,10 +153,14 @@
                 End Select
             End Get
             Set(value As Double)
+                If _Progress = value Then Exit Property
+                Dim OldValue = _Progress
                 _Progress = value
+                RaiseEvent ProgressChanged(value, OldValue)
             End Set
         End Property
         Private _Progress As Double = -1
+        Public Event ProgressChanged(NewProgress As Double, OldProgress As Double) Implements ILoadingTrigger.ProgressChanged
         ''' <summary>
         ''' 计算总进度时的权重。它应该为预计时间（秒）。
         ''' </summary>
@@ -236,11 +240,15 @@
         ''' </summary>
         Public ReadOnly Property IsAborted As Boolean
             Get
-                Return LastRunningThread Is Nothing OrElse
-                       Not ReferenceEquals(Thread.CurrentThread, LastRunningThread) OrElse
-                       State = LoadState.Aborted
+                Return IsAbortedWithThread(Thread.CurrentThread)
             End Get
         End Property
+        ''' <summary>
+        ''' 当前执行线程是否应当中断。需要手动提供加载器线程，用于需要跨线程检查的情况。
+        ''' </summary>
+        Public Function IsAbortedWithThread(Thread As Thread) As Boolean
+            Return LastRunningThread Is Nothing OrElse Not ReferenceEquals(Thread, LastRunningThread) OrElse State = LoadState.Aborted
+        End Function
         ''' <summary>
         ''' 在输入相同时使用原有结果的超时，单位为毫秒。
         ''' </summary>

@@ -197,7 +197,7 @@ Reopen:
                 GoTo FinishHiperFileCheck
             End If
             Log("[Hiper] hiper.exe 的所需 SHA1：" & ChecksumHiper)
-            If ChecksumHiper = GetAuthSHA1(PathHiper & "HiPer 联机模块.exe") Then
+            If ChecksumHiper = GetFileSHA1(PathHiper & "HiPer 联机模块.exe") Then
                 Log("[Hiper] hiper.exe 文件校验通过，无需重新下载")
                 GoTo FinishHiperFileCheck
             End If
@@ -233,7 +233,7 @@ FinishHiperFileCheck:
                 GoTo FinishWintunFileCheck
             End If
             Log("[Hiper] wintun.dll 的所需 SHA1：" & ChecksumWintun)
-            If ChecksumWintun = GetAuthSHA1(PathHiper & "wintun.dll") Then
+            If ChecksumWintun = GetFileSHA1(PathHiper & "wintun.dll") Then
                 Log("[Hiper] wintun.dll 文件校验通过，无需重新下载")
                 GoTo FinishWintunFileCheck
             End If
@@ -269,7 +269,7 @@ FinishWintunFileCheck:
                     GoTo FinishMcbFileCheck
                 End If
                 Log("[Hiper] mcb.exe 的所需 SHA1：" & ChecksumMcb)
-                If ChecksumMcb = GetAuthSHA1(PathHiper & "MCB 联机模块.exe") Then
+                If ChecksumMcb = GetFileSHA1(PathHiper & "MCB 联机模块.exe") Then
                     Log("[Hiper] mcb.exe 文件校验通过，无需重新下载")
                     GoTo FinishMcbFileCheck
                 End If

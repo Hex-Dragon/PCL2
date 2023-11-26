@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.6.100" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.6.100." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.6.11" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.6.11." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 308 'Release
 #Else
-    Public Const VersionCode As Integer = 307 'Snapshot
+    Public Const VersionCode As Integer = 309 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -560,7 +560,7 @@ Public Module ModBase
     ''' <summary>
     ''' 重命名一个注册表子键。不可用于包含子键的子键。
     ''' </summary>
-    Public Sub RegRename(parentKey As Microsoft.Win32.RegistryKey, subKeyName As String, newSubKeyName As String)
+    Public Sub RenameReg(parentKey As Microsoft.Win32.RegistryKey, subKeyName As String, newSubKeyName As String)
         If parentKey.GetSubKeyNames().Contains(newSubKeyName) Then parentKey.DeleteSubKeyTree(newSubKeyName, False)
         Dim SourceKey As Microsoft.Win32.RegistryKey = parentKey.OpenSubKey(subKeyName)
         If IsNothing(SourceKey) Then Exit Sub '没有目标项
@@ -1062,7 +1062,7 @@ Public Module ModBase
     ''' <summary>
     ''' 获取文件 MD5，若失败则返回空字符串。
     ''' </summary>
-    Public Function GetAuthMD5(FilePath As String) As String
+    Public Function GetFileMD5(FilePath As String) As String
         Dim Retry As Boolean = False
 Re:
         Try
@@ -1091,7 +1091,7 @@ Re:
     ''' <summary>
     ''' 获取文件 SHA256，若失败则返回空字符串。
     ''' </summary>
-    Public Function GetAuthSHA256(FilePath As String) As String
+    Public Function GetFileSHA256(FilePath As String) As String
         Dim Retry As Boolean = False
 Re:
         Try
@@ -1122,7 +1122,7 @@ Re:
     ''' <summary>
     ''' 获取文件 SHA1，若失败则返回空字符串。
     ''' </summary>
-    Public Function GetAuthSHA1(FilePath As String) As String
+    Public Function GetFileSHA1(FilePath As String) As String
         Dim Retry As Boolean = False
 Re:
         Try
@@ -1210,11 +1210,11 @@ Re:
                 If MinSize >= 0 AndAlso MinSize > FileSize Then Return "文件大小应大于 " & MinSize & " B，实际为 " & FileSize & " B"
                 If Not String.IsNullOrEmpty(Hash) Then
                     If Hash.Length < 35 Then 'MD5
-                        If Hash.ToLowerInvariant <> GetAuthMD5(LocalPath) Then Return "文件 MD5 应为 " & Hash & "，实际为 " & GetAuthMD5(LocalPath)
+                        If Hash.ToLowerInvariant <> GetFileMD5(LocalPath) Then Return "文件 MD5 应为 " & Hash & "，实际为 " & GetFileMD5(LocalPath)
                     ElseIf Hash.Length = 64 Then 'SHA256
-                        If Hash.ToLowerInvariant <> GetAuthSHA256(LocalPath) Then Return "文件 SHA256 应为 " & Hash & "，实际为 " & GetAuthSHA256(LocalPath)
+                        If Hash.ToLowerInvariant <> GetFileSHA256(LocalPath) Then Return "文件 SHA256 应为 " & Hash & "，实际为 " & GetFileSHA256(LocalPath)
                     Else 'SHA1 (40)
-                        If Hash.ToLowerInvariant <> GetAuthSHA1(LocalPath) Then Return "文件 SHA1 应为 " & Hash & "，实际为 " & GetAuthSHA1(LocalPath)
+                        If Hash.ToLowerInvariant <> GetFileSHA1(LocalPath) Then Return "文件 SHA1 应为 " & Hash & "，实际为 " & GetFileSHA1(LocalPath)
                     End If
                 End If
                 If IsJson Then
@@ -2319,6 +2319,16 @@ Retry:
     ''' </summary>
     Public Function RunInUi() As Boolean
         Return Thread.CurrentThread.ManagedThreadId = UiThreadId
+    End Function
+
+    ''' <summary>
+    ''' 检查某个控件是否位于主窗口可视区域内，且控件本身可见。
+    ''' </summary>
+    <Extension> Public Function IsVisibleInForm(element As FrameworkElement) As Boolean
+        If Not element.IsVisible Then Return False
+        Dim bounds As Rect = element.TransformToAncestor(FrmMain).TransformBounds(New Rect(0, 0, element.ActualWidth, element.ActualHeight))
+        Dim rect As New Rect(0, 0, FrmMain.ActualWidth, FrmMain.ActualHeight)
+        Return rect.Contains(bounds.TopLeft) OrElse rect.Contains(bounds.BottomRight)
     End Function
 
 #End Region

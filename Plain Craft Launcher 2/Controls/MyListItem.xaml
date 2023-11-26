@@ -11,7 +11,7 @@
         <ColumnDefinition x:Name="ColumnPaddingLeft" Width="0" />
         <ColumnDefinition x:Name="ColumnLogo" Width="4" />
         <ColumnDefinition Width="1*"/>
-        <ColumnDefinition x:Name="ColumnPaddingRight" Width="0" />
+        <ColumnDefinition x:Name="ColumnPaddingRight" Width="4" />
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
         <RowDefinition Height="1*" />

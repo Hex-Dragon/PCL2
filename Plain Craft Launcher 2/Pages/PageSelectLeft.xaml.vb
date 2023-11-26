@@ -71,7 +71,7 @@
                 CType(ContMenu.FindName("Rename"), MyMenuItem).AddHandler(MyMenuItem.ClickEvent, New RoutedEventHandler(AddressOf FrmSelectLeft.Rename_Click))
                 CType(ContMenu.FindName("Refresh"), MyMenuItem).AddHandler(MyMenuItem.ClickEvent, New RoutedEventHandler(AddressOf FrmSelectLeft.Refresh_Click))
                 '构建框架与图表按钮
-                Dim NewItem As New MyListItem With {.IsScaleAnimationEnabled = False, .Type = MyListItem.CheckType.RadioBox, .PaddingRight = 30, .Title = Folder.Name, .Info = Folder.Path, .Height = 40, .ContextMenu = ContMenu, .Tag = Folder}
+                Dim NewItem As New MyListItem With {.IsScaleAnimationEnabled = False, .Type = MyListItem.CheckType.RadioBox, .MinPaddingRight = 30, .Title = Folder.Name, .Info = Folder.Path, .Height = 40, .ContextMenu = ContMenu, .Tag = Folder}
                 AddHandler NewItem.Changed, AddressOf FrmSelectLeft.Folder_Change
                 Dim NewIconButton As New MyIconButton With {.Logo = Logo.IconButtonSetup, .LogoScale = 1.1}
                 AddHandler NewIconButton.Click, Sub(sender, e)

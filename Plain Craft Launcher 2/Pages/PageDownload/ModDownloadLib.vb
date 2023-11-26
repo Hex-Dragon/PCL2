@@ -190,7 +190,7 @@ Public Module ModDownloadLib
                 Logo = "pack://application:,,,/images/Blocks/CobbleStone.png"
         End Select
         '建立控件
-        Dim NewItem As New MyListItem With {.Logo = Logo, .SnapsToDevicePixels = True, .Title = Entry("id").ToString, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 60}
+        Dim NewItem As New MyListItem With {.Logo = Logo, .SnapsToDevicePixels = True, .Title = Entry("id").ToString, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry}
         If Entry("lore") Is Nothing Then
             NewItem.Info = Entry("releaseTime").Value(Of Date).ToString("yyyy/MM/dd HH:mm")
         Else
@@ -718,7 +718,7 @@ Retry:
     Public Function OptiFineDownloadListItem(Entry As DlOptiFineListEntry, OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = Entry.NameDisplay, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 60,
+            .Title = Entry.NameDisplay, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = If(Entry.IsPreview, "测试版", "正式版") &
                     If(Entry.ReleaseTime = "", "", "，发布于 " & Entry.ReleaseTime) &
                     If(Entry.RequiredForgeVersion Is Nothing, "，不兼容 Forge", If(Entry.RequiredForgeVersion = "", "", "，推荐 Forge 版本：" & Entry.RequiredForgeVersion)),
@@ -844,17 +844,17 @@ Retry:
                 '老版本
                 Select Case DownloadInfo.Inherit
                     Case "1.7.10"
-                        Address.Add("http://dl.liteloader.com/redist/1.7.10/liteloader-installer-1.7.10-04.jar")
+                        Address.Add("https://dl.liteloader.com/redist/1.7.10/liteloader-installer-1.7.10-04.jar")
                     Case "1.7.2"
-                        Address.Add("http://dl.liteloader.com/redist/1.7.2/liteloader-installer-1.7.2-04.jar")
+                        Address.Add("https://dl.liteloader.com/redist/1.7.2/liteloader-installer-1.7.2-04.jar")
                     Case "1.6.4"
-                        Address.Add("http://dl.liteloader.com/redist/1.6.4/liteloader-installer-1.6.4-01.jar")
+                        Address.Add("https://dl.liteloader.com/redist/1.6.4/liteloader-installer-1.6.4-01.jar")
                     Case "1.6.2"
-                        Address.Add("http://dl.liteloader.com/redist/1.6.2/liteloader-installer-1.6.2-04.jar")
+                        Address.Add("https://dl.liteloader.com/redist/1.6.2/liteloader-installer-1.6.2-04.jar")
                     Case "1.5.2"
                         'Address.AddRange({"https://download.mcbbs.net/maven/com/mumfrey/liteloader/1.5.2/liteloader-1.5.2.jar",
                         '                  "https://bmclapi2.bangbang93.com/maven/com/mumfrey/liteloader/1.5.2/liteloader-1.5.2.jar"})
-                        Address.Add("http://dl.liteloader.com/redist/1.5.2/liteloader-installer-1.5.2-01.jar")
+                        Address.Add("https://dl.liteloader.com/redist/1.5.2/liteloader-installer-1.5.2-01.jar")
                     Case Else
                         Throw New NotSupportedException("未知的 Minecraft 版本（" & DownloadInfo.Inherit & "）")
                 End Select
@@ -921,7 +921,7 @@ Retry:
                                                                     VersionJson.Add("type", "release")
                                                                     VersionJson.Add("arguments", GetJson("{""game"":[""--tweakClass"",""" & DownloadInfo.JsonToken("tweakClass").ToString & """]}"))
                                                                     VersionJson.Add("libraries", DownloadInfo.JsonToken("libraries"))
-                                                                    CType(VersionJson("libraries"), JContainer).Add(GetJson("{""name"": ""com.mumfrey:liteloader:" & DownloadInfo.JsonToken("version").ToString & """,""url"": ""http://dl.liteloader.com/versions/""}"))
+                                                                    CType(VersionJson("libraries"), JContainer).Add(GetJson("{""name"": ""com.mumfrey:liteloader:" & DownloadInfo.JsonToken("version").ToString & """,""url"": ""https://dl.liteloader.com/versions/""}"))
                                                                     VersionJson.Add("mainClass", "net.minecraft.launchwrapper.Launch")
                                                                     VersionJson.Add("minimumLauncherVersion", 18)
                                                                     VersionJson.Add("inheritsFrom", DownloadInfo.Inherit)
@@ -949,7 +949,7 @@ Retry:
     Public Function LiteLoaderDownloadListItem(Entry As DlLiteLoaderListEntry, OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = Entry.Inherit, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 30,
+            .Title = Entry.Inherit, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = If(Entry.IsPreview, "测试版", "稳定版") & If(Entry.ReleaseTime = "", "", "，发布于 " & Entry.ReleaseTime),
             .Logo = "pack://application:,,,/images/Blocks/Egg.png"
         }
@@ -965,10 +965,8 @@ Retry:
     End Function
     Private Sub LiteLoaderSaveContMenuBuild(sender As MyListItem, e As EventArgs)
         If sender.Tag.IsLegacy Then
-            sender.PaddingRight = 0
             sender.Buttons = {}
         Else
-            sender.PaddingRight = 30
             Dim BtnList As New MyIconButton With {.Logo = Logo.IconButtonList, .ToolTip = "查看全部版本", .Tag = sender}
             ToolTipService.SetPlacement(BtnList, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnList, 30)
@@ -984,10 +982,8 @@ Retry:
         ToolTipService.SetHorizontalOffset(BtnSave, 2)
         AddHandler BtnSave.Click, AddressOf LiteLoaderSave_Click
         If sender.Tag.IsLegacy Then
-            sender.PaddingRight = 30
             sender.Buttons = {BtnSave}
         Else
-            sender.PaddingRight = 60
             Dim BtnList As New MyIconButton With {.Logo = Logo.IconButtonList, .ToolTip = "查看全部版本", .Tag = sender}
             ToolTipService.SetPlacement(BtnList, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnList, 30)
@@ -1003,7 +999,7 @@ Retry:
         Else
             Version = sender.Tag.Tag
         End If
-        OpenWebsite("http://jenkins.liteloader.com/view/" & Version.Inherit)
+        OpenWebsite("https://jenkins.liteloader.com/view/" & Version.Inherit)
     End Sub
     Public Sub LiteLoaderSave_Click(sender As Object, e As RoutedEventArgs)
         'ListItem 与小按钮都会调用这个方法
@@ -1107,7 +1103,7 @@ Retry:
                                                                 Files.Add(New NetFile({
                                                                         "https://download.mcbbs.net/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
                                                                         "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                                                                        "http://files.minecraftforge.net/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
+                                                                        "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
                                                                     }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
                                                                 Task.Output = Files
                                                             End Sub) With {.ProgressWeight = 0.1, .Show = False})
@@ -1326,7 +1322,7 @@ Retry:
                 '添加主文件
                 Dim Files As New List(Of NetFile) From {New NetFile({
                     "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                    "http://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
+                    "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
                     "https://download.mcbbs.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
                 }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
                 Task.Output = Files
@@ -1580,7 +1576,7 @@ Retry:
     Public Function ForgeDownloadListItem(Entry As DlForgeVersionEntry, OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = Entry.Version, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 60,
+            .Title = Entry.Version, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = If(Entry.ReleaseTime = "",
                 If(ModeDebug, "种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), ""),
                 "发布于 " & Entry.ReleaseTime & If(ModeDebug, "，种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), "")),
@@ -1626,7 +1622,7 @@ Retry:
         Else
             Version = sender.Parent.Parent.Tag
         End If
-        OpenWebsite("http://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Version.Inherit & "-" & Version.Version & "/forge-" & Version.Inherit & "-" & Version.Version & "-changelog.txt")
+        OpenWebsite("https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Version.Inherit & "-" & Version.Version & "/forge-" & Version.Inherit & "-" & Version.Version & "-changelog.txt")
     End Sub
     Public Sub ForgeSave_Click(sender As Object, e As RoutedEventArgs)
         Dim Version As DlForgeVersionEntry
@@ -1787,7 +1783,7 @@ Retry:
     Public Function FabricDownloadListItem(Entry As JObject, OnClick As MyListItem.ClickEventHandler) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = Entry("version").ToString.Replace("+build", ""), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 60,
+            .Title = Entry("version").ToString.Replace("+build", ""), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = If(Entry("stable").ToObject(Of Boolean), "稳定版", "测试版"),
             .Logo = "pack://application:,,,/images/Blocks/Fabric.png"
         }
@@ -1798,7 +1794,7 @@ Retry:
     Public Function FabricApiDownloadListItem(Entry As CompFile, OnClick As MyListItem.ClickEventHandler) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Split("+").First.Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 60,
+            .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Split("+").First.Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy/MM/dd HH:mm"),
             .Logo = "pack://application:,,,/images/Blocks/Fabric.png"
         }
@@ -1809,7 +1805,7 @@ Retry:
     Public Function OptiFabricDownloadListItem(Entry As CompFile, OnClick As MyListItem.ClickEventHandler) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = Entry.DisplayName.ToLower.Replace("optifabric-", "").Replace(".jar", "").Trim.TrimStart("v"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry, .PaddingRight = 60,
+            .Title = Entry.DisplayName.ToLower.Replace("optifabric-", "").Replace(".jar", "").Trim.TrimStart("v"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy/MM/dd HH:mm"),
             .Logo = "pack://application:,,,/images/Blocks/OptiFabric.png"
         }

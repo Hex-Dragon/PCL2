@@ -4,15 +4,15 @@
         ''' <summary>
         ''' Mod。
         ''' </summary>
-        [Mod]
+        [Mod] = 0
         ''' <summary>
         ''' 整合包。
         ''' </summary>
-        ModPack
+        ModPack = 1
         ''' <summary>
         ''' 资源包。
         ''' </summary>
-        ResourcePack
+        ResourcePack = 2
     End Enum
     Public Enum CompModLoaderType
         'https://docs.curseforge.com/?http#tocS_ModLoaderType
@@ -164,7 +164,7 @@
         ''' <summary>
         ''' Logo 图片的下载地址。若为 Nothing 则没有。
         ''' </summary>
-        Public ReadOnly LogoUrl As String = Nothing
+        Public LogoUrl As String = Nothing
         ''' <summary>
         ''' 游戏大版本列表。例如：18, 16, 15……
         ''' </summary>
@@ -221,174 +221,224 @@
         ''' 从工程 Json 中初始化实例。若出错会抛出异常。
         ''' </summary>
         Public Sub New(Data As JObject)
-            FromCurseForge = Data.ContainsKey("gameId")
-            If FromCurseForge Then
-#Region "CurseForge"
-                '简单信息
-                Id = Data("id")
-                Slug = Data("slug")
-                RawName = Data("name")
-                Description = Data("summary")
-                Website = Data("links")("websiteUrl").ToString.TrimEnd("/")
-                LastUpdate = Data("dateReleased") '#1194
-                DownloadCount = Data("downloadCount")
-                'Logo
-                If Data("logo").Count > 0 Then
-                    If GetPixelSize(1) > 1.25 Then
-                        LogoUrl = Data("logo")("thumbnailUrl").ToString '使用 256x256 图标
-                    Else
-                        LogoUrl = Data("logo")("thumbnailUrl").ToString.Replace("/256/256/", "/64/64/") '使用 64x64 图标
-                    End If
-                End If
-                'FileIndexes / GameVersions
-                Dim Files = If(CType(Data("latestFilesIndexes"), JArray), New JArray).
-                            Where(Function(i) i("gameVersion").ToString.Contains("1."))
-                CurseForgeFileIds = Files.Select(Of Integer)(Function(v) v("fileId")).ToList
-                GameVersions = Files.Select(Of Integer)(Function(v) Val(v("gameVersion").ToString.Split(".")(1).Split("-").First)).Where(Function(v) v > 0).
-                               Distinct.OrderByDescending(Function(v) v).ToList
-                'Type
-                If Website.Contains("/mc-mods/") OrElse Website.Contains("/mod/") Then
-                    Type = CompType.Mod
-                ElseIf Website.Contains("/modpacks/") Then
-                    Type = CompType.ModPack
+            If Data.ContainsKey("Tags") Then
+#Region "CompJson"
+                FromCurseForge = Data("DataSource") = "CurseForge"
+                Type = Data("Type").ToObject(Of Integer)
+                Slug = Data("Slug")
+                Id = Data("Id")
+                If Data.ContainsKey("CurseForgeFileIds") Then CurseForgeFileIds = CType(Data("CurseForgeFileIds"), JArray).Select(Function(t) t.ToObject(Of Integer)).ToList
+                RawName = Data("RawName")
+                Description = Data("Description")
+                Website = Data("Website")
+                If Data.ContainsKey("LastUpdate") Then LastUpdate = Data("LastUpdate")
+                DownloadCount = Data("DownloadCount")
+                If Data.ContainsKey("ModLoaders") Then
+                    ModLoaders = CType(Data("ModLoaders"), JArray).Select(Function(t) CType(t.ToObject(Of Integer), CompModLoaderType)).ToList
                 Else
-                    Type = CompType.ResourcePack
+                    ModLoaders = New List(Of CompModLoaderType)
                 End If
-                'Tags
-                Tags = New List(Of String)
-                For Each Category In Data("categories").Select(Of Integer)(Function(t) t("id")).Distinct.OrderByDescending(Function(c) c)
-                    Select Case Category
-                        'Mod
-                        Case 406 : Tags.Add("世界元素")
-                        Case 407 : Tags.Add("生物群系")
-                        Case 410 : Tags.Add("维度")
-                        Case 408 : Tags.Add("矿物/资源")
-                        Case 409 : Tags.Add("天然结构")
-                        Case 412 : Tags.Add("科技")
-                        Case 415 : Tags.Add("管道/物流")
-                        Case 4843 : Tags.Add("自动化")
-                        Case 417 : Tags.Add("能源")
-                        Case 4558 : Tags.Add("红石")
-                        Case 436 : Tags.Add("食物/烹饪")
-                        Case 416 : Tags.Add("农业")
-                        Case 414 : Tags.Add("运输")
-                        Case 420 : Tags.Add("仓储")
-                        Case 419 : Tags.Add("魔法")
-                        Case 422 : Tags.Add("冒险")
-                        Case 424 : Tags.Add("装饰")
-                        Case 411 : Tags.Add("生物")
-                        Case 434 : Tags.Add("装备")
-                        Case 423 : Tags.Add("信息显示")
-                        Case 435 : Tags.Add("服务器")
-                        Case 5191 : Tags.Add("改良")
-                        Case 421 : Tags.Add("支持库")
-                        '整合包
-                        Case 4484 : Tags.Add("多人")
-                        Case 4479 : Tags.Add("硬核")
-                        Case 4483 : Tags.Add("战斗")
-                        Case 4478 : Tags.Add("任务")
-                        Case 4472 : Tags.Add("科技")
-                        Case 4473 : Tags.Add("魔法")
-                        Case 4475 : Tags.Add("冒险")
-                        Case 4476 : Tags.Add("探索")
-                        Case 4477 : Tags.Add("小游戏")
-                        Case 4471 : Tags.Add("科幻")
-                        Case 4736 : Tags.Add("空岛")
-                        Case 5128 : Tags.Add("原版改良")
-                        Case 4487 : Tags.Add("FTB")
-                        Case 4480 : Tags.Add("基于地图")
-                        Case 4481 : Tags.Add("轻量")
-                        Case 4482 : Tags.Add("大型")
-                            'FUTURE: Res
-                    End Select
-                Next
-                If Tags.Count = 0 Then Tags.Add("杂项")
-                'ModLoaders
-                ModLoaders = New List(Of CompModLoaderType)
-                For Each File In If(Data("latestFiles"), {})
-                    Dim NewFile As New CompFile(File, Type)
-                    If Not NewFile.Available Then Continue For
-                    ModLoaders.AddRange(NewFile.ModLoaders)
-                Next
-                ModLoaders = ModLoaders.Distinct.OrderBy(Of Integer)(Function(t) t).ToList
+                Tags = CType(Data("Tags"), JArray).Select(Function(t) t.ToString).ToList
+                If Data.ContainsKey("LogoUrl") Then LogoUrl = Data("LogoUrl")
+                If Data.ContainsKey("GameVersions") Then
+                    GameVersions = CType(Data("GameVersions"), JArray).Select(Function(t) t.ToObject(Of Integer)).ToList
+                Else
+                    GameVersions = New List(Of Integer)
+                End If
 #End Region
             Else
-#Region "Modrinth"
-                '简单信息
-                Id = If(Data("project_id"), Data("id")) '两个 API 会返回的 key 不一样
-                Slug = Data("slug")
-                RawName = Data("title")
-                Description = Data("description")
-                LastUpdate = Data("date_modified")
-                DownloadCount = Data("downloads")
-                LogoUrl = Data("icon_url")
-                If LogoUrl = "" Then LogoUrl = Nothing
-                Website = $"https://modrinth.com/{Data("project_type")}/{Slug}"
-                'GameVersions
-                GameVersions = If(CType(Data("versions"), JArray), New JArray).
-                                   Select(Function(v) v.ToString).Where(Function(v) v.StartsWith("1.")).
-                                   Select(Of Integer)(Function(v) Val(v.Split(".")(1).Split("-").First)).Where(Function(v) v > 0).
+                FromCurseForge = Data.ContainsKey("summary")
+                If FromCurseForge Then
+#Region "CurseForge"
+                    '简单信息
+                    Id = Data("id")
+                    Slug = Data("slug")
+                    RawName = Data("name")
+                    Description = Data("summary")
+                    Website = Data("links")("websiteUrl").ToString.TrimEnd("/")
+                    LastUpdate = Data("dateReleased") '#1194
+                    DownloadCount = Data("downloadCount")
+                    'Logo
+                    If Data("logo").Count > 0 Then
+                        If GetPixelSize(1) > 1.25 Then
+                            LogoUrl = Data("logo")("thumbnailUrl").ToString '使用 256x256 图标
+                        Else
+                            LogoUrl = Data("logo")("thumbnailUrl").ToString.Replace("/256/256/", "/64/64/") '使用 64x64 图标
+                        End If
+                    End If
+                    'FileIndexes / GameVersions
+                    Dim Files = If(CType(Data("latestFilesIndexes"), JArray), New JArray).
+                                Where(Function(i) i("gameVersion").ToString.Contains("1."))
+                    CurseForgeFileIds = Files.Select(Of Integer)(Function(v) v("fileId")).Distinct.ToList
+                    GameVersions = Files.Select(Of Integer)(Function(v) Val(v("gameVersion").ToString.Split(".")(1).Split("-").First)).Where(Function(v) v > 0).
                                    Distinct.OrderByDescending(Function(v) v).ToList
-                'Type
-                Select Case Data("project_type").ToString
-                    Case "mod" : Type = CompType.Mod
-                    Case "modpack" : Type = CompType.ModPack
-                    Case "resourcepack" : Type = CompType.ResourcePack
-                End Select
-                'Tags & ModLoaders
-                Tags = New List(Of String)
-                ModLoaders = New List(Of CompModLoaderType)
-                For Each Category In Data("categories").Select(Function(t) t.ToString)
-                    Select Case Category
-                        '加载器
-                        Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
-                        Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
-                        Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
+                    'Type
+                    If Website.Contains("/mc-mods/") OrElse Website.Contains("/mod/") Then
+                        Type = CompType.Mod
+                    ElseIf Website.Contains("/modpacks/") Then
+                        Type = CompType.ModPack
+                    Else
+                        Type = CompType.ResourcePack
+                    End If
+                    'Tags
+                    Tags = New List(Of String)
+                    For Each Category In Data("categories").Select(Of Integer)(Function(t) t("id")).Distinct.OrderByDescending(Function(c) c)
+                        Select Case Category
                         'Mod
-                        Case "worldgen" : Tags.Add("世界元素")
-                        Case "technology" : Tags.Add("科技")
-                        Case "food" : Tags.Add("食物/烹饪")
-                        Case "game-mechanics" : Tags.Add("游戏机制")
-                        Case "transportation" : Tags.Add("运输")
-                        Case "storage" : Tags.Add("仓储")
-                        Case "magic" : Tags.Add("魔法")
-                        Case "adventure" : Tags.Add("冒险")
-                        Case "decoration" : Tags.Add("装饰")
-                        Case "mobs" : Tags.Add("生物")
-                        Case "equipment" : Tags.Add("装备")
-                        Case "optimization" : Tags.Add("性能优化")
-                        Case "social" : Tags.Add("服务器")
-                        Case "utility" : Tags.Add("改良")
-                        Case "library" : Tags.Add("支持库")
+                            Case 406 : Tags.Add("世界元素")
+                            Case 407 : Tags.Add("生物群系")
+                            Case 410 : Tags.Add("维度")
+                            Case 408 : Tags.Add("矿物/资源")
+                            Case 409 : Tags.Add("天然结构")
+                            Case 412 : Tags.Add("科技")
+                            Case 415 : Tags.Add("管道/物流")
+                            Case 4843 : Tags.Add("自动化")
+                            Case 417 : Tags.Add("能源")
+                            Case 4558 : Tags.Add("红石")
+                            Case 436 : Tags.Add("食物/烹饪")
+                            Case 416 : Tags.Add("农业")
+                            Case 414 : Tags.Add("运输")
+                            Case 420 : Tags.Add("仓储")
+                            Case 419 : Tags.Add("魔法")
+                            Case 422 : Tags.Add("冒险")
+                            Case 424 : Tags.Add("装饰")
+                            Case 411 : Tags.Add("生物")
+                            Case 434 : Tags.Add("装备")
+                            Case 423 : Tags.Add("信息显示")
+                            Case 435 : Tags.Add("服务器")
+                            Case 5191 : Tags.Add("改良")
+                            Case 421 : Tags.Add("支持库")
                         '整合包
-                        Case "multiplayer" : Tags.Add("多人")
-                        Case "optimization" : Tags.Add("性能优化")
-                        Case "challenging" : Tags.Add("硬核")
-                        Case "combat" : Tags.Add("战斗")
-                        Case "quests" : Tags.Add("任务")
-                        Case "technology" : Tags.Add("科技")
-                        Case "magic" : Tags.Add("魔法")
-                        Case "adventure" : Tags.Add("冒险")
-                        Case "kitchen-sink" : Tags.Add("烹饪")
-                        Case "lightweight" : Tags.Add("轻量")
-                            'FUTURE: Res
-                    End Select
-                Next
-                If Tags.Count = 0 Then Tags.Add("杂项")
-                Tags.Sort()
-                ModLoaders.Sort()
+                            Case 4484 : Tags.Add("多人")
+                            Case 4479 : Tags.Add("硬核")
+                            Case 4483 : Tags.Add("战斗")
+                            Case 4478 : Tags.Add("任务")
+                            Case 4472 : Tags.Add("科技")
+                            Case 4473 : Tags.Add("魔法")
+                            Case 4475 : Tags.Add("冒险")
+                            Case 4476 : Tags.Add("探索")
+                            Case 4477 : Tags.Add("小游戏")
+                            Case 4471 : Tags.Add("科幻")
+                            Case 4736 : Tags.Add("空岛")
+                            Case 5128 : Tags.Add("原版改良")
+                            Case 4487 : Tags.Add("FTB")
+                            Case 4480 : Tags.Add("基于地图")
+                            Case 4481 : Tags.Add("轻量")
+                            Case 4482 : Tags.Add("大型")
+                                'FUTURE: Res
+                        End Select
+                    Next
+                    If Tags.Count = 0 Then Tags.Add("杂项")
+                    'ModLoaders
+                    ModLoaders = New List(Of CompModLoaderType)
+                    For Each File In If(Data("latestFiles"), {})
+                        Dim NewFile As New CompFile(File, Type)
+                        If Not NewFile.Available Then Continue For
+                        ModLoaders.AddRange(NewFile.ModLoaders)
+                    Next
+                    ModLoaders = ModLoaders.Distinct.OrderBy(Of Integer)(Function(t) t).ToList
 #End Region
+                Else
+#Region "Modrinth"
+                    '简单信息
+                    Id = If(Data("project_id"), Data("id")) '两个 API 会返回的 key 不一样
+                    Slug = Data("slug")
+                    RawName = Data("title")
+                    Description = Data("description")
+                    LastUpdate = Data("date_modified")
+                    DownloadCount = Data("downloads")
+                    LogoUrl = Data("icon_url")
+                    If LogoUrl = "" Then LogoUrl = Nothing
+                    Website = $"https://modrinth.com/{Data("project_type")}/{Slug}"
+                    'GameVersions
+                    '搜索结果的键为 versions，获取特定工程的键为 game_versions
+                    GameVersions = If(CType(If(Data("game_versions"), Data("versions")), JArray), New JArray).
+                                       Select(Function(v) v.ToString).Where(Function(v) v.StartsWith("1.")).
+                                       Select(Of Integer)(Function(v) Val(v.Split(".")(1).Split("-").First)).Where(Function(v) v > 0).
+                                       Distinct.OrderByDescending(Function(v) v).ToList
+                    'Type
+                    Select Case Data("project_type").ToString
+                        Case "mod" : Type = CompType.Mod
+                        Case "modpack" : Type = CompType.ModPack
+                        Case "resourcepack" : Type = CompType.ResourcePack
+                    End Select
+                    'Tags & ModLoaders
+                    Tags = New List(Of String)
+                    ModLoaders = New List(Of CompModLoaderType)
+                    For Each Category In Data("categories").Select(Function(t) t.ToString)
+                        Select Case Category
+                        '加载器
+                            Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
+                            Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
+                            Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
+                        'Mod
+                            Case "worldgen" : Tags.Add("世界元素")
+                            Case "technology" : Tags.Add("科技")
+                            Case "food" : Tags.Add("食物/烹饪")
+                            Case "game-mechanics" : Tags.Add("游戏机制")
+                            Case "transportation" : Tags.Add("运输")
+                            Case "storage" : Tags.Add("仓储")
+                            Case "magic" : Tags.Add("魔法")
+                            Case "adventure" : Tags.Add("冒险")
+                            Case "decoration" : Tags.Add("装饰")
+                            Case "mobs" : Tags.Add("生物")
+                            Case "equipment" : Tags.Add("装备")
+                            Case "optimization" : Tags.Add("性能优化")
+                            Case "social" : Tags.Add("服务器")
+                            Case "utility" : Tags.Add("改良")
+                            Case "library" : Tags.Add("支持库")
+                        '整合包
+                            Case "multiplayer" : Tags.Add("多人")
+                            Case "optimization" : Tags.Add("性能优化")
+                            Case "challenging" : Tags.Add("硬核")
+                            Case "combat" : Tags.Add("战斗")
+                            Case "quests" : Tags.Add("任务")
+                            Case "technology" : Tags.Add("科技")
+                            Case "magic" : Tags.Add("魔法")
+                            Case "adventure" : Tags.Add("冒险")
+                            Case "kitchen-sink" : Tags.Add("烹饪")
+                            Case "lightweight" : Tags.Add("轻量")
+                                'FUTURE: Res
+                        End Select
+                    Next
+                    If Tags.Count = 0 Then Tags.Add("杂项")
+                    Tags.Sort()
+                    ModLoaders.Sort()
+#End Region
+                End If
             End If
             '保存缓存
             CompProjectCache(Id) = Me
         End Sub
+        ''' <summary>
+        ''' 将当前实例转为可用于保存缓存的 Json。
+        ''' </summary>
+        Public Function ToJson() As JObject
+            Dim Json As New JObject
+            Json("DataSource") = If(FromCurseForge, "CurseForge", "Modrinth")
+            Json("Type") = CInt(Type)
+            Json("Slug") = Slug
+            Json("Id") = Id
+            If CurseForgeFileIds IsNot Nothing Then Json("CurseForgeFileIds") = New JArray(CurseForgeFileIds)
+            Json("RawName") = RawName
+            Json("Description") = Description
+            Json("Website") = Website
+            If LastUpdate IsNot Nothing Then Json("LastUpdate") = LastUpdate
+            Json("DownloadCount") = DownloadCount
+            If ModLoaders IsNot Nothing AndAlso ModLoaders.Count > 0 Then Json("ModLoaders") = New JArray(ModLoaders.Select(Function(m) CInt(m)))
+            Json("Tags") = New JArray(Tags)
+            If LogoUrl IsNot Nothing Then Json("LogoUrl") = LogoUrl
+            If GameVersions.Count > 0 Then Json("GameVersions") = New JArray(GameVersions)
+            Json("CacheTime") = Date.Now '用于检查缓存时间
+            Return Json
+        End Function
         ''' <summary>
         ''' 将当前工程信息实例化为控件。
         ''' </summary>
         Public Function ToCompItem(ShowMcVersionDesc As Boolean, ShowLoaderDesc As Boolean) As MyCompItem
             '获取版本描述
             Dim GameVersionDescription As String
-            If GameVersions Is Nothing OrElse GameVersions.Count = 0 Then
+            If GameVersions Is Nothing OrElse Not GameVersions.Any() Then
                 GameVersionDescription = "未知"
             Else
                 Dim SpaVersions As New List(Of String)
@@ -418,94 +468,16 @@
                 GameVersionDescription = SpaVersions.Join(", ")
             End If
             '实例化 UI
-            Dim NewItem As New MyCompItem With {.Tag = Me}
-            '整理 FinalName 与 ExNameList
-            '检查下列代码时可以参考 #1567 的测试例
-            Dim FinalName As String = RawName
-            Dim ExNameList As List(Of String)
-            If TranslatedName = RawName Then
-                '没有中文翻译
-                '将所有名称分段
-                Dim NameLists = TranslatedName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).
-                    Select(Function(s) s.Trim(" /\".ToCharArray)).Where(Function(w) Not String.IsNullOrEmpty(w)).ToList
-                If NameLists.Count = 1 Then GoTo NoExName
-                '查找其中的缩写、Forge/Fabric 等版本标记
-                ExNameList = New List(Of String)
-                Dim NormalNameList = New List(Of String)
-                For Each Name In NameLists
-                    Dim LowerName As String = Name.ToLower
-                    If Name.ToUpper = Name AndAlso Name <> "FPS" AndAlso Name <> "HUD" Then
-                        '缩写
-                        ExNameList.Add(Name)
-                    ElseIf (LowerName.Contains("forge") OrElse LowerName.Contains("fabric") OrElse LowerName.Contains("quilt")) AndAlso
-                        Not RegexCheck(LowerName.Replace("forge", "").Replace("fabric", "").Replace("quilt", ""), "[a-z]+") Then '去掉关键词后没有其他字母
-                        'Forge/Fabric 等版本标记
-                        ExNameList.Add(Name)
-                    Else
-                        '其他部分
-                        NormalNameList.Add(Name)
-                    End If
-                Next
-                '根据分类后的结果处理
-                If NormalNameList.Count = 0 OrElse ExNameList.Count = 0 Then GoTo NoExName
-                '同时包含 NormalName 和 ExName
-                FinalName = NormalNameList.Join(" - ")
-                ExNameList = ExNameList
-            Else
-                '有中文翻译
-                '尝试将文本分为三段：FinalName (EnglishName) - Suffix
-                '检查时注意 Carpet：它没有中文译名，但有 Suffix
-                FinalName = TranslatedName.Split(" (").First.Split(" - ").First
-                Dim Suffix As String = ""
-                If TranslatedName.Split(")").Last.Contains(" - ") Then Suffix = TranslatedName.Split(")").Last.Split(" - ").Last
-                Dim EnglishName As String = TranslatedName
-                If Suffix <> "" Then EnglishName = EnglishName.Replace(" - " & Suffix, "")
-                EnglishName = EnglishName.Replace(FinalName, "").Trim("("c, ")"c, " "c)
-                '中段的额外信息截取
-                ExNameList = EnglishName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).
-                        Select(Function(s) s.Trim(" /".ToCharArray)).Where(Function(w) Not String.IsNullOrEmpty(w)).ToList
-                If ExNameList.Count > 1 AndAlso
-                   Not ExNameList.Any(Function(s) s.ToLower.Contains("forge") OrElse s.ToLower.Contains("fabric") OrElse s.ToLower.Contains("quilt")) AndAlso '不是标注 XX 版
-                   Not (ExNameList.Count = 2 AndAlso ExNameList.Last.ToUpper = ExNameList.Last) Then '不是缩写
-                    ExNameList = New List(Of String) From {EnglishName} '使用原名
-                End If
-                '添加后缀
-                If Suffix <> "" Then ExNameList.Add(Suffix)
-            End If
-            ExNameList = ExNameList.Distinct().ToList()
-            '显示 FinalName 与 ExNameList
-            If ExNameList.Count = 0 Then
-NoExName:
-                NewItem.LabTitle.Text = FinalName
+            Dim NewItem As New MyCompItem With {.Tag = Me, .Logo = GetControlLogo()}
+            Dim Title = GetControlTitle(True)
+            NewItem.Title = Title.Key
+            If Title.Value = "" Then
                 CType(NewItem.LabTitleRaw.Parent, StackPanel).Children.Remove(NewItem.LabTitleRaw)
             Else
-                NewItem.LabTitle.Text = FinalName
-                Dim ExName As String = ""
-                For Each Ex In ExNameList
-                    '去除 “Forge/Fabric” 这一无意义提示
-                    If Ex.Length < 16 AndAlso Ex.ToLower.Contains("fabric") AndAlso Ex.ToLower.Contains("forge") Then Continue For
-                    '将 “Forge” 等提示改为 “Forge 版”
-                    If (Ex.ToLower.Contains("forge") OrElse Ex.ToLower.Contains("fabric") OrElse Ex.ToLower.Contains("quilt")) AndAlso Not Ex.Contains("版") AndAlso
-                        Ex.ToLower.Replace("forge", "").Replace("fabric", "").Replace("quilt", "").Length <= 3 Then
-                        Ex = Ex.Replace("Edition", "").Replace("edition", "").Trim.Capitalize & " 版"
-                    End If
-                    '将 “forge” 等词语的首字母大写
-                    Ex = Ex.Replace("forge", "Forge").Replace("neo", "Neo").Replace("fabric", "Fabric").Replace("quilt", "Quilt")
-                    ExName &= "  |  " & Ex.Trim
-                Next
-                If ExName = "" Then GoTo NoExName
-                NewItem.LabTitleRaw.Text = ExName
+                NewItem.SubTitle = Title.Value
             End If
-            'Tag
-            For Each TagText In Tags
-                Dim NewTag = GetObjectFromXML(
-                "<Border xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
-                         Background=""#11000000"" Padding=""3,1"" CornerRadius=""3"" Margin=""0,0,3,0"" 
-                         SnapsToDevicePixels=""True"" UseLayoutRounding=""False"">
-                   <TextBlock Text=""" & TagText & """ Foreground=""#868686"" FontSize=""11"" />
-                </Border>")
-                NewItem.PanTags.Children.Add(NewTag)
-            Next
+            NewItem.Tags = Tags
+            NewItem.Description = Description.Replace(vbCr, "").Replace(vbLf, "")
             '下边栏
             If Not ShowMcVersionDesc AndAlso Not ShowLoaderDesc Then
                 '全部隐藏
@@ -548,7 +520,6 @@ NoExName:
                         End If
                 End Select
             End If
-            NewItem.LabInfo.Text = Description.Replace(vbCr, "").Replace(vbLf, "")
             NewItem.LabSource.Text = If(FromCurseForge, "CurseForge", "Modrinth")
             If LastUpdate IsNot Nothing Then
                 NewItem.LabTime.Text = GetTimeSpanString(LastUpdate - Date.Now, True)
@@ -561,13 +532,92 @@ NoExName:
             NewItem.LabDownload.Text =
                 If(DownloadCount > 100000000, Math.Round(DownloadCount / 100000000, 2) & " 亿",
                     If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " 万", DownloadCount))
-            '其他
-            If LogoUrl Is Nothing Then
-                NewItem.Logo = "pack://application:,,,/images/Icons/NoIcon.png"
-            Else
-                NewItem.Logo = LogoUrl
-            End If
             Return NewItem
+        End Function
+        Public Function GetControlLogo() As String
+            If LogoUrl Is Nothing Then
+                Return "pack://application:,,,/images/Icons/NoIcon.png"
+            Else
+                Return LogoUrl
+            End If
+        End Function
+        Public Function GetControlTitle(HasModLoaderDescription As Boolean) As KeyValuePair(Of String, String)
+            '检查下列代码时可以参考 #1567 的测试例
+            Dim Title As String = RawName
+            Dim SubtitleList As List(Of String)
+            If TranslatedName = RawName Then
+                '没有中文翻译
+                '将所有名称分段
+                Dim NameLists = TranslatedName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).
+                    Select(Function(s) s.Trim(" /\".ToCharArray)).Where(Function(w) Not String.IsNullOrEmpty(w)).ToList
+                If NameLists.Count = 1 Then GoTo NoSubtitle
+                '查找其中的缩写、Forge/Fabric 等版本标记
+                SubtitleList = New List(Of String)
+                Dim NormalNameList = New List(Of String)
+                For Each Name In NameLists
+                    Dim LowerName As String = Name.ToLower
+                    If Name.ToUpper = Name AndAlso Name <> "FPS" AndAlso Name <> "HUD" Then
+                        '缩写
+                        SubtitleList.Add(Name)
+                    ElseIf (LowerName.Contains("forge") OrElse LowerName.Contains("fabric") OrElse LowerName.Contains("quilt")) AndAlso
+                        Not RegexCheck(LowerName.Replace("forge", "").Replace("fabric", "").Replace("quilt", ""), "[a-z]+") Then '去掉关键词后没有其他字母
+                        'Forge/Fabric 等版本标记
+                        SubtitleList.Add(Name)
+                    Else
+                        '其他部分
+                        NormalNameList.Add(Name)
+                    End If
+                Next
+                '根据分类后的结果处理
+                If NormalNameList.Count = 0 OrElse SubtitleList.Count = 0 Then GoTo NoSubtitle
+                '同时包含 NormalName 和 Subtitle
+                Title = NormalNameList.Join(" - ")
+            Else
+                '有中文翻译
+                '尝试将文本分为三段：Title (EnglishName) - Suffix
+                '检查时注意 Carpet：它没有中文译名，但有 Suffix
+                Title = TranslatedName.Split(" (").First.Split(" - ").First
+                Dim Suffix As String = ""
+                If TranslatedName.Split(")").Last.Contains(" - ") Then Suffix = TranslatedName.Split(")").Last.Split(" - ").Last
+                Dim EnglishName As String = TranslatedName
+                If Suffix <> "" Then EnglishName = EnglishName.Replace(" - " & Suffix, "")
+                EnglishName = EnglishName.Replace(Title, "").Trim("("c, ")"c, " "c)
+                '中段的额外信息截取
+                SubtitleList = EnglishName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).
+                        Select(Function(s) s.Trim(" /".ToCharArray)).Where(Function(w) Not String.IsNullOrEmpty(w)).ToList
+                If SubtitleList.Count > 1 AndAlso
+                   Not SubtitleList.Any(Function(s) s.ToLower.Contains("forge") OrElse s.ToLower.Contains("fabric") OrElse s.ToLower.Contains("quilt")) AndAlso '不是标注 XX 版
+                   Not (SubtitleList.Count = 2 AndAlso SubtitleList.Last.ToUpper = SubtitleList.Last) Then '不是缩写
+                    SubtitleList = New List(Of String) From {EnglishName} '使用原名
+                End If
+                '添加后缀
+                If Suffix <> "" Then SubtitleList.Add(Suffix)
+            End If
+            SubtitleList = SubtitleList.Distinct().ToList()
+            '设置标题与描述
+            Dim Subtitle As String = ""
+            If SubtitleList.Count > 0 Then
+                For Each Ex In SubtitleList
+                    Dim IsModLoaderDescription As Boolean =
+                        Ex.ToLower.Contains("forge") OrElse Ex.ToLower.Contains("fabric") OrElse Ex.ToLower.Contains("quilt")
+                    '是否显示 ModLoader 信息
+                    If Not HasModLoaderDescription AndAlso IsModLoaderDescription Then Continue For
+                    '去除 “Forge/Fabric” 这一无意义提示
+                    If Ex.Length < 16 AndAlso Ex.ToLower.Contains("fabric") AndAlso Ex.ToLower.Contains("forge") Then Continue For
+                    '将 “Forge” 等提示改为 “Forge 版”
+                    If IsModLoaderDescription AndAlso Not Ex.Contains("版") AndAlso
+                        Ex.ToLower.Replace("forge", "").Replace("fabric", "").Replace("quilt", "").Length <= 3 Then
+                        Ex = Ex.Replace("Edition", "").Replace("edition", "").Trim.Capitalize & " 版"
+                    End If
+                    '将 “forge” 等词语的首字母大写
+                    Ex = Ex.Replace("forge", "Forge").Replace("neo", "Neo").Replace("fabric", "Fabric").Replace("quilt", "Quilt")
+                    Subtitle &= "  |  " & Ex.Trim
+                Next
+            Else
+NoSubtitle:
+                Subtitle = ""
+            End If
+            Return New KeyValuePair(Of String, String)(Title, Subtitle)
         End Function
 
         '辅助函数
@@ -761,6 +811,10 @@ NoExName:
         ''' 可供展示的所有工程的列表。
         ''' </summary>
         Public Results As New List(Of CompProject)
+        ''' <summary>
+        ''' 当前的错误信息。如果没有则为 Nothing。
+        ''' </summary>
+        Public ErrorMessage As String = Nothing
 
     End Class
 
@@ -770,7 +824,7 @@ NoExName:
     ''' <summary>
     ''' 已知工程信息的缓存。
     ''' </summary>
-    Private CompProjectCache As New Dictionary(Of String, CompProject)
+    Public CompProjectCache As New Dictionary(Of String, CompProject)
     ''' <summary>
     ''' 根据搜索请求获取一系列的工程列表。需要基于加载器运行。
     ''' </summary>
@@ -887,6 +941,7 @@ Retry:
 
             '启动 CurseForge 线程
             Dim CurseForgeUrl As String = Task.Input.GetCurseForgeAddress()
+            Dim CurseForgeFailed As Boolean = False
             If CurseForgeUrl IsNot Nothing Then
                 CurseForgeThread = RunInNewThread(
                     Sub()
@@ -910,12 +965,14 @@ Retry:
                             Log(ex, "从 CurseForge 获取工程列表失败")
                             Storage.CurseForgeTotal = Storage.CurseForgeOffset
                             [Error] = ex
+                            CurseForgeFailed = True
                         End Try
                     End Sub, "CurseForge Project Request")
             End If
 
             '启动 Modrinth 线程
             Dim ModrinthUrl As String = Task.Input.GetModrinthAddress()
+            Dim ModrinthFailed As Boolean = False
             If ModrinthUrl IsNot Nothing Then
                 ModrinthThread = RunInNewThread(
                     Sub()
@@ -941,6 +998,7 @@ Retry:
                             Log(ex, "从 Modrinth 获取工程列表失败")
                             Storage.ModrinthTotal = Storage.ModrinthOffset
                             [Error] = ex
+                            ModrinthFailed = True
                         End Try
                     End Sub, "Modrinth Project Request")
             End If
@@ -951,7 +1009,8 @@ Retry:
             If ModrinthThread IsNot Nothing Then ModrinthThread.Join()
             If Task.IsAborted Then Exit Sub
 
-            '确认存在结果
+            '确保存在结果
+            Storage.ErrorMessage = Nothing
             If RawResults.Count = 0 Then
                 If [Error] IsNot Nothing Then
                     Throw [Error]
@@ -965,6 +1024,13 @@ Retry:
                     Else
                         Throw New Exception("没有符合条件的结果")
                     End If
+                End If
+            ElseIf [Error] IsNot Nothing Then
+                '有结果但是有错误
+                If CurseForgeFailed Then
+                    Storage.ErrorMessage = $"无法连接到 CurseForge，所以目前仅显示了来自 Modrinth 的内容，结果可能不全。{vbCrLf}请尝试使用 VPN 或加速器以改善网络。"
+                Else
+                    Storage.ErrorMessage = $"无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，结果可能不全。{vbCrLf}请尝试使用 VPN 或加速器以改善网络。"
                 End If
             End If
 
@@ -1160,7 +1226,7 @@ Retry:
                 FileName = Data("fileName")
                 'DownloadAddress
                 Dim Url = Data("downloadUrl").ToString
-                If Url = "" Then Url = "https://media.forgecdn.net/files/" & Id.ToString.Substring(0, 4) & "/" & Id.ToString.Substring(4).TrimStart("0") & "/" & FileName
+                If Url = "" Then Url = $"https://media.forgecdn.net/files/{CInt(Id.ToString.Substring(0, 4))}/{CInt(Id.ToString.Substring(4))}/{FileName}"
                 Url = Url.Replace(FileName, Net.WebUtility.UrlEncode(FileName)) '对文件名进行编码
                 DownloadAddress = {Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://media"),
                                    Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
@@ -1282,7 +1348,6 @@ Retry:
                 ToolTipService.SetHorizontalOffset(BtnSave, 2)
                 AddHandler BtnSave.Click, OnSaveClick
                 NewItem.Buttons = {BtnSave}
-                NewItem.PaddingRight = 35
             End If
 
             '结束

@@ -46,7 +46,7 @@
     ''' </summary>
     Private Function DequeueNextMusicAddress() As String
         '初始化，确保存在音乐
-        If MusicAllList Is Nothing OrElse MusicAllList.Count = 0 Then MusicListInit(False)
+        If MusicAllList Is Nothing OrElse MusicAllList.Count = 0 OrElse MusicWaitingList.Count = 0 Then MusicListInit(False)
         '出列下一个音乐，如果出列结束则生成新列表
         DequeueNextMusicAddress = MusicWaitingList(0)
         MusicWaitingList.RemoveAt(0)
@@ -267,6 +267,7 @@
             '当前音乐已播放结束，继续下一曲
             If CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Stopped AndAlso MusicAllList.Count > 0 Then MusicStartPlay(DequeueNextMusicAddress)
         Catch ex As Exception
+            Log("[Music] 播放音乐失败的文件完整路径：" & MusicCurrent)
             If ex.Message.Contains("Got a frame at sample rate") OrElse ex.Message.Contains("does not support changes to") Then
                 Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL 不支持播放音频属性在中途发生变化的音乐", HintType.Critical)
             ElseIf Not (MusicCurrent.ToLower.EndsWith(".wav") OrElse MusicCurrent.ToLower.EndsWith(".mp3") OrElse MusicCurrent.ToLower.EndsWith(".flac")) Then
@@ -274,10 +275,11 @@
             Else
                 Log(ex, "播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）", LogLevel.Hint)
             End If
-            Log(ex, "播放音乐失败（" & MusicCurrent & "）", LogLevel.Developer)
-            If MusicAllList.Count > 1 Then
-                Thread.Sleep(1000)
-                MusicStartPlay(DequeueNextMusicAddress, IsFirstLoad)
+            Thread.Sleep(1000)
+            If TypeOf ex Is FileNotFoundException Then
+                MusicRefreshPlay(True, IsFirstLoad)
+            ElseIf MusicAllList.Count > 1 Then
+                MusicStartPlay(DequeueNextMusicAddress(), IsFirstLoad)
             End If
         Finally
             If CurrentWave IsNot Nothing Then CurrentWave.Dispose()

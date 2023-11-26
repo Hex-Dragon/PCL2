@@ -67,32 +67,35 @@ Public Class MyLoading
     ''' </summary>
     Public Property TextErrorInherit As Boolean = True
 
-    Private Sub RefreshText() Handles Me.IsErrorChanged, Me.Loaded
-        If InnerState = MyLoadingState.Error Then
-            If TextErrorInherit AndAlso State.IsLoader Then
-                Dim Ex As Exception = CType(State, Object).Error
-                If Ex Is Nothing Then
-                    LabText.Text = "未知错误"
-                Else
-                    Do While Ex.InnerException IsNot Nothing
-                        Ex = Ex.InnerException
-                    Loop
-                    LabText.Text = StrTrim(Ex.Message)
-                    If {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
-                        "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) LabText.Text.Contains(s)) Then
-                        LabText.Text = "网络环境不佳，请重试或尝试使用 VPN"
+    Private Sub RefreshText() Handles Me.IsErrorChanged, Me.Loaded, _State.ProgressChanged
+        RunInUi(
+        Sub()
+            If InnerState = MyLoadingState.Error Then
+                If TextErrorInherit AndAlso State.IsLoader Then
+                    Dim Ex As Exception = CType(State, Object).Error
+                    If Ex Is Nothing Then
+                        LabText.Text = "未知错误"
+                    Else
+                        Do While Ex.InnerException IsNot Nothing
+                            Ex = Ex.InnerException
+                        Loop
+                        LabText.Text = StrTrim(Ex.Message)
+                        If {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
+                            "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) LabText.Text.Contains(s)) Then
+                            LabText.Text = "网络环境不佳，请重试或尝试使用 VPN"
+                        End If
                     End If
+                Else
+                    LabText.Text = TextError
                 End If
             Else
-                LabText.Text = TextError
+                If ShowProgress AndAlso State.IsLoader Then
+                    LabText.Text = Text & " - " & Math.Floor(CType(State, Object).Progress * 100) & "%"
+                Else
+                    LabText.Text = Text
+                End If
             End If
-        Else
-            If ShowProgress AndAlso State.IsLoader Then
-                LabText.Text = Text & " - " & Math.Floor(CType(State, Object).Progress * 100) & "%"
-            Else
-                LabText.Text = Text
-            End If
-        End If
+        End Sub)
     End Sub
 
 #End Region
@@ -183,46 +186,7 @@ Public Class MyLoading
         If Not HasAnimation OrElse IsLooping OrElse Not InnerState = MyLoadingState.Run OrElse AniSpeed > 10 OrElse Not IsLoaded Then Exit Sub
         IsLooping = True
         ErrorAnimationWaiting = True
-        If ShowProgress Then
-            RefreshText()
-            AniStart({
-                    AaRotateTransform(PathPickaxe, -20 - CType(PathPickaxe.RenderTransform, RotateTransform).Angle, 350, 250, New AniEaseInBack(AniEasePower.Weak)),
-                    AaCode(AddressOf RefreshText, 100), '这是为了省下一个 Timer 线程……
-                    AaCode(AddressOf RefreshText, 200),
-                    AaCode(AddressOf RefreshText, 300),
-                    AaCode(AddressOf RefreshText, 400),
-                    AaCode(AddressOf RefreshText, 500),
-                    AaRotateTransform(PathPickaxe, 50, 900,, New AniEaseOutFluent, True),
-                    AaRotateTransform(PathPickaxe, 25, 900,, New AniEaseOutElastic(AniEasePower.Weak)),
-                    AaCode(Sub()
-                               PathLeft.Opacity = 1
-                               PathLeft.Margin = New Thickness(7, 41, 0, 0)
-                               PathRight.Opacity = 1
-                               PathRight.Margin = New Thickness(14, 41, 0, 0)
-                               ErrorAnimationWaiting = False
-                               RefreshText()
-                           End Sub),
-                    AaCode(AddressOf RefreshText, 100),
-                    AaCode(AddressOf RefreshText, 200),
-                    AaCode(AddressOf RefreshText, 300),
-                    AaCode(AddressOf RefreshText, 400),
-                    AaCode(AddressOf RefreshText, 500),
-                    AaCode(AddressOf RefreshText, 600),
-                    AaCode(AddressOf RefreshText, 700),
-                    AaCode(AddressOf RefreshText, 800),
-                    AaOpacity(PathLeft, -1, 100, 70),
-                    AaX(PathLeft, -5, 180, 20, New AniEaseOutFluent),
-                    AaY(PathLeft, -6, 180, 20, New AniEaseOutFluent),
-                    AaOpacity(PathRight, -1, 100, 70),
-                    AaX(PathRight, 5, 180, 20, New AniEaseOutFluent),
-                    AaY(PathRight, -6, 180, 20, New AniEaseOutFluent),
-                    AaCode(Sub()
-                               IsLooping = False
-                               AniLoop()
-                           End Sub,, True)
-            }, "MyLoader Loop " & Uuid & "/" & GetUuid())
-        Else
-            AniStart({
+        AniStart({
                     AaRotateTransform(PathPickaxe, -20 - CType(PathPickaxe.RenderTransform, RotateTransform).Angle, 350, 250, New AniEaseInBack(AniEasePower.Weak)),
                     AaRotateTransform(PathPickaxe, 50, 900,, New AniEaseOutFluent, True),
                     AaRotateTransform(PathPickaxe, 25, 900,, New AniEaseOutElastic(AniEasePower.Weak)),
@@ -244,6 +208,8 @@ Public Class MyLoading
                                AniLoop()
                            End Sub,, True)
             }, "MyLoader Loop " & Uuid & "/" & GetUuid())
+        If ShowProgress Then
+
         End If
     End Sub
 
@@ -294,6 +260,7 @@ Public Interface ILoadingTrigger
     ReadOnly Property IsLoader As Boolean
     Property LoadingState As MyLoadingState
     Event LoadingStateChanged(NewState As MyLoadingState, OldState As MyLoadingState)
+    Event ProgressChanged(NewProgress As Double, OldProgress As Double)
 End Interface
 
 Public Class MyLoadingStateSimulator
@@ -313,4 +280,5 @@ Public Class MyLoadingStateSimulator
     Public ReadOnly Property IsLoader As Boolean = False Implements ILoadingTrigger.IsLoader
 
     Public Event LoadingStateChanged(NewState As MyLoadingState, OldState As MyLoadingState) Implements ILoadingTrigger.LoadingStateChanged
+    Public Event ProgressChanged(NewProgress As Double, OldProgress As Double) Implements ILoadingTrigger.ProgressChanged
 End Class

@@ -45,6 +45,13 @@
             BtnPageRight.IsEnabled = Storage.Results.Count > PageSize * (Page + 1) OrElse
                                      Storage.CurseForgeOffset < Storage.CurseForgeTotal OrElse Storage.ModrinthOffset < Storage.ModrinthTotal
             BtnPageRight.Opacity = If(BtnPageRight.IsEnabled, 1, 0.2)
+            '错误信息
+            If Storage.ErrorMessage Is Nothing Then
+                HintError.Visibility = Visibility.Collapsed
+            Else
+                HintError.Visibility = Visibility.Visible
+                HintError.Text = Storage.ErrorMessage
+            End If
             '强制返回顶部
             PanBack.ScrollToTop()
         Catch ex As Exception

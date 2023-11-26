@@ -9,23 +9,21 @@
             <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
                 <StackPanel x:Name="PanMain" Margin="25,10,25,10" Grid.IsSharedSizeScope="True"> <!-- 若显示多选模块则为 92 -->
                     <local:MySearchBox Margin="0,15" HintText="搜索 Mod" x:Name="SearchBox" />
-                    <local:MyCard Grid.Row="0" Margin="0,0,0,15" Title="管理" x:Name="PanManage">
-                        <StackPanel Margin="25,40,15,20">
-                            <TextBlock Margin="0,0,0,11" Text="点击红石灯图标可以快速启用或禁用单个 Mod。将 Mod 文件拖入窗口即可快速安装。" TextWrapping="Wrap" />
-                            <Grid Height="35">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                                </Grid.ColumnDefinitions>
-                                <local:MyButton x:Name="BtnManageOpen" Grid.Column="0" MinWidth="140" Text="打开 Mod 文件夹" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
-                                <local:MyButton x:Name="BtnManageSelectAll" Grid.Column="1" MinWidth="140" Text="全选" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
-                                <local:MyButton x:Name="BtnManageCheck" Grid.Column="2" MinWidth="140" Text="检查 Mod" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ToolTip="快速检查 Mod 的版本要求、重复、前置缺失等问题。&#xa;结果仅供参考，由于部分 Mod 标注的信息有误，可能并不准确。" Visibility="Collapsed" />
-                            </Grid>
-                        </StackPanel>
+                    <local:MyCard Grid.Row="0" Margin="0,0,0,15" x:Name="PanManage">
+                        <Grid Margin="15,15,0,15" Height="35">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            </Grid.ColumnDefinitions>
+                            <local:MyButton x:Name="BtnManageOpen" Grid.Column="0" MinWidth="140" Text="打开 Mod 文件夹" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
+                            <local:MyButton x:Name="BtnManageSelectAll" Grid.Column="1" MinWidth="140" Text="全选" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
+                            <local:MyButton x:Name="BtnManageInstall" Grid.Column="2" MinWidth="140" Text="安装 Mod" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ToolTip="将 Mod 文件直接拖入 PCL 窗口即可快捷安装！" ToolTipService.InitialShowDelay="0" />
+                            <local:MyButton x:Name="BtnManageCheck" Grid.Column="3" MinWidth="140" Text="检查 Mod" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ToolTip="快速检查 Mod 的版本要求、重复、前置缺失等问题。&#xa;结果仅供参考，由于部分 Mod 标注的信息有误，可能并不准确。" Visibility="Collapsed" />
+                        </Grid>
                     </local:MyCard>
                     <Grid>
-                        <!--虽然不知道为什么但是删掉这个 Grid 在搜索结束的时候就会出现显示问题-->
                         <local:MyCard x:Name="PanSearch" Visibility="Collapsed" VerticalAlignment="Top" Opacity="0" Margin="0,0,0,15" Title=" " MinHeight="40">
                             <StackPanel Margin="20,40,18,18" Name="PanSearchList" VerticalAlignment="Top" />
                         </local:MyCard>

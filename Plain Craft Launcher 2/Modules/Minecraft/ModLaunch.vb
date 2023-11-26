@@ -881,7 +881,7 @@ SystemBrowser:
         End If
         Dim Result As String
         Try
-            Result = NetRequestMulty("https://login.live.com/oauth20_token.srf", "POST", Request, "application/x-www-form-urlencoded", 1)
+            Result = NetRequestMulty("https://login.live.com/oauth20_token.srf", "POST", Request, "application/x-www-form-urlencoded", 2)
         Catch ex As Exception
             If ex.Message.Contains("must sign in again") OrElse ex.Message.Contains("invalid_grant") Then '#269
                 Return {"Relogin", ""}
@@ -1000,8 +1000,8 @@ SystemBrowser:
             ElseIf Message.Contains("(404)") Then
                 Log(ex, "微软登录第 6 步汇报 404")
                 RunInNewThread(Sub()
-                                   Select Case MyMsgBox("你可能没有在 Minecraft 官网创建档案，Xbox Game Pass 已到期，或者还没有购买 Minecraft。" & vbCrLf &
-                                            "如果你确认拥有 Minecraft，请在官网上创建档案后再试。", "登录失败", "创建档案", "购买 Minecraft", "取消")
+                                   Select Case MyMsgBox("你可能没有创建 Minecraft 玩家档案、Xbox Game Pass 已到期，或者还没有购买 Minecraft。" & vbCrLf &
+                                            "请先使用官方启动器登录一次，之后即可使用 PCL 登录。", "登录失败", "创建档案", "购买 Minecraft", "取消")
                                        Case 1
                                            OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
                                        Case 2
@@ -1210,6 +1210,7 @@ SystemBrowser:
         Loop
 
         '检查下载结果
+        If JavaSearchLoader.State <> LoadState.Loading Then JavaSearchLoader.State = LoadState.Waiting '2872#
         McLaunchJavaSelected = JavaSelect("$$", MinVer, MaxVer, McVersionCurrent)
         If Task.IsAborted Then Exit Sub
         If McLaunchJavaSelected IsNot Nothing Then
@@ -1857,7 +1858,7 @@ NextVersion:
                         End If
                     Case Else '快照版是 99
                         PackFormat = 17
-                        'https://minecraft.fandom.com/zh/wiki/数据包#数据包版本
+                        'https://zh.minecraft.wiki/w/数据包#数据包版本
                 End Select
                 McLaunchLog("正在构建自定义皮肤资源包，格式为：" & PackFormat)
                 '准备文件

@@ -189,6 +189,9 @@
     <Compile Include="Modules\Minecraft\ModJava.vb" />
     <Compile Include="Modules\Minecraft\ModMod.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
+    <Compile Include="Modules\Minecraft\MyLocalModItem.xaml.vb">
+      <DependentUpon>MyLocalModItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modules\ModEvent.vb" />
     <Compile Include="Controls\MyExtraButton.xaml.vb">
       <DependentUpon>MyExtraButton.xaml</DependentUpon>
@@ -463,6 +466,10 @@
       <DependentUpon>FormMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Modules\Minecraft\MyLocalModItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Modules\Minecraft\MyCompItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -904,6 +911,10 @@
     <Resource Include="Images\Skins\Noor.png" />
     <Resource Include="Images\Skins\Sunny.png" />
     <Resource Include="Images\Skins\Zuri.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\Disabled.png" />
+    <Resource Include="Images\Icons\Unavaliable.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

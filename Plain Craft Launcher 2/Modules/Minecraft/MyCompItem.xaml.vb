@@ -1,8 +1,9 @@
 ﻿Public Class MyCompItem
+
+#Region "基础属性"
     Public Uuid As Integer = GetUuid()
 
-#Region "Logo"
-
+    'Logo
     Private _Logo As String = ""
     Public Property Logo As String
         Get
@@ -44,7 +45,7 @@
             End Try
         End Set
     End Property
-
+    '后台加载 Logo
     Private Sub LogoLoader(Address As String)
         Dim Retry As Boolean = False
         Dim DownloadEnd As String = GetUuid()
@@ -81,6 +82,72 @@ RetryStart:
         End Try
     End Sub
 
+    '标题
+    Public Property Title As String
+        Get
+            Return LabTitle.Text
+        End Get
+        Set(value As String)
+            If LabTitle.Text = value Then Exit Property
+            LabTitle.Text = value
+        End Set
+    End Property
+
+    '副标题
+    Public Property SubTitle As String
+        Get
+            Return If(LabTitleRaw?.Text, "")
+        End Get
+        Set(value As String)
+            If LabTitleRaw.Text = value Then Exit Property
+            LabTitleRaw.Text = value
+            LabTitleRaw.Visibility = If(value = "", Visibility.Collapsed, Visibility.Visible)
+        End Set
+    End Property
+
+    '描述
+    Public Property Description As String
+        Get
+            Return LabInfo.Text
+        End Get
+        Set(value As String)
+            If LabInfo.Text = value Then Exit Property
+            LabInfo.Text = value
+        End Set
+    End Property
+    '指向时扩展描述
+    Private Sub LabInfo_MouseEnter(sender As Object, e As MouseEventArgs) Handles LabInfo.MouseEnter
+        If IsTextTrimmed(LabInfo) Then
+            ToolTipInfo.Content = LabInfo.Text
+            ToolTipInfo.Width = LabInfo.ActualWidth + 25
+            LabInfo.ToolTip = ToolTipInfo
+        Else
+            LabInfo.ToolTip = Nothing
+        End If
+    End Sub
+    Private Function IsTextTrimmed(textBlock As TextBlock) As Boolean
+        Dim typeface As New Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch)
+        Dim formattedText As New FormattedText(textBlock.Text, Thread.CurrentThread.CurrentCulture, textBlock.FlowDirection, typeface, textBlock.FontSize, textBlock.Foreground, DPI)
+        Return formattedText.Width > textBlock.ActualWidth
+    End Function
+
+    'Tag
+    Public WriteOnly Property Tags As List(Of String)
+        Set(value As List(Of String))
+            PanTags.Children.Clear()
+            PanTags.Visibility = If(value.Any(), Visibility.Visible, Visibility.Collapsed)
+            For Each TagText In value
+                Dim NewTag = GetObjectFromXML(
+                "<Border xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
+                         Background=""#11000000"" Padding=""3,1"" CornerRadius=""3"" Margin=""0,0,3,0"" 
+                         SnapsToDevicePixels=""True"" UseLayoutRounding=""False"">
+                   <TextBlock Text=""" & TagText & """ Foreground=""#868686"" FontSize=""11"" />
+                </Border>")
+                PanTags.Children.Add(NewTag)
+            Next
+        End Set
+    End Property
+
 #End Region
 
 #Region "点击"
@@ -104,13 +171,28 @@ RetryStart:
             Log("[Comp] 记录当前已展开的卡片：" & String.Join("、", Titles))
             FrmMain.PageCurrent.Additional(1) = Titles
         End If
-        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail, .Additional = {sender.Tag, New List(Of String)}})
+        '打开详情页
+        Dim TargetVersion As String, TargetLoader As CompModLoaderType
+        Select Case CType(sender.Tag, CompProject).Type
+            Case CompType.Mod
+                TargetVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
+            Case CompType.ModPack
+                TargetVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
+            Case Else 'CompType.ResourcePack
+                'FUTURE: Res
+                TargetVersion = "" 'If(PageDownloadResource.Loader.Input.GameVersion, "")
+        End Select
+        If CType(sender.Tag, CompProject).Type = CompType.Mod AndAlso PageDownloadMod.Loader.Input.ModLoader <> CompModLoaderType.Any Then
+            TargetLoader = PageDownloadMod.Loader.Input.ModLoader
+        End If
+        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
+                           .Additional = {sender.Tag, New List(Of String), TargetVersion, TargetLoader}})
     End Sub
 
     '鼠标点击判定
     Private IsMouseDown As Boolean = False
     Private Sub Button_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Me.PreviewMouseLeftButtonDown
-        If IsMouseOver Then IsMouseDown = True
+        If IsMouseOver AndAlso CanInteraction Then IsMouseDown = True
     End Sub
     Private Sub Button_MouseLeave(sender As Object, e As Object) Handles Me.MouseLeave, Me.PreviewMouseLeftButtonUp
         IsMouseDown = False
@@ -151,9 +233,12 @@ RetryStart:
 #End Region
 
     Private StateLast As String
-    Public HasAnimation As Boolean = True
+    ''' <summary>
+    ''' 是否允许交互。目前仅用于 PageDownloadCompDetail 的顶部栏展示：若关闭碰撞检测，则无法展开 Tooltip。
+    ''' </summary>
+    Public CanInteraction As Boolean = True
     Public Sub RefreshColor(sender As Object, e As EventArgs) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonDown, Me.MouseLeftButtonUp
-        If Not HasAnimation Then Exit Sub
+        If Not CanInteraction Then Exit Sub
         '判断当前颜色
         Dim StateNew As String, Time As Integer
         If IsMouseOver Then
@@ -199,21 +284,5 @@ RetryStart:
             If _RectBack IsNot Nothing Then RectBack.Opacity = 0
         End If
     End Sub
-
-    '指向时扩展描述
-    Private Sub LabInfo_MouseEnter(sender As Object, e As MouseEventArgs) Handles LabInfo.MouseEnter
-        If IsTextTrimmed(LabInfo) Then
-            ToolTipInfo.Content = LabInfo.Text
-            ToolTipInfo.Width = LabInfo.ActualWidth + 25
-            LabInfo.ToolTip = ToolTipInfo
-        Else
-            LabInfo.ToolTip = Nothing
-        End If
-    End Sub
-    Private Function IsTextTrimmed(textBlock As TextBlock) As Boolean
-        Dim typeface As New Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch)
-        Dim formattedText As New FormattedText(textBlock.Text, Thread.CurrentThread.CurrentCulture, textBlock.FlowDirection, typeface, textBlock.FontSize, textBlock.Foreground, DPI)
-        Return formattedText.Width > textBlock.ActualWidth
-    End Function
 
 End Class

@@ -104,42 +104,34 @@
             ColumnPaddingLeft.Width = New GridLength(value)
         End Set
     End Property
-    Public Property PaddingRight As Integer
-        Get
-            Return ColumnPaddingRight.Width.Value
-        End Get
-        Set(value As Integer)
-            ColumnPaddingRight.Width = New GridLength(value)
-        End Set
-    End Property
+    ''' <summary>
+    ''' 右边距的最小值。
+    ''' 在存在右侧按钮时，右边距会被自动设置为 5 + 按钮数 * 25。
+    ''' </summary>
+    Public Property MinPaddingRight As Integer = 4
 
     '按钮
-    Private _Buttons As IEnumerable
-    Public Property Buttons As IEnumerable
+    Private _Buttons As IEnumerable(Of MyIconButton)
+    Public Property Buttons As IEnumerable(Of MyIconButton)
         Get
             Return _Buttons
         End Get
-        Set(value As IEnumerable)
+        Set(value As IEnumerable(Of MyIconButton))
             _Buttons = value
             '没有特殊按钮，移除原 Stack
-            If Not IsNothing(ButtonStack) Then
+            If ButtonStack IsNot Nothing Then
                 Children.Remove(ButtonStack)
                 ButtonStack = Nothing
             End If
-            '获取按钮数量
-            Dim Count As Integer = 0
-            For Each Counter In value
-                Count += 1
-            Next
             '添加新 Stack
-            Select Case Count
+            Select Case value.Count
                 Case 0
                     '没有按钮，不添加新的
                 Case 1
                     '只有一个按钮
                     For Each Btn As MyIconButton In value
-                        If Btn.Height.Equals(Double.NaN) Then Btn.Height = 23
-                        If Btn.Width.Equals(Double.NaN) Then Btn.Width = 23
+                        If Btn.Height.Equals(Double.NaN) Then Btn.Height = 25
+                        If Btn.Width.Equals(Double.NaN) Then Btn.Width = 25
                         With Btn
                             .Opacity = 0
                             .Margin = New Thickness(0, 0, 5, 0)
@@ -149,22 +141,18 @@
                             .SnapsToDevicePixels = False
                             .UseLayoutRounding = False
                         End With
-                        SetColumn(Btn, 4)
-                        SetColumnSpan(Btn, 4)
-                        SetRowSpan(Btn, 4)
+                        SetColumnSpan(Btn, 10) : SetRowSpan(Btn, 10)
                         Children.Add(Btn)
                         ButtonStack = Btn
                     Next
                 Case Else
                     '有复数按钮，使用 StackPanel
                     ButtonStack = New StackPanel With {.Opacity = 0, .Margin = New Thickness(0, 0, 5, 0), .SnapsToDevicePixels = False, .Orientation = Orientation.Horizontal, .HorizontalAlignment = HorizontalAlignment.Right, .VerticalAlignment = VerticalAlignment.Center, .UseLayoutRounding = False}
-                    SetColumn(ButtonStack, 4)
-                    SetColumnSpan(ButtonStack, 4)
-                    SetRowSpan(ButtonStack, 4)
+                    SetColumnSpan(ButtonStack, 10) : SetRowSpan(ButtonStack, 10)
                     '构造按钮
                     For Each Btn As MyIconButton In value
-                        If Btn.Height.Equals(Double.NaN) Then Btn.Height = 23
-                        If Btn.Width.Equals(Double.NaN) Then Btn.Width = 23
+                        If Btn.Height.Equals(Double.NaN) Then Btn.Height = 25
+                        If Btn.Width.Equals(Double.NaN) Then Btn.Width = 25
                         CType(ButtonStack, StackPanel).Children.Add(Btn)
                     Next
                     Children.Add(ButtonStack)
@@ -324,7 +312,8 @@
                 '添加竖条控件
                 If IsNothing(RectCheck) Then
                     RectCheck = New Border With {.Width = 5, .Height = If(Checked, Double.NaN, 0), .CornerRadius = New CornerRadius(2, 2, 2, 2),
-                        .VerticalAlignment = If(Checked, VerticalAlignment.Stretch, VerticalAlignment.Center), .HorizontalAlignment = HorizontalAlignment.Left, .UseLayoutRounding = False, .SnapsToDevicePixels = False,
+                        .VerticalAlignment = If(Checked, VerticalAlignment.Stretch, VerticalAlignment.Center),
+                        .HorizontalAlignment = HorizontalAlignment.Left, .UseLayoutRounding = False, .SnapsToDevicePixels = False,
                         .Margin = If(Checked, New Thickness(-1, 6, 0, 6), New Thickness(-1, 0, 0, 0))}
                     RectCheck.SetResourceReference(Border.BackgroundProperty, "ColorBrush3")
                     SetRowSpan(RectCheck, 4)
@@ -532,10 +521,6 @@
                 Log("[Control] 按下复选列表项（" & (Not Checked).ToString & "）：" & Title)
                 SetChecked(Not Checked, True, True)
         End Select
-        'AniStart({
-        '       AaScaleTransform(Me, 1.004 - CType(RenderTransform, ScaleTransform).ScaleX, 150,, New AniEaseOutFluent),
-        '       AaScaleTransform(Me, -0.004, 100, 150, New AniEaseInFluent)
-        '   }, "MyListItem Scale " & Uuid)
     End Sub
 
     '鼠标点击判定
@@ -543,15 +528,12 @@
     Private Sub Button_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Me.PreviewMouseLeftButtonDown
         If IsMouseDirectlyOver AndAlso Not Type = CheckType.None Then
             IsMouseDown = True
-            If Not IsNothing(ButtonStack) Then ButtonStack.IsHitTestVisible = False
+            If ButtonStack IsNot Nothing Then ButtonStack.IsHitTestVisible = False
         End If
-        'AniStart({
-        '       AaScaleTransform(Me, 0.985 - CType(RenderTransform, ScaleTransform).ScaleX, 50,, New AniEaseOutFluent)
-        '   }, "MyListItem Scale " & Uuid)
     End Sub
     Private Sub Button_MouseLeave(sender As Object, e As Object) Handles Me.MouseLeave, Me.PreviewMouseLeftButtonUp
         IsMouseDown = False
-        If Not IsNothing(ButtonStack) Then ButtonStack.IsHitTestVisible = True
+        If ButtonStack IsNot Nothing Then ButtonStack.IsHitTestVisible = True
     End Sub
 
     '实现自定义事件
@@ -605,7 +587,11 @@
             '有动画
             Dim Ani As New List(Of AniData)
             If IsMouseOver AndAlso IsMouseOverAnimationEnabled Then
-                If ButtonStack IsNot Nothing Then Ani.Add(AaOpacity(ButtonStack, 1 - ButtonStack.Opacity, Time * 0.7, Time * 0.3))
+                If ButtonStack IsNot Nothing Then
+                    Ani.Add(AaOpacity(ButtonStack, 1 - ButtonStack.Opacity, Time * 0.7, Time * 0.3))
+                    Ani.Add(AaDouble(Sub(i) ColumnPaddingRight.Width = New GridLength(Math.Max(0, ColumnPaddingRight.Width.Value + i)),
+                                     Math.Max(MinPaddingRight, 5 + Buttons.Count * 25) - ColumnPaddingRight.Width.Value, Time * 0.3, Time * 0.7))
+                End If
                 Ani.AddRange({
                              AaColor(RectBack, Border.BackgroundProperty, If(IsMouseDown, "ColorBrush6", "ColorBrushBg1"), Time),
                              AaOpacity(RectBack, 1 - RectBack.Opacity, Time,, New AniEaseOutFluent)
@@ -619,7 +605,11 @@
                     End If
                 End If
             Else
-                If ButtonStack IsNot Nothing Then Ani.Add(AaOpacity(ButtonStack, -ButtonStack.Opacity, Time * 0.5))
+                If ButtonStack IsNot Nothing Then
+                    Ani.Add(AaOpacity(ButtonStack, -ButtonStack.Opacity, Time * 0.4))
+                    Ani.Add(AaDouble(Sub(i) ColumnPaddingRight.Width = New GridLength(Math.Max(0, ColumnPaddingRight.Width.Value + i)),
+                                     MinPaddingRight - ColumnPaddingRight.Width.Value, Time * 0.4))
+                End If
                 Ani.Add(AaOpacity(RectBack, -RectBack.Opacity, Time))
                 If IsScaleAnimationEnabled Then
                     Ani.AddRange({
@@ -634,14 +624,20 @@
         Else
             '无动画
             If IsMouseOver AndAlso IsMouseOverAnimationEnabled Then
-                If ButtonStack IsNot Nothing Then ButtonStack.Opacity = 1
+                If ButtonStack IsNot Nothing Then
+                    ButtonStack.Opacity = 1
+                    ColumnPaddingRight.Width = New GridLength(Math.Max(MinPaddingRight, 5 + Buttons.Count * 25))
+                End If
                 '由于鼠标已经移入，所以直接实例化 RectBack
                 RectBack.Background = ColorBg1
                 RectBack.Opacity = 1
                 RectBack.RenderTransform = New ScaleTransform(1, 1)
                 Me.RenderTransform = New ScaleTransform(1, 1)
             Else
-                If ButtonStack IsNot Nothing Then ButtonStack.Opacity = 0
+                If ButtonStack IsNot Nothing Then
+                    ButtonStack.Opacity = 0
+                    ColumnPaddingRight.Width = New GridLength(MinPaddingRight)
+                End If
                 Me.RenderTransform = New ScaleTransform(1, 1)
                 If _RectBack IsNot Nothing Then
                     If IsScaleAnimationEnabled Then RectBack.RenderTransform = New ScaleTransform(0.75, 0.75)
@@ -659,6 +655,7 @@
         Else
             SetResourceReference(ForegroundProperty, "ColorBrush1")
         End If
+        ColumnPaddingRight.Width = New GridLength(MinPaddingRight)
         If EventType = "打开帮助" Then
             Try
                 Dim NewElem = New HelpEntry(GetEventAbsoluteUrls(EventData, EventType)(0)).SetToListItem(Me)

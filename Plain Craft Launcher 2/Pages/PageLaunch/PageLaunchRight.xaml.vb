@@ -92,6 +92,10 @@ Download:
                         Log("[Page] 主页预设：简单主页")
                         Url = "https://cdn.wearclub.online/PCL/Custom.xaml"
                         GoTo Download
+                    Case 4 '历史上的今天
+                        Log("[Page] 主页预设：历史上的今天")
+                        Url = "https://pclnews.52chye.cn/custom.xaml"
+                        GoTo Download
                 End Select
         End Select
         RunInUi(Sub() LoadContent(Content))

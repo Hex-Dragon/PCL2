@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.Runtime.InteropServices
 
 Public Class FormMain
 
@@ -134,6 +135,13 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 307 Then 'Snapshot 2.6.11
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面将显示 Mod 的中文名、图标、标签等信息"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "从 Mod 管理页面查看 Mod 信息时会跳转到其下载详情页面"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新设计 Mod 管理页面的交互与样式"))
+            FeatureCount += 15
+            BugCount += 13
+        End If
         If LastVersion < 307 Then 'Snapshot 2.6.10
             FeatureCount += 2
             BugCount += 3
@@ -351,7 +359,6 @@ Public Class FormMain
     End Sub
 
     '窗口加载
-    Private Declare Auto Function ChangeWindowMessageFilterEx Lib "user32.dll" (ByVal hwnd As IntPtr, ByVal message As UInt32, ByVal action As UInt32, ByVal changeInfo As UInt32) As Boolean
     Private IsWindowLoadFinished As Boolean = False
     ''' <summary>
     ''' 是否为联机提权后自动重启。
@@ -489,20 +496,25 @@ Public Class FormMain
                            Catch ex As Exception
                                Log(ex, "清理自动更新文件失败")
                            End Try
-                           '开启管理员权限下的文件拖拽（#2531）
-                           Try
-                               If IsAdmin() Then
-                                   Log("[System] PCL 正以管理员权限运行")
-                                   ChangeWindowMessageFilterEx(Handle, &H233, 1, Nothing)
-                                   ChangeWindowMessageFilterEx(Handle, &H49, 1, Nothing)
-                               End If
-                           Catch ex As Exception
-                               Log(ex, "开启管理员权限下的文件拖拽失败")
-                           End Try
+                           '开启管理员权限下的文件拖拽，但下列代码也没用（#2531）
+                           If IsAdmin() Then
+                               Log("[System] PCL 正以管理员权限运行")
+                               Dim changeInfo As New ChangeFilter
+                               changeInfo.cbSize = Marshal.SizeOf(changeInfo)
+                               ChangeWindowMessageFilterEx(Handle, &H233, 1, changeInfo)
+                               ChangeWindowMessageFilterEx(Handle, &H4A, 1, changeInfo)
+                               ChangeWindowMessageFilterEx(Handle, &H49, 1, changeInfo)
+                           End If
                        End Sub, "Start Loader", ThreadPriority.Lowest)
 
         Log("[Start] 第三阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
     End Sub
+    <StructLayout(LayoutKind.Sequential)>
+    Public Structure ChangeFilter
+        Public cbSize As UInteger
+        Public ExtStatus As UInteger
+    End Structure
+    Private Declare Function ChangeWindowMessageFilterEx Lib "user32.dll" (hwnd As IntPtr, message As UInteger, action As UInteger, changeInfo As ChangeFilter) As Boolean
     '根据打开次数触发的事件
     Private Sub RunCountSub()
         Setup.Set("SystemCount", Setup.Get("SystemCount") + 1)

@@ -851,7 +851,6 @@ Done:
         Public Function ToListItem() As MyListItem
             Dim Item As New MyListItem With {
                 .Title = DisplayName, .Height = 42, .Tag = Me, .Type = MyListItem.CheckType.None,
-                .PaddingRight = 60,
                 .Logo = "pack://application:,,,/images/Blocks/Grass.png"}
             '绑定图标按钮
             Dim BtnRefresh As New MyIconButton With {.Logo = Logo.IconButtonRefresh, .LogoScale = 0.85, .ToolTip = "刷新", .Tag = Me}
@@ -941,7 +940,7 @@ Done:
         End Function
         Public Function ToListItem() As MyListItem
             Dim Item As New MyListItem With {
-                .Title = DisplayName, .Height = 42, .Info = GetDescription(), .Tag = Me, .PaddingRight = If(IsOwner, 60, 0),
+                .Title = DisplayName, .Height = 42, .Info = GetDescription(), .Tag = Me,
                 .Type = If(IsOwner, MyListItem.CheckType.None, MyListItem.CheckType.Clickable),
                 .Logo = "pack://application:,,,/images/Blocks/" & If(IsOwner, "GrassPath", "Grass") & ".png"}
             If IsOwner Then

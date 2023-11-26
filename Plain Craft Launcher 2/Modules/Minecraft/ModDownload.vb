@@ -455,7 +455,7 @@
     ''' </summary>
     Public DlForgeListOfficialLoader As New LoaderTask(Of Integer, DlForgeListResult)("DlForgeList Official", AddressOf DlForgeListOfficialMain)
     Private Sub DlForgeListOfficialMain(Loader As LoaderTask(Of Integer, DlForgeListResult))
-        Dim Result As String = NetGetCodeByRequestRetry("http://files.minecraftforge.net/maven/net/minecraftforge/forge/index_1.2.4.html", Encoding.Default, "text/html")
+        Dim Result As String = NetGetCodeByRequestRetry("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_1.2.4.html", Encoding.Default, "text/html")
         If Result.Length < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Result & "）")
         '获取所有版本信息
         Dim Names As List(Of String) = RegexSearch(Result, "(?<=a href=""index_)[0-9.]+(_pre[0-9]?)?(?=.html)")
@@ -593,7 +593,7 @@
     Public Sub DlForgeVersionOfficialMain(Loader As LoaderTask(Of String, List(Of DlForgeVersionEntry)))
         Dim Result As String
         Try
-            Result = NetGetCodeByDownload("http://files.minecraftforge.net/maven/net/minecraftforge/forge/index_" & Loader.Input & ".html")
+            Result = NetGetCodeByDownload("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_" & Loader.Input & ".html")
         Catch ex As Exception
             If GetExceptionSummary(ex).Contains("(404)") Then
                 Throw New Exception("没有可用版本")
@@ -799,7 +799,7 @@
     ''' </summary>
     Public DlLiteLoaderListOfficialLoader As New LoaderTask(Of Integer, DlLiteLoaderListResult)("DlLiteLoaderList Official", AddressOf DlLiteLoaderListOfficialMain)
     Private Sub DlLiteLoaderListOfficialMain(Loader As LoaderTask(Of Integer, DlLiteLoaderListResult))
-        Dim Result As JObject = NetGetCodeByRequestRetry("http://dl.liteloader.com/versions/versions.json", IsJson:=True)
+        Dim Result As JObject = NetGetCodeByRequestRetry("https://dl.liteloader.com/versions/versions.json", IsJson:=True)
         Try
             Dim Json As JObject = Result("versions")
             Dim Versions As New List(Of DlLiteLoaderListEntry)

@@ -67,7 +67,7 @@
 
             SearchBox.Text = ""
             '建立 StackPanel
-            PanItems = New StackPanel With {.Margin = New Thickness(18, MyCard.SwapedHeight, 18, If(List.Count > 0, 20, 0)), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0)}
+            PanItems = New StackPanel With {.Margin = New Thickness(20, 38, 18, If(List.Count > 0, 20, 0)), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0)}
             For Each ModEntity As McMod In List
                 PanItems.Children.Add(McModListItem(ModEntity))
             Next
@@ -95,63 +95,20 @@
         If Counter(McMod.McModState.Unavaliable) > 0 Then TypeList.Add("错误 " & Counter(McMod.McModState.Unavaliable))
         Return "Mod 列表（" & Join(TypeList, "，") & "）"
     End Function
-    Private Function McModListItem(Entry As McMod) As MyListItem
-        '图标
-        Dim Logo As String
-        Select Case Entry.State
-            Case McMod.McModState.Fine
-                Logo = "pack://application:,,,/images/Blocks/RedstoneLampOn.png"
-            Case McMod.McModState.Disabled
-                Logo = "pack://application:,,,/images/Blocks/RedstoneLampOff.png"
-            Case Else '出错
-                Logo = "pack://application:,,,/images/Blocks/RedstoneBlock.png"
-        End Select
-        '文本
-        Dim Title As String
-        If Entry.State = McMod.McModState.Disabled Then
-            Title = GetFileNameWithoutExtentionFromPath(Entry.Path.Substring(0, Entry.Path.Count - ".disabled".Count)) & "（已禁用）"
-        Else
-            Title = GetFileNameWithoutExtentionFromPath(Entry.Path)
-        End If
-        Dim Desc As String
-        If Entry.Version Is Nothing OrElse Entry.Description IsNot Nothing Then
-            Desc = Entry.Name & If(Entry.Version Is Nothing, "", " (" & Entry.Version & ")") & " : " & If(Entry.Description, Entry.Path)
-        ElseIf Entry.IsFileAvailable Then
-            Desc = Entry.Path
-        Else
-            Desc = "存在错误 : " & Entry.Path
-        End If
-        'Desc = If(Entry.ModId, "无可用名称") & " (" & If(Entry.Version, "无可用版本") & ")"
-        'If Entry.Dependencies.Count > 0 Then
-        '    Dim DepList As New List(Of String)
-        '    For Each Dep In Entry.Dependencies
-        '        DepList.Add(Dep.Key & If(Dep.Value Is Nothing, "", "@" & Dep.Value))
-        '    Next
-        '    Desc += " : " & Join(DepList, ", ")
-        'End If
-        '实例化
+    Private Function McModListItem(Entry As McMod) As MyLocalModItem
         AniControlEnabled += 1
-        Dim NewItem As New MyListItem With {
-            .LogoClickable = True, .Logo = Logo, .SnapsToDevicePixels = True, .Title = Title, .Info = Desc, .Height = 42, .Tag = Entry,
-            .Type = MyListItem.CheckType.CheckBox, .IsScaleAnimationEnabled = False,
-            .PaddingRight = 73,
-            .ContentHandler = AddressOf McModContent, .Checked = SelectedMods.Contains(Entry.RawFileName)
-        }
+        Dim NewItem As New MyLocalModItem With {.SnapsToDevicePixels = True, .Entry = Entry,
+            .ButtonHandler = AddressOf McModContent, .Checked = SelectedMods.Contains(Entry.RawFileName)}
+        AddHandler Entry.OnGetCompProject, AddressOf NewItem.Refresh
+        NewItem.Refresh()
         AniControlEnabled -= 1
         Return NewItem
     End Function
-    Private Sub McModContent(sender As MyListItem, e As EventArgs)
-        Dim ModEntity As McMod = sender.Tag
-        '注册点击事件
+    Private Sub McModContent(sender As MyLocalModItem, e As EventArgs)
+        '点击事件
         AddHandler sender.Changed, AddressOf CheckChanged
-        AddHandler sender.LogoClick, AddressOf ItemLogo_Click
+        AddHandler sender.Click, Sub(ss As MyLocalModItem, ee As EventArgs) ss.Checked = Not ss.Checked
         '图标按钮
-        Dim BtnDel As New MyIconButton With {.LogoScale = 1.1, .Logo = Logo.IconButtonDelete, .Tag = sender}
-        BtnDel.ToolTip = "删除"
-        ToolTipService.SetPlacement(BtnDel, Primitives.PlacementMode.Center)
-        ToolTipService.SetVerticalOffset(BtnDel, 30)
-        ToolTipService.SetHorizontalOffset(BtnDel, 2)
-        AddHandler BtnDel.Click, AddressOf Delete_Click
         Dim BtnOpen As New MyIconButton With {.LogoScale = 1.15, .Logo = Logo.IconButtonOpen, .Tag = sender}
         BtnOpen.ToolTip = "打开文件位置"
         ToolTipService.SetPlacement(BtnOpen, Primitives.PlacementMode.Center)
@@ -165,7 +122,7 @@
         ToolTipService.SetHorizontalOffset(BtnCont, 2)
         AddHandler BtnCont.Click, AddressOf Info_Click
         AddHandler sender.MouseRightButtonDown, AddressOf Info_Click
-        sender.Buttons = {BtnCont, BtnOpen, BtnDel}
+        sender.Buttons = {BtnCont, BtnOpen}
     End Sub
 
 #End Region
@@ -206,7 +163,11 @@
     ''' 全选。
     ''' </summary>
     Private Sub BtnManageSelectAll_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageSelectAll.Click
-        ChangeAllSelected(True)
+        If SelectedMods.Count < If(IsSearching, PanSearchList.Children.Count, McModLoader.Output.Count) Then
+            ChangeAllSelected(True)
+        Else
+            ChangeAllSelected(False)
+        End If
     End Sub
 
 #End Region
@@ -217,10 +178,10 @@
     Public SelectedMods As New List(Of String)
 
     '单项切换选择状态
-    Public Sub CheckChanged(sender As MyListItem, e As RouteEventArgs)
+    Public Sub CheckChanged(sender As MyLocalModItem, e As RouteEventArgs)
         If AniControlEnabled <> 0 Then Return
         '更新选择了的内容
-        Dim SelectedKey As String = CType(sender.Tag, McMod).RawFileName
+        Dim SelectedKey As String = sender.Entry.RawFileName
         If sender.Checked Then
             If Not SelectedMods.Contains(SelectedKey) Then SelectedMods.Add(SelectedKey)
         Else
@@ -304,13 +265,13 @@
         SelectedMods.Clear()
         If IsSearching Then
             '搜索中
-            For Each Item As MyListItem In PanSearchList.Children
+            For Each Item As MyLocalModItem In PanSearchList.Children
                 Item.Checked = Value
-                If Value Then SelectedMods.Add(CType(Item.Tag, McMod).RawFileName)
+                If Value Then SelectedMods.Add(Item.Entry.RawFileName)
             Next
             If Not Value Then '只取消选择
                 If PanItems IsNot Nothing Then
-                    For Each Item As MyListItem In PanItems.Children
+                    For Each Item As MyLocalModItem In PanItems.Children
                         Item.Checked = Value
                     Next
                 End If
@@ -318,9 +279,9 @@
         Else
             '非搜索中
             If PanItems IsNot Nothing Then
-                For Each Item As MyListItem In PanItems.Children
+                For Each Item As MyLocalModItem In PanItems.Children
                     Item.Checked = Value
-                    If Value Then SelectedMods.Add(CType(Item.Tag, McMod).RawFileName)
+                    If Value Then SelectedMods.Add(Item.Entry.RawFileName)
                 Next
             End If
         End If
@@ -372,11 +333,12 @@
             End Try
             '更改 Loader 和 UI 中的列表
             Dim NewModEntity As New McMod(NewPath)
+            NewModEntity.Comp = ModEntity.Comp
             Dim IndexOfLoader As Integer = McModLoader.Output.IndexOf(ModEntity)
             McModLoader.Output.RemoveAt(IndexOfLoader)
             McModLoader.Output.Insert(IndexOfLoader, NewModEntity)
             Dim List = If(IsSearching, PanSearchList, PanItems).Children
-            Dim IndexOfUi As Integer = List.IndexOf(List.OfType(Of MyListItem).FirstOrDefault(Function(i) CType(i.Tag, McMod) Is ModEntity))
+            Dim IndexOfUi As Integer = List.IndexOf(List.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry Is ModEntity))
             If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
             List.RemoveAt(IndexOfUi)
             List.Insert(IndexOfUi, McModListItem(NewModEntity))
@@ -419,7 +381,7 @@
             '更改 Loader 和 UI 中的列表
             McModLoader.Output.Remove(ModEntity)
             Dim Parent As StackPanel = If(IsSearching, PanSearchList, PanItems)
-            Dim IndexOfUi As Integer = Parent.Children.IndexOf(Parent.Children.OfType(Of MyListItem).First(Function(i) CType(i.Tag, McMod) Is ModEntity))
+            Dim IndexOfUi As Integer = Parent.Children.IndexOf(Parent.Children.OfType(Of MyLocalModItem).First(Function(i) i.Entry Is ModEntity))
             Parent.Children.RemoveAt(IndexOfUi)
         Next
         If Not IsSearching Then
@@ -454,165 +416,69 @@
 
 #Region "单个 Mod 项"
 
-    '点击 Logo：切换可用状态 / 显示错误原因
-    Public Sub ItemLogo_Click(sender As MyListItem, e As EventArgs)
-        Try
-
-            Dim ModEntity As McMod = sender.Tag
-            Dim NewPath As String = Nothing
-            Select Case ModEntity.State
-                Case McMod.McModState.Fine
-                    '前置检测警告
-                    If ModEntity.IsPresetMod Then
-                        If MyMsgBox("该 Mod 可能为其他 Mod 的前置，如果禁用可能导致其他 Mod 无法使用。" & vbCrLf & "你确定要继续禁用吗？", "警告", "禁用", "取消") = 2 Then Exit Sub
-                    End If
-                    NewPath = ModEntity.Path & ".disabled"
-                Case McMod.McModState.Disabled
-                    NewPath = ModEntity.Path.Substring(0, ModEntity.Path.Count - ".disabled".Count)
-                Case McMod.McModState.Unavaliable
-                    MyMsgBox("无法读取此 Mod 的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntity.FileUnavailableReason), "Mod 读取失败")
-                    Exit Sub
-            End Select
-            '重命名
-            Dim NewModEntity As New McMod(NewPath)
-            Try
-                File.Delete(NewPath)
-                FileSystem.Rename(ModEntity.Path, NewPath)
-            Catch ex As FileNotFoundException
-                Log(ex, "未找到理应存在的 Mod 文件（" & ModEntity.Path & "）")
-                FileSystem.Rename(NewPath, ModEntity.Path)
-                NewModEntity = New McMod(ModEntity.Path)
-            End Try
-            '更改 Loader 中的列表
-            Dim IndexOfLoader As Integer = McModLoader.Output.IndexOf(ModEntity)
-            McModLoader.Output.RemoveAt(IndexOfLoader)
-            McModLoader.Output.Insert(IndexOfLoader, NewModEntity)
-            '更改 UI 中的列表
-            Dim Parent As StackPanel = sender.Parent
-            Dim IndexOfUi As Integer = Parent.Children.IndexOf(sender)
-            Parent.Children.RemoveAt(IndexOfUi)
-            Parent.Children.Insert(IndexOfUi, McModListItem(NewModEntity))
-            '仅在非搜索页面才执行，以确保搜索页内外显示一致
-            If Not IsSearching Then
-                '改变禁用数量的显示
-                CType(Parent.Parent, MyCard).Title = McModGetTitle(McModLoader.Output)
-                '更新加载器状态
-                LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", LoaderFolderRunType.UpdateOnly)
-            End If
-            RefreshBottomBar()
-
-        Catch ex As Exception
-            Log(ex, "单个状态改变中重命名 Mod 失败")
-            Hint("切换 Mod 状态失败，请尝试关闭正在运行的游戏后再试！")
-            LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", LoaderFolderRunType.UpdateOnly)
-        End Try
-    End Sub
-    '删除
-    Public Sub Delete_Click(sender As MyIconButton, e As EventArgs)
-        Try
-
-            Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
-            Dim ListItem As MyListItem = sender.Tag
-            Dim ModEntity As McMod = ListItem.Tag
-            '前置检测警告
-            If ModEntity.IsPresetMod Then
-                If MyMsgBox("该 Mod 可能为其他 Mod 的前置，如果删除可能导致其他 Mod 无法使用。" & vbCrLf & "你确定要继续删除吗？", "警告", "删除", "取消", IsWarn:=True) = 2 Then Exit Sub
-            End If
-            '删除
-            If File.Exists(ModEntity.Path) Then
-                If IsShiftPressed Then
-                    File.Delete(ModEntity.Path)
-                Else
-                    My.Computer.FileSystem.DeleteFile(ModEntity.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                End If
-            Else
-                '在不明原因下删除的文件可能还在列表里，如果玩家又点了一次就会出错，总之加个判断也不碍事
-                Log("[System] 需要删除的 Mod 文件不存在（" & ModEntity.Path & "）", LogLevel.Hint)
-                Exit Sub
-            End If
-            '更改 Loader 中的列表
-            McModLoader.Output.Remove(ModEntity)
-            '更改 UI 中的列表
-            Dim Parent As StackPanel = ListItem.Parent
-            Parent.Children.Remove(ListItem)
-            If Parent.Children.Count = 0 Then
-                RefreshList(True)
-            Else
-                CType(Parent.Parent, MyCard).Title = McModGetTitle(McModLoader.Output)
-            End If
-            '显示提示
-            If IsShiftPressed Then
-                Hint("已删除 " & ModEntity.FileName & "！", HintType.Finish)
-            Else
-                Hint("已将 " & ModEntity.FileName & " 删除到回收站！", HintType.Finish)
-            End If
-            LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", LoaderFolderRunType.UpdateOnly)
-
-        Catch ex As OperationCanceledException
-            Log(ex, "删除 Mod 被主动取消")
-        Catch ex As Exception
-            Log(ex, "删除 Mod 失败", LogLevel.Feedback)
-        End Try
-    End Sub
     '详情
     Public Sub Info_Click(sender As Object, e As EventArgs)
         Try
 
-            Dim ListItem As MyListItem
-            ListItem = If(TypeOf sender Is MyIconButton, sender.Tag, sender)
-            Dim ModEntity As McMod = ListItem.Tag
+            Dim ModEntry As McMod = CType(If(TypeOf sender Is MyIconButton, sender.Tag, sender), MyLocalModItem).Entry
             '加载失败信息
-            If ModEntity.State = McMod.McModState.Unavaliable Then
-                MyMsgBox("无法读取此 Mod 的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntity.FileUnavailableReason), "Mod 读取失败")
+            If ModEntry.State = McMod.McModState.Unavaliable Then
+                MyMsgBox("无法读取此 Mod 的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "Mod 读取失败")
                 Return
             End If
-            '获取信息
-            Dim ContentLines As New List(Of String)
-            If ModEntity.Description IsNot Nothing Then ContentLines.Add(ModEntity.Description & vbCrLf)
-            If ModEntity.Authors IsNot Nothing Then ContentLines.Add("作者：" & ModEntity.Authors)
-            ContentLines.Add("文件：" & ModEntity.FileName & "（" & GetString(New FileInfo(ModEntity.Path).Length) & "）")
-            If ModEntity.Version IsNot Nothing Then ContentLines.Add("版本：" & ModEntity.Version)
-            Dim DebugInfo As New List(Of String)
-            If ModEntity.ModId IsNot Nothing Then
-                DebugInfo.Add("Mod ID：" & ModEntity.ModId)
-            End If
-            If ModEntity.Dependencies.Count > 0 Then
-                DebugInfo.Add("依赖于：")
-                For Each Dep In ModEntity.Dependencies
-                    DebugInfo.Add(" - " & Dep.Key & If(Dep.Value Is Nothing, "", "，版本：" & Dep.Value))
-                Next
-            End If
-            If DebugInfo.Count > 0 Then
-                ContentLines.Add("")
-                ContentLines.AddRange(DebugInfo)
-            End If
-            '获取用于搜索的 Mod 名称
-            Dim ModOriginalName As String = ModEntity.Name.Replace(" ", "+")
-            Dim ModSearchName As String = ModOriginalName.Substring(0, 1)
-            For i = 1 To ModOriginalName.Count - 1
-                Dim IsLastLower As Boolean = ModOriginalName(i - 1).ToString.ToLower.Equals(ModOriginalName(i - 1).ToString)
-                Dim IsCurrentLower As Boolean = ModOriginalName(i).ToString.ToLower.Equals(ModOriginalName(i).ToString)
-                If IsLastLower AndAlso Not IsCurrentLower Then
-                    '上一个字母为小写，这一个字母为大写
-                    ModSearchName += "+"
-                End If
-                ModSearchName += ModOriginalName(i)
-            Next
-            ModSearchName = ModSearchName.Replace("++", "+").Replace("pti+Fine", "ptiFine")
-            '显示
-            If ModEntity.Url Is Nothing Then
-                If MyMsgBox(Join(ContentLines, vbCrLf), ModEntity.Name, "百科搜索", "返回") = 1 Then
-                    OpenWebsite("https://www.mcmod.cn/s?key=" & ModSearchName & "&site=all&filter=0")
-                End If
+            If ModEntry.Comp IsNot Nothing Then
+                '跳转到 Mod 下载页面
+                FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
+                                   .Additional = {ModEntry.Comp, New List(Of String), PageVersionLeft.Version.Version.McName,
+                                   If(PageVersionLeft.Version.Version.HasForge, CompModLoaderType.Forge, If(PageVersionLeft.Version.Version.HasFabric, CompModLoaderType.Fabric, CompModLoaderType.Any))}})
             Else
-                Select Case MyMsgBox(Join(ContentLines, vbCrLf), ModEntity.Name, "打开官网", "百科搜索", "返回")
-                    Case 1
-                        OpenWebsite(ModEntity.Url)
-                    Case 2
+                '获取信息
+                Dim ContentLines As New List(Of String)
+                If ModEntry.Description IsNot Nothing Then ContentLines.Add(ModEntry.Description & vbCrLf)
+                If ModEntry.Authors IsNot Nothing Then ContentLines.Add("作者：" & ModEntry.Authors)
+                ContentLines.Add("文件：" & ModEntry.FileName & "（" & GetString(New FileInfo(ModEntry.Path).Length) & "）")
+                If ModEntry.Version IsNot Nothing Then ContentLines.Add("版本：" & ModEntry.Version)
+                Dim DebugInfo As New List(Of String)
+                If ModEntry.ModId IsNot Nothing Then
+                    DebugInfo.Add("Mod ID：" & ModEntry.ModId)
+                End If
+                If ModEntry.Dependencies.Count > 0 Then
+                    DebugInfo.Add("依赖于：")
+                    For Each Dep In ModEntry.Dependencies
+                        DebugInfo.Add(" - " & Dep.Key & If(Dep.Value Is Nothing, "", "，版本：" & Dep.Value))
+                    Next
+                End If
+                If DebugInfo.Count > 0 Then
+                    ContentLines.Add("")
+                    ContentLines.AddRange(DebugInfo)
+                End If
+                '获取用于搜索的 Mod 名称
+                Dim ModOriginalName As String = ModEntry.Name.Replace(" ", "+")
+                Dim ModSearchName As String = ModOriginalName.Substring(0, 1)
+                For i = 1 To ModOriginalName.Count - 1
+                    Dim IsLastLower As Boolean = ModOriginalName(i - 1).ToString.ToLower.Equals(ModOriginalName(i - 1).ToString)
+                    Dim IsCurrentLower As Boolean = ModOriginalName(i).ToString.ToLower.Equals(ModOriginalName(i).ToString)
+                    If IsLastLower AndAlso Not IsCurrentLower Then
+                        '上一个字母为小写，这一个字母为大写
+                        ModSearchName += "+"
+                    End If
+                    ModSearchName += ModOriginalName(i)
+                Next
+                ModSearchName = ModSearchName.Replace("++", "+").Replace("pti+Fine", "ptiFine")
+                '显示
+                If ModEntry.Url Is Nothing Then
+                    If MyMsgBox(Join(ContentLines, vbCrLf), ModEntry.Name, "百科搜索", "返回") = 1 Then
                         OpenWebsite("https://www.mcmod.cn/s?key=" & ModSearchName & "&site=all&filter=0")
-                End Select
+                    End If
+                Else
+                    Select Case MyMsgBox(Join(ContentLines, vbCrLf), ModEntry.Name, "打开官网", "百科搜索", "返回")
+                        Case 1
+                            OpenWebsite(ModEntry.Url)
+                        Case 2
+                            OpenWebsite("https://www.mcmod.cn/s?key=" & ModSearchName & "&site=all&filter=0")
+                    End Select
+                End If
             End If
-
         Catch ex As Exception
             Log(ex, "获取 Mod 详情失败", LogLevel.Feedback)
         End Try
@@ -621,9 +487,8 @@
     Public Sub Open_Click(sender As MyIconButton, e As EventArgs)
         Try
 
-            Dim ListItem As MyListItem = sender.Tag
-            Dim ModEntity As McMod = ListItem.Tag
-            OpenExplorer("/select,""" & ModEntity.Path & """")
+            Dim ListItem As MyLocalModItem = sender.Tag
+            OpenExplorer("/select,""" & ListItem.Entry.Path & """")
 
         Catch ex As Exception
             Log(ex, "打开 Mod 文件位置失败", LogLevel.Feedback)
@@ -631,6 +496,8 @@
     End Sub
 
 #End Region
+
+#Region "搜索"
 
     Public ReadOnly Property IsSearching As Boolean
         Get
@@ -643,17 +510,22 @@
             '构造请求
             Dim QueryList As New List(Of SearchEntry(Of McMod))
             For Each Entry As McMod In McModLoader.Output
-                QueryList.Add(New SearchEntry(Of McMod) With {
-                    .Item = Entry,
-                    .SearchSource = New List(Of KeyValuePair(Of String, Double)) From {
-                        New KeyValuePair(Of String, Double)(Entry.Name, 1),
-                        New KeyValuePair(Of String, Double)(Entry.FileName, 1),
-                        New KeyValuePair(Of String, Double)(If(Entry.Description, ""), 0.5)
-                    }
-                })
+                Dim SearchSource As New List(Of KeyValuePair(Of String, Double))
+                SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Name, 1))
+                SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.FileName, 1))
+                If Entry.Version IsNot Nothing Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Version, 0.2))
+                If Entry.Description IsNot Nothing AndAlso Entry.Description <> "" Then
+                    SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Description, 0.4))
+                End If
+                If Entry.Comp IsNot Nothing Then
+                    If Entry.Comp.RawName <> Entry.Name Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Comp.RawName, 1))
+                    If Entry.Comp.TranslatedName <> Entry.Comp.RawName Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Comp.TranslatedName, 1))
+                    If Entry.Comp.Description <> Entry.Description Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Comp.Description, 0.4))
+                End If
+                QueryList.Add(New SearchEntry(Of McMod) With {.Item = Entry, .SearchSource = SearchSource})
             Next
             '进行搜索，构造列表
-            Dim SearchResult = Search(QueryList, SearchBox.Text, MaxBlurCount:=5, MinBlurSimilarity:=0.35)
+            Dim SearchResult = Search(QueryList, SearchBox.Text, MaxBlurCount:=6, MinBlurSimilarity:=0.35)
             PanSearchList.Children.Clear()
             If SearchResult.Count = 0 Then
                 PanSearch.Title = "无搜索结果"
@@ -662,7 +534,7 @@
                 PanSearch.Title = "搜索结果"
                 For Each Result In SearchResult
                     Dim Item = McModListItem(Result.Item)
-                    If ModeDebug Then Item.Info = If(Result.AbsoluteRight, "完全匹配，", "") & "相似度：" & Math.Round(Result.Similarity, 3) & "，" & Item.Info
+                    If ModeDebug Then Item.Description = If(Result.AbsoluteRight, "完全匹配，", "") & "相似度：" & Math.Round(Result.Similarity, 3) & "，" & Item.Description
                     PanSearchList.Children.Add(Item)
                 Next
                 PanSearchList.Visibility = Visibility.Visible
@@ -691,5 +563,7 @@
                 }, "FrmVersionMod Search Switch", True)
         End If
     End Sub
+
+#End Region
 
 End Class

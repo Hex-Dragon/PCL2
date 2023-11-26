@@ -1,6 +1,5 @@
 ﻿Public Class PageDownloadCompDetail
     Private CompItem As MyCompItem = Nothing
-    Private Project As CompProject
 
 #Region "加载器"
 
@@ -10,8 +9,12 @@
     '初始化加载器信息
     Private Sub PageDownloadCompDetail_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         Project = FrmMain.PageCurrent.Additional(0)
+        TargetVersion = FrmMain.PageCurrent.Additional(2)
+        TargetLoader = FrmMain.PageCurrent.Additional(3)
         PageLoaderInit(Load, PanLoad, PanMain, CardIntro, CompFileLoader, AddressOf Load_OnFinish)
     End Sub
+    Private Project As CompProject
+    Private TargetVersion As String, TargetLoader As CompModLoaderType
     '自动重试
     Private Sub Load_State(sender As Object, state As MyLoading.MyLoadingState, oldState As MyLoading.MyLoadingState) Handles Load.StateChanged
         Select Case CompFileLoader.State
@@ -39,23 +42,8 @@
         End Sub
     End Class
     Private Sub Load_OnFinish()
-        '获取目标版本与 Mod 加载器
-        Dim TargetVersion As String
-        Select Case Project.Type
-            Case CompType.Mod
-                TargetVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
-            Case CompType.ModPack
-                TargetVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
-            Case Else 'CompType.ResourcePack
-                'FUTURE: Res
-                TargetVersion = "" 'If(PageDownloadResource.Loader.Input.GameVersion, "")
-        End Select
-        Dim TargetLoader = CompModLoaderType.Any
-        If Project.Type = CompType.Mod AndAlso PageDownloadMod.Loader.Input.ModLoader <> CompModLoaderType.Any Then
-            TargetLoader = PageDownloadMod.Loader.Input.ModLoader
-        End If
         Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
-            $"目标版本：{TargetVersion} {If(TargetLoader <> CompModLoaderType.Any, TargetLoader, "")}", "")
+            $"所选版本：{TargetVersion} {If(TargetLoader <> CompModLoaderType.Any, TargetLoader, "")}", "")
         '初始化字典
         Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New VersionSorterWithSelect(TargetCardName))
         Dict.Add("未知版本", New List(Of CompFile))
@@ -144,8 +132,7 @@
         '放置当前工程
         If CompItem IsNot Nothing Then PanIntro.Children.Remove(CompItem)
         CompItem = Project.ToCompItem(True, True)
-        CompItem.IsHitTestVisible = False
-        CompItem.HasAnimation = False
+        CompItem.CanInteraction = False
         CompItem.Margin = New Thickness(-7, -7, 0, 8)
         PanIntro.Children.Insert(0, CompItem)
 

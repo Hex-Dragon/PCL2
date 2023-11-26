@@ -1958,9 +1958,7 @@ NextVersion:
             Dim Urls As New List(Of String)
             If Token.Url IsNot Nothing Then
                 '获取 Url 的真实地址
-                Dim Url As String = Token.Url
-                Url = Url.Replace("https://files.minecraftforge.net", "http://files.minecraftforge.net") '这个鬼东西不让 https
-                Urls.Add(Url)
+                Urls.Add(Token.Url)
                 If Token.Url.Contains("launcher.mojang.com/v1/objects") Then Urls = DlSourceLauncherOrMetaGet(Token.Url).ToList() 'Mappings
                 If Token.Url.Contains("maven") Then Urls.Insert(0, Token.Url.Replace(Mid(Token.Url, 1, Token.Url.IndexOf("maven")), "https://download.mcbbs.net/").Replace("maven.fabricmc.net", "maven").Replace("maven.minecraftforge.net", "maven"))
             End If
@@ -1974,8 +1972,8 @@ NextVersion:
                 Dim OptiFineBase As String = Token.LocalPath.Replace(If(Token.IsJumpLoader, JumpLoaderFolder, CustomMcFolder) & "libraries\optifine\OptiFine\", "").Split("_")(0) & "/" & GetFileNameFromPath(Token.LocalPath).Replace("-", "_")
                 OptiFineBase = "/maven/com/optifine/" & OptiFineBase
                 If OptiFineBase.Contains("_pre") Then OptiFineBase = OptiFineBase.Replace("com/optifine/", "com/optifine/preview_")
-                Urls.Add("http://download.mcbbs.net" & OptiFineBase)
-                Urls.Add("http://bmclapi2.bangbang93.com" & OptiFineBase)
+                Urls.Add("https://download.mcbbs.net" & OptiFineBase)
+                Urls.Add("https://bmclapi2.bangbang93.com" & OptiFineBase)
             ElseIf Urls.Count <= 2 Then
                 '普通文件
                 Urls.AddRange(DlSourceLibraryGet("https://libraries.minecraft.net" & Token.LocalPath.Replace(If(Token.IsJumpLoader, JumpLoaderFolder, CustomMcFolder) & "libraries", "").Replace("\", "/")))
@@ -2188,7 +2186,7 @@ NextVersion:
                 '检查文件是否存在
                 Dim File As New FileInfo(Token.LocalPath)
                 If File.Exists AndAlso (Token.Size = 0 OrElse Token.Size = File.Length) AndAlso
-                    (Not CheckHash OrElse Token.Hash Is Nothing OrElse Token.Hash = GetAuthSHA1(Token.LocalPath)) Then Continue For
+                    (Not CheckHash OrElse Token.Hash Is Nothing OrElse Token.Hash = GetFileSHA1(Token.LocalPath)) Then Continue For
                 '文件不存在，添加下载
                 Result.Add(New NetFile(DlSourceResourceGet("https://resources.download.minecraft.net/" & Left(Token.Hash, 2) & "/" & Token.Hash), Token.LocalPath, New FileChecker(ActualSize:=If(Token.Size = 0, -1, Token.Size), Hash:=Token.Hash)))
             Next
