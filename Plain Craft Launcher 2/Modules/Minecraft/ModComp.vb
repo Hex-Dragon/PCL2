@@ -536,7 +536,7 @@
         End Function
         Public Function GetControlLogo() As String
             If LogoUrl Is Nothing Then
-                Return "pack://application:,,,/images/Icons/NoIcon.png"
+                Return PathImage & "Icons/NoIcon.png"
             Else
                 Return LogoUrl
             End If
@@ -1279,13 +1279,13 @@ Retry:
                 End If
                 'GameVersions
                 Dim RawVersions As List(Of String) = Data("game_versions").Select(Function(t) t.ToString.Trim.ToLower).ToList
-                GameVersions = RawVersions.Where(Function(v) v.StartsWith("1.")).
-                                           Select(Function(v) If(v.Contains("-"), v.Split("-").First & " 快照", v)).ToList
+                GameVersions = RawVersions.Where(Function(v) v.StartsWith("1.") OrElse v.StartsWith("b1.")).
+                                           Select(Function(v) If(v.Contains("-"), v.Split("-").First & " 快照", If(v.StartsWith("b1."), "远古版本", v))).ToList
                 If GameVersions.Count > 1 Then
                     GameVersions = Sort(GameVersions, AddressOf VersionSortBoolean).ToList
                     If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)}
                 ElseIf GameVersions.Count = 1 Then
-                    GameVersions = GameVersions.ToList
+                    '无需处理
                 ElseIf RawVersions.Any(Function(v) RegexCheck(v, "[0-9]{2}w[0-9]{2}[a-z]{1}")) Then
                     GameVersions = RawVersions.Where(Function(v) RegexCheck(v, "[0-9]{2}w[0-9]{2}[a-z]{1}")).ToList
                 Else
@@ -1332,11 +1332,11 @@ Retry:
             }
             Select Case Status
                 Case CompFileStatus.Release
-                    NewItem.Logo = "pack://application:,,,/images/Icons/R.png"
+                    NewItem.Logo = PathImage & "Icons/R.png"
                 Case CompFileStatus.Beta
-                    NewItem.Logo = "pack://application:,,,/images/Icons/B.png"
+                    NewItem.Logo = PathImage & "Icons/B.png"
                 Case Else 'Alpha
-                    NewItem.Logo = "pack://application:,,,/images/Icons/A.png"
+                    NewItem.Logo = PathImage & "Icons/A.png"
             End Select
             AddHandler NewItem.Click, OnClick
 

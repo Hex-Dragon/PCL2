@@ -24,7 +24,7 @@
     End Sub
     Public Sub PerformVerticalOffsetDelta(Delta As Double)
         AniStart(AaDouble(Sub(AnimDelta As Double)
-                              RealOffset = MathRange(RealOffset + AnimDelta, 0, ExtentHeight - ActualHeight)
+                              RealOffset = MathClamp(RealOffset + AnimDelta, 0, ExtentHeight - ActualHeight)
                               ScrollToVerticalOffset(RealOffset)
                           End Sub, Delta * DeltaMuity, 300,, New AniEaseOutFluent(6)))
     End Sub

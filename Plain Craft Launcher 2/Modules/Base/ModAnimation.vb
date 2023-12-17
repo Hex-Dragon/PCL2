@@ -577,10 +577,10 @@ Public Module ModAnimation
     Public Class AniEaseLinear
         Inherits AniEase
         Public Overrides Function GetValue(t As Double) As Double
-            Return MathRange(t, 0, 1)
+            Return MathClamp(t, 0, 1)
         End Function
         Public Overrides Function GetDelta(t1 As Double, t0 As Double) As Double
-            Return MathRange(t1, 0, 1) - MathRange(t0, 0, 1)
+            Return MathClamp(t1, 0, 1) - MathClamp(t0, 0, 1)
         End Function
     End Class
 
@@ -595,7 +595,7 @@ Public Module ModAnimation
             p = Power
         End Sub
         Public Overrides Function GetValue(t As Double) As Double
-            Return MathRange(t, 0, 1) ^ p
+            Return MathClamp(t, 0, 1) ^ p
         End Function
     End Class
     ''' <summary>
@@ -608,7 +608,7 @@ Public Module ModAnimation
             p = Power
         End Sub
         Public Overrides Function GetValue(t As Double) As Double
-            Return 1 - MathRange(1 - t, 0, 1) ^ p
+            Return 1 - MathClamp(1 - t, 0, 1) ^ p
         End Function
     End Class
     ''' <summary>
@@ -636,7 +636,7 @@ Public Module ModAnimation
             p = 3 - Power * 0.5
         End Sub
         Public Overrides Function GetValue(t As Double) As Double
-            t = MathRange(t, 0, 1)
+            t = MathClamp(t, 0, 1)
             Return t ^ p * Math.Cos(1.5 * Math.PI * (1 - t))
         End Function
     End Class
@@ -650,7 +650,7 @@ Public Module ModAnimation
             p = 3 - Power * 0.5
         End Sub
         Public Overrides Function GetValue(t As Double) As Double
-            t = MathRange(t, 0, 1)
+            t = MathClamp(t, 0, 1)
             Return 1 - (1 - t) ^ p * Math.Cos(1.5 * Math.PI * t)
         End Function
     End Class
@@ -694,7 +694,7 @@ Public Module ModAnimation
             p = Power + 4
         End Sub
         Public Overrides Function GetValue(t As Double) As Double
-            t = MathRange(t, 0, 1)
+            t = MathClamp(t, 0, 1)
             Return t ^ ((p - 1) * 0.25) * Math.Cos((p - 3.5) * Math.PI * (1 - t) ^ 1.5)
         End Function
     End Class
@@ -708,7 +708,7 @@ Public Module ModAnimation
             p = Power + 4
         End Sub
         Public Overrides Function GetValue(t As Double) As Double
-            t = 1 - MathRange(t, 0, 1)
+            t = 1 - MathClamp(t, 0, 1)
             Return 1 - t ^ ((p - 1) * 0.25) * Math.Cos((p - 3.5) * Math.PI * (1 - t) ^ 1.5)
         End Function
     End Class
@@ -766,7 +766,7 @@ Public Module ModAnimation
     ''' <summary>
     ''' 开始动画执行。
     ''' </summary>
-    Public Sub AniStartRun()
+    Public Sub AniStart()
         '初始化计时器
         AniLastTick = GetTimeTick()
         AniFPSTimer = AniLastTick
@@ -777,12 +777,12 @@ Public Module ModAnimation
                                Log("[Animation] 动画线程开始")
                                Do While True
                                    '两帧之间的间隔时间
-                                   Dim DeltaTime As Long = MathRange(GetTimeTick() - AniLastTick, 0, 100000)
+                                   Dim DeltaTime As Long = MathClamp(GetTimeTick() - AniLastTick, 0, 100000)
                                    If DeltaTime < 3 Then GoTo Sleeper
                                    AniLastTick = GetTimeTick()
                                    '记录 FPS
                                    If ModeDebug Then
-                                       If MathRange(AniLastTick - AniFPSTimer, 0, 100000) >= 500 Then
+                                       If MathClamp(AniLastTick - AniFPSTimer, 0, 100000) >= 500 Then
                                            AniFPS = AniFPSCounter
                                            AniFPSCounter = 0
                                            AniFPSTimer = AniLastTick
@@ -904,7 +904,7 @@ NextAni:
                             Case AniTypeSub.Y
                                 DeltaTop(Ani.Obj, Delta)
                             Case AniTypeSub.Opacity
-                                Ani.Obj.Opacity = MathRange(Ani.Obj.Opacity + Delta, 0, 1)
+                                Ani.Obj.Opacity = MathClamp(Ani.Obj.Opacity + Delta, 0, 1)
                             Case AniTypeSub.Width
                                 Dim Obj As FrameworkElement = Ani.Obj
                                 Obj.Width = Math.Max(If(Double.IsNaN(Obj.Width), Obj.ActualWidth, Obj.Width) + Delta, 0)

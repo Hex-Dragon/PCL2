@@ -634,7 +634,7 @@ Restart:
                 Next
             End SyncLock
             If Count = 0 Then Return 1
-            Return MathRange(Total / Count, 0, 1)
+            Return MathClamp(Total / Count, 0, 1)
         Catch ex As Exception
             Log(ex, "获取任务栏进度出错", LogLevel.Feedback)
             Return 0.5

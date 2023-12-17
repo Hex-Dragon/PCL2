@@ -24,11 +24,11 @@ Public Module ModMod
         End Property
 
         ''' <summary>
-        ''' Mod 的完整文件名，去除最后的 .disabled。
+        ''' Mod 的完整文件名，去除最后的 .disabled 和 .old。
         ''' </summary>
         Public ReadOnly Property RawFileName As String
             Get
-                Return FileName.Replace(".disabled", "")
+                Return FileName.Replace(".disabled", "").Replace(".old", "")
             End Get
         End Property
 
@@ -40,7 +40,7 @@ Public Module ModMod
                 Load()
                 If Not IsFileAvailable Then
                     Return McModState.Unavaliable
-                ElseIf Path.EndsWith(".disabled") Then
+                ElseIf Path.EndsWith(".disabled") OrElse Path.EndsWith(".old") Then
                     Return McModState.Disabled
                 Else
                     Return McModState.Fine
@@ -365,6 +365,56 @@ Public Module ModMod
                 Log(ex, "读取 mcmod.info 时出现未知错误（" & Path & "）", LogLevel.Developer)
             End Try
 #End Region
+#Region "尝试使用 fabric.mod.json"
+            Try
+                '获取 fabric.mod.json 文件
+                Dim FabricEntry As ZipArchiveEntry = Jar.GetEntry("fabric.mod.json")
+                Dim FabricText As String = Nothing
+                If FabricEntry IsNot Nothing Then
+                    FabricText = ReadFile(FabricEntry.Open(), Encoding.UTF8)
+                    If Not FabricText.Contains("schemaVersion") Then FabricText = Nothing
+                End If
+                If FabricText Is Nothing Then Exit Try
+                Dim FabricObject As JObject = GetJson(FabricText)
+GotFabric:
+                '从文件中获取 Mod 信息项
+                If FabricObject.ContainsKey("name") Then Name = FabricObject("name")
+                If FabricObject.ContainsKey("version") Then Version = FabricObject("version")
+                If FabricObject.ContainsKey("description") Then Description = FabricObject("description")
+                If FabricObject.ContainsKey("id") Then ModId = FabricObject("id")
+                If FabricObject.ContainsKey("contact") Then Url = If(FabricObject("contact")("homepage"), "")
+                Dim AuthorJson As JArray = FabricObject("authors")
+                If AuthorJson IsNot Nothing Then
+                    Dim Author As New List(Of String)
+                    For Each Token In AuthorJson
+                        Author.Add(Token.ToString)
+                    Next
+                    If Author.Count > 0 Then Authors = Join(Author, ", ")
+                End If
+                'If (Not FabricObject.ContainsKey("serverSideOnly")) OrElse FabricObject("serverSideOnly")("value").ToObject(Of Boolean) = False Then
+                '    '添加 Minecraft 依赖
+                '    Dim DepMinecraft As String = If(If(FabricObject("acceptedMinecraftVersions") IsNot Nothing, FabricObject("acceptedMinecraftVersions")("value"), ""), "")
+                '    If DepMinecraft <> "" Then AddDependency("minecraft", DepMinecraft)
+                '    '添加其他依赖
+                '    Dim Deps As String = If(If(FabricObject("dependencies") IsNot Nothing, FabricObject("dependencies")("value"), ""), "")
+                '    If Deps <> "" Then
+                '        For Each Dep In Deps.Split(";")
+                '            If Dep = "" OrElse Not Dep.StartsWith("required-") Then Continue For
+                '            Dep = Dep.Substring(Dep.IndexOf(":") + 1)
+                '            If Dep.Contains("@") Then
+                '                AddDependency(Dep.Split("@")(0), Dep.Split("@")(1))
+                '            Else
+                '                AddDependency(Dep)
+                '            End If
+                '        Next
+                '    End If
+                'End If
+                '加载成功
+                GoTo Finished
+            Catch ex As Exception
+                Log(ex, "读取 fabric.mod.json 时出现未知错误（" & Path & "）", LogLevel.Developer)
+            End Try
+#End Region
 #Region "尝试使用 mods.toml"
             Try
                 '获取 mods.toml 文件
@@ -465,56 +515,6 @@ Public Module ModMod
                 GoTo Finished
             Catch ex As Exception
                 Log(ex, "读取 mods.toml 时出现未知错误（" & Path & "）", LogLevel.Developer)
-            End Try
-#End Region
-#Region "尝试使用 fabric.mod.json"
-            Try
-                '获取 fabric.mod.json 文件
-                Dim FabricEntry As ZipArchiveEntry = Jar.GetEntry("fabric.mod.json")
-                Dim FabricText As String = Nothing
-                If FabricEntry IsNot Nothing Then
-                    FabricText = ReadFile(FabricEntry.Open(), Encoding.UTF8)
-                    If Not FabricText.Contains("schemaVersion") Then FabricText = Nothing
-                End If
-                If FabricText Is Nothing Then Exit Try
-                Dim FabricObject As JObject = GetJson(FabricText)
-GotFabric:
-                '从文件中获取 Mod 信息项
-                If FabricObject.ContainsKey("name") Then Name = FabricObject("name")
-                If FabricObject.ContainsKey("version") Then Version = FabricObject("version")
-                If FabricObject.ContainsKey("description") Then Description = FabricObject("description")
-                If FabricObject.ContainsKey("id") Then ModId = FabricObject("id")
-                If FabricObject.ContainsKey("contact") Then Url = If(FabricObject("contact")("homepage"), "")
-                Dim AuthorJson As JArray = FabricObject("authors")
-                If AuthorJson IsNot Nothing Then
-                    Dim Author As New List(Of String)
-                    For Each Token In AuthorJson
-                        Author.Add(Token.ToString)
-                    Next
-                    If Author.Count > 0 Then Authors = Join(Author, ", ")
-                End If
-                'If (Not FabricObject.ContainsKey("serverSideOnly")) OrElse FabricObject("serverSideOnly")("value").ToObject(Of Boolean) = False Then
-                '    '添加 Minecraft 依赖
-                '    Dim DepMinecraft As String = If(If(FabricObject("acceptedMinecraftVersions") IsNot Nothing, FabricObject("acceptedMinecraftVersions")("value"), ""), "")
-                '    If DepMinecraft <> "" Then AddDependency("minecraft", DepMinecraft)
-                '    '添加其他依赖
-                '    Dim Deps As String = If(If(FabricObject("dependencies") IsNot Nothing, FabricObject("dependencies")("value"), ""), "")
-                '    If Deps <> "" Then
-                '        For Each Dep In Deps.Split(";")
-                '            If Dep = "" OrElse Not Dep.StartsWith("required-") Then Continue For
-                '            Dep = Dep.Substring(Dep.IndexOf(":") + 1)
-                '            If Dep.Contains("@") Then
-                '                AddDependency(Dep.Split("@")(0), Dep.Split("@")(1))
-                '            Else
-                '                AddDependency(Dep)
-                '            End If
-                '        Next
-                '    End If
-                'End If
-                '加载成功
-                GoTo Finished
-            Catch ex As Exception
-                Log(ex, "读取 fabric.mod.json 时出现未知错误（" & Path & "）", LogLevel.Developer)
             End Try
 #End Region
 #Region "尝试使用 fml_cache_annotation.json"
@@ -774,7 +774,7 @@ VersionFindFail:
         ''' 是否可能为前置 Mod。
         ''' </summary>
         Public Function IsPresetMod() As Boolean
-            Return Dependencies.Count = 0 AndAlso (Name IsNot Nothing) AndAlso (Name.ToLower.Contains("core") OrElse Name.ToLower.Contains("lib"))
+            Return Dependencies.Count = 0 AndAlso Name IsNot Nothing AndAlso (Name.ToLower.Contains("core") OrElse Name.ToLower.Contains("lib"))
         End Function
 
         ''' <summary>
@@ -784,7 +784,8 @@ VersionFindFail:
             If Path Is Nothing OrElse Not Path.Contains(".") Then Return False
             Path = Path.ToLower
             If Path.EndsWith(".jar") OrElse Path.EndsWith(".zip") OrElse Path.EndsWith(".litemod") OrElse
-               Path.EndsWith(".jar.disabled") OrElse Path.EndsWith(".zip.disabled") OrElse Path.EndsWith(".litemod.disabled") Then Return True
+               Path.EndsWith(".jar.disabled") OrElse Path.EndsWith(".zip.disabled") OrElse Path.EndsWith(".litemod.disabled") OrElse
+               Path.EndsWith(".jar.old") OrElse Path.EndsWith(".zip.old") OrElse Path.EndsWith(".litemod.old") Then Return True
             Return False
         End Function
 
@@ -920,18 +921,19 @@ VersionFindFail:
                 Log($"[Mod] 从 Modrinth 获取到 {ModrinthUpdate.Count} 个本地 Mod 的对应信息")
                 '步骤 2：尝试读取工程信息缓存，构建其他 Mod 的对应关系
                 If ModrinthUpdate.Count = 0 Then Exit Sub
-                Dim ModrinthMapping As New Dictionary(Of String, McMod)
+                Dim ModrinthMapping As New Dictionary(Of String, List(Of McMod))
                 For Each ModEntity In Mods
                     If Not ModrinthUpdate.ContainsKey(ModEntity.ModrinthHash) Then Continue For
                     Dim ProjectId = ModrinthUpdate(ModEntity.ModrinthHash)("project_id").ToString
                     If CompProjectCache.ContainsKey(ProjectId) Then
                         ModEntity.Comp = CompProjectCache(ProjectId)
                     Else
-                        ModrinthMapping.Add(ProjectId, ModEntity)
+                        If Not ModrinthMapping.ContainsKey(ProjectId) Then ModrinthMapping(ProjectId) = New List(Of McMod)
+                        ModrinthMapping(ProjectId).Add(ModEntity)
                     End If
                 Next
                 If Loader.IsAbortedWithThread(MainThread) Then Exit Sub
-                Log($"[Mod] 读取缓存后还需要从 Modrinth 获取 {ModrinthMapping.Count} 个本地 Mod 的工程信息")
+                Log($"[Mod] 读取缓存后还需要从 Modrinth 获取 {ModrinthMapping.Count} 类本地 Mod 的工程信息")
                 '步骤 3：获取工程信息
                 If Not ModrinthMapping.Any() Then Exit Sub
                 Dim ModrinthProject = CType(GetJson(NetRequestRetry(
@@ -939,12 +941,13 @@ VersionFindFail:
                     "GET", "", "application/json")), JArray)
                 For Each ProjectJson In ModrinthProject
                     Dim Project As New CompProject(ProjectJson)
-                    Dim Entry = ModrinthMapping(Project.Id)
-                    If Entry.Comp IsNot Nothing AndAlso Not Entry.IsCompFromModrinth Then
-                        Project.LogoUrl = Entry.Comp.LogoUrl 'Modrinth 部分 Logo 加载不出来
-                    End If
-                    Entry.IsCompFromModrinth = True
-                    Entry.Comp = Project
+                    For Each Entry In ModrinthMapping(Project.Id)
+                        If Entry.Comp IsNot Nothing AndAlso Not Entry.IsCompFromModrinth Then
+                            Project.LogoUrl = Entry.Comp.LogoUrl 'Modrinth 部分 Logo 加载不出来
+                        End If
+                        Entry.IsCompFromModrinth = True
+                        Entry.Comp = Project
+                    Next
                 Next
                 Log($"[Mod] 从 Modrinth 获取本地 Mod 信息结束")
             Catch ex As Exception
@@ -968,16 +971,19 @@ VersionFindFail:
                 Log($"[Mod] 从 CurseForge 获取到 {CurseForgeRaw.Count} 个本地 Mod 的对应信息")
                 '步骤 2：尝试读取工程信息缓存，构建其他 Mod 的对应关系
                 If CurseForgeRaw.Count = 0 Then Exit Sub
-                Dim CurseForgeMapping As New Dictionary(Of Integer, McMod)
+                Dim CurseForgeMapping As New Dictionary(Of Integer, List(Of McMod))
                 For Each Project In CurseForgeRaw
                     Dim ProjectId = Project("id").ToString
                     Dim Hash As UInteger = Project("file")("fileFingerprint")
-                    Dim ModEntity = Mods.Find(Function(m) m.CurseForgeHash = Hash)
-                    If CompProjectCache.ContainsKey(ProjectId) Then
-                        ModEntity.Comp = CompProjectCache(ProjectId)
-                    Else
-                        CurseForgeMapping.Add(ProjectId, ModEntity)
-                    End If
+                    For Each Entry In Mods
+                        If Entry.CurseForgeHash <> Hash Then Continue For
+                        If CompProjectCache.ContainsKey(ProjectId) Then
+                            Entry.Comp = CompProjectCache(ProjectId)
+                        Else
+                            If Not CurseForgeMapping.ContainsKey(ProjectId) Then CurseForgeMapping(ProjectId) = New List(Of McMod)
+                            CurseForgeMapping(ProjectId).Add(Entry)
+                        End If
+                    Next
                 Next
                 If Loader.IsAbortedWithThread(MainThread) Then Exit Sub
                 Log($"[Mod] 读取缓存后还需要从 CurseForge 获取 {CurseForgeMapping.Count} 个本地 Mod 的工程信息")
@@ -987,14 +993,15 @@ VersionFindFail:
                                     $"{{""modIds"": [{CurseForgeMapping.Keys.Join(",")}]}}", "application/json")), JObject)("data")
                 For Each ProjectJson In CurseForgeProject
                     Dim Project As New CompProject(ProjectJson)
-                    Dim Entry = CurseForgeMapping(Project.Id) '倒查防止 CurseForge 返回的内容有漏
-                    If Entry.Comp IsNot Nothing AndAlso Entry.IsCompFromModrinth Then
-                        Entry.Comp.LogoUrl = Project.LogoUrl 'Modrinth 部分 Logo 加载不出来
-                        Entry.Comp = Entry.Comp '再次触发修改事件
-                        Continue For
-                    End If
-                    Entry.IsCompFromModrinth = False
-                    Entry.Comp = Project
+                    For Each Entry In CurseForgeMapping(Project.Id) '倒查防止 CurseForge 返回的内容有漏
+                        If Entry.Comp IsNot Nothing AndAlso Entry.IsCompFromModrinth Then
+                            Entry.Comp.LogoUrl = Project.LogoUrl 'Modrinth 部分 Logo 加载不出来
+                            Entry.Comp = Entry.Comp '再次触发修改事件
+                            Continue For
+                        End If
+                        Entry.IsCompFromModrinth = False
+                        Entry.Comp = Project
+                    Next
                 Next
                 Log($"[Mod] 从 CurseForge 获取本地 Mod 信息结束")
             Catch ex As Exception

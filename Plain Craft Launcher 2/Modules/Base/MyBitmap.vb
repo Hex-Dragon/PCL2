@@ -54,6 +54,7 @@ Public Class MyBitmap
     End Sub
     Public Sub New(FilePathOrResourceName As String)
         Try
+            FilePathOrResourceName = FilePathOrResourceName.Replace("pack://application:,,,/images/", PathImage)
             If FilePathOrResourceName.StartsWith(PathImage) Then
                 '使用缓存
                 If BitmapCache.ContainsKey(FilePathOrResourceName) Then

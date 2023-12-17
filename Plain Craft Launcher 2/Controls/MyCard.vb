@@ -209,7 +209,7 @@
         Dim AnimList As New List(Of AniData)
         If DeltaHeight > 10 OrElse (DeltaHeight < -10 AndAlso Not IsNothing(SwapControl)) Then '如果不是需要折叠的卡片，高度减小时的弹跳会吞掉按钮下边框
             '高度增加较大，使用弹起动画
-            Dim Delta As Double = MathRange(Math.Abs(DeltaHeight) * 0.05, 3, 10) * Math.Sign(DeltaHeight)
+            Dim Delta As Double = MathClamp(Math.Abs(DeltaHeight) * 0.05, 3, 10) * Math.Sign(DeltaHeight)
             AnimList.AddRange({
                      AaHeight(Me, DeltaHeight + Delta, 300, If(IsLoadAnimation, 30, 0), If(DeltaHeight > FrmMain.Height, New AniEaseInFluent(AniEasePower.ExtraStrong), New AniEaseOutFluent(AniEasePower.ExtraStrong))),
                      AaHeight(Me, -Delta, 150, 260, Ease:=New AniEaseOutFluent(AniEasePower.Strong))
@@ -217,7 +217,7 @@
         Else
             '普通的改变就行啦
             AnimList.AddRange({
-                         AaHeight(Me, DeltaHeight, MathRange(Math.Abs(DeltaHeight) * 4, 150, 250),, New AniEaseOutFluent)
+                         AaHeight(Me, DeltaHeight, MathClamp(Math.Abs(DeltaHeight) * 4, 150, 250),, New AniEaseOutFluent)
                     })
         End If
         AnimList.Add(AaCode(Sub()

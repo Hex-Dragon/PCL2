@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.6.11" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.6.11." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.6.12" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.6.12." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 308 'Release
 #Else
-    Public Const VersionCode As Integer = 309 'Snapshot
+    Public Const VersionCode As Integer = 310 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -46,7 +46,7 @@ Public Module ModBase
     ''' <summary>
     ''' 程序内嵌图片文件夹路径，以“/”结尾。
     ''' </summary>
-    Public PathImage As String = "pack://application:,,,/images/"
+    Public PathImage As String = "pack://application:,,,/Plain Craft Launcher 2;component/Images/"
     ''' <summary>
     ''' 当前程序的语言。
     ''' </summary>
@@ -521,7 +521,6 @@ Public Module ModBase
     ''' 获取两数间的百分比。小数点精确到 6 位。
     ''' </summary>
     ''' <returns></returns>
-    ''' <remarks></remarks>
     Public Function MathPercent(ValueA As Double, ValueB As Double, Percent As Double) As Double
         Return Math.Round(ValueA * (1 - Percent) + ValueB * Percent, 6) '解决 Double 计算错误
     End Function
@@ -535,7 +534,7 @@ Public Module ModBase
     ''' <summary>
     ''' 将数值限定在某个范围内。
     ''' </summary>
-    Public Function MathRange(value As Double, min As Double, max As Double) As Double
+    Public Function MathClamp(value As Double, min As Double, max As Double) As Double
         Return Math.Max(min, Math.Min(max, value))
     End Function
 
@@ -1325,8 +1324,10 @@ Re:
     ''' <summary>
     ''' 遍历文件夹中的所有文件。
     ''' </summary>
-    Public Function EnumerateFiles(Directory As String) As List(Of FileInfo)
-        Return New DirectoryInfo(Directory).EnumerateFiles("*", SearchOption.AllDirectories).ToList
+    Public Function EnumerateFiles(Directory As String) As IEnumerable(Of FileInfo)
+        Dim Info As New DirectoryInfo(Directory)
+        If Not Info.Exists Then Return New List(Of FileInfo)
+        Return Info.EnumerateFiles("*", SearchOption.AllDirectories)
     End Function
 
 #End Region
@@ -1456,15 +1457,15 @@ Re:
         ElseIf FileSize < 1024 * 1000 Then
             'K 级
             Dim RoundResult As String = Math.Round(FileSize / 1024)
-            Return If(IsNegative, "-", "") & Math.Round(FileSize / 1024, CInt(MathRange(3 - RoundResult.Length, 0, 2))) & " K"
+            Return If(IsNegative, "-", "") & Math.Round(FileSize / 1024, CInt(MathClamp(3 - RoundResult.Length, 0, 2))) & " K"
         ElseIf FileSize < 1024 * 1024 * 1000 Then
             'M 级
             Dim RoundResult As String = Math.Round(FileSize / 1024 / 1024)
-            Return If(IsNegative, "-", "") & Math.Round(FileSize / 1024 / 1024, CInt(MathRange(3 - RoundResult.Length, 0, 2))) & " M"
+            Return If(IsNegative, "-", "") & Math.Round(FileSize / 1024 / 1024, CInt(MathClamp(3 - RoundResult.Length, 0, 2))) & " M"
         Else
             'G 级
             Dim RoundResult As String = Math.Round(FileSize / 1024 / 1024 / 1024)
-            Return If(IsNegative, "-", "") & Math.Round(FileSize / 1024 / 1024 / 1024, CInt(MathRange(3 - RoundResult.Length, 0, 2))) & " G"
+            Return If(IsNegative, "-", "") & Math.Round(FileSize / 1024 / 1024 / 1024, CInt(MathClamp(3 - RoundResult.Length, 0, 2))) & " G"
         End If
     End Function
 

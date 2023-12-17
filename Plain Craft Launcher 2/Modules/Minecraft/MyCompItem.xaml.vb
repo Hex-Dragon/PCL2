@@ -20,9 +20,9 @@
                         PathLogo.Source = New MyBitmap(FileAddress)
                     ElseIf _Logo.ToLower.EndsWith(".webp") Then 'Modrinth 林业 Mod 使用了不支持的 WebP 格式 Logo
                         Log($"[Comp] 发现不支持的 WebP 格式图标，已更改为默认图标：{_Logo}")
-                        PathLogo.Source = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png")
+                        PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
                     Else
-                        PathLogo.Source = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png")
+                        PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
                         RunInNewThread(Sub() LogoLoader(FileAddress), "Comp Logo Loader " & Uuid & "#", ThreadPriority.BelowNormal)
                     End If
                 Else
@@ -77,7 +77,7 @@ RetryStart:
                 GoTo RetryStart
             Else
                 Log(ex, $"下载资源工程图标失败（{_Logo}）")
-                RunInUi(Sub() PathLogo.Source = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png"))
+                RunInUi(Sub() PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png"))
             End If
         End Try
     End Sub
@@ -172,19 +172,24 @@ RetryStart:
             FrmMain.PageCurrent.Additional(1) = Titles
         End If
         '打开详情页
-        Dim TargetVersion As String, TargetLoader As CompModLoaderType
-        Select Case CType(sender.Tag, CompProject).Type
-            Case CompType.Mod
-                TargetVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
-            Case CompType.ModPack
-                TargetVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
-            Case Else 'CompType.ResourcePack
-                'FUTURE: Res
-                TargetVersion = "" 'If(PageDownloadResource.Loader.Input.GameVersion, "")
-        End Select
-        If CType(sender.Tag, CompProject).Type = CompType.Mod AndAlso PageDownloadMod.Loader.Input.ModLoader <> CompModLoaderType.Any Then
-            TargetLoader = PageDownloadMod.Loader.Input.ModLoader
+        Dim TargetVersion As String
+        Dim TargetLoader As CompModLoaderType
+        If FrmMain.PageCurrent.Page = FormMain.PageType.CompDetail Then
+            TargetVersion = FrmMain.PageCurrent.Additional(2)
+            TargetLoader = FrmMain.PageCurrent.Additional(3)
+        Else
+            Select Case CType(sender.Tag, CompProject).Type
+                Case CompType.Mod
+                    TargetVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
+                    TargetLoader = PageDownloadMod.Loader.Input.ModLoader
+                Case CompType.ModPack
+                    TargetVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
+                Case Else 'CompType.ResourcePack
+                    'FUTURE: Res
+                    TargetVersion = "" 'If(PageDownloadResource.Loader.Input.GameVersion, "")
+            End Select
         End If
+        If CType(sender.Tag, CompProject).Type <> CompType.Mod Then TargetLoader = CompModLoaderType.Any
         FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
                            .Additional = {sender.Tag, New List(Of String), TargetVersion, TargetLoader}})
     End Sub

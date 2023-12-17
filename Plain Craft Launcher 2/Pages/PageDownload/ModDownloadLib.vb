@@ -181,13 +181,13 @@ Public Module ModDownloadLib
         Dim Logo As String
         Select Case Entry("type")
             Case "release"
-                Logo = "pack://application:,,,/images/Blocks/Grass.png"
+                Logo = PathImage & "Blocks/Grass.png"
             Case "snapshot"
-                Logo = "pack://application:,,,/images/Blocks/CommandBlock.png"
+                Logo = PathImage & "Blocks/CommandBlock.png"
             Case "special"
-                Logo = "pack://application:,,,/images/Blocks/GoldBlock.png"
+                Logo = PathImage & "Blocks/GoldBlock.png"
             Case Else
-                Logo = "pack://application:,,,/images/Blocks/CobbleStone.png"
+                Logo = PathImage & "Blocks/CobbleStone.png"
         End Select
         '建立控件
         Dim NewItem As New MyListItem With {.Logo = Logo, .SnapsToDevicePixels = True, .Title = Entry("id").ToString, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry}
@@ -722,7 +722,7 @@ Retry:
             .Info = If(Entry.IsPreview, "测试版", "正式版") &
                     If(Entry.ReleaseTime = "", "", "，发布于 " & Entry.ReleaseTime) &
                     If(Entry.RequiredForgeVersion Is Nothing, "，不兼容 Forge", If(Entry.RequiredForgeVersion = "", "", "，推荐 Forge 版本：" & Entry.RequiredForgeVersion)),
-            .Logo = "pack://application:,,,/images/Blocks/GrassPath.png"
+            .Logo = PathImage & "Blocks/GrassPath.png"
         }
         AddHandler NewItem.Click, OnClick
         '建立菜单
@@ -951,7 +951,7 @@ Retry:
         Dim NewItem As New MyListItem With {
             .Title = Entry.Inherit, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = If(Entry.IsPreview, "测试版", "稳定版") & If(Entry.ReleaseTime = "", "", "，发布于 " & Entry.ReleaseTime),
-            .Logo = "pack://application:,,,/images/Blocks/Egg.png"
+            .Logo = PathImage & "Blocks/Egg.png"
         }
         AddHandler NewItem.Click, OnClick
         '建立菜单
@@ -1349,18 +1349,20 @@ Retry:
                                                                                                If Json("data") IsNot Nothing AndAlso Json("data")("MOJMAPS") IsNot Nothing Then
                                                                                                    '下载原版 Json 文件
                                                                                                    Task.Progress = 0.4
-                                                                                                   Log("[Download] 需要 Mappings 下载信息，开始获取原版 Json 文件")
                                                                                                    Dim RawJson As JObject = GetJson(NetGetCodeByDownload(DlSourceLauncherOrMetaGet(DlClientListGet(Inherit)), IsJson:=True))
-                                                                                                   '[net.minecraft:client:1.17.1-20210706.113038:mappings@txt]
+                                                                                                   '[net.minecraft:client:1.17.1-20210706.113038:mappings@txt] 或 @tsrg]
                                                                                                    Dim OriginalName As String = Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Split("@")(0)
-                                                                                                   Dim Address = McLibGet(OriginalName).Replace(".jar", "-mappings.txt")
+                                                                                                   Dim Address = McLibGet(OriginalName).Replace(".jar", "-mappings." & Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Split("@")(1))
                                                                                                    Libs.Add(New McLibToken With {.IsJumpLoader = False, .IsNatives = False, .LocalPath = Address, .OriginalName = OriginalName,
                                                                                                             .Url = RawJson("downloads")("client_mappings")("url"), .Size = RawJson("downloads")("client_mappings")("size"), .SHA1 = RawJson("downloads")("client_mappings")("sha1")})
+                                                                                                   Log("[Download] 需要下载 Mappings：" & Address)
                                                                                                End If
                                                                                                Task.Progress = 0.8
                                                                                                '去除其中的原始 Forge 项
                                                                                                For i = 0 To Libs.Count - 1
-                                                                                                   If Libs(i).LocalPath.EndsWith("forge-" & Inherit & "-" & Version & ".jar") Then
+                                                                                                   If Libs(i).LocalPath.EndsWith("forge-" & Inherit & "-" & Version & ".jar") OrElse
+                                                                                                      Libs(i).LocalPath.EndsWith("forge-" & Inherit & "-" & Version & "-client.jar") Then
+                                                                                                       Log("[Download] 已从待下载 Forge 支持库中移除：" & Libs(i).LocalPath, LogLevel.Debug)
                                                                                                        Libs.RemoveAt(i)
                                                                                                        Exit For
                                                                                                    End If
@@ -1420,9 +1422,8 @@ Retry:
                                                                 Try
                                                                     Log("[Download] 开始进行新版方式 Forge 安装：" & InstallerAddress)
                                                                     '记录当前文件夹列表（在新建目标文件夹之前）
-                                                                    Dim OldList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.Select(Function(Info As DirectoryInfo) As String
-                                                                                                                                                            Return Info.FullName
-                                                                                                                                                        End Function).ToList()
+                                                                    Dim OldList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
+                                                                        Select(Function(i) i.FullName).ToList()
                                                                     '解压并获取信息
                                                                     Installer = New ZipArchive(New FileStream(InstallerAddress, FileMode.Open))
                                                                     Dim Json As JObject = GetJson(ReadFile(Installer.GetEntry("install_profile.json").Open))
@@ -1452,11 +1453,12 @@ Retry:
                                                                         End If
                                                                     End Try
                                                                     '拷贝新增的版本 Json
-                                                                    Dim DeltaList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.SkipWhile(Function(Info As DirectoryInfo) As Boolean
-                                                                                                                                                                 Return OldList.Contains(Info.FullName)
-                                                                                                                                                             End Function).ToList()
-                                                                    If DeltaList.Count > 1 Then '它可能和 OptiFine 安装同时运行，导致增加的文件不止一个（这导致了 #151）
-                                                                        DeltaList = New List(Of DirectoryInfo) From {DeltaList.Where(Function(l) l.Name.Contains("forge")).First}
+                                                                    Dim DeltaList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
+                                                                        SkipWhile(Function(i) OldList.Contains(i.FullName)).ToList()
+                                                                    If DeltaList.Count > 1 Then
+                                                                        '它可能和 OptiFine 安装同时运行，导致增加的文件不止一个（这导致了 #151）
+                                                                        '也可能是因为 Forge 安装器的 Bug，生成了一个名字错误的文件夹，所以需要检查文件夹是否为空
+                                                                        DeltaList = DeltaList.Where(Function(l) l.Name.Contains("forge") AndAlso l.EnumerateFiles.Any).ToList
                                                                     End If
                                                                     If DeltaList.Count = 1 Then '如果没有新增文件夹，那么预测的文件夹名就是正确的
                                                                         Dim JsonFile As FileInfo = DeltaList(0).EnumerateFiles.First()
@@ -1580,7 +1582,7 @@ Retry:
             .Info = If(Entry.ReleaseTime = "",
                 If(ModeDebug, "种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), ""),
                 "发布于 " & Entry.ReleaseTime & If(ModeDebug, "，种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), "")),
-            .Logo = "pack://application:,,,/images/Blocks/Anvil.png"
+            .Logo = PathImage & "Blocks/Anvil.png"
         }
         AddHandler NewItem.Click, OnClick
         '建立菜单
@@ -1785,7 +1787,7 @@ Retry:
         Dim NewItem As New MyListItem With {
             .Title = Entry("version").ToString.Replace("+build", ""), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = If(Entry("stable").ToObject(Of Boolean), "稳定版", "测试版"),
-            .Logo = "pack://application:,,,/images/Blocks/Fabric.png"
+            .Logo = PathImage & "Blocks/Fabric.png"
         }
         AddHandler NewItem.Click, OnClick
         '结束
@@ -1796,7 +1798,7 @@ Retry:
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Split("+").First.Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy/MM/dd HH:mm"),
-            .Logo = "pack://application:,,,/images/Blocks/Fabric.png"
+            .Logo = PathImage & "Blocks/Fabric.png"
         }
         AddHandler NewItem.Click, OnClick
         '结束
@@ -1807,7 +1809,7 @@ Retry:
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.ToLower.Replace("optifabric-", "").Replace(".jar", "").Trim.TrimStart("v"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy/MM/dd HH:mm"),
-            .Logo = "pack://application:,,,/images/Blocks/OptiFabric.png"
+            .Logo = PathImage & "Blocks/OptiFabric.png"
         }
         AddHandler NewItem.Click, OnClick
         '结束

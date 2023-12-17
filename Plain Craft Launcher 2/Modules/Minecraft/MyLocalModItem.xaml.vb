@@ -22,9 +22,9 @@ Public Class MyLocalModItem
                         PathLogo.Source = New MyBitmap(FileAddress)
                     ElseIf _Logo.ToLower.EndsWith(".webp") Then 'Modrinth 林业 Mod 使用了不支持的 WebP 格式 Logo
                         Log($"[LocalModItem] 发现不支持的 WebP 格式图标，已更改为默认图标：{_Logo}")
-                        PathLogo.Source = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png")
+                        PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
                     Else
-                        PathLogo.Source = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png")
+                        PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
                         RunInNewThread(Sub() LogoLoader(FileAddress), "Comp Logo Loader " & Uuid & "#", ThreadPriority.BelowNormal)
                     End If
                 Else
@@ -79,7 +79,7 @@ RetryStart:
                 GoTo RetryStart
             Else
                 Log(ex, $"下载本地 Mod 图标失败（{_Logo}）")
-                RunInUi(Sub() PathLogo.Source = New MyBitmap("pack://application:,,,/images/Icons/NoIcon.png"))
+                RunInUi(Sub() PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png"))
             End If
         End Try
     End Sub
@@ -93,9 +93,12 @@ RetryStart:
         Set(value As String)
             Dim RawValue = value
             Select Case Entry.State
+                Case McMod.McModState.Fine
+                    LabTitle.TextDecorations = Nothing
                 Case McMod.McModState.Disabled
-                    value &= " [禁用]"
+                    LabTitle.TextDecorations = TextDecorations.Strikethrough
                 Case McMod.McModState.Unavaliable
+                    LabTitle.TextDecorations = TextDecorations.Strikethrough
                     value &= " [错误]"
             End Select
             If LabTitle.Text = value Then Exit Property
@@ -153,17 +156,6 @@ RetryStart:
             Tag = value
         End Set
     End Property
-
-    '前景色绑定
-    Public Property Foreground As Brush
-        Get
-            Return GetValue(ForegroundProperty)
-        End Get
-        Set(value As Brush)
-            SetValue(ForegroundProperty, value)
-        End Set
-    End Property
-    Public Shared ReadOnly ForegroundProperty As DependencyProperty = DependencyProperty.Register("Foreground", GetType(Brush), GetType(MyLocalModItem), New PropertyMetadata(CType(Color1, SolidColorBrush)))
 
 #End Region
 
@@ -229,13 +221,13 @@ RetryStart:
                         Anim.Add(AaOpacity(RectCheck, 1 - RectCheck.Opacity, 30))
                         RectCheck.VerticalAlignment = VerticalAlignment.Center
                         RectCheck.Margin = New Thickness(-3, 0, 0, 0)
-                        Anim.Add(AaColor(Me, ForegroundProperty, "ColorBrush2", 200))
+                        Anim.Add(AaColor(LabTitle, TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush2", "ColorBrush5"), 200))
                     Else
                         '由有变无
                         Anim.Add(AaHeight(RectCheck, -RectCheck.ActualHeight, 120,, New AniEaseInFluent(AniEasePower.Weak)))
                         Anim.Add(AaOpacity(RectCheck, -RectCheck.Opacity, 70, 40))
                         RectCheck.VerticalAlignment = VerticalAlignment.Center
-                        Anim.Add(AaColor(Me, ForegroundProperty, "ColorBrush1", 120))
+                        Anim.Add(AaColor(LabTitle, TextBlock.ForegroundProperty, If(LabTitle.TextDecorations Is Nothing, "ColorBrush1", "ColorBrushGray4"), 120))
                     End If
                     AniStart(Anim, "MyLocalModItem Checked " & Uuid)
                 Else
@@ -245,23 +237,19 @@ RetryStart:
                     If Checked Then
                         RectCheck.Height = 32
                         RectCheck.Opacity = 1
-                        Foreground = CType(FindResource("ColorBrush2"), SolidColorBrush)
+                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush2", "ColorBrush5"))
                     Else
                         RectCheck.Height = 0
                         RectCheck.Opacity = 0
-                        Foreground = CType(FindResource("ColorBrush1"), SolidColorBrush)
+                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush1", "ColorBrushGray4"))
                     End If
                     AniStop("MyLocalModItem Checked " & Uuid)
                 End If
-
             Catch ex As Exception
                 Log(ex, "设置 Checked 失败")
             End Try
         End Set
     End Property
-    Private Sub ColorInit(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        SetResourceReference(ForegroundProperty, "ColorBrush1")
-    End Sub
 
 
 #End Region
@@ -361,13 +349,18 @@ RetryStart:
                 Title = Titles.Key
                 SubTitle = Titles.Value & If(Entry.Version Is Nothing, "", "  |  " & Entry.Version)
             End If
+            If Checked Then
+                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush2", "ColorBrush5"))
+            Else
+                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush1", "ColorBrushGray4"))
+            End If
             '描述
             Dim NewDescription As String
             Select Case Entry.State
                 Case McMod.McModState.Fine
                     NewDescription = GetFileNameWithoutExtentionFromPath(Entry.Path)
                 Case McMod.McModState.Disabled
-                    NewDescription = GetFileNameWithoutExtentionFromPath(Entry.Path.Substring(0, Entry.Path.Count - ".disabled".Count))
+                    NewDescription = GetFileNameWithoutExtentionFromPath(Entry.Path.Replace(".disabled", "").Replace(".old", ""))
                 Case Else 'McMod.McModState.Unavaliable
                     NewDescription = GetFileNameFromPath(Entry.Path)
             End Select
@@ -380,7 +373,7 @@ RetryStart:
             End If
             Description = NewDescription
             '主 Logo
-            Logo = If(Entry.Comp Is Nothing, "pack://application:,,,/images/Icons/NoIcon.png", Entry.Comp.GetControlLogo())
+            Logo = If(Entry.Comp Is Nothing, PathImage & "Icons/NoIcon.png", Entry.Comp.GetControlLogo())
             '图标右下角的 Logo
             If Entry.State = McMod.McModState.Fine Then
                 If ImgState IsNot Nothing Then
@@ -390,7 +383,7 @@ RetryStart:
             Else
                 If ImgState Is Nothing Then
                     ImgState = New Image With {
-                                .Width = 17, .Height = 17, .Margin = New Thickness(0, 0, -4, -3), .IsHitTestVisible = False,
+                                .Width = 20, .Height = 20, .Margin = New Thickness(0, 0, -5, -3), .IsHitTestVisible = False,
                                 .HorizontalAlignment = HorizontalAlignment.Right, .VerticalAlignment = VerticalAlignment.Bottom
                             }
                     RenderOptions.SetBitmapScalingMode(ImgState, BitmapScalingMode.HighQuality)
@@ -401,7 +394,7 @@ RetryStart:
                     '       HorizontalAlignment="Right" VerticalAlignment="Bottom"
                     '       Source="/Images/Icons/Unavaliable.png" />
                 End If
-                ImgState.Source = New MyBitmap($"pack://application:,,,/images/Icons/{Entry.State}.png")
+                ImgState.Source = New MyBitmap(PathImage & $"Icons/{Entry.State}.png")
             End If
             '标签
             If Entry.Comp IsNot Nothing Then Tags = Entry.Comp.Tags

@@ -22,12 +22,11 @@
             If MusicAllList Is Nothing Then
                 MusicAllList = New List(Of String)
                 Directory.CreateDirectory(Path & "PCL\Musics\")
-                For Each File In My.Computer.FileSystem.GetFiles(Path & "PCL\Musics\", FileIO.SearchOption.SearchAllSubDirectories, "*.*")
+                For Each File In EnumerateFiles(Path & "PCL\Musics\")
                     '文件夹可能会被加入 .ini 文件夹配置文件、一些乱七八糟的 .jpg 文件啥的
-                    Dim Extend As String = File.Split(".").Last.ToLower
-                    If Not (Extend = "ini" OrElse Extend = "jpg" OrElse Extend = "txt" OrElse Extend = "cfg" OrElse Extend = "lrc" OrElse Extend = "db" OrElse Extend = "png") Then
-                        MusicAllList.Add(File)
-                    End If
+                    Dim Ext As String = File.Extension.ToLower
+                    If {"ini", "jpg", "txt", "cfg", "lrc", "db", "png"}.Contains(Ext) Then Continue For
+                    MusicAllList.Add(File.FullName)
                 Next
             End If
             '打乱顺序播放

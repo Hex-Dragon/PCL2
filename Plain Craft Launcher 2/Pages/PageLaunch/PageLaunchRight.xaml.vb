@@ -90,7 +90,7 @@ Download:
                         GoTo Download
                     Case 3 '简单主页
                         Log("[Page] 主页预设：简单主页")
-                        Url = "https://cdn.wearclub.online/PCL/Custom.xaml"
+                        Url = "https://gitee.com/mfn233/PCL-Mainpage/raw/main/Custom.xaml"
                         GoTo Download
                     Case 4 '历史上的今天
                         Log("[Page] 主页预设：历史上的今天")

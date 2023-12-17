@@ -196,7 +196,7 @@
         Dim RamAvailable As Double = Math.Round(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024 / 1024 * 10) / 10
         Dim RamGameActual As Double = Math.Min(RamGame, RamAvailable)
         Dim RamUsed As Double = RamTotal - RamAvailable
-        Dim RamEmpty As Double = Math.Round(MathRange(RamTotal - RamUsed - RamGame, 0, 1000) * 10) / 10
+        Dim RamEmpty As Double = Math.Round(MathClamp(RamTotal - RamUsed - RamGame, 0, 1000) * 10) / 10
         '设置最大可用内存
         If RamTotal <= 1.5 Then
             SliderRamCustom.MaxValue = Math.Max(Math.Floor((RamTotal - 0.3) / 0.1), 1)

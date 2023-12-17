@@ -5,7 +5,7 @@
     Private IsLoad As Boolean = False
     Public Sub PageOther_Loaded() Handles Me.Loaded
 
-        PanBack.ScrollToHome()
+        If FrmMain.PageLast.Page <> FormMain.PageType.CompDetail Then PanBack.ScrollToHome()
         AniControlEnabled += 1
         SelectedMods.Clear()
         RefreshList()
@@ -122,7 +122,26 @@
         ToolTipService.SetHorizontalOffset(BtnCont, 2)
         AddHandler BtnCont.Click, AddressOf Info_Click
         AddHandler sender.MouseRightButtonDown, AddressOf Info_Click
-        sender.Buttons = {BtnCont, BtnOpen}
+        Dim BtnDelete As New MyIconButton With {.LogoScale = 1.1, .Logo = Logo.IconButtonDelete, .Tag = sender}
+        BtnDelete.ToolTip = "删除"
+        ToolTipService.SetPlacement(BtnDelete, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnDelete, 30)
+        ToolTipService.SetHorizontalOffset(BtnDelete, 2)
+        AddHandler BtnDelete.Click, AddressOf Delete_Click
+        Dim BtnED As New MyIconButton With {.LogoScale = 1.1, .Logo = If(sender.Entry.State = McMod.McModState.Fine,
+            "M508 990.4c-261.6 0-474.4-212-474.4-474.4S246.4 41.6 508 41.6s474.4 212 474.4 474.4S769.6 990.4 508 990.4zM508 136.8c-209.6 0-379.2 169.6-379.2 379.2 0 209.6 169.6 379.2 379.2 379.2s379.2-169.6 379.2-379.2C887.2 306.4 717.6 136.8 508 136.8zM697.6 563.2 318.4 563.2c-26.4 0-47.2-21.6-47.2-47.2 0-26.4 21.6-47.2 47.2-47.2l379.2 0c26.4 0 47.2 21.6 47.2 47.2C744.8 542.4 724 563.2 697.6 563.2z",
+            "M512 0a512 512 0 1 0 512 512A512 512 0 0 0 512 0z m0 921.6a409.6 409.6 0 1 1 409.6-409.6 409.6 409.6 0 0 1-409.6 409.6z M716.8 339.968l-256 253.44L328.192 460.8A51.2 51.2 0 0 0 256 532.992l168.448 168.96a51.2 51.2 0 0 0 72.704 0l289.28-289.792A51.2 51.2 0 0 0 716.8 339.968z"),
+            .Tag = sender}
+        BtnED.ToolTip = If(sender.Entry.State = McMod.McModState.Fine, "禁用", "启用")
+        ToolTipService.SetPlacement(BtnED, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnED, 30)
+        ToolTipService.SetHorizontalOffset(BtnED, 2)
+        AddHandler BtnED.Click, AddressOf ED_Click
+        If sender.Entry.State = McMod.McModState.Unavaliable Then
+            sender.Buttons = {BtnCont, BtnOpen, BtnDelete}
+        Else
+            sender.Buttons = {BtnCont, BtnOpen, BtnED, BtnDelete}
+        End If
     End Sub
 
 #End Region
@@ -168,6 +187,13 @@
         Else
             ChangeAllSelected(False)
         End If
+    End Sub
+
+    ''' <summary>
+    ''' 安装 Mod。
+    ''' </summary>
+    Private Sub BtnManageInstall_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageInstall.Click
+        Hint("将 Mod 文件直接拖入 PCL 窗口即可安装！")
     End Sub
 
 #End Region
@@ -304,17 +330,21 @@
 #Region "下边栏"
 
     '启用 / 禁用
-    Private Sub BtnSelectEorD_Click(sender As MyIconTextButton, e As RouteEventArgs) Handles BtnSelectEnable.Click, BtnSelectDisable.Click
+    Private Sub BtnSelectED_Click(sender As MyIconTextButton, e As RouteEventArgs) Handles BtnSelectEnable.Click, BtnSelectDisable.Click
+        EDMods(McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)).ToList(),
+               Not sender.Equals(BtnSelectDisable))
+        ChangeAllSelected(False)
+    End Sub
+    Private Sub EDMods(ModList As List(Of McMod), IsEnable As Boolean)
         Dim IsSuccessful As Boolean = True
-        Dim IsDisable As Boolean = sender.Equals(BtnSelectDisable)
-        For Each ModEntity In McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)).ToList()
+        For Each ModEntity In ModList
             Dim NewPath As String = Nothing
-            If ModEntity.State = McMod.McModState.Fine And IsDisable Then
+            If ModEntity.State = McMod.McModState.Fine AndAlso Not IsEnable Then
                 '禁用
                 NewPath = ModEntity.Path & ".disabled"
-            ElseIf ModEntity.State = McMod.McModState.Disabled AndAlso Not IsDisable Then
+            ElseIf ModEntity.State = McMod.McModState.Disabled AndAlso IsEnable Then
                 '启用
-                NewPath = ModEntity.Path.Substring(0, ModEntity.Path.Count - ".disabled".Count)
+                NewPath = ModEntity.Path.Replace(".disabled", "").Replace(".old", "")
             Else
                 Continue For
             End If
@@ -328,7 +358,7 @@
                 RefreshList(True)
                 Return
             Catch ex As Exception
-                Log(ex, $"批量重命名 Mod 失败（{If(ModEntity.Path, "null")}）")
+                Log(ex, $"重命名 Mod 失败（{If(ModEntity.Path, "null")}）")
                 IsSuccessful = False
             End Try
             '更改 Loader 和 UI 中的列表
@@ -350,61 +380,82 @@
             LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", LoaderFolderRunType.UpdateOnly)
         End If
         If Not IsSuccessful Then
-            Hint("由于文件被占用，部分 Mod 的状态切换失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
+            Hint("由于文件被占用，Mod 的状态切换失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
             RefreshList(True)
         Else
-            ChangeAllSelected(False)
+            RefreshBottomBar()
         End If
     End Sub
 
     '删除
     Private Sub BtnSelectDelete_Click() Handles BtnSelectDelete.Click
-        Dim IsSuccessful As Boolean = True
-        Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
         Dim DeleteList As List(Of McMod) = McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)).ToList()
-        For Each ModEntity In DeleteList
-            '删除
-            Try
-                If IsShiftPressed Then
-                    File.Delete(ModEntity.Path)
-                Else
-                    My.Computer.FileSystem.DeleteFile(ModEntity.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                End If
-            Catch ex As OperationCanceledException
-                Log(ex, "批量删除 Mod 被主动取消")
-                RefreshList(True)
-                Return
-            Catch ex As Exception
-                Log(ex, $"批量删除 Mod 失败（{ModEntity.Path}）", LogLevel.Msgbox)
-                IsSuccessful = False
-            End Try
-            '更改 Loader 和 UI 中的列表
-            McModLoader.Output.Remove(ModEntity)
-            Dim Parent As StackPanel = If(IsSearching, PanSearchList, PanItems)
-            Dim IndexOfUi As Integer = Parent.Children.IndexOf(Parent.Children.OfType(Of MyLocalModItem).First(Function(i) i.Entry Is ModEntity))
-            Parent.Children.RemoveAt(IndexOfUi)
-        Next
-        If Not IsSearching Then
-            '改变禁用数量的显示
-            CType(PanItems.Parent, MyCard).Title = McModGetTitle(McModLoader.Output)
-            '更新加载器状态
-            LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", LoaderFolderRunType.UpdateOnly)
-        End If
-        If Not IsSuccessful Then
-            Hint("由于文件被占用，部分 Mod 删除失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
-            RefreshList(True)
-        ElseIf If(IsSearching, PanSearchList, PanItems).Children.Count = 0 Then
-            RefreshList(True)
-        Else
-            ChangeAllSelected(False)
-        End If
-        If IsSuccessful Then
-            If IsShiftPressed Then
-                Hint($"已彻底删除 {DeleteList.Count} 个文件！", HintType.Finish)
-            Else
-                Hint($"已将 {DeleteList.Count} 个文件删除到回收站！", HintType.Finish)
+        DeleteMods(DeleteList)
+    End Sub
+    Private Sub DeleteMods(ModList As IEnumerable(Of McMod))
+        Try
+            Dim IsSuccessful As Boolean = True
+            Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
+            For Each ModEntity In ModList
+                '删除
+                Try
+                    If IsShiftPressed Then
+                        File.Delete(ModEntity.Path)
+                    Else
+                        My.Computer.FileSystem.DeleteFile(ModEntity.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+                    End If
+                Catch ex As OperationCanceledException
+                    Log(ex, "删除 Mod 被主动取消")
+                    RefreshList(True)
+                    Return
+                Catch ex As Exception
+                    Log(ex, $"删除 Mod 失败（{ModEntity.Path}）", LogLevel.Msgbox)
+                    IsSuccessful = False
+                End Try
+                '取消选中
+                SelectedMods.Remove(ModEntity.RawFileName)
+                '更改 Loader 和 UI 中的列表
+                McModLoader.Output.Remove(ModEntity)
+                Dim Parent As StackPanel = If(IsSearching, PanSearchList, PanItems)
+                Dim IndexOfUi As Integer = Parent.Children.IndexOf(Parent.Children.OfType(Of MyLocalModItem).First(Function(i) i.Entry Is ModEntity))
+                Parent.Children.RemoveAt(IndexOfUi)
+            Next
+            If Not IsSearching Then
+                '改变禁用数量的显示
+                CType(PanItems.Parent, MyCard).Title = McModGetTitle(McModLoader.Output)
+                '更新加载器状态
+                LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", LoaderFolderRunType.UpdateOnly)
             End If
-        End If
+            If Not IsSuccessful Then
+                Hint("由于文件被占用，Mod 删除失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
+                RefreshList(True)
+            ElseIf If(IsSearching, PanSearchList, PanItems).Children.Count = 0 Then
+                RefreshList(True)
+            Else
+                RefreshBottomBar()
+            End If
+            '显示结果提示
+            If Not IsSuccessful Then Exit Sub
+            If IsShiftPressed Then
+                If ModList.Count = 1 Then
+                    Hint($"已彻底删除 {ModList.Single.FileName}！", HintType.Finish)
+                Else
+                    Hint($"已彻底删除 {ModList.Count} 个文件！", HintType.Finish)
+                End If
+            Else
+                If ModList.Count = 1 Then
+                    Hint($"已将 {ModList.Single.FileName} 删除到回收站！", HintType.Finish)
+                Else
+                    Hint($"已将 {ModList.Count} 个文件删除到回收站！", HintType.Finish)
+                End If
+            End If
+        Catch ex As OperationCanceledException
+            Log(ex, "删除 Mod 被主动取消")
+            RefreshList(True)
+        Catch ex As Exception
+            Log(ex, "删除 Mod 出现未知错误", LogLevel.Feedback)
+            RefreshList(True)
+        End Try
     End Sub
 
     '取消选择
@@ -494,6 +545,16 @@
             Log(ex, "打开 Mod 文件位置失败", LogLevel.Feedback)
         End Try
     End Sub
+    '删除
+    Public Sub Delete_Click(sender As MyIconButton, e As EventArgs)
+        Dim ListItem As MyLocalModItem = sender.Tag
+        DeleteMods({ListItem.Entry})
+    End Sub
+    '启用 / 禁用
+    Public Sub ED_Click(sender As MyIconButton, e As EventArgs)
+        Dim ListItem As MyLocalModItem = sender.Tag
+        EDMods(New List(Of McMod) From {ListItem.Entry}, ListItem.Entry.State = McMod.McModState.Disabled)
+    End Sub
 
 #End Region
 
@@ -513,7 +574,9 @@
                 Dim SearchSource As New List(Of KeyValuePair(Of String, Double))
                 SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Name, 1))
                 SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.FileName, 1))
-                If Entry.Version IsNot Nothing Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Version, 0.2))
+                If Entry.Version IsNot Nothing Then
+                    SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Version, 0.2))
+                End If
                 If Entry.Description IsNot Nothing AndAlso Entry.Description <> "" Then
                     SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Description, 0.4))
                 End If
@@ -521,6 +584,7 @@
                     If Entry.Comp.RawName <> Entry.Name Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Comp.RawName, 1))
                     If Entry.Comp.TranslatedName <> Entry.Comp.RawName Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Comp.TranslatedName, 1))
                     If Entry.Comp.Description <> Entry.Description Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Comp.Description, 0.4))
+                    SearchSource.Add(New KeyValuePair(Of String, Double)(String.Join("", Entry.Comp.Tags), 0.2))
                 End If
                 QueryList.Add(New SearchEntry(Of McMod) With {.Item = Entry, .SearchSource = SearchSource})
             Next

@@ -716,23 +716,23 @@ ExitDataLoad:
                 If Logo = "" OrElse Not CType(ReadIni(Path & "PCL\Setup.ini", "LogoCustom", False), Boolean) Then
                     Select Case State
                         Case McVersionState.Original
-                            Logo = "pack://application:,,,/images/Blocks/Grass.png"
+                            Logo = PathImage & "Blocks/Grass.png"
                         Case McVersionState.Snapshot
-                            Logo = "pack://application:,,,/images/Blocks/CommandBlock.png"
+                            Logo = PathImage & "Blocks/CommandBlock.png"
                         Case McVersionState.Old
-                            Logo = "pack://application:,,,/images/Blocks/CobbleStone.png"
+                            Logo = PathImage & "Blocks/CobbleStone.png"
                         Case McVersionState.Forge
-                            Logo = "pack://application:,,,/images/Blocks/Anvil.png"
+                            Logo = PathImage & "Blocks/Anvil.png"
                         Case McVersionState.Fabric
-                            Logo = "pack://application:,,,/images/Blocks/Fabric.png"
+                            Logo = PathImage & "Blocks/Fabric.png"
                         Case McVersionState.OptiFine
-                            Logo = "pack://application:,,,/images/Blocks/GrassPath.png"
+                            Logo = PathImage & "Blocks/GrassPath.png"
                         Case McVersionState.LiteLoader
-                            Logo = "pack://application:,,,/images/Blocks/Egg.png"
+                            Logo = PathImage & "Blocks/Egg.png"
                         Case McVersionState.Fool
-                            Logo = "pack://application:,,,/images/Blocks/GoldBlock.png"
+                            Logo = PathImage & "Blocks/GoldBlock.png"
                         Case Else
-                            Logo = "pack://application:,,,/images/Blocks/RedstoneBlock.png"
+                            Logo = PathImage & "Blocks/RedstoneBlock.png"
                     End Select
                 End If
                 '确定版本描述
@@ -791,7 +791,7 @@ ExitDataLoad:
                 End If
             Catch ex As Exception
                 Info = "未知错误：" & GetExceptionSummary(ex)
-                Logo = "pack://application:,,,/images/Blocks/RedstoneBlock.png"
+                Logo = PathImage & "Blocks/RedstoneBlock.png"
                 State = McVersionState.Error
                 Log(ex, "加载版本失败（" & Name & "）", LogLevel.Feedback)
             Finally

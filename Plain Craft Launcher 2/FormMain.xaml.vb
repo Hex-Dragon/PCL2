@@ -11,6 +11,14 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 311 Then 'Release 2.6.12
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面将显示 Mod 的中文名、图标、标签等信息"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "从 Mod 管理页面查看 Mod 信息时会跳转到其下载详情页面"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新设计 Mod 管理页面的交互与样式"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 Forge 1.18.3+ 的 Bug"))
+            FeatureCount += 27
+            BugCount += 25
+        End If
         If LastVersion < 308 Then 'Release 2.6.10
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为版本独立设置添加忽略 Java 兼容性警告选项"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复开始或结束游戏时可能报错的 Bug"))
@@ -135,7 +143,13 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
-        If LastVersion < 307 Then 'Snapshot 2.6.11
+        If LastVersion < 310 Then 'Snapshot 2.6.12
+            If LastVersion = 309 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理页面添加启用、禁用单个 Mod 的快捷按钮"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 Forge 1.18.3+ 的 Bug"))
+            FeatureCount += 13
+            BugCount += 12
+        End If
+        If LastVersion < 309 Then 'Snapshot 2.6.11
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面将显示 Mod 的中文名、图标、标签等信息"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "从 Mod 管理页面查看 Mod 信息时会跳转到其下载详情页面"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新设计 Mod 管理页面的交互与样式"))
@@ -399,7 +413,7 @@ Public Class FormMain
 #If DEBUG Then
         Hint("[开发者模式] PCL 正以开发者模式运行，这可能会造成严重的性能下降，请务必立即向开发者反馈此问题！", HintType.Critical)
 #End If
-        If ModeDebug Then Hint("[调试模式] PCL 正以调试模式运行，这可能会造成性能的下降，若无必要请不要开启！")
+        If ModeDebug Then Hint("[调试模式] PCL 正以调试模式运行，这可能会导致性能下降，若无必要请不要开启！")
         '尽早执行的加载池
         McFolderListLoader.Start(0) '为了让下载已存在文件检测可以正常运行，必须跑一次；为了让启动按钮尽快可用，需要尽早执行；为了与 PageLaunchLeft 联动，需要为 0 而不是 GetUuid
 
@@ -466,8 +480,8 @@ Public Class FormMain
                    End Sub, , True)
         }, "Form Show")
         'Timer 启动
-        AniStartRun()
-        TimerMainStartRun()
+        AniStart()
+        TimerMainStart()
         '加载池
         RunInNewThread(Sub()
                            'EULA 提示
@@ -855,6 +869,11 @@ Public Class FormMain
                             '正在主页，需要刷新左边栏
                             FrmLaunchLeft.RefreshPage(True, False)
                         End If
+                    ElseIf Str.StartsWith("file:///") Then
+                        '文件拖拽（例如从浏览器下载窗口拖入）
+                        Dim FilePath = Net.WebUtility.UrlDecode(Str).Substring("file:///".Length).Replace("/", "\")
+                        e.Handled = True
+                        FileDrag(New List(Of String) From {FilePath})
                     End If
                 Catch ex As Exception
                     Log(ex, "无法接取文本拖拽事件", LogLevel.Developer)
@@ -867,107 +886,112 @@ Public Class FormMain
                     Hint("请将文件解压后再拖入！", HintType.Critical)
                     Exit Sub
                 End If
-                Dim FilePathList As New List(Of String)(CType(FilePathRaw, IEnumerable(Of String)))
                 e.Handled = True
-                If Directory.Exists(FilePathList.First) AndAlso Not File.Exists(FilePathList.First) Then
-                    Hint("请拖入一个文件，而非文件夹！", HintType.Critical)
-                    Exit Sub
-                End If
-                '多文件拖拽
-                If FilePathList.Count > 1 Then
-                    '必须要求全部为 jar 文件
-                    For Each File In FilePathList
-                        Dim Extension As String = File.Split(".").Last.ToLower
-                        If Not {"jar", "litemod", "disabled"}.Contains(Extension) Then
-                            Hint("一次请只拖入一个文件！", HintType.Critical)
-                            Exit Sub
-                        End If
-                    Next
-                End If
-                '实际执行事件
-                Dim FilePath As String = FilePathList.First
-                Log("[System] 接受文件拖拽：" & FilePath, LogLevel.Developer)
-                RunInNewThread(Sub()
-                                   Dim Extension As String = FilePath.Split(".").Last.ToLower
-                                   '自定义主页
-                                   If Extension = "xaml" Then
-                                       Log("[System] 文件后缀为 XAML，作为自定义主页加载")
-                                       If File.Exists(Path & "PCL\Custom.xaml") Then
-                                           If MyMsgBox("已存在一个自定义主页文件，是否要将它覆盖？", "覆盖确认", "覆盖", "取消") = 2 Then
-                                               Exit Sub
-                                           End If
-                                       End If
-                                       CopyFile(FilePath, Path & "PCL\Custom.xaml")
-                                       RunInUi(Sub()
-                                                   Setup.Set("UiCustomType", 1)
-                                                   FrmLaunchRight.ForceRefresh()
-                                                   Hint("已加载主页自定义文件！", HintType.Finish)
-                                               End Sub)
-                                       Exit Sub
-                                   End If
-                                   'Mod 安装
-                                   If {"jar", "litemod", "disabled"}.Any(Function(t) t = Extension) Then
-                                       Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
-                                       '获取并检查目标版本
-                                       Dim TargetVersion As McVersion = McVersionCurrent
-                                       If PageCurrent = PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
-                                       If PageCurrent = PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Modable Then
-                                           '正在选择版本，或当前版本不能安装 Mod
-                                           Hint("若要安装 Mod，请先选择一个可以安装 Mod 的版本！")
-                                       ElseIf Not (PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod) Then
-                                           '未处于 Mod 管理页面
-                                           If MyMsgBox($"是否要将这些文件作为 Mod 安装到 {TargetVersion.Name}？", "Mod 安装确认", "确定", "取消") = 1 Then GoTo Install
-                                       Else
-                                           '处于 Mod 管理页面
-Install:
-                                           Try
-                                               For Each ModFile In FilePathList
-                                                   CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & GetFileNameFromPath(ModFile))
-                                               Next
-                                               If FilePathList.Count = 1 Then
-                                                   Hint($"已安装 {GetFileNameFromPath(FilePathList.First)}！", HintType.Finish)
-                                               Else
-                                                   Hint($"已安装 {FilePathList.Count} 个 Mod！", HintType.Finish)
-                                               End If
-                                               '刷新列表
-                                               If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
-                                                   LoaderFolderRun(McModLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
-                                               End If
-                                           Catch ex As Exception
-                                               Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
-                                           End Try
-                                       End If
-                                       Exit Sub
-                                   End If
-                                   '安装整合包
-                                   If {"zip", "rar", "mrpack"}.Any(Function(t) t = Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
-                                       Log("[System] 文件为压缩包，尝试作为整合包安装")
-                                       If ModpackInstall(FilePath, ShowHint:=False) Then Exit Sub
-                                   End If
-                                   'RAR 处理
-                                   If Extension = "rar" Then
-                                       Hint("PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试！")
-                                       Exit Sub
-                                   End If
-                                   '错误报告分析
-                                   Try
-                                       Log("[System] 尝试进行错误报告分析")
-                                       Dim Analyzer As New CrashAnalyzer(GetUuid())
-                                       Analyzer.Import(FilePath)
-                                       If Analyzer.Prepare() = 0 Then Exit Try
-                                       Analyzer.Analyze()
-                                       Analyzer.Output(True, New List(Of String))
-                                       Exit Sub
-                                   Catch ex As Exception
-                                       Log(ex, "自主错误报告分析失败", LogLevel.Feedback)
-                                   End Try
-                                   '未知操作
-                                   Hint("PCL 无法确定应当执行的文件拖拽操作……")
-                               End Sub, "文件拖拽")
+                FileDrag(CType(FilePathRaw, IEnumerable(Of String)))
             End If
         Catch ex As Exception
             Log(ex, "接取拖拽事件失败", LogLevel.Feedback)
         End Try
+    End Sub
+    Private Sub FileDrag(FilePathList As IEnumerable(Of String))
+        RunInNewThread(
+        Sub()
+            Dim FilePath As String = FilePathList.First
+            Log("[System] 接受文件拖拽：" & FilePath & If(FilePathList.Count > 0, $" 等 {FilePathList.Count} 个文件", ""), LogLevel.Developer)
+            '基础检查
+            If Directory.Exists(FilePathList.First) AndAlso Not File.Exists(FilePathList.First) Then
+                Hint("请拖入一个文件，而非文件夹！", HintType.Critical)
+                Exit Sub
+            ElseIf Not File.Exists(FilePathList.First) Then
+                Hint("拖入的文件不存在：" & FilePathList.First, HintType.Critical)
+                Exit Sub
+            End If
+            '多文件拖拽
+            If FilePathList.Count > 1 Then
+                '必须要求全部为 jar 文件
+                For Each File In FilePathList
+                    If Not {"jar", "litemod", "disabled", "old"}.Contains(File.Split(".").Last.ToLower) Then
+                        Hint("一次请只拖入一个文件！", HintType.Critical)
+                        Exit Sub
+                    End If
+                Next
+            End If
+            '自定义主页
+            Dim Extension As String = FilePath.Split(".").Last.ToLower
+            If Extension = "xaml" Then
+                Log("[System] 文件后缀为 XAML，作为自定义主页加载")
+                If File.Exists(Path & "PCL\Custom.xaml") Then
+                    If MyMsgBox("已存在一个自定义主页文件，是否要将它覆盖？", "覆盖确认", "覆盖", "取消") = 2 Then
+                        Exit Sub
+                    End If
+                End If
+                CopyFile(FilePath, Path & "PCL\Custom.xaml")
+                RunInUi(Sub()
+                            Setup.Set("UiCustomType", 1)
+                            FrmLaunchRight.ForceRefresh()
+                            Hint("已加载主页自定义文件！", HintType.Finish)
+                        End Sub)
+                Exit Sub
+            End If
+            'Mod 安装
+            If {"jar", "litemod", "disabled", "old"}.Any(Function(t) t = Extension) Then
+                Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
+                '获取并检查目标版本
+                Dim TargetVersion As McVersion = McVersionCurrent
+                If PageCurrent = PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
+                If PageCurrent = PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Modable Then
+                    '正在选择版本，或当前版本不能安装 Mod
+                    Hint("若要安装 Mod，请先选择一个可以安装 Mod 的版本！")
+                ElseIf Not (PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod) Then
+                    '未处于 Mod 管理页面
+                    If MyMsgBox($"是否要将这些文件作为 Mod 安装到 {TargetVersion.Name}？", "Mod 安装确认", "确定", "取消") = 1 Then GoTo Install
+                Else
+                    '处于 Mod 管理页面
+Install:
+                    Try
+                        For Each ModFile In FilePathList
+                            CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & GetFileNameFromPath(ModFile))
+                        Next
+                        If FilePathList.Count = 1 Then
+                            Hint($"已安装 {GetFileNameFromPath(FilePathList.First)}！", HintType.Finish)
+                        Else
+                            Hint($"已安装 {FilePathList.Count} 个 Mod！", HintType.Finish)
+                        End If
+                        '刷新列表
+                        If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
+                            LoaderFolderRun(McModLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
+                        End If
+                    Catch ex As Exception
+                        Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
+                    End Try
+                End If
+                Exit Sub
+            End If
+            '安装整合包
+            If {"zip", "rar", "mrpack"}.Any(Function(t) t = Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
+                Log("[System] 文件为压缩包，尝试作为整合包安装")
+                If ModpackInstall(FilePath, ShowHint:=False) Then Exit Sub
+            End If
+            'RAR 处理
+            If Extension = "rar" Then
+                Hint("PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试！")
+                Exit Sub
+            End If
+            '错误报告分析
+            Try
+                Log("[System] 尝试进行错误报告分析")
+                Dim Analyzer As New CrashAnalyzer(GetUuid())
+                Analyzer.Import(FilePath)
+                If Analyzer.Prepare() = 0 Then Exit Try
+                Analyzer.Analyze()
+                Analyzer.Output(True, New List(Of String))
+                Exit Sub
+            Catch ex As Exception
+                Log(ex, "自主错误报告分析失败", LogLevel.Feedback)
+            End Try
+            '未知操作
+            Hint("PCL 无法确定应当执行的文件拖拽操作……")
+        End Sub, "文件拖拽")
     End Sub
 
     '接受到 Windows 窗体事件
@@ -1170,6 +1194,10 @@ Install:
     ''' </summary>
     Public PageCurrent As PageStackData = PageType.Launch
     ''' <summary>
+    ''' 上一个主页面。
+    ''' </summary>
+    Public PageLast As PageStackData = PageType.Launch
+    ''' <summary>
     ''' 当前的子页面。
     ''' </summary>
     Public ReadOnly Property PageCurrentSub As PageSubType
@@ -1347,6 +1375,7 @@ Install:
 #End Region
 
 #Region "实际更改页面框架 UI"
+            PageLast = PageCurrent
             PageCurrent = Stack
             Select Case Stack.Page
                 Case PageType.Launch '启动

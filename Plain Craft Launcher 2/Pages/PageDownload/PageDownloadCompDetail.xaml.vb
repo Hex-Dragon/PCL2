@@ -13,6 +13,12 @@
         TargetLoader = FrmMain.PageCurrent.Additional(3)
         PageLoaderInit(Load, PanLoad, PanMain, CardIntro, CompFileLoader, AddressOf Load_OnFinish)
     End Sub
+    Private Sub PageDownloadCompDetail_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
+        'Initialized 只会执行一次
+        Project = FrmMain.PageCurrent.Additional(0)
+        TargetVersion = FrmMain.PageCurrent.Additional(2)
+        TargetLoader = FrmMain.PageCurrent.Additional(3)
+    End Sub
     Private Project As CompProject
     Private TargetVersion As String, TargetLoader As CompModLoaderType
     '自动重试
@@ -55,10 +61,10 @@
                     TargetCard = "未知版本"
                 ElseIf GameVersion.Contains("w") OrElse GameVersion.Contains("pre") OrElse GameVersion.Contains("rc") Then
                     TargetCard = "快照版本"
-                ElseIf GameVersion.Split(".").Count >= 2 Then
-                    TargetCard = GameVersion
+                ElseIf GameVersion.StartsWith("1.0") Then
+                    TargetCard = "远古版本"
                 Else
-                    TargetCard = "未知版本"
+                    TargetCard = GameVersion
                 End If
                 '实际进行添加
                 If Not Dict.ContainsKey(TargetCard) Then Dict.Add(TargetCard, New List(Of CompFile))

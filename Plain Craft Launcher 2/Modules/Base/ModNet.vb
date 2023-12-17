@@ -1206,7 +1206,7 @@ SourceBreak:
                 Info.Source.Ex = ex
                 '根据情况判断，是否在多线程下禁用下载源（连续错误过多，或不支持断点续传）
                 If ex.Message.Contains("该下载源不支持") OrElse ex.Message.Contains("未能解析") OrElse ex.Message.Contains("(404)") OrElse ex.Message.Contains("(403)") OrElse ex.Message.Contains("(502)") OrElse ex.Message.Contains("无返回数据") OrElse ex.Message.Contains("空间不足") OrElse
-                    (Info.Source.FailCount >= MathRange(NetTaskThreadLimit, 5, 40) AndAlso DownloadDone < 1) OrElse
+                    (Info.Source.FailCount >= MathClamp(NetTaskThreadLimit, 5, 40) AndAlso DownloadDone < 1) OrElse
                     Info.Source.FailCount > NetTaskThreadLimit Then
                     Dim IsThisFail As Boolean = False
                     SyncLock LockSource
@@ -1862,9 +1862,9 @@ Retry:
                                            Dim IsSuccess As Boolean = False
                                            Dim NewThreadCount As Integer
                                            '确定最大线程追加数
-                                           NewThreadCount = Math.Max(FileRemain, MathRange(NetTaskThreadCount / 2, 1, 4))
+                                           NewThreadCount = Math.Max(FileRemain, MathClamp(NetTaskThreadCount / 2, 1, 4))
                                            NewThreadCount = Math.Floor(NewThreadCount / 2) '双线程启用减半
-                                           NewThreadCount = MathRange(NewThreadCount, 1, NetTaskThreadLimit)
+                                           NewThreadCount = MathClamp(NewThreadCount, 1, NetTaskThreadLimit)
                                            '循环追加
                                            Do
                                                IsSuccess = False
@@ -1919,9 +1919,9 @@ Retry:
                                            Dim IsSuccess As Boolean = False
                                            Dim NewThreadCount As Integer
                                            '确定最大线程追加数
-                                           NewThreadCount = Math.Max(FileRemain, MathRange(NetTaskThreadCount / 2, 1, 4))
+                                           NewThreadCount = Math.Max(FileRemain, MathClamp(NetTaskThreadCount / 2, 1, 4))
                                            NewThreadCount = Math.Floor(NewThreadCount / 2) '双线程启用减半
-                                           NewThreadCount = MathRange(NewThreadCount, 1, NetTaskThreadLimit)
+                                           NewThreadCount = MathClamp(NewThreadCount, 1, NetTaskThreadLimit)
                                            '循环追加
                                            Do
                                                IsSuccess = False

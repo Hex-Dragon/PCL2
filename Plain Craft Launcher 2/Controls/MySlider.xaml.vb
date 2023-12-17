@@ -28,7 +28,7 @@
         Set(newValue As Integer)
             Try
 
-                newValue = MathRange(newValue, 0, MaxValue)
+                newValue = MathClamp(newValue, 0, MaxValue)
                 If _Value = newValue Then Exit Property
 
                 '触发 Preview 事件，修改新值
@@ -88,7 +88,7 @@
         AniStop("MySlider KeyPopup " & Uuid)
     End Sub
     Public Sub DragDoing()
-        Dim Percent As Double = MathRange((Mouse.GetPosition(PanMain).X - ShapeDot.Width / 2) / (ActualWidth - ShapeDot.Width), 0, 1)
+        Dim Percent As Double = MathClamp((Mouse.GetPosition(PanMain).X - ShapeDot.Width / 2) / (ActualWidth - ShapeDot.Width), 0, 1)
         Dim NewValue As Integer = Percent * MaxValue
         If Not NewValue = Value Then
             Value = NewValue
