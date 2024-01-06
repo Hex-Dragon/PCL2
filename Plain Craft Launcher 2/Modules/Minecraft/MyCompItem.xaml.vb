@@ -46,34 +46,41 @@
         End Set
     End Property
     '后台加载 Logo
-    Private Sub LogoLoader(Address As String)
-        Dim Retry As Boolean = False
+    Private Sub LogoLoader(LocalFileAddress As String)
+        Dim Retried As Boolean = False
         Dim DownloadEnd As String = GetUuid()
 RetryStart:
         Try
-            NetDownload(_Logo, Address & DownloadEnd)
+            'CurseForge 图片使用缩略图
+            Dim Url As String = _Logo
+            If Url.Contains("/256/256/") AndAlso GetPixelSize(1) <= 1.25 AndAlso Not Retried Then
+                Url = Url.Replace("/256/256/", "/64/64/") '#3075：部分 Mod 不存在 64x64 图标，所以重试时不再缩小
+            End If
+            '下载图片
+            NetDownload(Url, LocalFileAddress & DownloadEnd)
             Dim LoadError As Exception = Nothing
-            RunInUiWait(Sub()
-                            Try
-                                '在地址更换时取消加载
-                                If Not Address = PathTemp & "CompLogo\" & GetHash(_Logo) & ".png" Then Exit Sub
-                                '在完成正常加载后才保存缓存图片
-                                PathLogo.Source = New MyBitmap(Address & DownloadEnd)
-                            Catch ex As Exception
-                                Log(ex, "读取资源工程图标失败（" & Address & "）")
-                                File.Delete(Address & DownloadEnd)
-                                LoadError = ex
-                            End Try
-                        End Sub)
+            RunInUiWait(
+            Sub()
+                Try
+                    '在地址更换时取消加载
+                    If LocalFileAddress <> $"{PathTemp}CompLogo\{GetHash(_Logo)}.png" Then Exit Sub
+                    '在完成正常加载后才保存缓存图片
+                    PathLogo.Source = New MyBitmap(LocalFileAddress & DownloadEnd)
+                Catch ex As Exception
+                    Log(ex, $"读取资源工程图标失败（{LocalFileAddress}）")
+                    File.Delete(LocalFileAddress & DownloadEnd)
+                    LoadError = ex
+                End Try
+            End Sub)
             If LoadError IsNot Nothing Then Throw LoadError
-            If File.Exists(Address) Then
-                File.Delete(Address & DownloadEnd)
+            If File.Exists(LocalFileAddress) Then
+                File.Delete(LocalFileAddress & DownloadEnd)
             Else
-                FileIO.FileSystem.MoveFile(Address & DownloadEnd, Address)
+                FileIO.FileSystem.MoveFile(LocalFileAddress & DownloadEnd, LocalFileAddress)
             End If
         Catch ex As Exception
-            If Not Retry Then
-                Retry = True
+            If Not Retried Then
+                Retried = True
                 GoTo RetryStart
             Else
                 Log(ex, $"下载资源工程图标失败（{_Logo}）")

@@ -101,10 +101,5 @@
                            End Try
                        End Sub, "Ms Login")
     End Sub
-    '账号迁移入口
-    Private Sub BtnMigration_Click(sender As Object, e As EventArgs) Handles BtnMigration.Click
-        MyMsgBox($"请在接下来要打开的页面登录你的 Mojang 账号。{vbCrLf}在迁移时，你可能需要设置档案信息，请注意让年龄大于 18 岁，否则可能会导致无法登录！", "迁移提示", "继续", ForceWait:=True)
-        OpenWebsite("https://www.minecraft.net/zh-hans/login")
-    End Sub
 
 End Class

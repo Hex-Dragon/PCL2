@@ -145,26 +145,27 @@
             '由于 Abort 不是实时的，暂时不会释放文件，会导致删除报错，故只能取消执行
             Hint("有正在获取中的皮肤，请稍后再试！", HintType.Info)
         Else
-            RunInThread(Sub()
-                            Try
-                                Hint("正在刷新头像……")
-                                '清空缓存
-                                Log("[Skin] 正在清空皮肤缓存")
-                                If Directory.Exists(PathTemp & "Cache\Skin") Then DeleteDirectory(PathTemp & "Cache\Skin")
-                                If Directory.Exists(PathTemp & "Cache\Uuid") Then DeleteDirectory(PathTemp & "Cache\Uuid")
-                                IniClearCache(PathTemp & "Cache\Skin\IndexMs.ini")
-                                IniClearCache(PathTemp & "Cache\Skin\IndexNide.ini")
-                                IniClearCache(PathTemp & "Cache\Skin\IndexAuth.ini")
-                                IniClearCache(PathTemp & "Cache\Uuid\Mojang.ini")
-                                '刷新控件
-                                For Each SkinLoader In If(sender IsNot Nothing, {sender}, {PageLaunchLeft.SkinLegacy, PageLaunchLeft.SkinMs})
-                                    SkinLoader.WaitForExit(IsForceRestart:=True)
-                                Next
-                                Hint("已刷新头像！", HintType.Finish)
-                            Catch ex As Exception
-                                Log(ex, "刷新皮肤缓存失败", LogLevel.Msgbox)
-                            End Try
-                        End Sub)
+            RunInThread(
+            Sub()
+                Try
+                    Hint("正在刷新头像……")
+                    '清空缓存
+                    Log("[Skin] 正在清空皮肤缓存")
+                    If Directory.Exists(PathTemp & "Cache\Skin") Then DeleteDirectory(PathTemp & "Cache\Skin")
+                    If Directory.Exists(PathTemp & "Cache\Uuid") Then DeleteDirectory(PathTemp & "Cache\Uuid")
+                    IniClearCache(PathTemp & "Cache\Skin\IndexMs.ini")
+                    IniClearCache(PathTemp & "Cache\Skin\IndexNide.ini")
+                    IniClearCache(PathTemp & "Cache\Skin\IndexAuth.ini")
+                    IniClearCache(PathTemp & "Cache\Uuid\Mojang.ini")
+                    '刷新控件
+                    For Each SkinLoader In If(sender IsNot Nothing, {sender}, {PageLaunchLeft.SkinLegacy, PageLaunchLeft.SkinMs})
+                        SkinLoader.WaitForExit(IsForceRestart:=True)
+                    Next
+                    Hint("已刷新头像！", HintType.Finish)
+                Catch ex As Exception
+                    Log(ex, "刷新皮肤缓存失败", LogLevel.Msgbox)
+                End Try
+            End Sub)
         End If
     End Sub
     ''' <summary>
@@ -172,21 +173,22 @@
     ''' </summary>
     ''' <param name="SkinAddress">新的正版皮肤完整地址。</param>
     Public Shared Sub ReloadCache(SkinAddress As String)
-        RunInThread(Sub()
-                        Try
-                            '更新缓存
-                            WriteIni(PathTemp & "Cache\Skin\IndexMs.ini", Setup.Get("CacheMsUuid"), SkinAddress)
-                            Log(String.Format("[Skin] 已写入皮肤地址缓存 {0} -> {1}", Setup.Get("CacheMsUuid"), SkinAddress))
-                            '刷新控件
-                            For Each SkinLoader In {PageLaunchLeft.SkinMs, PageLaunchLeft.SkinLegacy}
-                                SkinLoader.WaitForExit(IsForceRestart:=True)
-                            Next
-                            '完成提示
-                            Hint("更改皮肤成功！", HintType.Finish)
-                        Catch ex As Exception
-                            Log(ex, "更改正版皮肤后刷新皮肤失败", LogLevel.Feedback)
-                        End Try
-                    End Sub)
+        RunInThread(
+        Sub()
+            Try
+                '更新缓存
+                WriteIni(PathTemp & "Cache\Skin\IndexMs.ini", Setup.Get("CacheMsUuid"), SkinAddress)
+                Log(String.Format("[Skin] 已写入皮肤地址缓存 {0} -> {1}", Setup.Get("CacheMsUuid"), SkinAddress))
+                '刷新控件
+                For Each SkinLoader In {PageLaunchLeft.SkinMs, PageLaunchLeft.SkinLegacy}
+                    SkinLoader.WaitForExit(IsForceRestart:=True)
+                Next
+                '完成提示
+                Hint("更改皮肤成功！", HintType.Finish)
+            Catch ex As Exception
+                Log(ex, "更改正版皮肤后刷新皮肤失败", LogLevel.Feedback)
+            End Try
+        End Sub)
     End Sub
 
     '披风
@@ -216,58 +218,60 @@
         Hint("正在获取披风列表，请稍候……")
         IsChanging = True
         '开始实际获取
-        RunInNewThread(Sub()
-                           Try
+        RunInNewThread(
+        Sub()
+            Try
 Retry:
-                               '获取登录信息
-                               If McLoginMsLoader.State <> LoadState.Finished Then McLoginMsLoader.WaitForExit(PageLoginMsSkin.GetLoginData())
-                               If McLoginMsLoader.State <> LoadState.Finished Then
-                                   Hint("登录失败，无法更改披风！", HintType.Critical)
-                                   Exit Sub
-                               End If
-                               Dim AccessToken As String = McLoginMsLoader.Output.AccessToken
-                               Dim Uuid As String = McLoginMsLoader.Output.Uuid
-                               Dim SkinData As JObject = GetJson(McLoginMsLoader.Output.ProfileJson)
-                               '获取玩家的所有披风
-                               Dim SelId As Integer? = Nothing
-                               RunInUiWait(Sub()
-                                               Try
-                                                   Dim CapeNames As New Dictionary(Of String, String) From {
-                                                       {"Migrator", "迁移者披风"}, {"MapMaker", "Realms 地图制作者披风"}, {"Moderator", "Mojira 管理员披风"},
-                                                       {"Translator-Chinese", "Crowdin 中文翻译者披风"}, {"Translator", "Crowdin 翻译者披风"}, {"Cobalt", "Cobalt 披风"},
-                                                       {"Vanilla", "原版披风"}, {"Minecon2011", "Minecon 2011 参与者披风"}, {"Minecon2012", "Minecon 2012 参与者披风"},
-                                                       {"Minecon2013", "Minecon 2013 参与者披风"}, {"Minecon2015", "Minecon 2015 参与者披风"}, {"Minecon2016", "Minecon 2016 参与者披风"},
-                                                       {"Cherry Blossom", "樱花披风"}
-                                                   }
-                                                   Dim SelectionControl As New List(Of IMyRadio) From {New MyRadioBox With {.Text = "无披风"}}
-                                                   For Each Cape In SkinData("capes")
-                                                       Dim CapeName As String = Cape("alias").ToString
-                                                       If CapeNames.ContainsKey(CapeName) Then CapeName = CapeNames(CapeName)
-                                                       SelectionControl.Add(New MyRadioBox With {.Text = CapeName})
-                                                   Next
-                                                   SelId = MyMsgBoxSelect(SelectionControl, "选择披风", "确定", "取消")
-                                               Catch ex As Exception
-                                                   Log(ex, "获取玩家皮肤列表失败", LogLevel.Feedback)
-                                               End Try
-                                           End Sub)
-                               If SelId Is Nothing Then Exit Sub
-                               '发送请求
-                               Dim Result As String = NetRequestRetry("https://api.minecraftservices.com/minecraft/profile/capes/active",
-                                                                       If(SelId = 0, "DELETE", "PUT"),
-                                                                       If(SelId = 0, "", "{""capeId"": """ & SkinData("capes")(SelId - 1)("id").ToString & """}"),
-                                                                       "application/json", Headers:=New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}})
-                               If Result.Contains("""errorMessage""") Then
-                                   Hint("更改披风失败：" & GetJson(Result)("errorMessage"), HintType.Critical)
-                                   Exit Sub
-                               Else
-                                   Hint("更改披风成功！", HintType.Finish)
-                               End If
-                           Catch ex As Exception
-                               Log(ex, "更改披风失败", LogLevel.Hint)
-                           Finally
-                               IsChanging = False
-                           End Try
-                       End Sub, "Cape Change")
+                '获取登录信息
+                If McLoginMsLoader.State <> LoadState.Finished Then McLoginMsLoader.WaitForExit(PageLoginMsSkin.GetLoginData())
+                If McLoginMsLoader.State <> LoadState.Finished Then
+                    Hint("登录失败，无法更改披风！", HintType.Critical)
+                    Exit Sub
+                End If
+                Dim AccessToken As String = McLoginMsLoader.Output.AccessToken
+                Dim Uuid As String = McLoginMsLoader.Output.Uuid
+                Dim SkinData As JObject = GetJson(McLoginMsLoader.Output.ProfileJson)
+                '获取玩家的所有披风
+                Dim SelId As Integer? = Nothing
+                RunInUiWait(
+                Sub()
+                    Try
+                        Dim CapeNames As New Dictionary(Of String, String) From {
+                            {"Migrator", "迁移者披风"}, {"MapMaker", "Realms 地图制作者披风"}, {"Moderator", "Mojira 管理员披风"},
+                            {"Translator-Chinese", "Crowdin 中文翻译者披风"}, {"Translator", "Crowdin 翻译者披风"}, {"Cobalt", "Cobalt 披风"},
+                            {"Vanilla", "原版披风"}, {"Minecon2011", "Minecon 2011 参与者披风"}, {"Minecon2012", "Minecon 2012 参与者披风"},
+                            {"Minecon2013", "Minecon 2013 参与者披风"}, {"Minecon2015", "Minecon 2015 参与者披风"}, {"Minecon2016", "Minecon 2016 参与者披风"},
+                            {"Cherry Blossom", "樱花披风"}
+                        }
+                        Dim SelectionControl As New List(Of IMyRadio) From {New MyRadioBox With {.Text = "无披风"}}
+                        For Each Cape In SkinData("capes")
+                            Dim CapeName As String = Cape("alias").ToString
+                            If CapeNames.ContainsKey(CapeName) Then CapeName = CapeNames(CapeName)
+                            SelectionControl.Add(New MyRadioBox With {.Text = CapeName})
+                        Next
+                        SelId = MyMsgBoxSelect(SelectionControl, "选择披风", "确定", "取消")
+                    Catch ex As Exception
+                        Log(ex, "获取玩家皮肤列表失败", LogLevel.Feedback)
+                    End Try
+                End Sub)
+                If SelId Is Nothing Then Exit Sub
+                '发送请求
+                Dim Result As String = NetRequestRetry("https://api.minecraftservices.com/minecraft/profile/capes/active",
+                    If(SelId = 0, "DELETE", "PUT"),
+                    If(SelId = 0, "", New JObject(New JProperty("capeId", SkinData("capes")(SelId - 1)("id"))).ToString(0)),
+                    "application/json", Headers:=New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}})
+                If Result.Contains("""errorMessage""") Then
+                    Hint("更改披风失败：" & GetJson(Result)("errorMessage"), HintType.Critical)
+                    Exit Sub
+                Else
+                    Hint("更改披风成功！", HintType.Finish)
+                End If
+            Catch ex As Exception
+                Log(ex, "更改披风失败", LogLevel.Hint)
+            Finally
+                IsChanging = False
+            End Try
+        End Sub, "Cape Change")
     End Sub
 
 End Class

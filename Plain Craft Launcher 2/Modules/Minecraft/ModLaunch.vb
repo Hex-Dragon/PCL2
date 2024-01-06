@@ -435,13 +435,7 @@ NextInner:
             Case McLoginType.Ms
                 Loader = McLoginMsLoader
             Case McLoginType.Legacy
-                If PageLinkHiper.HiperState = LoadState.Finished Then
-                    '使用 HiPer 内网验证
-                    Loader = McLoginHiperLoader
-                Else
-                    '默认的离线验证
-                    Loader = McLoginLegacyLoader
-                End If
+                Loader = McLoginLegacyLoader
             Case McLoginType.Nide
                 Loader = McLoginNideLoader
             Case McLoginType.Auth
@@ -462,7 +456,6 @@ NextInner:
     Public McLoginLegacyLoader As New LoaderTask(Of McLoginLegacy, McLoginResult)("Loader Login Legacy", AddressOf McLoginLegacyStart)
     Public McLoginNideLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Nide", AddressOf McLoginServerStart) With {.ReloadTimeout = 60000}
     Public McLoginAuthLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Auth", AddressOf McLoginServerStart) With {.ReloadTimeout = 60000}
-    Public McLoginHiperLoader As New LoaderTask(Of McLoginLegacy, McLoginResult)("Loader Login HiPer", AddressOf McLoginHiperStart) With {.ReloadTimeout = 60000}
 
     '主加载函数，返回所有需要的登录信息
     Private Sub McLoginMsStart(Data As LoaderTask(Of McLoginMs, McLoginResult))
@@ -615,45 +608,6 @@ LoginFinish:
         Names.Insert(0, Input.UserName)
         Setup.Set("LoginLegacyName", Join(Names.ToArray, "¨"))
     End Sub
-    Private Sub McLoginHiperStart(Data As LoaderTask(Of McLoginLegacy, McLoginResult))
-        Dim Input As McLoginLegacy = Data.Input
-        McLaunchLog("登录方式：联机离线（" & Input.UserName & "）")
-        Data.Progress = 0.05
-        '尝试登录
-        Try
-            McLaunchLog("登录开始（Login, HiPer）")
-            Dim LoginJson As JObject = GetJson(NetRequestRetry(
-                   Url:="http://hiperauth.tech/api/yggdrasil-hiper/authserver/authenticate",
-                   Method:="POST",
-                   Data:="{""agent"": {""name"": ""Minecraft"",""version"": 1},""username"":""" & Data.Input.UserName & """,""password"":""" &
-                         McLoginLegacyUuidWithCustomSkin(Input.UserName, Input.SkinType, Input.SkinName) & """,""requestUser"":true}",
-                   ContentType:="application/json; charset=utf-8"))
-            '将登录结果输出
-            Data.Output.AccessToken = LoginJson("accessToken").ToString
-            Data.Output.ClientToken = LoginJson("clientToken").ToString
-            Data.Output.Name = LoginJson("selectedProfile")("name").ToString
-            Data.Output.Uuid = LoginJson("selectedProfile")("id").ToString
-            Data.Output.Type = "Auth"
-            McLaunchLog("登录成功（Login, HiPer）")
-            '保存启动记录
-            Dim Names As New List(Of String)
-            If Not Setup.Get("LoginLegacyName") = "" Then Names.AddRange(Setup.Get("LoginLegacyName").ToString.Split("¨"))
-            Names.Remove(Input.UserName)
-            Names.Insert(0, Input.UserName)
-            Setup.Set("LoginLegacyName", Join(Names.ToArray, "¨"))
-        Catch ex As Exception
-            Dim AllMessage As String = GetExceptionSummary(ex)
-            Log(ex, "登录失败原始错误信息", LogLevel.Normal)
-            Dim ThrowEx As Exception = ex
-            If AllMessage.Contains("403") Then
-                ThrowEx = New Exception("登录尝试过于频繁，导致被系统暂时屏蔽。请不要操作，等待 10 分钟后再试。", ex)
-            ElseIf AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout") OrElse AllMessage.Contains("网络请求失败") Then
-                ThrowEx = New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查 HiPer 联机模块的连接状况是否良好，或选择其他登录方式！")
-            End If
-            McLaunchLog("登录失败：" & GetExceptionSummary(ThrowEx))
-            Throw ThrowEx
-        End Try
-    End Sub
 
     'Server 登录：三种验证方式的请求
     Private Sub McLoginRequestValidate(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult))
@@ -664,11 +618,13 @@ LoginFinish:
         Dim Uuid As String = Setup.Get("Cache" & Data.Input.Token & "Uuid")
         Dim Name As String = Setup.Get("Cache" & Data.Input.Token & "Name")
         '发送登录请求
+        Dim RequestData As New JObject(
+            New JProperty("accessToken", AccessToken), New JProperty("clientToken", ClientToken), New JProperty("requestUser", True))
         NetRequestRetry(
-               Url:=Data.Input.BaseUrl & "/validate",
-               Method:="POST",
-               Data:="{""accessToken"":""" & AccessToken & """,""clientToken"":""" & ClientToken & """,""requestUser"":true}",
-               ContentType:="application/json; charset=utf-8") '没有返回值的
+            Url:=Data.Input.BaseUrl & "/validate",
+            Method:="POST",
+            Data:=RequestData.ToString(0),
+            ContentType:="application/json; charset=utf-8") '没有返回值的
         '将登录结果输出
         Data.Output.AccessToken = AccessToken
         Data.Output.ClientToken = ClientToken
@@ -712,11 +668,16 @@ LoginFinish:
         Try
             Dim NeedRefresh As Boolean = False
             McLaunchLog("登录开始（Login, " & Data.Input.Token & "）")
+            Dim RequestData As New JObject(
+                New JProperty("agent", New JObject(New JProperty("name", "Minecraft"), New JProperty("version", 1))),
+                New JProperty("username", Data.Input.UserName),
+                New JProperty("password", Data.Input.Password),
+                New JProperty("requestUser", True))
             Dim LoginJson As JObject = GetJson(NetRequestRetry(
-                   Url:=Data.Input.BaseUrl & "/authenticate",
-                   Method:="POST",
-                   Data:="{""agent"": {""name"": ""Minecraft"",""version"": 1},""username"":""" & Data.Input.UserName & """,""password"":""" & Data.Input.Password & """,""requestUser"":true}",
-                   ContentType:="application/json; charset=utf-8"))
+                Url:=Data.Input.BaseUrl & "/authenticate",
+                Method:="POST",
+                Data:=RequestData.ToString(0),
+                ContentType:="application/json; charset=utf-8"))
             '检查登录结果
             If LoginJson("availableProfiles").Count = 0 Then
                 If Data.Input.ForceReselectProfile Then Hint("你还没有创建角色，无法更换！", HintType.Critical)
@@ -964,7 +925,7 @@ SystemBrowser:
     Private Function MsLoginStep5(Tokens As String()) As String
         McLaunchLog("开始微软登录步骤 5")
 
-        Dim Request As String = "{""identityToken"": ""XBL3.0 x=" & Tokens(1) & ";" & Tokens(0) & """}"
+        Dim Request As String = New JObject(New JProperty("identityToken", $"XBL3.0 x={Tokens(1)};{Tokens(0)}")).ToString(0)
         Dim Result As String
         Try
             Result = NetRequestMulty("https://api.minecraftservices.com/authentication/login_with_xbox", "POST", Request, "application/json", 2)

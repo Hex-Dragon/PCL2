@@ -1,5 +1,4 @@
 ﻿Imports System.ComponentModel
-Imports System.Runtime.InteropServices
 
 Public Class FormMain
 
@@ -11,6 +10,11 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 313 Then 'Release 2.6.13
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动 Forge 1.18.3+ 的 Bug"))
+            FeatureCount += 6
+            BugCount += 10
+        End If
         If LastVersion < 311 Then 'Release 2.6.12
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面将显示 Mod 的中文名、图标、标签等信息"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "从 Mod 管理页面查看 Mod 信息时会跳转到其下载详情页面"))
@@ -119,30 +123,17 @@ Public Class FormMain
             FeatureCount += 4
             BugCount += 4
         End If
-        If LastVersion < 255 Then 'Release 2.2.14
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法启动 Minecraft 1.19-Pre1 的 Bug"))
-            FeatureCount += 5
-            BugCount += 3
-        End If
-        If LastVersion < 253 Then 'Release 2.2.13
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在安装菜单中直接安装 OptiFabric"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持调整 Mod 文件名中中文译名的位置"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "崩溃分析优化，支持分析更多 Forge 相关的崩溃"))
-            FeatureCount += 13
-            BugCount += 27
-        End If
-        If LastVersion < 250 Then 'Release 2.2.11
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持将 Mod 文件拖入窗口进行安装"))
-            If LastVersion = 246 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法使用中文搜索 Mod 的 Bug"))
-            FeatureCount += 8
-            BugCount += 33
-        End If
 #Else
         '5：          FEAT+
         '4：     IMP+ FEAT*
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 312 Then 'Snapshot 2.6.13
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动 Forge 1.18.3+ 的 Bug"))
+            FeatureCount += 6
+            BugCount += 10
+        End If
         If LastVersion < 310 Then 'Snapshot 2.6.12
             If LastVersion = 309 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理页面添加启用、禁用单个 Mod 的快捷按钮"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 Forge 1.18.3+ 的 Bug"))
@@ -322,28 +313,6 @@ Public Class FormMain
             FeatureCount += 4
             BugCount += 4
         End If
-        If LastVersion < 256 Then 'Snapshot 2.2.14
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法启动 Minecraft 1.19-Pre1 的 Bug"))
-            FeatureCount += 5
-            BugCount += 3
-        End If
-        If LastVersion < 254 Then 'Snapshot 2.2.13
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持调整 Mod 文件名中中文译名的位置"))
-            FeatureCount += 3
-            BugCount += 17
-        End If
-        If LastVersion < 252 Then 'Snapshot 2.2.12
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在安装菜单中直接安装 OptiFabric"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "崩溃分析优化，支持分析更多 Forge 相关的崩溃"))
-            If LastVersion = 251 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复同时安装 Forge 和 OptiFine 时 OptiFine 无效的 Bug"))
-            FeatureCount += 10
-            BugCount += 10
-        End If
-        If LastVersion < 251 Then 'Snapshot 2.2.11
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持将 Mod 文件拖入窗口进行安装"))
-            FeatureCount += 2
-            BugCount += 16
-        End If
 #End If
         '整理更新日志文本
         Dim ContentList As New List(Of String)
@@ -402,6 +371,13 @@ Public Class FormMain
         '加载 UI
         InitializeComponent()
         Opacity = 0
+        ''开启管理员权限下的文件拖拽，但下列代码也没用（#2531）
+        'If IsAdmin() Then
+        '    Log("[Start] PCL 正以管理员权限运行")
+        '    ChangeWindowMessageFilter(&H233, 1)
+        '    ChangeWindowMessageFilter(&H4A, 1)
+        '    ChangeWindowMessageFilter(&H49, 1)
+        'End If
         '切换到首页
         If Not IsNothing(FrmLaunchLeft.Parent) Then FrmLaunchLeft.SetValue(ContentPresenter.ContentProperty, Nothing)
         If Not IsNothing(FrmLaunchRight.Parent) Then FrmLaunchRight.SetValue(ContentPresenter.ContentProperty, Nothing)
@@ -510,25 +486,11 @@ Public Class FormMain
                            Catch ex As Exception
                                Log(ex, "清理自动更新文件失败")
                            End Try
-                           '开启管理员权限下的文件拖拽，但下列代码也没用（#2531）
-                           If IsAdmin() Then
-                               Log("[System] PCL 正以管理员权限运行")
-                               Dim changeInfo As New ChangeFilter
-                               changeInfo.cbSize = Marshal.SizeOf(changeInfo)
-                               ChangeWindowMessageFilterEx(Handle, &H233, 1, changeInfo)
-                               ChangeWindowMessageFilterEx(Handle, &H4A, 1, changeInfo)
-                               ChangeWindowMessageFilterEx(Handle, &H49, 1, changeInfo)
-                           End If
                        End Sub, "Start Loader", ThreadPriority.Lowest)
 
         Log("[Start] 第三阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
     End Sub
-    <StructLayout(LayoutKind.Sequential)>
-    Public Structure ChangeFilter
-        Public cbSize As UInteger
-        Public ExtStatus As UInteger
-    End Structure
-    Private Declare Function ChangeWindowMessageFilterEx Lib "user32.dll" (hwnd As IntPtr, message As UInteger, action As UInteger, changeInfo As ChangeFilter) As Boolean
+    'Private Declare Function ChangeWindowMessageFilter Lib "user32.dll" (message As Integer, action As Integer) As Boolean
     '根据打开次数触发的事件
     Private Sub RunCountSub()
         Setup.Set("SystemCount", Setup.Get("SystemCount") + 1)
@@ -1618,17 +1580,10 @@ Install:
         Return RealScroll IsNot Nothing AndAlso RealScroll.Visibility = Visibility.Visible AndAlso RealScroll.VerticalOffset > Height + If(BtnExtraBack.Show, 0, 700)
     End Function
     Private Function BtnExtraBack_GetRealChild() As MyScrollViewer
-        If PanMainRight.Child Is Nothing Then Return Nothing
-        Dim RightChild = CType(PanMainRight.Child, AdornerDecorator).Child
-        If RightChild Is Nothing Then
-            Return Nothing
-        ElseIf TypeOf RightChild Is MyScrollViewer Then
-            Return RightChild
-        ElseIf TypeOf RightChild Is Grid AndAlso TypeOf CType(RightChild, Grid).Children(0) Is MyScrollViewer Then
-            Return CType(RightChild, Grid).Children(0)
-        Else
-            Return Nothing
-        End If
+        If PanMainRight.Child Is Nothing OrElse TypeOf PanMainRight.Child IsNot MyPageRight Then Return Nothing
+        Dim Scroll = CType(PanMainRight.Child, MyPageRight).PanScroll
+        If Scroll Is Nothing OrElse Scroll.Visibility <> Visibility.Visible Then Return Nothing
+        Return Scroll
     End Function
 
 #End Region

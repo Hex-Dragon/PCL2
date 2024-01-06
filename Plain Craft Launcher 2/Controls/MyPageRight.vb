@@ -2,6 +2,18 @@
     Inherits AdornerDecorator
     Public PageUuid As Integer = GetUuid()
 
+    '“返回顶部” 按钮检测的滚动区域
+    Public Property PanScroll As MyScrollViewer
+        Get
+            Return GetValue(PanScrollProperty)
+        End Get
+        Set(value As MyScrollViewer)
+            SetValue(PanScrollProperty, value)
+        End Set
+    End Property
+    Private Shared ReadOnly PanScrollProperty =
+        DependencyProperty.Register("PanScroll", GetType(MyScrollViewer), GetType(MyPageRight), New PropertyMetadata(Nothing))
+
     '当前状态
     Public Enum PageStates
         Empty '默认状态，页面全空

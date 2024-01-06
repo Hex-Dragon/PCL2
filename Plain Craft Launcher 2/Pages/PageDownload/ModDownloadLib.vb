@@ -192,7 +192,7 @@ Public Module ModDownloadLib
         '建立控件
         Dim NewItem As New MyListItem With {.Logo = Logo, .SnapsToDevicePixels = True, .Title = Entry("id").ToString, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry}
         If Entry("lore") Is Nothing Then
-            NewItem.Info = Entry("releaseTime").Value(Of Date).ToString("yyyy/MM/dd HH:mm")
+            NewItem.Info = Entry("releaseTime").Value(Of Date).ToString("yyyy'/'MM'/'dd HH':'mm")
         Else
             NewItem.Info = Entry("lore").ToString
         End If
@@ -632,8 +632,8 @@ Retry:
                     Dim Json As String = "{
     ""id"": """ & Id & """,
     ""inheritsFrom"": """ & DownloadInfo.Inherit & """,
-    ""time"": """ & If(DownloadInfo.ReleaseTime = "", InheritVersion.ReleaseTime.ToString("yyyy-MM-dd"), DownloadInfo.ReleaseTime.Replace("/", "-")) & "T23:33:33+08:00"",
-    ""releaseTime"": """ & If(DownloadInfo.ReleaseTime = "", InheritVersion.ReleaseTime.ToString("yyyy-MM-dd"), DownloadInfo.ReleaseTime.Replace("/", "-")) & "T23:33:33+08:00"",
+    ""time"": """ & If(DownloadInfo.ReleaseTime = "", InheritVersion.ReleaseTime.ToString("yyyy'-'MM'-'dd"), DownloadInfo.ReleaseTime.Replace("/", "-")) & "T23:33:33+08:00"",
+    ""releaseTime"": """ & If(DownloadInfo.ReleaseTime = "", InheritVersion.ReleaseTime.ToString("yyyy'-'MM'-'dd"), DownloadInfo.ReleaseTime.Replace("/", "-")) & "T23:33:33+08:00"",
     ""type"": ""release"",
     ""libraries"": [
         {""name"": ""optifine:OptiFine:" & DownloadInfo.NameFile.Replace("OptiFine_", "").Replace(".jar", "").Replace("preview_", "") & """},
@@ -900,42 +900,41 @@ Retry:
 
         '启动依赖版本的下载
         If ClientDownloadLoader Is Nothing Then
-            Loaders.Add(New LoaderTask(Of String, String)(
-                    "启动 LiteLoader 依赖版本下载",
-                    Sub()
-                        If IsCustomFolder Then Throw New Exception("如果没有指定原版下载器，则不能指定 MC 安装文件夹")
-                        ClientDownloadLoader = McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, DownloadInfo.Inherit)
-                    End Sub) With {.ProgressWeight = 0.2, .Show = False, .Block = False})
+            Loaders.Add(New LoaderTask(Of String, String)("启动 LiteLoader 依赖版本下载",
+            Sub()
+                If IsCustomFolder Then Throw New Exception("如果没有指定原版下载器，则不能指定 MC 安装文件夹")
+                ClientDownloadLoader = McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, DownloadInfo.Inherit)
+            End Sub) With {.ProgressWeight = 0.2, .Show = False, .Block = False})
         End If
         '安装
         Loaders.Add(New LoaderTask(Of String, String)("安装 LiteLoader",
-                                                            Sub(Task As LoaderTask(Of String, String))
-                                                                Try
-                                                                    '新建版本文件夹
-                                                                    Directory.CreateDirectory(VersionFolder)
-                                                                    '构造版本 Json
-                                                                    Dim VersionJson As New JObject
-                                                                    VersionJson.Add("id", VersionName)
-                                                                    VersionJson.Add("time", Date.ParseExact(DownloadInfo.ReleaseTime, "yyyy/MM/dd HH:mm", Globalization.CultureInfo.CurrentCulture))
-                                                                    VersionJson.Add("releaseTime", Date.ParseExact(DownloadInfo.ReleaseTime, "yyyy/MM/dd HH:mm", Globalization.CultureInfo.CurrentCulture))
-                                                                    VersionJson.Add("type", "release")
-                                                                    VersionJson.Add("arguments", GetJson("{""game"":[""--tweakClass"",""" & DownloadInfo.JsonToken("tweakClass").ToString & """]}"))
-                                                                    VersionJson.Add("libraries", DownloadInfo.JsonToken("libraries"))
-                                                                    CType(VersionJson("libraries"), JContainer).Add(GetJson("{""name"": ""com.mumfrey:liteloader:" & DownloadInfo.JsonToken("version").ToString & """,""url"": ""https://dl.liteloader.com/versions/""}"))
-                                                                    VersionJson.Add("mainClass", "net.minecraft.launchwrapper.Launch")
-                                                                    VersionJson.Add("minimumLauncherVersion", 18)
-                                                                    VersionJson.Add("inheritsFrom", DownloadInfo.Inherit)
-                                                                    VersionJson.Add("jar", DownloadInfo.Inherit)
-                                                                    '输出 Json 文件
-                                                                    WriteFile(VersionFolder & VersionName & ".json", VersionJson.ToString)
-                                                                Catch ex As Exception
-                                                                    Throw New Exception("安装新 LiteLoader 版本失败", ex)
-                                                                End Try
-                                                            End Sub) With {.ProgressWeight = 1})
+        Sub(Task As LoaderTask(Of String, String))
+            Try
+                '新建版本文件夹
+                Directory.CreateDirectory(VersionFolder)
+                '构造版本 Json
+                Dim VersionJson As New JObject
+                VersionJson.Add("id", VersionName)
+                VersionJson.Add("time", Date.ParseExact(DownloadInfo.ReleaseTime, "yyyy/MM/dd HH:mm", Globalization.CultureInfo.CurrentCulture))
+                VersionJson.Add("releaseTime", Date.ParseExact(DownloadInfo.ReleaseTime, "yyyy/MM/dd HH:mm", Globalization.CultureInfo.CurrentCulture))
+                VersionJson.Add("type", "release")
+                VersionJson.Add("arguments", GetJson("{""game"":[""--tweakClass"",""" & DownloadInfo.JsonToken("tweakClass").ToString & """]}"))
+                VersionJson.Add("libraries", DownloadInfo.JsonToken("libraries"))
+                CType(VersionJson("libraries"), JContainer).Add(GetJson("{""name"": ""com.mumfrey:liteloader:" & DownloadInfo.JsonToken("version").ToString & """,""url"": ""https://dl.liteloader.com/versions/""}"))
+                VersionJson.Add("mainClass", "net.minecraft.launchwrapper.Launch")
+                VersionJson.Add("minimumLauncherVersion", 18)
+                VersionJson.Add("inheritsFrom", DownloadInfo.Inherit)
+                VersionJson.Add("jar", DownloadInfo.Inherit)
+                '输出 Json 文件
+                WriteFile(VersionFolder & VersionName & ".json", VersionJson.ToString)
+            Catch ex As Exception
+                Throw New Exception("安装新 LiteLoader 版本失败", ex)
+            End Try
+        End Sub) With {.ProgressWeight = 1})
         '下载支持库
         If FixLibrary Then
             Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 LiteLoader 支持库文件",
-                                                                Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
+                Sub(Task) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
             Loaders.Add(New LoaderDownload("下载 LiteLoader 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 6})
         End If
 
@@ -1797,7 +1796,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Split("+").First.Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy/MM/dd HH:mm"),
+            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
             .Logo = PathImage & "Blocks/Fabric.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1808,7 +1807,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.ToLower.Replace("optifabric-", "").Replace(".jar", "").Trim.TrimStart("v"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy/MM/dd HH:mm"),
+            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
             .Logo = PathImage & "Blocks/OptiFabric.png"
         }
         AddHandler NewItem.Click, OnClick

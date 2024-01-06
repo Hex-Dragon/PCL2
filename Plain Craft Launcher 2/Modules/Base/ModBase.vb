@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.6.12" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.6.12." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.6.13" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.6.13." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 308 'Release
+    Public Const VersionCode As Integer = 313 'Release
 #Else
-    Public Const VersionCode As Integer = 310 'Snapshot
+    Public Const VersionCode As Integer = 312 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1819,7 +1819,7 @@ NextElement:
     ''' 获取格式类似于“11:08:52.037”的当前时间的字符串。
     ''' </summary>
     Public Function GetTimeNow() As String
-        Return Date.Now.ToString("HH:mm:ss.fff")
+        Return Date.Now.ToString("HH':'mm':'ss'.'fff")
     End Function
     ''' <summary>
     ''' 获取系统运行时间（毫秒），保证为正 Long 且大于 1，但可能突变减小。

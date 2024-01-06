@@ -273,6 +273,7 @@ RequestFinished:
                 Client.Headers(HttpRequestHeader.Referer) = "http://" & VersionCode & ".pcl2.server/"
                 Client.DownloadFile(Url, LocalFile)
             Catch ex As Exception
+                File.Delete(LocalFile)
                 Throw New WebException("直接下载文件失败（" & Url & "）。", ex)
             End Try
         End Using

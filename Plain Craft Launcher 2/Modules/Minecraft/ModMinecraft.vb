@@ -128,7 +128,7 @@
             ""name"": ""PCL"",
             ""lastVersionId"": ""latest-release"",
             ""type"": ""latest-release"",
-            ""lastUsed"": """ & Date.Now.ToString("yyyy-MM-dd") & "T" & Date.Now.ToString("HH:mm:ss") & ".0000Z""
+            ""lastUsed"": """ & Date.Now.ToString("yyyy'-'MM'-'dd") & "T" & Date.Now.ToString("HH':'mm':'ss") & ".0000Z""
         }
     },
     ""selectedProfile"": ""PCL"",
@@ -779,7 +779,7 @@ ExitDataLoad:
                     WriteIni(Path & "PCL\Setup.ini", "Logo", Logo)
                 End If
                 If State <> McVersionState.Error Then
-                    WriteIni(Path & "PCL\Setup.ini", "ReleaseTime", ReleaseTime.ToString("yyyy-MM-dd HH:mm:ss"))
+                    WriteIni(Path & "PCL\Setup.ini", "ReleaseTime", ReleaseTime.ToString("yyyy'-'MM'-'dd HH':'mm"))
                     WriteIni(Path & "PCL\Setup.ini", "VersionFabric", Version.FabricVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionOptiFine", Version.OptiFineVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionLiteLoader", Version.HasLiteLoader)
@@ -1613,13 +1613,13 @@ NextVersion:
         End Property
         Private _Url As String
         ''' <summary>
-        ''' 原 Json 中 Name 项除去最后一部分版本号的较前部分。可能为 Nothing。
+        ''' 原 Json 中 Name 项除去版本号部分的较前部分。可能为 Nothing。
         ''' </summary>
         Public ReadOnly Property Name As String
             Get
                 If OriginalName Is Nothing Then Return Nothing
                 Dim Splited As New List(Of String)(OriginalName.Split(":"))
-                Splited.RemoveAt(Splited.Count - 1)
+                Splited.RemoveAt(2) 'Java 的此格式下版本号固定为第三段，第四段可能包含架构、分包等其他信息
                 Return Join(Splited, ":")
             End Get
         End Property
@@ -1678,7 +1678,7 @@ NextVersion:
             End If
             If Not IsNothing(Rule("features")) Then '标签
                 IsRightRule = IsRightRule AndAlso IsNothing(Rule("features")("is_demo_user")) '反选是否为 Demo 用户
-                If CType(Rule("features"), JObject).Children.Any(Function(j As JProperty) j.Name.StartsWith("is_quick_play")) Then
+                If CType(Rule("features"), JObject).Children.Any(Function(j As JProperty) j.Name.Contains("quick_play")) Then
                     IsRightRule = False '不开 Quick Play，让玩家自己加去
                 End If
             End If
@@ -1788,8 +1788,7 @@ NextVersion:
             End If
 
             '根据是否本地化处理（Natives）
-            If Library("natives") Is Nothing Then
-                '没有 Natives
+            If Library("natives") Is Nothing Then '没有 Natives
                 Dim LocalPath As String
                 If IsJumpLoader Then
                     LocalPath = McLibGet(Library("name"), CustomMcFolder:=If(JumpLoaderFolder, CustomMcFolder))
@@ -1813,29 +1812,26 @@ NextVersion:
                     Log(ex, "处理实际支持库列表失败（无 Natives，" & If(Library("name"), "Nothing").ToString & "）")
                     BasicArray.Add(New McLibToken With {.IsJumpLoader = IsJumpLoader, .OriginalName = Library("name"), .Url = RootUrl, .LocalPath = LocalPath, .Size = 0, .IsNatives = False, .SHA1 = Nothing})
                 End Try
-            Else
-                '有 Natives
-                If Library("natives")("windows") IsNot Nothing Then
-                    Try
-                        If Library("downloads") IsNot Nothing AndAlso Library("downloads")("classifiers") IsNot Nothing AndAlso Library("downloads")("classifiers")("natives-windows") IsNot Nothing Then
-                            BasicArray.Add(New McLibToken With {
-                                                       .IsJumpLoader = IsJumpLoader,
-                                                       .OriginalName = Library("name"),
-                                                       .Url = If(RootUrl, Library("downloads")("classifiers")("natives-windows")("url")),
-                                                       .LocalPath = If(Library("downloads")("classifiers")("natives-windows")("path") Is Nothing,
-                                                           McLibGet(Library("name"), CustomMcFolder:=CustomMcFolder).Replace(".jar", "-" & Library("natives")("windows").ToString & ".jar").Replace("${arch}", If(Environment.Is64BitOperatingSystem, "64", "32")),
-                                                           CustomMcFolder & "libraries\" & Library("downloads")("classifiers")("natives-windows")("path").ToString.Replace("/", "\")),
-                                                       .Size = Val(Library("downloads")("classifiers")("natives-windows")("size").ToString),
-                                                       .IsNatives = True,
-                                                       .SHA1 = Library("downloads")("classifiers")("natives-windows")("sha1").ToString})
-                        Else
-                            BasicArray.Add(New McLibToken With {.IsJumpLoader = IsJumpLoader, .OriginalName = Library("name"), .Url = RootUrl, .LocalPath = McLibGet(Library("name"), CustomMcFolder:=CustomMcFolder).Replace(".jar", "-" & Library("natives")("windows").ToString & ".jar").Replace("${arch}", If(Environment.Is64BitOperatingSystem, "64", "32")), .Size = 0, .IsNatives = True, .SHA1 = Nothing})
-                        End If
-                    Catch ex As Exception
-                        Log(ex, "处理实际支持库列表失败（有 Natives，" & If(Library("name"), "Nothing").ToString & "）")
+            ElseIf Library("natives")("windows") IsNot Nothing Then '有 Windows Natives
+                Try
+                    If Library("downloads") IsNot Nothing AndAlso Library("downloads")("classifiers") IsNot Nothing AndAlso Library("downloads")("classifiers")("natives-windows") IsNot Nothing Then
+                        BasicArray.Add(New McLibToken With {
+                             .IsJumpLoader = IsJumpLoader,
+                             .OriginalName = Library("name"),
+                             .Url = If(RootUrl, Library("downloads")("classifiers")("natives-windows")("url")),
+                             .LocalPath = If(Library("downloads")("classifiers")("natives-windows")("path") Is Nothing,
+                                 McLibGet(Library("name"), CustomMcFolder:=CustomMcFolder).Replace(".jar", "-" & Library("natives")("windows").ToString & ".jar").Replace("${arch}", If(Environment.Is64BitOperatingSystem, "64", "32")),
+                                 CustomMcFolder & "libraries\" & Library("downloads")("classifiers")("natives-windows")("path").ToString.Replace("/", "\")),
+                             .Size = Val(Library("downloads")("classifiers")("natives-windows")("size").ToString),
+                             .IsNatives = True,
+                             .SHA1 = Library("downloads")("classifiers")("natives-windows")("sha1").ToString})
+                    Else
                         BasicArray.Add(New McLibToken With {.IsJumpLoader = IsJumpLoader, .OriginalName = Library("name"), .Url = RootUrl, .LocalPath = McLibGet(Library("name"), CustomMcFolder:=CustomMcFolder).Replace(".jar", "-" & Library("natives")("windows").ToString & ".jar").Replace("${arch}", If(Environment.Is64BitOperatingSystem, "64", "32")), .Size = 0, .IsNatives = True, .SHA1 = Nothing})
-                    End Try
-                End If
+                    End If
+                Catch ex As Exception
+                    Log(ex, "处理实际支持库列表失败（有 Natives，" & If(Library("name"), "Nothing").ToString & "）")
+                    BasicArray.Add(New McLibToken With {.IsJumpLoader = IsJumpLoader, .OriginalName = Library("name"), .Url = RootUrl, .LocalPath = McLibGet(Library("name"), CustomMcFolder:=CustomMcFolder).Replace(".jar", "-" & Library("natives")("windows").ToString & ".jar").Replace("${arch}", If(Environment.Is64BitOperatingSystem, "64", "32")), .Size = 0, .IsNatives = True, .SHA1 = Nothing})
+                End Try
             End If
 
         Next
@@ -1845,17 +1841,19 @@ NextVersion:
         For i = 0 To BasicArray.Count - 1
             Dim Key As String = BasicArray(i).Name & BasicArray(i).IsNatives.ToString & BasicArray(i).IsJumpLoader.ToString
             If ResultArray.ContainsKey(Key) Then
-                If BasicArray(i).Version <> ResultArray(Key).Version AndAlso
-                    (KeepSameNameDifferentVersionResult OrElse BasicArray(i).Version.Contains("natives-windows")) Then
-                    'Contains("natives-windows") 源于 1.19-Pre1 开始，lwjgl-3.3.1-natives-windows 与 lwjgl-3.3.1-natives-windows-x86 重复
+                If BasicArray(i).Version <> ResultArray(Key).Version AndAlso KeepSameNameDifferentVersionResult Then
+                    Log($"[Minecraft] 发现疑似重复的支持库：{BasicArray(i)} 与 {ResultArray(Key)}")
                     ResultArray.Add(Key & GetUuid(), BasicArray(i))
-                ElseIf VersionSortBoolean(BasicArray(i).Version, ResultArray(Key).Version) Then
-                    ResultArray(Key) = BasicArray(i)
+                Else
+                    Log($"[Minecraft] 发现重复的支持库：{BasicArray(i)} 与 {ResultArray(Key)}，已忽略其中之一")
+                    If VersionSortBoolean(BasicArray(i).Version, ResultArray(Key).Version) Then
+                        ResultArray(Key) = BasicArray(i)
+                    End If
                 End If
             Else
                 ResultArray.Add(Key, BasicArray(i))
             End If
-        Next i
+        Next
         Return ResultArray.Values.ToList
     End Function
 
@@ -2043,14 +2041,13 @@ NextVersion:
             '    Return GetJson("{""id"": """ & AssetsName & """}")
             'Else
             Log("[Minecraft] 无法获取资源文件索引下载地址，使用默认的 legacy 下载地址")
-            Return GetJson("
-                    {
-                        ""id"": ""legacy"",
-                        ""sha1"": ""c0fd82e8ce9fbc93119e40d96d5a4e62cfa3f729"",
-                        ""size"": 134284,
-                        ""url"": ""https://launchermeta.mojang.com/mc-staging/assets/legacy/c0fd82e8ce9fbc93119e40d96d5a4e62cfa3f729/legacy.json"",
-                        ""totalSize"": 111220701
-                    }")
+            Return GetJson("{
+                ""id"": ""legacy"",
+                ""sha1"": ""c0fd82e8ce9fbc93119e40d96d5a4e62cfa3f729"",
+                ""size"": 134284,
+                ""url"": ""https://launchermeta.mojang.com/mc-staging/assets/legacy/c0fd82e8ce9fbc93119e40d96d5a4e62cfa3f729/legacy.json"",
+                ""totalSize"": 111220701
+            }")
             'End If
         Else
             Throw New Exception("该版本不存在资源文件索引信息")

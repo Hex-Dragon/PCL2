@@ -120,7 +120,11 @@
     End Sub
 
     '版本选择
-    Private Sub TextSearchVersion_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextSearchVersion.TextChanged
+    '#3067：当下拉菜单展开时，程序会被 WPF 挂起，因而无法更新 Grid 布局，所以必须延迟到下拉菜单收起后才能更新
+    Private Sub TextSearchVersion_TextChanged() Handles TextSearchVersion.TextChanged
+        If Not TextSearchVersion.IsDropDownOpen Then UpdateSearchLoaderVisibility()
+    End Sub
+    Private Sub UpdateSearchLoaderVisibility() Handles TextSearchVersion.DropDownClosed
         If TextSearchVersion.Text.Contains(".") OrElse TextSearchVersion.Text.Contains("w") Then
             ComboSearchLoader.Visibility = Visibility.Visible
             Grid.SetColumnSpan(TextSearchVersion, 1)

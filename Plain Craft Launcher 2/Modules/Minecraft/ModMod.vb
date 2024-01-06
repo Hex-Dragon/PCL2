@@ -943,7 +943,7 @@ VersionFindFail:
                     Dim Project As New CompProject(ProjectJson)
                     For Each Entry In ModrinthMapping(Project.Id)
                         If Entry.Comp IsNot Nothing AndAlso Not Entry.IsCompFromModrinth Then
-                            Project.LogoUrl = Entry.Comp.LogoUrl 'Modrinth 部分 Logo 加载不出来
+                            Project.LogoUrl = Entry.Comp.LogoUrl 'Modrinth 的部分 Logo 加载不出来
                         End If
                         Entry.IsCompFromModrinth = True
                         Entry.Comp = Project
@@ -992,6 +992,7 @@ VersionFindFail:
                 Dim CurseForgeProject = CType(GetJson(NetRequestRetry("https://api.curseforge.com/v1/mods", "POST",
                                     $"{{""modIds"": [{CurseForgeMapping.Keys.Join(",")}]}}", "application/json")), JObject)("data")
                 For Each ProjectJson In CurseForgeProject
+                    If Not ProjectJson("isAvailable").ToObject(Of Boolean) Then Continue For
                     Dim Project As New CompProject(ProjectJson)
                     For Each Entry In CurseForgeMapping(Project.Id) '倒查防止 CurseForge 返回的内容有漏
                         If Entry.Comp IsNot Nothing AndAlso Entry.IsCompFromModrinth Then

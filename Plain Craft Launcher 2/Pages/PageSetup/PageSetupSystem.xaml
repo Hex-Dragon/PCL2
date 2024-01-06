@@ -1,10 +1,10 @@
 ﻿<local:MyPageRight
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" x:Class="PageSetupSystem"
-             d:DesignWidth="800" d:DesignHeight="800">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    mc:Ignorable="d" x:Class="PageSetupSystem"
+    PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
 
@@ -52,9 +52,9 @@
                         <local:MyCheckBox Margin="0,5,0,4" Text="安装整合包时保留原始压缩包" Grid.Row="7" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadKeepModpack" Tag="ToolDownloadKeepModpack" 
                                           ToolTip="安装整合包时，在版本文件夹下保留用于安装的原始整合包压缩包文件" />
-                        <local:MyCheckBox Margin="0,2,0,4" Text="简化 Mod 加载器需求（忽略 Quilt）" Grid.Row="8" Height="22" Grid.ColumnSpan="2"
+                        <local:MyCheckBox Margin="0,2,0,4" Text="简化 Mod 加载器显示" Grid.Row="8" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" 
-                                          ToolTip="当 Mod 支持 Forge、Fabric 但不支持 Quilt 时，不显示它的 Mod 加载器需求。&#xa;例如，关闭时 JEI 会显示需要 Forge / Fabric 1.8+，开启后 JEI 仅显示需要 1.8+。" />
+                                          ToolTip="下载 Mod 时，若该 Mod 支持 Forge 和 Fabric，则显示为支持任意 Mod 加载器。&#xa;例如，开启时 JEI 显示支持全版本，关闭后 JEI 就会显示仅支持 Forge / Fabric 全版本。" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

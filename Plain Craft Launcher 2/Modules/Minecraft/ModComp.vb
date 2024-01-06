@@ -20,6 +20,7 @@
         Forge = 1
         Fabric = 4
         Quilt = 5
+        NeoForge = 6
     End Enum
     <Flags> Public Enum CompSourceType
         CurseForge = 1
@@ -258,14 +259,7 @@
                     Website = Data("links")("websiteUrl").ToString.TrimEnd("/")
                     LastUpdate = Data("dateReleased") '#1194
                     DownloadCount = Data("downloadCount")
-                    'Logo
-                    If Data("logo").Count > 0 Then
-                        If GetPixelSize(1) > 1.25 Then
-                            LogoUrl = Data("logo")("thumbnailUrl").ToString '使用 256x256 图标
-                        Else
-                            LogoUrl = Data("logo")("thumbnailUrl").ToString.Replace("/256/256/", "/64/64/") '使用 64x64 图标
-                        End If
-                    End If
+                    If Data("logo").Count > 0 Then LogoUrl = Data("logo")("thumbnailUrl")
                     'FileIndexes / GameVersions
                     Dim Files = If(CType(Data("latestFilesIndexes"), JArray), New JArray).
                                 Where(Function(i) i("gameVersion").ToString.Contains("1."))
@@ -371,6 +365,7 @@
                             Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
                             Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
                             Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
+                            Case "neoforge" : ModLoaders.Add(CompModLoaderType.NeoForge)
                         'Mod
                             Case "worldgen" : Tags.Add("世界元素")
                             Case "technology" : Tags.Add("科技")
@@ -442,21 +437,34 @@
                 GameVersionDescription = "未知"
             Else
                 Dim SpaVersions As New List(Of String)
-                For i = 0 To GameVersions.Count - 1
+                Dim IsOld As Boolean = False
+                For i = 0 To GameVersions.Count - 1 '版本号一定为降序
+                    '获取当前连续的版本号段
                     Dim StartVersion As Integer = GameVersions(i), EndVersion As Integer = GameVersions(i)
-                    For ii = i + 1 To GameVersions.Count - 1
-                        If GameVersions(ii) = EndVersion - 1 Then
-                            EndVersion = GameVersions(ii)
-                            i = ii
-                        Else
+                    If StartVersion < 10 Then '如果支持新版本，则不显示 1.9-
+                        If SpaVersions.Any() AndAlso Not IsOld Then
                             Exit For
+                        Else
+                            IsOld = True
                         End If
+                    End If
+                    For ii = i + 1 To GameVersions.Count - 1
+                        If GameVersions(ii) <> EndVersion - 1 Then Exit For
+                        EndVersion = GameVersions(ii)
+                        i = ii
                     Next
+                    '将版本号段转为描述文本
                     If StartVersion = EndVersion Then
                         SpaVersions.Add("1." & StartVersion)
                     ElseIf McVersionHighest > -1 AndAlso StartVersion >= McVersionHighest Then
-                        SpaVersions.Add("1." & EndVersion & "+")
-                    ElseIf EndVersion <= 7 Then
+                        If EndVersion <= 10 Then
+                            SpaVersions.Clear()
+                            SpaVersions.Add("全版本")
+                            Exit For
+                        Else
+                            SpaVersions.Add("1." & EndVersion & "+")
+                        End If
+                    ElseIf EndVersion <= 10 Then
                         SpaVersions.Add("1." & StartVersion & "-")
                         Exit For
                     ElseIf StartVersion - EndVersion = 1 Then
@@ -467,6 +475,28 @@
                 Next
                 GameVersionDescription = SpaVersions.Join(", ")
             End If
+            '获取 Mod 加载器描述
+            Dim ModLoaderDescriptionFull As String, ModLoaderDescriptionPart As String
+            Select Case ModLoaders.Count
+                Case 0
+                    ModLoaderDescriptionFull = "未知"
+                    ModLoaderDescriptionPart = ""
+                Case 1
+                    ModLoaderDescriptionFull = "仅 " & ModLoaders.Single.ToString
+                    ModLoaderDescriptionPart = ModLoaders.Single.ToString
+                Case 2, 3
+                    If Setup.Get("ToolDownloadIgnoreQuilt") AndAlso
+                       ModLoaders.Contains(CompModLoaderType.Forge) AndAlso ModLoaders.Contains(CompModLoaderType.Fabric) Then
+                        ModLoaderDescriptionFull = "任意"
+                        ModLoaderDescriptionPart = ""
+                    Else
+                        ModLoaderDescriptionFull = ModLoaders.Join(" / ")
+                        ModLoaderDescriptionPart = ModLoaders.Join(" / ")
+                    End If
+                Case Else
+                    ModLoaderDescriptionFull = "任意"
+                    ModLoaderDescriptionPart = ""
+            End Select
             '实例化 UI
             Dim NewItem As New MyCompItem With {.Tag = Me, .Logo = GetControlLogo()}
             Dim Title = GetControlTitle(True)
@@ -488,37 +518,13 @@
                 NewItem.ColumnVersion3.Width = New GridLength(0)
             ElseIf ShowMcVersionDesc AndAlso ShowMcVersionDesc Then
                 '全部显示
-                Dim ModLoaderDesc As String = If(ModLoaders.Count > 0 AndAlso ModLoaders.Count < 3 AndAlso
-                        Not (Type = CompType.Mod AndAlso Setup.Get("ToolDownloadIgnoreQuilt") AndAlso ModLoaders.Contains(CompModLoaderType.Forge) AndAlso ModLoaders.Contains(CompModLoaderType.Fabric)),
-                        ModLoaders.Join(" / ") & " ", "")
-                Dim VersionDesc As String = If(GameVersionDescription = "1.7+", "全版本", GameVersionDescription)
-                NewItem.LabVersion.Text = ModLoaderDesc & VersionDesc
+                NewItem.LabVersion.Text = If(ModLoaderDescriptionPart = "", "", ModLoaderDescriptionPart & " ") & GameVersionDescription
             ElseIf ShowMcVersionDesc Then
                 '仅显示版本
-                NewItem.LabVersion.Text = If(GameVersionDescription = "1.7+", "全版本", GameVersionDescription)
+                NewItem.LabVersion.Text = GameVersionDescription
             Else
                 '仅显示 Mod 加载器
-                Select Case ModLoaders.Count
-                    Case 0
-                        NewItem.LabVersion.Text = "未知"
-                    Case 1
-                        NewItem.LabVersion.Text = If(Type = CompType.Mod, "仅 ", "") & ModLoaders(0).ToString
-                    Case 2
-                        If Type = CompType.Mod Then
-                            NewItem.LabVersion.Text =
-                                If(Not (Setup.Get("ToolDownloadIgnoreQuilt") AndAlso
-                                ModLoaders.Contains(CompModLoaderType.Forge) AndAlso ModLoaders.Contains(CompModLoaderType.Fabric)),
-                                ModLoaders.Join(" / "), "任意")
-                        Else
-                            NewItem.LabVersion.Text = ModLoaders.Join(" / ")
-                        End If
-                    Case 3
-                        If Type = CompType.Mod Then
-                            NewItem.LabVersion.Text = "任意"
-                        Else
-                            NewItem.LabVersion.Text = ModLoaders.Join(" / ")
-                        End If
-                End Select
+                NewItem.LabVersion.Text = ModLoaderDescriptionFull
             End If
             NewItem.LabSource.Text = If(FromCurseForge, "CurseForge", "Modrinth")
             If LastUpdate IsNot Nothing Then
@@ -1255,6 +1261,7 @@ Retry:
                 If RawVersions.Contains("forge") Then ModLoaders.Add(CompModLoaderType.Forge)
                 If RawVersions.Contains("fabric") Then ModLoaders.Add(CompModLoaderType.Fabric)
                 If RawVersions.Contains("quilt") Then ModLoaders.Add(CompModLoaderType.Quilt)
+                If RawVersions.Contains("neoforge") Then ModLoaders.Add(CompModLoaderType.NeoForge)
 #End Region
             Else
 #Region "Modrinth"
