@@ -1378,6 +1378,9 @@ Re:
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
                 "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
             CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
+        ElseIf TypeOf InnerEx Is Security.Authentication.AuthenticationException And
+            {"基础连接已经关闭: 未能为 SSL/TLS 安全通道建立信任关系。", "根据验证过程，远程证书无效。"}.Any(Function(s) Desc.Contains(s)) Then
+            CommonReason = "由于服务器证书校验失败，PCL 无法连接到服务器。请多重试几次，或尝试使用 VPN。"
         End If
 
         '获取错误类型
@@ -1426,6 +1429,9 @@ Re:
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
                 "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
             CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
+        ElseIf TypeOf InnerEx Is Security.Authentication.AuthenticationException And
+            {"基础连接已经关闭: 未能为 SSL/TLS 安全通道建立信任关系。", "根据验证过程，远程证书无效。"}.Any(Function(s) Desc.Contains(s)) Then
+            CommonReason = "由于服务器证书校验失败，PCL 无法连接到服务器。请多重试几次，或尝试使用 VPN。"
         End If
 
         '构造输出信息
