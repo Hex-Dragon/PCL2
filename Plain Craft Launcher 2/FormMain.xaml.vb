@@ -833,7 +833,14 @@ Public Class FormMain
                         End If
                     ElseIf Str.StartsWith("file:///") Then
                         '文件拖拽（例如从浏览器下载窗口拖入）
-                        Dim FilePath = Net.WebUtility.UrlDecode(Str).Substring("file:///".Length).Replace("/", "\")
+                        Dim originalStr As String = Str  '赋值以方便重试
+                        Dim decodedStr As String
+                        decodedStr = Net.WebUtility.UrlDecode(Str)
+                        '如果文件不存在则将originalStr的值赋给decodedStr重试
+                        If Not decodedStr.StartsWith("file://") Then
+                            decodedStr = originalStr '重新赋值
+                        End If
+                        Dim FilePath = decodedStr.Substring("file://".Length).Replace("/","\")
                         e.Handled = True
                         FileDrag(New List(Of String) From {FilePath})
                     End If
