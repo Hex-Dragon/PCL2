@@ -13,6 +13,14 @@ Public Module ModMod
         Public Sub New(Path As String)
             Me.Path = If(Path, "")
         End Sub
+        ''' <summary>
+        ''' Mod 的完整路径，去除最后的 .disabled 和 .old。
+        ''' </summary>
+        Public ReadOnly Property RawPath As String
+            Get
+                Return GetPathFromFullPath(Path) & RawFileName
+            End Get
+        End Property
 
         ''' <summary>
         ''' Mod 的完整文件名。
@@ -770,6 +778,18 @@ VersionFindFail:
 
 #End Region
 
+#Region "API"
+
+        Public Overrides Function ToString() As String
+            Return $"{State} - {Path}"
+        End Function
+        Public Overrides Function Equals(obj As Object) As Boolean
+            Dim target = TryCast(obj, McMod)
+            Return target IsNot Nothing AndAlso Path = target.Path
+        End Function
+
+#End Region
+
         ''' <summary>
         ''' 是否可能为前置 Mod。
         ''' </summary>
@@ -844,6 +864,17 @@ VersionFindFail:
                 '加载 McMod 对象
                 Dim ModEntry As New McMod(ModFile.FullName)
                 ModEntry.Load()
+                Dim DumpMod As McMod = ModList.FirstOrDefault(Function(m) m.RawFileName = ModEntry.RawFileName)
+                If DumpMod IsNot Nothing Then
+                    Dim DisabledMod As McMod = If(DumpMod.State = McMod.McModState.Disabled, DumpMod, ModEntry)
+                    Log($"[Mod] 重复的 Mod 文件：{DumpMod.FileName} 与 {ModEntry.FileName}，已忽略 {DisabledMod.FileName}", LogLevel.Debug)
+                    If DisabledMod Is ModEntry Then
+                        Continue For
+                    Else
+                        ModList.Remove(DisabledMod)
+                        ModUpdateList.Remove(DisabledMod)
+                    End If
+                End If
                 ModList.Add(ModEntry)
                 '读取 Comp 缓存
                 If ModEntry.State = McMod.McModState.Unavaliable Then Continue For
@@ -860,13 +891,14 @@ VersionFindFail:
             Log($"[Mod] 共有 {ModList.Count} 个 Mod，其中 {ModUpdateList.Where(Function(m) m.Comp Is Nothing).Count} 个需要联网获取信息，{ModUpdateList.Where(Function(m) m.Comp IsNot Nothing).Count} 个需要更新信息")
 
             '排序
-            ModList = Sort(ModList, Function(Left As McMod, Right As McMod) As Boolean
-                                        If (Left.State = McMod.McModState.Unavaliable) <> (Right.State = McMod.McModState.Unavaliable) Then
-                                            Return Left.State = McMod.McModState.Unavaliable
-                                        Else
-                                            Return Not Right.FileName.CompareTo(Left.FileName)
-                                        End If
-                                    End Function)
+            ModList = Sort(ModList,
+            Function(Left As McMod, Right As McMod) As Boolean
+                If (Left.State = McMod.McModState.Unavaliable) <> (Right.State = McMod.McModState.Unavaliable) Then
+                    Return Left.State = McMod.McModState.Unavaliable
+                Else
+                    Return Not Right.FileName.CompareTo(Left.FileName)
+                End If
+            End Function)
 
             '回设
             If Loader.IsAborted Then Exit Sub

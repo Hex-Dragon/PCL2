@@ -121,9 +121,10 @@
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextServerEnter.ValidatedTextChanged, TextArgumentInfo.ValidatedTextChanged, TextAdvanceGame.ValidatedTextChanged, TextAdvanceJvm.ValidatedTextChanged, TextServerNide.ValidatedTextChanged, TextServerAuthName.ValidatedTextChanged, TextServerAuthRegister.ValidatedTextChanged, TextServerAuthServer.ValidatedTextChanged, TextArgumentTitle.ValidatedTextChanged, TextAdvanceRun.ValidatedTextChanged
         If AniControlEnabled = 0 Then
-            Dim HandledText As String = sender.Text
-            If sender.Tag = "VersionServerAuthServer" OrElse sender.Tag = "VersionServerAuthRegister" Then HandledText = HandledText.TrimEnd("/")
-            Setup.Set(sender.Tag, HandledText, Version:=PageVersionLeft.Version)
+            '#3194，不能删减 /
+            'Dim HandledText As String = sender.Text
+            'If sender.Tag = "VersionServerAuthServer" OrElse sender.Tag = "VersionServerAuthRegister" Then HandledText = HandledText.TrimEnd("/")
+            Setup.Set(sender.Tag, sender.Text, Version:=PageVersionLeft.Version)
         End If
     End Sub
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderRamCustom.Change
@@ -398,14 +399,12 @@ PreFin:
     Private Sub BtnServerNideWeb_Click(sender As Object, e As EventArgs) Handles BtnServerNideWeb.Click
         OpenWebsite("https://login.mc-user.com:233/server/intro")
     End Sub
-    Private Sub BtnServerNideBbs_Click(sender As Object, e As EventArgs) Handles BtnServerNideBbs.Click
-        OpenWebsite("https://www.mcbbs.net/thread-729821-1-1.html")
-    End Sub
 
     'LittleSkin
     Private Sub BtnServerAuthLittle_Click(sender As Object, e As EventArgs) Handles BtnServerAuthLittle.Click
         If TextServerAuthServer.Text <> "" AndAlso TextServerAuthServer.Text <> "https://littleskin.cn/api/yggdrasil" AndAlso
-            MyMsgBox("即将把第三方登录设置覆盖为自动使用 LittleSkin 登录，是否继续？", "覆盖确认", "确定", "取消") = 2 Then Exit Sub
+            MyMsgBox("即将把第三方登录设置覆盖为 LittleSkin 登录。" & vbCrLf & "除非你是服主，或者服主要求你这样做，否则请不要继续。" & vbCrLf & vbCrLf & "是否确实需要覆盖当前设置？",
+                     "设置覆盖确认", "继续", "取消") = 2 Then Exit Sub
         TextServerAuthServer.Text = "https://littleskin.cn/api/yggdrasil"
         TextServerAuthRegister.Text = "https://littleskin.cn/auth/register"
         TextServerAuthName.Text = "LittleSkin 登录"

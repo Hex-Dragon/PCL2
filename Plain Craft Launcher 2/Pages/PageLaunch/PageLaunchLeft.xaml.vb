@@ -286,7 +286,7 @@ UnknownType:
                 Setup.Set("LoginType", McLoginType.Ms)
                 PanType.Visibility = Visibility.Collapsed
                 PanTypeOne.Visibility = Visibility.Visible
-                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonMs)
+                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonShield)
                 LabTypeOne.Text = "正版登录"
                 RadioLoginType5.Visibility = Visibility.Visible
                 RadioLoginType0.Visibility = Visibility.Collapsed
@@ -295,7 +295,7 @@ UnknownType:
                 Setup.Set("LoginType", McLoginType.Legacy)
                 PanType.Visibility = Visibility.Collapsed
                 PanTypeOne.Visibility = Visibility.Visible
-                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonUser)
+                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonOffline)
                 LabTypeOne.Text = "离线登录"
             Case 3 '统一通行证
                 If Setup.Get("CacheNideAccess") = "" Then

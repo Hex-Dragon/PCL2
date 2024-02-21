@@ -59,7 +59,6 @@
                     Entry.WikiId = i
                     If SplitedLine.Count >= 2 Then
                         Entry.ChineseName = SplitedLine(1)
-                        Entry.MCBBS = If(SplitedLine.Count >= 3, SplitedLine(2), Nothing)
                         If Entry.ChineseName.Contains("*") Then '处理 *
                             Entry.ChineseName = Entry.ChineseName.Replace("*", " (" &
                                 String.Join(" ", If(Entry.CurseForgeSlug, Entry.ModrinthSlug).Split("-").Select(Function(w) w.Substring(0, 1).ToUpper & w.Substring(1, w.Length - 1))) & ")")
@@ -82,10 +81,6 @@
         ''' </summary>
         Public ChineseName As String = ""
         ''' <summary>
-        ''' MCBBS 发布帖编号（例如 195107）。若为 Nothing 则没有发布帖。
-        ''' </summary>
-        Public MCBBS As Integer?
-        ''' <summary>
         ''' CurseForge Slug（例如 advanced-solar-panels）。
         ''' </summary>
         Public CurseForgeSlug As String = Nothing
@@ -95,7 +90,7 @@
         Public ModrinthSlug As String = Nothing
 
         Public Overrides Function ToString() As String
-            Return If(CurseForgeSlug, "") & "&" & If(ModrinthSlug, "") & "|" & WikiId & "|" & ChineseName & If(MCBBS Is Nothing, "", "|" & MCBBS)
+            Return If(CurseForgeSlug, "") & "&" & If(ModrinthSlug, "") & "|" & WikiId & "|" & ChineseName
         End Function
     End Class
 
@@ -197,14 +192,6 @@
         Public ReadOnly Property WikiId As Integer
             Get
                 Return If(DatabaseEntry Is Nothing, 0, DatabaseEntry.WikiId)
-            End Get
-        End Property
-        ''' <summary>
-        ''' MCBBS 的帖子 ID。若为 0 则没有。
-        ''' </summary>
-        Public ReadOnly Property MCBBS As Integer
-            Get
-                Return If(DatabaseEntry Is Nothing, 0, If(DatabaseEntry.MCBBS, 0))
             End Get
         End Property
         ''' <summary>
@@ -884,10 +871,10 @@ NoSubtitle:
             Dim SearchResult As String = ""
             For i = 0 To Math.Min(4, SearchResults.Count - 1) '就算全是准确的，也最多只要 5 个
                 If Not SearchResults(i).AbsoluteRight AndAlso i >= Math.Min(2, SearchResults.Count - 1) Then Exit For '把 3 个结果拼合以提高准确度
-                If SearchResults(i).Item.CurseForgeSlug IsNot Nothing Then SearchResult += SearchResults(i).Item.CurseForgeSlug.Replace("-", " ") & " "
-                If SearchResults(i).Item.ModrinthSlug IsNot Nothing Then SearchResult += SearchResults(i).Item.ModrinthSlug.Replace("-", " ") & " "
+                If SearchResults(i).Item.CurseForgeSlug IsNot Nothing Then SearchResult += SearchResults(i).Item.CurseForgeSlug.Replace("-", " ").Replace("/", " ") & " "
+                If SearchResults(i).Item.ModrinthSlug IsNot Nothing Then SearchResult += SearchResults(i).Item.ModrinthSlug.Replace("-", " ").Replace("/", " ") & " "
                 SearchResult += SearchResults(i).Item.ChineseName.Split(" (").Last.TrimEnd(") ").Split(" - ").First.
-                    Replace(":", "").Replace("(", "").Replace(")", "").ToLower & " "
+                    Replace(":", "").Replace("(", "").Replace(")", "").ToLower.Replace("/", " ") & " "
             Next
             Log("[Comp] 中文搜索原始关键词：" & SearchResult, LogLevel.Developer)
             '去除常见连接词
@@ -911,9 +898,8 @@ NoSubtitle:
         For Each Keyword In AllPossibleKeywords.Split(" ")
             Keyword = Keyword.Trim("["c, "]"c)
             If Keyword = "" Then Continue For
-            If {"forge", "fabric", "for", "mod",
-                "forge/fabric", "fabric/forge", "fabric/quilt", "quilt/fabric"}.Contains(Keyword) Then '#208
-                Log("[Comp] 已跳过搜索关键词：" & Keyword)
+            If {"forge", "fabric", "for", "mod", "quilt"}.Contains(Keyword) Then '#208
+                Log("[Comp] 已跳过搜索关键词：" & Keyword, LogLevel.Developer)
                 Continue For
             End If
             RightKeywords.Add(Keyword)
@@ -927,7 +913,7 @@ NoSubtitle:
         '例外项：OptiForge、OptiFabric（拆词后因为包含 Forge/Fabric 导致无法搜到实际的 Mod）
         If RawFilter.Replace(" ", "").ToLower.Contains("optiforge") Then Task.Input.SearchText = "optiforge"
         If RawFilter.Replace(" ", "").ToLower.Contains("optifabric") Then Task.Input.SearchText = "optifabric"
-        Log("[Comp] 工程列表搜索最终文本：" & Task.Input.SearchText, LogLevel.Developer)
+        Log("[Comp] 工程列表搜索最终文本：" & Task.Input.SearchText, LogLevel.Debug)
         Task.Progress = 0.1
 
 #End Region

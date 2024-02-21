@@ -47,9 +47,12 @@ Public Class Application
                         Environment.Exit((My.Computer.Info.AvailablePhysicalMemory - Ram) / 1024) '返回清理的内存量（K）
                     End If
 #If DEBUG Then
-                ElseIf e.Args(0) = "--make" Then
                     '制作更新包
-                    UpdateMake(e.Args(1))
+                ElseIf e.Args(0) = "--edit1" Then
+                    ExeEdit(e.Args(1), True)
+                    Environment.Exit(Result.Cancel)
+                ElseIf e.Args(0) = "--edit2" Then
+                    ExeEdit(e.Args(1), False)
                     Environment.Exit(Result.Cancel)
 #End If
                 End If
@@ -112,13 +115,11 @@ Public Class Application
             Setup.Load("SystemDebugMode")
             Setup.Load("SystemDebugAnim")
             Setup.Load("ToolDownloadThread")
+            Setup.Load("ToolDownloadCert")
             '网络配置初始化
             ServicePointManager.Expect100Continue = True
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 Or SecurityProtocolType.Tls Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls12
             ServicePointManager.DefaultConnectionLimit = 1024
-            'ServicePointManager.ServerCertificateValidationCallback = New Security.RemoteCertificateValidationCallback(Function() As Boolean
-            '                                                                                                               Return True
-            '                                                                                                           End Function)
             '计时
             Log("[Start] 第一阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
             ApplicationStartTick = GetTimeTick()

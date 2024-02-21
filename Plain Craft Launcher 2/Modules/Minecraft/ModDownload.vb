@@ -221,9 +221,7 @@
     ''' </summary>
     Public DlClientListBmclapiLoader As New LoaderTask(Of Integer, DlClientListResult)("DlClientList Bmclapi", AddressOf DlClientListBmclapiMain)
     Private Sub DlClientListBmclapiMain(Loader As LoaderTask(Of Integer, DlClientListResult))
-        Dim Json As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/mc/game/version_manifest.json",
-                                                       BackupUrl:="https://download.mcbbs.net/mc/game/version_manifest.json",
-                                                       IsJson:=True)
+        Dim Json As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/mc/game/version_manifest.json", IsJson:=True)
         Try
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
@@ -384,8 +382,7 @@
     ''' </summary>
     Public DlOptiFineListBmclapiLoader As New LoaderTask(Of Integer, DlOptiFineListResult)("DlOptiFineList Bmclapi", AddressOf DlOptiFineListBmclapiMain)
     Private Sub DlOptiFineListBmclapiMain(Loader As LoaderTask(Of Integer, DlOptiFineListResult))
-        Dim Json As JArray = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/optifine/versionList",
-                                                      BackupUrl:="https://download.mcbbs.net/optifine/versionList", IsJson:=True)
+        Dim Json As JArray = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/optifine/versionList", IsJson:=True)
         Try
             Dim Versions As New List(Of DlOptiFineListEntry)
             For Each Token As JObject In Json
@@ -469,8 +466,7 @@
     ''' </summary>
     Public DlForgeListBmclapiLoader As New LoaderTask(Of Integer, DlForgeListResult)("DlForgeList Bmclapi", AddressOf DlForgeListBmclapiMain)
     Private Sub DlForgeListBmclapiMain(Loader As LoaderTask(Of Integer, DlForgeListResult))
-        Dim Result As String = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft", Encoding.Default,
-                                                       BackupUrl:="https://download.mcbbs.net/forge/minecraft")
+        Dim Result As String = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft", Encoding.Default)
         If Result.Length < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Result & "）")
         '获取所有版本信息
         Dim Names As List(Of String) = RegexSearch(Result, "[0-9.]+(_pre[0-9]?)?")
@@ -664,8 +660,7 @@
     ''' Forge 版本列表，BMCLAPI。
     ''' </summary>
     Public Sub DlForgeVersionBmclapiMain(Loader As LoaderTask(Of String, List(Of DlForgeVersionEntry)))
-        Dim Json As JArray = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft/" & Loader.Input,
-                                                       BackupUrl:="https://download.mcbbs.net/forge/minecraft/" & Loader.Input, IsJson:=True)
+        Dim Json As JArray = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft/" & Loader.Input, IsJson:=True)
         Dim Versions As New List(Of DlForgeVersionEntry)
         Try
             Dim Recommended As String = McDownloadForgeRecommendedGet(Loader.Input)
@@ -827,8 +822,7 @@
     ''' </summary>
     Public DlLiteLoaderListBmclapiLoader As New LoaderTask(Of Integer, DlLiteLoaderListResult)("DlLiteLoaderList Bmclapi", AddressOf DlLiteLoaderListBmclapiMain)
     Private Sub DlLiteLoaderListBmclapiMain(Loader As LoaderTask(Of Integer, DlLiteLoaderListResult))
-        Dim Result As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/maven/com/mumfrey/liteloader/versions.json",
-                                                       BackupUrl:="https://download.mcbbs.net/maven/com/mumfrey/liteloader/versions.json", IsJson:=True)
+        Dim Result As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/maven/com/mumfrey/liteloader/versions.json", IsJson:=True)
         Try
             Dim Json As JObject = Result("versions")
             Dim Versions As New List(Of DlLiteLoaderListEntry)
@@ -914,8 +908,7 @@
     ''' </summary>
     Public DlFabricListBmclapiLoader As New LoaderTask(Of Integer, DlFabricListResult)("DlFabricList Bmclapi", AddressOf DlFabricListBmclapiMain)
     Private Sub DlFabricListBmclapiMain(Loader As LoaderTask(Of Integer, DlFabricListResult))
-        Dim Result As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/fabric-meta/v2/versions",
-                                                       BackupUrl:="https://download.mcbbs.net/fabric-meta/v2/versions", IsJson:=True)
+        Dim Result As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/fabric-meta/v2/versions", IsJson:=True)
         Try
             Dim Output = New DlFabricListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Result}
             If Output.Value("game") Is Nothing OrElse Output.Value("loader") Is Nothing OrElse Output.Value("installer") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
@@ -943,26 +936,25 @@
 
     Public Function DlSourceResourceGet(MojangBase As String) As String()
         MojangBase = MojangBase.Replace("http://resources.download.minecraft.net", "https://resources.download.minecraft.net")
-        Return {MojangBase.Replace("https://piston-data.mojang.com", "https://download.mcbbs.net/assets").Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net/assets").Replace("https://resources.download.minecraft.net", "https://download.mcbbs.net/assets"),
-                MojangBase,
-                MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/assets").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/assets").Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets")
+        Return {
+                MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/assets").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/assets").Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets"),
+                MojangBase
                }
     End Function
 
     Public Function DlSourceLibraryGet(MojangBase As String) As String()
-        Return {MojangBase.Replace("https://piston-data.mojang.com", "https://download.mcbbs.net/maven").Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net/maven").Replace("https://libraries.minecraft.net", "https://download.mcbbs.net/maven"),
-                MojangBase.Replace("https://piston-data.mojang.com", "https://download.mcbbs.net/libraries").Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net/libraries").Replace("https://libraries.minecraft.net", "https://download.mcbbs.net/libraries"),
-                MojangBase,
+        Return {
                 MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
-                MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries")
+                MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
+                MojangBase
                }
     End Function
 
     Public Function DlSourceLauncherOrMetaGet(MojangBase As String) As String()
         If MojangBase Is Nothing Then Throw New Exception("无对应的 json 下载地址")
-        Return {MojangBase.Replace("https://piston-data.mojang.com", "https://download.mcbbs.net").Replace("https://piston-meta.mojang.com", "https://download.mcbbs.net").Replace("https://launcher.mojang.com", "https://download.mcbbs.net").Replace("https://launchermeta.mojang.com", "https://download.mcbbs.net"),
-                MojangBase,
-                MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com")
+        Return {
+                MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com"),
+                MojangBase
                }
     End Function
 

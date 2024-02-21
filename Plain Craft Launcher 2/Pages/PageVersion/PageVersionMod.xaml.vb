@@ -1,4 +1,6 @@
-﻿Public Class PageVersionMod
+﻿Imports System.Security.Principal
+
+Public Class PageVersionMod
 
 #Region "初始化"
 
@@ -65,12 +67,12 @@
                 PanBack.Visibility = Visibility.Collapsed
                 Exit Sub
             End If
-            SearchBox.Text = ""
             '输出结果
             ModItems.Clear()
             For Each ModEntity As McMod In Mods
                 ModItems(ModEntity.RawFileName) = McModListItem(ModEntity)
             Next
+            SearchBox.Text = "" '这会触发结果刷新，所以需要在 ModItems 更新之后，详见 #3124 的视频
             RefreshResult(Mods)
         Catch ex As Exception
             Log(ex, "加载 Mod 列表 UI 失败", LogLevel.Feedback)
@@ -333,20 +335,33 @@
     End Sub
     Private Sub EDMods(ModList As IEnumerable(Of McMod), IsEnable As Boolean)
         Dim IsSuccessful As Boolean = True
-        For Each ModEntity In ModList.ToList
+        For Each ModE In ModList.ToList
+            Dim ModEntity = ModE '仅用于去除迭代变量无法修改的限制
             Dim NewPath As String = Nothing
             If ModEntity.State = McMod.McModState.Fine AndAlso Not IsEnable Then
                 '禁用
-                NewPath = ModEntity.Path & ".disabled"
+                NewPath = ModEntity.Path & If(File.Exists(ModEntity.Path & ".old"), ".old", ".disabled")
             ElseIf ModEntity.State = McMod.McModState.Disabled AndAlso IsEnable Then
                 '启用
-                NewPath = ModEntity.Path.Replace(".disabled", "").Replace(".old", "")
+                NewPath = ModEntity.RawPath
             Else
                 Continue For
             End If
             '重命名
             Try
-                If File.Exists(NewPath) AndAlso Not File.Exists(ModEntity.Path) Then Continue For '因为未知原因 Mod 的状态已经切换完了
+                If File.Exists(NewPath) Then
+                    If File.Exists(ModEntity.Path) Then
+                        '同时存在两个名称的 Mod
+                        If GetFileMD5(ModEntity.Path) <> GetFileMD5(NewPath) Then
+                            MyMsgBox($"目前同时存在启用和禁用的两个 Mod 文件：{vbCrLf} - {NewPath}{vbCrLf} - {ModEntity.Path}{vbCrLf}{vbCrLf}注意，这两个文件的内容并不相同。{vbCrLf}在手动删除或重命名其中一个文件后，才能继续操作。", "存在文件冲突")
+                            Continue For
+                        End If
+                    Else
+                        '已经重命名过了
+                        Log("[Mod] Mod 的状态已被切换", LogLevel.Debug)
+                        Continue For
+                    End If
+                End If
                 File.Delete(NewPath)
                 FileSystem.Rename(ModEntity.Path, NewPath)
             Catch ex As FileNotFoundException
@@ -389,6 +404,16 @@
         Try
             Dim IsSuccessful As Boolean = True
             Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
+            '确认需要删除的文件
+            ModList = ModList.SelectMany(
+            Function(Target As McMod)
+                If Target.State = McMod.McModState.Fine Then
+                    Return {Target.Path, Target.Path & If(File.Exists(Target.Path & ".old"), ".old", ".disabled")}
+                Else
+                    Return {Target.Path, Target.RawPath}
+                End If
+            End Function).Distinct.Where(Function(m) File.Exists(m)).Select(Function(m) New McMod(m)).ToList()
+            '实际删除文件
             For Each ModEntity In ModList
                 '删除
                 Try
@@ -410,8 +435,8 @@
                 '更改 Loader 和 UI 中的列表
                 McModLoader.Output.Remove(ModEntity)
                 ModItems.Remove(ModEntity.RawFileName)
-                Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalModItem).First(Function(i) i.Entry Is ModEntity))
-                PanList.Children.RemoveAt(IndexOfUi)
+                Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
+                If IndexOfUi >= 0 Then PanList.Children.RemoveAt(IndexOfUi)
             Next
             RefreshTitle()
             If Not IsSuccessful Then

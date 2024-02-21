@@ -42,15 +42,19 @@
 #Region "读取默认（Original）文件夹，即当前、官启文件夹，可能没有结果"
 
             '扫描当前文件夹
-            If CheckPermission(Path) AndAlso Directory.Exists(Path & "versions\") Then CacheMcFolderList.Add(New McFolder With {.Name = "当前文件夹", .Path = Path, .Type = McFolderType.Original})
-            For Each Folder As DirectoryInfo In New DirectoryInfo(Path).GetDirectories
-                If CheckPermission(Folder.FullName) AndAlso Directory.Exists(Folder.FullName & "versions\") OrElse Folder.Name = ".minecraft" Then CacheMcFolderList.Add(New McFolder With {.Name = "当前文件夹", .Path = Folder.FullName & "\", .Type = McFolderType.Original})
-            Next
+            Try
+                If Directory.Exists(Path & "versions\") Then CacheMcFolderList.Add(New McFolder With {.Name = "当前文件夹", .Path = Path, .Type = McFolderType.Original})
+                For Each Folder As DirectoryInfo In New DirectoryInfo(Path).GetDirectories
+                    If Directory.Exists(Folder.FullName & "versions\") OrElse Folder.Name = ".minecraft" Then CacheMcFolderList.Add(New McFolder With {.Name = "当前文件夹", .Path = Folder.FullName & "\", .Type = McFolderType.Original})
+                Next
+            Catch ex As Exception
+                Log(ex, "扫描 PCL 所在文件夹中是否有 MC 文件夹失败")
+            End Try
 
             '扫描官启文件夹
             Dim MojangPath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\"
-            If (CacheMcFolderList.Count = 0 OrElse MojangPath <> CacheMcFolderList(0).Path) AndAlso '当前文件夹不是官启文件夹
-                CheckPermission(MojangPath) AndAlso Directory.Exists(MojangPath & "versions\") Then '具有权限且存在 versions 文件夹
+            If (Not CacheMcFolderList.Any OrElse MojangPath <> CacheMcFolderList(0).Path) AndAlso '当前文件夹不是官启文件夹
+                Directory.Exists(MojangPath & "versions\") Then '具有权限且存在 versions 文件夹
                 CacheMcFolderList.Add(New McFolder With {.Name = "官方启动器文件夹", .Path = MojangPath, .Type = McFolderType.Original})
             End If
 
@@ -406,7 +410,7 @@
                         End If
                         '无法获取
                         _Version.McName = "Unknown"
-                        Info = "PCL 无法识别该版本，请向作者反馈此问题"
+                        Info = "PCL 无法识别该版本的 MC 版本号"
                     Catch ex As Exception
                         Log(ex, "识别 Minecraft 版本时出错")
                         _Version.McName = "Unknown"
@@ -1915,7 +1919,7 @@ NextVersion:
                 '获取下载信息
                 Try
                     Log("[Minecraft] 开始获取 Authlib-Injector 下载信息")
-                    DownloadInfo = GetJson(NetGetCodeByDownload({"https://download.mcbbs.net/mirrors/authlib-injector/artifact/latest.json", "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json"}, IsJson:=True))
+                    DownloadInfo = GetJson(NetGetCodeByDownload({"https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json"}, IsJson:=True))
                 Catch ex As Exception
                     Log(ex, "获取 Authlib-Injector 下载信息失败")
                 End Try
@@ -1926,9 +1930,7 @@ NextVersion:
                         '开始下载
                         Dim DownloadAddress As String = DownloadInfo("download_url")
                         Log("[Minecraft] Authlib-Injector 需要更新：" & DownloadAddress, LogLevel.Developer)
-                        Result.Add(New NetFile({
-                                DownloadAddress.Replace("bmclapi2.bangbang93.com", "download.mcbbs.net"), DownloadAddress
-                            }, TargetFile, New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)))
+                        Result.Add(New NetFile({DownloadAddress}, TargetFile, New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)))
                     End If
                 End If
             End If
@@ -1958,7 +1960,7 @@ NextVersion:
                 '获取 Url 的真实地址
                 Urls.Add(Token.Url)
                 If Token.Url.Contains("launcher.mojang.com/v1/objects") Then Urls = DlSourceLauncherOrMetaGet(Token.Url).ToList() 'Mappings
-                If Token.Url.Contains("maven") Then Urls.Insert(0, Token.Url.Replace(Mid(Token.Url, 1, Token.Url.IndexOf("maven")), "https://download.mcbbs.net/").Replace("maven.fabricmc.net", "maven").Replace("maven.minecraftforge.net", "maven"))
+                If Token.Url.Contains("maven") Then Urls.Insert(0, Token.Url.Replace(Mid(Token.Url, 1, Token.Url.IndexOf("maven")), "https://bmclapi2.bangbang93.com/").Replace("maven.fabricmc.net", "maven").Replace("maven.minecraftforge.net", "maven"))
             End If
             If Token.LocalPath.Contains("transformer-discovery-service") Then
                 'Transformer 文件释放
@@ -1970,7 +1972,6 @@ NextVersion:
                 Dim OptiFineBase As String = Token.LocalPath.Replace(If(Token.IsJumpLoader, JumpLoaderFolder, CustomMcFolder) & "libraries\optifine\OptiFine\", "").Split("_")(0) & "/" & GetFileNameFromPath(Token.LocalPath).Replace("-", "_")
                 OptiFineBase = "/maven/com/optifine/" & OptiFineBase
                 If OptiFineBase.Contains("_pre") Then OptiFineBase = OptiFineBase.Replace("com/optifine/", "com/optifine/preview_")
-                Urls.Add("https://download.mcbbs.net" & OptiFineBase)
                 Urls.Add("https://bmclapi2.bangbang93.com" & OptiFineBase)
             ElseIf Urls.Count <= 2 Then
                 '普通文件

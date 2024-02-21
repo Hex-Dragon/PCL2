@@ -727,8 +727,7 @@ Wait:
     Private Sub JavaFileList(Loader As LoaderTask(Of Integer, List(Of NetFile)))
         Log("[Java] 开始获取 Java 下载信息")
         Dim IndexFileStr As String = NetGetCodeByDownload(
-            {"https://download.mcbbs.net/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json",
-             "https://bmclapi2.bangbang93.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json",
+            {"https://bmclapi2.bangbang93.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json",
              "https://piston-meta.mojang.com/v1/products/java-runtime/2ec0cc96c44e5a76b9c8b7c39df7210883d12871/all.json"},
         IsJson:=True)
         '获取下载地址
@@ -740,8 +739,7 @@ Wait:
         Log($"[Java] 准备下载 Java {TargetEntry.Value("version")("name")}（{TargetEntry.Key}）：{Address}")
         '获取文件列表
         Dim ListFileStr As String = NetGetCodeByDownload(
-            {Address.Replace("piston-meta.mojang.com", "download.mcbbs.net"),
-             Address.Replace("piston-meta.mojang.com", "bmclapi2.bangbang93.com"),
+            {Address.Replace("piston-meta.mojang.com", "bmclapi2.bangbang93.com"),
              Address},
         IsJson:=True)
         Dim BaseDir As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\runtime\" & TargetEntry.Key & "\"
@@ -753,8 +751,7 @@ Wait:
             If Checker.Check(BaseDir & File.Name) Is Nothing Then Continue For '跳过已存在的文件
             Dim Url As String = Info("url")
             Results.Add(New NetFile(
-                            {Url.Replace("piston-data.mojang.com", "download.mcbbs.net"),
-                             Url.Replace("piston-data.mojang.com", "bmclapi2.bangbang93.com"),
+                            {Url.Replace("piston-data.mojang.com", "bmclapi2.bangbang93.com"),
                              Url},
                         BaseDir & File.Name, Checker))
         Next

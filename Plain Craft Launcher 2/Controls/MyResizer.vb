@@ -128,7 +128,7 @@ Public Class MyResizer
 
     Private Declare Function GetMonitorInfo Lib "user32" (hMonitor As IntPtr, lpmi As MONITORINFO) As Boolean
 
-    Friend Declare Function MonitorFromWindow Lib "User32" (handle As IntPtr, flags As Integer) As IntPtr
+    Private Declare Function MonitorFromWindow Lib "User32" (handle As IntPtr, flags As Integer) As IntPtr
 
     Private Sub connectMouseHandlers(element As UIElement)
         AddHandler element.MouseLeftButtonDown, AddressOf Me.element_MouseLeftButtonDown

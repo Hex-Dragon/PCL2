@@ -25,7 +25,7 @@
                 For Each File In EnumerateFiles(Path & "PCL\Musics\")
                     '文件夹可能会被加入 .ini 文件夹配置文件、一些乱七八糟的 .jpg 文件啥的
                     Dim Ext As String = File.Extension.ToLower
-                    If {"ini", "jpg", "txt", "cfg", "lrc", "db", "png"}.Contains(Ext) Then Continue For
+                    If {".ini", ".jpg", ".txt", ".cfg", ".lrc", ".db", ".png"}.Contains(Ext) Then Continue For
                     MusicAllList.Add(File.FullName)
                 Next
             End If

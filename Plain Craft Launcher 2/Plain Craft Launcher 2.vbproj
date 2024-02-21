@@ -839,9 +839,6 @@
     <Resource Include="Images\Blocks\Fabric.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Heads\MCBBS.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\forge-installer.jar" />
   </ItemGroup>
   <ItemGroup>

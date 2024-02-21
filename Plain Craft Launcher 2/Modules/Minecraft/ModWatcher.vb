@@ -96,7 +96,7 @@
                                        '设置窗口标题
                                        For i = 1 To 3
                                            If IsWindowFinished AndAlso IsWindowAppeared AndAlso WindowTitle <> "" AndAlso State = MinecraftState.Running AndAlso Not GameProcess.HasExited Then
-                                               Dim RealTitle As String = WindowTitle.Replace("{time}", Date.Now.ToShortTimeString)
+                                               Dim RealTitle As String = WindowTitle.Replace("{date}", Date.Now.ToString("yyyy/M/d")).Replace("{time}", Date.Now.ToString("HH:mm:ss"))
                                                SetWindowText(WindowHandle, RealTitle.ToCharArray)
                                            End If
                                            Thread.Sleep(64)

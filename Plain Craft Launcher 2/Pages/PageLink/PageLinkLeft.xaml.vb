@@ -1,6 +1,4 @@
-﻿Imports NetFwTypeLib
-
-Public Class PageLinkLeft
+﻿Public Class PageLinkLeft
 
     Private IsLoad As Boolean = False
     Private IsPageSwitched As Boolean = False '如果在 Loaded 前切换到其他页面，会导致触发 Loaded 时再次切换一次
@@ -14,84 +12,6 @@ Public Class PageLinkLeft
     Private Sub PageOtherLeft_Unloaded(sender As Object, e As RoutedEventArgs) Handles Me.Unloaded
         IsPageSwitched = False
     End Sub
-
-#Region "Windows 防火墙"
-
-    '为联机模块添加防火墙通行权限的函数库
-    '不加防火墙权限你要我怎么办，这联机根本连都连不上，球球你们别看到防火墙就说是后门了，真的很恼火……
-
-    ''' <summary>
-    ''' 获取某个文件是否被 Windows 防火墙阻止。
-    ''' </summary>
-    Public Shared Function FirewallIsBlock(FilePath As String) As Boolean
-        '获取配置
-        If FirewallPolicy Is Nothing Then
-            Try
-                FirewallPolicy = FirewallPolicyGet()
-            Catch ex As Exception
-                Log(ex, "Windows 防火墙：可能关闭得太死了，根本检测不到，笑死", LogLevel.Normal)
-                Return False
-            End Try
-        End If
-        '检查是否开启
-        If Not FirewallPolicy.CurrentProfile.FirewallEnabled Then
-            Log("[Link] Windows 防火墙：防火墙关闭")
-            Return False
-        End If
-        '检查是否允许例外
-        If FirewallPolicy.CurrentProfile.ExceptionsNotAllowed Then
-            Log("[Link] Windows 防火墙：防火墙开启，不允许例外")
-            Return True
-        End If
-        '检查白名单
-        Dim Target As String = FilePath.Replace(PathTemp.Split("\").First, "").ToLower
-        For Each App As INetFwAuthorizedApplication In FirewallPolicy.CurrentProfile.AuthorizedApplications
-            If ModeDebug Then Log("[Link] 防火墙白名单（" & App.Enabled & "）：" & App.ProcessImageFileName)
-            If Not App.Enabled Then Continue For
-            '信标的奇妙盘符 E:0/xxxxx/xxx 导致误判……
-            Dim FileNameTrimmed As String = App.ProcessImageFileName.Replace(App.ProcessImageFileName.Split("\").First, "")
-            If App.ProcessImageFileName.ToLower.Contains(FilePath) Then
-                Log("[Link] Windows 防火墙：开启，已在白名单中（" & FilePath & "）")
-                Return False
-            End If
-        Next
-        Log("[Link] Windows 防火墙：开启，未在白名单中（" & FilePath & "）")
-        Return True
-    End Function
-    ''' <summary>
-    ''' 添加防火墙通行权限。需要管理员权限。
-    ''' </summary>
-    Public Shared Sub FirewallAddAuthorized(DisplayName As String, FilePath As String)
-        Log("[Link] Windows 防火墙：添加通行权限（" & FilePath & "）")
-        '获取配置
-        If FirewallPolicy Is Nothing Then FirewallPolicy = FirewallPolicyGet()
-        '添加项目
-        FirewallPolicy.GetProfileByType(NET_FW_PROFILE_TYPE_.NET_FW_PROFILE_DOMAIN).AuthorizedApplications.Add(New FirewallApp(DisplayName, FilePath))
-        FirewallPolicy.GetProfileByType(NET_FW_PROFILE_TYPE_.NET_FW_PROFILE_STANDARD).AuthorizedApplications.Add(New FirewallApp(DisplayName, FilePath))
-        FirewallPolicy.CurrentProfile.AuthorizedApplications.Add(New FirewallApp(DisplayName, FilePath))
-    End Sub
-    Private Class FirewallApp
-        Implements INetFwAuthorizedApplication
-        Public Property Name As String Implements INetFwAuthorizedApplication.Name
-        Public Property ProcessImageFileName As String Implements INetFwAuthorizedApplication.ProcessImageFileName
-        Public Property IpVersion As NET_FW_IP_VERSION_ = NET_FW_IP_VERSION_.NET_FW_IP_VERSION_ANY Implements INetFwAuthorizedApplication.IpVersion
-        Public Property Scope As NET_FW_SCOPE_ = NET_FW_SCOPE_.NET_FW_SCOPE_ALL Implements INetFwAuthorizedApplication.Scope
-        Public Property RemoteAddresses As String = "*" Implements INetFwAuthorizedApplication.RemoteAddresses
-        Public Property Enabled As Boolean = True Implements INetFwAuthorizedApplication.Enabled
-        Public Sub New(DisplayName As String, FilePath As String)
-            Name = DisplayName
-            ProcessImageFileName = FilePath
-        End Sub
-    End Class
-    '获取防火墙配置
-    Public Shared FirewallPolicy As INetFwPolicy = Nothing
-    Public Shared Function FirewallPolicyGet() As INetFwPolicy
-        Const CLSID_FIREWALL_MANAGER As String = "{304CE942-6E39-40D8-943A-B913C40C9CD4}"
-        Dim objType As Type = Type.GetTypeFromCLSID(New Guid(CLSID_FIREWALL_MANAGER))
-        Return TryCast(Activator.CreateInstance(objType), INetFwMgr).LocalPolicy
-    End Function
-
-#End Region
 
 #Region "页面切换"
 
@@ -184,7 +104,6 @@ Public Class PageLinkLeft
         PageLinkHiper.ModuleStopManually()
     End Sub
     Private Sub BtnIoiStop_Loaded(sender As Object, e As RoutedEventArgs)
-        sender.Visibility = If(PageLinkIoi.InitLoader.State = LoadState.Finished, Visibility.Visible, Visibility.Collapsed)
     End Sub
     Private Sub BtnIoiStop_Click(sender As Object, e As EventArgs)
         PageLinkIoi.ModuleStopManually()

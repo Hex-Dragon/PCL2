@@ -192,7 +192,6 @@ RequestFinished:
             If Url.StartsWith("https", StringComparison.OrdinalIgnoreCase) Then Request.ProtocolVersion = HttpVersion.Version11
             Request.Timeout = Timeout
             Request.Accept = Accept
-            Request.KeepAlive = False
             SecretHeadersSign(Url, Request)
             Using res As HttpWebResponse = Request.GetResponse()
                 Using HttpStream As Stream = res.GetResponseStream()
@@ -393,7 +392,6 @@ RequestFinished:
             End If
             Req.ContentType = ContentType
             Req.Timeout = Timeout
-            Req.KeepAlive = False
             SecretHeadersSign(Url, Req)
             If Url.StartsWith("https", StringComparison.OrdinalIgnoreCase) Then Req.ProtocolVersion = HttpVersion.Version11
             If Method = "POST" OrElse Method = "PUT" Then
@@ -965,13 +963,12 @@ Capture:
                     '是否禁用多线程，以及规定碎片大小
                     Dim TargetUrl As String = GetSource().Url
                     If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("gitcode.net") OrElse TargetUrl.Contains("github.com") Then Return False
-                    Dim RealFilePieceLimit = If(TargetUrl.Contains("download.mcbbs.net"), FilePieceLimit * 5, FilePieceLimit)
                     '寻找最大碎片
                     Dim FilePieceMax As NetThread = Threads
                     For Each Thread As NetThread In Threads
                         If Thread.DownloadUndone > FilePieceMax.DownloadUndone Then FilePieceMax = Thread
                     Next
-                    If FilePieceMax Is Nothing OrElse FilePieceMax.DownloadUndone < RealFilePieceLimit Then Return False
+                    If FilePieceMax Is Nothing OrElse FilePieceMax.DownloadUndone < FilePieceLimit Then Return False
                     StartPosition = FilePieceMax.DownloadEnd - FilePieceMax.DownloadUndone * 0.4
                     StartSource = GetSource()
 
@@ -1021,7 +1018,7 @@ StartThread:
             Dim HttpRequest As HttpWebRequest
             Dim ResultStream As Stream = Nothing
             '部分下载源真的特别慢，并且只需要一个请求，例如 Ping 为 20s，如果增长太慢，就会造成类似 2.5s 5s 7.5s 10s 12.5s... 的极大延迟
-            '延迟过长会导致某些特别慢的链接迟迟不被掐死，即使 MCBBS 源在 10s 下也会出现类似情况
+            '延迟过长会导致某些特别慢的链接迟迟不被掐死
             Dim Timeout As Integer = Math.Min(Math.Max(ConnectAverage, 6000) * (1 + Info.Source.FailCount), 30000)
             Info.State = NetState.Connect
             Try
@@ -1206,7 +1203,9 @@ SourceBreak:
                 'End SyncLock
                 Info.Source.Ex = ex
                 '根据情况判断，是否在多线程下禁用下载源（连续错误过多，或不支持断点续传）
-                If ex.Message.Contains("该下载源不支持") OrElse ex.Message.Contains("未能解析") OrElse ex.Message.Contains("(404)") OrElse ex.Message.Contains("(403)") OrElse ex.Message.Contains("(502)") OrElse ex.Message.Contains("无返回数据") OrElse ex.Message.Contains("空间不足") OrElse
+                'BMCLAPI 的部分源在高频率请求下会返回 403，所以不应因此禁用下载源
+                If ex.Message.Contains("该下载源不支持") OrElse ex.Message.Contains("未能解析") OrElse ex.Message.Contains("(404)") OrElse
+                   ex.Message.Contains("(502)") OrElse ex.Message.Contains("无返回数据") OrElse ex.Message.Contains("空间不足") OrElse ex.Message.Contains("获取到的片大小不一致") OrElse
                     (Info.Source.FailCount >= MathClamp(NetTaskThreadLimit, 5, 40) AndAlso DownloadDone < 1) OrElse
                     Info.Source.FailCount > NetTaskThreadLimit Then
                     Dim IsThisFail As Boolean = False
@@ -1225,7 +1224,7 @@ Wrong:
                     '本线程引发下载源被禁用
                     If IsThisFail Then
                         Log("[Download] " & LocalName & " " & Uuid & "#：下载源被禁用（" & Info.Source.Id & "）：" & Info.Source.Url)
-                        Log(ex, "下载源 " & Info.Source.Id & " 已被禁用", If(ex.Message.Contains("不支持断点续传") OrElse ex.Message.Contains("404") OrElse ex.Message.Contains("416"), LogLevel.Developer, LogLevel.Debug))
+                        Log(ex, "下载源 " & Info.Source.Id & " 已被禁用", If(ex.Message.Contains("不支持断点续传") OrElse ex.Message.Contains("(404)") OrElse ex.Message.Contains("(416)"), LogLevel.Developer, LogLevel.Debug))
                         If IsSourceFailed() Then
                             '没有可用源
                             Log("[Download] 文件 " & LocalName & " 已无可用下载源")
@@ -1475,7 +1474,7 @@ Retry:
             End Get
             Set(value As Integer)
                 _FailCount = value
-                If State = LoadState.Loading AndAlso value >= Math.Min(2000, Math.Max(FileRemain * 5.5, NetTaskThreadLimit * 5.5 + 3)) Then
+                If State = LoadState.Loading AndAlso value >= Math.Min(10000, Math.Max(FileRemain * 5.5, NetTaskThreadLimit * 5.5 + 3)) Then
                     Log("[Download] 由于同加载器中失败次数过多引发强制失败：连续失败了 " & value & " 次", LogLevel.Debug)
                     On Error Resume Next
                     Dim ExList As New List(Of Exception)
@@ -1846,69 +1845,70 @@ Retry:
         Private Sub StartManager()
             If IsManagerStarted Then Exit Sub
             IsManagerStarted = True
-            RunInNewThread(Sub()
-                               Try
-                                   Dim LastLoopTime As Long
-                                   While True
-                                       LastLoopTime = GetTimeTick()
-                                       '若已完成，则清空
-                                       If FileRemain = 0 AndAlso Files.Count > 0 Then
-                                           SyncLock LockFiles
-                                               Files.Clear()
-                                           End SyncLock
-                                       End If
-                                       '开启新线程
-                                       If Speed < NetTaskSpeedLimitLow OrElse FileRemain > NetTaskThreadLimit Then
-                                           '速度小于下限或剩余文件还贼多，尝试开启线程
-                                           Dim IsSuccess As Boolean = False
-                                           Dim NewThreadCount As Integer
-                                           '确定最大线程追加数
-                                           NewThreadCount = Math.Max(FileRemain, MathClamp(NetTaskThreadCount / 2, 1, 4))
-                                           NewThreadCount = Math.Floor(NewThreadCount / 2) '双线程启用减半
-                                           NewThreadCount = MathClamp(NewThreadCount, 1, NetTaskThreadLimit)
-                                           '循环追加
-                                           Do
-                                               IsSuccess = False
-                                               '启动 Wait 的文件后立即会变成 Connect，导致第二次循环再次调用，所以需要先暂时存储进去……
-                                               '此外为了减少 LockFiles 的占用时间，所以先遍历列表再开始
-                                               Dim FilesWaiting As New List(Of NetFile)
-                                               Dim FilesLoading As New List(Of NetFile)
-                                               SyncLock LockFiles
-                                                   For Each File As NetFile In Files.Values
-                                                       If File.RandomCode Mod 2 = 0 Then Continue For
-                                                       If File.State = NetState.WaitForDownload Then
-                                                           FilesWaiting.Add(File)
-                                                       ElseIf File.State < NetState.Merge Then
-                                                           FilesLoading.Add(File)
-                                                       End If
-                                                   Next
-                                               End SyncLock
-                                               '为文件列表中的文件开始线程
-                                               For Each File As NetFile In FilesWaiting
-                                                   If NewThreadCount = 0 Then Exit For
-                                                   If File.TryBeginThread() Then
-                                                       IsSuccess = True
-                                                       NewThreadCount -= 1
-                                                   End If
-                                               Next
-                                               For Each File As NetFile In FilesLoading
-                                                   If NewThreadCount = 0 Then Exit For
-                                                   If File.TryBeginThread() Then
-                                                       IsSuccess = True
-                                                       NewThreadCount -= 1
-                                                   End If
-                                               Next
-                                           Loop While NewThreadCount > 0 AndAlso IsSuccess
-                                       End If
-                                       '等待直至 120 ms
-                                       Do While GetTimeTick() - LastLoopTime < 120
-                                           Thread.Sleep(10)
-                                       Loop
-                                   End While
-                               Catch ex As Exception
-                                   Log(ex, "下载管理启动线程 1 出错", LogLevel.Assert)
-                               End Try
-                           End Sub, "NetManager ThreadStarter Single")
+            RunInNewThread(
+            Sub()
+                Try
+                    Dim LastLoopTime As Long
+                    While True
+                        LastLoopTime = GetTimeTick()
+                        '若已完成，则清空
+                        If FileRemain = 0 AndAlso Files.Count > 0 Then
+                            SyncLock LockFiles
+                                Files.Clear()
+                            End SyncLock
+                        End If
+                        '开启新线程
+                        If Speed < NetTaskSpeedLimitLow OrElse FileRemain > NetTaskThreadLimit Then
+                            '速度小于下限或剩余文件还贼多，尝试开启线程
+                            Dim IsSuccess As Boolean = False
+                            Dim NewThreadCount As Integer
+                            '确定最大线程追加数
+                            NewThreadCount = Math.Max(FileRemain, MathClamp(NetTaskThreadCount / 2, 1, 4))
+                            NewThreadCount = Math.Floor(NewThreadCount / 2) '双线程启用减半
+                            NewThreadCount = MathClamp(NewThreadCount, 1, NetTaskThreadLimit)
+                            '循环追加
+                            Do
+                                IsSuccess = False
+                                '启动 Wait 的文件后立即会变成 Connect，导致第二次循环再次调用，所以需要先暂时存储进去……
+                                '此外为了减少 LockFiles 的占用时间，所以先遍历列表再开始
+                                Dim FilesWaiting As New List(Of NetFile)
+                                Dim FilesLoading As New List(Of NetFile)
+                                SyncLock LockFiles
+                                    For Each File As NetFile In Files.Values
+                                        If File.RandomCode Mod 2 = 0 Then Continue For
+                                        If File.State = NetState.WaitForDownload Then
+                                            FilesWaiting.Add(File)
+                                        ElseIf File.State < NetState.Merge Then
+                                            FilesLoading.Add(File)
+                                        End If
+                                    Next
+                                End SyncLock
+                                '为文件列表中的文件开始线程
+                                For Each File As NetFile In FilesWaiting
+                                    If NewThreadCount = 0 Then Exit For
+                                    If File.TryBeginThread() Then
+                                        IsSuccess = True
+                                        NewThreadCount -= 1
+                                    End If
+                                Next
+                                For Each File As NetFile In FilesLoading
+                                    If NewThreadCount = 0 Then Exit For
+                                    If File.TryBeginThread() Then
+                                        IsSuccess = True
+                                        NewThreadCount -= 1
+                                    End If
+                                Next
+                                '等待 40 ms：BMCLAPI 部分时候有 20QPS 的限制
+                                Thread.Sleep(40)
+                            Loop While NewThreadCount > 0 AndAlso IsSuccess
+                        End If
+                        '等待 40 ms
+                        Thread.Sleep(40)
+                    End While
+                Catch ex As Exception
+                    Log(ex, "下载管理启动线程 1 出错", LogLevel.Assert)
+                End Try
+            End Sub, "NetManager ThreadStarter Single")
             RunInNewThread(Sub()
                                Try
                                    Dim LastLoopTime As Long

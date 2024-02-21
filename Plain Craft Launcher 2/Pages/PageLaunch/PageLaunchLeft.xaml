@@ -33,7 +33,7 @@
                     <Path Name="PathTypeOne" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5" Margin="12,0,0,0" Stretch="Uniform" Fill="{DynamicResource ColorBrush3}" MaxHeight="16" MaxWidth="16" VerticalAlignment="Center"
                           Data="">
                         <Path.RenderTransform>
-                            <ScaleTransform ScaleX="1.2" ScaleY="1.2" />
+                            <ScaleTransform ScaleX="1.05" ScaleY="1.05" />
                         </Path.RenderTransform>
                     </Path>
                     <TextBlock Name="LabTypeOne" Text="" FontSize="14" VerticalAlignment="Center" Grid.Column="1" Foreground="{DynamicResource ColorBrush3}" Margin="15,0,12,0" Grid.ColumnSpan="2" SnapsToDevicePixels="False" UseLayoutRounding="False" />

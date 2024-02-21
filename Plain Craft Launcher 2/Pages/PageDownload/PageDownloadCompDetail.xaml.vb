@@ -145,7 +145,6 @@
         '决定按钮显示
         BtnIntroWeb.Text = If(Project.FromCurseForge, "转到 CurseForge", "转到 Modrinth")
         BtnIntroWiki.Visibility = If(Project.WikiId = 0, Visibility.Collapsed, Visibility.Visible)
-        BtnIntroMCBBS.Visibility = If(Project.MCBBS = 0, Visibility.Collapsed, Visibility.Visible)
 
         AniControlEnabled -= 1
     End Sub
@@ -322,9 +321,6 @@
     End Sub
     Private Sub BtnIntroWiki_Click(sender As Object, e As EventArgs) Handles BtnIntroWiki.Click
         OpenWebsite("https://www.mcmod.cn/class/" & Project.WikiId & ".html")
-    End Sub
-    Private Sub BtnIntroMCBBS_Click(sender As Object, e As EventArgs) Handles BtnIntroMCBBS.Click
-        OpenWebsite("https://www.mcbbs.net/thread-" & Project.MCBBS & "-1-1.html")
     End Sub
     Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
         ClipboardSet(CompItem.LabTitle.Text)

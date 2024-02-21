@@ -277,7 +277,7 @@
                 <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
                 <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
                 <Setter Property="UndoLimit" Value="15" />
-                <Setter Property="MaxLength" Value="10000" />
+                <Setter Property="MaxLength" Value="1000" />
                 <Setter Property="BorderBrush" Value="{DynamicResource ColorBrushBg0}" />
                 <Setter Property="Template">
                     <Setter.Value>

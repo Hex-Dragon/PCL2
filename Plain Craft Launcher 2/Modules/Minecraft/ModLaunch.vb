@@ -1911,9 +1911,9 @@ IgnoreCustomSkin:
 
         '获取自定义命令
         Dim CustomCommandGlobal As String = Setup.Get("LaunchAdvanceRun")
-        If CustomCommandGlobal <> "" Then CustomCommandGlobal = ArgumentReplace(CustomCommandGlobal)
+        If CustomCommandGlobal <> "" Then CustomCommandGlobal = ArgumentReplace(CustomCommandGlobal, True)
         Dim CustomCommandVersion As String = Setup.Get("VersionAdvanceRun", Version:=McVersionCurrent)
-        If CustomCommandVersion <> "" Then CustomCommandVersion = ArgumentReplace(CustomCommandVersion)
+        If CustomCommandVersion <> "" Then CustomCommandVersion = ArgumentReplace(CustomCommandVersion, True)
 
         '输出 bat
         Try
@@ -2072,7 +2072,7 @@ IgnoreCustomSkin:
         '获取窗口标题
         Dim WindowTitle As String = Setup.Get("VersionArgumentTitle", Version:=McVersionCurrent)
         If WindowTitle = "" Then WindowTitle = Setup.Get("LaunchArgumentTitle")
-        WindowTitle = ArgumentReplace(WindowTitle)
+        WindowTitle = ArgumentReplace(WindowTitle, False)
 
         '初始化等待
         Dim Watcher As New Watcher(Loader, McVersionCurrent, WindowTitle)
@@ -2124,7 +2124,7 @@ IgnoreCustomSkin:
     ''' <summary>
     ''' 在启动结束时，对 PCL 约定的替换标记进行处理。
     ''' </summary>
-    Private Function ArgumentReplace(Raw As String) As String
+    Private Function ArgumentReplace(Raw As String, ReplaceTimeAndDate As Boolean) As String
         If Raw Is Nothing Then Return Nothing
         '路径替换
         Raw = Raw.Replace("{minecraft}", PathMcFolder)
@@ -2134,6 +2134,10 @@ IgnoreCustomSkin:
         '普通替换
         Raw = Raw.Replace("{user}", McLoginLoader.Output.Name)
         Raw = Raw.Replace("{uuid}", McLoginLoader.Output.Uuid)
+        If ReplaceTimeAndDate Then '设置窗口标题时需要动态替换日期和时间
+            Raw = Raw.Replace("{date}", Date.Now.ToString("yyyy/M/d"))
+            Raw = Raw.Replace("{time}", Date.Now.ToString("HH:mm:ss"))
+        End If
         Select Case McLoginLoader.Input.Type
             Case McLoginType.Legacy
                 If PageLinkHiper.HiperState = LoadState.Finished Then

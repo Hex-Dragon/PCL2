@@ -519,10 +519,8 @@ Public Module ModDownloadLib
                 Dim Sources As New List(Of String)
                 'BMCLAPI 源
                 If DownloadInfo.IsPreview Then
-                    Sources.Add("https://download.mcbbs.net/optifine/" & DownloadInfo.Inherit & "/HD_U_" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", "").Replace(" ", "/"))
                     Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & DownloadInfo.Inherit & "/HD_U_" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", "").Replace(" ", "/"))
                 Else
-                    Sources.Add("https://download.mcbbs.net/optifine/" & DownloadInfo.Inherit & "/HD_U/" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", ""))
                     Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & DownloadInfo.Inherit & "/HD_U/" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", ""))
                 End If
                 '官方源
@@ -682,30 +680,28 @@ Retry:
         Dim Loaders As New List(Of LoaderBase)
         '获取下载地址
         Loaders.Add(New LoaderTask(Of DlOptiFineListEntry, List(Of NetFile))("获取 OptiFine 下载地址",
-                                                            Sub(Task As LoaderTask(Of DlOptiFineListEntry, List(Of NetFile)))
-                                                                Dim Sources As New List(Of String)
-                                                                'BMCLAPI 源
-                                                                If DownloadInfo.IsPreview Then
-                                                                    Sources.Add("https://download.mcbbs.net/optifine/" & DownloadInfo.Inherit & "/HD_U_" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", "").Replace(" ", "/"))
-                                                                    Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & DownloadInfo.Inherit & "/HD_U_" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", "").Replace(" ", "/"))
-                                                                Else
-                                                                    Sources.Add("https://download.mcbbs.net/optifine/" & DownloadInfo.Inherit & "/HD_U/" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", ""))
-                                                                    Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & DownloadInfo.Inherit & "/HD_U/" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", ""))
-                                                                End If
-                                                                '官方源
-                                                                Dim PageData As String
-                                                                Try
-                                                                    PageData = NetGetCodeByClient("https://optifine.net/adloadx?f=" & DownloadInfo.NameFile, New UTF8Encoding(False), 15000, "text/html")
-                                                                    Task.Progress = 0.8
-                                                                    Sources.Add("https://optifine.net/" & RegexSearch(PageData, "downloadx\?f=[^""']+")(0))
-                                                                    Log("[Download] OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址：" & Sources(0))
-                                                                Catch ex As Exception
-                                                                    Log(ex, "获取 OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址失败")
-                                                                End Try
-                                                                Task.Progress = 0.9
-                                                                '构造文件请求
-                                                                Task.Output = New List(Of NetFile) From {New NetFile(Sources.ToArray, TargetFolder, New FileChecker(MinSize:=64 * 1024))}
-                                                            End Sub) With {.ProgressWeight = 6})
+        Sub(Task As LoaderTask(Of DlOptiFineListEntry, List(Of NetFile)))
+            Dim Sources As New List(Of String)
+            'BMCLAPI 源
+            If DownloadInfo.IsPreview Then
+                Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & DownloadInfo.Inherit & "/HD_U_" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", "").Replace(" ", "/"))
+            Else
+                Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & DownloadInfo.Inherit & "/HD_U/" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", ""))
+            End If
+            '官方源
+            Dim PageData As String
+            Try
+                PageData = NetGetCodeByClient("https://optifine.net/adloadx?f=" & DownloadInfo.NameFile, New UTF8Encoding(False), 15000, "text/html")
+                Task.Progress = 0.8
+                Sources.Add("https://optifine.net/" & RegexSearch(PageData, "downloadx\?f=[^""']+")(0))
+                Log("[Download] OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址：" & Sources(0))
+            Catch ex As Exception
+                Log(ex, "获取 OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址失败")
+            End Try
+            Task.Progress = 0.9
+            '构造文件请求
+            Task.Output = New List(Of NetFile) From {New NetFile(Sources.ToArray, TargetFolder, New FileChecker(MinSize:=64 * 1024))}
+        End Sub) With {.ProgressWeight = 6})
         '下载
         Loaders.Add(New LoaderDownload("下载 OptiFine 主文件", New List(Of NetFile)) With {.ProgressWeight = 10, .Block = True})
         Return Loaders
@@ -852,22 +848,11 @@ Retry:
                     Case "1.6.2"
                         Address.Add("https://dl.liteloader.com/redist/1.6.2/liteloader-installer-1.6.2-04.jar")
                     Case "1.5.2"
-                        'Address.AddRange({"https://download.mcbbs.net/maven/com/mumfrey/liteloader/1.5.2/liteloader-1.5.2.jar",
-                        '                  "https://bmclapi2.bangbang93.com/maven/com/mumfrey/liteloader/1.5.2/liteloader-1.5.2.jar"})
                         Address.Add("https://dl.liteloader.com/redist/1.5.2/liteloader-installer-1.5.2-01.jar")
                     Case Else
                         Throw New NotSupportedException("未知的 Minecraft 版本（" & DownloadInfo.Inherit & "）")
                 End Select
             Else
-                'BMCLAPI 源下载的是安装后的 Jar，而不是 Installer，故无法使用
-                ''BMCLAPI 源
-                'If DownloadInfo.IsPreview Then
-                '    Address.AddRange({"https://download.mcbbs.net/maven/com/mumfrey/liteloader/" & DownloadInfo.Inherit & "-SNAPSHOT/liteloader-" & DownloadInfo.Inherit & "-SNAPSHOT.jar",
-                '                      "https://bmclapi2.bangbang93.com/maven/com/mumfrey/liteloader/" & DownloadInfo.Inherit & "-SNAPSHOT/liteloader-" & DownloadInfo.Inherit & "-SNAPSHOT.jar"})
-                'Else
-                '    Address.AddRange({"https://download.mcbbs.net/maven/com/mumfrey/liteloader/" & DownloadInfo.Inherit & "/liteloader-" & DownloadInfo.Inherit & ".jar",
-                '                      "https://bmclapi2.bangbang93.com/maven/com/mumfrey/liteloader/" & DownloadInfo.Inherit & "/liteloader-" & DownloadInfo.Inherit & ".jar"})
-                'End If
                 '官方源
                 Address.Add("http://jenkins.liteloader.com/job/LiteLoaderInstaller%20" & DownloadInfo.Inherit & "/lastSuccessfulBuild/artifact/" & If(DownloadInfo.Inherit = "1.8", "ant/dist/", "build/libs/") & DownloadInfo.FileName)
             End If
@@ -1097,15 +1082,14 @@ Retry:
             Dim Loaders As New List(Of LoaderBase)
             '获取下载地址
             Loaders.Add(New LoaderTask(Of DlForgeVersionEntry, List(Of NetFile))("获取下载地址",
-                                                            Sub(Task As LoaderTask(Of DlForgeVersionEntry, List(Of NetFile)))
-                                                                Dim Files As New List(Of NetFile)
-                                                                Files.Add(New NetFile({
-                                                                        "https://download.mcbbs.net/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                                                                        "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                                                                        "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
-                                                                    }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
-                                                                Task.Output = Files
-                                                            End Sub) With {.ProgressWeight = 0.1, .Show = False})
+            Sub(Task As LoaderTask(Of DlForgeVersionEntry, List(Of NetFile)))
+                Dim Files As New List(Of NetFile)
+                Files.Add(New NetFile({
+                    "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
+                    "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
+                }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
+                Task.Output = Files
+            End Sub) With {.ProgressWeight = 0.1, .Show = False})
             '下载
             Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile)) With {.ProgressWeight = 6})
 
@@ -1123,7 +1107,7 @@ Retry:
 
     Private Sub ForgeInjector(Target As String, Task As LoaderTask(Of Boolean, Boolean), McFolder As String, UseJavaWrapper As Boolean)
         '选择 Java
-        Dim Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
+        Dim Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 60))
         If Java Is Nothing Then
             If Not JavaDownloadConfirm("Java 8 或更高版本") Then Throw New Exception("由于未找到 Java，已取消安装。")
             '开始自动下载
@@ -1133,7 +1117,7 @@ Retry:
                 Thread.Sleep(10)
             Loop
             '检查下载结果
-            Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
+            Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 60))
             If Task.IsAborted Then Exit Sub
             If Java Is Nothing Then Throw New Exception("由于未找到 Java，已取消安装。")
         End If
@@ -1160,50 +1144,52 @@ Retry:
             Dim LastResults As New Queue(Of String)
             Using outputWaitHandle As New AutoResetEvent(False)
                 Using errorWaitHandle As New AutoResetEvent(False)
-                    AddHandler process.OutputDataReceived, Function(sender, e)
-                                                               Try
-                                                                   If e.Data Is Nothing Then
-                                                                       outputWaitHandle.[Set]()
-                                                                   Else
-                                                                       LastResults.Enqueue(e.Data)
-                                                                       If LastResults.Count > 100 Then LastResults.Dequeue()
-                                                                       ForgeInjectorLine(e.Data, Task)
-                                                                   End If
-                                                               Catch ex As ObjectDisposedException
-                                                               Catch ex As Exception
-                                                                   Log(ex, "读取 Forge 安装器信息失败")
-                                                               End Try
-                                                               Try
-                                                                   If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                                                       Log("[Installer] 由于任务取消，已中止 Forge 安装")
-                                                                       process.Kill()
-                                                                   End If
-                                                               Catch
-                                                               End Try
-                                                               Return Nothing
-                                                           End Function
-                    AddHandler process.ErrorDataReceived, Function(sender, e)
-                                                              Try
-                                                                  If e.Data Is Nothing Then
-                                                                      errorWaitHandle.[Set]()
-                                                                  Else
-                                                                      LastResults.Enqueue(e.Data)
-                                                                      If LastResults.Count > 100 Then LastResults.Dequeue()
-                                                                      ForgeInjectorLine(e.Data, Task)
-                                                                  End If
-                                                              Catch ex As ObjectDisposedException
-                                                              Catch ex As Exception
-                                                                  Log(ex, "读取 Forge 安装器错误信息失败")
-                                                              End Try
-                                                              Try
-                                                                  If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                                                      Log("[Installer] 由于任务取消，已中止 Forge 安装")
-                                                                      process.Kill()
-                                                                  End If
-                                                              Catch
-                                                              End Try
-                                                              Return Nothing
-                                                          End Function
+                    AddHandler process.OutputDataReceived,
+                    Function(sender, e)
+                        Try
+                            If e.Data Is Nothing Then
+                                outputWaitHandle.[Set]()
+                            Else
+                                LastResults.Enqueue(e.Data)
+                                If LastResults.Count > 100 Then LastResults.Dequeue()
+                                ForgeInjectorLine(e.Data, Task)
+                            End If
+                        Catch ex As ObjectDisposedException
+                        Catch ex As Exception
+                            Log(ex, "读取 Forge 安装器信息失败")
+                        End Try
+                        Try
+                            If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
+                                Log("[Installer] 由于任务取消，已中止 Forge 安装")
+                                process.Kill()
+                            End If
+                        Catch
+                        End Try
+                        Return Nothing
+                    End Function
+                    AddHandler process.ErrorDataReceived,
+                    Function(sender, e)
+                        Try
+                            If e.Data Is Nothing Then
+                                errorWaitHandle.[Set]()
+                            Else
+                                LastResults.Enqueue(e.Data)
+                                If LastResults.Count > 100 Then LastResults.Dequeue()
+                                ForgeInjectorLine(e.Data, Task)
+                            End If
+                        Catch ex As ObjectDisposedException
+                        Catch ex As Exception
+                            Log(ex, "读取 Forge 安装器错误信息失败")
+                        End Try
+                        Try
+                            If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
+                                Log("[Installer] 由于任务取消，已中止 Forge 安装")
+                                process.Kill()
+                            End If
+                        Catch
+                        End Try
+                        Return Nothing
+                    End Function
                     process.Start()
                     process.BeginOutputReadLine()
                     process.BeginErrorReadLine()
@@ -1321,8 +1307,7 @@ Retry:
                 '添加主文件
                 Dim Files As New List(Of NetFile) From {New NetFile({
                     "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                    "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                    "https://download.mcbbs.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
+                    "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
                 }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
                 Task.Output = Files
             End Sub) With {.ProgressWeight = 0.5, .Show = False})
@@ -1650,7 +1635,7 @@ Retry:
         RunInNewThread(Sub()
                            Try
                                Log("[Download] 刷新 Forge 推荐版本缓存开始")
-                               Dim Result As String = NetGetCodeByDownload({"https://bmclapi2.bangbang93.com/forge/promos", "https://download.mcbbs.net/forge/promos"})
+                               Dim Result As String = NetGetCodeByDownload("https://bmclapi2.bangbang93.com/forge/promos")
                                If Result.Length < 1000 Then Throw New Exception("获取的结果过短（" & Result & "）")
                                Dim ResultJson As JContainer = GetJson(Result)
                                '获取所有推荐版本列表
@@ -1721,7 +1706,6 @@ Retry:
             '下载
             'BMCLAPI 不支持 Fabric Installer 下载
             Dim Address As New List(Of String)
-            'Address.Add(Url.Replace("maven.fabricmc.net", "download.mcbbs.net/maven"))
             Address.Add(Url)
             Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile) From {New NetFile(Address.ToArray, Target, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
             '启动
@@ -1759,7 +1743,7 @@ Retry:
                                                                 Task.Progress = 0.5
                                                                 '构造文件请求
                                                                 Task.Output = New List(Of NetFile) From {New NetFile({
-                                                                    "https://download.mcbbs.net/fabric-meta/v2/versions/loader/" & MinecraftName & "/" & FabricVersion & "/profile/json",
+                                                                    "https://bmclapi2.bangbang93.com/fabric-meta/v2/versions/loader/" & MinecraftName & "/" & FabricVersion & "/profile/json",
                                                                     "https://meta.fabricmc.net/v2/versions/loader/" & MinecraftName & "/" & FabricVersion & "/profile/json"
                                                                 }, VersionFolder & Id & ".json", New FileChecker(IsJson:=True))}
                                                                 '新建 mods 文件夹

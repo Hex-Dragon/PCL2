@@ -129,6 +129,12 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 314 Then 'Snapshot 2.6.14
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 MC 下载，尝试解决各种导致 MC 下载失败的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "由于 MCBBS 关站，移除其相关内容"))
+            FeatureCount += 17
+            BugCount += 16
+        End If
         If LastVersion < 312 Then 'Snapshot 2.6.13
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动 Forge 1.18.3+ 的 Bug"))
             FeatureCount += 6
@@ -906,7 +912,7 @@ Public Class FormMain
                     Hint("若要安装 Mod，请先选择一个可以安装 Mod 的版本！")
                 ElseIf Not (PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod) Then
                     '未处于 Mod 管理页面
-                    If MyMsgBox($"是否要将这些文件作为 Mod 安装到 {TargetVersion.Name}？", "Mod 安装确认", "确定", "取消") = 1 Then GoTo Install
+                    If MyMsgBox($"是否要将这{If(FilePathList.Count = 1, "个", "些")}文件作为 Mod 安装到 {TargetVersion.Name}？", "Mod 安装确认", "确定", "取消") = 1 Then GoTo Install
                 Else
                     '处于 Mod 管理页面
 Install:
@@ -994,7 +1000,6 @@ Install:
                 Left -= 10000
                 ShowInTaskbar = False
                 Visibility = Visibility.Hidden
-                'SetWindowLong(Handle, GWL_EXSTYLE, GetWindowLong(Handle, GWL_EXSTYLE) Or WS_EX_TOOLWINDOW)
                 Log("[System] 窗口已隐藏，位置：(" & Left & "," & Top & ")")
             Else
                 '取消隐藏
@@ -1017,16 +1022,9 @@ Install:
                     Topmost = False
                     SetForegroundWindow(Handle)
                     Focus()
-                    'ShowWindow(Handle, 1) 'SW_RESTORE
-                    'SetWindowPos(Handle, 0, 0, 0, 0, 0, 3) 'InsertAfter: TOP, NOMOVE & NOSIZE
-                    'SetFocus(Handle)
                     Log("[System] 窗口已置顶，位置：(" & Left & ", " & Top & "), " & Width & " x " & Height)
                 End Sub)
     End Sub
-    'Private Declare Function SetFocus Lib "user32" (hWnd As IntPtr) As IntPtr
-    'Private Declare Function SetWindowPos Lib "user32" (hWnd As IntPtr, hWndInsertAfter As IntPtr, x As Integer, y As Integer, cx As Integer, cy As Integer, flags As UInteger) As Boolean
-    'Private Declare Function AttachThreadInput Lib "user32" (attachFrom As IntPtr, attachTo As IntPtr, isAttach As Boolean) As Boolean
-    'Private Declare Function SendMessage Lib "user32" (hWnd As IntPtr, msg As UInteger, wParam As Long, lParam As Long) As IntPtr
 
 #End Region
 
@@ -1573,7 +1571,11 @@ Install:
     ''' </summary>
     Public Sub BackToTop() Handles BtnExtraBack.Click
         Dim RealScroll As MyScrollViewer = BtnExtraBack_GetRealChild()
-        RealScroll.PerformVerticalOffsetDelta(-RealScroll.VerticalOffset)
+        If RealScroll IsNot Nothing Then
+            RealScroll.PerformVerticalOffsetDelta(-RealScroll.VerticalOffset)
+        Else
+            Log("[UI] 无法返回顶部，未找到合适的 RealScroll", LogLevel.Hint)
+        End If
     End Sub
     Private Function BtnExtraBack_ShowCheck() As Boolean
         Dim RealScroll As MyScrollViewer = BtnExtraBack_GetRealChild()
@@ -1581,9 +1583,7 @@ Install:
     End Function
     Private Function BtnExtraBack_GetRealChild() As MyScrollViewer
         If PanMainRight.Child Is Nothing OrElse TypeOf PanMainRight.Child IsNot MyPageRight Then Return Nothing
-        Dim Scroll = CType(PanMainRight.Child, MyPageRight).PanScroll
-        If Scroll Is Nothing OrElse Scroll.Visibility <> Visibility.Visible Then Return Nothing
-        Return Scroll
+        Return CType(PanMainRight.Child, MyPageRight).PanScroll
     End Function
 
 #End Region
