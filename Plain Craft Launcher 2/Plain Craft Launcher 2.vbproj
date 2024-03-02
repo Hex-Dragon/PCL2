@@ -913,5 +913,8 @@
     <Resource Include="Images\Icons\Disabled.png" />
     <Resource Include="Images\Icons\Unavaliable.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\MCBBS.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

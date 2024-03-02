@@ -526,7 +526,7 @@ Public Module ModDownloadLib
                 '官方源
                 Dim PageData As String
                 Try
-                    PageData = NetGetCodeByClient("https://optifine.net/adloadx?f=" & DownloadInfo.NameFile, New UTF8Encoding(False), 15000, "text/html")
+                    PageData = NetGetCodeByClient("https://optifine.net/adloadx?f=" & DownloadInfo.NameFile, New UTF8Encoding(False), 15000, "text/html", True)
                     Task.Progress = 0.8
                     Sources.Add("https://optifine.net/" & RegexSearch(PageData, "downloadx\?f=[^""']+")(0))
                     Log("[Download] OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址：" & Sources(0))
@@ -691,7 +691,7 @@ Retry:
             '官方源
             Dim PageData As String
             Try
-                PageData = NetGetCodeByClient("https://optifine.net/adloadx?f=" & DownloadInfo.NameFile, New UTF8Encoding(False), 15000, "text/html")
+                PageData = NetGetCodeByClient("https://optifine.net/adloadx?f=" & DownloadInfo.NameFile, New UTF8Encoding(False), 15000, "text/html", True)
                 Task.Progress = 0.8
                 Sources.Add("https://optifine.net/" & RegexSearch(PageData, "downloadx\?f=[^""']+")(0))
                 Log("[Download] OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址：" & Sources(0))
@@ -1317,206 +1317,207 @@ Retry:
         If Version.Split(".")(0) >= 20 Then
             Log("[Download] 检测为新版 Forge：" & Version)
             Dim Libs As List(Of McLibToken) = Nothing
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Mod 加载器支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                                                                                           Task.Output = New List(Of NetFile)
-                                                                                           Dim Installer As ZipArchive = Nothing
-                                                                                           Try
-                                                                                               '解压并获取、合并两个 Json 的信息
-                                                                                               Installer = New ZipArchive(New FileStream(InstallerAddress, FileMode.Open))
-                                                                                               Task.Progress = 0.2
-                                                                                               Dim Json As JObject = GetJson(ReadFile(Installer.GetEntry("install_profile.json").Open))
-                                                                                               Dim Json2 As JObject = GetJson(ReadFile(Installer.GetEntry("version.json").Open))
-                                                                                               Json.Merge(Json2)
-                                                                                               '获取 Lib 下载信息
-                                                                                               Libs = McLibListGetWithJson(Json, True)
-                                                                                               '添加 Mappings 下载信息
-                                                                                               If Json("data") IsNot Nothing AndAlso Json("data")("MOJMAPS") IsNot Nothing Then
-                                                                                                   '下载原版 Json 文件
-                                                                                                   Task.Progress = 0.4
-                                                                                                   Dim RawJson As JObject = GetJson(NetGetCodeByDownload(DlSourceLauncherOrMetaGet(DlClientListGet(Inherit)), IsJson:=True))
-                                                                                                   '[net.minecraft:client:1.17.1-20210706.113038:mappings@txt] 或 @tsrg]
-                                                                                                   Dim OriginalName As String = Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Split("@")(0)
-                                                                                                   Dim Address = McLibGet(OriginalName).Replace(".jar", "-mappings." & Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Split("@")(1))
-                                                                                                   Libs.Add(New McLibToken With {.IsJumpLoader = False, .IsNatives = False, .LocalPath = Address, .OriginalName = OriginalName,
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Mod 加载器支持库文件",
+            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+                Task.Output = New List(Of NetFile)
+                Dim Installer As ZipArchive = Nothing
+                Try
+                    '解压并获取、合并两个 Json 的信息
+                    Installer = New ZipArchive(New FileStream(InstallerAddress, FileMode.Open))
+                    Task.Progress = 0.2
+                    Dim Json As JObject = GetJson(ReadFile(Installer.GetEntry("install_profile.json").Open))
+                    Dim Json2 As JObject = GetJson(ReadFile(Installer.GetEntry("version.json").Open))
+                    Json.Merge(Json2)
+                    '获取 Lib 下载信息
+                    Libs = McLibListGetWithJson(Json, True)
+                    '添加 Mappings 下载信息
+                    If Json("data") IsNot Nothing AndAlso Json("data")("MOJMAPS") IsNot Nothing Then
+                        '下载原版 Json 文件
+                        Task.Progress = 0.4
+                        Dim RawJson As JObject = GetJson(NetGetCodeByDownload(DlSourceLauncherOrMetaGet(DlClientListGet(Inherit)), IsJson:=True))
+                        '[net.minecraft:client:1.17.1-20210706.113038:mappings@txt] 或 @tsrg]
+                        Dim OriginalName As String = Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Split("@")(0)
+                        Dim Address = McLibGet(OriginalName).Replace(".jar", "-mappings." & Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Split("@")(1))
+                        Libs.Add(New McLibToken With {.IsJumpLoader = False, .IsNatives = False, .LocalPath = Address, .OriginalName = OriginalName,
                                                                                                             .Url = RawJson("downloads")("client_mappings")("url"), .Size = RawJson("downloads")("client_mappings")("size"), .SHA1 = RawJson("downloads")("client_mappings")("sha1")})
-                                                                                                   Log("[Download] 需要下载 Mappings：" & Address)
-                                                                                               End If
-                                                                                               Task.Progress = 0.8
-                                                                                               '去除其中的原始 Forge 项
-                                                                                               For i = 0 To Libs.Count - 1
-                                                                                                   If Libs(i).LocalPath.EndsWith("forge-" & Inherit & "-" & Version & ".jar") OrElse
+                        Log("[Download] 需要下载 Mappings：" & Address)
+                    End If
+                    Task.Progress = 0.8
+                    '去除其中的原始 Forge 项
+                    For i = 0 To Libs.Count - 1
+                        If Libs(i).LocalPath.EndsWith("forge-" & Inherit & "-" & Version & ".jar") OrElse
                                                                                                       Libs(i).LocalPath.EndsWith("forge-" & Inherit & "-" & Version & "-client.jar") Then
-                                                                                                       Log("[Download] 已从待下载 Forge 支持库中移除：" & Libs(i).LocalPath, LogLevel.Debug)
-                                                                                                       Libs.RemoveAt(i)
-                                                                                                       Exit For
-                                                                                                   End If
-                                                                                               Next
-                                                                                               Task.Output = McLibFixFromLibToken(Libs, PathMcFolder)
-                                                                                           Catch ex As Exception
-                                                                                               Throw New Exception("获取新版 Forge 支持库列表失败", ex)
-                                                                                           Finally
-                                                                                               '释放文件
-                                                                                               If Installer IsNot Nothing Then Installer.Dispose()
-                                                                                           End Try
-                                                                                       End Sub) With {.ProgressWeight = 2})
+                            Log("[Download] 已从待下载 Forge 支持库中移除：" & Libs(i).LocalPath, LogLevel.Debug)
+                            Libs.RemoveAt(i)
+                            Exit For
+                        End If
+                    Next
+                    Task.Output = McLibFixFromLibToken(Libs, PathMcFolder)
+                Catch ex As Exception
+                    Throw New Exception("获取新版 Forge 支持库列表失败", ex)
+                Finally
+                    '释放文件
+                    If Installer IsNot Nothing Then Installer.Dispose()
+                End Try
+            End Sub) With {.ProgressWeight = 2})
             Loaders.Add(New LoaderDownload("下载 Mod 加载器支持库文件", New List(Of NetFile)) With {.ProgressWeight = 12})
             Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("获取 Mod 下载器支持库文件",
-                                                                         Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
+            Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
 #Region "Forge 文件"
-                                                                             If IsCustomFolder Then
-                                                                                 For Each LibFile As McLibToken In Libs
-                                                                                     Dim RealPath As String = LibFile.LocalPath.Replace(PathMcFolder, McFolder)
-                                                                                     If Not File.Exists(RealPath) Then
-                                                                                         Directory.CreateDirectory(IO.Path.GetDirectoryName(RealPath))
-                                                                                         CopyFile(LibFile.LocalPath, RealPath)
-                                                                                     End If
-                                                                                     If ModeDebug Then Log("[Download] 复制的 Forge 支持库文件：" & LibFile.LocalPath)
-                                                                                 Next
-                                                                             End If
+                If IsCustomFolder Then
+                    For Each LibFile As McLibToken In Libs
+                        Dim RealPath As String = LibFile.LocalPath.Replace(PathMcFolder, McFolder)
+                        If Not File.Exists(RealPath) Then
+                            Directory.CreateDirectory(IO.Path.GetDirectoryName(RealPath))
+                            CopyFile(LibFile.LocalPath, RealPath)
+                        End If
+                        If ModeDebug Then Log("[Download] 复制的 Forge 支持库文件：" & LibFile.LocalPath)
+                    Next
+                End If
 #End Region
 #Region "原版文件"
-                                                                             '等待原版文件下载完成
-                                                                             If ClientDownloadLoader Is Nothing Then Exit Sub
-                                                                             Dim TargetLoaders As List(Of LoaderBase) =
+                '等待原版文件下载完成
+                If ClientDownloadLoader Is Nothing Then Exit Sub
+                Dim TargetLoaders As List(Of LoaderBase) =
                                                                                 ClientDownloadLoader.GetLoaderList.Where(Function(l) l.Name = McDownloadClientLibName OrElse l.Name = McDownloadClientJsonName).
                                                                                 Where(Function(l) l.State <> LoadState.Finished).ToList
-                                                                             If TargetLoaders.Count > 0 Then Log("[Download] Forge 安装正在等待原版文件下载完成")
-                                                                             Do While TargetLoaders.Count > 0 AndAlso Not Task.IsAborted
-                                                                                 TargetLoaders = TargetLoaders.Where(Function(l) l.State <> LoadState.Finished).ToList
-                                                                                 Thread.Sleep(50)
-                                                                             Loop
-                                                                             If Task.IsAborted Then Exit Sub
-                                                                             '拷贝原版文件
-                                                                             If Not IsCustomFolder Then Exit Sub
-                                                                             SyncLock VanillaSyncLock
-                                                                                 Dim ClientName As String = GetFolderNameFromPath(ClientFolder)
-                                                                                 Directory.CreateDirectory(McFolder & "versions\" & Inherit)
-                                                                                 If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".json") Then
-                                                                                     CopyFile(ClientFolder & ClientName & ".json", McFolder & "versions\" & Inherit & "\" & Inherit & ".json")
-                                                                                 End If
-                                                                                 If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".jar") Then
-                                                                                     CopyFile(ClientFolder & ClientName & ".jar", McFolder & "versions\" & Inherit & "\" & Inherit & ".jar")
-                                                                                 End If
-                                                                             End SyncLock
+                If TargetLoaders.Count > 0 Then Log("[Download] Forge 安装正在等待原版文件下载完成")
+                Do While TargetLoaders.Count > 0 AndAlso Not Task.IsAborted
+                    TargetLoaders = TargetLoaders.Where(Function(l) l.State <> LoadState.Finished).ToList
+                    Thread.Sleep(50)
+                Loop
+                If Task.IsAborted Then Exit Sub
+                '拷贝原版文件
+                If Not IsCustomFolder Then Exit Sub
+                SyncLock VanillaSyncLock
+                    Dim ClientName As String = GetFolderNameFromPath(ClientFolder)
+                    Directory.CreateDirectory(McFolder & "versions\" & Inherit)
+                    If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".json") Then
+                        CopyFile(ClientFolder & ClientName & ".json", McFolder & "versions\" & Inherit & "\" & Inherit & ".json")
+                    End If
+                    If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".jar") Then
+                        CopyFile(ClientFolder & ClientName & ".jar", McFolder & "versions\" & Inherit & "\" & Inherit & ".jar")
+                    End If
+                End SyncLock
 #End Region
-                                                                         End Sub) With {.ProgressWeight = 0.1, .Show = False})
+            End Sub) With {.ProgressWeight = 0.1, .Show = False})
             Loaders.Add(New LoaderTask(Of Boolean, Boolean)("安装 Mod 加载器（方式 A）",
-                                                            Sub(Task As LoaderTask(Of Boolean, Boolean))
-                                                                Dim Installer As ZipArchive = Nothing
-                                                                Try
-                                                                    Log("[Download] 开始进行新版方式 Forge 安装：" & InstallerAddress)
-                                                                    '记录当前文件夹列表（在新建目标文件夹之前）
-                                                                    Dim OldList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
+            Sub(Task As LoaderTask(Of Boolean, Boolean))
+                Dim Installer As ZipArchive = Nothing
+                Try
+                    Log("[Download] 开始进行新版方式 Forge 安装：" & InstallerAddress)
+                    '记录当前文件夹列表（在新建目标文件夹之前）
+                    Dim OldList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
                                                                         Select(Function(i) i.FullName).ToList()
-                                                                    '解压并获取信息
-                                                                    Installer = New ZipArchive(New FileStream(InstallerAddress, FileMode.Open))
-                                                                    Dim Json As JObject = GetJson(ReadFile(Installer.GetEntry("install_profile.json").Open))
-                                                                    '新建目标版本文件夹
-                                                                    Directory.CreateDirectory(VersionFolder)
-                                                                    Task.Progress = 0.04
-                                                                    '释放 launcher_installer.json
-                                                                    McFolderLauncherProfilesJsonCreate(McFolder)
-                                                                    Task.Progress = 0.05
-                                                                    '运行 Forge 安装器
-                                                                    Dim UseJavaWrapper As Boolean = True
+                    '解压并获取信息
+                    Installer = New ZipArchive(New FileStream(InstallerAddress, FileMode.Open))
+                    Dim Json As JObject = GetJson(ReadFile(Installer.GetEntry("install_profile.json").Open))
+                    '新建目标版本文件夹
+                    Directory.CreateDirectory(VersionFolder)
+                    Task.Progress = 0.04
+                    '释放 launcher_installer.json
+                    McFolderLauncherProfilesJsonCreate(McFolder)
+                    Task.Progress = 0.05
+                    '运行 Forge 安装器
+                    Dim UseJavaWrapper As Boolean = True
 Retry:
-                                                                    Try
-                                                                        '释放 Forge 注入器
-                                                                        WriteFile(PathTemp & "Cache\forge_installer.jar", GetResources("ForgeInstaller"))
-                                                                        Task.Progress = 0.06
-                                                                        '运行注入器
-                                                                        ForgeInjector(InstallerAddress, Task, McFolder, UseJavaWrapper)
-                                                                        Task.Progress = 0.97
-                                                                    Catch ex As Exception
-                                                                        If UseJavaWrapper Then
-                                                                            Log(ex, "使用 JavaWrapper 安装 Forge 失败，将不使用 JavaWrapper 并重试")
-                                                                            UseJavaWrapper = False
-                                                                            GoTo Retry
-                                                                        Else
-                                                                            Throw New Exception("运行 Forge 安装器失败", ex)
-                                                                        End If
-                                                                    End Try
-                                                                    '拷贝新增的版本 Json
-                                                                    Dim DeltaList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
+                    Try
+                        '释放 Forge 注入器
+                        WriteFile(PathTemp & "Cache\forge_installer.jar", GetResources("ForgeInstaller"))
+                        Task.Progress = 0.06
+                        '运行注入器
+                        ForgeInjector(InstallerAddress, Task, McFolder, UseJavaWrapper)
+                        Task.Progress = 0.97
+                    Catch ex As Exception
+                        If UseJavaWrapper Then
+                            Log(ex, "使用 JavaWrapper 安装 Forge 失败，将不使用 JavaWrapper 并重试")
+                            UseJavaWrapper = False
+                            GoTo Retry
+                        Else
+                            Throw New Exception("运行 Forge 安装器失败", ex)
+                        End If
+                    End Try
+                    '拷贝新增的版本 Json
+                    Dim DeltaList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
                                                                         SkipWhile(Function(i) OldList.Contains(i.FullName)).ToList()
-                                                                    If DeltaList.Count > 1 Then
-                                                                        '它可能和 OptiFine 安装同时运行，导致增加的文件不止一个（这导致了 #151）
-                                                                        '也可能是因为 Forge 安装器的 Bug，生成了一个名字错误的文件夹，所以需要检查文件夹是否为空
-                                                                        DeltaList = DeltaList.Where(Function(l) l.Name.Contains("forge") AndAlso l.EnumerateFiles.Any).ToList
-                                                                    End If
-                                                                    If DeltaList.Count = 1 Then '如果没有新增文件夹，那么预测的文件夹名就是正确的
-                                                                        Dim JsonFile As FileInfo = DeltaList(0).EnumerateFiles.First()
-                                                                        WriteFile(VersionFolder & Id & ".json", ReadFile(JsonFile.FullName))
-                                                                    End If
-                                                                    '新建 mods 文件夹
-                                                                    Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
-                                                                Catch ex As Exception
-                                                                    Throw New Exception("安装新 Forge 版本失败", ex)
-                                                                Finally
-                                                                    '清理文件
-                                                                    Try
-                                                                        If Installer IsNot Nothing Then Installer.Dispose()
-                                                                        If File.Exists(InstallerAddress) Then File.Delete(InstallerAddress)
-                                                                    Catch ex As Exception
-                                                                        Log(ex, "安装 Forge 清理文件时出错")
-                                                                    End Try
-                                                                End Try
-                                                            End Sub) With {.ProgressWeight = 10})
+                    If DeltaList.Count > 1 Then
+                        '它可能和 OptiFine 安装同时运行，导致增加的文件不止一个（这导致了 #151）
+                        '也可能是因为 Forge 安装器的 Bug，生成了一个名字错误的文件夹，所以需要检查文件夹是否为空
+                        DeltaList = DeltaList.Where(Function(l) l.Name.Contains("forge") AndAlso l.EnumerateFiles.Any).ToList
+                    End If
+                    If DeltaList.Count = 1 Then '如果没有新增文件夹，那么预测的文件夹名就是正确的
+                        Dim JsonFile As FileInfo = DeltaList(0).EnumerateFiles.First()
+                        WriteFile(VersionFolder & Id & ".json", ReadFile(JsonFile.FullName))
+                    End If
+                    '新建 mods 文件夹
+                    Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
+                Catch ex As Exception
+                    Throw New Exception("安装新 Forge 版本失败", ex)
+                Finally
+                    '清理文件
+                    Try
+                        If Installer IsNot Nothing Then Installer.Dispose()
+                        If File.Exists(InstallerAddress) Then File.Delete(InstallerAddress)
+                    Catch ex As Exception
+                        Log(ex, "安装 Forge 清理文件时出错")
+                    End Try
+                End Try
+            End Sub) With {.ProgressWeight = 10})
         Else
             Log("[Download] 检测为非新版 Forge：" & Version)
             Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("安装 Mod 加载器（方式 B）",
-                                                            Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
-                                                                Dim Installer As ZipArchive = Nothing
-                                                                Try
-                                                                    '解压并获取信息
-                                                                    Installer = New ZipArchive(New FileStream(InstallerAddress, FileMode.Open))
-                                                                    Task.Progress = 0.2
-                                                                    Dim Json As JObject = GetJson(ReadFile(Installer.GetEntry("install_profile.json").Open))
-                                                                    Task.Progress = 0.4
-                                                                    '新建版本文件夹
-                                                                    Directory.CreateDirectory(VersionFolder)
-                                                                    Task.Progress = 0.5
-                                                                    If Json("install") Is Nothing Then
-                                                                        '中版格式
-                                                                        Log("[Download] 进行中版方式安装：" & InstallerAddress)
-                                                                        '建立 Json 文件
-                                                                        Dim JsonVersion As JObject = GetJson(ReadFile(Installer.GetEntry(Json("json").ToString.TrimStart("/")).Open))
-                                                                        JsonVersion("id") = Id
-                                                                        WriteFile(VersionFolder & Id & ".json", JsonVersion.ToString)
-                                                                        Task.Progress = 0.6
-                                                                        '解压支持库文件
-                                                                        Installer.Dispose()
-                                                                        ExtractFile(InstallerAddress, InstallerAddress & "_unrar\")
-                                                                        CopyDirectory(InstallerAddress & "_unrar\maven\", McFolder & "libraries\")
-                                                                        DeleteDirectory(InstallerAddress & "_unrar\")
-                                                                    Else
-                                                                        '旧版格式
-                                                                        Log("[Download] 进行旧版方式安装：" & InstallerAddress)
-                                                                        '解压 Jar 文件
-                                                                        Dim JarAddress As String = McLibGet(Json("install")("path"), CustomMcFolder:=McFolder)
-                                                                        If File.Exists(JarAddress) Then File.Delete(JarAddress)
-                                                                        WriteFile(JarAddress, Installer.GetEntry(Json("install")("filePath")).Open)
-                                                                        Task.Progress = 0.9
-                                                                        '建立 Json 文件
-                                                                        Json("versionInfo")("id") = Id
-                                                                        If Json("versionInfo")("inheritsFrom") Is Nothing Then CType(Json("versionInfo"), JObject).Add("inheritsFrom", Inherit)
-                                                                        WriteFile(VersionFolder & Id & ".json", Json("versionInfo").ToString)
-                                                                    End If
-                                                                    '新建 mods 文件夹
-                                                                    Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
-                                                                Catch ex As Exception
-                                                                    Throw New Exception("非新版方式安装 Forge 失败", ex)
-                                                                Finally
-                                                                    Try
-                                                                        '清理文件
-                                                                        If Installer IsNot Nothing Then Installer.Dispose()
-                                                                        If File.Exists(InstallerAddress) Then File.Delete(InstallerAddress)
-                                                                        If Directory.Exists(InstallerAddress & "_unrar\") Then DeleteDirectory(InstallerAddress & "_unrar\")
-                                                                    Catch ex As Exception
-                                                                        Log(ex, "非新版方式安装 Forge 清理文件时出错")
-                                                                    End Try
-                                                                End Try
-                                                            End Sub) With {.ProgressWeight = 1})
+            Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
+                Dim Installer As ZipArchive = Nothing
+                Try
+                    '解压并获取信息
+                    Installer = New ZipArchive(New FileStream(InstallerAddress, FileMode.Open))
+                    Task.Progress = 0.2
+                    Dim Json As JObject = GetJson(ReadFile(Installer.GetEntry("install_profile.json").Open))
+                    Task.Progress = 0.4
+                    '新建版本文件夹
+                    Directory.CreateDirectory(VersionFolder)
+                    Task.Progress = 0.5
+                    If Json("install") Is Nothing Then
+                        '中版格式
+                        Log("[Download] 进行中版方式安装：" & InstallerAddress)
+                        '建立 Json 文件
+                        Dim JsonVersion As JObject = GetJson(ReadFile(Installer.GetEntry(Json("json").ToString.TrimStart("/")).Open))
+                        JsonVersion("id") = Id
+                        WriteFile(VersionFolder & Id & ".json", JsonVersion.ToString)
+                        Task.Progress = 0.6
+                        '解压支持库文件
+                        Installer.Dispose()
+                        ExtractFile(InstallerAddress, InstallerAddress & "_unrar\")
+                        CopyDirectory(InstallerAddress & "_unrar\maven\", McFolder & "libraries\")
+                        DeleteDirectory(InstallerAddress & "_unrar\")
+                    Else
+                        '旧版格式
+                        Log("[Download] 进行旧版方式安装：" & InstallerAddress)
+                        '解压 Jar 文件
+                        Dim JarAddress As String = McLibGet(Json("install")("path"), CustomMcFolder:=McFolder)
+                        If File.Exists(JarAddress) Then File.Delete(JarAddress)
+                        WriteFile(JarAddress, Installer.GetEntry(Json("install")("filePath")).Open)
+                        Task.Progress = 0.9
+                        '建立 Json 文件
+                        Json("versionInfo")("id") = Id
+                        If Json("versionInfo")("inheritsFrom") Is Nothing Then CType(Json("versionInfo"), JObject).Add("inheritsFrom", Inherit)
+                        WriteFile(VersionFolder & Id & ".json", Json("versionInfo").ToString)
+                    End If
+                    '新建 mods 文件夹
+                    Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
+                Catch ex As Exception
+                    Throw New Exception("非新版方式安装 Forge 失败", ex)
+                Finally
+                    Try
+                        '清理文件
+                        If Installer IsNot Nothing Then Installer.Dispose()
+                        If File.Exists(InstallerAddress) Then File.Delete(InstallerAddress)
+                        If Directory.Exists(InstallerAddress & "_unrar\") Then DeleteDirectory(InstallerAddress & "_unrar\")
+                    Catch ex As Exception
+                        Log(ex, "非新版方式安装 Forge 清理文件时出错")
+                    End Try
+                End Try
+            End Sub) With {.ProgressWeight = 1})
             If FixLibrary Then
                 If IsCustomFolder Then Throw New Exception("若需要补全支持库，就不能自定义 MC 文件夹")
                 Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Mod 加载器支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
