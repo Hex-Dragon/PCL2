@@ -97,6 +97,10 @@ Download:
                         Log("[Page] 主页预设：历史上的今天")
                         Url = "https://pclnews.52chye.cn/custom.xaml"
                         GoTo Download
+                    Case 5 'PCL2 更新历史主页
+                        Log("[Page] 主页预设：更新历史主页")
+                        Url = "https://transform.lzimul.top/pcl2hc?from=https://github.com/Hex-Dragon/PCL2/issues"
+                        GoTo Download
                 End Select
         End Select
         RunInUi(Sub() LoadContent(Content))

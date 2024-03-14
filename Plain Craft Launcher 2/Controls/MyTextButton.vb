@@ -23,14 +23,14 @@
     End Property
     Public Shared ReadOnly TextProperty As DependencyProperty =
         DependencyProperty.Register("Text", GetType(String), GetType(MyTextButton), New PropertyMetadata("", Sub(sender As MyTextButton, e As DependencyPropertyChangedEventArgs)
-                                                                                                                 If Not e.OldValue = e.NewValue Then
-                                                                                                                     AniStart({
-                                                                                                                              AaOpacity(sender, -sender.Opacity, 50),
-                                                                                                                              AaCode(Sub() sender.Content = e.NewValue,, True),
-                                                                                                                              AaOpacity(sender, 1, 170)
-                                                                                                                        }, "MyTextButton Text " & sender.Uuid)
-                                                                                                                 End If
-                                                                                                             End Sub))
+        If Not e.OldValue = e.NewValue Then
+        AniStart({
+            AaOpacity(sender, -sender.Opacity, 50),
+            AaCode(Sub() sender.Content = e.NewValue,, True),
+            AaOpacity(sender, 1, 170)
+        }, "MyTextButton Text " & sender.Uuid)
+    End If
+End Sub))
 
     '鼠标事件
 

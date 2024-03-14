@@ -93,9 +93,9 @@
                 ChangeValidateResult(IsSuccessful, True)
             Else
                 RunInNewThread(Sub()
-                                   Thread.Sleep(30)
-                                   RunInUi(Sub() ChangeValidateResult(IsSuccessful, False))
-                               End Sub, "DelayedValidate Change")
+                Thread.Sleep(30)
+                RunInUi(Sub() ChangeValidateResult(IsSuccessful, False))
+                End Sub, "DelayedValidate Change")
             End If
         End If
         '更新错误信息
@@ -104,18 +104,18 @@
                 labWrong.Text = ValidateResult
             Else
                 RunInNewThread(Sub()
-                                   Dim IsFinished As Boolean = False
-                                   Do Until IsFinished
-                                       Thread.Sleep(20)
-                                       RunInUiWait(Sub()
-                                                       If labWrong IsNot Nothing Then
-                                                           labWrong.Text = ValidateResult
-                                                           IsFinished = True
-                                                       End If
-                                                       If Not IsLoaded Then IsFinished = True
-                                                   End Sub)
-                                   Loop
-                               End Sub, "DelayedValidate Text")
+                Dim IsFinished As Boolean = False
+                Do Until IsFinished
+                Thread.Sleep(20)
+                    RunInUiWait(Sub()
+                    If labWrong IsNot Nothing Then
+                    labWrong.Text = ValidateResult
+                    IsFinished = True
+                    End If
+                    If Not IsLoaded Then IsFinished = True
+                    End Sub)
+                Loop
+                End Sub, "DelayedValidate Text")
             End If
         End If
     End Sub
