@@ -10,6 +10,17 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 317 Then 'Release 2.6.15
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法安装 Forge 的 Bug"))
+            FeatureCount += 2
+            BugCount += 2
+        End If
+        If LastVersion < 315 Then 'Release 2.6.14
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 MC 下载，尝试解决各种导致 MC 下载失败的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "由于 MCBBS 关站，移除其相关内容"))
+            FeatureCount += 17
+            BugCount += 16
+        End If
         If LastVersion < 313 Then 'Release 2.6.13
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动 Forge 1.18.3+ 的 Bug"))
             FeatureCount += 6
@@ -129,6 +140,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 316 Then 'Snapshot 2.6.15
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法安装 Forge 的 Bug"))
+            FeatureCount += 2
+            BugCount += 2
+        End If
         If LastVersion < 314 Then 'Snapshot 2.6.14
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 MC 下载，尝试解决各种导致 MC 下载失败的问题"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "由于 MCBBS 关站，移除其相关内容"))

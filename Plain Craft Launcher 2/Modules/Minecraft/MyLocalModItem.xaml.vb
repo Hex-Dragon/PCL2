@@ -59,7 +59,7 @@ RetryStart:
                 Url = Url.Replace("/256/256/", "/64/64/") '#3075：部分 Mod 不存在 64x64 图标，所以重试时不再缩小
             End If
             '下载图片
-            NetDownload(Url, LocalFileAddress & DownloadEnd)
+            NetDownload(Url, LocalFileAddress & DownloadEnd, True)
             Dim LoadError As Exception = Nothing
             RunInUiWait(
             Sub()

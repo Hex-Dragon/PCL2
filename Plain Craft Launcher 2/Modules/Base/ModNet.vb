@@ -28,7 +28,7 @@ Public Module ModNet
     ''' </summary>
     ''' <param name="Url">网页的 Url。</param>
     ''' <param name="Encoding">网页的编码，通常为 UTF-8。</param>
-    Public Function NetGetCodeByClient(Url As String, Encoding As Encoding, Optional Accept As String = "application/json, text/javascript, */*; q=0.01") As String
+    Public Function NetGetCodeByClient(Url As String, Encoding As Encoding, Optional Accept As String = "application/json, text/javascript, */*; q=0.01", Optional UseBrowserUserAgent As Boolean = False) As String
         Dim RetryCount As Integer = 0
         Dim RetryException As Exception = Nothing
         Dim StartTime As Long = GetTimeTick()
@@ -36,15 +36,15 @@ Public Module ModNet
 Retry:
             Select Case RetryCount
                 Case 0 '正常尝试
-                    Return NetGetCodeByClient(Url, Encoding, 10000, Accept)
+                    Return NetGetCodeByClient(Url, Encoding, 10000, Accept, UseBrowserUserAgent)
                 Case 1 '慢速重试
                     Thread.Sleep(500)
-                    Return NetGetCodeByClient(Url, Encoding, 30000, Accept)
+                    Return NetGetCodeByClient(Url, Encoding, 30000, Accept, UseBrowserUserAgent)
                 Case Else '快速重试
                     If GetTimeTick() - StartTime > 5500 Then
                         '若前两次加载耗费 5 秒以上，才进行重试
                         Thread.Sleep(500)
-                        Return NetGetCodeByClient(Url, Encoding, 4000, Accept)
+                        Return NetGetCodeByClient(Url, Encoding, 4000, Accept, UseBrowserUserAgent)
                     Else
                         Throw RetryException
                     End If
@@ -63,7 +63,7 @@ Retry:
             End Select
         End Try
     End Function
-    Public Function NetGetCodeByClient(Url As String, Encoding As Encoding, Timeout As Integer, Accept As String) As String
+    Public Function NetGetCodeByClient(Url As String, Encoding As Encoding, Timeout As Integer, Accept As String, Optional UseBrowserUserAgent As Boolean = False) As String
         Url = SecretCdnSign(Url)
         Log("[Net] 获取客户端网络结果：" & Url & "，最大超时 " & Timeout)
         Dim Request As CookieWebClient
@@ -77,7 +77,7 @@ Retry:
             Request.Headers("Accept") = Accept
             Request.Headers("Accept-Language") = "en-US,en;q=0.5"
             Request.Headers("X-Requested-With") = "XMLHttpRequest"
-            SecretHeadersSign(Url, Request)
+            SecretHeadersSign(Url, Request, UseBrowserUserAgent)
             Return Request.DownloadString(Url)
         Catch ex As Exception
             If ex.GetType.Equals(GetType(WebException)) AndAlso CType(ex, WebException).Status = WebExceptionStatus.Timeout Then
@@ -98,7 +98,7 @@ Retry:
     ''' <param name="Encode">网页的编码，通常为 UTF-8。</param>
     ''' <param name="BackupUrl">如果第一次尝试失败，换用的备用 URL。</param>
     Public Function NetGetCodeByRequestRetry(Url As String, Optional Encode As Encoding = Nothing, Optional Accept As String = "",
-                                             Optional IsJson As Boolean = False, Optional BackupUrl As String = Nothing)
+                                             Optional IsJson As Boolean = False, Optional BackupUrl As String = Nothing, Optional UseBrowserUserAgent As Boolean = False)
         Dim RetryCount As Integer = 0
         Dim RetryException As Exception = Nothing
         Dim StartTime As Long = GetTimeTick()
@@ -106,15 +106,15 @@ Retry:
 Retry:
             Select Case RetryCount
                 Case 0 '正常尝试
-                    Return NetGetCodeByRequestOnce(Url, Encode, 10000, IsJson, Accept)
+                    Return NetGetCodeByRequestOnce(Url, Encode, 10000, IsJson, Accept, UseBrowserUserAgent)
                 Case 1 '慢速重试
                     Thread.Sleep(500)
-                    Return NetGetCodeByRequestOnce(If(BackupUrl, Url), Encode, 30000, IsJson, Accept)
+                    Return NetGetCodeByRequestOnce(If(BackupUrl, Url), Encode, 30000, IsJson, Accept, UseBrowserUserAgent)
                 Case Else '快速重试
                     If GetTimeTick() - StartTime > 5500 Then
                         '若前两次加载耗费 5 秒以上，才进行重试
                         Thread.Sleep(500)
-                        Return NetGetCodeByRequestOnce(If(BackupUrl, Url), Encode, 4000, IsJson, Accept)
+                        Return NetGetCodeByRequestOnce(If(BackupUrl, Url), Encode, 4000, IsJson, Accept, UseBrowserUserAgent)
                     Else
                         Throw RetryException
                     End If
@@ -140,7 +140,7 @@ Retry:
     ''' </summary>
     ''' <param name="Url">网页的 Url。</param>
     ''' <param name="Encode">网页的编码，通常为 UTF-8。</param>
-    Public Function NetGetCodeByRequestMuity(Url As String, Optional Encode As Encoding = Nothing, Optional Accept As String = "", Optional IsJson As Boolean = False)
+    Public Function NetGetCodeByRequestMulty(Url As String, Optional Encode As Encoding = Nothing, Optional Accept As String = "", Optional IsJson As Boolean = False)
         Dim Threads As New List(Of Thread)
         Dim RequestResult = Nothing
         Dim RequestEx As Exception = Nothing
@@ -182,7 +182,7 @@ RequestFinished:
         Loop
         Throw New Exception("未知错误")
     End Function
-    Public Function NetGetCodeByRequestOnce(Url As String, Optional Encode As Encoding = Nothing, Optional Timeout As Integer = 30000, Optional IsJson As Boolean = False, Optional Accept As String = "")
+    Public Function NetGetCodeByRequestOnce(Url As String, Optional Encode As Encoding = Nothing, Optional Timeout As Integer = 30000, Optional IsJson As Boolean = False, Optional Accept As String = "", Optional UseBrowserUserAgent As Boolean = False)
         If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
         Url = SecretCdnSign(Url)
         Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 json", "")}")
@@ -192,7 +192,7 @@ RequestFinished:
             If Url.StartsWith("https", StringComparison.OrdinalIgnoreCase) Then Request.ProtocolVersion = HttpVersion.Version11
             Request.Timeout = Timeout
             Request.Accept = Accept
-            SecretHeadersSign(Url, Request)
+            SecretHeadersSign(Url, Request, UseBrowserUserAgent)
             Using res As HttpWebResponse = Request.GetResponse()
                 Using HttpStream As Stream = res.GetResponseStream()
                     HttpStream.ReadTimeout = Timeout
@@ -220,9 +220,9 @@ RequestFinished:
     ''' 以多线程下载网页文件的方式获取网页源代码。
     ''' </summary>
     ''' <param name="Url">网页的 Url。</param>
-    Public Function NetGetCodeByDownload(Url As String, Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False) As String
+    Public Function NetGetCodeByDownload(Url As String, Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
         Dim Temp As String = PathTemp & "Cache\Code\" & Url.GetHashCode() & "_" & GetUuid()
-        Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile({Url}, Temp, New FileChecker With {.IsJson = IsJson})})
+        Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile({Url}, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
             NewTask.WaitForExitTime(Timeout, TimeoutMessage:="连接服务器超时（" & Url & "）")
             NetGetCodeByDownload = ReadFile(Temp)
@@ -235,9 +235,9 @@ RequestFinished:
     ''' 以多线程下载网页文件的方式获取网页源代码。
     ''' </summary>
     ''' <param name="Urls">网页的 Url 列表。</param>
-    Public Function NetGetCodeByDownload(Urls As String(), Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False) As String
+    Public Function NetGetCodeByDownload(Urls As String(), Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
         Dim Temp As String = PathTemp & "Cache\Code\" & Urls(0).GetHashCode() & "_" & GetUuid()
-        Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile(Urls, Temp, New FileChecker With {.IsJson = IsJson})})
+        Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile(Urls, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
             NewTask.WaitForExitTime(Timeout, TimeoutMessage:="连接服务器超时（第一下载源：" & Urls(0) & "）")
             NetGetCodeByDownload = ReadFile(Temp)
@@ -252,7 +252,7 @@ RequestFinished:
     ''' </summary>
     ''' <param name="Url">网络 Url。</param>
     ''' <param name="LocalFile">下载的本地地址。</param>
-    Public Sub NetDownload(Url As String, LocalFile As String)
+    Public Sub NetDownload(Url As String, LocalFile As String, Optional UseBrowserUserAgent As Boolean = False)
         Log("[Net] 直接下载文件：" & Url)
 
         '初始化
@@ -268,7 +268,11 @@ RequestFinished:
         '下载
         Using Client As New WebClient
             Try
-                Client.Headers(HttpRequestHeader.UserAgent) = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+                If UseBrowserUserAgent Then
+                    Client.Headers(HttpRequestHeader.UserAgent) = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+                Else
+                    Client.Headers(HttpRequestHeader.UserAgent) = "PCL2/" & VersionStandardCode
+                End If
                 Client.Headers(HttpRequestHeader.Referer) = "http://" & VersionCode & ".pcl2.server/"
                 Client.DownloadFile(Url, LocalFile)
             Catch ex As Exception
@@ -369,7 +373,7 @@ RequestFinished:
     ''' <summary>
     ''' 发送一次网络请求并获取返回内容。
     ''' </summary>
-    Public Function NetRequestOnce(Url As String, Method As String, Data As Object, ContentType As String, Optional Timeout As Integer = 25000, Optional Headers As Dictionary(Of String, String) = Nothing, Optional MakeLog As Boolean = True) As String
+    Public Function NetRequestOnce(Url As String, Method As String, Data As Object, ContentType As String, Optional Timeout As Integer = 25000, Optional Headers As Dictionary(Of String, String) = Nothing, Optional MakeLog As Boolean = True, Optional UseBrowserUserAgent As Boolean = False) As String
         If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
         Url = SecretCdnSign(Url)
         If MakeLog Then Log("[Net] 发起网络请求（" & Method & "，" & Url & "），最大超时 " & Timeout)
@@ -392,7 +396,7 @@ RequestFinished:
             End If
             Req.ContentType = ContentType
             Req.Timeout = Timeout
-            SecretHeadersSign(Url, Req)
+            SecretHeadersSign(Url, Req, UseBrowserUserAgent)
             If Url.StartsWith("https", StringComparison.OrdinalIgnoreCase) Then Req.ProtocolVersion = HttpVersion.Version11
             If Method = "POST" OrElse Method = "PUT" Then
                 Req.ContentLength = SendData.Length
@@ -790,6 +794,10 @@ RequestFinished:
         ''' 文件的校验规则。
         ''' </summary>
         Public Check As FileChecker
+        ''' <summary>
+        ''' 下载时是否添加浏览器 UA。
+        ''' </summary>
+        Public UseBrowserUserAgent As Boolean
 
         ''' <summary>
         ''' 上次记速时的时间。
@@ -889,7 +897,7 @@ RequestFinished:
         ''' 新建一个需要下载的文件。
         ''' </summary>
         ''' <param name="LocalPath">包含文件名的本地地址。</param>
-        Public Sub New(Urls As String(), LocalPath As String, Optional Check As FileChecker = Nothing)
+        Public Sub New(Urls As String(), LocalPath As String, Optional Check As FileChecker = Nothing, Optional UseBrowserUserAgent As Boolean = False)
             Dim Sources As New List(Of NetSource)
             Dim Count As Integer = 0
             Urls = Urls.Distinct.ToArray
@@ -900,6 +908,7 @@ RequestFinished:
             Me.Sources = Sources.ToArray
             Me.LocalPath = LocalPath
             Me.Check = Check
+            Me.UseBrowserUserAgent = UseBrowserUserAgent
             Me.LocalName = GetFileNameFromPath(LocalPath)
         End Sub
 
@@ -1030,7 +1039,7 @@ StartThread:
                 'HttpRequest.Proxy = Nothing 'new WebProxy(Ip, Port)
                 HttpRequest.Timeout = Timeout
                 HttpRequest.AddRange(Info.DownloadStart)
-                SecretHeadersSign(Info.Source.Url, HttpRequest)
+                SecretHeadersSign(Info.Source.Url, HttpRequest, UseBrowserUserAgent)
                 Using HttpResponse As HttpWebResponse = HttpRequest.GetResponse()
                     '文件大小校验
                     Dim ThreadFileSize = HttpResponse.ContentLength
@@ -1909,84 +1918,86 @@ Retry:
                     Log(ex, "下载管理启动线程 1 出错", LogLevel.Assert)
                 End Try
             End Sub, "NetManager ThreadStarter Single")
-            RunInNewThread(Sub()
-                               Try
-                                   Dim LastLoopTime As Long
-                                   While True
-                                       LastLoopTime = GetTimeTick()
-                                       '开启新线程
-                                       If Speed < NetTaskSpeedLimitLow OrElse FileRemain > NetTaskThreadLimit Then
-                                           '速度小于下限或剩余文件还贼多，尝试开启线程
-                                           Dim IsSuccess As Boolean = False
-                                           Dim NewThreadCount As Integer
-                                           '确定最大线程追加数
-                                           NewThreadCount = Math.Max(FileRemain, MathClamp(NetTaskThreadCount / 2, 1, 4))
-                                           NewThreadCount = Math.Floor(NewThreadCount / 2) '双线程启用减半
-                                           NewThreadCount = MathClamp(NewThreadCount, 1, NetTaskThreadLimit)
-                                           '循环追加
-                                           Do
-                                               IsSuccess = False
-                                               '启动 Wait 的文件后立即会变成 Connect，导致第二次循环再次调用，所以需要先暂时存储进去……
-                                               '此外为了减少 LockFiles 的占用时间，所以先遍历列表再开始
-                                               Dim FilesWaiting As New List(Of NetFile)
-                                               Dim FilesLoading As New List(Of NetFile)
-                                               SyncLock LockFiles
-                                                   For Each File As NetFile In Files.Values
-                                                       If File.RandomCode Mod 2 = 1 Then Continue For
-                                                       If File.State = NetState.WaitForDownload Then
-                                                           FilesWaiting.Add(File)
-                                                       ElseIf File.State < NetState.Merge Then
-                                                           FilesLoading.Add(File)
-                                                       End If
-                                                   Next
-                                               End SyncLock
-                                               '为文件列表中的文件开始线程
-                                               For Each File As NetFile In FilesWaiting
-                                                   If NewThreadCount = 0 Then Exit For
-                                                   If File.TryBeginThread() Then
-                                                       IsSuccess = True
-                                                       NewThreadCount -= 1
-                                                   End If
-                                               Next
-                                               For Each File As NetFile In FilesLoading
-                                                   If NewThreadCount = 0 Then Exit For
-                                                   If File.TryBeginThread() Then
-                                                       IsSuccess = True
-                                                       NewThreadCount -= 1
-                                                   End If
-                                               Next
-                                           Loop While NewThreadCount > 0 AndAlso IsSuccess
-                                       End If
-                                       '等待直至 120 ms
-                                       Do While GetTimeTick() - LastLoopTime < 120
-                                           Thread.Sleep(10)
-                                       Loop
-                                   End While
-                               Catch ex As Exception
-                                   Log(ex, "下载管理启动线程 2 出错", LogLevel.Assert)
-                               End Try
-                           End Sub, "NetManager ThreadStarter Odd")
-            RunInNewThread(Sub()
-                               Try
-                                   Dim LastLoopTime As Long
-                                   NetTaskSpeedLimitLeftLast = GetTimeTick()
-                                   While True
-                                       Dim TimeNow = GetTimeTick()
-                                       LastLoopTime = TimeNow
-                                       '增加限速余量
-                                       If NetTaskSpeedLimitHigh > 0 Then NetTaskSpeedLimitLeft = NetTaskSpeedLimitHigh / 1000 * (TimeNow - NetTaskSpeedLimitLeftLast)
-                                       NetTaskSpeedLimitLeftLast = TimeNow
-                                       '刷新公开属性
-                                       RefreshStat()
-                                       '等待直至 170 ms
-                                       Do While GetTimeTick() - LastLoopTime < 170
-                                           Thread.Sleep(10)
-                                       Loop
-                                   End While
-                               Catch ex As Exception
-                                   Log(ex, "下载管理刷新线程出错", LogLevel.Assert)
-                               End Try
-                           End Sub, "NetManager StatRefresher")
+            RunInNewThread(
+            Sub()
+                Try
+                    Dim LastLoopTime As Long
+                    While True
+                        LastLoopTime = GetTimeTick()
+                        '开启新线程
+                        If Speed < NetTaskSpeedLimitLow OrElse FileRemain > NetTaskThreadLimit Then
+                            '速度小于下限或剩余文件还贼多，尝试开启线程
+                            Dim IsSuccess As Boolean = False
+                            Dim NewThreadCount As Integer
+                            '确定最大线程追加数
+                            NewThreadCount = Math.Max(FileRemain, MathClamp(NetTaskThreadCount / 2, 1, 4))
+                            NewThreadCount = Math.Floor(NewThreadCount / 2) '双线程启用减半
+                            NewThreadCount = MathClamp(NewThreadCount, 1, NetTaskThreadLimit)
+                            '循环追加
+                            Do
+                                IsSuccess = False
+                                '启动 Wait 的文件后立即会变成 Connect，导致第二次循环再次调用，所以需要先暂时存储进去……
+                                '此外为了减少 LockFiles 的占用时间，所以先遍历列表再开始
+                                Dim FilesWaiting As New List(Of NetFile)
+                                Dim FilesLoading As New List(Of NetFile)
+                                SyncLock LockFiles
+                                    For Each File As NetFile In Files.Values
+                                        If File.RandomCode Mod 2 = 1 Then Continue For
+                                        If File.State = NetState.WaitForDownload Then
+                                            FilesWaiting.Add(File)
+                                        ElseIf File.State < NetState.Merge Then
+                                            FilesLoading.Add(File)
+                                        End If
+                                    Next
+                                End SyncLock
+                                '为文件列表中的文件开始线程
+                                For Each File As NetFile In FilesWaiting
+                                    If NewThreadCount = 0 Then Exit For
+                                    If File.TryBeginThread() Then
+                                        IsSuccess = True
+                                        NewThreadCount -= 1
+                                    End If
+                                Next
+                                For Each File As NetFile In FilesLoading
+                                    If NewThreadCount = 0 Then Exit For
+                                    If File.TryBeginThread() Then
+                                        IsSuccess = True
+                                        NewThreadCount -= 1
+                                    End If
+                                Next
+                                '等待 40 ms：BMCLAPI 部分时候有 20QPS 的限制
+                                Thread.Sleep(40)
+                            Loop While NewThreadCount > 0 AndAlso IsSuccess
+                        End If
+                        '等待 40 ms
+                        Thread.Sleep(40)
+                    End While
+                Catch ex As Exception
+                    Log(ex, "下载管理启动线程 2 出错", LogLevel.Assert)
+                End Try
+            End Sub, "NetManager ThreadStarter Odd")
+            RunInNewThread(
+            Sub()
+                Try
+                    Dim LastLoopTime As Long
+                    NetTaskSpeedLimitLeftLast = GetTimeTick()
+                    While True
+                        Dim TimeNow = GetTimeTick()
+                        LastLoopTime = TimeNow
+                        '增加限速余量
+                        If NetTaskSpeedLimitHigh > 0 Then NetTaskSpeedLimitLeft = NetTaskSpeedLimitHigh / 1000 * (TimeNow - NetTaskSpeedLimitLeftLast)
+                        NetTaskSpeedLimitLeftLast = TimeNow
+                        '刷新公开属性
+                        RefreshStat()
+                        '等待直至 170 ms
+                        Do While GetTimeTick() - LastLoopTime < 170
+                            Thread.Sleep(10)
+                        Loop
+                    End While
+                Catch ex As Exception
+                    Log(ex, "下载管理刷新线程出错", LogLevel.Assert)
+                End Try
+            End Sub, "NetManager StatRefresher")
         End Sub
         Private IsManagerStarted As Boolean = False
 

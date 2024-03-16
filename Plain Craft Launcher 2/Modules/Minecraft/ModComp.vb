@@ -1196,7 +1196,7 @@ Retry:
         ''' </summary>
         ''' <param name="LocalAddress">目标本地文件夹，或完整的文件路径。会自动判断类型。</param>
         Public Function ToNetFile(LocalAddress As String) As NetFile
-            Return New NetFile(DownloadAddress, LocalAddress & If(LocalAddress.EndsWith("\"), FileName, ""))
+            Return New NetFile(DownloadAddress, LocalAddress & If(LocalAddress.EndsWith("\"), FileName, ""), UseBrowserUserAgent:=True)
         End Function
 
         '实例化

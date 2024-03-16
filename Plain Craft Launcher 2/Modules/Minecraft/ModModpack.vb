@@ -439,7 +439,7 @@ Retry:
             '添加下载文件
             FileList.Add(New NetFile(File("downloads").Select(Function(t) t.ToString.Replace("://edge.forgecdn", "://media.forgecdn")).ToArray, '修复 #2390
                                      PathMcFolder & "versions\" & VersionName & "\" & File("path").ToString,
-                                     New FileChecker(ActualSize:=File("fileSize").ToObject(Of Long), Hash:=File("hashes")("sha1").ToString)))
+                                     New FileChecker(ActualSize:=File("fileSize").ToObject(Of Long), Hash:=File("hashes")("sha1").ToString), True))
         Next
         If FileList.Count > 0 Then
             InstallLoaders.Add(New LoaderDownload("下载额外文件", FileList) With {.ProgressWeight = FileList.Count * 1.5}) '每个 Mod 需要 1.5s
