@@ -399,9 +399,7 @@ Public Class FormMain
         '    ChangeWindowMessageFilter(&H233, 1)
         '    ChangeWindowMessageFilter(&H4A, 1)
         '    ChangeWindowMessageFilter(&H49, 1)
-        'End If
-         ChangeWindowMessageFilterEx(hwndDlg, WM_DROPFILES, MSGFLT_ALLOW, NULL);
-         ChangeWindowMessageFilterEx(hwndDlg, 0x0049, MSGFLT_ALLOW, NULL);                                                         
+        'End If                                                  
         '切换到首页
         If Not IsNothing(FrmLaunchLeft.Parent) Then FrmLaunchLeft.SetValue(ContentPresenter.ContentProperty, Nothing)
         If Not IsNothing(FrmLaunchRight.Parent) Then FrmLaunchRight.SetValue(ContentPresenter.ContentProperty, Nothing)
