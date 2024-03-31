@@ -11,14 +11,19 @@
             Log("[Control] 执行自定义事件：" & Type & ", " & Join(Data, ", "))
             Select Case Type
 
-                Case "打开网页"
-                    Data(0) = Data(0).Replace("\", "/")
-                    If Not Data(0).Contains("://") OrElse Data(0).ToLower.StartsWith("file") Then '为了支持更多协议（#2200）
-                        MyMsgBox("EventData 必须为一个网址。" & vbCrLf & "如果想要启动程序，请将 EventType 改为 打开文件。", "事件执行失败")
-                        Exit Sub
+                Case "打开网页", "打开储存库" '你懂的啦，有些人有自己的git储存库。
+                    Dim url As String
+                    If Type = "打开网页" Then
+                        url = Data(0).Replace("\", "/")
+                        If Not Data(0).Contains("://") OrElse Data(0).ToLower.StartsWith("file") Then '为了支持更多协议（#2200）
+                            MyMsgBox("EventData 必须为一个网址。" & vbCrLf & "如果想要启动程序，请将 EventType 改为 打开文件。", "事件执行失败")
+                            Exit Sub
+                        End If
+                    Else
+                        url = "https://github.com/" + Data(0) + "/" + Data(1)
                     End If
                     Hint("正在开启中，请稍候……")
-                    OpenWebsite(Data(0))
+                    OpenWebsite(url)
 
                 Case "打开文件", "打开帮助"
                     RunInThread(Sub()
