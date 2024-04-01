@@ -996,7 +996,7 @@ ExitDataLoad:
         ElseIf Name = "23w13a_or_b" Then
             Return "研究表明玩家喜欢作出选择——越多越好！"
         ElseIf Name = "24w14potato" Then
-            Return "想象一下，你是个马铃薯……恭喜朋友，你是个……毒马铃薯！"
+            Return "想象一下，你是个马铃薯……恭喜朋友，你是个——毒马铃薯！"
         Else
             Return ""
         End If
