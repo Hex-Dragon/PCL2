@@ -995,6 +995,8 @@ ExitDataLoad:
             Return "一次一个方块更新！迎接全新的挖掘、合成与骑乘玩法吧！"
         ElseIf Name = "23w13a_or_b" Then
             Return "研究表明玩家喜欢作出选择——越多越好！"
+        ElseIf Name = "24w14potato" Then
+            Return "我们的有毒块茎一直被忽视和低估，于是我们加强了毒马铃薯！"
         Else
             Return ""
         End If
