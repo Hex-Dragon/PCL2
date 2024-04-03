@@ -143,7 +143,7 @@
                 '输出文本
                 Dim Copyed As New List(Of String)
                 SyncLock WaitingLogLock
-                    If WaitingLog.Count = 0 Then Exit Sub
+                    If Not WaitingLog.Any() Then Exit Sub
                     Copyed = WaitingLog
                     WaitingLog = New List(Of String)(1000)
                 End SyncLock
@@ -192,7 +192,7 @@
             If LogProgress < 2 AndAlso Text.Contains("Setting user:") Then
                 WatcherLog("日志 2/5：游戏用户已设置") '仅确保支持 Minecraft 1.7+
                 LogProgress = 2
-            ElseIf LogProgress < 3 AndAlso Text.ToLower.Contains("lwjgl version") Then
+            ElseIf LogProgress < 3 AndAlso Text.ContainsF("lwjgl version", True) Then
                 WatcherLog("日志 3/5：LWJGL 版本已确认")
                 LogProgress = 3
             ElseIf LogProgress < 4 AndAlso (Text.Contains("OpenAL initialized") OrElse Text.Contains("Starting up SoundSystem")) Then
@@ -269,7 +269,7 @@
                 If MinecraftWindow Is Nothing Then Exit Sub
                 Dim MinecraftWindowName = MinecraftWindow.Value.Value, MinecraftWindowHandle = MinecraftWindow.Value.Key
                 '已找到窗口
-                If Not MinecraftWindowName.StartsWith("FML") Then
+                If Not MinecraftWindowName.StartsWithF("FML") Then
                     '已找到 Minecraft 窗口
                     WindowHandle = MinecraftWindowHandle
                     WatcherLog($"Minecraft 窗口已加载：{MinecraftWindowName}（{MinecraftWindowHandle.ToInt64}）")
@@ -317,7 +317,7 @@
                     Dim WindowText As String = str.ToString
                     '有的 Mod 可以修改窗口标题，所以不能检测是否为 Minecraft 打头，这并不准确
                     '部分版本会搞个 GLFW message window 出来所以得反选
-                    If Not (WindowText.StartsWith("FML") OrElse (WindowText <> "PopupMessageWindow") AndAlso Not WindowText.StartsWith("GLFW")) Then Exit Sub
+                    If Not (WindowText.StartsWithF("FML") OrElse (WindowText <> "PopupMessageWindow") AndAlso Not WindowText.StartsWithF("GLFW")) Then Exit Sub
                     '获取窗口关联的进程
                     Dim ProcessId As Integer
                     GetWindowThreadProcessId(hwnd, ProcessId)

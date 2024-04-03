@@ -490,7 +490,7 @@
                 Select Case Loader.State
                     Case LoadState.Finished
                         '检查是否需要重启
-                        If Loader.GetType.Name.StartsWith("LoaderTask") Then '类型名后面带有泛型，必须用 StartsWith
+                        If Loader.GetType.Name.StartsWithF("LoaderTask") Then '类型名后面带有泛型，必须用 StartsWith
                             If CType(Loader, Object).ShouldStart(If(Input IsNot Nothing AndAlso Loader.GetType.GenericTypeArguments.First Is Input.GetType, Input, Nothing), IgnoreReloadTimeout:=True) Then
                                 If ModeDebug Then Log("[Loader] 由于输入条件变更，重启已完成的加载器 " & Loader.Name)
                                 GoTo Restart
@@ -500,7 +500,7 @@
                         End If
                     Case LoadState.Loading
                         '检查是否需要重启
-                        If Loader.GetType.Name.StartsWith("LoaderTask") Then
+                        If Loader.GetType.Name.StartsWithF("LoaderTask") Then
                             If CType(Loader, Object).ShouldStart(If(Input IsNot Nothing AndAlso Loader.GetType.GenericTypeArguments.First Is Input.GetType, Input, Nothing), IgnoreReloadTimeout:=True) Then
                                 If ModeDebug Then Log("[Loader] 由于输入条件变更，重启进行中的加载器 " & Loader.Name, LogLevel.Developer)
                                 GoTo Restart
@@ -517,9 +517,9 @@ Restart:
                         If Input IsNot Nothing Then
                             '若输入类型与下一个加载器相同才继续
                             Dim LoaderType As String = Loader.GetType.Name
-                            If LoaderType.StartsWith("LoaderTask") OrElse LoaderType.StartsWith("LoaderCombo") Then
+                            If LoaderType.StartsWithF("LoaderTask") OrElse LoaderType.StartsWithF("LoaderCombo") Then
                                 Loader.Start(If(Loader.GetType.GenericTypeArguments.First Is Input.GetType, Input, Nothing), IsForceRestarting)
-                            ElseIf LoaderType.StartsWith("LoaderDownload") Then
+                            ElseIf LoaderType.StartsWithF("LoaderDownload") Then
                                 Loader.Start(If(TypeOf Input Is List(Of NetFile), Input, Nothing), IsForceRestarting)
                             Else
                                 Throw New Exception("未知的加载器类型（" & LoaderType & "）")
@@ -545,7 +545,7 @@ Restart:
         Public Shared Sub GetLoaderList(Loader As Object, ByRef List As List(Of LoaderBase), Optional RequireShow As Boolean = True)
             For Each SubLoader In Loader.Loaders
                 If SubLoader.Show OrElse Not RequireShow Then List.Add(SubLoader)
-                If SubLoader.GetType.Name.StartsWith("LoaderCombo") Then GetLoaderList(SubLoader, List)
+                If SubLoader.GetType.Name.StartsWithF("LoaderCombo") Then GetLoaderList(SubLoader, List)
             Next
         End Sub
         ''' <summary>
@@ -606,7 +606,7 @@ Restart:
             End If
             RunInUi(Sub() FrmMain.BtnExtraDownload.Progress = LoaderTaskbarProgress)
             '更新任务栏信息
-            If LoaderTaskbar.Count = 0 OrElse LoaderTaskbarProgress = 1 Then
+            If Not LoaderTaskbar.Any() OrElse LoaderTaskbarProgress = 1 Then
                 NewState = Shell.TaskbarItemProgressState.None
             ElseIf LoaderTaskbarProgress < 0.015 Then
                 NewState = Shell.TaskbarItemProgressState.Indeterminate

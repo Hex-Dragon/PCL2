@@ -46,7 +46,7 @@
                                '无效的版本
                                Log("[Launch] Minecraft 版本无效" & If(IsNothing(Version), "，没有有效版本", "：" & Version.Path), If(IsNothing(Version), LogLevel.Normal, LogLevel.Debug))
                                If Not McVersionListLoader.State = LoadState.Finished Then LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
-                               If McVersionList.Count = 0 OrElse McVersionList.First.Value(0).Logo.Contains("RedstoneBlock") Then
+                               If Not McVersionList.Any() OrElse McVersionList.First.Value(0).Logo.Contains("RedstoneBlock") Then
                                    Version = Nothing
                                    Setup.Set("LaunchVersionSelect", "")
                                    Log("[Launch] 无可用 Minecraft 版本")

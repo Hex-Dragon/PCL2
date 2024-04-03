@@ -1,7 +1,7 @@
 ﻿Public Class MyIconButton
 
-    '声明
-    Public Event Click(sender As Object, e As EventArgs) '自定义事件
+    '自定义事件
+    Public Event Click(sender As Object, e As EventArgs)
 
     '自定义属性
 

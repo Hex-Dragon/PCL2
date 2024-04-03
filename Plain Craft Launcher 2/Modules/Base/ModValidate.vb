@@ -76,7 +76,7 @@ Public Class ValidateHttp
     Public Sub New()
     End Sub '用于 XAML 初始化
     Public Overrides Function Validate(Str As String) As String
-        If Str.EndsWith("/") Then Str = Str.Substring(0, Str.Length - 1)
+        If Str.EndsWithF("/") Then Str = Str.Substring(0, Str.Length - 1)
         If Not RegexCheck(Str, "^(http[s]?)\://") Then Return "输入的网址无效！"
         Return ""
     End Function
@@ -149,7 +149,7 @@ Public Class ValidateExcept
     End Sub
     Public Overrides Function Validate(Str As String) As String
         For Each Ch As String In Excepts
-            If Str.IndexOf(Ch, StringComparison.OrdinalIgnoreCase) >= 0 Then
+            If Str.IndexOfF(Ch, StringComparison.OrdinalIgnoreCase) >= 0 Then
                 If IsNothing(ErrorMessage) Then ErrorMessage = ""
                 Return ErrorMessage.Replace("%", Ch)
             End If
@@ -220,13 +220,13 @@ Public Class ValidateFolderName
             Dim LengthCheck As String = New ValidateNullOrWhiteSpace().Validate(Str)
             If Not LengthCheck = "" Then Return LengthCheck
             '检查空格
-            If Str.StartsWith(" ") Then Return "文件夹名不能以空格开头！"
-            If Str.EndsWith(" ") Then Return "文件夹名不能以空格结尾！"
+            If Str.StartsWithF(" ") Then Return "文件夹名不能以空格开头！"
+            If Str.EndsWithF(" ") Then Return "文件夹名不能以空格结尾！"
             '检查长度
             LengthCheck = New ValidateLength(1, 100).Validate(Str)
             If Not LengthCheck = "" Then Return LengthCheck
             '检查尾部小数点
-            If Str.EndsWith(".") Then Return "文件夹名不能以小数点结尾！"
+            If Str.EndsWithF(".") Then Return "文件夹名不能以小数点结尾！"
             '检查特殊字符
             Dim CharactCheck As String = New ValidateExcept(IO.Path.GetInvalidFileNameChars() & If(UseMinecraftCharCheck, "!;", ""), "文件夹名不可包含 % 字符！").Validate(Str)
             If Not CharactCheck = "" Then Return CharactCheck
@@ -273,13 +273,13 @@ Public Class ValidateFileName
             Dim LengthCheck As String = New ValidateNullOrWhiteSpace().Validate(Str)
             If Not LengthCheck = "" Then Return LengthCheck
             '检查空格
-            If Str.StartsWith(" ") Then Return "文件名不能以空格开头！"
-            If Str.EndsWith(" ") Then Return "文件名不能以空格结尾！"
+            If Str.StartsWithF(" ") Then Return "文件名不能以空格开头！"
+            If Str.EndsWithF(" ") Then Return "文件名不能以空格结尾！"
             '检查长度
             LengthCheck = New ValidateLength(1, 253).Validate(Str & If(ParentFolder, ""))
             If Not LengthCheck = "" Then Return LengthCheck
             '检查尾部小数点
-            If Str.EndsWith(".") Then Return "文件名不能以小数点结尾！"
+            If Str.EndsWithF(".") Then Return "文件名不能以小数点结尾！"
             '检查特殊字符
             Dim CharactCheck As String = New ValidateExcept(IO.Path.GetInvalidFileNameChars() & If(UseMinecraftCharCheck, "!;", ""), "文件名不可包含 % 字符！").Validate(Str)
             If Not CharactCheck = "" Then Return CharactCheck
@@ -319,7 +319,7 @@ Public Class ValidateFolderPath
     Public Overrides Function Validate(Str As String) As String
         '去除尾部斜线，统一为 \
         Str = Str.Replace("/", "\")
-        If Not Str.TrimEnd("\").EndsWith(":") Then Str = Str.TrimEnd("\")
+        If Not Str.TrimEnd("\").EndsWithF(":") Then Str = Str.TrimEnd("\")
         '检查是否为空
         Dim LengthCheck As String = New ValidateNullOrWhiteSpace().Validate(Str)
         If Not LengthCheck = "" Then Return LengthCheck
@@ -327,15 +327,15 @@ Public Class ValidateFolderPath
         LengthCheck = New ValidateLength(1, 254).Validate(Str)
         If Not LengthCheck = "" Then Return LengthCheck
         '检查开头
-        If Str.StartsWith("\\Mac\") Then GoTo Fin
+        If Str.StartsWithF("\\Mac\") Then GoTo Fin
         For Each Drive As DriveInfo In My.Computer.FileSystem.Drives
             If Str.ToUpper = Drive.Name Then Return ""
-            If Str.ToUpper.StartsWith(Drive.Name) Then GoTo Fin
+            If Str.StartsWithF(Drive.Name, True) Then GoTo Fin
         Next
         Return "文件夹路径头存在错误！"
 Fin:
         '对首层以外的路径检查
-        For i = If(Str.StartsWith("\\Mac\"), 2, 1) To Str.Split("\").Count - 1
+        For i = If(Str.StartsWithF("\\Mac\"), 2, 1) To Str.Split("\").Count - 1
             Dim SubStr As String = Str.Split("\")(i)
             '检查是否为空
             Dim SubLengthCheck As String = New ValidateNullOrWhiteSpace().Validate(SubStr)
@@ -344,10 +344,10 @@ Fin:
             Dim CharactCheck As String = New ValidateExcept(IO.Path.GetInvalidFileNameChars() & If(UseMinecraftCharCheck, "!;", ""), "路径中存在无效字符！").Validate(SubStr)
             If Not CharactCheck = "" Then Return CharactCheck
             '检查头部空格
-            If SubStr.StartsWith(" ") Then Return "文件夹名不能以空格开头！"
-            If SubStr.EndsWith(" ") Then Return "文件夹名不能以空格结尾！"
+            If SubStr.StartsWithF(" ") Then Return "文件夹名不能以空格开头！"
+            If SubStr.EndsWithF(" ") Then Return "文件夹名不能以空格结尾！"
             '检查尾部小数点
-            If SubStr.EndsWith(".") Then Return "文件夹名不能以小数点结尾！"
+            If SubStr.EndsWithF(".") Then Return "文件夹名不能以小数点结尾！"
             '检查特殊字符串
             Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件夹名不可为 %！").Validate(SubStr)
             If Not InvalidStrCheck = "" Then Return InvalidStrCheck

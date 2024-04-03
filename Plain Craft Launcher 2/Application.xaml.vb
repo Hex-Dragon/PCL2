@@ -28,11 +28,11 @@ Public Class Application
                     '自动更新
                     UpdateReplace(e.Args(1), e.Args(2).Trim(""""), e.Args(3).Trim(""""), e.Args(4))
                     Environment.Exit(Result.Cancel)
-                    'ElseIf e.Args(0).StartsWith("--link") Then
+                    'ElseIf e.Args(0).StartsWithF("--link") Then
                     '    '稍作等待后切换到联机页面
                     '    Thread.Sleep(1000)
                     '    FormMain.IsLinkRestart = True
-                ElseIf e.Args(0).StartsWith("--memory") Then
+                ElseIf e.Args(0).StartsWithF("--memory") Then
                     '内存优化
                     Dim Ram = My.Computer.Info.AvailablePhysicalMemory
                     Try
@@ -173,7 +173,7 @@ Public Class Application
     Private Shared ReadOnly AssemblyJsonLock As New Object
     Private Shared ReadOnly AssemblyDialogLock As New Object
     Public Shared Function AssemblyResolve(sender As Object, args As ResolveEventArgs) As Assembly
-        If args.Name.StartsWith("NAudio") Then
+        If args.Name.StartsWithF("NAudio") Then
             SyncLock AssemblyNAudioLock
                 If AssemblyNAudio Is Nothing Then
                     Log("[Start] 加载 DLL：NAudio")
@@ -181,7 +181,7 @@ Public Class Application
                 End If
                 Return AssemblyNAudio
             End SyncLock
-        ElseIf args.Name.StartsWith("Newtonsoft.Json") Then
+        ElseIf args.Name.StartsWithF("Newtonsoft.Json") Then
             SyncLock AssemblyJsonLock
                 If AssemblyJson Is Nothing Then
                     Log("[Start] 加载 DLL：Json")
@@ -189,7 +189,7 @@ Public Class Application
                 End If
                 Return AssemblyJson
             End SyncLock
-        ElseIf args.Name.StartsWith("Ookii.Dialogs.Wpf") Then
+        ElseIf args.Name.StartsWithF("Ookii.Dialogs.Wpf") Then
             SyncLock AssemblyDialogLock
                 If AssemblyDialog Is Nothing Then
                     Log("[Start] 加载 DLL：Dialogs")

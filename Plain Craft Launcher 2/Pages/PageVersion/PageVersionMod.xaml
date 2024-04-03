@@ -47,6 +47,8 @@
             </local:MyCard.RenderTransform>
             <TextBlock x:Name="LabSelect" Text="已选择 8 个文件" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="9" Foreground="{DynamicResource ColorBrush2}" />
             <StackPanel Orientation="Horizontal" Margin="5,28,5,5">
+                <local:MyIconTextButton x:Name="BtnSelectUpdate" Text="更新"
+                                        LogoScale="1" Logo="M640 768H384l-32-32V509H213L190 454l298-298h45l298 298L810 509h-138v226z m-224-64h192V477l32-32h93L512 223 290 445H384l32 32zM352 831h320v64h-320z" />
                 <local:MyIconTextButton x:Name="BtnSelectEnable" Text="启用"
                                         LogoScale="1.05" Logo="M512 0a512 512 0 1 0 512 512A512 512 0 0 0 512 0z m0 921.6a409.6 409.6 0 1 1 409.6-409.6 409.6 409.6 0 0 1-409.6 409.6z M716.8 339.968l-256 253.44L328.192 460.8A51.2 51.2 0 0 0 256 532.992l168.448 168.96a51.2 51.2 0 0 0 72.704 0l289.28-289.792A51.2 51.2 0 0 0 716.8 339.968z" />
                 <local:MyIconTextButton x:Name="BtnSelectDisable" Text="禁用"

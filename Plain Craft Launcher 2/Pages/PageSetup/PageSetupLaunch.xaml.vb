@@ -518,7 +518,7 @@ PreFin:
         RunInThread(Sub()
                         Hint("正在搜索 Java！")
                         JavaSearchLoader.WaitForExit(IsForceRestart:=True)
-                        If JavaList.Count = 0 Then
+                        If Not JavaList.Any() Then
                             Hint("未找到可用的 Java！", HintType.Critical)
                         Else
                             Hint("已找到 " & JavaList.Count & " 个 Java，请检查下拉框查看列表！", HintType.Finish)

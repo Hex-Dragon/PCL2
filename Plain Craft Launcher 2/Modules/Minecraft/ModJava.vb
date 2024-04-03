@@ -62,7 +62,7 @@
         Public ReadOnly Property HasEnvironment As Boolean
             Get
                 If PathFolder Is Nothing OrElse PathEnv Is Nothing Then Return False
-                Return PathEnv.Replace("\", "").Replace("/", "").ToLower.Contains(PathFolder.Replace("\", "").ToLower)
+                Return PathEnv.Replace("\", "").Replace("/", "").ContainsF(PathFolder.Replace("\", ""), True)
             End Get
         End Property
 
@@ -78,7 +78,7 @@
         ''' </summary>
         Public Overrides Function ToString() As String
             Dim VersionString = Version.ToString
-            If VersionString.StartsWith("1.") Then VersionString = Mid(VersionString, 3)
+            If VersionString.StartsWithF("1.") Then VersionString = Mid(VersionString, 3)
             Return If(IsJre, "JRE ", "JDK ") & VersionCode & " (" & VersionString & ")，" & If(Is64Bit, "64", "32") & " 位" & If(IsUserImport, "，手动导入", "") & "：" & PathFolder
         End Function
 
@@ -87,7 +87,7 @@
         ''' 输入 javaw.exe 文件所在文件夹的路径，不限制结尾。
         ''' </summary>
         Public Sub New(Folder As String, IsUserImport As Boolean)
-            If Not Folder.EndsWith("\") Then Folder += "\"
+            If Not Folder.EndsWithF("\") Then Folder += "\"
             PathFolder = Folder.Replace("/", "\")
             Me.IsUserImport = IsUserImport
         End Sub
@@ -116,8 +116,9 @@
                 If Output.Contains("/lib/ext exists") Then Throw New ApplicationException("无法运行该 Java，请在删除 Java 文件夹中的 /lib/ext 文件夹后再试")
                 '获取详细信息
                 Dim VersionString = If(RegexSeek(Output, "(?<=version "")[^""]+"), If(RegexSeek(Output, "(?<=openjdk )[0-9]+"), "")).Replace("_", ".").Split("-").First
+                If VersionString.Split(".").Count > 4 Then VersionString = VersionString.Replace(".0.", ".") '#3493，VersionString = "21.0.2.0.2"
                 Do While VersionString.Split(".").Count < 4
-                    If VersionString.StartsWith("1.") Then
+                    If VersionString.StartsWithF("1.") Then
                         VersionString = VersionString & ".0"
                     Else
                         VersionString = "1." & VersionString
@@ -184,7 +185,7 @@
                     JavaList.Add(JavaEntry.FromJson(JsonEntry))
                 Next
             End If
-            If JavaList.Count = 0 Then
+            If Not JavaList.Any() Then
                 Log("[Java] 初始化未找到可用的 Java，将自动触发搜索", LogLevel.Developer)
                 JavaSearchLoader.Start(0)
             Else
@@ -232,7 +233,7 @@
             Dim UserJava As JavaEntry = Nothing
 
             '获取版本独立设置中指定的 Java
-            If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion).ToString.StartsWith("{") Then
+            If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion).ToString.StartsWithF("{") Then
                 Try
                     UserJava = JavaEntry.FromJson(GetJson(Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)))
                     UserJava.Check()
@@ -291,7 +292,7 @@ RetryGet:
             Next
 
             '若未找到适合的 Java，尝试触发搜索
-            If AllowedJavaList.Count = 0 AndAlso JavaSearchLoader.State = LoadState.Waiting Then
+            If Not AllowedJavaList.Any() AndAlso JavaSearchLoader.State = LoadState.Waiting Then
                 Log("[Java] 未找到满足条件的 Java，尝试进行搜索")
                 JavaSearchLoader.Start(IsForceRestart:=True)
                 GoTo RetryGet
@@ -352,7 +353,7 @@ ExitUserJavaCheck:
 #End Region
 
             '若依然未找到适合的 Java，直接返回
-            If AllowedJavaList.Count = 0 Then Return Nothing
+            If Not AllowedJavaList.Any() Then Return Nothing
 
             '优先使用特定目录下的 Java
             For Each Java In AllowedJavaList
@@ -445,11 +446,11 @@ NoUserJava:
         Dim ProgramPathParent As String, MinecraftPathParent As String = ""
         ProgramPathParent = If(New DirectoryInfo(Path).Parent, New DirectoryInfo(Path)).FullName
         If PathMcFolder <> "" Then MinecraftPathParent = If(New DirectoryInfo(PathMcFolder).Parent, New DirectoryInfo(PathMcFolder)).FullName
-        If Left.PathFolder.StartsWith(ProgramPathParent) AndAlso Not Right.PathFolder.StartsWith(ProgramPathParent) Then Return True
-        If Not Left.PathFolder.StartsWith(ProgramPathParent) AndAlso Right.PathFolder.StartsWith(ProgramPathParent) Then Return False
+        If Left.PathFolder.StartsWithF(ProgramPathParent) AndAlso Not Right.PathFolder.StartsWithF(ProgramPathParent) Then Return True
+        If Not Left.PathFolder.StartsWithF(ProgramPathParent) AndAlso Right.PathFolder.StartsWithF(ProgramPathParent) Then Return False
         If PathMcFolder <> "" Then
-            If Left.PathFolder.StartsWith(MinecraftPathParent) AndAlso Not Right.PathFolder.StartsWith(MinecraftPathParent) Then Return True
-            If Not Left.PathFolder.StartsWith(MinecraftPathParent) AndAlso Right.PathFolder.StartsWith(MinecraftPathParent) Then Return False
+            If Left.PathFolder.StartsWithF(MinecraftPathParent) AndAlso Not Right.PathFolder.StartsWithF(MinecraftPathParent) Then Return True
+            If Not Left.PathFolder.StartsWithF(MinecraftPathParent) AndAlso Right.PathFolder.StartsWithF(MinecraftPathParent) Then Return False
         End If
         '2. 尽量使用 64 位
         If Left.Is64Bit AndAlso Not Right.Is64Bit Then Return True
@@ -459,7 +460,7 @@ NoUserJava:
         If Not Left.IsJre AndAlso Right.IsJre Then Return False
         '4. Java 大版本
         If Left.VersionCode <> Right.VersionCode Then
-            '                             Java  7   8   9  10  11  12 13 14 15  16  17  18  19  20...
+            '                             Java  7   8   9  10  11  12 13 14 15  16  17  18  19  20  21...
             Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 30, 10, 12, 15, 13, 9, 8, 7, 11, 31, 29, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
             Return Weight.ElementAtOrDefault(Left.VersionCode) >= Weight.ElementAtOrDefault(Right.VersionCode)
         End If
@@ -500,7 +501,7 @@ NoUserJava:
             For Each PathInEnv As String In Split((PathEnv & ";" & PathJavaHome).Replace("\\", "\").Replace("/", "\"), ";")
                 PathInEnv = PathInEnv.Trim(" """.ToCharArray())
                 If PathInEnv = "" Then Continue For
-                If Not PathInEnv.EndsWith("\") Then PathInEnv += "\"
+                If Not PathInEnv.EndsWithF("\") Then PathInEnv += "\"
                 '粗略检查有效性
                 If File.Exists(PathInEnv & "javaw.exe") Then JavaPreList(PathInEnv) = False
             Next
@@ -652,7 +653,7 @@ Wait:
             '确认目录存在
             If Not OriginalPath.Exists Then Exit Sub
             Dim Path As String = OriginalPath.FullName.Replace("\\", "\")
-            If Not Path.EndsWith("\") Then Path += "\"
+            If Not Path.EndsWithF("\") Then Path += "\"
             '若该目录有 Java，则加入结果
             If File.Exists(Path & "javaw.exe") Then Results(Path) = Source
             '查找其下的所有文件夹
@@ -715,7 +716,7 @@ Wait:
     End Function
 
     ''' <summary>
-    ''' 获取下载 Java 8/14/17 的加载器。需要开启 IsForceRestart 以正常刷新 Java 列表。
+    ''' 获取下载 Java 8/14/17/21 的加载器。需要开启 IsForceRestart 以正常刷新 Java 列表。
     ''' </summary>
     Public Function JavaFixLoaders(Version As Integer) As LoaderCombo(Of Integer)
         Return New LoaderCombo(Of Integer)($"下载 Java {Version}", {
@@ -734,7 +735,7 @@ Wait:
         Dim MainEntry As JObject = CType(GetJson(IndexFileStr), JObject)($"windows-x{If(Is32BitSystem, "86", "64")}")
         Dim Entries = MainEntry.Children.Reverse. '选择最靠后的一项（最新）
             SelectMany(Function(e As JProperty) CType(e.Value, JArray).Select(Function(v) New KeyValuePair(Of String, JObject)(e.Name, v)))
-        Dim TargetEntry = Entries.First(Function(t) t.Value("version")("name").ToString.StartsWith(Loader.Input))
+        Dim TargetEntry = Entries.First(Function(t) t.Value("version")("name").ToString.StartsWithF(Loader.Input))
         Dim Address As String = TargetEntry.Value("manifest")("url")
         Log($"[Java] 准备下载 Java {TargetEntry.Value("version")("name")}（{TargetEntry.Key}）：{Address}")
         '获取文件列表

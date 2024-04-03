@@ -129,7 +129,7 @@
                     Exit Sub
                 End If
             Next
-            If McFolderList.Count = 0 Then
+            If Not McFolderList.Any() Then
                 Throw New ArgumentNullException("没有可用的 Minecraft 文件夹")
             Else
                 Setup.Set("LaunchFolderSelect", McFolderList(0).Path.Replace(Path, "$"))
@@ -301,7 +301,7 @@
                 End If
             Next
             '保存
-            Setup.Set("LaunchFolders", If(Folders.Count = 0, "", Join(Folders.ToArray, "|")))
+            Setup.Set("LaunchFolders", If(Not Folders.Any(), "", Join(Folders.ToArray, "|")))
             Hint(If(Folder.Type = McFolderType.Custom, "文件夹 " & Name & " 已从列表中移除！", "文件夹名称已复原！"), HintType.Finish)
             McFolderListLoader.Start(IsForceRestart:=True)
 
@@ -325,7 +325,7 @@
                     Exit For
                 End If
             Next
-            Setup.Set("LaunchFolders", If(Folders.Count = 0, "", Join(Folders.ToArray, "|")))
+            Setup.Set("LaunchFolders", If(Not Folders.Any(), "", Join(Folders.ToArray, "|")))
         End If
         RunInNewThread(Sub()
                            '删除文件夹

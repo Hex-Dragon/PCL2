@@ -65,7 +65,7 @@
             '格式：TMZ 12>C://xxx/xx/|Test>D://xxx/xx/|名称>路径
             For Each Folder As String In Setup.Get("LaunchFolders").Split("|")
                 If Folder = "" Then Continue For
-                If Not Folder.Contains(">") OrElse Not Folder.EndsWith("\") Then
+                If Not Folder.Contains(">") OrElse Not Folder.EndsWithF("\") Then
                     Hint("无效的 Minecraft 文件夹：" & Folder, HintType.Critical)
                     Continue For
                 End If
@@ -92,13 +92,13 @@
             For Each Folder As McFolder In CacheMcFolderList
                 If Not Folder.Type = McFolderType.Original Then NewSetup.Add(Folder.Name & ">" & Folder.Path)
             Next
-            If NewSetup.Count = 0 Then NewSetup.Add("") '防止 0 元素 Join 返回 Nothing
+            If Not NewSetup.Any() Then NewSetup.Add("") '防止 0 元素 Join 返回 Nothing
             Setup.Set("LaunchFolders", Join(NewSetup, "|"))
 
 #End Region
 
             '若没有可用文件夹，则创建 .minecraft
-            If CacheMcFolderList.Count = 0 Then
+            If Not CacheMcFolderList.Any() Then
                 Directory.CreateDirectory(Path & ".minecraft\versions\")
                 CacheMcFolderList.Add(New McFolder With {.Name = "当前文件夹", .Path = Path & ".minecraft\", .Type = McFolderType.Original})
             End If
@@ -149,7 +149,7 @@
 
 #Region "版本处理"
 
-    Public Const McVersionCacheVersion As Integer = 26
+    Public Const McVersionCacheVersion As Integer = 27
 
     Private _McVersionCurrent As McVersion
     Private _McVersionLast = 0 '为 0 以保证与 Nothing 不相同，使得 UI 显示可以正常初始化
@@ -418,7 +418,7 @@
                     End Try
 VersionSearchFinish:
                     '获取版本号
-                    If _Version.McName.StartsWith("1.") Then
+                    If _Version.McName.StartsWithF("1.") Then
                         Dim SplitVersion = _Version.McName.Split(" "c, "_"c, "-"c, "."c)
                         Dim SplitResult As String
                         '分割获取信息
@@ -546,8 +546,8 @@ Recheck:
                         '处理 JumpLoader
                         If Text.Contains("minecraftforge") AndAlso File.Exists(PathIndie & "config\jumploader.json") Then
                             For Each ModFile In Directory.EnumerateFiles(PathIndie & "mods")
-                                Dim FileName As String = GetFileNameFromPath(ModFile).ToLower
-                                If FileName.EndsWith(".jar") AndAlso FileName.Contains("jumploader") Then
+                                Dim FileName As String = GetFileNameFromPath(ModFile)
+                                If FileName.EndsWithF(".jar", True) AndAlso FileName.ContainsF("jumploader", True) Then
                                     Log("[Minecraft] 发现 JumpLoader 分支项：" & FileName)
                                     HasJumpLoader = True
                                     Exit For
@@ -612,7 +612,7 @@ Recheck:
         Public Sub New(Path As String)
             Me.Path = If(Path.Contains(":"), "", PathMcFolder & "versions\") & '补全完整路径
                       Path &
-                      If(Path.EndsWith("\"), "", "\") '补全右划线
+                      If(Path.EndsWithF("\"), "", "\") '补全右划线
         End Sub
 
         ''' <summary>
@@ -684,7 +684,7 @@ Recheck:
                         '愚人节与快照版本
                         If If(JsonObject("type"), "").ToString = "fool" OrElse GetMcFoolName(Version.McName) <> "" Then
                             State = McVersionState.Fool
-                        ElseIf Version.McName.ToLower.Contains("w") OrElse Name.ToLower.Contains("combat") OrElse Version.McName.ToLower.Contains("rc") OrElse Version.McName.ToLower.Contains("pre") OrElse Version.McName.Contains("experimental") OrElse If(JsonObject("type"), "").ToString = "snapshot" OrElse If(JsonObject("type"), "").ToString = "pending" Then
+                        ElseIf Version.McName.ContainsF("w", True) OrElse Name.ContainsF("combat", True) OrElse Version.McName.ContainsF("rc", True) OrElse Version.McName.ContainsF("pre", True) OrElse Version.McName.ContainsF("experimental", True) OrElse If(JsonObject("type"), "").ToString = "snapshot" OrElse If(JsonObject("type"), "").ToString = "pending" Then
                             State = McVersionState.Snapshot
                         End If
                         'OptiFine
@@ -744,9 +744,9 @@ ExitDataLoad:
                 If CustomInfo = "" Then
                     Select Case State
                         Case McVersionState.Snapshot
-                            If Version.McName.ToLower.Contains("pre") Then
+                            If Version.McName.ContainsF("pre", True) Then
                                 Info = "预发布版 " & Version.McName
-                            ElseIf Version.McName.ToLower.Contains("rc") Then
+                            ElseIf Version.McName.ContainsF("rc", True) Then
                                 Info = "发布候选 " & Version.McName
                             ElseIf Version.McName.Contains("experimental") OrElse Version.McName = "pending" Then
                                 Info = "实验性快照"
@@ -948,8 +948,8 @@ ExitDataLoad:
                                 (Asc(CType(Left(OptiFineVersion.ToUpper, 1), Char)) - Asc("A"c) + 1) * 10000 + '第二段：字母编号（2 位），如 G2 中的 G（7）
                                 Val(RegexSeek(Right(OptiFineVersion, OptiFineVersion.Length - 1), "[0-9]+")) * 100         '第三段：末尾数字（2 位），如 C5 beta4 中的 5
                             '第三段：测试标记
-                            If OptiFineVersion.ToLower.Contains("pre") Then _SortCode += 50
-                            If OptiFineVersion.ToLower.Contains("pre") OrElse OptiFineVersion.ToLower.Contains("beta") Then
+                            If OptiFineVersion.ContainsF("pre", True) Then _SortCode += 50
+                            If OptiFineVersion.ContainsF("pre", True) OrElse OptiFineVersion.ContainsF("beta", True) Then
                                 If Val(Right(OptiFineVersion, 1)) = 0 AndAlso Right(OptiFineVersion, 1) <> "0" Then
                                     _SortCode += 1 '为 pre 或 beta 结尾，视作 1
                                 Else
@@ -981,9 +981,9 @@ ExitDataLoad:
     ''' </summary>
     Public Function GetMcFoolName(Name As String) As String
         Name = Name.ToLower
-        If Name.StartsWith("2.0") Then
+        If Name.StartsWithF("2.0") Then
             Return "这个秘密计划了两年的更新将游戏推向了一个新高度！"
-        ElseIf Name.StartsWith("20w14inf") OrElse Name = "20w14∞" Then
+        ElseIf Name.StartsWithF("20w14inf") OrElse Name = "20w14∞" Then
             Return "我们加入了 20 亿个新的维度，让无限的想象变成了现实！"
         ElseIf Name = "15w14a" Then
             Return "作为一款全年龄向的游戏，我们需要和平，需要爱与拥抱。"
@@ -994,9 +994,9 @@ ExitDataLoad:
         ElseIf Name = "22w13oneblockatatime" Then
             Return "一次一个方块更新！迎接全新的挖掘、合成与骑乘玩法吧！"
         ElseIf Name = "23w13a_or_b" Then
-            Return "研究表明玩家喜欢作出选择——越多越好！"
+            Return "研究表明：玩家喜欢作出选择——越多越好！"
         ElseIf Name = "24w14potato" Then
-            Return "我们的有毒块茎一直被忽视和低估，于是我们加强了毒马铃薯！"
+            Return "毒马铃薯一直都被大家忽视和低估，于是我们超级加强了它！"
         Else
             Return ""
         End If
@@ -1021,6 +1021,12 @@ ExitDataLoad:
     Public McVersionListLoader As New LoaderTask(Of String, Integer)("Minecraft Version List", AddressOf McVersionListLoad) With {.ReloadTimeout = 1}
 
     ''' <summary>
+    ''' 是否为本次打开 PCL 后第一次加载版本列表。
+    ''' 这会清理所有 .pclignore 文件，而非跳过这些对应版本。
+    ''' </summary>
+    Private IsFirstMcVersionListLoad As Boolean = True
+
+    ''' <summary>
     ''' 开始加载当前 Minecraft 文件夹的版本列表。
     ''' </summary>
     Private Sub McVersionListLoad(Loader As LoaderTask(Of String, Integer))
@@ -1042,7 +1048,7 @@ ExitDataLoad:
                 End Try
             End If
             '没有可用版本
-            If FolderList.Count = 0 Then
+            If Not FolderList.Any() Then
                 WriteIni(Path & "PCL.ini", "VersionCache", "") '清空缓存
                 GoTo OnLoaded
             End If
@@ -1064,6 +1070,7 @@ Reload:
                 WriteIni(Path & "PCL.ini", "VersionCache", FolderListCheck)
                 McVersionList = McVersionListLoadNoCache(Path)
             End If
+            IsFirstMcVersionListLoad = False
             If Loader.IsAborted Then Exit Sub
 
             '改变当前选择的版本
@@ -1116,14 +1123,20 @@ OnLoaded:
                 '循环读取版本
                 For Each Folder As String In ReadIni(Path & "PCL.ini", "CardValue" & (i + 1), ":").Split(":")
                     If Folder = "" Then Continue For
-                    If File.Exists(Path & "versions\" & Folder & "\.pclignore") Then
-                        Log("[Minecraft] 跳过要求忽略的项目：" & Path & "versions\" & Folder)
-                        Continue For
+                    Dim VersionFolder As String = $"{Path}versions\{Folder}\"
+                    If File.Exists(VersionFolder & ".pclignore") Then
+                        If IsFirstMcVersionListLoad Then
+                            Log("[Minecraft] 清理残留的忽略项目：" & VersionFolder) '#2781
+                            File.Delete(VersionFolder & ".pclignore")
+                        Else
+                            Log("[Minecraft] 跳过要求忽略的项目：" & VersionFolder)
+                            Continue For
+                        End If
                     End If
                     Try
 
                         '读取单个版本
-                        Dim Version As New McVersion(Path & "versions\" & Folder & "\")
+                        Dim Version As New McVersion(VersionFolder)
                         VersionList.Add(Version)
                         Version.Info = ReadIni(Version.Path & "PCL\Setup.ini", "CustomInfo", "")
                         If Version.Info = "" Then Version.Info = ReadIni(Version.Path & "PCL\Setup.ini", "Info", Version.Info)
@@ -1195,11 +1208,17 @@ OnLoaded:
                 Log("[Minecraft] 跳过可能不是版本文件夹的项目：" & Folder.FullName)
                 Continue For
             End If
-            If File.Exists(Folder.FullName & "\.pclignore") Then
-                Log("[Minecraft] 跳过要求忽略的项目：" & Folder.FullName)
-                Continue For
+            Dim VersionFolder As String = Folder.FullName & "\"
+            If File.Exists(VersionFolder & ".pclignore") Then
+                If IsFirstMcVersionListLoad Then
+                    Log("[Minecraft] 清理残留的忽略项目：" & VersionFolder) '#2781
+                    File.Delete(VersionFolder & ".pclignore")
+                Else
+                    Log("[Minecraft] 跳过要求忽略的项目：" & VersionFolder)
+                    Continue For
+                End If
             End If
-            Dim Version As New McVersion(Folder.FullName & "\")
+            Dim Version As New McVersion(VersionFolder)
             VersionList.Add(Version)
             Version.Load()
         Next
@@ -1496,7 +1515,7 @@ NextVersion:
     ''' </summary>
     Public Function McSkinGetAddress(Uuid As String, Type As String) As String
         If Uuid = "" Then Throw New Exception("Uuid 为空。")
-        If Uuid.StartsWith("000000") Then Throw New Exception("离线 Uuid 无正版皮肤文件。")
+        If Uuid.StartsWithF("000000") Then Throw New Exception("离线 Uuid 无正版皮肤文件。")
         '尝试读取缓存
         Dim CacheSkinAddress As String = ReadIni(PathTemp & "Cache\Skin\Index" & Type & ".ini", Uuid)
         If Not CacheSkinAddress = "" Then Return CacheSkinAddress
@@ -1962,7 +1981,7 @@ NextVersion:
                 '获取 Url 的真实地址
                 Urls.Add(Token.Url)
                 If Token.Url.Contains("launcher.mojang.com/v1/objects") Then Urls = DlSourceLauncherOrMetaGet(Token.Url).ToList() 'Mappings
-                If Token.Url.Contains("maven") Then Urls.Insert(0, Token.Url.Replace(Mid(Token.Url, 1, Token.Url.IndexOf("maven")), "https://bmclapi2.bangbang93.com/").Replace("maven.fabricmc.net", "maven").Replace("maven.minecraftforge.net", "maven"))
+                If Token.Url.Contains("maven") Then Urls.Insert(0, Token.Url.Replace(Mid(Token.Url, 1, Token.Url.IndexOfF("maven")), "https://bmclapi2.bangbang93.com/").Replace("maven.fabricmc.net", "maven").Replace("maven.minecraftforge.net", "maven"))
             End If
             If Token.LocalPath.Contains("transformer-discovery-service") Then
                 'Transformer 文件释放
@@ -1992,10 +2011,6 @@ NextVersion:
     Public Function McLibGet(Original As String, Optional WithHead As Boolean = True, Optional IgnoreLiteLoader As Boolean = False, Optional CustomMcFolder As String = Nothing) As String
         CustomMcFolder = If(CustomMcFolder, PathMcFolder)
         Dim Splited = Original.Split(":")
-        'If Original.ToLower.Contains("xray") OrElse Original.ToLower.Contains("rift") OrElse Original.ToLower.Contains("mixin") OrElse Original.Contains("net.minecraftforge:forge") OrElse Splited(2).Contains("beta") OrElse (IgnoreLiteLoader AndAlso Original.Contains("liteloader")) Then
-        'ElseIf Splited(2).Contains("-") Then
-        '    Log("[Launch] 可能存在分段问题的支持库：" & Original)
-        'End If
         McLibGet = If(WithHead, CustomMcFolder & "libraries\", "") &
                    Splited(0).Replace(".", "\") & "\" & Splited(1) & "\" & Splited(2) & "\" & Splited(1) & "-" & Splited(2) & ".jar"
         '判断 OptiFine 是否应该使用 installer
@@ -2252,8 +2267,10 @@ NextVersion:
             If Left = "未知版本" AndAlso Right = "未知版本" Then Return 0
             If Left <> "未知版本" AndAlso Right = "未知版本" Then Return -1
         End If
-        Dim Lefts = RegexSearch(Left.ToLower.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
-        Dim Rights = RegexSearch(Right.ToLower.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
+        Left = Left.ToLowerInvariant
+        Right = Right.ToLowerInvariant
+        Dim Lefts = RegexSearch(Left.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
+        Dim Rights = RegexSearch(Right.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
         Dim i As Integer = 0
         While True
             '两边均缺失，感觉是一个东西

@@ -13,7 +13,7 @@
 
                 Case "打开网页"
                     Data(0) = Data(0).Replace("\", "/")
-                    If Not Data(0).Contains("://") OrElse Data(0).ToLower.StartsWith("file") Then '为了支持更多协议（#2200）
+                    If Not Data(0).Contains("://") OrElse Data(0).StartsWithF("file", True) Then '为了支持更多协议（#2200）
                         MyMsgBox("EventData 必须为一个网址。" & vbCrLf & "如果想要启动程序，请将 EventType 改为 打开文件。", "事件执行失败")
                         Exit Sub
                     End If
@@ -78,7 +78,7 @@
 
                 Case "下载文件"
                     Data(0) = Data(0).Replace("\", "/")
-                    If Not (Data(0).StartsWith("http://") OrElse Data(0).StartsWith("https://")) Then
+                    If Not (Data(0).StartsWithF("http://", True) OrElse Data(0).StartsWithF("https://", True)) Then
                         MyMsgBox("EventData 必须为以 http:// 或 https:// 开头的网址。" & vbCrLf & "PCL 不支持其他乱七八糟的下载协议。", "事件执行失败")
                         Exit Sub
                     End If
@@ -99,7 +99,7 @@
     Public Function GetEventAbsoluteUrls(RelativeUrl As String, EventType As String) As String()
 
         '网页确认
-        If RelativeUrl.ToLower.StartsWith("http") Then
+        If RelativeUrl.StartsWithF("http", True) Then
             If RunInUi() Then
                 Throw New Exception("MyListItem 在界面初始化时就需要获取帮助标题等信息，这会导致程序在网络请求时卡死。" & vbCrLf &
                                     "因此，请换用 MyListItem 以外的控件（例如 MyButton）作为联网帮助页面的入口！")
@@ -108,7 +108,7 @@
             Dim RawFileName As String
             Try
                 RawFileName = GetFileNameFromPath(RelativeUrl)
-                If Not RawFileName.ToLower.EndsWith(".json") Then Throw New Exception("未指向 .json 后缀的文件")
+                If Not RawFileName.EndsWithF(".json", True) Then Throw New Exception("未指向 .json 后缀的文件")
             Catch ex As Exception
                 Throw New Exception("联网帮助页面须指向一个帮助 JSON 文件，并在同路径下包含相应 XAML 文件！" & vbCrLf &
                                     "例如：" & vbCrLf &

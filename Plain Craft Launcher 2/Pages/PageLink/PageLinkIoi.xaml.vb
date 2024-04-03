@@ -258,7 +258,7 @@ Public Class PageLinkIoi
         Public Function GetDescription() As String
             Return If(Progress < 1,
                 "正在连接，" & Math.Round(Progress * 100) & "%",
-                "已连接，" & If(PingRecord.Count = 0, "检查延迟中", Math.Round(PingRecord.Average) & "ms"))
+                "已连接，" & If(Not PingRecord.Any(), "检查延迟中", Math.Round(PingRecord.Average) & "ms"))
         End Function
         Public Function ToListItem() As MyListItem
             Dim Item As New MyListItem With {

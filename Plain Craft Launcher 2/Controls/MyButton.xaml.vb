@@ -138,7 +138,7 @@
         Log("[Control] 按下按钮：" & Text)
         RaiseEvent Click(sender, e)
         If Not String.IsNullOrEmpty(Tag) Then
-            If Tag.ToString.StartsWith("链接-") OrElse Tag.ToString.StartsWith("启动-") Then
+            If Tag.ToString.StartsWithF("链接-") OrElse Tag.ToString.StartsWithF("启动-") Then
                 Hint("主页自定义按钮语法已更新，且不再兼容老版本语法，请查看新的自定义示例！")
             End If
         End If

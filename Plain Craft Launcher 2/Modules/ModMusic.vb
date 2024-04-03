@@ -1,4 +1,6 @@
-﻿Public Module ModMusic
+﻿Imports System.Security.Cryptography
+
+Public Module ModMusic
 
 #Region "播放列表"
 
@@ -31,7 +33,7 @@
             End If
             '打乱顺序播放
             MusicWaitingList = If(Setup.Get("UiMusicRandom"), Shuffle(New List(Of String)(MusicAllList)), New List(Of String)(MusicAllList))
-            If Not IgnoreFirst = "" AndAlso Not MusicWaitingList.Count = 0 AndAlso MusicWaitingList(0) = IgnoreFirst Then
+            If Not IgnoreFirst = "" AndAlso Not Not MusicWaitingList.Any() AndAlso MusicWaitingList(0) = IgnoreFirst Then
                 '若需要避免成为第一项的为第一项，则将它放在最后
                 MusicWaitingList.RemoveAt(0)
                 MusicWaitingList.Add(IgnoreFirst)
@@ -45,11 +47,11 @@
     ''' </summary>
     Private Function DequeueNextMusicAddress() As String
         '初始化，确保存在音乐
-        If MusicAllList Is Nothing OrElse MusicAllList.Count = 0 OrElse MusicWaitingList.Count = 0 Then MusicListInit(False)
+        If MusicAllList Is Nothing OrElse Not MusicAllList.Any() OrElse Not MusicWaitingList.Any() Then MusicListInit(False)
         '出列下一个音乐，如果出列结束则生成新列表
         DequeueNextMusicAddress = MusicWaitingList(0)
         MusicWaitingList.RemoveAt(0)
-        If MusicWaitingList.Count = 0 Then MusicListInit(False, DequeueNextMusicAddress)
+        If Not MusicWaitingList.Any() Then MusicListInit(False, DequeueNextMusicAddress)
     End Function
 
 #End Region
@@ -63,7 +65,7 @@
         RunInUi(Sub()
                     Try
 
-                        If MusicAllList.Count = 0 Then
+                        If Not MusicAllList.Any() Then
                             '无背景音乐
                             FrmMain.BtnExtraMusic.Show = False
                         Else
@@ -160,7 +162,7 @@
         Try
 
             MusicListInit(True)
-            If MusicAllList.Count = 0 Then
+            If Not MusicAllList.Any() Then
                 If MusicNAudio Is Nothing Then
                     If ShowHint Then Hint("未检测到可用的背景音乐！", HintType.Critical)
                 Else
@@ -267,9 +269,13 @@
             If CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Stopped AndAlso MusicAllList.Count > 0 Then MusicStartPlay(DequeueNextMusicAddress)
         Catch ex As Exception
             Log("[Music] 播放音乐失败的文件完整路径：" & MusicCurrent)
+            If TypeOf ex Is NAudio.MmException AndAlso (ex.Message.Contains("NoDriver") OrElse ex.Message.Contains("BadDeviceId")) Then
+                Hint("由于音频设备变更，音乐播放功能在重启 PCL 后才能恢复！", HintType.Critical)
+                Thread.Sleep(1000000000)
+            End If
             If ex.Message.Contains("Got a frame at sample rate") OrElse ex.Message.Contains("does not support changes to") Then
                 Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL 不支持播放音频属性在中途发生变化的音乐", HintType.Critical)
-            ElseIf Not (MusicCurrent.ToLower.EndsWith(".wav") OrElse MusicCurrent.ToLower.EndsWith(".mp3") OrElse MusicCurrent.ToLower.EndsWith(".flac")) Then
+            ElseIf Not (MusicCurrent.EndsWithF(".wav", True) OrElse MusicCurrent.EndsWithF(".mp3", True) OrElse MusicCurrent.EndsWithF(".flac", True)) Then
                 Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试", HintType.Critical)
             Else
                 Log(ex, "播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）", LogLevel.Hint)

@@ -88,7 +88,7 @@
             PanMain.Children.Clear()
             '转化为 UI
             For Each Pair As KeyValuePair(Of String, List(Of CompFile)) In Dict
-                If Pair.Value.Count = 0 Then Continue For
+                If Not Pair.Value.Any() Then Continue For
                 '增加卡片
                 Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(Project.Type = CompType.ModPack, 9, 8)} 'FUTURE: Res
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
@@ -252,7 +252,7 @@
                         For Each Version As McVersion In McVersionList.Values.SelectMany(Function(l) l)
                             If IsVersionSuitable(Version) Then SuitableVersions.Add(Version)
                         Next
-                        If SuitableVersions.Count = 0 Then
+                        If Not SuitableVersions.Any() Then
                             DefaultFolder = PathMcFolder
                             If NeedLoad Then
                                 Hint("当前 MC 文件夹中没有找到适合这个 Mod 的版本！")

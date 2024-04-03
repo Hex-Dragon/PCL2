@@ -143,7 +143,7 @@ Public Module ModLaunch
         Catch ex As Exception
             Dim CurrentEx = ex
 NextInner:
-            If CurrentEx.Message.StartsWith("$") Then
+            If CurrentEx.Message.StartsWithF("$") Then
                 '若有以 $ 开头的错误信息，则以此为准显示提示
                 '若错误信息为 $$，则不提示
                 If Not CurrentEx.Message = "$$" Then MyMsgBox(CurrentEx.Message.TrimStart("$"), If(Loader.Input.SaveBatch Is Nothing, "启动失败", "导出启动脚本失败"))
@@ -752,7 +752,7 @@ LoginFinish:
                 End Select
             ElseIf AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout") OrElse AllMessage.Contains("网络请求失败") Then
                 Throw New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查你的网络状况是否良好，或尝试使用 VPN！")
-            ElseIf ex.Message.StartsWith("$") Then
+            ElseIf ex.Message.StartsWithF("$") Then
                 Throw
             Else
                 Throw New Exception("登录失败：" & ex.Message, ex)
@@ -990,13 +990,13 @@ SystemBrowser:
             Case 1
                 'Steve
                 Do Until McSkinSex(Uuid) = "Steve"
-                    If Uuid.EndsWith("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
+                    If Uuid.EndsWithF("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
                     Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
                 Loop
             Case 2
                 'Alex
                 Do Until McSkinSex(Uuid) = "Alex"
-                    If Uuid.EndsWith("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
+                    If Uuid.EndsWithF("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
                     Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
                 Loop
             Case 3
@@ -1013,7 +1013,7 @@ SystemBrowser:
             Case 4
                 '自定义
                 Do Until McSkinSex(Uuid) = If(Setup.Get("LaunchSkinSlim"), "Alex", "Steve")
-                    If Uuid.EndsWith("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
+                    If Uuid.EndsWithF("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
                     Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
                 Loop
         End Select
@@ -1057,7 +1057,12 @@ SystemBrowser:
         Dim MinVer As New Version(0, 0, 0, 0), MaxVer As New Version(999, 999, 999, 999)
 
         'MC 大版本检测
-        If (McVersionCurrent.ReleaseTime >= New Date(2021, 11, 16) AndAlso McVersionCurrent.Version.McCodeMain = 99) OrElse
+        If (McVersionCurrent.ReleaseTime >= New Date(2024, 4, 2) AndAlso McVersionCurrent.Version.McCodeMain = 99) OrElse
+            (McVersionCurrent.Version.McCodeMain > 20 AndAlso McVersionCurrent.Version.McCodeMain <> 99) OrElse
+            (McVersionCurrent.Version.McCodeMain = 20 AndAlso McVersionCurrent.Version.McCodeSub >= 5) Then
+            '1.20.5+（24w14a+）：至少 Java 21
+            MinVer = New Version(1, 21, 0, 0)
+        ElseIf (McVersionCurrent.ReleaseTime >= New Date(2021, 11, 16) AndAlso McVersionCurrent.Version.McCodeMain = 99) OrElse
             (McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain <> 99) Then
             '1.18 pre2+：至少 Java 17
             MinVer = New Version(1, 17, 0, 0)
@@ -1140,7 +1145,10 @@ SystemBrowser:
         If Task.IsAborted Then Exit Sub '中断加载会导致 JavaSelect 异常地返回空值，误判找不到 Java
         McLaunchLog("无合适的 Java，需要确认是否自动下载")
         Dim JavaCode As String
-        If MinVer >= New Version(1, 9, 0, 0) Then
+        If MinVer >= New Version(1, 21, 0, 0) Then
+            JavaCode = 21
+            If Not JavaDownloadConfirm("Java 21") Then Throw New Exception("$$")
+        ElseIf MinVer >= New Version(1, 9, 0, 0) Then
             JavaCode = 17
             If Not JavaDownloadConfirm("Java 17") Then Throw New Exception("$$")
         ElseIf MaxVer < New Version(1, 8, 0, 0) Then
@@ -1394,9 +1402,9 @@ NextVersion:
         Dim DeDuplicateDataList As New List(Of String)
         For i = 0 To DataList.Count - 1
             Dim CurrentEntry As String = DataList(i)
-            If DataList(i).StartsWith("-") Then
+            If DataList(i).StartsWithF("-") Then
                 Do While i < DataList.Count - 1
-                    If DataList(i + 1).StartsWith("-") Then
+                    If DataList(i + 1).StartsWithF("-") Then
                         Exit Do
                     Else
                         i += 1
@@ -1487,9 +1495,9 @@ NextVersion:
         Dim DeDuplicateDataList As New List(Of String)
         For i = 0 To DataList.Count - 1
             Dim CurrentEntry As String = DataList(i)
-            If DataList(i).StartsWith("-") Then
+            If DataList(i).StartsWithF("-") Then
                 Do While i < DataList.Count - 1
-                    If DataList(i + 1).StartsWith("-") Then
+                    If DataList(i + 1).StartsWithF("-") Then
                         Exit Do
                     Else
                         i += 1
@@ -1595,7 +1603,7 @@ NextVersion:
             End Try
             For Each Entry In Zip.Entries
                 Dim FileName As String = Entry.FullName
-                If FileName.EndsWith(".dll") Then
+                If FileName.EndsWithF(".dll", True) Then
                     '实际解压文件的步骤
                     Dim FilePath As String = McVersionCurrent.Path & McVersionCurrent.Name & "-natives\" & FileName
                     ExistFiles.Add(FilePath)

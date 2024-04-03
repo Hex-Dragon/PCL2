@@ -89,7 +89,7 @@
         If PanAlways IsNot Nothing Then PanAlways.Visibility = Visibility.Collapsed
         '初次运行加载器
         If PageLoaderAutoRun Then
-            If PageLoader.GetType.Name.StartsWith("LoaderTask") Then
+            If PageLoader.GetType.Name.StartsWithF("LoaderTask") Then
                 PageLoader.Start(CType(PageLoader, Object).StartGetInput(Nothing, PageLoaderInputInvoke))
             Else
                 Dim Input = Nothing
@@ -107,7 +107,7 @@
     '重试
     Public Sub PageLoaderRestart(Optional Input As Object = Nothing, Optional IsForceRestart As Boolean = True) '由外部调用的重试
         If Not PageLoaderAutoRun Then Exit Sub
-        If PageLoader.GetType.Name.StartsWith("LoaderTask") Then
+        If PageLoader.GetType.Name.StartsWithF("LoaderTask") Then
             PageLoader.Start(CType(PageLoader, Object).StartGetInput(Input, PageLoaderInputInvoke), IsForceRestart:=IsForceRestart)
         Else
             If Input Is Nothing AndAlso PageLoaderInputInvoke IsNot Nothing Then Input = PageLoaderInputInvoke()

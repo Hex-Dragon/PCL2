@@ -16,11 +16,11 @@ Public Class MyLocalModItem
             _Logo = value
             Dim FileAddress = PathTemp & "CompLogo\" & GetHash(_Logo) & ".png"
             Try
-                If _Logo.ToLower.StartsWith("http") Then
+                If _Logo.StartsWithF("http", True) Then
                     '网络图片
                     If File.Exists(FileAddress) Then
                         PathLogo.Source = New MyBitmap(FileAddress)
-                    ElseIf _Logo.ToLower.EndsWith(".webp") Then 'Modrinth 林业 Mod 使用了不支持的 WebP 格式 Logo
+                    ElseIf _Logo.EndsWithF(".webp", True) Then 'Modrinth 林业 Mod 使用了不支持的 WebP 格式 Logo
                         Log($"[LocalModItem] 发现不支持的 WebP 格式图标，已更改为默认图标：{_Logo}")
                         PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
                     Else
@@ -190,6 +190,39 @@ RetryStart:
         If ButtonStack IsNot Nothing Then ButtonStack.IsHitTestVisible = True
     End Sub
 
+    '滑动选中
+    Private Shared SwipeStart As Integer, SwipeEnd As Integer
+    Private Shared Swiping As Boolean = False
+    Private Shared SwipToState As Boolean '被滑动到的目标应将 Checked 改为此值
+    Private Sub Button_MouseSwipeStart(sender As Object, e As Object) Handles Me.MouseLeftButtonDown
+        '开始滑动
+        Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
+        SwipeStart = Index
+        SwipeEnd = Index
+        Swiping = True
+        SwipToState = Not Checked
+        FrmVersionMod.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
+    End Sub
+    Private Sub Button_MouseSwipe(sender As Object, e As Object) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonUp
+        '结束滑动
+        If Mouse.LeftButton <> MouseButtonState.Pressed OrElse Not Swiping Then
+            Swiping = False
+            FrmVersionMod.CardSelect.IsHitTestVisible = True
+            Exit Sub
+        End If
+        '计算滑动范围
+        Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
+        SwipeStart = Math.Min(SwipeStart, Index)
+        SwipeEnd = Math.Max(SwipeEnd, Index)
+        '勾选所有范围中的项
+        If SwipeStart = SwipeEnd Then Exit Sub
+        For i = SwipeStart To SwipeEnd
+            Dim Item As MyLocalModItem = CType(Parent, StackPanel).Children(i)
+            Item.InitLate(Item, e)
+            Item.Checked = SwipToState
+        Next
+    End Sub
+
     '勾选状态
     Public Event Check(sender As Object, e As RouteEventArgs)
     Public Event Changed(sender As Object, e As RouteEventArgs)
@@ -201,10 +234,10 @@ RetryStart:
         Set(value As Boolean)
             Try
                 '触发属性值修改
-                Dim ChangedEventArgs As New RouteEventArgs(False)
                 Dim RawValue = _Checked
                 If value = _Checked Then Exit Property
                 _Checked = value
+                Dim ChangedEventArgs As New RouteEventArgs(False)
                 If IsInitialized Then
                     RaiseEvent Changed(Me, ChangedEventArgs)
                     If ChangedEventArgs.Handled Then
@@ -310,7 +343,7 @@ RetryStart:
                 Children.Remove(ButtonStack)
                 ButtonStack = Nothing
             End If
-            If value.Count = 0 Then Exit Property
+            If Not value.Any() Then Exit Property
             '添加新 Stack
             ButtonStack = New StackPanel With {.Opacity = 0, .Margin = New Thickness(0, 0, 5, 0), .SnapsToDevicePixels = False, .Orientation = Orientation.Horizontal,
                 .HorizontalAlignment = HorizontalAlignment.Right, .VerticalAlignment = VerticalAlignment.Center, .UseLayoutRounding = False}
@@ -347,6 +380,30 @@ RetryStart:
     Public Sub Refresh()
         RunInUi(
         Sub()
+            '更新
+            If Entry.CanUpdate Then
+                BtnUpdate.Visibility = Visibility.Visible
+                Dim CurrentName = Entry.CompFile.FileName.Replace(".jar", "")
+                Dim NewestName = Entry.UpdateFile.FileName.Replace(".jar", "")
+                '简化名称对比
+                Dim CurrentSegs = CurrentName.Split("-"c).ToList()
+                Dim NewestSegs = NewestName.Split("-"c).ToList()
+                Dim Shortened As Boolean = False
+                For Each Seg In CurrentSegs.ToList()
+                    If Not NewestSegs.Contains(Seg) Then Continue For
+                    CurrentSegs.Remove(Seg)
+                    NewestSegs.Remove(Seg)
+                    Shortened = True
+                Next
+                If Shortened AndAlso CurrentSegs.Any() AndAlso NewestSegs.Any() Then
+                    CurrentName = Join(CurrentSegs, "-")
+                    NewestName = Join(NewestSegs, "-")
+                    Entry._Version = CurrentName '使用网络信息作为显示的版本号
+                End If
+                BtnUpdate.ToolTip = $"当前版本：{CurrentName} ({Entry.CompFile.ReleaseDate:yyyy/MM/dd HH:mm:ss}){vbCrLf}最新版本：{NewestName} ({Entry.UpdateFile.ReleaseDate:yyyy/MM/dd HH:mm:ss}){vbCrLf}点击以更新，右键查看更新日志。"
+            Else
+                BtnUpdate.Visibility = Visibility.Collapsed
+            End If
             '标题
             If Entry.Comp Is Nothing Then
                 Title = Entry.Name
@@ -390,9 +447,9 @@ RetryStart:
             Else
                 If ImgState Is Nothing Then
                     ImgState = New Image With {
-                                .Width = 20, .Height = 20, .Margin = New Thickness(0, 0, -5, -3), .IsHitTestVisible = False,
-                                .HorizontalAlignment = HorizontalAlignment.Right, .VerticalAlignment = VerticalAlignment.Bottom
-                            }
+                        .Width = 20, .Height = 20, .Margin = New Thickness(0, 0, -5, -3), .IsHitTestVisible = False,
+                        .HorizontalAlignment = HorizontalAlignment.Right, .VerticalAlignment = VerticalAlignment.Bottom
+                    }
                     RenderOptions.SetBitmapScalingMode(ImgState, BitmapScalingMode.HighQuality)
                     SetColumn(ImgState, 1) : SetRow(ImgState, 1) : SetRowSpan(ImgState, 2)
                     Children.Add(ImgState)
@@ -409,11 +466,7 @@ RetryStart:
     End Sub
 
     Public Sub RefreshColor(sender As Object, e As EventArgs) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonDown, Me.MouseLeftButtonUp, Me.Changed
-        '按钮虚拟化检测
-        If ButtonHandler IsNot Nothing Then
-            ButtonHandler(sender, e)
-            ButtonHandler = Nothing
-        End If
+        InitLate(sender, e)
         '触发颜色动画
         Dim Time As Integer = If(IsMouseOver, 120, 180)
         Dim Ani As New List(Of AniData)
@@ -422,19 +475,19 @@ RetryStart:
             If IsMouseOver Then
                 Ani.Add(AaOpacity(ButtonStack, 1 - ButtonStack.Opacity, Time * 0.7, Time * 0.3))
                 Ani.Add(AaDouble(Sub(i) ColumnPaddingRight.Width = New GridLength(Math.Max(0, ColumnPaddingRight.Width.Value + i)),
-                                         5 + Buttons.Count * 25 - ColumnPaddingRight.Width.Value, Time * 0.3, Time * 0.7))
+                    5 + Buttons.Count * 25 - ColumnPaddingRight.Width.Value, Time * 0.3, Time * 0.7))
             Else
                 Ani.Add(AaOpacity(ButtonStack, -ButtonStack.Opacity, Time * 0.4))
                 Ani.Add(AaDouble(Sub(i) ColumnPaddingRight.Width = New GridLength(Math.Max(0, ColumnPaddingRight.Width.Value + i)),
-                                     4 - ColumnPaddingRight.Width.Value, Time * 0.4))
+                    4 - ColumnPaddingRight.Width.Value, Time * 0.4))
             End If
         End If
         'RectBack
         If IsMouseOver OrElse Checked Then
             Ani.AddRange({
-                    AaColor(RectBack, Border.BackgroundProperty, If(IsMouseDown, "ColorBrush6", "ColorBrushBg1"), Time),
-                    AaOpacity(RectBack, 1 - RectBack.Opacity, Time,, New AniEaseOutFluent)
-                })
+                AaColor(RectBack, Border.BackgroundProperty, If(IsMouseDown, "ColorBrush6", "ColorBrushBg1"), Time),
+                AaOpacity(RectBack, 1 - RectBack.Opacity, Time,, New AniEaseOutFluent)
+            })
             If IsMouseDown Then
                 Ani.Add(AaScaleTransform(RectBack, 0.996 - CType(RectBack.RenderTransform, ScaleTransform).ScaleX, Time * 1.2,, New AniEaseOutFluent))
             Else
@@ -442,12 +495,42 @@ RetryStart:
             End If
         Else
             Ani.AddRange({
-                    AaOpacity(RectBack, -RectBack.Opacity, Time),
-                    AaScaleTransform(RectBack, 0.996 - CType(RectBack.RenderTransform, ScaleTransform).ScaleX, Time,, New AniEaseOutFluent),
-                    AaScaleTransform(RectBack, -0.196, 1,,, True)
-                })
+                AaOpacity(RectBack, -RectBack.Opacity, Time),
+                AaScaleTransform(RectBack, 0.996 - CType(RectBack.RenderTransform, ScaleTransform).ScaleX, Time,, New AniEaseOutFluent),
+                AaScaleTransform(RectBack, -0.196, 1,,, True)
+            })
         End If
         AniStart(Ani, "LocalModItem Color " & Uuid)
+    End Sub
+
+    '触发虚拟化内容
+    Private Sub InitLate(sender As Object, e As EventArgs)
+        If ButtonHandler IsNot Nothing Then
+            ButtonHandler(sender, e)
+            ButtonHandler = Nothing
+        End If
+    End Sub
+
+    '显示更新日志
+    Private Sub ShowUpdateLog(sender As Object, e As MouseButtonEventArgs) Handles BtnUpdate.PreviewMouseRightButtonUp
+        e.Handled = True
+        Dim CurseForgeUrl As String = Entry.ChangelogUrls.FirstOrDefault(Function(x) x.Contains("curseforge.com"))
+        Dim ModrinthUrl As String = Entry.ChangelogUrls.FirstOrDefault(Function(x) x.Contains("modrinth.com"))
+        If CurseForgeUrl Is Nothing OrElse ModrinthUrl Is Nothing Then
+            OpenWebsite(Entry.ChangelogUrls.First)
+        Else
+            Select Case MyMsgBox("要在哪个网站上查看更新日志？", "查看更新日志", "Modrinth", "CurseForge", "取消")
+                Case 1
+                    OpenWebsite(ModrinthUrl)
+                Case 2
+                    OpenWebsite(CurseForgeUrl)
+            End Select
+        End If
+    End Sub
+
+    '触发更新
+    Private Sub BtnUpdate_Click(sender As Object, e As EventArgs) Handles BtnUpdate.Click
+        FrmVersionMod.UpdateMods({Entry})
     End Sub
 
 End Class

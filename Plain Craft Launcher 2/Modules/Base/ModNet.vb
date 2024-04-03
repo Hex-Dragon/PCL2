@@ -189,7 +189,7 @@ RequestFinished:
         Dim Request As HttpWebRequest = WebRequest.Create(Url)
         Dim Result As New List(Of Byte)
         Try
-            If Url.StartsWith("https", StringComparison.OrdinalIgnoreCase) Then Request.ProtocolVersion = HttpVersion.Version11
+            If Url.StartsWithF("https", True) Then Request.ProtocolVersion = HttpVersion.Version11
             Request.Timeout = Timeout
             Request.Accept = Accept
             SecretHeadersSign(Url, Request, UseBrowserUserAgent)
@@ -397,7 +397,7 @@ RequestFinished:
             Req.ContentType = ContentType
             Req.Timeout = Timeout
             SecretHeadersSign(Url, Req, UseBrowserUserAgent)
-            If Url.StartsWith("https", StringComparison.OrdinalIgnoreCase) Then Req.ProtocolVersion = HttpVersion.Version11
+            If Url.StartsWithF("https", True) Then Req.ProtocolVersion = HttpVersion.Version11
             If Method = "POST" OrElse Method = "PUT" Then
                 Req.ContentLength = SendData.Length
                 DataStream = Req.GetRequestStream()
@@ -897,7 +897,7 @@ RequestFinished:
         ''' 新建一个需要下载的文件。
         ''' </summary>
         ''' <param name="LocalPath">包含文件名的本地地址。</param>
-        Public Sub New(Urls As String(), LocalPath As String, Optional Check As FileChecker = Nothing, Optional UseBrowserUserAgent As Boolean = False)
+        Public Sub New(Urls As IEnumerable(Of String), LocalPath As String, Optional Check As FileChecker = Nothing, Optional UseBrowserUserAgent As Boolean = False)
             Dim Sources As New List(Of NetSource)
             Dim Count As Integer = 0
             Urls = Urls.Distinct.ToArray
@@ -987,7 +987,7 @@ StartThread:
                     '构建线程
                     Dim ThreadUuid As Integer = GetUuid()
                     SyncLock LockTasks
-                        If Tasks.Count = 0 Then Return False '由于中断，已没有可用任务
+                        If Not Tasks.Any() Then Return False '由于中断，已没有可用任务
                         Th = New Thread(AddressOf Thread) With {.Name = "NetTask " & Tasks(0).Uuid & "/" & Uuid & " Download " & ThreadUuid & "#", .Priority = ThreadPriority.BelowNormal}
                     End SyncLock
                     ThreadInfo = New NetThread With {.Uuid = ThreadUuid, .DownloadStart = StartPosition, .Thread = Th, .Source = StartSource, .Task = Me, .State = NetState.WaitForDownload}
@@ -1035,7 +1035,7 @@ StartThread:
                 If SourcesOnce.Contains(Info.Source) AndAlso Not Info.Equals(Info.Source.Thread) Then GoTo SourceBreak
                 '请求头
                 HttpRequest = WebRequest.Create(Info.Source.Url)
-                If Info.Source.Url.StartsWith("https", StringComparison.OrdinalIgnoreCase) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
+                If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
                 'HttpRequest.Proxy = Nothing 'new WebProxy(Ip, Port)
                 HttpRequest.Timeout = Timeout
                 HttpRequest.AddRange(Info.DownloadStart)
@@ -1067,11 +1067,11 @@ StartThread:
                         If ThreadFileSize > 50 * 1024 * 1024 Then
                             For Each Drive As DriveInfo In DriveInfo.GetDrives
                                 Dim DriveName As String = Drive.Name.First.ToString
-                                Dim RequiredSpace = If(PathTemp.StartsWith(DriveName), ThreadFileSize * 1.1, 0) +
-                                                If(LocalPath.StartsWith(DriveName), ThreadFileSize + 5 * 1024 * 1024, 0)
+                                Dim RequiredSpace = If(PathTemp.StartsWithF(DriveName), ThreadFileSize * 1.1, 0) +
+                                                If(LocalPath.StartsWithF(DriveName), ThreadFileSize + 5 * 1024 * 1024, 0)
                                 If Drive.TotalFreeSpace < RequiredSpace Then
                                     Throw New Exception(DriveName & " 盘空间不足，无法进行下载。" & vbCrLf & "需要至少 " & GetString(RequiredSpace) & " 空间，但当前仅剩余 " & GetString(Drive.TotalFreeSpace) & "。" &
-                                                    If(PathTemp.StartsWith(DriveName), vbCrLf & vbCrLf & "下载时需要与文件同等大小的空间存放缓存，你可以在设置中调整缓存文件夹的位置。", ""))
+                                                    If(PathTemp.StartsWithF(DriveName), vbCrLf & vbCrLf & "下载时需要与文件同等大小的空间存放缓存，你可以在设置中调整缓存文件夹的位置。", ""))
                                 End If
                             Next
                         End If
@@ -1465,7 +1465,7 @@ Retry:
         Public Overrides Property Progress As Double
             Get
                 If State >= LoadState.Finished Then Return 1
-                If Files.Count = 0 Then Return 0 '必须返回 0，否则在获取列表的时候会错觉已经下载完了
+                If Not Files.Any() Then Return 0 '必须返回 0，否则在获取列表的时候会错觉已经下载完了
                 Return _Progress
             End Get
             Set(value As Double)
@@ -1559,21 +1559,21 @@ NextElement:
             RunInNewThread(Sub()
                                Try
                                    '输入检测
-                                   If Files.Count = 0 Then
+                                   If Not Files.Any() Then
                                        OnFinish()
                                        Exit Sub
                                    End If
                                    For Each File As NetFile In Files
                                        If File Is Nothing Then Throw New ArgumentException("存在空文件请求！")
                                        For Each Source As NetSource In File.Sources
-                                           If Not (Source.Url.ToLower.StartsWith("https://") OrElse Source.Url.ToLower.StartsWith("http://")) Then
+                                           If Not (Source.Url.StartsWithF("https://", True) OrElse Source.Url.StartsWithF("http://", True)) Then
                                                Source.Ex = New ArgumentException("输入的下载链接不正确！")
                                                Source.IsFailed = True
                                            End If
                                        Next
                                        If File.IsSourceFailed() Then Throw New ArgumentException("输入的下载链接不正确！")
                                        If Not File.LocalPath.ToLower.Contains(":\") Then Throw New ArgumentException("输入的本地文件地址不正确！")
-                                       If File.LocalPath.EndsWith("\") Then Throw New ArgumentException("请输入含文件名的完整文件路径！")
+                                       If File.LocalPath.EndsWithF("\") Then Throw New ArgumentException("请输入含文件名的完整文件路径！")
                                        '文件夹检测
                                        Dim DirPath As String = New FileInfo(File.LocalPath).Directory.FullName
                                        If Not Directory.Exists(DirPath) Then Directory.CreateDirectory(DirPath)
@@ -1626,7 +1626,7 @@ NextElement:
                 For Each File As NetFile In Files
                     Dim ExistFilePath As String = Nothing
                     '判断是否有已存在的文件
-                    If File.Check IsNot Nothing AndAlso McFolderList IsNot Nothing AndAlso PathMcFolder IsNot Nothing AndAlso File.Check.CanUseExistsFile AndAlso File.LocalPath.StartsWith(PathMcFolder) Then
+                    If File.Check IsNot Nothing AndAlso McFolderList IsNot Nothing AndAlso PathMcFolder IsNot Nothing AndAlso File.Check.CanUseExistsFile AndAlso File.LocalPath.StartsWithF(PathMcFolder) Then
                         Dim Relative = File.LocalPath.Replace(PathMcFolder, "")
                         For Each Folder In FolderList
                             Dim Target = Folder & Relative
@@ -1699,7 +1699,7 @@ Retry:
         Public Sub OnFail(ExList As List(Of Exception))
             SyncLock LockState
                 If State > LoadState.Loading Then Exit Sub
-                If ExList Is Nothing OrElse ExList.Count = 0 Then ExList = New List(Of Exception) From {New Exception("未知错误！")}
+                If ExList Is Nothing OrElse Not ExList.Any() Then ExList = New List(Of Exception) From {New Exception("未知错误！")}
                 '寻找第一个不是 404 的下载源
                 Dim UsefulExs = ExList.Where(Function(e) Not e.Message.Contains("(404)")).ToList
                 [Error] = If(UsefulExs.Count > 0, UsefulExs(0), ExList(0))

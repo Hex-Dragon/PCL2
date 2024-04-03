@@ -36,7 +36,7 @@
         Try
 
 #Region "更新左边栏"
-            If LoaderTaskbar.Count = 0 Then
+            If Not LoaderTaskbar.Any() Then
                 '无任务
                 LabProgress.Text = "100 %"
                 LabSpeed.Text = "0 B/s"
@@ -214,13 +214,14 @@
     End Sub
     Public Sub TaskRemove(Loader As Object)
         If RightCards.ContainsKey(Loader.Name) Then
-            RunInUiWait(Sub()
-                            '移除已有的卡片
-                            Dim Card As Grid = RightCards(Loader.Name)
-                            FrmSpeedRight.PanMain.Children.Remove(Card)
-                            RightCards.Remove(Loader.Name)
-                            Log($"[Watcher] 移除下载管理卡片：{Loader.Name}")
-                        End Sub)
+            RunInUiWait(
+            Sub()
+                '移除已有的卡片
+                Dim Card As Grid = RightCards(Loader.Name)
+                FrmSpeedRight.PanMain.Children.Remove(Card)
+                RightCards.Remove(Loader.Name)
+                Log($"[Watcher] 移除下载管理卡片：{Loader.Name}")
+            End Sub)
         End If
     End Sub
 
