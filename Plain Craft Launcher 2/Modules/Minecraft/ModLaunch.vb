@@ -991,13 +991,13 @@ SystemBrowser:
                 'Steve
                 Do Until McSkinSex(Uuid) = "Steve"
                     If Uuid.EndsWithF("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
-                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
+                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("F")
                 Loop
             Case 2
                 'Alex
                 Do Until McSkinSex(Uuid) = "Alex"
                     If Uuid.EndsWithF("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
-                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
+                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("F")
                 Loop
             Case 3
                 '使用正版用户名
@@ -1014,7 +1014,7 @@ SystemBrowser:
                 '自定义
                 Do Until McSkinSex(Uuid) = If(Setup.Get("LaunchSkinSlim"), "Alex", "Steve")
                     If Uuid.EndsWithF("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
-                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
+                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("F")
                 Loop
         End Select
         Return Uuid
@@ -1044,7 +1044,7 @@ SystemBrowser:
         Return Uuid
     End Function
     Public Function McLoginLegacyUuid(Name As String)
-        Dim FullUuid As String = StrFill(Name.Length.ToString("X"), "0", 16) & StrFill(GetHash(Name).ToString("X"), "0", 16)
+        Dim FullUuid As String = StrFill(Name.Length.ToString("F"), "0", 16) & StrFill(GetHash(Name).ToString("F"), "0", 16)
         Return FullUuid.Substring(0, 12) & "3" & FullUuid.Substring(13, 3) & "9" & FullUuid.Substring(17, 15)
     End Function
 
