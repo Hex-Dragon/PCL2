@@ -149,7 +149,7 @@
             '进行搜索，构造列表
             Dim SearchResult = Search(QueryList, SearchBox.Text, MaxBlurCount:=5, MinBlurSimilarity:=0.08)
             PanSearchList.Children.Clear()
-            If SearchResult.Count = 0 Then
+            If Not SearchResult.Any() Then
                 PanSearch.Title = "无搜索结果"
                 PanSearchList.Visibility = Visibility.Collapsed
             Else

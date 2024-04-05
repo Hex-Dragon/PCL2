@@ -869,7 +869,7 @@ NextAni:
                 Loop
 
                 '如果当前动画组都执行完毕则删除
-                If Entry.Data.Count = 0 Then
+                If Not Entry.Data.Any() Then
                     '为了避免新添加的动画影响顺序，不能 RemoveAt(i)
                     '为了允许动画在执行中添加同名动画组，不能按名字移除
                     For Current = 0 To AniGroups.Count - 1

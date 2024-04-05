@@ -140,6 +140,14 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 318 Then 'Snapshot 2.7.0
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持更新 Mod"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持查看可更新的 Mod 的更新日志"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持滑动鼠标快速选中、取消选中多个 Mod"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动 MC 24w14a+ 的 Bug"))
+            FeatureCount += 2
+            BugCount += 2
+        End If
         If LastVersion < 316 Then 'Snapshot 2.6.15
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法安装 Forge 的 Bug"))
             FeatureCount += 2
@@ -341,7 +349,7 @@ Public Class FormMain
         Dim SortedFeatures = Sort(FeatureList, Function(Left As KeyValuePair(Of Integer, String), Right As KeyValuePair(Of Integer, String)) As Boolean
                                                    Return Left.Key > Right.Key
                                                End Function)
-        If SortedFeatures.Count = 0 AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then
+        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then
             ContentList.Add("龙猫忘记写更新日志啦！可以去提醒他一下……")
         End If
         For i = 0 To Math.Min(9, SortedFeatures.Count - 1) '最多取 10 项
@@ -810,7 +818,7 @@ Public Class FormMain
                 Try
                     Dim Str As String = e.Data.GetData(DataFormats.Text)
                     Log("[System] 接受文本拖拽：" & Str)
-                    If Str.StartsWith("authlib-injector:yggdrasil-server:") Then
+                    If Str.StartsWithF("authlib-injector:yggdrasil-server:") Then
                         'Authlib 拖拽
                         e.Handled = True
                         Dim AuthlibServer As String = Net.WebUtility.UrlDecode(Str.Substring("authlib-injector:yggdrasil-server:".Length))
@@ -853,7 +861,7 @@ Public Class FormMain
                             '正在主页，需要刷新左边栏
                             FrmLaunchLeft.RefreshPage(True, False)
                         End If
-                    ElseIf Str.StartsWith("file:///") Then
+                    ElseIf Str.StartsWithF("file:///") Then
                         '文件拖拽（例如从浏览器下载窗口拖入）
                         Dim FilePath = Net.WebUtility.UrlDecode(Str).Substring("file:///".Length).Replace("/", "\")
                         e.Handled = True
@@ -1296,7 +1304,7 @@ Install:
     ''' 通过点击返回按钮或手动触发返回来改变页面。
     ''' </summary>
     Public Sub PageBack() Handles BtnTitleInner.Click
-        If PageStack.Count = 0 Then Exit Sub
+        If Not PageStack.Any() Then Exit Sub
         PageChangeActual(PageStack(0))
     End Sub
 
@@ -1316,27 +1324,13 @@ Install:
                 PageChangeExit()
             Else
                 '即将切换到一个子页面
-                If PageStack.Count = 0 Then
-                    '主页面 → 子页面，进入
-                    PanTitleInner.Visibility = Visibility.Visible
-                    PanTitleMain.IsHitTestVisible = False
-                    PanTitleInner.IsHitTestVisible = True
-                    PageNameRefresh(Stack)
-                    AniStart({
-                                 AaOpacity(PanTitleMain, -PanTitleMain.Opacity, 150),
-                                 AaX(PanTitleMain, 12 - PanTitleMain.Margin.Left, 150,, New AniEaseInFluent(AniEasePower.Weak)),
-                                 AaOpacity(PanTitleInner, 1 - PanTitleInner.Opacity, 150, 200),
-                                 AaX(PanTitleInner, -PanTitleInner.Margin.Left, 350, 200, New AniEaseOutBack),
-                                 AaCode(Sub() PanTitleMain.Visibility = Visibility.Collapsed,, True)
-                        }, "FrmMain Titlebar FirstLayer")
-                    PageStack.Insert(0, PageCurrent)
-                Else
+                If PageStack.Any Then
                     '子页面 → 另一个子页面，更新
                     AniStart({
-                                 AaOpacity(LabTitleInner, -LabTitleInner.Opacity, 130),
-                                 AaCode(Sub() LabTitleInner.Text = PageName,, True),
-                                 AaOpacity(LabTitleInner, 1, 150, 30)
-                        }, "FrmMain Titlebar SubLayer")
+                             AaOpacity(LabTitleInner, -LabTitleInner.Opacity, 130),
+                             AaCode(Sub() LabTitleInner.Text = PageName,, True),
+                             AaOpacity(LabTitleInner, 1, 150, 30)
+                    }, "FrmMain Titlebar SubLayer")
                     If PageStack.Contains(Stack) Then
                         '返回到更上层的子页面
                         Do While PageStack.Contains(Stack)
@@ -1346,6 +1340,20 @@ Install:
                         '进入更深层的子页面
                         PageStack.Insert(0, PageCurrent)
                     End If
+                Else
+                    '主页面 → 子页面，进入
+                    PanTitleInner.Visibility = Visibility.Visible
+                    PanTitleMain.IsHitTestVisible = False
+                    PanTitleInner.IsHitTestVisible = True
+                    PageNameRefresh(Stack)
+                    AniStart({
+                        AaOpacity(PanTitleMain, -PanTitleMain.Opacity, 150),
+                        AaX(PanTitleMain, 12 - PanTitleMain.Margin.Left, 150,, New AniEaseInFluent(AniEasePower.Weak)),
+                        AaOpacity(PanTitleInner, 1 - PanTitleInner.Opacity, 150, 200),
+                        AaX(PanTitleInner, -PanTitleInner.Margin.Left, 350, 200, New AniEaseOutBack),
+                        AaCode(Sub() PanTitleMain.Visibility = Visibility.Collapsed,, True)
+                    }, "FrmMain Titlebar FirstLayer")
+                    PageStack.Insert(0, PageCurrent)
                 End If
             End If
 #End Region
@@ -1452,9 +1460,7 @@ Install:
     ''' 退出子界面。
     ''' </summary>
     Private Sub PageChangeExit()
-        If PageStack.Count = 0 Then
-            '主页面 → 主页面，无事发生
-        Else
+        If PageStack.Any Then
             '子页面 → 主页面，退出
             PanTitleMain.Visibility = Visibility.Visible
             PanTitleMain.IsHitTestVisible = True
@@ -1467,6 +1473,8 @@ Install:
                          AaCode(Sub() PanTitleInner.Visibility = Visibility.Collapsed,, True)
                 }, "FrmMain Titlebar FirstLayer")
             PageStack.Clear()
+        Else
+            '主页面 → 主页面，无事发生
         End If
     End Sub
 

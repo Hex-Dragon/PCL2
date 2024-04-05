@@ -3648,7 +3648,7 @@ vpn-blocker|禁用VPN (VPN Blocker)
 premium-wood@
 tenshilib¨tenshilib-fabric
 randomportals|随意传送门 (RandomPortals)
-configured|配置界面* - Forge¨configured-fabric|配置界面 (Configured) - Fabric
+configured|配置界面*¨configured-fabric|配置界面 (Configured) - Fabric
 
 jellyfishing@|抓水母*
 accurate-block-placement

@@ -40,7 +40,7 @@ Public Module ModModpack
                 For Each Entry In Archive.Entries
                     Dim FullNames As String() = Entry.FullName.Split("/")
                     ArchiveBaseFolder = FullNames(0) & "/"
-                    If Entry.FullName.EndsWith("/versions/") AndAlso FullNames.Count = 3 Then PackType = 9 : Exit Try '压缩包
+                    If Entry.FullName.EndsWithF("/versions/") AndAlso FullNames.Count = 3 Then PackType = 9 : Exit Try '压缩包
                     '确定为一级目录下
                     If FullNames.Count <> 2 Then Continue For
                     '判断是否为关键文件
@@ -61,7 +61,7 @@ Public Module ModModpack
                 If GetExceptionDetail(ex, True).Contains("Error.WinIOError") Then
                     Log(ex, "打开整合包文件失败", If(ShowHint, LogLevel.Hint, LogLevel.Normal))
                     Return False
-                ElseIf File.ToLower.EndsWith(".rar") Then
+                ElseIf File.EndsWithF(".rar", True) Then
                     Log(ex, "PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试", If(ShowHint, LogLevel.Hint, LogLevel.Normal))
                     Return False
                 Else
@@ -186,7 +186,7 @@ Retry:
         Dim FabricVersion As String = Nothing
         For Each Entry In If(Json("minecraft")("modLoaders"), {})
             Dim Id As String = If(Entry("id"), "").ToString.ToLower
-            If Id.StartsWith("forge-") Then
+            If Id.StartsWithF("forge-") Then
                 'Forge 指定
                 If Id.Contains("recommended") Then
                     Log("[ModPack] 该整合包版本过老，已不支持进行安装！", LogLevel.Hint)
@@ -199,7 +199,7 @@ Retry:
                 Catch ex As Exception
                     Log(ex, "读取整合包 Forge 版本失败：" & Id)
                 End Try
-            ElseIf Id.StartsWith("fabric-") Then
+            ElseIf Id.StartsWithF("fabric-") Then
                 'Fabric 指定
                 Try
                     Log("[ModPack] 整合包 Fabric 版本：" & Id)
@@ -277,7 +277,7 @@ Retry:
                         IsResourcePack =
                             (Not ModuleNames.Contains("META-INF")) AndAlso (Not ModuleNames.Contains("mcmod.info")) AndAlso '不包含 META-INF 或 mcmod.info
                             ModuleNames.Contains("pack.mcmeta") AndAlso '包含 pack.mcmeta
-                            (Not File.FileName.EndsWith(".jar")) '文件后缀不是 .jar
+                            (Not File.FileName.EndsWithF(".jar", True)) '文件后缀不是 .jar
                     Else
                         IsResourcePack = False
                     End If

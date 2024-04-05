@@ -58,11 +58,12 @@
         Interop.ComponentDispatcher.PopModal()
         '动画
         AniStart({
-            AaCode(Sub()
-                       If WaitingMyMsgBox.Count = 0 Then
-                           AniStart(AaColor(FrmMain.PanMsg, Grid.BackgroundProperty, New MyColor(0, 0, 0, 0) - FrmMain.PanMsg.Background, 200, Ease:=New AniEaseOutFluent(AniEasePower.Weak)))
-                       End If
-                   End Sub, 30),
+            AaCode(
+            Sub()
+                If Not WaitingMyMsgBox.Any() Then
+                    AniStart(AaColor(FrmMain.PanMsg, Grid.BackgroundProperty, New MyColor(0, 0, 0, 0) - FrmMain.PanMsg.Background, 200, Ease:=New AniEaseOutFluent(AniEasePower.Weak)))
+                End If
+            End Sub, 30),
             AaOpacity(Me, -Opacity, 80, 20),
             AaDouble(Sub(i) TransformPos.Y += i, 20 - TransformPos.Y, 150, 0, New AniEaseOutFluent),
             AaDouble(Sub(i) TransformRotate.Angle += i, 6 - TransformRotate.Angle, 150, 0, New AniEaseInFluent(AniEasePower.Weak)),

@@ -80,7 +80,7 @@
                 Log(ex, "确认崩溃日志时间失败（" & LogFile & "）")
             End Try
         Next
-        If RightLogs.Count = 0 Then Log("[Crash] 未发现可能可用的日志文件")
+        If Not RightLogs.Any() Then Log("[Crash] 未发现可能可用的日志文件")
 
         '将可能可用的日志文件导出
         For Each FilePath In RightLogs
@@ -114,7 +114,7 @@
         Try
             Dim Info As New FileInfo(FilePath)
             If Not Info.Exists OrElse Info.Length = 0 Then Exit Try
-            If Not FilePath.ToLower.EndsWith(".jar") AndAlso ExtractFile(FilePath, TempFolder & "Temp\") Then
+            If Not FilePath.EndsWithF(".jar", True) AndAlso ExtractFile(FilePath, TempFolder & "Temp\") Then
                 '解压成功
                 Log("[Crash] 已解压导入的日志文件：" & FilePath)
             Else
@@ -132,7 +132,7 @@
                 If Not TargetFile.Exists OrElse TargetFile.Length = 0 Then Continue For
                 Dim Ext As String = TargetFile.Extension.ToLower
                 If Ext = ".log" OrElse Ext = ".txt" Then
-                    If TargetFile.Name.StartsWith("crash-") Then
+                    If TargetFile.Name.StartsWithF("crash-") Then
                         AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(TargetFile.FullName, ReadFile(TargetFile.FullName).Split(vbCrLf.ToCharArray)))
                     Else
                         AnalyzeRawFiles.Add(New KeyValuePair(Of String, String())(TargetFile.FullName, ReadFile(TargetFile.FullName, Encoding.UTF8).Split(vbCrLf.ToCharArray)))
@@ -169,10 +169,10 @@
         For Each LogFile In AnalyzeRawFiles
             Dim MatchName As String = GetFileNameFromPath(LogFile.Key).ToLower
             Dim TargetType As AnalyzeFileType
-            If MatchName.StartsWith("hs_err") Then
+            If MatchName.StartsWithF("hs_err") Then
                 TargetType = AnalyzeFileType.HsErr
                 DirectFile = LogFile
-            ElseIf MatchName.StartsWith("crash-") Then
+            ElseIf MatchName.StartsWithF("crash-") Then
                 TargetType = AnalyzeFileType.CrashReport
                 DirectFile = LogFile
             ElseIf MatchName = "latest.log" OrElse MatchName = "latest log.txt" OrElse
@@ -187,13 +187,13 @@
                 Else
                     TargetType = AnalyzeFileType.ExtraLog
                 End If
-            ElseIf MatchName.EndsWith(".log") OrElse MatchName.EndsWith(".txt") Then
+            ElseIf MatchName.EndsWithF(".log", True) OrElse MatchName.EndsWithF(".txt", True) Then
                 TargetType = AnalyzeFileType.ExtraLog
             Else
                 Log("[Crash] " & MatchName & " 分类为 Ignore")
                 Continue For
             End If
-            If LogFile.Value.Count = 0 Then
+            If Not LogFile.Value.Any() Then
                 Log("[Crash] " & MatchName & " 由于内容为空跳过")
             Else
                 TotalFiles.Add(New KeyValuePair(Of AnalyzeFileType, KeyValuePair(Of String, String()))(TargetType, LogFile))
@@ -208,7 +208,7 @@
             For Each File In TotalFiles
                 If SelectType = File.Key Then SelectedFiles.Add(File.Value)
             Next
-            If SelectedFiles.Count = 0 Then Continue For
+            If Not SelectedFiles.Any() Then Continue For
             Try
                 '根据文件类别判断
                 Select Case SelectType
@@ -437,7 +437,7 @@
 
         '输出到日志
 Done:
-        If CrashReasons.Count = 0 Then
+        If Not CrashReasons.Any() Then
             Log("[Crash] 步骤 3：分析崩溃原因完成，未找到可能的原因")
         Else
             Log("[Crash] 步骤 3：分析崩溃原因完成，找到 " & CrashReasons.Count & " 条可能的原因")
@@ -645,14 +645,14 @@ Done:
                 "org.lwjgl", "com.sun", "net.minecraftforge", "paulscode.sound", "com.mojang", "net.minecraft", "cpw.mods", "com.google", "org.apache", "org.spongepowered", "net.fabricmc", "com.mumfrey",
                 "com.electronwill.nightconfig", "it.unimi.dsi",
                 "MojangTricksIntelDriversForPerformance_javaw"}
-                If Stack.StartsWith(IgnoreStack) Then GoTo NextStack
+                If Stack.StartsWithF(IgnoreStack) Then GoTo NextStack
             Next
             PossibleStacks.Add(Stack.Trim) '.Split("$").First)
 NextStack:
         Next
         PossibleStacks = PossibleStacks.Distinct.ToList
         Log("[Crash] 找到 " & PossibleStacks.Count & " 条可能的堆栈信息")
-        If PossibleStacks.Count = 0 Then Return New List(Of String)
+        If Not PossibleStacks.Any() Then Return New List(Of String)
         For Each Stack As String In PossibleStacks
             Log("[Crash]  - " & Stack)
         Next
@@ -663,7 +663,7 @@ NextStack:
             Dim Splited = Stack.Split(".")
             For i = 0 To Math.Min(3, Splited.Count - 1) '最多取前 4 节
                 Dim Word As String = Splited(i)
-                If Word.Length <= 2 OrElse Word.StartsWith("func_") Then Continue For
+                If Word.Length <= 2 OrElse Word.StartsWithF("func_") Then Continue For
                 If {"com", "org", "net", "asm", "fml", "mod", "jar", "sun", "lib", "map", "gui", "dev", "nio", "api", "dsi", "top",
                     "core", "init", "mods", "main", "file", "game", "load", "read", "done", "util", "tile", "item", "base", "oshi",
                     "forge", "setup", "block", "model", "mixin", "event", "unimi", "netty",
@@ -716,8 +716,8 @@ NextStack:
             '[Fabric] 获取所有包含 Mod 信息的行
             Dim ModNameLines As New List(Of String)
             For Each Line In Details.Split(vbLf)
-                If Line.ToLower.Contains(".jar") OrElse
-                   (IsFabricDetail AndAlso Line.StartsWith(vbTab & vbTab) AndAlso Not RegexCheck(Line, "\t\tfabric[\w-]*: Fabric")) Then ModNameLines.Add(Line)
+                If Line.ContainsF(".jar", True) OrElse
+                   (IsFabricDetail AndAlso Line.StartsWithF(vbTab & vbTab) AndAlso Not RegexCheck(Line, "\t\tfabric[\w-]*: Fabric")) Then ModNameLines.Add(Line)
             Next
             Log("[Crash] 崩溃报告中找到 " & ModNameLines.Count & " 个可能的 Mod 项目行")
 
@@ -782,7 +782,7 @@ NextStack:
 
         '输出
         ModFileNames = ModFileNames.Distinct.ToList
-        If ModFileNames.Count = 0 Then
+        If Not ModFileNames.Any() Then
             Return Nothing
         Else
             Log("[Crash] 找到 " & ModFileNames.Count & " 个可能的崩溃 Mod 文件名")
@@ -866,7 +866,7 @@ NextStack:
     Private Function GetAnalyzeResult(IsHandAnalyze As Boolean) As String
 
         '没有结果的处理
-        If CrashReasons.Count = 0 Then
+        If Not CrashReasons.Any() Then
             If IsHandAnalyze Then
                 Return "很抱歉，PCL 无法确定错误原因。"
             Else
@@ -1034,7 +1034,7 @@ NextStack:
                     Replace("\e", If(IsHandAnalyze, "", vbCrLf & "你可以查看错误报告了解错误具体是如何发生的。")).
                     Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr, vbCrLf).
                     Trim(vbCrLf.ToCharArray) &
-                If(Not Results.Any(Function(r) r.EndsWith("\h")) OrElse IsHandAnalyze, "",
+                If(Not Results.Any(Function(r) r.EndsWithF("\h")) OrElse IsHandAnalyze, "",
                     vbCrLf & "如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。" &
                     If(If(PageSetupSystem.IsLauncherNewest(), True), "",
                     vbCrLf & vbCrLf & "此外，你正在使用老版本 PCL，更新到最新版可能会修复这个问题。" & vbCrLf & "你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。"))

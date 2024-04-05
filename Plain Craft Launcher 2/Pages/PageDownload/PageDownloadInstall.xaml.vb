@@ -523,7 +523,7 @@
                                 Version("id") = "20w14∞"
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
-                            Case "3d shareware v1.34", "1.rv-pre1", "15w14a", "2.0", "22w13oneblockatatime", "23w13a_or_b"
+                            Case "3d shareware v1.34", "1.rv-pre1", "15w14a", "2.0", "22w13oneblockatatime", "23w13a_or_b", "24w14potato"
                                 Type = "愚人节版"
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
@@ -562,7 +562,7 @@
             PanMinecraft.Children.Insert(0, CardInfo)
             '添加其他版本
             For Each Pair As KeyValuePair(Of String, List(Of JObject)) In Dict
-                If Pair.Value.Count = 0 Then Continue For
+                If Not Pair.Value.Any() Then Continue For
                 '增加卡片
                 Dim NewCard As New MyCard With {.Title = Pair.Key & " (" & Pair.Value.Count & ")", .Margin = New Thickness(0, 0, 0, 15), .SwapType = 7}
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
@@ -656,7 +656,7 @@
                 If SelectedForge IsNot Nothing AndAlso Not IsOptiFineSuitForForge(Version, SelectedForge) Then Continue For
                 If Version.NameDisplay.StartsWith(SelectedMinecraftId & " ") Then Versions.Add(Version)
             Next
-            If Versions.Count = 0 Then Exit Sub
+            If Not Versions.Any() Then Exit Sub
             '排序
             Versions = Sort(Versions, Function(Left As DlOptiFineListEntry, Right As DlOptiFineListEntry) As Boolean
                                           If Not Left.IsPreview AndAlso Right.IsPreview Then Return True
@@ -724,7 +724,7 @@
             For Each Version As DlLiteLoaderListEntry In DlLiteLoaderListLoader.Output.Value
                 If Version.Inherit = SelectedMinecraftId Then Versions.Add(Version)
             Next
-            If Versions.Count = 0 Then Exit Sub
+            If Not Versions.Any() Then Exit Sub
             '可视化
             PanLiteLoader.Children.Clear()
             For Each Version In Versions
@@ -804,7 +804,7 @@
             '获取要显示的版本
             Dim Versions As New List(Of DlForgeVersionEntry)
             Versions.AddRange(Loader.Output) '复制数组，以免 Output 在实例化后变空
-            If Loader.Output.Count = 0 Then Exit Sub
+            If Not Loader.Output.Any() Then Exit Sub
             PanForge.Children.Clear()
             Versions = Sort(Versions, Function(a, b) New Version(a.Version) > New Version(b.Version)).
                        Where(Function(v)
@@ -870,7 +870,7 @@
             If DlFabricListLoader.State <> LoadState.Finished Then Exit Sub
             '获取版本列表
             Dim Versions As JArray = DlFabricListLoader.Output.Value("loader")
-            If Versions.Count = 0 Then Exit Sub
+            If Not Versions.Any() Then Exit Sub
             '可视化
             PanFabric.Children.Clear()
             PanFabric.Tag = Versions
@@ -983,7 +983,7 @@
                     Versions.Add(Version)
                 End If
             Next
-            If Versions.Count = 0 Then Exit Sub
+            If Not Versions.Any() Then Exit Sub
             Versions = Sort(Versions, Function(a, b) a.ReleaseDate > b.ReleaseDate)
             '可视化
             PanFabricApi.Children.Clear()
@@ -1073,7 +1073,7 @@
             For Each Version In DlOptiFabricLoader.Output
                 If IsSuitableOptiFabric(Version, SelectedMinecraftId) Then Versions.Add(Version)
             Next
-            If Versions.Count = 0 Then Exit Sub
+            If Not Versions.Any() Then Exit Sub
             '排序
             Versions = Sort(Versions, Function(a, b) a.ReleaseDate > b.ReleaseDate)
             '可视化

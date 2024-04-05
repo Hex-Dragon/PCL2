@@ -120,49 +120,49 @@ Public Module ModDownloadLib
         '下载版本 Json 文件
         If JsonUrl Is Nothing Then
             Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取原版 json 文件下载地址",
-                                                            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                                                                Dim JsonAddress As String = DlClientListGet(Id)
-                                                                Task.Output = New List(Of NetFile) From {New NetFile(DlSourceLauncherOrMetaGet(JsonAddress), VersionFolder & VersionName & ".json")}
-                                                            End Sub) With {.ProgressWeight = 2, .Show = False})
+            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+                Dim JsonAddress As String = DlClientListGet(Id)
+                Task.Output = New List(Of NetFile) From {New NetFile(DlSourceLauncherOrMetaGet(JsonAddress), VersionFolder & VersionName & ".json")}
+            End Sub) With {.ProgressWeight = 2, .Show = False})
         End If
         Loaders.Add(New LoaderDownload(McDownloadClientJsonName, New List(Of NetFile) From {
-                New NetFile(DlSourceLauncherOrMetaGet(If(JsonUrl, "")), VersionFolder & VersionName & ".json", New FileChecker(CanUseExistsFile:=False, IsJson:=True))
-            }) With {.ProgressWeight = 3})
+            New NetFile(DlSourceLauncherOrMetaGet(If(JsonUrl, "")), VersionFolder & VersionName & ".json", New FileChecker(CanUseExistsFile:=False, IsJson:=True))
+        }) With {.ProgressWeight = 3})
 
         '下载支持库文件
         Dim LoadersLib As New List(Of LoaderBase)
         LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析原版支持库文件（副加载器）",
-                                                            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                                                                Log("[Download] 开始分析原版支持库文件：" & VersionFolder)
-                                                                Task.Output = McLibFix(New McVersion(VersionFolder))
-                                                            End Sub) With {.ProgressWeight = 1, .Show = False})
+        Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+            Log("[Download] 开始分析原版支持库文件：" & VersionFolder)
+            Task.Output = McLibFix(New McVersion(VersionFolder))
+        End Sub) With {.ProgressWeight = 1, .Show = False})
         LoadersLib.Add(New LoaderDownload("下载原版支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 13, .Show = False})
         Loaders.Add(New LoaderCombo(Of String)(McDownloadClientLibName, LoadersLib) With {.Block = False, .ProgressWeight = 14})
 
         '下载资源文件
         Dim LoadersAssets As New List(Of LoaderBase)
         LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("分析资源文件索引地址（副加载器）",
-                                                            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                                                                Try
-                                                                    Dim Version As New McVersion(VersionFolder)
-                                                                    Task.Output = New List(Of NetFile) From {DlClientAssetIndexGet(Version)}
-                                                                Catch ex As Exception
-                                                                    Throw New Exception("分析资源文件索引地址失败", ex)
-                                                                End Try
-                                                                '顺手添加 Json 项目
-                                                                Try
-                                                                    Dim VersionJson As JObject = GetJson(ReadFile(VersionFolder & VersionName & ".json"))
-                                                                    VersionJson.Add("clientVersion", Id)
-                                                                    WriteFile(VersionFolder & VersionName & ".json", VersionJson.ToString)
-                                                                Catch ex As Exception
-                                                                    Throw New Exception("添加客户端版本失败", ex)
-                                                                End Try
-                                                            End Sub) With {.ProgressWeight = 1, .Show = False})
+        Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+            Try
+                Dim Version As New McVersion(VersionFolder)
+                Task.Output = New List(Of NetFile) From {DlClientAssetIndexGet(Version)}
+            Catch ex As Exception
+                Throw New Exception("分析资源文件索引地址失败", ex)
+            End Try
+            '顺手添加 Json 项目
+            Try
+                Dim VersionJson As JObject = GetJson(ReadFile(VersionFolder & VersionName & ".json"))
+                VersionJson.Add("clientVersion", Id)
+                WriteFile(VersionFolder & VersionName & ".json", VersionJson.ToString)
+            Catch ex As Exception
+                Throw New Exception("添加客户端版本失败", ex)
+            End Try
+        End Sub) With {.ProgressWeight = 1, .Show = False})
         LoadersAssets.Add(New LoaderDownload("下载资源文件索引（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 3, .Show = False})
         LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("分析所需资源文件（副加载器）",
-                                                            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                                                                Task.Output = McAssetsFixList(McAssetsGetIndexName(New McVersion(VersionFolder)), True, Task)
-                                                            End Sub) With {.ProgressWeight = 3, .Show = False})
+        Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+            Task.Output = McAssetsFixList(McAssetsGetIndexName(New McVersion(VersionFolder)), True, Task)
+        End Sub) With {.ProgressWeight = 3, .Show = False})
         LoadersAssets.Add(New LoaderDownload("下载资源文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 14, .Show = False})
         Loaders.Add(New LoaderCombo(Of String)("下载原版资源文件", LoadersAssets) With {.Block = False, .ProgressWeight = 21})
 
@@ -283,7 +283,7 @@ Public Module ModDownloadLib
             WikiName = "Java版Combat_Test_8c"
         ElseIf Id = "1.0.0-rc2-2" Then
             WikiName = "Java版RC2"
-        ElseIf Id.StartsWith("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWith("1_19_deep_dark_experimental_snapshot-") Then
+        ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
             WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Java版Deep_Dark_Experimental_Snapshot_")
         ElseIf Id = "b1.9-pre6" Then
             WikiName = "Java版Beta_1.9_Prerelease_6"
@@ -291,19 +291,19 @@ Public Module ModDownloadLib
             WikiName = "Java版Beta_1.9_Prerelease"
         ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
             WikiName = If(Id.Contains("w"), "", "Java版") & Id.Replace(" Pre-Release ", "-pre")
-        ElseIf Id.StartsWith("b") Then
+        ElseIf Id.StartsWithF("b") Then
             WikiName = "Java版" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("b", "Beta_")
-        ElseIf Id.StartsWith("a") Then
+        ElseIf Id.StartsWithF("a") Then
             WikiName = "Java版" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("a", "Alpha_v")
         ElseIf Id = "inf-20100618" Then
             WikiName = "Java版Infdev_20100618"
         ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") Then
             WikiName = "Java版Classic_0.30（生存模式）"
-        ElseIf Id.StartsWith("c0.31") Then
+        ElseIf Id.StartsWithF("c0.31") Then
             WikiName = "Java版Indev_0.31_20100130"
-        ElseIf Id.StartsWith("c") Then
+        ElseIf Id.StartsWithF("c") Then
             WikiName = "Java版" & Id.Replace("c", "Classic_")
-        ElseIf Id.StartsWith("rd-") Then
+        ElseIf Id.StartsWithF("rd-") Then
             WikiName = "Java版Pre-classic_" & Id
         Else
             Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
@@ -428,52 +428,54 @@ Public Module ModDownloadLib
             Dim LastResult As String = ""
             Using outputWaitHandle As New AutoResetEvent(False)
                 Using errorWaitHandle As New AutoResetEvent(False)
-                    AddHandler process.OutputDataReceived, Function(sender, e)
-                                                               Try
-                                                                   If e.Data Is Nothing Then
-                                                                       outputWaitHandle.[Set]()
-                                                                   Else
-                                                                       LastResult = e.Data
-                                                                       If ModeDebug Then Log("[Installer] " & LastResult)
-                                                                       TotalLength += 1
-                                                                       Task.Progress += 0.9 / 7000
-                                                                   End If
-                                                               Catch ex As ObjectDisposedException
-                                                               Catch ex As Exception
-                                                                   Log(ex, "读取 OptiFine 安装器信息失败")
-                                                               End Try
-                                                               Try
-                                                                   If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                                                       Log("[Installer] 由于任务取消，已中止 OptiFine 安装")
-                                                                       process.Kill()
-                                                                   End If
-                                                               Catch
-                                                               End Try
-                                                               Return Nothing
-                                                           End Function
-                    AddHandler process.ErrorDataReceived, Function(sender, e)
-                                                              Try
-                                                                  If e.Data Is Nothing Then
-                                                                      errorWaitHandle.[Set]()
-                                                                  Else
-                                                                      LastResult = e.Data
-                                                                      If ModeDebug Then Log("[Installer] " & LastResult)
-                                                                      TotalLength += 1
-                                                                      Task.Progress += 0.9 / 7000
-                                                                  End If
-                                                              Catch ex As ObjectDisposedException
-                                                              Catch ex As Exception
-                                                                  Log(ex, "读取 OptiFine 安装器错误信息失败")
-                                                              End Try
-                                                              Try
-                                                                  If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                                                      Log("[Installer] 由于任务取消，已中止 OptiFine 安装")
-                                                                      process.Kill()
-                                                                  End If
-                                                              Catch
-                                                              End Try
-                                                              Return Nothing
-                                                          End Function
+                    AddHandler process.OutputDataReceived,
+                    Function(sender, e)
+                        Try
+                            If e.Data Is Nothing Then
+                                outputWaitHandle.[Set]()
+                            Else
+                                LastResult = e.Data
+                                If ModeDebug Then Log("[Installer] " & LastResult)
+                                TotalLength += 1
+                                Task.Progress += 0.9 / 7000
+                            End If
+                        Catch ex As ObjectDisposedException
+                        Catch ex As Exception
+                            Log(ex, "读取 OptiFine 安装器信息失败")
+                        End Try
+                        Try
+                            If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
+                                Log("[Installer] 由于任务取消，已中止 OptiFine 安装")
+                                process.Kill()
+                            End If
+                        Catch
+                        End Try
+                        Return Nothing
+                    End Function
+                    AddHandler process.ErrorDataReceived,
+                    Function(sender, e)
+                        Try
+                            If e.Data Is Nothing Then
+                                errorWaitHandle.[Set]()
+                            Else
+                                LastResult = e.Data
+                                If ModeDebug Then Log("[Installer] " & LastResult)
+                                TotalLength += 1
+                                Task.Progress += 0.9 / 7000
+                            End If
+                        Catch ex As ObjectDisposedException
+                        Catch ex As Exception
+                            Log(ex, "读取 OptiFine 安装器错误信息失败")
+                        End Try
+                        Try
+                            If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
+                                Log("[Installer] 由于任务取消，已中止 OptiFine 安装")
+                                process.Kill()
+                            End If
+                        Catch
+                        End Try
+                        Return Nothing
+                    End Function
                     process.Start()
                     process.BeginOutputReadLine()
                     process.BeginErrorReadLine()
@@ -1010,7 +1012,7 @@ Retry:
             End If
             Exit Sub
         End If
-        If DownloadInfo.Category = "universal" OrElse DownloadInfo.Inherit.StartsWith("1.5") Then '对该版本自动安装的支持将在之后加入
+        If DownloadInfo.Category = "universal" OrElse DownloadInfo.Inherit.StartsWithF("1.5") Then '对该版本自动安装的支持将在之后加入
             If MyMsgBox("该 Forge 版本过于古老，PCL 暂不支持该版本的自动安装。" & vbCrLf &
                         "若你仍然希望继续，PCL 将把安装程序下载到你指定的位置，但不会进行安装。",
                         "版本过老", "继续", "取消") = 1 Then
@@ -1214,9 +1216,9 @@ Retry:
         End SyncLock
     End Sub
     Private Sub ForgeInjectorLine(Content As String, Task As LoaderTask(Of Boolean, Boolean))
-        If Content.StartsWith("  Data") OrElse Content.StartsWith("  Slim") Then
+        If Content.StartsWithF("  Data") OrElse Content.StartsWithF("  Slim") Then
             If ModeDebug Then Log("[Installer] " & Content)
-        ElseIf Content.StartsWith("  Reading patch ") Then
+        ElseIf Content.StartsWithF("  Reading patch ") Then
             If ModeDebug Then Log("[Installer] " & Content)
             Task.Progress = 0.86
         Else
@@ -1265,7 +1267,7 @@ Retry:
 
         '参数初始化
         McFolder = If(McFolder, PathMcFolder)
-        If Version.StartsWith("1.") AndAlso Version.Contains("-") Then
+        If Version.StartsWithF("1.") AndAlso Version.Contains("-") Then
             '类似 1.19.3-41.2.8 格式，优先使用 Version 中要求的版本而非 Inherit（例如 1.19.3 却使用了 1.19 的 Forge）
             Inherit = Version.Split("-").First
             Version = Version.Split("-").Last
@@ -1345,8 +1347,8 @@ Retry:
                     Task.Progress = 0.8
                     '去除其中的原始 Forge 项
                     For i = 0 To Libs.Count - 1
-                        If Libs(i).LocalPath.EndsWith("forge-" & Inherit & "-" & Version & ".jar") OrElse
-                                                                                                      Libs(i).LocalPath.EndsWith("forge-" & Inherit & "-" & Version & "-client.jar") Then
+                        If Libs(i).LocalPath.EndsWithF("forge-" & Inherit & "-" & Version & ".jar") OrElse
+                                                                                                      Libs(i).LocalPath.EndsWithF("forge-" & Inherit & "-" & Version & "-client.jar") Then
                             Log("[Download] 已从待下载 Forge 支持库中移除：" & Libs(i).LocalPath, LogLevel.Debug)
                             Libs.RemoveAt(i)
                             Exit For
@@ -1644,7 +1646,7 @@ Retry:
                                For Each Version As JObject In ResultJson
                                    If Version("name") Is Nothing OrElse Version("build") Is Nothing Then Continue For
                                    Dim Name As String = Version("name")
-                                   If Not Name.EndsWith("-recommended") Then Continue For
+                                   If Not Name.EndsWithF("-recommended") Then Continue For
                                    '内容为："1.15.2":"31.2.0"
                                    RecommendedList.Add("""" & Name.Replace("-recommended", """:""" & Version("build")("version").ToString & """"))
                                Next
@@ -1974,9 +1976,9 @@ Retry:
             Request.OptiFineEntry = New DlOptiFineListEntry With {
                 .NameDisplay = Request.MinecraftName & " " & Request.OptiFineVersion.Replace("HD_U_", "").Replace("_", "").Replace("pre", " pre"),
                 .Inherit = Request.MinecraftName,
-                .IsPreview = Request.OptiFineVersion.ToLower.Contains("pre"),
+                .IsPreview = Request.OptiFineVersion.ContainsF("pre", True),
                 .NameVersion = Request.MinecraftName & "-OptiFine_" & Request.OptiFineVersion,
-                .NameFile = If(Request.OptiFineVersion.ToLower.Contains("pre"), "preview_", "") &
+                .NameFile = If(Request.OptiFineVersion.ContainsF("pre", True), "preview_", "") &
                     "OptiFine_" & Request.MinecraftName & "_" & Request.OptiFineVersion & ".jar"
             }
         End If
@@ -2012,7 +2014,7 @@ Retry:
 
         Dim LoaderList As New List(Of LoaderBase)
         '添加忽略标识
-        LoaderList.Add(New LoaderTask(Of Integer, Integer)("添加忽略标识", Sub() WriteFile(OutputFolder & ".pclignore", "该文件会使得该文件夹不在 PCL 的版本列表中显示")) With {.Show = False, .Block = False})
+        LoaderList.Add(New LoaderTask(Of Integer, Integer)("添加忽略标识", Sub() WriteFile(OutputFolder & ".pclignore", "用于临时地 PCL 的版本列表中屏蔽此版本。")) With {.Show = False, .Block = False})
         'Fabric API
         If Request.FabricApi IsNot Nothing Then
             LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
@@ -2083,36 +2085,36 @@ Retry:
         Dim OutputJsonPath As String, MinecraftJsonPath As String, OptiFineJsonPath As String = Nothing, ForgeJsonPath As String = Nothing, LiteLoaderJsonPath As String = Nothing, FabricJsonPath As String = Nothing
         Dim OutputJar As String, MinecraftJar As String
 #Region "初始化路径信息"
-        If Not OutputFolder.EndsWith("\") Then OutputFolder += "\"
+        If Not OutputFolder.EndsWithF("\") Then OutputFolder += "\"
         OutputName = GetFolderNameFromPath(OutputFolder)
         OutputJsonPath = OutputFolder & OutputName & ".json"
         OutputJar = OutputFolder & OutputName & ".jar"
 
-        If Not MinecraftFolder.EndsWith("\") Then MinecraftFolder += "\"
+        If Not MinecraftFolder.EndsWithF("\") Then MinecraftFolder += "\"
         MinecraftName = GetFolderNameFromPath(MinecraftFolder)
         MinecraftJsonPath = MinecraftFolder & MinecraftName & ".json"
         MinecraftJar = MinecraftFolder & MinecraftName & ".jar"
 
         If HasOptiFine Then
-            If Not OptiFineFolder.EndsWith("\") Then OptiFineFolder += "\"
+            If Not OptiFineFolder.EndsWithF("\") Then OptiFineFolder += "\"
             OptiFineName = GetFolderNameFromPath(OptiFineFolder)
             OptiFineJsonPath = OptiFineFolder & OptiFineName & ".json"
         End If
 
         If HasForge Then
-            If Not ForgeFolder.EndsWith("\") Then ForgeFolder += "\"
+            If Not ForgeFolder.EndsWithF("\") Then ForgeFolder += "\"
             ForgeName = GetFolderNameFromPath(ForgeFolder)
             ForgeJsonPath = ForgeFolder & ForgeName & ".json"
         End If
 
         If HasLiteLoader Then
-            If Not LiteLoaderFolder.EndsWith("\") Then LiteLoaderFolder += "\"
+            If Not LiteLoaderFolder.EndsWithF("\") Then LiteLoaderFolder += "\"
             LiteLoaderName = GetFolderNameFromPath(LiteLoaderFolder)
             LiteLoaderJsonPath = LiteLoaderFolder & LiteLoaderName & ".json"
         End If
 
         If HasFabric Then
-            If Not FabricFolder.EndsWith("\") Then FabricFolder += "\"
+            If Not FabricFolder.EndsWithF("\") Then FabricFolder += "\"
             FabricName = GetFolderNameFromPath(FabricFolder)
             FabricJsonPath = FabricFolder & FabricName & ".json"
         End If
@@ -2121,30 +2123,30 @@ Retry:
         Dim OutputJson As JObject, MinecraftJson As JObject, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing
 #Region "读取文件并检查文件是否合规"
         Dim MinecraftJsonText As String = ReadFile(MinecraftJsonPath)
-        If Not MinecraftJsonText.StartsWith("{") Then Throw New Exception("Minecraft json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
+        If Not MinecraftJsonText.StartsWithF("{") Then Throw New Exception("Minecraft json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
         MinecraftJson = GetJson(MinecraftJsonText)
 
         If HasOptiFine Then
             Dim OptiFineJsonText As String = ReadFile(OptiFineJsonPath)
-            If Not OptiFineJsonText.StartsWith("{") Then Throw New Exception("OptiFine json 有误，地址：" & OptiFineJsonPath & "，前段内容：" & OptiFineJsonText.Substring(0, Math.Min(OptiFineJsonText.Length, 1000)))
+            If Not OptiFineJsonText.StartsWithF("{") Then Throw New Exception("OptiFine json 有误，地址：" & OptiFineJsonPath & "，前段内容：" & OptiFineJsonText.Substring(0, Math.Min(OptiFineJsonText.Length, 1000)))
             OptiFineJson = GetJson(OptiFineJsonText)
         End If
 
         If HasForge Then
             Dim ForgeJsonText As String = ReadFile(ForgeJsonPath)
-            If Not ForgeJsonText.StartsWith("{") Then Throw New Exception("Forge json 有误，地址：" & ForgeJsonPath & "，前段内容：" & ForgeJsonText.Substring(0, Math.Min(ForgeJsonText.Length, 1000)))
+            If Not ForgeJsonText.StartsWithF("{") Then Throw New Exception("Forge json 有误，地址：" & ForgeJsonPath & "，前段内容：" & ForgeJsonText.Substring(0, Math.Min(ForgeJsonText.Length, 1000)))
             ForgeJson = GetJson(ForgeJsonText)
         End If
 
         If HasLiteLoader Then
             Dim LiteLoaderJsonText As String = ReadFile(LiteLoaderJsonPath)
-            If Not LiteLoaderJsonText.StartsWith("{") Then Throw New Exception("LiteLoader json 有误，地址：" & LiteLoaderJsonPath & "，前段内容：" & LiteLoaderJsonText.Substring(0, Math.Min(LiteLoaderJsonText.Length, 1000)))
+            If Not LiteLoaderJsonText.StartsWithF("{") Then Throw New Exception("LiteLoader json 有误，地址：" & LiteLoaderJsonPath & "，前段内容：" & LiteLoaderJsonText.Substring(0, Math.Min(LiteLoaderJsonText.Length, 1000)))
             LiteLoaderJson = GetJson(LiteLoaderJsonText)
         End If
 
         If HasFabric Then
             Dim FabricJsonText As String = ReadFile(FabricJsonPath)
-            If Not FabricJsonText.StartsWith("{") Then Throw New Exception("Fabric json 有误，地址：" & FabricJsonPath & "，前段内容：" & FabricJsonText.Substring(0, Math.Min(FabricJsonText.Length, 1000)))
+            If Not FabricJsonText.StartsWithF("{") Then Throw New Exception("Fabric json 有误，地址：" & FabricJsonPath & "，前段内容：" & FabricJsonText.Substring(0, Math.Min(FabricJsonText.Length, 1000)))
             FabricJson = GetJson(FabricJsonText)
         End If
 #End Region
@@ -2160,9 +2162,9 @@ Retry:
         Dim RawArguments As List(Of String) = AllArguments.Split(" ").Where(Function(l) l <> "").Select(Function(l) l.Trim).ToList
         Dim SplitArguments As New List(Of String)
         For i = 0 To RawArguments.Count - 1
-            If RawArguments(i).StartsWith("-") Then
+            If RawArguments(i).StartsWithF("-") Then
                 SplitArguments.Add(RawArguments(i))
-            ElseIf SplitArguments.Count > 0 AndAlso SplitArguments.Last.StartsWith("-") AndAlso Not SplitArguments.Last.Contains(" ") Then
+            ElseIf SplitArguments.Count > 0 AndAlso SplitArguments.Last.StartsWithF("-") AndAlso Not SplitArguments.Last.Contains(" ") Then
                 SplitArguments(SplitArguments.Count - 1) = SplitArguments.Last & " " & RawArguments(i)
             Else
                 SplitArguments.Add(RawArguments(i))

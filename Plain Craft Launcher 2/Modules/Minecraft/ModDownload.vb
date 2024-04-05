@@ -57,9 +57,9 @@
 
 #Region "下载支持库文件"
         Dim LoadersLib As New List(Of LoaderBase) From {
-                New LoaderTask(Of String, List(Of NetFile))("分析缺失支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(Version)) With {.ProgressWeight = 1},
-                New LoaderDownload("下载支持库文件", New List(Of NetFile)) With {.ProgressWeight = 15}
-            }
+            New LoaderTask(Of String, List(Of NetFile))("分析缺失支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(Version)) With {.ProgressWeight = 1},
+            New LoaderDownload("下载支持库文件", New List(Of NetFile)) With {.ProgressWeight = 15}
+        }
         '构造加载器
         Loaders.Add(New LoaderCombo(Of String)("下载支持库文件（主加载器）", LoadersLib) With {.Block = False, .Show = False, .ProgressWeight = 16})
 #End Region
@@ -71,19 +71,19 @@
             Dim LoadersAssets As New List(Of LoaderBase)
             '获取资源文件索引地址
             LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("分析资源文件索引地址",
-                                                                Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                                                                    Try
-                                                                        Dim IndexFile = DlClientAssetIndexGet(Version)
-                                                                        Dim IndexFileInfo As New FileInfo(IndexFile.LocalPath)
-                                                                        If AssetsIndexBehaviour <> AssetsIndexExistsBehaviour.AlwaysDownload AndAlso IndexFile.Check.Check(IndexFile.LocalPath) Is Nothing Then
-                                                                            Task.Output = New List(Of NetFile)
-                                                                        Else
-                                                                            Task.Output = New List(Of NetFile) From {IndexFile}
-                                                                        End If
-                                                                    Catch ex As Exception
-                                                                        Throw New Exception("分析资源文件索引地址失败", ex)
-                                                                    End Try
-                                                                End Sub) With {.ProgressWeight = 0.5, .Show = False})
+            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+                Try
+                    Dim IndexFile = DlClientAssetIndexGet(Version)
+                    Dim IndexFileInfo As New FileInfo(IndexFile.LocalPath)
+                    If AssetsIndexBehaviour <> AssetsIndexExistsBehaviour.AlwaysDownload AndAlso IndexFile.Check.Check(IndexFile.LocalPath) Is Nothing Then
+                        Task.Output = New List(Of NetFile)
+                    Else
+                        Task.Output = New List(Of NetFile) From {IndexFile}
+                    End If
+                Catch ex As Exception
+                    Throw New Exception("分析资源文件索引地址失败", ex)
+                End Try
+            End Sub) With {.ProgressWeight = 0.5, .Show = False})
             '下载资源文件索引
             LoadersAssets.Add(New LoaderDownload("下载资源文件索引", New List(Of NetFile)) With {.ProgressWeight = 2})
             '要求独立更新索引
@@ -91,27 +91,29 @@
                 Dim LoadersAssetsUpdate As New List(Of LoaderBase)
                 Dim TempAddress As String = Nothing
                 Dim RealAddress As String = Nothing
-                LoadersAssetsUpdate.Add(New LoaderTask(Of String, List(Of NetFile))("后台分析资源文件索引地址", Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                                                                                                        Dim BackAssetsFile As NetFile = DlClientAssetIndexGet(Version)
-                                                                                                        RealAddress = BackAssetsFile.LocalPath
-                                                                                                        TempAddress = PathTemp & "Cache\" & BackAssetsFile.LocalName
-                                                                                                        BackAssetsFile.LocalPath = TempAddress
-                                                                                                        Task.Output = New List(Of NetFile) From {BackAssetsFile}
-                                                                                                    End Sub))
+                LoadersAssetsUpdate.Add(New LoaderTask(Of String, List(Of NetFile))("后台分析资源文件索引地址",
+                Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+                    Dim BackAssetsFile As NetFile = DlClientAssetIndexGet(Version)
+                    RealAddress = BackAssetsFile.LocalPath
+                    TempAddress = PathTemp & "Cache\" & BackAssetsFile.LocalName
+                    BackAssetsFile.LocalPath = TempAddress
+                    Task.Output = New List(Of NetFile) From {BackAssetsFile}
+                End Sub))
                 LoadersAssetsUpdate.Add(New LoaderDownload("后台下载资源文件索引", New List(Of NetFile)))
-                LoadersAssetsUpdate.Add(New LoaderTask(Of List(Of NetFile), String)("后台复制资源文件索引", Sub(Task As LoaderTask(Of List(Of NetFile), String))
-                                                                                                      CopyFile(TempAddress, RealAddress)
-                                                                                                      McLaunchLog("后台更新资源文件索引成功：" & TempAddress)
-                                                                                                  End Sub))
+                LoadersAssetsUpdate.Add(New LoaderTask(Of List(Of NetFile), String)("后台复制资源文件索引",
+                Sub(Task As LoaderTask(Of List(Of NetFile), String))
+                    CopyFile(TempAddress, RealAddress)
+                    McLaunchLog("后台更新资源文件索引成功：" & TempAddress)
+                End Sub))
                 Dim Updater As New LoaderCombo(Of String)("后台更新资源文件索引", LoadersAssetsUpdate)
                 Log("[Download] 开始后台更新资源文件索引")
                 Updater.Start()
             End If
             '获取资源文件地址
             LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("分析缺失资源文件",
-                                                                Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                                                                    Task.Output = McAssetsFixList(McAssetsGetIndexName(Version), CheckAssetsHash, Task)
-                                                                End Sub) With {.ProgressWeight = 3})
+            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+                Task.Output = McAssetsFixList(McAssetsGetIndexName(Version), CheckAssetsHash, Task)
+            End Sub) With {.ProgressWeight = 3})
             '下载资源文件
             LoadersAssets.Add(New LoaderDownload("下载资源文件", New List(Of NetFile)) With {.ProgressWeight = 25})
             '构造加载器
@@ -248,7 +250,7 @@
             End Select
             '确认版本格式标准
             Id = Id.Replace("_", "-") '1.7.10_pre4 在版本列表中显示为 1.7.10-pre4
-            If Id <> "1.0" AndAlso Id.EndsWith(".0") Then Id = Left(Id, Id.Length - 2) 'OptiFine 1.8 的下载会触发此问题，显示版本为 1.8.0
+            If Id <> "1.0" AndAlso Id.EndsWithF(".0") Then Id = Left(Id, Id.Length - 2) 'OptiFine 1.8 的下载会触发此问题，显示版本为 1.8.0
             '查找版本并开始
             For Each Version As JObject In DlClientListLoader.Output.Value("versions")
                 If Version("id") = Id Then
@@ -306,7 +308,7 @@
                 Return _inherit
             End Get
             Set(value As String)
-                If value.EndsWith(".0") Then value = Left(value, value.Length - 2)
+                If value.EndsWithF(".0") Then value = Left(value, value.Length - 2)
                 _inherit = value
             End Set
         End Property
@@ -366,9 +368,9 @@
             Dim Entry As New DlOptiFineListEntry With {
                          .NameDisplay = Name(i).Replace("HD U ", "").Replace(".0 ", " "),
                          .ReleaseTime = Join({ReleaseTime(i).Split(".")(2), ReleaseTime(i).Split(".")(1), ReleaseTime(i).Split(".")(0)}, "/"),
-                         .IsPreview = Name(i).ToLower.Contains("pre"),
+                         .IsPreview = Name(i).ContainsF("pre", True),
                          .Inherit = Name(i).ToString.Split(" ")(0),
-                         .NameFile = If(Name(i).ToLower.Contains("pre"), "preview_", "") & "OptiFine_" & Name(i).Replace(" ", "_") & ".jar",
+                         .NameFile = If(Name(i).ContainsF("pre", True), "preview_", "") & "OptiFine_" & Name(i).Replace(" ", "_") & ".jar",
                          .RequiredForgeVersion = Forge(i).Replace("Forge ", "").Replace("#", "")}
             If Entry.RequiredForgeVersion.Contains("N/A") Then Entry.RequiredForgeVersion = Nothing
             Entry.NameVersion = Entry.Inherit & "-OptiFine_" & Name(i).ToString.Replace(" ", "_").Replace(Entry.Inherit & "_", "")
@@ -389,7 +391,7 @@
                 Dim Entry As New DlOptiFineListEntry With {
                              .NameDisplay = (Token("mcversion").ToString & Token("type").ToString.Replace("HD_U", "").Replace("_", " ") & " " & Token("patch").ToString).Replace(".0 ", " "),
                              .ReleaseTime = "",
-                             .IsPreview = Token("patch").ToString.ToLower.Contains("pre"),
+                             .IsPreview = Token("patch").ToString.ContainsF("pre", True),
                              .Inherit = Token("mcversion").ToString,
                              .NameFile = Token("filename").ToString,
                              .RequiredForgeVersion = If(Token("forge"), "").ToString.Replace("Forge ", "").Replace("#", "")
@@ -601,7 +603,7 @@
         Dim Versions As New List(Of DlForgeVersionEntry)
         Try
             '分割版本信息
-            Dim VersionCodes = Mid(Result, 1, Result.LastIndexOf("</table>")).Split("<td class=""download-version")
+            Dim VersionCodes = Mid(Result, 1, Result.LastIndexOfF("</table>")).Split("<td class=""download-version")
             '获取所有版本信息
             For i = 1 To VersionCodes.Count - 1
                 Dim VersionCode = VersionCodes(i)
@@ -626,17 +628,17 @@
                     Dim MD5 As String, Category As String
                     If VersionCode.Contains("classifier-installer""") Then
                         '类型为 installer.jar，支持范围 ~753 (~ 1.6.1 部分), 738~684 (1.5.2 全部)
-                        VersionCode = VersionCode.Substring(VersionCode.IndexOf("installer.jar"))
+                        VersionCode = VersionCode.Substring(VersionCode.IndexOfF("installer.jar"))
                         MD5 = RegexSeek(VersionCode, "(?<=MD5:</strong> )[^<]+")
                         Category = "installer"
                     ElseIf VersionCode.Contains("classifier-universal""") Then
                         '类型为 universal.zip，支持范围 751~449 (1.6.1 部分), 682~183 (1.5.1 ~ 1.3.2 部分)
-                        VersionCode = VersionCode.Substring(VersionCode.IndexOf("universal.zip"))
+                        VersionCode = VersionCode.Substring(VersionCode.IndexOfF("universal.zip"))
                         MD5 = RegexSeek(VersionCode, "(?<=MD5:</strong> )[^<]+")
                         Category = "universal"
                     ElseIf VersionCode.Contains("client.zip") Then
                         '类型为 client.zip，支持范围 182~ (1.3.2 部分 ~)
-                        VersionCode = VersionCode.Substring(VersionCode.IndexOf("client.zip"))
+                        VersionCode = VersionCode.Substring(VersionCode.IndexOfF("client.zip"))
                         MD5 = RegexSeek(VersionCode, "(?<=MD5:</strong> )[^<]+")
                         Category = "client"
                     Else
@@ -652,7 +654,7 @@
         Catch ex As Exception
             Throw New Exception("版本列表解析失败（" & Result & "）", ex)
         End Try
-        If Versions.Count = 0 Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("没有可用版本")
         Loader.Output = Versions
     End Sub
 
@@ -708,7 +710,7 @@
         Catch ex As Exception
             Throw New Exception("版本列表解析失败（" & Json.ToString & "）", ex)
         End Try
-        If Versions.Count = 0 Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("没有可用版本")
         Loader.Output = Versions
     End Sub
 
@@ -799,7 +801,7 @@
             Dim Json As JObject = Result("versions")
             Dim Versions As New List(Of DlLiteLoaderListEntry)
             For Each Pair As KeyValuePair(Of String, JToken) In Json
-                If Pair.Key.StartsWith("1.6") OrElse Pair.Key.StartsWith("1.5") Then Continue For
+                If Pair.Key.StartsWithF("1.6") OrElse Pair.Key.StartsWithF("1.5") Then Continue For
                 Dim RealEntry As JToken = If(Pair.Value("artefacts"), Pair.Value("snapshots"))("com.mumfrey:liteloader")("latest")
                 Versions.Add(New DlLiteLoaderListEntry With {
                              .Inherit = Pair.Key,
@@ -827,7 +829,7 @@
             Dim Json As JObject = Result("versions")
             Dim Versions As New List(Of DlLiteLoaderListEntry)
             For Each Pair As KeyValuePair(Of String, JToken) In Json
-                If Pair.Key.StartsWith("1.6") OrElse Pair.Key.StartsWith("1.5") Then Continue For
+                If Pair.Key.StartsWithF("1.6") OrElse Pair.Key.StartsWithF("1.5") Then Continue For
                 Dim RealEntry As JToken = If(Pair.Value("artefacts"), Pair.Value("snapshots"))("com.mumfrey:liteloader")("latest")
                 Versions.Add(New DlLiteLoaderListEntry With {
                              .Inherit = Pair.Key,

@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.6.15" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.6.15." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.7.0" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.7.0." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 317 'Release
+    Public Const VersionCode As Integer = 319 'Release
 #Else
-    Public Const VersionCode As Integer = 316 'Snapshot
+    Public Const VersionCode As Integer = 318 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -109,6 +109,14 @@ Public Module ModBase
         ''' 图标按钮，垃圾桶，1.1x
         ''' </summary>
         Public Const IconButtonDelete As String = "M520.192 0C408.43 0 317.44 82.87 313.563 186.734H52.736c-29.038 0-52.663 21.943-52.663 49.079s23.625 49.152 52.663 49.152h58.075v550.473c0 103.35 75.118 187.757 167.717 187.757h472.43c92.599 0 167.716-83.894 167.716-187.757V285.477h52.59c29.038 0 52.59-21.943 52.663-49.08-0.073-27.135-23.625-49.151-52.663-49.151H726.235C723.237 83.017 631.955 0 520.192 0zM404.846 177.957c3.803-50.03 50.176-89.015 107.447-89.015 57.197 0 103.57 38.985 106.788 89.015H404.92zM284.379 933.669c-33.353 0-69.997-39.351-69.997-95.525v-549.01H833.39v549.522c0 56.247-36.645 95.525-69.998 95.525H284.379v-0.512z M357.23 800.695a48.274 48.274 0 0 0 47.616-49.006V471.7a48.274 48.274 0 0 0-47.543-49.08 48.274 48.274 0 0 0-47.69 49.006V751.69c0 27.282 20.846 49.006 47.617 49.006z m166.62 0a48.274 48.274 0 0 0 47.688-49.006V471.7a48.274 48.274 0 0 0-47.689-49.08 48.274 48.274 0 0 0-47.543 49.006V751.69c0 27.282 21.431 49.006 47.543 49.006z m142.92 0a48.274 48.274 0 0 0 47.543-49.006V471.7a48.274 48.274 0 0 0-47.543-49.08 48.274 48.274 0 0 0-47.616 49.006V751.69c0 27.282 20.773 49.006 47.543 49.006z"
+        ''' <summary>
+        ''' 图标按钮，禁止，1x
+        ''' </summary>
+        Public Const IconButtonStop As String = "M508 990.4c-261.6 0-474.4-212-474.4-474.4S246.4 41.6 508 41.6s474.4 212 474.4 474.4S769.6 990.4 508 990.4zM508 136.8c-209.6 0-379.2 169.6-379.2 379.2 0 209.6 169.6 379.2 379.2 379.2s379.2-169.6 379.2-379.2C887.2 306.4 717.6 136.8 508 136.8zM697.6 563.2 318.4 563.2c-26.4 0-47.2-21.6-47.2-47.2 0-26.4 21.6-47.2 47.2-47.2l379.2 0c26.4 0 47.2 21.6 47.2 47.2C744.8 542.4 724 563.2 697.6 563.2z"
+        ''' <summary>
+        ''' 图标按钮，勾选，1x
+        ''' </summary>
+        Public Const IconButtonCheck As String = "M512 0a512 512 0 1 0 512 512A512 512 0 0 0 512 0z m0 921.6a409.6 409.6 0 1 1 409.6-409.6 409.6 409.6 0 0 1-409.6 409.6z M716.8 339.968l-256 253.44L328.192 460.8A51.2 51.2 0 0 0 256 532.992l168.448 168.96a51.2 51.2 0 0 0 72.704 0l289.28-289.792A51.2 51.2 0 0 0 716.8 339.968z"
         ''' <summary>
         ''' 图标按钮，笔，1x
         ''' </summary>
@@ -471,11 +479,11 @@ Public Module ModBase
         Const Digits As String = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz/+="
         '零与负数的处理
         If String.IsNullOrEmpty(Input) Then Return "0"
-        Dim IsNegative As Boolean = Input.StartsWith("-")
+        Dim IsNegative As Boolean = Input.StartsWithF("-")
         If IsNegative Then Input = Input.TrimStart("-")
         '转换为十进制
         Dim RealNum As Long = 0, Scale As Long = 1
-        For Each Digit In Input.Reverse.Select(Function(l) Digits.IndexOf(l))
+        For Each Digit In Input.Reverse.Select(Function(l) Digits.IndexOfF(l))
             RealNum += Digit * Scale
             Scale *= FromRadix
         Next
@@ -614,82 +622,53 @@ Public Module ModBase
     End Sub
 
     'Ini 文件
-    Private Class IniCache
-        Public FileContent As String = ""
-        Public KVCache As New Dictionary(Of String, String)
-    End Class
-    Private ReadOnly IniCacheList As New Dictionary(Of String, IniCache)
+    Private ReadOnly IniCache As New Dictionary(Of String, Dictionary(Of String, String))
     ''' <summary>
-    ''' 清除某 Ini 文件的运行时缓存。
+    ''' 清除某 ini 文件的运行时缓存。
     ''' </summary>
     ''' <param name="FileName">文件完整路径或简写文件名。简写将会使用“ApplicationName\文件名.ini”作为路径。</param>
     Public Sub IniClearCache(FileName As String)
-        '还原文件路径
-        If Not FileName.Contains(":\") Then FileName = Path & "PCL\" & FileName & ".ini"
-        '检索缓存
-        If IniCacheList.ContainsKey(FileName) Then IniCacheList.Remove(FileName)
+        If Not FileName.Contains(":\") Then FileName = $"{Path}PCL\{FileName}.ini"
+        If IniCache.ContainsKey(FileName) Then IniCache.Remove(FileName)
     End Sub
     ''' <summary>
-    ''' 获取 Ini 文件内容，这可能会使用到缓存。
+    ''' 获取 ini 文件缓存。如果没有，则新读取 ini 文件内容。
+    ''' 在文件不存在或读取失败时返回 Nothing。
     ''' </summary>
     ''' <param name="FileName">文件完整路径或简写文件名。简写将会使用“ApplicationName\文件名.ini”作为路径。</param>
-    Private Function IniGetContent(FileName As String) As IniCache
+    Private Function IniGetContent(FileName As String) As Dictionary(Of String, String)
         Try
             '还原文件路径
-            If Not FileName.Contains(":\") Then FileName = Path & "PCL\" & FileName & ".ini"
+            If Not FileName.Contains(":\") Then FileName = $"{Path}PCL\{FileName}.ini"
             '检索缓存
-            If IniCacheList.ContainsKey(FileName) Then
-                '返回缓存中的信息
-                Dim Cache As New IniCache
-                IniCacheList.TryGetValue(FileName, Cache)
-                Return Cache '防止ByRef导致缓存变更
-            Else
-                Dim Ini As IniCache
-                If File.Exists(FileName) Then
-                    '返回文件信息并且记入缓存
-                    Dim Cache As String = (vbCrLf & ReadFile(FileName) & vbCrLf).Replace(vbCrLf, vbCr).Replace(vbLf, vbCr).Replace(vbCr, vbCrLf).Replace(vbCrLf & vbCrLf, vbCrLf).Replace(vbNullChar, "")
-                    Ini = New IniCache With {.FileContent = Cache}
-                Else
-                    '返回空文件信息
-                    Ini = New IniCache With {.FileContent = ""}
-                End If
-                If Not IniCacheList.ContainsKey(FileName) Then IniCacheList.Add(FileName, Ini) '避免多线程异步执行此方法时造成多次添加项
-                Return Ini
-            End If
+            If IniCache.ContainsKey(FileName) Then Return IniCache(FileName)
+            '读取文件
+            If Not File.Exists(FileName) Then Return Nothing
+            Dim Ini As New Dictionary(Of String, String)
+            For Each Line In ReadFile(FileName).Split(vbCrLf.ToArray(), StringSplitOptions.RemoveEmptyEntries)
+                Dim Index As Integer = Line.IndexOfF(":")
+                If Index > 0 Then Ini.Add(Line.Substring(0, Index), Line.Substring(Index + 1))
+            Next
+            IniCache(FileName) = Ini
+            Return Ini
         Catch ex As Exception
-            Log(ex, "读取文件失败：" & FileName, LogLevel.Hint)
-            Return New IniCache With {.FileContent = ""}
+            Log(ex, $"生成 ini 文件缓存失败（{FileName}）", LogLevel.Hint)
+            Return Nothing
         End Try
     End Function
     ''' <summary>
-    ''' 读取Ini文件，这可能会使用到缓存。
+    ''' 读取 ini 文件。这可能会使用到缓存。
     ''' </summary>
     ''' <param name="FileName">文件完整路径或简写文件名。简写将会使用“ApplicationName\文件名.ini”作为路径。</param>
     ''' <param name="Key">键。</param>
     ''' <param name="DefaultValue">没有找到键时返回的默认值。</param>
     Public Function ReadIni(FileName As String, Key As String, Optional DefaultValue As String = "") As String
-        Try
-            '获取目前文件
-            Dim NowIni As IniCache = IniGetContent(FileName)
-            If IsNothing(NowIni) Then Return DefaultValue
-            '使用缓存
-            If NowIni.KVCache.ContainsKey(Key) Then Return If(NowIni.KVCache(Key), DefaultValue)
-            '没有缓存，读取文件
-            If NowIni.FileContent.Contains(vbCrLf & Key & ":") Then
-                Dim Ret As String = Mid(NowIni.FileContent, NowIni.FileContent.IndexOf(vbCrLf & Key & ":") + 3)
-                Ret = If(Ret.Contains(vbCrLf), Mid(Ret, 1, Ret.IndexOf(vbCrLf)), Ret).Replace(Key & ":", "")
-                NowIni.KVCache.Add(Key, If(Ret = vbLf, "", Ret))
-                Return If(Ret = vbLf, "", Ret)
-            Else
-                Return DefaultValue
-            End If
-        Catch ex As Exception
-            '读取失败
-            Return DefaultValue
-        End Try
+        Dim Content = IniGetContent(FileName)
+        If Content Is Nothing OrElse Not Content.ContainsKey(Key) Then Return DefaultValue
+        Return Content(Key)
     End Function
     ''' <summary>
-    ''' 写入ini文件，这会更新缓存。
+    ''' 写入 ini 文件，这会更新缓存。
     ''' </summary>
     ''' <param name="FileName">文件完整路径或简写文件名。简写将会使用“ApplicationName\文件名.ini”作为路径。</param>
     ''' <param name="Key">键。</param>
@@ -697,47 +676,41 @@ Public Module ModBase
     ''' <remarks></remarks>
     Public Sub WriteIni(FileName As String, Key As String, Value As String)
         Try
-
-            '还原文件路径
-            If Not FileName.Contains(":\") Then FileName = Path & "PCL\" & FileName & ".ini"
-            If IsNothing(Value) Then Value = ""
-            Value = Value.Replace(vbCrLf, "")
-            '创建文件夹
-            If Not Directory.Exists(GetPathFromFullPath(FileName)) Then Directory.CreateDirectory(GetPathFromFullPath(FileName))
+            '预处理
+            Key = Key.Replace(vbCr, "").Replace(vbLf, "").Replace(":", "")
+            Value = Value.Replace(vbCr, "").Replace(vbLf, "") '允许 Value 中包含冒号
             '获取目前文件
-            Dim NowFile As String = IniGetContent(FileName).FileContent
-            If Not NowFile.EndsWith(vbCrLf) Then NowFile += vbCrLf
-            '如果值一样就不处理
-            If NowFile.Contains(vbCrLf & Key & ":" & Value & vbCrLf) Then Exit Sub
-            '处理文件
-            Dim FindResult As String = ReadIni(FileName, Key)
-            If FindResult = "" AndAlso Not NowFile.Contains(vbCrLf & Key & ":") Then
-                '不存在这个键
-                NowFile = NowFile & vbCrLf & Key & ":" & Value & vbCrLf
-            Else
-                '存在这个键
-                NowFile = NowFile.Replace(vbCrLf & Key & ":" & FindResult & vbCrLf, vbCrLf & Key & ":" & Value & vbCrLf)
-            End If
-            WriteFile(FileName, NowFile)
-            '刷新目前缓存
-            IniCacheList(FileName).FileContent = NowFile
-            IniCacheList(FileName).KVCache.Remove(Key)
-            IniCacheList(FileName).KVCache.Add(Key, Value)
-
+            Dim Content As Dictionary(Of String, String) = IniGetContent(FileName)
+            If Content Is Nothing Then Content = New Dictionary(Of String, String)
+            If Content.ContainsKey(Key) AndAlso Content(Key) = Value Then Exit Sub '如果值一样就不处理
+            '更新缓存
+            Content(Key) = Value
+            '写入文件
+            Dim FileContent As New StringBuilder
+            For Each Pair In Content
+                FileContent.Append(Pair.Key)
+                FileContent.Append(":")
+                FileContent.Append(Pair.Value)
+                FileContent.Append(vbCrLf)
+            Next
+            If Not FileName.Contains(":\") Then FileName = $"{Path}PCL\{FileName}.ini"
+            WriteFile(FileName, FileContent.ToString)
         Catch ex As Exception
-            Log(ex, "写入文件失败：" & FileName & "/" & Key & ": " & Value)
+            Log(ex, $"写入文件失败（{FileName} -> {Key}:{Value}）")
         End Try
     End Sub
 
     '路径处理
     ''' <summary>
-    ''' 从文件路径或者 Url 获取不包含文件名的路径，或获取文件夹的父文件夹路径。不包含路径将会抛出异常。
+    ''' 从文件路径或者 Url 获取不包含文件名的路径，或获取文件夹的父文件夹路径。
+    ''' 取决于原路径格式，路径以 / 或 \ 结尾。
+    ''' 不包含路径将会抛出异常。
     ''' </summary>
     Public Function GetPathFromFullPath(FilePath As String) As String
         If Not (FilePath.Contains("\") OrElse FilePath.Contains("/")) Then Throw New Exception("不包含路径：" & FilePath)
-        If FilePath.EndsWith("\") OrElse FilePath.EndsWith("/") Then
+        If FilePath.EndsWithF("\") OrElse FilePath.EndsWithF("/") Then
             '是文件夹路径
-            Dim IsRight As Boolean = FilePath.EndsWith("\")
+            Dim IsRight As Boolean = FilePath.EndsWithF("\")
             FilePath = Left(FilePath, Len(FilePath) - 1)
             GetPathFromFullPath = Left(FilePath, FilePath.LastIndexOfAny({"\", "/"})) & If(IsRight, "\", "/")
             If GetPathFromFullPath = "" Then Throw New Exception("不包含路径：" & FilePath)
@@ -752,11 +725,13 @@ Public Module ModBase
     ''' </summary>
     Public Function GetFileNameFromPath(FilePath As String) As String
         FilePath = FilePath.Replace("/", "\")
-        If FilePath.EndsWith("\") Then Throw New Exception("不包含文件名：" & FilePath)
-        Dim FileName As String = FilePath.Split("\").Last.Split("?").First '去掉网络参数后的 ?
-        If FileName.Length = 0 Then Throw New Exception("不包含文件名：" & FilePath)
-        If FileName.Length > 250 Then Throw New PathTooLongException("文件名过长：" & FilePath)
-        Return FileName
+        If FilePath.EndsWithF("\") Then Throw New Exception("不包含文件名：" & FilePath)
+        If FilePath.Contains("\") Then FilePath = FilePath.Substring(FilePath.LastIndexOfF("\") + 1)
+        If FilePath.Contains("?") Then FilePath = FilePath.Substring(0, FilePath.IndexOfF("?")) '去掉网络参数后的 ?
+        Dim length As Integer = FilePath.Length
+        If length = 0 Then Throw New Exception("不包含文件名：" & FilePath)
+        If length > 250 Then Throw New PathTooLongException("文件名过长：" & FilePath)
+        Return FilePath
     End Function
     ''' <summary>
     ''' 从文件路径或者 Url 获取不包含路径与扩展名的文件名。不包含文件名将会抛出异常。
@@ -764,7 +739,7 @@ Public Module ModBase
     Public Function GetFileNameWithoutExtentionFromPath(FilePath As String) As String
         Dim Name As String = GetFileNameFromPath(FilePath)
         If Name.Contains(".") Then
-            Return Name.Substring(0, Name.LastIndexOf("."))
+            Return Name.Substring(0, Name.LastIndexOfF("."))
         Else
             Return Name
         End If
@@ -773,8 +748,8 @@ Public Module ModBase
     ''' 从文件夹路径获取文件夹名。
     ''' </summary>
     Public Function GetFolderNameFromPath(FolderPath As String) As String
-        If FolderPath.EndsWith(":\") OrElse FolderPath.EndsWith(":\\") Then Return FolderPath.Substring(0, 1)
-        If FolderPath.EndsWith("\") OrElse FolderPath.EndsWith("/") Then FolderPath = Left(FolderPath, FolderPath.Length - 1)
+        If FolderPath.EndsWithF(":\") OrElse FolderPath.EndsWithF(":\\") Then Return FolderPath.Substring(0, 1)
+        If FolderPath.EndsWithF("\") OrElse FolderPath.EndsWithF("/") Then FolderPath = Left(FolderPath, FolderPath.Length - 1)
         Return GetFileNameFromPath(FolderPath)
     End Function
 
@@ -1027,7 +1002,7 @@ Public Module ModBase
     Public Function SelectFolder(Optional Title As String = "选择文件夹") As String
         Dim folderDialog As New Ookii.Dialogs.Wpf.VistaFolderBrowserDialog With {.ShowNewFolderButton = True, .RootFolder = Environment.SpecialFolder.Desktop, .Description = Title, .UseDescriptionForTitle = True}
         folderDialog.ShowDialog()
-        SelectFolder = If(String.IsNullOrEmpty(folderDialog.SelectedPath), "", folderDialog.SelectedPath & If(folderDialog.SelectedPath.EndsWith("\"), "", "\"))
+        SelectFolder = If(String.IsNullOrEmpty(folderDialog.SelectedPath), "", folderDialog.SelectedPath & If(folderDialog.SelectedPath.EndsWithF("\"), "", "\"))
         Log("[UI] 选择文件夹返回：" & SelectFolder)
     End Function
 
@@ -1038,8 +1013,8 @@ Public Module ModBase
     Public Function CheckPermission(Path As String) As Boolean
         Try
             If Path = "" Then Return False
-            If Not Path.EndsWith("\") Then Path += "\"
-            If Path.EndsWith(":\System Volume Information\") OrElse Path.EndsWith(":\$RECYCLE.BIN\") Then Return False
+            If Not Path.EndsWithF("\") Then Path += "\"
+            If Path.EndsWithF(":\System Volume Information\") OrElse Path.EndsWithF(":\$RECYCLE.BIN\") Then Return False
             If Not Directory.Exists(Path) Then Return False
             Dim FileName As String = "CheckPermission" & GetUuid()
             If File.Exists(Path & FileName) Then File.Delete(Path & FileName)
@@ -1056,7 +1031,7 @@ Public Module ModBase
     ''' </summary>
     Public Sub CheckPermissionWithException(Path As String)
         If String.IsNullOrWhiteSpace(Path) Then Throw New ArgumentNullException("文件夹名不能为空！")
-        If Not Path.EndsWith("\") Then Path += "\"
+        If Not Path.EndsWithF("\") Then Path += "\"
         If Not Directory.Exists(Path) Then Throw New DirectoryNotFoundException("文件夹不存在！")
         If File.Exists(Path & "CheckPermission") Then File.Delete(Path & "CheckPermission")
         File.Create(Path & "CheckPermission").Dispose()
@@ -1245,7 +1220,7 @@ Re:
     Public Function ExtractFile(CompressFilePath As String, DestDirectory As String, Optional Encode As Encoding = Nothing) As Boolean
         Try
             Directory.CreateDirectory(DestDirectory)
-            If CompressFilePath.EndsWith(".gz") Then
+            If CompressFilePath.EndsWithF(".gz", True) Then
                 '以 gz 方式解压
                 Dim stream As New GZipStream(New FileStream(CompressFilePath, FileMode.Open, FileAccess.ReadWrite), CompressionMode.Decompress)
                 Dim decompressedFile As New FileStream(DestDirectory & GetFileNameFromPath(CompressFilePath).ToLower.Replace(".tar", "").Replace(".gz", ""), FileMode.OpenOrCreate, FileAccess.Write)
@@ -1262,7 +1237,7 @@ Re:
                 Using Archive = ZipFile.Open(CompressFilePath, ZipArchiveMode.Read, If(Encode, Encoding.GetEncoding("GB18030")))
                     For Each Entry As ZipArchiveEntry In Archive.Entries
                         Dim DestinationPath As String = IO.Path.Combine(DestDirectory, Entry.FullName)
-                        If DestinationPath.EndsWith("\") OrElse DestinationPath.EndsWith("/") Then
+                        If DestinationPath.EndsWithF("\") OrElse DestinationPath.EndsWithF("/") Then
                             Continue For '不创建空文件夹
                         Else
                             Directory.CreateDirectory(GetPathFromFullPath(DestinationPath))
@@ -1318,9 +1293,9 @@ Re:
     ''' </summary>
     Public Sub CopyDirectory(FromPath As String, ToPath As String)
         FromPath = FromPath.Replace("/", "\")
-        If Not FromPath.EndsWith("\") Then FromPath &= "\"
+        If Not FromPath.EndsWithF("\") Then FromPath &= "\"
         ToPath = ToPath.Replace("/", "\")
-        If Not ToPath.EndsWith("\") Then ToPath &= "\"
+        If Not ToPath.EndsWithF("\") Then ToPath &= "\"
         For Each File In EnumerateFiles(FromPath)
             CopyFile(File.FullName, File.FullName.Replace(FromPath, ToPath))
         Next
@@ -1568,6 +1543,42 @@ Re:
     End Function
 
     ''' <summary>
+    ''' 高速的 StartsWith。
+    ''' </summary>
+    <Extension> <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function StartsWithF(Str As String, Prefix As String, Optional IgnoreCase As Boolean = False) As Boolean
+        Return Str.StartsWith(Prefix, If(IgnoreCase, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal))
+    End Function
+    ''' <summary>
+    ''' 高速的 EndsWith。
+    ''' </summary>
+    <Extension> <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function EndsWithF(Str As String, Suffix As String, Optional IgnoreCase As Boolean = False) As Boolean
+        Return Str.EndsWith(Suffix, If(IgnoreCase, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal))
+    End Function
+    ''' <summary>
+    ''' 支持可变大小写判断的 Contains。
+    ''' </summary>
+    <Extension> <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function ContainsF(Str As String, SubStr As String, Optional IgnoreCase As Boolean = False) As Boolean
+        Return Str.IndexOf(SubStr, If(IgnoreCase, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal)) >= 0
+    End Function
+    ''' <summary>
+    ''' 高速的 IndexOf。
+    ''' </summary>
+    <Extension> <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function IndexOfF(Str As String, SubStr As String, Optional IgnoreCase As Boolean = False) As Integer
+        Return Str.IndexOf(SubStr, If(IgnoreCase, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal))
+    End Function
+    ''' <summary>
+    ''' 高速的 LastIndexOf。
+    ''' </summary>
+    <Extension> <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function LastIndexOfF(Str As String, SubStr As String, Optional IgnoreCase As Boolean = False) As Integer
+        Return Str.LastIndexOf(SubStr, If(IgnoreCase, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal))
+    End Function
+
+    ''' <summary>
     ''' 输入 And 字符不会报错的 Val。
     ''' </summary>
     Public Function Val(Str As Object) As Double
@@ -1649,14 +1660,14 @@ Re:
         Source = Source.ToLower.Replace(" ", "")
         Query = Query.ToLower.Replace(" ", "")
         Dim sourceLength As Integer = Source.Length, queryLength As Integer = Query.Length '用于计算最后因数的长度缓存
-        Do While qp < Query.Length
+        Do While qp < queryLength
             '对 qp 作为开始位置计算
             Dim sp As Integer = 0, lenMax As Integer = 0, spMax As Integer = 0
             '查找以 qp 为头的最大子串
             Do While sp < Source.Length
                 '对每个 sp 作为开始位置计算最大子串
                 Dim len As Integer = 0
-                Do While (qp + len) < Query.Length AndAlso (sp + len) < Source.Length AndAlso Source(sp + len) = Query(qp + len)
+                Do While (qp + len) < queryLength AndAlso (sp + len) < Source.Length AndAlso Source(sp + len) = Query(qp + len)
                     len += 1
                 Loop
                 '存储 len
@@ -1671,7 +1682,7 @@ Re:
                 Source = Source.Substring(0, spMax) & If(Source.Count > spMax + lenMax, Source.Substring(spMax + lenMax), String.Empty) '将源中的对应字段替换空
                 '存储 lenSum
                 Dim IncWeight = (Math.Pow(1.4, 3 + lenMax) - 3.6) '根据长度加成
-                IncWeight *= (1 + 0.3 * Math.Max(0, 3 - Math.Abs(qp - spMax))) '根据位置加成
+                IncWeight *= 1 + 0.3 * Math.Max(0, 3 - Math.Abs(qp - spMax)) '根据位置加成
                 lenSum += IncWeight
             End If
             '根据结果增加 qp
@@ -1721,23 +1732,24 @@ Re:
     Public Function Search(Of T)(Entries As List(Of SearchEntry(Of T)), Query As String, Optional MaxBlurCount As Integer = 5, Optional MinBlurSimilarity As Double = 0.1) As List(Of SearchEntry(Of T))
         '初始化
         Dim ResultList As New List(Of SearchEntry(Of T))
-        If Entries.Count = 0 Then Return ResultList
+        If Not Entries.Any() Then Return ResultList
         '进行搜索，获取相似信息
         For Each Entry In Entries
             Entry.Similarity = SearchSimilarityWeighted(Entry.SearchSource, Query)
             Entry.AbsoluteRight = False
             For Each Pair In Entry.SearchSource
-                If Pair.Key.ToLower.Replace(" ", "").Contains(Query.ToLower.Replace(" ", "")) Then Entry.AbsoluteRight = True
+                If Pair.Key.Replace(" ", "").ContainsF(Query.Replace(" ", ""), True) Then Entry.AbsoluteRight = True
             Next
         Next
         '按照相似度进行排序
-        Entries = Sort(Entries, Function(Left As SearchEntry(Of T), Right As SearchEntry(Of T)) As Boolean
-                                    If Left.AbsoluteRight Xor Right.AbsoluteRight Then
-                                        Return Left.AbsoluteRight
-                                    Else
-                                        Return Left.Similarity > Right.Similarity
-                                    End If
-                                End Function)
+        Entries = Sort(Entries,
+        Function(Left, Right) As Boolean
+            If Left.AbsoluteRight Xor Right.AbsoluteRight Then
+                Return Left.AbsoluteRight
+            Else
+                Return Left.Similarity > Right.Similarity
+            End If
+        End Function)
         '返回结果
         Dim BlurCount As Integer = 0
         For Each Entry In Entries
@@ -2089,7 +2101,7 @@ NextElement:
         Dim AllArguments() As String = Command.Split(" ")
         For i = 0 To AllArguments.Length - 1
             If AllArguments(i) = "-" & Name Then
-                If AllArguments.Length = i + 1 OrElse AllArguments(i + 1).StartsWith("-") Then Return True
+                If AllArguments.Length = i + 1 OrElse AllArguments(i + 1).StartsWithF("-") Then Return True
                 Return AllArguments(i + 1)
             End If
         Next
@@ -2116,7 +2128,7 @@ NextElement:
     ''' </summary>
     Public Sub OpenWebsite(Url As String)
         Try
-            If Not Url.ToLower.StartsWith("http") Then Throw New Exception(Url & " 不是一个有效的网址，它必须以 http 开头！")
+            If Not Url.StartsWithF("http", True) Then Throw New Exception(Url & " 不是一个有效的网址，它必须以 http 开头！")
             Log("[System] 正在打开网页：" & Url)
             Process.Start(Url)
         Catch ex As Exception
