@@ -10,6 +10,14 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 319 Then 'Release 2.7.0
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持更新 Mod"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持查看可更新的 Mod 的更新日志"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持滑动鼠标快速选中、取消选中多个 Mod"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动 MC 24w14a+ 的 Bug"))
+            FeatureCount += 10
+            BugCount += 10
+        End If
         If LastVersion < 317 Then 'Release 2.6.15
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法安装 Forge 的 Bug"))
             FeatureCount += 2
@@ -82,71 +90,23 @@ Public Class FormMain
             FeatureCount += 35
             BugCount += 36
         End If
-        If LastVersion < 281 Then 'Release 2.4.9
-            If LastVersion = 279 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复进入 Mod、整合包下载页时报错的 Bug"))
-            FeatureCount += 1
-            BugCount += 5
-        End If
-        If LastVersion < 279 Then 'Release 2.4.8
-            FeatureCount += 1
-            BugCount += 10
-        End If
-        If LastVersion < 276 Then 'Release 2.4.7
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "增加 在游戏启动前执行命令 设置"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在百宝箱添加了清理 MC 日志、崩溃报告的按钮"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化界面动画，修改部分配色"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 Mod 中文搜索"))
-            FeatureCount += 25
-            BugCount += 56
-        End If
-        If LastVersion < 272 Then 'Release 2.4.4
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在版本设置页导出启动脚本、打开存档文件夹等"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 Mod、整合包下载的版本检查与显示"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修改部分配色，让整体边框变得更淡"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法从下载页安装最新 MC 版本的整合包的 Bug"))
-            If LastVersion <= 267 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 LiteLoader 的 Bug"))
-            FeatureCount += 13
-            BugCount += 23
-        End If
-        If LastVersion < 268 Then 'Release 2.4.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "暂时关闭了联机功能"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "游戏崩溃的弹窗添加了直接查看日志的选项"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在更多分类下添加了新功能投票选项"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "自动安装时支持检查 OptiFine 对 Forge 的具体版本需求"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化自动 Java 选择的准确度"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 Mod 中文名的显示"))
-            FeatureCount += 14
-            BugCount += 33
-        End If
-        If LastVersion < 265 Then 'Release 2.3.5
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复部分情况下无法启动路径带有中文的游戏的 Bug"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复多个可能导致 OptiFine、Forge 安装失败的 Bug"))
-            FeatureCount += 13
-            BugCount += 9
-        End If
-        If LastVersion < 260 Then 'Release 2.3.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "解决了联机人数 ≥3 人时出现的频繁掉线或突发高延迟的问题"))
-            FeatureCount += 22
-            BugCount += 4
-        End If
-        If LastVersion < 257 Then 'Release 2.3.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复下载部分 Mod、整合包的 Bug"))
-            FeatureCount += 4
-            BugCount += 4
-        End If
 #Else
         '5：          FEAT+
         '4：     IMP+ FEAT*
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 318 Then 'Snapshot 2.7.1
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复启动部分整合包导致设置丢失的 Bug"))
+            BugCount += 1
+        End If
         If LastVersion < 318 Then 'Snapshot 2.7.0
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持更新 Mod"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持查看可更新的 Mod 的更新日志"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持滑动鼠标快速选中、取消选中多个 Mod"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动 MC 24w14a+ 的 Bug"))
-            FeatureCount += 2
-            BugCount += 2
+            FeatureCount += 10
+            BugCount += 10
         End If
         If LastVersion < 316 Then 'Snapshot 2.6.15
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法安装 Forge 的 Bug"))
@@ -259,116 +219,29 @@ Public Class FormMain
             FeatureCount += 5
             BugCount += 5
         End If
-        If LastVersion < 282 Then 'Snapshot 2.4.9
-            FeatureCount += 1
-            BugCount += 5
-            If LastVersion = 280 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复进入 Mod、整合包下载页时报错的 Bug"))
-        End If
-        If LastVersion < 280 Then 'Snapshot 2.4.8
-            FeatureCount += 1
-            BugCount += 10
-        End If
-        If LastVersion < 278 Then 'Snapshot 2.4.7
-            If LastVersion = 277 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复设置背景音乐可能导致无法启动 PCL 的 Bug"))
-            BugCount += 2
-        End If
-        If LastVersion < 277 Then 'Snapshot 2.4.6
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在百宝箱添加了清理 MC 日志、崩溃报告的按钮"))
-            FeatureCount += 8
-            BugCount += 21
-        End If
-        If LastVersion < 275 Then 'Snapshot 2.4.5
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "增加 在游戏启动前执行命令 设置"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化界面动画，修改部分配色"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 Mod 中文搜索"))
-            FeatureCount += 17
-            BugCount += 35
-        End If
-        If LastVersion < 273 Then 'Snapshot 2.4.4
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在版本设置页导出启动脚本、打开存档文件夹等"))
-            If LastVersion = 271 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法同时开启多个 Minecraft 客户端的 Bug"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法从下载页安装最新 MC 版本的整合包的 Bug"))
-            FeatureCount += 7
-            BugCount += 8
-        End If
-        If LastVersion < 271 Then 'Snapshot 2.4.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 Mod、整合包下载的版本检查与显示"))
-            If LastVersion <= 267 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 LiteLoader 的 Bug"))
-            FeatureCount += 6
-            BugCount += 15
-        End If
-        If LastVersion < 269 Then 'Snapshot 2.4.2
-            If LastVersion = 267 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法下载 CurseForge 整合包的 Bug"))
-            FeatureCount += 2
-            BugCount += 3
-        End If
-        If LastVersion < 267 Then 'Snapshot 2.4.1
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "暂时关闭了联机功能"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "自动安装时支持检查 OptiFine 对 Forge 的具体版本需求"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化自动 Java 选择的准确度"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 Mod 中文名的显示"))
-            FeatureCount += 12
-            BugCount += 22
-        End If
-        If LastVersion < 266 Then 'Snapshot 2.4.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "游戏崩溃的弹窗添加了直接查看日志的选项"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在更多分类下添加了新功能投票选项"))
-            FeatureCount += 3
-            BugCount += 11
-        End If
-        If LastVersion < 264 Then 'Snapshot 2.3.5
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法启动部分 Forge 版本的 Bug"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复多个可能导致 OptiFine、Forge 安装失败的 Bug"))
-            FeatureCount += 2
-            BugCount += 3
-        End If
-        If LastVersion < 263 Then 'Snapshot 2.3.4
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复部分情况下无法启动路径带有中文的游戏的 Bug"))
-            FeatureCount += 11
-            BugCount += 5
-        End If
-        If LastVersion < 262 Then 'Snapshot 2.3.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复无法使用 Mod、整合包搜索功能的 Bug"))
-            BugCount += 1
-        End If
-        If LastVersion < 261 Then 'Snapshot 2.3.2
-            FeatureCount += 8
-            BugCount += 4
-        End If
-        If LastVersion < 259 Then 'Snapshot 2.3.1
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "解决了联机人数 ≥3 人时出现的频繁掉线或突发高延迟的问题"))
-            FeatureCount += 14
-        End If
-        If LastVersion < 258 Then 'Snapshot 2.3.0
-            FeatureCount += 4
-            BugCount += 4
-        End If
 #End If
         '整理更新日志文本
         Dim ContentList As New List(Of String)
-        Dim SortedFeatures = Sort(FeatureList, Function(Left As KeyValuePair(Of Integer, String), Right As KeyValuePair(Of Integer, String)) As Boolean
-                                                   Return Left.Key > Right.Key
-                                               End Function)
-        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then
-            ContentList.Add("龙猫忘记写更新日志啦！可以去提醒他一下……")
-        End If
+        Dim SortedFeatures = Sort(FeatureList, Function(Left, Right) Left.Key > Right.Key)
+        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("龙猫忘记写更新日志啦！可以去提醒他一下……")
         For i = 0 To Math.Min(9, SortedFeatures.Count - 1) '最多取 10 项
             ContentList.Add(SortedFeatures(i).Value)
         Next
         If SortedFeatures.Count > 10 Then FeatureCount += SortedFeatures.Count - 10
         If FeatureCount > 0 OrElse BugCount > 0 Then
             ContentList.Add(If(FeatureCount > 0, "其他 " & FeatureCount & " 项小调整与修改", "") &
-                        If(FeatureCount > 0 AndAlso BugCount > 0, "，", "") &
-                        If(BugCount > 0, "修复了 " & BugCount & " 个 Bug", "") &
-                        "，详见完整更新日志")
+                If(FeatureCount > 0 AndAlso BugCount > 0, "，", "") &
+                If(BugCount > 0, "修复了 " & BugCount & " 个 Bug", "") &
+                "，详见完整更新日志")
         End If
         Dim Content As String = "· " & Join(ContentList, vbCrLf & "· ")
         '输出更新日志
-        RunInNewThread(Sub()
-                           If MyMsgBox(Content, "PCL 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
-                               OpenWebsite("https://afdian.net/a/LTCat?tab=feed")
-                           End If
-                       End Sub, "UpdateLog Output")
+        RunInNewThread(
+        Sub()
+            If MyMsgBox(Content, "PCL 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
+                OpenWebsite("https://afdian.net/a/LTCat?tab=feed")
+            End If
+        End Sub, "UpdateLog Output")
     End Sub
 
     '窗口加载
@@ -520,7 +393,6 @@ Public Class FormMain
 
         Log("[Start] 第三阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
     End Sub
-    'Private Declare Function ChangeWindowMessageFilter Lib "user32.dll" (message As Integer, action As Integer) As Boolean
     '根据打开次数触发的事件
     Private Sub RunCountSub()
         Setup.Set("SystemCount", Setup.Get("SystemCount") + 1)

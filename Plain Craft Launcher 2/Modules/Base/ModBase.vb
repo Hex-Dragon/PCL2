@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.7.0" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.7.0." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.7.1" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.7.1." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 319 'Release
 #Else
-    Public Const VersionCode As Integer = 318 'Snapshot
+    Public Const VersionCode As Integer = 320 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -647,7 +647,7 @@ Public Module ModBase
             Dim Ini As New Dictionary(Of String, String)
             For Each Line In ReadFile(FileName).Split(vbCrLf.ToArray(), StringSplitOptions.RemoveEmptyEntries)
                 Dim Index As Integer = Line.IndexOfF(":")
-                If Index > 0 Then Ini.Add(Line.Substring(0, Index), Line.Substring(Index + 1))
+                If Index > 0 Then Ini(Line.Substring(0, Index)) = Line.Substring(Index + 1) '可能会有重复键，见 #3616
             Next
             IniCache(FileName) = Ini
             Return Ini
