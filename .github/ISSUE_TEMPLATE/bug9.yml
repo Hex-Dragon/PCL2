@@ -13,12 +13,19 @@ body:
 - type: textarea
   id: "yml-2"
   attributes:
+    label: 版本号
+    description: "填写具体的版本号，例如：Release 2.7.1 (注意“最新版”并不是一个正确的版本号)"
+  validations:
+    required: true
+- type: textarea
+  id: "yml-3"
+  attributes:
     label: 描述
     description: "详细描述该 Bug 的具体表现。"
   validations:
     required: true
 - type: textarea
-  id: "yml-3"
+  id: "yml-4"
   attributes:
     label: 重现步骤
     description: "详细描述要怎么操作才能再次触发这个 Bug。"
@@ -28,7 +35,7 @@ body:
   validations:
     required: true
 - type: textarea
-  id: "yml-4"
+  id: "yml-5"
   attributes:
     label: 日志与附件
     description: "上传 PCL 文件夹中的 Log1~5.txt。[日志在哪？](https://shimo.im/docs/qKPttVvXKqPD8YDC#anchor-fvZW)"
