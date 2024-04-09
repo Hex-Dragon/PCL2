@@ -15,21 +15,21 @@ body:
     - label: "我已在 [Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 和 [常见&难检反馈及问题列表](https://github.com/Hex-Dragon/PCL2/discussions/1930) 中搜索，确认了这一 Bug 未被提交过。"
       required: true
 - type: textarea
-  id: "yml-5"
+  id: "yml-2"
   attributes:
     label: 版本号
     description: "填写具体的版本号，例如：Release 2.7.1 (注意“最新版”并不是一个正确的版本号)"
   validations:
     required: true
 - type: textarea
-  id: "yml-2"
+  id: "yml-3"
   attributes:
     label: 描述
     description: "详细描述具体表现。"
   validations:
     required: true
 - type: textarea
-  id: "yml-3"
+  id: "yml-4"
   attributes:
     label: PCL 错误报告、日志与附件
     description: "上传 PCL 提供的错误报告（在崩溃时选择导出错误报告）。如果没有，也可以上传 PCL 文件夹中的 Log1~5.txt。"
@@ -37,7 +37,7 @@ body:
   validations:
     required: true
 - type: textarea
-  id: "yml-4"
+  id: "yml-5"
   attributes:
     label: HMCL 启动脚本
     description: "在 HMCL 中进入版本列表，点击版本右侧的三个点，选择 生成启动脚本。"
