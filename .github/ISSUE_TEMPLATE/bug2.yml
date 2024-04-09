@@ -39,7 +39,7 @@ body:
   validations:
     required: true
 - type: textarea
-  id: "yml-4"
+  id: "yml-5"
   attributes:
     label: 日志与附件
     description: "上传 PCL 文件夹中的 Log1~5.txt。[日志在哪？](https://shimo.im/docs/qKPttVvXKqPD8YDC#anchor-fvZW)"
