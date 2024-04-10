@@ -445,6 +445,13 @@
             InstallLoaders.Add(New LoaderTask(Of Integer, Integer)("替换旧版 Mod 文件",
             Sub()
                 Try
+                    For Each Entry As McMod In ModList
+                        If File.Exists(Entry.Path) Then
+                            My.Computer.FileSystem.DeleteFile(Entry.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+                        Else
+                            Log($"[Mod] 未找到更新前的 Mod 文件，跳过对它的删除：{Entry.Path}", LogLevel.Debug)
+                        End If
+                    Next
                     For Each Entry As KeyValuePair(Of String, String) In FileCopyList
                         If File.Exists(Entry.Value) Then
                             My.Computer.FileSystem.DeleteFile(Entry.Value, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
@@ -455,13 +462,6 @@
                             FinishedFileNames.Add(GetFileNameFromPath(Entry.Value))
                         Else
                             Log($"[Mod] 更新后的目标文件夹已被删除：{Entry.Value}", LogLevel.Debug)
-                        End If
-                    Next
-                    For Each Entry As McMod In ModList
-                        If File.Exists(Entry.Path) Then
-                            My.Computer.FileSystem.DeleteFile(Entry.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                        Else
-                            Log($"[Mod] 未找到更新前的 Mod 文件，跳过对它的删除：{Entry.Path}", LogLevel.Debug)
                         End If
                     Next
                 Catch ex As OperationCanceledException
