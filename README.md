@@ -1,4 +1,8 @@
-## Plain Craft Launcher 2 源代码库
+# Plain Craft Launcher 2 源代码库
+
+![Stars](https://img.shields.io/github/stars/Hex-Dragon/PCL2?style=flat&logoSize=auto&label=Stars&labelColor=eac54f&color=106ac4)
+
+## 介绍
 
 这里提供了 PCL 的大多数源代码，包括 UI 库、动画模块、下载模块、Minecraft 启动模块等！
 
@@ -6,16 +10,12 @@ PCL 的代码绝大多数其实都是几年前学生时代的产物了……那�
 
 你也可以丢 Pull Request，虽然这个源代码库并不能直接编译，但一些简单的修改应该还是没问题的……
 
-　
-
-**相关内容：**
+## 相关内容
 - [PCL 功能投票](https://github.com/Hex-Dragon/PCL2/discussions/2)：来参加投票吧，开发者会优先处理票数较高的帖子！
 - [程序下载](https://afdian.net/p/0164034c016c11ebafcb52540025c377)：下载免费的正式版 PCL。
 - [帮助文档库](https://github.com/LTCatt/PCL2Help)：PCL 帮助文档在 GitHub 上的存储库（是的，帮助库在另一个 Repo……）
 
-　
-
-**一些无趣的小细节：**
+## 一些无趣的小细节
 - 别想在这里面找到解密游戏的线索，那部分的代码被我抠掉了（笑）
 - 哦，对，解锁隐藏主题的相关代码也都被抠掉了，所以别想着用翻源代码这种歪门邪道来绕过解密了.jpg
 - 源代码库并不是即时更新的，而是在每次 PCL 发布更新时（手动）同步一次
