@@ -963,7 +963,7 @@ SystemBrowser:
                 Log(ex, "微软登录第 6 步汇报 404")
                 RunInNewThread(Sub()
                                    Select Case MyMsgBox("你可能没有创建 Minecraft 玩家档案、Xbox Game Pass 已到期，或者还没有购买 Minecraft。" & vbCrLf &
-                                            "请创建档案或购买 Minecraft，之后即可使用 PCL 登录。", "登录失败", "创建档案", "购买 Minecraft", "取消")
+                                            "如果您确认您已购买 Minecraft 或您的 Xbox Game Pass 未过期，请创建档案，之后即可使用 PCL 登录。", "登录失败", "创建档案", "购买 Minecraft", "取消")
                                        Case 1
                                            OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
                                        Case 2
