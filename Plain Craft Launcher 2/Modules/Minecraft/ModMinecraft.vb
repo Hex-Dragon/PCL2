@@ -181,7 +181,7 @@
             If AniControlEnabled = 0 AndAlso
                Setup.Get("VersionServerAuthServer", Version:=value) <> Setup.Get("CacheAuthServerServer") AndAlso
                Setup.Get("VersionServerLogin", Version:=value) = 4 Then
-                Setup.Set("CacheNideServer", "")
+                Setup.Set("CacheAuthAccess", "")
                 Log("[Launch] 服务器改变，要求重新登录 Authlib-Injector")
             End If
             If Setup.Get("VersionServerLogin", Version:=value) = 4 Then
@@ -216,8 +216,8 @@
                     '尚未判断
                     Dim ModFolder As New DirectoryInfo(Path & "mods\")
                     Dim SaveFolder As New DirectoryInfo(Path & "saves\")
-                    If (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Count > 0) OrElse
-                       (SaveFolder.Exists AndAlso SaveFolder.EnumerateFiles.Count > 0) Then
+                    If (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Any) OrElse
+                       (SaveFolder.Exists AndAlso SaveFolder.EnumerateFiles.Any) Then
                         '自动开启
                         Setup.Set("VersionArgumentIndie", 1, Version:=Me)
                         Log("[Setup] 已自动开启单版本隔离：" & Name)
@@ -1234,7 +1234,7 @@ OnLoaded:
             For Each Version As McVersion In VersionList
                 If Version.IsStar AndAlso Not Version.DisplayType = McVersionCardType.Hidden Then StaredVersions.Add(Version)
             Next
-            If StaredVersions.Count > 0 Then VersionListOriginal.Add(McVersionCardType.Star, StaredVersions)
+            If StaredVersions.Any Then VersionListOriginal.Add(McVersionCardType.Star, StaredVersions)
 
             '预先筛选出愚人节的版本
             McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Error}, McVersionCardType.Error)
@@ -1308,8 +1308,8 @@ OnLoaded:
 
             '将剩余的东西添加进去
             VersionRubbish.AddRange(VersionList)
-            If VersionUseful.Count > 0 Then VersionListOriginal.Add(McVersionCardType.OriginalLike, VersionUseful)
-            If VersionRubbish.Count > 0 Then VersionListOriginal.Add(McVersionCardType.Rubbish, VersionRubbish)
+            If VersionUseful.Any Then VersionListOriginal.Add(McVersionCardType.OriginalLike, VersionUseful)
+            If VersionRubbish.Any Then VersionListOriginal.Add(McVersionCardType.Rubbish, VersionRubbish)
 
             '按照自定义版本分类重新添加
             For Each VersionPair In VersionListOriginal
@@ -1429,7 +1429,7 @@ OnLoaded:
 NextVersion:
         Next
         '加入版本列表，并从剩余中删除
-        If KeepList.Count > 0 Then
+        If KeepList.Any Then
             Target.Add(CardType, KeepList)
             For Each Version As McVersion In KeepList
                 VersionList.Remove(Version)
@@ -1450,7 +1450,7 @@ NextVersion:
             Next
 NextVersion:
         Next
-        If KeepList.Count > 0 Then
+        If KeepList.Any Then
             For Each Version As McVersion In KeepList
                 VersionList.Remove(Version)
             Next
@@ -1515,7 +1515,7 @@ NextVersion:
     ''' </summary>
     Public Function McSkinGetAddress(Uuid As String, Type As String) As String
         If Uuid = "" Then Throw New Exception("Uuid 为空。")
-        If Uuid.StartsWithF("000000") Then Throw New Exception("离线 Uuid 无正版皮肤文件。")
+        If Uuid.StartsWithF("00000") Then Throw New Exception("离线 Uuid 无正版皮肤文件。")
         '尝试读取缓存
         Dim CacheSkinAddress As String = ReadIni(PathTemp & "Cache\Skin\Index" & Type & ".ini", Uuid)
         If Not CacheSkinAddress = "" Then Return CacheSkinAddress
@@ -2048,8 +2048,7 @@ NextVersion:
                 If Version.InheritVersion = "" Then Exit Do
                 Version = New McVersion(PathMcFolder & "versions\" & Version.InheritVersion)
             Loop
-        Catch ex As Exception
-            Log(ex, "获取资源文件索引下载地址失败")
+        Catch
         End Try
         '无法获取到下载地址
         If ReturnLegacyOnError Then
@@ -2239,10 +2238,11 @@ NextVersion:
             '弹窗结果
             If MsgResult = 2 Then
                 '下载
-                RunInUi(Sub()
-                            PageDownloadInstall.McVersionWaitingForSelect = VersionName
-                            FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
-                        End Sub)
+                RunInUi(
+                Sub()
+                    PageDownloadInstall.McVersionWaitingForSelect = VersionName
+                    FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
+                End Sub)
             End If
 
         Catch ex As Exception

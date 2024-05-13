@@ -337,7 +337,7 @@ Public Module ModMod
                     For Each Token In AuthorJson
                         Author.Add(Token.ToString)
                     Next
-                    If Author.Count > 0 Then Authors = Join(Author, ", ")
+                    If Author.Any Then Authors = Join(Author, ", ")
                 End If
                 Dim Reqs As JArray = InfoObject("requiredMods")
                 If Reqs IsNot Nothing Then
@@ -393,7 +393,7 @@ GotFabric:
                     For Each Token In AuthorJson
                         Author.Add(Token.ToString)
                     Next
-                    If Author.Count > 0 Then Authors = Join(Author, ", ")
+                    If Author.Any Then Authors = Join(Author, ", ")
                 End If
                 'If (Not FabricObject.ContainsKey("serverSideOnly")) OrElse FabricObject("serverSideOnly")("value").ToObject(Of Boolean) = False Then
                 '    '添加 Minecraft 依赖
@@ -438,7 +438,7 @@ GotFabric:
                         Line = Line.Substring(0, Line.IndexOfF("#"))
                     End If
                     Line = Line.Trim(New Char() {" "c, "	"c, "　"c}) '去除头尾的空格
-                    If Line.Count > 0 Then Lines.Add(Line) '去除空行
+                    If Line.Any Then Lines.Add(Line) '去除空行
                 Next
                 '读取文件数据
                 Dim TomlData As New List(Of KeyValuePair(Of String, Dictionary(Of String, Object))) From {New KeyValuePair(Of String, Dictionary(Of String, Object))("", New Dictionary(Of String, Object))}
@@ -925,7 +925,7 @@ Finished:
     End Sub
 
     '联网加载 Mod 详情
-    Private Const LocalModCacheVersion As Integer = 2
+    Private Const LocalModCacheVersion As Integer = 3
     Public McModDetailLoader As New LoaderTask(Of KeyValuePair(Of List(Of McMod), JObject), Integer)("Mod List Detail Loader", AddressOf McModDetailLoad)
     Private Sub McModDetailLoad(Loader As LoaderTask(Of KeyValuePair(Of List(Of McMod), JObject), Integer))
         Dim Mods As List(Of McMod) = Loader.Input.Key
@@ -965,6 +965,7 @@ Finished:
                 Dim ModrinthMapping As New Dictionary(Of String, List(Of McMod))
                 For Each Entry In Mods
                     If Not ModrinthVersion.ContainsKey(Entry.ModrinthHash) Then Continue For
+                    If ModrinthVersion(Entry.ModrinthHash)("files")(0)("hashes")("sha1") <> Entry.ModrinthHash Then Continue For
                     Dim ProjectId = ModrinthVersion(Entry.ModrinthHash)("project_id").ToString
                     If CompProjectCache.ContainsKey(ProjectId) AndAlso Entry.Comp Is Nothing Then Entry.Comp = CompProjectCache(ProjectId) '读取已加载的缓存，加快结果出现速度
                     If Not ModrinthMapping.ContainsKey(ProjectId) Then ModrinthMapping(ProjectId) = New List(Of McMod)

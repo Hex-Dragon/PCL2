@@ -33,7 +33,7 @@
             If Indie = -1 Then
                 Dim ModFolder As New DirectoryInfo(PageVersionLeft.Version.Path & "mods\")
                 Dim SaveFolder As New DirectoryInfo(PageVersionLeft.Version.Path & "saves\")
-                If (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Count > 0) OrElse (SaveFolder.Exists AndAlso SaveFolder.EnumerateFiles.Count > 0) Then
+                If (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Any) OrElse (SaveFolder.Exists AndAlso SaveFolder.EnumerateFiles.Any) Then
                     '自动开启
                     Setup.Set("VersionArgumentIndie", 1, Version:=PageVersionLeft.Version)
                     Log("[Setup] 已自动开启单版本隔离：" & PageVersionLeft.Version.Name)
@@ -438,7 +438,7 @@ PreFin:
             Log(ex, "更新版本设置 Java 下拉框失败", LogLevel.Feedback)
         End Try
         '更新选择项
-        If SelectedItem Is Nothing AndAlso JavaList.Count > 0 Then
+        If SelectedItem Is Nothing AndAlso JavaList.Any Then
             If SelectedBySetup = "" Then
                 SelectedItem = ComboArgumentJava.Items(1) '选中 “自动选择”
             Else

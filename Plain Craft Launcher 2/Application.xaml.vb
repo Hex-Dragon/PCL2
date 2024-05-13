@@ -19,7 +19,6 @@ Public Class Application
 
     '开始
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
-        ApplicationStartTick = GetTimeTick()
         SecretOnApplicationStart()
         Try
             '检查参数调用
@@ -104,9 +103,10 @@ Public Class Application
             '日志初始化
             LogStart()
             '添加日志
-            Log("[Start] 程序版本：" & VersionDisplayName & "（" & VersionCode & "）")
-            Log("[Start] 识别码：" & UniqueAddress & If(ThemeCheckOne(9), "，已解锁反馈主题", ""))
-            Log("[Start] 程序路径：" & PathWithName)
+            Log($"[Start] 程序版本：{VersionDisplayName} ({VersionCode})")
+            Log($"[Start] 识别码：{UniqueAddress}{If(ThemeCheckOne(9), "，已解锁反馈主题", "")}")
+            Log($"[Start] 程序路径：{PathWithName}")
+            Log($"[Start] 系统编码：{Encoding.Default} ({Encoding.Default.CodePage}, GBK={IsGBKEncoding})")
             '检测压缩包运行
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
                 MyMsgBox("PCL 正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。" & vbCrLf & "请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！", "环境警告", "我知道了", IsWarn:=True)
@@ -220,7 +220,7 @@ Public Class Application
                 Names.Remove(sender.Tag)
                 Setup.Set("LoginLegacyName", Join(Names, "¨"))
                 FrmLoginLegacy.ComboName.ItemsSource = Names
-                FrmLoginLegacy.ComboName.Text = If(Names.Count > 0, Names(0), "")
+                FrmLoginLegacy.ComboName.Text = If(Names.Any, Names(0), "")
             Case Else
                 '第三方
                 Dim Token As String = GetStringFromEnum(Setup.Get("LoginType"))
@@ -238,12 +238,12 @@ Public Class Application
                 Select Case Token
                     Case "Nide"
                         FrmLoginNide.ComboName.ItemsSource = Dict.Keys
-                        FrmLoginNide.ComboName.Text = If(Dict.Keys.Count > 0, Dict.Keys(0), "")
-                        FrmLoginNide.TextPass.Password = If(Dict.Values.Count > 0, Dict.Values(0), "")
+                        FrmLoginNide.ComboName.Text = If(Dict.Keys.Any, Dict.Keys(0), "")
+                        FrmLoginNide.TextPass.Password = If(Dict.Values.Any, Dict.Values(0), "")
                     Case "Auth"
                         FrmLoginAuth.ComboName.ItemsSource = Dict.Keys
-                        FrmLoginAuth.ComboName.Text = If(Dict.Keys.Count > 0, Dict.Keys(0), "")
-                        FrmLoginAuth.TextPass.Password = If(Dict.Values.Count > 0, Dict.Values(0), "")
+                        FrmLoginAuth.ComboName.Text = If(Dict.Keys.Any, Dict.Keys(0), "")
+                        FrmLoginAuth.TextPass.Password = If(Dict.Values.Any, Dict.Values(0), "")
                 End Select
         End Select
     End Sub

@@ -210,10 +210,10 @@
                 If Project.Type = CompType.Mod Then
                     '获取 Mod 所需的加载器种类
                     Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing
-                    If File.ModLoaders.Count > 0 Then '从文件中获取
+                    If File.ModLoaders.Any Then '从文件中获取
                         AllowForge = File.ModLoaders.Contains(CompModLoaderType.Forge)
                         AllowFabric = File.ModLoaders.Contains(CompModLoaderType.Fabric)
-                    ElseIf Project.ModLoaders.Count > 0 Then '从工程中获取
+                    ElseIf Project.ModLoaders.Any Then '从工程中获取
                         AllowForge = Project.ModLoaders.Contains(CompModLoaderType.Forge)
                         AllowFabric = Project.ModLoaders.Contains(CompModLoaderType.Fabric)
                     End If

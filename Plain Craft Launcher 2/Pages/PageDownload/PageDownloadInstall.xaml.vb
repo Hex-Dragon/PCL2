@@ -32,7 +32,7 @@
 #Region "页面切换"
 
     '页面切换动画
-    Private IsInSelectPage As Boolean = False
+    Public IsInSelectPage As Boolean = False
     Private IsFirstLoaded As Boolean = False
     Private Sub EnterSelectPage()
         If IsInSelectPage Then Exit Sub
@@ -273,11 +273,13 @@
         End If
     End Sub
 
+    Private IsReloading As Boolean = False '#3742 中，LoadOptiFineGetError 会初始化 LoadOptiFine，触发事件 LoadOptiFine.StateChanged，导致再次调用 SelectReload
     ''' <summary>
     ''' 重载已选择的项目的显示。
     ''' </summary>
     Private Sub SelectReload() Handles CardOptiFine.Swap, LoadOptiFine.StateChanged, CardForge.Swap, LoadForge.StateChanged, CardFabric.Swap, LoadFabric.StateChanged, CardFabricApi.Swap, LoadFabricApi.StateChanged, CardOptiFabric.Swap, LoadOptiFabric.StateChanged, CardLiteLoader.Swap, LoadLiteLoader.StateChanged
-        If SelectedMinecraftId Is Nothing Then Exit Sub
+        If SelectedMinecraftId Is Nothing OrElse IsReloading Then Exit Sub
+        IsReloading = True
         '主预览
         SelectNameUpdate()
         ItemSelect.Title = TextSelectName.Text
@@ -385,17 +387,12 @@
         '主警告
         HintFabricAPI.Visibility = If(SelectedFabric IsNot Nothing AndAlso SelectedFabricApi Is Nothing, Visibility.Visible, Visibility.Collapsed)
         If SelectedFabric IsNot Nothing AndAlso SelectedOptiFine IsNot Nothing AndAlso SelectedOptiFabric Is Nothing Then
-            If SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15") Then
-                HintOptiFabric.Visibility = Visibility.Collapsed
-                HintOptiFabricOld.Visibility = Visibility.Visible
-            Else
-                HintOptiFabric.Visibility = Visibility.Visible
-                HintOptiFabricOld.Visibility = Visibility.Collapsed
-            End If
+            HintOptiFabric.Visibility = Visibility.Visible
         Else
             HintOptiFabric.Visibility = Visibility.Collapsed
-            HintOptiFabricOld.Visibility = Visibility.Collapsed
         End If
+        '结束
+        IsReloading = False
     End Sub
     ''' <summary>
     ''' 清空已选择的项目。
@@ -1037,7 +1034,6 @@
     ''' 获取 OptiFabric 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadOptiFabricGetError() As String
-        If SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15") Then Return "不兼容老版本 Fabric，请手动下载 OptiFabric Origins"
         If LoadOptiFabric Is Nothing OrElse LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFabric.State, Object).Error.Message
         If DlOptiFabricLoader.Output Is Nothing Then

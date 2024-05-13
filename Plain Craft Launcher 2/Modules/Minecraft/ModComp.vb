@@ -414,10 +414,10 @@
             Json("Website") = Website
             If LastUpdate IsNot Nothing Then Json("LastUpdate") = LastUpdate
             Json("DownloadCount") = DownloadCount
-            If ModLoaders IsNot Nothing AndAlso ModLoaders.Count > 0 Then Json("ModLoaders") = New JArray(ModLoaders.Select(Function(m) CInt(m)))
+            If ModLoaders IsNot Nothing AndAlso ModLoaders.Any Then Json("ModLoaders") = New JArray(ModLoaders.Select(Function(m) CInt(m)))
             Json("Tags") = New JArray(Tags)
             If LogoUrl IsNot Nothing Then Json("LogoUrl") = LogoUrl
-            If GameVersions.Count > 0 Then Json("GameVersions") = New JArray(GameVersions)
+            If GameVersions.Any Then Json("GameVersions") = New JArray(GameVersions)
             Json("CacheTime") = Date.Now '用于检查缓存时间
             Return Json
         End Function
@@ -596,7 +596,7 @@
             SubtitleList = SubtitleList.Distinct().ToList()
             '设置标题与描述
             Dim Subtitle As String = ""
-            If SubtitleList.Count > 0 Then
+            If SubtitleList.Any Then
                 For Each Ex In SubtitleList
                     Dim IsModLoaderDescription As Boolean =
                         Ex.ToLower.Contains("forge") OrElse Ex.ToLower.Contains("fabric") OrElse Ex.ToLower.Contains("quilt")
@@ -1356,9 +1356,9 @@ Retry:
             Dim Info As String = ""
             Select Case Type
                 Case CompType.Mod
-                    Info += If(ModLoaders.Count > 0,
+                    Info += If(ModLoaders.Any,
                         "适用于 " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & "，", "")
-                    Info += If(ModeDebug AndAlso Dependencies.Count > 0, Dependencies.Count & " 个前置 Mod，", "")
+                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " 个前置 Mod，", "")
                 Case CompType.ModPack
                     If GameVersions.All(Function(v) v.Contains("w")) Then
                         Info += $"游戏版本 {Join(GameVersions, "、")}，"
@@ -1452,7 +1452,7 @@ Retry:
             SelectMany(Function(f) f.RawDependencies).Distinct().ToList
         Dim UndoneDeps = Deps.Where(Function(f) Not CompProjectCache.ContainsKey(f)).ToList
         '获取前置 Mod 工程信息
-        If UndoneDeps.Count > 0 Then
+        If UndoneDeps.Any Then
             Log($"[Comp] {ProjectId} 文件列表中还需要获取信息的前置 Mod：{Join(UndoneDeps, "，")}")
             Dim Projects As JArray
             If TargetProject.FromCurseForge Then
@@ -1467,7 +1467,7 @@ Retry:
             Next
         End If
         '更新前置 Mod 信息
-        If Deps.Count > 0 Then
+        If Deps.Any Then
             For Each DepProject In Deps.Select(Function(id) CompProjectCache(id))
                 For Each File In CompFilesCache(ProjectId)
                     If File.RawDependencies.Contains(DepProject.Id) AndAlso DepProject.Id <> ProjectId Then

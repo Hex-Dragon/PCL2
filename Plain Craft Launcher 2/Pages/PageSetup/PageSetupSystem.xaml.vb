@@ -126,23 +126,21 @@
 
     '滑动条
     Private Sub SliderLoad()
-        SliderDownloadThread.GetHintText = Function(Value As Integer)
-                                               Return Value + 1
-                                           End Function
-        SliderDownloadSpeed.GetHintText = Function(Value As Integer)
-                                              If Value <= 14 Then
-                                                  Return (Value + 1) * 0.1 & " M/s"
-                                              ElseIf Value <= 31 Then
-                                                  Return (Value - 11) * 0.5 & " M/s"
-                                              ElseIf Value <= 41 Then
-                                                  Return (Value - 21) & " M/s"
-                                              Else
-                                                  Return "无限制"
-                                              End If
-                                          End Function
-        SliderDebugAnim.GetHintText = Function(Value As Integer)
-                                          Return If(Value > 29, "关闭", (Value / 10 + 0.1) & "x")
-                                      End Function
+        SliderDownloadThread.GetHintText = Function(v) v + 1
+        SliderDownloadSpeed.GetHintText =
+        Function(v)
+            Select Case v
+                Case Is <= 14
+                    Return (v + 1) * 0.1 & " M/s"
+                Case Is <= 31
+                    Return (v - 11) * 0.5 & " M/s"
+                Case Is <= 41
+                    Return (v - 21) & " M/s"
+                Case Else
+                    Return "无限制"
+            End Select
+        End Function
+        SliderDebugAnim.GetHintText = Function(v) If(v > 29, "关闭", (v / 10 + 0.1) & "x")
     End Sub
     Private Sub SliderDownloadThread_PreviewChange(sender As Object, e As RouteEventArgs) Handles SliderDownloadThread.PreviewChange
         If SliderDownloadThread.Value < 100 Then Exit Sub

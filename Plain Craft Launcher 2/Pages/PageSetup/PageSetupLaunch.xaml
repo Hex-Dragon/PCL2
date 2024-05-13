@@ -115,7 +115,7 @@
                             <local:MyComboBoxItem Content="中（平衡）" IsSelected="True" />
                             <local:MyComboBoxItem Content="低（优先保证其他程序运行，但可能让游戏卡顿，适合挂机时使用）" />
                         </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="10" HorizontalAlignment="Left" Text="游戏窗口" Margin="0,0,25,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Row="10" HorizontalAlignment="Left" Text="窗口大小" Margin="0,0,25,0" />
                         <Grid x:Name="PanArgumentWindow" Grid.Row="10" Grid.ColumnSpan="2" Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -125,11 +125,10 @@
                             </Grid.ColumnDefinitions>
                             <local:MyComboBox x:Name="ComboArgumentWindowType" Tag="LaunchArgumentWindowType">
                                 <local:MyComboBoxItem Content="全屏" />
-                                <local:MyComboBoxItem Content="默认大小" IsSelected="True" ToolTip="以 854×480 的默认窗口大小启动 Minecraft" />
-                                <local:MyComboBoxItem Content="与启动器窗口大小一致" />
-                                <local:MyComboBoxItem Content="自定义大小" ToolTip="注意：Forge 1.12 存在 Bug，会导致高度设定无效" />
+                                <local:MyComboBoxItem Content="默认" IsSelected="True" />
+                                <local:MyComboBoxItem Content="与启动器尺寸一致" />
+                                <local:MyComboBoxItem Content="自定义尺寸" ToolTip="Forge 1.12.2 等个别版本存在 Bug，会导致高度设定无效" />
                                 <local:MyComboBoxItem Content="最大化" />
-                                <local:MyComboBoxItem Content="保持游戏默认" />
                             </local:MyComboBox>
                             <local:MyTextBox Padding="0,0,5,0" Visibility="Collapsed" Grid.Column="1" Margin="50,0,0,0" x:Name="TextArgumentWindowWidth" Tag="LaunchArgumentWindowWidth" Width="60" HorizontalContentAlignment="Center" Text="854">
                                 <local:MyTextBox.ValidateRules>
@@ -138,7 +137,7 @@
                             </local:MyTextBox>
                             <TextBlock x:Name="LabArgumentWindowMiddle" Visibility="Collapsed" Grid.Column="2" Text=" × " VerticalAlignment="Center" FontSize="18" />
                             <local:MyTextBox Padding="0,0,5,0" Visibility="Collapsed" Grid.Column="3" Width="60" HorizontalContentAlignment="Center" x:Name="TextArgumentWindowHeight" Tag="LaunchArgumentWindowHeight" Text="480"
-                                              ToolTip="注意：Forge 1.12.2 等个别版本存在 Bug，会导致高度设定无效" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5">
+                                              ToolTip="Forge 1.12.2 等个别版本存在 Bug，会导致高度设定无效" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5">
                                 <local:MyTextBox.ValidateRules>
                                     <local:ValidateInteger Min="1" Max="9999" />
                                 </local:MyTextBox.ValidateRules>
@@ -175,11 +174,16 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="9" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="9" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <local:MyRadioBox Text="自动配置" Width="110" Checked="True" x:Name="RadioRamType0" Tag="LaunchRamType/0" Margin="0,0,20,0" 
                                           ToolTip="根据安装的 Mod 量与电脑剩余内存，动态调整为游戏分配的内存" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="-10" ToolTipService.VerticalOffset="-3" />
                         <local:MyRadioBox Grid.Row="2" Text="自定义" x:Name="RadioRamType1" Tag="LaunchRamType/1" Margin="0,0,20,0" />
                         <local:MySlider Grid.Row="2" Grid.Column="1" IsEnabled="False" x:Name="SliderRamCustom" Tag="LaunchRamCustom" MaxValue="49" Value="13" />
+                        <local:MyCheckBox Grid.Row="4" Grid.ColumnSpan="3" Text="启动游戏前进行内存优化" Height="22" x:Name="CheckArgumentRam" Tag="LaunchArgumentRam"
+                                          ToolTipService.Placement="Left" ToolTipService.HorizontalOffset="525" ToolTipService.VerticalOffset="-30"
+                                          ToolTip="内存优化能将当前物理内存占用降低约 1/3，不仅限于 MC！&#xa;如果使用机械硬盘，这还可能会导致一小段时间的严重卡顿。&#xa;使用 --memory 参数启动 PCL 可以静默执行内存优化。" />
                         <!--<local:MyTextBox Grid.Row="2" Grid.Column="3" Width="100" VerticalAlignment="Center" Margin="30,0,0,0" Text="2048 MB" />-->
                     </Grid>
                     <Grid x:Name="PanRamDisplay" Margin="0,11,2,0" SnapsToDevicePixels="True" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1">
@@ -229,7 +233,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="JVM 参数头" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextAdvanceJvm" Grid.Row="0" Grid.ColumnSpan="2" Tag="LaunchAdvanceJvm" Grid.Column="1" ToolTip="启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。&#xa;你可以通过点击左侧选项卡的初始化按钮来恢复到默认设置。" MaxLength="4000" Text="-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true" 
+                    <local:MyTextBox x:Name="TextAdvanceJvm" Grid.Row="0" Grid.ColumnSpan="2" Tag="LaunchAdvanceJvm" Grid.Column="1" ToolTip="启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。&#xa;你可以通过点击左侧选项卡的初始化按钮来恢复到默认设置。" MaxLength="4000"
                                      Height="57" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="0,5" />
                     <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="JVM 参数尾" Margin="0,0,25,0" />
                     <local:MyTextBox x:Name="TextAdvanceGame" Grid.Row="2" Grid.ColumnSpan="2" Tag="LaunchAdvanceGame" Grid.Column="1" ToolTip="文本框中的内容将会被直接拼合在启动参数的末尾。&#xa;例如输入 --demo 则会以试玩模式启动游戏。" />

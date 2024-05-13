@@ -94,7 +94,7 @@
                 Log(ex, "读取可能的崩溃日志文件失败（" & FilePath & "）")
             End Try
         Next
-        If LatestLog IsNot Nothing AndAlso LatestLog.Count > 0 Then
+        If LatestLog IsNot Nothing AndAlso LatestLog.Any Then
             Dim RawOutput As String = Join(LatestLog, vbCrLf)
             Log("[Crash] 以下为游戏输出的最后一段内容：" & vbCrLf & RawOutput)
             WriteFile(TempFolder & "RawOutput.log", RawOutput)
@@ -110,21 +110,20 @@
     Public Sub Import(FilePath As String)
         Log("[Crash] 步骤 1：自主导入日志文件")
 
-        '解压压缩包
+        '尝试视作压缩包解压
         Try
             Dim Info As New FileInfo(FilePath)
-            If Not Info.Exists OrElse Info.Length = 0 Then Exit Try
-            If Not FilePath.EndsWithF(".jar", True) AndAlso ExtractFile(FilePath, TempFolder & "Temp\") Then
-                '解压成功
+            If Info.Exists AndAlso Info.Length > 0 AndAlso Not FilePath.EndsWithF(".jar", True) Then
+                ExtractFile(FilePath, TempFolder & "Temp\")
                 Log("[Crash] 已解压导入的日志文件：" & FilePath)
-            Else
-                '解压失败
-                CopyFile(FilePath, TempFolder & "Temp\" & GetFileNameFromPath(FilePath))
-                Log("[Crash] 已复制导入的日志文件：" & FilePath)
+                GoTo Extracted
             End If
-        Catch ex As Exception
-            Log(ex, "解压导入文件中的压缩包失败")
+        Catch
         End Try
+        '并非压缩包
+        CopyFile(FilePath, TempFolder & "Temp\" & GetFileNameFromPath(FilePath))
+        Log("[Crash] 已复制导入的日志文件：" & FilePath)
+Extracted:
 
         '导入其中的日志文件
         For Each TargetFile As FileInfo In New DirectoryInfo(TempFolder & "Temp\").EnumerateFiles.ToList()
@@ -389,9 +388,9 @@
 
         '1. 精准日志匹配，中/高优先级
         AnalyzeCrit1()
-        If CrashReasons.Count > 0 Then GoTo Done
+        If CrashReasons.Any Then GoTo Done
         AnalyzeCrit2()
-        If CrashReasons.Count > 0 Then GoTo Done
+        If CrashReasons.Any Then GoTo Done
 
         '2. 堆栈分析
         If LogAll.Contains("orge") OrElse LogAll.Contains("abric") OrElse LogAll.Contains("uilt") OrElse LogAll.Contains("iteloader") Then
@@ -406,7 +405,7 @@
             If LogMc IsNot Nothing Then
                 Dim Fatals = RegexSearch(LogMc, "/FATAL] [\w\W]+?(?=[\n]+\[)")
                 Log("[Crash] 开始进行 Minecraft 日志堆栈分析，发现 " & Fatals.Count & " 个报错项")
-                If Fatals.Count > 0 Then
+                If Fatals.Any Then
                     For Each Fatal In Fatals
                         Keywords.AddRange(AnalyzeStackKeyword(Fatal))
                     Next
@@ -419,7 +418,7 @@
                 Keywords.AddRange(AnalyzeStackKeyword(StackLogs))
             End If
             'Mod 名称分析
-            If Keywords.Count > 0 Then
+            If Keywords.Any Then
                 Dim Names = AnalyzeModName(Keywords)
                 If Names Is Nothing Then
                     AppendReason(CrashReason.堆栈分析发现关键字, Keywords)
@@ -442,7 +441,7 @@ Done:
         Else
             Log("[Crash] 步骤 3：分析崩溃原因完成，找到 " & CrashReasons.Count & " 条可能的原因")
             For Each Reason In CrashReasons
-                Log("[Crash]  - " & GetStringFromEnum(Reason.Key) & If(Reason.Value.Count > 0, "（" & Join(Reason.Value, "；") & "）", ""))
+                Log("[Crash]  - " & GetStringFromEnum(Reason.Key) & If(Reason.Value.Any, "（" & Join(Reason.Value, "；") & "）", ""))
             Next
         End If
     End Sub
@@ -458,7 +457,7 @@ Done:
         Else
             CrashReasons.Add(Reason, New List(Of String)(If(Additional, {})))
         End If
-        Log("[Crash] 可能的崩溃原因：" & GetStringFromEnum(Reason) & If(Additional IsNot Nothing AndAlso Additional.Count > 0, "（" & Join(Additional, "；") & "）", ""))
+        Log("[Crash] 可能的崩溃原因：" & GetStringFromEnum(Reason) & If(Additional IsNot Nothing AndAlso Additional.Any, "（" & Join(Additional, "；") & "）", ""))
     End Sub
     Private Sub AppendReason(Reason As CrashReason, Additional As String)
         AppendReason(Reason, If(String.IsNullOrEmpty(Additional), Nothing, New List(Of String) From {Additional}))
@@ -567,7 +566,6 @@ Done:
                 End If
             End If
             If LogCrash.Contains("Multiple entries with same key: ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogCrash, "(?<=Multiple entries with same key: )[^=]+"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
-            If LogCrash.Contains("due to errors, provided by ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogCrash, "(?<=due to errors, provided by ')[^']+"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
             If LogCrash.Contains("LoaderExceptionModCrash: Caught exception from ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogCrash, "(?<=LoaderExceptionModCrash: Caught exception from )[^\n]+"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
             If LogCrash.Contains("Failed loading config file ") Then AppendReason(CrashReason.Mod配置文件导致游戏崩溃, {TryAnalyzeModName(If(RegexSeek(LogCrash, "(?<=Failed loading config file .+ for modid )[^\n]+"), "").TrimEnd(vbCrLf)).First, If(RegexSeek(LogCrash, "(?<=Failed loading config file ).+(?= of type)"), "").TrimEnd(vbCrLf)})
         End If
@@ -612,6 +610,9 @@ Done:
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "[^./ \]]+(?=.mixins.json)")
                 If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=mixins.)[^./ \]]+(?=.json)")
                 AppendReason(CrashReason.ModMixin失败, TryAnalyzeModName(If(ModId, "").TrimEnd((vbCrLf & " ").ToCharArray)))
+            Else
+                '在 #3104 的情况下，这一句导致 OptiFabric 的 Mixin 失败错判为 Fabric Loader 加载失败
+                If LogMc.Contains("due to errors, provided by ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogMc, "(?<=due to errors, provided by ')[^']+"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
             End If
             '极短的程序输出
             If Not (LogMc.Contains("at net.") OrElse LogMc.Contains("INFO]")) AndAlso LogHs Is Nothing AndAlso LogCrash Is Nothing AndAlso LogMc.Length < 100 Then
@@ -678,7 +679,7 @@ NextStack:
         Next
         PossibleWords = PossibleWords.Distinct.ToList
         Log("[Crash] 从堆栈信息中找到 " & PossibleWords.Count & " 个可能的 Mod ID 关键词")
-        If PossibleWords.Count > 0 Then Log("[Crash]  - " & Join(PossibleWords, ", "))
+        If PossibleWords.Any Then Log("[Crash]  - " & Join(PossibleWords, ", "))
         If PossibleWords.Count > 10 Then
             Log("[Crash] 关键词过多，考虑匹配出错，不纳入考虑")
             Return New List(Of String)
@@ -847,7 +848,7 @@ NextStack:
                                 FileName = "游戏崩溃前的输出.txt"
                         End Select
                         If File.Exists(OutputFile) Then
-                            WriteFile(TempFolder & "Report\" & FileName, SecretFilter(ReadFile(OutputFile)))
+                            WriteFile(TempFolder & "Report\" & FileName, SecretFilter(ReadFile(OutputFile), If(FileName = "启动脚本.bat", "F", "*")))
                         End If
                     Next
                     '导出报告
@@ -903,7 +904,7 @@ NextStack:
                         Results.Add("你正在使用 32 位的操作系统，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。\n\n你或许只能重装 64 位的操作系统来解决此问题。\n如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……\h")
                     End If
                 Case CrashReason.Mod缺少前置或MC版本错误
-                    If Additional.Count > 0 Then
+                    If Additional.Any Then
                         Results.Add("由于未满足 Mod 的依赖项，导致游戏退出。\n未满足的依赖项：\n - " & Join(Additional, "\n - ") & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
                     Else
                         Results.Add("由于未满足 Mod 的依赖项，导致游戏退出。\n请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\h")

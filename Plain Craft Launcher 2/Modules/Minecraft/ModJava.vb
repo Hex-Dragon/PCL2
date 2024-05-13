@@ -79,7 +79,7 @@
         Public Overrides Function ToString() As String
             Dim VersionString = Version.ToString
             If VersionString.StartsWithF("1.") Then VersionString = Mid(VersionString, 3)
-            Return If(IsJre, "JRE ", "JDK ") & VersionCode & " (" & VersionString & ")，" & If(Is64Bit, "64", "32") & " 位" & If(IsUserImport, "，手动导入", "") & "：" & PathFolder
+            Return If(IsJre, "JRE ", "JDK ") & VersionCode & " (" & VersionString & ")" & If(Is64Bit, "", "，32 位") & If(IsUserImport, "，手动导入", "") & "：" & PathFolder
         End Function
 
         '构造
@@ -220,7 +220,7 @@
             Next
 
             '检查特定的 Java
-            If TargetJavaList.Count > 0 Then
+            If TargetJavaList.Any Then
                 TargetJavaList = JavaCheckList(TargetJavaList)
                 Log("[Java] 检查后找到 " & TargetJavaList.Count & " 个特定路径下的 Java：")
                 For Each Java In TargetJavaList
@@ -534,7 +534,7 @@ NoUserJava:
                 Log("[Java] 位于 " & Folder & " 的 Java 不含符号链接")
                 JavaWithoutReparse.Add(Pair.Key, Pair.Value)
             Next
-            If JavaWithoutReparse.Count > 0 Then JavaPreList = JavaWithoutReparse
+            If JavaWithoutReparse.Any Then JavaPreList = JavaWithoutReparse
 
             '若不全为特殊引用，则清除特殊引用的地址
             Dim JavaWithoutInherit As New Dictionary(Of String, Boolean)
@@ -546,7 +546,7 @@ NoUserJava:
                     JavaWithoutInherit.Add(Pair.Key, Pair.Value)
                 End If
             Next
-            If JavaWithoutInherit.Count > 0 Then JavaPreList = JavaWithoutInherit
+            If JavaWithoutInherit.Any Then JavaPreList = JavaWithoutInherit
 
 #End Region
 

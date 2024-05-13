@@ -487,7 +487,7 @@ Public Module ModDownloadLib
                     outputWaitHandle.WaitOne(10000)
                     errorWaitHandle.WaitOne(10000)
                     process.Dispose()
-                    If TotalLength < 1000 Then Throw New Exception("安装器运行出错，末行为 " & LastResult)
+                    If TotalLength < 1000 OrElse LastResult.Contains("at ") Then Throw New Exception("安装器运行出错，末行为 " & LastResult)
                 End Using
             End Using
         End SyncLock
@@ -538,7 +538,7 @@ Public Module ModDownloadLib
                 'OptiFine 中文镜像源
                 Sources.Add("https://optifine.cn/download/" & DownloadInfo.NameFile)
                 '构造文件请求
-                Task.Output = New List(Of NetFile) From {New NetFile(Sources.ToArray, Target, New FileChecker(MinSize:=64 * 1024))}
+                Task.Output = New List(Of NetFile) From {New NetFile(Sources.ToArray, Target, New FileChecker(MinSize:=300 * 1024))}
             End Sub) With {.ProgressWeight = 8})
         Loaders.Add(New LoaderDownload("下载 OptiFine 主文件", New List(Of NetFile)) With {.ProgressWeight = 8})
         Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("等待原版下载",
@@ -548,8 +548,8 @@ Public Module ModDownloadLib
                 Dim TargetLoaders As List(Of LoaderBase) =
                    ClientDownloadLoader.GetLoaderList.Where(Function(l) l.Name = McDownloadClientLibName OrElse l.Name = McDownloadClientJsonName).
                    Where(Function(l) l.State <> LoadState.Finished).ToList
-                If TargetLoaders.Count > 0 Then Log("[Download] OptiFine 安装正在等待原版文件下载完成")
-                Do While TargetLoaders.Count > 0 AndAlso Not Task.IsAborted
+                If TargetLoaders.Any Then Log("[Download] OptiFine 安装正在等待原版文件下载完成")
+                Do While TargetLoaders.Any AndAlso Not Task.IsAborted
                     TargetLoaders = TargetLoaders.Where(Function(l) l.State <> LoadState.Finished).ToList
                     Thread.Sleep(50)
                 Loop
@@ -560,12 +560,10 @@ Public Module ModDownloadLib
                     Dim ClientName As String = GetFolderNameFromPath(ClientFolder)
                     Directory.CreateDirectory(McFolder & "versions\" & DownloadInfo.Inherit)
                     If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json") Then
-                        CopyFile(ClientFolder & ClientName & ".json",
-                                                                                          McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".json")
+                        CopyFile($"{ClientFolder}{ClientName}.json", $"{McFolder}versions\{DownloadInfo.Inherit}\{DownloadInfo.Inherit}.json")
                     End If
                     If Not File.Exists(McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar") Then
-                        CopyFile(ClientFolder & ClientName & ".jar",
-                                                                                              McFolder & "versions\" & DownloadInfo.Inherit & "\" & DownloadInfo.Inherit & ".jar")
+                        CopyFile($"{ClientFolder}{ClientName}.jar", $"{McFolder}versions\{DownloadInfo.Inherit}\{DownloadInfo.Inherit}.jar")
                     End If
                 End SyncLock
             End Sub) With {.ProgressWeight = 0.1, .Show = False})
@@ -1283,20 +1281,20 @@ Retry:
         '获取下载信息
         If DownloadInfo Is Nothing Then
             Loaders.Add(New LoaderTask(Of String, String)("获取 Mod 加载器详细信息",
-                                                            Sub(Task As LoaderTask(Of String, String))
-                                                                '获取 Forge 版本列表
-                                                                Dim ForgeLoader = New LoaderTask(Of String, List(Of DlForgeVersionEntry))("McDownloadForgeLoader " & Inherit, AddressOf DlForgeVersionMain)
-                                                                ForgeLoader.WaitForExit(Inherit)
-                                                                Task.Progress = 0.8
-                                                                '查找对应版本
-                                                                For Each ForgeVersion In ForgeLoader.Output
-                                                                    If ForgeVersion.Version = Version Then
-                                                                        DownloadInfo = ForgeVersion
-                                                                        Exit Sub
-                                                                    End If
-                                                                Next
-                                                                Throw New Exception("未能找到 Forge " & Inherit & "-" & Version & " 的详细信息！")
-                                                            End Sub) With {.ProgressWeight = 3})
+            Sub(Task As LoaderTask(Of String, String))
+                '获取 Forge 版本列表
+                Dim ForgeLoader = New LoaderTask(Of String, List(Of DlForgeVersionEntry))("McDownloadForgeLoader " & Inherit, AddressOf DlForgeVersionMain)
+                ForgeLoader.WaitForExit(Inherit)
+                Task.Progress = 0.8
+                '查找对应版本
+                For Each ForgeVersion In ForgeLoader.Output
+                    If ForgeVersion.Version = Version Then
+                        DownloadInfo = ForgeVersion
+                        Exit Sub
+                    End If
+                Next
+                Throw New Exception("未能找到 Forge " & Inherit & "-" & Version & " 的详细信息！")
+            End Sub) With {.ProgressWeight = 3})
         End If
         '下载 Forge 主文件
         Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("准备 Mod 加载器下载",
@@ -1383,8 +1381,8 @@ Retry:
                 Dim TargetLoaders As List(Of LoaderBase) =
                                                                                 ClientDownloadLoader.GetLoaderList.Where(Function(l) l.Name = McDownloadClientLibName OrElse l.Name = McDownloadClientJsonName).
                                                                                 Where(Function(l) l.State <> LoadState.Finished).ToList
-                If TargetLoaders.Count > 0 Then Log("[Download] Forge 安装正在等待原版文件下载完成")
-                Do While TargetLoaders.Count > 0 AndAlso Not Task.IsAborted
+                If TargetLoaders.Any Then Log("[Download] Forge 安装正在等待原版文件下载完成")
+                Do While TargetLoaders.Any AndAlso Not Task.IsAborted
                     TargetLoaders = TargetLoaders.Where(Function(l) l.State <> LoadState.Finished).ToList
                     Thread.Sleep(50)
                 Loop
@@ -1441,7 +1439,7 @@ Retry:
                     End Try
                     '拷贝新增的版本 Json
                     Dim DeltaList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
-                                                                        SkipWhile(Function(i) OldList.Contains(i.FullName)).ToList()
+                        SkipWhile(Function(i) OldList.Contains(i.FullName)).ToList()
                     If DeltaList.Count > 1 Then
                         '它可能和 OptiFine 安装同时运行，导致增加的文件不止一个（这导致了 #151）
                         '也可能是因为 Forge 安装器的 Bug，生成了一个名字错误的文件夹，所以需要检查文件夹是否为空
@@ -1537,7 +1535,7 @@ Retry:
     Public Sub ForgeDownloadListItemPreload(Stack As StackPanel, Entrys As List(Of DlForgeVersionEntry), OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean)
         '获取推荐版本与最新版本
         Dim FreshVersion As DlForgeVersionEntry = Nothing
-        If Entrys.Count > 0 Then
+        If Entrys.Any Then
             FreshVersion = Entrys(0)
         Else
             Log("[System] 未找到可用的 Forge 版本", LogLevel.Debug)
@@ -2014,7 +2012,7 @@ Retry:
 
         Dim LoaderList As New List(Of LoaderBase)
         '添加忽略标识
-        LoaderList.Add(New LoaderTask(Of Integer, Integer)("添加忽略标识", Sub() WriteFile(OutputFolder & ".pclignore", "用于临时地 PCL 的版本列表中屏蔽此版本。")) With {.Show = False, .Block = False})
+        LoaderList.Add(New LoaderTask(Of Integer, Integer)("添加忽略标识", Sub() WriteFile(OutputFolder & ".pclignore", "用于临时地在 PCL 的版本列表中屏蔽此版本。")) With {.Show = False, .Block = False})
         'Fabric API
         If Request.FabricApi IsNot Nothing Then
             LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
@@ -2164,7 +2162,7 @@ Retry:
         For i = 0 To RawArguments.Count - 1
             If RawArguments(i).StartsWithF("-") Then
                 SplitArguments.Add(RawArguments(i))
-            ElseIf SplitArguments.Count > 0 AndAlso SplitArguments.Last.StartsWithF("-") AndAlso Not SplitArguments.Last.Contains(" ") Then
+            ElseIf SplitArguments.Any AndAlso SplitArguments.Last.StartsWithF("-") AndAlso Not SplitArguments.Last.Contains(" ") Then
                 SplitArguments(SplitArguments.Count - 1) = SplitArguments.Last & " " & RawArguments(i)
             Else
                 SplitArguments.Add(RawArguments(i))
@@ -2172,6 +2170,7 @@ Retry:
         Next
         Dim RealArguments As String = Join(SplitArguments.Distinct.ToList, " ")
         '合并
+        '相关讨论见 #2801
         OutputJson = MinecraftJson
         If HasOptiFine Then
             '合并 OptiFine

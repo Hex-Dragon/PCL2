@@ -62,7 +62,7 @@ Public Module ModLaunch
     ''' 记录启动日志。
     ''' </summary>
     Public Sub McLaunchLog(Text As String)
-        Text = SecretFilter(Text)
+        Text = SecretFilter(Text, "*")
         RunInUi(Sub() FrmLaunchRight.LabLog.Text += vbCrLf & "[" & GetTimeNow() & "] " & Text)
         Log("[Launch] " & Text)
     End Sub
@@ -101,10 +101,10 @@ Public Module ModLaunch
         '正式加载
         Try
             '构造主加载器
-            Dim LaunchLoader As New LoaderCombo(Of Object)("Minecraft 启动", {
-                New LoaderTask(Of Integer, Integer)("获取 Java", AddressOf McLaunchJava) With {.ProgressWeight = 4, .Block = False, .Show = False},
+            Dim Loaders As New List(Of LoaderBase) From {
+                New LoaderTask(Of Integer, Integer)("获取 Java", AddressOf McLaunchJava) With {.ProgressWeight = 4, .Block = False},
                 McLoginLoader,
-                New LoaderCombo(Of String)("补全文件", DlClientFix(McVersionCurrent, False, AssetsIndexExistsBehaviour.DownloadInBackground, True)) With {.ProgressWeight = 15, .Show = False, .Block = True},
+                New LoaderCombo(Of String)("补全文件", DlClientFix(McVersionCurrent, False, AssetsIndexExistsBehaviour.DownloadInBackground, True)) With {.ProgressWeight = 15, .Show = False},
                 New LoaderTask(Of String, List(Of McLibToken))("获取启动参数", AddressOf McLaunchArgumentMain) With {.ProgressWeight = 2},
                 New LoaderTask(Of List(Of McLibToken), Integer)("解压文件", AddressOf McLaunchNatives) With {.ProgressWeight = 2},
                 New LoaderTask(Of Integer, Integer)("预启动处理", AddressOf McLaunchPrerun) With {.ProgressWeight = 1},
@@ -112,7 +112,12 @@ Public Module ModLaunch
                 New LoaderTask(Of Integer, Process)("启动进程", AddressOf McLaunchRun) With {.ProgressWeight = 2},
                 New LoaderTask(Of Process, Integer)("等待游戏窗口出现", AddressOf McLaunchWait) With {.ProgressWeight = 1},
                 New LoaderTask(Of Integer, Integer)("结束处理", AddressOf McLaunchEnd) With {.ProgressWeight = 1}
-            }) With {.Show = False}
+            }
+            If Setup.Get("LaunchArgumentRam") Then
+                CType(Loaders(2), LoaderCombo(Of String)).Block = False
+                Loaders.Insert(3, New LoaderTask(Of Integer, Integer)("内存优化", AddressOf McLaunchMemoryOptimize) With {.ProgressWeight = 30})
+            End If
+            Dim LaunchLoader As New LoaderCombo(Of Object)("Minecraft 启动", Loaders) With {.Show = False}
             If McLoginLoader.State = LoadState.Finished Then McLoginLoader.State = LoadState.Waiting '要求重启登录主加载器，它会自行决定是否启动副加载器
             '等待加载器执行并更新 UI
             McLaunchLoaderReal = LaunchLoader
@@ -159,6 +164,28 @@ NextInner:
                 Throw
             End If
         End Try
+    End Sub
+
+#End Region
+
+#Region "内存优化"
+
+    Private Sub McLaunchMemoryOptimize(Loader As LoaderTask(Of Integer, Integer))
+        McLaunchLog("内存优化开始")
+        Dim Finished As Boolean = False
+        RunInNewThread(
+        Sub()
+            PageOtherTest.MemoryOptimize(False)
+            Finished = True
+        End Sub, "Launch Memory Optimize")
+        Do While Not Finished AndAlso Not Loader.IsAborted
+            If Loader.Progress < 0.7 Then
+                Loader.Progress += 0.007 '10s
+            Else
+                Loader.Progress += (0.95 - Loader.Progress) * 0.02 '最快 += 0.005
+            End If
+            Thread.Sleep(100)
+        Loop
     End Sub
 
 #End Region
@@ -247,7 +274,7 @@ NextInner:
         ''' </summary>
         Public BaseUrl As String
         ''' <summary>
-        ''' 登录所使用的标识符，如 “Mojang”、“Nide”，用于存储缓存等。
+        ''' 登录所使用的标识符，目前只可能为 “Auth” 或 “Nide”，用于存储缓存等。
         ''' </summary>
         Public Token As String
         ''' <summary>
@@ -526,7 +553,13 @@ SkipLogin:
         McLaunchLog("登录方式：" & Input.Description & "（" & LogUsername & "）")
         Data.Progress = 0.05
         '尝试登录
-        If (Not Data.Input.ForceReselectProfile) AndAlso Setup.Get("Cache" & Input.Token & "Username") = Data.Input.UserName AndAlso Setup.Get("Cache" & Input.Token & "Pass") = Data.Input.Password AndAlso Not Setup.Get("Cache" & Input.Token & "Access") = "" AndAlso Not Setup.Get("Cache" & Input.Token & "Client") = "" AndAlso Not Setup.Get("Cache" & Input.Token & "Uuid") = "" AndAlso Not Setup.Get("Cache" & Input.Token & "Name") = "" Then
+        If (Not Data.Input.ForceReselectProfile) AndAlso
+            Setup.Get("Cache" & Input.Token & "Username") = Data.Input.UserName AndAlso
+            Setup.Get("Cache" & Input.Token & "Pass") = Data.Input.Password AndAlso
+            Setup.Get("Cache" & Input.Token & "Access") <> "" AndAlso
+            Setup.Get("Cache" & Input.Token & "Client") <> "" AndAlso
+            Setup.Get("Cache" & Input.Token & "Uuid") <> "" AndAlso
+            Setup.Get("Cache" & Input.Token & "Name") <> "" Then
             '尝试验证登录
             Try
                 If Data.IsAborted Then Throw New ThreadInterruptedException
@@ -990,14 +1023,14 @@ SystemBrowser:
             Case 1
                 'Steve
                 Do Until McSkinSex(Uuid) = "Steve"
-                    If Uuid.EndsWithF("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
-                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
+                    If Uuid.EndsWithF("FFFFF") Then Uuid = Uuid.Substring(0, 27) & "00000"
+                    Uuid = Uuid.Substring(0, 27) & (Long.Parse(Uuid.Substring(27), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X").PadLeft(5, "0")
                 Loop
             Case 2
                 'Alex
                 Do Until McSkinSex(Uuid) = "Alex"
-                    If Uuid.EndsWithF("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
-                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
+                    If Uuid.EndsWithF("FFFFF") Then Uuid = Uuid.Substring(0, 27) & "00000"
+                    Uuid = Uuid.Substring(0, 27) & (Long.Parse(Uuid.Substring(27), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X").PadLeft(5, "0")
                 Loop
             Case 3
                 '使用正版用户名
@@ -1096,22 +1129,25 @@ SystemBrowser:
         If McVersionCurrent.Version.HasForge Then
             If McVersionCurrent.Version.McName = "1.7.2" Then
                 '1.7.2：必须 Java 7
-                MinVer = New Version(1, 7, 0, 0) : MaxVer = New Version(1, 7, 999, 999)
+                MinVer = If(New Version(1, 7, 0, 0) > MinVer, New Version(1, 7, 0, 0), MinVer)
+                MaxVer = If(New Version(1, 7, 999, 999) < MaxVer, New Version(1, 7, 999, 999), MaxVer)
             ElseIf McVersionCurrent.Version.McCodeMain <= 12 AndAlso McVersionCurrent.Version.McCodeMain > 0 Then
                 '<=1.12：Java 8
                 MaxVer = New Version(1, 8, 999, 999)
             ElseIf McVersionCurrent.Version.McCodeMain <= 14 AndAlso McVersionCurrent.Version.McCodeMain >= 13 Then
                 '1.13 - 1.14：Java 8 - 10
-                MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 10, 999, 999)
+                MinVer = If(New Version(1, 8, 0, 0) > MinVer, New Version(1, 8, 0, 0), MinVer)
+                MaxVer = If(New Version(1, 10, 999, 999) < MaxVer, New Version(1, 10, 999, 999), MaxVer)
             ElseIf McVersionCurrent.Version.McCodeMain = 15 Then
                 '1.15：Java 8 - 15
-                MinVer = New Version(1, 8, 0, 0) : MaxVer = New Version(1, 15, 999, 999)
+                MinVer = If(New Version(1, 8, 0, 0) > MinVer, New Version(1, 8, 0, 0), MinVer)
+                MaxVer = If(New Version(1, 15, 999, 999) < MaxVer, New Version(1, 15, 999, 999), MaxVer)
             ElseIf VersionSortBoolean(McVersionCurrent.Version.ForgeVersion, "34.0.0") AndAlso VersionSortBoolean("36.2.25", McVersionCurrent.Version.ForgeVersion) Then
                 '1.16，Forge 34.X ~ 36.2.25：最高 Java 8u320
-                MaxVer = New Version(1, 8, 0, 320)
+                MaxVer = If(New Version(1, 8, 0, 320) < MaxVer, New Version(1, 8, 0, 320), MaxVer)
             ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 19 AndAlso McVersionCurrent.Version.HasOptiFine Then '#305
                 '1.18：若安装了 OptiFine，最高 Java 18
-                MaxVer = New Version(1, 18, 999, 999)
+                MaxVer = If(New Version(1, 18, 999, 999) < MaxVer, New Version(1, 18, 999, 999), MaxVer)
             End If
         End If
 
@@ -1119,10 +1155,10 @@ SystemBrowser:
         If McVersionCurrent.Version.HasFabric Then
             If McVersionCurrent.Version.McCodeMain >= 15 AndAlso McVersionCurrent.Version.McCodeMain <= 16 AndAlso McVersionCurrent.Version.McCodeMain <> -1 Then
                 '1.15 - 1.16：Java 8+
-                MinVer = New Version(1, 8, 0, 0)
+                MinVer = If(New Version(1, 8, 0, 0) > MinVer, New Version(1, 8, 0, 0), MinVer)
             ElseIf McVersionCurrent.Version.McCodeMain >= 18 AndAlso McVersionCurrent.Version.McCodeMain < 99 Then
                 '1.18+：Java 17+
-                MinVer = New Version(1, 17, 0, 0)
+                MinVer = If(New Version(1, 17, 0, 0) > MinVer, New Version(1, 17, 0, 0), MinVer)
             End If
         End If
 
@@ -1202,17 +1238,20 @@ SystemBrowser:
     ''' </summary>
     Public Function ExtractJavaWrapper() As String
         Dim WrapperPath As String = GetJavaWrapperDir() & "\JavaWrapper.jar"
-        WriteFile(WrapperPath, GetResources("JavaWrapper"))
+        SyncLock ExtractJavaWrapperLock '避免 OptiFine 和 Forge 安装时同时释放 Java Wrapper 导致冲突
+            WriteFile(WrapperPath, GetResources("JavaWrapper"))
+        End SyncLock
         Log("[Java] 已释放 Java Wrapper：" & WrapperPath)
         Return WrapperPath
     End Function
+    Private ExtractJavaWrapperLock As New Object
     ''' <summary>
     ''' 获取 Java Wrapper 所在的文件夹，不以 \ 结尾。
     ''' </summary>
     Public Function GetJavaWrapperDir() As String
-        If Encoding.UTF8.GetByteCount(PathAppdata) = PathAppdata.Length Then
+        If PathAppdata.IsASCII() Then
             Return PathAppdata.TrimEnd("\")
-        ElseIf Encoding.UTF8.GetByteCount(PathTemp) = PathTemp.Length Then
+        ElseIf PathTemp.IsASCII() Then
             Log("[Java] Wrapper：AppData 路径中包含非 ASCII 字符，换用 Temp 目录")
             Return PathTemp.TrimEnd("\")
         Else
@@ -1276,9 +1315,7 @@ SystemBrowser:
                     '不包含端口号
                     Arguments += " --server " & Server & " --port 25565"
                 End If
-                If McVersionCurrent.Version.HasOptiFine Then 'OptiFine 警告
-                    Hint("OptiFine 与自动进入服务器可能不兼容，有概率导致材质丢失甚至游戏崩溃！", HintType.Critical)
-                End If
+                If McVersionCurrent.Version.HasOptiFine Then Hint("OptiFine 与自动进入服务器可能不兼容，有概率导致材质丢失甚至游戏崩溃！", HintType.Critical)
             End If
         End If
         '自定义
@@ -1300,10 +1337,11 @@ SystemBrowser:
         Dim ArgumentJvm As String = Setup.Get("VersionAdvanceJvm", Version:=McVersionCurrent)
         If ArgumentJvm = "" Then ArgumentJvm = Setup.Get("LaunchAdvanceJvm")
         If Not ArgumentJvm.Contains("-Dlog4j2.formatMsgNoLookups=true") Then ArgumentJvm += " -Dlog4j2.formatMsgNoLookups=true"
+        ArgumentJvm = ArgumentJvm.Replace(" -XX:MaxDirectMemorySize=256M", "") '#3511 的清理
         DataList.Insert(0, ArgumentJvm) '可变 JVM 参数
-        DataList.Add("-Xmn256m")
+        DataList.Add("-Xmn" & Math.Floor(PageVersionSetup.GetRam(McVersionCurrent, Not McLaunchJavaSelected.Is64Bit) * 1024 * 0.5) & "m")
         DataList.Add("-Xmx" & Math.Floor(PageVersionSetup.GetRam(McVersionCurrent, Not McLaunchJavaSelected.Is64Bit) * 1024) & "m")
-        DataList.Add("""-Djava.library.path=" & Version.Path & Version.Name & "-natives""")
+        DataList.Add("""-Djava.library.path=" & GetNativesFolder() & """")
         DataList.Add("-cp ${classpath}") '把支持库添加进启动参数表
 
         '统一通行证
@@ -1414,6 +1452,9 @@ NextVersion:
             End If
             DeDuplicateDataList.Add(CurrentEntry.Trim.Replace("McEmu= ", "McEmu="))
         Next
+
+        '#3511 的清理
+        DeDuplicateDataList.Remove("-XX:MaxDirectMemorySize=256M")
 
         '去重
         Dim Result As String = Join(DeDuplicateDataList.Distinct.ToList, " ")
@@ -1535,7 +1576,7 @@ NextVersion:
 
         '基础参数
         GameArguments.Add("${classpath_separator}", ";")
-        GameArguments.Add("${natives_directory}", Version.Path & Version.Name & "-natives")
+        GameArguments.Add("${natives_directory}", GetNativesFolder())
         GameArguments.Add("${library_directory}", PathMcFolder & "libraries")
         GameArguments.Add("${libraries_directory}", PathMcFolder & "libraries")
         GameArguments.Add("${launcher_name}", "PCL")
@@ -1552,9 +1593,26 @@ NextVersion:
         GameArguments.Add("${access_token}", McLoginLoader.Output.AccessToken)
         GameArguments.Add("${auth_session}", McLoginLoader.Output.AccessToken)
         GameArguments.Add("${user_type}", "msa") '#1221
-        Dim GameSize As Size = Setup.GetLaunchArgumentWindowSize()
-        GameArguments.Add("${resolution_width}", GameSize.Width)
-        GameArguments.Add("${resolution_height}", GameSize.Height)
+
+        '窗口尺寸参数
+        Dim GameSize As Size
+        Select Case Setup.Get("LaunchArgumentWindowType")
+            Case 2
+                Dim Result As Size
+                RunInUiWait(Sub() Result = New Size(GetPixelSize(FrmMain.PanForm.ActualWidth), GetPixelSize(FrmMain.PanForm.ActualHeight)))
+                GameSize = Result
+            Case 3
+                GameSize = New Size(Math.Max(100, Setup.Get("LaunchArgumentWindowWidth") - 2), Math.Max(100, Setup.Get("LaunchArgumentWindowHeight") - 2))
+            Case Else
+                GameSize = New Size(875 - 2, 540 - 2)
+        End Select
+        GameSize.Height -= 29.5 * DPI / 96 '标题栏高度
+        If McVersionCurrent.Version.McCodeMain <= 12 AndAlso McLaunchJavaSelected.VersionCode <= 8 Then '修复 #3463：1.12.2-，JRE 8 下窗口大小为设置大小的 DPI% 倍
+            GameSize.Width /= DPI / 96
+            GameSize.Height /= DPI / 96
+        End If
+        GameArguments.Add("${resolution_width}", Math.Round(GameSize.Width))
+        GameArguments.Add("${resolution_height}", Math.Round(GameSize.Height))
 
         'Assets 相关参数
         GameArguments.Add("${game_assets}", PathMcFolder & "assets\virtual\legacy") '1.5.2 的 pre-1.6 资源索引应与 legacy 合并
@@ -1586,7 +1644,8 @@ NextVersion:
     Private Sub McLaunchNatives(Loader As LoaderTask(Of List(Of McLibToken), Integer))
 
         '创建文件夹
-        Directory.CreateDirectory(McVersionCurrent.Path & McVersionCurrent.Name & "-natives")
+        Dim Target As String = GetNativesFolder() & "\"
+        Directory.CreateDirectory(Target)
 
         '解压文件
         McLaunchLog("正在解压 Natives 文件")
@@ -1605,7 +1664,7 @@ NextVersion:
                 Dim FileName As String = Entry.FullName
                 If FileName.EndsWithF(".dll", True) Then
                     '实际解压文件的步骤
-                    Dim FilePath As String = McVersionCurrent.Path & McVersionCurrent.Name & "-natives\" & FileName
+                    Dim FilePath As String = Target & FileName
                     ExistFiles.Add(FilePath)
                     Dim OriginalFile As New FileInfo(FilePath)
                     If OriginalFile.Exists Then
@@ -1631,7 +1690,7 @@ NextVersion:
         Next
 
         '删除多余文件
-        For Each FileName As String In Directory.GetFiles(McVersionCurrent.Path & McVersionCurrent.Name & "-natives")
+        For Each FileName As String In Directory.GetFiles(Target)
             If ExistFiles.Contains(FileName) Then Continue For
             Try
                 McLaunchLog("删除：" & FileName)
@@ -1644,6 +1703,16 @@ NextVersion:
         Next
 
     End Sub
+    ''' <summary>
+    ''' 获取 Natives 文件夹路径，不以 \ 结尾。
+    ''' </summary>
+    Private Function GetNativesFolder() As String
+        Dim Result As String = McVersionCurrent.Path & McVersionCurrent.Name & "-natives"
+        If IsGBKEncoding OrElse Result.IsASCII() Then Return Result
+        Result = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\bin\natives"
+        If Result.IsASCII() Then Return Result
+        Return OsDrive & "ProgramData\PCL\natives"
+    End Function
 
 #End Region
 
@@ -1758,7 +1827,7 @@ NextVersion:
             Select Case Setup.Get("LaunchArgumentWindowType")
                 Case 0 '全屏
                     WriteIni(SetupFileAddress, "fullscreen", "true")
-                Case 5 '保持默认
+                Case 1 '默认
                 Case Else '其他
                     WriteIni(SetupFileAddress, "fullscreen", "false")
             End Select
@@ -1936,7 +2005,7 @@ IgnoreCustomSkin:
                 """" & McLaunchJavaSelected.PathJava & """ " & McLaunchArgument & vbCrLf &
                 "echo 游戏已退出。" & vbCrLf &
                 "pause"
-            WriteFile(If(McLaunchLoader.Input.SaveBatch, Path & "PCL\LatestLaunch.bat"), SecretFilter(CmdString),
+            WriteFile(If(McLaunchLoader.Input.SaveBatch, Path & "PCL\LatestLaunch.bat"), SecretFilter(CmdString, "F"),
                       Encoding:=If(Encoding.Default.Equals(Encoding.UTF8), Encoding.UTF8, Encoding.GetEncoding("GB18030")))
             If McLaunchLoader.Input.SaveBatch IsNot Nothing Then
                 McLaunchLog("导出启动脚本完成，强制结束启动过程")
@@ -2058,7 +2127,7 @@ IgnoreCustomSkin:
         McLaunchLog("")
         McLaunchLog("~ 基础参数 ~")
         McLaunchLog("PCL 版本：" & VersionDisplayName & " (" & VersionCode & ")")
-        McLaunchLog("游戏版本：" & McVersionCurrent.Version.ToString & "（" & McVersionCurrent.Version.McCodeMain & "." & McVersionCurrent.Version.McCodeSub & "）")
+        McLaunchLog("游戏版本：" & McVersionCurrent.Version.ToString & "（识别为 1." & McVersionCurrent.Version.McCodeMain & "." & McVersionCurrent.Version.McCodeSub & "）")
         McLaunchLog("资源版本：" & McAssetsGetIndexName(McVersionCurrent))
         McLaunchLog("版本继承：" & If(McVersionCurrent.InheritVersion = "", "无", McVersionCurrent.InheritVersion))
         McLaunchLog("分配的内存：" & PageVersionSetup.GetRam(McVersionCurrent, Not McLaunchJavaSelected.Is64Bit) & " GB（" & Math.Round(PageVersionSetup.GetRam(McVersionCurrent, Not McLaunchJavaSelected.Is64Bit) * 1024) & " MB）")
@@ -2068,6 +2137,7 @@ IgnoreCustomSkin:
         McLaunchLog("HMCL 格式：" & McVersionCurrent.IsHmclFormatJson)
         McLaunchLog("Java 信息：" & If(McLaunchJavaSelected IsNot Nothing, McLaunchJavaSelected.ToString, "无可用 Java"))
         McLaunchLog("环境变量：" & If(McLaunchJavaSelected IsNot Nothing, If(McLaunchJavaSelected.HasEnvironment, "已设置", "未设置"), "未设置"))
+        McLaunchLog("Natives 文件夹：" & GetNativesFolder())
         McLaunchLog("")
         McLaunchLog("~ 登录参数 ~")
         McLaunchLog("玩家用户名：" & McLoginLoader.Output.Name)

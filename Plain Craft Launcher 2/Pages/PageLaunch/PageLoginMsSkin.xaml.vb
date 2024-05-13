@@ -85,50 +85,51 @@
         Hint("正在更改皮肤……")
         IsChanging = True
         '开始实际获取
-        RunInNewThread(Async Sub()
-                           Try
+        RunInNewThread(
+        Async Sub()
+            Try
 Retry:
-                               If McLoginMsLoader.State = LoadState.Loading Then McLoginMsLoader.WaitForExit() '等待登录结束
-                               Dim AccessToken As String = Setup.Get("CacheMsAccess")
-                               Dim Uuid As String = Setup.Get("CacheMsUuid")
+                If McLoginMsLoader.State = LoadState.Loading Then McLoginMsLoader.WaitForExit() '等待登录结束
+                Dim AccessToken As String = Setup.Get("CacheMsAccess")
+                Dim Uuid As String = Setup.Get("CacheMsUuid")
 
-                               Dim Client As New Net.Http.HttpClient With {.Timeout = New TimeSpan(0, 0, 30)}
-                               Client.DefaultRequestHeaders.Authorization = New Net.Http.Headers.AuthenticationHeaderValue("Bearer", AccessToken)
-                               Client.DefaultRequestHeaders.Accept.Add(New Net.Http.Headers.MediaTypeWithQualityHeaderValue("*/*"))
-                               Client.DefaultRequestHeaders.UserAgent.Add(New Net.Http.Headers.ProductInfoHeaderValue("MojangSharp", "0.1"))
-                               Dim Contents As New Net.Http.MultipartFormDataContent From {
-                                      {New Net.Http.StringContent(If(SkinInfo.IsSlim, "slim", "classic")), "variant"},
-                                      {New Net.Http.ByteArrayContent(File.ReadAllBytes(SkinInfo.LocalFile)), "file", GetFileNameFromPath(SkinInfo.LocalFile)}
-                                  }
-                               Dim Result As String = Await (Await Client.PostAsync(New Uri("https://api.minecraftservices.com/minecraft/profile/skins"), Contents)).Content.ReadAsStringAsync
-                               If Result.Contains("request requires user authentication") Then
-                                   Hint("正在登录，将在登录完成后继续更改皮肤……")
-                                   McLoginMsLoader.Start(GetLoginData(), IsForceRestart:=True)
-                                   GoTo Retry
-                               ElseIf Result.Contains("""error""") Then
-                                   Hint("更改皮肤失败：" & GetJson(Result)("error"), HintType.Critical)
-                                   Exit Sub
-                               End If
-                               '获取新皮肤地址
-                               Log("[Skin] 皮肤修改返回值：" & vbCrLf & Result)
-                               Dim ResultJson As JObject = GetJson(Result)
-                               For Each Skin As JObject In ResultJson("skins")
-                                   If Skin("state").ToString = "ACTIVE" Then
-                                       MySkin.ReloadCache(Skin("url"))
-                                       Exit Sub
-                                   End If
-                               Next
-                               Throw New Exception("未知错误（" & Result & "）")
-                           Catch ex As Exception
-                               If ex.GetType.Equals(GetType(Tasks.TaskCanceledException)) Then
-                                   Hint("更改皮肤失败：与 Mojang 皮肤服务器的连接超时，请检查你的网络是否通畅！", HintType.Critical)
-                               Else
-                                   Log(ex, "更改皮肤失败", LogLevel.Hint)
-                               End If
-                           Finally
-                               IsChanging = False
-                           End Try
-                       End Sub, "Ms Skin Upload")
+                Dim Client As New Net.Http.HttpClient With {.Timeout = New TimeSpan(0, 0, 30)}
+                Client.DefaultRequestHeaders.Authorization = New Net.Http.Headers.AuthenticationHeaderValue("Bearer", AccessToken)
+                Client.DefaultRequestHeaders.Accept.Add(New Net.Http.Headers.MediaTypeWithQualityHeaderValue("*/*"))
+                Client.DefaultRequestHeaders.UserAgent.Add(New Net.Http.Headers.ProductInfoHeaderValue("MojangSharp", "0.1"))
+                Dim Contents As New Net.Http.MultipartFormDataContent From {
+                    {New Net.Http.StringContent(If(SkinInfo.IsSlim, "slim", "classic")), "variant"},
+                    {New Net.Http.ByteArrayContent(File.ReadAllBytes(SkinInfo.LocalFile)), "file", GetFileNameFromPath(SkinInfo.LocalFile)}
+                }
+                Dim Result As String = Await (Await Client.PostAsync(New Uri("https://api.minecraftservices.com/minecraft/profile/skins"), Contents)).Content.ReadAsStringAsync
+                If Result.Contains("request requires user authentication") Then
+                    Hint("正在登录，将在登录完成后继续更改皮肤……")
+                    McLoginMsLoader.Start(GetLoginData(), IsForceRestart:=True)
+                    GoTo Retry
+                ElseIf Result.Contains("""error""") Then
+                    Hint("更改皮肤失败：" & GetJson(Result)("error"), HintType.Critical)
+                    Exit Sub
+                End If
+                '获取新皮肤地址
+                Log("[Skin] 皮肤修改返回值：" & vbCrLf & Result)
+                Dim ResultJson As JObject = GetJson(Result)
+                For Each Skin As JObject In ResultJson("skins")
+                    If Skin("state").ToString = "ACTIVE" Then
+                        MySkin.ReloadCache(Skin("url"))
+                        Exit Sub
+                    End If
+                Next
+                Throw New Exception("未知错误（" & Result & "）")
+            Catch ex As Exception
+                If ex.GetType.Equals(GetType(Tasks.TaskCanceledException)) Then
+                    Hint("更改皮肤失败：与 Mojang 皮肤服务器的连接超时，请检查你的网络是否通畅！", HintType.Critical)
+                Else
+                    Log(ex, "更改皮肤失败", LogLevel.Hint)
+                End If
+            Finally
+                IsChanging = False
+            End Try
+        End Sub, "Ms Skin Upload")
     End Sub
 
     '保存皮肤

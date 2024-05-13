@@ -19,51 +19,53 @@
         RefreshButtonsUI()
 
         '加载版本
-        RunInNewThread(Sub()
-                           '确认 Minecraft 文件夹存在
-                           PathMcFolder = Setup.Get("LaunchFolderSelect").ToString.Replace("$", Path)
-                           If PathMcFolder = "" OrElse Not Directory.Exists(PathMcFolder) Then
-                               '无效的文件夹
-                               If PathMcFolder = "" Then
-                                   Log("[Launch] 没有已储存的 Minecraft 文件夹")
-                               Else
-                                   Log("[Launch] Minecraft 文件夹无效，该文件夹已不存在：" & PathMcFolder, LogLevel.Debug)
-                               End If
-                               McFolderListLoader.WaitForExit(IsForceRestart:=True)
-                               Setup.Set("LaunchFolderSelect", McFolderList(0).Path.Replace(Path, "$"))
-                           End If
-                           Log("[Launch] Minecraft 文件夹：" & PathMcFolder)
-                           If Setup.Get("SystemDebugDelay") Then Thread.Sleep(RandomInteger(500, 3000))
-                           '确认 Minecraft 版本存在
-                           Dim Selection As String = Setup.Get("LaunchVersionSelect")
-                           Dim Version As McVersion
-                           If Selection = "" Then
-                               Version = Nothing
-                           Else
-                               Version = New McVersion(Selection)
-                           End If
-                           If IsNothing(Version) OrElse Not (Version.Path.StartsWith(PathMcFolder) AndAlso Version.Check) Then
-                               '无效的版本
-                               Log("[Launch] Minecraft 版本无效" & If(IsNothing(Version), "，没有有效版本", "：" & Version.Path), If(IsNothing(Version), LogLevel.Normal, LogLevel.Debug))
-                               If Not McVersionListLoader.State = LoadState.Finished Then LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
-                               If Not McVersionList.Any() OrElse McVersionList.First.Value(0).Logo.Contains("RedstoneBlock") Then
-                                   Version = Nothing
-                                   Setup.Set("LaunchVersionSelect", "")
-                                   Log("[Launch] 无可用 Minecraft 版本")
-                               Else
-                                   Version = McVersionList.First.Value(0)
-                                   Setup.Set("LaunchVersionSelect", Version.Name)
-                                   Log("[Launch] 自动选择 Minecraft 版本：" & Version.Path)
-                               End If
-                           End If
-                           RunInUi(Sub()
-                                       McVersionCurrent = Version '绕这一圈是为了避免 McVersionCheck 触发第二次版本改变
-                                       IsLoadFinished = True
-                                       RefreshButtonsUI()
-                                       RefreshPage(False, False) '有可能选择的版本变化了，需要重新刷新
-                                       If McLoginAble() = "" Then McLoginLoader.Start() '自动登录
-                                   End Sub)
-                       End Sub, "Version Check", ThreadPriority.AboveNormal)
+        RunInNewThread(
+        Sub()
+            '确认 Minecraft 文件夹存在
+            PathMcFolder = Setup.Get("LaunchFolderSelect").ToString.Replace("$", Path)
+            If PathMcFolder = "" OrElse Not Directory.Exists(PathMcFolder) Then
+                '无效的文件夹
+                If PathMcFolder = "" Then
+                    Log("[Launch] 没有已储存的 Minecraft 文件夹")
+                Else
+                    Log("[Launch] Minecraft 文件夹无效，该文件夹已不存在：" & PathMcFolder, LogLevel.Debug)
+                End If
+                McFolderListLoader.WaitForExit(IsForceRestart:=True)
+                Setup.Set("LaunchFolderSelect", McFolderList(0).Path.Replace(Path, "$"))
+            End If
+            Log("[Launch] Minecraft 文件夹：" & PathMcFolder)
+            If Setup.Get("SystemDebugDelay") Then Thread.Sleep(RandomInteger(500, 3000))
+            '确认 Minecraft 版本存在
+            Dim Selection As String = Setup.Get("LaunchVersionSelect")
+            Dim Version As McVersion
+            If Selection = "" Then
+                Version = Nothing
+            Else
+                Version = New McVersion(Selection)
+            End If
+            If IsNothing(Version) OrElse Not (Version.Path.StartsWith(PathMcFolder) AndAlso Version.Check) Then
+                '无效的版本
+                Log("[Launch] Minecraft 版本无效" & If(IsNothing(Version), "，没有有效版本", "：" & Version.Path), If(IsNothing(Version), LogLevel.Normal, LogLevel.Debug))
+                If Not McVersionListLoader.State = LoadState.Finished Then LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
+                If Not McVersionList.Any() OrElse McVersionList.First.Value(0).Logo.Contains("RedstoneBlock") Then
+                    Version = Nothing
+                    Setup.Set("LaunchVersionSelect", "")
+                    Log("[Launch] 无可用 Minecraft 版本")
+                Else
+                    Version = McVersionList.First.Value(0)
+                    Setup.Set("LaunchVersionSelect", Version.Name)
+                    Log("[Launch] 自动选择 Minecraft 版本：" & Version.Path)
+                End If
+            End If
+            RunInUi(
+            Sub()
+                McVersionCurrent = Version '绕这一圈是为了避免 McVersionCheck 触发第二次版本改变
+                IsLoadFinished = True
+                RefreshButtonsUI()
+                RefreshPage(False, False) '有可能选择的版本变化了，需要重新刷新
+                If McLoginAble() = "" Then McLoginLoader.Start() '自动登录
+            End Sub)
+        End Sub, "Version Check", ThreadPriority.AboveNormal)
 
         '改变页面
         Dim LoginType As McLoginType = Setup.Get("LoginType")

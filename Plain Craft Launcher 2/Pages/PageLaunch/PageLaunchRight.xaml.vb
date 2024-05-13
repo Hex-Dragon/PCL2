@@ -67,7 +67,7 @@ Download:
                 End If
             Case 3
                 Select Case Setup.Get("UiCustomPreset")
-                    Case 0 '你知道吗
+                    Case 0
                         Log("[Page] 主页预设：你知道吗")
                         Content = "
                             <local:MyCard Title=""你知道吗？"" Margin=""0,0,0,15"">
@@ -76,7 +76,7 @@ Download:
                                     EventType=""刷新主页"" EventData=""/""
                                     Logo=""M875.52 148.48C783.36 56.32 655.36 0 512 0 291.84 0 107.52 138.24 30.72 332.8l122.88 46.08C204.8 230.4 348.16 128 512 128c107.52 0 199.68 40.96 271.36 112.64L640 384h384V0L875.52 148.48zM512 896c-107.52 0-199.68-40.96-271.36-112.64L384 640H0v384l148.48-148.48C240.64 967.68 368.64 1024 512 1024c220.16 0 404.48-138.24 481.28-332.8L870.4 645.12C819.2 793.6 675.84 896 512 896z"" />
                             </local:MyCard>"
-                    Case 1 '回声洞
+                    Case 1
                         Log("[Page] 主页预设：回声洞")
                         Content = "
                             <local:MyCard Title=""回声洞"" Margin=""0,0,0,15"">
@@ -85,17 +85,17 @@ Download:
                                     EventType=""刷新主页"" EventData=""/""
                                     Logo=""M875.52 148.48C783.36 56.32 655.36 0 512 0 291.84 0 107.52 138.24 30.72 332.8l122.88 46.08C204.8 230.4 348.16 128 512 128c107.52 0 199.68 40.96 271.36 112.64L640 384h384V0L875.52 148.48zM512 896c-107.52 0-199.68-40.96-271.36-112.64L384 640H0v384l148.48-148.48C240.64 967.68 368.64 1024 512 1024c220.16 0 404.48-138.24 481.28-332.8L870.4 645.12C819.2 793.6 675.84 896 512 896z"" />
                             </local:MyCard>"
-                    Case 2 '新闻
+                    Case 2
                         Log("[Page] 主页预设：Minecraft 新闻")
                         Url = "http://pcl.mcnews.thestack.top"
                         GoTo Download
-                    Case 3 '简单主页
+                    Case 3
                         Log("[Page] 主页预设：简单主页")
                         Url = "https://gitee.com/mfn233/PCL-Mainpage/raw/main/Custom.xaml"
                         GoTo Download
-                    Case 4 '历史上的今天
-                        Log("[Page] 主页预设：历史上的今天")
-                        Url = "https://pclnews.52chye.cn/custom.xaml"
+                    Case 4
+                        Log("[Page] 主页预设：每日整合包推荐")
+                        Url = "https://pclsub.sodamc.com/"
                         GoTo Download
                 End Select
         End Select

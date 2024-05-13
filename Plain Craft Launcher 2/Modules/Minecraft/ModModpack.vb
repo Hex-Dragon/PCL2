@@ -244,16 +244,17 @@ Retry:
             ModList.Add(ModEntry("fileID"))
             If ModEntry("required") IsNot Nothing AndAlso Not ModEntry("required").ToObject(Of Boolean) Then ModOptionalList.Add(ModEntry("fileID"))
         Next
-        If ModList.Count > 0 Then
+        If ModList.Any Then
+            Dim ModDownloadLoaders As New List(Of LoaderBase)
             '获取 Mod 下载信息
-            InstallLoaders.Add(New LoaderTask(Of Integer, JArray)("获取 Mod 下载信息",
+            ModDownloadLoaders.Add(New LoaderTask(Of Integer, JArray)("获取 Mod 下载信息",
             Sub(Task As LoaderTask(Of Integer, JArray))
                 Task.Output = GetJson(NetRequestRetry("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(ModList, ",") & "]}", "application/json"))("data")
                 '如果文件已被删除，则 API 会跳过那一项
                 If ModList.Count > Task.Output.Count Then Throw New Exception("整合包所需要的部分 Mod 版本已被 Mod 作者删除，因此无法完成整合包安装，请联系整合包作者更新整合包中的 Mod 版本")
             End Sub) With {.ProgressWeight = ModList.Count / 10}) '每 10 Mod 需要 1s
             '构造 NetFile
-            InstallLoaders.Add(New LoaderTask(Of JArray, List(Of NetFile))("构造 Mod 下载信息",
+            ModDownloadLoaders.Add(New LoaderTask(Of JArray, List(Of NetFile))("构造 Mod 下载信息",
             Sub(Task As LoaderTask(Of JArray, List(Of NetFile)))
                 Dim FileList As New Dictionary(Of Integer, NetFile)
                 For Each ModJson In Task.Input
@@ -288,7 +289,10 @@ Retry:
                 Task.Output = FileList.Values.ToList
             End Sub) With {.ProgressWeight = ModList.Count / 200, .Show = False}) '每 200 Mod 需要 1s
             '下载 Mod 文件
-            InstallLoaders.Add(New LoaderDownload("下载 Mod", New List(Of NetFile)) With {.ProgressWeight = ModList.Count * 1.5}) '每个 Mod 需要 1.5s
+            ModDownloadLoaders.Add(New LoaderDownload("下载 Mod", New List(Of NetFile)) With {.ProgressWeight = ModList.Count * 1.5}) '每个 Mod 需要 1.5s
+            '构造加载器
+            InstallLoaders.Add(New LoaderCombo(Of Integer)("下载 Mod（主加载器）", ModDownloadLoaders) With
+                {.Show = False, .ProgressWeight = ModDownloadLoaders.Sum(Function(l) l.ProgressWeight)})
         End If
 
         '构造加载器
@@ -299,43 +303,35 @@ Retry:
             .ForgeVersion = ForgeVersion,
             .FabricVersion = FabricVersion
         }
-        Dim InstallExpectTime As Double = 0
-        For Each InstallLoader In InstallLoaders
-            InstallExpectTime += InstallLoader.ProgressWeight
-        Next
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
         If MergeLoaders Is Nothing Then Exit Sub
-        Dim MergeExpectTime As Double = 0
-        For Each MergeLoader In MergeLoaders
-            MergeExpectTime += MergeLoader.ProgressWeight
-        Next
-        '构造 Libraries 加载器（为了使得 Mods 下载结束后再构造，这样才会下载 JumpLoader 文件）
+        '构造 Libraries 加载器
         Dim LoadersLib As New List(Of LoaderBase)
         LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionName))) With {.ProgressWeight = 1, .Show = False})
         LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
         '构造总加载器
         Dim Loaders As New List(Of LoaderBase)
-        Loaders.Add(New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .Block = False, .ProgressWeight = InstallExpectTime})
-        Loaders.Add(New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .ProgressWeight = MergeExpectTime})
+        Loaders.Add(New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .Block = False, .ProgressWeight = InstallLoaders.Sum(Function(l) l.ProgressWeight)})
+        Loaders.Add(New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .ProgressWeight = MergeLoaders.Sum(Function(l) l.ProgressWeight)})
         Loaders.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
         Loaders.Add(New LoaderTask(Of String, String)("最终整理文件",
-                                                      Sub(Task As LoaderTask(Of String, String))
-                                                          '设置图标
-                                                          Dim VersionFolder As String = PathMcFolder & "versions\" & VersionName & "\"
-                                                          If Logo IsNot Nothing AndAlso File.Exists(Logo) Then
-                                                              File.Copy(Logo, VersionFolder & "PCL\Logo.png", True)
-                                                              WriteIni(VersionFolder & "PCL\Setup.ini", "Logo", "PCL\Logo.png")
-                                                              WriteIni(VersionFolder & "PCL\Setup.ini", "LogoCustom", "True")
-                                                              Log("[ModPack] 已设置整合包 Logo：" & Logo)
-                                                          End If
-                                                          '删除原始整合包文件
-                                                          For Each Target As String In {VersionFolder & "原始整合包.zip", VersionFolder & "原始整合包.mrpack"}
-                                                              If Not Setup.Get("ToolDownloadKeepModpack") AndAlso File.Exists(Target) Then
-                                                                  Log("[ModPack] 根据设置要求删除原始整合包文件：" & Target)
-                                                                  File.Delete(Target)
-                                                              End If
-                                                          Next
-                                                      End Sub) With {.ProgressWeight = 0.1, .Show = False})
+        Sub(Task As LoaderTask(Of String, String))
+            '设置图标
+            Dim VersionFolder As String = PathMcFolder & "versions\" & VersionName & "\"
+            If Logo IsNot Nothing AndAlso File.Exists(Logo) Then
+                File.Copy(Logo, VersionFolder & "PCL\Logo.png", True)
+                WriteIni(VersionFolder & "PCL\Setup.ini", "Logo", "PCL\Logo.png")
+                WriteIni(VersionFolder & "PCL\Setup.ini", "LogoCustom", "True")
+                Log("[ModPack] 已设置整合包 Logo：" & Logo)
+            End If
+            '删除原始整合包文件
+            For Each Target As String In {VersionFolder & "原始整合包.zip", VersionFolder & "原始整合包.mrpack"}
+                If Not Setup.Get("ToolDownloadKeepModpack") AndAlso File.Exists(Target) Then
+                    Log("[ModPack] 根据设置要求删除原始整合包文件：" & Target)
+                    File.Delete(Target)
+                End If
+            Next
+        End Sub) With {.ProgressWeight = 0.1, .Show = False})
 
         '重复任务检查
         Dim LoaderName As String = "CurseForge 整合包安装：" & VersionName & " "
@@ -438,10 +434,10 @@ Retry:
             End If
             '添加下载文件
             FileList.Add(New NetFile(File("downloads").Select(Function(t) t.ToString.Replace("://edge.forgecdn", "://media.forgecdn")).ToArray, '修复 #2390
-                                     PathMcFolder & "versions\" & VersionName & "\" & File("path").ToString,
-                                     New FileChecker(ActualSize:=File("fileSize").ToObject(Of Long), Hash:=File("hashes")("sha1").ToString), True))
+                PathMcFolder & "versions\" & VersionName & "\" & File("path").ToString,
+                New FileChecker(ActualSize:=File("fileSize").ToObject(Of Long), Hash:=File("hashes")("sha1").ToString), True))
         Next
-        If FileList.Count > 0 Then
+        If FileList.Any Then
             InstallLoaders.Add(New LoaderDownload("下载额外文件", FileList) With {.ProgressWeight = FileList.Count * 1.5}) '每个 Mod 需要 1.5s
         End If
 
@@ -453,43 +449,35 @@ Retry:
             .ForgeVersion = ForgeVersion,
             .FabricVersion = FabricVersion
         }
-        Dim InstallExpectTime As Double = 0
-        For Each InstallLoader In InstallLoaders
-            InstallExpectTime += InstallLoader.ProgressWeight
-        Next
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
         If MergeLoaders Is Nothing Then Exit Sub
-        Dim MergeExpectTime As Double = 0
-        For Each MergeLoader In MergeLoaders
-            MergeExpectTime += MergeLoader.ProgressWeight
-        Next
-        '构造 Libraries 加载器（为了使得 Mods 下载结束后再构造，这样才会下载 JumpLoader 文件）
+        '构造 Libraries 加载器
         Dim LoadersLib As New List(Of LoaderBase)
         LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionName))) With {.ProgressWeight = 1, .Show = False})
         LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
         '构造总加载器
         Dim Loaders As New List(Of LoaderBase)
-        Loaders.Add(New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .Block = False, .ProgressWeight = InstallExpectTime})
-        Loaders.Add(New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .ProgressWeight = MergeExpectTime})
+        Loaders.Add(New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .Block = False, .ProgressWeight = InstallLoaders.Sum(Function(l) l.ProgressWeight)})
+        Loaders.Add(New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .ProgressWeight = MergeLoaders.Sum(Function(l) l.ProgressWeight)})
         Loaders.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
         Loaders.Add(New LoaderTask(Of String, String)("最终整理文件",
-                                                      Sub(Task As LoaderTask(Of String, String))
-                                                          '设置图标
-                                                          Dim VersionFolder As String = PathMcFolder & "versions\" & VersionName & "\"
-                                                          If Logo IsNot Nothing AndAlso File.Exists(Logo) Then
-                                                              File.Copy(Logo, VersionFolder & "PCL\Logo.png", True)
-                                                              WriteIni(VersionFolder & "PCL\Setup.ini", "Logo", "PCL\Logo.png")
-                                                              WriteIni(VersionFolder & "PCL\Setup.ini", "LogoCustom", "True")
-                                                              Log("[ModPack] 已设置整合包 Logo：" & Logo)
-                                                          End If
-                                                          '删除原始整合包文件
-                                                          For Each Target As String In {VersionFolder & "原始整合包.zip", VersionFolder & "原始整合包.mrpack"}
-                                                              If Not Setup.Get("ToolDownloadKeepModpack") AndAlso File.Exists(Target) Then
-                                                                  Log("[ModPack] 根据设置要求删除原始整合包文件：" & Target)
-                                                                  File.Delete(Target)
-                                                              End If
-                                                          Next
-                                                      End Sub) With {.ProgressWeight = 0.1, .Show = False})
+        Sub(Task As LoaderTask(Of String, String))
+            '设置图标
+            Dim VersionFolder As String = PathMcFolder & "versions\" & VersionName & "\"
+            If Logo IsNot Nothing AndAlso File.Exists(Logo) Then
+                File.Copy(Logo, VersionFolder & "PCL\Logo.png", True)
+                WriteIni(VersionFolder & "PCL\Setup.ini", "Logo", "PCL\Logo.png")
+                WriteIni(VersionFolder & "PCL\Setup.ini", "LogoCustom", "True")
+                Log("[ModPack] 已设置整合包 Logo：" & Logo)
+            End If
+            '删除原始整合包文件
+            For Each Target As String In {VersionFolder & "原始整合包.zip", VersionFolder & "原始整合包.mrpack"}
+                If Not Setup.Get("ToolDownloadKeepModpack") AndAlso File.Exists(Target) Then
+                    Log("[ModPack] 根据设置要求删除原始整合包文件：" & Target)
+                    File.Delete(Target)
+                End If
+            Next
+        End Sub) With {.ProgressWeight = 0.1, .Show = False})
 
         '重复任务检查
         Dim LoaderName As String = "Modrinth 整合包安装：" & VersionName & " "
@@ -554,16 +542,8 @@ Retry:
             .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\",
             .MinecraftName = Json("gameVersion").ToString
         }
-        Dim InstallExpectTime As Double = 0
-        For Each InstallLoader In InstallLoaders
-            InstallExpectTime += InstallLoader.ProgressWeight
-        Next
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
         If MergeLoaders Is Nothing Then Exit Sub
-        Dim MergeExpectTime As Double = 0
-        For Each MergeLoader In MergeLoaders
-            MergeExpectTime += MergeLoader.ProgressWeight
-        Next
         '构造 Libraries 加载器（为了使得 Mods 下载结束后再构造，这样才会下载 JumpLoader 文件）
         Dim LoadersLib As New List(Of LoaderBase)
         LoadersLib.Add(New LoaderTask(Of String, String)("重命名版本 Json（副加载器）",
@@ -584,8 +564,8 @@ Retry:
         LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
         '构造总加载器
         Dim Loaders As New List(Of LoaderBase) From {
-            New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .Block = False, .ProgressWeight = MergeExpectTime},
-            New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .ProgressWeight = InstallExpectTime},
+            New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .Block = False, .ProgressWeight = MergeLoaders.Sum(Function(l) l.ProgressWeight)},
+            New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .ProgressWeight = InstallLoaders.Sum(Function(l) l.ProgressWeight)},
             New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8}
         }
 
@@ -704,24 +684,16 @@ Retry:
             End Select
         Next
         '构造加载器
-        Dim InstallExpectTime As Double = 0
-        For Each InstallLoader In InstallLoaders
-            InstallExpectTime += InstallLoader.ProgressWeight
-        Next
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
         If MergeLoaders Is Nothing Then Exit Sub
-        Dim MergeExpectTime As Double = 0
-        For Each MergeLoader In MergeLoaders
-            MergeExpectTime += MergeLoader.ProgressWeight
-        Next
-        '构造 Libraries 加载器（为了使得 Mods 下载结束后再构造，这样才会下载 JumpLoader 文件）
+        '构造 Libraries 加载器
         Dim LoadersLib As New List(Of LoaderBase)
         LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionName))) With {.ProgressWeight = 1, .Show = False})
         LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
         '构造总加载器
         Dim Loaders As New List(Of LoaderBase)
-        Loaders.Add(New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .Block = False, .ProgressWeight = MergeExpectTime})
-        Loaders.Add(New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .ProgressWeight = InstallExpectTime})
+        Loaders.Add(New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .Block = False, .ProgressWeight = MergeLoaders.Sum(Function(l) l.ProgressWeight)})
+        Loaders.Add(New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .ProgressWeight = InstallLoaders.Sum(Function(l) l.ProgressWeight)})
         Loaders.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
 
         '重复任务检查
@@ -802,24 +774,16 @@ Retry:
             .ForgeVersion = If(Addons.ContainsKey("forge"), Addons("forge"), Nothing),
             .FabricVersion = If(Addons.ContainsKey("fabric"), Addons("fabric"), Nothing)
         }
-        Dim InstallExpectTime As Double = 0
-        For Each InstallLoader In InstallLoaders
-            InstallExpectTime += InstallLoader.ProgressWeight
-        Next
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
         If MergeLoaders Is Nothing Then Exit Sub
-        Dim MergeExpectTime As Double = 0
-        For Each MergeLoader In MergeLoaders
-            MergeExpectTime += MergeLoader.ProgressWeight
-        Next
-        '构造 Libraries 加载器（为了使得 Mods 下载结束后再构造，这样才会下载 JumpLoader 文件）
+        '构造 Libraries 加载器
         Dim LoadersLib As New List(Of LoaderBase)
         LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionName))) With {.ProgressWeight = 1, .Show = False})
         LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
         '构造总加载器
         Dim Loaders As New List(Of LoaderBase)
-        Loaders.Add(New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .Block = False, .ProgressWeight = MergeExpectTime})
-        Loaders.Add(New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .ProgressWeight = InstallExpectTime})
+        Loaders.Add(New LoaderCombo(Of String)("游戏安装", MergeLoaders) With {.Show = False, .Block = False, .ProgressWeight = MergeLoaders.Sum(Function(l) l.ProgressWeight)})
+        Loaders.Add(New LoaderCombo(Of String)("整合包安装", InstallLoaders) With {.Show = False, .ProgressWeight = InstallLoaders.Sum(Function(l) l.ProgressWeight)})
         Loaders.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
 
         '重复任务检查

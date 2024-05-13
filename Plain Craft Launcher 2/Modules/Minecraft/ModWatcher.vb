@@ -276,17 +276,18 @@
                     IsWindowFinished = True
                     '最大化
                     If Setup.Get("LaunchArgumentWindowType") = 4 Then
-                        RunInNewThread(Sub()
-                                           Try
-                                               '如果最大化导致屏幕渲染大小不对，那是 MC 的 Bug，不是我的 Bug
-                                               '……虽然我很想这样说，但总有人反馈，算了
-                                               Thread.Sleep(2000)
-                                               ShowWindow(WindowHandle, 3)
-                                               WatcherLog($"已最大化 Minecraft 窗口：{MinecraftWindowHandle.ToInt64}")
-                                           Catch ex As Exception
-                                               Log(ex, "最大化 Minecraft 窗口时出现错误")
-                                           End Try
-                                       End Sub, "MinecraftWindowMaximize")
+                        RunInNewThread(
+                        Sub()
+                            Try
+                                '如果最大化导致屏幕渲染大小不对，那是 MC 的 Bug，不是我的 Bug
+                                '……虽然我很想这样说，但总有人反馈，算了
+                                Thread.Sleep(2000)
+                                ShowWindow(WindowHandle, 3)
+                                WatcherLog($"已最大化 Minecraft 窗口：{MinecraftWindowHandle.ToInt64}")
+                            Catch ex As Exception
+                                Log(ex, "最大化 Minecraft 窗口时出现错误")
+                            End Try
+                        End Sub, "MinecraftWindowMaximize")
                     End If
                 ElseIf Not IsWindowAppeared Then
                     '已找到 FML 窗口
