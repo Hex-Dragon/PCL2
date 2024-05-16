@@ -517,7 +517,7 @@ RequestFinished:
         ''' </summary>
         Finish = 6
         ''' <summary>
-        ''' 已失败。
+        ''' 已失败或中断。
         ''' </summary>
         [Error] = 7
     End Enum
@@ -1035,6 +1035,7 @@ StartThread:
                 SecretHeadersSign(Info.Source.Url, HttpRequest, UseBrowserUserAgent)
                 Dim ContentLength As Long = 0
                 Using HttpResponse As HttpWebResponse = HttpRequest.GetResponse()
+                    If State = NetState.Error Then GoTo SourceBreak '快速中断
                     If ModeDebug AndAlso HttpResponse.ResponseUri.OriginalString <> Info.Source.Url Then
                         Log($"[Download] {LocalName} {Info.Uuid}#：重定向至 {HttpResponse.ResponseUri.OriginalString}")
                     End If
@@ -1379,14 +1380,7 @@ Retry:
                 '凉凉
                 State = NetState.Error
             End SyncLock
-            Try
-                If File.Exists(LocalPath) Then File.Delete(LocalPath)
-            Catch
-            End Try
-            SyncLock NetManager.LockRemain
-                NetManager.FileRemain -= 1
-                Log("[Download] " & LocalName & "：已失败，剩余文件 " & NetManager.FileRemain)
-            End SyncLock
+            InterruptAndDelete()
             For Each Task In Tasks
                 Task.OnFileFail(Me)
             Next
@@ -1395,7 +1389,7 @@ Retry:
         ''' 下载中断。
         ''' </summary>
         Public Sub Abort(CausedByTask As LoaderDownload)
-            '确认任务移除
+            '从特定任务中移除，如果它还属于其他任务，则继续下载
             SyncLock LockTasks
                 Tasks.Remove(CausedByTask)
                 If Tasks.Any Then Exit Sub
@@ -1405,9 +1399,14 @@ Retry:
                 If State >= NetState.Finish Then Exit Sub
                 State = NetState.Error
             End SyncLock
+            InterruptAndDelete()
+        End Sub
+        Private Sub InterruptAndDelete()
+            On Error Resume Next
+            If File.Exists(LocalPath) Then File.Delete(LocalPath)
             SyncLock NetManager.LockRemain
                 NetManager.FileRemain -= 1
-                If ModeDebug Then Log("[Download] " & LocalName & "：已取消，剩余文件 " & NetManager.FileRemain)
+                Log($"[Download] {LocalName}：状态 {State}，剩余文件 {NetManager.FileRemain}")
             End SyncLock
         End Sub
 

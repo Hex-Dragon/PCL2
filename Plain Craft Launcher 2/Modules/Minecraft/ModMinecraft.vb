@@ -2001,7 +2001,7 @@ NextVersion:
             Result.Add(New NetFile(Urls.Distinct.ToArray, Token.LocalPath, Checker))
         Next
         '去重并返回
-        Return Distinct(Result, Function(a, b) a.LocalPath = b.LocalPath)
+        Return Result.Distinct(Function(a, b) a.LocalPath = b.LocalPath)
     End Function
     ''' <summary>
     ''' 获取对应的支持库文件地址。

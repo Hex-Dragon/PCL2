@@ -567,7 +567,7 @@ NoUserJava:
 
             '确保可用并获取详细信息，转入正式列表
             Dim NewJavaList As New List(Of JavaEntry)
-            For Each Entry In Distinct(JavaPreList.ToList, Function(a, b) a.Key.ToLower = b.Key.ToLower) '#794
+            For Each Entry In JavaPreList.Distinct(Function(a, b) a.Key.ToLower = b.Key.ToLower) '#794
                 NewJavaList.Add(New JavaEntry(Entry.Key, Entry.Value))
             Next
             NewJavaList = Sort(JavaCheckList(NewJavaList), AddressOf JavaSorter)
@@ -719,12 +719,25 @@ Wait:
     ''' 获取下载 Java 8/14/17/21 的加载器。需要开启 IsForceRestart 以正常刷新 Java 列表。
     ''' </summary>
     Public Function JavaFixLoaders(Version As Integer) As LoaderCombo(Of Integer)
-        Return New LoaderCombo(Of Integer)($"下载 Java {Version}", {
+        Dim JavaDownloadLoader As New LoaderDownload("下载 Java 文件", New List(Of NetFile)) With {.ProgressWeight = 10}
+        Dim Loader = New LoaderCombo(Of Integer)($"下载 Java {Version}", {
             New LoaderTask(Of Integer, List(Of NetFile))("获取 Java 下载信息", AddressOf JavaFileList) With {.ProgressWeight = 2},
-            New LoaderDownload("下载 Java 文件", New List(Of NetFile)) With {.ProgressWeight = 10},
+            JavaDownloadLoader,
             JavaSearchLoader
         })
+        AddHandler JavaDownloadLoader.OnStateChangedThread,
+        Sub(Raw As LoaderBase, NewState As LoadState, OldState As LoadState)
+            If (NewState = LoadState.Failed OrElse NewState = LoadState.Aborted) AndAlso LastJavaBaseDir IsNot Nothing Then
+                Log($"[Java] 由于下载未完成，清理未下载完成的 Java 文件：{LastJavaBaseDir}", LogLevel.Debug)
+                DeleteDirectory(LastJavaBaseDir)
+            ElseIf NewState = LoadState.Finished Then
+                LastJavaBaseDir = Nothing
+            End If
+        End Sub
+        JavaDownloadLoader.HasOnStateChangedThread = True
+        Return Loader
     End Function
+    Private LastJavaBaseDir As String = Nothing '用于在下载中断或失败时删除未完成下载的 Java 文件夹，防止残留只下了一半但 -version 能跑的 Java
     Private Sub JavaFileList(Loader As LoaderTask(Of Integer, List(Of NetFile)))
         Log("[Java] 开始获取 Java 下载信息")
         Dim IndexFileStr As String = NetGetCodeByDownload(
@@ -739,25 +752,23 @@ Wait:
         Dim Address As String = TargetEntry.Value("manifest")("url")
         Log($"[Java] 准备下载 Java {TargetEntry.Value("version")("name")}（{TargetEntry.Key}）：{Address}")
         '获取文件列表
-        Dim ListFileStr As String = NetGetCodeByDownload(
-            {Address.Replace("piston-meta.mojang.com", "bmclapi2.bangbang93.com"),
-             Address},
-        IsJson:=True)
-        Dim BaseDir As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\runtime\" & TargetEntry.Key & "\"
+        Dim ListFileStr As String = NetGetCodeByDownload({Address.Replace("piston-meta.mojang.com", "bmclapi2.bangbang93.com"), Address}, IsJson:=True)
+        LastJavaBaseDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\runtime\" & TargetEntry.Key & "\"
         Dim Results As New List(Of NetFile)
         For Each File As JProperty In CType(GetJson(ListFileStr), JObject)("files")
             If CType(File.Value, JObject)("downloads")?("raw") Is Nothing Then Continue For
             Dim Info As JObject = CType(File.Value, JObject)("downloads")("raw")
             Dim Checker As New FileChecker(ActualSize:=Info("size"), Hash:=Info("sha1"))
-            If Checker.Check(BaseDir & File.Name) Is Nothing Then Continue For '跳过已存在的文件
+            If Checker.Hash = "12976a6c2b227cbac58969c1455444596c894656" OrElse Checker.Hash = "c80e4bab46e34d02826eab226a4441d0970f2aba" OrElse Checker.Hash = "84d2102ad171863db04e7ee22a259d1f6c5de4a5" Then
+                '跳过 3 个无意义大量重复文件（#3827）
+                Continue For
+            End If
+            If Checker.Check(LastJavaBaseDir & File.Name) Is Nothing Then Continue For '跳过已存在的文件
             Dim Url As String = Info("url")
-            Results.Add(New NetFile(
-                            {Url.Replace("piston-data.mojang.com", "bmclapi2.bangbang93.com"),
-                             Url},
-                        BaseDir & File.Name, Checker))
+            Results.Add(New NetFile({Url.Replace("piston-data.mojang.com", "bmclapi2.bangbang93.com"), Url}, LastJavaBaseDir & File.Name, Checker))
         Next
         Loader.Output = Results
-        Log($"[Java] 需要下载 {Results.Count} 个文件，目标文件夹：{BaseDir}")
+        Log($"[Java] 需要下载 {Results.Count} 个文件，目标文件夹：{LastJavaBaseDir}")
     End Sub
 
 #End Region

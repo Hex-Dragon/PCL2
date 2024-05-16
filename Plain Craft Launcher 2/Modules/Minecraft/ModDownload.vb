@@ -98,6 +98,11 @@
                     TempAddress = PathTemp & "Cache\" & BackAssetsFile.LocalName
                     BackAssetsFile.LocalPath = TempAddress
                     Task.Output = New List(Of NetFile) From {BackAssetsFile}
+                    '检查是否需要更新：每天只更新一次
+                    If File.Exists(RealAddress) AndAlso Math.Abs((File.GetLastWriteTime(RealAddress).Date - Now.Date).TotalDays) < 1 Then
+                        Log("[Download] 无需更新资源文件索引")
+                        Task.Abort()
+                    End If
                 End Sub))
                 LoadersAssetsUpdate.Add(New LoaderDownload("后台下载资源文件索引", New List(Of NetFile)))
                 LoadersAssetsUpdate.Add(New LoaderTask(Of List(Of NetFile), String)("后台复制资源文件索引",
@@ -106,7 +111,7 @@
                     McLaunchLog("后台更新资源文件索引成功：" & TempAddress)
                 End Sub))
                 Dim Updater As New LoaderCombo(Of String)("后台更新资源文件索引", LoadersAssetsUpdate)
-                Log("[Download] 开始后台更新资源文件索引")
+                Log("[Download] 开始后台检查资源文件索引")
                 Updater.Start()
             End If
             '获取资源文件地址

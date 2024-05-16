@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.7.2" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.7.2." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.7.3" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.7.3." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 321 'Release
+    Public Const VersionCode As Integer = 323 'Release
 #Else
-    Public Const VersionCode As Integer = 322 'Snapshot
+    Public Const VersionCode As Integer = 324 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1817,15 +1817,11 @@ Re:
     ''' <summary>
     ''' 数组去重。
     ''' </summary>
-    Public Function Distinct(Of T)(Arr As ICollection(Of T), Optional IsEqual As CompareThreadStart(Of T) = Nothing) As List(Of T)
+    <Extension> Public Function Distinct(Of T)(Arr As ICollection(Of T), IsEqual As CompareThreadStart(Of T)) As List(Of T)
         Dim ResultArray As New List(Of T)
         For i = 0 To Arr.Count - 1
             For ii = i + 1 To Arr.Count - 1
-                If IsEqual Is Nothing Then
-                    If Arr(i).Equals(Arr(ii)) Then GoTo NextElement
-                Else
-                    If IsEqual(Arr(i), Arr(ii)) Then GoTo NextElement
-                End If
+                If IsEqual(Arr(i), Arr(ii)) Then GoTo NextElement
             Next
             ResultArray.Add(Arr(i))
 NextElement:
@@ -2073,7 +2069,7 @@ NextElement:
     ''' 按照既定的函数进行选择排序。
     ''' </summary>
     ''' <param name="SortRule">传入两个对象，若第一个对象应该排在前面，则返回 True。</param>
-    Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart(Of T)) As List(Of T)
+    <Extension> Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart(Of T)) As List(Of T)
         Dim NewList As New List(Of T)
         While List.Any
             Dim Highest = List(0)

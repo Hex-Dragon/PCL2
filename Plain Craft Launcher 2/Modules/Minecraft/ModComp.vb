@@ -593,7 +593,7 @@
                 '添加后缀
                 If Suffix <> "" Then SubtitleList.Add(Suffix)
             End If
-            SubtitleList = SubtitleList.Distinct().ToList()
+            SubtitleList = SubtitleList.Distinct.ToList()
             '设置标题与描述
             Dim Subtitle As String = ""
             If SubtitleList.Any Then
@@ -1046,7 +1046,7 @@ Retry:
         '这样做的话，去重后将优先保留 CurseForge 内容（考虑到 CurseForge 热度更高）
         RawResults = RawResults.Where(Function(x) Not x.FromCurseForge).Concat(RawResults.Where(Function(x) x.FromCurseForge)).ToList
         'RawResults 去重
-        RawResults = Distinct(RawResults, Function(a, b) a.IsLike(b))
+        RawResults = RawResults.Distinct(Function(a, b) a.IsLike(b))
         '已有内容去重
         RawResults = RawResults.Where(Function(r) Not RealResults.Any(Function(b) r.IsLike(b)) AndAlso
                                                   Not Storage.Results.Any(Function(b) r.IsLike(b))).ToList
@@ -1444,8 +1444,8 @@ Retry:
             'Modrinth
             ResultJsonArray = NetGetCodeByRequestRetry($"https://api.modrinth.com/v2/project/{ProjectId}/version", Accept:="application/json", IsJson:=True)
         End If
-        CompFilesCache(ProjectId) = Distinct(ResultJsonArray.Select(Function(a) New CompFile(a, TargetProject.Type)).
-            Where(Function(a) a.Available).ToList, Function(a, b) a.Id = b.Id) 'CurseForge 可能会重复返回相同项（#1330）
+        CompFilesCache(ProjectId) = ResultJsonArray.Select(Function(a) New CompFile(a, TargetProject.Type)).
+            Where(Function(a) a.Available).ToList.Distinct(Function(a, b) a.Id = b.Id) 'CurseForge 可能会重复返回相同项（#1330）
         '获取前置 Mod 列表
         If TargetProject.Type <> CompType.Mod Then Return CompFilesCache(ProjectId)
         Dim Deps As List(Of String) = CompFilesCache(ProjectId).

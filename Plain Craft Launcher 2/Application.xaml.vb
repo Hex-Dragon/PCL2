@@ -19,18 +19,14 @@ Public Class Application
 
     '开始
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
-        SecretOnApplicationStart()
         Try
+            SecretOnApplicationStart()
             '检查参数调用
             If e.Args.Length > 0 Then
                 If e.Args(0) = "--update" Then
                     '自动更新
                     UpdateReplace(e.Args(1), e.Args(2).Trim(""""), e.Args(3).Trim(""""), e.Args(4))
                     Environment.Exit(Result.Cancel)
-                    'ElseIf e.Args(0).StartsWithF("--link") Then
-                    '    '稍作等待后切换到联机页面
-                    '    Thread.Sleep(1000)
-                    '    FormMain.IsLinkRestart = True
                 ElseIf e.Args(0).StartsWithF("--memory") Then
                     '内存优化
                     Dim Ram = My.Computer.Info.AvailablePhysicalMemory
@@ -129,7 +125,12 @@ Public Class Application
 #End If
             AniControlEnabled += 1
         Catch ex As Exception
-            MsgBox(GetExceptionDetail(ex, True), MsgBoxStyle.Critical, "PCL 初始化错误")
+            Dim FilePath As String = Nothing
+            Try
+                FilePath = PathWithName
+            Catch
+            End Try
+            MsgBox(GetExceptionDetail(ex, True) & vbCrLf & "PCL 所在路径：" & If(String.IsNullOrEmpty(FilePath), "获取失败", FilePath), MsgBoxStyle.Critical, "PCL 初始化错误")
             FormMain.EndProgramForce(Result.Exception)
         End Try
     End Sub

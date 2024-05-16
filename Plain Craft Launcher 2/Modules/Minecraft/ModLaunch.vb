@@ -1192,12 +1192,10 @@ SystemBrowser:
             If Not JavaDownloadConfirm("Java 7") Then Throw New Exception("$$")
         ElseIf MinVer > New Version(1, 8, 0, 100) AndAlso MaxVer < New Version(1, 8, 0, 321) Then
             JavaCode = "8u101"
-            JavaDownloadConfirm("Java 8.0.101 ~ 8.0.320", True)
-            Throw New Exception("$$")
+            If Not JavaDownloadConfirm("Java 8.0.101 ~ 8.0.320", True) Then Throw New Exception("$$")
         ElseIf MinVer > New Version(1, 8, 0, 100) Then
             JavaCode = "8u101"
-            JavaDownloadConfirm("Java 8.0.101 或更高版本的 Java 8", True)
-            Throw New Exception("$$")
+            If Not JavaDownloadConfirm("Java 8.0.101 或更高版本的 Java 8", True) Then Throw New Exception("$$")
         ElseIf MaxVer < New Version(1, 8, 0, 321) Then
             JavaCode = 8
             If Not JavaDownloadConfirm("Java 8.0.320 或更低版本的 Java 8") Then Throw New Exception("$$")
@@ -1208,11 +1206,15 @@ SystemBrowser:
 
         '开始自动下载
         Dim JavaLoader = JavaFixLoaders(JavaCode)
-        JavaLoader.Start(JavaCode, IsForceRestart:=True)
-        Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
-            Task.Progress = JavaLoader.Progress
-            Thread.Sleep(10)
-        Loop
+        Try
+            JavaLoader.Start(JavaCode, IsForceRestart:=True)
+            Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
+                Task.Progress = JavaLoader.Progress
+                Thread.Sleep(10)
+            Loop
+        Finally
+            JavaLoader.Abort() '确保取消时中止 Java 下载
+        End Try
 
         '检查下载结果
         If JavaSearchLoader.State <> LoadState.Loading Then JavaSearchLoader.State = LoadState.Waiting '2872#

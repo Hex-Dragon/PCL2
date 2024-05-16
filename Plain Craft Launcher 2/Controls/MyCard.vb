@@ -130,7 +130,7 @@
                                                                     FrmDownloadInstall.MinecraftSelected(sender, e)
                                                                 End Sub, False))
                 Case 8
-                    If Distinct(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.DisplayName = b.DisplayName).Count <>
+                    If CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <>
                        CType(Stack.Tag, List(Of CompFile)).Count Then
                         '存在重复的名称（#1344）
                         Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=True))
@@ -139,7 +139,7 @@
                         Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click))
                     End If
                 Case 9
-                    If Distinct(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.DisplayName = b.DisplayName).Count <>
+                    If CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <>
                        CType(Stack.Tag, List(Of CompFile)).Count Then
                         '存在重复的名称（#1344）
                         Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=True))

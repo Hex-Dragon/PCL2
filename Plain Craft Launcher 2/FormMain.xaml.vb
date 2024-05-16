@@ -10,6 +10,14 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 323 Then 'Release 2.7.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 启动游戏前进行内存优化 设置"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 MC 性能"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复安装 OptiFine 有概率失败的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复启动 Fabric 1.20.5+ 时无法正确选择 Java 的 Bug"))
+            FeatureCount += 22
+            BugCount += 21
+        End If
         If LastVersion < 321 Then 'Release 2.7.1
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复启动部分整合包导致设置丢失的 Bug"))
             BugCount += 1
@@ -100,6 +108,10 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 324 Then 'Snapshot 2.7.3
+            FeatureCount += 4
+            BugCount += 3
+        End If
         If LastVersion < 322 Then 'Snapshot 2.7.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 启动游戏前进行内存优化 设置"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 MC 性能"))
@@ -241,7 +253,7 @@ Public Class FormMain
         Next
         If SortedFeatures.Count > 10 Then FeatureCount += SortedFeatures.Count - 10
         If FeatureCount > 0 OrElse BugCount > 0 Then
-            ContentList.Add(If(FeatureCount > 0, "其他 " & FeatureCount & " 项小调整与修改", "") &
+            ContentList.Add(If(FeatureCount > 0, FeatureCount & " 项小调整与修改", "") &
                 If(FeatureCount > 0 AndAlso BugCount > 0, "，", "") &
                 If(BugCount > 0, "修复了 " & BugCount & " 个 Bug", "") &
                 "，详见完整更新日志")

@@ -389,10 +389,14 @@ Public Module ModDownloadLib
             If Not JavaDownloadConfirm("Java 8 或更高版本") Then Throw New Exception("由于未找到 Java，已取消安装。")
             '开始自动下载
             Dim JavaLoader = JavaFixLoaders(17)
-            JavaLoader.Start(17, IsForceRestart:=True)
-            Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
-                Thread.Sleep(10)
-            Loop
+            Try
+                JavaLoader.Start(17, IsForceRestart:=True)
+                Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
+                    Thread.Sleep(10)
+                Loop
+            Finally
+                JavaLoader.Abort() '确保取消时中止 Java 下载
+            End Try
             '检查下载结果
             Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
             If Task.IsAborted Then Exit Sub
@@ -1112,10 +1116,14 @@ Retry:
             If Not JavaDownloadConfirm("Java 8 或更高版本") Then Throw New Exception("由于未找到 Java，已取消安装。")
             '开始自动下载
             Dim JavaLoader = JavaFixLoaders(17)
-            JavaLoader.Start(17, IsForceRestart:=True)
-            Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
-                Thread.Sleep(10)
-            Loop
+            Try
+                JavaLoader.Start(17, IsForceRestart:=True)
+                Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
+                    Thread.Sleep(10)
+                Loop
+            Finally
+                JavaLoader.Abort() '确保取消时中止 Java 下载
+            End Try
             '检查下载结果
             Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 60))
             If Task.IsAborted Then Exit Sub
