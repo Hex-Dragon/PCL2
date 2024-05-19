@@ -542,17 +542,17 @@ Done:
 
             '虚拟机日志分析
             If LogHs IsNot Nothing Then
-            If LogHs.Contains("The system is out of physical RAM or swap space") Then AppendReason(CrashReason.内存不足)
-            If LogHs.Contains("Out of Memory Error") Then AppendReason(CrashReason.内存不足)
-            If LogHs.Contains("EXCEPTION_ACCESS_VIOLATION") Then
-                If LogHs.Contains("# C  [ig") Then AppendReason(CrashReason.Intel驱动不兼容导致EXCEPTION_ACCESS_VIOLATION)
-                If LogHs.Contains("# C  [atio") Then AppendReason(CrashReason.AMD驱动不兼容导致EXCEPTION_ACCESS_VIOLATION)
-                If LogHs.Contains("# C  [nvoglv") Then AppendReason(CrashReason.Nvidia驱动不兼容导致EXCEPTION_ACCESS_VIOLATION)
+                If LogHs.Contains("The system is out of physical RAM or swap space") Then AppendReason(CrashReason.内存不足)
+                If LogHs.Contains("Out of Memory Error") Then AppendReason(CrashReason.内存不足)
+                If LogHs.Contains("EXCEPTION_ACCESS_VIOLATION") Then
+                    If LogHs.Contains("# C  [ig") Then AppendReason(CrashReason.Intel驱动不兼容导致EXCEPTION_ACCESS_VIOLATION)
+                    If LogHs.Contains("# C  [atio") Then AppendReason(CrashReason.AMD驱动不兼容导致EXCEPTION_ACCESS_VIOLATION)
+                    If LogHs.Contains("# C  [nvoglv") Then AppendReason(CrashReason.Nvidia驱动不兼容导致EXCEPTION_ACCESS_VIOLATION)
+                End If
             End If
-        End If
 
-        '崩溃报告分析
-        If LogCrash IsNot Nothing Then
+            '崩溃报告分析
+            If LogCrash IsNot Nothing Then
             If LogCrash.Contains("maximum id range exceeded") Then AppendReason(CrashReason.Mod过多导致超出ID限制)
             If LogCrash.Contains("java.lang.OutOfMemoryError") Then AppendReason(CrashReason.内存不足)
             If LogCrash.Contains("Pixel format not accelerated") Then AppendReason(CrashReason.显卡驱动不支持导致无法设置像素格式)
