@@ -378,6 +378,7 @@ Extracted:
         Forge安装不完整
         Mod需要Java11
         Mod缺少前置或MC版本错误
+        高版本Optifine
     End Enum
     ''' <summary>
     ''' 根据 AnalyzeLogs 与可能的版本信息分析崩溃原因。
@@ -525,6 +526,7 @@ Done:
                     AppendReason(CrashReason.内存不足)
                 End If
             End If
+            If (LogMc.Contains("libraries") OrElse LogMc.Contains("mods")) AndAlso LogMc.Contains("has mods that were not found") Then AppendReason(CrashReason.高版本Optifine)
             '确定的 Mod 导致崩溃
             If LogMc.Contains("Caught exception from ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(RegexSeek(LogMc, "(?<=Caught exception from )[^\n]+?")?.TrimEnd((vbCrLf & " ").ToCharArray)))
             'Mod 重复安装
@@ -534,13 +536,12 @@ Done:
             'Mod 缺少前置
             If LogMc.Contains("Missing or unsupported mandatory dependencies:") Then
                 AppendReason(CrashReason.Mod缺少前置或MC版本错误,
-                    RegexSearch(LogMc, "(?<=Missing or unsupported mandatory dependencies:)([\n\r]+\t(.*))+", RegularExpressions.RegexOptions.IgnoreCase).
-                    Select(Function(s) s.Trim((vbCrLf & vbTab & " ").ToCharArray)).Distinct().ToList())
+                RegexSearch(LogMc, "(?<=Missing or unsupported mandatory dependencies:)([\n\r]+\t(.*))+", RegularExpressions.RegexOptions.IgnoreCase).
+                Select(Function(s) s.Trim((vbCrLf & vbTab & " ").ToCharArray)).Distinct().ToList())
             End If
-        End If
 
-        '虚拟机日志分析
-        If LogHs IsNot Nothing Then
+            '虚拟机日志分析
+            If LogHs IsNot Nothing Then
             If LogHs.Contains("The system is out of physical RAM or swap space") Then AppendReason(CrashReason.内存不足)
             If LogHs.Contains("Out of Memory Error") Then AppendReason(CrashReason.内存不足)
             If LogHs.Contains("EXCEPTION_ACCESS_VIOLATION") Then
