@@ -295,7 +295,7 @@
             For i = 0 To Folders.Count - 1
                 If Folders(i) = "" Then Exit For
                 If Folders(i).ToString.EndsWith(Folder.Path) Then
-                    Name = Folders(i).ToString.Split(">")(0)
+                    Name = Folders(i).ToString.Before(">")
                     Folders.RemoveAt(i)
                     Exit For
                 End If
@@ -320,7 +320,7 @@
             For i = 0 To Folders.Count - 1
                 If Folders(i) = "" Then Exit For
                 If Folders(i).ToString.EndsWith(Folder.Path) Then
-                    'Name = Folders(i).ToString.Split(">")(0)
+                    'Name = Folders(i).ToString.Before(">")
                     Folders.RemoveAt(i)
                     Exit For
                 End If

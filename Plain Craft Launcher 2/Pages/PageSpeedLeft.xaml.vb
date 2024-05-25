@@ -1,4 +1,6 @@
-﻿Public Class PageSpeedLeft
+﻿Imports System.Threading.Tasks
+
+Public Class PageSpeedLeft
     Private Const WatcherInterval As Integer = 300
 
     '初始化
@@ -59,8 +61,8 @@
         If FrmSpeedRight Is Nothing OrElse FrmSpeedRight.PanMain Is Nothing Then Exit Sub
         Try
             SyncLock LoaderTaskbarLock
-                For i = 0 To LoaderTaskbar.Count - 1
-                    TaskRefresh(LoaderTaskbar(i))
+                For Each Loader In LoaderTaskbar.ToList
+                    TaskRefresh(Loader)
                 Next
             End SyncLock
         Catch ex As Exception
@@ -110,7 +112,7 @@
 #Region "进度不同，更新卡片"
                             Try
                                 If Card.Children.Count < LoaderList.Count * 2 Then
-                                    Log("刷新下载管理卡片失败：卡片中仅有 " & Card.Children.Count & " 个子项", LogLevel.Debug)
+                                    Log($"[Watcher] 刷新下载管理卡片 {Loader.Name} 失败：卡片中仅有 {Card.Children.Count} 个子项，要求至少有 {LoaderList.Count * 2} 个子项", LogLevel.Debug)
                                     Exit Try
                                 End If
                                 Dim Row As Integer = 0
@@ -137,7 +139,7 @@
                                     Row += 1
                                 Next
                             Catch ex As Exception
-                                Log(ex, "刷新下载管理卡片失败", LogLevel.Feedback)
+                                Log(ex, $"刷新下载管理卡片 {Loader.Name} 失败", LogLevel.Feedback)
                             End Try
 #End Region
                     End Select
@@ -191,13 +193,18 @@
                     '添加取消按钮
                     Dim Cancel As New MyIconButton With {.Name = "BtnCancel", .Logo = "F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z", .Height = 20, .Margin = New Thickness(0, 10, 10, 0), .LogoScale = 1.1, .HorizontalAlignment = HorizontalAlignment.Right, .VerticalAlignment = VerticalAlignment.Top}
                     Card.Children.Add(Cancel)
-                    AddHandler Cancel.Click, Sub(sender As MyIconButton, e As EventArgs)
-                                                 AniDispose(sender, False)
-                                                 AniDispose(Card, True, Sub() If FrmSpeedRight.PanMain.Children.Count = 0 AndAlso FrmMain.PageCurrent = FormMain.PageType.DownloadManager Then FrmMain.PageBack())
-                                                 RightCards.Remove(Loader.Name)
-                                                 Log($"[Watcher] 关闭下载管理卡片：{Loader.Name}")
-                                                 RunInThread(Sub() Loader.Abort())
-                                             End Sub
+                    AddHandler Cancel.Click,
+                    Sub(sender As MyIconButton, e As EventArgs)
+                        AniDispose(sender, False)
+                        AniDispose(Card, True, Sub() If FrmSpeedRight.PanMain.Children.Count = 0 AndAlso FrmMain.PageCurrent = FormMain.PageType.DownloadManager Then FrmMain.PageBack())
+                        RightCards.Remove(Loader.Name)
+                        SyncLock LoaderTaskbarLock
+                            LoaderTaskbar.Remove(Loader)
+                            Log($"[Taskbar] 由于下载管理卡片关闭，{Loader.Name} 已移出任务列表")
+                        End SyncLock
+                        Log($"[Watcher] 关闭下载管理卡片：{Loader.Name}")
+                        RunInThread(Sub() Loader.Abort())
+                    End Sub
                     '如果已经失败，再刷新一次，修改成失败的控件
                     If Loader.State = LoadState.Failed Then
                         Card.Tag = Nothing '避免重复导致刷新无效

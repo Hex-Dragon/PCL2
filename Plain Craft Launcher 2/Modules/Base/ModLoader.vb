@@ -266,7 +266,7 @@
         Public Output As OutputType = Nothing
 
         '获取输入
-        Public Function StartGetInput(Optional Input As InputType = Nothing, Optional InputDelegate As Func(Of Object) = Nothing) As InputType
+        Public Function StartGetInput(Optional Input As InputType = Nothing, Optional InputDelegate As Func(Of Object) = Nothing) As InputType 'InputDelegate 参数存在匿名调用
             If InputDelegate Is Nothing Then InputDelegate = Me.InputDelegate
             Dim NewInput As InputType = Nothing '若 InputType 不能为 Nothing，则会导致 Input Is Nothing 永远失败，因此需要额外判断
             If (Input Is Nothing OrElse (NewInput IsNot Nothing AndAlso Input.Equals(NewInput))) AndAlso InputDelegate IsNot Nothing Then

@@ -400,7 +400,7 @@ Finish:
                 ElseIf Setup.Get("LoginLegacyName") = "" Then
                     Return New EqualableList(Of String) From {0, ""}
                 Else
-                    Return New EqualableList(Of String) From {0, If(Setup.Get("LoginLegacyName").ToString.Split("¨")(0), "")}
+                    Return New EqualableList(Of String) From {0, If(Setup.Get("LoginLegacyName").ToString.Before("¨"), "")}
                 End If
             Case 3
                 Return New EqualableList(Of String) From {3, Setup.Get("LaunchSkinID")}

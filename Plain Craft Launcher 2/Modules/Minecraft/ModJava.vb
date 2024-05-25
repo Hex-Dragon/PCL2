@@ -1,5 +1,5 @@
 ﻿Public Module ModJava
-    Public JavaListCacheVersion As Integer = 5
+    Public JavaListCacheVersion As Integer = 6
 
     ''' <summary>
     ''' 目前所有可用的 Java。
@@ -131,7 +131,9 @@
                     Version = New Version(1, Version.Major, Version.Build, Version.Revision)
                 End If
                 Is64Bit = Output.Contains("64-bit")
-                If Version.Minor <= 4 OrElse Version.Minor >= 25 Then Throw New Exception("分析详细信息失败，获取的版本为 " & Version.ToString)
+                If Version.Minor <= 4 OrElse Version.Minor >= 25 Then Throw New ApplicationException("分析详细信息失败，获取的版本为 " & Version.ToString)
+                '基于 #3649，在 64 位系统上禁用 32 位 Java
+                If Not Is64Bit AndAlso Not Is32BitSystem Then Throw New Exception("该 Java 为 32 位版本，请安装 64 位的 Java")
                 '基于 #2249 发现 JRE 17 似乎也导致了 Forge 安装失败，干脆禁用更多版本的 JRE
                 If IsJre AndAlso VersionCode >= 16 Then Throw New Exception("由于高版本 JRE 对游戏的兼容性很差，因此不再允许使用。你可以使用对应版本的 JDK，而非 JRE！")
             Catch ex As ApplicationException
@@ -197,10 +199,15 @@
             Setup.Set("LaunchArgumentJavaAll", "[]")
         End Try
     End Sub
+
+    ''' <summary>
+    ''' 防止多个需要 Java 的部分同时要求下载 Java（#3797）。
+    ''' </summary>
+    Public JavaLock As New Object
     ''' <summary>
     ''' 根据要求返回最适合的 Java，若找不到则返回 Nothing。
     ''' 最小与最大版本在与输入相同时也会通过。
-    ''' 必须在工作线程调用。
+    ''' 必须在工作线程调用，且必须包括 SyncLock JavaLock。
     ''' </summary>
     Public Function JavaSelect(CancelException As String, Optional MinVersion As Version = Nothing, Optional MaxVersion As Version = Nothing,
                                Optional RelatedVersion As McVersion = Nothing) As JavaEntry
@@ -460,8 +467,8 @@ NoUserJava:
         If Not Left.IsJre AndAlso Right.IsJre Then Return False
         '4. Java 大版本
         If Left.VersionCode <> Right.VersionCode Then
-            '                             Java  7   8   9  10  11  12 13 14 15  16  17  18  19  20  21...
-            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 30, 10, 12, 15, 13, 9, 8, 7, 11, 31, 29, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
+            '                             Java  7   8   9  10  11  12 13 14 15  16  17  18  19  20  21  22  23...
+            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 30, 10, 12, 15, 13, 9, 8, 7, 11, 31, 29, 16, 17, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18}
             Return Weight.ElementAtOrDefault(Left.VersionCode) >= Weight.ElementAtOrDefault(Right.VersionCode)
         End If
         '5. 最次级版本号更接近 51
@@ -601,22 +608,23 @@ NoUserJava:
         '启动检查线程
         Dim CheckThreads As New List(Of Thread)
         For Each Entry In JavaEntries
-            Dim CheckThread As New Thread(Sub()
-                                              Try
-                                                  Entry.Check()
-                                                  If ModeDebug Then Log("[Java]  - " & Entry.ToString)
-                                                  SyncLock ListLock
-                                                      JavaCheckList.Add(Entry)
-                                                  End SyncLock
-                                              Catch ex As ThreadInterruptedException
-                                              Catch ex As Exception
-                                                  If Entry.IsUserImport Then
-                                                      Log(ex, "位于 " & Entry.PathFolder & " 的 Java 存在异常，将被自动移除", LogLevel.Hint)
-                                                  Else
-                                                      Log(ex, "位于 " & Entry.PathFolder & " 的 Java 存在异常")
-                                                  End If
-                                              End Try
-                                          End Sub)
+            Dim CheckThread As New Thread(
+            Sub()
+                Try
+                    Entry.Check()
+                    If ModeDebug Then Log("[Java]  - " & Entry.ToString)
+                    SyncLock ListLock
+                        JavaCheckList.Add(Entry)
+                    End SyncLock
+                Catch ex As ThreadInterruptedException
+                Catch ex As Exception
+                    If Entry.IsUserImport Then
+                        Log(ex, "位于 " & Entry.PathFolder & " 的 Java 存在异常，将被自动移除", LogLevel.Hint)
+                    Else
+                        Log(ex, "位于 " & Entry.PathFolder & " 的 Java 存在异常")
+                    End If
+                End Try
+            End Sub)
             CheckThreads.Add(CheckThread)
             CheckThread.Start()
         Next

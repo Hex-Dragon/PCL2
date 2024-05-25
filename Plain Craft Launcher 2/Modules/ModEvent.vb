@@ -73,8 +73,8 @@
                 Case "切换页面"
                     FrmMain.PageChange(Val(Data(0)), Val(Data(1)))
 
-                Case "导入整合包"
-                    RunInThread(Sub() ModpackInstall())
+                Case "导入整合包", "安装整合包"
+                    RunInUi(Sub() ModpackInstall())
 
                 Case "下载文件"
                     Data(0) = Data(0).Replace("\", "/")
@@ -101,8 +101,7 @@
         '网页确认
         If RelativeUrl.StartsWithF("http", True) Then
             If RunInUi() Then
-                Throw New Exception("MyListItem 在界面初始化时就需要获取帮助标题等信息，这会导致程序在网络请求时卡死。" & vbCrLf &
-                                    "因此，请换用 MyListItem 以外的控件（例如 MyButton）作为联网帮助页面的入口！")
+                Throw New Exception("能打开联网帮助页面的 MyListItem 必须手动设置 Title、Info 属性！")
             End If
             '获取文件名
             Dim RawFileName As String

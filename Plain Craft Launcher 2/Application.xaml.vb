@@ -213,6 +213,7 @@ Public Class Application
                 Dim MsJson As JObject = GetJson(Setup.Get("LoginMsJson"))
                 MsJson.Remove(sender.Tag)
                 Setup.Set("LoginMsJson", MsJson.ToString(Newtonsoft.Json.Formatting.None))
+                If FrmLoginMs.ComboAccounts.SelectedItem Is sender.Parent Then FrmLoginMs.ComboAccounts.SelectedIndex = 0
                 FrmLoginMs.ComboAccounts.Items.Remove(sender.Parent)
             Case McLoginType.Legacy
                 '离线

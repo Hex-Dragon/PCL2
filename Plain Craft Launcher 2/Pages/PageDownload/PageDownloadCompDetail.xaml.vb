@@ -275,7 +275,7 @@
                 If Project.TranslatedName = Project.RawName Then
                     FileName = File.FileName
                 Else
-                    Dim ChineseName As String = Project.TranslatedName.Split(" (").First.Split(" - ").First.
+                    Dim ChineseName As String = Project.TranslatedName.Before(" (").Before(" - ").
                         Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")
                     Select Case Setup.Get("ToolDownloadTranslate")
                         Case 0
@@ -299,7 +299,7 @@
                                           If(File.FileName.EndsWith(".mrpack"), "*.mrpack", "*.zip")), DefaultFolder)
                     If Not Target.Contains("\") Then Exit Sub
                     '构造步骤加载器
-                    Dim LoaderName As String = Desc & "下载：" & File.DisplayName & " "
+                    Dim LoaderName As String = Desc & "下载：" & GetFileNameWithoutExtentionFromPath(Target) & " "
                     If Target <> DefaultFolder AndAlso Project.Type = CompType.Mod Then CachedFolder = GetPathFromFullPath(Target)
                     Dim Loaders As New List(Of LoaderBase)
                     Loaders.Add(New LoaderDownload("下载文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 6, .Block = True})

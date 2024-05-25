@@ -108,13 +108,19 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 325 Then 'Snapshot 2.7.4
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "会自动隐藏明显不可用的自动安装选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化正版登录流程和 MC 性能"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复正版登录时弹出脚本错误提示的 Bug"))
+            FeatureCount += 17
+            BugCount += 19
+        End If
         If LastVersion < 324 Then 'Snapshot 2.7.3
             FeatureCount += 4
             BugCount += 3
         End If
         If LastVersion < 322 Then 'Snapshot 2.7.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 启动游戏前进行内存优化 设置"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 MC 性能"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复安装 OptiFine 有概率失败的 Bug"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复启动 Fabric 1.20.5+ 时无法正确选择 Java 的 Bug"))
             FeatureCount += 18
@@ -376,44 +382,46 @@ Public Class FormMain
             AaOpacity(Me, Setup.Get("UiLauncherTransparent") / 1000 + 0.4, 250, 100),
             AaDouble(Sub(i) TransformPos.Y += i, -TransformPos.Y, 600, 100, New AniEaseOutBack(AniEasePower.Weak)),
             AaDouble(Sub(i) TransformRotate.Angle += i, -TransformRotate.Angle, 500, 100, New AniEaseOutBack(AniEasePower.Weak)),
-            AaCode(Sub()
-                       PanBack.RenderTransform = Nothing
-                       IsWindowLoadFinished = True
-                       Log($"[System] DPI：{DPI}，系统版本：{OsVersion}，PCL 位置：{PathWithName}")
-                   End Sub, , True)
+            AaCode(
+            Sub()
+                PanBack.RenderTransform = Nothing
+                IsWindowLoadFinished = True
+                Log($"[System] DPI：{DPI}，系统版本：{OsVersion}，PCL 位置：{PathWithName}")
+            End Sub, , True)
         }, "Form Show")
         'Timer 启动
         AniStart()
         TimerMainStart()
         '加载池
-        RunInNewThread(Sub()
-                           'EULA 提示
-                           If Not Setup.Get("SystemEula") Then
-                               Select Case MyMsgBox("在使用 PCL 前，请同意 PCL 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明",
+        RunInNewThread(
+        Sub()
+            'EULA 提示
+            If Not Setup.Get("SystemEula") Then
+                Select Case MyMsgBox("在使用 PCL 前，请同意 PCL 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明",
                                    Button3Action:=Sub() OpenWebsite("https://shimo.im/docs/rGrd8pY8xWkt6ryW"))
-                                   Case 1
-                                       Setup.Set("SystemEula", True)
-                                   Case 2
-                                       EndProgram(False)
-                               End Select
-                           End If
-                           '启动加载器池
-                           Try
-                               JavaListInit() '延后到同意协议后再执行，避免在初次启动时进行进程操作
-                               Thread.Sleep(200)
-                               DlClientListMojangLoader.Start(1)
-                               RunCountSub()
-                               ServerLoader.Start(1)
-                           Catch ex As Exception
-                               Log(ex, "初始化加载池运行失败", LogLevel.Feedback)
-                           End Try
-                           '清理自动更新文件
-                           Try
-                               If File.Exists(Path & "PCL\Plain Craft Launcher 2.exe") Then File.Delete(Path & "PCL\Plain Craft Launcher 2.exe")
-                           Catch ex As Exception
-                               Log(ex, "清理自动更新文件失败")
-                           End Try
-                       End Sub, "Start Loader", ThreadPriority.Lowest)
+                    Case 1
+                        Setup.Set("SystemEula", True)
+                    Case 2
+                        EndProgram(False)
+                End Select
+            End If
+            '启动加载器池
+            Try
+                JavaListInit() '延后到同意协议后再执行，避免在初次启动时进行进程操作
+                Thread.Sleep(200)
+                DlClientListMojangLoader.Start(1)
+                RunCountSub()
+                ServerLoader.Start(1)
+            Catch ex As Exception
+                Log(ex, "初始化加载池运行失败", LogLevel.Feedback)
+            End Try
+            '清理自动更新文件
+            Try
+                If File.Exists(Path & "PCL\Plain Craft Launcher 2.exe") Then File.Delete(Path & "PCL\Plain Craft Launcher 2.exe")
+            Catch ex As Exception
+                Log(ex, "清理自动更新文件失败")
+            End Try
+        End Sub, "Start Loader", ThreadPriority.Lowest)
 
         Log("[Start] 第三阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
     End Sub
@@ -521,12 +529,13 @@ Public Class FormMain
         If SendWarning AndAlso HasDownloadingTask() Then
             If MyMsgBox("还有下载任务尚未完成，是否确定退出？", "提示", "确定", "取消") = 1 Then
                 '强行结束下载任务
-                RunInNewThread(Sub()
-                                   Log("[System] 正在强行停止任务")
-                                   For Each Task As LoaderBase In LoaderTaskbar.ToArray
-                                       Task.Abort()
-                                   Next
-                               End Sub, "强行停止下载任务")
+                RunInNewThread(
+                Sub()
+                    Log("[System] 正在强行停止任务")
+                    For Each Task As LoaderBase In LoaderTaskbar.ToArray
+                        Task.Abort()
+                    Next
+                End Sub, "强行停止下载任务")
             Else
                 Exit Sub
             End If
@@ -542,17 +551,19 @@ Public Class FormMain
                     PanBack.RenderTransform = New TransformGroup() With {.Children = New TransformCollection({TransformRotate, TransformPos, TransformScale})}
                     AniStart({
                         AaOpacity(Me, -Opacity, 140, 40, New AniEaseOutFluent(AniEasePower.Weak)),
-                        AaDouble(Sub(i)
-                                     TransformScale.ScaleX += i
-                                     TransformScale.ScaleY += i
-                                 End Sub, 0.88 - TransformScale.ScaleX, 180),
+                        AaDouble(
+                        Sub(i)
+                            TransformScale.ScaleX += i
+                            TransformScale.ScaleY += i
+                        End Sub, 0.88 - TransformScale.ScaleX, 180),
                         AaDouble(Sub(i) TransformPos.Y += i, 20 - TransformPos.Y, 180, 0, New AniEaseOutFluent(AniEasePower.Weak)),
                         AaDouble(Sub(i) TransformRotate.Angle += i, 0.6 - TransformRotate.Angle, 180, 0, New AniEaseInoutFluent(AniEasePower.Weak)),
-                        AaCode(Sub()
-                                   IsHitTestVisible = False
-                                   Top = -10000
-                                   ShowInTaskbar = False
-                               End Sub, 210),
+                        AaCode(
+                        Sub()
+                            IsHitTestVisible = False
+                            Top = -10000
+                            ShowInTaskbar = False
+                        End Sub, 210),
                         AaCode(AddressOf EndProgramForce, 230)
                     }, "Form Close")
                 Else
@@ -800,14 +811,14 @@ Public Class FormMain
             If FilePathList.Count > 1 Then
                 '必须要求全部为 jar 文件
                 For Each File In FilePathList
-                    If Not {"jar", "litemod", "disabled", "old"}.Contains(File.Split(".").Last.ToLower) Then
+                    If Not {"jar", "litemod", "disabled", "old"}.Contains(File.After(".").ToLower) Then
                         Hint("一次请只拖入一个文件！", HintType.Critical)
                         Exit Sub
                     End If
                 Next
             End If
             '自定义主页
-            Dim Extension As String = FilePath.Split(".").Last.ToLower
+            Dim Extension As String = FilePath.After(".").ToLower
             If Extension = "xaml" Then
                 Log("[System] 文件后缀为 XAML，作为自定义主页加载")
                 If File.Exists(Path & "PCL\Custom.xaml") Then

@@ -384,24 +384,27 @@ Public Module ModDownloadLib
     End Sub
     Private Sub McDownloadOptiFineInstall(BaseMcFolderHome As String, Target As String, Task As LoaderTask(Of List(Of NetFile), Boolean), UseJavaWrapper As Boolean)
         '选择 Java
-        Dim Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
-        If Java Is Nothing Then
-            If Not JavaDownloadConfirm("Java 8 或更高版本") Then Throw New Exception("由于未找到 Java，已取消安装。")
-            '开始自动下载
-            Dim JavaLoader = JavaFixLoaders(17)
-            Try
-                JavaLoader.Start(17, IsForceRestart:=True)
-                Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
-                    Thread.Sleep(10)
-                Loop
-            Finally
-                JavaLoader.Abort() '确保取消时中止 Java 下载
-            End Try
-            '检查下载结果
+        Dim Java As JavaEntry
+        SyncLock JavaLock
             Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
-            If Task.IsAborted Then Exit Sub
-            If Java Is Nothing Then Throw New Exception("由于未找到 Java，已取消安装。")
-        End If
+            If Java Is Nothing Then
+                If Not JavaDownloadConfirm("Java 8 或更高版本") Then Throw New Exception("由于未找到 Java，已取消安装。")
+                '开始自动下载
+                Dim JavaLoader = JavaFixLoaders(17)
+                Try
+                    JavaLoader.Start(17, IsForceRestart:=True)
+                    Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
+                        Thread.Sleep(10)
+                    Loop
+                Finally
+                    JavaLoader.Abort() '确保取消时中止 Java 下载
+                End Try
+                '检查下载结果
+                Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 0))
+                If Task.IsAborted Then Exit Sub
+                If Java Is Nothing Then Throw New Exception("由于未找到 Java，已取消安装。")
+            End If
+        End SyncLock
         '添加 Java Wrapper 作为主 Jar
         Dim Arguments As String
         If UseJavaWrapper Then
@@ -1111,24 +1114,27 @@ Retry:
 
     Private Sub ForgeInjector(Target As String, Task As LoaderTask(Of Boolean, Boolean), McFolder As String, UseJavaWrapper As Boolean)
         '选择 Java
-        Dim Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 60))
-        If Java Is Nothing Then
-            If Not JavaDownloadConfirm("Java 8 或更高版本") Then Throw New Exception("由于未找到 Java，已取消安装。")
-            '开始自动下载
-            Dim JavaLoader = JavaFixLoaders(17)
-            Try
-                JavaLoader.Start(17, IsForceRestart:=True)
-                Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
-                    Thread.Sleep(10)
-                Loop
-            Finally
-                JavaLoader.Abort() '确保取消时中止 Java 下载
-            End Try
-            '检查下载结果
+        Dim Java As JavaEntry
+        SyncLock JavaLock
             Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 60))
-            If Task.IsAborted Then Exit Sub
-            If Java Is Nothing Then Throw New Exception("由于未找到 Java，已取消安装。")
-        End If
+            If Java Is Nothing Then
+                If Not JavaDownloadConfirm("Java 8 或更高版本") Then Throw New Exception("由于未找到 Java，已取消安装。")
+                '开始自动下载
+                Dim JavaLoader = JavaFixLoaders(17)
+                Try
+                    JavaLoader.Start(17, IsForceRestart:=True)
+                    Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
+                        Thread.Sleep(10)
+                    Loop
+                Finally
+                    JavaLoader.Abort() '确保取消时中止 Java 下载
+                End Try
+                '检查下载结果
+                Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 60))
+                If Task.IsAborted Then Exit Sub
+                If Java Is Nothing Then Throw New Exception("由于未找到 Java，已取消安装。")
+            End If
+        End SyncLock
         '添加 Java Wrapper 作为主 Jar
         Dim Arguments As String
         If UseJavaWrapper Then
@@ -1275,8 +1281,8 @@ Retry:
         McFolder = If(McFolder, PathMcFolder)
         If Version.StartsWithF("1.") AndAlso Version.Contains("-") Then
             '类似 1.19.3-41.2.8 格式，优先使用 Version 中要求的版本而非 Inherit（例如 1.19.3 却使用了 1.19 的 Forge）
-            Inherit = Version.Split("-").First
-            Version = Version.Split("-").Last
+            Inherit = Version.Before("-")
+            Version = Version.After("-")
         End If
         Dim IsCustomFolder As Boolean = McFolder <> PathMcFolder
         Dim Id As String = Inherit & "-forge-" & Version
@@ -1322,7 +1328,7 @@ Retry:
         Loaders.Add(New LoaderDownload("下载 Mod 加载器主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
 
         '安装（仅在新版安装时需要原版 Jar）
-        If Version.Split(".")(0) >= 20 Then
+        If Version.Before(".") >= 20 Then
             Log("[Download] 检测为新版 Forge：" & Version)
             Dim Libs As List(Of McLibToken) = Nothing
             Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Mod 加载器支持库文件",
@@ -1344,7 +1350,7 @@ Retry:
                         Task.Progress = 0.4
                         Dim RawJson As JObject = GetJson(NetGetCodeByDownload(DlSourceLauncherOrMetaGet(DlClientListGet(Inherit)), IsJson:=True))
                         '[net.minecraft:client:1.17.1-20210706.113038:mappings@txt] 或 @tsrg]
-                        Dim OriginalName As String = Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Split("@")(0)
+                        Dim OriginalName As String = Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Before("@")
                         Dim Address = McLibGet(OriginalName).Replace(".jar", "-mappings." & Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Split("@")(1))
                         Libs.Add(New McLibToken With {.IsJumpLoader = False, .IsNatives = False, .LocalPath = Address, .OriginalName = OriginalName,
                                                                                                             .Url = RawJson("downloads")("client_mappings")("url"), .Size = RawJson("downloads")("client_mappings")("size"), .SHA1 = RawJson("downloads")("client_mappings")("sha1")})
@@ -1788,7 +1794,7 @@ Retry:
     Public Function FabricApiDownloadListItem(Entry As CompFile, OnClick As MyListItem.ClickEventHandler) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Split("+").First.Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Before("+").Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
             .Logo = PathImage & "Blocks/Fabric.png"
         }
@@ -1978,7 +1984,7 @@ Retry:
         If Directory.Exists(TempMcFolder) Then DeleteDirectory(TempMcFolder)
         Dim OptiFineFolder As String = Nothing
         If Request.OptiFineVersion IsNot Nothing Then
-            If Request.OptiFineVersion.Contains("_HD_U_") Then Request.OptiFineVersion = "HD_U_" & Request.OptiFineVersion.Split("_HD_U_").Last '#735
+            If Request.OptiFineVersion.Contains("_HD_U_") Then Request.OptiFineVersion = "HD_U_" & Request.OptiFineVersion.After("_HD_U_") '#735
             Request.OptiFineEntry = New DlOptiFineListEntry With {
                 .NameDisplay = Request.MinecraftName & " " & Request.OptiFineVersion.Replace("HD_U_", "").Replace("_", "").Replace("pre", " pre"),
                 .Inherit = Request.MinecraftName,
@@ -2062,7 +2068,7 @@ Retry:
             End Sub) With {.ProgressWeight = 2, .Block = True})
         '补全文件
         If Not DontFixLibraries AndAlso
-        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.Split(".")(0) >= 20) OrElse Request.FabricVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
+        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.Before(".") >= 20) OrElse Request.FabricVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
             Dim LoadersLib As New List(Of LoaderBase)
             LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(OutputFolder))) With {.ProgressWeight = 1, .Show = False})
             LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})

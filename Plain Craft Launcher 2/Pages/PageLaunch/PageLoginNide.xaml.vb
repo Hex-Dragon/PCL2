@@ -17,8 +17,8 @@
                 ComboName.ItemsSource = Nothing
             Else
                 ComboName.ItemsSource = Setup.Get("LoginNideEmail").ToString.Split("¨")
-                ComboName.Text = Setup.Get("LoginNideEmail").ToString.Split("¨")(0)
-                If Setup.Get("LoginRemember") Then TextPass.Password = Setup.Get("LoginNidePass").ToString.Split("¨")(0).Trim
+                ComboName.Text = Setup.Get("LoginNideEmail").ToString.Before("¨")
+                If Setup.Get("LoginRemember") Then TextPass.Password = Setup.Get("LoginNidePass").ToString.Before("¨").Trim
             End If
         End If
         IsFirstLoad = False

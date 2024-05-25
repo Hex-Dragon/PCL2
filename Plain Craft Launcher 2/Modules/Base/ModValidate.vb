@@ -149,7 +149,7 @@ Public Class ValidateExcept
     End Sub
     Public Overrides Function Validate(Str As String) As String
         For Each Ch As String In Excepts
-            If Str.IndexOfF(Ch, StringComparison.OrdinalIgnoreCase) >= 0 Then
+            If Str.IndexOfF(Ch, True) >= 0 Then
                 If IsNothing(ErrorMessage) Then ErrorMessage = ""
                 Return ErrorMessage.Replace("%", Ch)
             End If

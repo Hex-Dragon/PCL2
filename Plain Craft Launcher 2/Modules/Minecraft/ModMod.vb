@@ -887,11 +887,11 @@ Finished:
                 ModList.Add(ModEntry)
                 '读取 Comp 缓存
                 If ModEntry.State = McMod.McModState.Unavaliable Then Continue For
-                Dim Hash = ModEntry.ModrinthHash
-                If Cache.ContainsKey(Hash) Then
-                    ModEntry.FromJson(Cache(Hash))
+                Dim CacheKey = ModEntry.ModrinthHash & PageVersionLeft.Version.Version.McName
+                If Cache.ContainsKey(CacheKey) Then
+                    ModEntry.FromJson(Cache(CacheKey))
                     '如果缓存中的信息在 6 小时以内更新过，则无需重新获取
-                    If ModEntry.CompLoaded AndAlso Date.Now - Cache(Hash)("Comp")("CacheTime").ToObject(Of Date) < New TimeSpan(6, 0, 0) Then Continue For
+                    If ModEntry.CompLoaded AndAlso Date.Now - Cache(CacheKey)("Comp")("CacheTime").ToObject(Of Date) < New TimeSpan(6, 0, 0) Then Continue For
                 End If
                 ModUpdateList.Add(ModEntry)
             Next
@@ -925,7 +925,7 @@ Finished:
     End Sub
 
     '联网加载 Mod 详情
-    Private Const LocalModCacheVersion As Integer = 3
+    Private Const LocalModCacheVersion As Integer = 4
     Public McModDetailLoader As New LoaderTask(Of KeyValuePair(Of List(Of McMod), JObject), Integer)("Mod List Detail Loader", AddressOf McModDetailLoad)
     Private Sub McModDetailLoad(Loader As LoaderTask(Of KeyValuePair(Of List(Of McMod), JObject), Integer))
         Dim Mods As List(Of McMod) = Loader.Input.Key
@@ -937,7 +937,7 @@ Finished:
         If TargetMcVersion.HasFabric Then ModLoaders.Add(CompModLoaderType.Fabric)
         If TargetMcVersion.HasLiteLoader Then ModLoaders.Add(CompModLoaderType.LiteLoader)
         If Not ModLoaders.Any() Then ModLoaders.AddRange({CompModLoaderType.Forge, CompModLoaderType.Fabric, CompModLoaderType.LiteLoader, CompModLoaderType.Quilt})
-        Dim McVersions As New List(Of String) From {TargetMcVersion.McName}
+        Dim McVersion = TargetMcVersion.McName
         '暂不向下扩展检查的 MC 小版本
         '例如：Mod 在更新 1.16.5 后，对早期的 1.16.2 版本发布了修补补丁，这会导致 PCL 将 1.16.5 版本的 Mod 降级到 1.16.2
         'If TargetMcVersion.McCodeMain > 0 AndAlso TargetMcVersion.McCodeMain < 99 Then
@@ -948,7 +948,7 @@ Finished:
         'End If
         'McVersions = McVersions.Distinct().ToList()
         '开始网络获取
-        Log($"[Mod] 目标加载器：{ModLoaders.Join("/")}，版本：{McVersions.Join("/")}")
+        Log($"[Mod] 目标加载器：{ModLoaders.Join("/")}，版本：{McVersion}")
         Dim EndedThreadCount As Integer = 0, SucceedThreadCount As Integer = 0
         Dim MainThread As Thread = Thread.CurrentThread
         '从 Modrinth 获取信息
@@ -991,8 +991,8 @@ Finished:
                 Log($"[Mod] 已从 Modrinth 获取本地 Mod 信息，继续获取更新信息")
                 '步骤 4：获取更新信息
                 Dim ModrinthUpdate = CType(GetJson(NetRequestRetry("https://api.modrinth.com/v2/version_files/update", "POST",
-                    $"{{""hashes"": [""{ModrinthHashes.Join(""",""")}""], ""algorithm"": ""sha1"", 
-                    ""loaders"": [""{ModLoaders.Join(""",""").ToLower}""],""game_versions"": [""{McVersions.Join(""",""")}""]}}", "application/json")), JObject)
+                    $"{{""hashes"": [""{ModrinthMapping.SelectMany(Function(l) l.Value.Select(Function(m) m.ModrinthHash)).Join(""",""")}""], ""algorithm"": ""sha1"", 
+                    ""loaders"": [""{ModLoaders.Join(""",""").ToLower}""],""game_versions"": [""{McVersion}""]}}", "application/json")), JObject)
                 For Each Entry In Mods
                     If Not ModrinthUpdate.ContainsKey(Entry.ModrinthHash) OrElse Entry.CompFile Is Nothing Then Continue For
                     Dim UpdateFile As New CompFile(ModrinthUpdate(Entry.ModrinthHash), CompType.Mod)
@@ -1001,11 +1001,11 @@ Finished:
                     If Entry.CompFile.ReleaseDate >= UpdateFile.ReleaseDate OrElse Entry.CompFile.Hash = UpdateFile.Hash Then Continue For
                     '设置更新日志与更新文件
                     If Entry.UpdateFile IsNot Nothing AndAlso UpdateFile.Hash = Entry.UpdateFile.Hash Then '合并
-                        Entry.ChangelogUrls.Add($"https://modrinth.com/mod/{ModrinthUpdate(Entry.ModrinthHash)("project_id")}/changelog?{McVersions.Select(Function(v) $"g={v}&").Join("")}")
+                        Entry.ChangelogUrls.Add($"https://modrinth.com/mod/{ModrinthUpdate(Entry.ModrinthHash)("project_id")}/changelog?g={McVersion}")
                         UpdateFile.DownloadUrls.AddRange(Entry.UpdateFile.DownloadUrls) '合并下载源
                         Entry.UpdateFile = UpdateFile '优先使用 Modrinth 的文件
                     ElseIf Entry.UpdateFile Is Nothing OrElse UpdateFile.ReleaseDate >= Entry.UpdateFile.ReleaseDate Then '替换
-                        Entry.ChangelogUrls = New List(Of String) From {$"https://modrinth.com/mod/{ModrinthUpdate(Entry.ModrinthHash)("project_id")}/changelog?{McVersions.Select(Function(v) $"g={v}&").Join("")}"}
+                        Entry.ChangelogUrls = New List(Of String) From {$"https://modrinth.com/mod/{ModrinthUpdate(Entry.ModrinthHash)("project_id")}/changelog?g={McVersion}"}
                         Entry.UpdateFile = UpdateFile
                     End If
                 Next
@@ -1073,7 +1073,7 @@ Finished:
                         For Each IndexEntry In ProjectJson("latestFilesIndexes")
                             If ModLoaders.Single <> IndexEntry("modLoader")?.ToObject(Of Integer) Then Continue For 'ModLoader 唯一且匹配
                             Dim IndexVersion As String = IndexEntry("gameVersion")
-                            If Not McVersions.Contains(IndexVersion) Then Continue For 'MC 版本匹配
+                            If McVersion <> IndexVersion Then Continue For 'MC 版本匹配
                             '由于 latestFilesIndexes 是按时间从新到老排序的，所以只需取第一个；如果需要检查多个 releaseType 下的文件，将 > -1 改为 = 1，但这应当并不会获取到更新的文件
                             If NewestVersion IsNot Nothing AndAlso VersionSortInteger(NewestVersion, IndexVersion) > -1 Then Continue For '只保留最新 MC 版本
                             If NewestVersion <> IndexVersion Then
@@ -1136,7 +1136,7 @@ Finished:
         If Not Mods.Any() Then Exit Sub
         For Each Entry In Mods 'TODO: Bookshelf 的 Logo 会在两个网站间横跳
             Entry.CompLoaded = SucceedThreadCount = 2
-            Cache(Entry.ModrinthHash) = Entry.ToJson()
+            Cache(Entry.ModrinthHash & McVersion) = Entry.ToJson()
         Next
         WriteFile(PathTemp & "Cache\LocalMod.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))
     End Sub

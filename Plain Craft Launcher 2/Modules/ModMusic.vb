@@ -1,6 +1,4 @@
-﻿Imports System.Security.Cryptography
-
-Public Module ModMusic
+﻿Public Module ModMusic
 
 #Region "播放列表"
 
@@ -199,13 +197,15 @@ Public Module ModMusic
     ''' </summary>
     Public Function MusicPause() As Boolean
         If MusicState = MusicStates.Play Then
-            RunInThread(Sub()
-                            MusicNAudio.Pause()
-                            MusicRefreshUI()
-                            Log("[Music] 已暂停播放")
-                        End Sub)
+            RunInThread(
+            Sub()
+                Log("[Music] 已暂停播放")
+                MusicNAudio?.Pause()
+                MusicRefreshUI()
+            End Sub)
             Return True
         Else
+            Log($"[Music] 无需暂停播放，当前状态为 {MusicState}")
             Return False
         End If
     End Function
@@ -214,13 +214,15 @@ Public Module ModMusic
     ''' </summary>
     Public Function MusicResume() As Boolean
         If MusicState = MusicStates.Play OrElse Not MusicAllList.Any() Then
+            Log($"[Music] 无需继续播放，当前状态为 {MusicState}")
             Return False
         Else
-            RunInThread(Sub()
-                            MusicNAudio.Play()
-                            MusicRefreshUI()
-                            Log("[Music] 已恢复播放")
-                        End Sub)
+            RunInThread(
+            Sub()
+                Log("[Music] 已恢复播放")
+                MusicNAudio?.Play()
+                MusicRefreshUI()
+            End Sub)
             Return True
         End If
     End Function

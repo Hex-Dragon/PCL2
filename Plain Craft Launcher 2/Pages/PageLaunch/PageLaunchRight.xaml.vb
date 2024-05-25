@@ -97,6 +97,10 @@ Download:
                         Log("[Page] 主页预设：每日整合包推荐")
                         Url = "https://pclsub.sodamc.com/"
                         GoTo Download
+                    Case 5
+                        Log("[Page] 主页预设：Minecraft 皮肤推荐")
+                        Url = "https://forgepixel.com/pcl_sub_file"
+                        GoTo Download
                 End Select
         End Select
         RunInUi(Sub() LoadContent(Content))
@@ -106,16 +110,17 @@ Download:
     '联网获取自定义主页文件
     Private OnlineLoader As New LoaderTask(Of String, Integer)("自定义主页获取", AddressOf OnlineLoaderSub) With {.ReloadTimeout = 10 * 60 * 1000}
     Private Sub OnlineLoaderSub(Task As LoaderTask(Of String, Integer))
+        Dim Address As String = Task.Input '#3721 中连续触发两次导致内容变化
         Try
             '获取版本校验地址
             Dim VersionAddress As String
-            If Task.Input.Contains(".xaml") Then
-                VersionAddress = Task.Input.Replace(".xaml", ".xaml.ini")
+            If Address.Contains(".xaml") Then
+                VersionAddress = Address.Replace(".xaml", ".xaml.ini")
             Else
-                VersionAddress = Task.Input.Split("?").First
+                VersionAddress = Address.Before("?")
                 If Not VersionAddress.EndsWith("/") Then VersionAddress += "/"
                 VersionAddress += "version"
-                If Task.Input.Contains("?") Then VersionAddress += Task.Input.Split("?").Last
+                If Address.Contains("?") Then VersionAddress += Address.After("?")
             End If
             '校验版本
             Dim Version As String = ""
@@ -136,9 +141,9 @@ Download:
             End Try
             '实际下载
             If NeedDownload Then
-                Dim FileContent As String = NetGetCodeByRequestRetry(Task.Input)
-                Log($"[Page] 已联网下载自定义主页，内容长度：{FileContent.Length}，来源：{Task.Input}")
-                Setup.Set("CacheSavedPageUrl", Task.Input)
+                Dim FileContent As String = NetGetCodeByRequestRetry(Address)
+                Log($"[Page] 已联网下载自定义主页，内容长度：{FileContent.Length}，来源：{Address}")
+                Setup.Set("CacheSavedPageUrl", Address)
                 Setup.Set("CacheSavedPageVersion", Version)
                 WriteFile(PathTemp & "Cache\Custom.xaml", FileContent)
             End If
@@ -146,11 +151,11 @@ Download:
             Refresh()
         Catch ex As Exception
             If Setup.Get("CacheSavedPageVersion") = "" Then
-                Log(ex, $"联网下载自定义主页失败（{Task.Input}）", LogLevel.Msgbox)
+                Log(ex, $"联网下载自定义主页失败（{Address}）", LogLevel.Msgbox)
             Else
-                Log(ex, $"联网下载自定义主页失败（{Task.Input}）")
+                Log(ex, $"联网下载自定义主页失败（{Address}）")
             End If
-            Task.Input = ""
+            Address = ""
         End Try
     End Sub
 
@@ -208,6 +213,7 @@ Download:
                     GoTo Refresh '防止 SyncLock 死锁
                 End If
             End Try
+            Log($"[Page] 实例化：加载自定义主页 UI 完成")
         End SyncLock
         Return
 Refresh:

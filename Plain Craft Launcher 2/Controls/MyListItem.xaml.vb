@@ -656,9 +656,9 @@
             SetResourceReference(ForegroundProperty, "ColorBrush1")
         End If
         ColumnPaddingRight.Width = New GridLength(MinPaddingRight)
-        If EventType = "打开帮助" Then
+        If EventType = "打开帮助" AndAlso Not (Title <> "" AndAlso Info <> "") Then '#3266
             Try
-                Dim NewElem = New HelpEntry(GetEventAbsoluteUrls(EventData, EventType)(0)).SetToListItem(Me)
+                Dim Unused = New HelpEntry(GetEventAbsoluteUrls(EventData, EventType)(0)).SetToListItem(Me)
             Catch ex As Exception
                 Log(ex, "设置帮助 MyListItem 失败", LogLevel.Msgbox)
             End Try

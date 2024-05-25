@@ -13,8 +13,26 @@
             MainBorder.Child = value
         End Set
     End Property
-    Public MainTextBlock As TextBlock
-    Public MainSwap As Shapes.Path
+    Private _MainTextBlock As TextBlock
+    Public Property MainTextBlock As TextBlock
+        Get
+            Init() '当父级触发 Loaded 时，本卡片可能尚未触发 Loaded（该事件从父级向子级调用），因此这会是 null。手动触发以确保控件已加载。
+            Return _MainTextBlock
+        End Get
+        Set(value As TextBlock)
+            _MainTextBlock = value
+        End Set
+    End Property
+    Private _MainSwap As Shapes.Path
+    Public Property MainSwap As Shapes.Path
+        Get
+            Init()
+            Return _MainSwap
+        End Get
+        Set(value As Shapes.Path)
+            _MainSwap = value
+        End Set
+    End Property
 
     '属性
     Public Uuid As Integer = GetUuid()
@@ -24,7 +42,7 @@
         End Get
         Set(value As String)
             SetValue(TitleProperty, value)
-            If MainTextBlock IsNot Nothing Then MainTextBlock.Text = value
+            If _MainTextBlock IsNot Nothing Then MainTextBlock.Text = value
         End Set
     End Property
     Public Shared ReadOnly TitleProperty As DependencyProperty = DependencyProperty.Register("Title", GetType(String), GetType(MyCard), New PropertyMetadata(""))
@@ -40,10 +58,11 @@
         Children.Add(MainGrid)
     End Sub
     Private IsLoad As Boolean = False
-    Private Sub MyCard_Loaded() Handles Me.Loaded
+    Private Sub Init() Handles Me.Loaded
         If IsLoad Then Exit Sub
+        IsLoad = True
         '初次加载限定
-        If Not Title = "" AndAlso IsNothing(MainTextBlock) Then
+        If Title <> "" AndAlso MainTextBlock Is Nothing Then
             MainTextBlock = New TextBlock With {.HorizontalAlignment = HorizontalAlignment.Left, .VerticalAlignment = VerticalAlignment.Top, .Margin = New Thickness(15, 12, 0, 0), .FontWeight = FontWeights.Bold, .FontSize = 13, .IsHitTestVisible = False}
             MainTextBlock.SetResourceReference(TextBlock.ForegroundProperty, "ColorBrush1")
             MainTextBlock.SetBinding(TextBlock.TextProperty, New Binding("Title") With {.Source = Me, .Mode = BindingMode.OneWay})
@@ -55,7 +74,6 @@
             MainSwap.SetResourceReference(Shapes.Path.FillProperty, "ColorBrush1")
             MainGrid.Children.Add(MainSwap)
         End If
-        IsLoad = True
         '改变默认的折叠
         If IsSwaped AndAlso SwapControl IsNot Nothing Then
             MainSwap.RenderTransform = New RotateTransform(If(SwapLogoRight, 270, 0))
