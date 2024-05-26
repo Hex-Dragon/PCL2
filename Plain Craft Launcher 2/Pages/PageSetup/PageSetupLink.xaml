@@ -28,7 +28,6 @@
                                 <local:ValidateNullable />
                                 <local:ValidateNullOrWhiteSpace />
                                 <local:ValidateLength Max="20" />
-                                <local:ValidateFilter />
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
                     </Grid>

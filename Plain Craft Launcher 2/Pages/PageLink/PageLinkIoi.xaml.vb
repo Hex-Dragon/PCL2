@@ -149,9 +149,6 @@ Public Class PageLinkIoi
     ''' 检查某个玩家名是否合法。
     ''' </summary>
     Private Shared Function IsPlayerNameValid(Name As String) As Boolean
-        For Each ValidateRule As Validate In {New ValidateNullOrWhiteSpace, New ValidateLength(0, 20), New ValidateFilter}
-            If Not String.IsNullOrEmpty(ValidateRule.Validate(Name)) Then Return False
-        Next
         Return True
     End Function
 

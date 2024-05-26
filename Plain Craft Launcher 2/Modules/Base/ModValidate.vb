@@ -355,26 +355,3 @@ Fin:
         Return ""
     End Function
 End Class
-
-''' <summary>
-''' 敏感词过滤。
-''' </summary>
-Public Class ValidateFilter
-    Inherits Validate
-    Private Shared Excepts As String() = SecretDecrypt(SecretSensitiveWordsRaw).Split("|")
-    Public Sub New()
-    End Sub '用于 XAML 初始化
-    Public Overrides Function Validate(Str As String) As String
-        '提取无间隔符的字符串
-        Dim RealStr As String = ""
-        For Each St In If(Str, "").ToLower
-            If String.IsNullOrWhiteSpace(St.ToString) OrElse ("!@#$%^&*()_+-={}[]|\;':"",./<>? ~　·！￥…（）—，。、《》？‘；：【】｛｝" & vbLQ & vbRQ).ToCharArray.Contains(St) Then Continue For
-            RealStr += St
-        Next
-        '检查
-        For Each Except In Excepts
-            If RealStr.Contains(Except) Then Return "存在敏感内容！"
-        Next
-        Return ""
-    End Function
-End Class

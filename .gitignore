@@ -343,11 +343,5 @@ healthchecksdb
 
 # ------------------------------------------------------------
 
-# 包含主题解锁、加密解密等部分的代码
-ModSecret.vb
-ModSetup.vb
-PageOtherAbout.*
-PageOtherTest.*
-PageSetupUI.*
-# 开发者工具
+MaskFiles/
 ModDevelop.vb

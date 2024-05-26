@@ -156,7 +156,7 @@
         PageOtherAbout.CopyUniqueAddress()
     End Sub
     Private Sub BtnSystemUnlock_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemUnlock.Click
-        PageOtherAbout.DonateCodeInput()
+        DonateCodeInput()
     End Sub
 
     '调试模式

@@ -12,7 +12,7 @@ Public Class Application
         Try
             ModDevelop.Start()
         Catch ex As Exception
-            Log(ex, "开发者模式测试出错", LogLevel.Feedback)
+            Log(ex, "开发者模式测试出错", LogLevel.Msgbox)
         End Try
     End Sub
 #End If

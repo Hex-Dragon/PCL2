@@ -595,7 +595,7 @@ Public Module ModBase
         Try
             Dim parentKey As Microsoft.Win32.RegistryKey, softKey As Microsoft.Win32.RegistryKey
             parentKey = My.Computer.Registry.CurrentUser
-            softKey = parentKey.OpenSubKey("Software\PCL", True)
+            softKey = parentKey.OpenSubKey("Software\" & RegFolder, True)
             If softKey Is Nothing Then
                 ReadReg = DefaultValue '不存在则返回默认值
             Else
@@ -616,8 +616,8 @@ Public Module ModBase
         Try
             Dim parentKey As Microsoft.Win32.RegistryKey, softKey As Microsoft.Win32.RegistryKey
             parentKey = My.Computer.Registry.CurrentUser
-            softKey = parentKey.OpenSubKey("Software\PCL", True)
-            If softKey Is Nothing Then softKey = parentKey.CreateSubKey("Software\PCL") '如果不存在就创建  
+            softKey = parentKey.OpenSubKey("Software\" & RegFolder, True)
+            If softKey Is Nothing Then softKey = parentKey.CreateSubKey("Software\" & RegFolder) '如果不存在就创建  
             softKey.SetValue(Key, Value)
         Catch ex As Exception
             Log(ex, "写入注册表出错：" & Key, If(ShowException, LogLevel.Hint, LogLevel.Developer))
