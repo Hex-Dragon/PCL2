@@ -35,7 +35,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <DefineDebug>true</DefineDebug>
+    <DefineDebug>false</DefineDebug>
     <DefineTrace>false</DefineTrace>
     <IncrementalBuild>true</IncrementalBuild>
     <OutputPath>D:\Minecraft\程序\</OutputPath>
@@ -185,10 +185,9 @@
     <Compile Include="Controls\MyIconTextButton.xaml.vb">
       <DependentUpon>MyIconTextButton.xaml</DependentUpon>
     </Compile>
-    <None Include="MaskFiles\Plain Craft Launcher 2\Pages\PageOther\PageOtherTest.xaml.vb">
-      <DependentUpon>PageOtherTest.xaml</DependentUpon>
-    </None>
-    <None Include="MaskFiles\Plain Craft Launcher 2\Modules\ModSecret.vb" />
+
+
+
     <Compile Include="Modules\Minecraft\ModComp.vb" />
     <Compile Include="Modules\Minecraft\ModJava.vb" />
     <Compile Include="Modules\Minecraft\ModMod.vb" />
@@ -470,10 +469,7 @@
       <DependentUpon>FormMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <None Include="MaskFiles\Plain Craft Launcher 2\Pages\PageOther\PageOtherTest.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </None>
+
     <Page Include="Modules\Minecraft\MyLocalModItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -925,7 +921,8 @@
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MaskFiles\Plain Craft Launcher 2.sln" />
+
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

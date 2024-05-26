@@ -26,7 +26,7 @@ Public Module ModBase
 #ElseIf BETA Then
     Public Const VersionBranchName As String = "Release"
     Public Const VersionBranchCode As String = "50"
-#ElseIf DEBUG Then
+#Else
     Public Const VersionBranchName As String = "Debug"
     Public Const VersionBranchCode As String = "100"
 #End If

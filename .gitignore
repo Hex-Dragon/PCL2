@@ -341,7 +341,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 
-# ------------------------------------------------------------
-
 MaskFiles/
-ModDevelop.vb
