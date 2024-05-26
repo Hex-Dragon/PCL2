@@ -336,7 +336,7 @@ Public Class FormMain
         Setup.Load("UiBackgroundBlur")
         Setup.Load("UiLogoType")
         Setup.Load("UiHiddenPageDownload")
-        BackgroundRefresh(False, True)
+        PageSetupUI.BackgroundRefresh(False, True)
         MusicRefreshPlay(False, True)
         '扩展按钮
         BtnExtraDownload.ShowCheck = AddressOf BtnExtraDownload_ShowCheck
