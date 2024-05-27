@@ -1,6 +1,8 @@
-﻿Public Class PageLaunchRight
+﻿Imports System.Threading.Tasks
+Imports System.Windows.Threading
+Public Class PageLaunchRight
 
-    Private Sub Init() Handles Me.Loaded
+    Private Async Sub Init() Handles Me.Loaded
         PanBack.ScrollToHome()
         PanScroll = PanBack '不知道为啥不能在 XAML 设置
         PanLog.Visibility = If(ModeDebug, Visibility.Visible, Visibility.Collapsed)
@@ -26,8 +28,8 @@
     ''' <summary>
     ''' 刷新自定义主页。
     ''' </summary>
-    Private Sub Refresh() Handles Me.Loaded
-        RunInNewThread(Sub()
+    Private Async Sub Refresh() Handles Me.Loaded
+        Await Task.Run(Sub()
                            Try
                                SyncLock RefreshLock
                                    RefreshReal()
@@ -35,9 +37,10 @@
                            Catch ex As Exception
                                Log(ex, "加载 PCL 主页自定义信息失败", LogLevel.Msgbox)
                            End Try
-                       End Sub, $"刷新自定义主页 #{GetUuid()}")
+                       End Sub)
     End Sub
-    Private Sub RefreshReal()
+
+    Private Async Sub RefreshReal()
         Dim Content As String = ""
         Dim Url As String
         Select Case Setup.Get("UiCustomType")
@@ -55,14 +58,14 @@ Download:
                     Log("[Page] 主页自定义数据来源：联网缓存文件")
                     Content = ReadFile(PathTemp & "Cache\Custom.xaml")
                     '后台更新缓存
-                    OnlineLoader.Start(Url)
+                    Await OnlineLoader(Url)
                 Else
                     '缓存不可用
                     Log("[Page] 主页自定义数据来源：联网全新下载")
                     Hint("正在加载主页……")
                     RunInUiWait(Sub() LoadContent("")) '在加载结束前清空页面
                     Setup.Set("CacheSavedPageVersion", "")
-                    OnlineLoader.Start(Url) '下载完成后将会再次触发更新
+                    Await OnlineLoader(Url) '下载完成后将会再次触发更新
                     Exit Sub
                 End If
             Case 3
@@ -103,14 +106,12 @@ Download:
                         GoTo Download
                 End Select
         End Select
-        RunInUi(Sub() LoadContent(Content))
+        Await Dispatcher.InvokeAsync(Sub() LoadContent(Content))
     End Sub
     Private RefreshLock As New Object
 
     '联网获取自定义主页文件
-    Private OnlineLoader As New LoaderTask(Of String, Integer)("自定义主页获取", AddressOf OnlineLoaderSub) With {.ReloadTimeout = 10 * 60 * 1000}
-    Private Sub OnlineLoaderSub(Task As LoaderTask(Of String, Integer))
-        Dim Address As String = Task.Input '#3721 中连续触发两次导致内容变化
+    Private Async Function OnlineLoader(Address As String) As Task
         Try
             '获取版本校验地址
             Dim VersionAddress As String
@@ -126,7 +127,7 @@ Download:
             Dim Version As String = ""
             Dim NeedDownload As Boolean = True
             Try
-                Version = NetGetCodeByRequestOnce(VersionAddress, Timeout:=10000)
+                Version = Await NetGetCodeByRequestOnceAsync(VersionAddress, Timeout:=10000)
                 If Version.Length > 100 Then Throw New Exception($"获取的自定义主页版本过长（{Version.Length} 字符）")
                 Dim CurrentVersion As String = Setup.Get("CacheSavedPageVersion")
                 If Version <> "" AndAlso CurrentVersion <> "" AndAlso Version = CurrentVersion Then
@@ -141,14 +142,14 @@ Download:
             End Try
             '实际下载
             If NeedDownload Then
-                Dim FileContent As String = NetGetCodeByRequestRetry(Address)
+                Dim FileContent As String = Await NetGetCodeByRequestRetryAsync(Address)
                 Log($"[Page] 已联网下载自定义主页，内容长度：{FileContent.Length}，来源：{Address}")
                 Setup.Set("CacheSavedPageUrl", Address)
                 Setup.Set("CacheSavedPageVersion", Version)
                 WriteFile(PathTemp & "Cache\Custom.xaml", FileContent)
             End If
             '要求刷新
-            Refresh()
+            Await Dispatcher.InvokeAsync(Sub() Refresh())
         Catch ex As Exception
             If Setup.Get("CacheSavedPageVersion") = "" Then
                 Log(ex, $"联网下载自定义主页失败（{Address}）", LogLevel.Msgbox)
@@ -157,7 +158,7 @@ Download:
             End If
             Address = ""
         End Try
-    End Sub
+    End Function
 
     ''' <summary>
     ''' 立即强制刷新自定义主页。
@@ -180,7 +181,6 @@ Download:
     ''' </summary>
     Private Sub ClearCache()
         LoadedContentHash = -1
-        OnlineLoader.Input = ""
         Setup.Set("CacheSavedPageUrl", "")
         Setup.Set("CacheSavedPageVersion", "")
         Log("[Page] 已清空自定义主页缓存")
