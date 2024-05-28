@@ -71,7 +71,7 @@ jobs:
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 5
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
@@ -112,4 +112,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.configuration }}
-        path: ${{ env.Wap_Project_Directory }}\obj\${{ matrix.configuration }}\Plain Craft Launcher 2
+        path: ${{ env.Wap_Project_Directory }}\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
