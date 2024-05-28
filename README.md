@@ -1,5 +1,6 @@
 # Plain Craft Launcher 源代码库
 
+[![.NET Core Desktop](https://github.com/allMagicNB/PCL2/actions/workflows/dotnet-desktop.yml/badge.svg?branch=Auto-Build)](https://github.com/allMagicNB/PCL2/actions/workflows/dotnet-desktop.yml)
 [![Stars](https://img.shields.io/github/stars/Hex-Dragon/PCL2?style=flat&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHBhdGggZD0iTTggLjI1YS43NS43NSAwIDAgMSAuNjczLjQxOGwxLjg4MiAzLjgxNSA0LjIxLjYxMmEuNzUuNzUgMCAwIDEgLjQxNiAxLjI3OWwtMy4wNDYgMi45Ny43MTkgNC4xOTJhLjc1MS43NTEgMCAwIDEtMS4wODguNzkxTDggMTIuMzQ3bC0zLjc2NiAxLjk4YS43NS43NSAwIDAgMS0xLjA4OC0uNzlsLjcyLTQuMTk0TC44MTggNi4zNzRhLjc1Ljc1IDAgMCAxIC40MTYtMS4yOGw0LjIxLS42MTFMNy4zMjcuNjY4QS43NS43NSAwIDAgMSA4IC4yNVoiIGZpbGw9IiNlYWM1NGYiLz48L3N2Zz4=&logoSize=auto&label=Stars&labelColor=666666&color=eac54f)](https://github.com/Hex-Dragon/PCL2/)
 [![Issues](https://img.shields.io/github/issues/Hex-Dragon/PCL2?style=flat&label=Issues&labelColor=666666&color=1a7f37)](https://github.com/Hex-Dragon/PCL2/issues)
 [![爱发电](https://img.shields.io/badge/赞助-%E7%88%B1%E5%8F%91%E7%94%B5-946ce6?style=flat&labelColor=666666&logoSize=auto)](https://afdian.net/@LTCat)
