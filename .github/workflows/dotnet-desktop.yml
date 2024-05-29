@@ -2,9 +2,15 @@ name: .NET Core Desktop
 
 on:
   push:
-    branches: [ "Auto-Build" ]
+    paths:
+      - 'Plain Craft Launcher 2.sln'
+      - 'Plain Craft Launcher 2/**'
+      - '.github/workflows/**'
   pull_request:
-    branches: [ "main" ]
+    paths:
+      - 'Plain Craft Launcher 2.sln'
+      - 'Plain Craft Launcher 2/**'
+      - '.github/workflows/**'
 
 jobs:
 
