@@ -18,7 +18,7 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [Debug, Release, Snapshot, BETA, ReleaseUpdate]
+        configuration: [Beta, Debug, Release, ReleaseUpdate]
 
     runs-on: windows-latest
 
