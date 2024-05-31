@@ -1,4 +1,4 @@
-name: .NET Core Desktop
+name: Build PCL2
 
 on:
   push:
@@ -6,11 +6,7 @@ on:
       - 'Plain Craft Launcher 2.sln'
       - 'Plain Craft Launcher 2/**'
       - '.github/workflows/**'
-  pull_request:
-    paths:
-      - 'Plain Craft Launcher 2.sln'
-      - 'Plain Craft Launcher 2/**'
-      - '.github/workflows/**'
+  workflow_dispatch:
 
 jobs:
 
@@ -26,6 +22,7 @@ jobs:
       Solution_Name: Plain Craft Launcher 2.sln
       Wap_Project_Directory: Plain Craft Launcher 2
       Wap_Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
+      Configuration: ${{ matrix.configuration }}
 
     steps:
     - name: Checkout
@@ -40,8 +37,7 @@ jobs:
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
       run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
-      env:
-        Configuration: ${{ matrix.configuration }}
+
 
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: Create the app package
@@ -50,7 +46,6 @@ jobs:
         Appx_Bundle: Always
         Appx_Bundle_Platforms: x86|x64|ARM|ARM64
         Appx_Package_Build_Mode: StoreUpload
-        Configuration: ${{ matrix.configuration }}
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
