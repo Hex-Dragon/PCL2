@@ -22,7 +22,7 @@ jobs:
       Solution_Name: Plain Craft Launcher 2.sln
       Wap_Project_Directory: Plain Craft Launcher 2
       Wap_Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
-      # Configuration: ${{ matrix.configuration }}
+      Configuration: ${{ matrix.configuration }}
 
     steps:
     - name: 签出仓库
@@ -41,7 +41,7 @@ jobs:
 
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: 编译 PCL
-      run: msbuild $env:Wap_Project_Path /p:Configuration=${{ matrix:configuration }} /t:Rebuild
+      run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /t:Rebuild
       # /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle
       # env:
       #   Appx_Bundle: Always
@@ -52,5 +52,5 @@ jobs:
     - name: 上传编译产物
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.configuration }}
+        name: ${{ env.Configuration }}
         path: ${{ env.Wap_Project_Directory }}\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
