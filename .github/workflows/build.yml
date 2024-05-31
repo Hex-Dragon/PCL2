@@ -25,7 +25,7 @@ jobs:
       # Configuration: ${{ matrix.configuration }}
 
     steps:
-    - name: Checkout
+    - name: 签出仓库
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
@@ -41,7 +41,7 @@ jobs:
 
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: 编译 PCL
-      run: msbuild $env:Wap_Project_Path /p:Configuration=$matrix:configuration 
+      run: msbuild $env:Wap_Project_Path /p:Configuration=${{ matrix:configuration }} /t:Rebuild
       # /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle
       # env:
       #   Appx_Bundle: Always
