@@ -266,7 +266,7 @@
         Public Output As OutputType = Nothing
 
         '获取输入
-        Public Function StartGetInput(Optional Input As InputType = Nothing, Optional InputDelegate As Func(Of Object) = Nothing) As InputType
+        Public Function StartGetInput(Optional Input As InputType = Nothing, Optional InputDelegate As Func(Of Object) = Nothing) As InputType 'InputDelegate 参数存在匿名调用
             If InputDelegate Is Nothing Then InputDelegate = Me.InputDelegate
             Dim NewInput As InputType = Nothing '若 InputType 不能为 Nothing，则会导致 Input Is Nothing 永远失败，因此需要额外判断
             If (Input Is Nothing OrElse (NewInput IsNot Nothing AndAlso Input.Equals(NewInput))) AndAlso InputDelegate IsNot Nothing Then
@@ -571,7 +571,7 @@ Restart:
     Public LoaderTaskbarProgress As Double = 0 '平滑后的进度
     Private LoaderTaskbarProgressLast As Shell.TaskbarItemProgressState = Shell.TaskbarItemProgressState.None
 
-    Public Sub LoaderTaskbarAdd(Loader As LoaderBase)
+    Public Sub LoaderTaskbarAdd(Of T)(Loader As LoaderCombo(Of T))
         If FrmSpeedLeft IsNot Nothing Then FrmSpeedLeft.TaskRemove(Loader)
         SyncLock LoaderTaskbarLock
             LoaderTaskbar.Add(Loader)
@@ -587,11 +587,11 @@ Restart:
                 '外显任务是否已经全部完成
                 Dim IsAllDownloadTaskCompleted As Boolean = True
                 For Each Loader In LoaderTaskbar
-                    If Loader.Show AndAlso Loader.State = LoadState.Loading Then IsAllDownloadTaskCompleted = False
+                    If Loader.State = LoadState.Loading Then IsAllDownloadTaskCompleted = False
                 Next
                 '若单个任务已中止或全部任务已完成，则刷新并移除
                 For Each Task In LoaderTaskbar.ToList()
-                    If (IsAllDownloadTaskCompleted OrElse Task.State = LoadState.Aborted OrElse Task.State = LoadState.Waiting) AndAlso Task.Show Then
+                    If IsAllDownloadTaskCompleted OrElse Task.State = LoadState.Aborted OrElse Task.State = LoadState.Waiting Then
                         If FrmSpeedLeft IsNot Nothing Then FrmSpeedLeft.TaskRefresh(Task)
                         LoaderTaskbar.Remove(Task)
                         Log($"[Taskbar] {Task.Name} 已移出任务列表")
@@ -628,7 +628,6 @@ Restart:
             Dim Total As Double = 0, Count As Integer = 0
             SyncLock LoaderTaskbarLock
                 For Each Task In LoaderTaskbar.ToList
-                    If Not Task.Show Then Continue For
                     Total += Task.Progress
                     Count += 1 '避免多线程影响导致计数出错
                 Next

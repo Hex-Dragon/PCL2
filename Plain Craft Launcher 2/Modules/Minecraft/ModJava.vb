@@ -1,5 +1,5 @@
 ﻿Public Module ModJava
-    Public JavaListCacheVersion As Integer = 5
+    Public JavaListCacheVersion As Integer = 6
 
     ''' <summary>
     ''' 目前所有可用的 Java。
@@ -79,7 +79,7 @@
         Public Overrides Function ToString() As String
             Dim VersionString = Version.ToString
             If VersionString.StartsWithF("1.") Then VersionString = Mid(VersionString, 3)
-            Return If(IsJre, "JRE ", "JDK ") & VersionCode & " (" & VersionString & ")，" & If(Is64Bit, "64", "32") & " 位" & If(IsUserImport, "，手动导入", "") & "：" & PathFolder
+            Return If(IsJre, "JRE ", "JDK ") & VersionCode & " (" & VersionString & ")" & If(Is64Bit, "", "，32 位") & If(IsUserImport, "，手动导入", "") & "：" & PathFolder
         End Function
 
         '构造
@@ -131,7 +131,9 @@
                     Version = New Version(1, Version.Major, Version.Build, Version.Revision)
                 End If
                 Is64Bit = Output.Contains("64-bit")
-                If Version.Minor <= 4 OrElse Version.Minor >= 25 Then Throw New Exception("分析详细信息失败，获取的版本为 " & Version.ToString)
+                If Version.Minor <= 4 OrElse Version.Minor >= 25 Then Throw New ApplicationException("分析详细信息失败，获取的版本为 " & Version.ToString)
+                '基于 #3649，在 64 位系统上禁用 32 位 Java
+                If Not Is64Bit AndAlso Not Is32BitSystem Then Throw New Exception("该 Java 为 32 位版本，请安装 64 位的 Java")
                 '基于 #2249 发现 JRE 17 似乎也导致了 Forge 安装失败，干脆禁用更多版本的 JRE
                 If IsJre AndAlso VersionCode >= 16 Then Throw New Exception("由于高版本 JRE 对游戏的兼容性很差，因此不再允许使用。你可以使用对应版本的 JDK，而非 JRE！")
             Catch ex As ApplicationException
@@ -197,10 +199,15 @@
             Setup.Set("LaunchArgumentJavaAll", "[]")
         End Try
     End Sub
+
+    ''' <summary>
+    ''' 防止多个需要 Java 的部分同时要求下载 Java（#3797）。
+    ''' </summary>
+    Public JavaLock As New Object
     ''' <summary>
     ''' 根据要求返回最适合的 Java，若找不到则返回 Nothing。
     ''' 最小与最大版本在与输入相同时也会通过。
-    ''' 必须在工作线程调用。
+    ''' 必须在工作线程调用，且必须包括 SyncLock JavaLock。
     ''' </summary>
     Public Function JavaSelect(CancelException As String, Optional MinVersion As Version = Nothing, Optional MaxVersion As Version = Nothing,
                                Optional RelatedVersion As McVersion = Nothing) As JavaEntry
@@ -220,7 +227,7 @@
             Next
 
             '检查特定的 Java
-            If TargetJavaList.Count > 0 Then
+            If TargetJavaList.Any Then
                 TargetJavaList = JavaCheckList(TargetJavaList)
                 Log("[Java] 检查后找到 " & TargetJavaList.Count & " 个特定路径下的 Java：")
                 For Each Java In TargetJavaList
@@ -460,8 +467,8 @@ NoUserJava:
         If Not Left.IsJre AndAlso Right.IsJre Then Return False
         '4. Java 大版本
         If Left.VersionCode <> Right.VersionCode Then
-            '                             Java  7   8   9  10  11  12 13 14 15  16  17  18  19  20  21...
-            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 30, 10, 12, 15, 13, 9, 8, 7, 11, 31, 29, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}
+            '                             Java  7   8   9  10  11  12 13 14 15  16  17  18  19  20  21  22  23...
+            Dim Weight = {0, 1, 2, 3, 4, 5, 6, 14, 30, 10, 12, 15, 13, 9, 8, 7, 11, 31, 29, 16, 17, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18}
             Return Weight.ElementAtOrDefault(Left.VersionCode) >= Weight.ElementAtOrDefault(Right.VersionCode)
         End If
         '5. 最次级版本号更接近 51
@@ -534,7 +541,7 @@ NoUserJava:
                 Log("[Java] 位于 " & Folder & " 的 Java 不含符号链接")
                 JavaWithoutReparse.Add(Pair.Key, Pair.Value)
             Next
-            If JavaWithoutReparse.Count > 0 Then JavaPreList = JavaWithoutReparse
+            If JavaWithoutReparse.Any Then JavaPreList = JavaWithoutReparse
 
             '若不全为特殊引用，则清除特殊引用的地址
             Dim JavaWithoutInherit As New Dictionary(Of String, Boolean)
@@ -546,7 +553,7 @@ NoUserJava:
                     JavaWithoutInherit.Add(Pair.Key, Pair.Value)
                 End If
             Next
-            If JavaWithoutInherit.Count > 0 Then JavaPreList = JavaWithoutInherit
+            If JavaWithoutInherit.Any Then JavaPreList = JavaWithoutInherit
 
 #End Region
 
@@ -567,7 +574,7 @@ NoUserJava:
 
             '确保可用并获取详细信息，转入正式列表
             Dim NewJavaList As New List(Of JavaEntry)
-            For Each Entry In Distinct(JavaPreList.ToList, Function(a, b) a.Key.ToLower = b.Key.ToLower) '#794
+            For Each Entry In JavaPreList.Distinct(Function(a, b) a.Key.ToLower = b.Key.ToLower) '#794
                 NewJavaList.Add(New JavaEntry(Entry.Key, Entry.Value))
             Next
             NewJavaList = Sort(JavaCheckList(NewJavaList), AddressOf JavaSorter)
@@ -601,22 +608,23 @@ NoUserJava:
         '启动检查线程
         Dim CheckThreads As New List(Of Thread)
         For Each Entry In JavaEntries
-            Dim CheckThread As New Thread(Sub()
-                                              Try
-                                                  Entry.Check()
-                                                  If ModeDebug Then Log("[Java]  - " & Entry.ToString)
-                                                  SyncLock ListLock
-                                                      JavaCheckList.Add(Entry)
-                                                  End SyncLock
-                                              Catch ex As ThreadInterruptedException
-                                              Catch ex As Exception
-                                                  If Entry.IsUserImport Then
-                                                      Log(ex, "位于 " & Entry.PathFolder & " 的 Java 存在异常，将被自动移除", LogLevel.Hint)
-                                                  Else
-                                                      Log(ex, "位于 " & Entry.PathFolder & " 的 Java 存在异常")
-                                                  End If
-                                              End Try
-                                          End Sub)
+            Dim CheckThread As New Thread(
+            Sub()
+                Try
+                    Entry.Check()
+                    If ModeDebug Then Log("[Java]  - " & Entry.ToString)
+                    SyncLock ListLock
+                        JavaCheckList.Add(Entry)
+                    End SyncLock
+                Catch ex As ThreadInterruptedException
+                Catch ex As Exception
+                    If Entry.IsUserImport Then
+                        Log(ex, "位于 " & Entry.PathFolder & " 的 Java 存在异常，将被自动移除", LogLevel.Hint)
+                    Else
+                        Log(ex, "位于 " & Entry.PathFolder & " 的 Java 存在异常")
+                    End If
+                End Try
+            End Sub)
             CheckThreads.Add(CheckThread)
             CheckThread.Start()
         Next
@@ -719,12 +727,25 @@ Wait:
     ''' 获取下载 Java 8/14/17/21 的加载器。需要开启 IsForceRestart 以正常刷新 Java 列表。
     ''' </summary>
     Public Function JavaFixLoaders(Version As Integer) As LoaderCombo(Of Integer)
-        Return New LoaderCombo(Of Integer)($"下载 Java {Version}", {
+        Dim JavaDownloadLoader As New LoaderDownload("下载 Java 文件", New List(Of NetFile)) With {.ProgressWeight = 10}
+        Dim Loader = New LoaderCombo(Of Integer)($"下载 Java {Version}", {
             New LoaderTask(Of Integer, List(Of NetFile))("获取 Java 下载信息", AddressOf JavaFileList) With {.ProgressWeight = 2},
-            New LoaderDownload("下载 Java 文件", New List(Of NetFile)) With {.ProgressWeight = 10},
+            JavaDownloadLoader,
             JavaSearchLoader
         })
+        AddHandler JavaDownloadLoader.OnStateChangedThread,
+        Sub(Raw As LoaderBase, NewState As LoadState, OldState As LoadState)
+            If (NewState = LoadState.Failed OrElse NewState = LoadState.Aborted) AndAlso LastJavaBaseDir IsNot Nothing Then
+                Log($"[Java] 由于下载未完成，清理未下载完成的 Java 文件：{LastJavaBaseDir}", LogLevel.Debug)
+                DeleteDirectory(LastJavaBaseDir)
+            ElseIf NewState = LoadState.Finished Then
+                LastJavaBaseDir = Nothing
+            End If
+        End Sub
+        JavaDownloadLoader.HasOnStateChangedThread = True
+        Return Loader
     End Function
+    Private LastJavaBaseDir As String = Nothing '用于在下载中断或失败时删除未完成下载的 Java 文件夹，防止残留只下了一半但 -version 能跑的 Java
     Private Sub JavaFileList(Loader As LoaderTask(Of Integer, List(Of NetFile)))
         Log("[Java] 开始获取 Java 下载信息")
         Dim IndexFileStr As String = NetGetCodeByDownload(
@@ -739,25 +760,23 @@ Wait:
         Dim Address As String = TargetEntry.Value("manifest")("url")
         Log($"[Java] 准备下载 Java {TargetEntry.Value("version")("name")}（{TargetEntry.Key}）：{Address}")
         '获取文件列表
-        Dim ListFileStr As String = NetGetCodeByDownload(
-            {Address.Replace("piston-meta.mojang.com", "bmclapi2.bangbang93.com"),
-             Address},
-        IsJson:=True)
-        Dim BaseDir As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\runtime\" & TargetEntry.Key & "\"
+        Dim ListFileStr As String = NetGetCodeByDownload({Address.Replace("piston-meta.mojang.com", "bmclapi2.bangbang93.com"), Address}, IsJson:=True)
+        LastJavaBaseDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\runtime\" & TargetEntry.Key & "\"
         Dim Results As New List(Of NetFile)
         For Each File As JProperty In CType(GetJson(ListFileStr), JObject)("files")
             If CType(File.Value, JObject)("downloads")?("raw") Is Nothing Then Continue For
             Dim Info As JObject = CType(File.Value, JObject)("downloads")("raw")
             Dim Checker As New FileChecker(ActualSize:=Info("size"), Hash:=Info("sha1"))
-            If Checker.Check(BaseDir & File.Name) Is Nothing Then Continue For '跳过已存在的文件
+            If Checker.Hash = "12976a6c2b227cbac58969c1455444596c894656" OrElse Checker.Hash = "c80e4bab46e34d02826eab226a4441d0970f2aba" OrElse Checker.Hash = "84d2102ad171863db04e7ee22a259d1f6c5de4a5" Then
+                '跳过 3 个无意义大量重复文件（#3827）
+                Continue For
+            End If
+            If Checker.Check(LastJavaBaseDir & File.Name) Is Nothing Then Continue For '跳过已存在的文件
             Dim Url As String = Info("url")
-            Results.Add(New NetFile(
-                            {Url.Replace("piston-data.mojang.com", "bmclapi2.bangbang93.com"),
-                             Url},
-                        BaseDir & File.Name, Checker))
+            Results.Add(New NetFile({Url.Replace("piston-data.mojang.com", "bmclapi2.bangbang93.com"), Url}, LastJavaBaseDir & File.Name, Checker))
         Next
         Loader.Output = Results
-        Log($"[Java] 需要下载 {Results.Count} 个文件，目标文件夹：{BaseDir}")
+        Log($"[Java] 需要下载 {Results.Count} 个文件，目标文件夹：{LastJavaBaseDir}")
     End Sub
 
 #End Region

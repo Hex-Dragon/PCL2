@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.7.1" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.7.1." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.7.4" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.7.4." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 319 'Release
+    Public Const VersionCode As Integer = 323 'Release
 #Else
-    Public Const VersionCode As Integer = 320 'Snapshot
+    Public Const VersionCode As Integer = 325 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -26,7 +26,7 @@ Public Module ModBase
 #ElseIf BETA Then
     Public Const VersionBranchName As String = "Release"
     Public Const VersionBranchCode As String = "50"
-#ElseIf DEBUG Then
+#Else
     Public Const VersionBranchName As String = "Debug"
     Public Const VersionBranchCode As String = "100"
 #End If
@@ -58,7 +58,7 @@ Public Module ModBase
     ''' <summary>
     ''' 程序的打开计时。
     ''' </summary>
-    Public ApplicationStartTick As Long
+    Public ApplicationStartTick As Long = GetTimeTick()
     ''' <summary>
     ''' 程序打开时的时间。
     ''' </summary>
@@ -75,6 +75,10 @@ Public Module ModBase
     ''' 是否为 32 位系统。
     ''' </summary>
     Public Is32BitSystem As Boolean = Not Environment.Is64BitOperatingSystem
+    ''' <summary>
+    ''' 是否使用 GBK 编码。
+    ''' </summary>
+    Public IsGBKEncoding As Boolean = Encoding.Default.CodePage = 936
     ''' <summary>
     ''' 操作系统版本。Win10 为 10.0。
     ''' </summary>
@@ -591,7 +595,7 @@ Public Module ModBase
         Try
             Dim parentKey As Microsoft.Win32.RegistryKey, softKey As Microsoft.Win32.RegistryKey
             parentKey = My.Computer.Registry.CurrentUser
-            softKey = parentKey.OpenSubKey("Software\PCL", True)
+            softKey = parentKey.OpenSubKey("Software\" & RegFolder, True)
             If softKey Is Nothing Then
                 ReadReg = DefaultValue '不存在则返回默认值
             Else
@@ -612,8 +616,8 @@ Public Module ModBase
         Try
             Dim parentKey As Microsoft.Win32.RegistryKey, softKey As Microsoft.Win32.RegistryKey
             parentKey = My.Computer.Registry.CurrentUser
-            softKey = parentKey.OpenSubKey("Software\PCL", True)
-            If softKey Is Nothing Then softKey = parentKey.CreateSubKey("Software\PCL") '如果不存在就创建  
+            softKey = parentKey.OpenSubKey("Software\" & RegFolder, True)
+            If softKey Is Nothing Then softKey = parentKey.CreateSubKey("Software\" & RegFolder) '如果不存在就创建  
             softKey.SetValue(Key, Value)
         Catch ex As Exception
             Log(ex, "写入注册表出错：" & Key, If(ShowException, LogLevel.Hint, LogLevel.Developer))
@@ -726,8 +730,8 @@ Public Module ModBase
     Public Function GetFileNameFromPath(FilePath As String) As String
         FilePath = FilePath.Replace("/", "\")
         If FilePath.EndsWithF("\") Then Throw New Exception("不包含文件名：" & FilePath)
-        If FilePath.Contains("\") Then FilePath = FilePath.Substring(FilePath.LastIndexOfF("\") + 1)
         If FilePath.Contains("?") Then FilePath = FilePath.Substring(0, FilePath.IndexOfF("?")) '去掉网络参数后的 ?
+        If FilePath.Contains("\") Then FilePath = FilePath.Substring(FilePath.LastIndexOfF("\") + 1)
         Dim length As Integer = FilePath.Length
         If length = 0 Then Throw New Exception("不包含文件名：" & FilePath)
         If length > 250 Then Throw New PathTooLongException("文件名过长：" & FilePath)
@@ -1215,43 +1219,35 @@ Re:
     ''' <summary>
     ''' 尝试根据后缀名判断文件种类并解压文件，支持 gz 与 zip，会尝试将 jar 以 zip 方式解压。
     ''' 会尝试创建，但不会清空目标文件夹。
-    ''' 成功返回 True，并非压缩文件或失败返回 False。
     ''' </summary>
-    Public Function ExtractFile(CompressFilePath As String, DestDirectory As String, Optional Encode As Encoding = Nothing) As Boolean
-        Try
-            Directory.CreateDirectory(DestDirectory)
-            If CompressFilePath.EndsWithF(".gz", True) Then
-                '以 gz 方式解压
-                Dim stream As New GZipStream(New FileStream(CompressFilePath, FileMode.Open, FileAccess.ReadWrite), CompressionMode.Decompress)
-                Dim decompressedFile As New FileStream(DestDirectory & GetFileNameFromPath(CompressFilePath).ToLower.Replace(".tar", "").Replace(".gz", ""), FileMode.OpenOrCreate, FileAccess.Write)
-                Dim data As Integer = stream.ReadByte()
-                While data <> -1
-                    decompressedFile.WriteByte(data)
-                    data = stream.ReadByte()
-                End While
-                decompressedFile.Close()
-                stream.Close()
-                Return True
-            Else
-                '以 zip 方式解压
-                Using Archive = ZipFile.Open(CompressFilePath, ZipArchiveMode.Read, If(Encode, Encoding.GetEncoding("GB18030")))
-                    For Each Entry As ZipArchiveEntry In Archive.Entries
-                        Dim DestinationPath As String = IO.Path.Combine(DestDirectory, Entry.FullName)
-                        If DestinationPath.EndsWithF("\") OrElse DestinationPath.EndsWithF("/") Then
-                            Continue For '不创建空文件夹
-                        Else
-                            Directory.CreateDirectory(GetPathFromFullPath(DestinationPath))
-                            Entry.ExtractToFile(DestinationPath, True)
-                        End If
-                    Next
-                End Using
-                Return True
-            End If
-        Catch ex As Exception
-            Log(ex, "尝试解压文件失败")
-            Return False
-        End Try
-    End Function
+    Public Sub ExtractFile(CompressFilePath As String, DestDirectory As String, Optional Encode As Encoding = Nothing)
+        Directory.CreateDirectory(DestDirectory)
+        If CompressFilePath.EndsWithF(".gz", True) Then
+            '以 gz 方式解压
+            Dim stream As New GZipStream(New FileStream(CompressFilePath, FileMode.Open, FileAccess.ReadWrite), CompressionMode.Decompress)
+            Dim decompressedFile As New FileStream(DestDirectory & GetFileNameFromPath(CompressFilePath).ToLower.Replace(".tar", "").Replace(".gz", ""), FileMode.OpenOrCreate, FileAccess.Write)
+            Dim data As Integer = stream.ReadByte()
+            While data <> -1
+                decompressedFile.WriteByte(data)
+                data = stream.ReadByte()
+            End While
+            decompressedFile.Close()
+            stream.Close()
+        Else
+            '以 zip 方式解压
+            Using Archive = ZipFile.Open(CompressFilePath, ZipArchiveMode.Read, If(Encode, Encoding.GetEncoding("GB18030")))
+                For Each Entry As ZipArchiveEntry In Archive.Entries
+                    Dim DestinationPath As String = IO.Path.Combine(DestDirectory, Entry.FullName)
+                    If DestinationPath.EndsWithF("\") OrElse DestinationPath.EndsWithF("/") Then
+                        Continue For '不创建空文件夹
+                    Else
+                        Directory.CreateDirectory(GetPathFromFullPath(DestinationPath))
+                        Entry.ExtractToFile(DestinationPath, True)
+                    End If
+                Next
+            End Using
+        End If
+    End Sub
 
     ''' <summary>
     ''' 删除文件夹，返回删除的文件个数。通过参数选择是否抛出异常。
@@ -1342,7 +1338,7 @@ Re:
         Loop
         DescList = DescList.Distinct.ToList
         Dim Desc As String = Join(DescList, vbCrLf & "→ ")
-        Dim Stack As String = If(StackList.Count > 0, vbCrLf & Join(StackList, vbCrLf), "")
+        Dim Stack As String = If(StackList.Any, vbCrLf & Join(StackList, vbCrLf), "")
 
         '常见错误（记得同时修改下面的）
         Dim CommonReason As String = Nothing
@@ -1455,7 +1451,8 @@ Re:
         Try
             Return JsonConvert.DeserializeObject(Data, New JsonSerializerSettings With {.DateTimeZoneHandling = DateTimeZoneHandling.Local})
         Catch ex As Exception
-            Throw New Exception("格式化 json 对象失败：" & If(If(Data, "").Length > 10000, Data.Substring(0, 100) & "...", Data))
+            Dim Length As Integer = If(Data, "").Length
+            Throw New Exception("格式化 json 对象失败：" & If(Length > 10000, Data.Substring(0, 100) & $"...(全长 {Length} 个字符)..." & Right(Data, 100), Data))
         End Try
     End Function
 
@@ -1541,6 +1538,57 @@ Re:
         Next
         Return tmp.ToString()
     End Function
+    ''' <summary>
+    ''' 检查字符串中的字符是否均为 ASCII 字符。
+    ''' </summary>
+    <Extension> Public Function IsASCII(Input As String) As Boolean
+        Return Input.All(Function(c) AscW(c) < 128)
+    End Function
+
+    ''' <summary>
+    ''' 获取在子字符串之前的部分。
+    ''' 会裁切尽可能多的内容，但如果未找到子字符串则不裁切。
+    ''' </summary>
+    <Extension> Public Function Before(Str As String, Text As String, Optional IgnoreCase As Boolean = False) As String
+        Dim Pos As Integer = If(String.IsNullOrEmpty(Text), -1, Str.IndexOfF(Text, IgnoreCase))
+        If Pos >= 0 Then
+            Return Str.Substring(0, Pos)
+        Else
+            Return Str
+        End If
+    End Function
+    ''' <summary>
+    ''' 获取在子字符串之后的部分。
+    ''' 会裁切尽可能多的内容，但如果未找到子字符串则不裁切。
+    ''' </summary>
+    <Extension> Public Function After(Str As String, Text As String, Optional IgnoreCase As Boolean = False) As String
+        Dim Pos As Integer = If(String.IsNullOrEmpty(Text), -1, Str.LastIndexOfF(Text, IgnoreCase))
+        If Pos >= 0 Then
+            Return Str.Substring(Pos + Text.Length)
+        Else
+            Return Str
+        End If
+    End Function
+    ''' <summary>
+    ''' 获取处于两个子字符串之间的部分。
+    ''' 会裁切尽可能多的内容：匹配开始使用 LastIndexOf，匹配结束使用 IndexOf，但如果未找到子字符串则不裁切。
+    ''' </summary>
+    <Extension> Public Function Between(Str As String, Before As String, After As String, Optional IgnoreCase As Boolean = False) As String
+        Dim StartPos As Integer = If(String.IsNullOrEmpty(Before), -1, Str.LastIndexOfF(Before, IgnoreCase))
+        If StartPos >= 0 Then
+            StartPos += Before.Length
+        Else
+            StartPos = 0
+        End If
+        Dim EndPos As Integer = If(String.IsNullOrEmpty(After), -1, Str.IndexOfF(After, StartPos, IgnoreCase))
+        If EndPos >= 0 Then
+            Return Str.Substring(StartPos, EndPos - StartPos)
+        ElseIf StartPos > 0 Then
+            Return Str.Substring(StartPos)
+        Else
+            Return Str
+        End If
+    End Function
 
     ''' <summary>
     ''' 高速的 StartsWith。
@@ -1571,11 +1619,25 @@ Re:
         Return Str.IndexOf(SubStr, If(IgnoreCase, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal))
     End Function
     ''' <summary>
+    ''' 高速的 IndexOf。
+    ''' </summary>
+    <Extension> <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function IndexOfF(Str As String, SubStr As String, StartIndex As Integer, Optional IgnoreCase As Boolean = False) As Integer
+        Return Str.IndexOf(SubStr, StartIndex, If(IgnoreCase, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal))
+    End Function
+    ''' <summary>
     ''' 高速的 LastIndexOf。
     ''' </summary>
     <Extension> <MethodImpl(MethodImplOptions.AggressiveInlining)>
     Public Function LastIndexOfF(Str As String, SubStr As String, Optional IgnoreCase As Boolean = False) As Integer
         Return Str.LastIndexOf(SubStr, If(IgnoreCase, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal))
+    End Function
+    ''' <summary>
+    ''' 高速的 LastIndexOf。
+    ''' </summary>
+    <Extension> <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function LastIndexOfF(Str As String, SubStr As String, StartIndex As Integer, Optional IgnoreCase As Boolean = False) As Integer
+        Return Str.LastIndexOf(SubStr, StartIndex, If(IgnoreCase, StringComparison.OrdinalIgnoreCase, StringComparison.Ordinal))
     End Function
 
     ''' <summary>
@@ -1815,15 +1877,11 @@ Re:
     ''' <summary>
     ''' 数组去重。
     ''' </summary>
-    Public Function Distinct(Of T)(Arr As ICollection(Of T), Optional IsEqual As CompareThreadStart(Of T) = Nothing) As List(Of T)
+    <Extension> Public Function Distinct(Of T)(Arr As ICollection(Of T), IsEqual As CompareThreadStart(Of T)) As List(Of T)
         Dim ResultArray As New List(Of T)
         For i = 0 To Arr.Count - 1
             For ii = i + 1 To Arr.Count - 1
-                If IsEqual Is Nothing Then
-                    If Arr(i).Equals(Arr(ii)) Then GoTo NextElement
-                Else
-                    If IsEqual(Arr(i), Arr(ii)) Then GoTo NextElement
-                End If
+                If IsEqual(Arr(i), Arr(ii)) Then GoTo NextElement
             Next
             ResultArray.Add(Arr(i))
 NextElement:
@@ -2071,9 +2129,9 @@ NextElement:
     ''' 按照既定的函数进行选择排序。
     ''' </summary>
     ''' <param name="SortRule">传入两个对象，若第一个对象应该排在前面，则返回 True。</param>
-    Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart(Of T)) As List(Of T)
+    <Extension> Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart(Of T)) As List(Of T)
         Dim NewList As New List(Of T)
-        While List.Count > 0
+        While List.Any
             Dim Highest = List(0)
             For i = 1 To List.Count - 1
                 If SortRule(List(i), Highest) Then Highest = List(i)
@@ -2646,7 +2704,7 @@ Retry:
     ''' </summary>
     Public Function Shuffle(Of T)(array As IList(Of T)) As IList(Of T)
         Shuffle = New List(Of T)
-        Do While array.Count > 0
+        Do While array.Any
             Dim i As Integer = RandomInteger(0, array.Count - 1)
             Shuffle.Add(array(i))
             array.RemoveAt(i)

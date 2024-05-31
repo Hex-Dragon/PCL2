@@ -341,15 +341,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 
-# ------------------------------------------------------------
-
-# 包含主题解锁、加密解密等部分的代码
-ModSecret.vb
-ModSetup.vb
-PageOtherAbout.*
-PageOtherTest.*
-PageSetupUI.*
-# 开发者工具
-ModDevelop.vb
-# 不公开底层函数库，以免抄袭
-ModMain.vb
+MaskFiles/

@@ -10,6 +10,18 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 323 Then 'Release 2.7.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 启动游戏前进行内存优化 设置"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 MC 性能"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复安装 OptiFine 有概率失败的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复启动 Fabric 1.20.5+ 时无法正确选择 Java 的 Bug"))
+            FeatureCount += 22
+            BugCount += 21
+        End If
+        If LastVersion < 321 Then 'Release 2.7.1
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复启动部分整合包导致设置丢失的 Bug"))
+            BugCount += 1
+        End If
         If LastVersion < 319 Then 'Release 2.7.0
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持更新 Mod"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持查看可更新的 Mod 的更新日志"))
@@ -96,7 +108,25 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
-        If LastVersion < 318 Then 'Snapshot 2.7.1
+        If LastVersion < 325 Then 'Snapshot 2.7.4
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "会自动隐藏明显不可用的自动安装选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化正版登录流程和 MC 性能"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复正版登录时弹出脚本错误提示的 Bug"))
+            FeatureCount += 17
+            BugCount += 19
+        End If
+        If LastVersion < 324 Then 'Snapshot 2.7.3
+            FeatureCount += 4
+            BugCount += 3
+        End If
+        If LastVersion < 322 Then 'Snapshot 2.7.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 启动游戏前进行内存优化 设置"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复安装 OptiFine 有概率失败的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复启动 Fabric 1.20.5+ 时无法正确选择 Java 的 Bug"))
+            FeatureCount += 18
+            BugCount += 18
+        End If
+        If LastVersion < 320 Then 'Snapshot 2.7.1
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复启动部分整合包导致设置丢失的 Bug"))
             BugCount += 1
         End If
@@ -229,7 +259,7 @@ Public Class FormMain
         Next
         If SortedFeatures.Count > 10 Then FeatureCount += SortedFeatures.Count - 10
         If FeatureCount > 0 OrElse BugCount > 0 Then
-            ContentList.Add(If(FeatureCount > 0, "其他 " & FeatureCount & " 项小调整与修改", "") &
+            ContentList.Add(If(FeatureCount > 0, FeatureCount & " 项小调整与修改", "") &
                 If(FeatureCount > 0 AndAlso BugCount > 0, "，", "") &
                 If(BugCount > 0, "修复了 " & BugCount & " 个 Bug", "") &
                 "，详见完整更新日志")
@@ -306,7 +336,7 @@ Public Class FormMain
         Setup.Load("UiBackgroundBlur")
         Setup.Load("UiLogoType")
         Setup.Load("UiHiddenPageDownload")
-        BackgroundRefresh(False, True)
+        PageSetupUI.BackgroundRefresh(False, True)
         MusicRefreshPlay(False, True)
         '扩展按钮
         BtnExtraDownload.ShowCheck = AddressOf BtnExtraDownload_ShowCheck
@@ -352,44 +382,46 @@ Public Class FormMain
             AaOpacity(Me, Setup.Get("UiLauncherTransparent") / 1000 + 0.4, 250, 100),
             AaDouble(Sub(i) TransformPos.Y += i, -TransformPos.Y, 600, 100, New AniEaseOutBack(AniEasePower.Weak)),
             AaDouble(Sub(i) TransformRotate.Angle += i, -TransformRotate.Angle, 500, 100, New AniEaseOutBack(AniEasePower.Weak)),
-            AaCode(Sub()
-                       PanBack.RenderTransform = Nothing
-                       IsWindowLoadFinished = True
-                       Log($"[System] DPI：{DPI}，系统版本：{OsVersion}，PCL 位置：{PathWithName}")
-                   End Sub, , True)
+            AaCode(
+            Sub()
+                PanBack.RenderTransform = Nothing
+                IsWindowLoadFinished = True
+                Log($"[System] DPI：{DPI}，系统版本：{OsVersion}，PCL 位置：{PathWithName}")
+            End Sub, , True)
         }, "Form Show")
         'Timer 启动
         AniStart()
         TimerMainStart()
         '加载池
-        RunInNewThread(Sub()
-                           'EULA 提示
-                           If Not Setup.Get("SystemEula") Then
-                               Select Case MyMsgBox("在使用 PCL 前，请同意 PCL 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明",
+        RunInNewThread(
+        Sub()
+            'EULA 提示
+            If Not Setup.Get("SystemEula") Then
+                Select Case MyMsgBox("在使用 PCL 前，请同意 PCL 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明",
                                    Button3Action:=Sub() OpenWebsite("https://shimo.im/docs/rGrd8pY8xWkt6ryW"))
-                                   Case 1
-                                       Setup.Set("SystemEula", True)
-                                   Case 2
-                                       EndProgram(False)
-                               End Select
-                           End If
-                           '启动加载器池
-                           Try
-                               JavaListInit() '延后到同意协议后再执行，避免在初次启动时进行进程操作
-                               Thread.Sleep(200)
-                               DlClientListMojangLoader.Start(1)
-                               RunCountSub()
-                               ServerLoader.Start(1)
-                           Catch ex As Exception
-                               Log(ex, "初始化加载池运行失败", LogLevel.Feedback)
-                           End Try
-                           '清理自动更新文件
-                           Try
-                               If File.Exists(Path & "PCL\Plain Craft Launcher 2.exe") Then File.Delete(Path & "PCL\Plain Craft Launcher 2.exe")
-                           Catch ex As Exception
-                               Log(ex, "清理自动更新文件失败")
-                           End Try
-                       End Sub, "Start Loader", ThreadPriority.Lowest)
+                    Case 1
+                        Setup.Set("SystemEula", True)
+                    Case 2
+                        EndProgram(False)
+                End Select
+            End If
+            '启动加载器池
+            Try
+                JavaListInit() '延后到同意协议后再执行，避免在初次启动时进行进程操作
+                Thread.Sleep(200)
+                DlClientListMojangLoader.Start(1)
+                RunCountSub()
+                ServerLoader.Start(1)
+            Catch ex As Exception
+                Log(ex, "初始化加载池运行失败", LogLevel.Feedback)
+            End Try
+            '清理自动更新文件
+            Try
+                If File.Exists(Path & "PCL\Plain Craft Launcher 2.exe") Then File.Delete(Path & "PCL\Plain Craft Launcher 2.exe")
+            Catch ex As Exception
+                Log(ex, "清理自动更新文件失败")
+            End Try
+        End Sub, "Start Loader", ThreadPriority.Lowest)
 
         Log("[Start] 第三阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
     End Sub
@@ -430,6 +462,8 @@ Public Class FormMain
             Log("[Start] 最高版本号从 " & LowerVersionCode & " 升高到 " & VersionCode)
         End If
 #End If
+        '被移除的窗口设置选项
+        If Setup.Get("LaunchArgumentWindowType") = 5 Then Setup.Set("LaunchArgumentWindowType", 1)
         '修改主题设置项名称
         If LowerVersionCode <= 207 Then
             Dim UnlockedTheme As New List(Of String) From {"2"}
@@ -495,12 +529,13 @@ Public Class FormMain
         If SendWarning AndAlso HasDownloadingTask() Then
             If MyMsgBox("还有下载任务尚未完成，是否确定退出？", "提示", "确定", "取消") = 1 Then
                 '强行结束下载任务
-                RunInNewThread(Sub()
-                                   Log("[System] 正在强行停止任务")
-                                   For Each Task As LoaderBase In LoaderTaskbar.ToArray
-                                       Task.Abort()
-                                   Next
-                               End Sub, "强行停止下载任务")
+                RunInNewThread(
+                Sub()
+                    Log("[System] 正在强行停止任务")
+                    For Each Task As LoaderBase In LoaderTaskbar.ToArray
+                        Task.Abort()
+                    Next
+                End Sub, "强行停止下载任务")
             Else
                 Exit Sub
             End If
@@ -516,17 +551,19 @@ Public Class FormMain
                     PanBack.RenderTransform = New TransformGroup() With {.Children = New TransformCollection({TransformRotate, TransformPos, TransformScale})}
                     AniStart({
                         AaOpacity(Me, -Opacity, 140, 40, New AniEaseOutFluent(AniEasePower.Weak)),
-                        AaDouble(Sub(i)
-                                     TransformScale.ScaleX += i
-                                     TransformScale.ScaleY += i
-                                 End Sub, 0.88 - TransformScale.ScaleX, 180),
+                        AaDouble(
+                        Sub(i)
+                            TransformScale.ScaleX += i
+                            TransformScale.ScaleY += i
+                        End Sub, 0.88 - TransformScale.ScaleX, 180),
                         AaDouble(Sub(i) TransformPos.Y += i, 20 - TransformPos.Y, 180, 0, New AniEaseOutFluent(AniEasePower.Weak)),
                         AaDouble(Sub(i) TransformRotate.Angle += i, 0.6 - TransformRotate.Angle, 180, 0, New AniEaseInoutFluent(AniEasePower.Weak)),
-                        AaCode(Sub()
-                                   IsHitTestVisible = False
-                                   Top = -10000
-                                   ShowInTaskbar = False
-                               End Sub, 210),
+                        AaCode(
+                        Sub()
+                            IsHitTestVisible = False
+                            Top = -10000
+                            ShowInTaskbar = False
+                        End Sub, 210),
                         AaCode(AddressOf EndProgramForce, 230)
                     }, "Form Close")
                 Else
@@ -653,7 +690,7 @@ Public Class FormMain
         If e.ChangedButton = MouseButton.XButton1 OrElse e.ChangedButton = MouseButton.XButton2 Then TriggerPageBack()
     End Sub
     Private Sub TriggerPageBack()
-        If PageCurrent = PageType.Download AndAlso PageCurrentSub = PageSubType.DownloadInstall Then
+        If PageCurrent = PageType.Download AndAlso PageCurrentSub = PageSubType.DownloadInstall AndAlso FrmDownloadInstall.IsInSelectPage Then
             FrmDownloadInstall.ExitSelectPage()
         Else
             PageBack()
@@ -761,7 +798,7 @@ Public Class FormMain
         RunInNewThread(
         Sub()
             Dim FilePath As String = FilePathList.First
-            Log("[System] 接受文件拖拽：" & FilePath & If(FilePathList.Count > 0, $" 等 {FilePathList.Count} 个文件", ""), LogLevel.Developer)
+            Log("[System] 接受文件拖拽：" & FilePath & If(FilePathList.Any, $" 等 {FilePathList.Count} 个文件", ""), LogLevel.Developer)
             '基础检查
             If Directory.Exists(FilePathList.First) AndAlso Not File.Exists(FilePathList.First) Then
                 Hint("请拖入一个文件，而非文件夹！", HintType.Critical)
@@ -774,14 +811,14 @@ Public Class FormMain
             If FilePathList.Count > 1 Then
                 '必须要求全部为 jar 文件
                 For Each File In FilePathList
-                    If Not {"jar", "litemod", "disabled", "old"}.Contains(File.Split(".").Last.ToLower) Then
+                    If Not {"jar", "litemod", "disabled", "old"}.Contains(File.After(".").ToLower) Then
                         Hint("一次请只拖入一个文件！", HintType.Critical)
                         Exit Sub
                     End If
                 Next
             End If
             '自定义主页
-            Dim Extension As String = FilePath.Split(".").Last.ToLower
+            Dim Extension As String = FilePath.After(".").ToLower
             If Extension = "xaml" Then
                 Log("[System] 文件后缀为 XAML，作为自定义主页加载")
                 If File.Exists(Path & "PCL\Custom.xaml") Then
@@ -1176,8 +1213,11 @@ Install:
     ''' 通过点击返回按钮或手动触发返回来改变页面。
     ''' </summary>
     Public Sub PageBack() Handles BtnTitleInner.Click
-        If Not PageStack.Any() Then Exit Sub
-        PageChangeActual(PageStack(0))
+        If PageStack.Any() Then
+            PageChangeActual(PageStack(0))
+        Else
+            PageChange(PageType.Launch)
+        End If
     End Sub
 
     '实际处理页面切换
@@ -1357,23 +1397,22 @@ Install:
     End Sub
     Private Sub PanMainLeft_Resize(NewWidth As Double)
         Dim Delta As Double = NewWidth - RectLeftBackground.Width
-        If Math.Abs(Delta) < 0.1 Then Exit Sub
-        If AniControlEnabled = 0 Then
+        If Math.Abs(Delta) > 0.1 AndAlso AniControlEnabled = 0 Then
             If PanMain.Opacity < 0.1 Then PanMainLeft.IsHitTestVisible = False '避免左边栏指向背景未能完美覆盖左边栏
             If NewWidth > 0 Then
                 '宽度足够，显示
                 AniStart({
-                              AaWidth(RectLeftBackground, NewWidth - RectLeftBackground.Width, 400,, New AniEaseOutFluent(AniEasePower.ExtraStrong)),
-                              AaOpacity(RectLeftShadow, 1 - RectLeftShadow.Opacity, 200),
-                              AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 250)
-                         }, "FrmMain LeftChange", True)
+                     AaWidth(RectLeftBackground, NewWidth - RectLeftBackground.Width, 400,, New AniEaseOutFluent(AniEasePower.ExtraStrong)),
+                     AaOpacity(RectLeftShadow, 1 - RectLeftShadow.Opacity, 200),
+                     AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 250)
+                }, "FrmMain LeftChange", True)
             Else
                 '宽度不足，隐藏
                 AniStart({
-                              AaWidth(RectLeftBackground, -RectLeftBackground.Width, 200,, New AniEaseOutFluent),
-                              AaOpacity(RectLeftShadow, -RectLeftShadow.Opacity, 200),
-                              AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 170)
-                         }, "FrmMain LeftChange", True)
+                     AaWidth(RectLeftBackground, -RectLeftBackground.Width, 200,, New AniEaseOutFluent),
+                     AaOpacity(RectLeftShadow, -RectLeftShadow.Opacity, 200),
+                     AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 170)
+                }, "FrmMain LeftChange", True)
             End If
         Else
             RectLeftBackground.Width = NewWidth

@@ -93,7 +93,7 @@ Public Class FormLoginOAuth
         If Not IsLoginSuccessed Then RaiseEvent OnLoginCanceled(IsSwitch)
         FrmMain.Focus()
     End Sub
-    Private Sub HintSwitch_Click(sender As Object, e As EventArgs) Handles HintSwitch.Click
+    Private Sub HintSwitch_Click() Handles HintSwitch.Click
         IsSwitch = True
         Close()
     End Sub

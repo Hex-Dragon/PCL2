@@ -38,6 +38,7 @@
             ComboArgumentWindowType.SelectedIndex = Setup.Get("LaunchArgumentWindowType")
             TextArgumentWindowWidth.Text = Setup.Get("LaunchArgumentWindowWidth")
             TextArgumentWindowHeight.Text = Setup.Get("LaunchArgumentWindowHeight")
+            CheckArgumentRam.Checked = Setup.Get("LaunchArgumentRam")
             RefreshJavaComboBox()
 
             '游戏内存
@@ -71,6 +72,7 @@
             Setup.Reset("LaunchArgumentWindowWidth")
             Setup.Reset("LaunchArgumentWindowHeight")
             Setup.Reset("LaunchArgumentPriority")
+            Setup.Reset("LaunchArgumentRam")
             Setup.Reset("LaunchRamType")
             Setup.Reset("LaunchRamCustom")
             Setup.Reset("LaunchSkinType")
@@ -108,7 +110,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboArgumentVisibie.SelectionChanged, ComboArgumentWindowType.SelectionChanged, ComboArgumentPriority.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
 
@@ -352,19 +354,19 @@
                 '可安装 Mod 的版本
                 Dim ModDir As New DirectoryInfo(Version.PathIndie & "mods\")
                 Dim ModCount As Integer = If(ModDir.Exists, ModDir.GetFiles.Length, 0)
-                RamMininum = 0.4 + ModCount / 150
-                RamTarget1 = 1.5 + ModCount / 100
-                RamTarget2 = 3 + ModCount / 60
-                RamTarget3 = 6 + ModCount / 30
+                RamMininum = 0.5 + ModCount / 150
+                RamTarget1 = 1.5 + ModCount / 90
+                RamTarget2 = 2.7 + ModCount / 50
+                RamTarget3 = 4.5 + ModCount / 25
             ElseIf Version IsNot Nothing AndAlso Version.Version.HasOptiFine Then
                 'OptiFine 版本
-                RamMininum = 0.3
+                RamMininum = 0.5
                 RamTarget1 = 1.5
                 RamTarget2 = 3
-                RamTarget3 = 6
+                RamTarget3 = 5
             Else
                 '普通版本
-                RamMininum = 0.3
+                RamMininum = 0.5
                 RamTarget1 = 1.5
                 RamTarget2 = 2.5
                 RamTarget3 = 4
@@ -372,27 +374,23 @@
             Dim RamDelta As Double
             '预分配内存，阶段一，0 ~ T1，100%
             RamDelta = RamTarget1
-            RamAvailable = Math.Max(0, RamAvailable - 0.1)
-            RamGive += Math.Min(RamAvailable * 1, RamDelta)
-            RamAvailable -= RamDelta / 1 + 0.1
+            RamGive += Math.Min(RamAvailable, RamDelta)
+            RamAvailable -= RamDelta
             If RamAvailable < 0.1 Then GoTo PreFin
-            '预分配内存，阶段二，T1 ~ T2，80%
+            '预分配内存，阶段二，T1 ~ T2，70%
             RamDelta = RamTarget2 - RamTarget1
-            RamAvailable = Math.Max(0, RamAvailable - 0.1)
-            RamGive += Math.Min(RamAvailable * 0.8, RamDelta)
-            RamAvailable -= RamDelta / 0.8 + 0.1
+            RamGive += Math.Min(RamAvailable * 0.7, RamDelta)
+            RamAvailable -= RamDelta / 0.7
             If RamAvailable < 0.1 Then GoTo PreFin
-            '预分配内存，阶段三，T2 ~ T3，60%
+            '预分配内存，阶段三，T2 ~ T3，40%
             RamDelta = RamTarget3 - RamTarget2
-            RamAvailable = Math.Max(0, RamAvailable - 0.2)
-            RamGive += Math.Min(RamAvailable * 0.6, RamDelta)
-            RamAvailable -= RamDelta / 0.6 + 0.2
-            If RamAvailable < 0.1 Then GoTo PreFin
-            '预分配内存，阶段四，T3 ~ T3 * 2，40%
-            RamDelta = RamTarget3
-            RamAvailable = Math.Max(0, RamAvailable - 0.3)
             RamGive += Math.Min(RamAvailable * 0.4, RamDelta)
-            RamAvailable -= RamDelta / 0.4 + 0.3
+            RamAvailable -= RamDelta / 0.4
+            If RamAvailable < 0.1 Then GoTo PreFin
+            '预分配内存，阶段四，T3 ~ T3 * 2，15%
+            RamDelta = RamTarget3
+            RamGive += Math.Min(RamAvailable * 0.15, RamDelta)
+            RamAvailable -= RamDelta / 0.15
             If RamAvailable < 0.1 Then GoTo PreFin
 PreFin:
             '不低于最低值
@@ -444,7 +442,7 @@ PreFin:
             Log(ex, "更新设置 Java 下拉框失败", LogLevel.Feedback)
         End Try
         '更新选择项
-        If SelectedItem Is Nothing AndAlso JavaList.Count > 0 Then SelectedItem = ComboArgumentJava.Items(0) '选中 “自动选择”
+        If SelectedItem Is Nothing AndAlso JavaList.Any Then SelectedItem = ComboArgumentJava.Items(0) '选中 “自动选择”
         ComboArgumentJava.SelectedItem = SelectedItem
         '结束处理
         If SelectedItem Is Nothing Then
@@ -515,15 +513,16 @@ PreFin:
             Hint("正在搜索 Java，请稍候！", HintType.Critical)
             Exit Sub
         End If
-        RunInThread(Sub()
-                        Hint("正在搜索 Java！")
-                        JavaSearchLoader.WaitForExit(IsForceRestart:=True)
-                        If Not JavaList.Any() Then
-                            Hint("未找到可用的 Java！", HintType.Critical)
-                        Else
-                            Hint("已找到 " & JavaList.Count & " 个 Java，请检查下拉框查看列表！", HintType.Finish)
-                        End If
-                    End Sub)
+        RunInThread(
+        Sub()
+            Hint("正在搜索 Java！")
+            JavaSearchLoader.WaitForExit(IsForceRestart:=True)
+            If Not JavaList.Any() Then
+                Hint("未找到可用的 Java！", HintType.Critical)
+            Else
+                Hint("已找到 " & JavaList.Count & " 个 Java，请检查下拉框查看列表！", HintType.Finish)
+            End If
+        End Sub)
     End Sub
 
 #End Region
@@ -548,9 +547,21 @@ PreFin:
         If AniControlEnabled <> 0 Then Exit Sub
         If ComboArgumentVisibie.SelectedIndex = 0 Then
             If MyMsgBox("若在游戏启动后立即关闭启动器，崩溃检测、更改游戏标题等功能将失效。" & vbCrLf &
-                        "如果想保留这些功能，可以选择让启动器在游戏启动后隐藏，游戏退出后自动关闭。", "提示", "继续", "取消") = 2 Then
+                        "如果想保留这些功能，可以选择让启动器在游戏启动后隐藏，游戏退出后自动关闭。", "提醒", "继续", "取消") = 2 Then
                 ComboArgumentVisibie.SelectedItem = e.RemovedItems(0)
             End If
+        End If
+    End Sub
+
+    '开启自动内存优化的警告
+    Private Sub CheckArgumentRam_Change() Handles CheckArgumentRam.Change
+        If AniControlEnabled <> 0 Then Exit Sub
+        If Not CheckArgumentRam.Checked Then Return
+        If MyMsgBox("内存优化耗时较长，这会拖慢游戏的启动过程，建议仅在电脑内存不充裕时开启此选项。" & vbCrLf &
+                    "如果你在使用机械硬盘，这还可能会导致一小段时间的严重卡顿。" &
+                    If(IsAdmin(), "", $"{vbCrLf}{vbCrLf}每次启动游戏，PCL 都需要申请管理员权限以进行内存优化。{vbCrLf}若想自动授予权限，可以右键 PCL，打开 属性 → 兼容性 → 以管理员身份运行此程序。"),
+                    "提醒", "确定", "取消") = 2 Then
+            CheckArgumentRam.Checked = False
         End If
     End Sub
 

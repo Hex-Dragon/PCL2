@@ -149,7 +149,7 @@ Public Class ValidateExcept
     End Sub
     Public Overrides Function Validate(Str As String) As String
         For Each Ch As String In Excepts
-            If Str.IndexOfF(Ch, StringComparison.OrdinalIgnoreCase) >= 0 Then
+            If Str.IndexOfF(Ch, True) >= 0 Then
                 If IsNothing(ErrorMessage) Then ErrorMessage = ""
                 Return ErrorMessage.Replace("%", Ch)
             End If
@@ -351,29 +351,6 @@ Fin:
             '检查特殊字符串
             Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件夹名不可为 %！").Validate(SubStr)
             If Not InvalidStrCheck = "" Then Return InvalidStrCheck
-        Next
-        Return ""
-    End Function
-End Class
-
-''' <summary>
-''' 敏感词过滤。
-''' </summary>
-Public Class ValidateFilter
-    Inherits Validate
-    Private Shared Excepts As String() = SecretDecrypt(SecretSensitiveWordsRaw).Split("|")
-    Public Sub New()
-    End Sub '用于 XAML 初始化
-    Public Overrides Function Validate(Str As String) As String
-        '提取无间隔符的字符串
-        Dim RealStr As String = ""
-        For Each St In If(Str, "").ToLower
-            If String.IsNullOrWhiteSpace(St.ToString) OrElse ("!@#$%^&*()_+-={}[]|\;':"",./<>? ~　·！￥…（）—，。、《》？‘；：【】｛｝" & vbLQ & vbRQ).ToCharArray.Contains(St) Then Continue For
-            RealStr += St
-        Next
-        '检查
-        For Each Except In Excepts
-            If RealStr.Contains(Except) Then Return "存在敏感内容！"
         Next
         Return ""
     End Function

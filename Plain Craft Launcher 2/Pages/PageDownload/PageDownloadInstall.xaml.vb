@@ -32,7 +32,7 @@
 #Region "页面切换"
 
     '页面切换动画
-    Private IsInSelectPage As Boolean = False
+    Public IsInSelectPage As Boolean = False
     Private IsFirstLoaded As Boolean = False
     Private Sub EnterSelectPage()
         If IsInSelectPage Then Exit Sub
@@ -273,11 +273,13 @@
         End If
     End Sub
 
+    Private IsReloading As Boolean = False '#3742 中，LoadOptiFineGetError 会初始化 LoadOptiFine，触发事件 LoadOptiFine.StateChanged，导致再次调用 SelectReload
     ''' <summary>
     ''' 重载已选择的项目的显示。
     ''' </summary>
     Private Sub SelectReload() Handles CardOptiFine.Swap, LoadOptiFine.StateChanged, CardForge.Swap, LoadForge.StateChanged, CardFabric.Swap, LoadFabric.StateChanged, CardFabricApi.Swap, LoadFabricApi.StateChanged, CardOptiFabric.Swap, LoadOptiFabric.StateChanged, CardLiteLoader.Swap, LoadLiteLoader.StateChanged
-        If SelectedMinecraftId Is Nothing Then Exit Sub
+        If SelectedMinecraftId Is Nothing OrElse IsReloading Then Exit Sub
+        IsReloading = True
         '主预览
         SelectNameUpdate()
         ItemSelect.Title = TextSelectName.Text
@@ -303,20 +305,25 @@
             LabOptiFine.Foreground = ColorGray1
         End If
         'LiteLoader
-        Dim LiteLoaderError As String = LoadLiteLoaderGetError()
-        CardLiteLoader.MainSwap.Visibility = If(LiteLoaderError Is Nothing, Visibility.Visible, Visibility.Collapsed)
-        If LiteLoaderError IsNot Nothing Then CardLiteLoader.IsSwaped = True '例如在同时展开卡片时选择了不兼容项则强制折叠
-        SetLiteLoaderInfoShow(CardLiteLoader.IsSwaped)
-        If SelectedLiteLoader Is Nothing Then
-            BtnLiteLoaderClear.Visibility = Visibility.Collapsed
-            ImgLiteLoader.Visibility = Visibility.Collapsed
-            LabLiteLoader.Text = If(LiteLoaderError, "点击选择")
-            LabLiteLoader.Foreground = ColorGray4
+        If Not SelectedMinecraftId.Contains("1.") OrElse Val(SelectedMinecraftId.Split(".")(1)) > 12 Then
+            CardLiteLoader.Visibility = Visibility.Collapsed
         Else
-            BtnLiteLoaderClear.Visibility = Visibility.Visible
-            ImgLiteLoader.Visibility = Visibility.Visible
-            LabLiteLoader.Text = SelectedLiteLoader.Inherit
-            LabLiteLoader.Foreground = ColorGray1
+            CardLiteLoader.Visibility = Visibility.Visible
+            Dim LiteLoaderError As String = LoadLiteLoaderGetError()
+            CardLiteLoader.MainSwap.Visibility = If(LiteLoaderError Is Nothing, Visibility.Visible, Visibility.Collapsed)
+            If LiteLoaderError IsNot Nothing Then CardLiteLoader.IsSwaped = True '例如在同时展开卡片时选择了不兼容项则强制折叠
+            SetLiteLoaderInfoShow(CardLiteLoader.IsSwaped)
+            If SelectedLiteLoader Is Nothing Then
+                BtnLiteLoaderClear.Visibility = Visibility.Collapsed
+                ImgLiteLoader.Visibility = Visibility.Collapsed
+                LabLiteLoader.Text = If(LiteLoaderError, "点击选择")
+                LabLiteLoader.Foreground = ColorGray4
+            Else
+                BtnLiteLoaderClear.Visibility = Visibility.Visible
+                ImgLiteLoader.Visibility = Visibility.Visible
+                LabLiteLoader.Text = SelectedLiteLoader.Inherit
+                LabLiteLoader.Foreground = ColorGray1
+            End If
         End If
         'Forge
         Dim ForgeError As String = LoadForgeGetError()
@@ -335,67 +342,87 @@
             LabForge.Foreground = ColorGray1
         End If
         'Fabric
-        Dim FabricError As String = LoadFabricGetError()
-        CardFabric.MainSwap.Visibility = If(FabricError Is Nothing, Visibility.Visible, Visibility.Collapsed)
-        If FabricError IsNot Nothing Then CardFabric.IsSwaped = True
-        SetFabricInfoShow(CardFabric.IsSwaped)
-        If SelectedFabric Is Nothing Then
-            BtnFabricClear.Visibility = Visibility.Collapsed
-            ImgFabric.Visibility = Visibility.Collapsed
-            LabFabric.Text = If(FabricError, "点击选择")
-            LabFabric.Foreground = ColorGray4
+        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 13 Then
+            CardFabric.Visibility = Visibility.Collapsed
         Else
-            BtnFabricClear.Visibility = Visibility.Visible
-            ImgFabric.Visibility = Visibility.Visible
-            LabFabric.Text = SelectedFabric.Replace("+build", "")
-            LabFabric.Foreground = ColorGray1
+            CardFabric.Visibility = Visibility.Visible
+            Dim FabricError As String = LoadFabricGetError()
+            CardFabric.MainSwap.Visibility = If(FabricError Is Nothing, Visibility.Visible, Visibility.Collapsed)
+            If FabricError IsNot Nothing Then CardFabric.IsSwaped = True
+            SetFabricInfoShow(CardFabric.IsSwaped)
+            If SelectedFabric Is Nothing Then
+                BtnFabricClear.Visibility = Visibility.Collapsed
+                ImgFabric.Visibility = Visibility.Collapsed
+                LabFabric.Text = If(FabricError, "点击选择")
+                LabFabric.Foreground = ColorGray4
+            Else
+                BtnFabricClear.Visibility = Visibility.Visible
+                ImgFabric.Visibility = Visibility.Visible
+                LabFabric.Text = SelectedFabric.Replace("+build", "")
+                LabFabric.Foreground = ColorGray1
+            End If
         End If
         'FabricApi
-        Dim FabricApiError As String = LoadFabricApiGetError()
-        CardFabricApi.MainSwap.Visibility = If(FabricApiError Is Nothing, Visibility.Visible, Visibility.Collapsed)
-        If FabricApiError IsNot Nothing OrElse SelectedFabric Is Nothing Then CardFabricApi.IsSwaped = True
-        SetFabricApiInfoShow(CardFabricApi.IsSwaped)
-        If SelectedFabricApi Is Nothing Then
-            BtnFabricApiClear.Visibility = Visibility.Collapsed
-            ImgFabricApi.Visibility = Visibility.Collapsed
-            LabFabricApi.Text = If(FabricApiError, "点击选择")
-            LabFabricApi.Foreground = ColorGray4
+        If SelectedFabric Is Nothing Then
+            CardFabricApi.Visibility = Visibility.Collapsed
         Else
-            BtnFabricApiClear.Visibility = Visibility.Visible
-            ImgFabricApi.Visibility = Visibility.Visible
-            LabFabricApi.Text = SelectedFabricApi.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Split("+").First.Trim
-            LabFabricApi.Foreground = ColorGray1
+            CardFabricApi.Visibility = Visibility.Visible
+            Dim FabricApiError As String = LoadFabricApiGetError()
+            CardFabricApi.MainSwap.Visibility = If(FabricApiError Is Nothing, Visibility.Visible, Visibility.Collapsed)
+            If FabricApiError IsNot Nothing OrElse SelectedFabric Is Nothing Then CardFabricApi.IsSwaped = True
+            SetFabricApiInfoShow(CardFabricApi.IsSwaped)
+            If SelectedFabricApi Is Nothing Then
+                BtnFabricApiClear.Visibility = Visibility.Collapsed
+                ImgFabricApi.Visibility = Visibility.Collapsed
+                LabFabricApi.Text = If(FabricApiError, "点击选择")
+                LabFabricApi.Foreground = ColorGray4
+            Else
+                BtnFabricApiClear.Visibility = Visibility.Visible
+                ImgFabricApi.Visibility = Visibility.Visible
+                LabFabricApi.Text = SelectedFabricApi.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Split("+").First.Trim
+                LabFabricApi.Foreground = ColorGray1
+            End If
         End If
         'OptiFabric
-        Dim OptiFabricError As String = LoadOptiFabricGetError()
-        CardOptiFabric.MainSwap.Visibility = If(OptiFabricError Is Nothing, Visibility.Visible, Visibility.Collapsed)
-        If OptiFabricError IsNot Nothing OrElse SelectedFabric Is Nothing Then CardOptiFabric.IsSwaped = True
-        SetOptiFabricInfoShow(CardOptiFabric.IsSwaped)
-        If SelectedOptiFabric Is Nothing Then
-            BtnOptiFabricClear.Visibility = Visibility.Collapsed
-            ImgOptiFabric.Visibility = Visibility.Collapsed
-            LabOptiFabric.Text = If(OptiFabricError, "点击选择")
-            LabOptiFabric.Foreground = ColorGray4
+        If SelectedFabric Is Nothing OrElse SelectedOptiFine Is Nothing Then
+            CardOptiFabric.Visibility = Visibility.Collapsed
         Else
-            BtnOptiFabricClear.Visibility = Visibility.Visible
-            ImgOptiFabric.Visibility = Visibility.Visible
-            LabOptiFabric.Text = SelectedOptiFabric.DisplayName.ToLower.Replace("optifabric-", "").Replace(".jar", "").Trim.TrimStart("v")
-            LabOptiFabric.Foreground = ColorGray1
+            CardOptiFabric.Visibility = Visibility.Visible
+            Dim OptiFabricError As String = LoadOptiFabricGetError()
+            CardOptiFabric.MainSwap.Visibility = If(OptiFabricError Is Nothing, Visibility.Visible, Visibility.Collapsed)
+            If OptiFabricError IsNot Nothing OrElse SelectedFabric Is Nothing Then CardOptiFabric.IsSwaped = True
+            SetOptiFabricInfoShow(CardOptiFabric.IsSwaped)
+            If SelectedOptiFabric Is Nothing Then
+                BtnOptiFabricClear.Visibility = Visibility.Collapsed
+                ImgOptiFabric.Visibility = Visibility.Collapsed
+                LabOptiFabric.Text = If(OptiFabricError, "点击选择")
+                LabOptiFabric.Foreground = ColorGray4
+            Else
+                BtnOptiFabricClear.Visibility = Visibility.Visible
+                ImgOptiFabric.Visibility = Visibility.Visible
+                LabOptiFabric.Text = SelectedOptiFabric.DisplayName.ToLower.Replace("optifabric-", "").Replace(".jar", "").Trim.TrimStart("v")
+                LabOptiFabric.Foreground = ColorGray1
+            End If
         End If
         '主警告
-        HintFabricAPI.Visibility = If(SelectedFabric IsNot Nothing AndAlso SelectedFabricApi Is Nothing, Visibility.Visible, Visibility.Collapsed)
+        If SelectedFabric IsNot Nothing AndAlso SelectedFabricApi Is Nothing Then
+            HintFabricAPI.Visibility = Visibility.Visible
+        Else
+            HintFabricAPI.Visibility = Visibility.Collapsed
+        End If
         If SelectedFabric IsNot Nothing AndAlso SelectedOptiFine IsNot Nothing AndAlso SelectedOptiFabric Is Nothing Then
-            If SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15") Then
-                HintOptiFabric.Visibility = Visibility.Collapsed
-                HintOptiFabricOld.Visibility = Visibility.Visible
-            Else
-                HintOptiFabric.Visibility = Visibility.Visible
-                HintOptiFabricOld.Visibility = Visibility.Collapsed
-            End If
+            HintOptiFabric.Visibility = Visibility.Visible
         Else
             HintOptiFabric.Visibility = Visibility.Collapsed
-            HintOptiFabricOld.Visibility = Visibility.Collapsed
         End If
+        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) >= 16 AndAlso SelectedOptiFine IsNot Nothing AndAlso
+           (SelectedForge IsNot Nothing OrElse SelectedFabric IsNot Nothing) Then
+            HintModOptiFine.Visibility = Visibility.Visible
+        Else
+            HintModOptiFine.Visibility = Visibility.Collapsed
+        End If
+        '结束
+        IsReloading = False
     End Sub
     ''' <summary>
     ''' 清空已选择的项目。
@@ -643,7 +670,7 @@
         Return (OptiFine.RequiredForgeVersion.Contains(".") AndAlso 'XX.X.XXX
                 VersionSortInteger(Forge.Version, OptiFine.RequiredForgeVersion) >= 0) OrElse
                (Not OptiFine.RequiredForgeVersion.Contains(".") AndAlso '#XXXX
-                VersionSortInteger(Forge.Version.Split(".").Last, OptiFine.RequiredForgeVersion) >= 0)
+                Forge.Version.After(".") >= OptiFine.RequiredForgeVersion)
     End Function
 
     '限制展开
@@ -920,12 +947,12 @@
             If DisplayName.StartsWith("[" & MinecraftVersion & "]") Then Return True
             If Not DisplayName.Contains("/") OrElse Not DisplayName.Contains("]") Then Return False
             '直接的判断（例如 1.18.1/22w03a）
-            For Each Part As String In DisplayName.Split("]")(0).TrimStart("[").Split("/")
+            For Each Part As String In DisplayName.Before("]").TrimStart("[").Split("/")
                 If Part = MinecraftVersion Then Return True
             Next
             '将版本名分割语素（例如 1.16.4/5）
-            Dim Lefts = RegexSearch(DisplayName.Split("]")(0), "[a-z/]+|[0-9/]+")
-            Dim Rights = RegexSearch(MinecraftVersion.Split("]")(0), "[a-z/]+|[0-9/]+")
+            Dim Lefts = RegexSearch(DisplayName.Before("]"), "[a-z/]+|[0-9/]+")
+            Dim Rights = RegexSearch(MinecraftVersion.Before("]"), "[a-z/]+|[0-9/]+")
             '对每段进行判断
             Dim i As Integer = 0
             While True
@@ -1045,7 +1072,6 @@
     ''' 获取 OptiFabric 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadOptiFabricGetError() As String
-        If SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15") Then Return "不兼容老版本 Fabric，请手动下载 OptiFabric Origins"
         If LoadOptiFabric Is Nothing OrElse LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFabric.State, Object).Error.Message
         If DlOptiFabricLoader.Output Is Nothing Then

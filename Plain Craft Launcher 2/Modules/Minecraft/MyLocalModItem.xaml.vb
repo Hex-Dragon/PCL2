@@ -195,6 +195,7 @@ RetryStart:
     Private Shared Swiping As Boolean = False
     Private Shared SwipToState As Boolean '被滑动到的目标应将 Checked 改为此值
     Private Sub Button_MouseSwipeStart(sender As Object, e As Object) Handles Me.MouseLeftButtonDown
+        If Parent Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
         '开始滑动
         Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
         SwipeStart = Index
@@ -204,6 +205,7 @@ RetryStart:
         FrmVersionMod.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
     End Sub
     Private Sub Button_MouseSwipe(sender As Object, e As Object) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonUp
+        If Parent Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
         '结束滑动
         If Mouse.LeftButton <> MouseButtonState.Pressed OrElse Not Swiping Then
             Swiping = False

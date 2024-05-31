@@ -177,7 +177,7 @@
     Private Sub BtnManageCheck_Click(sender As Object, e As EventArgs) Handles BtnManageCheck.Click
         Try
             Dim Result = McModCheck(PageVersionLeft.Version, McModLoader.Output)
-            If Result.Count > 0 Then
+            If Result.Any Then
                 MyMsgBox(Join(Result, vbCrLf & vbCrLf), "Mod 检查结果")
             Else
                 Hint("Mod 检查完成，未发现任何问题！", HintType.Finish)
@@ -620,13 +620,13 @@
                 If ModEntry.ModId IsNot Nothing Then
                     DebugInfo.Add("Mod ID：" & ModEntry.ModId)
                 End If
-                If ModEntry.Dependencies.Count > 0 Then
+                If ModEntry.Dependencies.Any Then
                     DebugInfo.Add("依赖于：")
                     For Each Dep In ModEntry.Dependencies
                         DebugInfo.Add(" - " & Dep.Key & If(Dep.Value Is Nothing, "", "，版本：" & Dep.Value))
                     Next
                 End If
-                If DebugInfo.Count > 0 Then
+                If DebugInfo.Any Then
                     ContentLines.Add("")
                     ContentLines.AddRange(DebugInfo)
                 End If

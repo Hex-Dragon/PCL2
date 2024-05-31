@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Plain Craft Launcher 2", "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj", "{4499F2D2-18EF-4238-B1F0-7BD547AFF925}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Beta|Any CPU = Beta|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		ReleaseUpdate|Any CPU = ReleaseUpdate|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Beta|Any CPU.ActiveCfg = BETA|Any CPU
+		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Beta|Any CPU.Build.0 = BETA|Any CPU
+		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.ReleaseUpdate|Any CPU.ActiveCfg = ReleaseUpdate|Any CPU
+		{4499F2D2-18EF-4238-B1F0-7BD547AFF925}.ReleaseUpdate|Any CPU.Build.0 = ReleaseUpdate|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {838A572E-025C-4A2B-B682-68732EC0FE76}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal

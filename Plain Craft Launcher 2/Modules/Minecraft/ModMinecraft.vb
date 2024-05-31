@@ -1,4 +1,6 @@
-﻿Public Module ModMinecraft
+﻿Imports System.IO.Compression
+
+Public Module ModMinecraft
 
 #Region "文件夹"
 
@@ -149,7 +151,7 @@
 
 #Region "版本处理"
 
-    Public Const McVersionCacheVersion As Integer = 27
+    Public Const McVersionCacheVersion As Integer = 29
 
     Private _McVersionCurrent As McVersion
     Private _McVersionLast = 0 '为 0 以保证与 Nothing 不相同，使得 UI 显示可以正常初始化
@@ -181,7 +183,7 @@
             If AniControlEnabled = 0 AndAlso
                Setup.Get("VersionServerAuthServer", Version:=value) <> Setup.Get("CacheAuthServerServer") AndAlso
                Setup.Get("VersionServerLogin", Version:=value) = 4 Then
-                Setup.Set("CacheNideServer", "")
+                Setup.Set("CacheAuthAccess", "")
                 Log("[Launch] 服务器改变，要求重新登录 Authlib-Injector")
             End If
             If Setup.Get("VersionServerLogin", Version:=value) = 4 Then
@@ -216,8 +218,8 @@
                     '尚未判断
                     Dim ModFolder As New DirectoryInfo(Path & "mods\")
                     Dim SaveFolder As New DirectoryInfo(Path & "saves\")
-                    If (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Count > 0) OrElse
-                       (SaveFolder.Exists AndAlso SaveFolder.EnumerateFiles.Count > 0) Then
+                    If (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Any) OrElse
+                       (SaveFolder.Exists AndAlso SaveFolder.EnumerateFiles.Any) Then
                         '自动开启
                         Setup.Set("VersionArgumentIndie", 1, Version:=Me)
                         Log("[Setup] 已自动开启单版本隔离：" & Name)
@@ -390,6 +392,29 @@
                         If JsonObject("jar") IsNot Nothing Then
                             _Version.McName = JsonObject("jar").ToString
                             GoTo VersionSearchFinish
+                        End If
+                        '从 jar 文件的 version.json 中获取版本号
+                        If File.Exists(Path & Name & ".jar") Then
+                            Try
+                                Using JarArchive As New ZipArchive(New FileStream(Path & Name & ".jar", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                                    Dim VersionJson As ZipArchiveEntry = JarArchive.GetEntry("version.json")
+                                    If VersionJson IsNot Nothing Then
+                                        Using VersionJsonStream As New StreamReader(VersionJson.Open)
+                                            Dim VersionJsonObj As JObject = GetJson(VersionJsonStream.ReadToEnd)
+                                            If VersionJsonObj("id") IsNot Nothing Then
+                                                Dim VersionId As String = VersionJsonObj("id").ToString
+                                                If VersionId.Length < 32 Then '因为 wiki 说这玩意儿可能是个 hash，虽然我没发现
+                                                    _Version.McName = VersionId
+                                                    Log("[Minecraft] 从版本 jar 中的 version.json 获取到版本号：" & VersionId)
+                                                    GoTo VersionSearchFinish
+                                                End If
+                                            End If
+                                        End Using
+                                    End If
+                                End Using
+                            Catch ex As Exception
+                                Log(ex, "从版本 jar 中的 version.json 获取版本号失败")
+                            End Try
                         End If
                         '非准确的版本判断警告
                         Log("[Minecraft] 无法完全确认 MC 版本号的版本：" & Name)
@@ -1034,7 +1059,7 @@ ExitDataLoad:
         Dim Path As String = Loader.Input
         Try
             '初始化
-            McVersionList.Clear()
+            McVersionList = New Dictionary(Of McVersionCardType, List(Of McVersion))
 
             '检测缓存是否需要更新
             Dim FolderList As New List(Of String)
@@ -1075,10 +1100,10 @@ Reload:
 
             '改变当前选择的版本
 OnLoaded:
-            If McVersionList.Any(Function(v) v.Key <> McVersionCardType.Error) Then '不能判断 Count = 0，这在只有错误版本时导致了误判
+            If McVersionList.Any(Function(v) v.Key <> McVersionCardType.Error) Then
                 '尝试读取已储存的选择
                 Dim SavedSelection As String = ReadIni(Path & "PCL.ini", "Version")
-                If Not SavedSelection = "" Then
+                If SavedSelection <> "" Then
                     For Each Card As KeyValuePair(Of McVersionCardType, List(Of McVersion)) In McVersionList
                         For Each Version As McVersion In Card.Value
                             If Version.Name = SavedSelection AndAlso Not Version.State = McVersionState.Error Then
@@ -1190,7 +1215,7 @@ OnLoaded:
                     End Try
                 Next
 
-                ResultVersionList.Add(CardType, VersionList)
+                If VersionList.Any Then ResultVersionList.Add(CardType, VersionList)
             Next
             Return ResultVersionList
         Catch ex As Exception
@@ -1200,10 +1225,14 @@ OnLoaded:
     End Function
     Private Function McVersionListLoadNoCache(Path As String) As Dictionary(Of McVersionCardType, List(Of McVersion))
         Dim VersionList As New List(Of McVersion)
-        Dim ResultVersionList As New Dictionary(Of McVersionCardType, List(Of McVersion))
+
 #Region "循环加载每个版本的信息"
         Dim Dirs As DirectoryInfo() = New DirectoryInfo(Path & "versions").GetDirectories
         For Each Folder As DirectoryInfo In Dirs
+            If Not Folder.EnumerateFiles.Any Then
+                Log("[Minecraft] 跳过空文件夹：" & Folder.FullName)
+                Continue For
+            End If
             If (Folder.Name = "cache" OrElse Folder.Name = "BLClient" OrElse Folder.Name = "PCL") AndAlso Not File.Exists(Folder.FullName & "\" & Folder.Name & ".json") Then
                 Log("[Minecraft] 跳过可能不是版本文件夹的项目：" & Folder.FullName)
                 Continue For
@@ -1223,6 +1252,9 @@ OnLoaded:
             Version.Load()
         Next
 #End Region
+
+        Dim ResultVersionList As New Dictionary(Of McVersionCardType, List(Of McVersion))
+
 #Region "将版本分类到各个卡片"
         Try
 
@@ -1234,9 +1266,9 @@ OnLoaded:
             For Each Version As McVersion In VersionList
                 If Version.IsStar AndAlso Not Version.DisplayType = McVersionCardType.Hidden Then StaredVersions.Add(Version)
             Next
-            If StaredVersions.Count > 0 Then VersionListOriginal.Add(McVersionCardType.Star, StaredVersions)
+            If StaredVersions.Any Then VersionListOriginal.Add(McVersionCardType.Star, StaredVersions)
 
-            '预先筛选出愚人节的版本
+            '预先筛选出愚人节和错误的版本
             McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Error}, McVersionCardType.Error)
             McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Fool}, McVersionCardType.Fool)
 
@@ -1308,8 +1340,8 @@ OnLoaded:
 
             '将剩余的东西添加进去
             VersionRubbish.AddRange(VersionList)
-            If VersionUseful.Count > 0 Then VersionListOriginal.Add(McVersionCardType.OriginalLike, VersionUseful)
-            If VersionRubbish.Count > 0 Then VersionListOriginal.Add(McVersionCardType.Rubbish, VersionRubbish)
+            If VersionUseful.Any Then VersionListOriginal.Add(McVersionCardType.OriginalLike, VersionUseful)
+            If VersionRubbish.Any Then VersionListOriginal.Add(McVersionCardType.Rubbish, VersionRubbish)
 
             '按照自定义版本分类重新添加
             For Each VersionPair In VersionListOriginal
@@ -1347,9 +1379,7 @@ OnLoaded:
             Next
             If Not IsNothing(Snapshot) Then OldList.Remove(Snapshot)
             '按版本号排序
-            Dim NewList As List(Of McVersion) = Sort(OldList, Function(Left As McVersion, Right As McVersion)
-                                                                  Return Left.Version.McCodeMain > Right.Version.McCodeMain
-                                                              End Function)
+            Dim NewList As List(Of McVersion) = Sort(OldList, Function(Left, Right) Left.Version.McCodeMain > Right.Version.McCodeMain)
             '回设
             If Not IsNothing(Snapshot) Then NewList.Insert(0, Snapshot)
             ResultVersionList(McVersionCardType.OriginalLike) = NewList
@@ -1357,43 +1387,45 @@ OnLoaded:
 
         '不常用版本：按发布时间新旧排序，如果不可用则按名称排序
         If ResultVersionList.ContainsKey(McVersionCardType.Rubbish) Then
-            ResultVersionList(McVersionCardType.Rubbish) = Sort(ResultVersionList(McVersionCardType.Rubbish), Function(Left As McVersion, Right As McVersion)
-                                                                                                                  Dim LeftYear As Integer = Left.ReleaseTime.Year '+ If(Left.State = McVersionState.Original OrElse Left.Version.HasOptiFine, 100, 0)
-                                                                                                                  Dim RightYear As Integer = Right.ReleaseTime.Year '+ If(Right.State = McVersionState.Original OrElse Left.Version.HasOptiFine, 100, 0)
-                                                                                                                  If LeftYear > 2000 AndAlso RightYear > 2000 Then
-                                                                                                                      If LeftYear <> RightYear Then
-                                                                                                                          Return LeftYear > RightYear
-                                                                                                                      Else
-                                                                                                                          Return Left.ReleaseTime > Right.ReleaseTime
-                                                                                                                      End If
-                                                                                                                  ElseIf LeftYear > 2000 AndAlso RightYear < 2000 Then
-                                                                                                                      Return True
-                                                                                                                  ElseIf LeftYear < 2000 AndAlso RightYear > 2000 Then
-                                                                                                                      Return False
-                                                                                                                  Else
-                                                                                                                      Return Left.Name > Right.Name
-                                                                                                                  End If
-                                                                                                              End Function)
+            ResultVersionList(McVersionCardType.Rubbish) = Sort(ResultVersionList(McVersionCardType.Rubbish),
+            Function(Left As McVersion, Right As McVersion)
+                Dim LeftYear As Integer = Left.ReleaseTime.Year '+ If(Left.State = McVersionState.Original OrElse Left.Version.HasOptiFine, 100, 0)
+                Dim RightYear As Integer = Right.ReleaseTime.Year '+ If(Right.State = McVersionState.Original OrElse Left.Version.HasOptiFine, 100, 0)
+                If LeftYear > 2000 AndAlso RightYear > 2000 Then
+                    If LeftYear <> RightYear Then
+                        Return LeftYear > RightYear
+                    Else
+                        Return Left.ReleaseTime > Right.ReleaseTime
+                    End If
+                ElseIf LeftYear > 2000 AndAlso RightYear < 2000 Then
+                    Return True
+                ElseIf LeftYear < 2000 AndAlso RightYear > 2000 Then
+                    Return False
+                Else
+                    Return Left.Name > Right.Name
+                End If
+            End Function)
         End If
 
         'API 版本：优先按版本排序，此后【先放 Fabric，再放 Forge（按版本号从高到低排序），最后放 LiteLoader（按名称排序）】
         If ResultVersionList.ContainsKey(McVersionCardType.API) Then
-            ResultVersionList(McVersionCardType.API) = Sort(ResultVersionList(McVersionCardType.API), Function(Left As McVersion, Right As McVersion)
-                                                                                                          Dim Basic = VersionSortInteger(Left.Version.McName, Right.Version.McName)
-                                                                                                          If Basic <> 0 Then
-                                                                                                              Return Basic > 0
-                                                                                                          Else
-                                                                                                              If Left.Version.HasFabric Xor Right.Version.HasFabric Then
-                                                                                                                  Return Left.Version.HasFabric
-                                                                                                              ElseIf Left.Version.HasForge Xor Right.Version.HasForge Then
-                                                                                                                  Return Left.Version.HasForge
-                                                                                                              ElseIf Not Left.Version.SortCode <> Right.Version.SortCode Then
-                                                                                                                  Return Left.Version.SortCode > Right.Version.SortCode
-                                                                                                              Else
-                                                                                                                  Return Left.Name > Right.Name
-                                                                                                              End If
-                                                                                                          End If
-                                                                                                      End Function)
+            ResultVersionList(McVersionCardType.API) = Sort(ResultVersionList(McVersionCardType.API),
+            Function(Left As McVersion, Right As McVersion)
+                Dim Basic = VersionSortInteger(Left.Version.McName, Right.Version.McName)
+                If Basic <> 0 Then
+                    Return Basic > 0
+                Else
+                    If Left.Version.HasFabric Xor Right.Version.HasFabric Then
+                        Return Left.Version.HasFabric
+                    ElseIf Left.Version.HasForge Xor Right.Version.HasForge Then
+                        Return Left.Version.HasForge
+                    ElseIf Not Left.Version.SortCode <> Right.Version.SortCode Then
+                        Return Left.Version.SortCode > Right.Version.SortCode
+                    Else
+                        Return Left.Name > Right.Name
+                    End If
+                End If
+            End Function)
         End If
 
 #End Region
@@ -1417,19 +1449,9 @@ OnLoaded:
     ''' <param name="Formula">需要筛选出的版本类型。-2 代表隐藏的版本。</param>
     ''' <param name="CardType">卡片的名称。</param>
     Private Sub McVersionFilter(ByRef VersionList As List(Of McVersion), ByRef Target As Dictionary(Of McVersionCardType, List(Of McVersion)), Formula As McVersionState(), CardType As McVersionCardType)
-        '将某种版本筛选出来
-        Dim KeepList As New List(Of McVersion)
-        For Each Version As McVersion In VersionList
-            For Each Type As Integer In Formula
-                If Type = Version.State Then
-                    KeepList.Add(Version)
-                    GoTo NextVersion
-                End If
-            Next
-NextVersion:
-        Next
+        Dim KeepList = VersionList.Where(Function(v) Formula.Contains(v.State)).ToList
         '加入版本列表，并从剩余中删除
-        If KeepList.Count > 0 Then
+        If KeepList.Any Then
             Target.Add(CardType, KeepList)
             For Each Version As McVersion In KeepList
                 VersionList.Remove(Version)
@@ -1443,14 +1465,9 @@ NextVersion:
     ''' <param name="Formula">需要筛选出的版本类型。-2 代表隐藏的版本。</param>
     ''' <param name="KeepList">传入需要增加入的列表。</param>
     Private Sub McVersionFilter(ByRef VersionList As List(Of McVersion), Formula As McVersionState(), ByRef KeepList As List(Of McVersion))
-        For Each Version As McVersion In VersionList
-            For Each Type As McVersionState In Formula
-                If Type <> Version.State Then Continue For
-                KeepList.Add(Version) : Exit For
-            Next
-NextVersion:
-        Next
-        If KeepList.Count > 0 Then
+        KeepList.AddRange(VersionList.Where(Function(v) Formula.Contains(v.State)))
+        '加入版本列表，并从剩余中删除
+        If KeepList.Any Then
             For Each Version As McVersion In KeepList
                 VersionList.Remove(Version)
             Next
@@ -1515,7 +1532,7 @@ NextVersion:
     ''' </summary>
     Public Function McSkinGetAddress(Uuid As String, Type As String) As String
         If Uuid = "" Then Throw New Exception("Uuid 为空。")
-        If Uuid.StartsWithF("000000") Then Throw New Exception("离线 Uuid 无正版皮肤文件。")
+        If Uuid.StartsWithF("00000") Then Throw New Exception("离线 Uuid 无正版皮肤文件。")
         '尝试读取缓存
         Dim CacheSkinAddress As String = ReadIni(PathTemp & "Cache\Skin\Index" & Type & ".ini", Uuid)
         If Not CacheSkinAddress = "" Then Return CacheSkinAddress
@@ -2001,7 +2018,7 @@ NextVersion:
             Result.Add(New NetFile(Urls.Distinct.ToArray, Token.LocalPath, Checker))
         Next
         '去重并返回
-        Return Distinct(Result, Function(a, b) a.LocalPath = b.LocalPath)
+        Return Result.Distinct(Function(a, b) a.LocalPath = b.LocalPath)
     End Function
     ''' <summary>
     ''' 获取对应的支持库文件地址。
@@ -2048,8 +2065,7 @@ NextVersion:
                 If Version.InheritVersion = "" Then Exit Do
                 Version = New McVersion(PathMcFolder & "versions\" & Version.InheritVersion)
             Loop
-        Catch ex As Exception
-            Log(ex, "获取资源文件索引下载地址失败")
+        Catch
         End Try
         '无法获取到下载地址
         If ReturnLegacyOnError Then
@@ -2239,10 +2255,11 @@ NextVersion:
             '弹窗结果
             If MsgResult = 2 Then
                 '下载
-                RunInUi(Sub()
-                            PageDownloadInstall.McVersionWaitingForSelect = VersionName
-                            FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
-                        End Sub)
+                RunInUi(
+                Sub()
+                    PageDownloadInstall.McVersionWaitingForSelect = VersionName
+                    FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
+                End Sub)
             End If
 
         Catch ex As Exception
