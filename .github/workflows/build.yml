@@ -1,4 +1,4 @@
-name: 构建 PCL2
+name: 构建 PCL
 
 on:
   push:
