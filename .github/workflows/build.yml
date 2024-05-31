@@ -1,4 +1,4 @@
-name: Build PCL2
+name: 构建 PCL2
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
       Solution_Name: Plain Craft Launcher 2.sln
       Wap_Project_Directory: Plain Craft Launcher 2
       Wap_Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
-      Configuration: ${{ matrix.configuration }}
+      # Configuration: ${{ matrix.configuration }}
 
     steps:
     - name: Checkout
@@ -31,17 +31,17 @@ jobs:
         fetch-depth: 0
 
     # setup msbuild
-    - name: Setup MSBuild.exe
+    - name: 安装 MSBuild
       uses: microsoft/setup-msbuild@v2
 
-    # Restore the application to populate the obj folder with RuntimeIdentifiers
-    - name: Restore the application
-      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+    # # Restore the application to populate the obj folder with RuntimeIdentifiers
+    # - name: Restore the application
+    #   run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
 
 
     # Create the app package by building and packaging the Windows Application Packaging project
-    - name: Create the app package
-      run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration 
+    - name: 编译 PCL
+      run: msbuild $env:Wap_Project_Path /p:Configuration=$matrix:configuration 
       # /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle
       # env:
       #   Appx_Bundle: Always
@@ -49,7 +49,7 @@ jobs:
       #   Appx_Package_Build_Mode: StoreUpload
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
-    - name: Upload build artifacts
+    - name: 上传编译产物
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.configuration }}
