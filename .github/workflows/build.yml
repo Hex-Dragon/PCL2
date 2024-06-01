@@ -33,7 +33,7 @@ jobs:
 
     env:
       # Wap_Project_Directory: Plain Craft Launcher 2
-      Wap_Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
+      # Wap_Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
       Configuration: ${{ matrix.configuration }}
       Version_Friendly_Name: ${{ matrix.name }}
 
@@ -49,7 +49,7 @@ jobs:
         msbuild-architecture: x64
 
     - name: 编译源代码
-      run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /t:Rebuild
+      run: msbuild Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj /p:Configuration=$env:Configuration /t:Rebuild
       
     - name: 上传编译产物
       uses: actions/upload-artifact@v4
