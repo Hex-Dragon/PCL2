@@ -49,12 +49,12 @@ jobs:
 
     # 由于路径包含空格，使用环境变量传入路径，避免令人疑惑的引号写法
     - name: 编译源代码
-      run: msbuild $env:Project_Path /p:Configuration=$env:Configuration /t:Rebuild
+      run: msbuild $env:Project_Path /p:Configuration=$env:Configuration
       env: 
         Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
       
     - name: 上传编译产物
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.Version_Friendly_Name }}
-        path: Plain Craft Launcher 2\obj\${{ env.Configuration }}\Plain Craft Launcher 2.exe
+        name: ${{ matrix.Version_Friendly_Name }}
+        path: Plain Craft Launcher 2\obj\${{ matrix.Configuration }}\Plain Craft Launcher 2.exe
