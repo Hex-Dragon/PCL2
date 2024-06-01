@@ -26,7 +26,7 @@ jobs:
           configuration: Snapshot
         - name: 快照版
           configuration: Release
-        - name: 快照版（通过在线更新）
+        - name: 更新快照版
           configuration: ReleaseUpdate
         - name: 正式版
           configuration: BETA
@@ -57,12 +57,7 @@ jobs:
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: 编译源代码
       run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /t:Rebuild
-      # /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle
-      # env:
-      #   Appx_Bundle: Always
-      #   Appx_Bundle_Platforms: x86|x64|ARM|ARM64
-      #   Appx_Package_Build_Mode: StoreUpload
-
+    
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: 上传编译产物
       uses: actions/upload-artifact@v4
