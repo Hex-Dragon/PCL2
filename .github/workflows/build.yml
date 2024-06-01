@@ -34,7 +34,6 @@ jobs:
     runs-on: windows-latest
 
     env:
-      Solution_Name: Plain Craft Launcher 2.sln
       Wap_Project_Directory: Plain Craft Launcher 2
       Wap_Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
       Configuration: ${{ matrix.configuration }}
@@ -46,19 +45,14 @@ jobs:
       with:
         fetch-depth: 0
 
-    # setup msbuild
-    - name: 安装 MSBuild
+    - name: 配置 MSBuild
       uses: microsoft/setup-msbuild@v2
+      with:
+        msbuild-architecture: x64
 
-    # # Restore the application to populate the obj folder with RuntimeIdentifiers
-    # - name: Restore the application
-    #   run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
-
-    # Create the app package by building and packaging the Windows Application Packaging project
     - name: 编译源代码
       run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /t:Rebuild
-    
-    # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
+      
     - name: 上传编译产物
       uses: actions/upload-artifact@v4
       with:
