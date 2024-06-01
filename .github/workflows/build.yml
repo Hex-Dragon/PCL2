@@ -3,12 +3,10 @@ name: 构建 PCL
 on:
   push:
     paths:
-      - 'Plain Craft Launcher 2.sln'
       - 'Plain Craft Launcher 2/**'
       - '.github/workflows/**'
   pull_request:
     paths:
-      - 'Plain Craft Launcher 2.sln'
       - 'Plain Craft Launcher 2/**'
       - '.github/workflows/**'
   workflow_dispatch:
@@ -20,7 +18,7 @@ jobs:
     strategy:
       matrix:
         include: 
-        - name: 调试版
+        - name: 可调试开发版
           configuration: Debug
         - name: 开发版
           configuration: Snapshot
