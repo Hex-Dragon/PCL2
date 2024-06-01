@@ -33,8 +33,8 @@ jobs:
 
     env:
       # Wap_Project_Directory: Plain Craft Launcher 2
-      Configuration: ${{ matrix.configuration }}
-      Version_Friendly_Name: ${{ matrix.name }}
+      Configuration: 
+      # Version_Friendly_Name: ${{ matrix.name }}
 
     steps:
     - name: 签出仓库
@@ -49,9 +49,10 @@ jobs:
 
     # 由于路径包含空格，使用环境变量传入路径，避免令人疑惑的引号写法
     - name: 编译源代码
-      run: msbuild $env:Project_Path /p:Configuration=$env:Configuration
+      run: msbuild $env:Project_Path /p:Configuration=${{ matrix.configuration }}
       env: 
         Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
+        # Configuration: 
       
     - name: 上传编译产物
       uses: actions/upload-artifact@v4
