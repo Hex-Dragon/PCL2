@@ -23,8 +23,8 @@ jobs:
     runs-on: windows-latest
 
     env:
-      Wap_Project_Directory: Plain Craft Launcher 2
-      Wap_Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
+      Project_Directory: Plain Craft Launcher 2
+      Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
 
     steps:
     - name: Checkout
@@ -38,11 +38,11 @@ jobs:
 
     # Create the app package by building and packaging the Windows Application Packaging project
     - name: Create the app package
-      run: msbuild $env:Wap_Project_Path /p:Configuration=${{ matrix.configuration }}
+      run: msbuild $env:Project_Path /p:Configuration=${{ matrix.configuration }}
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.configuration }}
-        path: ${{ env.Wap_Project_Directory }}\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
+        path: ${{ env.Project_Directory }}\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
