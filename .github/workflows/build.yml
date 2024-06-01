@@ -25,13 +25,13 @@ jobs:
       # 定义矩阵，矩阵中每组都会单独执行，并使矩阵本身成为可用的上下文
       matrix:
         include: 
-        - name: 开发版_可调试
+        - name: 开发版
           configuration: Debug
         - name: 开发版
           configuration: Snapshot
         - name: 快照版
           configuration: Release
-        - name: 快照版_通过更新
+        - name: 快照版
           configuration: ReleaseUpdate
         - name: 正式版
           configuration: BETA
@@ -51,18 +51,18 @@ jobs:
         # 只签出第一层
         fetch-depth: 0
 
-    # 第二步，配置.NET生成工具
+    # 第二步，配置生成工具
     - name: 配置 MSBuild
       uses: microsoft/setup-msbuild@v2
       with:
-        # 使用64位架构的生成工具
+        # 生成工具使用64位架构
         msbuild-architecture: x64
 
     # 第三步，编译
     - name: 编译源代码
-    # 直接运行Powershell命令
-    # ${{}}括号内的是工作流表达式，此处即当前运行的矩阵的参数，运行时将直接替换
-    # $env:是Powershell读取环境变量的语法
+      # 直接运行Powershell命令
+      # ${{}}括号内的是工作流表达式，此处即当前运行的矩阵的参数，运行时将直接替换
+      # $env:是Powershell读取环境变量的语法
       run: msbuild $env:Project_Path /p:Configuration=${{ matrix.configuration }}
       env: 
         # 设置单个步骤的环境变量
@@ -73,7 +73,7 @@ jobs:
     - name: 上传编译产物
       uses: actions/upload-artifact@v4
       with:
-        # Artifact压缩包名称
+        # Artifact压缩包名称，此处命名为友好名称_原始名称
         name: ${{ matrix.name }}_${{ matrix.configuration }}
         # 将要上传的对象，将被压缩为Artifact压缩包
         path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
