@@ -56,5 +56,5 @@ jobs:
     - name: 上传编译产物
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.Version_Friendly_Name }}
-        path: Plain Craft Launcher 2\obj\${{ matrix.Configuration }}\Plain Craft Launcher 2.exe
+        name: ${{ matrix.name }}
+        path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
