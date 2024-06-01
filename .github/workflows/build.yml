@@ -25,13 +25,13 @@ jobs:
       # 定义矩阵，矩阵中每组都会单独执行，并使矩阵本身成为可用的上下文
       matrix:
         include: 
-        - name: 可调试开发版
+        - name: 开发版_可调试
           configuration: Debug
         - name: 开发版
           configuration: Snapshot
         - name: 快照版
           configuration: Release
-        - name: 更新快照版
+        - name: 快照版_通过更新
           configuration: ReleaseUpdate
         - name: 正式版
           configuration: BETA
@@ -74,6 +74,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         # Artifact压缩包名称
-        name: ${{ matrix.name }}
+        name: ${{ matrix.name }}_${{ matrix.configuration }}
         # 将要上传的对象，将被压缩为Artifact压缩包
         path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
