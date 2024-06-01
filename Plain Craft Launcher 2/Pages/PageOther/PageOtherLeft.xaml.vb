@@ -127,7 +127,7 @@
     '打开网页
     Public Shared Sub TryFeedback() Handles ItemFeedback.Click
         If Not CanFeedback(True) Then Exit Sub
-        Select Case MyMsgBox("此版本为开源版本，产生的 Bug 不是由 PCL 引起的。是否仍要打开反馈列表网页？" & vbCrLf & "如果无法打开该网页，请尝试使用加速器或 VPN。",
+        Select Case MyMsgBox("此版本为开源版本，产生的 Bug 可能不是由原版 PCL 引起的。是否仍要打开反馈列表网页？" & vbCrLf & "如果无法打开该网页，请尝试使用加速器或 VPN。",
                     "反馈提示", "提交新反馈", "查看反馈列表", "取消")
             Case 1
                 Feedback(True, False)
