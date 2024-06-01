@@ -816,7 +816,7 @@ LoginFinish:
         ExpiresIn = ResultJson("expires_in")
         ClipboardSet(UserCode)
         OpenWebsite(VerifyUri)
-        MyMsgBox("请在打开的网页里输入 PCL2 提供的设备代码并登录微软账户，然后允许 PCL2 访问相关信息。" & vbCrLf & "设备代码有时效性，若操作时间过长需要重新进行登录流程。" & vbCrLf & vbCrLf & "本次验证的设备代码为：" & UserCode & vbCrLf & vbCrLf & "你也可以在任意设备上打开下列网址进行验证：" & vbCrLf & VerifyUri & vbCrLf & vbCrLf & "请在完成后点击继续。", "正版验证", "继续")
+        MyMsgBox("请在打开的网页里输入 PCL2 提供的设备代码（已经复制到剪贴板）并登录微软账户，然后允许 PCL2 访问相关信息。" & vbCrLf & "设备代码有时效性，若操作时间过长需要重新进行登录流程。" & vbCrLf & vbCrLf & "本次验证的设备代码为：" & UserCode & vbCrLf & vbCrLf & "你也可以在任意设备上打开下列网址进行验证：" & vbCrLf & VerifyUri & vbCrLf & vbCrLf & "请在完成后点击继续。", "正版验证", "继续")
         Return DeviceCode
     End Function
 
@@ -849,7 +849,7 @@ LoginFinish:
                 ElseIf ex.Message.Contains("authorization_declined") Then
                     Hint("你取消了验证过程！")
                 ElseIf ex.Message.Contains("expired_token") Then
-                    Hint("设备代码已过期，请尝试重新验证！")
+                    Hint("Token 已过期，请尝试重新验证！")
                 ElseIf ex.Message.Contains("AADSTS70016") Then
                     Continue While
                 Else
