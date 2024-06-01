@@ -6,6 +6,11 @@ on:
       - 'Plain Craft Launcher 2.sln'
       - 'Plain Craft Launcher 2/**'
       - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'Plain Craft Launcher 2.sln'
+      - 'Plain Craft Launcher 2/**'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 jobs:
@@ -14,8 +19,18 @@ jobs:
 
     strategy:
       matrix:
-        configuration: [Debug, Release, Snapshot, BETA, ReleaseUpdate]
-
+        include: 
+        - name: 调试版
+          configuration: Debug
+        - name: 开发版
+          configuration: Snapshot
+        - name: 快照版
+          configuration: Release
+        - name: 快照版（通过在线更新）
+          configuration: ReleaseUpdate
+        - name: 正式版
+          configuration: BETA
+        
     runs-on: windows-latest
 
     env:
@@ -23,6 +38,7 @@ jobs:
       Wap_Project_Directory: Plain Craft Launcher 2
       Wap_Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
       Configuration: ${{ matrix.configuration }}
+      Version_Friendly_Name: ${{ matrix.name }}
 
     steps:
     - name: 签出仓库
@@ -38,9 +54,8 @@ jobs:
     # - name: Restore the application
     #   run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
 
-
     # Create the app package by building and packaging the Windows Application Packaging project
-    - name: 编译 PCL
+    - name: 编译源代码
       run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /t:Rebuild
       # /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle
       # env:
@@ -52,5 +67,5 @@ jobs:
     - name: 上传编译产物
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.Configuration }}
+        name: ${{ env.Version_Friendly_Name }}
         path: ${{ env.Wap_Project_Directory }}\obj\${{ env.Configuration }}\Plain Craft Launcher 2.exe
