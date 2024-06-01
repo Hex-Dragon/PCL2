@@ -6,6 +6,11 @@ on:
       - 'Plain Craft Launcher 2.sln'
       - 'Plain Craft Launcher 2/**'
       - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'Plain Craft Launcher 2.sln'
+      - 'Plain Craft Launcher 2/**'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 jobs:
@@ -21,7 +26,7 @@ jobs:
           configuration: Snapshot
         - name: 快照版
           configuration: Release
-        - name: 更新的快照版
+        - name: 快照版（通过在线更新）
           configuration: ReleaseUpdate
         - name: 正式版
           configuration: BETA
@@ -49,9 +54,8 @@ jobs:
     # - name: Restore the application
     #   run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
 
-
     # Create the app package by building and packaging the Windows Application Packaging project
-    - name: 编译 PCL
+    - name: 编译源代码
       run: msbuild $env:Wap_Project_Path /p:Configuration=$env:Configuration /t:Rebuild
       # /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle
       # env:
