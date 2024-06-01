@@ -49,7 +49,7 @@ jobs:
 
     # 由于路径包含空格，使用环境变量传入路径，避免令人疑惑的引号写法
     - name: 编译源代码
-      run: msbuild $Path /p:Configuration=$env:Configuration /t:Rebuild
+      run: msbuild $env:Path /p:Configuration=$env:Configuration /t:Rebuild
       env: 
         Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
       
