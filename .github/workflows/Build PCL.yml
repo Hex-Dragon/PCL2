@@ -32,15 +32,17 @@ jobs:
       with:
         fetch-depth: 0
 
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    # 将 x64 的 MSBuild 加到 PATH：https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
+      with:
+        msbuild-architecture: x64
 
-    # Create the app package by building and packaging the Windows Application Packaging project
-    - name: Create the app package
+    # 编译 PCL
+    - name: Build
       run: msbuild $env:Project_Path /p:Configuration=${{ matrix.configuration }}
 
-    # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
+    # 上传编译后的可执行文件：https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
