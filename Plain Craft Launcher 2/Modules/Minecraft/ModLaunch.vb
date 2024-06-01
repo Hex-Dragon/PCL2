@@ -498,16 +498,17 @@ NextInner:
         End If
         '尝试登录
         Dim OAuthTokens As String()
+        Dim ClientId As String = ""
         If Input.OAuthRefreshToken = "" Then
             '无 RefreshToken
 Relogin:
-            Dim OAuthCode As String = MsLoginStep1(Data)
+            Dim OAuthCode As String = MsLoginStep1(Data, ClientId)
             If Data.IsAborted Then Throw New ThreadInterruptedException
             Data.Progress = 0.2
-            OAuthTokens = MsLoginStep2(OAuthCode, False)
+            OAuthTokens = MsLoginStep2(OAuthCode, False, ClientId)
         Else
             '有 RefreshToken
-            OAuthTokens = MsLoginStep2(Input.OAuthRefreshToken, True)
+            OAuthTokens = MsLoginStep2(Input.OAuthRefreshToken, True, ClientId)
         End If
         '要求重新打开登录网页认证
         If OAuthTokens(0) = "Relogin" Then GoTo Relogin
@@ -797,100 +798,75 @@ LoginFinish:
         End Try
     End Function
 
-    '微软登录步骤 1：打开网页认证，获取 OAuth Code
-    Private Function MsLoginStep1(Data As LoaderTask(Of McLoginMs, McLoginResult)) As String
+    '微软登录步骤 1：获取 DeviceCode 并显示验证提示
+    Private Function MsLoginStep1(Data As LoaderTask(Of McLoginMs, McLoginResult), ClientId As String) As String
         McLaunchLog("开始微软登录步骤 1")
-        If True OrElse OsVersion <= New Version(10, 0, 17763, 0) Then '由于 #3849，WebBrowser 已经无法正常加载微软登录网页了
-SystemBrowser:
-            'Windows 7 或老版 Windows 10 登录
-            OpenWebsite(FormLoginOAuth.LoginUrl1)
-            Dim Result As String =
-                MyMsgBoxInput("等待网页登录",
-                              "登录完成后，网页会变得完全空白，把那个空白网页的网址复制到下面的框中就行了！" & vbCrLf &
-                              "如果网络环境不佳，它可能一直加载不出来，那就只能试试用 VPN 或加速器了。",
-                              ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateRegex("(?<=code\=)[^&]+", "返回网址应以 https://login.live.com/oauth20_desktop.srf?code= 开头")},
-                              HintText:="https://login.live.com/oauth20_desktop.srf?code=XXXXXX")
-            If Result Is Nothing Then
-                McLaunchLog("微软登录已在步骤 1 被取消")
-                Throw New ThreadInterruptedException("$$")
-            Else
-                Return RegexSeek(Result, "(?<=code\=)[^&]+")
-            End If
-            Hint("网页登录成功，你可以关闭浏览器啦！", HintType.Finish)
-        Else
-            'Windows 10 登录
-            Dim ReturnCode As String = Nothing
-            Dim ReturnEx As Exception = Nothing
-            Dim IsFinished As LoadState = LoadState.Loading
-            Dim LoginForm As FormLoginOAuth = Nothing
-            Dim IsSwitchToSystemBrowser As Boolean = False
-            RunInUi(Sub()
-                        Try
-                            LoginForm = New FormLoginOAuth
-                            LoginForm.Show()
-                            AddHandler LoginForm.OnLoginSuccess, Sub(Code As String)
-                                                                     ReturnCode = Code
-                                                                     IsFinished = LoadState.Finished
-                                                                 End Sub
-                            AddHandler LoginForm.OnLoginCanceled, Sub(IsSwitch As Boolean)
-                                                                      IsFinished = LoadState.Aborted
-                                                                      IsSwitchToSystemBrowser = IsSwitch
-                                                                  End Sub
-                        Catch ex As Exception
-                            ReturnEx = ex
-                            IsFinished = LoadState.Failed
-                        End Try
-                    End Sub)
-            Do While IsFinished = LoadState.Loading AndAlso Not Data.IsAborted
-                Thread.Sleep(20)
-            Loop
-            RunInUi(Sub() If LoginForm IsNot Nothing Then LoginForm.Close())
-            If IsFinished = LoadState.Finished Then
-                Return ReturnCode
-            ElseIf IsFinished = LoadState.Failed Then
-                Throw ReturnEx
-            ElseIf IsSwitchToSystemBrowser Then
-                McLaunchLog("微软登录在步骤 1 要求切换到系统浏览器")
-                GoTo SystemBrowser
-            Else
-                McLaunchLog("微软登录已在步骤 1 被取消")
-                Throw New ThreadInterruptedException("$$")
-            End If
-        End If
+
+        Dim DeviceCode As String
+        Dim UserCode As String
+        Dim VerifyUri As String
+        Dim ExpiresIn As String
+        Dim Request As String = "client_id=" & ClientId & "&" & "scope=XboxLive.signin%20offline_access"
+        Dim Result As String = NetRequestMulty("https://login.microsoftonline.com/consumers/oauth2/v2.0/devicecode", "POST", Request, "application/x-www-form-urlencoded", 2)
+
+        Dim ResultJson As JObject = GetJson(Result)
+        DeviceCode = ResultJson("device_code")
+        UserCode = ResultJson("user_code")
+        VerifyUri = ResultJson("verification_uri")
+        ExpiresIn = ResultJson("expires_in")
+        ClipboardSet(UserCode)
+        OpenWebsite(VerifyUri)
+        MyMsgBox("请在打开的网页里输入 PCL2 提供的设备代码并登录微软账户，然后允许 PCL2 访问相关信息。" & vbCrLf & "设备代码有时效性，若操作时间过长需要重新进行登录流程。" & vbCrLf & vbCrLf & "本次验证的设备代码为：" & UserCode & vbCrLf & vbCrLf & "你也可以在任意设备上打开下列网址进行验证：" & vbCrLf & VerifyUri & vbCrLf & vbCrLf & "请在完成后点击继续。", "正版验证", "继续")
+        Return DeviceCode
     End Function
+
     '微软登录步骤 2：从 OAuth Code 或 OAuth RefreshToken 获取 {OAuth AccessToken, OAuth RefreshToken}
-    Private Function MsLoginStep2(Code As String, IsRefresh As Boolean) As String()
+    Private Function MsLoginStep2(Code As String, IsRefresh As Boolean, ClientId As String, Optional ExpiresIn As String = "900") As String()
         McLaunchLog("开始微软登录步骤 2（" & If(IsRefresh, "", "非") & "刷新登录）")
 
         Dim Request As String
         If IsRefresh Then
-            Request = "client_id=00000000402b5328" & "&" &
+            Request = "grant_type=refresh_token" & "&" &
+                      "client_id=" & ClientId & "&" &
+                      "device_code=" & Code & "&" &
                       "refresh_token=" & Uri.EscapeDataString(Code) & "&" &
-                      "grant_type=refresh_token" & "&" &
-                      "redirect_uri=" & Uri.EscapeDataString("https://login.live.com/oauth20_desktop.srf") & "&" &
-                      "scope=" & Uri.EscapeDataString("service::user.auth.xboxlive.com::MBI_SSL")
+                      "scope=XboxLive.signin%20offline_access"
         Else
-            Request = "client_id=00000000402b5328" & "&" &
-                      "code=" & Uri.EscapeDataString(Code) & "&" &
-                      "grant_type=authorization_code" & "&" &
-                      "redirect_uri=" & Uri.EscapeDataString("https://login.live.com/oauth20_desktop.srf") & "&" &
-                      "scope=" & Uri.EscapeDataString("service::user.auth.xboxlive.com::MBI_SSL")
+            Request = "grant_type=urn:ietf:params:oauth:grant-type:device_code" & "&" &
+                      "client_id=" & ClientId & "&" &
+                      "device_code=" & Code & "&" &
+                      "scope=XboxLive.signin%20offline_access"
         End If
         Dim Result As String
-        Try
-            Result = NetRequestMulty("https://login.live.com/oauth20_token.srf", "POST", Request, "application/x-www-form-urlencoded", 2)
-        Catch ex As Exception
-            If ex.Message.Contains("must sign in again") OrElse ex.Message.Contains("invalid_grant") Then '#269
-                Return {"Relogin", ""}
-            Else
-                Throw
-            End If
-        End Try
+        Dim stopwatch As Stopwatch = Stopwatch.StartNew()
 
-        Dim ResultJson As JObject = GetJson(Result)
-        Dim AccessToken As String = ResultJson("access_token").ToString
-        Dim RefreshToken As String = ResultJson("refresh_token").ToString
-        Return {AccessToken, RefreshToken}
+        While stopwatch.Elapsed < TimeSpan.FromSeconds(ExpiresIn)
+            Try
+                Result = NetRequestMulty("https://login.microsoftonline.com/consumers/oauth2/v2.0/token", "POST", Request, "application/x-www-form-urlencoded", 2)
+            Catch ex As Exception
+                If ex.Message.Contains("must sign in again") OrElse ex.Message.Contains("invalid_grant") Then '#269
+                    Return {"Relogin", ""}
+                ElseIf ex.Message.Contains("authorization_declined") Then
+                    Hint("你取消了验证过程！")
+                ElseIf ex.Message.Contains("expired_token") Then
+                    Hint("设备代码已过期，请尝试重新验证！")
+                ElseIf ex.Message.Contains("AADSTS70016") Then
+                    Continue While
+                Else
+                    Throw
+                End If
+            End Try
+
+            If Result IsNot Nothing Then
+                Dim ResultJson As JObject = GetJson(Result)
+                Dim AccessToken As String = ResultJson("access_token").ToString
+                Dim RefreshToken As String = ResultJson("refresh_token").ToString
+                Return {AccessToken, RefreshToken}
+            End If
+        End While
+
+        Hint("验证超时，请尝试重新验证！")
+
     End Function
     '微软登录步骤 3：从 OAuth AccessToken 获取 XBLToken
     Private Function MsLoginStep3(AccessToken As String) As String
@@ -900,7 +876,7 @@ SystemBrowser:
                                     ""Properties"": {
                                         ""AuthMethod"": ""RPS"",
                                         ""SiteName"": ""user.auth.xboxlive.com"",
-                                        ""RpsTicket"": """ & AccessToken & """
+                                        ""RpsTicket"": ""d=" & AccessToken & """
                                     },
                                     ""RelyingParty"": ""http://auth.xboxlive.com"",
                                     ""TokenType"": ""JWT""
