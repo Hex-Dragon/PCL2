@@ -21,7 +21,6 @@ PCL 的代码绝大多数其实都是几年前学生时代的产物了……那�
 - 其他许可信息详见 [LICENSE](https://github.com/Silverteal/PCL2/blob/main/LICENCE)。
 
 ## 一些无趣的小细节
-
 - 除了以下文件进行了修改外，这里的源代码与 PCL 的发布版本相同。
   ```
   ModMain.vb
