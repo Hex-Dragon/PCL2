@@ -8,15 +8,6 @@
 
 这里提供了 PCL 的大多数源代码，包括 UI 库、动画模块、下载模块、Minecraft 启动模块等！
 
-除了以下文件出于一些原因进行了修改外，这里的源代码与 PCL 的发布版本相同。
-```
-ModMain.vb
-ModSecret.vb
-ModSetup.vb
-PageOtherTest.xaml
-PageOtherTest.xaml.vb
-```
-
 PCL 的代码绝大多数其实都是几年前学生时代的产物了……那时候英语还不过关……所以经常出现奇葩命名，还有令人高血压的高耦合啊，没做单例啊，瞎勾八乱糊啊之类的问题……额，我也不可能把这一堆玩意儿再从头写一次，各位就基于能跑就行的原则凑合凑合着看吧，求求别喷了……
 
 ## 相关内容
@@ -30,6 +21,15 @@ PCL 的代码绝大多数其实都是几年前学生时代的产物了……那�
 - 其他许可信息详见 [LICENSE](https://github.com/Silverteal/PCL2/blob/main/LICENCE)。
 
 ## 一些无趣的小细节
+
+- 除了以下文件进行了修改外，这里的源代码与 PCL 的发布版本相同。
+  ```
+  ModMain.vb
+  ModSecret.vb
+  ModSetup.vb
+  PageOtherTest.xaml
+  PageOtherTest.xaml.vb
+  ```
 - 别想在这里面找到解密游戏的线索，那部分的代码被我抠掉了
 - 解锁隐藏主题的相关代码也被抠掉了，所以别想着用翻源代码这种歪门邪道来绕过解密了.jpg
 - 源代码库并不是即时更新的，而是在每次 PCL 发布更新时（手动）同步一次
