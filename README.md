@@ -8,7 +8,7 @@
 
 这里提供了 PCL 的大多数源代码，包括 UI 库、动画模块、下载模块、Minecraft 启动模块等！
 
-除了以下文件出于各类原因进行了修改外，本仓库源代码与 PCL 的发布版本相同。
+除了以下文件出于一些原因进行了修改外，这里的源代码与 PCL 的发布版本相同。
 ```
 ModMain.vb
 ModSecret.vb
@@ -22,8 +22,12 @@ PCL 的代码绝大多数其实都是几年前学生时代的产物了……那�
 ## 相关内容
 - [PCL 功能投票](https://github.com/Hex-Dragon/PCL2/discussions/2)：来参加投票吧，开发者会优先处理票数较高的帖子！
 - [正式版下载](https://afdian.net/p/0164034c016c11ebafcb52540025c377)：下载免费的正式版 PCL。
-- [自动编译版下载](https://github.com/Hex-Dragon/PCL2/actions?query=event%3Apush)：下载此仓库编译的 PCL。
+- [自动构建版下载](https://github.com/Hex-Dragon/PCL2/actions?query=event%3Apush)：下载开源版的 PCL。
 - [帮助文档库](https://github.com/LTCatt/PCL2Help)：PCL 帮助文档在 GitHub 上的存储库（是的，帮助库在另一个 Repo……）
+
+## 许可
+- 您不能直接分发 PCL 修改版本的可执行文件。  
+- 其他许可信息详见 [LICENSE](https://github.com/Silverteal/PCL2/blob/main/LICENCE)。
 
 ## 一些无趣的小细节
 - 别想在这里面找到解密游戏的线索，那部分的代码被我抠掉了
