@@ -17,7 +17,7 @@ PCL 的代码绝大多数其实都是几年前学生时代的产物了……那�
 - [帮助文档库](https://github.com/LTCatt/PCL2Help)：PCL 帮助文档在 GitHub 上的存储库（是的，帮助库在另一个 Repo……）
 
 ## 许可
-- 您不能直接分发 PCL 修改版本的可执行文件。  
+- **您不能直接分发 PCL 修改版本的可执行文件。**
 - 其他许可信息详见 [LICENSE](https://github.com/Silverteal/PCL2/blob/main/LICENCE)。
 
 ## 一些无趣的小细节
