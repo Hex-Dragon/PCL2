@@ -7,10 +7,10 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
-            <!--
+            
                 <local:MyCard x:Name="CardSkin" Margin="0,15" Title="离线皮肤">
                     <StackPanel Margin="25,40,25,15">
-                        <local:MyHint Text="由于技术问题，皮肤预览与 Steve/Alex/自定义 选项暂时仅保证对 1.19.2 以前的版本有效！" IsWarn="False" Margin="0,0,0,10" />
+                        <local:MyHint Text="由于PCL-Community专门版本的修改，此部分选项目前没有效果" IsWarn="False" Margin="0,0,0,10" />
                         <Grid Margin="-1,0,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -55,7 +55,7 @@
                         </Grid>
                     </StackPanel>
                 </local:MyCard>
-            -->
+            
             <local:MyCard x:Name="CardArgument" Margin="0,0,0,15" Title="启动选项">
                 <StackPanel Margin="25,40,25,15">
                     <Grid>
