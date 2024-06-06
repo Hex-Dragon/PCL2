@@ -8,8 +8,8 @@ Friend Module ModSecret
 
 #Region "杂项"
 
-    '在开源内容的注册表键与普通内容的注册表键隔离
-    Public Const RegFolder As String = "PCLDebug"
+    'PCL-Community专门版本注册表项
+    Public Const RegFolder As String = "PCL-Community\Uuid-Fix"
 
     Friend Sub SecretOnApplicationStart()
         '提升 UI 线程优先级
@@ -40,12 +40,14 @@ Friend Module ModSecret
                 MsgBoxStyle.Critical, "运行环境错误")
             Environment.[Exit](Result.Cancel)
         End If
-        '开源版本提示
+        'PCL-Community专门版本提示
         MyMsgBox($"该版本中不包含以下特性：
-- CurseForge 查询：需要 API Key（你可以申请一个，然后添加到 SecretHeadersSign 方法中）
+- CurseForge 查询：需要私有的 API Key，避免滥用隐患
 - 更新与联网通知：避免滥用隐患
 - 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……
-- 百宝箱：开发早期往里面塞了些开发工具，整理起来太麻烦了", "开源版本说明")
+- 百宝箱：开发早期往里面塞了些开发工具，整理起来太麻烦了
+该版本中新增了以下特性：
+- 离线登录时，将始终使用原版离线服务器格式的UUID", "开源版本PCL-Community/Uuid-Fix说明")
     End Sub
 
     ''' <summary>
