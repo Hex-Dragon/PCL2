@@ -8,9 +8,9 @@
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
             
-                <local:MyCard x:Name="CardSkin" Margin="0,15" Title="离线皮肤">
+                <local:MyCard x:Name="CardSkin" Margin="0,15" Title="离线 UUID 和皮肤">
                     <StackPanel Margin="25,40,25,15">
-                        <local:MyHint Text="由于PCL-Community专门版本的修改，此部分选项目前没有效果" IsWarn="False" Margin="0,0,0,10" />
+                        <local:MyHint Text="由于PCL-Community专门版本的修改，此部分选项可能工作不正常或完全不工作" IsWarn="False" Margin="0,0,0,10" />
                         <Grid Margin="-1,0,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -19,11 +19,13 @@
                                 <ColumnDefinition />
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <local:MyRadioBox Text="随机" x:Name="RadioSkinType0" Height="22" Tag="LaunchSkinType/0" Grid.Column="0" ToolTip="随机选择一个默认皮肤" />
-                            <local:MyRadioBox Text="Steve" x:Name="RadioSkinType1" Height="22" Tag="LaunchSkinType/1" Grid.Column="1" />
-                            <local:MyRadioBox Text="Alex" x:Name="RadioSkinType2" Height="22" Tag="LaunchSkinType/2" Grid.Column="2" />
-                            <local:MyRadioBox Text="正版皮肤" x:Name="RadioSkinType3" Height="22" Tag="LaunchSkinType/3" Grid.Column="3" ToolTip="使用某个正版玩家的皮肤" />
-                            <local:MyRadioBox Text="自定义" x:Name="RadioSkinType4" Height="22" Tag="LaunchSkinType/4" Grid.Column="4" ToolTip="以资源包的形式加载自定义皮肤。&#xa;使用此方式更换的皮肤在多人游戏中仅自己可见，且会替换游戏中所有的角色。" />
+                            <local:MyRadioBox Text="默认 UUID 和皮肤" x:Name="RadioSkinType0" Height="22" Tag="LaunchSkinType/0" Grid.Column="0" ToolTip="通过登录时的用户名生成UUID。和服务器的兼容性好" />
+                            <!--
+                                <local:MyRadioBox Text="Steve" x:Name="RadioSkinType1" Height="22" Tag="LaunchSkinType/1" Grid.Column="1" />
+                                <local:MyRadioBox Text="Alex" x:Name="RadioSkinType2" Height="22" Tag="LaunchSkinType/2" Grid.Column="2" />
+                            -->
+                            <local:MyRadioBox Text="正版玩家 UUID 和皮肤" x:Name="RadioSkinType3" Height="22" Tag="LaunchSkinType/3" Grid.Column="3" ToolTip="使用指定正版玩家的UUID登录" />
+                            <local:MyRadioBox Text="默认 UUID 和自定义皮肤" x:Name="RadioSkinType4" Height="22" Tag="LaunchSkinType/4" Grid.Column="4" ToolTip="使用默认UUID的同时以资源包的形式加载自定义皮肤。&#xa;使用此方式更换的皮肤在多人游戏中仅自己可见，且会替换游戏中所有的该角色。" />
                         </Grid>
                         <Grid x:Name="PanSkinID" Margin="0,14,0,2" Visibility="Collapsed">
                             <Grid.ColumnDefinitions>
