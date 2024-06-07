@@ -1,5 +1,5 @@
 # 定义工作流名称
-name: 构建 PCL
+name: 编译 PCL
 
 # 定义触发器
 on:
@@ -23,17 +23,19 @@ jobs:
   
     strategy:
       # 定义矩阵，矩阵中每组都会单独执行，并使矩阵本身成为可用的上下文
+      # 由于一些奇葩的原因，Artifacts使用中文作为名称会导致它无法被下载，因此此处使用英文名。
+      # 或许后续可以试着直接发Release？
       matrix:
         include: 
-        - name: 开发版
+        - name: 'Debug with symbols'
           configuration: Debug
-        - name: 开发版
+        - name: 'Debug'
           configuration: Snapshot
-        - name: 快照版
+        - name: 'Snapshot'
           configuration: Release
-        - name: 快照版
+        - name: 'Snapshot from update'
           configuration: ReleaseUpdate
-        - name: 正式版
+        - name: 'Release'
           configuration: BETA
           
     # 显然，只有Windows才能构建.NET Framework程序
@@ -69,11 +71,12 @@ jobs:
         # 由于路径包含空格，使用环境变量传入路径，避免令人疑惑的引号写法
         Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
 
-    # 第四步，上传编译产物到Artifacts
-    - name: 上传编译产物
+    # 第四步，打包并上传编译产物到Artifacts
+    - name: 打包并上传编译产物
       uses: actions/upload-artifact@v4
       with:
-        # Artifact压缩包名称，此处命名为友好名称_原始名称
-        name: ${{ matrix.name }}_${{ matrix.configuration }}
+        # Artifact压缩包名称，此处命名为友好名称
+        name: ${{ matrix.name }}
         # 将要上传的对象，将被压缩为Artifact压缩包
         path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
+  

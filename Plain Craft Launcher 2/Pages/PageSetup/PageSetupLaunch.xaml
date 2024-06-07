@@ -7,53 +7,57 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
-            <local:MyCard x:Name="CardSkin" Margin="0,15" Title="离线皮肤">
-                <StackPanel Margin="25,40,25,15">
-                    <local:MyHint Text="由于技术问题，皮肤预览与 Steve/Alex/自定义 选项暂时仅保证对 1.19.2 以前的版本有效！" IsWarn="False" Margin="0,0,0,10" />
-                    <Grid Margin="-1,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <local:MyRadioBox Text="随机" x:Name="RadioSkinType0" Height="22" Tag="LaunchSkinType/0" Grid.Column="0" ToolTip="随机选择一个默认皮肤" />
-                        <local:MyRadioBox Text="Steve" x:Name="RadioSkinType1" Height="22" Tag="LaunchSkinType/1" Grid.Column="1" />
-                        <local:MyRadioBox Text="Alex" x:Name="RadioSkinType2" Height="22" Tag="LaunchSkinType/2" Grid.Column="2" />
-                        <local:MyRadioBox Text="正版皮肤" x:Name="RadioSkinType3" Height="22" Tag="LaunchSkinType/3" Grid.Column="3" ToolTip="使用某个正版玩家的皮肤" />
-                        <local:MyRadioBox Text="自定义" x:Name="RadioSkinType4" Height="22" Tag="LaunchSkinType/4" Grid.Column="4" ToolTip="以资源包的形式加载自定义皮肤。&#xa;使用此方式更换的皮肤在多人游戏中仅自己可见，且会替换游戏中所有的角色。" />
-                    </Grid>
-                    <Grid x:Name="PanSkinID" Margin="0,14,0,2" Visibility="Collapsed">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="正版玩家名" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextSkinID" Tag="LaunchSkinID" Grid.Column="1" MaxLength="50" />
-                        <Grid Height="35" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,14,0,0">
+            
+                <local:MyCard x:Name="CardSkin" Margin="0,15" Title="离线 UUID 和皮肤">
+                    <StackPanel Margin="25,40,25,15">
+                        <local:MyHint Text="由于PCL-Community专门版本的修改，此部分选项可能工作不正常或完全不工作" IsWarn="False" Margin="0,0,0,10" />
+                        <Grid Margin="-1,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <local:MyRadioBox Text="默认 UUID 和皮肤" x:Name="RadioSkinType0" Height="22" Tag="LaunchSkinType/0" Grid.Row="0" ToolTip="通过登录时的用户名生成UUID。和服务器的兼容性好" />
+                            
+                                <local:MyRadioBox Text="Steve" x:Name="RadioSkinType1" Height="22" Tag="LaunchSkinType/1" Grid.Row="1" />
+                                <local:MyRadioBox Text="Alex" x:Name="RadioSkinType2" Height="22" Tag="LaunchSkinType/2" Grid.Row="2" />
+                            
+                            <local:MyRadioBox Text="正版玩家 UUID 和皮肤" x:Name="RadioSkinType3" Height="22" Tag="LaunchSkinType/3" Grid.Row="3" ToolTip="使用指定正版玩家的UUID登录" />
+                            <local:MyRadioBox Text="默认 UUID 和自定义皮肤" x:Name="RadioSkinType4" Height="22" Tag="LaunchSkinType/4" Grid.Row="4" ToolTip="使用默认UUID的同时以资源包的形式加载自定义皮肤。&#xa;使用此方式更换的皮肤在多人游戏中仅自己可见，且会替换游戏中所有的该角色。" />
+                        </Grid>
+                        <Grid x:Name="PanSkinID" Margin="0,14,0,2" Visibility="Collapsed">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="正版玩家名" Margin="0,0,25,0" />
+                            <local:MyTextBox x:Name="TextSkinID" Tag="LaunchSkinID" Grid.Column="1" MaxLength="50" />
+                            <Grid Height="35" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,14,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                                </Grid.ColumnDefinitions>
+                                <local:MyButton x:Name="BtnSkinSave" Text="保存皮肤" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Row="1" />
+                                <local:MyButton x:Name="BtnSkinCache" Text="刷新缓存" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ToolTip="刷新并重新下载 PCL 当前显示的皮肤" Grid.Row="1" Grid.Column="1" />
+                            </Grid>
+                        </Grid>
+                        <Grid x:Name="PanSkinChange" Margin="0,14,0,2" Height="35" Visibility="Collapsed">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             </Grid.ColumnDefinitions>
-                            <local:MyButton x:Name="BtnSkinSave" Text="保存皮肤" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Row="1" />
-                            <local:MyButton x:Name="BtnSkinCache" Text="刷新缓存" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ToolTip="刷新并重新下载 PCL 当前显示的皮肤" Grid.Row="1" Grid.Column="1" />
+                            <local:MyButton x:Name="BtnSkinChange" Text="更改皮肤" MinWidth="140" Padding="13,0" Margin="0,0,20,0" />
+                            <local:MyButton x:Name="BtnSkinDelete" Text="重置皮肤" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Red" Grid.Column="1" />
                         </Grid>
-                    </Grid>
-                    <Grid x:Name="PanSkinChange" Margin="0,14,0,2" Height="35" Visibility="Collapsed">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                        </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnSkinChange" Text="更改皮肤" MinWidth="140" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton x:Name="BtnSkinDelete" Text="重置皮肤" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Red" Grid.Column="1" />
-                    </Grid>
-                </StackPanel>
-            </local:MyCard>
+                    </StackPanel>
+                </local:MyCard>
+            
             <local:MyCard x:Name="CardArgument" Margin="0,0,0,15" Title="启动选项">
                 <StackPanel Margin="25,40,25,15">
                     <Grid>
