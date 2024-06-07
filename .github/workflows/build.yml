@@ -71,12 +71,13 @@ jobs:
         # 由于路径包含空格，使用环境变量传入路径，避免令人疑惑的引号写法
         Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
 
-    # 第四步，上传编译产物到Artifacts
-    - name: 上传编译产物
+    # 第四步，打包并上传编译产物到Artifacts
+    - name: 打包并上传编译产物
       uses: actions/upload-artifact@v4
       with:
         # Artifact压缩包名称，此处命名为友好名称
         name: ${{ matrix.name }}
         # 将要上传的对象，将被压缩为Artifact压缩包
         path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
-        compression-level: 9
+        # 禁用压缩，加快工作流速度（反正也压不了多少）
+        compression-level: 0
