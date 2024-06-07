@@ -73,7 +73,7 @@ jobs:
     - name: 上传编译产物
       uses: actions/upload-artifact@v4
       with:
-        # Artifact压缩包名称，此处命名为友好名称_原始名称
-        name: ${{ matrix.name }}_${{ matrix.configuration }}
+        # Artifact压缩包名称，此处命名为友好名称-原始名称
+        name: ${{ matrix.name }}-${{ matrix.configuration }}
         # 将要上传的对象，将被压缩为Artifact压缩包
         path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
