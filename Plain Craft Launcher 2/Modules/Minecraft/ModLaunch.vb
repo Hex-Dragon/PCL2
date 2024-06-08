@@ -1076,6 +1076,7 @@ SystemBrowser:
                     Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
                 Loop
         End Select
+        Log("[Uuid-Fix]登录使用的 Uuid：" & Uuid)
         Return Uuid
     End Function
     '根据用户名返回对应 UUID，需要多线程
@@ -1103,8 +1104,14 @@ SystemBrowser:
         Return Uuid
     End Function
     Public Function McLoginLegacyUuid(Name As String)
-        Dim FullUuid As String = StrFill(Name.Length.ToString("X"), "0", 16) & StrFill(GetHash(Name).ToString("X"), "0", 16)
-        Return FullUuid.Substring(0, 12) & "3" & FullUuid.Substring(13, 3) & "9" & FullUuid.Substring(17, 15)
+        Dim NameHash As String = GetStringMD5("OfflinePlayer:" & Name)
+        Dim PendingVariant As Integer = Conversion.Val("&H" & NameHash(16))
+        PendingVariant = (PendingVariant Mod 4) + 8
+        Dim FinalVarient As String = PendingVariant.ToString("X")
+        Dim FinalHash As String = NameHash.Substring(0, 12) & "3" & NameHash.Substring(13, 3) & FinalVarient & NameHash.Substring(17, 15)
+        Return FinalHash.ToUpper()
+        'Dim FullUuid As String = StrFill(Name.Length.ToString("X"), "0", 16) & StrFill(GetHash(Name).ToString("X"), "0", 16)
+        'Return FullUuid.Substring(0, 12) & "3" & FullUuid.Substring(13, 3) & "9" & FullUuid.Substring(17, 15)
     End Function
 
 #End Region
