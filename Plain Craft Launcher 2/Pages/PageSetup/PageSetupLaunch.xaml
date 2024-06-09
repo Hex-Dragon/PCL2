@@ -10,7 +10,7 @@
             
                 <local:MyCard x:Name="CardSkin" Margin="0,15" Title="离线 UUID 和皮肤">
                     <StackPanel Margin="25,40,25,15">
-                        <local:MyHint Text="由于PCL-Community专门版本的修改，此部分选项可能工作不正常或完全不工作" IsWarn="False" Margin="0,0,0,10" />
+                        <local:MyHint Text="由于PCL-Community的修改，这些选项可能导致您以前的配置工作不完全或完全不工作" IsWarn="True" Margin="0,0,0,10" />
                     <Grid Margin="-1,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />

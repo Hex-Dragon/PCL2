@@ -1539,6 +1539,22 @@ Re:
         Return tmp.ToString()
     End Function
     ''' <summary>
+    ''' 将没有或有符号的UUID转换为有符号UUID，没有进行格式检查
+    ''' </summary>
+    Public Function GetSignedUuid(Str As String) As String
+        If Not Str.Contains("-") Then
+            Return Str.Substring(0, 8) & "-" & Str.Substring(8, 4) & "-" & Str.Substring(12, 4) & "-" & Str.Substring(16, 4) & "-" & Str.Substring(20)
+        Else
+            Return Str
+        End If
+    End Function
+    ''' <summary>
+    ''' 将没有或有符号的UUID转换为无符号UUID，没有进行格式检查
+    ''' </summary>
+    Public Function GetUnignedUuid(Str As String) As String
+        Return Str.Replace("-", "")
+    End Function
+    ''' <summary>
     ''' 检查字符串中的字符是否均为 ASCII 字符。
     ''' </summary>
     <Extension> Public Function IsASCII(Input As String) As Boolean

@@ -1076,15 +1076,18 @@ SystemBrowser:
                     Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
                 Loop
             Case 5 '每次都询问
+                Uuid = Uuid.ToLower()
                 Dim UuidAsked As String = MyMsgBoxInput(
                               Title:="设置自定义 UUID",
                               Text:="",
-                              DefaultInput:=Uuid,
+                              DefaultInput:=GetSignedUuid(Uuid),
                               ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateRegex("([A-Fa-f0-9]{32}|[A-Fa-f0-9]{8}(-[A-Fa-f0-9]{4}){3}-[A-Fa-f0-9]{12})", "请输入一个UUID")},
-                              HintText:="无符号纯小写32位字符串",
+                              HintText:=GetSignedUuid(Uuid),
+                              Button1:="使用此UUID",
+                              Button2:="使用默认UUID"
 )
                 If UuidAsked IsNot Nothing Then
-                    Uuid = UuidAsked.Replace("-", "").ToLower()
+                    Uuid = GetUnignedUuid(Uuid)
                 End If
 
         End Select
