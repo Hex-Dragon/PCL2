@@ -19,7 +19,7 @@ Public Module ModBase
     Public Const VersionCode As Integer = 325 'Snapshot
 #End If
     '自动生成的版本信息
-    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
+    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName & "-UuidFix"
 #If RELEASE Then
     Public Const VersionBranchName As String = "Snapshot"
     Public Const VersionBranchCode As String = "0"
