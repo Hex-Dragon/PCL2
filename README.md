@@ -10,6 +10,7 @@
 
 本仓库对 PCL 进行了相应修改，使其能够以默认通用的方式生成离线玩家的 UUID，并通过一些选项允许玩家在启动时自定义自己的 UUID。
 
+## 改动
 相比原始的仓库版PCL，粗略的修改内容如下：
 - 修改了注册表根节点位置为`HKCU\SOFTWARE\PCL-Community\Uuid-Fix`
 - 修改了通用占位识别码为`UUID-FIXD-ONTS-HARE`
@@ -18,8 +19,20 @@
   - `正版玩家`：获取某名在线玩家的 UUID 并应用。
   - `启动时询问`：在启动时询问需要使用的 UUID，缺省与`默认`相同。
   - `自定义皮肤`：使用`默认` UUID 的同时加载皮肤纹理包，实现替换皮肤。
+ 
+`默认` UUID 的生成函数大致如下（位于`ModLaunch.vb`）：
+```vb
+Public Function McLoginLegacyUuid(Name As String)
+        Dim NameHash As String = GetStringMD5("OfflinePlayer:" & Name)
+        Dim PendingVariant As Integer = Conversion.Val("&H" & NameHash(16))
+        PendingVariant = (PendingVariant Mod 4) + 8
+        Dim FinalVarient As String = PendingVariant.ToString("x")
+        Dim FinalUuid As String = (NameHash.Substring(0, 12) & "3" & NameHash.Substring(13, 3) & FinalVarient & NameHash.Substring(17, 15)).ToLower()
+        Return FinalUuid
+    End Function
+```
 
+## 杂项
 根据 PCL 的使用许可，本修改版本不提供可用的二进制文件，请自行编译源代码。
 
-
-[效果展示](https://github.com/PCL-Community/PCL2-Uuid-Fix/blob/Silverteal-commits/TRIVIAS.md)
+[使用效果展示](https://github.com/PCL-Community/PCL2-Uuid-Fix/blob/Silverteal-commits/TRIVIAS.md)
