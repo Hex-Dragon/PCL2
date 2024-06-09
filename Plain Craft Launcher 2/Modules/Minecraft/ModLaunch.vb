@@ -1075,8 +1075,19 @@ SystemBrowser:
                     If Uuid.EndsWithF("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
                     Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
                 Loop
+            Case 5 '每次都询问
+                Dim UuidAsked As String = MyMsgBoxInput(Title:="设置自定义 UUID",
+                              Text:="",
+                              HintText:="无符号纯小写32位字符串",
+                              ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateRegex("([A-Fa-f0-9]{32}|[A-Fa-f0-9]{8}(-[A-Fa-f0-9]{4}){3}-[A-Fa-f0-9]{12})", "请输入一个UUID")},
+                              DefaultInput:=Uuid,
+)
+                If UuidAsked IsNot Nothing Then
+                    Uuid = UuidAsked.Replace("-", "").ToLower()
+                End If
+
         End Select
-        Log("[Uuid-Fix]登录使用的 Uuid：" & Uuid)
+        Log("[Uuid-Fix] 登录使用的离线 UUID：" & Uuid, LogLevel.Hint)
         Return Uuid
     End Function
     '根据用户名返回对应 UUID，需要多线程
@@ -1107,9 +1118,10 @@ SystemBrowser:
         Dim NameHash As String = GetStringMD5("OfflinePlayer:" & Name)
         Dim PendingVariant As Integer = Conversion.Val("&H" & NameHash(16))
         PendingVariant = (PendingVariant Mod 4) + 8
-        Dim FinalVarient As String = PendingVariant.ToString("X")
-        Dim FinalHash As String = NameHash.Substring(0, 12) & "3" & NameHash.Substring(13, 3) & FinalVarient & NameHash.Substring(17, 15)
-        Return FinalHash.ToUpper()
+        Dim FinalVarient As String = PendingVariant.ToString("x")
+        Dim FinalUuid As String = (NameHash.Substring(0, 12) & "3" & NameHash.Substring(13, 3) & FinalVarient & NameHash.Substring(17, 15)).ToLower()
+        Log("[Uuid-Fix] 根据用户名生成的离线 UUID：" & FinalUuid, LogLevel.Debug)
+        Return FinalUuid
         'Dim FullUuid As String = StrFill(Name.Length.ToString("X"), "0", 16) & StrFill(GetHash(Name).ToString("X"), "0", 16)
         'Return FullUuid.Substring(0, 12) & "3" & FullUuid.Substring(13, 3) & "9" & FullUuid.Substring(17, 15)
     End Function

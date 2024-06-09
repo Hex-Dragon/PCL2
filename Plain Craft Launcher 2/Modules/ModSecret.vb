@@ -54,7 +54,7 @@ Friend Module ModSecret
     ''' 获取设备标识码。
     ''' </summary>
     Friend Function SecretGetUniqueAddress() As String
-        Return "PCL2-DONT-SHAR-THIS"
+        Return "UUID-FIXD-ONTS-HARE"
     End Function
 
     Friend Sub SecretLaunchJvmArgs(ByRef DataList As List(Of String))
