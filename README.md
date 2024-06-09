@@ -4,8 +4,6 @@
 [![Issues](https://img.shields.io/github/issues/PCL-Community/PCL2-Uuid-Fix?style=flat&label=Issues&labelColor=666666&color=1a7f37)](https://github.com/Hex-Dragon/PCL2/issues)
 [![爱发电](https://img.shields.io/badge/赞助-%E7%88%B1%E5%8F%91%E7%94%B5-946ce6?style=flat&labelColor=666666&logoSize=auto)](https://afdian.net/@LTCat)
 
-<br/>
-
 ## 介绍
 
 由于一些历史原因，PCL的UUID采用了一种和其他启动器非常不同的方式生成离线UUID，这导致PCL的离线游戏存档和其他启动器的存档不能互通，并对局域网联机的一些常见操作造成诸多不便。
