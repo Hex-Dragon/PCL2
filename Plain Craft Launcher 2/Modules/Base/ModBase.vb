@@ -2186,14 +2186,15 @@ NextElement:
     ''' </summary>
     Public Sub OpenWebsite(Url As String)
         Try
-            If Not Url.StartsWithF("http", True) Then Throw New Exception(Url & " 不是一个有效的网址，它必须以 http 开头！")
-            Log("[System] 正在打开网页：" & Url)
-            Process.Start(Url)
-        Catch ex As Exception
-            Log(ex, "无法打开网页（" & Url & "）")
-            ClipboardSet(Url, False)
-            MyMsgBox("可能由于浏览器未正确配置，PCL 无法为你打开网页。" & vbCrLf & "网址已经复制到剪贴板，若有需要可以手动粘贴访问。" & vbCrLf &
-                     $"网址：{Url}", "无法打开网页")
+            Log("[System] 正在打开网页：" & Url)  
+            Process.Start(Url) 
+        Catch ex As Exception  
+             
+            Log(ex, "无法打开URL（" & Url & "）")  
+            ClipboardSet(Url, False)  
+            MyMsgBox("可能由于系统未配置相应的应用，PCL 无法为你打开这个链接。" & vbCrLf &  
+                    "链接已经复制到剪贴板，若有需要可以手动粘贴访问。" & vbCrLf &  
+                    $"链接：{Url}", "无法打开链接") 
         End Try
     End Sub
     ''' <summary>
