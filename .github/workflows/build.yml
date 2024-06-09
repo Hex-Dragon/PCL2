@@ -25,15 +25,15 @@ jobs:
       # 定义矩阵，矩阵中每组都会单独执行，并使矩阵本身成为可用的上下文
       matrix:
         include: 
-        - name: 开发版
+        - name: Debug
           configuration: Debug
-        - name: 开发版
+        - name: DebugSnapshot
           configuration: Snapshot
-        - name: 快照版
+        - name: Release
           configuration: Release
-        - name: 快照版
+        - name: ReleaseUpdate
           configuration: ReleaseUpdate
-        - name: 正式版
+        - name: Beta
           configuration: BETA
           
     # 显然，只有Windows才能构建.NET Framework程序
