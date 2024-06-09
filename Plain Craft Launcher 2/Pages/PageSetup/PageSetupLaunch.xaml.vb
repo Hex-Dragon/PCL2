@@ -98,7 +98,7 @@
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub RadioBoxChange(sender As MyRadioBox, e As Object) Handles RadioSkinType0.Check, RadioSkinType1.Check, RadioSkinType2.Check, RadioSkinType3.Check, RadioSkinType4.Check, RadioRamType0.Check, RadioRamType1.Check
+    Private Shared Sub RadioBoxChange(sender As MyRadioBox, e As Object) Handles RadioSkinType0.Check, RadioSkinType1.Check, RadioSkinType2.Check, RadioSkinType3.Check, RadioSkinType4.Check, RadioSkinType5.Check, RadioRamType0.Check, RadioRamType1.Check
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag.ToString.Split("/")(0), Val(sender.Tag.ToString.Split("/")(1)))
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSkinID.ValidatedTextChanged, TextArgumentWindowHeight.ValidatedTextChanged, TextArgumentWindowWidth.ValidatedTextChanged, TextArgumentInfo.ValidatedTextChanged, TextAdvanceGame.ValidatedTextChanged, TextAdvanceJvm.ValidatedTextChanged, TextArgumentTitle.ValidatedTextChanged, TextAdvanceRun.ValidatedTextChanged

@@ -374,7 +374,7 @@
         RunInUi(Sub()
                     If Not IsNothing(FrmSetupLaunch) Then
                         Select Case Value
-                            Case 0, 1, 2 '默认
+                            Case 0, 1, 2, 5 '默认
                                 FrmSetupLaunch.PanSkinID.Visibility = Visibility.Collapsed
                                 FrmSetupLaunch.PanSkinChange.Visibility = Visibility.Collapsed
                             Case 3 '正版
