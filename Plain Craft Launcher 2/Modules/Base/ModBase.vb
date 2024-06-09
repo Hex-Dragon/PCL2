@@ -2186,11 +2186,11 @@ NextElement:
     ''' </summary>
     Public Sub OpenWebsite(Url As String)
         Try
-            Log("[System] 正在打开网页：" & Url)  
+            Log("[System] 正在打开链接：" & Url)  
             Process.Start(Url) 
         Catch ex As Exception  
              
-            Log(ex, "无法打开URL（" & Url & "）")  
+            Log(ex, "无法打开链接（" & Url & "）")  
             ClipboardSet(Url, False)  
             MyMsgBox("可能由于系统未配置相应的应用，PCL 无法为你打开这个链接。" & vbCrLf &  
                     "链接已经复制到剪贴板，若有需要可以手动粘贴访问。" & vbCrLf &  
