@@ -2186,9 +2186,9 @@ NextElement:
     ''' </summary>
     Public Sub OpenWebsite(Url As String)
         ' 允许 Minecraft 基岩版的 URLScheme (#3985)
-        If Url.StartsWithF("minecraft", True) Then
+        If Url = "minecraft://" Then
             ' 一定会被捕捉到错误，单独拎出来
-            Process.Start("minecraft://")
+            Process.Start(Url)
         Else
             Try
                 If Not Url.StartsWithF("http", True) Then Throw New Exception(Url & " 不是一个有效的网址，它必须以 http 开头！")
