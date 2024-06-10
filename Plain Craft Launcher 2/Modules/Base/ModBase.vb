@@ -2186,7 +2186,7 @@ NextElement:
     ''' </summary>
     Public Sub OpenWebsite(Url As String)
         Try
-            If Not Url.StartsWithF("http", True) Then Throw New Exception(Url & " 不是一个有效的网址，它必须以 http 开头！")
+            If Not Url.StartsWithF("http", True) Or Url = "minecraft://" Then Throw New Exception(Url & " 不是一个有效的网址，它必须以 http 开头！")
             Log("[System] 正在打开网页：" & Url)
             Process.Start(Url)
         Catch ex As Exception
