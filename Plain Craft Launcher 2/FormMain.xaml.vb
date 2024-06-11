@@ -1220,6 +1220,13 @@ Install:
         End If
     End Sub
 
+    ''' <summary>
+    ''' 通过右键直接返回到最初页面
+    ''' </summary>
+    Public Sub PageBackToHome() Handles BtnTitleInner.MouseRightButtonUp
+        PageChangeExit()
+    End Sub
+
     '实际处理页面切换
     ''' <summary>
     ''' 切换现有页面的实际方法。
