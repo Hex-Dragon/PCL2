@@ -7,8 +7,8 @@ on:
       - '.github/workflows/**'
   pull_request:
     paths:
-    - 'Plain Craft Launcher 2/**'
-    - '.github/workflows/**'
+      - 'Plain Craft Launcher 2/**'
+      - '.github/workflows/**'
 
 jobs:
 
