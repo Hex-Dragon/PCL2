@@ -43,5 +43,5 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4.3.3
       with:
-        name: ${{ matrix.configuration }}-${{ env.Hash }}
+        name: ${{ matrix.configuration }} ${{ env.Hash }}
         path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
