@@ -1224,6 +1224,7 @@ Install:
     ''' 通过右键直接返回到最初页面
     ''' </summary>
     Public Sub PageBackToHome() Handles BtnTitleInner.MouseRightButtonUp
+        PageChangeActual(PageStack.Last)
         PageChangeExit()
     End Sub
 
