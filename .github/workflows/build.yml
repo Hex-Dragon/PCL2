@@ -26,11 +26,11 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Set Hash
+    - name: Set Describe
       shell: bash
       run: |
-          Hash=`git rev-parse --short HEAD`
-          echo "Hash=$Hash" >> $GITHUB_ENV
+          Describe=`git describe`
+          echo "Describe=$Describe" >> $GITHUB_ENV
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
@@ -43,5 +43,5 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.configuration }} ${{ env.Hash }}
+        name: ${{ matrix.configuration }} ${{ env.Describe }}
         path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
