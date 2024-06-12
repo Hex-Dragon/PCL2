@@ -23,13 +23,13 @@
 `默认` UUID 的生成函数大致如下（位于`ModLaunch.vb`）：
 ```vb
 Public Function McLoginLegacyUuid(Name As String)
-        Dim NameHash As String = GetStringMD5("OfflinePlayer:" & Name)
-        Dim PendingVariant As Integer = Conversion.Val("&H" & NameHash(16))
-        PendingVariant = (PendingVariant Mod 4) + 8
-        Dim FinalVarient As String = PendingVariant.ToString("x")
-        Dim FinalUuid As String = (NameHash.Substring(0, 12) & "3" & NameHash.Substring(13, 3) & FinalVarient & NameHash.Substring(17, 15)).ToLower()
-        Return FinalUuid
-    End Function
+      Dim NameHash As String = GetStringMD5("OfflinePlayer:" & Name)
+      Dim PendingVariant As Integer = Conversion.Val("&H" & NameHash(16))
+      PendingVariant = (PendingVariant Mod 4) + 8
+      Dim FinalVarient As String = PendingVariant.ToString("x")
+      Dim FinalUuid As String = (NameHash.Substring(0, 12) & "3" & NameHash.Substring(13, 3) & FinalVarient & NameHash.Substring(17, 15)).ToLower()
+      Return FinalUuid
+End Function
 ```
 
 ## 杂项
