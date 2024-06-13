@@ -1023,6 +1023,7 @@ Install:
         DownloadLiteLoader = 8
         DownloadMod = 10
         DownloadPack = 11
+        DownloadResourcePack = 12
         SetupLaunch = 0
         SetupUI = 1
         SetupSystem = 2
@@ -1058,8 +1059,10 @@ Install:
                         Return "Mod 下载 - " & Project.TranslatedName
                     Case CompType.ModPack
                         Return "整合包下载 - " & Project.TranslatedName
-                    Case Else 'CompType.ResourcePack
+                    Case CompType.ResourcePack
                         Return "资源包下载 - " & Project.TranslatedName
+                    Case Else 'CompType.ShaderPack
+                        Return "光影包下载 - " & Project.TranslatedName
                 End Select
             Case PageType.HelpDetail
                 Dim Entry As HelpEntry = Stack.Additional(0)
