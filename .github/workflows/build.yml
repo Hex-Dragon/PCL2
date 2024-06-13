@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  push:
+    paths:
+      - 'Plain Craft Launcher 2/**'
+      - '.github/workflows/**'
+  pull_request:
+    paths:
+      - 'Plain Craft Launcher 2/**'
+      - '.github/workflows/**'
+
+jobs:
+
+  build:
+
+    strategy: 
+      matrix: 
+        configuration: [Debug, Release, Snapshot, BETA, ReleaseUpdate]
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set Describe
+      shell: bash
+      run: |
+          Describe=`git describe --tags`
+          echo "Describe=$Describe" >> $GITHUB_ENV
+
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+      with:
+        msbuild-architecture: x64
+
+    - name: Build
+      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.configuration }} ${{ env.Describe }}
+        path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
