@@ -62,14 +62,7 @@ jobs:
         msbuild-architecture: x64
 
     - name: 编译源代码
-      # 直接运行Powershell命令
-      # ${{}}括号内的是工作流表达式，此处即当前运行的矩阵的参数，运行时将直接替换
-      # $env:是Powershell读取环境变量的语法
-      run: msbuild $env:Project_Path /p:Configuration=${{ matrix.configuration }}
-      env: 
-        # 设置单个步骤的环境变量
-        # 由于路径包含空格，使用环境变量传入路径，避免令人疑惑的引号写法
-        Project_Path: Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj
+      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
 
     - name: 打包并上传编译产物
       uses: actions/upload-artifact@v4
