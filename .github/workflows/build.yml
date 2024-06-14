@@ -74,7 +74,7 @@ jobs:
     - name: 打包并上传编译产物
       uses: actions/upload-artifact@v4
       with:
-        # 文件名格式示例：pcl2_autobuild_a1b23c4_Snapshot.zip
-        name: pcl2_autobuild_${{ env.Describe }}_${{ matrix.configuration }}
+        # 文件名格式示例：pcl2-autobuild-2.7.4-13-a0b1c2d3-Snapshot.zip
+        name: pcl2-autobuild-${{ env.Describe }}-${{ matrix.configuration }}
         path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
   
