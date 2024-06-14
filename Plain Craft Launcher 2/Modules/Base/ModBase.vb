@@ -2185,22 +2185,18 @@ NextElement:
     ''' 打开网页。
     ''' </summary>
     Public Sub OpenWebsite(Url As String)
-        ' 允许 Minecraft 基岩版的 URLScheme (#3985)
-        If Url.StartsWithF("minecraft://") Then
-            ' 一定会被捕捉到错误，要单独拎出来
+        Try
+            ' 允许 Minecraft 基岩版的 URLScheme (#3985)
+            If Not Url.StartsWithF("http", True) Or Not Url.StartsWithF("minecraft://") Then Throw New Exception(Url & " 不是一个有效的网址，它必须以 http 开头！")
+            Log("[System] 正在打开网页：" & Url)
             Process.Start(Url)
-        Else
-            Try
-                If Not Url.StartsWithF("http", True) Then Throw New Exception(Url & " 不是一个有效的网址，它必须以 http 开头！")
-                Log("[System] 正在打开网页：" & Url)
-                Process.Start(Url)
-            Catch ex As Exception
-                Log(ex, "无法打开网页（" & Url & "）")
-                ClipboardSet(Url, False)
-                MyMsgBox("可能由于浏览器未正确配置，PCL 无法为你打开网页。" & vbCrLf & "网址已经复制到剪贴板，若有需要可以手动粘贴访问。" & vbCrLf &
-                         $"网址：{Url}", "无法打开网页")
-            End Try
-        End If
+        Catch ex As Exception
+            Log(ex, "无法打开网页（" & Url & "）")
+            ClipboardSet(Url, False)
+            MyMsgBox("可能由于浏览器未正确配置，PCL 无法为你打开网页。" & vbCrLf & "网址已经复制到剪贴板，若有需要可以手动粘贴访问。" & vbCrLf &
+                     $"网址：{Url}", "无法打开网页")
+        End Try
+        ' End If
     End Sub
     ''' <summary>
     ''' 打开 explorer。注意参数中的路径要尽量加上双引号！
