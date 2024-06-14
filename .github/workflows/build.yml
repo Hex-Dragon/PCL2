@@ -46,6 +46,13 @@ jobs:
       run: |
           Describe=`git describe --tags`
           echo "Describe=$Describe" >> $GITHUB_ENV
+      continue-on-error: true
+
+    - name: 导出提交哈希出错，导出备用描述字符串，
+      shell: bash
+      run: |
+          echo "Describe=unknown" >> $GITHUB_ENV
+      if: ${{ failure() }}
 
     - name: 配置 MSBuild
       uses: microsoft/setup-msbuild@v2
