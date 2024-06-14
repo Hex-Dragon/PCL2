@@ -48,7 +48,8 @@ jobs:
           echo "Describe=$Describe" >> $GITHUB_ENV
       continue-on-error: true
 
-    - name: 导出提交哈希出错，导出备用描述字符串，
+    # 在极少数情况下，可能没有可用的哈希。详见 https://github.com/Silverteal/PCL2/actions/runs/9518525229/job/26239628548
+    - name: 若导出提交哈希出错，导出备用描述字符串
       shell: bash
       run: |
           echo "Describe=unknown" >> $GITHUB_ENV
