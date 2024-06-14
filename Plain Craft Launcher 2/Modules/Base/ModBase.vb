@@ -2196,7 +2196,6 @@ NextElement:
             MyMsgBox("可能由于浏览器未正确配置，PCL 无法为你打开网页。" & vbCrLf & "网址已经复制到剪贴板，若有需要可以手动粘贴访问。" & vbCrLf &
                      $"网址：{Url}", "无法打开网页")
         End Try
-        ' End If
     End Sub
     ''' <summary>
     ''' 打开 explorer。注意参数中的路径要尽量加上双引号！
