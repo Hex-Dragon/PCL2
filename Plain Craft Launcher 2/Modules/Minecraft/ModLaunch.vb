@@ -1073,7 +1073,7 @@ SystemBrowser:
                 '自定义
                 Do Until McSkinSex(Uuid) = If(Setup.Get("LaunchSkinSlim"), "Alex", "Steve")
                     If Uuid.EndsWithF("FFFFF") Then Uuid = Mid(Uuid, 1, 32 - 5) & "00000"
-                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X")
+                    Uuid = Mid(Uuid, 1, 32 - 5) & (Long.Parse(Right(Uuid, 5), Globalization.NumberStyles.AllowHexSpecifier) + 1).ToString("X").PadLeft(5, "0")
                 Loop
             Case 5 '每次都询问
                 Uuid = Uuid.ToLower()
