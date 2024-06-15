@@ -34,8 +34,8 @@ jobs:
           Describe=`git describe --tags`
           echo "Describe=$Describe" >> $GITHUB_ENV
 
-    - name: Set Hash when Describe is Blank
-      if: ${{ env.Describe}}=``
+    - name: Set Hash as Describe when Describe is Blank
+      if: ${{ env.Describe }}
       shell: bash
       run: |
           Hash=`git rev-parse --short HEAD`
