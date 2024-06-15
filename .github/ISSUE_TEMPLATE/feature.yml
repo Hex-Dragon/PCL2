@@ -8,7 +8,7 @@ body:
     label: "检查项"
     description: "请逐个检查下列项目，并勾选确认。"
     options:
-    - label: "我确定**官方最新版**的 PCL 中没有此功能。"
+    - label: "我确定 **官方最新版** 的 PCL 中没有此功能。"
       required: true
     - label: "我已在 [Issues 页面](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) 和 [常见&难检反馈及问题列表](https://github.com/Hex-Dragon/PCL2/discussions/1930) 中搜索，确认了这一提案未被提交过。"
       required: true
