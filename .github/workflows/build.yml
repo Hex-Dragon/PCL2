@@ -9,7 +9,7 @@ on:
     paths:
       - 'Plain Craft Launcher 2/**'
       - '.github/workflows/**'
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
 
