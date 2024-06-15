@@ -2262,7 +2262,7 @@ Retry:
                 If(Entry.ReleaseTime = "",
                 If(ModeDebug, "种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), ""),
                 "发布于 " & Entry.ReleaseTime & If(ModeDebug, "，种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), "")),
-            .Logo = PathImage & "Blocks/Anvil.png"
+            .Logo = PathImage & "Blocks/NeoForge.png"
         }
         AddHandler NewItem.Click, OnClick
         '建立菜单

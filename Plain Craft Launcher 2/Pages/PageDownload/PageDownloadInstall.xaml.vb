@@ -499,7 +499,7 @@
             Name += "-Forge_" & SelectedForge.Version
         End If
         If SelectedNeoForge IsNot Nothing Then
-            Name += "-NeoForge_" & SelectedNeoForge.Version
+            Name += "-NeoForge_" & SelectedNeoForge.Version.Replace("neoforge-", "").Replace("forge-", "").Replace("1.20.1-", "")
         End If
         If SelectedLiteLoader IsNot Nothing Then
             Name += "-LiteLoader"
@@ -521,7 +521,7 @@
             Info += ", Forge " & SelectedForge.Version
         End If
         If SelectedNeoForge IsNot Nothing Then
-            Info += ", NeoForge " & SelectedNeoForge.Version
+            Info += ", NeoForge " & SelectedNeoForge.Version.Replace("neoforge-", "").Replace("forge-", "").Replace("1.20.1-", "")
         End If
         If SelectedLiteLoader IsNot Nothing Then
             Info += ", LiteLoader"
@@ -541,7 +541,7 @@
         ElseIf SelectedForge IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/Anvil.png"
         ElseIf SelectedNeoForge IsNot Nothing Then
-            Return "pack://application:,,,/images/Blocks/Anvil.png"
+            Return "pack://application:,,,/images/Blocks/NeoForge.png"
         ElseIf SelectedLiteLoader IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/Egg.png"
         ElseIf SelectedOptiFine IsNot Nothing Then
