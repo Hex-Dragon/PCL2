@@ -2257,7 +2257,7 @@ Retry:
     Public Function NeoForgeDownloadListItem(Entry As DlNeoForgeVersionEntry, OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = If(Entry.IsBeta, Entry.Version & "-beta", Entry.Version), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Title = Entry.Version, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = If(Entry.IsBeta, "测试版", "稳定版") &
                 If(Entry.ReleaseTime = "",
                 If(ModeDebug, "种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), ""),

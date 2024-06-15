@@ -880,19 +880,21 @@
                 Dim Name As String               '存储 rawVersion，貌似变化更加频繁
                 Dim StdVersion As String         '存储 version，相对规则
                 Dim IsBeta As Boolean
-                If Token("rawVersion").Contains("-beta") Then
-                    StdVersion = Token("version").ToString() - "-beta"
+                Dim rawVersion As String = Token("rawVersion")
+                If rawVersion.Contains("-beta") Then
+                    StdVersion = Token("version").ToString().Replace("-beta", "")
                     IsBeta = True
                 Else
                     StdVersion = Token("version").ToString()
                     IsBeta = False
                 End If
-                Name = Token("rawVersion")
+                Name = rawVersion
                 Dim Inherit As String = Token("mcversion")
                 Dim Entry = New DlNeoForgeVersionEntry With {.Version = Name, .Inherit = Inherit, .IsBeta = IsBeta, .StdVersion = StdVersion}
                 Versions.Add(Entry)
             Next
         Catch ex As Exception
+            MyMsgBox(ex.ToString(), "错误")
             Throw New Exception("版本列表解析失败（" & Json.ToString & "）", ex)
         End Try
         If Not Versions.Any() Then Throw New Exception("没有可用版本")
