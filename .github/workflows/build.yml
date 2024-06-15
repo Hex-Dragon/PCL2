@@ -27,15 +27,11 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Set Hash
-      shell: bash
-      run: |
-          Hash=`git rev-parse --short HEAD`
-          echo "Describe=$Describe" >> $GITHUB_ENV
-
     - name: Set Describe
       shell: bash
       run: |
+          Hash=`git rev-parse --short HEAD`
+          echo echo "Describe=$Hash" >> $GITHUB_ENV
           Describe=`git describe --tags`
           echo "Describe=$Describe" >> $GITHUB_ENV
 
