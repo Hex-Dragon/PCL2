@@ -31,10 +31,15 @@ jobs:
       continue-on-error: true
       shell: bash
       run: |
-          Hash=`git rev-parse --short HEAD`
-          echo echo "Describe=$Hash" >> $GITHUB_ENV
           Describe=`git describe --tags`
           echo "Describe=$Describe" >> $GITHUB_ENV
+
+    - name: Set Hash when Describe is ``
+      if: ${{ env.Describe}}=``
+      shell: bash
+      run: |
+          Hash=`git rev-parse --short HEAD`
+          echo "Describe=$Hash" >> $GITHUB_ENV
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
