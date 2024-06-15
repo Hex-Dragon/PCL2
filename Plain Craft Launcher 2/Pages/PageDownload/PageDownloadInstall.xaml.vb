@@ -787,6 +787,7 @@
         If LoadLiteLoader Is Nothing OrElse LoadLiteLoader.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadLiteLoader.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadLiteLoader.State, Object).Error.Message
         For Each Version As DlLiteLoaderListEntry In DlLiteLoaderListLoader.Output.Value
+            If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
             If Version.Inherit = SelectedMinecraftId Then Return Nothing
         Next
         Return "没有可用版本"
@@ -857,6 +858,7 @@
         Dim NotSuitForOptiFine As Boolean = False
         For Each Version In Loader.Output
             If Version.Category = "universal" OrElse Version.Category = "client" Then Continue For '跳过无法自动安装的版本
+            If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
             If SelectedFabric IsNot Nothing Then Return "与 Fabric 不兼容"
             If SelectedOptiFine IsNot Nothing AndAlso
                 VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then
@@ -945,6 +947,7 @@
         If Loader.State <> LoadState.Finished Then Return "获取版本列表失败：未知错误，状态为 " & GetStringFromEnum(Loader.State)
         For Each Version In Loader.Output
             If Version.Category = "universal" OrElse Version.Category = "client" Then Continue For '跳过无法自动安装的版本
+            If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
             If SelectedFabric IsNot Nothing Then Return "与 Fabric 不兼容"
             Return Nothing
         Next
@@ -1008,6 +1011,7 @@
         If LoadFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadFabric.State, Object).Error.Message
         For Each Version As JObject In DlFabricListLoader.Output.Value("game")
             If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
+                If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
                 If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
                 'If SelectedOptiFine IsNot Nothing Then Return "与 OptiFine 不兼容"
                 Return Nothing

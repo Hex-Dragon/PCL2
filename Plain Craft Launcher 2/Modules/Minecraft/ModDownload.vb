@@ -748,6 +748,10 @@
         ''' 版本分支。若无分支则为 Nothing。
         ''' </summary>
         Public Branch As String = Nothing
+        ''' <summary>
+        ''' 是否是 Beta 版。若未提供则默认为 False。
+        ''' </summary>
+        Public IsBeta As Boolean = False
         Public Structure DlNeoForgeListResult
             ''' <summary>
             ''' 数据来源名称，如“Official”，“BMCLAPI”。
@@ -857,7 +861,6 @@
         ResultJson = GetJson(Result)
         Dim Versions As New List(Of DlNeoForgeVersionEntry)
         Dim VersionList As String = ResultJson("versions")
-        MyMsgBox(VersionList, "VersionList 获取测试")
         'Try
         '    Try
         '        '基础信息获取
@@ -894,9 +897,17 @@
         Dim Versions As New List(Of DlNeoForgeVersionEntry)
         Try
             For Each Token As JObject In Json
-                Dim Name As String = Token("version")
+                Dim Name As String
+                Dim IsBeta As Boolean
+                If Token("version").Contains("-beta") Then
+                    Name = Token("version").ToString() - "-beta"
+                    IsBeta = True
+                Else
+                    Name = Token("version")
+                    IsBeta = False
+                End If
                 Dim Inherit As String = Token("mcversion")
-                Dim Entry = New DlNeoForgeVersionEntry With {.Version = Name, .Inherit = Inherit}
+                Dim Entry = New DlNeoForgeVersionEntry With {.Version = Name, .Inherit = Inherit, .IsBeta = IsBeta}
                 Versions.Add(Entry)
             Next
             'For Each Token As JObject In Json
