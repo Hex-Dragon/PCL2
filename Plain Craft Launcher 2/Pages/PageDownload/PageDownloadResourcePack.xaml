@@ -11,8 +11,7 @@
                     <Grid Margin="0,0,0,11" HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="1.3*" />
-                            <ColumnDefinition Width="1.2*" />
+                            <ColumnDefinition Width="2.5*" />
                             <ColumnDefinition Width="50" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="1*" />
@@ -23,9 +22,9 @@
                             <RowDefinition Height="28" />
                         </Grid.RowDefinitions>
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="名称" Margin="0,0,18,0" />
-                        <local:MyTextBox x:Name="TextSearchName" Grid.Column="1" Grid.ColumnSpan="2" />
-                        <TextBlock VerticalAlignment="Center" Grid.Column="4" HorizontalAlignment="Left" Text="来源" Margin="0,0,18,0" />
-                        <local:MyComboBox x:Name="ComboSearchSource" Grid.Column="5">
+                        <local:MyTextBox x:Name="TextSearchName" Grid.Column="1" />
+                        <TextBlock VerticalAlignment="Center" Grid.Column="3" HorizontalAlignment="Left" Text="来源" Margin="0,0,18,0" />
+                        <local:MyComboBox x:Name="ComboSearchSource" Grid.Column="4">
                             <local:MyComboBoxItem Content="全部" Tag="3" IsSelected="True" />
                             <local:MyComboBoxItem Content="CurseForge" Tag="1" />
                             <local:MyComboBoxItem Content="Modrinth" Tag="2" />
@@ -49,9 +48,9 @@
                             <local:MyComboBoxItem Content="1.8.9" />
                             <local:MyComboBoxItem Content="1.7.10" />
                         </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Left" Text="类型" Margin="0,0,18,0" />
-                        <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="5" Grid.Row="2" MaxDropDownHeight="320">
-                            <local:MyComboBoxItem Content="全部" Tag="" IsSelected="True" />
+                        <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="类型" Margin="0,0,18,0" />
+                        <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="4" Grid.Row="2" MaxDropDownHeight="320">
+                            <local:MyComboBoxItem Tag="" Content="全部" IsSelected="True" />
                             <local:MyComboBoxItem Content="字体包" Tag="5244/" />
                             <local:MyComboBoxItem Content="数据包" Tag="5193/" />
                             <local:MyComboBoxItem Content="蒸汽朋克" Tag="399/" />
