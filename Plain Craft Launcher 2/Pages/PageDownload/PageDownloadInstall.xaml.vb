@@ -974,9 +974,11 @@
             If Not Loader.Output.Any() Then Exit Sub
             PanNeoForge.Children.Clear()
 
+            Dim VersionsArray As Array = Versions.ToArray()
+            VersionsArray.Reverse(VersionsArray)
             'Versions = Sort(Versions, Function(a, b) New Version(a.Version) > New Version(b.Version)).ToList
             NeoForgeDownloadListItemPreload(PanNeoForge, Versions, AddressOf NeoForge_Selected, False)
-            For Each Version In Versions
+            For Each Version In VersionsArray
                 PanNeoForge.Children.Add(NeoForgeDownloadListItem(Version, AddressOf NeoForge_Selected, False))
             Next
         Catch ex As Exception

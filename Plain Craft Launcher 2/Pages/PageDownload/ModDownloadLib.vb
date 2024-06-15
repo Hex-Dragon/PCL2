@@ -2241,11 +2241,10 @@ Retry:
         '获取最新版本
         Dim FreshVersion As DlNeoForgeVersionEntry = Nothing
         If Entrys.Any Then
-            FreshVersion = Entrys(0)
+            FreshVersion = Entrys.Last()
         Else
             Log("[System] 未找到可用的 NeoForge 版本", LogLevel.Debug)
         End If
-        Dim RecommendedVersion As DlNeoForgeVersionEntry = Nothing
         '显示各个版本
         If FreshVersion IsNot Nothing Then
             Dim Fresh = NeoForgeDownloadListItem(FreshVersion, OnClick, IsSaveOnly)

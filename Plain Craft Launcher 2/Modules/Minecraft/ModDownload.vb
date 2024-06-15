@@ -752,6 +752,10 @@
         ''' 是否是 Beta 版。若未提供则默认为 False。
         ''' </summary>
         Public IsBeta As Boolean = False
+        ''' <summary>
+        ''' 标准的版本号
+        ''' </summary>
+        Public StdVersion As String
         Public Structure DlNeoForgeListResult
             ''' <summary>
             ''' 数据来源名称，如“Official”，“BMCLAPI”。
@@ -897,17 +901,19 @@
         Dim Versions As New List(Of DlNeoForgeVersionEntry)
         Try
             For Each Token As JObject In Json
-                Dim Name As String
+                Dim Name As String               '存储 rawVersion，貌似变化更加频繁
+                Dim StdVersion As String         '存储 version，相对规则
                 Dim IsBeta As Boolean
                 If Token("version").Contains("-beta") Then
-                    Name = Token("version").ToString() - "-beta"
+                    StdVersion = Token("version").ToString() - "-beta"
                     IsBeta = True
                 Else
-                    Name = Token("version")
+                    StdVersion = Token("version").ToString()
                     IsBeta = False
                 End If
+                Name = Token("rawVersion")
                 Dim Inherit As String = Token("mcversion")
-                Dim Entry = New DlNeoForgeVersionEntry With {.Version = Name, .Inherit = Inherit, .IsBeta = IsBeta}
+                Dim Entry = New DlNeoForgeVersionEntry With {.Version = Name, .Inherit = Inherit, .IsBeta = IsBeta, .StdVersion = StdVersion}
                 Versions.Add(Entry)
             Next
             'For Each Token As JObject In Json
