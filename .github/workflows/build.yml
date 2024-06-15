@@ -32,6 +32,9 @@ jobs:
       shell: bash
       run: |
           Describe=`git describe --tags`
+          if %errorlevel% neq 0 (
+          exit /b 0
+          )
           echo "Describe=$Describe" >> $GITHUB_ENV
           exit 0
 
