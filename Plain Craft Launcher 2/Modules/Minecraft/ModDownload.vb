@@ -904,7 +904,7 @@
                 Dim Name As String               '存储 rawVersion，貌似变化更加频繁
                 Dim StdVersion As String         '存储 version，相对规则
                 Dim IsBeta As Boolean
-                If Token("version").Contains("-beta") Then
+                If Token("rawVersion").Contains("-beta") Then
                     StdVersion = Token("version").ToString() - "-beta"
                     IsBeta = True
                 Else
