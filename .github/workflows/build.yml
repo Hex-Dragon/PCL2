@@ -33,6 +33,7 @@ jobs:
       run: |
           Describe=`git describe --tags`
           echo "Describe=$Describe" >> $GITHUB_ENV
+          exit 0
 
     - name: Set Hash as Describe when Describe is Blank
       if: ${{ ! env.Describe }}
