@@ -721,6 +721,232 @@
 
 #End Region
 
+#Region "DlNeoForgeVersion | NeoForge 版本列表"
+
+    Public Class DlNeoForgeVersionEntry
+        ''' <summary>
+        ''' 完整的版本名，如 “14.22.1.2478”。
+        ''' </summary>
+        Public Version As String
+        ''' <summary>
+        ''' 对应的 Minecraft 版本，如“1.12.2”。
+        ''' </summary>
+        Public Inherit As String
+        ''' <summary>
+        ''' 发布时间，格式为“yyyy/MM/dd HH:mm”。
+        ''' </summary>
+        Public ReleaseTime As String
+        ''' <summary>
+        ''' 文件的 MD5 或 SHA1（BMCLAPI 的老版本是 MD5，新版本是 SHA1；官方源总是 MD5）。
+        ''' </summary>
+        Public Hash As String = Nothing
+        ''' <summary>
+        ''' 安装类型。有 installer、client、universal 三种。
+        ''' </summary>
+        Public Category As String
+        ''' <summary>
+        ''' 版本分支。若无分支则为 Nothing。
+        ''' </summary>
+        Public Branch As String = Nothing
+        Public Structure DlNeoForgeListResult
+            ''' <summary>
+            ''' 数据来源名称，如“Official”，“BMCLAPI”。
+            ''' </summary>
+            Public SourceName As String
+            ''' <summary>
+            ''' 是否为官方的实时数据。
+            ''' </summary>
+            Public IsOfficial As Boolean
+            ''' <summary>
+            ''' 获取到的数据。
+            ''' </summary>
+            Public Value As JObject
+        End Structure
+        ''' <summary>
+        ''' 是否为新版 Forge。（即为 Minecraft 1.13+）
+        ''' </summary>
+        Public ReadOnly Property IsNewType As Boolean
+            Get
+                Return Version.Split(".")(0) >= 20
+            End Get
+        End Property
+        ''' <summary>
+        ''' 构建数。
+        ''' </summary>
+        Public ReadOnly Property Build As Integer
+            Get
+                Dim Version = Me.Version.Split(".")
+                If Version(0) < 15 Then
+                    Return Version(Version.Count - 1)
+                Else
+                    Return Version(Version.Count - 1) + 10000
+                End If
+            End Get
+        End Property
+        ''' <summary>
+        ''' 用于下载的文件版本名。可能在 Version 的基础上添加了分支。
+        ''' </summary>
+        Public ReadOnly Property FileVersion As String
+            Get
+                Return Version & If(Branch Is Nothing, ""， "-" & Branch)
+            End Get
+        End Property
+        ''' <summary>
+        ''' 即将下载的文件全名。
+        ''' </summary>
+        Public ReadOnly Property FileName As String
+            Get
+                Return "forge-" & Inherit & "-" & FileVersion & "-" & Category & "." & FileSuffix
+            End Get
+        End Property
+        ''' <summary>
+        ''' 文件扩展名。
+        ''' </summary>
+        Public ReadOnly Property FileSuffix As String
+            Get
+                If Category = "installer" Then
+                    Return "jar"
+                Else
+                    Return "zip"
+                End If
+            End Get
+        End Property
+    End Class
+
+    ''' <summary>
+    ''' NeoForge 版本列表，主加载器。
+    ''' </summary>
+    Public Sub DlNeoForgeVersionMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))
+        Dim DlNeoForgeVersionOfficialLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Official", AddressOf DlNeoForgeVersionOfficialMain)
+        Dim DlNeoForgeVersionBmclapiLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Bmclapi", AddressOf DlNeoForgeVersionBmclapiMain)
+        Select Case Setup.Get("ToolDownloadVersion")
+            Case 0
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionBmclapiLoader, 30),
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionOfficialLoader, 60)
+                }, Loader.IsForceRestarting)
+            Case 1
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionOfficialLoader, 5),
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionBmclapiLoader, 35)
+                }, Loader.IsForceRestarting)
+            Case Else
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionOfficialLoader, 60),
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionBmclapiLoader, 60)
+                }, Loader.IsForceRestarting)
+        End Select
+    End Sub
+
+    ''' <summary>
+    ''' NeoForge 版本列表，官方源。
+    ''' </summary>
+    Public Sub DlNeoForgeVersionOfficialMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))
+        Dim Result As String
+        Dim ResultJson As JObject
+        Try
+            Result = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True)
+        Catch ex As Exception
+            If GetExceptionSummary(ex).Contains("(404)") Then
+                Throw New Exception("没有可用版本")
+            Else
+                Throw
+            End If
+        End Try
+        If Result.Length < 50 Then Throw New Exception("获取到的版本列表长度不足（" & Result & "）")
+        ResultJson = GetJson(Result)
+        Dim Versions As New List(Of DlNeoForgeVersionEntry)
+        Dim VersionList As String = ResultJson("versions")
+        MyMsgBox(VersionList, "VersionList 获取测试")
+        'Try
+        '    Try
+        '        '基础信息获取
+        '        Dim Name As String = RegexSeek(VersionCode, "(?<=[^(0-9)]+)[0-9\.]+")
+        '        Dim IsRecommended As Boolean = VersionCode.Contains("fa promo-recommended")
+        '        Dim Inherit As String = Loader.Input
+        '        '分支获取
+        '        Dim Branch As String = RegexSeek(VersionCode, $"(?<=-{Name}-)[^-""]+(?=-[a-z]+.[a-z]{{3}})")
+        '        If String.IsNullOrWhiteSpace(Branch) Then Branch = Nothing
+        '        '发布时间获取
+        '        Dim ReleaseTimeOriginal = RegexSeek(VersionCode, "(?<=""download-time"" title="")[^""]+")
+        '        Dim ReleaseTimeSplit = ReleaseTimeOriginal.Split(" -:".ToCharArray) '原格式："2021-02-15 03:24:02"
+        '        Dim ReleaseDate As New Date(ReleaseTimeSplit(0), ReleaseTimeSplit(1), ReleaseTimeSplit(2), '年月日
+        '                                        ReleaseTimeSplit(3), ReleaseTimeSplit(4), ReleaseTimeSplit(5), '时分秒
+        '                                        0, DateTimeKind.Utc) '以 UTC 时间作为标准
+        '        Dim ReleaseTime As String = ReleaseDate.ToLocalTime.ToString("yyyy'/'MM'/'dd HH':'mm") '时区与格式转换
+        '        '添加进列表
+        '        Versions.Add(New DlNeoForgeVersionEntry With {.Category = Category, .Version = Name, .Hash = MD5.Trim(vbCr, vbLf), .Inherit = Inherit, .ReleaseTime = ReleaseTime, .Branch = Branch})
+        '    Catch ex As Exception
+        '        Throw New Exception("版本信息提取失败（" & VersionCode & "）", ex)
+        '    End Try
+        'Catch ex As Exception
+        '    Throw New Exception("版本列表解析失败（" & Result & "）", ex)
+        'End Try
+        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        Loader.Output = Versions
+    End Sub
+
+    ''' <summary>
+    ''' NeoForge 版本列表，BMCLAPI。
+    ''' </summary>
+    Public Sub DlNeoForgeVersionBmclapiMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))
+        Dim Json As JArray = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/neoforge/list/" & Loader.Input, IsJson:=True)
+        Dim Versions As New List(Of DlNeoForgeVersionEntry)
+        Try
+            For Each Token As JObject In Json
+                Dim Name As String = Token("version")
+                Dim Inherit As String = Token("mcversion")
+                Dim Entry = New DlNeoForgeVersionEntry With {.Version = Name, .Inherit = Inherit}
+                Versions.Add(Entry)
+            Next
+            'For Each Token As JObject In Json
+            '    '分类与 Hash 获取
+            '    Dim Hash As String = Nothing, Category As String = "unknown", Proi As Integer = -1
+            '    For Each File As JObject In Token("files")
+            '        Select Case File("category").ToString
+            '            Case "installer"
+            '                If File("format").ToString = "jar" Then
+            '                    '类型为 installer.jar，支持范围 ~753 (~ 1.6.1 部分), 738~684 (1.5.2 全部)
+            '                    Hash = File("hash")
+            '                    Category = "installer"
+            '                    Proi = 2
+            '                End If
+            '            Case "universal"
+            '                If Proi <= 1 AndAlso File("format").ToString = "zip" Then
+            '                    '类型为 universal.zip，支持范围 751~449 (1.6.1 部分), 682~183 (1.5.1 ~ 1.3.2 部分)
+            '                    Hash = File("hash")
+            '                    Category = "universal"
+            '                    Proi = 1
+            '                End If
+            '            Case "client"
+            '                If Proi <= 0 AndAlso File("format").ToString = "zip" Then
+            '                    '类型为 client.zip，支持范围 182~ (1.3.2 部分 ~)
+            '                    Hash = File("hash")
+            '                    Category = "client"
+            '                    Proi = 0
+            '                End If
+            '        End Select
+            '    Next
+            '    '获取 Entry
+            '    Dim Inherit As String = Loader.Input
+            '    Dim Branch As String = Token("branch")
+            '    Dim Name As String = Token("version")
+            '    '基础信息获取
+            '    Dim Entry = New DlNeoForgeVersionEntry With {.Hash = Hash, .Category = Category, .Version = Name, .Branch = Branch, .Inherit = Inherit}
+            '    Dim TimeSplit = Token("modified").ToString.Split("-"c, "T"c, ":"c, "."c, " "c, "/"c)
+            '    Entry.ReleaseTime = Token("modified").ToObject(Of Date).ToLocalTime.ToString("yyyy'/'MM'/'dd HH':'mm")
+            '    '添加项
+            '    Versions.Add(Entry)
+            'Next
+        Catch ex As Exception
+            Throw New Exception("版本列表解析失败（" & Json.ToString & "）", ex)
+        End Try
+        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        Loader.Output = Versions
+    End Sub
+
+#End Region
+
 #Region "DlLiteLoaderList | LiteLoader 版本列表"
 
     Public Structure DlLiteLoaderListResult
