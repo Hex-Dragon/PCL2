@@ -33,14 +33,6 @@ jobs:
       run: |
           Describe=`git describe --tags --always`
           echo "Describe=$Describe" >> $GITHUB_ENV
-          exit 0
-
-    - name: Set Hash as Describe when Describe is Blank
-      if: ${{ ! env.Describe }}
-      shell: bash
-      run: |
-          Hash=`git rev-parse --short HEAD`
-          echo "Describe=$Hash" >> $GITHUB_ENV
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
