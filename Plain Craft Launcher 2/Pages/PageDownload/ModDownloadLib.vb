@@ -1783,8 +1783,8 @@ Retry:
             Sub(Task As LoaderTask(Of DlForgeVersionEntry, List(Of NetFile)))
                 Dim Files As New List(Of NetFile)
                 Files.Add(New NetFile({
-                    "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                    "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
+                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/neoforge/" & DownloadInfo.StdVersion & "/" & DownloadInfo.FileName,
+                    "https://maven.neoforged.net/releases/net/neoforged/neoforge/" & DownloadInfo.StdVersion & "/" & DownloadInfo.FileName
                 }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
                 Task.Output = Files
             End Sub) With {.ProgressWeight = 0.1, .Show = False})

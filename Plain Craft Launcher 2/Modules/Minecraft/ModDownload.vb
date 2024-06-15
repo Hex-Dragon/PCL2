@@ -804,7 +804,7 @@
         ''' </summary>
         Public ReadOnly Property FileName As String
             Get
-                Return "forge-" & Inherit & "-" & FileVersion & "-" & Category & "." & FileSuffix
+                Return "neoforge-" & "-" & StdVersion & "-" & "installer" & "." & "jar"
             End Get
         End Property
         ''' <summary>
@@ -865,30 +865,6 @@
         ResultJson = GetJson(Result)
         Dim Versions As New List(Of DlNeoForgeVersionEntry)
         Dim VersionList As String = ResultJson("versions")
-        'Try
-        '    Try
-        '        '基础信息获取
-        '        Dim Name As String = RegexSeek(VersionCode, "(?<=[^(0-9)]+)[0-9\.]+")
-        '        Dim IsRecommended As Boolean = VersionCode.Contains("fa promo-recommended")
-        '        Dim Inherit As String = Loader.Input
-        '        '分支获取
-        '        Dim Branch As String = RegexSeek(VersionCode, $"(?<=-{Name}-)[^-""]+(?=-[a-z]+.[a-z]{{3}})")
-        '        If String.IsNullOrWhiteSpace(Branch) Then Branch = Nothing
-        '        '发布时间获取
-        '        Dim ReleaseTimeOriginal = RegexSeek(VersionCode, "(?<=""download-time"" title="")[^""]+")
-        '        Dim ReleaseTimeSplit = ReleaseTimeOriginal.Split(" -:".ToCharArray) '原格式："2021-02-15 03:24:02"
-        '        Dim ReleaseDate As New Date(ReleaseTimeSplit(0), ReleaseTimeSplit(1), ReleaseTimeSplit(2), '年月日
-        '                                        ReleaseTimeSplit(3), ReleaseTimeSplit(4), ReleaseTimeSplit(5), '时分秒
-        '                                        0, DateTimeKind.Utc) '以 UTC 时间作为标准
-        '        Dim ReleaseTime As String = ReleaseDate.ToLocalTime.ToString("yyyy'/'MM'/'dd HH':'mm") '时区与格式转换
-        '        '添加进列表
-        '        Versions.Add(New DlNeoForgeVersionEntry With {.Category = Category, .Version = Name, .Hash = MD5.Trim(vbCr, vbLf), .Inherit = Inherit, .ReleaseTime = ReleaseTime, .Branch = Branch})
-        '    Catch ex As Exception
-        '        Throw New Exception("版本信息提取失败（" & VersionCode & "）", ex)
-        '    End Try
-        'Catch ex As Exception
-        '    Throw New Exception("版本列表解析失败（" & Result & "）", ex)
-        'End Try
         If Not Versions.Any() Then Throw New Exception("没有可用版本")
         Loader.Output = Versions
     End Sub
@@ -916,45 +892,6 @@
                 Dim Entry = New DlNeoForgeVersionEntry With {.Version = Name, .Inherit = Inherit, .IsBeta = IsBeta, .StdVersion = StdVersion}
                 Versions.Add(Entry)
             Next
-            'For Each Token As JObject In Json
-            '    '分类与 Hash 获取
-            '    Dim Hash As String = Nothing, Category As String = "unknown", Proi As Integer = -1
-            '    For Each File As JObject In Token("files")
-            '        Select Case File("category").ToString
-            '            Case "installer"
-            '                If File("format").ToString = "jar" Then
-            '                    '类型为 installer.jar，支持范围 ~753 (~ 1.6.1 部分), 738~684 (1.5.2 全部)
-            '                    Hash = File("hash")
-            '                    Category = "installer"
-            '                    Proi = 2
-            '                End If
-            '            Case "universal"
-            '                If Proi <= 1 AndAlso File("format").ToString = "zip" Then
-            '                    '类型为 universal.zip，支持范围 751~449 (1.6.1 部分), 682~183 (1.5.1 ~ 1.3.2 部分)
-            '                    Hash = File("hash")
-            '                    Category = "universal"
-            '                    Proi = 1
-            '                End If
-            '            Case "client"
-            '                If Proi <= 0 AndAlso File("format").ToString = "zip" Then
-            '                    '类型为 client.zip，支持范围 182~ (1.3.2 部分 ~)
-            '                    Hash = File("hash")
-            '                    Category = "client"
-            '                    Proi = 0
-            '                End If
-            '        End Select
-            '    Next
-            '    '获取 Entry
-            '    Dim Inherit As String = Loader.Input
-            '    Dim Branch As String = Token("branch")
-            '    Dim Name As String = Token("version")
-            '    '基础信息获取
-            '    Dim Entry = New DlNeoForgeVersionEntry With {.Hash = Hash, .Category = Category, .Version = Name, .Branch = Branch, .Inherit = Inherit}
-            '    Dim TimeSplit = Token("modified").ToString.Split("-"c, "T"c, ":"c, "."c, " "c, "/"c)
-            '    Entry.ReleaseTime = Token("modified").ToObject(Of Date).ToLocalTime.ToString("yyyy'/'MM'/'dd HH':'mm")
-            '    '添加项
-            '    Versions.Add(Entry)
-            'Next
         Catch ex As Exception
             Throw New Exception("版本列表解析失败（" & Json.ToString & "）", ex)
         End Try
