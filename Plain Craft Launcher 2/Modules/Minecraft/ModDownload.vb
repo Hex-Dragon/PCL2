@@ -820,24 +820,24 @@
     ''' NeoForge 版本列表，主加载器。
     ''' </summary>
     Public DlNeoForgeListLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeList Main", AddressOf DlNeoForgeVersionMain)
-    Public Sub DlNeoForgeVersionMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))
+    Public Sub DlNeoForgeVersionMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))          'BMCLAPI 不会返回完整的 NeoForge 版本列表，始终从官方源获取
         Dim DlNeoForgeVersionOfficialLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Official", AddressOf DlNeoForgeVersionOfficialMain)
-        Dim DlNeoForgeVersionBmclapiLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Bmclapi", AddressOf DlNeoForgeVersionBmclapiMain)
+        'Dim DlNeoForgeVersionBmclapiLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Bmclapi", AddressOf DlNeoForgeVersionBmclapiMain)
         Select Case Setup.Get("ToolDownloadVersion")
             Case 0
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)) From {
-                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionBmclapiLoader, 30),
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionOfficialLoader, 30),
                     New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionOfficialLoader, 60)
                 }, Loader.IsForceRestarting)
             Case 1
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionOfficialLoader, 5),
-                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionBmclapiLoader, 35)
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionOfficialLoader, 35)
                 }, Loader.IsForceRestarting)
             Case Else
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionOfficialLoader, 60),
-                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionBmclapiLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)), Integer)(DlNeoForgeVersionOfficialLoader, 60)
                 }, Loader.IsForceRestarting)
         End Select
     End Sub
