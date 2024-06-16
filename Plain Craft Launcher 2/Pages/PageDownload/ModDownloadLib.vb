@@ -319,6 +319,10 @@ Public Module ModDownloadLib
     Public Sub McDownloadOptiFine(DownloadInfo As DlOptiFineListEntry)
         Try
             Dim Id As String = DownloadInfo.NameVersion
+            'OptiFine 1.8 和 1.9 版本的版本列表存在问题，需要补 0 才能获取到对应版本
+            If Id = "1.9" OrElse Id = "1.8" Then
+                Id = Id & ".0"
+            End If
             Dim VersionFolder As String = PathMcFolder & "versions\" & Id & "\"
             Dim IsNewVersion As Boolean = Val(DownloadInfo.Inherit.Split(".")(1)) >= 14
             Dim Target As String = If(IsNewVersion,
