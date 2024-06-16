@@ -499,7 +499,7 @@
             Name += "-Forge_" & SelectedForge.Version
         End If
         If SelectedNeoForge IsNot Nothing Then
-            Name += "-NeoForge_" & SelectedNeoForge.Version.Replace("neoforge-", "").Replace("forge-", "").Replace("1.20.1-", "")
+            Name += "-NeoForge_" & SelectedNeoForge.StdVersion & If(SelectedNeoForge.IsBeta, "-beta", "")
         End If
         If SelectedLiteLoader IsNot Nothing Then
             Name += "-LiteLoader"
@@ -521,7 +521,7 @@
             Info += ", Forge " & SelectedForge.Version
         End If
         If SelectedNeoForge IsNot Nothing Then
-            Info += ", NeoForge " & SelectedNeoForge.Version.Replace("neoforge-", "").Replace("forge-", "").Replace("1.20.1-", "")
+            Info += ", NeoForge " & SelectedNeoForge.ohao & If(SelectedNeoForge.IsBeta, "-beta", "")
         End If
         If SelectedLiteLoader IsNot Nothing Then
             Info += ", LiteLoader"
