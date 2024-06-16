@@ -820,7 +820,7 @@
     ''' NeoForge 版本列表，主加载器。
     ''' </summary>
     Public DlNeoForgeListLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeList Main", AddressOf DlNeoForgeVersionMain)
-    Public Sub DlNeoForgeVersionMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))          'BMCLAPI 不会返回完整的 NeoForge 版本列表，始终从官方源获取
+    Public Sub DlNeoForgeVersionMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))          'BMCLAPI 不会返回完整的 NeoForge 版本列表，而貌似也没有办法获取 NeoForge 支持的所有 Minecraft 版本，始终从官方源获取
         Dim DlNeoForgeVersionOfficialLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Official", AddressOf DlNeoForgeVersionOfficialMain)
         'Dim DlNeoForgeVersionBmclapiLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Bmclapi", AddressOf DlNeoForgeVersionBmclapiMain)
         Select Case Setup.Get("ToolDownloadVersion")
