@@ -736,12 +736,12 @@ Recheck:
                             If Version.ForgeVersion Is Nothing Then Version.ForgeVersion = RegexSeek(RealJson, "(?<=net\.minecraftforge:minecraftforge:)[0-9\.]+")
                             If Version.ForgeVersion Is Nothing Then Version.ForgeVersion = If(RegexSeek(RealJson, "(?<=net\.minecraftforge:fmlloader:[0-9\.]+-)[0-9\.]+"), "未知版本")
                             Version.HasForge = True
-                        ElseIf RealJson.Contains("neoforge") Then
-                            State = McVersionState.NeoForge
-                            Dim JsonStr1() As String = RealJson.Replace(" ", "").Split("""--fml.neoForgeVersion""," & vbCrLf & """")          '这里的实现比较抽象，正则我写不会
+                        ElseIf RealJson.Contains("neoforge") Then    '1.20.1 NeoForge Json 内信息不同，为了方便直接截断 orgeVersion；这里的实现比较抽象，正则我写不会
+                            State = McVersionState.NeoForge          '1.20.1 Json 标识："--fml.forgeVersion"     1.20.1 以上 Json 标识："--fml.neoForgeVersion"
+                            Dim JsonStr1() As String = RealJson.Replace(" ", "").Split("orgeVersion""," & vbCrLf & """")
                             Dim JsonStr2() As String = JsonStr1(1).Split("""")
                             Version.NeoForgeVersion = JsonStr2(0)
-                            If Version.NeoForgeVersion Is Nothing Then Version.NeoForgeVersion = RegexSeek(RealJson, "(?<=""--fml.neoForgeVersion"",)[0-9\.]+")
+                            If Version.NeoForgeVersion Is Nothing Then Version.NeoForgeVersion = RegexSeek(RealJson, "(?<=orgeVersion"",)[0-9\.]+")
                             If Version.NeoForgeVersion Is Nothing Then Version.NeoForgeVersion = If(RegexSeek(RealJson, "(?<=net\.minecraftforge:fmlloader:[0-9\.]+-)[0-9\.]+"), "未知版本")
                             Version.HasNeoForge = True
                         End If

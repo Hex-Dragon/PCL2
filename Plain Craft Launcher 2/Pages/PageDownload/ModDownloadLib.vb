@@ -1782,10 +1782,17 @@ Retry:
             Loaders.Add(New LoaderTask(Of DlNeoForgeVersionEntry, List(Of NetFile))("获取下载地址",
             Sub(Task As LoaderTask(Of DlNeoForgeVersionEntry, List(Of NetFile)))
                 Dim Files As New List(Of NetFile)
-                Files.Add(New NetFile({
-                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/neoforge/" & DownloadInfo.StdVersion & "/" & DownloadInfo.FileName,
-                    "https://maven.neoforged.net/releases/net/neoforged/neoforge/" & DownloadInfo.StdVersion & "/" & DownloadInfo.FileName
+                If DownloadInfo.StdVersion.StartsWith("47.") Then          '1.20.1 NeoForge 下载地址不同
+                    Files.Add(New NetFile({
+                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
+                    "https://maven.neoforged.net/releases/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
                 }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
+                Else
+                    Files.Add(New NetFile({
+                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/neoforge/" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
+                    "https://maven.neoforged.net/releases/net/neoforged/neoforge/" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
+                }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
+                End If
                 Task.Output = Files
             End Sub) With {.ProgressWeight = 0.1, .Show = False})
             '下载
@@ -2005,11 +2012,20 @@ Retry:
                     If IsCustomFolder Then Throw New Exception("如果没有指定原版下载器，则不能指定 MC 安装文件夹")
                     ClientDownloadLoader = McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, Inherit)
                 End If
-                '添加主文件
-                Dim Files As New List(Of NetFile) From {New NetFile({
+                Dim Files
+                If DownloadInfo.StdVersion.StartsWith("47.") Then          '1.20.1 NeoForge 下载地址不同
+                    Dim FilesLegacy As New List(Of NetFile) From {New NetFile({
+                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
+                    "https://maven.neoforged.net/releases/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
+                }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
+                    Files = FilesLegacy
+                Else
+                    Dim FilesLatest As New List(Of NetFile) From {New NetFile({
                     "https://bmclapi2.bangbang93.com/maven/net/neoforged/neoforge/" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
                     "https://maven.neoforged.net/releases/net/neoforged/neoforge/" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
                 }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
+                    Files = FilesLatest
+                End If
                 Task.Output = Files
             End Sub) With {.ProgressWeight = 0.5, .Show = False})
         Loaders.Add(New LoaderDownload("下载 Mod 加载器主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
@@ -2196,7 +2212,7 @@ Retry:
                 If(Entry.ReleaseTime = "",
                 If(ModeDebug, If(Entry.Category IsNot Nothing, "种类：" & Entry.Category, "") & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), ""),
                 "发布于 " & Entry.ReleaseTime & If(ModeDebug, "，种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), "")),
-            .Logo = PathImage & "Blocks/NeoForge.png"
+            .Logo = PathImage & "Icons/NeoForged.png"
         }
         AddHandler NewItem.Click, OnClick
         '建立菜单

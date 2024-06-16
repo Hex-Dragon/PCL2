@@ -771,7 +771,7 @@
             Public Value As JObject
         End Structure
         ''' <summary>
-        ''' 是否为新版 Forge。（即为 Minecraft 1.13+）
+        ''' 是否为新版 NeoForge。（即为 Minecraft 1.13+）
         ''' </summary>
         Public ReadOnly Property IsNewType As Boolean
             Get
@@ -804,21 +804,17 @@
         ''' </summary>
         Public ReadOnly Property FileName As String
             Get
-                Return "neoforge-" & StdVersion & If(IsBeta, "-beta", "") & "-" & "installer" & "." & "jar"
+                If StdVersion.StartsWith("47.") Then          'NeoForge 1.20.1 的版本命名有些特殊...
+                    Return "forge-" & Inherit & "-" & StdVersion & If(IsBeta, "-beta", "") & "-" & "installer" & "." & "jar"
+                Else
+                    Return "neoforge-" & StdVersion & If(IsBeta, "-beta", "") & "-" & "installer" & "." & "jar"
+                End If
             End Get
         End Property
         ''' <summary>
         ''' 文件扩展名。
         ''' </summary>
-        Public ReadOnly Property FileSuffix As String
-            Get
-                If Category = "installer" Then
-                    Return "jar"
-                Else
-                    Return "jar"
-                End If
-            End Get
-        End Property
+        Public FileSuffix As String = "jar"
     End Class
     ''' <summary>
     ''' NeoForge 版本列表，主加载器。
@@ -882,10 +878,10 @@
                 Dim IsBeta As Boolean
                 Dim rawVersion As String = Token("rawVersion")
                 If rawVersion.Contains("-beta") Then
-                    StdVersion = Token("version").ToString().Replace("neoforge-", "").Replace("-beta", "")
+                    StdVersion = Token("version").ToString().Replace("neoforge-", "").Replace("-beta", "").Replace("1.20.1-", "")
                     IsBeta = True
                 Else
-                    StdVersion = Token("version").ToString().Replace("neoforge-", "")
+                    StdVersion = Token("version").ToString().Replace("neoforge-", "").Replace("1.20.1-", "")
                     IsBeta = False
                 End If
                 Name = rawVersion

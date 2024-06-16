@@ -757,7 +757,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\Anvil.png" />
-    <Resource Include="Images\Blocks\NeoForge.png" />
     <Resource Include="Images\Blocks\CobbleStone.png" />
     <Resource Include="Images\Blocks\CommandBlock.png" />
     <Resource Include="Images\Blocks\Grass.png" />
@@ -924,6 +923,8 @@
   <ItemGroup>
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Icons\NeoForged.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
