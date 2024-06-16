@@ -1973,11 +1973,27 @@ Retry:
     ''' <summary>
     ''' 获取下载某个 NeoForge 版本的加载器列表。
     ''' </summary>
-    Private Function McDownloadNeoForgeLoader(Version As String, Inherit As String, Optional DownloadInfo As DlNeoForgeVersionEntry = Nothing, Optional McFolder As String = Nothing, Optional ClientDownloadLoader As LoaderCombo(Of String) = Nothing, Optional ClientFolder As String = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
+    Private Function McDownloadNeoForgeLoader(Version As String, Inherit As String, Optional DownloadRawInfo As DlNeoForgeVersionEntry = Nothing, Optional McFolder As String = Nothing, Optional ClientDownloadLoader As LoaderCombo(Of String) = Nothing, Optional ClientFolder As String = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
 
         '参数初始化
+        Dim DownloadInfo As New DlNeoForgeVersionEntry
         McFolder = If(McFolder, PathMcFolder)
-        Version = DownloadInfo.StdVersion
+        If DownloadRawInfo Is Nothing Then          '兜底，有的时候 DownloadInfo 可能是空的
+            If Version.Contains("-beta") Then
+                DownloadInfo.Version = Version
+                Version = Version.Replace("neoforge-", "").Replace("-beta", "").Replace("1.20.1-", "")
+                DownloadInfo.StdVersion = Version
+                DownloadInfo.IsBeta = True
+            Else
+                DownloadInfo.Version = Version
+                Version = Version.Replace("neoforge-", "").Replace("1.20.1-", "")
+                DownloadInfo.StdVersion = Version
+                DownloadInfo.IsBeta = False
+            End If
+        Else
+            DownloadInfo = DownloadRawInfo
+            Version = DownloadInfo.StdVersion
+        End If
         Dim IsCustomFolder As Boolean = McFolder <> PathMcFolder
         Dim Id As String = DownloadInfo.Version
         Dim InstallerAddress As String = PathTemp & "Cache\Code\NeoForgeInstall-" & Version & "_" & RandomInteger(0, 100000)
