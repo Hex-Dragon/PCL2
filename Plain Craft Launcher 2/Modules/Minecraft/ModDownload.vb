@@ -804,7 +804,7 @@
         ''' </summary>
         Public ReadOnly Property FileName As String
             Get
-                Return "neoforge-" & "-" & StdVersion & "-" & "installer" & "." & "jar"
+                Return "neoforge-" & StdVersion & If(IsBeta, "-beta", "") & "-" & "installer" & "." & "jar"
             End Get
         End Property
         ''' <summary>
@@ -815,7 +815,7 @@
                 If Category = "installer" Then
                     Return "jar"
                 Else
-                    Return "zip"
+                    Return "jar"
                 End If
             End Get
         End Property
