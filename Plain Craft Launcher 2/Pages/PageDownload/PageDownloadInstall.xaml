@@ -89,7 +89,7 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="1*" />
                             </Grid.ColumnDefinitions>
-                            <Image x:Name="ImgNeoForge" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/Anvil.png" />
+                            <Image x:Name="ImgNeoForge" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Icons/NeoForged.png" />
                             <TextBlock x:Name="LabNeoForge" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
                         </Grid>
                         <Grid x:Name="BtnNeoForgeClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">

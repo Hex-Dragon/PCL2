@@ -2194,9 +2194,9 @@ Retry:
             .Title = If(Entry.IsBeta, Entry.StdVersion & "-beta", Entry.StdVersion), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = If(Entry.IsBeta, "测试版", "稳定版") &
                 If(Entry.ReleaseTime = "",
-                If(ModeDebug, "种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), ""),
+                If(ModeDebug, If(Entry.Category IsNot Nothing, "种类：" & Entry.Category, "") & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), ""),
                 "发布于 " & Entry.ReleaseTime & If(ModeDebug, "，种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), "")),
-            .Logo = PathImage & "Blocks/Anvil.png"
+            .Logo = PathImage & "Icons/NeoForged.png"
         }
         AddHandler NewItem.Click, OnClick
         '建立菜单
