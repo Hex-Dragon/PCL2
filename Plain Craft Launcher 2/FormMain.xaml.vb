@@ -1019,6 +1019,7 @@ Install:
         DownloadClient = 4
         DownloadOptiFine = 5
         DownloadForge = 6
+        DownloadNeoForge = 13
         DownloadFabric = 7
         DownloadLiteLoader = 8
         DownloadMod = 10

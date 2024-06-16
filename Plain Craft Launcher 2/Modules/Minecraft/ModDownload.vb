@@ -725,7 +725,7 @@
 
     Public Class DlNeoForgeVersionEntry
         ''' <summary>
-        ''' 完整的版本名，如 “14.22.1.2478”。
+        ''' 完整的版本名，如 “neoforge-20.4.30-beta”。
         ''' </summary>
         Public Version As String
         ''' <summary>
@@ -753,7 +753,7 @@
         ''' </summary>
         Public IsBeta As Boolean = False
         ''' <summary>
-        ''' 标准的版本号
+        ''' 标准的版本号，如 “20.4.30”。
         ''' </summary>
         Public StdVersion As String
         Public Structure DlNeoForgeListResult
@@ -804,7 +804,7 @@
         ''' </summary>
         Public ReadOnly Property FileName As String
             Get
-                Return "neoforge-" & "-" & StdVersion & "-" & "installer" & "." & "jar"
+                Return "neoforge-" & StdVersion & If(IsBeta, "-beta", "") & "-" & "installer" & "." & "jar"
             End Get
         End Property
         ''' <summary>
@@ -815,15 +815,15 @@
                 If Category = "installer" Then
                     Return "jar"
                 Else
-                    Return "zip"
+                    Return "jar"
                 End If
             End Get
         End Property
     End Class
-
     ''' <summary>
     ''' NeoForge 版本列表，主加载器。
     ''' </summary>
+    Public DlNeoForgeListLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeList Main", AddressOf DlNeoForgeVersionMain)
     Public Sub DlNeoForgeVersionMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))
         Dim DlNeoForgeVersionOfficialLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Official", AddressOf DlNeoForgeVersionOfficialMain)
         Dim DlNeoForgeVersionBmclapiLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Bmclapi", AddressOf DlNeoForgeVersionBmclapiMain)
@@ -880,19 +880,21 @@
                 Dim Name As String               '存储 rawVersion，貌似变化更加频繁
                 Dim StdVersion As String         '存储 version，相对规则
                 Dim IsBeta As Boolean
-                If Token("rawVersion").Contains("-beta") Then
-                    StdVersion = Token("version").ToString() - "-beta"
+                Dim rawVersion As String = Token("rawVersion")
+                If rawVersion.Contains("-beta") Then
+                    StdVersion = Token("version").ToString().Replace("neoforge-", "").Replace("-beta", "")
                     IsBeta = True
                 Else
-                    StdVersion = Token("version").ToString()
+                    StdVersion = Token("version").ToString().Replace("neoforge-", "")
                     IsBeta = False
                 End If
-                Name = Token("rawVersion")
+                Name = rawVersion
                 Dim Inherit As String = Token("mcversion")
                 Dim Entry = New DlNeoForgeVersionEntry With {.Version = Name, .Inherit = Inherit, .IsBeta = IsBeta, .StdVersion = StdVersion}
                 Versions.Add(Entry)
             Next
         Catch ex As Exception
+            MyMsgBox(ex.ToString(), "错误")
             Throw New Exception("版本列表解析失败（" & Json.ToString & "）", ex)
         End Try
         If Not Versions.Any() Then Throw New Exception("没有可用版本")

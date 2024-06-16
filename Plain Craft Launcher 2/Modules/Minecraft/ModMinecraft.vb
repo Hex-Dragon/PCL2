@@ -1,4 +1,5 @@
 ﻿Imports System.IO.Compression
+Imports MS.Internal
 
 Public Module ModMinecraft
 
@@ -345,7 +346,7 @@ Public Module ModMinecraft
                                 End If
                             Next
                         End If
-                        '从 Forge Arguments 中获取版本号
+                        '从 Forge / NeoForge Arguments 中获取版本号
                         If JsonObject("arguments") IsNot Nothing AndAlso JsonObject("arguments")("game") IsNot Nothing Then
                             Dim Mark As Boolean = False
                             For Each Argument In JsonObject("arguments")("game")
@@ -729,12 +730,20 @@ Recheck:
                             State = McVersionState.Fabric
                             Version.FabricVersion = If(RegexSeek(RealJson, "(?<=(net.fabricmc:fabric-loader:)|(org.quiltmc:quilt-loader:))[0-9\.]+(\+build.[0-9]+)?"), "未知版本").Replace("+build", "")
                             Version.HasFabric = True
-                        ElseIf RealJson.Contains("minecraftforge") Then
+                        ElseIf RealJson.Contains("minecraftforge") AndAlso Not RealJson.Contains("neoforge") Then
                             State = McVersionState.Forge
                             Version.ForgeVersion = RegexSeek(RealJson, "(?<=forge:[0-9\.]+(_pre[0-9]*)?\-)[0-9\.]+")
                             If Version.ForgeVersion Is Nothing Then Version.ForgeVersion = RegexSeek(RealJson, "(?<=net\.minecraftforge:minecraftforge:)[0-9\.]+")
                             If Version.ForgeVersion Is Nothing Then Version.ForgeVersion = If(RegexSeek(RealJson, "(?<=net\.minecraftforge:fmlloader:[0-9\.]+-)[0-9\.]+"), "未知版本")
                             Version.HasForge = True
+                        ElseIf RealJson.Contains("neoforge") Then
+                            State = McVersionState.NeoForge
+                            Dim JsonStr1() As String = RealJson.Replace(" ", "").Split("""--fml.neoForgeVersion""," & vbCrLf & """")          '这里的实现比较抽象，正则我写不会
+                            Dim JsonStr2() As String = JsonStr1(1).Split("""")
+                            Version.NeoForgeVersion = JsonStr2(0)
+                            If Version.NeoForgeVersion Is Nothing Then Version.NeoForgeVersion = RegexSeek(RealJson, "(?<=""--fml.neoForgeVersion"",)[0-9\.]+")
+                            If Version.NeoForgeVersion Is Nothing Then Version.NeoForgeVersion = If(RegexSeek(RealJson, "(?<=net\.minecraftforge:fmlloader:[0-9\.]+-)[0-9\.]+"), "未知版本")
+                            Version.HasNeoForge = True
                         End If
                         Version.IsApiLoaded = True
                 End Select
@@ -752,6 +761,8 @@ ExitDataLoad:
                             Logo = PathImage & "Blocks/CobbleStone.png"
                         Case McVersionState.Forge
                             Logo = PathImage & "Blocks/Anvil.png"
+                        Case McVersionState.NeoForge
+                            Logo = PathImage & "Icons/NeoForged.png"
                         Case McVersionState.Fabric
                             Logo = PathImage & "Blocks/Fabric.png"
                         Case McVersionState.OptiFine
@@ -780,7 +791,7 @@ ExitDataLoad:
                             End If
                         Case McVersionState.Old
                             Info = "远古版本"
-                        Case McVersionState.Original, McVersionState.Forge, McVersionState.Fabric, McVersionState.OptiFine, McVersionState.LiteLoader
+                        Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.OptiFine, McVersionState.LiteLoader
                             Info = Version.ToString
                         Case McVersionState.Fool
                             Info = GetMcFoolName(Version.McName)
@@ -813,6 +824,7 @@ ExitDataLoad:
                     WriteIni(Path & "PCL\Setup.ini", "VersionOptiFine", Version.OptiFineVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionLiteLoader", Version.HasLiteLoader)
                     WriteIni(Path & "PCL\Setup.ini", "VersionForge", Version.ForgeVersion)
+                    WriteIni(Path & "PCL\Setup.ini", "VersionNeoForge", Version.NeoForgeVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionApiCode", Version.SortCode)
                     WriteIni(Path & "PCL\Setup.ini", "VersionOriginal", Version.McName)
                     WriteIni(Path & "PCL\Setup.ini", "VersionOriginalMain", Version.McCodeMain)
@@ -852,6 +864,7 @@ ExitDataLoad:
         OptiFine
         Old
         Forge
+        NeoForge
         LiteLoader
         Fabric
     End Enum
@@ -903,6 +916,17 @@ ExitDataLoad:
         ''' </summary>
         Public ForgeVersion As String = ""
 
+        'NeoForge
+
+        ''' <summary>
+        ''' 该版本是否安装了 NeoForge。
+        ''' </summary>
+        Public HasNeoForge As Boolean = False
+        ''' <summary>
+        ''' NeoForge 版本号，如 31.1.2、14.23.5.2847。
+        ''' </summary>
+        Public NeoForgeVersion As String = ""
+
         'Fabric
 
         ''' <summary>
@@ -929,6 +953,7 @@ ExitDataLoad:
         Public Overrides Function ToString() As String
             ToString = ""
             If HasForge Then ToString += ", Forge" & If(ForgeVersion = "未知版本", "", " " & ForgeVersion)
+            If HasNeoForge Then ToString += ", NeoForge" & If(NeoForgeVersion = "未知版本", "", " " & NeoForgeVersion)
             If HasFabric Then ToString += ", Fabric" & If(FabricVersion = "未知版本", "", " " & FabricVersion)
             If HasOptiFine Then ToString += ", OptiFine" & If(OptiFineVersion = "未知版本", "", " " & OptiFineVersion)
             If HasLiteLoader Then ToString += ", LiteLoader"
@@ -964,6 +989,16 @@ ExitDataLoad:
                                 _SortCode = Val(SubVersions(0)) * 1000000 + Val(SubVersions(1)) * 10000 + Val(SubVersions(2))
                             Else
                                 Throw New Exception("无效的 Forge 版本：" & ForgeVersion)
+                            End If
+                        ElseIf HasNeoForge Then
+                            If NeoForgeVersion = "未知版本" Then Return 0
+                            Dim SubVersions = NeoForgeVersion.Split(".")
+                            If SubVersions.Length = 4 Then
+                                _SortCode = Val(SubVersions(0)) * 1000000 + Val(SubVersions(1)) * 10000 + Val(SubVersions(3))
+                            ElseIf SubVersions.Length = 3 Then
+                                _SortCode = Val(SubVersions(0)) * 1000000 + Val(SubVersions(1)) * 10000 + Val(SubVersions(2))
+                            Else
+                                Throw New Exception("无效的 NeoForge 版本：" & NeoForgeVersion)
                             End If
                         ElseIf HasOptiFine Then
                             If OptiFineVersion = "未知版本" Then Return 0
@@ -1175,6 +1210,7 @@ OnLoaded:
                             Dim VersionInfo As New McVersionInfo With {
                                 .FabricVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionFabric", ""),
                                 .ForgeVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionForge", ""),
+                                .NeoForgeVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionNeoForge", ""),
                                 .OptiFineVersion = ReadIni(Version.Path & "PCL\Setup.ini", "VersionOptiFine", ""),
                                 .HasLiteLoader = ReadIni(Version.Path & "PCL\Setup.ini", "VersionLiteLoader", False),
                                 .SortCode = ReadIni(Version.Path & "PCL\Setup.ini", "VersionApiCode", -1),
@@ -1185,6 +1221,7 @@ OnLoaded:
                             }
                             VersionInfo.HasFabric = VersionInfo.FabricVersion.Count > 1
                             VersionInfo.HasForge = VersionInfo.ForgeVersion.Count > 1
+                            VersionInfo.HasNeoForge = VersionInfo.NeoForgeVersion.Count > 1
                             VersionInfo.HasOptiFine = VersionInfo.OptiFineVersion.Count > 1
                             Version.Version = VersionInfo
                         End If
@@ -1273,7 +1310,7 @@ OnLoaded:
             McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Fool}, McVersionCardType.Fool)
 
             '筛选 API 版本
-            McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Forge, McVersionState.LiteLoader, McVersionState.Fabric}, McVersionCardType.API)
+            McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Forge, McVersionState.NeoForge, McVersionState.LiteLoader, McVersionState.Fabric}, McVersionCardType.API)
 
             '将老版本预先分类入不常用，只剩余原版、快照、OptiFine
             Dim VersionUseful As New List(Of McVersion)
@@ -1407,7 +1444,7 @@ OnLoaded:
             End Function)
         End If
 
-        'API 版本：优先按版本排序，此后【先放 Fabric，再放 Forge（按版本号从高到低排序），最后放 LiteLoader（按名称排序）】
+        'API 版本：优先按版本排序，此后【先放 Fabric，再放 Forge，再放 NeoForge（按版本号从高到低排序），最后放 LiteLoader（按名称排序）】
         If ResultVersionList.ContainsKey(McVersionCardType.API) Then
             ResultVersionList(McVersionCardType.API) = Sort(ResultVersionList(McVersionCardType.API),
             Function(Left As McVersion, Right As McVersion)
@@ -1419,6 +1456,8 @@ OnLoaded:
                         Return Left.Version.HasFabric
                     ElseIf Left.Version.HasForge Xor Right.Version.HasForge Then
                         Return Left.Version.HasForge
+                    ElseIf Left.Version.HasNeoForge Xor Right.Version.HasNeoForge Then
+                        Return Left.Version.HasNeoForge
                     ElseIf Not Left.Version.SortCode <> Right.Version.SortCode Then
                         Return Left.Version.SortCode > Right.Version.SortCode
                     Else

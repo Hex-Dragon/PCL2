@@ -521,7 +521,7 @@
             Info += ", Forge " & SelectedForge.Version
         End If
         If SelectedNeoForge IsNot Nothing Then
-            Info += ", NeoForge " & SelectedNeoForge.ohao & If(SelectedNeoForge.IsBeta, "-beta", "")
+            Info += ", NeoForge " & SelectedNeoForge.StdVersion & If(SelectedNeoForge.IsBeta, "-beta", "")
         End If
         If SelectedLiteLoader IsNot Nothing Then
             Info += ", LiteLoader"
@@ -1279,7 +1279,7 @@
     End Sub
     Private Sub BtnSelectStart_Click() Handles BtnSelectStart.Click
         '确认版本隔离
-        If (SelectedForge IsNot Nothing OrElse SelectedFabric IsNot Nothing) AndAlso
+        If (SelectedForge IsNot Nothing OrElse SelectedFabric IsNot Nothing OrElse SelectedNeoForge IsNot Nothing) AndAlso
            (Setup.Get("LaunchArgumentIndie") = 0 OrElse Setup.Get("LaunchArgumentIndie") = 2) Then
             If MyMsgBox("你尚未开启版本隔离，这会导致多个 MC 共用同一个 Mod 文件夹。" & vbCrLf &
                         "因此在切换 MC 版本时，MC 会因为读取到与当前版本不符的 Mod 而崩溃。" & vbCrLf &
@@ -1295,6 +1295,7 @@
             .MinecraftName = SelectedMinecraftId,
             .OptiFineEntry = SelectedOptiFine,
             .ForgeEntry = SelectedForge,
+            .NeoForgeEntry = SelectedNeoForge,
             .FabricVersion = SelectedFabric,
             .FabricApi = SelectedFabricApi,
             .OptiFabric = SelectedOptiFabric,
