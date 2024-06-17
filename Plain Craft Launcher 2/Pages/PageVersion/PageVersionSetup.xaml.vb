@@ -51,6 +51,7 @@
             '游戏内存
             CType(FindName("RadioRamType" & Setup.Load("VersionRamType", Version:=PageVersionLeft.Version)), MyRadioBox).Checked = True
             SliderRamCustom.Value = Setup.Get("VersionRamCustom", Version:=PageVersionLeft.Version)
+            ComboRamOptimize.SelectedIndex = Setup.Get("VersionRamOptimize", Version:=PageVersionLeft.Version)
 
             '服务器
             TextServerEnter.Text = Setup.Get("VersionServerEnter", Version:=PageVersionLeft.Version)
@@ -95,6 +96,7 @@
             Setup.Set("VersionArgumentIndie", 0, Version:=PageVersionLeft.Version)
             Setup.Reset("VersionRamType", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionRamCustom", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionRamOptimize", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceJvm", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceGame", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
@@ -361,6 +363,11 @@ PreFin:
         If If(Is32BitJava, Not JavaIs64Bit(PageVersionLeft.Version)) Then RamGive = Math.Min(1, RamGive)
         Return RamGive
     End Function
+
+    Private Sub ComboRamOptimize_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboRamOptimize.SelectionChanged
+        If AniControlEnabled <> 0 Then Exit Sub
+        Setup.Set("VersionRamOptimize", ComboRamOptimize.SelectedIndex, Version:=PageVersionLeft.Version)
+    End Sub
 
 #End Region
 

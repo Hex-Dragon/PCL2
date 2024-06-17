@@ -163,6 +163,7 @@
         {"VersionAdvanceRunWait", New SetupEntry(True, Source:=SetupSource.Version)},
         {"VersionRamType", New SetupEntry(2, Source:=SetupSource.Version)},
         {"VersionRamCustom", New SetupEntry(15, Source:=SetupSource.Version)},
+        {"VersionRamOptimize", New SetupEntry(0, Source:=SetupSource.Version)},
         {"VersionArgumentTitle", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionArgumentInfo", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionArgumentIndie", New SetupEntry(-1, Source:=SetupSource.Version)},
