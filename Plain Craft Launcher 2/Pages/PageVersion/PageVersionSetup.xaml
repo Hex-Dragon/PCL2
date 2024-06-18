@@ -116,7 +116,7 @@
                             <RowDefinition Height="28" />
                         </Grid.RowDefinitions>
                         <TextBlock Margin="0,6,0,0" Text="启动游戏前进行内存优化" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" />
-                        <local:MyComboBox x:Name="ComboRamOptimize" Margin="10,0,0,0" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2">
+                        <local:MyComboBox x:Name="ComboRamOptimize" Margin="10,0,0,0" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2" Tag="VersionRamOptimize">
                             <local:MyComboBoxItem Content="使用全局设置" IsSelected="True" />
                             <local:MyComboBoxItem Content="开启" />
                             <local:MyComboBoxItem Content="关闭" />

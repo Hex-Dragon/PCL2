@@ -132,7 +132,7 @@
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderRamCustom.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value, Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboRamOptimize.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex, Version:=PageVersionLeft.Version)
     End Sub
     Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change
@@ -363,11 +363,6 @@ PreFin:
         If If(Is32BitJava, Not JavaIs64Bit(PageVersionLeft.Version)) Then RamGive = Math.Min(1, RamGive)
         Return RamGive
     End Function
-
-    Private Sub ComboRamOptimize_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboRamOptimize.SelectionChanged
-        If AniControlEnabled <> 0 Then Exit Sub
-        Setup.Set("VersionRamOptimize", ComboRamOptimize.SelectedIndex, Version:=PageVersionLeft.Version)
-    End Sub
 
 #End Region
 
