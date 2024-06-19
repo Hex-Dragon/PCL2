@@ -665,7 +665,6 @@ NextFile:
         Dim Result = Xaml.Replace("{path}", EscapeXML(Path))
         Result = RegexReplaceEach(Result, Function() EscapeXML(PageOtherTest.GetRandomHint()), "\{hint\}")
         Result = RegexReplaceEach(Result, Function() EscapeXML(PageOtherTest.GetRandomCave()), "\{cave\}")
-        Result = Result.Replace("{mcv}", "$mcv") '不知道为啥，实例化 {mcv} 有可能会炸掉，只能先把它换掉，再换成版本名
         Return Result
     End Function
 

@@ -43,7 +43,7 @@
                                 End Sub)
 
                 Case "启动游戏"
-                    If Data(0) = "$mcv" Then Data(0) = McVersionCurrent.Name
+                    If Data(0) = "\current" Then Data(0) = McVersionCurrent.Name
                     If McLaunchStart(New McLaunchOptions With
                                      {.ServerIp = If(Data.Length >= 2, Data(1), Nothing), .Version = New McVersion(Data(0))}) Then
                         Hint("正在启动 " & Data(0) & "……")
