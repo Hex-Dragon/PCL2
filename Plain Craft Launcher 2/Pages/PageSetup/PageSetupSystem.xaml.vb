@@ -238,6 +238,7 @@ Class PageSetupSystem
     '导入
     Private Sub BtnSystemSettingImp_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemSettingImp.Click
         If MyMsgBox("导入设置后，现有的设置将会被覆盖，建议先导出现有设置。" & vbCrLf &
+                    "当前设置将会被备份到 PCL 文件夹下的 Setup.ini.old 文件，如有需要可以自行还原。" & vbCrLf &
                     "导入完成后，启动器可能需要重启。" & vbCrLf &
                     "是否继续？", Button1:="继续", Button2:="取消") = 1 Then
             Select Case Setup.SetupImport(SelectFile("PCL 配置文件(*.ini)|*.ini", "选择配置文件"))
