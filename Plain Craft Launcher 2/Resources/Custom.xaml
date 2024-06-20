@@ -81,9 +81,9 @@
 		<local:MyButton Margin="0,4,0,0" Width="250" Height="35"
                     Text="启动 1.12.2 并进入 Hypixel" EventType="启动游戏" EventData="1.12.2|mc.hypixel.net" ToolTip="服务器 IP：mc.hypixel.net" />
 		<TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
-                    Text="使用 {mcver} 可以表示当前被选中的游戏版本，但请注意，这只在 EventData 属性中有效。" />
+                    Text="在 EventData 中填写 \current，表示启动当前被选中的游戏版本，同样可以在后面填写服务器 IP。" />
 		<local:MyButton Margin="0,4,0,10" Width="250" Height="35"
-                    Text="启动当前选中版本并进入 Hypixel" EventType="启动游戏" EventData="{mcver}|mc.hypixel.net" ToolTip="服务器 IP：mc.hypixel.net" />
+                    Text="启动当前选中版本并进入 Hypixel" EventType="启动游戏" EventData="\current|mc.hypixel.net" ToolTip="服务器 IP：mc.hypixel.net" />
 	</StackPanel>
 </local:MyCard>
 
