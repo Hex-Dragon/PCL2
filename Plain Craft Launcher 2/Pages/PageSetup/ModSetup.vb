@@ -1,7 +1,4 @@
-﻿Imports System.Text
-Imports Newtonsoft.Json
-
-Public Class ModSetup
+﻿Public Class ModSetup
 
     ''' <summary>
     ''' 设置的更新号。
@@ -692,88 +689,66 @@ Public Class ModSetup
 #End Region
 
 #Region "导入/导出"
+    Private Function MachineID() As String
+        Return "" 'TODO：改为实际的机器码。
+    End Function
     ''' <summary>
     ''' 导出设置。
     ''' </summary>
     ''' <param name="Target">目标文件。</param>
-    ''' <param name="Registry">是否导出注册表的设置。</param>
+    ''' <param name="ExportEncoded">是否导出注册表中被加密的设置。</param>
     ''' <returns>是否成功。</returns>
-    Public Function SetupExport(Target As String, Optional Registry As Boolean = False) As Boolean
+    Public Function SetupExport(Target As String, Optional ExportEncoded As Boolean = False) As Boolean
         Try
-            Log($"[Setup] 导出设置：到 {Target}，{If(Registry, "含注册表", "不含注册表")}")
-            If File.Exists(Target) Then File.Delete(Target) '选文件的时候已经确认要给他替换掉了
-            CopyFile(Path & "PCL\Setup.ini", Target)
-            If Registry Then
-                ShellAndGetOutput("cmd", Arguments:=$"/C reg export HKCU\Software\{RegFolder} ""{PathTemp}\ExportTemp.reg""")
-                WriteIni(Target, "RegInfo", Convert.ToBase64String(File.ReadAllBytes($"{PathTemp}\ExportTemp.reg")))
-                If File.Exists($"{PathTemp}\ExportTemp.reg") Then File.Delete($"{PathTemp}\ExportTemp.reg")
-                WriteIni(Target, "Identify", Setup.Get("Identify"))
-            End If
+            Log($"[Setup] 导出设置：到 {Target}，{If(ExportEncoded, "含注册表", "不含注册表")}")
+            File.Create(Target).Dispose() '选文件的时候已经确认要给他替换掉了
+            IniClearCache(Target)
+            For Each entry In SetupDict
+                If entry.Value.Source <> SetupSource.Version Then
+                    If ExportEncoded OrElse (Not (entry.Value.Encoded OrElse entry.Key = "Identify")) Then
+                        WriteIni(Target, entry.Key, entry.Value.Value)
+                    End If
+                End If
+            Next
+            WriteIni(Target, "MachineID", MachineID)
             Return True
         Catch ex As Exception
             Log(ex, "导出设置失败", Level:=LogLevel.Hint)
             Return False
         End Try
     End Function
+    Private CannotImport As String() = {"HintNotice", "SystemHelpVersion"}
     ''' <summary>
     ''' 导入设置。
     ''' </summary>
     ''' <param name="Source">源文件。</param>
-    ''' <returns>0 为成功需重启，1 为成功不需重启，2 为失败。</returns>
-    Public Function SetupImport(Source As String) As Byte
+    ''' <returns>是否成功。</returns>
+    Public Function SetupImport(Source As String) As Boolean
         Try
             Log($"[Setup] 导入设置：从 {Source}")
-            CopyFile(Path & "PCL\Setup.ini", Path & "PCL\Setup.ini.old")
-            If ReadIni(Source, "Identify", "null") = "null" Then
-                Hint("不是有效的配置文件！", HintType.Critical)
-                Return 2 '失败
-            End If
+            CopyFile(Path & "PCL\Setup.ini", Path & "PCL\Setup.ini.old") '备份现有
 
             '还原 Setup.ini
-            'If File.Exists(Path & "PCL\Setup.ini") Then File.Delete(Path & "PCL\Setup.ini")
-            'File.Create(Path & "PCL\Setup.ini")
-            Dim id As String = "null"
-            Dim hasReg As Boolean = False
+            Dim importEncoded As Boolean = ReadIni(Source, "MachineID", "null") = MachineID()
+
             For Each Ln In File.ReadAllLines(Source)
                 Dim pair As String() = Ln.Split(":".ToCharArray, 2)
                 Dim key As String = pair.First()
                 Dim val As String = If(pair.Length < 2, "", pair.Last())
-                If Ln.StartsWithF("RegInfo:") Then '注册表
-                    WriteFile($"{PathTemp}\ImportTemp.reg", Convert.FromBase64String(val))
-                    hasReg = True
-                ElseIf Ln.StartsWithF("Identify:") Then
-                    If val <> "" Then id = val
-                Else
-                    Log($"[Setup] 设置项：{key} 设置为 {val}")
-                    Setup.Set(key, val, ForceReload:=True)
+                If key = "MachineID" OrElse CannotImport.Contains(key) Then
+                    Log($"[Setup] 设置项 {key} 忽略")
+                    Continue For
+                ElseIf (Not importEncoded) AndAlso SetupDict(key).Encoded Then
+                    Log($"[Setup] 设置项 {key} 被加密，忽略")
+                    Continue For
                 End If
+                Log($"[Setup] 设置项 {key} 导入，数据 {val}")
+                Setup.Set(key, val, ForceReload:=True)
             Next
-            If Not hasReg Then Return 1 '不重启
-            If Setup.Get("Identify") <> id Then
-#If BETA Then
-                Dim msg As String = " PCL 隐藏主题、正版账号、LittleSkin 账号"
-#Else
-                Dim msg As String = "正版账号、LittleSkin 账号"
-#End If
-                If MyMsgBox(
-                        $"导入的设置可能来自另一台电脑，且将会导致{msg}等信息失效。" & vbCrLf &
-                        "即使你导出了当前设置，也可能无法再次还原！" & vbCrLf & 'youzi-2333：别问我是怎么知道的
-                        "除非你知道你在做什么，否则请取消导入注册表项！" & vbCrLf &
-                        vbCrLf &
-                        "点击 ""取消"" 按钮后，账号信息、主题颜色信息等不会被导入，其他安全的信息仍会导入。" & vbCrLf &
-                        "这是最后的警告！" & vbCrLf &
-                        "如果你刚刚重装了系统，并在同一台电脑上启动 PCL，请忽略该提示并继续。", Title:="警告",
-                        Button1:="取消", Button2:="我知道我在做什么！", Button3:="取消", IsWarn:=True) <> 2 Then
-                    If File.Exists($"{PathTemp}\ExportTemp.reg") Then File.Delete($"{PathTemp}\ExportTemp.reg")
-                    Return 1 '不重启
-                End If
-            End If
-            ShellAndGetOutput("cmd", Arguments:=$"/C reg import ""{PathTemp}\ImportTemp.reg""")
-            If File.Exists($"{PathTemp}\ExportTemp.reg") Then File.Delete($"{PathTemp}\ExportTemp.reg")
-            Return 0 '重启
+            Return True
         Catch ex As Exception
             Log(ex, "导入设置失败", Level:=LogLevel.Msgbox)
-            Return 2 '失败
+            Return False
         End Try
     End Function
 #End Region
