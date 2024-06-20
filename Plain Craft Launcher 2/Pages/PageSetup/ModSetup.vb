@@ -749,12 +749,12 @@ Public Class ModSetup
             If hasReg Then
                 If Setup.Get("Identify") <> id Then
 #If BETA Then
-                    Dim msg As String = "隐藏主题、正版账号、LittleSkin 账号"
+                    Dim msg As String = " PCL 隐藏主题、正版账号、LittleSkin 账号"
 #Else
                     Dim msg As String = "正版账号、LittleSkin 账号"
 #End If
                     If MyMsgBox(
-                        $"导入的设置可能来自另一台电脑，且将会导致 PCL {msg}等信息失效。" & vbCrLf &
+                        $"导入的设置可能来自另一台电脑，且将会导致{msg}等信息失效。" & vbCrLf &
                         "即使你导出了当前设置，也可能无法再次还原！" & vbCrLf & 'youzi-2333：别问我是怎么知道的
                         "除非你知道你在做什么，否则请取消导入注册表项！" & vbCrLf &
                         vbCrLf &
