@@ -1,4 +1,7 @@
-﻿Public Class ModSetup
+﻿Imports System.Text
+Imports Newtonsoft.Json
+
+Public Class ModSetup
 
     ''' <summary>
     ''' 设置的更新号。
@@ -686,6 +689,90 @@
         LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
     End Sub
 
+#End Region
+
+#Region "导入/导出"
+    ''' <summary>
+    ''' 导出设置。
+    ''' </summary>
+    ''' <param name="Target">目标文件。</param>
+    ''' <param name="Registry">是否导出注册表的设置。</param>
+    ''' <returns>是否成功。</returns>
+    Public Function SetupExport(Target As String, Optional Registry As Boolean = False) As Boolean
+        Try
+            Log($"[Setup] 导出设置：到 {Target}，{If(Registry, "含注册表", "不含注册表")}")
+            If File.Exists(Target) Then File.Delete(Target) '选文件的时候已经确认要给他替换掉了
+            File.Copy(Path & "PCL\Setup.ini", Target)
+            If Registry Then
+                ShellAndGetOutput("cmd", Arguments:=$"/C reg export HKCU\Software\{RegFolder} ""{PathTemp}\ExportTemp.reg""")
+                WriteIni(Target, "RegInfo", Convert.ToBase64String(File.ReadAllBytes($"{PathTemp}\ExportTemp.reg")))
+                WriteIni(Target, "Identify", Setup.Get("Identify"))
+                File.Delete($"{PathTemp}\ExportTemp.reg")
+            End If
+            Return True
+        Catch ex As Exception
+            Log(ex, "导出设置失败", Level:=LogLevel.Hint)
+            Return False
+        End Try
+    End Function
+    ''' <summary>
+    ''' 导入设置。
+    ''' </summary>
+    ''' <param name="Source">源文件。</param>
+    ''' <returns>0 为成功需重启，1 为成功不需重启，2 为失败。</returns>
+    Public Function SetupImport(Source As String) As Byte
+        Try
+            Log($"[Setup] 导入设置：从 {Source}")
+            If ReadIni(Source, "Identify", "null") = "null" Then
+                Hint("不是有效的配置文件！", HintType.Critical)
+                Return 2 '失败
+            End If
+
+            '还原 Setup.ini
+            'If File.Exists(Path & "PCL\Setup.ini") Then File.Delete(Path & "PCL\Setup.ini")
+            'File.Create(Path & "PCL\Setup.ini")
+            Dim id As String = "null"
+            Dim hasReg As Boolean = False
+            For Each Ln In File.ReadAllLines(Source)
+                Dim pair As String() = Ln.Split(":".ToCharArray, 2)
+                Dim key As String = pair.First()
+                Dim val As String = If(pair.Length < 2, "", pair.Last())
+                If Ln.StartsWithF("RegInfo:") Then '注册表
+                    File.WriteAllBytes($"{PathTemp}\ImportTemp.reg", Convert.FromBase64String(val))
+                    hasReg = True
+                ElseIf Ln.StartsWithF("Identify:") Then
+                    If val <> "" Then id = val
+                Else
+                    Setup.Set(key, val, ForceReload:=True)
+                End If
+            Next
+            If hasReg Then
+                If Setup.Get("Identify") <> id Then
+#If BETA Then
+                    Dim msg As String = "隐藏主题、正版账号、LittleSkin 账号"
+#Else
+                    Dim msg As String = "正版账号、LittleSkin 账号"
+#End If
+                    If MyMsgBox(
+                        $"导入的设置可能来自另一台电脑，且将会导致 PCL {msg}等信息失效。" & vbCrLf &
+                        "即使你导出了当前设置，也可能无法再次还原！" & vbCrLf & 'youzi-2333：别问我是怎么知道的
+                        "除非你知道你在做什么，否则请取消导入注册表项！" & vbCrLf &
+                        vbCrLf &
+                        "点击 ""取消"" 按钮后，账号信息、主题颜色信息等不会被导入，其它安全的信息仍会导入。" & vbCrLf &
+                        "这是最后的警告！", Title:="警告",
+                        Button1:="取消", Button2:="我知道我在做什么！", Button3:="取消", IsWarn:=True) <> 2 Then
+                        Return 1 '不重启
+                    End If
+                End If
+                ShellAndGetOutput("cmd", Arguments:=$"/C reg import ""{PathTemp}\ImportTemp.reg""")
+                Return 0 '重启
+            End If
+            Return 1 '不重启
+        Catch ex As Exception
+            Log(ex, "导入设置失败", Level:=LogLevel.Msgbox)
+            Return 2 '失败
+        End Try
+    End Function
 #End Region
 
 End Class
