@@ -244,7 +244,7 @@ Class PageSetupSystem
                 Case 0 '重启
                     MyMsgBox("配置导入成功！PCL 即将重启……", ForceWait:=True)
                     ShellOnly(PathWithName)
-                    Environment.Exit(0)
+                    FrmMain.EndProgram(True)
                 Case 1 '不重启
                     Hint("配置导入成功！", HintType.Finish)
                 Case 2 '炸了，在 SetupImport 函数中显示错误信息
