@@ -1703,7 +1703,7 @@ Retry:
         Dim Id As String = DownloadInfo.Inherit & "-neoforge-" & DownloadInfo.Version
         Dim Target As String = PathTemp & "Cache\Code\NeoForgeInstall-" & DownloadInfo.Version & "_" & GetUuid() & "." & DownloadInfo.FileSuffix
         Dim VersionFolder As String = PathMcFolder & "versions\" & Id & "\"
-        Dim DisplayName As String = "Forge " & DownloadInfo.Inherit & " - " & DownloadInfo.Version
+        Dim DisplayName As String = "NeoForge " & DownloadInfo.Inherit & " - " & DownloadInfo.Version
         Try
 
             '重复任务检查
@@ -2436,7 +2436,7 @@ Retry:
 
         '若要下载 NeoForge，则需要在下面两项中完成至少一项
         ''' <summary>
-        ''' 欲下载的 NeoForge 版本名。接受例如 36.1.4 / 14.23.5.2859 / 1.19-41.1.0 的输入。
+        ''' 欲下载的 NeoForge 版本名。
         ''' </summary>
         Public NeoForgeVersion As String = Nothing
         ''' <summary>
@@ -2583,7 +2583,7 @@ Retry:
         If Request.ForgeVersion IsNot Nothing Then ForgeFolder = TempMcFolder & "versions\" & Request.MinecraftName & "-forge-" & Request.ForgeVersion
         Dim NeoForgeFolder As String = Nothing
         If Request.NeoForgeEntry IsNot Nothing Then Request.NeoForgeVersion = If(Request.NeoForgeVersion, Request.NeoForgeEntry.Version)
-        If Request.NeoForgeVersion IsNot Nothing Then NeoForgeFolder = TempMcFolder & "versions\" & Request.NeoForgeVersion
+        If Request.NeoForgeVersion IsNot Nothing Then NeoForgeFolder = TempMcFolder & "versions\" & If(Request.NeoForgeVersion.StartsWithF("1.20.1"), "1.20.1-forge-", "") & Request.NeoForgeVersion.Replace("1.20.1-", "")
         Dim FabricFolder As String = Nothing
         If Request.FabricVersion IsNot Nothing Then FabricFolder = TempMcFolder & "versions\fabric-loader-" & Request.FabricVersion & "-" & Request.MinecraftName
         Dim LiteLoaderFolder As String = Nothing
