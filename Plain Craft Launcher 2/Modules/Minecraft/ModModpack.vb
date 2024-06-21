@@ -202,16 +202,12 @@ Retry:
                 End Try
             ElseIf Id.StartsWithF("neoforge-") Then
                 'NeoForge 指定
-                If Id.Contains("recommended") Then
-                    Log("[ModPack] 该整合包版本过老，已不支持进行安装！", LogLevel.Hint)
-                    Exit Sub
-                End If
                 Try
                     Log("[ModPack] 整合包 NeoForge 版本：" & Id)
                     NeoForgeVersion = Id.Split("-")(1)
                     Exit For
                 Catch ex As Exception
-                    Log(ex, "读取整合包 Forge 版本失败：" & Id)
+                    Log(ex, "读取整合包 NeoForge 版本失败：" & Id)
                 End Try
             ElseIf Id.StartsWithF("fabric-") Then
                 'Fabric 指定

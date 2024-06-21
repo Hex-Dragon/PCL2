@@ -1699,23 +1699,6 @@ Retry:
 #Region "NeoForge 下载"
 
     Public Sub McDownloadNeoForge(DownloadInfo As DlNeoForgeVersionEntry)
-        '老版本提示
-        If DownloadInfo.Category = "client" Then
-            If MyMsgBox("该 Forge 版本过于古老，PCL 暂不支持该版本的自动安装。" & vbCrLf &
-                        "若你仍然希望继续，PCL 将把安装程序下载到你指定的位置，但不会进行安装。",
-                        "版本过老", "继续", "取消") = 1 Then
-                McDownloadNeoForgeSave(DownloadInfo)
-            End If
-            Exit Sub
-        End If
-        If DownloadInfo.Category = "universal" OrElse DownloadInfo.Inherit.StartsWithF("1.5") Then '对该版本自动安装的支持将在之后加入
-            If MyMsgBox("该 Forge 版本过于古老，PCL 暂不支持该版本的自动安装。" & vbCrLf &
-                        "若你仍然希望继续，PCL 将把安装程序下载到你指定的位置，但不会进行安装。",
-                        "版本过老", "继续", "取消") = 1 Then
-                McDownloadNeoForgeSave(DownloadInfo)
-            End If
-            Exit Sub
-        End If
         '初始化参数
         Dim Id As String = DownloadInfo.Inherit & "-neoforge-" & DownloadInfo.Version
         Dim Target As String = PathTemp & "Cache\Code\NeoForgeInstall-" & DownloadInfo.Version & "_" & GetUuid() & "." & DownloadInfo.FileSuffix

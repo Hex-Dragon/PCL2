@@ -771,14 +771,6 @@
             Public Value As JObject
         End Structure
         ''' <summary>
-        ''' 是否为新版 NeoForge。（即为 Minecraft 1.13+）
-        ''' </summary>
-        Public ReadOnly Property IsNewType As Boolean
-            Get
-                Return Version.Split(".")(0) >= 20
-            End Get
-        End Property
-        ''' <summary>
         ''' 构建数。
         ''' </summary>
         Public ReadOnly Property Build As Integer
@@ -805,7 +797,7 @@
         Public ReadOnly Property FileName As String
             Get
                 If StdVersion.StartsWith("47.") Then          'NeoForge 1.20.1 的版本命名有些特殊...
-                    Return "forge-" & Inherit & "-" & StdVersion & If(IsBeta, "-beta", "") & "-" & "installer" & "." & "jar"
+                    Return "forge-" & "1.20.1" & "-" & StdVersion & If(IsBeta, "-beta", "") & "-" & "installer" & "." & "jar"
                 Else
                     Return "neoforge-" & StdVersion & If(IsBeta, "-beta", "") & "-" & "installer" & "." & "jar"
                 End If
@@ -859,8 +851,8 @@
         End Try
         If Result.Length < 50 Then Throw New Exception("获取到的版本列表长度不足（" & Result & "）")
         ResultJson = GetJson(Result)
+        Dim VersionArray As Array = ResultJson("versions")
         Dim Versions As New List(Of DlNeoForgeVersionEntry)
-        Dim VersionList As String = ResultJson("versions")
         If Not Versions.Any() Then Throw New Exception("没有可用版本")
         Loader.Output = Versions
     End Sub
