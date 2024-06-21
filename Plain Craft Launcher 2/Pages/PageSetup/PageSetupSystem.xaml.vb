@@ -226,7 +226,7 @@
             Case 3
                 Exit Sub
         End Select
-        Dim savePath As String = SelectAs("选择保存位置", "PCL 导出配置.ini", "PCL 配置文件(*.ini)|*.ini", Path).Replace("/", "\")
+        Dim savePath As String = SelectAs("选择保存位置", "PCL 全局配置.ini", "PCL 配置文件(*.ini)|*.ini", Path).Replace("/", "\")
         If savePath = "" Then Exit Sub
         If Setup.SetupExport(savePath, ExportEncoded:=encodedExport) Then
             Hint("配置导出成功！", HintType.Finish)
