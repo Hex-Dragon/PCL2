@@ -1294,7 +1294,7 @@ Retry:
 
         '获取下载信息
         If DownloadInfo Is Nothing Then
-            Loaders.Add(New LoaderTask(Of String, String)("获取 Mod 加载器详细信息",
+            Loaders.Add(New LoaderTask(Of String, String)("获取 Forge 详细信息",
             Sub(Task As LoaderTask(Of String, String))
                 '获取 Forge 版本列表
                 Dim ForgeLoader = New LoaderTask(Of String, List(Of DlForgeVersionEntry))("McDownloadForgeLoader " & Inherit, AddressOf DlForgeVersionMain)
@@ -1311,7 +1311,7 @@ Retry:
             End Sub) With {.ProgressWeight = 3})
         End If
         '下载 Forge 主文件
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("准备 Mod 加载器下载",
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("准备下载 Forge",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 '启动依赖版本的下载
                 If ClientDownloadLoader Is Nothing Then
@@ -1325,13 +1325,13 @@ Retry:
                 }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
                 Task.Output = Files
             End Sub) With {.ProgressWeight = 0.5, .Show = False})
-        Loaders.Add(New LoaderDownload("下载 Mod 加载器主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
+        Loaders.Add(New LoaderDownload("下载 Forge 主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
 
         '安装（仅在新版安装时需要原版 Jar）
         If Version.Before(".") >= 20 Then
             Log("[Download] 检测为新版 Forge：" & Version)
             Dim Libs As List(Of McLibToken) = Nothing
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Mod 加载器支持库文件",
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Forge 支持库文件",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 Task.Output = New List(Of NetFile)
                 Dim Installer As ZipArchive = Nothing
@@ -1374,8 +1374,8 @@ Retry:
                     If Installer IsNot Nothing Then Installer.Dispose()
                 End Try
             End Sub) With {.ProgressWeight = 2})
-            Loaders.Add(New LoaderDownload("下载 Mod 加载器支持库文件", New List(Of NetFile)) With {.ProgressWeight = 12})
-            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("获取 Mod 下载器支持库文件",
+            Loaders.Add(New LoaderDownload("下载 Forge 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 12})
+            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("获取 Forge 支持库文件",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
 #Region "Forge 文件"
                 If IsCustomFolder Then
@@ -1415,7 +1415,7 @@ Retry:
                 End SyncLock
 #End Region
             End Sub) With {.ProgressWeight = 0.1, .Show = False})
-            Loaders.Add(New LoaderTask(Of Boolean, Boolean)("安装 Mod 加载器（方式 A）",
+            Loaders.Add(New LoaderTask(Of Boolean, Boolean)("安装 Forge（方式 A）",
             Sub(Task As LoaderTask(Of Boolean, Boolean))
                 Dim Installer As ZipArchive = Nothing
                 Try
@@ -1479,7 +1479,7 @@ Retry:
             End Sub) With {.ProgressWeight = 10})
         Else
             Log("[Download] 检测为非新版 Forge：" & Version)
-            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("安装 Mod 加载器（方式 B）",
+            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("安装 Forge（方式 B）",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
                 Dim Installer As ZipArchive = Nothing
                 Try
@@ -1534,8 +1534,8 @@ Retry:
             End Sub) With {.ProgressWeight = 1})
             If FixLibrary Then
                 If IsCustomFolder Then Throw New Exception("若需要补全支持库，就不能自定义 MC 文件夹")
-                Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Mod 加载器支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
-                Loaders.Add(New LoaderDownload("下载 Mod 加载器支持库文件", New List(Of NetFile)) With {.ProgressWeight = 11})
+                Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Forge 支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
+                Loaders.Add(New LoaderDownload("下载 Forge 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 11})
             End If
         End If
 
@@ -1718,7 +1718,7 @@ Retry:
 
             '已有版本检查
             If File.Exists(VersionFolder & Id & ".json") Then
-                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 和 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
+                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 和 Jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
                     File.Delete(VersionFolder & Id & ".jar")
                     File.Delete(VersionFolder & Id & ".json")
                 Else
@@ -1746,7 +1746,7 @@ Retry:
     Public Sub McDownloadNeoForgeSave(DownloadInfo As DlNeoForgeVersionEntry)
         Try
             Dim Target As String = SelectAs("选择保存位置", DownloadInfo.FileName, "NeoForge 文件 (*." & DownloadInfo.FileSuffix & ")|*." & DownloadInfo.FileSuffix)
-            Dim DisplayName As String = "Forge " & DownloadInfo.Inherit & " - " & DownloadInfo.Version
+            Dim DisplayName As String = "NeoForge " & DownloadInfo.Inherit & " - " & DownloadInfo.Version
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
@@ -1987,7 +1987,7 @@ Retry:
 
         '获取下载信息
         If DownloadInfo Is Nothing Then
-            Loaders.Add(New LoaderTask(Of String, String)("获取 Mod 加载器详细信息",
+            Loaders.Add(New LoaderTask(Of String, String)("获取 NeoForge 详细信息",
             Sub(Task As LoaderTask(Of String, String))
                 '获取 NeoForge 版本列表
                 Dim NeoForgeLoader = New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("McDownloadNeoForgeLoader " & Inherit, AddressOf DlNeoForgeVersionMain)
@@ -2004,7 +2004,7 @@ Retry:
             End Sub) With {.ProgressWeight = 3})
         End If
         '下载 NeoForge 主文件
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("准备 Mod 加载器下载",
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("准备下载 NeoForge",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 '启动依赖版本的下载
                 If ClientDownloadLoader Is Nothing Then
@@ -2027,12 +2027,12 @@ Retry:
                 End If
                 Task.Output = Files
             End Sub) With {.ProgressWeight = 0.5, .Show = False})
-        Loaders.Add(New LoaderDownload("下载 Mod 加载器主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
+        Loaders.Add(New LoaderDownload("下载 NeoForge 主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
 
-        '安装（仅在新版安装时需要原版 Jar）
+        '安装（需要原版 Jar）
         Log("[Download] 检测为新版 NeoForge：" & Version)
         Dim Libs As List(Of McLibToken) = Nothing
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Mod 加载器支持库文件",
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 NeoForge 支持库文件",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 Task.Output = New List(Of NetFile)
                 Dim Installer As ZipArchive = Nothing
@@ -2069,14 +2069,14 @@ Retry:
                     Next
                     Task.Output = McLibFixFromLibToken(Libs, PathMcFolder)
                 Catch ex As Exception
-                    Throw New Exception("获取新版 NeoForge 支持库列表失败", ex)
+                    Throw New Exception("获取 NeoForge 支持库列表失败", ex)
                 Finally
                     '释放文件
                     If Installer IsNot Nothing Then Installer.Dispose()
                 End Try
             End Sub) With {.ProgressWeight = 2})
-        Loaders.Add(New LoaderDownload("下载 Mod 加载器支持库文件", New List(Of NetFile)) With {.ProgressWeight = 12})
-        Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("获取 Mod 下载器支持库文件",
+        Loaders.Add(New LoaderDownload("下载 NeoForge 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 12})
+        Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("获取 NeoForge 支持库文件",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
 #Region "NeoForge 文件"
                 If IsCustomFolder Then
@@ -2116,11 +2116,11 @@ Retry:
                 End SyncLock
 #End Region
             End Sub) With {.ProgressWeight = 0.1, .Show = False})
-        Loaders.Add(New LoaderTask(Of Boolean, Boolean)("安装 Mod 加载器（方式 A）",
+        Loaders.Add(New LoaderTask(Of Boolean, Boolean)("安装 NeoForge",
             Sub(Task As LoaderTask(Of Boolean, Boolean))
                 Dim Installer As ZipArchive = Nothing
                 Try
-                    Log("[Download] 开始进行新版方式 NeoForge 安装：" & InstallerAddress)
+                    Log("[Download] 开始进行 NeoForge 安装：" & InstallerAddress)
                     '记录当前文件夹列表（在新建目标文件夹之前）
                     Dim OldList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
                                                                         Select(Function(i) i.FullName).ToList()

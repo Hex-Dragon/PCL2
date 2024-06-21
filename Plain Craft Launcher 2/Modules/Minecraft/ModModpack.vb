@@ -391,6 +391,9 @@ Retry:
                 Case "neoforge" 'eg. 20.6.98-beta
                     NeoForgeVersion = Entry.Value.ToString
                     Log("[ModPack] 整合包 NeoForge 版本：" & NeoForgeVersion)
+                Case "neo-forge" 'eg. 20.6.98-beta  /  有些早期的 Modrinth 整合包可能会写成这样，也检测一下
+                    NeoForgeVersion = Entry.Value.ToString
+                    Log("[ModPack] 整合包 NeoForge 版本：" & NeoForgeVersion)
                 Case "fabric-loader" 'eg. 0.14.14
                     FabricVersion = Entry.Value.ToString
                     Log("[ModPack] 整合包 Fabric 版本：" & FabricVersion)
