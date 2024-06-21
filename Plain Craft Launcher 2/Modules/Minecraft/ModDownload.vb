@@ -939,6 +939,85 @@
 
 #End Region
 
+#Region "DlQuiltList | Quilt 列表"
+
+    Public Structure DlQuiltListResult
+        ''' <summary>
+        ''' 数据来源名称，如“Official”，“BMCLAPI”。
+        ''' </summary>
+        Public SourceName As String
+        ''' <summary>
+        ''' 是否为官方的实时数据。
+        ''' </summary>
+        Public IsOfficial As Boolean
+        ''' <summary>
+        ''' 获取到的数据。
+        ''' </summary>
+        Public Value As JObject
+    End Structure
+
+    ''' <summary>
+    ''' Quilt 列表，主加载器。
+    ''' </summary>
+    Public DlQuiltListLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Main", AddressOf DlQuiltListMain)
+    Private Sub DlQuiltListMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
+        Select Case Setup.Get("ToolDownloadVersion")
+            Case 0
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListBmclapiLoader, 30),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListBmclapiLoader, 60)
+                }, Loader.IsForceRestarting)
+            Case 1
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 5),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListBmclapiLoader, 35)
+                }, Loader.IsForceRestarting)
+            Case Else
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 60),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListBmclapiLoader, 60)
+                }, Loader.IsForceRestarting)
+        End Select
+    End Sub
+
+    ''' <summary>
+    ''' Quilt 列表，官方源。
+    ''' </summary>
+    Public DlQuiltListOfficialLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Official", AddressOf DlQuiltListOfficialMain)
+    Private Sub DlQuiltListOfficialMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
+        Dim Result As JObject = NetGetCodeByRequestRetry("https://meta.fabricmc.net/v2/versions", IsJson:=True)
+        Try
+            Dim Output = New DlQuiltListResult With {.IsOfficial = True, .SourceName = "Quilt 官方源", .Value = Result}
+            If Output.Value("game") Is Nothing OrElse Output.Value("loader") Is Nothing OrElse Output.Value("installer") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
+            Loader.Output = Output
+        Catch ex As Exception
+            Throw New Exception("列表解析失败（" & Result.ToString & "）", ex)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Quilt 列表，BMCLAPI。Note: 由于 Quilt 官方 API 的问题，BMCLAPI 暂时无法使用
+    ''' </summary>
+    Public DlQuiltListBmclapiLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Bmclapi", AddressOf DlQuiltListBmclapiMain)
+    Private Sub DlQuiltListBmclapiMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
+        Dim Result As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/fabric-meta/v2/versions", IsJson:=True)
+        Try
+            Dim Output = New DlQuiltListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Result}
+            If Output.Value("game") Is Nothing OrElse Output.Value("loader") Is Nothing OrElse Output.Value("installer") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
+            Loader.Output = Output
+        Catch ex As Exception
+            Throw New Exception("列表解析失败（" & Result.ToString & "）", ex)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Quilt API 列表，官方源。
+    ''' </summary>
+    Public DlQuiltApiLoader As New LoaderTask(Of Integer, List(Of CompFile))("Quilt API List Loader",
+        Sub(Task As LoaderTask(Of Integer, List(Of CompFile))) Task.Output = CompFilesGet("fabric-api", False))
+
+#End Region
+
 #Region "DlSource | 镜像下载源"
 
     Public Function DlSourceResourceGet(MojangBase As String) As String()
