@@ -694,6 +694,7 @@ Public Class ModSetup
     Private Function MachineID() As String
         Return "" 'TODO：改为实际的机器码。
     End Function
+#Region "导出"
     ''' <summary>
     ''' 导出全局设置。
     ''' </summary>
@@ -714,6 +715,7 @@ Public Class ModSetup
             Next
             WriteIni(Target, "MachineID", MachineID)
             WriteIni(Target, "ExportType", "Global")
+            WriteIni(Target, "PCLVersion", VersionCode)
             Return True
         Catch ex As Exception
             Log(ex, "导出全局设置失败", Level:=LogLevel.Hint)
@@ -740,13 +742,17 @@ Public Class ModSetup
                 WriteIni(Target, key, ReadIni($"{Version.Path}PCL\Setup.ini", key))
             Next
             WriteIni(Target, "ExportType", "Version")
-                Return True
+            WriteIni(Target, "PCLVersion", VersionCode)
+            Return True
         Catch ex As Exception
             Log(ex, "导出版本设置失败", Level:=LogLevel.Hint)
             Return False
         End Try
     End Function
-    Private CannotImport As String() = {"MachineID", "ExportType", "HintNotice", "SystemHelpVersion"}
+#End Region
+
+#Region "导入"
+    Private CannotImport As String() = {"MachineID", "ExportType", "PCLVersion", "HintNotice", "SystemHelpVersion"}
     ''' <summary>
     ''' 导入全局设置。
     ''' </summary>
@@ -764,6 +770,10 @@ Public Class ModSetup
                     Hint("请确认导入的配置文件有效！", HintType.Critical)
                     Return False
             End Select
+            If ReadIni(Source, "PCLVersion", "10000000") > VersionCode Then
+                Hint("导入的配置来自高版本 PCL，可能导致问题。请到 设置 → 启动器 → 检查更新 更新启动器再试！", HintType.Critical)
+                Return False
+            End If
             CopyFile(Path & "PCL\Setup.ini", Path & "PCL\Setup.ini.old") '备份现有
 
             Dim importEncoded As Boolean = ReadIni(Source, "MachineID", "null") = MachineID()
@@ -806,6 +816,11 @@ Public Class ModSetup
                     Hint("请确认导入的配置文件有效！", HintType.Critical)
                     Return False
             End Select
+            If ReadIni(Source, "PCLVersion", "10000000") > VersionCode Then
+                Hint("导入的配置来自高版本 PCL，可能导致问题。请到 设置 → 启动器 → 检查更新 更新启动器再试！", HintType.Critical)
+                Return False
+            End If
+
             CopyFile(Version.Path & "PCL\Setup.ini", Version.Path & "PCL\Setup.ini.old") '备份现有
 
             For Each Ln In File.ReadAllLines(Source)
@@ -825,6 +840,8 @@ Public Class ModSetup
             Return False
         End Try
     End Function
+#End Region
+
 #End Region
 
 End Class
