@@ -291,7 +291,7 @@ Public Module ModMinecraft
         Public ReadOnly Property Modable As Boolean
             Get
                 If Not IsLoaded Then Load()
-                Return Version.HasFabric OrElse Version.HasForge OrElse Version.HasLiteLoader OrElse
+                Return Version.HasFabric OrElse Version.HasForge OrElse Version.HasLiteLoader OrElse Version.HasNeoForge OrElse
                     DisplayType = McVersionCardType.API '#223
             End Get
         End Property
@@ -923,7 +923,7 @@ ExitDataLoad:
         ''' </summary>
         Public HasNeoForge As Boolean = False
         ''' <summary>
-        ''' NeoForge 版本号，如 31.1.2、14.23.5.2847。
+        ''' NeoForge 版本号，如 21.0.2-beta、47.1.79。
         ''' </summary>
         Public NeoForgeVersion As String = ""
 

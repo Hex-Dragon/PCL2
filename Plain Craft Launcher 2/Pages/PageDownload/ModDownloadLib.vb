@@ -2030,7 +2030,7 @@ Retry:
         Loaders.Add(New LoaderDownload("下载 NeoForge 主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
 
         '安装（需要原版 Jar）
-        Log("[Download] 检测为新版 NeoForge：" & Version)
+        Log("[Download] 检测到的 NeoForge 版本：" & Version)
         Dim Libs As List(Of McLibToken) = Nothing
         Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 NeoForge 支持库文件",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
@@ -2583,7 +2583,7 @@ Retry:
         If Request.ForgeVersion IsNot Nothing Then ForgeFolder = TempMcFolder & "versions\" & Request.MinecraftName & "-forge-" & Request.ForgeVersion
         Dim NeoForgeFolder As String = Nothing
         If Request.NeoForgeEntry IsNot Nothing Then Request.NeoForgeVersion = If(Request.NeoForgeVersion, Request.NeoForgeEntry.Version)
-        If Request.NeoForgeVersion IsNot Nothing Then NeoForgeFolder = TempMcFolder & "versions\" & If(Request.NeoForgeVersion.StartsWithF("1.20.1") OrElse Request.NeoForgeVersion.StartsWithF("47."), "1.20.1-forge-", "") & Request.NeoForgeVersion.Replace("1.20.1-", "")
+        If Request.NeoForgeVersion IsNot Nothing Then NeoForgeFolder = TempMcFolder & "versions\" & If(Request.NeoForgeVersion.StartsWithF("1.20.1") OrElse Request.NeoForgeVersion.StartsWithF("47."), "1.20.1-forge-", "") & Request.NeoForgeVersion.Replace("1.20.1-forge-", "").Replace("1.20.1-", "")
         Dim FabricFolder As String = Nothing
         If Request.FabricVersion IsNot Nothing Then FabricFolder = TempMcFolder & "versions\fabric-loader-" & Request.FabricVersion & "-" & Request.MinecraftName
         Dim LiteLoaderFolder As String = Nothing
@@ -2601,6 +2601,7 @@ Retry:
         If OptiFineFolder IsNot Nothing Then Log("[Download] OptiFine 缓存：" & OptiFineFolder)
         If ForgeFolder IsNot Nothing Then Log("[Download] Forge 缓存：" & ForgeFolder)
         If NeoForgeFolder IsNot Nothing Then Log("[Download] NeoForge 缓存：" & NeoForgeFolder)
+        If Request.NeoForgeVersion IsNot Nothing Then Log("[Download] NeoForge 版本：" & Request.NeoForgeVersion)
         If FabricFolder IsNot Nothing Then Log("[Download] Fabric 缓存：" & FabricFolder)
         If LiteLoaderFolder IsNot Nothing Then Log("[Download] LiteLoader 缓存：" & LiteLoaderFolder)
         Log("[Download] 对应的原版版本：" & Request.MinecraftName)
