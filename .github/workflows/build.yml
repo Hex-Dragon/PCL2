@@ -9,6 +9,7 @@ on:
     paths:
       - 'Plain Craft Launcher 2/**'
       - '.github/workflows/**'
+  workflow_dispatch:
 
 jobs:
 
@@ -29,7 +30,7 @@ jobs:
     - name: Set Describe
       shell: bash
       run: |
-          Describe=`git describe --tags`
+          Describe=`git describe --tags --always`
           echo "Describe=$Describe" >> $GITHUB_ENV
 
     - name: Setup MSBuild.exe
