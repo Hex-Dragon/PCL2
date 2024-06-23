@@ -2,6 +2,18 @@
     Public JavaListCacheVersion As Integer = 6
 
     ''' <summary>
+    ''' 用于在搜索 Java 时进行关键词检测。
+    ''' </summary>
+    Public ReadOnly SearchEntryWords As List(Of String) =
+        New List(Of String) From {"java", "jdk", "env", "环境", "run", "软件", "jre", "bin", "mc",
+        "soft", "cache", "temp", "corretto", "roaming", "users", "craft", "program", "世界", "net",
+        "游戏", "oracle", "game", "file", "data", "jvm", "服务", "server", "客户", "client", "整合",
+        "应用", "运行", "前置", "mojang", "官启", "新建文件夹", "eclipse", "microsoft", "hotspot",
+        "runtime", "x86", "x64", "forge", "原版", "optifine", "官方", "启动", "hmcl", "mod", "高清",
+        "download", "launch", "程序", "path", "version", "baka", "pcl", "zulu", "local", "packages",
+        "4297127d64ec6", "国服", "网易", "ext", "netease", "1.", "启动"}
+
+    ''' <summary>
     ''' 目前所有可用的 Java。
     ''' </summary>
     Public JavaList As New List(Of JavaEntry)
@@ -670,29 +682,8 @@ Wait:
                 Dim SearchEntry = GetFolderNameFromPath(FolderInfo.Name).ToLower '用于搜索的字符串
                 If IsFullSearch OrElse
                         FolderInfo.Parent.Name.ToLower = "users" OrElse
-                        SearchEntry.Contains("java") OrElse SearchEntry.Contains("jdk") OrElse SearchEntry.Contains("env") OrElse
-                        SearchEntry.Contains("环境") OrElse SearchEntry.Contains("run") OrElse SearchEntry.Contains("软件") OrElse
-                        SearchEntry.Contains("jre") OrElse SearchEntry = "bin" OrElse SearchEntry.Contains("mc") OrElse
-                        SearchEntry.Contains("soft") OrElse SearchEntry.Contains("cache") OrElse SearchEntry.Contains("temp") OrElse
-                        SearchEntry.Contains("corretto") OrElse SearchEntry.Contains("roaming") OrElse SearchEntry.Contains("users") OrElse
-                        SearchEntry.Contains("craft") OrElse SearchEntry.Contains("program") OrElse SearchEntry.Contains("世界") OrElse
-                        SearchEntry.Contains("net") OrElse SearchEntry.Contains("游戏") OrElse SearchEntry.Contains("oracle") OrElse
-                        SearchEntry.Contains("game") OrElse SearchEntry.Contains("file") OrElse SearchEntry.Contains("data") OrElse
-                        SearchEntry.Contains("jvm") OrElse SearchEntry.Contains("服务") OrElse SearchEntry.Contains("server") OrElse
-                        SearchEntry.Contains("客户") OrElse SearchEntry.Contains("client") OrElse SearchEntry.Contains("整合") OrElse
-                        SearchEntry.Contains("应用") OrElse SearchEntry.Contains("运行") OrElse SearchEntry.Contains("前置") OrElse
-                        SearchEntry.Contains("mojang") OrElse SearchEntry.Contains("官启") OrElse SearchEntry.Contains("新建文件夹") OrElse
-                        SearchEntry.Contains("eclipse") OrElse SearchEntry.Contains("microsoft") OrElse SearchEntry.Contains("hotspot") OrElse
-                        SearchEntry.Contains("runtime") OrElse SearchEntry.Contains("x86") OrElse SearchEntry.Contains("x64") OrElse
-                        SearchEntry.Contains("forge") OrElse SearchEntry.Contains("原版") OrElse SearchEntry.Contains("optifine") OrElse
-                        SearchEntry.Contains("官方") OrElse SearchEntry.Contains("启动") OrElse SearchEntry.Contains("hmcl") OrElse
-                        SearchEntry.Contains("mod") OrElse SearchEntry.Contains("高清") OrElse SearchEntry.Contains("download") OrElse
-                        SearchEntry.Contains("launch") OrElse SearchEntry.Contains("程序") OrElse SearchEntry.Contains("path") OrElse
-                        SearchEntry.Contains("version") OrElse SearchEntry.Contains("baka") OrElse SearchEntry.Contains("pcl") OrElse
-                        SearchEntry.Contains("zulu") OrElse
-                        SearchEntry.Contains("local") OrElse SearchEntry.Contains("packages") OrElse SearchEntry.Contains("4297127d64ec6") OrElse '官启文件夹
-                        SearchEntry.Contains("国服") OrElse SearchEntry.Contains("网易") OrElse SearchEntry.Contains("ext") OrElse '网易 Java 文件夹名
-                        SearchEntry.Contains("netease") OrElse SearchEntry.Contains("1.") OrElse SearchEntry.Contains("启动") Then
+                        SearchEntryWords.Any(Function(word) SearchEntry.Contains(word)) OrElse '进行关键词检测
+                        SearchEntry = "bin" Then
                     JavaSearchFolder(FolderInfo, Results, Source)
                 End If
             Next
