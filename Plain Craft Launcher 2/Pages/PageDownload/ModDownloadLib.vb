@@ -2191,7 +2191,9 @@ Retry:
         Dim FreshStableVersion As DlNeoForgeVersionEntry = Nothing
         Dim FreshBetaVersion As DlNeoForgeVersionEntry = Nothing
         If Entrys.Any Then
-            For Each Entry In Entrys
+            Dim VersionsArray = Entrys.ToList()
+            VersionsArray.Reverse()
+            For Each Entry In VersionsArray
                 If Entry.IsBeta Then
                     FreshBetaVersion = Entry
                 Else

@@ -746,18 +746,18 @@
         Select Case Setup.Get("ToolDownloadVersion")
             Case 0
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)) From {
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 30),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListBmclapiLoader, 30),
                     New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 60)
                 }, Loader.IsForceRestarting)
             Case 1
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 5),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 35)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListBmclapiLoader, 35)
                 }, Loader.IsForceRestarting)
             Case Else
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 60),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListBmclapiLoader, 60)
                 }, Loader.IsForceRestarting)
         End Select
     End Sub
@@ -806,15 +806,31 @@
     ''' <summary>
     ''' NeoForge 版本列表，BMCLAPI。
     ''' </summary>
-    'Public DlNeoForgeListBmclapiLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Bmclapi", AddressOf DlNeoForgeListBmclapiMain)
-    'Private Sub DlNeoForgeListBmclapiMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
-    '    Dim Result As String = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft", Encoding.Default)
-    '    If Result.Length < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Result & "）")
-    '    '获取所有版本信息
-    '    Dim Names As List(Of String) = RegexSearch(Result, "[0-9.]+(_pre[0-9]?)?")
-    '    If Names.Count < 10 Then Throw New Exception("获取到的版本数量不足（" & Result & "）")
-    '    Loader.Output = New DlNeoForgeListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Names}
-    'End Sub
+    Public DlNeoForgeListBmclapiLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Bmclapi", AddressOf DlNeoForgeListBmclapiMain)
+    Private Sub DlNeoForgeListBmclapiMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
+        Dim Versions As List(Of String) = New List(Of String)
+        Dim ClientVersions As JArray = DlClientListLoader.Output.Value("versions")          'BMCLAPI 不能返回所有 NeoForge 版本，获取 MC 版本列表进行遍历
+        Dim ClientReleases As List(Of String) = New List(Of String)
+
+        For Each Client In ClientVersions          '排除快照版或远古版等特殊版本
+            Dim ClientVersionString = Client("id").ToString()
+            If Not (ClientVersionString.ContainsF("a") OrElse ClientVersionString.ContainsF("b") OrElse ClientVersionString.ContainsF("c") OrElse ClientVersionString.ContainsF("w") OrElse ClientVersionString.ContainsF("pre") OrElse ClientVersionString.ContainsF("Pre") OrElse ClientVersionString.ContainsF("rc") OrElse ClientVersionString.ContainsF("b") OrElse ClientVersionString.ContainsF("rd") OrElse ClientVersionString.ContainsF("inf")) Then
+                ClientReleases.Add(ClientVersionString)
+            End If
+        Next
+
+        For Each Release In ClientReleases
+            If Int(Release.Split(".")(1)) > 19 Then          '如果游戏版本低于 1.20 就不进行请求
+                Dim Json As String = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/neoforge/list/" & Release)
+                If Json IsNot "[]" Then          '如果这个版本不支持 NeoForge，BMCLAPI 会直接返回一个空的 Json 序列，这里直接用字符串处理了
+                    Versions.Add(Release)
+                    Versions.Remove("1.20")
+                End If
+            End If
+        Next
+
+        Loader.Output = New DlNeoForgeListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Versions}
+    End Sub
 #End Region
 
 #Region "DlNeoForgeVersion | NeoForge 版本列表"
@@ -907,7 +923,7 @@
     ''' <summary>
     ''' NeoForge 版本列表，主加载器。
     ''' </summary>
-    Public Sub DlNeoForgeVersionMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))          'BMCLAPI 不会返回完整的 NeoForge 版本列表，而貌似也没有办法获取 NeoForge 支持的所有 Minecraft 版本
+    Public Sub DlNeoForgeVersionMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))
         Dim DlNeoForgeVersionOfficialLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Official", AddressOf DlNeoForgeVersionOfficialMain)
         Dim DlNeoForgeVersionBmclapiLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Bmclapi", AddressOf DlNeoForgeVersionBmclapiMain)
         Select Case Setup.Get("ToolDownloadVersion")
@@ -935,7 +951,6 @@
     Public Sub DlNeoForgeVersionOfficialMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))
         Dim ResultLatest As String
         Dim ResultLegacy As String
-        Dim ResultJson As String
         Dim ResultLatestJson As JObject
         Dim ResultLegacyJson As JObject
         Dim VersionsJArray As JArray
@@ -996,7 +1011,9 @@
             Throw New Exception("版本列表解析失败（" & VersionsJArray.ToString & "）", ex)
         End Try
         If Not Versions.Any() Then Throw New Exception("没有可用版本")
-        Loader.Output = Versions
+        Dim VersionsArray = Versions.ToList()
+        VersionsArray.Reverse()
+        Loader.Output = VersionsArray
     End Sub
 
     ''' <summary>
@@ -1026,7 +1043,9 @@
             Throw New Exception("版本列表解析失败（" & Json.ToString & "）", ex)
         End Try
         If Not Versions.Any() Then Throw New Exception("没有可用版本")
-        Loader.Output = Versions
+        Dim VersionsArray = Versions.ToList()
+        VersionsArray.Reverse()
+        Loader.Output = VersionsArray
     End Sub
 
 #End Region
