@@ -2187,16 +2187,28 @@ Retry:
 #Region "NeoForge 下载菜单"
 
     Public Sub NeoForgeDownloadListItemPreload(Stack As StackPanel, Entrys As List(Of DlNeoForgeVersionEntry), OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean)
-        '获取最新版本
-        Dim FreshVersion As DlNeoForgeVersionEntry = Nothing
+        '获取最新稳定版和测试版
+        Dim FreshStableVersion As DlNeoForgeVersionEntry = Nothing
+        Dim FreshBetaVersion As DlNeoForgeVersionEntry = Nothing
         If Entrys.Any Then
-            FreshVersion = Entrys.Last()
+            For Each Entry In Entrys
+                If Entry.IsBeta Then
+                    FreshBetaVersion = Entry
+                Else
+                    FreshStableVersion = Entry
+                End If
+            Next
         Else
             Log("[System] 未找到可用的 NeoForge 版本", LogLevel.Debug)
         End If
         '显示各个版本
-        If FreshVersion IsNot Nothing Then
-            Dim Fresh = NeoForgeDownloadListItem(FreshVersion, OnClick, IsSaveOnly)
+        If FreshStableVersion IsNot Nothing Then
+            Dim Fresh = NeoForgeDownloadListItem(FreshStableVersion, OnClick, IsSaveOnly)
+            Fresh.Info = "最新版" & If(Fresh.Info = "", "", "，" & Fresh.Info)
+            Stack.Children.Add(Fresh)
+        End If
+        If FreshBetaVersion IsNot Nothing Then
+            Dim Fresh = NeoForgeDownloadListItem(FreshBetaVersion, OnClick, IsSaveOnly)
             Fresh.Info = "最新版" & If(Fresh.Info = "", "", "，" & Fresh.Info)
             Stack.Children.Add(Fresh)
         End If

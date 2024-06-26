@@ -17,10 +17,11 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard x:Name="CardVersions" Margin="20,15,20,20" Title="版本列表">
+            <!--<local:MyCard x:Name="CardVersions" Margin="20,15,20,20" Title="版本列表">
                 <StackPanel x:Name="PanVersions" Margin="20,40,18,20" />
-            </local:MyCard>
-            <local:MyCard HorizontalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
+            </local:MyCard>-->
+            <StackPanel Name="PanMain" Margin="20,15,20,5" Grid.IsSharedSizeScope="True" />
+            <local:MyCard HorizontalAlignment="Center" Margin="40,50" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False">
                 <local:MyLoading Text="正在获取 NeoForge 列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </local:MyCard>
         </StackPanel>

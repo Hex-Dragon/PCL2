@@ -721,6 +721,108 @@
 
 #End Region
 
+#Region "DlNeoForgeList | NeoForge Minecraft 版本列表"
+
+    Public Structure DlNeoForgeListResult
+        ''' <summary>
+        ''' 数据来源名称，如“Official”，“BMCLAPI”。
+        ''' </summary>
+        Public SourceName As String
+        ''' <summary>
+        ''' 是否为官方的实时数据。
+        ''' </summary>
+        Public IsOfficial As Boolean
+        ''' <summary>
+        ''' 获取到的数据。
+        ''' </summary>
+        Public Value As List(Of String)
+    End Structure
+
+    ''' <summary>
+    ''' NeoForge 版本列表，主加载器。
+    ''' </summary>
+    Public DlNeoForgeListLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Main", AddressOf DlNeoForgeListMain)
+    Private Sub DlNeoForgeListMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
+        Select Case Setup.Get("ToolDownloadVersion")
+            Case 0
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 30),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 60)
+                }, Loader.IsForceRestarting)
+            Case 1
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 5),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 35)
+                }, Loader.IsForceRestarting)
+            Case Else
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 60),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 60)
+                }, Loader.IsForceRestarting)
+        End Select
+    End Sub
+
+    ''' <summary>
+    ''' NeoForge 版本列表，官方源。
+    ''' </summary>
+    Public DlNeoForgeListOfficialLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Official", AddressOf DlNeoForgeListOfficialMain)
+    Private Sub DlNeoForgeListOfficialMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
+        'Dim Result As String = NetGetCodeByRequestRetry("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_1.2.4.html", Encoding.Default, "text/html", UseBrowserUserAgent:=True)
+        'If Result.Length < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Result & "）")
+        ''获取所有版本信息
+        'Dim Names As List(Of String) = RegexSearch(Result, "(?<=a href=""index_)[0-9.]+(_pre[0-9]?)?(?=.html)")
+        'If Names.Count < 10 Then Throw New Exception("获取到的版本数量不足（" & Result & "）")
+        'Loader.Output = New DlNeoForgeListResult With {.IsOfficial = True, .SourceName = "NeoForge 官方源", .Value = Names}
+        Dim ResultLatest As String
+        Dim VersionsJArray As JArray
+        Try
+            ResultLatest = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True)
+        Catch ex As Exception
+            If GetExceptionSummary(ex).Contains("(404)") Then
+                Throw New Exception("没有可用版本")
+            Else
+                Throw
+            End If
+        End Try
+        If ResultLatest.Length < 50 Then Throw New Exception("获取到的版本列表长度不足（" & ResultLatest & "）")
+        VersionsJArray = GetJson(ResultLatest)("versions")
+        Dim Versions As List(Of String) = New List(Of String)
+        Versions.Add("1.20.1")
+        Try
+            For Each Token As String In VersionsJArray
+                Dim Version As String = Token.ToString().Replace("neoforge-", "")
+                Dim Inherit As String = "1." & Version.ToString().Split(".")(0) & "." & Token.ToString().Split(".")(1)
+                If Inherit.EndsWith(".0") Then
+                    Inherit = Inherit.Replace(".0", "")
+                End If
+                If Versions.Contains(Inherit) Then
+                    Continue For
+                Else
+                    Versions.Add(Inherit)
+                End If
+            Next
+        Catch ex As Exception
+            MyMsgBox(ex.ToString(), "错误")
+            Throw New Exception("版本列表解析失败（" & VersionsJArray.ToString & "）", ex)
+        End Try
+        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        Loader.Output = New DlNeoForgeListResult With {.IsOfficial = True, .SourceName = "NeoForge 官方源", .Value = Versions}
+    End Sub
+
+    ''' <summary>
+    ''' NeoForge 版本列表，BMCLAPI。
+    ''' </summary>
+    'Public DlNeoForgeListBmclapiLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Bmclapi", AddressOf DlNeoForgeListBmclapiMain)
+    'Private Sub DlNeoForgeListBmclapiMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
+    '    Dim Result As String = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft", Encoding.Default)
+    '    If Result.Length < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Result & "）")
+    '    '获取所有版本信息
+    '    Dim Names As List(Of String) = RegexSearch(Result, "[0-9.]+(_pre[0-9]?)?")
+    '    If Names.Count < 10 Then Throw New Exception("获取到的版本数量不足（" & Result & "）")
+    '    Loader.Output = New DlNeoForgeListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Names}
+    'End Sub
+#End Region
+
 #Region "DlNeoForgeVersion | NeoForge 版本列表"
 
     Public Class DlNeoForgeVersionEntry
@@ -811,7 +913,6 @@
     ''' <summary>
     ''' NeoForge 版本列表，主加载器。
     ''' </summary>
-    Public DlNeoForgeListLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeList Main", AddressOf DlNeoForgeVersionMain)
     Public Sub DlNeoForgeVersionMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))          'BMCLAPI 不会返回完整的 NeoForge 版本列表，而貌似也没有办法获取 NeoForge 支持的所有 Minecraft 版本
         Dim DlNeoForgeVersionOfficialLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Official", AddressOf DlNeoForgeVersionOfficialMain)
         Dim DlNeoForgeVersionBmclapiLoader As New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Bmclapi", AddressOf DlNeoForgeVersionBmclapiMain)
@@ -838,10 +939,15 @@
     ''' NeoForge 版本列表，官方源。
     ''' </summary>
     Public Sub DlNeoForgeVersionOfficialMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))
-        Dim Result As String
-        Dim ResultJson As JObject
+        Dim ResultLatest As String
+        Dim ResultLegacy As String
+        Dim ResultJson As String
+        Dim ResultLatestJson As JObject
+        Dim ResultLegacyJson As JObject
+        Dim VersionsJArray As JArray
         Try
-            Result = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True)
+            ResultLatest = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True)
+            ResultLegacy = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/forge", UseBrowserUserAgent:=True)
         Catch ex As Exception
             If GetExceptionSummary(ex).Contains("(404)") Then
                 Throw New Exception("没有可用版本")
@@ -849,10 +955,52 @@
                 Throw
             End If
         End Try
-        If Result.Length < 50 Then Throw New Exception("获取到的版本列表长度不足（" & Result & "）")
-        ResultJson = GetJson(Result)
-        Dim VersionArray As Array = ResultJson("versions")
+        If ResultLatest.Length < 50 AndAlso ResultLegacy.Length < 50 Then Throw New Exception("获取到的版本列表长度不足（" & ResultLatest & "）")
+        ResultLatestJson = GetJson(ResultLatest)
+        ResultLegacyJson = GetJson(ResultLegacy)
+        If Loader.Input IsNot Nothing Then
+            If Loader.Input Is "1.20.1" Then
+                VersionsJArray = ResultLegacyJson("versions")
+            Else
+                VersionsJArray = ResultLatestJson("versions")
+            End If
+        Else
+            VersionsJArray = ResultLatestJson("versions")
+        End If
         Dim Versions As New List(Of DlNeoForgeVersionEntry)
+        Try
+            For Each Token As String In VersionsJArray
+                Dim StdVersion As String
+                Dim IsBeta As Boolean
+                Dim rawVersion As String = Token.ToString()
+                If rawVersion.Contains("-beta") Then
+                    StdVersion = Token.ToString().Replace("neoforge-", "").Replace("-beta", "")
+                    IsBeta = True
+                Else
+                    StdVersion = Token.ToString().Replace("neoforge-", "")
+                    IsBeta = False
+                End If
+                Dim Inherit As String = "1." & StdVersion.ToString().Split(".")(0) & "." & StdVersion.ToString().Split(".")(1)
+                If Inherit.EndsWith(".0") Then
+                    Inherit = Inherit.Replace(".0", "")
+                End If
+                Dim Entry = New DlNeoForgeVersionEntry
+                If Loader.Input IsNot Nothing Then
+                    If Inherit Is Loader.Input Then
+                        Entry = New DlNeoForgeVersionEntry With {.Version = rawVersion, .Inherit = Inherit, .IsBeta = IsBeta, .StdVersion = StdVersion}
+                        Versions.Add(Entry)
+                        Continue For
+                    Else
+                        Continue For
+                    End If
+                End If
+                Entry = New DlNeoForgeVersionEntry With {.Version = rawVersion, .Inherit = Inherit, .IsBeta = IsBeta, .StdVersion = StdVersion}
+                Versions.Add(Entry)
+            Next
+        Catch ex As Exception
+            MyMsgBox(ex.ToString(), "错误")
+            Throw New Exception("版本列表解析失败（" & VersionsJArray.ToString & "）", ex)
+        End Try
         If Not Versions.Any() Then Throw New Exception("没有可用版本")
         Loader.Output = Versions
     End Sub
@@ -865,8 +1013,7 @@
         Dim Versions As New List(Of DlNeoForgeVersionEntry)
         Try
             For Each Token As JObject In Json
-                Dim Name As String               '存储 rawVersion，貌似变化更加频繁
-                Dim StdVersion As String         '存储 version，相对规则
+                Dim StdVersion As String
                 Dim IsBeta As Boolean
                 Dim rawVersion As String = Token("rawVersion")
                 If rawVersion.Contains("-beta") Then
@@ -876,9 +1023,8 @@
                     StdVersion = Token("version").ToString().Replace("neoforge-", "").Replace("1.20.1-", "")
                     IsBeta = False
                 End If
-                Name = rawVersion
                 Dim Inherit As String = Token("mcversion")
-                Dim Entry = New DlNeoForgeVersionEntry With {.Version = Name, .Inherit = Inherit, .IsBeta = IsBeta, .StdVersion = StdVersion}
+                Dim Entry = New DlNeoForgeVersionEntry With {.Version = rawVersion, .Inherit = Inherit, .IsBeta = IsBeta, .StdVersion = StdVersion}
                 Versions.Add(Entry)
             Next
         Catch ex As Exception
