@@ -981,21 +981,19 @@
             For Each Token As String In VersionsJArray
                 Dim StdVersion As String
                 Dim IsBeta As Boolean
-                Dim rawVersion As String = Token.ToString()
+                Dim rawVersion As String = Token
                 If rawVersion.Contains("-beta") Then
-                    StdVersion = Token.ToString().Replace("neoforge-", "").Replace("-beta", "")
+                    StdVersion = Token.Replace("neoforge-", "").Replace("-beta", "")
                     IsBeta = True
                 Else
-                    StdVersion = Token.ToString().Replace("neoforge-", "")
+                    StdVersion = Token.Replace("neoforge-", "")
                     IsBeta = False
                 End If
-                Dim Inherit As String = "1." & StdVersion.ToString().Split(".")(0) & "." & StdVersion.ToString().Split(".")(1)
-                If Inherit.EndsWith(".0") Then
-                    Inherit = Inherit.Replace(".0", "")
-                End If
+                Dim Inherit As String = "1." & StdVersion.Split(".")(0) & "." & StdVersion.Split(".")(1)
+                Inherit = Inherit.Replace(".0", "")
                 Dim Entry = New DlNeoForgeVersionEntry
                 If Loader.Input IsNot Nothing Then
-                    If Inherit Is Loader.Input Then
+                    If Inherit Is Loader.Input.ToString() Then
                         Entry = New DlNeoForgeVersionEntry With {.Version = rawVersion, .Inherit = Inherit, .IsBeta = IsBeta, .StdVersion = StdVersion}
                         Versions.Add(Entry)
                         Continue For
