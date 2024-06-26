@@ -767,12 +767,6 @@
     ''' </summary>
     Public DlNeoForgeListOfficialLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Official", AddressOf DlNeoForgeListOfficialMain)
     Private Sub DlNeoForgeListOfficialMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
-        'Dim Result As String = NetGetCodeByRequestRetry("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_1.2.4.html", Encoding.Default, "text/html", UseBrowserUserAgent:=True)
-        'If Result.Length < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Result & "）")
-        ''获取所有版本信息
-        'Dim Names As List(Of String) = RegexSearch(Result, "(?<=a href=""index_)[0-9.]+(_pre[0-9]?)?(?=.html)")
-        'If Names.Count < 10 Then Throw New Exception("获取到的版本数量不足（" & Result & "）")
-        'Loader.Output = New DlNeoForgeListResult With {.IsOfficial = True, .SourceName = "NeoForge 官方源", .Value = Names}
         Dim ResultLatest As String
         Dim VersionsJArray As JArray
         Try

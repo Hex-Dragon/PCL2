@@ -11,11 +11,10 @@
         '结果数据化
         Try
             Dim Versions = Sort(DlNeoForgeListLoader.Output.Value, AddressOf VersionSortBoolean)
-            'Dim Versions As List(Of DlNeoForgeVersionEntry) = DlNeoForgeListLoader.Output
             PanMain.Children.Clear()
             For Each Version As String In Versions
                 '增加卡片
-                Dim NewCard As New MyCard With {.Title = Version.Replace("_p", " P"), .Margin = New Thickness(0, 0, 0, 15), .SwapType = 5}
+                Dim NewCard As New MyCard With {.Title = Version.Replace("_p", " P"), .Margin = New Thickness(0, 0, 0, 15), .SwapType = 13}
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Version}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
@@ -34,7 +33,7 @@
         '载入列表
         Card.SwapControl.Children.Clear()
         Card.SwapControl.Tag = Loader.Output
-        Card.SwapType = 6
+        Card.SwapType = 14
         Card.StackInstall()
     End Sub
     Public Sub NeoForge_Click(sender As MyLoading, e As MouseButtonEventArgs)
