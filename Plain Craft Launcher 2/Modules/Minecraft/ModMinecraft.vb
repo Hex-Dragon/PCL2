@@ -1,5 +1,4 @@
 ﻿Imports System.IO.Compression
-Imports MS.Internal
 
 Public Module ModMinecraft
 
@@ -762,7 +761,7 @@ ExitDataLoad:
                         Case McVersionState.Forge
                             Logo = PathImage & "Blocks/Anvil.png"
                         Case McVersionState.NeoForge
-                            Logo = PathImage & "Icons/NeoForged.png"
+                            Logo = PathImage & "Icons/NeoForge.png"
                         Case McVersionState.Fabric
                             Logo = PathImage & "Blocks/Fabric.png"
                         Case McVersionState.OptiFine

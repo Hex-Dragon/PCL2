@@ -384,7 +384,7 @@
         Else
             BtnNeoForgeClear.Visibility = Visibility.Visible
             ImgNeoForge.Visibility = Visibility.Visible
-            LabNeoForge.Text = SelectedNeoForge.StdVersion & If(SelectedNeoForge.IsBeta, "-beta", "")
+            LabNeoForge.Text = SelectedNeoForge.VersionCode & If(SelectedNeoForge.IsBeta, "-beta", "")
             LabNeoForge.Foreground = ColorGray1
         End If
         'Fabric
@@ -499,7 +499,7 @@
             Name += "-Forge_" & SelectedForge.Version
         End If
         If SelectedNeoForge IsNot Nothing Then
-            Name += "-NeoForge_" & SelectedNeoForge.StdVersion & If(SelectedNeoForge.IsBeta, "-beta", "")
+            Name += "-NeoForge_" & SelectedNeoForge.VersionCode & If(SelectedNeoForge.IsBeta, "-beta", "")
         End If
         If SelectedLiteLoader IsNot Nothing Then
             Name += "-LiteLoader"
@@ -521,7 +521,7 @@
             Info += ", Forge " & SelectedForge.Version
         End If
         If SelectedNeoForge IsNot Nothing Then
-            Info += ", NeoForge " & SelectedNeoForge.StdVersion & If(SelectedNeoForge.IsBeta, "-beta", "")
+            Info += ", NeoForge " & SelectedNeoForge.VersionCode & If(SelectedNeoForge.IsBeta, "-beta", "")
         End If
         If SelectedLiteLoader IsNot Nothing Then
             Info += ", LiteLoader"
@@ -541,7 +541,7 @@
         ElseIf SelectedForge IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/Anvil.png"
         ElseIf SelectedNeoForge IsNot Nothing Then
-            Return "pack://application:,,,/images/Icons/NeoForged.png"
+            Return "pack://application:,,,/images/Icons/NeoForge.png"
         ElseIf SelectedLiteLoader IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/Egg.png"
         ElseIf SelectedOptiFine IsNot Nothing Then
