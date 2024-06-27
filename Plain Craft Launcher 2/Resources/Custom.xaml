@@ -202,7 +202,7 @@
 			<!-- 鸡蛋 -->
 			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Fabric.png"/>
 			<!-- 布料（Fabric 图标） -->
-      <Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Icons/NeoForge.png"/>
+      <Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/NeoForge.png"/>
       <!-- 狐狸（NeoForge 图标） -->
 		</StackPanel>
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"

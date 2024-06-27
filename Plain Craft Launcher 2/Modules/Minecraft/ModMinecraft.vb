@@ -761,7 +761,7 @@ ExitDataLoad:
                         Case McVersionState.Forge
                             Logo = PathImage & "Blocks/Anvil.png"
                         Case McVersionState.NeoForge
-                            Logo = PathImage & "Icons/NeoForge.png"
+                            Logo = PathImage & "Blocks/NeoForge.png"
                         Case McVersionState.Fabric
                             Logo = PathImage & "Blocks/Fabric.png"
                         Case McVersionState.OptiFine
@@ -979,25 +979,15 @@ ExitDataLoad:
                             Else
                                 Throw New Exception("无效的 Fabric 版本：" & ForgeVersion)
                             End If
-                        ElseIf HasForge Then
-                            If ForgeVersion = "未知版本" Then Return 0
-                            Dim SubVersions = ForgeVersion.Split(".")
+                        ElseIf HasForge OrElse HasNeoForge Then
+                            If ForgeVersion = "未知版本" AndAlso NeoForgeVersion = "未知版本" Then Return 0
+                            Dim SubVersions = If(HasForge, ForgeVersion.Split("."), NeoForgeVersion.Split("."))
                             If SubVersions.Length = 4 Then
                                 _SortCode = Val(SubVersions(0)) * 1000000 + Val(SubVersions(1)) * 10000 + Val(SubVersions(3))
                             ElseIf SubVersions.Length = 3 Then
                                 _SortCode = Val(SubVersions(0)) * 1000000 + Val(SubVersions(1)) * 10000 + Val(SubVersions(2))
                             Else
-                                Throw New Exception("无效的 Forge 版本：" & ForgeVersion)
-                            End If
-                        ElseIf HasNeoForge Then
-                            If NeoForgeVersion = "未知版本" Then Return 0
-                            Dim SubVersions = NeoForgeVersion.Split(".")
-                            If SubVersions.Length = 4 Then
-                                _SortCode = Val(SubVersions(0)) * 1000000 + Val(SubVersions(1)) * 10000 + Val(SubVersions(3))
-                            ElseIf SubVersions.Length = 3 Then
-                                _SortCode = Val(SubVersions(0)) * 1000000 + Val(SubVersions(1)) * 10000 + Val(SubVersions(2))
-                            Else
-                                Throw New Exception("无效的 NeoForge 版本：" & NeoForgeVersion)
+                                Throw New Exception(If(HasForge, "无效的 Forge 版本：" & ForgeVersion, "无效的 NeoForge 版本：" & NeoForgeVersion))
                             End If
                         ElseIf HasOptiFine Then
                             If OptiFineVersion = "未知版本" Then Return 0

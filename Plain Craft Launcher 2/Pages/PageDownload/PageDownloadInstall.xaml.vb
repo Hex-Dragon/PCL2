@@ -541,7 +541,7 @@
         ElseIf SelectedForge IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/Anvil.png"
         ElseIf SelectedNeoForge IsNot Nothing Then
-            Return "pack://application:,,,/images/Icons/NeoForge.png"
+            Return "pack://application:,,,/images/Blocks/NeoForge.png"
         ElseIf SelectedLiteLoader IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/Egg.png"
         ElseIf SelectedOptiFine IsNot Nothing Then
@@ -946,7 +946,6 @@
         End If
         If Loader.State <> LoadState.Finished Then Return "获取版本列表失败：未知错误，状态为 " & GetStringFromEnum(Loader.State)
         For Each Version In Loader.Output
-            If Version.Category = "universal" OrElse Version.Category = "client" Then Continue For '跳过无法自动安装的版本
             If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
             If SelectedFabric IsNot Nothing Then Return "与 Fabric 不兼容"
             Return Nothing

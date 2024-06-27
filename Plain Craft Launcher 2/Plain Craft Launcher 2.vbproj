@@ -924,7 +924,7 @@
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Icons\NeoForged.png" />
+    <Resource Include="Images\Blocks\NeoForge.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

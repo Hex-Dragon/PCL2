@@ -785,14 +785,16 @@
         Try
             For Each Token As String In VersionsJArray
                 Dim Version As String = Token.Replace("neoforge-", "")
-                Dim Inherit As String = $"1.{Version.ToString().Split(".")(0)}.{Token.ToString().Split(".")(1)}"
+                Dim Inherit As String = $"1.{Version.Split(".")(0)}.{Token.Split(".")(1)}"
                 If Inherit.EndsWith(".0") Then Inherit = Inherit.Replace(".0", "")
-                Versions.Add(Inherit)
+                If Versions.Contains(Inherit) Then
+                    Continue For
+                Else
+                    Versions.Add(Inherit)
+                End If
             Next
-            Versions.Distinct() '去重
         Catch ex As Exception
             Log(ex, LogLevel.Feedback)
-            'Throw New Exception("版本列表解析失败（" & VersionsJArray.ToString & "）", ex)
         End Try
         If Not Versions.Any() Then Throw New Exception("没有可用版本")
         Loader.Output = New DlNeoForgeListResult With {.IsOfficial = True, .SourceName = "NeoForge 官方源", .Value = Versions}
@@ -808,9 +810,8 @@
         Dim ClientReleases As New List(Of String)
 
         For Each Client In ClientVersions '排除快照版或远古版等特殊版本
-            Dim ClientVersionString = Client("id").ToString()
-            If Not (ClientVersionString.ContainsF("a") OrElse ClientVersionString.ContainsF("b") OrElse ClientVersionString.ContainsF("c") OrElse ClientVersionString.ContainsF("w") OrElse ClientVersionString.ContainsF("pre") OrElse ClientVersionString.ContainsF("Pre") OrElse ClientVersionString.ContainsF("rc") OrElse ClientVersionString.ContainsF("b") OrElse ClientVersionString.ContainsF("rd") OrElse ClientVersionString.ContainsF("inf")) Then
-                ClientReleases.Add(ClientVersionString)
+            If RegexCheck(Client("id").ToString(), "[0,9.]+") Then
+                ClientReleases.Add(Client("id").ToString())
             End If
         Next
 
@@ -846,10 +847,6 @@
         ''' </summary>
         Public Hash As String = Nothing
         ''' <summary>
-        ''' 安装类型。有 installer、client、universal 三种。
-        ''' </summary>
-        Public Category As String
-        ''' <summary>
         ''' 版本分支。若无分支则为 Nothing。
         ''' </summary>
         Public Branch As String = Nothing
@@ -876,19 +873,6 @@
             Public Value As JObject
         End Structure
         ''' <summary>
-        ''' 构建数。
-        ''' </summary>
-        Public ReadOnly Property Build As Integer
-            Get
-                Dim Version = Me.VersionName.Split(".")
-                If Version(0) < 15 Then
-                    Return Version(Version.Count - 1)
-                Else
-                    Return Version(Version.Count - 1) + 10000
-                End If
-            End Get
-        End Property
-        ''' <summary>
         ''' 用于下载的文件版本名。可能在 Version 的基础上添加了分支。
         ''' </summary>
         Public ReadOnly Property FileVersion As String
@@ -908,10 +892,6 @@
                 End If
             End Get
         End Property
-        ''' <summary>
-        ''' 文件扩展名。
-        ''' </summary>
-        Public FileSuffix As String = "jar"
     End Class
     ''' <summary>
     ''' NeoForge 版本列表，主加载器。
@@ -944,13 +924,9 @@
     Public Sub DlNeoForgeVersionOfficialMain(Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)))
         Dim ResultLatest As String
         Dim ResultLegacy As String
-        Dim ResultLatestJson As JObject
-        Dim ResultLegacyJson As JObject
-        Dim VersionsJArray As JArray
-        Dim IsLegacyNeo As Boolean = False
         Try
-            ResultLatest = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True)
-            ResultLegacy = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/forge", UseBrowserUserAgent:=True)
+            ResultLatest = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
+            ResultLegacy = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/forge", UseBrowserUserAgent:=True, IsJson:=True)
         Catch ex As Exception
             If GetExceptionSummary(ex).Contains("(404)") Then
                 Throw New Exception("没有可用版本")
@@ -959,15 +935,13 @@
             End If
         End Try
         If ResultLatest.Length < 50 AndAlso ResultLegacy.Length < 50 Then Throw New Exception("获取到的版本列表长度不足（" & ResultLatest & "）")
-        ResultLatestJson = GetJson(ResultLatest)
-        ResultLegacyJson = GetJson(ResultLegacy)
-        If Loader.Input IsNot Nothing Then
-            If Loader.Input.ToString().Contains("1.20.1") Then
-                VersionsJArray = ResultLegacyJson("versions")
-                IsLegacyNeo = True
-            Else
-                VersionsJArray = ResultLatestJson("versions")
-            End If
+        Dim ResultLatestJson As JObject = GetJson(ResultLatest)
+        Dim ResultLegacyJson As JObject = GetJson(ResultLegacy)
+        Dim VersionsJArray As JArray
+        Dim IsLegacyNeo As Boolean = False
+        If Loader.Input IsNot Nothing AndAlso Loader.Input.ToString().Contains("1.20.1") Then
+            VersionsJArray = ResultLegacyJson("versions")
+            IsLegacyNeo = True
         Else
             VersionsJArray = ResultLatestJson("versions")
         End If
@@ -984,19 +958,14 @@
                     StdVersion = Token.Replace("neoforge-", "").Replace("1.20.1-", "")
                     IsBeta = False
                 End If
-                Dim Inherit As String = "1." & StdVersion.Split(".")(0) & "." & StdVersion.Split(".")(1)
-                Inherit = Inherit.Replace(".0", "")
-                If IsLegacyNeo Then Inherit = "1.20.1"
+                Dim Inherit As String = $"1.{StdVersion.Split(".")(0)}.{StdVersion.Split(".")(1)}"
+                If Inherit.EndsWithF(".0") Then Inherit.Remove(Inherit.LastIndexOfF(".0"), 1)
+                Inherit = If(IsLegacyNeo, "1.20.1", Inherit)
                 Dim Entry = New DlNeoForgeVersionEntry
                 If Loader.Input IsNot Nothing Then
-                    If IsLegacyNeo Then
+                    If IsLegacyNeo OrElse Inherit.Contains(Loader.Input.ToString().Replace("1.", "")) Then
                         Entry = New DlNeoForgeVersionEntry With {.VersionName = rawVersion, .Inherit = Inherit, .IsBeta = IsBeta, .VersionCode = StdVersion}
                         Versions.Add(Entry)
-                    Else
-                        If Inherit.Contains(Loader.Input.ToString().Replace("1.", "")) Then
-                            Entry = New DlNeoForgeVersionEntry With {.VersionName = rawVersion, .Inherit = Inherit, .IsBeta = IsBeta, .VersionCode = StdVersion}
-                            Versions.Add(Entry)
-                        End If
                     End If
                 Else
                     Entry = New DlNeoForgeVersionEntry With {.VersionName = rawVersion, .Inherit = Inherit, .IsBeta = IsBeta, .VersionCode = StdVersion}
@@ -1004,8 +973,7 @@
                 End If
             Next
         Catch ex As Exception
-            MyMsgBox(ex.ToString(), "错误")
-            Throw New Exception("版本列表解析失败（" & VersionsJArray.ToString & "）", ex)
+            Log(ex, LogLevel.Feedback)
         End Try
         If Not Versions.Any() Then Throw New Exception("没有可用版本")
         Dim VersionsArray = Versions.ToList()
