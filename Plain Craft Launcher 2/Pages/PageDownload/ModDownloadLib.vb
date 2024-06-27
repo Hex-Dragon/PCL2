@@ -2197,6 +2197,7 @@ Retry:
                 If Entry.IsBeta Then
                     FreshBetaVersion = Entry
                 Else
+                    If Entry.StdVersion.Contains("47.1.82") Then Continue For
                     FreshStableVersion = Entry
                 End If
             Next
