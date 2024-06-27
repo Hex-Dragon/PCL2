@@ -1700,10 +1700,10 @@ Retry:
 
     Public Sub McDownloadNeoForge(DownloadInfo As DlNeoForgeVersionEntry)
         '初始化参数
-        Dim Id As String = DownloadInfo.Inherit & "-neoforge-" & DownloadInfo.Version
-        Dim Target As String = PathTemp & "Cache\Code\NeoForgeInstall-" & DownloadInfo.Version & "_" & GetUuid() & "." & DownloadInfo.FileSuffix
+        Dim Id As String = DownloadInfo.Inherit & "-neoforge-" & DownloadInfo.VersionName
+        Dim Target As String = PathTemp & "Cache\Code\NeoForgeInstall-" & DownloadInfo.VersionName & "_" & GetUuid() & "." & DownloadInfo.FileSuffix
         Dim VersionFolder As String = PathMcFolder & "versions\" & Id & "\"
-        Dim DisplayName As String = "NeoForge " & DownloadInfo.Inherit & " - " & DownloadInfo.Version
+        Dim DisplayName As String = "NeoForge " & DownloadInfo.Inherit & " - " & DownloadInfo.VersionName
         Try
 
             '重复任务检查
@@ -1727,7 +1727,7 @@ Retry:
             End If
 
             '启动
-            Dim Loader As New LoaderCombo(Of String)(DisplayName & " 下载", McDownloadNeoForgeLoader(DownloadInfo.Version, DownloadInfo.Inherit, DownloadInfo)) With {.OnStateChanged = AddressOf McInstallState}
+            Dim Loader As New LoaderCombo(Of String)(DisplayName & " 下载", McDownloadNeoForgeLoader(DownloadInfo.VersionName, DownloadInfo.Inherit, DownloadInfo)) With {.OnStateChanged = AddressOf McInstallState}
             Loader.Start(VersionFolder)
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()
@@ -1746,7 +1746,7 @@ Retry:
     Public Sub McDownloadNeoForgeSave(DownloadInfo As DlNeoForgeVersionEntry)
         Try
             Dim Target As String = SelectAs("选择保存位置", DownloadInfo.FileName, "NeoForge 文件 (*." & DownloadInfo.FileSuffix & ")|*." & DownloadInfo.FileSuffix)
-            Dim DisplayName As String = "NeoForge " & DownloadInfo.Inherit & " - " & DownloadInfo.Version
+            Dim DisplayName As String = "NeoForge " & DownloadInfo.Inherit & " - " & DownloadInfo.VersionName
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
@@ -1765,15 +1765,15 @@ Retry:
             Loaders.Add(New LoaderTask(Of DlNeoForgeVersionEntry, List(Of NetFile))("获取下载地址",
             Sub(Task As LoaderTask(Of DlNeoForgeVersionEntry, List(Of NetFile)))
                 Dim Files As New List(Of NetFile)
-                If DownloadInfo.StdVersion.StartsWith("47.") Then          '1.20.1 NeoForge 下载地址不同
+                If DownloadInfo.VersionCode.StartsWith("47.") Then          '1.20.1 NeoForge 下载地址不同
                     Files.Add(New NetFile({
-                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
-                    "https://maven.neoforged.net/releases/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
+                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
+                    "https://maven.neoforged.net/releases/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
                 }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
                 Else
                     Files.Add(New NetFile({
-                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/neoforge/" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
-                    "https://maven.neoforged.net/releases/net/neoforged/neoforge/" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
+                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/neoforge/" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
+                    "https://maven.neoforged.net/releases/net/neoforged/neoforge/" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
                 }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
                 End If
                 Task.Output = Files
@@ -1963,22 +1963,22 @@ Retry:
         McFolder = If(McFolder, PathMcFolder)
         If DownloadRawInfo Is Nothing Then          '兜底，有的时候 DownloadInfo 可能是空的
             If Version.Contains("-beta") Then
-                DownloadInfo.Version = Version
+                DownloadInfo.VersionName = Version
                 Version = Version.Replace("neoforge-", "").Replace("-beta", "").Replace("1.20.1-", "")
-                DownloadInfo.StdVersion = Version
+                DownloadInfo.VersionCode = Version
                 DownloadInfo.IsBeta = True
             Else
-                DownloadInfo.Version = Version
+                DownloadInfo.VersionName = Version
                 Version = Version.Replace("neoforge-", "").Replace("1.20.1-", "")
-                DownloadInfo.StdVersion = Version
+                DownloadInfo.VersionCode = Version
                 DownloadInfo.IsBeta = False
             End If
         Else
             DownloadInfo = DownloadRawInfo
-            Version = DownloadInfo.StdVersion
+            Version = DownloadInfo.VersionCode
         End If
         Dim IsCustomFolder As Boolean = McFolder <> PathMcFolder
-        Dim Id As String = DownloadInfo.Version
+        Dim Id As String = DownloadInfo.VersionName
         Dim InstallerAddress As String = PathTemp & "Cache\Code\NeoForgeInstall-" & Version & "_" & RandomInteger(0, 100000)
         Dim VersionFolder As String = McFolder & "versions\" & Id & "\"
         Dim DisplayName As String = "NeoForge " & Inherit & " - " & Version
@@ -1995,7 +1995,7 @@ Retry:
                 Task.Progress = 0.8
                 '查找对应版本
                 For Each NeoForgeVersion In NeoForgeLoader.Output
-                    If NeoForgeVersion.Version = Version Then
+                    If NeoForgeVersion.VersionName = Version Then
                         DownloadInfo = NeoForgeVersion
                         Exit Sub
                     End If
@@ -2012,16 +2012,16 @@ Retry:
                     ClientDownloadLoader = McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, Inherit)
                 End If
                 Dim Files
-                If DownloadInfo.StdVersion.StartsWith("47.") Then          '1.20.1 NeoForge 下载地址不同
+                If DownloadInfo.VersionCode.StartsWith("47.") Then          '1.20.1 NeoForge 下载地址不同
                     Dim FilesLegacy As New List(Of NetFile) From {New NetFile({
-                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
-                    "https://maven.neoforged.net/releases/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
+                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
+                    "https://maven.neoforged.net/releases/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
                 }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
                     Files = FilesLegacy
                 Else
                     Dim FilesLatest As New List(Of NetFile) From {New NetFile({
-                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/neoforge/" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
-                    "https://maven.neoforged.net/releases/net/neoforged/neoforge/" & DownloadInfo.StdVersion & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
+                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/neoforge/" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
+                    "https://maven.neoforged.net/releases/net/neoforged/neoforge/" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
                 }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
                     Files = FilesLatest
                 End If
@@ -2197,7 +2197,7 @@ Retry:
                 If Entry.IsBeta Then
                     FreshBetaVersion = Entry
                 Else
-                    If Entry.StdVersion.Contains("47.1.82") Then Continue For
+                    If Entry.VersionCode.Contains("47.1.82") Then Continue For
                     FreshStableVersion = Entry
                 End If
             Next
@@ -2221,12 +2221,12 @@ Retry:
     Public Function NeoForgeDownloadListItem(Entry As DlNeoForgeVersionEntry, OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = If(Entry.IsBeta, Entry.StdVersion & "-beta", Entry.StdVersion), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Title = If(Entry.IsBeta, Entry.VersionCode & "-beta", Entry.VersionCode), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = If(Entry.IsBeta, "测试版", "稳定版") &
                 If(Entry.ReleaseTime = "",
                 If(ModeDebug, If(Entry.Category IsNot Nothing, "种类：" & Entry.Category, "") & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), ""),
                 "发布于 " & Entry.ReleaseTime & If(ModeDebug, "，种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), "")),
-            .Logo = PathImage & "Icons/NeoForged.png"
+            .Logo = PathImage & "Icons/NeoForge.png"
         }
         AddHandler NewItem.Click, OnClick
         '建立菜单
@@ -2268,7 +2268,7 @@ Retry:
         Else
             Version = sender.Parent.Parent.Tag
         End If
-        OpenWebsite("https://maven.neoforged.net/releases/net/neoforged/neoforge/" & Version.StdVersion & "/" & Version.Version & "-changelog.txt")
+        OpenWebsite("https://maven.neoforged.net/releases/net/neoforged/neoforge/" & Version.VersionCode & "/" & Version.VersionName & "-changelog.txt")
     End Sub
     Public Sub NeoForgeSave_Click(sender As Object, e As RoutedEventArgs)
         Dim Version As DlNeoForgeVersionEntry
@@ -2597,7 +2597,7 @@ Retry:
         If Request.ForgeEntry IsNot Nothing Then Request.ForgeVersion = If(Request.ForgeVersion, Request.ForgeEntry.Version)
         If Request.ForgeVersion IsNot Nothing Then ForgeFolder = TempMcFolder & "versions\" & Request.MinecraftName & "-forge-" & Request.ForgeVersion
         Dim NeoForgeFolder As String = Nothing
-        If Request.NeoForgeEntry IsNot Nothing Then Request.NeoForgeVersion = If(Request.NeoForgeVersion, Request.NeoForgeEntry.Version)
+        If Request.NeoForgeEntry IsNot Nothing Then Request.NeoForgeVersion = If(Request.NeoForgeVersion, Request.NeoForgeEntry.VersionName)
         If Request.NeoForgeVersion IsNot Nothing Then NeoForgeFolder = TempMcFolder & "versions\" & If(Request.NeoForgeVersion.StartsWithF("1.20.1") OrElse Request.NeoForgeVersion.StartsWithF("47."), "1.20.1-forge-", "") & Request.NeoForgeVersion.Replace("1.20.1-forge-", "").Replace("1.20.1-", "")
         Dim FabricFolder As String = Nothing
         If Request.FabricVersion IsNot Nothing Then FabricFolder = TempMcFolder & "versions\fabric-loader-" & Request.FabricVersion & "-" & Request.MinecraftName
