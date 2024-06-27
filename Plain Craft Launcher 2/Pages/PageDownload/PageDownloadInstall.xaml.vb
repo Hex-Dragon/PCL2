@@ -10,6 +10,7 @@
         DlOptiFineListLoader.Start()
         DlLiteLoaderListLoader.Start()
         DlFabricListLoader.Start()
+        DlQuiltListLoader.Start()
 
         '重载预览
         TextSelectName.ValidateRules = New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions")}
@@ -26,6 +27,8 @@
         LoadLiteLoader.State = DlLiteLoaderListLoader
         LoadFabric.State = DlFabricListLoader
         LoadFabricApi.State = DlFabricApiLoader
+        LoadQuilt.State = DlQuiltListLoader
+        LoadQSL.State = DlQSLLoader
         LoadOptiFabric.State = DlOptiFabricLoader
     End Sub
 
@@ -39,6 +42,7 @@
         IsInSelectPage = True
 
         AutoSelectedFabricApi = False
+        AutoSelectedQSL = False
         AutoSelectedOptiFabric = False
         IsSelectNameEdited = False
         PanSelect.Visibility = Visibility.Visible
@@ -53,6 +57,8 @@
         CardForge.IsSwaped = True
         CardFabric.IsSwaped = True
         CardFabricApi.IsSwaped = True
+        CardQuilt.IsSwaped = True
+        CardQSL.IsSwaped = True
         CardOptiFabric.IsSwaped = True
 
         If Not Setup.Get("HintInstallBack") Then
@@ -73,8 +79,9 @@
             ForgeLoader.Start(SelectedMinecraftId)
         End If
 
-        '启动 Fabric API、OptiFabric 加载
+        '启动 Fabric API、QSL、OptiFabric 加载
         DlFabricApiLoader.Start()
+        DlQSLLoader.Start()
         DlOptiFabricLoader.Start()
 
         AniStart({
@@ -88,6 +95,8 @@
                        Forge_Loaded()
                        Fabric_Loaded()
                        FabricApi_Loaded()
+                       Quilt_Loaded()
+                       QSL_Loaded()
                        OptiFabric_Loaded()
                        SelectReload()
                    End Sub, After:=True),
@@ -104,6 +113,8 @@
                        BtnForgeClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardForge.MainTextBlock, .Mode = BindingMode.OneWay})
                        BtnFabricClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardFabric.MainTextBlock, .Mode = BindingMode.OneWay})
                        BtnFabricApiClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardFabricApi.MainTextBlock, .Mode = BindingMode.OneWay})
+                       BtnQuiltClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardQuilt.MainTextBlock, .Mode = BindingMode.OneWay})
+                       BtnQSLClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardQSL.MainTextBlock, .Mode = BindingMode.OneWay})
                        BtnOptiFabricClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardOptiFabric.MainTextBlock, .Mode = BindingMode.OneWay})
                    End Sub,, True)
         }, "FrmDownloadInstall SelectPageSwitch", True)
@@ -253,6 +264,46 @@
         End If
     End Sub
 
+    'Quilt
+    Private SelectedQuilt As String = Nothing
+    Private Sub SetQuiltInfoShow(IsShow As String)
+        If PanQuiltInfo.Tag = IsShow Then Exit Sub
+        PanQuiltInfo.Tag = IsShow
+        If IsShow = "True" Then
+            '显示信息栏
+            AniStart({
+                AaTranslateY(PanQuiltInfo, -CType(PanQuiltInfo.RenderTransform, TranslateTransform).Y, 270, 100, Ease:=New AniEaseOutBack),
+                AaOpacity(PanQuiltInfo, 1 - PanQuiltInfo.Opacity, 100, 90)
+            }, "SetQuiltInfoShow")
+        Else
+            '隐藏信息栏
+            AniStart({
+                AaTranslateY(PanQuiltInfo, 6 - CType(PanQuiltInfo.RenderTransform, TranslateTransform).Y, 200),
+                AaOpacity(PanQuiltInfo, -PanQuiltInfo.Opacity, 100)
+            }, "SetQuiltInfoShow")
+        End If
+    End Sub
+
+    'Quilt Standard Libraries
+    Private SelectedQSL As CompFile = Nothing
+    Private Sub SetQSLInfoShow(IsShow As String)
+        If PanQSLInfo.Tag = IsShow Then Exit Sub
+        PanQSLInfo.Tag = IsShow
+        If IsShow = "True" Then
+            '显示信息栏
+            AniStart({
+                AaTranslateY(PanQSLInfo, -CType(PanQSLInfo.RenderTransform, TranslateTransform).Y, 270, 100, Ease:=New AniEaseOutBack),
+                AaOpacity(PanQSLInfo, 1 - PanQSLInfo.Opacity, 100, 90)
+            }, "SetQSLInfoShow")
+        Else
+            '隐藏信息栏
+            AniStart({
+                AaTranslateY(PanQSLInfo, 6 - CType(PanQSLInfo.RenderTransform, TranslateTransform).Y, 200),
+                AaOpacity(PanQSLInfo, -PanQSLInfo.Opacity, 100)
+            }, "SetQSLInfoShow")
+        End If
+    End Sub
+
     'OptiFabric
     Private SelectedOptiFabric As CompFile = Nothing
     Private Sub SetOptiFabricInfoShow(IsShow As String)
@@ -381,6 +432,48 @@
                 ImgFabricApi.Visibility = Visibility.Visible
                 LabFabricApi.Text = SelectedFabricApi.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Split("+").First.Trim
                 LabFabricApi.Foreground = ColorGray1
+            End If
+        End If
+        'Quilt
+        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 13 Then
+            CardQuilt.Visibility = Visibility.Collapsed
+        Else
+            CardQuilt.Visibility = Visibility.Visible
+            Dim QuiltError As String = LoadQuiltGetError()
+            CardQuilt.MainSwap.Visibility = If(QuiltError Is Nothing, Visibility.Visible, Visibility.Collapsed)
+            If QuiltError IsNot Nothing Then CardQuilt.IsSwaped = True
+            SetQuiltInfoShow(CardQuilt.IsSwaped)
+            If SelectedQuilt Is Nothing Then
+                BtnQuiltClear.Visibility = Visibility.Collapsed
+                ImgQuilt.Visibility = Visibility.Collapsed
+                LabQuilt.Text = If(QuiltError, "点击选择")
+                LabQuilt.Foreground = ColorGray4
+            Else
+                BtnQuiltClear.Visibility = Visibility.Visible
+                ImgQuilt.Visibility = Visibility.Visible
+                LabQuilt.Text = SelectedQuilt.Replace("+build", "")
+                LabQuilt.Foreground = ColorGray1
+            End If
+        End If
+        'QSL
+        If SelectedQuilt Is Nothing Then
+            CardQSL.Visibility = Visibility.Collapsed
+        Else
+            CardQSL.Visibility = Visibility.Visible
+            Dim QSLError As String = LoadQSLGetError()
+            CardQSL.MainSwap.Visibility = If(QSLError Is Nothing, Visibility.Visible, Visibility.Collapsed)
+            If QSLError IsNot Nothing OrElse SelectedFabric Is Nothing Then CardQSL.IsSwaped = True
+            SetQSLInfoShow(CardQSL.IsSwaped)
+            If SelectedQSL Is Nothing Then
+                BtnQSLClear.Visibility = Visibility.Collapsed
+                ImgQSL.Visibility = Visibility.Collapsed
+                LabQSL.Text = If(QSLError, "点击选择")
+                LabQSL.Foreground = ColorGray4
+            Else
+                BtnQSLClear.Visibility = Visibility.Visible
+                ImgQSL.Visibility = Visibility.Visible
+                LabQSL.Text = SelectedQSL.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Split("+").First.Trim
+                LabQSL.Foreground = ColorGray1
             End If
         End If
         'OptiFabric
@@ -1038,6 +1131,184 @@
     Private Sub FabricApi_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnFabricApiClear.MouseLeftButtonUp
         SelectedFabricApi = Nothing
         CardFabricApi.IsSwaped = True
+        e.Handled = True
+        SelectReload()
+    End Sub
+
+#End Region
+
+#Region "Quilt 列表"
+
+    ''' <summary>
+    ''' 获取 Quilt 的加载异常信息。若正常则返回 Nothing。
+    ''' </summary>
+    Private Function LoadQuiltGetError() As String
+        If LoadQuilt Is Nothing OrElse LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
+        If LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadQuilt.State, Object).Error.Message
+        For Each Version As JObject In DlQuiltListLoader.Output.Value("game")
+            If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
+                If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
+                'If SelectedOptiFine IsNot Nothing Then Return "与 OptiFine 不兼容"
+                Return Nothing
+            End If
+        Next
+        Return "没有可用版本"
+    End Function
+
+    '限制展开
+    Private Sub CardQuilt_PreviewSwap(sender As Object, e As RouteEventArgs) Handles CardQuilt.PreviewSwap
+        If LoadQuiltGetError() IsNot Nothing Then e.Handled = True
+    End Sub
+
+    ''' <summary>
+    ''' 尝试重新可视化 Quilt 版本列表。
+    ''' </summary>
+    Private Sub Quilt_Loaded() Handles LoadQuilt.StateChanged
+        Try
+            If DlQuiltListLoader.State <> LoadState.Finished Then Exit Sub
+            '获取版本列表
+            Dim Versions As JArray = DlQuiltListLoader.Output.Value("loader")
+            If Not Versions.Any() Then Exit Sub
+            '可视化
+            PanQuilt.Children.Clear()
+            PanQuilt.Tag = Versions
+            CardQuilt.SwapControl = PanQuilt
+            CardQuilt.SwapType = 15
+        Catch ex As Exception
+            Log(ex, "可视化 Quilt 安装版本列表出错", LogLevel.Feedback)
+        End Try
+    End Sub
+
+    '选择与清除
+    Public Sub Quilt_Selected(sender As MyListItem, e As EventArgs)
+        SelectedQuilt = sender.Tag("version").ToString
+        QSL_Loaded()
+        OptiFabric_Loaded()
+        CardQuilt.IsSwaped = True
+        SelectReload()
+    End Sub
+    Private Sub Quilt_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnQuiltClear.MouseLeftButtonUp
+        SelectedQuilt = Nothing
+        SelectedQSL = Nothing
+        SelectedOptiFabric = Nothing
+        CardQuilt.IsSwaped = True
+        e.Handled = True
+        SelectReload()
+    End Sub
+
+#End Region
+
+#Region "Quilt Standard Libraries 列表"
+
+    ''' <summary>
+    ''' 从显示名判断该 API 是否与某版本适配。
+    ''' </summary>
+    Public Shared Function IsSuitableQSL(DisplayName As String, MinecraftVersion As String) As Boolean
+        Try
+            If DisplayName Is Nothing OrElse MinecraftVersion Is Nothing Then Return False
+            DisplayName = DisplayName.ToLower : MinecraftVersion = MinecraftVersion.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3").ToLower
+            If DisplayName.StartsWith("[" & MinecraftVersion & "]") Then Return True
+            If Not DisplayName.Contains("/") OrElse Not DisplayName.Contains("]") Then Return False
+            '直接的判断（例如 1.18.1/22w03a）
+            For Each Part As String In DisplayName.Before("]").TrimStart("[").Split("/")
+                If Part = MinecraftVersion Then Return True
+            Next
+            '将版本名分割语素（例如 1.16.4/5）
+            Dim Lefts = RegexSearch(DisplayName.Before("]"), "[a-z/]+|[0-9/]+")
+            Dim Rights = RegexSearch(MinecraftVersion.Before("]"), "[a-z/]+|[0-9/]+")
+            '对每段进行判断
+            Dim i As Integer = 0
+            While True
+                '两边均缺失，感觉是一个东西
+                If Lefts.Count - 1 < i AndAlso Rights.Count - 1 < i Then Return True
+                '确定两边是否一致
+                Dim LeftValue As String = If(Lefts.Count - 1 < i, "-1", Lefts(i))
+                Dim RightValue As String = If(Rights.Count - 1 < i, "-1", Rights(i))
+                If Not LeftValue.Contains("/") Then
+                    If LeftValue <> RightValue Then Return False
+                Else
+                    '左边存在斜杠
+                    If Not LeftValue.Contains(RightValue) Then Return False
+                End If
+                i += 1
+            End While
+            Return True
+        Catch ex As Exception
+            Log(ex, "判断 QSL 版本适配性出错（" & DisplayName & ", " & MinecraftVersion & "）")
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' 获取 QSL 的加载异常信息。若正常则返回 Nothing。
+    ''' </summary>
+    Private Function LoadQSLGetError() As String
+        If LoadQSL Is Nothing OrElse LoadQSL.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
+        If LoadQSL.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadQSL.State, Object).Error.Message
+        If DlQSLLoader.Output Is Nothing Then
+            If SelectedQuilt Is Nothing Then Return "需要安装 Quilt"
+            Return "正在获取版本列表……"
+        End If
+        For Each Version In DlQSLLoader.Output
+            If Not IsSuitableQSL(Version.DisplayName, SelectedMinecraftId) Then Continue For
+            If SelectedQuilt Is Nothing Then Return "需要安装 Quilt"
+            Return Nothing
+        Next
+        Return "没有可用版本"
+    End Function
+
+    '限制展开
+    Private Sub CardQSL_PreviewSwap(sender As Object, e As RouteEventArgs) Handles CardQSL.PreviewSwap
+        If LoadQSLGetError() IsNot Nothing Then e.Handled = True
+    End Sub
+
+    Private AutoSelectedQSL As Boolean = False
+    ''' <summary>
+    ''' 尝试重新可视化 QSL 版本列表。
+    ''' </summary>
+    Private Sub QSL_Loaded() Handles LoadQSL.StateChanged
+        Try
+            If DlQSLLoader.State <> LoadState.Finished Then Exit Sub
+            If SelectedMinecraftId Is Nothing OrElse SelectedQuilt Is Nothing Then Exit Sub
+            '获取版本列表
+            Dim Versions As New List(Of CompFile)
+            For Each Version In DlQSLLoader.Output
+                If IsSuitableQSL(Version.DisplayName, SelectedMinecraftId) Then
+                    If Not Version.DisplayName.StartsWith("[") Then
+                        Log("[Download] 已特判修改 QSL 显示名：" & Version.DisplayName, LogLevel.Debug)
+                        Version.DisplayName = "[" & SelectedMinecraftId & "] " & Version.DisplayName
+                    End If
+                    Versions.Add(Version)
+                End If
+            Next
+            If Not Versions.Any() Then Exit Sub
+            Versions = Sort(Versions, Function(a, b) a.ReleaseDate > b.ReleaseDate)
+            '可视化
+            PanQSL.Children.Clear()
+            For Each Version In Versions
+                If Not IsSuitableQSL(Version.DisplayName, SelectedMinecraftId) Then Continue For
+                PanQSL.Children.Add(QSLDownloadListItem(Version, AddressOf QSL_Selected))
+            Next
+            '自动选择 QSL
+            If Not AutoSelectedQSL Then
+                AutoSelectedQSL = True
+                Log($"[Download] 已自动选择 QSL：{CType(PanQSL.Children(0), MyListItem).Title}")
+                QSL_Selected(PanQSL.Children(0), Nothing)
+            End If
+        Catch ex As Exception
+            Log(ex, "可视化 QSL 安装版本列表出错", LogLevel.Feedback)
+        End Try
+    End Sub
+
+    '选择与清除
+    Private Sub QSL_Selected(sender As MyListItem, e As EventArgs)
+        SelectedQSL = sender.Tag
+        CardQSL.IsSwaped = True
+        SelectReload()
+    End Sub
+    Private Sub QSL_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnQSLClear.MouseLeftButtonUp
+        SelectedQSL = Nothing
+        CardQSL.IsSwaped = True
         e.Handled = True
         SelectReload()
     End Sub

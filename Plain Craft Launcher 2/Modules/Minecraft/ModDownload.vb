@@ -965,7 +965,7 @@
             Case 0
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListBmclapiLoader, 30),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListBmclapiLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 60)
                 }, Loader.IsForceRestarting)
             Case 1
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)) From {
@@ -985,7 +985,7 @@
     ''' </summary>
     Public DlQuiltListOfficialLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Official", AddressOf DlQuiltListOfficialMain)
     Private Sub DlQuiltListOfficialMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
-        Dim Result As JObject = NetGetCodeByRequestRetry("https://meta.fabricmc.net/v2/versions", IsJson:=True)
+        Dim Result As JObject = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/game", IsJson:=True)
         Try
             Dim Output = New DlQuiltListResult With {.IsOfficial = True, .SourceName = "Quilt 官方源", .Value = Result}
             If Output.Value("game") Is Nothing OrElse Output.Value("loader") Is Nothing OrElse Output.Value("installer") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
@@ -1013,7 +1013,7 @@
     ''' <summary>
     ''' Quilt API 列表，官方源。
     ''' </summary>
-    Public DlQuiltApiLoader As New LoaderTask(Of Integer, List(Of CompFile))("Quilt API List Loader",
+    Public DlQSLLoader As New LoaderTask(Of Integer, List(Of CompFile))("Quilt API List Loader",
         Sub(Task As LoaderTask(Of Integer, List(Of CompFile))) Task.Output = CompFilesGet("fabric-api", False))
 
 #End Region

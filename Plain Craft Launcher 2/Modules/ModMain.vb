@@ -395,6 +395,7 @@ EndHint:
     Public FrmDownloadLiteLoader As PageDownloadLiteLoader
     Public FrmDownloadForge As PageDownloadForge
     Public FrmDownloadFabric As PageDownloadFabric
+    Public FrmDownloadQuilt As PageDownloadQuilt
     Public FrmDownloadMod As PageDownloadMod
     Public FrmDownloadPack As PageDownloadPack
 

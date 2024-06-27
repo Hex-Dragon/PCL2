@@ -1020,6 +1020,7 @@ Install:
         DownloadOptiFine = 5
         DownloadForge = 6
         DownloadFabric = 7
+        DownloadQuilt = 14
         DownloadLiteLoader = 8
         DownloadMod = 10
         DownloadPack = 11
