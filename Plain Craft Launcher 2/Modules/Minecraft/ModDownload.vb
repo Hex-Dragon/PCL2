@@ -993,11 +993,15 @@
                 Inherit = Inherit.Replace(".0", "")
                 Dim Entry = New DlNeoForgeVersionEntry
                 If Loader.Input IsNot Nothing Then
-                    If Inherit Is Loader.Input.ToString() Then
+                    If Inherit.Contains(Loader.Input.ToString().Replace("1.", "")) Then
                         Entry = New DlNeoForgeVersionEntry With {.Version = rawVersion, .Inherit = Inherit, .IsBeta = IsBeta, .StdVersion = StdVersion}
+                        Hint(Entry.StdVersion)
+                        Log(Entry.StdVersion)
                         Versions.Add(Entry)
                         Continue For
                     Else
+                        Hint("匹配失败: " & Inherit & " 但是请求的版本是 " & Loader.Input.ToString())
+                        Log("匹配失败: " & Inherit & " 但是请求的版本是 " & Loader.Input.ToString())
                         Continue For
                     End If
                 End If
