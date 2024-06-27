@@ -51,31 +51,14 @@
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="类型" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="4" Grid.Row="2" MaxDropDownHeight="320">
                             <local:MyComboBoxItem Tag="" Content="全部" IsSelected="True" />
-                            <local:MyComboBoxItem Content="字体包" Tag="5244/" />
-                            <local:MyComboBoxItem Content="数据包" Tag="5193/" />
-                            <local:MyComboBoxItem Content="蒸汽朋克" Tag="399/" />
-                            <local:MyComboBoxItem Content="128x" Tag="396/" />
-                            <local:MyComboBoxItem Content="512x 或更高" Tag="398/" />
-                            <local:MyComboBoxItem Content="256x" Tag="397/" />
-                            <local:MyComboBoxItem Content="其他" Tag="405/" />
-                            <local:MyComboBoxItem Content="64x" Tag="395/" />
-                            <local:MyComboBoxItem Content="仿真" Tag="400/" />
-                            <local:MyComboBoxItem Content="16x" Tag="393/" />
-                            <local:MyComboBoxItem Content="传统" Tag="403/" />
-                            <local:MyComboBoxItem Content="32x" Tag="394/" />
-                            <local:MyComboBoxItem Content="动态效果" Tag="404/" />
-                            <local:MyComboBoxItem Content="模组支持" Tag="4465/" />
-                            <local:MyComboBoxItem Content="中世纪" Tag="402/" />
-                            <local:MyComboBoxItem Content="现代" Tag="401/" />
-
                             <local:MyComboBoxItem Content="8x-" Tag="/8x-" />
-                            <local:MyComboBoxItem Content="16x" Tag="/16x" />
-                            <local:MyComboBoxItem Content="32x" Tag="/32x" />
+                            <local:MyComboBoxItem Content="16x" Tag="393/16x" />
+                            <local:MyComboBoxItem Content="32x" Tag="394/32x" />
                             <local:MyComboBoxItem Content="48x" Tag="/48x" />
-                            <local:MyComboBoxItem Content="64x" Tag="/64x" />
-                            <local:MyComboBoxItem Content="128x" Tag="/128x" />
-                            <local:MyComboBoxItem Content="256x" Tag="/256x" />
-                            <local:MyComboBoxItem Content="512x+" Tag="/512x+" />
+                            <local:MyComboBoxItem Content="64x" Tag="395/64x" />
+                            <local:MyComboBoxItem Content="128x" Tag="396/128x" />
+                            <local:MyComboBoxItem Content="256x" Tag="397/256x" />
+                            <local:MyComboBoxItem Content="512x+" Tag="398/512x+" />
                             <local:MyComboBoxItem Content="声音" Tag="/audio" />
                             <local:MyComboBoxItem Content="方块" Tag="/blocks" />
                             <local:MyComboBoxItem Content="战斗" Tag="/combat" />
@@ -89,14 +72,22 @@
                             <local:MyComboBoxItem Content="GUI" Tag="/gui" />
                             <local:MyComboBoxItem Content="物品" Tag="/items" />
                             <local:MyComboBoxItem Content="本地化" Tag="/locale" />
-                            <local:MyComboBoxItem Content="Modded" Tag="/modded" />
+                            <local:MyComboBoxItem Content="Modded" Tag="4465/modded" />
                             <local:MyComboBoxItem Content="模型" Tag="/models" />
-                            <local:MyComboBoxItem Content="写实" Tag="/realistic" />
+                            <local:MyComboBoxItem Content="写实" Tag="400/realistic" />
                             <local:MyComboBoxItem Content="扁平" Tag="/simplistic" />
                             <local:MyComboBoxItem Content="主题" Tag="/themed" />
                             <local:MyComboBoxItem Content="优化" Tag="/tweaks" />
                             <local:MyComboBoxItem Content="实用" Tag="/utility" />
                             <local:MyComboBoxItem Content="类原生" Tag="/vanilla-like" />
+                            <local:MyComboBoxItem Content="动态效果" Tag="404/" />
+                            <local:MyComboBoxItem Content="传统" Tag="403/" />
+                            <local:MyComboBoxItem Content="中世纪" Tag="402/" />
+                            <local:MyComboBoxItem Content="蒸汽朋克" Tag="399/" />
+                            <local:MyComboBoxItem Content="现代" Tag="401/" />
+                            <local:MyComboBoxItem Content="字体包" Tag="5244/" />
+                            <local:MyComboBoxItem Content="数据包" Tag="5193/" />
+                            <local:MyComboBoxItem Content="其他" Tag="405/" />
                         </local:MyComboBox>
                     </Grid>
                     <Grid Margin="0,4,0,6" Height="35">
