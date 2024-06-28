@@ -42,10 +42,10 @@
         End If
     End Sub
     Private Sub NeoForge_Selected(sender As MyListItem, e As EventArgs)
-        McDownloadNeoForgeSave(sender.Tag)
+        McDownloadForgeSave(True, sender.Tag)
     End Sub
     Public Sub DownloadStart(sender As MyListItem, e As Object)
-        McDownloadNeoForge(sender.Tag)
+        McDownloadForge(True, sender.Tag)
     End Sub
     Private Sub BtnWeb_Click(sender As Object, e As EventArgs) Handles BtnWeb.Click
         OpenWebsite("https://neoforged.net/")

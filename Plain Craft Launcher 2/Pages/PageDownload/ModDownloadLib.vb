@@ -1005,15 +1005,16 @@ Retry:
 
 #End Region
 
-#Region "Forge 下载"
+#Region "Forge / NeoForge 下载"
 
-    Public Sub McDownloadForge(DownloadInfo As DlForgeVersionEntry)
+    Public Sub McDownloadForge(IsNeo As Boolean, Optional DownloadForgeInfo As DlForgeVersionEntry = Nothing, Optional DownloadNeoInfo As DlNeoForgeVersionEntry = Nothing)
+        Dim DownloadInfo = If(IsNeo, DownloadNeoInfo, DownloadForgeInfo)
         '老版本提示
         If DownloadInfo.Category = "client" Then
             If MyMsgBox("该 Forge 版本过于古老，PCL 暂不支持该版本的自动安装。" & vbCrLf &
                         "若你仍然希望继续，PCL 将把安装程序下载到你指定的位置，但不会进行安装。",
                         "版本过老", "继续", "取消") = 1 Then
-                McDownloadForgeSave(DownloadInfo)
+                McDownloadForgeSave(IsNeo, DownloadInfo)
             End If
             Exit Sub
         End If
@@ -1021,15 +1022,15 @@ Retry:
             If MyMsgBox("该 Forge 版本过于古老，PCL 暂不支持该版本的自动安装。" & vbCrLf &
                         "若你仍然希望继续，PCL 将把安装程序下载到你指定的位置，但不会进行安装。",
                         "版本过老", "继续", "取消") = 1 Then
-                McDownloadForgeSave(DownloadInfo)
+                McDownloadForgeSave(IsNeo, DownloadInfo)
             End If
             Exit Sub
         End If
         '初始化参数
-        Dim Id As String = DownloadInfo.Inherit & "-forge-" & DownloadInfo.Version
-        Dim Target As String = PathTemp & "Cache\Code\ForgeInstall-" & DownloadInfo.Version & "_" & GetUuid() & "." & DownloadInfo.FileSuffix
+        Dim Id As String = DownloadInfo.Inherit & $"-{If(IsNeo, "neo", "")}forge-" & DownloadInfo.Version
+        Dim Target As String = PathTemp & $"Cache\Code\{If(IsNeo, "Neo", "")}ForgeInstall-" & DownloadInfo.Version & "_" & GetUuid() & "." & DownloadInfo.FileSuffix
         Dim VersionFolder As String = PathMcFolder & "versions\" & Id & "\"
-        Dim DisplayName As String = "Forge " & DownloadInfo.Inherit & " - " & DownloadInfo.Version
+        Dim DisplayName As String = $"{If(IsNeo, "Neo", "")}Forge " & DownloadInfo.Inherit & " - " & DownloadInfo.Version
         Try
 
             '重复任务检查
@@ -1053,14 +1054,14 @@ Retry:
             End If
 
             '启动
-            Dim Loader As New LoaderCombo(Of String)(DisplayName & " 下载", McDownloadForgeLoader(DownloadInfo.Version, DownloadInfo.Inherit, DownloadInfo)) With {.OnStateChanged = AddressOf McInstallState}
+            Dim Loader As New LoaderCombo(Of String)(DisplayName & " 下载", McDownloadForgeLoader(IsNeo, DownloadInfo.Version, DownloadInfo.Inherit, DownloadInfo)) With {.OnStateChanged = AddressOf McInstallState}
             Loader.Start(VersionFolder)
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()
             FrmMain.BtnExtraDownload.Ribble()
 
         Catch ex As Exception
-            Log(ex, "开始 Forge 下载失败", LogLevel.Feedback)
+            Log(ex, $"开始 {If(IsNeo, "Neo", "")}Forge 下载失败", LogLevel.Feedback)
         Finally
             '删除安装包
             Try
@@ -1069,10 +1070,11 @@ Retry:
             End Try
         End Try
     End Sub
-    Public Sub McDownloadForgeSave(DownloadInfo As DlForgeVersionEntry)
+    Public Sub McDownloadForgeSave(IsNeo As Boolean, Optional DownloadForgeInfo As DlForgeVersionEntry = Nothing, Optional DownloadNeoInfo As DlNeoForgeVersionEntry = Nothing)
+        Dim DownloadInfo = If(IsNeo, DownloadNeoInfo, DownloadForgeInfo)
         Try
-            Dim Target As String = SelectAs("选择保存位置", DownloadInfo.FileName, "Forge 文件 (*." & DownloadInfo.FileSuffix & ")|*." & DownloadInfo.FileSuffix)
-            Dim DisplayName As String = "Forge " & DownloadInfo.Inherit & " - " & DownloadInfo.Version
+            Dim Target As String = SelectAs("选择保存位置", DownloadInfo.FileName, $"{If(IsNeo, "Neo", "")}Forge 文件 (*." & DownloadInfo.FileSuffix & ")|*." & DownloadInfo.FileSuffix)
+            Dim DisplayName As String = $"{If(IsNeo, "Neo", "")}Forge " & DownloadInfo.Inherit & " - " & If(IsNeo, DownloadInfo.VersionCode, DownloadInfo.Version)
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
@@ -1088,31 +1090,47 @@ Retry:
             '构造步骤加载器
             Dim Loaders As New List(Of LoaderBase)
             '获取下载地址
-            Loaders.Add(New LoaderTask(Of DlForgeVersionEntry, List(Of NetFile))("获取下载地址",
-            Sub(Task As LoaderTask(Of DlForgeVersionEntry, List(Of NetFile)))
-                Dim Files As New List(Of NetFile)
-                Files.Add(New NetFile({
-                    "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                    "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
-                }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
-                Task.Output = Files
-            End Sub) With {.ProgressWeight = 0.1, .Show = False})
+            If IsNeo Then
+                'NeoForge
+                Loaders.Add(New LoaderTask(Of DlNeoForgeVersionEntry, List(Of NetFile))("获取下载地址",
+                Sub(Task As LoaderTask(Of DlNeoForgeVersionEntry, List(Of NetFile)))
+                    Dim Files As New List(Of NetFile)
+                    Dim IsLegacyNeo As Boolean = DownloadInfo.VersionCode.StartsWith("47.")
+                    Files.Add(New NetFile({
+                        $"https://bmclapi2.bangbang93.com/maven/net/neoforged/{If(IsLegacyNeo, "", "neo")}forge/{If(IsLegacyNeo, "1.20.1-", "")}{DownloadInfo.VersionCode}{If(DownloadInfo.IsBeta, "-beta", "")}/{DownloadInfo.FileName}",
+                        $"https://maven.neoforged.net/releases/net/neoforged/{If(IsLegacyNeo, "", "neo")}forge/{If(IsLegacyNeo, "1.20.1-", "")}{DownloadInfo.VersionCode}{If(DownloadInfo.IsBeta, "-beta", "")}/{DownloadInfo.FileName}"
+                    }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
+                    Task.Output = Files
+                End Sub) With {.ProgressWeight = 0.1, .Show = False})
+            Else
+                'Forge
+                Loaders.Add(New LoaderTask(Of DlForgeVersionEntry, List(Of NetFile))("获取下载地址",
+                Sub(Task As LoaderTask(Of DlForgeVersionEntry, List(Of NetFile)))
+                    Dim Files As New List(Of NetFile)
+                    Files.Add(New NetFile({
+                        "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
+                        "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
+                    }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
+                    Task.Output = Files
+                End Sub) With {.ProgressWeight = 0.1, .Show = False})
+            End If
             '下载
             Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile)) With {.ProgressWeight = 6})
 
             '启动
-            Dim Loader As New LoaderCombo(Of DlForgeVersionEntry)(DisplayName & " 下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+            Dim Loader = If(IsNeo, New LoaderCombo(Of DlNeoForgeVersionEntry)(DisplayName & " 下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave},
+                New LoaderCombo(Of DlForgeVersionEntry)(DisplayName & " 下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave})
             Loader.Start(DownloadInfo)
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()
             FrmMain.BtnExtraDownload.Ribble()
 
         Catch ex As Exception
-            Log(ex, "开始 Forge 下载失败", LogLevel.Feedback)
+            Log(ex, $"开始 {If(IsNeo, "Neo", "")}Forge 下载失败", LogLevel.Feedback)
         End Try
     End Sub
 
-    Private Sub ForgeInjector(Target As String, Task As LoaderTask(Of Boolean, Boolean), McFolder As String, UseJavaWrapper As Boolean)
+    Private Sub ForgeInjector(Target As String, Task As LoaderTask(Of Boolean, Boolean), McFolder As String, UseJavaWrapper As Boolean, IsNeoForge As Boolean)
         '选择 Java
         Dim Java As JavaEntry
         SyncLock JavaLock
@@ -1153,7 +1171,7 @@ Retry:
                 .RedirectStandardError = True,
                 .RedirectStandardOutput = True
             }
-            Log("[Download] 开始安装 Forge：" & Arguments)
+            Log($"[Download] 开始安装 {If(IsNeoForge, "Neo", "")}Forge：" & Arguments)
             Dim process As New Process With {.StartInfo = Info}
             Dim LastResults As New Queue(Of String)
             Using outputWaitHandle As New AutoResetEvent(False)
@@ -1170,11 +1188,11 @@ Retry:
                             End If
                         Catch ex As ObjectDisposedException
                         Catch ex As Exception
-                            Log(ex, "读取 Forge 安装器信息失败")
+                            Log(ex, $"读取 {If(IsNeoForge, "Neo", "")}Forge 安装器信息失败")
                         End Try
                         Try
                             If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                Log("[Installer] 由于任务取消，已中止 Forge 安装")
+                                Log($"[Installer] 由于任务取消，已中止 {If(IsNeoForge, "Neo", "")}Forge 安装")
                                 process.Kill()
                             End If
                         Catch
@@ -1193,11 +1211,11 @@ Retry:
                             End If
                         Catch ex As ObjectDisposedException
                         Catch ex As Exception
-                            Log(ex, "读取 Forge 安装器错误信息失败")
+                            Log(ex, $"读取 {If(IsNeoForge, "Neo", "")}Forge 安装器错误信息失败")
                         End Try
                         Try
                             If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                Log("[Installer] 由于任务取消，已中止 Forge 安装")
+                                Log($"[Installer] 由于任务取消，已中止 {If(IsNeoForge, "Neo", "")}Forge 安装")
                                 process.Kill()
                             End If
                         Catch
@@ -1222,7 +1240,7 @@ Retry:
                     For i As Integer = Math.Max(0, LastResults.Count - 5) To LastResults.Count - 1 '最后 5 行
                         LastLines &= vbCrLf & LastResults(i)
                     Next
-                    Throw New Exception("Forge 安装器出错，日志结束部分为：" & LastLines)
+                    Throw New Exception($"{If(IsNeoForge, "Neo", "")}Forge 安装器出错，日志结束部分为：" & LastLines)
                 End Using
             End Using
         End SyncLock
@@ -1273,31 +1291,43 @@ Retry:
     End Sub
 
     ''' <summary>
-    ''' 获取下载某个 Forge 版本的加载器列表。
+    ''' 获取下载某个 Forge / NeoForge 版本的加载器列表。
     ''' </summary>
-    Private Function McDownloadForgeLoader(Version As String, Inherit As String, Optional DownloadInfo As DlForgeVersionEntry = Nothing, Optional McFolder As String = Nothing, Optional ClientDownloadLoader As LoaderCombo(Of String) = Nothing, Optional ClientFolder As String = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
+    Private Function McDownloadForgeLoader(IsNeo As Boolean, Version As String, Inherit As String, Optional DownloadForgeInfo As DlForgeVersionEntry = Nothing, Optional DownloadNeoInfo As DlNeoForgeVersionEntry = Nothing, Optional McFolder As String = Nothing, Optional ClientDownloadLoader As LoaderCombo(Of String) = Nothing, Optional ClientFolder As String = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
 
         '参数初始化
+        Dim DownloadInfo = If(IsNeo, DownloadNeoInfo, DownloadForgeInfo)
+        If DownloadNeoInfo Is Nothing AndAlso IsNeo Then          '兜底，有的时候 DownloadInfo 可能是空的
+            DownloadInfo.VersionName = Version
+            Version = Version.Replace("neoforge-", "").Replace("-beta", "").Replace("1.20.1-", "")
+            DownloadInfo.VersionCode = Version
+            If Version.Contains("-beta") Then DownloadInfo.IsBeta = True
+        ElseIf IsNeo Then
+            DownloadInfo = DownloadNeoInfo
+            Version = DownloadInfo.VersionCode
+        Else
+            DownloadInfo = DownloadForgeInfo
+        End If
         McFolder = If(McFolder, PathMcFolder)
-        If Version.StartsWithF("1.") AndAlso Version.Contains("-") Then
+        If Not IsNeo AndAlso Version.StartsWithF("1.") AndAlso Version.Contains("-") Then
             '类似 1.19.3-41.2.8 格式，优先使用 Version 中要求的版本而非 Inherit（例如 1.19.3 却使用了 1.19 的 Forge）
             Inherit = Version.Before("-")
             Version = Version.After("-")
         End If
         Dim IsCustomFolder As Boolean = McFolder <> PathMcFolder
-        Dim Id As String = Inherit & "-forge-" & Version
-        Dim InstallerAddress As String = PathTemp & "Cache\Code\ForgeInstall-" & Version & "_" & RandomInteger(0, 100000)
+        Dim Id As String = If(IsNeo, DownloadInfo.VersionName, Inherit & "-forge-" & Version)
+        Dim InstallerAddress As String = PathTemp & $"Cache\Code\{If(IsNeo, "Neo", "")}ForgeInstall-" & Version & "_" & RandomInteger(0, 100000)
         Dim VersionFolder As String = McFolder & "versions\" & Id & "\"
-        Dim DisplayName As String = "Forge " & Inherit & " - " & Version
+        Dim DisplayName As String = $"{If(IsNeo, "Neo", "")}Forge " & Inherit & " - " & Version
         Dim Loaders As New List(Of LoaderBase)
         Dim LibVersionFolder As String = PathMcFolder & "versions\" & Id & "\" '作为 Lib 文件目标的版本文件夹
 
         '获取下载信息
         If DownloadInfo Is Nothing Then
-            Loaders.Add(New LoaderTask(Of String, String)("获取 Forge 详细信息",
+            Loaders.Add(New LoaderTask(Of String, String)($"获取 {If(IsNeo, "Neo", "")}Forge 详细信息",
             Sub(Task As LoaderTask(Of String, String))
-                '获取 Forge 版本列表
-                Dim ForgeLoader = New LoaderTask(Of String, List(Of DlForgeVersionEntry))("McDownloadForgeLoader " & Inherit, AddressOf DlForgeVersionMain)
+                '获取 Forge / NeoForge 版本列表
+                Dim ForgeLoader = If(IsNeo, New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("McDownloadForgeLoader " & Inherit, AddressOf DlNeoForgeVersionMain), New LoaderTask(Of String, List(Of DlForgeVersionEntry))("McDownloadForgeLoader " & Inherit, AddressOf DlForgeVersionMain))
                 ForgeLoader.WaitForExit(Inherit)
                 Task.Progress = 0.8
                 '查找对应版本
@@ -1307,11 +1337,11 @@ Retry:
                         Exit Sub
                     End If
                 Next
-                Throw New Exception("未能找到 Forge " & Inherit & "-" & Version & " 的详细信息！")
+                Throw New Exception($"未能找到 {If(IsNeo, "Neo", "")}Forge " & Inherit & "-" & Version & " 的详细信息！")
             End Sub) With {.ProgressWeight = 3})
         End If
-        '下载 Forge 主文件
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("准备下载 Forge",
+        '下载 Forge / NeoForge 主文件
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))($"准备下载 {If(IsNeo, "Neo", "")}Forge",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 '启动依赖版本的下载
                 If ClientDownloadLoader Is Nothing Then
@@ -1319,19 +1349,28 @@ Retry:
                     ClientDownloadLoader = McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, Inherit)
                 End If
                 '添加主文件
-                Dim Files As New List(Of NetFile) From {New NetFile({
+                Dim Files
+                If IsNeo Then 'NeoForge
+                    Dim IsLegacyNeo As Boolean = DownloadInfo.VersionCode.StartsWith("47.")
+                    Files = New List(Of NetFile) From {New NetFile({
+                        $"https://bmclapi2.bangbang93.com/maven/net/neoforged/{If(IsLegacyNeo, "", "neo")}forge/{If(IsLegacyNeo, "1.20.1-", "")}{DownloadInfo.VersionCode}{If(DownloadInfo.IsBeta, "-beta", "")}/{DownloadInfo.FileName}",
+                        $"https://maven.neoforged.net/releases/net/neoforged/{If(IsLegacyNeo, "", "neo")}forge/{If(IsLegacyNeo, "1.20.1-", "")}{DownloadInfo.VersionCode}{If(DownloadInfo.IsBeta, "-beta", "")}/{DownloadInfo.FileName}"
+                    }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
+                Else 'Forge
+                    Files = New List(Of NetFile) From {New NetFile({
                     "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
                     "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
                 }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
+                End If
                 Task.Output = Files
             End Sub) With {.ProgressWeight = 0.5, .Show = False})
-        Loaders.Add(New LoaderDownload("下载 Forge 主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
+        Loaders.Add(New LoaderDownload($"下载 {If(IsNeo, "Neo", "")}Forge 主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
 
         '安装（仅在新版安装时需要原版 Jar）
         If Version.Before(".") >= 20 Then
-            Log("[Download] 检测为新版 Forge：" & Version)
+            Log($"[Download] 检测为{If(IsNeo, " Neo", "新版 ")}Forge：" & Version)
             Dim Libs As List(Of McLibToken) = Nothing
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Forge 支持库文件",
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))($"分析 {If(IsNeo, "Neo", "")}Forge 支持库文件",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 Task.Output = New List(Of NetFile)
                 Dim Installer As ZipArchive = Nothing
@@ -1357,27 +1396,27 @@ Retry:
                         Log("[Download] 需要下载 Mappings：" & Address)
                     End If
                     Task.Progress = 0.8
-                    '去除其中的原始 Forge 项
+                    '去除其中的原始 Forge / NeoForge 项
                     For i = 0 To Libs.Count - 1
-                        If Libs(i).LocalPath.EndsWithF("forge-" & Inherit & "-" & Version & ".jar") OrElse
+                        If Libs(i).LocalPath.EndsWithF($"{If(IsNeo, "neo", "")}forge-" & Inherit & "-" & Version & ".jar") OrElse
                                                                                                       Libs(i).LocalPath.EndsWithF("forge-" & Inherit & "-" & Version & "-client.jar") Then
-                            Log("[Download] 已从待下载 Forge 支持库中移除：" & Libs(i).LocalPath, LogLevel.Debug)
+                            Log($"[Download] 已从待下载 {If(IsNeo, "Neo", "")}Forge 支持库中移除：" & Libs(i).LocalPath, LogLevel.Debug)
                             Libs.RemoveAt(i)
                             Exit For
                         End If
                     Next
                     Task.Output = McLibFixFromLibToken(Libs, PathMcFolder)
                 Catch ex As Exception
-                    Throw New Exception("获取新版 Forge 支持库列表失败", ex)
+                    Throw New Exception($"获取{If(IsNeo, " Neo", "新版 ")}Forge 支持库列表失败", ex)
                 Finally
                     '释放文件
                     If Installer IsNot Nothing Then Installer.Dispose()
                 End Try
             End Sub) With {.ProgressWeight = 2})
-            Loaders.Add(New LoaderDownload("下载 Forge 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 12})
-            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("获取 Forge 支持库文件",
+            Loaders.Add(New LoaderDownload($"下载 {If(IsNeo, "Neo", "")}Forge 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 12})
+            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)($"获取 {If(IsNeo, "Neo", "")}Forge 支持库文件",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
-#Region "Forge 文件"
+#Region "Forge / NeoForge 文件"
                 If IsCustomFolder Then
                     For Each LibFile As McLibToken In Libs
                         Dim RealPath As String = LibFile.LocalPath.Replace(PathMcFolder, McFolder)
@@ -1385,7 +1424,7 @@ Retry:
                             Directory.CreateDirectory(IO.Path.GetDirectoryName(RealPath))
                             CopyFile(LibFile.LocalPath, RealPath)
                         End If
-                        If ModeDebug Then Log("[Download] 复制的 Forge 支持库文件：" & LibFile.LocalPath)
+                        If ModeDebug Then Log($"[Download] 复制的 {If(IsNeo, "Neo", "")}Forge 支持库文件：" & LibFile.LocalPath)
                     Next
                 End If
 #End Region
@@ -1395,7 +1434,7 @@ Retry:
                 Dim TargetLoaders As List(Of LoaderBase) =
                                                                                 ClientDownloadLoader.GetLoaderList.Where(Function(l) l.Name = McDownloadClientLibName OrElse l.Name = McDownloadClientJsonName).
                                                                                 Where(Function(l) l.State <> LoadState.Finished).ToList
-                If TargetLoaders.Any Then Log("[Download] Forge 安装正在等待原版文件下载完成")
+                If TargetLoaders.Any Then Log($"[Download] {If(IsNeo, "Neo", "")}Forge 安装正在等待原版文件下载完成")
                 Do While TargetLoaders.Any AndAlso Not Task.IsAborted
                     TargetLoaders = TargetLoaders.Where(Function(l) l.State <> LoadState.Finished).ToList
                     Thread.Sleep(50)
@@ -1415,11 +1454,11 @@ Retry:
                 End SyncLock
 #End Region
             End Sub) With {.ProgressWeight = 0.1, .Show = False})
-            Loaders.Add(New LoaderTask(Of Boolean, Boolean)("安装 Forge（方式 A）",
+            Loaders.Add(New LoaderTask(Of Boolean, Boolean)(If(IsNeo, "安装 NeoForge", "安装 Forge（方式 A）"),
             Sub(Task As LoaderTask(Of Boolean, Boolean))
                 Dim Installer As ZipArchive = Nothing
                 Try
-                    Log("[Download] 开始进行新版方式 Forge 安装：" & InstallerAddress)
+                    Log($"[Download] 开始进行{If(IsNeo, " Neo", "新版方式 ")}Forge 安装：" & InstallerAddress)
                     '记录当前文件夹列表（在新建目标文件夹之前）
                     Dim OldList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
                                                                         Select(Function(i) i.FullName).ToList()
@@ -1440,15 +1479,15 @@ Retry:
                         WriteFile(PathTemp & "Cache\forge_installer.jar", GetResources("ForgeInstaller"))
                         Task.Progress = 0.06
                         '运行注入器
-                        ForgeInjector(InstallerAddress, Task, McFolder, UseJavaWrapper)
+                        ForgeInjector(InstallerAddress, Task, McFolder, UseJavaWrapper, False)
                         Task.Progress = 0.97
                     Catch ex As Exception
                         If UseJavaWrapper Then
-                            Log(ex, "使用 JavaWrapper 安装 Forge 失败，将不使用 JavaWrapper 并重试")
+                            Log(ex, $"使用 JavaWrapper 安装 {If(IsNeo, "Neo", "")}Forge 失败，将不使用 JavaWrapper 并重试")
                             UseJavaWrapper = False
                             GoTo Retry
                         Else
-                            Throw New Exception("运行 Forge 安装器失败", ex)
+                            Throw New Exception($"运行 {If(IsNeo, "Neo", "")}Forge 安装器失败", ex)
                         End If
                     End Try
                     '拷贝新增的版本 Json
@@ -1457,7 +1496,7 @@ Retry:
                     If DeltaList.Count > 1 Then
                         '它可能和 OptiFine 安装同时运行，导致增加的文件不止一个（这导致了 #151）
                         '也可能是因为 Forge 安装器的 Bug，生成了一个名字错误的文件夹，所以需要检查文件夹是否为空
-                        DeltaList = DeltaList.Where(Function(l) l.Name.Contains("forge") AndAlso l.EnumerateFiles.Any).ToList
+                        DeltaList = DeltaList.Where(Function(l) l.Name.Contains($"{If(IsNeo, "neo", "")}forge") AndAlso l.EnumerateFiles.Any).ToList
                     End If
                     If DeltaList.Count = 1 Then '如果没有新增文件夹，那么预测的文件夹名就是正确的
                         Dim JsonFile As FileInfo = DeltaList(0).EnumerateFiles.First()
@@ -1466,14 +1505,14 @@ Retry:
                     '新建 mods 文件夹
                     Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
                 Catch ex As Exception
-                    Throw New Exception("安装新 Forge 版本失败", ex)
+                    Throw New Exception($"安装新 {If(IsNeo, "Neo", "")}Forge 版本失败", ex)
                 Finally
                     '清理文件
                     Try
                         If Installer IsNot Nothing Then Installer.Dispose()
                         If File.Exists(InstallerAddress) Then File.Delete(InstallerAddress)
                     Catch ex As Exception
-                        Log(ex, "安装 Forge 清理文件时出错")
+                        Log(ex, $"安装 {If(IsNeo, "Neo", "")}Forge 清理文件时出错")
                     End Try
                 End Try
             End Sub) With {.ProgressWeight = 10})
@@ -1534,8 +1573,8 @@ Retry:
             End Sub) With {.ProgressWeight = 1})
             If FixLibrary Then
                 If IsCustomFolder Then Throw New Exception("若需要补全支持库，就不能自定义 MC 文件夹")
-                Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Forge 支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
-                Loaders.Add(New LoaderDownload("下载 Forge 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 11})
+                Loaders.Add(New LoaderTask(Of String, List(Of NetFile))($"分析 {If(IsNeo, "Neo", "")}Forge 支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
+                Loaders.Add(New LoaderDownload($"下载 {If(IsNeo, "Neo", "")}Forge 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 11})
             End If
         End If
 
@@ -1634,7 +1673,7 @@ Retry:
         Else
             Version = sender.Parent.Parent.Tag
         End If
-        McDownloadForgeSave(Version)
+        McDownloadForgeSave(False, Version)
     End Sub
 
 #End Region
@@ -1692,485 +1731,6 @@ Retry:
             Log(ex, "获取 Forge 推荐版本失败（" & If(McVersion, "null") & "）", LogLevel.Feedback)
             Return Nothing
         End Try
-    End Function
-
-#End Region
-
-#Region "NeoForge 下载"
-
-    Public Sub McDownloadNeoForge(DownloadInfo As DlNeoForgeVersionEntry)
-        '初始化参数
-        Dim Id As String = DownloadInfo.Inherit & "-neoforge-" & DownloadInfo.VersionName
-        Dim Target As String = PathTemp & "Cache\Code\NeoForgeInstall-" & DownloadInfo.VersionName & "_" & GetUuid() & ".jar"
-        Dim VersionFolder As String = PathMcFolder & "versions\" & Id & "\"
-        Dim DisplayName As String = "NeoForge " & DownloadInfo.Inherit & " - " & DownloadInfo.VersionName
-        Try
-
-            '重复任务检查
-            SyncLock LoaderTaskbarLock
-                For i = 0 To LoaderTaskbar.Count - 1
-                    If LoaderTaskbar(i).Name = DisplayName & " 下载" Then
-                        Hint("该版本正在下载中！", HintType.Critical)
-                        Exit Sub
-                    End If
-                Next
-            End SyncLock
-
-            '已有版本检查
-            If File.Exists(VersionFolder & Id & ".json") Then
-                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 和 Jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
-                    File.Delete(VersionFolder & Id & ".jar")
-                    File.Delete(VersionFolder & Id & ".json")
-                Else
-                    Exit Sub
-                End If
-            End If
-
-            '启动
-            Dim Loader As New LoaderCombo(Of String)(DisplayName & " 下载", McDownloadNeoForgeLoader(DownloadInfo.VersionName, DownloadInfo.Inherit, DownloadInfo)) With {.OnStateChanged = AddressOf McInstallState}
-            Loader.Start(VersionFolder)
-            LoaderTaskbarAdd(Loader)
-            FrmMain.BtnExtraDownload.ShowRefresh()
-            FrmMain.BtnExtraDownload.Ribble()
-
-        Catch ex As Exception
-            Log(ex, "开始 NeoForge 下载失败", LogLevel.Feedback)
-        Finally
-            '删除安装包
-            Try
-                If File.Exists(Target) Then File.Delete(Target)
-            Catch
-            End Try
-        End Try
-    End Sub
-    Public Sub McDownloadNeoForgeSave(DownloadInfo As DlNeoForgeVersionEntry)
-        Try
-            Dim Target As String = SelectAs("选择保存位置", DownloadInfo.FileName, "NeoForge 文件 (*.jar)")
-            Dim DisplayName As String = "NeoForge " & DownloadInfo.Inherit & " - " & DownloadInfo.VersionName
-            If Not Target.Contains("\") Then Exit Sub
-
-            '重复任务检查
-            SyncLock LoaderTaskbarLock
-                For i = 0 To LoaderTaskbar.Count - 1
-                    If LoaderTaskbar(i).Name = DisplayName & " 下载" Then
-                        Hint("该版本正在下载中！", HintType.Critical)
-                        Exit Sub
-                    End If
-                Next
-            End SyncLock
-
-            '构造步骤加载器
-            Dim Loaders As New List(Of LoaderBase)
-            '获取下载地址
-            Loaders.Add(New LoaderTask(Of DlNeoForgeVersionEntry, List(Of NetFile))("获取下载地址",
-            Sub(Task As LoaderTask(Of DlNeoForgeVersionEntry, List(Of NetFile)))
-                Dim Files As New List(Of NetFile)
-                If DownloadInfo.VersionCode.StartsWith("47.") Then          '1.20.1 NeoForge 下载地址不同
-                    Files.Add(New NetFile({
-                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
-                    "https://maven.neoforged.net/releases/net/neoforged/forge/" & "1.20.1-" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
-                }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
-                Else
-                    Files.Add(New NetFile({
-                    "https://bmclapi2.bangbang93.com/maven/net/neoforged/neoforge/" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName,
-                    "https://maven.neoforged.net/releases/net/neoforged/neoforge/" & DownloadInfo.VersionCode & If(DownloadInfo.IsBeta, "-beta", "") & "/" & DownloadInfo.FileName
-                }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
-                End If
-                Task.Output = Files
-            End Sub) With {.ProgressWeight = 0.1, .Show = False})
-            '下载
-            Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile)) With {.ProgressWeight = 6})
-
-            '启动
-            Dim Loader As New LoaderCombo(Of DlNeoForgeVersionEntry)(DisplayName & " 下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
-            Loader.Start(DownloadInfo)
-            LoaderTaskbarAdd(Loader)
-            FrmMain.BtnExtraDownload.ShowRefresh()
-            FrmMain.BtnExtraDownload.Ribble()
-
-        Catch ex As Exception
-            Log(ex, "开始 NeoForge 下载失败", LogLevel.Feedback)
-        End Try
-    End Sub
-
-    Private Sub NeoForgeInjector(Target As String, Task As LoaderTask(Of Boolean, Boolean), McFolder As String, UseJavaWrapper As Boolean)
-        '选择 Java
-        Dim Java As JavaEntry
-        SyncLock JavaLock
-            Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 60))
-            If Java Is Nothing Then
-                If Not JavaDownloadConfirm("Java 8 或更高版本") Then Throw New Exception("由于未找到 Java，已取消安装。")
-                '开始自动下载
-                Dim JavaLoader = JavaFixLoaders(17)
-                Try
-                    JavaLoader.Start(17, IsForceRestart:=True)
-                    Do While JavaLoader.State = LoadState.Loading AndAlso Not Task.IsAborted
-                        Thread.Sleep(10)
-                    Loop
-                Finally
-                    JavaLoader.Abort() '确保取消时中止 Java 下载
-                End Try
-                '检查下载结果
-                Java = JavaSelect("已取消安装。", New Version(1, 8, 0, 60))
-                If Task.IsAborted Then Exit Sub
-                If Java Is Nothing Then Throw New Exception("由于未找到 Java，已取消安装。")
-            End If
-        End SyncLock
-        '添加 Java Wrapper 作为主 Jar
-        Dim Arguments As String
-        If UseJavaWrapper Then
-            Arguments = $"-Doolloo.jlw.tmpdir=""{GetJavaWrapperDir()}"" -cp ""{PathTemp}Cache\neoforge_installer.jar;{Target}"" -jar ""{ExtractJavaWrapper()}"" com.bangbang93.ForgeInstaller ""{McFolder}"
-        Else
-            Arguments = $"-cp ""{PathTemp}Cache\neoforge_installer.jar;{Target}"" com.bangbang93.ForgeInstaller ""{McFolder}"
-        End If
-        If Java.VersionCode >= 9 Then Arguments = "--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED " & Arguments
-        '开始启动
-        SyncLock InstallSyncLock
-            Dim Info = New ProcessStartInfo With {
-                .FileName = Java.PathJavaw,
-                .Arguments = Arguments,
-                .UseShellExecute = False,
-                .CreateNoWindow = True,
-                .RedirectStandardError = True,
-                .RedirectStandardOutput = True
-            }
-            Log("[Download] 开始安装 NeoForge：" & Arguments)
-            Dim process As New Process With {.StartInfo = Info}
-            Dim LastResults As New Queue(Of String)
-            Using outputWaitHandle As New AutoResetEvent(False)
-                Using errorWaitHandle As New AutoResetEvent(False)
-                    AddHandler process.OutputDataReceived,
-                    Function(sender, e)
-                        Try
-                            If e.Data Is Nothing Then
-                                outputWaitHandle.[Set]()
-                            Else
-                                LastResults.Enqueue(e.Data)
-                                If LastResults.Count > 100 Then LastResults.Dequeue()
-                                NeoForgeInjectorLine(e.Data, Task)
-                            End If
-                        Catch ex As ObjectDisposedException
-                        Catch ex As Exception
-                            Log(ex, "读取 NeoForge 安装器信息失败")
-                        End Try
-                        Try
-                            If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                Log("[Installer] 由于任务取消，已中止 NeoForge 安装")
-                                process.Kill()
-                            End If
-                        Catch
-                        End Try
-                        Return Nothing
-                    End Function
-                    AddHandler process.ErrorDataReceived,
-                    Function(sender, e)
-                        Try
-                            If e.Data Is Nothing Then
-                                errorWaitHandle.[Set]()
-                            Else
-                                LastResults.Enqueue(e.Data)
-                                If LastResults.Count > 100 Then LastResults.Dequeue()
-                                NeoForgeInjectorLine(e.Data, Task)
-                            End If
-                        Catch ex As ObjectDisposedException
-                        Catch ex As Exception
-                            Log(ex, "读取 NeoForge 安装器错误信息失败")
-                        End Try
-                        Try
-                            If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                Log("[Installer] 由于任务取消，已中止 NeoForge 安装")
-                                process.Kill()
-                            End If
-                        Catch
-                        End Try
-                        Return Nothing
-                    End Function
-                    process.Start()
-                    process.BeginOutputReadLine()
-                    process.BeginErrorReadLine()
-                    '等待
-                    Do Until process.HasExited
-                        Thread.Sleep(10)
-                    Loop
-                    '输出
-                    outputWaitHandle.WaitOne(10000)
-                    errorWaitHandle.WaitOne(10000)
-                    process.Dispose()
-                    '检查是否安装成功：最后两行中是否有 true（true 可能在倒数第二行，见 #832）
-                    If LastResults.Last = "true" OrElse (LastResults.Count >= 2 AndAlso LastResults(LastResults.Count - 2) = "true") Then Exit Sub
-                    Log(Join(LastResults, vbCrLf))
-                    Dim LastLines As String = ""
-                    For i As Integer = Math.Max(0, LastResults.Count - 5) To LastResults.Count - 1 '最后 5 行
-                        LastLines &= vbCrLf & LastResults(i)
-                    Next
-                    Throw New Exception("NeoForge 安装器出错，日志结束部分为：" & LastLines)
-                End Using
-            End Using
-        End SyncLock
-    End Sub
-    Private Sub NeoForgeInjectorLine(Content As String, Task As LoaderTask(Of Boolean, Boolean))
-        If Content.StartsWithF("  Data") OrElse Content.StartsWithF("  Slim") Then
-            If ModeDebug Then Log("[Installer] " & Content)
-        ElseIf Content.StartsWithF("  Reading patch ") Then
-            If ModeDebug Then Log("[Installer] " & Content)
-            Task.Progress = 0.86
-        Else
-            Select Case Content
-                Case "Extracting json"
-                    Log("[Installer] " & Content)
-                    Task.Progress = 0.07
-                Case "Downloading libraries"
-                    Log("[Installer] " & Content)
-                    Task.Progress = 0.08
-                Case "  File exists: Checksum validated."
-                    If ModeDebug Then Log("[Installer] " & Content)
-                    Task.Progress += 0.003
-                Case "Building Processors"
-                    Task.Progress = 0.38
-                Case "Task: DOWNLOAD_MOJMAPS" 'B
-                    Task.Progress = 0.4
-                Case "Task: MERGE_MAPPING" 'B
-                    Task.Progress = 0.6
-                Case "Splitting: "
-                    Task.Progress = 0.62
-                Case "Parameter Annotations" 'B
-                    Task.Progress = 0.66
-                Case "Processing Complete" 'B
-                    Task.Progress = 0.7
-                Case "Remapping final jar" 'A
-                    Task.Progress = 0.72
-                Case "Remapping jar... 50%" 'A
-                    Task.Progress = 0.76
-                Case "Remapping jar... 100%" 'A
-                    Task.Progress = 0.81
-                Case "Injecting profile"
-                    Task.Progress = 0.91
-                Case Else
-                    If ModeDebug Then Log("[Installer] " & Content)
-                    Exit Sub
-            End Select
-            Log("[Installer] " & Content)
-        End If
-    End Sub
-
-    ''' <summary>
-    ''' 获取下载某个 NeoForge 版本的加载器列表。
-    ''' </summary>
-    Private Function McDownloadNeoForgeLoader(Version As String, Inherit As String, Optional DownloadRawInfo As DlNeoForgeVersionEntry = Nothing, Optional McFolder As String = Nothing, Optional ClientDownloadLoader As LoaderCombo(Of String) = Nothing, Optional ClientFolder As String = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
-
-        '参数初始化
-        Dim DownloadInfo As New DlNeoForgeVersionEntry
-        McFolder = If(McFolder, PathMcFolder)
-        If DownloadRawInfo Is Nothing Then          '兜底，有的时候 DownloadInfo 可能是空的
-            If Version.Contains("-beta") Then
-                DownloadInfo.VersionName = Version
-                Version = Version.Replace("neoforge-", "").Replace("-beta", "").Replace("1.20.1-", "")
-                DownloadInfo.VersionCode = Version
-                DownloadInfo.IsBeta = True
-            Else
-                DownloadInfo.VersionName = Version
-                Version = Version.Replace("neoforge-", "").Replace("1.20.1-", "")
-                DownloadInfo.VersionCode = Version
-                DownloadInfo.IsBeta = False
-            End If
-        Else
-            DownloadInfo = DownloadRawInfo
-            Version = DownloadInfo.VersionCode
-        End If
-        Dim IsCustomFolder As Boolean = McFolder <> PathMcFolder
-        Dim Id As String = DownloadInfo.VersionName
-        Dim InstallerAddress As String = PathTemp & "Cache\Code\NeoForgeInstall-" & Version & "_" & RandomInteger(0, 100000)
-        Dim VersionFolder As String = McFolder & "versions\" & Id & "\"
-        Dim DisplayName As String = "NeoForge " & Inherit & " - " & Version
-        Dim Loaders As New List(Of LoaderBase)
-        Dim LibVersionFolder As String = PathMcFolder & "versions\" & Id & "\" '作为 Lib 文件目标的版本文件夹
-
-        '获取下载信息
-        If DownloadInfo Is Nothing Then
-            Loaders.Add(New LoaderTask(Of String, String)("获取 NeoForge 详细信息",
-            Sub(Task As LoaderTask(Of String, String))
-                '获取 NeoForge 版本列表
-                Dim NeoForgeLoader = New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("McDownloadNeoForgeLoader " & Inherit, AddressOf DlNeoForgeVersionMain)
-                NeoForgeLoader.WaitForExit(Inherit)
-                Task.Progress = 0.8
-                '查找对应版本
-                For Each NeoForgeVersion In NeoForgeLoader.Output
-                    If NeoForgeVersion.VersionName = Version Then
-                        DownloadInfo = NeoForgeVersion
-                        Exit Sub
-                    End If
-                Next
-                Throw New Exception("未能找到 NeoForge " & Inherit & "-" & Version & " 的详细信息！")
-            End Sub) With {.ProgressWeight = 3})
-        End If
-        '下载 NeoForge 主文件
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("准备下载 NeoForge",
-            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                '启动依赖版本的下载
-                If ClientDownloadLoader Is Nothing Then
-                    If IsCustomFolder Then Throw New Exception("如果没有指定原版下载器，则不能指定 MC 安装文件夹")
-                    ClientDownloadLoader = McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, Inherit)
-                End If
-                Dim IsLegacyNeo As Boolean = DownloadInfo.VersionCode.StartsWith("47.")
-                Dim Files As New List(Of NetFile) From {New NetFile({
-                    $"https://bmclapi2.bangbang93.com/maven/net/neoforged/{If(IsLegacyNeo, "", "neo")}forge/{If(IsLegacyNeo, "1.20.1-", "")}{DownloadInfo.VersionCode}{If(DownloadInfo.IsBeta, "-beta", "")}/{DownloadInfo.FileName}",
-                    $"https://maven.neoforged.net/releases/net/neoforged/{If(IsLegacyNeo, "", "neo")}forge/{If(IsLegacyNeo, "1.20.1-", "")}{DownloadInfo.VersionCode}{If(DownloadInfo.IsBeta, "-beta", "")}/{DownloadInfo.FileName}"
-                }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
-                Task.Output = Files
-            End Sub) With {.ProgressWeight = 0.5, .Show = False})
-        Loaders.Add(New LoaderDownload("下载 NeoForge 主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
-
-        '安装（需要原版 Jar）
-        Log("[Download] 检测到的 NeoForge 版本：" & Version)
-        Dim Libs As List(Of McLibToken) = Nothing
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 NeoForge 支持库文件",
-            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                Task.Output = New List(Of NetFile)
-                Dim Installer As ZipArchive = Nothing
-                Try
-                    '解压并获取、合并两个 Json 的信息
-                    Installer = New ZipArchive(New FileStream(InstallerAddress, FileMode.Open))
-                    Task.Progress = 0.2
-                    Dim Json As JObject = GetJson(ReadFile(Installer.GetEntry("install_profile.json").Open))
-                    Dim Json2 As JObject = GetJson(ReadFile(Installer.GetEntry("version.json").Open))
-                    Json.Merge(Json2)
-                    '获取 Lib 下载信息
-                    Libs = McLibListGetWithJson(Json, True)
-                    '添加 Mappings 下载信息
-                    If Json("data") IsNot Nothing AndAlso Json("data")("MOJMAPS") IsNot Nothing Then
-                        '下载原版 Json 文件
-                        Task.Progress = 0.4
-                        Dim RawJson As JObject = GetJson(NetGetCodeByDownload(DlSourceLauncherOrMetaGet(DlClientListGet(Inherit)), IsJson:=True))
-                        '[net.minecraft:client:1.17.1-20210706.113038:mappings@txt] 或 @tsrg]
-                        Dim OriginalName As String = Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Before("@")
-                        Dim Address = McLibGet(OriginalName).Replace(".jar", "-mappings." & Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Split("@")(1))
-                        Libs.Add(New McLibToken With {.IsJumpLoader = False, .IsNatives = False, .LocalPath = Address, .OriginalName = OriginalName,
-                                                                                                            .Url = RawJson("downloads")("client_mappings")("url"), .Size = RawJson("downloads")("client_mappings")("size"), .SHA1 = RawJson("downloads")("client_mappings")("sha1")})
-                        Log("[Download] 需要下载 Mappings：" & Address)
-                    End If
-                    Task.Progress = 0.8
-                    '去除其中的原始 NeoForge 项
-                    For i = 0 To Libs.Count - 1
-                        If Libs(i).LocalPath.EndsWithF("neoforge-" & Inherit & "-" & Version & ".jar") OrElse
-                                                                                                      Libs(i).LocalPath.EndsWithF("forge-" & Inherit & "-" & Version & "-client.jar") Then
-                            Log("[Download] 已从待下载 NeoForge 支持库中移除：" & Libs(i).LocalPath, LogLevel.Debug)
-                            Libs.RemoveAt(i)
-                            Exit For
-                        End If
-                    Next
-                    Task.Output = McLibFixFromLibToken(Libs, PathMcFolder)
-                Catch ex As Exception
-                    Throw New Exception("获取 NeoForge 支持库列表失败", ex)
-                Finally
-                    '释放文件
-                    If Installer IsNot Nothing Then Installer.Dispose()
-                End Try
-            End Sub) With {.ProgressWeight = 2})
-        Loaders.Add(New LoaderDownload("下载 NeoForge 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 12})
-        Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("获取 NeoForge 支持库文件",
-            Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
-#Region "NeoForge 文件"
-                If IsCustomFolder Then
-                    For Each LibFile As McLibToken In Libs
-                        Dim RealPath As String = LibFile.LocalPath.Replace(PathMcFolder, McFolder)
-                        If Not File.Exists(RealPath) Then
-                            Directory.CreateDirectory(IO.Path.GetDirectoryName(RealPath))
-                            CopyFile(LibFile.LocalPath, RealPath)
-                        End If
-                        If ModeDebug Then Log("[Download] 复制的 NeoForge 支持库文件：" & LibFile.LocalPath)
-                    Next
-                End If
-#End Region
-#Region "原版文件"
-                '等待原版文件下载完成
-                If ClientDownloadLoader Is Nothing Then Exit Sub
-                Dim TargetLoaders As List(Of LoaderBase) =
-                                                                                ClientDownloadLoader.GetLoaderList.Where(Function(l) l.Name = McDownloadClientLibName OrElse l.Name = McDownloadClientJsonName).
-                                                                                Where(Function(l) l.State <> LoadState.Finished).ToList
-                If TargetLoaders.Any Then Log("[Download] NeoForge 安装正在等待原版文件下载完成")
-                Do While TargetLoaders.Any AndAlso Not Task.IsAborted
-                    TargetLoaders = TargetLoaders.Where(Function(l) l.State <> LoadState.Finished).ToList
-                    Thread.Sleep(50)
-                Loop
-                If Task.IsAborted Then Exit Sub
-                '拷贝原版文件
-                If Not IsCustomFolder Then Exit Sub
-                SyncLock VanillaSyncLock
-                    Dim ClientName As String = GetFolderNameFromPath(ClientFolder)
-                    Directory.CreateDirectory(McFolder & "versions\" & Inherit)
-                    If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".json") Then
-                        CopyFile(ClientFolder & ClientName & ".json", McFolder & "versions\" & Inherit & "\" & Inherit & ".json")
-                    End If
-                    If Not File.Exists(McFolder & "versions\" & Inherit & "\" & Inherit & ".jar") Then
-                        CopyFile(ClientFolder & ClientName & ".jar", McFolder & "versions\" & Inherit & "\" & Inherit & ".jar")
-                    End If
-                End SyncLock
-#End Region
-            End Sub) With {.ProgressWeight = 0.1, .Show = False})
-        Loaders.Add(New LoaderTask(Of Boolean, Boolean)("安装 NeoForge",
-            Sub(Task As LoaderTask(Of Boolean, Boolean))
-                Dim Installer As ZipArchive = Nothing
-                Try
-                    Log("[Download] 开始进行 NeoForge 安装：" & InstallerAddress)
-                    '记录当前文件夹列表（在新建目标文件夹之前）
-                    Dim OldList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
-                                                                        Select(Function(i) i.FullName).ToList()
-                    '解压并获取信息
-                    Installer = New ZipArchive(New FileStream(InstallerAddress, FileMode.Open))
-                    Dim Json As JObject = GetJson(ReadFile(Installer.GetEntry("install_profile.json").Open))
-                    '新建目标版本文件夹
-                    Directory.CreateDirectory(VersionFolder)
-                    Task.Progress = 0.04
-                    '释放 launcher_installer.json
-                    McFolderLauncherProfilesJsonCreate(McFolder)
-                    Task.Progress = 0.05
-                    '运行 NeoForge 安装器
-                    Dim UseJavaWrapper As Boolean = True
-Retry:
-                    Try
-                        '释放 NeoForge 注入器
-                        WriteFile(PathTemp & "Cache\neoforge_installer.jar", GetResources("ForgeInstaller"))
-                        Task.Progress = 0.06
-                        '运行注入器
-                        NeoForgeInjector(InstallerAddress, Task, McFolder, UseJavaWrapper)
-                        Task.Progress = 0.97
-                    Catch ex As Exception
-                        If UseJavaWrapper Then
-                            Log(ex, "使用 JavaWrapper 安装 NeoForge 失败，将不使用 JavaWrapper 并重试")
-                            UseJavaWrapper = False
-                            GoTo Retry
-                        Else
-                            Throw New Exception("运行 NeoForge 安装器失败", ex)
-                        End If
-                    End Try
-                    '拷贝新增的版本 Json
-                    Dim DeltaList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
-                        SkipWhile(Function(i) OldList.Contains(i.FullName)).ToList()
-                    If DeltaList.Count > 1 Then
-                        '它可能和 OptiFine 安装同时运行，导致增加的文件不止一个（这导致了 #151）
-                        '也可能是因为 NeoForge 安装器的 Bug，生成了一个名字错误的文件夹，所以需要检查文件夹是否为空
-                        DeltaList = DeltaList.Where(Function(l) l.Name.Contains("neoforge") AndAlso l.EnumerateFiles.Any).ToList
-                    End If
-                    If DeltaList.Count = 1 Then '如果没有新增文件夹，那么预测的文件夹名就是正确的
-                        Dim JsonFile As FileInfo = DeltaList(0).EnumerateFiles.First()
-                        WriteFile(VersionFolder & Id & ".json", ReadFile(JsonFile.FullName))
-                    End If
-                    '新建 mods 文件夹
-                    Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
-                Catch ex As Exception
-                    Throw New Exception("安装新 NeoForge 版本失败", ex)
-                Finally
-                    '清理文件
-                    Try
-                        If Installer IsNot Nothing Then Installer.Dispose()
-                        If File.Exists(InstallerAddress) Then File.Delete(InstallerAddress)
-                    Catch ex As Exception
-                        Log(ex, "安装 NeoForge 清理文件时出错")
-                    End Try
-                End Try
-            End Sub) With {.ProgressWeight = 10})
-
-        Return Loaders
     End Function
 
 #End Region
@@ -2270,7 +1830,7 @@ Retry:
         Else
             Version = sender.Parent.Parent.Tag
         End If
-        McDownloadNeoForgeSave(Version)
+        McDownloadForgeSave(True, , Version)
     End Sub
 
 #End Region
@@ -2642,11 +2202,11 @@ Retry:
         End If
         'Forge
         If Request.ForgeVersion IsNot Nothing Then
-            LoaderList.Add(New LoaderCombo(Of String)("下载 Forge " & Request.ForgeVersion, McDownloadForgeLoader(Request.ForgeVersion, Request.MinecraftName, Request.ForgeEntry, TempMcFolder, ClientLoader, Request.TargetVersionFolder, False)) With {.Show = False, .ProgressWeight = 25, .Block = Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing AndAlso Request.NeoForgeEntry Is Nothing})
+            LoaderList.Add(New LoaderCombo(Of String)("下载 Forge " & Request.ForgeVersion, McDownloadForgeLoader(False, Request.ForgeVersion, Request.MinecraftName, Request.ForgeEntry, , TempMcFolder, ClientLoader, Request.TargetVersionFolder, False)) With {.Show = False, .ProgressWeight = 25, .Block = Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing AndAlso Request.NeoForgeEntry Is Nothing})
         End If
         'NeoForge
         If Request.NeoForgeVersion IsNot Nothing Then
-            LoaderList.Add(New LoaderCombo(Of String)("下载 NeoForge " & Request.NeoForgeVersion, McDownloadNeoForgeLoader(Request.NeoForgeVersion, Request.MinecraftName, Request.NeoForgeEntry, TempMcFolder, ClientLoader, Request.TargetVersionFolder, False)) With {.Show = False, .ProgressWeight = 25, .Block = Request.ForgeEntry Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
+            LoaderList.Add(New LoaderCombo(Of String)("下载 NeoForge " & Request.NeoForgeVersion, McDownloadForgeLoader(True, Request.NeoForgeVersion, Request.MinecraftName, , Request.NeoForgeEntry, TempMcFolder, ClientLoader, Request.TargetVersionFolder, False)) With {.Show = False, .ProgressWeight = 25, .Block = Request.ForgeEntry Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
         End If
         'LiteLoader
         If Request.LiteLoaderEntry IsNot Nothing Then

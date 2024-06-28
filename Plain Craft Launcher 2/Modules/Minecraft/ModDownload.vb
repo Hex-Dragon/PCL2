@@ -787,12 +787,9 @@
                 Dim Version As String = Token.Replace("neoforge-", "")
                 Dim Inherit As String = $"1.{Version.Split(".")(0)}.{Token.Split(".")(1)}"
                 If Inherit.EndsWith(".0") Then Inherit = Inherit.Replace(".0", "")
-                If Versions.Contains(Inherit) Then
-                    Continue For
-                Else
-                    Versions.Add(Inherit)
-                End If
+                Versions.Add(Inherit)
             Next
+            Versions = Versions.Distinct().ToList()
         Catch ex As Exception
             Log(ex, LogLevel.Feedback)
         End Try
@@ -892,6 +889,10 @@
                 End If
             End Get
         End Property
+        ''' <summary>
+        ''' 文件扩展名
+        ''' </summary>
+        Public ReadOnly Property FileSuffix As String = ".jar"
     End Class
     ''' <summary>
     ''' NeoForge 版本列表，主加载器。
