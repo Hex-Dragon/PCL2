@@ -5,7 +5,7 @@
     ''' 用于在搜索 Java 时进行关键词检测。
     ''' </summary>
     Public ReadOnly SearchEntryWords As List(Of String) =
-        New List(Of String) From {"java", "jdk", "env", "环境", "run", "软件", "jre", "bin", "mc",
+        New List(Of String) From {"java", "jdk", "env", "环境", "run", "软件", "jre", "mc",
         "soft", "cache", "temp", "corretto", "roaming", "users", "craft", "program", "世界", "net",
         "游戏", "oracle", "game", "file", "data", "jvm", "服务", "server", "客户", "client", "整合",
         "应用", "运行", "前置", "mojang", "官启", "新建文件夹", "eclipse", "microsoft", "hotspot",
