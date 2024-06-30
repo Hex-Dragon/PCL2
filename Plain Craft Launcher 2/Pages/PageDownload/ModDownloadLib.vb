@@ -1099,7 +1099,7 @@ Retry:
                     Files.Add(New NetFile({
                         $"https://bmclapi2.bangbang93.com/maven/net/neoforged/{If(IsLegacyNeo, "", "neo")}forge/{If(IsLegacyNeo, "1.20.1-", "")}{DownloadInfo.VersionCode}{If(DownloadInfo.IsBeta, "-beta", "")}/{DownloadInfo.FileName}",
                         $"https://maven.neoforged.net/releases/net/neoforged/{If(IsLegacyNeo, "", "neo")}forge/{If(IsLegacyNeo, "1.20.1-", "")}{DownloadInfo.VersionCode}{If(DownloadInfo.IsBeta, "-beta", "")}/{DownloadInfo.FileName}"
-                    }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
+                    }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=If(IsNeo, Nothing, DownloadInfo.Hash))))
                     Task.Output = Files
                 End Sub) With {.ProgressWeight = 0.1, .Show = False})
             Else
@@ -1110,7 +1110,7 @@ Retry:
                     Files.Add(New NetFile({
                         "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
                         "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
-                    }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
+                    }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=If(IsNeo, Nothing, DownloadInfo.Hash))))
                     Task.Output = Files
                 End Sub) With {.ProgressWeight = 0.1, .Show = False})
             End If
@@ -1359,12 +1359,12 @@ Retry:
                     Files = New List(Of NetFile) From {New NetFile({
                         $"https://bmclapi2.bangbang93.com/maven/net/neoforged/{If(IsLegacyNeo, "", "neo")}forge/{If(IsLegacyNeo, "1.20.1-", "")}{DownloadInfo.VersionCode}{If(DownloadInfo.IsBeta, "-beta", "")}/{DownloadInfo.FileName}",
                         $"https://maven.neoforged.net/releases/net/neoforged/{If(IsLegacyNeo, "", "neo")}forge/{If(IsLegacyNeo, "1.20.1-", "")}{DownloadInfo.VersionCode}{If(DownloadInfo.IsBeta, "-beta", "")}/{DownloadInfo.FileName}"
-                    }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
+                    }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=If(IsNeo, Nothing, DownloadInfo.Hash)))}
                 Else 'Forge
                     Files = New List(Of NetFile) From {New NetFile({
                     "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
                     "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
-                }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
+                }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=If(IsNeo, Nothing, DownloadInfo.Hash)))}
                 End If
                 Task.Output = Files
             End Sub) With {.ProgressWeight = 0.5, .Show = False})
@@ -1777,10 +1777,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = If(Entry.IsBeta, Entry.VersionCode & "-beta", Entry.VersionCode), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry.IsBeta, "测试版", "稳定版") &
-                If(Entry.ReleaseTime = "",
-                If(ModeDebug, If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), ""),
-                "发布于 " & Entry.ReleaseTime & If(ModeDebug, If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), "")),
+            .Info = If(Entry.IsBeta, "测试版", "稳定版"),
             .Logo = PathImage & "Blocks/NeoForge.png"
         }
         AddHandler NewItem.Click, OnClick

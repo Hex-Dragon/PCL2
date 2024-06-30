@@ -841,21 +841,9 @@
         ''' </summary>
         Public VersionName As String
         ''' <summary>
-        ''' 对应的 Minecraft 版本，如“1.12.2”。
+        ''' 对应的 Minecraft 版本，如“1.20.4”。
         ''' </summary>
         Public Inherit As String
-        ''' <summary>
-        ''' 发布时间，格式为“yyyy/MM/dd HH:mm”。
-        ''' </summary>
-        Public ReleaseTime As String
-        ''' <summary>
-        ''' 文件的 MD5 或 SHA1（BMCLAPI 的老版本是 MD5，新版本是 SHA1；官方源总是 MD5）。
-        ''' </summary>
-        Public Hash As String = Nothing
-        ''' <summary>
-        ''' 版本分支。若无分支则为 Nothing。
-        ''' </summary>
-        Public Branch As String = Nothing
         ''' <summary>
         ''' 是否是 Beta 版。若未提供则默认为 False。
         ''' </summary>
@@ -878,14 +866,6 @@
             ''' </summary>
             Public Value As JObject
         End Structure
-        ''' <summary>
-        ''' 用于下载的文件版本名。可能在 Version 的基础上添加了分支。
-        ''' </summary>
-        Public ReadOnly Property FileVersion As String
-            Get
-                Return VersionName & If(Branch Is Nothing, ""， "-" & Branch)
-            End Get
-        End Property
         ''' <summary>
         ''' 即将下载的文件全名。
         ''' </summary>

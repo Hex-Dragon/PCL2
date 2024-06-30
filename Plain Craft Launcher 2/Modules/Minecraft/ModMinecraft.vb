@@ -1208,10 +1208,10 @@ OnLoaded:
                                 .McCodeSub = ReadIni(Version.Path & "PCL\Setup.ini", "VersionOriginalSub", -1),
                                 .IsApiLoaded = True
                             }
-                            VersionInfo.HasFabric = VersionInfo.FabricVersion.Count > 1
-                            VersionInfo.HasForge = VersionInfo.ForgeVersion.Count > 1
-                            VersionInfo.HasNeoForge = VersionInfo.NeoForgeVersion.Count > 1
-                            VersionInfo.HasOptiFine = VersionInfo.OptiFineVersion.Count > 1
+                            VersionInfo.HasFabric = VersionInfo.FabricVersion.Any()
+                            VersionInfo.HasForge = VersionInfo.ForgeVersion.Any()
+                            VersionInfo.HasNeoForge = VersionInfo.NeoForgeVersion.Any()
+                            VersionInfo.HasOptiFine = VersionInfo.OptiFineVersion.Any()
                             Version.Version = VersionInfo
                         End If
 
