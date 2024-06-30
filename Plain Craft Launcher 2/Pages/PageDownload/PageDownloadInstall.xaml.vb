@@ -372,20 +372,24 @@
             LabForge.Foreground = ColorGray1
         End If
         'NeoForge
-        Dim NeoForgeError As String = LoadNeoForgeGetError()
-        CardNeoForge.MainSwap.Visibility = If(NeoForgeError Is Nothing, Visibility.Visible, Visibility.Collapsed)
-        If NeoForgeError IsNot Nothing Then CardNeoForge.IsSwaped = True
-        SetNeoForgeInfoShow(CardNeoForge.IsSwaped)
-        If SelectedNeoForge Is Nothing Then
-            BtnNeoForgeClear.Visibility = Visibility.Collapsed
-            ImgNeoForge.Visibility = Visibility.Collapsed
-            LabNeoForge.Text = If(NeoForgeError, "点击选择")
-            LabNeoForge.Foreground = ColorGray4
+        If Not SelectedMinecraftId.Contains("1.") OrElse Val(SelectedMinecraftId.Split(".")(1)) <= 19 Then
+            CardNeoForge.Visibility = Visibility.Collapsed
         Else
-            BtnNeoForgeClear.Visibility = Visibility.Visible
-            ImgNeoForge.Visibility = Visibility.Visible
-            LabNeoForge.Text = SelectedNeoForge.VersionCode & If(SelectedNeoForge.IsBeta, "-beta", "")
-            LabNeoForge.Foreground = ColorGray1
+            Dim NeoForgeError As String = LoadNeoForgeGetError()
+            CardNeoForge.MainSwap.Visibility = If(NeoForgeError Is Nothing, Visibility.Visible, Visibility.Collapsed)
+            If NeoForgeError IsNot Nothing Then CardNeoForge.IsSwaped = True
+            SetNeoForgeInfoShow(CardNeoForge.IsSwaped)
+            If SelectedNeoForge Is Nothing Then
+                BtnNeoForgeClear.Visibility = Visibility.Collapsed
+                ImgNeoForge.Visibility = Visibility.Collapsed
+                LabNeoForge.Text = If(NeoForgeError, "点击选择")
+                LabNeoForge.Foreground = ColorGray4
+            Else
+                BtnNeoForgeClear.Visibility = Visibility.Visible
+                ImgNeoForge.Visibility = Visibility.Visible
+                LabNeoForge.Text = SelectedNeoForge.VersionCode & If(SelectedNeoForge.IsBeta, "-beta", "")
+                LabNeoForge.Foreground = ColorGray1
+            End If
         End If
         'Fabric
         If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 13 Then

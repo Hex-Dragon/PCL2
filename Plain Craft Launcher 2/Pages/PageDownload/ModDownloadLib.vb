@@ -1300,7 +1300,7 @@ Retry:
         Dim DownloadInfo = If(IsNeo, DownloadNeoInfo, DownloadForgeInfo)
         If IsNeo Then '兜底，有的时候 DownloadInfo 可能是空的
             If DownloadNeoInfo Is Nothing Then
-                DownloadInfo.VersionName = Version
+                DownloadInfo = New DlNeoForgeVersionEntry With {.VersionName = Version}
                 Version = Version.Replace("neoforge-", "").Replace("-beta", "").Replace("1.20.1-", "")
                 DownloadInfo.VersionCode = Version
                 If Version.Contains("-beta") Then DownloadInfo.IsBeta = True

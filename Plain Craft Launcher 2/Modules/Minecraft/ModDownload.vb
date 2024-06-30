@@ -802,24 +802,33 @@
     ''' </summary>
     Public DlNeoForgeListBmclapiLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Bmclapi", AddressOf DlNeoForgeListBmclapiMain)
     Private Sub DlNeoForgeListBmclapiMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
+        Dim ResultLatest As String
+        Dim VersionsJArray As JArray
+        Try
+            ResultLatest = NetGetCodeByDownload("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
+        Catch ex As Exception
+            If GetExceptionSummary(ex).Contains("(404)") Then
+                Throw New Exception("没有可用版本")
+            Else
+                Throw
+            End If
+        End Try
+        If ResultLatest.Length < 50 Then Throw New Exception("获取到的版本列表长度不足（" & ResultLatest & "）")
+        VersionsJArray = GetJson(ResultLatest)("name")
         Dim Versions As New List(Of String)
-        Dim ClientVersions As JArray = DlClientListLoader.Output.Value("versions") 'BMCLAPI 不能返回所有 NeoForge 版本，获取 MC 版本列表进行遍历
-        Dim ClientReleases As New List(Of String)
-
-        For Each Client In ClientVersions '排除快照版或远古版等特殊版本
-            If RegexCheck(Client("id").ToString(), "[0,9.]+") Then
-                ClientReleases.Add(Client("id").ToString())
-            End If
-        Next
-
-        For Each Release In ClientReleases
-            If Int(Release.Split(".")(1)) <= 19 Then Continue For '如果游戏版本低于 1.20 就不进行请求
-            Dim Json As String = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/neoforge/list/" & Release)
-            If Not Json.Contains("[]") Then '如果这个版本不支持 NeoForge，BMCLAPI 会直接返回一个空的 Json 序列，这里直接用字符串处理了
-                Versions.Add(Release)
-            End If
-        Next
-
+        Versions.Add("1.20.1")
+        Try
+            For Each Token As String In VersionsJArray("name")
+                Dim Version As String = Token.Replace("neoforge-", "")
+                Dim Inherit As String = $"1.{Version.Split(".")(0)}.{Token.Split(".")(1)}"
+                If Inherit.EndsWith(".0") Then Inherit = Inherit.Replace(".0", "")
+                Versions.Add(Inherit)
+            Next
+            Versions = Versions.Distinct().ToList()
+        Catch ex As Exception
+            Log(ex, LogLevel.Feedback)
+        End Try
+        If Not Versions.Any() Then Throw New Exception("没有可用版本")
         Loader.Output = New DlNeoForgeListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Versions}
     End Sub
 #End Region
