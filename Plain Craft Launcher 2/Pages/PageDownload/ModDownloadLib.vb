@@ -1331,7 +1331,7 @@ Retry:
             Loaders.Add(New LoaderTask(Of String, String)($"获取 {LoaderName} 详细信息",
             Sub(Task As LoaderTask(Of String, String))
                 '获取 Forge / NeoForge 版本列表
-                Dim ForgeLoader = If(IsNeo, New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("McDownloadForgeLoader " & Inherit, AddressOf DlNeoForgeVersionMain), New LoaderTask(Of String, List(Of DlForgeVersionEntry))("McDownloadForgeLoader " & Inherit, AddressOf DlForgeVersionMain))
+                Dim ForgeLoader = If(IsNeo, New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("McDownloadNeoForgeLoader " & Inherit, AddressOf DlNeoForgeVersionMain), New LoaderTask(Of String, List(Of DlForgeVersionEntry))("McDownloadForgeLoader " & Inherit, AddressOf DlForgeVersionMain))
                 ForgeLoader.WaitForExit(Inherit)
                 Task.Progress = 0.8
                 '查找对应版本

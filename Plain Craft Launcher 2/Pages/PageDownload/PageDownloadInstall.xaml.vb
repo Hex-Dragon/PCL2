@@ -75,7 +75,7 @@
         End If
 
         '启动 NeoForge 加载
-        If SelectedMinecraftId.StartsWith("1.") Then
+        If SelectedMinecraftId.StartsWith("1.") AndAlso Int(SelectedMinecraftId.Split(".")(1)) > 19 Then
             Dim NeoForgeLoader = New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion " & SelectedMinecraftId, AddressOf DlNeoForgeVersionMain)
             LoadNeoForge.State = NeoForgeLoader
             NeoForgeLoader.Start(SelectedMinecraftId)
