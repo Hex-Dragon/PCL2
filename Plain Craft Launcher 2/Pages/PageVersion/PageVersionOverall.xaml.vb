@@ -342,4 +342,31 @@
 
 #End Region
 
+#Region "卡片：导入 / 导出设置"
+    Private Sub BtnSettingExport_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSettingExport.Click
+        Dim savePath As String = SelectAs("选择保存位置", $"PCL 版本配置 - {PageVersionLeft.Version.Name}.ini", "PCL 配置文件(*.ini)|*.ini", Path).Replace("/", "\")
+        If savePath = "" Then Exit Sub
+        If Setup.SetupExport(savePath, Version:=PageVersionLeft.Version) Then
+            Hint("配置导出成功！", HintType.Finish)
+            OpenExplorer($"/select,""{savePath}""")
+        End If
+    End Sub
+
+    Private Sub BtnSettingImport_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSettingImport.Click
+        If MyMsgBox("导入设置后，现有的设置将会被覆盖，建议先导出现有设置。" & vbCrLf &
+                    "当前设置将会被备份到：版本文件夹下的 PCL 文件夹下的 Setup.ini.old 文件，如有需要可以自行还原。" & vbCrLf &
+                    "是否继续？", Button1:="继续", Button2:="取消") = 1 Then
+            Dim sourcePath As String = SelectFile("PCL 配置文件(*.ini)|*.ini", "选择配置文件")
+            If sourcePath = "" Then Exit Sub
+            If Setup.SetupImport(sourcePath, PageVersionLeft.Version) Then
+                '把导入的设置 UI 化
+                If FrmVersionOverall IsNot Nothing Then FrmVersionOverall.Reload()
+                If FrmVersionSetup IsNot Nothing Then FrmVersionSetup.Reload()
+                Hint("配置导入成功！", HintType.Finish)
+            End If
+        End If
+    End Sub
+
+#End Region
+
 End Class
