@@ -51,6 +51,7 @@
             '游戏内存
             CType(FindName("RadioRamType" & Setup.Load("VersionRamType", Version:=PageVersionLeft.Version)), MyRadioBox).Checked = True
             SliderRamCustom.Value = Setup.Get("VersionRamCustom", Version:=PageVersionLeft.Version)
+            ComboRamOptimize.SelectedIndex = Setup.Get("VersionRamOptimize", Version:=PageVersionLeft.Version)
 
             '服务器
             TextServerEnter.Text = Setup.Get("VersionServerEnter", Version:=PageVersionLeft.Version)
@@ -95,6 +96,7 @@
             Setup.Set("VersionArgumentIndie", 0, Version:=PageVersionLeft.Version)
             Setup.Reset("VersionRamType", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionRamCustom", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionRamOptimize", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceJvm", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceGame", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
@@ -130,7 +132,7 @@
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderRamCustom.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value, Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboRamOptimize.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex, Version:=PageVersionLeft.Version)
     End Sub
     Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change
