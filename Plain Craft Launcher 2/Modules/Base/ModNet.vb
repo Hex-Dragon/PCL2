@@ -1,4 +1,6 @@
 ﻿Imports System.Net
+Imports System.Net.Http
+Imports System.Threading.Tasks
 Imports PCL.ModNet
 
 Public Module ModNet
@@ -137,6 +139,50 @@ Retry:
         End Try
     End Function
     ''' <summary>
+    ''' 以 WebRequest 获取网页源代码或 Json。会进行至多 45 秒 3 次的尝试，允许最长 30s 的超时。
+    ''' </summary>
+    ''' <param name="Url">网页的 Url。</param>
+    ''' <param name="Encode">网页的编码，通常为 UTF-8。</param>
+    ''' <param name="BackupUrl">如果第一次尝试失败，换用的备用 URL。</param>
+    Public Async Function NetGetCodeByRequestRetryAsync(Url As String, Optional Encode As Encoding = Nothing, Optional Accept As String = "",
+                                                     Optional IsJson As Boolean = False, Optional BackupUrl As String = Nothing, Optional UseBrowserUserAgent As Boolean = False) As Task(Of Object)
+        Dim RetryCount As Integer = 0
+        Dim RetryException As Exception = Nothing
+        Dim StartTime As Long = GetTimeTick()
+        Try
+Retry:
+            Select Case RetryCount
+                Case 0 '正常尝试
+                    Return Await NetGetCodeByRequestOnceAsync(Url, Encode, 10000, IsJson, Accept, UseBrowserUserAgent)
+                Case 1 '慢速重试
+                    Await Task.Delay(500)
+                    Return Await NetGetCodeByRequestOnceAsync(If(BackupUrl, Url), Encode, 30000, IsJson, Accept, UseBrowserUserAgent)
+                Case Else '快速重试
+                    If GetTimeTick() - StartTime > 5500 Then
+                        '若前两次加载耗费 5 秒以上，才进行重试
+                        Await Task.Delay(500)
+                        Return Await NetGetCodeByRequestOnceAsync(If(BackupUrl, Url), Encode, 4000, IsJson, Accept, UseBrowserUserAgent)
+                    Else
+                        Throw RetryException
+                    End If
+            End Select
+        Catch ex As ThreadInterruptedException
+            Throw
+        Catch ex As Exception
+            Select Case RetryCount
+                Case 0
+                    RetryException = ex
+                    RetryCount += 1
+                    GoTo Retry
+                Case 1
+                    RetryCount += 1
+                    GoTo Retry
+                Case Else
+                    Throw
+            End Select
+        End Try
+    End Function
+    ''' <summary>
     ''' 以 WebRequest 获取网页源代码或 Json。会逐渐生成 4 个尝试线程，并在 60s 后超时。
     ''' </summary>
     ''' <param name="Url">网页的 Url。</param>
@@ -216,6 +262,47 @@ RequestFinished:
             Request.Abort()
         End Try
     End Function
+
+    Public Async Function NetGetCodeByRequestOnceAsync(Url As String, Optional Encode As Encoding = Nothing, Optional Timeout As Integer = 30000, Optional IsJson As Boolean = False, Optional Accept As String = "", Optional UseBrowserUserAgent As Boolean = False) As Task(Of String)
+        If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
+        Url = SecretCdnSign(Url)
+        Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 json", "")}")
+
+        Using client As New HttpClient()
+            client.Timeout = TimeSpan.FromMilliseconds(Timeout)
+
+            ' 设置 User-Agent 和其他请求头
+            If UseBrowserUserAgent Then
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"PCL2/{VersionStandardCode} Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36")
+            Else
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"PCL2/{VersionStandardCode}")
+            End If
+            client.DefaultRequestHeaders.Referrer = New Uri($"http://{VersionCode}.pcl2.server/")
+
+            ' 设置Accept头
+            If Not String.IsNullOrEmpty(Accept) Then
+                client.DefaultRequestHeaders.Accept.ParseAdd(Accept)
+            End If
+
+            Try
+                Dim response As HttpResponseMessage = Await client.GetAsync(Url)
+                response.EnsureSuccessStatusCode()
+
+                Dim ResultString As String = Await response.Content.ReadAsStringAsync()
+
+                Return If(IsJson, GetJson(ResultString), ResultString)
+            Catch ex As TaskCanceledException
+                If Not ex.CancellationToken.IsCancellationRequested Then
+                    Throw New TimeoutException("连接服务器超时（" & Url & "）")
+                Else
+                    Throw
+                End If
+            Catch ex As Exception
+                Throw New WebException("获取结果失败，" & ex.Message & "（" & Url & "）", ex)
+            End Try
+        End Using
+    End Function
+
 
     ''' <summary>
     ''' 以多线程下载网页文件的方式获取网页源代码。
