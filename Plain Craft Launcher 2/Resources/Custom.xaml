@@ -80,6 +80,10 @@
                     Text="在 EventData 后面添加一条竖线（|），竖线后填写服务器 IP，即可在启动该版本的同时自动进入服务器。" />
 		<local:MyButton Margin="0,4,0,0" Width="250" Height="35"
                     Text="启动 1.12.2 并进入 Hypixel" EventType="启动游戏" EventData="1.12.2|mc.hypixel.net" ToolTip="服务器 IP：mc.hypixel.net" />
+		<TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
+                    Text="在 EventData 中填写 \current，表示启动当前被选中的游戏版本，同样可以在后面填写服务器 IP。" />
+		<local:MyButton Margin="0,4,0,10" Width="250" Height="35"
+                    Text="启动当前选中版本并进入 Hypixel" EventType="启动游戏" EventData="\current|mc.hypixel.net" ToolTip="服务器 IP：mc.hypixel.net" />
 	</StackPanel>
 </local:MyCard>
 
