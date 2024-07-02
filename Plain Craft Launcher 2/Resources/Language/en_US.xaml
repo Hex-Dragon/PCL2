@@ -2,9 +2,38 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="clr-namespace:System;assembly=mscorlib">
 
-    <s:String x:Key="LangTitleOther">More</s:String>
     <s:String x:Key="LangTitleDownload">Download</s:String>
     <s:String x:Key="LangTitleHome">Launch</s:String>
     <s:String x:Key="LangTitleSetup">Setting</s:String>
+    <s:String x:Key="LangTitleLink">Link</s:String>
+    <s:String x:Key="LangTitleOther">More</s:String>
+    <s:String x:Key="LangToolTipBackToTop">Back to top</s:String>
+    <s:String x:Key="LangToolTipDownload">Download Management</s:String>
+    <s:String x:Key="LangToolTipSurrender">Surrender</s:String>
+    <s:String x:Key="LangToolTipCloseMinecraft">Close Minecraft</s:String>
+    <s:String x:Key="LangDialogBtnOK">OK</s:String>
+    <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
+    <s:String x:Key="LangDialogBtnUpdateFullLog">Full update log</s:String>
+    <s:String x:Key="LangDialogUpdateTo">PCL has been updated to {0}</s:String>
+    <s:String x:Key="LangDialogPolicyContent">Before using PCL, please agree to the PCL user agreement and disclaimer.</s:String>
+    <s:String x:Key="LangDialogPolicyTitle">Agreement authorization</s:String>
+    <s:String x:Key="LangDialogBtnAgree">Agree</s:String>
+    <s:String x:Key="LangDialogBtnDeny">Deny</s:String>
+    <s:String x:Key="LangDialogBtnPolicyContent">View user agreements and disclaimers</s:String>
+    <s:String x:Key="LangHintDebugWarning">[Debug Mode] PCL is running in debug mode, which may cause performance degradation. Please do not turn it on unless necessary!</s:String>
+    <s:String x:Key="LangDialogTitleTip">Tip</s:String>
+    <s:String x:Key="LangDialogHardcoreFanTheme">You have used PCL 99 times, thank you for your long-term support!&#x0a;Hidden theme hardcore fans have been unlocked!</s:String>
+    <s:String x:Key="LangDialogCloseOnDownloading">There is still a download task that has not been completed. Are you sure you want to quit?</s:String>
+    <s:String x:Key="LangHintHideModeOn">Function hidden settings have been reopened!</s:String>
+    <s:String x:Key="LangHintHideModeOff">Function hidden settings have been temporarily turned off!</s:String>
+    <s:String x:Key="LangHintIJustWantToStart">Muda!</s:String>
+    <s:String x:Key="LangHintAuthlibUrlIncorrect">The Authlib verification server entered does not match the URL format ({0})！</s:String>
+    <s:String x:Key="LangHintAuthlibDownloadGame">Please download the game first and then set up a third-party login!</s:String>
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">Do you want to enable LittleSkin login in version {0}?&#x0a;You can modify the login method in Version Settings → Settings → Server Options.</s:String>
+    <s:String x:Key="LangDialogTitleAuthlibEnableLittleSkin">Third-party login activation confirmation</s:String>
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">Do you want to enable LittleSkin login in version {0}?&#x0a;Authlib Server:{1}&#x0a;&#x0a;You can modify the login method in Version Settings → Settings → Server Options.</s:String>
+    <s:String x:Key="LangHintWindowDropExtract">Please unzip the file before dragging it in!</s:String>
+    <s:String x:Key="LangHintWindowDropFolder">Please drag a file instead of a folder!</s:String>
+    <s:String x:Key="LangHintWindowDropFileNotFound">The file you dragged in does not exist:{0}</s:String>
 
 </ResourceDictionary>

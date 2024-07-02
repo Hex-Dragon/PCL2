@@ -1,31 +1,30 @@
 ﻿Class PageSetupSystem
 
 #Region "语言"
-    'Private Sub PageSetupUI_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-    '  AniControlEnabled -= 1
+    Private Sub PageSetupUI_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+        AniControlEnabled -= 1
 
-    '  '读取设置
-    '  Select Case Lang
-    '      Case "zh_CN"
-    '          ComboLang.SelectedIndex = 0
-    '      Case "zh_HK"
-    '          ComboLang.SelectedIndex = 1
-    '      Case "en_US"
-    '          ComboLang.SelectedIndex = 2
-    '  End Select
-    '  CheckDebug.Checked = ReadReg("SystemDebugMode", "False")
+        '读取设置
+        Select Case Lang
+            Case "zh_CN"
+                ComboBackgroundSuit.SelectedIndex = 0
+            Case "zh_HK"
+                ComboBackgroundSuit.SelectedIndex = 1
+            Case "en_US"
+                ComboBackgroundSuit.SelectedIndex = 2
+        End Select
 
-    '  AniControlEnabled += 1
-    'End Sub
+        AniControlEnabled += 1
+    End Sub
 
-    'Private Sub RefreshLang() Handles ComboLang.SelectionChanged
-    '  If IsLoaded Then
-    '      If Not ComboLang.IsLoaded Then Exit Sub
-    '      Lang = CType(ComboLang.SelectedItem, MyComboBoxItem).Tag
-    '      Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Url("Languages\" & Lang & ".xaml", UrlKind.Relative)}
-    '      WriteReg("Lang", Lang)
-    '  End If
-    'End Sub
+    Private Sub RefreshLang() Handles ComboBackgroundSuit.SelectionChanged
+        If IsLoaded Then
+            If Not ComboBackgroundSuit.IsLoaded Then Exit Sub
+            Lang = CType(ComboBackgroundSuit.SelectedItem, MyComboBoxItem).Tag
+            Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
+            WriteReg("Lang", Lang)
+        End If
+    End Sub
 #End Region
 
     Private Shadows IsLoaded As Boolean = False
