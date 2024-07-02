@@ -38,19 +38,23 @@
                         CardName = "常规版本"
                     Case McVersionCardType.API
                         Dim IsForgeExists As Boolean = False
+                        Dim IsNeoExists As Boolean = False
                         Dim IsFabricExists As Boolean = False
                         Dim IsLiteExists As Boolean = False
                         For Each Version As McVersion In Card.Value
                             If Version.Version.HasFabric Then IsFabricExists = True
                             If Version.Version.HasLiteLoader Then IsLiteExists = True
                             If Version.Version.HasForge Then IsForgeExists = True
+                            If Version.Version.HasNeoForge Then IsNeoExists = True
                         Next
-                        If If(IsLiteExists, 1, 0) + If(IsForgeExists, 1, 0) + If(IsFabricExists, 1, 0) > 1 Then
+                        If If(IsLiteExists, 1, 0) + If(IsForgeExists, 1, 0) + If(IsFabricExists, 1, 0) + If(IsNeoExists, 1, 0) > 1 Then
                             CardName = "可安装 Mod"
                         ElseIf IsForgeExists Then
                             CardName = "Forge 版本"
                         ElseIf IsLiteExists Then
                             CardName = "LiteLoader 版本"
+                        ElseIf IsNeoExists Then
+                            CardName = "NeoForge 版本"
                         Else
                             CardName = "Fabric 版本"
                         End If

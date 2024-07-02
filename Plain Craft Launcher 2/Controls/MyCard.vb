@@ -128,6 +128,16 @@
                 ForgeDownloadListItemPreload(Stack, Stack.Tag, AddressOf ForgeSave_Click, True)
             Case 8
                 CompFilesCardPreload(Stack, Stack.Tag)
+            Case 13
+                Dim LoadingPickaxe As New MyLoading With {.Text = "正在获取版本列表", .Margin = New Thickness(5)}
+                Dim Loader = New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Main", AddressOf DlNeoForgeVersionMain)
+                LoadingPickaxe.State = Loader
+                Loader.Start(Stack.Tag)
+                AddHandler LoadingPickaxe.StateChanged, AddressOf FrmDownloadNeoForge.NeoForge_StateChanged
+                AddHandler LoadingPickaxe.Click, AddressOf FrmDownloadNeoForge.NeoForge_Click
+                Stack.Children.Add(LoadingPickaxe)
+            Case 14
+                NeoForgeDownloadListItemPreload(Stack, Stack.Tag, AddressOf NeoForgeSave_Click, True)
         End Select
         '实现控件虚拟化
         For Each Data As Object In Stack.Tag
@@ -171,6 +181,9 @@
                     Stack.Children.Add(CType(Data, HelpEntry).ToListItem)
                 Case 12
                     Stack.Children.Add(FabricDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Fabric_Selected))
+                Case 13
+                Case 14
+                    Stack.Children.Add(NeoForgeDownloadListItem(Data, AddressOf NeoForgeSave_Click, True))
                 Case Else
                     Log("未知的虚拟化种类：" & Type, LogLevel.Feedback)
             End Select
