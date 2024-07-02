@@ -268,7 +268,7 @@ Public Class FormMain
         '输出更新日志
         RunInNewThread(
         Sub()
-            If MyMsgBox(Content, "PCL 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
+            If MyMsgBox(Content, String.Format(Application.Current.FindResource("LangDialogUpdateTo"), VersionDisplayName), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnUpdateFullLog")) = 2 Then
                 OpenWebsite("https://afdian.net/a/LTCat?tab=feed")
             End If
         End Sub, "UpdateLog Output")
@@ -295,9 +295,9 @@ Public Class FormMain
             '触发降级
             DowngradeSub(LastVersion)
         End If
-        ''刷新语言
-        'Lang = ReadReg("Lang", "zh_CN")
-        'Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("Resources\Language\" & Lang & ".xaml", UriKind.Relative)}
+        '刷新语言
+        Lang = ReadReg("Lang", "zh_CN")
+        Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
         '刷新主题
         ThemeCheckAll(False)
         Setup.Load("UiLauncherTheme")
@@ -322,7 +322,7 @@ Public Class FormMain
 #If DEBUG Then
         Hint("[开发者模式] PCL 正以开发者模式运行，这可能会造成严重的性能下降，请务必立即向开发者反馈此问题！", HintType.Critical)
 #End If
-        If ModeDebug Then Hint("[调试模式] PCL 正以调试模式运行，这可能会导致性能下降，若无必要请不要开启！")
+        If ModeDebug Then Hint(Application.Current.FindResource("LangHintDebugWarning"))
         '尽早执行的加载池
         McFolderListLoader.Start(0) '为了让下载已存在文件检测可以正常运行，必须跑一次；为了让启动按钮尽快可用，需要尽早执行；为了与 PageLaunchLeft 联动，需要为 0 而不是 GetUuid
 
@@ -397,7 +397,7 @@ Public Class FormMain
         Sub()
             'EULA 提示
             If Not Setup.Get("SystemEula") Then
-                Select Case MyMsgBox("在使用 PCL 前，请同意 PCL 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明",
+                Select Case MyMsgBox(Application.Current.FindResource("LangDialogPolicyContent"), Application.Current.FindResource("LangDialogPolicyTitle"), Application.Current.FindResource("LangDialogBtnAgree"), Application.Current.FindResource("LangDialogBtnDeny"), Application.Current.FindResource("LangDialogBtnPolicyContent"),
                                    Button3Action:=Sub() OpenWebsite("https://shimo.im/docs/rGrd8pY8xWkt6ryW"))
                     Case 1
                         Setup.Set("SystemEula", True)
@@ -437,8 +437,7 @@ Public Class FormMain
         End Select
         If Setup.Get("SystemCount") >= 99 Then
             If ThemeUnlock(6, False) Then
-                MyMsgBox("你已经使用了 99 次 PCL 啦，感谢你长期以来的支持！" & vbCrLf &
-                         "隐藏主题 铁杆粉 已解锁！", "提示")
+                MyMsgBox(Application.Current.FindResource("LangDialogHardcoreFanTheme"), Application.Current.FindResource("LangDialogTitleTip"))
             End If
         End If
 #End If
@@ -527,7 +526,7 @@ Public Class FormMain
     Public Sub EndProgram(SendWarning As Boolean)
         '发出警告
         If SendWarning AndAlso HasDownloadingTask() Then
-            If MyMsgBox("还有下载任务尚未完成，是否确定退出？", "提示", "确定", "取消") = 1 Then
+            If MyMsgBox(Application.Current.FindResource("LangDialogCloseOnDownloading"), Application.Current.FindResource("LangDialogTitleTip"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel")) = 1 Then
                 '强行结束下载任务
                 RunInNewThread(
                 Sub()
@@ -667,9 +666,9 @@ Public Class FormMain
         If e.Key = Key.F12 Then
             PageSetupUI.HiddenForceShow = Not PageSetupUI.HiddenForceShow
             If PageSetupUI.HiddenForceShow Then
-                Hint("功能隐藏设置已暂时关闭！", HintType.Finish)
+                Hint(Application.Current.FindResource("LangHintHideModeOff"), HintType.Finish)
             Else
-                Hint("功能隐藏设置已重新开启！", HintType.Finish)
+                Hint(Application.Current.FindResource("LangHintHideModeOn"), HintType.Finish)
             End If
             PageSetupUI.HiddenRefresh()
             Exit Sub
@@ -677,7 +676,7 @@ Public Class FormMain
         '调用启动游戏
         If e.Key = Key.Enter AndAlso PageCurrent = FormMain.PageType.Launch Then
             If IsAprilEnabled AndAlso Not IsAprilGiveup Then
-                Hint("木大！")
+                Hint(Application.Current.FindResource("LangHintIJustWantToStart"))
             Else
                 FrmLaunchLeft.LaunchButtonClick()
             End If
@@ -733,18 +732,17 @@ Public Class FormMain
                         Dim AuthlibServer As String = Net.WebUtility.UrlDecode(Str.Substring("authlib-injector:yggdrasil-server:".Length))
                         Log("[System] Authlib 拖拽：" & AuthlibServer)
                         If Not String.IsNullOrEmpty(New ValidateHttp().Validate(AuthlibServer)) Then
-                            Hint($"输入的 Authlib 验证服务器不符合网址格式（{AuthlibServer}）！", HintType.Critical)
+                            Hint(String.Format(Application.Current.FindResource("LangHintAuthlibUrlIncorrect"), AuthlibServer), HintType.Critical)
                             Exit Sub
                         End If
                         Dim TargetVersion = If(PageCurrent = PageType.VersionSetup, PageVersionLeft.Version, McVersionCurrent)
                         If TargetVersion Is Nothing Then
-                            Hint("请先下载游戏，再设置第三方登录！", HintType.Critical)
+                            Hint(Application.Current.FindResource("LangHintAuthlibDownloadGame"), HintType.Critical)
                             Exit Sub
                         End If
                         If AuthlibServer = "https://littleskin.cn/api/yggdrasil" Then
                             'LittleSkin
-                            If MyMsgBox($"是否要在版本 {TargetVersion.Name} 中开启 LittleSkin 登录？" & vbCrLf &
-                                        "你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。", "第三方登录开启确认", "确定", "取消") = 2 Then
+                            If MyMsgBox(String.Format(Application.Current.FindResource("LangDialogAuthlibEnableLittleSkin"), TargetVersion.Name), Application.Current.FindResource("LangDialogTitleAuthlibEnableLittleSkin"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel")) = 2 Then
                                 Exit Sub
                             End If
                             Setup.Set("VersionServerLogin", 4, Version:=TargetVersion)
@@ -753,9 +751,7 @@ Public Class FormMain
                             Setup.Set("VersionServerAuthName", "LittleSkin 登录", Version:=TargetVersion)
                         Else
                             '第三方 Authlib 服务器
-                            If MyMsgBox($"是否要在版本 {TargetVersion.Name} 中开启第三方登录？" & vbCrLf &
-                                        $"登录服务器：{AuthlibServer}" & vbCrLf & vbCrLf &
-                                        "你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。", "第三方登录开启确认", "确定", "取消") = 2 Then
+                            If MyMsgBox(String.Format(Application.Current.FindResource("LangDialogAuthlibEnableLittleSkinServer"), TargetVersion.Name, AuthlibServer), Application.Current.FindResource("LangDialogTitleAuthlibEnableLittleSkin"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel")) = 2 Then
                                 Exit Sub
                             End If
                             Setup.Set("VersionServerLogin", 4, Version:=TargetVersion)
@@ -784,7 +780,7 @@ Public Class FormMain
                 '获取文件并检查
                 Dim FilePathRaw = e.Data.GetData(DataFormats.FileDrop)
                 If FilePathRaw Is Nothing Then '#2690
-                    Hint("请将文件解压后再拖入！", HintType.Critical)
+                    Hint(Application.Current.FindResource("LangHintWindowDropExtract"), HintType.Critical)
                     Exit Sub
                 End If
                 e.Handled = True
@@ -801,10 +797,10 @@ Public Class FormMain
             Log("[System] 接受文件拖拽：" & FilePath & If(FilePathList.Any, $" 等 {FilePathList.Count} 个文件", ""), LogLevel.Developer)
             '基础检查
             If Directory.Exists(FilePathList.First) AndAlso Not File.Exists(FilePathList.First) Then
-                Hint("请拖入一个文件，而非文件夹！", HintType.Critical)
+                Hint(Application.Current.FindResource("LangHintWindowDropFolder"), HintType.Critical)
                 Exit Sub
             ElseIf Not File.Exists(FilePathList.First) Then
-                Hint("拖入的文件不存在：" & FilePathList.First, HintType.Critical)
+                Hint(String.Format(Application.Current.FindResource("LangHintWindowDropFileNotFound"), FilePathList.First), HintType.Critical)
                 Exit Sub
             End If
             '多文件拖拽
