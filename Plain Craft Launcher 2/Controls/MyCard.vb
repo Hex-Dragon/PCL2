@@ -171,6 +171,8 @@
                     Stack.Children.Add(CType(Data, HelpEntry).ToListItem)
                 Case 12
                     Stack.Children.Add(FabricDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Fabric_Selected))
+                Case 15
+                    Stack.Children.Add(QuiltDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Quilt_Selected))
                 Case Else
                     Log("未知的虚拟化种类：" & Type, LogLevel.Feedback)
             End Select
