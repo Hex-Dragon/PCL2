@@ -71,9 +71,9 @@
     End Sub
     Private Sub Btn_Click(sender As Object, e As EventArgs) Handles BtnLink.Click
         If BtnLink.Content = "注册账号" Then
-            OpenWebsite(Setup.Get("VersionServerAuthRegister", Version:=McVersionCurrent))
+            OpenWebsite(If(McVersionCurrent IsNot Nothing, Setup.Get("VersionServerAuthRegister", Version:=McVersionCurrent), Setup.Get("CacheAuthServerRegister")))
         Else
-            Dim Website As String = Setup.Get("VersionServerAuthRegister", Version:=McVersionCurrent)
+            Dim Website As String = If(McVersionCurrent IsNot Nothing, Setup.Get("VersionServerAuthRegister", Version:=McVersionCurrent), Setup.Get("CacheAuthServerRegister"))
             OpenWebsite(Website.Replace("/auth/register", "/auth/forgot"))
         End If
     End Sub
