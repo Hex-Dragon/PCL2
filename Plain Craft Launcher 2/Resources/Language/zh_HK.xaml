@@ -227,6 +227,7 @@
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">僅隱藏本選項卡，設置的禁用內容依然有效。&#xa;可以在保留個性化設置頁面的情況下避免隱藏設置被修改。</s:String>
 
     <!--PageSelectLeft-->
+    <s:String x:Key="LangSelectFolderList">文件夾列表</s:String>
     <s:String x:Key="LangSelectRename">重命名</s:String>
     <s:String x:Key="LangSelectOpen">打開</s:String>
     <s:String x:Key="LangSelectRefresh">刷新</s:String>
@@ -305,5 +306,70 @@
     <s:String x:Key="LangSelectVersionDeletedB">版本 {0} 已刪除到回收站！</s:String>
     <s:String x:Key="LangSelectVersionDeleteCancelled">刪除版本 {0} 被主動取消</s:String>
     <s:String x:Key="LangSelectVersionDeleteFail">刪除版本 {0} 失敗</s:String>
+    
+    <!--PageSpeedLeft-->
+    <s:String x:Key="LangSpeedTotalProgress">總進度</s:String>
+    <s:String x:Key="LangSpeedSpeed">下載速度</s:String>
+    <s:String x:Key="LangSpeedLeftFiles">剩餘文件</s:String>
+    <s:String x:Key="LangSpeedLeftThreads">剩餘線程</s:String>
+    <s:String x:Key="LangSpeedClickCopyError">單擊複製錯誤詳情</s:String>
+    <s:String x:Key="LangSpeedHintClickCopyError">已複製錯誤詳情！</s:String>
+    
+    <!--PageDownloadClient-->
+    <s:String x:Key="LangDownloadCilentLoadingList">正在獲取版本列表</s:String>
+    
+    <!--PageDownloadCompDetail-->
+    <s:String x:Key="LangDownloadCompToCurseForge">轉到 CurseForge</s:String>
+    <s:String x:Key="LangDownloadCompToMCMod">轉到 MC 百科</s:String>
+    <s:String x:Key="LangDownloadCompCopyName">複製名稱</s:String>
+    <s:String x:Key="LangDownloadCompLoadingList">正在獲取版本列表</s:String>
+    
+    <!--PageDownloadFabric-->
+    <s:String x:Key="LangDownloadFabricDescTitle">Fabric 簡介</s:String>
+    <s:String x:Key="LangDownloadFabricDesc">Fabric Loader 是新版 Minecraft 下的輕量化 Mod 加載器，你需要先安裝它才能安裝各種 Fabric 模組。&#xa;本頁面提供 Fabric 安裝器下載，在下載後你需要手動打開安裝器進行安裝。</s:String>
+    <s:String x:Key="LangDownloadFabricWebsite">打開官網</s:String>
+    <s:String x:Key="LangDownloadFabricVersionList">版本列表</s:String>
+    <s:String x:Key="LangDownloadFabricGettingList">正在獲取 Fabric 列表</s:String>
+    
+        <!--PageDownloadForge-->
+    <s:String x:Key="LangDownloadForgeDescTitle">Forge 簡介</s:String>
+    <s:String x:Key="LangDownloadForgeDesc">Forge 是一個 Mod 加載器，你需要先安裝 Forge 才能安裝各種 Forge 模組。</s:String>
+    <s:String x:Key="LangDownloadForgeWebsite">打開官網</s:String>
+    <s:String x:Key="LangDownloadForgeGettingList">正在獲取 Forge 列表</s:String>
+    
+    <!--PageDownloadInstall-->
+    <s:String x:Key="LangDownloadInstallReview">安裝預覽</s:String>
+    <s:String x:Key="LangDownloadInstallFabricApi">你尚未選擇安裝 Fabric API，這會導致大多數 Mod 無法使用！</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFabric">你尚未選擇安裝 OptiFabric，這會導致 OptiFine 無法使用！</s:String>
+    <s:String x:Key="LangDownloadInstallOptifine">OptiFine 與一部分 Mod 的兼容性不佳，請謹慎安裝。</s:String>
+    <s:String x:Key="LangDownloadInstallStart">開始安裝</s:String>
+    <s:String x:Key="LangDownloadInstallVersionName">版本名稱</s:String>
+    <s:String x:Key="LangDownloadInstallBack">返回</s:String>
+    <s:String x:Key="LangDownloadInstallGettingList">正在獲取版本列表</s:String>
+    <s:String x:Key="LangDownloadInstallHintBackTip">點擊 Minecraft 項即可返回遊戲主版本選擇頁面！</s:String>
+    <s:String x:Key="LangDownloadInstallClickToChose">點擊選擇</s:String>
+    <s:String x:Key="LangDownloadInstallForgeIncompatible">與 Forge 不兼容</s:String>
+    <s:String x:Key="LangDownloadInstallFabricIncompatible">與 Fabric 不兼容</s:String>
+    <s:String x:Key="LangDownloadInstallOptifineIncompatible">與 OptiFine 不兼容</s:String>
+    <s:String x:Key="LangDownloadInstallForgeNeed">需要 Forge</s:String>
+    <s:String x:Key="LangDownloadInstallFabricNeed">需要 Fabric</s:String>
+    <s:String x:Key="LangDownloadInstallOptifineNeed">需要 OptiFine</s:String>
+    <s:String x:Key="LangDownloadInstallOptifineFabricNeed">需要 OptiFine 與 Fabric</s:String>
+    <s:String x:Key="LangDownloadInstallOrHigherVersion">或更高版本</s:String>
+    <s:String x:Key="LangDownloadInstallNoAvailabeVersion">沒有可用版本</s:String>
+    <s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">獲取版本列表失敗：未知錯誤，狀態為</s:String>
+    <s:String x:Key="LangDownloadInstallFailGetList">獲取版本列表失敗：</s:String>
+    <s:String x:Key="LangDownloadInstallNoAutoInstall">該版本不支持自動安裝</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieTitle">版本隔離提示</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieContent">你尚未開啟版本隔離，這會導致多個 MC 共用同一個 Mod 文件夾。&#xa;因此在切換 MC 版本時，MC 會因為讀取到與當前版本不符的 Mod 而崩潰。&#xa;PCL 推薦你在開始下載前，在 設置 → 版本隔離 中開啟版本隔離選項！</s:String>
+    <s:String x:Key="LangDownloadInstallCancelDownload">取消下載</s:String>
+    
+    <!--FormLoginOAuth-->
+    <s:String x:Key="LangLoginOAuthLoading">正在加載登錄頁面</s:String>
+    <s:String x:Key="LangLoginOAuthLoadingTipA">如果網絡環境不佳，加載可能非常緩慢甚至一直加載不出來</s:String>
+    <s:String x:Key="LangLoginOAuthLoadingTipB">此時請嘗試使用 VPN 或加速器，然後重試</s:String>
+    <s:String x:Key="LangLoginOAuthToBrower">如果遇到問題，可以點擊這裡使用系統瀏覽器登錄</s:String>
+    <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL 不支持使用 GitHub 登錄微軟賬號！</s:String>
+    <s:String x:Key="LangLoginOAuthWindowTitle">Microsoft 賬戶登錄</s:String>
     
 </ResourceDictionary>

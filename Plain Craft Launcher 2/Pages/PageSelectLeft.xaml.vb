@@ -28,7 +28,7 @@
             FrmSelectLeft.PanList.Children.Clear()
 
             '文件夹列表
-            FrmSelectLeft.PanList.Children.Add(New TextBlock With {.Text = "文件夹列表", .Margin = New Thickness(13, 18, 5, 4), .Opacity = 0.6, .FontSize = 12})
+            FrmSelectLeft.PanList.Children.Add(New TextBlock With {.Text = Application.Current.FindResource("LangSelectFolderList"), .Margin = New Thickness(13, 18, 5, 4), .Opacity = 0.6, .FontSize = 12})
             For Each Folder As McFolder In McFolderList.ToArray
                 '添加控件
                 Dim ContMenu As ContextMenu = Nothing

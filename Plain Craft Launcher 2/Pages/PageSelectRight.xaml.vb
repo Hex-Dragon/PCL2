@@ -35,7 +35,7 @@
                 Dim CardName As String = ""
                 Select Case Card.Key
                     Case McVersionCardType.OriginalLike
-                        CardName = "常规版本"
+                        CardName = Application.Current.FindResource("LangSelectVersionTypeRegular")
                     Case McVersionCardType.API
                         Dim IsForgeExists As Boolean = False
                         Dim IsFabricExists As Boolean = False
@@ -215,9 +215,8 @@
         Try
             Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
             Dim IsHintIndie As Boolean = Version.State <> McVersionState.Error AndAlso Version.PathIndie <> PathMcFolder
-            Dim MsgBoxContent As String = If(IsShiftPressed, Application.Current.FindResource("LangSelectDeleteVersionContentB"), Application.Current.FindResource("LangSelectDeleteVersionContentA")) & If(IsHintIndie, vbCrLf & Application.Current.FindResource("LangSelectDeleteVersionContentC"), "")
-            Select Case MyMsgBox(MsgBoxContent, "",
-                        Application.Current.FindResource("LangSelectDeleteVersionTitle"), Application.Current.FindResource("LangDialogBtnCancel"),, True)
+            Dim MsgBoxContent As String = If(IsShiftPressed, String.Format(Application.Current.FindResource("LangSelectDeleteVersionContentB"), Version.Name), String.Format(Application.Current.FindResource("LangSelectDeleteVersionContentA"), Version.Name)) & If(IsHintIndie, vbCrLf & Application.Current.FindResource("LangSelectDeleteVersionContentC"), "")
+            Select Case MyMsgBox(MsgBoxContent, Application.Current.FindResource("LangSelectDeleteVersionTitle"), Application.Current.FindResource("LangDialogBtnContinue"), Application.Current.FindResource("LangDialogBtnCancel"),, True)
 
                 Case 1
                     IniClearCache(Version.Path & "PCL\Setup.ini")

@@ -227,6 +227,7 @@
 <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Only hide this tab, and the settings for the disabled content will still be valid.&#xa;You can prevent hidden settings from being modified while keeping the personalization page.</s:String>
     
     <!--PageSelectLeft-->
+    <s:String x:Key="LangSelectFolderList">Folder list</s:String>
 <s:String x:Key="LangSelectRename">Rename</s:String>
 <s:String x:Key="LangSelectOpen">Open</s:String>
 <s:String x:Key="LangSelectRefresh">Refresh</s:String>
@@ -298,12 +299,77 @@
 <s:String x:Key="LangSelectBtnSet">Configuration</s:String>
 <s:String x:Key="LangSelectBtnOpenFolder">Open Folder</s:String>
 <s:String x:Key="LangSelectDeleteVersionTitle">Instance deletion confirmation</s:String>
-<s:String x:Key="LangSelectDeleteVersionContentA">Are you sure to delete instance {Version.Name} ?</s:String>
-<s:String x:Key="LangSelectDeleteVersionContentB">Are you sure to delete instance {Version.Name} permanently?</s:String>
+<s:String x:Key="LangSelectDeleteVersionContentA">Are you sure to delete instance {0} ?</s:String>
+<s:String x:Key="LangSelectDeleteVersionContentB">Are you sure to delete instance {0} permanently?</s:String>
 <s:String x:Key="LangSelectDeleteVersionContentC">Since instance isolation is enabled for this instance, archives, resource packs, Mod and other files corresponding to this version will also be deleted when the instance is deleted!</s:String>
 <s:String x:Key="LangSelectVersionDeletedA">Instance {0} has been permanently deleted!</s:String>
 <s:String x:Key="LangSelectVersionDeletedB">Instance {0} has been deleted to the Recycle Bin!</s:String>
 <s:String x:Key="LangSelectVersionDeleteCancelled">Delete instance {0} was actively canceled</s:String>
 <s:String x:Key="LangSelectVersionDeleteFail">Failed to delete instance {0}</s:String>
 
+    <!--PageSpeedLeft-->
+    <s:String x:Key="LangSpeedTotalProgress">Total Progress</s:String>
+    <s:String x:Key="LangSpeedSpeed">Download Speed</s:String>
+    <s:String x:Key="LangSpeedLeftFiles">Remaining Files</s:String>
+    <s:String x:Key="LangSpeedLeftThreads">Remaining Threads</s:String>
+    <s:String x:Key="LangSpeedClickCopyError">Click Copy Error Details</s:String>
+    <s:String x:Key="LangSpeedHintClickCopyError">Error details have been copied!</s:String>
+    
+    <!--PageDownloadClient-->
+<s:String x:Key="LangDownloadCilentLoadingList">Getting instance list</s:String>
+
+<!--PageDownloadCompDetail-->
+<s:String x:Key="LangDownloadCompToCurseForge">Go to CurseForge</s:String>
+<s:String x:Key="LangDownloadCompToMCMod">Go to MC Encyclopedia</s:String>
+<s:String x:Key="LangDownloadCompCopyName">Replication name</s:String>
+<s:String x:Key="LangDownloadCompLoadingList">Getting version list</s:String>
+
+        <!--PageDownloadFabric-->
+    <s:String x:Key="LangDownloadFabricDescTitle">Introduction to Fabric</s:String>
+    <s:String x:Key="LangDownloadFabricDesc">Fabric Loader is a lightweight Mod loader under the new version of Minecraft. You need to install it first before you can install various Fabric modules.&#xa;This page provides Fabric installer downloads. After downloading, you need to manually open the installer to install.</s:String>
+    <s:String x:Key="LangDownloadFabricWebsite">Open the official website</s:String>
+    <s:String x:Key="LangDownloadFabricVersionList">Instance list</s:String>
+    <s:String x:Key="LangDownloadFabricGettingList">Getting Fabric list</s:String>
+
+    <!--PageDownloadForge-->
+    <s:String x:Key="LangDownloadForgeDescTitle">Introduction to Forge</s:String>
+    <s:String x:Key="LangDownloadForgeDesc">Forge is a Mod loader. You need to install Forge first to install various Forge modules.</s:String>
+    <s:String x:Key="LangDownloadForgeWebsite">Open the official website</s:String>
+    <s:String x:Key="LangDownloadForgeGettingList">Getting Forge list</s:String>
+    
+    <!--PageDownloadInstall-->
+<s:String x:Key="LangDownloadInstallReview">Install full-featured</s:String>
+<s:String x:Key="LangDownloadInstallFabricApi">You have not yet chosen to install the Fabric API, which will make most Mods unusable!</s:String>
+<s:String x:Key="LangDownloadInstallOptiFabric">You have not chosen to install OptiFabric, which will make OptiFine unusable!</s:String>
+<s:String x:Key="LangDownloadInstallOptifine">OptiFine is not compatible with some Mods, please install carefully.</s:String>
+<s:String x:Key="LangDownloadInstallStart">Start installation</s:String>
+<s:String x:Key="LangDownloadInstallVersionName">Instance name</s:String>
+<s:String x:Key="LangDownloadInstallBack">Back</s:String>
+<s:String x:Key="LangDownloadInstallGettingList">Getting instance list</s:String>
+    <s:String x:Key="LangDownloadInstallHintBackTip">Click the Minecraft item to return to the main game version selection page!</s:String>
+<s:String x:Key="LangDownloadInstallClickToChose">Click to select</s:String>
+<s:String x:Key="LangDownloadInstallForgeIncompatible">Incompatible with Forge</s:String>
+<s:String x:Key="LangDownloadInstallFabricIncompatible">Incompatibility with Fabric</s:String>
+<s:String x:Key="LangDownloadInstallOptifineIncompatible">Incompatibility with OptiFine</s:String>
+<s:String x:Key="LangDownloadInstallForgeNeed">Need Forge</s:String>
+<s:String x:Key="LangDownloadInstallFabricNeed">Need Fabric</s:String>
+<s:String x:Key="LangDownloadInstallOptifineNeed">Need OptiFine</s:String>
+<s:String x:Key="LangDownloadInstallOptifineFabricNeed">Need OptiFine and Fabric</s:String>
+<s:String x:Key="LangDownloadInstallOrHigherVersion">or later</s:String>
+<s:String x:Key="LangDownloadInstallNoAvailabeVersion">No version available</s:String>
+<s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">Failed to obtain instance list: unknown error, status is</s:String>
+<s:String x:Key="LangDownloadInstallFailGetList">Failed to obtain instance list:</s:String>
+<s:String x:Key="LangDownloadInstallNoAutoInstall">This instance does not support automatic installation</s:String>
+<s:String x:Key="LangDownloadInstallDialogIndieTitle">Instance isolation tips</s:String>
+<s:String x:Key="LangDownloadInstallDialogIndieContent">You have not turned on instance isolation, which will cause multiple Minecraft instances to share the same Mod folder.&#xa;Therefore, when switching Minecraft instance, Minecraft will crash because it reads a Mod that does not match the current version.&#xa;PCL recommends that you enable version isolation option in "Configuration → Version Isolation" before starting downloading!</s:String>
+<s:String x:Key="LangDownloadInstallCancelDownload">Cancel the download</s:String>
+    
+<!--FormLoginOAuth-->
+<s:String x:Key="LangLoginOAuthLoading">Loading login page</s:String>
+<s:String x:Key="LangLoginOAuthLoadingTipA">If the network environment is not good, loading may be very slow or even impossible to load</s:String>
+<s:String x:Key="LangLoginOAuthLoadingTipB">Try using a VPN or accelerator at this time and try again</s:String>
+<s:String x:Key="LangLoginOAuthToBrower">If you encounter problems, you can click here to log in using the system browser</s:String>
+<s:String x:Key="LangLoginOAuthNoGithubLogin">PCL does not support using GitHub to log in to Microsoft accounts!</s:String>
+<s:String x:Key="LangLoginOAuthWindowTitle">Microsoft account login</s:String>
+    
 </ResourceDictionary>

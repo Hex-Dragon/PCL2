@@ -57,7 +57,7 @@
 
         If Not Setup.Get("HintInstallBack") Then
             Setup.Set("HintInstallBack", True)
-            Hint("点击 Minecraft 项即可返回游戏主版本选择页面！")
+            Hint(Application.Current.FindResource("LangDownloadInstallHintBackTip"))
         End If
 
         '如果在选择页面按了刷新键，选择页的东西可能会由于动画被隐藏，但不会由于加载结束而再次显示，因此这里需要手动恢复
@@ -296,7 +296,7 @@
         If SelectedOptiFine Is Nothing Then
             BtnOptiFineClear.Visibility = Visibility.Collapsed
             ImgOptiFine.Visibility = Visibility.Collapsed
-            LabOptiFine.Text = If(OptiFineError, "点击选择")
+            LabOptiFine.Text = If(OptiFineError, Application.Current.FindResource("LangDownloadInstallClickToChose"))
             LabOptiFine.Foreground = ColorGray4
         Else
             BtnOptiFineClear.Visibility = Visibility.Visible
@@ -316,7 +316,7 @@
             If SelectedLiteLoader Is Nothing Then
                 BtnLiteLoaderClear.Visibility = Visibility.Collapsed
                 ImgLiteLoader.Visibility = Visibility.Collapsed
-                LabLiteLoader.Text = If(LiteLoaderError, "点击选择")
+                LabLiteLoader.Text = If(LiteLoaderError, Application.Current.FindResource("LangDownloadInstallClickToChose"))
                 LabLiteLoader.Foreground = ColorGray4
             Else
                 BtnLiteLoaderClear.Visibility = Visibility.Visible
@@ -333,7 +333,7 @@
         If SelectedForge Is Nothing Then
             BtnForgeClear.Visibility = Visibility.Collapsed
             ImgForge.Visibility = Visibility.Collapsed
-            LabForge.Text = If(ForgeError, "点击选择")
+            LabForge.Text = If(ForgeError, Application.Current.FindResource("LangDownloadInstallClickToChose"))
             LabForge.Foreground = ColorGray4
         Else
             BtnForgeClear.Visibility = Visibility.Visible
@@ -353,7 +353,7 @@
             If SelectedFabric Is Nothing Then
                 BtnFabricClear.Visibility = Visibility.Collapsed
                 ImgFabric.Visibility = Visibility.Collapsed
-                LabFabric.Text = If(FabricError, "点击选择")
+                LabFabric.Text = If(FabricError, Application.Current.FindResource("LangDownloadInstallClickToChose"))
                 LabFabric.Foreground = ColorGray4
             Else
                 BtnFabricClear.Visibility = Visibility.Visible
@@ -374,7 +374,7 @@
             If SelectedFabricApi Is Nothing Then
                 BtnFabricApiClear.Visibility = Visibility.Collapsed
                 ImgFabricApi.Visibility = Visibility.Collapsed
-                LabFabricApi.Text = If(FabricApiError, "点击选择")
+                LabFabricApi.Text = If(FabricApiError, Application.Current.FindResource("LangDownloadInstallClickToChose"))
                 LabFabricApi.Foreground = ColorGray4
             Else
                 BtnFabricApiClear.Visibility = Visibility.Visible
@@ -395,7 +395,7 @@
             If SelectedOptiFabric Is Nothing Then
                 BtnOptiFabricClear.Visibility = Visibility.Collapsed
                 ImgOptiFabric.Visibility = Visibility.Collapsed
-                LabOptiFabric.Text = If(OptiFabricError, "点击选择")
+                LabOptiFabric.Text = If(OptiFabricError, Application.Current.FindResource("LangDownloadInstallClickToChose"))
                 LabOptiFabric.Foreground = ColorGray4
             Else
                 BtnOptiFabricClear.Visibility = Visibility.Visible
@@ -624,12 +624,12 @@
     ''' 获取 OptiFine 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadOptiFineGetError() As String
-        If LoadOptiFine Is Nothing OrElse LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
+        If LoadOptiFine Is Nothing OrElse LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Run Then Return Application.Current.FindResource("LangDownloadInstallGettingList")
         If LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFine.State, Object).Error.Message
         '检查 Forge 1.13 - 1.14.3：全部不兼容
         If SelectedForge IsNot Nothing AndAlso
             VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then
-            Return "与 Forge 不兼容"
+            Return Application.Current.FindResource("LangDownloadInstallForgeIncompatible")
         End If
         '检查最低 Forge 版本
         Dim MinimalForgeVersion As String = "9999.9999"
@@ -649,9 +649,9 @@
             End If
         Next
         If MinimalForgeVersion = "9999.9999" Then
-            Return If(NotSuitForForge, "与 Forge 不兼容", "没有可用版本")
+            Return If(NotSuitForForge, Application.Current.FindResource("LangDownloadInstallForgeIncompatible"), Application.Current.FindResource("LangDownloadInstallNoAvailabeVersion"))
         Else
-            Return "需要 Forge " & If(MinimalForgeVersion.Contains("."), "", "#") & MinimalForgeVersion & " 或更高版本"
+            Return Application.Current.FindResource("LangDownloadInstallForgeNeed") & " " & If(MinimalForgeVersion.Contains("."), "", "#") & MinimalForgeVersion & " " & Application.Current.FindResource("LangDownloadInstallOrHigherVersion")
         End If
     End Function
 
@@ -726,13 +726,13 @@
     ''' 获取 LiteLoader 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadLiteLoaderGetError() As String
-        If Not SelectedMinecraftId.Contains("1.") OrElse Val(SelectedMinecraftId.Split(".")(1)) > 12 Then Return "没有可用版本"
-        If LoadLiteLoader Is Nothing OrElse LoadLiteLoader.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
+        If Not SelectedMinecraftId.Contains("1.") OrElse Val(SelectedMinecraftId.Split(".")(1)) > 12 Then Return Application.Current.FindResource("LangDownloadInstallNoAvailabeVersion")
+        If LoadLiteLoader Is Nothing OrElse LoadLiteLoader.State.LoadingState = MyLoading.MyLoadingState.Run Then Return Application.Current.FindResource("LangDownloadInstallGettingList")
         If LoadLiteLoader.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadLiteLoader.State, Object).Error.Message
         For Each Version As DlLiteLoaderListEntry In DlLiteLoaderListLoader.Output.Value
             If Version.Inherit = SelectedMinecraftId Then Return Nothing
         Next
-        Return "没有可用版本"
+        Return Application.Current.FindResource("LangDownloadInstallNoAvailabeVersion")
     End Function
 
     '限制展开
@@ -783,27 +783,27 @@
     ''' 获取 Forge 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadForgeGetError() As String
-        If Not SelectedMinecraftId.StartsWith("1.") Then Return "没有可用版本"
-        If Not LoadForge.State.IsLoader Then Return "正在获取版本列表……"
+        If Not SelectedMinecraftId.StartsWith("1.") Then Return Application.Current.FindResource("LangDownloadInstallNoAvailabeVersion")
+        If Not LoadForge.State.IsLoader Then Return Application.Current.FindResource("LangDownloadInstallGettingList")
         Dim Loader As LoaderTask(Of String, List(Of DlForgeVersionEntry)) = LoadForge.State
-        If SelectedMinecraftId <> Loader.Input Then Return "正在获取版本列表……"
-        If Loader.State = LoadState.Loading Then Return "正在获取版本列表……"
+        If SelectedMinecraftId <> Loader.Input Then Return Application.Current.FindResource("LangDownloadInstallGettingList")
+        If Loader.State = LoadState.Loading Then Return Application.Current.FindResource("LangDownloadInstallGettingList")
         If Loader.State = LoadState.Failed Then
             Dim ErrorMessage As String = Loader.Error.Message
             If ErrorMessage.Contains("没有可用版本") Then
-                Return "没有可用版本"
+                Return Application.Current.FindResource("LangDownloadInstallNoAvailabeVersion")
             Else
-                Return "获取版本列表失败：" & ErrorMessage
+                Return Application.Current.FindResource("LangDownloadInstallFailGetList") & ErrorMessage
             End If
         End If
-        If Loader.State <> LoadState.Finished Then Return "获取版本列表失败：未知错误，状态为 " & GetStringFromEnum(Loader.State)
+        If Loader.State <> LoadState.Finished Then Return Application.Current.FindResource("LangDownloadInstallFailGetListUnknwonStatus") & " " & GetStringFromEnum(Loader.State)
         Dim NotSuitForOptiFine As Boolean = False
         For Each Version In Loader.Output
             If Version.Category = "universal" OrElse Version.Category = "client" Then Continue For '跳过无法自动安装的版本
-            If SelectedFabric IsNot Nothing Then Return "与 Fabric 不兼容"
+            If SelectedFabric IsNot Nothing Then Return Application.Current.FindResource("LangDownloadInstallFabricIncompatible")
             If SelectedOptiFine IsNot Nothing AndAlso
                 VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then
-                Return "与 OptiFine 不兼容" '1.13 ~ 1.14.3 OptiFine 检查
+                Return Application.Current.FindResource("LangDownloadInstallOptifineIncompatible") '1.13 ~ 1.14.3 OptiFine 检查
             End If
             If SelectedOptiFine IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, Version) Then
                 NotSuitForOptiFine = True '与 OptiFine 不兼容
@@ -811,7 +811,7 @@
             End If
             Return Nothing
         Next
-        Return If(NotSuitForOptiFine, "与 OptiFine 不兼容", "该版本不支持自动安装")
+        Return If(NotSuitForOptiFine, Application.Current.FindResource("LangDownloadInstallOptifineIncompatible"), Application.Current.FindResource("LangDownloadInstallNoAutoInstall"))
     End Function
 
     '限制展开
@@ -872,16 +872,16 @@
     ''' 获取 Fabric 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadFabricGetError() As String
-        If LoadFabric Is Nothing OrElse LoadFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
-        If LoadFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadFabric.State, Object).Error.Message
+        If LoadFabric Is Nothing OrElse LoadFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return Application.Current.FindResource("LangDownloadInstallGettingList")
+        If LoadFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return Application.Current.FindResource("LangDownloadInstallFailGetList") & CType(LoadFabric.State, Object).Error.Message
         For Each Version As JObject In DlFabricListLoader.Output.Value("game")
             If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
-                If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
+                If SelectedForge IsNot Nothing Then Return Application.Current.FindResource("LangDownloadInstallForgeIncompatible")
                 'If SelectedOptiFine IsNot Nothing Then Return "与 OptiFine 不兼容"
                 Return Nothing
             End If
         Next
-        Return "没有可用版本"
+        Return Application.Current.FindResource("LangDownloadInstallNoAvailabeVersion")
     End Function
 
     '限制展开
@@ -972,18 +972,18 @@
     ''' 获取 FabricApi 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadFabricApiGetError() As String
-        If LoadFabricApi Is Nothing OrElse LoadFabricApi.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
-        If LoadFabricApi.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadFabricApi.State, Object).Error.Message
+        If LoadFabricApi Is Nothing OrElse LoadFabricApi.State.LoadingState = MyLoading.MyLoadingState.Run Then Return Application.Current.FindResource("LangDownloadInstallGettingList")
+        If LoadFabricApi.State.LoadingState = MyLoading.MyLoadingState.Error Then Return Application.Current.FindResource("LangDownloadInstallFailGetList") & CType(LoadFabricApi.State, Object).Error.Message
         If DlFabricApiLoader.Output Is Nothing Then
-            If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
-            Return "正在获取版本列表……"
+            If SelectedFabric Is Nothing Then Return Application.Current.FindResource("LangDownloadInstallFabricNeed")
+            Return Application.Current.FindResource("LangDownloadInstallGettingList")
         End If
         For Each Version In DlFabricApiLoader.Output
             If Not IsSuitableFabricApi(Version.DisplayName, SelectedMinecraftId) Then Continue For
-            If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
+            If SelectedFabric Is Nothing Then Return Application.Current.FindResource("LangDownloadInstallFabricNeed")
             Return Nothing
         Next
-        Return "没有可用版本"
+        Return Application.Current.FindResource("LangDownloadInstallNoAvailabeVersion")
     End Function
 
     '限制展开
@@ -1064,22 +1064,22 @@
     ''' 获取 OptiFabric 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadOptiFabricGetError() As String
-        If LoadOptiFabric Is Nothing OrElse LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
-        If LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFabric.State, Object).Error.Message
+        If LoadOptiFabric Is Nothing OrElse LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return Application.Current.FindResource("LangDownloadInstallGettingList")
+        If LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return Application.Current.FindResource("LangDownloadInstallFailGetList") & CType(LoadOptiFabric.State, Object).Error.Message
         If DlOptiFabricLoader.Output Is Nothing Then
-            If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine 与 Fabric"
-            If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
-            If SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine"
-            Return "正在获取版本列表……"
+            If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return Application.Current.FindResource("LangDownloadInstallOptifineFabricNeed")
+            If SelectedFabric Is Nothing Then Return Application.Current.FindResource("LangDownloadInstallFabricNeed")
+            If SelectedOptiFine Is Nothing Then Return Application.Current.FindResource("LangDownloadInstallOptifineNeed")
+            Return Application.Current.FindResource("LangDownloadInstallGettingList")
         End If
         For Each Version In DlOptiFabricLoader.Output
             If Not IsSuitableOptiFabric(Version, SelectedMinecraftId) Then Continue For '2135#
-            If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine 与 Fabric"
-            If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
-            If SelectedOptiFine Is Nothing Then Return "需要安装 OptiFine"
+            If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return Application.Current.FindResource("LangDownloadInstallOptifineFabricNeed")
+            If SelectedFabric Is Nothing Then Return Application.Current.FindResource("LangDownloadInstallFabricNeed")
+            If SelectedOptiFine Is Nothing Then Return Application.Current.FindResource("LangDownloadInstallOptifineNeed")
             Return Nothing '通过检查
         Next
-        Return "没有可用版本"
+        Return Application.Current.FindResource("LangDownloadInstallNoAvailabeVersion")
     End Function
 
     '限制展开
@@ -1143,9 +1143,7 @@
         '确认版本隔离
         If (SelectedForge IsNot Nothing OrElse SelectedFabric IsNot Nothing) AndAlso
            (Setup.Get("LaunchArgumentIndie") = 0 OrElse Setup.Get("LaunchArgumentIndie") = 2) Then
-            If MyMsgBox("你尚未开启版本隔离，这会导致多个 MC 共用同一个 Mod 文件夹。" & vbCrLf &
-                        "因此在切换 MC 版本时，MC 会因为读取到与当前版本不符的 Mod 而崩溃。" & vbCrLf &
-                        "PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔离选项！", "版本隔离提示", "取消下载", "继续") = 1 Then
+            If MyMsgBox(Application.Current.FindResource("LangDownloadInstallDialogIndieContent"), Application.Current.FindResource("LangDownloadInstallDialogIndieTitle"), Application.Current.FindResource("LangDownloadInstallCancelDownload"), Application.Current.FindResource("LangDialogBtnContinue")) = 1 Then
                 Exit Sub
             End If
         End If
