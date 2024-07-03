@@ -582,7 +582,7 @@ Public Class FormMain
         If ReturnCode = Result.Exception Then
             If Not IsLogShown Then
                 FeedbackInfo()
-                Log("请在 https://github.com/Hex-Dragon/PCL2/issues 提交错误报告，以便于作者解决此问题！")
+                Log(Application.Current.FindResource("LangCrashReport"))
                 IsLogShown = True
                 ShellOnly(Path & "PCL\Log1.txt")
             End If
@@ -808,7 +808,7 @@ Public Class FormMain
                 '必须要求全部为 jar 文件
                 For Each File In FilePathList
                     If Not {"jar", "litemod", "disabled", "old"}.Contains(File.After(".").ToLower) Then
-                        Hint("一次请只拖入一个文件！", HintType.Critical)
+                        Hint(Application.Current.FindResource("LangHintWindowDropFileOneFileAtATime"), HintType.Critical)
                         Exit Sub
                     End If
                 Next
@@ -818,7 +818,7 @@ Public Class FormMain
             If Extension = "xaml" Then
                 Log("[System] 文件后缀为 XAML，作为自定义主页加载")
                 If File.Exists(Path & "PCL\Custom.xaml") Then
-                    If MyMsgBox("已存在一个自定义主页文件，是否要将它覆盖？", "覆盖确认", "覆盖", "取消") = 2 Then
+                    If MyMsgBox(Application.Current.FindResource("LangDialogCustomHomePageReplaceContent"), Application.Current.FindResource("LangDialogCustomHomePageReplaceTitle"), Application.Current.FindResource("LangDialogBtnCustomHomePageReplaceConfirm"), Application.Current.FindResource("LangDialogBtnCancel")) = 2 Then
                         Exit Sub
                     End If
                 End If
@@ -826,7 +826,7 @@ Public Class FormMain
                 RunInUi(Sub()
                             Setup.Set("UiCustomType", 1)
                             FrmLaunchRight.ForceRefresh()
-                            Hint("已加载主页自定义文件！", HintType.Finish)
+                            Hint(Application.Current.FindResource("LangHintLoadedCustomHomePage"), HintType.Finish)
                         End Sub)
                 Exit Sub
             End If
@@ -838,10 +838,16 @@ Public Class FormMain
                 If PageCurrent = PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
                 If PageCurrent = PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Modable Then
                     '正在选择版本，或当前版本不能安装 Mod
-                    Hint("若要安装 Mod，请先选择一个可以安装 Mod 的版本！")
+                    Hint(Application.Current.FindResource("LangHintChoseLoaderBeforeInstallMod"))
                 ElseIf Not (PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod) Then
                     '未处于 Mod 管理页面
-                    If MyMsgBox($"是否要将这{If(FilePathList.Count = 1, "个", "些")}文件作为 Mod 安装到 {TargetVersion.Name}？", "Mod 安装确认", "确定", "取消") = 1 Then GoTo Install
+                    Dim ModInstallConfirm As Int32
+                    If FilePathList.Count = 1 Then
+                        ModInstallConfirm = MyMsgBox(String.Format(Application.Current.FindResource("LangDialogInstallModContent"), TargetVersion.Name), Application.Current.FindResource("LangDialogInstallModTitle"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel"))
+                    ElseIf FilePathList.Count >= 2 Then
+                        ModInstallConfirm = MyMsgBox(String.Format(Application.Current.FindResource("LangDialogInstallModsContent"), TargetVersion.Name), Application.Current.FindResource("LangDialogInstallModTitle"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel"))
+                    End If
+                    If ModInstallConfirm = 1 Then GoTo Install
                 Else
                     '处于 Mod 管理页面
 Install:
@@ -850,16 +856,16 @@ Install:
                             CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & GetFileNameFromPath(ModFile))
                         Next
                         If FilePathList.Count = 1 Then
-                            Hint($"已安装 {GetFileNameFromPath(FilePathList.First)}！", HintType.Finish)
+                            Hint(String.Format(Application.Current.FindResource("LangHintInstallModSuccessA"), GetFileNameFromPath(FilePathList.First)), HintType.Finish)
                         Else
-                            Hint($"已安装 {FilePathList.Count} 个 Mod！", HintType.Finish)
+                            Hint(String.Format(Application.Current.FindResource("LangHintInstallModSuccessB"), FilePathList.Count), HintType.Finish)
                         End If
                         '刷新列表
                         If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
                             LoaderFolderRun(McModLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
                         End If
                     Catch ex As Exception
-                        Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
+                        Log(ex, Application.Current.FindResource("LangHintInstallModFailed"), LogLevel.Msgbox)
                     End Try
                 End If
                 Exit Sub
@@ -871,7 +877,7 @@ Install:
             End If
             'RAR 处理
             If Extension = "rar" Then
-                Hint("PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试！")
+                Hint(Application.Current.FindResource("LangHintRarNotSupport"))
                 Exit Sub
             End If
             '错误报告分析
@@ -887,7 +893,7 @@ Install:
                 Log(ex, "自主错误报告分析失败", LogLevel.Feedback)
             End Try
             '未知操作
-            Hint("PCL 无法确定应当执行的文件拖拽操作……")
+            Hint(Application.Current.FindResource("LangHintWindowDropUnknown"))
         End Sub, "文件拖拽")
     End Sub
 
@@ -1042,20 +1048,20 @@ Install:
     Private Function PageNameGet(Stack As PageStackData) As String
         Select Case Stack.Page
             Case PageType.VersionSelect
-                Return "版本选择"
+                Return Application.Current.FindResource("LangPageNameVersionChoose")
             Case PageType.DownloadManager
-                Return "下载管理"
+                Return Application.Current.FindResource("LangPageNameDownloadManagement")
             Case PageType.VersionSetup
-                Return "版本设置 - " & If(PageVersionLeft.Version Is Nothing, "未知版本", PageVersionLeft.Version.Name)
+                Return Application.Current.FindResource("LangPageNameVersionConfiguration") & " - " & If(PageVersionLeft.Version Is Nothing, Application.Current.FindResource("LangPageNameVersionConfigurationUnknownVersion"), PageVersionLeft.Version.Name)
             Case PageType.CompDetail
                 Dim Project As CompProject = Stack.Additional(0)
                 Select Case Project.Type
                     Case CompType.Mod
-                        Return "Mod 下载 - " & Project.TranslatedName
+                        Return Application.Current.FindResource("LangPageNameModDownload") & " - " & Project.TranslatedName
                     Case CompType.ModPack
-                        Return "整合包下载 - " & Project.TranslatedName
+                        Return Application.Current.FindResource("LangPageNameModpacksDownload") & " - " & Project.TranslatedName
                     Case Else 'CompType.ResourcePack
-                        Return "资源包下载 - " & Project.TranslatedName
+                        Return Application.Current.FindResource("LangPageNameResourcePacksDownload") & " - " & Project.TranslatedName
                 End Select
             Case PageType.HelpDetail
                 Dim Entry As HelpEntry = Stack.Additional(0)
@@ -1311,7 +1317,7 @@ Install:
 
             Log("[Control] 切换主要页面：" & GetStringFromEnum(Stack) & ", " & SubType)
         Catch ex As Exception
-            Log(ex, "切换主要页面失败（ID " & PageCurrent.Page & "）", LogLevel.Feedback)
+            Log(ex, String.Format(Application.Current.FindResource("LangDialogFailedToChangePage"), PageCurrent.Page), LogLevel.Feedback)
         Finally
             AniControlEnabled -= 1
         End Try
@@ -1488,9 +1494,9 @@ Install:
             For Each Watcher In McWatcherList
                 Watcher.Kill()
             Next
-            Hint("已关闭运行中的 Minecraft！", HintType.Finish)
+            Hint(Application.Current.FindResource("LangHintCloseMinecraftSuccess"), HintType.Finish)
         Catch ex As Exception
-            Log(ex, "强制关闭所有 Minecraft 失败", LogLevel.Feedback)
+            Log(ex, Application.Current.FindResource("LangHintCloseMinecraftFailed"), LogLevel.Feedback)
         End Try
     End Sub
     Public Function BtnExtraShutdown_ShowCheck() As Boolean
@@ -1505,7 +1511,7 @@ Install:
         If RealScroll IsNot Nothing Then
             RealScroll.PerformVerticalOffsetDelta(-RealScroll.VerticalOffset)
         Else
-            Log("[UI] 无法返回顶部，未找到合适的 RealScroll", LogLevel.Hint)
+            Log("[UI] " + Application.Current.FindResource("LangHintBackToTopFailed"), LogLevel.Hint)
         End If
     End Sub
     Private Function BtnExtraBack_ShowCheck() As Boolean
