@@ -41,13 +41,14 @@ Public Class MyLoading
         End Set
     End Property
 
-    Private _Text As String = "加载中"
+    Public Shared ReadOnly TextProperty As DependencyProperty = DependencyProperty.Register("Text", GetType(String), GetType(MyLoading), New PropertyMetadata("加载中"))
+
     Public Property Text As String
         Get
-            Return _Text
+            Return GetValue(TextProperty)
         End Get
         Set(value As String)
-            _Text = value
+            SetValue(TextProperty, value)
             RefreshText()
         End Set
     End Property

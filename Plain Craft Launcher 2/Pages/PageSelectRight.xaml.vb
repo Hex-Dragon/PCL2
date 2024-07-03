@@ -217,7 +217,8 @@
             Dim IsHintIndie As Boolean = Version.State <> McVersionState.Error AndAlso Version.PathIndie <> PathMcFolder
             Dim MsgBoxContent As String = If(IsShiftPressed, Application.Current.FindResource("LangSelectDeleteVersionContentB"), Application.Current.FindResource("LangSelectDeleteVersionContentA")) & If(IsHintIndie, vbCrLf & Application.Current.FindResource("LangSelectDeleteVersionContentC"), "")
             Select Case MyMsgBox(MsgBoxContent, "",
-                        Application.Current.FindResource("LangSelectDeleteVersionTitle"), , Application.Current.FindResource("LangDialogBtnCancel"),, True)
+                        Application.Current.FindResource("LangSelectDeleteVersionTitle"), Application.Current.FindResource("LangDialogBtnCancel"),, True)
+
                 Case 1
                     IniClearCache(Version.Path & "PCL\Setup.ini")
                     If IsShiftPressed Then
@@ -228,6 +229,8 @@
                         Hint(String.Format(Application.Current.FindResource("LangSelectVersionDeletedB"), Version.Name), HintType.Finish)
                     End If
                 Case 2
+                    Exit Sub
+                Case Else
                     Exit Sub
             End Select
             '从 UI 中移除
