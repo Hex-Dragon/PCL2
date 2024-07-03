@@ -272,5 +272,38 @@
 <s:String x:Key="LangSelectHintNameUpdated">The folder name has been updated to </s:String>
 <s:String x:Key="LangSelectFailToRename">Failed to rename folder </s:String>
 <s:String x:Key="LangSelectDownloadingTaskExistsNoChange">You cannot switch game folders while the download task is in progress!</s:String>
+    
+    <!--PageSelectRight-->
+<s:String x:Key="LangSelectNoAvailableVersion">No version available</s:String>
+<s:String x:Key="LangSelectNoAvailableVersionTip">No version of the game was found. Please download any version of the game first.&#xa;If there is an existing game, select "Add Folder" in the list on the left, and select the.minecraft folder to import it.</s:String>
+<s:String x:Key="LangSelectNoAvailableVersionDownloadGame">Download games</s:String>
+<s:String x:Key="LangSelectGettingVersion">Getting version list</s:String>
+<s:String x:Key="LangSelectVersionTypeRegular">Regular Version</s:String>
+<s:String x:Key="LangSelectVersionTypeModAbility">Mod Capacity</s:String>
+<s:String x:Key="LangSelectVersionTypeForge">Forge Instance</s:String>
+<s:String x:Key="LangSelectVersionTypeLiteloader">LiteLoader Instance</s:String>
+<s:String x:Key="LangSelectVersionTypeFabric">Fabric Instance</s:String>
+<s:String x:Key="LangSelectVersionTypeError">Error Instance</s:String>
+<s:String x:Key="LangSelectVersionTypeHidden">Hidden Instance</s:String>
+<s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">Not Commonly Used Instance</s:String>
+<s:String x:Key="LangSelectVersionTypeFavorites">Favorites</s:String>
+<s:String x:Key="LangSelectVersionTypeAprilFool">April Fool's Day Instance</s:String>
+<s:String x:Key="LangSelectVersionTypeUnknown">Unknown card type</s:String>
+<s:String x:Key="LangSelectVersionNoHidden">No hidden instance</s:String>
+<s:String x:Key="LangSelectVersionNoHiddenTip">No Instance is hidden. You can hide the instance in the instance classification option of the instance setting.&#xa;Press F11 again to exit hidden instance viewing mode.</s:String>
+<s:String x:Key="LangSelectVersionListLoadFail">Failed while converting version list to display</s:String>
+<s:String x:Key="LangSelectVersionListLoadIconFail">Failed to load instance icon</s:String>
+<s:String x:Key="LangSelectBtnFavorite">Favorite</s:String>
+<s:String x:Key="LangSelectBtnCancelFavorite">Cancel Favorite</s:String>
+<s:String x:Key="LangSelectBtnSet">Configuration</s:String>
+<s:String x:Key="LangSelectBtnOpenFolder">Open Folder</s:String>
+<s:String x:Key="LangSelectDeleteVersionTitle">Instance deletion confirmation</s:String>
+<s:String x:Key="LangSelectDeleteVersionContentA">Are you sure to delete instance {Version.Name} ?</s:String>
+<s:String x:Key="LangSelectDeleteVersionContentB">Are you sure to delete instance {Version.Name} permanently?</s:String>
+<s:String x:Key="LangSelectDeleteVersionContentC">Since instance isolation is enabled for this instance, archives, resource packs, Mod and other files corresponding to this version will also be deleted when the instance is deleted!</s:String>
+<s:String x:Key="LangSelectVersionDeletedA">Instance {0} has been permanently deleted!</s:String>
+<s:String x:Key="LangSelectVersionDeletedB">Instance {0} has been deleted to the Recycle Bin!</s:String>
+<s:String x:Key="LangSelectVersionDeleteCancelled">Delete instance {0} was actively canceled</s:String>
+<s:String x:Key="LangSelectVersionDeleteFail">Failed to delete instance {0}</s:String>
 
 </ResourceDictionary>

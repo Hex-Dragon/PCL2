@@ -273,4 +273,37 @@
     <s:String x:Key="LangSelectFailToRename">重命名文件夹失败</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoChange">在下载任务进行时，无法切换游戏文件夹！</s:String>
     
+    <!--PageSelectRight-->
+    <s:String x:Key="LangSelectNoAvailableVersion">无可用版本</s:String>
+    <s:String x:Key="LangSelectNoAvailableVersionTip">未找到任何版本的游戏，请先下载任意版本的游戏。&#xa;若有已存在的游戏，请在左边的列表中选择“添加文件夹”，选择 .minecraft 文件夹将其导入。</s:String>
+    <s:String x:Key="LangSelectNoAvailableVersionDownloadGame">下载游戏</s:String>
+    <s:String x:Key="LangSelectGettingVersion">正在获取版本列表</s:String>
+    <s:String x:Key="LangSelectVersionTypeRegular">常规版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeModAbility">可安装 Mod</s:String>
+    <s:String x:Key="LangSelectVersionTypeForge">Forge 版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeLiteloader">LiteLoader 版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeFabric">Fabric 版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeError">错误的版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeHidden">隐藏的版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">不常用版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeFavorites">收藏夹</s:String>
+    <s:String x:Key="LangSelectVersionTypeAprilFool">愚人节版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeUnknown">未知的卡片种类</s:String>
+    <s:String x:Key="LangSelectVersionNoHidden">无隐藏版本</s:String>
+    <s:String x:Key="LangSelectVersionNoHiddenTip">没有版本被隐藏，你可以在版本设置的版本分类选项中隐藏版本。&#xa;再次按下 F11 即可退出隐藏版本查看模式。</s:String>
+    <s:String x:Key="LangSelectVersionListLoadFail">将版本列表转换显示时失败</s:String>
+    <s:String x:Key="LangSelectVersionListLoadIconFail">加载版本图标失败</s:String>
+    <s:String x:Key="LangSelectBtnFavorite">收藏</s:String>
+    <s:String x:Key="LangSelectBtnCancelFavorite">取消收藏</s:String>
+    <s:String x:Key="LangSelectBtnSet">设置</s:String>
+    <s:String x:Key="LangSelectBtnOpenFolder">打开文件夹</s:String>
+    <s:String x:Key="LangSelectDeleteVersionTitle">版本删除确认</s:String>
+    <s:String x:Key="LangSelectDeleteVersionContentA">你确定要删除版本 {Version.Name} 吗？</s:String>
+    <s:String x:Key="LangSelectDeleteVersionContentB">你确定要永久地删除版本 {Version.Name} 吗？</s:String>
+    <s:String x:Key="LangSelectDeleteVersionContentC">由于该版本开启了版本隔离，删除版本时该版本对应的存档、资源包、Mod 等文件也将被一并删除！</s:String>
+    <s:String x:Key="LangSelectVersionDeletedA">版本 {0} 已永久删除！</s:String>
+    <s:String x:Key="LangSelectVersionDeletedB">版本 {0} 已删除到回收站！</s:String>
+    <s:String x:Key="LangSelectVersionDeleteCancelled">删除版本 {0} 被主动取消</s:String>
+    <s:String x:Key="LangSelectVersionDeleteFail">删除版本 {0} 失败</s:String>
+    
 </ResourceDictionary>

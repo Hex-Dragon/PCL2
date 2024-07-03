@@ -296,7 +296,24 @@ Public Class FormMain
             DowngradeSub(LastVersion)
         End If
         '刷新语言
-        Lang = ReadReg("Lang", "zh_CN")
+        Lang = ReadReg("Lang")
+        If String.IsNullOrWhiteSpace(Lang) Then
+            Select Case Globalization.CultureInfo.CurrentCulture.Name
+                Case "zh-CN"
+                    Lang = "zh_CN"
+                Case "zh-HK"
+                    Lang = "zh_HK"
+                Case "zh-TW"
+                    Lang = "zh_HK"
+                Case "en-US"
+                    Lang = "en_US"
+                Case Else
+                    Lang = "en_US"
+            End Select
+        End If
+        WriteReg("Lang", Lang)
+        Log("[Lang] 选择启动器语言为 " & Lang)
+
         Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
         '刷新主题
         ThemeCheckAll(False)
