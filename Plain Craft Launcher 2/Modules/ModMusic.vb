@@ -74,11 +74,19 @@
                             If MusicState = MusicStates.Pause Then
                                 FrmMain.BtnExtraMusic.Logo = Logo.IconPlay
                                 FrmMain.BtnExtraMusic.LogoScale = 0.8
-                                If MusicAllList.Count > 1 Then ToolTipText += vbCrLf & "左键播放，右键播放下一曲。"
+                                If MusicAllList.Count > 1 Then
+                                    ToolTipText += vbCrLf & "左键播放，右键播放下一曲。"
+                                Else
+                                    ToolTipText += vbCrLf & "左键播放，右键从头重新播放。"
+                                End If
                             Else
                                 FrmMain.BtnExtraMusic.Logo = Logo.IconMusic
                                 FrmMain.BtnExtraMusic.LogoScale = 1
-                                If MusicAllList.Count > 1 Then ToolTipText += vbCrLf & "左键暂停，右键播放下一曲。"
+                                If MusicAllList.Count > 1 Then
+                                    ToolTipText += vbCrLf & "左键暂停，右键播放下一曲。"
+                                Else
+                                    ToolTipText += vbCrLf & "左键暂停，右键从头重新播放。"
+                                End If
                             End If
                             FrmMain.BtnExtraMusic.ToolTip = ToolTipText
                             ToolTipService.SetVerticalOffset(FrmMain.BtnExtraMusic, If(ToolTipText.Contains(vbLf), 10, 16))
@@ -115,7 +123,10 @@
     ''' </summary>
     Public Sub MusicControlNext()
         If MusicAllList.Count = 1 Then
-            Hint("播放列表中仅有一首歌曲！")
+            'Hint("播放列表中仅有一首歌曲！")
+            MusicStartPlay(MusicCurrent)
+            Hint("重新播放：" & GetFileNameFromPath(MusicCurrent), HintType.Finish)
+            MusicRefreshUI()
         Else
             Dim Address As String = DequeueNextMusicAddress()
             MusicStartPlay(Address)
