@@ -444,6 +444,25 @@
     <s:String x:Key="LangDownloadModpackInstallFromLocalToolTip">在當前選擇的 Minecraft 文件夾下安裝整合包</s:String>
     <s:String x:Key="LangDownloadModpackType">類型</s:String>
     <s:String x:Key="LangDownloadModpackTypeAll">全部</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllMulti">多人</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllOptimization">性能優化</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllChallenging">硬核</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllCombat">戰鬥</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllQuests">任務</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllTech">科技</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllMagic">魔法</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllAdventure">冒險</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllCook">烹飪</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllExplore">探索</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllGame">小遊戲</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllScienceFiction">科幻</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllSkyland">空島</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllImprove">原版改良</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllFTB">FTB</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllFTBToolTip">由 FTB 官方發布</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllMapBased">基於地圖</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllLightWeight">輕量整合</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">大型整合</s:String>
     
     <!--FormLoginOAuth-->
     <s:String x:Key="LangLoginOAuthLoading">正在加載登錄頁面</s:String>
