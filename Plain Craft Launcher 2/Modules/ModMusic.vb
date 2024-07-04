@@ -1,6 +1,4 @@
-﻿Imports System.Net
-
-Public Module ModMusic
+﻿Public Module ModMusic
 
 #Region "播放列表"
 
