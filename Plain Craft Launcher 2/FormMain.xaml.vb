@@ -319,7 +319,7 @@ Public Class FormMain
         FrmLaunchRight.PageState = MyPageRight.PageStates.ContentStay
         If IsLinkRestart Then PageChange(PageType.Link, PageSubType.LinkIoi)
         '模式提醒
-#If Debug Then
+#If DEBUG Then
         Hint("[开发者模式] PCL 正以开发者模式运行，这可能会造成严重的性能下降，请务必立即向开发者反馈此问题！", HintType.Critical)
 End If
         If ModeDebug Then Hint("[调试模式] PCL 正以调试模式运行，这可能会导致性能下降，若无必要请不要开启！")
