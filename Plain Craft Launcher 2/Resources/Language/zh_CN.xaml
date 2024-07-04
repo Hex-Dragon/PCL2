@@ -389,14 +389,13 @@
     <s:String x:Key="LangDownloadModSearchName">名称</s:String>
     <s:String x:Key="LangDownloadModSearchSource">来源</s:String>
     <s:String x:Key="LangDownloadModSearchSourceAll">全部</s:String>
-    <s:String x:Key="LangDownloadModSearchSourceCF">CurseForge</s:String>
-    <s:String x:Key="LangDownloadModSearchSourceM">Modrinth</s:String>
     <s:String x:Key="LangDownloadModSearchVersion">版本</s:String>
     <s:String x:Key="LangDownloadModSearchVersionAll">全部 (也可自行输入)</s:String>
     <s:String x:Key="LangDownloadModSearchLoader">任意 Mod 加载器</s:String>
     <s:String x:Key="LangDownloadModSearch">搜索</s:String>
     <s:String x:Key="LangDownloadModReset">重置条件</s:String>
     <s:String x:Key="LangDownloadModGettingList">正在获取 Mod 列表</s:String>
+    <s:String x:Key="LangDownloadModType">类型</s:String>
     <s:String x:Key="LangDownloadModTypeAll">全部</s:String>
     <s:String x:Key="LangDownloadModTypeWorldElement">世界元素</s:String>
     <s:String x:Key="LangDownloadModTypeBiome">生物群系</s:String>
@@ -423,6 +422,47 @@
     <s:String x:Key="LangDownloadModTypeServer">服务器</s:String>
     <s:String x:Key="LangDownloadModTypeUtility">改良</s:String>
     <s:String x:Key="LangDownloadModTypeLib">支持库</s:String>
+    
+    <!--PageDownloadOptiFine-->
+    <s:String x:Key="LangDownloadOptiFineDescTitle">OptiFine 简介</s:String>
+    <s:String x:Key="LangDownloadOptiFineDesc">OptiFine 又名高清修复，它让你可以安装光影、使用高清材质，并且可以大幅提高游戏性能。</s:String>
+    <s:String x:Key="LangDownloadOptiFineWebsite">打开官网</s:String>
+    <s:String x:Key="LangDownloadOptiFineChineseWebsite">打开中文网</s:String>
+    <s:String x:Key="LangDownloadOptiFineGettingList">正在获取 OptiFine 列表</s:String>
+    
+    <!--PageDownloadPack-->
+    <s:String x:Key="LangDownloadModpackSearchTitle">搜索整合包</s:String>
+    <s:String x:Key="LangDownloadModpackSearchName">名称</s:String>
+    <s:String x:Key="LangDownloadModpackSearchSource">来源</s:String>
+    <s:String x:Key="LangDownloadModpackSearchSourceAll">全部</s:String>
+    <s:String x:Key="LangDownloadModpackSearchVersion">版本</s:String>
+    <s:String x:Key="LangDownloadModpackSearchVersionAll">全部 (也可自行输入)</s:String>
+    <s:String x:Key="LangDownloadModpackSearch">搜索</s:String>
+    <s:String x:Key="LangDownloadModpackReset">重置条件</s:String>
+    <s:String x:Key="LangDownloadModpackGettingList">正在获取整合包列表</s:String>
+    <s:String x:Key="LangDownloadModpackInstallFromLocal">安装已有整合包</s:String>
+    <s:String x:Key="LangDownloadModpackInstallFromLocalToolTip">在当前选择的 Minecraft 文件夹下安装整合包</s:String>
+    <s:String x:Key="LangDownloadModpackType">类型</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAll">全部</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllMulti">多人</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllOptimization">性能优化</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllChallenging">硬核</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllCombat">战斗</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllQuests">任务</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllTech">科技</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllMagic">魔法</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllAdventure">冒险</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllCook">烹饪</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllExplore">探索</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllGame">小游戏</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllScienceFiction">科幻</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllSkyland">空岛</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllImprove">原版改良</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllFTB">FTB</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllFTBToolTip">由 FTB 官方发布</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllMapBased">基于地图</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllLightWeight">轻量整合</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">大型整合</s:String>
     
     <!--FormLoginOAuth-->
     <s:String x:Key="LangLoginOAuthLoading">正在加载登录页面</s:String>

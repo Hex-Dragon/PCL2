@@ -389,8 +389,6 @@
     <s:String x:Key="LangDownloadModSearchName">Name</s:String>
     <s:String x:Key="LangDownloadModSearchSource">Source</s:String>
     <s:String x:Key="LangDownloadModSearchSourceAll">All</s:String>
-    <s:String x:Key="LangDownloadModSearchSourceCF">CurseForge</s:String>
-    <s:String x:Key="LangDownloadModSearchSourceM">Modrinth</s:String>
     <s:String x:Key="LangDownloadModSearchVersion">Version</s:String>
     <s:String x:Key="LangDownloadModSearchVersionAll">All (You can also enter yourself)</s:String>
     <s:String x:Key="LangDownloadModSearchLoader">Any Mod loader</s:String>
@@ -398,6 +396,7 @@
     <s:String x:Key="LangDownloadModReset">Reset</s:String>
     <s:String x:Key="LangDownloadModGettingList">Getting Mod list</s:String>
     <s:String x:Key="LangDownloadModTypeAll">All</s:String>
+    <s:String x:Key="LangDownloadModType">Type</s:String>
 <s:String x:Key="LangDownloadModTypeWorldElement">World Generation</s:String>
 <s:String x:Key="LangDownloadModTypeBiome">Biome</s:String>
 <s:String x:Key="LangDownloadModTypeDimension">Dimension</s:String>
@@ -423,6 +422,47 @@
 <s:String x:Key="LangDownloadModTypeServer">Server</s:String>
 <s:String x:Key="LangDownloadModTypeUtility">Utility</s:String>
 <s:String x:Key="LangDownloadModTypeLib">Library</s:String>
+    
+        <!--PageDownloadOptiFine-->
+    <s:String x:Key="LangDownloadOptiFineDescTitle">Introduce to OptiFine</s:String>
+    <s:String x:Key="LangDownloadOptiFineDesc">OptiFine, also known as HD repair, allows you to install light and shadow, use HD materials, and significantly improve game performance.</s:String>
+    <s:String x:Key="LangDownloadOptiFineWebsite">Open the official website</s:String>
+    <s:String x:Key="LangDownloadOptiFineChineseWebsite">Open the Chinese website</s:String>
+    <s:String x:Key="LangDownloadOptiFineGettingList">Getting OptiFine list</s:String>
+    
+    <!--PageDownloadPack-->
+    <s:String x:Key="LangDownloadModpackSearchTitle">Search Modpacks</s:String>
+    <s:String x:Key="LangDownloadModpackSearchName">Name</s:String>
+    <s:String x:Key="LangDownloadModpackSearchSource">Source</s:String>
+    <s:String x:Key="LangDownloadModpackSearchSourceAll">All</s:String>
+    <s:String x:Key="LangDownloadModpackSearchVersion">Version</s:String>
+    <s:String x:Key="LangDownloadModpackSearchVersionAll">All (You can also enter yourself)</s:String>
+    <s:String x:Key="LangDownloadModpackSearch">Search</s:String>
+    <s:String x:Key="LangDownloadModpackReset">Reset</s:String>
+    <s:String x:Key="LangDownloadModpackGettingList">Getting modpack list</s:String>
+    <s:String x:Key="LangDownloadModpackInstallFromLocal">Install existing modpack</s:String>
+    <s:String x:Key="LangDownloadModpackInstallFromLocalToolTip">Install the modpack under the currently selected Minecraft folder</s:String>
+    <s:String x:Key="LangDownloadModpackType">Type</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAll">All</s:String>
+        <s:String x:Key="LangDownloadModpackTypeAllMulti">Multiplayer</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllOptimization">Optimization</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllChallenging">Challenging</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllCombat">Combat</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllQuests">Quests</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllTech">Technology</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllMagic">Magic</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllAdventure">Adventure</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllCook">Kitchen sink</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllExplore">Explore</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllGame">Mini games</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllScienceFiction">Science fiction</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllSkyland">Skyland</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllImprove">Improvement</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllFTB">FTB</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllFTBToolTip">Officially released by FTB</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllMapBased">Map-based</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllLightWeight">Lightweight</s:String>
+    <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">Large consolidation</s:String>
     
 <!--FormLoginOAuth-->
 <s:String x:Key="LangLoginOAuthLoading">Loading login page</s:String>

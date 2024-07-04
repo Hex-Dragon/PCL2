@@ -27,8 +27,8 @@
                         <TextBlock VerticalAlignment="Center" Grid.Column="4" HorizontalAlignment="Left" Text="{DynamicResource LangDownloadModSearchSource}" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="ComboSearchSource" Grid.Column="5">
                             <local:MyComboBoxItem Content="{DynamicResource LangDownloadModSearchSourceAll}" Tag="3" IsSelected="True" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangDownloadModSearchSourceCF}" Tag="1" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangDownloadModSearchSourceM}" Tag="2" />
+                            <local:MyComboBoxItem Content="CurseForge" Tag="1" />
+                            <local:MyComboBoxItem Content="Modrinth" Tag="2" />
                         </local:MyComboBox>
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="{DynamicResource LangDownloadModSearchVersion}" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" IsEditable="True" MaxDropDownHeight="320">
@@ -56,7 +56,7 @@
                             <local:MyComboBoxItem Content="Quilt" Tag="5" />
                             <local:MyComboBoxItem Content="NeoForge" Tag="6" />
                         </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Left" Text="类型" Margin="0,0,18,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Left" Text="{DynamicResource LangDownloadModType}" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="5" Grid.Row="2" MaxDropDownHeight="320">
                             <local:MyComboBoxItem Content="{DynamicResource LangDownloadModTypeAll}" Tag="" IsSelected="True" />
                             <local:MyComboBoxItem Content="{DynamicResource LangDownloadModTypeWorldElement}" Tag="406/worldgen" />

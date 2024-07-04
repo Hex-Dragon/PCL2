@@ -6,7 +6,7 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel Orientation="Vertical" Margin="25">
-            <local:MyCard Title="搜索整合包" Margin="0,0,0,15" x:Name="PanAlways">
+            <local:MyCard Title="{DynamicResource LangDownloadModpackSearchTitle}" Margin="0,0,0,15" x:Name="PanAlways">
                 <StackPanel Margin="25,40,25,15">
                     <Grid Margin="0,0,0,11" HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
@@ -21,17 +21,17 @@
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
                         </Grid.RowDefinitions>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="名称" Margin="0,0,18,0" />
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangDownloadModpackSearchName}" Margin="0,0,18,0" />
                         <local:MyTextBox x:Name="TextSearchName" Grid.Column="1" />
-                        <TextBlock VerticalAlignment="Center" Grid.Column="3" HorizontalAlignment="Left" Text="来源" Margin="0,0,18,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Column="3" HorizontalAlignment="Left" Text="{DynamicResource LangDownloadModpackSearchSource}" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="ComboSearchSource" Grid.Column="4">
-                            <local:MyComboBoxItem Content="全部" Tag="3" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{DynamicResource LangDownloadModpackSearchSourceAll}" Tag="3" IsSelected="True" />
                             <local:MyComboBoxItem Content="CurseForge" Tag="1" />
                             <local:MyComboBoxItem Content="Modrinth" Tag="2" />
                         </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="版本" Margin="0,0,18,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="{DynamicResource LangDownloadModpackSearchVersion}" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="1" IsEditable="True" MaxDropDownHeight="320">
-                            <local:MyComboBoxItem Content="全部 (也可自行输入)" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{DynamicResource LangDownloadModpackSearchVersionAll}" IsSelected="True" />
                             <local:MyComboBoxItem Content="1.20.6" />
                             <local:MyComboBoxItem Content="1.20.4" />
                             <local:MyComboBoxItem Content="1.20.1" />
@@ -48,28 +48,28 @@
                             <local:MyComboBoxItem Content="1.8.9" />
                             <local:MyComboBoxItem Content="1.7.10" />
                         </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="类型" Margin="0,0,18,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="{DynamicResource LangDownloadModpackType}" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="4" Grid.Row="2" MaxDropDownHeight="320">
-                            <local:MyComboBoxItem Tag="" Content="全部" IsSelected="True" />
-                            <local:MyComboBoxItem Tag="4484/" Content="多人" />
-                            <local:MyComboBoxItem Tag="/optimization" Content="性能优化" />
-                            <local:MyComboBoxItem Tag="4479/challenging" Content="硬核" />
-                            <local:MyComboBoxItem Tag="4483/combat" Content="战斗" />
-                            <local:MyComboBoxItem Tag="4478/quests" Content="任务" />
-                            <local:MyComboBoxItem Tag="4472/technology" Content="科技" />
-                            <local:MyComboBoxItem Tag="4473/magic" Content="魔法" />
-                            <local:MyComboBoxItem Tag="4475/adventure" Content="冒险" />
-                            <local:MyComboBoxItem Tag="/kitchen-sink" Content="烹饪" />
-                            <local:MyComboBoxItem Tag="4476/" Content="探索" />
-                            <local:MyComboBoxItem Tag="4477/" Content="小游戏" />
-                            <local:MyComboBoxItem Tag="4471/" Content="科幻" />
-                            <local:MyComboBoxItem Tag="4736/" Content="空岛" />
-                            <local:MyComboBoxItem Tag="5128/" Content="原版改良" />
-                            <local:MyComboBoxItem Tag="4487/" Content="FTB" 
-                                                  ToolTip="由 FTB 官方发布" ToolTipService.HorizontalOffset="70" />
-                            <local:MyComboBoxItem Tag="4480/" Content="基于地图" />
-                            <local:MyComboBoxItem Tag="4481/lightweight" Content="轻量整合" />
-                            <local:MyComboBoxItem Tag="4482/" Content="大型整合" />
+                            <local:MyComboBoxItem Tag="" Content="{DynamicResource LangDownloadModpackTypeAll}" IsSelected="True" />
+                            <local:MyComboBoxItem Tag="4484/" Content="{DynamicResource LangDownloadModpackTypeAllMulti}" />
+                            <local:MyComboBoxItem Tag="/optimization" Content="{DynamicResource LangDownloadModpackTypeAllOptimization}" />
+                            <local:MyComboBoxItem Tag="4479/challenging" Content="{DynamicResource LangDownloadModpackTypeAllChallenging}" />
+                            <local:MyComboBoxItem Tag="4483/combat" Content="{DynamicResource LangDownloadModpackTypeAllCombat}" />
+                            <local:MyComboBoxItem Tag="4478/quests" Content="{DynamicResource LangDownloadModpackTypeAllQuests}" />
+                            <local:MyComboBoxItem Tag="4472/technology" Content="{DynamicResource LangDownloadModpackTypeAllTech}" />
+                            <local:MyComboBoxItem Tag="4473/magic" Content="{DynamicResource LangDownloadModpackTypeAllMagic}" />
+                            <local:MyComboBoxItem Tag="4475/adventure" Content="{DynamicResource LangDownloadModpackTypeAllAdventure}" />
+                            <local:MyComboBoxItem Tag="/kitchen-sink" Content="{DynamicResource LangDownloadModpackTypeAllCook}" />
+                            <local:MyComboBoxItem Tag="4476/" Content="{DynamicResource LangDownloadModpackTypeAllExplore}" />
+                            <local:MyComboBoxItem Tag="4477/" Content="{DynamicResource LangDownloadModpackTypeAllGame}" />
+                            <local:MyComboBoxItem Tag="4471/" Content="{DynamicResource LangDownloadModpackTypeAllScienceFiction}" />
+                            <local:MyComboBoxItem Tag="4736/" Content="{DynamicResource LangDownloadModpackTypeAllSkyland}" />
+                            <local:MyComboBoxItem Tag="5128/" Content="{DynamicResource LangDownloadModpackTypeAllImprove}" />
+                            <local:MyComboBoxItem Tag="4487/" Content="{DynamicResource LangDownloadModpackTypeAllFTB}" 
+                                                  ToolTip="{DynamicResource LangDownloadModpackTypeAllFTBToolTip}" ToolTipService.HorizontalOffset="70" />
+                            <local:MyComboBoxItem Tag="4480/" Content="{DynamicResource LangDownloadModpackTypeAllMapBased}" />
+                            <local:MyComboBoxItem Tag="4481/lightweight" Content="{DynamicResource LangDownloadModpackTypeAllLightWeight}" />
+                            <local:MyComboBoxItem Tag="4482/" Content="{DynamicResource LangDownloadModpackTypeAllHeavyWeight}" />
                         </local:MyComboBox>
                     </Grid>
                     <Grid Margin="0,4,0,6" Height="35">
@@ -78,10 +78,10 @@
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnSearchRun" Text="搜索" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Highlight" />
-                        <local:MyButton x:Name="BtnSearchReset" Text="重置条件" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" />
-                        <local:MyButton x:Name="BtnSearchInstall" Text="安装已有整合包" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="2" 
-                                        ToolTip="在当前选择的 Minecraft 文件夹下安装整合包" ToolTipService.HorizontalOffset="-55" ToolTipService.VerticalOffset="5" />
+                        <local:MyButton x:Name="BtnSearchRun" Text="{DynamicResource LangDownloadModpackSearch}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Highlight" />
+                        <local:MyButton x:Name="BtnSearchReset" Text="{DynamicResource LangDownloadModpackReset}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" />
+                        <local:MyButton x:Name="BtnSearchInstall" Text="{DynamicResource LangDownloadModpackInstallFromLocal}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="2" 
+                                        ToolTip="{DynamicResource LangDownloadModpackInstallFromLocalToolTip}" ToolTipService.HorizontalOffset="-55" ToolTipService.VerticalOffset="5" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
@@ -104,7 +104,7 @@
                 </local:MyCard>
             </StackPanel>
             <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
-                <local:MyLoading Text="正在获取整合包列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <local:MyLoading Text="{DynamicResource LangDownloadModpackGettingList}" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </local:MyCard>
         </StackPanel>
     </local:MyScrollViewer>
