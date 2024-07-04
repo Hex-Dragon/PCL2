@@ -143,7 +143,7 @@
         PanIntro.Children.Insert(0, CompItem)
 
         '决定按钮显示
-        BtnIntroWeb.Text = If(Project.FromCurseForge, "转到 CurseForge", "转到 Modrinth")
+        BtnIntroWeb.Text = If(Project.FromCurseForge, Application.Current.FindResource("LangDownloadCompToCurseForge"), Application.Current.FindResource("LangDownloadCompToModrinth"))
         BtnIntroWiki.Visibility = If(Project.WikiId = 0, Visibility.Collapsed, Visibility.Visible)
 
         AniControlEnabled -= 1

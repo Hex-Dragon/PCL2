@@ -320,6 +320,7 @@
     
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">转到 CurseForge</s:String>
+    <s:String x:Key="LangDownloadCompToModrinth">转到 Modrinth</s:String>
     <s:String x:Key="LangDownloadCompToMCMod">转到 MC 百科</s:String>
     <s:String x:Key="LangDownloadCompCopyName">复制名称</s:String>
     <s:String x:Key="LangDownloadCompLoadingList">正在获取版本列表</s:String>
@@ -363,6 +364,65 @@
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">版本隔离提示</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieContent">你尚未开启版本隔离，这会导致多个 MC 共用同一个 Mod 文件夹。&#xa;因此在切换 MC 版本时，MC 会因为读取到与当前版本不符的 Mod 而崩溃。&#xa;PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔离选项！</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">取消下载</s:String>
+    <s:String x:Key="LangDownloadInstallNoAdd">无附加安装</s:String>
+    
+    <!--PageDownloadLeft-->
+    <s:String x:Key="LangDownloadPageRefresh">刷新</s:String>
+    <s:String x:Key="LangDownloadPageAutoInstall">自动安装</s:String>
+    <s:String x:Key="LangDownloadPageManualInstall">▼ 手动安装包</s:String>
+        <s:String x:Key="LangDownloadPageDialogManualInstallContent">手动安装包功能提供了 OptiFine、Forge 等组件的 .jar 安装文件下载，但无法自动安装。&#xa;在自动安装页面先选择 MC 版本，然后就可以选择 OptiFine、Forge 等组件，让 PCL 自动进行安装了。</s:String>
+    <s:String x:Key="LangDownloadPageDialogManualInstallTitle">自动安装提示</s:String>
+    <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">返回自动安装</s:String>
+    <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">继续下载手动安装包</s:String>
+    <s:String x:Key="LangDownloadPageManualInstallFold">手动安装包</s:String>
+    <s:String x:Key="LangDownloadPageResource">资源</s:String>
+    <s:String x:Key="LangDownloadPageModpackages">整合包</s:String>
+        
+    <!--PageDownloadLiteLoader-->
+    <s:String x:Key="LangDownloadLiteloaderDescTitle">LiteLoader 简介</s:String>
+        <s:String x:Key="LangDownloadLiteloaderDesc">与 Forge 类似，LiteLoader 可以用于加载老版本 Minecraft 中的 LiteLoader 模组。</s:String>
+    <s:String x:Key="LangDownloadLiteloaderWebsite">打开官网</s:String>
+    <s:String x:Key="LangDownloadLiteloaderGettingList">正在获取 LiteLoader 列表</s:String>
+    
+    <!--PageDownloadMod-->
+    <s:String x:Key="LangDownloadModSearchTitle">搜索 Mod</s:String>
+    <s:String x:Key="LangDownloadModSearchName">名称</s:String>
+    <s:String x:Key="LangDownloadModSearchSource">来源</s:String>
+    <s:String x:Key="LangDownloadModSearchSourceAll">全部</s:String>
+    <s:String x:Key="LangDownloadModSearchSourceCF">CurseForge</s:String>
+    <s:String x:Key="LangDownloadModSearchSourceM">Modrinth</s:String>
+    <s:String x:Key="LangDownloadModSearchVersion">版本</s:String>
+    <s:String x:Key="LangDownloadModSearchVersionAll">全部 (也可自行输入)</s:String>
+    <s:String x:Key="LangDownloadModSearchLoader">任意 Mod 加载器</s:String>
+    <s:String x:Key="LangDownloadModSearch">搜索</s:String>
+    <s:String x:Key="LangDownloadModReset">重置条件</s:String>
+    <s:String x:Key="LangDownloadModGettingList">正在获取 Mod 列表</s:String>
+    <s:String x:Key="LangDownloadModTypeAll">全部</s:String>
+    <s:String x:Key="LangDownloadModTypeWorldElement">世界元素</s:String>
+    <s:String x:Key="LangDownloadModTypeBiome">生物群系</s:String>
+    <s:String x:Key="LangDownloadModTypeDimension">维度</s:String>
+    <s:String x:Key="LangDownloadModTypeMineral">矿物与资源</s:String>
+    <s:String x:Key="LangDownloadModTypeStructure">天然结构</s:String>
+    <s:String x:Key="LangDownloadModTypeTech">科技</s:String>
+    <s:String x:Key="LangDownloadModTypePipe">管道与物流</s:String>
+    <s:String x:Key="LangDownloadModTypeAuto">自动化</s:String>
+    <s:String x:Key="LangDownloadModTypeEnergy">能源</s:String>
+    <s:String x:Key="LangDownloadModTypeRedstone">红石</s:String>
+    <s:String x:Key="LangDownloadModTypeFood">食物与烹饪</s:String>
+    <s:String x:Key="LangDownloadModTypeAgriculture">农业</s:String>
+    <s:String x:Key="LangDownloadModTypeGameMechanics">游戏机制</s:String>
+    <s:String x:Key="LangDownloadModTypeTransportation">运输</s:String>
+    <s:String x:Key="LangDownloadModTypeStorage">仓储</s:String>
+    <s:String x:Key="LangDownloadModTypeMagic">魔法</s:String>
+    <s:String x:Key="LangDownloadModTypeAdventure">冒险</s:String>
+    <s:String x:Key="LangDownloadModTypeDecoration">装饰</s:String>
+    <s:String x:Key="LangDownloadModTypeMobs">生物</s:String>
+    <s:String x:Key="LangDownloadModTypeEquipment">装备与工具</s:String>
+    <s:String x:Key="LangDownloadModTypeOptimization">性能优化</s:String>
+    <s:String x:Key="LangDownloadModTypeDisplay">信息显示</s:String>
+    <s:String x:Key="LangDownloadModTypeServer">服务器</s:String>
+    <s:String x:Key="LangDownloadModTypeUtility">改良</s:String>
+    <s:String x:Key="LangDownloadModTypeLib">支持库</s:String>
     
     <!--FormLoginOAuth-->
     <s:String x:Key="LangLoginOAuthLoading">正在加载登录页面</s:String>

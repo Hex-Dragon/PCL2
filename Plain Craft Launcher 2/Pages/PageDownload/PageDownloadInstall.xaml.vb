@@ -476,7 +476,7 @@
         If SelectedOptiFine IsNot Nothing Then
             Info += ", OptiFine " & SelectedOptiFine.NameDisplay.Replace(SelectedMinecraftId & " ", "")
         End If
-        If Info = "" Then Info = ", 无附加安装"
+        If Info = "" Then Info = "," & Application.Current.FindResource("LangDownloadInstallNoAdd")
         Return Info.TrimStart(", ".ToCharArray())
     End Function
     ''' <summary>

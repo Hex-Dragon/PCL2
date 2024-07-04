@@ -140,15 +140,14 @@
         AniControlEnabled += 1
         If Not Setup.Get("HintHandInstall") Then
             Setup.Set("HintHandInstall", True)
-            If MyMsgBox("手动安装包功能提供了 OptiFine、Forge 等组件的 .jar 安装文件下载，但无法自动安装。" & vbCrLf &
-                        "在自动安装页面先选择 MC 版本，然后就可以选择 OptiFine、Forge 等组件，让 PCL 自动进行安装了。", "自动安装提示", "返回自动安装", "继续下载手动安装包") = 1 Then
+            If MyMsgBox(Application.Current.FindResource("LangDownloadPageDialogManualInstallContent"), Application.Current.FindResource("LangDownloadPageDialogManualInstallTitle"), Application.Current.FindResource("LangDownloadPageDialogManualInstallBtn1"), Application.Current.FindResource("LangDownloadPageDialogManualInstallBtn2")) = 1 Then
                 FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.Download}, FormMain.PageSubType.DownloadInstall)
                 AniControlEnabled -= 1
                 Exit Sub
             End If
         End If
         ItemHand.Visibility = Visibility.Collapsed
-        LabGame.Visibility = Visibility.Collapsed
+        'LabGame.Visibility = Visibility.Collapsed
         LabHand.Visibility = Visibility.Visible
         ItemClient.Visibility = Visibility.Visible
         ItemOptiFine.Visibility = Visibility.Visible
@@ -166,7 +165,7 @@
         e.Handled = True
         AniControlEnabled += 1
         ItemHand.Visibility = Visibility.Visible
-        LabGame.Visibility = Visibility.Visible
+        'LabGame.Visibility = Visibility.Visible
         LabHand.Visibility = Visibility.Collapsed
         ItemClient.Visibility = Visibility.Collapsed
         ItemOptiFine.Visibility = Visibility.Collapsed
