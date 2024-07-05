@@ -183,6 +183,7 @@ Retry:
 
         '获取 Mod API 版本信息
         Dim ForgeVersion As String = Nothing
+        Dim NeoForgeVersion As String = Nothing
         Dim FabricVersion As String = Nothing
         For Each Entry In If(Json("minecraft")("modLoaders"), {})
             Dim Id As String = If(Entry("id"), "").ToString.ToLower
@@ -198,6 +199,15 @@ Retry:
                     Exit For
                 Catch ex As Exception
                     Log(ex, "读取整合包 Forge 版本失败：" & Id)
+                End Try
+            ElseIf Id.StartsWithF("neoforge-") Then
+                'NeoForge 指定
+                Try
+                    Log("[ModPack] 整合包 NeoForge 版本：" & Id)
+                    NeoForgeVersion = Id.Split("-")(1)
+                    Exit For
+                Catch ex As Exception
+                    Log(ex, "读取整合包 NeoForge 版本失败：" & Id)
                 End Try
             ElseIf Id.StartsWithF("fabric-") Then
                 'Fabric 指定
@@ -301,6 +311,7 @@ Retry:
             .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\",
             .MinecraftName = Json("minecraft")("version").ToString,
             .ForgeVersion = ForgeVersion,
+            .NeoForgeVersion = NeoForgeVersion,
             .FabricVersion = FabricVersion
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
@@ -368,6 +379,7 @@ Retry:
         '获取 Mod API 版本信息
         Dim MinecraftVersion As String = Nothing
         Dim ForgeVersion As String = Nothing
+        Dim NeoForgeVersion As String = Nothing
         Dim FabricVersion As String = Nothing
         For Each Entry As JProperty In If(Json("dependencies"), {})
             Select Case Entry.Name.ToLower
@@ -376,6 +388,9 @@ Retry:
                 Case "forge" 'eg. 14.23.5.2859 / 1.19-41.1.0
                     ForgeVersion = Entry.Value.ToString
                     Log("[ModPack] 整合包 Forge 版本：" & ForgeVersion)
+                Case "neoforge", "neo-forge" 'eg. 20.6.98-beta
+                    NeoForgeVersion = Entry.Value.ToString
+                    Log("[ModPack] 整合包 NeoForge 版本：" & NeoForgeVersion)
                 Case "fabric-loader" 'eg. 0.14.14
                     FabricVersion = Entry.Value.ToString
                     Log("[ModPack] 整合包 Fabric 版本：" & FabricVersion)
@@ -447,6 +462,7 @@ Retry:
             .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\",
             .MinecraftName = MinecraftVersion,
             .ForgeVersion = ForgeVersion,
+            .NeoForgeVersion = NeoForgeVersion,
             .FabricVersion = FabricVersion
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
@@ -676,6 +692,8 @@ Retry:
                     Request.MinecraftName = Component("version")
                 Case "net.minecraftforge"
                     Request.ForgeVersion = Component("version")
+                Case "net.neoforged"
+                    Request.NeoForgeVersion = Component("version")
                 Case "net.fabricmc.fabric-loader"
                     Request.FabricVersion = Component("version")
                 Case "org.quiltmc.quilt-loader" 'eg. 1.0.0
@@ -772,6 +790,7 @@ Retry:
             .MinecraftName = Addons("game"),
             .OptiFineVersion = If(Addons.ContainsKey("optifine"), Addons("optifine"), Nothing),
             .ForgeVersion = If(Addons.ContainsKey("forge"), Addons("forge"), Nothing),
+            .NeoForgeVersion = If(Addons.ContainsKey("neoforge"), Addons("neoforge"), Nothing),
             .FabricVersion = If(Addons.ContainsKey("fabric"), Addons("fabric"), Nothing)
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
