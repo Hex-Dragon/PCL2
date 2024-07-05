@@ -464,6 +464,46 @@
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">Lightweight</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">Large consolidation</s:String>
     
+    <!--MySkin-->
+        <s:String x:Key="LangMySkinSave">save as</s:String>
+    <s:String x:Key="LangMySkinRefresh">refresh</s:String>
+    <s:String x:Key="LangMySkinChange">Change your cape</s:String>
+    <s:String x:Key="LangMySkinLoading">loading in the</s:String>
+    <s:String x:Key="LangMySkinClickToChange">Click to replace skin (right click to view more options)</s:String>
+    <s:String x:Key="LangMySkinHintLoading">Skin is being obtained, please wait! </s:String>
+    <s:String x:Key="LangMySkinDialogChoseSavePath">Select where to save the skin</s:String>
+    <s:String x:Key="LangMySkinHintSaveSuccess">Skin preservation successfully! </s:String>
+    <s:String x:Key="LangMySkinHintSaveFail">Failure to preserve skin</s:String>
+    <s:String x:Key="LangMySkinHintSkinFileCorruption">Skin file is damaged:</s:String>
+    <s:String x:Key="LangMySkinHintExistSkinFileGetTask">There are skins being obtained. Please try again later! </s:String>
+    <s:String x:Key="LangMySkinHintRefreshing">Updating avatar...</s:String>
+    <s:String x:Key="LangMySkinHintRefreshed">Avatar has been refreshed! </s:String>
+    <s:String x:Key="LangMySkinHintRefreshFail">Failed to refresh skin cache</s:String>
+    <s:String x:Key="LangMySkinHintChangeSuccess">Change skin successfully! </s:String>
+    <s:String x:Key="LangMySkinHintChanging">Changing the cape, please wait! </s:String>
+    <s:String x:Key="LangMySkinHintChangFailByLoginFail">Login failed and the cape cannot be changed! </s:String>
+    <s:String x:Key="LangMySkinHintGettingCape">Getting the list of capes, please wait...</s:String>
+    <s:String x:Key="LangMySkinDialogChooseCape">Choose a cape</s:String>
+    <s:String x:Key="LangMySkinHintChangeCapeFail">Changing cape failed</s:String>
+    <s:String x:Key="LangMySkinHintChangeCapeSuccess">Changing the cape successfully! </s:String>
+        <s:String x:Key="LangMySkinCapeNameMigrator">Migrants 'Cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameMapMaker">Realms Map Maker Cloak</s:String>
+    <s:String x:Key="LangMySkinCapeNameModerator">Mojira Administrator Cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameTranslator-Chinese">Crowdin Chinese translator cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameTranslator">Crowdin Translator's Cloak</s:String>
+    <s:String x:Key="LangMySkinCapeNameCobalt">Cobalt cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameVanilla">Original cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2011">Minecon 2011 participant cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2012">Minecon 2012 participant cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2013">Minecon 2013 participant cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2015">Minecon 2015 participant cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2016">Minecon 2016 participant cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameCherryBlossom">Sakura cape</s:String>
+    <s:String x:Key="LangMySkinCapeName15th-Anniversary">15th anniversary cape</s:String>
+    <s:String x:Key="LangMySkinCapeNamePurpleHeart">Purple heart-shaped cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameFollower's">Follower Cloak</s:String>
+    <s:String x:Key="LangMySkinCapeNameNone">No cape</s:String>
+    
 <!--FormLoginOAuth-->
 <s:String x:Key="LangLoginOAuthLoading">Loading login page</s:String>
 <s:String x:Key="LangLoginOAuthLoadingTipA">If the network environment is not good, loading may be very slow or even impossible to load</s:String>
@@ -472,4 +512,41 @@
 <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL does not support using GitHub to log in to Microsoft accounts!</s:String>
 <s:String x:Key="LangLoginOAuthWindowTitle">Microsoft account login</s:String>
     
+        <!--PageLaunchLeft-->
+    <s:String x:Key="LangLaunchLeftInstanceChoose">Selection</s:String>
+    <s:String x:Key="LangLaunchLeftInstanceConfig">Config</s:String>
+    <s:String x:Key="LangLaunchLeftAccountMicrosoft">Microsoft</s:String>
+    <s:String x:Key="LangLaunchLeftAccountUnifiedPass">Unified pass</s:String>
+    <s:String x:Key="LangLaunchLeftAccountOffline">Offline</s:String>
+    <s:String x:Key="LangLaunchLeftLoadingInstance">Loading</s:String>
+    <s:String x:Key="LangLaunchLeftLoadingInstanceTip">Please wait while the version list is loading</s:String>
+    <s:String x:Key="LangLaunchLeftStartingInstance">Starting game</s:String>
+    <s:String x:Key="LangLaunchLeftStartingStage">Current step</s:String>
+    <s:String x:Key="LangLaunchLeftStageDownloadLib">Download libraries</s:String>
+    <s:String x:Key="LangLaunchLeftStageLogin">Login method</s:String>
+    <s:String x:Key="LangLaunchLeftStageMicrosoftAccount">Microsoft login</s:String>
+    <s:String x:Key="LangLaunchLeftStageStarting">Start-up progress</s:String>
+    <s:String x:Key="LangLaunchLeftStageDownload">Download speed</s:String>
+    <s:String x:Key="LangLaunchLeftTip">Tips</s:String>
+    <s:String x:Key="LangLaunchLeftInit">Initialization</s:String>
+<s:String x:Key="LangLaunchLeftAccountOfflineLinkLogin">Online and offline login</s:String>
+<s:String x:Key="LangLaunchLeftAccountOfflineLogin">Offline Login</s:String>
+<s:String x:Key="LangLaunchLeftAccountMicrosoftLogin">Microsoft Login</s:String>
+<s:String x:Key="LangLaunchLeftAccountUnifiedPassLogin">Unified pass login</s:String>
+<s:String x:Key="LangLaunchLeftAccountThirdPartLogin">Third party logging</s:String>
+<s:String x:Key="LangLaunchLeftSkinNotFound">The offline skin customization file was not found, it may have been deleted. PCL will use the default Steve skin! </s:String>
+<s:String x:Key="LangLaunchThemeFunnyUnlock">Hidden theme funny color has been unlocked! </s:String>
+<s:String x:Key="LangLaunchLeftStartInstance">Start</s:String>
+<s:String x:Key="LangLaunchLeftDownloadInstance">Download</s:String>
+<s:String x:Key="LangLaunchLeftNoAvailableInstance">No available instance</s:String>
+<s:String x:Key="LangLaunchLeftStartCancelled">Startup canceled</s:String>
+<s:String x:Key="LangLaunchLeftStarted">Game started</s:String>
+<s:String x:Key="LangLaunchLeftWaitForWindow">Wait for the game window to appear</s:String>
+<s:String x:Key="LangLaunchLeftAbortTask">Ends the processing</s:String>
+<s:String x:Key="LangLaunchLeftFinished">Completed</s:String>
+<s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">Exporting startup script</s:String>
+    
+        <!--PageLaunchRight-->
+    <s:String x:Key="LangLaunchRightSnapshot">Snapshot Tips</s:String>
+    <s:String x:Key="LangLaunchRightLog">Startup log</s:String>
 </ResourceDictionary>

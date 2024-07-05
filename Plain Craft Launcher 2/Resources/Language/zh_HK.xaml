@@ -464,6 +464,46 @@
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">輕量整合</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">大型整合</s:String>
     
+    <!--MySkin-->
+    <s:String x:Key="LangMySkinSave">另存為</s:String>
+    <s:String x:Key="LangMySkinRefresh">刷新</s:String>
+    <s:String x:Key="LangMySkinChange">更換披風</s:String>
+    <s:String x:Key="LangMySkinLoading">加載中</s:String>
+    <s:String x:Key="LangMySkinClickToChange">點擊更換皮膚（右鍵查看更多選項）</s:String>
+    <s:String x:Key="LangMySkinHintLoading">皮膚正在獲取中，請稍候！</s:String>
+    <s:String x:Key="LangMySkinDialogChoseSavePath">選取保存皮膚的位置</s:String>
+    <s:String x:Key="LangMySkinHintSaveSuccess">皮膚保存成功！</s:String>
+    <s:String x:Key="LangMySkinHintSaveFail">保存皮膚失敗</s:String>
+    <s:String x:Key="LangMySkinHintSkinFileCorruption">皮膚文件已損壞：</s:String>
+    <s:String x:Key="LangMySkinHintExistSkinFileGetTask">有正在獲取中的皮膚，請稍後再試！</s:String>
+    <s:String x:Key="LangMySkinHintRefreshing">正在刷新頭像……</s:String>
+    <s:String x:Key="LangMySkinHintRefreshed">已刷新頭像！</s:String>
+    <s:String x:Key="LangMySkinHintRefreshFail">刷新皮膚緩存失敗</s:String>
+    <s:String x:Key="LangMySkinHintChangeSuccess">更改皮膚成功！</s:String>
+    <s:String x:Key="LangMySkinHintChanging">正在更改披風中，請稍候！</s:String>
+    <s:String x:Key="LangMySkinHintChangFailByLoginFail">登錄失敗，無法更改披風！</s:String>
+    <s:String x:Key="LangMySkinHintGettingCape">正在獲取披風列表，請稍候……</s:String>
+    <s:String x:Key="LangMySkinDialogChooseCape">選擇披風</s:String>
+    <s:String x:Key="LangMySkinHintChangeCapeFail">更改披風失敗</s:String>
+    <s:String x:Key="LangMySkinHintChangeCapeSuccess">更改披風成功！</s:String>
+    <s:String x:Key="LangMySkinCapeNameMigrator">遷移者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMapMaker">Realms 地圖製作者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameModerator">Mojira 管理員披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameTranslator-Chinese">Crowdin 中文翻譯者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameTranslator">Crowdin 翻譯者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameCobalt">Cobalt 披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameVanilla">原版披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2011">Minecon 2011 參與者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2012">Minecon 2012 參與者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2013">Minecon 2013 參與者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2015">Minecon 2015 參與者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2016">Minecon 2016 參與者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameCherryBlossom">櫻花披風</s:String>
+    <s:String x:Key="LangMySkinCapeName15th-Anniversary">15 周年紀念披風</s:String>
+    <s:String x:Key="LangMySkinCapeNamePurpleHeart">紫色心形披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameFollower's">追隨者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameNone">無披風</s:String>
+    
     <!--FormLoginOAuth-->
     <s:String x:Key="LangLoginOAuthLoading">正在加載登錄頁面</s:String>
     <s:String x:Key="LangLoginOAuthLoadingTipA">如果網絡環境不佳，加載可能非常緩慢甚至一直加載不出來</s:String>
@@ -472,4 +512,41 @@
     <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL 不支持使用 GitHub 登錄微軟賬號！</s:String>
     <s:String x:Key="LangLoginOAuthWindowTitle">Microsoft 賬戶登錄</s:String>
     
+    <!--PageLaunchLeft-->
+    <s:String x:Key="LangLaunchLeftInstanceChoose">版本選擇</s:String>
+    <s:String x:Key="LangLaunchLeftInstanceConfig">版本設置</s:String>
+    <s:String x:Key="LangLaunchLeftAccountMicrosoft">正版</s:String>
+    <s:String x:Key="LangLaunchLeftAccountOffline">離線</s:String>
+    <s:String x:Key="LangLaunchLeftAccountUnifiedPass">統一通行證</s:String>
+    <s:String x:Key="LangLaunchLeftLoadingInstance">正在加載</s:String>
+    <s:String x:Key="LangLaunchLeftLoadingInstanceTip">正在加載版本列表，請稍候</s:String>
+    <s:String x:Key="LangLaunchLeftStartingInstance">正在啟動遊戲</s:String>
+    <s:String x:Key="LangLaunchLeftStartingStage">當前步驟</s:String>
+    <s:String x:Key="LangLaunchLeftStageDownloadLib">下載支持</s:String>
+    <s:String x:Key="LangLaunchLeftStageLogin">登錄方式</s:String>
+    <s:String x:Key="LangLaunchLeftStageMicrosoftAccount">正版登錄</s:String>
+    <s:String x:Key="LangLaunchLeftStageStarting">啟動進度</s:String>
+    <s:String x:Key="LangLaunchLeftStageDownload">下載速度</s:String>
+    <s:String x:Key="LangLaunchLeftTip">你知道嗎</s:String>
+    <s:String x:Key="LangLaunchLeftInit">初始化</s:String>
+    <s:String x:Key="LangLaunchLeftAccountOfflineLinkLogin">聯機離線登錄</s:String>
+    <s:String x:Key="LangLaunchLeftAccountOfflineLogin">離線登錄</s:String>
+    <s:String x:Key="LangLaunchLeftAccountMicrosoftLogin">正版登錄</s:String>
+    <s:String x:Key="LangLaunchLeftAccountUnifiedPassLogin">統一通行證登錄</s:String>
+    <s:String x:Key="LangLaunchLeftAccountThirdPartLogin">第三方登錄</s:String>
+    <s:String x:Key="LangLaunchLeftSkinNotFound">未找到離線皮膚自定義文件，可能它已被刪除。PCL 將使用默認的 Steve 皮膚！</s:String>
+    <s:String x:Key="LangLaunchThemeFunnyUnlock">隱藏主題 滑稽彩 已解鎖！</s:String>
+    <s:String x:Key="LangLaunchLeftStartInstance">啟動遊戲</s:String>
+    <s:String x:Key="LangLaunchLeftDownloadInstance">下載遊戲</s:String>
+    <s:String x:Key="LangLaunchLeftNoAvailableInstance">未找到可用的遊戲版本</s:String>
+    <s:String x:Key="LangLaunchLeftStartCancelled">已取消啟動</s:String>
+    <s:String x:Key="LangLaunchLeftStarted">已啟動遊戲</s:String>
+    <s:String x:Key="LangLaunchLeftWaitForWindow">等待遊戲窗口出現</s:String>
+    <s:String x:Key="LangLaunchLeftAbortTask">結束處理</s:String>
+    <s:String x:Key="LangLaunchLeftFinished">已完成</s:String>
+    <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">正在導出啟動腳本</s:String>
+    
+    <!--PageLaunchRight-->
+    <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
+    <s:String x:Key="LangLaunchRightLog">啟動日誌</s:String>
 </ResourceDictionary>
