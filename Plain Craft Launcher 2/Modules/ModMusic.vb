@@ -69,23 +69,24 @@
                         Else
                             '有背景音乐
                             FrmMain.BtnExtraMusic.Show = True
-
-                            Dim ToolTipText As String = "正在播放：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
+                            Dim ToolTipText As String
                             If MusicState = MusicStates.Pause Then
                                 FrmMain.BtnExtraMusic.Logo = Logo.IconPlay
                                 FrmMain.BtnExtraMusic.LogoScale = 0.8
+                                ToolTipText = "已暂停：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
                                 If MusicAllList.Count > 1 Then
-                                    ToolTipText += vbCrLf & "左键播放，右键播放下一曲。"
+                                    ToolTipText += vbCrLf & "左键恢复播放，右键播放下一曲。"
                                 Else
-                                    ToolTipText += vbCrLf & "左键播放，右键从头重新播放。"
+                                    ToolTipText += vbCrLf & "左键恢复播放，右键重新从头播放。"
                                 End If
                             Else
                                 FrmMain.BtnExtraMusic.Logo = Logo.IconMusic
                                 FrmMain.BtnExtraMusic.LogoScale = 1
+                                ToolTipText = "正在播放：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
                                 If MusicAllList.Count > 1 Then
                                     ToolTipText += vbCrLf & "左键暂停，右键播放下一曲。"
                                 Else
-                                    ToolTipText += vbCrLf & "左键暂停，右键从头重新播放。"
+                                    ToolTipText += vbCrLf & "左键暂停，右键重新从头播放。"
                                 End If
                             End If
                             FrmMain.BtnExtraMusic.ToolTip = ToolTipText
@@ -123,16 +124,14 @@
     ''' </summary>
     Public Sub MusicControlNext()
         If MusicAllList.Count = 1 Then
-            'Hint("播放列表中仅有一首歌曲！")
             MusicStartPlay(MusicCurrent)
             Hint("重新播放：" & GetFileNameFromPath(MusicCurrent), HintType.Finish)
-            MusicRefreshUI()
         Else
             Dim Address As String = DequeueNextMusicAddress()
             MusicStartPlay(Address)
             Hint("正在播放：" & GetFileNameFromPath(Address), HintType.Finish)
-            MusicRefreshUI()
         End If
+        MusicRefreshUI()
     End Sub
 
 #End Region

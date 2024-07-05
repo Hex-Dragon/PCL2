@@ -206,10 +206,8 @@
             SliderRamCustom.MaxValue = Math.Floor((RamTotal - 1.5) / 0.5) + 12
         ElseIf RamTotal <= 16 Then
             SliderRamCustom.MaxValue = Math.Floor((RamTotal - 8) / 1) + 25
-        ElseIf RamTotal <= 32 Then
-            SliderRamCustom.MaxValue = Math.Floor((RamTotal - 16) / 2) + 33
         Else
-            SliderRamCustom.MaxValue = Math.Min(Math.Floor((RamTotal - 32) / 4) + 41, 49)
+            SliderRamCustom.MaxValue = Math.Min(Math.Floor((RamTotal - 16) / 2) + 33, 41)
         End If
         '设置文本
         LabRamGame.Text = If(RamGame = Math.Floor(RamGame), RamGame & ".0", RamGame) & " GB" &
@@ -259,7 +257,6 @@
         End If
         If RamTextLeft <> Left Then
             RamTextLeft = Left
-            'If AniControlEnabled = 0 Then
             Select Case Left
                 Case 0
                     AniStart({
@@ -280,22 +277,6 @@
                             AaOpacity(LabRamUsedTitle, 0.7 - LabRamUsedTitle.Opacity, 100)
                         }, "SetupLaunch Ram TextLeft")
             End Select
-            'Else
-            '    Select Case Left
-            '        Case 0
-            '            LabRamUsed.Opacity = 0
-            '            LabRamTotal.Opacity = 0
-            '            LabRamUsedTitle.Opacity = 0
-            '        Case 1
-            '            LabRamUsed.Opacity = 1
-            '            LabRamTotal.Opacity = 0
-            '            LabRamUsedTitle.Opacity = 0.7
-            '        Case 2
-            '            LabRamUsed.Opacity = 1
-            '            LabRamTotal.Opacity = 1
-            '            LabRamUsedTitle.Opacity = 0.7
-            '    End Select
-            'End If
         End If
         '右侧
         Dim Right As Integer
@@ -404,15 +385,14 @@ PreFin:
                 RamGive = (Value - 12) * 0.5 + 1.5
             ElseIf Value <= 33 Then
                 RamGive = (Value - 25) * 1 + 8
-            ElseIf Value <= 41 Then
-                RamGive = (Value - 33) * 2 + 16
             Else
-                RamGive = (Value - 41) * 4 + 32
+                RamGive = (Value - 33) * 2 + 16
             End If
         End If
         '若使用 32 位 Java，则限制为 1G
         If If(Is32BitJava, Not JavaIs64Bit(If(UseVersionJavaSetup, Version, Nothing))) Then RamGive = Math.Min(1, RamGive)
-        Return RamGive
+        '封顶 32G
+        Return Math.Min(32, RamGive)
     End Function
 
 #End Region
@@ -557,8 +537,8 @@ PreFin:
     Private Sub CheckArgumentRam_Change() Handles CheckArgumentRam.Change
         If AniControlEnabled <> 0 Then Exit Sub
         If Not CheckArgumentRam.Checked Then Return
-        If MyMsgBox("内存优化耗时较长，这会拖慢游戏的启动过程，建议仅在电脑内存不充裕时开启此选项。" & vbCrLf &
-                    "如果你在使用机械硬盘，这还可能会导致一小段时间的严重卡顿。" &
+        If MyMsgBox("内存优化会显著延长启动耗时，建议仅在内存不足时开启。" & vbCrLf &
+                    "如果你在使用机械硬盘，这还可能导致一小段时间的严重卡顿。" &
                     If(IsAdmin(), "", $"{vbCrLf}{vbCrLf}每次启动游戏，PCL 都需要申请管理员权限以进行内存优化。{vbCrLf}若想自动授予权限，可以右键 PCL，打开 属性 → 兼容性 → 以管理员身份运行此程序。"),
                     "提醒", "确定", "取消") = 2 Then
             CheckArgumentRam.Checked = False

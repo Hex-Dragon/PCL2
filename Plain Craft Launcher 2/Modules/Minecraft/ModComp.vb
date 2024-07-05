@@ -355,12 +355,12 @@
                     ModLoaders = New List(Of CompModLoaderType)
                     For Each Category In Data("categories").Select(Function(t) t.ToString)
                         Select Case Category
-                        '加载器
+                            '加载器
                             Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
                             Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
                             Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
                             Case "neoforge" : ModLoaders.Add(CompModLoaderType.NeoForge)
-                        'Mod
+                            'Mod
                             Case "worldgen" : Tags.Add("世界元素")
                             Case "technology" : Tags.Add("科技")
                             Case "food" : Tags.Add("食物/烹饪")
@@ -376,7 +376,7 @@
                             Case "social" : Tags.Add("服务器")
                             Case "utility" : Tags.Add("改良")
                             Case "library" : Tags.Add("支持库")
-                        '整合包
+                            '整合包
                             Case "multiplayer" : Tags.Add("多人")
                             Case "optimization" : Tags.Add("性能优化")
                             Case "challenging" : Tags.Add("硬核")
@@ -387,7 +387,7 @@
                             Case "adventure" : Tags.Add("冒险")
                             Case "kitchen-sink" : Tags.Add("烹饪")
                             Case "lightweight" : Tags.Add("轻量")
-                                'FUTURE: Res
+                            'FUTURE: Res
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -1320,6 +1320,7 @@ Retry:
                     Dim RawLoaders As List(Of String) = Data("loaders").Select(Function(v) v.ToString).ToList
                     ModLoaders = New List(Of CompModLoaderType)
                     If RawLoaders.Contains("forge") Then ModLoaders.Add(CompModLoaderType.Forge)
+                    If RawLoaders.Contains("neoforge") Then ModLoaders.Add(CompModLoaderType.NeoForge)
                     If RawLoaders.Contains("fabric") Then ModLoaders.Add(CompModLoaderType.Fabric)
                     If RawLoaders.Contains("quilt") Then ModLoaders.Add(CompModLoaderType.Quilt)
 #End Region

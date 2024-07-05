@@ -697,8 +697,8 @@ NextStack:
                     "forge", "setup", "block", "model", "mixin", "event", "unimi", "netty", "world",
                     "gitlab", "common", "server", "config", "loader", "launch", "entity", "assist", "client", "plugin", "modapi", "mojang", "shader", "events", "github", "recipe", "render", "packet", "events",
                     "preinit", "preload", "machine", "reflect", "channel", "general", "handler", "content", "systems", "modules", "service",
-                    "fastutil", "optifine", "internal", "platform", "override", "fabricmc",
-                    "injection", "listeners", "scheduler", "minecraft", "transformer", "transformers", "universal", "multipart", "minecraftforge", "blockentity", "spongepowered", "electronwill"
+                    "fastutil", "optifine", "internal", "platform", "override", "fabricmc", "neoforge",
+                    "injection", "listeners", "scheduler", "minecraft", "transformer", "transformers", "neoforged", "universal", "multipart", "minecraftforge", "blockentity", "spongepowered", "electronwill"
                    }.Contains(Word.ToLower) Then Continue For
                 PossibleWords.Add(Word.Trim)
             Next

@@ -41,8 +41,8 @@
         '设置解锁
         If Not RadioLauncherTheme8.IsEnabled Then LabLauncherTheme8Copy.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。" & vbCrLf & "右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！"
         RadioLauncherTheme8.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁"
-        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在 Issue 标记为 [已完成] 后回复 Issue 要求解锁（右键打开反馈页面）" & vbCrLf & "· 向帮助库提交 Pull Request，在龙猫合并后解锁"
-        RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在反馈标记为 [完成] 后回复 Issue 要求解锁" & vbCrLf & "· 向帮助库提交 Pull Request，在龙猫合并后解锁"
+        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）" & vbCrLf & "· 提交一个 Pull Request，在合并后回复识别码要求解锁"
+        RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁" & vbCrLf & "· 提交一个 Pull Request，在合并后回复识别码要求解锁"
         '极客蓝的处理在 ThemeCheck 中
 
     End Sub
@@ -83,7 +83,11 @@
             MusicRefreshUI()
 
             '主页
-            ComboCustomPreset.SelectedIndex = Setup.Get("UiCustomPreset")
+            Try
+                ComboCustomPreset.SelectedIndex = Setup.Get("UiCustomPreset")
+            Catch
+                Setup.Reset("UiCustomPreset")
+            End Try
             CType(FindName("RadioCustomType" & Setup.Load("UiCustomType")), MyRadioBox).Checked = True
             TextCustomNet.Text = Setup.Get("UiCustomNet")
 

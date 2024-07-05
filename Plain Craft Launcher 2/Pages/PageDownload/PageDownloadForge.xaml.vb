@@ -33,7 +33,7 @@
             '    PanMain.Children.Insert(0, CardWarn)
             'End If
         Catch ex As Exception
-            Log(ex, "可视化版本列表出错", LogLevel.Feedback)
+            Log(ex, "可视化 Forge 版本列表出错", LogLevel.Feedback)
         End Try
     End Sub
 
@@ -56,7 +56,7 @@
     End Sub
 
     Public Sub DownloadStart(sender As MyListItem, e As Object)
-        McDownloadForge(sender.Tag)
+        McDownloadForgelike(sender.Tag)
     End Sub
 
     '介绍栏

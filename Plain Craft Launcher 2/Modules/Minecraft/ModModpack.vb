@@ -281,19 +281,23 @@ Retry:
                     '建立 CompFile
                     Dim File As New CompFile(ModJson, CompType.Mod)
                     If Not File.Available Then Continue For
-                    '根据 modules 和文件名后缀判断是资源包还是 Mod
-                    Dim IsResourcePack As Boolean
+                    '根据 modules 和文件名后缀判断资源类型
+                    Dim TargetFolder As String
                     If ModJson("modules").Any Then 'modules 可能返回 null（#1006）
                         Dim ModuleNames = CType(ModJson("modules"), JArray).Select(Function(l) l("name").ToString).ToList
-                        IsResourcePack =
-                            (Not ModuleNames.Contains("META-INF")) AndAlso (Not ModuleNames.Contains("mcmod.info")) AndAlso '不包含 META-INF 或 mcmod.info
-                            ModuleNames.Contains("pack.mcmeta") AndAlso '包含 pack.mcmeta
-                            (Not File.FileName.EndsWithF(".jar", True)) '文件后缀不是 .jar
+                        If ModuleNames.Contains("META-INF") OrElse ModuleNames.Contains("mcmod.info") OrElse
+                           File.FileName.EndsWithF(".jar", True) Then
+                            TargetFolder = "mods"
+                        ElseIf ModuleNames.Contains("pack.mcmeta") Then
+                            TargetFolder = "resourcepacks"
+                        Else
+                            TargetFolder = "shaderpacks"
+                        End If
                     Else
-                        IsResourcePack = False
+                        TargetFolder = "mods"
                     End If
                     '实际的添加
-                    FileList.Add(Id, File.ToNetFile($"{PathMcFolder}versions\{VersionName}\{If(IsResourcePack, "resourcepacks", "mods")}\"))
+                    FileList.Add(Id, File.ToNetFile($"{PathMcFolder}versions\{VersionName}\{TargetFolder}\"))
                     Task.Progress += 1 / (1 + ModList.Count)
                 Next
                 Task.Output = FileList.Values.ToList

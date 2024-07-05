@@ -74,13 +74,13 @@
         '添加结束 Invoke
         If FinishedInvoke IsNot Nothing Then
             AddHandler RealLoader.PreviewFinish,
-                Sub()
-                    Do While PageState = MyPageRight.PageStates.PageExit OrElse PageState = MyPageRight.PageStates.ContentExit
-                        Thread.Sleep(10) '不在退出动画时执行 UI 线程操作，避免退出动画被重置
-                    Loop
-                    RunInUiWait(Sub() FinishedInvoke(RealLoader))
-                    Thread.Sleep(20) '由于大量初始化控件会导致掉帧，延迟触发 State 改变事件
-                End Sub
+            Sub()
+                Do While PageState = MyPageRight.PageStates.PageExit OrElse PageState = MyPageRight.PageStates.ContentExit
+                    Thread.Sleep(10) '不在退出动画时执行 UI 线程操作，避免退出动画被重置
+                Loop
+                RunInUiWait(Sub() FinishedInvoke(RealLoader))
+                Thread.Sleep(20) '由于大量初始化控件会导致掉帧，延迟触发 State 改变事件
+            End Sub
         End If
         AddHandler RealLoader.OnStateChangedUi, Sub(Loader As LoaderBase, NewState As LoadState, OldState As LoadState) RunInUi(Sub() PageLoaderState(Loader, NewState, OldState))
         '隐藏 UI

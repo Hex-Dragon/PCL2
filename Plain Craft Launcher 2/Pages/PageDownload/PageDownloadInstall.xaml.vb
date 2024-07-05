@@ -10,6 +10,7 @@
         DlOptiFineListLoader.Start()
         DlLiteLoaderListLoader.Start()
         DlFabricListLoader.Start()
+        DlNeoForgeListLoader.Start()
 
         '重载预览
         TextSelectName.ValidateRules = New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions")}
@@ -26,6 +27,7 @@
         LoadLiteLoader.State = DlLiteLoaderListLoader
         LoadFabric.State = DlFabricListLoader
         LoadFabricApi.State = DlFabricApiLoader
+        LoadNeoForge.State = DlNeoForgeListLoader
         LoadOptiFabric.State = DlOptiFabricLoader
     End Sub
 
@@ -74,13 +76,6 @@
             ForgeLoader.Start(SelectedMinecraftId)
         End If
 
-        '启动 NeoForge 加载
-        If SelectedMinecraftId.StartsWith("1.") AndAlso Int(SelectedMinecraftId.Split(".")(1)) > 19 Then
-            Dim NeoForgeLoader = New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion " & SelectedMinecraftId, AddressOf DlNeoForgeVersionMain)
-            LoadNeoForge.State = NeoForgeLoader
-            NeoForgeLoader.Start(SelectedMinecraftId)
-        End If
-
         '启动 Fabric API、OptiFabric 加载
         DlFabricApiLoader.Start()
         DlOptiFabricLoader.Start()
@@ -88,34 +83,36 @@
         AniStart({
             AaOpacity(PanMinecraft, -PanMinecraft.Opacity, 100, 10),
             AaTranslateX(PanMinecraft, -50 - CType(PanMinecraft.RenderTransform, TranslateTransform).X, 110, 10),
-            AaCode(Sub()
-                       PanBack.ScrollToHome()
-                       TextSelectName.Validate()
-                       OptiFine_Loaded()
-                       LiteLoader_Loaded()
-                       Forge_Loaded()
-                       NeoForge_Loaded()
-                       Fabric_Loaded()
-                       FabricApi_Loaded()
-                       OptiFabric_Loaded()
-                       SelectReload()
-                   End Sub, After:=True),
+            AaCode(
+            Sub()
+                PanBack.ScrollToHome()
+                TextSelectName.Validate()
+                OptiFine_Loaded()
+                LiteLoader_Loaded()
+                Forge_Loaded()
+                NeoForge_Loaded()
+                Fabric_Loaded()
+                FabricApi_Loaded()
+                OptiFabric_Loaded()
+                SelectReload()
+            End Sub, After:=True),
             AaOpacity(PanSelect, 1 - PanSelect.Opacity, 250, 150),
             AaTranslateX(PanSelect, -CType(PanSelect.RenderTransform, TranslateTransform).X, 500, 150, Ease:=New AniEaseOutBack(AniEasePower.Weak)),
-            AaCode(Sub()
-                       PanMinecraft.Visibility = Visibility.Collapsed
-                       PanBack.IsHitTestVisible = True
-                       '初始化 Binding
-                       If IsFirstLoaded Then Exit Sub
-                       IsFirstLoaded = True
-                       BtnOptiFineClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardOptiFine.MainTextBlock, .Mode = BindingMode.OneWay})
-                       BtnLiteLoaderClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardLiteLoader.MainTextBlock, .Mode = BindingMode.OneWay})
-                       BtnForgeClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardForge.MainTextBlock, .Mode = BindingMode.OneWay})
-                       BtnNeoForgeClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardNeoForge.MainTextBlock, .Mode = BindingMode.OneWay})
-                       BtnFabricClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardFabric.MainTextBlock, .Mode = BindingMode.OneWay})
-                       BtnFabricApiClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardFabricApi.MainTextBlock, .Mode = BindingMode.OneWay})
-                       BtnOptiFabricClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardOptiFabric.MainTextBlock, .Mode = BindingMode.OneWay})
-                   End Sub,, True)
+            AaCode(
+            Sub()
+                PanMinecraft.Visibility = Visibility.Collapsed
+                PanBack.IsHitTestVisible = True
+                '初始化 Binding
+                If IsFirstLoaded Then Exit Sub
+                IsFirstLoaded = True
+                BtnOptiFineClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardOptiFine.MainTextBlock, .Mode = BindingMode.OneWay})
+                BtnLiteLoaderClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardLiteLoader.MainTextBlock, .Mode = BindingMode.OneWay})
+                BtnForgeClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardForge.MainTextBlock, .Mode = BindingMode.OneWay})
+                BtnNeoForgeClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardNeoForge.MainTextBlock, .Mode = BindingMode.OneWay})
+                BtnFabricClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardFabric.MainTextBlock, .Mode = BindingMode.OneWay})
+                BtnFabricApiClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardFabricApi.MainTextBlock, .Mode = BindingMode.OneWay})
+                BtnOptiFabricClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardOptiFabric.MainTextBlock, .Mode = BindingMode.OneWay})
+            End Sub,, True)
         }, "FrmDownloadInstall SelectPageSwitch", True)
     End Sub
     Public Sub ExitSelectPage()
@@ -224,7 +221,7 @@
     End Sub
 
     'NeoForge
-    Private SelectedNeoForge As DlNeoForgeVersionEntry = Nothing
+    Private SelectedNeoForge As DlNeoForgeListEntry = Nothing
     Private Sub SetNeoForgeInfoShow(IsShow As String)
         If PanNeoForgeInfo.Tag = IsShow Then Exit Sub
         PanNeoForgeInfo.Tag = IsShow
@@ -368,13 +365,14 @@
         Else
             BtnForgeClear.Visibility = Visibility.Visible
             ImgForge.Visibility = Visibility.Visible
-            LabForge.Text = SelectedForge.Version
+            LabForge.Text = SelectedForge.VersionName
             LabForge.Foreground = ColorGray1
         End If
         'NeoForge
         If Not SelectedMinecraftId.Contains("1.") OrElse Val(SelectedMinecraftId.Split(".")(1)) <= 19 Then
             CardNeoForge.Visibility = Visibility.Collapsed
         Else
+            CardNeoForge.Visibility = Visibility.Visible
             Dim NeoForgeError As String = LoadNeoForgeGetError()
             CardNeoForge.MainSwap.Visibility = If(NeoForgeError Is Nothing, Visibility.Visible, Visibility.Collapsed)
             If NeoForgeError IsNot Nothing Then CardNeoForge.IsSwaped = True
@@ -387,7 +385,7 @@
             Else
                 BtnNeoForgeClear.Visibility = Visibility.Visible
                 ImgNeoForge.Visibility = Visibility.Visible
-                LabNeoForge.Text = SelectedNeoForge.VersionCode & If(SelectedNeoForge.IsBeta, "-beta", "")
+                LabNeoForge.Text = SelectedNeoForge.VersionName
                 LabNeoForge.Foreground = ColorGray1
             End If
         End If
@@ -461,9 +459,16 @@
             HintFabricAPI.Visibility = Visibility.Collapsed
         End If
         If SelectedFabric IsNot Nothing AndAlso SelectedOptiFine IsNot Nothing AndAlso SelectedOptiFabric Is Nothing Then
-            HintOptiFabric.Visibility = Visibility.Visible
+            If SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15") Then
+                HintOptiFabric.Visibility = Visibility.Collapsed
+                HintOptiFabricOld.Visibility = Visibility.Visible
+            Else
+                HintOptiFabric.Visibility = Visibility.Visible
+                HintOptiFabricOld.Visibility = Visibility.Collapsed
+            End If
         Else
             HintOptiFabric.Visibility = Visibility.Collapsed
+            HintOptiFabricOld.Visibility = Visibility.Collapsed
         End If
         If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) >= 16 AndAlso SelectedOptiFine IsNot Nothing AndAlso
            (SelectedForge IsNot Nothing OrElse SelectedFabric IsNot Nothing) Then
@@ -500,10 +505,10 @@
             Name += "-Fabric " & SelectedFabric.Replace("+build", "")
         End If
         If SelectedForge IsNot Nothing Then
-            Name += "-Forge_" & SelectedForge.Version
+            Name += "-Forge_" & SelectedForge.VersionName
         End If
         If SelectedNeoForge IsNot Nothing Then
-            Name += "-NeoForge_" & SelectedNeoForge.VersionCode & If(SelectedNeoForge.IsBeta, "-beta", "")
+            Name += "-NeoForge_" & SelectedNeoForge.VersionName
         End If
         If SelectedLiteLoader IsNot Nothing Then
             Name += "-LiteLoader"
@@ -522,10 +527,10 @@
             Info += ", Fabric " & SelectedFabric.Replace("+build", "")
         End If
         If SelectedForge IsNot Nothing Then
-            Info += ", Forge " & SelectedForge.Version
+            Info += ", Forge " & SelectedForge.VersionName
         End If
         If SelectedNeoForge IsNot Nothing Then
-            Info += ", NeoForge " & SelectedNeoForge.VersionCode & If(SelectedNeoForge.IsBeta, "-beta", "")
+            Info += ", NeoForge " & SelectedNeoForge.VersionName
         End If
         If SelectedLiteLoader IsNot Nothing Then
             Info += ", LiteLoader"
@@ -683,6 +688,7 @@
     ''' 获取 OptiFine 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadOptiFineGetError() As String
+        If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
         If LoadOptiFine Is Nothing OrElse LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFine.State, Object).Error.Message
         '检查 Forge 1.13 - 1.14.3：全部不兼容
@@ -718,10 +724,11 @@
     Private Function IsOptiFineSuitForForge(OptiFine As DlOptiFineListEntry, Forge As DlForgeVersionEntry)
         If Forge.Inherit <> OptiFine.Inherit Then Return False '不是同一个大版本
         If OptiFine.RequiredForgeVersion Is Nothing Then Return False '不兼容 Forge
-        Return (OptiFine.RequiredForgeVersion.Contains(".") AndAlso 'XX.X.XXX
-                VersionSortInteger(Forge.Version, OptiFine.RequiredForgeVersion) >= 0) OrElse
-               (Not OptiFine.RequiredForgeVersion.Contains(".") AndAlso '#XXXX
-                Forge.Version.After(".") >= OptiFine.RequiredForgeVersion)
+        If OptiFine.RequiredForgeVersion.Contains(".") Then 'XX.X.XXX
+            Return VersionSortInteger(Forge.Version.ToString, OptiFine.RequiredForgeVersion) >= 0
+        Else 'XXXX
+            Return Forge.Version.Revision >= OptiFine.RequiredForgeVersion
+        End If
     End Function
 
     '限制展开
@@ -744,11 +751,12 @@
             Next
             If Not Versions.Any() Then Exit Sub
             '排序
-            Versions = Sort(Versions, Function(Left As DlOptiFineListEntry, Right As DlOptiFineListEntry) As Boolean
-                                          If Not Left.IsPreview AndAlso Right.IsPreview Then Return True
-                                          If Left.IsPreview AndAlso Not Right.IsPreview Then Return False
-                                          Return VersionSortBoolean(Left.NameDisplay, Right.NameDisplay)
-                                      End Function)
+            Versions = Sort(Versions,
+            Function(Left As DlOptiFineListEntry, Right As DlOptiFineListEntry) As Boolean
+                If Not Left.IsPreview AndAlso Right.IsPreview Then Return True
+                If Left.IsPreview AndAlso Not Right.IsPreview Then Return False
+                Return VersionSortBoolean(Left.NameDisplay, Right.NameDisplay)
+            End Function)
             '可视化
             PanOptiFine.Children.Clear()
             For Each Version In Versions
@@ -791,7 +799,6 @@
         If LoadLiteLoader Is Nothing OrElse LoadLiteLoader.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadLiteLoader.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadLiteLoader.State, Object).Error.Message
         For Each Version As DlLiteLoaderListEntry In DlLiteLoaderListLoader.Output.Value
-            If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
             If Version.Inherit = SelectedMinecraftId Then Return Nothing
         Next
         Return "没有可用版本"
@@ -892,16 +899,15 @@
             If SelectedMinecraftId <> Loader.Input Then Exit Sub
             If Loader.State <> LoadState.Finished Then Exit Sub
             '获取要显示的版本
-            Dim Versions As New List(Of DlForgeVersionEntry)
-            Versions.AddRange(Loader.Output) '复制数组，以免 Output 在实例化后变空
+            Dim Versions = Loader.Output.ToList '复制数组，以免 Output 在实例化后变空
             If Not Loader.Output.Any() Then Exit Sub
             PanForge.Children.Clear()
-            Versions = Sort(Versions, Function(a, b) New Version(a.Version) > New Version(b.Version)).
-                       Where(Function(v)
-                                 If v.Category = "universal" OrElse v.Category = "client" Then Return False '跳过无法自动安装的版本
-                                 If SelectedOptiFine IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, v) Then Return False
-                                 Return True
-                             End Function).ToList
+            Versions = Sort(Versions, Function(a, b) a.Version > b.Version).Where(
+            Function(v)
+                If v.Category = "universal" OrElse v.Category = "client" Then Return False '跳过无法自动安装的版本
+                If SelectedOptiFine IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, v) Then Return False
+                Return True
+            End Function).ToList()
             ForgeDownloadListItemPreload(PanForge, Versions, AddressOf Forge_Selected, False)
             For Each Version In Versions
                 PanForge.Children.Add(ForgeDownloadListItem(Version, AddressOf Forge_Selected, False))
@@ -936,25 +942,16 @@
     ''' </summary>
     Private Function LoadNeoForgeGetError() As String
         If Not SelectedMinecraftId.StartsWith("1.") Then Return "没有可用版本"
-        If Not LoadNeoForge.State.IsLoader Then Return "正在获取版本列表……"
-        Dim Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)) = LoadNeoForge.State
-        If SelectedMinecraftId <> Loader.Input Then Return "正在获取版本列表……"
-        If Loader.State = LoadState.Loading Then Return "正在获取版本列表……"
-        If Loader.State = LoadState.Failed Then
-            Dim ErrorMessage As String = Loader.Error.Message
-            If ErrorMessage.Contains("没有可用版本") Then
-                Return "没有可用版本"
-            Else
-                Return "获取版本列表失败：" & ErrorMessage
-            End If
-        End If
-        If Loader.State <> LoadState.Finished Then Return "获取版本列表失败：未知错误，状态为 " & GetStringFromEnum(Loader.State)
-        For Each Version In Loader.Output
-            If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
-            If SelectedFabric IsNot Nothing Then Return "与 Fabric 不兼容"
+        If SelectedOptiFine IsNot Nothing Then Return "与 OptiFine 不兼容"
+        If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
+        If SelectedFabric IsNot Nothing Then Return "与 Fabric 不兼容"
+        If LoadNeoForge Is Nothing OrElse LoadNeoForge.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
+        If LoadNeoForge.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadNeoForge.State, Object).Error.Message
+        If DlNeoForgeListLoader.Output.Value.Any(Function(v) v.Inherit = SelectedMinecraftId) Then
             Return Nothing
-        Next
-        Return False
+        Else
+            Return "没有可用版本"
+        End If
     End Function
 
     '限制展开
@@ -965,18 +962,14 @@
     ''' <summary>
     ''' 尝试重新可视化 NeoForge 版本列表。
     ''' </summary>
-    Private Sub NeoForge_Loaded() Handles LoadForge.StateChanged
+    Private Sub NeoForge_Loaded() Handles LoadNeoForge.StateChanged
         Try
-            If Not LoadNeoForge.State.IsLoader Then Exit Sub
-            Dim Loader As LoaderTask(Of String, List(Of DlNeoForgeVersionEntry)) = LoadNeoForge.State
-            If SelectedMinecraftId <> Loader.Input Then Exit Sub
-            If Loader.State <> LoadState.Finished Then Exit Sub
-            '获取要显示的版本
-            Dim Versions As New List(Of DlNeoForgeVersionEntry)
-            Versions.AddRange(Loader.Output) '复制数组，以免 Output 在实例化后变空
-            If Not Loader.Output.Any() Then Exit Sub
+            '获取版本列表
+            If DlNeoForgeListLoader.State <> LoadState.Finished Then Exit Sub
+            Dim Versions = DlNeoForgeListLoader.Output.Value.Where(Function(v) v.Inherit = SelectedMinecraftId).ToList
+            If Not Versions.Any() Then Exit Sub
+            '可视化
             PanNeoForge.Children.Clear()
-
             NeoForgeDownloadListItemPreload(PanNeoForge, Versions, AddressOf NeoForge_Selected, False)
             For Each Version In Versions
                 PanNeoForge.Children.Add(NeoForgeDownloadListItem(Version, AddressOf NeoForge_Selected, False))
@@ -1013,9 +1006,8 @@
         If LoadFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadFabric.State, Object).Error.Message
         For Each Version As JObject In DlFabricListLoader.Output.Value("game")
             If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
-                If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
                 If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
-                'If SelectedOptiFine IsNot Nothing Then Return "与 OptiFine 不兼容"
+                If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
                 Return Nothing
             End If
         Next
@@ -1202,6 +1194,7 @@
     ''' 获取 OptiFabric 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadOptiFabricGetError() As String
+        If SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15") Then Return "不兼容老版本 Fabric，请手动下载 OptiFabric Origins"
         If LoadOptiFabric Is Nothing OrElse LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFabric.State, Object).Error.Message
         If DlOptiFabricLoader.Output Is Nothing Then
@@ -1247,7 +1240,8 @@
                 PanOptiFabric.Children.Add(OptiFabricDownloadListItem(Version, AddressOf OptiFabric_Selected))
             Next
             '自动选择 OptiFabric
-            If Not AutoSelectedOptiFabric Then
+            If Not AutoSelectedOptiFabric AndAlso
+                Not (SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15")) Then '1.14~15 不自动选择
                 AutoSelectedOptiFabric = True
                 Log($"[Download] 已自动选择 OptiFabric：{CType(PanOptiFabric.Children(0), MyListItem).Title}")
                 OptiFabric_Selected(PanOptiFabric.Children(0), Nothing)
@@ -1279,7 +1273,7 @@
     End Sub
     Private Sub BtnSelectStart_Click() Handles BtnSelectStart.Click
         '确认版本隔离
-        If (SelectedForge IsNot Nothing OrElse SelectedFabric IsNot Nothing OrElse SelectedNeoForge IsNot Nothing) AndAlso
+        If (SelectedForge IsNot Nothing OrElse SelectedNeoForge IsNot Nothing OrElse SelectedFabric IsNot Nothing) AndAlso
            (Setup.Get("LaunchArgumentIndie") = 0 OrElse Setup.Get("LaunchArgumentIndie") = 2) Then
             If MyMsgBox("你尚未开启版本隔离，这会导致多个 MC 共用同一个 Mod 文件夹。" & vbCrLf &
                         "因此在切换 MC 版本时，MC 会因为读取到与当前版本不符的 Mod 而崩溃。" & vbCrLf &

@@ -72,17 +72,19 @@
         FrmMain.PageRight = Target
         CType(FrmMain.PanMainRight.Child, MyPageRight).PageOnExit()
         AniStart({
-                         AaCode(Sub()
-                                    CType(FrmMain.PanMainRight.Child, MyPageRight).PageOnForceExit()
-                                    FrmMain.PanMainRight.Child = FrmMain.PageRight
-                                    FrmMain.PageRight.Opacity = 0
-                                End Sub, 130),
-                         AaCode(Sub()
-                                    '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
-                                    FrmMain.PageRight.Opacity = 1
-                                    FrmMain.PageRight.PageOnEnter()
-                                End Sub, 30, True)
-                     }, "PageLeft PageChange")
+            AaCode(
+            Sub()
+                CType(FrmMain.PanMainRight.Child, MyPageRight).PageOnForceExit()
+                FrmMain.PanMainRight.Child = FrmMain.PageRight
+                FrmMain.PageRight.Opacity = 0
+            End Sub, 130),
+            AaCode(
+            Sub()
+                '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
+                FrmMain.PageRight.Opacity = 1
+                FrmMain.PageRight.PageOnEnter()
+            End Sub, 30, True)
+        }, "PageLeft PageChange")
     End Sub
 
 #End Region
@@ -163,11 +165,12 @@
         ItemForge.Visibility = Visibility.Visible
         ItemNeoForge.Visibility = Visibility.Visible
         ItemLiteLoader.Visibility = Visibility.Visible
-        RunInThread(Sub()
-                        Thread.Sleep(20)
-                        RunInUiWait(Sub() ItemClient.SetChecked(True, True, True))
-                        AniControlEnabled -= 1
-                    End Sub)
+        RunInThread(
+        Sub()
+            Thread.Sleep(20)
+            RunInUiWait(Sub() ItemClient.SetChecked(True, True, True))
+            AniControlEnabled -= 1
+        End Sub)
     End Sub
     '折叠手动安装
     Private Sub LabHand_Click(sender As Object, e As MouseButtonEventArgs) Handles LabHand.MouseLeftButtonUp
@@ -178,15 +181,16 @@
         LabHand.Visibility = Visibility.Collapsed
         ItemClient.Visibility = Visibility.Collapsed
         ItemOptiFine.Visibility = Visibility.Collapsed
+        ItemNeoForge.Visibility = Visibility.Collapsed
         ItemFabric.Visibility = Visibility.Collapsed
         ItemForge.Visibility = Visibility.Collapsed
-        ItemNeoForge.Visibility = Visibility.Collapsed
         ItemLiteLoader.Visibility = Visibility.Collapsed
-        RunInThread(Sub()
-                        Thread.Sleep(20)
-                        RunInUiWait(Sub() ItemInstall.SetChecked(True, True, True))
-                        AniControlEnabled -= 1
-                    End Sub)
+        RunInThread(
+        Sub()
+            Thread.Sleep(20)
+            RunInUiWait(Sub() ItemInstall.SetChecked(True, True, True))
+            AniControlEnabled -= 1
+        End Sub)
     End Sub
 
 End Class

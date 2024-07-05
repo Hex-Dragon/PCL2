@@ -98,21 +98,13 @@
         '排序
         Select Case Type
             Case 3
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlOptiFineListEntry)), Function(Left As DlOptiFineListEntry, Right As DlOptiFineListEntry) As Boolean
-                                                                                     Return VersionSortBoolean(Left.NameDisplay, Right.NameDisplay)
-                                                                                 End Function)
+                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlOptiFineListEntry)), Function(a, b) VersionSortBoolean(a.NameDisplay, b.NameDisplay))
             Case 4, 10
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlLiteLoaderListEntry)), Function(Left As DlLiteLoaderListEntry, Right As DlLiteLoaderListEntry) As Boolean
-                                                                                       Return VersionSortBoolean(Left.Inherit, Right.Inherit)
-                                                                                   End Function)
+                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlLiteLoaderListEntry)), Function(a, b) VersionSortBoolean(a.Inherit, b.Inherit))
             Case 6
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlForgeVersionEntry)), Function(Left As DlForgeVersionEntry, Right As DlForgeVersionEntry) As Boolean
-                                                                                     Return VersionSortBoolean(Left.Version, Right.Version)
-                                                                                 End Function)
+                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlForgeVersionEntry)), Function(a, b) a.Version > b.Version)
             Case 8, 9
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(Left As CompFile, Right As CompFile) As Boolean
-                                                                          Return Left.ReleaseDate > Right.ReleaseDate
-                                                                      End Function)
+                Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
         End Select
         '控件转换
         Select Case Type
@@ -128,16 +120,6 @@
                 ForgeDownloadListItemPreload(Stack, Stack.Tag, AddressOf ForgeSave_Click, True)
             Case 8
                 CompFilesCardPreload(Stack, Stack.Tag)
-            Case 13
-                Dim LoadingPickaxe As New MyLoading With {.Text = "正在获取版本列表", .Margin = New Thickness(5)}
-                Dim Loader = New LoaderTask(Of String, List(Of DlNeoForgeVersionEntry))("DlNeoForgeVersion Main", AddressOf DlNeoForgeVersionMain)
-                LoadingPickaxe.State = Loader
-                Loader.Start(Stack.Tag)
-                AddHandler LoadingPickaxe.StateChanged, AddressOf FrmDownloadNeoForge.NeoForge_StateChanged
-                AddHandler LoadingPickaxe.Click, AddressOf FrmDownloadNeoForge.NeoForge_Click
-                Stack.Children.Add(LoadingPickaxe)
-            Case 14
-                NeoForgeDownloadListItemPreload(Stack, Stack.Tag, AddressOf NeoForgeSave_Click, True)
         End Select
         '实现控件虚拟化
         For Each Data As Object In Stack.Tag
@@ -154,9 +136,8 @@
                 Case 6
                     Stack.Children.Add(ForgeDownloadListItem(Data, AddressOf ForgeSave_Click, True))
                 Case 7
-                    Stack.Children.Add(McDownloadListItem(Data, Sub(sender, e) '不能使用 AddressOf，这导致了 #535，原因完全不明，疑似是编译器 Bug
-                                                                    FrmDownloadInstall.MinecraftSelected(sender, e)
-                                                                End Sub, False))
+                    '不能使用 AddressOf，这导致了 #535，原因完全不明，疑似是编译器 Bug
+                    Stack.Children.Add(McDownloadListItem(Data, Sub(sender, e) FrmDownloadInstall.MinecraftSelected(sender, e), False))
                 Case 8
                     If CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <>
                        CType(Stack.Tag, List(Of CompFile)).Count Then
@@ -182,7 +163,6 @@
                 Case 12
                     Stack.Children.Add(FabricDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Fabric_Selected))
                 Case 13
-                Case 14
                     Stack.Children.Add(NeoForgeDownloadListItem(Data, AddressOf NeoForgeSave_Click, True))
                 Case Else
                     Log("未知的虚拟化种类：" & Type, LogLevel.Feedback)

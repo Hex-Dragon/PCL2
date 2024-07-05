@@ -39,12 +39,14 @@
                                       Visibility.Visible, Visibility.Collapsed)
             LabPage.Text = Page + 1
             BtnPageFirst.IsEnabled = Page > 1
-            BtnPageFirst.Opacity = If(BtnPageFirst.IsEnabled, 1, 0.2)
+            BtnPageFirst.Opacity = If(Page > 1, 1, 0.2)
             BtnPageLeft.IsEnabled = Page > 0
-            BtnPageLeft.Opacity = If(BtnPageLeft.IsEnabled, 1, 0.2)
-            BtnPageRight.IsEnabled = Storage.Results.Count > PageSize * (Page + 1) OrElse
-                                     Storage.CurseForgeOffset < Storage.CurseForgeTotal OrElse Storage.ModrinthOffset < Storage.ModrinthTotal
-            BtnPageRight.Opacity = If(BtnPageRight.IsEnabled, 1, 0.2)
+            BtnPageLeft.Opacity = If(Page > 0, 1, 0.2)
+            Dim IsRightEnabled As Boolean = '由于 WPF 的未知 bug，读取到的 IsEnabled 可能是错误的值（#3319）
+                Storage.Results.Count > PageSize * (Page + 1) OrElse
+                Storage.CurseForgeOffset < Storage.CurseForgeTotal OrElse Storage.ModrinthOffset < Storage.ModrinthTotal
+            BtnPageRight.IsEnabled = IsRightEnabled
+            BtnPageRight.Opacity = If(IsRightEnabled, 1, 0.2)
             '错误信息
             If Storage.ErrorMessage Is Nothing Then
                 HintError.Visibility = Visibility.Collapsed
