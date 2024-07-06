@@ -115,6 +115,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 328 Then 'Snapshot 2.8.1
+            If LastVersion = 327 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 Forge 1.12.2- 的 Bug"))
+            If LastVersion = 327 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法输入解锁码的 Bug"))
+            If LastVersion = 327 Then BugCount += 1
+        End If
         If LastVersion < 327 Then 'Snapshot 2.8.0
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "NeoForge 兼容与自动安装"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持编译、运行 PCL 开源代码"))

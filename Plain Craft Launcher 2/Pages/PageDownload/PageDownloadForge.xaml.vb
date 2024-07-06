@@ -55,10 +55,6 @@
         Card.StackInstall()
     End Sub
 
-    Public Sub DownloadStart(sender As MyListItem, e As Object)
-        McDownloadForgelike(sender.Tag)
-    End Sub
-
     '介绍栏
     Private Sub BtnWeb_Click(sender As Object, e As EventArgs) Handles BtnWeb.Click
         OpenWebsite("https://files.minecraftforge.net")

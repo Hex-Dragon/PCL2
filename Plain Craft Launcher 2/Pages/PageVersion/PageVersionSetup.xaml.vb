@@ -351,8 +351,6 @@ PreFin:
                 RamGive = (Value - 12) * 0.5 + 1.5
             ElseIf Value <= 33 Then
                 RamGive = (Value - 25) * 1 + 8
-            ElseIf Value <= 41 Then
-                RamGive = (Value - 33) * 2 + 16
             Else
                 RamGive = (Value - 33) * 2 + 16
             End If

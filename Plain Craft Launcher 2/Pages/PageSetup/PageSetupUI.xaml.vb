@@ -364,27 +364,28 @@ Refresh:
     End Sub
     Private Sub BtnMusicClear_Click(sender As Object, e As EventArgs) Handles BtnMusicClear.Click
         If MyMsgBox("即将删除背景音乐文件夹中的所有文件。" & vbCrLf & "此操作不可撤销，是否确定？", "警告",, "取消", IsWarn:=True) = 1 Then
-            RunInThread(Sub()
-                            Hint("正在删除背景音乐……")
-                            '停止播放音乐
-                            MusicNAudio = Nothing
-                            MusicWaitingList = New List(Of String)
-                            MusicAllList = New List(Of String)
-                            Thread.Sleep(200)
-                            '删除文件
-                            Try
-                                DeleteDirectory(Path & "PCL\Musics")
-                                Hint("背景音乐已删除！", HintType.Finish)
-                            Catch ex As Exception
-                                Log(ex, "删除背景音乐失败", LogLevel.Msgbox)
-                            End Try
-                            Try
-                                Directory.CreateDirectory(Path & "PCL\Musics")
-                                RunInUi(Sub() MusicRefreshPlay(False))
-                            Catch ex As Exception
-                                Log(ex, "重建背景音乐文件夹失败", LogLevel.Msgbox)
-                            End Try
-                        End Sub)
+            RunInThread(
+            Sub()
+                Hint("正在删除背景音乐……")
+                '停止播放音乐
+                MusicNAudio = Nothing
+                MusicWaitingList = New List(Of String)
+                MusicAllList = New List(Of String)
+                Thread.Sleep(200)
+                '删除文件
+                Try
+                    DeleteDirectory(Path & "PCL\Musics")
+                    Hint("背景音乐已删除！", HintType.Finish)
+                Catch ex As Exception
+                    Log(ex, "删除背景音乐失败", LogLevel.Msgbox)
+                End Try
+                Try
+                    Directory.CreateDirectory(Path & "PCL\Musics")
+                    RunInUi(Sub() MusicRefreshPlay(False))
+                Catch ex As Exception
+                    Log(ex, "重建背景音乐文件夹失败", LogLevel.Msgbox)
+                End Try
+            End Sub)
         End If
     End Sub
     Private Sub CheckMusicStart_Change() Handles CheckMusicStart.Change
@@ -427,9 +428,9 @@ Refresh:
         RadioLauncherTheme5Gray.Opacity -= 0.23
         RadioLauncherTheme5.Opacity += 0.23
         AniStart({
-                     AaOpacity(RadioLauncherTheme5Gray, 1, 1000),
-                     AaOpacity(RadioLauncherTheme5, -1, 1000)
-                 }, "ThemeUnlock")
+            AaOpacity(RadioLauncherTheme5Gray, 1, 1000),
+            AaOpacity(RadioLauncherTheme5, -1, 1000)
+        }, "ThemeUnlock")
         If RadioLauncherTheme5Gray.Opacity < 0.08 Then
             ThemeUnlock(5, UnlockHint:="隐藏主题 玄素黑 已解锁！")
             AniStop("ThemeUnlock")
@@ -668,18 +669,10 @@ Refresh:
 
     '滑动条
     Private Sub SliderLoad()
-        SliderMusicVolume.GetHintText = Function(Value As Integer)
-                                            Return Math.Ceiling(Value * 0.1) & "%"
-                                        End Function
-        SliderLauncherOpacity.GetHintText = Function(Value As Integer)
-                                                Return Math.Round(40 + Value * 0.1) & "%"
-                                            End Function
-        SliderLauncherHue.GetHintText = Function(Value As Integer)
-                                            Return Value & "°"
-                                        End Function
-        SliderLauncherSat.GetHintText = Function(Value As Integer)
-                                            Return Value & "%"
-                                        End Function
+        SliderMusicVolume.GetHintText = Function(v) Math.Ceiling(v * 0.1) & "%"
+        SliderLauncherOpacity.GetHintText = Function(v) Math.Round(40 + v * 0.1) & "%"
+        SliderLauncherHue.GetHintText = Function(v) v & "°"
+        SliderLauncherSat.GetHintText = Function(v) v & "%"
         SliderLauncherDelta.GetHintText = Function(Value As Integer)
                                               If Value > 90 Then
                                                   Return "+" & (Value - 90)
@@ -698,12 +691,8 @@ Refresh:
                                                   Return Value - 20
                                               End If
                                           End Function
-        SliderBackgroundOpacity.GetHintText = Function(Value As Integer)
-                                                  Return Math.Round(Value * 0.1) & "%"
-                                              End Function
-        SliderBackgroundBlur.GetHintText = Function(Value As Integer)
-                                               Return Value & " 像素"
-                                           End Function
+        SliderBackgroundOpacity.GetHintText = Function(v) Math.Round(v * 0.1) & "%"
+        SliderBackgroundBlur.GetHintText = Function(v) v & " 像素"
     End Sub
 
 End Class
