@@ -105,7 +105,7 @@
                 End If
                 '增加提示
                 If Pair.Key = "未知版本" Then
-                    NewStack.Children.Add(New MyHint With {.Text = "由于 API 的版本信息更新缓慢，可能无法识别刚更新不久的 MC 版本，只需等待几天即可自动恢复正常。", .IsWarn = False, .Margin = New Thickness(0, 0, 0, 7)})
+                    NewStack.Children.Add(New MyHint With {.Text = Application.Current.FindResource("LangDownloadCompApiSlow"), .IsWarn = False, .Margin = New Thickness(0, 0, 0, 7)})
                 End If
             Next
             '如果只有一张卡片，展开第一张卡片
@@ -246,7 +246,7 @@
                     Else
                         Dim NeedLoad As Boolean = McVersionListLoader.State <> LoadState.Finished
                         If NeedLoad Then
-                            Hint("正在查找适合的游戏版本……")
+                            Hint(Application.Current.FindResource("LangDownloadCompSearchingSuitableInstance"))
                             LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
                         End If
                         Dim SuitableVersions As New List(Of McVersion)
@@ -256,7 +256,7 @@
                         If Not SuitableVersions.Any() Then
                             DefaultFolder = PathMcFolder
                             If NeedLoad Then
-                                Hint("当前 MC 文件夹中没有找到适合这个 Mod 的版本！")
+                                Hint(Application.Current.FindResource("LangDownloadCompNoSuitableInstance"))
                             Else
                                 Log("[Comp] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
                             End If

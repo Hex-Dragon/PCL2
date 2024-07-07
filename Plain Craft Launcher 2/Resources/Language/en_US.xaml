@@ -195,7 +195,7 @@
 <s:String x:Key="LangSetHomePageSeeDoc">View the tutorial</s:String>
 <s:String x:Key="LangSetHomePageDownload">Download address</s:String>
 <s:String x:Key="LangSetHomePagePresetPage">Home Presets</s:String>
-<s:String x:Key="LangSetHomePagePresetPageA">You know what?</s:String>
+<s:String x:Key="LangSetHomePagePresetPageA">Tips</s:String>
 <s:String x:Key="LangSetHomePagePresetPageB">Echo hole</s:String>
 <s:String x:Key="LangSetHomePagePresetPageC">Minecraft News (Author:最亮的信标)</s:String>
 <s:String x:Key="LangSetHomePagePresetPageD">Simple Homepage (Author:MFn233)</s:String>
@@ -324,6 +324,9 @@
 <s:String x:Key="LangDownloadCompToMCMod">Go to MC Encyclopedia</s:String>
 <s:String x:Key="LangDownloadCompCopyName">Replication name</s:String>
 <s:String x:Key="LangDownloadCompLoadingList">Getting version list</s:String>
+        <s:String x:Key="LangDownloadCompApiSlow">Due to the slow update of the API version information, the newly updated MC version may not be recognized, and it will automatically return to normal after waiting a few days. </s:String>
+    <s:String x:Key="LangDownloadCompSearchingSuitableInstance">Looking for the right game version...</s:String>
+    <s:String x:Key="LangDownloadCompNoSuitableInstance">No version suitable for this Mod was found in the current MC folder! </s:String>
 
         <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Introduction to Fabric</s:String>
@@ -365,16 +368,18 @@
 <s:String x:Key="LangDownloadInstallDialogIndieContent">You have not turned on instance isolation, which will cause multiple Minecraft instances to share the same Mod folder.&#xa;Therefore, when switching Minecraft instance, Minecraft will crash because it reads a Mod that does not match the current version.&#xa;PCL recommends that you enable version isolation option in "Configuration → Version Isolation" before starting downloading!</s:String>
 <s:String x:Key="LangDownloadInstallCancelDownload">Cancel the download</s:String>
     <s:String x:Key="LangDownloadInstallNoAdd">No additional installation</s:String>
+        <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">Incompatible with NeoForge</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFabricManually">Old versions of Fabric are not allowed, please download OptFabric Origins manually</s:String>
     
         <!--PageDownloadLeft-->
     <s:String x:Key="LangDownloadPageRefresh">Refresh</s:String>
-    <s:String x:Key="LangDownloadPageAutoInstall">Automatical installation</s:String>
-    <s:String x:Key="LangDownloadPageManualInstall">▼ Manual installation</s:String>
+    <s:String x:Key="LangDownloadPageAutoInstall">Automatic</s:String>
+    <s:String x:Key="LangDownloadPageManualInstall">▼ Manual</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallContent">The manual installation package function provides download of.jar installation files for components such as OptiFine and Forge, but cannot be automatically installed.&#xa;Select MC version first on the automatic installation page, and then you can select OptiFine, Forge and other components to allow PCL to be installed automatically.</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallTitle">Automatic installation tips</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">Back to Automatic Installation</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">Continue downloading the manual installation package</s:String>
-    <s:String x:Key="LangDownloadPageManualInstallFold">Manual installation</s:String>
+    <s:String x:Key="LangDownloadPageManualInstallFold">Manual</s:String>
     <s:String x:Key="LangDownloadPageResource">Resources</s:String>
     <s:String x:Key="LangDownloadPageModpackages">Modpacks</s:String>
     
@@ -422,6 +427,12 @@
 <s:String x:Key="LangDownloadModTypeServer">Server</s:String>
 <s:String x:Key="LangDownloadModTypeUtility">Utility</s:String>
 <s:String x:Key="LangDownloadModTypeLib">Library</s:String>
+    
+        <!--PageDownloadNeoForge-->
+    <s:String x:Key="LangDownloadNeoForgeDescTitle">Introduce to NeoForge</s:String>
+<s:String x:Key="LangDownloadNeoForgeDesc">NeoForge is the Mod loader for Minecraft 1.19+. You need to install it first to install various NeoForge modules.&#xa;This page provides download of NeoForge Installer. After downloading, you need to manually open the installer to install.</s:String>
+<s:String x:Key="LangDownloadNeoForgeWebsite">Open the official website</s:String>
+<s:String x:Key="LangDownloadNeoForgeGettingList">Getting NeoForge list</s:String>
     
         <!--PageDownloadOptiFine-->
     <s:String x:Key="LangDownloadOptiFineDescTitle">Introduce to OptiFine</s:String>
@@ -549,4 +560,10 @@
         <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">Snapshot Tips</s:String>
     <s:String x:Key="LangLaunchRightLog">Startup log</s:String>
+    <s:String x:Key="LangLaunchRightLabHint1">The snapshot version contains test features that have not yet been officially released and is only for the sponsors themselves to try. Please do not send it to others or use it to make integrated packages!</s:String>
+<s:String x:Key="LangLaunchRightLabHint2">If you have accumulated sponsorship ¥ 23.33, you can permanently hide this reminder by sending the "解锁码" in a private message from AiPower Generation.</s:String>
+        <s:String x:Key="LangLaunchRightLoadingPage">Loading home page...</s:String>
+    <s:String x:Key="LangLaunchRightPageTips">Tips </s:String>
+    <s:String x:Key="LangLaunchRightPageEcho">Echo hole</s:String>
 </ResourceDictionary>
+

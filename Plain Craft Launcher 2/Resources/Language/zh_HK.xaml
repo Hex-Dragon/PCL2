@@ -324,6 +324,9 @@
     <s:String x:Key="LangDownloadCompToMCMod">轉到 MC 百科</s:String>
     <s:String x:Key="LangDownloadCompCopyName">複製名稱</s:String>
     <s:String x:Key="LangDownloadCompLoadingList">正在獲取版本列表</s:String>
+    <s:String x:Key="LangDownloadCompApiSlow">由於 API 的版本信息更新緩慢，可能無法識別剛更新不久的 MC 版本，只需等待幾天即可自動恢復正常。</s:String>
+    <s:String x:Key="LangDownloadCompSearchingSuitableInstance">正在查找適合的遊戲版本……</s:String>
+    <s:String x:Key="LangDownloadCompNoSuitableInstance">當前 MC 文件夾中沒有找到適合這個 Mod 的版本！</s:String>
     
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Fabric 簡介</s:String>
@@ -365,6 +368,8 @@
     <s:String x:Key="LangDownloadInstallDialogIndieContent">你尚未開啟版本隔離，這會導致多個 MC 共用同一個 Mod 文件夾。&#xa;因此在切換 MC 版本時，MC 會因為讀取到與當前版本不符的 Mod 而崩潰。&#xa;PCL 推薦你在開始下載前，在 設置 → 版本隔離 中開啟版本隔離選項！</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">取消下載</s:String>
     <s:String x:Key="LangDownloadInstallNoAdd">無附加安裝</s:String>
+    <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">與 NeoForge 不兼容</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFabricManually">不兼容老版本 Fabric，請手動下載 OptiFabric Origins</s:String>
     
     <!--PageDownloadLeft-->
     <s:String x:Key="LangDownloadPageRefresh">刷新</s:String>
@@ -422,6 +427,12 @@
     <s:String x:Key="LangDownloadModTypeServer">服務器</s:String>
     <s:String x:Key="LangDownloadModTypeUtility">改良</s:String>
     <s:String x:Key="LangDownloadModTypeLib">支持庫</s:String>
+    
+    <!--PageDownloadNeoForge-->
+    <s:String x:Key="LangDownloadNeoForgeDescTitle">NeoForge 簡介</s:String>
+<s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 是 Minecraft 1.19+ 的 Mod 加載器，你需要先安裝它才能安裝各種 NeoForge 模組。&#xa;本頁面提供 NeoForge 安裝器下載，在下載後你需要手動打開安裝器進行安裝。</s:String>
+<s:String x:Key="LangDownloadNeoForgeWebsite">打開官網</s:String>
+<s:String x:Key="LangDownloadNeoForgeGettingList">正在獲取 NeoForge 列表</s:String>
     
     <!--PageDownloadOptiFine-->
     <s:String x:Key="LangDownloadOptiFineDescTitle">OptiFine 簡介</s:String>
@@ -549,4 +560,9 @@
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
     <s:String x:Key="LangLaunchRightLog">啟動日誌</s:String>
+    <s:String x:Key="LangLaunchRightLabHint1">快照版包含尚未正式發布的測試功能，僅用於贊助者本人嘗鮮。請不要發給其他人或者用來製作整合包哦！</s:String>
+    <s:String x:Key="LangLaunchRightLabHint2">若已累積贊助￥23.33，在愛發電私信發送 「解鎖碼」 即可永久隱藏此提示。</s:String>
+    <s:String x:Key="LangLaunchRightLoadingPage">正在加載主頁……</s:String>
+    <s:String x:Key="LangLaunchRightPageTips">你知道嗎？</s:String>
+    <s:String x:Key="LangLaunchRightPageEcho">回聲洞</s:String>
 </ResourceDictionary>
