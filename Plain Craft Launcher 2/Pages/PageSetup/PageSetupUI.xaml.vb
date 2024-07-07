@@ -39,10 +39,10 @@
 #End If
 
         '设置解锁
-        If Not RadioLauncherTheme8.IsEnabled Then LabLauncherTheme8Copy.ToolTip = Application.Current.FindResource("LangThemeUnlockCopyTip8")
-        RadioLauncherTheme8.ToolTip = Application.Current.FindResource("LangThemeUnlockTip8")
-        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = Application.Current.FindResource("LangThemeUnlockCopyTip9")
-        RadioLauncherTheme9.ToolTip = Application.Current.FindResource("LangThemeUnlockTip9")
+        If Not RadioLauncherTheme8.IsEnabled Then LabLauncherTheme8Copy.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。" & vbCrLf & "右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！"
+        RadioLauncherTheme8.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁"
+        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）" & vbCrLf & "· 提交一个 Pull Request，在合并后回复识别码要求解锁"
+        RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁" & vbCrLf & "· 提交一个 Pull Request，在合并后回复识别码要求解锁"
         '极客蓝的处理在 ThemeCheck 中
 
     End Sub
@@ -83,7 +83,11 @@
             MusicRefreshUI()
 
             '主页
-            ComboCustomPreset.SelectedIndex = Setup.Get("UiCustomPreset")
+            Try
+                ComboCustomPreset.SelectedIndex = Setup.Get("UiCustomPreset")
+            Catch
+                Setup.Reset("UiCustomPreset")
+            End Try
             CType(FindName("RadioCustomType" & Setup.Load("UiCustomType")), MyRadioBox).Checked = True
             TextCustomNet.Text = Setup.Get("UiCustomNet")
 
@@ -356,27 +360,28 @@ Refresh:
     End Sub
     Private Sub BtnMusicClear_Click(sender As Object, e As EventArgs) Handles BtnMusicClear.Click
         If MyMsgBox(Application.Current.FindResource("LangDialogBackgroundMusicDeleteContent"), Application.Current.FindResource("LangDialogTitleWarning"),, Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
-            RunInThread(Sub()
-                            Hint(Application.Current.FindResource("LangHintBackgroundMusicDeleting"))
-                            '停止播放音乐
-                            MusicNAudio = Nothing
-                            MusicWaitingList = New List(Of String)
-                            MusicAllList = New List(Of String)
-                            Thread.Sleep(200)
-                            '删除文件
-                            Try
-                                DeleteDirectory(Path & "PCL\Musics")
-                                Hint(Application.Current.FindResource("LangHintBackgroundMusicDeleted"), HintType.Finish)
-                            Catch ex As Exception
-                                Log(ex, Application.Current.FindResource("LangHintBackgroundMusicDeleteFail"), LogLevel.Msgbox)
-                            End Try
-                            Try
-                                Directory.CreateDirectory(Path & "PCL\Musics")
-                                RunInUi(Sub() MusicRefreshPlay(False))
-                            Catch ex As Exception
-                                Log(ex, Application.Current.FindResource("LangHintBackgroundMusicCreateFolderFail"), LogLevel.Msgbox)
-                            End Try
-                        End Sub)
+            RunInThread(
+            Sub()
+                Hint(Application.Current.FindResource("LangHintBackgroundMusicDeleting"))
+                '停止播放音乐
+                MusicNAudio = Nothing
+                MusicWaitingList = New List(Of String)
+                MusicAllList = New List(Of String)
+                Thread.Sleep(200)
+                '删除文件
+                Try
+                    DeleteDirectory(Path & "PCL\Musics")
+                    Hint(Application.Current.FindResource("LangHintBackgroundMusicDeleted"), HintType.Finish)
+                Catch ex As Exception
+                    Log(ex, Application.Current.FindResource("LangHintBackgroundMusicDeleteFail"), LogLevel.Msgbox)
+                End Try
+                Try
+                    Directory.CreateDirectory(Path & "PCL\Musics")
+                    RunInUi(Sub() MusicRefreshPlay(False))
+                Catch ex As Exception
+                    Log(ex, Application.Current.FindResource("LangHintBackgroundMusicCreateFolderFail"), LogLevel.Msgbox)
+                End Try
+            End Sub)
         End If
     End Sub
     Private Sub CheckMusicStart_Change() Handles CheckMusicStart.Change
@@ -414,9 +419,9 @@ Refresh:
         RadioLauncherTheme5Gray.Opacity -= 0.23
         RadioLauncherTheme5.Opacity += 0.23
         AniStart({
-                     AaOpacity(RadioLauncherTheme5Gray, 1, 1000),
-                     AaOpacity(RadioLauncherTheme5, -1, 1000)
-                 }, "ThemeUnlock")
+            AaOpacity(RadioLauncherTheme5Gray, 1, 1000),
+            AaOpacity(RadioLauncherTheme5, -1, 1000)
+        }, "ThemeUnlock")
         If RadioLauncherTheme5Gray.Opacity < 0.08 Then
             ThemeUnlock(5, UnlockHint:=Application.Current.FindResource("LangThemeBackUnlock"))
             AniStop("ThemeUnlock")
@@ -650,18 +655,10 @@ Refresh:
 
     '滑动条
     Private Sub SliderLoad()
-        SliderMusicVolume.GetHintText = Function(Value As Integer)
-                                            Return Math.Ceiling(Value * 0.1) & "%"
-                                        End Function
-        SliderLauncherOpacity.GetHintText = Function(Value As Integer)
-                                                Return Math.Round(40 + Value * 0.1) & "%"
-                                            End Function
-        SliderLauncherHue.GetHintText = Function(Value As Integer)
-                                            Return Value & "°"
-                                        End Function
-        SliderLauncherSat.GetHintText = Function(Value As Integer)
-                                            Return Value & "%"
-                                        End Function
+        SliderMusicVolume.GetHintText = Function(v) Math.Ceiling(v * 0.1) & "%"
+        SliderLauncherOpacity.GetHintText = Function(v) Math.Round(40 + v * 0.1) & "%"
+        SliderLauncherHue.GetHintText = Function(v) v & "°"
+        SliderLauncherSat.GetHintText = Function(v) v & "%"
         SliderLauncherDelta.GetHintText = Function(Value As Integer)
                                               If Value > 90 Then
                                                   Return "+" & (Value - 90)
@@ -680,12 +677,8 @@ Refresh:
                                                   Return Value - 20
                                               End If
                                           End Function
-        SliderBackgroundOpacity.GetHintText = Function(Value As Integer)
-                                                  Return Math.Round(Value * 0.1) & "%"
-                                              End Function
-        SliderBackgroundBlur.GetHintText = Function(Value As Integer)
-                                               Return Value & " 像素"
-                                           End Function
+        SliderBackgroundOpacity.GetHintText = Function(v) Math.Round(v * 0.1) & "%"
+        SliderBackgroundBlur.GetHintText = Function(v) v & " 像素"
     End Sub
 
 End Class

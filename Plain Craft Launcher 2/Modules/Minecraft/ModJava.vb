@@ -2,18 +2,6 @@
     Public JavaListCacheVersion As Integer = 6
 
     ''' <summary>
-    ''' 用于在搜索 Java 时进行关键词检测。
-    ''' </summary>
-    Public ReadOnly SearchEntryWords As List(Of String) =
-        New List(Of String) From {"java", "jdk", "env", "环境", "run", "软件", "jre", "mc",
-        "soft", "cache", "temp", "corretto", "roaming", "users", "craft", "program", "世界", "net",
-        "游戏", "oracle", "game", "file", "data", "jvm", "服务", "server", "客户", "client", "整合",
-        "应用", "运行", "前置", "mojang", "官启", "新建文件夹", "eclipse", "microsoft", "hotspot",
-        "runtime", "x86", "x64", "forge", "原版", "optifine", "官方", "启动", "hmcl", "mod", "高清",
-        "download", "launch", "程序", "path", "version", "baka", "pcl", "zulu", "local", "packages",
-        "4297127d64ec6", "国服", "网易", "ext", "netease", "1.", "启动"}
-
-    ''' <summary>
     ''' 目前所有可用的 Java。
     ''' </summary>
     Public JavaList As New List(Of JavaEntry)
@@ -252,21 +240,25 @@
             Dim UserJava As JavaEntry = Nothing
 
             '获取版本独立设置中指定的 Java
-            If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion).ToString.StartsWithF("{") Then
-                Try
-                    UserJava = JavaEntry.FromJson(GetJson(Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)))
-                    UserJava.Check()
-                Catch ex As ThreadInterruptedException
-                    Throw
-                Catch ex As Exception
-                    UserJava = Nothing
-                    Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
-                    Log(ex, "版本独立设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
-                End Try
+            Dim VersionSelect As String = ""
+            If RelatedVersion IsNot Nothing Then
+                VersionSelect = Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)
+                If VersionSelect.StartsWithF("{") Then
+                    Try
+                        UserJava = JavaEntry.FromJson(GetJson(VersionSelect))
+                        UserJava.Check()
+                    Catch ex As ThreadInterruptedException
+                        Throw
+                    Catch ex As Exception
+                        UserJava = Nothing
+                        Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
+                        Log(ex, "版本独立设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
+                    End Try
+                End If
             End If
 
             '获取全局设置中指定的 Java
-            If UserJava Is Nothing AndAlso Setup.Get("LaunchArgumentJavaSelect") <> "" Then
+            If UserJava Is Nothing AndAlso VersionSelect <> "" AndAlso Setup.Get("LaunchArgumentJavaSelect") <> "" Then
                 Try
                     UserJava = JavaEntry.FromJson(GetJson(Setup.Get("LaunchArgumentJavaSelect")))
                     UserJava.Check()
@@ -677,13 +669,18 @@ Wait:
             '若该目录有 Java，则加入结果
             If File.Exists(Path & "javaw.exe") Then Results(Path) = Source
             '查找其下的所有文件夹
+            Dim Keywords = {"java", "jdk", "env", "环境", "run", "软件", "jre", "mc", "dragon",
+                            "soft", "cache", "temp", "corretto", "roaming", "users", "craft", "program", "世界", "net",
+                            "游戏", "oracle", "game", "file", "data", "jvm", "服务", "server", "客户", "client", "整合",
+                            "应用", "运行", "前置", "mojang", "官启", "新建文件夹", "eclipse", "microsoft", "hotspot",
+                            "runtime", "x86", "x64", "forge", "原版", "optifine", "官方", "启动", "hmcl", "mod", "高清",
+                            "download", "launch", "程序", "path", "version", "baka", "pcl", "zulu", "local", "packages",
+                            "4297127d64ec6", "国服", "网易", "ext", "netease", "1.", "启动"}
             For Each FolderInfo As DirectoryInfo In OriginalPath.EnumerateDirectories
                 If FolderInfo.Attributes.HasFlag(FileAttributes.ReparsePoint) Then Continue For '跳过符号链接
                 Dim SearchEntry = GetFolderNameFromPath(FolderInfo.Name).ToLower '用于搜索的字符串
-                If IsFullSearch OrElse
-                        FolderInfo.Parent.Name.ToLower = "users" OrElse
-                        SearchEntryWords.Any(Function(word) SearchEntry.Contains(word)) OrElse '进行关键词检测
-                        SearchEntry = "bin" Then
+                If IsFullSearch OrElse FolderInfo.Parent.Name.ToLower = "users" OrElse
+                   Keywords.Any(Function(w) SearchEntry.Contains(w)) OrElse SearchEntry = "bin" Then
                     JavaSearchFolder(FolderInfo, Results, Source)
                 End If
             Next

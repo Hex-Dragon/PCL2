@@ -10,6 +10,13 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 326 Then 'Release 2.7.4
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "会自动隐藏明显不可用的自动安装选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化正版登录流程和 MC 性能"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复正版登录时弹出脚本错误提示的 Bug"))
+            FeatureCount += 17
+            BugCount += 19
+        End If
         If LastVersion < 323 Then 'Release 2.7.3
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 启动游戏前进行内存优化 设置"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 MC 性能"))
@@ -108,6 +115,17 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 328 Then 'Snapshot 2.8.1
+            If LastVersion = 327 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 Forge 1.12.2- 的 Bug"))
+            If LastVersion = 327 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法输入解锁码的 Bug"))
+            If LastVersion = 327 Then BugCount += 1
+        End If
+        If LastVersion < 327 Then 'Snapshot 2.8.0
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "NeoForge 兼容与自动安装"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持编译、运行 PCL 开源代码"))
+            FeatureCount += 11
+            BugCount += 14
+        End If
         If LastVersion < 325 Then 'Snapshot 2.7.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "会自动隐藏明显不可用的自动安装选项"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化正版登录流程和 MC 性能"))
@@ -1038,10 +1056,11 @@ Install:
         DownloadClient = 4
         DownloadOptiFine = 5
         DownloadForge = 6
-        DownloadFabric = 7
-        DownloadLiteLoader = 8
-        DownloadMod = 10
-        DownloadPack = 11
+        DownloadNeoForge = 7
+        DownloadFabric = 8
+        DownloadLiteLoader = 9
+        DownloadMod = 11
+        DownloadPack = 12
         SetupLaunch = 0
         SetupUI = 1
         SetupSystem = 2

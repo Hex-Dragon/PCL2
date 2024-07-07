@@ -10,7 +10,7 @@
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemInstall.Check, ItemClient.Check, ItemOptiFine.Check, ItemForge.Check, ItemLiteLoader.Check, ItemMod.Check, ItemFabric.Check, ItemPack.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemInstall.Check, ItemClient.Check, ItemOptiFine.Check, ItemForge.Check, ItemNeoForge.Check, ItemLiteLoader.Check, ItemMod.Check, ItemFabric.Check, ItemPack.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -31,6 +31,9 @@
             Case FormMain.PageSubType.DownloadForge
                 If FrmDownloadForge Is Nothing Then FrmDownloadForge = New PageDownloadForge
                 Return FrmDownloadForge
+            Case FormMain.PageSubType.DownloadNeoForge
+                If FrmDownloadNeoForge Is Nothing Then FrmDownloadNeoForge = New PageDownloadNeoForge
+                Return FrmDownloadNeoForge
             Case FormMain.PageSubType.DownloadLiteLoader
                 If FrmDownloadLiteLoader Is Nothing Then FrmDownloadLiteLoader = New PageDownloadLiteLoader
                 Return FrmDownloadLiteLoader
@@ -69,17 +72,19 @@
         FrmMain.PageRight = Target
         CType(FrmMain.PanMainRight.Child, MyPageRight).PageOnExit()
         AniStart({
-                         AaCode(Sub()
-                                    CType(FrmMain.PanMainRight.Child, MyPageRight).PageOnForceExit()
-                                    FrmMain.PanMainRight.Child = FrmMain.PageRight
-                                    FrmMain.PageRight.Opacity = 0
-                                End Sub, 130),
-                         AaCode(Sub()
-                                    '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
-                                    FrmMain.PageRight.Opacity = 1
-                                    FrmMain.PageRight.PageOnEnter()
-                                End Sub, 30, True)
-                     }, "PageLeft PageChange")
+            AaCode(
+            Sub()
+                CType(FrmMain.PanMainRight.Child, MyPageRight).PageOnForceExit()
+                FrmMain.PanMainRight.Child = FrmMain.PageRight
+                FrmMain.PageRight.Opacity = 0
+            End Sub, 130),
+            AaCode(
+            Sub()
+                '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
+                FrmMain.PageRight.Opacity = 1
+                FrmMain.PageRight.PageOnEnter()
+            End Sub, 30, True)
+        }, "PageLeft PageChange")
     End Sub
 
 #End Region
@@ -91,6 +96,7 @@
                 DlClientListLoader.Start(IsForceRestart:=True)
                 DlOptiFineListLoader.Start(IsForceRestart:=True)
                 DlForgeListLoader.Start(IsForceRestart:=True)
+                DlNeoForgeListLoader.Start(IsForceRestart:=True)
                 DlLiteLoaderListLoader.Start(IsForceRestart:=True)
                 DlFabricListLoader.Start(IsForceRestart:=True)
                 DlFabricApiLoader.Start(IsForceRestart:=True)
@@ -117,6 +123,9 @@
             Case FormMain.PageSubType.DownloadForge
                 DlForgeListLoader.Start(IsForceRestart:=True)
                 ItemForge.Checked = True
+            Case FormMain.PageSubType.DownloadNeoForge
+                DlNeoForgeListLoader.Start(IsForceRestart:=True)
+                ItemNeoForge.Checked = True
             Case FormMain.PageSubType.DownloadLiteLoader
                 DlLiteLoaderListLoader.Start(IsForceRestart:=True)
                 ItemLiteLoader.Checked = True
@@ -153,12 +162,14 @@
         ItemOptiFine.Visibility = Visibility.Visible
         ItemFabric.Visibility = Visibility.Visible
         ItemForge.Visibility = Visibility.Visible
+        ItemNeoForge.Visibility = Visibility.Visible
         ItemLiteLoader.Visibility = Visibility.Visible
-        RunInThread(Sub()
-                        Thread.Sleep(20)
-                        RunInUiWait(Sub() ItemClient.SetChecked(True, True, True))
-                        AniControlEnabled -= 1
-                    End Sub)
+        RunInThread(
+        Sub()
+            Thread.Sleep(20)
+            RunInUiWait(Sub() ItemClient.SetChecked(True, True, True))
+            AniControlEnabled -= 1
+        End Sub)
     End Sub
     '折叠手动安装
     Private Sub LabHand_Click(sender As Object, e As MouseButtonEventArgs) Handles LabHand.MouseLeftButtonUp
@@ -169,14 +180,16 @@
         LabHand.Visibility = Visibility.Collapsed
         ItemClient.Visibility = Visibility.Collapsed
         ItemOptiFine.Visibility = Visibility.Collapsed
+        ItemNeoForge.Visibility = Visibility.Collapsed
         ItemFabric.Visibility = Visibility.Collapsed
         ItemForge.Visibility = Visibility.Collapsed
         ItemLiteLoader.Visibility = Visibility.Collapsed
-        RunInThread(Sub()
-                        Thread.Sleep(20)
-                        RunInUiWait(Sub() ItemInstall.SetChecked(True, True, True))
-                        AniControlEnabled -= 1
-                    End Sub)
+        RunInThread(
+        Sub()
+            Thread.Sleep(20)
+            RunInUiWait(Sub() ItemInstall.SetChecked(True, True, True))
+            AniControlEnabled -= 1
+        End Sub)
     End Sub
 
 End Class

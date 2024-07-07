@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.7.4" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.7.4." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.8.1" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.8.1." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 323 'Release
+    Public Const VersionCode As Integer = 326 'Release
 #Else
-    Public Const VersionCode As Integer = 325 'Snapshot
+    Public Const VersionCode As Integer = 328 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -2065,15 +2065,16 @@ NextElement:
     ''' 在新的工作线程中执行代码。
     ''' </summary>
     Public Function RunInNewThread(Action As Action, Name As String, Optional Priority As ThreadPriority = ThreadPriority.Normal) As Thread
-        Dim th As New Thread(Sub()
-                                 Try
-                                     Action()
-                                 Catch ex As ThreadInterruptedException
-                                     Log(Name & "：线程已中止")
-                                 Catch ex As Exception
-                                     Log(ex, Name & "：线程执行失败", LogLevel.Feedback)
-                                 End Try
-                             End Sub) With {.Name = Name, .Priority = Priority}
+        Dim th As New Thread(
+        Sub()
+            Try
+                Action()
+            Catch ex As ThreadInterruptedException
+                Log(Name & "：线程已中止")
+            Catch ex As Exception
+                Log(ex, Name & "：线程执行失败", LogLevel.Feedback)
+            End Try
+        End Sub) With {.Name = Name, .Priority = Priority}
         th.Start()
         Return th
     End Function
@@ -2186,8 +2187,9 @@ NextElement:
     ''' </summary>
     Public Sub OpenWebsite(Url As String)
         Try
-            ' 允许 Minecraft 基岩版的 URLScheme (#3985)
-            If Not Url.StartsWithF("http", True) Or Not Url.StartsWithF("minecraft://") Then Throw New Exception(Url & " 不是一个有效的网址，它必须以 http 开头！")
+            If Not Url.StartsWithF("http", True) AndAlso Not Url.StartsWithF("minecraft://", True) Then
+                Throw New Exception(Url & " 不是一个有效的网址，它必须以 http 开头！")
+            End If
             Log("[System] 正在打开网页：" & Url)
             Process.Start(Url)
         Catch ex As Exception
@@ -2212,25 +2214,27 @@ NextElement:
     ''' 设置剪贴板。将在另一线程运行，且不会抛出异常。
     ''' </summary>
     Public Sub ClipboardSet(Text As String, Optional ShowSuccessHint As Boolean = True)
-        RunInThread(Sub()
-                        Dim RetryCount As Integer = 0
+        RunInThread(
+        Sub()
+            Dim RetryCount As Integer = 0
 Retry:
-                        Try
-                            RunInUi(Sub()
-                                        My.Computer.Clipboard.Clear()
-                                        My.Computer.Clipboard.SetText(Text)
-                                    End Sub)
-                        Catch ex As Exception
-                            RetryCount += 1
-                            If RetryCount <= 5 Then
-                                Thread.Sleep(20)
-                                GoTo Retry
-                            Else
-                                Log(ex, "可能由于剪贴板被其他程序占用，文本复制失败", LogLevel.Hint)
-                            End If
-                        End Try
-                        If ShowSuccessHint Then Hint("已成功复制！", HintType.Finish)
-                    End Sub)
+            Try
+                RunInUi(
+                Sub()
+                    My.Computer.Clipboard.Clear()
+                    My.Computer.Clipboard.SetText(Text)
+                End Sub)
+            Catch ex As Exception
+                RetryCount += 1
+                If RetryCount <= 5 Then
+                    Thread.Sleep(20)
+                    GoTo Retry
+                Else
+                    Log(ex, "可能由于剪贴板被其他程序占用，文本复制失败", LogLevel.Hint)
+                End If
+            End Try
+            If ShowSuccessHint Then Hint("已成功复制！", HintType.Finish)
+        End Sub)
     End Sub
 
     ''' <summary>
@@ -2449,39 +2453,40 @@ Retry:
     Private LogList As New StringBuilder
     Private LogWritter As StreamWriter
     Public Sub LogStart()
-        RunInNewThread(Sub()
-                           Dim IsInitSuccess As Boolean = True
-                           Try
-                               For i = 4 To 1 Step -1
-                                   If File.Exists(Path & "PCL\Log" & i & ".txt") Then
-                                       If File.Exists(Path & "PCL\Log" & (i + 1) & ".txt") Then File.Delete(Path & "PCL\Log" & (i + 1) & ".txt")
-                                       CopyFile(Path & "PCL\Log" & i & ".txt", Path & "PCL\Log" & (i + 1) & ".txt")
-                                   End If
-                               Next
-                               File.Create(Path & "PCL\Log1.txt").Dispose()
-                           Catch ex As IOException
-                               IsInitSuccess = False
-                               Hint("可能同时开启了多个 PCL，程序可能会出现未知问题！", HintType.Critical)
-                               Log(ex, "日志初始化失败（疑似文件占用问题）")
-                           Catch ex As Exception
-                               IsInitSuccess = False
-                               Log(ex, "日志初始化失败", LogLevel.Hint)
-                           End Try
-                           Try
-                               LogWritter = New StreamWriter(Path & "PCL\Log1.txt", True) With {.AutoFlush = True}
-                           Catch ex As Exception
-                               LogWritter = Nothing
-                               Log(ex, "日志写入失败", LogLevel.Hint)
-                           End Try
-                           While True
-                               If IsInitSuccess Then
-                                   LogFlush()
-                               Else
-                                   LogList = New StringBuilder '清空 LogList 避免内存爆炸
-                               End If
-                               Thread.Sleep(50)
-                           End While
-                       End Sub, "Log Writer", ThreadPriority.Lowest)
+        RunInNewThread(
+        Sub()
+            Dim IsInitSuccess As Boolean = True
+            Try
+                For i = 4 To 1 Step -1
+                    If File.Exists(Path & "PCL\Log" & i & ".txt") Then
+                        If File.Exists(Path & "PCL\Log" & (i + 1) & ".txt") Then File.Delete(Path & "PCL\Log" & (i + 1) & ".txt")
+                        CopyFile(Path & "PCL\Log" & i & ".txt", Path & "PCL\Log" & (i + 1) & ".txt")
+                    End If
+                Next
+                File.Create(Path & "PCL\Log1.txt").Dispose()
+            Catch ex As IOException
+                IsInitSuccess = False
+                Hint("可能同时开启了多个 PCL，程序可能会出现未知问题！", HintType.Critical)
+                Log(ex, "日志初始化失败（疑似文件占用问题）")
+            Catch ex As Exception
+                IsInitSuccess = False
+                Log(ex, "日志初始化失败", LogLevel.Hint)
+            End Try
+            Try
+                LogWritter = New StreamWriter(Path & "PCL\Log1.txt", True) With {.AutoFlush = True}
+            Catch ex As Exception
+                LogWritter = Nothing
+                Log(ex, "日志写入失败", LogLevel.Hint)
+            End Try
+            While True
+                If IsInitSuccess Then
+                    LogFlush()
+                Else
+                    LogList = New StringBuilder '清空 LogList 避免内存爆炸
+                End If
+                Thread.Sleep(50)
+            End While
+        End Sub, "Log Writer", ThreadPriority.Lowest)
     End Sub
     Private ReadOnly LogFlushLock As New Object '防止外部调用 LogFlush 时同时输出多次日志
     Public Sub LogFlush()

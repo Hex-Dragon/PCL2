@@ -183,6 +183,7 @@ Retry:
 
         '获取 Mod API 版本信息
         Dim ForgeVersion As String = Nothing
+        Dim NeoForgeVersion As String = Nothing
         Dim FabricVersion As String = Nothing
         For Each Entry In If(Json("minecraft")("modLoaders"), {})
             Dim Id As String = If(Entry("id"), "").ToString.ToLower
@@ -198,6 +199,15 @@ Retry:
                     Exit For
                 Catch ex As Exception
                     Log(ex, "读取整合包 Forge 版本失败：" & Id)
+                End Try
+            ElseIf Id.StartsWithF("neoforge-") Then
+                'NeoForge 指定
+                Try
+                    Log("[ModPack] 整合包 NeoForge 版本：" & Id)
+                    NeoForgeVersion = Id.Split("-")(1)
+                    Exit For
+                Catch ex As Exception
+                    Log(ex, "读取整合包 NeoForge 版本失败：" & Id)
                 End Try
             ElseIf Id.StartsWithF("fabric-") Then
                 'Fabric 指定
@@ -271,19 +281,23 @@ Retry:
                     '建立 CompFile
                     Dim File As New CompFile(ModJson, CompType.Mod)
                     If Not File.Available Then Continue For
-                    '根据 modules 和文件名后缀判断是资源包还是 Mod
-                    Dim IsResourcePack As Boolean
+                    '根据 modules 和文件名后缀判断资源类型
+                    Dim TargetFolder As String
                     If ModJson("modules").Any Then 'modules 可能返回 null（#1006）
                         Dim ModuleNames = CType(ModJson("modules"), JArray).Select(Function(l) l("name").ToString).ToList
-                        IsResourcePack =
-                            (Not ModuleNames.Contains("META-INF")) AndAlso (Not ModuleNames.Contains("mcmod.info")) AndAlso '不包含 META-INF 或 mcmod.info
-                            ModuleNames.Contains("pack.mcmeta") AndAlso '包含 pack.mcmeta
-                            (Not File.FileName.EndsWithF(".jar", True)) '文件后缀不是 .jar
+                        If ModuleNames.Contains("META-INF") OrElse ModuleNames.Contains("mcmod.info") OrElse
+                           File.FileName.EndsWithF(".jar", True) Then
+                            TargetFolder = "mods"
+                        ElseIf ModuleNames.Contains("pack.mcmeta") Then
+                            TargetFolder = "resourcepacks"
+                        Else
+                            TargetFolder = "shaderpacks"
+                        End If
                     Else
-                        IsResourcePack = False
+                        TargetFolder = "mods"
                     End If
                     '实际的添加
-                    FileList.Add(Id, File.ToNetFile($"{PathMcFolder}versions\{VersionName}\{If(IsResourcePack, "resourcepacks", "mods")}\"))
+                    FileList.Add(Id, File.ToNetFile($"{PathMcFolder}versions\{VersionName}\{TargetFolder}\"))
                     Task.Progress += 1 / (1 + ModList.Count)
                 Next
                 Task.Output = FileList.Values.ToList
@@ -301,6 +315,7 @@ Retry:
             .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\",
             .MinecraftName = Json("minecraft")("version").ToString,
             .ForgeVersion = ForgeVersion,
+            .NeoForgeVersion = NeoForgeVersion,
             .FabricVersion = FabricVersion
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
@@ -368,6 +383,7 @@ Retry:
         '获取 Mod API 版本信息
         Dim MinecraftVersion As String = Nothing
         Dim ForgeVersion As String = Nothing
+        Dim NeoForgeVersion As String = Nothing
         Dim FabricVersion As String = Nothing
         For Each Entry As JProperty In If(Json("dependencies"), {})
             Select Case Entry.Name.ToLower
@@ -376,6 +392,9 @@ Retry:
                 Case "forge" 'eg. 14.23.5.2859 / 1.19-41.1.0
                     ForgeVersion = Entry.Value.ToString
                     Log("[ModPack] 整合包 Forge 版本：" & ForgeVersion)
+                Case "neoforge", "neo-forge" 'eg. 20.6.98-beta
+                    NeoForgeVersion = Entry.Value.ToString
+                    Log("[ModPack] 整合包 NeoForge 版本：" & NeoForgeVersion)
                 Case "fabric-loader" 'eg. 0.14.14
                     FabricVersion = Entry.Value.ToString
                     Log("[ModPack] 整合包 Fabric 版本：" & FabricVersion)
@@ -447,6 +466,7 @@ Retry:
             .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\",
             .MinecraftName = MinecraftVersion,
             .ForgeVersion = ForgeVersion,
+            .NeoForgeVersion = NeoForgeVersion,
             .FabricVersion = FabricVersion
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
@@ -676,6 +696,8 @@ Retry:
                     Request.MinecraftName = Component("version")
                 Case "net.minecraftforge"
                     Request.ForgeVersion = Component("version")
+                Case "net.neoforged"
+                    Request.NeoForgeVersion = Component("version")
                 Case "net.fabricmc.fabric-loader"
                     Request.FabricVersion = Component("version")
                 Case "org.quiltmc.quilt-loader" 'eg. 1.0.0
@@ -772,6 +794,7 @@ Retry:
             .MinecraftName = Addons("game"),
             .OptiFineVersion = If(Addons.ContainsKey("optifine"), Addons("optifine"), Nothing),
             .ForgeVersion = If(Addons.ContainsKey("forge"), Addons("forge"), Nothing),
+            .NeoForgeVersion = If(Addons.ContainsKey("neoforge"), Addons("neoforge"), Nothing),
             .FabricVersion = If(Addons.ContainsKey("fabric"), Addons("fabric"), Nothing)
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)

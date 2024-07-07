@@ -1005,74 +1005,13 @@ Retry:
 
 #End Region
 
-#Region "Forge 下载"
+#Region "Forgelike 下载"
 
-    Public Sub McDownloadForge(DownloadInfo As DlForgeVersionEntry)
-        '老版本提示
-        If DownloadInfo.Category = "client" Then
-            If MyMsgBox("该 Forge 版本过于古老，PCL 暂不支持该版本的自动安装。" & vbCrLf &
-                        "若你仍然希望继续，PCL 将把安装程序下载到你指定的位置，但不会进行安装。",
-                        "版本过老", "继续", "取消") = 1 Then
-                McDownloadForgeSave(DownloadInfo)
-            End If
-            Exit Sub
-        End If
-        If DownloadInfo.Category = "universal" OrElse DownloadInfo.Inherit.StartsWithF("1.5") Then '对该版本自动安装的支持将在之后加入
-            If MyMsgBox("该 Forge 版本过于古老，PCL 暂不支持该版本的自动安装。" & vbCrLf &
-                        "若你仍然希望继续，PCL 将把安装程序下载到你指定的位置，但不会进行安装。",
-                        "版本过老", "继续", "取消") = 1 Then
-                McDownloadForgeSave(DownloadInfo)
-            End If
-            Exit Sub
-        End If
-        '初始化参数
-        Dim Id As String = DownloadInfo.Inherit & "-forge-" & DownloadInfo.Version
-        Dim Target As String = PathTemp & "Cache\Code\ForgeInstall-" & DownloadInfo.Version & "_" & GetUuid() & "." & DownloadInfo.FileSuffix
-        Dim VersionFolder As String = PathMcFolder & "versions\" & Id & "\"
-        Dim DisplayName As String = "Forge " & DownloadInfo.Inherit & " - " & DownloadInfo.Version
+    Public Sub McDownloadForgelikeSave(Info As DlForgelikeEntry)
         Try
-
-            '重复任务检查
-            SyncLock LoaderTaskbarLock
-                For i = 0 To LoaderTaskbar.Count - 1
-                    If LoaderTaskbar(i).Name = DisplayName & " 下载" Then
-                        Hint("该版本正在下载中！", HintType.Critical)
-                        Exit Sub
-                    End If
-                Next
-            End SyncLock
-
-            '已有版本检查
-            If File.Exists(VersionFolder & Id & ".json") Then
-                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 和 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
-                    File.Delete(VersionFolder & Id & ".jar")
-                    File.Delete(VersionFolder & Id & ".json")
-                Else
-                    Exit Sub
-                End If
-            End If
-
-            '启动
-            Dim Loader As New LoaderCombo(Of String)(DisplayName & " 下载", McDownloadForgeLoader(DownloadInfo.Version, DownloadInfo.Inherit, DownloadInfo)) With {.OnStateChanged = AddressOf McInstallState}
-            Loader.Start(VersionFolder)
-            LoaderTaskbarAdd(Loader)
-            FrmMain.BtnExtraDownload.ShowRefresh()
-            FrmMain.BtnExtraDownload.Ribble()
-
-        Catch ex As Exception
-            Log(ex, "开始 Forge 下载失败", LogLevel.Feedback)
-        Finally
-            '删除安装包
-            Try
-                If File.Exists(Target) Then File.Delete(Target)
-            Catch
-            End Try
-        End Try
-    End Sub
-    Public Sub McDownloadForgeSave(DownloadInfo As DlForgeVersionEntry)
-        Try
-            Dim Target As String = SelectAs("选择保存位置", DownloadInfo.FileName, "Forge 文件 (*." & DownloadInfo.FileSuffix & ")|*." & DownloadInfo.FileSuffix)
-            Dim DisplayName As String = "Forge " & DownloadInfo.Inherit & " - " & DownloadInfo.Version
+            Dim Target As String = SelectAs("选择保存位置", $"{Info.LoaderName}-{Info.Inherit}-{Info.VersionName}.{Info.FileExtension}",
+                                            $"{Info.LoaderName} 安装器 (*.{Info.FileExtension})|*.{Info.FileExtension}")
+            Dim DisplayName As String = $"{Info.LoaderName} {Info.Inherit} - {Info.VersionName}"
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
@@ -1085,34 +1024,41 @@ Retry:
                 Next
             End SyncLock
 
-            '构造步骤加载器
-            Dim Loaders As New List(Of LoaderBase)
             '获取下载地址
-            Loaders.Add(New LoaderTask(Of DlForgeVersionEntry, List(Of NetFile))("获取下载地址",
-            Sub(Task As LoaderTask(Of DlForgeVersionEntry, List(Of NetFile)))
-                Dim Files As New List(Of NetFile)
+            Dim Files As New List(Of NetFile)
+            If Info.IsNeoForge Then
+                'NeoForge
+                Dim Neo As DlNeoForgeListEntry = Info
+                Dim Url As String = Neo.UrlBase & "-installer.jar"
                 Files.Add(New NetFile({
-                    "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                    "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & DownloadInfo.Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
-                }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash)))
-                Task.Output = Files
-            End Sub) With {.ProgressWeight = 0.1, .Show = False})
-            '下载
-            Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile)) With {.ProgressWeight = 6})
+                    Url.Replace("maven.neoforged.net/releases", "bmclapi2.bangbang93.com/maven"), Url
+                }, Target, New FileChecker(MinSize:=64 * 1024)))
+            Else
+                'Forge
+                Dim Forge As DlForgeVersionEntry = Info
+                Files.Add(New NetFile({
+                    $"https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{Forge.Inherit}-{Forge.FileVersion}/forge-{Forge.Inherit}-{Forge.FileVersion}-{Forge.Category}.{Forge.FileExtension}",
+                    $"https://files.minecraftforge.net/maven/net/minecraftforge/forge/{Forge.Inherit}-{Forge.FileVersion}/forge-{Forge.Inherit}-{Forge.FileVersion}-{Forge.Category}.{Forge.FileExtension}"
+                }, Target, New FileChecker(MinSize:=64 * 1024, Hash:=Forge.Hash)))
+            End If
+
+            '构造加载器
+            Dim Loaders As New List(Of LoaderBase)
+            Loaders.Add(New LoaderDownload("下载主文件", Files) With {.ProgressWeight = 6})
 
             '启动
-            Dim Loader As New LoaderCombo(Of DlForgeVersionEntry)(DisplayName & " 下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
-            Loader.Start(DownloadInfo)
+            Dim Loader = New LoaderCombo(Of DlForgelikeEntry)(DisplayName & " 下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+            Loader.Start(Info)
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()
             FrmMain.BtnExtraDownload.Ribble()
 
         Catch ex As Exception
-            Log(ex, "开始 Forge 下载失败", LogLevel.Feedback)
+            Log(ex, $"开始 {Info.LoaderName} 安装器下载失败", LogLevel.Feedback)
         End Try
     End Sub
 
-    Private Sub ForgeInjector(Target As String, Task As LoaderTask(Of Boolean, Boolean), McFolder As String, UseJavaWrapper As Boolean)
+    Private Sub ForgelikeInjector(Target As String, Task As LoaderTask(Of Boolean, Boolean), McFolder As String, UseJavaWrapper As Boolean, IsNeoForge As Boolean)
         '选择 Java
         Dim Java As JavaEntry
         SyncLock JavaLock
@@ -1153,7 +1099,8 @@ Retry:
                 .RedirectStandardError = True,
                 .RedirectStandardOutput = True
             }
-            Log("[Download] 开始安装 Forge：" & Arguments)
+            Dim LoaderName As String = If(IsNeoForge, "NeoForge", "Forge")
+            Log($"[Download] 开始安装 {LoaderName}：" & Arguments)
             Dim process As New Process With {.StartInfo = Info}
             Dim LastResults As New Queue(Of String)
             Using outputWaitHandle As New AutoResetEvent(False)
@@ -1166,15 +1113,15 @@ Retry:
                             Else
                                 LastResults.Enqueue(e.Data)
                                 If LastResults.Count > 100 Then LastResults.Dequeue()
-                                ForgeInjectorLine(e.Data, Task)
+                                ForgelikeInjectorLine(e.Data, Task)
                             End If
                         Catch ex As ObjectDisposedException
                         Catch ex As Exception
-                            Log(ex, "读取 Forge 安装器信息失败")
+                            Log(ex, $"读取 {LoaderName} 安装器信息失败")
                         End Try
                         Try
                             If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                Log("[Installer] 由于任务取消，已中止 Forge 安装")
+                                Log($"[Installer] 由于任务取消，已中止 {LoaderName} 安装")
                                 process.Kill()
                             End If
                         Catch
@@ -1189,15 +1136,15 @@ Retry:
                             Else
                                 LastResults.Enqueue(e.Data)
                                 If LastResults.Count > 100 Then LastResults.Dequeue()
-                                ForgeInjectorLine(e.Data, Task)
+                                ForgelikeInjectorLine(e.Data, Task)
                             End If
                         Catch ex As ObjectDisposedException
                         Catch ex As Exception
-                            Log(ex, "读取 Forge 安装器错误信息失败")
+                            Log(ex, $"读取 {LoaderName} 安装器错误信息失败")
                         End Try
                         Try
                             If Task.State = LoadState.Aborted AndAlso Not process.HasExited Then
-                                Log("[Installer] 由于任务取消，已中止 Forge 安装")
+                                Log($"[Installer] 由于任务取消，已中止 {LoaderName} 安装")
                                 process.Kill()
                             End If
                         Catch
@@ -1222,116 +1169,133 @@ Retry:
                     For i As Integer = Math.Max(0, LastResults.Count - 5) To LastResults.Count - 1 '最后 5 行
                         LastLines &= vbCrLf & LastResults(i)
                     Next
-                    Throw New Exception("Forge 安装器出错，日志结束部分为：" & LastLines)
+                    Throw New Exception($"{LoaderName} 安装器出错，日志结束部分为：" & LastLines)
                 End Using
             End Using
         End SyncLock
     End Sub
-    Private Sub ForgeInjectorLine(Content As String, Task As LoaderTask(Of Boolean, Boolean))
-        If Content.StartsWithF("  Data") OrElse Content.StartsWithF("  Slim") Then
-            If ModeDebug Then Log("[Installer] " & Content)
-        ElseIf Content.StartsWithF("  Reading patch ") Then
-            If ModeDebug Then Log("[Installer] " & Content)
-            Task.Progress = 0.86
-        Else
-            Select Case Content
-                Case "Extracting json"
-                    Log("[Installer] " & Content)
-                    Task.Progress = 0.07
-                Case "Downloading libraries"
-                    Log("[Installer] " & Content)
-                    Task.Progress = 0.08
-                Case "  File exists: Checksum validated."
-                    If ModeDebug Then Log("[Installer] " & Content)
-                    Task.Progress += 0.003
-                Case "Building Processors"
-                    Task.Progress = 0.38
-                Case "Task: DOWNLOAD_MOJMAPS" 'B
-                    Task.Progress = 0.4
-                Case "Task: MERGE_MAPPING" 'B
-                    Task.Progress = 0.6
-                Case "Splitting: "
-                    Task.Progress = 0.62
-                Case "Parameter Annotations" 'B
-                    Task.Progress = 0.66
-                Case "Processing Complete" 'B
-                    Task.Progress = 0.7
-                Case "Remapping final jar" 'A
-                    Task.Progress = 0.72
-                Case "Remapping jar... 50%" 'A
-                    Task.Progress = 0.76
-                Case "Remapping jar... 100%" 'A
-                    Task.Progress = 0.81
-                Case "Injecting profile"
-                    Task.Progress = 0.91
-                Case Else
-                    If ModeDebug Then Log("[Installer] " & Content)
-                    Exit Sub
-            End Select
-            Log("[Installer] " & Content)
-        End If
+    Private Sub ForgelikeInjectorLine(Content As String, Task As LoaderTask(Of Boolean, Boolean))
+        Select Case Content
+            Case "Extracting json"
+                Log("[Installer] " & Content)
+                Task.Progress = 0.07
+            Case "Downloading libraries"
+                Log("[Installer] " & Content)
+                Task.Progress = 0.08
+            Case "  File exists: Checksum validated."
+                If ModeDebug Then Log("[Installer] " & Content)
+                Task.Progress += 0.003
+            Case "Building Processors"
+                Task.Progress = 0.18
+            Case "Task: DOWNLOAD_MOJMAPS" 'B
+                Task.Progress = 0.2
+            Case "Task: MERGE_MAPPING" 'B
+                Task.Progress = 0.3
+            Case "Splitting: "
+                Task.Progress = 0.35
+            Case "Parameter Annotations" 'B
+                Task.Progress = 0.4
+            Case "Processing Complete" 'B
+                Task.Progress = 0.5
+            Case "log: null" 'new
+                Task.Progress = 0.5
+            Case "Sorting" 'new
+                Task.Progress = 0.65
+            Case "Remapping final jar" 'A
+                Task.Progress = 0.72
+            Case "Remapping jar... 50%" 'A
+                Task.Progress = 0.76
+            Case "Remapping jar... 100%" 'A
+                Task.Progress = 0.81
+            Case "Injecting profile"
+                Task.Progress = 0.91
+            Case Else
+                If ModeDebug Then Log("[Installer] " & Content)
+                Exit Sub
+        End Select
+        Log("[Installer] " & Content)
     End Sub
 
     ''' <summary>
-    ''' 获取下载某个 Forge 版本的加载器列表。
+    ''' 获取下载某个 Forgelike 版本的加载器列表。
     ''' </summary>
-    Private Function McDownloadForgeLoader(Version As String, Inherit As String, Optional DownloadInfo As DlForgeVersionEntry = Nothing, Optional McFolder As String = Nothing, Optional ClientDownloadLoader As LoaderCombo(Of String) = Nothing, Optional ClientFolder As String = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
+    Private Function McDownloadForgelikeLoader(IsNeoForge As Boolean, LoaderVersion As String, TargetVersion As String, Inherit As String, Optional Info As DlForgelikeEntry = Nothing, Optional McFolder As String = Nothing, Optional ClientDownloadLoader As LoaderCombo(Of String) = Nothing, Optional ClientFolder As String = Nothing) As List(Of LoaderBase)
 
         '参数初始化
         McFolder = If(McFolder, PathMcFolder)
-        If Version.StartsWithF("1.") AndAlso Version.Contains("-") Then
-            '类似 1.19.3-41.2.8 格式，优先使用 Version 中要求的版本而非 Inherit（例如 1.19.3 却使用了 1.19 的 Forge）
-            Inherit = Version.Before("-")
-            Version = Version.After("-")
+        If IsNeoForge AndAlso Info Is Nothing Then
+            '需要传入 API Name，但整合包版本可能不以 1.20.1- 开头，所以需要进行特别处理
+            If Inherit = "1.20.1" AndAlso Not LoaderVersion.StartsWithF("1.20.1-") Then
+                Info = New DlNeoForgeListEntry("1.20.1-" & LoaderVersion)
+            Else
+                Info = New DlNeoForgeListEntry(LoaderVersion)
+            End If
         End If
+        If Not IsNeoForge AndAlso LoaderVersion.StartsWithF("1.") AndAlso LoaderVersion.Contains("-") Then
+            '类似 1.19.3-41.2.8 格式，优先使用 Version 中要求的版本而非 Inherit（例如 1.19.3 却使用了 1.19 的 Forge）
+            Inherit = LoaderVersion.Before("-")
+            LoaderVersion = LoaderVersion.After("-")
+        End If
+        Dim LoaderName As String = If(IsNeoForge, "NeoForge", "Forge")
         Dim IsCustomFolder As Boolean = McFolder <> PathMcFolder
-        Dim Id As String = Inherit & "-forge-" & Version
-        Dim InstallerAddress As String = PathTemp & "Cache\Code\ForgeInstall-" & Version & "_" & RandomInteger(0, 100000)
-        Dim VersionFolder As String = McFolder & "versions\" & Id & "\"
-        Dim DisplayName As String = "Forge " & Inherit & " - " & Version
+        Dim InstallerAddress As String = $"{PathTemp}Cache\Code\{LoaderName}Install-{LoaderVersion}_{RandomInteger(0, 100000)}"
+        Dim VersionFolder As String = $"{McFolder}versions\{TargetVersion}\"
+        Dim DisplayName As String = $"{LoaderName} {Inherit} - {LoaderVersion}"
         Dim Loaders As New List(Of LoaderBase)
-        Dim LibVersionFolder As String = PathMcFolder & "versions\" & Id & "\" '作为 Lib 文件目标的版本文件夹
+        Dim LibVersionFolder As String = $"{PathMcFolder}versions\{TargetVersion}\" '作为 Lib 文件目标的版本文件夹
 
-        '获取下载信息
-        If DownloadInfo Is Nothing Then
-            Loaders.Add(New LoaderTask(Of String, String)("获取 Mod 加载器详细信息",
+        '获取 Forge 下载信息
+        If Info Is Nothing Then
+            Loaders.Add(New LoaderTask(Of String, String)($"获取 {LoaderName} 详细信息",
             Sub(Task As LoaderTask(Of String, String))
-                '获取 Forge 版本列表
+                '获取 Forge 对应 MC 版本列表
                 Dim ForgeLoader = New LoaderTask(Of String, List(Of DlForgeVersionEntry))("McDownloadForgeLoader " & Inherit, AddressOf DlForgeVersionMain)
                 ForgeLoader.WaitForExit(Inherit)
                 Task.Progress = 0.8
                 '查找对应版本
                 For Each ForgeVersion In ForgeLoader.Output
-                    If ForgeVersion.Version = Version Then
-                        DownloadInfo = ForgeVersion
+                    If VersionSortInteger(ForgeVersion.Version.ToString, LoaderVersion) = 0 Then
+                        Info = ForgeVersion
                         Exit Sub
                     End If
                 Next
-                Throw New Exception("未能找到 Forge " & Inherit & "-" & Version & " 的详细信息！")
+                Throw New Exception($"未能找到 {LoaderName} " & Inherit & "-" & LoaderVersion & " 的详细信息！")
             End Sub) With {.ProgressWeight = 3})
         End If
-        '下载 Forge 主文件
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("准备 Mod 加载器下载",
-            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                '启动依赖版本的下载
-                If ClientDownloadLoader Is Nothing Then
-                    If IsCustomFolder Then Throw New Exception("如果没有指定原版下载器，则不能指定 MC 安装文件夹")
-                    ClientDownloadLoader = McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, Inherit)
-                End If
-                '添加主文件
-                Dim Files As New List(Of NetFile) From {New NetFile({
-                    "https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName,
-                    "https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Inherit & "-" & DownloadInfo.FileVersion & "/" & DownloadInfo.FileName
-                }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=DownloadInfo.Hash))}
-                Task.Output = Files
-            End Sub) With {.ProgressWeight = 0.5, .Show = False})
-        Loaders.Add(New LoaderDownload("下载 Mod 加载器主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
+        '下载 Forgelike 主文件
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))($"准备下载 {LoaderName}",
+        Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+            '启动依赖版本的下载
+            If ClientDownloadLoader Is Nothing Then
+                If IsCustomFolder Then Throw New Exception("如果没有指定原版下载器，则不能指定 MC 安装文件夹")
+                ClientDownloadLoader = McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, Inherit)
+            End If
+            '添加主文件下载
+            Dim Files As New List(Of NetFile)
+            If Info.IsNeoForge Then
+                'NeoForge
+                Dim Neo As DlNeoForgeListEntry = Info
+                Dim Url As String = Neo.UrlBase & "-installer.jar"
+                Files.Add(New NetFile({
+                    Url.Replace("maven.neoforged.net/releases", "bmclapi2.bangbang93.com/maven"), Url
+                }, InstallerAddress, New FileChecker(MinSize:=64 * 1024)))
+            Else
+                'Forge
+                Dim Forge As DlForgeVersionEntry = Info
+                Files.Add(New NetFile({
+                    $"https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{Forge.Inherit}-{Forge.FileVersion}/forge-{Forge.Inherit}-{Forge.FileVersion}-{Forge.Category}.{Forge.FileExtension}",
+                    $"https://files.minecraftforge.net/maven/net/minecraftforge/forge/{Forge.Inherit}-{Forge.FileVersion}/forge-{Forge.Inherit}-{Forge.FileVersion}-{Forge.Category}.{Forge.FileExtension}"
+                }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=Forge.Hash)))
+            End If
+            Task.Output = Files
+        End Sub) With {.ProgressWeight = 0.5, .Show = False})
+        Loaders.Add(New LoaderDownload($"下载 {LoaderName} 主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
 
         '安装（仅在新版安装时需要原版 Jar）
-        If Version.Before(".") >= 20 Then
-            Log("[Download] 检测为新版 Forge：" & Version)
+        If IsNeoForge OrElse LoaderVersion.Before(".") >= 20 Then
+            Log($"[Download] 检测为{If(IsNeoForge, " Neo", "新版 ")}Forge：" & LoaderVersion)
             Dim Libs As List(Of McLibToken) = Nothing
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Mod 加载器支持库文件",
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))($"分析 {LoaderName} 支持库文件",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 Task.Output = New List(Of NetFile)
                 Dim Installer As ZipArchive = Nothing
@@ -1357,27 +1321,27 @@ Retry:
                         Log("[Download] 需要下载 Mappings：" & Address)
                     End If
                     Task.Progress = 0.8
-                    '去除其中的原始 Forge 项
+                    '去除其中的原始 Forgelike 项
                     For i = 0 To Libs.Count - 1
-                        If Libs(i).LocalPath.EndsWithF("forge-" & Inherit & "-" & Version & ".jar") OrElse
-                                                                                                      Libs(i).LocalPath.EndsWithF("forge-" & Inherit & "-" & Version & "-client.jar") Then
-                            Log("[Download] 已从待下载 Forge 支持库中移除：" & Libs(i).LocalPath, LogLevel.Debug)
+                        If Libs(i).LocalPath.EndsWithF($"{LoaderName.ToLower}-{Inherit}-{LoaderVersion}.jar") OrElse
+                           Libs(i).LocalPath.EndsWithF($"{LoaderName.ToLower}-{Inherit}-{LoaderVersion}-client.jar") Then
+                            Log($"[Download] 已从待下载 {LoaderName} 支持库中移除：" & Libs(i).LocalPath, LogLevel.Debug)
                             Libs.RemoveAt(i)
                             Exit For
                         End If
                     Next
                     Task.Output = McLibFixFromLibToken(Libs, PathMcFolder)
                 Catch ex As Exception
-                    Throw New Exception("获取新版 Forge 支持库列表失败", ex)
+                    Throw New Exception($"获取{If(IsNeoForge, " Neo", "新版 ")}Forge 支持库列表失败", ex)
                 Finally
                     '释放文件
                     If Installer IsNot Nothing Then Installer.Dispose()
                 End Try
             End Sub) With {.ProgressWeight = 2})
-            Loaders.Add(New LoaderDownload("下载 Mod 加载器支持库文件", New List(Of NetFile)) With {.ProgressWeight = 12})
-            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("获取 Mod 下载器支持库文件",
+            Loaders.Add(New LoaderDownload($"下载 {LoaderName} 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 12})
+            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)($"获取 {LoaderName} 支持库文件",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
-#Region "Forge 文件"
+#Region "Forgelike 文件"
                 If IsCustomFolder Then
                     For Each LibFile As McLibToken In Libs
                         Dim RealPath As String = LibFile.LocalPath.Replace(PathMcFolder, McFolder)
@@ -1385,7 +1349,7 @@ Retry:
                             Directory.CreateDirectory(IO.Path.GetDirectoryName(RealPath))
                             CopyFile(LibFile.LocalPath, RealPath)
                         End If
-                        If ModeDebug Then Log("[Download] 复制的 Forge 支持库文件：" & LibFile.LocalPath)
+                        If ModeDebug Then Log($"[Download] 复制的 {LoaderName} 支持库文件：" & LibFile.LocalPath)
                     Next
                 End If
 #End Region
@@ -1393,9 +1357,9 @@ Retry:
                 '等待原版文件下载完成
                 If ClientDownloadLoader Is Nothing Then Exit Sub
                 Dim TargetLoaders As List(Of LoaderBase) =
-                                                                                ClientDownloadLoader.GetLoaderList.Where(Function(l) l.Name = McDownloadClientLibName OrElse l.Name = McDownloadClientJsonName).
-                                                                                Where(Function(l) l.State <> LoadState.Finished).ToList
-                If TargetLoaders.Any Then Log("[Download] Forge 安装正在等待原版文件下载完成")
+                    ClientDownloadLoader.GetLoaderList.Where(Function(l) l.Name = McDownloadClientLibName OrElse l.Name = McDownloadClientJsonName).
+                    Where(Function(l) l.State <> LoadState.Finished).ToList()
+                If TargetLoaders.Any Then Log($"[Download] {LoaderName} 安装正在等待原版文件下载完成")
                 Do While TargetLoaders.Any AndAlso Not Task.IsAborted
                     TargetLoaders = TargetLoaders.Where(Function(l) l.State <> LoadState.Finished).ToList
                     Thread.Sleep(50)
@@ -1415,14 +1379,13 @@ Retry:
                 End SyncLock
 #End Region
             End Sub) With {.ProgressWeight = 0.1, .Show = False})
-            Loaders.Add(New LoaderTask(Of Boolean, Boolean)("安装 Mod 加载器（方式 A）",
+            Loaders.Add(New LoaderTask(Of Boolean, Boolean)(If(IsNeoForge, "安装 NeoForge", "安装 Forge（方式 A）"),
             Sub(Task As LoaderTask(Of Boolean, Boolean))
                 Dim Installer As ZipArchive = Nothing
                 Try
-                    Log("[Download] 开始进行新版方式 Forge 安装：" & InstallerAddress)
+                    Log($"[Download] 开始进行 Forgelike 安装：" & InstallerAddress)
                     '记录当前文件夹列表（在新建目标文件夹之前）
-                    Dim OldList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.
-                                                                        Select(Function(i) i.FullName).ToList()
+                    Dim OldList = New DirectoryInfo(McFolder & "versions\").EnumerateDirectories.Select(Function(i) i.FullName).ToList()
                     '解压并获取信息
                     Installer = New ZipArchive(New FileStream(InstallerAddress, FileMode.Open))
                     Dim Json As JObject = GetJson(ReadFile(Installer.GetEntry("install_profile.json").Open))
@@ -1440,15 +1403,15 @@ Retry:
                         WriteFile(PathTemp & "Cache\forge_installer.jar", GetResources("ForgeInstaller"))
                         Task.Progress = 0.06
                         '运行注入器
-                        ForgeInjector(InstallerAddress, Task, McFolder, UseJavaWrapper)
+                        ForgelikeInjector(InstallerAddress, Task, McFolder, UseJavaWrapper, IsNeoForge)
                         Task.Progress = 0.97
                     Catch ex As Exception
                         If UseJavaWrapper Then
-                            Log(ex, "使用 JavaWrapper 安装 Forge 失败，将不使用 JavaWrapper 并重试")
+                            Log(ex, $"使用 JavaWrapper 安装 {LoaderName} 失败，将不使用 JavaWrapper 并重试")
                             UseJavaWrapper = False
                             GoTo Retry
                         Else
-                            Throw New Exception("运行 Forge 安装器失败", ex)
+                            Throw New Exception($"运行 {LoaderName} 安装器失败", ex)
                         End If
                     End Try
                     '拷贝新增的版本 Json
@@ -1457,29 +1420,38 @@ Retry:
                     If DeltaList.Count > 1 Then
                         '它可能和 OptiFine 安装同时运行，导致增加的文件不止一个（这导致了 #151）
                         '也可能是因为 Forge 安装器的 Bug，生成了一个名字错误的文件夹，所以需要检查文件夹是否为空
-                        DeltaList = DeltaList.Where(Function(l) l.Name.Contains("forge") AndAlso l.EnumerateFiles.Any).ToList
+                        DeltaList = DeltaList.Where(Function(l) l.Name.ContainsF("forge", True) AndAlso l.EnumerateFiles.Any).ToList
                     End If
-                    If DeltaList.Count = 1 Then '如果没有新增文件夹，那么预测的文件夹名就是正确的
+                    If DeltaList.Count = 1 Then
+                        '如果没有新增文件夹，那么预测的文件夹名就是正确的
+                        '如果只新增 1 个文件夹，那么拷贝 json 文件
                         Dim JsonFile As FileInfo = DeltaList(0).EnumerateFiles.First()
-                        WriteFile(VersionFolder & Id & ".json", ReadFile(JsonFile.FullName))
+                        WriteFile(VersionFolder & TargetVersion & ".json", ReadFile(JsonFile.FullName))
+                        Log($"[Download] 已拷贝新增的版本 JSON 文件：{JsonFile.FullName} -> {VersionFolder}{TargetVersion}.json")
+                    ElseIf DeltaList.Count > 1 Then
+                        '新增了多个文件夹
+                        Log($"[Download] 有多个疑似的新增版本，无法确定：{DeltaList.Select(Function(d) d.Name).Join(";")}")
+                    Else
+                        '没有新增文件夹
+                        Log("[Download] 未找到新增的版本文件夹")
                     End If
                     '新建 mods 文件夹
                     Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
                 Catch ex As Exception
-                    Throw New Exception("安装新 Forge 版本失败", ex)
+                    Throw New Exception($"安装新 {LoaderName} 版本失败", ex)
                 Finally
                     '清理文件
                     Try
                         If Installer IsNot Nothing Then Installer.Dispose()
                         If File.Exists(InstallerAddress) Then File.Delete(InstallerAddress)
                     Catch ex As Exception
-                        Log(ex, "安装 Forge 清理文件时出错")
+                        Log(ex, $"安装 {LoaderName} 清理文件时出错")
                     End Try
                 End Try
             End Sub) With {.ProgressWeight = 10})
         Else
-            Log("[Download] 检测为非新版 Forge：" & Version)
-            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("安装 Mod 加载器（方式 B）",
+            Log("[Download] 检测为非新版 Forge：" & LoaderVersion)
+                        Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)($"安装 {LoaderName}（方式 B）",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
                 Dim Installer As ZipArchive = Nothing
                 Try
@@ -1492,12 +1464,12 @@ Retry:
                     Directory.CreateDirectory(VersionFolder)
                     Task.Progress = 0.5
                     If Json("install") Is Nothing Then
-                        '中版格式
-                        Log("[Download] 进行中版方式安装：" & InstallerAddress)
+                        '中版：Legacy 方式 1
+                        Log("[Download] 开始进行 Forge 安装，Legacy 方式 1：" & InstallerAddress)
                         '建立 Json 文件
                         Dim JsonVersion As JObject = GetJson(ReadFile(Installer.GetEntry(Json("json").ToString.TrimStart("/")).Open))
-                        JsonVersion("id") = Id
-                        WriteFile(VersionFolder & Id & ".json", JsonVersion.ToString)
+                        JsonVersion("id") = TargetVersion
+                        WriteFile(VersionFolder & TargetVersion & ".json", JsonVersion.ToString)
                         Task.Progress = 0.6
                         '解压支持库文件
                         Installer.Dispose()
@@ -1505,17 +1477,17 @@ Retry:
                         CopyDirectory(InstallerAddress & "_unrar\maven\", McFolder & "libraries\")
                         DeleteDirectory(InstallerAddress & "_unrar\")
                     Else
-                        '旧版格式
-                        Log("[Download] 进行旧版方式安装：" & InstallerAddress)
+                        '旧版：Legacy 方式 2
+                        Log("[Download] 开始进行 Forge 安装，Legacy 方式 2：" & InstallerAddress)
                         '解压 Jar 文件
                         Dim JarAddress As String = McLibGet(Json("install")("path"), CustomMcFolder:=McFolder)
                         If File.Exists(JarAddress) Then File.Delete(JarAddress)
                         WriteFile(JarAddress, Installer.GetEntry(Json("install")("filePath")).Open)
                         Task.Progress = 0.9
                         '建立 Json 文件
-                        Json("versionInfo")("id") = Id
+                        Json("versionInfo")("id") = TargetVersion
                         If Json("versionInfo")("inheritsFrom") Is Nothing Then CType(Json("versionInfo"), JObject).Add("inheritsFrom", Inherit)
-                        WriteFile(VersionFolder & Id & ".json", Json("versionInfo").ToString)
+                        WriteFile(VersionFolder & TargetVersion & ".json", Json("versionInfo").ToString)
                     End If
                     '新建 mods 文件夹
                     Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
@@ -1532,11 +1504,6 @@ Retry:
                     End Try
                 End Try
             End Sub) With {.ProgressWeight = 1})
-            If FixLibrary Then
-                If IsCustomFolder Then Throw New Exception("若需要补全支持库，就不能自定义 MC 文件夹")
-                Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Mod 加载器支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
-                Loaders.Add(New LoaderDownload("下载 Mod 加载器支持库文件", New List(Of NetFile)) With {.ProgressWeight = 11})
-            End If
         End If
 
         Return Loaders
@@ -1546,16 +1513,16 @@ Retry:
 
 #Region "Forge 下载菜单"
 
-    Public Sub ForgeDownloadListItemPreload(Stack As StackPanel, Entrys As List(Of DlForgeVersionEntry), OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean)
+    Public Sub ForgeDownloadListItemPreload(Stack As StackPanel, Entries As List(Of DlForgeVersionEntry), OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean)
         '获取推荐版本与最新版本
         Dim FreshVersion As DlForgeVersionEntry = Nothing
-        If Entrys.Any Then
-            FreshVersion = Entrys(0)
+        If Entries.Any Then
+            FreshVersion = Entries(0)
         Else
             Log("[System] 未找到可用的 Forge 版本", LogLevel.Debug)
         End If
         Dim RecommendedVersion As DlForgeVersionEntry = Nothing
-        For Each Entry In Entrys
+        For Each Entry In Entries
             If Entry.IsRecommended Then RecommendedVersion = Entry
         Next
         '若推荐版本与最新版本为同一版本，则仅显示推荐版本
@@ -1572,15 +1539,14 @@ Retry:
             Stack.Children.Add(Fresh)
         End If
         '添加间隔
-        Stack.Children.Add(New TextBlock With {.Text = "全部版本 (" & Entrys.Count & ")", .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 13, 0, 4)})
+        Stack.Children.Add(New TextBlock With {.Text = "全部版本 (" & Entries.Count & ")", .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 13, 0, 4)})
     End Sub
     Public Function ForgeDownloadListItem(Entry As DlForgeVersionEntry, OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = Entry.Version, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry.ReleaseTime = "",
-                If(ModeDebug, "种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), ""),
-                "发布于 " & Entry.ReleaseTime & If(ModeDebug, "，种类：" & Entry.Category & If(Entry.Branch Is Nothing, "", "，开发分支：" & Entry.Branch), "")),
+            .Title = Entry.VersionName, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Info = {If(Entry.ReleaseTime = "", "", "发布于 " & Entry.ReleaseTime), If(ModeDebug, "种类：" & Entry.Category, "")}.
+                Where(Function(d) d <> "").Join("，"),
             .Logo = PathImage & "Blocks/Anvil.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1623,7 +1589,7 @@ Retry:
         Else
             Version = sender.Parent.Parent.Tag
         End If
-        OpenWebsite("https://files.minecraftforge.net/maven/net/minecraftforge/forge/" & Version.Inherit & "-" & Version.Version & "/forge-" & Version.Inherit & "-" & Version.Version & "-changelog.txt")
+        OpenWebsite($"https://files.minecraftforge.net/maven/net/minecraftforge/forge/{Version.Inherit}-{Version.VersionName}/forge-{Version.Inherit}-{Version.VersionName}-changelog.txt")
     End Sub
     Public Sub ForgeSave_Click(sender As Object, e As RoutedEventArgs)
         Dim Version As DlForgeVersionEntry
@@ -1634,7 +1600,7 @@ Retry:
         Else
             Version = sender.Parent.Parent.Tag
         End If
-        McDownloadForgeSave(Version)
+        McDownloadForgelikeSave(Version)
     End Sub
 
 #End Region
@@ -1693,6 +1659,101 @@ Retry:
             Return Nothing
         End Try
     End Function
+
+#End Region
+
+#Region "NeoForge 下载菜单"
+
+    Public Sub NeoForgeDownloadListItemPreload(Stack As StackPanel, Entries As List(Of DlNeoForgeListEntry), OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean)
+        '获取最新稳定版和测试版
+        Dim FreshStableVersion As DlNeoForgeListEntry = Nothing
+        Dim FreshBetaVersion As DlNeoForgeListEntry = Nothing
+        If Entries.Any() Then
+            For Each Entry In Entries.ToList()
+                If Entry.IsBeta Then
+                    If FreshBetaVersion Is Nothing Then FreshBetaVersion = Entry
+                Else
+                    FreshStableVersion = Entry
+                    Exit For
+                End If
+            Next
+        Else
+            Log("[System] 未找到可用的 NeoForge 版本", LogLevel.Debug)
+        End If
+        '显示各个版本
+        If FreshStableVersion IsNot Nothing Then
+            Dim Fresh = NeoForgeDownloadListItem(FreshStableVersion, OnClick, IsSaveOnly)
+            Fresh.Info = If(Fresh.Info = "", "最新稳定版", "最新" & Fresh.Info)
+            Stack.Children.Add(Fresh)
+        End If
+        If FreshBetaVersion IsNot Nothing Then
+            Dim Fresh = NeoForgeDownloadListItem(FreshBetaVersion, OnClick, IsSaveOnly)
+            Fresh.Info = If(Fresh.Info = "", "最新测试版", "最新" & Fresh.Info)
+            Stack.Children.Add(Fresh)
+        End If
+        '添加间隔
+        Stack.Children.Add(New TextBlock With {.Text = "全部版本 (" & Entries.Count & ")", .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 13, 0, 4)})
+    End Sub
+    Public Function NeoForgeDownloadListItem(Info As DlNeoForgeListEntry, OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean) As MyListItem
+        '建立控件
+        Dim NewItem As New MyListItem With {
+            .Title = Info.VersionName, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Info,
+            .Info = If(Info.IsBeta, "测试版", "稳定版"),
+            .Logo = PathImage & "Blocks/NeoForge.png"
+        }
+        AddHandler NewItem.Click, OnClick
+        '建立菜单
+        If IsSaveOnly Then
+            NewItem.ContentHandler = AddressOf NeoForgeSaveContMenuBuild
+        Else
+            NewItem.ContentHandler = AddressOf NeoForgeContMenuBuild
+        End If
+        '结束
+        Return NewItem
+    End Function
+    Private Sub NeoForgeContMenuBuild(sender As MyListItem, e As EventArgs)
+        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
+        ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnSave, 30)
+        ToolTipService.SetHorizontalOffset(BtnSave, 2)
+        AddHandler BtnSave.Click, AddressOf NeoForgeSave_Click
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnInfo, 30)
+        ToolTipService.SetHorizontalOffset(BtnInfo, 2)
+        AddHandler BtnInfo.Click, AddressOf NeoForgeLog_Click
+        sender.Buttons = {BtnSave, BtnInfo}
+    End Sub
+    Private Sub NeoForgeSaveContMenuBuild(sender As MyListItem, e As EventArgs)
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnInfo, 30)
+        ToolTipService.SetHorizontalOffset(BtnInfo, 2)
+        AddHandler BtnInfo.Click, AddressOf NeoForgeLog_Click
+        sender.Buttons = {BtnInfo}
+    End Sub
+    Private Sub NeoForgeLog_Click(sender As Object, e As RoutedEventArgs)
+        Dim Info As DlNeoForgeListEntry
+        If sender.Tag IsNot Nothing Then
+            Info = sender.Tag
+        ElseIf sender.Parent.Tag IsNot Nothing Then
+            Info = sender.Parent.Tag
+        Else
+            Info = sender.Parent.Parent.Tag
+        End If
+        OpenWebsite(Info.UrlBase & "-changelog.txt")
+    End Sub
+    Public Sub NeoForgeSave_Click(sender As Object, e As RoutedEventArgs)
+        Dim Info As DlNeoForgeListEntry
+        If sender.Tag IsNot Nothing Then
+            Info = sender.Tag
+        ElseIf sender.Parent.Tag IsNot Nothing Then
+            Info = sender.Parent.Tag
+        Else
+            Info = sender.Parent.Parent.Tag
+        End If
+        McDownloadForgelikeSave(Info)
+    End Sub
 
 #End Region
 
@@ -1861,6 +1922,16 @@ Retry:
         ''' </summary>
         Public ForgeEntry As DlForgeVersionEntry = Nothing
 
+        '若要下载 NeoForge，则需要在下面两项中完成至少一项
+        ''' <summary>
+        ''' 欲下载的 NeoForge 版本名。
+        ''' </summary>
+        Public NeoForgeVersion As String = Nothing
+        ''' <summary>
+        ''' 欲下载的 NeoForge。
+        ''' </summary>
+        Public NeoForgeEntry As DlNeoForgeListEntry = Nothing
+
         ''' <summary>
         ''' 欲下载的 Fabric Loader 版本名。
         ''' </summary>
@@ -1961,7 +2032,7 @@ Retry:
     Public Function McInstallLoader(Request As McInstallRequest, Optional DontFixLibraries As Boolean = False) As List(Of LoaderBase)
         '获取缓存目录
         Dim PathInstallTemp As String
-        If PathTemp.Contains(" ") AndAlso Request.ForgeEntry IsNot Nothing Then
+        If PathTemp.Contains(" ") AndAlso (Request.OptiFineEntry IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing OrElse Request.NeoForgeEntry IsNot Nothing) Then
             PathInstallTemp = OsDrive & "ProgramData\PCL\Install\"
         Else
             PathInstallTemp = PathTemp & "Install\"
@@ -1996,8 +2067,11 @@ Retry:
         End If
         If Request.OptiFineEntry IsNot Nothing Then OptiFineFolder = TempMcFolder & "versions\" & Request.OptiFineEntry.NameVersion
         Dim ForgeFolder As String = Nothing
-        If Request.ForgeEntry IsNot Nothing Then Request.ForgeVersion = If(Request.ForgeVersion, Request.ForgeEntry.Version)
-        If Request.ForgeVersion IsNot Nothing Then ForgeFolder = TempMcFolder & "versions\" & Request.MinecraftName & "-forge-" & Request.ForgeVersion
+        If Request.ForgeEntry IsNot Nothing Then Request.ForgeVersion = If(Request.ForgeVersion, Request.ForgeEntry.VersionName)
+        If Request.ForgeVersion IsNot Nothing Then ForgeFolder = TempMcFolder & "versions\forge-" & Request.ForgeVersion
+        Dim NeoForgeFolder As String = Nothing
+        If Request.NeoForgeEntry IsNot Nothing Then Request.NeoForgeVersion = If(Request.NeoForgeVersion, Request.NeoForgeEntry.VersionName)
+        If Request.NeoForgeVersion IsNot Nothing Then NeoForgeFolder = TempMcFolder & "versions\neoforge-" & Request.NeoForgeVersion
         Dim FabricFolder As String = Nothing
         If Request.FabricVersion IsNot Nothing Then FabricFolder = TempMcFolder & "versions\fabric-loader-" & Request.FabricVersion & "-" & Request.MinecraftName
         Dim LiteLoaderFolder As String = Nothing
@@ -2014,6 +2088,7 @@ Retry:
         '记录日志
         If OptiFineFolder IsNot Nothing Then Log("[Download] OptiFine 缓存：" & OptiFineFolder)
         If ForgeFolder IsNot Nothing Then Log("[Download] Forge 缓存：" & ForgeFolder)
+        If NeoForgeFolder IsNot Nothing Then Log("[Download] NeoForge 缓存：" & NeoForgeFolder)
         If FabricFolder IsNot Nothing Then Log("[Download] Fabric 缓存：" & FabricFolder)
         If LiteLoaderFolder IsNot Nothing Then Log("[Download] LiteLoader 缓存：" & LiteLoaderFolder)
         Log("[Download] 对应的原版版本：" & Request.MinecraftName)
@@ -2048,7 +2123,11 @@ Retry:
         End If
         'Forge
         If Request.ForgeVersion IsNot Nothing Then
-            LoaderList.Add(New LoaderCombo(Of String)("下载 Forge " & Request.ForgeVersion, McDownloadForgeLoader(Request.ForgeVersion, Request.MinecraftName, Request.ForgeEntry, TempMcFolder, ClientLoader, Request.TargetVersionFolder, False)) With {.Show = False, .ProgressWeight = 25, .Block = Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
+            LoaderList.Add(New LoaderCombo(Of String)("下载 Forge " & Request.ForgeVersion, McDownloadForgelikeLoader(False, Request.ForgeVersion, "forge-" & Request.ForgeVersion, Request.MinecraftName, Request.ForgeEntry, TempMcFolder, ClientLoader, Request.TargetVersionFolder)) With {.Show = False, .ProgressWeight = 25, .Block = Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing AndAlso Request.NeoForgeEntry Is Nothing})
+        End If
+        'NeoForge
+        If Request.NeoForgeVersion IsNot Nothing Then
+            LoaderList.Add(New LoaderCombo(Of String)("下载 NeoForge " & Request.NeoForgeVersion, McDownloadForgelikeLoader(True, Request.NeoForgeVersion, "neoforge-" & Request.NeoForgeVersion, Request.MinecraftName, Request.NeoForgeEntry, TempMcFolder, ClientLoader, Request.TargetVersionFolder)) With {.Show = False, .ProgressWeight = 25, .Block = Request.ForgeEntry Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing})
         End If
         'LiteLoader
         If Request.LiteLoaderEntry IsNot Nothing Then
@@ -2061,14 +2140,14 @@ Retry:
         '合并安装
         LoaderList.Add(New LoaderTask(Of String, String)("安装游戏",
             Sub(Task As LoaderTask(Of String, String))
-                InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, FabricFolder, LiteLoaderFolder)
+                InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, FabricFolder, LiteLoaderFolder)
                 Task.Progress = 0.3
                 If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
                 If Directory.Exists(TempMcFolder & "mods") Then CopyDirectory(TempMcFolder & "mods", PathMcFolder & "mods")
             End Sub) With {.ProgressWeight = 2, .Block = True})
         '补全文件
         If Not DontFixLibraries AndAlso
-        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.Before(".") >= 20) OrElse Request.FabricVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
+        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.Before(".") >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
             Dim LoadersLib As New List(Of LoaderBase)
             LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(OutputFolder))) With {.ProgressWeight = 1, .Show = False})
             LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
@@ -2084,17 +2163,18 @@ Retry:
     ''' <summary>
     ''' 将多个版本 Json 进行合并，如果目标已存在则直接覆盖。失败会抛出异常。
     ''' </summary>
-    Private Sub InstallMerge(OutputFolder As String, MinecraftFolder As String, Optional OptiFineFolder As String = Nothing, Optional OptiFineAsMod As Boolean = False, Optional ForgeFolder As String = Nothing, Optional ForgeVersion As String = Nothing, Optional FabricFolder As String = Nothing, Optional LiteLoaderFolder As String = Nothing)
+    Private Sub InstallMerge(OutputFolder As String, MinecraftFolder As String, Optional OptiFineFolder As String = Nothing, Optional OptiFineAsMod As Boolean = False, Optional ForgeFolder As String = Nothing, Optional ForgeVersion As String = Nothing, Optional NeoForgeFolder As String = Nothing, Optional NeoForgeVersion As String = Nothing, Optional FabricFolder As String = Nothing, Optional LiteLoaderFolder As String = Nothing)
         Log("[Download] 开始进行版本合并，输出：" & OutputFolder & "，Minecraft：" & MinecraftFolder &
             If(OptiFineFolder IsNot Nothing, "，OptiFine：" & OptiFineFolder, "") &
             If(ForgeFolder IsNot Nothing, "，Forge：" & ForgeFolder, "") &
+            If(NeoForgeFolder IsNot Nothing, "，NeoForge：" & NeoForgeFolder, "") &
             If(LiteLoaderFolder IsNot Nothing, "，LiteLoader：" & LiteLoaderFolder, "") &
             If(FabricFolder IsNot Nothing, "，Fabric：" & FabricFolder, ""))
         Directory.CreateDirectory(OutputFolder)
 
-        Dim HasOptiFine As Boolean = OptiFineFolder IsNot Nothing AndAlso Not OptiFineAsMod, HasForge As Boolean = ForgeFolder IsNot Nothing, HasLiteLoader As Boolean = LiteLoaderFolder IsNot Nothing, HasFabric As Boolean = FabricFolder IsNot Nothing
-        Dim OutputName As String, MinecraftName As String, OptiFineName As String, ForgeName As String, LiteLoaderName As String, FabricName As String
-        Dim OutputJsonPath As String, MinecraftJsonPath As String, OptiFineJsonPath As String = Nothing, ForgeJsonPath As String = Nothing, LiteLoaderJsonPath As String = Nothing, FabricJsonPath As String = Nothing
+        Dim HasOptiFine As Boolean = OptiFineFolder IsNot Nothing AndAlso Not OptiFineAsMod, HasForge As Boolean = ForgeFolder IsNot Nothing, HasNeoForge As Boolean = NeoForgeFolder IsNot Nothing, HasLiteLoader As Boolean = LiteLoaderFolder IsNot Nothing, HasFabric As Boolean = FabricFolder IsNot Nothing
+        Dim OutputName As String, MinecraftName As String, OptiFineName As String, ForgeName As String, NeoForgeName As String, LiteLoaderName As String, FabricName As String
+        Dim OutputJsonPath As String, MinecraftJsonPath As String, OptiFineJsonPath As String = Nothing, ForgeJsonPath As String = Nothing, NeoForgeJsonPath As String = Nothing, LiteLoaderJsonPath As String = Nothing, FabricJsonPath As String = Nothing
         Dim OutputJar As String, MinecraftJar As String
 #Region "初始化路径信息"
         If Not OutputFolder.EndsWithF("\") Then OutputFolder += "\"
@@ -2119,6 +2199,12 @@ Retry:
             ForgeJsonPath = ForgeFolder & ForgeName & ".json"
         End If
 
+        If HasNeoForge Then
+            If Not NeoForgeFolder.EndsWithF("\") Then NeoForgeFolder += "\"
+            NeoForgeName = GetFolderNameFromPath(NeoForgeFolder)
+            NeoForgeJsonPath = NeoForgeFolder & NeoForgeName & ".json"
+        End If
+
         If HasLiteLoader Then
             If Not LiteLoaderFolder.EndsWithF("\") Then LiteLoaderFolder += "\"
             LiteLoaderName = GetFolderNameFromPath(LiteLoaderFolder)
@@ -2132,7 +2218,7 @@ Retry:
         End If
 #End Region
 
-        Dim OutputJson As JObject, MinecraftJson As JObject, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing
+        Dim OutputJson As JObject, MinecraftJson As JObject, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, NeoForgeJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing
 #Region "读取文件并检查文件是否合规"
         Dim MinecraftJsonText As String = ReadFile(MinecraftJsonPath)
         If Not MinecraftJsonText.StartsWithF("{") Then Throw New Exception("Minecraft json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
@@ -2150,6 +2236,12 @@ Retry:
             ForgeJson = GetJson(ForgeJsonText)
         End If
 
+        If HasNeoForge Then
+            Dim NeoForgeJsonText As String = ReadFile(NeoForgeJsonPath)
+            If Not NeoForgeJsonText.StartsWithF("{") Then Throw New Exception("NeoForge json 有误，地址：" & NeoForgeJsonPath & "，前段内容：" & NeoForgeJsonText.Substring(0, Math.Min(NeoForgeJsonText.Length, 1000)))
+            NeoForgeJson = GetJson(NeoForgeJsonText)
+        End If
+
         If HasLiteLoader Then
             Dim LiteLoaderJsonText As String = ReadFile(LiteLoaderJsonPath)
             If Not LiteLoaderJsonText.StartsWithF("{") Then Throw New Exception("LiteLoader json 有误，地址：" & LiteLoaderJsonPath & "，前段内容：" & LiteLoaderJsonText.Substring(0, Math.Min(LiteLoaderJsonText.Length, 1000)))
@@ -2163,12 +2255,13 @@ Retry:
         End If
 #End Region
 
-#Region "处理 Json 文件"
+#Region "处理 JSON 文件"
         '获取 minecraftArguments
         Dim AllArguments As String =
             If(MinecraftJson("minecraftArguments"), " ").ToString & " " &
             If(OptiFineJson IsNot Nothing, If(OptiFineJson("minecraftArguments"), " ").ToString, " ") & " " &
             If(ForgeJson IsNot Nothing, If(ForgeJson("minecraftArguments"), " ").ToString, " ") & " " &
+            If(NeoForgeJson IsNot Nothing, If(NeoForgeJson("minecraftArguments"), " ").ToString, " ") & " " &
             If(LiteLoaderJson IsNot Nothing, If(LiteLoaderJson("minecraftArguments"), " ").ToString, " ")
         '分割参数字符串
         Dim RawArguments As List(Of String) = AllArguments.Split(" ").Where(Function(l) l <> "").Select(Function(l) l.Trim).ToList
@@ -2197,6 +2290,12 @@ Retry:
             ForgeJson.Remove("releaseTime")
             ForgeJson.Remove("time")
             OutputJson.Merge(ForgeJson)
+        End If
+        If HasNeoForge Then
+            '合并 NeoForge
+            NeoForgeJson.Remove("releaseTime")
+            NeoForgeJson.Remove("time")
+            OutputJson.Merge(NeoForgeJson)
         End If
         If HasLiteLoader Then
             '合并 LiteLoader

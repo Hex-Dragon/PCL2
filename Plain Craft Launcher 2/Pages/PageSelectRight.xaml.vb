@@ -38,17 +38,21 @@
                         CardName = Application.Current.FindResource("LangSelectVersionTypeRegular")
                     Case McVersionCardType.API
                         Dim IsForgeExists As Boolean = False
+                        Dim IsNeoForgeExists As Boolean = False
                         Dim IsFabricExists As Boolean = False
                         Dim IsLiteExists As Boolean = False
                         For Each Version As McVersion In Card.Value
                             If Version.Version.HasFabric Then IsFabricExists = True
                             If Version.Version.HasLiteLoader Then IsLiteExists = True
                             If Version.Version.HasForge Then IsForgeExists = True
+                            If Version.Version.HasNeoForge Then IsNeoForgeExists = True
                         Next
-                        If If(IsLiteExists, 1, 0) + If(IsForgeExists, 1, 0) + If(IsFabricExists, 1, 0) > 1 Then
+                        If If(IsLiteExists, 1, 0) + If(IsForgeExists, 1, 0) + If(IsFabricExists, 1, 0) + If(IsNeoForgeExists, 1, 0) > 1 Then
                             CardName = Application.Current.FindResource("LangSelectVersionTypeModAbility")
                         ElseIf IsForgeExists Then
                             CardName = Application.Current.FindResource("LangSelectVersionTypeForge")
+                        ElseIf IsNeoForgeExists Then
+                            CardName = "NeoForge 版本"
                         ElseIf IsLiteExists Then
                             CardName = Application.Current.FindResource("LangSelectVersionTypeLiteloader")
                         Else
@@ -210,8 +214,8 @@
         FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
     End Sub
 
+    '修改此代码时，同时修改 PageVersionOverall 中的代码
     Public Shared Sub DeleteVersion(Item As MyListItem, Version As McVersion)
-        '修改此代码时，同时修改 PageVersionOverall 中的代码
         Try
             Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
             Dim IsHintIndie As Boolean = Version.State <> McVersionState.Error AndAlso Version.PathIndie <> PathMcFolder
