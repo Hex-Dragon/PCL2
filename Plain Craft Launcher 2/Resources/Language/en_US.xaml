@@ -564,7 +564,7 @@
     <s:String x:Key="LangLaunchRightSnapshot">Snapshot Tips</s:String>
     <s:String x:Key="LangLaunchRightLog">Startup log</s:String>
     <s:String x:Key="LangLaunchRightLabHint1">The snapshot version contains test features that have not yet been officially released and is only for the sponsors themselves to try. Please do not send it to others or use it to make integrated packages!</s:String>
-<s:String x:Key="LangLaunchRightLabHint2">If you have accumulated sponsorship ¥ 23.33, you can permanently hide this reminder by sending the "解锁码" in a private message from AiPower Generation.</s:String>
+<s:String x:Key="LangLaunchRightLabHint2">If you have accumulated sponsorship ¥ 23.33, you can permanently hide this reminder by sending the "解锁码" in a private message from AFDian.</s:String>
         <s:String x:Key="LangLaunchRightLoadingPage">Loading home page...</s:String>
     <s:String x:Key="LangLaunchRightPageTips">Tips </s:String>
     <s:String x:Key="LangLaunchRightPageEcho">Echo hole</s:String>
@@ -635,5 +635,55 @@
             <s:String x:Key="LangPageLoginNideSkinLoading">Loading</s:String>
     <s:String x:Key="LangPageLoginNideSkinChangePassword">Change password</s:String>
     <s:String x:Key="LangPageLoginNideSkinLogout">Log out</s:String>
+    
+        <!--PageOtherLeft-->
+    <s:String x:Key="LangPageOtherLeftHelp">Help</s:String>
+    <s:String x:Key="LangPageOtherLeftRefresh">Refresh</s:String>
+    <s:String x:Key="LangPageOtherLeftAbout">About and thanks</s:String>
+    <s:String x:Key="LangPageOtherLeftTools">Tools</s:String>
+    <s:String x:Key="LangPageOtherLeftFeedback">Feedback</s:String>
+    <s:String x:Key="LangPageOtherLeftVoteNew">New feature voting</s:String>
+    
+        <!--PageOtherHelp-->
+    <s:String x:Key="LangPageOtherHelpSearch">Search here</s:String>
+    <s:String x:Key="LangPageOtherHelpLoading">Loading help list</s:String>
+    <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">Sorry, the help library currently only supports Simplified Chinese</s:String>
+        <s:String x:Key="LangPageOtherRefreshing">Refreshing...</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackContent">Do you want to open the feedback list page?&#xa;If you can't open the webpage, try using an accelerator or VPN. </s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackTitle">Feedback prompt</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackBtn1">Submit new feedback</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackBtn2">View the feedback list</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteContent">Do you want to open a new feature voting page?&#xa;If you can't open the webpage, try using an accelerator or VPN. </s:String>
+<s:String x:Key="LangPageOtherDialogVoteTitle">Remind</s:String>
+<s:String x:Key="LangPageOtherDialogVoteBtn1">Open</s:String>
+    
+    <!--PageOtherAbout-->
+<s:String x:Key="LangPageOtherAboutAbout">About</s:String>
+<s:String x:Key="LangPageOtherAboutAboutAuthor">LTCat</s:String>
+<s:String x:Key="LangPageOtherAboutAboutAuthorSubtitle">The author of Plain Craft Launcher !</s:String>
+<s:String x:Key="LangPageOtherAboutAboutAuthorBtn">Buy him a coffee</s:String>
+<s:String x:Key="LangPageOtherAboutAboutVersionSubtitle">Version: %VERSION%（%VERSIONCODE%.%BRANCH%）</s:String>
+<s:String x:Key="LangPageOtherAboutAboutVersionBtn">View source</s:String>
+<s:String x:Key="LangPageOtherAboutThanks">Special thanks</s:String>
+<s:String x:Key="LangPageOtherAboutThanksbangbang93">Provide BMCLAPI image source and Forge installation tool. For details, see https://bmclapi.bangbang93.com</s:String>
+<s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">Sponsor</s:String>
+<s:String x:Key="LangPageOtherAboutThanksMCMod">It provides a Chinese translation of the name of Mod and more related information!</s:String>
+<s:String x:Key="LangPageOtherAboutThanksMCModBtn">Open the MCMod</s:String>
+<s:String x:Key="LangPageOtherAboutThanks00ll00">Provides Java Launch Wrapper and some important service support!</s:String>
+<s:String x:Key="LangPageOtherAboutThanksDoodleHuang">Provides some hard-to-find versions of Minecraft and some technical support!</s:String>
+<s:String x:Key="LangPageOtherAboutThanksPatrick">I designed and made the PCL icon, which freed me from the dire straits of making icons...</s:String>
+<s:String x:Key="LangPageOtherAboutThanksHao_Tian">In the internal test, we found a lot of weird bugs that no one expected, and they had extraordinary Bug constitutions.</s:String>
+<s:String x:Key="LangPageOtherAboutThanksMCBBS">Although the website has been closed, thank you for providing the MCBBS image source before...</s:String>
+<s:String x:Key="LangPageOtherAboutThanksUsers">Thank you to the netizens in the group for their support and encouragement to PCL and me for so long!</s:String>
+<s:String x:Key="LangPageOtherAboutSponsors">Sponsors</s:String>
+<s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from May to June 2024! Thank you for your support for PCL!</s:String>
+<s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">Generate unlock code</s:String>
+<s:String x:Key="LangPageOtherAboutSponsorsDonate">Sponsored author</s:String>
+<s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">Copy identification code</s:String>
+<s:String x:Key="LangPageOtherAboutSponsorsSetUnlockCode">Enter unlock code</s:String>
+<s:String x:Key="LangPageOtherAboutLawInfo">Legal information</s:String>
+<s:String x:Key="LangPageOtherAboutLicenseCopyright">License and copyright statement</s:String>
+<s:String x:Key="LangPageOtherAboutLicenseDoc">View license documents</s:String>
+<s:String x:Key="LangPageOtherAboutLicenseWeb">Check the source website</s:String>
+<s:String x:Key="LangPageOtherAboutLawInfoAgreement">User Agreement and Disclaimer</s:String>
 </ResourceDictionary>
-

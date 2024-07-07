@@ -635,4 +635,55 @@
         <s:String x:Key="LangPageLoginNideSkinLoading">加载中</s:String>
     <s:String x:Key="LangPageLoginNideSkinChangePassword">更改密码</s:String>
     <s:String x:Key="LangPageLoginNideSkinLogout">退出登录</s:String>
+    
+    <!--PageOtherLeft-->
+    <s:String x:Key="LangPageOtherLeftHelp">帮助</s:String>
+    <s:String x:Key="LangPageOtherLeftRefresh">刷新</s:String>
+    <s:String x:Key="LangPageOtherLeftAbout">关于与鸣谢</s:String>
+    <s:String x:Key="LangPageOtherLeftTools">百宝箱</s:String>
+    <s:String x:Key="LangPageOtherLeftFeedback">反馈</s:String>
+    <s:String x:Key="LangPageOtherLeftVoteNew">新功能投票</s:String>
+    
+    <!--PageOtherHelp-->
+    <s:String x:Key="LangPageOtherHelpSearch">搜索帮助</s:String>
+    <s:String x:Key="LangPageOtherHelpLoading">正在加载帮助列表</s:String>
+    <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">很抱歉，帮助库目前只支持简体中文</s:String>
+    <s:String x:Key="LangPageOtherRefreshing">正在刷新……</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackContent">是否要打开反馈列表网页？&#xa;如果无法打开该网页，请尝试使用加速器或 VPN。</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackTitle">反馈提示</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackBtn1">提交新反馈</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackBtn2">查看反馈列表</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteContent">是否要打开新功能投票网页？&#xa;如果无法打开该网页，请尝试使用加速器或 VPN。</s:String>
+<s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
+<s:String x:Key="LangPageOtherDialogVoteBtn1">打开</s:String>
+
+    <!--PageOtherAbout-->
+    <s:String x:Key="LangPageOtherAboutAbout">关于</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutAuthor">龙腾猫跃</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutAuthorSubtitle">Plain Craft Launcher 的作者！</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutAuthorBtn">赞助作者</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutVersionSubtitle">当前版本：%VERSION%（%VERSIONCODE%.%BRANCH%）</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutVersionBtn">查看源代码</s:String>
+    <s:String x:Key="LangPageOtherAboutThanks">特别鸣谢</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksbangbang93">提供 BMCLAPI 镜像源和 Forge 安装工具，详见 https://bmclapi.bangbang93.com</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">赞助镜像源</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCMod">提供了 Mod 名称的中文翻译和更多相关信息！</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCModBtn">打开百科</s:String>
+    <s:String x:Key="LangPageOtherAboutThanks00ll00">提供了 Java Launch Wrapper 和一些重要服务支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksDoodleHuang">提供了部分很难找到的 Minecraft 版本与一些技术支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksPatrick">设计并制作了 PCL 图标，让我从做图标的水深火热中得到了解脱……</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksHao_Tian">在内测中找出了一大堆没人想得到的诡异 Bug，有非同寻常的 Bug 体质</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCBBS">虽然已经关站了，但感谢此前提供了 MCBBS 镜像源……</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 5~6 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsDonate">赞助作者</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSetUnlockCode">输入解锁码</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfo">法律信息</s:String>
+    <s:String x:Key="LangPageOtherAboutLicenseCopyright">许可与版权声明</s:String>
+    <s:String x:Key="LangPageOtherAboutLicenseDoc">查看许可文档</s:String>
+    <s:String x:Key="LangPageOtherAboutLicenseWeb">查看来源网站</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用户协议与免责声明</s:String>
 </ResourceDictionary>
