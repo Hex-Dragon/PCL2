@@ -48,14 +48,14 @@
         If McLoginLoader.State = LoadState.Loading Then
             Log("[Launch] 要求更换角色，但登录加载器繁忙", LogLevel.Debug)
             If CType(McLoginLoader.Input, McLoginServer).ForceReselectProfile Then
-                Hint("正在尝试更换，请稍候！")
+                Hint(Application.Current.FindResource("LangPageLoginAuthSkinChanging"))
                 Exit Sub
             Else
-                Hint("正在登录中，请稍后再更换角色！", HintType.Critical)
+                Hint(Application.Current.FindResource("LangPageLoginAuthSkinLogining"), HintType.Critical)
                 Exit Sub
             End If
         End If
-        Hint("正在尝试更换，请稍候！")
+        Hint(Application.Current.FindResource("LangPageLoginAuthSkinChanging"))
         Setup.Set("CacheAuthUuid", "") '清空选择缓存
         Setup.Set("CacheAuthName", "")
         RunInThread(Sub()
@@ -65,7 +65,7 @@
                             McLoginLoader.WaitForExit(Data, IsForceRestart:=True)
                             RunInUi(Sub() Reload(True))
                         Catch ex As Exception
-                            Log(ex, "更换角色失败", LogLevel.Hint)
+                            Log(ex, Application.Current.FindResource("LangPageLoginAuthSkinChangeFail"), LogLevel.Hint)
                         End Try
                     End Sub)
     End Sub

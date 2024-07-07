@@ -346,6 +346,7 @@
 <s:String x:Key="LangDownloadInstallFabricApi">You have not yet chosen to install the Fabric API, which will make most Mods unusable!</s:String>
 <s:String x:Key="LangDownloadInstallOptiFabric">You have not chosen to install OptiFabric, which will make OptiFine unusable!</s:String>
 <s:String x:Key="LangDownloadInstallOptifine">OptiFine is not compatible with some Mods, please install carefully.</s:String>
+    <s:String x:Key="LangDownloadInstallOldOptiFabric">After installation, please search for "OptiFabric Origins" in Mod Download and download it, otherwise "OptiFine" will not be available!</s:String>
 <s:String x:Key="LangDownloadInstallStart">Start installation</s:String>
 <s:String x:Key="LangDownloadInstallVersionName">Instance name</s:String>
 <s:String x:Key="LangDownloadInstallBack">Back</s:String>
@@ -427,6 +428,7 @@
 <s:String x:Key="LangDownloadModTypeServer">Server</s:String>
 <s:String x:Key="LangDownloadModTypeUtility">Utility</s:String>
 <s:String x:Key="LangDownloadModTypeLib">Library</s:String>
+<s:String x:Key="LangDownloadModConnectModrinthFail">Unable to connect to Modrinth, so currently only content from CurseForge is displayed, and the results may be incomplete.&#xa; Try using a VPN or accelerator to improve your network. </s:String>
     
         <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">Introduce to NeoForge</s:String>
@@ -474,6 +476,7 @@
     <s:String x:Key="LangDownloadModpackTypeAllMapBased">Map-based</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">Lightweight</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">Large consolidation</s:String>
+<s:String x:Key="LangDownloadModpackConnectModrinthFail">Unable to connect to Modrinth, so currently only content from CurseForge is displayed, and the results may be incomplete.&#xa; Try using a VPN or accelerator to improve your network. </s:String>
     
     <!--MySkin-->
         <s:String x:Key="LangMySkinSave">save as</s:String>
@@ -565,5 +568,72 @@
         <s:String x:Key="LangLaunchRightLoadingPage">Loading home page...</s:String>
     <s:String x:Key="LangLaunchRightPageTips">Tips </s:String>
     <s:String x:Key="LangLaunchRightPageEcho">Echo hole</s:String>
+    
+        <!--PageLoginAuth-->
+    <s:String x:Key="LangPageLoginAuthMail">Mailbox</s:String>
+    <s:String x:Key="LangPageLoginAuthPassword">Password</s:String>
+    <s:String x:Key="LangPageLoginAuthRememberPassword">Remember password</s:String>
+    <s:String x:Key="LangPageLoginAuthRegister">Register</s:String>
+    <s:String x:Key="LangPageLoginAuthNoEmptyMail">Account cannot be empty! </s:String>
+    <s:String x:Key="LangPageLoginAuthNoEmptyPassword">Password cannot be empty! </s:String>
+    <s:String x:Key="LangPageLoginAuthForgetPassword">Forget password</s:String>
+    
+    <!--PageLoginAuthSkin-->
+    <s:String x:Key="LangPageLoginAuthSkinLoading">Loading</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinChangeRole">Change roles</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinLogout">Log out</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinLogining">You are logging in, please change your role later! </s:String>
+    <s:String x:Key="LangPageLoginAuthSkinChanging">Trying to replace, please wait! </s:String>
+    <s:String x:Key="LangPageLoginAuthSkinChangeFail">Change of role failed</s:String>
+    
+        <!--PageLoginLegacy-->
+    <s:String x:Key="LangPageLoginLegacySpecialCharacters">If the player name contains content other than English, numbers, and underscores, you may not be able to enter the world after Minecraft 1.18! </s:String>
+    <s:String x:Key="LangPageLoginLegacyID">Game username</s:String>
+    <s:String x:Key="LangPageLoginLegacyNoEmptyID">Player name cannot be empty! </s:String>
+    <s:String x:Key="LangPageLoginLegacyNoQuotationInID">Player names cannot contain English quotation marks! </s:String>
+    <s:String x:Key="LangPageLoginLegacyConfigHidden">Boot settings have been disabled! </s:String>
+    
+        <!--PageLoginMs-->
+    <s:String x:Key="LangPageLoginMsLogin">Login</s:String>
+    <s:String x:Key="LangPageLoginMsBuy">» Buy authentic</s:String>
+    <s:String x:Key="LangPageLoginMsWebsite">» Official website</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccount">Add a new account</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">Please log in to your account before starting the game! </s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountCancel">Login has been cancelled! </s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFail">Genuine login verification failed. Please try turning off [Verify SSL Certificates] in [Settings → Launcher] and try again.&#xa;&#xa;Original error message:</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">Login has been cancelled! </s:String>
+    
+        <!--PageLoginMsSkin-->
+    <s:String x:Key="LangPageLoginMsLoading">Loading</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkin">Skin and Cape</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkinChange">Change skin</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkinSave">Save skin</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkinRefresh">Refresh Skin</s:String>
+    <s:String x:Key="LangPageLoginMsSkinCapeChange">Change Cape</s:String>
+    <s:String x:Key="LangPageLoginMsSkinInfoChange">Modification information</s:String>
+    <s:String x:Key="LangPageLoginMsSkinInfoChangePassword">Change the password</s:String>
+    <s:String x:Key="LangPageLoginMsSkinInfoChangeID">Change player name</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSwitchID">Switch accounts</s:String>
+        <s:String x:Key="LangPageLoginMsSkinChangingSkinPlzWait">Changing skin, please wait! </s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByLoginFail">Login failed and the skin cannot be changed! </s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangingSkin">Changing skin...</s:String>
+    <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">Logging in and will continue to change skin after login is completed...</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangeSkinFail">Failed to change skin</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByTimeOut">Skin change failed: The connection to the Mojang skin server timed out. Please check whether your network is smooth! </s:String>
+    
+        <!--PageLoginNide-->
+    <s:String x:Key="LangPageLoginNideAccount">Account</s:String>
+    <s:String x:Key="LangPageLoginNidePassword">Password</s:String>
+    <s:String x:Key="LangPageLoginNideRememberPassword">Remember password</s:String>
+    <s:String x:Key="LangPageLoginNideRegister">Register</s:String>
+    <s:String x:Key="LangPageLoginNideDesc">Unified pass</s:String>
+    <s:String x:Key="LangPageLoginNideNoEmptyAccount">Account cannot be empty! </s:String>
+    <s:String x:Key="LangPageLoginNideNoEmptyPassword">Password cannot be empty! </s:String>
+    <s:String x:Key="LangPageLoginNideForgetPassword">Forget password</s:String>
+    
+    <!--PageLoginNideSkin-->
+            <s:String x:Key="LangPageLoginNideSkinLoading">Loading</s:String>
+    <s:String x:Key="LangPageLoginNideSkinChangePassword">Change password</s:String>
+    <s:String x:Key="LangPageLoginNideSkinLogout">Log out</s:String>
 </ResourceDictionary>
 

@@ -346,6 +346,7 @@
     <s:String x:Key="LangDownloadInstallFabricApi">你尚未選擇安裝 Fabric API，這會導致大多數 Mod 無法使用！</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">你尚未選擇安裝 OptiFabric，這會導致 OptiFine 無法使用！</s:String>
     <s:String x:Key="LangDownloadInstallOptifine">OptiFine 與一部分 Mod 的兼容性不佳，請謹慎安裝。</s:String>
+    <s:String x:Key="LangDownloadInstallOldOptiFabric">安裝結束後，請在 Mod 下載中搜索 OptiFabric Origins 並下載，否則 OptiFine 會無法使用！</s:String>
     <s:String x:Key="LangDownloadInstallStart">開始安裝</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">版本名稱</s:String>
     <s:String x:Key="LangDownloadInstallBack">返回</s:String>
@@ -427,6 +428,7 @@
     <s:String x:Key="LangDownloadModTypeServer">服務器</s:String>
     <s:String x:Key="LangDownloadModTypeUtility">改良</s:String>
     <s:String x:Key="LangDownloadModTypeLib">支持庫</s:String>
+    <s:String x:Key="LangDownloadModConnectModrinthFail">無法連接到 Modrinth，所以目前僅顯示了來自 CurseForge 的內容，結果可能不全。&#xa;請嘗試使用 VPN 或加速器以改善網絡。</s:String>
     
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">NeoForge 簡介</s:String>
@@ -474,6 +476,7 @@
     <s:String x:Key="LangDownloadModpackTypeAllMapBased">基於地圖</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">輕量整合</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">大型整合</s:String>
+    <s:String x:Key="LangDownloadModpackConnectModrinthFail">無法連接到 Modrinth，所以目前僅顯示了來自 CurseForge 的內容，結果可能不全。&#xa;請嘗試使用 VPN 或加速器以改善網絡。</s:String>
     
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">另存為</s:String>
@@ -565,4 +568,71 @@
     <s:String x:Key="LangLaunchRightLoadingPage">正在加載主頁……</s:String>
     <s:String x:Key="LangLaunchRightPageTips">你知道嗎？</s:String>
     <s:String x:Key="LangLaunchRightPageEcho">回聲洞</s:String>
+    
+    <!--PageLoginAuth-->
+    <s:String x:Key="LangPageLoginAuthMail">郵箱</s:String>
+    <s:String x:Key="LangPageLoginAuthPassword">密碼</s:String>
+    <s:String x:Key="LangPageLoginAuthRememberPassword">記住密碼</s:String>
+    <s:String x:Key="LangPageLoginAuthRegister">註冊賬號</s:String>
+    <s:String x:Key="LangPageLoginAuthNoEmptyMail">賬號不能為空！</s:String>
+    <s:String x:Key="LangPageLoginAuthNoEmptyPassword">密碼不能為空！</s:String>
+    <s:String x:Key="LangPageLoginAuthForgetPassword">找回密碼</s:String>
+    
+    <!--PageLoginAuthSkin-->
+    <s:String x:Key="LangPageLoginAuthSkinLoading">加載中</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinChangeRole">更換角色</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinLogout">退出登錄</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinLogining">正在登錄中，請稍後再更換角色！</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinChanging">正在嘗試更換，請稍候！</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinChangeFail">更換角色失敗</s:String>
+    
+    <!--PageLoginLegacy-->
+    <s:String x:Key="LangPageLoginLegacySpecialCharacters">玩家名如果包含英文、數字、下劃線以外的內容，可能會無法進入 Minecraft 1.18 以後的世界！</s:String>
+    <s:String x:Key="LangPageLoginLegacyID">遊戲用戶名</s:String>
+    <s:String x:Key="LangPageLoginLegacyNoEmptyID">玩家名不能為空！</s:String>
+    <s:String x:Key="LangPageLoginLegacyNoQuotationInID">玩家名不能包含英文引號！</s:String>
+    <s:String x:Key="LangPageLoginLegacyConfigHidden">啟動設置已被禁用！</s:String>
+    
+    <!--PageLoginMs-->
+    <s:String x:Key="LangPageLoginMsLogin">登錄</s:String>
+    <s:String x:Key="LangPageLoginMsBuy">»  購買正版</s:String>
+    <s:String x:Key="LangPageLoginMsWebsite">»  前往官網</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccount">添加新賬號</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">請在登錄賬號後再啟動遊戲！</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountCancel">已取消登錄！</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFail">正版登錄驗證失敗，請嘗試在 [設置 → 啟動器] 中關閉 [驗證 SSL 證書] 然後再試。&#xa;&#xa;原始錯誤信息：</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">已取消登錄！</s:String>
+    
+    <!--PageLoginMsSkin-->
+    <s:String x:Key="LangPageLoginMsLoading">加載中</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkin">皮膚與披風</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkinChange">修改皮膚</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkinSave">保存皮膚</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkinRefresh">刷新頭像</s:String>
+    <s:String x:Key="LangPageLoginMsSkinCapeChange">修改披風</s:String>
+    <s:String x:Key="LangPageLoginMsSkinInfoChange">修改信息</s:String>
+    <s:String x:Key="LangPageLoginMsSkinInfoChangePassword">修改密碼</s:String>
+    <s:String x:Key="LangPageLoginMsSkinInfoChangeID">修改玩家名</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSwitchID">切換賬號</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangingSkinPlzWait">正在更改皮膚中，請稍候！</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByLoginFail">登錄失敗，無法更改皮膚！</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangingSkin">正在更改皮膚……</s:String>
+    <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">正在登錄，將在登錄完成後繼續更改皮膚……</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangeSkinFail">更改皮膚失敗</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByTimeOut">更改皮膚失敗：與 Mojang 皮膚服務器的連接超時，請檢查你的網絡是否通暢！</s:String>
+    
+    <!--PageLoginNide-->
+    <s:String x:Key="LangPageLoginNideAccount">賬號</s:String>
+    <s:String x:Key="LangPageLoginNidePassword">密碼</s:String>
+    <s:String x:Key="LangPageLoginNideRememberPassword">記住密碼</s:String>
+    <s:String x:Key="LangPageLoginNideRegister">註冊賬號</s:String>
+    <s:String x:Key="LangPageLoginNideDesc">統一通行證</s:String>
+    <s:String x:Key="LangPageLoginNideNoEmptyAccount">賬號不能為空！</s:String>
+    <s:String x:Key="LangPageLoginNideNoEmptyPassword">密碼不能為空！</s:String>
+    <s:String x:Key="LangPageLoginNideForgetPassword">找回密碼</s:String>
+    
+    <!--PageLoginNideSkin-->
+        <s:String x:Key="LangPageLoginNideSkinLoading">加載中</s:String>
+    <s:String x:Key="LangPageLoginNideSkinChangePassword">更改密碼</s:String>
+    <s:String x:Key="LangPageLoginNideSkinLogout">退出登錄</s:String>
 </ResourceDictionary>

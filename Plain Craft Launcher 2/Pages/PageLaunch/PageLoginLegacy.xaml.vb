@@ -42,8 +42,8 @@ Public Class PageLoginLegacy
     ''' 当前页面的登录信息是否有效。
     ''' </summary>
     Public Shared Function IsVaild(LoginData As McLoginLegacy) As String
-        If LoginData.UserName.Trim = "" Then Return "玩家名不能为空！"
-        If LoginData.UserName.Contains("""") Then Return "玩家名不能包含英文引号！"
+        If LoginData.UserName.Trim = "" Then Return Application.Current.FindResource("LangPageLoginLegacyNoEmptyID")
+        If LoginData.UserName.Contains("""") Then Return Application.Current.FindResource("LangPageLoginLegacyNoQuotationInID")
         Return ""
     End Function
     Public Function IsVaild() As String
@@ -62,7 +62,7 @@ Public Class PageLoginLegacy
     End Sub
     Private Sub Skin_Click() Handles Skin.Click
         If (Setup.Get("UiHiddenPageSetup") OrElse Setup.Get("UiHiddenSetupLaunch")) AndAlso Not PageSetupUI.HiddenForceShow Then
-            Hint("启动设置已被禁用！", HintType.Critical)
+            Hint(Application.Current.FindResource("LangPageLoginLegacyConfigHidden"), HintType.Critical)
         Else
             FrmMain.PageChange(FormMain.PageType.Setup, FormMain.PageSubType.SetupLaunch) '切换到皮肤设置页面
         End If

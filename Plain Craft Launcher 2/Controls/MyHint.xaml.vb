@@ -32,12 +32,15 @@
 
     Public Property Text As String
         Get
-            Return LabText.Text
+            Return GetValue(TextProperty)
         End Get
         Set(value As String)
-            LabText.Text = value
+            If LabText IsNot Nothing Then LabText.Text = value
+            SetValue(TextProperty, value)
         End Set
     End Property
+
+    Public Shared ReadOnly TextProperty As DependencyProperty = DependencyProperty.Register("Text", GetType(String), GetType(MyHint), New PropertyMetadata("Tips"))
 
     Public Property CanClose As Boolean
         Get
@@ -53,6 +56,7 @@
         If CanClose AndAlso Setup.Get(RelativeSetup) Then
             Visibility = Visibility.Collapsed
         End If
+        LabText.Text = Text
     End Sub
     Private Sub BtnClose_Click(sender As Object, e As EventArgs) Handles BtnClose.Click
         Setup.Set(RelativeSetup, True)
