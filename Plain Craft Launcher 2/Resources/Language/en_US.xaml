@@ -73,7 +73,7 @@
     <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as [已完成]&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">There is an exception in the personalize items and has been automatically reset</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">Error overloading personalize</s:String>
-    <s:String x:Key="LangHintThemeSetInit">personalize has been initialized</s:String>
+    <s:String x:Key="LangHintThemeSetInit">Personalize has been initialized</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">Failed to initialize personalize</s:String>
     <s:String x:Key="LangBackgroundPic">Background Picture</s:String>
     <s:String x:Key="LangBackgroundPicCount">Background Picture (Quantity: {0})</s:String>
