@@ -335,7 +335,7 @@
     <s:String x:Key="LangDownloadFabricVersionList">版本列表</s:String>
     <s:String x:Key="LangDownloadFabricGettingList">正在獲取 Fabric 列表</s:String>
     
-        <!--PageDownloadForge-->
+    <!--PageDownloadForge-->
     <s:String x:Key="LangDownloadForgeDescTitle">Forge 簡介</s:String>
     <s:String x:Key="LangDownloadForgeDesc">Forge 是一個 Mod 加載器，你需要先安裝 Forge 才能安裝各種 Forge 模組。</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">打開官網</s:String>
@@ -376,7 +376,7 @@
     <s:String x:Key="LangDownloadPageRefresh">刷新</s:String>
     <s:String x:Key="LangDownloadPageAutoInstall">自動安裝</s:String>
     <s:String x:Key="LangDownloadPageManualInstall">▼ 手動安裝包</s:String>
-        <s:String x:Key="LangDownloadPageDialogManualInstallContent">手動安裝包功能提供了 OptiFine、Forge 等組件的 .jar 安裝文件下載，但無法自動安裝。&#xa;在自動安裝頁面先選擇 MC 版本，然後就可以選擇 OptiFine、Forge 等組件，讓 PCL 自動進行安裝了。</s:String>
+    <s:String x:Key="LangDownloadPageDialogManualInstallContent">手動安裝包功能提供了 OptiFine、Forge 等組件的 .jar 安裝文件下載，但無法自動安裝。&#xa;在自動安裝頁面先選擇 MC 版本，然後就可以選擇 OptiFine、Forge 等組件，讓 PCL 自動進行安裝了。</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallTitle">自動安裝提示</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">返回自動安裝</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">繼續下載手動安裝包</s:String>
@@ -386,7 +386,7 @@
         
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteloaderDescTitle">LiteLoader 簡介</s:String>
-        <s:String x:Key="LangDownloadLiteloaderDesc">與 Forge 類似，LiteLoader 可以用於加載老版本 Minecraft 中的 LiteLoader 模組。</s:String>
+    <s:String x:Key="LangDownloadLiteloaderDesc">與 Forge 類似，LiteLoader 可以用於加載老版本 Minecraft 中的 LiteLoader 模組。</s:String>
     <s:String x:Key="LangDownloadLiteloaderWebsite">打開官網</s:String>
     <s:String x:Key="LangDownloadLiteloaderGettingList">正在獲取 LiteLoader 列表</s:String>
     
@@ -432,9 +432,9 @@
     
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">NeoForge 簡介</s:String>
-<s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 是 Minecraft 1.19+ 的 Mod 加載器，你需要先安裝它才能安裝各種 NeoForge 模組。&#xa;本頁面提供 NeoForge 安裝器下載，在下載後你需要手動打開安裝器進行安裝。</s:String>
-<s:String x:Key="LangDownloadNeoForgeWebsite">打開官網</s:String>
-<s:String x:Key="LangDownloadNeoForgeGettingList">正在獲取 NeoForge 列表</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 是 Minecraft 1.19+ 的 Mod 加載器，你需要先安裝它才能安裝各種 NeoForge 模組。&#xa;本頁面提供 NeoForge 安裝器下載，在下載後你需要手動打開安裝器進行安裝。</s:String>
+    <s:String x:Key="LangDownloadNeoForgeWebsite">打開官網</s:String>
+    <s:String x:Key="LangDownloadNeoForgeGettingList">正在獲取 NeoForge 列表</s:String>
     
     <!--PageDownloadOptiFine-->
     <s:String x:Key="LangDownloadOptiFineDescTitle">OptiFine 簡介</s:String>
@@ -632,7 +632,7 @@
     <s:String x:Key="LangPageLoginNideForgetPassword">找回密碼</s:String>
     
     <!--PageLoginNideSkin-->
-        <s:String x:Key="LangPageLoginNideSkinLoading">加載中</s:String>
+    <s:String x:Key="LangPageLoginNideSkinLoading">加載中</s:String>
     <s:String x:Key="LangPageLoginNideSkinChangePassword">更改密碼</s:String>
     <s:String x:Key="LangPageLoginNideSkinLogout">退出登錄</s:String>
     
@@ -654,8 +654,8 @@
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">提交新反饋</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">查看反饋列表</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">是否要打開新功能投票網頁？&#xa;如果無法打開該網頁，請嘗試使用加速器或 VPN。</s:String>
-<s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
-<s:String x:Key="LangPageOtherDialogVoteBtn1">打開</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteBtn1">打開</s:String>
 
     <!--PageOtherAbout-->
     <s:String x:Key="LangPageOtherAboutAbout">關於</s:String>
