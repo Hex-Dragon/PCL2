@@ -5,7 +5,7 @@
 
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下载</s:String>
-    <s:String x:Key="LangTitleHome"> 启动</s:String>
+    <s:String x:Key="LangTitleHome">启动</s:String>
     <s:String x:Key="LangTitleSetup">设置</s:String>
     <s:String x:Key="LangTitleLink">联机</s:String>
     <s:String x:Key="LangTitleOther">更多</s:String>
@@ -779,7 +779,7 @@
     <s:String x:Key="LangPageSetupLaunchJavaAddedJava">已将该 Java 加入 Java 列表！</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaIncorrectJava">该 Java 存在异常，无法使用</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaSearchSuccess">已找到 {0} 个 Java，请检查下拉框查看列表！</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">若在游戏启动后立即关闭启动器，崩溃检测、更改游戏标题等功能将失效。&#xa;如果想保留这些功能，可以选择让启动器在。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">若在游戏启动后立即关闭启动器，崩溃检测、更改游戏标题等功能将失效。&#xa;如果想保留这些功能，可以选择让启动器在游戏启动后隐藏，游戏退出后自动关闭。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">提醒</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableContent">内存优化会显著延长启动耗时，建议仅在内存不足时开启。&#xa;如果你在使用机械硬盘，这还可能导致一小段时间的严重卡顿。&#xa;&#xa;每次启动游戏，PCL 都需要申请管理员权限以进行内存优化。&#xa;若想自动授予权限，可以右键 PCL，打开 属性 → 兼容性 → 以管理员身份运行此程序。</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">提醒</s:String>
