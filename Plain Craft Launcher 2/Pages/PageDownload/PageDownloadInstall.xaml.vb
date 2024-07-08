@@ -724,6 +724,7 @@
     Private Function IsOptiFineSuitForForge(OptiFine As DlOptiFineListEntry, Forge As DlForgeVersionEntry)
         If Forge.Inherit <> OptiFine.Inherit Then Return False '不是同一个大版本
         If OptiFine.RequiredForgeVersion Is Nothing Then Return False '不兼容 Forge
+        If OptiFine.RequiredForgeVersion = "" Then Return True                                                                                                                                                                                                                                                                                                
         If OptiFine.RequiredForgeVersion.Contains(".") Then 'XX.X.XXX
             Return VersionSortInteger(Forge.Version.ToString, OptiFine.RequiredForgeVersion) >= 0
         Else 'XXXX
