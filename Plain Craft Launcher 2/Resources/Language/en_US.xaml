@@ -264,8 +264,8 @@
     <s:String x:Key="LangSelectHintFolderRemoved">Folder {0} has been removed from the list!</s:String>
     <s:String x:Key="LangSelectHintFolderNameRestored">The folder name has been restored!</s:String>
     <s:String x:Key="LangSelectRemoveFolderFail">Failed to remove game folder from list</s:String>
-    <s:String x:Key="LangSelectDialogDeleteConfirmContentA">Are you sure you want this folder {0}?&#xa;Target folder:{1}&#xa;&#xa;This will cause all saves and other files in this folder to be permanently lost and unrecoverable!</s:String>
-    <s:String x:Key="LangSelectDialogDeleteConfirmTitleA">Delete Warning</s:String>
+    <s:String x:Key="LangSelectDialogDeleteConfirmContentA">Are you sure you want this folder {0}?&#xa;Target folder: {1}&#xa;&#xa;This will cause all saves and other files in this folder to be permanently lost and unrecoverable!</s:String>
+    <s:String x:Key="LangSelectDialogDeleteConfirmTitleA">Warning</s:String>
     <s:String x:Key="LangSelectDialogDeleteConfirmContentB">If you store other files other than Minecraft in this folder, these files will also be deleted!&#xa;Continuing to delete will cause all files in this folder to be permanently lost. Please confirm carefully before continuing!&#xa;Target folder: {0} This is the last warning!</s:String>
     <s:String x:Key="LangSelectFolderEmptied">Folder {0} has been emptied!</s:String>
     <s:String x:Key="LangSelectFolderDeleted">Folder {0} has been deleted!</s:String>
