@@ -382,6 +382,7 @@
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">繼續下載手動安裝包</s:String>
     <s:String x:Key="LangDownloadPageManualInstallFold">手動安裝包</s:String>
     <s:String x:Key="LangDownloadPageResource">資源</s:String>
+    <s:String x:Key="LangDownloadPageMods">Mod</s:String>
     <s:String x:Key="LangDownloadPageModpackages">整合包</s:String>
         
     <!--PageDownloadLiteLoader-->
@@ -673,7 +674,9 @@
     <s:String x:Key="LangPageOtherAboutThanksDoodleHuang">提供了部分很難找到的 Minecraft 版本與一些技術支持！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksPatrick">設計並製作了 PCL 圖標，讓我從做圖標的水深火熱中得到了解脫……</s:String>
     <s:String x:Key="LangPageOtherAboutThanksHao_Tian">在內測中找出了一大堆沒人想得到的詭異 Bug，有非同尋常的 Bug 體質</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">Minecraft 中文論壇</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBS">雖然已經關站了，但感謝此前提供了 MCBBS 鏡像源……</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 內群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感謝內群的沙雕網友們這麼久以來對我和 PCL 的支持與鼓勵！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">贊助者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 5~6 月的高級贊助者們！感謝各位對 PCL 和偉大的咕咕咕事業的支持！</s:String>
@@ -779,4 +782,86 @@
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">提醒</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableContent">內存優化會顯著延長啟動耗時，建議僅在內存不足時開啟。&#xa;如果你在使用機械硬盤，這還可能導致一小段時間的嚴重卡頓。&#xa;&#xa;每次啟動遊戲，PCL 都需要申請管理員權限以進行內存優化。&#xa;若想自動授予權限，可以右鍵 PCL，打開 屬性 → 兼容性 → 以管理員身份運行此程序。</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">提醒</s:String>
+    
+    <!--PageSetupLeft-->
+    <s:String x:Key="LangPageSetupLeftGame">遊戲</s:String>
+    <s:String x:Key="LangPageSetupLeftPersonalize">個性化</s:String>
+    <s:String x:Key="LangPageSetupLeftLaunch">啟動器</s:String>
+    <s:String x:Key="LangPageSetupLeftLink">聯機</s:String>
+    <s:String x:Key="LangPageSetupLeftReset">初始化本頁設置</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetGameConfirmContent">是否要初始化遊戲頁的所有設置？該操作不可撤銷。</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetLaunchConfirmContent">是否要初始化啟動器頁的所有設置？該操作不可撤銷。</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">是否要初始化個性化頁的所有設置？該操作不可撤銷。&#xa;（背景圖片與音樂、自定義主頁等外部文件不會被刪除）</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">是否要初始化聯機頁的所有設置？該操作不可撤銷。</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">初始化確認</s:String>
+    
+    <!--PageSetupSystem-->
+    <s:String x:Key="LangPageSetupSystemDownload">下載</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本列表獲取</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">儘量使用鏡像源（加載快，但版本可能不是最新的）</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">在官方源加載緩慢時改用鏡像源（平衡）</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">儘量使用官方源（保證版本為最新，但加載非常緩慢）</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod 命名風格</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">決定下載的 Mod 的默認文件名中，中文譯名應該放在哪個位置</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">譯名位於文件名開頭：[遺物] relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">譯名位於文件名開頭：遺物-relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">譯名位於文件名末尾：relics-0.1.14-遺物</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">不添加中文譯名：relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadThread">最大線程數</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">線程數越多，限速的文件下載越快，但過高的線程數會造成下載時非常嚴重的卡頓。&#xa;一般而言，64 線程已可以保證足夠的下載速度。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedLimit">速度限制</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedLimitToolTip">設置下載的速度上限，以避免在下載時導致其他需要聯網的程序卡死</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadTargetFolder">目標文件夾</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadTargetFolderToolTip">請在 啟動 → 版本選擇 → 文件夾列表 中更改下載目標文件夾。&#xa;在某個文件夾或遊戲版本上右鍵，即可選擇打開對應文件夾。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">安裝整合包時保留原始壓縮包</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">安裝整合包時，在版本文件夾下保留用於安裝的原始整合包壓縮包文件</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">簡化 Mod 加載器顯示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">下載 Mod 時，若該 Mod 支持 Forge 和 Fabric，則顯示為支持任意 Mod 加載器。&#xa;例如，開啟時 JEI 顯示支持全版本，關閉後 JEI 就會顯示僅支持 Forge / Fabric 全版本。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSL">驗證 SSL 證書</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">驗證證書會提高安全性，但疑似有概率導致正版登錄失敗（#3018）。&#xa;如果在正版登錄時因為 [根據驗證過程，遠程證書無效] 失敗，可以嘗試關閉此項。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibility">輔助功能</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">遊戲更新提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">測試版更新提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">在 Minecraft 測試版（快照、預發布版）更新時彈窗提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">正式版更新提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">在 Minecraft 正式版更新時彈窗提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">遊戲語言</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">自動設置為中文</s:String>
+    <s:String x:Key="LangPageSetupSystemSystem">系統</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">啟動器更新</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">在有新版本時自動下載</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateB">在有新版本時顯示提示</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateC">僅在有重大漏洞更新時顯示提示</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateD">關閉更新提示</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnet">啟動器公告</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetA">顯示所有公告</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetAToolTip">顯示包括啟動器功能調查、活動等在內的全部公告</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetB">僅在有重要通知時顯示公告</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetC">關閉所有公告</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemCacheFolder">緩存文件夾</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemCacheFolderToolTip">PCL 的下載、皮膚等緩存文件的存儲位置。&#xa;不推薦路徑中帶有空格。&#xa;留空即為默認值，重啟 PCL 後生效。</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">檢查更新</s:String>
+    <s:String x:Key="LangPageSetupSystemLang">語言</s:String>
+    <s:String x:Key="LangPageSetupSystemLangLaunchLang">啟動器語言</s:String>
+    <s:String x:Key="LangPageSetupSystemLangWarn">翻譯不保證 100% 準確</s:String>
+    <s:String x:Key="LangPageSetupSystemDebug">調試選項</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugAnimSpeed">動畫速度</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">禁止在下載時複製已存在的文件</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownloadToolTip">在下載時不直接複製已經存在的文件，而是重新下載每個文件。&#xa;只建議在測試下載速度時開啟。</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugDebugMode">調試模式</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugDebugModeToolTip">顯示調試信息與更多錯誤信息。&#xa;這會導致啟動器性能略有下降，若無特殊需要不建議開啟。</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugDelay">添加延遲</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugDelayToolTip">在各個環節添加隨機的延遲，拖慢加載速度，以測試部分功能是否正常運行。&#xa;這會嚴重影響啟動器運行，若無特殊需要不建議開啟。</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">在有新版本時自動下載（更新快照版可能需要更新密鑰）</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">已初始化啟動器頁設置！</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchResetFail">初始化啟動器頁設置失敗</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">無限制</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">關閉</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">如果設置過多的下載線程，可能會導致下載時出現非常嚴重的卡頓。&#xa;一般設置 64 線程即可滿足大多數下載需求，除非你知道你在幹什麼，否則不建議設置更多的線程數！</s:String>
+    <s:String x:Key="LangDialogBtnIC">我知道了</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugNeedRestart">部分調試信息將在刷新或啟動器重啟後切換顯示！</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementSilentContent">若選擇此項，即使在將來出現嚴重問題時，你也無法獲取相關通知。&#xa;例如，如果發現某個版本遊戲存在嚴重 Bug，你可能就會因為無法得到通知而導致無法預知的後果。&#xa;&#xa;一般選擇 僅在有重要通知時顯示公告 就可以讓你儘量不受打擾了。&#xa;除非你在製作服務器整合包，或時常手動更新啟動器，否則極度不推薦選擇此項！</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm">我知道我在做什麼</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementDisableContent">若選擇此項，即使在啟動器將來出現嚴重問題時，你也無法獲取更新並獲得修復。&#xa;例如，如果官方修改了登錄方式，從而導致現有啟動器無法登錄，你可能就會因為無法更新而無法開始遊戲。&#xa;&#xa;一般選擇 僅在有重大漏洞更新時顯示提示 就可以讓你儘量不受打擾了。&#xa;除非你在製作服務器整合包，或時常手動更新啟動器，否則極度不推薦選擇此項！</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">確認啟動器更新失敗</s:String>
 </ResourceDictionary>

@@ -35,7 +35,7 @@
         PanBack.ScrollToHome()
 
 #If Not BETA Then
-        ItemSystemUpdateDownload.Content = "在有新版本时自动下载（更新快照版可能需要更新密钥）"
+        ItemSystemUpdateDownload.Content = Application.Current.FindResource("LangPageSetupSystemSystemLaunchUpdateE")
 #End If
 
         '非重复加载部分
@@ -101,9 +101,9 @@
             Setup.Reset("SystemSystemActivity")
 
             Log("[Setup] 已初始化启动器页设置")
-            Hint("已初始化启动器页设置！", HintType.Finish, False)
+            Hint(Application.Current.FindResource("LangPageSetupSystemLaunchResetSuccess"), HintType.Finish, False)
         Catch ex As Exception
-            Log(ex, "初始化启动器页设置失败", LogLevel.Msgbox)
+            Log(ex, Application.Current.FindResource("LangPageSetupSystemLaunchResetFail"), LogLevel.Msgbox)
         End Try
 
         Reload()
@@ -136,17 +136,16 @@
                 Case Is <= 41
                     Return (v - 21) & " M/s"
                 Case Else
-                    Return "无限制"
+                    Return Application.Current.FindResource("LangPageSetupSystemDownloadSpeedUnlimit")
             End Select
         End Function
-        SliderDebugAnim.GetHintText = Function(v) If(v > 29, "关闭", (v / 10 + 0.1) & "x")
+        SliderDebugAnim.GetHintText = Function(v) If(v > 29, Application.Current.FindResource("LangPageSetupSystemDebugAnimSpeedDisable"), (v / 10 + 0.1) & "x")
     End Sub
     Private Sub SliderDownloadThread_PreviewChange(sender As Object, e As RouteEventArgs) Handles SliderDownloadThread.PreviewChange
         If SliderDownloadThread.Value < 100 Then Exit Sub
         If Not Setup.Get("HintDownloadThread") Then
             Setup.Set("HintDownloadThread", True)
-            MyMsgBox("如果设置过多的下载线程，可能会导致下载时出现非常严重的卡顿。" & vbCrLf &
-                     "一般设置 64 线程即可满足大多数下载需求，除非你知道你在干什么，否则不建议设置更多的线程数！", "警告", "我知道了", IsWarn:=True)
+            MyMsgBox(Application.Current.FindResource("LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent"), Application.Current.FindResource("LangDialogTitleWarning"), Application.Current.FindResource("LangDialogBtnIC"), IsWarn:=True)
         End If
     End Sub
 
@@ -160,17 +159,14 @@
 
     '调试模式
     Private Sub CheckDebugMode_Change() Handles CheckDebugMode.Change
-        If AniControlEnabled = 0 Then Hint("部分调试信息将在刷新或启动器重启后切换显示！",, False)
+        If AniControlEnabled = 0 Then Hint(Application.Current.FindResource("LangPageSetupSystemDebugNeedRestart"),, False)
     End Sub
 
     '自动更新
     Private Sub ComboSystemActivity_SizeChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemActivity.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
         If ComboSystemActivity.SelectedIndex = 2 Then
-            If MyMsgBox("若选择此项，即使在将来出现严重问题时，你也无法获取相关通知。" & vbCrLf &
-                        "例如，如果发现某个版本游戏存在严重 Bug，你可能就会因为无法得到通知而导致无法预知的后果。" & vbCrLf & vbCrLf &
-                        "一般选择 仅在有重要通知时显示公告 就可以让你尽量不受打扰了。" & vbCrLf &
-                        "除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！", "警告", "我知道我在做什么", "取消", IsWarn:=True) = 2 Then
+            If MyMsgBox(Application.Current.FindResource("LangPageSetupSystemLaunchDialogAnnouncementSilentContent"), Application.Current.FindResource("LangDialogTitleWarning"), Application.Current.FindResource("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
                 ComboSystemActivity.SelectedItem = e.RemovedItems(0)
             End If
         End If
@@ -178,10 +174,7 @@
     Private Sub ComboSystemUpdate_SizeChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemUpdate.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
         If ComboSystemUpdate.SelectedIndex = 3 Then
-            If MyMsgBox("若选择此项，即使在启动器将来出现严重问题时，你也无法获取更新并获得修复。" & vbCrLf &
-                        "例如，如果官方修改了登录方式，从而导致现有启动器无法登录，你可能就会因为无法更新而无法开始游戏。" & vbCrLf & vbCrLf &
-                        "一般选择 仅在有重大漏洞更新时显示提示 就可以让你尽量不受打扰了。" & vbCrLf &
-                        "除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！", "警告", "我知道我在做什么", "取消", IsWarn:=True) = 2 Then
+            If MyMsgBox(Application.Current.FindResource("LangPageSetupSystemLaunchDialogAnnouncementDisableContent"), Application.Current.FindResource("LangDialogTitleWarning"), Application.Current.FindResource("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
                 ComboSystemUpdate.SelectedItem = e.RemovedItems(0)
             End If
         End If
@@ -206,7 +199,7 @@
 #End If
             Return NewVersionCode <= VersionCode
         Catch ex As Exception
-            Log(ex, "确认启动器更新失败", LogLevel.Feedback)
+            Log(ex, Application.Current.FindResource("LangPageSetupSystemSystemLaunchUpdateFail"), LogLevel.Feedback)
             Return Nothing
         End Try
     End Function
