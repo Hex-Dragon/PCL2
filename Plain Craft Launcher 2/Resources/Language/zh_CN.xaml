@@ -160,7 +160,7 @@
     <s:String x:Key="LangSetBackgroundPicAdaptivePosC">居于左下</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptivePosD">居于右下</s:String>
     <s:String x:Key="LangSetBackgroundPicBlur">背景模糊</s:String>
-    <s:String x:Key="LangSetBackgroundPicBlurToolTip">背景模糊</s:String>
+    <s:String x:Key="LangSetBackgroundPicBlurToolTip">较强的模糊会导致启动器严重掉帧，请谨慎使用。&#13;不建议在制作整合包时开启模糊，以确保 PCL 在低性能电脑上可以流畅运行。</s:String>
     <s:String x:Key="LangSetBackgroundPicColorfulBack">使用彩色背景</s:String>
     <s:String x:Key="LangSetOpenFolder">打开文件夹</s:String>
     <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">将背景图片放到该文件夹，PCL 将会在每次打开时随机加载其中的一张图片</s:String>
@@ -299,8 +299,8 @@
     <s:String x:Key="LangSelectBtnSet">设置</s:String>
     <s:String x:Key="LangSelectBtnOpenFolder">打开文件夹</s:String>
     <s:String x:Key="LangSelectDeleteVersionTitle">版本删除确认</s:String>
-    <s:String x:Key="LangSelectDeleteVersionContentA">你确定要删除版本 {Version.Name} 吗？</s:String>
-    <s:String x:Key="LangSelectDeleteVersionContentB">你确定要永久地删除版本 {Version.Name} 吗？</s:String>
+    <s:String x:Key="LangSelectDeleteVersionContentA">你确定要删除版本 {0} 吗？</s:String>
+    <s:String x:Key="LangSelectDeleteVersionContentB">你确定要永久地删除版本 {0} 吗？</s:String>
     <s:String x:Key="LangSelectDeleteVersionContentC">由于该版本开启了版本隔离，删除版本时该版本对应的存档、资源包、Mod 等文件也将被一并删除！</s:String>
     <s:String x:Key="LangSelectVersionDeletedA">版本 {0} 已永久删除！</s:String>
     <s:String x:Key="LangSelectVersionDeletedB">版本 {0} 已删除到回收站！</s:String>
@@ -382,6 +382,7 @@
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">继续下载手动安装包</s:String>
     <s:String x:Key="LangDownloadPageManualInstallFold">手动安装包</s:String>
     <s:String x:Key="LangDownloadPageResource">资源</s:String>
+    <s:String x:Key="LangDownloadPageMods">Mod</s:String>
     <s:String x:Key="LangDownloadPageModpackages">整合包</s:String>
         
     <!--PageDownloadLiteLoader-->
@@ -432,9 +433,9 @@
     
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">NeoForge 简介</s:String>
-<s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 是 Minecraft 1.19+ 的 Mod 加载器，你需要先安装它才能安装各种 NeoForge 模组。&#xa;本页面提供 NeoForge 安装器下载，在下载后你需要手动打开安装器进行安装。</s:String>
-<s:String x:Key="LangDownloadNeoForgeWebsite">打开官网</s:String>
-<s:String x:Key="LangDownloadNeoForgeGettingList">正在获取 NeoForge 列表</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 是 Minecraft 1.19+ 的 Mod 加载器，你需要先安装它才能安装各种 NeoForge 模组。&#xa;本页面提供 NeoForge 安装器下载，在下载后你需要手动打开安装器进行安装。</s:String>
+    <s:String x:Key="LangDownloadNeoForgeWebsite">打开官网</s:String>
+    <s:String x:Key="LangDownloadNeoForgeGettingList">正在获取 NeoForge 列表</s:String>
     
     <!--PageDownloadOptiFine-->
     <s:String x:Key="LangDownloadOptiFineDescTitle">OptiFine 简介</s:String>
@@ -507,11 +508,11 @@
     <s:String x:Key="LangMySkinCapeNameTranslator">Crowdin 翻译者披风</s:String>
     <s:String x:Key="LangMySkinCapeNameCobalt">Cobalt 披风</s:String>
     <s:String x:Key="LangMySkinCapeNameVanilla">原版披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2011">Minecon 2011 参与者披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2012">Minecon 2012 参与者披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2013">Minecon 2013 参与者披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2015">Minecon 2015 参与者披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2016">Minecon 2016 参与者披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2011">MINECON 2011 参与者披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2012">MINECON 2012 参与者披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2013">MINECON 2013 参与者披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2015">MINECON 2015 参与者披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2016">MINECON 2016 参与者披风</s:String>
     <s:String x:Key="LangMySkinCapeNameCherryBlossom">樱花披风</s:String>
     <s:String x:Key="LangMySkinCapeName15th-Anniversary">15 周年纪念披风</s:String>
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">紫色心形披风</s:String>
@@ -632,7 +633,7 @@
     <s:String x:Key="LangPageLoginNideForgetPassword">找回密码</s:String>
     
     <!--PageLoginNideSkin-->
-        <s:String x:Key="LangPageLoginNideSkinLoading">加载中</s:String>
+    <s:String x:Key="LangPageLoginNideSkinLoading">加载中</s:String>
     <s:String x:Key="LangPageLoginNideSkinChangePassword">更改密码</s:String>
     <s:String x:Key="LangPageLoginNideSkinLogout">退出登录</s:String>
     
@@ -654,8 +655,8 @@
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">提交新反馈</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">查看反馈列表</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">是否要打开新功能投票网页？&#xa;如果无法打开该网页，请尝试使用加速器或 VPN。</s:String>
-<s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
-<s:String x:Key="LangPageOtherDialogVoteBtn1">打开</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteBtn1">打开</s:String>
 
     <!--PageOtherAbout-->
     <s:String x:Key="LangPageOtherAboutAbout">关于</s:String>
@@ -714,7 +715,7 @@
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">可安装 Mod 的版本（例如 Forge、Fabric）均互相独立以避免 Mod 冲突，其他版本（例如原版）则不会被隔离。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">隔离非正式版</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">将 Minecraft 快照、预发布版、远古版本、愚人节版本与其他版本进行隔离</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaAndMod">隔离可安装 Mod 的版本与非正式版</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaAndMod">隔离可安装 Mod 的版本和非正式版</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAll">隔离所有版本</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">不同版本之间的存档、Mod、资源包等均不互通。&#xa;这会导致不同原版版本间的存档不能共用，所以一般不推荐。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibility">启动器可见性</s:String>
