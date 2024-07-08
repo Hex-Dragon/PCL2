@@ -843,7 +843,7 @@
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">檢查更新</s:String>
     <s:String x:Key="LangPageSetupSystemLang">語言</s:String>
     <s:String x:Key="LangPageSetupSystemLangLaunchLang">啟動器語言</s:String>
-    <s:String x:Key="LangPageSetupSystemLangWarn">翻譯不保證 100% 準確</s:String>
+    <s:String x:Key="LangPageSetupSystemLangWarn">翻譯不保證 100% 準確，修改語言後需要重啟 PCL</s:String>
     <s:String x:Key="LangPageSetupSystemDebug">調試選項</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeed">動畫速度</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">禁止在下載時複製已存在的文件</s:String>
@@ -1020,4 +1020,32 @@
     <s:String x:Key="LangPageVersionSetupCommand">該項不會覆蓋全局設置：啟動時會先執行全局設置的命令，再執行版本設置的命令。&#xa;&#xa;在 MC 啟動前執行特定命令或程序，語法與 Windows 的命令提示符一致。&#xa;&#xa;可以使用以下替換標記實現相對路徑（路徑均以 \ 結尾）：&#xa; · {path}：PCL 的 exe 文件所在的文件夾&#xa; · {minecraft}：.minecraft 文件夾&#xa; · {verpath}：版本文件夾（.minecraft\versions\版本名\）&#xa; · {verindie}：開啟版本隔離時等同版本文件夾，未開啟時等同 .minecraft 文件夾&#xa; · {java}：遊戲運行時的 Java 文件夾&#xa;&#xa;除此之外，也支持以下替換標記：&#xa; · {user}：玩家名字&#xa; · {login}：玩家的登錄方式&#xa; · {uuid}：玩家的 UUID&#xa; · {name}：遊戲版本名&#xa; · {date}、{time}：當前的系統時間&#xa; · {version}：遊戲對應的原版版本號&#xa;&#xa;例如：&#xa; · &quot;{verpath}test.exe&quot; ：運行版本文件夾下的 test.exe 程序&#xa; · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 運行版本文件夾下的 test.jar&#xa; · notepad &quot;{verindie}option.txt&quot; ：使用記事本打開該版本的設置文件&#xa;&#xa;涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致運行失敗。&#xa;執行命令時，命令行所在的目錄是當前的 .minecraft 文件夾。</s:String>
     <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在設置中手動選擇了與當前版本不兼容的 Java，則自動跳過兼容性警告彈窗，強制使用手動選擇的 Java。</s:String>
     <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校驗 libraries、第三方登錄庫與版本主 jar 文件是否被修改。&#xa;如果你沒有修改相關文件，請勿勾選此項。</s:String>
+    
+    <!--ModMain-->
+    <s:String x:Key="LangModMainAprilFoolTipA">放棄吧！只需要點一下右下角的小白旗……</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipB">看到右下角的那面小白旗了嗎？</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipC">這裡建議點一下右下角的小白旗投降呢.jpg</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永遠等着你……</s:String>
+    
+    <!--ModEvent-->
+    <s:String x:Key="LangModEventOpeningWeb">正在開啟中，請稍候……</s:String>
+    <s:String x:Key="LangModEventStartInstance">正在啟動 {0}……</s:String>
+    <s:String x:Key="LangModEventChoseAnInstance">請先選擇一個 Minecraft 版本！</s:String>
+    <s:String x:Key="LangModEventHomePageRefreshed">已刷新主頁！</s:String>
+    <s:String x:Key="LangModEventDialogDownloadIncorrectContent">EventData 必須為以 http:// 或 https:// 開頭的網址。&#xa;PCL 不支持其他亂七八糟的下載協議。</s:String>
+    <s:String x:Key="LangModEventDialogEventFailTitle">事件執行失敗</s:String>
+    <s:String x:Key="LangModEventDialogUnknownEventContent">未知的事件類型：{0}&#xa;請檢查事件類型填寫是否正確，或者 PCL 是否為最新版本。</s:String>
+    <s:String x:Key="LangModEventGettingResource">正在獲取資源，請稍候……</s:String>
+    
+    <!--ModMusic-->
+    <s:String x:Key="LangModMusicDeviceChanged">由於音頻設備變更，音樂播放功能在重啟 PCL 後才能恢復！</s:String>
+    <s:String x:Key="LangModMusicMusicChanged">播放音樂失敗（{0}）：PCL 不支持播放音頻屬性在中途發生變化的音樂</s:String>
+    <s:String x:Key="LangModMusicMusicFormatNotSupport">播放音樂失敗（{0}）：PCL 可能不支持此音樂格式，請將格式轉換為 .wav、.mp3 或 .flac 後再試</s:String>
+    
+    <!--ModSecret-->
+    <s:String x:Key="LangModSecretPermissionA">PCL 無法創建 PCL 文件夾（{0}PCL），請嘗試：&#xa;
+    1. 將 PCL 移動到其他文件夾{1}&#xa;2. 刪除當前目錄中的 PCL 文件夾，然後再試。&#xa;3. 右鍵 PCL 選擇屬性，打開 兼容性 中的 以管理員身份運行此程序。</s:String>
+    <s:String x:Key="LangModSecretPermissionB">PCL 沒有對當前文件夾的寫入權限，請嘗試：&#xa;1. 將 PCL 移動到其他文件夾{0}&#xa;2. 刪除當前目錄中的 PCL 文件夾，然後再試。&#xa;3. 右鍵 PCL 選擇屬性，打開 兼容性 中的 以管理員身份運行此程序。</s:String>
+    <s:String x:Key="LangModSecretPermissionAddition">（例如 C 盤和桌面以外的其他位置）</s:String>
+    <s:String x:Key="LangModSecretPermissionError">運行環境錯誤</s:String>
 </ResourceDictionary>

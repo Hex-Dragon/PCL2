@@ -282,13 +282,13 @@
         Catch ex As Exception
             Log("[Music] 播放音乐失败的文件完整路径：" & MusicCurrent)
             If TypeOf ex Is NAudio.MmException AndAlso (ex.Message.Contains("NoDriver") OrElse ex.Message.Contains("BadDeviceId")) Then
-                Hint("由于音频设备变更，音乐播放功能在重启 PCL 后才能恢复！", HintType.Critical)
+                Hint(Application.Current.FindResource("LangModMusicDeviceChanged"), HintType.Critical)
                 Thread.Sleep(1000000000)
             End If
             If ex.Message.Contains("Got a frame at sample rate") OrElse ex.Message.Contains("does not support changes to") Then
-                Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL 不支持播放音频属性在中途发生变化的音乐", HintType.Critical)
+                Hint(String.Format(Application.Current.FindResource("LangModMusicMusicChanged"), GetFileNameFromPath(MusicCurrent)), HintType.Critical)
             ElseIf Not (MusicCurrent.EndsWithF(".wav", True) OrElse MusicCurrent.EndsWithF(".mp3", True) OrElse MusicCurrent.EndsWithF(".flac", True)) Then
-                Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试", HintType.Critical)
+                Hint(String.Format(Application.Current.FindResource("LangModMusicMusicFormatNotSupport"), GetFileNameFromPath(MusicCurrent)), HintType.Critical)
             Else
                 Log(ex, "播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）", LogLevel.Hint)
             End If

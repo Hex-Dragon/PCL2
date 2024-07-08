@@ -427,7 +427,7 @@
     <s:String x:Key="LangDownloadModTypeOptimization">Optimization</s:String>
     <s:String x:Key="LangDownloadModTypeDisplay">Display</s:String>
     <s:String x:Key="LangDownloadModTypeServer">Server Utility</s:String>
-    <s:String x:Key="LangDownloadModTypeUtility">Utility &amp; QoL</s:String>
+    <s:String x:Key="LangDownloadModTypeUtility">Utility / QoL</s:String>
     <s:String x:Key="LangDownloadModTypeLib">API and Library</s:String>
     <s:String x:Key="LangDownloadModConnectModrinthFail">Unable to connect to Modrinth, so currently only content from CurseForge is displayed, and the results may be incomplete.</s:String>
     
@@ -843,7 +843,7 @@
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">Check for updates</s:String>
     <s:String x:Key="LangPageSetupSystemLang">Language</s:String>
     <s:String x:Key="LangPageSetupSystemLangLaunchLang">Launcher language</s:String>
-    <s:String x:Key="LangPageSetupSystemLangWarn">Translation does not guarantee 100% accuracy</s:String>
+    <s:String x:Key="LangPageSetupSystemLangWarn">Translation does not guarantee 100% accuracy.You need to restart PCL after switch to another language.</s:String>
     <s:String x:Key="LangPageSetupSystemDebug">Debug</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeed">Animation speed</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">Disable copying existing files while downloading</s:String>
@@ -1020,4 +1020,31 @@
     <s:String x:Key="LangPageVersionSetupCommand">该项不会覆盖全局设置：启动时会先执行全局设置的命令，再执行版本设置的命令。&#xa;&#xa;在 MC 启动前执行特定命令或程序，语法与 Windows 的命令提示符一致。&#xa;&#xa;可以使用以下替换标记实现相对路径（路径均以 \ 结尾）：&#xa; · {path}：PCL 的 exe 文件所在的文件夹&#xa; · {minecraft}：.minecraft 文件夹&#xa; · {verpath}：版本文件夹（.minecraft\versions\版本名\）&#xa; · {verindie}：开启版本隔离时等同版本文件夹，未开启时等同 .minecraft 文件夹&#xa; · {java}：游戏运行时的 Java 文件夹&#xa;&#xa;除此之外，也支持以下替换标记：&#xa; · {user}：玩家名字&#xa; · {login}：玩家的登录方式&#xa; · {uuid}：玩家的 UUID&#xa; · {name}：游戏版本名&#xa; · {date}、{time}：当前的系统时间&#xa; · {version}：游戏对应的原版版本号&#xa;&#xa;例如：&#xa; · &quot;{verpath}test.exe&quot; ：运行版本文件夹下的 test.exe 程序&#xa; · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 运行版本文件夹下的 test.jar&#xa; · notepad &quot;{verindie}option.txt&quot; ：使用记事本打开该版本的设置文件&#xa;&#xa;涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行失败。&#xa;执行命令时，命令行所在的目录是当前的 .minecraft 文件夹。</s:String>
     <s:String x:Key="LangPageVersionSetupJavaCompatibility">If a Java that is incompatible with the current version is manually selected in the settings, the compatibility warning pop-up window is automatically skipped and the manually selected Java is forced to be used. </s:String>
     <s:String x:Key="LangPageVersionSetupFileVerification">Assets are not changed at all; libraries, third-party login libraries, and version master jar files are not verified to see if they have been modified.&#xa;If you have not modified the relevant document, please do not check this item. </s:String>
+    
+        <!--ModMain-->
+    <s:String x:Key="LangModMainAprilFoolTipA">Give up! Just click the little white flag in the lower right corner...</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipB">See the little white flag in the lower right corner? </s:String>
+    <s:String x:Key="LangModMainAprilFoolTipC">It is recommended here to click the small white flag in the lower right corner to surrender.jpg</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipD">The little white flag in the lower right corner is always waiting for you...</s:String>
+    
+    <!--ModEvent-->
+    <s:String x:Key="LangModEventOpeningWeb">Opening, please wait...</s:String>
+    <s:String x:Key="LangModEventStartInstance">Starting {0}…</s:String>
+    <s:String x:Key="LangModEventChoseAnInstance">Please select a Minecraft version first! </s:String>
+    <s:String x:Key="LangModEventHomePageRefreshed">The homepage has been refreshed! </s:String>
+    <s:String x:Key="LangModEventDialogDownloadIncorrectContent">EventData must be a URL that starts with "http://" or "https://".&#xa;PCL does not support other messy download protocols. </s:String>
+    <s:String x:Key="LangModEventDialogEventFailTitle">Event execution failed</s:String>
+    <s:String x:Key="LangModEventDialogUnknownEventContent">Unknown event type: {0}&#xa;Please check whether the event type is filled correctly or whether the PCL is the latest version. </s:String>
+    <s:String x:Key="LangModEventGettingResource">Obtaining resources, please wait...</s:String>
+    
+    <!--ModMusic-->
+    <s:String x:Key="LangModMusicDeviceChanged">Due to changes in audio equipment, music playback cannot be restored until the PCL is restarted!</s:String>
+    <s:String x:Key="LangModMusicMusicChanged">Failed to play music ({0}): PCL does not support playing music whose audio properties change in the middle</s:String>
+    <s:String x:Key="LangModMusicMusicFormatNotSupport">Failed to play music ({0}): PCL may not support this music format. Please convert the format to ".wav",".mp3" or ".flac" and try again</s:String>
+    
+    <!--ModSecret-->
+    <s:String x:Key="LangModSecretPermissionA">PCL cannot create the PCL folder ({0}PCL), please try:&#xa;1. Move PCL to another folder {1}&#xa;2. Delete the PCL folder in the current directory and try again.&#xa;3. Right-click on PCL and select Properties to open Run this program as administrator in Compatibility. </s:String>
+    <s:String x:Key="LangModSecretPermissionB">PCL does not have write permissions to the current folder. Please try: &#xa;1. Move PCL to another folder {0}&#xa;2. Delete the PCL folder in the current directory and try again.&#xa;3. Right-click on PCL and select Properties to open Run this program as administrator in Compatibility. </s:String>
+    <s:String x:Key="LangModSecretPermissionAddition">(For example,any other locations rather than C drive and desktop)</s:String>
+    <s:String x:Key="LangModSecretPermissionError">Operating environment error</s:String>
 </ResourceDictionary>

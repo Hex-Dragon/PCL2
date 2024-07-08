@@ -25,19 +25,13 @@ Friend Module ModSecret
         Try
             Directory.CreateDirectory(Path & "PCL")
         Catch ex As Exception
-            MsgBox($"PCL 无法创建 PCL 文件夹（{Path & "PCL"}），请尝试：" & vbCrLf &
-                  "1. 将 PCL 移动到其他文件夹" & If(Path.StartsWithF("C:", True), "，例如 C 盘和桌面以外的其他位置。", "。") & vbCrLf &
-                  "2. 删除当前目录中的 PCL 文件夹，然后再试。" & vbCrLf &
-                  "3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。",
-                MsgBoxStyle.Critical, "运行环境错误")
+            MsgBox(String.Format(Application.Current.FindResource("LangModSecretPermissionA"), Path, If(Path.StartsWithF("C:", True), Application.Current.FindResource("LangModSecretPermissionAddition"), "")),
+                MsgBoxStyle.Critical, Application.Current.FindResource("LangModSecretPermissionError"))
             Environment.[Exit](Result.Cancel)
         End Try
         If Not CheckPermission(Path & "PCL") Then
-            MsgBox("PCL 没有对当前文件夹的写入权限，请尝试：" & vbCrLf &
-                  "1. 将 PCL 移动到其他文件夹" & If(Path.StartsWithF("C:", True), "，例如 C 盘和桌面以外的其他位置。", "。") & vbCrLf &
-                  "2. 删除当前目录中的 PCL 文件夹，然后再试。" & vbCrLf &
-                  "3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。",
-                MsgBoxStyle.Critical, "运行环境错误")
+            MsgBox(String.Format(Application.Current.FindResource("LangModSecretPermissionB"), If(Path.StartsWithF("C:", True), Application.Current.FindResource("LangModSecretPermissionAddition"), "")),
+                MsgBoxStyle.Critical, Application.Current.FindResource("LangModSecretPermissionError"))
             Environment.[Exit](Result.Cancel)
         End If
         '开源版本提示

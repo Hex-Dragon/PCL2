@@ -407,14 +407,14 @@
     <s:String x:Key="LangDownloadModTypeWorldElement">世界元素</s:String>
     <s:String x:Key="LangDownloadModTypeBiome">生物群系</s:String>
     <s:String x:Key="LangDownloadModTypeDimension">维度</s:String>
-    <s:String x:Key="LangDownloadModTypeMineral">矿物与资源</s:String>
+    <s:String x:Key="LangDownloadModTypeMineral">矿物 / 资源</s:String>
     <s:String x:Key="LangDownloadModTypeStructure">天然结构</s:String>
     <s:String x:Key="LangDownloadModTypeTech">科技</s:String>
-    <s:String x:Key="LangDownloadModTypePipe">管道与物流</s:String>
+    <s:String x:Key="LangDownloadModTypePipe">管道 / 物流</s:String>
     <s:String x:Key="LangDownloadModTypeAuto">自动化</s:String>
     <s:String x:Key="LangDownloadModTypeEnergy">能源</s:String>
     <s:String x:Key="LangDownloadModTypeRedstone">红石</s:String>
-    <s:String x:Key="LangDownloadModTypeFood">食物与烹饪</s:String>
+    <s:String x:Key="LangDownloadModTypeFood">食物 / 烹饪</s:String>
     <s:String x:Key="LangDownloadModTypeAgriculture">农业</s:String>
     <s:String x:Key="LangDownloadModTypeGameMechanics">游戏机制</s:String>
     <s:String x:Key="LangDownloadModTypeTransportation">运输</s:String>
@@ -423,7 +423,7 @@
     <s:String x:Key="LangDownloadModTypeAdventure">冒险</s:String>
     <s:String x:Key="LangDownloadModTypeDecoration">装饰</s:String>
     <s:String x:Key="LangDownloadModTypeMobs">生物</s:String>
-    <s:String x:Key="LangDownloadModTypeEquipment">装备与工具</s:String>
+    <s:String x:Key="LangDownloadModTypeEquipment">装备 / 工具</s:String>
     <s:String x:Key="LangDownloadModTypeOptimization">性能优化</s:String>
     <s:String x:Key="LangDownloadModTypeDisplay">信息显示</s:String>
     <s:String x:Key="LangDownloadModTypeServer">服务器</s:String>
@@ -843,7 +843,7 @@
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">检查更新</s:String>
     <s:String x:Key="LangPageSetupSystemLang">语言</s:String>
     <s:String x:Key="LangPageSetupSystemLangLaunchLang">启动器语言</s:String>
-    <s:String x:Key="LangPageSetupSystemLangWarn">翻译不保证 100% 准确</s:String>
+    <s:String x:Key="LangPageSetupSystemLangWarn">翻译不保证 100% 准确，修改语言后需要重启 PCL</s:String>
     <s:String x:Key="LangPageSetupSystemDebug">调试选项</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeed">动画速度</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">禁止在下载时复制已存在的文件</s:String>
@@ -1020,4 +1020,49 @@
     <s:String x:Key="LangPageVersionSetupCommand">该项不会覆盖全局设置：启动时会先执行全局设置的命令，再执行版本设置的命令。&#xa;&#xa;在 MC 启动前执行特定命令或程序，语法与 Windows 的命令提示符一致。&#xa;&#xa;可以使用以下替换标记实现相对路径（路径均以 \ 结尾）：&#xa; · {path}：PCL 的 exe 文件所在的文件夹&#xa; · {minecraft}：.minecraft 文件夹&#xa; · {verpath}：版本文件夹（.minecraft\versions\版本名\）&#xa; · {verindie}：开启版本隔离时等同版本文件夹，未开启时等同 .minecraft 文件夹&#xa; · {java}：游戏运行时的 Java 文件夹&#xa;&#xa;除此之外，也支持以下替换标记：&#xa; · {user}：玩家名字&#xa; · {login}：玩家的登录方式&#xa; · {uuid}：玩家的 UUID&#xa; · {name}：游戏版本名&#xa; · {date}、{time}：当前的系统时间&#xa; · {version}：游戏对应的原版版本号&#xa;&#xa;例如：&#xa; · &quot;{verpath}test.exe&quot; ：运行版本文件夹下的 test.exe 程序&#xa; · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 运行版本文件夹下的 test.jar&#xa; · notepad &quot;{verindie}option.txt&quot; ：使用记事本打开该版本的设置文件&#xa;&#xa;涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行失败。&#xa;执行命令时，命令行所在的目录是当前的 .minecraft 文件夹。</s:String>
     <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在设置中手动选择了与当前版本不兼容的 Java，则自动跳过兼容性警告弹窗，强制使用手动选择的 Java。</s:String>
     <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。&#xa;如果你没有修改相关文件，请勿勾选此项。</s:String>
+    
+    <!--ModMain-->
+    <s:String x:Key="LangModMainAprilFoolTipA">放弃吧！只需要点一下右下角的小白旗……</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipB">看到右下角的那面小白旗了吗？</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipC">这里建议点一下右下角的小白旗投降呢.jpg</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永远等着你……</s:String>
+    
+    <!--ModEvent-->
+    <s:String x:Key="LangModEventOpeningWeb">正在开启中，请稍候……</s:String>
+    <s:String x:Key="LangModEventStartInstance">正在启动 {0}……</s:String>
+    <s:String x:Key="LangModEventChoseAnInstance">请先选择一个 Minecraft 版本！</s:String>
+    <s:String x:Key="LangModEventHomePageRefreshed">已刷新主页！</s:String>
+    <s:String x:Key="LangModEventDialogDownloadIncorrectContent">EventData 必须为以 http:// 或 https:// 开头的网址。&#xa;PCL 不支持其他乱七八糟的下载协议。</s:String>
+    <s:String x:Key="LangModEventDialogEventFailTitle">事件执行失败</s:String>
+    <s:String x:Key="LangModEventDialogUnknownEventContent">未知的事件类型：{0}&#xa;请检查事件类型填写是否正确，或者 PCL 是否为最新版本。</s:String>
+    <s:String x:Key="LangModEventGettingResource">正在获取资源，请稍候……</s:String>
+    
+    <!--ModMusic-->
+    <s:String x:Key="LangModMusicDeviceChanged">由于音频设备变更，音乐播放功能在重启 PCL 后才能恢复！</s:String>
+    <s:String x:Key="LangModMusicMusicChanged">播放音乐失败（{0}）：PCL 不支持播放音频属性在中途发生变化的音乐</s:String>
+    <s:String x:Key="LangModMusicMusicFormatNotSupport">播放音乐失败（{0}）：PCL 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试</s:String>
+    
+    <!--ModSecret-->
+    <s:String x:Key="LangModSecretPermissionA">PCL 无法创建 PCL 文件夹（{0}PCL），请尝试：&#xa;
+1. 将 PCL 移动到其他文件夹{1}&#xa;2. 删除当前目录中的 PCL 文件夹，然后再试。&#xa;3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。</s:String>
+    <s:String x:Key="LangModSecretPermissionB">PCL 没有对当前文件夹的写入权限，请尝试：&#xa;1. 将 PCL 移动到其他文件夹{0}&#xa;2. 删除当前目录中的 PCL 文件夹，然后再试。&#xa;3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。</s:String>
+    <s:String x:Key="LangModSecretPermissionAddition">（例如 C 盘和桌面以外的其他位置）</s:String>
+    <s:String x:Key="LangModSecretPermissionError">运行环境错误</s:String>
+    
+    <!--ModMinecraft-->
+    <s:String x:Key="LangModMinecraftCurrentFolder">当前文件夹</s:String>
+    <s:String x:Key="LangModMinecraftOfficalFolder">官方启动器文件夹</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusInstanceNotFound">未找到版本</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusNoPermission">PCL 没有对该文件夹的访问权限，请右键以管理员身份运行 PCL</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusNeedDependency">需要安装前置版本：</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusUnknownError">未知错误：</s:String>
+    <s:String x:Key="LangModMinecraftSkinSizeErrorA">皮肤图片大小应为 64x32 像素或 64x64 像素！</s:String>
+    <s:String x:Key="LangModMinecraftSkinSizeErrorB">皮肤文件大小需小于 24 KB，而所选文件大小为</s:String>
+    <s:String x:Key="LangModMinecraftSkinErrorFile">皮肤文件存在错误</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeContent">此皮肤为 Steve 模型（粗手臂）还是 Alex 模型（细手臂）？</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeTitle">选择皮肤种类</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeSteve">Steve 模型</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Alex 模型</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">我不知道</s:String>
+    <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">请在皮肤下载页面确认皮肤种类后再使用此皮肤！</s:String>
 </ResourceDictionary>
