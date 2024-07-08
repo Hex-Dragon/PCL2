@@ -317,14 +317,14 @@ Public Class FormMain
         Lang = ReadReg("Lang")
         If String.IsNullOrWhiteSpace(Lang) Then
             Select Case Globalization.CultureInfo.CurrentCulture.Name
+                Case "en-US"
+                    Lang = "en_US"
                 Case "zh-CN"
                     Lang = "zh_CN"
                 Case "zh-HK"
                     Lang = "zh_HK"
                 Case "zh-TW"
-                    Lang = "zh_HK"
-                Case "en-US"
-                    Lang = "en_US"
+                    Lang = "zh_TW"
                 Case Else
                     Lang = "en_US"
             End Select

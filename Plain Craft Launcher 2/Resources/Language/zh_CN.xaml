@@ -142,7 +142,7 @@
     <s:String x:Key="LangSetThemeNameGeekToolTip">右键打开解密游戏入口</s:String>
     <s:String x:Key="LangSetThemeNameCustom">自定义</s:String>
     <s:String x:Key="LangSetThemeNameCustomToolTip">需要解锁五个隐藏主题</s:String>
-    <s:String x:Key="LangSetThemeShowLogOnStart">打开启动器时显示 PCL 图标</s:String>
+    <s:String x:Key="LangSetThemeShowLogoOnStart">打开启动器时显示 PCL 图标</s:String>
     <s:String x:Key="LangSetThemeSponsorship">需要小小赞助一下作者，才能修改主题颜色（悲）……</s:String>
     <s:String x:Key="LangSetThemeSupport">支持作者</s:String>
     <s:String x:Key="LangSetBackgroundPic">背景图片</s:String>
@@ -264,7 +264,7 @@
     <s:String x:Key="LangSelectHintFolderRemoved">文件夹 {0} 已从列表中移除！</s:String>
     <s:String x:Key="LangSelectHintFolderNameRestored">文件夹名称已复原！</s:String>
     <s:String x:Key="LangSelectRemoveFolderFail">从列表中移除游戏文件夹失败</s:String>
-    <s:String x:Key="LangSelectDialogDeleteConfirmContentA">你确定要 {0} 这个文件夹吗？&#xa;目标文件夹：{1}&#xa;&#xa;这会导致该文件夹中的所有存档与其他文件永久丢失，且不可恢复！</s:String>
+    <s:String x:Key="LangSelectDialogDeleteConfirmContentA">你确定要删除这个文件夹吗？&#xa;目标文件夹：{1}&#xa;&#xa;这会导致该文件夹中的所有存档与其他文件永久丢失，且不可恢复！</s:String>
     <s:String x:Key="LangSelectDialogDeleteConfirmTitleA">删除警告</s:String>
     <s:String x:Key="LangSelectDialogDeleteConfirmContentB">如果你在该文件夹中存放了除 MC 以外的其他文件，这些文件也会被一同删除！&#xa;继续删除会导致该文件夹中的所有文件永久丢失，请在仔细确认后再继续！&#xa;目标文件夹：{0}&#xa;&#xa;这是最后一次警告！</s:String>
     <s:String x:Key="LangSelectFolderEmptied">文件夹 {0} 已清空！</s:String>
@@ -668,6 +668,7 @@
     <s:String x:Key="LangPageOtherAboutThanks">特别鸣谢</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93">提供 BMCLAPI 镜像源和 Forge 安装工具，详见 https://bmclapi.bangbang93.com</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">赞助镜像源</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCModTitle">MC 百科</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCMod">提供了 Mod 名称的中文翻译和更多相关信息！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">打开百科</s:String>
     <s:String x:Key="LangPageOtherAboutThanks00ll00">提供了 Java Launch Wrapper 和一些重要服务支持！</s:String>
@@ -778,7 +779,7 @@
     <s:String x:Key="LangPageSetupLaunchJavaAddedJava">已将该 Java 加入 Java 列表！</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaIncorrectJava">该 Java 存在异常，无法使用</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaSearchSuccess">已找到 {0} 个 Java，请检查下拉框查看列表！</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">若在游戏启动后立即关闭启动器，崩溃检测、更改游戏标题等功能将失效。&#xa;如果想保留这些功能，可以选择让启动器在游戏启动后隐藏，游戏退出后自动关闭。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">若在游戏启动后立即关闭启动器，崩溃检测、更改游戏标题等功能将失效。&#xa;如果想保留这些功能，可以选择让启动器在。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">提醒</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableContent">内存优化会显著延长启动耗时，建议仅在内存不足时开启。&#xa;如果你在使用机械硬盘，这还可能导致一小段时间的严重卡顿。&#xa;&#xa;每次启动游戏，PCL 都需要申请管理员权限以进行内存优化。&#xa;若想自动授予权限，可以右键 PCL，打开 属性 → 兼容性 → 以管理员身份运行此程序。</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">提醒</s:String>
@@ -826,7 +827,7 @@
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">正式版更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">在 Minecraft 正式版更新时弹窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">游戏语言</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">自动设置为中文</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">自动设置为简体中文</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">系统</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">启动器更新</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">在有新版本时自动下载</s:String>
@@ -1043,8 +1044,7 @@
     <s:String x:Key="LangModMusicMusicFormatNotSupport">播放音乐失败（{0}）：PCL 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试</s:String>
     
     <!--ModSecret-->
-    <s:String x:Key="LangModSecretPermissionA">PCL 无法创建 PCL 文件夹（{0}PCL），请尝试：&#xa;
-1. 将 PCL 移动到其他文件夹{1}&#xa;2. 删除当前目录中的 PCL 文件夹，然后再试。&#xa;3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。</s:String>
+    <s:String x:Key="LangModSecretPermissionA">PCL 无法创建 PCL 文件夹（{0}PCL），请尝试：&#xa;1. 将 PCL 移动到其他文件夹{1}&#xa;2. 删除当前目录中的 PCL 文件夹，然后再试。&#xa;3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。</s:String>
     <s:String x:Key="LangModSecretPermissionB">PCL 没有对当前文件夹的写入权限，请尝试：&#xa;1. 将 PCL 移动到其他文件夹{0}&#xa;2. 删除当前目录中的 PCL 文件夹，然后再试。&#xa;3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。</s:String>
     <s:String x:Key="LangModSecretPermissionAddition">（例如 C 盘和桌面以外的其他位置）</s:String>
     <s:String x:Key="LangModSecretPermissionError">运行环境错误</s:String>

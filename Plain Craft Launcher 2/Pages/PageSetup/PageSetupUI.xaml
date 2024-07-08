@@ -70,7 +70,7 @@
                             <TextBlock Grid.Column="4" Grid.Row="2" x:Name="LabLauncherTheme11Click" Background="{StaticResource ColorBrushSemiTransparent}" ToolTipService.Placement="Bottom" />
                             <local:MyRadioBox Grid.Column="5" Grid.Row="2" Text="{DynamicResource LangSetThemeNameCustom}" x:Name="RadioLauncherTheme14" Tag="UiLauncherTheme/14" IsEnabled="False" ToolTipService.Placement="Bottom" ToolTip="{DynamicResource LangSetThemeNameCustomToolTip}" ToolTipService.ShowOnDisabled="True" />
                         </Grid>
-                        <local:MyCheckBox Text="{DynamicResource LangSetThemeShowLogOnStart}" Margin="-1,0,0,1" Height="22" x:Name="CheckLauncherLogo" Tag="UiLauncherLogo" />
+                        <local:MyCheckBox Text="{DynamicResource LangSetThemeShowLogoOnStart}" Margin="-1,0,0,1" Height="22" x:Name="CheckLauncherLogo" Tag="UiLauncherLogo" />
                     </StackPanel>
                     <Border Background="#CCCCCCCC" Margin="-5,22,-5,-5" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed">
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
