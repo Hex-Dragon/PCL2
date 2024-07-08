@@ -26,7 +26,7 @@
 
         '刷新设置项目
         ComboDisplayType.SelectedIndex = ReadIni(PageVersionLeft.Version.Path & "PCL\Setup.ini", "DisplayType", McVersionCardType.Auto)
-        BtnDisplayStar.Text = If(PageVersionLeft.Version.IsStar, "从收藏夹中移除", "加入收藏夹")
+        BtnDisplayStar.Text = If(PageVersionLeft.Version.IsStar, Application.Current.FindResource("LangPageVersionOverallCancelFavorite"), Application.Current.FindResource("LangPageVersionOverallFavorite"))
         BtnFolderMods.Visibility = If(PageVersionLeft.Version.Modable, Visibility.Visible, Visibility.Collapsed)
         '刷新版本显示
         PanDisplayItem.Children.Clear()
@@ -73,7 +73,7 @@
             '改为隐藏
             Try
                 If Not Setup.Get("HintHide") Then
-                    If MyMsgBox("确认要从版本列表中隐藏该版本吗？隐藏该版本后，它将不再出现于 PCL 显示的版本列表中。" & vbCrLf & "此后，在版本列表页面按下 F11 才可以查看被隐藏的版本。", "隐藏版本提示",, "取消") <> 1 Then
+                    If MyMsgBox(Application.Current.FindResource("LangPageVersionOverallDialogHideInstanceContent"), Application.Current.FindResource("LangPageVersionOverallDialogHideInstanceTitle"),, Application.Current.FindResource("LangDialogBtnCancel")) <> 1 Then
                         ComboDisplayType.SelectedIndex = 0
                         Exit Sub
                     End If
@@ -92,7 +92,7 @@
     Private Sub BtnDisplayDesc_Click(sender As Object, e As EventArgs) Handles BtnDisplayDesc.Click
         Try
             Dim OldInfo As String = ReadIni(PageVersionLeft.Version.Path & "PCL\Setup.ini", "CustomInfo")
-            Dim NewInfo As String = MyMsgBoxInput("更改描述", "修改版本的描述文本，留空则使用 PCL 的默认描述。", OldInfo, New ObjectModel.Collection(Of Validate), "默认描述")
+            Dim NewInfo As String = MyMsgBoxInput(Application.Current.FindResource("LangPageVersionOverallDialogEditDescTitle"), Application.Current.FindResource("LangPageVersionOverallDialogEditDescContent"), OldInfo, New ObjectModel.Collection(Of Validate), Application.Current.FindResource("LangPageVersionOverallDialogEditDescHint"))
             If NewInfo IsNot Nothing AndAlso OldInfo <> NewInfo Then WriteIni(PageVersionLeft.Version.Path & "PCL\Setup.ini", "CustomInfo", NewInfo)
             PageVersionLeft.Version = New McVersion(PageVersionLeft.Version.Name).Load()
             Reload()
@@ -109,7 +109,7 @@
             Dim OldName As String = PageVersionLeft.Version.Name
             Dim OldPath As String = PageVersionLeft.Version.Path
             '修改此部分的同时修改快速安装的版本名检测*
-            Dim NewName As String = MyMsgBoxInput("重命名版本", "", OldName, New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions", IgnoreCase:=False)})
+            Dim NewName As String = MyMsgBoxInput(Application.Current.FindResource("LangPageVersionOverallDialogEditNameTitle"), "", OldName, New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions", IgnoreCase:=False)})
             If String.IsNullOrWhiteSpace(NewName) Then Exit Sub
             Dim NewPath As String = PathMcFolder & "versions\" & NewName & "\"
             '获取临时中间名，以防止仅修改大小写的重命名失败
@@ -168,13 +168,13 @@
                 End Try
             End If
             '刷新与提示
-            Hint("重命名成功！", HintType.Finish)
+            Hint(Application.Current.FindResource("LangPageVersionOverallHintEditNameSuccess"), HintType.Finish)
             PageVersionLeft.Version = New McVersion(NewName).Load()
             If Not IsNothing(McVersionCurrent) AndAlso McVersionCurrent.Equals(PageVersionLeft.Version) Then WriteIni(PathMcFolder & "PCL.ini", "Version", NewName)
             Reload()
             LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
         Catch ex As Exception
-            Log(ex, "重命名版本失败", LogLevel.Msgbox)
+            Log(ex, Application.Current.FindResource("LangPageVersionOverallEditNameFail"), LogLevel.Msgbox)
         End Try
     End Sub
 
@@ -260,23 +260,23 @@
     Private Sub BtnManageScript_Click() Handles BtnManageScript.Click
         Try
             '弹窗要求指定脚本的保存位置
-            Dim SavePath As String = SelectAs("选择脚本保存位置", "启动 " & PageVersionLeft.Version.Name & ".bat", "批处理文件(*.bat)|*.bat")
+            Dim SavePath As String = SelectAs(Application.Current.FindResource("LangPageVersionOverallSelectSaveCommandFile"), "启动 " & PageVersionLeft.Version.Name & ".bat", "批处理文件(*.bat)|*.bat")
             If SavePath = "" Then Exit Sub
             '检查中断（等玩家选完弹窗指不定任务就结束了呢……）
             If McLaunchLoader.State = LoadState.Loading Then
-                Hint("请在当前启动任务结束后再试！", HintType.Critical)
+                Hint(Application.Current.FindResource("LangPageVersionOverallHintWaitForTaskOver"), HintType.Critical)
                 Exit Sub
             End If
             '生成脚本
             If McLaunchStart(New McLaunchOptions With {.SaveBatch = SavePath, .Version = PageVersionLeft.Version}) Then
                 If Setup.Get("LoginType") = McLoginType.Legacy Then
-                    Hint("正在导出启动脚本……")
+                    Hint(Application.Current.FindResource("LangPageVersionOverallHintExportingCommandA"))
                 Else
-                    Hint("正在导出启动脚本……（注意，使用脚本启动可能会导致登录失效！）")
+                    Hint(Application.Current.FindResource("LangPageVersionOverallHintExportingCommandB"))
                 End If
             End If
         Catch ex As Exception
-            Log(ex, "导出启动脚本失败（" & PageVersionLeft.Version.Name & "）", LogLevel.Msgbox)
+            Log(ex, Application.Current.FindResource("LangPageVersionOverallHintExportingCommandFail") & "（" & PageVersionLeft.Version.Name & "）", LogLevel.Msgbox)
         End Try
     End Sub
 
@@ -286,23 +286,23 @@
             '重复任务检查
             SyncLock LoaderTaskbarLock
                 For i = 0 To LoaderTaskbar.Count - 1
-                    If LoaderTaskbar(i).Name = PageVersionLeft.Version.Name & " 文件补全" Then
-                        Hint("正在处理中，请稍候！", HintType.Critical)
+                    If LoaderTaskbar(i).Name = PageVersionLeft.Version.Name & " " & Application.Current.FindResource("LangPageVersionOverallTaskCompleteFile") Then
+                        Hint(Application.Current.FindResource("LangPageVersionOverallCompleteFileInTask"), HintType.Critical)
                         Exit Sub
                     End If
                 Next
             End SyncLock
             '启动
-            Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " 文件补全", DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload, False))
+            Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " " & Application.Current.FindResource("LangPageVersionOverallTaskCompleteFile"), DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload, False))
             Loader.OnStateChanged =
             Sub()
                 Select Case Loader.State
                     Case LoadState.Finished
-                        Hint(Loader.Name & "成功！", HintType.Finish)
+                        Hint(Loader.Name & Application.Current.FindResource("LangPageVersionOverallCompleteFileSuccess"), HintType.Finish)
                     Case LoadState.Failed
-                        Hint(Loader.Name & "失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
+                        Hint(Loader.Name & Application.Current.FindResource("LangPageVersionOverallCompleteFileFail") & GetExceptionSummary(Loader.Error), HintType.Critical)
                     Case LoadState.Aborted
-                        Hint(Loader.Name & "已取消！", HintType.Info)
+                        Hint(Loader.Name & Application.Current.FindResource("LangPageVersionOverallCompleteFileAbort"), HintType.Info)
                 End Select
             End Sub
             Loader.Start(PageVersionLeft.Version.Name)
@@ -320,17 +320,22 @@
         Try
             Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
             Dim IsHintIndie As Boolean = PageVersionLeft.Version.State <> McVersionState.Error AndAlso PageVersionLeft.Version.PathIndie <> PathMcFolder
-            Select Case MyMsgBox($"你确定要{If(IsShiftPressed, "永久", "")}删除版本 {PageVersionLeft.Version.Name} 吗？" &
-                        If(IsHintIndie, vbCrLf & "由于该版本开启了版本隔离，删除版本时该版本对应的存档、资源包、Mod 等文件也将被一并删除！", ""),
-                        "版本删除确认", , "取消",, IsHintIndie OrElse IsShiftPressed)
+            Dim MsgContent = ""
+            If IsShiftPressed Then
+                MsgContent = String.Format(Application.Current.FindResource("LangPageVersionOverallDialogDeleteA"), PageVersionLeft.Version.Name)
+            Else
+                MsgContent = String.Format(Application.Current.FindResource("LangPageVersionOverallDialogDeleteB"), PageVersionLeft.Version.Name)
+            End If
+            Select Case MyMsgBox(MsgContent,
+                        Application.Current.FindResource("LangPageVersionOverallDialogDeleteTitle"), , Application.Current.FindResource("LangDialogBtnCancel"),, IsHintIndie OrElse IsShiftPressed)
                 Case 1
                     IniClearCache(PageVersionLeft.Version.Path & "PCL\Setup.ini")
                     If IsShiftPressed Then
                         DeleteDirectory(PageVersionLeft.Version.Path)
-                        Hint("版本 " & PageVersionLeft.Version.Name & " 已永久删除！", HintType.Finish)
+                        Hint(String.Format(Application.Current.FindResource("LangPageVersionOverallHintPermanentDeleteSuccess"), PageVersionLeft.Version.Name), HintType.Finish)
                     Else
                         FileIO.FileSystem.DeleteDirectory(PageVersionLeft.Version.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                        Hint("版本 " & PageVersionLeft.Version.Name & " 已删除到回收站！", HintType.Finish)
+                        Hint(String.Format(Application.Current.FindResource("LangPageVersionOverallHintDeleteSuccess"), PageVersionLeft.Version.Name), HintType.Finish)
                     End If
                 Case 2
                     Exit Sub
