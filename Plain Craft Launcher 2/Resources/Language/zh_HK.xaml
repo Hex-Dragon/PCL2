@@ -844,7 +844,7 @@
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">檢查更新</s:String>
     <s:String x:Key="LangPageSetupSystemLang">語言</s:String>
     <s:String x:Key="LangPageSetupSystemLangLaunchLang">啟動器語言</s:String>
-    <s:String x:Key="LangPageSetupSystemLangWarn">翻譯不保證 100% 準確</s:String>
+    <s:String x:Key="LangPageSetupSystemLangWarn">翻譯不保證 100% 準確，修改語言後需要重啟 PCL</s:String>
     <s:String x:Key="LangPageSetupSystemDebug">調試選項</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeed">動畫速度</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">禁止在下載時複製已存在的文件</s:String>
@@ -865,4 +865,205 @@
     <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm">我知道我在做什麼</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementDisableContent">若選擇此項，即使在啟動器將來出現嚴重問題時，你也無法獲取更新並獲得修復。&#xa;例如，如果官方修改了登錄方式，從而導致現有啟動器無法登錄，你可能就會因為無法更新而無法開始遊戲。&#xa;&#xa;一般選擇 僅在有重大漏洞更新時顯示提示 就可以讓你儘量不受打擾了。&#xa;除非你在製作服務器整合包，或時常手動更新啟動器，否則極度不推薦選擇此項！</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">確認啟動器更新失敗</s:String>
+    
+    <!--PageVersionLeft-->
+    <s:String x:Key="LangPageVersionLeftOverview">概覽</s:String>
+    <s:String x:Key="LangPageVersionLeftSetting">設置</s:String>
+    <s:String x:Key="LangPageVersionLeftModMangment">Mod 管理</s:String>
+    <s:String x:Key="LangPageVersionLeftModMangmentRefresh">刷新</s:String>
+    <s:String x:Key="LangPageVersionLeftModMangmentRefreshing">正在刷新……</s:String>
+    <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetContent">是否要初始化該版本的版本獨立設置？該操作不可撤銷。</s:String>
+    <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetTitle">初始化確認</s:String>
+    
+    <!--PageVersionMod-->
+    <s:String x:Key="LangPageVersionModSearchTip">搜索 Mod 名稱 / 描述 / 標籤</s:String>
+    <s:String x:Key="LangPageVersionModOpenFolder">打開 Mod 文件夾</s:String>
+    <s:String x:Key="LangPageVersionModSelectAll">全選</s:String>
+    <s:String x:Key="LangPageVersionModInstallMod">安裝 Mod</s:String>
+    <s:String x:Key="LangPageVersionModCheckMod">檢查 Mod</s:String>
+    <s:String x:Key="LangPageVersionModCheckModToolTip">快速檢查 Mod 的版本要求、重複、前置缺失等問題。&#xa;結果僅供參考，由於部分 Mod 標註的信息有誤，可能並不準確。</s:String>
+    <s:String x:Key="LangPageVersionModNoModFile">未找到 Mod</s:String>
+    <s:String x:Key="LangPageVersionModDropToInstallModTip">要安裝 Mod，請直接將 Mod 文件拖入 PCL 窗口。&#xa;如果你確定你已經安裝了 Mod，但仍然看到了這條提示，則是版本隔離設置有誤，請在啟動設置中調整版本隔離選項。</s:String>
+    <s:String x:Key="LangPageVersionModLoadingList">正在加載 Mod 列表</s:String>
+    <s:String x:Key="LangPageVersionModSelectedFile">已選擇 {0} 個文件</s:String>
+    <s:String x:Key="LangPageVersionModOperationUpdate">更新</s:String>
+    <s:String x:Key="LangPageVersionModOperationEnable">啟用</s:String>
+    <s:String x:Key="LangPageVersionModOperationDisable">禁用</s:String>
+    <s:String x:Key="LangPageVersionModOperationDelete">刪除</s:String>
+    <s:String x:Key="LangPageVersionModOperationDeselect">取消選擇</s:String>
+    <s:String x:Key="LangPageVersionModOpenPath">打開文件位置</s:String>
+    <s:String x:Key="LangPageVersionModDetail">詳情</s:String>
+    <s:String x:Key="LangPageVersionModModList">Mod 列表</s:String>
+    <s:String x:Key="LangPageVersionModSearchResult">搜索結果</s:String>
+    <s:String x:Key="LangPageVersionModSearchNoResult">無搜索結果</s:String>
+    <s:String x:Key="LangPageVersionModHintDropFileToInstall">將 Mod 文件直接拖入 PCL 窗口即可安裝！</s:String>
+    <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusContent">目前同時存在啟用和禁用的兩個 Mod 文件：&#xa;{0}&#xa;{1}&#xa;&#xa;注意，這兩個文件的內容並不相同。&#xa;&#xa;在手動刪除或重命名其中一個文件後，才能繼續操作。</s:String>
+    <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusTitle">存在文件衝突</s:String>
+    <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">由於文件被占用，Mod 的狀態切換失敗，請嘗試關閉正在運行的遊戲後再試！</s:String>
+    <s:String x:Key="LangPageVersionModDialogUpdateModContent">新版本 Mod 可能不兼容老版本的存檔或者其他 Mod，這可能導致遊戲崩潰，甚至存檔損壞！&#xa;除非整合包作者要求你更新，否則不要私自更新整合包里的 Mod！&#xa;在更新 Mod 前，請先備份存檔，並檢查它的更新日誌！&#xa;更新時，老版本的 Mod 會被移動到回收站，以防萬一。&#xa;&#xa;請在認真閱讀上述警告後再繼續！</s:String>
+    <s:String x:Key="LangPageVersionModDialogUpdateModTitle">Mod 更新警告</s:String>
+    <s:String x:Key="LangPageVersionModDialogUpdateModBtnConfirm">我已了解上述風險，繼續更新</s:String>
+    <s:String x:Key="LangPageVersionModTaskDownloadNewMod">下載新版 Mod 文件</s:String>
+    <s:String x:Key="LangPageVersionModTaskReplaceModFile">替換舊版 Mod 文件</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdate">Mod 更新：</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateSuccessA">已成功更新 {0} 個 Mod！</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateSuccessB">已成功更新：</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateFail">Mod 更新失敗：</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateAbort">Mod 更新已中止！</s:String>
+    <s:String x:Key="LangPageVersionModHintFileOccupyWhenDelete">由於文件被占用，Mod 刪除失敗，請嘗試關閉正在運行的遊戲後再試！</s:String>
+    <s:String x:Key="LangPageVersionModHintFileDeleteSuccessA">已將 {0} 刪除到回收站！</s:String>
+    <s:String x:Key="LangPageVersionModHintFileDeleteSuccessB">已將 {0} 個文件刪除到回收站！</s:String>
+    <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">已徹底刪除 {0}！</s:String>
+    <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">已徹底刪除 {0} 個文件！</s:String>
+    <s:String x:Key="LangPageVersionModDialogFailGetModDetail">無法讀取此 Mod 的信息。</s:String>
+    
+    <!--PageVersionModDisabled-->
+    <s:String x:Key="LangPageVersionModDisabledTitle">該版本不可使用 Mod</s:String>
+    <s:String x:Key="LangPageVersionModDisabledContent">你需要先安裝 Forge、Fabric 等 Mod 加載器才能使用 Mod，請在下載頁面安裝這些版本。&#xa;如果你已經安裝過了 Mod 加載器，那麼你很可能選擇了錯誤的版本，請點擊版本選擇按鈕切換版本。</s:String>
+    <s:String x:Key="LangPageVersionModDisabledBtnGoToDownload">轉到下載頁面</s:String>
+    <s:String x:Key="LangPageVersionModDisabledBtnSelectInstance">版本選擇</s:String>
+    
+    <!--PageVersionOverall-->
+    <s:String x:Key="LangPageVersionOverallPersonalize">個性化</s:String>
+    <s:String x:Key="LangPageVersionOverallIcon">圖標</s:String>
+    <s:String x:Key="LangPageVersionOverallIconAuto">自動</s:String>
+    <s:String x:Key="LangPageVersionOverallIconCustom">自定義...</s:String>
+    <s:String x:Key="LangPageVersionOverallIconCobbleStone">圓石</s:String>
+    <s:String x:Key="LangPageVersionOverallIconCommandBlock">命令方塊</s:String>
+    <s:String x:Key="LangPageVersionOverallIconGoldBlock">金塊</s:String>
+    <s:String x:Key="LangPageVersionOverallIconGrass">草方塊</s:String>
+    <s:String x:Key="LangPageVersionOverallIconGrassPath">草徑</s:String>
+    <s:String x:Key="LangPageVersionOverallIconAnvil">鐵砧</s:String>
+    <s:String x:Key="LangPageVersionOverallIconRedstoneBlock">紅石塊</s:String>
+    <s:String x:Key="LangPageVersionOverallIconRedstoneLampOn">紅石燈（開）</s:String>
+    <s:String x:Key="LangPageVersionOverallIconRedstoneLampOff">紅石燈（關）</s:String>
+    <s:String x:Key="LangPageVersionOverallIconEgg">雞蛋</s:String>
+    <s:String x:Key="LangPageVersionOverallIconFabric">布料（Fabric）</s:String>
+    <s:String x:Key="LangPageVersionOverallIconNeoForge">狐狸（NeoForge）</s:String>
+    <s:String x:Key="LangPageVersionOverallCategory">分類</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryAuto">自動</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryHidden">從版本列表中隱藏</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryHiddenToolTip">該版本默認將不會在版本列表中顯示。&#xa;在版本列表頁面按下 F11，即可查看所有隱藏的版本。</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryMod">可安裝 Mod 的版本</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryRegular">常規版本</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryUncommon">不常用版本</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryAprilFool">愚人節版本</s:String>
+    <s:String x:Key="LangPageVersionOverallEditName">修改版本名</s:String>
+    <s:String x:Key="LangPageVersionOverallEditDesc">修改版本描述</s:String>
+    <s:String x:Key="LangPageVersionOverallFavorite">加入收藏夾</s:String>
+    <s:String x:Key="LangPageVersionOverallCancelFavorite">從收藏夾中移除</s:String>
+    <s:String x:Key="LangPageVersionOverallShortcut">快捷方式</s:String>
+    <s:String x:Key="LangPageVersionOverallFolder">版本文件夾</s:String>
+    <s:String x:Key="LangPageVersionOverallFolderSaves">存檔文件夾</s:String>
+    <s:String x:Key="LangPageVersionOverallFolderMods">Mod 文件夾</s:String>
+    <s:String x:Key="LangPageVersionOverallManagement">高級管理</s:String>
+    <s:String x:Key="LangPageVersionOverallManagementExportCommand">導出啟動腳本</s:String>
+    <s:String x:Key="LangPageVersionOverallManagementCompleteFile">補全文件</s:String>
+    <s:String x:Key="LangPageVersionOverallManagementCompleteFileToolTip">校驗版本依賴文件是否完整，並重新下載 Assets 索引與缺失、校驗失敗的文件。&#xa;若遊戲缺失音效，請嘗試此項。</s:String>
+    <s:String x:Key="LangPageVersionOverallManagementDelete">刪除版本</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogHideInstanceContent">確認要從版本列表中隱藏該版本嗎？隱藏該版本後，它將不再出現於 PCL 顯示的版本列表中。&#xa;此後，在版本列表頁面按下 F11 才可以查看被隱藏的版本。</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogHideInstanceTitle">隱藏版本提示</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogEditDescHint">默認描述</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogEditDescContent">修改版本的描述文本，留空則使用 PCL 的默認描述。</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogEditDescTitle">更改描述</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogEditNameTitle">重命名版本</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEditNameSuccess">重命名成功！</s:String>
+    <s:String x:Key="LangPageVersionOverallEditNameFail">重命名版本失敗</s:String>
+    <s:String x:Key="LangPageVersionOverallSelectSaveCommandFile">選擇腳本保存位置</s:String>
+    <s:String x:Key="LangPageVersionOverallHintWaitForTaskOver">請在當前啟動任務結束後再試！</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandA">正在導出啟動腳本……</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandB">正在導出啟動腳本……（注意，使用腳本啟動可能會導致登錄失效！）</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandFail">導出啟動腳本失敗</s:String>
+    <s:String x:Key="LangPageVersionOverallTaskCompleteFile">文件補全</s:String>
+    <s:String x:Key="LangPageVersionOverallCompleteFileInTask">正在處理中，請稍候！</s:String>
+    <s:String x:Key="LangPageVersionOverallCompleteFileSuccess">成功！</s:String>
+    <s:String x:Key="LangPageVersionOverallCompleteFileFail">失敗：</s:String>
+    <s:String x:Key="LangPageVersionOverallCompleteFileAbort">已取消！</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogDeleteA">你確定要永久刪除版本 {0} 嗎？&#xa;由於該版本開啟了版本隔離，刪除版本時該版本對應的存檔、資源包、Mod 等文件也將被一併刪除！</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogDeleteB">你確定要刪除版本 {0} 嗎？</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">版本刪除確認</s:String>
+    <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">版本 {0} 已刪除到回收站！</s:String>
+    <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">版本 {0} 已永久刪除！</s:String>
+    
+    <!--PageVersionSetup-->
+    <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">已初始化版本獨立設置！</s:String>
+    <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">初始化版本獨立設置失敗</s:String>
+    <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">即將把第三方登錄設置覆蓋為 LittleSkin 登錄。&#xa;除非你是服主，或者服主要求你這樣做，否則請不要繼續。&#xa;&#xa;是否確實需要覆蓋當前設置？</s:String>
+    <s:String x:Key="LangPageVersionSetupDialogLittleSkinTitle">設置覆蓋確認</s:String>
+    <s:String x:Key="LangPageVersionSetupLittleSkinLogin">LittleSkin 登錄</s:String>
+    <s:String x:Key="LangPageVersionSetupTips">本頁面的設置均只對當前版本生效，這對整合包製作應該會有所幫助。&#xa;你也可以在設置頁面中修改對全部版本生效的全局設置。</s:String>
+    <s:String x:Key="LangPageVersionSetupUseGlobal">使用全局設置</s:String>
+    <s:String x:Key="LangPageVersionSetupEnable">開啟</s:String>
+    <s:String x:Key="LangPageVersionSetupDisable">關閉</s:String>
+    <s:String x:Key="LangPageVersionSetupIndieDisable">與其餘未開啟隔離的版本均使用同一檔案，存檔、Mod 等均為公用。&#xa;若存在不同版本的 Forge 或 Fabric，可能會由於 Mod 與版本衝突導致未知問題。</s:String>
+    <s:String x:Key="LangPageVersionSetupIndieEnable">讓這個版本與其他版本的存檔、Mod 等檔案相互獨立，互不干涉</s:String>
+    <s:String x:Key="LangPageVersionSetupServer">服務器</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLogin">登錄方式</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">正版登錄或離線登錄</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginOnline">僅正版登錄</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginOffline">僅離線登錄</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginThirdParty">第三方登錄：統一通行證</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginThirdPartyAuthlib">第三方登錄：Authlib Injector 或 LittleSkin</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerID">服務器 ID（必填）</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerIDToolTip">服主後台 → 集成說明 中提供的服務器 ID</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginAuthServer">認證服務器（必填）</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginYggdrasil">Yggdrasil API 認證服務器的完整地址</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginRegister">註冊鏈接</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginRegisterWeb">註冊賬號的網頁地址，如 https://xxxxx.xxx/auth/register</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerName">服務器名稱</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerNameToolTip">顯示在登錄頁面的服務器名稱</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServer">自動進入服務器</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServerToolTip">在打開 Minecraft 後自動進入某服務器。&#xa;用英文冒號間隔 IP 與端口，例如 233.233.233.233:12345。</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerMaster">服主後台</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerSetLittleSkin">設置為 LittleSkin</s:String>
+    <s:String x:Key="LangPageVersionSetupJVMHead">啟動 Minecraft 時使用的額外 JVM 參數，在沒有確定把握的情況下請不要嘗試修改。&#xa;若留空，則使用全局設置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupJVMTail">文本框中的內容將會被直接拼合在啟動參數的末尾。&#xa;例如輸入 --demo 則會以試玩模式啟動遊戲。&#xa;若留空，則使用全局設置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupCommand">該項不會覆蓋全局設置：啟動時會先執行全局設置的命令，再執行版本設置的命令。&#xa;&#xa;在 MC 啟動前執行特定命令或程序，語法與 Windows 的命令提示符一致。&#xa;&#xa;可以使用以下替換標記實現相對路徑（路徑均以 \ 結尾）：&#xa; · {path}：PCL 的 exe 文件所在的文件夾&#xa; · {minecraft}：.minecraft 文件夾&#xa; · {verpath}：版本文件夾（.minecraft\versions\版本名\）&#xa; · {verindie}：開啟版本隔離時等同版本文件夾，未開啟時等同 .minecraft 文件夾&#xa; · {java}：遊戲運行時的 Java 文件夾&#xa;&#xa;除此之外，也支持以下替換標記：&#xa; · {user}：玩家名字&#xa; · {login}：玩家的登錄方式&#xa; · {uuid}：玩家的 UUID&#xa; · {name}：遊戲版本名&#xa; · {date}、{time}：當前的系統時間&#xa; · {version}：遊戲對應的原版版本號&#xa;&#xa;例如：&#xa; · &quot;{verpath}test.exe&quot; ：運行版本文件夾下的 test.exe 程序&#xa; · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 運行版本文件夾下的 test.jar&#xa; · notepad &quot;{verindie}option.txt&quot; ：使用記事本打開該版本的設置文件&#xa;&#xa;涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致運行失敗。&#xa;執行命令時，命令行所在的目錄是當前的 .minecraft 文件夾。</s:String>
+    <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在設置中手動選擇了與當前版本不兼容的 Java，則自動跳過兼容性警告彈窗，強制使用手動選擇的 Java。</s:String>
+    <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校驗 libraries、第三方登錄庫與版本主 jar 文件是否被修改。&#xa;如果你沒有修改相關文件，請勿勾選此項。</s:String>
+    
+    <!--ModMain-->
+    <s:String x:Key="LangModMainAprilFoolTipA">放棄吧！只需要點一下右下角的小白旗……</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipB">看到右下角的那面小白旗了嗎？</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipC">這裡建議點一下右下角的小白旗投降呢.jpg</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永遠等着你……</s:String>
+    
+    <!--ModEvent-->
+    <s:String x:Key="LangModEventOpeningWeb">正在開啟中，請稍候……</s:String>
+    <s:String x:Key="LangModEventStartInstance">正在啟動 {0}……</s:String>
+    <s:String x:Key="LangModEventChoseAnInstance">請先選擇一個 Minecraft 版本！</s:String>
+    <s:String x:Key="LangModEventHomePageRefreshed">已刷新主頁！</s:String>
+    <s:String x:Key="LangModEventDialogDownloadIncorrectContent">EventData 必須為以 http:// 或 https:// 開頭的網址。&#xa;PCL 不支持其他亂七八糟的下載協議。</s:String>
+    <s:String x:Key="LangModEventDialogEventFailTitle">事件執行失敗</s:String>
+    <s:String x:Key="LangModEventDialogUnknownEventContent">未知的事件類型：{0}&#xa;請檢查事件類型填寫是否正確，或者 PCL 是否為最新版本。</s:String>
+    <s:String x:Key="LangModEventGettingResource">正在獲取資源，請稍候……</s:String>
+    
+    <!--ModMusic-->
+    <s:String x:Key="LangModMusicDeviceChanged">由於音頻設備變更，音樂播放功能在重啟 PCL 後才能恢復！</s:String>
+    <s:String x:Key="LangModMusicMusicChanged">播放音樂失敗（{0}）：PCL 不支持播放音頻屬性在中途發生變化的音樂</s:String>
+    <s:String x:Key="LangModMusicMusicFormatNotSupport">播放音樂失敗（{0}）：PCL 可能不支持此音樂格式，請將格式轉換為 .wav、.mp3 或 .flac 後再試</s:String>
+    
+    <!--ModSecret-->
+    <s:String x:Key="LangModSecretPermissionA">PCL 無法創建 PCL 文件夾（{0}PCL），請嘗試：&#xa;
+    1. 將 PCL 移動到其他文件夾{1}&#xa;2. 刪除當前目錄中的 PCL 文件夾，然後再試。&#xa;3. 右鍵 PCL 選擇屬性，打開 兼容性 中的 以管理員身份運行此程序。</s:String>
+    <s:String x:Key="LangModSecretPermissionB">PCL 沒有對當前文件夾的寫入權限，請嘗試：&#xa;1. 將 PCL 移動到其他文件夾{0}&#xa;2. 刪除當前目錄中的 PCL 文件夾，然後再試。&#xa;3. 右鍵 PCL 選擇屬性，打開 兼容性 中的 以管理員身份運行此程序。</s:String>
+    <s:String x:Key="LangModSecretPermissionAddition">（例如 C 盤和桌面以外的其他位置）</s:String>
+    <s:String x:Key="LangModSecretPermissionError">運行環境錯誤</s:String>
+    
+    <!--ModMinecraft-->
+    <s:String x:Key="LangModMinecraftCurrentFolder">當前文件夾</s:String>
+    <s:String x:Key="LangModMinecraftOfficalFolder">官方啟動器文件夾</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusInstanceNotFound">未找到版本</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusNoPermission">PCL 沒有對該文件夾的訪問權限，請右鍵以管理員身份運行 PCL</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusNeedDependency">需要安裝前置版本：</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusUnknownError">未知錯誤：</s:String>
+    <s:String x:Key="LangModMinecraftSkinSizeErrorA">皮膚圖片大小應為 64x32 像素或 64x64 像素！</s:String>
+    <s:String x:Key="LangModMinecraftSkinSizeErrorB">皮膚文件大小需小於 24 KB，而所選文件大小為</s:String>
+    <s:String x:Key="LangModMinecraftSkinErrorFile">皮膚文件存在錯誤</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeContent">此皮膚為 Steve 模型（粗手臂）還是 Alex 模型（細手臂）？</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeTitle">選擇皮膚種類</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeSteve">Steve 模型</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Alex 模型</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">我不知道</s:String>
+    <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">請在皮膚下載頁面確認皮膚種類後再使用此皮膚！</s:String>
 </ResourceDictionary>

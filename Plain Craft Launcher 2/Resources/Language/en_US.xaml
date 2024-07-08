@@ -427,7 +427,7 @@
     <s:String x:Key="LangDownloadModTypeOptimization">Optimization</s:String>
     <s:String x:Key="LangDownloadModTypeDisplay">Display</s:String>
     <s:String x:Key="LangDownloadModTypeServer">Server Utility</s:String>
-    <s:String x:Key="LangDownloadModTypeUtility">Utility &amp; QoL</s:String>
+    <s:String x:Key="LangDownloadModTypeUtility">Utility / QoL</s:String>
     <s:String x:Key="LangDownloadModTypeLib">API and Library</s:String>
     <s:String x:Key="LangDownloadModConnectModrinthFail">Unable to connect to Modrinth, so currently only content from CurseForge is displayed, and the results may be incomplete.</s:String>
     
@@ -844,7 +844,7 @@
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">Check for updates</s:String>
     <s:String x:Key="LangPageSetupSystemLang">Language</s:String>
     <s:String x:Key="LangPageSetupSystemLangLaunchLang">Launcher language</s:String>
-    <s:String x:Key="LangPageSetupSystemLangWarn">Language translations may not be 100% accurate</s:String>
+    <s:String x:Key="LangPageSetupSystemLangWarn">Translation does not guarantee 100% accuracy.You need to restart PCL after switch to another language.</s:String>
     <s:String x:Key="LangPageSetupSystemDebug">Debug</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeed">Animation speed</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">Disable copying existing files while downloading</s:String>
@@ -865,4 +865,204 @@
     <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm">I know what I am doing</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementDisableContent">If you select this option, you will not be able to get updates and fixes even if there are serious problems with the launcher in the future.&#xa;For example, if the official login method is changed, making the existing launcher unable to log in, you may not be able to start the game because you cannot update launcher.&#xa;Generally, if you want to be as uninterrupted as possible, selecting "Display prompt only when there is a critical vulnerability update" is fine.&#xa;Unless you are making a modpack or updating the launcher manually from time to time, this option is highly not recommended!</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">Confirm launcher update failed</s:String>
+
+    <!--PageVersionLeft-->
+    <s:String x:Key="LangPageVersionLeftOverview">Overview</s:String>
+    <s:String x:Key="LangPageVersionLeftSetting">Setting</s:String>
+    <s:String x:Key="LangPageVersionLeftModMangment">Mod Management</s:String>
+    <s:String x:Key="LangPageVersionLeftModMangmentRefresh">Rfresh</s:String>
+    <s:String x:Key="LangPageVersionLeftModMangmentRefreshing">Refreshing...</s:String>
+    <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetContent">Do you want to initialize the version-independent settings for this version? This operation is irrevocable. </s:String>
+    <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetTitle">Initialization confirmation</s:String>
+    
+    <!--PageVersionMod-->
+    <s:String x:Key="LangPageVersionModSearchTip">Search for Mod name/Description/Tag</s:String>
+    <s:String x:Key="LangPageVersionModOpenFolder">Open the Mod folder</s:String>
+    <s:String x:Key="LangPageVersionModSelectAll">Select all</s:String>
+    <s:String x:Key="LangPageVersionModInstallMod">Install Mod</s:String>
+    <s:String x:Key="LangPageVersionModCheckMod">Check Mod</s:String>
+    <s:String x:Key="LangPageVersionModCheckModToolTip">Quickly check Mod for issues such as version requirements, duplication, and missing prefixes.&#xa;The results are for reference only. Due to incorrect information in some Mod notes, they may not be accurate.</s:String>
+    <s:String x:Key="LangPageVersionModNoModFile">Mod not found</s:String>
+    <s:String x:Key="LangPageVersionModDropToInstallModTip">To install Mod, please drag the Mod file directly into the PCL window.&#xa;If you are sure that you have installed Mod but still see this prompt, the version isolation setting is incorrect. Please adjust the version isolation options in the startup settings.</s:String>
+    <s:String x:Key="LangPageVersionModLoadingList">Loading Mod list</s:String>
+    <s:String x:Key="LangPageVersionModSelectedFile">{0} files selected</s:String>
+    <s:String x:Key="LangPageVersionModOperationUpdate">Update</s:String>
+    <s:String x:Key="LangPageVersionModOperationEnable">Enabled</s:String>
+    <s:String x:Key="LangPageVersionModOperationDisable">Disable</s:String>
+    <s:String x:Key="LangPageVersionModOperationDelete">Delete</s:String>
+    <s:String x:Key="LangPageVersionModOperationDeselect">Deselect</s:String>
+    <s:String x:Key="LangPageVersionModOpenPath">Open file location</s:String>
+    <s:String x:Key="LangPageVersionModDetail">Details</s:String>
+    <s:String x:Key="LangPageVersionModModList">Mod list</s:String>
+    <s:String x:Key="LangPageVersionModSearchResult">Search results</s:String>
+    <s:String x:Key="LangPageVersionModSearchNoResult">No search results</s:String>
+    <s:String x:Key="LangPageVersionModHintDropFileToInstall">Drag the Mod file directly into the PCL window to install it! </s:String>
+    <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusContent">There are currently two Mod files that are enabled and disabled: &#xa;{0}&#xa;{1}&#xa;&#xa;Note that the contents of these two files are not the same.&#xa;You cannot continue until you manually delete or rename one of the files. </s:String>
+    <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusTitle">File conflict exists</s:String>
+    <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">Mod failed to switch state due to the file being occupied. Please try closing the running game and try again! </s:String>
+    <s:String x:Key="LangPageVersionModDialogUpdateModContent">The new version of Mod may not be compatible with older versions of archives or other Mods, which may cause game crashes or even archive corruption!&#xa;Don't update the Mod in the integration package privately unless the author of the integration package asks you to update it!&#xa;Before updating Mod, please back up the archive and check its update log!&#xa;When updating, older versions of Mod are moved to the Recycle Bin, just in case.&#xa;&#xa;Please read the above warning carefully before continuing!</s:String>
+    <s:String x:Key="LangPageVersionModDialogUpdateModTitle">Mod updates warning</s:String>
+    <s:String x:Key="LangPageVersionModDialogUpdateModBtnConfirm">I have understood the above risks and continue to update</s:String>
+    <s:String x:Key="LangPageVersionModTaskDownloadNewMod">Download the new version of Mod file</s:String>
+    <s:String x:Key="LangPageVersionModTaskReplaceModFile">Replace older Mod files</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdate">Mod updates:</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateSuccessA">{0} Mods have been successfully updated!</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateSuccessB">Successfully updated:</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateFail">Mod update failed:</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateAbort">Mod updates have been aborted!</s:String>
+    <s:String x:Key="LangPageVersionModHintFileOccupyWhenDelete">Mod deletion failed because the file is occupied. Please try closing the running game and try again!</s:String>
+    <s:String x:Key="LangPageVersionModHintFileDeleteSuccessA">{0} has been deleted to the Recycle Bin!</s:String>
+    <s:String x:Key="LangPageVersionModHintFileDeleteSuccessB">{0} files have been deleted to the Recycle Bin!</s:String>
+    <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">{0} has been completely deleted!</s:String>
+    <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">{0} files have been completely deleted!</s:String>
+    <s:String x:Key="LangPageVersionModDialogFailGetModDetail">Unable to read information for this Mod.</s:String>
+    
+    <!--PageVersionModDisabled-->
+    <s:String x:Key="LangPageVersionModDisabledTitle">This instance is not available with Mod</s:String>
+    <s:String x:Key="LangPageVersionModDisabledContent">You need to install Mod loaders such as Forge and Fabric to use Mod. Please install these versions on the download page.&#xa;If you have already installed the Mod loader, you may have selected the wrong version. Please click the version selection button to switch versions. </s:String>
+    <s:String x:Key="LangPageVersionModDisabledBtnGoToDownload">Go to Download</s:String>
+    <s:String x:Key="LangPageVersionModDisabledBtnSelectInstance">Go to selection</s:String>
+    
+    <!--PageVersionOverall-->
+    <s:String x:Key="LangPageVersionOverallPersonalize">Personalize</s:String>
+    <s:String x:Key="LangPageVersionOverallIcon">Icon</s:String>
+    <s:String x:Key="LangPageVersionOverallIconAuto">Automatic</s:String>
+    <s:String x:Key="LangPageVersionOverallIconCustom">Custom...</s:String>
+    <s:String x:Key="LangPageVersionOverallIconCobbleStone">Cobble Stone</s:String>
+    <s:String x:Key="LangPageVersionOverallIconCommandBlock">Command Block</s:String>
+    <s:String x:Key="LangPageVersionOverallIconGoldBlock">Gold Block</s:String>
+    <s:String x:Key="LangPageVersionOverallIconGrass">Grass</s:String>
+    <s:String x:Key="LangPageVersionOverallIconGrassPath">Grass Path</s:String>
+    <s:String x:Key="LangPageVersionOverallIconAnvil">Anvil</s:String>
+    <s:String x:Key="LangPageVersionOverallIconRedstoneBlock">Redstone Block</s:String>
+    <s:String x:Key="LangPageVersionOverallIconRedstoneLampOn">Redstone Lamp(ON)</s:String>
+    <s:String x:Key="LangPageVersionOverallIconRedstoneLampOff">Redstone Lamp(OFF)</s:String>
+    <s:String x:Key="LangPageVersionOverallIconEgg">Egg</s:String>
+    <s:String x:Key="LangPageVersionOverallIconFabric">Fabric</s:String>
+    <s:String x:Key="LangPageVersionOverallIconNeoForge">Fox(NeoForge)</s:String>
+    <s:String x:Key="LangPageVersionOverallCategory">Category</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryAuto">Automatic</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryHidden">Hide from instance list</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryHiddenToolTip">This instance will not show in the instance list.&#xa;Press F11 on the Versions list page to see all hidden versions.</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryMod">A version where the mod can be installed</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryRegular">Regular instance</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryUncommon">Infrequently used instance</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryAprilFool">April Fool instance</s:String>
+    <s:String x:Key="LangPageVersionOverallEditName">Edit instance name</s:String>
+    <s:String x:Key="LangPageVersionOverallEditDesc">Edit instance description</s:String>
+    <s:String x:Key="LangPageVersionOverallFavorite">Add to favorites</s:String>
+    <s:String x:Key="LangPageVersionOverallCancelFavorite">Remove from favorites</s:String>
+    <s:String x:Key="LangPageVersionOverallShortcut">Shortcut</s:String>
+    <s:String x:Key="LangPageVersionOverallFolder">Instance Folder</s:String>
+    <s:String x:Key="LangPageVersionOverallFolderSaves">Saves Folder</s:String>
+    <s:String x:Key="LangPageVersionOverallFolderMods">Mod Folder</s:String>
+    <s:String x:Key="LangPageVersionOverallManagement">Senior management</s:String>
+    <s:String x:Key="LangPageVersionOverallManagementExportCommand">Export the startup script</s:String>
+    <s:String x:Key="LangPageVersionOverallManagementCompleteFile">Complete the file</s:String>
+    <s:String x:Key="LangPageVersionOverallManagementCompleteFileToolTip">Verify whether the version dependency files are complete, and re-download the Assets index and the missing files that failed to be verified.&#xa;If the game is missing sound effects, try this.</s:String>
+    <s:String x:Key="LangPageVersionOverallManagementDelete">Delete instance</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogHideInstanceContent">Are you sure you want to hide the version from the list of versions? When the version is hidden, it no longer appears in the list of versions displayed by the PCL.&#xa;After that, press F11 on the Versions list page to view the hidden versions.</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogHideInstanceTitle">Hide instance hints</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogEditDescHint">Default description</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogEditDescContent">Modify the instance's description text, leaving it blank to use the PCL's default description.</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogEditDescTitle">Edit the description</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogEditNameTitle">Edit the name</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEditNameSuccess">Rename successful!</s:String>
+    <s:String x:Key="LangPageVersionOverallEditNameFail">Rename instance failed</s:String>
+    <s:String x:Key="LangPageVersionOverallSelectSaveCommandFile">Select a location to save the script</s:String>
+    <s:String x:Key="LangPageVersionOverallHintWaitForTaskOver">Please try again after the current startup task is over!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandA">Exporting startup scripts......</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandB">Exporting startup scripts...... (Note that launching with a script may result in a login invalidation!) ）</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandFail">Failed to export startup script</s:String>
+    <s:String x:Key="LangPageVersionOverallTaskCompleteFile">File completion</s:String>
+    <s:String x:Key="LangPageVersionOverallCompleteFileInTask">It's being processed, please wait!</s:String>
+    <s:String x:Key="LangPageVersionOverallCompleteFileSuccess">Success!</s:String>
+    <s:String x:Key="LangPageVersionOverallCompleteFileFail">Failed:</s:String>
+    <s:String x:Key="LangPageVersionOverallCompleteFileAbort">Canceled!</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogDeleteA">Are you sure you want to permanently delete version {0}?&#xa;Since version isolation is enabled for this version, when you delete the version, the archives, resource packs, mods and other files corresponding to the version will also be deleted!</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogDeleteB">Are you sure you want to delete version {0}?</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">Instance deletion confirmation</s:String>
+    <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">Instance {0} has been deleted to the Recycle Bin!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">Instance {0} has been permanently removed!</s:String>
+    
+    <!--PageVersionSetup-->
+    <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">Initialized version independent!</s:String>
+    <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Failed to initialize the version independently</s:String>
+    <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">It is about to overwrite the third-party login setting to LittleSkin login.&#xa;Unless you are a servant of the Lord, or the Lord asks you to do so, please do not continue.&#xa;&#xa;Do you really need to override the current settings?</s:String>
+    <s:String x:Key="LangPageVersionSetupDialogLittleSkinTitle">Set override confirmation</s:String>
+    <s:String x:Key="LangPageVersionSetupLittleSkinLogin">LittleSkin Login</s:String>
+    <s:String x:Key="LangPageVersionSetupTips">The settings on this page are only effective for the current version, which should be helpful for making integrated packages.&#xa;You can also modify global settings that are effective for all versions on the settings page.</s:String>
+    <s:String x:Key="LangPageVersionSetupUseGlobal">Use global settings</s:String>
+    <s:String x:Key="LangPageVersionSetupEnable">Enable</s:String>
+    <s:String x:Key="LangPageVersionSetupDisable">Disable</s:String>
+    <s:String x:Key="LangPageVersionSetupIndieDisable">Use the same file as other versions that have not yet been quarantined, and archives, Mod, etc. are public.&#xa;If there are different versions of Forge or Fabric, unknown problems may occur due to conflicts between the Mod and the version.</s:String>
+    <s:String x:Key="LangPageVersionSetupIndieEnable">Make this version independent of other versions of archives, Mod and other files and do not interfere with each other</s:String>
+    <s:String x:Key="LangPageVersionSetupServer">Server</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLogin">Login method</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">Microsoft login or offline login</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginOnline">Microsoft login only</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginOffline">Offline login only</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginThirdParty">Third-party login: unified pass</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginThirdPartyAuthlib">Third-party login: Authlib Injector or LittleSkin</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerID">Server ID (required)</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerIDToolTip">Server host and backend → Server ID provided in the integration instructions</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginAuthServer">Authentication server (required)</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginYggdrasil">Full address of the Yggdrasil API authentication server</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginRegister">Registration link</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginRegisterWeb">The web address for registering an account, such as https://xxxxx.xxx/auth/register</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerName">Server name</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerNameToolTip">Server name displayed on login page</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServer">Automatic entry to server</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServerToolTip">Automatically enter a server after opening Minecraft.&#xa;Use an English colon to separate IP and port, for example, 233.233.233.233:12345. </s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerMaster">Serve the main backstage</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginServerSetLittleSkin">Set to LittleSkin</s:String>
+    <s:String x:Key="LangPageVersionSetupJVMHead">Please do not try to modify the extra JVM parameters used when starting Minecraft without certain certainty.&#xa;If left blank, the value set globally is used. </s:String>
+    <s:String x:Key="LangPageVersionSetupJVMTail">The content in the text box will be spliced directly to the end of the startup parameter.&#xa;For example, typing--demo will start the game in demo mode.&#xa;If left blank, the value set globally is used. </s:String>
+    <s:String x:Key="LangPageVersionSetupCommand">该项不会覆盖全局设置：启动时会先执行全局设置的命令，再执行版本设置的命令。&#xa;&#xa;在 MC 启动前执行特定命令或程序，语法与 Windows 的命令提示符一致。&#xa;&#xa;可以使用以下替换标记实现相对路径（路径均以 \ 结尾）：&#xa; · {path}：PCL 的 exe 文件所在的文件夹&#xa; · {minecraft}：.minecraft 文件夹&#xa; · {verpath}：版本文件夹（.minecraft\versions\版本名\）&#xa; · {verindie}：开启版本隔离时等同版本文件夹，未开启时等同 .minecraft 文件夹&#xa; · {java}：游戏运行时的 Java 文件夹&#xa;&#xa;除此之外，也支持以下替换标记：&#xa; · {user}：玩家名字&#xa; · {login}：玩家的登录方式&#xa; · {uuid}：玩家的 UUID&#xa; · {name}：游戏版本名&#xa; · {date}、{time}：当前的系统时间&#xa; · {version}：游戏对应的原版版本号&#xa;&#xa;例如：&#xa; · &quot;{verpath}test.exe&quot; ：运行版本文件夹下的 test.exe 程序&#xa; · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 运行版本文件夹下的 test.jar&#xa; · notepad &quot;{verindie}option.txt&quot; ：使用记事本打开该版本的设置文件&#xa;&#xa;涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行失败。&#xa;执行命令时，命令行所在的目录是当前的 .minecraft 文件夹。</s:String>
+    <s:String x:Key="LangPageVersionSetupJavaCompatibility">If a Java that is incompatible with the current version is manually selected in the settings, the compatibility warning pop-up window is automatically skipped and the manually selected Java is forced to be used. </s:String>
+    <s:String x:Key="LangPageVersionSetupFileVerification">Assets are not changed at all; libraries, third-party login libraries, and version master jar files are not verified to see if they have been modified.&#xa;If you have not modified the relevant document, please do not check this item. </s:String>
+    
+        <!--ModMain-->
+    <s:String x:Key="LangModMainAprilFoolTipA">Give up! Just click the little white flag in the lower right corner...</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipB">See the little white flag in the lower right corner? </s:String>
+    <s:String x:Key="LangModMainAprilFoolTipC">It is recommended here to click the small white flag in the lower right corner to surrender.jpg</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipD">The little white flag in the lower right corner is always waiting for you...</s:String>
+    
+    <!--ModEvent-->
+    <s:String x:Key="LangModEventOpeningWeb">Opening, please wait...</s:String>
+    <s:String x:Key="LangModEventStartInstance">Starting {0}…</s:String>
+    <s:String x:Key="LangModEventChoseAnInstance">Please select a Minecraft version first! </s:String>
+    <s:String x:Key="LangModEventHomePageRefreshed">The homepage has been refreshed! </s:String>
+    <s:String x:Key="LangModEventDialogDownloadIncorrectContent">EventData must be a URL that starts with "http://" or "https://".&#xa;PCL does not support other messy download protocols. </s:String>
+    <s:String x:Key="LangModEventDialogEventFailTitle">Event execution failed</s:String>
+    <s:String x:Key="LangModEventDialogUnknownEventContent">Unknown event type: {0}&#xa;Please check whether the event type is filled correctly or whether the PCL is the latest version. </s:String>
+    <s:String x:Key="LangModEventGettingResource">Obtaining resources, please wait...</s:String>
+    
+    <!--ModMusic-->
+    <s:String x:Key="LangModMusicDeviceChanged">Due to changes in audio equipment, music playback cannot be restored until the PCL is restarted!</s:String>
+    <s:String x:Key="LangModMusicMusicChanged">Failed to play music ({0}): PCL does not support playing music whose audio properties change in the middle</s:String>
+    <s:String x:Key="LangModMusicMusicFormatNotSupport">Failed to play music ({0}): PCL may not support this music format. Please convert the format to ".wav",".mp3" or ".flac" and try again</s:String>
+    
+    <!--ModSecret-->
+    <s:String x:Key="LangModSecretPermissionA">PCL cannot create the PCL folder ({0}PCL), please try:&#xa;1. Move PCL to another folder {1}&#xa;2. Delete the PCL folder in the current directory and try again.&#xa;3. Right-click on PCL and select Properties to open Run this program as administrator in Compatibility. </s:String>
+    <s:String x:Key="LangModSecretPermissionB">PCL does not have write permissions to the current folder. Please try: &#xa;1. Move PCL to another folder {0}&#xa;2. Delete the PCL folder in the current directory and try again.&#xa;3. Right-click on PCL and select Properties to open Run this program as administrator in Compatibility. </s:String>
+    <s:String x:Key="LangModSecretPermissionAddition">(For example,any other locations rather than C drive and desktop)</s:String>
+    <s:String x:Key="LangModSecretPermissionError">Operating environment error</s:String>
+    
+    <!--ModMinecraft-->
+    <s:String x:Key="LangModMinecraftCurrentFolder">current folder</s:String>
+    <s:String x:Key="LangModMinecraftOfficalFolder">Official Launcher Folder</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusInstanceNotFound">Version not found</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusNoPermission">PCL does not have access to this folder. Please right-click to run PCL as administrator</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusNeedDependency">Pre-version installation is required:</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusUnknownError">Unknown error:</s:String>
+    <s:String x:Key="LangModMinecraftSkinSizeErrorA">Skin picture size should be 64x32 pixels or 64x64 pixels! </s:String>
+    <s:String x:Key="LangModMinecraftSkinSizeErrorB">The skin file size needs to be less than 24 KB, and the selected file size is</s:String>
+    <s:String x:Key="LangModMinecraftSkinErrorFile">Error in skin file</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeContent">Is this skin a Steve model (thick arms) or an Alex model (thin arms)? </s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeTitle">Select skin type</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeSteve">Steve's model</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Alex model</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">I don't know</s:String>
+    <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">Please confirm the skin type on the skin download page before using this skin! </s:String>
 </ResourceDictionary>

@@ -45,9 +45,9 @@ Public Module ModMinecraft
 
             '扫描当前文件夹
             Try
-                If Directory.Exists(Path & "versions\") Then CacheMcFolderList.Add(New McFolder With {.Name = "当前文件夹", .Path = Path, .Type = McFolderType.Original})
+                If Directory.Exists(Path & "versions\") Then CacheMcFolderList.Add(New McFolder With {.Name = Application.Current.FindResource("LangModMinecraftCurrentFolder"), .Path = Path, .Type = McFolderType.Original})
                 For Each Folder As DirectoryInfo In New DirectoryInfo(Path).GetDirectories
-                    If Directory.Exists(Folder.FullName & "versions\") OrElse Folder.Name = ".minecraft" Then CacheMcFolderList.Add(New McFolder With {.Name = "当前文件夹", .Path = Folder.FullName & "\", .Type = McFolderType.Original})
+                    If Directory.Exists(Folder.FullName & "versions\") OrElse Folder.Name = ".minecraft" Then CacheMcFolderList.Add(New McFolder With {.Name = Application.Current.FindResource("LangModMinecraftCurrentFolder"), .Path = Folder.FullName & "\", .Type = McFolderType.Original})
                 Next
             Catch ex As Exception
                 Log(ex, "扫描 PCL 所在文件夹中是否有 MC 文件夹失败")
@@ -57,7 +57,7 @@ Public Module ModMinecraft
             Dim MojangPath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\"
             If (Not CacheMcFolderList.Any OrElse MojangPath <> CacheMcFolderList(0).Path) AndAlso '当前文件夹不是官启文件夹
                 Directory.Exists(MojangPath & "versions\") Then '具有权限且存在 versions 文件夹
-                CacheMcFolderList.Add(New McFolder With {.Name = "官方启动器文件夹", .Path = MojangPath, .Type = McFolderType.Original})
+                CacheMcFolderList.Add(New McFolder With {.Name = Application.Current.FindResource("LangModMinecraftOfficalFolder"), .Path = MojangPath, .Type = McFolderType.Original})
             End If
 
 #End Region
@@ -648,7 +648,7 @@ Recheck:
             '检查文件夹
             If Not Directory.Exists(Path) Then
                 State = McVersionState.Error
-                Info = "未找到版本 " & Name
+                Info = Application.Current.FindResource("LangModMinecraftCheckStatusInstanceNotFound") & " " & Name
                 Return False
             End If
             '检查权限
@@ -657,7 +657,7 @@ Recheck:
                 CheckPermissionWithException(Path & "PCL\")
             Catch ex As Exception
                 State = McVersionState.Error
-                Info = "PCL 没有对该文件夹的访问权限，请右键以管理员身份运行 PCL"
+                Info = Application.Current.FindResource("LangModMinecraftCheckStatusNoPermission")
                 Log(ex, "没有访问版本文件夹的权限")
                 Return False
             End Try
@@ -677,14 +677,14 @@ Recheck:
                 If Not InheritVersion = "" Then
                     If Not File.Exists(GetPathFromFullPath(Path) & InheritVersion & "\" & InheritVersion & ".json") Then
                         State = McVersionState.Error
-                        Info = "需要安装 " & InheritVersion & " 作为前置版本"
+                        Info = Application.Current.FindResource("LangModMinecraftCheckStatusNeedDependency") & InheritVersion
                         Return False
                     End If
                 End If
             Catch ex As Exception
                 Log(ex, "依赖版本检查出错（" & Name & "）")
                 State = McVersionState.Error
-                Info = "未知错误：" & GetExceptionSummary(ex)
+                Info = Application.Current.FindResource("LangModMinecraftCheckStatusUnknownError") & GetExceptionSummary(ex)
                 Return False
             End Try
 
@@ -1530,23 +1530,23 @@ OnLoaded:
         Try
             Dim Image As New MyBitmap(FileName)
             If Image.Pic.Width <> 64 OrElse Not (Image.Pic.Height = 32 OrElse Image.Pic.Height = 64) Then
-                Hint("皮肤图片大小应为 64x32 像素或 64x64 像素！", HintType.Critical)
+                Hint(Application.Current.FindResource("LangModMinecraftSkinSizeErrorA"), HintType.Critical)
                 Return New McSkinInfo With {.IsVaild = False}
             End If
             Dim FileInfo As New FileInfo(FileName)
             If FileInfo.Length > 24 * 1024 Then
-                Hint("皮肤文件大小需小于 24 KB，而所选文件大小为 " & Math.Round(FileInfo.Length / 1024, 2) & " KB", HintType.Critical)
+                Hint(Application.Current.FindResource("LangModMinecraftSkinSizeErrorB") & " " & Math.Round(FileInfo.Length / 1024, 2) & " KB", HintType.Critical)
                 Return New McSkinInfo With {.IsVaild = False}
             End If
         Catch ex As Exception
-            Log(ex, "皮肤文件存在错误", LogLevel.Hint)
+            Log(ex, Application.Current.FindResource("LangModMinecraftSkinErrorFile"), LogLevel.Hint)
             Return New McSkinInfo With {.IsVaild = False}
         End Try
 
         '获取皮肤种类
-        Dim IsSlim As Integer = MyMsgBox("此皮肤为 Steve 模型（粗手臂）还是 Alex 模型（细手臂）？", "选择皮肤种类", "Steve 模型", "Alex 模型", "我不知道", HighLight:=False)
+        Dim IsSlim As Integer = MyMsgBox(Application.Current.FindResource("LangModMinecraftSkinDialogSkinTypeContent"), Application.Current.FindResource("LangModMinecraftSkinDialogSkinTypeTitle"), Application.Current.FindResource("LangModMinecraftSkinDialogSkinTypeSteve"), Application.Current.FindResource("LangModMinecraftSkinDialogSkinTypeAlex"), Application.Current.FindResource("LangModMinecraftSkinDialogSkinTypeIDK"), HighLight:=False)
         If IsSlim = 3 Then
-            Hint("请在皮肤下载页面确认皮肤种类后再使用此皮肤！")
+            Hint(Application.Current.FindResource("LangModMinecraftSkinSkinTypeIDK"))
             Return New McSkinInfo With {.IsVaild = False}
         End If
 
