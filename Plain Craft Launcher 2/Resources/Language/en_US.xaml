@@ -1047,4 +1047,21 @@
     <s:String x:Key="LangModSecretPermissionB">PCL does not have write permissions to the current folder. Please try: &#xa;1. Move PCL to another folder {0}&#xa;2. Delete the PCL folder in the current directory and try again.&#xa;3. Right-click on PCL and select Properties to open Run this program as administrator in Compatibility. </s:String>
     <s:String x:Key="LangModSecretPermissionAddition">(For example,any other locations rather than C drive and desktop)</s:String>
     <s:String x:Key="LangModSecretPermissionError">Operating environment error</s:String>
+    
+    <!--ModMinecraft-->
+    <s:String x:Key="LangModMinecraftCurrentFolder">current folder</s:String>
+    <s:String x:Key="LangModMinecraftOfficalFolder">Official Launcher Folder</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusInstanceNotFound">Version not found</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusNoPermission">PCL does not have access to this folder. Please right-click to run PCL as administrator</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusNeedDependency">Pre-version installation is required:</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusUnknownError">Unknown error:</s:String>
+    <s:String x:Key="LangModMinecraftSkinSizeErrorA">Skin picture size should be 64x32 pixels or 64x64 pixels! </s:String>
+    <s:String x:Key="LangModMinecraftSkinSizeErrorB">The skin file size needs to be less than 24 KB, and the selected file size is</s:String>
+    <s:String x:Key="LangModMinecraftSkinErrorFile">Error in skin file</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeContent">Is this skin a Steve model (thick arms) or an Alex model (thin arms)? </s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeTitle">Select skin type</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeSteve">Steve's model</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Alex model</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">I don't know</s:String>
+    <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">Please confirm the skin type on the skin download page before using this skin! </s:String>
 </ResourceDictionary>

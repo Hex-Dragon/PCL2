@@ -1048,4 +1048,21 @@
     <s:String x:Key="LangModSecretPermissionB">PCL 沒有對當前文件夾的寫入權限，請嘗試：&#xa;1. 將 PCL 移動到其他文件夾{0}&#xa;2. 刪除當前目錄中的 PCL 文件夾，然後再試。&#xa;3. 右鍵 PCL 選擇屬性，打開 兼容性 中的 以管理員身份運行此程序。</s:String>
     <s:String x:Key="LangModSecretPermissionAddition">（例如 C 盤和桌面以外的其他位置）</s:String>
     <s:String x:Key="LangModSecretPermissionError">運行環境錯誤</s:String>
+    
+    <!--ModMinecraft-->
+    <s:String x:Key="LangModMinecraftCurrentFolder">當前文件夾</s:String>
+    <s:String x:Key="LangModMinecraftOfficalFolder">官方啟動器文件夾</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusInstanceNotFound">未找到版本</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusNoPermission">PCL 沒有對該文件夾的訪問權限，請右鍵以管理員身份運行 PCL</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusNeedDependency">需要安裝前置版本：</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusUnknownError">未知錯誤：</s:String>
+    <s:String x:Key="LangModMinecraftSkinSizeErrorA">皮膚圖片大小應為 64x32 像素或 64x64 像素！</s:String>
+    <s:String x:Key="LangModMinecraftSkinSizeErrorB">皮膚文件大小需小於 24 KB，而所選文件大小為</s:String>
+    <s:String x:Key="LangModMinecraftSkinErrorFile">皮膚文件存在錯誤</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeContent">此皮膚為 Steve 模型（粗手臂）還是 Alex 模型（細手臂）？</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeTitle">選擇皮膚種類</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeSteve">Steve 模型</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Alex 模型</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">我不知道</s:String>
+    <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">請在皮膚下載頁面確認皮膚種類後再使用此皮膚！</s:String>
 </ResourceDictionary>
