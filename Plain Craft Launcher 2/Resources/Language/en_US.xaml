@@ -23,7 +23,7 @@
     <s:String x:Key="LangDialogBtnDeny">Deny</s:String>
     <s:String x:Key="LangDialogBtnPolicyContent">View user agreements and disclaimers</s:String>
     <s:String x:Key="LangHintDebugWarning">[Debug Mode] PCL is running in debug mode, which may cause performance degradation. Please do not turn it on unless necessary!</s:String>
-    <s:String x:Key="LangDialogTitleTip">Tips</s:String>
+    <s:String x:Key="LangDialogTitleTip">Tip</s:String>
     <s:String x:Key="LangDialogHardcoreFanTheme">You have used PCL 99 times, thank you for your long-term support!&#x000D;Hidden theme hardcore fans have been unlocked!</s:String>
     <s:String x:Key="LangDialogCloseOnDownloading">There is still a download task that has not been completed. Are you sure you want to quit?</s:String>
     <s:String x:Key="LangHintHideModeOn">Function hidden settings have been reopened!</s:String>
@@ -374,7 +374,7 @@
     
     <!--PageDownloadLeft-->
     <s:String x:Key="LangDownloadPageRefresh">Refresh</s:String>
-    <s:String x:Key="LangDownloadPageAutoInstall">Installation</s:String>
+    <s:String x:Key="LangDownloadPageAutoInstall">Installations</s:String>
     <s:String x:Key="LangDownloadPageManualInstall">▼ Packages</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallContent">The packages function provides download of .jar installation files for loaders such as OptiFine and Forge, but cannot be automatically installed.&#xa;Select Minecraft version first on the installation page, and then you can select OptiFine, Forge and other loaders to let PCL to be installed automatically.</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallTitle">Install tips</s:String>
@@ -562,10 +562,10 @@
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">Exporting startup script</s:String>
     
     <!--PageLaunchRight-->
-    <s:String x:Key="LangLaunchRightSnapshot">Snapshot Tips</s:String>
+    <s:String x:Key="LangLaunchRightSnapshot">Snapshot Tip</s:String>
     <s:String x:Key="LangLaunchRightLog">Startup Log</s:String>
     <s:String x:Key="LangLaunchRightLabHint1">The snapshot version contains test features that have not yet been officially released and is only for the sponsors themselves to try. Please do not send it to others or use it to make integrated packages!</s:String>
-    <s:String x:Key="LangLaunchRightLabHint2">If you have accumulated sponsorship ¥23.33, you can permanently hide this reminder by sending the "解锁码" in a private message from Afdian.</s:String>
+    <s:String x:Key="LangLaunchRightLabHint2">If you have accumulated sponsorship ¥23.33, you can permanently hide this notice by sending the "解锁码" in a private message from Afdian.</s:String>
     <s:String x:Key="LangLaunchRightLoadingPage">Loading home page…</s:String>
     <s:String x:Key="LangLaunchRightPageTips">Did you know?</s:String>
     <s:String x:Key="LangLaunchRightPageEcho">Echo Hole</s:String>
@@ -655,7 +655,7 @@
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">Submit new feedback</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">View feedback list</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">Do you want to open a new feature voting page?</s:String>
-    <s:String x:Key="LangPageOtherDialogVoteTitle">Remind</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteTitle">Notice</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">Open</s:String>
     
     <!--PageOtherAbout-->
@@ -668,13 +668,14 @@
     <s:String x:Key="LangPageOtherAboutThanks">Special Thanks</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93">Provide BMCLAPI mirror and Forge installation tool. For details, see https://bmclapi.bangbang93.com</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">Sponsor</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCModTitle">MCMod</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCMod">It provides a Chinese translation of the name of mods and more related information!</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">Visit MCMod</s:String>
     <s:String x:Key="LangPageOtherAboutThanks00ll00">Provides Java Launch Wrapper and some important service support!</s:String>
     <s:String x:Key="LangPageOtherAboutThanksDoodleHuang">Provides some hard-to-find versions of Minecraft and some technical support!</s:String>
     <s:String x:Key="LangPageOtherAboutThanksPatrick">Designing and making PCL icons relieved LTCat from the pain of making icons…</s:String>
     <s:String x:Key="LangPageOtherAboutThanksHao_Tian">A lot of weird bugs that no one expected were found in the internal test. He/she has an unusual bug physique</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">Minecraft Chinese Forum</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">MCBBS</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBS">Although the website has been closed, thanks for providing the MCBBS mirror before…</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">Everyone in the PCL QQ Group</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">Thanks to the netizens in the group for their support and encouragement to LTCat and PCL for so long!</s:String>
@@ -779,17 +780,17 @@
     <s:String x:Key="LangPageSetupLaunchJavaIncorrectJava">This Java has an exception and cannot be used</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaSearchSuccess">{0} Java found, please check the drop down box to view the list!</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">If you close the launcher immediately after the game starts, functions such as crash detection and changing the game title will fail.&#xa;If you want to retain these features, you can choose to have the launcher hidden after the game starts and automatically shut down after the game exits.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">Remind</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">Notice</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableContent">Memory optimization will significantly prolong the startup time, and it is recommended to start it only when there is insufficient memory.&#xa;If you are using a mechanical hard drive, this can also cause severe jams for a short period of time.&#xa;Every time you start a game, PCL needs to apply for administrator rights to perform memory optimization.&#xa;If you want to automatically grant permissions, you can right-click on PCL executable file and open "Properties → Compatibility → Run this program as an administrator".</s:String>
-    <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">Remind</s:String>
+    <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">Notice</s:String>
     
     <!--PageSetupLeft-->
     <s:String x:Key="LangPageSetupLeftGame">Game</s:String>
     <s:String x:Key="LangPageSetupLeftPersonalize">Personalize</s:String>
-    <s:String x:Key="LangPageSetupLeftLaunch">Launch</s:String>
+    <s:String x:Key="LangPageSetupLeftLaunch">Launcher</s:String>
     <s:String x:Key="LangPageSetupLeftLink">Online</s:String>
     <s:String x:Key="LangPageSetupLeftReset">Initialize settings on this page</s:String>
-    <s:String x:Key="LangPageSetupLeftDialogResetGameConfirmContent">Do you want to initialize all settings on the "Game" page? This operation is irrevocable.</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetGameConfirmContent">Do you want to initialize all settings for the "Game" page? This operation is irrevocable.</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLaunchConfirmContent">Do you want to initialize all settings for the "Launch" page? This operation is irrevocable.</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">Do you want to initialize all settings for the "Personalize" page? This operation is irrevocable.&#xa;(Background pictures and external files such as music and custom home pages will not be deleted)</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">Do you want to initialize all settings for the "Online" page? This operation is irrevocable.</s:String>
@@ -797,71 +798,71 @@
     
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">Download</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">Version list acquisition</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">Version list source</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">Use mirror sources as much as possible</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">Switch to mirror sources when official sources load slowly</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">Switch to mirror sources when official source load slowly</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">Use official source as much as possible</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod naming style</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Decide where the Chinese translation should be placed in the default file name of the downloaded Mod</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">Translation is at the beginning of the file name: [遗物] relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Decide where the Simplified Chinese translation should be placed in the default file name of the downloaded mods</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">Translation at the beginning of file name: [遗物] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">Translation at the beginning of file name: 遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">Translation at the end of the file name: relics-0.1.14-遗物</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">No Chinese translation: relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadThread">maximum number of threads</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">The higher the number of threads, the faster the speed limit file downloads, but too high the number of threads will cause very serious jams during downloading.&#xa;Generally speaking, 64 threads can ensure sufficient download speed.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">No Simplified Chinese translation: relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadThread">Maximum number of threads</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">The higher the number of threads, the faster the speed limit file downloads, but too high the number of threads will cause very serious jams during downloading.&#xa;Generally, 64 threads can ensure sufficient download speed.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedLimit">Speed limit</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedLimitToolTip">Set a maximum download speed to prevent other programs that require networking from getting stuck during downloading</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadTargetFolder">Destination folder</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadTargetFolderToolTip">Please change the download destination folder in "Launch → Selection → Folder list".&#xa;Right-click a folder or game version to open the corresponding folder. </s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">Keep the original compressed package when installing the integrated package</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">When installing the integration package, keep the original integration package zip file used for installation under the version folder</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">Simplify Mod loader display</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">When downloading a Mod, if the Mod supports Forge and Fabric, it will be shown as supporting the task Mod loader.&#xa;For example, when it is opened, JEI will show that it supports full versions, and when it is closed, JEI will show that only full versions of Forge / Fabric are supported. </s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadTargetFolderToolTip">Please change the download destination folder in "Launch → Select → Folder List".&#xa;Right-click a folder or game instance to open the corresponding folder. </s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">Keep the original archive file when installing the modpack</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">When installing the modpack, keep the original modpack archive file used for installation under the instance folder</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">Simplify mod loader display</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">When downloading a mod, if the mod supports Forge and Fabric, it will be shown as supporting the task mod loader.&#xa;For example, when it is enabled, JEI will show that it supports all loaders, and when it is disabled, JEI will show that only Forge / Fabric are supported. </s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">Verify SSL Certificates</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Verifying the certificate improves security, but it is similar to a common failure to boot the original login (#3018).&#xa;If you fail at official login due to [Full Data Verification Process, Remote Certificate Invalid], you can retest and close the project. </s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Verifying the certificate will improve security, but it may cause Microsoft login failure (#3018).&#xa;If the Microsoft login fails because [the remote certificate is invalid according to the verification process], you can try to turn this off.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">Acessibility</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">Game update remind</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">Beta update remind</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">Prompt pops up when Minecraft beta (snapshot, pre-release) updates</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">Release version update remind</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">Ammunition remind when the official version of Minecraft is updated</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">Game update notice</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">Beta update</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">Display prompt when new Minecraft beta (snapshot, pre-release) released</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">Release update</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">Display prompt when new Minecraft release released</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">Game language</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">Automatically set game language to Chinese</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">Automatically set game language to Simplified Chinese</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">System</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">Launcher update</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">Automatic download when new version is available</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateB">Display prompts when new versions are available</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateB">Display prompt when new versions are available</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateC">Display prompt only when there is a critical vulnerability update</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateD">Turn off update prompts</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnet">Launcher Announcement</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnet">Launcher announcement</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetA">Show all announcements</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetAToolTip">Display all internal announcements including initiator function surveys, activities, etc.</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetAToolTip">Display announcements of function surveys, events, etc.</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetB">Display announcements only when there are important notices</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetC">Close all announcements</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetC">Disable all announcements</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCacheFolder">Cache folder</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCacheFolderToolTip">Storage location of PCL downloads, skins and other cached files.&#xa;It is not recommended to have spaces in the path.&#xa;Blank is the default value and takes effect after restarting the PCL.</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">Check for updates</s:String>
     <s:String x:Key="LangPageSetupSystemLang">Language</s:String>
     <s:String x:Key="LangPageSetupSystemLangLaunchLang">Launcher language</s:String>
-    <s:String x:Key="LangPageSetupSystemLangWarn">Translation does not guarantee 100% accuracy</s:String>
+    <s:String x:Key="LangPageSetupSystemLangWarn">Language translations may not be 100% accurate</s:String>
     <s:String x:Key="LangPageSetupSystemDebug">Debug</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeed">Animation speed</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">Disable copying existing files while downloading</s:String>
-    <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownloadToolTip">Don't directly copy existing files when downloading, but re-download each file.&#xa;It is only recommended to turn on when testing download speed.</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownloadToolTip">Do not directly copy existing files when downloading, but re-download each file.&#xa;It is only recommended to turn on when testing download speed.</s:String>
     <s:String x:Key="LangPageSetupSystemDebugDebugMode">Debug mode</s:String>
-    <s:String x:Key="LangPageSetupSystemDebugDebugModeToolTip">Display debugging information and more error messages.&#xa;This will cause a slight decline in starter performance, and it is not recommended to start it unless there are special needs.</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugDebugModeToolTip">Display debugging information and more error messages.&#xa;This will cause a slight decline in launcher performance, and it is not recommended to start it unless there are special needs.</s:String>
     <s:String x:Key="LangPageSetupSystemDebugDelay">Add a delay</s:String>
-    <s:String x:Key="LangPageSetupSystemDebugDelayToolTip">Add random delays in each link to slow down the loading speed to test whether some functions are working normally.&#xa;This will seriously affect the operation of the initiator, and it is not recommended to start it unless there are special needs.</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugDelayToolTip">Add random delays in each link to slow down the loading speed to test whether some functions are working normally.&#xa;This will seriously affect the operation of the launcher, and it is not recommended to start it unless there are special needs.</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">Automatic download when new versions are available (updating snapshot versions may require key updates)</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">Launcher page settings have been initialized! </s:String>
-    <s:String x:Key="LangPageSetupSystemLaunchResetFail">Failed to initialize initiator page settings</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchResetFail">Failed to initialize launcher page settings</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">Unlimited</s:String>
-    <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">Closed</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">If you set too many download threads, it may cause very serious jams during downloading.&#xa;Generally, setting 64 threads can meet most download needs. Unless you know what you are doing, it is not recommended to set more threads!</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">Disabled</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">If you set too many download threads, it may cause very severe lags in downloading.&#xa;Generally, setting 64 threads can meet most download needs. Unless you know what you are doing, it is not recommended to set more threads!</s:String>
     <s:String x:Key="LangDialogBtnIC">I see</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNeedRestart">Some debugging information will be switched after refreshing or restarting the launcher! </s:String>
-    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementSilentContent">If you select this option, you will not be able to get notification even if serious problems arise in the future.&#xa;For example, if you find a serious Bug in a certain version of the game, you may not be notified and have unpredictable consequences.&#xa;Generally speaking, you choose to only display announcements when there are important notices to keep you as undisturbed as possible.&#xa;Unless you are making a server integration package or updating the launcher manually from time to time, this is highly recommended! </s:String>
-    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm">I know what I'm doing</s:String>
-    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementDisableContent">If you select this option, you will not be able to get updates and get fixes even if there is a serious problem with the launcher in the future.&#xa;For example, if the official login method is changed, making the existing launcher unable to log in, you may not be able to start the game because you cannot update.&#xa;Generally speaking, you can only display a prompt when there are major vulnerability updates to keep you as undisturbed as possible.&#xa;Unless you are making a server integration package or updating the launcher manually from time to time, this is highly recommended! </s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">Confirm initiator update failed</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementSilentContent">If you select this option, you will not be able to get notification even if serious problems arise in the future.&#xa;For example, if a serious bug is found in a certain version of the game, you may not be notified, which may lead to unpredictable consequences.&#xa;Generally, if you want to be as uninterrupted as possible, selecting "Display announcements only when there are important notices" is fine.&#xa;Unless you are making a modpack or updating the launcher manually from time to time, this option is highly not recommended!</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm">I know what I am doing</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementDisableContent">If you select this option, you will not be able to get updates and fixes even if there are serious problems with the launcher in the future.&#xa;For example, if the official login method is changed, making the existing launcher unable to log in, you may not be able to start the game because you cannot update launcher.&#xa;Generally, if you want to be as uninterrupted as possible, selecting "Display prompt only when there is a critical vulnerability update" is fine.&#xa;Unless you are making a modpack or updating the launcher manually from time to time, this option is highly not recommended!</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">Confirm launcher update failed</s:String>
 </ResourceDictionary>

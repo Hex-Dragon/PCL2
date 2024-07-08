@@ -142,9 +142,9 @@
                     </Grid.RowDefinitions>
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemLangLaunchLang}"/>
                     <local:MyComboBox x:Name="ComboBackgroundSuit" Tag="UiBackgroundSuit" HorizontalAlignment="Left" Width="170" Grid.Column="1">
-                        <local:MyComboBoxItem Content="简体中文" Tag="zh_CN" IsSelected="True" />
-                        <local:MyComboBoxItem Content="繁體中文" Tag="zh_HK"/>
-                        <local:MyComboBoxItem Content="English" Tag="en_US" />
+                        <local:MyComboBoxItem Content="简体中文 (中国大陆)" Tag="zh_CN" IsSelected="True" />
+                        <local:MyComboBoxItem Content="繁體中文 (香港特別行政區)" Tag="zh_HK"/>
+                        <local:MyComboBoxItem Content="English (US)" Tag="en_US" />
                     </local:MyComboBox>
                     <local:MyHint Height="25" Text="{DynamicResource LangPageSetupSystemLangWarn}" Grid.Row="2" Grid.ColumnSpan="2"/>
                 </Grid>

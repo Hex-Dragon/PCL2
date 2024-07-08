@@ -668,6 +668,7 @@
     <s:String x:Key="LangPageOtherAboutThanks">特别鸣谢</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93">提供 BMCLAPI 镜像源和 Forge 安装工具，详见 https://bmclapi.bangbang93.com</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">赞助镜像源</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCModTitle">MC 百科</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCMod">提供了 Mod 名称的中文翻译和更多相关信息！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">打开百科</s:String>
     <s:String x:Key="LangPageOtherAboutThanks00ll00">提供了 Java Launch Wrapper 和一些重要服务支持！</s:String>
@@ -826,7 +827,7 @@
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">正式版更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">在 Minecraft 正式版更新时弹窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">游戏语言</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">自动设置为中文</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">自动设置为简体中文</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">系统</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">启动器更新</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">在有新版本时自动下载</s:String>
