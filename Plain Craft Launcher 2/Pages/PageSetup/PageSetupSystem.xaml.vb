@@ -6,12 +6,14 @@
 
         '读取设置
         Select Case Lang
-            Case "zh_CN"
-                ComboBackgroundSuit.SelectedIndex = 0
-            Case "zh_HK"
-                ComboBackgroundSuit.SelectedIndex = 1
             Case "en_US"
+                ComboBackgroundSuit.SelectedIndex = 0
+            Case "zh_CN"
+                ComboBackgroundSuit.SelectedIndex = 1
+            Case "zh_HK"
                 ComboBackgroundSuit.SelectedIndex = 2
+            Case "zh_TW"
+                ComboBackgroundSuit.SelectedIndex = 3
         End Select
 
         AniControlEnabled += 1

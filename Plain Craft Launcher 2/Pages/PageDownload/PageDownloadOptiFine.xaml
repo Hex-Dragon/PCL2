@@ -14,8 +14,8 @@
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnChina" Grid.Column="0" MinWidth="140" Text="{DynamicResource LangDownloadOptiFineChineseWebsite}" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
-                        <local:MyButton x:Name="BtnWeb" Grid.Column="1" MinWidth="140" Text="{DynamicResource LangDownloadOptiFineWebsite}" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
+                        <local:MyButton x:Name="BtnWeb" Grid.Column="0" MinWidth="140" Text="{DynamicResource LangDownloadOptiFineWebsite}" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
+                        <local:MyButton x:Name="BtnChina" Grid.Column="1" MinWidth="140" Text="{DynamicResource LangDownloadOptiFineChineseWebsite}" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
