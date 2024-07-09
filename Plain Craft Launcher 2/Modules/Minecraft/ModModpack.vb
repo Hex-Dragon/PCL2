@@ -185,6 +185,7 @@ Retry:
         Dim ForgeVersion As String = Nothing
         Dim NeoForgeVersion As String = Nothing
         Dim FabricVersion As String = Nothing
+        Dim QuiltVersion As String = Nothing
         For Each Entry In If(Json("minecraft")("modLoaders"), {})
             Dim Id As String = If(Entry("id"), "").ToString.ToLower
             If Id.StartsWithF("forge-") Then
@@ -217,6 +218,15 @@ Retry:
                     Exit For
                 Catch ex As Exception
                     Log(ex, "读取整合包 Fabric 版本失败：" & Id)
+                End Try
+            ElseIf Id.StartsWithF("quilt-") Then
+                'Quilt 指定
+                Try
+                    Log("[ModPack] 整合包 Quilt 版本：" & Id)
+                    QuiltVersion = Id.Split("-")(1)
+                    Exit For
+                Catch ex As Exception
+                    Log(ex, "读取整合包 Quilt 版本失败：" & Id)
                 End Try
             End If
         Next
@@ -316,7 +326,8 @@ Retry:
             .MinecraftName = Json("minecraft")("version").ToString,
             .ForgeVersion = ForgeVersion,
             .NeoForgeVersion = NeoForgeVersion,
-            .FabricVersion = FabricVersion
+            .FabricVersion = FabricVersion,
+            .QuiltVersion = QuiltVersion
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
         If MergeLoaders Is Nothing Then Exit Sub
@@ -385,6 +396,7 @@ Retry:
         Dim ForgeVersion As String = Nothing
         Dim NeoForgeVersion As String = Nothing
         Dim FabricVersion As String = Nothing
+        Dim QuiltVersion As String = Nothing
         For Each Entry As JProperty In If(Json("dependencies"), {})
             Select Case Entry.Name.ToLower
                 Case "minecraft"
@@ -398,9 +410,9 @@ Retry:
                 Case "fabric-loader" 'eg. 0.14.14
                     FabricVersion = Entry.Value.ToString
                     Log("[ModPack] 整合包 Fabric 版本：" & FabricVersion)
-                Case "quilt-loader" 'eg. 1.0.0
-                    Hint("PCL 暂不支持安装需要 Quilt 的整合包！", HintType.Critical)
-                    Exit Sub
+                Case "quilt-loader" 'eg. 0.26.0
+                    QuiltVersion = Entry.Value.ToString
+                    Log("[ModPack] 整合包 Quilt 版本：" & QuiltVersion)
                 Case Else
                     Hint($"无法安装整合包，其中出现了未知的 Mod 加载器 {Entry.Value}！", HintType.Critical)
                     Exit Sub
@@ -467,7 +479,8 @@ Retry:
             .MinecraftName = MinecraftVersion,
             .ForgeVersion = ForgeVersion,
             .NeoForgeVersion = NeoForgeVersion,
-            .FabricVersion = FabricVersion
+            .FabricVersion = FabricVersion,
+            .QuiltVersion = QuiltVersion
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
         If MergeLoaders Is Nothing Then Exit Sub
@@ -700,9 +713,8 @@ Retry:
                     Request.NeoForgeVersion = Component("version")
                 Case "net.fabricmc.fabric-loader"
                     Request.FabricVersion = Component("version")
-                Case "org.quiltmc.quilt-loader" 'eg. 1.0.0
-                    Hint("PCL 暂不支持安装需要 Quilt 的整合包！", HintType.Critical)
-                    Exit Sub
+                Case "org.quiltmc.quilt-loader"
+                    Request.QuiltVersion = Component("version")
             End Select
         Next
         '构造加载器
@@ -784,10 +796,6 @@ Retry:
             Hint("该整合包未提供游戏版本信息，无法安装！", HintType.Critical)
             Exit Sub
         End If
-        If Addons.ContainsKey("quilt") Then
-            Hint("PCL 暂不支持安装需要 Quilt 的整合包！", HintType.Critical)
-            Exit Sub
-        End If
         Dim Request As New McInstallRequest With {
             .TargetVersionName = VersionName,
             .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\",
@@ -795,7 +803,8 @@ Retry:
             .OptiFineVersion = If(Addons.ContainsKey("optifine"), Addons("optifine"), Nothing),
             .ForgeVersion = If(Addons.ContainsKey("forge"), Addons("forge"), Nothing),
             .NeoForgeVersion = If(Addons.ContainsKey("neoforge"), Addons("neoforge"), Nothing),
-            .FabricVersion = If(Addons.ContainsKey("fabric"), Addons("fabric"), Nothing)
+            .FabricVersion = If(Addons.ContainsKey("fabric"), Addons("fabric"), Nothing),
+            .QuiltVersion = If(Addons.ContainsKey("quilt"), Addons("quilt"), Nothing)
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
         If MergeLoaders Is Nothing Then Exit Sub
