@@ -1089,15 +1089,15 @@
         ''' <summary>
         ''' 获取到的游戏列表数据。
         ''' </summary>
-        Public GameValue As JObject
+        Public GameValue As JArray
         ''' <summary>
         ''' 获取到的加载器列表数据。
         ''' </summary>
-        Public LoaderValue As JObject
+        Public LoaderValue As JArray
         ''' <summary>
         ''' 获取到的安装器列表数据。
         ''' </summary>
-        Public InstallerValue As JObject
+        Public InstallerValue As JArray
     End Structure
 
     ''' <summary>
@@ -1129,9 +1129,9 @@
     ''' </summary>
     Public DlQuiltListOfficialLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Official", AddressOf DlQuiltListOfficialMain)
     Private Sub DlQuiltListOfficialMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
-        Dim GameResult As JObject = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/game", IsJson:=True)
-        Dim LoaderResult As JObject = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/loader", IsJson:=True)
-        Dim InstallerResult As JObject = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/installer", IsJson:=True)
+        Dim GameResult As JArray = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/game", IsJson:=True)
+        Dim LoaderResult As JArray = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/loader", IsJson:=True)
+        Dim InstallerResult As JArray = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/installer", IsJson:=True)
         Try
             Dim Output = New DlQuiltListResult With {.IsOfficial = True, .SourceName = "Quilt 官方源", .GameValue = GameResult, .LoaderValue = LoaderResult, .InstallerValue = InstallerResult}
             If Output.GameValue.ToString Is Nothing OrElse Output.LoaderValue.ToString Is Nothing OrElse Output.InstallerValue.ToString Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")

@@ -1963,8 +1963,8 @@ Retry:
     Public Function QuiltDownloadListItem(Entry As JObject, OnClick As MyListItem.ClickEventHandler) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = Entry("version").ToString.Replace("+build", ""), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry("stable").ToObject(Of Boolean), "稳定版", "测试版"),
+            .Title = Entry("version").ToString, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Info = "安装器",
             .Logo = PathImage & "Blocks/Fabric.png"
         }
         AddHandler NewItem.Click, OnClick
