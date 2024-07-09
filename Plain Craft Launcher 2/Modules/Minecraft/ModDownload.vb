@@ -1075,6 +1075,95 @@
 
 #End Region
 
+#Region "DlQuiltList | Quilt 列表"
+
+    Public Structure DlQuiltListResult
+        ''' <summary>
+        ''' 数据来源名称，如“Official”，“BMCLAPI”。
+        ''' </summary>
+        Public SourceName As String
+        ''' <summary>
+        ''' 是否为官方的实时数据。
+        ''' </summary>
+        Public IsOfficial As Boolean
+        ''' <summary>
+        ''' 获取到的游戏列表数据。
+        ''' </summary>
+        Public GameValue As JObject
+        ''' <summary>
+        ''' 获取到的加载器列表数据。
+        ''' </summary>
+        Public LoaderValue As JObject
+        ''' <summary>
+        ''' 获取到的安装器列表数据。
+        ''' </summary>
+        Public InstallerValue As JObject
+    End Structure
+
+    ''' <summary>
+    ''' Quilt 列表，主加载器。
+    ''' </summary>
+    Public DlQuiltListLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Main", AddressOf DlQuiltListMain)
+    Private Sub DlQuiltListMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
+        Select Case Setup.Get("ToolDownloadVersion")
+            Case 0
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 30),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 60)
+                }, Loader.IsForceRestarting)
+            Case 1
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 5),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 35)
+                }, Loader.IsForceRestarting)
+            Case Else
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 60),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 60)
+                }, Loader.IsForceRestarting)
+        End Select
+    End Sub
+
+    ''' <summary>
+    ''' Quilt 列表，官方源。
+    ''' </summary>
+    Public DlQuiltListOfficialLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Official", AddressOf DlQuiltListOfficialMain)
+    Private Sub DlQuiltListOfficialMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
+        Dim GameResult As JObject = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/game", IsJson:=True)
+        Dim LoaderResult As JObject = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/loader", IsJson:=True)
+        Dim InstallerResult As JObject = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/installer", IsJson:=True)
+        Try
+            Dim Output = New DlQuiltListResult With {.IsOfficial = True, .SourceName = "Quilt 官方源", .GameValue = GameResult, .LoaderValue = LoaderResult, .InstallerValue = InstallerResult}
+            If Output.GameValue.ToString Is Nothing OrElse Output.LoaderValue.ToString Is Nothing OrElse Output.InstallerValue.ToString Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
+            Loader.Output = Output
+        Catch ex As Exception
+            Throw New Exception("Quilt 官方源版本列表解析失败（" & GameResult.ToString & LoaderResult.ToString & InstallerResult.ToString & "）", ex)
+        End Try
+    End Sub
+
+    '''' <summary>
+    '''' Quilt 列表，BMCLAPI。
+    '''' </summary>
+    'Public DlQuiltListBmclapiLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Bmclapi", AddressOf DlQuiltListBmclapiMain)
+    'Private Sub DlQuiltListBmclapiMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
+    '    Dim Result As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/Quilt-meta/v2/versions", IsJson:=True)
+    '    Try
+    '        Dim Output = New DlQuiltListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Result}
+    '        If Output.Value("game") Is Nothing OrElse Output.Value("loader") Is Nothing OrElse Output.Value("installer") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
+    '        Loader.Output = Output
+    '    Catch ex As Exception
+    '        Throw New Exception("Quilt BMCLAPI 版本列表解析失败（" & Result.ToString & "）", ex)
+    '    End Try
+    'End Sub
+
+    ''' <summary>
+    ''' Quilt API 列表，官方源。
+    ''' </summary>
+    Public DlQSLLoader As New LoaderTask(Of Integer, List(Of CompFile))("Quilt API List Loader",
+        Sub(Task As LoaderTask(Of Integer, List(Of CompFile))) Task.Output = CompFilesGet("Quilt-api", False))
+
+#End Region
+
 #Region "DlSource | 镜像下载源"
 
     Public Function DlSourceResourceGet(MojangBase As String) As String()

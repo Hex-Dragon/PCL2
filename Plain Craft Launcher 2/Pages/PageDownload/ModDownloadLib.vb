@@ -1877,6 +1877,114 @@ Retry:
 
 #End Region
 
+#Region "Quilt 下载"
+
+    Public Sub McDownloadQuiltLoaderSave(DownloadInfo As JObject)
+        Try
+            Dim Url As String = DownloadInfo("url").ToString
+            Dim FileName As String = GetFileNameFromPath(Url)
+            Dim Version As String = GetFileNameFromPath(DownloadInfo("version").ToString)
+            Dim Target As String = SelectAs("选择保存位置", FileName, "Quilt 安装器 (*.jar)|*.jar")
+            If Not Target.Contains("\") Then Exit Sub
+
+            '重复任务检查
+            SyncLock LoaderTaskbarLock
+                For i = 0 To LoaderTaskbar.Count - 1
+                    If LoaderTaskbar(i).Name = "Quilt " & Version & " 安装器下载" Then
+                        Hint("该版本正在下载中！", HintType.Critical)
+                        Exit Sub
+                    End If
+                Next
+            End SyncLock
+
+            '构造步骤加载器
+            Dim Loaders As New List(Of LoaderBase)
+            '下载
+            'BMCLAPI 不支持 Quilt Installer 下载
+            Dim Address As New List(Of String)
+            Address.Add(Url)
+            Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile) From {New NetFile(Address.ToArray, Target, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
+            '启动
+            Dim Loader As New LoaderCombo(Of JObject)("Quilt " & Version & " 安装器下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+            Loader.Start(DownloadInfo)
+            LoaderTaskbarAdd(Loader)
+            FrmMain.BtnExtraDownload.ShowRefresh()
+            FrmMain.BtnExtraDownload.Ribble()
+
+        Catch ex As Exception
+            Log(ex, "开始 Quilt 安装器下载失败", LogLevel.Feedback)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' 获取下载某个 Quilt 版本的加载器列表。
+    ''' </summary>
+    Private Function McDownloadQuiltLoader(QuiltVersion As String, MinecraftName As String, Optional McFolder As String = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
+
+        '参数初始化
+        McFolder = If(McFolder, PathMcFolder)
+        Dim IsCustomFolder As Boolean = McFolder <> PathMcFolder
+        Dim Id As String = "Quilt-loader-" & QuiltVersion & "-" & MinecraftName
+        Dim VersionFolder As String = McFolder & "versions\" & Id & "\"
+        Dim Loaders As New List(Of LoaderBase)
+
+        '下载 Json
+        MinecraftName = MinecraftName.Replace("∞", "infinite") '放在 ID 后面避免影响版本文件夹名称
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取 Quilt 主文件下载地址",
+                                                            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+                                                                '启动依赖版本的下载
+                                                                If FixLibrary Then
+                                                                    McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, MinecraftName)
+                                                                End If
+                                                                Task.Progress = 0.5
+                                                                '构造文件请求
+                                                                Task.Output = New List(Of NetFile) From {New NetFile({
+                                                                    "https://meta.quiltmc.net/v2/versions/loader/" & MinecraftName & "/" & QuiltVersion & "/profile/json"
+                                                                }, VersionFolder & Id & ".json", New FileChecker(IsJson:=True))}
+                                                                '新建 mods 文件夹
+                                                                Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
+                                                            End Sub) With {.ProgressWeight = 0.5})
+        Loaders.Add(New LoaderDownload("下载 Quilt 主文件", New List(Of NetFile)) With {.ProgressWeight = 2.5})
+
+        '下载支持库
+        If FixLibrary Then
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Quilt 支持库文件",
+                                                                Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
+            Loaders.Add(New LoaderDownload("下载 Quilt 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 8})
+        End If
+
+        Return Loaders
+    End Function
+
+#End Region
+
+#Region "Quilt 下载菜单"
+
+    Public Function QuiltDownloadListItem(Entry As JObject, OnClick As MyListItem.ClickEventHandler) As MyListItem
+        '建立控件
+        Dim NewItem As New MyListItem With {
+            .Title = Entry("version").ToString.Replace("+build", ""), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Info = If(Entry("stable").ToObject(Of Boolean), "稳定版", "测试版"),
+            .Logo = PathImage & "Blocks/Fabric.png"
+        }
+        AddHandler NewItem.Click, OnClick
+        '结束
+        Return NewItem
+    End Function
+    Public Function QSLDownloadListItem(Entry As CompFile, OnClick As MyListItem.ClickEventHandler) As MyListItem
+        '建立控件
+        Dim NewItem As New MyListItem With {
+            .Title = Entry.DisplayName.Split("]")(1).Replace("QSL ", "").Replace(" build ", ".").Before("+").Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
+            .Logo = PathImage & "Blocks/Fabric.png"
+        }
+        AddHandler NewItem.Click, OnClick
+        '结束
+        Return NewItem
+    End Function
+
+#End Region
+
 #Region "合并安装"
 
     ''' <summary>
