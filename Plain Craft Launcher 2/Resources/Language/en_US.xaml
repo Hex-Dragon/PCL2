@@ -312,7 +312,7 @@
     <s:String x:Key="LangSpeedSpeed">Download Speed</s:String>
     <s:String x:Key="LangSpeedLeftFiles">Remaining Files</s:String>
     <s:String x:Key="LangSpeedLeftThreads">Remaining Threads</s:String>
-    <s:String x:Key="LangSpeedClickCopyError">Click Copy Error Details</s:String>
+    <s:String x:Key="LangSpeedClickCopyError">Click to Copy Error Details</s:String>
     <s:String x:Key="LangSpeedHintClickCopyError">Error details have been copied!</s:String>
     
     <!--PageDownloadClient-->
@@ -1013,7 +1013,7 @@
     <s:String x:Key="LangPageVersionSetupServerLoginServerName">Server name</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerNameToolTip">Server name displayed on login page</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServer">Automatic entry to server</s:String>
-    <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServerToolTip">Automatically enter a server after starting Minecraft.&#xa;Separate the IP and port with a half-width colon, such as 233.233.233.233:12345.</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServerToolTip">Automatically enter a server after starting Minecraft.&#xa;Separate the IP and the port with a half-width colon, such as 233.233.233.233:12345.</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerMaster">Server control panel</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerSetLittleSkin">Set to LittleSkin</s:String>
     <s:String x:Key="LangPageVersionSetupJVMHead">Additional JVM arguments to use when launching Minecraft. Do not attempt to change them unless you are sure.&#xa;If left blank, the value of the global setting is used.</s:String>
@@ -1094,7 +1094,7 @@
     <s:String x:Key="LangModBaseDateHour">hour(s)</s:String>
     <s:String x:Key="LangModBaseDateMinute">minute(s)</s:String>
     <s:String x:Key="LangModBaseDateSecond">second(s)</s:String>
-    <s:String x:Key="LangModBaseDateAgo"> ago</s:String><!--Keep the whitespace in the front-->
+    <s:String x:Key="LangModBaseDateAgo"> ago</s:String> <!--Keep the whitespace in the front-->
     <s:String x:Key="LangModBaseDateLater">later</s:String>
     <s:String x:Key="LangModBaseDialogWebOpenFailContent">Maybe the browser is not configured correctly, so PCL cannot open the web page for you.&#xa;The URL has been copied to the clipboard and can be manually pasted and accessed if necessary.&#xa;Url:{0}</s:String>
     <s:String x:Key="LangModBaseDialogWebOpenFailTitle">Unable to open web page</s:String>
