@@ -229,7 +229,7 @@ EndHint:
     ''' </summary>
     ''' <param name="Title">弹窗的标题。</param>
     ''' <param name="Caption">弹窗的内容。</param>
-    ''' <param name="Button1">显示的第一个按钮，默认为“OK”。</param>
+    ''' <param name="Button1">显示的第一个按钮，默认为“确定”，内容会依据当前启动器语言而变。</param>
     ''' <param name="Button2">显示的第二个按钮，默认为空。</param>
     ''' <param name="Button3">显示的第三个按钮，默认为空。</param>
     ''' <param name="Button1Action">点击第一个按钮将执行该方法，不关闭弹窗。</param>
@@ -237,10 +237,12 @@ EndHint:
     ''' <param name="Button3Action">点击第三个按钮将执行该方法，不关闭弹窗。</param>
     ''' <param name="IsWarn">是否为警告弹窗，若为 True，弹窗配色和背景会变为红色。</param>
     Public Function MyMsgBox(Caption As String, Optional Title As String = "提示",
-                             Optional Button1 As String = "OK", Optional Button2 As String = "", Optional Button3 As String = "",
+                             Optional Button1 As String = "确定", Optional Button2 As String = "", Optional Button3 As String = "",
                              Optional IsWarn As Boolean = False, Optional HighLight As Boolean = True, Optional ForceWait As Boolean = False,
                              Optional Button1Action As Action = Nothing, Optional Button2Action As Action = Nothing, Optional Button3Action As Action = Nothing) As Integer
         '将弹窗列入队列
+        If Button1 = "确定" Then Button1 = Application.Current.FindResource("LangDialogBtnOK")
+        If Title = "提示" Then Title = Application.Current.FindResource("LangDialogTitleTip")
         Dim Converter As New MyMsgBoxConverter With {.Type = MyMsgBoxType.Text, .Button1 = Button1, .Button2 = Button2, .Button3 = Button3, .Text = Caption, .IsWarn = IsWarn, .Title = Title, .HighLight = HighLight, .ForceWait = True, .Button1Action = Button1Action, .Button2Action = Button2Action, .Button3Action = Button3Action}
         WaitingMyMsgBox.Add(Converter)
         If RunInUi() Then
@@ -291,10 +293,12 @@ EndHint:
     ''' <param name="Text">弹窗的介绍文本。</param>
     ''' <param name="DefaultInput">文本框的默认内容。</param>
     ''' <param name="HintText">文本框的提示内容。</param>
-    ''' <param name="Button1">显示的第一个按钮，默认为“OK”。</param>
+    ''' <param name="Button1">显示的第一个按钮，默认为“确定”。</param>
     ''' <param name="Button2">显示的第二个按钮，默认为“取消”。</param>
     ''' <param name="IsWarn">是否为警告弹窗，若为 True，弹窗配色和背景会变为红色。</param>
-    Public Function MyMsgBoxInput(Title As String, Optional Text As String = "", Optional DefaultInput As String = "", Optional ValidateRules As ObjectModel.Collection(Of Validate) = Nothing, Optional HintText As String = "", Optional Button1 As String = "OK", Optional Button2 As String = "取消", Optional IsWarn As Boolean = False) As String
+    Public Function MyMsgBoxInput(Title As String, Optional Text As String = "", Optional DefaultInput As String = "", Optional ValidateRules As ObjectModel.Collection(Of Validate) = Nothing, Optional HintText As String = "", Optional Button1 As String = "确定", Optional Button2 As String = "取消", Optional IsWarn As Boolean = False) As String
+        If Button1 = "确定" Then Button1 = Application.Current.FindResource("LangDialogBtnOK")
+        If Button2 = "取消" Then Button2 = Application.Current.FindResource("LangDialogBtnCancel")
         '将弹窗列入队列
         Dim Converter As New MyMsgBoxConverter With {.Text = Text, .HintText = HintText, .Type = MyMsgBoxType.Input, .ValidateRules = If(ValidateRules, New ObjectModel.Collection(Of Validate)), .Button1 = Button1, .Button2 = Button2, .Content = DefaultInput, .IsWarn = IsWarn, .Title = Title}
         WaitingMyMsgBox.Add(Converter)
@@ -313,10 +317,12 @@ EndHint:
     ''' 显示选择框并返回选择的第几项（从 0 开始）。若点击第二个按钮，则返回 Nothing。
     ''' </summary>
     ''' <param name="Title">弹窗的标题。</param>
-    ''' <param name="Button1">显示的第一个按钮，默认为 “OK”。</param>
+    ''' <param name="Button1">显示的第一个按钮，默认为 “确定”。</param>
     ''' <param name="Button2">显示的第二个按钮，默认为空。</param>
     ''' <param name="IsWarn">是否为警告弹窗，若为 True，弹窗配色和背景会变为红色。</param>
-    Public Function MyMsgBoxSelect(Selections As List(Of IMyRadio), Optional Title As String = "提示", Optional Button1 As String = "OK", Optional Button2 As String = "", Optional IsWarn As Boolean = False) As Integer?
+    Public Function MyMsgBoxSelect(Selections As List(Of IMyRadio), Optional Title As String = "提示", Optional Button1 As String = "确定", Optional Button2 As String = "", Optional IsWarn As Boolean = False) As Integer?
+        If Button1 = "确定" Then Button1 = Application.Current.FindResource("LangDialogBtnOK")
+        If Title = "提示" Then Title = Application.Current.FindResource("LangDialogTitleTip")
         '将弹窗列入队列
         Dim Converter As New MyMsgBoxConverter With {.Type = MyMsgBoxType.Select, .Button1 = Button1, .Button2 = Button2, .Content = Selections, .IsWarn = IsWarn, .Title = Title}
         WaitingMyMsgBox.Add(Converter)

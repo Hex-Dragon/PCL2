@@ -1065,4 +1065,48 @@
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Alex 模型</s:String>
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">我不知道</s:String>
     <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">請在皮膚下載頁面確認皮膚種類後再使用此皮膚！</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionContentA">新版本：</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionContentB">更新時間：</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionContentC">更新於：</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft 更新提示</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">下載</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">更新日誌</s:String>
+
+    <!--ModComp-->
+    <s:String x:Key="LangModCompModSuitFor">適用於</s:String>
+    <s:String x:Key="LangModCompModDependentCount">個前置 Mod，</s:String>
+    <s:String x:Key="LangModCompModDownload">次下載，</s:String>
+    <s:String x:Key="LangModCompModDownloadMillion">萬次下載，</s:String>
+    <s:String x:Key="LangModCompModGameVersion">遊戲版本</s:String>
+    <s:String x:Key="LangModCompModUpdateTime">{0}更新</s:String>
+    <s:String x:Key="LangModCompModSaveAs">另存為</s:String>
+    <s:String x:Key="LangModCompModDependent">前置 Mod</s:String>
+    <s:String x:Key="LangModCompModAlternateVersion">可選版本</s:String>
+    <s:String x:Key="LangModCompModStatusDescRelease">正式版</s:String>
+    <s:String x:Key="LangModCompModStatusDescBeta">測試版</s:String>
+    <s:String x:Key="LangModCompModStatusDescAlpha">測試版</s:String>
+
+    <!--ModBase-->
+    <s:String x:Key="LangModBaseDateYear">年</s:String>
+    <s:String x:Key="LangModBaseDateMonthA">個月</s:String>
+    <s:String x:Key="LangModBaseDateMonthB">月</s:String>
+    <s:String x:Key="LangModBaseDateDay">天</s:String>
+    <s:String x:Key="LangModBaseDateHour">小時</s:String>
+    <s:String x:Key="LangModBaseDateMinute">分鐘</s:String>
+    <s:String x:Key="LangModBaseDateSecond">秒</s:String>
+    <s:String x:Key="LangModBaseDateAgo">前</s:String>
+    <s:String x:Key="LangModBaseDateLater">後</s:String>
+    <s:String x:Key="LangModBaseDialogWebOpenFailContent">可能由於瀏覽器未正確配置，PCL 無法為你打開網頁。&#xa;網址已經複製到剪貼板，若有需要可以手動粘貼訪問。&#xa;網址：{0}</s:String>
+    <s:String x:Key="LangModBaseDialogWebOpenFailTitle">無法打開網頁</s:String>
+    <s:String x:Key="LangModBaseHintCopySuccess">已成功複製！</s:String>
+    <s:String x:Key="LangModBaseHintMultiplePCL">可能同時開啟了多個 PCL，程序可能會出現未知問題！</s:String>
+    <s:String x:Key="LangModBaseDialogFeedbackContent">是否反饋此問題？如果不反饋，這個問題可能永遠無法得到解決！</s:String>
+    <s:String x:Key="LangModBaseDialogFeedbackTitle">出現錯誤</s:String>
+    <s:String x:Key="LangModBaseDialogFeedbackBtnConfirm">反饋</s:String>
+    <s:String x:Key="LangModBaseDialogUploadLogContent">若你在匯報一個 Bug，請點擊 打開文件夾 按鈕，並上傳 Log(1~5).txt 中包含錯誤信息的文件。&#xa;遊戲崩潰一般與啟動器無關，請不要因為遊戲崩潰而提交反饋。</s:String>
+    <s:String x:Key="LangModBaseDialogUploadLogTitle">反饋提交提醒</s:String>
+    <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">打開文件夾</s:String>
+    <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">你的 PCL 不是最新版，因此無法提交反饋。&#xa;請先在 設置 → 啟動器 中更新啟動器，確認該問題在最新版中依然存在，然後再提交反饋。</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">無法提交反饋</s:String>
 </ResourceDictionary>

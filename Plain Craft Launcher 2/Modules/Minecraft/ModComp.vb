@@ -1163,11 +1163,11 @@ Retry:
             Get
                 Select Case Status
                     Case CompFileStatus.Release
-                        Return "正式版"
+                        Return Application.Current.FindResource("LangModCompModStatusDescRelease")
                     Case CompFileStatus.Beta
-                        Return If(ModeDebug, "Beta 版", "测试版")
+                        Return If(ModeDebug, "Beta", Application.Current.FindResource("LangModCompModStatusDescBeta"))
                     Case Else
-                        Return If(ModeDebug, "Alpha 版", "测试版")
+                        Return If(ModeDebug, "Alpha", Application.Current.FindResource("LangModCompModStatusDescAlpha"))
                 End Select
             End Get
         End Property
@@ -1358,17 +1358,17 @@ Retry:
             Select Case Type
                 Case CompType.Mod
                     Info += If(ModLoaders.Any,
-                        "适用于 " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & "，", "")
-                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " 个前置 Mod，", "")
+                        Application.Current.FindResource("LangModCompModSuitFor") & " " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & "，", "")
+                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & Application.Current.FindResource("LangModCompModDependentCount") & "，", "")
                 Case CompType.ModPack
                     If GameVersions.All(Function(v) v.Contains("w")) Then
-                        Info += $"游戏版本 {Join(GameVersions, "、")}，"
+                        Info += Application.Current.FindResource("LangModCompModGameVersion") & $" {Join(GameVersions, "、")}，"
                     End If
             End Select
             If DownloadCount > 0 Then 'CurseForge 的下载次数经常错误地返回 0
-                Info += If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " 万次下载，", DownloadCount & " 次下载，")
+                Info += If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " " & Application.Current.FindResource("LangModCompModDownloadMillion") & "，", DownloadCount & " " & Application.Current.FindResource("LangModCompModDownload") & "，")
             End If
-            Info += GetTimeSpanString(ReleaseDate - Date.Now, False) & "更新"
+            Info += String.Format(Application.Current.FindResource("LangModCompModUpdateTime"), GetTimeSpanString(ReleaseDate - Date.Now, False))
             Info += If(Status = CompFileStatus.Release, "", "，" & StatusDescription)
 
             '建立控件
@@ -1389,7 +1389,7 @@ Retry:
 
             '建立另存为按钮
             If OnSaveClick IsNot Nothing Then
-                Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
+                Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = Application.Current.FindResource("LangModCompModSaveAs")}
                 ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
                 ToolTipService.SetVerticalOffset(BtnSave, 30)
                 ToolTipService.SetHorizontalOffset(BtnSave, 2)
@@ -1494,14 +1494,14 @@ Retry:
                               Return CompProjectCache.ContainsKey(dep)
                           End Function).ToList
         '添加开头间隔
-        Stack.Children.Add(New TextBlock With {.Text = "前置 Mod", .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 2, 0, 5)})
+        Stack.Children.Add(New TextBlock With {.Text = Application.Current.FindResource("LangModCompModDependent"), .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 2, 0, 5)})
         '添加前置 Mod 列表
         For Each Dep In Deps
             Dim Item = CompProjectCache(Dep).ToCompItem(False, False)
             Stack.Children.Add(Item)
         Next
         '添加结尾间隔
-        Stack.Children.Add(New TextBlock With {.Text = "可选版本", .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 12, 0, 5)})
+        Stack.Children.Add(New TextBlock With {.Text = Application.Current.FindResource("LangModCompModAlternateVersion"), .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 12, 0, 5)})
     End Sub
 
 #End Region

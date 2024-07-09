@@ -1065,4 +1065,48 @@
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Slim model</s:String>
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">I do not know</s:String>
     <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">Please confirm the skin type on the skin download page before using this skin!</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionContentA">New verison:</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionContentB">Update time:</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionContentC">Updated on:</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft update tip</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">Download</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">View update log</s:String>
+
+        <!--ModComp-->
+    <s:String x:Key="LangModCompModSuitFor">Applicable to</s:String>
+    <s:String x:Key="LangModCompModDependentCount">dependent mod(s)</s:String>
+    <s:String x:Key="LangModCompModDownload">downloads</s:String>
+    <s:String x:Key="LangModCompModDownloadMillion">million downloads</s:String>
+    <s:String x:Key="LangModCompModGameVersion">Game version</s:String>
+    <s:String x:Key="LangModCompModUpdateTime">Updated on {0}</s:String>
+    <s:String x:Key="LangModCompModSaveAs">Save as</s:String>
+    <s:String x:Key="LangModCompModDependent">Dependent mod</s:String>
+    <s:String x:Key="LangModCompModAlternateVersion">Alternate version</s:String>
+    <s:String x:Key="LangModCompModStatusDescRelease">Release version</s:String>
+    <s:String x:Key="LangModCompModStatusDescBeta">Beta version</s:String>
+    <s:String x:Key="LangModCompModStatusDescAlpha">Alpha version</s:String>
+    
+    <!--ModBase-->
+    <s:String x:Key="LangModBaseDateYear">year(s)</s:String>
+    <s:String x:Key="LangModBaseDateMonthA">month(es)</s:String>
+    <s:String x:Key="LangModBaseDateMonthB">month(es)</s:String>
+    <s:String x:Key="LangModBaseDateDay">day(s)</s:String>
+    <s:String x:Key="LangModBaseDateHour">hour(s)</s:String>
+    <s:String x:Key="LangModBaseDateMinute">minute(s)</s:String>
+    <s:String x:Key="LangModBaseDateSecond">second(s)</s:String>
+    <s:String x:Key="LangModBaseDateAgo"> ago</s:String><!--Keep the whitespace in the front-->
+    <s:String x:Key="LangModBaseDateLater">later</s:String>
+    <s:String x:Key="LangModBaseDialogWebOpenFailContent">Maybe the browser is not configured correctly, so PCL cannot open the web page for you.&#xa;The URL has been copied to the clipboard and can be manually pasted and accessed if necessary.&#xa;Url:{0}</s:String>
+    <s:String x:Key="LangModBaseDialogWebOpenFailTitle">Unable to open web page</s:String>
+    <s:String x:Key="LangModBaseHintCopySuccess">Successfully copied!</s:String>
+    <s:String x:Key="LangModBaseHintMultiplePCL">Multiple PCLs may be opened at the same time, and unknown problems may occur in the program!</s:String>
+    <s:String x:Key="LangModBaseDialogFeedbackContent">Do you want to give feedback on this question? Without feedback, this problem may never be solved!</s:String>
+    <s:String x:Key="LangModBaseDialogFeedbackTitle">An error occurred</s:String>
+    <s:String x:Key="LangModBaseDialogFeedbackBtnConfirm">Feedback now</s:String>
+    <s:String x:Key="LangModBaseDialogUploadLogContent">If you are reporting a Bug, please click the Open Folder button and upload the file containing the error message in Log(1~5).txt.&#xa;Game crashes are generally not related to the launcher. Please do not submit feedback because of game crashes.</s:String>
+    <s:String x:Key="LangModBaseDialogUploadLogTitle">Feedback Submission Reminder</s:String>
+    <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">Open Folder</s:String>
+    <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">No,thanks</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Your PCL is not the latest version, so you cannot submit feedback.&#xa;Please update the launcher in "Settings → Launcher" first, confirm that the problem still exists in the latest version, and then submit feedback.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Unable to submit feedback</s:String>
 </ResourceDictionary>

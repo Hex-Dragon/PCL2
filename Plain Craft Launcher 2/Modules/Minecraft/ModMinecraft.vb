@@ -2282,9 +2282,9 @@ OnLoaded:
             '进行提示
             If Version Is Nothing Then Exit Sub
             Dim Time As Date = Version("releaseTime")
-            Dim MsgBoxText As String = $"新版本：{VersionName}{vbCrLf}" &
-                If((Date.Now - Time).TotalDays > 1, "更新时间：" & Time.ToString, "更新于：" & GetTimeSpanString(Time - Date.Now, False))
-            Dim MsgResult = MyMsgBox(MsgBoxText, "Minecraft 更新提示", "确定", "下载", If((Date.Now - Time).TotalHours > 3, "更新日志", ""),
+            Dim MsgBoxText As String = Application.Current.FindResource("LangModMinecraftDialogNewVersionContentA") & $"{VersionName}{vbCrLf}" &
+                If((Date.Now - Time).TotalDays > 1, Application.Current.FindResource("LangModMinecraftDialogNewVersionContentB") & Time.ToString, Application.Current.FindResource("LangModMinecraftDialogNewVersionContentC") & GetTimeSpanString(Time - Date.Now, False))
+            Dim MsgResult = MyMsgBox(MsgBoxText, Application.Current.FindResource("LangModMinecraftDialogNewVersionTitle"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangModMinecraftDialogNewVersionBtnDownload"), If((Date.Now - Time).TotalHours > 3, Application.Current.FindResource("LangModMinecraftDialogNewVersionBtnLog"), ""),
                 Button3Action:=Sub() McUpdateLogShow(Version))
             '弹窗结果
             If MsgResult = 2 Then
