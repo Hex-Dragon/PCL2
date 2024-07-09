@@ -24,7 +24,7 @@
     <s:String x:Key="LangDialogBtnPolicyContent">View user agreements and disclaimers</s:String>
     <s:String x:Key="LangHintDebugWarning">[Debug Mode] PCL is running in debug mode, which may cause performance degradation. Please do not enable it unless necessary!</s:String>
     <s:String x:Key="LangDialogTitleTip">Tip</s:String>
-    <s:String x:Key="LangDialogHardcoreFanTheme">You have used PCL 99 times, thank you for your long-term support!&#x000D;Hidden theme hardcore fans have been unlocked!</s:String>
+    <s:String x:Key="LangDialogHardcoreFanTheme">You have used PCL 99 times, thank you for your long-term support!&#x000D;Hidden theme Hardcore Fans have been unlocked!</s:String>
     <s:String x:Key="LangDialogCloseOnDownloading">There is still a download task that has not been completed. Are you sure you want to quit?</s:String>
     <s:String x:Key="LangHintHideModeOn">Feature hidden settings have been enabled!</s:String>
     <s:String x:Key="LangHintHideModeOff">Feature hidden settings have been disabled temporarily!</s:String>
@@ -135,7 +135,7 @@
     <s:String x:Key="LangSetThemeNameYellow">Pineapple Yellow</s:String>
     <s:String x:Key="LangSetThemeNameBrown">Oak Brown</s:String>
     <s:String x:Key="LangSetThemeNameBlack">Xuansu Black</s:String>
-    <s:String x:Key="LangSetThemeNameGreyToolTip">Grey is a lie</s:String>
+    <s:String x:Key="LangSetThemeNameGreyToolTip">Grey is a Lie</s:String>
     <s:String x:Key="LangSetThemeNameFunny">Funny fruits on the funny tree, and you and I under the funny tree. When we do things on funny days, we will have more fun and more fun</s:String>
     <s:String x:Key="LangSetThemeNameLucky">This is the lucky man, right?</s:String>
     <s:String x:Key="LangSetThemeNameMojang">Make a genuine login and support genuine games!</s:String>
@@ -550,7 +550,7 @@
     <s:String x:Key="LangLaunchLeftAccountUnifiedPassLogin">Unified pass</s:String>
     <s:String x:Key="LangLaunchLeftAccountThirdPartLogin">Third party</s:String>
     <s:String x:Key="LangLaunchLeftSkinNotFound">The offline custom skin file was not found, it may have been deleted. PCL will use the default Steve skin!</s:String>
-    <s:String x:Key="LangLaunchThemeFunnyUnlock">Hidden theme "FUNNY COLOR" has been unlocked!</s:String>
+    <s:String x:Key="LangLaunchThemeFunnyUnlock">Hidden theme FUNNY COLOR has been unlocked!</s:String>
     <s:String x:Key="LangLaunchLeftStartInstance">Play</s:String>
     <s:String x:Key="LangLaunchLeftDownloadInstance">Download</s:String>
     <s:String x:Key="LangLaunchLeftNoAvailableInstance">No available instance</s:String>
