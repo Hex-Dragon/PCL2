@@ -1039,6 +1039,7 @@ Install:
         DownloadForge = 6
         DownloadNeoForge = 7
         DownloadFabric = 8
+        DownloadQuilt = 10
         DownloadLiteLoader = 9
         DownloadMod = 11
         DownloadPack = 12
