@@ -2,6 +2,7 @@
 
 Public Module ModModpack
 
+#Region "安装"
     '触发整合包安装的外部接口
     ''' <summary>
     ''' 弹窗要求选择一个整合包文件并进行安装。
@@ -848,6 +849,113 @@ Retry:
         PageSelectLeft.AddFolder(TargetFolder, NewName, False)
         Hint("已加入游戏文件夹列表：" & NewName, HintType.Finish)
     End Sub
+
+#End Region
+#End Region
+
+#Region "导出"
+    Private ExpTempDir As String = PathTemp & "PackExport\"
+    ''' <summary>
+    ''' 整合包类型。
+    ''' </summary>
+    Public Enum ModpackType
+        CurseForge = 0
+        HMCL = 1
+        MMC = 2
+        MCBBS = 3
+        Modrinth = 4
+        Compressed = 9
+    End Enum
+    ''' <summary>
+    ''' 导出整合包的选项。
+    ''' </summary>
+    Public Class ExportOptions
+        ''' <summary>
+        ''' 要导出的版本。
+        ''' </summary>
+        Public Version As McVersion
+        ''' <summary>
+        ''' 要保存整合包的位置。
+        ''' </summary>
+        Public Dest As String
+        ''' <summary>
+        ''' 整合包类型。
+        ''' </summary>
+        Public Type As ModpackType
+        ''' <summary>
+        ''' 要保留到整合包的存档。
+        ''' </summary>
+        Public Saves As String()
+    End Class
+    ''' <summary>
+    ''' 导出整合包。
+    ''' </summary>
+    ''' <returns>是否成功。</returns>
+    Public Function ModpackExport(Options As ExportOptions)
+        Select Case Options.Type
+            Case ModpackType.Compressed
+                ExportCompressed(Options.Version, Options.Dest)
+        End Select
+    End Function
+
+#Region "冗余"
+    Private VersionRedundant As String() = {"saves", "screenshots", "backups", "command_history\.txt", '个人文件
+        ".*-natives", "server-resource-packs", "user.*cache\.json", "\.optifine", "\.fabric", '缓存
+        ".*\.jar", "downloads", "realms_persistence.json", "\$\{natives_directory\}", '可联网更新
+        "logs", "crash-reports", ".*\.log", '日志
+        ".*\.dat_old", ".*\.old", '备份
+        "\$\{quickPlayPath\}", '服务器
+        "\.replay_cache", "replay_recordings", "replay_videos", 'ReplayMod
+        "irisUpdateInfo\.json", 'Iris
+        ".*\.BakaCoreInfo" 'BakaXL
+    }
+    Private Function IsVerRedundant(FileName As String) As Boolean
+        For Each regex In VersionRedundant
+            If RegexCheck(FileName, regex) Then Return True
+        Next
+        Return False
+    End Function
+#End Region
+
+#Region "不同类型整合包的导出方法"
+    Private Sub ExportCompressed(Version As McVersion, DestPath As String, Optional Saves As String() = Nothing, Optional PCLSetup As Boolean = True)
+        Try
+            Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
+            Directory.CreateDirectory(tempDir)
+            Dim tempVerPath As String = $"{tempDir}{Version.Path.Replace(GetPathFromFullPath(Version.PathIndie), "")}"
+
+            For Each f In Directory.EnumerateFiles(Version.Path)
+                If Not IsVerRedundant(GetFileNameFromPath(f)) Then CopyFile(f, tempVerPath & GetFileNameFromPath(f))
+            Next
+            For Each d In Directory.EnumerateDirectories(Version.Path)
+                If Not IsVerRedundant(GetFolderNameFromPath(d)) Then CopyDirectory(d, tempVerPath & GetFileNameFromPath(d))
+            Next
+
+            If Saves IsNot Nothing Then
+                For Each s In Saves
+                    Dim saveFullPath As String = Version.Path & "saves" & s
+                    If Not Directory.Exists(saveFullPath) Then Continue For
+                    CopyDirectory(saveFullPath, $"{tempVerPath}saves\{s}")
+                Next
+            End If
+
+            If PCLSetup Then
+                If File.Exists(Path & "PCL\Setup.ini") Then CopyFile("PCL\Setup.ini", tempDir & "PCL\Setup.ini")
+                If File.Exists(Path & "PCL\Custom.xaml") Then CopyFile("PCL\Custom.xaml", tempDir & "PCL\Custom.xaml")
+                If Directory.Exists(Path & "PCL\Pictures") Then CopyDirectory(Path & "PCL\Pictures", tempDir & "PCL\Pictures")
+                If Directory.Exists(Path & "PCL\Musics") Then CopyDirectory(Path & "PCL\Musics", tempDir & "PCL\Musics")
+            End If
+
+            CopyFile(PathWithName, tempDir & GetFileNameFromPath(PathWithName))
+
+            If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换
+            ZipFile.CreateFromDirectory(tempDir, DestPath)
+            DeleteDirectory(tempDir)
+        Catch ex As Exception
+            Log(ex, "导出整合包失败", LogLevel.Msgbox)
+        End Try
+    End Sub
+#End Region
 
 #End Region
 
