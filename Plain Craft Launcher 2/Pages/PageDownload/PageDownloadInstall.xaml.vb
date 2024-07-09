@@ -10,6 +10,7 @@
         DlOptiFineListLoader.Start()
         DlLiteLoaderListLoader.Start()
         DlFabricListLoader.Start()
+        DlQuiltListLoader.Start()
         DlNeoForgeListLoader.Start()
 
         '重载预览
@@ -27,6 +28,8 @@
         LoadLiteLoader.State = DlLiteLoaderListLoader
         LoadFabric.State = DlFabricListLoader
         LoadFabricApi.State = DlFabricApiLoader
+        LoadQuilt.State = DlQuiltListLoader
+        LoadQSL.State = DlQSLLoader
         LoadNeoForge.State = DlNeoForgeListLoader
         LoadOptiFabric.State = DlOptiFabricLoader
     End Sub
@@ -41,6 +44,7 @@
         IsInSelectPage = True
 
         AutoSelectedFabricApi = False
+        AutoSelectedQSL = False
         AutoSelectedOptiFabric = False
         IsSelectNameEdited = False
         PanSelect.Visibility = Visibility.Visible
@@ -56,6 +60,8 @@
         CardNeoForge.IsSwaped = True
         CardFabric.IsSwaped = True
         CardFabricApi.IsSwaped = True
+        CardQuilt.IsSwaped = True
+        CardQSL.IsSwaped = True
         CardOptiFabric.IsSwaped = True
 
         If Not Setup.Get("HintInstallBack") Then
@@ -76,8 +82,9 @@
             ForgeLoader.Start(SelectedMinecraftId)
         End If
 
-        '启动 Fabric API、OptiFabric 加载
+        '启动 Fabric API、QSL、OptiFabric 加载
         DlFabricApiLoader.Start()
+        DlQSLLoader.Start()
         DlOptiFabricLoader.Start()
 
         AniStart({
@@ -93,6 +100,8 @@
                 NeoForge_Loaded()
                 Fabric_Loaded()
                 FabricApi_Loaded()
+                Quilt_Loaded()
+                QSL_Loaded()
                 OptiFabric_Loaded()
                 SelectReload()
             End Sub, After:=True),
@@ -111,6 +120,8 @@
                 BtnNeoForgeClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardNeoForge.MainTextBlock, .Mode = BindingMode.OneWay})
                 BtnFabricClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardFabric.MainTextBlock, .Mode = BindingMode.OneWay})
                 BtnFabricApiClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardFabricApi.MainTextBlock, .Mode = BindingMode.OneWay})
+                BtnQuiltClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardQuilt.MainTextBlock, .Mode = BindingMode.OneWay})
+                BtnQSLClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardQSL.MainTextBlock, .Mode = BindingMode.OneWay})
                 BtnOptiFabricClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardOptiFabric.MainTextBlock, .Mode = BindingMode.OneWay})
             End Sub,, True)
         }, "FrmDownloadInstall SelectPageSwitch", True)
@@ -471,6 +482,48 @@
                 LabFabricApi.Foreground = ColorGray1
             End If
         End If
+        'Quilt
+        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 13 Then
+            CardQuilt.Visibility = Visibility.Collapsed
+        Else
+            CardQuilt.Visibility = Visibility.Visible
+            Dim QuiltError As String = LoadQuiltGetError()
+            CardQuilt.MainSwap.Visibility = If(QuiltError Is Nothing, Visibility.Visible, Visibility.Collapsed)
+            If QuiltError IsNot Nothing Then CardQuilt.IsSwaped = True
+            SetQuiltInfoShow(CardQuilt.IsSwaped)
+            If SelectedQuilt Is Nothing Then
+                BtnQuiltClear.Visibility = Visibility.Collapsed
+                ImgQuilt.Visibility = Visibility.Collapsed
+                LabQuilt.Text = If(QuiltError, "点击选择")
+                LabQuilt.Foreground = ColorGray4
+            Else
+                BtnQuiltClear.Visibility = Visibility.Visible
+                ImgQuilt.Visibility = Visibility.Visible
+                LabQuilt.Text = SelectedQuilt.Replace("+build", "")
+                LabQuilt.Foreground = ColorGray1
+            End If
+        End If
+        'QSL
+        If SelectedQuilt Is Nothing Then
+            CardQSL.Visibility = Visibility.Collapsed
+        Else
+            CardQSL.Visibility = Visibility.Visible
+            Dim QSLError As String = LoadQSLGetError()
+            CardQSL.MainSwap.Visibility = If(QSLError Is Nothing, Visibility.Visible, Visibility.Collapsed)
+            If QSLError IsNot Nothing OrElse SelectedQuilt Is Nothing Then CardQSL.IsSwaped = True
+            SetQSLInfoShow(CardQSL.IsSwaped)
+            If SelectedQSL Is Nothing Then
+                BtnQSLClear.Visibility = Visibility.Collapsed
+                ImgQSL.Visibility = Visibility.Collapsed
+                LabQSL.Text = If(QSLError, "点击选择")
+                LabQSL.Foreground = ColorGray4
+            Else
+                BtnQSLClear.Visibility = Visibility.Visible
+                ImgQSL.Visibility = Visibility.Visible
+                LabQSL.Text = SelectedQSL.DisplayName.Split("]")(1).Replace("Quilt API ", "").Replace(" build ", ".").Split("+").First.Trim
+                LabQSL.Foreground = ColorGray1
+            End If
+        End If
         'OptiFabric
         If SelectedFabric Is Nothing OrElse SelectedOptiFine Is Nothing Then
             CardOptiFabric.Visibility = Visibility.Collapsed
@@ -497,6 +550,11 @@
             HintFabricAPI.Visibility = Visibility.Visible
         Else
             HintFabricAPI.Visibility = Visibility.Collapsed
+        End If
+        If SelectedQuilt IsNot Nothing AndAlso SelectedQSL Is Nothing Then
+            HintQSL.Visibility = Visibility.Visible
+        Else
+            HintQSL.Visibility = Visibility.Collapsed
         End If
         If SelectedFabric IsNot Nothing AndAlso SelectedOptiFine IsNot Nothing AndAlso SelectedOptiFabric Is Nothing Then
             If SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15") Then
@@ -532,6 +590,8 @@
         SelectedNeoForge = Nothing
         SelectedFabric = Nothing
         SelectedFabricApi = Nothing
+        SelectedQuilt = Nothing
+        SelectedQSL = Nothing
         SelectedOptiFabric = Nothing
     End Sub
 
@@ -543,6 +603,9 @@
         Dim Name As String = SelectedMinecraftId
         If SelectedFabric IsNot Nothing Then
             Name += "-Fabric " & SelectedFabric.Replace("+build", "")
+        End If
+        If SelectedQuilt IsNot Nothing Then
+            Name += "-Quilt " & SelectedQuilt
         End If
         If SelectedForge IsNot Nothing Then
             Name += "-Forge_" & SelectedForge.VersionName
@@ -566,6 +629,9 @@
         If SelectedFabric IsNot Nothing Then
             Info += ", Fabric " & SelectedFabric.Replace("+build", "")
         End If
+        If SelectedQuilt IsNot Nothing Then
+            Info += ", Quilt " & SelectedQuilt
+        End If
         If SelectedForge IsNot Nothing Then
             Info += ", Forge " & SelectedForge.VersionName
         End If
@@ -587,6 +653,8 @@
     Private Function GetSelectLogo() As String
         If SelectedFabric IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/Fabric.png"
+        ElseIf SelectedQuilt IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/Quilt.png"
         ElseIf SelectedForge IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/Anvil.png"
         ElseIf SelectedNeoForge IsNot Nothing Then
@@ -1222,13 +1290,17 @@
     Private Function LoadQuiltGetError() As String
         If LoadQuilt Is Nothing OrElse LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadQuilt.State, Object).Error.Message
-        For Each Version As JObject In DlQuiltListLoader.Output.GameValue.ToString
-            If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
-                If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
-                If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
-                Return Nothing
-            End If
-        Next
+        'For Each Version As JObject In DlQuiltListLoader.Output.LoaderValue
+        '    Hint(Version("version").ToString)
+        '    If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
+        '        If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
+        '        If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
+        '        Return Nothing
+        '    End If
+        'Next
+        If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
+        If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
+        If DlQuiltListLoader.Output.LoaderValue IsNot Nothing Then Return Nothing
         Return "没有可用版本"
     End Function
 
@@ -1244,13 +1316,13 @@
         Try
             If DlQuiltListLoader.State <> LoadState.Finished Then Exit Sub
             '获取版本列表
-            Dim Versions As JArray = DlQuiltListLoader.Output.LoaderValue.ToString
+            Dim Versions As JArray = DlQuiltListLoader.Output.LoaderValue
             If Not Versions.Any() Then Exit Sub
             '可视化
             PanQuilt.Children.Clear()
             PanQuilt.Tag = Versions
             CardQuilt.SwapControl = PanQuilt
-            CardQuilt.SwapType = 12
+            CardQuilt.SwapType = 14
         Catch ex As Exception
             Log(ex, "可视化 Quilt 安装版本列表出错", LogLevel.Feedback)
         End Try
@@ -1309,7 +1381,7 @@
             End While
             Return True
         Catch ex As Exception
-            Log(ex, "判断 Quilt API 版本适配性出错（" & DisplayName & ", " & MinecraftVersion & "）")
+            Log(ex, "判断 QSL 版本适配性出错（" & DisplayName & ", " & MinecraftVersion & "）")
             Return False
         End Try
     End Function
@@ -1322,7 +1394,8 @@
         If LoadQSL.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadQSL.State, Object).Error.Message
         If DlQSLLoader.Output Is Nothing Then
             If SelectedQuilt Is Nothing Then Return "需要安装 Quilt"
-            Return "正在获取版本列表……"
+            'Return "正在获取版本列表……"
+            Return Nothing
         End If
         For Each Version In DlQSLLoader.Output
             If Not IsSuitableQSL(Version.DisplayName, SelectedMinecraftId) Then Continue For
@@ -1350,7 +1423,7 @@
             For Each Version In DlQSLLoader.Output
                 If IsSuitableQSL(Version.DisplayName, SelectedMinecraftId) Then
                     If Not Version.DisplayName.StartsWith("[") Then
-                        Log("[Download] 已特判修改 Quilt API 显示名：" & Version.DisplayName, LogLevel.Debug)
+                        Log("[Download] 已特判修改 QSL 显示名：" & Version.DisplayName, LogLevel.Debug)
                         Version.DisplayName = "[" & SelectedMinecraftId & "] " & Version.DisplayName
                     End If
                     Versions.Add(Version)
@@ -1364,14 +1437,14 @@
                 If Not IsSuitableQSL(Version.DisplayName, SelectedMinecraftId) Then Continue For
                 PanQSL.Children.Add(QSLDownloadListItem(Version, AddressOf QSL_Selected))
             Next
-            '自动选择 Quilt API
+            '自动选择 QSL
             If Not AutoSelectedQSL Then
                 AutoSelectedQSL = True
-                Log($"[Download] 已自动选择 Quilt API：{CType(PanQSL.Children(0), MyListItem).Title}")
+                Log($"[Download] 已自动选择 QSL：{CType(PanQSL.Children(0), MyListItem).Title}")
                 QSL_Selected(PanQSL.Children(0), Nothing)
             End If
         Catch ex As Exception
-            Log(ex, "可视化 Quilt API 安装版本列表出错", LogLevel.Feedback)
+            Log(ex, "可视化 QSL 安装版本列表出错", LogLevel.Feedback)
         End Try
     End Sub
 
@@ -1508,6 +1581,8 @@
             .NeoForgeEntry = SelectedNeoForge,
             .FabricVersion = SelectedFabric,
             .FabricApi = SelectedFabricApi,
+            .QuiltVersion = SelectedQuilt,
+            .QSL = SelectedQSL,
             .OptiFabric = SelectedOptiFabric,
             .LiteLoaderEntry = SelectedLiteLoader
         }

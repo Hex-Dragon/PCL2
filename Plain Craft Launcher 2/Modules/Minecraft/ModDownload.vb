@@ -1160,7 +1160,7 @@
     ''' Quilt API 列表，官方源。
     ''' </summary>
     Public DlQSLLoader As New LoaderTask(Of Integer, List(Of CompFile))("Quilt API List Loader",
-        Sub(Task As LoaderTask(Of Integer, List(Of CompFile))) Task.Output = CompFilesGet("Quilt-api", False))
+        Sub(Task As LoaderTask(Of Integer, List(Of CompFile))) Task.Output = CompFilesGet("qsl", False))
 
 #End Region
 
