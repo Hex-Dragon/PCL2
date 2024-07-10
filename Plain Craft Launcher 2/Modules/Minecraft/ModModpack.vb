@@ -859,10 +859,6 @@ Retry:
     ''' 整合包类型。
     ''' </summary>
     Public Enum ModpackType
-        CurseForge = 0
-        HMCL = 1
-        MMC = 2
-        MCBBS = 3
         Modrinth = 4
         Compressed = 9
     End Enum
@@ -886,17 +882,39 @@ Retry:
         ''' 要保留到整合包的存档。
         ''' </summary>
         Public Saves As String()
+        ''' <summary>
+        ''' 是否需要保留 PCL 全局设置。仅在压缩包中有效。
+        ''' </summary>
+        Public PCLSetupGlobal As Boolean = True
+        ''' <summary>
+        ''' 是否需要保留 PCL 版本设置。仅在压缩包中有效。
+        ''' </summary>
+        Public PCLSetupVer As Boolean = True
+        Public Sub New(Version As McVersion,
+                       Dest As String,
+                       Type As ModpackType,
+                       Saves As String(),
+                       Optional PCLSetupGlobal As Boolean = True,
+                       Optional PCLSetupVer As Boolean = True)
+            Me.Version = Version
+            Me.Dest = Dest
+            Me.Type = Type
+            Me.Saves = Saves
+            Me.PCLSetupGlobal = PCLSetupGlobal
+            Me.PCLSetupVer = PCLSetupVer
+        End Sub
     End Class
     ''' <summary>
     ''' 导出整合包。
     ''' </summary>
-    ''' <returns>是否成功。</returns>
-    Public Function ModpackExport(Options As ExportOptions)
+    Public Sub ModpackExport(Options As ExportOptions)
         Select Case Options.Type
+            Case ModpackType.Modrinth
+                ExportModrinth(Options.Version, Options.Dest, Options.Saves)
             Case ModpackType.Compressed
-                ExportCompressed(Options.Version, Options.Dest)
+                ExportCompressed(Options.Version, Options.Dest, Options.Saves, Options.PCLSetupGlobal, Options.PCLSetupVer)
         End Select
-    End Function
+    End Sub
 
 #Region "冗余"
     Private VersionRedundant As String() = {"saves", "screenshots", "backups", "command_history\.txt", '个人文件
@@ -907,7 +925,8 @@ Retry:
         "\$\{quickPlayPath\}", '服务器
         "\.replay_cache", "replay_recordings", "replay_videos", 'ReplayMod
         "irisUpdateInfo\.json", 'Iris
-        ".*\.BakaCoreInfo" 'BakaXL
+        ".*\.BakaCoreInfo", 'BakaXL
+        "PCL" '到时候会拷，别急
     }
     Private Function IsVerRedundant(FileName As String) As Boolean
         For Each regex In VersionRedundant
@@ -918,7 +937,10 @@ Retry:
 #End Region
 
 #Region "不同类型整合包的导出方法"
-    Private Sub ExportCompressed(Version As McVersion, DestPath As String, Optional Saves As String() = Nothing, Optional PCLSetup As Boolean = True)
+    Private Sub ExportModrinth(Version As McVersion, DestPath As String, Saves As String())
+
+    End Sub
+    Private Sub ExportCompressed(Version As McVersion, DestPath As String, Saves As String(), PCLSetupGlobal As Boolean, PCLSetupVer As Boolean)
         Try
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
             Directory.CreateDirectory(tempDir)
@@ -928,25 +950,34 @@ Retry:
                 If Not IsVerRedundant(GetFileNameFromPath(f)) Then CopyFile(f, tempVerPath & GetFileNameFromPath(f))
             Next
             For Each d In Directory.EnumerateDirectories(Version.Path)
-                If Not IsVerRedundant(GetFolderNameFromPath(d)) Then CopyDirectory(d, tempVerPath & GetFileNameFromPath(d))
+                If Not IsVerRedundant(GetFolderNameFromPath(d)) Then CopyDirectory(d, $"{tempVerPath}{GetFolderNameFromPath(d)}\")
             Next
 
             If Saves IsNot Nothing Then
                 For Each s In Saves
-                    Dim saveFullPath As String = Version.Path & "saves" & s
+                    Dim saveFullPath As String = $"{Version.Path}saves\{s}"
                     If Not Directory.Exists(saveFullPath) Then Continue For
                     CopyDirectory(saveFullPath, $"{tempVerPath}saves\{s}")
                 Next
             End If
 
-            If PCLSetup Then
+            If PCLSetupGlobal Then
                 If File.Exists(Path & "PCL\Setup.ini") Then CopyFile("PCL\Setup.ini", tempDir & "PCL\Setup.ini")
                 If File.Exists(Path & "PCL\Custom.xaml") Then CopyFile("PCL\Custom.xaml", tempDir & "PCL\Custom.xaml")
                 If Directory.Exists(Path & "PCL\Pictures") Then CopyDirectory(Path & "PCL\Pictures", tempDir & "PCL\Pictures")
                 If Directory.Exists(Path & "PCL\Musics") Then CopyDirectory(Path & "PCL\Musics", tempDir & "PCL\Musics")
             End If
 
-            CopyFile(PathWithName, tempDir & GetFileNameFromPath(PathWithName))
+            If PCLSetupVer Then
+                If Directory.Exists(Version.Path & "PCL\") Then CopyDirectory(Version.Path & "PCL\", tempVerPath & "PCL\")
+            End If
+
+            If Directory.Exists($"{Version.PathIndie}libraries\optifine") Then '#114 OptiFine Libraries 缺失造成补全文件失败
+                CopyDirectory($"{Version.PathIndie}libraries\optifine",
+                              $"{tempDir}{GetFolderNameFromPath(Version.PathIndie)}libraries\optifine")
+            End If
+
+            CopyFile(PathWithName, tempDir & GetFileNameFromPath(PathWithName)) 'PCL 本体
 
             If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换
             ZipFile.CreateFromDirectory(tempDir, DestPath)
