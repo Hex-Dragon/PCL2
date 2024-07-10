@@ -2,7 +2,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xml:space="preserve">
-    
+
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">Download</s:String>
     <s:String x:Key="LangTitleHome">Launch</s:String>
@@ -21,37 +21,37 @@
     <s:String x:Key="LangDialogPolicyTitle">Agreement Authorization</s:String>
     <s:String x:Key="LangDialogBtnAgree">Agree</s:String>
     <s:String x:Key="LangDialogBtnDeny">Deny</s:String>
-    <s:String x:Key="LangDialogBtnPolicyContent">View user agreements and disclaimers</s:String>
+    <s:String x:Key="LangDialogBtnPolicyContent">View User Agreements and Disclaimers</s:String>
     <s:String x:Key="LangHintDebugWarning">[Debug Mode] PCL is running in debug mode, which may cause performance degradation. Please do not enable it unless necessary!</s:String>
     <s:String x:Key="LangDialogTitleTip">Tip</s:String>
-    <s:String x:Key="LangDialogHardcoreFanTheme">You have used PCL 99 times, thank you for your long-term support!&#x000D;Hidden theme Hardcore Fans have been unlocked!</s:String>
+    <s:String x:Key="LangDialogHardcoreFanTheme">You have used PCL 99 times, thank you for your long-term support!&#x000D;The hidden theme Hardcore Fans has been unlocked!</s:String>
     <s:String x:Key="LangDialogCloseOnDownloading">There is still a download task that has not been completed. Are you sure you want to quit?</s:String>
-    <s:String x:Key="LangHintHideModeOn">Feature hidden settings have been enabled!</s:String>
-    <s:String x:Key="LangHintHideModeOff">Feature hidden settings have been disabled temporarily!</s:String>
+    <s:String x:Key="LangHintHideModeOn">The hide feature settings have been enabled!</s:String>
+    <s:String x:Key="LangHintHideModeOff">The hide feature settings have been disabled temporarily!</s:String>
     <s:String x:Key="LangHintIJustWantToStart">Muda!</s:String>
     <s:String x:Key="LangHintAuthlibUrlIncorrect">The authlib verification server entered does not match the URL format ({0})!</s:String>
     <s:String x:Key="LangHintAuthlibDownloadGame">Please download the game first and then set up a third-party login!</s:String>
-    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">Do you want to enable LittleSkin login in instance {0}?&#x000D;You can modify the login method in "Instance Properties → Settings → Server Options".</s:String>
-    <s:String x:Key="LangDialogTitleAuthlibEnableLittleSkin">Third-party login enable confirmation</s:String>
-    <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">Do you want to enable LittleSkin login in instance {0}?&#x000D;Authlib server:{1}&#x000D;&#x000D;You can modify the login method in "Instance Properties → Settings → Server Options".</s:String>
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">Do you want to log in using LittleSkin in the instance {0}?&#x000D;You can modify the login method in "Instance Properties → Settings → Server Options".</s:String>
+    <s:String x:Key="LangDialogTitleAuthlibEnableLittleSkin">Third-party Login Confirmation</s:String>
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">Do you want to log in using LittleSkin in the instance {0}?&#x000D;Authlib server: {1}&#x000D;&#x000D;You can modify the login method in "Instance Properties → Settings → Server Options".</s:String>
     <s:String x:Key="LangHintWindowDropExtract">Please extract the file before dragging it in!</s:String>
     <s:String x:Key="LangHintWindowDropFolder">Please drag a file instead of a folder!</s:String>
-    <s:String x:Key="LangHintWindowDropFileNotFound">The file you dragged in does not exist:{0}</s:String>
-    <s:String x:Key="LangHintWindowDropFileOneFileAtATime">Please drag in only one file at a time.</s:String>
+    <s:String x:Key="LangHintWindowDropFileNotFound">The file you dragged in does not exist: {0}</s:String>
+    <s:String x:Key="LangHintWindowDropFileOneFileAtATime">Please drag only one file in at a time.</s:String>
     <s:String x:Key="LangCrashReport">Please submit an issue at https://github.com/Hex-Dragon/PCL2/issues so that the developer can resolve this issue!</s:String>
     <s:String x:Key="LangDialogCustomHomePageReplaceContent">A custom homepage file already exists. Do you want to overwrite it?</s:String>
     <s:String x:Key="LangDialogCustomHomePageReplaceTitle">Overwrite Confirmation</s:String>
-    <s:String x:Key="LangDialogBtnCustomHomePageReplaceConfirm">Overwrite it</s:String>
-    <s:String x:Key="LangHintLoadedCustomHomePage">Homepage customization file loaded!</s:String>
-    <s:String x:Key="LangHintChoseLoaderBeforeInstallMod">To install mods, please choose an instance that can install mods!</s:String>
+    <s:String x:Key="LangDialogBtnCustomHomePageReplaceConfirm">Overwrite</s:String>
+    <s:String x:Key="LangHintLoadedCustomHomePage">Custom homepage file loaded!</s:String>
+    <s:String x:Key="LangHintChoseLoaderBeforeInstallMod">To install mods, please choose an instance that allow to install mods!</s:String>
     <s:String x:Key="LangDialogInstallModContent">Do you want to install this file as mod to instance {0}</s:String>
     <s:String x:Key="LangDialogInstallModsContent">Do you want to install these files as mods to instance {0}</s:String>
-    <s:String x:Key="LangDialogInstallModTitle">Mod Installation Confirmation</s:String>
+    <s:String x:Key="LangDialogInstallModTitle">Install Mods Confirmation</s:String>
     <s:String x:Key="LangHintInstallModSuccessA">Installed {0}</s:String>
     <s:String x:Key="LangHintInstallModSuccessB">Installed {0} mods!</s:String>
     <s:String x:Key="LangHintInstallModFailed">Failed to copy mod files!</s:String>
-    <s:String x:Key="LangHintRarNotSupport">PCL cannot handle archive packages in RAR format. Please extract and re-archive to ZIP format and try again!</s:String>
-    <s:String x:Key="LangHintWindowDropUnknown">PCL cannot determine which file drag operation should be performed…</s:String>
+    <s:String x:Key="LangHintRarNotSupport">PCL cannot handle archive files in RAR format. Please extract and re-archive to ZIP format and try again!</s:String>
+    <s:String x:Key="LangHintWindowDropUnknown">PCL cannot determine which file drag operation should be performed...</s:String>
     <s:String x:Key="LangHintCloseMinecraftSuccess">Closed Minecraft!</s:String>
     <s:String x:Key="LangHintCloseMinecraftFailed">Failed to force close all Minecraft</s:String>
     <s:String x:Key="LangHintBackToTopFailed">Unable to return to top, a suitable RealScroll is not found</s:String>
@@ -63,23 +63,23 @@
     <s:String x:Key="LangPageNameModDownload">Mods Download</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">Modpacks Download</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">Resource Packs Download</s:String>
-    
+
     <!--PageSetupUI-->
     <s:String x:Key="LangThemeRealWhite">TRUE WHITE</s:String>
     <s:String x:Key="LangThemeRealFunny">TRUE FUNNY COLOR</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip8">After the accumulated sponsorship reaches ¥23.33, you can send [解锁码] in the private message of Afdian to unlock.&#x000D; Right-click to open the sponsorship page and support PCL if you think it is doing a good job =w=!</s:String>
     <s:String x:Key="LangThemeUnlockTip8">After the accumulated sponsorship reaches ¥23.33, you can send [解锁码] in the private message in Afdian to unlock</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as [已完成] (right click to open feedback page)&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as [已完成] (right click to open the feedback page)&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
     <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as [已完成]&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">There is an exception in the personalize settings and has been automatically reset</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">Error overloading personalize settings</s:String>
-    <s:String x:Key="LangHintThemeSetInit">Personalize has been initialized settings</s:String>
-    <s:String x:Key="LangHintThemeSetInitFail">Failed to initialize personalize settings</s:String>
+    <s:String x:Key="LangHintThemeSetInit">The personalize settings have been initialized</s:String>
+    <s:String x:Key="LangHintThemeSetInitFail">Failed to initialize the personalize settings</s:String>
     <s:String x:Key="LangBackgroundPic">Background Image</s:String>
     <s:String x:Key="LangBackgroundPicCount">Background Image (Quantity: {0})</s:String>
-    <s:String x:Key="LangDialogDeleteAllBackgroundPicCntent">All files in the background image folder are about to be deleted.&#x000D;This operation is irrevocable. Are you sure?</s:String>
+    <s:String x:Key="LangDialogDeleteAllBackgroundPicCntent">All files in the background image folder will be deleted.&#x000D;This operation is irrevocable. Are you sure?</s:String>
     <s:String x:Key="LangDialogTitleWarning">Warning</s:String>
-    <s:String x:Key="LangHintBackgroundPicDeleted">The background images has been cleared!</s:String>
+    <s:String x:Key="LangHintBackgroundPicDeleted">The background image has been cleared!</s:String>
     <s:String x:Key="LangHintBackgroundPicNotFound">No available background images were detected!</s:String>
     <s:String x:Key="LangHintBackgroundPicRefreshed">The background image has been refreshed:</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailA">Failed to refresh the background images. The image file may not be in standard format.&#x000D;You can try using Paint to open and save it again, which will save the image into standard format.&#x000D;File:</s:String>
@@ -95,56 +95,57 @@
     <s:String x:Key="LangDialogTitlePicEmptyFail">Failed to clear the title bar image</s:String>
     <s:String x:Key="LangBackgroundMusicCount">Background Music (Quantity: {0})</s:String>
     <s:String x:Key="LangBackgroundMusic">Background Music</s:String>
-    <s:String x:Key="LangDialogBackgroundMusicDeleteContent">All files in the background music folder are about to be deleted.&#x000D;This operation is irrevocable. Are you sure?</s:String>
-    <s:String x:Key="LangHintBackgroundMusicDeleting">Deleteing background music…</s:String>
+    <s:String x:Key="LangDialogBackgroundMusicDeleteContent">All files in the background music folder will be deleted.&#x000D;This operation is irrevocable. Are you sure?</s:String>
+    <s:String x:Key="LangHintBackgroundMusicDeleting">Deleteing background music...</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleted">The background music has been deleted!</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">Failed to delete background music</s:String>
     <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Failed to re-create background music folder</s:String>
-    <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">A layout file already exists. Continuing to generate teaching files will overwrite the existing layout file!</s:String>
+    <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">A layout file already exists. Continuing to generate the documentation file will overwrite the existing layout file!</s:String>
     <s:String x:Key="LangDialogBtnContinue">Continue</s:String>
-    <s:String x:Key="LangDialogCustomPageOverwriteFail">Failed to generate teaching file</s:String>
-    <s:String x:Key="LangHintCustomPageOverwriteSuccess">Teaching file have been generated!</s:String>
+    <s:String x:Key="LangDialogCustomPageOverwriteFail">Failed to generate the documentaion file</s:String>
+    <s:String x:Key="LangHintCustomPageOverwriteSuccess">The documentaion file has been generated!</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">The homepage has been refreshed!</s:String>
-    <s:String x:Key="LangDialogCustomPageTeachContent">1. Click "Generate teaching file" button, which will generate the "Custom.xaml" layout file under the PCL folder.&#x000D;2. Use Notepad or other tools to open this file and modify it. Remember to save it after modification.&#x000D;3. Click the Refresh Home button to see what the homepage looks like now.&#x000D;You can directly refresh the homepage after generating the teaching file and make changes accordingly, which will be more helpful for understanding.&#x000D;You can also load the custom homepage file directly by dragging it into the PCL window.</s:String>
+    <s:String x:Key="LangDialogCustomPageTeachContent">1. Click the "Generate the Documentaion" button, which will generate the "Custom.xaml" layout file under the PCL folder.&#x000D;2. Use Notepad or other tools to open this file and modify it. Remember to save it after modification.&#x000D;3. Click the "Refresh Home" button to see what the homepage looks like now.&#x000D;You can directly refresh the homepage after generating the documentaion file and make changes accordingly, which will be more helpful for understanding.&#x000D;You can also load the custom homepage file directly by dragging it into the PCL window.</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">Home Custom Tutorials</s:String>
-    <s:String x:Key="LangThemeBackUnlock">Hidden theme Xuansu Black has been unlocked!</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameContent">1. Do not crawl or attack related services or websites, do not steal related accounts, no puzzles can or need to be solved.&#x000D;2. Relevant public information must not be tampered with or destroyed. Please try to keep it as it is.&#x000D;3. When you are feeling confused, looking at the echo hole may surprise you.&#x000D;&#x000D;If you violate the rules, you may be kicked out of any relevant group!</s:String>
+    <s:String x:Key="LangThemeBackUnlock">The hidden theme Xuansu Black has been unlocked!</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameContent">1. Do not crawl or attack related services or websites, do not steal related accounts, no puzzles can or need to be solved.&#x000D;2. Relevant public information must not be tampered with or destroyed. Please try to keep it as it is.&#x000D;3. When you are feeling confused, "Echo Hole" may surprise you.&#x000D;&#x000D;If you violate the rules, you may be kicked out of any relevant group!</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameTitle">Basic Rules of Decryption Games</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameAccrpt">I see</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameDeny">Allow me to refuse</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">You need to use your wisdom to find the next clue… Initial clue:</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameFirstClueTitle">Decoding Games</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">You need to use your wisdom to find the next clue... Initial clue:</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameFirstClueTitle">Decryption Games</s:String>
     <s:String x:Key="LangOtherHelp">Help</s:String>
     <s:String x:Key="LangOtherAbout">About</s:String>
-    <s:String x:Key="LangOtherTool">Tools</s:String>
+    <s:String x:Key="LangOtherTool">Utilities</s:String>
     <s:String x:Key="LangOtherMore">More</s:String>
-    <s:String x:Key="LangHiddenModeTitleA">Feature Hidden (Temporarily Disabled, Press "F12" to Re-enable)</s:String>
-    <s:String x:Key="LangHiddenModeTitleB">Feature Hidden</s:String>
-    <s:String x:Key="LangHiddenModeFail">Failed to refresh feature hidden item</s:String>
-    <s:String x:Key="LangHintHiddenModeTip">Press F12 to temporarily disable "Feature Hidden" settings. Do not forget, otherwise you will not be able to change the settings back…</s:String>
+    <s:String x:Key="LangHiddenModeTitleA">Hide Feature (Disabled temporarily, press "F12" to re-enable)</s:String>
+    <s:String x:Key="LangHiddenModeTitleB">Hide Feature</s:String>
+    <s:String x:Key="LangHiddenModeFail">Failed to refresh hide feature item</s:String>
+    <s:String x:Key="LangHintHiddenModeTip">Press F12 to disable "Hide Feature" settings temporarily. Do not forget, otherwise you will not be able to change the settings back...</s:String>
+    <s:String x:Key="LangSetTheme">Basic Options</s:String>
     <s:String x:Key="LangSetThemeOpacity">Opacity</s:String>
     <s:String x:Key="LangSetThemeHue">Hue</s:String>
     <s:String x:Key="LangSetThemeToneGradient">Tone Gradient</s:String>
     <s:String x:Key="LangSetThemeSaturation">Saturation</s:String>
     <s:String x:Key="LangSetThemeBrightness">Brightness</s:String>
     <s:String x:Key="LangSetThemeTitle">Theme</s:String>
-    <s:String x:Key="LangSetThemeHiddenTitle">Hidden Theme</s:String>
+    <s:String x:Key="LangSetThemeHiddenTitle">Hidden theme</s:String>
     <s:String x:Key="LangSetThemeNameBlue">LTCat Blue</s:String>
-    <s:String x:Key="LangSetThemeNameCyan">Cyan</s:String>
+    <s:String x:Key="LangSetThemeNameCyan">Citrus Cyan</s:String>
     <s:String x:Key="LangSetThemeNameGreen">Grass Green</s:String>
     <s:String x:Key="LangSetThemeNameYellow">Pineapple Yellow</s:String>
     <s:String x:Key="LangSetThemeNameBrown">Oak Brown</s:String>
     <s:String x:Key="LangSetThemeNameBlack">Xuansu Black</s:String>
     <s:String x:Key="LangSetThemeNameGreyToolTip">Grey is a Lie</s:String>
     <s:String x:Key="LangSetThemeNameFunny">Funny fruits on the funny tree, and you and I under the funny tree. When we do things on funny days, we will have more fun and more fun</s:String>
-    <s:String x:Key="LangSetThemeNameLucky">This is the lucky man, right?</s:String>
+    <s:String x:Key="LangSetThemeNameLucky">What a lucky guy, right?</s:String>
     <s:String x:Key="LangSetThemeNameMojang">Make a genuine login and support genuine games!</s:String>
     <s:String x:Key="LangSetThemeNameGeekToolTip">Right-click to open the decryption game entrance</s:String>
     <s:String x:Key="LangSetThemeNameCustom">Custom</s:String>
-    <s:String x:Key="LangSetThemeNameCustomToolTip">You need to unlock five hidden themes</s:String>
-    <s:String x:Key="LangSetThemeShowLogoOnStart">Display PCL logo when opening launcher</s:String>
-    <s:String x:Key="LangSetThemeSponsorship">You need a little sponsorship of the developer to change the theme color… :(</s:String>
-    <s:String x:Key="LangSetThemeSupport">Support developer</s:String>
+    <s:String x:Key="LangSetThemeNameCustomToolTip">You need to unlock at least five hidden themes</s:String>
+    <s:String x:Key="LangSetThemeShowLogoOnStart">Display PCL logo when opening the launcher</s:String>
+    <s:String x:Key="LangSetThemeSponsorship">You need a little sponsorship of the developer to change the theme color... :(</s:String>
+    <s:String x:Key="LangSetThemeSupport">Support Developers</s:String>
     <s:String x:Key="LangSetBackgroundPic">Background Image</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptive">Adaptive</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveAuto">Auto</s:String>
@@ -201,9 +202,9 @@
     <s:String x:Key="LangSetHomePagePresetPageD">Simple Homepage (Author: MFn233)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">Daily Modpack Recommendation (Author: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft Skin Recommendation (Author: wkea)</s:String>
-    <s:String x:Key="LangSetFuncHidden">Features Hidden</s:String>
-    <s:String x:Key="LangSetFuncHiddenToolTip">You can hide unnecessary pages or disable specific features. Press "F12" in any interface to temporarily show hidden features.</s:String>
-    <s:String x:Key="LangSetFuncHiddenLaunch">Launch</s:String>
+    <s:String x:Key="LangSetFuncHidden">Hide Feature</s:String>
+    <s:String x:Key="LangSetFuncHiddenToolTip">You can hide unnecessary pages or disable specific features. Press "F12" in any interface to show hidden features temporarily.</s:String>
+    <s:String x:Key="LangSetFuncHiddenLaunch">Main interface</s:String>
     <s:String x:Key="LangSetFuncHiddenDownload">Download</s:String>
     <s:String x:Key="LangSetFuncHiddenLink">Online</s:String>
     <s:String x:Key="LangSetFuncHiddenSettings">Settings</s:String>
@@ -220,12 +221,12 @@
     <s:String x:Key="LangSetFuncHiddenMoreFeedback">Feedback</s:String>
     <s:String x:Key="LangSetFuncHiddenMoreVote">New Feature Voting</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecial">Specific features</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialEmail">Email Hidden</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialEmail">Hide Email</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">Hide the email display of third-party login accounts and try to type the email to avoid privacy disclosure.&#xa;Changes to this option will take effect after restarting the launcher.</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">Select Instance</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">Feature Hidden</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Only hide the "Feature Hidden" tab, and the settings for the disabled features will still be valid.&#xa;You can prevent hidden settings from being modified while keeping the "Personalize" page.</s:String>
-    
+    <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">Hide Feature</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Only hide the "Hide Feature" tab, and the settings for the disabled features will still be valid.&#xa;You can prevent hidden settings from being modified while keeping the "Personalize" page.</s:String>
+
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">Folder List</s:String>
     <s:String x:Key="LangSelectRename">Rename</s:String>
@@ -246,7 +247,7 @@
     <s:String x:Key="LangSelectUIError">Error building Minecraft folder list UI</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoAdd">The game folder cannot be added while the download task is in progress!</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoCreate">The game folder cannot be created while the download task is in progress!</s:String>
-    <s:String x:Key="LangSelectNoSpecialSymbol">Minecraft folder paths cannot contain exclamation points or semicolons!</s:String>
+    <s:String x:Key="LangSelectNoSpecialSymbol">Minecraft folder paths cannot contain "!" or ";"!</s:String>
     <s:String x:Key="LangSelectDialogInputNameTitle">Enter a Display Name</s:String>
     <s:String x:Key="LangSelectDialogInputNameContent">Enter the name of the folder that appears in the list on the left column.</s:String>
     <s:String x:Key="LangSelectFailToAddFolder">Failed to add folder ({0})</s:String>
@@ -254,33 +255,33 @@
     <s:String x:Key="LangSelectNoPermission">Failed to add folder: PCL does not have permission to access this folder!</s:String>
     <s:String x:Key="LangSelectAlreadyAdded">This folder is already in the list!</s:String>
     <s:String x:Key="LangSelectRenameSuccess">The folder name has been renamed to {0}!</s:String>
-    <s:String x:Key="LangSelectFolderAdded">Folder {0} has been added!</s:String>
+    <s:String x:Key="LangSelectFolderAdded">The folder {0} has been added!</s:String>
     <s:String x:Key="LangSelectFolderCreateSuccess">Create a new ".minecraft" folder successfully!</s:String>
-    <s:String x:Key="LangSelectDialogCleanCacheContent">Do you need to clean up the PCL configuration files in this folder?&#xa;This includes settings for each instances (such as custom icons, third-party login options), etc., and has no effect on the game itself.</s:String>
+    <s:String x:Key="LangSelectDialogCleanCacheContent">Do you need to clean up the PCL config files in this folder?&#xa;This includes settings for each instances (such as custom icons, third-party login options), etc., and has no effect on the game itself.</s:String>
     <s:String x:Key="LangSelectDialogCleanCacheTitle">Profile Cleanup</s:String>
     <s:String x:Key="LangDialogBtnDelete">Delete</s:String>
     <s:String x:Key="LangDialogBtnKeep">Keep</s:String>
     <s:String x:Key="LangDialogBtnEmpty">Empty</s:String>
-    <s:String x:Key="LangSelectHintFolderRemoved">Folder {0} has been removed from the list!</s:String>
+    <s:String x:Key="LangSelectHintFolderRemoved">The folder {0} has been removed from the list!</s:String>
     <s:String x:Key="LangSelectHintFolderNameRestored">The folder name has been restored!</s:String>
     <s:String x:Key="LangSelectRemoveFolderFail">Failed to remove game folder from list</s:String>
     <s:String x:Key="LangSelectDialogDeleteConfirmContentA">Are you sure you want to delete this folder?&#xa;Target folder: {1}&#xa;&#xa;This will cause all saves and other files in this folder to be permanently lost and unrecoverable!</s:String>
     <s:String x:Key="LangSelectDialogDeleteConfirmTitleA">Delete Warning</s:String>
     <s:String x:Key="LangSelectDialogDeleteConfirmContentB">If you store other files other than Minecraft in this folder, these files will also be deleted!&#xa;Continuing to delete will cause all files in this folder to be permanently lost. Please confirm carefully before continuing!&#xa;Target folder: {0}&#xa;&#xa;This is the last warning!</s:String>
-    <s:String x:Key="LangSelectFolderEmptied">Folder {0} has been emptied!</s:String>
-    <s:String x:Key="LangSelectFolderDeleted">Folder {0} has been deleted!</s:String>
+    <s:String x:Key="LangSelectFolderEmptied">The folder {0} has been emptied!</s:String>
+    <s:String x:Key="LangSelectFolderDeleted">The folder {0} has been deleted!</s:String>
     <s:String x:Key="LangSelectDialogInputNewName">Enter a new name</s:String>
     <s:String x:Key="LangSelectHintNameUpdated">The folder name has been renamed to</s:String>
     <s:String x:Key="LangSelectFailToRename">Failed to rename folder</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoChange">You cannot switch game folders while the download task is in progress!</s:String>
-    
+
     <!--PageSelectRight-->
     <s:String x:Key="LangSelectNoAvailableVersion">No instances available</s:String>
-    <s:String x:Key="LangSelectNoAvailableVersionTip">No instances found. Please download any version of the game first.&#xa;If there is an existing instance, click "Add Existing Folders" in the list on the left, and select the ".minecraft" folder to import it.</s:String>
+    <s:String x:Key="LangSelectNoAvailableVersionTip">No instances found. Please download any version of the game first.&#xa;If there is an existing instance, click the "Add Existing Folders" in the list on the left, and select the ".minecraft" folder to import it.</s:String>
     <s:String x:Key="LangSelectNoAvailableVersionDownloadGame">Download games</s:String>
     <s:String x:Key="LangSelectGettingVersion">Getting version list</s:String>
-    <s:String x:Key="LangSelectVersionTypeRegular">Regular Instance</s:String>
-    <s:String x:Key="LangSelectVersionTypeModAbility">Mods Can be Installed</s:String>
+    <s:String x:Key="LangSelectVersionTypeRegular">Regular Instances</s:String>
+    <s:String x:Key="LangSelectVersionTypeModAbility">Mods Allow to Installed</s:String>
     <s:String x:Key="LangSelectVersionTypeForge">Forge Instances</s:String>
     <s:String x:Key="LangSelectVersionTypeLiteloader">LiteLoader Instances</s:String>
     <s:String x:Key="LangSelectVersionTypeFabric">Fabric Instances</s:String>
@@ -288,24 +289,24 @@
     <s:String x:Key="LangSelectVersionTypeHidden">Hidden Instances</s:String>
     <s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">Not Commonly Used Instances</s:String>
     <s:String x:Key="LangSelectVersionTypeFavorites">Favorites</s:String>
-    <s:String x:Key="LangSelectVersionTypeAprilFool">April Fool's Day Instances</s:String>
+    <s:String x:Key="LangSelectVersionTypeAprilFool">April Fools Instances</s:String>
     <s:String x:Key="LangSelectVersionTypeUnknown">Unknown Type</s:String>
     <s:String x:Key="LangSelectVersionNoHidden">No Hidden Instance</s:String>
     <s:String x:Key="LangSelectVersionNoHiddenTip">No instances are hidden, you can select "Hidden Instances" in the category options in "Personalize" of "Instance Properties".&#xa;Press "F11" again to exit the hidden instance viewing mode.</s:String>
-    <s:String x:Key="LangSelectVersionListLoadFail">Failed while converting instance list to display</s:String>
-    <s:String x:Key="LangSelectVersionListLoadIconFail">Failed to load instance icon</s:String>
+    <s:String x:Key="LangSelectVersionListLoadFail">Failed while converting the instance list to display</s:String>
+    <s:String x:Key="LangSelectVersionListLoadIconFail">Failed to load the instance icon</s:String>
     <s:String x:Key="LangSelectBtnFavorite">Favorite</s:String>
     <s:String x:Key="LangSelectBtnCancelFavorite">Cancel Favorite</s:String>
     <s:String x:Key="LangSelectBtnSet">Properties</s:String>
     <s:String x:Key="LangSelectBtnOpenFolder">Open folder</s:String>
-    <s:String x:Key="LangSelectDeleteVersionTitle">Instance Deletion Confirmation</s:String>
-    <s:String x:Key="LangSelectDeleteVersionContentA">Are you sure to delete instance {0}?</s:String>
-    <s:String x:Key="LangSelectDeleteVersionContentB">Are you sure to delete instance {0} permanently?</s:String>
-    <s:String x:Key="LangSelectDeleteVersionContentC">Since "Instance isolation" is enabled for this instance, the corresponding saves, resource packs, mods and other files of this instance will also be deleted when it is deleted!</s:String>
-    <s:String x:Key="LangSelectVersionDeletedA">Instance {0} has been permanently deleted!</s:String>
-    <s:String x:Key="LangSelectVersionDeletedB">Instance {0} has been deleted to the recycle bin!</s:String>
-    <s:String x:Key="LangSelectVersionDeleteCancelled">Delete instance {0} was manually canceled</s:String>
-    <s:String x:Key="LangSelectVersionDeleteFail">Failed to delete instance {0}</s:String>
+    <s:String x:Key="LangSelectDeleteVersionTitle">Delete Instance Confirmation</s:String>
+    <s:String x:Key="LangSelectDeleteVersionContentA">Are you sure to delete the instance {0}?</s:String>
+    <s:String x:Key="LangSelectDeleteVersionContentB">Are you sure to delete the instance {0} permanently?</s:String>
+    <s:String x:Key="LangSelectDeleteVersionContentC">Since "Isolate instance" is enabled for this instance, the corresponding saves, resource packs, mods and other files of this instance will also be deleted when it is deleted!</s:String>
+    <s:String x:Key="LangSelectVersionDeletedA">The instance {0} has been permanently deleted!</s:String>
+    <s:String x:Key="LangSelectVersionDeletedB">The instance {0} has been deleted to the recycle bin!</s:String>
+    <s:String x:Key="LangSelectVersionDeleteCancelled">Delete the instance {0} was manually canceled</s:String>
+    <s:String x:Key="LangSelectVersionDeleteFail">Failed to delete the instance {0}</s:String>
 
     <!--PageSpeedLeft-->
     <s:String x:Key="LangSpeedTotalProgress">Total Progress</s:String>
@@ -313,8 +314,8 @@
     <s:String x:Key="LangSpeedLeftFiles">Remaining Files</s:String>
     <s:String x:Key="LangSpeedLeftThreads">Remaining Threads</s:String>
     <s:String x:Key="LangSpeedClickCopyError">Click to Copy Error Details</s:String>
-    <s:String x:Key="LangSpeedHintClickCopyError">Error details have been copied!</s:String>
-    
+    <s:String x:Key="LangSpeedHintClickCopyError">The error details have been copied!</s:String>
+
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadCilentLoadingList">Getting version list</s:String>
 
@@ -322,10 +323,10 @@
     <s:String x:Key="LangDownloadCompToCurseForge">Go to CurseForge</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">Go to Modrinth</s:String>
     <s:String x:Key="LangDownloadCompToMCMod">Go to MCMod</s:String>
-    <s:String x:Key="LangDownloadCompCopyName">Replication name</s:String>
+    <s:String x:Key="LangDownloadCompCopyName">Copy name</s:String>
     <s:String x:Key="LangDownloadCompLoadingList">Getting version list</s:String>
     <s:String x:Key="LangDownloadCompApiSlow">Since version information from the API is updated slowly, it may not be able to recognize the recently updated Minecraft version. Just wait for a while and it will automatically return to normal.</s:String>
-    <s:String x:Key="LangDownloadCompSearchingSuitableInstance">Looking for the right game version…</s:String>
+    <s:String x:Key="LangDownloadCompSearchingSuitableInstance">Looking for the right game version...</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">No instances suitable for this mod was found in the current Minecraft folder!</s:String>
 
     <!--PageDownloadFabric-->
@@ -340,7 +341,7 @@
     <s:String x:Key="LangDownloadForgeDesc">Forge is a mod loader. You need to install Forge first to install various Forge mods.</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">Open official website</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">Getting Forge list</s:String>
-    
+
     <!--PageDownloadInstall-->
     <s:String x:Key="LangDownloadInstallReview">Preview of installation content</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">You have not chosen to install the Fabric API, which will make most mods unusable!</s:String>
@@ -365,13 +366,13 @@
     <s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">Failed to get version list: unknown error, status is</s:String>
     <s:String x:Key="LangDownloadInstallFailGetList">Failed to get version list:</s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">This version does not support install in the launcher</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieTitle">Instance Isolation Tip</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieContent">You have not enabled "Instance isolation", which would cause multiple instances to share the same mods folder.&#xa;Therefore, when switching instances, Minecraft will crash because it reads mods that are inconsistent with the current game or loader.&#xa;PCL recommends that you enable "Instance isolation" option in "Settings → Instance isolation" before starting downloading!</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieTitle">Isolate Instance Tip</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieContent">You have not enabled "Isolate instance", which would cause multiple instances to share the same mods folder.&#xa;Therefore, when switching instances, Minecraft will crash because it reads mods that are inconsistent with the current game or loader.&#xa;PCL recommends that you enable "Isolate instance" option in "Settings → Isolate instance" before starting downloading!</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">Cancel the download</s:String>
     <s:String x:Key="LangDownloadInstallNoAdd">No additional installation</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">Incompatible with NeoForge</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Incompatible with older versions of Fabric, please download OptiFabric Origins manually</s:String>
-    
+
     <!--PageDownloadLeft-->
     <s:String x:Key="LangDownloadPageRefresh">Refresh</s:String>
     <s:String x:Key="LangDownloadPageAutoInstall">Install</s:String>
@@ -384,13 +385,13 @@
     <s:String x:Key="LangDownloadPageResource">Resources</s:String>
     <s:String x:Key="LangDownloadPageMods">Mods</s:String>
     <s:String x:Key="LangDownloadPageModpackages">Modpacks</s:String>
-    
+
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteloaderDescTitle">Introduce to LiteLoader</s:String>
     <s:String x:Key="LangDownloadLiteloaderDesc">Similar to Forge, LiteLoader can be used to load LiteLoader mods in older versions of Minecraft.</s:String>
     <s:String x:Key="LangDownloadLiteloaderWebsite">Open official website</s:String>
     <s:String x:Key="LangDownloadLiteloaderGettingList">Getting LiteLoader list</s:String>
-    
+
     <!--PageDownloadMod-->
     <s:String x:Key="LangDownloadModSearchTitle">Search Mods</s:String>
     <s:String x:Key="LangDownloadModSearchName">Name</s:String>
@@ -430,20 +431,20 @@
     <s:String x:Key="LangDownloadModTypeUtility">Utility / QoL</s:String>
     <s:String x:Key="LangDownloadModTypeLib">API and Library</s:String>
     <s:String x:Key="LangDownloadModConnectModrinthFail">Unable to connect to Modrinth, so currently only content from CurseForge is displayed, and the results may be incomplete.</s:String>
-    
+
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">Introduce to NeoForge</s:String>
     <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge is the mod loader for Minecraft 1.19+. You need to install it first to install various NeoForge mods.&#xa;This page provides download of NeoForge installer. After downloading, you need to manually open the installer to install.</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">Open official website</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">Getting NeoForge list</s:String>
-    
+
     <!--PageDownloadOptiFine-->
     <s:String x:Key="LangDownloadOptiFineDescTitle">Introduce to OptiFine</s:String>
     <s:String x:Key="LangDownloadOptiFineDesc">OptiFine allows you to install shader packs, use HD resource packs, and significantly improve game performance.</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">Open official website</s:String>
     <s:String x:Key="LangDownloadOptiFineChineseWebsite">Open Chinese website</s:String>
     <s:String x:Key="LangDownloadOptiFineGettingList">Getting OptiFine list</s:String>
-    
+
     <!--PageDownloadPack-->
     <s:String x:Key="LangDownloadModpackSearchTitle">Search Modpacks</s:String>
     <s:String x:Key="LangDownloadModpackSearchName">Name</s:String>
@@ -478,7 +479,7 @@
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">Small / Light</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">Extra Large</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">Unable to connect to Modrinth, so currently only content from CurseForge is displayed, and the results may be incomplete.</s:String>
-    
+
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">Save as</s:String>
     <s:String x:Key="LangMySkinRefresh">Refresh</s:String>
@@ -491,13 +492,13 @@
     <s:String x:Key="LangMySkinHintSaveFail">Failed to save skin</s:String>
     <s:String x:Key="LangMySkinHintSkinFileCorruption">Skin file corrupted:</s:String>
     <s:String x:Key="LangMySkinHintExistSkinFileGetTask">There are skins being obtained. Please try again later!</s:String>
-    <s:String x:Key="LangMySkinHintRefreshing">Updating avatar…</s:String>
-    <s:String x:Key="LangMySkinHintRefreshed">Avatar has been refreshed!</s:String>
+    <s:String x:Key="LangMySkinHintRefreshing">Updating avatar...</s:String>
+    <s:String x:Key="LangMySkinHintRefreshed">The avatar has been refreshed!</s:String>
     <s:String x:Key="LangMySkinHintRefreshFail">Failed to refresh skin cache</s:String>
     <s:String x:Key="LangMySkinHintChangeSuccess">Change skin successfully!</s:String>
     <s:String x:Key="LangMySkinHintChanging">Changing the cape, please wait!</s:String>
     <s:String x:Key="LangMySkinHintChangFailByLoginFail">Login failed and the cape cannot be changed!</s:String>
-    <s:String x:Key="LangMySkinHintGettingCape">Getting the list of capes, please wait…</s:String>
+    <s:String x:Key="LangMySkinHintGettingCape">Getting the list of capes, please wait...</s:String>
     <s:String x:Key="LangMySkinDialogChooseCape">Choose a cape</s:String>
     <s:String x:Key="LangMySkinHintChangeCapeFail">Changing cape failed</s:String>
     <s:String x:Key="LangMySkinHintChangeCapeSuccess">Changing the cape successfully!</s:String>
@@ -518,7 +519,7 @@
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">Purple Heart Cape</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">Follower's Cape</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">No Cape</s:String>
-    
+
     <!--FormLoginOAuth-->
     <s:String x:Key="LangLoginOAuthLoading">Loading login page</s:String>
     <s:String x:Key="LangLoginOAuthLoadingTipA">If the network environment is not good, loading may be very slow or even impossible to load</s:String>
@@ -526,7 +527,7 @@
     <s:String x:Key="LangLoginOAuthToBrower">If you encounter problems, you can click here to log in using the system browser</s:String>
     <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL does not support using GitHub to log in to Microsoft accounts!</s:String>
     <s:String x:Key="LangLoginOAuthWindowTitle">Microsoft Account Login</s:String>
-    
+
     <!--PageLaunchLeft-->
     <s:String x:Key="LangLaunchLeftInstanceChoose">Select</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Properties</s:String>
@@ -543,14 +544,14 @@
     <s:String x:Key="LangLaunchLeftStageStarting">Start-up progress</s:String>
     <s:String x:Key="LangLaunchLeftStageDownload">Download speed</s:String>
     <s:String x:Key="LangLaunchLeftTip">Did you know</s:String>
-    <s:String x:Key="LangLaunchLeftInit">Initialization</s:String>
+    <s:String x:Key="LangLaunchLeftInit">Initialize</s:String>
     <s:String x:Key="LangLaunchLeftAccountOfflineLinkLogin">Offline in Online</s:String>
     <s:String x:Key="LangLaunchLeftAccountOfflineLogin">Offline</s:String>
     <s:String x:Key="LangLaunchLeftAccountMicrosoftLogin">Microsoft</s:String>
     <s:String x:Key="LangLaunchLeftAccountUnifiedPassLogin">Unified pass</s:String>
     <s:String x:Key="LangLaunchLeftAccountThirdPartLogin">Third party</s:String>
-    <s:String x:Key="LangLaunchLeftSkinNotFound">The offline custom skin file was not found, it may have been deleted. PCL will use the default Steve skin!</s:String>
-    <s:String x:Key="LangLaunchThemeFunnyUnlock">Hidden theme FUNNY COLOR has been unlocked!</s:String>
+    <s:String x:Key="LangLaunchLeftSkinNotFound">The offline custom skin file was not found, it may has been deleted. PCL will use the default Steve skin!</s:String>
+    <s:String x:Key="LangLaunchThemeFunnyUnlock">The hidden theme FUNNY COLOR has been unlocked!</s:String>
     <s:String x:Key="LangLaunchLeftStartInstance">Play</s:String>
     <s:String x:Key="LangLaunchLeftDownloadInstance">Download</s:String>
     <s:String x:Key="LangLaunchLeftNoAvailableInstance">No available instance</s:String>
@@ -560,16 +561,16 @@
     <s:String x:Key="LangLaunchLeftAbortTask">Ends the processing</s:String>
     <s:String x:Key="LangLaunchLeftFinished">Completed</s:String>
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">Exporting startup script</s:String>
-    
+
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">Snapshot Tip</s:String>
     <s:String x:Key="LangLaunchRightLog">Startup Log</s:String>
     <s:String x:Key="LangLaunchRightLabHint1">The snapshot version contains test features that have not yet been officially released and is only for the sponsors themselves to try. Please do not send it to others or use it to make modpacks!</s:String>
-    <s:String x:Key="LangLaunchRightLabHint2">If you have accumulated sponsorship ¥23.33, you can permanently hide this notice by sending the "解锁码" in a private message from Afdian.</s:String>
-    <s:String x:Key="LangLaunchRightLoadingPage">Loading homepage…</s:String>
+    <s:String x:Key="LangLaunchRightLabHint2">If you have accumulated sponsorship ¥23.33, you can permanently hide this tip by sending the "解锁码" in a private message from Afdian.</s:String>
+    <s:String x:Key="LangLaunchRightLoadingPage">Loading homepage...</s:String>
     <s:String x:Key="LangLaunchRightPageTips">Did you know?</s:String>
     <s:String x:Key="LangLaunchRightPageEcho">Echo Hole</s:String>
-    
+
     <!--PageLoginAuth-->
     <s:String x:Key="LangPageLoginAuthMail">Email</s:String>
     <s:String x:Key="LangPageLoginAuthPassword">Password</s:String>
@@ -578,7 +579,7 @@
     <s:String x:Key="LangPageLoginAuthNoEmptyMail">Account cannot be empty!</s:String>
     <s:String x:Key="LangPageLoginAuthNoEmptyPassword">Password cannot be empty!</s:String>
     <s:String x:Key="LangPageLoginAuthForgetPassword">Forget password</s:String>
-    
+
     <!--PageLoginAuthSkin-->
     <s:String x:Key="LangPageLoginAuthSkinLoading">Loading</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChangeRole">Change roles</s:String>
@@ -586,24 +587,24 @@
     <s:String x:Key="LangPageLoginAuthSkinLogining">You are logging in, please change your role later!</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChanging">Trying to replace, please wait!</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChangeFail">Change of role failed</s:String>
-    
+
     <!--PageLoginLegacy-->
     <s:String x:Key="LangPageLoginLegacySpecialCharacters">If the player name contains content other than English, numbers, and underscores, you may not be able to enter the world after Minecraft 1.18!</s:String>
     <s:String x:Key="LangPageLoginLegacyID">Player name</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">Player name cannot be empty!</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">Player names cannot contain quotation marks!</s:String>
-    <s:String x:Key="LangPageLoginLegacyConfigHidden">Startup Options have been disabled!</s:String>
-    
+    <s:String x:Key="LangPageLoginLegacyConfigHidden">The startup options have been disabled!</s:String>
+
     <!--PageLoginMs-->
     <s:String x:Key="LangPageLoginMsLogin">Login</s:String>
     <s:String x:Key="LangPageLoginMsBuy">» Buy genuine</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">» Official website</s:String>
     <s:String x:Key="LangPageLoginMsAddAccount">Add a new account</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">Please log in to your account before starting the game!</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountCancel">Login has been cancelled!</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountCancel">The login has been cancelled!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountFail">Genuine login verification failed. Please try disabling "Verify SSL Certificates" in "Settings → Launcher" and try again.&#xa;&#xa;Original error message:</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">Login has been cancelled!</s:String>
-    
+    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">The login has been cancelled!</s:String>
+
     <!--PageLoginMsSkin-->
     <s:String x:Key="LangPageLoginMsLoading">Loading</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">Skin and cape</s:String>
@@ -611,17 +612,17 @@
     <s:String x:Key="LangPageLoginMsSkinSkinSave">Save skin</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinRefresh">Refresh skin</s:String>
     <s:String x:Key="LangPageLoginMsSkinCapeChange">Change cape</s:String>
-    <s:String x:Key="LangPageLoginMsSkinInfoChange">Modification information</s:String>
+    <s:String x:Key="LangPageLoginMsSkinInfoChange">Change information</s:String>
     <s:String x:Key="LangPageLoginMsSkinInfoChangePassword">Change password</s:String>
     <s:String x:Key="LangPageLoginMsSkinInfoChangeID">Change player name</s:String>
     <s:String x:Key="LangPageLoginMsSkinSwitchID">Switch accounts</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangingSkinPlzWait">Changing skin, please wait!</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByLoginFail">Login failed and the skin cannot be changed!</s:String>
-    <s:String x:Key="LangPageLoginMsSkinChangingSkin">Changing skin…</s:String>
-    <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">Logging in and will continue to change skin after login is completed…</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangingSkin">Changing skin...</s:String>
+    <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">Logging in and will continue to change skin after login is completed...</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangeSkinFail">Failed to change skin</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByTimeOut">Skin change failed: The connection to the Mojang skin server timed out. Please check whether your network is smooth!</s:String>
-    
+
     <!--PageLoginNide-->
     <s:String x:Key="LangPageLoginNideAccount">Account</s:String>
     <s:String x:Key="LangPageLoginNidePassword">Password</s:String>
@@ -631,12 +632,12 @@
     <s:String x:Key="LangPageLoginNideNoEmptyAccount">Account cannot be empty!</s:String>
     <s:String x:Key="LangPageLoginNideNoEmptyPassword">Password cannot be empty!</s:String>
     <s:String x:Key="LangPageLoginNideForgetPassword">Forget password</s:String>
-    
+
     <!--PageLoginNideSkin-->
     <s:String x:Key="LangPageLoginNideSkinLoading">Loading</s:String>
     <s:String x:Key="LangPageLoginNideSkinChangePassword">Change password</s:String>
     <s:String x:Key="LangPageLoginNideSkinLogout">Log out</s:String>
-    
+
     <!--PageOtherLeft-->
     <s:String x:Key="LangPageOtherLeftHelp">Help</s:String>
     <s:String x:Key="LangPageOtherLeftRefresh">Refresh</s:String>
@@ -644,20 +645,20 @@
     <s:String x:Key="LangPageOtherLeftTools">Tools</s:String>
     <s:String x:Key="LangPageOtherLeftFeedback">Feedback</s:String>
     <s:String x:Key="LangPageOtherLeftVoteNew">New Feature Voting</s:String>
-    
+
     <!--PageOtherHelp-->
     <s:String x:Key="LangPageOtherHelpSearch">Search here</s:String>
     <s:String x:Key="LangPageOtherHelpLoading">Loading help list</s:String>
     <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">Sorry, the help library currently only supports Simplified Chinese.</s:String>
-    <s:String x:Key="LangPageOtherRefreshing">Refreshing…</s:String>
+    <s:String x:Key="LangPageOtherRefreshing">Refreshing...</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackContent">Do you want to open feedback list page?</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">Feedback Prompt</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">Submit new feedback</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">Visit feedback list</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">Do you want to open new feature voting page?</s:String>
-    <s:String x:Key="LangPageOtherDialogVoteTitle">Notice</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteTitle">Reminder</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">Open</s:String>
-    
+
     <!--PageOtherAbout-->
     <s:String x:Key="LangPageOtherAboutAbout">About</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthor">LTCat</s:String>
@@ -673,24 +674,24 @@
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">Visit MCMod</s:String>
     <s:String x:Key="LangPageOtherAboutThanks00ll00">Provides Java Launch Wrapper and some important service support!</s:String>
     <s:String x:Key="LangPageOtherAboutThanksDoodleHuang">Provides some hard-to-find versions of Minecraft and some technical support!</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksPatrick">Designing and making PCL icons relieved LTCat from the pain of making icons…</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksPatrick">Designing and making PCL icons relieved LTCat from the pain of making icons...</s:String>
     <s:String x:Key="LangPageOtherAboutThanksHao_Tian">A lot of weird bugs that no one expected were found in the internal test. He/she has an unusual bug physique</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">MCBBS</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksMCBBS">Although the website has been closed, thanks for providing the MCBBS mirror before…</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCBBS">Although the website has been closed, thanks for providing the MCBBS mirror before...</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">Everyone in the PCL QQ Group</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">Thanks to the netizens in the group for their support and encouragement to LTCat and PCL for so long!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">Sponsors</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from May to June 2024! Thanks for your support for PCL!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">Generate unlock code</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">Sponsor developer</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">Copy identification code</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">Copy identify code</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsSetUnlockCode">Enter unlock code</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfo">Legal Information</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseCopyright">License and Copyright Statement</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseDoc">Visit license documents</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseWeb">Visit source website</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">User Agreement and Disclaimer</s:String>
-    
+
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">Offline Skin</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTips">Due to technical issues, the skin preview and Steve/Alex/Custom options are currently only guaranteed to be valid for versions prior to 1.19.2!</s:String>
@@ -711,7 +712,7 @@
     <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleToolTip">Customize the title of the game window. If it left blank, it will not be changed.&#xa;Supports the following replacement markers:&#xa; · {user}: player name&#xa; · {login}: player login method&#xa; · {name}: instance name&#xa; · {date}, {time}: current system time&#xa; · {version}: The game version corresponding to the instance</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">Custom information</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">This information will be displayed in the main game interface and debug screen</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">Instance isolation</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">Isolate instance</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">Disable</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">All instances use the same profile, and save, mods, resource packs, etc. are all shared.&#xa;If there are multiple instances with mods installed, it may cause mod conflicts.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">Isolate instances that can install mods</s:String>
@@ -740,7 +741,7 @@
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeMaxium">To maximize</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJava">Java</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaToolTip">If you place Java in a game folder or a PCL folder, PCL will try to give it priority when making automatic selection</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchJavaLoading">Loading…</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchJavaLoading">Loading...</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaAutoSearch">Automatic search</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaImport">Manually import</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMem">Game Memory</s:String>
@@ -754,22 +755,22 @@
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">Game allocation</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">Advanced Startup Options</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM parameter header</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Additional JVM arguments to use when launching Minecraft. Do not attempt to change them unless you are sure.&#xa;You can return to default settings by clicking the initialize button on the left tab.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Additional JVM arguments to use when starting Minecraft. Do not attempt to change them unless you are sure.&#xa;You can return to default settings by clicking the initialize button on the left tab.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM parameter tail</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">The content in the text box will be spliced directly to the end of the startup parameter.&#xa;For example, typing --demo will start the game in demo mode.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">Execute command before startup</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">Executes a specific command or program before Minecraft starts.&#xa;The syntax is the same as the Windows Command Prompt.&#xa;&#xa;Relative paths can be implemented using the following substitution markers&#xa;and paths all end with \ ):&#xa; · {path}: The folder where the PCL executable file is located&#xa; · {minecraft}: .minecraft folder&#xa; · {verpath}: instance folder (.minecraft\versions\&lt;instance name&gt;\)&#xa; · {verindie}: When instance isolation is enabled, it is equivalent to the instance folder&#xa;   When it is not enabled, it is equivalent to the .minecraft folder&#xa; · {java}: Folder for Java used by the game&#xa;&#xa;In addition, the following replacement markers are supported:&#xa; · {user}: player username&#xa; · {login}: player login method&#xa; · {uuid}: player's UUID&#xa; · {name}: instance name&#xa; · {date}, {time}: current system time&#xa; · {version}: the game version corresponding to the instance&#xa;&#xa;For example: &#xa; · &quot;{verpath}test.exe&quot; : Run the test.exe program in the instance folder&#xa; · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; : Run the test.jar file in the example folder using Java&#xa; · notepad &quot;{verindie}option.txt&quot; : Use Notepad to open option.txt of this instance&#xa;&#xa;It is best to put double quotes around operations involving paths to avoid failures due to spaces in the path.&#xa;When executing a command, the directory where the command line is located is the current .minecraft folder.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">Executes a specific command or program before Minecraft starts.&#xa;The syntax is the same as the Windows Command Prompt.&#xa;&#xa;Relative paths can be implemented using the following replacement markers&#xa;and paths all end with \ ):&#xa; · {path}: The folder where the PCL executable file is located&#xa; · {minecraft}: .minecraft folder&#xa; · {verpath}: instance folder (.minecraft\versions\&lt;instance name&gt;\)&#xa; · {verindie}: When isolate instance is enabled, it is equivalent to the instance folder&#xa;   When it is not enabled, it is equivalent to the .minecraft folder&#xa; · {java}: Folder for Java used by the game&#xa;&#xa;In addition, the following replacement markers are supported:&#xa; · {user}: player username&#xa; · {login}: player login method&#xa; · {uuid}: player's UUID&#xa; · {name}: instance name&#xa; · {date}, {time}: current system time&#xa; · {version}: the game version corresponding to the instance&#xa;&#xa;For example: &#xa; · &quot;{verpath}test.exe&quot; : Run the test.exe program in the instance folder&#xa; · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; : Run the test.jar file in the example folder using Java&#xa; · notepad &quot;{verindie}option.txt&quot; : Use Notepad to open option.txt of this instance&#xa;&#xa;It is best to put double quotes around operations involving paths to avoid failures due to spaces in the path.&#xa;When executing a command, the directory where the command line is located is the current .minecraft folder.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand">Wait for the command execution to complete before continuing to start</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility">Ignore Java compatibility warnings</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">Warning: It is highly recommended to disable warnings for specific instances in "Instance Properties", rather than disabling warnings for all instances here!&#xa;If a Java that is incompatible with the current instances is manually selected in the settings, the compatibility warning pop-up window is automatically skipped and the manually selected Java is forced to be used.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">Disable file verification</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">Warning: It is highly recommended to disable verification for specific instances in "Instance Properties", rather than disabling verification for all instances here!&#xa;Does not change assets at all; does not verify whether libraries, third-party login libraries, and client.jar have been modified.&#xa;If you have not modified the relevant files, please do not check this item.</s:String>
-    <s:String x:Key="LangPageSetupLaunchReloadByError">There is an exception in the startup options and has been automatically reset</s:String>
+    <s:String x:Key="LangPageSetupLaunchReloadByError">There is an exception in the startup options and have been automatically reset</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">An error occurred while overloading the startup options</s:String>
-    <s:String x:Key="LangPageSetupLaunchInit">Startup options have been initialized!</s:String>
+    <s:String x:Key="LangPageSetupLaunchInit">The startup options have been initialized!</s:String>
     <s:String x:Key="LangPageSetupLaunchInitFail">Failed to initialize startup options</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinChangeFail">Changing offline skin failed</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinEmptied">Offline skin has been cleared!</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinEmptied">The offline skin has been cleared!</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinEmptyFail">Failed to clear offline skin</s:String>
     <s:String x:Key="LangPageSetupLaunchMemAvailabe">Available</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaAutoChoice">Automatically select right Java</s:String>
@@ -779,11 +780,11 @@
     <s:String x:Key="LangPageSetupLaunchJavaAddedJava">This Java has been added to Java list!</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaIncorrectJava">This Java has an exception and cannot be used</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaSearchSuccess">{0} Java found, please check the drop down box to view the list!</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">If you close the launcher immediately after the game starts, features such as crash detection and changing the game title will no longer work.&#xa;If you want to keep these features, you can choose "Hide the launcher after the game started, and close it after the game closed"</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">Notice</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">If you close the launcher immediately after the game starts, features such as detect crashes and changing the game title will no longer work.&#xa;If you want to keep these features, you can choose "Hide the launcher after the game started, and close it after the game closed"</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">Reminder</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableContent">Memory optimization will significantly prolong the startup time, and it is recommended to start it only when there is insufficient memory.&#xa;If you are using a mechanical hard drive, this can also cause severe jams for a short period of time.&#xa;Every time you start a game, PCL needs to apply for administrator rights to perform memory optimization.&#xa;If you want to automatically grant permissions, you can right-click on PCL executable file and open "Properties → Compatibility → Run this program as an administrator".</s:String>
-    <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">Notice</s:String>
-    
+    <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">Reminder</s:String>
+
     <!--PageSetupLeft-->
     <s:String x:Key="LangPageSetupLeftGame">Game</s:String>
     <s:String x:Key="LangPageSetupLeftPersonalize">Personalize</s:String>
@@ -794,8 +795,8 @@
     <s:String x:Key="LangPageSetupLeftDialogResetLaunchConfirmContent">Do you want to initialize all settings for the "Launch" page? This operation is irrevocable.</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">Do you want to initialize all settings for the "Personalize" page? This operation is irrevocable.&#xa;(Background pictures and external files such as music and custom homepages will not be deleted)</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">Do you want to initialize all settings for the "Online" page? This operation is irrevocable.</s:String>
-    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">Initialization confirmation</s:String>
-    
+    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">Initialize confirmation</s:String>
+
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">Download</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">Version list source</s:String>
@@ -813,7 +814,7 @@
     <s:String x:Key="LangPageSetupSystemDownloadSpeedLimit">Speed limit</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedLimitToolTip">Set a maximum download speed to prevent other programs that require networking from getting stuck during downloading</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadTargetFolder">Destination folder</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadTargetFolderToolTip">Please change the download destination folder in "Launch → Select → Folder List".&#xa;Right-click a folder or game instance to open the corresponding folder.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadTargetFolderToolTip">Please change the download destination folder in "Launch → Select → Folder List".&#xa;Right-click a folder or instance to open the corresponding folder.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">Keep the original modpack file when installing the modpack</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">When installing the modpack, keep the original modpack file used for installation under the instance folder</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">Simplify mod loader display</s:String>
@@ -821,7 +822,7 @@
     <s:String x:Key="LangPageSetupSystemDownloadSSL">Verify SSL Certificates</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Verifying the certificate will improve security, but it may cause Microsoft login failure (#3018).&#xa;If the Microsoft login fails because "The remote certificate is invalid according to the verification process", you can try to disable it.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">Acessibility</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">Game update notice</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">Game update reminder</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">Beta update</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">Display prompt when new Minecraft beta (snapshot, pre-release) released</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">Release update</s:String>
@@ -854,16 +855,16 @@
     <s:String x:Key="LangPageSetupSystemDebugDelay">Add a delay</s:String>
     <s:String x:Key="LangPageSetupSystemDebugDelayToolTip">Add random delays in each link to slow down the loading speed to test whether some features are working normally.&#xa;This will seriously affect the operation of the launcher, and it is not recommended to start it unless there are special needs.</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">Automatic download when new versions are available (updating snapshot versions may require key updates)</s:String>
-    <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">Launcher page settings have been initialized!</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">The launcher page settings have been initialized!</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">Failed to initialize launcher page settings</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">Unlimited</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">Disabled</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">If you set too many download threads, it may cause very severe lags in downloading.&#xa;Generally, setting 64 threads can meet most download needs. Unless you know what you are doing, it is not recommended to set more threads!</s:String>
     <s:String x:Key="LangDialogBtnIC">I see</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNeedRestart">Some debugging information will be switched after refreshing or restarting the launcher!</s:String>
-    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementSilentContent">If you enable this option, you will not be able to get notification even if serious problems arise in the future.&#xa;For example, if a serious bug is found in a certain version of the game, you may not be notified, which may lead to unpredictable consequences.&#xa;Generally, if you want to be as uninterrupted as possible, selecting "Display announcements only when there are important notices" is fine.&#xa;Unless you are making a modpack or updating the launcher manually from time to time, this option is highly not recommended!</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementSilentContent">If you select this option, you will not be able to get notification even if serious problems arise in the future.&#xa;For example, if a serious bug is found in a certain version of the game, you may not be notified, which may lead to unpredictable consequences.&#xa;Generally, if you want to be as uninterrupted as possible, selecting "Display announcements only when there are important notices" is fine.&#xa;Unless you are making a modpack or updating the launcher manually from time to time, this option is highly not recommended!</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm">I know what I am doing</s:String>
-    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementDisableContent">If you enable this option, you will not be able to get updates and fixes even if there are serious problems with the launcher in the future.&#xa;For example, if the official login method is changed, making the existing launcher unable to log in, you may not be able to start the game because you cannot update launcher.&#xa;Generally, if you want to be as uninterrupted as possible, selecting "Display prompt only when there is a critical vulnerability update" is fine.&#xa;Unless you are making a modpack or updating the launcher manually from time to time, this option is highly not recommended!</s:String>
+    <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementDisableContent">If you select this option, you will not be able to get updates and fixes even if there are serious problems with the launcher in the future.&#xa;For example, if the official login method is changed, making the existing launcher unable to log in, you may not be able to start the game because you cannot update launcher.&#xa;Generally, if you want to be as uninterrupted as possible, selecting "Display prompt only when there is a critical vulnerability update" is fine.&#xa;Unless you are making a modpack or updating the launcher manually from time to time, this option is highly not recommended!</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">Confirm launcher update failed</s:String>
 
     <!--PageVersionLeft-->
@@ -871,10 +872,10 @@
     <s:String x:Key="LangPageVersionLeftSetting">Settings</s:String>
     <s:String x:Key="LangPageVersionLeftModMangment">Mod Management</s:String>
     <s:String x:Key="LangPageVersionLeftModMangmentRefresh">Refresh</s:String>
-    <s:String x:Key="LangPageVersionLeftModMangmentRefreshing">Refreshing…</s:String>
+    <s:String x:Key="LangPageVersionLeftModMangmentRefreshing">Refreshing...</s:String>
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetContent">Do you want to initialize the settings for this instance? This operation is irrevocable.</s:String>
-    <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetTitle">Initialization Confirmation</s:String>
-    
+    <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetTitle">Initialize Confirmation</s:String>
+
     <!--PageVersionMod-->
     <s:String x:Key="LangPageVersionModSearchTip">Search for mod's name/description/tag</s:String>
     <s:String x:Key="LangPageVersionModOpenFolder">Open mods folder</s:String>
@@ -883,7 +884,7 @@
     <s:String x:Key="LangPageVersionModCheckMod">Check mods</s:String>
     <s:String x:Key="LangPageVersionModCheckModToolTip">Quickly check mods for issues such as version requirements, duplication, and missing dependencies.&#xa;The results are for reference only. Due to incorrect information in some mods, they may not be accurate.</s:String>
     <s:String x:Key="LangPageVersionModNoModFile">Mods not found</s:String>
-    <s:String x:Key="LangPageVersionModDropToInstallModTip">To install mods, please drag the mod file directly into the PCL window.&#xa;If you are sure that you have installed mods but still see this prompt, the "Instance isolation" options is incorrect. Please adjust the "Instance isolation" options in the "Startup Options".</s:String>
+    <s:String x:Key="LangPageVersionModDropToInstallModTip">To install mods, please drag the mod file directly into the PCL window.&#xa;If you are sure that you have installed mods but still see this prompt, the "Isolate instance" options is incorrect. Please adjust the "Isolate instance" options in the "Startup Options".</s:String>
     <s:String x:Key="LangPageVersionModLoadingList">Loading mod list</s:String>
     <s:String x:Key="LangPageVersionModSelectedFile">{0} files selected</s:String>
     <s:String x:Key="LangPageVersionModOperationUpdate">Update</s:String>
@@ -906,28 +907,28 @@
     <s:String x:Key="LangPageVersionModTaskDownloadNewMod">Download the new version of mod files</s:String>
     <s:String x:Key="LangPageVersionModTaskReplaceModFile">Replace older mod files</s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdate">Mod updates:</s:String>
-    <s:String x:Key="LangPageVersionModTaskModUpdateSuccessA">{0} mods have been successfully updated!</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateSuccessA">The {0} mods have been successfully updated!</s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdateSuccessB">Successfully updated:</s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdateFail">Mod update failed:</s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdateAbort">Mod update have been aborted!</s:String>
-    <s:String x:Key="LangPageVersionModHintFileOccupyWhenDelete">Mod deletion failed because the file is occupied. Please try closing the running game and try again!</s:String>
-    <s:String x:Key="LangPageVersionModHintFileDeleteSuccessA">{0} has been deleted to the recycle bin!</s:String>
-    <s:String x:Key="LangPageVersionModHintFileDeleteSuccessB">{0} files have been deleted to the recycle bin!</s:String>
-    <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">{0} has been completely deleted!</s:String>
-    <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">{0} files have been completely deleted!</s:String>
+    <s:String x:Key="LangPageVersionModHintFileOccupyWhenDelete">Delete mod failed because the file is occupied. Please try closing the running game and try again!</s:String>
+    <s:String x:Key="LangPageVersionModHintFileDeleteSuccessA">The {0} has been deleted to the recycle bin!</s:String>
+    <s:String x:Key="LangPageVersionModHintFileDeleteSuccessB">The {0} files have been deleted to the recycle bin!</s:String>
+    <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">The {0} has been completely deleted!</s:String>
+    <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">The {0} files have been completely deleted!</s:String>
     <s:String x:Key="LangPageVersionModDialogFailGetModDetail">Unable to read information for this mod.</s:String>
-    
+
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">This Instance is NOT Available with Mods</s:String>
     <s:String x:Key="LangPageVersionModDisabledContent">You need to install mod loaders such as Forge or Fabric to use mod. Please install these on "Download" page.&#xa;If you have already installed the mod loader, you may have selected the wrong instance. Please click the "Select" button to switch instances.</s:String>
     <s:String x:Key="LangPageVersionModDisabledBtnGoToDownload">Go to Download</s:String>
     <s:String x:Key="LangPageVersionModDisabledBtnSelectInstance">Go to Select</s:String>
-    
+
     <!--PageVersionOverall-->
     <s:String x:Key="LangPageVersionOverallPersonalize">Personalize</s:String>
     <s:String x:Key="LangPageVersionOverallIcon">Icon</s:String>
     <s:String x:Key="LangPageVersionOverallIconAuto">Automatic</s:String>
-    <s:String x:Key="LangPageVersionOverallIconCustom">Custom…</s:String>
+    <s:String x:Key="LangPageVersionOverallIconCustom">Custom...</s:String>
     <s:String x:Key="LangPageVersionOverallIconCobbleStone">Cobblestone</s:String>
     <s:String x:Key="LangPageVersionOverallIconCommandBlock">Command Block</s:String>
     <s:String x:Key="LangPageVersionOverallIconGoldBlock">Block of Gold</s:String>
@@ -968,25 +969,25 @@
     <s:String x:Key="LangPageVersionOverallDialogEditDescTitle">Edit Description</s:String>
     <s:String x:Key="LangPageVersionOverallDialogEditNameTitle">Edit Name</s:String>
     <s:String x:Key="LangPageVersionOverallHintEditNameSuccess">Rename successful!</s:String>
-    <s:String x:Key="LangPageVersionOverallEditNameFail">Rename instance failed</s:String>
+    <s:String x:Key="LangPageVersionOverallEditNameFail">Rename the instance failed</s:String>
     <s:String x:Key="LangPageVersionOverallSelectSaveCommandFile">Select location to save the script</s:String>
     <s:String x:Key="LangPageVersionOverallHintWaitForTaskOver">Please try again after the current startup task is over!</s:String>
-    <s:String x:Key="LangPageVersionOverallHintExportingCommandA">Exporting startup scripts…</s:String>
-    <s:String x:Key="LangPageVersionOverallHintExportingCommandB">Exporting startup scripts… (Note that launching with a script may result in a login invalidation!) ）</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandA">Exporting startup scripts...</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandB">Exporting startup scripts... (Note that starting the game using a script may result in invalid login!) </s:String>
     <s:String x:Key="LangPageVersionOverallHintExportingCommandFail">Failed to export startup script</s:String>
     <s:String x:Key="LangPageVersionOverallTaskCompleteFile">File repair</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileInTask">It is being processed, please wait!</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileSuccess">Success!</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileFail">Failed:</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileAbort">Canceled!</s:String>
-    <s:String x:Key="LangPageVersionOverallDialogDeleteA">Are you sure you want to permanently delete instance {0}?&#xa;Since "Instance isolation" is enabled for this instance, when you delete the instance, the saves, resource packs, mods and other files corresponding to the instance will also be deleted!</s:String>
-    <s:String x:Key="LangPageVersionOverallDialogDeleteB">Are you sure you want to delete instance {0}?</s:String>
-    <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">Instance Deletion Confirmation</s:String>
-    <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">Instance {0} has been deleted to the recycle bin!</s:String>
-    <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">Instance {0} has been permanently removed!</s:String>
-    
+    <s:String x:Key="LangPageVersionOverallDialogDeleteA">Are you sure you want to permanently delete the instance {0}?&#xa;Since "Isolate instance" is enabled for this instance, when you delete the instance, the saves, resource packs, mods and other files corresponding to the instance will also be deleted!</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogDeleteB">Are you sure you want to delete the instance {0}?</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">Delete Instance Confirmation</s:String>
+    <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">The instance {0} has been deleted to the recycle bin!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">The instance {0} has been permanently removed!</s:String>
+
     <!--PageVersionSetup-->
-    <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">Initialized instance settings!</s:String>
+    <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">The instance settings has been initialized!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Failed to initialize the instance settings</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">The third-party login option will be set to LittleSkin.&#xa;Do not proceed unless you are the server owner, or the server owner has asked you to do so.&#xa;&#xa;Do you really need to override the current options?</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinTitle">Settings Overwrite Confirmation</s:String>
@@ -1016,43 +1017,43 @@
     <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServerToolTip">Automatically enter a server after starting Minecraft.&#xa;Separate the IP and the port with a half-width colon, such as 233.233.233.233:12345.</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerMaster">Server control panel</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerSetLittleSkin">Set to LittleSkin</s:String>
-    <s:String x:Key="LangPageVersionSetupJVMHead">Additional JVM arguments to use when launching Minecraft. Do not attempt to change them unless you are sure.&#xa;If left blank, the value of the global setting is used.</s:String>
+    <s:String x:Key="LangPageVersionSetupJVMHead">Additional JVM arguments to use when starting Minecraft. Do not attempt to change them unless you are sure.&#xa;If left blank, the value of the global setting is used.</s:String>
     <s:String x:Key="LangPageVersionSetupJVMTail">The content in the text box will be spliced directly to the end of the startup parameter.&#xa;For example, typing --demo will start the game in demo mode.&#xa;If left blank, the value of the global setting is used.</s:String>
-    <s:String x:Key="LangPageVersionSetupCommand">This option does not override global settings:&#xa;at startup, the commands for global settings are executed first,&#xa;and then the commands for instance settings.&#xa;&#xa;Executes a specific command or program before Minecraft starts.&#xa;The syntax is the same as the Windows Command Prompt.&#xa;&#xa;Relative paths can be implemented using the following substitution markers&#xa;and paths all end with \ ):&#xa; · {path}: The folder where the PCL executable file is located&#xa; · {minecraft}: .minecraft folder&#xa; · {verpath}: instance folder (.minecraft\versions\&lt;instance name&gt;\)&#xa; · {verindie}: When instance isolation is enabled, it is equivalent to the instance folder&#xa;   When it is not enabled, it is equivalent to the .minecraft folder&#xa; · {java}: Folder for Java used by the game&#xa;&#xa;In addition, the following replacement markers are supported:&#xa; · {user}: player username&#xa; · {login}: player login method&#xa; · {uuid}: player's UUID&#xa; · {name}: instance name&#xa; · {date}, {time}: current system time&#xa; · {version}: The game version corresponding to the instance&#xa;&#xa;For example: &#xa; · &quot;{verpath}test.exe&quot; : Run the test.exe program in the instance folder&#xa; · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; : Run the test.jar file in the example folder using Java&#xa; · notepad &quot;{verindie}option.txt&quot; : Use Notepad to open option.txt of this instance&#xa;&#xa;It is best to put double quotes around operations involving paths to avoid failures due to spaces in the path.&#xa;When executing a command, the directory where the command line is located is the current .minecraft folder.</s:String>
+    <s:String x:Key="LangPageVersionSetupCommand">This option does not override global settings:&#xa;at startup, the commands for global settings are executed first,&#xa;and then the commands for the instance settings.&#xa;&#xa;Executes a specific command or program before Minecraft starts.&#xa;The syntax is the same as the Windows Command Prompt.&#xa;&#xa;Relative paths can be implemented using the following replacement markers&#xa;and paths all end with \ ):&#xa; · {path}: The folder where the PCL executable file is located&#xa; · {minecraft}: .minecraft folder&#xa; · {verpath}: instance folder (.minecraft\versions\&lt;instance name&gt;\)&#xa; · {verindie}: When isolate instance is enabled, it is equivalent to the instance folder&#xa;   When it is not enabled, it is equivalent to the .minecraft folder&#xa; · {java}: Folder for Java used by the game&#xa;&#xa;In addition, the following replacement markers are supported:&#xa; · {user}: player username&#xa; · {login}: player login method&#xa; · {uuid}: player's UUID&#xa; · {name}: instance name&#xa; · {date}, {time}: current system time&#xa; · {version}: The game version corresponding to the instance&#xa;&#xa;For example: &#xa; · &quot;{verpath}test.exe&quot; : Run the test.exe program in the instance folder&#xa; · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; : Run the test.jar file in the example folder using Java&#xa; · notepad &quot;{verindie}option.txt&quot; : Use Notepad to open option.txt of this instance&#xa;&#xa;It is best to put double quotes around operations involving paths to avoid failures due to spaces in the path.&#xa;When executing a command, the directory where the command line is located is the current .minecraft folder.</s:String>
     <s:String x:Key="LangPageVersionSetupJavaCompatibility">If a Java that is incompatible with the current instances is manually selected in the settings, the compatibility warning pop-up window is automatically skipped and the manually selected Java is forced to be used.</s:String>
-    <s:String x:Key="LangPageVersionSetupFileVerification">Do not change assets at all; do not verify whether libraries, third-party login libraries, and client.jar have been modified.&#xa;If you have not modified the relevant files, please do not check this item.</s:String>
-    
+    <s:String x:Key="LangPageVersionSetupFileVerification">Do not change assets at all; do not verify whether the libraries, third-party login libraries, and client.jar have been modified.&#xa;If you have not modified the relevant files, please do not check this item.</s:String>
+
     <!--ModMain-->
-    <s:String x:Key="LangModMainAprilFoolTipA">Give up! Just click the little white flag in the lower right corner…</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipA">Give up! Just click the little white flag in the lower right corner...</s:String>
     <s:String x:Key="LangModMainAprilFoolTipB">See the little white flag in the lower right corner?</s:String>
     <s:String x:Key="LangModMainAprilFoolTipC">It is recommended here to click the small white flag in the lower right corner to surrender.jpg</s:String>
-    <s:String x:Key="LangModMainAprilFoolTipD">The little white flag in the lower right corner is always waiting for you…</s:String>
-    
+    <s:String x:Key="LangModMainAprilFoolTipD">The little white flag in the lower right corner is always waiting for you...</s:String>
+
     <!--ModEvent-->
-    <s:String x:Key="LangModEventOpeningWeb">Opening, please wait…</s:String>
-    <s:String x:Key="LangModEventStartInstance">Starting {0}…</s:String>
+    <s:String x:Key="LangModEventOpeningWeb">Opening, please wait...</s:String>
+    <s:String x:Key="LangModEventStartInstance">Starting {0}...</s:String>
     <s:String x:Key="LangModEventChoseAnInstance">Please select an instance first!</s:String>
     <s:String x:Key="LangModEventHomePageRefreshed">The homepage has been refreshed!</s:String>
     <s:String x:Key="LangModEventDialogDownloadIncorrectContent">EventData must be a URL that starts with "http://" or "https://".&#xa;PCL does not support other messy download protocols.</s:String>
     <s:String x:Key="LangModEventDialogEventFailTitle">Event Execution Failed</s:String>
     <s:String x:Key="LangModEventDialogUnknownEventContent">Unknown event type: {0}&#xa;Please check whether the event type is filled correctly or whether the PCL is the latest version.</s:String>
-    <s:String x:Key="LangModEventGettingResource">Obtaining resources, please wait…</s:String>
-    
+    <s:String x:Key="LangModEventGettingResource">Obtaining resources, please wait...</s:String>
+
     <!--ModMusic-->
     <s:String x:Key="LangModMusicDeviceChanged">Due to changes in the audio device, music playback feature cannot be restored until PCL is restarted!</s:String>
     <s:String x:Key="LangModMusicMusicChanged">Failed to play music ({0}): PCL does not support playing music whose audio properties change during playback</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">Failed to play music ({0}): PCL may not support this music format. Please convert the format to ".wav",".mp3" or ".flac" and try again</s:String>
-    
+
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL cannot create the "PCL" folder ({0}PCL), please try:&#xa;1. Move PCL to another folder {1}&#xa;2. Delete the "PCL" folder in the current directory and try again.&#xa;3. Right-click on PCL executable file and open "Properties → Compatibility → Run this program as an administrator".</s:String>
     <s:String x:Key="LangModSecretPermissionB">PCL does not have write permissions to the current folder. Please try: &#xa;1. Move PCL to another folder {0}&#xa;2. Delete the "PCL" folder in the current directory and try again.&#xa;3. Right-click on PCL executable file and open "Properties → Compatibility → Run this program as an administrator".</s:String>
     <s:String x:Key="LangModSecretPermissionAddition">(For example, system partitions and other locations other than the desktop)</s:String>
     <s:String x:Key="LangModSecretPermissionError">Operating environment error</s:String>
-    
+
     <!--ModMinecraft-->
     <s:String x:Key="LangModMinecraftCurrentFolder">Current Folder</s:String>
     <s:String x:Key="LangModMinecraftOfficalFolder">Minecraft Launcher Folder</s:String>
-    <s:String x:Key="LangModMinecraftCheckStatusInstanceNotFound">Instances not found</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusInstanceNotFound">No instances found</s:String>
     <s:String x:Key="LangModMinecraftCheckStatusNoPermission">PCL does not have access to this folder, please right-click the PCL executable file and run as administrator.</s:String>
     <s:String x:Key="LangModMinecraftCheckStatusNeedDependency">Versions of dependencies that need to be installed:</s:String>
     <s:String x:Key="LangModMinecraftCheckStatusUnknownError">Unknown error:</s:String>
@@ -1068,24 +1069,24 @@
     <s:String x:Key="LangModMinecraftDialogNewVersionContentA">New verison:</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionContentB">Update time:</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionContentC">Updated on:</s:String>
-    <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft update tip</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft Update Tip</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">Download</s:String>
-    <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">View update log</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">View changelog</s:String>
 
-        <!--ModComp-->
-    <s:String x:Key="LangModCompModSuitFor">Applicable to</s:String>
-    <s:String x:Key="LangModCompModDependentCount">dependent mod(s)</s:String>
+    <!--ModComp-->
+    <s:String x:Key="LangModCompModSuitFor">Available for</s:String>
+    <s:String x:Key="LangModCompModDependentCount">dependencie(s)</s:String>
     <s:String x:Key="LangModCompModDownload">downloads</s:String>
     <s:String x:Key="LangModCompModDownloadMillion">million downloads</s:String>
     <s:String x:Key="LangModCompModGameVersion">Game version</s:String>
     <s:String x:Key="LangModCompModUpdateTime">Updated on {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">Save as</s:String>
-    <s:String x:Key="LangModCompModDependent">Dependent mod</s:String>
-    <s:String x:Key="LangModCompModAlternateVersion">Alternate version</s:String>
-    <s:String x:Key="LangModCompModStatusDescRelease">Release version</s:String>
-    <s:String x:Key="LangModCompModStatusDescBeta">Beta version</s:String>
-    <s:String x:Key="LangModCompModStatusDescAlpha">Alpha version</s:String>
-    
+    <s:String x:Key="LangModCompModDependent">Dependencie(s)</s:String>
+    <s:String x:Key="LangModCompModAlternateVersion">Available version(s)</s:String>
+    <s:String x:Key="LangModCompModStatusDescRelease">Release</s:String>
+    <s:String x:Key="LangModCompModStatusDescBeta">Beta</s:String>
+    <s:String x:Key="LangModCompModStatusDescAlpha">Alpha</s:String>
+
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">year(s)</s:String>
     <s:String x:Key="LangModBaseDateMonthA">month(es)</s:String>
@@ -1096,17 +1097,17 @@
     <s:String x:Key="LangModBaseDateSecond">second(s)</s:String>
     <s:String x:Key="LangModBaseDateAgo"> ago</s:String> <!--Keep the whitespace in the front-->
     <s:String x:Key="LangModBaseDateLater">later</s:String>
-    <s:String x:Key="LangModBaseDialogWebOpenFailContent">Maybe the browser is not configured correctly, so PCL cannot open the web page for you.&#xa;The URL has been copied to the clipboard and can be manually pasted and accessed if necessary.&#xa;Url:{0}</s:String>
-    <s:String x:Key="LangModBaseDialogWebOpenFailTitle">Unable to open web page</s:String>
+    <s:String x:Key="LangModBaseDialogWebOpenFailContent">Maybe the browser is not configured correctly, so PCL cannot open the webpage for you.&#xa;The URL has been copied to the clipboard and can be manually pasted and accessed if necessary.&#xa;Url: {0}</s:String>
+    <s:String x:Key="LangModBaseDialogWebOpenFailTitle">Unable to open the webpage</s:String>
     <s:String x:Key="LangModBaseHintCopySuccess">Successfully copied!</s:String>
     <s:String x:Key="LangModBaseHintMultiplePCL">Multiple PCLs may be opened at the same time, and unknown problems may occur in the program!</s:String>
-    <s:String x:Key="LangModBaseDialogFeedbackContent">Do you want to give feedback on this question? Without feedback, this problem may never be solved!</s:String>
+    <s:String x:Key="LangModBaseDialogFeedbackContent">Do you want to give feedback on this problem? Without feedback, this problem may never be solved!</s:String>
     <s:String x:Key="LangModBaseDialogFeedbackTitle">An error occurred</s:String>
     <s:String x:Key="LangModBaseDialogFeedbackBtnConfirm">Feedback now</s:String>
-    <s:String x:Key="LangModBaseDialogUploadLogContent">If you are reporting a Bug, please click the Open Folder button and upload the file containing the error message in Log(1~5).txt.&#xa;Game crashes are generally not related to the launcher. Please do not submit feedback because of game crashes.</s:String>
-    <s:String x:Key="LangModBaseDialogUploadLogTitle">Feedback Submission Reminder</s:String>
+    <s:String x:Key="LangModBaseDialogUploadLogContent">If you are reporting a bug, please click the "Open Folder" button and upload the file containing the error message in "Log(1~5).txt".&#xa;Game crashes are generally not related to the launcher. Please do not submit feedback related to game crashes.</s:String>
+    <s:String x:Key="LangModBaseDialogUploadLogTitle">Submit Feedback Reminder</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">Open Folder</s:String>
-    <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">No,thanks</s:String>
+    <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">No, thanks</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Your PCL is not the latest version, so you cannot submit feedback.&#xa;Please update the launcher in "Settings → Launcher" first, confirm that the problem still exists in the latest version, and then submit feedback.</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Unable to submit feedback</s:String>
 </ResourceDictionary>
