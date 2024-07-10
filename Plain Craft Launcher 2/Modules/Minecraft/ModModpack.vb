@@ -245,7 +245,7 @@ Retry:
                     CopyDirectory(OverridePath, PathMcFolder & "versions\" & VersionName)
                     Log($"[ModPack] 整合包 override 复制：{OverridePath} -> {PathMcFolder & "versions\" & VersionName}")
                 Else
-                    Log($"[ModPack] 整合包中未找到 override 文件夹：{OverridePath}")
+                    Log($"[ModPack] 整合包中未找到 overrides 文件夹：{OverridePath}")
                 End If
                 Task.Progress = 0.9
                 '开启版本隔离
@@ -414,7 +414,7 @@ Retry:
                     QuiltVersion = Entry.Value.ToString
                     Log("[ModPack] 整合包 Quilt 版本：" & QuiltVersion)
                 Case Else
-                    Hint($"无法安装整合包，其中出现了未知的 Mod 加载器 {Entry.Value}！", HintType.Critical)
+                    Hint($"无法安装整合包，其中出现了未知的 Mod 加载器 {Entry.Name}（版本为 {Entry.Value.ToString}）！", HintType.Critical)
                     Exit Sub
             End Select
         Next
@@ -438,7 +438,7 @@ Retry:
                 If Directory.Exists(InstallTemp & ArchiveBaseFolder & "overrides") Then
                     CopyDirectory(InstallTemp & ArchiveBaseFolder & "overrides", PathMcFolder & "versions\" & VersionName)
                 Else
-                    Log("[ModPack] 整合包中未找到 override 目录，已跳过")
+                    Log("[ModPack] 整合包中未找到 overrides 目录，已跳过")
                 End If
                 Task.Progress = 0.8
                 If Directory.Exists(InstallTemp & ArchiveBaseFolder & "client-overrides") Then
@@ -559,7 +559,7 @@ Retry:
             If Directory.Exists(InstallTemp & ArchiveBaseFolder & "minecraft") Then
                 CopyDirectory(InstallTemp & ArchiveBaseFolder & "minecraft", PathMcFolder & "versions\" & VersionName)
             Else
-                Log("[ModPack] 整合包中未找到 minecraft override 目录，已跳过")
+                Log("[ModPack] 整合包中未找到 minecraft overrides 目录，已跳过")
             End If
             Task.Progress = 0.9
             '开启版本隔离
@@ -651,7 +651,7 @@ Retry:
             If Directory.Exists(InstallTemp & ArchiveBaseFolder & ".minecraft") Then
                 CopyDirectory(InstallTemp & ArchiveBaseFolder & ".minecraft", PathMcFolder & "versions\" & VersionName)
             Else
-                Log("[ModPack] 整合包中未找到 override .minecraft 目录，已跳过")
+                Log("[ModPack] 整合包中未找到 overrides .minecraft 目录，已跳过")
             End If
             Task.Progress = 0.9
             '开启版本隔离
