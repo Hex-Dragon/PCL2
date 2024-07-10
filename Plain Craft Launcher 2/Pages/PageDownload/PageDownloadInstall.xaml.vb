@@ -191,6 +191,9 @@
         End If
     End Sub
 
+    'Mod Loader 统一判断，内容应为 Forge / NeoForge / Fabric / Quilt
+    Private SelectedLoaderName As String = Nothing
+
     'LiteLoader
     Private SelectedLiteLoader As DlLiteLoaderListEntry = Nothing
     Private Sub SetLiteLoaderInfoShow(IsShow As String)
@@ -800,7 +803,7 @@
         If LoadOptiFine Is Nothing OrElse LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFine.State, Object).Error.Message
         '检查 Forge 1.13 - 1.14.3：全部不兼容
-        If SelectedForge IsNot Nothing AndAlso
+        If (SelectedLoaderName = "Forge") AndAlso
             VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then
             Return "与 Forge 不兼容"
         End If
@@ -977,8 +980,7 @@
         Dim NotSuitForOptiFine As Boolean = False
         For Each Version In Loader.Output
             If Version.Category = "universal" OrElse Version.Category = "client" Then Continue For '跳过无法自动安装的版本
-            If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
-            If SelectedFabric IsNot Nothing Then Return "与 Fabric 不兼容"
+            If SelectedLoaderName IsNot Nothing AndAlso SelectedLoaderName IsNot "Forge" Then Return $"与 {SelectedLoaderName} 不兼容"
             If SelectedOptiFine IsNot Nothing AndAlso
                 VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then
                 Return "与 OptiFine 不兼容" '1.13 ~ 1.14.3 OptiFine 检查
@@ -1028,6 +1030,7 @@
     '选择与清除
     Private Sub Forge_Selected(sender As MyListItem, e As EventArgs)
         SelectedForge = sender.Tag
+        SelectedLoaderName = "Forge"
         CardForge.IsSwaped = True
         If SelectedOptiFine IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, SelectedForge) Then SelectedOptiFine = Nothing
         OptiFine_Loaded()
@@ -1035,6 +1038,7 @@
     End Sub
     Private Sub Forge_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnForgeClear.MouseLeftButtonUp
         SelectedForge = Nothing
+        SelectedLoaderName = Nothing
         CardForge.IsSwaped = True
         e.Handled = True
         OptiFine_Loaded()
@@ -1051,8 +1055,7 @@
     Private Function LoadNeoForgeGetError() As String
         If Not SelectedMinecraftId.StartsWith("1.") Then Return "没有可用版本"
         If SelectedOptiFine IsNot Nothing Then Return "与 OptiFine 不兼容"
-        If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
-        If SelectedFabric IsNot Nothing Then Return "与 Fabric 不兼容"
+        If SelectedLoaderName IsNot Nothing AndAlso SelectedLoaderName IsNot "NeoForge" Then Return $"与 {SelectedLoaderName} 不兼容"
         If LoadNeoForge Is Nothing OrElse LoadNeoForge.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadNeoForge.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadNeoForge.State, Object).Error.Message
         If DlNeoForgeListLoader.Output.Value.Any(Function(v) v.Inherit = SelectedMinecraftId) Then
@@ -1090,12 +1093,14 @@
     '选择与清除
     Private Sub NeoForge_Selected(sender As MyListItem, e As EventArgs)
         SelectedNeoForge = sender.Tag
+        SelectedLoaderName = "NeoForge"
         CardNeoForge.IsSwaped = True
         OptiFine_Loaded()
         SelectReload()
     End Sub
     Private Sub NeoForge_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnNeoForgeClear.MouseLeftButtonUp
         SelectedNeoForge = Nothing
+        SelectedLoaderName = Nothing
         CardNeoForge.IsSwaped = True
         e.Handled = True
         OptiFine_Loaded()
@@ -1114,8 +1119,7 @@
         If LoadFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadFabric.State, Object).Error.Message
         For Each Version As JObject In DlFabricListLoader.Output.Value("game")
             If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
-                If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
-                If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
+                If SelectedLoaderName IsNot Nothing AndAlso SelectedLoaderName IsNot "Fabric" Then Return $"与 {SelectedLoaderName} 不兼容"
                 Return Nothing
             End If
         Next
@@ -1149,6 +1153,7 @@
     '选择与清除
     Public Sub Fabric_Selected(sender As MyListItem, e As EventArgs)
         SelectedFabric = sender.Tag("version").ToString
+        SelectedLoaderName = "Fabric"
         FabricApi_Loaded()
         OptiFabric_Loaded()
         CardFabric.IsSwaped = True
@@ -1158,6 +1163,7 @@
         SelectedFabric = Nothing
         SelectedFabricApi = Nothing
         SelectedOptiFabric = Nothing
+        SelectedLoaderName = Nothing
         CardFabric.IsSwaped = True
         e.Handled = True
         SelectReload()
@@ -1298,8 +1304,7 @@
         '        Return Nothing
         '    End If
         'Next
-        If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
-        If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
+        If SelectedLoaderName IsNot Nothing AndAlso SelectedLoaderName IsNot "Quilt" Then Return $"与 {SelectedLoaderName} 不兼容"
         If DlQuiltListLoader.Output.LoaderValue IsNot Nothing Then Return Nothing
         Return "没有可用版本"
     End Function
@@ -1331,6 +1336,7 @@
     '选择与清除
     Public Sub Quilt_Selected(sender As MyListItem, e As EventArgs)
         SelectedQuilt = sender.Tag("version").ToString
+        SelectedLoaderName = "Quilt"
         QSL_Loaded()
         CardQuilt.IsSwaped = True
         SelectReload()
@@ -1338,6 +1344,7 @@
     Private Sub Quilt_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnQuiltClear.MouseLeftButtonUp
         SelectedQuilt = Nothing
         SelectedQSL = Nothing
+        SelectedLoaderName = Nothing
         CardQuilt.IsSwaped = True
         e.Handled = True
         SelectReload()

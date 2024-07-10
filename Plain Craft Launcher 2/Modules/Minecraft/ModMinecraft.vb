@@ -382,7 +382,7 @@ Public Module ModMinecraft
                             GoTo VersionSearchFinish
                         End If
                         '从 Fabric 版本中获取版本号
-                        Regex = RegexSeek(LibrariesString, "(?<=((fabricmc)|(quiltmc)):intermediary:)[^""]*")
+                        Regex = RegexSeek(LibrariesString, "(?<=(fabricmc):intermediary:)[^""]*")
                         If Regex IsNot Nothing Then
                             _Version.McName = Regex
                             GoTo VersionSearchFinish
@@ -732,11 +732,11 @@ Recheck:
                         If RealJson.Contains("net.fabricmc:fabric-loader") Then
                             State = McVersionState.Fabric
                             Version.HasFabric = True
-                            Version.FabricVersion = If(RegexSeek(RealJson, "(?<=(net.fabricmc:fabric-loader:))[0-9\.]+(\+build.[0-9]+)?"), "未知版本").Replace("+build", "")
+                            Version.FabricVersion = If(RegexSeek(RealJson, "(?<=(net.fabricmc:fabric-loader:)[0-9\.]+(\+build.[0-9]+)?"), "未知版本").Replace("+build", "")
                         ElseIf RealJson.Contains("org.quiltmc:quilt-loader") Then
                             State = McVersionState.Quilt
                             Version.HasQuilt = True
-                            Version.QuiltVersion = If(RegexSeek(RealJson, "(?<=(org.quiltmc:quilt-loader:))[0-9\.]+(\+build.[0-9]+)?"), "未知版本").Replace("+build", "")
+                            Version.QuiltVersion = If(RegexSeek(RealJson, "(?<=(org.quiltmc:quilt-loader:)[0-9\.]+(\+build.[0-9]+)?"), "未知版本").Replace("+build", "")
                         ElseIf RealJson.Contains("minecraftforge") AndAlso Not RealJson.Contains("net.neoforge") Then
                             State = McVersionState.Forge
                             Version.HasForge = True

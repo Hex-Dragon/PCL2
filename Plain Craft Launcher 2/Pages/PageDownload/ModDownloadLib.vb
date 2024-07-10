@@ -1964,7 +1964,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry("version").ToString, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry("version").ToString.Contains("beta"), "测试版", "稳定版"),
+            .Info = If(Entry("maven").ToString.Contains("installer"), "安装器", If(Entry("version").ToString.Contains("beta"), "测试版", "稳定版")),
             .Logo = PathImage & "Blocks/Quilt.png"
         }
         AddHandler NewItem.Click, OnClick
