@@ -54,10 +54,10 @@
             CheckAdvanceJava.Checked = Setup.Get("LaunchAdvanceJava")
 
         Catch ex As NullReferenceException
-            Log(ex, Application.Current.FindResource("LangPageSetupLaunchReloadByError"), LogLevel.Msgbox)
+            Log(ex, GetLang("LangPageSetupLaunchReloadByError"), LogLevel.Msgbox)
             Reset()
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangPageSetupLaunchReloadFail"), LogLevel.Feedback)
+            Log(ex, GetLang("LangPageSetupLaunchReloadFail"), LogLevel.Feedback)
         End Try
     End Sub
 
@@ -89,9 +89,9 @@
             JavaSearchLoader.Start(IsForceRestart:=True)
 
             Log("[Setup] 已初始化启动设置")
-            Hint(Application.Current.FindResource("LangPageSetupLaunchInit"), HintType.Finish, False)
+            Hint(GetLang("LangPageSetupLaunchInit"), HintType.Finish, False)
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangPageSetupLaunchInitFail"), LogLevel.Msgbox)
+            Log(ex, GetLang("LangPageSetupLaunchInitFail"), LogLevel.Msgbox)
         End Try
 
         Reload()
@@ -155,7 +155,7 @@
             Setup.Set("LaunchSkinSlim", SkinInfo.IsSlim)
             ChangeSkin = True
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangPageSetupLaunchSkinChangeFail"), LogLevel.Msgbox)
+            Log(ex, GetLang("LangPageSetupLaunchSkinChangeFail"), LogLevel.Msgbox)
             ChangeSkin = False
         Finally
             '设置当前显示
@@ -166,9 +166,9 @@
         Try
             File.Delete(PathAppdata & "CustomSkin.png")
             RadioSkinType0.SetChecked(True, True, True)
-            Hint(Application.Current.FindResource("LangPageSetupLaunchSkinEmptied"), HintType.Finish)
+            Hint(GetLang("LangPageSetupLaunchSkinEmptied"), HintType.Finish)
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangPageSetupLaunchSkinEmptyFail"), LogLevel.Msgbox)
+            Log(ex, GetLang("LangPageSetupLaunchSkinEmptyFail"), LogLevel.Msgbox)
         End Try
     End Sub
     Private Sub BtnSkinSave_Click(sender As Object, e As EventArgs) Handles BtnSkinSave.Click
@@ -211,7 +211,7 @@
         End If
         '设置文本
         LabRamGame.Text = If(RamGame = Math.Floor(RamGame), RamGame & ".0", RamGame) & " GB" &
-                          If(RamGame <> RamGameActual, " (" & Application.Current.FindResource("LangPageSetupLaunchMemAvailabe") & " " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
+                          If(RamGame <> RamGameActual, " (" & GetLang("LangPageSetupLaunchMemAvailabe") & " " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
         LabRamUsed.Text = If(RamUsed = Math.Floor(RamUsed), RamUsed & ".0", RamUsed) & " GB"
         LabRamTotal.Text = " / " & If(RamTotal = Math.Floor(RamTotal), RamTotal & ".0", RamTotal) & " GB"
         LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaIs64Bit() AndAlso Not Is32BitSystem, Visibility.Visible, Visibility.Collapsed)
@@ -404,7 +404,7 @@ PreFin:
         If ComboArgumentJava Is Nothing Then Exit Sub
         '初始化列表
         ComboArgumentJava.Items.Clear()
-        ComboArgumentJava.Items.Add(New MyComboBoxItem With {.Content = Application.Current.FindResource("LangPageSetupLaunchJavaAutoChoice"), .Tag = "自动选择"})
+        ComboArgumentJava.Items.Add(New MyComboBoxItem With {.Content = GetLang("LangPageSetupLaunchJavaAutoChoice"), .Tag = "自动选择"})
         '更新列表
         Dim SelectedItem As MyComboBoxItem = Nothing
         Dim SelectedBySetup As String = Setup.Get("LaunchArgumentJavaSelect")
@@ -419,7 +419,7 @@ PreFin:
             Next
         Catch ex As Exception
             Setup.Set("LaunchArgumentJavaSelect", "")
-            Log(ex, Application.Current.FindResource("LangPageSetupLaunchJavaUpdateListFail"), LogLevel.Feedback)
+            Log(ex, GetLang("LangPageSetupLaunchJavaUpdateListFail"), LogLevel.Feedback)
         End Try
         '更新选择项
         If SelectedItem Is Nothing AndAlso JavaList.Any Then SelectedItem = ComboArgumentJava.Items(0) '选中 “自动选择”
@@ -427,13 +427,13 @@ PreFin:
         '结束处理
         If SelectedItem Is Nothing Then
             ComboArgumentJava.Items.Clear()
-            ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = Application.Current.FindResource("LangPageSetupLaunchJavaNoAvailabeJava"), .IsSelected = True})
+            ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = GetLang("LangPageSetupLaunchJavaNoAvailabeJava"), .IsSelected = True})
         End If
         RefreshRam(True)
     End Sub
     '阻止在特定情况下展开下拉框
     Private Sub ComboArgumentJava_DropDownOpened(sender As Object, e As EventArgs) Handles ComboArgumentJava.DropDownOpened
-        If ComboArgumentJava.SelectedItem Is Nothing OrElse ComboArgumentJava.Items(0).Content = Application.Current.FindResource("LangPageSetupLaunchJavaNoAvailabeJava") OrElse ComboArgumentJava.Items(0).Content = Application.Current.FindResource("LangPageSetupLaunchLaunchJavaLoading") Then
+        If ComboArgumentJava.SelectedItem Is Nothing OrElse ComboArgumentJava.Items(0).Content = GetLang("LangPageSetupLaunchJavaNoAvailabeJava") OrElse ComboArgumentJava.Items(0).Content = GetLang("LangPageSetupLaunchLaunchJavaLoading") Then
             ComboArgumentJava.IsDropDownOpen = False
         End If
     End Sub
@@ -460,7 +460,7 @@ PreFin:
     '手动选择
     Private Sub BtnArgumentJavaSelect_Click(sender As Object, e As EventArgs) Handles BtnArgumentJavaSelect.Click
         If JavaSearchLoader.State = LoadState.Loading Then
-            Hint(Application.Current.FindResource("LangPageSetupLaunchJavaSearchingJava"), HintType.Critical)
+            Hint(GetLang("LangPageSetupLaunchJavaSearchingJava"), HintType.Critical)
             Exit Sub
         End If
         '选择 Java
@@ -481,26 +481,26 @@ PreFin:
             Setup.Set("LaunchArgumentJavaAll", JavaNewList.ToString(Newtonsoft.Json.Formatting.None))
             '重新加载列表
             JavaSearchLoader.Start(IsForceRestart:=True)
-            Hint(Application.Current.FindResource("LangPageSetupLaunchJavaAddedJava"), HintType.Finish)
+            Hint(GetLang("LangPageSetupLaunchJavaAddedJava"), HintType.Finish)
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangPageSetupLaunchJavaIncorrectJava"), LogLevel.Msgbox, "异常的 Java")
+            Log(ex, GetLang("LangPageSetupLaunchJavaIncorrectJava"), LogLevel.Msgbox, "异常的 Java")
             Exit Sub
         End Try
     End Sub
     '自动查找
     Private Sub BtnArgumentJavaSearch_Click(sender As Object, e As EventArgs) Handles BtnArgumentJavaSearch.Click
         If JavaSearchLoader.State = LoadState.Loading Then
-            Hint(Application.Current.FindResource("LangPageSetupLaunchJavaSearchingJava"), HintType.Critical)
+            Hint(GetLang("LangPageSetupLaunchJavaSearchingJava"), HintType.Critical)
             Exit Sub
         End If
         RunInThread(
         Sub()
-            Hint(Application.Current.FindResource("LangPageSetupLaunchJavaSearchingJava"))
+            Hint(GetLang("LangPageSetupLaunchJavaSearchingJava"))
             JavaSearchLoader.WaitForExit(IsForceRestart:=True)
             If Not JavaList.Any() Then
-                Hint(Application.Current.FindResource("LangPageSetupLaunchJavaNoAvailabeJava"), HintType.Critical)
+                Hint(GetLang("LangPageSetupLaunchJavaNoAvailabeJava"), HintType.Critical)
             Else
-                Hint(String.Format(Application.Current.FindResource("LangPageSetupLaunchJavaSearchSuccess"), JavaList.Count), HintType.Finish)
+                Hint(GetLang("LangPageSetupLaunchJavaSearchSuccess", JavaList.Count), HintType.Finish)
             End If
         End Sub)
     End Sub
@@ -526,7 +526,7 @@ PreFin:
     Private Sub ComboArgumentVisibie_SizeChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboArgumentVisibie.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
         If ComboArgumentVisibie.SelectedIndex = 0 Then
-            If MyMsgBox(Application.Current.FindResource("LangPageSetupLaunchLaunchDialogCloseOnGameStartContent"), Application.Current.FindResource("LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle"), Application.Current.FindResource("LangDialogBtnContinue"), Application.Current.FindResource("LangDialogBtnCancel")) = 2 Then
+            If MyMsgBox(GetLang("LangPageSetupLaunchLaunchDialogCloseOnGameStartContent"), GetLang("LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle"), GetLang("LangDialogBtnContinue"), GetLang("LangDialogBtnCancel")) = 2 Then
                 ComboArgumentVisibie.SelectedItem = e.RemovedItems(0)
             End If
         End If
@@ -536,8 +536,8 @@ PreFin:
     Private Sub CheckArgumentRam_Change() Handles CheckArgumentRam.Change
         If AniControlEnabled <> 0 Then Exit Sub
         If Not CheckArgumentRam.Checked Then Return
-        If MyMsgBox(Application.Current.FindResource("LangPageSetupLaunchMemReduceDialogEnableContent"),
-                    Application.Current.FindResource("LangPageSetupLaunchMemReduceDialogEnableTitle"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel")) = 2 Then
+        If MyMsgBox(GetLang("LangPageSetupLaunchMemReduceDialogEnableContent"),
+                    GetLang("LangPageSetupLaunchMemReduceDialogEnableTitle"), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnCancel")) = 2 Then
             CheckArgumentRam.Checked = False
         End If
     End Sub

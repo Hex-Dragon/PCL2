@@ -35,7 +35,7 @@
                 Dim CardName As String = ""
                 Select Case Card.Key
                     Case McVersionCardType.OriginalLike
-                        CardName = Application.Current.FindResource("LangSelectVersionTypeRegular")
+                        CardName = GetLang("LangSelectVersionTypeRegular")
                     Case McVersionCardType.API
                         Dim IsForgeExists As Boolean = False
                         Dim IsNeoForgeExists As Boolean = False
@@ -48,32 +48,32 @@
                             If Version.Version.HasNeoForge Then IsNeoForgeExists = True
                         Next
                         If If(IsLiteExists, 1, 0) + If(IsForgeExists, 1, 0) + If(IsFabricExists, 1, 0) + If(IsNeoForgeExists, 1, 0) > 1 Then
-                            CardName = Application.Current.FindResource("LangSelectVersionTypeModAbility")
+                            CardName = GetLang("LangSelectVersionTypeModAbility")
                         ElseIf IsForgeExists Then
-                            CardName = Application.Current.FindResource("LangSelectVersionTypeForge")
+                            CardName = GetLang("LangSelectVersionTypeForge")
                         ElseIf IsNeoForgeExists Then
                             CardName = "NeoForge 版本"
                         ElseIf IsLiteExists Then
-                            CardName = Application.Current.FindResource("LangSelectVersionTypeLiteloader")
+                            CardName = GetLang("LangSelectVersionTypeLiteloader")
                         Else
-                            CardName = Application.Current.FindResource("LangSelectVersionTypeFabric")
+                            CardName = GetLang("LangSelectVersionTypeFabric")
                         End If
                     Case McVersionCardType.Error
-                        CardName = Application.Current.FindResource("LangSelectVersionTypeError")
+                        CardName = GetLang("LangSelectVersionTypeError")
                     Case McVersionCardType.Hidden
-                        CardName = Application.Current.FindResource("LangSelectVersionTypeHidden")
+                        CardName = GetLang("LangSelectVersionTypeHidden")
                     Case McVersionCardType.Rubbish
-                        CardName = Application.Current.FindResource("LangSelectVersionTypeNotCommonlyUsed")
+                        CardName = GetLang("LangSelectVersionTypeNotCommonlyUsed")
                     Case McVersionCardType.Star
-                        CardName = Application.Current.FindResource("LangSelectVersionTypeFavorites")
+                        CardName = GetLang("LangSelectVersionTypeFavorites")
                     Case McVersionCardType.Fool
-                        CardName = Application.Current.FindResource("LangSelectVersionTypeAprilFool")
+                        CardName = GetLang("LangSelectVersionTypeAprilFool")
                     Case Else
-                        Throw New ArgumentException(Application.Current.FindResource("LangSelectVersionTypeUnknown") & "（" & Card.Key & "）")
+                        Throw New ArgumentException(GetLang("LangSelectVersionTypeUnknown") & "（" & Card.Key & "）")
                 End Select
 #End Region
                 '建立控件
-                Dim CardTitle As String = CardName & If(CardName = Application.Current.FindResource("LangSelectVersionTypeFavorites"), "", " (" & Card.Value.Count & ")")
+                Dim CardTitle As String = CardName & If(CardName = GetLang("LangSelectVersionTypeFavorites"), "", " (" & Card.Value.Count & ")")
                 Dim NewCard As New MyCard With {.Title = CardTitle, .Margin = New Thickness(0, 0, 0, 15), .SwapType = 0}
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Card.Value}
                 NewCard.Children.Add(NewStack)
@@ -97,12 +97,12 @@
                 PanEmpty.Visibility = Visibility.Visible
                 PanBack.Visibility = Visibility.Collapsed
                 If ShowHidden Then
-                    LabEmptyTitle.Text = Application.Current.FindResource("LangSelectVersionNoHidden")
-                    LabEmptyContent.Text = Application.Current.FindResource("LangSelectVersionNoHiddenTip")
+                    LabEmptyTitle.Text = GetLang("LangSelectVersionNoHidden")
+                    LabEmptyContent.Text = GetLang("LangSelectVersionNoHiddenTip")
                     BtnEmptyDownload.Visibility = Visibility.Collapsed
                 Else
-                    LabEmptyTitle.Text = Application.Current.FindResource("LangSelectNoAvailableVersion")
-                    LabEmptyContent.Text = Application.Current.FindResource("LangSelectNoAvailableVersionTip")
+                    LabEmptyTitle.Text = GetLang("LangSelectNoAvailableVersion")
+                    LabEmptyContent.Text = GetLang("LangSelectNoAvailableVersionTip")
                     BtnEmptyDownload.Visibility = If(Setup.Get("UiHiddenPageDownload") AndAlso Not PageSetupUI.HiddenForceShow, Visibility.Collapsed, Visibility.Visible)
                 End If
             Else
@@ -111,7 +111,7 @@
             End If
 
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangSelectVersionListLoadFail"), LogLevel.Feedback)
+            Log(ex, GetLang("LangSelectVersionListLoadFail"), LogLevel.Feedback)
         End Try
     End Sub
     Public Shared Function McVersionListItem(Version As McVersion) As MyListItem
@@ -123,7 +123,7 @@
                 NewItem.Logo = Version.Logo
             End If
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangSelectVersionListLoadIconFail"), LogLevel.Hint)
+            Log(ex, GetLang("LangSelectVersionListLoadIconFail"), LogLevel.Hint)
             NewItem.Logo = "pack://application:,,,/images/Blocks/RedstoneBlock.png"
         End Try
         NewItem.ContentHandler = AddressOf McVersionListContent
@@ -136,14 +136,14 @@
         '图标按钮
         Dim BtnStar As New MyIconButton
         If Version.IsStar Then
-            BtnStar.ToolTip = Application.Current.FindResource("LangSelectBtnCancelFavorite")
+            BtnStar.ToolTip = GetLang("LangSelectBtnCancelFavorite")
             ToolTipService.SetPlacement(BtnStar, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnStar, 30)
             ToolTipService.SetHorizontalOffset(BtnStar, 2)
             BtnStar.LogoScale = 1.1
             BtnStar.Logo = Logo.IconButtonLikeFill
         Else
-            BtnStar.ToolTip = Application.Current.FindResource("LangSelectBtnFavorite")
+            BtnStar.ToolTip = GetLang("LangSelectBtnFavorite")
             ToolTipService.SetPlacement(BtnStar, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnStar, 30)
             ToolTipService.SetHorizontalOffset(BtnStar, 2)
@@ -156,14 +156,14 @@
                                       LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
                                   End Sub
         Dim BtnDel As New MyIconButton With {.LogoScale = 1.1, .Logo = Logo.IconButtonDelete}
-        BtnDel.ToolTip = Application.Current.FindResource("LangSelectDelete")
+        BtnDel.ToolTip = GetLang("LangSelectDelete")
         ToolTipService.SetPlacement(BtnDel, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnDel, 30)
         ToolTipService.SetHorizontalOffset(BtnDel, 2)
         AddHandler BtnDel.Click, Sub() DeleteVersion(sender, Version)
         If Version.State <> McVersionState.Error Then
             Dim BtnCont As New MyIconButton With {.LogoScale = 1.1, .Logo = Logo.IconButtonSetup}
-            BtnCont.ToolTip = Application.Current.FindResource("LangSelectBtnSet")
+            BtnCont.ToolTip = GetLang("LangSelectBtnSet")
             ToolTipService.SetPlacement(BtnCont, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnCont, 30)
             ToolTipService.SetHorizontalOffset(BtnCont, 2)
@@ -178,7 +178,7 @@
             sender.Buttons = {BtnStar, BtnDel, BtnCont}
         Else
             Dim BtnCont As New MyIconButton With {.LogoScale = 1.15, .Logo = Logo.IconButtonOpen}
-            BtnCont.ToolTip = Application.Current.FindResource("LangSelectBtnOpenFolder")
+            BtnCont.ToolTip = GetLang("LangSelectBtnOpenFolder")
             ToolTipService.SetPlacement(BtnCont, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnCont, 30)
             ToolTipService.SetHorizontalOffset(BtnCont, 2)
@@ -219,17 +219,17 @@
         Try
             Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
             Dim IsHintIndie As Boolean = Version.State <> McVersionState.Error AndAlso Version.PathIndie <> PathMcFolder
-            Dim MsgBoxContent As String = If(IsShiftPressed, String.Format(Application.Current.FindResource("LangSelectDeleteVersionContentB"), Version.Name), String.Format(Application.Current.FindResource("LangSelectDeleteVersionContentA"), Version.Name)) & If(IsHintIndie, vbCrLf & Application.Current.FindResource("LangSelectDeleteVersionContentC"), "")
-            Select Case MyMsgBox(MsgBoxContent, Application.Current.FindResource("LangSelectDeleteVersionTitle"), Application.Current.FindResource("LangDialogBtnContinue"), Application.Current.FindResource("LangDialogBtnCancel"),, True)
+            Dim MsgBoxContent As String = If(IsShiftPressed, GetLang("LangSelectDeleteVersionContentB", Version.Name), GetLang("LangSelectDeleteVersionContentA", Version.Name)) & If(IsHintIndie, vbCrLf & GetLang("LangSelectDeleteVersionContentC"), "")
+            Select Case MyMsgBox(MsgBoxContent, GetLang("LangSelectDeleteVersionTitle"), GetLang("LangDialogBtnContinue"), GetLang("LangDialogBtnCancel"),, True)
 
                 Case 1
                     IniClearCache(Version.Path & "PCL\Setup.ini")
                     If IsShiftPressed Then
                         DeleteDirectory(Version.Path)
-                        Hint(String.Format(Application.Current.FindResource("LangSelectVersionDeletedA"), Version.Name), HintType.Finish)
+                        Hint(GetLang("LangSelectVersionDeletedA", Version.Name), HintType.Finish)
                     Else
                         FileIO.FileSystem.DeleteDirectory(Version.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                        Hint(String.Format(Application.Current.FindResource("LangSelectVersionDeletedB"), Version.Name), HintType.Finish)
+                        Hint(GetLang("LangSelectVersionDeletedB", Version.Name), HintType.Finish)
                     End If
                 Case 2
                     Exit Sub
@@ -259,9 +259,9 @@
                 LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
             End If
         Catch ex As OperationCanceledException
-            Log(ex, String.Format(Application.Current.FindResource("LangSelectVersionDeleteCancelled"), Version.Name))
+            Log(ex, GetLang("LangSelectVersionDeleteCancelled", Version.Name))
         Catch ex As Exception
-            Log(ex, String.Format(Application.Current.FindResource("LangSelectVersionDeleteFail")), LogLevel.Msgbox)
+            Log(ex, GetLang("LangSelectVersionDeleteFail"), LogLevel.Msgbox)
         End Try
     End Sub
 

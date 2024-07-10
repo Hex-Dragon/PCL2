@@ -37,7 +37,7 @@
         PanBack.ScrollToHome()
 
 #If Not BETA Then
-        ItemSystemUpdateDownload.Content = Application.Current.FindResource("LangPageSetupSystemSystemLaunchUpdateE")
+        ItemSystemUpdateDownload.Content = GetLang("LangPageSetupSystemSystemLaunchUpdateE")
 #End If
 
         '非重复加载部分
@@ -103,9 +103,9 @@
             Setup.Reset("SystemSystemActivity")
 
             Log("[Setup] 已初始化启动器页设置")
-            Hint(Application.Current.FindResource("LangPageSetupSystemLaunchResetSuccess"), HintType.Finish, False)
+            Hint(GetLang("LangPageSetupSystemLaunchResetSuccess"), HintType.Finish, False)
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangPageSetupSystemLaunchResetFail"), LogLevel.Msgbox)
+            Log(ex, GetLang("LangPageSetupSystemLaunchResetFail"), LogLevel.Msgbox)
         End Try
 
         Reload()
@@ -138,16 +138,16 @@
                 Case Is <= 41
                     Return (v - 21) & " M/s"
                 Case Else
-                    Return Application.Current.FindResource("LangPageSetupSystemDownloadSpeedUnlimit")
+                    Return GetLang("LangPageSetupSystemDownloadSpeedUnlimit")
             End Select
         End Function
-        SliderDebugAnim.GetHintText = Function(v) If(v > 29, Application.Current.FindResource("LangPageSetupSystemDebugAnimSpeedDisable"), (v / 10 + 0.1) & "x")
+        SliderDebugAnim.GetHintText = Function(v) If(v > 29, GetLang("LangPageSetupSystemDebugAnimSpeedDisable"), (v / 10 + 0.1) & "x")
     End Sub
     Private Sub SliderDownloadThread_PreviewChange(sender As Object, e As RouteEventArgs) Handles SliderDownloadThread.PreviewChange
         If SliderDownloadThread.Value < 100 Then Exit Sub
         If Not Setup.Get("HintDownloadThread") Then
             Setup.Set("HintDownloadThread", True)
-            MyMsgBox(Application.Current.FindResource("LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent"), Application.Current.FindResource("LangDialogTitleWarning"), Application.Current.FindResource("LangDialogBtnIC"), IsWarn:=True)
+            MyMsgBox(GetLang("LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent"), GetLang("LangDialogTitleWarning"), GetLang("LangDialogBtnIC"), IsWarn:=True)
         End If
     End Sub
 
@@ -161,14 +161,14 @@
 
     '调试模式
     Private Sub CheckDebugMode_Change() Handles CheckDebugMode.Change
-        If AniControlEnabled = 0 Then Hint(Application.Current.FindResource("LangPageSetupSystemDebugNeedRestart"),, False)
+        If AniControlEnabled = 0 Then Hint(GetLang("LangPageSetupSystemDebugNeedRestart"),, False)
     End Sub
 
     '自动更新
     Private Sub ComboSystemActivity_SizeChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemActivity.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
         If ComboSystemActivity.SelectedIndex = 2 Then
-            If MyMsgBox(Application.Current.FindResource("LangPageSetupSystemLaunchDialogAnnouncementSilentContent"), Application.Current.FindResource("LangDialogTitleWarning"), Application.Current.FindResource("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
+            If MyMsgBox(GetLang("LangPageSetupSystemLaunchDialogAnnouncementSilentContent"), GetLang("LangDialogTitleWarning"), GetLang("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
                 ComboSystemActivity.SelectedItem = e.RemovedItems(0)
             End If
         End If
@@ -176,7 +176,7 @@
     Private Sub ComboSystemUpdate_SizeChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemUpdate.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
         If ComboSystemUpdate.SelectedIndex = 3 Then
-            If MyMsgBox(Application.Current.FindResource("LangPageSetupSystemLaunchDialogAnnouncementDisableContent"), Application.Current.FindResource("LangDialogTitleWarning"), Application.Current.FindResource("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
+            If MyMsgBox(GetLang("LangPageSetupSystemLaunchDialogAnnouncementDisableContent"), GetLang("LangDialogTitleWarning"), GetLang("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
                 ComboSystemUpdate.SelectedItem = e.RemovedItems(0)
             End If
         End If
@@ -201,7 +201,7 @@
 #End If
             Return NewVersionCode <= VersionCode
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangPageSetupSystemSystemLaunchUpdateFail"), LogLevel.Feedback)
+            Log(ex, GetLang("LangPageSetupSystemSystemLaunchUpdateFail"), LogLevel.Feedback)
             Return Nothing
         End Try
     End Function

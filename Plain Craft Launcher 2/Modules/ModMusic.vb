@@ -282,13 +282,13 @@
         Catch ex As Exception
             Log("[Music] 播放音乐失败的文件完整路径：" & MusicCurrent)
             If TypeOf ex Is NAudio.MmException AndAlso (ex.Message.Contains("NoDriver") OrElse ex.Message.Contains("BadDeviceId")) Then
-                Hint(Application.Current.FindResource("LangModMusicDeviceChanged"), HintType.Critical)
+                Hint(GetLang("LangModMusicDeviceChanged"), HintType.Critical)
                 Thread.Sleep(1000000000)
             End If
             If ex.Message.Contains("Got a frame at sample rate") OrElse ex.Message.Contains("does not support changes to") Then
-                Hint(String.Format(Application.Current.FindResource("LangModMusicMusicChanged"), GetFileNameFromPath(MusicCurrent)), HintType.Critical)
+                Hint(GetLang("LangModMusicMusicChanged", GetFileNameFromPath(MusicCurrent)), HintType.Critical)
             ElseIf Not (MusicCurrent.EndsWithF(".wav", True) OrElse MusicCurrent.EndsWithF(".mp3", True) OrElse MusicCurrent.EndsWithF(".flac", True)) Then
-                Hint(String.Format(Application.Current.FindResource("LangModMusicMusicFormatNotSupport"), GetFileNameFromPath(MusicCurrent)), HintType.Critical)
+                Hint(GetLang("LangModMusicMusicFormatNotSupport", GetFileNameFromPath(MusicCurrent)), HintType.Critical)
             Else
                 Log(ex, "播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）", LogLevel.Hint)
             End If

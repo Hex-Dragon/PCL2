@@ -489,13 +489,13 @@ NoUserJava:
         If FrmSetupLaunch IsNot Nothing Then
             RunInUiWait(Sub()
                             FrmSetupLaunch.ComboArgumentJava.Items.Clear()
-                            FrmSetupLaunch.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = Application.Current.FindResource("LangPageSetupLaunchLaunchJavaLoading"), .IsSelected = True})
+                            FrmSetupLaunch.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = GetLang("LangPageSetupLaunchLaunchJavaLoading"), .IsSelected = True})
                         End Sub)
         End If
         If FrmVersionSetup IsNot Nothing Then
             RunInUiWait(Sub()
                             FrmVersionSetup.ComboArgumentJava.Items.Clear()
-                            FrmVersionSetup.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = Application.Current.FindResource("LangPageSetupLaunchLaunchJavaLoading"), .IsSelected = True})
+                            FrmVersionSetup.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = GetLang("LangPageSetupLaunchLaunchJavaLoading"), .IsSelected = True})
                         End Sub)
         End If
 

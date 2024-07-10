@@ -1905,69 +1905,69 @@ NextElement:
     ''' 将时间间隔转换为类似“5 分 10 秒前”的易于阅读的形式。
     ''' </summary>
     Public Function GetTimeSpanString(Span As TimeSpan, IsShortForm As Boolean) As String
-        Dim EndFix = If(Span.TotalMilliseconds > 0, Application.Current.FindResource("LangModBaseDateLater"), Application.Current.FindResource("LangModBaseDateAgo"))
+        Dim EndFix = If(Span.TotalMilliseconds > 0, GetLang("LangModBaseDateLater"), GetLang("LangModBaseDateAgo"))
         If Span.TotalMilliseconds < 0 Then Span = -Span
         Dim TotalMonthes = Math.Floor(Span.Days / 30)
         If IsShortForm Then
             If TotalMonthes >= 12 Then
                 '1+ 年，“3 年”
-                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " " & Application.Current.FindResource("LangModBaseDateYear")
+                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " " & GetLang("LangModBaseDateYear")
             ElseIf TotalMonthes >= 2 Then
                 '2~11 月，“5 个月”
-                GetTimeSpanString = TotalMonthes & " " & Application.Current.FindResource("LangModBaseDateMonthA")
+                GetTimeSpanString = TotalMonthes & " " & GetLang("LangModBaseDateMonthA")
             ElseIf Span.TotalDays >= 2 Then
                 '2 天 ~ 2 月，“23 天”
-                GetTimeSpanString = Span.Days & " " & Application.Current.FindResource("LangModBaseDateDay")
+                GetTimeSpanString = Span.Days & " " & GetLang("LangModBaseDateDay")
             ElseIf Span.TotalHours >= 1 Then
                 '1 小时 ~ 2 天，“15 小时”
-                GetTimeSpanString = Span.Hours & " " & Application.Current.FindResource("LangModBaseDateHour")
+                GetTimeSpanString = Span.Hours & " " & GetLang("LangModBaseDateHour")
             ElseIf Span.TotalMinutes >= 1 Then
                 '1 分钟 ~ 1 小时，“49 分钟”
-                GetTimeSpanString = Span.Minutes & " " & Application.Current.FindResource("LangModBaseDateMinute")
+                GetTimeSpanString = Span.Minutes & " " & GetLang("LangModBaseDateMinute")
             ElseIf Span.TotalSeconds >= 1 Then
                 '1 秒 ~ 1 分钟，“23 秒”
-                GetTimeSpanString = Span.Seconds & " " & Application.Current.FindResource("LangModBaseDateSecond")
+                GetTimeSpanString = Span.Seconds & " " & GetLang("LangModBaseDateSecond")
             Else
                 '不到 1 秒
-                GetTimeSpanString = "1 " & Application.Current.FindResource("LangModBaseDateSecond")
+                GetTimeSpanString = "1 " & GetLang("LangModBaseDateSecond")
             End If
         Else
             If TotalMonthes >= 61 Then
                 '5+ 年，“5 年”
-                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " " & Application.Current.FindResource("LangModBaseDateYear")
+                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " " & GetLang("LangModBaseDateYear")
             ElseIf TotalMonthes >= 12 Then
                 '12~60 月，“1 年 2 个月”
-                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " " & Application.Current.FindResource("LangModBaseDateYear") & If((TotalMonthes Mod 12) > 0, " " & (TotalMonthes Mod 12) & " " & Application.Current.FindResource("LangModBaseDateMonthA"), "")
+                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " " & GetLang("LangModBaseDateYear") & If((TotalMonthes Mod 12) > 0, " " & (TotalMonthes Mod 12) & " " & GetLang("LangModBaseDateMonthA"), "")
             ElseIf TotalMonthes >= 4 Then
                 '4~11 月，“5 月”
-                GetTimeSpanString = TotalMonthes & " " & Application.Current.FindResource("LangModBaseDateMonthB")
+                GetTimeSpanString = TotalMonthes & " " & GetLang("LangModBaseDateMonthB")
             ElseIf TotalMonthes >= 1 Then
                 '1~4 月，“2 月 13 天”
-                GetTimeSpanString = TotalMonthes & " " & Application.Current.FindResource("LangModBaseDateMonthB") & If((Span.Days Mod 30) > 0, " " & (Span.Days Mod 30) & Application.Current.FindResource("LangModBaseDateDay"), "")
+                GetTimeSpanString = TotalMonthes & " " & GetLang("LangModBaseDateMonthB") & If((Span.Days Mod 30) > 0, " " & (Span.Days Mod 30) & GetLang("LangModBaseDateDay"), "")
             ElseIf Span.TotalDays >= 4 Then
                 '4~30 天，“23 天”
-                GetTimeSpanString = Span.Days & " " & Application.Current.FindResource("LangModBaseDateDay")
+                GetTimeSpanString = Span.Days & " " & GetLang("LangModBaseDateDay")
             ElseIf Span.TotalDays >= 1 Then
                 '1~3 天，“2 天 20 小时”
-                GetTimeSpanString = Span.Days & " " & Application.Current.FindResource("LangModBaseDateDay") & If(Span.Hours > 0, " " & Span.Hours & " " & Application.Current.FindResource("LangModBaseDateHour"), "")
+                GetTimeSpanString = Span.Days & " " & GetLang("LangModBaseDateDay") & If(Span.Hours > 0, " " & Span.Hours & " " & GetLang("LangModBaseDateHour"), "")
             ElseIf Span.TotalHours >= 10 Then
                 '10 小时 ~ 1 天，“15 小时”
-                GetTimeSpanString = Span.Hours & " " & Application.Current.FindResource("LangModBaseDateHour")
+                GetTimeSpanString = Span.Hours & " " & GetLang("LangModBaseDateHour")
             ElseIf Span.TotalHours >= 1 Then
                 '1~10 小时，“1 小时 20 分钟”
-                GetTimeSpanString = Span.Hours & " " & Application.Current.FindResource("LangModBaseDateHour") & If(Span.Minutes > 0, " " & Span.Minutes & " " & Application.Current.FindResource("LangModBaseDateMinute"), "")
+                GetTimeSpanString = Span.Hours & " " & GetLang("LangModBaseDateHour") & If(Span.Minutes > 0, " " & Span.Minutes & " " & GetLang("LangModBaseDateMinute"), "")
             ElseIf Span.TotalMinutes >= 10 Then
                 '10 分钟 ~ 1 小时，“49 分钟”
-                GetTimeSpanString = Span.Minutes & " " & Application.Current.FindResource("LangModBaseDateMinute")
+                GetTimeSpanString = Span.Minutes & " " & GetLang("LangModBaseDateMinute")
             ElseIf Span.TotalMinutes >= 1 Then
                 '1~10 分钟，“9 分 23 秒”
-                GetTimeSpanString = Span.Minutes & " " & Application.Current.FindResource("LangModBaseDateMinute") & If(Span.Seconds > 0, " " & Span.Seconds & " " & Application.Current.FindResource("LangModBaseDateSecond"), "")
+                GetTimeSpanString = Span.Minutes & " " & GetLang("LangModBaseDateMinute") & If(Span.Seconds > 0, " " & Span.Seconds & " " & GetLang("LangModBaseDateSecond"), "")
             ElseIf Span.TotalSeconds >= 1 Then
                 '1 秒 ~ 1 分钟，“23 秒”
-                GetTimeSpanString = Span.Seconds & " " & Application.Current.FindResource("LangModBaseDateSecond")
+                GetTimeSpanString = Span.Seconds & " " & GetLang("LangModBaseDateSecond")
             Else
                 '不到 1 秒
-                GetTimeSpanString = "1 " & Application.Current.FindResource("LangModBaseDateSecond")
+                GetTimeSpanString = "1 " & GetLang("LangModBaseDateSecond")
             End If
         End If
         GetTimeSpanString += EndFix
@@ -2195,7 +2195,7 @@ NextElement:
         Catch ex As Exception
             Log(ex, "无法打开网页（" & Url & "）")
             ClipboardSet(Url, False)
-            MyMsgBox(Application.Current.FindResource("LangModBaseDialogWebOpenFailContent"), Application.Current.FindResource("LangModBaseDialogWebOpenFailTitle"))
+            MyMsgBox(GetLang("LangModBaseDialogWebOpenFailContent"), GetLang("LangModBaseDialogWebOpenFailTitle"))
         End Try
     End Sub
     ''' <summary>
@@ -2232,7 +2232,7 @@ Retry:
                     Log(ex, "可能由于剪贴板被其他程序占用，文本复制失败", LogLevel.Hint)
                 End If
             End Try
-            If ShowSuccessHint Then Hint(Application.Current.FindResource("LangModBaseHintCopySuccess"), HintType.Finish)
+            If ShowSuccessHint Then Hint(GetLang("LangModBaseHintCopySuccess"), HintType.Finish)
         End Sub)
     End Sub
 
@@ -2243,6 +2243,15 @@ Retry:
         Log("[System] 获取资源：" & ResourceName)
         Dim Raw As Byte() = My.Resources.ResourceManager.GetObject(ResourceName)
         Return Raw
+    End Function
+
+    Public Function GetLang(Key As String, ParamArray Param As String()) As String
+        Try
+            Return String.Format(Application.Current.FindResource(Key), Param)
+        Catch ex As Exception
+            Log(ex, "[Lang] 获取语言资源失败：" & Key, LogLevel.Hint)
+            Return Key
+        End Try
     End Function
 
 #End Region
@@ -2465,7 +2474,7 @@ Retry:
                 File.Create(Path & "PCL\Log1.txt").Dispose()
             Catch ex As IOException
                 IsInitSuccess = False
-                Hint(Application.Current.FindResource("LangModBaseHintMultiplePCL"), HintType.Critical)
+                Hint(GetLang("LangModBaseHintMultiplePCL"), HintType.Critical)
                 Log(ex, "日志初始化失败（疑似文件占用问题）")
             Catch ex As Exception
                 IsInitSuccess = False
@@ -2514,7 +2523,7 @@ Retry:
         On Error Resume Next
         '放在最后会导致无法显示极端错误下的弹窗（如无法写入日志文件）
         '处理错误会导致再次调用 Log() 导致无限循环
-        If Title = "出现错误" Then Title = Application.Current.FindResource("LangModBaseDialogFeedbackTitle")
+        If Title = "出现错误" Then Title = GetLang("LangModBaseDialogFeedbackTitle")
 
         '输出日志
         Dim AppendText As String = "[" & GetTimeNow() & "] " & Text & vbCrLf '减轻同步锁占用
@@ -2551,16 +2560,16 @@ Retry:
                 MyMsgBox(Text, Title, IsWarn:=True)
             Case LogLevel.Feedback
                 If CanFeedback(False) Then
-                    If MyMsgBox(Text & vbCrLf & vbCrLf & Application.Current.FindResource("LangModBaseDialogFeedbackContent"), Title, Application.Current.FindResource("LangModBaseDialogFeedbackBtnConfirm"), Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 1 Then Feedback(False, True)
+                    If MyMsgBox(Text & vbCrLf & vbCrLf & GetLang("LangModBaseDialogFeedbackContent"), Title, GetLang("LangModBaseDialogFeedbackBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then Feedback(False, True)
                 Else
-                    MyMsgBox(Text & vbCrLf & vbCrLf & Application.Current.FindResource("LangModBaseDialogResolveByUpdate"), Title, IsWarn:=True)
+                    MyMsgBox(Text & vbCrLf & vbCrLf & GetLang("LangModBaseDialogResolveByUpdate"), Title, IsWarn:=True)
                 End If
             Case LogLevel.Assert
                 Dim Time As Long = GetTimeTick()
                 If CanFeedback(False) Then
-                    If MsgBox(Text & vbCrLf & vbCrLf & Application.Current.FindResource("LangModBaseDialogFeedbackContent"), MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback(False, True)
+                    If MsgBox(Text & vbCrLf & vbCrLf & GetLang("LangModBaseDialogFeedbackContent"), MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback(False, True)
                 Else
-                    MsgBox(Text & vbCrLf & vbCrLf & Application.Current.FindResource("LangModBaseDialogResolveByUpdate"), MsgBoxStyle.Critical, Title)
+                    MsgBox(Text & vbCrLf & vbCrLf & GetLang("LangModBaseDialogResolveByUpdate"), MsgBoxStyle.Critical, Title)
                 End If
                 If GetTimeTick() - Time < 1500 Then
                     '弹窗无法保留
@@ -2620,16 +2629,16 @@ Retry:
                 MyMsgBox(ExFull, Title, IsWarn:=True)
             Case LogLevel.Feedback
                 If CanFeedback(False) Then
-                    If MyMsgBox(ExFull & vbCrLf & vbCrLf & Application.Current.FindResource("LangModBaseDialogFeedbackContent"), Title, Application.Current.FindResource("LangModBaseDialogFeedbackBtnConfirm"), Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 1 Then Feedback(False, True)
+                    If MyMsgBox(ExFull & vbCrLf & vbCrLf & GetLang("LangModBaseDialogFeedbackContent"), Title, GetLang("LangModBaseDialogFeedbackBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then Feedback(False, True)
                 Else
-                    MyMsgBox(ExFull & vbCrLf & vbCrLf & Application.Current.FindResource("LangModBaseDialogResolveByUpdate"), Title, IsWarn:=True)
+                    MyMsgBox(ExFull & vbCrLf & vbCrLf & GetLang("LangModBaseDialogResolveByUpdate"), Title, IsWarn:=True)
                 End If
             Case LogLevel.Assert
                 Dim Time As Long = GetTimeTick()
                 If CanFeedback(False) Then
-                    If MsgBox(ExFull & vbCrLf & vbCrLf & Application.Current.FindResource("LangModBaseDialogFeedbackContent"), MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback(False, True)
+                    If MsgBox(ExFull & vbCrLf & vbCrLf & GetLang("LangModBaseDialogFeedbackContent"), MsgBoxStyle.Critical + MsgBoxStyle.YesNo, Title) = MsgBoxResult.Yes Then Feedback(False, True)
                 Else
-                    MsgBox(ExFull & vbCrLf & vbCrLf & Application.Current.FindResource("LangModBaseDialogResolveByUpdate"), MsgBoxStyle.Critical, Title)
+                    MsgBox(ExFull & vbCrLf & vbCrLf & GetLang("LangModBaseDialogResolveByUpdate"), MsgBoxStyle.Critical, Title)
                 End If
                 If GetTimeTick() - Time < 1500 Then
                     '弹窗无法保留
@@ -2646,14 +2655,14 @@ Retry:
     Public Sub Feedback(Optional ShowMsgbox As Boolean = True, Optional ForceOpenLog As Boolean = False)
         On Error Resume Next
         FeedbackInfo()
-        If ForceOpenLog OrElse (ShowMsgbox AndAlso MyMsgBox(Application.Current.FindResource("LangModBaseDialogUploadLogContent"), Application.Current.FindResource("LangModBaseDialogUploadLogTitle"), Application.Current.FindResource("LangModBaseDialogUploadLogBtnOpenFolder"), Application.Current.FindResource("LangModBaseDialogUploadLogBtnNoNeed")) = 1) Then
+        If ForceOpenLog OrElse (ShowMsgbox AndAlso MyMsgBox(GetLang("LangModBaseDialogUploadLogContent"), GetLang("LangModBaseDialogUploadLogTitle"), GetLang("LangModBaseDialogUploadLogBtnOpenFolder"), GetLang("LangModBaseDialogUploadLogBtnNoNeed")) = 1) Then
             OpenExplorer("""" & Path & "PCL\""")
         End If
         OpenWebsite("https://github.com/Hex-Dragon/PCL2/issues/")
     End Sub
     Public Function CanFeedback(ShowHint As Boolean) As Boolean
         If False.Equals(PageSetupSystem.IsLauncherNewest) Then
-            If ShowHint Then MyMsgBox(Application.Current.FindResource("LangModBaseDialogUpdateBeforeFeedbackContent"), Application.Current.FindResource("LangModBaseDialogUpdateBeforeFeedbackTitle"))
+            If ShowHint Then MyMsgBox(GetLang("LangModBaseDialogUpdateBeforeFeedbackContent"), GetLang("LangModBaseDialogUpdateBeforeFeedbackTitle"))
             Return False
         Else
             Return True

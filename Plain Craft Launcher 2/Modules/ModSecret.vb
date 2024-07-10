@@ -25,13 +25,13 @@ Friend Module ModSecret
         Try
             Directory.CreateDirectory(Path & "PCL")
         Catch ex As Exception
-            MsgBox(String.Format(Application.Current.FindResource("LangModSecretPermissionA"), Path, If(Path.StartsWithF("C:", True), Application.Current.FindResource("LangModSecretPermissionAddition"), "")),
-                MsgBoxStyle.Critical, Application.Current.FindResource("LangModSecretPermissionError"))
+            MsgBox(GetLang("LangModSecretPermissionA", Path, If(Path.StartsWithF("C:", True), GetLang("LangModSecretPermissionAddition"), "")),
+                MsgBoxStyle.Critical, GetLang("LangModSecretPermissionError"))
             Environment.[Exit](Result.Cancel)
         End Try
         If Not CheckPermission(Path & "PCL") Then
-            MsgBox(String.Format(Application.Current.FindResource("LangModSecretPermissionB"), If(Path.StartsWithF("C:", True), Application.Current.FindResource("LangModSecretPermissionAddition"), "")),
-                MsgBoxStyle.Critical, Application.Current.FindResource("LangModSecretPermissionError"))
+            MsgBox(GetLang("LangModSecretPermissionB", If(Path.StartsWithF("C:", True), GetLang("LangModSecretPermissionAddition"), "")),
+                MsgBoxStyle.Critical, GetLang("LangModSecretPermissionError"))
             Environment.[Exit](Result.Cancel)
         End If
         '开源版本提示

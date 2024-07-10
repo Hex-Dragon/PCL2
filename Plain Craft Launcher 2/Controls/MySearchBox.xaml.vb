@@ -3,7 +3,6 @@
 
     Public Event TextChanged(sender As Object, e As EventArgs)
     Private Sub MySearchBox_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        TextBox.HintText = HintText
         TextBox.Focus()
     End Sub
 
@@ -14,7 +13,6 @@
         End Get
         Set(value As String)
             SetValue(HintTextProperty, value)
-            If TextBox IsNot Nothing Then TextBox.HintText = value
         End Set
     End Property
     Public Shared ReadOnly HintTextProperty As DependencyProperty = DependencyProperty.Register("HintText", GetType(String), GetType(MySearchBox), New PropertyMetadata(""))

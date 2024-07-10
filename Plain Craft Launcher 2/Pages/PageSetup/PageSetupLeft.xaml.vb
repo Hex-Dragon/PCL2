@@ -144,25 +144,25 @@
     Public Sub Reset(sender As Object, e As EventArgs)
         Select Case Val(sender.Tag)
             Case FormMain.PageSubType.SetupLaunch
-                If MyMsgBox(Application.Current.FindResource("LangPageSetupLeftDialogResetGameConfirmContent"), Application.Current.FindResource("LangPageSetupLeftDialogBtnResetConfirm"),, Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
+                If MyMsgBox(GetLang("LangPageSetupLeftDialogResetGameConfirmContent"), GetLang("LangPageSetupLeftDialogBtnResetConfirm"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
                     If IsNothing(FrmSetupLaunch) Then FrmSetupLaunch = New PageSetupLaunch
                     FrmSetupLaunch.Reset()
                     ItemLaunch.Checked = True
                 End If
             Case FormMain.PageSubType.SetupUI
-                If MyMsgBox(Application.Current.FindResource("LangPageSetupLeftDialogResetLaunchConfirmContent"), Application.Current.FindResource("LangPageSetupLeftDialogBtnResetConfirm"),, Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
+                If MyMsgBox(GetLang("LangPageSetupLeftDialogResetLaunchConfirmContent"), GetLang("LangPageSetupLeftDialogBtnResetConfirm"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
                     If IsNothing(FrmSetupUI) Then FrmSetupUI = New PageSetupUI
                     FrmSetupUI.Reset()
                     ItemUI.Checked = True
                 End If
             Case FormMain.PageSubType.SetupSystem
-                If MyMsgBox(Application.Current.FindResource("LangPageSetupLeftDialogResetPersonalizeConfirmContent"), Application.Current.FindResource("LangPageSetupLeftDialogBtnResetConfirm"),, Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
+                If MyMsgBox(GetLang("LangPageSetupLeftDialogResetPersonalizeConfirmContent"), GetLang("LangPageSetupLeftDialogBtnResetConfirm"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
                     If IsNothing(FrmSetupSystem) Then FrmSetupSystem = New PageSetupSystem
                     FrmSetupSystem.Reset()
                     ItemSystem.Checked = True
                 End If
             Case FormMain.PageSubType.SetupLink
-                If MyMsgBox(Application.Current.FindResource("LangPageSetupLeftDialogResetLinkConfirmContent"), Application.Current.FindResource("LangPageSetupLeftDialogBtnResetConfirm"),, Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
+                If MyMsgBox(GetLang("LangPageSetupLeftDialogResetLinkConfirmContent"), GetLang("LangPageSetupLeftDialogBtnResetConfirm"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
                     If IsNothing(FrmSetupLink) Then FrmSetupLink = New PageSetupLink
                     FrmSetupLink.Reset()
                     ItemLink.Checked = True

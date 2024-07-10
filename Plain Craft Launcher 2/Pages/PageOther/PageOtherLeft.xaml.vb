@@ -116,7 +116,7 @@
                 RefreshHelp()
                 ItemHelp.Checked = True
         End Select
-        Hint(Application.Current.FindResource("LangPageOtherRefreshing"), Log:=False)
+        Hint(GetLang("LangPageOtherRefreshing"), Log:=False)
     End Sub
     Public Shared Sub RefreshHelp()
         Setup.Set("SystemHelpVersion", 0) '强制重新解压文件
@@ -127,8 +127,8 @@
     '打开网页
     Public Shared Sub TryFeedback() Handles ItemFeedback.Click
         If Not CanFeedback(True) Then Exit Sub
-        Select Case MyMsgBox(Application.Current.FindResource("LangPageOtherDialogFeedbackContent"),
-                    Application.Current.FindResource("LangPageOtherDialogFeedbackTitle"), Application.Current.FindResource("LangPageOtherDialogFeedbackBtn1"), Application.Current.FindResource("LangPageOtherDialogFeedbackBtn2"), Application.Current.FindResource("LangDialogBtnCancel"))
+        Select Case MyMsgBox(GetLang("LangPageOtherDialogFeedbackContent"),
+                    GetLang("LangPageOtherDialogFeedbackTitle"), GetLang("LangPageOtherDialogFeedbackBtn1"), GetLang("LangPageOtherDialogFeedbackBtn2"), GetLang("LangDialogBtnCancel"))
             Case 1
                 Feedback(True, False)
             Case 2
@@ -136,8 +136,8 @@
         End Select
     End Sub
     Public Shared Sub TryVote() Handles ItemVote.Click
-        If MyMsgBox(Application.Current.FindResource("LangPageOtherDialogVoteContent"),
-                    Application.Current.FindResource("LangPageOtherDialogVoteTitle"), Application.Current.FindResource("LangPageOtherDialogVoteBtn1"), Application.Current.FindResource("LangDialogBtnCancel")) = 2 Then Exit Sub
+        If MyMsgBox(GetLang("LangPageOtherDialogVoteContent"),
+                    GetLang("LangPageOtherDialogVoteTitle"), GetLang("LangPageOtherDialogVoteBtn1"), GetLang("LangDialogBtnCancel")) = 2 Then Exit Sub
         OpenWebsite("https://github.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8?discussions_q=category%3A%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8+sort%3Adate_created")
     End Sub
 

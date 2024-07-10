@@ -11,7 +11,7 @@
         End Get
         Set(value As String)
             _Address = value
-            ToolTip = If(_Address = "", Application.Current.FindResource("LangMySkinLoading"), Application.Current.FindResource("LangMySkinClickToChange"))
+            ToolTip = If(_Address = "", GetLang("LangMySkinLoading"), GetLang("LangMySkinClickToChange"))
         End Set
     End Property
     Public Loader As LoaderTask(Of EqualableList(Of String), String)
@@ -47,12 +47,12 @@
     Public Shared Sub Save(Loader As LoaderTask(Of EqualableList(Of String), String))
         Dim Address = Loader.Output
         If Not Loader.State = LoadState.Finished Then
-            Hint(Application.Current.FindResource("LangMySkinHintLoading"), HintType.Critical)
+            Hint(GetLang("LangMySkinHintLoading"), HintType.Critical)
             If Not Loader.State = LoadState.Loading Then Loader.Start()
             Exit Sub
         End If
         Try
-            Dim FileAddress As String = SelectAs(Application.Current.FindResource("LangMySkinDialogChoseSavePath"), GetFileNameFromPath(Address), "皮肤图片文件(*.png)|*.png")
+            Dim FileAddress As String = SelectAs(GetLang("LangMySkinDialogChoseSavePath"), GetFileNameFromPath(Address), "皮肤图片文件(*.png)|*.png")
             If FileAddress.Contains("\") Then
                 File.Delete(FileAddress)
                 If Address.StartsWith(PathImage) Then
@@ -61,10 +61,10 @@
                 Else
                     CopyFile(Address, FileAddress)
                 End If
-                Hint(Application.Current.FindResource("LangMySkinHintSaveSuccess"), HintType.Finish)
+                Hint(GetLang("LangMySkinHintSaveSuccess"), HintType.Finish)
             End If
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangMySkinHintSaveFail"), LogLevel.Hint)
+            Log(ex, GetLang("LangMySkinHintSaveFail"), LogLevel.Hint)
         End Try
     End Sub
     Private Sub BtnSkinSave_Checked(sender As MyMenuItem, e As RoutedEventArgs) Handles BtnSkinSave.Checked
@@ -85,7 +85,7 @@
             Try
                 Image = New MyBitmap(Address)
             Catch ex As Exception '#2272
-                Log(ex, Application.Current.FindResource("LangMySkinHintSkinFileCorruption") & Address, LogLevel.Hint)
+                Log(ex, GetLang("LangMySkinHintSkinFileCorruption") & Address, LogLevel.Hint)
                 File.Delete(Address)
                 Exit Sub
             End Try
@@ -143,12 +143,12 @@
         Next
         If FrmLaunchLeft IsNot Nothing AndAlso HasLoaderRunning Then
             '由于 Abort 不是实时的，暂时不会释放文件，会导致删除报错，故只能取消执行
-            Hint(Application.Current.FindResource("LangMySkinHintExistSkinFileGetTask"), HintType.Info)
+            Hint(GetLang("LangMySkinHintExistSkinFileGetTask"), HintType.Info)
         Else
             RunInThread(
             Sub()
                 Try
-                    Hint(Application.Current.FindResource("LangMySkinHintRefreshing"))
+                    Hint(GetLang("LangMySkinHintRefreshing"))
                     '清空缓存
                     Log("[Skin] 正在清空皮肤缓存")
                     If Directory.Exists(PathTemp & "Cache\Skin") Then DeleteDirectory(PathTemp & "Cache\Skin")
@@ -161,9 +161,9 @@
                     For Each SkinLoader In If(sender IsNot Nothing, {sender}, {PageLaunchLeft.SkinLegacy, PageLaunchLeft.SkinMs})
                         SkinLoader.WaitForExit(IsForceRestart:=True)
                     Next
-                    Hint(Application.Current.FindResource("LangMySkinHintRefreshed"), HintType.Finish)
+                    Hint(GetLang("LangMySkinHintRefreshed"), HintType.Finish)
                 Catch ex As Exception
-                    Log(ex, Application.Current.FindResource("LangMySkinHintRefreshFail"), LogLevel.Msgbox)
+                    Log(ex, GetLang("LangMySkinHintRefreshFail"), LogLevel.Msgbox)
                 End Try
             End Sub)
         End If
@@ -184,7 +184,7 @@
                     SkinLoader.WaitForExit(IsForceRestart:=True)
                 Next
                 '完成提示
-                Hint(Application.Current.FindResource("LangMySkinHintChangeSuccess"), HintType.Finish)
+                Hint(GetLang("LangMySkinHintChangeSuccess"), HintType.Finish)
             Catch ex As Exception
                 Log(ex, "更改正版皮肤后刷新皮肤失败", LogLevel.Feedback)
             End Try
@@ -208,14 +208,14 @@
     Public Sub BtnSkinCape_Click() Handles BtnSkinCape.Click
         '检查条件，获取新披风
         If IsChanging Then
-            Hint(Application.Current.FindResource("LangMySkinHintChanging"))
+            Hint(GetLang("LangMySkinHintChanging"))
             Exit Sub
         End If
         If McLoginMsLoader.State = LoadState.Failed Then
-            Hint(Application.Current.FindResource("LangMySkinHintChangFailByLoginFail"), HintType.Critical)
+            Hint(GetLang("LangMySkinHintChangFailByLoginFail"), HintType.Critical)
             Exit Sub
         End If
-        Hint(Application.Current.FindResource("LangMySkinHintGettingCape"))
+        Hint(GetLang("LangMySkinHintGettingCape"))
         IsChanging = True
         '开始实际获取
         RunInNewThread(
@@ -225,7 +225,7 @@ Retry:
                 '获取登录信息
                 If McLoginMsLoader.State <> LoadState.Finished Then McLoginMsLoader.WaitForExit(PageLoginMsSkin.GetLoginData())
                 If McLoginMsLoader.State <> LoadState.Finished Then
-                    Hint(Application.Current.FindResource("LangMySkinHintChangFailByLoginFail"), HintType.Critical)
+                    Hint(GetLang("LangMySkinHintChangFailByLoginFail"), HintType.Critical)
                     Exit Sub
                 End If
                 Dim AccessToken As String = McLoginMsLoader.Output.AccessToken
@@ -237,19 +237,19 @@ Retry:
                 Sub()
                     Try
                         Dim CapeNames As New Dictionary(Of String, String) From {
-                            {"Migrator", Application.Current.FindResource("LangMySkinCapeNameMigrator")}, {"MapMaker", Application.Current.FindResource("LangMySkinCapeNameMapMaker")}, {"Moderator", Application.Current.FindResource("LangMySkinCapeNameModerator")},
-                            {"Translator-Chinese", Application.Current.FindResource("LangMySkinCapeNameTranslator-Chinese")}, {"Translator", Application.Current.FindResource("LangMySkinCapeNameTranslator")}, {"Cobalt", Application.Current.FindResource("LangMySkinCapeNameCobalt")},
-                            {"Vanilla", Application.Current.FindResource("LangMySkinCapeNameVanilla")}, {"Minecon2011", Application.Current.FindResource("LangMySkinCapeNameMinecon2011")}, {"Minecon2012", Application.Current.FindResource("LangMySkinCapeNameMinecon2012")},
-                            {"Minecon2013", Application.Current.FindResource("LangMySkinCapeNameMinecon2013")}, {"Minecon2015", Application.Current.FindResource("LangMySkinCapeNameMinecon2015")}, {"Minecon2016", Application.Current.FindResource("LangMySkinCapeNameMinecon2016")},
-                            {"Cherry Blossom", Application.Current.FindResource("LangMySkinCapeNameCherryBlossom")}, {"15th Anniversary", Application.Current.FindResource("LangMySkinCapeName15th-Anniversary")}, {"Purple Heart", Application.Current.FindResource("LangMySkinCapeNamePurpleHeart")}, {"Follower's", Application.Current.FindResource("LangMySkinCapeNameFollower's")}
+                            {"Migrator", GetLang("LangMySkinCapeNameMigrator")}, {"MapMaker", GetLang("LangMySkinCapeNameMapMaker")}, {"Moderator", GetLang("LangMySkinCapeNameModerator")},
+                            {"Translator-Chinese", GetLang("LangMySkinCapeNameTranslator-Chinese")}, {"Translator", GetLang("LangMySkinCapeNameTranslator")}, {"Cobalt", GetLang("LangMySkinCapeNameCobalt")},
+                            {"Vanilla", GetLang("LangMySkinCapeNameVanilla")}, {"Minecon2011", GetLang("LangMySkinCapeNameMinecon2011")}, {"Minecon2012", GetLang("LangMySkinCapeNameMinecon2012")},
+                            {"Minecon2013", GetLang("LangMySkinCapeNameMinecon2013")}, {"Minecon2015", GetLang("LangMySkinCapeNameMinecon2015")}, {"Minecon2016", GetLang("LangMySkinCapeNameMinecon2016")},
+                            {"Cherry Blossom", GetLang("LangMySkinCapeNameCherryBlossom")}, {"15th Anniversary", GetLang("LangMySkinCapeName15th-Anniversary")}, {"Purple Heart", GetLang("LangMySkinCapeNamePurpleHeart")}, {"Follower's", GetLang("LangMySkinCapeNameFollower's")}
                         }
-                        Dim SelectionControl As New List(Of IMyRadio) From {New MyRadioBox With {.Text = Application.Current.FindResource("LangMySkinCapeNameNone")}}
+                        Dim SelectionControl As New List(Of IMyRadio) From {New MyRadioBox With {.Text = GetLang("LangMySkinCapeNameNone")}}
                         For Each Cape In SkinData("capes")
                             Dim CapeName As String = Cape("alias").ToString
                             If CapeNames.ContainsKey(CapeName) Then CapeName = CapeNames(CapeName)
                             SelectionControl.Add(New MyRadioBox With {.Text = CapeName})
                         Next
-                        SelId = MyMsgBoxSelect(SelectionControl, Application.Current.FindResource("LangMySkinDialogChooseCape"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel"))
+                        SelId = MyMsgBoxSelect(SelectionControl, GetLang("LangMySkinDialogChooseCape"), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnCancel"))
                     Catch ex As Exception
                         Log(ex, "获取玩家皮肤列表失败", LogLevel.Feedback)
                     End Try
@@ -261,13 +261,13 @@ Retry:
                     If(SelId = 0, "", New JObject(New JProperty("capeId", SkinData("capes")(SelId - 1)("id"))).ToString(0)),
                     "application/json", Headers:=New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}})
                 If Result.Contains("""errorMessage""") Then
-                    Hint(Application.Current.FindResource("LangMySkinHintChangeFail") & ":" & GetJson(Result)("errorMessage"), HintType.Critical)
+                    Hint(GetLang("LangMySkinHintChangeFail") & ":" & GetJson(Result)("errorMessage"), HintType.Critical)
                     Exit Sub
                 Else
-                    Hint(Application.Current.FindResource("LangMySkinHintChangeSuccess"), HintType.Finish)
+                    Hint(GetLang("LangMySkinHintChangeSuccess"), HintType.Finish)
                 End If
             Catch ex As Exception
-                Log(ex, Application.Current.FindResource("LangMySkinHintChangeFail"), LogLevel.Hint)
+                Log(ex, GetLang("LangMySkinHintChangeFail"), LogLevel.Hint)
             Finally
                 IsChanging = False
             End Try

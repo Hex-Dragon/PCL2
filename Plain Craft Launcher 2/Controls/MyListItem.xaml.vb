@@ -190,13 +190,16 @@
         Set(value As String)
             value = value.Replace(vbCr, "").Replace(vbLf, "")
             SetValue(InfoProperty, value)
-            If LabInfo IsNot Nothing Then
-                LabInfo.Text = value
-                LabInfo.Visibility = If(value = "", Visibility.Collapsed, Visibility.Visible)
-            End If
+            OnInfoPropertyChanged()
         End Set
     End Property
     Public Shared ReadOnly InfoProperty As DependencyProperty = DependencyProperty.Register("Info", GetType(String), GetType(MyListItem), New PropertyMetadata(""))
+
+    Public Sub OnInfoPropertyChanged()
+        If LabInfo Is Nothing Then Exit Sub
+        LabInfo.Text = Info
+        LabInfo.Visibility = If(String.IsNullOrWhiteSpace(LabInfo.Text), Visibility.Collapsed, Visibility.Visible)
+    End Sub
 
     '图片
     Private _Logo As String = ""
@@ -664,8 +667,7 @@
                 Log(ex, "设置帮助 MyListItem 失败", LogLevel.Msgbox)
             End Try
         End If
-        LabInfo.Text = Info
-        LabInfo.Visibility = If(LabInfo.Text = "", Visibility.Collapsed, Visibility.Visible)
+        OnInfoPropertyChanged()
     End Sub
     Public Overrides Function ToString() As String
         Return Title

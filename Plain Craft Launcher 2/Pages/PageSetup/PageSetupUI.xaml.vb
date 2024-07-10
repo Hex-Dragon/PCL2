@@ -12,9 +12,9 @@
             Dim NewText As String
             Select Case ThemeDontClick
                 Case 1
-                    NewText = Application.Current.FindResource("LangThemeRealWhite")
+                    NewText = GetLang("LangThemeRealWhite")
                 Case 2
-                    NewText = Application.Current.FindResource("LangThemeRealFunny")
+                    NewText = GetLang("LangThemeRealFunny")
                 Case Else
                     NewText = "？？？"
             End Select
@@ -109,10 +109,10 @@
             CheckHiddenOtherTest.Checked = Setup.Get("UiHiddenOtherTest")
 
         Catch ex As NullReferenceException
-            Log(ex, Application.Current.FindResource("LangHintThemeSetIncorrect"), LogLevel.Msgbox)
+            Log(ex, GetLang("LangHintThemeSetIncorrect"), LogLevel.Msgbox)
             Reset()
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangHintThemeSetLoadFail"), LogLevel.Feedback)
+            Log(ex, GetLang("LangHintThemeSetLoadFail"), LogLevel.Feedback)
         End Try
     End Sub
 
@@ -159,9 +159,9 @@
             Setup.Reset("UiHiddenOtherTest")
 
             Log("[Setup] 已初始化个性化设置！")
-            Hint(Application.Current.FindResource("LangHintThemeSetInit"), HintType.Finish, False)
+            Hint(GetLang("LangHintThemeSetInit"), HintType.Finish, False)
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangHintThemeSetInitFail"), LogLevel.Msgbox)
+            Log(ex, GetLang("LangHintThemeSetInitFail"), LogLevel.Msgbox)
         End Try
 
         Reload()
@@ -198,21 +198,21 @@
             PanBackgroundBlur.Visibility = Visibility.Visible
             PanBackgroundSuit.Visibility = Visibility.Visible
             BtnBackgroundClear.Visibility = Visibility.Visible
-            CardBackground.Title = String.Format(Application.Current.FindResource("LangBackgroundPicCount"), Count)
+            CardBackground.Title = GetLang("LangBackgroundPicCount", Count)
         Else
             PanBackgroundOpacity.Visibility = Visibility.Collapsed
             PanBackgroundBlur.Visibility = Visibility.Collapsed
             PanBackgroundSuit.Visibility = Visibility.Collapsed
             BtnBackgroundClear.Visibility = Visibility.Collapsed
-            CardBackground.Title = Application.Current.FindResource("LangBackgroundPic")
+            CardBackground.Title = GetLang("LangBackgroundPic")
         End If
         CardBackground.TriggerForceResize()
     End Sub
     Private Sub BtnBackgroundClear_Click(sender As Object, e As EventArgs) Handles BtnBackgroundClear.Click
-        If MyMsgBox(Application.Current.FindResource("LangDialogDeleteAllBackgroundPicCntent"), Application.Current.FindResource("LangDialogTitleWarning"),, Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
+        If MyMsgBox(GetLang("LangDialogDeleteAllBackgroundPicCntent"), GetLang("LangDialogTitleWarning"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
             DeleteDirectory(Path & "PCL\Pictures")
             BackgroundRefresh(False, True)
-            Hint(Application.Current.FindResource("LangHintBackgroundPicDeleted"), HintType.Finish)
+            Hint(GetLang("LangHintBackgroundPicDeleted"), HintType.Finish)
         End If
     End Sub
     ''' <summary>
@@ -235,10 +235,10 @@
             If Not Pic.Any() Then
                 If Refresh Then
                     If FrmMain.ImgBack.Visibility = Visibility.Collapsed Then
-                        If IsHint Then Hint(Application.Current.FindResource("LangHintBackgroundPicNotFound"), HintType.Critical)
+                        If IsHint Then Hint(GetLang("LangHintBackgroundPicNotFound"), HintType.Critical)
                     Else
                         FrmMain.ImgBack.Visibility = Visibility.Collapsed
-                        If IsHint Then Hint(Application.Current.FindResource("LangHintBackgroundPicDeleted"), HintType.Finish)
+                        If IsHint Then Hint(GetLang("LangHintBackgroundPicDeleted"), HintType.Finish)
                     End If
                 End If
                 If Not IsNothing(FrmSetupUI) Then FrmSetupUI.BackgroundRefreshUI(False, 0)
@@ -250,12 +250,12 @@
                         FrmMain.ImgBack.Background = New MyBitmap(Address)
                         Setup.Load("UiBackgroundSuit", True)
                         FrmMain.ImgBack.Visibility = Visibility.Visible
-                        If IsHint Then Hint(Application.Current.FindResource("LangHintBackgroundPicRefreshed") & GetFileNameFromPath(Address), HintType.Finish, False)
+                        If IsHint Then Hint(GetLang("LangHintBackgroundPicRefreshed") & GetFileNameFromPath(Address), HintType.Finish, False)
                     Catch ex As Exception
                         If ex.Message.Contains("参数无效") Then
-                            Log(Application.Current.FindResource("LangDialogBackgroundPicRefreshFailA") & Address, LogLevel.Msgbox)
+                            Log(GetLang("LangDialogBackgroundPicRefreshFailA") & Address, LogLevel.Msgbox)
                         Else
-                            Log(ex, String.Format(Application.Current.FindResource("LangDialogBackgroundPicRefreshFailB"), Address), LogLevel.Msgbox)
+                            Log(ex, GetLang("LangDialogBackgroundPicRefreshFailB", Address), LogLevel.Msgbox)
                         End If
                     End Try
                 End If
@@ -263,7 +263,7 @@
             End If
 
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangDialogBackgroundPicRefreshFailUnknwon"), LogLevel.Feedback)
+            Log(ex, GetLang("LangDialogBackgroundPicRefreshFailUnknwon"), LogLevel.Feedback)
         End Try
     End Sub
 
@@ -280,9 +280,9 @@
             FrmMain.ImageTitleLogo.Source = New MyBitmap(Path & "PCL\Logo.png")
         Catch ex As Exception
             If ex.Message.Contains("参数无效") Then
-                Log(Application.Current.FindResource("LangDialogTitlePicChangeFailA"), LogLevel.Msgbox)
+                Log(GetLang("LangDialogTitlePicChangeFailA"), LogLevel.Msgbox)
             Else
-                Log(ex, Application.Current.FindResource("LangDialogTitlePicChangeFailB"), LogLevel.Msgbox)
+                Log(ex, GetLang("LangDialogTitlePicChangeFailB"), LogLevel.Msgbox)
             End If
             FrmMain.ImageTitleLogo.Source = Nothing
         End Try
@@ -296,16 +296,16 @@ Refresh:
                 FrmMain.ImageTitleLogo.Source = New MyBitmap(Path & "PCL\Logo.png")
             Catch ex As Exception
                 If ex.Message.Contains("参数无效") Then
-                    Log(Application.Current.FindResource("LangDialogTitlePicChangeFailC"), LogLevel.Msgbox)
+                    Log(GetLang("LangDialogTitlePicChangeFailC"), LogLevel.Msgbox)
                 Else
-                    Log(ex, Application.Current.FindResource("LangDialogTitlePicChangeFailD"), LogLevel.Msgbox)
+                    Log(ex, GetLang("LangDialogTitlePicChangeFailD"), LogLevel.Msgbox)
                 End If
                 FrmMain.ImageTitleLogo.Source = Nothing
                 e.Handled = True
                 Try
                     File.Delete(Path & "PCL\Logo.png")
                 Catch exx As Exception
-                    Log(exx, Application.Current.FindResource("LangDialogTitlePicChangeFailE"), LogLevel.Msgbox)
+                    Log(exx, GetLang("LangDialogTitlePicChangeFailE"), LogLevel.Msgbox)
                 End Try
             End Try
             Exit Sub
@@ -322,7 +322,7 @@ Refresh:
                 CopyFile(FileName, Path & "PCL\Logo.png")
                 GoTo Refresh
             Catch ex As Exception
-                Log(ex, Application.Current.FindResource("LangDialogTitlePicChangeFailF"), LogLevel.Msgbox)
+                Log(ex, GetLang("LangDialogTitlePicChangeFailF"), LogLevel.Msgbox)
             End Try
         End If
     End Sub
@@ -330,9 +330,9 @@ Refresh:
         Try
             File.Delete(Path & "PCL\Logo.png")
             RadioLogoType1.SetChecked(True, True, True)
-            Hint(Application.Current.FindResource("LangHintTitlePicEmptied"), HintType.Finish)
+            Hint(GetLang("LangHintTitlePicEmptied"), HintType.Finish)
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangDialogTitlePicEmptyFail"), LogLevel.Msgbox)
+            Log(ex, GetLang("LangDialogTitlePicEmptyFail"), LogLevel.Msgbox)
         End Try
     End Sub
 
@@ -349,20 +349,20 @@ Refresh:
             PanMusicVolume.Visibility = Visibility.Visible
             PanMusicDetail.Visibility = Visibility.Visible
             BtnMusicClear.Visibility = Visibility.Visible
-            CardMusic.Title = String.Format(Application.Current.FindResource("LangBackgroundMusicCount"), EnumerateFiles(Path & "PCL\Musics\").Count)
+            CardMusic.Title = GetLang("LangBackgroundMusicCount", EnumerateFiles(Path & "PCL\Musics\").Count)
         Else
             PanMusicVolume.Visibility = Visibility.Collapsed
             PanMusicDetail.Visibility = Visibility.Collapsed
             BtnMusicClear.Visibility = Visibility.Collapsed
-            CardMusic.Title = Application.Current.FindResource("LangBackgroundMusic")
+            CardMusic.Title = GetLang("LangBackgroundMusic")
         End If
         CardMusic.TriggerForceResize()
     End Sub
     Private Sub BtnMusicClear_Click(sender As Object, e As EventArgs) Handles BtnMusicClear.Click
-        If MyMsgBox(Application.Current.FindResource("LangDialogBackgroundMusicDeleteContent"), Application.Current.FindResource("LangDialogTitleWarning"),, Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
+        If MyMsgBox(GetLang("LangDialogBackgroundMusicDeleteContent"), GetLang("LangDialogTitleWarning"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
             RunInThread(
             Sub()
-                Hint(Application.Current.FindResource("LangHintBackgroundMusicDeleting"))
+                Hint(GetLang("LangHintBackgroundMusicDeleting"))
                 '停止播放音乐
                 MusicNAudio = Nothing
                 MusicWaitingList = New List(Of String)
@@ -371,15 +371,15 @@ Refresh:
                 '删除文件
                 Try
                     DeleteDirectory(Path & "PCL\Musics")
-                    Hint(Application.Current.FindResource("LangHintBackgroundMusicDeleted"), HintType.Finish)
+                    Hint(GetLang("LangHintBackgroundMusicDeleted"), HintType.Finish)
                 Catch ex As Exception
-                    Log(ex, Application.Current.FindResource("LangHintBackgroundMusicDeleteFail"), LogLevel.Msgbox)
+                    Log(ex, GetLang("LangHintBackgroundMusicDeleteFail"), LogLevel.Msgbox)
                 End Try
                 Try
                     Directory.CreateDirectory(Path & "PCL\Musics")
                     RunInUi(Sub() MusicRefreshPlay(False))
                 Catch ex As Exception
-                    Log(ex, Application.Current.FindResource("LangHintBackgroundMusicCreateFolderFail"), LogLevel.Msgbox)
+                    Log(ex, GetLang("LangHintBackgroundMusicCreateFolderFail"), LogLevel.Msgbox)
                 End Try
             End Sub)
         End If
@@ -397,21 +397,21 @@ Refresh:
     Private Sub BtnCustomFile_Click(sender As Object, e As EventArgs) Handles BtnCustomFile.Click
         Try
             If File.Exists(Path & "PCL\Custom.xaml") Then
-                If MyMsgBox(Application.Current.FindResource("LangDialogCustomPageOverwriteConfirmationContent"), Application.Current.FindResource("LangDialogCustomHomePageReplaceTitle"), Application.Current.FindResource("LangDialogBtnContinue"), Application.Current.FindResource("LangDialogBtnCancel"), IsWarn:=True) = 2 Then Exit Sub
+                If MyMsgBox(GetLang("LangDialogCustomPageOverwriteConfirmationContent"), GetLang("LangDialogCustomHomePageReplaceTitle"), GetLang("LangDialogBtnContinue"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 2 Then Exit Sub
             End If
             WriteFile(Path & "PCL\Custom.xaml", GetResources("Custom"))
-            Hint(Application.Current.FindResource("LangHintCustomPageOverwriteSuccess"), HintType.Finish)
+            Hint(GetLang("LangHintCustomPageOverwriteSuccess"), HintType.Finish)
             OpenExplorer("/select,""" & Path & "PCL\Custom.xaml""")
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangDialogCustomPageOverwriteFail"), LogLevel.Feedback)
+            Log(ex, GetLang("LangDialogCustomPageOverwriteFail"), LogLevel.Feedback)
         End Try
     End Sub
     Private Sub BtnCustomRefresh_Click() Handles BtnCustomRefresh.Click
         FrmLaunchRight.ForceRefresh()
-        Hint(Application.Current.FindResource("LangHintCustomPageRefreshed"), HintType.Finish)
+        Hint(GetLang("LangHintCustomPageRefreshed"), HintType.Finish)
     End Sub
     Private Sub BtnCustomTutorial_Click(sender As Object, e As EventArgs) Handles BtnCustomTutorial.Click
-        MyMsgBox(Application.Current.FindResource("LangDialogCustomPageTeachContent"), Application.Current.FindResource("LangDialogCustomPageTeachTitle"))
+        MyMsgBox(GetLang("LangDialogCustomPageTeachContent"), GetLang("LangDialogCustomPageTeachTitle"))
     End Sub
 
     '主题
@@ -423,16 +423,16 @@ Refresh:
             AaOpacity(RadioLauncherTheme5, -1, 1000)
         }, "ThemeUnlock")
         If RadioLauncherTheme5Gray.Opacity < 0.08 Then
-            ThemeUnlock(5, UnlockHint:=Application.Current.FindResource("LangThemeBackUnlock"))
+            ThemeUnlock(5, UnlockHint:=GetLang("LangThemeBackUnlock"))
             AniStop("ThemeUnlock")
             RadioLauncherTheme5.Checked = True
         End If
     End Sub
     Private Sub LabLauncherTheme11Click_MouseLeftButtonUp() Handles LabLauncherTheme11Click.MouseLeftButtonUp, RadioLauncherTheme11.MouseRightButtonUp
         If LabLauncherTheme11Click.Visibility = Visibility.Collapsed OrElse LabLauncherTheme11Click.ToolTip.ToString.Contains("点击") Then
-            If MyMsgBox(Application.Current.FindResource("LangDialogThemeUnlockGameContent"),
-                Application.Current.FindResource("LangDialogThemeUnlockGameTitle"), Application.Current.FindResource("LangDialogThemeUnlockGameAccrpt"), Application.Current.FindResource("LangDialogThemeUnlockGameDeny")) = 1 Then
-                MyMsgBox(Application.Current.FindResource("LangDialogThemeUnlockGameFirstClueContent") & "gnp.dorC61\60\20\0202\moc.x1xa.2s\\:sp" & "T".ToLower & "th", Application.Current.FindResource("LangDialogThemeUnlockGameFirstClueTitle")) '防止触发病毒检测规则
+            If MyMsgBox(GetLang("LangDialogThemeUnlockGameContent"),
+                GetLang("LangDialogThemeUnlockGameTitle"), GetLang("LangDialogThemeUnlockGameAccrpt"), GetLang("LangDialogThemeUnlockGameDeny")) = 1 Then
+                MyMsgBox(GetLang("LangDialogThemeUnlockGameFirstClueContent") & "gnp.dorC61\60\20\0202\moc.x1xa.2s\\:sp" & "T".ToLower & "th", GetLang("LangDialogThemeUnlockGameFirstClueTitle")) '防止触发病毒检测规则
             End If
         End If
     End Sub
@@ -544,23 +544,23 @@ Refresh:
             End If
             If OtherAvaliableCount = 1 AndAlso Not HiddenForceShow Then
                 If Not Setup.Get("UiHiddenOtherHelp") Then
-                    FrmMain.BtnTitleSelect4.Text = Application.Current.FindResource("LangOtherHelp")
+                    FrmMain.BtnTitleSelect4.Text = GetLang("LangOtherHelp")
                 ElseIf Not Setup.Get("UiHiddenOtherAbout") Then
-                    FrmMain.BtnTitleSelect4.Text = Application.Current.FindResource("LangOtherAbout")
+                    FrmMain.BtnTitleSelect4.Text = GetLang("LangOtherAbout")
                 Else
-                    FrmMain.BtnTitleSelect4.Text = Application.Current.FindResource("LangOtherTool")
+                    FrmMain.BtnTitleSelect4.Text = GetLang("LangOtherTool")
                 End If
             Else
-                FrmMain.BtnTitleSelect4.Text = Application.Current.FindResource("LangOtherMore")
+                FrmMain.BtnTitleSelect4.Text = GetLang("LangOtherMore")
             End If
             '各个页面的入口
             If FrmMain.PageCurrent = FormMain.PageType.VersionSelect Then FrmSelectRight.BtnEmptyDownload_Loaded()
             If FrmMain.PageCurrent = FormMain.PageType.Launch Then FrmLaunchLeft.RefreshButtonsUI()
             If FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmVersionModDisabled IsNot Nothing Then FrmVersionModDisabled.BtnDownload_Loaded()
             '备注
-            If FrmSetupUI IsNot Nothing Then FrmSetupUI.CardSwitch.Title = If(HiddenForceShow, Application.Current.FindResource("LangHiddenModeTitleA"), Application.Current.FindResource("LangHiddenModeTitleB"))
+            If FrmSetupUI IsNot Nothing Then FrmSetupUI.CardSwitch.Title = If(HiddenForceShow, GetLang("LangHiddenModeTitleA"), GetLang("LangHiddenModeTitleB"))
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangHiddenModeFail"), LogLevel.Feedback)
+            Log(ex, GetLang("LangHiddenModeFail"), LogLevel.Feedback)
         End Try
     End Sub
 
@@ -643,7 +643,7 @@ Refresh:
 
     '警告提示
     Private Sub HiddenHint(sender As Object, user As Boolean) Handles CheckHiddenFunctionHidden.Change, CheckHiddenPageSetup.Change, CheckHiddenSetupUI.Change
-        If AniControlEnabled = 0 AndAlso sender.Checked Then Hint(Application.Current.FindResource("LangHintHiddenModeTip"))
+        If AniControlEnabled = 0 AndAlso sender.Checked Then Hint(GetLang("LangHintHiddenModeTip"))
     End Sub
 
 #End Region

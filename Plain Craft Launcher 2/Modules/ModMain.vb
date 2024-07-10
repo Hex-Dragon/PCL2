@@ -191,7 +191,7 @@ EndHint:
         ''' 有多个按钮时，是否给第一个按钮加高亮。
         ''' </summary>
         Public HighLight As Boolean
-        Public Button1 As String = Application.Current.FindResource("LangDialogBtnOK")
+        Public Button1 As String = GetLang("LangDialogBtnOK")
         Public Button2 As String = ""
         Public Button3 As String = ""
         ''' <summary>
@@ -241,8 +241,8 @@ EndHint:
                              Optional IsWarn As Boolean = False, Optional HighLight As Boolean = True, Optional ForceWait As Boolean = False,
                              Optional Button1Action As Action = Nothing, Optional Button2Action As Action = Nothing, Optional Button3Action As Action = Nothing) As Integer
         '将弹窗列入队列
-        If Button1 = "确定" Then Button1 = Application.Current.FindResource("LangDialogBtnOK")
-        If Title = "提示" Then Title = Application.Current.FindResource("LangDialogTitleTip")
+        If Button1 = "确定" Then Button1 = GetLang("LangDialogBtnOK")
+        If Title = "提示" Then Title = GetLang("LangDialogTitleTip")
         Dim Converter As New MyMsgBoxConverter With {.Type = MyMsgBoxType.Text, .Button1 = Button1, .Button2 = Button2, .Button3 = Button3, .Text = Caption, .IsWarn = IsWarn, .Title = Title, .HighLight = HighLight, .ForceWait = True, .Button1Action = Button1Action, .Button2Action = Button2Action, .Button3Action = Button3Action}
         WaitingMyMsgBox.Add(Converter)
         If RunInUi() Then
@@ -297,8 +297,8 @@ EndHint:
     ''' <param name="Button2">显示的第二个按钮，默认为“取消”。</param>
     ''' <param name="IsWarn">是否为警告弹窗，若为 True，弹窗配色和背景会变为红色。</param>
     Public Function MyMsgBoxInput(Title As String, Optional Text As String = "", Optional DefaultInput As String = "", Optional ValidateRules As ObjectModel.Collection(Of Validate) = Nothing, Optional HintText As String = "", Optional Button1 As String = "确定", Optional Button2 As String = "取消", Optional IsWarn As Boolean = False) As String
-        If Button1 = "确定" Then Button1 = Application.Current.FindResource("LangDialogBtnOK")
-        If Button2 = "取消" Then Button2 = Application.Current.FindResource("LangDialogBtnCancel")
+        If Button1 = "确定" Then Button1 = GetLang("LangDialogBtnOK")
+        If Button2 = "取消" Then Button2 = GetLang("LangDialogBtnCancel")
         '将弹窗列入队列
         Dim Converter As New MyMsgBoxConverter With {.Text = Text, .HintText = HintText, .Type = MyMsgBoxType.Input, .ValidateRules = If(ValidateRules, New ObjectModel.Collection(Of Validate)), .Button1 = Button1, .Button2 = Button2, .Content = DefaultInput, .IsWarn = IsWarn, .Title = Title}
         WaitingMyMsgBox.Add(Converter)
@@ -321,8 +321,8 @@ EndHint:
     ''' <param name="Button2">显示的第二个按钮，默认为空。</param>
     ''' <param name="IsWarn">是否为警告弹窗，若为 True，弹窗配色和背景会变为红色。</param>
     Public Function MyMsgBoxSelect(Selections As List(Of IMyRadio), Optional Title As String = "提示", Optional Button1 As String = "确定", Optional Button2 As String = "", Optional IsWarn As Boolean = False) As Integer?
-        If Button1 = "确定" Then Button1 = Application.Current.FindResource("LangDialogBtnOK")
-        If Title = "提示" Then Title = Application.Current.FindResource("LangDialogTitleTip")
+        If Button1 = "确定" Then Button1 = GetLang("LangDialogBtnOK")
+        If Title = "提示" Then Title = GetLang("LangDialogTitleTip")
         '将弹窗列入队列
         Dim Converter As New MyMsgBoxConverter With {.Type = MyMsgBoxType.Select, .Button1 = Button1, .Button2 = Button2, .Content = Selections, .IsWarn = IsWarn, .Title = Title}
         WaitingMyMsgBox.Add(Converter)
@@ -770,13 +770,13 @@ NextFile:
                 AprilDistance = -4000
                 Select Case RandomInteger(0, 3)
                     Case 0
-                        Hint(Application.Current.FindResource("LangModMainAprilFoolTipA"))
+                        Hint(GetLang("LangModMainAprilFoolTipA"))
                     Case 1
-                        Hint(Application.Current.FindResource("LangModMainAprilFoolTipB"))
+                        Hint(GetLang("LangModMainAprilFoolTipB"))
                     Case 2
-                        Hint(Application.Current.FindResource("LangModMainAprilFoolTipC"))
+                        Hint(GetLang("LangModMainAprilFoolTipC"))
                     Case 3
-                        Hint(Application.Current.FindResource("LangModMainAprilFoolTipD"))
+                        Hint(GetLang("LangModMainAprilFoolTipD"))
                 End Select
             End If
 

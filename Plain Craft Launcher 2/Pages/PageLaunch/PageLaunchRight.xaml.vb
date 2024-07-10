@@ -9,8 +9,8 @@
         PanHint.Visibility = Visibility.Collapsed
 #Else
         PanHint.Visibility = If(ThemeCheckGold(), Visibility.Collapsed, Visibility.Visible)
-        LabHint1.Text = Application.Current.FindResource("LangLaunchRightLabHint1")
-        LabHint2.Text = Application.Current.FindResource("LangLaunchRightLabHint2")
+        LabHint1.Text = GetLang("LangLaunchRightLabHint1")
+        LabHint2.Text = GetLang("LangLaunchRightLabHint2")
 #End If
     End Sub
 
@@ -60,7 +60,7 @@ Download:
                 Else
                     '缓存不可用
                     Log("[Page] 主页自定义数据来源：联网全新下载")
-                    Hint(Application.Current.FindResource("LangLaunchRightLoadingPage"))
+                    Hint(GetLang("LangLaunchRightLoadingPage"))
                     RunInUiWait(Sub() LoadContent("")) '在加载结束前清空页面
                     Setup.Set("CacheSavedPageVersion", "")
                     OnlineLoader.Start(Url) '下载完成后将会再次触发更新

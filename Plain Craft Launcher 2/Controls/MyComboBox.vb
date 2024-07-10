@@ -13,7 +13,7 @@
             SetValue(HintTextProperty, value)
         End Set
     End Property
-    Public Shared ReadOnly HintTextProperty As DependencyProperty = DependencyProperty.Register("HintText", GetType(String), GetType(MyComboBox), New PropertyMetadata("Tips"))
+    Public Shared ReadOnly HintTextProperty As DependencyProperty = DependencyProperty.Register("HintText", GetType(String), GetType(MyComboBox), New PropertyMetadata(""))
 
     Public Overrides Sub OnApplyTemplate()
         MyBase.OnApplyTemplate()

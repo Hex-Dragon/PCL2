@@ -35,7 +35,6 @@
             Return GetValue(TextProperty)
         End Get
         Set(value As String)
-            If LabText IsNot Nothing Then LabText.Text = value
             SetValue(TextProperty, value)
         End Set
     End Property

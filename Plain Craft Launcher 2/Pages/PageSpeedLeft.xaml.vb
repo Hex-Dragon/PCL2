@@ -96,7 +96,7 @@ Public Class PageSpeedLeft
                             Tb.Text = GetExceptionDetail(Loader.Error)
                             AddHandler Tb.MouseLeftButtonDown, Sub(sender As TextBlock, e As EventArgs)
                                                                    ClipboardSet(sender.Text, False)
-                                                                   Hint(Application.Current.FindResource("LangSpeedHintClickCopyError"), HintType.Finish)
+                                                                   Hint(GetLang("LangSpeedHintClickCopyError"), HintType.Finish)
                                                                End Sub
                             Card.Children.Add(Tb)
                             ''删除取消按钮

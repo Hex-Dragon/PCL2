@@ -149,7 +149,7 @@
         AniControlEnabled += 1
         If Not Setup.Get("HintHandInstall") Then
             Setup.Set("HintHandInstall", True)
-            If MyMsgBox(Application.Current.FindResource("LangDownloadPageDialogManualInstallContent"), Application.Current.FindResource("LangDownloadPageDialogManualInstallTitle"), Application.Current.FindResource("LangDownloadPageDialogManualInstallBtn1"), Application.Current.FindResource("LangDownloadPageDialogManualInstallBtn2")) = 1 Then
+            If MyMsgBox(GetLang("LangDownloadPageDialogManualInstallContent"), GetLang("LangDownloadPageDialogManualInstallTitle"), GetLang("LangDownloadPageDialogManualInstallBtn1"), GetLang("LangDownloadPageDialogManualInstallBtn2")) = 1 Then
                 FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.Download}, FormMain.PageSubType.DownloadInstall)
                 AniControlEnabled -= 1
                 Exit Sub

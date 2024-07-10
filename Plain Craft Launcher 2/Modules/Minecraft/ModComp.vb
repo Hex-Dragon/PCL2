@@ -281,46 +281,46 @@
                     For Each Category In Data("categories").Select(Of Integer)(Function(t) t("id")).Distinct.OrderByDescending(Function(c) c)
                         Select Case Category
                         'Mod
-                            Case 406 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeWorldElement"))
-                            Case 407 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeBiome"))
-                            Case 410 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeDimension"))
-                            Case 408 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeMineral"))
-                            Case 409 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeStructure"))
-                            Case 412 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeTech"))
-                            Case 415 : Tags.Add(Application.Current.FindResource("LangDownloadModTypePipe"))
-                            Case 4843 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeAuto"))
-                            Case 417 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeEnergy"))
-                            Case 4558 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeRedstone"))
-                            Case 436 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeFood"))
-                            Case 416 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeAgriculture"))
-                            Case 414 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeTransportation"))
-                            Case 420 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeStorage"))
-                            Case 419 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeMagic"))
-                            Case 422 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeAdventure"))
-                            Case 424 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeDecoration"))
-                            Case 411 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeMobs"))
-                            Case 434 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeEquipment"))
-                            Case 423 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeDisplay"))
-                            Case 435 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeServer"))
-                            Case 5191 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeUtility"))
-                            Case 421 : Tags.Add(Application.Current.FindResource("LangDownloadModTypeLib"))
+                            Case 406 : Tags.Add(GetLang("LangDownloadModTypeWorldElement"))
+                            Case 407 : Tags.Add(GetLang("LangDownloadModTypeBiome"))
+                            Case 410 : Tags.Add(GetLang("LangDownloadModTypeDimension"))
+                            Case 408 : Tags.Add(GetLang("LangDownloadModTypeMineral"))
+                            Case 409 : Tags.Add(GetLang("LangDownloadModTypeStructure"))
+                            Case 412 : Tags.Add(GetLang("LangDownloadModTypeTech"))
+                            Case 415 : Tags.Add(GetLang("LangDownloadModTypePipe"))
+                            Case 4843 : Tags.Add(GetLang("LangDownloadModTypeAuto"))
+                            Case 417 : Tags.Add(GetLang("LangDownloadModTypeEnergy"))
+                            Case 4558 : Tags.Add(GetLang("LangDownloadModTypeRedstone"))
+                            Case 436 : Tags.Add(GetLang("LangDownloadModTypeFood"))
+                            Case 416 : Tags.Add(GetLang("LangDownloadModTypeAgriculture"))
+                            Case 414 : Tags.Add(GetLang("LangDownloadModTypeTransportation"))
+                            Case 420 : Tags.Add(GetLang("LangDownloadModTypeStorage"))
+                            Case 419 : Tags.Add(GetLang("LangDownloadModTypeMagic"))
+                            Case 422 : Tags.Add(GetLang("LangDownloadModTypeAdventure"))
+                            Case 424 : Tags.Add(GetLang("LangDownloadModTypeDecoration"))
+                            Case 411 : Tags.Add(GetLang("LangDownloadModTypeMobs"))
+                            Case 434 : Tags.Add(GetLang("LangDownloadModTypeEquipment"))
+                            Case 423 : Tags.Add(GetLang("LangDownloadModTypeDisplay"))
+                            Case 435 : Tags.Add(GetLang("LangDownloadModTypeServer"))
+                            Case 5191 : Tags.Add(GetLang("LangDownloadModTypeUtility"))
+                            Case 421 : Tags.Add(GetLang("LangDownloadModTypeLib"))
                         '整合包
-                            Case 4484 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllMulti"))
-                            Case 4479 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllChallenging"))
-                            Case 4483 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllCombat"))
-                            Case 4478 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllQuests"))
-                            Case 4472 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllTech"))
-                            Case 4473 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllMagic"))
-                            Case 4475 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllAdventure"))
-                            Case 4476 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllExplore"))
-                            Case 4477 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllGame"))
-                            Case 4471 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllScienceFiction"))
-                            Case 4736 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllSkyland"))
-                            Case 5128 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllImprove"))
-                            Case 4487 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllFTB"))
-                            Case 4480 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllMapBased"))
-                            Case 4481 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllLightWeight"))
-                            Case 4482 : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllHeavyWeight"))
+                            Case 4484 : Tags.Add(GetLang("LangDownloadModpackTypeAllMulti"))
+                            Case 4479 : Tags.Add(GetLang("LangDownloadModpackTypeAllChallenging"))
+                            Case 4483 : Tags.Add(GetLang("LangDownloadModpackTypeAllCombat"))
+                            Case 4478 : Tags.Add(GetLang("LangDownloadModpackTypeAllQuests"))
+                            Case 4472 : Tags.Add(GetLang("LangDownloadModpackTypeAllTech"))
+                            Case 4473 : Tags.Add(GetLang("LangDownloadModpackTypeAllMagic"))
+                            Case 4475 : Tags.Add(GetLang("LangDownloadModpackTypeAllAdventure"))
+                            Case 4476 : Tags.Add(GetLang("LangDownloadModpackTypeAllExplore"))
+                            Case 4477 : Tags.Add(GetLang("LangDownloadModpackTypeAllGame"))
+                            Case 4471 : Tags.Add(GetLang("LangDownloadModpackTypeAllScienceFiction"))
+                            Case 4736 : Tags.Add(GetLang("LangDownloadModpackTypeAllSkyland"))
+                            Case 5128 : Tags.Add(GetLang("LangDownloadModpackTypeAllImprove"))
+                            Case 4487 : Tags.Add(GetLang("LangDownloadModpackTypeAllFTB"))
+                            Case 4480 : Tags.Add(GetLang("LangDownloadModpackTypeAllMapBased"))
+                            Case 4481 : Tags.Add(GetLang("LangDownloadModpackTypeAllLightWeight"))
+                            Case 4482 : Tags.Add(GetLang("LangDownloadModpackTypeAllHeavyWeight"))
                                 'FUTURE: Res
                         End Select
                     Next
@@ -361,32 +361,32 @@
                             Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
                             Case "neoforge" : ModLoaders.Add(CompModLoaderType.NeoForge)
                             'Mod
-                            Case "worldgen" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeWorldElement"))
-                            Case "technology" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeTech"))
-                            Case "food" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeFood"))
-                            Case "game-mechanics" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeGameMechanics"))
-                            Case "transportation" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeTransportation"))
-                            Case "storage" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeStorage"))
-                            Case "magic" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeMagic"))
-                            Case "adventure" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeAdventure"))
-                            Case "decoration" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeDecoration"))
-                            Case "mobs" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeMobs"))
-                            Case "equipment" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeEquipment"))
-                            Case "optimization" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeOptimization"))
-                            Case "social" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeServer"))
-                            Case "utility" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeUtility"))
-                            Case "library" : Tags.Add(Application.Current.FindResource("LangDownloadModTypeLib"))
+                            Case "worldgen" : Tags.Add(GetLang("LangDownloadModTypeWorldElement"))
+                            Case "technology" : Tags.Add(GetLang("LangDownloadModTypeTech"))
+                            Case "food" : Tags.Add(GetLang("LangDownloadModTypeFood"))
+                            Case "game-mechanics" : Tags.Add(GetLang("LangDownloadModTypeGameMechanics"))
+                            Case "transportation" : Tags.Add(GetLang("LangDownloadModTypeTransportation"))
+                            Case "storage" : Tags.Add(GetLang("LangDownloadModTypeStorage"))
+                            Case "magic" : Tags.Add(GetLang("LangDownloadModTypeMagic"))
+                            Case "adventure" : Tags.Add(GetLang("LangDownloadModTypeAdventure"))
+                            Case "decoration" : Tags.Add(GetLang("LangDownloadModTypeDecoration"))
+                            Case "mobs" : Tags.Add(GetLang("LangDownloadModTypeMobs"))
+                            Case "equipment" : Tags.Add(GetLang("LangDownloadModTypeEquipment"))
+                            Case "optimization" : Tags.Add(GetLang("LangDownloadModTypeOptimization"))
+                            Case "social" : Tags.Add(GetLang("LangDownloadModTypeServer"))
+                            Case "utility" : Tags.Add(GetLang("LangDownloadModTypeUtility"))
+                            Case "library" : Tags.Add(GetLang("LangDownloadModTypeLib"))
                             '整合包
-                            Case "multiplayer" : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllMulti"))
-                            Case "optimization" : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllOptimization"))
-                            Case "challenging" : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllChallenging"))
-                            Case "combat" : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllCombat"))
-                            Case "quests" : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllQuests"))
-                            Case "technology" : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllTech"))
-                            Case "magic" : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllMagic"))
-                            Case "adventure" : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllAdventure"))
-                            Case "kitchen-sink" : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllCook"))
-                            Case "lightweight" : Tags.Add(Application.Current.FindResource("LangDownloadModpackTypeAllLightWeight"))
+                            Case "multiplayer" : Tags.Add(GetLang("LangDownloadModpackTypeAllMulti"))
+                            Case "optimization" : Tags.Add(GetLang("LangDownloadModpackTypeAllOptimization"))
+                            Case "challenging" : Tags.Add(GetLang("LangDownloadModpackTypeAllChallenging"))
+                            Case "combat" : Tags.Add(GetLang("LangDownloadModpackTypeAllCombat"))
+                            Case "quests" : Tags.Add(GetLang("LangDownloadModpackTypeAllQuests"))
+                            Case "technology" : Tags.Add(GetLang("LangDownloadModpackTypeAllTech"))
+                            Case "magic" : Tags.Add(GetLang("LangDownloadModpackTypeAllMagic"))
+                            Case "adventure" : Tags.Add(GetLang("LangDownloadModpackTypeAllAdventure"))
+                            Case "kitchen-sink" : Tags.Add(GetLang("LangDownloadModpackTypeAllCook"))
+                            Case "lightweight" : Tags.Add(GetLang("LangDownloadModpackTypeAllLightWeight"))
                                 'FUTURE: Res
                         End Select
                     Next
@@ -1163,11 +1163,11 @@ Retry:
             Get
                 Select Case Status
                     Case CompFileStatus.Release
-                        Return Application.Current.FindResource("LangModCompModStatusDescRelease")
+                        Return GetLang("LangModCompModStatusDescRelease")
                     Case CompFileStatus.Beta
-                        Return If(ModeDebug, "Beta", Application.Current.FindResource("LangModCompModStatusDescBeta"))
+                        Return If(ModeDebug, "Beta", GetLang("LangModCompModStatusDescBeta"))
                     Case Else
-                        Return If(ModeDebug, "Alpha", Application.Current.FindResource("LangModCompModStatusDescAlpha"))
+                        Return If(ModeDebug, "Alpha", GetLang("LangModCompModStatusDescAlpha"))
                 End Select
             End Get
         End Property
@@ -1358,17 +1358,17 @@ Retry:
             Select Case Type
                 Case CompType.Mod
                     Info += If(ModLoaders.Any,
-                        Application.Current.FindResource("LangModCompModSuitFor") & " " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & "，", "")
-                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & Application.Current.FindResource("LangModCompModDependentCount") & "，", "")
+                        GetLang("LangModCompModSuitFor") & " " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & "，", "")
+                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & GetLang("LangModCompModDependentCount") & "，", "")
                 Case CompType.ModPack
                     If GameVersions.All(Function(v) v.Contains("w")) Then
-                        Info += Application.Current.FindResource("LangModCompModGameVersion") & $" {Join(GameVersions, "、")}，"
+                        Info += GetLang("LangModCompModGameVersion") & $" {Join(GameVersions, "、")}，"
                     End If
             End Select
             If DownloadCount > 0 Then 'CurseForge 的下载次数经常错误地返回 0
-                Info += If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " " & Application.Current.FindResource("LangModCompModDownloadMillion") & "，", DownloadCount & " " & Application.Current.FindResource("LangModCompModDownload") & "，")
+                Info += If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " " & GetLang("LangModCompModDownloadMillion") & "，", DownloadCount & " " & GetLang("LangModCompModDownload") & "，")
             End If
-            Info += String.Format(Application.Current.FindResource("LangModCompModUpdateTime"), GetTimeSpanString(ReleaseDate - Date.Now, False))
+            Info += GetLang("LangModCompModUpdateTime", GetTimeSpanString(ReleaseDate - Date.Now, False))
             Info += If(Status = CompFileStatus.Release, "", "，" & StatusDescription)
 
             '建立控件
@@ -1389,7 +1389,7 @@ Retry:
 
             '建立另存为按钮
             If OnSaveClick IsNot Nothing Then
-                Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = Application.Current.FindResource("LangModCompModSaveAs")}
+                Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = GetLang("LangModCompModSaveAs")}
                 ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
                 ToolTipService.SetVerticalOffset(BtnSave, 30)
                 ToolTipService.SetHorizontalOffset(BtnSave, 2)
@@ -1494,14 +1494,14 @@ Retry:
                               Return CompProjectCache.ContainsKey(dep)
                           End Function).ToList
         '添加开头间隔
-        Stack.Children.Add(New TextBlock With {.Text = Application.Current.FindResource("LangModCompModDependent"), .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 2, 0, 5)})
+        Stack.Children.Add(New TextBlock With {.Text = GetLang("LangModCompModDependent"), .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 2, 0, 5)})
         '添加前置 Mod 列表
         For Each Dep In Deps
             Dim Item = CompProjectCache(Dep).ToCompItem(False, False)
             Stack.Children.Add(Item)
         Next
         '添加结尾间隔
-        Stack.Children.Add(New TextBlock With {.Text = Application.Current.FindResource("LangModCompModAlternateVersion"), .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 12, 0, 5)})
+        Stack.Children.Add(New TextBlock With {.Text = GetLang("LangModCompModAlternateVersion"), .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 12, 0, 5)})
     End Sub
 
 #End Region

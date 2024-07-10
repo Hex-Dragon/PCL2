@@ -286,7 +286,7 @@ Public Class FormMain
         '输出更新日志
         RunInNewThread(
         Sub()
-            If MyMsgBox(Content, String.Format(Application.Current.FindResource("LangDialogUpdateTo"), VersionDisplayName), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnUpdateFullLog")) = 2 Then
+            If MyMsgBox(Content, GetLang("LangDialogUpdateTo", VersionDisplayName), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnUpdateFullLog")) = 2 Then
                 OpenWebsite("https://afdian.net/a/LTCat?tab=feed")
             End If
         End Sub, "UpdateLog Output")
@@ -357,7 +357,7 @@ Public Class FormMain
 #If DEBUG Then
         Hint("[开发者模式] PCL 正以开发者模式运行，这可能会造成严重的性能下降，请务必立即向开发者反馈此问题！", HintType.Critical)
 #End If
-        If ModeDebug Then Hint(Application.Current.FindResource("LangHintDebugWarning"))
+        If ModeDebug Then Hint(GetLang("LangHintDebugWarning"))
         '尽早执行的加载池
         McFolderListLoader.Start(0) '为了让下载已存在文件检测可以正常运行，必须跑一次；为了让启动按钮尽快可用，需要尽早执行；为了与 PageLaunchLeft 联动，需要为 0 而不是 GetUuid
 
@@ -432,7 +432,7 @@ Public Class FormMain
         Sub()
             'EULA 提示
             If Not Setup.Get("SystemEula") Then
-                Select Case MyMsgBox(Application.Current.FindResource("LangDialogPolicyContent"), Application.Current.FindResource("LangDialogPolicyTitle"), Application.Current.FindResource("LangDialogBtnAgree"), Application.Current.FindResource("LangDialogBtnDeny"), Application.Current.FindResource("LangDialogBtnPolicyContent"),
+                Select Case MyMsgBox(GetLang("LangDialogPolicyContent"), GetLang("LangDialogPolicyTitle"), GetLang("LangDialogBtnAgree"), GetLang("LangDialogBtnDeny"), GetLang("LangDialogBtnPolicyContent"),
                                    Button3Action:=Sub() OpenWebsite("https://shimo.im/docs/rGrd8pY8xWkt6ryW"))
                     Case 1
                         Setup.Set("SystemEula", True)
@@ -472,7 +472,7 @@ Public Class FormMain
         End Select
         If Setup.Get("SystemCount") >= 99 Then
             If ThemeUnlock(6, False) Then
-                MyMsgBox(Application.Current.FindResource("LangDialogHardcoreFanTheme"), Application.Current.FindResource("LangDialogTitleTip"))
+                MyMsgBox(GetLang("LangDialogHardcoreFanTheme"), GetLang("LangDialogTitleTip"))
             End If
         End If
 #End If
@@ -561,7 +561,7 @@ Public Class FormMain
     Public Sub EndProgram(SendWarning As Boolean)
         '发出警告
         If SendWarning AndAlso HasDownloadingTask() Then
-            If MyMsgBox(Application.Current.FindResource("LangDialogCloseOnDownloading"), Application.Current.FindResource("LangDialogTitleTip"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel")) = 1 Then
+            If MyMsgBox(GetLang("LangDialogCloseOnDownloading"), GetLang("LangDialogTitleTip"), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnCancel")) = 1 Then
                 '强行结束下载任务
                 RunInNewThread(
                 Sub()
@@ -617,7 +617,7 @@ Public Class FormMain
         If ReturnCode = Result.Exception Then
             If Not IsLogShown Then
                 FeedbackInfo()
-                Log(Application.Current.FindResource("LangCrashReport"))
+                Log(GetLang("LangCrashReport"))
                 IsLogShown = True
                 ShellOnly(Path & "PCL\Log1.txt")
             End If
@@ -701,9 +701,9 @@ Public Class FormMain
         If e.Key = Key.F12 Then
             PageSetupUI.HiddenForceShow = Not PageSetupUI.HiddenForceShow
             If PageSetupUI.HiddenForceShow Then
-                Hint(Application.Current.FindResource("LangHintHideModeOff"), HintType.Finish)
+                Hint(GetLang("LangHintHideModeOff"), HintType.Finish)
             Else
-                Hint(Application.Current.FindResource("LangHintHideModeOn"), HintType.Finish)
+                Hint(GetLang("LangHintHideModeOn"), HintType.Finish)
             End If
             PageSetupUI.HiddenRefresh()
             Exit Sub
@@ -711,7 +711,7 @@ Public Class FormMain
         '调用启动游戏
         If e.Key = Key.Enter AndAlso PageCurrent = FormMain.PageType.Launch Then
             If IsAprilEnabled AndAlso Not IsAprilGiveup Then
-                Hint(Application.Current.FindResource("LangHintIJustWantToStart"))
+                Hint(GetLang("LangHintIJustWantToStart"))
             Else
                 FrmLaunchLeft.LaunchButtonClick()
             End If
@@ -767,17 +767,17 @@ Public Class FormMain
                         Dim AuthlibServer As String = Net.WebUtility.UrlDecode(Str.Substring("authlib-injector:yggdrasil-server:".Length))
                         Log("[System] Authlib 拖拽：" & AuthlibServer)
                         If Not String.IsNullOrEmpty(New ValidateHttp().Validate(AuthlibServer)) Then
-                            Hint(String.Format(Application.Current.FindResource("LangHintAuthlibUrlIncorrect"), AuthlibServer), HintType.Critical)
+                            Hint(GetLang("LangHintAuthlibUrlIncorrect", AuthlibServer), HintType.Critical)
                             Exit Sub
                         End If
                         Dim TargetVersion = If(PageCurrent = PageType.VersionSetup, PageVersionLeft.Version, McVersionCurrent)
                         If TargetVersion Is Nothing Then
-                            Hint(Application.Current.FindResource("LangHintAuthlibDownloadGame"), HintType.Critical)
+                            Hint(GetLang("LangHintAuthlibDownloadGame"), HintType.Critical)
                             Exit Sub
                         End If
                         If AuthlibServer = "https://littleskin.cn/api/yggdrasil" Then
                             'LittleSkin
-                            If MyMsgBox(String.Format(Application.Current.FindResource("LangDialogAuthlibEnableLittleSkin"), TargetVersion.Name), Application.Current.FindResource("LangDialogTitleAuthlibEnableLittleSkin"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel")) = 2 Then
+                            If MyMsgBox(GetLang("LangDialogAuthlibEnableLittleSkin", TargetVersion.Name), GetLang("LangDialogTitleAuthlibEnableLittleSkin"), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnCancel")) = 2 Then
                                 Exit Sub
                             End If
                             Setup.Set("VersionServerLogin", 4, Version:=TargetVersion)
@@ -786,7 +786,7 @@ Public Class FormMain
                             Setup.Set("VersionServerAuthName", "LittleSkin 登录", Version:=TargetVersion)
                         Else
                             '第三方 Authlib 服务器
-                            If MyMsgBox(String.Format(Application.Current.FindResource("LangDialogAuthlibEnableLittleSkinServer"), TargetVersion.Name, AuthlibServer), Application.Current.FindResource("LangDialogTitleAuthlibEnableLittleSkin"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel")) = 2 Then
+                            If MyMsgBox(GetLang("LangDialogAuthlibEnableLittleSkinServer", TargetVersion.Name, AuthlibServer), GetLang("LangDialogTitleAuthlibEnableLittleSkin"), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnCancel")) = 2 Then
                                 Exit Sub
                             End If
                             Setup.Set("VersionServerLogin", 4, Version:=TargetVersion)
@@ -815,7 +815,7 @@ Public Class FormMain
                 '获取文件并检查
                 Dim FilePathRaw = e.Data.GetData(DataFormats.FileDrop)
                 If FilePathRaw Is Nothing Then '#2690
-                    Hint(Application.Current.FindResource("LangHintWindowDropExtract"), HintType.Critical)
+                    Hint(GetLang("LangHintWindowDropExtract"), HintType.Critical)
                     Exit Sub
                 End If
                 e.Handled = True
@@ -832,10 +832,10 @@ Public Class FormMain
             Log("[System] 接受文件拖拽：" & FilePath & If(FilePathList.Any, $" 等 {FilePathList.Count} 个文件", ""), LogLevel.Developer)
             '基础检查
             If Directory.Exists(FilePathList.First) AndAlso Not File.Exists(FilePathList.First) Then
-                Hint(Application.Current.FindResource("LangHintWindowDropFolder"), HintType.Critical)
+                Hint(GetLang("LangHintWindowDropFolder"), HintType.Critical)
                 Exit Sub
             ElseIf Not File.Exists(FilePathList.First) Then
-                Hint(String.Format(Application.Current.FindResource("LangHintWindowDropFileNotFound"), FilePathList.First), HintType.Critical)
+                Hint(GetLang("LangHintWindowDropFileNotFound", FilePathList.First), HintType.Critical)
                 Exit Sub
             End If
             '多文件拖拽
@@ -843,7 +843,7 @@ Public Class FormMain
                 '必须要求全部为 jar 文件
                 For Each File In FilePathList
                     If Not {"jar", "litemod", "disabled", "old"}.Contains(File.After(".").ToLower) Then
-                        Hint(Application.Current.FindResource("LangHintWindowDropFileOneFileAtATime"), HintType.Critical)
+                        Hint(GetLang("LangHintWindowDropFileOneFileAtATime"), HintType.Critical)
                         Exit Sub
                     End If
                 Next
@@ -853,7 +853,7 @@ Public Class FormMain
             If Extension = "xaml" Then
                 Log("[System] 文件后缀为 XAML，作为自定义主页加载")
                 If File.Exists(Path & "PCL\Custom.xaml") Then
-                    If MyMsgBox(Application.Current.FindResource("LangDialogCustomHomePageReplaceContent"), Application.Current.FindResource("LangDialogCustomHomePageReplaceTitle"), Application.Current.FindResource("LangDialogBtnCustomHomePageReplaceConfirm"), Application.Current.FindResource("LangDialogBtnCancel")) = 2 Then
+                    If MyMsgBox(GetLang("LangDialogCustomHomePageReplaceContent"), GetLang("LangDialogCustomHomePageReplaceTitle"), GetLang("LangDialogBtnCustomHomePageReplaceConfirm"), GetLang("LangDialogBtnCancel")) = 2 Then
                         Exit Sub
                     End If
                 End If
@@ -861,7 +861,7 @@ Public Class FormMain
                 RunInUi(Sub()
                             Setup.Set("UiCustomType", 1)
                             FrmLaunchRight.ForceRefresh()
-                            Hint(Application.Current.FindResource("LangHintLoadedCustomHomePage"), HintType.Finish)
+                            Hint(GetLang("LangHintLoadedCustomHomePage"), HintType.Finish)
                         End Sub)
                 Exit Sub
             End If
@@ -873,14 +873,14 @@ Public Class FormMain
                 If PageCurrent = PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
                 If PageCurrent = PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Modable Then
                     '正在选择版本，或当前版本不能安装 Mod
-                    Hint(Application.Current.FindResource("LangHintChoseLoaderBeforeInstallMod"))
+                    Hint(GetLang("LangHintChoseLoaderBeforeInstallMod"))
                 ElseIf Not (PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod) Then
                     '未处于 Mod 管理页面
                     Dim ModInstallConfirm As Int32
                     If FilePathList.Count = 1 Then
-                        ModInstallConfirm = MyMsgBox(String.Format(Application.Current.FindResource("LangDialogInstallModContent"), TargetVersion.Name), Application.Current.FindResource("LangDialogInstallModTitle"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel"))
+                        ModInstallConfirm = MyMsgBox(GetLang("LangDialogInstallModContent", TargetVersion.Name), GetLang("LangDialogInstallModTitle"), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnCancel"))
                     ElseIf FilePathList.Count >= 2 Then
-                        ModInstallConfirm = MyMsgBox(String.Format(Application.Current.FindResource("LangDialogInstallModsContent"), TargetVersion.Name), Application.Current.FindResource("LangDialogInstallModTitle"), Application.Current.FindResource("LangDialogBtnOK"), Application.Current.FindResource("LangDialogBtnCancel"))
+                        ModInstallConfirm = MyMsgBox(GetLang("LangDialogInstallModsContent", TargetVersion.Name), GetLang("LangDialogInstallModTitle"), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnCancel"))
                     End If
                     If ModInstallConfirm = 1 Then GoTo Install
                 Else
@@ -891,16 +891,16 @@ Install:
                             CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & GetFileNameFromPath(ModFile))
                         Next
                         If FilePathList.Count = 1 Then
-                            Hint(String.Format(Application.Current.FindResource("LangHintInstallModSuccessA"), GetFileNameFromPath(FilePathList.First)), HintType.Finish)
+                            Hint(GetLang("LangHintInstallModSuccessA", GetFileNameFromPath(FilePathList.First)), HintType.Finish)
                         Else
-                            Hint(String.Format(Application.Current.FindResource("LangHintInstallModSuccessB"), FilePathList.Count), HintType.Finish)
+                            Hint(GetLang("LangHintInstallModSuccessB", FilePathList.Count), HintType.Finish)
                         End If
                         '刷新列表
                         If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
                             LoaderFolderRun(McModLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
                         End If
                     Catch ex As Exception
-                        Log(ex, Application.Current.FindResource("LangHintInstallModFailed"), LogLevel.Msgbox)
+                        Log(ex, GetLang("LangHintInstallModFailed"), LogLevel.Msgbox)
                     End Try
                 End If
                 Exit Sub
@@ -912,7 +912,7 @@ Install:
             End If
             'RAR 处理
             If Extension = "rar" Then
-                Hint(Application.Current.FindResource("LangHintRarNotSupport"))
+                Hint(GetLang("LangHintRarNotSupport"))
                 Exit Sub
             End If
             '错误报告分析
@@ -928,7 +928,7 @@ Install:
                 Log(ex, "自主错误报告分析失败", LogLevel.Feedback)
             End Try
             '未知操作
-            Hint(Application.Current.FindResource("LangHintWindowDropUnknown"))
+            Hint(GetLang("LangHintWindowDropUnknown"))
         End Sub, "文件拖拽")
     End Sub
 
@@ -1084,20 +1084,20 @@ Install:
     Private Function PageNameGet(Stack As PageStackData) As String
         Select Case Stack.Page
             Case PageType.VersionSelect
-                Return Application.Current.FindResource("LangPageNameVersionChoose")
+                Return GetLang("LangPageNameVersionChoose")
             Case PageType.DownloadManager
-                Return Application.Current.FindResource("LangPageNameDownloadManagement")
+                Return GetLang("LangPageNameDownloadManagement")
             Case PageType.VersionSetup
-                Return Application.Current.FindResource("LangPageNameVersionConfiguration") & " - " & If(PageVersionLeft.Version Is Nothing, Application.Current.FindResource("LangPageNameVersionConfigurationUnknownVersion"), PageVersionLeft.Version.Name)
+                Return GetLang("LangPageNameVersionConfiguration") & " - " & If(PageVersionLeft.Version Is Nothing, GetLang("LangPageNameVersionConfigurationUnknownVersion"), PageVersionLeft.Version.Name)
             Case PageType.CompDetail
                 Dim Project As CompProject = Stack.Additional(0)
                 Select Case Project.Type
                     Case CompType.Mod
-                        Return Application.Current.FindResource("LangPageNameModDownload") & " - " & Project.TranslatedName
+                        Return GetLang("LangPageNameModDownload") & " - " & Project.TranslatedName
                     Case CompType.ModPack
-                        Return Application.Current.FindResource("LangPageNameModpacksDownload") & " - " & Project.TranslatedName
+                        Return GetLang("LangPageNameModpacksDownload") & " - " & Project.TranslatedName
                     Case Else 'CompType.ResourcePack
-                        Return Application.Current.FindResource("LangPageNameResourcePacksDownload") & " - " & Project.TranslatedName
+                        Return GetLang("LangPageNameResourcePacksDownload") & " - " & Project.TranslatedName
                 End Select
             Case PageType.HelpDetail
                 Dim Entry As HelpEntry = Stack.Additional(0)
@@ -1353,7 +1353,7 @@ Install:
 
             Log("[Control] 切换主要页面：" & GetStringFromEnum(Stack) & ", " & SubType)
         Catch ex As Exception
-            Log(ex, String.Format(Application.Current.FindResource("LangDialogFailedToChangePage"), PageCurrent.Page), LogLevel.Feedback)
+            Log(ex, GetLang("LangDialogFailedToChangePage", PageCurrent.Page), LogLevel.Feedback)
         Finally
             AniControlEnabled -= 1
         End Try
@@ -1530,9 +1530,9 @@ Install:
             For Each Watcher In McWatcherList
                 Watcher.Kill()
             Next
-            Hint(Application.Current.FindResource("LangHintCloseMinecraftSuccess"), HintType.Finish)
+            Hint(GetLang("LangHintCloseMinecraftSuccess"), HintType.Finish)
         Catch ex As Exception
-            Log(ex, Application.Current.FindResource("LangHintCloseMinecraftFailed"), LogLevel.Feedback)
+            Log(ex, GetLang("LangHintCloseMinecraftFailed"), LogLevel.Feedback)
         End Try
     End Sub
     Public Function BtnExtraShutdown_ShowCheck() As Boolean
@@ -1547,7 +1547,7 @@ Install:
         If RealScroll IsNot Nothing Then
             RealScroll.PerformVerticalOffsetDelta(-RealScroll.VerticalOffset)
         Else
-            Log("[UI] " + Application.Current.FindResource("LangHintBackToTopFailed"), LogLevel.Hint)
+            Log("[UI] " + GetLang("LangHintBackToTopFailed"), LogLevel.Hint)
         End If
     End Sub
     Private Function BtnExtraBack_ShowCheck() As Boolean

@@ -29,17 +29,17 @@
     Public Shared Function GetLoginData() As McLoginServer
         Dim Server As String = If(IsNothing(McVersionCurrent), Setup.Get("CacheNideServer"), Setup.Get("VersionServerNide", Version:=McVersionCurrent))
         If FrmLoginNide Is Nothing Then
-            Return New McLoginServer(McLoginType.Nide) With {.Token = "Nide", .UserName = "", .Password = "", .Description = Application.Current.FindResource("LangPageLoginNideDesc"), .Type = McLoginType.Nide, .BaseUrl = "https://auth.mc-user.com:233/" & Server & "/authserver"}
+            Return New McLoginServer(McLoginType.Nide) With {.Token = "Nide", .UserName = "", .Password = "", .Description = GetLang("LangPageLoginNideDesc"), .Type = McLoginType.Nide, .BaseUrl = "https://auth.mc-user.com:233/" & Server & "/authserver"}
         Else
-            Return New McLoginServer(McLoginType.Nide) With {.Token = "Nide", .UserName = FrmLoginNide.ComboName.Text.Replace("¨", "").Trim, .Password = FrmLoginNide.TextPass.Password.Replace("¨", "").Trim, .Description = Application.Current.FindResource("LangPageLoginNideDesc"), .Type = McLoginType.Nide, .BaseUrl = "https://auth.mc-user.com:233/" & Server & "/authserver"}
+            Return New McLoginServer(McLoginType.Nide) With {.Token = "Nide", .UserName = FrmLoginNide.ComboName.Text.Replace("¨", "").Trim, .Password = FrmLoginNide.TextPass.Password.Replace("¨", "").Trim, .Description = GetLang("LangPageLoginNideDesc"), .Type = McLoginType.Nide, .BaseUrl = "https://auth.mc-user.com:233/" & Server & "/authserver"}
         End If
     End Function
     ''' <summary>
     ''' 当前页面的登录信息是否有效。
     ''' </summary>
     Public Shared Function IsVaild(LoginData As McLoginServer) As String
-        If LoginData.UserName = "" Then Return Application.Current.FindResource("LangPageLoginNideNoEmptyAccount")
-        If LoginData.Password = "" Then Return Application.Current.FindResource("LangPageLoginNideNoEmptyPassword")
+        If LoginData.UserName = "" Then Return GetLang("LangPageLoginNideNoEmptyAccount")
+        If LoginData.Password = "" Then Return GetLang("LangPageLoginNideNoEmptyPassword")
         Return ""
     End Function
     Public Function IsVaild() As String
@@ -67,10 +67,10 @@
 
     '链接处理
     Private Sub ComboName_TextChanged() Handles ComboName.TextChanged
-        BtnLink.Content = If(ComboName.Text = "", Application.Current.FindResource("LangPageLoginNideRegister"), Application.Current.FindResource("LangPageLoginNideForgetPassword"))
+        BtnLink.Content = If(ComboName.Text = "", GetLang("LangPageLoginNideRegister"), GetLang("LangPageLoginNideForgetPassword"))
     End Sub
     Private Sub Btn_Click(sender As Object, e As EventArgs) Handles BtnLink.Click
-        If BtnLink.Content = Application.Current.FindResource("LangPageLoginNideRegister") Then
+        If BtnLink.Content = GetLang("LangPageLoginNideRegister") Then
             OpenWebsite("https://login.mc-user.com:233/" & Setup.Get("VersionServerNide", Version:=McVersionCurrent) & "/register")
         Else
             OpenWebsite("https://login.mc-user.com:233/account/login")

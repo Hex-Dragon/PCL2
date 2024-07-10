@@ -7,7 +7,7 @@
         Dim IndexBefore = ComboAccounts.SelectedIndex
         '刷新下拉框列表
         ComboAccounts.Items.Clear()
-        ComboAccounts.Items.Add(New MyComboBoxItem With {.Content = Application.Current.FindResource("LangPageLoginMsAddAccount")})
+        ComboAccounts.Items.Add(New MyComboBoxItem With {.Content = GetLang("LangPageLoginMsAddAccount")})
         Try
             Dim MsJson As JObject = GetJson(Setup.Get("LoginMsJson"))
             For Each Account In MsJson
@@ -55,7 +55,7 @@
     ''' </summary>
     Public Shared Function IsVaild(LoginData As McLoginMs) As String
         If LoginData.OAuthRefreshToken = "" Then
-            Return Application.Current.FindResource("LangPageLoginMsAddAccountBeforeStart")
+            Return GetLang("LangPageLoginMsAddAccountBeforeStart")
         Else
             Return ""
         End If
@@ -86,22 +86,22 @@
                     Throw New Exception(McLoginMsLoader.Error.Message, McLoginMsLoader.Error)
                 End If
             Catch ex As ThreadInterruptedException
-                Hint(Application.Current.FindResource("LangPageLoginMsAddAccountCancel"))
+                Hint(GetLang("LangPageLoginMsAddAccountCancel"))
             Catch ex As Exception
                 If ex.Message = "$$" Then
                 ElseIf ex.Message.StartsWith("$") Then
                     Hint(ex.Message.TrimStart("$"), HintType.Critical)
                 ElseIf TypeOf ex Is Security.Authentication.AuthenticationException AndAlso ex.Message.ContainsF("SSL/TLS") Then
-                    Log(ex, Application.Current.FindResource("LangPageLoginMsAddAccountFailBySSL"), LogLevel.Msgbox)
+                    Log(ex, GetLang("LangPageLoginMsAddAccountFailBySSL"), LogLevel.Msgbox)
                 Else
-                    Log(ex, Application.Current.FindResource("LangPageLoginMsAddAccountFail"), LogLevel.Msgbox)
+                    Log(ex, GetLang("LangPageLoginMsAddAccountFail"), LogLevel.Msgbox)
                 End If
             Finally
                 RunInUi(
                 Sub()
                     ComboAccounts.IsEnabled = True
                     BtnLogin.IsEnabled = True
-                    BtnLogin.Text = Application.Current.FindResource("LangPageLoginMsLogin")
+                    BtnLogin.Text = GetLang("LangPageLoginMsLogin")
                 End Sub)
             End Try
         End Sub, "Ms Login")

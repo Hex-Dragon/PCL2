@@ -105,7 +105,7 @@
                 End If
                 '增加提示
                 If Pair.Key = "未知版本" Then
-                    NewStack.Children.Add(New MyHint With {.Text = Application.Current.FindResource("LangDownloadCompApiSlow"), .IsWarn = False, .Margin = New Thickness(0, 0, 0, 7)})
+                    NewStack.Children.Add(New MyHint With {.Text = GetLang("LangDownloadCompApiSlow"), .IsWarn = False, .Margin = New Thickness(0, 0, 0, 7)})
                 End If
             Next
             '如果只有一张卡片，展开第一张卡片
@@ -143,7 +143,7 @@
         PanIntro.Children.Insert(0, CompItem)
 
         '决定按钮显示
-        BtnIntroWeb.Text = If(Project.FromCurseForge, Application.Current.FindResource("LangDownloadCompToCurseForge"), Application.Current.FindResource("LangDownloadCompToModrinth"))
+        BtnIntroWeb.Text = If(Project.FromCurseForge, GetLang("LangDownloadCompToCurseForge"), GetLang("LangDownloadCompToModrinth"))
         BtnIntroWiki.Visibility = If(Project.WikiId = 0, Visibility.Collapsed, Visibility.Visible)
 
         AniControlEnabled -= 1
@@ -246,7 +246,7 @@
                     Else
                         Dim NeedLoad As Boolean = McVersionListLoader.State <> LoadState.Finished
                         If NeedLoad Then
-                            Hint(Application.Current.FindResource("LangDownloadCompSearchingSuitableInstance"))
+                            Hint(GetLang("LangDownloadCompSearchingSuitableInstance"))
                             LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
                         End If
                         Dim SuitableVersions As New List(Of McVersion)
@@ -256,7 +256,7 @@
                         If Not SuitableVersions.Any() Then
                             DefaultFolder = PathMcFolder
                             If NeedLoad Then
-                                Hint(Application.Current.FindResource("LangDownloadCompNoSuitableInstance"))
+                                Hint(GetLang("LangDownloadCompNoSuitableInstance"))
                             Else
                                 Log("[Comp] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
                             End If

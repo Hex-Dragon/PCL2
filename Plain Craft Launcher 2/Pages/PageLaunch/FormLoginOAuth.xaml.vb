@@ -17,7 +17,7 @@ Public Class FormLoginOAuth
             IsLoginSuccessed = True
             RaiseEvent OnLoginSuccess(Code)
         ElseIf Url.Contains("github.") Then
-            Hint(Application.Current.FindResource("LangLoginOAuthNoGithubLogin"), HintType.Critical)
+            Hint(GetLang("LangLoginOAuthNoGithubLogin"), HintType.Critical)
             Close()
         End If
     End Sub
