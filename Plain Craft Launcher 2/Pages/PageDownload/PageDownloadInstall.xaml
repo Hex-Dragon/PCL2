@@ -19,7 +19,7 @@
                     <local:MyCard Title="安装预览" Margin="0,15,0,0" UseAnimation="False">
                         <StackPanel Margin="25,37,25,15">
                             <local:MyHint Text="你尚未选择安装 Fabric API，这会导致大多数 Mod 无法使用！" Margin="0,1,0,7" x:Name="HintFabricAPI" IsWarn="True" />
-                            <local:MyHint Text="你尚未选择安装 Quilt Standard Libraries(QSL)，这会导致大多数 Mod 无法使用！" Margin="0,1,0,7" x:Name="HintQSL" IsWarn="True" />
+                            <local:MyHint Text="你尚未选择安装 QFAPI / QSL，这会导致大多数 Mod 无法使用！" Margin="0,1,0,7" x:Name="HintQSL" IsWarn="True" />
                             <local:MyHint Text="你尚未选择安装 OptiFabric，这会导致 OptiFine 无法使用！" Margin="0,1,0,7" x:Name="HintOptiFabric" IsWarn="True" />
                             <local:MyHint Text="安装结束后，请在 Mod 下载中搜索 OptiFabric Origins 并下载，否则 OptiFine 会无法使用！" Margin="0,1,0,7" x:Name="HintOptiFabricOld" IsWarn="False" />
                             <local:MyHint Text="OptiFine 与一部分 Mod 的兼容性不佳，请谨慎安装。" Margin="0,1,0,7" x:Name="HintModOptiFine" IsWarn="False" />
@@ -153,7 +153,7 @@
                     Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="QSL" Height="40" Margin="0,15,0,0" x:Name="CardQSL" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="QFAPI / QSL" Height="40" Margin="0,15,0,0" x:Name="CardQSL" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanQSL" />
                         <Grid x:Name="PanQSLInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>

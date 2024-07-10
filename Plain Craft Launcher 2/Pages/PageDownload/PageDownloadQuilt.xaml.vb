@@ -26,7 +26,7 @@
     End Sub
 
     Private Sub BtnWeb_Click(sender As Object, e As EventArgs) Handles BtnWeb.Click
-        OpenWebsite("https://www.quiltmc.org")
+        OpenWebsite("https://quiltmc.org")
     End Sub
 
 End Class

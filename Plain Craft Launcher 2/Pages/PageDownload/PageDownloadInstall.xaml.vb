@@ -486,7 +486,7 @@
             End If
         End If
         'Quilt
-        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 13 Then
+        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 14 AndAlso Val(SelectedMinecraftId.Split(".")(2)) < 4 Then
             CardQuilt.Visibility = Visibility.Collapsed
         Else
             CardQuilt.Visibility = Visibility.Visible
@@ -589,6 +589,7 @@
         SelectedMinecraftIcon = Nothing
         SelectedOptiFine = Nothing
         SelectedLiteLoader = Nothing
+        SelectedLoaderName = Nothing
         SelectedForge = Nothing
         SelectedNeoForge = Nothing
         SelectedFabric = Nothing
@@ -605,10 +606,10 @@
     Private Function GetSelectName() As String
         Dim Name As String = SelectedMinecraftId
         If SelectedFabric IsNot Nothing Then
-            Name += "-Fabric " & SelectedFabric.Replace("+build", "")
+            Name += "-Fabric_" & SelectedFabric.Replace("+build", "")
         End If
         If SelectedQuilt IsNot Nothing Then
-            Name += "-Quilt " & SelectedQuilt
+            Name += "-Quilt_" & SelectedQuilt
         End If
         If SelectedForge IsNot Nothing Then
             Name += "-Forge_" & SelectedForge.VersionName
@@ -799,7 +800,7 @@
     ''' 获取 OptiFine 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadOptiFineGetError() As String
-        If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
+        If SelectedLoaderName = "NeoForge" OrElse SelectedLoaderName = "Quilt" Then Return $"与 {SelectedLoaderName} 不兼容"
         If LoadOptiFine Is Nothing OrElse LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFine.State, Object).Error.Message
         '检查 Forge 1.13 - 1.14.3：全部不兼容
@@ -1357,38 +1358,15 @@
     ''' <summary>
     ''' 从显示名判断该 API 是否与某版本适配。
     ''' </summary>
-    Public Shared Function IsSuitableQSL(DisplayName As String, MinecraftVersion As String) As Boolean
+    Public Shared Function IsSuitableQSL(SupportVersions As List(Of String), MinecraftVersion As String) As Boolean
         Try
-            If DisplayName Is Nothing OrElse MinecraftVersion Is Nothing Then Return False
-            DisplayName = DisplayName.ToLower : MinecraftVersion = MinecraftVersion.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3").ToLower
-            If DisplayName.StartsWith("[" & MinecraftVersion & "]") Then Return True
-            If Not DisplayName.Contains("/") OrElse Not DisplayName.Contains("]") Then Return False
-            '直接的判断（例如 1.18.1/22w03a）
-            For Each Part As String In DisplayName.Before("]").TrimStart("[").Split("/")
-                If Part = MinecraftVersion Then Return True
-            Next
-            '将版本名分割语素（例如 1.16.4/5）
-            Dim Lefts = RegexSearch(DisplayName.Before("]"), "[a-z/]+|[0-9/]+")
-            Dim Rights = RegexSearch(MinecraftVersion.Before("]"), "[a-z/]+|[0-9/]+")
-            '对每段进行判断
-            Dim i As Integer = 0
-            While True
-                '两边均缺失，感觉是一个东西
-                If Lefts.Count - 1 < i AndAlso Rights.Count - 1 < i Then Return True
-                '确定两边是否一致
-                Dim LeftValue As String = If(Lefts.Count - 1 < i, "-1", Lefts(i))
-                Dim RightValue As String = If(Rights.Count - 1 < i, "-1", Rights(i))
-                If Not LeftValue.Contains("/") Then
-                    If LeftValue <> RightValue Then Return False
-                Else
-                    '左边存在斜杠
-                    If Not LeftValue.Contains(RightValue) Then Return False
-                End If
-                i += 1
-            End While
-            Return True
+            If SupportVersions.Contains(MinecraftVersion) Then
+                Return True
+            Else
+                Return False
+            End If
         Catch ex As Exception
-            Log(ex, "判断 QSL 版本适配性出错（" & DisplayName & ", " & MinecraftVersion & "）")
+            Log(ex, "判断 QSL 版本适配性出错（" & SupportVersions.ToString & ", " & MinecraftVersion & "）")
             Return False
         End Try
     End Function
@@ -1405,7 +1383,7 @@
             Return Nothing
         End If
         For Each Version In DlQSLLoader.Output
-            If Not IsSuitableQSL(Version.DisplayName, SelectedMinecraftId) Then Continue For
+            If Not IsSuitableQSL(Version.GameVersions, SelectedMinecraftId) Then Continue For
             If SelectedQuilt Is Nothing Then Return "需要安装 Quilt"
             Return Nothing
         Next
@@ -1428,7 +1406,7 @@
             '获取版本列表
             Dim Versions As New List(Of CompFile)
             For Each Version In DlQSLLoader.Output
-                If IsSuitableQSL(Version.DisplayName, SelectedMinecraftId) Then
+                If IsSuitableQSL(Version.GameVersions, SelectedMinecraftId) Then
                     If Not Version.DisplayName.StartsWith("[") Then
                         Log("[Download] 已特判修改 QSL 显示名：" & Version.DisplayName, LogLevel.Debug)
                         Version.DisplayName = "[" & SelectedMinecraftId & "] " & Version.DisplayName
@@ -1441,7 +1419,7 @@
             '可视化
             PanQSL.Children.Clear()
             For Each Version In Versions
-                If Not IsSuitableQSL(Version.DisplayName, SelectedMinecraftId) Then Continue For
+                If Not IsSuitableQSL(Version.GameVersions, SelectedMinecraftId) Then Continue For
                 PanQSL.Children.Add(QSLDownloadListItem(Version, AddressOf QSL_Selected))
             Next
             '自动选择 QSL

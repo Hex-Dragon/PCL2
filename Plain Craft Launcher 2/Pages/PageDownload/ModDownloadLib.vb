@@ -1964,7 +1964,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry("version").ToString, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry("maven").ToString.Contains("installer"), "安装器", If(Entry("version").ToString.Contains("beta"), "测试版", "稳定版")),
+            .Info = If(Entry("maven").ToString.Contains("installer"), "安装器", If(Entry("version").ToString.Contains("beta") OrElse Entry("version").ToString.Contains("pre"), "测试版", "稳定版")),
             .Logo = PathImage & "Blocks/Quilt.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -2056,7 +2056,7 @@ Retry:
         Public QuiltVersion As String = Nothing
 
         ''' <summary>
-        ''' 欲下载的 Quilt Standard Libraries(QSL) 信息。
+        ''' 欲下载的 Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL) 信息。
         ''' </summary>
         Public QSL As CompFile = Nothing
 
@@ -2227,9 +2227,9 @@ Retry:
         If Request.FabricApi IsNot Nothing Then
             LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
         End If
-        'Quilt Standard Libraries(QSL)
+        'Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL)
         If Request.QSL IsNot Nothing Then
-            LoaderList.Add(New LoaderDownload("下载 Quilt Standard Libraries(QSL)", New List(Of NetFile) From {Request.QSL.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
+            LoaderList.Add(New LoaderDownload("下载 QFAPI / QSL", New List(Of NetFile) From {Request.QSL.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
         End If
         'OptiFabric
         If Request.OptiFabric IsNot Nothing Then

@@ -223,7 +223,7 @@ Retry:
                 'Quilt 指定
                 Try
                     Log("[ModPack] 整合包 Quilt 版本：" & Id)
-                    QuiltVersion = Id.Split("-")(1)
+                    QuiltVersion = Id.Replace("quilt-", "")
                     Exit For
                 Catch ex As Exception
                     Log(ex, "读取整合包 Quilt 版本失败：" & Id)
