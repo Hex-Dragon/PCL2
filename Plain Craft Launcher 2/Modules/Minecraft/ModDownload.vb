@@ -13,7 +13,7 @@
         Loop
         '检查 Json 是否标准
         If Version.JsonObject("downloads") Is Nothing OrElse Version.JsonObject("downloads")("client") Is Nothing OrElse Version.JsonObject("downloads")("client")("url") Is Nothing Then
-            Throw New Exception("底层版本 " & Version.Name & " 中无 jar 文件下载信息")
+            Throw New Exception("底层版本 " & Version.Name & " 中无 Jar 文件下载信息")
         End If
         '检查文件
         Dim Checker As New FileChecker(MinSize:=1024, ActualSize:=If(Version.JsonObject("downloads")("client")("size"), -1), Hash:=Version.JsonObject("downloads")("client")("sha1"))
@@ -262,10 +262,10 @@
                     Return Version("url").ToString
                 End If
             Next
-            Log("未发现版本 " & Id & " 的 json 下载地址，版本列表返回为：" & vbCrLf & DlClientListLoader.Output.Value.ToString, LogLevel.Debug)
+            Log("未发现版本 " & Id & " 的 Json 下载地址，版本列表返回为：" & vbCrLf & DlClientListLoader.Output.Value.ToString, LogLevel.Debug)
             Return Nothing
         Catch ex As Exception
-            Log(ex, "获取版本 " & Id & " 的 json 下载地址失败")
+            Log(ex, "获取版本 " & Id & " 的 Json 下载地址失败")
             Return Nothing
         End Try
     End Function
@@ -1183,7 +1183,7 @@
     End Function
 
     Public Function DlSourceLauncherOrMetaGet(MojangBase As String) As String()
-        If MojangBase Is Nothing Then Throw New Exception("无对应的 json 下载地址")
+        If MojangBase Is Nothing Then Throw New Exception("无对应的 Json 下载地址")
         Return {
             MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com"),
             MojangBase

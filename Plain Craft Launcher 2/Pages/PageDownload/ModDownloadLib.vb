@@ -41,7 +41,7 @@ Public Module ModDownloadLib
             '已有版本检查
             If Behaviour <> NetPreDownloadBehaviour.IgnoreCheck AndAlso File.Exists(VersionFolder & Id & ".json") AndAlso File.Exists(VersionFolder & Id & ".jar") Then
                 If Behaviour = NetPreDownloadBehaviour.ExitWhileExistsOrDownloading Then Return Nothing
-                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 与 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
+                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 与 Jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
                     File.Delete(VersionFolder & Id & ".jar")
                     File.Delete(VersionFolder & Id & ".json")
                 Else
@@ -86,14 +86,14 @@ Public Module ModDownloadLib
 
             Dim Loaders As New List(Of LoaderBase)
             '下载版本 Json 文件
-            Loaders.Add(New LoaderDownload("下载版本 json 文件", New List(Of NetFile) From {
+            Loaders.Add(New LoaderDownload("下载版本 Json 文件", New List(Of NetFile) From {
                 New NetFile(DlSourceLauncherOrMetaGet(JsonUrl), VersionFolder & Id & ".json", New FileChecker(CanUseExistsFile:=False, IsJson:=True))
             }) With {.ProgressWeight = 2})
             '获取支持库文件地址
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析核心 jar 文件下载地址",
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析核心 Jar 文件下载地址",
                                                             Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder), True)) With {.ProgressWeight = 0.5, .Show = False})
             '下载支持库文件
-            Loaders.Add(New LoaderDownload("下载核心 jar 文件", New List(Of NetFile)) With {.ProgressWeight = 5})
+            Loaders.Add(New LoaderDownload("下载核心 Jar 文件", New List(Of NetFile)) With {.ProgressWeight = 5})
 
             '启动
             Dim Loader As New LoaderCombo(Of String)("Minecraft " & Id & " 下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
@@ -119,7 +119,7 @@ Public Module ModDownloadLib
 
         '下载版本 Json 文件
         If JsonUrl Is Nothing Then
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取原版 json 文件下载地址",
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取原版 Json 文件下载地址",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 Dim JsonAddress As String = DlClientListGet(Id)
                 Task.Output = New List(Of NetFile) From {New NetFile(DlSourceLauncherOrMetaGet(JsonAddress), VersionFolder & VersionName & ".json")}
@@ -170,7 +170,7 @@ Public Module ModDownloadLib
 
     End Function
     Private Const McDownloadClientLibName As String = "下载原版支持库文件"
-    Private Const McDownloadClientJsonName As String = "下载原版 json 文件"
+    Private Const McDownloadClientJsonName As String = "下载原版 Json 文件"
 
 #End Region
 
@@ -337,7 +337,7 @@ Public Module ModDownloadLib
 
             '已有版本检查
             If File.Exists(VersionFolder & Id & ".json") Then
-                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 和 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
+                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 和 Jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
                     File.Delete(VersionFolder & Id & ".jar")
                     File.Delete(VersionFolder & Id & ".json")
                 Else
@@ -804,7 +804,7 @@ Retry:
 
             '已有版本检查
             If File.Exists(VersionFolder & VersionName & ".json") Then
-                If MyMsgBox("版本 " & VersionName & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 和 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
+                If MyMsgBox("版本 " & VersionName & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 和 Jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
                     File.Delete(VersionFolder & VersionName & ".jar")
                     File.Delete(VersionFolder & VersionName & ".json")
                 Else
@@ -1424,10 +1424,10 @@ Retry:
                     End If
                     If DeltaList.Count = 1 Then
                         '如果没有新增文件夹，那么预测的文件夹名就是正确的
-                        '如果只新增 1 个文件夹，那么拷贝 json 文件
+                        '如果只新增 1 个文件夹，那么拷贝 Json 文件
                         Dim JsonFile As FileInfo = DeltaList(0).EnumerateFiles.First()
                         WriteFile(VersionFolder & TargetVersion & ".json", ReadFile(JsonFile.FullName))
-                        Log($"[Download] 已拷贝新增的版本 JSON 文件：{JsonFile.FullName} -> {VersionFolder}{TargetVersion}.json")
+                        Log($"[Download] 已拷贝新增的版本 Json 文件：{JsonFile.FullName} -> {VersionFolder}{TargetVersion}.json")
                     ElseIf DeltaList.Count > 1 Then
                         '新增了多个文件夹
                         Log($"[Download] 有多个疑似的新增版本，无法确定：{DeltaList.Select(Function(d) d.Name).Join(";")}")
@@ -2357,42 +2357,42 @@ Retry:
         Dim OutputJson As JObject, MinecraftJson As JObject, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, NeoForgeJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing, QuiltJson As JObject = Nothing
 #Region "读取文件并检查文件是否合规"
         Dim MinecraftJsonText As String = ReadFile(MinecraftJsonPath)
-        If Not MinecraftJsonText.StartsWithF("{") Then Throw New Exception("Minecraft json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
+        If Not MinecraftJsonText.StartsWithF("{") Then Throw New Exception("Minecraft Json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
         MinecraftJson = GetJson(MinecraftJsonText)
 
         If HasOptiFine Then
             Dim OptiFineJsonText As String = ReadFile(OptiFineJsonPath)
-            If Not OptiFineJsonText.StartsWithF("{") Then Throw New Exception("OptiFine json 有误，地址：" & OptiFineJsonPath & "，前段内容：" & OptiFineJsonText.Substring(0, Math.Min(OptiFineJsonText.Length, 1000)))
+            If Not OptiFineJsonText.StartsWithF("{") Then Throw New Exception("OptiFine Json 有误，地址：" & OptiFineJsonPath & "，前段内容：" & OptiFineJsonText.Substring(0, Math.Min(OptiFineJsonText.Length, 1000)))
             OptiFineJson = GetJson(OptiFineJsonText)
         End If
 
         If HasForge Then
             Dim ForgeJsonText As String = ReadFile(ForgeJsonPath)
-            If Not ForgeJsonText.StartsWithF("{") Then Throw New Exception("Forge json 有误，地址：" & ForgeJsonPath & "，前段内容：" & ForgeJsonText.Substring(0, Math.Min(ForgeJsonText.Length, 1000)))
+            If Not ForgeJsonText.StartsWithF("{") Then Throw New Exception("Forge Json 有误，地址：" & ForgeJsonPath & "，前段内容：" & ForgeJsonText.Substring(0, Math.Min(ForgeJsonText.Length, 1000)))
             ForgeJson = GetJson(ForgeJsonText)
         End If
 
         If HasNeoForge Then
             Dim NeoForgeJsonText As String = ReadFile(NeoForgeJsonPath)
-            If Not NeoForgeJsonText.StartsWithF("{") Then Throw New Exception("NeoForge json 有误，地址：" & NeoForgeJsonPath & "，前段内容：" & NeoForgeJsonText.Substring(0, Math.Min(NeoForgeJsonText.Length, 1000)))
+            If Not NeoForgeJsonText.StartsWithF("{") Then Throw New Exception("NeoForge Json 有误，地址：" & NeoForgeJsonPath & "，前段内容：" & NeoForgeJsonText.Substring(0, Math.Min(NeoForgeJsonText.Length, 1000)))
             NeoForgeJson = GetJson(NeoForgeJsonText)
         End If
 
         If HasLiteLoader Then
             Dim LiteLoaderJsonText As String = ReadFile(LiteLoaderJsonPath)
-            If Not LiteLoaderJsonText.StartsWithF("{") Then Throw New Exception("LiteLoader json 有误，地址：" & LiteLoaderJsonPath & "，前段内容：" & LiteLoaderJsonText.Substring(0, Math.Min(LiteLoaderJsonText.Length, 1000)))
+            If Not LiteLoaderJsonText.StartsWithF("{") Then Throw New Exception("LiteLoader Json 有误，地址：" & LiteLoaderJsonPath & "，前段内容：" & LiteLoaderJsonText.Substring(0, Math.Min(LiteLoaderJsonText.Length, 1000)))
             LiteLoaderJson = GetJson(LiteLoaderJsonText)
         End If
 
         If HasFabric Then
             Dim FabricJsonText As String = ReadFile(FabricJsonPath)
-            If Not FabricJsonText.StartsWithF("{") Then Throw New Exception("Fabric json 有误，地址：" & FabricJsonPath & "，前段内容：" & FabricJsonText.Substring(0, Math.Min(FabricJsonText.Length, 1000)))
+            If Not FabricJsonText.StartsWithF("{") Then Throw New Exception("Fabric Json 有误，地址：" & FabricJsonPath & "，前段内容：" & FabricJsonText.Substring(0, Math.Min(FabricJsonText.Length, 1000)))
             FabricJson = GetJson(FabricJsonText)
         End If
 
         If HasQuilt Then
             Dim QuiltJsonText As String = ReadFile(QuiltJsonPath)
-            If Not QuiltJsonText.StartsWithF("{") Then Throw New Exception("Quilt json 有误，地址：" & QuiltJsonPath & "，前段内容：" & QuiltJsonText.Substring(0, Math.Min(QuiltJsonText.Length, 1000)))
+            If Not QuiltJsonText.StartsWithF("{") Then Throw New Exception("Quilt Json 有误，地址：" & QuiltJsonPath & "，前段内容：" & QuiltJsonText.Substring(0, Math.Min(QuiltJsonText.Length, 1000)))
             QuiltJson = GetJson(QuiltJsonText)
         End If
 #End Region

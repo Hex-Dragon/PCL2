@@ -827,7 +827,7 @@ Public Class FormMain
             End If
             '多文件拖拽
             If FilePathList.Count > 1 Then
-                '必须要求全部为 jar 文件
+                '必须要求全部为 Jar 文件
                 For Each File In FilePathList
                     If Not {"jar", "litemod", "disabled", "old"}.Contains(File.After(".").ToLower) Then
                         Hint("一次请只拖入一个文件！", HintType.Critical)
@@ -854,7 +854,7 @@ Public Class FormMain
             End If
             'Mod 安装
             If {"jar", "litemod", "disabled", "old"}.Any(Function(t) t = Extension) Then
-                Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
+                Log("[System] 文件为 jar / litemod 格式，尝试作为 Mod 安装")
                 '获取并检查目标版本
                 Dim TargetVersion As McVersion = McVersionCurrent
                 If PageCurrent = PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version

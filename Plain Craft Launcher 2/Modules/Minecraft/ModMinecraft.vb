@@ -393,12 +393,12 @@ Public Module ModMinecraft
                             _Version.McName = Regex
                             GoTo VersionSearchFinish
                         End If
-                        '从 jar 项中获取版本号
+                        '从 Jar 项中获取版本号
                         If JsonObject("jar") IsNot Nothing Then
                             _Version.McName = JsonObject("jar").ToString
                             GoTo VersionSearchFinish
                         End If
-                        '从 jar 文件的 version.json 中获取版本号
+                        '从 Jar 文件的 version.json 中获取版本号
                         If File.Exists(Path & Name & ".jar") Then
                             Try
                                 Using JarArchive As New ZipArchive(New FileStream(Path & Name & ".jar", FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -410,7 +410,7 @@ Public Module ModMinecraft
                                                 Dim VersionId As String = VersionJsonObj("id").ToString
                                                 If VersionId.Length < 32 Then '因为 wiki 说这玩意儿可能是个 hash，虽然我没发现
                                                     _Version.McName = VersionId
-                                                    Log("[Minecraft] 从版本 jar 中的 version.json 获取到版本号：" & VersionId)
+                                                    Log("[Minecraft] 从版本 Jar 中的 version.json 获取到版本号：" & VersionId)
                                                     GoTo VersionSearchFinish
                                                 End If
                                             End If
@@ -418,7 +418,7 @@ Public Module ModMinecraft
                                     End If
                                 End Using
                             Catch ex As Exception
-                                Log(ex, "从版本 jar 中的 version.json 获取版本号失败")
+                                Log(ex, "从版本 Jar 中的 version.json 获取版本号失败")
                             End Try
                         End If
                         '非准确的版本判断警告
@@ -481,21 +481,21 @@ VersionSearchFinish:
         Public Property JsonText As String
             Get
                 If _JsonText Is Nothing Then
-                    If Not File.Exists(Path & Name & ".json") Then Throw New Exception("未找到版本 json 文件：" & Path & Name & ".json")
+                    If Not File.Exists(Path & Name & ".json") Then Throw New Exception("未找到版本 Json 文件：" & Path & Name & ".json")
                     _JsonText = ReadFile(Path & Name & ".json")
                     '如果 ReadFile 失败会返回空字符串；这可能是由于文件被临时占用，故延时后重试
                     If _JsonText.Length = 0 Then
                         If RunInUi() Then
-                            Log("[Minecraft] 版本 json 文件为空或读取失败，由于代码在主线程运行，将不再进行重试", LogLevel.Debug)
+                            Log("[Minecraft] 版本 Json 文件为空或读取失败，由于代码在主线程运行，将不再进行重试", LogLevel.Debug)
                             Throw New Exception("版本 Json 文件为空或读取失败")
                         Else
-                            Log("[Minecraft] 版本 json 文件为空或读取失败，将在 2s 后重试读取（" & Path & Name & ".json）", LogLevel.Debug)
+                            Log("[Minecraft] 版本 Json 文件为空或读取失败，将在 2s 后重试读取（" & Path & Name & ".json）", LogLevel.Debug)
                             Thread.Sleep(2000)
                             _JsonText = ReadFile(Path & Name & ".json")
-                            If _JsonText.Length = 0 Then Throw New Exception("版本 json 文件为空或读取失败")
+                            If _JsonText.Length = 0 Then Throw New Exception("版本 Json 文件为空或读取失败")
                         End If
                     End If
-                    If _JsonText.Length < 100 Then Throw New Exception("版本 json 文件有误，内容为：" & _JsonText)
+                    If _JsonText.Length < 100 Then Throw New Exception("版本 Json 文件有误，内容为：" & _JsonText)
                 End If
                 Return _JsonText
             End Get
@@ -567,10 +567,10 @@ Recheck:
                                 GoTo Recheck
                             End If
                         Catch ex As Exception
-                            Log(ex, "合并版本依赖项 json 失败（" & If(InheritVersion, "null").ToString & "）")
+                            Log(ex, "合并版本依赖项 Json 失败（" & If(InheritVersion, "null").ToString & "）")
                         End Try
                     Catch ex As Exception
-                        Throw New Exception("版本 json 不规范（" & If(Name, "null") & "）", ex)
+                        Throw New Exception("版本 Json 不规范（" & If(Name, "null") & "）", ex)
                     End Try
                     Try
                         '处理 JumpLoader
@@ -670,7 +670,7 @@ Recheck:
             Try
                 Dim JsonObjCheck = JsonObject
             Catch ex As Exception
-                Log(ex, "版本 json 可用性检查失败（" & Path & "）")
+                Log(ex, "版本 Json 可用性检查失败（" & Path & "）")
                 JsonText = ""
                 JsonObject = Nothing
                 Info = ex.Message
@@ -1826,7 +1826,7 @@ OnLoaded:
             '不能调用 RealVersion.Check()，可能会莫名其妙地触发 CheckPermission 正被另一进程使用，导致误判前置不存在
             If Not File.Exists(RealVersion.Path & RealVersion.Name & ".json") Then
                 RealVersion = Version
-                Log("[Minecraft] 可能缺少前置版本 " & RealVersion.Name & "，找不到对应的 json 文件", LogLevel.Debug)
+                Log("[Minecraft] 可能缺少前置版本 " & RealVersion.Name & "，找不到对应的 Json 文件", LogLevel.Debug)
             End If
             '获取详细下载信息
             If RealVersion.JsonObject("downloads") IsNot Nothing AndAlso RealVersion.JsonObject("downloads")("client") IsNot Nothing Then
@@ -1977,7 +1977,7 @@ OnLoaded:
             Dim MainJar As NetFile = DlClientJarGet(Version, True)
             If MainJar IsNot Nothing Then Result.Add(MainJar)
         Catch ex As Exception
-            Log(ex, "版本缺失主 jar 文件所必须的信息", LogLevel.Developer)
+            Log(ex, "版本缺失主 Jar 文件所必须的信息", LogLevel.Developer)
         End Try
         If CoreJarOnly Then Return Result
 
