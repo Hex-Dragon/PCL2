@@ -102,30 +102,30 @@ Public Module ModLaunch
         Try
             '构造主加载器
             Dim Loaders As New List(Of LoaderBase) From {
-                New LoaderTask(Of Integer, Integer)("获取 Java", AddressOf McLaunchJava) With {.ProgressWeight = 4, .Block = False},
+                New LoaderTask(Of Integer, Integer)(GetLang("LangModLaunchStartStageGetJava"), AddressOf McLaunchJava) With {.ProgressWeight = 4, .Block = False},
                 McLoginLoader,
-                New LoaderCombo(Of String)("补全文件", DlClientFix(McVersionCurrent, False, AssetsIndexExistsBehaviour.DownloadInBackground, True)) With {.ProgressWeight = 15, .Show = False},
-                New LoaderTask(Of String, List(Of McLibToken))("获取启动参数", AddressOf McLaunchArgumentMain) With {.ProgressWeight = 2},
-                New LoaderTask(Of List(Of McLibToken), Integer)("解压文件", AddressOf McLaunchNatives) With {.ProgressWeight = 2},
-                New LoaderTask(Of Integer, Integer)("预启动处理", AddressOf McLaunchPrerun) With {.ProgressWeight = 1},
-                New LoaderTask(Of Integer, Integer)("执行自定义命令", AddressOf McLaunchCustom) With {.ProgressWeight = 1},
-                New LoaderTask(Of Integer, Process)("启动进程", AddressOf McLaunchRun) With {.ProgressWeight = 2},
-                New LoaderTask(Of Process, Integer)("等待游戏窗口出现", AddressOf McLaunchWait) With {.ProgressWeight = 1},
-                New LoaderTask(Of Integer, Integer)("结束处理", AddressOf McLaunchEnd) With {.ProgressWeight = 1}
+                New LoaderCombo(Of String)(GetLang("LangModLaunchStartStageCompleteFile"), DlClientFix(McVersionCurrent, False, AssetsIndexExistsBehaviour.DownloadInBackground, True)) With {.ProgressWeight = 15, .Show = False},
+                New LoaderTask(Of String, List(Of McLibToken))(GetLang("LangModLaunchStartStageGetParameters"), AddressOf McLaunchArgumentMain) With {.ProgressWeight = 2},
+                New LoaderTask(Of List(Of McLibToken), Integer)(GetLang("LangModLaunchStartStageExtractFile"), AddressOf McLaunchNatives) With {.ProgressWeight = 2},
+                New LoaderTask(Of Integer, Integer)(GetLang("LangModLaunchStartStagePreProcess"), AddressOf McLaunchPrerun) With {.ProgressWeight = 1},
+                New LoaderTask(Of Integer, Integer)(GetLang("LangModLaunchStartStageExecuteCommand"), AddressOf McLaunchCustom) With {.ProgressWeight = 1},
+                New LoaderTask(Of Integer, Process)(GetLang("LangModLaunchStartStageWaitForProgress"), AddressOf McLaunchRun) With {.ProgressWeight = 2},
+                New LoaderTask(Of Process, Integer)(GetLang("LangModLaunchStartStageWaitForWindow"), AddressOf McLaunchWait) With {.ProgressWeight = 1},
+                New LoaderTask(Of Integer, Integer)(GetLang("LangModLaunchStartStageLaunchEnd"), AddressOf McLaunchEnd) With {.ProgressWeight = 1}
             }
             '内存优化
             Select Case Setup.Get("VersionRamOptimize", Version:=McVersionCurrent)
                 Case 0 '全局
                     If Setup.Get("LaunchArgumentRam") Then '使用全局设置
                         CType(Loaders(2), LoaderCombo(Of String)).Block = False
-                        Loaders.Insert(3, New LoaderTask(Of Integer, Integer)("内存优化", AddressOf McLaunchMemoryOptimize) With {.ProgressWeight = 30})
+                        Loaders.Insert(3, New LoaderTask(Of Integer, Integer)(GetLang("LangModLaunchStartStageMemReduce"), AddressOf McLaunchMemoryOptimize) With {.ProgressWeight = 30})
                     End If
                 Case 1 '开启
                     CType(Loaders(2), LoaderCombo(Of String)).Block = False
-                    Loaders.Insert(3, New LoaderTask(Of Integer, Integer)("内存优化", AddressOf McLaunchMemoryOptimize) With {.ProgressWeight = 30})
+                    Loaders.Insert(3, New LoaderTask(Of Integer, Integer)(GetLang("LangModLaunchStartStageMemReduce"), AddressOf McLaunchMemoryOptimize) With {.ProgressWeight = 30})
                 Case 2 '关闭
             End Select
-            Dim LaunchLoader As New LoaderCombo(Of Object)("Minecraft 启动", Loaders) With {.Show = False}
+            Dim LaunchLoader As New LoaderCombo(Of Object)(GetLang("LangModLaunchStartStageMCStarted"), Loaders) With {.Show = False}
             If McLoginLoader.State = LoadState.Finished Then McLoginLoader.State = LoadState.Waiting '要求重启登录主加载器，它会自行决定是否启动副加载器
             '等待加载器执行并更新 UI
             McLaunchLoaderReal = LaunchLoader
@@ -141,10 +141,10 @@ Public Module ModLaunch
             '成功与失败处理
             Select Case LaunchLoader.State
                 Case LoadState.Finished
-                    Hint(McVersionCurrent.Name & " 启动成功！", HintType.Finish)
+                    Hint(McVersionCurrent.Name & " " & GetLang("LangModLaunchStartSuccess"), HintType.Finish)
                 Case LoadState.Aborted
                     If AbortHint Is Nothing Then
-                        Hint(If(Loader.Input.SaveBatch Is Nothing, "已取消启动！", "已取消导出启动脚本！"), HintType.Info)
+                        Hint(If(Loader.Input.SaveBatch Is Nothing, GetLang("LangModLaunchCancelStart"), GetLang("LangModLaunchCancelExportCommand")), HintType.Info)
                     Else
                         Hint(AbortHint, HintType.Finish)
                     End If

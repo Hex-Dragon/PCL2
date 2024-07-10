@@ -1109,4 +1109,20 @@
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">你的 PCL 不是最新版，因此無法提交反饋。&#xa;請先在 設置 → 啟動器 中更新啟動器，確認該問題在最新版中依然存在，然後再提交反饋。</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">無法提交反饋</s:String>
+    
+    <!--ModLaunch-->
+    <s:String x:Key="LangModLaunchStartStageGetJava">獲取 Java</s:String>
+    <s:String x:Key="LangModLaunchStartStageCompleteFile">補全文件</s:String>
+    <s:String x:Key="LangModLaunchStartStageGetParameters">獲取啟動參數</s:String>
+    <s:String x:Key="LangModLaunchStartStageExtractFile">解壓文件</s:String>
+    <s:String x:Key="LangModLaunchStartStagePreProcess">預啟動處理</s:String>
+    <s:String x:Key="LangModLaunchStartStageExecuteCommand">執行自定義命令</s:String>
+    <s:String x:Key="LangModLaunchStartStageWaitForProgress">啟動進程</s:String>
+    <s:String x:Key="LangModLaunchStartStageWaitForWindow">等待遊戲窗口出現</s:String>
+    <s:String x:Key="LangModLaunchStartStageLaunchEnd">結束處理</s:String>
+    <s:String x:Key="LangModLaunchStartStageMemReduce">內存優化</s:String>
+    <s:String x:Key="LangModLaunchStartStageMCStarted">Minecraft 啟動</s:String>
+    <s:String x:Key="LangModLaunchStartSuccess">啟動成功！</s:String>
+    <s:String x:Key="LangModLaunchCancelStart">已取消啟動！</s:String>
+    <s:String x:Key="LangModLaunchCancelExportCommand">已取消導出啟動腳本！</s:String>
 </ResourceDictionary>

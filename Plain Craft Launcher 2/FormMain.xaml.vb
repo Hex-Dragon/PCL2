@@ -328,11 +328,15 @@ Public Class FormMain
                 Case Else
                     Lang = "en_US"
             End Select
+            WriteReg("Lang", Lang)
         End If
-        WriteReg("Lang", Lang)
         Log("[Lang] 选择启动器语言为 " & Lang)
+        Try
+            Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
+        Catch ex As Exception
+            Log("无法找到语言资源：" & Lang & vbCrLf & "Language resource cannot be found:" & Lang, LogLevel.Assert)
+        End Try
 
-        Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
         '刷新主题
         ThemeCheckAll(False)
         Setup.Load("UiLauncherTheme")
