@@ -629,19 +629,19 @@ NoSubtitle:
             If Id = Project.Id Then Return True '相同实例
             '提取字符串中的字母和数字
             Dim GetRaw =
-                Function(Data As String) As String
-                    Dim Result As New StringBuilder()
-                    For Each r As Char In Data.Where(Function(c) Char.IsLetterOrDigit(c))
-                        Result.Append(r)
-                    Next
-                    Return Result.ToString.ToLower
-                End Function
+            Function(Data As String) As String
+                Dim Result As New StringBuilder()
+                For Each r As Char In Data.Where(Function(c) Char.IsLetterOrDigit(c))
+                    Result.Append(r)
+                Next
+                Return Result.ToString.ToLower
+            End Function
             '来自不同的网站
             If FromCurseForge = Project.FromCurseForge Then Return False
             'Mod 加载器一致
-            If ModLoaders.Count <> Project.ModLoaders.Count OrElse ModLoaders.Except(Project.ModLoaders).Count > 0 Then Return False
+            If ModLoaders.Count <> Project.ModLoaders.Count OrElse ModLoaders.Except(Project.ModLoaders).Any() Then Return False
             'MC 版本一致
-            If GameVersions.Count <> Project.GameVersions.Count OrElse GameVersions.Except(Project.GameVersions).Count > 0 Then Return False
+            If GameVersions.Count <> Project.GameVersions.Count OrElse GameVersions.Except(Project.GameVersions).Any() Then Return False
             'MCMOD 翻译名 / 原名 / 描述文本 / Slug 的英文部分相同
             If TranslatedName = Project.TranslatedName OrElse
                RawName = Project.RawName OrElse Description = Project.Description OrElse

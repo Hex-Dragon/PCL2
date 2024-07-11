@@ -8,9 +8,13 @@
     ''' </summary>
     Public Function DlClientJarGet(Version As McVersion, ReturnNothingOnFileUseable As Boolean) As NetFile
         '获取底层继承版本
-        Do While Not String.IsNullOrEmpty(Version.InheritVersion)
-            Version = New McVersion(Version.InheritVersion)
-        Loop
+        Try
+            Do While Not String.IsNullOrEmpty(Version.InheritVersion)
+                Version = New McVersion(Version.InheritVersion)
+            Loop
+        Catch ex As Exception
+            Log(ex, "获取底层继承版本失败")
+        End Try
         '检查 Json 是否标准
         If Version.JsonObject("downloads") Is Nothing OrElse Version.JsonObject("downloads")("client") Is Nothing OrElse Version.JsonObject("downloads")("client")("url") Is Nothing Then
             Throw New Exception("底层版本 " & Version.Name & " 中无 jar 文件下载信息")
@@ -610,7 +614,9 @@
     Public Sub DlForgeVersionOfficialMain(Loader As LoaderTask(Of String, List(Of DlForgeVersionEntry)))
         Dim Result As String
         Try
-            Result = NetGetCodeByDownload("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_" & Loader.Input & ".html", UseBrowserUserAgent:=True)
+            Result = NetGetCodeByDownload("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_" &
+                                          Loader.Input.Replace("-", "_") & '兼容 Forge 1.7.10-pre4，#4057
+                                          ".html", UseBrowserUserAgent:=True)
         Catch ex As Exception
             If GetExceptionSummary(ex).Contains("(404)") Then
                 Throw New Exception("没有可用版本")
@@ -679,7 +685,9 @@
     ''' Forge 版本列表，BMCLAPI。
     ''' </summary>
     Public Sub DlForgeVersionBmclapiMain(Loader As LoaderTask(Of String, List(Of DlForgeVersionEntry)))
-        Dim Json As JArray = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft/" & Loader.Input, IsJson:=True)
+        Dim Json As JArray = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/forge/minecraft/" &
+                                                      Loader.Input.Replace("-", "_"), '兼容 Forge 1.7.10-pre4，#4057
+                                                      IsJson:=True)
         Dim Versions As New List(Of DlForgeVersionEntry)
         Try
             Dim Recommended As String = McDownloadForgeRecommendedGet(Loader.Input)

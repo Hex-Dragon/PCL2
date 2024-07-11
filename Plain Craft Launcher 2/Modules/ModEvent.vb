@@ -21,26 +21,28 @@
                     OpenWebsite(Data(0))
 
                 Case "打开文件", "打开帮助"
-                    RunInThread(Sub()
-                                    Try
-                                        '确认实际路径
-                                        Dim ActualPaths = GetEventAbsoluteUrls(Data(0), Type)
-                                        Dim Location = ActualPaths(0), WorkingDir = ActualPaths(1)
-                                        '执行
-                                        If Type = "打开文件" Then
-                                            Dim Info As New ProcessStartInfo With {
-                                                .Arguments = If(Data.Length >= 2, Data(1), ""),
-                                                .FileName = Location,
-                                                .WorkingDirectory = WorkingDir
-                                            }
-                                            Process.Start(Info)
-                                        Else '打开帮助
-                                            PageOtherHelp.EnterHelpPage(Location)
-                                        End If
-                                    Catch ex As Exception
-                                        Log(ex, "执行打开类自定义事件失败", LogLevel.Msgbox)
-                                    End Try
-                                End Sub)
+                    RunInThread(
+                    Sub()
+                        Try
+                            '确认实际路径
+                            Dim ActualPaths = GetEventAbsoluteUrls(Data(0), Type)
+                            Dim Location = ActualPaths(0), WorkingDir = ActualPaths(1)
+                            Log($"[Control] 打开类自定义事件实际路径：{Location}，工作目录：{WorkingDir}")
+                            '执行
+                            If Type = "打开文件" Then
+                                Dim Info As New ProcessStartInfo With {
+                                    .Arguments = If(Data.Length >= 2, Data(1), ""),
+                                    .FileName = Location,
+                                    .WorkingDirectory = WorkingDir
+                                }
+                                Process.Start(Info)
+                            Else '打开帮助
+                                PageOtherHelp.EnterHelpPage(Location)
+                            End If
+                        Catch ex As Exception
+                            Log(ex, "执行打开类自定义事件失败", LogLevel.Msgbox)
+                        End Try
+                    End Sub)
 
                 Case "启动游戏"
                     If Data(0) = "\current" Then

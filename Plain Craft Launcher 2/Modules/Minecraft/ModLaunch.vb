@@ -1278,7 +1278,9 @@ SystemBrowser:
     Public Function ExtractJavaWrapper() As String
         Dim WrapperPath As String = GetJavaWrapperDir() & "\JavaWrapper.jar"
         SyncLock ExtractJavaWrapperLock '避免 OptiFine 和 Forge 安装时同时释放 Java Wrapper 导致冲突
-            WriteFile(WrapperPath, GetResources("JavaWrapper"))
+            If Not WriteFile(WrapperPath, GetResources("JavaWrapper")) Then
+                Throw New FileNotFoundException("释放 Java Wrapper 失败")
+            End If
         End SyncLock
         Log("[Java] 已释放 Java Wrapper：" & WrapperPath)
         Return WrapperPath

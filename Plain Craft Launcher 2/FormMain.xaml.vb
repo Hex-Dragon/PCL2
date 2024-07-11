@@ -10,6 +10,12 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 330 Then 'Release 2.8.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "NeoForge 兼容与自动安装"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持编译、运行 PCL 开源代码"))
+            FeatureCount += 15
+            BugCount += 22
+        End If
         If LastVersion < 326 Then 'Release 2.7.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "会自动隐藏明显不可用的自动安装选项"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化正版登录流程和 MC 性能"))
@@ -115,6 +121,14 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 329 Then 'Snapshot 2.8.2
+            If LastVersion >= 327 Then
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 Beta 版 NeoForge 的整合包的 Bug"))
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复自动安装无法选择部分 OptiFine 的 Bug"))
+            End If
+            FeatureCount += 4
+            BugCount += 8
+        End If
         If LastVersion < 328 Then 'Snapshot 2.8.1
             If LastVersion = 327 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 Forge 1.12.2- 的 Bug"))
             If LastVersion = 327 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法输入解锁码的 Bug"))

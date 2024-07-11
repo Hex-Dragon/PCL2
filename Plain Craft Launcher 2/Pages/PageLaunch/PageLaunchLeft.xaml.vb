@@ -22,6 +22,19 @@
         '加载版本
         RunInNewThread(
         Sub()
+            ''自动整合包安装：准备
+            'Dim PackInstallPath As String = Nothing
+            'If File.Exists(Path & "modpack.zip") Then PackInstallPath = Path & "modpack.zip"
+            'If File.Exists(Path & "modpack.mrpack") Then PackInstallPath = Path & "modpack.mrpack"
+            'If PackInstallPath IsNot Nothing Then
+            '    Log("[Launch] 需自动安装整合包：" & PackInstallPath, LogLevel.Debug)
+            '    If Not Directory.Exists(Path & ".minecraft\") Then
+            '        Directory.CreateDirectory(Path & ".minecraft\")
+            '        Directory.CreateDirectory(Path & ".minecraft\versions\")
+            '        McFolderLauncherProfilesJsonCreate(Path & ".minecraft\")
+            '    End If
+            '    Setup.Set("LaunchFolderSelect", "$.minecraft\")
+            'End If
             '确认 Minecraft 文件夹存在
             PathMcFolder = Setup.Get("LaunchFolderSelect").ToString.Replace("$", Path)
             If PathMcFolder = "" OrElse Not Directory.Exists(PathMcFolder) Then
@@ -36,17 +49,21 @@
             End If
             Log("[Launch] Minecraft 文件夹：" & PathMcFolder)
             If Setup.Get("SystemDebugDelay") Then Thread.Sleep(RandomInteger(500, 3000))
+            ''自动整合包安装
+            'If PackInstallPath IsNot Nothing Then
+            '    If ModpackInstall(PackInstallPath) Then
+            '        Log("[Launch] 自动安装整合包成功：" & PackInstallPath)
+            '        File.Delete(PackInstallPath)
+            '    Else
+            '        Log("[Launch] 自动安装整合包失败：" & PackInstallPath)
+            '    End If
+            'End If
             '确认 Minecraft 版本存在
             Dim Selection As String = Setup.Get("LaunchVersionSelect")
-            Dim Version As McVersion
-            If Selection = "" Then
-                Version = Nothing
-            Else
-                Version = New McVersion(Selection)
-            End If
-            If IsNothing(Version) OrElse Not (Version.Path.StartsWith(PathMcFolder) AndAlso Version.Check) Then
+            Dim Version As McVersion = If(Selection = "", Nothing, New McVersion(Selection))
+            If Version Is Nothing OrElse Not (Version.Path.StartsWith(PathMcFolder) AndAlso Version.Check) Then
                 '无效的版本
-                Log("[Launch] Minecraft 版本无效" & If(IsNothing(Version), "，没有有效版本", "：" & Version.Path), If(IsNothing(Version), LogLevel.Normal, LogLevel.Debug))
+                Log("[Launch] Minecraft 版本无效" & If(Version Is Nothing, "，没有有效版本", "：" & Version.Path), If(IsNothing(Version), LogLevel.Normal, LogLevel.Debug))
                 If Not McVersionListLoader.State = LoadState.Finished Then LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
                 If Not McVersionList.Any() OrElse McVersionList.First.Value(0).Logo.Contains("RedstoneBlock") Then
                     Version = Nothing

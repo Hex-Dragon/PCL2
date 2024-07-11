@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.1" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.1." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.8.2" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.8.2." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 326 'Release
+    Public Const VersionCode As Integer = 330 'Release
 #Else
-    Public Const VersionCode As Integer = 328 'Snapshot
+    Public Const VersionCode As Integer = 329 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -86,7 +86,7 @@ Public Module ModBase
     ''' <summary>
     ''' 系统盘盘符，以 \ 结尾。例如 “C:\”。
     ''' </summary>
-    Public OsDrive As String = Environment.GetLogicalDrives().First.ToUpper.First & ":\"
+    Public OsDrive As String = Environment.GetLogicalDrives().Where(Function(p) Directory.Exists(p)).First.ToUpper.First & ":\" '#3799
     ''' <summary>
     ''' 程序的缓存文件夹路径，以 \ 结尾。
     ''' </summary>
@@ -1257,12 +1257,19 @@ Re:
         Dim DeletedCount As Integer = 0
         Dim Temp As String()
         Temp = Directory.GetFiles(Path)
-        For Each str As String In Temp
+        For Each FilePath As String In Temp
+            Dim RetriedFile As Boolean = False
+RetryFile:
             Try
-                File.Delete(str)
+                File.Delete(FilePath)
                 DeletedCount += 1
             Catch ex As Exception
-                If IgnoreIssue Then
+                If Not RetriedFile Then
+                    RetriedFile = True
+                    Log(ex, $"删除文件失败，将在 0.3s 后重试（{FilePath}）")
+                    Thread.Sleep(300)
+                    GoTo RetryFile
+                ElseIf IgnoreIssue Then
                     Log(ex, "删除单个文件可忽略地失败")
                 Else
                     Throw
@@ -1273,10 +1280,17 @@ Re:
         For Each str As String In Temp
             DeleteDirectory(str, IgnoreIssue)
         Next
+        Dim RetriedDir As Boolean = False
+RetryDir:
         Try
             Directory.Delete(Path, True)
         Catch ex As Exception
-            If IgnoreIssue Then
+            If Not RetriedDir Then
+                RetriedDir = True
+                Log(ex, $"删除文件夹失败，将在 0.3s 后重试（{Path}）")
+                Thread.Sleep(300)
+                GoTo RetryDir
+            ElseIf IgnoreIssue Then
                 Log(ex, "删除单个文件夹可忽略地失败")
             Else
                 Throw
@@ -1652,7 +1666,10 @@ Re:
     ''' 为字符串进行 XML 转义。
     ''' </summary>
     Public Function EscapeXML(Str As String) As String
-        Return Str.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").Replace("""", "&quot;").Replace(vbCrLf, "&#xa;")
+        If Str.StartsWithF("{") Then Str = "{}" & Str '#4187
+        Return Str.
+            Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("'", "&apos;").
+            Replace("""", "&quot;").Replace(vbCrLf, "&#xa;")
     End Function
 
     '正则
