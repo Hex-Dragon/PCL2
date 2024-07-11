@@ -486,7 +486,7 @@
             End If
         End If
         'Quilt
-        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 14 AndAlso Val(SelectedMinecraftId.Split(".")(2)) < 4 Then
+        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 13 OrElse SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 14 AndAlso Val(SelectedMinecraftId.Split(".")(2)) < 4 Then
             CardQuilt.Visibility = Visibility.Collapsed
         Else
             CardQuilt.Visibility = Visibility.Visible
@@ -1297,8 +1297,12 @@
     Private Function LoadQuiltGetError() As String
         If LoadQuilt Is Nothing OrElse LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadQuilt.State, Object).Error.Message
-        If SelectedLoaderName IsNot Nothing AndAlso SelectedLoaderName IsNot "Quilt" Then Return $"与 {SelectedLoaderName} 不兼容"
-        If DlQuiltListLoader.Output.Value("loader") IsNot Nothing Then Return Nothing
+        For Each Version As JObject In DlQuiltListLoader.Output.Value("game")
+            If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
+                If SelectedLoaderName IsNot Nothing AndAlso SelectedLoaderName IsNot "Quilt" Then Return $"与 {SelectedLoaderName} 不兼容"
+                Return Nothing
+            End If
+        Next
         Return "没有可用版本"
     End Function
 
