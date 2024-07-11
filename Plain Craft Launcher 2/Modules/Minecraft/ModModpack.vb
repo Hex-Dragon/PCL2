@@ -195,7 +195,7 @@ Retry:
                 End If
                 Try
                     Log("[ModPack] 整合包 Forge 版本：" & Id)
-                    ForgeVersion = Id.Remove(0, 6)
+                    ForgeVersion = Id.Replace("forge-", "")
                     Exit For
                 Catch ex As Exception
                     Log(ex, "读取整合包 Forge 版本失败：" & Id)
@@ -204,7 +204,7 @@ Retry:
                 'NeoForge 指定
                 Try
                     Log("[ModPack] 整合包 NeoForge 版本：" & Id)
-                    NeoForgeVersion = Id.Remove(0, 9)
+                    NeoForgeVersion = Id.Replace("neoforge-", "")
                     Exit For
                 Catch ex As Exception
                     Log(ex, "读取整合包 NeoForge 版本失败：" & Id)
@@ -213,7 +213,7 @@ Retry:
                 'Fabric 指定
                 Try
                     Log("[ModPack] 整合包 Fabric 版本：" & Id)
-                    FabricVersion = Id.Remove(0, 7)
+                    FabricVersion = Id.Replace("fabric-", "")
                     Exit For
                 Catch ex As Exception
                     Log(ex, "读取整合包 Fabric 版本失败：" & Id)
