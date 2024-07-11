@@ -57,6 +57,7 @@
                     Log("[Launch] 自动选择 Minecraft 版本：" & Version.Path)
                 End If
             End If
+
             RunInUi(
             Sub()
                 McVersionCurrent = Version '绕这一圈是为了避免 McVersionCheck 触发第二次版本改变
@@ -71,6 +72,21 @@
         Dim LoginType As McLoginType = Setup.Get("LoginType")
         If LoginType = McLoginType.Legacy OrElse LoginType = McLoginType.Ms Then CType(FindName("RadioLoginType" & LoginType), MyRadioButton).Checked = True
         RefreshPage(False, False)
+
+        '整合包安装
+        If McVersionList.Count = 0 AndAlso File.Exists(Path & "modpack.zip") Then
+            If MyMsgBox("即将自动安装整合包，是否继续？", Button2:="取消") = 1 Then
+                If Not Directory.Exists(Path & ".minecraft\") Then
+                    Directory.CreateDirectory(Path & ".minecraft\")
+                    Directory.CreateDirectory(Path & ".minecraft\versions\")
+                    Setup.Set("LaunchFolderSelect", "$.minecraft\")
+                    McFolderLauncherProfilesJsonCreate(Path & ".minecraft\")
+                End If
+                McFolderListLoader.Start(IsForceRestart:=True)
+
+                RunInNewThread(Sub() ModpackInstall(Path & "modpack.zip", ShowHint:=False), "Modpack Auto Install")
+            End If
+        End If
 
         AniControlEnabled -= 1
     End Sub
