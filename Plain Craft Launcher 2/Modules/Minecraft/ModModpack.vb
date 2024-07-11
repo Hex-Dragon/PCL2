@@ -949,7 +949,8 @@ Retry:
         "\$\{quickPlayPath\}", '服务器
         "\.replay_cache", "replay_recordings", "replay_videos", 'ReplayMod
         "irisUpdateInfo\.json", 'Iris
-        ".*\.BakaCoreInfo", 'BakaXL
+        ".*\.BakaCoreInfo", 'BakaXL 配置
+        "hmclversion\.cfg", 'HMCL 配置
         "PCL", "saves" '到时候会拷，别急
     }
     Private Function IsVerRedundant(FileName As String) As Boolean
