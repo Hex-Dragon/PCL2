@@ -35,7 +35,7 @@
     Private Sub BtnExportExport_Click() Handles BtnExportExport.Click
         If Type = ModpackType.Compressed AndAlso Val(VersionBranchCode) <> 50 Then
             If MyMsgBox("你当前的 PCL 不是正式版，且受到再次分发（制作压缩包）的限制。" & vbCrLf &
-                     "请使用正式版再次进行该操作再试！" & vbCrLf &
+                     "请使用正式版再次尝试该操作！" & vbCrLf &
                      "其他类型的整合包（例如 Modrinth 整合包）没有该限制。", Button1:="下载正式版", Button2:="取消") = 1 Then
                 OpenWebsite("https://afdian.net/p/0164034c016c11ebafcb52540025c377")
             End If
