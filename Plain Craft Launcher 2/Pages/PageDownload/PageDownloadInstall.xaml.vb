@@ -1375,8 +1375,7 @@
         If LoadQSL.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadQSL.State, Object).Error.Message
         If DlQSLLoader.Output Is Nothing Then
             If SelectedQuilt Is Nothing Then Return "需要安装 Quilt"
-            'Return "正在获取版本列表……"
-            Return Nothing
+            Return "正在获取版本列表……"
         End If
         For Each Version In DlQSLLoader.Output
             If Not IsSuitableQSL(Version.GameVersions, SelectedMinecraftId) Then Continue For
