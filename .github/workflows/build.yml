@@ -41,9 +41,9 @@ jobs:
     - name: Replace
       shell: powershell
       run: |
-        (gc "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb") -replace 'Dim ClientId As String = ""', 'Dim ClientId As String = "${{ secrets.client_id }}"' | Out-File "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb"
-        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Client.Headers("x-api-key") = ""', '"Client.Headers("x-api-key") = "${{ secrets.x_api_key }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
-        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Request.Headers("x-api-key") = ""', 'Request.Headers("x-api-key") = "${{ secrets.x_api_key }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
+        (gc "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb") -replace 'Dim ClientId As String = ""', 'Dim ClientId As String = "${{ secrets.CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb"
+        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Client.Headers\("x-api-key"\) = ""', 'Client.Headers("x-api-key") = "${{ secrets.X_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
+        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Request.Headers\("x-api-key"\) = ""', 'Request.Headers("x-api-key") = "${{ secrets.X_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
 
     - name: Build
       run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
