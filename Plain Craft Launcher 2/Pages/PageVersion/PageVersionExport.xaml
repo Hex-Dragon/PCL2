@@ -7,7 +7,7 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="25,10">
-            <local:MyCard Margin="0,0,0,15" Title="导出选项">
+            <local:MyCard x:Name="CardExport" Margin="0,20,0,15" Title="导出选项">
                 <StackPanel Margin="25,40,25,21">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -20,12 +20,46 @@
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
                             <RowDefinition Height="9" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="整合包类型" VerticalAlignment="Center" />
+                        <local:MyComboBox x:Name="ComboExportType" Margin="10,0,0,0" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0">
+                            <local:MyComboBoxItem Content="压缩包" IsSelected="True" />
+                            <local:MyComboBoxItem Content="Modrinth" />
+                        </local:MyComboBox>
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="包含存档" VerticalAlignment="Center" />
+                        <local:MyTextBox x:Name="TbExportSave" HintText="不包含存档" ToolTip="填写存档的目录名，注意不是存档名。留空则不包含存档。" Margin="10,0,0,0" Grid.Column="1" Grid.Row="2" Tag="1" />
+                    </Grid>
+                    <Grid x:Name="GridCompressed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
+                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="9" />
+                        </Grid.RowDefinitions>
+                        <local:MyCheckBox x:Name="CheckExportGlobal" Text="导出 PCL 全局设置" Grid.Column="0" Grid.Row="0" Checked="True" />
+                        <local:MyCheckBox x:Name="CheckExportVersion" Text="导出 PCL 版本设置" Grid.Column="2" Grid.Row="0" Checked="True" />
+                    </Grid>
+                    <Grid x:Name="GridModrinth" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
                             <RowDefinition Height="28" />
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
+                            <RowDefinition Height="9" />
                         </Grid.RowDefinitions>
-                        <local:MyButton x:Name="BtnExportExport" Margin="0,0,0,0" Text="导出整合包" Grid.Column="0" Grid.Row="0" Width="150" />
+                        <TextBlock Text="整合包名称" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
+                        <local:MyTextBox x:Name="TbExportName" HintText="" Grid.Column="2" Grid.Row="0" Width="140" />
+                        <TextBlock Text="整合包版本" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" />
+                        <local:MyTextBox x:Name="TbExportVersion" HintText="1.0.0" Grid.Column="2" Grid.Row="2" Width="140" />
                     </Grid>
+                    <local:MyButton x:Name="BtnExportExport" HorizontalAlignment="Left" Text="导出整合包" Height="35" Width="150" ColorType="Highlight" />
                 </StackPanel>
             </local:MyCard>
         </StackPanel>

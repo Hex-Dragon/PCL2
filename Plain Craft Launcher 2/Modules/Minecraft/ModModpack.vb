@@ -891,6 +891,10 @@ Retry:
         ''' </summary>
         Public PCLSetupVer As Boolean = True
         ''' <summary>
+        ''' 整合包名称。仅在 Modrinth 有效。
+        ''' </summary>
+        Public Name As String = ""
+        ''' <summary>
         ''' 版本号。仅在 Modrinth 有效。
         ''' </summary>
         Public VerID As String = ""
@@ -900,6 +904,8 @@ Retry:
                        Saves As String(),
                        Optional PCLSetupGlobal As Boolean = True,
                        Optional PCLSetupVer As Boolean = True,
+                       Optional Name As String = "",
+                       Optional Author As String = "",
                        Optional VerID As String = "")
             Me.Version = Version
             Me.Dest = Dest
@@ -907,23 +913,35 @@ Retry:
             Me.Saves = Saves
             Me.PCLSetupGlobal = PCLSetupGlobal
             Me.PCLSetupVer = PCLSetupVer
+            Me.Name = Name
             Me.VerID = VerID
         End Sub
     End Class
     ''' <summary>
-    ''' 导出整合包。
+    ''' 导出整合包。不阻塞。
     ''' </summary>
     Public Sub ModpackExport(Options As ExportOptions)
+        Hint("正在导出……")
+        RunInNewThread(Sub()
+                           If ModpackExportBlocking(Options) Then
+                               Hint("导出成功！", HintType.Finish)
+                               OpenExplorer($"""{GetPathFromFullPath(Options.Dest)}""")
+                           End If
+                       End Sub, "Modpack Export")
+    End Sub
+    Private Function ModpackExportBlocking(Options As ExportOptions) As Boolean
         Select Case Options.Type
             Case ModpackType.Modrinth
-                ExportModrinth(Options.Version, Options.Dest, Options.Saves, Options.VerID)
+                Return ExportModrinth(Options.Version, Options.Dest, Options.Saves, Options.Name, Options.VerID)
             Case ModpackType.Compressed
-                ExportCompressed(Options.Version, Options.Dest, Options.Saves, Options.PCLSetupGlobal, Options.PCLSetupVer)
+                Return ExportCompressed(Options.Version, Options.Dest, Options.Saves, Options.PCLSetupGlobal, Options.PCLSetupVer)
+            Case Else
+                Throw New ArgumentException($"未知的整合包类型：{Options.Type}")
         End Select
-    End Sub
+    End Function
 
 #Region "冗余"
-    Private VersionRedundant As String() = {"saves", "screenshots", "backups", "command_history\.txt", '个人文件
+    Private VersionRedundant As String() = {"screenshots", "backups", "command_history\.txt", '个人文件
         ".*-natives", "server-resource-packs", "user.*cache\.json", "\.optifine", "\.fabric", '缓存
         ".*\.jar", "downloads", "realms_persistence.json", "\$\{natives_directory\}", '可联网更新
         "logs", "crash-reports", ".*\.log", '日志
@@ -932,7 +950,7 @@ Retry:
         "\.replay_cache", "replay_recordings", "replay_videos", 'ReplayMod
         "irisUpdateInfo\.json", 'Iris
         ".*\.BakaCoreInfo", 'BakaXL
-        "PCL" '到时候会拷，别急
+        "PCL", "saves" '到时候会拷，别急
     }
     Private Function IsVerRedundant(FileName As String) As Boolean
         For Each regex In VersionRedundant
@@ -943,7 +961,7 @@ Retry:
 #End Region
 
 #Region "不同类型整合包的导出方法"
-    Private Sub ExportModrinth(Version As McVersion, DestPath As String, Saves As String(), VerID As String)
+    Private Function ExportModrinth(Version As McVersion, DestPath As String, Saves As String(), Name As String, VerID As String)
         Try
             Log($"[Export] 导出整合包（Modrinth）：{Version.Path} -> {DestPath}，导出存档 {If(Saves Is Nothing OrElse Not Saves.Any, "不导出", Saves.Join(", "))}")
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
@@ -998,7 +1016,7 @@ Retry:
                 {"game", "minecraft"},
                 {"formatVersion", 1},
                 {"versionId", VerID},
-                {"name", Version.Name},
+                {"name", If(String.IsNullOrEmpty(Name), Version.Name, Name)},
                 {"summary", Version.Info},
                 {"files", files},
                 {"dependencies", depend}
@@ -1013,6 +1031,7 @@ Retry:
 
             '存档
             For Each s In Saves
+                If String.IsNullOrWhiteSpace(s) Then Continue For '草了，传空字串进去会直接把 saves 整个文件夹拷过去
                 Dim fromPath As String = $"{Version.Path}saves\{s}"
                 If Directory.Exists(fromPath) Then CopyDirectory(fromPath, $"{tempDir}overrides\saves\{s}")
             Next
@@ -1020,11 +1039,13 @@ Retry:
             If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换
             ZipFile.CreateFromDirectory(tempDir, DestPath)
             DeleteDirectory(tempDir)
+            Return True
         Catch ex As Exception
             Log(ex, "导出整合包失败", LogLevel.Msgbox)
+            Return False
         End Try
-    End Sub
-    Private Sub ExportCompressed(Version As McVersion, DestPath As String, Saves As String(), PCLSetupGlobal As Boolean, PCLSetupVer As Boolean)
+    End Function
+    Private Function ExportCompressed(Version As McVersion, DestPath As String, Saves As String(), PCLSetupGlobal As Boolean, PCLSetupVer As Boolean)
         Try
             Log($"[Export] 导出整合包（压缩包）：{Version.Path} -> {DestPath}，导出存档 {If(Saves Is Nothing OrElse Not Saves.Any, "不导出", Saves.Join(", "))}，全局设置 {If(PCLSetupGlobal, "导出", "不导出")}，版本设置 {If(PCLSetupVer, "导出", "不导出")}")
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
@@ -1079,10 +1100,12 @@ Retry:
             If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换
             ZipFile.CreateFromDirectory(tempDir, DestPath)
             DeleteDirectory(tempDir)
+            Return True
         Catch ex As Exception
             Log(ex, "导出整合包失败", LogLevel.Msgbox)
+            Return False
         End Try
-    End Sub
+    End Function
 #End Region
 
 #End Region
