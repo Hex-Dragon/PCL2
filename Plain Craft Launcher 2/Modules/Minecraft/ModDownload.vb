@@ -1087,17 +1087,9 @@
         ''' </summary>
         Public IsOfficial As Boolean
         ''' <summary>
-        ''' 获取到的游戏列表数据。
+        ''' 获取到的数据。
         ''' </summary>
-        Public GameValue As JArray
-        ''' <summary>
-        ''' 获取到的加载器列表数据。
-        ''' </summary>
-        Public LoaderValue As JArray
-        ''' <summary>
-        ''' 获取到的安装器列表数据。
-        ''' </summary>
-        Public InstallerValue As JArray
+        Public Value As JObject
     End Structure
 
     ''' <summary>
@@ -1129,20 +1121,18 @@
     ''' </summary>
     Public DlQuiltListOfficialLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Official", AddressOf DlQuiltListOfficialMain)
     Private Sub DlQuiltListOfficialMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
-        Dim GameResult As JArray = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/game", IsJson:=True)
-        Dim LoaderResult As JArray = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/loader", IsJson:=True)
-        Dim InstallerResult As JArray = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions/installer", IsJson:=True)
+        Dim Result As JObject = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions", IsJson:=True)
         Try
-            Dim Output = New DlQuiltListResult With {.IsOfficial = True, .SourceName = "Quilt 官方源", .GameValue = GameResult, .LoaderValue = LoaderResult, .InstallerValue = InstallerResult}
-            If Output.GameValue.ToString Is Nothing OrElse Output.LoaderValue.ToString Is Nothing OrElse Output.InstallerValue.ToString Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
+            Dim Output = New DlQuiltListResult With {.IsOfficial = True, .SourceName = "Quilt 官方源", .Value = Result}
+            If Output.Value("game") Is Nothing OrElse Output.Value("loader") Is Nothing OrElse Output.Value("installer") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
             Loader.Output = Output
         Catch ex As Exception
-            Throw New Exception("Quilt 官方源版本列表解析失败（" & GameResult.ToString & LoaderResult.ToString & InstallerResult.ToString & "）", ex)
+            Throw New Exception("Quilt 官方源版本列表解析失败（" & Result.ToString & "）", ex)
         End Try
     End Sub
 
     '''' <summary>
-    '''' Quilt 列表，BMCLAPI。
+    '''' TODO: Quilt 列表，BMCLAPI。
     '''' </summary>
     'Public DlQuiltListBmclapiLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Bmclapi", AddressOf DlQuiltListBmclapiMain)
     'Private Sub DlQuiltListBmclapiMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
@@ -1157,9 +1147,9 @@
     'End Sub
 
     ''' <summary>
-    ''' Quilt API 列表，官方源。
+    ''' QSL 列表，官方源。
     ''' </summary>
-    Public DlQSLLoader As New LoaderTask(Of Integer, List(Of CompFile))("Quilt API List Loader",
+    Public DlQSLLoader As New LoaderTask(Of Integer, List(Of CompFile))("QSL List Loader",
         Sub(Task As LoaderTask(Of Integer, List(Of CompFile))) Task.Output = CompFilesGet("qsl", False))
 
 #End Region

@@ -523,7 +523,7 @@
             Else
                 BtnQSLClear.Visibility = Visibility.Visible
                 ImgQSL.Visibility = Visibility.Visible
-                LabQSL.Text = SelectedQSL.DisplayName.Split("]")(1).Replace("Quilt API ", "").Replace(" build ", ".").Split("+").First.Trim
+                LabQSL.Text = SelectedQSL.DisplayName.After("]").Trim
                 LabQSL.Foreground = ColorGray1
             End If
         End If
@@ -804,7 +804,7 @@
         If LoadOptiFine Is Nothing OrElse LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFine.State, Object).Error.Message
         '检查 Forge 1.13 - 1.14.3：全部不兼容
-        If (SelectedLoaderName = "Forge") AndAlso
+        If SelectedLoaderName = "Forge" AndAlso
             VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then
             Return "与 Forge 不兼容"
         End If
@@ -1297,16 +1297,8 @@
     Private Function LoadQuiltGetError() As String
         If LoadQuilt Is Nothing OrElse LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadQuilt.State, Object).Error.Message
-        'For Each Version As JObject In DlQuiltListLoader.Output.LoaderValue
-        '    Hint(Version("version").ToString)
-        '    If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
-        '        If SelectedForge IsNot Nothing Then Return "与 Forge 不兼容"
-        '        If SelectedNeoForge IsNot Nothing Then Return "与 NeoForge 不兼容"
-        '        Return Nothing
-        '    End If
-        'Next
         If SelectedLoaderName IsNot Nothing AndAlso SelectedLoaderName IsNot "Quilt" Then Return $"与 {SelectedLoaderName} 不兼容"
-        If DlQuiltListLoader.Output.LoaderValue IsNot Nothing Then Return Nothing
+        If DlQuiltListLoader.Output.Value("loader") IsNot Nothing Then Return Nothing
         Return "没有可用版本"
     End Function
 
@@ -1322,7 +1314,7 @@
         Try
             If DlQuiltListLoader.State <> LoadState.Finished Then Exit Sub
             '获取版本列表
-            Dim Versions As JArray = DlQuiltListLoader.Output.LoaderValue
+            Dim Versions As JArray = DlQuiltListLoader.Output.Value("loader")
             If Not Versions.Any() Then Exit Sub
             '可视化
             PanQuilt.Children.Clear()

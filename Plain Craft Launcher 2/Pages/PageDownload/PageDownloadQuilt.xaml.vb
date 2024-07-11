@@ -10,7 +10,7 @@
     Private Sub Load_OnFinish()
         '结果数据化
         Try
-            Dim Versions As JArray = DlQuiltListLoader.Output.InstallerValue
+            Dim Versions As JArray = DlQuiltListLoader.Output.Value("installer")
             PanVersions.Children.Clear()
             For Each Version In Versions
                 PanVersions.Children.Add(QuiltDownloadListItem(Version, AddressOf Quilt_Selected))

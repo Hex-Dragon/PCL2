@@ -381,14 +381,8 @@ Public Module ModMinecraft
                             _Version.McName = Regex
                             GoTo VersionSearchFinish
                         End If
-                        '从 Fabric 版本中获取版本号
-                        Regex = RegexSeek(LibrariesString, "(?<=(fabricmc):intermediary:)[^""]*")
-                        If Regex IsNot Nothing Then
-                            _Version.McName = Regex
-                            GoTo VersionSearchFinish
-                        End If
-                        '从 Quilt 版本中获取版本号
-                        Regex = RegexSeek(LibrariesString, "(?<=(quiltmc):intermediary:)[^""]*")
+                        '从 Fabric / Quilt 版本中获取版本号
+                        Regex = RegexSeek(LibrariesString, "(?<=((fabricmc)|(quiltmc)):intermediary:)[^""]*")
                         If Regex IsNot Nothing Then
                             _Version.McName = Regex
                             GoTo VersionSearchFinish

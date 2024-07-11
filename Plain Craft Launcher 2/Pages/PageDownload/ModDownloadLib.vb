@@ -1900,7 +1900,7 @@ Retry:
             '构造步骤加载器
             Dim Loaders As New List(Of LoaderBase)
             '下载
-            'BMCLAPI 不支持 Quilt Installer 下载
+            'TODO: BMCLAPI 不支持 Quilt Installer 下载
             Dim Address As New List(Of String)
             Address.Add(Url)
             Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile) From {New NetFile(Address.ToArray, Target, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
