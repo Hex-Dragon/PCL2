@@ -112,7 +112,7 @@
     <s:String x:Key="LangDialogThemeUnlockGameTitle">解密游戏的基本规则</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameAccrpt">我知道了</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameDeny">恕我拒绝</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">你需要用自己的智慧来找到下一步的线索……&#x000D初始线索：</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">你需要用自己的智慧来找到下一步的线索……&#x000D;初始线索：</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameFirstClueTitle">解密游戏</s:String>
     <s:String x:Key="LangOtherHelp">帮助</s:String>
     <s:String x:Key="LangOtherAbout">关于</s:String>
