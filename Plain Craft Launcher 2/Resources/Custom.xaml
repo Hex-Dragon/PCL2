@@ -148,7 +148,7 @@
 			<local:MyButton Margin="0,0,10,0" Width="140" Height="35" HorizontalAlignment="Left" Padding="13,0,13,0"
                         Text="进入 Hypixel" EventType="启动游戏" EventData="1.16.3|mc.hypixel.net" ToolTip="使用 Minecraft 1.16.3 进入 Hypixel" />
 			<local:MyButton Margin="0,0,10,0" Width="140" Height="35" HorizontalAlignment="Left" Padding="13,0,13,0"
-                        Text="打开画图" EventType="打开文件" EventData="mspaint.exe" />
+                        Text="打开记事本" EventType="打开文件" EventData="notepad" />
 		</StackPanel>
 		<!-- 这是第二行 -->
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
@@ -270,7 +270,7 @@
 			<local:MyButton Grid.Column="1" Margin="0,0,10,0" Height="35"
                         Text="进入 Hypixel" EventType="启动游戏" EventData="1.16.3|mc.hypixel.net" ToolTip="使用 Minecraft 1.16.3 进入 Hypixel" />
 			<local:MyButton Grid.Column="2" Margin="0,0,10,0" Height="35"
-                        Text="打开画图" EventType="打开文件" EventData="mspaint.exe" />
+                        Text="打开记事本" EventType="打开文件" EventData="notepad" />
 		</Grid>
 	</StackPanel>
 </local:MyCard>

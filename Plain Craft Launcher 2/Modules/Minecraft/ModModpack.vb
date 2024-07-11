@@ -25,6 +25,7 @@ Public Module ModModpack
                 Archive = New ZipArchive(New FileStream(File, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 '从根目录判断整合包类型
                 If Archive.GetEntry("mcbbs.packmeta") IsNot Nothing Then PackType = 3 : Exit Try 'MCBBS 整合包（优先于 manifest.json 判断）
+                If Archive.GetEntry("mmc-pack.json") IsNot Nothing Then PackType = 2 : Exit Try 'MMC 整合包（优先于 manifest.json 判断，#4194）
                 If Archive.GetEntry("modrinth.index.json") IsNot Nothing Then PackType = 4 : Exit Try 'Modrinth 整合包
                 If Archive.GetEntry("manifest.json") IsNot Nothing Then
                     Dim Json As JObject = GetJson(ReadFile(Archive.GetEntry("manifest.json").Open, Encoding.UTF8))
@@ -35,7 +36,6 @@ Public Module ModModpack
                     End If
                 End If
                 If Archive.GetEntry("modpack.json") IsNot Nothing Then PackType = 1 : Exit Try 'HMCL 整合包
-                If Archive.GetEntry("mmc-pack.json") IsNot Nothing Then PackType = 2 : Exit Try 'MMC 整合包
                 '从一级目录判断整合包类型
                 For Each Entry In Archive.Entries
                     Dim FullNames As String() = Entry.FullName.Split("/")
