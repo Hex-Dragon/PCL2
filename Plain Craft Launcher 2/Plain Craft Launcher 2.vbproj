@@ -38,7 +38,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>false</DefineTrace>
     <IncrementalBuild>true</IncrementalBuild>
-    <OutputPath>D:\Minecraft\程序\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
@@ -111,7 +111,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BETA|AnyCPU'">
-    <OutputPath>D:\Minecraft\程序\</OutputPath>
+    <OutputPath>bin\BETA\</OutputPath>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <WarningLevel>1</WarningLevel>

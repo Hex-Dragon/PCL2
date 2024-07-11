@@ -890,18 +890,24 @@ Retry:
         ''' 是否需要保留 PCL 版本设置。仅在压缩包中有效。
         ''' </summary>
         Public PCLSetupVer As Boolean = True
+        ''' <summary>
+        ''' 版本号。仅在 Modrinth 有效。
+        ''' </summary>
+        Public VerID As String = ""
         Public Sub New(Version As McVersion,
                        Dest As String,
                        Type As ModpackType,
                        Saves As String(),
                        Optional PCLSetupGlobal As Boolean = True,
-                       Optional PCLSetupVer As Boolean = True)
+                       Optional PCLSetupVer As Boolean = True,
+                       Optional VerID As String = "")
             Me.Version = Version
             Me.Dest = Dest
             Me.Type = Type
             Me.Saves = Saves
             Me.PCLSetupGlobal = PCLSetupGlobal
             Me.PCLSetupVer = PCLSetupVer
+            Me.VerID = VerID
         End Sub
     End Class
     ''' <summary>
@@ -910,7 +916,7 @@ Retry:
     Public Sub ModpackExport(Options As ExportOptions)
         Select Case Options.Type
             Case ModpackType.Modrinth
-                ExportModrinth(Options.Version, Options.Dest, Options.Saves)
+                ExportModrinth(Options.Version, Options.Dest, Options.Saves, Options.VerID)
             Case ModpackType.Compressed
                 ExportCompressed(Options.Version, Options.Dest, Options.Saves, Options.PCLSetupGlobal, Options.PCLSetupVer)
         End Select
@@ -937,31 +943,119 @@ Retry:
 #End Region
 
 #Region "不同类型整合包的导出方法"
-    Private Sub ExportModrinth(Version As McVersion, DestPath As String, Saves As String())
+    Private Sub ExportModrinth(Version As McVersion, DestPath As String, Saves As String(), VerID As String)
+        Try
+            Log($"[Export] 导出整合包（Modrinth）：{Version.Path} -> {DestPath}，导出存档 {If(Saves Is Nothing OrElse Not Saves.Any, "不导出", Saves.Join(", "))}")
+            Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
+            Log($"[Export] 缓存文件夹：{tempDir}")
+            Directory.CreateDirectory(tempDir)
 
+            '步骤 1：从 Modrinth 获取 Mod 工程信息，得到 URL
+            Dim Mods As New List(Of McMod)
+            For Each m In Directory.EnumerateFiles(Version.Path & "mods\")
+                Mods.Add(New McMod(m))
+            Next
+
+            '从 Modrinth 获取信息
+            Dim ModrinthHashes = Mods.Select(Function(m) m.ModrinthHash).ToList()
+            Dim ModrinthVersion = CType(GetJson(NetRequestRetry("https://api.modrinth.com/v2/version_files", "POST",
+    $"{{""hashes"": [""{ModrinthHashes.Join(""",""")}""], ""algorithm"": ""sha1""}}", "application/json")), JObject)
+            Log($"[Export] 从 Modrinth 获取到 {ModrinthVersion.Count} 个本地 Mod 的对应信息")
+
+            Dim ModrinthMapping As New Dictionary(Of String, JObject) 'Modrinth 获取到的 Mod
+            Dim LocalMods As New List(Of String) 'Modrinth 获取失败的 Mod
+            For Each Entry In Mods
+                If (Not ModrinthVersion.ContainsKey(Entry.ModrinthHash)) OrElse
+                   (ModrinthVersion(Entry.ModrinthHash)("files")(0)("hashes")("sha1") <> Entry.ModrinthHash) Then
+                    LocalMods.Add(Entry.Path)
+                    Continue For
+                End If
+                ModrinthMapping.Add(Entry.FileName, ModrinthVersion(Entry.ModrinthHash)("files")(0))
+            Next
+
+            '步骤 2：写入 Json 文件
+            '获取作为检查目标的加载器和版本
+            Dim ModLoaders = GetTargetModLoaders()
+            Dim McVersion = Version.Version.McName
+            Log($"[Export] 目标加载器：{ModLoaders.Join("/")}，版本：{McVersion}")
+
+            Dim files As New JArray
+            For Each m In ModrinthMapping
+                Dim f As New JObject
+                f.Add("path", $"mods/{m.Key}")
+                f.Add("hashes", m.Value("hashes"))
+                f.Add("env", New JObject From {{"client", "required"}, {"server", "required"}})
+                f.Add("downloads", New JArray From {m.Value("url")})
+                f.Add("fileSize", m.Value("size"))
+                files.Add(f)
+            Next
+            Dim depend As New JObject From {{"minecraft", McVersion}}
+            If Version.Version.HasForge Then depend.Add("forge", Version.Version.ForgeVersion)
+            If Version.Version.HasFabric Then depend.Add("fabric-loader", Version.Version.FabricVersion)
+            If Version.Version.HasNeoForge Then depend.Add("neoforge", Version.Version.NeoForgeVersion)
+
+            Dim json As New JObject From {
+                {"game", "minecraft"},
+                {"formatVersion", 1},
+                {"versionId", VerID},
+                {"name", Version.Name},
+                {"summary", Version.Info},
+                {"files", files},
+                {"dependencies", depend}
+            }
+
+            File.WriteAllText(tempDir & "modrinth.index.json", json.ToString)
+
+            '步骤 3：将获取不到的保存到 overrides 目录
+            For Each m In LocalMods
+                CopyFile(m, tempDir & "overrides\" & GetFileNameFromPath(m))
+            Next
+
+            '存档
+            For Each s In Saves
+                Dim fromPath As String = $"{Version.Path}saves\{s}"
+                If Directory.Exists(fromPath) Then CopyDirectory(fromPath, $"{tempDir}overrides\saves\{s}")
+            Next
+
+            If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换
+            ZipFile.CreateFromDirectory(tempDir, DestPath)
+            DeleteDirectory(tempDir)
+        Catch ex As Exception
+            Log(ex, "导出整合包失败", LogLevel.Msgbox)
+        End Try
     End Sub
     Private Sub ExportCompressed(Version As McVersion, DestPath As String, Saves As String(), PCLSetupGlobal As Boolean, PCLSetupVer As Boolean)
         Try
+            Log($"[Export] 导出整合包（压缩包）：{Version.Path} -> {DestPath}，导出存档 {If(Saves Is Nothing OrElse Not Saves.Any, "不导出", Saves.Join(", "))}，全局设置 {If(PCLSetupGlobal, "导出", "不导出")}，版本设置 {If(PCLSetupVer, "导出", "不导出")}")
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
+            Log($"[Export] 缓存文件夹：{tempDir}")
             Directory.CreateDirectory(tempDir)
             Dim tempVerPath As String = $"{tempDir}{Version.Path.Replace(GetPathFromFullPath(Version.PathIndie), "")}"
 
             For Each f In Directory.EnumerateFiles(Version.Path)
-                If Not IsVerRedundant(GetFileNameFromPath(f)) Then CopyFile(f, tempVerPath & GetFileNameFromPath(f))
+                If Not IsVerRedundant(GetFileNameFromPath(f)) Then
+                    Log($"[Export] 复制版本文件：{f} -> {tempVerPath}{GetFileNameFromPath(f)}")
+                    CopyFile(f, tempVerPath & GetFileNameFromPath(f))
+                End If
             Next
             For Each d In Directory.EnumerateDirectories(Version.Path)
-                If Not IsVerRedundant(GetFolderNameFromPath(d)) Then CopyDirectory(d, $"{tempVerPath}{GetFolderNameFromPath(d)}\")
+                If Not IsVerRedundant(GetFolderNameFromPath(d)) Then
+                    Log($"[Export] 复制版本文件夹：{d} -> {tempVerPath}{GetFolderNameFromPath(d)}\")
+                    CopyDirectory(d, $"{tempVerPath}{GetFolderNameFromPath(d)}\")
+                End If
             Next
 
             If Saves IsNot Nothing Then
                 For Each s In Saves
                     Dim saveFullPath As String = $"{Version.Path}saves\{s}"
                     If Not Directory.Exists(saveFullPath) Then Continue For
+                    Log($"[Export] 复制存档文件夹：{saveFullPath} -> {tempVerPath}saves\{s}")
                     CopyDirectory(saveFullPath, $"{tempVerPath}saves\{s}")
                 Next
             End If
 
             If PCLSetupGlobal Then
+                Log($"[Export] 正在复制 PCL 全局设置")
                 If File.Exists(Path & "PCL\Setup.ini") Then CopyFile("PCL\Setup.ini", tempDir & "PCL\Setup.ini")
                 If File.Exists(Path & "PCL\Custom.xaml") Then CopyFile("PCL\Custom.xaml", tempDir & "PCL\Custom.xaml")
                 If Directory.Exists(Path & "PCL\Pictures") Then CopyDirectory(Path & "PCL\Pictures", tempDir & "PCL\Pictures")
@@ -969,14 +1063,17 @@ Retry:
             End If
 
             If PCLSetupVer Then
+                Log($"[Export] 正在复制 PCL 版本设置")
                 If Directory.Exists(Version.Path & "PCL\") Then CopyDirectory(Version.Path & "PCL\", tempVerPath & "PCL\")
             End If
 
             If Directory.Exists($"{Version.PathIndie}libraries\optifine") Then '#114 OptiFine Libraries 缺失造成补全文件失败
+                Log($"[Export] 正在复制 OptiFine Libraries")
                 CopyDirectory($"{Version.PathIndie}libraries\optifine",
                               $"{tempDir}{GetFolderNameFromPath(Version.PathIndie)}libraries\optifine")
             End If
 
+            Log($"[Export] 正在复制 PCL 本体")
             CopyFile(PathWithName, tempDir & GetFileNameFromPath(PathWithName)) 'PCL 本体
 
             If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换
