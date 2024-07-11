@@ -40,11 +40,8 @@ jobs:
 
     - name: Replace
       shell: powershell
-      env:
-        client_id: ${{ secrets.client_id }}
-        x-api-key: ${{ secrets.x_api_key }}
       run: |
-        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Dim Client_id = ""', 'Dim Client_id = "${{ secrets.client_id }}"' | Out-File "Plain Craft Launcher 2\Modules\ModLaunch.vb"
+        (gc "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb") -replace 'Dim ClientId As String = ""', 'Dim ClientId As String = "${{ secrets.client_id }}"' | Out-File "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb"
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Client.Headers("x-api-key") = ""', '"Client.Headers("x-api-key") = "${{ secrets.x_api_key }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Request.Headers("x-api-key") = ""', 'Request.Headers("x-api-key") = "${{ secrets.x_api_key }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
 
