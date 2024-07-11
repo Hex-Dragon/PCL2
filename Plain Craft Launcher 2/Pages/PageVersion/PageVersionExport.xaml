@@ -22,7 +22,7 @@
                             <RowDefinition Height="9" />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Column="0" Grid.Row="0" Text="整合包类型" VerticalAlignment="Center" />
-                        <local:MyComboBox x:Name="ComboExportType" Margin="10,0,0,0" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="0">
+                        <local:MyComboBox x:Name="ComboExportType" Margin="10,0,0,0" Grid.Column="1" Grid.Row="0">
                             <local:MyComboBoxItem Content="压缩包" IsSelected="True" />
                             <local:MyComboBoxItem Content="Modrinth" />
                         </local:MyComboBox>
@@ -46,7 +46,8 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
                             <ColumnDefinition Width="10" />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="60" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="28" />
@@ -55,9 +56,9 @@
                             <RowDefinition Height="9" />
                         </Grid.RowDefinitions>
                         <TextBlock Text="整合包名称" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
-                        <local:MyTextBox x:Name="TbExportName" HintText="" Grid.Column="2" Grid.Row="0" Width="140" />
+                        <local:MyTextBox x:Name="TbExportName" HintText="" Grid.Column="2" Grid.Row="0" />
                         <TextBlock Text="整合包版本" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" />
-                        <local:MyTextBox x:Name="TbExportVersion" HintText="1.0.0" Grid.Column="2" Grid.Row="2" Width="140" />
+                        <local:MyTextBox x:Name="TbExportVersion" HintText="1.0.0" Grid.Column="2" Grid.Row="2" />
                     </Grid>
                     <local:MyButton x:Name="BtnExportExport" HorizontalAlignment="Left" Text="导出整合包" Height="35" Width="150" ColorType="Highlight" />
                 </StackPanel>
