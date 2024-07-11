@@ -38,6 +38,15 @@ jobs:
       with:
         msbuild-architecture: x64
 
+    - name: Replace
+      shell: powershell
+      env:
+        client_id: ${{ secrets.client_id }}
+        x-api-key: ${{ secrets.x_api_key }}
+      run: |
+        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace '$client_id',   | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
+        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Client.Headers("x-api-key") = ""', '"Client.Headers("x-api-key") = ""' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
+        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace '$client_id',  | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
     - name: Build
       run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
 
