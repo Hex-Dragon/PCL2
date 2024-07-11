@@ -394,6 +394,7 @@ EndHint:
     Public FrmDownloadOptiFine As PageDownloadOptiFine
     Public FrmDownloadLiteLoader As PageDownloadLiteLoader
     Public FrmDownloadForge As PageDownloadForge
+    Public FrmDownloadNeoForge As PageDownloadNeoForge
     Public FrmDownloadFabric As PageDownloadFabric
     Public FrmDownloadMod As PageDownloadMod
     Public FrmDownloadPack As PageDownloadPack

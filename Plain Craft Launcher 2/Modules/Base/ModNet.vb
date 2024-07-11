@@ -341,14 +341,15 @@ Retry:
         Dim RequestEx As Exception = Nothing
         Dim FailCount As Integer = 0
         For i = 1 To RequestCount
-            Dim th As New Thread(Sub()
-                                     Try
-                                         RequestResult = NetRequestOnce(Url, Method, Data, ContentType, 30000, Headers)
-                                     Catch ex As Exception
-                                         FailCount += 1
-                                         RequestEx = ex
-                                     End Try
-                                 End Sub)
+            Dim th As New Thread(
+            Sub()
+                Try
+                    RequestResult = NetRequestOnce(Url, Method, Data, ContentType, 30000, Headers)
+                Catch ex As Exception
+                    FailCount += 1
+                    RequestEx = ex
+                End Try
+            End Sub)
             th.Start()
             Threads.Add(th)
             Thread.Sleep(i * 250)
@@ -382,7 +383,7 @@ RequestFinished:
         Dim Resp As WebResponse = Nothing
         Dim Req As HttpWebRequest
         Try
-            Req = WebRequest.Create(New Uri(Url))
+            Req = WebRequest.Create(Url)
             Req.Method = Method
             Dim SendData As Byte()
             If TypeOf Data Is Byte() Then
@@ -1859,15 +1860,10 @@ Retry:
                 Try
                     While True
                         Thread.Sleep(20)
-                        '若已完成，则清空
-                        If Id = 0 AndAlso FileRemain = 0 AndAlso Files.Any() Then
-                            SyncLock LockFiles
-                                Files.Clear()
-                            End SyncLock
-                        End If
                         '获取文件列表
                         Dim AllFiles As List(Of NetFile)
                         SyncLock LockFiles
+                            If Id = 0 AndAlso FileRemain = 0 AndAlso Files.Any() Then Files.Clear() '若已完成，则清空
                             AllFiles = Files.Values.ToList()
                         End SyncLock
                         Dim WaitingFiles As New List(Of NetFile)

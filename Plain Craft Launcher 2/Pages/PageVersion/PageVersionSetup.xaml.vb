@@ -51,6 +51,7 @@
             '游戏内存
             CType(FindName("RadioRamType" & Setup.Load("VersionRamType", Version:=PageVersionLeft.Version)), MyRadioBox).Checked = True
             SliderRamCustom.Value = Setup.Get("VersionRamCustom", Version:=PageVersionLeft.Version)
+            ComboRamOptimize.SelectedIndex = Setup.Get("VersionRamOptimize", Version:=PageVersionLeft.Version)
 
             '服务器
             TextServerEnter.Text = Setup.Get("VersionServerEnter", Version:=PageVersionLeft.Version)
@@ -95,6 +96,7 @@
             Setup.Set("VersionArgumentIndie", 0, Version:=PageVersionLeft.Version)
             Setup.Reset("VersionRamType", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionRamCustom", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionRamOptimize", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceJvm", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceGame", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
@@ -130,7 +132,7 @@
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderRamCustom.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value, Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboRamOptimize.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex, Version:=PageVersionLeft.Version)
     End Sub
     Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change
@@ -163,10 +165,8 @@
             SliderRamCustom.MaxValue = Math.Floor((RamTotal - 1.5) / 0.5) + 12
         ElseIf RamTotal <= 16 Then
             SliderRamCustom.MaxValue = Math.Floor((RamTotal - 8) / 1) + 25
-        ElseIf RamTotal <= 32 Then
-            SliderRamCustom.MaxValue = Math.Floor((RamTotal - 16) / 2) + 33
         Else
-            SliderRamCustom.MaxValue = Math.Min(Math.Floor((RamTotal - 32) / 4) + 41, 49)
+            SliderRamCustom.MaxValue = Math.Min(Math.Floor((RamTotal - 16) / 2) + 33, 41)
         End If
         '设置文本
         LabRamGame.Text = If(RamGame = Math.Floor(RamGame), RamGame & ".0", RamGame) & " GB" &
@@ -351,15 +351,14 @@ PreFin:
                 RamGive = (Value - 12) * 0.5 + 1.5
             ElseIf Value <= 33 Then
                 RamGive = (Value - 25) * 1 + 8
-            ElseIf Value <= 41 Then
-                RamGive = (Value - 33) * 2 + 16
             Else
-                RamGive = (Value - 41) * 4 + 32
+                RamGive = (Value - 33) * 2 + 16
             End If
         End If
         '若使用 32 位 Java，则限制为 1G
         If If(Is32BitJava, Not JavaIs64Bit(PageVersionLeft.Version)) Then RamGive = Math.Min(1, RamGive)
-        Return RamGive
+        '封顶 32G
+        Return Math.Min(32, RamGive)
     End Function
 
 #End Region

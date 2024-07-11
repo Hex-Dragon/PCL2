@@ -887,7 +887,7 @@ Finished:
                 ModList.Add(ModEntry)
                 '读取 Comp 缓存
                 If ModEntry.State = McMod.McModState.Unavaliable Then Continue For
-                Dim CacheKey = ModEntry.ModrinthHash & PageVersionLeft.Version.Version.McName
+                Dim CacheKey = ModEntry.ModrinthHash & PageVersionLeft.Version.Version.McName & GetTargetModLoaders().Join("")
                 If Cache.ContainsKey(CacheKey) Then
                     ModEntry.FromJson(Cache(CacheKey))
                     '如果缓存中的信息在 6 小时以内更新过，则无需重新获取
@@ -923,20 +923,15 @@ Finished:
             Throw
         End Try
     End Sub
-
     '联网加载 Mod 详情
-    Private Const LocalModCacheVersion As Integer = 4
+    Private Const LocalModCacheVersion As Integer = 5
     Public McModDetailLoader As New LoaderTask(Of KeyValuePair(Of List(Of McMod), JObject), Integer)("Mod List Detail Loader", AddressOf McModDetailLoad)
     Private Sub McModDetailLoad(Loader As LoaderTask(Of KeyValuePair(Of List(Of McMod), JObject), Integer))
         Dim Mods As List(Of McMod) = Loader.Input.Key
         Dim Cache As JObject = Loader.Input.Value
         '获取作为检查目标的加载器和版本
         Dim TargetMcVersion As McVersionInfo = PageVersionLeft.Version.Version
-        Dim ModLoaders As New List(Of CompModLoaderType)
-        If TargetMcVersion.HasForge Then ModLoaders.Add(CompModLoaderType.Forge)
-        If TargetMcVersion.HasFabric Then ModLoaders.Add(CompModLoaderType.Fabric)
-        If TargetMcVersion.HasLiteLoader Then ModLoaders.Add(CompModLoaderType.LiteLoader)
-        If Not ModLoaders.Any() Then ModLoaders.AddRange({CompModLoaderType.Forge, CompModLoaderType.Fabric, CompModLoaderType.LiteLoader, CompModLoaderType.Quilt})
+        Dim ModLoaders = GetTargetModLoaders()
         Dim McVersion = TargetMcVersion.McName
         '暂不向下扩展检查的 MC 小版本
         '例如：Mod 在更新 1.16.5 后，对早期的 1.16.2 版本发布了修补补丁，这会导致 PCL 将 1.16.5 版本的 Mod 降级到 1.16.2
@@ -1136,10 +1131,19 @@ Finished:
         If Not Mods.Any() Then Exit Sub
         For Each Entry In Mods 'TODO: Bookshelf 的 Logo 会在两个网站间横跳
             Entry.CompLoaded = SucceedThreadCount = 2
-            Cache(Entry.ModrinthHash & McVersion) = Entry.ToJson()
+            Cache(Entry.ModrinthHash & McVersion & ModLoaders.Join("")) = Entry.ToJson()
         Next
         WriteFile(PathTemp & "Cache\LocalMod.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))
     End Sub
+    Private Function GetTargetModLoaders() As List(Of CompModLoaderType)
+        Dim ModLoaders As New List(Of CompModLoaderType)
+        If PageVersionLeft.Version.Version.HasForge Then ModLoaders.Add(CompModLoaderType.Forge)
+        If PageVersionLeft.Version.Version.HasNeoForge Then ModLoaders.Add(CompModLoaderType.NeoForge)
+        If PageVersionLeft.Version.Version.HasFabric Then ModLoaders.Add(CompModLoaderType.Fabric)
+        If PageVersionLeft.Version.Version.HasLiteLoader Then ModLoaders.Add(CompModLoaderType.LiteLoader)
+        If Not ModLoaders.Any() Then ModLoaders.AddRange({CompModLoaderType.Forge, CompModLoaderType.NeoForge, CompModLoaderType.Fabric, CompModLoaderType.LiteLoader, CompModLoaderType.Quilt})
+        Return ModLoaders
+    End Function
 
 #If DEBUG Then
     ''' <summary>

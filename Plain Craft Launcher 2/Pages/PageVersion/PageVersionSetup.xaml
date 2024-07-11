@@ -77,6 +77,22 @@
                         <local:MySlider Grid.Row="3" Grid.Column="1" IsEnabled="False" x:Name="SliderRamCustom" Tag="VersionRamCustom" MaxValue="49" Value="13" />
                         <!--<local:MyTextBox Grid.Row="2" Grid.Column="3" Width="100" VerticalAlignment="Center" Margin="30,0,0,0" Text="2048 MB" />-->
                     </Grid>
+                    <Grid Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Margin="0,6,30,0" Text="启动游戏前进行内存优化" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" />
+                        <local:MyComboBox x:Name="ComboRamOptimize" Margin="10,0,0,0" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2" Tag="VersionRamOptimize">
+                            <local:MyComboBoxItem Content="使用全局设置" IsSelected="True" />
+                            <local:MyComboBoxItem Content="开启" />
+                            <local:MyComboBoxItem Content="关闭" />
+                        </local:MyComboBox>
+                    </Grid>
                     <Grid x:Name="PanRamDisplay" Margin="0,11,2,0" SnapsToDevicePixels="True" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition x:Name="ColumnRamUsed" Width="4.7*"/>

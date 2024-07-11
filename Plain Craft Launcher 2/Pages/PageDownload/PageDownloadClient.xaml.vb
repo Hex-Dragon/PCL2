@@ -87,7 +87,7 @@
                 PanMain.Children.Add(NewCard)
             Next
         Catch ex As Exception
-            Log(ex, "可视化版本列表出错", LogLevel.Feedback)
+            Log(ex, "可视化 MC 版本列表出错", LogLevel.Feedback)
         End Try
     End Sub
 
