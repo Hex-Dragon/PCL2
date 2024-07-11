@@ -27,7 +27,7 @@
                             <local:MyComboBoxItem Content="Modrinth" />
                         </local:MyComboBox>
                         <TextBlock Grid.Column="0" Grid.Row="2" Text="包含存档" VerticalAlignment="Center" />
-                        <local:MyTextBox x:Name="TbExportSave" HintText="不包含存档" ToolTip="填写存档的目录名，注意不是存档名。留空则不包含存档。" Margin="10,0,0,0" Grid.Column="1" Grid.Row="2" Tag="1" />
+                        <local:MyTextBox x:Name="TbExportSave" HintText="不包含存档" ToolTip="在此处填写存档目录名，可以将存档包含在整合包内，留空则不包含存档。" Margin="10,0,0,0" Grid.Column="1" Grid.Row="2" Tag="1" />
                     </Grid>
                     <Grid x:Name="GridCompressed">
                         <Grid.ColumnDefinitions>
