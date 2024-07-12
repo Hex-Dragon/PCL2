@@ -10,6 +10,11 @@ on:
       - 'Plain Craft Launcher 2/**'
       - '.github/workflows/**'
   workflow_dispatch:
+    inputs:
+      Release:
+        description: 'Release'
+        required: true
+        type: boolean
 
 jobs:
 
@@ -17,7 +22,7 @@ jobs:
 
     strategy: 
       matrix: 
-        configuration: [Debug, Release, Snapshot, BETA, ReleaseUpdate]
+        configuration: [Debug]
 
     runs-on: windows-latest
 
@@ -53,3 +58,25 @@ jobs:
       with:
         name: ${{ matrix.configuration }} ${{ env.Describe }}
         path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
+
+    - name: Create Release
+      if: ${{ inputs.Release }}
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with: 
+        tag_name: ${{ env.Describe }}
+        release_name: ${{ env.Describe }}
+
+    - name: Upload Release Asset
+      if: ${{ inputs.Release }}
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
+        asset_name: ${{ matrix.configuration }} ${{ env.Describe }}.exe
+        asset_content_type: application/octet-stream
