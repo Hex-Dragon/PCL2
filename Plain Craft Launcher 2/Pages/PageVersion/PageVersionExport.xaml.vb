@@ -1,7 +1,7 @@
 ﻿Public Class PageVersionExport
 
     Private CurrentVersion As McVersion = PageVersionLeft.Version
-    Private Type As ModpackType = ModpackType.Compressed
+    Private Type As ModpackType = ModpackType.Modrinth
     Private SelectedSaves As New List(Of Integer)
     Private ReadOnly Property Saves As List(Of String)
         Get
@@ -18,22 +18,27 @@
     End Sub
 
 #Region "控件事件"
+    Private Function IncludePCL() As Boolean
+        Return True
+    End Function
     Private Sub ComboExportType_Change(sender As ComboBox, e As SelectionChangedEventArgs) Handles ComboExportType.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
-        Type = If(sender.SelectedIndex = 0, ModpackType.Compressed, ModpackType.Modrinth)
+        Type = sender.SelectedIndex
         Select Case Type
             Case ModpackType.Modrinth
-                If GridCompressed IsNot Nothing Then GridCompressed.Visibility = Visibility.Collapsed
-                If GridModrinth IsNot Nothing Then GridModrinth.Visibility = Visibility.Visible
-            Case ModpackType.Compressed
-                If GridCompressed IsNot Nothing Then GridCompressed.Visibility = Visibility.Visible
-                If GridModrinth IsNot Nothing Then GridModrinth.Visibility = Visibility.Collapsed
+                If IncludePCL() Then 'TODO：修改这里的条件
+                    If GridCompressed IsNot Nothing Then GridCompressed.Visibility = Visibility.Visible
+                    If GridModrinth IsNot Nothing Then GridModrinth.Visibility = Visibility.Collapsed
+                Else
+                    If GridCompressed IsNot Nothing Then GridCompressed.Visibility = Visibility.Collapsed
+                    If GridModrinth IsNot Nothing Then GridModrinth.Visibility = Visibility.Visible
+                End If
         End Select
         CardExport.TriggerForceResize()
     End Sub
 
     Private Sub BtnExportExport_Click() Handles BtnExportExport.Click
-        If Type = ModpackType.Compressed AndAlso Val(VersionBranchCode) <> 50 Then
+        If IncludePCL() AndAlso Val(VersionBranchCode) <> 50 Then
             If MyMsgBox("你当前的 PCL 不是正式版，有二次分发（制作压缩包）的限制。" & vbCrLf &
                      "请使用正式版再次尝试该操作！" & vbCrLf &
                      "其他类型的整合包（例如 Modrinth 整合包）没有该限制。", Button1:="下载正式版", Button2:="取消") = 1 Then
@@ -46,8 +51,7 @@
             If(Type = ModpackType.Modrinth, "Modrinth 整合包(*.mrpack)|*.mrpack", "整合包文件(*.zip)|*.zip"))
         If String.IsNullOrEmpty(savePath) Then Exit Sub
         ModpackExport(New ExportOptions(CurrentVersion, savePath, Type, {TbExportSave.Text},
-                                        PCLSetupGlobal:=CheckExportGlobal.Checked,
-                                        PCLSetupVer:=CheckExportVersion.Checked, Name:=TbExportName.Text,
+                                        PCLSetupGlobal:=CheckExportGlobal.Checked, Name:=TbExportName.Text,
                                         VerID:=TbExportVersion.Text))
     End Sub
 

@@ -859,8 +859,7 @@ Retry:
     ''' 整合包类型。
     ''' </summary>
     Public Enum ModpackType
-        Modrinth = 4
-        Compressed = 9
+        Modrinth
     End Enum
     ''' <summary>
     ''' 导出整合包的选项。
@@ -875,21 +874,21 @@ Retry:
         ''' </summary>
         Public Dest As String
         ''' <summary>
+        ''' 是否包括 PCL 文件。
+        ''' </summary>
+        Public IncludePCL As Boolean
+        ''' <summary>
         ''' 整合包类型。
         ''' </summary>
         Public Type As ModpackType
         ''' <summary>
-        ''' 要保留到整合包的存档。
+        ''' 要保留到整合包的文件。
         ''' </summary>
-        Public Saves As String()
+        Public Remain As String()
         ''' <summary>
         ''' 是否需要保留 PCL 全局设置。仅在压缩包中有效。
         ''' </summary>
         Public PCLSetupGlobal As Boolean = True
-        ''' <summary>
-        ''' 是否需要保留 PCL 版本设置。仅在压缩包中有效。
-        ''' </summary>
-        Public PCLSetupVer As Boolean = True
         ''' <summary>
         ''' 整合包名称。仅在 Modrinth 有效。
         ''' </summary>
@@ -900,19 +899,17 @@ Retry:
         Public VerID As String = ""
         Public Sub New(Version As McVersion,
                        Dest As String,
-                       Type As ModpackType,
-                       Saves As String(),
+                       IncludePCL As Boolean,
+                       Remain As String(),
                        Optional PCLSetupGlobal As Boolean = True,
-                       Optional PCLSetupVer As Boolean = True,
                        Optional Name As String = "",
                        Optional Author As String = "",
                        Optional VerID As String = "")
             Me.Version = Version
             Me.Dest = Dest
-            Me.Type = Type
-            Me.Saves = Saves
+            Me.IncludePCL = IncludePCL
+            Me.Remain = Remain
             Me.PCLSetupGlobal = PCLSetupGlobal
-            Me.PCLSetupVer = PCLSetupVer
             Me.Name = Name
             Me.VerID = VerID
         End Sub
@@ -930,32 +927,34 @@ Retry:
                        End Sub, "Modpack Export")
     End Sub
     Private Function ModpackExportBlocking(Options As ExportOptions) As Boolean
-        Select Case Options.Type
-            Case ModpackType.Modrinth
-                Return ExportModrinth(Options.Version, Options.Dest, Options.Saves, Options.Name, Options.VerID)
-            Case ModpackType.Compressed
-                Return ExportCompressed(Options.Version, Options.Dest, Options.Saves, Options.PCLSetupGlobal, Options.PCLSetupVer)
-            Case Else
-                Throw New ArgumentException($"未知的整合包类型：{Options.Type}")
-        End Select
+        If Options.IncludePCL Then
+            Return ExportCompressed(Options.Version, Options.Dest, Options.Remain, Options.PCLSetupGlobal)
+        End If
+        Return ExportModrinth(Options.Version, Options.Dest, Options.Remain, Options.Name, Options.VerID)
     End Function
 
 #Region "冗余"
     Private VersionRedundant As String() = {"screenshots", "backups", "command_history\.txt", '个人文件
-        ".*-natives", "server-resource-packs", "user.*cache\.json", "\.optifine", "\.fabric", '缓存
-        ".*\.jar", "downloads", "realms_persistence.json", "\$\{natives_directory\}", '可联网更新
-        "logs", "crash-reports", ".*\.log", '日志
+        ".*-natives", "server-resource-packs", "user.*cache\.json", "\.optifine", "\.fabric", "\.mixin\.out", '缓存
+        ".*\.jar", "downloads", "realms_persistence.json", "\$\{natives_directory\}", "essential", '可联网更新
+        "logs", "crash-reports", ".*\.log", "debug", '日志
         ".*\.dat_old", ".*\.old", '备份
         "\$\{quickPlayPath\}", '服务器
         "\.replay_cache", "replay_recordings", "replay_videos", 'ReplayMod
         "irisUpdateInfo\.json", 'Iris
+        "modernfix", 'ModernFix 模组
+        "modtranslations", 'Mod 翻译
+        "schematics", 'schematics 模组
         ".*\.BakaCoreInfo", 'BakaXL 配置
-        "hmclversion\.cfg", "log4j2\.xml", 'HMCL 配置
-        "PCL", "saves" '到时候会拷，别急
+        "hmclversion\.cfg", "log4j2\.xml" 'HMCL 配置
     }
-    Private Function IsVerRedundant(FileName As String) As Boolean
+    Private Function IsVerRedundant(FilePath As String) As Boolean
         For Each regex In VersionRedundant
-            If RegexCheck(FileName, regex) Then Return True
+            If RegexCheck(GetFileNameFromPath(FilePath).ToLower(), regex) Then Return True
+            If FilePath.Replace("/", "\").EndsWithF("\journeymap\data\") OrElse
+                FilePath.Replace("/", "\").EndsWithF("\journeymap\data") Then
+                Return True
+            End If
         Next
         Return False
     End Function
@@ -972,7 +971,7 @@ Retry:
             '步骤 1：从 Modrinth 获取 Mod 工程信息，得到 URL
             Dim Mods As New List(Of McMod)
             For Each m In Directory.EnumerateFiles(Version.Path & "mods\")
-                Mods.Add(New McMod(m))
+                If m.EndsWithF(".jar") Then Mods.Add(New McMod(m))
             Next
 
             '从 Modrinth 获取信息
@@ -1046,9 +1045,9 @@ Retry:
             Return False
         End Try
     End Function
-    Private Function ExportCompressed(Version As McVersion, DestPath As String, Saves As String(), PCLSetupGlobal As Boolean, PCLSetupVer As Boolean)
+    Private Function ExportCompressed(Version As McVersion, DestPath As String, Saves As String(), PCLSetupGlobal As Boolean)
         Try
-            Log($"[Export] 导出整合包（压缩包）：{Version.Path} -> {DestPath}，导出存档 {If(Saves Is Nothing OrElse Not Saves.Any, "不导出", Saves.Join(", "))}，全局设置 {If(PCLSetupGlobal, "导出", "不导出")}，版本设置 {If(PCLSetupVer, "导出", "不导出")}")
+            Log($"[Export] 导出整合包（压缩包）：{Version.Path} -> {DestPath}，导出存档 {If(Saves Is Nothing OrElse Not Saves.Any, "不导出", Saves.Join(", "))}，全局设置 {If(PCLSetupGlobal, "导出", "不导出")}")
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
             Log($"[Export] 缓存文件夹：{tempDir}")
             Directory.CreateDirectory(tempDir)
@@ -1082,11 +1081,6 @@ Retry:
                 If File.Exists(Path & "PCL\Custom.xaml") Then CopyFile("PCL\Custom.xaml", tempDir & "PCL\Custom.xaml")
                 If Directory.Exists(Path & "PCL\Pictures") Then CopyDirectory(Path & "PCL\Pictures", tempDir & "PCL\Pictures")
                 If Directory.Exists(Path & "PCL\Musics") Then CopyDirectory(Path & "PCL\Musics", tempDir & "PCL\Musics")
-            End If
-
-            If PCLSetupVer Then
-                Log($"[Export] 正在复制 PCL 版本设置")
-                If Directory.Exists(Version.Path & "PCL\") Then CopyDirectory(Version.Path & "PCL\", tempVerPath & "PCL\")
             End If
 
             If Directory.Exists($"{Version.PathIndie}libraries\optifine") Then '#114 OptiFine Libraries 缺失造成补全文件失败

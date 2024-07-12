@@ -61,6 +61,7 @@
                         <local:MyTextBox x:Name="TbExportVersion" HintText="1.0.0" Grid.Column="2" Grid.Row="2" />
                     </Grid>
                     <local:MyButton x:Name="BtnExportExport" HorizontalAlignment="Left" Text="导出整合包" Height="35" Width="150" ColorType="Highlight" />
+                    <local:MyListItem Title="游戏存档" />
                 </StackPanel>
             </local:MyCard>
         </StackPanel>
