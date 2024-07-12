@@ -7,7 +7,13 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="25,10">
-            <local:MyCard x:Name="CardExport" Margin="0,20,0,15" Title="导出选项">
+
+            <local:MyCard Margin="0,15" Title="">
+                <Grid Margin="10,7" Name="PanDisplayItem" />
+                <TextBlock TextWrapping="Wrap" Margin="0,0,0,4" Text="空白填充" />
+            </local:MyCard>
+
+            <local:MyCard x:Name="CardExport" Margin="0,0,0,15" Title="整合包信息">
                 <StackPanel Margin="25,40,25,21">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -20,49 +26,73 @@
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
                             <RowDefinition Height="9" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="9" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Column="0" Grid.Row="0" Text="整合包类型" VerticalAlignment="Center" />
-                        <local:MyComboBox x:Name="ComboExportType" Margin="10,0,0,0" Grid.Column="1" Grid.Row="0">
-                            <local:MyComboBoxItem Content="压缩包" IsSelected="True" />
-                            <local:MyComboBoxItem Content="Modrinth" />
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包名称" Margin="0,0,25,0" />
+                        <local:MyTextBox Grid.Row="0" x:Name="TbExportName" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" MaxLength="100" />
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="图标" Margin="0,0,25,0"  />
+                        <local:MyComboBox Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1">
+                            <local:MyComboBoxItem Content="自动" IsSelected="True" Tag="" />
+                            <!-- 此处需要添加一个自定义图标 -->
+                            <local:MyComboBoxItem Content="自定义..." />
+                            <!--x:Name="ItemDisplayLogoCustom"-->
+                            <local:MyComboBoxItem Content="圆石" Tag="pack://application:,,,/images/Blocks/CobbleStone.png" />
+                            <local:MyComboBoxItem Content="命令方块" Tag="pack://application:,,,/images/Blocks/CommandBlock.png" />
+                            <local:MyComboBoxItem Content="金块" Tag="pack://application:,,,/images/Blocks/GoldBlock.png" />
+                            <local:MyComboBoxItem Content="草方块" Tag="pack://application:,,,/images/Blocks/Grass.png" />
+                            <local:MyComboBoxItem Content="草径" Tag="pack://application:,,,/images/Blocks/GrassPath.png" />
+                            <local:MyComboBoxItem Content="铁砧" Tag="pack://application:,,,/images/Blocks/Anvil.png" />
+                            <local:MyComboBoxItem Content="红石块" Tag="pack://application:,,,/images/Blocks/RedstoneBlock.png" />
+                            <local:MyComboBoxItem Content="红石灯（开）" Tag="pack://application:,,,/images/Blocks/RedstoneLampOn.png" />
+                            <local:MyComboBoxItem Content="红石灯（关）" Tag="pack://application:,,,/images/Blocks/RedstoneLampOff.png" />
+                            <local:MyComboBoxItem Content="鸡蛋" Tag="pack://application:,,,/images/Blocks/Egg.png" />
+                            <local:MyComboBoxItem Content="布料（Fabric）" Tag="pack://application:,,,/images/Blocks/Fabric.png" />
+                            <local:MyComboBoxItem Content="狐狸（NeoForge）" Tag="pack://application:,,,/images/Blocks/NeoForge.png" />
                         </local:MyComboBox>
-                        <TextBlock Grid.Column="0" Grid.Row="2" Text="包含存档" VerticalAlignment="Center" />
-                        <local:MyTextBox x:Name="TbExportSave" HintText="不包含存档" ToolTip="在此处填写存档目录名，可以将存档包含在整合包内，留空则不包含存档。" Margin="10,0,0,0" Grid.Column="1" Grid.Row="2" Tag="1" />
-                    </Grid>
-                    <Grid x:Name="GridCompressed">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
-                            <ColumnDefinition Width="20" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="28" />
-                            <RowDefinition Height="9" />
-                        </Grid.RowDefinitions>
-                        <local:MyCheckBox x:Name="CheckExportGlobal" Text="导出 PCL 全局设置" Grid.Column="0" Grid.Row="0" Checked="True" />
-                        <local:MyCheckBox x:Name="CheckExportVersion" Text="导出 PCL 版本设置" Grid.Column="2" Grid.Row="0" Checked="True" />
-                    </Grid>
-                    <Grid x:Name="GridModrinth" Visibility="Collapsed">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
-                            <ColumnDefinition Width="10" />
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="60" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="28" />
-                            <RowDefinition Height="9" />
-                            <RowDefinition Height="28" />
-                            <RowDefinition Height="9" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="整合包名称" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
-                        <local:MyTextBox x:Name="TbExportName" HintText="" Grid.Column="2" Grid.Row="0" />
-                        <TextBlock Text="整合包版本" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" />
-                        <local:MyTextBox x:Name="TbExportVersion" HintText="1.0.0" Grid.Column="2" Grid.Row="2" />
+                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包版本" Margin="0,0,25,0" />
+                        <local:MyTextBox Grid.Row="4" x:Name="TbExportVersion" HintText="1.0.0" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" MaxLength="100" />
                     </Grid>
                     <local:MyButton x:Name="BtnExportExport" HorizontalAlignment="Left" Text="导出整合包" Height="35" Width="150" ColorType="Highlight" />
                 </StackPanel>
             </local:MyCard>
+
+            <local:MyCard x:Name="CardSwitch" Margin="0,0,0,15" Title="基础选择">
+                <StackPanel Margin="25,38,15,15">
+                    <TextBlock Margin="0,1,0,1" Text="你可以在此处勾选需要包含进整合包的文件夹，其他文件夹请前往高级选项添加。" TextWrapping="Wrap" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="18" />
+                            <ColumnDefinition Width="1.0*" />
+                            <ColumnDefinition Width="1.2*" />
+                            <ColumnDefinition Width="1.0*" />
+                            <ColumnDefinition Width="1.0*" />
+                            <ColumnDefinition Width="1.0*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Text="包含启动器" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3" Text="启动器全局配置" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Text="配置" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="存档" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="4" Text="材质包" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="5" Text="光影包" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="6" Text="光影配置" />
+                    </Grid>
+                </StackPanel>
+                
+            </local:MyCard>
+            <local:MyCard Title="高级选项" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
+                <StackPanel Margin="25,40,23,15">
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
+                    Text="空白填充" />
+                </StackPanel>
+            </local:MyCard>
+
         </StackPanel>
     </local:MyScrollViewer>
 </local:MyPageRight>
