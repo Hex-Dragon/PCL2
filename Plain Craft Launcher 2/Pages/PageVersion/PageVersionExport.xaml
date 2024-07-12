@@ -78,22 +78,22 @@
                             <RowDefinition Height="30" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Text="包含启动器"
-                                          ToolTip="勾选将pcl2包含在整合包内"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3" Text="启动器全局配置"
-                                          ToolTip="勾选将启动器的全局配置包含在整合包内"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Text="服务器文件"
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Text="服务器文件"
                                           ToolTip="server.dat文件"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="模组配置"
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3" Text="模组配置"
                                           ToolTip="config文件夹"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="4" Text="游戏配置"
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="4" Text="游戏配置"
                                           ToolTip="options.txt文件"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="5" Text="存档"
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="5" Text="存档"
                                           ToolTip="默认包含整个存档文件夹"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="6" Text="材质包"
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="6" Text="材质包"
                                           ToolTip="默认包含整个材质包文件夹"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="7" Text="光影包"
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="7" Text="光影包"
                                           ToolTip="默认包含整个光影包文件夹"/>
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Text="包含启动器"
+                                          ToolTip="勾选将pcl2包含在整合包内"/>
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="启动器全局配置"
+                                          ToolTip="勾选将启动器的全局配置包含在整合包内"/>
                     </Grid>
                 </StackPanel>
                 
