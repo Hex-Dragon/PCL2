@@ -77,5 +77,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
-        asset_name: ${{ matrix.configuration }} ${{ env.Describe }}.exe
+        asset_name: Plain Craft Launcher 2.exe
         asset_content_type: application/octet-stream
