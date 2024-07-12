@@ -36,7 +36,7 @@
         End Select
         CardExport.TriggerForceResize()
     End Sub
-
+    If GridModrinth IsNot Nothing Then GridModrinth.Visibility = Visibility.Visible
     Private Sub BtnExportExport_Click() Handles BtnExportExport.Click
         If IncludePCL() AndAlso Val(VersionBranchCode) <> 50 Then
             If MyMsgBox("你当前的 PCL 不是正式版，有二次分发（制作压缩包）的限制。" & vbCrLf &
@@ -52,6 +52,11 @@
         If String.IsNullOrEmpty(savePath) Then Exit Sub
         ModpackExport(New ExportOptions(CurrentVersion, savePath, Type, {TbExportSave.Text},
                                         PCLSetupGlobal:=CheckExportGlobal.Checked, Name:=TbExportName.Text,
+                                        VerID:=TbExportVersion.Text))
+    End Sub
+        ModpackExport(New ExportOptions(CurrentVersion, savePath, Type, {TbExportSave.Text},
+                                        PCLSetupGlobal:=CheckExportGlobal.Checked,
+                                        PCLSetupVer:=CheckExportVersion.Checked, Name:=TbExportName.Text,
                                         VerID:=TbExportVersion.Text))
     End Sub
 
