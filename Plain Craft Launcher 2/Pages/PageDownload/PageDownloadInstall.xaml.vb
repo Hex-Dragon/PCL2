@@ -1,4 +1,4 @@
-﻿Public Class PageDownloadInstall
+Public Class PageDownloadInstall
 
     Private Sub LoaderInit() Handles Me.Initialized
         PageLoaderInit(LoadMinecraft, PanLoad, PanBack, Nothing, DlClientListLoader, AddressOf LoadMinecraft_OnFinish)
@@ -486,7 +486,9 @@
             End If
         End If
         'Quilt
-        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 13 OrElse SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 14 AndAlso Val(SelectedMinecraftId.Split(".")(2)) < 4 Then
+        If SelectedMinecraftId.Contains("1.14.4") Then
+						CardQuilt.Visibility = Visibility.Visible
+        ElseIf SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 14 Then
             CardQuilt.Visibility = Visibility.Collapsed
         Else
             CardQuilt.Visibility = Visibility.Visible
