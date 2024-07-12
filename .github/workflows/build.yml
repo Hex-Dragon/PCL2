@@ -13,7 +13,6 @@ on:
     inputs:
       Release:
         description: 'Release'
-        required: true
         type: boolean
 
 jobs:
