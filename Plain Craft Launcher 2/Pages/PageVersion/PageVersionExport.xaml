@@ -14,7 +14,7 @@
             </local:MyCard>
 
             <local:MyCard x:Name="CardExport" Margin="0,0,0,15" Title="整合包信息">
-                <StackPanel Margin="25,40,25,20">
+                <StackPanel Margin="25,40,25,21">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
