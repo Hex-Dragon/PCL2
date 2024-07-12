@@ -59,13 +59,14 @@
 
             <local:MyCard x:Name="CardSwitch" Margin="0,0,0,15" Title="基础选择">
                 <StackPanel Margin="25,38,15,15">
-                    <TextBlock Margin="0,1,0,1" Text="你可以在此处勾选需要包含进整合包的文件夹，其他文件夹请前往高级选项添加。" TextWrapping="Wrap" />
+                    <TextBlock Margin="0,1,0,1" Text="你可以在此处勾选需要包含进整合包的文件或者文件夹，其他文件夹请前往高级选项添加。" TextWrapping="Wrap" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="18" />
+                            <ColumnDefinition Width="1.4*" />
+                            <ColumnDefinition Width="1.6*" />
                             <ColumnDefinition Width="1.0*" />
-                            <ColumnDefinition Width="1.2*" />
                             <ColumnDefinition Width="1.0*" />
                             <ColumnDefinition Width="1.0*" />
                             <ColumnDefinition Width="1.0*" />
@@ -73,15 +74,19 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="4" />
                             <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Text="包含启动器" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3" Text="启动器全局配置" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Text="配置" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="存档" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="4" Text="材质包" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="5" Text="光影包" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="6" Text="光影配置" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Text="光影配置" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="服务器文件" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="4" Text="配置" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="5" Text="存档" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="6" Text="材质包" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="7" Text="光影包" />
+
+
                     </Grid>
                 </StackPanel>
                 
