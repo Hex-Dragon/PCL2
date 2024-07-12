@@ -60,7 +60,7 @@
 
             <local:MyCard x:Name="CardSwitch" Margin="0,0,0,15" Title="基础选项">
                 <StackPanel Margin="25,38,15,15">
-                    <TextBlock Margin="0,1,0,1" Text="你可以在此处勾选需要包含进整合包的文件或者文件夹，其他文件夹请前往高级选项添加。" TextWrapping="Wrap" />
+                    <TextBlock Margin="0,1,0,1" Text="你可以在此勾选需要包含进整合包的文件或者文件夹，其他文件或者文件夹在高级选项添加。" TextWrapping="Wrap" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
