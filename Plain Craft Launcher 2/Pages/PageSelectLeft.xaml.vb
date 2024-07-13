@@ -119,6 +119,21 @@
             FrmSelectLeft.PanList.Children.Add(ItemInstall)
             AddHandler ItemInstall.Click, AddressOf ModpackInstall
 
+            '基岩版
+            Dim ItemLaunchBedrockUWP As New MyListItem With {.IsScaleAnimationEnabled = False, .Type = MyListItem.CheckType.Clickable, .Title = "启动基岩正式版"， .Height = 34}
+            ToolTipService.SetPlacement(ItemLaunchBedrockUWP, Primitives.PlacementMode.Right)
+            ToolTipService.SetHorizontalOffset(ItemLaunchBedrockUWP, -50)
+            ToolTipService.SetVerticalOffset(ItemLaunchBedrockUWP, 2.5)
+            FrmSelectLeft.PanList.Children.Add(ItemLaunchBedrockUWP)
+            AddHandler ItemLaunchBedrockUWP.Click, AddressOf ModBedrock.LaunchBedrockUWP
+
+            Dim ItemLaunchBedrockBeta As New MyListItem With {.IsScaleAnimationEnabled = False, .Type = MyListItem.CheckType.Clickable, .Title = "启动基岩测试版"， .Height = 34}
+            ToolTipService.SetPlacement(ItemLaunchBedrockBeta, Primitives.PlacementMode.Right)
+            ToolTipService.SetHorizontalOffset(ItemLaunchBedrockBeta, -50)
+            ToolTipService.SetVerticalOffset(ItemLaunchBedrockBeta, 2.5)
+            FrmSelectLeft.PanList.Children.Add(ItemLaunchBedrockBeta)
+            AddHandler ItemLaunchBedrockBeta.Click, AddressOf ModBedrock.LaunchBedrockBeta
+
             '边距
             FrmSelectLeft.PanList.Children.Add(New FrameworkElement With {.Height = 10, .IsHitTestVisible = False})
 
