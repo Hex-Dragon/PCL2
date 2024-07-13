@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.2" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.2." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.8.3" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.8.3." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
-    Public Const VersionCode As Integer = 330 'Release
+    Public Const VersionCode As Integer = 332 'Release
 #Else
-    Public Const VersionCode As Integer = 329 'Snapshot
+    Public Const VersionCode As Integer = 331 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1016,7 +1016,7 @@ Public Module ModBase
     ''' </summary>
     Public Function CheckPermission(Path As String) As Boolean
         Try
-            If Path = "" Then Return False
+            If String.IsNullOrEmpty(Path) Then Return False
             If Not Path.EndsWithF("\") Then Path += "\"
             If Path.EndsWithF(":\System Volume Information\") OrElse Path.EndsWithF(":\$RECYCLE.BIN\") Then Return False
             If Not Directory.Exists(Path) Then Return False
