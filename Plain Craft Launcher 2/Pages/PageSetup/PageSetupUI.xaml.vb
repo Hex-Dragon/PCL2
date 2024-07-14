@@ -429,10 +429,11 @@ Refresh:
         End If
     End Sub
     Private Sub LabLauncherTheme11Click_MouseLeftButtonUp() Handles LabLauncherTheme11Click.MouseLeftButtonUp, RadioLauncherTheme11.MouseRightButtonUp
-        If LabLauncherTheme11Click.Visibility = Visibility.Collapsed OrElse LabLauncherTheme11Click.ToolTip.ToString.Contains("点击") Then
+        If LabLauncherTheme11Click.Visibility = Visibility.Collapsed OrElse If(LabLauncherTheme11Click.ToolTip, "").ToString.Contains("点击") Then
             If MyMsgBox(GetLang("LangDialogThemeUnlockGameContent"),
                 GetLang("LangDialogThemeUnlockGameTitle"), GetLang("LangDialogThemeUnlockGameAccrpt"), GetLang("LangDialogThemeUnlockGameDeny")) = 1 Then
-                MyMsgBox(GetLang("LangDialogThemeUnlockGameFirstClueContent") & "gnp.dorC61\60\20\0202\moc.x1xa.2s\\:sp" & "T".ToLower & "th", GetLang("LangDialogThemeUnlockGameFirstClueTitle")) '防止触发病毒检测规则
+                MyMsgBox(GetLang("LangDialogThemeUnlockGameFirstClueContent") &
+                         "gnp.dorC61\60\20\0202\moc.x1xa.2s\\:sp" & "T".ToLower & "th", GetLang("LangDialogThemeUnlockGameFirstClueTitle")) '防止触发病毒检测规则
             End If
         End If
     End Sub

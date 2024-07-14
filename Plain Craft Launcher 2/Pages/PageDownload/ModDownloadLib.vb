@@ -316,46 +316,6 @@ Public Module ModDownloadLib
 
 #Region "OptiFine 下载"
 
-    Public Sub McDownloadOptiFine(DownloadInfo As DlOptiFineListEntry)
-        Try
-            Dim Id As String = DownloadInfo.NameVersion
-            Dim VersionFolder As String = PathMcFolder & "versions\" & Id & "\"
-            Dim IsNewVersion As Boolean = Val(DownloadInfo.Inherit.Split(".")(1)) >= 14
-            Dim Target As String = If(IsNewVersion,
-                PathTemp & "Cache\Code\" & DownloadInfo.NameVersion & "_" & GetUuid(),
-                PathMcFolder & "libraries\optifine\OptiFine\" & DownloadInfo.NameFile.Replace("OptiFine_", "").Replace(".jar", "").Replace("preview_", "") & "\" & DownloadInfo.NameFile.Replace("OptiFine_", "OptiFine-").Replace("preview_", ""))
-
-            '重复任务检查
-            SyncLock LoaderTaskbarLock
-                For i = 0 To LoaderTaskbar.Count - 1
-                    If LoaderTaskbar(i).Name = "OptiFine " & DownloadInfo.NameDisplay & " 下载" Then
-                        Hint("该版本正在下载中！", HintType.Critical)
-                        Exit Sub
-                    End If
-                Next
-            End SyncLock
-
-            '已有版本检查
-            If File.Exists(VersionFolder & Id & ".json") Then
-                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 和 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
-                    File.Delete(VersionFolder & Id & ".jar")
-                    File.Delete(VersionFolder & Id & ".json")
-                Else
-                    Exit Sub
-                End If
-            End If
-
-            '启动
-            Dim Loader As New LoaderCombo(Of String)("OptiFine " & DownloadInfo.NameDisplay & " 下载", McDownloadOptiFineLoader(DownloadInfo)) With {.OnStateChanged = AddressOf McInstallState}
-            Loader.Start(VersionFolder)
-            LoaderTaskbarAdd(Loader)
-            FrmMain.BtnExtraDownload.ShowRefresh()
-            FrmMain.BtnExtraDownload.Ribble()
-
-        Catch ex As Exception
-            Log(ex, "开始 OptiFine 下载失败", LogLevel.Feedback)
-        End Try
-    End Sub
     Private Sub McDownloadOptiFineSave(DownloadInfo As DlOptiFineListEntry)
         Try
             Dim Id As String = DownloadInfo.NameVersion
@@ -1282,9 +1242,11 @@ Retry:
             Else
                 'Forge
                 Dim Forge As DlForgeVersionEntry = Info
+                Dim FileName As String =
+                    $"{Forge.Inherit.Replace("-", "_")}-{Forge.FileVersion}/forge-{Forge.Inherit.Replace("-", "_")}-{Forge.FileVersion}-{Forge.Category}.{Forge.FileExtension}"
                 Files.Add(New NetFile({
-                    $"https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{Forge.Inherit}-{Forge.FileVersion}/forge-{Forge.Inherit}-{Forge.FileVersion}-{Forge.Category}.{Forge.FileExtension}",
-                    $"https://files.minecraftforge.net/maven/net/minecraftforge/forge/{Forge.Inherit}-{Forge.FileVersion}/forge-{Forge.Inherit}-{Forge.FileVersion}-{Forge.Category}.{Forge.FileExtension}"
+                    $"https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{FileName}",
+                    $"https://files.minecraftforge.net/maven/net/minecraftforge/forge/{FileName}"
                 }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=Forge.Hash)))
             End If
             Task.Output = Files

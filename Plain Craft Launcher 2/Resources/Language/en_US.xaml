@@ -1110,4 +1110,20 @@
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">No, thanks</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Your PCL is not the latest version, so you cannot submit feedback.&#xa;Please update the launcher in "Settings → Launcher" first, confirm that the problem still exists in the latest version, and then submit feedback.</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Unable to submit feedback</s:String>
+    
+    <!--ModLaunch-->
+    <s:String x:Key="LangModLaunchStartStageGetJava">Get Java</s:String>
+    <s:String x:Key="LangModLaunchStartStageCompleteFile">Complete file</s:String>
+    <s:String x:Key="LangModLaunchStartStageGetParameters">Get startup parameters</s:String>
+    <s:String x:Key="LangModLaunchStartStageExtractFile">Extract the files</s:String>
+    <s:String x:Key="LangModLaunchStartStagePreProcess">Pre-start processing</s:String>
+    <s:String x:Key="LangModLaunchStartStageExecuteCommand">Execute custom commands</s:String>
+    <s:String x:Key="LangModLaunchStartStageWaitForProgress">Start the process</s:String>
+    <s:String x:Key="LangModLaunchStartStageWaitForWindow">Wait for game window</s:String>
+    <s:String x:Key="LangModLaunchStartStageLaunchEnd">Ends the processing</s:String>
+    <s:String x:Key="LangModLaunchStartStageMemReduce">Memory optimization</s:String>
+    <s:String x:Key="LangModLaunchStartStageMCStarted">Minecraft started</s:String>
+    <s:String x:Key="LangModLaunchStartSuccess">Start successfully!</s:String>
+    <s:String x:Key="LangModLaunchCancelStart">Start canceled!</s:String>
+    <s:String x:Key="LangModLaunchCancelExportCommand">Export of startup script has been canceled!</s:String>
 </ResourceDictionary>
