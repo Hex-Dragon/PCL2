@@ -342,6 +342,7 @@
     <s:String x:Key="LangDownloadSaveInstaller">保存安裝器</s:String>
     <s:String x:Key="LangDownloadAll">全部版本</s:String>
     <s:String x:Key="LangDownloadCategory">種類：</s:String>
+    <s:String x:Key="LangDownloadUnknown">未知版本</s:String>
     
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">轉到 CurseForge</s:String>
@@ -352,6 +353,7 @@
     <s:String x:Key="LangDownloadCompApiSlow">由於 API 的版本信息更新緩慢，可能無法識別剛更新不久的 MC 版本，只需等待幾天即可自動恢復正常。</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">正在查找適合的遊戲版本……</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">當前 MC 文件夾中沒有找到適合這個 Mod 的版本！</s:String>
+    <s:String x:Key="LangDownloadCompSelectedVersion">所選版本：</s:String>
     
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Fabric 簡介</s:String>
@@ -502,6 +504,7 @@
     <s:String x:Key="LangDownloadModpackTypeAllMapBased">基於地圖</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">輕量整合</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">大型整合</s:String>
+    <s:String x:Key="LangDownloadModpackTypeMisc">雜項</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">無法連接到 Modrinth，所以目前僅顯示了來自 CurseForge 的內容，結果可能不全。&#xa;請嘗試使用 VPN 或加速器以改善網絡。</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">無法連接到 CurseForge，所以目前僅顯示了來自 Modrinth 的內容，結果可能不全。&#xa;請嘗試使用 VPN 或加速器以改善網絡。</s:String>
     

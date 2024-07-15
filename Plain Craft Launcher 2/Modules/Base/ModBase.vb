@@ -2278,10 +2278,12 @@ Retry:
                 Return GetLang("LangDownloadRelease")
             Case "预览版", "快照版本"
                 Return GetLang("LangDownloadBeta")
-            Case "远古版"
+            Case "远古版", "远古版本"
                 Return GetLang("LangDownloadAncientVersion")
             Case "愚人节版"
                 Return GetLang("LangDownloadAprilFool")
+            Case "未知版本"
+                Return GetLang("LangDownloadUnknown")
             Case Else
                 Log("[Lang] GetLangByWord:没有找到 " & Word & " 的对应翻译")
                 Return Word
