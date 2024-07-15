@@ -1133,16 +1133,16 @@
     <s:String x:Key="LangModLaunchCancelExportCommand">Export of startup script has been canceled!</s:String>
     
     <!--ModValidate-->
-    <s:String x:Key="LangModValidateNoSameFolderName">Cannot have the same name as an existing folder!</s:String>
-    <s:String x:Key="LangModValidateNoEndWithDotFolderName">Folder names cannot end in decimal point!</s:String>
-    <s:String x:Key="LangModValidateNoEndWithSpecialCharFolderName">Folder names cannot contain % characters!</s:String>
-    <s:String x:Key="LangModValidateNoEndWithSpaceFolderName">Folder names cannot end with spaces!</s:String>
-    <s:String x:Key="LangModValidateNoStartWithSpaceFolderName">Folder names cannot start with spaces!</s:String>
-    <s:String x:Key="LangModValidateNoSpacialFolderName">The folder name cannot be %!</s:String>
-    <s:String x:Key="LangModValidateNoEmptyInput">The input content cannot be blank!</s:String>
-    <s:String x:Key="LangModValidateIncorrectUrl">The URL you entered is invalid! </s:String>
-    <s:String x:Key="LangModValidateNumTooLong">Please enter a reasonable number! </s:String>
-    <s:String x:Key="LangModValidateNumInt">Please enter an integer! </s:String>
-    <s:String x:Key="LangModValidateNumNoGreater">Cannot exceed {0}! </s:String>
-    <s:String x:Key="LangModValidateNumNoLess">It cannot be lower than {0}! </s:String>
+    <s:String x:Key="LangModValidateNoSameFolderName">Cannot have the same name as an existing folder.</s:String>  
+    <s:String x:Key="LangModValidateNoEndWithDotFolderName">Folder names must not end with a decimal point.</s:String>  
+    <s:String x:Key="LangModValidateNoEndWithSpecialCharFolderName">Folder names cannot contain percent signs (%).</s:String>  
+    <s:String x:Key="LangModValidateNoEndWithSpaceFolderName">Folder names must not end with spaces.</s:String>  
+    <s:String x:Key="LangModValidateNoStartWithSpaceFolderName">Folder names cannot begin with spaces.</s:String>  
+    <s:String x:Key="LangModValidateNoSpacialFolderName">The folder name cannot be "%".</s:String>  
+    <s:String x:Key="LangModValidateNoEmptyInput">The input content cannot be left blank.</s:String>  
+    <s:String x:Key="LangModValidateIncorrectUrl">The URL you entered is invalid.</s:String>  
+    <s:String x:Key="LangModValidateNumTooLong">Please enter a reasonable number within the allowed range.</s:String>  
+    <s:String x:Key="LangModValidateNumInt">Please enter an integer value.</s:String>  
+    <s:String x:Key="LangModValidateNumNoGreater">The number cannot exceed {0}.</s:String>  
+    <s:String x:Key="LangModValidateNumNoLess">The number cannot be less than {0}.</s:String>
 </ResourceDictionary>
