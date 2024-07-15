@@ -19,6 +19,30 @@ Public Class Application
 
     '开始
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
+        '刷新语言
+        Lang = ReadReg("Lang")
+        If String.IsNullOrWhiteSpace(Lang) Then
+            Select Case Globalization.CultureInfo.CurrentCulture.Name
+                Case "en-US"
+                    Lang = "en_US"
+                Case "zh-CN"
+                    Lang = "zh_CN"
+                Case "zh-HK"
+                    Lang = "zh_HK"
+                Case "zh-TW"
+                    Lang = "zh_TW"
+                Case Else
+                    Lang = "en_US"
+            End Select
+            WriteReg("Lang", Lang)
+        End If
+        Log("[Lang] 选择启动器语言为 " & Lang)
+        Try
+            Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
+        Catch ex As Exception
+            Log("无法找到语言资源：" & Lang & vbCrLf & "Language resource cannot be found:" & Lang, LogLevel.Assert)
+        End Try
+
         Try
             SecretOnApplicationStart()
             '检查参数调用
