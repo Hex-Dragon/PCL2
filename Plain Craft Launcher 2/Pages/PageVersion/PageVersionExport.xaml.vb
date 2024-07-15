@@ -1,4 +1,6 @@
-﻿Public Class PageVersionExport
+﻿Imports System.Runtime.CompilerServices
+
+Public Class PageVersionExport
     Private Sub PageVersionExport_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         TbExportName.HintText = PageVersionLeft.Version.Name
         Reload()
@@ -6,10 +8,18 @@
 
     Public ItemVersion As MyListItem
     Public Sub Reload()
+        AniControlEnabled += 1
+
         PanDisplayItem.Children.Clear()
-        ItemVersion = PageSelectRight.McVersionListItem(PageVersionLeft.Version)
+        ItemVersion = PageSelectRight.McVersionListItem(PageVersionLeft.Version.Load())
         ItemVersion.IsHitTestVisible = False
+        If Not String.IsNullOrEmpty(CustomLogo) Then
+            ItemVersion.Logo = CustomLogo
+        End If
         PanDisplayItem.Children.Add(ItemVersion)
+        ItemVersion.Title = If(String.IsNullOrWhiteSpace(TbExportName.Text), PageVersionLeft.Version.Name, TbExportName.Text)
+
+        AniControlEnabled -= 1
     End Sub
 
     Private Type As ModpackType = ModpackType.Modrinth
@@ -26,6 +36,34 @@
 #Region "整合包信息 & 预览栏"
     Private Sub TbExportName_TextChanged(sender As MyTextBox, e As TextChangedEventArgs) Handles TbExportName.TextChanged
         ItemVersion.Title = If(String.IsNullOrWhiteSpace(sender.Text), PageVersionLeft.Version.Name, sender.Text)
+    End Sub
+
+    Private CustomLogoVal As String
+    ''' <summary>
+    ''' 自定义 Logo 的路径。
+    ''' </summary>
+    Public Property CustomLogo() As String
+        Get
+            Return CustomLogoVal
+        End Get
+        Set(value As String)
+            If AniControlEnabled <> 0 Then Exit Property
+            CustomLogoVal = value
+            ItemVersion.Logo = value
+            Reload()
+        End Set
+    End Property
+
+    Private Sub ComboDisplayLogo_SelectionChanged(sender As MyComboBox, e As SelectionChangedEventArgs) Handles ComboDisplayLogo.SelectionChanged
+        If Not AniControlEnabled = 0 Then Exit Sub
+        '选择 自定义 时修改图片
+        If ComboDisplayLogo.SelectedItem Is ItemDisplayLogoCustom Then
+            Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif)|*.png;*.jpg;*.gif", "选择图片")
+            If String.IsNullOrWhiteSpace(FileName) Then Exit Sub
+            CustomLogo = FileName
+        Else
+            CustomLogo = sender.SelectedItem.Tag
+        End If
     End Sub
 #End Region
 

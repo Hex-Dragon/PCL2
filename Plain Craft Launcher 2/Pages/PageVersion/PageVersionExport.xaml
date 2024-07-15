@@ -33,10 +33,10 @@
                         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包名称" Margin="0,0,25,0" />
                         <local:MyTextBox Grid.Row="0" x:Name="TbExportName" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" MaxLength="100" />
                         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="图标" Margin="0,0,25,0"  />
-                        <local:MyComboBox x:Name="ItemDisplayLogoCustom" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1">
+                        <local:MyComboBox x:Name="ComboDisplayLogo" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1">
                             <local:MyComboBoxItem Content="自动" IsSelected="True" Tag="" />
                             <!-- 此处需要添加一个自定义图标 -->
-                            <local:MyComboBoxItem Content="自定义..." />
+                            <local:MyComboBoxItem x:Name="ItemDisplayLogoCustom" Content="自定义..." />
                             <local:MyComboBoxItem Content="圆石" Tag="pack://application:,,,/images/Blocks/CobbleStone.png" />
                             <local:MyComboBoxItem Content="命令方块" Tag="pack://application:,,,/images/Blocks/CommandBlock.png" />
                             <local:MyComboBoxItem Content="金块" Tag="pack://application:,,,/images/Blocks/GoldBlock.png" />
