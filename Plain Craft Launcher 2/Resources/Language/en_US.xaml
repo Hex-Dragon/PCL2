@@ -190,6 +190,7 @@
     <s:String x:Key="LangSetHomePageEmpty">Empty</s:String>
     <s:String x:Key="LangSetHomePagePreset">Preset</s:String>
     <s:String x:Key="LangSetHomePageLocal">Local file</s:String>
+    <s:String x:Key="LangSetHomePageLocalTip">See more on ModSetup</s:String>
     <s:String x:Key="LangSetHomePageOnline">Online file</s:String>
     <s:String x:Key="LangSetHomePageRefresh">Refresh homepage</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">Generating teaching file</s:String>
@@ -343,32 +344,32 @@
     <s:String x:Key="LangDownloadForgeGettingList">Getting Forge list</s:String>
 
     <!--PageDownloadInstall-->
-    <s:String x:Key="LangDownloadInstallReview">Preview of installation content</s:String>
+    <s:String x:Key="LangDownloadInstallReview">Installation Preview</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">You have not chosen to install the Fabric API, which will make most mods unusable!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">You have not chosen to install OptiFabric, which will make OptiFine unusable!</s:String>
-    <s:String x:Key="LangDownloadInstallOptifine">OptiFine is not compatible with some mods, please install carefully.</s:String>
-    <s:String x:Key="LangDownloadInstallOldOptiFabric">After installation, please search for "OptiFabric Origins" in Mods Download and download it, otherwise "OptiFine" will not be available!</s:String>
-    <s:String x:Key="LangDownloadInstallStart">Start to install</s:String>
+    <s:String x:Key="LangDownloadInstallOptifine">OptiFine is not compatible with some mods, please be careful.</s:String>
+    <s:String x:Key="LangDownloadInstallOldOptiFabric">After the installation, please search for "OptiFabric Origins" in Mods Download and download it, otherwise "OptiFine" will not be available!</s:String>
+    <s:String x:Key="LangDownloadInstallStart">Install</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">Instance Name</s:String>
     <s:String x:Key="LangDownloadInstallBack">Back</s:String>
     <s:String x:Key="LangDownloadInstallGettingList">Getting version list</s:String>
     <s:String x:Key="LangDownloadInstallHintBackTip">Click the Minecraft item to return to the main game version select page!</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">Click to select</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">Incompatible with Forge</s:String>
-    <s:String x:Key="LangDownloadInstallFabricIncompatible">Incompatibility with Fabric</s:String>
-    <s:String x:Key="LangDownloadInstallOptifineIncompatible">Incompatibility with OptiFine</s:String>
-    <s:String x:Key="LangDownloadInstallForgeNeed">Need Forge</s:String>
-    <s:String x:Key="LangDownloadInstallFabricNeed">Need Fabric</s:String>
-    <s:String x:Key="LangDownloadInstallOptifineNeed">Need OptiFine</s:String>
-    <s:String x:Key="LangDownloadInstallOptifineFabricNeed">Need OptiFine and Fabric</s:String>
+    <s:String x:Key="LangDownloadInstallFabricIncompatible">Incompatible with Fabric</s:String>
+    <s:String x:Key="LangDownloadInstallOptifineIncompatible">Incompatible with OptiFine</s:String>
+    <s:String x:Key="LangDownloadInstallForgeNeed">Forge Needed</s:String>
+    <s:String x:Key="LangDownloadInstallFabricNeed">Fabric Needed</s:String>
+    <s:String x:Key="LangDownloadInstallOptifineNeed">OptiFine Needed</s:String>
+    <s:String x:Key="LangDownloadInstallOptifineFabricNeed">OptiFine and Fabric Needed</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">or higher</s:String>
     <s:String x:Key="LangDownloadInstallNoAvailabeVersion">No version available</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">Failed to get version list: unknown error, status is</s:String>
     <s:String x:Key="LangDownloadInstallFailGetList">Failed to get version list:</s:String>
-    <s:String x:Key="LangDownloadInstallNoAutoInstall">This version does not support install in the launcher</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieTitle">Isolate Instance Tip</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieContent">You have not enabled "Isolate instance", which would cause multiple instances to share the same mods folder.&#xa;Therefore, when switching instances, Minecraft will crash because it reads mods that are inconsistent with the current game or loader.&#xa;PCL recommends that you enable "Isolate instance" option in "Settings → Isolate instance" before starting downloading!</s:String>
-    <s:String x:Key="LangDownloadInstallCancelDownload">Cancel the download</s:String>
+    <s:String x:Key="LangDownloadInstallNoAutoInstall">This version is not supported to be installed in the launcher</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieTitle">Instance Isolation Tip</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieContent">You have not enabled "Instance isolation", which would cause multiple instances to share the same mods folder.&#xa;Therefore, when switching instances, Minecraft will crash because it reads mods that are inconsistent with the current game or loader.&#xa;PCL recommends that you enable "Instance isolation" option in "Settings → Instance isolation" before starting downloading!</s:String>
+    <s:String x:Key="LangDownloadInstallCancelDownload">Cancel</s:String>
     <s:String x:Key="LangDownloadInstallNoAdd">No additional installation</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">Incompatible with NeoForge</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Incompatible with older versions of Fabric, please download OptiFabric Origins manually</s:String>
@@ -479,7 +480,8 @@
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">Small / Light</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">Extra Large</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">Unable to connect to Modrinth, so currently only content from CurseForge is displayed, and the results may be incomplete.</s:String>
-
+    <s:String x:Key="LangDownloadModpackConnectCurseForge">Unable to connect to CurseForge, so currently only content from Modrinth is displayed, and the results may be incomplete.</s:String>
+    
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">Save as</s:String>
     <s:String x:Key="LangMySkinRefresh">Refresh</s:String>
@@ -691,7 +693,11 @@
     <s:String x:Key="LangPageOtherAboutLicenseDoc">Visit license documents</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseWeb">Visit source website</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">User Agreement and Disclaimer</s:String>
-
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">Privacy Notice</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">This software will report its own version name and version number to count the number of users and the proportion of users for each version. In addition, this software will not upload any of your information.&#13;If you can provide conclusive evidence that this unmodified version of the software is uploading privacy information without external modifications, the developer will pay you the entire net income generated from the development of PCL.</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">Other information</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龙腾猫跃 2016. All Rights Reserved.&#13;Computer software copyright registration number: 2020SR0875133&#13;Email for reporting and complaining about violations of laws and regulations: hexdragon@vip.qq.com</s:String>
+    
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">Offline Skin</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTips">Due to technical issues, the skin preview and Steve/Alex/Custom options are currently only guaranteed to be valid for versions prior to 1.19.2!</s:String>
@@ -1126,4 +1132,18 @@
     <s:String x:Key="LangModLaunchStartSuccess">Start successfully!</s:String>
     <s:String x:Key="LangModLaunchCancelStart">Start canceled!</s:String>
     <s:String x:Key="LangModLaunchCancelExportCommand">Export of startup script has been canceled!</s:String>
+    
+    <!--ModValidate-->
+    <s:String x:Key="LangModValidateNoSameFolderName">Cannot have the same name as an existing folder.</s:String>  
+    <s:String x:Key="LangModValidateNoEndWithDotFolderName">Folder names must not end with a decimal point.</s:String>  
+    <s:String x:Key="LangModValidateNoEndWithSpecialCharFolderName">Folder names cannot contain percent signs (%).</s:String>  
+    <s:String x:Key="LangModValidateNoEndWithSpaceFolderName">Folder names must not end with spaces.</s:String>  
+    <s:String x:Key="LangModValidateNoStartWithSpaceFolderName">Folder names cannot begin with spaces.</s:String>  
+    <s:String x:Key="LangModValidateNoSpacialFolderName">The folder name cannot be "%".</s:String>  
+    <s:String x:Key="LangModValidateNoEmptyInput">The input content cannot be left blank.</s:String>  
+    <s:String x:Key="LangModValidateIncorrectUrl">The URL you entered is invalid.</s:String>  
+    <s:String x:Key="LangModValidateNumTooLong">Please enter a reasonable number within the allowed range.</s:String>  
+    <s:String x:Key="LangModValidateNumInt">Please enter an integer value.</s:String>  
+    <s:String x:Key="LangModValidateNumNoGreater">The number cannot exceed {0}.</s:String>  
+    <s:String x:Key="LangModValidateNumNoLess">The number cannot be less than {0}.</s:String>
 </ResourceDictionary>

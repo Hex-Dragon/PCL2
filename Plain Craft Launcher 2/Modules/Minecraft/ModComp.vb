@@ -1027,9 +1027,9 @@ Retry:
             ElseIf [Error] IsNot Nothing Then
                 '有结果但是有错误
                 If CurseForgeFailed Then
-                    Storage.ErrorMessage = $"无法连接到 CurseForge，所以目前仅显示了来自 Modrinth 的内容，结果可能不全。{vbCrLf}请尝试使用 VPN 或加速器以改善网络。"
+                    Storage.ErrorMessage = GetLang("LangDownloadModpackConnectCurseForge")
                 Else
-                    Storage.ErrorMessage = $"无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，结果可能不全。{vbCrLf}请尝试使用 VPN 或加速器以改善网络。"
+                    Storage.ErrorMessage = GetLang("LangDownloadModpackConnectModrinthFail")
                 End If
             End If
 

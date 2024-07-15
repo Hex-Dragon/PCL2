@@ -190,6 +190,7 @@
     <s:String x:Key="LangSetHomePageEmpty">空白</s:String>
     <s:String x:Key="LangSetHomePagePreset">預設</s:String>
     <s:String x:Key="LangSetHomePageLocal">讀取本地文件</s:String>
+    <s:String x:Key="LangSetHomePageLocalTip">內容見 ModSetup</s:String>
     <s:String x:Key="LangSetHomePageOnline">聯網更新</s:String>
     <s:String x:Key="LangSetHomePageRefresh">刷新主頁</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">生成教學文件</s:String>
@@ -479,7 +480,8 @@
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">輕量整合</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">大型整合</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">無法連接到 Modrinth，所以目前僅顯示了來自 CurseForge 的內容，結果可能不全。&#xa;請嘗試使用 VPN 或加速器以改善網絡。</s:String>
-
+    <s:String x:Key="LangDownloadModpackConnectCurseForge">無法連接到 CurseForge，所以目前僅顯示了來自 Modrinth 的內容，結果可能不全。&#xa;請嘗試使用 VPN 或加速器以改善網絡。</s:String>
+    
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">另存為</s:String>
     <s:String x:Key="LangMySkinRefresh">刷新</s:String>
@@ -691,7 +693,11 @@
     <s:String x:Key="LangPageOtherAboutLicenseDoc">查看許可文檔</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseWeb">查看來源網站</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用戶協議與免責聲明</s:String>
-
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隱私說明</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟件會匯報自己的版本名與版本號，以統計用戶數量與各版本的用戶數量占比。除此之外，本軟件不會上傳您的任何信息。&#13;若您能提供未經外部修改的本軟件本體上傳隱私信息的確鑿證據，開發者會向您支付 PCL 開發所獲全部淨收入。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龍騰貓躍 2016. All Rights Reserved.&#13;計算機軟件著作權登記號：2020SR0875133&#13;違法違規行為舉報投訴郵箱：hexdragon@vip.qq.com</s:String>
+    
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">離線皮膚</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTips">由於技術問題，皮膚預覽與 Steve/Alex/自定義 選項暫時僅保證對 1.19.2 以前的版本有效！</s:String>
@@ -1126,4 +1132,18 @@
     <s:String x:Key="LangModLaunchStartSuccess">啟動成功！</s:String>
     <s:String x:Key="LangModLaunchCancelStart">已取消啟動！</s:String>
     <s:String x:Key="LangModLaunchCancelExportCommand">已取消導出啟動腳本！</s:String>
+    
+    <!--ModValidate-->
+    <s:String x:Key="LangModValidateNoSameFolderName">不可與現有文件夾重名！</s:String>
+    <s:String x:Key="LangModValidateNoEndWithDotFolderName">文件夾名不能以小數點結尾！</s:String>
+    <s:String x:Key="LangModValidateNoEndWithSpecialCharFolderName">文件夾名不可包含 % 字符！</s:String>
+    <s:String x:Key="LangModValidateNoEndWithSpaceFolderName">文件夾名不能以空格結尾！</s:String>
+    <s:String x:Key="LangModValidateNoStartWithSpaceFolderName">文件夾名不能以空格開頭！</s:String>
+    <s:String x:Key="LangModValidateNoSpacialFolderName">文件夾名不可為 %！</s:String>
+    <s:String x:Key="LangModValidateNoEmptyInput">輸入內容不能為空！</s:String>
+    <s:String x:Key="LangModValidateIncorrectUrl">輸入的網址無效！</s:String>
+    <s:String x:Key="LangModValidateNumTooLong">請輸入一個大小合理的數字！</s:String>
+    <s:String x:Key="LangModValidateNumInt">請輸入一個整數！</s:String>
+    <s:String x:Key="LangModValidateNumNoGreater">不可超過 {0}！</s:String>
+    <s:String x:Key="LangModValidateNumNoLess">不可低於 {0}！</s:String>
 </ResourceDictionary>

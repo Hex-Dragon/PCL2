@@ -133,7 +133,7 @@
                 DlFabricListLoader.Start(IsForceRestart:=True)
                 ItemFabric.Checked = True
         End Select
-        Hint("正在刷新……", Log:=False)
+        Hint(GetLang("LangPageOtherRefreshing"), Log:=False)
     End Sub
 
     '点击返回

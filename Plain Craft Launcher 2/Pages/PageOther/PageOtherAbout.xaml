@@ -426,10 +426,10 @@
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="{DynamicResource LangPageOtherAboutLawInfo}" IsSwaped="True" CanSwap="True">
                 <StackPanel Margin="25,39,23,20">
-                    <TextBlock Text="隐私说明" TextWrapping="Wrap" Margin="0,6,0,4" FontWeight="Bold" />
-                    <TextBlock Margin="0,0,0,2" LineHeight="17" Text="本软件会汇报自己的版本名与版本号，以统计用户数量与各版本的用户数量占比。除此之外，本软件不会上传您的任何信息。&#13;若您能提供未经外部修改的本软件本体上传隐私信息的确凿证据，开发者会向您支付 PCL 开发所获全部净收入。" TextWrapping="Wrap" />
-                    <TextBlock Text="其他信息" TextWrapping="Wrap" Margin="0,12,0,4" FontWeight="Bold" />
-                    <TextBlock Margin="0,0,0,2" LineHeight="17" Text="Copyright © 龙腾猫跃 2016. All Rights Reserved.&#13;计算机软件著作权登记号：2020SR0875133&#13;违法违规行为举报投诉邮箱：hexdragon@vip.qq.com" TextWrapping="Wrap" />
+                    <TextBlock Text="{DynamicResource LangPageOtherAboutLawInfoPrivacyTitle}" TextWrapping="Wrap" Margin="0,6,0,4" FontWeight="Bold" />
+                    <TextBlock Margin="0,0,0,2" LineHeight="17" Text="{DynamicResource LangPageOtherAboutLawInfoPrivacyContent}" TextWrapping="Wrap" />
+                    <TextBlock Text="{DynamicResource LangPageOtherAboutLawInfoOtherTitle}" TextWrapping="Wrap" Margin="0,12,0,4" FontWeight="Bold" />
+                    <TextBlock Margin="0,0,0,2" LineHeight="17" Text="{DynamicResource LangPageOtherAboutLawInfoOtherContent}" TextWrapping="Wrap" />
                     <StackPanel Orientation="Horizontal" Height="35" HorizontalAlignment="Left" Margin="0,12,0,0">
                         <local:MyButton Text="{DynamicResource LangPageOtherAboutLawInfoAgreement}" Width="170" Padding="13,0" Margin="0,0,20,0" ColorType="Highlight" EventType="打开网页" EventData="https://shimo.im/docs/rGrd8pY8xWkt6ryW" />
                         <local:MyButton Text="{DynamicResource LangPageOtherAboutAboutVersionBtn}" Width="140" Padding="13,0" EventType="打开网页" EventData="https://github.com/Hex-Dragon/PCL2" />
