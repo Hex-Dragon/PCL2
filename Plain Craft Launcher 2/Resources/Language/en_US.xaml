@@ -1163,7 +1163,7 @@
     <s:String x:Key="LangModLaunchCancelExportCommand">Export of startup script has been canceled!</s:String>
     
     <!--ModValidate-->
-    <s:String x:Key="LangModValidateNoSameFolderName">The name cannot be the same as that of an existing folder!</s:String>  
+    <s:String x:Key="LangModValidateNoSameFolderName">The name cannot be the same as that of an existing instance!</s:String>  
     <s:String x:Key="LangModValidateNoEndWithDotFolderName">The name cannot end with a decimal point (.)!</s:String>  
     <s:String x:Key="LangModValidateNoEndWithSpecialCharFolderName">The name cannot contain special characters (%)!</s:String>  
     <s:String x:Key="LangModValidateNoEndWithSpaceFolderName">The name cannot end with spaces!</s:String>  
