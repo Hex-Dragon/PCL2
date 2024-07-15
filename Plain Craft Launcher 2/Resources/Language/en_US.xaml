@@ -290,7 +290,7 @@
     <s:String x:Key="LangSelectVersionTypeHidden">Hidden Instances</s:String>
     <s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">Less-used Instances</s:String>
     <s:String x:Key="LangSelectVersionTypeFavorites">Favorites</s:String>
-    <s:String x:Key="LangSelectVersionTypeAprilFool">April Fools' Instances</s:String>
+    <s:String x:Key="LangSelectVersionTypeAprilFool">April Fools Instances</s:String>
     <s:String x:Key="LangSelectVersionTypeUnknown">Unknown Type</s:String>
     <s:String x:Key="LangSelectVersionNoHidden">No Hidden Instance</s:String>
     <s:String x:Key="LangSelectVersionNoHiddenTip">No instances are hidden, you can select "Hidden Instances" in the category options in "Personalize" of "Instance Properties".&#xa;Press "F11" again to exit the hidden instance viewing mode.</s:String>
@@ -327,11 +327,13 @@
     <s:String x:Key="LangDownloadRelease">Release</s:String>
     <s:String x:Key="LangDownloadBeta">Development</s:String>
     <s:String x:Key="LangDownloadAncientVersion">Historical</s:String>
-    <s:String x:Key="LangDownloadAprilFool">April Fools'</s:String>
+    <s:String x:Key="LangDownloadAprilFool">April Fools</s:String>
     <s:String x:Key="LangDownloadStable">Stable</s:String>
     <s:String x:Key="LangDownloadNewStable">Latest Stable</s:String>
     <s:String x:Key="LangDownloadNewTest">Latest Beta</s:String>
     <s:String x:Key="LangDownloadTest">Beta</s:String>
+    <s:String x:Key="LangDownloadPreviewOptiFine">Preview</s:String>
+    <s:String x:Key="LangDownloadPreviewLiteLoader">Snapshot</s:String>
     <s:String x:Key="LangDownloadRecommend">Recommended</s:String>
     <s:String x:Key="LangDownloadPCLProvided">Provided by PCL</s:String>
     <s:String x:Key="LangDownloadChangelog">Changelog</s:String>
@@ -342,7 +344,7 @@
     <s:String x:Key="LangDownloadShowAll">Show All Versions</s:String>
     <s:String x:Key="LangDownloadSaveInstaller">Save Installer</s:String>
     <s:String x:Key="LangDownloadAll">All Versions</s:String>
-    <s:String x:Key="LangDownloadCategory">Category: </s:String> <!--Keep the trailing space-->
+    <s:String x:Key="LangDownloadCategory">Type: </s:String> <!--Keep the trailing space-->
     <s:String x:Key="LangDownloadUnknown">Unknown Version</s:String>
     
     <!--PageDownloadCompDetail-->
@@ -748,11 +750,11 @@
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">Isolate instances</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">Disable</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">All instances use the same profile, and save, mods, resource packs, etc. are all shared.&#xa;If there are multiple instances with mods installed, it may cause mod conflicts.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">Isolate instances that can install mods</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">Isolate support for mod installation instances</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">Isolate instances that can install mods (such as Forge, Fabric) to avoid mod conflicts, while other instances (such as the original version) are not isolated</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">Isolate non-releases</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">Isolate Minecraft snapshots, pre-release, historical, and April Fools' Day releases from other game version</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaAndMod">Isolate instances that can install mods and non-releases</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">Isolate non-release instances</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">Isolate Minecraft development, historical and April Fools instances</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaAndMod">Isolate support for mod installation and non-release instances</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAll">Isolate all instances</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">Saves, mods, resource packs, etc. between different instances are not interoperable.&#xa;This will cause saves between different original versions to not be shared, so it is generally not recommended</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibility">Launcher visibility</s:String>
@@ -981,7 +983,7 @@
     <s:String x:Key="LangPageVersionOverallCategoryMod">Support Mod Installation</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryRegular">Regular Instances</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryUncommon">Less-used Instances</s:String>
-    <s:String x:Key="LangPageVersionOverallCategoryAprilFool">April Fools' Instances</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryAprilFool">April Fools Instances</s:String>
     <s:String x:Key="LangPageVersionOverallEditName">Edit instance name</s:String>
     <s:String x:Key="LangPageVersionOverallEditDesc">Edit instance description</s:String>
     <s:String x:Key="LangPageVersionOverallFavorite">Add to favorites</s:String>

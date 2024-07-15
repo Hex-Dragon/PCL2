@@ -320,19 +320,21 @@
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">正在獲取版本列表</s:String>
     <s:String x:Key="LangDownloadClientReleaseReleaseOn">最新正式版，發布於</s:String>
-    <s:String x:Key="LangDownloadClientBetaReleaseOn">最新預覽版，發布於</s:String>
+    <s:String x:Key="LangDownloadClientBetaReleaseOn">最新開發版，發布於</s:String>
     
     <!--PageDownload-->
     <s:String x:Key="LangDownloadLatest">最新版本</s:String>
     <s:String x:Key="LangDownloadRelease">正式版</s:String>
-    <s:String x:Key="LangDownloadBeta">預覽版</s:String>
+    <s:String x:Key="LangDownloadBeta">開發版</s:String>
     <s:String x:Key="LangDownloadAncientVersion">遠古版</s:String>
     <s:String x:Key="LangDownloadAprilFool">愚人節版</s:String>
     <s:String x:Key="LangDownloadStable">穩定版</s:String>
     <s:String x:Key="LangDownloadNewStable">最新穩定版</s:String>
     <s:String x:Key="LangDownloadNewTest">最新測試版</s:String>
     <s:String x:Key="LangDownloadTest">測試版</s:String>
-    <s:String x:Key="LangDownloadRecommend">推薦版</s:String>
+    <s:String x:Key="LangDownloadPreviewOptiFine">預覽版</s:String>
+    <s:String x:Key="LangDownloadPreviewLiteLoader">測試版</s:String>
+    <s:String x:Key="LangDownloadRecommend">推薦版本</s:String>
     <s:String x:Key="LangDownloadPCLProvided">PCL 特供下載</s:String>
     <s:String x:Key="LangDownloadChangelog">更新日誌</s:String>
     <s:String x:Key="LangDownloadSaveAs">另存為</s:String>
