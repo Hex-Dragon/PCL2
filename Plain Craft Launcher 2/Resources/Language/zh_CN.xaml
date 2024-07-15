@@ -189,6 +189,7 @@
     <s:String x:Key="LangSetHomePageEmpty">空白</s:String>
     <s:String x:Key="LangSetHomePagePreset">预设</s:String>
     <s:String x:Key="LangSetHomePageLocal">读取本地文件</s:String>
+    <s:String x:Key="LangSetHomePageLocalTip">内容见 ModSetup</s:String>
     <s:String x:Key="LangSetHomePageOnline">联网更新</s:String>
     <s:String x:Key="LangSetHomePageRefresh">刷新主页</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">生成教学文件</s:String>
@@ -478,6 +479,7 @@
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">轻量整合</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">大型整合</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，结果可能不全。&#xa;请尝试使用 VPN 或加速器以改善网络。</s:String>
+    <s:String x:Key="LangDownloadModpackConnectCurseForge">无法连接到 CurseForge，所以目前仅显示了来自 Modrinth 的内容，结果可能不全。&#xa;请尝试使用 VPN 或加速器以改善网络。</s:String>
     
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">另存为</s:String>
@@ -690,6 +692,10 @@
     <s:String x:Key="LangPageOtherAboutLicenseDoc">查看许可文档</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseWeb">查看来源网站</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用户协议与免责声明</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隐私说明</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本软件会汇报自己的版本名与版本号，以统计用户数量与各版本的用户数量占比。除此之外，本软件不会上传您的任何信息。&#13;若您能提供未经外部修改的本软件本体上传隐私信息的确凿证据，开发者会向您支付 PCL 开发所获全部净收入。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龙腾猫跃 2016. All Rights Reserved.&#13;计算机软件著作权登记号：2020SR0875133&#13;违法违规行为举报投诉邮箱：hexdragon@vip.qq.com</s:String>
     
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">离线皮肤</s:String>
@@ -1125,4 +1131,18 @@
     <s:String x:Key="LangModLaunchStartSuccess">启动成功！</s:String>
     <s:String x:Key="LangModLaunchCancelStart">已取消启动！</s:String>
     <s:String x:Key="LangModLaunchCancelExportCommand">已取消导出启动脚本！</s:String>
+    
+    <!--ModValidate-->
+    <s:String x:Key="LangModValidateNoSameFolderName">不可与现有文件夹重名！</s:String>
+    <s:String x:Key="LangModValidateNoEndWithDotFolderName">文件夹名不能以小数点结尾！</s:String>
+    <s:String x:Key="LangModValidateNoEndWithSpecialCharFolderName">文件夹名不可包含 % 字符！</s:String>
+    <s:String x:Key="LangModValidateNoEndWithSpaceFolderName">文件夹名不能以空格结尾！</s:String>
+    <s:String x:Key="LangModValidateNoStartWithSpaceFolderName">文件夹名不能以空格开头！</s:String>
+    <s:String x:Key="LangModValidateNoSpacialFolderName">文件夹名不可为 %！</s:String>
+    <s:String x:Key="LangModValidateNoEmptyInput">输入内容不能为空！</s:String>
+    <s:String x:Key="LangModValidateIncorrectUrl">输入的网址无效！</s:String>
+    <s:String x:Key="LangModValidateNumTooLong">请输入一个大小合理的数字！</s:String>
+    <s:String x:Key="LangModValidateNumInt">请输入一个整数！</s:String>
+    <s:String x:Key="LangModValidateNumNoGreater">不可超过 {0}！</s:String>
+    <s:String x:Key="LangModValidateNumNoLess">不可低于 {0}！</s:String>
 </ResourceDictionary>

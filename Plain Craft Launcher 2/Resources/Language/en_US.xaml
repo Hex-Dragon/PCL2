@@ -189,6 +189,7 @@
     <s:String x:Key="LangSetHomePageEmpty">Empty</s:String>
     <s:String x:Key="LangSetHomePagePreset">Preset</s:String>
     <s:String x:Key="LangSetHomePageLocal">Local file</s:String>
+    <s:String x:Key="LangSetHomePageLocalTip">See more on ModSetup</s:String>
     <s:String x:Key="LangSetHomePageOnline">Online file</s:String>
     <s:String x:Key="LangSetHomePageRefresh">Refresh homepage</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">Generating teaching file</s:String>
@@ -478,6 +479,7 @@
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">Small / Light</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">Extra Large</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">Unable to connect to Modrinth, so currently only content from CurseForge is displayed, and the results may be incomplete.</s:String>
+    <s:String x:Key="LangDownloadModpackConnectCurseForge">Unable to connect to CurseForge, so currently only content from Modrinth is displayed, and the results may be incomplete.</s:String>
     
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">Save as</s:String>
@@ -690,6 +692,10 @@
     <s:String x:Key="LangPageOtherAboutLicenseDoc">Visit license documents</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseWeb">Visit source website</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">User Agreement and Disclaimer</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">Privacy Notice</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">This software will report its own version name and version number to count the number of users and the proportion of users for each version. In addition, this software will not upload any of your information.&#13;If you can provide conclusive evidence that this unmodified version of the software is uploading privacy information without external modifications, the developer will pay you the entire net income generated from the development of PCL.</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">Other information</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龙腾猫跃 2016. All Rights Reserved.&#13;Computer software copyright registration number: 2020SR0875133&#13;Email for reporting and complaining about violations of laws and regulations: hexdragon@vip.qq.com</s:String>
     
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">Offline Skin</s:String>
@@ -1125,4 +1131,18 @@
     <s:String x:Key="LangModLaunchStartSuccess">Start successfully!</s:String>
     <s:String x:Key="LangModLaunchCancelStart">Start canceled!</s:String>
     <s:String x:Key="LangModLaunchCancelExportCommand">Export of startup script has been canceled!</s:String>
+    
+    <!--ModValidate-->
+    <s:String x:Key="LangModValidateNoSameFolderName">Cannot have the same name as an existing folder!</s:String>
+    <s:String x:Key="LangModValidateNoEndWithDotFolderName">Folder names cannot end in decimal point!</s:String>
+    <s:String x:Key="LangModValidateNoEndWithSpecialCharFolderName">Folder names cannot contain % characters!</s:String>
+    <s:String x:Key="LangModValidateNoEndWithSpaceFolderName">Folder names cannot end with spaces!</s:String>
+    <s:String x:Key="LangModValidateNoStartWithSpaceFolderName">Folder names cannot start with spaces!</s:String>
+    <s:String x:Key="LangModValidateNoSpacialFolderName">The folder name cannot be %!</s:String>
+    <s:String x:Key="LangModValidateNoEmptyInput">The input content cannot be blank!</s:String>
+    <s:String x:Key="LangModValidateIncorrectUrl">The URL you entered is invalid! </s:String>
+    <s:String x:Key="LangModValidateNumTooLong">Please enter a reasonable number! </s:String>
+    <s:String x:Key="LangModValidateNumInt">Please enter an integer! </s:String>
+    <s:String x:Key="LangModValidateNumNoGreater">Cannot exceed {0}! </s:String>
+    <s:String x:Key="LangModValidateNumNoLess">It cannot be lower than {0}! </s:String>
 </ResourceDictionary>

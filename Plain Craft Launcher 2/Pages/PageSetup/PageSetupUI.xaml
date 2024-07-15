@@ -206,7 +206,7 @@
                         <local:MyRadioBox Text="{DynamicResource LangSetHomePageLocal}" x:Name="RadioCustomType1" Height="22" Tag="UiCustomType/1" Grid.Column="2" />
                         <local:MyRadioBox Text="{DynamicResource LangSetHomePageOnline}" x:Name="RadioCustomType2" Height="22" Tag="UiCustomType/2" Grid.Column="3" />
                     </Grid>
-                    <local:MyHint Margin="0,15,0,1" Text="内容见 ModSetup" IsWarn="False" x:Name="HintCustom" />
+                    <local:MyHint Margin="0,15,0,1" Text="{DynamicResource LangSetHomePageLocalTip}" IsWarn="False" x:Name="HintCustom" />
                     <Grid Height="35" x:Name="PanCustomLocal" Visibility="Collapsed" Margin="0,10,0,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />

@@ -79,7 +79,7 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupLaunchLaunchWindowTitle}" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextArgumentTitle" Grid.Row="0" Grid.ColumnSpan="2" Tag="LaunchArgumentTitle" Grid.Column="1" ToolTip="{DynamicResource LangPageSetupLaunchLaunchWindowTitleToolTip}" HintText="默认" MaxLength="100" />
+                        <local:MyTextBox x:Name="TextArgumentTitle" Grid.Row="0" Grid.ColumnSpan="2" Tag="LaunchArgumentTitle" Grid.Column="1" ToolTip="{DynamicResource LangPageSetupLaunchLaunchWindowTitleToolTip}" HintText="{DynamicResource LangSetDefault}" MaxLength="100" />
                         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupLaunchLaunchCustomInfo}" Margin="0,0,25,0" />
                         <local:MyTextBox x:Name="TextArgumentInfo" Grid.Row="2" Grid.ColumnSpan="2" Tag="LaunchArgumentInfo" Text="PCL" Grid.Column="1" ToolTip="{DynamicResource LangPageSetupLaunchLaunchCustomInfoToolTip}">
                             <local:MyTextBox.ValidateRules>
