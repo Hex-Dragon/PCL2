@@ -317,7 +317,7 @@
     <s:String x:Key="LangSpeedHintClickCopyError">已複製錯誤詳情！</s:String>
     
     <!--PageDownloadClient-->
-    <s:String x:Key="LangDownloadCilentLoadingList">正在獲取版本列表</s:String>
+    <s:String x:Key="LangDownloadClientLoadingList">正在獲取版本列表</s:String>
     
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">轉到 CurseForge</s:String>

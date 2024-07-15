@@ -317,8 +317,32 @@
     <s:String x:Key="LangSpeedHintClickCopyError">Error details have been copied!</s:String>
     
     <!--PageDownloadClient-->
-    <s:String x:Key="LangDownloadCilentLoadingList">Getting version list</s:String>
-
+    <s:String x:Key="LangDownloadClientLoadingList">Getting version list</s:String>
+    <s:String x:Key="LangDownloadClientReleaseReleaseOn">Latest Official Release, Released on</s:String>  
+    <s:String x:Key="LangDownloadClientBetaReleaseOn">Latest Beta Release, Released on</s:String>
+    
+    <!--PageDownload-->
+    <s:String x:Key="LangDownloadLatest">Latest Version</s:String>
+    <s:String x:Key="LangDownloadRelease">Official Version</s:String>
+    <s:String x:Key="LangDownloadBeta">Beta Version</s:String>
+    <s:String x:Key="LangDownloadAncientVersion">Ancient Version</s:String>  
+    <s:String x:Key="LangDownloadAprilFool">April Fool's Version</s:String>
+    <s:String x:Key="LangDownloadStable">Stable Version</s:String>  
+    <s:String x:Key="LangDownloadNewStable">Latest Stable Version</s:String>  
+    <s:String x:Key="LangDownloadNewTest">Latest Beta Version</s:String>  
+    <s:String x:Key="LangDownloadTest">Beta Version</s:String>  
+    <s:String x:Key="LangDownloadRecommend">Recommended Version</s:String>  
+    <s:String x:Key="LangDownloadPCLProvided">PCL Exclusive Download</s:String>  
+    <s:String x:Key="LangDownloadChangelog">Changelog</s:String>  
+    <s:String x:Key="LangDownloadSaveAs">Save As</s:String>  
+    <s:String x:Key="LangDownloadReleaseOn">Released On</s:String>  
+    <s:String x:Key="LangDownloadForgeIncompatible">Incompatible with Forge</s:String>  
+    <s:String x:Key="LangDownloadRecommendForge">Recommended Forge Version:</s:String>  
+    <s:String x:Key="LangDownloadShowAll">Show All Versions</s:String>  
+    <s:String x:Key="LangDownloadSaveInstaller">Save Installer</s:String>  
+    <s:String x:Key="LangDownloadAll">All Versions</s:String>  
+    <s:String x:Key="LangDownloadCategory">Category:</s:String>
+    
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">Go to CurseForge</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">Go to Modrinth</s:String>

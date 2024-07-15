@@ -317,7 +317,31 @@
     <s:String x:Key="LangSpeedHintClickCopyError">已复制错误详情！</s:String>
     
     <!--PageDownloadClient-->
-    <s:String x:Key="LangDownloadCilentLoadingList">正在获取版本列表</s:String>
+    <s:String x:Key="LangDownloadClientLoadingList">正在获取版本列表</s:String>
+    <s:String x:Key="LangDownloadClientReleaseReleaseOn">最新正式版，发布于</s:String>
+    <s:String x:Key="LangDownloadClientBetaReleaseOn">最新预览版，发布于</s:String>
+    
+    <!--PageDownload-->
+    <s:String x:Key="LangDownloadLatest">最新版本</s:String>
+    <s:String x:Key="LangDownloadRelease">正式版</s:String>
+    <s:String x:Key="LangDownloadBeta">预览版</s:String>
+    <s:String x:Key="LangDownloadAncientVersion">远古版</s:String>
+    <s:String x:Key="LangDownloadAprilFool">愚人节版</s:String>
+    <s:String x:Key="LangDownloadStable">稳定版</s:String>
+    <s:String x:Key="LangDownloadNewStable">最新稳定版</s:String>
+    <s:String x:Key="LangDownloadNewTest">最新测试版</s:String>
+    <s:String x:Key="LangDownloadTest">测试版</s:String>
+    <s:String x:Key="LangDownloadRecommend">推荐版</s:String>
+    <s:String x:Key="LangDownloadPCLProvided">PCL 特供下载</s:String>
+    <s:String x:Key="LangDownloadChangelog">更新日志</s:String>
+    <s:String x:Key="LangDownloadSaveAs">另存为</s:String>
+    <s:String x:Key="LangDownloadReleaseOn">发布于</s:String>
+    <s:String x:Key="LangDownloadForgeIncompatible">不兼容 Forge</s:String>
+    <s:String x:Key="LangDownloadRecommendForge">推荐 Forge 版本：</s:String>
+    <s:String x:Key="LangDownloadShowAll">查看全部版本</s:String>
+    <s:String x:Key="LangDownloadSaveInstaller">保存安装器</s:String>
+    <s:String x:Key="LangDownloadAll">全部版本</s:String>
+    <s:String x:Key="LangDownloadCategory">种类：</s:String>
     
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">转到 CurseForge</s:String>

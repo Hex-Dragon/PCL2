@@ -22,6 +22,7 @@ Public Class Application
         '刷新语言
         Lang = ReadReg("Lang")
         If String.IsNullOrWhiteSpace(Lang) Then
+            Log("[Lang] 未设置语言，自动进行配置……")
             Select Case Globalization.CultureInfo.CurrentCulture.Name
                 Case "en-US"
                     Lang = "en_US"
