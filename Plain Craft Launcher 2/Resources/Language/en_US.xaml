@@ -1054,6 +1054,8 @@
     <s:String x:Key="LangModSecretPermissionB">PCL does not have write permissions to the current folder. Please try: &#xa;1. Move PCL to another folder {0}&#xa;2. Delete the "PCL" folder in the current directory and try again.&#xa;3. Right-click on PCL executable file and open "Properties → Compatibility → Run this program as an administrator".</s:String>
     <s:String x:Key="LangModSecretPermissionAddition">(For example, system partitions and other locations other than the desktop)</s:String>
     <s:String x:Key="LangModSecretPermissionError">Operating environment error</s:String>
+    <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">Open Source Version</s:String>
+    <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">This version does not include the following features:&#xa;- CurseForge Queries: Requires an API Key (you can apply for one and add it to the SecretHeadersSign method)&#xa;- Update and Networking Notifications: To avoid potential abuse concerns&#xa;- Theme Switching: This is a commemorative feature that requires sponsorship to unlock. Let's not disappoint our sponsors...&#xa;- Treasure Chest: Early in development, we stuffed some development tools into it, and it's too much trouble to organize them now.</s:String>
     
     <!--ModMinecraft-->
     <s:String x:Key="LangModMinecraftCurrentFolder">Current Folder</s:String>
