@@ -9,8 +9,8 @@
         <StackPanel Margin="25,10">
 
             <local:MyCard Margin="0,15" Title="">
-                <Grid Margin="10,7" Name="PanDisplayItem" />
-                <TextBlock TextWrapping="Wrap" Margin="0,0,0,4" Text="空白填充" />
+                <Grid Margin="10,7,10,7" Name="PanDisplayItem" />
+                <local:MyButton x:Name="BtnExportExport" Margin="0,0,10,0" HorizontalAlignment="Right" Text="导出整合包" Height="35" Width="150" ColorType="Highlight" />
             </local:MyCard>
 
             <local:MyCard x:Name="CardExport" Margin="0,0,0,15" Title="整合包信息">
@@ -33,11 +33,10 @@
                         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包名称" Margin="0,0,25,0" />
                         <local:MyTextBox Grid.Row="0" x:Name="TbExportName" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" MaxLength="100" />
                         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="图标" Margin="0,0,25,0"  />
-                        <local:MyComboBox Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1">
+                        <local:MyComboBox x:Name="ItemDisplayLogoCustom" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1">
                             <local:MyComboBoxItem Content="自动" IsSelected="True" Tag="" />
                             <!-- 此处需要添加一个自定义图标 -->
                             <local:MyComboBoxItem Content="自定义..." />
-                            <!--x:Name="ItemDisplayLogoCustom"-->
                             <local:MyComboBoxItem Content="圆石" Tag="pack://application:,,,/images/Blocks/CobbleStone.png" />
                             <local:MyComboBoxItem Content="命令方块" Tag="pack://application:,,,/images/Blocks/CommandBlock.png" />
                             <local:MyComboBoxItem Content="金块" Tag="pack://application:,,,/images/Blocks/GoldBlock.png" />
@@ -54,14 +53,12 @@
                         <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包版本" Margin="0,0,25,0" />
                         <local:MyTextBox Grid.Row="4" x:Name="TbExportVersion" HintText="1.0.0" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" MaxLength="100" />
                     </Grid>
-                    <local:MyButton x:Name="BtnExportExport" HorizontalAlignment="Left" Text="导出整合包" Height="35" Width="150" ColorType="Highlight" />
-                    <local:MyListItem Title="游戏存档" />
                 </StackPanel>
             </local:MyCard>
 
             <local:MyCard x:Name="CardSwitch" Margin="0,0,0,15" Title="基础选项">
                 <StackPanel Margin="25,38,15,15">
-                    <TextBlock Margin="0,1,0,1" Text="你可以在此勾选需要包含进整合包的文件或者文件夹，其他文件或者文件夹在高级选项添加。" TextWrapping="Wrap" />
+                    <TextBlock Margin="0,1,0,1" Text="你可以在此勾选需要包含进整合包的文件或文件夹，其他文件或文件夹在高级选项添加。" TextWrapping="Wrap" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -77,31 +74,36 @@
                             <RowDefinition Height="4" />
                             <RowDefinition Height="30" />
                             <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Text="服务器文件"
-                                          ToolTip="server.dat文件"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3" Text="模组配置"
-                                          ToolTip="config文件夹"/>
+                        <TextBlock Text="游戏配置" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Text="服务器列表"
+                                          ToolTip="server.dat 文件" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3" Text="Mod 配置"
+                                          ToolTip="config 文件夹" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="4" Text="游戏配置"
-                                          ToolTip="options.txt文件"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="5" Text="存档"
-                                          ToolTip="默认包含整个存档文件夹"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="6" Text="材质包"
-                                          ToolTip="默认包含整个材质包文件夹"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="7" Text="光影包"
-                                          ToolTip="默认包含整个光影包文件夹"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Text="包含启动器"
-                                          ToolTip="勾选将pcl2包含在整合包内"/>
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="启动器全局配置"
-                                          ToolTip="勾选将启动器的全局配置包含在整合包内"/>
+                                          ToolTip="options.txt 文件" />
+                        <TextBlock Text="游戏文件" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Text="存档"
+                                          ToolTip="saves 文件夹" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="材质包"
+                                          ToolTip="resourcepacks 文件夹" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="4" Text="光影包"
+                                          ToolTip="shaderpacks 文件夹" />
+                        <TextBlock Text="PCL 配置" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" Text="包含启动器"
+                                          ToolTip="将 PCL 程序包含在整合包内" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="3" Grid.Column="3" Text="PCL 全局配置"
+                                          ToolTip="将 PCL 全局配置包含在整合包内" />
                     </Grid>
                 </StackPanel>
                 
             </local:MyCard>
             <local:MyCard Title="高级选项" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
-                <StackPanel Margin="25,40,23,15">
-                    <TextBlock TextWrapping="Wrap" Margin="0,0,0,4" Text="空白填充" />
+                <StackPanel x:Name="PanFileList" Margin="25,40,23,15">
+                    <local:MyListItem Type="CheckBox" Title="游戏存档" Height="35" />
+                    <local:MyListItem Type="CheckBox" Title="游戏存档" Height="35" />
                 </StackPanel>
             </local:MyCard>
 

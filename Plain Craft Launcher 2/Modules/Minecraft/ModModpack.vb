@@ -919,12 +919,13 @@ Retry:
     ''' </summary>
     Public Sub ModpackExport(Options As ExportOptions)
         Hint("正在导出……")
-        RunInNewThread(Sub()
-                           If ModpackExportBlocking(Options) Then
-                               Hint("导出成功！", HintType.Finish)
-                               OpenExplorer($"""{GetPathFromFullPath(Options.Dest)}""")
-                           End If
-                       End Sub, "Modpack Export")
+        RunInNewThread(
+            Sub()
+                If ModpackExportBlocking(Options) Then
+                    Hint("导出成功！", HintType.Finish)
+                    OpenExplorer($"""{GetPathFromFullPath(Options.Dest)}""")
+                End If
+            End Sub, "Modpack Export")
     End Sub
     Private Function ModpackExportBlocking(Options As ExportOptions) As Boolean
         If Options.IncludePCL Then
