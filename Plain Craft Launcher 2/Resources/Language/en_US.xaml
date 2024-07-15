@@ -318,8 +318,33 @@
     <s:String x:Key="LangSpeedHintClickCopyError">The error details have been copied!</s:String>
 
     <!--PageDownloadClient-->
-    <s:String x:Key="LangDownloadCilentLoadingList">Getting version list</s:String>
-
+    <s:String x:Key="LangDownloadClientLoadingList">Getting version list</s:String>
+    <s:String x:Key="LangDownloadClientReleaseReleaseOn">Latest Official Release, Released on</s:String>  
+    <s:String x:Key="LangDownloadClientBetaReleaseOn">Latest Beta Release, Released on</s:String>
+    
+    <!--PageDownload-->
+    <s:String x:Key="LangDownloadLatest">Latest Version</s:String>
+    <s:String x:Key="LangDownloadRelease">Official Version</s:String>
+    <s:String x:Key="LangDownloadBeta">Beta Version</s:String>
+    <s:String x:Key="LangDownloadAncientVersion">Ancient Version</s:String>  
+    <s:String x:Key="LangDownloadAprilFool">April Fool's Version</s:String>
+    <s:String x:Key="LangDownloadStable">Stable Version</s:String>  
+    <s:String x:Key="LangDownloadNewStable">Latest Stable Version</s:String>  
+    <s:String x:Key="LangDownloadNewTest">Latest Beta Version</s:String>  
+    <s:String x:Key="LangDownloadTest">Beta Version</s:String>  
+    <s:String x:Key="LangDownloadRecommend">Recommended Version</s:String>  
+    <s:String x:Key="LangDownloadPCLProvided">PCL Exclusive Download</s:String>  
+    <s:String x:Key="LangDownloadChangelog">Changelog</s:String>  
+    <s:String x:Key="LangDownloadSaveAs">Save As</s:String>  
+    <s:String x:Key="LangDownloadReleaseOn">Released On</s:String>  
+    <s:String x:Key="LangDownloadForgeIncompatible">Incompatible with Forge</s:String>  
+    <s:String x:Key="LangDownloadRecommendForge">Recommended Forge Version:</s:String>  
+    <s:String x:Key="LangDownloadShowAll">Show All Versions</s:String>  
+    <s:String x:Key="LangDownloadSaveInstaller">Save Installer</s:String>  
+    <s:String x:Key="LangDownloadAll">All Versions</s:String>  
+    <s:String x:Key="LangDownloadCategory">Category:</s:String>
+    <s:String x:Key="LangDownloadUnknown">Unknown Version</s:String>
+    
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">Go to CurseForge</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">Go to Modrinth</s:String>
@@ -329,6 +354,7 @@
     <s:String x:Key="LangDownloadCompApiSlow">Since version information from the API is updated slowly, it may not be able to recognize the recently updated Minecraft version. Just wait for a while and it will automatically return to normal.</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">Looking for the right game version...</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">No instances suitable for this mod was found in the current Minecraft folder!</s:String>
+    <s:String x:Key="LangDownloadCompSelectedVersion">Selected version:</s:String>
 
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Introduction to Fabric</s:String>
@@ -479,6 +505,7 @@
     <s:String x:Key="LangDownloadModpackTypeAllMapBased">Map Based</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">Small / Light</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">Extra Large</s:String>
+    <s:String x:Key="LangDownloadModpackTypeMisc">Misc</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">Unable to connect to Modrinth, so currently only content from CurseForge is displayed, and the results may be incomplete.</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">Unable to connect to CurseForge, so currently only content from Modrinth is displayed, and the results may be incomplete.</s:String>
     

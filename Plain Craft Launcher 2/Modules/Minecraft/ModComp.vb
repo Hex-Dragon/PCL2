@@ -324,7 +324,7 @@
                                 'FUTURE: Res
                         End Select
                     Next
-                    If Not Tags.Any() Then Tags.Add("杂项")
+                    If Not Tags.Any() Then Tags.Add(GetLang("LangDownloadModpackTypeMisc"))
 #End Region
                 Else
 #Region "Modrinth"
@@ -390,7 +390,7 @@
                                 'FUTURE: Res
                         End Select
                     Next
-                    If Not Tags.Any() Then Tags.Add("杂项")
+                    If Not Tags.Any() Then Tags.Add(GetLang("LangDownloadModpackTypeMisc"))
                     Tags.Sort()
                     ModLoaders.Sort()
 #End Region

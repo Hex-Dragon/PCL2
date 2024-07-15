@@ -2271,6 +2271,25 @@ Retry:
         End Try
     End Function
 
+    Public Function GetLangByWord(Word As String) As String
+        If Lang = "zh_CN" Then Return Word
+        Select Case Word
+            Case "正式版"
+                Return GetLang("LangDownloadRelease")
+            Case "预览版", "快照版本"
+                Return GetLang("LangDownloadBeta")
+            Case "远古版", "远古版本"
+                Return GetLang("LangDownloadAncientVersion")
+            Case "愚人节版"
+                Return GetLang("LangDownloadAprilFool")
+            Case "未知版本"
+                Return GetLang("LangDownloadUnknown")
+            Case Else
+                Log("[Lang] GetLangByWord:没有找到 " & Word & " 的对应翻译")
+                Return Word
+        End Select
+    End Function
+
 #End Region
 
 #Region "UI"

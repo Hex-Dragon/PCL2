@@ -318,8 +318,33 @@
     <s:String x:Key="LangSpeedHintClickCopyError">已复制错误详情！</s:String>
 
     <!--PageDownloadClient-->
-    <s:String x:Key="LangDownloadCilentLoadingList">正在获取版本列表</s:String>
-
+    <s:String x:Key="LangDownloadClientLoadingList">正在获取版本列表</s:String>
+    <s:String x:Key="LangDownloadClientReleaseReleaseOn">最新正式版，发布于</s:String>
+    <s:String x:Key="LangDownloadClientBetaReleaseOn">最新预览版，发布于</s:String>
+    
+    <!--PageDownload-->
+    <s:String x:Key="LangDownloadLatest">最新版本</s:String>
+    <s:String x:Key="LangDownloadRelease">正式版</s:String>
+    <s:String x:Key="LangDownloadBeta">预览版</s:String>
+    <s:String x:Key="LangDownloadAncientVersion">远古版</s:String>
+    <s:String x:Key="LangDownloadAprilFool">愚人节版</s:String>
+    <s:String x:Key="LangDownloadStable">稳定版</s:String>
+    <s:String x:Key="LangDownloadNewStable">最新稳定版</s:String>
+    <s:String x:Key="LangDownloadNewTest">最新测试版</s:String>
+    <s:String x:Key="LangDownloadTest">测试版</s:String>
+    <s:String x:Key="LangDownloadRecommend">推荐版</s:String>
+    <s:String x:Key="LangDownloadPCLProvided">PCL 特供下载</s:String>
+    <s:String x:Key="LangDownloadChangelog">更新日志</s:String>
+    <s:String x:Key="LangDownloadSaveAs">另存为</s:String>
+    <s:String x:Key="LangDownloadReleaseOn">发布于</s:String>
+    <s:String x:Key="LangDownloadForgeIncompatible">不兼容 Forge</s:String>
+    <s:String x:Key="LangDownloadRecommendForge">推荐 Forge 版本：</s:String>
+    <s:String x:Key="LangDownloadShowAll">查看全部版本</s:String>
+    <s:String x:Key="LangDownloadSaveInstaller">保存安装器</s:String>
+    <s:String x:Key="LangDownloadAll">全部版本</s:String>
+    <s:String x:Key="LangDownloadCategory">种类：</s:String>
+    <s:String x:Key="LangDownloadUnknown">未知版本</s:String>
+    
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">转到 CurseForge</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">转到 Modrinth</s:String>
@@ -329,7 +354,8 @@
     <s:String x:Key="LangDownloadCompApiSlow">由于 API 的版本信息更新缓慢，可能无法识别刚更新不久的 MC 版本，只需等待几天即可自动恢复正常。</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">正在查找适合的游戏版本……</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">当前 MC 文件夹中没有找到适合这个 Mod 的版本！</s:String>
-
+    <s:String x:Key="LangDownloadCompSelectedVersion">所选版本：</s:String>
+    
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Fabric 简介</s:String>
     <s:String x:Key="LangDownloadFabricDesc">Fabric Loader 是新版 Minecraft 下的轻量化 Mod 加载器，你需要先安装它才能安装各种 Fabric 模组。&#xa;本页面提供 Fabric 安装器下载，在下载后你需要手动打开安装器进行安装。</s:String>
@@ -479,6 +505,7 @@
     <s:String x:Key="LangDownloadModpackTypeAllMapBased">基于地图</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllLightWeight">轻量整合</s:String>
     <s:String x:Key="LangDownloadModpackTypeAllHeavyWeight">大型整合</s:String>
+    <s:String x:Key="LangDownloadModpackTypeMisc">杂项</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，结果可能不全。&#xa;请尝试使用 VPN 或加速器以改善网络。</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">无法连接到 CurseForge，所以目前仅显示了来自 Modrinth 的内容，结果可能不全。&#xa;请尝试使用 VPN 或加速器以改善网络。</s:String>
     <!--MySkin-->

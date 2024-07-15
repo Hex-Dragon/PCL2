@@ -196,7 +196,7 @@ Public Module ModDownloadLib
         Else
             NewItem.Info = Entry("lore").ToString
         End If
-        If Entry("url").ToString.Contains("pcl") Then NewItem.Info = "[PCL 特供下载] " & NewItem.Info
+        If Entry("url").ToString.Contains("pcl") Then NewItem.Info = "[" & GetLang("LangDownloadPCLProvided") & "] " & NewItem.Info
         AddHandler NewItem.Click, OnClick
         '建立菜单
         If IsSaveOnly Then
@@ -208,7 +208,7 @@ Public Module ModDownloadLib
         Return NewItem
     End Function
     Private Sub McDownloadSaveMenuBuild(sender As Object, e As EventArgs)
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -216,12 +216,12 @@ Public Module ModDownloadLib
         sender.Buttons = {BtnInfo}
     End Sub
     Private Sub McDownloadMenuBuild(sender As Object, e As EventArgs)
-        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
+        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = GetLang("LangDownloadSaveAs")}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
         ToolTipService.SetHorizontalOffset(BtnSave, 2)
         AddHandler BtnSave.Click, AddressOf McDownloadMenuSave
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -682,9 +682,9 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.NameDisplay, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry.IsPreview, "测试版", "正式版") &
-                    If(Entry.ReleaseTime = "", "", "，发布于 " & Entry.ReleaseTime) &
-                    If(Entry.RequiredForgeVersion Is Nothing, "，不兼容 Forge", If(Entry.RequiredForgeVersion = "", "", "，推荐 Forge 版本：" & Entry.RequiredForgeVersion)),
+            .Info = If(Entry.IsPreview, GetLang("LangDownloadTest"), GetLang("LangDownloadRelease")) &
+                    If(Entry.ReleaseTime = "", "", "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime) &
+                    If(Entry.RequiredForgeVersion Is Nothing, "，" & GetLang("LangDownloadForgeIncompatible"), If(Entry.RequiredForgeVersion = "", "", "，" & GetLang("LangDownloadRecommendForge") & Entry.RequiredForgeVersion)),
             .Logo = PathImage & "Blocks/GrassPath.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -698,7 +698,7 @@ Retry:
         Return NewItem
     End Function
     Private Sub OptiFineSaveContMenuBuild(sender As Object, e As EventArgs)
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -706,12 +706,12 @@ Retry:
         sender.Buttons = {BtnInfo}
     End Sub
     Private Sub OptiFineContMenuBuild(sender As Object, e As EventArgs)
-        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
+        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = GetLang("LangDownloadSaveAs")}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
         ToolTipService.SetHorizontalOffset(BtnSave, 2)
         AddHandler BtnSave.Click, AddressOf OptiFineSave_Click
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -901,7 +901,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.Inherit, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry.IsPreview, "测试版", "稳定版") & If(Entry.ReleaseTime = "", "", "，发布于 " & Entry.ReleaseTime),
+            .Info = If(Entry.IsPreview, GetLang("LangDownloadTest"), GetLang("LangDownloadStable")) & If(Entry.ReleaseTime = "", "", "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime),
             .Logo = PathImage & "Blocks/Egg.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -918,7 +918,7 @@ Retry:
         If sender.Tag.IsLegacy Then
             sender.Buttons = {}
         Else
-            Dim BtnList As New MyIconButton With {.Logo = Logo.IconButtonList, .ToolTip = "查看全部版本", .Tag = sender}
+            Dim BtnList As New MyIconButton With {.Logo = Logo.IconButtonList, .ToolTip = GetLang("LangDownloadShowAll"), .Tag = sender}
             ToolTipService.SetPlacement(BtnList, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnList, 30)
             ToolTipService.SetHorizontalOffset(BtnList, 2)
@@ -927,7 +927,7 @@ Retry:
         End If
     End Sub
     Private Sub LiteLoaderContMenuBuild(sender As MyListItem, e As EventArgs)
-        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "保存安装器", .Tag = sender}
+        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = GetLang("LangDownloadSaveInstaller"), .Tag = sender}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
         ToolTipService.SetHorizontalOffset(BtnSave, 2)
@@ -935,7 +935,7 @@ Retry:
         If sender.Tag.IsLegacy Then
             sender.Buttons = {BtnSave}
         Else
-            Dim BtnList As New MyIconButton With {.Logo = Logo.IconButtonList, .ToolTip = "查看全部版本", .Tag = sender}
+            Dim BtnList As New MyIconButton With {.Logo = Logo.IconButtonList, .ToolTip = GetLang("LangDownloadShowAll"), .Tag = sender}
             ToolTipService.SetPlacement(BtnList, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnList, 30)
             ToolTipService.SetHorizontalOffset(BtnList, 2)
@@ -1492,22 +1492,22 @@ Retry:
         '显示各个版本
         If RecommendedVersion IsNot Nothing Then
             Dim Recommended = ForgeDownloadListItem(RecommendedVersion, OnClick, IsSaveOnly)
-            Recommended.Info = "推荐版" & If(Recommended.Info = "", "", "，" & Recommended.Info)
+            Recommended.Info = GetLang("LangDownloadRecommend") & If(Recommended.Info = "", "", "，" & Recommended.Info)
             Stack.Children.Add(Recommended)
         End If
         If FreshVersion IsNot Nothing Then
             Dim Fresh = ForgeDownloadListItem(FreshVersion, OnClick, IsSaveOnly)
-            Fresh.Info = "最新版" & If(Fresh.Info = "", "", "，" & Fresh.Info)
+            Fresh.Info = GetLang("LangDownloadLatest") & If(Fresh.Info = "", "", "，" & Fresh.Info)
             Stack.Children.Add(Fresh)
         End If
         '添加间隔
-        Stack.Children.Add(New TextBlock With {.Text = "全部版本 (" & Entries.Count & ")", .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 13, 0, 4)})
+        Stack.Children.Add(New TextBlock With {.Text = GetLang("LangDownloadAll") & " (" & Entries.Count & ")", .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 13, 0, 4)})
     End Sub
     Public Function ForgeDownloadListItem(Entry As DlForgeVersionEntry, OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.VersionName, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = {If(Entry.ReleaseTime = "", "", "发布于 " & Entry.ReleaseTime), If(ModeDebug, "种类：" & Entry.Category, "")}.
+            .Info = {If(Entry.ReleaseTime = "", "", GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime), If(ModeDebug, GetLang("LangDownloadCategory") & Entry.Category, "")}.
                 Where(Function(d) d <> "").Join("，"),
             .Logo = PathImage & "Blocks/Anvil.png"
         }
@@ -1522,12 +1522,12 @@ Retry:
         Return NewItem
     End Function
     Private Sub ForgeContMenuBuild(sender As MyListItem, e As EventArgs)
-        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
+        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = GetLang("LangDownloadSaveAs")}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
         ToolTipService.SetHorizontalOffset(BtnSave, 2)
         AddHandler BtnSave.Click, AddressOf ForgeSave_Click
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -1535,7 +1535,7 @@ Retry:
         sender.Buttons = {BtnSave, BtnInfo}
     End Sub
     Private Sub ForgeSaveContMenuBuild(sender As MyListItem, e As EventArgs)
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -1645,22 +1645,22 @@ Retry:
         '显示各个版本
         If FreshStableVersion IsNot Nothing Then
             Dim Fresh = NeoForgeDownloadListItem(FreshStableVersion, OnClick, IsSaveOnly)
-            Fresh.Info = If(Fresh.Info = "", "最新稳定版", "最新" & Fresh.Info)
+            Fresh.Info = If(Fresh.Info = "", GetLang("LangDownloadNewStable"), GetLang("LangDownloadLatest") & Fresh.Info)
             Stack.Children.Add(Fresh)
         End If
         If FreshBetaVersion IsNot Nothing Then
             Dim Fresh = NeoForgeDownloadListItem(FreshBetaVersion, OnClick, IsSaveOnly)
-            Fresh.Info = If(Fresh.Info = "", "最新测试版", "最新" & Fresh.Info)
+            Fresh.Info = If(Fresh.Info = "", GetLang("LangDownloadNewTest"), GetLang("LangDownloadLatest") & Fresh.Info)
             Stack.Children.Add(Fresh)
         End If
         '添加间隔
-        Stack.Children.Add(New TextBlock With {.Text = "全部版本 (" & Entries.Count & ")", .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 13, 0, 4)})
+        Stack.Children.Add(New TextBlock With {.Text = GetLang("LangDownloadAll") & " (" & Entries.Count & ")", .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 13, 0, 4)})
     End Sub
     Public Function NeoForgeDownloadListItem(Info As DlNeoForgeListEntry, OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Info.VersionName, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Info,
-            .Info = If(Info.IsBeta, "测试版", "稳定版"),
+            .Info = If(Info.IsBeta, GetLang("LangDownloadTest"), GetLang("LangDownloadStable")),
             .Logo = PathImage & "Blocks/NeoForge.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1674,12 +1674,12 @@ Retry:
         Return NewItem
     End Function
     Private Sub NeoForgeContMenuBuild(sender As MyListItem, e As EventArgs)
-        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
+        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = GetLang("LangDownloadSaveAs")}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
         ToolTipService.SetHorizontalOffset(BtnSave, 2)
         AddHandler BtnSave.Click, AddressOf NeoForgeSave_Click
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -1687,7 +1687,7 @@ Retry:
         sender.Buttons = {BtnSave, BtnInfo}
     End Sub
     Private Sub NeoForgeSaveContMenuBuild(sender As MyListItem, e As EventArgs)
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -1807,7 +1807,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry("version").ToString.Replace("+build", ""), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry("stable").ToObject(Of Boolean), "稳定版", "测试版"),
+            .Info = If(Entry("stable").ToObject(Of Boolean), GetLang("LangDownloadStable"), GetLang("LangDownloadTest")),
             .Logo = PathImage & "Blocks/Fabric.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1818,7 +1818,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Before("+").Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
+            .Info = Entry.StatusDescription & "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
             .Logo = PathImage & "Blocks/Fabric.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1829,7 +1829,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.ToLower.Replace("optifabric-", "").Replace(".jar", "").Trim.TrimStart("v"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
+            .Info = Entry.StatusDescription & "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
             .Logo = PathImage & "Blocks/OptiFabric.png"
         }
         AddHandler NewItem.Click, OnClick
