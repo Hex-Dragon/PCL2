@@ -1772,7 +1772,7 @@ Retry:
 
         '下载 Json
         MinecraftName = MinecraftName.Replace("∞", "infinite") '放在 ID 后面避免影响版本文件夹名称
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取 Fabric 主文件下载地址",
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangGetDownloadAddressOfFabricMainFile"),
                                                             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                                                                 '启动依赖版本的下载
                                                                 If FixLibrary Then
@@ -1787,7 +1787,7 @@ Retry:
                                                                 '新建 mods 文件夹
                                                                 Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
                                                             End Sub) With {.ProgressWeight = 0.5})
-        Loaders.Add(New LoaderDownload("下载 Fabric 主文件", New List(Of NetFile)) With {.ProgressWeight = 2.5})
+        Loaders.Add(New LoaderDownload(GetLang("LangDownloadFabricMainFile"), New List(Of NetFile)) With {.ProgressWeight = 2.5})
 
         '下载支持库
         If FixLibrary Then
@@ -2066,7 +2066,7 @@ Retry:
         LoaderList.Add(New LoaderTask(Of Integer, Integer)("添加忽略标识", Sub() WriteFile(OutputFolder & ".pclignore", "用于临时地在 PCL 的版本列表中屏蔽此版本。")) With {.Show = False, .Block = False})
         'Fabric API
         If Request.FabricApi IsNot Nothing Then
-            LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
+            LoaderList.Add(New LoaderDownload(GetLang("LangDownloadFabricAPI"), New List(Of NetFile) From {Request.FabricApi.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
         End If
         'OptiFabric
         If Request.OptiFabric IsNot Nothing Then

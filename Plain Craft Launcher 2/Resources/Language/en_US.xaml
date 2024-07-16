@@ -321,6 +321,9 @@
     <!--PageDownloadProgressRight-->
     <s:String x:Key="LangDownloadVanillaSupportLibrary">Download Vanilla support libraries</s:String>
     <s:String x:Key="LangDownloadVanillaJSON">Download Vanilla JSON</s:String>
+    <s:String x:Key="LangDownloadFabricAPI">Download Fabric API</s:String>
+    <s:String x:Key="LangGetDownloadAddressOfFabricMainFile">Get the download address of Fabric main file</s:String>
+    <s:String x:Key="LangDownloadFabricMainFile">Download Fabric main file</s:String>
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">Getting version list</s:String>
