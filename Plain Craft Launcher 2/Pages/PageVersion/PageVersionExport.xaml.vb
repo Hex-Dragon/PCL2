@@ -1,8 +1,5 @@
-﻿Imports System.Runtime.CompilerServices
-
-Public Class PageVersionExport
+﻿Public Class PageVersionExport
     Private Sub PageVersionExport_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        TbExportName.HintText = PageVersionLeft.Version.Name
         Reload()
     End Sub
 
@@ -10,6 +7,8 @@ Public Class PageVersionExport
     Public Sub Reload()
         AniControlEnabled += 1
 
+        TbExportName.HintText = PageVersionLeft.Version.Name
+        TbExportDesc.HintText = PageVersionLeft.Version.Info
         PanDisplayItem.Children.Clear()
         ItemVersion = PageSelectRight.McVersionListItem(PageVersionLeft.Version.Load())
         ItemVersion.IsHitTestVisible = False
@@ -36,6 +35,10 @@ Public Class PageVersionExport
 #Region "整合包信息 & 预览栏"
     Private Sub TbExportName_TextChanged(sender As MyTextBox, e As TextChangedEventArgs) Handles TbExportName.TextChanged
         ItemVersion.Title = If(String.IsNullOrWhiteSpace(sender.Text), PageVersionLeft.Version.Name, sender.Text)
+    End Sub
+
+    Private Sub TbExportDesc_TextChanged(sender As MyTextBox, e As TextChangedEventArgs) Handles TbExportDesc.TextChanged
+        ItemVersion.Info = If(String.IsNullOrWhiteSpace(sender.Text), PageVersionLeft.Version.Info, sender.Text)
     End Sub
 
     Private CustomLogoVal As String

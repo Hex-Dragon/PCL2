@@ -886,15 +886,19 @@ Retry:
         ''' </summary>
         Public Remain As String()
         ''' <summary>
-        ''' 是否需要保留 PCL 全局设置。仅在压缩包中有效。
+        ''' 是否需要保留 PCL 全局设置。仅在包括 PCL 时有效。
         ''' </summary>
         Public PCLSetupGlobal As Boolean = True
         ''' <summary>
-        ''' 整合包名称。仅在 Modrinth 有效。
+        ''' 整合包名称。
         ''' </summary>
         Public Name As String = ""
         ''' <summary>
-        ''' 版本号。仅在 Modrinth 有效。
+        ''' 整合包描述。
+        ''' </summary>
+        Public Desc As String = ""
+        ''' <summary>
+        ''' 版本号。
         ''' </summary>
         Public VerID As String = ""
         Public Sub New(Version As McVersion,
@@ -903,7 +907,7 @@ Retry:
                        Remain As String(),
                        Optional PCLSetupGlobal As Boolean = True,
                        Optional Name As String = "",
-                       Optional Author As String = "",
+                       Optional Desc As String = "",
                        Optional VerID As String = "")
             Me.Version = Version
             Me.Dest = Dest
@@ -911,6 +915,7 @@ Retry:
             Me.Remain = Remain
             Me.PCLSetupGlobal = PCLSetupGlobal
             Me.Name = Name
+            Me.Desc = Desc
             Me.VerID = VerID
         End Sub
     End Class
