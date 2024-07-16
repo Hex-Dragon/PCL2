@@ -319,19 +319,19 @@
     <s:String x:Key="LangSpeedHintClickCopyError">已複製錯誤詳情！</s:String>
 
     <!--PageSpeedRight-->
-    <s:String x:Key="LangDownloadVanillaSupportLibrary">下載原版支持庫文件</s:String>
-    <s:String x:Key="LangDownloadVanillaJSON">下載原版 JSON 文件</s:String>
-    <s:String x:Key="LangDownloadFabricAPI">下載 Fabric API</s:String>
-    <s:String x:Key="LangGetFabricMainFileDownloadAddress">獲取 Fabric 主文件下載地址</s:String>
-    <s:String x:Key="LangDownloadFabricMainFile">下載 Fabric 主文件</s:String>
-    <s:String x:Key="LangDownloadVanillaResource">下載原版資源文件</s:String>
-    <s:String x:Key="LangInstallGame">安裝遊戲</s:String>
-    <s:String x:Key="LangDownloadGameSupportLibrary">下載遊戲支持庫文件</s:String>
-    <s:String x:Key="LangInstallForgeMethodA">安裝 Forge（方式 A）</s:String>
-    <s:String x:Key="LangInstallNeoForge">安裝 NeoForge</s:String>
-    <s:String x:Key="LangDownloadModLoaderMainFile">下載 {0} 主文件</s:String>
-    <s:String x:Key="LangAnalyseModLoaderSupportLibrary">分析 {0} 支持庫文件</s:String>
-    <s:String x:Key="LangDownloadModLoaderSupportLibrary">下載 {0} 支持庫文件</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadVanillaSupportLibrary">下載原版支持庫文件</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadVanillaJSON">下載原版 JSON 文件</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadFabricAPI">下載 Fabric API</s:String>
+    <s:String x:Key="LangPageSpeedRightGetFabricMainFileDownloadAddress">獲取 Fabric 主文件下載地址</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadFabricMainFile">下載 Fabric 主文件</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadVanillaResource">下載原版資源文件</s:String>
+    <s:String x:Key="LangPageSpeedRightInstallGame">安裝遊戲</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadGameSupportLibrary">下載遊戲支持庫文件</s:String>
+    <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">安裝 Forge（方式 A）</s:String>
+    <s:String x:Key="LangPageSpeedRightInstallNeoForge">安裝 NeoForge</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">下載 {0} 主文件</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">分析 {0} 支持庫文件</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">下載 {0} 支持庫文件</s:String>
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">正在獲取版本列表</s:String>

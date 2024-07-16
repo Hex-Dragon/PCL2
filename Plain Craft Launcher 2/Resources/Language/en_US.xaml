@@ -319,19 +319,19 @@
     <s:String x:Key="LangSpeedHintClickCopyError">The error details have been copied!</s:String>
 
     <!--PageSpeedRight-->
-    <s:String x:Key="LangDownloadVanillaSupportLibrary">Download Vanilla support libraries</s:String>
-    <s:String x:Key="LangDownloadVanillaJSON">Download Vanilla JSON</s:String>
-    <s:String x:Key="LangDownloadFabricAPI">Download Fabric API</s:String>
-    <s:String x:Key="LangGetFabricMainFileDownloadAddress">Get the download address of the Fabric main file</s:String>
-    <s:String x:Key="LangDownloadFabricMainFile">Download Fabric main file</s:String>
-    <s:String x:Key="LangDownloadVanillaResource">Download Vanilla resources</s:String>
-    <s:String x:Key="LangInstallGame">Install game</s:String>
-    <s:String x:Key="LangDownloadGameSupportLibrary">Download game support libraries</s:String>
-    <s:String x:Key="LangInstallForgeMethodA">Install Forge (Method A)</s:String>
-    <s:String x:Key="LangInstallNeoForge">Install NeoForge</s:String>
-    <s:String x:Key="LangDownloadModLoaderMainFile">Download {0} main file</s:String>
-    <s:String x:Key="LangAnalyseModLoaderSupportLibrary">Analyse {0} support libraries</s:String>
-    <s:String x:Key="LangDownloadModLoaderSupportLibrary">Download {0} support libraries</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadVanillaSupportLibrary">Download Vanilla support libraries</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadVanillaJSON">Download Vanilla JSON</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadFabricAPI">Download Fabric API</s:String>
+    <s:String x:Key="LangPageSpeedRightGetFabricMainFileDownloadAddress">Get the download address of the Fabric main file</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadFabricMainFile">Download Fabric main file</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadVanillaResource">Download Vanilla resources</s:String>
+    <s:String x:Key="LangPageSpeedRightInstallGame">Install game</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadGameSupportLibrary">Download game support libraries</s:String>
+    <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">Install Forge (Method A)</s:String>
+    <s:String x:Key="LangPageSpeedRightInstallNeoForge">Install NeoForge</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">Download {0} main file</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Analyse {0} support libraries</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">Download {0} support libraries</s:String>
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">Getting version list</s:String>
