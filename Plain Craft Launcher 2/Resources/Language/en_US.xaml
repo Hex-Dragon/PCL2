@@ -69,8 +69,8 @@
     <s:String x:Key="LangThemeRealFunny">TRUE FUNNY COLOR</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip8">After the accumulated sponsorship reaches ¥23.33, you can send "解锁码" in the private message of Afdian to unlock.&#x000D; Right-click to open the sponsorship page and support PCL if you think it is doing a good job =w=!</s:String>
     <s:String x:Key="LangThemeUnlockTip8">After the accumulated sponsorship reaches ¥23.33, you can send "解锁码" in the private message in Afdian to unlock</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as [已完成] (right click to open the feedback page)&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as [已完成]&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (right click to open the feedback page)&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
+    <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成"&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">There is an exception in the personalize settings and has been reset automatically</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">Error overloading personalize settings</s:String>
     <s:String x:Key="LangHintThemeSetInit">The personalize settings have been initialized</s:String>
@@ -99,7 +99,7 @@
     <s:String x:Key="LangHintBackgroundMusicDeleting">Deleteing background music...</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleted">The background music has been deleted!</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">Failed to delete background music</s:String>
-    <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Failed to re-create background music folder</s:String>
+    <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Failed to recreate background music folder</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">A layout file already exists. Continuing to generate the documentation file will overwrite the existing layout file!</s:String>
     <s:String x:Key="LangDialogBtnContinue">Continue</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteFail">Failed to generate the documentaion file</s:String>
@@ -161,7 +161,7 @@
     <s:String x:Key="LangSetBackgroundPicAdaptivePosC">Bottom-left</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptivePosD">Bottom-right</s:String>
     <s:String x:Key="LangSetBackgroundPicBlur">Background Blur</s:String>
-    <s:String x:Key="LangSetBackgroundPicBlurToolTip">Strong blurring will cause serious fps drops in the launcher. Please use it with caution.&#13;It is not recommended to enable blur when making an modpack to ensure that PCL can run smoothly on low-performance computers.</s:String>
+    <s:String x:Key="LangSetBackgroundPicBlurToolTip">Strong blurring will cause serious FPS drops in the launcher. Please use it with caution.&#13;It is not recommended to enable blur when making an modpack to ensure that PCL can run smoothly on low-performance computers.</s:String>
     <s:String x:Key="LangSetBackgroundPicColorfulBack">Use a colored background</s:String>
     <s:String x:Key="LangSetOpenFolder">Open folder</s:String>
     <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">Place the background image in this folder, and PCL will randomly load one of the images each time it opens</s:String>
