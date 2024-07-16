@@ -1299,7 +1299,7 @@ Retry:
                     '释放文件
                     If Installer IsNot Nothing Then Installer.Dispose()
                 End Try
-            End Sub With {.ProgressWeight = 2})
+            End Sub) With {.ProgressWeight = 2})
             Loaders.Add(New LoaderDownload(GetLang("LangDownloadModLoaderSupportLibrary", LoaderName), New List(Of NetFile)) With {.ProgressWeight = 12})
             Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)($"获取 {LoaderName} 支持库文件",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
