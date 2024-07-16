@@ -329,8 +329,12 @@
     <s:String x:Key="LangDownloadGameSupportLibrary">Download game support libraries</s:String>
     <s:String x:Key="LangInstallForgeMethodA">Install Forge (Method A)</s:String>
     <s:String x:Key="LangInstallNeoForge">Install NeoForge</s:String>
-    <s:String x:Key="LangDownloadModLoaderMainFilePrefix">Install </s:String> <!--Keep the whitespace-->
+    <s:String x:Key="LangDownloadModLoaderMainFilePrefix">Download </s:String> <!--Keep the whitespace-->
     <s:String x:Key="LangDownloadModLoaderMainFileSuffix"> main file</s:String> <!--Keep the whitespace-->
+    <s:String x:Key="LangAnalyseModLoaderSupportLibraryPrefix">Analyse </s:String> <!--Keep the whitespace-->
+    <s:String x:Key="LangAnalyseModLoaderSupportLibrarySuffix"> support libraries</s:String> <!--Keep the whitespace-->
+    <s:String x:Key="LangDownloadModLoaderSupportLibraryPrefix">Download </s:String> <!--Keep the whitespace-->
+    <s:String x:Key="LangDownloadModLoaderSupportLibrarySuffix"> support libraries</s:String> <!--Keep the whitespace-->
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">Getting version list</s:String>

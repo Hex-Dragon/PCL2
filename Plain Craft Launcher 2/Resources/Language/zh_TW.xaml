@@ -330,6 +330,10 @@
     <s:String x:Key="LangInstallNeoForge">安裝 NeoForge</s:String>
     <s:String x:Key="LangDownloadModLoaderMainFilePrefix">下載 </s:String> <!--保留空格-->
     <s:String x:Key="LangDownloadModLoaderMainFileSuffix"> 主文件</s:String> <!--保留空格-->
+    <s:String x:Key="LangAnalyseModLoaderSupportLibraryPrefix">分析 </s:String> <!--保留空格-->
+    <s:String x:Key="LangAnalyseModLoaderSupportLibrarySuffix"> 支持庫文件</s:String> <!--保留空格-->
+    <s:String x:Key="LangDownloadModLoaderSupportLibraryPrefix">下載 </s:String> <!--保留空格-->
+    <s:String x:Key="LangDownloadModLoaderSupportLibrarySuffix"> 支持庫文件</s:String> <!--保留空格-->
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">正在獲取版本列表</s:String>
