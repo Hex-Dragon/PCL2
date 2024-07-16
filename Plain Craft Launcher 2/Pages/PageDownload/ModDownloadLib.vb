@@ -682,7 +682,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.NameDisplay, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry.IsPreview, GetLang("LangDownloadTest"), GetLang("LangDownloadRelease")) &
+            .Info = If(Entry.IsPreview, GetLang("LangDownloadPreviewOptiFine"), GetLang("LangDownloadStable")) &
                     If(Entry.ReleaseTime = "", "", "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime) &
                     If(Entry.RequiredForgeVersion Is Nothing, "，" & GetLang("LangDownloadForgeIncompatible"), If(Entry.RequiredForgeVersion = "", "", "，" & GetLang("LangDownloadRecommendForge") & Entry.RequiredForgeVersion)),
             .Logo = PathImage & "Blocks/GrassPath.png"
@@ -901,7 +901,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.Inherit, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry.IsPreview, GetLang("LangDownloadTest"), GetLang("LangDownloadStable")) & If(Entry.ReleaseTime = "", "", "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime),
+            .Info = If(Entry.IsPreview, GetLang("LangDownloadPreviewLiteLoader"), GetLang("LangDownloadStable")) & If(Entry.ReleaseTime = "", "", "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime),
             .Logo = PathImage & "Blocks/Egg.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1645,12 +1645,12 @@ Retry:
         '显示各个版本
         If FreshStableVersion IsNot Nothing Then
             Dim Fresh = NeoForgeDownloadListItem(FreshStableVersion, OnClick, IsSaveOnly)
-            Fresh.Info = If(Fresh.Info = "", GetLang("LangDownloadNewStable"), GetLang("LangDownloadLatest") & Fresh.Info)
+            Fresh.Info = If(Fresh.Info = "", GetLang("LangDownloadNewStable"), GetLang("LangDownloadNewStable"))
             Stack.Children.Add(Fresh)
         End If
         If FreshBetaVersion IsNot Nothing Then
             Dim Fresh = NeoForgeDownloadListItem(FreshBetaVersion, OnClick, IsSaveOnly)
-            Fresh.Info = If(Fresh.Info = "", GetLang("LangDownloadNewTest"), GetLang("LangDownloadLatest") & Fresh.Info)
+            Fresh.Info = If(Fresh.Info = "", GetLang("LangDownloadNewTest"), GetLang("LangDownloadNewTest"))
             Stack.Children.Add(Fresh)
         End If
         '添加间隔

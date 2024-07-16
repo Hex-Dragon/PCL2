@@ -6,7 +6,7 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
-            <local:MyCard Margin="0,15" Title="基础" x:Name="CardLauncher">
+            <local:MyCard Margin="0,15" Title="{DynamicResource LangSetTheme}" x:Name="CardLauncher">
                 <Grid Margin="25,40,25,17">
                     <StackPanel>
                         <Grid Margin="0,0,0,6">
