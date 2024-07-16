@@ -69,8 +69,8 @@
     <s:String x:Key="LangThemeRealFunny">TRUE FUNNY COLOR</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip8">After the accumulated sponsorship reaches ¥23.33, you can send "解锁码" in the private message of Afdian to unlock.&#x000D; Right-click to open the sponsorship page and support PCL if you think it is doing a good job =w=!</s:String>
     <s:String x:Key="LangThemeUnlockTip8">After the accumulated sponsorship reaches ¥23.33, you can send "解锁码" in the private message in Afdian to unlock</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as [已完成] (right click to open the feedback page)&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as [已完成]&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (right click to open the feedback page)&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
+    <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成"&#x000D;· Submit a pull request to the help library, unlock after LTCat merged it</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">There is an exception in the personalize settings and has been reset automatically</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">Error overloading personalize settings</s:String>
     <s:String x:Key="LangHintThemeSetInit">The personalize settings have been initialized</s:String>
@@ -99,7 +99,7 @@
     <s:String x:Key="LangHintBackgroundMusicDeleting">Deleteing background music...</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleted">The background music has been deleted!</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">Failed to delete background music</s:String>
-    <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Failed to re-create background music folder</s:String>
+    <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Failed to recreate background music folder</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">A layout file already exists. Continuing to generate the documentation file will overwrite the existing layout file!</s:String>
     <s:String x:Key="LangDialogBtnContinue">Continue</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteFail">Failed to generate the documentaion file</s:String>
@@ -138,6 +138,7 @@
     <s:String x:Key="LangSetThemeNameBlack">Bipolar Black</s:String>
     <s:String x:Key="LangSetThemeNameGreyToolTip">Grey is a lie.</s:String>
     <s:String x:Key="LangSetThemeNameFunny">Funny fruits on the funny tree, you and I are sitting under it, doing memes on funny days, fun and more fun that we will make.</s:String>
+    <s:String x:Key="LangSetThemeNameHardcoreFan">Play the game 99 times.</s:String>
     <s:String x:Key="LangSetThemeNameLucky">What a lucky guy, right?</s:String>
     <s:String x:Key="LangSetThemeNameMojang">Login once with your Microsoft account. Support genuine games!</s:String>
     <s:String x:Key="LangSetThemeNameGeekToolTip">Right-click to open the decryption game entrance</s:String>
@@ -161,7 +162,7 @@
     <s:String x:Key="LangSetBackgroundPicAdaptivePosC">Bottom-left</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptivePosD">Bottom-right</s:String>
     <s:String x:Key="LangSetBackgroundPicBlur">Background Blur</s:String>
-    <s:String x:Key="LangSetBackgroundPicBlurToolTip">Strong blurring will cause serious fps drops in the launcher. Please use it with caution.&#13;It is not recommended to enable blur when making an modpack to ensure that PCL can run smoothly on low-performance computers.</s:String>
+    <s:String x:Key="LangSetBackgroundPicBlurToolTip">Strong blurring will cause serious FPS drops in the launcher. Please use it with caution.&#13;It is not recommended to enable blur when making an modpack to ensure that PCL can run smoothly on low-performance computers.</s:String>
     <s:String x:Key="LangSetBackgroundPicColorfulBack">Use a colored background</s:String>
     <s:String x:Key="LangSetOpenFolder">Open folder</s:String>
     <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">Place the background image in this folder, and PCL will randomly load one of the images each time it opens</s:String>
@@ -316,6 +317,21 @@
     <s:String x:Key="LangSpeedLeftThreads">Remaining Threads</s:String>
     <s:String x:Key="LangSpeedClickCopyError">Click to copy error details</s:String>
     <s:String x:Key="LangSpeedHintClickCopyError">The error details have been copied!</s:String>
+
+    <!--PageSpeedRight-->
+    <s:String x:Key="LangDownloadVanillaSupportLibrary">Download Vanilla support libraries</s:String>
+    <s:String x:Key="LangDownloadVanillaJSON">Download Vanilla JSON</s:String>
+    <s:String x:Key="LangDownloadFabricAPI">Download Fabric API</s:String>
+    <s:String x:Key="LangGetFabricMainFileDownloadAddress">Get the download address of the Fabric main file</s:String>
+    <s:String x:Key="LangDownloadFabricMainFile">Download Fabric main file</s:String>
+    <s:String x:Key="LangDownloadVanillaResource">Download Vanilla resources</s:String>
+    <s:String x:Key="LangInstallGame">Install game</s:String>
+    <s:String x:Key="LangDownloadGameSupportLibrary">Download game support libraries</s:String>
+    <s:String x:Key="LangInstallForgeMethodA">Install Forge (Method A)</s:String>
+    <s:String x:Key="LangInstallNeoForge">Install NeoForge</s:String>
+    <s:String x:Key="LangDownloadModLoaderMainFile">Download {0} main file</s:String>
+    <s:String x:Key="LangAnalyseModLoaderSupportLibrary">Analyse {0} support libraries</s:String>
+    <s:String x:Key="LangDownloadModLoaderSupportLibrary">Download {0} support libraries</s:String>
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">Getting version list</s:String>

@@ -5,7 +5,7 @@
 
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下載</s:String>
-    <s:String x:Key="LangTitleHome"> 啟動</s:String>
+    <s:String x:Key="LangTitleHome">啟動</s:String>
     <s:String x:Key="LangTitleSetup">設置</s:String>
     <s:String x:Key="LangTitleLink">聯機</s:String>
     <s:String x:Key="LangTitleOther">更多</s:String>
@@ -138,6 +138,7 @@
     <s:String x:Key="LangSetThemeNameBlack">玄素黑</s:String>
     <s:String x:Key="LangSetThemeNameGreyToolTip">灰色是個謊言</s:String>
     <s:String x:Key="LangSetThemeNameFunny">滑稽樹上滑稽果，滑稽樹下你和我，滑稽之日搞事情，歡樂多又多</s:String>
+    <s:String x:Key="LangSetThemeNameHardcoreFan">99 次重逢的喜悅</s:String>
     <s:String x:Key="LangSetThemeNameLucky">這就是傳說中的歐皇了吧</s:String>
     <s:String x:Key="LangSetThemeNameMojang">進行一次正版登錄，支持正版遊戲！</s:String>
     <s:String x:Key="LangSetThemeNameGeekToolTip">右鍵打開解密遊戲入口</s:String>
@@ -316,6 +317,21 @@
     <s:String x:Key="LangSpeedLeftThreads">剩餘線程</s:String>
     <s:String x:Key="LangSpeedClickCopyError">單擊複製錯誤詳情</s:String>
     <s:String x:Key="LangSpeedHintClickCopyError">已複製錯誤詳情！</s:String>
+
+    <!--PageSpeedRight-->
+    <s:String x:Key="LangDownloadVanillaSupportLibrary">下載原版支持庫文件</s:String>
+    <s:String x:Key="LangDownloadVanillaJSON">下載原版 JSON 文件</s:String>
+    <s:String x:Key="LangDownloadFabricAPI">下載 Fabric API</s:String>
+    <s:String x:Key="LangGetFabricMainFileDownloadAddress">獲取 Fabric 主文件下載地址</s:String>
+    <s:String x:Key="LangDownloadFabricMainFile">下載 Fabric 主文件</s:String>
+    <s:String x:Key="LangDownloadVanillaResource">下載原版資源文件</s:String>
+    <s:String x:Key="LangInstallGame">安裝遊戲</s:String>
+    <s:String x:Key="LangDownloadGameSupportLibrary">下載遊戲支持庫文件</s:String>
+    <s:String x:Key="LangInstallForgeMethodA">安裝 Forge（方式 A）</s:String>
+    <s:String x:Key="LangInstallNeoForge">安裝 NeoForge</s:String>
+    <s:String x:Key="LangDownloadModLoaderMainFile">下載 {0} 主文件</s:String>
+    <s:String x:Key="LangAnalyseModLoaderSupportLibrary">分析 {0} 支持庫文件</s:String>
+    <s:String x:Key="LangDownloadModLoaderSupportLibrary">下載 {0} 支持庫文件</s:String>
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">正在獲取版本列表</s:String>
