@@ -1251,13 +1251,13 @@ Retry:
             End If
             Task.Output = Files
         End Sub) With {.ProgressWeight = 0.5, .Show = False})
-        Loaders.Add(New LoaderDownload(GetLang("LangDownloadModLoaderMainFilePrefix") + LoaderName + GetLang("LangDownloadModLoaderMainFileSuffix"), New List(Of NetFile)) With {.ProgressWeight = 9})
+        Loaders.Add(New LoaderDownload(GetLang("LangDownloadModLoaderMainFile", LoaderName), New List(Of NetFile)) With {.ProgressWeight = 9})
 
         '安装（仅在新版安装时需要原版 Jar）
         If IsNeoForge OrElse LoaderVersion.Before(".") >= 20 Then
             Log($"[Download] 检测为{If(IsNeoForge, " Neo", "新版 ")}Forge：" & LoaderVersion)
             Dim Libs As List(Of McLibToken) = Nothing
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangAnalyseModLoaderSupportLibraryPrefix") + LoaderName + GetLang("LangAnalyseModLoaderSupportLibrarySuffix"),
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangAnalyseModLoaderSupportLibrary", LoaderName)),
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 Task.Output = New List(Of NetFile)
                 Dim Installer As ZipArchive = Nothing
@@ -1300,7 +1300,7 @@ Retry:
                     If Installer IsNot Nothing Then Installer.Dispose()
                 End Try
             End Sub) With {.ProgressWeight = 2})
-            Loaders.Add(New LoaderDownload(GetLang("LangDownloadModLoaderSupportLibraryPrefix") + LoaderName + GetLang("LangDownloadModLoaderSupportLibrarySuffix"), New List(Of NetFile)) With {.ProgressWeight = 12})
+            Loaders.Add(New LoaderDownload(GetLang("LangDownloadModLoaderSupportLibrary", LoaderName), New List(Of NetFile)) With {.ProgressWeight = 12})
             Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)($"获取 {LoaderName} 支持库文件",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
 #Region "Forgelike 文件"

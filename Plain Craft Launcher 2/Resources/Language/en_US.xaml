@@ -318,7 +318,7 @@
     <s:String x:Key="LangSpeedClickCopyError">Click to copy error details</s:String>
     <s:String x:Key="LangSpeedHintClickCopyError">The error details have been copied!</s:String>
 
-    <!--PageDownloadProgressRight-->
+    <!--PageSpeedRight-->
     <s:String x:Key="LangDownloadVanillaSupportLibrary">Download Vanilla support libraries</s:String>
     <s:String x:Key="LangDownloadVanillaJSON">Download Vanilla JSON</s:String>
     <s:String x:Key="LangDownloadFabricAPI">Download Fabric API</s:String>
@@ -329,12 +329,9 @@
     <s:String x:Key="LangDownloadGameSupportLibrary">Download game support libraries</s:String>
     <s:String x:Key="LangInstallForgeMethodA">Install Forge (Method A)</s:String>
     <s:String x:Key="LangInstallNeoForge">Install NeoForge</s:String>
-    <s:String x:Key="LangDownloadModLoaderMainFilePrefix">Download </s:String> <!--Keep the whitespace-->
-    <s:String x:Key="LangDownloadModLoaderMainFileSuffix"> main file</s:String> <!--Keep the whitespace-->
-    <s:String x:Key="LangAnalyseModLoaderSupportLibraryPrefix">Analyse </s:String> <!--Keep the whitespace-->
-    <s:String x:Key="LangAnalyseModLoaderSupportLibrarySuffix"> support libraries</s:String> <!--Keep the whitespace-->
-    <s:String x:Key="LangDownloadModLoaderSupportLibraryPrefix">Download </s:String> <!--Keep the whitespace-->
-    <s:String x:Key="LangDownloadModLoaderSupportLibrarySuffix"> support libraries</s:String> <!--Keep the whitespace-->
+    <s:String x:Key="LangDownloadModLoaderMainFile">Download {0} main file</s:String>
+    <s:String x:Key="LangAnalyseModLoaderSupportLibrary">Analyse {0} support libraries</s:String>
+    <s:String x:Key="LangDownloadModLoaderSupportLibrary">Download {0} support libraries</s:String>
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">Getting version list</s:String>
