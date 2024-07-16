@@ -322,8 +322,15 @@
     <s:String x:Key="LangDownloadVanillaSupportLibrary">下載原版支持庫文件</s:String>
     <s:String x:Key="LangDownloadVanillaJSON">下載原版 JSON 文件</s:String>
     <s:String x:Key="LangDownloadFabricAPI">下載 Fabric API</s:String>
-    <s:String x:Key="LangGetDownloadAddressOfFabricMainFile">獲取 Fabric 主文件下載地址</s:String>
+    <s:String x:Key="LangGetFabricMainFileDownloadAddress">獲取 Fabric 主文件下載地址</s:String>
     <s:String x:Key="LangDownloadFabricMainFile">下載 Fabric 主文件</s:String>
+    <s:String x:Key="LangDownloadVanillaResource">下載原版資源文件</s:String>
+    <s:String x:Key="LangInstallGame">安裝遊戲</s:String>
+    <s:String x:Key="LangDownloadGameSupportLibrary">下載遊戲支持庫文件</s:String>
+    <s:String x:Key="LangInstallForgeMethodA">安裝 Forge（方式 A）</s:String>
+    <s:String x:Key="LangInstallNeoForge">安裝 NeoForge</s:String>
+    <s:String x:Key="LangDownloadModLoaderMainFilePrefix">下載 </s:String> <!--保留空格-->
+    <s:String x:Key="LangDownloadModLoaderMainFileSuffix"> 主文件</s:String> <!--保留空格-->
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">正在獲取版本列表</s:String>

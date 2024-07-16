@@ -164,7 +164,7 @@ Public Module ModDownloadLib
             Task.Output = McAssetsFixList(McAssetsGetIndexName(New McVersion(VersionFolder)), True, Task)
         End Sub) With {.ProgressWeight = 3, .Show = False})
         LoadersAssets.Add(New LoaderDownload("下载资源文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 14, .Show = False})
-        Loaders.Add(New LoaderCombo(Of String)("下载原版资源文件", LoadersAssets) With {.Block = False, .ProgressWeight = 21})
+        Loaders.Add(New LoaderCombo(Of String)(GetLang("LangDownloadVanillaResource"), LoadersAssets) With {.Block = False, .ProgressWeight = 21})
 
         Return Loaders
 
@@ -1251,7 +1251,7 @@ Retry:
             End If
             Task.Output = Files
         End Sub) With {.ProgressWeight = 0.5, .Show = False})
-        Loaders.Add(New LoaderDownload($"下载 {LoaderName} 主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
+        Loaders.Add(New LoaderDownload(GetLang("LangDownloadModLoaderMainFilePrefix") + LoaderName + GetLang("LangDownloadModLoaderSuffix"), New List(Of NetFile)) With {.ProgressWeight = 9})
 
         '安装（仅在新版安装时需要原版 Jar）
         If IsNeoForge OrElse LoaderVersion.Before(".") >= 20 Then
@@ -1341,7 +1341,7 @@ Retry:
                 End SyncLock
 #End Region
             End Sub) With {.ProgressWeight = 0.1, .Show = False})
-            Loaders.Add(New LoaderTask(Of Boolean, Boolean)(If(IsNeoForge, "安装 NeoForge", "安装 Forge（方式 A）"),
+            Loaders.Add(New LoaderTask(Of Boolean, Boolean)(If(IsNeoForge, GetLang("LangInstallNeoForge"), GetLang("LangInstallForgeMethodA")),
             Sub(Task As LoaderTask(Of Boolean, Boolean))
                 Dim Installer As ZipArchive = Nothing
                 Try
@@ -1772,7 +1772,7 @@ Retry:
 
         '下载 Json
         MinecraftName = MinecraftName.Replace("∞", "infinite") '放在 ID 后面避免影响版本文件夹名称
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangGetDownloadAddressOfFabricMainFile"),
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangGetFabricMainFileDownloadAddress"),
                                                             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                                                                 '启动依赖版本的下载
                                                                 If FixLibrary Then
@@ -2100,7 +2100,7 @@ Retry:
             LoaderList.Add(New LoaderCombo(Of String)("下载 Fabric " & Request.FabricVersion, McDownloadFabricLoader(Request.FabricVersion, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2, .Block = True})
         End If
         '合并安装
-        LoaderList.Add(New LoaderTask(Of String, String)("安装游戏",
+        LoaderList.Add(New LoaderTask(Of String, String)(GetLang("LangInstallGame"),
             Sub(Task As LoaderTask(Of String, String))
                 InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, FabricFolder, LiteLoaderFolder)
                 Task.Progress = 0.3
@@ -2113,7 +2113,7 @@ Retry:
             Dim LoadersLib As New List(Of LoaderBase)
             LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(OutputFolder))) With {.ProgressWeight = 1, .Show = False})
             LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
-            LoaderList.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
+            LoaderList.Add(New LoaderCombo(Of String)(GetLang("LangDownloadGameSupportLibrary"), LoadersLib) With {.ProgressWeight = 8})
         End If
         '删除忽略标识
         LoaderList.Add(New LoaderTask(Of Integer, Integer)("删除忽略标识", Sub() File.Delete(OutputFolder & ".pclignore")) With {.Show = False})
