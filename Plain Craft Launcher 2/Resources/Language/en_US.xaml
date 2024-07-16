@@ -318,6 +318,10 @@
     <s:String x:Key="LangSpeedClickCopyError">Click to copy error details</s:String>
     <s:String x:Key="LangSpeedHintClickCopyError">The error details have been copied!</s:String>
 
+    <!--PageDownloadProgressRight-->
+    <s:String x:Key="LangDownloadVanillaSupportLibrary">Download Vanilla support libraries</s:String>
+    <s:String x:Key="LangDownloadVanillaJSON">Download Vanilla JSON</s:String>
+
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">Getting version list</s:String>
     <s:String x:Key="LangDownloadClientReleaseReleaseOn">Latest Release, Released on</s:String>  

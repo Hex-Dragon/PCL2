@@ -318,6 +318,10 @@
     <s:String x:Key="LangSpeedClickCopyError">单击复制错误详情</s:String>
     <s:String x:Key="LangSpeedHintClickCopyError">已复制错误详情！</s:String>
 
+    <!--PageDownloadProgressRight-->
+    <s:String x:Key="LangDownloadVanillaSupportLibrary">下载原版支持库文件</s:String>
+    <s:String x:Key="LangDownloadVanillaJSON">下载原版 JSON 文件</s:String>
+
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">正在获取版本列表</s:String>
     <s:String x:Key="LangDownloadClientReleaseReleaseOn">最新正式版，发布于</s:String>

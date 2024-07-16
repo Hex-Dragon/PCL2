@@ -169,8 +169,8 @@ Public Module ModDownloadLib
         Return Loaders
 
     End Function
-    Private Const McDownloadClientLibName As String = "下载原版支持库文件"
-    Private Const McDownloadClientJsonName As String = "下载原版 json 文件"
+    Private Const McDownloadClientLibName As String = GetLang("LangDownloadVanillaSupportLibrary")
+    Private Const McDownloadClientJsonName As String = GetLang("LangDownloadVanillaJSON")
 
 #End Region
 
