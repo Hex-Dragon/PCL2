@@ -1257,7 +1257,7 @@ Retry:
         If IsNeoForge OrElse LoaderVersion.Before(".") >= 20 Then
             Log($"[Download] 检测为{If(IsNeoForge, " Neo", "新版 ")}Forge：" & LoaderVersion)
             Dim Libs As List(Of McLibToken) = Nothing
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangAnalyseModLoaderSupportLibrary", LoaderName)),
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangAnalyseModLoaderSupportLibrary", LoaderName),
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 Task.Output = New List(Of NetFile)
                 Dim Installer As ZipArchive = Nothing
