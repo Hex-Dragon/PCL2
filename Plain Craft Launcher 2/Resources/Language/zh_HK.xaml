@@ -5,7 +5,7 @@
 
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下載</s:String>
-    <s:String x:Key="LangTitleHome"> 啟動</s:String>
+    <s:String x:Key="LangTitleHome">啟動</s:String>
     <s:String x:Key="LangTitleSetup">設置</s:String>
     <s:String x:Key="LangTitleLink">聯機</s:String>
     <s:String x:Key="LangTitleOther">更多</s:String>
@@ -138,6 +138,7 @@
     <s:String x:Key="LangSetThemeNameBlack">玄素黑</s:String>
     <s:String x:Key="LangSetThemeNameGreyToolTip">灰色是個謊言</s:String>
     <s:String x:Key="LangSetThemeNameFunny">滑稽樹上滑稽果，滑稽樹下你和我，滑稽之日搞事情，歡樂多又多</s:String>
+    <s:String x:Key="LangSetThemeNameHardcoreFan">99 次重逢的喜悅</s:String>
     <s:String x:Key="LangSetThemeNameLucky">這就是傳說中的歐皇了吧</s:String>
     <s:String x:Key="LangSetThemeNameMojang">進行一次正版登錄，支持正版遊戲！</s:String>
     <s:String x:Key="LangSetThemeNameGeekToolTip">右鍵打開解密遊戲入口</s:String>

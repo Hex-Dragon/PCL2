@@ -138,6 +138,7 @@
     <s:String x:Key="LangSetThemeNameBlack">玄素黑</s:String>
     <s:String x:Key="LangSetThemeNameGreyToolTip">灰色是个谎言</s:String>
     <s:String x:Key="LangSetThemeNameFunny">滑稽树上滑稽果，滑稽树下你和我，滑稽之日搞事情，欢乐多又多</s:String>
+    <s:String x:Key="LangSetThemeNameHardcoreFan">99 次重逢的喜悦</s:String>
     <s:String x:Key="LangSetThemeNameLucky">这就是传说中的欧皇了吧</s:String>
     <s:String x:Key="LangSetThemeNameMojang">进行一次正版登录，支持正版游戏！</s:String>
     <s:String x:Key="LangSetThemeNameGeekToolTip">右键打开解密游戏入口</s:String>

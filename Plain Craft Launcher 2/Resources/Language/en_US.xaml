@@ -138,6 +138,7 @@
     <s:String x:Key="LangSetThemeNameBlack">Bipolar Black</s:String>
     <s:String x:Key="LangSetThemeNameGreyToolTip">Grey is a lie.</s:String>
     <s:String x:Key="LangSetThemeNameFunny">Funny fruits on the funny tree, you and I are sitting under it, doing memes on funny days, fun and more fun that we will make.</s:String>
+    <s:String x:Key="LangSetThemeNameHardcoreFan">Play the game 99 times.</s:String>
     <s:String x:Key="LangSetThemeNameLucky">What a lucky guy, right?</s:String>
     <s:String x:Key="LangSetThemeNameMojang">Login once with your Microsoft account. Support genuine games!</s:String>
     <s:String x:Key="LangSetThemeNameGeekToolTip">Right-click to open the decryption game entrance</s:String>
