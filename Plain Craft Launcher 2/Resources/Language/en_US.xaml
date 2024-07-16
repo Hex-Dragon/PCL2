@@ -330,7 +330,7 @@
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">Install Forge (Method A)</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">Install NeoForge</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">Download {0} main file</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Analyse {0} support libraries</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Analyze {0} support libraries</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">Download {0} support libraries</s:String>
 
     <!--PageDownloadClient-->
