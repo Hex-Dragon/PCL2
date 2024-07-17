@@ -35,7 +35,6 @@ jobs:
       with:
         msbuild-architecture: x64
     - name: Replace
-      shell: powershell
       run: |
         (gc "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb") -replace 'Dim ClientId As String = ""', 'Dim ClientId As String = "${{ secrets.CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb"
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Client.Headers\("x-api-key"\) = ""', 'Client.Headers("x-api-key") = "${{ secrets.X_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
@@ -43,6 +42,7 @@ jobs:
     - name: Build
       run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ env.configuration }}
     - name: dir
+      shell: cmd
       run: dir /s
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
