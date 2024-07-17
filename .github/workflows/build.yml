@@ -10,10 +10,6 @@ on:
       - '.github/workflows/**'
   workflow_dispatch:
     inputs:
-      configuration:
-        description: 'Configuration'
-        default: 'Debug'
-        type: string
       release:
         description: 'Release'
         type: boolean
@@ -22,6 +18,8 @@ jobs:
   build:
     name: Build
     runs-on: windows-latest
+    env:
+      configuration: Debug
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -43,12 +41,12 @@ jobs:
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Client.Headers\("x-api-key"\) = ""', 'Client.Headers("x-api-key") = "${{ secrets.X_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Request.Headers\("x-api-key"\) = ""', 'Request.Headers("x-api-key") = "${{ secrets.X_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
     - name: Build
-      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ inputs.configuration }}
+      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ env.configuration }}
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.configuration }} ${{ env.describe }}
-        path: Plain Craft Launcher 2\obj\${{ inputs.configuration }}\Plain Craft Launcher 2.exe
+        name: ${{ env.configuration }} ${{ env.describe }}
+        path: Plain Craft Launcher 2\obj\Debug\Plain Craft Launcher 2.exe
     - name: Release
       if: ${{ inputs.Release }}
       uses: softprops/action-gh-release@v2
@@ -57,4 +55,4 @@ jobs:
       with: 
         name: ${{ env.describe }}
         tag_name: ${{ env.describe }}
-        files: Plain Craft Launcher 2\obj\${{ inputs.configuration }}\Plain Craft Launcher 2.exe
+        files: Plain Craft Launcher 2\obj\${{ env.configuration }}\Plain Craft Launcher 2.exe
