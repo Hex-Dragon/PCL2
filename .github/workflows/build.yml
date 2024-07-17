@@ -42,6 +42,8 @@ jobs:
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Request.Headers\("x-api-key"\) = ""', 'Request.Headers("x-api-key") = "${{ secrets.X_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
     - name: Build
       run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ env.configuration }}
+    - name: dir
+      run: dir /s
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
