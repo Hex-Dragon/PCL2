@@ -14,10 +14,6 @@ on:
         description: 'Configuration'
         default: 'Debug'
         type: string
-      replace:
-        description: 'Replace'
-        default: true
-        type: boolean
       release:
         description: 'Release'
         type: boolean
@@ -41,7 +37,6 @@ jobs:
       with:
         msbuild-architecture: x64
     - name: Replace
-      if: ${{ inputs.replace }}
       shell: powershell
       run: |
         (gc "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb") -replace 'Dim ClientId As String = ""', 'Dim ClientId As String = "${{ secrets.CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb"
