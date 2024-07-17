@@ -1,5 +1,4 @@
 name: Build
-
 on:
   push:
     paths:
@@ -11,71 +10,56 @@ on:
       - '.github/workflows/**'
   workflow_dispatch:
     inputs:
-      Release:
+      configuration:
+        description: 'Configuration'
+        default: 'Debug'
+        type: string
+      replace:
+        description: 'Replace'
+        default: true
+        type: boolean
+      release:
         description: 'Release'
         type: boolean
 
 jobs:
-
   build:
-
-    strategy: 
-      matrix: 
-        configuration: [Debug]
-
+    name: Build
     runs-on: windows-latest
-
     steps:
     - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
     - name: Set Describe
       shell: bash
       run: |
-          Describe=`git describe --tags --always`
-          echo "Describe=$Describe" >> $GITHUB_ENV
-
+          describe=`git describe --tags --always`
+          echo "describe=$describe" >> $GITHUB_ENV
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
       with:
         msbuild-architecture: x64
-
     - name: Replace
+      if: ${{ inputs.replace }}
       shell: powershell
       run: |
         (gc "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb") -replace 'Dim ClientId As String = ""', 'Dim ClientId As String = "${{ secrets.CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\Minecraft\ModLaunch.vb"
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Client.Headers\("x-api-key"\) = ""', 'Client.Headers("x-api-key") = "${{ secrets.X_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Request.Headers\("x-api-key"\) = ""', 'Request.Headers("x-api-key") = "${{ secrets.X_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
-
     - name: Build
-      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
-
+      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ inputs.configuration }}
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.configuration }} ${{ env.Describe }}
-        path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
-
-    - name: Create Release
+        name: ${{ inputs.configuration }} ${{ env.describe }}
+        path: Plain Craft Launcher 2\obj\${{ inputs.configuration }}\Plain Craft Launcher 2.exe
+    - name: Release
       if: ${{ inputs.Release }}
-      id: create_release
-      uses: actions/create-release@latest
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with: 
-        tag_name: ${{ env.Describe }}
-        release_name: ${{ env.Describe }}
-
-    - name: Upload Release Asset
-      if: ${{ inputs.Release }}
-      id: upload-release-asset 
-      uses: actions/upload-release-asset@latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
-        asset_name: Plain Craft Launcher 2.exe
-        asset_content_type: application/octet-stream
+        name: ${{ env.describe }}
+        tag_name: ${{ env.describe }}
+        files: Plain Craft Launcher 2\obj\${{ inputs.configuration }}\Plain Craft Launcher 2.exe
