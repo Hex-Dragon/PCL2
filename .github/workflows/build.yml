@@ -45,7 +45,7 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.configuration }} ${{ env.describe }}.zip
+        name: ${{ env.configuration }} ${{ env.describe }}
         path: .\Plain Craft Launcher 2\obj\Debug\Plain Craft Launcher 2.exe
     - name: Release
       if: ${{ inputs.Release }}
