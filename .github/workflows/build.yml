@@ -45,8 +45,8 @@ jobs:
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.configuration }} ${{ env.describe }}
-        path: Plain Craft Launcher 2\obj\Debug\Plain Craft Launcher 2.exe
+        name: ${{ env.configuration }} ${{ env.describe }}.zip
+        path: .\Plain Craft Launcher 2\obj\Debug\Plain Craft Launcher 2.exe
     - name: Release
       if: ${{ inputs.Release }}
       uses: softprops/action-gh-release@v2
@@ -55,4 +55,4 @@ jobs:
       with: 
         name: ${{ env.describe }}
         tag_name: ${{ env.describe }}
-        files: Plain Craft Launcher 2\obj\${{ env.configuration }}\Plain Craft Launcher 2.exe
+        files: .\Plain Craft Launcher 2\obj\${{ env.configuration }}\Plain Craft Launcher 2.exe
