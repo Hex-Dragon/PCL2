@@ -56,6 +56,13 @@
         SliderDownloadSpeed.Value = Setup.Get("ToolDownloadSpeed")
         ComboDownloadVersion.SelectedIndex = Setup.Get("ToolDownloadVersion")
         ComboDownloadTranslate.SelectedIndex = Setup.Get("ToolDownloadTranslate")
+        ComboDownloadMod.SelectedIndex = Setup.Get("ToolDownloadMod")
+        CheckDownloadModMirror.Checked = Setup.Get("ToolDownloadModMirror")
+        If ComboDownloadMod.SelectedItem Is ComboItemDefault Then
+            CheckDownloadModMirror.IsEnabled = False
+        Else
+            CheckDownloadModMirror.IsEnabled = True
+        End If
         CheckDownloadKeepModpack.Checked = Setup.Get("ToolDownloadKeepModpack")
         CheckDownloadIgnoreQuilt.Checked = Setup.Get("ToolDownloadIgnoreQuilt")
         CheckDownloadCert.Checked = Setup.Get("ToolDownloadCert")
@@ -90,6 +97,8 @@
             Setup.Reset("ToolDownloadKeepModpack")
             Setup.Reset("ToolDownloadIgnoreQuilt")
             Setup.Reset("ToolDownloadCert")
+            Setup.Reset("ToolDownloadMod")
+            Setup.Reset("ToolDownloadModMirror")
             Setup.Reset("ToolUpdateRelease")
             Setup.Reset("ToolUpdateSnapshot")
             Setup.Reset("ToolHelpChinese")
@@ -111,17 +120,25 @@
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadKeepModpack.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadKeepModpack.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckDownloadModMirror.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboDownloadTranslate.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboDownloadTranslate.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboDownloadMod.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Text)
+    End Sub
+    Private Sub ComboDownloadMod_SelectionChanged(sender As MyComboBox, e As Object) Handles ComboDownloadMod.SelectionChanged
+        If CheckDownloadModMirror Is Nothing Then Exit Sub
+        If sender.SelectedItem Is ComboItemDefault Then
+            CheckDownloadModMirror.IsEnabled = False
+        Else
+            CheckDownloadModMirror.IsEnabled = True
+        End If
     End Sub
 
     '滑动条

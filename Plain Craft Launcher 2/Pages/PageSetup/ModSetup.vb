@@ -108,6 +108,8 @@
         {"ToolDownloadKeepModpack", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadIgnoreQuilt", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadCert", New SetupEntry(True, Source:=SetupSource.Registry)},
+        {"ToolDownloadMod", New SetupEntry(0, Source:=SetupSource.Registry)},
+        {"ToolDownloadModMirror", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolUpdateAlpha", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
         {"ToolUpdateRelease", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolUpdateSnapshot", New SetupEntry(False, Source:=SetupSource.Registry)},
