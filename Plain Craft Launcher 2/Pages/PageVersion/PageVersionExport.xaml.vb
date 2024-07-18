@@ -12,11 +12,10 @@
         PanDisplayItem.Children.Clear()
         ItemVersion = PageSelectRight.McVersionListItem(PageVersionLeft.Version.Load())
         ItemVersion.IsHitTestVisible = False
-        If Not String.IsNullOrEmpty(CustomLogo) Then
-            ItemVersion.Logo = CustomLogo
-        End If
+        If Not String.IsNullOrEmpty(CustomLogo) Then ItemVersion.Logo = CustomLogo
         PanDisplayItem.Children.Add(ItemVersion)
         ItemVersion.Title = If(String.IsNullOrWhiteSpace(TbExportName.Text), PageVersionLeft.Version.Name, TbExportName.Text)
+        ItemVersion.Info = If(String.IsNullOrWhiteSpace(TbExportDesc.Text), PageVersionLeft.Version.Info, TbExportDesc.Text)
 
         AniControlEnabled -= 1
     End Sub
