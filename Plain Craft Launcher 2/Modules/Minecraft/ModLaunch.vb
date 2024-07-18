@@ -822,7 +822,20 @@ LoginFinish:
             ClipboardSet(UserCode)
             OpenWebsite(VerifyUri)
 
-            MyMsgBox("本次验证的设备代码为：" & UserCode & vbCrLf & vbCrLf & "你也可以在任意设备上打开下列网址进行验证：" & vbCrLf & VerifyUri & vbCrLf & vbCrLf & "在验证完成后，你可以直接关闭这个弹窗，PCL2 会自动完成接下来的流程。", "正版验证", "关闭")
+            Dim MsgBoxValue As String = ""
+            While MsgBoxValue IsNot "1"
+                MsgBoxValue = MyMsgBox("本次验证的设备代码为：" & UserCode & vbCrLf & vbCrLf & "你也可以在任意设备上打开下列网址进行验证：" & vbCrLf & VerifyUri & vbCrLf & vbCrLf & "在验证完成后，你可以直接关闭这个弹窗，PCL2 会自动完成接下来的流程。", "正版验证", "关闭", "复制网址", "复制设备代码").ToString
+                If MsgBoxValue = "2" Then
+                    ClipboardSet(VerifyUri)
+                    Continue While
+                ElseIf MsgBoxValue = "3" Then
+                    ClipboardSet(UserCode)
+                    Continue While
+                ElseIf MsgBoxValue = "1" Then
+                    Exit While
+                End If
+            End While
+
             Return DeviceCode
         Else
             Return "Cancel"
