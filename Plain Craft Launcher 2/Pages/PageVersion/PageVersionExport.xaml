@@ -9,8 +9,15 @@
         <StackPanel Margin="25,10">
 
             <local:MyCard Margin="0,15" Title="">
-                <Grid Margin="10,7,10,7" Name="PanDisplayItem" />
-                <local:MyButton x:Name="BtnExportExport" Margin="0,0,10,0" HorizontalAlignment="Right" Text="导出整合包" Height="35" Width="150" ColorType="Highlight" />
+                <Grid Margin="0,0,25,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="150" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Margin="10,7,10,7" Name="PanDisplayItem" Grid.Column="0" />
+                    <local:MyButton x:Name="BtnExportExport" Grid.Column="1" HorizontalAlignment="Right" 
+                                    Text="导出整合包" Width="150" Height="35" ColorType="Highlight" />
+                </Grid>
             </local:MyCard>
 
             <local:MyCard x:Name="CardExport" Margin="0,0,0,15" Title="整合包信息">
@@ -28,12 +35,12 @@
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
                             <RowDefinition Height="9" />
-                            <RowDefinition Height="28" />
+                            <RowDefinition Height="60" />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包名称" Margin="0,0,25,0" />
                         <local:MyTextBox Grid.Row="0" x:Name="TbExportName" Grid.ColumnSpan="2" Grid.Column="1" MaxLength="100" />
-                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="描述" Margin="0,0,25,0" />
-                        <local:MyTextBox Grid.Row="2" x:Name="TbExportDesc" Grid.ColumnSpan="2" Grid.Column="1" MaxLength="100" />
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包版本" Margin="0,0,25,0" />
+                        <local:MyTextBox Grid.Row="2" x:Name="TbExportVersion" HintText="1.0.0" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" MaxLength="100" />
                         <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="图标" Margin="0,0,25,0"  />
                         <local:MyComboBox x:Name="ComboDisplayLogo" Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="1">
                             <local:MyComboBoxItem Content="自动" IsSelected="True" Tag="" />
@@ -51,8 +58,8 @@
                             <local:MyComboBoxItem Content="布料（Fabric）" Tag="pack://application:,,,/images/Blocks/Fabric.png" />
                             <local:MyComboBoxItem Content="狐狸（NeoForge）" Tag="pack://application:,,,/images/Blocks/NeoForge.png" />
                         </local:MyComboBox>
-                        <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包版本" Margin="0,0,25,0" />
-                        <local:MyTextBox Grid.Row="6" x:Name="TbExportVersion" HintText="1.0.0" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" MaxLength="100" />
+                        <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="描述" Margin="0,0,25,0" />
+                        <local:MyTextBox Grid.Row="6" x:Name="TbExportDesc" Grid.ColumnSpan="2" Grid.Column="1" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="0,5" MaxLength="100" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
@@ -64,9 +71,9 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="18" />
-                            <ColumnDefinition Width="1.4*" />
                             <ColumnDefinition Width="1.7*" />
-                            <ColumnDefinition Width="1.3*" />
+                            <ColumnDefinition Width="1.9*" />
+                            <ColumnDefinition Width="1.4*" />
                             <ColumnDefinition Width="1.0*" />
                             <ColumnDefinition Width="1.0*" />
                             <ColumnDefinition Width="1.0*" />
@@ -99,7 +106,7 @@
                                           ToolTip="将 PCL 全局配置包含在整合包内" />
                     </Grid>
                 </StackPanel>
-                
+
             </local:MyCard>
             <local:MyCard Title="高级选项" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
                 <StackPanel x:Name="PanFileList" Margin="25,40,23,15">
