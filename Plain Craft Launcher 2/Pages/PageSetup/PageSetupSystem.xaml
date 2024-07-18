@@ -48,7 +48,7 @@
                         <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Mod 信息获取" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboDownloadMod" Grid.Row="4" Grid.ColumnSpan="2" Tag="ToolDownloadMod" Grid.Column="1">
                             <local:MyComboBoxItem x:Name="ComboItemDefault" Content="官方源" IsSelected="True" />
-                            <local:MyComboBoxItem Content="MCLM 镜像源" />
+                            <local:MyComboBoxItem Content="MCIM 镜像源" />
                         </local:MyComboBox>
                         <local:MyCheckBox Margin="0,2,0,4" Text="在官方源下载 Mod 文件缓慢时改用镜像源" Grid.Row="6" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadModMirror" Tag="ToolDownloadModMirror" 
