@@ -1276,25 +1276,40 @@ SystemBrowser:
     ''' 释放 Java Wrapper 并返回完整文件路径。
     ''' </summary>
     Public Function ExtractJavaWrapper() As String
-        Dim WrapperPath As String = GetJavaWrapperDir() & "\JavaWrapper.jar"
+        Dim BaseDir As String = GetJavaWrapperDir()
+        Dim WrapperPath As String = BaseDir & "\JavaWrapper.jar"
+        Log("[Java] 选定的 Java Wrapper 路径：" & WrapperPath)
         SyncLock ExtractJavaWrapperLock '避免 OptiFine 和 Forge 安装时同时释放 Java Wrapper 导致冲突
-            WriteFile(WrapperPath, GetResources("JavaWrapper"))
+            Dim IsWrapperWritten As Boolean = WriteFile(WrapperPath, GetResources("JavaWrapper"))
+            If Not IsWrapperWritten AndAlso File.Exists(WrapperPath) Then
+                '以下为 #4243 的修复，因为未知原因 Java Wrapper 可能变为只读文件
+                Log("[Java] Java Wrapper 文件释放失败，但文件已存在，将在删除后尝试重新生成", LogLevel.Debug)
+                Try
+                    File.Delete(WrapperPath)
+                    IsWrapperWritten = WriteFile(WrapperPath, GetResources("JavaWrapper"))
+                Catch ex As Exception
+                    Log(ex, "Java Wrapper 文件重新释放失败，将尝试更换文件名重新生成")
+                    WrapperPath = BaseDir & "\JavaWrapper2.jar"
+                    IsWrapperWritten = WriteFile(WrapperPath, GetResources("JavaWrapper"))
+                End Try
+            End If
+            If Not IsWrapperWritten Then Throw New FileNotFoundException("释放 Java Wrapper 失败，请查看 PCL 日志查找详细信息")
         End SyncLock
-        Log("[Java] 已释放 Java Wrapper：" & WrapperPath)
         Return WrapperPath
     End Function
     Private ExtractJavaWrapperLock As New Object
+
     ''' <summary>
     ''' 获取 Java Wrapper 所在的文件夹，不以 \ 结尾。
     ''' </summary>
     Public Function GetJavaWrapperDir() As String
-        If PathAppdata.IsASCII() Then
+        If (Path & "PCL").IsASCII() Then
+            Return Path & "PCL"
+        ElseIf PathAppdata.IsASCII() Then
             Return PathAppdata.TrimEnd("\")
         ElseIf PathTemp.IsASCII() Then
-            Log("[Java] Wrapper：AppData 路径中包含非 ASCII 字符，换用 Temp 目录")
             Return PathTemp.TrimEnd("\")
         Else
-            Log("[Java] Wrapper：AppData 路径与 Temp 路径中均包含非 ASCII 字符，换用 ProgramData 目录")
             Return OsDrive & "ProgramData\PCL"
         End If
     End Function

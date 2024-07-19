@@ -356,6 +356,7 @@ Public Module ModDownloadLib
             Log(ex, "开始 OptiFine 下载失败", LogLevel.Feedback)
         End Try
     End Sub
+
     Private Sub McDownloadOptiFineSave(DownloadInfo As DlOptiFineListEntry)
         Try
             Dim Id As String = DownloadInfo.NameVersion
@@ -1282,9 +1283,11 @@ Retry:
             Else
                 'Forge
                 Dim Forge As DlForgeVersionEntry = Info
+                Dim FileName As String =
+                    $"{Forge.Inherit.Replace("-", "_")}-{Forge.FileVersion}/forge-{Forge.Inherit.Replace("-", "_")}-{Forge.FileVersion}-{Forge.Category}.{Forge.FileExtension}"
                 Files.Add(New NetFile({
-                    $"https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{Forge.Inherit}-{Forge.FileVersion}/forge-{Forge.Inherit}-{Forge.FileVersion}-{Forge.Category}.{Forge.FileExtension}",
-                    $"https://files.minecraftforge.net/maven/net/minecraftforge/forge/{Forge.Inherit}-{Forge.FileVersion}/forge-{Forge.Inherit}-{Forge.FileVersion}-{Forge.Category}.{Forge.FileExtension}"
+                    $"https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{FileName}",
+                    $"https://files.minecraftforge.net/maven/net/minecraftforge/forge/{FileName}"
                 }, InstallerAddress, New FileChecker(MinSize:=64 * 1024, Hash:=Forge.Hash)))
             End If
             Task.Output = Files

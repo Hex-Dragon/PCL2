@@ -438,7 +438,7 @@ Refresh:
         End If
     End Sub
     Private Sub LabLauncherTheme11Click_MouseLeftButtonUp() Handles LabLauncherTheme11Click.MouseLeftButtonUp, RadioLauncherTheme11.MouseRightButtonUp
-        If LabLauncherTheme11Click.Visibility = Visibility.Collapsed OrElse LabLauncherTheme11Click.ToolTip.ToString.Contains("点击") Then
+        If LabLauncherTheme11Click.Visibility = Visibility.Collapsed OrElse If(LabLauncherTheme11Click.ToolTip, "").ToString.Contains("点击") Then
             If MyMsgBox(
                 "1. 不爬取或攻击相关服务或网站，不盗取相关账号，没有谜题可以或需要以此来解决。" & vbCrLf &
                 "2. 不得篡改或损毁相关公开信息，请尽量让它们保持原状。" & vbCrLf &
