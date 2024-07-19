@@ -194,6 +194,9 @@ Public Class PageDownloadInstall
     'Mod Loader 统一判断，内容应为 Forge / NeoForge / Fabric / Quilt
     Private SelectedLoaderName As String = Nothing
 
+    'Mod Loader API 统一判断，内容应为 Fabric API 或 QFAPI / QSL
+    Private SelectedAPIName As String = Nothing
+
     'LiteLoader
     Private SelectedLiteLoader As DlLiteLoaderListEntry = Nothing
     Private Sub SetLiteLoaderInfoShow(IsShow As String)
@@ -465,13 +468,13 @@ Public Class PageDownloadInstall
             End If
         End If
         'FabricApi
-        If SelectedFabric Is Nothing Then
+        If SelectedFabric Is Nothing AndAlso SelectedQuilt Is Nothing Then
             CardFabricApi.Visibility = Visibility.Collapsed
         Else
             CardFabricApi.Visibility = Visibility.Visible
             Dim FabricApiError As String = LoadFabricApiGetError()
             CardFabricApi.MainSwap.Visibility = If(FabricApiError Is Nothing, Visibility.Visible, Visibility.Collapsed)
-            If FabricApiError IsNot Nothing OrElse SelectedFabric Is Nothing Then CardFabricApi.IsSwaped = True
+            If FabricApiError IsNot Nothing OrElse SelectedFabric Is Nothing AndAlso SelectedQuilt Is Nothing Then CardFabricApi.IsSwaped = True
             SetFabricApiInfoShow(CardFabricApi.IsSwaped)
             If SelectedFabricApi Is Nothing Then
                 BtnFabricApiClear.Visibility = Visibility.Collapsed
@@ -486,9 +489,7 @@ Public Class PageDownloadInstall
             End If
         End If
         'Quilt
-        If SelectedMinecraftId.Contains("1.14.4") Then
-						CardQuilt.Visibility = Visibility.Visible
-        ElseIf SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 14 Then
+        If SelectedMinecraftId.Contains("1.") AndAlso Val(SelectedMinecraftId.Split(".")(1)) <= 14 AndAlso Not SelectedMinecraftId.Contains("1.14.4") Then
             CardQuilt.Visibility = Visibility.Collapsed
         Else
             CardQuilt.Visibility = Visibility.Visible
@@ -556,10 +557,22 @@ Public Class PageDownloadInstall
         Else
             HintFabricAPI.Visibility = Visibility.Collapsed
         End If
-        If SelectedQuilt IsNot Nothing AndAlso SelectedQSL Is Nothing Then
+        If SelectedQuilt IsNot Nothing AndAlso SelectedQSL Is Nothing AndAlso SelectedFabricApi Is Nothing Then
             HintQSL.Visibility = Visibility.Visible
         Else
             HintQSL.Visibility = Visibility.Collapsed
+        End If
+        If SelectedQuilt IsNot Nothing AndAlso SelectedFabricApi IsNot Nothing AndAlso DlQSLLoader.Output IsNot Nothing Then
+            For Each Version In DlQSLLoader.Output
+                If IsSuitableQSL(Version.GameVersions, SelectedMinecraftId) Then
+                    HintQuiltFabricAPI.Visibility = Visibility.Visible
+                    Exit For
+                Else
+                    HintQuiltFabricAPI.Visibility = Visibility.Collapsed
+                End If
+            Next
+        Else
+            HintQuiltFabricAPI.Visibility = Visibility.Collapsed
         End If
         If SelectedFabric IsNot Nothing AndAlso SelectedOptiFine IsNot Nothing AndAlso SelectedOptiFabric Is Nothing Then
             If SelectedMinecraftId.StartsWith("1.14") OrElse SelectedMinecraftId.StartsWith("1.15") Then
@@ -592,6 +605,7 @@ Public Class PageDownloadInstall
         SelectedOptiFine = Nothing
         SelectedLiteLoader = Nothing
         SelectedLoaderName = Nothing
+        SelectedAPIName = Nothing
         SelectedForge = Nothing
         SelectedNeoForge = Nothing
         SelectedFabric = Nothing
@@ -1222,13 +1236,14 @@ Public Class PageDownloadInstall
     Private Function LoadFabricApiGetError() As String
         If LoadFabricApi Is Nothing OrElse LoadFabricApi.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadFabricApi.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadFabricApi.State, Object).Error.Message
+        If SelectedAPIName IsNot Nothing AndAlso SelectedAPIName IsNot "Fabric API" Then Return $"与 {SelectedAPIName} 不兼容"
         If DlFabricApiLoader.Output Is Nothing Then
-            If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
+            If SelectedFabric Is Nothing AndAlso SelectedQuilt Is Nothing Then Return "需要安装 Fabric / Quilt"
             Return "正在获取版本列表……"
         End If
         For Each Version In DlFabricApiLoader.Output
             If Not IsSuitableFabricApi(Version.DisplayName, SelectedMinecraftId) Then Continue For
-            If SelectedFabric Is Nothing Then Return "需要安装 Fabric"
+            If SelectedFabric Is Nothing AndAlso SelectedQuilt Is Nothing Then Return "需要安装 Fabric / Quilt"
             Return Nothing
         Next
         Return "没有可用版本"
@@ -1246,7 +1261,7 @@ Public Class PageDownloadInstall
     Private Sub FabricApi_Loaded() Handles LoadFabricApi.StateChanged
         Try
             If DlFabricApiLoader.State <> LoadState.Finished Then Exit Sub
-            If SelectedMinecraftId Is Nothing OrElse SelectedFabric Is Nothing Then Exit Sub
+            If SelectedMinecraftId Is Nothing OrElse (SelectedFabric Is Nothing AndAlso SelectedQuilt Is Nothing) Then Exit Sub
             '获取版本列表
             Dim Versions As New List(Of CompFile)
             For Each Version In DlFabricApiLoader.Output
@@ -1267,7 +1282,7 @@ Public Class PageDownloadInstall
                 PanFabricApi.Children.Add(FabricApiDownloadListItem(Version, AddressOf FabricApi_Selected))
             Next
             '自动选择 Fabric API
-            If Not AutoSelectedFabricApi Then
+            If (Not AutoSelectedFabricApi AndAlso SelectedQuilt Is Nothing) OrElse (SelectedQuilt IsNot Nothing AndAlso LoadQSLGetError() Is "没有可用版本") Then
                 AutoSelectedFabricApi = True
                 Log($"[Download] 已自动选择 Fabric API：{CType(PanFabricApi.Children(0), MyListItem).Title}")
                 FabricApi_Selected(PanFabricApi.Children(0), Nothing)
@@ -1280,11 +1295,13 @@ Public Class PageDownloadInstall
     '选择与清除
     Private Sub FabricApi_Selected(sender As MyListItem, e As EventArgs)
         SelectedFabricApi = sender.Tag
+        SelectedAPIName = "Fabric API"
         CardFabricApi.IsSwaped = True
         SelectReload()
     End Sub
     Private Sub FabricApi_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnFabricApiClear.MouseLeftButtonUp
         SelectedFabricApi = Nothing
+        SelectedAPIName = Nothing
         CardFabricApi.IsSwaped = True
         e.Handled = True
         SelectReload()
@@ -1337,6 +1354,7 @@ Public Class PageDownloadInstall
     Public Sub Quilt_Selected(sender As MyListItem, e As EventArgs)
         SelectedQuilt = sender.Tag("version").ToString
         SelectedLoaderName = "Quilt"
+        FabricApi_Loaded()
         QSL_Loaded()
         CardQuilt.IsSwaped = True
         SelectReload()
@@ -1344,6 +1362,7 @@ Public Class PageDownloadInstall
     Private Sub Quilt_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnQuiltClear.MouseLeftButtonUp
         SelectedQuilt = Nothing
         SelectedQSL = Nothing
+        SelectedFabricApi = Nothing
         SelectedLoaderName = Nothing
         CardQuilt.IsSwaped = True
         e.Handled = True
@@ -1376,6 +1395,7 @@ Public Class PageDownloadInstall
     Private Function LoadQSLGetError() As String
         If LoadQSL Is Nothing OrElse LoadQSL.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
         If LoadQSL.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadQSL.State, Object).Error.Message
+        If SelectedAPIName IsNot Nothing AndAlso SelectedAPIName IsNot "QFAPI / QSL" Then Return $"与 {SelectedAPIName} 不兼容"
         If DlQSLLoader.Output Is Nothing Then
             If SelectedQuilt Is Nothing Then Return "需要安装 Quilt"
             Return "正在获取版本列表……"
@@ -1434,11 +1454,13 @@ Public Class PageDownloadInstall
     '选择与清除
     Private Sub QSL_Selected(sender As MyListItem, e As EventArgs)
         SelectedQSL = sender.Tag
+        SelectedAPIName = "QFAPI / QSL"
         CardQSL.IsSwaped = True
         SelectReload()
     End Sub
     Private Sub QSL_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnQSLClear.MouseLeftButtonUp
         SelectedQSL = Nothing
+        SelectedAPIName = Nothing
         CardQSL.IsSwaped = True
         e.Handled = True
         SelectReload()
