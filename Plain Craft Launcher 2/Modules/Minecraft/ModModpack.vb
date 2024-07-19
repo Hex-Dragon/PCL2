@@ -884,7 +884,7 @@ Retry:
         ''' <summary>
         ''' 要保留到整合包的文件。
         ''' </summary>
-        Public Remain As String()
+        Public Additional As String()
         ''' <summary>
         ''' 是否需要保留 PCL 全局设置。仅在包括 PCL 时有效。
         ''' </summary>
@@ -904,7 +904,7 @@ Retry:
         Public Sub New(Version As McVersion,
                        Dest As String,
                        IncludePCL As Boolean,
-                       Remain As String(),
+                       Additional As String(),
                        Optional PCLSetupGlobal As Boolean = True,
                        Optional Name As String = "",
                        Optional Desc As String = "",
@@ -912,7 +912,7 @@ Retry:
             Me.Version = Version
             Me.Dest = Dest
             Me.IncludePCL = IncludePCL
-            Me.Remain = Remain
+            Me.Additional = Additional
             Me.PCLSetupGlobal = PCLSetupGlobal
             Me.Name = Name
             Me.Desc = Desc
@@ -934,9 +934,9 @@ Retry:
     End Sub
     Private Function ModpackExportBlocking(Options As ExportOptions) As Boolean
         If Options.IncludePCL Then
-            Return ExportCompressed(Options.Version, Options.Dest, Options.Remain, Options.PCLSetupGlobal)
+            Return ExportCompressed(Options.Version, Options.Dest, Options.Additional, Options.Name, Options.VerID, Options.PCLSetupGlobal)
         End If
-        Return ExportModrinth(Options.Version, Options.Dest, Options.Remain, Options.Name, Options.VerID)
+        Return ExportModrinth(Options.Version, Options.Dest, Options.Additional, Options.Name, Options.VerID)
     End Function
 
 #Region "冗余"
@@ -954,7 +954,7 @@ Retry:
         ".*\.BakaCoreInfo", 'BakaXL 配置
         "hmclversion\.cfg", "log4j2\.xml" 'HMCL 配置
     }
-    Private Function IsVerRedundant(FilePath As String) As Boolean
+    Public Function IsVerRedundant(FilePath As String) As Boolean
         For Each regex In VersionRedundant
             If RegexCheck(GetFileNameFromPath(FilePath).ToLower(), regex) Then Return True
             If FilePath.Replace("/", "\").EndsWithF("\journeymap\data\") OrElse
@@ -967,9 +967,9 @@ Retry:
 #End Region
 
 #Region "不同类型整合包的导出方法"
-    Private Function ExportModrinth(Version As McVersion, DestPath As String, Saves As String(), Name As String, VerID As String)
+    Private Function ExportModrinth(Version As McVersion, DestPath As String, Additional As String(), Name As String, VerID As String) As Boolean
         Try
-            Log($"[Export] 导出整合包（Modrinth）：{Version.Path} -> {DestPath}，导出存档 {If(Saves Is Nothing OrElse Not Saves.Any, "不导出", Saves.Join(", "))}")
+            Log($"[Export] 导出整合包（Modrinth）：{Version.Path} -> {DestPath}，额外版本文件 {If(Additional Is Nothing OrElse Not Additional.Any, "不导出", Additional.Join(", "))}")
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
             Log($"[Export] 缓存文件夹：{tempDir}")
             Directory.CreateDirectory(tempDir)
@@ -1035,11 +1035,15 @@ Retry:
                 CopyFile(m, tempDir & "overrides\" & GetFileNameFromPath(m))
             Next
 
-            '存档
-            For Each s In Saves
-                If String.IsNullOrWhiteSpace(s) Then Continue For '草了，传空字串进去会直接把 saves 整个文件夹拷过去
-                Dim fromPath As String = $"{Version.Path}saves\{s}"
-                If Directory.Exists(fromPath) Then CopyDirectory(fromPath, $"{tempDir}overrides\saves\{s}")
+            '额外文件
+            For Each p In Additional
+                If String.IsNullOrWhiteSpace(p) Then Continue For '传空字串进去会直接把整个版本文件夹拷过去
+                Dim fromPath As String = $"{Version.Path}{p}"
+                If Directory.Exists(fromPath) Then
+                    CopyDirectory(fromPath, $"{tempDir}overrides\{p}")
+                ElseIf File.Exists(fromPath) Then
+                    CopyFile(fromPath, $"{tempDir}overrides\{p}")
+                End If
             Next
 
             If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换
@@ -1051,52 +1055,23 @@ Retry:
             Return False
         End Try
     End Function
-    Private Function ExportCompressed(Version As McVersion, DestPath As String, Saves As String(), PCLSetupGlobal As Boolean)
+    Private Function ExportCompressed(Version As McVersion, DestPath As String, Additional As String(), Name As String, VerID As String, PCLSetupGlobal As Boolean) As Boolean
         Try
-            Log($"[Export] 导出整合包（压缩包）：{Version.Path} -> {DestPath}，导出存档 {If(Saves Is Nothing OrElse Not Saves.Any, "不导出", Saves.Join(", "))}，全局设置 {If(PCLSetupGlobal, "导出", "不导出")}")
+            Log($"[Export] 导出整合包（含启动器）：{Version.Path} -> {DestPath}，额外版本文件 {If(Additional Is Nothing OrElse Not Additional.Any, "不导出", Additional.Join(", "))}，全局设置 {If(PCLSetupGlobal, "导出", "不导出")}")
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
-            Log($"[Export] 缓存文件夹：{tempDir}")
+            Log($"[Export] 最终压缩包的缓存文件夹：{tempDir}")
             Directory.CreateDirectory(tempDir)
-            Dim tempVerPath As String = $"{tempDir}{Version.Path.Replace(GetPathFromFullPath(Version.PathIndie), "")}"
 
-            For Each f In Directory.EnumerateFiles(Version.Path)
-                If Not IsVerRedundant(GetFileNameFromPath(f)) Then
-                    Log($"[Export] 复制版本文件：{f} -> {tempVerPath}{GetFileNameFromPath(f)}")
-                    CopyFile(f, tempVerPath & GetFileNameFromPath(f))
-                End If
-            Next
-            For Each d In Directory.EnumerateDirectories(Version.Path)
-                If Not IsVerRedundant(GetFolderNameFromPath(d)) Then
-                    Log($"[Export] 复制版本文件夹：{d} -> {tempVerPath}{GetFolderNameFromPath(d)}\")
-                    CopyDirectory(d, $"{tempVerPath}{GetFolderNameFromPath(d)}\")
-                End If
-            Next
-
-            If Saves IsNot Nothing Then
-                For Each s In Saves
-                    Dim saveFullPath As String = $"{Version.Path}saves\{s}"
-                    If Not Directory.Exists(saveFullPath) Then Continue For
-                    Log($"[Export] 复制存档文件夹：{saveFullPath} -> {tempVerPath}saves\{s}")
-                    CopyDirectory(saveFullPath, $"{tempVerPath}saves\{s}")
-                Next
-            End If
-
-            If PCLSetupGlobal Then
-                Log($"[Export] 正在复制 PCL 全局设置")
-                If File.Exists(Path & "PCL\Setup.ini") Then CopyFile("PCL\Setup.ini", tempDir & "PCL\Setup.ini")
-                If File.Exists(Path & "PCL\Custom.xaml") Then CopyFile("PCL\Custom.xaml", tempDir & "PCL\Custom.xaml")
-                If Directory.Exists(Path & "PCL\Pictures") Then CopyDirectory(Path & "PCL\Pictures", tempDir & "PCL\Pictures")
-                If Directory.Exists(Path & "PCL\Musics") Then CopyDirectory(Path & "PCL\Musics", tempDir & "PCL\Musics")
-            End If
-
-            If Directory.Exists($"{Version.PathIndie}libraries\optifine") Then '#114 OptiFine Libraries 缺失造成补全文件失败
-                Log($"[Export] 正在复制 OptiFine Libraries")
-                CopyDirectory($"{Version.PathIndie}libraries\optifine",
-                              $"{tempDir}{GetFolderNameFromPath(Version.PathIndie)}libraries\optifine")
-            End If
+            Log("[Export] 开始导出 Modrinth 整合包")
+            ExportModrinth(Version, $"{tempDir}modpack.mrpack", Additional, Name, VerID)
 
             Log($"[Export] 正在复制 PCL 本体")
-            CopyFile(PathWithName, tempDir & GetFileNameFromPath(PathWithName)) 'PCL 本体
+            CopyFile(PathWithName, tempDir & GetFileNameFromPath(PathWithName))
+
+            If PCLSetupGlobal Then
+                Log($"[Export] 正在复制 PCL 全局配置")
+                CopyFile(Path & "PCL\Setup.ini", tempDir & "PCL\Setup.ini")
+            End If
 
             If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换
             ZipFile.CreateFromDirectory(tempDir, DestPath)

@@ -4,6 +4,7 @@
     End Sub
 
     Public ItemVersion As MyListItem
+    Private SelectedEntries As New List(Of String)
     Public Sub Reload()
         AniControlEnabled += 1
 
@@ -16,12 +17,56 @@
         PanDisplayItem.Children.Add(ItemVersion)
         ItemVersion.Title = If(String.IsNullOrWhiteSpace(TbExportName.Text), PageVersionLeft.Version.Name, TbExportName.Text)
         ItemVersion.Info = If(String.IsNullOrWhiteSpace(TbExportDesc.Text), PageVersionLeft.Version.Info, TbExportDesc.Text)
+#If BETA Then
+        CheckIncludePCL.IsEnabled = True
+#Else
+        CheckIncludePCL.IsEnabled = False
+        TbHint.Text = "你可以在此勾选需要包含进整合包的文件或文件夹，其他文件或文件夹在高级选项添加。" & vbCrLf & "你当前的 PCL 不是正式版，有二次分发的限制，因此不能选择是否包含 PCL 程序。"
+#End If
+        CheckIncludeSetup.IsEnabled = CheckIncludePCL.IsEnabled
+        ReloadFileList()
 
         AniControlEnabled -= 1
     End Sub
+    Private Sub ReloadFileList()
+        Dim tb As TextBlock = PanFileList.Children(0)
+        PanFileList.Children.Clear()
+        PanFileList.Children.Add(tb)
 
-    Private Type As ModpackType = ModpackType.Modrinth
-    Private SelectedSaves As New List(Of Integer)
+        For Each d In Directory.EnumerateDirectories(PageVersionLeft.Version.Path)
+            If Directory.EnumerateFileSystemEntries(d).Count = 0 Then Continue For
+            d = GetFolderNameFromPath(d)
+            If IsVerRedundant(d) Then Continue For
+            Dim title As String = ""
+            Dim listItem As New MyListItem
+            If Titles.TryGetValue(d, title) Then 'title 作为引用类型传入
+                listItem.Title = title
+                listItem.Info = d
+            Else
+                listItem.Title = d
+            End If
+            '图标按钮
+            Dim btnSwap As New MyIconButton
+            btnSwap.Path = New Shapes.Path With {.HorizontalAlignment = HorizontalAlignment.Right, .Stretch = Stretch.Uniform, .Height = 6, .Width = 10, .VerticalAlignment = VerticalAlignment.Top, .Margin = New Thickness(0, 17, 16, 0), .Data = New GeometryConverter().ConvertFromString("M2,4 l-2,2 10,10 10,-10 -2,-2 -8,8 -8,-8 z"), .RenderTransform = New RotateTransform(180), .RenderTransformOrigin = New Point(0.5, 0.5)}
+            AddHandler btnSwap.Click, AddressOf BtnSwap_Click
+            listItem.Buttons = {btnSwap}
+            listItem.Type = MyListItem.CheckType.CheckBox
+            listItem.Height = 35
+            listItem.Logo = Logo.IconButtonOpen
+            PanFileList.Children.Add(listItem)
+        Next
+    End Sub
+    Private Titles As New Dictionary(Of String, String) From {
+        {"saves", "存档"},
+        {"resourcepacks", "资源包"},
+        {"config", "Mod 配置"},
+        {"shaderpacks", "光影包"},
+        {"options.txt", "游戏配置"},
+        {"servers.dat", "服务器列表"}
+    }
+    Private Sub BtnSwap_Click(sender As MyIconButton, e As Object)
+        MsgBox("测试") 'TODO：处理展开操作
+    End Sub
     Private ReadOnly Property Saves As List(Of String)
         Get
             If Directory.Exists(PageVersionLeft.Version.Path & "saves\") Then
@@ -69,10 +114,13 @@
     End Sub
 #End Region
 
+#Region "基本信息"
+    Private Sub CheckIncludePCL_Change(sender As Object, user As Boolean) Handles CheckIncludePCL.Change
+        CheckIncludeSetup.IsEnabled = CheckIncludePCL.IsEnabled
+    End Sub
+#End Region
+
 #Region "导出"
-    Private Function IncludePCL() As Boolean
-        Return True
-    End Function
     'Private Sub ComboExportType_Change(sender As ComboBox, e As SelectionChangedEventArgs) Handles ComboExportType.SelectionChanged
     '    If AniControlEnabled <> 0 Then Exit Sub
     '    Type = sender.SelectedIndex
@@ -89,20 +137,19 @@
     '    CardExport.TriggerForceResize()
     'End Sub
     Private Sub BtnExportExport_Click() Handles BtnExportExport.Click
-        If IncludePCL() AndAlso Val(VersionBranchCode) <> 50 Then
-            If MyMsgBox("你当前的 PCL 不是正式版，有二次分发（制作压缩包）的限制。" & vbCrLf &
-                     "请使用正式版再次尝试该操作！" & vbCrLf &
-                     "其他类型的整合包（例如 Modrinth 整合包）没有该限制。", Button1:="下载正式版", Button2:="取消") = 1 Then
-                OpenWebsite("https://afdian.net/p/0164034c016c11ebafcb52540025c377")
-            End If
-            Exit Sub
-        End If
+        '获取需要包含的文件夹
+        Dim contains As New List(Of String)
+        For Each c In PanFiles.Children
+            If TypeOf c IsNot MyCheckBox Then Continue For
+            If String.IsNullOrEmpty(c.Tag) Then Continue For
+            contains.Add(c.Tag)
+        Next
         Dim savePath As String = SelectAs(
-            "选择导出位置", $"整合包 - {If(String.IsNullOrWhiteSpace(TbExportName.Text), PageVersionLeft.Version.Name, TbExportName.Text)}" & If(Type = ModpackType.Modrinth, ".mrpack", ".zip"),
-            If(Type = ModpackType.Modrinth, "Modrinth 整合包(*.mrpack)|*.mrpack", "整合包文件(*.zip)|*.zip"))
+            "选择导出位置", $"整合包 - {If(String.IsNullOrWhiteSpace(TbExportName.Text), PageVersionLeft.Version.Name, TbExportName.Text)}" & If(CheckIncludePCL.Checked, ".zip", ".mrpack"),
+            If(CheckIncludePCL.Checked, "整合包文件(*.zip)|*.zip", "Modrinth 整合包(*.mrpack)|*.mrpack"))
         If String.IsNullOrEmpty(savePath) Then Exit Sub
-        ModpackExport(New ExportOptions(PageVersionLeft.Version, savePath, Type, {}, 'TODO：改成要保留的文件列表
-                                        Name:=TbExportName.Text, VerID:=TbExportVersion.Text))
+        ModpackExport(New ExportOptions(PageVersionLeft.Version, savePath, CheckIncludePCL.Checked, {}, 'TODO：改成要保留的文件列表
+                                        PCLSetupGlobal:=CheckIncludeSetup.Checked, Name:=TbExportName.Text, VerID:=TbExportVersion.Text))
     End Sub
 
 #End Region
