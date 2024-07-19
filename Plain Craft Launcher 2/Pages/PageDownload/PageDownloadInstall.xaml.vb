@@ -1182,6 +1182,7 @@ Public Class PageDownloadInstall
         SelectedFabricApi = Nothing
         SelectedOptiFabric = Nothing
         SelectedLoaderName = Nothing
+        SelectedAPIName = Nothing
         CardFabric.IsSwaped = True
         e.Handled = True
         SelectReload()
@@ -1364,6 +1365,7 @@ Public Class PageDownloadInstall
         SelectedQSL = Nothing
         SelectedFabricApi = Nothing
         SelectedLoaderName = Nothing
+        SelectedAPIName = Nothing
         CardQuilt.IsSwaped = True
         e.Handled = True
         SelectReload()
