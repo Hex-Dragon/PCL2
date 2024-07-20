@@ -477,7 +477,7 @@ Public Module ModDownloadLib
         Dim Loaders As New List(Of LoaderBase)
 
         '获取下载地址
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取 OptiFine 主文件下载地址",
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangPageSpeedRightGetOptiFineDownloadAddress"),
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 '启动依赖版本的下载
                 If ClientDownloadLoader Is Nothing Then
@@ -507,7 +507,7 @@ Public Module ModDownloadLib
                 '构造文件请求
                 Task.Output = New List(Of NetFile) From {New NetFile(Sources.ToArray, Target, New FileChecker(MinSize:=300 * 1024))}
             End Sub) With {.ProgressWeight = 8})
-        Loaders.Add(New LoaderDownload("下载 OptiFine 主文件", New List(Of NetFile)) With {.ProgressWeight = 8})
+        Loaders.Add(New LoaderDownload(GetLang("LangPageSpeedRightDownloadOptifineMainFile"), New List(Of NetFile)) With {.ProgressWeight = 8})
         Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("等待原版下载",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
                 '等待原版文件下载完成
@@ -538,7 +538,7 @@ Public Module ModDownloadLib
         '安装（新旧方式均需要原版 Jar 和 Json）
         If IsNewVersion Then
             Log("[Download] 检测为新版 OptiFine：" & DownloadInfo.Inherit)
-            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("安装 OptiFine（方式 A）",
+            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)(GetLang("LangPageSpeedRightInstallOptifineMethodA"),
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
                 Dim BaseMcFolderHome As String = PathTemp & "InstallOptiFine" & RandomInteger(0, 100000)
                 Dim BaseMcFolder As String = BaseMcFolderHome & "\.minecraft\"
@@ -670,7 +670,7 @@ Retry:
             Task.Output = New List(Of NetFile) From {New NetFile(Sources.ToArray, TargetFolder, New FileChecker(MinSize:=64 * 1024))}
         End Sub) With {.ProgressWeight = 6})
         '下载
-        Loaders.Add(New LoaderDownload("下载 OptiFine 主文件", New List(Of NetFile)) With {.ProgressWeight = 10, .Block = True})
+        Loaders.Add(New LoaderDownload(GetLang("LangPageSpeedRightDownloadOptifineMainFile"), New List(Of NetFile)) With {.ProgressWeight = 10, .Block = True})
         Return Loaders
     End Function
 
