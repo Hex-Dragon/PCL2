@@ -335,6 +335,7 @@
     <s:String x:Key="LangPageSpeedRightGetOptifineDownloadAddress">Get the download address of OptiFine</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptifineMainFile">Download OptiFine main file</s:String>
     <s:String x:Key="LangPageSpeedRightInstallOptifineMethodA">Install OptiFine (Method A)</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadOptiFabric">Download OptiFabric</s:String>
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">Getting version list</s:String>

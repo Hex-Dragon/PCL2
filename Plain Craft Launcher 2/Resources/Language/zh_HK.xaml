@@ -335,6 +335,7 @@
     <s:String x:Key="LangPageSpeedRightGetFabricMainFileDownloadAddress">獲取 OptiFine 下載地址</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptifineMainFile">下載 OptiFine 主文件</s:String>
     <s:String x:Key="LangPageSpeedRightInstallOptifineMethodA">安裝 OptiFine（方式 A）</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadOptiFabric">下載 OptiFabric</s:String>
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">正在獲取版本列表</s:String>
