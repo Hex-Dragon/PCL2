@@ -333,8 +333,8 @@
     <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Analyze {0} support libraries</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">Download {0} support libraries</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptifineDownloadAddress">Get the download address of OptiFine</s:String>
-    <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">Download OptiFine main file</s:String>
-    <s:String x:Key="LangPageSpeedRightInstallOptiFineMethodA">Install OptiFine (Method A)</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadOptifineMainFile">Download OptiFine main file</s:String>
+    <s:String x:Key="LangPageSpeedRightInstallOptifineMethodA">Install OptiFine (Method A)</s:String>
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">Getting version list</s:String>

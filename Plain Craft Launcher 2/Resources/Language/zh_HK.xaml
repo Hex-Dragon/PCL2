@@ -333,7 +333,7 @@
     <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">分析 {0} 支持庫文件</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">下載 {0} 支持庫文件</s:String>
     <s:String x:Key="LangPageSpeedRightGetFabricMainFileDownloadAddress">獲取 OptiFine 下載地址</s:String>
-    <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">下載 OptiFine 主文件</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadOptifineMainFile">下載 OptiFine 主文件</s:String>
     <s:String x:Key="LangPageSpeedRightInstallOptifineMethodA">安裝 OptiFine（方式 A）</s:String>
 
     <!--PageDownloadClient-->
