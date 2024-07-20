@@ -27,7 +27,7 @@
     Public Shared Sub CopyUniqueAddress() Handles BtnDonateCopy.Click
         ClipboardSet(UniqueAddress)
     End Sub
-    Private Sub DonateCodeInput() Handles BtnDonateInput.Click
+    Private Sub BtnDonateCodeInput_Click() Handles BtnDonateInput.Click
         DonateCodeInput()
     End Sub
 

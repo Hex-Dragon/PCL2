@@ -79,7 +79,11 @@
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="在 EventData 后面添加一条竖线（|），竖线后填写服务器 IP，即可在启动该版本的同时自动进入服务器。" />
 		<local:MyButton Margin="0,4,0,0" Width="250" Height="35"
-                    Text="启动 1.12.2 并进入 Hypixel" EventType="启动游戏" EventData="1.12.2|mc.hypixel.net" ToolTip="服务器 IP：mc.hypixel.net" />
+                    Text="启动 1.20.1 并进入 Hypixel" EventType="启动游戏" EventData="1.20.1|mc.hypixel.net" ToolTip="服务器 IP：mc.hypixel.net" />
+		<TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
+                    Text="在 EventData 中填写 \current，表示启动当前被选中的游戏版本，同样可以在后面填写服务器 IP。" />
+		<local:MyButton Margin="0,4,0,10" Width="250" Height="35"
+                    Text="启动当前选中版本并进入 Hypixel" EventType="启动游戏" EventData="\current|mc.hypixel.net" ToolTip="启动当前版本" />
 	</StackPanel>
 </local:MyCard>
 
@@ -144,7 +148,7 @@
 			<local:MyButton Margin="0,0,10,0" Width="140" Height="35" HorizontalAlignment="Left" Padding="13,0,13,0"
                         Text="进入 Hypixel" EventType="启动游戏" EventData="1.16.3|mc.hypixel.net" ToolTip="使用 Minecraft 1.16.3 进入 Hypixel" />
 			<local:MyButton Margin="0,0,10,0" Width="140" Height="35" HorizontalAlignment="Left" Padding="13,0,13,0"
-                        Text="打开画图" EventType="打开文件" EventData="mspaint.exe" />
+                        Text="打开记事本" EventType="打开文件" EventData="notepad" />
 		</StackPanel>
 		<!-- 这是第二行 -->
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
@@ -180,28 +184,30 @@
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="PCL 内置了一些 Minecraft 方块与物品图片，可以直接使用。"/>
 		<StackPanel Orientation="Horizontal" Margin="10,8,0,15" Height="30">
-			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/CommandBlock.png"/>
 			<!-- 命令方块 -->
-			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Cobblestone.png"/>
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/CommandBlock.png"/>
 			<!-- 圆石 -->
-			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/GoldBlock.png"/>
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Cobblestone.png"/>
 			<!-- 金块 -->
-			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Grass.png"/>
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/GoldBlock.png"/>
 			<!-- 草方块 -->
-			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/GrassPath.png"/>
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Grass.png"/>
 			<!-- 草径 -->
-			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Anvil.png"/>
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/GrassPath.png"/>
 			<!-- 铁砧 -->
-			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/RedstoneBlock.png"/>
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Anvil.png"/>
 			<!-- 红石块 -->
-			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/RedstoneLampOn.png"/>
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/RedstoneBlock.png"/>
 			<!-- 红石灯（亮） -->
-			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/RedstoneLampOff.png"/>
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/RedstoneLampOn.png"/>
 			<!-- 红石灯（灭） -->
-			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Egg.png"/>
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/RedstoneLampOff.png"/>
 			<!-- 鸡蛋 -->
-			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Fabric.png"/>
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Egg.png"/>
 			<!-- 布料（Fabric 图标） -->
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Fabric.png"/>
+			<!-- 狐狸（NeoForge 图标） -->
+			<Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/NeoForge.png"/>
 		</StackPanel>
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="使用时，将上方对应行的 Source 复制到 MyListItem 的 Logo 属性处即可。"/>
@@ -264,7 +270,7 @@
 			<local:MyButton Grid.Column="1" Margin="0,0,10,0" Height="35"
                         Text="进入 Hypixel" EventType="启动游戏" EventData="1.16.3|mc.hypixel.net" ToolTip="使用 Minecraft 1.16.3 进入 Hypixel" />
 			<local:MyButton Grid.Column="2" Margin="0,0,10,0" Height="35"
-                        Text="打开画图" EventType="打开文件" EventData="mspaint.exe" />
+                        Text="打开记事本" EventType="打开文件" EventData="notepad" />
 		</Grid>
 	</StackPanel>
 </local:MyCard>

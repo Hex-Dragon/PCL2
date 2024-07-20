@@ -20,6 +20,7 @@
                         <StackPanel Margin="25,37,25,15">
                             <local:MyHint Text="你尚未选择安装 Fabric API，这会导致大多数 Mod 无法使用！" Margin="0,1,0,7" x:Name="HintFabricAPI" IsWarn="True" />
                             <local:MyHint Text="你尚未选择安装 OptiFabric，这会导致 OptiFine 无法使用！" Margin="0,1,0,7" x:Name="HintOptiFabric" IsWarn="True" />
+                            <local:MyHint Text="安装结束后，请在 Mod 下载中搜索 OptiFabric Origins 并下载，否则 OptiFine 会无法使用！" Margin="0,1,0,7" x:Name="HintOptiFabricOld" IsWarn="False" />
                             <local:MyHint Text="OptiFine 与一部分 Mod 的兼容性不佳，请谨慎安装。" Margin="0,1,0,7" x:Name="HintModOptiFine" IsWarn="False" />
                             <Grid Margin="0,0,0,11">
                                 <Grid.ColumnDefinitions>
@@ -77,6 +78,24 @@
                         <Grid x:Name="BtnForgeClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
                             <Path x:Name="BtnForgeClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
+                        </Grid>
+                    </local:MyCard>
+                    <local:MyCard Title="NeoForge" Height="40" Margin="0,15,0,0" x:Name="CardNeoForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                        <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanNeoForge" />
+                        <Grid x:Name="PanNeoForgeInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid.RenderTransform>
+                                <TranslateTransform />
+                            </Grid.RenderTransform>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="ImgNeoForge" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/NeoForge.png" />
+                            <TextBlock x:Name="LabNeoForge" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
+                        </Grid>
+                        <Grid x:Name="BtnNeoForgeClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnNeoForgeClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
                     <local:MyCard Title="Fabric" Height="40" Margin="0,15,0,0" x:Name="CardFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
@@ -178,6 +197,7 @@
             <local:MyLoading Text="正在获取版本列表" Margin="20,20,20,17" x:Name="LoadMinecraft" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadOptiFine" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadForge" HasAnimation="False" />
+            <local:MyLoading Visibility="Collapsed" x:Name="LoadNeoForge" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadLiteLoader" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadFabric" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadFabricApi" HasAnimation="False" />

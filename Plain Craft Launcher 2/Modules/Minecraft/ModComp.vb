@@ -355,12 +355,12 @@
                     ModLoaders = New List(Of CompModLoaderType)
                     For Each Category In Data("categories").Select(Function(t) t.ToString)
                         Select Case Category
-                        '加载器
+                            '加载器
                             Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
                             Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
                             Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
                             Case "neoforge" : ModLoaders.Add(CompModLoaderType.NeoForge)
-                        'Mod
+                            'Mod
                             Case "worldgen" : Tags.Add("世界元素")
                             Case "technology" : Tags.Add("科技")
                             Case "food" : Tags.Add("食物/烹饪")
@@ -376,7 +376,7 @@
                             Case "social" : Tags.Add("服务器")
                             Case "utility" : Tags.Add("改良")
                             Case "library" : Tags.Add("支持库")
-                        '整合包
+                            '整合包
                             Case "multiplayer" : Tags.Add("多人")
                             Case "optimization" : Tags.Add("性能优化")
                             Case "challenging" : Tags.Add("硬核")
@@ -387,7 +387,7 @@
                             Case "adventure" : Tags.Add("冒险")
                             Case "kitchen-sink" : Tags.Add("烹饪")
                             Case "lightweight" : Tags.Add("轻量")
-                                'FUTURE: Res
+                            'FUTURE: Res
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -629,19 +629,19 @@ NoSubtitle:
             If Id = Project.Id Then Return True '相同实例
             '提取字符串中的字母和数字
             Dim GetRaw =
-                Function(Data As String) As String
-                    Dim Result As New StringBuilder()
-                    For Each r As Char In Data.Where(Function(c) Char.IsLetterOrDigit(c))
-                        Result.Append(r)
-                    Next
-                    Return Result.ToString.ToLower
-                End Function
+            Function(Data As String) As String
+                Dim Result As New StringBuilder()
+                For Each r As Char In Data.Where(Function(c) Char.IsLetterOrDigit(c))
+                    Result.Append(r)
+                Next
+                Return Result.ToString.ToLower
+            End Function
             '来自不同的网站
             If FromCurseForge = Project.FromCurseForge Then Return False
             'Mod 加载器一致
-            If ModLoaders.Count <> Project.ModLoaders.Count OrElse ModLoaders.Except(Project.ModLoaders).Count > 0 Then Return False
+            If ModLoaders.Count <> Project.ModLoaders.Count OrElse ModLoaders.Except(Project.ModLoaders).Any() Then Return False
             'MC 版本一致
-            If GameVersions.Count <> Project.GameVersions.Count OrElse GameVersions.Except(Project.GameVersions).Count > 0 Then Return False
+            If GameVersions.Count <> Project.GameVersions.Count OrElse GameVersions.Except(Project.GameVersions).Any() Then Return False
             'MCMOD 翻译名 / 原名 / 描述文本 / Slug 的英文部分相同
             If TranslatedName = Project.TranslatedName OrElse
                RawName = Project.RawName OrElse Description = Project.Description OrElse
@@ -1320,6 +1320,7 @@ Retry:
                     Dim RawLoaders As List(Of String) = Data("loaders").Select(Function(v) v.ToString).ToList
                     ModLoaders = New List(Of CompModLoaderType)
                     If RawLoaders.Contains("forge") Then ModLoaders.Add(CompModLoaderType.Forge)
+                    If RawLoaders.Contains("neoforge") Then ModLoaders.Add(CompModLoaderType.NeoForge)
                     If RawLoaders.Contains("fabric") Then ModLoaders.Add(CompModLoaderType.Fabric)
                     If RawLoaders.Contains("quilt") Then ModLoaders.Add(CompModLoaderType.Quilt)
 #End Region

@@ -256,6 +256,7 @@ Friend Module ModSecret
         Return False
     End Function
     Public Function DonateCodeInput() As Boolean?
+        Return Nothing
     End Function
 
 #End Region
