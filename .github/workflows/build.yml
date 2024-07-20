@@ -9,10 +9,6 @@ on:
       - 'Plain Craft Launcher 2/**'
       - '.github/workflows/**'
   workflow_dispatch:
-    inputs:
-      release:
-        description: 'Release'
-        type: boolean
 
 jobs:
   build:
@@ -47,12 +43,3 @@ jobs:
       with:
         name: ${{ env.configuration }} ${{ env.describe }}
         path: Plain Craft Launcher 2\obj\Debug\Plain Craft Launcher 2.exe
-    - name: Release
-      if: ${{ inputs.Release }}
-      uses: softprops/action-gh-release@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with: 
-        name: ${{ env.describe }}
-        tag_name: ${{ env.describe }}
-        files: Plain Craft Launcher 2\obj\${{ env.configuration }}\Plain Craft Launcher 2.exe
