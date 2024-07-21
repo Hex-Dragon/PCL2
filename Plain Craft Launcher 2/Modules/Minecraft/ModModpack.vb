@@ -956,11 +956,20 @@ Retry:
     }
     Public Function IsVerRedundant(FilePath As String) As Boolean
         For Each regex In VersionRedundant
-            If RegexCheck(GetFileNameFromPath(FilePath).ToLower(), regex) Then Return True
+            If RegexCheck(GetFileNameFromPath(FilePath), regex, RegularExpressions.RegexOptions.IgnoreCase) Then Return True
             If FilePath.Replace("/", "\").EndsWithF("\journeymap\data\") OrElse
                 FilePath.Replace("/", "\").EndsWithF("\journeymap\data") Then
                 Return True
             End If
+        Next
+        Return False
+    End Function
+    Private MustExport As String() = {
+        "mods", "PCL", ".*\.json"
+    }
+    Public Function IsMustExport(FileName As String) As Boolean
+        For Each regex In MustExport
+            If RegexCheck(FileName, regex, RegularExpressions.RegexOptions.IgnoreCase) Then Return True
         Next
         Return False
     End Function

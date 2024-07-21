@@ -1,13 +1,19 @@
 ﻿Public Class PageVersionExport
+    Private CurrentVer As String = ""
     Private Sub PageVersionExport_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         Reload()
     End Sub
 
     Public ItemVersion As MyListItem
-    Private SelectedEntries As New List(Of String)
     Public Sub Reload()
         AniControlEnabled += 1
 
+        If CurrentVer <> PageVersionLeft.Version.Path Then
+            '说明切换到另一个版本了，所有的绝对路径都要重置，否则爆炸
+            CurrentPath = ""
+            Selected = New List(Of String)
+            CurrentVer = PageVersionLeft.Version.Path
+        End If
         TbExportName.HintText = PageVersionLeft.Version.Name
         TbExportDesc.HintText = PageVersionLeft.Version.Info
         PanDisplayItem.Children.Clear()
@@ -21,22 +27,37 @@
         CheckIncludePCL.IsEnabled = True
 #Else
         CheckIncludePCL.IsEnabled = False
-        TbHint.Text = "你可以在此勾选需要包含进整合包的文件或文件夹，其他文件或文件夹在高级选项添加。" & vbCrLf & "你当前的 PCL 不是正式版，有二次分发的限制，因此不能选择是否包含 PCL 程序。"
+        TbHint.Text = "你可以在此勾选需要包含进整合包的文件或文件夹，其他文件或文件夹在高级选项添加。" & vbCrLf & "你当前的 PCL 不是正式版，有二次分发的限制，因此整合包不能包含 PCL 程序。"
 #End If
         CheckIncludeSetup.IsEnabled = CheckIncludePCL.IsEnabled
-        ReloadFileList()
+        ReloadFileList(CurrentPath)
 
         AniControlEnabled -= 1
     End Sub
-    Private Sub ReloadFileList()
+
+#Region "文件列表"
+    ''' <summary>
+    ''' 当前所在的文件夹。注意是绝对路径！以 \ 结尾。
+    ''' </summary>
+    Private CurrentPath As String = ""
+    Private Sub ReloadFileList(Optional NewPath As String = "")
+        If String.IsNullOrWhiteSpace(NewPath) Then NewPath = PageVersionLeft.Version.Path
         Dim tb As TextBlock = PanFileList.Children(0)
         PanFileList.Children.Clear()
         PanFileList.Children.Add(tb)
 
-        For Each d In Directory.EnumerateDirectories(PageVersionLeft.Version.Path)
+        If NewPath <> PageVersionLeft.Version.Path Then
+            Dim listItem As New MyListItem With {.Title = "返回上一级目录", .Tag = "..", .Height = 35, .Type = MyListItem.CheckType.Clickable}
+            AddHandler listItem.Click, AddressOf ListItem_Click
+            PanFileList.Children.Add(listItem)
+        End If
+
+        Dim fileCount As Integer = 0
+
+        For Each d In Directory.EnumerateDirectories(NewPath)
             If Directory.EnumerateFileSystemEntries(d).Count = 0 Then Continue For
             d = GetFolderNameFromPath(d)
-            If IsVerRedundant(d) Then Continue For
+            If IsVerRedundant(NewPath & d) OrElse IsMustExport(d) Then Continue For
             Dim title As String = ""
             Dim listItem As New MyListItem
             If Titles.TryGetValue(d, title) Then 'title 作为引用类型传入
@@ -47,14 +68,44 @@
             End If
             '图标按钮
             Dim btnSwap As New MyIconButton
-            btnSwap.Path = New Shapes.Path With {.HorizontalAlignment = HorizontalAlignment.Right, .Stretch = Stretch.Uniform, .Height = 6, .Width = 10, .VerticalAlignment = VerticalAlignment.Top, .Margin = New Thickness(0, 17, 16, 0), .Data = New GeometryConverter().ConvertFromString("M2,4 l-2,2 10,10 10,-10 -2,-2 -8,8 -8,-8 z"), .RenderTransform = New RotateTransform(180), .RenderTransformOrigin = New Point(0.5, 0.5)}
+            btnSwap.Logo = Logo.IconButtonRight
+            btnSwap.LogoScale = 1.0
+            btnSwap.Tag = d
             AddHandler btnSwap.Click, AddressOf BtnSwap_Click
             listItem.Buttons = {btnSwap}
             listItem.Type = MyListItem.CheckType.CheckBox
             listItem.Height = 35
             listItem.Logo = Logo.IconButtonOpen
+            listItem.Tag = d & "\"
+            If IsSelected(NewPath & d & "\") Then listItem.Checked = True
+            AddHandler listItem.Click, AddressOf ListItem_Click
             PanFileList.Children.Add(listItem)
+            fileCount += 1
         Next
+
+        For Each f In Directory.EnumerateFiles(NewPath)
+            f = GetFileNameFromPath(f)
+            If IsVerRedundant(NewPath & f) OrElse IsMustExport(f) Then Continue For
+            Dim title As String = ""
+            Dim listItem As New MyListItem
+            If Titles.TryGetValue(f, title) Then 'title 作为引用类型传入
+                listItem.Title = title
+                listItem.Info = f
+            Else
+                listItem.Title = f
+            End If
+            listItem.Info = (NewPath & f).Replace(GetPathFromFullPath(PageVersionLeft.Version.Path), "")
+            listItem.Type = MyListItem.CheckType.CheckBox
+            listItem.Height = 35
+            listItem.Tag = f
+            If IsSelected(NewPath & f) Then listItem.Checked = True
+            AddHandler listItem.Click, AddressOf ListItem_Click
+            PanFileList.Children.Add(listItem)
+            fileCount += 1
+        Next
+
+        CurrentPath = NewPath
+        CardMore.Title = If(NewPath = PageVersionLeft.Version.Path, "高级选项", $"高级选项 ({NewPath.Replace(PageVersionLeft.Version.Path, "").TrimEnd("\")})")
     End Sub
     Private Titles As New Dictionary(Of String, String) From {
         {"saves", "存档"},
@@ -65,16 +116,86 @@
         {"servers.dat", "服务器列表"}
     }
     Private Sub BtnSwap_Click(sender As MyIconButton, e As Object)
-        MsgBox("测试") 'TODO：处理展开操作
+        Dim actualPath As String = CurrentPath & sender.Tag & "\"
+        'Dim relative As String = actualPath.Replace(PageVersionLeft.Version.Path, "")
+
+        If Not Directory.Exists(actualPath) Then
+            Hint($"找不到目录：{actualPath}", HintType.Critical)
+            Exit Sub
+        End If
+        ReloadFileList(actualPath)
     End Sub
-    Private ReadOnly Property Saves As List(Of String)
-        Get
-            If Directory.Exists(PageVersionLeft.Version.Path & "saves\") Then
-                Return Directory.EnumerateDirectories(PageVersionLeft.Version.Path & "saves\").ToList
-            End If
-            Return New List(Of String)
-        End Get
-    End Property
+    ''' <summary>
+    ''' 选中的文件列表，绝对路径。
+    ''' </summary>
+    Private Selected As New List(Of String)
+    Private Sub SelectedChange(IsAdd As Boolean, TargetPath As String)
+        If File.Exists(TargetPath) Then
+            If IsAdd Then Selected.Add(TargetPath) Else Selected.Remove(TargetPath)
+            Exit Sub
+        End If
+        If Directory.Exists(TargetPath) Then
+            For Each d In Directory.EnumerateDirectories(TargetPath)
+                SelectedChange(IsAdd, d)
+            Next
+            For Each f In Directory.EnumerateFiles(TargetPath)
+                If IsAdd Then Selected.Add(f) Else Selected.Remove(f)
+            Next
+        End If
+    End Sub
+    Private Function IsSelected(TargetPath As String) As Boolean
+        If File.Exists(TargetPath) Then
+            Return Selected.Contains(TargetPath)
+        End If
+        If Directory.Exists(TargetPath) Then
+            Return Directory.EnumerateDirectories(TargetPath).All(Function(s) IsSelected(s)) AndAlso
+                    Directory.EnumerateFiles(TargetPath).All(Function(s) Selected.Contains(s))
+        End If
+        Return False
+    End Function
+    Private Sub ListItem_Click(sender As MyListItem, e As Object)
+        If sender.Tag = ".." Then '回到上一级目录
+            ReloadFileList(GetPathFromFullPath(CurrentPath))
+            Exit Sub
+        End If
+        SelectedChange(Not sender.Checked, '非常难绷的逻辑，很难描述清楚，自己打断点看 Checked 属性值吧……
+                       CurrentPath & sender.Tag)
+    End Sub
+
+    'Private ReadOnly Property Saves As List(Of String)
+    '    Get
+    '        If Directory.Exists(PageVersionLeft.Version.Path & "saves\") Then
+    '            Return Directory.EnumerateDirectories(PageVersionLeft.Version.Path & "saves\").ToList
+    '        End If
+    '        Return New List(Of String)
+    '    End Get
+    'End Property
+
+    '复选框与高级选项同步
+    Private Sub PanCommonFiles_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles PanCommonFiles.MouseLeftButtonUp
+        For Each c In PanCommonFiles.Children
+            If TypeOf c IsNot MyCheckBox Then Continue For
+            If String.IsNullOrEmpty(c.Tag) Then Continue For
+            For Each l In PanFileList.Children
+                If TypeOf l Is MyListItem Then
+                    If l.Tag.Replace("\", "") = c.Tag Then l.Checked = c.Checked
+                End If
+            Next
+        Next
+    End Sub
+    '高级选项与复选框同步
+    Private Sub PanFileList_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles PanFileList.MouseLeftButtonUp
+        For Each l In PanFileList.Children
+            If TypeOf l IsNot MyListItem Then Continue For
+            If String.IsNullOrEmpty(l.Tag) Then Continue For
+            For Each c In PanCommonFiles.Children
+                If TypeOf c Is MyCheckBox Then
+                    If c.Tag = l.Tag.Replace("\", "") Then c.Checked = l.Checked
+                End If
+            Next
+        Next
+    End Sub
+#End Region
 
 #Region "整合包信息 & 预览栏"
     Private Sub TbExportName_TextChanged(sender As MyTextBox, e As TextChangedEventArgs) Handles TbExportName.TextChanged
@@ -137,18 +258,19 @@
     '    CardExport.TriggerForceResize()
     'End Sub
     Private Sub BtnExportExport_Click() Handles BtnExportExport.Click
-        '获取需要包含的文件夹
-        Dim contains As New List(Of String)
-        For Each c In PanFiles.Children
-            If TypeOf c IsNot MyCheckBox Then Continue For
-            If String.IsNullOrEmpty(c.Tag) Then Continue For
-            contains.Add(c.Tag)
-        Next
         Dim savePath As String = SelectAs(
             "选择导出位置", $"整合包 - {If(String.IsNullOrWhiteSpace(TbExportName.Text), PageVersionLeft.Version.Name, TbExportName.Text)}" & If(CheckIncludePCL.Checked, ".zip", ".mrpack"),
             If(CheckIncludePCL.Checked, "整合包文件(*.zip)|*.zip", "Modrinth 整合包(*.mrpack)|*.mrpack"))
         If String.IsNullOrEmpty(savePath) Then Exit Sub
-        ModpackExport(New ExportOptions(PageVersionLeft.Version, savePath, CheckIncludePCL.Checked, {}, 'TODO：改成要保留的文件列表
+
+        '获取需要包含的文件夹
+        Dim contains As New List(Of String)
+        For Each c In PanCommonFiles.Children
+            If TypeOf c IsNot MyCheckBox Then Continue For
+            If String.IsNullOrEmpty(c.Tag) Then Continue For
+            contains.Add(c.Tag)
+        Next
+        ModpackExport(New ExportOptions(PageVersionLeft.Version, savePath, CheckIncludePCL.Checked, Selected.ToArray,
                                         PCLSetupGlobal:=CheckIncludeSetup.Checked, Name:=TbExportName.Text, VerID:=TbExportVersion.Text))
     End Sub
 
