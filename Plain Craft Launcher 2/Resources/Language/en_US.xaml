@@ -332,6 +332,10 @@
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">Download {0} main file</s:String>
     <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Analyze {0} support libraries</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">Download {0} support libraries</s:String>
+    <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">Get the download address of OptiFine</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">Download OptiFine main file</s:String>
+    <s:String x:Key="LangPageSpeedRightInstallOptiFineMethodA">Install OptiFine (Method A)</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadOptiFabric">Download OptiFabric</s:String>
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">Getting version list</s:String>
@@ -391,7 +395,7 @@
     <s:String x:Key="LangDownloadInstallReview">Installation Preview</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">You have not chosen to install the Fabric API, most of the mods will be unusable!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">You have not chosen to install OptiFabric, which will make OptiFine unusable!</s:String>
-    <s:String x:Key="LangDownloadInstallOptifine">OptiFine is not compatible with some mods, please be careful.</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFine">OptiFine is not compatible with some mods, please be careful.</s:String>
     <s:String x:Key="LangDownloadInstallOldOptiFabric">After the installation, please search for "OptiFabric Origins" in "Download Mods" and download it, otherwise OptiFine will not be available!</s:String>
     <s:String x:Key="LangDownloadInstallStart">Install</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">Instance Name</s:String>
@@ -401,11 +405,11 @@
     <s:String x:Key="LangDownloadInstallClickToChose">Click to select</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">Incompatible with Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">Incompatible with Fabric</s:String>
-    <s:String x:Key="LangDownloadInstallOptifineIncompatible">Incompatible with OptiFine</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineIncompatible">Incompatible with OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallForgeNeed">Forge Needed</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">Fabric Needed</s:String>
-    <s:String x:Key="LangDownloadInstallOptifineNeed">OptiFine Needed</s:String>
-    <s:String x:Key="LangDownloadInstallOptifineFabricNeed">OptiFine and Fabric Needed</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineNeed">OptiFine Needed</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">OptiFine and Fabric Needed</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">or higher</s:String>
     <s:String x:Key="LangDownloadInstallNoAvailabeVersion">No available version</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">Failed to get version list: unknown error, status is</s:String>

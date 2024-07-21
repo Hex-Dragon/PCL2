@@ -21,7 +21,7 @@
                             <local:MyHint Text="{DynamicResource LangDownloadInstallFabricApi}" Margin="0,1,0,7" x:Name="HintFabricAPI" IsWarn="True" />
                             <local:MyHint Text="{DynamicResource LangDownloadInstallOptiFabric}" Margin="0,1,0,7" x:Name="HintOptiFabric" IsWarn="True" />
                             <local:MyHint Text="{DynamicResource LangDownloadInstallOldOptiFabric}" Margin="0,1,0,7" x:Name="HintOptiFabricOld" IsWarn="False" />
-                            <local:MyHint Text="{DynamicResource LangDownloadInstallOptifine}" Margin="0,1,0,7" x:Name="HintModOptiFine" IsWarn="False" />
+                            <local:MyHint Text="{DynamicResource LangDownloadInstallOptiFine}" Margin="0,1,0,7" x:Name="HintModOptiFine" IsWarn="False" />
                             <Grid Margin="0,0,0,11">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*" />
