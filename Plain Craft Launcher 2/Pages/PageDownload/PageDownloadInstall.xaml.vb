@@ -874,7 +874,7 @@
             If SelectedFabric IsNot Nothing Then Return GetLang("LangDownloadInstallFabricIncompatible")
             If SelectedOptiFine IsNot Nothing AndAlso
                 VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then
-                Return GetLang("LangDownloadInstallOptifineIncompatible") '1.13 ~ 1.14.3 OptiFine 检查
+                Return GetLang("LangDownloadInstallOptiFineIncompatible") '1.13 ~ 1.14.3 OptiFine 检查
             End If
             If SelectedOptiFine IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, Version) Then
                 NotSuitForOptiFine = True '与 OptiFine 不兼容
@@ -882,7 +882,7 @@
             End If
             Return Nothing
         Next
-        Return If(NotSuitForOptiFine, GetLang("LangDownloadInstallOptifineIncompatible"), GetLang("LangDownloadInstallNoAutoInstall"))
+        Return If(NotSuitForOptiFine, GetLang("LangDownloadInstallOptiFineIncompatible"), GetLang("LangDownloadInstallNoAutoInstall"))
     End Function
 
     '限制展开
@@ -943,7 +943,7 @@
     ''' </summary>
     Private Function LoadNeoForgeGetError() As String
         If Not SelectedMinecraftId.StartsWith("1.") Then Return GetLang("LangDownloadInstallNoAvailabeVersion")
-        If SelectedOptiFine IsNot Nothing Then Return GetLang("LangDownloadInstallOptifineIncompatible")
+        If SelectedOptiFine IsNot Nothing Then Return GetLang("LangDownloadInstallOptiFineIncompatible")
         If SelectedForge IsNot Nothing Then Return GetLang("LangDownloadInstallForgeIncompatible")
         If SelectedFabric IsNot Nothing Then Return GetLang("LangDownloadInstallFabricIncompatible")
         If LoadNeoForge Is Nothing OrElse LoadNeoForge.State.LoadingState = MyLoading.MyLoadingState.Run Then Return GetLang("LangDownloadInstallGettingList")
@@ -1199,16 +1199,16 @@
         If LoadOptiFabric Is Nothing OrElse LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Run Then Return GetLang("LangDownloadInstallGettingList")
         If LoadOptiFabric.State.LoadingState = MyLoading.MyLoadingState.Error Then Return GetLang("LangDownloadInstallFailGetList") & CType(LoadOptiFabric.State, Object).Error.Message
         If DlOptiFabricLoader.Output Is Nothing Then
-            If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return GetLang("LangDownloadInstallOptifineFabricNeed")
+            If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return GetLang("LangDownloadInstallOptiFineFabricNeed")
             If SelectedFabric Is Nothing Then Return GetLang("LangDownloadInstallFabricNeed")
-            If SelectedOptiFine Is Nothing Then Return GetLang("LangDownloadInstallOptifineNeed")
+            If SelectedOptiFine Is Nothing Then Return GetLang("LangDownloadInstallOptiFineNeed")
             Return GetLang("LangDownloadInstallGettingList")
         End If
         For Each Version In DlOptiFabricLoader.Output
             If Not IsSuitableOptiFabric(Version, SelectedMinecraftId) Then Continue For '2135#
-            If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return GetLang("LangDownloadInstallOptifineFabricNeed")
+            If SelectedFabric Is Nothing AndAlso SelectedOptiFine Is Nothing Then Return GetLang("LangDownloadInstallOptiFineFabricNeed")
             If SelectedFabric Is Nothing Then Return GetLang("LangDownloadInstallFabricNeed")
-            If SelectedOptiFine Is Nothing Then Return GetLang("LangDownloadInstallOptifineNeed")
+            If SelectedOptiFine Is Nothing Then Return GetLang("LangDownloadInstallOptiFineNeed")
             Return Nothing '通过检查
         Next
         Return GetLang("LangDownloadInstallNoAvailabeVersion")

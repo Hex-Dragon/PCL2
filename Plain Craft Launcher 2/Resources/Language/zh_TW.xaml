@@ -333,8 +333,8 @@
     <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">分析 {0} 支持庫文件</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">下載 {0} 支持庫文件</s:String>
     <s:String x:Key="LangPageSpeedRightGetFabricMainFileDownloadAddress">獲取 OptiFine 下載地址</s:String>
-    <s:String x:Key="LangPageSpeedRightDownloadOptifineMainFile">下載 Optifine 主文件</s:String>
-    <s:String x:Key="LangPageSpeedRightInstallOptifineMethodA">安裝 OptiFine（方式 A）</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">下載 OptiFine 主文件</s:String>
+    <s:String x:Key="LangPageSpeedRightInstallOptiFineMethodA">安裝 OptiFine（方式 A）</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFabric">下載 OptiFabric</s:String>
 
     <!--PageDownloadClient-->
@@ -395,7 +395,7 @@
     <s:String x:Key="LangDownloadInstallReview">安裝預覽</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">你尚未選擇安裝 Fabric API，這會導致大多數 Mod 無法使用！</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">你尚未選擇安裝 OptiFabric，這會導致 OptiFine 無法使用！</s:String>
-    <s:String x:Key="LangDownloadInstallOptifine">OptiFine 與一部分 Mod 的兼容性不佳，請謹慎安裝。</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFine">OptiFine 與一部分 Mod 的兼容性不佳，請謹慎安裝。</s:String>
     <s:String x:Key="LangDownloadInstallOldOptiFabric">安裝結束後，請在 Mod 下載中搜索 OptiFabric Origins 並下載，否則 OptiFine 會無法使用！</s:String>
     <s:String x:Key="LangDownloadInstallStart">開始安裝</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">版本名稱</s:String>
@@ -405,11 +405,11 @@
     <s:String x:Key="LangDownloadInstallClickToChose">點擊選擇</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">與 Forge 不兼容</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">與 Fabric 不兼容</s:String>
-    <s:String x:Key="LangDownloadInstallOptifineIncompatible">與 OptiFine 不兼容</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineIncompatible">與 OptiFine 不兼容</s:String>
     <s:String x:Key="LangDownloadInstallForgeNeed">需要 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">需要 Fabric</s:String>
-    <s:String x:Key="LangDownloadInstallOptifineNeed">需要 OptiFine</s:String>
-    <s:String x:Key="LangDownloadInstallOptifineFabricNeed">需要 OptiFine 與 Fabric</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineNeed">需要 OptiFine</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">需要 OptiFine 與 Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">或更高版本</s:String>
     <s:String x:Key="LangDownloadInstallNoAvailabeVersion">沒有可用版本</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">獲取版本列表失敗：未知錯誤，狀態為</s:String>
