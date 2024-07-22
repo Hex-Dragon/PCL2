@@ -100,7 +100,7 @@
                         <TextBlock Text="游戏文件" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Text="存档"
                                           Tag="saves" ToolTip="saves 文件夹" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="材质包"
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="资源包"
                                           Tag="resources" ToolTip="resourcepacks 文件夹" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="4" Text="光影包"
                                           Tag="shaderpacks" ToolTip="shaderpacks 文件夹" />

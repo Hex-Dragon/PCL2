@@ -94,7 +94,6 @@
             Else
                 listItem.Title = f
             End If
-            listItem.Info = (NewPath & f).Replace(GetPathFromFullPath(PageVersionLeft.Version.Path), "")
             listItem.Type = MyListItem.CheckType.CheckBox
             listItem.Height = 35
             listItem.Tag = f
@@ -143,12 +142,14 @@
             Next
         End If
     End Sub
-    Private Function IsSelected(TargetPath As String) As Boolean
+    Private Function IsSelected(TargetPath As String, Optional AllowEmpty As Boolean = False) As Boolean
         If File.Exists(TargetPath) Then
             Return Selected.Contains(TargetPath)
         End If
         If Directory.Exists(TargetPath) Then
-            Return Directory.EnumerateDirectories(TargetPath).All(Function(s) IsSelected(s)) AndAlso
+            Dim di As New DirectoryInfo(TargetPath)
+            If (Not AllowEmpty) AndAlso di.GetDirectories.Length + di.GetFiles.Length = 0 Then Return False
+            Return Directory.EnumerateDirectories(TargetPath).All(Function(s) IsSelected(s, True)) AndAlso
                     Directory.EnumerateFiles(TargetPath).All(Function(s) Selected.Contains(s))
         End If
         Return False
@@ -178,21 +179,20 @@
             If String.IsNullOrEmpty(c.Tag) Then Continue For
             For Each l In PanFileList.Children
                 If TypeOf l Is MyListItem Then
-                    If l.Tag.Replace("\", "") = c.Tag Then l.Checked = c.Checked
+                    If l.Tag.Replace("\", "") = c.Tag Then
+                        l.Checked = c.Checked
+                        SelectedChange(c.Checked, PageVersionLeft.Version.Path & c.Tag)
+                    End If
                 End If
             Next
         Next
     End Sub
     '高级选项与复选框同步
     Private Sub PanFileList_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles PanFileList.MouseLeftButtonUp
-        For Each l In PanFileList.Children
-            If TypeOf l IsNot MyListItem Then Continue For
-            If String.IsNullOrEmpty(l.Tag) Then Continue For
-            For Each c In PanCommonFiles.Children
-                If TypeOf c Is MyCheckBox Then
-                    If c.Tag = l.Tag.Replace("\", "") Then c.Checked = l.Checked
-                End If
-            Next
+        For Each c In PanCommonFiles.Children
+            If TypeOf c Is MyCheckBox Then
+                c.Checked = IsSelected(PageVersionLeft.Version.Path & c.Tag)
+            End If
         Next
     End Sub
 #End Region
