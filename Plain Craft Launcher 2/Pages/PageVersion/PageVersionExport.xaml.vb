@@ -158,12 +158,13 @@
         End If
         If Directory.Exists(TargetPath) Then
             Dim di As New DirectoryInfo(TargetPath)
-            If (Not AllowEmpty) AndAlso di.GetDirectories.Length + di.GetFiles.Length = 0 Then Return 0
+            If di.GetDirectories.Length + di.GetFiles.Length = 0 Then Return If(AllowEmpty, 2, 0)
             '如果有一个文件不在列表，则 hasFalse = True
             Dim hasFalse As Boolean = False
             '如果有一个文件在列表，则 hasTrue = True
             Dim hasTrue As Boolean = False
             For Each d In Directory.EnumerateDirectories(TargetPath)
+                If Directory.EnumerateFileSystemEntries(d).Count = 0 Then Continue For
                 Select Case IsSelected(d, True)
                     Case 0
                         hasFalse = True
