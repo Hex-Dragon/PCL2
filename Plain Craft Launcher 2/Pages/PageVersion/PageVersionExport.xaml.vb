@@ -77,7 +77,12 @@
             listItem.Height = 35
             listItem.Logo = Logo.IconButtonOpen
             listItem.Tag = d & "\"
-            If IsSelected(NewPath & d & "\") Then listItem.Checked = True
+            Select Case IsSelected(NewPath & d & "\")
+                Case 1
+                    listItem.Half = True
+                Case 2
+                    listItem.Checked = True
+            End Select
             AddHandler listItem.Click, AddressOf ListItem_Click
             PanFileList.Children.Add(listItem)
             fileCount += 1
@@ -97,7 +102,7 @@
             listItem.Type = MyListItem.CheckType.CheckBox
             listItem.Height = 35
             listItem.Tag = f
-            If IsSelected(NewPath & f) Then listItem.Checked = True
+            listItem.Checked = (IsSelected(NewPath & f) = 2)
             AddHandler listItem.Click, AddressOf ListItem_Click
             PanFileList.Children.Add(listItem)
             fileCount += 1
@@ -141,18 +146,42 @@
                 If IsAdd Then Selected.Add(f) Else Selected.Remove(f)
             Next
         End If
+        Selected = Selected.Distinct().ToList()
     End Sub
-    Private Function IsSelected(TargetPath As String, Optional AllowEmpty As Boolean = False) As Boolean
+    ''' <summary>
+    ''' 获取 TargetPath 是否选中。
+    ''' </summary>
+    ''' <returns>全部未选中为 0，部分选中为 1，全部选中为 2。</returns>
+    Private Function IsSelected(TargetPath As String, Optional AllowEmpty As Boolean = False) As Integer
         If File.Exists(TargetPath) Then
-            Return Selected.Contains(TargetPath)
+            Return If(Selected.Contains(TargetPath), 2, 0)
         End If
         If Directory.Exists(TargetPath) Then
             Dim di As New DirectoryInfo(TargetPath)
-            If (Not AllowEmpty) AndAlso di.GetDirectories.Length + di.GetFiles.Length = 0 Then Return False
-            Return Directory.EnumerateDirectories(TargetPath).All(Function(s) IsSelected(s, True)) AndAlso
-                    Directory.EnumerateFiles(TargetPath).All(Function(s) Selected.Contains(s))
+            If (Not AllowEmpty) AndAlso di.GetDirectories.Length + di.GetFiles.Length = 0 Then Return 0
+            '如果有一个文件不在列表，则 hasFalse = True
+            Dim hasFalse As Boolean = False
+            '如果有一个文件在列表，则 hasTrue = True
+            Dim hasTrue As Boolean = False
+            For Each d In Directory.EnumerateDirectories(TargetPath)
+                Select Case IsSelected(d, True)
+                    Case 0
+                        hasFalse = True
+                    Case 1
+                        Return 1
+                    Case 2
+                        hasTrue = True
+                End Select
+                If hasTrue AndAlso hasFalse Then Return 1 '如果有文件在、有文件不在列表中，可以断定部分选中
+            Next
+            For Each f In Directory.EnumerateFiles(TargetPath)
+                If Selected.Contains(f) Then hasTrue = True Else hasFalse = True
+                If hasTrue AndAlso hasFalse Then Return 1 '如果有文件在、有文件不在列表中，可以断定部分选中
+            Next
+            If hasFalse AndAlso Not hasTrue Then Return 0
+            If hasTrue AndAlso Not hasFalse Then Return 2
         End If
-        Return False
+        Return 0
     End Function
     Private Sub ListItem_Click(sender As MyListItem, e As Object)
         If sender.Tag = ".." Then '回到上一级目录
@@ -191,7 +220,7 @@
     Private Sub PanFileList_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles PanFileList.MouseLeftButtonUp
         For Each c In PanCommonFiles.Children
             If TypeOf c Is MyCheckBox Then
-                c.Checked = IsSelected(PageVersionLeft.Version.Path & c.Tag)
+                c.Checked = (IsSelected(PageVersionLeft.Version.Path & c.Tag) = 2)
             End If
         Next
     End Sub
@@ -263,14 +292,14 @@
             If(CheckIncludePCL.Checked, "整合包文件(*.zip)|*.zip", "Modrinth 整合包(*.mrpack)|*.mrpack"))
         If String.IsNullOrEmpty(savePath) Then Exit Sub
 
-        '获取需要包含的文件夹
-        Dim contains As New List(Of String)
+        '获取需要包含的文件
+        Dim contains As List(Of String) = Selected
         For Each c In PanCommonFiles.Children
             If TypeOf c IsNot MyCheckBox Then Continue For
             If String.IsNullOrEmpty(c.Tag) Then Continue For
-            contains.Add(c.Tag)
+            contains.Add(PageVersionLeft.Version.Path & c.Tag)
         Next
-        ModpackExport(New ExportOptions(PageVersionLeft.Version, savePath, CheckIncludePCL.Checked, Selected.ToArray,
+        ModpackExport(New ExportOptions(PageVersionLeft.Version, savePath, CheckIncludePCL.Checked, contains.Distinct.ToArray,
                                         PCLSetupGlobal:=CheckIncludeSetup.Checked, Name:=TbExportName.Text, VerID:=TbExportVersion.Text))
     End Sub
 
