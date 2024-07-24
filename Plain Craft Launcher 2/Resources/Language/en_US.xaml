@@ -116,13 +116,13 @@ This operation is irrevocable. Are you sure?</s:String>
     <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Failed to re-create the music folder.</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">A layout file already exists. Continuing to generate the documentation file will override the existing layout file!</s:String>
     <s:String x:Key="LangDialogBtnContinue">Continue</s:String>
-    <s:String x:Key="LangDialogCustomPageOverwriteFail">Failed to generate the documentaion file</s:String>
-    <s:String x:Key="LangHintCustomPageOverwriteSuccess">The documentaion file has been generated!</s:String>
+    <s:String x:Key="LangDialogCustomPageOverwriteFail">Failed to generate the documentation file</s:String>
+    <s:String x:Key="LangHintCustomPageOverwriteSuccess">The documentation file has been generated!</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">The homepage has been refreshed!</s:String>
-    <s:String x:Key="LangDialogCustomPageTeachContent">1. Click the &quot;Generate the Documentaion&quot; button, which will generate the &quot;Custom.xaml&quot; layout file under the PCL folder;
+    <s:String x:Key="LangDialogCustomPageTeachContent">1. Click the &quot;Generate the Documentation&quot; button, which will generate the &quot;Custom.xaml&quot; layout file under the PCL folder;
 2. Modify the file with tools like Notepad, remember to save it after the modification;
 3. Click the &quot;Refresh Home&quot; button to see what the homepage looks like now.
-You can directly refresh the homepage after generating the documentaion file and make changes accordingly, which will be more helpful for understanding.
+You can directly refresh the homepage after generating the documentation file and make changes accordingly, which will be more helpful for understanding.
 You can also load the custom homepage file directly by dragging it into the PCL window.</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">Homepage Custom Tutorials</s:String>
     <s:String x:Key="LangThemeBackUnlock">The hidden theme &quot;Bipolar Black&quot; has been unlocked!</s:String>
@@ -143,7 +143,7 @@ Initial clue:</s:String>
     <s:String x:Key="LangOtherMore">More</s:String>
     <s:String x:Key="LangHiddenModeTitleA">Feature Hiding (Disabled temporarily, press &quot;F12&quot; to re-enable)</s:String>
     <s:String x:Key="LangHiddenModeTitleB">Feature Hiding</s:String>
-    <s:String x:Key="LangHiddenModeFail">Failed to refresh the &quot;Feature Hidding&quot; item.</s:String>
+    <s:String x:Key="LangHiddenModeFail">Failed to refresh the &quot;Feature Hiding&quot; item.</s:String>
     <s:String x:Key="LangHintHiddenModeTip">Press F12 to disable &quot;Feature Hiding&quot; settings temporarily. Do not forget it or you will not be able to change the settings back...</s:String>
     <s:String x:Key="LangSetTheme">Basic Options</s:String>
     <s:String x:Key="LangSetThemeOpacity">Opacity</s:String>
@@ -200,7 +200,7 @@ It is not recommended enabling blur when making a modpack to ensure that PCL can
     <s:String x:Key="LangSetBackgroundMusicPlayDuringLaunching">Play when the game is not running</s:String>
     <s:String x:Key="LangSetBackgroundMusicOpenFolderToolTip">Put the music in this folder, and PCL will play all of them.</s:String>
     <s:String x:Key="LangSetBackgroundMusicRefresh">Refresh</s:String>
-    <s:String x:Key="LangSetBackgroundMusicRefreshToolTip">Refresh the playlist and play the music in the list.</s:String>
+    <s:String x:Key="LangSetBackgroundMusicRefreshToolTip">Refresh the playlist and play the music on the list.</s:String>
     <s:String x:Key="LangSetBackgroundMusicEmpty">Clear All</s:String>
     <s:String x:Key="LangSetTitle">Title Bar</s:String>
     <s:String x:Key="LangSetNone">None</s:String>
@@ -277,11 +277,11 @@ Avoid &quot;Feature Hiding&quot; be changed while keeping the &quot;Personalizat
     <s:String x:Key="LangSelectDownloadingTaskExistsNoCreate">The game folder cannot be created while the download task is in progress!</s:String>
     <s:String x:Key="LangSelectNoSpecialSymbol">Minecraft folder paths cannot contain exclamation marks (&quot;) or semicolon (;)!</s:String>
     <s:String x:Key="LangSelectDialogInputNameTitle">Enter a Display Name</s:String>
-    <s:String x:Key="LangSelectDialogInputNameContent">Enter the name of the folder that appears in the list on the left column.</s:String>
+    <s:String x:Key="LangSelectDialogInputNameContent">Enter the name of the folder that appears on the list on the left column.</s:String>
     <s:String x:Key="LangSelectFailToAddFolder">Failed to add folder ({0}).</s:String>
     <s:String x:Key="LangSelectFailToAddFolderLog">Failed to add a new folder to the folder list.</s:String>
     <s:String x:Key="LangSelectNoPermission">Failed to add folder: PCL does not have permission to access this folder!</s:String>
-    <s:String x:Key="LangSelectAlreadyAdded">This folder is already in the list!</s:String>
+    <s:String x:Key="LangSelectAlreadyAdded">This folder is already on the list!</s:String>
     <s:String x:Key="LangSelectRenameSuccess">The folder name has been renamed to {0}!</s:String>
     <s:String x:Key="LangSelectFolderAdded">The folder {0} has been added!</s:String>
     <s:String x:Key="LangSelectFolderCreateSuccess">Create a new &quot;.minecraft&quot; folder successfully!</s:String>
@@ -314,7 +314,7 @@ This is the last warning!</s:String>
     <!--PageSelectRight-->
     <s:String x:Key="LangSelectNoAvailableVersion">No Instances Available</s:String>
     <s:String x:Key="LangSelectNoAvailableVersionTip">No instances found. Please download any version of the game first.
-If there is an existing instance, click the &quot;Add Existing Folders&quot; in the list on the left, and select the &quot;.minecraft&quot; folder to import it.</s:String>
+If there is an existing instance, click the &quot;Add Existing Folders&quot; on the list on the left, and select the &quot;.minecraft&quot; folder to import it.</s:String>
     <s:String x:Key="LangSelectNoAvailableVersionDownloadGame">Download</s:String>
     <s:String x:Key="LangSelectGettingVersion">Getting Version List...</s:String>
     <s:String x:Key="LangSelectVersionTypeRegular">Regular Instance</s:String>
@@ -468,7 +468,7 @@ PCL suggests turning on the &quot;Instances Isolation&quot; option in &quot;Sett
     <s:String x:Key="LangDownloadPageDialogManualInstallContent">The &quot;Packages&quot; feature allows you to download a .jar installation file for loaders like OptiFine and Forge, but cannot be automatically installed.
 Select Minecraft version first on the &quot;Installation&quot; page, then choose OptiFine, Forge, or any other loader letting PCL install it automatically.</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallTitle">Installation Hint</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">Installtion Page</s:String>
+    <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">Installation Page</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">Continue</s:String>
     <s:String x:Key="LangDownloadPageManualInstallFold">Packages</s:String>
     <s:String x:Key="LangDownloadPageResource">Resources</s:String>
@@ -808,7 +808,7 @@ The skin replacement in this way will only be visible to player itself in multip
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftName">Username</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinSave">Save</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinRefresh">Refresh</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinRefreshToolTip">Refresh and redownload the skin displayed on the PCL currently.</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinRefreshToolTip">Refresh and re-download the skin displayed on the PCL currently.</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinChange">Change Skin</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinReset">Reset Skin</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchOptions">Launch Options</s:String>
@@ -891,7 +891,7 @@ In addition, the following alternate tags are also supported:
  · {uuid}: Player's UUID;
  · {name}: Instance Name;
  · {date}, {time}: System Time;
- · {version}: Vallina Game Version.
+ · {version}: Vanilla Game Version.
 
 For example:
  · [ {verpath}test.exe ] : Run the test.exe program in the instance folder;
@@ -968,7 +968,7 @@ In general, 64 threads are sufficient to ensure download speed.</s:String>
 Right-click a folder or instance to open the corresponding folder.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">Keep the Original Modpack File</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">Keep the modpack file that use for installation under the instance folder when installing the modpack.</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">Simplify Mod Loader Dislay</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">Simplify Mod Loader Display</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">If the mod supports Forge and Fabric, it appears to support all mod loader when downloading the mod.
 For example, when it is enabled, JEI will show that it supports all loaders, and when it is disabled, JEI will show that only Forge / Fabric are supported.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">Verify SSL Certificates</s:String>
@@ -1146,7 +1146,7 @@ Press F11 in &quot;Instance Selection&quot; page to see all hidden instances.</s
     <s:String x:Key="LangPageVersionOverallManagementCompleteFileToolTip">Verify the dependencies of the instance, then re-download the assets index and the files that are missing or failed to verify.
 Try this if your game sound effects are missing.</s:String>
     <s:String x:Key="LangPageVersionOverallManagementDelete">Delete</s:String>
-    <s:String x:Key="LangPageVersionOverallDialogHideInstanceContent">Are you sure you want to hide this instance from the &quot;Instance Selection&quot; page? It will no longer appear in the list.
+    <s:String x:Key="LangPageVersionOverallDialogHideInstanceContent">Are you sure you want to hide this instance from the &quot;Instance Selection&quot; page? It will no longer appear on the list.
 Hereafter, hidden instances are only visible while the F11 is pressed in the page.</s:String>
     <s:String x:Key="LangPageVersionOverallDialogHideInstanceTitle">Hidden Instance Hint</s:String>
     <s:String x:Key="LangPageVersionOverallDialogEditDescHint">Default Description</s:String>
@@ -1231,7 +1231,7 @@ In addition, the following alternate tags are also supported:
  · {uuid}: Player's UUID;
  · {name}: Instance Name;
  · {date}, {time}: System Time;
- · {version}: Vallina Game Version.
+ · {version}: Vanilla Game Version.
 
 For example:
  · [ {verpath}test.exe ] : Run the test.exe program in the instance folder;
@@ -1301,7 +1301,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Slim Model</s:String>
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">I Don't Know</s:String>
     <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">Please confirm the skin type on the skin download page before using this skin!</s:String>
-    <s:String x:Key="LangModMinecraftDialogNewVersionContentA">New Verison:</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionContentA">New Version:</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionContentB">Update Time:</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionContentC">Updated on:</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft Update Hint</s:String>
@@ -1310,7 +1310,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">Available for</s:String>
-    <s:String x:Key="LangModCompModDependentCount">dependencie(s), </s:String>
+    <s:String x:Key="LangModCompModDependentCount">dependencies, </s:String>
     <s:String x:Key="LangModCompModDownload">downloads, </s:String>
     <s:String x:Key="LangModCompModDownloadMillion">downloads in 10k, </s:String>
     <s:String x:Key="LangModCompModGameVersion">Game version</s:String>
