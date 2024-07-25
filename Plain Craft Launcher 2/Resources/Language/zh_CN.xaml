@@ -1105,6 +1105,8 @@
     <s:String x:Key="LangModSecretPermissionError">运行环境错误</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">开源版本说明</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">该版本中不包含以下特性：&#xa;- CurseForge 查询：需要 API Key（你可以申请一个，然后添加到 SecretHeadersSign 方法中）&#xa;- 更新与联网通知：避免滥用隐患&#xa;- 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……&#xa;- 百宝箱：开发早期往里面塞了些开发工具，整理起来太麻烦了</s:String>
+    <s:String x:Key="LangModSecretDialogNoTheme">该版本中不包含主题功能……</s:String>
+    <s:String x:Key="LangModSecretDialogNoTheme">该版本中不包含更新功能……</s:String>
 
     <!--ModMinecraft-->
     <s:String x:Key="LangModMinecraftCurrentFolder">当前文件夹</s:String>
