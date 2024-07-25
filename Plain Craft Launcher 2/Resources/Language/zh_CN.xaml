@@ -341,7 +341,7 @@
     <s:String x:Key="LangDownloadClientLoadingList">正在获取版本列表</s:String>
     <s:String x:Key="LangDownloadClientReleaseReleaseOn">最新正式版，发布于</s:String>
     <s:String x:Key="LangDownloadClientBetaReleaseOn">最新开发版，发布于</s:String>
-    
+
     <!--PageDownload-->
     <s:String x:Key="LangDownloadLatest">最新版本</s:String>
     <s:String x:Key="LangDownloadRelease">正式版</s:String>
@@ -366,7 +366,7 @@
     <s:String x:Key="LangDownloadAll">全部版本</s:String>
     <s:String x:Key="LangDownloadCategory">种类：</s:String>
     <s:String x:Key="LangDownloadUnknown">未知版本</s:String>
-    
+
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">转到 CurseForge</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">转到 Modrinth</s:String>
@@ -377,7 +377,7 @@
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">正在查找适合的游戏版本……</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">当前 MC 文件夹中没有找到适合这个 Mod 的版本！</s:String>
     <s:String x:Key="LangDownloadCompSelectedVersion">所选版本：</s:String>
-    
+
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Fabric 简介</s:String>
     <s:String x:Key="LangDownloadFabricDesc">Fabric Loader 是新版 Minecraft 下的轻量化 Mod 加载器，你需要先安装它才能安装各种 Fabric 模组。&#xa;本页面提供 Fabric 安装器下载，在下载后你需要手动打开安装器进行安装。</s:String>
@@ -1105,7 +1105,7 @@
     <s:String x:Key="LangModSecretPermissionError">运行环境错误</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">开源版本说明</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">该版本中不包含以下特性：&#xa;- CurseForge 查询：需要 API Key（你可以申请一个，然后添加到 SecretHeadersSign 方法中）&#xa;- 更新与联网通知：避免滥用隐患&#xa;- 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……&#xa;- 百宝箱：开发早期往里面塞了些开发工具，整理起来太麻烦了</s:String>
-    
+
     <!--ModMinecraft-->
     <s:String x:Key="LangModMinecraftCurrentFolder">当前文件夹</s:String>
     <s:String x:Key="LangModMinecraftOfficalFolder">官方启动器文件夹</s:String>
@@ -1166,7 +1166,7 @@
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">你的 PCL 不是最新版，因此无法提交反馈。&#xa;请先在 设置 → 启动器 中更新启动器，确认该问题在最新版中依然存在，然后再提交反馈。</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">无法提交反馈</s:String>
-    
+
     <!--ModLaunch-->
     <s:String x:Key="LangModLaunchStartStageGetJava">获取 Java</s:String>
     <s:String x:Key="LangModLaunchStartStageCompleteFile">补全文件</s:String>
@@ -1182,7 +1182,7 @@
     <s:String x:Key="LangModLaunchStartSuccess">启动成功！</s:String>
     <s:String x:Key="LangModLaunchCancelStart">已取消启动！</s:String>
     <s:String x:Key="LangModLaunchCancelExportCommand">已取消导出启动脚本！</s:String>
-    
+
     <!--ModValidate-->
     <s:String x:Key="LangModValidateNoSameFolderName">不可与现有文件夹重名！</s:String>
     <s:String x:Key="LangModValidateNoEndWithDotFolderName">文件夹名不能以小数点结尾！</s:String>

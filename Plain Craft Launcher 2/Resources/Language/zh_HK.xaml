@@ -341,7 +341,7 @@
     <s:String x:Key="LangDownloadClientLoadingList">正在獲取版本列表</s:String>
     <s:String x:Key="LangDownloadClientReleaseReleaseOn">最新正式版，發布於</s:String>
     <s:String x:Key="LangDownloadClientBetaReleaseOn">最新開發版，發布於</s:String>
-    
+
     <!--PageDownload-->
     <s:String x:Key="LangDownloadLatest">最新版本</s:String>
     <s:String x:Key="LangDownloadRelease">正式版</s:String>
@@ -366,7 +366,7 @@
     <s:String x:Key="LangDownloadAll">全部版本</s:String>
     <s:String x:Key="LangDownloadCategory">種類：</s:String>
     <s:String x:Key="LangDownloadUnknown">未知版本</s:String>
-    
+
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">轉到 CurseForge</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">轉到 Modrinth</s:String>
@@ -377,7 +377,7 @@
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">正在查找適合的遊戲版本……</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">當前 MC 文件夾中沒有找到適合這個 Mod 的版本！</s:String>
     <s:String x:Key="LangDownloadCompSelectedVersion">所選版本：</s:String>
-    
+
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Fabric 簡介</s:String>
     <s:String x:Key="LangDownloadFabricDesc">Fabric Loader 是新版 Minecraft 下的輕量化 Mod 加載器，你需要先安裝它才能安裝各種 Fabric 模組。&#xa;本頁面提供 Fabric 安裝器下載，在下載後你需要手動打開安裝器進行安裝。</s:String>
@@ -530,7 +530,7 @@
     <s:String x:Key="LangDownloadModpackTypeMisc">雜項</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">無法連接到 Modrinth，所以目前僅顯示了來自 CurseForge 的內容，結果可能不全。&#xa;請嘗試使用 VPN 或加速器以改善網絡。</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">無法連接到 CurseForge，所以目前僅顯示了來自 Modrinth 的內容，結果可能不全。&#xa;請嘗試使用 VPN 或加速器以改善網絡。</s:String>
-    
+
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">另存為</s:String>
     <s:String x:Key="LangMySkinRefresh">刷新</s:String>
@@ -746,7 +746,7 @@
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟件會匯報自己的版本名與版本號，以統計用戶數量與各版本的用戶數量占比。除此之外，本軟件不會上傳您的任何信息。&#13;若您能提供未經外部修改的本軟件本體上傳隱私信息的確鑿證據，開發者會向您支付 PCL 開發所獲全部淨收入。</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龍騰貓躍 2016. All Rights Reserved.&#13;計算機軟件著作權登記號：2020SR0875133&#13;違法違規行為舉報投訴郵箱：hexdragon@vip.qq.com</s:String>
-    
+
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">離線皮膚</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTips">由於技術問題，皮膚預覽與 Steve/Alex/自定義 選項暫時僅保證對 1.19.2 以前的版本有效！</s:String>
@@ -1106,7 +1106,7 @@
     <s:String x:Key="LangModSecretPermissionError">運行環境錯誤</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">開源版本說明</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">該版本中不包含以下特性：&#xa;- CurseForge 查詢：需要 API Key（你可以申請一個，然後添加到 SecretHeadersSign 方法中）&#xa;- 更新與聯網通知：避免濫用隱患&#xa;- 主題切換：這是需要贊助解鎖的紀念性質的功能，別讓贊助者太傷心啦……&#xa;- 百寶箱：開發早期往裡面塞了些開發工具，整理起來太麻煩了</s:String>
-    
+
     <!--ModMinecraft-->
     <s:String x:Key="LangModMinecraftCurrentFolder">當前文件夾</s:String>
     <s:String x:Key="LangModMinecraftOfficalFolder">官方啟動器文件夾</s:String>
@@ -1167,7 +1167,7 @@
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">你的 PCL 不是最新版，因此無法提交反饋。&#xa;請先在 設置 → 啟動器 中更新啟動器，確認該問題在最新版中依然存在，然後再提交反饋。</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">無法提交反饋</s:String>
-    
+
     <!--ModLaunch-->
     <s:String x:Key="LangModLaunchStartStageGetJava">獲取 Java</s:String>
     <s:String x:Key="LangModLaunchStartStageCompleteFile">補全文件</s:String>
@@ -1183,7 +1183,7 @@
     <s:String x:Key="LangModLaunchStartSuccess">啟動成功！</s:String>
     <s:String x:Key="LangModLaunchCancelStart">已取消啟動！</s:String>
     <s:String x:Key="LangModLaunchCancelExportCommand">已取消導出啟動腳本！</s:String>
-    
+
     <!--ModValidate-->
     <s:String x:Key="LangModValidateNoSameFolderName">不可與現有文件夾重名！</s:String>
     <s:String x:Key="LangModValidateNoEndWithDotFolderName">文件夾名不能以小數點結尾！</s:String>

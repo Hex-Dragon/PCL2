@@ -2,7 +2,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xml:space="preserve">
-    
+
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">Download</s:String>
     <s:String x:Key="LangTitleHome">Launch</s:String>
@@ -377,7 +377,7 @@ Press &quot;F11&quot; again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadClientLoadingList">Getting Version List...</s:String>
     <s:String x:Key="LangDownloadClientReleaseReleaseOn">Latest Release, released on</s:String>
     <s:String x:Key="LangDownloadClientBetaReleaseOn">Latest Development, released on</s:String>
-    
+
     <!--PageDownload-->
     <s:String x:Key="LangDownloadLatest">Latest</s:String>
     <s:String x:Key="LangDownloadRelease">Release</s:String>
@@ -402,7 +402,7 @@ Press &quot;F11&quot; again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadAll">All Versions</s:String>
     <s:String x:Key="LangDownloadCategory">Type: </s:String>
     <s:String x:Key="LangDownloadUnknown">Unknown Version</s:String>
-    
+
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">CurseForge</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">Modrinth</s:String>
@@ -413,7 +413,7 @@ Press &quot;F11&quot; again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">Looking for an applicable instance...</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">No applicable instance found in this Minecraft folder for this mod!</s:String>
     <s:String x:Key="LangDownloadCompSelectedVersion">Selected Version: </s:String>
-    
+
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Introduction of Fabric</s:String>
     <s:String x:Key="LangDownloadFabricDesc">Fabric Loader is a lightweight mod loader under the newer version of Minecraft. You need to install it first before you can install various Fabric mods.
@@ -1284,7 +1284,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
 - Update and Networking Notifications: To avoid potential abuse concerns;
 - Theme: This is a commemorative feature that requires sponsorship to unlock. Do not make the sponsors too sad...;
 - Utilities: Some development tools were placed here during the early stages of development, and it was difficult to sort them out.</s:String>
-    
+
     <!--ModMinecraft-->
     <s:String x:Key="LangModMinecraftCurrentFolder">Current Folder</s:String>
     <s:String x:Key="LangModMinecraftOfficalFolder">Minecraft Launcher Folder</s:String>
@@ -1349,7 +1349,7 @@ Game crashes are not related to the launcher commonly. Please do not submit feed
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Your PCL is not the latest version, feedback submittal is unsupportable.
 Please update the launcher in &quot;Settings → Launcher&quot; first, then submit feedback if the problem still exists in the latest version.</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Unable to Submit</s:String>
-    
+
     <!--ModLaunch-->
     <s:String x:Key="LangModLaunchStartStageGetJava">Obtain Java</s:String>
     <s:String x:Key="LangModLaunchStartStageCompleteFile">Repair Files</s:String>
@@ -1365,7 +1365,7 @@ Please update the launcher in &quot;Settings → Launcher&quot; first, then subm
     <s:String x:Key="LangModLaunchStartSuccess">Successfully Launched!</s:String>
     <s:String x:Key="LangModLaunchCancelStart">Launch Canceled!</s:String>
     <s:String x:Key="LangModLaunchCancelExportCommand">Export of launch script has been canceled!</s:String>
-    
+
     <!--ModValidate-->
     <s:String x:Key="LangModValidateNoSameFolderName">The name cannot be the same as that of an existing instance!</s:String>
     <s:String x:Key="LangModValidateNoEndWithDotFolderName">The name cannot end with a dot (.)!</s:String>
