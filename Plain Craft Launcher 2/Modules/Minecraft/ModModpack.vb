@@ -928,7 +928,7 @@ Retry:
             Sub()
                 If ModpackExportBlocking(Options) Then
                     Hint("导出成功！", HintType.Finish)
-                    OpenExplorer($"""{GetPathFromFullPath(Options.Dest)}""")
+                    OpenExplorer($"/select,""{Options.Dest}""")
                 End If
             End Sub, "Modpack Export")
     End Sub
@@ -1014,13 +1014,13 @@ Retry:
 
             Dim files As New JArray
             For Each m In ModrinthMapping
-                Dim f As New JObject
-                f.Add("path", $"mods/{m.Key}")
-                f.Add("hashes", m.Value("hashes"))
-                f.Add("env", New JObject From {{"client", "required"}, {"server", "required"}})
-                f.Add("downloads", New JArray From {m.Value("url")})
-                f.Add("fileSize", m.Value("size"))
-                files.Add(f)
+                files.Add(New JObject From {
+                    {"path", $"mods/{m.Key}"},
+                    {"hashes", m.Value("hashes")},
+                    {"env", New JObject From {{"client", "required"}, {"server", "required"}}},
+                    {"downloads", New JArray From {m.Value("url")}},
+                    {"fileSize", m.Value("size")}
+                })
             Next
             Dim depend As New JObject From {{"minecraft", McVersion}}
             If Version.Version.HasForge Then depend.Add("forge", Version.Version.ForgeVersion)
@@ -1047,11 +1047,10 @@ Retry:
             '额外文件
             For Each p In Additional
                 If String.IsNullOrWhiteSpace(p) Then Continue For '传空字串进去会直接把整个版本文件夹拷过去
-                Dim fromPath As String = $"{Version.Path}{p}"
-                If Directory.Exists(fromPath) Then
-                    CopyDirectory(fromPath, $"{tempDir}overrides\{p}")
-                ElseIf File.Exists(fromPath) Then
-                    CopyFile(fromPath, $"{tempDir}overrides\{p}")
+                If Not p.StartsWithF(Version.Path, IgnoreCase:=True) Then Continue For
+                Dim relative As String = p.Replace(Version.Path, "")
+                If File.Exists(p) AndAlso Not IsVerRedundant(p) Then
+                    CopyFile(p, $"{tempDir}overrides\{relative}")
                 End If
             Next
 
@@ -1066,7 +1065,7 @@ Retry:
     End Function
     Private Function ExportCompressed(Version As McVersion, DestPath As String, Additional As String(), Name As String, VerID As String, PCLSetupGlobal As Boolean) As Boolean
         Try
-            Log($"[Export] 导出整合包（含启动器）：{Version.Path} -> {DestPath}，额外版本文件 {If(Additional Is Nothing OrElse Not Additional.Any, "不导出", Additional.Join(", "))}，全局设置 {If(PCLSetupGlobal, "导出", "不导出")}")
+            Log($"[Export] 导出整合包（含启动器）：{Version.Path} -> {DestPath}，额外版本文件 {Additional.Count} 个，全局设置 {If(PCLSetupGlobal, "导出", "不导出")}")
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
             Log($"[Export] 最终压缩包的缓存文件夹：{tempDir}")
             Directory.CreateDirectory(tempDir)
