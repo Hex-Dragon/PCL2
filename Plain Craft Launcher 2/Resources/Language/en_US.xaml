@@ -796,7 +796,7 @@ Copyright of Computer Software Registration Number: 2020SR0875133
 Email for Reporting Illegal and Irregular Behavior: hexdragon@vip.qq.com</s:String>
 
     <!--PageOtherTest-->
-    <s:String x:Key="LangPageOtherTestNoUtility">For ease of maintenance, the open source content does not include the utility function...</s:String>
+    <s:String x:Key="LangPageOtherTestNoUtility">For ease of maintenance, the debug version does not include the utility function...</s:String>
 
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">Offline Skin</s:String>
