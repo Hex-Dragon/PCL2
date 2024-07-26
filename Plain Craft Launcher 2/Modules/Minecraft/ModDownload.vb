@@ -1,4 +1,6 @@
-﻿Public Module ModDownload
+﻿Imports System.Security.Policy
+
+Public Module ModDownload
 
 #Region "DlClient* | Minecraft 客户端"
 
@@ -1090,6 +1092,19 @@
             MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
             MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
             MojangBase
+        }
+    End Function
+    Public Function DlSourceCfOrMrGet(CfMrBase As String) As String()
+        If CfMrBase Is Nothing Then Throw New Exception("无对应的 Mod 下载地址")
+        Return {
+            CfMrBase.Replace("api.modrinth.com/v2", "mod.mcmirror.top/modrinth") _
+            .Replace("staging-api.modrinth.com/v2", "mod.mcmirror.top/modrinth") _
+            .Replace("cdn.modrinth.com", "mod.mcimirror.top") _
+            .Replace("api.curseforge.com", "mod.mcimirror.top/curseforge") _
+            .Replace("edge.forgecdn.net", "mod.mcimirror.top") _
+            .Replace("mediafilez.forgecdn.net", "mod.mcimirror.top") _
+            .Replace("media.forgecdn.net", "mod.mcimirror.top"),
+            CfMrBase
         }
     End Function
 
