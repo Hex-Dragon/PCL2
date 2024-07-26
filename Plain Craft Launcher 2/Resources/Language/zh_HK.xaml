@@ -747,6 +747,9 @@
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龍騰貓躍 2016. All Rights Reserved.&#13;計算機軟件著作權登記號：2020SR0875133&#13;違法違規行為舉報投訴郵箱：hexdragon@vip.qq.com</s:String>
 
+    <!--PageOtherTest-->
+    <s:String x:Key="LangPageOtherTestNoUtility">為便於維護，開源內容中不包含百寶箱功能……</s:String>
+
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">離線皮膚</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTips">由於技術問題，皮膚預覽與 Steve/Alex/自定義 選項暫時僅保證對 1.19.2 以前的版本有效！</s:String>
