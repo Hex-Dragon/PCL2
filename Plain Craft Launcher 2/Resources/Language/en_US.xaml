@@ -1287,7 +1287,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
 - Update and Networking Notifications: To avoid potential abuse concerns;
 - Theme: This is a commemorative feature that requires sponsorship to unlock. Do not make the sponsors too sad...;
 - Utilities: Some development tools were placed here during the early stages of development, and it was difficult to sort them out.</s:String>
-    <s:String x:Key="LangModSecretHintNoTheme">This version does not include theme functionality...</s:String>
+    <s:String x:Key="LangModSecretHintNoTheme">The current version of PCL does not include theme functionality...</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">This version does not include update functionality...</s:String>
 
     <!--ModMinecraft-->
