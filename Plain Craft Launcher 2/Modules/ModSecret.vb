@@ -184,7 +184,7 @@ Friend Module ModSecret
     Public ThemeDontClick As Integer = 0
 
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
-        Hint("该版本中不包含主题功能……")
+        Hint(GetLang("LangModSecretHintNoTheme"))
     End Sub
     Public Sub ThemeRefreshMain()
         RunInUi(
@@ -252,7 +252,7 @@ Friend Module ModSecret
     Public IsUpdateStarted As Boolean = False
     Public IsUpdateWaitingRestart As Boolean = False
     Public Sub UpdateCheckByButton()
-        Hint("该版本中不包含更新功能……")
+        Hint(GetLang("LangModSecretHintNoUpdate"))
     End Sub
     Public Sub UpdateStart(BaseUrl As String, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
     End Sub
