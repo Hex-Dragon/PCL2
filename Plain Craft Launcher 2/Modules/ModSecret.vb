@@ -184,7 +184,7 @@ Friend Module ModSecret
     Public ThemeDontClick As Integer = 0
 
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
-        Hint(GetLang("LangModSecretDialogNoTheme"))
+        Hint(GetLang("LangModSecretHintNoTheme"))
     End Sub
     Public Sub ThemeRefreshMain()
         RunInUi(
@@ -252,7 +252,7 @@ Friend Module ModSecret
     Public IsUpdateStarted As Boolean = False
     Public IsUpdateWaitingRestart As Boolean = False
     Public Sub UpdateCheckByButton()
-        Hint(GetLang("LangModSecretDialogNoUpdate"))
+        Hint(GetLang("LangModSecretHintNoUpdate"))
     End Sub
     Public Sub UpdateStart(BaseUrl As String, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
     End Sub
