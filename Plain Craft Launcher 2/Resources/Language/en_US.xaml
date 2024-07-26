@@ -838,11 +838,11 @@ If there are multiple instances with mods installed, it may cause mod conflicts.
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">Saves, mods, resource packs, etc. are not interoperable between instances.
 This will cause saves that are not shared between Vanilla instances, so it is generally not recommended.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibility">Visibility</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameStart">Close immediately after the game launched.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameClose">Hide after the game started, close after the game closed.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityRestartOnGameClose">Hide after the game started, reopen after the game closed.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityMinimizeOnGameStart">Minimize after the game started.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityKeep">Remain unchanged.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameStart">Close immediately after the game launched</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameClose">Hide after the game started, close after the game closed</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityRestartOnGameClose">Hide after the game started, reopen after the game closed</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityMinimizeOnGameStart">Minimize after the game started</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityKeep">Remain unchanged</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriority">Priority</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityHigh">High (Ensure game performance but may cause lag in other program)</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityMedium">Medium (Balanced)</s:String>
