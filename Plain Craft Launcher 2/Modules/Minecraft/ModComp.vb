@@ -13,6 +13,10 @@
         ''' 资源包。
         ''' </summary>
         ResourcePack = 2
+        ''' <summary>
+        ''' 数据包。
+        ''' </summary>
+        DataPack = 4
     End Enum
     Public Enum CompModLoaderType
         'https://docs.curseforge.com/?http#tocS_ModLoaderType
@@ -748,8 +752,8 @@ NoSubtitle:
                     Address += "&classId=6"
                 Case CompType.ModPack
                     Address += "&classId=4471"
-                Case CompType.ResourcePack
-                    'FUTURE: Res
+                Case CompType.DataPack
+                    Address += "&classId=6945"
             End Select
             Address += "&categoryId=" & If(Tag = "", "0", Tag.Before("/"))
             If ModLoader <> CompModLoaderType.Any Then Address += "&modLoaderType=" & CType(ModLoader, Integer)

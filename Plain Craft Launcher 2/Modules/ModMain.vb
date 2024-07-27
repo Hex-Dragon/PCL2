@@ -398,6 +398,7 @@ EndHint:
     Public FrmDownloadFabric As PageDownloadFabric
     Public FrmDownloadMod As PageDownloadMod
     Public FrmDownloadPack As PageDownloadPack
+    Public FrmDownloadDataPack As PageDownloadDataPack
 
     '设置页面声明
     Public FrmSetupLeft As PageSetupLeft
