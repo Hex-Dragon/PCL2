@@ -1,0 +1,344 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>PCL</RootNamespace>
+    <MyType>Custom</MyType>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <TargetCulture>zh-CN</TargetCulture>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>false</DefineTrace>
+    <IncrementalBuild>true</IncrementalBuild>
+    <OutputPath>.\bin\</OutputPath>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <Configuration>PCL2 Config Mark</Configuration>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>false</DefineTrace>
+    <IncrementalBuild>false</IncrementalBuild>
+    <OutputPath>.\bin\</OutputPath>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+    <DefineConstants>RELEASE</DefineConstants>
+    <Configuration>PCL2 Config Mark</Configuration>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>CE7A815CD81401B559C8649A3EEA43B75ECB8FC5</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Plain Craft Launcher 2_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Snapshot|AnyCPU'">
+    <OutputPath>.\bin\</OutputPath>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+    <DefineConstants>SNAPSHOT</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BETA|AnyCPU'">
+    <OutputPath>.\bin\</OutputPath>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+    <DefineConstants>BETA</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <AssemblyTitle>Plain Craft Launcher 启动器</AssemblyTitle>
+    <Description>Minecraft 启动器 %28制作：龙腾猫跃%29</Description>
+    <Product>Plain Craft Launcher</Product>
+    <Copyright>Copyright © 龙腾猫跃 2016. All Rights Reserved.</Copyright>
+    <AssemblyVersion>2.8.3.0</AssemblyVersion>
+    <FileVersion>2.8.3.0</FileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseUpdate|AnyCPU'">
+    <OutputPath>.\bin\</OutputPath>
+    <DefineConstants>RELEASE,BY_UPDATE</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Modules\Reference\CookieWebClient.vb">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Newtonsoft.Json.Linq" />
+    <Import Include="System.IO" />
+    <Import Include="System.Text" />
+    <Import Include="System.Threading" />
+    <Import Include="System.Windows" />
+    <Import Include="System.Windows.Controls" />
+    <Import Include="System.Windows.Data" />
+    <Import Include="System.Windows.Documents" />
+    <Import Include="System.Windows.Input" />
+    <Import Include="System.Windows.Shapes" />
+    <Import Include="System.Windows.Media" />
+    <Import Include="System.Windows.Media.Imaging" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="My Project\MyExtensions\MyWpfExtension.vb">
+      <VBMyExtensionTemplateID>Microsoft.VisualBasic.WPF.MyExtension</VBMyExtensionTemplateID>
+      <VBMyExtensionTemplateVersion>1.0.0.0</VBMyExtensionTemplateVersion>
+    </Compile>
+    <Compile Update="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Font.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\LTCat.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Blocks\Anvil.png" />
+    <Resource Include="Images\Blocks\CobbleStone.png" />
+    <Resource Include="Images\Blocks\CommandBlock.png" />
+    <Resource Include="Images\Blocks\Grass.png" />
+    <Resource Include="Images\Blocks\RedstoneBlock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Blocks\GrassPath.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Blocks\Egg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\Hao_Tian.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Skins\Steve.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Skins\Alex.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Themes\5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Themes\6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Themes\7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Themes\8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Themes\9.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Themes\10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="NAudio">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+    <PublishFile Include="Newtonsoft.Json">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\Patrick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Themes\11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Themes\12.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Blocks\GoldBlock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Themes\13.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Themes\42.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Blocks\RedstoneLampOff.png" />
+    <Resource Include="Images\Blocks\RedstoneLampOn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Blocks\Fabric.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\A.png" />
+    <Resource Include="Images\Icons\B.png" />
+    <Resource Include="Images\Icons\R.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\NoIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\PCL2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\00ll00.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\bangbang93.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\DoodleHuang.png" />
+    <Resource Include="Images\Heads\wiki.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="NATUPNPLib">
+      <Guid>{1C565858-F302-471E-B409-F180AA4ABEC6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="NetFwTypeLib">
+      <Guid>{58FBCF7C-E7A9-467C-80B3-FC65E8FCCA08}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Blocks\OptiFabric.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ModData.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Skins\Ari.png" />
+    <Resource Include="Images\Skins\Efe.png" />
+    <Resource Include="Images\Skins\Kai.png" />
+    <Resource Include="Images\Skins\Makena.png" />
+    <Resource Include="Images\Skins\Noor.png" />
+    <Resource Include="Images\Skins\Sunny.png" />
+    <Resource Include="Images\Skins\Zuri.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\Disabled.png" />
+    <Resource Include="Images\Icons\Unavaliable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\MCBBS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Management" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Security.AccessControl" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Blocks\NeoForge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="NAudio.Asio" Version="2.2.1" />
+    <PackageReference Include="NAudio.Core" Version="2.2.1" />
+    <PackageReference Include="NAudio.Midi" Version="2.2.1" />
+    <PackageReference Include="NAudio.Wasapi" Version="2.2.1" />
+    <PackageReference Include="NAudio.WinForms" Version="2.2.1" />
+    <PackageReference Include="NAudio.WinMM" Version="2.2.1" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Controls\MySliderDot.xaml.vb" />
+    <Page Remove="Controls\MySliderDot.xaml" />
+    <Page Remove="Resources\Custom.xaml" />
+  </ItemGroup>
+</Project>
