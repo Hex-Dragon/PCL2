@@ -51,32 +51,28 @@
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="类型" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="4" Grid.Row="2" MaxDropDownHeight="320">
                             <local:MyComboBoxItem Tag="" Content="全部" IsSelected="True" />
-                            <local:MyComboBoxItem Content="卡通" Tag="/cartoon" />
+                            <local:MyComboBoxItem Content="冒险" Tag="6948/adventure" />
                             <local:MyComboBoxItem Content="Cursed" Tag="/cursed" />
-                            <local:MyComboBoxItem Content="幻想" Tag="6554/fantasy" />
-                            <local:MyComboBoxItem Content="写实" Tag="6553/realistic" />
-                            <local:MyComboBoxItem Content="半写实" Tag="/semi-realistic" />
-                            <local:MyComboBoxItem Content="原版风" Tag="6555/vanilla-like" />
-
-                            <local:MyComboBoxItem Content="大气环境" Tag="/atmosphere" />
-                            <local:MyComboBoxItem Content="植被" Tag="/bloom" />
-                            <local:MyComboBoxItem Content="光源着色" Tag="/colored-lighting" />
-                            <local:MyComboBoxItem Content="树叶" Tag="/foliage" />
-                            <local:MyComboBoxItem Content="路径追踪" Tag="/path-tracing" />
-                            <local:MyComboBoxItem Content="PBR" Tag="/pbr" />
-                            <local:MyComboBoxItem Content="反射" Tag="/reflections" />
-                            <local:MyComboBoxItem Content="阴影" Tag="/shadows" />
-
-                            <local:MyComboBoxItem Content="土豆画质" Tag="/potato" />
-                            <local:MyComboBoxItem Content="低性能影响" Tag="/low" />
-                            <local:MyComboBoxItem Content="中性能影响" Tag="/medium" />
-                            <local:MyComboBoxItem Content="高性能影响" Tag="/high" />
-                            <local:MyComboBoxItem Content="极致画质" Tag="/screenshot" />
-
-                            <local:MyComboBoxItem Content="Canvas" Tag="/canvas" />
-                            <local:MyComboBoxItem Content="Iris" Tag="/iris" />
-                            <local:MyComboBoxItem Content="OptiFine" Tag="/optifine" />
-                            <local:MyComboBoxItem Content="原版光影" Tag="/vanilla-shader" />
+                            <local:MyComboBoxItem Content="装饰" Tag="6554/decoration" />
+                            <local:MyComboBoxItem Content="经济" Tag="6553/economy" />
+                            <local:MyComboBoxItem Content="装备" Tag="/equipment" />
+                            <local:MyComboBoxItem Content="食物" Tag="6555/food" />
+                            <local:MyComboBoxItem Content="游戏机制" Tag="/game-mechanics" />
+                            <local:MyComboBoxItem Content="支持库" Tag="6950/library" />
+                            <local:MyComboBoxItem Content="魔法" Tag="6952/magic" />
+                            <local:MyComboBoxItem Content="管理" Tag="/management" />
+                            <local:MyComboBoxItem Content="小游戏" Tag="/minigame" />
+                            <local:MyComboBoxItem Content="生物" Tag="/mobs" />
+                            <local:MyComboBoxItem Content="优化" Tag="/optimization" />
+                            <local:MyComboBoxItem Content="社交" Tag="/social" />
+                            <local:MyComboBoxItem Content="存储" Tag="/storage" />
+                            <local:MyComboBoxItem Content="科技" Tag="6951/technology" />
+                            <local:MyComboBoxItem Content="交通" Tag="/transportation" />
+                            <local:MyComboBoxItem Content="实用工具" Tag="6953/utility" />
+                            <local:MyComboBoxItem Content="世界生成" Tag="/worldgen" />
+                            <local:MyComboBoxItem Content="Mod 支持" Tag="6946/" />
+                            <local:MyComboBoxItem Content="杂项" Tag="6947/" />
+                            <local:MyComboBoxItem Content="幻想" Tag="6949/" />
                         </local:MyComboBox>
                     </Grid>
                     <Grid Margin="0,4,0,6" Height="35">
@@ -108,7 +104,7 @@
                 </local:MyCard>
             </StackPanel>
             <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
-                <local:MyLoading Text="正在获取资源包列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <local:MyLoading Text="正在获取数据包列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </local:MyCard>
         </StackPanel>
     </local:MyScrollViewer>
