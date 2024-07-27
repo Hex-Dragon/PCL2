@@ -1,4 +1,4 @@
-﻿<local:MyPageRight
+<local:MyPageRight
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -86,7 +86,7 @@
                             <local:MyComboBoxItem Content="蒸汽朋克" Tag="399/" />
                             <local:MyComboBoxItem Content="现代" Tag="401/" />
                             <local:MyComboBoxItem Content="字体包" Tag="5244/" />
-                            <local:MyComboBoxItem Content="数据包" Tag="5193/" />
+                            <local:MyComboBoxItem Content="含有数据包" Tag="5193/" />
                             <local:MyComboBoxItem Content="其他" Tag="405/" />
                         </local:MyComboBox>
                     </Grid>
