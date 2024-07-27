@@ -10,7 +10,7 @@ Public Class Application
     ''' </summary>
     Private Sub Test()
         Try
-            ModDevelop.Start()
+            'ModDevelop.Start()
         Catch ex As Exception
             Log(ex, "开发者模式测试出错", LogLevel.Msgbox)
         End Try
@@ -44,10 +44,10 @@ Public Class Application
 #If DEBUG Then
                     '制作更新包
                 ElseIf e.Args(0) = "--edit1" Then
-                    ExeEdit(e.Args(1), True)
+                    'ExeEdit(e.Args(1), True)
                     Environment.Exit(Result.Cancel)
                 ElseIf e.Args(0) = "--edit2" Then
-                    ExeEdit(e.Args(1), False)
+                    'ExeEdit(e.Args(1), False)
                     Environment.Exit(Result.Cancel)
 #End If
                 End If

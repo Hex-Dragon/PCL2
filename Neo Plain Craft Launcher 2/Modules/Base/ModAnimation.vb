@@ -958,7 +958,7 @@ NextAni:
                     If TextCount < Ani.Value(0).ToString.Length Then
                         Dim NextText As String = Mid(Ani.Value(0), TextCount + 1, 1)
                         If Convert.ToInt32(Convert.ToChar(NextText)) >= Convert.ToInt32(Convert.ToChar(128)) Then
-                            NewText &= Encoding.GetEncoding("GB18030").GetString({RandomInteger(16 + 160, 87 + 160), RandomInteger(1 + 160, 89 + 160)})
+                            NewText &= Encoding.GetEncoding("GB18030").GetString(CType({RandomInteger(16 + 160, 87 + 160), RandomInteger(1 + 160, 89 + 160)}, Byte()))
                         Else
                             NewText &= RandomOne("0123456789./*-+\[]{};':/?,!@#$%^&*()_+-=qwwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM".ToCharArray)
                         End If
