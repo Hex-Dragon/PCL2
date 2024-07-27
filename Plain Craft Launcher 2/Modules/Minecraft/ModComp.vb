@@ -13,6 +13,10 @@
         ''' 资源包。
         ''' </summary>
         ResourcePack = 2
+        ''' <summary>
+        ''' 光影包。
+        ''' </summary>
+        Shader = 3
     End Enum
     Public Enum CompModLoaderType
         'https://docs.curseforge.com/?http#tocS_ModLoaderType
@@ -273,8 +277,10 @@
                         Type = CompType.Mod
                     ElseIf Website.Contains("/modpacks/") Then
                         Type = CompType.ModPack
-                    Else
+                    ElseIf Website.Contains("/texture-packs/") Then
                         Type = CompType.ResourcePack
+                    Else 'Website.Contains("/shaders/")
+                        Type = CompType.Shader
                     End If
                     'Tags
                     Tags = New List(Of String)
@@ -321,7 +327,10 @@
                             Case 4480 : Tags.Add("基于地图")
                             Case 4481 : Tags.Add("轻量")
                             Case 4482 : Tags.Add("大型")
-                                'FUTURE: Res
+                        '光影包
+                            Case 6553 : Tags.Add("写实")
+                            Case 6554 : Tags.Add("幻想")
+                            Case 6555 : Tags.Add("原版风")
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -349,6 +358,7 @@
                         Case "mod" : Type = CompType.Mod
                         Case "modpack" : Type = CompType.ModPack
                         Case "resourcepack" : Type = CompType.ResourcePack
+                        Case "shaders" : Type = CompType.Shader
                     End Select
                     'Tags & ModLoaders
                     Tags = New List(Of String)
@@ -387,7 +397,33 @@
                             Case "adventure" : Tags.Add("冒险")
                             Case "kitchen-sink" : Tags.Add("烹饪")
                             Case "lightweight" : Tags.Add("轻量")
-                            'FUTURE: Res
+                            '光影包
+                            Case "cartoon" : Tags.Add("卡通")
+                            Case "cursed" : Tags.Add("Cursed")
+                            Case "fantasy" : Tags.Add("幻想")
+                            Case "realistic" : Tags.Add("写实")
+                            Case "semi-realistic" : Tags.Add("半写实")
+                            Case "vanilla-like" : Tags.Add("原版风")
+
+                            Case "atmosphere" : Tags.Add("大气环境")
+                            Case "bloom" : Tags.Add("植被")
+                            Case "colored-lighting" : Tags.Add("光源着色")
+                            Case "foliage" : Tags.Add("树叶")
+                            Case "path-tracing" : Tags.Add("路径追踪")
+                            Case "pbr" : Tags.Add("PBR")
+                            Case "reflections" : Tags.Add("反射")
+                            Case "shadows" : Tags.Add("阴影")
+
+                            Case "potato" : Tags.Add("土豆画质")
+                            Case "low" : Tags.Add("低性能影响")
+                            Case "medium" : Tags.Add("中性能影响")
+                            Case "high" : Tags.Add("高性能影响")
+                            Case "screenshot" : Tags.Add("极致画质")
+
+                            Case "canvas" : Tags.Add("Canvas")
+                            Case "iris" : Tags.Add("Iris")
+                            Case "optifine" : Tags.Add("OptiFine")
+                            Case "vanilla-shader" : Tags.Add("原版光影")
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -748,8 +784,8 @@ NoSubtitle:
                     Address += "&classId=6"
                 Case CompType.ModPack
                     Address += "&classId=4471"
-                Case CompType.ResourcePack
-                    'FUTURE: Res
+                Case CompType.Shader
+                    Address += "&classId=6552"
             End Select
             Address += "&categoryId=" & If(Tag = "", "0", Tag.Before("/"))
             If ModLoader <> CompModLoaderType.Any Then Address += "&modLoaderType=" & CType(ModLoader, Integer)
