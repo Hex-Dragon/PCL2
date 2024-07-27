@@ -423,7 +423,7 @@
                             Case "canvas" : Tags.Add("Canvas")
                             Case "iris" : Tags.Add("Iris")
                             Case "optifine" : Tags.Add("OptiFine")
-                            Case "vanilla-shader" : Tags.Add("原版光影")
+                            Case "vanilla" : Tags.Add("原版光影")
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")

@@ -76,7 +76,7 @@
                             <local:MyComboBoxItem Content="Canvas" Tag="/canvas" />
                             <local:MyComboBoxItem Content="Iris" Tag="/iris" />
                             <local:MyComboBoxItem Content="OptiFine" Tag="/optifine" />
-                            <local:MyComboBoxItem Content="原版光影" Tag="/vanilla-shader" />
+                            <local:MyComboBoxItem Content="原版光影" Tag="/vanilla" />
                         </local:MyComboBox>
                     </Grid>
                     <Grid Margin="0,4,0,6" Height="35">
@@ -108,7 +108,7 @@
                 </local:MyCard>
             </StackPanel>
             <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
-                <local:MyLoading Text="正在获取资源包列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <local:MyLoading Text="正在获取光影包列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </local:MyCard>
         </StackPanel>
     </local:MyScrollViewer>
