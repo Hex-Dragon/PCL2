@@ -9,8 +9,8 @@
         PanHint.Visibility = Visibility.Collapsed
 #Else
         PanHint.Visibility = If(ThemeCheckGold(), Visibility.Collapsed, Visibility.Visible)
-        LabHint1.Text = "快照版包含尚未正式发布的测试功能，仅用于赞助者本人尝鲜。请不要发给其他人或者用来制作整合包哦！"
-        LabHint2.Text = $"若已累积赞助￥23.33，在爱发电私信发送 {vbLQ}解锁码{vbRQ} 即可永久隐藏此提示。"
+        LabHint1.Text = "该版本旨在将PCL2从原来的.NET Framework 4.6.2迁移到.NET 8平台上"
+        LabHint2.Text = "目前大部分功能是可用的，可能会存在亿点点Bug......"
 #End If
     End Sub
 

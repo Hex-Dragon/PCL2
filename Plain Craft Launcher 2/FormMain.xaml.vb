@@ -2,7 +2,7 @@
 
 Public Class FormMain
 
-#Region "基础"
+#Region "更新日志"
 
     '更新日志
     Private Sub ShowUpdateLog(LastVersion As Integer)
@@ -312,6 +312,9 @@ Public Class FormMain
         End Sub, "UpdateLog Output")
     End Sub
 
+#End Region
+
+#Region "基础"
     '窗口加载
     Private IsWindowLoadFinished As Boolean = False
     ''' <summary>
