@@ -410,8 +410,8 @@ RequestFinished:
             End If
             Resp = Req.GetResponse()
             DataStream = Resp.GetResponseStream()
-            DataStream.WriteTimeout = Timeout
-            DataStream.ReadTimeout = Timeout
+            'DataStream.WriteTimeout = Timeout
+            'DataStream.ReadTimeout = Timeout
             Using Reader As New StreamReader(DataStream)
                 Return Reader.ReadToEnd()
             End Using
