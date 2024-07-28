@@ -930,14 +930,14 @@ Public Module ModBase
             ElseIf Bytes(0) = &HFF AndAlso Bytes(1) = &HFE Then
                 Return Encoding.Unicode
             Else
-                Return Encoding.GetEncoding("GB18030")
+                Return Encoding.UTF8
             End If
         End If
         '无 BOM 文件：GB18030（ANSI）或 UTF8
         Dim UTF8 = Encoding.UTF8.GetString(Bytes)
         Dim ErrorChar As Char = Encoding.UTF8.GetString({239, 191, 189}).ToCharArray()(0)
         If UTF8.Contains(ErrorChar) Then
-            Return Encoding.GetEncoding("GB18030")
+            Return Encoding.UTF8
         Else
             Return New UTF8Encoding(False) '不带 BOM 的 UTF8
         End If
@@ -958,14 +958,14 @@ Public Module ModBase
             ElseIf Bytes(0) = &HFF AndAlso Bytes(1) = &HFE Then
                 Return Encoding.Unicode.GetString(Bytes, 3, Length - 3)
             Else
-                Return Encoding.GetEncoding("GB18030").GetString(Bytes, 3, Length - 3)
+                Return Encoding.UTF8.GetString(Bytes, 3, Length - 3)
             End If
         End If
         '无 BOM 文件：GB18030（ANSI）或 UTF8
         Dim UTF8 = Encoding.UTF8.GetString(Bytes)
         Dim ErrorChar As Char = Encoding.UTF8.GetString({239, 191, 189}).ToCharArray()(0)
         If UTF8.Contains(ErrorChar) Then
-            Return Encoding.GetEncoding("GB18030").GetString(Bytes)
+            Return Encoding.UTF8.GetString(Bytes)
         Else
             Return UTF8
         End If
@@ -1245,7 +1245,7 @@ Re:
             stream.Close()
         Else
             '以 zip 方式解压
-            Using Archive = ZipFile.Open(CompressFilePath, ZipArchiveMode.Read, If(Encode, Encoding.GetEncoding("GB18030")))
+            Using Archive = ZipFile.Open(CompressFilePath, ZipArchiveMode.Read, If(Encode, Encoding.UTF8))
                 For Each Entry As ZipArchiveEntry In Archive.Entries
                     Dim DestinationPath As String = IO.Path.Combine(DestDirectory, Entry.FullName)
                     If DestinationPath.EndsWithF("\") OrElse DestinationPath.EndsWithF("/") Then

@@ -140,7 +140,7 @@ Public Module ModMinecraft
     ""selectedProfile"": ""PCL"",
     ""clientToken"": ""23323323323323323323323323323333""
 }"
-            WriteFile(Folder & "launcher_profiles.json", ResultJson, Encoding:=Encoding.GetEncoding("GB18030"))
+            WriteFile(Folder & "launcher_profiles.json", ResultJson, Encoding:=Encoding.UTF8)
             Log("[Minecraft] 已创建 launcher_profiles.json：" & Folder)
         Catch ex As Exception
             Log(ex, "创建 launcher_profiles.json 失败（" & Folder & "）", LogLevel.Feedback)
@@ -1590,7 +1590,7 @@ OnLoaded:
             Log(ex, "无法完成解析的皮肤返回值，可能是未设置自定义皮肤的用户：" & SkinString, LogLevel.Developer)
             Throw New Exception("皮肤返回值中不包含皮肤数据项，可能是未设置自定义皮肤的用户", ex)
         End Try
-        SkinString = Encoding.GetEncoding("utf-8").GetString(Convert.FromBase64String(SkinValue))
+        SkinString = Encoding.UTF8.GetString(Convert.FromBase64String(SkinValue))
         Dim SkinJson As JObject = GetJson(SkinString.ToLower)
         If SkinJson("textures") Is Nothing OrElse SkinJson("textures")("skin") Is Nothing OrElse SkinJson("textures")("skin")("url") Is Nothing Then
             Throw New Exception("用户未设置自定义皮肤")

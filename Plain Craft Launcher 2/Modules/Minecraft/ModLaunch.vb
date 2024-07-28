@@ -1804,7 +1804,7 @@ NextVersion:
             '更新文件
             Dim Profiles As JObject = GetJson(ReadFile(PathMcFolder & "launcher_profiles.json"))
             Profiles.Merge(ReplaceJson)
-            WriteFile(PathMcFolder & "launcher_profiles.json", Profiles.ToString, Encoding:=Encoding.GetEncoding("GB18030"))
+            WriteFile(PathMcFolder & "launcher_profiles.json", Profiles.ToString, Encoding:=Encoding.UTF8)
             McLaunchLog("已更新 launcher_profiles.json")
         Catch ex As Exception
             Log(ex, "更新 launcher_profiles.json 失败，将在删除文件后重试")
@@ -1835,7 +1835,7 @@ NextVersion:
                 '更新文件
                 Dim Profiles As JObject = GetJson(ReadFile(PathMcFolder & "launcher_profiles.json"))
                 Profiles.Merge(ReplaceJson)
-                WriteFile(PathMcFolder & "launcher_profiles.json", Profiles.ToString, Encoding:=Encoding.GetEncoding("GB18030"))
+                WriteFile(PathMcFolder & "launcher_profiles.json", Profiles.ToString, Encoding:=Encoding.UTF8)
                 McLaunchLog("已在删除后更新 launcher_profiles.json")
             Catch exx As Exception
                 Log(exx, "更新 launcher_profiles.json 失败", LogLevel.Feedback)
@@ -2062,7 +2062,7 @@ IgnoreCustomSkin:
                 "echo 游戏已退出。" & vbCrLf &
                 "pause"
             WriteFile(If(McLaunchLoader.Input.SaveBatch, Path & "PCL\LatestLaunch.bat"), SecretFilter(CmdString, "F"),
-                      Encoding:=If(Encoding.Default.Equals(Encoding.UTF8), Encoding.UTF8, Encoding.GetEncoding("GB18030")))
+                      Encoding:=If(Encoding.Default.Equals(Encoding.UTF8), Encoding.UTF8, Encoding.UTF8))
             If McLaunchLoader.Input.SaveBatch IsNot Nothing Then
                 McLaunchLog("导出启动脚本完成，强制结束启动过程")
                 AbortHint = "导出启动脚本成功！"
