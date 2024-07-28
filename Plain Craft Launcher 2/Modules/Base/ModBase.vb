@@ -2218,7 +2218,7 @@ NextElement:
                 Throw New Exception(Url & " 不是一个有效的网址，它必须以 http 开头！")
             End If
             Log("[System] 正在打开网页：" & Url)
-            Process.Start(Url)
+            Process.Start(New ProcessStartInfo(Url) With {.UseShellExecute = True})
         Catch ex As Exception
             Log(ex, "无法打开网页（" & Url & "）")
             ClipboardSet(Url, False)
