@@ -403,8 +403,8 @@ RequestFinished:
             If Method = "POST" OrElse Method = "PUT" Then
                 Req.ContentLength = SendData.Length
                 DataStream = Req.GetRequestStream()
-                DataStream.WriteTimeout = Timeout
-                DataStream.ReadTimeout = Timeout
+                'DataStream.WriteTimeout = Timeout
+                'DataStream.ReadTimeout = Timeout
                 DataStream.Write(SendData, 0, SendData.Length)
                 DataStream.Close()
             End If
