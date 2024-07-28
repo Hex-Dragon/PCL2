@@ -1,4 +1,5 @@
 ﻿Imports System.IO.Compression
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
@@ -42,7 +43,7 @@ Public Module ModBase
     ''' <summary>
     ''' 包含程序名的完整路径。
     ''' </summary>
-    Public PathWithName As String = Path & AppDomain.CurrentDomain.SetupInformation.ApplicationName
+    Public PathWithName As String = Path & Assembly.GetEntryAssembly()?.GetName().Name
     ''' <summary>
     ''' 程序内嵌图片文件夹路径，以“/”结尾。
     ''' </summary>
@@ -597,11 +598,20 @@ Public Module ModBase
             parentKey = My.Computer.Registry.CurrentUser
             softKey = parentKey.OpenSubKey("Software\" & RegFolder, True)
             If softKey Is Nothing Then
-                ReadReg = DefaultValue '不存在则返回默认值
+                Return DefaultValue '不存在则返回默认值
             Else
                 Dim readValue As New Text.StringBuilder
-                readValue.AppendLine(softKey.GetValue(Key))
-                Dim value = readValue.ToString.Replace(vbCrLf, "") '去除莫名的回车
+                Dim keyValue As Object = softKey.GetValue(Key)
+                If TypeOf keyValue Is String Then
+                    readValue.AppendLine(DirectCast(keyValue, String))
+                ElseIf keyValue IsNot DBNull.Value AndAlso keyValue IsNot Nothing Then
+                    ' 处理非字符串类型的情况，例如转换为字符串或使用默认值
+                    readValue.AppendLine(keyValue.ToString())
+                Else
+                    ' keyValue 是 DBNull 或 Nothing，返回默认值
+                    Return DefaultValue
+                End If
+                Dim value = readValue.ToString().Replace(vbCrLf, "") '去除莫名的回车
                 Return If(value = "", DefaultValue, value) '错误则返回默认值
             End If
         Catch ex As Exception
