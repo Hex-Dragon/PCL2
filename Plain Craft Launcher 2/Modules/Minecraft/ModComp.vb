@@ -947,7 +947,7 @@ Retry:
                         Try
                             '获取工程列表
                             Log("[Comp] 开始从 CurseForge 获取工程列表：" & CurseForgeUrl)
-                            Dim RequestResult As JObject = NetGetCodeByRequestRetry(CurseForgeUrl, IsJson:=True, Encode:=Encoding.UTF8)
+                            Dim RequestResult As JObject = DlModRequest(CurseForgeUrl, IsJson:=True)
                             Task.Progress += 0.2
                             Dim ProjectList As New List(Of CompProject)
                             For Each JsonEntry As JObject In RequestResult("data")
@@ -977,7 +977,7 @@ Retry:
                     Sub()
                         Try
                             Log("[Comp] 开始从 Modrinth 获取工程列表：" & ModrinthUrl)
-                            Dim RequestResult As JObject = NetGetCodeByRequestRetry(ModrinthUrl, IsJson:=True, Encode:=Encoding.UTF8)
+                            Dim RequestResult As JObject = DlModRequest(ModrinthUrl, IsJson:=True)
                             Task.Progress += 0.2
                             Dim ProjectList As New List(Of CompProject)
                             For Each JsonEntry As JObject In RequestResult("hits")
@@ -1190,6 +1190,10 @@ Retry:
         ''' </summary>
         Public DownloadUrls As List(Of String)
         ''' <summary>
+        ''' 文件所有可能的镜像源。
+        ''' </summary>
+        Public MirrorUrls As List(Of String)
+        ''' <summary>
         ''' 文件的 SHA1 或 MD5。
         ''' </summary>
         Public ReadOnly Hash As String = Nothing
@@ -1207,7 +1211,9 @@ Retry:
         ''' </summary>
         ''' <param name="LocalAddress">目标本地文件夹，或完整的文件路径。会自动判断类型。</param>
         Public Function ToNetFile(LocalAddress As String) As NetFile
-            Return New NetFile(DownloadUrls, LocalAddress & If(LocalAddress.EndsWithF("\"), FileName, ""), New FileChecker(Hash:=Hash), UseBrowserUserAgent:=True)
+            Dim urls As List(Of String) = DownloadUrls
+            urls.AddRange(MirrorUrls)
+            Return New NetFile(urls, LocalAddress & If(LocalAddress.EndsWithF("\"), FileName, ""), New FileChecker(Hash:=Hash), UseBrowserUserAgent:=True)
         End Function
 
         '实例化
@@ -1325,6 +1331,11 @@ Retry:
                     If RawLoaders.Contains("quilt") Then ModLoaders.Add(CompModLoaderType.Quilt)
 #End Region
                 End If
+                '末尾添加备用镜像 URL
+                MirrorUrls = New List(Of String)
+                For Each u In DownloadUrls
+                    MirrorUrls.Add(DlSourceModGet(u))
+                Next
             End If
         End Sub
         ''' <summary>
@@ -1426,10 +1437,24 @@ Retry:
         Dim TargetProject As CompProject
         If CompProjectCache.ContainsKey(ProjectId) Then '存在缓存
             TargetProject = CompProjectCache(ProjectId)
-        ElseIf FromCurseForge Then 'CurseForge
-            TargetProject = New CompProject(NetGetCodeByRequestRetry("https://api.curseforge.com/v1/mods/" & ProjectId, IsJson:=True, Encode:=Encoding.UTF8)("data"))
-        Else 'Modrinth
-            TargetProject = New CompProject(NetGetCodeByRequestRetry("https://api.modrinth.com/v2/project/" & ProjectId, IsJson:=True, Encode:=Encoding.UTF8))
+        Else
+            Dim retryCount As Integer = 0
+Retry:
+            Dim comp As Object
+            If FromCurseForge Then 'CurseForge
+                comp = DlModRequest("https://api.curseforge.com/v1/mods/" & ProjectId, IsJson:=True)
+                TargetProject = New CompProject(DlModRequest("https://api.curseforge.com/v1/mods/" & ProjectId, IsJson:=True)("data"))
+            Else 'Modrinth
+                comp = DlModRequest("https://api.modrinth.com/v2/project/" & ProjectId, IsJson:=True)
+                TargetProject = New CompProject(DlModRequest("https://api.modrinth.com/v2/project/" & ProjectId, IsJson:=True))
+            End If
+            If comp Is Nothing Then '获取 ("data") 时会报值不能为 null
+                If retryCount > 2 Then Throw New Exception("工程对象获取失败，请等待一段时间后刷新再试！")
+                retryCount += 1
+                Thread.Sleep(1000)
+                GoTo Retry
+            End If
+            TargetProject = New CompProject(If(FromCurseForge, comp("data"), comp))
         End If
         '获取工程对象的文件列表
         Log("[Comp] 开始获取文件列表：" & ProjectId)
@@ -1437,13 +1462,13 @@ Retry:
         If FromCurseForge Then
             'CurseForge
             If TargetProject.Type = CompType.Mod Then 'Mod 使用每个版本最新的文件
-                ResultJsonArray = GetJson(NetRequestRetry("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(TargetProject.CurseForgeFileIds, ",") & "]}", "application/json"))("data")
+                ResultJsonArray = GetJson(DlModRequest("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(TargetProject.CurseForgeFileIds, ",") & "]}", "application/json"))("data")
             Else '否则使用全部文件
-                ResultJsonArray = NetGetCodeByRequestRetry($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=999", Accept:="application/json", IsJson:=True)("data")
+                ResultJsonArray = NetGetCodeByRequestRetry($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=999", Accept:="application/json", IsJson:=True, BackupUrl:=DlSourceModGet($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=999"))("data")
             End If
         Else
             'Modrinth
-            ResultJsonArray = NetGetCodeByRequestRetry($"https://api.modrinth.com/v2/project/{ProjectId}/version", Accept:="application/json", IsJson:=True)
+            ResultJsonArray = NetGetCodeByRequestRetry($"https://api.modrinth.com/v2/project/{ProjectId}/version", Accept:="application/json", IsJson:=True, BackupUrl:=DlSourceModGet($"https://api.modrinth.com/v2/project/{ProjectId}/version"))
         End If
         CompFilesCache(ProjectId) = ResultJsonArray.Select(Function(a) New CompFile(a, TargetProject.Type)).
             Where(Function(a) a.Available).ToList.Distinct(Function(a, b) a.Id = b.Id) 'CurseForge 可能会重复返回相同项（#1330）
@@ -1457,7 +1482,7 @@ Retry:
             Log($"[Comp] {ProjectId} 文件列表中还需要获取信息的前置 Mod：{Join(UndoneDeps, "，")}")
             Dim Projects As JArray
             If TargetProject.FromCurseForge Then
-                Projects = GetJson(NetRequestRetry("https://api.curseforge.com/v1/mods",
+                Projects = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
                     "POST", "{""modIds"": [" & Join(UndoneDeps, ",") & "]}", "application/json"))("data")
             Else
                 Projects = NetGetCodeByRequestRetry($"https://api.modrinth.com/v2/projects?ids=[""{Join(UndoneDeps, """,""")}""]",
