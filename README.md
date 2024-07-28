@@ -4,24 +4,14 @@
 [![Issues](https://img.shields.io/github/issues/Hex-Dragon/PCL2?style=flat&label=Issues&labelColor=666666&color=1a7f37)](https://github.com/Hex-Dragon/PCL2/issues)
 [![爱发电](https://img.shields.io/badge/赞助-%E7%88%B1%E5%8F%91%E7%94%B5-946ce6?style=flat&labelColor=666666&logoSize=auto)](https://afdian.com/@LTCat)
 
-<br/>
+# PCL2启动器，但是运行在.NET8平台上！
 
-## 介绍
-
-这里提供了 PCL 的大多数源代码，包括 UI 库、动画模块、下载模块、Minecraft 启动模块等！
-
-PCL 的代码绝大多数其实都是几年前学生时代的产物了……那时候英语还不过关……所以经常出现奇葩命名，还有令人高血压的高耦合啊，没做单例啊，瞎勾八乱糊啊之类的问题……额，我也不可能把这一堆玩意儿再从头写一次，各位就基于能跑就行的原则凑合凑合着看吧，求求别喷了……
-
-<br/>
+[2024.7.28.12:21]终于！能在.NET8上看到界面了！
 
 ## 相关内容
+
 - [PCL 功能投票](https://github.com/Hex-Dragon/PCL2/discussions/2)：来参加投票吧，开发者会优先处理票数较高的帖子！
 - [程序下载](https://afdian.com/p/0164034c016c11ebafcb52540025c377)：下载免费的正式版 PCL。
 - [帮助文档库](https://github.com/LTCatt/PCL2Help)：PCL 帮助文档在 GitHub 上的存储库（是的，帮助库在另一个 Repo……）
 
 <br/>
-
-## 一些无趣的小细节
-- 别想在这里面找到解密游戏的线索，那部分的代码被我抠掉了
-- 解锁隐藏主题的相关代码也被抠掉了，所以别想着用翻源代码这种歪门邪道来绕过解密了.jpg
-- 源代码库并不是即时更新的，而是在每次 PCL 发布更新时（手动）同步一次
