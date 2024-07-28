@@ -212,4 +212,45 @@
         End Try
     End Function
 
+#Region "导入/导出设置"
+    '导出设置
+    Private Sub BtnSystemSettingExp_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemSettingExp.Click
+        Dim encodedExport As Boolean = False
+        Select Case MyMsgBox("是否需要导出账号密码、主题颜色等个人设置？" & vbCrLf &
+                             "如果确定，则应妥善保存该设置，避免被他人窃取。这部分设置仅对这台电脑有效。",
+                 Button1:="否", Button2:="是", Button3:="取消")
+            Case 1
+                encodedExport = False
+            Case 2
+                encodedExport = True
+            Case 3
+                Exit Sub
+        End Select
+        Dim savePath As String = SelectAs("选择保存位置", "PCL 全局配置.ini", "PCL 配置文件(*.ini)|*.ini", Path).Replace("/", "\")
+        If savePath = "" Then Exit Sub
+        If Setup.SetupExport(savePath, ExportEncoded:=encodedExport) Then
+            Hint("配置导出成功！", HintType.Finish)
+            OpenExplorer($"/select,""{savePath}""")
+        End If
+    End Sub
+
+    '导入
+    Private Sub BtnSystemSettingImp_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemSettingImp.Click
+        If MyMsgBox("导入设置后，现有的设置将会被覆盖，建议先导出现有设置。" & vbCrLf &
+                    "当前设置将会被备份到 PCL 文件夹下的 Setup.ini.old 文件，如有需要可以自行还原。" & vbCrLf &
+                    "是否继续？", Button1:="继续", Button2:="取消") = 1 Then
+            Dim sourcePath As String = SelectFile("PCL 配置文件(*.ini)|*.ini", "选择配置文件")
+            If sourcePath = "" Then Exit Sub
+            If Setup.SetupImport(sourcePath) Then
+                '把导入的设置 UI 化
+                If FrmSetupLaunch IsNot Nothing Then FrmSetupLaunch.Reload()
+                If FrmSetupUI IsNot Nothing Then FrmSetupUI.Reload()
+                If FrmSetupSystem IsNot Nothing Then FrmSetupSystem.Reload()
+                Hint("配置导入成功！", HintType.Finish)
+            End If
+        End If
+    End Sub
+
+#End Region
+
 End Class

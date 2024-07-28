@@ -1,4 +1,6 @@
-﻿Public Class ModSetup
+﻿Imports System.Windows.Forms.AxHost
+
+Public Class ModSetup
 
     ''' <summary>
     ''' 设置的更新号。
@@ -686,6 +688,160 @@
         PageVersionLeft.Version = New McVersion(PageVersionLeft.Version.Name).Load()
         LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
     End Sub
+
+#End Region
+
+#Region "导入/导出"
+    Private Function MachineID() As String
+        Return "" 'TODO：改为实际的机器码。
+    End Function
+#Region "导出"
+    ''' <summary>
+    ''' 导出全局设置。
+    ''' </summary>
+    ''' <param name="Target">目标文件。</param>
+    ''' <param name="ExportEncoded">是否导出注册表中被加密的设置。</param>
+    ''' <returns>是否成功。</returns>
+    Public Function SetupExport(Target As String, Optional ExportEncoded As Boolean = False) As Boolean
+        Try
+            Log($"[Setup] 导出全局设置：到 {Target}，{If(ExportEncoded, "含注册表", "不含注册表")}")
+            File.Create(Target).Dispose() '选文件的时候已经确认要给他替换掉了
+            IniClearCache(Target)
+            For Each entry In SetupDict
+                If entry.Value.Source <> SetupSource.Version Then
+                    If ExportEncoded OrElse (Not (entry.Value.Encoded OrElse entry.Key = "Identify")) Then
+                        WriteIni(Target, entry.Key, entry.Value.Value)
+                    End If
+                End If
+            Next
+            WriteIni(Target, "MachineID", MachineID)
+            WriteIni(Target, "ExportType", "Global")
+            WriteIni(Target, "PCLVersion", VersionCode)
+            Return True
+        Catch ex As Exception
+            Log(ex, "导出全局设置失败", Level:=LogLevel.Hint)
+            Return False
+        End Try
+    End Function
+    ''' <summary>
+    ''' 导出版本设置。
+    ''' </summary>
+    ''' <param name="Target">目标文件。</param>
+    ''' <param name="Version">要导出设置的版本。</param>
+    ''' <returns>是否成功。</returns>
+    Public Function SetupExport(Target As String, Version As McVersion) As Boolean
+        Try
+            Log($"[Setup] 导出版本设置：{Version.Path}，到 {Target}")
+            File.Create(Target).Dispose() '选文件的时候已经确认要给他替换掉了
+            IniClearCache(Target)
+            For Each entry In SetupDict
+                If entry.Value.Source = SetupSource.Version Then
+                    WriteIni(Target, entry.Key, Setup.Get(entry.Key, Version))
+                End If
+            Next
+            For Each key In {"State", "Info", "Logo"}
+                WriteIni(Target, key, ReadIni($"{Version.Path}PCL\Setup.ini", key))
+            Next
+            WriteIni(Target, "ExportType", "Version")
+            WriteIni(Target, "PCLVersion", VersionCode)
+            Return True
+        Catch ex As Exception
+            Log(ex, "导出版本设置失败", Level:=LogLevel.Hint)
+            Return False
+        End Try
+    End Function
+#End Region
+
+#Region "导入"
+    Private CannotImport As String() = {"MachineID", "ExportType", "PCLVersion", "HintNotice", "SystemHelpVersion"}
+    ''' <summary>
+    ''' 导入全局设置。
+    ''' </summary>
+    ''' <param name="Source">源文件。</param>
+    ''' <returns>是否成功。</returns>
+    Public Function SetupImport(Source As String) As Boolean
+        Try
+            Log($"[Setup] 导入全局设置：从 {Source}")
+            Select Case ReadIni(Source, "ExportType")
+                Case "Version"
+                    Hint("导入的配置是版本设置，请到 版本设置 → 导入版本设置 页面导入！", HintType.Critical)
+                    Return False
+                Case "Global" '正常
+                Case Else
+                    Hint("请确认导入的配置文件有效！", HintType.Critical)
+                    Return False
+            End Select
+            If ReadIni(Source, "PCLVersion", "10000000") > VersionCode Then
+                Hint("导入的配置来自高版本 PCL，可能导致问题。请到 设置 → 启动器 → 检查更新 更新启动器再试！", HintType.Critical)
+                Return False
+            End If
+            CopyFile(Path & "PCL\Setup.ini", Path & "PCL\Setup.ini.old") '备份现有
+
+            Dim importEncoded As Boolean = ReadIni(Source, "MachineID", "null") = MachineID()
+
+            For Each Ln In File.ReadAllLines(Source)
+                Dim pair As String() = Ln.Split(":".ToCharArray, 2)
+                Dim key As String = pair.First()
+                Dim val As String = If(pair.Length < 2, "", pair.Last())
+                If CannotImport.Contains(key) Then
+                    Log($"[Setup] 设置项 {key} 忽略")
+                    Continue For
+                ElseIf (Not importEncoded) AndAlso SetupDict(key).Encoded Then
+                    Log($"[Setup] 设置项 {key} 被加密，忽略")
+                    Continue For
+                End If
+                Log($"[Setup] 设置项 {key} 导入，数据 {val}")
+                Setup.Set(key, val, ForceReload:=True)
+            Next
+            Return True
+        Catch ex As Exception
+            Log(ex, "导入全局设置失败", Level:=LogLevel.Msgbox)
+            Return False
+        End Try
+    End Function
+    ''' <summary>
+    ''' 导入版本设置。
+    ''' </summary>
+    ''' <param name="Source">源文件。</param>
+    ''' <param name="Version">要导入设置的版本。</param>
+    ''' <returns>是否成功。</returns>
+    Public Function SetupImport(Source As String, Version As McVersion) As Boolean
+        Try
+            Log($"[Setup] 导入版本设置：{Version.Path}，从 {Source}")
+            Select Case ReadIni(Source, "ExportType")
+                Case "Global"
+                    Hint("导入的配置是全局设置，请到 设置 → 启动器 页面导入！", HintType.Critical)
+                    Return False
+                Case "Version" '正常
+                Case Else
+                    Hint("请确认导入的配置文件有效！", HintType.Critical)
+                    Return False
+            End Select
+            If ReadIni(Source, "PCLVersion", "10000000") > VersionCode Then
+                Hint("导入的配置来自高版本 PCL，可能导致问题。请到 设置 → 启动器 → 检查更新 更新启动器再试！", HintType.Critical)
+                Return False
+            End If
+
+            CopyFile(Version.Path & "PCL\Setup.ini", Version.Path & "PCL\Setup.ini.old") '备份现有
+
+            For Each Ln In File.ReadAllLines(Source)
+                Dim pair As String() = Ln.Split(":".ToCharArray, 2)
+                Dim key As String = pair.First()
+                Dim val As String = If(pair.Length < 2, "", pair.Last())
+                If CannotImport.Contains(key) Then
+                    Log($"[Setup] 设置项 {key} 忽略")
+                    Continue For
+                End If
+                Log($"[Setup] 设置项 {key} 导入，数据 {val}")
+                If SetupDict.ContainsKey(key) Then Setup.Set(key, val, ForceReload:=True, Version:=Version) Else WriteIni(Version.Path & "PCL\Setup.ini", key, val)
+            Next
+            Return True
+        Catch ex As Exception
+            Log(ex, "导入全局设置失败", Level:=LogLevel.Msgbox)
+            Return False
+        End Try
+    End Function
+#End Region
 
 #End Region
 

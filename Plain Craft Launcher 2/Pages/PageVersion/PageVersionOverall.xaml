@@ -89,6 +89,18 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
+            <local:MyCard Margin="0,0,0,15" Title="导入 / 导出设置" x:Name="PanSettingExpImp">
+                <StackPanel Margin="25,40,25,15">
+                    <Grid Margin="0,2,0,7" Height="35">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                        </Grid.ColumnDefinitions>
+                        <local:MyButton x:Name="BtnSettingExport" Text="导出版本设置" MinWidth="140" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton x:Name="BtnSettingImport" Text="导入版本设置" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" />
+                    </Grid>
+                </StackPanel>
+            </local:MyCard>
         </StackPanel>
     </local:MyScrollViewer>
 </local:MyPageRight>
