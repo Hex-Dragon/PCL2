@@ -196,7 +196,7 @@ RequestFinished:
             SecretHeadersSign(Url, Request, UseBrowserUserAgent)
             Using res As HttpWebResponse = Request.GetResponse()
                 Using HttpStream As Stream = res.GetResponseStream()
-                    HttpStream.ReadTimeout = Timeout
+                    'HttpStream.ReadTimeout = Timeout
                     Dim HttpData As Byte() = New Byte(16384) {}
                     Using Reader As New StreamReader(HttpStream, If(Encode, Encoding.UTF8))
                         Dim ResultString As String = Reader.ReadToEnd
@@ -1109,7 +1109,7 @@ NotSupportRange:
                     End If
                     '开始下载
                     Using HttpStream = HttpResponse.GetResponseStream()
-                        HttpStream.ReadTimeout = Timeout
+                        'HttpStream.ReadTimeout = Timeout
                         If Setup.Get("SystemDebugDelay") Then Threading.Thread.Sleep(RandomInteger(50, 3000))
                         Dim HttpData As Byte() = New Byte(16384) {}
                         HttpDataCount = HttpStream.Read(HttpData, 0, 16384)
