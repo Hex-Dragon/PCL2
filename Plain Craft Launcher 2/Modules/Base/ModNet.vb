@@ -2,45 +2,6 @@
 
 Public Module ModNet
 
-#Region "Mod"
-    Public Function ModMirrorUrl(Url As String) As String
-        Select Case Setup.Get("ToolDownloadMod")
-            Case 0
-                Return Url
-            Case 1
-                Return Url.Replace("api.modrinth.com/v2", "mod.mcmirror.top/modrinth").
-                Replace("staging-api.modrinth.com/v2", "mod.mcmirror.top/modrinth").
-                Replace("cdn.modrinth.com", "mod.mcimirror.top").
-                Replace("api.curseforge.com", "mod.mcimirror.top/curseforge").
-                Replace("edge.forgecdn.net", "mod.mcimirror.top").
-                Replace("mediafilez.forgecdn.net", "mod.mcimirror.top").
-                Replace("media.forgecdn.net", "mod.mcimirror.top")
-            Case Else
-                Return Url
-        End Select
-    End Function
-    Public Function AllowModMirror(IsModFile As Boolean)
-        Return Setup.Get("ToolDownloadMod") <> 0 AndAlso (Setup.Get("ToolDownloadModMirror") OrElse Not IsModFile)
-    End Function
-    ''' <summary>
-    ''' 请求 CurseForge 或者 Modrinth。会抛出异常。
-    ''' </summary>
-    Public Function NetRequestMod(Url As String, Method As String, Data As Object, ContentType As String,
-                                  Optional Headers As Dictionary(Of String, String) = Nothing,
-                                  Optional IsModFile As Boolean = False) As String
-        Try
-            If AllowModMirror(IsModFile) Then
-                Return NetRequestOnce(Url, Method, Data, ContentType, Timeout:=5000, Headers:=Headers)
-            Else
-                Return NetRequestRetry(Url, Method, Data, ContentType, Headers:=Headers)
-            End If
-        Catch ex1 As Exception
-            If Not AllowModMirror(IsModFile) Then Throw ex1 '没机会了，45s 都没有加载完
-            Dim retry As Integer = 0
-            Return NetRequestOnce(ModMirrorUrl(Url), Method, Data, ContentType, Timeout:=30000, Headers:=Headers)
-        End Try
-    End Function
-#End Region
 
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
@@ -143,9 +104,6 @@ Retry:
         Dim RetryCount As Integer = 0
         Dim RetryException As Exception = Nothing
         Dim StartTime As Long = GetTimeTick()
-        If BackupUrl Is Nothing Then
-            If ModMirrorUrl(Url) <> Url Then BackupUrl = ModMirrorUrl(Url)
-        End If
         Try
 Retry:
             Select Case RetryCount

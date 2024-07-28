@@ -1,4 +1,4 @@
-﻿Imports System.Security.Policy
+﻿Imports Newtonsoft
 
 Public Module ModDownload
 
@@ -1077,6 +1077,69 @@ Public Module ModDownload
 
 #End Region
 
+#Region "DlMod* | Mod 列表 / 信息 / 下载"
+    Public Function DlModRequest(Url As String, Optional IsJson As Boolean = False) As String
+        Dim McimUrl As String = DlSourceModGet(Url)
+        Dim Urls As New List(Of KeyValuePair(Of String, Integer))
+        If McimUrl <> Url Then
+            Select Case Setup.Get("ToolDownloadVersion")
+                Case 0
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                Case 1
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 35))
+                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+            End Select
+        End If
+        Return DlModRequest(Urls, IsJson:=IsJson)
+    End Function
+    Public Function DlModRequest(Url As String, Method As String, Data As String, ContentType As String,
+                                 Optional Headers As Dictionary(Of String, String) = Nothing) As String
+        Dim McimUrl As String = DlSourceModGet(Url)
+        Dim Urls As New List(Of KeyValuePair(Of String, Integer))
+        If McimUrl <> Url Then
+            Select Case Setup.Get("ToolDownloadVersion")
+                Case 0
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                Case 1
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 35))
+                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+            End Select
+        End If
+        Return DlModRequest(Urls, Method, Data, ContentType, Headers:=Headers)
+    End Function
+    Private Function DlModRequest(Urls As List(Of KeyValuePair(Of String, Integer)), Optional IsJson As Boolean = False) As String
+        Dim exMessage As String = ""
+        For Each url In Urls
+            Try
+                Return NetGetCodeByDownload(url.Key, Timeout:=url.Value, IsJson:=IsJson)
+            Catch ex As Exception
+                exMessage += ex.Message + vbCrLf
+            End Try
+        Next
+        Throw New Exception(exMessage)
+    End Function
+    Private Function DlModRequest(Urls As List(Of KeyValuePair(Of String, Integer)), Method As String, Data As String,
+                                  ContentType As String, Optional Headers As Dictionary(Of String, String) = Nothing) As String
+        Dim exMessage As String = ""
+        For Each url In Urls
+            Try
+                Return NetRequestOnce(url.Key, Method, Data, ContentType, Timeout:=url.Value, Headers:=Headers)
+            Catch ex As Exception
+                exMessage += ex.Message + vbCrLf
+            End Try
+        Next
+        Throw New Exception(exMessage)
+    End Function
+#End Region
+
 #Region "DlSource | 镜像下载源"
 
     Public Function DlSourceResourceGet(MojangBase As String) As String()
@@ -1094,18 +1157,15 @@ Public Module ModDownload
             MojangBase
         }
     End Function
-    Public Function DlSourceCfOrMrGet(CfMrBase As String) As String()
-        If CfMrBase Is Nothing Then Throw New Exception("无对应的 Mod 下载地址")
-        Return {
-            CfMrBase.Replace("api.modrinth.com/v2", "mod.mcmirror.top/modrinth") _
+    Public Function DlSourceModGet(CfMrBase As String) As String
+        'If CfMrBase Is Nothing Then Throw New Exception("无对应的 Mod 下载地址")
+        Return CfMrBase.Replace("api.modrinth.com/v2", "mod.mcmirror.top/modrinth") _
             .Replace("staging-api.modrinth.com/v2", "mod.mcmirror.top/modrinth") _
             .Replace("cdn.modrinth.com", "mod.mcimirror.top") _
             .Replace("api.curseforge.com", "mod.mcimirror.top/curseforge") _
             .Replace("edge.forgecdn.net", "mod.mcimirror.top") _
             .Replace("mediafilez.forgecdn.net", "mod.mcimirror.top") _
-            .Replace("media.forgecdn.net", "mod.mcimirror.top"),
-            CfMrBase
-        }
+            .Replace("media.forgecdn.net", "mod.mcimirror.top")
     End Function
 
     Public Function DlSourceLauncherOrMetaGet(MojangBase As String) As String()
