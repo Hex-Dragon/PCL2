@@ -196,7 +196,9 @@ RequestFinished:
             SecretHeadersSign(Url, Request, UseBrowserUserAgent)
             Using res As HttpWebResponse = Request.GetResponse()
                 Using HttpStream As Stream = res.GetResponseStream()
-                    'HttpStream.ReadTimeout = Timeout
+                    If (HttpStream.CanTimeout) Then
+                        HttpStream.ReadTimeout = Timeout
+                    End If
                     Dim HttpData As Byte() = New Byte(16384) {}
                     Using Reader As New StreamReader(HttpStream, If(Encode, Encoding.UTF8))
                         Dim ResultString As String = Reader.ReadToEnd
@@ -403,15 +405,19 @@ RequestFinished:
             If Method = "POST" OrElse Method = "PUT" Then
                 Req.ContentLength = SendData.Length
                 DataStream = Req.GetRequestStream()
-                'DataStream.WriteTimeout = Timeout
-                'DataStream.ReadTimeout = Timeout
+                If (DataStream.CanTimeout) Then
+                    DataStream.WriteTimeout = Timeout
+                    DataStream.ReadTimeout = Timeout
+                End If
                 DataStream.Write(SendData, 0, SendData.Length)
                 DataStream.Close()
             End If
             Resp = Req.GetResponse()
             DataStream = Resp.GetResponseStream()
-            'DataStream.WriteTimeout = Timeout
-            'DataStream.ReadTimeout = Timeout
+            If (DataStream.CanTimeout) Then
+                DataStream.WriteTimeout = Timeout
+                DataStream.ReadTimeout = Timeout
+            End If
             Using Reader As New StreamReader(DataStream)
                 Return Reader.ReadToEnd()
             End Using
@@ -1109,7 +1115,9 @@ NotSupportRange:
                     End If
                     '开始下载
                     Using HttpStream = HttpResponse.GetResponseStream()
-                        'HttpStream.ReadTimeout = Timeout
+                        If (HttpStream.CanTimeout) Then
+                            HttpStream.ReadTimeout = Timeout
+                        End If
                         If Setup.Get("SystemDebugDelay") Then Threading.Thread.Sleep(RandomInteger(50, 3000))
                         Dim HttpData As Byte() = New Byte(16384) {}
                         HttpDataCount = HttpStream.Read(HttpData, 0, 16384)
