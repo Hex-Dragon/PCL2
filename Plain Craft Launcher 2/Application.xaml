@@ -15,26 +15,26 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!-- 颜色表 -->
-            <SolidColorBrush x:Key="ColorBrush1">#343d4a</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrush2">#0b5bcb</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrush3">#1370f3</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrush4">#4890f5</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrush5">#96c0f9</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrush6">#d5e6fd</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrush7">#e0eafd</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrush8">#eaf2fe</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrushBg0">#96c0f9</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrushBg1">#bee0eafd</SolidColorBrush>
-            <Color x:Key="ColorObject1">#343d4a</Color>
-            <Color x:Key="ColorObject2">#0b5bcb</Color>
-            <Color x:Key="ColorObject3">#1370f3</Color>
-            <Color x:Key="ColorObject4">#4890f5</Color>
-            <Color x:Key="ColorObject5">#96c0f9</Color>
-            <Color x:Key="ColorObject6">#d5e6fd</Color>
-            <Color x:Key="ColorObject7">#e0eafd</Color>
-            <Color x:Key="ColorObject8">#eaf2fe</Color>
-            <Color x:Key="ColorObjectBg0">#96c0f9</Color>
-            <Color x:Key="ColorObjectBg1">#bee0eafd</Color>
+            <SolidColorBrush x:Key="ColorBrush1">#344d29</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrush2">#0b7c2b</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrush3">#138c3b</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrush4">#48a035</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrush5">#96c02d</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrush6">#d5e655</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrush7">#e0f3a0</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrush8">#eaf2e0</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushBg0">#96c02d</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushBg1">#bee0f3a0</SolidColorBrush>
+            <Color x:Key="ColorObject1">#344d29</Color>
+            <Color x:Key="ColorObject2">#0b7c2b</Color>
+            <Color x:Key="ColorObject3">#138c3b</Color>
+            <Color x:Key="ColorObject4">#48a035</Color>
+            <Color x:Key="ColorObject5">#96c02d</Color>
+            <Color x:Key="ColorObject6">#d5e655</Color>
+            <Color x:Key="ColorObject7">#e0f3a0</Color>
+            <Color x:Key="ColorObject8">#eaf2e0</Color>
+            <Color x:Key="ColorObjectBg0">#96c02d</Color>
+            <Color x:Key="ColorObjectBg1">#bee0f3a0</Color>
             <SolidColorBrush x:Key="ColorBrushGray1">#404040</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushGray2">#737373</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushGray3">#8c8c8c</SolidColorBrush>
