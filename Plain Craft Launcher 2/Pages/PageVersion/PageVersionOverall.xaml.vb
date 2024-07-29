@@ -121,7 +121,7 @@
             Try
                 JsonObject = GetJson(ReadFile(PageVersionLeft.Version.Path & PageVersionLeft.Version.Name & ".json"))
             Catch ex As Exception
-                Log(ex, "重命名读取 json 时失败")
+                Log(ex, "重命名读取 Json 时失败")
                 JsonObject = PageVersionLeft.Version.JsonObject
             End Try
             '重命名主文件夹
@@ -164,7 +164,7 @@
                     JsonObject("id") = NewName
                     WriteFile(NewPath & NewName & ".json", JsonObject.ToString)
                 Catch ex As Exception
-                    Log(ex, "重命名版本 json 失败")
+                    Log(ex, "重命名版本 Json 失败")
                 End Try
             End If
             '刷新与提示

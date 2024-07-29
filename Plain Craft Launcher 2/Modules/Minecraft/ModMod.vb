@@ -303,7 +303,7 @@ Public Module ModMod
         End Sub
 
         ''' <summary>
-        ''' 从 jar 文件中获取 Mod 信息。
+        ''' 从 Jar 文件中获取 Mod 信息。
         ''' </summary>
         Private Sub LookupMetadata(Jar As ZipArchive)
 

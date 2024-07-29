@@ -67,8 +67,8 @@
             Case LoadState.Failed
                 Dim ErrorMessage As String = ""
                 If Loader.Error IsNot Nothing Then ErrorMessage = Loader.Error.Message
-                If ErrorMessage.Contains("不是有效的 json 文件") Then
-                    Log("[Download] 下载的整合包列表 json 文件损坏，已自动重试", LogLevel.Debug)
+                If ErrorMessage.Contains("不是有效的 Json 文件") Then
+                    Log("[Download] 下载的整合包列表 Json 文件损坏，已自动重试", LogLevel.Debug)
                     PageLoaderRestart()
                 End If
         End Select
