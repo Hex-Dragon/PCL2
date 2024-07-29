@@ -191,6 +191,8 @@ RetryStart:
                     TargetLoader = PageDownloadMod.Loader.Input.ModLoader
                 Case CompType.ModPack
                     TargetVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
+                Case CompType.DataPack
+                    TargetVersion = If(PageDownloadDataPack.Loader.Input.GameVersion, "")
                 Case Else 'CompType.ResourcePack
                     'FUTURE: Res
                     TargetVersion = "" 'If(PageDownloadResource.Loader.Input.GameVersion, "")
