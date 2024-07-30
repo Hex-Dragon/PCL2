@@ -42,6 +42,7 @@ Friend Module ModSecret
         End If
         '开源版本提示
         MyMsgBox($"该版本中不包含以下特性：
+- 微软账户登录：需要 Client ID（你可以创建并申请一个，然后添加到 McLoginMsStart 方法中）
 - CurseForge 查询：需要 API Key（你可以申请一个，然后添加到 SecretHeadersSign 方法中）
 - 更新与联网通知：避免滥用隐患
 - 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……
