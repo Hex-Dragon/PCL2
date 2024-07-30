@@ -820,7 +820,7 @@ LoginFinish:
             VerifyUri = ResultJson("verification_uri")
             ExpiresIn = ResultJson("expires_in")
             ClipboardSet(UserCode)
-            OpenWebsite(VerifyUri)
+            OpenWebsite(VerifyUri + "?oct=" + UserCode)
 
             Dim MsgBoxValue As String = ""
             While MsgBoxValue IsNot "1"
