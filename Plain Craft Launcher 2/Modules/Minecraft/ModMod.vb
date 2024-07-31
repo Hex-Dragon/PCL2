@@ -1135,7 +1135,7 @@ Finished:
         Next
         WriteFile(PathTemp & "Cache\LocalMod.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))
     End Sub
-    Private Function GetTargetModLoaders() As List(Of CompModLoaderType)
+    Public Function GetTargetModLoaders() As List(Of CompModLoaderType)
         Dim ModLoaders As New List(Of CompModLoaderType)
         If PageVersionLeft.Version.Version.HasForge Then ModLoaders.Add(CompModLoaderType.Forge)
         If PageVersionLeft.Version.Version.HasNeoForge Then ModLoaders.Add(CompModLoaderType.NeoForge)

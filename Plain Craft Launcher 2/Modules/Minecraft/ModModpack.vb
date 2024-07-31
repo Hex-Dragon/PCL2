@@ -2,6 +2,7 @@
 
 Public Module ModModpack
 
+#Region "安装"
     '触发整合包安装的外部接口
     ''' <summary>
     ''' 弹窗要求选择一个整合包文件并进行安装。
@@ -848,6 +849,288 @@ Retry:
         PageSelectLeft.AddFolder(TargetFolder, NewName, False)
         Hint("已加入游戏文件夹列表：" & NewName, HintType.Finish)
     End Sub
+
+#End Region
+#End Region
+
+#Region "导出"
+    Private ExpTempDir As String = PathTemp & "PackExport\"
+    ''' <summary>
+    ''' 整合包类型。
+    ''' </summary>
+    Public Enum ModpackType
+        Modrinth
+    End Enum
+    ''' <summary>
+    ''' 导出整合包的选项。
+    ''' </summary>
+    Public Class ExportOptions
+        ''' <summary>
+        ''' 要导出的版本。
+        ''' </summary>
+        Public Version As McVersion
+        ''' <summary>
+        ''' 要保存整合包的位置。
+        ''' </summary>
+        Public Dest As String
+        ''' <summary>
+        ''' 是否包括 PCL 文件。
+        ''' </summary>
+        Public IncludePCL As Boolean
+        ''' <summary>
+        ''' 整合包类型。
+        ''' </summary>
+        Public Type As ModpackType
+        ''' <summary>
+        ''' 要保留到整合包的文件。
+        ''' </summary>
+        Public Additional As String()
+        ''' <summary>
+        ''' 是否需要保留 PCL 全局设置。仅在包括 PCL 时有效。
+        ''' </summary>
+        Public PCLSetupGlobal As Boolean = True
+        ''' <summary>
+        ''' 整合包名称。
+        ''' </summary>
+        Public Name As String = ""
+        ''' <summary>
+        ''' 整合包描述。
+        ''' </summary>
+        Public Desc As String = ""
+        ''' <summary>
+        ''' 版本号。
+        ''' </summary>
+        Public VerID As String = ""
+        Public Sub New(Version As McVersion,
+                       Dest As String,
+                       IncludePCL As Boolean,
+                       Additional As String(),
+                       Optional PCLSetupGlobal As Boolean = True,
+                       Optional Name As String = "",
+                       Optional Desc As String = "",
+                       Optional VerID As String = "")
+            Me.Version = Version
+            Me.Dest = Dest
+            Me.IncludePCL = IncludePCL
+            Me.Additional = Additional
+            Me.PCLSetupGlobal = PCLSetupGlobal
+            Me.Name = Name
+            Me.Desc = Desc
+            Me.VerID = VerID
+        End Sub
+    End Class
+    ''' <summary>
+    ''' 导出整合包。不阻塞。
+    ''' </summary>
+    Public Sub ModpackExport(Options As ExportOptions)
+        Hint("正在导出……")
+        RunInNewThread(
+            Sub()
+                If ModpackExportBlocking(Options) Then
+                    Hint("导出成功！", HintType.Finish)
+                    OpenExplorer($"/select,""{Options.Dest}""")
+                End If
+            End Sub, "Modpack Export")
+    End Sub
+    Private Function ModpackExportBlocking(Options As ExportOptions) As Boolean
+        If Options.IncludePCL Then
+            Return ExportCompressed(Options.Version, Options.Dest, Options.Additional, Options.Name, Options.VerID, Options.PCLSetupGlobal)
+        End If
+        Return ExportModrinth(Options.Version, Options.Dest, Options.Additional, Options.Name, Options.VerID)
+    End Function
+
+#Region "冗余"
+    Private VersionRedundant As String() = {"screenshots", "backups", "command_history\.txt", '个人文件
+        ".*-natives", "server-resource-packs", "user.*cache\.json", "\.optifine", "\.fabric", "\.mixin\.out", '缓存
+        ".*\.jar", "downloads", "realms_persistence.json", "\$\{natives_directory\}", "essential", '可联网更新
+        "logs", "crash-reports", ".*\.log", "debug", '日志
+        ".*\.dat_old", ".*\.old", '备份
+        "\$\{quickPlayPath\}", '服务器
+        "\.replay_cache", "replay_recordings", "replay_videos", 'ReplayMod
+        "irisUpdateInfo\.json", 'Iris
+        "modernfix", 'ModernFix 模组
+        "modtranslations", 'Mod 翻译
+        "schematics", 'schematics 模组
+        ".*\.BakaCoreInfo", 'BakaXL 配置
+        "hmclversion\.cfg", "log4j2\.xml" 'HMCL 配置
+    }
+    Public Function IsVerRedundant(FilePath As String) As Boolean
+        FilePath = FilePath.Replace("/", "\")
+        For Each regex In VersionRedundant
+            If RegexCheck(GetFileNameFromPath(FilePath), regex, RegularExpressions.RegexOptions.IgnoreCase) Then Return True
+            If FilePath.EndsWithF("\journeymap\data\") OrElse
+                FilePath.EndsWithF("\journeymap\data") OrElse
+                FilePath.EndsWithF("\mods\.connector") Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+    Private MustExport As String() = {
+        "mods", "PCL", ".*\.json"
+    }
+    Public Function IsMustExport(FileName As String) As Boolean
+        For Each regex In MustExport
+            If RegexCheck(FileName, regex, RegularExpressions.RegexOptions.IgnoreCase) Then Return True
+        Next
+        Return False
+    End Function
+#End Region
+
+#Region "不同类型整合包的导出方法"
+    Private Function ExportModrinth(Version As McVersion, DestPath As String, Additional As String(), Name As String, VerID As String) As Boolean
+        Try
+            Log($"[Export] 导出整合包（Modrinth）：{Version.Path} -> {DestPath}，额外版本文件 {If(Additional Is Nothing OrElse Not Additional.Any, "不导出", Additional.Join(", "))}")
+            Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
+            Log($"[Export] 缓存文件夹：{tempDir}")
+            Directory.CreateDirectory(tempDir)
+
+            '步骤 1：从 Modrinth 获取 Mod 工程信息，得到 URL
+            Dim Mods As New List(Of McMod)
+            For Each m In Directory.EnumerateFiles(Version.Path & "mods\")
+                If m.EndsWithF(".jar") Then Mods.Add(New McMod(m))
+            Next
+
+            '从 Modrinth 获取信息
+            Dim ModrinthHashes = Mods.Select(Function(m) m.ModrinthHash).ToList()
+            Dim ModrinthVersion = CType(GetJson(NetRequestRetry("https://api.modrinth.com/v2/version_files", "POST",
+    $"{{""hashes"": [""{ModrinthHashes.Join(""",""")}""], ""algorithm"": ""sha1""}}", "application/json")), JObject)
+            Log($"[Export] 从 Modrinth 获取到 {ModrinthVersion.Count} 个本地 Mod 的对应信息")
+
+            Dim ModrinthMapping As New Dictionary(Of String, JObject) 'Modrinth 获取到的 Mod
+            Dim ModrinthFailed As New List(Of McMod) 'Modrinth 获取失败的 Mod
+            For Each Entry In Mods
+                If (Not ModrinthVersion.ContainsKey(Entry.ModrinthHash)) OrElse
+                   (ModrinthVersion(Entry.ModrinthHash)("files")(0)("hashes")("sha1") <> Entry.ModrinthHash) Then
+                    ModrinthFailed.Add(Entry)
+                    Continue For
+                End If
+                ModrinthMapping.Add(Entry.FileName, ModrinthVersion(Entry.ModrinthHash)("files")(0))
+            Next
+
+            '步骤 2：把获取失败的 Mod 从 CurseForge 继续获取
+            Dim CurseForgeHashes = ModrinthFailed.Select(Function(m) m.CurseForgeHash).ToList()
+            Dim CurseForgeRaw = CType(CType(GetJson(NetRequestRetry("https://api.curseforge.com/v1/fingerprints/432/", "POST",
+                                    $"{{""fingerprints"": [{CurseForgeHashes.Join(",")}]}}", "application/json")), JObject)("data")("exactMatches"), JContainer)
+            Log($"[Export] 从 CurseForge 获取到 {CurseForgeRaw.Count} 个本地 Mod 的对应信息")
+
+
+            Dim CurseForgeMapping As New Dictionary(Of String, JObject) 'CurseForge 获取到的 Mod
+            For Each m In CurseForgeRaw
+                Dim hash As String = ""
+                For Each h In m("file")("hashes") '获取 Modrinth Hash
+                    If h("algo").ToString = 1 Then
+                        hash = h("value")
+                        Exit For
+                    End If
+                Next
+                If String.IsNullOrEmpty(hash) OrElse String.IsNullOrEmpty(m("file")("downloadUrl")) Then Continue For
+
+                m("file")("ModrinthHash") = hash
+                CurseForgeMapping.Add(m("file")("fileName"), m("file"))
+                For Each file In ModrinthFailed
+                    If file.ModrinthHash = hash Then
+                        ModrinthFailed.Remove(file)
+                        Exit For
+                    End If
+                Next
+            Next
+
+            '步骤 3：写入 Json 文件
+            '获取作为检查目标的加载器和版本
+            Dim ModLoaders = GetTargetModLoaders()
+            Dim McVersion = Version.Version.McName
+            Log($"[Export] 目标加载器：{ModLoaders.Join("/")}，版本：{McVersion}")
+
+            Dim files As New JArray
+            For Each m In ModrinthMapping
+                files.Add(New JObject From {
+                    {"path", $"mods/{m.Key}"},
+                    {"hashes", m.Value("hashes")},
+                    {"env", New JObject From {{"client", "required"}, {"server", "required"}}},
+                    {"downloads", New JArray From {m.Value("url")}},
+                    {"fileSize", m.Value("size")}
+                })
+            Next
+            For Each m In CurseForgeMapping
+                files.Add(New JObject From {
+                    {"path", $"mods/{m.Key}"},
+                    {"hashes", New JObject From {{"sha1", m.Value("ModrinthHash").ToString}}},
+                    {"env", New JObject From {{"client", "required"}, {"server", "required"}}},
+                    {"downloads", New JArray From {m.Value("downloadUrl")}},
+                    {"fileSize", m.Value("fileLength")}
+                })
+            Next
+
+            Dim depend As New JObject From {{"minecraft", McVersion}}
+            If Version.Version.HasForge Then depend.Add("forge", Version.Version.ForgeVersion)
+            If Version.Version.HasFabric Then depend.Add("fabric-loader", Version.Version.FabricVersion)
+            If Version.Version.HasNeoForge Then depend.Add("neoforge", Version.Version.NeoForgeVersion)
+
+            Dim json As New JObject From {
+                {"game", "minecraft"},
+                {"formatVersion", 1},
+                {"versionId", VerID},
+                {"name", If(String.IsNullOrEmpty(Name), Version.Name, Name)},
+                {"summary", Version.Info},
+                {"files", files},
+                {"dependencies", depend}
+            }
+
+            File.WriteAllText(tempDir & "modrinth.index.json", json.ToString)
+
+            '步骤 4：将获取不到的保存到 overrides 目录
+            For Each m In ModrinthFailed
+                CopyFile(m.Path, tempDir & "overrides\mods\" & m.FileName)
+            Next
+
+            '额外文件
+            For Each p In Additional
+                If String.IsNullOrWhiteSpace(p) Then Continue For '传空字串进去会直接把整个版本文件夹拷过去
+                If Not p.StartsWithF(Version.Path, IgnoreCase:=True) Then Continue For
+                Dim relative As String = p.Replace(Version.Path, "")
+                If File.Exists(p) AndAlso Not IsVerRedundant(p) Then
+                    CopyFile(p, $"{tempDir}overrides\{relative}")
+                End If
+            Next
+
+            If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换
+            ZipFile.CreateFromDirectory(tempDir, DestPath)
+            DeleteDirectory(tempDir)
+            Return True
+        Catch ex As Exception
+            Log(ex, "导出整合包失败", LogLevel.Msgbox)
+            Return False
+        End Try
+    End Function
+    Private Function ExportCompressed(Version As McVersion, DestPath As String, Additional As String(), Name As String, VerID As String, PCLSetupGlobal As Boolean) As Boolean
+        Try
+            Log($"[Export] 导出整合包（含启动器）：{Version.Path} -> {DestPath}，额外版本文件 {Additional.Count} 个，全局设置 {If(PCLSetupGlobal, "导出", "不导出")}")
+            Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
+            Log($"[Export] 最终压缩包的缓存文件夹：{tempDir}")
+            Directory.CreateDirectory(tempDir)
+
+            Log("[Export] 开始导出 Modrinth 整合包")
+            ExportModrinth(Version, $"{tempDir}modpack.mrpack", Additional, Name, VerID)
+
+            Log($"[Export] 正在复制 PCL 本体")
+            CopyFile(PathWithName, tempDir & GetFileNameFromPath(PathWithName))
+
+            If PCLSetupGlobal Then
+                Log($"[Export] 正在复制 PCL 全局配置")
+                CopyFile(Path & "PCL\Setup.ini", tempDir & "PCL\Setup.ini")
+            End If
+
+            If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换
+            ZipFile.CreateFromDirectory(tempDir, DestPath)
+            DeleteDirectory(tempDir)
+            Return True
+        Catch ex As Exception
+            Log(ex, "导出整合包失败", LogLevel.Msgbox)
+            Return False
+        End Try
+    End Function
+#End Region
 
 #End Region
 
