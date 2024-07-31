@@ -955,10 +955,12 @@ Retry:
         "hmclversion\.cfg", "log4j2\.xml" 'HMCL 配置
     }
     Public Function IsVerRedundant(FilePath As String) As Boolean
+        FilePath = FilePath.Replace("/", "\")
         For Each regex In VersionRedundant
             If RegexCheck(GetFileNameFromPath(FilePath), regex, RegularExpressions.RegexOptions.IgnoreCase) Then Return True
-            If FilePath.Replace("/", "\").EndsWithF("\journeymap\data\") OrElse
-                FilePath.Replace("/", "\").EndsWithF("\journeymap\data") Then
+            If FilePath.EndsWithF("\journeymap\data\") OrElse
+                FilePath.EndsWithF("\journeymap\data") OrElse
+                FilePath.EndsWithF("\mods\.connector") Then
                 Return True
             End If
         Next
@@ -996,17 +998,45 @@ Retry:
             Log($"[Export] 从 Modrinth 获取到 {ModrinthVersion.Count} 个本地 Mod 的对应信息")
 
             Dim ModrinthMapping As New Dictionary(Of String, JObject) 'Modrinth 获取到的 Mod
-            Dim LocalMods As New List(Of String) 'Modrinth 获取失败的 Mod
+            Dim ModrinthFailed As New List(Of McMod) 'Modrinth 获取失败的 Mod
             For Each Entry In Mods
                 If (Not ModrinthVersion.ContainsKey(Entry.ModrinthHash)) OrElse
                    (ModrinthVersion(Entry.ModrinthHash)("files")(0)("hashes")("sha1") <> Entry.ModrinthHash) Then
-                    LocalMods.Add(Entry.Path)
+                    ModrinthFailed.Add(Entry)
                     Continue For
                 End If
                 ModrinthMapping.Add(Entry.FileName, ModrinthVersion(Entry.ModrinthHash)("files")(0))
             Next
 
-            '步骤 2：写入 Json 文件
+            '步骤 2：把获取失败的 Mod 从 CurseForge 继续获取
+            Dim CurseForgeHashes = ModrinthFailed.Select(Function(m) m.CurseForgeHash).ToList()
+            Dim CurseForgeRaw = CType(CType(GetJson(NetRequestRetry("https://api.curseforge.com/v1/fingerprints/432/", "POST",
+                                    $"{{""fingerprints"": [{CurseForgeHashes.Join(",")}]}}", "application/json")), JObject)("data")("exactMatches"), JContainer)
+            Log($"[Export] 从 CurseForge 获取到 {CurseForgeRaw.Count} 个本地 Mod 的对应信息")
+
+
+            Dim CurseForgeMapping As New Dictionary(Of String, JObject) 'CurseForge 获取到的 Mod
+            For Each m In CurseForgeRaw
+                Dim hash As String = ""
+                For Each h In m("file")("hashes") '获取 Modrinth Hash
+                    If h("algo").ToString = 1 Then
+                        hash = h("value")
+                        Exit For
+                    End If
+                Next
+                If String.IsNullOrEmpty(hash) OrElse String.IsNullOrEmpty(m("file")("downloadUrl")) Then Continue For
+
+                m("file")("ModrinthHash") = hash
+                CurseForgeMapping.Add(m("file")("fileName"), m("file"))
+                For Each file In ModrinthFailed
+                    If file.ModrinthHash = hash Then
+                        ModrinthFailed.Remove(file)
+                        Exit For
+                    End If
+                Next
+            Next
+
+            '步骤 3：写入 Json 文件
             '获取作为检查目标的加载器和版本
             Dim ModLoaders = GetTargetModLoaders()
             Dim McVersion = Version.Version.McName
@@ -1022,6 +1052,16 @@ Retry:
                     {"fileSize", m.Value("size")}
                 })
             Next
+            For Each m In CurseForgeMapping
+                files.Add(New JObject From {
+                    {"path", $"mods/{m.Key}"},
+                    {"hashes", New JObject From {{"sha1", m.Value("ModrinthHash").ToString}}},
+                    {"env", New JObject From {{"client", "required"}, {"server", "required"}}},
+                    {"downloads", New JArray From {m.Value("downloadUrl")}},
+                    {"fileSize", m.Value("fileLength")}
+                })
+            Next
+
             Dim depend As New JObject From {{"minecraft", McVersion}}
             If Version.Version.HasForge Then depend.Add("forge", Version.Version.ForgeVersion)
             If Version.Version.HasFabric Then depend.Add("fabric-loader", Version.Version.FabricVersion)
@@ -1039,9 +1079,9 @@ Retry:
 
             File.WriteAllText(tempDir & "modrinth.index.json", json.ToString)
 
-            '步骤 3：将获取不到的保存到 overrides 目录
-            For Each m In LocalMods
-                CopyFile(m, tempDir & "overrides\" & GetFileNameFromPath(m))
+            '步骤 4：将获取不到的保存到 overrides 目录
+            For Each m In ModrinthFailed
+                CopyFile(m.Path, tempDir & "overrides\mods\" & m.FileName)
             Next
 
             '额外文件

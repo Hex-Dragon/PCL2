@@ -298,7 +298,7 @@
         For Each c In PanCommonFiles.Children
             If TypeOf c IsNot MyCheckBox Then Continue For
             If String.IsNullOrEmpty(c.Tag) Then Continue For
-            contains.Add(PageVersionLeft.Version.Path & c.Tag)
+            If c.Checked Then contains.Add(PageVersionLeft.Version.Path & c.Tag)
         Next
         ModpackExport(New ExportOptions(PageVersionLeft.Version, savePath, CheckIncludePCL.Checked, contains.Distinct.ToArray,
                                         PCLSetupGlobal:=CheckIncludeSetup.Checked, Name:=TbExportName.Text, VerID:=TbExportVersion.Text))
