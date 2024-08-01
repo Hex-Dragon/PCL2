@@ -52,25 +52,25 @@
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Text="{DynamicResource LangDownloadModpackType}" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="4" Grid.Row="2" MaxDropDownHeight="320">
                             <local:MyComboBoxItem Tag="" Content="{DynamicResource LangDownloadModpackTypeAll}" IsSelected="True" />
-                            <local:MyComboBoxItem Tag="4484/" Content="{DynamicResource LangDownloadModpackTypeAllMulti}" />
-                            <local:MyComboBoxItem Tag="/optimization" Content="{DynamicResource LangDownloadModpackTypeAllOptimization}" />
-                            <local:MyComboBoxItem Tag="4479/challenging" Content="{DynamicResource LangDownloadModpackTypeAllChallenging}" />
-                            <local:MyComboBoxItem Tag="4483/combat" Content="{DynamicResource LangDownloadModpackTypeAllCombat}" />
-                            <local:MyComboBoxItem Tag="4478/quests" Content="{DynamicResource LangDownloadModpackTypeAllQuests}" />
-                            <local:MyComboBoxItem Tag="4472/technology" Content="{DynamicResource LangDownloadModpackTypeAllTech}" />
-                            <local:MyComboBoxItem Tag="4473/magic" Content="{DynamicResource LangDownloadModpackTypeAllMagic}" />
-                            <local:MyComboBoxItem Tag="4475/adventure" Content="{DynamicResource LangDownloadModpackTypeAllAdventure}" />
-                            <local:MyComboBoxItem Tag="/kitchen-sink" Content="{DynamicResource LangDownloadModpackTypeAllCook}" />
-                            <local:MyComboBoxItem Tag="4476/" Content="{DynamicResource LangDownloadModpackTypeAllExplore}" />
-                            <local:MyComboBoxItem Tag="4477/" Content="{DynamicResource LangDownloadModpackTypeAllGame}" />
-                            <local:MyComboBoxItem Tag="4471/" Content="{DynamicResource LangDownloadModpackTypeAllScienceFiction}" />
-                            <local:MyComboBoxItem Tag="4736/" Content="{DynamicResource LangDownloadModpackTypeAllSkyland}" />
-                            <local:MyComboBoxItem Tag="5128/" Content="{DynamicResource LangDownloadModpackTypeAllImprove}" />
-                            <local:MyComboBoxItem Tag="4487/" Content="{DynamicResource LangDownloadModpackTypeAllFTB}" 
-                                                  ToolTip="{DynamicResource LangDownloadModpackTypeAllFTBToolTip}" ToolTipService.HorizontalOffset="70" />
-                            <local:MyComboBoxItem Tag="4480/" Content="{DynamicResource LangDownloadModpackTypeAllMapBased}" />
-                            <local:MyComboBoxItem Tag="4481/lightweight" Content="{DynamicResource LangDownloadModpackTypeAllLightWeight}" />
-                            <local:MyComboBoxItem Tag="4482/" Content="{DynamicResource LangDownloadModpackTypeAllHeavyWeight}" />
+                            <local:MyComboBoxItem Tag="4484/" Content="{DynamicResource LangDownloadModpackTypeMulti}" />
+                            <local:MyComboBoxItem Tag="/optimization" Content="{DynamicResource LangDownloadModpackTypeOptimization}" />
+                            <local:MyComboBoxItem Tag="4479/challenging" Content="{DynamicResource LangDownloadModpackTypeChallenging}" />
+                            <local:MyComboBoxItem Tag="4483/combat" Content="{DynamicResource LangDownloadModpackTypeCombat}" />
+                            <local:MyComboBoxItem Tag="4478/quests" Content="{DynamicResource LangDownloadModpackTypeQuests}" />
+                            <local:MyComboBoxItem Tag="4472/technology" Content="{DynamicResource LangDownloadModpackTypeTech}" />
+                            <local:MyComboBoxItem Tag="4473/magic" Content="{DynamicResource LangDownloadModpackTypeMagic}" />
+                            <local:MyComboBoxItem Tag="4475/adventure" Content="{DynamicResource LangDownloadModpackTypeAdventure}" />
+                            <local:MyComboBoxItem Tag="/kitchen-sink" Content="{DynamicResource LangDownloadModpackTypeCook}" />
+                            <local:MyComboBoxItem Tag="4476/" Content="{DynamicResource LangDownloadModpackTypeExplore}" />
+                            <local:MyComboBoxItem Tag="4477/" Content="{DynamicResource LangDownloadModpackTypeGame}" />
+                            <local:MyComboBoxItem Tag="4471/" Content="{DynamicResource LangDownloadModpackTypeScienceFiction}" />
+                            <local:MyComboBoxItem Tag="4736/" Content="{DynamicResource LangDownloadModpackTypeSkyland}" />
+                            <local:MyComboBoxItem Tag="5128/" Content="{DynamicResource LangDownloadModpackTypeImprove}" />
+                            <local:MyComboBoxItem Tag="4487/" Content="{DynamicResource LangDownloadModpackTypeFTB}" 
+                                                  ToolTip="{DynamicResource LangDownloadModpackTypeFTBToolTip}" ToolTipService.HorizontalOffset="70" />
+                            <local:MyComboBoxItem Tag="4480/" Content="{DynamicResource LangDownloadModpackTypeMapBased}" />
+                            <local:MyComboBoxItem Tag="4481/lightweight" Content="{DynamicResource LangDownloadModpackTypeLightWeight}" />
+                            <local:MyComboBoxItem Tag="4482/" Content="{DynamicResource LangDownloadModpackTypeHeavyWeight}" />
                         </local:MyComboBox>
                     </Grid>
                     <Grid Margin="0,4,0,6" Height="35">
