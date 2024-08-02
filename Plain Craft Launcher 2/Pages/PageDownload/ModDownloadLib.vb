@@ -192,7 +192,7 @@ Public Module ModDownloadLib
         '建立控件
         Dim NewItem As New MyListItem With {.Logo = Logo, .SnapsToDevicePixels = True, .Title = Entry("id").ToString, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry}
         If Entry("lore") Is Nothing Then
-            NewItem.Info = Entry("releaseTime").Value(Of Date).ToString("yyyy'/'MM'/'dd HH':'mm")
+            NewItem.Info = GetLocalTimeFormat(Entry("releaseTime").Value(Of Date))
         Else
             NewItem.Info = Entry("lore").ToString
         End If
@@ -1818,7 +1818,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Before("+").Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = Entry.StatusDescription & "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
+            .Info = Entry.StatusDescription & "，" & GetLang("LangDownloadReleaseOn") & " " & GetLocalTimeFormat(Entry.ReleaseDate),
             .Logo = PathImage & "Blocks/Fabric.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1829,7 +1829,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.ToLower.Replace("optifabric-", "").Replace(".jar", "").Trim.TrimStart("v"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = Entry.StatusDescription & "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
+            .Info = Entry.StatusDescription & "，" & GetLang("LangDownloadReleaseOn") & " " & GetLocalTimeFormat(Entry.ReleaseDate),
             .Logo = PathImage & "Blocks/OptiFabric.png"
         }
         AddHandler NewItem.Click, OnClick

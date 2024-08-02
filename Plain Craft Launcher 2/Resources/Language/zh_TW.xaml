@@ -24,7 +24,7 @@
     <s:String x:Key="LangDialogBtnPolicyContent">查看用戶協議與免責聲明</s:String>
     <s:String x:Key="LangHintDebugWarning">[調試模式] PCL 正以調試模式運行，這可能會導致性能下降，若無必要請不要開啟！</s:String>
     <s:String x:Key="LangDialogTitleTip">提示</s:String>
-    <s:String x:Key="LangDialogHardcoreFanTheme">你已經使用了 99 次 PCL 啦，感謝你長期以來的支持！&#x000D;隱藏主題 鐵杆粉 已解鎖！</s:String>
+    <s:String x:Key="LangDialogHardcoreFanTheme">你已經使用了 99 次 PCL 啦，感謝你長期以來的支持！&#x000D;隱藏主題 鐵桿粉 已解鎖！</s:String>
     <s:String x:Key="LangDialogCloseOnDownloading">還有下載任務尚未完成，是否確定退出？</s:String>
     <s:String x:Key="LangHintHideModeOn">功能隱藏設置已重新開啟！</s:String>
     <s:String x:Key="LangHintHideModeOff">功能隱藏設置已暫時關閉！</s:String>
@@ -105,7 +105,7 @@
     <s:String x:Key="LangDialogCustomPageOverwriteFail">生成教學文件失敗</s:String>
     <s:String x:Key="LangHintCustomPageOverwriteSuccess">教學文件已生成！</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">已刷新主頁！</s:String>
-    <s:String x:Key="LangDialogCustomPageTeachContent">1. 點擊 生成教學文件 按鈕，這會在 PCL 文件夾下生成 Custom.xaml 布局文件。&#x000D;2. 使用記事本等工具打開這個文件並進行修改，修改完記得保存。&#x000D;3. 點擊 刷新主頁 按鈕，查看主頁現在長啥樣了。&#x000D;你可以在生成教學文件後直接刷新主頁，對照着進行修改，更有助於理解。&#x000D;直接將自定義主頁文件拖進 PCL 窗口也可以快捷加載。</s:String>
+    <s:String x:Key="LangDialogCustomPageTeachContent">1. 點擊 生成教學文件 按鈕，這會在 PCL 文件夾下生成 Custom.xaml 布局文件。&#x000D;2. 使用記事本等工具打開這個文件並進行修改，修改完記得保存。&#x000D;3. 點擊 刷新主頁 按鈕，查看主頁現在長啥樣了。&#x000D;你可以在生成教學文件後直接刷新主頁，對照著進行修改，更有助於理解。&#x000D;直接將自定義主頁文件拖進 PCL 窗口也可以快捷加載。</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">主頁自定義教程</s:String>
     <s:String x:Key="LangThemeBackUnlock">隱藏主題 玄素黑 已解鎖！</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameContent">1. 不爬取或攻擊相關服務或網站，不盜取相關賬號，沒有謎題可以或需要以此來解決。&#x000D;2. 不得篡改或損毀相關公開信息，請儘量讓它們保持原狀。&#x000D;3. 在你感到迷茫的時候，看看回聲洞可能會給你帶來驚喜。&#x000D;&#x000D;若違規，可能會被從任意相關群中踢出！</s:String>
@@ -224,7 +224,7 @@
     <s:String x:Key="LangSetFuncHiddenMoreVote">新功能投票</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecial">特定功能</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">郵箱隱藏</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">隱藏第三方登錄的賬號郵箱顯示，並儘量將郵箱打碼，以避免隱私泄露。&#xa;此選項的更改將在重啟啟動器後生效。</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">隱藏第三方登錄的賬號郵箱顯示，並儘量將郵箱打碼，以避免隱私洩露。&#xa;此選項的更改將在重啟啟動器後生效。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">版本選擇</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">功能隱藏</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">僅隱藏本選項卡，設置的禁用內容依然有效。&#xa;可以在保留個性化設置頁面的情況下避免隱藏設置被修改。</s:String>
@@ -285,6 +285,7 @@
     <s:String x:Key="LangSelectVersionTypeRegular">常規版本</s:String>
     <s:String x:Key="LangSelectVersionTypeModAbility">可安裝 Mod</s:String>
     <s:String x:Key="LangSelectVersionTypeForge">Forge 版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeNeoForge">NeoForge 版本</s:String>
     <s:String x:Key="LangSelectVersionTypeLiteloader">LiteLoader 版本</s:String>
     <s:String x:Key="LangSelectVersionTypeFabric">Fabric 版本</s:String>
     <s:String x:Key="LangSelectVersionTypeError">錯誤的版本</s:String>
@@ -743,9 +744,9 @@
     <s:String x:Key="LangPageOtherAboutLicenseWeb">查看來源網站</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用戶協議與免責聲明</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隱私說明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟件會匯報自己的版本名與版本號，以統計用戶數量與各版本的用戶數量占比。除此之外，本軟件不會上傳您的任何信息。&#13;若您能提供未經外部修改的本軟件本體上傳隱私信息的確鑿證據，開發者會向您支付 PCL 開發所獲全部淨收入。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟體會匯報自己的版本名與版本號，以統計用戶數量與各版本的用戶數量占比。除此之外，本軟體不會上傳您的任何信息。&#13;若您能提供未經外部修改的本軟體本體上傳隱私信息的確鑿證據，開發者會向您支付 PCL 開發所獲全部淨收入。</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龍騰貓躍 2016. All Rights Reserved.&#13;計算機軟件著作權登記號：2020SR0875133&#13;違法違規行為舉報投訴郵箱：hexdragon@vip.qq.com</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龍騰貓躍 2016. All Rights Reserved.&#13;計算機軟體著作權登記號：2020SR0875133&#13;違法違規行為舉報投訴郵箱：hexdragon@vip.qq.com</s:String>
 
     <!--PageOtherTest-->
     <s:String x:Key="LangPageOtherTestNoUtility">為便於維護，開源內容中不包含百寶箱功能……</s:String>
@@ -1072,7 +1073,7 @@
     <s:String x:Key="LangPageVersionSetupServerLoginServerName">服務器名稱</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerNameToolTip">顯示在登錄頁面的服務器名稱</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServer">自動進入服務器</s:String>
-    <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServerToolTip">在打開 Minecraft 後自動進入某服務器。&#xa;用英文冒號間隔 IP 與端口，例如 233.233.233.233:12345。</s:String>
+    <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServerToolTip">在打開 Minecraft 後自動進入某服務器。&#xa;用英文冒號間隔 IP 與埠，例如 233.233.233.233:12345。</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerMaster">服主後台</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerSetLittleSkin">設置為 LittleSkin</s:String>
     <s:String x:Key="LangPageVersionSetupJVMHead">啟動 Minecraft 時使用的額外 JVM 參數，在沒有確定把握的情況下請不要嘗試修改。&#xa;若留空，則使用全局設置的值。</s:String>
@@ -1085,7 +1086,7 @@
     <s:String x:Key="LangModMainAprilFoolTipA">放棄吧！只需要點一下右下角的小白旗……</s:String>
     <s:String x:Key="LangModMainAprilFoolTipB">看到右下角的那面小白旗了嗎？</s:String>
     <s:String x:Key="LangModMainAprilFoolTipC">這裡建議點一下右下角的小白旗投降呢.jpg</s:String>
-    <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永遠等着你……</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永遠等著你……</s:String>
 
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">正在開啟中，請稍候……</s:String>
@@ -1134,6 +1135,7 @@
     <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft 更新提示</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">下載</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">更新日誌</s:String>
+    <s:String x:Key="LangModMinecraftVersionVanilla">原版</s:String>
 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">適用於</s:String>
@@ -1172,7 +1174,12 @@
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">你的 PCL 不是最新版，因此無法提交反饋。&#xa;請先在 設置 → 啟動器 中更新啟動器，確認該問題在最新版中依然存在，然後再提交反饋。</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">無法提交反饋</s:String>
-
+    <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL 的運行環境存在問題。請嘗試重新安裝 .NET Framework 4.6.2 然後再試。</s:String>
+    <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL 的權限不足。請嘗試右鍵 PCL，選擇以管理員身份運行。</s:String>
+    <s:String x:Key="LangModBaseExceptionOutOfMemoryException">你的電腦運行內存不足，導致 PCL 無法繼續運行。請在關閉一部分不需要的程序後再試。</s:String>
+    <s:String x:Key="LangModBaseExceptionCOMException">由於作業系統或顯卡存在問題，導致出現錯誤。請嘗試重啟 PCL。</s:String>
+    <s:String x:Key="LangModBaseExceptionBadNetwork">你的網絡環境不佳，導致難以連接到伺服器。請檢查網絡，多重試幾次，或嘗試使用 VPN。</s:String>
+    
     <!--ModLaunch-->
     <s:String x:Key="LangModLaunchStartStageGetJava">獲取 Java</s:String>
     <s:String x:Key="LangModLaunchStartStageCompleteFile">補全文件</s:String>

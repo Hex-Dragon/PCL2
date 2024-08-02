@@ -320,6 +320,7 @@ If there is an existing instance, click the &quot;Add Existing Folders&quot; on 
     <s:String x:Key="LangSelectVersionTypeRegular">Regular Instance</s:String>
     <s:String x:Key="LangSelectVersionTypeModAbility">Mods Installable</s:String>
     <s:String x:Key="LangSelectVersionTypeForge">Forge Instance</s:String>
+    <s:String x:Key="LangSelectVersionTypeNeoForge">NeoForge Instance</s:String>
     <s:String x:Key="LangSelectVersionTypeLiteloader">LiteLoader Instance</s:String>
     <s:String x:Key="LangSelectVersionTypeFabric">Fabric Instance</s:String>
     <s:String x:Key="LangSelectVersionTypeError">Error Instance</s:String>
@@ -1312,11 +1313,12 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft Update Hint</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">Download</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">View Change Log</s:String>
+    <s:String x:Key="LangModMinecraftVersionVanilla">Vanilla</s:String>
 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">Available for</s:String>
     <s:String x:Key="LangModCompModDependentCount">dependencies, </s:String>
-    <s:String x:Key="LangModCompModDownload">downloads, </s:String>
+    <s:String x:Key="LangModCompModDownload">downloads </s:String>
     <s:String x:Key="LangModCompModDownloadMillion">downloads in 10k, </s:String>
     <s:String x:Key="LangModCompModGameVersion">Game version</s:String>
     <s:String x:Key="LangModCompModUpdateTime">Updated {0}</s:String>
@@ -1335,8 +1337,8 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModBaseDateHour">hour(s)</s:String>
     <s:String x:Key="LangModBaseDateMinute">minute(s)</s:String>
     <s:String x:Key="LangModBaseDateSecond">second(s)</s:String>
-    <s:String x:Key="LangModBaseDateAgo">ago.</s:String>
-    <s:String x:Key="LangModBaseDateLater">later.</s:String>
+    <s:String x:Key="LangModBaseDateAgo">ago</s:String>
+    <s:String x:Key="LangModBaseDateLater">later</s:String>
     <s:String x:Key="LangModBaseDialogWebOpenFailContent">PCL cannot open the webpage since the browser may not be configured correctly.
 The URL has been copied to the clipboard, paste to access manually.
 URL: {0}</s:String>
@@ -1354,6 +1356,11 @@ Game crashes are not related to the launcher commonly. Please do not submit feed
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Your PCL is not the latest version, feedback submittal is unsupportable.
 Please update the launcher in &quot;Settings → Launcher&quot; first, then submit feedback if the problem still exists in the latest version.</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Unable to Submit</s:String>
+    <s:String x:Key="LangModBaseExceptionBadEnvironment">There is a problem with the PCL's operating environment. Please try reinstalling .NET Framework 4.6.2 and then try again.</s:String>  
+    <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL does not have sufficient permissions. Please try right-clicking on PCL and select 'Run as administrator'.</s:String>  
+    <s:String x:Key="LangModBaseExceptionOutOfMemoryException">Your computer's RAM is insufficient, causing PCL to be unable to continue running. Please close some unnecessary programs and try again.</s:String>  
+    <s:String x:Key="LangModBaseExceptionCOMException">An error occurred due to issues with the operating system or graphics card. Please try restarting PCL.</s:String>  
+    <s:String x:Key="LangModBaseExceptionBadNetwork">Your network environment is poor, resulting in difficulty connecting to the server. Please check your network, try again multiple times, or attempt to use a VPN.</s:String>
 
     <!--ModLaunch-->
     <s:String x:Key="LangModLaunchStartStageGetJava">Obtain Java</s:String>

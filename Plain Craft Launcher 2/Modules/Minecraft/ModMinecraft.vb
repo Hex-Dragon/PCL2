@@ -102,7 +102,7 @@ Public Module ModMinecraft
             '若没有可用文件夹，则创建 .minecraft
             If Not CacheMcFolderList.Any() Then
                 Directory.CreateDirectory(Path & ".minecraft\versions\")
-                CacheMcFolderList.Add(New McFolder With {.Name = "当前文件夹", .Path = Path & ".minecraft\", .Type = McFolderType.Original})
+                CacheMcFolderList.Add(New McFolder With {.Name = GetLang("LangModMinecraftCurrentFolder"), .Path = Path & ".minecraft\", .Type = McFolderType.Original})
             End If
 
             For Each Folder As McFolder In CacheMcFolderList
@@ -955,7 +955,7 @@ ExitDataLoad:
             If HasOptiFine Then ToString += ", OptiFine" & If(OptiFineVersion = "未知版本", "", " " & OptiFineVersion)
             If HasLiteLoader Then ToString += ", LiteLoader"
             If ToString = "" Then
-                Return "原版 " & McName
+                Return GetLang("LangModMinecraftVersionVanilla") & " " & McName
             Else
                 Return McName & ToString & If(ModeDebug, " (" & SortCode & "#)", "")
             End If

@@ -100,12 +100,12 @@
     <s:String x:Key="LangHintBackgroundMusicDeleted">背景音樂已刪除！</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">刪除背景音樂失敗</s:String>
     <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">重建背景音樂文件夾失敗</s:String>
-    <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">當前已存在布局文件，繼續生成教學文件將會覆蓋現有布局文件！</s:String>
+    <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">當前已存在佈局文件，繼續生成教學文件將會覆蓋現有佈局文件！</s:String>
     <s:String x:Key="LangDialogBtnContinue">繼續</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteFail">生成教學文件失敗</s:String>
     <s:String x:Key="LangHintCustomPageOverwriteSuccess">教學文件已生成！</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">已刷新主頁！</s:String>
-    <s:String x:Key="LangDialogCustomPageTeachContent">1. 點擊 生成教學文件 按鈕，這會在 PCL 文件夾下生成 Custom.xaml 布局文件。&#x000D;2. 使用記事本等工具打開這個文件並進行修改，修改完記得保存。&#x000D;3. 點擊 刷新主頁 按鈕，查看主頁現在長啥樣了。&#x000D;你可以在生成教學文件後直接刷新主頁，對照着進行修改，更有助於理解。&#x000D;直接將自定義主頁文件拖進 PCL 窗口也可以快捷加載。</s:String>
+    <s:String x:Key="LangDialogCustomPageTeachContent">1. 點擊 生成教學文件 按鈕，這會在 PCL 文件夾下生成 Custom.xaml 佈局文件。&#x000D;2. 使用記事本等工具打開這個文件並進行修改，修改完記得保存。&#x000D;3. 點擊 刷新主頁 按鈕，查看主頁現在長啥樣了。&#x000D;你可以在生成教學文件後直接刷新主頁，對照着進行修改，更有助於理解。&#x000D;直接將自定義主頁文件拖進 PCL 窗口也可以快捷加載。</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">主頁自定義教程</s:String>
     <s:String x:Key="LangThemeBackUnlock">隱藏主題 玄素黑 已解鎖！</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameContent">1. 不爬取或攻擊相關服務或網站，不盜取相關賬號，沒有謎題可以或需要以此來解決。&#x000D;2. 不得篡改或損毀相關公開信息，請儘量讓它們保持原狀。&#x000D;3. 在你感到迷茫的時候，看看回聲洞可能會給你帶來驚喜。&#x000D;&#x000D;若違規，可能會被從任意相關群中踢出！</s:String>
@@ -224,7 +224,7 @@
     <s:String x:Key="LangSetFuncHiddenMoreVote">新功能投票</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecial">特定功能</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">郵箱隱藏</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">隱藏第三方登錄的賬號郵箱顯示，並儘量將郵箱打碼，以避免隱私泄露。&#xa;此選項的更改將在重啟啟動器後生效。</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">隱藏第三方登錄的賬號郵箱顯示，並儘量將郵箱打碼，以避免私隱泄露。&#xa;此選項的更改將在重啟啟動器後生效。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">版本選擇</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">功能隱藏</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">僅隱藏本選項卡，設置的禁用內容依然有效。&#xa;可以在保留個性化設置頁面的情況下避免隱藏設置被修改。</s:String>
@@ -285,6 +285,7 @@
     <s:String x:Key="LangSelectVersionTypeRegular">常規版本</s:String>
     <s:String x:Key="LangSelectVersionTypeModAbility">可安裝 Mod</s:String>
     <s:String x:Key="LangSelectVersionTypeForge">Forge 版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeNeoForge">NeoForge 版本</s:String>
     <s:String x:Key="LangSelectVersionTypeLiteloader">LiteLoader 版本</s:String>
     <s:String x:Key="LangSelectVersionTypeFabric">Fabric 版本</s:String>
     <s:String x:Key="LangSelectVersionTypeError">錯誤的版本</s:String>
@@ -339,8 +340,8 @@
 
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">正在獲取版本列表</s:String>
-    <s:String x:Key="LangDownloadClientReleaseReleaseOn">最新正式版，發布於</s:String>
-    <s:String x:Key="LangDownloadClientBetaReleaseOn">最新開發版，發布於</s:String>
+    <s:String x:Key="LangDownloadClientReleaseReleaseOn">最新正式版，發佈於</s:String>
+    <s:String x:Key="LangDownloadClientBetaReleaseOn">最新開發版，發佈於</s:String>
 
     <!--PageDownload-->
     <s:String x:Key="LangDownloadLatest">最新版本</s:String>
@@ -358,7 +359,7 @@
     <s:String x:Key="LangDownloadPCLProvided">PCL 特供下載</s:String>
     <s:String x:Key="LangDownloadChangelog">更新日誌</s:String>
     <s:String x:Key="LangDownloadSaveAs">另存為</s:String>
-    <s:String x:Key="LangDownloadReleaseOn">發布於</s:String>
+    <s:String x:Key="LangDownloadReleaseOn">發佈於</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">不兼容 Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">推薦 Forge 版本：</s:String>
     <s:String x:Key="LangDownloadShowAll">查看全部版本</s:String>
@@ -523,7 +524,7 @@
     <s:String x:Key="LangDownloadModpackTypeSkyland">空島</s:String>
     <s:String x:Key="LangDownloadModpackTypeImprove">原版改良</s:String>
     <s:String x:Key="LangDownloadModpackTypeFTB">FTB</s:String>
-    <s:String x:Key="LangDownloadModpackTypeFTBToolTip">由 FTB 官方發布</s:String>
+    <s:String x:Key="LangDownloadModpackTypeFTBToolTip">由 FTB 官方發佈</s:String>
     <s:String x:Key="LangDownloadModpackTypeMapBased">基於地圖</s:String>
     <s:String x:Key="LangDownloadModpackTypeLightWeight">輕量整合</s:String>
     <s:String x:Key="LangDownloadModpackTypeHeavyWeight">大型整合</s:String>
@@ -575,7 +576,7 @@
     <s:String x:Key="LangLoginOAuthLoading">正在加載登錄頁面</s:String>
     <s:String x:Key="LangLoginOAuthLoadingTipA">如果網絡環境不佳，加載可能非常緩慢甚至一直加載不出來</s:String>
     <s:String x:Key="LangLoginOAuthLoadingTipB">此時請嘗試使用 VPN 或加速器，然後重試</s:String>
-    <s:String x:Key="LangLoginOAuthToBrower">如果遇到問題，可以點擊這裡使用系統瀏覽器登錄</s:String>
+    <s:String x:Key="LangLoginOAuthToBrower">如果遇到問題，可以點擊這裏使用系統瀏覽器登錄</s:String>
     <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL 不支持使用 GitHub 登錄微軟賬號！</s:String>
     <s:String x:Key="LangLoginOAuthWindowTitle">Microsoft 賬戶登錄</s:String>
 
@@ -616,7 +617,7 @@
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
     <s:String x:Key="LangLaunchRightLog">啟動日誌</s:String>
-    <s:String x:Key="LangLaunchRightLabHint1">快照版包含尚未正式發布的測試功能，僅用於贊助者本人嘗鮮。請不要發給其他人或者用來製作整合包哦！</s:String>
+    <s:String x:Key="LangLaunchRightLabHint1">快照版包含尚未正式發佈的測試功能，僅用於贊助者本人嘗鮮。請不要發給其他人或者用來製作整合包哦！</s:String>
     <s:String x:Key="LangLaunchRightLabHint2">若已累積贊助￥23.33，在愛發電私信發送 「解鎖碼」 即可永久隱藏此提示。</s:String>
     <s:String x:Key="LangLaunchRightLoadingPage">正在加載主頁……</s:String>
     <s:String x:Key="LangLaunchRightPageTips">你知道嗎？</s:String>
@@ -742,8 +743,8 @@
     <s:String x:Key="LangPageOtherAboutLicenseDoc">查看許可文檔</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseWeb">查看來源網站</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用戶協議與免責聲明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隱私說明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟件會匯報自己的版本名與版本號，以統計用戶數量與各版本的用戶數量占比。除此之外，本軟件不會上傳您的任何信息。&#13;若您能提供未經外部修改的本軟件本體上傳隱私信息的確鑿證據，開發者會向您支付 PCL 開發所獲全部淨收入。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">私隱說明</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟件會匯報自己的版本名與版本號，以統計用戶數量與各版本的用戶數量佔比。除此之外，本軟件不會上傳您的任何信息。&#13;若您能提供未經外部修改的本軟件本體上傳私隱信息的確鑿證據，開發者會向您支付 PCL 開發所獲全部淨收入。</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龍騰貓躍 2016. All Rights Reserved.&#13;計算機軟件著作權登記號：2020SR0875133&#13;違法違規行為舉報投訴郵箱：hexdragon@vip.qq.com</s:String>
 
@@ -776,7 +777,7 @@
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">隔離可安裝 Mod 的版本</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">可安裝 Mod 的版本（例如 Forge、Fabric）均互相獨立以避免 Mod 衝突，其他版本（例如原版）則不會被隔離。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">隔離非正式版</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">將 Minecraft 快照、預發布版、遠古版本、愚人節版本與其他版本進行隔離</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">將 Minecraft 快照、預發佈版、遠古版本、愚人節版本與其他版本進行隔離</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaAndMod">隔離可安裝 Mod 的版本與非正式版</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAll">隔離所有版本</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">不同版本之間的存檔、Mod、資源包等均不互通。&#xa;這會導致不同原版版本間的存檔不能共用，所以一般不推薦。</s:String>
@@ -808,7 +809,7 @@
     <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjustToolTip">根據安裝的 Mod 量與電腦剩餘內存，動態調整為遊戲分配的內存</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemCustom">自定義</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunch">啟動遊戲前進行內存優化</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunchToolTip">內存優化能將當前物理內存占用降低約 1/3，不僅限於 MC！&#xa;如果使用機械硬盤，這還可能會導致一小段時間的嚴重卡頓。&#xa;使用 --memory 參數啟動 PCL 可以靜默執行內存優化。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunchToolTip">內存優化能將當前物理內存佔用降低約 1/3，不僅限於 MC！&#xa;如果使用機械硬盤，這還可能會導致一小段時間的嚴重卡頓。&#xa;使用 --memory 參數啟動 PCL 可以靜默執行內存優化。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">已使用內存</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">遊戲分配</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">高級啟動選項</s:String>
@@ -820,9 +821,9 @@
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">在 MC 啟動前執行特定命令或程序，語法與 Windows 的命令提示符一致。&#xa;&#xa;可以使用以下替換標記實現相對路徑（路徑均以 \ 結尾）：&#xa; · {path}：PCL 的 exe 文件所在的文件夾&#xa; · {minecraft}：.minecraft 文件夾&#xa; · {verpath}：版本文件夾（.minecraft\versions\版本名\）&#xa; · {verindie}：開啟版本隔離時等同版本文件夾，未開啟時等同 .minecraft 文件夾&#xa; · {java}：遊戲運行時的 Java 文件夾&#xa;&#xa;除此之外，也支持以下替換標記：&#xa; · {user}：玩家名字&#xa; · {login}：玩家的登錄方式&#xa; · {uuid}：玩家的 UUID&#xa; · {name}：遊戲版本名&#xa; · {date}、{time}：當前的系統時間&#xa; · {version}：遊戲對應的原版版本號&#xa;&#xa;例如：&#xa; · &quot;{verpath}test.exe&quot; ：運行版本文件夾下的 test.exe 程序&#xa; · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 運行版本文件夾下的 test.jar&#xa; · notepad &quot;{verindie}option.txt&quot; ：使用記事本打開該版本的設置文件&#xa;&#xa;涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致運行失敗。&#xa;執行命令時，命令行所在的目錄是當前的 .minecraft 文件夾。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand">等待命令執行完成後再繼續啟動</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility">忽略 Java 兼容性警告</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">警告：強烈推薦在版本設置中關閉特定版本的警告，而不是在這裡關閉所有版本的警告！&#xa;如果在設置中手動選擇了與當前版本不兼容的 Java，則自動跳過兼容性警告彈窗，強制使用手動選擇的 Java。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">警告：強烈推薦在版本設置中關閉特定版本的警告，而不是在這裏關閉所有版本的警告！&#xa;如果在設置中手動選擇了與當前版本不兼容的 Java，則自動跳過兼容性警告彈窗，強制使用手動選擇的 Java。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">關閉文件校驗</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：強烈推薦在版本設置中關閉特定版本的校驗，而不是在這裡關閉所有版本的校驗！&#xa;完全不更改 assets；不校驗 libraries、第三方登錄庫與版本主 jar 文件是否被修改。&#xa;如果你沒有修改相關文件，請勿勾選此項。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：強烈推薦在版本設置中關閉特定版本的校驗，而不是在這裏關閉所有版本的校驗！&#xa;完全不更改 assets；不校驗 libraries、第三方登錄庫與版本主 jar 文件是否被修改。&#xa;如果你沒有修改相關文件，請勿勾選此項。</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">啟動設置項存在異常，已被自動重置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">重載啟動設置時出錯</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">已初始化啟動設置！</s:String>
@@ -882,7 +883,7 @@
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">輔助功能</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">遊戲更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">測試版更新提示</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">在 Minecraft 測試版（快照、預發布版）更新時彈窗提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">在 Minecraft 測試版（快照、預發佈版）更新時彈窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">正式版更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">在 Minecraft 正式版更新時彈窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">遊戲語言</s:String>
@@ -958,7 +959,7 @@
     <s:String x:Key="LangPageVersionModHintDropFileToInstall">將 Mod 文件直接拖入 PCL 窗口即可安裝！</s:String>
     <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusContent">目前同時存在啟用和禁用的兩個 Mod 文件：&#xa;{0}&#xa;{1}&#xa;&#xa;注意，這兩個文件的內容並不相同。&#xa;&#xa;在手動刪除或重命名其中一個文件後，才能繼續操作。</s:String>
     <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusTitle">存在文件衝突</s:String>
-    <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">由於文件被占用，Mod 的狀態切換失敗，請嘗試關閉正在運行的遊戲後再試！</s:String>
+    <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">由於文件被佔用，Mod 的狀態切換失敗，請嘗試關閉正在運行的遊戲後再試！</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModContent">新版本 Mod 可能不兼容老版本的存檔或者其他 Mod，這可能導致遊戲崩潰，甚至存檔損壞！&#xa;除非整合包作者要求你更新，否則不要私自更新整合包里的 Mod！&#xa;在更新 Mod 前，請先備份存檔，並檢查它的更新日誌！&#xa;更新時，老版本的 Mod 會被移動到回收站，以防萬一。&#xa;&#xa;請在認真閱讀上述警告後再繼續！</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModTitle">Mod 更新警告</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModBtnConfirm">我已了解上述風險，繼續更新</s:String>
@@ -969,7 +970,7 @@
     <s:String x:Key="LangPageVersionModTaskModUpdateSuccessB">已成功更新：</s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdateFail">Mod 更新失敗：</s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdateAbort">Mod 更新已中止！</s:String>
-    <s:String x:Key="LangPageVersionModHintFileOccupyWhenDelete">由於文件被占用，Mod 刪除失敗，請嘗試關閉正在運行的遊戲後再試！</s:String>
+    <s:String x:Key="LangPageVersionModHintFileOccupyWhenDelete">由於文件被佔用，Mod 刪除失敗，請嘗試關閉正在運行的遊戲後再試！</s:String>
     <s:String x:Key="LangPageVersionModHintFileDeleteSuccessA">已將 {0} 刪除到回收站！</s:String>
     <s:String x:Key="LangPageVersionModHintFileDeleteSuccessB">已將 {0} 個文件刪除到回收站！</s:String>
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">已徹底刪除 {0}！</s:String>
@@ -1084,7 +1085,7 @@
     <!--ModMain-->
     <s:String x:Key="LangModMainAprilFoolTipA">放棄吧！只需要點一下右下角的小白旗……</s:String>
     <s:String x:Key="LangModMainAprilFoolTipB">看到右下角的那面小白旗了嗎？</s:String>
-    <s:String x:Key="LangModMainAprilFoolTipC">這裡建議點一下右下角的小白旗投降呢.jpg</s:String>
+    <s:String x:Key="LangModMainAprilFoolTipC">這裏建議點一下右下角的小白旗投降呢.jpg</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永遠等着你……</s:String>
 
     <!--ModEvent-->
@@ -1108,7 +1109,7 @@
     <s:String x:Key="LangModSecretPermissionAddition">（例如 C 盤和桌面以外的其他位置）</s:String>
     <s:String x:Key="LangModSecretPermissionError">運行環境錯誤</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">開源版本說明</s:String>
-    <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">該版本中不包含以下特性：&#xa;- CurseForge 查詢：需要 API Key（你可以申請一個，然後添加到 SecretHeadersSign 方法中）&#xa;- 更新與聯網通知：避免濫用隱患&#xa;- 主題切換：這是需要贊助解鎖的紀念性質的功能，別讓贊助者太傷心啦……&#xa;- 百寶箱：開發早期往裡面塞了些開發工具，整理起來太麻煩了</s:String>
+    <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">該版本中不包含以下特性：&#xa;- CurseForge 查詢：需要 API Key（你可以申請一個，然後添加到 SecretHeadersSign 方法中）&#xa;- 更新與聯網通知：避免濫用隱患&#xa;- 主題切換：這是需要贊助解鎖的紀念性質的功能，別讓贊助者太傷心啦……&#xa;- 百寶箱：開發早期往裏面塞了些開發工具，整理起來太麻煩了</s:String>
     <s:String x:Key="LangModSecretHintNoTheme">該版本中不包含主題功能……</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">該版本中不包含更新功能……</s:String>
 
@@ -1134,6 +1135,7 @@
     <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft 更新提示</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">下載</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">更新日誌</s:String>
+    <s:String x:Key="LangModMinecraftVersionVanilla">原版</s:String>
 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">適用於</s:String>
@@ -1172,7 +1174,12 @@
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">你的 PCL 不是最新版，因此無法提交反饋。&#xa;請先在 設置 → 啟動器 中更新啟動器，確認該問題在最新版中依然存在，然後再提交反饋。</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">無法提交反饋</s:String>
-
+    <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL 的運行環境存在問題。請嘗試重新安裝 .NET Framework 4.6.2 然後再試。</s:String>
+    <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL 的權限不足。請嘗試右鍵 PCL，選擇以管理員身份運行。</s:String>
+    <s:String x:Key="LangModBaseExceptionOutOfMemoryException">你的電腦運行內存不足，導致 PCL 無法繼續運行。請在關閉一部分不需要的程序後再試。</s:String>
+    <s:String x:Key="LangModBaseExceptionCOMException">由於作業系統或顯卡存在問題，導致出現錯誤。請嘗試重啟 PCL。</s:String>
+    <s:String x:Key="LangModBaseExceptionBadNetwork">你的網絡環境不佳，導致難以連接到伺服器。請檢查網絡，多重試幾次，或嘗試使用 VPN。</s:String>
+    
     <!--ModLaunch-->
     <s:String x:Key="LangModLaunchStartStageGetJava">獲取 Java</s:String>
     <s:String x:Key="LangModLaunchStartStageCompleteFile">補全文件</s:String>

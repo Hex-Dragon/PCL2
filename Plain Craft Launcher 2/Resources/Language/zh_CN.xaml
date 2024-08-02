@@ -285,6 +285,7 @@
     <s:String x:Key="LangSelectVersionTypeRegular">常规版本</s:String>
     <s:String x:Key="LangSelectVersionTypeModAbility">可安装 Mod</s:String>
     <s:String x:Key="LangSelectVersionTypeForge">Forge 版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeNeoForge">NeoForge 版本</s:String>
     <s:String x:Key="LangSelectVersionTypeLiteloader">LiteLoader 版本</s:String>
     <s:String x:Key="LangSelectVersionTypeFabric">Fabric 版本</s:String>
     <s:String x:Key="LangSelectVersionTypeError">错误的版本</s:String>
@@ -1133,6 +1134,7 @@
     <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft 更新提示</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">下载</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">更新日志</s:String>
+    <s:String x:Key="LangModMinecraftVersionVanilla">原版</s:String>
 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">适用于</s:String>
@@ -1171,6 +1173,11 @@
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">你的 PCL 不是最新版，因此无法提交反馈。&#xa;请先在 设置 → 启动器 中更新启动器，确认该问题在最新版中依然存在，然后再提交反馈。</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">无法提交反馈</s:String>
+    <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。</s:String>
+    <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。</s:String>
+    <s:String x:Key="LangModBaseExceptionOutOfMemoryException">你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。</s:String>
+    <s:String x:Key="LangModBaseExceptionCOMException">由于操作系统或显卡存在问题，导致出现错误。请尝试重启 PCL。</s:String>
+    <s:String x:Key="LangModBaseExceptionBadNetwork">你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。</s:String>
 
     <!--ModLaunch-->
     <s:String x:Key="LangModLaunchStartStageGetJava">获取 Java</s:String>
