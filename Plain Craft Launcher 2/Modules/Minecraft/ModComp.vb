@@ -200,6 +200,7 @@
         ''' </summary>
         Public ReadOnly Property TranslatedName As String
             Get
+                If Not Lang.Equals("zh_CN") Then Return RawName
                 Return If(DatabaseEntry Is Nothing OrElse DatabaseEntry.ChineseName = "", RawName, DatabaseEntry.ChineseName)
             End Get
         End Property
@@ -545,7 +546,7 @@
             '检查下列代码时可以参考 #1567 的测试例
             Dim Title As String = RawName
             Dim SubtitleList As List(Of String)
-            If TranslatedName = RawName Or Not Lang.Equals("zh_CN") Then
+            If TranslatedName = RawName Then
                 '没有中文翻译
                 '将所有名称分段
                 Dim NameLists = TranslatedName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).
