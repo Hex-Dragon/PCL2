@@ -155,7 +155,7 @@
 
             '获取基本信息
             Dim File As CompFile = sender.Tag
-            Dim LoaderName As String = $"{If(Project.FromCurseForge, "CurseForge", "Modrinth")} {GetLang("LangDownloadCompDownloadModpack")}{Project.TranslatedName} "
+            Dim LoaderName As String = $"{If(Project.FromCurseForge, "CurseForge", "Modrinth")} {GetLang("LangDownloadCompDownloadModpack")}{GetProjectLocalName(Project)} "
 
             '获取版本名
             Dim PackName As String = Project.TranslatedName.Replace(".zip", "").Replace(".rar", "").Replace(".mrpack", "").Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")

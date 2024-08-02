@@ -545,7 +545,7 @@
             '检查下列代码时可以参考 #1567 的测试例
             Dim Title As String = RawName
             Dim SubtitleList As List(Of String)
-            If TranslatedName = RawName Then
+            If TranslatedName = RawName Or Not Lang.Equals("zh_CN") Then
                 '没有中文翻译
                 '将所有名称分段
                 Dim NameLists = TranslatedName.Split({" | ", " - ", "(", ")", "[", "]", "{", "}"}, StringSplitOptions.RemoveEmptyEntries).

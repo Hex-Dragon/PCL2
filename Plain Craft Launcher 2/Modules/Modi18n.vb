@@ -1,4 +1,6 @@
-﻿Module Modi18n
+﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock
+
+Module Modi18n
     ''' <summary>
     ''' 获取语言
     ''' </summary>
@@ -52,4 +54,12 @@
         End Select
     End Function
 
+    Public Function GetProjectLocalName(Project As CompProject) As String
+        Select Case Lang
+            Case "zh_CN"
+                Return Project.TranslatedName
+            Case Else 'en_US
+                Return Project.RawName
+        End Select
+    End Function
 End Module
