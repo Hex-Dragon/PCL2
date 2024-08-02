@@ -530,8 +530,8 @@
                 NewItem.ColumnTime3.Width = New GridLength(0)
             End If
             NewItem.LabDownload.Text =
-                If(DownloadCount > 100000000, Math.Round(DownloadCount / 100000000, 2) & " 亿",
-                    If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " 万", DownloadCount))
+                If(DownloadCount > 100000000, Math.Round(DownloadCount / 100000000, 2) & " " & GetLang("LangModCompModBilion"),
+                    If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " " & GetLang("LangModCompModMilion"), DownloadCount))
             Return NewItem
         End Function
         Public Function GetControlLogo() As String

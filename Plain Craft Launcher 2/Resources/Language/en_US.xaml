@@ -2,6 +2,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xml:space="preserve">
+    
+    <!--Common-->
+    <s:String x:Key="LangTaskAbort">Canceled!</s:String>
+    <s:String x:Key="LangDialogBtnOK">OK</s:String>
+    <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
+    <s:String x:Key="LangResourcePackage">Resource Package</s:String>
 
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">Download</s:String>
@@ -13,8 +19,6 @@
     <s:String x:Key="LangToolTipDownload">Download Management</s:String>
     <s:String x:Key="LangToolTipSurrender">Surrender</s:String>
     <s:String x:Key="LangToolTipCloseMinecraft">Close Minecraft</s:String>
-    <s:String x:Key="LangDialogBtnOK">OK</s:String>
-    <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
     <s:String x:Key="LangDialogBtnUpdateFullLog">Full Change Log</s:String>
     <s:String x:Key="LangDialogUpdateTo">PCL {0} Updated</s:String>
     <s:String x:Key="LangDialogPolicyContent">Before using PCL, please agree to the Term of Service and Disclaimer of PCL.</s:String>
@@ -422,6 +426,12 @@ This page provides Fabric installer downloads. After downloading, you need to ma
     <s:String x:Key="LangDownloadFabricWebsite">Official Website</s:String>
     <s:String x:Key="LangDownloadFabricVersionList">Version List</s:String>
     <s:String x:Key="LangDownloadFabricGettingList">Getting Fabric List...</s:String>
+    <s:String x:Key="LangDownloadCompDownloadModpack">Download Modpack:</s:String>  
+    <s:String x:Key="LangDownloadCompInputInstanceName">Enter Version Name</s:String>  
+    <s:String x:Key="LangDownloadCompTaskDownloadModpackFile">Download Modpack File</s:String>  
+    <s:String x:Key="LangDownloadCompTaskPrepareInstallModpack">Prepare to Install Modpack</s:String>  
+    <s:String x:Key="LangDownloadCompTaskDownloadFile">Download File</s:String>  
+    <s:String x:Key="LangDownloadCompTaskDownloadFileDetail">Downloading:</s:String>
 
     <!--PageDownloadForge-->
     <s:String x:Key="LangDownloadForgeDescTitle">Introduction of Forge</s:String>
@@ -1168,7 +1178,6 @@ Hereafter, hidden instances are only visible while the F11 is pressed in the pag
     <s:String x:Key="LangPageVersionOverallCompleteFileInTask">Processing, please wait!</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileSuccess">Success!</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileFail">Failed: </s:String>
-    <s:String x:Key="LangPageVersionOverallCompleteFileAbort">Canceled!</s:String>
     <s:String x:Key="LangPageVersionOverallDialogDeleteA">Are you sure you want to permanently delete the instance {0}?
 Since &quot;Instance Isolation&quot; is enabled for this instance, when you delete the instance, the saves, resource packs, mods, and other files corresponding to the instance will also be deleted!</s:String>
     <s:String x:Key="LangPageVersionOverallDialogDeleteB">Are you sure you want to delete the instance {0}?</s:String>
@@ -1318,8 +1327,8 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">Available for</s:String>
     <s:String x:Key="LangModCompModDependentCount">dependencies, </s:String>
-    <s:String x:Key="LangModCompModDownload">downloads </s:String>
-    <s:String x:Key="LangModCompModDownloadMillion">downloads in 10k, </s:String>
+    <s:String x:Key="LangModCompModDownload">downloads</s:String>
+    <s:String x:Key="LangModCompModDownloadMillion">downloads in 10k</s:String>
     <s:String x:Key="LangModCompModGameVersion">Game version</s:String>
     <s:String x:Key="LangModCompModUpdateTime">Updated {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">Save as</s:String>
@@ -1328,6 +1337,8 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModCompModStatusDescRelease">Release</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">Beta</s:String>
     <s:String x:Key="LangModCompModStatusDescAlpha">Alpha</s:String>
+    <s:String x:Key="LangModCompModMilion">Milion</s:String>
+    <s:String x:Key="LangModCompModBilion">Bilion</s:String>
 
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">year(s)</s:String>

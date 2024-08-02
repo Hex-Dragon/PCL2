@@ -302,7 +302,7 @@
                     Case LoadState.Failed
                         Hint(Loader.Name & GetLang("LangPageVersionOverallCompleteFileFail") & GetExceptionSummary(Loader.Error), HintType.Critical)
                     Case LoadState.Aborted
-                        Hint(Loader.Name & GetLang("LangPageVersionOverallCompleteFileAbort"), HintType.Info)
+                        Hint(Loader.Name & GetLang("LangTaskAbort"), HintType.Info)
                 End Select
             End Sub
             Loader.Start(PageVersionLeft.Version.Name)

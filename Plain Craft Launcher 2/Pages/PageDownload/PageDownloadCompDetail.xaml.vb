@@ -155,21 +155,21 @@
 
             '获取基本信息
             Dim File As CompFile = sender.Tag
-            Dim LoaderName As String = $"{If(Project.FromCurseForge, "CurseForge", "Modrinth")} 整合包下载：{Project.TranslatedName} "
+            Dim LoaderName As String = $"{If(Project.FromCurseForge, "CurseForge", "Modrinth")} {GetLang("LangDownloadCompDownloadModpack")}{Project.TranslatedName} "
 
             '获取版本名
             Dim PackName As String = Project.TranslatedName.Replace(".zip", "").Replace(".rar", "").Replace(".mrpack", "").Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")
             Dim Validate As New ValidateFolderName(PathMcFolder & "versions")
             If Validate.Validate(PackName) <> "" Then PackName = ""
-            Dim VersionName As String = MyMsgBoxInput("输入版本名称", "", PackName, New ObjectModel.Collection(Of Validate) From {Validate})
+            Dim VersionName As String = MyMsgBoxInput(GetLang("LangDownloadCompInputInstanceName"), "", PackName, New ObjectModel.Collection(Of Validate) From {Validate})
             If String.IsNullOrEmpty(VersionName) Then Exit Sub
 
             '构造步骤加载器
             Dim Loaders As New List(Of LoaderBase)
             Dim Target As String = $"{PathMcFolder}versions\{VersionName}\原始整合包.{If(Project.FromCurseForge, "zip", "mrpack")}"
             Dim LogoFileAddress As String = PathTemp & "CompLogo\" & GetHash(CompItem.Logo) & ".png"
-            Loaders.Add(New LoaderDownload("下载整合包文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 10, .Block = True})
-            Loaders.Add(New LoaderTask(Of Integer, Integer)("准备安装整合包",
+            Loaders.Add(New LoaderDownload(GetLang("LangDownloadCompTaskDownloadModpackFile"), New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 10, .Block = True})
+            Loaders.Add(New LoaderTask(Of Integer, Integer)(GetLang("LangDownloadCompTaskPrepareInstallModpack"),
                 Sub()
                     If Not ModpackInstall(Target, VersionName, Logo:=If(IO.File.Exists(LogoFileAddress), LogoFileAddress, Nothing)) Then
                         Throw New Exception("整合包安装出现异常！")
@@ -183,7 +183,7 @@
                     Case LoadState.Failed
                         Hint(MyLoader.Name & "失败：" & GetExceptionSummary(MyLoader.Error), HintType.Critical)
                     Case LoadState.Aborted
-                        Hint(MyLoader.Name & "已取消！", HintType.Info)
+                        Hint(MyLoader.Name & GetLang("LangTaskAbort"), HintType.Info)
                     Case LoadState.Loading
                         Exit Sub '不重新加载版本列表
                 End Select
@@ -205,7 +205,7 @@
         RunInNewThread(
         Sub()
             Try
-                Dim Desc As String = If(Project.Type = CompType.ModPack, "整合包", If(Project.Type = CompType.Mod, "Mod ", "资源包"))
+                Dim Desc As String = If(Project.Type = CompType.ModPack, GetLang("LangDownloadPageModpackages"), If(Project.Type = CompType.Mod, "Mod ", GetLang("LangResourcePackage")))
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
                 If Project.Type = CompType.Mod Then
@@ -301,10 +301,10 @@
                                           If(File.FileName.EndsWith(".mrpack"), "*.mrpack", "*.zip")), DefaultFolder)
                     If Not Target.Contains("\") Then Exit Sub
                     '构造步骤加载器
-                    Dim LoaderName As String = Desc & "下载：" & GetFileNameWithoutExtentionFromPath(Target) & " "
+                    Dim LoaderName As String = Desc & GetLang("LangDownloadCompTaskDownloadFileDetail") & GetFileNameWithoutExtentionFromPath(Target) & " "
                     If Target <> DefaultFolder AndAlso Project.Type = CompType.Mod Then CachedFolder = GetPathFromFullPath(Target)
                     Dim Loaders As New List(Of LoaderBase)
-                    Loaders.Add(New LoaderDownload("下载文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 6, .Block = True})
+                    Loaders.Add(New LoaderDownload(GetLang("LangDownloadCompTaskDownloadFile"), New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 6, .Block = True})
                     '启动
                     Dim Loader As New LoaderCombo(Of Integer)(LoaderName, Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
                     Loader.Start(1)

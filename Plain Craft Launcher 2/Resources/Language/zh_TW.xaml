@@ -2,6 +2,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
     xml:space="preserve">
+    
+    <!--Common-->
+    <s:String x:Key="LangTaskAbort">已取消！</s:String>
+    <s:String x:Key="LangDialogBtnOK">確定</s:String>
+    <s:String x:Key="LangDialogBtnCancel">取消</s:String>
+    <s:String x:Key="LangResourcePackage">资源包</s:String>
 
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下載</s:String>
@@ -13,8 +19,6 @@
     <s:String x:Key="LangToolTipDownload">下載管理</s:String>
     <s:String x:Key="LangToolTipSurrender">投降</s:String>
     <s:String x:Key="LangToolTipCloseMinecraft">關閉 Minecraft</s:String>
-    <s:String x:Key="LangDialogBtnOK">確定</s:String>
-    <s:String x:Key="LangDialogBtnCancel">取消</s:String>
     <s:String x:Key="LangDialogBtnUpdateFullLog">完整更新日誌</s:String>
     <s:String x:Key="LangDialogUpdateTo">PCL 已更新至 {0}</s:String>
     <s:String x:Key="LangDialogPolicyContent">在使用 PCL 前，請同意 PCL 的用戶協議與免責聲明。</s:String>
@@ -378,6 +382,12 @@
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">正在查找適合的遊戲版本……</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">當前 MC 文件夾中沒有找到適合這個 Mod 的版本！</s:String>
     <s:String x:Key="LangDownloadCompSelectedVersion">所選版本：</s:String>
+    <s:String x:Key="LangDownloadCompDownloadModpack">整合包下載：</s:String>
+    <s:String x:Key="LangDownloadCompInputInstanceName">輸入版本名稱</s:String>
+    <s:String x:Key="LangDownloadCompTaskDownloadModpackFile">下載整合包文件</s:String>
+    <s:String x:Key="LangDownloadCompTaskPrepareInstallModpack">準備安裝整合包</s:String>
+    <s:String x:Key="LangDownloadCompTaskDownloadFile">下載文件</s:String>
+    <s:String x:Key="LangDownloadCompTaskDownloadFileDetail">下載：</s:String>
 
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Fabric 簡介</s:String>
@@ -1038,7 +1048,6 @@
     <s:String x:Key="LangPageVersionOverallCompleteFileInTask">正在處理中，請稍候！</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileSuccess">成功！</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileFail">失敗：</s:String>
-    <s:String x:Key="LangPageVersionOverallCompleteFileAbort">已取消！</s:String>
     <s:String x:Key="LangPageVersionOverallDialogDeleteA">你確定要永久刪除版本 {0} 嗎？&#xa;由於該版本開啟了版本隔離，刪除版本時該版本對應的存檔、資源包、Mod 等文件也將被一併刪除！</s:String>
     <s:String x:Key="LangPageVersionOverallDialogDeleteB">你確定要刪除版本 {0} 嗎？</s:String>
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">版本刪除確認</s:String>
@@ -1150,6 +1159,8 @@
     <s:String x:Key="LangModCompModStatusDescRelease">正式版</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">測試版</s:String>
     <s:String x:Key="LangModCompModStatusDescAlpha">測試版</s:String>
+    <s:String x:Key="LangModCompModMilion">萬</s:String>
+    <s:String x:Key="LangModCompModBilion">億</s:String>
 
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">年</s:String>
