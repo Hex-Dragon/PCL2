@@ -967,7 +967,8 @@ To automatically grant, right-click PCL and open &quot;Properties → Compatibil
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">Balanced (Switch to mirror when official source load slowly)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">Official (Versions are newest)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod Naming</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Determine the location and the style of the Simplified Chinese Translation for the mod that will be downloaded.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Determine the location and the style of the Simplified Chinese Translation for the mod that will be downloaded.
+This option is only valid when the language is set to Simplified Chinese.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">Front: [遗物] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">Front: 遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">Back: relics-0.1.14-遗物</s:String>
@@ -1402,4 +1403,10 @@ Please update the launcher in &quot;Settings → Launcher&quot; first, then subm
     <s:String x:Key="LangModValidateNumInt">Please enter an integer!</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">Cannot be greater than {0}!</s:String>
     <s:String x:Key="LangModValidateNumNoLess">Cannot be less than {0}!</s:String>
+
+    <!--MyLocalModItem-->
+    <s:String x:Key="LangMyLocalModItemToolTipModUpdate">Current Version: {0} ({1})&#xa;Latest Version: {2} ({3})&#xa;Click to update, right-click to view update logs.</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">Which website would you like to visit to view the changelog?</s:String>  
+    <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">View changelog</s:String>  
+    <s:String x:Key="LangMyLocalModItemFailGetModInfo">An error occurred and information could not be retrieved.</s:String>
 </ResourceDictionary>

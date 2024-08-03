@@ -1219,4 +1219,10 @@
     <s:String x:Key="LangModValidateNumInt">请输入一个整数！</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">不可超过 {0}！</s:String>
     <s:String x:Key="LangModValidateNumNoLess">不可低于 {0}！</s:String>
+    
+    <!--MyLocalModItem-->
+    <s:String x:Key="LangMyLocalModItemToolTipModUpdate">当前版本：{0} ({1})&#xa;最新版本：{2} ({3})&#xa;点击以更新，右键查看更新日志。</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">要在哪个网站上查看更新日志？</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">查看更新日志</s:String>
+    <s:String x:Key="LangMyLocalModItemFailGetModInfo">存在错误，无法获取信息</s:String>
 </ResourceDictionary>

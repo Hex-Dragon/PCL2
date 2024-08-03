@@ -873,7 +873,7 @@
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">在官方源加載緩慢時改用鏡像源（平衡）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">儘量使用官方源（保證版本為最新，但加載非常緩慢）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod 命名風格</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">決定下載的 Mod 的預設檔案名中，中文譯名應該放在哪個位置</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">決定下載的 Mod 的預設檔案名中，中文譯名應該放在哪個位置&#xa;該選項僅在語言設置為簡體中文時有效</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">譯名位於檔案名開頭：[遺物] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">譯名位於檔案名開頭：遺物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">譯名位於檔案名末尾：relics-0.1.14-遺物</s:String>
@@ -1220,4 +1220,10 @@
     <s:String x:Key="LangModValidateNumInt">請輸入一個整數！</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">不可超過 {0}！</s:String>
     <s:String x:Key="LangModValidateNumNoLess">不可低於 {0}！</s:String>
+
+    <!--MyLocalModItem-->
+    <s:String x:Key="LangMyLocalModItemToolTipModUpdate">當前版本：{0} ({1})&#xa;最新版本：{2} ({3})&#xa;點擊以更新，右鍵查看更新日誌。</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">要在哪個網站上查看更新日誌？</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">查看更新日誌</s:String>
+    <s:String x:Key="LangMyLocalModItemFailGetModInfo">存在錯誤，無法獲取信息</s:String>
 </ResourceDictionary>
