@@ -14,8 +14,6 @@
 
 ## 相关内容
 
-- [PCL 功能投票](https://github.com/Hex-Dragon/PCL2/discussions/2)：来参加投票吧，开发者会优先处理票数较高的帖子！
-- [程序下载](https://afdian.com/p/0164034c016c11ebafcb52540025c377)：下载免费的正式版 PCL。
-- [帮助文档库](https://github.com/LTCatt/PCL2Help)：PCL 帮助文档在 GitHub 上的存储库（是的，帮助库在另一个 Repo……）
+- [PCL2官方仓库](https://github.com/Hex-Dragon/PCL2)
 
 <br/>
