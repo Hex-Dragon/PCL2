@@ -778,7 +778,7 @@ Retry:
             Dim launchArgument As String = String.Join(" ", launchInfo("launchArgument"))
             Dim javaArgument As String = String.Join(" ", launchInfo("javaArgument"))
             WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionAdvanceJvm", javaArgument)
-            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionAdvanceLaunch", launchArgument)
+            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionAdvanceGame", launchArgument)
         '构造加载器
         If Json("addons") Is Nothing Then
             Hint("该整合包未提供游戏版本附加信息，无法安装！", HintType.Critical)
