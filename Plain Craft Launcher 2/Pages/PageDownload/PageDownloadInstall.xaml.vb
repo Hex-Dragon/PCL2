@@ -619,6 +619,14 @@
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
                         End Select
+                        '所有4月1日发布的版本视为愚人节版，但不改动版本描述
+                        Select Case Version("releaseTime").Value(Of Date).ToString("MM'/'dd")
+                            Case "04/01"
+                                If Not Version("type") = "special" Then
+                                    Type = "愚人节版"
+                                    Version("type") = "special"
+                                End If
+                        End Select
                     Case "special"
                         '已被处理的愚人节版
                         Type = "愚人节版"
