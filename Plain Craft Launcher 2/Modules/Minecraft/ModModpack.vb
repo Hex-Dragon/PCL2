@@ -774,9 +774,8 @@ Retry:
         If Json("launchInfo") Is Nothing Then
             Log("[ModPack] 整合包中未找到启动信息，已跳过")
         Else
-            Dim launchInfo as JObject = Json("launchInfo)
-            Dim launchArgument As String = String.Join(" ", launchInfo("launchArgument"))
-            Dim javaArgument As String = String.Join(" ", launchInfo("javaArgument"))
+            Dim launchArgument As String = String.Join(" ", Json("launchInfo")("launchArgument"))
+            Dim javaArgument As String = String.Join(" ", Json("launchInfo")("javaArgument"))
             WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionAdvanceJvm", javaArgument)
             WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionAdvanceGame", launchArgument)
         '构造加载器
