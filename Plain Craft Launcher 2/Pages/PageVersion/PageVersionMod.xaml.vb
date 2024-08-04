@@ -146,14 +146,16 @@
     ''' 刷新卡片标题。
     ''' </summary>
     Private Sub RefreshTitle()
-        RefreshTargetTitle(PanDefaultListBack, PanDefaultList, "启用 Mod")
+        RefreshTargetTitle(PanDefaultListBack, PanDefaultList, "已启用 Mod")
         RefreshTargetTitle(PanUpdateListBack, PanUpdateList, "可更新 Mod")
-        RefreshTargetTitle(PanDisabledListBack, PanDisabledList, "禁用 Mod")
+        '没有可以更新的 Mod 就暂时隐藏卡片
+        PanUpdateListBack.Visibility = If(PanUpdateList.Children.Count.Equals(0), Visibility.Collapsed, Visibility.Visible)
+        RefreshTargetTitle(PanDisabledListBack, PanDisabledList, "已禁用的 Mod")
         RefreshTargetTitle(PanUnavaliableListBack, PanUnavaliableList, "暂不可用 Mod")
     End Sub
 
     Private Sub RefreshTargetTitle(Card As MyCard, List As StackPanel, Name As String)
-        Dim Mods = List.Children.Cast(Of MyLocalModItem).Select(Function(i) i.Entry).ToList
+        Dim Mods = List.Children.Cast(Of MyLocalModItem).ToList
         If Not IsSearching Then
             Card.Title = Name & " 列表 (" & Mods.Count & ")"
         ElseIf Mods.Any() Then
@@ -161,8 +163,11 @@
         Else
             Card.Title = Name & " 列表无搜索结果"
         End If
-        List.Visibility = If(Mods.Any(), Visibility.Visible, Visibility.Collapsed)
-        Card.CanSwap = If(Mods.Any(), True, False)
+        Dim IsContainItem As Boolean = Mods.Any()
+        List.Visibility = If(IsContainItem, Visibility.Visible, Visibility.Collapsed)
+        'CanSwap 设置无效果，不知道为什么
+        Card.CanSwap = IsContainItem
+        Card.IsSwaped = Not IsContainItem
     End Sub
 
 #End Region
