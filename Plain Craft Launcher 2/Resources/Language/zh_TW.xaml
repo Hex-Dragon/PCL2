@@ -76,9 +76,9 @@
     <!--PageSetupUI-->
     <s:String x:Key="LangThemeRealWhite">眼瞎白</s:String>
     <s:String x:Key="LangThemeRealFunny">真·滑稽彩</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip8">累積贊助達到 ¥23.33 後，在愛發電私訊發送「解锁码」以解鎖。
+    <s:String x:Key="LangThemeUnlockCopyTip8">累計贊助達到 ¥23.33 後，在愛發電私訊發送「解锁码」以解鎖。
 右鍵開啟贊助畫面，如果覺得 PCL 做得還不錯就支援一下吧 =w=！</s:String>
-    <s:String x:Key="LangThemeUnlockTip8">累積贊助達到 ¥23.33 後，在愛發電私訊發送「解锁码」以解鎖</s:String>
+    <s:String x:Key="LangThemeUnlockTip8">累計贊助達到 ¥23.33 後，在愛發電私訊發送「解锁码」以解鎖</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip9">· 回報一個程式錯誤，在 Issue 標記為 [已完成] 後回復 Issue 要求解鎖（右鍵開啟回報畫面）
 · 向幫助庫提交 Pull Request，在龍貓合併後解鎖</s:String>
     <s:String x:Key="LangThemeUnlockTip9">· 回報一個程式錯誤，在回報標記為 [完成] 後回復 Issue 要求解鎖
@@ -672,7 +672,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
     <s:String x:Key="LangLaunchRightLog">啟動日誌</s:String>
     <s:String x:Key="LangLaunchRightLabHint1">快照版包含尚未正式發布的測試功能，僅用於贊助者本人嘗鮮。請不要發給其他人或者用來製作模組包哦！</s:String>
-    <s:String x:Key="LangLaunchRightLabHint2">若已累積贊助￥23.33，在愛發電私訊發送「解锁码」即可永久隱藏此提示。</s:String>
+    <s:String x:Key="LangLaunchRightLabHint2">若已累計贊助￥23.33，在愛發電私訊發送「解锁码」即可永久隱藏此提示。</s:String>
     <s:String x:Key="LangLaunchRightLoadingPage">正在載入首頁……</s:String>
     <s:String x:Key="LangLaunchRightPageTips">你知道嗎？</s:String>
     <s:String x:Key="LangLaunchRightPageEcho">回聲洞</s:String>
