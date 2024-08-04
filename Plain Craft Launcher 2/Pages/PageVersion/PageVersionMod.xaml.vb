@@ -437,15 +437,6 @@
     ''' </summary>
     Public Shared UpdatingVersions As New List(Of String)
 
-    Public Sub New()
-
-        ' 此调用是设计器所必需的。
-        InitializeComponent()
-
-        ' 在 InitializeComponent() 调用之后添加任何初始化。
-
-    End Sub
-
     Public Sub UpdateMods(ModList As IEnumerable(Of McMod))
         '更新前警告
         If Not Setup.Get("HintUpdateMod") Then
