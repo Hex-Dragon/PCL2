@@ -312,16 +312,17 @@
     Private Sub ChangeAllSelected(Value As Boolean)
         AniControlEnabled += 1
         SelectedMods.Clear()
-        ChangeTargetListSeleted(PanUpdateList, Value)
-        ChangeTargetListSeleted(PanDisabledList, Value)
-        ChangeTargetListSeleted(PanUnavaliableList, Value)
-        ChangeTargetListSeleted(PanDefaultList, Value)
+        ChangeTargetListSeleted(PanUpdateListBack, PanUpdateList, Value)
+        ChangeTargetListSeleted(PanDisabledListBack, PanDisabledList, Value)
+        ChangeTargetListSeleted(PanUnavaliableListBack, PanUnavaliableList, Value)
+        ChangeTargetListSeleted(PanDefaultListBack, PanDefaultList, Value)
         AniControlEnabled -= 1
         '更新下边栏 UI
         RefreshBottomBar()
     End Sub
 
-    Private Sub ChangeTargetListSeleted(List As StackPanel, Value As Boolean)
+    Private Sub ChangeTargetListSeleted(Card As MyCard, List As StackPanel, Value As Boolean)
+        If Value.Equals(True) Then Card.IsSwaped = False
         For Each Item As MyLocalModItem In List.Children
             Item.Checked = Value
             If Value Then SelectedMods.Add(Item.Entry.RawFileName)
@@ -435,6 +436,16 @@
     ''' 记录正在进行 Mod 更新的 mods 文件夹路径。
     ''' </summary>
     Public Shared UpdatingVersions As New List(Of String)
+
+    Public Sub New()
+
+        ' 此调用是设计器所必需的。
+        InitializeComponent()
+
+        ' 在 InitializeComponent() 调用之后添加任何初始化。
+
+    End Sub
+
     Public Sub UpdateMods(ModList As IEnumerable(Of McMod))
         '更新前警告
         If Not Setup.Get("HintUpdateMod") Then
