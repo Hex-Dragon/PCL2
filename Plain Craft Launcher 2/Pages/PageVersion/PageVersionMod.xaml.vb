@@ -407,16 +407,16 @@
                 If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
                 PanUpdateList.Children.RemoveAt(IndexOfUi)
                 PanUpdateList.Children.Insert(IndexOfUi, NewItem)
-            ElseIf ModEntity.State.Equals(McMod.McModState.Fine) Then
+            ElseIf ModEntity.State.Equals(McMod.McModState.Fine) Then '启用 → 禁用
                 Dim IndexOfUi As Integer = PanDefaultList.Children.IndexOf(PanDefaultList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry Is ModEntity))
                 If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
                 PanDefaultList.Children.RemoveAt(IndexOfUi)
-                PanDefaultList.Children.Insert(IndexOfUi, NewItem)
-            ElseIf ModEntity.State.Equals(McMod.McModState.Disabled) Then
+                PanDisabledList.Children.Add(NewItem)
+            ElseIf ModEntity.State.Equals(McMod.McModState.Disabled) Then '禁用 → 启用
                 Dim IndexOfUi As Integer = PanDisabledList.Children.IndexOf(PanDisabledList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry Is ModEntity))
                 If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
                 PanDisabledList.Children.RemoveAt(IndexOfUi)
-                PanDisabledList.Children.Insert(IndexOfUi, NewItem)
+                PanDefaultList.Children.Add(NewItem)
             Else
                 Dim IndexOfUi As Integer = PanUnavaliableList.Children.IndexOf(PanUnavaliableList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry Is ModEntity))
                 If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
