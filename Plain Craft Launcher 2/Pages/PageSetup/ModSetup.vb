@@ -101,6 +101,7 @@
         {"LinkHiperCertWarn", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"LinkIoiVersion", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
         {"ToolHelpChinese", New SetupEntry(True, Source:=SetupSource.Registry)},
+        {"ToolModFilename", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadThread", New SetupEntry(63, Source:=SetupSource.Registry)},
         {"ToolDownloadSpeed", New SetupEntry(42, Source:=SetupSource.Registry)},
         {"ToolDownloadVersion", New SetupEntry(0, Source:=SetupSource.Registry)},

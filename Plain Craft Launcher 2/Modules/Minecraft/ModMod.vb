@@ -70,9 +70,13 @@ Public Module ModMod
         ''' </summary>
         Public Property Name As String
             Get
-                If _Name Is Nothing Then Load()
-                If _Name Is Nothing Then _Name = _ModId
-                If _Name Is Nothing Then _Name = GetFileNameWithoutExtentionFromPath(Path)
+                If Setup.Get("ToolModFilename") = "True" Then
+                    _Name = GetFileNameWithoutExtentionFromPath(Path)
+                Else
+                    If _Name Is Nothing Then Load()
+                    If _Name Is Nothing Then _Name = _ModId
+                    If _Name Is Nothing Then _Name = GetFileNameWithoutExtentionFromPath(Path)
+                End If
                 Return _Name
             End Get
             Set(value As String)
