@@ -66,6 +66,7 @@
 
         '辅助设置
         CheckHelpChinese.Checked = Setup.Get("ToolHelpChinese")
+        CheckModFilename.Checked = Setup.Get("ToolModFilename")
 
         '系统设置
         ComboSystemUpdate.SelectedIndex = Setup.Get("SystemSystemUpdate")
@@ -93,6 +94,7 @@
             Setup.Reset("ToolUpdateRelease")
             Setup.Reset("ToolUpdateSnapshot")
             Setup.Reset("ToolHelpChinese")
+            Setup.Reset("ToolModFilename")
             Setup.Reset("SystemDebugMode")
             Setup.Reset("SystemDebugAnim")
             Setup.Reset("SystemDebugDelay")

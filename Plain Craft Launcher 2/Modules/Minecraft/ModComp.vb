@@ -387,7 +387,7 @@
                             Case "adventure" : Tags.Add("冒险")
                             Case "kitchen-sink" : Tags.Add("烹饪")
                             Case "lightweight" : Tags.Add("轻量")
-                            'FUTURE: Res
+                                'FUTURE: Res
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
