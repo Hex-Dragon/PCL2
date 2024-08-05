@@ -169,11 +169,11 @@
                 ModError += 1
             End If
         Next
-        BtnTypeAll.Text = $"全部 ({ModEnabled + ModDisabled + ModError})"
-        BtnTypeCanUpdate.Text = $"可更新 ({ModCanUpdate})"
-        BtnTypeEnabled.Text = $"已启用 ({ModEnabled})"
-        BtnTypeDisabled.Text = $"已禁用 ({ModDisabled})"
-        BtnTypeError.Text = $"错误 ({ModError})"
+        BtnTypeAll.Text = $"全部 ({ModEnabled + ModDisabled + ModError}) "
+        BtnTypeCanUpdate.Text = $"可更新 ({ModCanUpdate}) "
+        BtnTypeEnabled.Text = $"已启用 ({ModEnabled}) "
+        BtnTypeDisabled.Text = $"已禁用 ({ModDisabled}) "
+        BtnTypeError.Text = $"错误 ({ModError}) "
         RefreshTitle()
     End Sub
     ''' <summary>
@@ -385,7 +385,7 @@
 
     Private ViewModType As String = "All"
 
-    Private Sub ChangeViewType(sender As MyTextButton, e As EventArgs) Handles BtnTypeAll.Click, BtnTypeCanUpdate.Click, BtnTypeDisabled.Click, BtnTypeEnabled.Click, BtnTypeError.Click
+    Private Sub ChangeViewType(sender As MyRadioButton, raiseByMouse As Boolean) Handles BtnTypeAll.Check, BtnTypeCanUpdate.Check, BtnTypeDisabled.Check, BtnTypeEnabled.Check, BtnTypeError.Check
         ViewModType = sender.Tag
         If IsSearching Then
             SearchRun()
