@@ -229,9 +229,9 @@
     ''' </summary>
     Private Sub BtnManageSelectAll_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageSelectAll.Click
         If SelectedMods.Count < PanList.Children.Count Then
-            ChangeAllSelected(True)
+            ChangeCurrentSelected(True)
         Else
-            ChangeAllSelected(False)
+            ChangeCurrentSelected(False)
         End If
     End Sub
 
@@ -337,7 +337,7 @@
     Private Sub ChangeAllSelected(Value As Boolean)
         AniControlEnabled += 1
         SelectedMods.Clear()
-        For Each Item As MyLocalModItem In PanList.Children
+        For Each Item As MyLocalModItem In ModItems.Values.ToList
             Item.Checked = Value
             If Value Then SelectedMods.Add(Item.Entry.RawFileName)
         Next
@@ -345,6 +345,22 @@
         '更新下边栏 UI
         RefreshBottomBar()
     End Sub
+
+    Private Sub ChangeCurrentSelected(Value As Boolean)
+        AniControlEnabled += 1
+        For Each Item As MyLocalModItem In PanList.Children
+            Item.Checked = Value
+            If Value Then
+                If Not SelectedMods.Contains(Item.Entry.RawFileName) Then SelectedMods.Add(Item.Entry.RawFileName)
+            Else
+                If SelectedMods.Contains(Item.Entry.RawFileName) Then SelectedMods.Remove(Item.Entry.RawFileName)
+            End If
+        Next
+        AniControlEnabled -= 1
+        '更新下边栏 UI
+        RefreshBottomBar()
+    End Sub
+
     Private Sub UnselectedAllWithAnimation() Handles Load.StateChanged, Me.PageExit
         Dim CacheAniControlEnabled = AniControlEnabled
         AniControlEnabled = 0

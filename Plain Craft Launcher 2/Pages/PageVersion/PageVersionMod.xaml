@@ -25,16 +25,16 @@
                         </Grid>
                     </local:MyCard>
                     <local:MyCard x:Name="PanListBack" VerticalAlignment="Top" Opacity="0" Margin="0,0,0,15" Title=" " MinHeight="40">
-                        <StackPanel Margin="13" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20">
-                            <local:MyTextButton Height="20" Margin="3,0" Tag="All"  Text="全部" x:Name="BtnTypeAll"/>
-                            <TextBlock Text="|" Foreground="Gray"/>
-                            <local:MyTextButton Height="20" Margin="3,0" Tag="Enabled" Text="已启用" x:Name="BtnTypeEnabled"/>
-                            <TextBlock Text="|" Foreground="Gray"/>
-                            <local:MyTextButton Height="20" Margin="3,0" Tag="Disabled" Text="已禁用" x:Name="BtnTypeDisabled"/>
-                            <TextBlock Text="|" Foreground="Gray"/>
-                            <local:MyTextButton Height="20" Margin="3,0" Tag="CanUpdate" Text="可更新" x:Name="BtnTypeCanUpdate"/>
-                            <TextBlock Text="|" Foreground="Gray"/>
-                            <local:MyTextButton Height="20" Margin="3,0" Tag="Error" Text="错误" x:Name="BtnTypeError"/>
+                        <StackPanel Margin="0,11,10,0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20">
+                            <local:MyTextButton VerticalContentAlignment="Center" Height="20" Margin="3,0" Tag="All"  Text="全部" x:Name="BtnTypeAll"/>
+                            <TextBlock Text="|" Foreground="{StaticResource ColorBrushGray1}" VerticalAlignment="Center"/>
+                            <local:MyTextButton VerticalContentAlignment="Center" Height="20" Margin="3,0" Tag="Enabled" Text="已启用" x:Name="BtnTypeEnabled"/>
+                            <TextBlock Text="|" Foreground="{StaticResource ColorBrushGray1}" VerticalAlignment="Center"/>
+                            <local:MyTextButton VerticalContentAlignment="Center" Height="20" Margin="3,0" Tag="Disabled" Text="已禁用" x:Name="BtnTypeDisabled"/>
+                            <TextBlock Text="|" Foreground="{StaticResource ColorBrushGray1}" VerticalAlignment="Center"/>
+                            <local:MyTextButton VerticalContentAlignment="Center" Height="20" Margin="3,0" Tag="CanUpdate" Text="可更新" x:Name="BtnTypeCanUpdate"/>
+                            <TextBlock Text="|" Foreground="{StaticResource ColorBrushGray1}" VerticalAlignment="Center"/>
+                            <local:MyTextButton VerticalContentAlignment="Center" Height="20" Margin="3,0" Tag="Error" Text="错误" x:Name="BtnTypeError"/>
                         </StackPanel>
                         <StackPanel Margin="20,38,18,18" Name="PanList" VerticalAlignment="Top" />
                     </local:MyCard>
