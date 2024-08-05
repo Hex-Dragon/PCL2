@@ -181,12 +181,24 @@
     ''' </summary>
     Private Sub RefreshTitle()
         If Not IsSearching Then
-            PanListBack.Title = "Mod 列表 (" & PanList.Children.Count & ")"
+            PanListBack.Title = "Mod 列表 - "
         ElseIf PanList.Children.Count > 0 Then
-            PanListBack.Title = "搜索结果 (" & PanList.Children.Count & ")"
+            PanListBack.Title = "搜索结果 - "
         Else
-            PanListBack.Title = "无搜索结果"
+            PanListBack.Title = "无搜索结果 - "
         End If
+        Select Case ViewModType
+            Case "All"
+                PanListBack.Title += BtnTypeAll.Text
+            Case "Enabled"
+                PanListBack.Title += BtnTypeEnabled.Text
+            Case "Disabled"
+                PanListBack.Title += BtnTypeDisabled.Text
+            Case "CanUpdate"
+                PanListBack.Title += BtnTypeCanUpdate.Text
+            Case "Error"
+                PanListBack.Title += BtnTypeError.Text
+        End Select
         PanList.Visibility = If(PanList.Children.Count > 0, Visibility.Visible, Visibility.Collapsed)
     End Sub
 
