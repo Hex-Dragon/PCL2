@@ -4,6 +4,11 @@
 
     Private IsLoad As Boolean = False
     Public Sub PageOther_Loaded() Handles Me.Loaded
+        BtnTypeAll.Tag = ViewType.All
+        BtnTypeEnabled.Tag = ViewType.Enabled
+        BtnTypeDisabled.Tag = ViewType.Disabled
+        BtnTypeCanUpdate.Tag = ViewType.CanUpdate
+        BtnTypeError.Tag = ViewType.InError
 
         If FrmMain.PageLast.Page <> FormMain.PageType.CompDetail Then PanBack.ScrollToHome()
         AniControlEnabled += 1
@@ -25,7 +30,7 @@
     ''' 刷新 Mod 列表。
     ''' </summary>
     Public Sub RefreshList(Optional ForceReload As Boolean = False)
-        ViewModType = "All"
+        ViewModType = ViewType.All
         If LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", If(ForceReload, LoaderFolderRunType.ForceRun, LoaderFolderRunType.RunOnUpdated)) Then
             Log("[System] 已刷新 Mod 列表")
             PanBack.ScrollToHome()
@@ -128,21 +133,21 @@
     Private Sub RefreshResult(Mods As List(Of McMod))
         Dim ShowMods As List(Of McMod) = New List(Of McMod)
         Select Case ViewModType
-            Case "All"
+            Case ViewType.All
                 ShowMods = Mods
-            Case "Enabled"
+            Case ViewType.Enabled
                 For Each Item In Mods
                     If Item.State.Equals(McMod.McModState.Fine) Then ShowMods.Add(Item)
                 Next
-            Case "Disabled"
+            Case ViewType.Disabled
                 For Each Item In Mods
                     If Item.State.Equals(McMod.McModState.Disabled) Then ShowMods.Add(Item)
                 Next
-            Case "CanUpdate"
+            Case ViewType.CanUpdate
                 For Each Item In Mods
                     If Item.CanUpdate Then ShowMods.Add(Item)
                 Next
-            Case "Error"
+            Case ViewType.InError
                 For Each Item In Mods
                     If Item.State.Equals(McMod.McModState.Unavaliable) Then ShowMods.Add(Item)
                 Next
@@ -188,15 +193,15 @@
             PanListBack.Title = "无搜索结果 - "
         End If
         Select Case ViewModType
-            Case "All"
+            Case ViewType.All
                 PanListBack.Title += BtnTypeAll.Text
-            Case "Enabled"
+            Case ViewType.Enabled
                 PanListBack.Title += BtnTypeEnabled.Text
-            Case "Disabled"
+            Case ViewType.Disabled
                 PanListBack.Title += BtnTypeDisabled.Text
-            Case "CanUpdate"
+            Case ViewType.CanUpdate
                 PanListBack.Title += BtnTypeCanUpdate.Text
-            Case "Error"
+            Case ViewType.InError
                 PanListBack.Title += BtnTypeError.Text
         End Select
         PanList.Visibility = If(PanList.Children.Count > 0, Visibility.Visible, Visibility.Collapsed)
@@ -383,7 +388,15 @@
         If My.Computer.Keyboard.CtrlKeyDown AndAlso e.Key = Key.A Then ChangeCurrentSelected(True)
     End Sub
 
-    Private ViewModType As String = "All"
+    Private ViewModType As ViewType = ViewType.All
+
+    Private Enum ViewType As Integer
+        All
+        Enabled
+        Disabled
+        CanUpdate
+        InError
+    End Enum
 
     Private Sub ChangeViewType(sender As MyRadioButton, raiseByMouse As Boolean) Handles BtnTypeAll.Check, BtnTypeCanUpdate.Check, BtnTypeDisabled.Check, BtnTypeEnabled.Check, BtnTypeError.Check
         ViewModType = sender.Tag
