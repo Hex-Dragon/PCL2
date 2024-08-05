@@ -380,7 +380,7 @@
         AniControlEnabled += CacheAniControlEnabled
     End Sub
     Private Sub PageVersionMod_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
-        If My.Computer.Keyboard.CtrlKeyDown AndAlso e.Key = Key.A Then ChangeAllSelected(True)
+        If My.Computer.Keyboard.CtrlKeyDown AndAlso e.Key = Key.A Then ChangeCurrentSelected(True)
     End Sub
 
     Private ViewModType As String = "All"
