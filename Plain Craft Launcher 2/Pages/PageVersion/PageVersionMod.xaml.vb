@@ -25,6 +25,7 @@
     ''' 刷新 Mod 列表。
     ''' </summary>
     Public Sub RefreshList(Optional ForceReload As Boolean = False)
+        ViewModType = "All"
         If LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", If(ForceReload, LoaderFolderRunType.ForceRun, LoaderFolderRunType.RunOnUpdated)) Then
             Log("[System] 已刷新 Mod 列表")
             PanBack.ScrollToHome()
@@ -125,49 +126,68 @@
     ''' 刷新结果显示。
     ''' </summary>
     Private Sub RefreshResult(Mods As List(Of McMod))
-        PanDefaultList.Children.Clear()
-        PanDisabledList.Children.Clear()
-        PanUpdateList.Children.Clear()
-        PanUnavaliableList.Children.Clear()
-        For Each TargetMod In Mods
-            If TargetMod.CanUpdate Then
-                PanUpdateList.Children.Add(ModItems(TargetMod.RawFileName))
-            ElseIf TargetMod.State.Equals(McMod.McModState.Fine) Then
-                PanDefaultList.Children.Add(ModItems(TargetMod.RawFileName))
-            ElseIf TargetMod.State.Equals(McMod.McModState.Disabled) Then
-                PanDisabledList.Children.Add(ModItems(TargetMod.RawFileName))
-            Else
-                PanUnavaliableList.Children.Add(ModItems(TargetMod.RawFileName))
+        Dim ShowMods As List(Of McMod) = New List(Of McMod)
+        Select Case ViewModType
+            Case "All"
+                ShowMods = Mods
+            Case "Enabled"
+                For Each Item In Mods
+                    If Item.State.Equals(McMod.McModState.Fine) Then ShowMods.Add(Item)
+                Next
+            Case "Disabled"
+                For Each Item In Mods
+                    If Item.State.Equals(McMod.McModState.Disabled) Then ShowMods.Add(Item)
+                Next
+            Case "CanUpdate"
+                For Each Item In Mods
+                    If Item.CanUpdate Then ShowMods.Add(Item)
+                Next
+            Case "Error"
+                For Each Item In Mods
+                    If Item.State.Equals(McMod.McModState.Unavaliable) Then ShowMods.Add(Item)
+                Next
+        End Select
+        PanList.Children.Clear()
+        For Each TargetMod In ShowMods
+            PanList.Children.Add(ModItems(TargetMod.RawFileName))
+        Next
+        Dim ModEnabled As Integer = 0
+        Dim ModDisabled As Integer = 0
+        Dim ModCanUpdate As Integer = 0
+        Dim ModError As Integer = 0
+        For Each ModItem In ModItems
+            If ModItem.Value.Entry.CanUpdate Then
+                ModCanUpdate += 1
+            End If
+            If ModItem.Value.Entry.State.Equals(McMod.McModState.Fine) Then
+                ModEnabled += 1
+            End If
+            If ModItem.Value.Entry.State.Equals(McMod.McModState.Disabled) Then
+                ModDisabled += 1
+            End If
+            If ModItem.Value.Entry.State.Equals(McMod.McModState.Unavaliable) Then
+                ModError += 1
             End If
         Next
+        BtnTypeAll.Text = $"全部（{ModEnabled + ModDisabled + ModCanUpdate + ModError}）"
+        BtnTypeCanUpdate.Text = $"可更新（{ModCanUpdate}）"
+        BtnTypeEnabled.Text = $"已启用（{ModEnabled}）"
+        BtnTypeDisabled.Text = $"已禁用（{ModDisabled}）"
+        BtnTypeError.Text = $"错误（{ModError}）"
         RefreshTitle()
     End Sub
     ''' <summary>
     ''' 刷新卡片标题。
     ''' </summary>
     Private Sub RefreshTitle()
-        RefreshTargetTitle(PanDefaultListBack, PanDefaultList, "已启用 Mod")
-        RefreshTargetTitle(PanUpdateListBack, PanUpdateList, "可更新 Mod")
-        '没有可以更新的 Mod 就暂时隐藏卡片
-        PanUpdateListBack.Visibility = If(PanUpdateList.Children.Count.Equals(0), Visibility.Collapsed, Visibility.Visible)
-        RefreshTargetTitle(PanDisabledListBack, PanDisabledList, "已禁用的 Mod")
-        RefreshTargetTitle(PanUnavaliableListBack, PanUnavaliableList, "暂不可用 Mod")
-    End Sub
-
-    Private Sub RefreshTargetTitle(Card As MyCard, List As StackPanel, Name As String)
-        Dim Mods = List.Children.Cast(Of MyLocalModItem).ToList
         If Not IsSearching Then
-            Card.Title = Name & " 列表 (" & Mods.Count & ")"
-        ElseIf Mods.Any() Then
-            Card.Title = Name & " 列表搜索结果 (" & Mods.Count & ")"
+            PanListBack.Title = "Mod 列表 (" & PanList.Children.Count & ")"
+        ElseIf PanList.Children.Count > 0 Then
+            PanListBack.Title = "搜索结果 (" & PanList.Children.Count & ")"
         Else
-            Card.Title = Name & " 列表无搜索结果"
+            PanListBack.Title = "无搜索结果"
         End If
-        Dim IsContainItem As Boolean = Mods.Any()
-        List.Visibility = If(IsContainItem, Visibility.Visible, Visibility.Collapsed)
-        'CanSwap 设置无效果，不知道为什么
-        Card.CanSwap = IsContainItem
-        Card.IsSwaped = Not IsContainItem
+        PanList.Visibility = If(PanList.Children.Count > 0, Visibility.Visible, Visibility.Collapsed)
     End Sub
 
 #End Region
@@ -208,7 +228,7 @@
     ''' 全选。
     ''' </summary>
     Private Sub BtnManageSelectAll_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageSelectAll.Click
-        If SelectedMods.Count < PanDefaultList.Children.Count + PanUnavaliableList.Children.Count + PanUpdateList.Children.Count + PanDisabledList.Children.Count Then
+        If SelectedMods.Count < PanList.Children.Count Then
             ChangeAllSelected(True)
         Else
             ChangeAllSelected(False)
@@ -317,23 +337,14 @@
     Private Sub ChangeAllSelected(Value As Boolean)
         AniControlEnabled += 1
         SelectedMods.Clear()
-        ChangeTargetListSeleted(PanUpdateListBack, PanUpdateList, Value)
-        ChangeTargetListSeleted(PanDisabledListBack, PanDisabledList, Value)
-        ChangeTargetListSeleted(PanUnavaliableListBack, PanUnavaliableList, Value)
-        ChangeTargetListSeleted(PanDefaultListBack, PanDefaultList, Value)
+        For Each Item As MyLocalModItem In PanList.Children
+            Item.Checked = Value
+            If Value Then SelectedMods.Add(Item.Entry.RawFileName)
+        Next
         AniControlEnabled -= 1
         '更新下边栏 UI
         RefreshBottomBar()
     End Sub
-
-    Private Sub ChangeTargetListSeleted(Card As MyCard, List As StackPanel, Value As Boolean)
-        If Value.Equals(True) Then Card.IsSwaped = False
-        For Each Item As MyLocalModItem In List.Children
-            Item.Checked = Value
-            If Value Then SelectedMods.Add(Item.Entry.RawFileName)
-        Next
-    End Sub
-
     Private Sub UnselectedAllWithAnimation() Handles Load.StateChanged, Me.PageExit
         Dim CacheAniControlEnabled = AniControlEnabled
         AniControlEnabled = 0
@@ -342,6 +353,17 @@
     End Sub
     Private Sub PageVersionMod_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         If My.Computer.Keyboard.CtrlKeyDown AndAlso e.Key = Key.A Then ChangeAllSelected(True)
+    End Sub
+
+    Private ViewModType As String = "All"
+
+    Private Sub ChangeViewType(sender As MyTextButton, e As EventArgs) Handles BtnTypeAll.Click, BtnTypeCanUpdate.Click, BtnTypeDisabled.Click, BtnTypeEnabled.Click, BtnTypeError.Click
+        ViewModType = sender.Tag
+        If IsSearching Then
+            SearchRun()
+        Else
+            RefreshResult(McModLoader.Output)
+        End If
     End Sub
 
 #End Region
@@ -353,6 +375,7 @@
         EDMods(McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)),
                Not sender.Equals(BtnSelectDisable))
         ChangeAllSelected(False)
+        RefreshResult(McModLoader.Output)
     End Sub
     Private Sub EDMods(ModList As IEnumerable(Of McMod), IsEnable As Boolean)
         Dim IsSuccessful As Boolean = True
@@ -402,27 +425,10 @@
             '更改 UI 中的列表
             Dim NewItem As MyLocalModItem = McModListItem(NewModEntity)
             ModItems(ModEntity.RawFileName) = NewItem
-            If ModEntity.CanUpdate Then
-                Dim IndexOfUi As Integer = PanUpdateList.Children.IndexOf(PanUpdateList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry Is ModEntity))
-                If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
-                PanUpdateList.Children.RemoveAt(IndexOfUi)
-                PanUpdateList.Children.Insert(IndexOfUi, NewItem)
-            ElseIf ModEntity.State.Equals(McMod.McModState.Fine) Then '启用 → 禁用
-                Dim IndexOfUi As Integer = PanDefaultList.Children.IndexOf(PanDefaultList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry Is ModEntity))
-                If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
-                PanDefaultList.Children.RemoveAt(IndexOfUi)
-                PanDisabledList.Children.Add(NewItem)
-            ElseIf ModEntity.State.Equals(McMod.McModState.Disabled) Then '禁用 → 启用
-                Dim IndexOfUi As Integer = PanDisabledList.Children.IndexOf(PanDisabledList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry Is ModEntity))
-                If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
-                PanDisabledList.Children.RemoveAt(IndexOfUi)
-                PanDefaultList.Children.Add(NewItem)
-            Else
-                Dim IndexOfUi As Integer = PanUnavaliableList.Children.IndexOf(PanUnavaliableList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry Is ModEntity))
-                If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
-                PanUnavaliableList.Children.RemoveAt(IndexOfUi)
-                PanUnavaliableList.Children.Insert(IndexOfUi, NewItem)
-            End If
+            Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry Is ModEntity))
+            If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
+            PanList.Children.RemoveAt(IndexOfUi)
+            PanList.Children.Insert(IndexOfUi, NewItem)
         Next
         RefreshTitle() '改变数量显示
         If Not IsSuccessful Then
@@ -441,7 +447,6 @@
     ''' 记录正在进行 Mod 更新的 mods 文件夹路径。
     ''' </summary>
     Public Shared UpdatingVersions As New List(Of String)
-
     Public Sub UpdateMods(ModList As IEnumerable(Of McMod))
         '更新前警告
         If Not Setup.Get("HintUpdateMod") Then
@@ -592,20 +597,14 @@
                 '更改 Loader 和 UI 中的列表
                 McModLoader.Output.Remove(ModEntity)
                 ModItems.Remove(ModEntity.RawFileName)
-                Dim IndexOfUi As Integer = PanDefaultList.Children.IndexOf(PanDefaultList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
-                If IndexOfUi >= 0 Then PanDefaultList.Children.RemoveAt(IndexOfUi)
-                IndexOfUi = PanUpdateList.Children.IndexOf(PanUpdateList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
-                If IndexOfUi >= 0 Then PanUpdateList.Children.RemoveAt(IndexOfUi)
-                IndexOfUi = PanDisabledList.Children.IndexOf(PanDisabledList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
-                If IndexOfUi >= 0 Then PanDisabledList.Children.RemoveAt(IndexOfUi)
-                IndexOfUi = PanUnavaliableList.Children.IndexOf(PanUnavaliableList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
-                If IndexOfUi >= 0 Then PanUnavaliableList.Children.RemoveAt(IndexOfUi)
+                Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
+                If IndexOfUi >= 0 Then PanList.Children.RemoveAt(IndexOfUi)
             Next
             RefreshTitle()
             If Not IsSuccessful Then
                 Hint("由于文件被占用，Mod 删除失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
                 RefreshList(True)
-            ElseIf PanDefaultList.Children.Count + PanUpdateList.Children.Count + PanDisabledList.Children.Count + PanUnavaliableList.Children.Count = 0 Then
+            ElseIf PanList.Children.Count = 0 Then
                 RefreshList(True) '删除了全部文件
             Else
                 RefreshBottomBar()
