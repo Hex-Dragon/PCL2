@@ -169,7 +169,7 @@
                 ModError += 1
             End If
         Next
-        BtnTypeAll.Text = $"全部 ({ModEnabled + ModDisabled + ModCanUpdate + ModError})"
+        BtnTypeAll.Text = $"全部 ({ModEnabled + ModDisabled + ModError})"
         BtnTypeCanUpdate.Text = $"可更新 ({ModCanUpdate})"
         BtnTypeEnabled.Text = $"已启用 ({ModEnabled})"
         BtnTypeDisabled.Text = $"已禁用 ({ModDisabled})"
