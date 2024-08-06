@@ -31,6 +31,7 @@
     ''' </summary>
     Public Sub RefreshList(Optional ForceReload As Boolean = False)
         ViewModType = ViewType.All
+        BtnTypeAll.Checked = True
         If LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", If(ForceReload, LoaderFolderRunType.ForceRun, LoaderFolderRunType.RunOnUpdated)) Then
             Log("[System] 已刷新 Mod 列表")
             PanBack.ScrollToHome()
