@@ -247,7 +247,11 @@
     ''' 全选。
     ''' </summary>
     Private Sub BtnManageSelectAll_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageSelectAll.Click
-        If SelectedMods.Count < PanList.Children.Count Then
+        Dim CurrentSelected As Integer = 0
+        For Each Item In PanList.Children.OfType(Of MyLocalModItem).ToList
+            If Item.Checked Then CurrentSelected += 1
+        Next
+        If CurrentSelected < PanList.Children.Count Then
             ChangeCurrentSelected(True)
         Else
             ChangeCurrentSelected(False)
