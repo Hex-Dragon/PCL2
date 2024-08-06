@@ -44,6 +44,15 @@ Public Class Application
             Log("无法找到语言资源：" & Lang & vbCrLf & "Language resource cannot be found:" & Lang, LogLevel.Assert)
         End Try
 
+        Dim LaunchFont As FontFamily
+        Select Case Lang
+            Case "zh_TW", "zh_HK"
+                LaunchFont = New FontFamily("Pack://application:,,,;/Resources/#PCL English, Microsoft JhengHei")
+            Case Else
+                LaunchFont = New FontFamily("Pack://application:,,,;/Resources/#PCL English, Microsoft YaHei UI")
+        End Select
+        SwitchApplicationFont(LaunchFont)
+
         Try
             SecretOnApplicationStart()
             '检查参数调用

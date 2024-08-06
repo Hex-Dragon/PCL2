@@ -62,4 +62,15 @@ Module Modi18n
                 Return Project.RawName
         End Select
     End Function
+
+    ''' <summary>
+    ''' 切换应用程序的字体
+    ''' </summary>
+    Public Sub SwitchApplicationFont(Font As FontFamily)
+        Try
+            Application.Current.Resources("LaunchFontFamily") = Font
+        Catch ex As Exception
+            Log("[Lang] 切换字体失败", LogLevel.Hint)
+        End Try
+    End Sub
 End Module
