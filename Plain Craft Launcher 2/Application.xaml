@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Resources/Language/zh_CN.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <!--字体-->
             <FontFamily x:Key="LaunchFontFamily"/>
 
             <!-- 颜色表 -->
