@@ -132,6 +132,7 @@
     ''' 刷新结果显示。
     ''' </summary>
     Private Sub RefreshResult(Mods As List(Of McMod))
+        If PanList Is Nothing Then Exit Sub
         Dim ShowMods As List(Of McMod) = New List(Of McMod)
         Select Case ViewModType
             Case ViewType.All
