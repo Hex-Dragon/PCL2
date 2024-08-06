@@ -25,7 +25,7 @@
     <s:String x:Key="LangDialogPolicyTitle">協議授權</s:String>
     <s:String x:Key="LangDialogBtnAgree">同意</s:String>
     <s:String x:Key="LangDialogBtnDeny">拒絕</s:String>
-    <s:String x:Key="LangDialogBtnPolicyContent">查看使用者協議與免責宣告</s:String>
+    <s:String x:Key="LangDialogBtnPolicyContent">檢視使用者協議與免責宣告</s:String>
     <s:String x:Key="LangHintDebugWarning">[除錯模式] PCL 正以除錯模式執行，這可能會導致效能下降，若無必要請不要開啟！</s:String>
     <s:String x:Key="LangDialogTitleTip">提示</s:String>
     <s:String x:Key="LangDialogHardcoreFanTheme">你已經使用了 99 次 PCL 啦，感謝你長期以來的支援！
@@ -125,7 +125,7 @@
     <s:String x:Key="LangHintCustomPageRefreshed">已重新整理首頁！</s:String>
     <s:String x:Key="LangDialogCustomPageTeachContent">1. 點擊「生成教學文件」按鈕，這會在 PCL 資料夾下生成「Custom.xaml」佈局檔案。
 2. 使用記事本等工具開啟這個檔案並進行修改，修改完記得儲存。
-3. 點擊 重新整理首頁 按鈕，查看首頁現在長什麼樣了。
+3. 點擊 重新整理首頁 按鈕，檢視首頁現在長什麼樣了。
 你可以在生成教學檔案後直接重新整理首頁，對照著進行修改，更有助於理解。
 直接將自訂首頁檔案拖進 PCL 視窗也可以快捷載入。</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">首頁自訂教學</s:String>
@@ -172,7 +172,7 @@
     <s:String x:Key="LangSetThemeNameCustom">自訂</s:String>
     <s:String x:Key="LangSetThemeNameCustomToolTip">需要解鎖五個隱藏主題</s:String>
     <s:String x:Key="LangSetThemeShowLogoOnStart">開啟啟動器時顯示 PCL 標誌</s:String>
-    <s:String x:Key="LangSetThemeSponsorship">需要小小贊助一下開發者，才能修改主題顏色（悲）……</s:String>
+    <s:String x:Key="LangSetThemeSponsorship">需要小小贊助一下開發者，才能修改主題色彩（悲）……</s:String>
     <s:String x:Key="LangSetThemeSupport">支援開發者</s:String>
     <s:String x:Key="LangSetBackgroundPic">背景圖像</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptive">自適應方式</s:String>
@@ -204,7 +204,7 @@
     <s:String x:Key="LangSetBackgroundMusicPlayDuringLaunching">遊戲啟動後自動暫停播放，遊戲結束後自動開始播放</s:String>
     <s:String x:Key="LangSetBackgroundMusicOpenFolderToolTip">將背景音樂放到該資料夾，PCL 將會播放其中的所有音樂</s:String>
     <s:String x:Key="LangSetBackgroundMusicRefresh">重新整理背景音樂</s:String>
-    <s:String x:Key="LangSetBackgroundMusicRefreshToolTip">重新整理播放列表，並播放列表中的音樂</s:String>
+    <s:String x:Key="LangSetBackgroundMusicRefreshToolTip">重新整理播放清單，並播放清單中的音樂</s:String>
     <s:String x:Key="LangSetBackgroundMusicEmpty">清空背景音樂</s:String>
     <s:String x:Key="LangSetTitle">標題欄</s:String>
     <s:String x:Key="LangSetNone">無</s:String>
@@ -223,7 +223,7 @@
     <s:String x:Key="LangSetHomePageOnline">聯網更新</s:String>
     <s:String x:Key="LangSetHomePageRefresh">重新整理首頁</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">生成教學檔案</s:String>
-    <s:String x:Key="LangSetHomePageSeeDoc">查看教學</s:String>
+    <s:String x:Key="LangSetHomePageSeeDoc">檢視教學</s:String>
     <s:String x:Key="LangSetHomePageDownload">下載連結</s:String>
     <s:String x:Key="LangSetHomePagePresetPage">首頁預設</s:String>
     <s:String x:Key="LangSetHomePagePresetPageA">你知道嗎？</s:String>
@@ -233,7 +233,7 @@
     <s:String x:Key="LangSetHomePagePresetPageE">每日模組包推薦（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 外觀推薦（作者：wkea）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能隱藏</s:String>
-    <s:String x:Key="LangSetFuncHiddenToolTip">你可以隱藏不需要的畫面或關閉特定功能。在任意介面按 F12 可以暫時顯示被隱藏的功能。</s:String>
+    <s:String x:Key="LangSetFuncHiddenToolTip">你可以隱藏不需要的畫面或關閉特定功能。在任意畫面按 F12 可以暫時顯示被隱藏的功能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">首畫面</s:String>
     <s:String x:Key="LangSetFuncHiddenDownload">下載</s:String>
     <s:String x:Key="LangSetFuncHiddenLink">連線</s:String>
@@ -260,32 +260,32 @@
 可以在保留個人化設定畫面的情況下避免隱藏設定被修改。</s:String>
 
     <!--PageSelectLeft-->
-    <s:String x:Key="LangSelectFolderList">資料夾列表</s:String>
+    <s:String x:Key="LangSelectFolderList">資料夾清單</s:String>
     <s:String x:Key="LangSelectRename">重新命名</s:String>
     <s:String x:Key="LangSelectOpen">開啟</s:String>
     <s:String x:Key="LangSelectRefresh">重新整理</s:String>
     <s:String x:Key="LangSelectDelete">刪除</s:String>
     <s:String x:Key="LangSelectRestoreName">復原名稱</s:String>
-    <s:String x:Key="LangSelectRemove">移出列表</s:String>
+    <s:String x:Key="LangSelectRemove">移出清單</s:String>
     <s:String x:Key="LangSelectEmpty">清空</s:String>
     <s:String x:Key="LangSelectAddFolder">添加或匯入</s:String>
     <s:String x:Key="LangSelectCreateFolder">新增 .minecraft 資料夾</s:String>
     <s:String x:Key="LangSelectCreateFolderToolTip">在 PCL 目前所在資料夾下創建新的 .minecraft 資料夾</s:String>
     <s:String x:Key="LangSelectAddExistFolder">添加已有資料夾</s:String>
-    <s:String x:Key="LangSelectAddExistFolderToolTip">將一個已有的 Minecraft 資料夾添加到列表</s:String>
+    <s:String x:Key="LangSelectAddExistFolderToolTip">將一個已有的 Minecraft 資料夾添加到清單</s:String>
     <s:String x:Key="LangSelectAddModpackages">匯入模組包</s:String>
     <s:String x:Key="LangSelectAddModpackagesToolTip">在目前選擇的 Minecraft 資料夾下安裝模組包</s:String>
     <s:String x:Key="LangSelectNoMCFolder">沒有可用的 Minecraft 資料夾</s:String>
-    <s:String x:Key="LangSelectUIError">構建 Minecraft 資料夾列表 UI 出錯</s:String>
+    <s:String x:Key="LangSelectUIError">構建 Minecraft 資料夾清單 UI 出錯</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoAdd">在下載工作進行時，無法添加遊戲資料夾！</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoCreate">在下載工作進行時，無法創建遊戲資料夾！</s:String>
     <s:String x:Key="LangSelectNoSpecialSymbol">Minecraft 資料夾路徑中不能含有驚嘆號或分號！</s:String>
     <s:String x:Key="LangSelectDialogInputNameTitle">輸入顯示名稱</s:String>
-    <s:String x:Key="LangSelectDialogInputNameContent">輸入該資料夾在左邊欄列表中顯示的名稱。</s:String>
+    <s:String x:Key="LangSelectDialogInputNameContent">輸入該資料夾在左邊欄清單中顯示的名稱。</s:String>
     <s:String x:Key="LangSelectFailToAddFolder">添加資料夾失敗 （{0}）</s:String>
-    <s:String x:Key="LangSelectFailToAddFolderLog">向資料夾列表中添加新資料夾失敗</s:String>
+    <s:String x:Key="LangSelectFailToAddFolderLog">向資料夾清單中添加新資料夾失敗</s:String>
     <s:String x:Key="LangSelectNoPermission">添加資料夾失敗：PCL 沒有存取該資料夾的權限！</s:String>
-    <s:String x:Key="LangSelectAlreadyAdded">此資料夾已在列表中！</s:String>
+    <s:String x:Key="LangSelectAlreadyAdded">此資料夾已在清單中！</s:String>
     <s:String x:Key="LangSelectRenameSuccess">資料夾名稱已更新為 {0} ！</s:String>
     <s:String x:Key="LangSelectFolderAdded">資料夾 {0} 已添加！</s:String>
     <s:String x:Key="LangSelectFolderCreateSuccess">新增 .minecraft 資料夾成功！</s:String>
@@ -295,9 +295,9 @@
     <s:String x:Key="LangDialogBtnDelete">刪除</s:String>
     <s:String x:Key="LangDialogBtnKeep">保留</s:String>
     <s:String x:Key="LangDialogBtnEmpty">清空</s:String>
-    <s:String x:Key="LangSelectHintFolderRemoved">資料夾 {0} 已從列表中移除！</s:String>
+    <s:String x:Key="LangSelectHintFolderRemoved">資料夾 {0} 已從清單中移除！</s:String>
     <s:String x:Key="LangSelectHintFolderNameRestored">資料夾名稱已復原！</s:String>
-    <s:String x:Key="LangSelectRemoveFolderFail">從列表中移除遊戲資料夾失敗</s:String>
+    <s:String x:Key="LangSelectRemoveFolderFail">從清單中移除遊戲資料夾失敗</s:String>
     <s:String x:Key="LangSelectDialogDeleteConfirmContentA">你確認要刪除這個資料夾嗎？
 目標資料夾：{1}
 
@@ -318,9 +318,9 @@
     <!--PageSelectRight-->
     <s:String x:Key="LangSelectNoAvailableVersion">無可用實例</s:String>
     <s:String x:Key="LangSelectNoAvailableVersionTip">未找到任何實例，請先下載任意版本的遊戲。
-若有已存在的遊戲，請在左邊的列表中選擇「添加資料夾」，選擇 .minecraft 資料夾將其匯入。</s:String>
+若有已存在的遊戲，請在左邊的清單中選擇「添加資料夾」，選擇 .minecraft 資料夾將其匯入。</s:String>
     <s:String x:Key="LangSelectNoAvailableVersionDownloadGame">下載遊戲</s:String>
-    <s:String x:Key="LangSelectGettingVersion">正在獲取版本列表</s:String>
+    <s:String x:Key="LangSelectGettingVersion">正在獲取版本清單</s:String>
     <s:String x:Key="LangSelectVersionTypeRegular">常規實例</s:String>
     <s:String x:Key="LangSelectVersionTypeModAbility">可安裝模組</s:String>
     <s:String x:Key="LangSelectVersionTypeForge">Forge 實例</s:String>
@@ -330,16 +330,16 @@
     <s:String x:Key="LangSelectVersionTypeError">錯誤的實例</s:String>
     <s:String x:Key="LangSelectVersionTypeHidden">隱藏的實例</s:String>
     <s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">不常用實例</s:String>
-    <s:String x:Key="LangSelectVersionTypeFavorites">收藏夾</s:String>
+    <s:String x:Key="LangSelectVersionTypeFavorites">我的最愛</s:String>
     <s:String x:Key="LangSelectVersionTypeAprilFool">愚人節實例</s:String>
     <s:String x:Key="LangSelectVersionTypeUnknown">未知的卡片種類</s:String>
     <s:String x:Key="LangSelectVersionNoHidden">無隱藏實例</s:String>
     <s:String x:Key="LangSelectVersionNoHiddenTip">沒有實例被隱藏，你可以在實例設定的實例分類選項中隱藏實例。
-再次按下 F11 即可結束隱藏實例查看模式。</s:String>
+再次按下 F11 即可結束隱藏實例檢視模式。</s:String>
     <s:String x:Key="LangSelectVersionListLoadFail">將實例列錶轉換顯示時失敗</s:String>
     <s:String x:Key="LangSelectVersionListLoadIconFail">載入實例圖示失敗</s:String>
-    <s:String x:Key="LangSelectBtnFavorite">收藏</s:String>
-    <s:String x:Key="LangSelectBtnCancelFavorite">取消收藏</s:String>
+    <s:String x:Key="LangSelectBtnFavorite">添加至我的最愛</s:String>
+    <s:String x:Key="LangSelectBtnCancelFavorite">从我的最愛中移除</s:String>
     <s:String x:Key="LangSelectBtnSet">設定</s:String>
     <s:String x:Key="LangSelectBtnOpenFolder">開啟資料夾</s:String>
     <s:String x:Key="LangSelectDeleteVersionTitle">實例刪除確認</s:String>
@@ -379,7 +379,7 @@
     <s:String x:Key="LangPageSpeedRightDownloadOptiFabric">下載 OptiFabric</s:String>
 
     <!--PageDownloadClient-->
-    <s:String x:Key="LangDownloadClientLoadingList">正在獲取版本列表</s:String>
+    <s:String x:Key="LangDownloadClientLoadingList">正在獲取版本清單</s:String>
     <s:String x:Key="LangDownloadClientReleaseReleaseOn">最新正式版，發布於</s:String>
     <s:String x:Key="LangDownloadClientBetaReleaseOn">最新開發版，發布於</s:String>
 
@@ -402,7 +402,7 @@
     <s:String x:Key="LangDownloadReleaseOn">發布於</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">與 Forge 不相容</s:String>
     <s:String x:Key="LangDownloadRecommendForge">推薦 Forge 版本：</s:String>
-    <s:String x:Key="LangDownloadShowAll">查看全部版本</s:String>
+    <s:String x:Key="LangDownloadShowAll">檢視全部版本</s:String>
     <s:String x:Key="LangDownloadSaveInstaller">儲存安裝器</s:String>
     <s:String x:Key="LangDownloadAll">全部版本</s:String>
     <s:String x:Key="LangDownloadCategory">種類：</s:String>
@@ -413,7 +413,7 @@
     <s:String x:Key="LangDownloadCompToModrinth">轉到 Modrinth</s:String>
     <s:String x:Key="LangDownloadCompToMCMod">轉到 MC 百科</s:String>
     <s:String x:Key="LangDownloadCompCopyName">複製名稱</s:String>
-    <s:String x:Key="LangDownloadCompLoadingList">正在獲取版本列表</s:String>
+    <s:String x:Key="LangDownloadCompLoadingList">正在獲取版本清單</s:String>
     <s:String x:Key="LangDownloadCompApiSlow">由於 API 的版本訊息更新緩慢，可能無法識別剛更新不久的 Minecraft 版本，只需等待幾天即可自動復原正常。</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">正在尋找適合的遊戲版本……</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">目前 Minecraft 資料夾中沒有找到適合這個模組的版本！</s:String>
@@ -430,14 +430,14 @@
     <s:String x:Key="LangDownloadFabricDesc">Fabric Loader 是新版 Minecraft 下的輕量化模組載入器，你需要先安裝它才能安裝各種 Fabric 模組。
 本畫面提供 Fabric 安裝器下載，在下載後你需要手動開啟安裝器進行安裝。</s:String>
     <s:String x:Key="LangDownloadFabricWebsite">開啟官網</s:String>
-    <s:String x:Key="LangDownloadFabricVersionList">版本列表</s:String>
-    <s:String x:Key="LangDownloadFabricGettingList">正在獲取 Fabric 列表</s:String>
+    <s:String x:Key="LangDownloadFabricVersionList">版本清單</s:String>
+    <s:String x:Key="LangDownloadFabricGettingList">正在獲取 Fabric 清單</s:String>
 
     <!--PageDownloadForge-->
     <s:String x:Key="LangDownloadForgeDescTitle">Forge 簡介</s:String>
     <s:String x:Key="LangDownloadForgeDesc">Forge 是一個模組載入器，你需要先安裝 Forge 才能安裝各種 Forge 模組。</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">開啟官網</s:String>
-    <s:String x:Key="LangDownloadForgeGettingList">正在獲取 Forge 列表</s:String>
+    <s:String x:Key="LangDownloadForgeGettingList">正在獲取 Forge 清單</s:String>
 
     <!--PageDownloadInstall-->
     <s:String x:Key="LangDownloadInstallReview">安裝預覽</s:String>
@@ -448,7 +448,7 @@
     <s:String x:Key="LangDownloadInstallStart">開始安裝</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">版本名稱</s:String>
     <s:String x:Key="LangDownloadInstallBack">返回</s:String>
-    <s:String x:Key="LangDownloadInstallGettingList">正在獲取版本列表</s:String>
+    <s:String x:Key="LangDownloadInstallGettingList">正在獲取版本清單</s:String>
     <s:String x:Key="LangDownloadInstallHintBackTip">點擊 Minecraft 項即可返回遊戲主版本選擇畫面！</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">點擊選擇</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">與 Forge 不相容</s:String>
@@ -460,8 +460,8 @@
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">需要 OptiFine 與 Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">或更高版本</s:String>
     <s:String x:Key="LangDownloadInstallNoAvailabeVersion">沒有可用版本</s:String>
-    <s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">獲取版本列表失敗：未知錯誤，狀態為</s:String>
-    <s:String x:Key="LangDownloadInstallFailGetList">獲取版本列表失敗：</s:String>
+    <s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">獲取版本清單失敗：未知錯誤，狀態為</s:String>
+    <s:String x:Key="LangDownloadInstallFailGetList">獲取版本清單失敗：</s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">該版本不支援自動安裝</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">實例隔離提示</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieContent">你尚未開啟實例隔離，這會導致多個實例共用同一個模組資料夾。
@@ -490,7 +490,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangDownloadLiteloaderDescTitle">LiteLoader 簡介</s:String>
     <s:String x:Key="LangDownloadLiteloaderDesc">與 Forge 類似，LiteLoader 可以用於載入老版本 Minecraft 中的 LiteLoader 模組。</s:String>
     <s:String x:Key="LangDownloadLiteloaderWebsite">開啟官網</s:String>
-    <s:String x:Key="LangDownloadLiteloaderGettingList">正在獲取 LiteLoader 列表</s:String>
+    <s:String x:Key="LangDownloadLiteloaderGettingList">正在獲取 LiteLoader 清單</s:String>
 
     <!--PageDownloadMod-->
     <s:String x:Key="LangDownloadModSearchTitle">搜尋模組</s:String>
@@ -502,11 +502,11 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangDownloadModSearchLoader">任意模組載入器</s:String>
     <s:String x:Key="LangDownloadModSearch">搜尋</s:String>
     <s:String x:Key="LangDownloadModReset">重設條件</s:String>
-    <s:String x:Key="LangDownloadModGettingList">正在獲取模組列表</s:String>
+    <s:String x:Key="LangDownloadModGettingList">正在獲取模組清單</s:String>
     <s:String x:Key="LangDownloadModType">類型</s:String>
     <s:String x:Key="LangDownloadModTypeAll">全部</s:String>
     <s:String x:Key="LangDownloadModTypeWorldElement">世界元素</s:String>
-    <s:String x:Key="LangDownloadModTypeBiome">生物群系</s:String>
+    <s:String x:Key="LangDownloadModTypeBiome">生態域</s:String>
     <s:String x:Key="LangDownloadModTypeDimension">維度</s:String>
     <s:String x:Key="LangDownloadModTypeMineral">礦物與資源</s:String>
     <s:String x:Key="LangDownloadModTypeStructure">天然結構</s:String>
@@ -538,14 +538,14 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 是 Minecraft 1.19+ 的模組載入器，你需要先安裝它才能安裝各種 NeoForge 模組。
 本畫面提供 NeoForge 安裝器下載，在下載後你需要手動開啟安裝器進行安裝。</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">開啟官網</s:String>
-    <s:String x:Key="LangDownloadNeoForgeGettingList">正在獲取 NeoForge 列表</s:String>
+    <s:String x:Key="LangDownloadNeoForgeGettingList">正在獲取 NeoForge 清單</s:String>
 
     <!--PageDownloadOptiFine-->
     <s:String x:Key="LangDownloadOptiFineDescTitle">OptiFine 簡介</s:String>
     <s:String x:Key="LangDownloadOptiFineDesc">OptiFine 讓你可以安裝光影、使用高解析度紋理，並且可以大幅提高遊戲效能。</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">開啟官網</s:String>
     <s:String x:Key="LangDownloadOptiFineChineseWebsite">開啟中文網</s:String>
-    <s:String x:Key="LangDownloadOptiFineGettingList">正在獲取 OptiFine 列表</s:String>
+    <s:String x:Key="LangDownloadOptiFineGettingList">正在獲取 OptiFine 清單</s:String>
 
     <!--PageDownloadPack-->
     <s:String x:Key="LangDownloadModpackSearchTitle">搜尋模組包</s:String>
@@ -556,7 +556,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangDownloadModpackSearchVersionAll">全部 (也可自行輸入)</s:String>
     <s:String x:Key="LangDownloadModpackSearch">搜尋</s:String>
     <s:String x:Key="LangDownloadModpackReset">重設條件</s:String>
-    <s:String x:Key="LangDownloadModpackGettingList">正在獲取模組包列表</s:String>
+    <s:String x:Key="LangDownloadModpackGettingList">正在獲取模組包清單</s:String>
     <s:String x:Key="LangDownloadModpackInstallFromLocal">安裝已有模組包</s:String>
     <s:String x:Key="LangDownloadModpackInstallFromLocalToolTip">在目前選擇的 Minecraft 資料夾下安裝模組包</s:String>
     <s:String x:Key="LangDownloadModpackType">類型</s:String>
@@ -591,7 +591,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangMySkinRefresh">重新整理</s:String>
     <s:String x:Key="LangMySkinChange">更換披風</s:String>
     <s:String x:Key="LangMySkinLoading">載入中</s:String>
-    <s:String x:Key="LangMySkinClickToChange">點擊更換外觀（右鍵查看更多選項）</s:String>
+    <s:String x:Key="LangMySkinClickToChange">點擊更換外觀（右鍵檢視更多選項）</s:String>
     <s:String x:Key="LangMySkinHintLoading">外觀正在獲取中，請稍候！</s:String>
     <s:String x:Key="LangMySkinDialogChoseSavePath">選取儲存外觀的位置</s:String>
     <s:String x:Key="LangMySkinHintSaveSuccess">外觀儲存成功！</s:String>
@@ -604,7 +604,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangMySkinHintChangeSuccess">更改外觀成功！</s:String>
     <s:String x:Key="LangMySkinHintChanging">正在更改披風中，請稍候！</s:String>
     <s:String x:Key="LangMySkinHintChangFailByLoginFail">登入失敗，無法更改披風！</s:String>
-    <s:String x:Key="LangMySkinHintGettingCape">正在獲取披風列表，請稍候……</s:String>
+    <s:String x:Key="LangMySkinHintGettingCape">正在獲取披風清單，請稍候……</s:String>
     <s:String x:Key="LangMySkinDialogChooseCape">選擇披風</s:String>
     <s:String x:Key="LangMySkinHintChangeCapeFail">更改披風失敗</s:String>
     <s:String x:Key="LangMySkinHintChangeCapeSuccess">更改披風成功！</s:String>
@@ -641,7 +641,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangLaunchLeftAccountOffline">離線</s:String>
     <s:String x:Key="LangLaunchLeftAccountUnifiedPass">統一通行證</s:String>
     <s:String x:Key="LangLaunchLeftLoadingInstance">正在載入</s:String>
-    <s:String x:Key="LangLaunchLeftLoadingInstanceTip">正在載入實例列表，請稍候</s:String>
+    <s:String x:Key="LangLaunchLeftLoadingInstanceTip">正在載入實例清單，請稍候</s:String>
     <s:String x:Key="LangLaunchLeftStartingInstance">正在啟動遊戲</s:String>
     <s:String x:Key="LangLaunchLeftStartingStage">目前步驟</s:String>
     <s:String x:Key="LangLaunchLeftStageDownloadLib">下載支援</s:String>
@@ -666,7 +666,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangLaunchLeftWaitForWindow">等待遊戲視窗出現</s:String>
     <s:String x:Key="LangLaunchLeftAbortTask">結束工作</s:String>
     <s:String x:Key="LangLaunchLeftFinished">已完成</s:String>
-    <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">正在導出啟動腳本</s:String>
+    <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">正在匯出啟動腳本</s:String>
 
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
@@ -708,7 +708,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageLoginMsAddAccount">添加新帳戶</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">請在登入帳戶後再啟動遊戲！</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">已取消登入！</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">正版登入驗證失敗，請嘗試在「設定 → 啟動器」中關閉「驗證 SSL 證書」然後再試。
+    <s:String x:Key="LangPageLoginMsAddAccountFail">正版登入驗證失敗，請嘗試在「設定 → 啟動器」中關閉「驗證 SSL 認證」然後再試。
 
 原始錯誤訊息：</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">已取消登入！</s:String>
@@ -756,14 +756,14 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 
     <!--PageOtherHelp-->
     <s:String x:Key="LangPageOtherHelpSearch">搜尋幫助</s:String>
-    <s:String x:Key="LangPageOtherHelpLoading">正在載入幫助列表</s:String>
+    <s:String x:Key="LangPageOtherHelpLoading">正在載入幫助清單</s:String>
     <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">很抱歉，幫助庫目前只支援簡體中文</s:String>
     <s:String x:Key="LangPageOtherRefreshing">正在重新整理……</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackContent">是否要開啟回報列表網頁？
+    <s:String x:Key="LangPageOtherDialogFeedbackContent">是否要開啟回報清單網頁？
 如果無法開啟該網頁，請嘗試使用 VPN 或 Proxy。</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">回報提示</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">提交新回報</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackBtn2">查看回報列表</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackBtn2">檢視回報清單</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">是否要開啟新功能投票網頁？
 如果無法開啟該網頁，請嘗試使用 VPN 或 Proxy。</s:String>
     <s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
@@ -775,7 +775,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageOtherAboutAboutAuthorSubtitle">Plain Craft Launcher 的開發者！</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthorBtn">贊助開發者</s:String>
     <s:String x:Key="LangPageOtherAboutAboutVersionSubtitle">目前版本：%VERSION%（%VERSIONCODE%.%BRANCH%）</s:String>
-    <s:String x:Key="LangPageOtherAboutAboutVersionBtn">查看原始碼</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutVersionBtn">檢視原始碼</s:String>
     <s:String x:Key="LangPageOtherAboutThanks">特別鳴謝</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93">提供 BMCLAPI 鏡像源和 Forge 安裝工具，詳見 https://bmclapi.bangbang93.com</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">贊助鏡像源</s:String>
@@ -798,8 +798,8 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageOtherAboutSponsorsSetUnlockCode">輸入解鎖碼</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfo">法律訊息</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseCopyright">許可與版權聲明</s:String>
-    <s:String x:Key="LangPageOtherAboutLicenseDoc">查看許可文件</s:String>
-    <s:String x:Key="LangPageOtherAboutLicenseWeb">查看來源網站</s:String>
+    <s:String x:Key="LangPageOtherAboutLicenseDoc">檢視許可文件</s:String>
+    <s:String x:Key="LangPageOtherAboutLicenseWeb">檢視來源網站</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">使用者協議與免責聲明</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隱私說明</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟體會匯報自己的版本名與版本號，以統計使用者數量與各版本的使用者數量占比。除此之外，本軟體不會上傳您的任何訊息。
@@ -817,7 +817,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchSkinTips">由於技術問題，外觀預覽與 Steve/Alex/自訂 選項暫時僅保證對 1.19.2 以前的版本有效！</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandom">隨機</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandomToolTip">隨機選擇一個預設外觀</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoft">正版使用者外觀</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoft">正版使用者</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftToolTip">使用某個正版使用者的外觀</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeCustom">自訂</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeCustomToolTip">以資源包的形式載入自訂外觀。
@@ -838,7 +838,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
  · {date}、{time}：目前的系統時間
  · {version}：實例對應的遊戲版本號</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">自訂訊息</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">該訊息會顯示在遊戲主介面的左下角，與 F3 除錯畫面的左上角</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">該訊息會顯示在遊戲主選單的左下角，與 F3 除錯畫面的左上角</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">實例隔離</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">關閉</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">所有實例均使用同一檔案，存檔、Mod、資源包等均為公用。
@@ -857,7 +857,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchLaunchVisibilityRestartOnGameClose">遊戲啟動後隱藏，遊戲結束後重新開啟</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibilityMinimizeOnGameStart">遊戲啟動後最小化</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibilityKeep">遊戲啟動後仍保持不變</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchGamePriority">處理程序優先度</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchGamePriority">處理程式優先度</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityHigh">高（優先保證遊戲執行，遊戲效能更佳，但可能造成其他程式卡頓）</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityMedium">中（平衡）</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityLow">低（優先保證其他程式執行，但可能讓遊戲卡頓，適合掛機時使用）</s:String>
@@ -936,9 +936,9 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchJavaUpdateListFail">更新設定 Java 下拉框失敗</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaNoAvailabeJava">未找到可用的 Java</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaSearchingJava">正在搜尋 Java，請稍候！</s:String>
-    <s:String x:Key="LangPageSetupLaunchJavaAddedJava">已將該 Java 加入 Java 列表！</s:String>
+    <s:String x:Key="LangPageSetupLaunchJavaAddedJava">已將該 Java 加入 Java 清單！</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaIncorrectJava">該 Java 存在異常，無法使用</s:String>
-    <s:String x:Key="LangPageSetupLaunchJavaSearchSuccess">已找到 {0} 個 Java，請檢查下拉框查看列表！</s:String>
+    <s:String x:Key="LangPageSetupLaunchJavaSearchSuccess">已找到 {0} 個 Java，請檢查下拉框檢視清單！</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">若在遊戲啟動後立即關閉啟動器，崩潰檢測、更改遊戲標題等功能將失效。
 如果想保留這些功能，可以選擇讓啟動器在遊戲啟動後隱藏，遊戲結束後自動關閉。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">提醒</s:String>
@@ -964,7 +964,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">下載</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本列表獲取</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本清單獲取</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">盡量使用鏡像源（載入快，但版本可能不是最新的）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">在官方源載入緩慢時改用鏡像源（平衡）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">盡量使用官方源（保證版本為最新，但載入非常緩慢）</s:String>
@@ -981,17 +981,17 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupSystemDownloadSpeedLimit">速度限制</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedLimitToolTip">設定下載的速度上限，以避免在下載時導致其他需要聯網的程式卡死</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadTargetFolder">目標資料夾</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadTargetFolderToolTip">請在「啟動 → 實例選擇 → 資料夾列表」中更改下載目標資料夾。
+    <s:String x:Key="LangPageSetupSystemDownloadTargetFolderToolTip">請在「啟動 → 實例選擇 → 資料夾清單」中更改下載目標資料夾。
 在某個資料夾或遊戲實例上右鍵，即可選擇開啟對應資料夾。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">安裝模組包時保留原始壓縮檔案</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">安裝模組包時，在實例資料夾下保留用於安裝的原始模組包壓縮檔案檔案</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">簡化模組載入器顯示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">下載模組時，若該模組支援 Forge 和 Fabric，則顯示為支援任意模組載入器。
 例如，開啟時 JEI 顯示支援全版本，關閉後 JEI 就會顯示僅支援 Forge / Fabric 全版本。</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSL">驗證 SSL 證書</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">驗證證書會提高安全性，但疑似有機率導致正版登入失敗（#3018）。
+    <s:String x:Key="LangPageSetupSystemDownloadSSL">驗證 SSL 認證</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">驗證認證會提高安全性，但疑似有機率導致正版登入失敗（#3018）。
 如果在正版登入時因為「根據驗證過程，遠端認證無效」失敗，可以嘗試關閉此項。</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibility">輔助功能</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibility">協助工具</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">遊戲更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">測試版更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">在 Minecraft 測試版（快照、預發布版）更新時彈窗提示</s:String>
@@ -1071,7 +1071,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageVersionModNoModFile">未找到模組</s:String>
     <s:String x:Key="LangPageVersionModDropToInstallModTip">要安裝模組，請直接將模組檔案拖入 PCL 視窗。
 如果你確認你已經安裝了模組，但仍然看到了這條提示，則是實例隔離設定有誤，請在啟動設定中調整實例隔離選項。</s:String>
-    <s:String x:Key="LangPageVersionModLoadingList">正在載入模組列表</s:String>
+    <s:String x:Key="LangPageVersionModLoadingList">正在載入模組清單</s:String>
     <s:String x:Key="LangPageVersionModSelectedFile">已選擇 {0} 個檔案</s:String>
     <s:String x:Key="LangPageVersionModOperationUpdate">更新</s:String>
     <s:String x:Key="LangPageVersionModOperationEnable">啟用</s:String>
@@ -1080,7 +1080,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageVersionModOperationDeselect">取消選擇</s:String>
     <s:String x:Key="LangPageVersionModOpenPath">開啟檔案位置</s:String>
     <s:String x:Key="LangPageVersionModDetail">詳情</s:String>
-    <s:String x:Key="LangPageVersionModModList">模組列表</s:String>
+    <s:String x:Key="LangPageVersionModModList">模組清單</s:String>
     <s:String x:Key="LangPageVersionModSearchResult">搜尋結果</s:String>
     <s:String x:Key="LangPageVersionModSearchNoResult">無搜尋結果</s:String>
     <s:String x:Key="LangPageVersionModHintDropFileToInstall">將模組檔案直接拖入 PCL 視窗即可安裝！</s:String>
@@ -1141,29 +1141,29 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageVersionOverallIconNeoForge">狐狸（NeoForge）</s:String>
     <s:String x:Key="LangPageVersionOverallCategory">分類</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryAuto">自動</s:String>
-    <s:String x:Key="LangPageVersionOverallCategoryHidden">從實例列表中隱藏</s:String>
-    <s:String x:Key="LangPageVersionOverallCategoryHiddenToolTip">該實例預設將不會在實例列表中顯示。
-在實例列表畫面按下 F11，即可查看所有隱藏的實例。</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryHidden">從實例清單中隱藏</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryHiddenToolTip">該實例預設將不會在實例清單中顯示。
+在實例清單畫面按下 F11，即可檢視所有隱藏的實例。</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryMod">可安裝模組的實例</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryRegular">常規實例</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryUncommon">不常用實例</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryAprilFool">愚人節實例</s:String>
     <s:String x:Key="LangPageVersionOverallEditName">修改實例名</s:String>
     <s:String x:Key="LangPageVersionOverallEditDesc">修改實例描述</s:String>
-    <s:String x:Key="LangPageVersionOverallFavorite">加入收藏夾</s:String>
-    <s:String x:Key="LangPageVersionOverallCancelFavorite">從收藏夾中移除</s:String>
+    <s:String x:Key="LangPageVersionOverallFavorite">加入我的最愛</s:String>
+    <s:String x:Key="LangPageVersionOverallCancelFavorite">從我的最愛中移除</s:String>
     <s:String x:Key="LangPageVersionOverallShortcut">捷徑</s:String>
     <s:String x:Key="LangPageVersionOverallFolder">實例資料夾</s:String>
     <s:String x:Key="LangPageVersionOverallFolderSaves">存檔資料夾</s:String>
     <s:String x:Key="LangPageVersionOverallFolderMods">模組資料夾</s:String>
     <s:String x:Key="LangPageVersionOverallManagement">進階管理</s:String>
-    <s:String x:Key="LangPageVersionOverallManagementExportCommand">導出啟動腳本</s:String>
+    <s:String x:Key="LangPageVersionOverallManagementExportCommand">匯出啟動腳本</s:String>
     <s:String x:Key="LangPageVersionOverallManagementCompleteFile">補全檔案</s:String>
     <s:String x:Key="LangPageVersionOverallManagementCompleteFileToolTip">校驗遊戲依賴檔案是否完整，並重新下載 Assets 索引與缺失、校驗失敗的檔案。
 若遊戲缺失音效，請嘗試此項。</s:String>
     <s:String x:Key="LangPageVersionOverallManagementDelete">刪除實例</s:String>
-    <s:String x:Key="LangPageVersionOverallDialogHideInstanceContent">確認要從實例列表中隱藏該實例嗎？隱藏該實例後，它將不再出現於 PCL 顯示的實例列表中。
-此後，在實例列表畫面按下 F11 才可以查看被隱藏的實例。</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogHideInstanceContent">確認要從實例清單中隱藏該實例嗎？隱藏該實例後，它將不再出現於 PCL 顯示的實例清單中。
+此後，在實例清單畫面按下 F11 才可以檢視被隱藏的實例。</s:String>
     <s:String x:Key="LangPageVersionOverallDialogHideInstanceTitle">隱藏實例提示</s:String>
     <s:String x:Key="LangPageVersionOverallDialogEditDescHint">預設描述</s:String>
     <s:String x:Key="LangPageVersionOverallDialogEditDescContent">修改實例的描述文字，留空則使用 PCL 的預設描述。</s:String>
@@ -1173,9 +1173,9 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageVersionOverallEditNameFail">重新命名實例失敗</s:String>
     <s:String x:Key="LangPageVersionOverallSelectSaveCommandFile">選擇腳本儲存位置</s:String>
     <s:String x:Key="LangPageVersionOverallHintWaitForTaskOver">請在目前啟動工作結束後再試！</s:String>
-    <s:String x:Key="LangPageVersionOverallHintExportingCommandA">正在導出啟動腳本……</s:String>
-    <s:String x:Key="LangPageVersionOverallHintExportingCommandB">正在導出啟動腳本……（注意，使用腳本啟動可能會導致登入失效！）</s:String>
-    <s:String x:Key="LangPageVersionOverallHintExportingCommandFail">導出啟動腳本失敗</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandA">正在匯出啟動腳本……</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandB">正在匯出啟動腳本……（注意，使用腳本啟動可能會導致登入失效！）</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandFail">匯出啟動腳本失敗</s:String>
     <s:String x:Key="LangPageVersionOverallTaskCompleteFile">檔案補全</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileInTask">正在處理中，請稍候！</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileSuccess">成功！</s:String>
@@ -1382,14 +1382,14 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchStartStageExtractFile">解壓縮檔案</s:String>
     <s:String x:Key="LangModLaunchStartStagePreProcess">預啟動處理</s:String>
     <s:String x:Key="LangModLaunchStartStageExecuteCommand">執行自訂命令</s:String>
-    <s:String x:Key="LangModLaunchStartStageWaitForProgress">啟動處理程序</s:String>
+    <s:String x:Key="LangModLaunchStartStageWaitForProgress">啟動處理程式</s:String>
     <s:String x:Key="LangModLaunchStartStageWaitForWindow">等待遊戲視窗出現</s:String>
     <s:String x:Key="LangModLaunchStartStageLaunchEnd">結束處理</s:String>
     <s:String x:Key="LangModLaunchStartStageMemReduce">記憶體最佳化</s:String>
     <s:String x:Key="LangModLaunchStartStageMCStarted">Minecraft 啟動</s:String>
     <s:String x:Key="LangModLaunchStartSuccess">啟動成功！</s:String>
     <s:String x:Key="LangModLaunchCancelStart">已取消啟動！</s:String>
-    <s:String x:Key="LangModLaunchCancelExportCommand">已取消導出啟動腳本！</s:String>
+    <s:String x:Key="LangModLaunchCancelExportCommand">已取消匯出啟動腳本！</s:String>
 
     <!--ModValidate-->
     <s:String x:Key="LangModValidateNoSameFolderName">不可與現有資料夾重名！</s:String>
@@ -1408,8 +1408,8 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <!--MyLocalModItem-->
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">目前版本：{0} ({1})
 最新版本：{2} ({3})
-點擊以更新，右鍵查看更新日誌。</s:String>
-    <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">要在哪個網站上查看更新日誌？</s:String>
-    <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">查看更新日誌</s:String>
+點擊以更新，右鍵檢視更新日誌。</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">要在哪個網站上檢視更新日誌？</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">檢視更新日誌</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">存在錯誤，無法獲取資訊</s:String>
 </ResourceDictionary>
