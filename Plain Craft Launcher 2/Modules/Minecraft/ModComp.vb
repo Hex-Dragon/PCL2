@@ -385,7 +385,7 @@
                             Case "technology" : Tags.Add("科技")
                             Case "magic" : Tags.Add("魔法")
                             Case "adventure" : Tags.Add("冒险")
-                            Case "kitchen-sink" : Tags.Add("烹饪")
+                            Case "kitchen-sink" : Tags.Add("大杂烩 (水槽)")
                             Case "lightweight" : Tags.Add("轻量")
                             'FUTURE: Res
                         End Select
