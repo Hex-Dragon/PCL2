@@ -816,13 +816,13 @@ Finished:
             If PageVersionMod.UpdatingVersions.Contains(Loader.Input) Then
                 Log($"[Mod] 等待 Mod 更新完成后才能继续加载 Mod 列表")
                 Try
-                    RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = "正在更新 Mod")
+                    RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = GetLang("LangModModUpdatingMod"))
                     Do Until Not PageVersionMod.UpdatingVersions.Contains(Loader.Input)
                         If Loader.IsAborted Then Exit Sub
                         Thread.Sleep(100)
                     Loop
                 Finally
-                    RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = "正在加载 Mod 列表")
+                    RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = GetLang("LangModModLoadingModList"))
                 End Try
             End If
 

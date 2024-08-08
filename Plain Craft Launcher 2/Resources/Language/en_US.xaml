@@ -1409,4 +1409,45 @@ Please update the launcher in &quot;Settings → Launcher&quot; first, then subm
     <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">Which website would you like to visit to view the changelog?</s:String>  
     <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">View changelog</s:String>  
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">An error occurred and information could not be retrieved.</s:String>
+    
+    <!--ModMod-->
+    <s:String x:Key="LangModModUpdatingMod">Updating Mod</s:String>
+    <s:String x:Key="LangModModLoadingModList">Loading Mod List</s:String>
+
+    <!--ModComp-->
+    <s:String x:Key="LangModCompVersionUnknown">Unknown</s:String>
+    <s:String x:Key="LangModCompVersionAll">All Versions</s:String>
+    <s:String x:Key="LangModCompVersionAny">Any</s:String>
+    <s:String x:Key="LangModCompVersionOnly">Only {0}</s:String>
+    <s:String x:Key="LangModCompEdition">{0} Edition</s:String>
+    <s:String x:Key="LangModCompSearchInEnglish">Current resources only support search in English</s:String>
+    <s:String x:Key="LangModCompIncompatibleOptionCurseForge">CurseForge is not compatible with the selected type</s:String>
+    <s:String x:Key="LangModCompIncompatibleOptionModrinth">Modrinth is not compatible with the selected type</s:String>
+    <s:String x:Key="LangModCompSearchNoResult">No results found that match the criteria</s:String>
+    <s:String x:Key="LangModCompVersionSnapshot">Snapshot</s:String>
+    <s:String x:Key="LangModCompVersionUnknownVersion">Unknown Version</s:String>
+
+    <!--ModDownload-->
+    <s:String x:Key="LangModDownloadMcLibFixAnalysis">Analyzing missing support library files</s:String>
+    <s:String x:Key="LangModDownloadMcLibFixDownload">Downloading support library files</s:String>
+    <s:String x:Key="LangModDownloadMcLibFixDownloadMainLoader">Downloading support library files (main loader)</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsAnalysis">Analyzing asset file index address</s:String>
+    <s:String x:Key="LangModDownloadExceptionAssetsAnalysis">Failed to analyze asset file index address</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsDownload">Downloading asset file index</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateAnalysis">Background analysis of asset file index address</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateDownload">Background download of asset file index</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateCopy">Background copy of asset file index</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateRefresh">Background update of asset file index</s:String>
+    <s:String x:Key="LangModDownloadMcResFixAnalysis">Analyzing missing asset files</s:String>
+    <s:String x:Key="LangModDownloadMcResDownload">Downloading asset files</s:String>
+    <s:String x:Key="LangModDownloadMcResDownloadMainLoader">Downloading asset files (main loader)</s:String>
+    <s:String x:Key="LangModDownloadExceptionShortVersionList">Insufficient version list length received ({0})</s:String>
+    <s:String x:Key="LangModDownloadExceptionOptiFineTime">Version and release time data do not match</s:String>
+    <s:String x:Key="LangModDownloadExceptionOptiFineNoCorresponding">Version and Forge compatibility data do not match</s:String>
+    <s:String x:Key="LangModDownloadExceptionShortVersion">Insufficient number of versions received ({0})</s:String>
+    <s:String x:Key="LangModDownloadSourceOffical">{0} Official Source</s:String>
+    <s:String x:Key="LangModDownloadExceptionForgeGetInfoFail">Failed to extract Forge official source version information ({0})</s:String>
+    <s:String x:Key="LangModDownloadExceptionSourceOfficalListLoad">Failed to parse {0} official source version list ({1})</s:String>
+    <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">Failed to parse {0} version list ({1})</s:String>
+    <s:String x:Key="LangModDownloadExceptionMissNecessary">The retrieved list lacks necessary items</s:String>
 </ResourceDictionary>

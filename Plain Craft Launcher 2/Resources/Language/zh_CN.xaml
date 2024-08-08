@@ -1225,4 +1225,45 @@
     <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">要在哪个网站上查看更新日志？</s:String>
     <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">查看更新日志</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">存在错误，无法获取信息</s:String>
+    
+    <!--ModMod-->
+    <s:String x:Key="LangModModUpdatingMod">正在更新 Mod</s:String>
+    <s:String x:Key="LangModModLoadingModList">正在加载 Mod 列表</s:String>
+    
+    <!--ModComp-->
+    <s:String x:Key="LangModCompVersionUnknown">未知</s:String>
+    <s:String x:Key="LangModCompVersionAll">全版本</s:String>
+    <s:String x:Key="LangModCompVersionAny">任意</s:String>
+    <s:String x:Key="LangModCompVersionOnly">仅 {0}</s:String>
+    <s:String x:Key="LangModCompEdition">{0} 版</s:String>
+    <s:String x:Key="LangModCompSearchInEnglish">当前资源仅支持使用英文搜索</s:String>
+    <s:String x:Key="LangModCompIncompatibleOptionCurseForge">CurseForge 不兼容所选的类型</s:String>
+    <s:String x:Key="LangModCompIncompatibleOptionModrinth">Modrinth 不兼容所选的类型</s:String>
+    <s:String x:Key="LangModCompSearchNoResult">没有符合条件的结果</s:String>
+    <s:String x:Key="LangModCompVersionSnapshot">快照</s:String>
+    <s:String x:Key="LangModCompVersionUnknownVersion">未知版本</s:String>
+    
+    <!--ModDownload-->
+    <s:String x:Key="LangModDownloadMcLibFixAnalysis">分析缺失支持库文件</s:String>
+    <s:String x:Key="LangModDownloadMcLibFixDownload">下载支持库文件</s:String>
+    <s:String x:Key="LangModDownloadMcLibFixDownloadMainLoader">下载支持库文件（主加载器）</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsAnalysis">分析资源文件索引地址</s:String>
+    <s:String x:Key="LangModDownloadExceptionAssetsAnalysis">分析资源文件索引地址失败</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsDownload">下载资源文件索引</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateAnalysis">后台分析资源文件索引地址</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateDownload">后台下载资源文件索引</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateCopy">后台复制资源文件索引</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateRefresh">后台更新资源文件索引</s:String>
+    <s:String x:Key="LangModDownloadMcResFixAnalysis">分析缺失资源文件</s:String>
+    <s:String x:Key="LangModDownloadMcResDownload">下载资源文件</s:String>
+    <s:String x:Key="LangModDownloadMcResDownloadMainLoader">下载资源文件（主加载器）</s:String>
+    <s:String x:Key="LangModDownloadExceptionShortVersionList">获取到的版本列表长度不足（{0}）</s:String>
+    <s:String x:Key="LangModDownloadExceptionOptiFineTime">版本与发布时间数据无法对应</s:String>
+    <s:String x:Key="LangModDownloadExceptionOptiFineNoCorresponding">版本与 Forge 兼容数据无法对应</s:String>
+    <s:String x:Key="LangModDownloadExceptionShortVersion">获取到的版本数量不足（{0}）</s:String>
+    <s:String x:Key="LangModDownloadSourceOffical">{0} 官方源</s:String>
+    <s:String x:Key="LangModDownloadExceptionForgeGetInfoFail">Forge 官方源版本信息提取失败（{0}）</s:String>
+    <s:String x:Key="LangModDownloadExceptionSourceOfficalListLoad">{0} 官方源版本列表解析失败（{1}）</s:String>
+    <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">{0} 版本列表解析失败（{1}）</s:String>
+    <s:String x:Key="LangModDownloadExceptionMissNecessary">獲取到的列表缺乏必要項</s:String>
 </ResourceDictionary>

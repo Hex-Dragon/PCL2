@@ -429,7 +429,7 @@
             '获取版本描述
             Dim GameVersionDescription As String
             If GameVersions Is Nothing OrElse Not GameVersions.Any() Then
-                GameVersionDescription = "未知"
+                GameVersionDescription = GetLang("LangModCompVersionUnknown")
             Else
                 Dim SpaVersions As New List(Of String)
                 Dim IsOld As Boolean = False
@@ -454,7 +454,7 @@
                     ElseIf McVersionHighest > -1 AndAlso StartVersion >= McVersionHighest Then
                         If EndVersion <= 10 Then
                             SpaVersions.Clear()
-                            SpaVersions.Add("全版本")
+                            SpaVersions.Add(GetLang("LangModCompVersionAll"))
                             Exit For
                         Else
                             SpaVersions.Add("1." & EndVersion & "+")
@@ -474,22 +474,22 @@
             Dim ModLoaderDescriptionFull As String, ModLoaderDescriptionPart As String
             Select Case ModLoaders.Count
                 Case 0
-                    ModLoaderDescriptionFull = "未知"
+                    ModLoaderDescriptionFull = GetLang("LangModCompVersionUnknown")
                     ModLoaderDescriptionPart = ""
                 Case 1
-                    ModLoaderDescriptionFull = "仅 " & ModLoaders.Single.ToString
+                    ModLoaderDescriptionFull = GetLang("LangModCompVersionOnly", ModLoaders.Single.ToString)
                     ModLoaderDescriptionPart = ModLoaders.Single.ToString
                 Case 2, 3
                     If Setup.Get("ToolDownloadIgnoreQuilt") AndAlso
                        ModLoaders.Contains(CompModLoaderType.Forge) AndAlso ModLoaders.Contains(CompModLoaderType.Fabric) Then
-                        ModLoaderDescriptionFull = "任意"
+                        ModLoaderDescriptionFull = GetLang("LangModCompVersionAny")
                         ModLoaderDescriptionPart = ""
                     Else
                         ModLoaderDescriptionFull = ModLoaders.Join(" / ")
                         ModLoaderDescriptionPart = ModLoaders.Join(" / ")
                     End If
                 Case Else
-                    ModLoaderDescriptionFull = "任意"
+                    ModLoaderDescriptionFull = GetLang("LangModCompVersionAny")
                     ModLoaderDescriptionPart = ""
             End Select
             '实例化 UI
@@ -608,7 +608,7 @@
                     '将 “Forge” 等提示改为 “Forge 版”
                     If IsModLoaderDescription AndAlso Not Ex.Contains("版") AndAlso
                         Ex.ToLower.Replace("forge", "").Replace("fabric", "").Replace("quilt", "").Length <= 3 Then
-                        Ex = Ex.Replace("Edition", "").Replace("edition", "").Trim.Capitalize & " 版"
+                        Ex = GetLang("LangModCompEdition", Ex.Replace("Edition", "").Replace("edition", "").Trim.Capitalize)
                     End If
                     '将 “forge” 等词语的首字母大写
                     Ex = Ex.Replace("forge", "Forge").Replace("neo", "Neo").Replace("fabric", "Fabric").Replace("quilt", "Quilt")
@@ -1016,13 +1016,13 @@ Retry:
                     Throw [Error]
                 Else
                     If IsChineseSearch AndAlso Task.Input.Type <> CompType.Mod Then
-                        Throw New Exception($"{If(Task.Input.Type = CompType.ModPack, "整合包", "资源包")}搜索仅支持英文")
+                        Throw New Exception(GetLang("LangModCompSearchInEnglish"))
                     ElseIf Task.Input.Source = CompSourceType.CurseForge AndAlso Task.Input.Tag.StartsWithF("/") Then
-                        Throw New Exception("CurseForge 不兼容所选的类型")
+                        Throw New Exception(GetLang("LangModCompIncompatibleOptionCurseForge"))
                     ElseIf Task.Input.Source = CompSourceType.Modrinth AndAlso Task.Input.Tag.EndsWithF("/") Then
-                        Throw New Exception("Modrinth 不兼容所选的类型")
+                        Throw New Exception(GetLang("LangModCompIncompatibleOptionModrinth"))
                     Else
-                        Throw New Exception("没有符合条件的结果")
+                        Throw New Exception(GetLang("LangModCompSearchNoResult"))
                     End If
                 End If
             ElseIf [Error] IsNot Nothing Then
@@ -1264,14 +1264,14 @@ Retry:
                     End If
                     'GameVersions
                     Dim RawVersions As List(Of String) = Data("gameVersions").Select(Function(t) t.ToString.Trim.ToLower).ToList
-                    GameVersions = RawVersions.Where(Function(v) v.StartsWithF("1.")).Select(Function(v) v.Replace("-snapshot", " 快照")).ToList
+                    GameVersions = RawVersions.Where(Function(v) v.StartsWithF("1.")).Select(Function(v) v.Replace("-snapshot", " " & GetLang("LangModCompVersionSnapshot"))).ToList
                     If GameVersions.Count > 1 Then
                         GameVersions = Sort(GameVersions, AddressOf VersionSortBoolean).ToList
                         If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)}
                     ElseIf GameVersions.Count = 1 Then
                         GameVersions = GameVersions.ToList
                     Else
-                        GameVersions = New List(Of String) From {"未知版本"}
+                        GameVersions = New List(Of String) From {GetLang("LangModCompVersionUnknownVersion")}
                     End If
                     'ModLoaders
                     ModLoaders = New List(Of CompModLoaderType)
@@ -1306,7 +1306,7 @@ Retry:
                     'GameVersions
                     Dim RawVersions As List(Of String) = Data("game_versions").Select(Function(t) t.ToString.Trim.ToLower).ToList
                     GameVersions = RawVersions.Where(Function(v) v.StartsWithF("1.") OrElse v.StartsWithF("b1.")).
-                                               Select(Function(v) If(v.Contains("-"), v.Before("-") & " 快照", If(v.StartsWithF("b1."), "远古版本", v))).ToList
+                                               Select(Function(v) If(v.Contains("-"), v.Before("-") & " " & GetLang("LangModCompVersionSnapshot"), If(v.StartsWithF("b1."), GetLang("LangDownloadAncientVersion"), v))).ToList
                     If GameVersions.Count > 1 Then
                         GameVersions = Sort(GameVersions, AddressOf VersionSortBoolean).ToList
                         If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)}
@@ -1315,7 +1315,7 @@ Retry:
                     ElseIf RawVersions.Any(Function(v) RegexCheck(v, "[0-9]{2}w[0-9]{2}[a-z]{1}")) Then
                         GameVersions = RawVersions.Where(Function(v) RegexCheck(v, "[0-9]{2}w[0-9]{2}[a-z]{1}")).ToList
                     Else
-                        GameVersions = New List(Of String) From {"未知版本"}
+                        GameVersions = New List(Of String) From {GetLang("LangModCompVersionUnknownVersion")}
                     End If
                     'ModLoaders
                     Dim RawLoaders As List(Of String) = Data("loaders").Select(Function(v) v.ToString).ToList
