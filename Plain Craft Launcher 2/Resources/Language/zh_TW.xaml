@@ -784,7 +784,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageOtherAboutThanks00ll00">提供了 Java Launch Wrapper 和一些重要服務支援！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksDoodleHuang">提供了部分很難找到的 Minecraft 版本與一些技術支援！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksPatrick">設計並製作了 PCL 標誌，讓我從做標誌的水深火熱中得到了解脫……</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksHao_Tian">在內測中找出了一大堆沒人想得到的詭異程式錯誤，有非比尋常的Bug體質</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksHao_Tian">在內測中找出了一大堆沒人想得到的詭異 Bug，有非比尋常的 Bug 體質</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">Minecraft 中文論壇</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBS">雖然已經關站了，但感謝此前提供了 MCBBS 鏡像源……</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 內群的各位</s:String>
@@ -903,7 +903,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 除此之外，也支援以下取代標記：
  · {user}：玩家名稱
  · {login}：玩家的登入方式
- · {UUID}：玩家的 UUID
+ · {uuid}：玩家的 UUID
  · {name}：實例名
  · {date}、{time}：目前的系統時間
  · {version}：實例對應的遊戲版本號
@@ -1240,9 +1240,9 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
  · {java}：遊戲執行時的 Java 資料夾
 
 除此之外，也支援以下取代標記：
- · {user}：玩家名字
+ · {user}：玩家名稱
  · {login}：玩家的登入方式
- · {UUID}：玩家的 UUID
+ · {uuid}：玩家的 UUID
  · {name}：遊戲實例名
  · {date}、{time}：目前的系統時間
  · {version}：實例對應的遊戲版本號
