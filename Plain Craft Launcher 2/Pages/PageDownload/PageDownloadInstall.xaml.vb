@@ -620,7 +620,8 @@
                                 Version.Add("lore", GetMcFoolName(Version("id")))
                         End Select
                         '所有4月1日发布的版本视为愚人节版，但不改动版本描述
-                        Select Case Version("releaseTime").Value(Of Date).ToString("MM'/'dd")
+                        Dim swedenTime As Date = Version("releaseTime").Value(Of Date).ToUniversalTime().AddHours(2)
+                        Select Case swedenTime.ToString("MM'/'dd")
                             Case "04/01"
                                 If Not Version("type") = "special" Then
                                     Type = "愚人节版"
