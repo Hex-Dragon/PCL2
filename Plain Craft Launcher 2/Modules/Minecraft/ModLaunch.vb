@@ -29,10 +29,10 @@ Public Module ModLaunch
         Options = If(Options, New McLaunchOptions)
         '预检查
         If Not RunInUi() Then
-            Throw New Exception("McLaunchStart 必须在 UI 线程调用！")
+            Throw New Exception(GetLang("LangModLaunchExceptionRunNotInUI"))
         End If
         If McLaunchLoader.State = LoadState.Loading Then
-            Hint("已有游戏正在启动中！", HintType.Critical)
+            Hint(GetLang("LangModLaunchAlreadyLaunchGame"), HintType.Critical)
             Return False
         End If
         '强制切换需要启动的版本
@@ -41,7 +41,7 @@ Public Module ModLaunch
             '检查版本
             Options.Version.Load()
             If Options.Version.State = McVersionState.Error Then
-                Hint("无法启动 Minecraft：" & Options.Version.Info, HintType.Critical)
+                Hint(GetLang("LangModLaunchLaunchFail", Options.Version.Info), HintType.Critical)
                 Return False
             End If
             '切换版本
@@ -151,7 +151,7 @@ Public Module ModLaunch
                 Case LoadState.Failed
                     Throw LaunchLoader.Error
                 Case Else
-                    Throw New Exception("错误的状态改变：" & GetStringFromEnum(CType(LaunchLoader.State, [Enum])))
+                    Throw New Exception(GetLang("LangModLaunchExceptionStateSwitchError", GetStringFromEnum(CType(LaunchLoader.State, [Enum]))))
             End Select
         Catch ex As Exception
             Dim CurrentEx = ex
@@ -203,12 +203,12 @@ NextInner:
     Private Sub McLaunchPrecheck()
         If Setup.Get("SystemDebugDelay") Then Thread.Sleep(RandomInteger(100, 2000))
         '检查路径
-        If McVersionCurrent.PathIndie.Contains("!") OrElse McVersionCurrent.PathIndie.Contains(";") Then Throw New Exception("游戏路径中不可包含 ! 或 ;（" & McVersionCurrent.PathIndie & "）")
-        If McVersionCurrent.Path.Contains("!") OrElse McVersionCurrent.Path.Contains(";") Then Throw New Exception("游戏路径中不可包含 ! 或 ;（" & McVersionCurrent.Path & "）")
+        If McVersionCurrent.PathIndie.Contains("!") OrElse McVersionCurrent.PathIndie.Contains(";") Then Throw New Exception(GetLang("LangModLaunchExceptionPathIncorrect", McVersionCurrent.PathIndie))
+        If McVersionCurrent.Path.Contains("!") OrElse McVersionCurrent.Path.Contains(";") Then Throw New Exception(GetLang("LangModLaunchExceptionPathIncorrect", McVersionCurrent.Path))
         '检查版本
-        If McVersionCurrent Is Nothing Then Throw New Exception("未选择 Minecraft 版本！")
+        If McVersionCurrent Is Nothing Then Throw New Exception(GetLang("LangModLaunchExceptionNoInstanceSelected"))
         McVersionCurrent.Load()
-        If McVersionCurrent.State = McVersionState.Error Then Throw New Exception("Minecraft 存在问题：" & McVersionCurrent.Info)
+        If McVersionCurrent.State = McVersionState.Error Then Throw New Exception(GetLang("LangModLaunchExceptionInstanceError", McVersionCurrent.Info))
         '检查输入信息
         Dim CheckResult As String = ""
         RunInUiWait(Sub()
@@ -221,10 +221,8 @@ NextInner:
         RunInNewThread(Sub()
                            Select Case Setup.Get("SystemLaunchCount")
                                Case 20, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1700, 1900, 2100, 2300, 2500
-                                   If MyMsgBox("PCL 已经为你启动了 " & Setup.Get("SystemLaunchCount") & " 次游戏啦！" & vbCrLf &
-                                               "如果觉得 PCL 还算好用的话，也可以考虑赞助一下作者……一点心意也行……" & vbCrLf &
-                                               "毕竟一个人开发也不容易（悲）……",
-                                               "求赞助啦……", "这就赞助！", "但是我拒绝") = 1 Then
+                                   If MyMsgBox(GetLang("LangModLaunchDialogContentSponsorship", Setup.Get("SystemLaunchCount")),
+                                               GetLang("LangModLaunchDialogTitleSponsorship"), GetLang("LangModLaunchDialogBtn1Sponsorship"), GetLang("LangModLaunchDialogBtn2Sponsorship")) = 1 Then
                                        OpenWebsite("https://afdian.net/a/LTCat")
                                    End If
                            End Select
@@ -234,10 +232,8 @@ NextInner:
         If Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
             Select Case Setup.Get("SystemLaunchCount")
                 Case 10, 35, 75, 125, 175, 225, 275, 325, 375, 425, 475, 550, 650, 750, 850, 950, 1050, 1150, 1250, 1350, 1450, 1600, 1800, 2000, 2200, 2400
-                    If MyMsgBox("你已经启动了 " & Setup.Get("SystemLaunchCount") & " 次 Minecraft 啦！" & vbCrLf &
-                                "如果觉得 Minecraft 还不错，也可以考虑购买正版支持一下，毕竟开发游戏也很不容易……" & vbCrLf &
-                                "在你登录一次正版账号后，就不会再出现这个提示了。",
-                                "考虑一下正版？", "购买正版游戏", "下次一定") = 1 Then
+                    If MyMsgBox(GetLang("LangModLaunchDialogContentBuyMc", Setup.Get("SystemLaunchCount")),
+                                GetLang("LangModLaunchDialogTitleBuyMc"), GetLang("LangModLaunchDialogBtn1BuyMc"), GetLang("LangModLaunchDialogBtn2BuyMc")) = 1 Then
                         OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
                     End If
             End Select
@@ -422,12 +418,12 @@ NextInner:
             Case McLoginType.Auth
                 Return PageLoginAuth.IsVaild(LoginData)
             Case Else
-                Return "未知的登录方式"
+                Return GetLang("LangModLaunchUnknownLoginMethod")
         End Select
     End Function
 
     '登录主模块加载器
-    Public McLoginLoader As New LoaderTask(Of McLoginData, McLoginResult)("登录", AddressOf McLoginStart, AddressOf McLoginInput, ThreadPriority.BelowNormal) With {.ReloadTimeout = 1, .ProgressWeight = 15, .Block = False}
+    Public McLoginLoader As New LoaderTask(Of McLoginData, McLoginResult)(GetLang("LangModLaunchLogin"), AddressOf McLoginStart, AddressOf McLoginInput, ThreadPriority.BelowNormal) With {.ReloadTimeout = 1, .ProgressWeight = 15, .Block = False}
     Public Function McLoginInput() As McLoginData
         Dim LoginData As McLoginData = Nothing
         Dim LoginType As McLoginType = Setup.Get("LoginType")
@@ -552,7 +548,7 @@ SkipLogin:
         McLaunchLog("微软登录完成")
         Setup.Set("HintBuy", True) '关闭正版购买提示
         Data.Progress = 0.98
-        If ThemeUnlock(10, False) Then MyMsgBox("感谢你对正版游戏的支持！" & vbCrLf & "隐藏主题 跳票红 已解锁！", "提示")
+        If ThemeUnlock(10, False) Then MyMsgBox(GetLang("LangModLaunchDialogContentThemeUnlockMojang"), GetLang("LangDialogTitleTip"))
     End Sub
     Private Sub McLoginServerStart(Data As LoaderTask(Of McLoginServer, McLoginResult))
         Dim Input As McLoginServer = Data.Input
@@ -693,7 +689,7 @@ LoginFinish:
                ""clientToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Client") & """}",
                ContentType:="application/json; charset=utf-8"))
         '将登录结果输出
-        If LoginJson("selectedProfile") Is Nothing Then Throw New Exception("选择的角色 " & Setup.Get("Cache" & Data.Input.Token & "Name") & " 无效！")
+        If LoginJson("selectedProfile") Is Nothing Then Throw New Exception(GetLang("LangModLaunchExceptionInvalidSelectedRole", Setup.Get("Cache" & Data.Input.Token & "Name")))
         Data.Output.AccessToken = LoginJson("accessToken").ToString
         Data.Output.ClientToken = LoginJson("clientToken").ToString
         Data.Output.Uuid = LoginJson("selectedProfile")("id").ToString
@@ -724,10 +720,10 @@ LoginFinish:
                 ContentType:="application/json; charset=utf-8"))
             '检查登录结果
             If LoginJson("availableProfiles").Count = 0 Then
-                If Data.Input.ForceReselectProfile Then Hint("你还没有创建角色，无法更换！", HintType.Critical)
-                Throw New Exception("$你还没有创建角色，请在创建角色后再试！")
+                If Data.Input.ForceReselectProfile Then Hint(GetLang("LangModLaunchHintNoRoleChangeRole"), HintType.Critical)
+                Throw New Exception("$" & GetLang("LangModLaunchHintNoRole"))
             ElseIf Data.Input.ForceReselectProfile AndAlso LoginJson("availableProfiles").Count = 1 Then
-                Hint("你的账户中只有一个角色，无法更换！", HintType.Critical)
+                Hint(GetLang("LangModLaunchHintNoRoleOnlyOne"), HintType.Critical)
             End If
             Dim SelectedName As String = Nothing
             Dim SelectedId As String = Nothing
@@ -739,7 +735,7 @@ LoginFinish:
                     If Profile("id").ToString = CacheId Then
                         SelectedName = Profile("name").ToString
                         SelectedId = Profile("id").ToString
-                        McLaunchLog("根据缓存选择的角色：" & SelectedName)
+                        McLaunchLog("根据缓存选择的角色： " & SelectedName)
                     End If
                 Next
                 '缓存无效，要求玩家选择
@@ -752,7 +748,7 @@ LoginFinish:
                                         SelectionControl.Add(New MyRadioBox With {.Text = Profile("name").ToString})
                                         SelectionJson.Add(Profile)
                                     Next
-                                    Dim SelectedIndex As Integer = MyMsgBoxSelect(SelectionControl, "选择使用的角色")
+                                    Dim SelectedIndex As Integer = MyMsgBoxSelect(SelectionControl, GetLang("LangModLaunchDialogSelectRole"))
                                     SelectedName = SelectionJson(SelectedIndex)("name").ToString
                                     SelectedId = SelectionJson(SelectedIndex)("id").ToString
                                 End Sub)
@@ -799,7 +795,7 @@ LoginFinish:
             ElseIf ex.Message.StartsWithF("$") Then
                 Throw
             Else
-                Throw New Exception("登录失败：" & ex.Message, ex)
+                Throw New Exception(GetLang("LangModLaunchExceptionLoginFail", ex.Message), ex)
             End If
             Return False
         End Try
@@ -813,10 +809,9 @@ SystemBrowser:
             'Windows 7 或老版 Windows 10 登录
             OpenWebsite(FormLoginOAuth.LoginUrl1)
             Dim Result As String =
-                MyMsgBoxInput("等待网页登录",
-                              "登录完成后，网页会变得完全空白，把那个空白网页的网址复制到下面的框中就行了！" & vbCrLf &
-                              "如果网络环境不佳，它可能一直加载不出来，那就只能试试用 VPN 或加速器了。",
-                              ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateRegex("(?<=code\=)[^&]+", "返回网址应以 https://login.live.com/oauth20_desktop.srf?code= 开头")},
+                MyMsgBoxInput(GetLang("LangModLaunchDialogTitleWebLogin"),
+                              GetLang("LangModLaunchDialogContentWebLogin"),
+                              ValidateRules:=New ObjectModel.Collection(Of Validate) From {New ValidateRegex("(?<=code\=)[^&]+", GetLang("LangModLaunchDialogTipWebLogin"))},
                               HintText:="https://login.live.com/oauth20_desktop.srf?code=XXXXXX")
             If Result Is Nothing Then
                 McLaunchLog("微软登录已在步骤 1 被取消")
@@ -824,7 +819,7 @@ SystemBrowser:
             Else
                 Return RegexSeek(Result, "(?<=code\=)[^&]+")
             End If
-            Hint("网页登录成功，你可以关闭浏览器啦！", HintType.Finish)
+            Hint(GetLang("LangModLaunchHintWebLoginSuccess"), HintType.Finish)
         Else
             'Windows 10 登录
             Dim ReturnCode As String = Nothing
@@ -939,26 +934,23 @@ SystemBrowser:
         Catch ex As Net.WebException
             '参考 https://github.com/PrismarineJS/prismarine-auth/blob/master/src/common/Constants.js
             If ex.Message.Contains("2148916227") Then
-                MyMsgBox("该账号似乎已被微软封禁，无法登录。", "登录失败", "我知道了", IsWarn:=True)
+                MyMsgBox(GetLang("LangModLaunchDialogContentBanned"), GetLang("LangModLaunchLoginFail"), GetLang("LangModLaunchDialogBtnISee"), IsWarn:=True)
                 Throw New Exception("$$")
             ElseIf ex.Message.Contains("2148916233") Then
-                If MyMsgBox("你尚未注册 Xbox 账户，请在注册后再登录。", "登录提示", "注册", "取消") = 1 Then
+                If MyMsgBox(GetLang("LangModLaunchDialogContentNoXBoxAccount"), GetLang("LangModLaunchDialogTitleLoginTip"), GetLang("LangModLaunchDialogBtnRegiste"), GetLang("LangDialogBtnCancel")) = 1 Then
                     OpenWebsite("https://signup.live.com/signup")
                 End If
                 Throw New Exception("$$")
             ElseIf ex.Message.Contains("2148916235") Then
-                MyMsgBox($"你的网络所在的国家或地区无法登录微软账号。{vbCrLf}请尝试使用加速器或 VPN。", "登录失败", "我知道了")
+                MyMsgBox(GetLang("LangModLaunchDialogContentUnableReachMicrosoft"), GetLang("LangModLaunchDialogTitleLoginFail"), GetLang("LangModLaunchDialogBtnISee"))
                 Throw New Exception("$$")
             ElseIf ex.Message.Contains("2148916238") Then
-                If MyMsgBox("该账号年龄不足，你需要先修改出生日期，然后才能登录。" & vbCrLf &
-                            "该账号目前填写的年龄是否在 13 岁以上？", "登录提示", "13 岁以上", "12 岁以下", "我不知道") = 1 Then
+                If MyMsgBox(GetLang("LangModLaunchDialogContentAgeLimit"), GetLang("LangModLaunchDialogTitleLoginTip"), GetLang("LangModLaunchDialogBtnAgeGreater13"), GetLang("LangModLaunchDialogBtnAgeLess12"), GetLang("LangModLaunchDialogBtnIDK")) = 1 Then
                     OpenWebsite("https://account.live.com/editprof.aspx")
-                    MyMsgBox("请在打开的网页中修改账号的出生日期（至少改为 18 岁以上）。" & vbCrLf &
-                             "在修改成功后等待一分钟，然后再回到 PCL，就可以正常登录了！", "登录提示")
+                    MyMsgBox(GetLang("LangModLaunchDialogContentChangeAgeA"), GetLang("LangModLaunchDialogTitleLoginTip"))
                 Else
                     OpenWebsite("https://support.microsoft.com/zh-cn/account-billing/如何更改-microsoft-帐户上的出生日期-837badbc-999e-54d2-2617-d19206b9540a")
-                    MyMsgBox("请根据打开的网页的说明，修改账号的出生日期（至少改为 18 岁以上）。" & vbCrLf &
-                             "在修改成功后等待一分钟，然后再回到 PCL，就可以正常登录了！", "登录提示")
+                    MyMsgBox(GetLang("LangModLaunchDialogContentChangeAgeB"), GetLang("LangModLaunchDialogTitleLoginTip"))
                 End If
                 Throw New Exception("$$")
             Else
@@ -983,10 +975,10 @@ SystemBrowser:
             Dim Message As String = GetExceptionSummary(ex)
             If Message.Contains("(429)") Then
                 Log(ex, "微软登录第 5 步汇报 429")
-                Throw New Exception("$登录尝试太过频繁，请等待几分钟后再试！")
+                Throw New Exception("$" & GetLang("LangModLaunchExceptionLoginTooFrequently"))
             ElseIf Message.Contains("(403)") Then
                 Log(ex, "微软登录第 5 步汇报 403")
-                Throw New Exception("$当前 IP 的登录尝试异常。" & vbCrLf & "如果你使用了 VPN 或加速器，请把它们关掉或更换节点后再试！")
+                Throw New Exception("$" & GetLang("LangModLaunchExceptionLoginIPIncorrect"))
             Else
                 Throw
             End If
@@ -1004,7 +996,7 @@ SystemBrowser:
         Try
             Dim ResultJson As JObject = GetJson(Result)
             If Not (ResultJson.ContainsKey("items") AndAlso ResultJson("items").Any) Then
-                Select Case MyMsgBox("你尚未购买正版 Minecraft，或者 Xbox Game Pass 已到期。", "登录失败", "购买 Minecraft", "取消")
+                Select Case MyMsgBox(GetLang("LangModLaunchDialogContentNoMc"), GetLang("LangModLaunchDialogTitleLoginFail"), GetLang("LangModLaunchDialogBtnByMc"), GetLang("LangDialogBtnCancel"))
                     Case 1
                         OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
                 End Select
@@ -1026,12 +1018,12 @@ SystemBrowser:
             Dim Message As String = GetExceptionSummary(ex)
             If Message.Contains("(429)") Then
                 Log(ex, "微软登录第 7 步汇报 429")
-                Throw New Exception("$登录尝试太过频繁，请等待几分钟后再试！")
+                Throw New Exception("$" & GetLang("LangModLaunchExceptionLoginTooFrequently"))
             ElseIf Message.Contains("(404)") Then
                 Log(ex, "微软登录第 7 步汇报 404")
                 RunInNewThread(
                 Sub()
-                    Select Case MyMsgBox("请先创建 Minecraft 玩家档案，然后再重新登录。", "登录失败", "创建档案", "取消")
+                    Select Case MyMsgBox(GetLang("LangModLaunchDialogContentCreateRole"), GetLang("LangModLaunchDialogTitleLoginFail"), GetLang("LangModLaunchDialogBtnCreateRole"), GetLang("LangDialogBtnCancel"))
                         Case 1
                             OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
                     End Select
@@ -1075,7 +1067,7 @@ SystemBrowser:
                     End If
                 Catch ex As Exception
                     Log(ex, "离线启动时使用的正版皮肤获取失败")
-                    MyMsgBox("由于设置的离线启动时使用的正版皮肤获取失败，游戏将以无皮肤的方式启动。" & vbCrLf & "请检查你的网络是否通畅，或尝试使用 VPN！" & vbCrLf & vbCrLf & "详细的错误信息：" & ex.Message, "皮肤获取失败")
+                    MyMsgBox(GetLang("LangModLaunchDialogContentGetSkinFail", ex.Message), GetLang("LangModLaunchDialogTitleGetSkinFail"))
                 End Try
             Case 4
                 '自定义
@@ -1095,18 +1087,18 @@ SystemBrowser:
         '从官网获取
         Try
             Dim GotJson As JObject = NetGetCodeByRequestRetry("https://api.mojang.com/users/profiles/minecraft/" & Name, IsJson:=True)
-            If GotJson Is Nothing Then Throw New FileNotFoundException("正版玩家档案不存在（" & Name & "）")
+            If GotJson Is Nothing Then Throw New FileNotFoundException(GetLang("LangModLaunchExceptionOnlineProfileNotFound", Name))
             Uuid = If(GotJson("id"), "")
         Catch ex As Exception
-            Log(ex, "从官网获取正版 Uuid 失败（" & Name & "）")
+            Log(ex, GetLang("LangModLaunchExceptionOnlineUUIDGetFail", Name))
             If Not ThrowOnNotFound AndAlso ex.GetType.Name = "FileNotFoundException" Then
                 Uuid = McLoginLegacyUuid(Name) '玩家档案不存在
             Else
-                Throw New Exception("从官网获取正版 Uuid 失败", ex)
+                Throw New Exception(GetLang("LangModLaunchExceptionOnlineUUIDGetFail", "Fail"), ex)
             End If
         End Try
         '写入缓存
-        If Not Len(Uuid) = 32 Then Throw New Exception("获取的正版 Uuid 长度不足（" & Uuid & "）")
+        If Not Len(Uuid) = 32 Then Throw New Exception(GetLang("LangModLaunchExceptionOnlineUUIDLenIncorrect", Uuid))
         WriteIni(PathTemp & "Cache\Uuid\Mojang.ini", Name, Uuid)
         Return Uuid
     End Function
@@ -1259,7 +1251,7 @@ SystemBrowser:
             If McLaunchJavaSelected IsNot Nothing Then
                 McLaunchLog("选择的 Java：" & McLaunchJavaSelected.ToString)
             Else
-                Hint("没有可用的 Java，已取消启动！", HintType.Critical)
+                Hint(GetLang("LangModLaunchHintNoAvailableJava"), HintType.Critical)
                 Throw New Exception("$$")
             End If
 
@@ -1293,7 +1285,7 @@ SystemBrowser:
                     IsWrapperWritten = WriteFile(WrapperPath, GetResources("JavaWrapper"))
                 End Try
             End If
-            If Not IsWrapperWritten Then Throw New FileNotFoundException("释放 Java Wrapper 失败，请查看 PCL 日志查找详细信息")
+            If Not IsWrapperWritten Then Throw New FileNotFoundException(GetLang("LangModLaunchExceptionReleaseJavaWrapperFail"))
         End SyncLock
         Return WrapperPath
     End Function
@@ -1369,7 +1361,7 @@ SystemBrowser:
                     '不包含端口号
                     Arguments += " --server " & Server & " --port 25565"
                 End If
-                If McVersionCurrent.Version.HasOptiFine Then Hint("OptiFine 与自动进入服务器可能不兼容，有概率导致材质丢失甚至游戏崩溃！", HintType.Critical)
+                If McVersionCurrent.Version.HasOptiFine Then Hint(GetLang("LangModLaunchHintOptiFineAutoEnterServer"), HintType.Critical)
             End If
         End If
         '自定义
@@ -1413,7 +1405,7 @@ SystemBrowser:
                               " -Dauthlibinjector.side=client" &
                               " -Dauthlibinjector.yggdrasil.prefetched=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(Response)))
             Catch ex As Exception
-                Throw New Exception("无法连接到第三方登录服务器（" & If(Server, Nothing) & "）", ex)
+                Throw New Exception(GetLang("LangModLaunchExceptionConnectServerFail", If(Server, Nothing)), ex)
             End Try
         End If
 
@@ -1424,7 +1416,7 @@ SystemBrowser:
 
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
-            Throw New Exception("版本 json 中没有 mainClass 项！")
+            Throw New Exception(GetLang("LangModLaunchExceptionJsonMiss-mainClass"))
         Else
             DataList.Add(Version.JsonObject("mainClass"))
         End If
@@ -1480,7 +1472,7 @@ NextVersion:
                               " -Dauthlibinjector.side=client" &
                               " -Dauthlibinjector.yggdrasil.prefetched=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(Response)))
             Catch ex As Exception
-                Throw New Exception("无法连接到第三方登录服务器（" & If(Server, Nothing) & "）", ex)
+                Throw New Exception(GetLang("LangModLaunchExceptionConnectServerFail", If(Server, Nothing)), ex)
             End Try
         End If
 
@@ -1515,7 +1507,7 @@ NextVersion:
 
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
-            Throw New Exception("版本 json 中没有 mainClass 项！")
+            Throw New Exception(GetLang("LangModLaunchExceptionJsonMiss-mainClass"))
         Else
             Result += " " & Version.JsonObject("mainClass").ToString
         End If
@@ -1713,7 +1705,7 @@ NextVersion:
             Catch ex As InvalidDataException
                 Log(ex, "打开 Natives 文件失败（" & Native.LocalPath & "）")
                 File.Delete(Native.LocalPath)
-                Throw New Exception("无法打开 Natives 文件（" & Native.LocalPath & "），该文件可能已损坏，请重新尝试启动游戏")
+                Throw New Exception(GetLang("LangModLaunchExceptionOpenNativesFail", Native.LocalPath))
             End Try
             For Each Entry In Zip.Entries
                 Dim FileName As String = Entry.FullName
@@ -1897,7 +1889,7 @@ NextVersion:
                McLoginLoader.Input.Type = McLoginType.Legacy AndAlso '离线登录
                (Setup.Get("LaunchSkinType") = 2 OrElse '强制 Alex
                (Setup.Get("LaunchSkinType") = 4 AndAlso Setup.Get("LaunchSkinSlim"))) Then '或选用 Alex 皮肤
-                Hint("此 Minecraft 版本尚不支持 Alex 皮肤，你的皮肤可能会显示为 Steve！", HintType.Critical)
+                Hint(GetLang("LangModLaunchHintAlexSkinNotSupport"), HintType.Critical)
             End If
         Catch ex As Exception
             Log(ex, "检查离线皮肤失效失败")
