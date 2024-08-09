@@ -7,7 +7,7 @@
     <s:String x:Key="LangTaskAbort">Canceled!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
-    <s:String x:Key="LangResourcePackage">Resource Pack</s:String>
+    <s:String x:Key="LangResourcePackage">Resource Package</s:String>
     
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">Download</s:String>
@@ -417,7 +417,7 @@ Press &quot;F11&quot; again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadCompApiSlow">Since version information from the API is updated slowly, it may not be able to recognize the version updated recently. Just wait a jiffy and it will automatically return to normal.</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">Looking for an applicable instance...</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">No applicable instance found in this Minecraft folder for this mod!</s:String>
-    <s:String x:Key="LangDownloadCompSelectedVersion">Selected Version: </s:String>
+    <s:String x:Key="LangDownloadCompSelectedVersion">Selected Version:</s:String>
     <s:String x:Key="LangDownloadCompDownloadModpack">Download Modpack: </s:String>
     <s:String x:Key="LangDownloadCompInputInstanceName">Enter Instance Name</s:String>
     <s:String x:Key="LangDownloadCompTaskDownloadModpackFile">Download Modpack File</s:String>
@@ -822,7 +822,7 @@ The skin replacement in this way will only be visible to player itself in multip
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftName">Username</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinSave">Save</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinRefresh">Refresh</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinRefreshToolTip">Refresh and redownload the skin displayed on the PCL currently.</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinRefreshToolTip">Refresh and re-download the skin displayed on the PCL currently.</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinChange">Change Skin</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinReset">Reset Skin</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchOptions">Launch Options</s:String>
@@ -849,10 +849,10 @@ If there are multiple instances with mods installed, it may cause mod conflicts.
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">Saves, mods, resource packs, etc. are not interoperable between instances.
 This will cause saves that are not shared between Vanilla instances, so it is generally not recommended.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibility">Visibility</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameStart">Close immediately after the game launched.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameClose">Hide after the game started, close after the game closed.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityRestartOnGameClose">Hide after the game started, reopen after the game closed.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityMinimizeOnGameStart">Minimize after the game started.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameStart">Close immediately after the game launched</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameClose">Hide after the game started, close after the game closed</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityRestartOnGameClose">Hide after the game started, reopen after the game closed</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityMinimizeOnGameStart">Minimize after the game started</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibilityKeep">Remain unchanged.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriority">Priority</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityHigh">High (Ensure game performance but may cause lag in other program)</s:String>
@@ -967,7 +967,8 @@ To automatically grant, right-click PCL and open &quot;Properties → Compatibil
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">Balanced (Switch to mirror when official source load slowly)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">Official (Versions are newest)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod Naming</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Determine the location and the style of the Simplified Chinese Translation for the mod that will be downloaded.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Determine the location and the style of the Simplified Chinese Translation for the mod that will be downloaded.
+This option is only valid when the language is set to Simplified Chinese.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">Front: [遗物] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">Front: 遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">Back: relics-0.1.14-遗物</s:String>
@@ -1039,8 +1040,7 @@ Download requirement can be assured when it is set to 64. Threads above 64 is NO
 For example, if some serious bug in the game is found in the future, unpredictable consequences may happen because of the ignoration.
 
 In general, choose &quot;Display announcements only when there are important notices&quot; to avoid most disturbances.
-Unless you are making a modpack or updating the launcher often, this option is extremely NOT recommended!
-</s:String>
+Unless you are making a modpack or updating the launcher often, this option is extremely NOT recommended!</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm">I know what I am doing</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementDisableContent">Choose this option means you will NOT be able to receive any announcement even if there are some fatal problems with the launcher.
 For example, if the existing launcher is unable to login due to the changes in login method by Mojang, you may not be able to play the game because the launcher is not up to date to fit the changes.
@@ -1316,7 +1316,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Slim Arms</s:String>
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">I Don't Know</s:String>
     <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">Please confirm the skin type on the skin download page before using this skin!</s:String>
-    <s:String x:Key="LangModMinecraftDialogNewVersionContentA">New Verison:</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionContentA">New Version:</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionContentB">Update Time:</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionContentC">Updated on:</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft Update Hint</s:String>
@@ -1329,8 +1329,8 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftGetVersionFail">Unable to identify: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">Version json file not found: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionReadJsonFail">Version json file is empty of failed to read.</s:String>
-    <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">Version json file is incorrect, content: {0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">Nesting appears in version dependencies: {0}</s:String>
+    <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">Version json file is incorrect, content: {0}.</s:String>
+    <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">Nesting appears in version dependencies: {0}.</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">Version json is non-standard. ({0})</s:String>
     <s:String x:Key="LangModMinecraftVersionPre">Pre-release</s:String>
     <s:String x:Key="LangModMinecraftVersionRC">Release Candidate</s:String>
@@ -1339,7 +1339,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftUnknownError">An unknown error occurred, please report this issue to the author.</s:String>
     <s:String x:Key="LangModMinecraftNideAuth">Unified Pass Authentication</s:String>
     <s:String x:Key="LangModMinecraftAuthlibAuth">Authlib Authentication</s:String>
-    <s:String x:Key="LangModMinecraftInvalidFabricVersion">Invalid Fabric version: {0}</s:String>
+    <s:String x:Key="LangModMinecraftInvalidFabricVersion">Invalid Fabric version: {0}.</s:String>
     <s:String x:Key="LangModMinecraftInvalidForgeVersion">Invalid Neo/Forge version: {0}</s:String>
     <s:String x:Key="LangModMinecraftFoolName24w14potato">Poisonous potatoes have always been overlooked and underestimated, so we've super-powered them!</s:String>
     <s:String x:Key="LangModMinecraftFoolName23w13ab">Research shows: players like making choices—the more, the better!</s:String>
@@ -1365,9 +1365,9 @@ Please check whether the event type is filled correctly, whether the PCL is the 
 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">Available for</s:String>
-    <s:String x:Key="LangModCompModDependentCount">dependency, </s:String>
+    <s:String x:Key="LangModCompModDependentCount">dependencies,</s:String>
     <s:String x:Key="LangModCompModDownload">downloads, </s:String>
-    <s:String x:Key="LangModCompModDownloadMillion">downloads in 10k, </s:String>
+    <s:String x:Key="LangModCompModDownloadMillion">downloads in 10k</s:String>
     <s:String x:Key="LangModCompModGameVersion">Game version</s:String>
     <s:String x:Key="LangModCompModUpdateTime">Updated {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">Save as</s:String>
@@ -1376,8 +1376,8 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModCompModStatusDescRelease">Release</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">Beta</s:String>
     <s:String x:Key="LangModCompModStatusDescAlpha">Alpha</s:String>
-    <s:String x:Key="LangModCompModMilion">Milion</s:String>
-    <s:String x:Key="LangModCompModBilion">Bilion</s:String>
+    <s:String x:Key="LangModCompModMilion">Million</s:String>
+    <s:String x:Key="LangModCompModBilion">Billion</s:String>
 
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">year(s)</s:String>
@@ -1583,7 +1583,7 @@ If you are using a VPN, please disable it or switch to a different server and tr
     <s:String x:Key="LangModLaunchDialogContentNoMc">You have not purchased Minecraft yet, or you Xbox Game Pass has expired.</s:String>
     <s:String x:Key="LangModLaunchDialogContentCreateRole">Please create Minecraft player profile first, then try again.</s:String>
     <s:String x:Key="LangModLaunchDialogBtnCreateRole">Create Profile</s:String>
-    <s:String x:Key="LangModLaunchDialogContentGetSkinFail">Game will launch without custom skin since the failure of skin obtainment.
+    <s:String x:Key="LangModLaunchDialogContentGetSkinFail">Game will launch without custom skin since the failure of skin obtainance.
 Please check the internet!
 
 Detailed error information: {0}</s:String>
