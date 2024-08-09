@@ -1310,10 +1310,10 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftSkinSizeErrorA">Dimensions of the skin image should be 64x32 px or 64x64 px!</s:String>
     <s:String x:Key="LangModMinecraftSkinSizeErrorB">Skin file size needs to be less than 24 KB, and the selected file size is</s:String>
     <s:String x:Key="LangModMinecraftSkinErrorFile">Error in skin file</s:String>
-    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeContent">Is this skin the classic or slim arms?</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeContent">Is this skin the classic or slim model?</s:String>
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeTitle">Skin Type</s:String>
-    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeSteve">Classic Arms</s:String>
-    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Slim Arms</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeSteve">Classic Model</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Slim Model</s:String>
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">I Don't Know</s:String>
     <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">Please confirm the skin type on the skin download page before using this skin!</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionContentA">New Version:</s:String>
@@ -1597,5 +1597,5 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModLaunchExceptionConnectServerFail">Unable to connect to third-party login server. ({0})</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">Missing &quot;mainClass&quot; in version json!</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">Unable to open Natives file ({0}), the file may be corrupted, please try to relaunch the game.</s:String>
-    <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">Slim arms skin is unsupported in this version, your skin may appear as Classic arms skin.</s:String>
+    <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">Slim model is unsupported in this version, your skin may appear as Classic model.</s:String>
 </ResourceDictionary>

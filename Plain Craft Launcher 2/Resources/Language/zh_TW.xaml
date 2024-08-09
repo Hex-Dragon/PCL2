@@ -98,7 +98,7 @@
     <s:String x:Key="LangDialogBackgroundPicRefreshFailA">重新整理背景圖像失敗，該圖像檔案可能並非標準格式。
 你可以嘗試使用小畫家開啟該檔案並重新儲存，這會讓圖像變為標準格式。
 檔案：</s:String>
-    <s:String x:Key="LangDialogBackgroundPicRefreshFailB">重新整理背景圖像失敗（ {0} ）</s:String>
+    <s:String x:Key="LangDialogBackgroundPicRefreshFailB">重新整理背景圖像失敗（{0}）</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailUnknwon">重新整理背景圖像時出現未知錯誤</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailA">改變標題欄圖像失敗，該圖像檔案可能並非標準格式。
 你可以嘗試使用小畫家開啟該檔案並重新儲存，這會讓圖像變為標準格式。</s:String>
@@ -110,7 +110,7 @@
     <s:String x:Key="LangDialogTitlePicChangeFailF">複製標題欄圖像失敗</s:String>
     <s:String x:Key="LangHintTitlePicEmptied">標題欄圖像已清空！</s:String>
     <s:String x:Key="LangDialogTitlePicEmptyFail">清空標題欄圖像失敗</s:String>
-    <s:String x:Key="LangBackgroundMusicCount">背景音樂（ {0} 首）</s:String>
+    <s:String x:Key="LangBackgroundMusicCount">背景音樂（{0} 首）</s:String>
     <s:String x:Key="LangBackgroundMusic">背景音樂</s:String>
     <s:String x:Key="LangDialogBackgroundMusicDeleteContent">即將刪除背景音樂資料夾中的所有檔案。
 此操作不可復原，是否確認？</s:String>
@@ -125,7 +125,7 @@
     <s:String x:Key="LangHintCustomPageRefreshed">已重新整理首頁！</s:String>
     <s:String x:Key="LangDialogCustomPageTeachContent">1. 點擊「生成教學文件」按鈕，這會在 PCL 資料夾下生成「Custom.xaml」佈局檔案。
 2. 使用記事本等工具開啟這個檔案並進行修改，修改完記得儲存。
-3. 點擊 重新整理首頁 按鈕，檢視首頁現在長什麼樣了。
+3. 點擊「重新整理首頁」按鈕，檢視首頁現在長什麼樣了。
 你可以在生成教學檔案後直接重新整理首頁，對照著進行修改，更有助於理解。
 直接將自訂首頁檔案拖進 PCL 視窗也可以快捷載入。</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">首頁自訂教學</s:String>
@@ -336,7 +336,7 @@
     <s:String x:Key="LangSelectVersionNoHidden">無隱藏實例</s:String>
     <s:String x:Key="LangSelectVersionNoHiddenTip">沒有實例被隱藏，你可以在實例設定的實例分類選項中隱藏實例。
 再次按下 F11 即可結束隱藏實例檢視模式。</s:String>
-    <s:String x:Key="LangSelectVersionListLoadFail">將實例列錶轉換顯示時失敗</s:String>
+    <s:String x:Key="LangSelectVersionListLoadFail">將實例清單轉換顯示時失敗</s:String>
     <s:String x:Key="LangSelectVersionListLoadIconFail">載入實例圖示失敗</s:String>
     <s:String x:Key="LangSelectBtnFavorite">添加至我的最愛</s:String>
     <s:String x:Key="LangSelectBtnCancelFavorite">從我的最愛中移除</s:String>
@@ -614,11 +614,11 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangMySkinCapeNameTranslator">Crowdin 翻譯者披風</s:String>
     <s:String x:Key="LangMySkinCapeNameCobalt">Cobalt 披風</s:String>
     <s:String x:Key="LangMySkinCapeNameVanilla">原版披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2011">Minecon 2011 參與者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2012">Minecon 2012 參與者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2013">Minecon 2013 參與者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2015">Minecon 2015 參與者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2016">Minecon 2016 參與者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2011">MINECON 2011 參與者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2012">MINECON 2012 參與者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2013">MINECON 2013 參與者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2015">MINECON 2015 參與者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2016">MINECON 2016 參與者披風</s:String>
     <s:String x:Key="LangMySkinCapeNameCherryBlossom">櫻花披風</s:String>
     <s:String x:Key="LangMySkinCapeName15th-Anniversary">15 周年紀念披風</s:String>
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">紫色愛心披風</s:String>
@@ -783,8 +783,8 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">開啟百科</s:String>
     <s:String x:Key="LangPageOtherAboutThanks00ll00">提供了 Java Launch Wrapper 和一些重要服務支援！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksDoodleHuang">提供了部分很難找到的 Minecraft 版本與一些技術支援！</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksPatrick">設計並製作了 PCL 圖示，讓我從做圖示的水深火熱中得到了解脫……</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksHao_Tian">在內測中找出了一大堆沒人想得到的詭異程式錯誤，有非比尋常的程式錯誤 體質</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksPatrick">設計並製作了 PCL 標誌，讓我從做標誌的水深火熱中得到了解脫……</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksHao_Tian">在內測中找出了一大堆沒人想得到的詭異程式錯誤，有非比尋常的Bug體質</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">Minecraft 中文論壇</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBS">雖然已經關站了，但感謝此前提供了 MCBBS 鏡像源……</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 內群的各位</s:String>
@@ -813,7 +813,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">離線外觀</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTips">由於技術問題，外觀預覽與 Steve/Alex/自訂 選項暫時僅保證對 1.19.2 以前的版本有效！</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTips">由於技術問題，外觀預覽與「Steve/Alex/自訂」選項暫時僅保證對 1.19.2 以前的版本有效！</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandom">隨機</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandomToolTip">隨機選擇一個預設外觀</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoft">正版使用者</s:String>
@@ -840,7 +840,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">該訊息會顯示在遊戲主選單的左下角，與 F3 除錯畫面的左上角</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">實例隔離</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">關閉</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">所有實例均使用同一檔案，存檔、Mod、資源包等均為公用。
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">所有實例均使用同一檔案，存檔、模組、資源包等均為公用。
 若存在多個安裝了模組的實例，可能會導致模組衝突。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">隔離可安裝模組的實例</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">可安裝模組的實例（例如 Forge、Fabric）均互相獨立以避免模組衝突，其他實例（例如原版）則不會被隔離。</s:String>
@@ -886,7 +886,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">進階啟動選項</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 參數頭</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">啟動 Minecraft 時使用的額外 JVM 參數，在沒有確認把握的情況下請不要嘗試修改。
-你可以通過點擊左側選項卡的初始化按鈕來復原到預設設定。</s:String>
+你可以通過點擊左側頁籤的初始化按鈕來復原到預設設定。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM 參數尾</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">文字框中的內容將會被直接拼合在啟動參數的末尾。
 例如輸入 --demo 則會以試玩模式啟動遊戲。</s:String>
@@ -918,7 +918,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand">等待指令執行完成後再繼續啟動</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility">忽略 Java 相容性警告</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">警告：強烈推薦在實例設定中關閉特定實例的警告，而不是在這裡關閉所有實例的警告！
-如果在設定中手動選擇了與目前實例不相容的 Java，則自動跳過相容性警告彈窗，強制使用手動選擇的 Java。</s:String>
+如果在設定中手動選擇了與目前實例不相容的 Java，則自動跳過相容性警告彈出視窗，強制使用手動選擇的 Java。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">關閉檔案校驗</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：強烈推薦在實例設定中關閉特定實例的校驗，而不是在這裡關閉所有實例的校驗！
 完全不更改 assets；不校驗 libraries、第三方登入庫與實例主 jar 檔案是否被修改。
@@ -968,11 +968,11 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">在官方源載入緩慢時改用鏡像源（平衡）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">盡量使用官方源（保證版本為最新，但載入非常緩慢）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">模組命名風格</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">決定下載的模組的預設檔案名中，中文譯名應該放在哪個位置
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">決定下載的模組的預設檔案名中，簡體中文譯名應該放在哪個位置
 該選項僅在語言設定為簡體中文時有效</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">譯名位於檔案名開頭：[遺物] relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">譯名位於檔案名開頭：遺物-relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">譯名位於檔案名末尾：relics-0.1.14-遺物</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">譯名位於檔案名開頭：[遗物] relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">譯名位於檔案名開頭：遗物-relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">譯名位於檔案名末尾：relics-0.1.14-遗物</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">不添加中文譯名：relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">最大執行緒數</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">執行緒數越多，限速的檔案下載越快，但過高的執行緒數會造成下載時非常嚴重的卡頓。
@@ -983,7 +983,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupSystemDownloadTargetFolderToolTip">請在「啟動 → 實例選擇 → 資料夾清單」中更改下載目標資料夾。
 在某個資料夾或遊戲實例上右鍵，即可選擇開啟對應資料夾。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">安裝模組包時保留原始壓縮檔案</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">安裝模組包時，在實例資料夾下保留用於安裝的原始模組包壓縮檔案檔案</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">安裝模組包時，在實例資料夾下保留用於安裝的原始模組包壓縮檔案</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">簡化模組載入器顯示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">下載模組時，若該模組支援 Forge 和 Fabric，則顯示為支援任意模組載入器。
 例如，開啟時 JEI 顯示支援全版本，關閉後 JEI 就會顯示僅支援 Forge / Fabric 全版本。</s:String>
@@ -992,10 +992,10 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 如果在正版登入時因為「根據驗證過程，遠端認證無效」失敗，可以嘗試關閉此項。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">協助工具</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">遊戲更新提示</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">測試版更新提示</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">在 Minecraft 測試版（快照、預發布版）更新時彈窗提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">開發版更新提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">在 Minecraft 開發版（快照、預發布版）更新時彈出視窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">正式版更新提示</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">在 Minecraft 正式版更新時彈窗提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">在 Minecraft 正式版更新時彈出視窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">遊戲語言</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">自動設定為簡體中文</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">系統</s:String>
@@ -1220,7 +1220,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageVersionSetupServerLoginServerNameToolTip">顯示在登入畫面的伺服器名稱</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServer">自動進入伺服器</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServerToolTip">在開啟 Minecraft 後自動進入某伺服器。
-用英文冒號間隔 IP 與埠，例如 233.233.233.233:12345。</s:String>
+用英文冒號間隔 IP 與埠，例如「233.233.233.233:12345」。</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerMaster">服主後台</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerSetLittleSkin">設定為 LittleSkin</s:String>
     <s:String x:Key="LangPageVersionSetupJVMHead">啟動 Minecraft 時使用的額外 JVM 參數，在沒有確認把握的情況下請不要嘗試修改。
@@ -1254,7 +1254,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 
 涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致執行失敗。
 執行指令時，命令列所在的目錄是目前的 .minecraft 資料夾。</s:String>
-    <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在設定中手動選擇了與目前實例不相容的 Java，則自動跳過相容性警告彈窗，強制使用手動選擇的 Java。</s:String>
+    <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在設定中手動選擇了與目前實例不相容的 Java，則自動跳過相容性警告彈出視窗，強制使用手動選擇的 Java。</s:String>
     <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校驗 libraries、第三方登入庫與實例主 jar 檔案是否被修改。
 如果你沒有修改相關檔案，請勿勾選此項。</s:String>
 
@@ -1269,7 +1269,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangModEventStartInstance">正在啟動 {0}……</s:String>
     <s:String x:Key="LangModEventChoseAnInstance">請先選擇一個 Minecraft 實例！</s:String>
     <s:String x:Key="LangModEventHomePageRefreshed">已重新整理首頁！</s:String>
-    <s:String x:Key="LangModEventDialogDownloadIncorrectContent">EventData 必須為以 http:// 或 https:// 開頭的連結。
+    <s:String x:Key="LangModEventDialogDownloadIncorrectContent">EventData 必須為以「http://」或「https://」開頭的連結。
 PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModEventDialogEventFailTitle">事件執行失敗</s:String>
     <s:String x:Key="LangModEventDialogUnknownEventContent">未知的事件類型：{0}
@@ -1353,8 +1353,8 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftExceptionGetFolderListFail">無法讀取版本資料夾，可能是由於沒有權限（{0}versions）</s:String>
     <s:String x:Key="LangModMinecraftSelectTypeSkin">外觀檔案</s:String>
     <s:String x:Key="LangModMinecraftSelectTitleSkin">選擇外觀檔案</s:String>
-    <s:String x:Key="LangModMinecraftExceptionUuidNoOnlineProfile">離線 Uuid 無正版外觀檔案。</s:String>
-    <s:String x:Key="LangModMinecraftExceptionEmptyUuid">Uuid 為空。</s:String>
+    <s:String x:Key="LangModMinecraftExceptionUuidNoOnlineProfile">離線 UUID 無正版外觀檔案。</s:String>
+    <s:String x:Key="LangModMinecraftExceptionEmptyUuid">UUID 為空。</s:String>
     <s:String x:Key="LangModMinecraftExceptionEmptySkin">外觀回傳值為空，可能是未設定自訂外觀的使用者</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinTypeInvalid">外觀地址種類無效：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinPropertyNotFound">未從外觀回傳值中找到符合條件的 Property</s:String>
@@ -1432,10 +1432,10 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <!--ModValidate-->
     <s:String x:Key="LangModValidateNoSameFolderName">不可與現有資料夾重名！</s:String>
     <s:String x:Key="LangModValidateNoEndWithDotFolderName">資料夾名不能以小數點結尾！</s:String>
-    <s:String x:Key="LangModValidateNoEndWithSpecialCharFolderName">資料夾名不可包含 % 字元！</s:String>
+    <s:String x:Key="LangModValidateNoEndWithSpecialCharFolderName">資料夾名不可包含「%」字元！</s:String>
     <s:String x:Key="LangModValidateNoEndWithSpaceFolderName">資料夾名不能以空格結尾！</s:String>
     <s:String x:Key="LangModValidateNoStartWithSpaceFolderName">資料夾名不能以空格開頭！</s:String>
-    <s:String x:Key="LangModValidateNoSpacialFolderName">資料夾名不可為 %！</s:String>
+    <s:String x:Key="LangModValidateNoSpacialFolderName">資料夾名不可為「%」！</s:String>
     <s:String x:Key="LangModValidateNoEmptyInput">輸入內容不能為空！</s:String>
     <s:String x:Key="LangModValidateIncorrectUrl">輸入的連結無效！</s:String>
     <s:String x:Key="LangModValidateNumTooLong">請輸入一個大小合理的數字！</s:String>
@@ -1452,7 +1452,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">存在錯誤，無法獲取資訊</s:String>
     
     <!--ModMod-->
-    <s:String x:Key="LangModModUpdatingMod">正在更新 Mod</s:String>
+    <s:String x:Key="LangModModUpdatingMod">正在更新模組</s:String>
     <s:String x:Key="LangModModLoadingModList">正在載入模組清單</s:String>
     
     <!--ModComp-->
