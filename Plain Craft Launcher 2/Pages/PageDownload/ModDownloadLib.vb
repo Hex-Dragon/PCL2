@@ -164,13 +164,13 @@ Public Module ModDownloadLib
             Task.Output = McAssetsFixList(McAssetsGetIndexName(New McVersion(VersionFolder)), True, Task)
         End Sub) With {.ProgressWeight = 3, .Show = False})
         LoadersAssets.Add(New LoaderDownload("下载资源文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 14, .Show = False})
-        Loaders.Add(New LoaderCombo(Of String)("下载原版资源文件", LoadersAssets) With {.Block = False, .ProgressWeight = 21})
+        Loaders.Add(New LoaderCombo(Of String)(GetLang("LangPageSpeedRightDownloadVanillaResource"), LoadersAssets) With {.Block = False, .ProgressWeight = 21})
 
         Return Loaders
 
     End Function
-    Private Const McDownloadClientLibName As String = "下载原版支持库文件"
-    Private Const McDownloadClientJsonName As String = "下载原版 json 文件"
+    Private McDownloadClientLibName As String = GetLang("LangPageSpeedRightDownloadVanillaSupportLibrary")
+    Private McDownloadClientJsonName As String = GetLang("LangPageSpeedRightDownloadVanillaJSON")
 
 #End Region
 
@@ -192,11 +192,11 @@ Public Module ModDownloadLib
         '建立控件
         Dim NewItem As New MyListItem With {.Logo = Logo, .SnapsToDevicePixels = True, .Title = Entry("id").ToString, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry}
         If Entry("lore") Is Nothing Then
-            NewItem.Info = Entry("releaseTime").Value(Of Date).ToString("yyyy'/'MM'/'dd HH':'mm")
+            NewItem.Info = GetLocalTimeFormat(Entry("releaseTime").Value(Of Date))
         Else
             NewItem.Info = Entry("lore").ToString
         End If
-        If Entry("url").ToString.Contains("pcl") Then NewItem.Info = "[PCL 特供下载] " & NewItem.Info
+        If Entry("url").ToString.Contains("pcl") Then NewItem.Info = "[" & GetLang("LangDownloadPCLProvided") & "] " & NewItem.Info
         AddHandler NewItem.Click, OnClick
         '建立菜单
         If IsSaveOnly Then
@@ -208,7 +208,7 @@ Public Module ModDownloadLib
         Return NewItem
     End Function
     Private Sub McDownloadSaveMenuBuild(sender As Object, e As EventArgs)
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -216,12 +216,12 @@ Public Module ModDownloadLib
         sender.Buttons = {BtnInfo}
     End Sub
     Private Sub McDownloadMenuBuild(sender As Object, e As EventArgs)
-        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
+        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = GetLang("LangDownloadSaveAs")}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
         ToolTipService.SetHorizontalOffset(BtnSave, 2)
         AddHandler BtnSave.Click, AddressOf McDownloadMenuSave
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -477,7 +477,7 @@ Public Module ModDownloadLib
         Dim Loaders As New List(Of LoaderBase)
 
         '获取下载地址
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取 OptiFine 主文件下载地址",
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangPageSpeedRightGetOptiFineDownloadAddress"),
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 '启动依赖版本的下载
                 If ClientDownloadLoader Is Nothing Then
@@ -507,7 +507,7 @@ Public Module ModDownloadLib
                 '构造文件请求
                 Task.Output = New List(Of NetFile) From {New NetFile(Sources.ToArray, Target, New FileChecker(MinSize:=300 * 1024))}
             End Sub) With {.ProgressWeight = 8})
-        Loaders.Add(New LoaderDownload("下载 OptiFine 主文件", New List(Of NetFile)) With {.ProgressWeight = 8})
+        Loaders.Add(New LoaderDownload(GetLang("LangPageSpeedRightDownloadOptiFineMainFile"), New List(Of NetFile)) With {.ProgressWeight = 8})
         Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("等待原版下载",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
                 '等待原版文件下载完成
@@ -538,7 +538,7 @@ Public Module ModDownloadLib
         '安装（新旧方式均需要原版 Jar 和 Json）
         If IsNewVersion Then
             Log("[Download] 检测为新版 OptiFine：" & DownloadInfo.Inherit)
-            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("安装 OptiFine（方式 A）",
+            Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)(GetLang("LangPageSpeedRightInstallOptiFineMethodA"),
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
                 Dim BaseMcFolderHome As String = PathTemp & "InstallOptiFine" & RandomInteger(0, 100000)
                 Dim BaseMcFolder As String = BaseMcFolderHome & "\.minecraft\"
@@ -670,7 +670,7 @@ Retry:
             Task.Output = New List(Of NetFile) From {New NetFile(Sources.ToArray, TargetFolder, New FileChecker(MinSize:=64 * 1024))}
         End Sub) With {.ProgressWeight = 6})
         '下载
-        Loaders.Add(New LoaderDownload("下载 OptiFine 主文件", New List(Of NetFile)) With {.ProgressWeight = 10, .Block = True})
+        Loaders.Add(New LoaderDownload(GetLang("LangPageSpeedRightDownloadOptiFineMainFile"), New List(Of NetFile)) With {.ProgressWeight = 10, .Block = True})
         Return Loaders
     End Function
 
@@ -682,9 +682,9 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.NameDisplay, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry.IsPreview, "测试版", "正式版") &
-                    If(Entry.ReleaseTime = "", "", "，发布于 " & Entry.ReleaseTime) &
-                    If(Entry.RequiredForgeVersion Is Nothing, "，不兼容 Forge", If(Entry.RequiredForgeVersion = "", "", "，推荐 Forge 版本：" & Entry.RequiredForgeVersion)),
+            .Info = If(Entry.IsPreview, GetLang("LangDownloadPreviewOptiFine"), GetLang("LangDownloadStable")) &
+                    If(Entry.ReleaseTime = "", "", "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime) &
+                    If(Entry.RequiredForgeVersion Is Nothing, "，" & GetLang("LangDownloadForgeIncompatible"), If(Entry.RequiredForgeVersion = "", "", "，" & GetLang("LangDownloadRecommendForge") & Entry.RequiredForgeVersion)),
             .Logo = PathImage & "Blocks/GrassPath.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -698,7 +698,7 @@ Retry:
         Return NewItem
     End Function
     Private Sub OptiFineSaveContMenuBuild(sender As Object, e As EventArgs)
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -706,12 +706,12 @@ Retry:
         sender.Buttons = {BtnInfo}
     End Sub
     Private Sub OptiFineContMenuBuild(sender As Object, e As EventArgs)
-        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
+        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = GetLang("LangDownloadSaveAs")}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
         ToolTipService.SetHorizontalOffset(BtnSave, 2)
         AddHandler BtnSave.Click, AddressOf OptiFineSave_Click
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -901,7 +901,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.Inherit, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry.IsPreview, "测试版", "稳定版") & If(Entry.ReleaseTime = "", "", "，发布于 " & Entry.ReleaseTime),
+            .Info = If(Entry.IsPreview, GetLang("LangDownloadPreviewLiteLoader"), GetLang("LangDownloadStable")) & If(Entry.ReleaseTime = "", "", "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime),
             .Logo = PathImage & "Blocks/Egg.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -918,7 +918,7 @@ Retry:
         If sender.Tag.IsLegacy Then
             sender.Buttons = {}
         Else
-            Dim BtnList As New MyIconButton With {.Logo = Logo.IconButtonList, .ToolTip = "查看全部版本", .Tag = sender}
+            Dim BtnList As New MyIconButton With {.Logo = Logo.IconButtonList, .ToolTip = GetLang("LangDownloadShowAll"), .Tag = sender}
             ToolTipService.SetPlacement(BtnList, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnList, 30)
             ToolTipService.SetHorizontalOffset(BtnList, 2)
@@ -927,7 +927,7 @@ Retry:
         End If
     End Sub
     Private Sub LiteLoaderContMenuBuild(sender As MyListItem, e As EventArgs)
-        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "保存安装器", .Tag = sender}
+        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = GetLang("LangDownloadSaveInstaller"), .Tag = sender}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
         ToolTipService.SetHorizontalOffset(BtnSave, 2)
@@ -935,7 +935,7 @@ Retry:
         If sender.Tag.IsLegacy Then
             sender.Buttons = {BtnSave}
         Else
-            Dim BtnList As New MyIconButton With {.Logo = Logo.IconButtonList, .ToolTip = "查看全部版本", .Tag = sender}
+            Dim BtnList As New MyIconButton With {.Logo = Logo.IconButtonList, .ToolTip = GetLang("LangDownloadShowAll"), .Tag = sender}
             ToolTipService.SetPlacement(BtnList, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnList, 30)
             ToolTipService.SetHorizontalOffset(BtnList, 2)
@@ -1251,13 +1251,13 @@ Retry:
             End If
             Task.Output = Files
         End Sub) With {.ProgressWeight = 0.5, .Show = False})
-        Loaders.Add(New LoaderDownload($"下载 {LoaderName} 主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
+        Loaders.Add(New LoaderDownload(GetLang("LangPageSpeedRightDownloadModLoaderMainFile", LoaderName), New List(Of NetFile)) With {.ProgressWeight = 9})
 
         '安装（仅在新版安装时需要原版 Jar）
         If IsNeoForge OrElse LoaderVersion.Before(".") >= 20 Then
             Log($"[Download] 检测为{If(IsNeoForge, " Neo", "新版 ")}Forge：" & LoaderVersion)
             Dim Libs As List(Of McLibToken) = Nothing
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))($"分析 {LoaderName} 支持库文件",
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangPageSpeedRightAnalyseModLoaderSupportLibrary", LoaderName),
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 Task.Output = New List(Of NetFile)
                 Dim Installer As ZipArchive = Nothing
@@ -1300,7 +1300,7 @@ Retry:
                     If Installer IsNot Nothing Then Installer.Dispose()
                 End Try
             End Sub) With {.ProgressWeight = 2})
-            Loaders.Add(New LoaderDownload($"下载 {LoaderName} 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 12})
+            Loaders.Add(New LoaderDownload(GetLang("LangPageSpeedRightDownloadModLoaderSupportLibrary", LoaderName), New List(Of NetFile)) With {.ProgressWeight = 12})
             Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)($"获取 {LoaderName} 支持库文件",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
 #Region "Forgelike 文件"
@@ -1341,7 +1341,7 @@ Retry:
                 End SyncLock
 #End Region
             End Sub) With {.ProgressWeight = 0.1, .Show = False})
-            Loaders.Add(New LoaderTask(Of Boolean, Boolean)(If(IsNeoForge, "安装 NeoForge", "安装 Forge（方式 A）"),
+            Loaders.Add(New LoaderTask(Of Boolean, Boolean)(If(IsNeoForge, GetLang("LangPageSpeedRightInstallNeoForge"), GetLang("LangPageSpeedRightInstallForgeMethodA")),
             Sub(Task As LoaderTask(Of Boolean, Boolean))
                 Dim Installer As ZipArchive = Nothing
                 Try
@@ -1492,22 +1492,22 @@ Retry:
         '显示各个版本
         If RecommendedVersion IsNot Nothing Then
             Dim Recommended = ForgeDownloadListItem(RecommendedVersion, OnClick, IsSaveOnly)
-            Recommended.Info = "推荐版" & If(Recommended.Info = "", "", "，" & Recommended.Info)
+            Recommended.Info = GetLang("LangDownloadRecommend") & If(Recommended.Info = "", "", "，" & Recommended.Info)
             Stack.Children.Add(Recommended)
         End If
         If FreshVersion IsNot Nothing Then
             Dim Fresh = ForgeDownloadListItem(FreshVersion, OnClick, IsSaveOnly)
-            Fresh.Info = "最新版" & If(Fresh.Info = "", "", "，" & Fresh.Info)
+            Fresh.Info = GetLang("LangDownloadLatest") & If(Fresh.Info = "", "", "，" & Fresh.Info)
             Stack.Children.Add(Fresh)
         End If
         '添加间隔
-        Stack.Children.Add(New TextBlock With {.Text = "全部版本 (" & Entries.Count & ")", .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 13, 0, 4)})
+        Stack.Children.Add(New TextBlock With {.Text = GetLang("LangDownloadAll") & " (" & Entries.Count & ")", .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 13, 0, 4)})
     End Sub
     Public Function ForgeDownloadListItem(Entry As DlForgeVersionEntry, OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.VersionName, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = {If(Entry.ReleaseTime = "", "", "发布于 " & Entry.ReleaseTime), If(ModeDebug, "种类：" & Entry.Category, "")}.
+            .Info = {If(Entry.ReleaseTime = "", "", GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime), If(ModeDebug, GetLang("LangDownloadCategory") & Entry.Category, "")}.
                 Where(Function(d) d <> "").Join("，"),
             .Logo = PathImage & "Blocks/Anvil.png"
         }
@@ -1522,12 +1522,12 @@ Retry:
         Return NewItem
     End Function
     Private Sub ForgeContMenuBuild(sender As MyListItem, e As EventArgs)
-        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
+        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = GetLang("LangDownloadSaveAs")}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
         ToolTipService.SetHorizontalOffset(BtnSave, 2)
         AddHandler BtnSave.Click, AddressOf ForgeSave_Click
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -1535,7 +1535,7 @@ Retry:
         sender.Buttons = {BtnSave, BtnInfo}
     End Sub
     Private Sub ForgeSaveContMenuBuild(sender As MyListItem, e As EventArgs)
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -1645,22 +1645,22 @@ Retry:
         '显示各个版本
         If FreshStableVersion IsNot Nothing Then
             Dim Fresh = NeoForgeDownloadListItem(FreshStableVersion, OnClick, IsSaveOnly)
-            Fresh.Info = If(Fresh.Info = "", "最新稳定版", "最新" & Fresh.Info)
+            Fresh.Info = If(Fresh.Info = "", GetLang("LangDownloadNewStable"), GetLang("LangDownloadNewStable"))
             Stack.Children.Add(Fresh)
         End If
         If FreshBetaVersion IsNot Nothing Then
             Dim Fresh = NeoForgeDownloadListItem(FreshBetaVersion, OnClick, IsSaveOnly)
-            Fresh.Info = If(Fresh.Info = "", "最新测试版", "最新" & Fresh.Info)
+            Fresh.Info = If(Fresh.Info = "", GetLang("LangDownloadNewTest"), GetLang("LangDownloadNewTest"))
             Stack.Children.Add(Fresh)
         End If
         '添加间隔
-        Stack.Children.Add(New TextBlock With {.Text = "全部版本 (" & Entries.Count & ")", .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 13, 0, 4)})
+        Stack.Children.Add(New TextBlock With {.Text = GetLang("LangDownloadAll") & " (" & Entries.Count & ")", .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 13, 0, 4)})
     End Sub
     Public Function NeoForgeDownloadListItem(Info As DlNeoForgeListEntry, OnClick As MyListItem.ClickEventHandler, IsSaveOnly As Boolean) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Info.VersionName, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Info,
-            .Info = If(Info.IsBeta, "测试版", "稳定版"),
+            .Info = If(Info.IsBeta, GetLang("LangDownloadTest"), GetLang("LangDownloadStable")),
             .Logo = PathImage & "Blocks/NeoForge.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1674,12 +1674,12 @@ Retry:
         Return NewItem
     End Function
     Private Sub NeoForgeContMenuBuild(sender As MyListItem, e As EventArgs)
-        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
+        Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = GetLang("LangDownloadSaveAs")}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
         ToolTipService.SetHorizontalOffset(BtnSave, 2)
         AddHandler BtnSave.Click, AddressOf NeoForgeSave_Click
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -1687,7 +1687,7 @@ Retry:
         sender.Buttons = {BtnSave, BtnInfo}
     End Sub
     Private Sub NeoForgeSaveContMenuBuild(sender As MyListItem, e As EventArgs)
-        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = "更新日志"}
+        Dim BtnInfo As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonInfo, .ToolTip = GetLang("LangDownloadChangelog")}
         ToolTipService.SetPlacement(BtnInfo, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
@@ -1772,7 +1772,7 @@ Retry:
 
         '下载 Json
         MinecraftName = MinecraftName.Replace("∞", "infinite") '放在 ID 后面避免影响版本文件夹名称
-        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取 Fabric 主文件下载地址",
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangPageSpeedRightGetFabricMainFileDownloadAddress"),
                                                             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                                                                 '启动依赖版本的下载
                                                                 If FixLibrary Then
@@ -1787,7 +1787,7 @@ Retry:
                                                                 '新建 mods 文件夹
                                                                 Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
                                                             End Sub) With {.ProgressWeight = 0.5})
-        Loaders.Add(New LoaderDownload("下载 Fabric 主文件", New List(Of NetFile)) With {.ProgressWeight = 2.5})
+        Loaders.Add(New LoaderDownload(GetLang("LangPageSpeedRightDownloadFabricMainFile"), New List(Of NetFile)) With {.ProgressWeight = 2.5})
 
         '下载支持库
         If FixLibrary Then
@@ -1807,7 +1807,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry("version").ToString.Replace("+build", ""), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry("stable").ToObject(Of Boolean), "稳定版", "测试版"),
+            .Info = If(Entry("stable").ToObject(Of Boolean), GetLang("LangDownloadStable"), GetLang("LangDownloadTest")),
             .Logo = PathImage & "Blocks/Fabric.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1818,7 +1818,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Before("+").Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
+            .Info = Entry.StatusDescription & "，" & GetLang("LangDownloadReleaseOn") & " " & GetLocalTimeFormat(Entry.ReleaseDate),
             .Logo = PathImage & "Blocks/Fabric.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1829,7 +1829,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.ToLower.Replace("optifabric-", "").Replace(".jar", "").Trim.TrimStart("v"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
+            .Info = Entry.StatusDescription & "，" & GetLang("LangDownloadReleaseOn") & " " & GetLocalTimeFormat(Entry.ReleaseDate),
             .Logo = PathImage & "Blocks/OptiFabric.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -2066,11 +2066,11 @@ Retry:
         LoaderList.Add(New LoaderTask(Of Integer, Integer)("添加忽略标识", Sub() WriteFile(OutputFolder & ".pclignore", "用于临时地在 PCL 的版本列表中屏蔽此版本。")) With {.Show = False, .Block = False})
         'Fabric API
         If Request.FabricApi IsNot Nothing Then
-            LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
+            LoaderList.Add(New LoaderDownload(GetLang("LangPageSpeedRightDownloadFabricAPI"), New List(Of NetFile) From {Request.FabricApi.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
         End If
         'OptiFabric
         If Request.OptiFabric IsNot Nothing Then
-            LoaderList.Add(New LoaderDownload("下载 OptiFabric", New List(Of NetFile) From {Request.OptiFabric.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
+            LoaderList.Add(New LoaderDownload(GetLang("LangPageSpeedRightDownloadOptiFabric"), New List(Of NetFile) From {Request.OptiFabric.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
         End If
         '原版
         Dim ClientLoader = New LoaderCombo(Of String)("下载原版 " & Request.MinecraftName, McDownloadClientLoader(Request.MinecraftName, Request.MinecraftJson, Request.TargetVersionName)) With {.Show = False, .ProgressWeight = 39, .Block = Request.ForgeVersion Is Nothing AndAlso Request.OptiFineEntry Is Nothing AndAlso Request.FabricVersion Is Nothing AndAlso Request.LiteLoaderEntry Is Nothing}
@@ -2100,7 +2100,7 @@ Retry:
             LoaderList.Add(New LoaderCombo(Of String)("下载 Fabric " & Request.FabricVersion, McDownloadFabricLoader(Request.FabricVersion, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2, .Block = True})
         End If
         '合并安装
-        LoaderList.Add(New LoaderTask(Of String, String)("安装游戏",
+        LoaderList.Add(New LoaderTask(Of String, String)(GetLang("LangPageSpeedRightInstallGame"),
             Sub(Task As LoaderTask(Of String, String))
                 InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, FabricFolder, LiteLoaderFolder)
                 Task.Progress = 0.3
@@ -2113,7 +2113,7 @@ Retry:
             Dim LoadersLib As New List(Of LoaderBase)
             LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(OutputFolder))) With {.ProgressWeight = 1, .Show = False})
             LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
-            LoaderList.Add(New LoaderCombo(Of String)("下载游戏支持库文件", LoadersLib) With {.ProgressWeight = 8})
+            LoaderList.Add(New LoaderCombo(Of String)(GetLang("LangPageSpeedRightDownloadGameSupportLibrary"), LoadersLib) With {.ProgressWeight = 8})
         End If
         '删除忽略标识
         LoaderList.Add(New LoaderTask(Of Integer, Integer)("删除忽略标识", Sub() File.Delete(OutputFolder & ".pclignore")) With {.Show = False})

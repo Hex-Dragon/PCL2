@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PCL"
         mc:Ignorable="d"
-        Height="720" Width="580" MinHeight="720" MinWidth="580" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" Title="Microsoft 账户登录">
+        Height="720" Width="580" MinHeight="720" MinWidth="580" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" Title="{DynamicResource LangLoginOAuthWindowTitle}">
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -14,15 +14,15 @@
             </LinearGradientBrush>
         </Grid.Background>
         <StackPanel x:Name="PanLoading" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <local:MyLoading x:Name="Loading" Text="正在加载登录页面" HorizontalAlignment="Center" />
-            <TextBlock Text="如果网络环境不佳，加载可能非常缓慢甚至一直加载不出来" Margin="0,25,0,0"
+            <local:MyLoading x:Name="Loading" Text="{DynamicResource LangLoginOAuthLoading}" HorizontalAlignment="Center" />
+            <TextBlock Text="{DynamicResource LangLoginOAuthLoadingTipA}" Margin="0,25,0,0"
                        HorizontalAlignment="Center" Foreground="{DynamicResource ColorBrush1}" Opacity="0.7" />
-            <TextBlock Text="此时请尝试使用 VPN 或加速器，然后重试"
+            <TextBlock Text="{DynamicResource LangLoginOAuthLoadingTipB}"
                        HorizontalAlignment="Center" Foreground="{DynamicResource ColorBrush1}" Opacity="0.7" />
         </StackPanel>
         <WebBrowser x:Name="Browser1" Visibility="Collapsed" Tag="1" Margin="0,0,0,25" />
         <WebBrowser x:Name="Browser2" Visibility="Collapsed" Tag="2" Margin="0,0,0,25" />
         <WebBrowser x:Name="Browser3" Visibility="Collapsed" Tag="3" Margin="0,0,0,25" />
-        <local:MyTextButton Text="如果遇到问题，可以点击这里使用系统浏览器登录" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5" x:Name="HintSwitch" />
+        <local:MyTextButton Text="{DynamicResource LangLoginOAuthToBrower}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5" x:Name="HintSwitch" />
     </Grid>
 </Window>

@@ -183,19 +183,23 @@
     Public Shared ReadOnly FontSizeProperty As DependencyProperty = DependencyProperty.Register("FontSize", GetType(Double), GetType(MyListItem), New PropertyMetadata(CType(14, Double)))
 
     '信息
-    Private _Info As String = ""
     Public Property Info As String
         Get
-            Return _Info
+            Return GetValue(InfoProperty)
         End Get
         Set(value As String)
-            If _Info = value Then Exit Property
             value = value.Replace(vbCr, "").Replace(vbLf, "")
-            _Info = value
-            LabInfo.Text = value
-            LabInfo.Visibility = If(value = "", Visibility.Collapsed, Visibility.Visible)
+            SetValue(InfoProperty, value)
+            OnInfoPropertyChanged()
         End Set
     End Property
+    Public Shared ReadOnly InfoProperty As DependencyProperty = DependencyProperty.Register("Info", GetType(String), GetType(MyListItem), New PropertyMetadata(""))
+
+    Public Sub OnInfoPropertyChanged()
+        If LabInfo Is Nothing Then Exit Sub
+        LabInfo.Text = Info
+        LabInfo.Visibility = If(String.IsNullOrWhiteSpace(LabInfo.Text), Visibility.Collapsed, Visibility.Visible)
+    End Sub
 
     '图片
     Private _Logo As String = ""
@@ -663,6 +667,7 @@
                 Log(ex, "设置帮助 MyListItem 失败", LogLevel.Msgbox)
             End Try
         End If
+        OnInfoPropertyChanged()
     End Sub
     Public Overrides Function ToString() As String
         Return Title
