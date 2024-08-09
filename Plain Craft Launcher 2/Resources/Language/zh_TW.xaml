@@ -1547,7 +1547,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchUnknownLoginMethod">未知的登入方式</s:String>
     <s:String x:Key="LangModLaunchLogin">登入</s:String>
     <s:String x:Key="LangModLaunchDialogContentThemeUnlockMojang">感謝你對正版遊戲的支援！
-隱藏主題 跳票紅 已解鎖！</s:String>
+隱藏主題「跳票紅」已解鎖！</s:String>
     <s:String x:Key="LangModLaunchExceptionInvalidSelectedRole">選擇的角色 {0} 無效！</s:String>
     <s:String x:Key="LangModLaunchHintNoRoleChangeRole">你還沒有建立角色，無法更換！</s:String>
     <s:String x:Key="LangModLaunchHintNoRole">你還沒有建立角色，請在建立角色後再試！</s:String>
@@ -1555,7 +1555,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchDialogSelectRole">選擇使用的角色</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginFail">登入失敗：{0}</s:String>
     <s:String x:Key="LangModLaunchDialogContentWebLogin">登入完成後，網頁會變得完全空白，把那個空白網頁的網址複製到下面的框中就行了！
-如果網路環境不佳，它可能一直載入不出來，那就只能試試用 VPN 或加速器了。</s:String>
+如果網路環境不佳，它可能一直載入不出來，那就只能試試用 VPN 或 Proxy 了。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">等待網頁登入</s:String>
     <s:String x:Key="LangModLaunchDialogTipWebLogin">返回網址應以 https://login.live.com/oauth20_desktop.srf?code= 開頭</s:String>
     <s:String x:Key="LangModLaunchHintWebLoginSuccess">網頁登入成功，你可以關閉瀏覽器啦！</s:String>
@@ -1566,7 +1566,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchDialogContentBanned">該帳戶似乎已被微軟封禁，無法登入。</s:String>
     <s:String x:Key="LangModLaunchDialogContentNoXBoxAccount">你尚未註冊 Xbox 帳戶，請在註冊後再登入。</s:String>
     <s:String x:Key="LangModLaunchDialogContentUnableReachMicrosoft">你的網路所在的國家或地區無法登入微軟帳戶。
-請嘗試使用加速器或 VPN。</s:String>
+請嘗試使用 VPN 或 Proxy。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnIDK">我不知道</s:String>
     <s:String x:Key="LangModLaunchDialogContentAgeLimit">該帳戶年齡不足，你需要先修改出生日期，然後才能登入。
 該帳戶目前填寫的年齡是否在 13 歲以上？</s:String>
@@ -1578,7 +1578,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 在修改成功後等待一分鐘，然後再回到 PCL，就可以正常登入了！</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginTooFrequently">登入嘗試太過頻繁，請等待幾分鐘後再試！</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginIPIncorrect">目前 IP 的登入嘗試異常。
-如果你使用了 VPN 或加速器，請把它們關掉或更換節點後再試！</s:String>
+如果你使用了 VPN 或 Proxy，請把它們關掉或更換節點後再試！</s:String>
     <s:String x:Key="LangModLaunchDialogBtnByMc">購買 Minecraft</s:String>
     <s:String x:Key="LangModLaunchDialogContentNoMc">你尚未購買正版 Minecraft，或者 Xbox Game Pass 已到期。</s:String>
     <s:String x:Key="LangModLaunchDialogContentCreateRole">請先建立 Minecraft 玩家檔案，然後再重新登入。</s:String>
