@@ -903,7 +903,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 除此之外，也支援以下取代標記：
  · {user}：玩家名稱
  · {login}：玩家的登入方式
- · {uuid}：玩家的 UUID
+ · {UUID}：玩家的 UUID
  · {name}：實例名
  · {date}、{time}：目前的系統時間
  · {version}：實例對應的遊戲版本號
@@ -1242,7 +1242,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 除此之外，也支援以下取代標記：
  · {user}：玩家名字
  · {login}：玩家的登入方式
- · {uuid}：玩家的 UUID
+ · {UUID}：玩家的 UUID
  · {name}：遊戲實例名
  · {date}、{time}：目前的系統時間
  · {version}：實例對應的遊戲版本號
@@ -1353,8 +1353,8 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftExceptionGetFolderListFail">無法讀取版本資料夾，可能是由於沒有權限（{0}versions）</s:String>
     <s:String x:Key="LangModMinecraftSelectTypeSkin">外觀檔案</s:String>
     <s:String x:Key="LangModMinecraftSelectTitleSkin">選擇外觀檔案</s:String>
-    <s:String x:Key="LangModMinecraftExceptionUuidNoOnlineProfile">離線 UUID 無正版外觀檔案。</s:String>
-    <s:String x:Key="LangModMinecraftExceptionEmptyUuid">UUID 為空。</s:String>
+    <s:String x:Key="LangModMinecraftExceptionUUIDNoOnlineProfile">離線 UUID 無正版外觀檔案。</s:String>
+    <s:String x:Key="LangModMinecraftExceptionEmptyUUID">UUID 為空。</s:String>
     <s:String x:Key="LangModMinecraftExceptionEmptySkin">外觀回傳值為空，可能是未設定自訂外觀的使用者</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinTypeInvalid">外觀地址種類無效：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinPropertyNotFound">未從外觀回傳值中找到符合條件的 Property</s:String>
@@ -1589,8 +1589,8 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 詳細的錯誤資訊：{0}</s:String>
     <s:String x:Key="LangModLaunchDialogTitleGetSkinFail">外觀獲取失敗</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">正版玩家檔案不存在（{0}）</s:String>
-    <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">從官網獲取正版 Uuid 失敗（{0}）</s:String>
-    <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">獲取的正版 Uuid 長度不足（{0}）</s:String>
+    <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">從官網獲取正版 UUID 失敗（{0}）</s:String>
+    <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">獲取的正版 UUID 長度不足（{0}）</s:String>
     <s:String x:Key="LangModLaunchHintNoAvailableJava">沒有可用的 Java，已取消啟動！</s:String>
     <s:String x:Key="LangModLaunchExceptionReleaseJavaWrapperFail">釋放 Java Wrapper 失敗，請查看 PCL 日誌尋找詳細資訊</s:String>
     <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">OptiFine 與自動進入伺服器可能不相容，有機率導致紋理遺失甚至遊戲崩潰！</s:String>
