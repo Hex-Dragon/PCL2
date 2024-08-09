@@ -1265,5 +1265,33 @@
     <s:String x:Key="LangModDownloadExceptionForgeGetInfoFail">Forge 官方源版本信息提取失败（{0}）</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceOfficalListLoad">{0} 官方源版本列表解析失败（{1}）</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">{0} 版本列表解析失败（{1}）</s:String>
-    <s:String x:Key="LangModDownloadExceptionMissNecessary">獲取到的列表缺乏必要項</s:String>
+    <s:String x:Key="LangModDownloadExceptionMissNecessary">获取到的列表缺乏必要项</s:String>
+    
+    <!--ModJava-->
+    <s:String x:Key="LangModJavaManuallyImport">手动导入</s:String>
+    <s:String x:Key="LangModJava32Bit">32 位</s:String>
+    <s:String x:Key="LangModJavaExceptionFileNotFound">未找到 {0} 文件</s:String>
+    <s:String x:Key="LangModJavaExceptionTryRunFail">尝试运行该 Java 失败</s:String>
+    <s:String x:Key="LangModJavaExceptionRunFail">无法运行该 Java，请在删除 Java 文件夹中的 /lib/ext 文件夹后再试</s:String>
+    <s:String x:Key="LangModJavaExceptionVersionNotFound">未找到该 Java 的版本号</s:String>
+    <s:String x:Key="LangModJavaExceptionGetDetailInfoFail">分析详细信息失败，获取的版本为 {0}</s:String>
+    <s:String x:Key="LangModJavaExceptionNeed64Bit">该 Java 为 32 位版本，请安装 64 位的 Java</s:String>
+    <s:String x:Key="LangModJavaExceptionNeedJDK">由于高版本 JRE 对游戏的兼容性很差，因此不再允许使用。你可以使用对应版本的 JDK，而非 JRE！</s:String>
+    <s:String x:Key="LangModJavaExceptionCheckFail">检查 Java 失败（{0}）</s:String>
+    <s:String x:Key="LangModJavaExceptionSearchAbort">Java 搜索加载器已中断</s:String>
+    <s:String x:Key="LangModJavaMaxRequireVersion">最高兼容到 Java {0}</s:String>
+    <s:String x:Key="LangModJavaMinRequireVersion">至少需要 Java {0}</s:String>
+    <s:String x:Key="LangModJavaRequireVersion">需要 Java {0}</s:String>
+    <s:String x:Key="LangModJavaDialogContentCompatibilityWarning">你在设置中手动指定了使用 Java {0}，但当前{1}。&#xa;如果强制使用该 Java，可能导致游戏崩溃。&#xa;你也可以将 游戏 Java 设置修改为 自动选择合适的 Java。&#xa;&#xa;- 指定的 Java：{2}</s:String>
+    <s:String x:Key="LangModJavaDialogTitleCompatibilityWarning">Java 兼容性警告</s:String>
+    <s:String x:Key="LangModJavaDialogBtn1CompatibilityWarning">让 PCL 自动选择</s:String>
+    <s:String x:Key="LangModJavaDialogBtn2CompatibilityWarning">强制使用该 Java</s:String>
+    <s:String x:Key="LangModJavaTaskSearchJava">查找 Java</s:String>
+    <s:String x:Key="LangModJavaDialogContentJavaNotFound">PCL 未找到 {0}。&#xa;请自行搜索并安装 {1}，安装后在 设置 → 启动选项 → 游戏 Java 中重新搜索或导入。</s:String>
+    <s:String x:Key="LangModJavaDialogTitleJavaNotFound">未找到 Java</s:String>
+    <s:String x:Key="LangModJavaDialogContentDownloadJava">PCL 未找到 {0}，是否需要 PCL 自动下载？&#xa;如果你已经安装了 {1}，请在 设置 → 启动选项 → 游戏 Java 中手动导入。</s:String>
+    <s:String x:Key="LangModJavaDialogBtn1DownloadJava">自动下载</s:String>
+    <s:String x:Key="LangModJavaTaskDownloadJavaFile">下载 Java 文件</s:String>
+    <s:String x:Key="LangModJavaTaskDownloadJava">下载 Java {0}</s:String>
+    <s:String x:Key="LangModJavaTaskGetJavaDownloadInfo">获取 Java 下载信息</s:String>
 </ResourceDictionary>

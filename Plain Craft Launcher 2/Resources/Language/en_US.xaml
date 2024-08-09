@@ -1450,4 +1450,32 @@ Please update the launcher in &quot;Settings → Launcher&quot; first, then subm
     <s:String x:Key="LangModDownloadExceptionSourceOfficalListLoad">Failed to parse {0} official source version list ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">Failed to parse {0} version list ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionMissNecessary">The retrieved list lacks necessary items</s:String>
+    
+    <!--ModJava-->  
+    <s:String x:Key="LangModJavaManuallyImport">Manually Import</s:String>  
+    <s:String x:Key="LangModJava32Bit">32-bit</s:String>  
+    <s:String x:Key="LangModJavaExceptionFileNotFound">File {0} not found</s:String>  
+    <s:String x:Key="LangModJavaExceptionTryRunFail">Failed to run this Java version</s:String>  
+    <s:String x:Key="LangModJavaExceptionRunFail">Unable to run this Java. Please try again after deleting the '/lib/ext' folder in the Java folder.</s:String>  
+    <s:String x:Key="LangModJavaExceptionVersionNotFound">Java version not found</s:String>  
+    <s:String x:Key="LangModJavaExceptionGetDetailInfoFail">Failed to analyze details, version obtained is {0}</s:String>  
+    <s:String x:Key="LangModJavaExceptionNeed64Bit">This is a 32-bit version of Java. Please install a 64-bit version.</s:String>  
+    <s:String x:Key="LangModJavaExceptionNeedJDK">High version JREs have poor compatibility with the game and are no longer allowed. Use the corresponding JDK version instead of JRE!</s:String>  
+    <s:String x:Key="LangModJavaExceptionCheckFail">Java check failed ({0})</s:String>  
+    <s:String x:Key="LangModJavaExceptionSearchAbort">Java search loader aborted</s:String>  
+    <s:String x:Key="LangModJavaMaxRequireVersion">Maximum compatible Java version: {0}</s:String>  
+    <s:String x:Key="LangModJavaMinRequireVersion">Minimum required Java version: {0}</s:String>  
+    <s:String x:Key="LangModJavaRequireVersion">Java {0} is required</s:String>  
+    <s:String x:Key="LangModJavaDialogContentCompatibilityWarning">You have manually specified Java {0} in the settings, but currently {1}.&#xa;Forcing the use of this Java may cause the game to crash.&#xa;You can also change the Game Java setting to automatically select an appropriate Java.&#xa;&#xa;- Specified Java: {2}</s:String>  
+    <s:String x:Key="LangModJavaDialogTitleCompatibilityWarning">Java Compatibility Warning</s:String>  
+    <s:String x:Key="LangModJavaDialogBtn1CompatibilityWarning">Let PCL Automatically Choose</s:String>  
+    <s:String x:Key="LangModJavaDialogBtn2CompatibilityWarning">Force Use This Java</s:String>  
+    <s:String x:Key="LangModJavaTaskSearchJava">Searching for Java</s:String>  
+    <s:String x:Key="LangModJavaDialogContentJavaNotFound">PCL did not find {0}.&#xa;Please search and install {1} yourself, then search or import it again in Settings → Startup Options → Game Java.</s:String>  
+    <s:String x:Key="LangModJavaDialogTitleJavaNotFound">Java Not Found</s:String>  
+    <s:String x:Key="LangModJavaDialogContentDownloadJava">PCL did not find {0}. Would you like PCL to download it automatically?&#xa;If you have already installed {1}, please manually import it in Settings → Startup Options → Game Java.</s:String>  
+    <s:String x:Key="LangModJavaDialogBtn1DownloadJava">Download Automatically</s:String>  
+    <s:String x:Key="LangModJavaTaskDownloadJavaFile">Downloading Java File</s:String>  
+    <s:String x:Key="LangModJavaTaskDownloadJava">Downloading Java {0}</s:String>  
+    <s:String x:Key="LangModJavaTaskGetJavaDownloadInfo">Fetching Java Download Information</s:String>
 </ResourceDictionary>
