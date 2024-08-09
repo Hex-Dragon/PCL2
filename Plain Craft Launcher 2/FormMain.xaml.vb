@@ -1093,11 +1093,11 @@ Install:
                 Dim Project As CompProject = Stack.Additional(0)
                 Select Case Project.Type
                     Case CompType.Mod
-                        Return GetLang("LangPageNameModDownload") & " - " & GetProjectLocalName(Project)
+                        Return GetLang("LangPageNameModDownload") & " - " & Project.TranslatedName
                     Case CompType.ModPack
-                        Return GetLang("LangPageNameModpacksDownload") & " - " & GetProjectLocalName(Project)
+                        Return GetLang("LangPageNameModpacksDownload") & " - " & Project.TranslatedName
                     Case Else 'CompType.ResourcePack
-                        Return GetLang("LangPageNameResourcePacksDownload") & " - " & GetProjectLocalName(Project)
+                        Return GetLang("LangPageNameResourcePacksDownload") & " - " & Project.TranslatedName
                 End Select
             Case PageType.HelpDetail
                 Dim Entry As HelpEntry = Stack.Additional(0)

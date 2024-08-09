@@ -9,15 +9,22 @@ Module Modi18n
     ''' <returns></returns>
     Public Function GetLang(Key As String, ParamArray Param As String()) As String
         Try
+            If String.IsNullOrWhiteSpace(Key) Then Throw New Exception("Key 值未提供;No key value provided")
             Return String.Format(Application.Current.FindResource(Key), Param)
+        Catch ex As FormatException
+            Log(ex, $"[Lang] 格式化文本失败：{Key};传入参数：{Param.Join(",")}", LogLevel.Hint)
+            Return Application.Current.FindResource(Key)
+        Catch ex As ResourceReferenceKeyNotFoundException
+            Log(ex, $"[Lang] 找不到对应的语言资源：{Key}")
+            Return Key
         Catch ex As Exception
-            Log(ex, "[Lang] 获取语言资源失败：" & Key, LogLevel.Hint)
+            Log(ex, $"[Lang] 获取语言资源失败：{Key}（{ex.Message}）", LogLevel.Hint)
             Return Key
         End Try
     End Function
 
     ''' <summary>
-    ''' 通过中文得到其它语言，应付一些 i18n 适配较苦难的场景
+    ''' 通过中文得到其它语言，应付一些 i18n 适配较困难的场景
     ''' </summary>
     ''' <param name="Word"></param>
     ''' <returns></returns>
@@ -35,7 +42,7 @@ Module Modi18n
             Case "未知版本"
                 Return GetLang("LangDownloadUnknown")
             Case Else
-                Log("[Lang] GetLangByWord:没有找到 " & Word & " 的对应翻译")
+                Log("[Lang] 没有找到词语""" & Word & """的对应翻译")
                 Return Word
         End Select
     End Function
@@ -43,7 +50,7 @@ Module Modi18n
     ''' <summary>
     ''' 获取当前语言的时间表达方式
     ''' </summary>
-    ''' <param name="Time"></param>
+    ''' <param name="Time">时间</param>
     ''' <returns></returns>
     Public Function GetLocalTimeFormat(Time As DateTime) As String
         Select Case Lang
@@ -54,15 +61,6 @@ Module Modi18n
         End Select
     End Function
 
-    Public Function GetProjectLocalName(Project As CompProject) As String
-        Select Case Lang
-            Case "zh_CN"
-                Return Project.TranslatedName
-            Case Else 'en_US
-                Return Project.RawName
-        End Select
-    End Function
-
     ''' <summary>
     ''' 切换应用程序的字体
     ''' </summary>
@@ -70,7 +68,7 @@ Module Modi18n
         Try
             Application.Current.Resources("LaunchFontFamily") = Font
         Catch ex As Exception
-            Log("[Lang] 切换字体失败", LogLevel.Hint)
+            Log(ex, "[Lang] 切换字体失败，这可能导致界面显示异常", LogLevel.Msgbox)
         End Try
     End Sub
 End Module
