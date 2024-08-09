@@ -670,7 +670,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">快相版提示</s:String>
     <s:String x:Key="LangLaunchRightLog">啟動日誌</s:String>
-    <s:String x:Key="LangLaunchRightLabHint1">快照版包含尚未正式發佈的測試功能，僅用於贊助者本人嘗鮮。請不要發給其他人或者用來製作模組包哦！</s:String>
+    <s:String x:Key="LangLaunchRightLabHint1">快相版包含尚未正式發佈的測試功能，僅用於贊助者本人嘗鮮。請不要發給其他人或者用來製作模組包哦！</s:String>
     <s:String x:Key="LangLaunchRightLabHint2">若已累計贊助￥23.33，在愛發電私訊發送「解锁码」即可永久隱藏此提示。</s:String>
     <s:String x:Key="LangLaunchRightLoadingPage">正在載入首頁……</s:String>
     <s:String x:Key="LangLaunchRightPageTips">你知道嗎？</s:String>
@@ -837,7 +837,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
  · {date}、{time}：目前的系統時間
  · {version}：實例對應的遊戲版本號</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">自訂訊息</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">該訊息會顯示在遊戲主菜單的左下角，與 F3 調試畫面的左上角</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">該訊息會顯示在遊戲主菜單的左下角，與 F3 調試熒幕的左上角</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">實例隔離</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">關閉</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">所有實例均使用同一檔案，存檔、Mod、資源包等均為公用。
@@ -845,7 +845,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">隔離可安裝模組的實例</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">可安裝模組的實例（例如 Forge、Fabric）均互相獨立以避免模組衝突，其他實例（例如原版）則不會被隔離。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">隔離非正式版</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">將 Minecraft 快照、預發佈版、遠古版本、愚人節版本與其他實例進行隔離</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">將 Minecraft 快相、預發佈版、遠古版本、愚人節版本與其他實例進行隔離</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaAndMod">隔離可安裝模組的實例與非正式版</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAll">隔離所有實例</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">不同實例之間的存檔、Mod、資源包等均不互通。
@@ -890,8 +890,8 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM 參數尾</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">文字框中的內容將會被直接拼合在啟動參數的末尾。
 例如輸入 --demo 則會以試玩模式啟動遊戲。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">啟動前執行指令</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">在 Minecraft 啟動前執行特定指令或程式，語法與 Windows 的命令提示字元一致。
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">啟動前執行命令</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">在 Minecraft 啟動前執行特定命令或程式，語法與 Windows 的命令提示字元一致。
 
 可以使用以下取代標記實現相對路徑（路徑均以 \ 結尾）：
  · {path}：PCL 的 exe 檔案所在的資料夾
@@ -914,8 +914,8 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
  · notepad &quot;{verindie}option.txt&quot; ：使用記事本開啟該實例的設定檔案
 
 涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致執行失敗。
-執行指令時，命令列所在的目錄是目前的 .minecraft 資料夾。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand">等待指令執行完成後再繼續啟動</s:String>
+執行命令時，命令列所在的目錄是目前的 .minecraft 資料夾。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand">等待命令執行完成後再繼續啟動</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility">忽略 Java 相容性警吿</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">警吿：強烈推薦在實例設定中關閉特定實例的警吿，而不是在這裏關閉所有實例的警吿！
 如果在設定中手動選擇了與目前實例不相容的 Java，則自動跳過相容性警吿彈窗，強制使用手動選擇的 Java。</s:String>
@@ -993,7 +993,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">協助工具</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">遊戲更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">測試版更新提示</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">在 Minecraft 測試版（快照、預發佈版）更新時彈窗提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">在 Minecraft 測試版（快相、預發佈版）更新時彈窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">正式版更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">在 Minecraft 正式版更新時彈窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">遊戲語言</s:String>
@@ -1028,7 +1028,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupSystemDebugDelay">添加延遲</s:String>
     <s:String x:Key="LangPageSetupSystemDebugDelayToolTip">在各個環節添加隨機的延遲，拖慢載入速度，以測試部分功能是否正常執行。
 這會嚴重影響啟動器執行，若無特殊需要不建議開啟。</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">在有新版本時自動下載（更新快照版可能需要更新金鑰）</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">在有新版本時自動下載（更新快相版可能需要更新金鑰）</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">已初始化啟動器頁設定！</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">初始化啟動器頁設定失敗</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">無限制</s:String>
@@ -1228,9 +1228,9 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageVersionSetupJVMTail">文字框中的內容將會被直接拼合在啟動參數的末尾。
 例如輸入 --demo 則會以試玩模式啟動遊戲。
 若留空，則使用全域設定的值。</s:String>
-    <s:String x:Key="LangPageVersionSetupCommand">該項不會覆蓋全域設定：啟動時會先執行全域設定的指令，再執行實例設定的指令。
+    <s:String x:Key="LangPageVersionSetupCommand">該項不會覆蓋全域設定：啟動時會先執行全域設定的命令，再執行實例設定的命令。
 
-在 Minecraft 啟動前執行特定指令或程式，語法與 Windows 的命令提示字元一致。
+在 Minecraft 啟動前執行特定命令或程式，語法與 Windows 的命令提示字元一致。
 
 可以使用以下取代標記實現相對路徑（路徑均以 \ 結尾）：
  · {path}：PCL 的 exe 檔案所在的資料夾
@@ -1253,7 +1253,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
  · notepad &quot;{verindie}option.txt&quot; ：使用記事本開啟該實例的設定檔案
 
 涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致執行失敗。
-執行指令時，命令列所在的目錄是目前的 .minecraft 資料夾。</s:String>
+執行命令時，命令列所在的目錄是目前的 .minecraft 資料夾。</s:String>
     <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在設定中手動選擇了與目前實例不相容的 Java，則自動跳過相容性警吿彈窗，強制使用手動選擇的 Java。</s:String>
     <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校驗 libraries、第三方登入庫與實例主 jar 檔案是否被修改。
 如果你沒有修改相關檔案，請勿勾選此項。</s:String>
@@ -1335,7 +1335,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">版本 json 不規範（{0}）</s:String>
     <s:String x:Key="LangModMinecraftVersionPre">預發佈版</s:String>
     <s:String x:Key="LangModMinecraftVersionRC">發佈候選</s:String>
-    <s:String x:Key="LangModMinecraftVersionExperimental">實驗性快照</s:String>
+    <s:String x:Key="LangModMinecraftVersionExperimental">實驗性快相</s:String>
     <s:String x:Key="LangModMinecraftVersionOld">遠古版本</s:String>
     <s:String x:Key="LangModMinecraftUnknownError">發生了未知錯誤，請向作者回報此問題</s:String>
     <s:String x:Key="LangModMinecraftNideAuth">統一通行證驗證</s:String>
@@ -1419,7 +1419,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchStartStageGetParameters">獲取啟動參數</s:String>
     <s:String x:Key="LangModLaunchStartStageExtractFile">解壓縮檔案</s:String>
     <s:String x:Key="LangModLaunchStartStagePreProcess">預啟動處理</s:String>
-    <s:String x:Key="LangModLaunchStartStageExecuteCommand">執行自訂指令</s:String>
+    <s:String x:Key="LangModLaunchStartStageExecuteCommand">執行自訂命令</s:String>
     <s:String x:Key="LangModLaunchStartStageWaitForProgress">啟動處理程式</s:String>
     <s:String x:Key="LangModLaunchStartStageWaitForWindow">等待遊戲視窗出現</s:String>
     <s:String x:Key="LangModLaunchStartStageLaunchEnd">結束處理</s:String>
@@ -1465,7 +1465,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCompIncompatibleOptionCurseForge">CurseForge 與所選的類型不相容</s:String>
     <s:String x:Key="LangModCompIncompatibleOptionModrinth">Modrinth 與所選的類型不相容</s:String>
     <s:String x:Key="LangModCompSearchNoResult">沒有符合條件的結果</s:String>
-    <s:String x:Key="LangModCompVersionSnapshot">快照</s:String>
+    <s:String x:Key="LangModCompVersionSnapshot">快相</s:String>
     <s:String x:Key="LangModCompVersionUnknownVersion">未知版本</s:String>
     
     <!--ModDownload-->
@@ -1525,7 +1525,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModJavaTaskGetJavaDownloadInfo">獲取 Java 下載資訊</s:String>
     
     <!--ModLaunch-->
-    <s:String x:Key="LangModLaunchExceptionRunNotInUI">McLaunchStart 必須在 UI 線程呼叫！</s:String>
+    <s:String x:Key="LangModLaunchExceptionRunNotInUI">McLaunchStart 必須在 UI 線程調用！</s:String>
     <s:String x:Key="LangModLaunchAlreadyLaunchGame">已有遊戲正在啟動中！</s:String>
     <s:String x:Key="LangModLaunchLaunchFail">無法啟動 Minecraft：{0}</s:String>
     <s:String x:Key="LangModLaunchExceptionStateSwitchError">錯誤的狀態改變：{0}</s:String>
