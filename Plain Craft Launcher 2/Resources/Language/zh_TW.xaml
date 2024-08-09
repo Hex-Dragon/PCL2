@@ -1597,5 +1597,5 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchExceptionConnectServerFail">無法連接到第三方登入伺服器（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 json 中沒有 mainClass 項！</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">無法打開 Natives 檔案（{0}），該檔案可能已損壞，請重新嘗試啟動遊戲</s:String>
-    <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">此 Minecraft 版本尚不支援 Alex 外觀，你的外觀可能會顯示為 Steve！</s:String>
+    <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">此 Minecraft 版本尚不支援纖細外觀，你的外觀可能會顯示為寬型！</s:String>
 </ResourceDictionary>
