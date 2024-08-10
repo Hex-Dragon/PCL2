@@ -1609,7 +1609,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModModpackInputInstanceName">輸入實例名稱</s:String>
     <s:String x:Key="LangModModpackTaskExtraModpack">解壓縮模組包檔案</s:String>
     <s:String x:Key="LangModModpackTaskGetModDownloadInfo">獲取模組下載資訊</s:String>
-    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">模組包所需的部分模組版本已被模組作者刪除，因此無法完成整合包安裝，請聯絡模組包作者更新模組包中的模組版本</s:String>
+    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">模組包所需的部分模組版本已被模組作者刪除，因此無法完成模組包安裝，請聯絡模組包作者更新模組包中的模組版本</s:String>
     <s:String x:Key="LangModModpackTaskInitModDownloadInfo">構造模組下載資訊</s:String>
     <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">是否要下載模組包中的可選檔案 {0}？</s:String>
     <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">下載可選檔案</s:String>
@@ -1624,7 +1624,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModModpackTaskCurseForgeModpackInstall">CurseForge 模組包安裝：</s:String>
     <s:String x:Key="LangModModpackHintInstalling">該模組包正在安裝中！</s:String>
     <s:String x:Key="LangModModpacHintQuiltNotSupport">PCL 暫不支援安裝需要 Quilt 的模組包！</s:String>
-    <s:String x:Key="LangModModpacHintUnknownModLoader">無法安裝模組包，其中出現了未知的 Mod 載入器 {0}！</s:String>
+    <s:String x:Key="LangModModpacHintUnknownModLoader">無法安裝模組包，其中出現了未知的模組載入器 {0}！</s:String>
     <s:String x:Key="LangModModpackTaskDownloadExtraFile">下載額外檔案</s:String>
     <s:String x:Key="LangModModpackTaskModrinthModpackInstall">Modrinth 模組包安裝：</s:String>
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">重新命名版本 JSON（副載入器）</s:String>
@@ -1636,7 +1636,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModModpackDialogContentInstallTip">請在接下來開啟的視窗中選擇安裝目標資料夾，它必須是一個空白資料夾。</s:String>
     <s:String x:Key="LangModModpackDialogTitleInstallTip">安裝提示</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">選擇安裝目標（必須是一個空白資料夾）</s:String>
-    <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 資料夾路徑中不能含有驚嘆號號或分號！</s:String>
+    <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 資料夾路徑中不能含有驚嘆號或分號！</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">請選擇一個空白資料夾作為安裝目標！</s:String>
     <s:String x:Key="LangModModpackExtraArchive">正在解壓縮壓縮包……</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">已加入遊戲資料夾列表：{0}</s:String>
