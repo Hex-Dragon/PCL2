@@ -580,7 +580,7 @@ Public Module ModBase
         Dim SourceKey As Microsoft.Win32.RegistryKey = parentKey.OpenSubKey(subKeyName)
         If IsNothing(SourceKey) Then Exit Sub '没有目标项
         Dim NewKey As Microsoft.Win32.RegistryKey = parentKey.CreateSubKey(newSubKeyName)
-        If SourceKey.GetSubKeyNames().Length > 0 Then Throw New NotSupportedException("不支持对包含子键的子键进行重命名：" & SourceKey.GetSubKeyNames()(0) & "。")
+        If SourceKey.GetSubKeyNames().Length > 0 Then Throw New NotSupportedException(GetLang("LangModBaseExceptionRenameSubKeyNotSupport", SourceKey.GetSubKeyNames()(0)))
         For Each valueName As String In SourceKey.GetValueNames()
             Dim objValue As Object = SourceKey.GetValue(valueName)
             Dim valKind As Microsoft.Win32.RegistryValueKind = SourceKey.GetValueKind(valueName)
@@ -711,17 +711,17 @@ Public Module ModBase
     ''' 不包含路径将会抛出异常。
     ''' </summary>
     Public Function GetPathFromFullPath(FilePath As String) As String
-        If Not (FilePath.Contains("\") OrElse FilePath.Contains("/")) Then Throw New Exception("不包含路径：" & FilePath)
+        If Not (FilePath.Contains("\") OrElse FilePath.Contains("/")) Then Throw New Exception(GetLang("LangModBaseExceptionPathIncorrect", FilePath))
         If FilePath.EndsWithF("\") OrElse FilePath.EndsWithF("/") Then
             '是文件夹路径
             Dim IsRight As Boolean = FilePath.EndsWithF("\")
             FilePath = Left(FilePath, Len(FilePath) - 1)
             GetPathFromFullPath = Left(FilePath, FilePath.LastIndexOfAny({"\", "/"})) & If(IsRight, "\", "/")
-            If GetPathFromFullPath = "" Then Throw New Exception("不包含路径：" & FilePath)
+            If GetPathFromFullPath = "" Then Throw New Exception(GetLang("LangModBaseExceptionPathIncorrect", FilePath))
         Else
             '是文件路径
             GetPathFromFullPath = Left(FilePath, FilePath.LastIndexOfAny({"\", "/"}) + 1)
-            If GetPathFromFullPath = "" Then Throw New Exception("不包含路径：" & FilePath)
+            If GetPathFromFullPath = "" Then Throw New Exception(GetLang("LangModBaseExceptionPathIncorrect", FilePath))
         End If
     End Function
     ''' <summary>
@@ -729,12 +729,12 @@ Public Module ModBase
     ''' </summary>
     Public Function GetFileNameFromPath(FilePath As String) As String
         FilePath = FilePath.Replace("/", "\")
-        If FilePath.EndsWithF("\") Then Throw New Exception("不包含文件名：" & FilePath)
+        If FilePath.EndsWithF("\") Then Throw New Exception(GetLang("LangModBaseExceptionFileNameIncorrect", FilePath))
         If FilePath.Contains("?") Then FilePath = FilePath.Substring(0, FilePath.IndexOfF("?")) '去掉网络参数后的 ?
         If FilePath.Contains("\") Then FilePath = FilePath.Substring(FilePath.LastIndexOfF("\") + 1)
         Dim length As Integer = FilePath.Length
-        If length = 0 Then Throw New Exception("不包含文件名：" & FilePath)
-        If length > 250 Then Throw New PathTooLongException("文件名过长：" & FilePath)
+        If length = 0 Then Throw New Exception(GetLang("LangModBaseExceptionFileNameIncorrect", FilePath))
+        If length > 250 Then Throw New PathTooLongException(GetLang("LangModBaseExceptionFileNameTooLong", FilePath))
         Return FilePath
     End Function
     ''' <summary>
@@ -770,7 +770,7 @@ Public Module ModBase
             '复制文件
             File.Copy(FromPath, ToPath, True)
         Catch ex As Exception
-            Throw New Exception("复制文件出错：" & FromPath & " → " & ToPath, ex)
+            Throw New Exception(GetLang("LangModBaseExceptionCopyFileFail", FromPath, ToPath), ex)
         End Try
     End Sub
     ''' <summary>
@@ -1004,6 +1004,7 @@ Public Module ModBase
     ''' 弹出选取文件夹对话框并且要求选取文件夹。如果没有选择就返回空字符串。
     ''' </summary>
     Public Function SelectFolder(Optional Title As String = "选择文件夹") As String
+        If Title = "选择文件夹" Then Title = GetLang("LangModBaseSelectFolder")
         Dim folderDialog As New Ookii.Dialogs.Wpf.VistaFolderBrowserDialog With {.ShowNewFolderButton = True, .RootFolder = Environment.SpecialFolder.Desktop, .Description = Title, .UseDescriptionForTitle = True}
         folderDialog.ShowDialog()
         SelectFolder = If(String.IsNullOrEmpty(folderDialog.SelectedPath), "", folderDialog.SelectedPath & If(folderDialog.SelectedPath.EndsWithF("\"), "", "\"))
@@ -1034,9 +1035,9 @@ Public Module ModBase
     ''' 检查是否拥有某一文件夹的 I/O 权限。如果出错，则抛出异常。
     ''' </summary>
     Public Sub CheckPermissionWithException(Path As String)
-        If String.IsNullOrWhiteSpace(Path) Then Throw New ArgumentNullException("文件夹名不能为空！")
+        If String.IsNullOrWhiteSpace(Path) Then Throw New ArgumentNullException(GetLang("LangModBaseExceptionEmptyFolderName"))
         If Not Path.EndsWithF("\") Then Path += "\"
-        If Not Directory.Exists(Path) Then Throw New DirectoryNotFoundException("文件夹不存在！")
+        If Not Directory.Exists(Path) Then Throw New DirectoryNotFoundException(GetLang("LangModBaseExceptionFolderNotExist"))
         If File.Exists(Path & "CheckPermission") Then File.Delete(Path & "CheckPermission")
         File.Create(Path & "CheckPermission").Dispose()
         File.Delete(Path & "CheckPermission")
@@ -1186,26 +1187,26 @@ Re:
         Public Function Check(LocalPath As String) As String
             Try
                 Dim Info As New FileInfo(LocalPath)
-                If Not Info.Exists Then Return "文件不存在：" & LocalPath
+                If Not Info.Exists Then Return GetLang("LangModBaseFileCheckFileNotExist", LocalPath)
                 Dim FileSize As Long = Info.Length
-                If ActualSize >= 0 AndAlso ActualSize <> FileSize Then Return "文件大小应为 " & ActualSize & " B，实际为 " & FileSize & " B"
-                If MinSize >= 0 AndAlso MinSize > FileSize Then Return "文件大小应大于 " & MinSize & " B，实际为 " & FileSize & " B"
+                If ActualSize >= 0 AndAlso ActualSize <> FileSize Then Return GetLang("LangModBaseFileCheckFileSizeIncorrectA", ActualSize, FileSize)
+                If MinSize >= 0 AndAlso MinSize > FileSize Then Return GetLang("LangModBaseFileCheckFileSizeIncorrectB", MinSize, FileSize)
                 If Not String.IsNullOrEmpty(Hash) Then
                     If Hash.Length < 35 Then 'MD5
-                        If Hash.ToLowerInvariant <> GetFileMD5(LocalPath) Then Return "文件 MD5 应为 " & Hash & "，实际为 " & GetFileMD5(LocalPath)
+                        If Hash.ToLowerInvariant <> GetFileMD5(LocalPath) Then Return GetLang("LangModBaseFileCheckFileMD5Incorrect", Hash, GetFileMD5(LocalPath))
                     ElseIf Hash.Length = 64 Then 'SHA256
-                        If Hash.ToLowerInvariant <> GetFileSHA256(LocalPath) Then Return "文件 SHA256 应为 " & Hash & "，实际为 " & GetFileSHA256(LocalPath)
+                        If Hash.ToLowerInvariant <> GetFileSHA256(LocalPath) Then Return GetLang("LangModBaseFileCheckFileSHA256Incorrect", Hash, GetFileSHA256(LocalPath))
                     Else 'SHA1 (40)
-                        If Hash.ToLowerInvariant <> GetFileSHA1(LocalPath) Then Return "文件 SHA1 应为 " & Hash & "，实际为 " & GetFileSHA1(LocalPath)
+                        If Hash.ToLowerInvariant <> GetFileSHA1(LocalPath) Then Return GetLang("LangModBaseFileCheckFileSHA1Incorrect", Hash, GetFileSHA1(LocalPath))
                     End If
                 End If
                 If IsJson Then
                     Dim Content As String = ReadFile(LocalPath)
-                    If Content = "" Then Throw New Exception("读取到的文件为空")
+                    If Content = "" Then Throw New Exception(GetLang("LangModBaseExceptionEmptyFile"))
                     Try
                         GetJson(Content)
                     Catch ex As Exception
-                        Throw New Exception("不是有效的 json 文件", ex)
+                        Throw New Exception(GetLang("LangModBaseExceptionInvalidJson"), ex)
                     End Try
                 End If
                 Return Nothing
@@ -1330,7 +1331,7 @@ RetryDir:
     ''' </summary>
     ''' <param name="ShowAllTrace">是否必须显示所有堆栈。通常用于判定堆栈信息。</param>
     Public Function GetExceptionDetail(Ex As Exception, Optional ShowAllTrace As Boolean = False) As String
-        If Ex Is Nothing Then Return "无可用错误信息！"
+        If Ex Is Nothing Then Return GetLang("LangModBaseNoExceptionDetail")
 
         '获取最底层的异常
         Dim InnerEx As Exception = Ex
@@ -1373,7 +1374,7 @@ RetryDir:
     ''' 提取 Exception 描述，汇总到一行。
     ''' </summary>
     Public Function GetExceptionSummary(Ex As Exception) As String
-        If Ex Is Nothing Then Return "无可用错误信息！"
+        If Ex Is Nothing Then Return GetLang("LangModBaseNoExceptionDetail")
 
         '获取最底层的异常
         Dim InnerEx As Exception = Ex
