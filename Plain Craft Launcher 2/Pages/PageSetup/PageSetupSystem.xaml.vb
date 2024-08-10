@@ -14,6 +14,8 @@
                 ComboBackgroundSuit.SelectedIndex = 2
             Case "zh_TW"
                 ComboBackgroundSuit.SelectedIndex = 3
+            Case "lzh"
+                ComboBackgroundSuit.SelectedIndex = 4
         End Select
 
         AniControlEnabled += 1

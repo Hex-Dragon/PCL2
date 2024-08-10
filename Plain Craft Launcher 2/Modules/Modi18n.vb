@@ -54,7 +54,7 @@ Module Modi18n
     ''' <returns></returns>
     Public Function GetLocalTimeFormat(Time As DateTime) As String
         Select Case Lang
-            Case "zh_CN", "zh_HK", "zh_TW"
+            Case "zh_CN", "zh_HK", "zh_TW", "lzh"
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
             Case Else 'en_US
                 Return Time.ToString("HH:mm MM/dd/yyyy")
