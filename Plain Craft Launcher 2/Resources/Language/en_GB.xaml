@@ -93,10 +93,10 @@ This operation is irrevocable. Are you sure?</s:String>
     <s:String x:Key="LangDialogTitleWarning">Warning</s:String>
     <s:String x:Key="LangHintBackgroundPicDeleted">The background has been cleared!</s:String>
     <s:String x:Key="LangHintBackgroundPicNotFound">No available background were detected!</s:String>
-    <s:String x:Key="LangHintBackgroundPicRefreshed">The background has been refreshed:</s:String>
+    <s:String x:Key="LangHintBackgroundPicRefreshed">The background has been refreshed: </s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailA">Failed to refresh the background. The image file may not be in a standard format.
 You can try to open it with Paint and save it again, which will save the image as a standard format.
-File:</s:String>
+File: </s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailB">Failed to refresh the background. ({0})</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailUnknwon">Unknown error occurred while refreshing the background.</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailA">Failed to change the title bar image. The image file may not be in a standard format.
@@ -138,7 +138,7 @@ If you violate the rules, you may be kicked out of any relevant group!</s:String
     <s:String x:Key="LangDialogThemeUnlockGameAccrpt">I See</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameDeny">Pardon My Rejection</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">You need to use your wisdom to find the next clue...
-Initial clue:</s:String>
+Initial clue: </s:String>
     <s:String x:Key="LangDialogThemeUnlockGameFirstClueTitle">Decryption Games</s:String>
     <s:String x:Key="LangOtherHelp">Help Center</s:String>
     <s:String x:Key="LangOtherAbout">About</s:String>
@@ -400,11 +400,11 @@ Press &quot;F11&quot; again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadSaveAs">Save as</s:String>
     <s:String x:Key="LangDownloadReleaseOn">Released on</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Incompatible with Forge</s:String>
-    <s:String x:Key="LangDownloadRecommendForge">Recommended Forge Version:</s:String>
+    <s:String x:Key="LangDownloadRecommendForge">Recommended Forge Version: </s:String>
     <s:String x:Key="LangDownloadShowAll">Show All Versions</s:String>
     <s:String x:Key="LangDownloadSaveInstaller">Save Installer</s:String>
     <s:String x:Key="LangDownloadAll">All Versions</s:String>
-    <s:String x:Key="LangDownloadCategory">Type:</s:String>
+    <s:String x:Key="LangDownloadCategory">Type: </s:String>
     <s:String x:Key="LangDownloadUnknown">Unknown Version</s:String>
 
     <!--PageDownloadCompDetail-->
@@ -416,13 +416,13 @@ Press &quot;F11&quot; again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadCompApiSlow">Since version information from the API is updated slowly, it may not be able to recognize the version updated recently. Just wait a jiffy and it will automatically return to normal.</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">Looking for an applicable instance...</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">No applicable instance found in this Minecraft folder for this mod!</s:String>
-    <s:String x:Key="LangDownloadCompSelectedVersion">Selected Version:</s:String>
-    <s:String x:Key="LangDownloadCompDownloadModpack">Download Modpack:</s:String>
+    <s:String x:Key="LangDownloadCompSelectedVersion">Selected Version: </s:String>
+    <s:String x:Key="LangDownloadCompDownloadModpack">Download Modpack: </s:String>
     <s:String x:Key="LangDownloadCompInputInstanceName">Enter Instance Name</s:String>
     <s:String x:Key="LangDownloadCompTaskDownloadModpackFile">Download Modpack File</s:String>
     <s:String x:Key="LangDownloadCompTaskPrepareInstallModpack">Modpack Installation</s:String>
     <s:String x:Key="LangDownloadCompTaskDownloadFile">Download File</s:String>
-    <s:String x:Key="LangDownloadCompTaskDownloadFileDetail">Download:</s:String>
+    <s:String x:Key="LangDownloadCompTaskDownloadFileDetail">Download: </s:String>
 
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Introduction of Fabric</s:String>
@@ -460,7 +460,7 @@ This page provides Fabric installer downloads. After downloading, you need to ma
     <s:String x:Key="LangDownloadInstallOrHigherVersion">or higher</s:String>
     <s:String x:Key="LangDownloadInstallNoAvailabeVersion">No Version Available</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">Failed to get version list: Unknown error, status is</s:String>
-    <s:String x:Key="LangDownloadInstallFailGetList">Failed to get version list:</s:String>
+    <s:String x:Key="LangDownloadInstallFailGetList">Failed to get version list: </s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">Cannot be installed by the launcher.</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">Instance Isolation Hint</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieContent">&quot;Instance Isolation&quot; has not been enabled yet, which will result in multiple instances sharing the same mods folder.
@@ -594,7 +594,7 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangMySkinDialogChoseSavePath">Select a location to save the skin.</s:String>
     <s:String x:Key="LangMySkinHintSaveSuccess">Skin saved successfully!</s:String>
     <s:String x:Key="LangMySkinHintSaveFail">Failed to save the skin.</s:String>
-    <s:String x:Key="LangMySkinHintSkinFileCorruption">Skin file corrupted:</s:String>
+    <s:String x:Key="LangMySkinHintSkinFileCorruption">Skin file corrupted: </s:String>
     <s:String x:Key="LangMySkinHintExistSkinFileGetTask">Still obtaining the skin, please try again later!</s:String>
     <s:String x:Key="LangMySkinHintRefreshing">Updating avatar...</s:String>
     <s:String x:Key="LangMySkinHintRefreshed">The avatar has been refreshed!</s:String>
@@ -708,7 +708,7 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">The login has been cancelled!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountFail">Microsoft login verification failed. Please try to disable the &quot;Verify SSL Certificates&quot; in &quot;Settings → Launcher&quot; and try again.
 
-Original error message:</s:String>
+Original error message: </s:String>
     <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">The login has been cancelled!</s:String>
 
     <!--PageLoginMsSkin-->
@@ -1100,10 +1100,10 @@ Please read the warning above carefully before continuing!</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModBtnConfirm">I have understood the risks, keep updating</s:String>
     <s:String x:Key="LangPageVersionModTaskDownloadNewMod">Download the new version of mod files</s:String>
     <s:String x:Key="LangPageVersionModTaskReplaceModFile">Replace older mod files</s:String>
-    <s:String x:Key="LangPageVersionModTaskModUpdate">Mod Updates:</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdate">Mod Updates: </s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdateSuccessA">{0} mods have been successfully updated!</s:String>
-    <s:String x:Key="LangPageVersionModTaskModUpdateSuccessB">Successfully updated:</s:String>
-    <s:String x:Key="LangPageVersionModTaskModUpdateFail">Mod update failed:</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateSuccessB">Successfully updated: </s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateFail">Mod update failed: </s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdateAbort">Mod update have been aborted!</s:String>
     <s:String x:Key="LangPageVersionModHintFileOccupyWhenDelete">Failed to delete the mod due to the occupation, please try again after the game is closed.</s:String>
     <s:String x:Key="LangPageVersionModHintFileDeleteSuccessA">The mod {0} has been deleted to the recycle bin!</s:String>
@@ -1176,7 +1176,7 @@ Hereafter, hidden instances are only visible while the F11 is pressed in the pag
     <s:String x:Key="LangPageVersionOverallTaskCompleteFile">File Repairment</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileInTask">Processing, please wait!</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileSuccess">Success!</s:String>
-    <s:String x:Key="LangPageVersionOverallCompleteFileFail">Failed:</s:String>
+    <s:String x:Key="LangPageVersionOverallCompleteFileFail">Failed: </s:String>
     <s:String x:Key="LangPageVersionOverallDialogDeleteA">Are you sure you want to permanently delete the instance {0}?
 Since &quot;Instance Isolation&quot; is enabled for this instance, when you delete the instance, the saves, resource packs, mods, and other files corresponding to the instance will also be deleted!</s:String>
     <s:String x:Key="LangPageVersionOverallDialogDeleteB">Are you sure you want to delete the instance {0}?</s:String>
@@ -1304,8 +1304,8 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftOfficalFolder">Minecraft Launcher Folder</s:String>
     <s:String x:Key="LangModMinecraftCheckStatusInstanceNotFound">No Instances Found</s:String>
     <s:String x:Key="LangModMinecraftCheckStatusNoPermission">PCL does not have permission to access this folder, please try right-clicking to run PCL as administrator.</s:String>
-    <s:String x:Key="LangModMinecraftCheckStatusNeedDependency">Version of dependency need to install:</s:String>
-    <s:String x:Key="LangModMinecraftCheckStatusUnknownError">Unknown Error:</s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusNeedDependency">Version of dependency need to install: </s:String>
+    <s:String x:Key="LangModMinecraftCheckStatusUnknownError">Unknown Error: </s:String>
     <s:String x:Key="LangModMinecraftSkinSizeErrorA">Dimensions of the skin image should be 64x32 px or 64x64 px!</s:String>
     <s:String x:Key="LangModMinecraftSkinSizeErrorB">Skin file size needs to be less than 24 KB, and the selected file size is</s:String>
     <s:String x:Key="LangModMinecraftSkinErrorFile">Error in skin file</s:String>
@@ -1315,9 +1315,9 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Slim Model</s:String>
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">I Don't Know</s:String>
     <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">Please confirm the skin type on the skin download page before using this skin!</s:String>
-    <s:String x:Key="LangModMinecraftDialogNewVersionContentA">New Version:</s:String>
-    <s:String x:Key="LangModMinecraftDialogNewVersionContentB">Update Time:</s:String>
-    <s:String x:Key="LangModMinecraftDialogNewVersionContentC">Updated on:</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionContentA">New Version: </s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionContentB">Update Time: </s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionContentC">Updated on: </s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft Update Hint</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">Download</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">View Change Log</s:String>
