@@ -1643,4 +1643,7 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Please select an empty folder as the installation destination!</s:String>
     <s:String x:Key="LangModModpackExtraArchive">Extracting archive...</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Added to Game Folder List: {0}</s:String>
+    
+    <!--ModWatcher-->
+    <s:String x:Key="LangModWatcherMcCrashed">Minecraft crash detected, error analysis has begun...</s:String>
 </ResourceDictionary>

@@ -1439,4 +1439,7 @@
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">请选择一个空文件夹作为安装目标！</s:String>
     <s:String x:Key="LangModModpackExtraArchive">正在解压压缩包……</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">已加入游戏文件夹列表：{0}</s:String>
+    
+    <!--ModWatcher-->
+    <s:String x:Key="LangModWatcherMcCrashed">检测到 Minecraft 出现错误，错误分析已开始……</s:String>
 </ResourceDictionary>
