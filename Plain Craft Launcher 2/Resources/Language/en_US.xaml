@@ -8,6 +8,8 @@
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
     <s:String x:Key="LangResourcePackage">Resource Pack</s:String>
+    <s:String x:Key="LangDialogBtnYes">Yes</s:String>
+    <s:String x:Key="LangDialogBtnNo">No</s:String>
     
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">Download</s:String>
@@ -1601,4 +1603,44 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">Missing &quot;mainClass&quot; in version json!</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">Unable to open Natives file ({0}), the file may be corrupted, please try to relaunch the game.</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">Slim model is unsupported in this version, your skin may appear as Classic model.</s:String>
+    
+    <!--ModModpack-->
+    <s:String x:Key="LangModModpackSelectModpack">Modpack File</s:String>
+    <s:String x:Key="LangModModpackSelectTitleModpack">Select Modpack Archive</s:String>
+    <s:String x:Key="LangModModpackUnknownType">The type of this modpack is unrecognized and cannot be installed!</s:String>
+    <s:String x:Key="LangModModpackExceptionNoMcInfo">The modpack does not provide Minecraft version information</s:String>
+    <s:String x:Key="LangModModpackInputInstanceName">Enter Instance Name</s:String>
+    <s:String x:Key="LangModModpackTaskExtraModpack">Extracting Modpack File</s:String>
+    <s:String x:Key="LangModModpackTaskGetModDownloadInfo">Fetching Mod Download Information</s:String>
+    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">Some Mod versions required by the modpack have been deleted by their authors. The modpack installation cannot be completed. Please contact the modpack author to update the Mod versions in the modpack.</s:String>
+    <s:String x:Key="LangModModpackTaskInitModDownloadInfo">Preparing Mod Download Information</s:String>
+    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">Do you want to download the optional file {0} from the modpack?</s:String>
+    <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">Download Optional File</s:String>
+    <s:String x:Key="LangModModpackTaskDownloadMod">Downloading Mod</s:String>
+    <s:String x:Key="LangModModpackTaskDownloadModMainLoader">Downloading Mod (Main Loader)</s:String>
+    <s:String x:Key="LangModModpackTaskAnalysisLibSideLoader">Analyzing Game Support Library Files (Side Loader)</s:String>
+    <s:String x:Key="LangModModpackTaskDownloadLibSideLoader">Downloading Game Support Library Files (Side Loader)</s:String>
+    <s:String x:Key="LangModModpackTaskInstallModpack">Installing Modpack</s:String>
+    <s:String x:Key="LangModModpackTaskInstallGame">Installing Game</s:String>
+    <s:String x:Key="LangModModpackTaskDownloadLib">Downloading Game Support Library Files</s:String>
+    <s:String x:Key="LangModModpackTaskOrganizeFiles">Finalizing File Organization</s:String>
+    <s:String x:Key="LangModModpackTaskCurseForgeModpackInstall">CurseForge Modpack Installation:</s:String>
+    <s:String x:Key="LangModModpackHintInstalling">This modpack is currently being installed!</s:String>
+    <s:String x:Key="LangModModpacHintQuiltNotSupport">PCL does not currently support installing modpacks that require Quilt!</s:String>
+    <s:String x:Key="LangModModpacHintUnknownModLoader">Unable to install modpack due to an unknown Mod Loader {0}!</s:String>
+    <s:String x:Key="LangModModpackTaskDownloadExtraFile">Downloading Additional Files</s:String>
+    <s:String x:Key="LangModModpackTaskModrinthModpackInstall">Modrinth Modpack Installation:</s:String>
+    <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">Renaming Instance Json (Side Loader)</s:String>
+    <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL Modpack Installation:</s:String>
+    <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC Modpack Installation:</s:String>
+    <s:String x:Key="LangModModpackNoAddons">This modpack does not provide additional game version information and cannot be installed!</s:String>
+    <s:String x:Key="LangModModpackNoGameInfo">This modpack does not provide game version information and cannot be installed!</s:String>
+    <s:String x:Key="LangModModpackTaskMCBBSModpackInstall">MCBBS Modpack Installation:</s:String>
+    <s:String x:Key="LangModModpackDialogContentInstallTip">Please select the installation target folder in the next window. It must be an empty folder.</s:String>
+    <s:String x:Key="LangModModpackDialogTitleInstallTip">Installation Prompt</s:String>
+    <s:String x:Key="LangModModpackSelectInstallFolder">Select Installation Destination (Must be an Empty Folder)</s:String>
+    <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Exclamation marks or semicolons are not allowed in the Minecraft folder path!</s:String>
+    <s:String x:Key="LangModModpackFolderShouldBeEmpty">Please select an empty folder as the installation destination!</s:String>
+    <s:String x:Key="LangModModpackExtraArchive">Extracting archive...</s:String>
+    <s:String x:Key="LangModModpackAddedToGameList">Added to Game Folder List: {0}</s:String>
 </ResourceDictionary>

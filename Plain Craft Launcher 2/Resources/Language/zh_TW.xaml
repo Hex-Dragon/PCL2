@@ -8,6 +8,8 @@
     <s:String x:Key="LangDialogBtnOK">確認</s:String>
     <s:String x:Key="LangDialogBtnCancel">取消</s:String>
     <s:String x:Key="LangResourcePackage">資源包</s:String>
+    <s:String x:Key="LangDialogBtnYes">是</s:String>
+    <s:String x:Key="LangDialogBtnNo">否</s:String>
     
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下載</s:String>
@@ -1601,4 +1603,44 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 json 中沒有 mainClass 項！</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">無法打開 Natives 檔案（{0}），該檔案可能已損壞，請重新嘗試啟動遊戲</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">此 Minecraft 版本尚不支援纖細外觀，你的外觀可能會顯示為寬型！</s:String>
+    
+    <!--ModModpack-->
+    <s:String x:Key="LangModModpackSelectModpack">整合包檔案</s:String>  
+    <s:String x:Key="LangModModpackSelectTitleModpack">選擇整合包壓縮檔案</s:String>  
+    <s:String x:Key="LangModModpackUnknownType">無法識別該整合包的種類，無法安裝！</s:String>  
+    <s:String x:Key="LangModModpackExceptionNoMcInfo">整合包未提供 Minecraft 版本資訊</s:String>  
+    <s:String x:Key="LangModModpackInputInstanceName">輸入版本名稱</s:String>  
+    <s:String x:Key="LangModModpackTaskExtraModpack">解壓縮整合包檔案</s:String>  
+    <s:String x:Key="LangModModpackTaskGetModDownloadInfo">獲取 Mod 下載資訊</s:String>  
+    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">整合包所需的部分 Mod 版本已被 Mod 作者刪除，因此無法完成整合包安裝，請聯繫整合包作者更新整合包中的 Mod 版本</s:String>  
+    <s:String x:Key="LangModModpackTaskInitModDownloadInfo">構造 Mod 下載資訊</s:String>  
+    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">是否要下載整合包中的可選檔案 {0}？</s:String>  
+    <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">下載可選檔案</s:String>  
+    <s:String x:Key="LangModModpackTaskDownloadMod">下載 Mod</s:String>  
+    <s:String x:Key="LangModModpackTaskDownloadModMainLoader">下載 Mod（主加載器）</s:String>  
+    <s:String x:Key="LangModModpackTaskAnalysisLibSideLoader">分析遊戲支援庫檔案（副加載器）</s:String>  
+    <s:String x:Key="LangModModpackTaskDownloadLibSideLoader">下載遊戲支援庫檔案（副加載器）</s:String>  
+    <s:String x:Key="LangModModpackTaskInstallModpack">整合包安裝</s:String>  
+    <s:String x:Key="LangModModpackTaskInstallGame">遊戲安裝</s:String>  
+    <s:String x:Key="LangModModpackTaskDownloadLib">下載遊戲支援庫檔案</s:String>  
+    <s:String x:Key="LangModModpackTaskOrganizeFiles">最終整理檔案</s:String>  
+    <s:String x:Key="LangModModpackTaskCurseForgeModpackInstall">CurseForge 整合包安裝：</s:String>  
+    <s:String x:Key="LangModModpackHintInstalling">該整合包正在安裝中！</s:String>  
+    <s:String x:Key="LangModModpacHintQuiltNotSupport">PCL 暫不支援安裝需要 Quilt 的整合包！</s:String>  
+    <s:String x:Key="LangModModpacHintUnknownModLoader">無法安裝整合包，其中出現了未知的 Mod 加載器 {0}！</s:String>  
+    <s:String x:Key="LangModModpackTaskDownloadExtraFile">下載額外檔案</s:String>  
+    <s:String x:Key="LangModModpackTaskModrinthModpackInstall">Modrinth 整合包安裝：</s:String>  
+    <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">重命名版本 Json（副加載器）</s:String>  
+    <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL 整合包安裝：</s:String>  
+    <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC 整合包安裝：</s:String>
+    <s:String x:Key="LangModModpackNoAddons">該整合包未提供遊戲版本附加資訊，無法安裝！</s:String>
+    <s:String x:Key="LangModModpackNoGameInfo">該整合包未提供遊戲版本資訊，無法安裝！</s:String>
+    <s:String x:Key="LangModModpackTaskMCBBSModpackInstall">MCBBS 整合包安裝：</s:String>
+    <s:String x:Key="LangModModpackDialogContentInstallTip">請在接下來開啟的視窗中選擇安裝目標資料夾，它必須是一個空白資料夾。</s:String>
+    <s:String x:Key="LangModModpackDialogTitleInstallTip">安裝提示</s:String>
+    <s:String x:Key="LangModModpackSelectInstallFolder">選擇安裝目標（必須是一個空白資料夾）</s:String>
+    <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 資料夾路徑中不能含有嘆號或分號！</s:String>
+    <s:String x:Key="LangModModpackFolderShouldBeEmpty">請選擇一個空白資料夾作為安裝目標！</s:String>
+    <s:String x:Key="LangModModpackExtraArchive">正在解壓縮檔案包……</s:String>
+    <s:String x:Key="LangModModpackAddedToGameList">已加入遊戲資料夾列表：{0}</s:String>
 </ResourceDictionary>
