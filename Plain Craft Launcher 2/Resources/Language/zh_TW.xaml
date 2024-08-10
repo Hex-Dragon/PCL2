@@ -1352,8 +1352,8 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftExceptionGetFolderListFail">無法讀取版本資料夾，可能是由於沒有權限（{0}versions）</s:String>
     <s:String x:Key="LangModMinecraftSelectTypeSkin">外觀檔案</s:String>
     <s:String x:Key="LangModMinecraftSelectTitleSkin">選擇外觀檔案</s:String>
-    <s:String x:Key="LangModMinecraftExceptionUuidNoOnlineProfile">離線 Uuid 無正版外觀檔案。</s:String>
-    <s:String x:Key="LangModMinecraftExceptionEmptyUuid">Uuid 為空。</s:String>
+    <s:String x:Key="LangModMinecraftExceptionUuidNoOnlineProfile">離線 UUID 無正版外觀檔案。</s:String>
+    <s:String x:Key="LangModMinecraftExceptionEmptyUuid">UUID 為空。</s:String>
     <s:String x:Key="LangModMinecraftExceptionEmptySkin">外觀回傳值為空，可能是未設定自訂外觀的使用者</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinTypeInvalid">外觀地址種類無效：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinPropertyNotFound">未從外觀回傳值中找到符合條件的 Property</s:String>

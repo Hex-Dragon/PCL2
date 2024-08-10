@@ -1195,8 +1195,8 @@
     <s:String x:Key="LangModMinecraftExceptionGetFolderListFail">无法读取版本文件夹，可能是由于没有权限（{0}versions）</s:String>
     <s:String x:Key="LangModMinecraftSelectTypeSkin">皮肤文件</s:String>
     <s:String x:Key="LangModMinecraftSelectTitleSkin">选择皮肤文件</s:String>
-    <s:String x:Key="LangModMinecraftExceptionUuidNoOnlineProfile">离线 Uuid 无正版皮肤文件。</s:String>
-    <s:String x:Key="LangModMinecraftExceptionEmptyUuid">Uuid 为空。</s:String>
+    <s:String x:Key="LangModMinecraftExceptionUuidNoOnlineProfile">离线 UUID 无正版皮肤文件。</s:String>
+    <s:String x:Key="LangModMinecraftExceptionEmptyUuid">UUID 为空。</s:String>
     <s:String x:Key="LangModMinecraftExceptionEmptySkin">皮肤返回值为空，可能是未设置自定义皮肤的用户</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinTypeInvalid">皮肤地址种类无效：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinPropertyNotFound">未从皮肤返回值中找到符合条件的 Property</s:String>
@@ -1410,8 +1410,8 @@
     <s:String x:Key="LangModLaunchDialogContentGetSkinFail">由于设置的离线启动时使用的正版皮肤获取失败，游戏将以无皮肤的方式启动。&#xa;请检查你的网络是否通畅，或尝试使用 VPN！&#xa;&#xa;详细的错误信息：{0}</s:String>
     <s:String x:Key="LangModLaunchDialogTitleGetSkinFail">皮肤获取失败</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">正版玩家档案不存在（{0}）</s:String>
-    <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">从官网获取正版 Uuid 失败（{0}）</s:String>
-    <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">获取的正版 Uuid 长度不足（{0}）</s:String>
+    <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">从官网获取正版 UUID 失败（{0}）</s:String>
+    <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">获取的正版 UUID 长度不足（{0}）</s:String>
     <s:String x:Key="LangModLaunchHintNoAvailableJava">没有可用的 Java，已取消启动！</s:String>
     <s:String x:Key="LangModLaunchExceptionReleaseJavaWrapperFail">释放 Java Wrapper 失败，请查看 PCL 日志查找详细信息</s:String>
     <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">OptiFine 与自动进入服务器可能不兼容，有概率导致材质丢失甚至游戏崩溃！</s:String>
