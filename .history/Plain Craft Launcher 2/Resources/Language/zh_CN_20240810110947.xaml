@@ -1,4 +1,7 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">已取消！</s:String>
@@ -27,21 +30,16 @@
     <s:String x:Key="LangDialogBtnPolicyContent">查看用户协议与免责声明</s:String>
     <s:String x:Key="LangHintDebugWarning">[调试模式] PCL 正以调试模式运行，这可能会导致性能下降，若无必要请不要开启！</s:String>
     <s:String x:Key="LangDialogTitleTip">提示</s:String>
-    <s:String x:Key="LangDialogHardcoreFanTheme">你已经使用了 99 次 PCL 啦，感谢你长期以来的支持！
-隐藏主题 铁杆粉 已解锁！</s:String>
+    <s:String x:Key="LangDialogHardcoreFanTheme">你已经使用了 99 次 PCL 啦，感谢你长期以来的支持！&#x000D;隐藏主题 铁杆粉 已解锁！</s:String>
     <s:String x:Key="LangDialogCloseOnDownloading">还有下载任务尚未完成，是否确定退出？</s:String>
     <s:String x:Key="LangHintHideModeOn">功能隐藏设置已重新开启！</s:String>
     <s:String x:Key="LangHintHideModeOff">功能隐藏设置已暂时关闭！</s:String>
     <s:String x:Key="LangHintIJustWantToStart">木大！</s:String>
     <s:String x:Key="LangHintAuthlibUrlIncorrect">输入的 Authlib 验证服务器不符合网址格式 ({0})！</s:String>
     <s:String x:Key="LangHintAuthlibDownloadGame">请先下载游戏，再设置第三方登录！</s:String>
-    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">是否要在版本 {0} 中开启 LittleSkin 登录？
-你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。</s:String>
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">是否要在版本 {0} 中开启 LittleSkin 登录？&#x000D;你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。</s:String>
     <s:String x:Key="LangDialogTitleAuthlibEnableLittleSkin">第三方登录开启确认</s:String>
-    <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">是否要在版本 {0} 中开启 LittleSkin 登录？
-登录服务器：{1}
-
-你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。</s:String>
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">是否要在版本 {0} 中开启 LittleSkin 登录？&#x000D;登录服务器：{1}&#x000D;&#x000D;你可以在 版本设置 → 设置 → 服务器选项 中修改登录方式。</s:String>
     <s:String x:Key="LangHintWindowDropExtract">请将文件解压后再拖入！</s:String>
     <s:String x:Key="LangHintWindowDropFolder">请拖入一个文件，而非文件夹！</s:String>
     <s:String x:Key="LangHintWindowDropFileNotFound">拖入的文件不存在：{0}</s:String>
@@ -75,35 +73,27 @@
     <!--PageSetupUI-->
     <s:String x:Key="LangThemeRealWhite">眼瞎白</s:String>
     <s:String x:Key="LangThemeRealFunny">真·滑稽彩</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip8">累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。
-右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip8">累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。&#x000D;右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！</s:String>
     <s:String x:Key="LangThemeUnlockTip8">累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· 反馈一个 Bug，在 Issue 标记为 [已完成] 后回复 Issue 要求解锁（右键打开反馈页面）
-· 向帮助库提交 Pull Request，在龙猫合并后解锁</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· 反馈一个 Bug，在反馈标记为 [完成] 后回复 Issue 要求解锁
-· 向帮助库提交 Pull Request，在龙猫合并后解锁</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip9">· 反馈一个 Bug，在 Issue 标记为 [已完成] 后回复 Issue 要求解锁（右键打开反馈页面）&#x000D;· 向帮助库提交 Pull Request，在龙猫合并后解锁</s:String>
+    <s:String x:Key="LangThemeUnlockTip9">· 反馈一个 Bug，在反馈标记为 [完成] 后回复 Issue 要求解锁&#x000D;· 向帮助库提交 Pull Request，在龙猫合并后解锁</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">个性化设置项存在异常，已被自动重置</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">重载个性化设置时出错</s:String>
     <s:String x:Key="LangHintThemeSetInit">已初始化个性化设置</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">初始化个性化设置失败</s:String>
     <s:String x:Key="LangBackgroundPic">背景图片</s:String>
     <s:String x:Key="LangBackgroundPicCount">背景图片 （{0} 张）</s:String>
-    <s:String x:Key="LangDialogDeleteAllBackgroundPicCntent">即将删除背景图片文件夹中的所有文件。
-此操作不可撤销，是否确定？</s:String>
+    <s:String x:Key="LangDialogDeleteAllBackgroundPicCntent">即将删除背景图片文件夹中的所有文件。&#x000D;此操作不可撤销，是否确定？</s:String>
     <s:String x:Key="LangDialogTitleWarning">警告</s:String>
     <s:String x:Key="LangHintBackgroundPicDeleted">背景图片已清空！</s:String>
     <s:String x:Key="LangHintBackgroundPicNotFound">未检测到可用背景图片！</s:String>
     <s:String x:Key="LangHintBackgroundPicRefreshed">背景图片已刷新：</s:String>
-    <s:String x:Key="LangDialogBackgroundPicRefreshFailA">刷新背景图片失败，该图片文件可能并非标准格式。
-你可以尝试使用画图打开该文件并重新保存，这会让图片变为标准格式。
-文件：</s:String>
+    <s:String x:Key="LangDialogBackgroundPicRefreshFailA">刷新背景图片失败，该图片文件可能并非标准格式。&#x000D;你可以尝试使用画图打开该文件并重新保存，这会让图片变为标准格式。&#x000D;文件：</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailB">刷新背景图片失败（ {0} ）</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailUnknwon">刷新背景图片时出现未知错误</s:String>
-    <s:String x:Key="LangDialogTitlePicChangeFailA">改变标题栏图片失败，该图片文件可能并非标准格式。
-你可以尝试使用画图打开该文件并重新保存，这会让图片变为标准格式。</s:String>
+    <s:String x:Key="LangDialogTitlePicChangeFailA">改变标题栏图片失败，该图片文件可能并非标准格式。&#x000D;你可以尝试使用画图打开该文件并重新保存，这会让图片变为标准格式。</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailB">设置标题栏图片失败</s:String>
-    <s:String x:Key="LangDialogTitlePicChangeFailC">调整标题栏图片失败，该图片文件可能并非标准格式。
-你可以尝试使用画图打开该文件并重新保存，这会让图片变为标准格式。</s:String>
+    <s:String x:Key="LangDialogTitlePicChangeFailC">调整标题栏图片失败，该图片文件可能并非标准格式。&#x000D;你可以尝试使用画图打开该文件并重新保存，这会让图片变为标准格式。</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailD">调整标题栏图片失败</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailE">清理错误的标题栏图片失败</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailF">复制标题栏图片失败</s:String>
@@ -111,8 +101,7 @@
     <s:String x:Key="LangDialogTitlePicEmptyFail">清空标题栏图片失败</s:String>
     <s:String x:Key="LangBackgroundMusicCount">背景音乐（ {0} 首）</s:String>
     <s:String x:Key="LangBackgroundMusic">背景音乐</s:String>
-    <s:String x:Key="LangDialogBackgroundMusicDeleteContent">即将删除背景音乐文件夹中的所有文件。
-此操作不可撤销，是否确定？</s:String>
+    <s:String x:Key="LangDialogBackgroundMusicDeleteContent">即将删除背景音乐文件夹中的所有文件。&#x000D;此操作不可撤销，是否确定？</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleting">正在删除背景音乐……</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleted">背景音乐已删除！</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">删除背景音乐失败</s:String>
@@ -122,23 +111,14 @@
     <s:String x:Key="LangDialogCustomPageOverwriteFail">生成教学文件失败</s:String>
     <s:String x:Key="LangHintCustomPageOverwriteSuccess">教学文件已生成！</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">已刷新主页！</s:String>
-    <s:String x:Key="LangDialogCustomPageTeachContent">1. 点击 生成教学文件 按钮，这会在 PCL 文件夹下生成 Custom.xaml 布局文件。
-2. 使用记事本等工具打开这个文件并进行修改，修改完记得保存。
-3. 点击 刷新主页 按钮，查看主页现在长啥样了。
-你可以在生成教学文件后直接刷新主页，对照着进行修改，更有助于理解。
-直接将自定义主页文件拖进 PCL 窗口也可以快捷加载。</s:String>
+    <s:String x:Key="LangDialogCustomPageTeachContent">1. 点击 生成教学文件 按钮，这会在 PCL 文件夹下生成 Custom.xaml 布局文件。&#x000D;2. 使用记事本等工具打开这个文件并进行修改，修改完记得保存。&#x000D;3. 点击 刷新主页 按钮，查看主页现在长啥样了。&#x000D;你可以在生成教学文件后直接刷新主页，对照着进行修改，更有助于理解。&#x000D;直接将自定义主页文件拖进 PCL 窗口也可以快捷加载。</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">主页自定义教程</s:String>
     <s:String x:Key="LangThemeBackUnlock">隐藏主题 玄素黑 已解锁！</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameContent">1. 不爬取或攻击相关服务或网站，不盗取相关账号，没有谜题可以或需要以此来解决。
-2. 不得篡改或损毁相关公开信息，请尽量让它们保持原状。
-3. 在你感到迷茫的时候，看看回声洞可能会给你带来惊喜。
-
-若违规，可能会被从任意相关群中踢出！</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameContent">1. 不爬取或攻击相关服务或网站，不盗取相关账号，没有谜题可以或需要以此来解决。&#x000D;2. 不得篡改或损毁相关公开信息，请尽量让它们保持原状。&#x000D;3. 在你感到迷茫的时候，看看回声洞可能会给你带来惊喜。&#x000D;&#x000D;若违规，可能会被从任意相关群中踢出！</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameTitle">解密游戏的基本规则</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameAccrpt">我知道了</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameDeny">恕我拒绝</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">你需要用自己的智慧来找到下一步的线索……
-初始线索：</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">你需要用自己的智慧来找到下一步的线索……&#x000D;初始线索：</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameFirstClueTitle">解密游戏</s:String>
     <s:String x:Key="LangOtherHelp">帮助</s:String>
     <s:String x:Key="LangOtherAbout">关于</s:String>
@@ -1446,7 +1426,7 @@
     <s:String x:Key="LangModModpacHintUnknownModLoader">无法安装整合包，其中出现了未知的 Mod 加载器 {0}！</s:String>
     <s:String x:Key="LangModModpackTaskDownloadExtraFile">下载额外文件</s:String>
     <s:String x:Key="LangModModpackTaskModrinthModpackInstall">Modrinth 整合包安装：</s:String>
-    <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">重命名版本 Json（副加载器）</s:String>
+    <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">重命名版本 JSON（副加载器）</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL 整合包安装：</s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC 整合包安装：</s:String>
     <s:String x:Key="LangModModpackNoAddons">该整合包未提供游戏版本附加信息，无法安装！</s:String>

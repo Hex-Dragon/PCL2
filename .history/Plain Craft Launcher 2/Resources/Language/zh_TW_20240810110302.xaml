@@ -1,4 +1,7 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">已取消！</s:String>
@@ -1327,11 +1330,11 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftNotLoaded">該實例未被載入，請向作者回報此問題</s:String>
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL 無法識別該實例的 MC 版本號</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">無法識別：{0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionJsonNotFound">未找到版本 JSON 檔案：{0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionReadJsonFail">版本 JSON 檔案為空或讀取失敗</s:String>
-    <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">版本 JSON 檔案有誤，內容為：{0}</s:String>
+    <s:String x:Key="LangModMinecraftExceptionJsonNotFound">未找到版本 json 檔案：{0}</s:String>
+    <s:String x:Key="LangModMinecraftExceptionReadJsonFail">版本 Json 檔案為空或讀取失敗</s:String>
+    <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">版本 json 檔案有誤，內容為：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">版本依賴項出現嵌套：{0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">版本 JSON 不規範（{0}）</s:String>
+    <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">版本 json 不規範（{0}）</s:String>
     <s:String x:Key="LangModMinecraftVersionPre">預發布版</s:String>
     <s:String x:Key="LangModMinecraftVersionRC">發布候選</s:String>
     <s:String x:Key="LangModMinecraftVersionExperimental">實驗性快照</s:String>
@@ -1352,8 +1355,8 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftExceptionGetFolderListFail">無法讀取版本資料夾，可能是由於沒有權限（{0}versions）</s:String>
     <s:String x:Key="LangModMinecraftSelectTypeSkin">外觀檔案</s:String>
     <s:String x:Key="LangModMinecraftSelectTitleSkin">選擇外觀檔案</s:String>
-    <s:String x:Key="LangModMinecraftExceptionUuidNoOnlineProfile">離線 Uuid 無正版外觀檔案。</s:String>
-    <s:String x:Key="LangModMinecraftExceptionEmptyUuid">Uuid 為空。</s:String>
+    <s:String x:Key="LangModMinecraftExceptionUUIDNoOnlineProfile">離線 UUID 無正版外觀檔案。</s:String>
+    <s:String x:Key="LangModMinecraftExceptionEmptyUUID">UUID 為空。</s:String>
     <s:String x:Key="LangModMinecraftExceptionEmptySkin">外觀回傳值為空，可能是未設定自訂外觀的使用者</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinTypeInvalid">外觀地址種類無效：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinPropertyNotFound">未從外觀回傳值中找到符合條件的 Property</s:String>
@@ -1453,10 +1456,10 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <!--ModMod-->
     <s:String x:Key="LangModModUpdatingMod">正在更新模組</s:String>
     <s:String x:Key="LangModModLoadingModList">正在載入模組清單</s:String>
-    <s:String x:Key="LangModModExceptionIncorrectPath">錯誤的模組檔案路徑（{0}）</s:String>
-    <s:String x:Key="LangModModExceptionFileNotFound">未找到模組檔案（{0}）</s:String>
+    <s:String x:Key="LangModModExceptionIncorrectPath">錯誤的 Mod 檔案路徑（{0}）</s:String>
+    <s:String x:Key="LangModModExceptionFileNotFound">未找到 Mod 檔案（{0}）</s:String>
     <s:String x:Key="LangModModExceptionUnauthorizedAccess">沒有讀取此檔案的權限，請嘗試右鍵以系統管理員身分執行 PCL</s:String>
-    
+
     <!--ModComp-->
     <s:String x:Key="LangModCompVersionUnknown">未知</s:String>
     <s:String x:Key="LangModCompVersionAll">全版本</s:String>
@@ -1597,69 +1600,69 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchExceptionReleaseJavaWrapperFail">釋放 Java Wrapper 失敗，請查看 PCL 日誌尋找詳細資訊</s:String>
     <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">OptiFine 與自動進入伺服器可能不相容，有機率導致紋理遺失甚至遊戲崩潰！</s:String>
     <s:String x:Key="LangModLaunchExceptionConnectServerFail">無法連接到第三方登入伺服器（{0}）</s:String>
-    <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 JSON 中沒有 mainClass 項！</s:String>
+    <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 json 中沒有 mainClass 項！</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">無法打開 Natives 檔案（{0}），該檔案可能已損壞，請重新嘗試啟動遊戲</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">此 Minecraft 版本尚不支援纖細外觀，你的外觀可能會顯示為寬型！</s:String>
     
     <!--ModModpack-->
-    <s:String x:Key="LangModModpackSelectModpack">模組包檔案</s:String>
-    <s:String x:Key="LangModModpackSelectTitleModpack">選擇模組包壓縮檔案</s:String>
-    <s:String x:Key="LangModModpackUnknownType">無法識別該模組包的種類，無法安裝！</s:String>
-    <s:String x:Key="LangModModpackExceptionNoMcInfo">模組包未提供 Minecraft 版本資訊</s:String>
-    <s:String x:Key="LangModModpackInputInstanceName">輸入實例名稱</s:String>
-    <s:String x:Key="LangModModpackTaskExtraModpack">解壓縮模組包檔案</s:String>
-    <s:String x:Key="LangModModpackTaskGetModDownloadInfo">獲取模組下載資訊</s:String>
-    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">模組包所需的部分模組版本已被模組作者刪除，因此無法完成整合包安裝，請聯絡模組包作者更新模組包中的模組版本</s:String>
-    <s:String x:Key="LangModModpackTaskInitModDownloadInfo">構造模組下載資訊</s:String>
-    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">是否要下載模組包中的可選檔案 {0}？</s:String>
-    <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">下載可選檔案</s:String>
-    <s:String x:Key="LangModModpackTaskDownloadMod">下載模組</s:String>
-    <s:String x:Key="LangModModpackTaskDownloadModMainLoader">下載模組（主載入器）</s:String>
-    <s:String x:Key="LangModModpackTaskAnalysisLibSideLoader">分析遊戲支援庫檔案（副載入器）</s:String>
-    <s:String x:Key="LangModModpackTaskDownloadLibSideLoader">下載遊戲支援庫檔案（副載入器）</s:String>
-    <s:String x:Key="LangModModpackTaskInstallModpack">模組包安裝</s:String>
-    <s:String x:Key="LangModModpackTaskInstallGame">遊戲安裝</s:String>
-    <s:String x:Key="LangModModpackTaskDownloadLib">下載遊戲支援庫檔案</s:String>
-    <s:String x:Key="LangModModpackTaskOrganizeFiles">最終整理檔案</s:String>
-    <s:String x:Key="LangModModpackTaskCurseForgeModpackInstall">CurseForge 模組包安裝：</s:String>
-    <s:String x:Key="LangModModpackHintInstalling">該模組包正在安裝中！</s:String>
-    <s:String x:Key="LangModModpacHintQuiltNotSupport">PCL 暫不支援安裝需要 Quilt 的模組包！</s:String>
-    <s:String x:Key="LangModModpacHintUnknownModLoader">無法安裝模組包，其中出現了未知的 Mod 載入器 {0}！</s:String>
-    <s:String x:Key="LangModModpackTaskDownloadExtraFile">下載額外檔案</s:String>
-    <s:String x:Key="LangModModpackTaskModrinthModpackInstall">Modrinth 模組包安裝：</s:String>
-    <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">重新命名版本 JSON（副載入器）</s:String>
-    <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL 模組包安裝：</s:String>
-    <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC 模組包安裝：</s:String>
-    <s:String x:Key="LangModModpackNoAddons">該模組包未提供遊戲版本附加資訊，無法安裝！</s:String>
-    <s:String x:Key="LangModModpackNoGameInfo">該模組包未提供遊戲版本資訊，無法安裝！</s:String>
-    <s:String x:Key="LangModModpackTaskMCBBSModpackInstall">MCBBS 模組包安裝：</s:String>
+    <s:String x:Key="LangModModpackSelectModpack">整合包檔案</s:String>  
+    <s:String x:Key="LangModModpackSelectTitleModpack">選擇整合包壓縮檔案</s:String>  
+    <s:String x:Key="LangModModpackUnknownType">無法識別該整合包的種類，無法安裝！</s:String>  
+    <s:String x:Key="LangModModpackExceptionNoMcInfo">整合包未提供 Minecraft 版本資訊</s:String>  
+    <s:String x:Key="LangModModpackInputInstanceName">輸入版本名稱</s:String>  
+    <s:String x:Key="LangModModpackTaskExtraModpack">解壓縮整合包檔案</s:String>  
+    <s:String x:Key="LangModModpackTaskGetModDownloadInfo">獲取 Mod 下載資訊</s:String>  
+    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">整合包所需的部分 Mod 版本已被 Mod 作者刪除，因此無法完成整合包安裝，請聯繫整合包作者更新整合包中的 Mod 版本</s:String>  
+    <s:String x:Key="LangModModpackTaskInitModDownloadInfo">構造 Mod 下載資訊</s:String>  
+    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">是否要下載整合包中的可選檔案 {0}？</s:String>  
+    <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">下載可選檔案</s:String>  
+    <s:String x:Key="LangModModpackTaskDownloadMod">下載 Mod</s:String>  
+    <s:String x:Key="LangModModpackTaskDownloadModMainLoader">下載 Mod（主加載器）</s:String>  
+    <s:String x:Key="LangModModpackTaskAnalysisLibSideLoader">分析遊戲支援庫檔案（副加載器）</s:String>  
+    <s:String x:Key="LangModModpackTaskDownloadLibSideLoader">下載遊戲支援庫檔案（副加載器）</s:String>  
+    <s:String x:Key="LangModModpackTaskInstallModpack">整合包安裝</s:String>  
+    <s:String x:Key="LangModModpackTaskInstallGame">遊戲安裝</s:String>  
+    <s:String x:Key="LangModModpackTaskDownloadLib">下載遊戲支援庫檔案</s:String>  
+    <s:String x:Key="LangModModpackTaskOrganizeFiles">最終整理檔案</s:String>  
+    <s:String x:Key="LangModModpackTaskCurseForgeModpackInstall">CurseForge 整合包安裝：</s:String>  
+    <s:String x:Key="LangModModpackHintInstalling">該整合包正在安裝中！</s:String>  
+    <s:String x:Key="LangModModpacHintQuiltNotSupport">PCL 暫不支援安裝需要 Quilt 的整合包！</s:String>  
+    <s:String x:Key="LangModModpacHintUnknownModLoader">無法安裝整合包，其中出現了未知的 Mod 加載器 {0}！</s:String>  
+    <s:String x:Key="LangModModpackTaskDownloadExtraFile">下載額外檔案</s:String>  
+    <s:String x:Key="LangModModpackTaskModrinthModpackInstall">Modrinth 整合包安裝：</s:String>  
+    <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">重命名版本 Json（副加載器）</s:String>  
+    <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL 整合包安裝：</s:String>  
+    <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC 整合包安裝：</s:String>
+    <s:String x:Key="LangModModpackNoAddons">該整合包未提供遊戲版本附加資訊，無法安裝！</s:String>
+    <s:String x:Key="LangModModpackNoGameInfo">該整合包未提供遊戲版本資訊，無法安裝！</s:String>
+    <s:String x:Key="LangModModpackTaskMCBBSModpackInstall">MCBBS 整合包安裝：</s:String>
     <s:String x:Key="LangModModpackDialogContentInstallTip">請在接下來開啟的視窗中選擇安裝目標資料夾，它必須是一個空白資料夾。</s:String>
     <s:String x:Key="LangModModpackDialogTitleInstallTip">安裝提示</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">選擇安裝目標（必須是一個空白資料夾）</s:String>
-    <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 資料夾路徑中不能含有驚嘆號號或分號！</s:String>
+    <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 資料夾路徑中不能含有嘆號或分號！</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">請選擇一個空白資料夾作為安裝目標！</s:String>
-    <s:String x:Key="LangModModpackExtraArchive">正在解壓縮壓縮包……</s:String>
+    <s:String x:Key="LangModModpackExtraArchive">正在解壓縮檔案包……</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">已加入遊戲資料夾列表：{0}</s:String>
     
     <!--ModWatcher-->
-    <s:String x:Key="LangModWatcherMcCrashed">檢測到 Minecraft 出現錯誤，錯誤分析已開始……</s:String>
+    <s:String x:Key="LangModWatcherMcCrashed">Minecraft 崩毀已偵測到，錯誤分析已開始...</s:String>
     
-    <!--ModBase-->
-    <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">不支援對包含子鍵的子鍵進行重新命名：{0}。</s:String>
-    <s:String x:Key="LangModBaseExceptionPathIncorrect">不包含路徑：{0}</s:String>
-    <s:String x:Key="LangModBaseExceptionFileNameIncorrect">不包含檔案名：{0}</s:String>
-    <s:String x:Key="LangModBaseExceptionFileNameTooLong">檔案名過長：{0}</s:String>
-    <s:String x:Key="LangModBaseExceptionCopyFileFail">複製檔案出錯：{0} → {1}</s:String>
-    <s:String x:Key="LangModBaseSelectFolder">選擇資料夾</s:String>
-    <s:String x:Key="LangModBaseExceptionEmptyFolderName">資料夾名不能為空！</s:String>
-    <s:String x:Key="LangModBaseExceptionFolderNotExist">資料夾不存在！</s:String>
-    <s:String x:Key="LangModBaseFileCheckFileNotExist">檔案不存在：{0}</s:String>
-    <s:String x:Key="LangModBaseFileCheckFileSizeIncorrectA">檔案大小應為 {0} B，實際為 {1} B</s:String>
-    <s:String x:Key="LangModBaseFileCheckFileSizeIncorrectB">檔案大小應大於 {0} B，實際為 {1} B</s:String>
-    <s:String x:Key="LangModBaseFileCheckFileMD5Incorrect">檔案 MD5 應為 {0}，實際為 {1}</s:String>
-    <s:String x:Key="LangModBaseFileCheckFileSHA256Incorrect">檔案 SHA256 應為 {0}，實際為 {1}</s:String>
-    <s:String x:Key="LangModBaseFileCheckFileSHA1Incorrect">檔案 SHA1 應為 {0}，實際為 {1}</s:String>
-    <s:String x:Key="LangModBaseExceptionEmptyFile">讀取到的檔案為空</s:String>
-    <s:String x:Key="LangModBaseExceptionInvalidJson">不是有效的 JSON 檔案</s:String>
+    <!--ModBase-->  
+    <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">不支援對包含子鍵的子鍵進行重新命名：{0}。</s:String>  
+    <s:String x:Key="LangModBaseExceptionPathIncorrect">不包含路徑：{0}</s:String>  
+    <s:String x:Key="LangModBaseExceptionFileNameIncorrect">不包含檔案名：{0}</s:String>  
+    <s:String x:Key="LangModBaseExceptionFileNameTooLong">檔案名過長：{0}</s:String>  
+    <s:String x:Key="LangModBaseExceptionCopyFileFail">複製檔案出錯：{0} → {1}</s:String>  
+    <s:String x:Key="LangModBaseSelectFolder">選擇資料夾</s:String>  
+    <s:String x:Key="LangModBaseExceptionEmptyFolderName">資料夾名不能為空！</s:String>  
+    <s:String x:Key="LangModBaseExceptionFolderNotExist">資料夾不存在！</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileNotExist">檔案不存在：{0}</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSizeIncorrectA">檔案大小應為 {0} B，實際為 {1} B</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSizeIncorrectB">檔案大小應大於 {0} B，實際為 {1} B</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileMD5Incorrect">檔案 MD5 應為 {0}，實際為 {1}</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSHA256Incorrect">檔案 SHA256 應為 {0}，實際為 {1}</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSHA1Incorrect">檔案 SHA1 應為 {0}，實際為 {1}</s:String>  
+    <s:String x:Key="LangModBaseExceptionEmptyFile">讀取到的檔案為空</s:String>  
+    <s:String x:Key="LangModBaseExceptionInvalidJson">不是有效的 json 檔案</s:String>  
     <s:String x:Key="LangModBaseNoExceptionDetail">無可用錯誤訊息！</s:String>
 </ResourceDictionary>

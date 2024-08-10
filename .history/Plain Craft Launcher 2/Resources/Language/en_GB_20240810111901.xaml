@@ -171,7 +171,7 @@ Initial clue:</s:String>
     <s:String x:Key="LangSetThemeNameCustom">Custom</s:String>
     <s:String x:Key="LangSetThemeNameCustomToolTip">You need to unlock at least five hidden themes.</s:String>
     <s:String x:Key="LangSetThemeShowLogoOnStart">Display PCL logo when opening the launcher.</s:String>
-    <s:String x:Key="LangSetThemeSponsorship">You need a little sponsorship of the developer to change the theme colour... :(</s:String>
+    <s:String x:Key="LangSetThemeSponsorship">You need a little sponsorship of the developer to change the theme color... :(</s:String>
     <s:String x:Key="LangSetThemeSupport">Support Developers</s:String>
     <s:String x:Key="LangSetBackgroundPic">Background</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptive">Adaptive</s:String>
@@ -190,7 +190,7 @@ Initial clue:</s:String>
     <s:String x:Key="LangSetBackgroundPicBlur">Background Blur</s:String>
     <s:String x:Key="LangSetBackgroundPicBlurToolTip">Strong blur will cause serious fps drops in the launcher. Please use it wisely.
 It is not recommended enabling blur when making a modpack to ensure that PCL can run smoothly on low-performance devices.</s:String>
-    <s:String x:Key="LangSetBackgroundPicColorfulBack">Coloured Background</s:String>
+    <s:String x:Key="LangSetBackgroundPicColorfulBack">Colored Background</s:String>
     <s:String x:Key="LangSetOpenFolder">Folder</s:String>
     <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">Put the background in this folder, and PCL will randomly load one of them each time.</s:String>
     <s:String x:Key="LangSetBackgroundPicRefresh">Refresh</s:String>
@@ -329,7 +329,7 @@ If there is an existing instance, click the &quot;Add Existing Folders&quot; on 
     <s:String x:Key="LangSelectVersionTypeError">Error Instance</s:String>
     <s:String x:Key="LangSelectVersionTypeHidden">Hidden Instance</s:String>
     <s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">Less-used Instance</s:String>
-    <s:String x:Key="LangSelectVersionTypeFavorites">Favourites</s:String>
+    <s:String x:Key="LangSelectVersionTypeFavorites">Favorites</s:String>
     <s:String x:Key="LangSelectVersionTypeAprilFool">April Fools' Instance</s:String>
     <s:String x:Key="LangSelectVersionTypeUnknown">Unknown Type</s:String>
     <s:String x:Key="LangSelectVersionNoHidden">No Hidden Instances</s:String>
@@ -337,8 +337,8 @@ If there is an existing instance, click the &quot;Add Existing Folders&quot; on 
 Press &quot;F11&quot; again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangSelectVersionListLoadFail">Failed while converting the instance list to display.</s:String>
     <s:String x:Key="LangSelectVersionListLoadIconFail">Failed to load the instance icon.</s:String>
-    <s:String x:Key="LangSelectBtnFavorite">Favourite</s:String>
-    <s:String x:Key="LangSelectBtnCancelFavorite">Unfavourite</s:String>
+    <s:String x:Key="LangSelectBtnFavorite">Favorite</s:String>
+    <s:String x:Key="LangSelectBtnCancelFavorite">Unfavorite</s:String>
     <s:String x:Key="LangSelectBtnSet">Properties</s:String>
     <s:String x:Key="LangSelectBtnOpenFolder">Folder</s:String>
     <s:String x:Key="LangSelectDeleteVersionTitle">Instance Deletion Confirmation</s:String>
@@ -655,7 +655,7 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangLaunchLeftAccountUnifiedPassLogin">Unified Pass</s:String>
     <s:String x:Key="LangLaunchLeftAccountThirdPartLogin">Third-party</s:String>
     <s:String x:Key="LangLaunchLeftSkinNotFound">The offline skin was not found, it may have been deleted. PCL will use the default Steve skin!</s:String>
-    <s:String x:Key="LangLaunchThemeFunnyUnlock">The hidden theme &quot;FUNNY COLOUR&quot; has been unlocked!</s:String>
+    <s:String x:Key="LangLaunchThemeFunnyUnlock">The hidden theme &quot;FUNNY COLOR&quot; has been unlocked!</s:String>
     <s:String x:Key="LangLaunchLeftStartInstance">Launch</s:String>
     <s:String x:Key="LangLaunchLeftDownloadInstance">Download</s:String>
     <s:String x:Key="LangLaunchLeftNoAvailableInstance">No Instance Available</s:String>
@@ -1147,8 +1147,8 @@ Press F11 in &quot;Instance Selection&quot; page to see all hidden instances.</s
     <s:String x:Key="LangPageVersionOverallCategoryAprilFool">April Fools'</s:String>
     <s:String x:Key="LangPageVersionOverallEditName">Edit Name</s:String>
     <s:String x:Key="LangPageVersionOverallEditDesc">Edit Description</s:String>
-    <s:String x:Key="LangPageVersionOverallFavorite">Favourite</s:String>
-    <s:String x:Key="LangPageVersionOverallCancelFavorite">Unfavourite</s:String>
+    <s:String x:Key="LangPageVersionOverallFavorite">Favorite</s:String>
+    <s:String x:Key="LangPageVersionOverallCancelFavorite">Unfavorite</s:String>
     <s:String x:Key="LangPageVersionOverallShortcut">Shortcut</s:String>
     <s:String x:Key="LangPageVersionOverallFolder">Instance Folder</s:String>
     <s:String x:Key="LangPageVersionOverallFolderSaves">Saves Folder</s:String>

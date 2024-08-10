@@ -1147,8 +1147,8 @@ Press F11 in &quot;Instance Selection&quot; page to see all hidden instances.</s
     <s:String x:Key="LangPageVersionOverallCategoryAprilFool">April Fools'</s:String>
     <s:String x:Key="LangPageVersionOverallEditName">Edit Name</s:String>
     <s:String x:Key="LangPageVersionOverallEditDesc">Edit Description</s:String>
-    <s:String x:Key="LangPageVersionOverallFavorite">Favourite</s:String>
-    <s:String x:Key="LangPageVersionOverallCancelFavorite">Unfavourite</s:String>
+    <s:String x:Key="LangPageVersionOverallFavorite">Favorite</s:String>
+    <s:String x:Key="LangPageVersionOverallCancelFavorite">Unfavorite</s:String>
     <s:String x:Key="LangPageVersionOverallShortcut">Shortcut</s:String>
     <s:String x:Key="LangPageVersionOverallFolder">Instance Folder</s:String>
     <s:String x:Key="LangPageVersionOverallFolderSaves">Saves Folder</s:String>

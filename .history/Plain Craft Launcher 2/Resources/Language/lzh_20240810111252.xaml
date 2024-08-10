@@ -1,4 +1,7 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">已罷！</s:String>
@@ -27,21 +30,16 @@
     <s:String x:Key="LangDialogBtnPolicyContent">覽用戶約與免責言</s:String>
     <s:String x:Key="LangHintDebugWarning">[調試模] PCL 正以調試模行，此或致性能降，若無必，請勿開！</s:String>
     <s:String x:Key="LangDialogTitleTip">示</s:String>
-    <s:String x:Key="LangDialogHardcoreFanTheme">汝已用 PCL 九十九次矣，謝汝長期支持！
-隱主題 鐵杆粉 已解！</s:String>
+    <s:String x:Key="LangDialogHardcoreFanTheme">汝已用 PCL 九十九次矣，謝汝長期支持！&#x000D;隱主題 鐵杆粉 已解！</s:String>
     <s:String x:Key="LangDialogCloseOnDownloading">尚有下載任未完，確欲退乎？</s:String>
     <s:String x:Key="LangHintHideModeOn">功能隱設已重開！</s:String>
     <s:String x:Key="LangHintHideModeOff">功能隱設已暫關！</s:String>
     <s:String x:Key="LangHintIJustWantToStart">無！</s:String>
     <s:String x:Key="LangHintAuthlibUrlIncorrect">所入 Authlib 驗證服不合網址式 ({0})！</s:String>
     <s:String x:Key="LangHintAuthlibDownloadGame">請先下遊戲，再設第三方登！</s:String>
-    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">欲於版 {0} 中開 LittleSkin 登乎？
-汝可於 版本設置 → 設置 → 服務器選項 中改登方式。</s:String>
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">欲於版 {0} 中開 LittleSkin 登乎？&#x000D;汝可於 版本設置 → 設置 → 服務器選項 中改登方式。</s:String>
     <s:String x:Key="LangDialogTitleAuthlibEnableLittleSkin">第三方登開確認</s:String>
-    <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">欲於版 {0} 中開 LittleSkin 登乎？
-登服務器：{1}
-
-汝可於 版本設置 → 設置 → 服務器選項 中改登方式。</s:String>
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">欲於版 {0} 中開 LittleSkin 登乎？&#x000D;登服務器：{1}&#x000D;&#x000D;汝可於 版本設置 → 設置 → 服務器選項 中改登方式。</s:String>
     <s:String x:Key="LangHintWindowDropExtract">請解壓文件後再拖入！</s:String>
     <s:String x:Key="LangHintWindowDropFolder">請拖入一文件，非文件夾！</s:String>
     <s:String x:Key="LangHintWindowDropFileNotFound">所拖入文件不存：{0}</s:String>
@@ -75,35 +73,27 @@
     <!--PageSetupUI-->
     <s:String x:Key="LangThemeRealWhite">目眩白</s:String>
     <s:String x:Key="LangThemeRealFunny">真·滑稽彩</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip8">累積贊助達二十三元三角三分，於愛發電私信發【解鎖碼】以解鎖。
-右擊開贊助頁，若覺 PCL 尚可，則請支持之！</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip8">累積贊助達二十三元三角三分，於愛發電私信發【解鎖碼】以解鎖。&#x000D;右擊開贊助頁，若覺 PCL 尚可，則請支持之！</s:String>
     <s:String x:Key="LangThemeUnlockTip8">累積贊助達二十三元三角三分，於愛發電私信發【解鎖碼】以解鎖</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· 反饋一誤，待 Issue 標記【已完成】後，復 Issue 求解鎖（右擊開反饋頁）
-· 向助庫提交 Pull Request，待龍貓合並後解鎖</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· 反饋一誤，待反饋標記【完成】後，復 Issue 求解鎖
-· 向助庫提交 Pull Request，待龍貓合並後解鎖</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip9">· 反饋一誤，待 Issue 標記【已完成】後，復 Issue 求解鎖（右擊開反饋頁）&#x000D;· 向助庫提交 Pull Request，待龍貓合並後解鎖</s:String>
+    <s:String x:Key="LangThemeUnlockTip9">· 反饋一誤，待反饋標記【完成】後，復 Issue 求解鎖&#x000D;· 向助庫提交 Pull Request，待龍貓合並後解鎖</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">個性化設置項有異，已自動重置</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">重載個性化設置時有誤</s:String>
     <s:String x:Key="LangHintThemeSetInit">已初個性化設置</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">初個性化設置失</s:String>
     <s:String x:Key="LangBackgroundPic">背景圖</s:String>
     <s:String x:Key="LangBackgroundPicCount">背景圖 （{0} 幅）</s:String>
-    <s:String x:Key="LangDialogDeleteAllBackgroundPicCntent">將刪背景圖文夾中所有文。
-此操不可撤，確乎？</s:String>
+    <s:String x:Key="LangDialogDeleteAllBackgroundPicCntent">將刪背景圖文夾中所有文。&#x000D;此操不可撤，確乎？</s:String>
     <s:String x:Key="LangDialogTitleWarning">警</s:String>
     <s:String x:Key="LangHintBackgroundPicDeleted">背景圖已清！</s:String>
     <s:String x:Key="LangHintBackgroundPicNotFound">未檢得可用背景圖！</s:String>
     <s:String x:Key="LangHintBackgroundPicRefreshed">背景圖已刷：</s:String>
-    <s:String x:Key="LangDialogBackgroundPicRefreshFailA">刷背景圖失，此圖文或非標準式。
-可試以畫圖開此文並重存，此將使圖為標準式。
-文：</s:String>
+    <s:String x:Key="LangDialogBackgroundPicRefreshFailA">刷背景圖失，此圖文或非標準式。&#x000D;可試以畫圖開此文並重存，此將使圖為標準式。&#x000D;文：</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailB">刷背景圖失（ {0} ）</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailUnknwon">刷背景圖時有未知誤</s:String>
-    <s:String x:Key="LangDialogTitlePicChangeFailA">改標題欄圖失，此圖文或非標準式。
-可試以畫圖開此文並重存，此將使圖為標準式。</s:String>
+    <s:String x:Key="LangDialogTitlePicChangeFailA">改標題欄圖失，此圖文或非標準式。&#x000D;可試以畫圖開此文並重存，此將使圖為標準式。</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailB">設標題欄圖失</s:String>
-    <s:String x:Key="LangDialogTitlePicChangeFailC">調標題欄圖失，此圖文或非標準式。
-可試以畫圖開此文並重存，此將使圖為標準式。</s:String>
+    <s:String x:Key="LangDialogTitlePicChangeFailC">調標題欄圖失，此圖文或非標準式。&#x000D;可試以畫圖開此文並重存，此將使圖為標準式。</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailD">調標題欄圖失</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailE">清誤標題欄圖失</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailF">復標題欄圖失</s:String>
@@ -111,8 +101,7 @@
     <s:String x:Key="LangDialogTitlePicEmptyFail">清標題欄圖失</s:String>
     <s:String x:Key="LangBackgroundMusicCount">背景樂（ {0} 曲）</s:String>
     <s:String x:Key="LangBackgroundMusic">背景樂</s:String>
-    <s:String x:Key="LangDialogBackgroundMusicDeleteContent">將刪背景樂文夾中所有文。
-此操不可撤，確乎？</s:String>
+    <s:String x:Key="LangDialogBackgroundMusicDeleteContent">將刪背景樂文夾中所有文。&#x000D;此操不可撤，確乎？</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleting">正刪背景樂……</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleted">背景樂已刪！</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">刪背景樂失</s:String>
@@ -122,23 +111,14 @@
     <s:String x:Key="LangDialogCustomPageOverwriteFail">生教學文失</s:String>
     <s:String x:Key="LangHintCustomPageOverwriteSuccess">教學文已生！</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">已刷主頁！</s:String>
-    <s:String x:Key="LangDialogCustomPageTeachContent">一、點生教學文按，此將於 PCL 文夾下生 Custom.xaml 布局文。
-二、以記事本等工開此文並改之，改畢記存。
-三、點刷主頁按，觀主頁今何狀。
-汝可生教學文後直刷主頁，對照而改，更助理解。
-直拖自定主頁文入 PCL 窗亦可速載。</s:String>
+    <s:String x:Key="LangDialogCustomPageTeachContent">一、點生教學文按，此將於 PCL 文夾下生 Custom.xaml 布局文。&#x000D;二、以記事本等工開此文並改之，改畢記存。&#x000D;三、點刷主頁按，觀主頁今何狀。&#x000D;汝可生教學文後直刷主頁，對照而改，更助理解。&#x000D;直拖自定主頁文入 PCL 窗亦可速載。</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">主頁自定教</s:String>
     <s:String x:Key="LangThemeBackUnlock">隱主題 玄素黑 已解！</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameContent">一、勿爬攻相關服網，勿盜相關賬，無謎可需以此解。
-二、勿篡損相關公開信，請盡存其原狀。
-三、汝若迷茫，觀回聲洞或有驚喜。
-
-若違規，或被逐出任相關群！</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameContent">一、勿爬攻相關服網，勿盜相關賬，無謎可需以此解。&#x000D;二、勿篡損相關公開信，請盡存其原狀。&#x000D;三、汝若迷茫，觀回聲洞或有驚喜。&#x000D;&#x000D;若違規，或被逐出任相關群！</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameTitle">解密戲基本規</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameAccrpt">吾已知</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameDeny">吾拒之</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">汝需以己智尋下一步線索……
-初始線索：</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">汝需以己智尋下一步線索……&#x000D;初始線索：</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameFirstClueTitle">解密戲</s:String>
     <s:String x:Key="LangOtherHelp">助</s:String>
     <s:String x:Key="LangOtherAbout">關</s:String>

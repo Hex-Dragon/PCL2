@@ -337,7 +337,7 @@ If there is an existing instance, click the &quot;Add Existing Folders&quot; on 
 Press &quot;F11&quot; again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangSelectVersionListLoadFail">Failed while converting the instance list to display.</s:String>
     <s:String x:Key="LangSelectVersionListLoadIconFail">Failed to load the instance icon.</s:String>
-    <s:String x:Key="LangSelectBtnFavorite">Favourite</s:String>
+    <s:String x:Key="LangSelectBtnFavorite">Favorite</s:String>
     <s:String x:Key="LangSelectBtnCancelFavorite">Unfavourite</s:String>
     <s:String x:Key="LangSelectBtnSet">Properties</s:String>
     <s:String x:Key="LangSelectBtnOpenFolder">Folder</s:String>
@@ -1147,8 +1147,8 @@ Press F11 in &quot;Instance Selection&quot; page to see all hidden instances.</s
     <s:String x:Key="LangPageVersionOverallCategoryAprilFool">April Fools'</s:String>
     <s:String x:Key="LangPageVersionOverallEditName">Edit Name</s:String>
     <s:String x:Key="LangPageVersionOverallEditDesc">Edit Description</s:String>
-    <s:String x:Key="LangPageVersionOverallFavorite">Favourite</s:String>
-    <s:String x:Key="LangPageVersionOverallCancelFavorite">Unfavourite</s:String>
+    <s:String x:Key="LangPageVersionOverallFavorite">Favorite</s:String>
+    <s:String x:Key="LangPageVersionOverallCancelFavorite">Unfavorite</s:String>
     <s:String x:Key="LangPageVersionOverallShortcut">Shortcut</s:String>
     <s:String x:Key="LangPageVersionOverallFolder">Instance Folder</s:String>
     <s:String x:Key="LangPageVersionOverallFolderSaves">Saves Folder</s:String>

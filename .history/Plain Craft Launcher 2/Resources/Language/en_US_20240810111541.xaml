@@ -1,7 +1,8 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<?xml version="1.0"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
-    <s:String x:Key="LangTaskAbort">Cancelled!</s:String>
+    <s:String x:Key="LangTaskAbort">Canceled!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
     <s:String x:Key="LangResourcePackage">Resource Pack</s:String>
@@ -74,7 +75,7 @@ You can modify the login method in &quot;Instance Properties → Settings → Se
 
     <!--PageSetupUI-->
     <s:String x:Key="LangThemeRealWhite">TRUE WHITE</s:String>
-    <s:String x:Key="LangThemeRealFunny">TRUE FUNNY COLOUR</s:String>
+    <s:String x:Key="LangThemeRealFunny">TRUE FUNNY COLOR</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip8">After the accumulated sponsorship reaches ¥23.33, message the term &quot;解锁码&quot; (Unlock Code) to the developer on Afdian to unlock.
 Right-click to open the sponsorship page and support PCL if you think it is doing a good job =w=!</s:String>
     <s:String x:Key="LangThemeUnlockTip8">After the accumulated sponsorship reaches ¥23.33, message the term &quot;解锁码&quot; (Unlock Code) to the developer on Afdian to unlock.</s:String>
@@ -171,7 +172,7 @@ Initial clue:</s:String>
     <s:String x:Key="LangSetThemeNameCustom">Custom</s:String>
     <s:String x:Key="LangSetThemeNameCustomToolTip">You need to unlock at least five hidden themes.</s:String>
     <s:String x:Key="LangSetThemeShowLogoOnStart">Display PCL logo when opening the launcher.</s:String>
-    <s:String x:Key="LangSetThemeSponsorship">You need a little sponsorship of the developer to change the theme colour... :(</s:String>
+    <s:String x:Key="LangSetThemeSponsorship">You need a little sponsorship of the developer to change the theme color... :(</s:String>
     <s:String x:Key="LangSetThemeSupport">Support Developers</s:String>
     <s:String x:Key="LangSetBackgroundPic">Background</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptive">Adaptive</s:String>
@@ -190,7 +191,7 @@ Initial clue:</s:String>
     <s:String x:Key="LangSetBackgroundPicBlur">Background Blur</s:String>
     <s:String x:Key="LangSetBackgroundPicBlurToolTip">Strong blur will cause serious fps drops in the launcher. Please use it wisely.
 It is not recommended enabling blur when making a modpack to ensure that PCL can run smoothly on low-performance devices.</s:String>
-    <s:String x:Key="LangSetBackgroundPicColorfulBack">Coloured Background</s:String>
+    <s:String x:Key="LangSetBackgroundPicColorfulBack">Colored Background</s:String>
     <s:String x:Key="LangSetOpenFolder">Folder</s:String>
     <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">Put the background in this folder, and PCL will randomly load one of them each time.</s:String>
     <s:String x:Key="LangSetBackgroundPicRefresh">Refresh</s:String>
@@ -329,7 +330,7 @@ If there is an existing instance, click the &quot;Add Existing Folders&quot; on 
     <s:String x:Key="LangSelectVersionTypeError">Error Instance</s:String>
     <s:String x:Key="LangSelectVersionTypeHidden">Hidden Instance</s:String>
     <s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">Less-used Instance</s:String>
-    <s:String x:Key="LangSelectVersionTypeFavorites">Favourites</s:String>
+    <s:String x:Key="LangSelectVersionTypeFavorites">Favorites</s:String>
     <s:String x:Key="LangSelectVersionTypeAprilFool">April Fools' Instance</s:String>
     <s:String x:Key="LangSelectVersionTypeUnknown">Unknown Type</s:String>
     <s:String x:Key="LangSelectVersionNoHidden">No Hidden Instances</s:String>
@@ -337,8 +338,8 @@ If there is an existing instance, click the &quot;Add Existing Folders&quot; on 
 Press &quot;F11&quot; again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangSelectVersionListLoadFail">Failed while converting the instance list to display.</s:String>
     <s:String x:Key="LangSelectVersionListLoadIconFail">Failed to load the instance icon.</s:String>
-    <s:String x:Key="LangSelectBtnFavorite">Favourite</s:String>
-    <s:String x:Key="LangSelectBtnCancelFavorite">Unfavourite</s:String>
+    <s:String x:Key="LangSelectBtnFavorite">Favorite</s:String>
+    <s:String x:Key="LangSelectBtnCancelFavorite">Unfavorite</s:String>
     <s:String x:Key="LangSelectBtnSet">Properties</s:String>
     <s:String x:Key="LangSelectBtnOpenFolder">Folder</s:String>
     <s:String x:Key="LangSelectDeleteVersionTitle">Instance Deletion Confirmation</s:String>
@@ -347,7 +348,7 @@ Press &quot;F11&quot; again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangSelectDeleteVersionContentC">Since the &quot;Instance Isolation&quot; is enabled for this instance, the corresponding saves, resource packs, mods, and other files of this instance will also be deleted!</s:String>
     <s:String x:Key="LangSelectVersionDeletedA">The instance {0} has been permanently deleted!</s:String>
     <s:String x:Key="LangSelectVersionDeletedB">The instance {0} has been deleted to the recycle bin!</s:String>
-    <s:String x:Key="LangSelectVersionDeleteCancelled">Deletion of the instance {0} has been manually cancelled.</s:String>
+    <s:String x:Key="LangSelectVersionDeleteCancelled">Deletion of the instance {0} has been manually canceled.</s:String>
     <s:String x:Key="LangSelectVersionDeleteFail">Failed to delete the instance {0}.</s:String>
 
     <!--PageSpeedLeft-->
@@ -370,7 +371,7 @@ Press &quot;F11&quot; again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">Forge Installation (Method A)</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">NeoForge Installation</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">Download {0} Main File</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Analyse {0} Libraries</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Analyze {0} Libraries</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">Download {0} Libraries</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">Obtain OptiFine Address</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">Download OptiFine Main File</s:String>
@@ -655,11 +656,11 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangLaunchLeftAccountUnifiedPassLogin">Unified Pass</s:String>
     <s:String x:Key="LangLaunchLeftAccountThirdPartLogin">Third-party</s:String>
     <s:String x:Key="LangLaunchLeftSkinNotFound">The offline skin was not found, it may have been deleted. PCL will use the default Steve skin!</s:String>
-    <s:String x:Key="LangLaunchThemeFunnyUnlock">The hidden theme &quot;FUNNY COLOUR&quot; has been unlocked!</s:String>
+    <s:String x:Key="LangLaunchThemeFunnyUnlock">The hidden theme &quot;FUNNY COLOR&quot; has been unlocked!</s:String>
     <s:String x:Key="LangLaunchLeftStartInstance">Launch</s:String>
     <s:String x:Key="LangLaunchLeftDownloadInstance">Download</s:String>
     <s:String x:Key="LangLaunchLeftNoAvailableInstance">No Instance Available</s:String>
-    <s:String x:Key="LangLaunchLeftStartCancelled">Launch Cancelled</s:String>
+    <s:String x:Key="LangLaunchLeftStartCancelled">Launch Canceled</s:String>
     <s:String x:Key="LangLaunchLeftStarted">Game Launched</s:String>
     <s:String x:Key="LangLaunchLeftWaitForWindow">Wait for Appearance</s:String>
     <s:String x:Key="LangLaunchLeftAbortTask">Ends Processing</s:String>
@@ -1147,8 +1148,8 @@ Press F11 in &quot;Instance Selection&quot; page to see all hidden instances.</s
     <s:String x:Key="LangPageVersionOverallCategoryAprilFool">April Fools'</s:String>
     <s:String x:Key="LangPageVersionOverallEditName">Edit Name</s:String>
     <s:String x:Key="LangPageVersionOverallEditDesc">Edit Description</s:String>
-    <s:String x:Key="LangPageVersionOverallFavorite">Favourite</s:String>
-    <s:String x:Key="LangPageVersionOverallCancelFavorite">Unfavourite</s:String>
+    <s:String x:Key="LangPageVersionOverallFavorite">Favorite</s:String>
+    <s:String x:Key="LangPageVersionOverallCancelFavorite">Unfavorite</s:String>
     <s:String x:Key="LangPageVersionOverallShortcut">Shortcut</s:String>
     <s:String x:Key="LangPageVersionOverallFolder">Instance Folder</s:String>
     <s:String x:Key="LangPageVersionOverallFolderSaves">Saves Folder</s:String>
@@ -1424,8 +1425,8 @@ Please update the launcher in &quot;Settings → Launcher&quot; first, then subm
     <s:String x:Key="LangModLaunchStartStageMemReduce">Memory Optimization</s:String>
     <s:String x:Key="LangModLaunchStartStageMCStarted">Launch Minecraft</s:String>
     <s:String x:Key="LangModLaunchStartSuccess">Successfully Launched!</s:String>
-    <s:String x:Key="LangModLaunchCancelStart">Launch Cancelled!</s:String>
-    <s:String x:Key="LangModLaunchCancelExportCommand">Export of launch script has been cancelled!</s:String>
+    <s:String x:Key="LangModLaunchCancelStart">Launch Canceled!</s:String>
+    <s:String x:Key="LangModLaunchCancelExportCommand">Export of launch script has been canceled!</s:String>
 
     <!--ModValidate-->
     <s:String x:Key="LangModValidateNoSameFolderName">The name cannot be the same as that of an existing instance!</s:String>
@@ -1470,17 +1471,17 @@ Click to update, right-click to view change logs.</s:String>
     <s:String x:Key="LangModCompVersionUnknownVersion">Unknown Version</s:String>
     
     <!--ModDownload-->
-    <s:String x:Key="LangModDownloadMcLibFixAnalysis">Analyse Missing Libraries</s:String>
+    <s:String x:Key="LangModDownloadMcLibFixAnalysis">Analyze Missing Libraries</s:String>
     <s:String x:Key="LangModDownloadMcLibFixDownload">Download Libraries</s:String>
     <s:String x:Key="LangModDownloadMcLibFixDownloadMainLoader">Download Libraries (Main Loader)</s:String>
-    <s:String x:Key="LangModDownloadMcAssetsAnalysis">Analyse Assets Index Address</s:String>
-    <s:String x:Key="LangModDownloadExceptionAssetsAnalysis">Failed to analyse assets index address.</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsAnalysis">Analyze Assets Index Address</s:String>
+    <s:String x:Key="LangModDownloadExceptionAssetsAnalysis">Failed to analyze assets index address.</s:String>
     <s:String x:Key="LangModDownloadMcAssetsDownload">Download Assets Index</s:String>
-    <s:String x:Key="LangModDownloadMcAssetsUpdateAnalysis">Analyse Assets Index Address in Background</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateAnalysis">Analyze Assets Index Address in Background</s:String>
     <s:String x:Key="LangModDownloadMcAssetsUpdateDownload">Download Assets Index in Background</s:String>
     <s:String x:Key="LangModDownloadMcAssetsUpdateCopy">Copy Assets Index in Background</s:String>
     <s:String x:Key="LangModDownloadMcAssetsUpdateRefresh">Update Assets Index in Background</s:String>
-    <s:String x:Key="LangModDownloadMcResFixAnalysis">Analyse Missing Assets</s:String>
+    <s:String x:Key="LangModDownloadMcResFixAnalysis">Analyze Missing Assets</s:String>
     <s:String x:Key="LangModDownloadMcResDownload">Download Assets</s:String>
     <s:String x:Key="LangModDownloadMcResDownloadMainLoader">Download Assets (Main Loader)</s:String>
     <s:String x:Key="LangModDownloadExceptionShortVersionList">Insufficient version list length received. ({0})</s:String>
@@ -1500,7 +1501,7 @@ Click to update, right-click to view change logs.</s:String>
     <s:String x:Key="LangModJavaExceptionTryRunFail">Failed to run this Java.</s:String>
     <s:String x:Key="LangModJavaExceptionRunFail">Unable to run this Java, please delete the &quot;/lib/ext&quot; folder in the Java folder and try again.</s:String>
     <s:String x:Key="LangModJavaExceptionVersionNotFound">Java version not found.</s:String>
-    <s:String x:Key="LangModJavaExceptionGetDetailInfoFail">Failed to analyse details, version obtained is {0}.</s:String>
+    <s:String x:Key="LangModJavaExceptionGetDetailInfoFail">Failed to analyze details, version obtained is {0}.</s:String>
     <s:String x:Key="LangModJavaExceptionNeed64Bit">This Java is in 32-bit version, please install a 64-bit version of it.</s:String>
     <s:String x:Key="LangModJavaExceptionNeedJDK">Since the poor compatibility with the game, higher version of JRE are no longer permitted. Please try to use the corresponding JDK version!</s:String>
     <s:String x:Key="LangModJavaExceptionCheckFail">Failed to check Java. ({0})</s:String>
@@ -1593,7 +1594,7 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">Player profile not found. ({0})</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">Failed to obtain UUID from the official website. ({0})</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">The length of the obtained UUID is insufficient. ({0})</s:String>
-    <s:String x:Key="LangModLaunchHintNoAvailableJava">No Java available, launch cancelled!</s:String>
+    <s:String x:Key="LangModLaunchHintNoAvailableJava">No Java available, launch canceled!</s:String>
     <s:String x:Key="LangModLaunchExceptionReleaseJavaWrapperFail">Failed to release Java Wrapper, please check PCL logs for detailed information.</s:String>
     <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">OptiFine may be incompatible with &quot;Automatic Join&quot;, potentially causing texture missing or even game crash!</s:String>
     <s:String x:Key="LangModLaunchExceptionConnectServerFail">Unable to connect to third-party login server. ({0})</s:String>
@@ -1615,7 +1616,7 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">Download Optional Files</s:String>
     <s:String x:Key="LangModModpackTaskDownloadMod">Download Mods</s:String>
     <s:String x:Key="LangModModpackTaskDownloadModMainLoader">Download Mods (Main Loader)</s:String>
-    <s:String x:Key="LangModModpackTaskAnalysisLibSideLoader">Analyse Libraries (Side Loader)</s:String>
+    <s:String x:Key="LangModModpackTaskAnalysisLibSideLoader">Analyze Libraries (Side Loader)</s:String>
     <s:String x:Key="LangModModpackTaskDownloadLibSideLoader">Download Libraries (Side Loader)</s:String>
     <s:String x:Key="LangModModpackTaskInstallModpack">Modpack Installation</s:String>
     <s:String x:Key="LangModModpackTaskInstallGame">Game Installation</s:String>

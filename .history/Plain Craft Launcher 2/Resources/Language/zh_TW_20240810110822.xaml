@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
@@ -1597,7 +1598,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchExceptionReleaseJavaWrapperFail">釋放 Java Wrapper 失敗，請查看 PCL 日誌尋找詳細資訊</s:String>
     <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">OptiFine 與自動進入伺服器可能不相容，有機率導致紋理遺失甚至遊戲崩潰！</s:String>
     <s:String x:Key="LangModLaunchExceptionConnectServerFail">無法連接到第三方登入伺服器（{0}）</s:String>
-    <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 JSON 中沒有 mainClass 項！</s:String>
+    <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 json 中沒有 mainClass 項！</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">無法打開 Natives 檔案（{0}），該檔案可能已損壞，請重新嘗試啟動遊戲</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">此 Minecraft 版本尚不支援纖細外觀，你的外觀可能會顯示為寬型！</s:String>
     
