@@ -128,7 +128,7 @@ This operation is irrevocable. Are you sure?</s:String>
 You can directly refresh the homepage after generating the documentation file and make changes accordingly, which will be more helpful for understanding.
 You can also load the custom homepage file directly by dragging it into the PCL window.</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">Homepage Custom Tutorials</s:String>
-    <s:String x:Key="LangThemeBackUnlock">The hidden theme &quot;Bipolar Black&quot; has been unlocked!</s:String>
+    <s:String x:Key="LangThemeBackUnlock">The hidden theme &quot;Xuansu Black&quot; has been unlocked!</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameContent">1. Do not crawl or attack related services or websites, do not steal related accounts, no puzzles can or need to be solved;
 2. Relevant public information must not be tampered with or destroyed. Please try to keep it as it is;
 3. When you are feeling confused, &quot;Echo Hole&quot; may surprise you.
@@ -161,8 +161,8 @@ Initial clue: </s:String>
     <s:String x:Key="LangSetThemeNameGreen">Grass Green</s:String>
     <s:String x:Key="LangSetThemeNameYellow">Pineapple Yellow</s:String>
     <s:String x:Key="LangSetThemeNameBrown">Oak Brown</s:String>
-    <s:String x:Key="LangSetThemeNameBlack">Bipolar Black</s:String>
-    <s:String x:Key="LangSetThemeNameGreyToolTip">Grey is a lie.</s:String>
+    <s:String x:Key="LangSetThemeNameBlack">Xuansu Black</s:String>
+    <s:String x:Key="LangSetThemeNameGreyToolTip">Gray is a lie.</s:String>
     <s:String x:Key="LangSetThemeNameFunny">Funny fruits on the funny tree, you and I are sitting under it, doing memes on funny days, fun and more fun that we'll make.</s:String>
     <s:String x:Key="LangSetThemeNameHardcoreFan">Play the game 99 times.</s:String>
     <s:String x:Key="LangSetThemeNameLucky">What a lucky dog, right?</s:String>
@@ -464,7 +464,7 @@ This page provides Fabric installer downloads. After downloading, you need to ma
     <s:String x:Key="LangDownloadInstallNoAutoInstall">Cannot be installed by the launcher.</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">Instance Isolation Hint</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieContent">&quot;Instance Isolation&quot; has not been enabled yet, which will result in multiple instances sharing the same mods folder.
-Therefore, when switching instances, Minecraft will crash because it reads mods that don't match the current version or the loader.
+Therefore, when switching instances, Minecraft will crash because it reads mods that do not match the current version or the loader.
 PCL suggests turning on the &quot;Instances Isolation&quot; option in &quot;Settings → Instance Isolation&quot; before the installation!</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">Cancel</s:String>
     <s:String x:Key="LangDownloadInstallNoAdd">No Additional Installation</s:String>
@@ -704,7 +704,7 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangPageLoginMsBuy">» Purchase</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">» Website</s:String>
     <s:String x:Key="LangPageLoginMsAddAccount">New Account</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">Please login yo your account first before launching the game!</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">Please login to your account first before launching the game!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">The login has been cancelled!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountFail">Microsoft login verification failed. Please try to disable the &quot;Verify SSL Certificates&quot; in &quot;Settings → Launcher&quot; and try again.
 
@@ -834,7 +834,7 @@ Supports the following alternate tags:
  · {date}, {time}: System Time;
  · {version}: Vanilla Game Version.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">Custom Text</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">This information will be displayed in the title screen and the debug screen</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">This information will be displayed in the title screen and the debug screen.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">Instance Isolation</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">Disable</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">All instances use the same profile, and saves, mods, resource packs, etc. are shared.
@@ -854,7 +854,7 @@ This will cause saves that are not shared between Vanilla instances, so it is ge
     <s:String x:Key="LangPageSetupLaunchLaunchVisibilityMinimizeOnGameStart">Minimize after the game started.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibilityKeep">Remain unchanged.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriority">Priority</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityHigh">High (Ensure game performance but may cause lag in other program)</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityHigh">High (Ensure game performance but may cause lag in another program)</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityMedium">Medium (Balanced)</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityLow">Low (Ensure performability of other program but may cause lags in game, suitable for AFK)</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSize">Resolution</s:String>
@@ -1010,7 +1010,7 @@ If Microsoft Login fails because &quot;The remote certificate is invalid accordi
     <s:String x:Key="LangPageSetupSystemSystemCacheFolder">Cache</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCacheFolderToolTip">Location of cache like download files and skins stored by PCL.
 Spaces in paths are not recommended.
-Leave blank as default, require to restart the launcher to apply.</s:String>
+Leave blank as default, require restarting the launcher to apply.</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">Check for Updates</s:String>
     <s:String x:Key="LangPageSetupSystemLang">Language</s:String>
     <s:String x:Key="LangPageSetupSystemLangLaunchLang">Language</s:String>
@@ -1171,7 +1171,7 @@ Hereafter, hidden instances are only visible while the F11 is pressed in the pag
     <s:String x:Key="LangPageVersionOverallSelectSaveCommandFile">Select a location to save the script</s:String>
     <s:String x:Key="LangPageVersionOverallHintWaitForTaskOver">Please try again after the current launch task is over!</s:String>
     <s:String x:Key="LangPageVersionOverallHintExportingCommandA">Exporting launch scripts...</s:String>
-    <s:String x:Key="LangPageVersionOverallHintExportingCommandB">Exporting launch scripts... (Note: Using the launch script may cause the login be invalid!)</s:String>
+    <s:String x:Key="LangPageVersionOverallHintExportingCommandB">Exporting launch scripts... (Note: Using the launch script may cause the login to be invalid!)</s:String>
     <s:String x:Key="LangPageVersionOverallHintExportingCommandFail">Failed to export launch script.</s:String>
     <s:String x:Key="LangPageVersionOverallTaskCompleteFile">File Repairment</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileInTask">Processing, please wait!</s:String>
@@ -1502,7 +1502,7 @@ Click to update, right-click to view change logs.</s:String>
     <s:String x:Key="LangModJavaExceptionVersionNotFound">Java version not found.</s:String>
     <s:String x:Key="LangModJavaExceptionGetDetailInfoFail">Failed to analyze details, version obtained is {0}.</s:String>
     <s:String x:Key="LangModJavaExceptionNeed64Bit">This Java is in 32-bit version, please install a 64-bit version of it.</s:String>
-    <s:String x:Key="LangModJavaExceptionNeedJDK">Since the poor compatibility with the game, higher version of JRE are no longer permitted. Please try to use the corresponding JDK version!</s:String>
+    <s:String x:Key="LangModJavaExceptionNeedJDK">Since the poor compatibility with the game, higher version of JRE is no longer permitted. Please try to use the corresponding JDK version!</s:String>
     <s:String x:Key="LangModJavaExceptionCheckFail">Failed to check Java. ({0})</s:String>
     <s:String x:Key="LangModJavaExceptionSearchAbort">Java search loader aborted.</s:String>
     <s:String x:Key="LangModJavaMaxRequireVersion">the maximum version is Java {0}</s:String>
@@ -1536,7 +1536,7 @@ If you have already installed {1}, please import it in &quot;Settings → Launch
     <s:String x:Key="LangModLaunchExceptionNoInstanceSelected">No instance selected!</s:String>
     <s:String x:Key="LangModLaunchExceptionInstanceError">Instance Error: {0}</s:String>
     <s:String x:Key="LangModLaunchDialogContentSponsorship">PCL has launched the game {0} times for you!
-If you think PCL is ease to use, hope you can consider sponsoring the developer... Any amount would help...
+If you think PCL is eased to use, hope you can consider sponsoring the developer... Any amount would help...
 It is not easy developing alone to be honest (sadly)...</s:String>
     <s:String x:Key="LangModLaunchDialogTitleSponsorship">Buy Me a Coffee...</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">Sponsor Now!</s:String>
@@ -1565,7 +1565,7 @@ If the network environment is poor, it may be unable to load, check the internet
     <s:String x:Key="LangModLaunchDialogTitleLoginTip">Login Hint</s:String>
     <s:String x:Key="LangModLaunchDialogBtnRegiste">Register</s:String>
     <s:String x:Key="LangModLaunchDialogBtnISee">I See</s:String>
-    <s:String x:Key="LangModLaunchDialogContentBanned">This account appears to been banned by Microsoft and cannot login.</s:String>
+    <s:String x:Key="LangModLaunchDialogContentBanned">This account appears to be banned by Microsoft and cannot login.</s:String>
     <s:String x:Key="LangModLaunchDialogContentNoXBoxAccount">You have not registered an Xbox account yet, please try again after the registration.</s:String>
     <s:String x:Key="LangModLaunchDialogContentUnableReachMicrosoft">The country or region where your network is located cannot login to Microsoft accounts.
 Please try to use a VPN.</s:String>
