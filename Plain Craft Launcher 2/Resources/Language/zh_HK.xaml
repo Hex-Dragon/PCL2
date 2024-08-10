@@ -1454,7 +1454,10 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <!--ModMod-->
     <s:String x:Key="LangModModUpdatingMod">正在更新模組</s:String>
     <s:String x:Key="LangModModLoadingModList">正在載入模組清單</s:String>
-    
+    <s:String x:Key="LangModModExceptionIncorrectPath">錯誤的 Mod 文件路徑（{0}）</s:String>
+    <s:String x:Key="LangModModExceptionFileNotFound">未找到 Mod 文件（{0}）</s:String>
+    <s:String x:Key="LangModModExceptionUnauthorizedAccess">沒有讀取此文件的權限，請嘗試右鍵以管理員身份運行 PCL</s:String>
+
     <!--ModComp-->
     <s:String x:Key="LangModCompVersionUnknown">未知</s:String>
     <s:String x:Key="LangModCompVersionAll">全版本</s:String>

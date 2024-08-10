@@ -1268,6 +1268,9 @@
     <!--ModMod-->
     <s:String x:Key="LangModModUpdatingMod">正在更新 Mod</s:String>
     <s:String x:Key="LangModModLoadingModList">正在加载 Mod 列表</s:String>
+    <s:String x:Key="LangModModExceptionIncorrectPath">错误的 Mod 文件路径（{0}）</s:String>
+    <s:String x:Key="LangModModExceptionFileNotFound">未找到 Mod 文件（{0}）</s:String>
+    <s:String x:Key="LangModModExceptionUnauthorizedAccess">没有读取此文件的权限，请尝试右键以管理员身份运行 PCL</s:String>
     
     <!--ModComp-->
     <s:String x:Key="LangModCompVersionUnknown">未知</s:String>

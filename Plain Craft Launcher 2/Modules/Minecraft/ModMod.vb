@@ -284,14 +284,14 @@ Public Module ModMod
             Dim Jar As ZipArchive = Nothing
             Try
                 '基础可用性检查、打开 Jar 文件
-                If Path.Length < 2 Then Throw New FileNotFoundException("错误的 Mod 文件路径（" & If(Path, "null") & "）")
-                If Not File.Exists(Path) Then Throw New FileNotFoundException("未找到 Mod 文件（" & Path & "）")
+                If Path.Length < 2 Then Throw New FileNotFoundException(GetLang("LangModModExceptionIncorrectPath", If(Path, "null")))
+                If Not File.Exists(Path) Then Throw New FileNotFoundException(GetLang("LangModModExceptionFileNotFound", Path))
                 Jar = New ZipArchive(New FileStream(Path, FileMode.Open))
                 '信息获取
                 LookupMetadata(Jar)
             Catch ex As UnauthorizedAccessException
                 Log(ex, "Mod 文件由于无权限无法打开（" & Path & "）", LogLevel.Developer)
-                _FileUnavailableReason = New UnauthorizedAccessException("没有读取此文件的权限，请尝试右键以管理员身份运行 PCL", ex)
+                _FileUnavailableReason = New UnauthorizedAccessException(GetLang("LangModModExceptionUnauthorizedAccess"), ex)
             Catch ex As Exception
                 Log(ex, "Mod 文件无法打开（" & Path & "）", LogLevel.Developer)
                 _FileUnavailableReason = ex
