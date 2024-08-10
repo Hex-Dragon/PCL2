@@ -584,6 +584,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 请尝试使用 VPN 或加速器以改善网络。</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">无法连接到 CurseForge，所以目前仅显示了来自 Modrinth 的内容，结果可能不全。
 请尝试使用 VPN 或加速器以改善网络。</s:String>
+
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">另存为</s:String>
     <s:String x:Key="LangMySkinRefresh">刷新</s:String>
@@ -967,7 +968,8 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">在官方源加载缓慢时改用镜像源（平衡）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本为最新，但加载非常缓慢）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod 命名风格</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">决定下载的 Mod 的默认文件名中，中文译名应该放在哪个位置</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">决定下载的 Mod 的默认文件名中，中文译名应该放在哪个位置
+该选项仅在语言设置为简体中文时有效</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">译名位于文件名开头：[遗物] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">译名位于文件名开头：遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">译名位于文件名末尾：relics-0.1.14-遗物</s:String>

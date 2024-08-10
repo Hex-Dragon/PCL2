@@ -584,6 +584,7 @@ This page provides download of NeoForge installer. After downloading, you need t
 Please check the internet then try again.</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">Could not connect to CurseForge, so currently only content from Modrinth is displayed, the results may be incomplete.
 Please check the internet then try again.</s:String>
+
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">Save as</s:String>
     <s:String x:Key="LangMySkinRefresh">Refresh</s:String>
@@ -758,10 +759,12 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">Sorry, the Help Centre is Simplified Chinese only.</s:String>
     <s:String x:Key="LangPageOtherRefreshing">Refreshing...</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackContent">Do you want to open the feedback list page?</s:String>
+
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">Feedback Hint</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">New Feedback</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">Feedback List</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">Do you want to open the new feature voting page?</s:String>
+    
     <s:String x:Key="LangPageOtherDialogVoteTitle">Hint</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">Open</s:String>
 
@@ -888,8 +891,7 @@ You can restore the default settings by clicking the &quot;Initialise&quot; butt
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">Text fields will be joined directly at the end of the launch parameter.
 For example, typing &quot;--demo&quot; will launch the game in demo mode.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">Executed Command</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">Executes the specific command or programme before Minecraft is launched.
-The syntax is same as the batch script.
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">Executes the specific command or programme before Minecraft is launched. The syntax is same as the batch script.
 
 Relative paths can be implemented with the following alternate tags (paths end with &quot;\&quot; ):
  · {path}: The folder where the PCL is located;
@@ -1227,8 +1229,9 @@ You can return to default settings by clicking the initialise button on the left
     <s:String x:Key="LangPageVersionSetupJVMTail">Text fields will be joined directly at the end of the launch parameter.
 For example, typing &quot;--demo&quot; will launch the game in demo mode.
 If left as blank, the value of the global setting is used.</s:String>
-    <s:String x:Key="LangPageVersionSetupCommand">This option does not override global settings: Executes the specific command or programme before Minecraft is launched.
-The syntax is same as the batch script.
+    <s:String x:Key="LangPageVersionSetupCommand">This option does not override global settings: The command for global is executed before the command for version.
+ 
+Executes the specific command or programme before Minecraft is launched. The syntax is same as the batch script.
 
 Relative paths can be implemented with the following alternate tags (paths end with &quot;\&quot; ):
  · {path}: The folder where the PCL is located;

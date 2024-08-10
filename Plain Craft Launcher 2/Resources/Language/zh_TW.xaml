@@ -584,6 +584,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 請嘗試使用 VPN 或 Proxy 以改善網路。</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">無法連線到 CurseForge，所以目前僅顯示了來自 Modrinth 的內容，結果可能不全。
 請嘗試使用 VPN 或 Proxy 以改善網路。</s:String>
+
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">另存新檔</s:String>
     <s:String x:Key="LangMySkinRefresh">重新整理</s:String>
@@ -1509,7 +1510,9 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModJavaMaxRequireVersion">最高與 Java {0} 相容</s:String>
     <s:String x:Key="LangModJavaMinRequireVersion">至少需要 Java {0}</s:String>
     <s:String x:Key="LangModJavaRequireVersion">需要 Java {0}</s:String>
-    <s:String x:Key="LangModJavaDialogContentCompatibilityWarning">你在設定中手動指定了使用 Java {0}，但目前{1}。 如果強制使用該 Java，可能導致遊戲崩潰。 你也可以將 遊戲 Java 設定修改為 自動選擇合適的 Java。
+    <s:String x:Key="LangModJavaDialogContentCompatibilityWarning">你在設定中手動指定了使用 Java {0}，但目前{1}。
+如果強制使用該 Java，可能導致遊戲崩潰。
+你也可以將 遊戲 Java 設定修改為 自動選擇合適的 Java。
 
 - 指定的 Java：{2}</s:String>
     <s:String x:Key="LangModJavaDialogTitleCompatibilityWarning">Java 相容性警告</s:String>
