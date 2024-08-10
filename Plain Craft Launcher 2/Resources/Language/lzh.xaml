@@ -1443,4 +1443,23 @@
     
     <!--ModWatcher-->
     <s:String x:Key="LangModWatcherMcCrashed">检测到 Minecraft 出现错误，错误分析已开始……</s:String>
+    
+    <!--ModBase-->
+    <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">不支持对包含子键的子键进行重命名：{0}。</s:String>
+    <s:String x:Key="LangModBaseExceptionPathIncorrect">不包含路径：{0}</s:String>
+    <s:String x:Key="LangModBaseExceptionFileNameIncorrect">不包含文件名：{0}</s:String>
+    <s:String x:Key="LangModBaseExceptionFileNameTooLong">文件名过长：{0}</s:String>
+    <s:String x:Key="LangModBaseExceptionCopyFileFail">复制文件出错：{0} → {1}</s:String>
+    <s:String x:Key="LangModBaseSelectFolder">选择文件夹</s:String>
+    <s:String x:Key="LangModBaseExceptionEmptyFolderName">文件夹名不能为空！</s:String>
+    <s:String x:Key="LangModBaseExceptionFolderNotExist">文件夹不存在！</s:String>
+    <s:String x:Key="LangModBaseFileCheckFileNotExist">文件不存在：{0}</s:String>
+    <s:String x:Key="LangModBaseFileCheckFileSizeIncorrectA">文件大小应为 {0} B，实际为 {1} B</s:String>
+    <s:String x:Key="LangModBaseFileCheckFileSizeIncorrectB">文件大小应大于 {0} B，实际为 {1} B</s:String>
+    <s:String x:Key="LangModBaseFileCheckFileMD5Incorrect">文件 MD5 应为 {0}，实际为 {1}</s:String>
+    <s:String x:Key="LangModBaseFileCheckFileSHA256Incorrect">文件 SHA256 应为 {0}，实际为 {1}</s:String>
+    <s:String x:Key="LangModBaseFileCheckFileSHA1Incorrect">文件 SHA1 应为 {0}，实际为 {1}</s:String>
+    <s:String x:Key="LangModBaseExceptionEmptyFile">读取到的文件为空</s:String>
+    <s:String x:Key="LangModBaseExceptionInvalidJson">不是有效的 json 文件</s:String>
+    <s:String x:Key="LangModBaseNoExceptionDetail">无可用错误信息！</s:String>
 </ResourceDictionary>

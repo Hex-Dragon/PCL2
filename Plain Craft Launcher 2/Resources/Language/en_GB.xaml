@@ -1626,4 +1626,23 @@ Please update the launcher in &quot;Settings → Launcher&quot; first, then subm
     
     <!--ModWatcher-->
     <s:String x:Key="LangModWatcherMcCrashed">Minecraft crash detected, error analysis has begun...</s:String>
+    
+    <!--ModBase-->  
+    <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">Renaming a subkey that contains subkeys is not supported: {0}.</s:String>  
+    <s:String x:Key="LangModBaseExceptionPathIncorrect">Path not included: {0}</s:String>  
+    <s:String x:Key="LangModBaseExceptionFileNameIncorrect">File name not included: {0}</s:String>  
+    <s:String x:Key="LangModBaseExceptionFileNameTooLong">File name is too long: {0}</s:String>  
+    <s:String x:Key="LangModBaseExceptionCopyFileFail">Error copying file: {0} → {1}</s:String>  
+    <s:String x:Key="LangModBaseSelectFolder">Select Folder</s:String>  
+    <s:String x:Key="LangModBaseExceptionEmptyFolderName">Folder name cannot be empty!</s:String>  
+    <s:String x:Key="LangModBaseExceptionFolderNotExist">Folder does not exist!</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileNotExist">File does not exist: {0}</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSizeIncorrectA">File size should be {0} B, but it is {1} B</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSizeIncorrectB">File size should be greater than {0} B, but it is {1} B</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileMD5Incorrect">File MD5 should be {0}, but it is {1}</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSHA256Incorrect">File SHA256 should be {0}, but it is {1}</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSHA1Incorrect">File SHA1 should be {0}, but it is {1}</s:String>  
+    <s:String x:Key="LangModBaseExceptionEmptyFile">The read file is empty</s:String>  
+    <s:String x:Key="LangModBaseExceptionInvalidJson">Not a valid json file</s:String>  
+    <s:String x:Key="LangModBaseNoExceptionDetail">No error information available!</s:String>
 </ResourceDictionary>

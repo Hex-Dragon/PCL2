@@ -1646,4 +1646,23 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     
     <!--ModWatcher-->
     <s:String x:Key="LangModWatcherMcCrashed">Minecraft 崩毀已偵測到，錯誤分析已開始...</s:String>
+    
+    <!--ModBase-->  
+    <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">不支援對包含子鍵的子鍵進行重新命名：{0}。</s:String>  
+    <s:String x:Key="LangModBaseExceptionPathIncorrect">不包含路徑：{0}</s:String>  
+    <s:String x:Key="LangModBaseExceptionFileNameIncorrect">不包含檔案名：{0}</s:String>  
+    <s:String x:Key="LangModBaseExceptionFileNameTooLong">檔案名過長：{0}</s:String>  
+    <s:String x:Key="LangModBaseExceptionCopyFileFail">複製檔案出錯：{0} → {1}</s:String>  
+    <s:String x:Key="LangModBaseSelectFolder">選擇資料夾</s:String>  
+    <s:String x:Key="LangModBaseExceptionEmptyFolderName">資料夾名不能為空！</s:String>  
+    <s:String x:Key="LangModBaseExceptionFolderNotExist">資料夾不存在！</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileNotExist">檔案不存在：{0}</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSizeIncorrectA">檔案大小應為 {0} B，實際為 {1} B</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSizeIncorrectB">檔案大小應大於 {0} B，實際為 {1} B</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileMD5Incorrect">檔案 MD5 應為 {0}，實際為 {1}</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSHA256Incorrect">檔案 SHA256 應為 {0}，實際為 {1}</s:String>  
+    <s:String x:Key="LangModBaseFileCheckFileSHA1Incorrect">檔案 SHA1 應為 {0}，實際為 {1}</s:String>  
+    <s:String x:Key="LangModBaseExceptionEmptyFile">讀取到的檔案為空</s:String>  
+    <s:String x:Key="LangModBaseExceptionInvalidJson">不是有效的 json 檔案</s:String>  
+    <s:String x:Key="LangModBaseNoExceptionDetail">無可用錯誤訊息！</s:String>
 </ResourceDictionary>
