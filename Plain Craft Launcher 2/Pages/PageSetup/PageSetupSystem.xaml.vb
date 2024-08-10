@@ -8,14 +8,16 @@
         Select Case Lang
             Case "en_US"
                 ComboBackgroundSuit.SelectedIndex = 0
-            Case "zh_CN"
+            Case "en_GB"
                 ComboBackgroundSuit.SelectedIndex = 1
-            Case "zh_HK"
+            Case "zh_CN"
                 ComboBackgroundSuit.SelectedIndex = 2
-            Case "zh_TW"
+            Case "zh_HK"
                 ComboBackgroundSuit.SelectedIndex = 3
-            Case "lzh"
+            Case "zh_TW"
                 ComboBackgroundSuit.SelectedIndex = 4
+            Case "lzh"
+                ComboBackgroundSuit.SelectedIndex = 5
         End Select
 
         AniControlEnabled += 1
