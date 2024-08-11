@@ -1229,7 +1229,7 @@ You can return to default settings by clicking the initialize button on the left
     <s:String x:Key="LangPageVersionSetupJVMTail">Text fields will be joined directly at the end of the launch parameter.
 For example, typing &quot;--demo&quot; will launch the game in demo mode.
 If left as blank, the value of the global setting is used.</s:String>
-    <s:String x:Key="LangPageVersionSetupCommand">This option does not override global settings: The command for global is executed before the command for version.
+    <s:String x:Key="LangPageVersionSetupCommand">This option does not override global settings: The command for global is executed before the command for instances.
 
 Executes the specific command or program before Minecraft is launched. The syntax is same as the batch script.
 
