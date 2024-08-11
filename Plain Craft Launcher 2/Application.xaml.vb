@@ -26,6 +26,8 @@ Public Class Application
             Select Case Globalization.CultureInfo.CurrentCulture.Name
                 Case "en-US"
                     Lang = "en_US"
+                Case "en-GB"
+                    Lang = "en_GB"
                 Case "zh-CN"
                     Lang = "zh_CN"
                 Case "zh-HK"
