@@ -278,7 +278,7 @@ Avoid &quot;Feature Hiding&quot; be changed while keeping the &quot;Personalizat
     <s:String x:Key="LangSelectUIError">Error occur while building Minecraft folder list UI.</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoAdd">The game folder cannot be added while the download task is in progress!</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoCreate">The game folder cannot be created while the download task is in progress!</s:String>
-    <s:String x:Key="LangSelectNoSpecialSymbol">Minecraft folder paths cannot contain exclamation marks (&quot;) or semicolon (;)!</s:String>
+    <s:String x:Key="LangSelectNoSpecialSymbol">Minecraft folder paths cannot contain exclamation marks (!) or semicolon (;)!</s:String>
     <s:String x:Key="LangSelectDialogInputNameTitle">Enter a Display Name</s:String>
     <s:String x:Key="LangSelectDialogInputNameContent">Enter the name of the folder that appears on the list on the left column.</s:String>
     <s:String x:Key="LangSelectFailToAddFolder">Failed to add folder. ({0})</s:String>
@@ -1639,7 +1639,7 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModModpackDialogContentInstallTip">Please select the targeted installation folder in the next window that opens, it must be an empty folder.</s:String>
     <s:String x:Key="LangModModpackDialogTitleInstallTip">Installation Hint</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">Select installation destination (must be an empty folder)</s:String>
-    <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft folder paths cannot contain exclamation marks (&quot;) or semicolon (;)!</s:String>
+    <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft folder paths cannot contain exclamation marks (!) or semicolon (;)!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Please select an empty folder as the installation destination!</s:String>
     <s:String x:Key="LangModModpackExtraArchive">Extracting archive...</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Added to the folder list: {0}</s:String>
