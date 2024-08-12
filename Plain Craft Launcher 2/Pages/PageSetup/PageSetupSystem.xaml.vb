@@ -18,6 +18,8 @@
                 ComboBackgroundSuit.SelectedIndex = 4
             Case "lzh"
                 ComboBackgroundSuit.SelectedIndex = 5
+            Case "zh_MEME"
+                ComboBackgroundSuit.SelectedIndex = 6
         End Select
 
         AniControlEnabled += 1
