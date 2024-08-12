@@ -1050,7 +1050,7 @@ For example, if the existing launcher is unable to login due to the changes in l
 In general, choose 'Display a hint when there is a critical vulnerability patch' to avoid most disturbances.
 Unless you are making a modpack or updating the launcher often, this option is extremely NOT recommended!</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">Failed to confirm the launcher update.</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mods Source</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod Source</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Official</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Balanced</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Mirror</s:String>
