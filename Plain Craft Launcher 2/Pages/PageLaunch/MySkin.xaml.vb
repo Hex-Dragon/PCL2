@@ -241,7 +241,7 @@ Retry:
                             {"Translator-Chinese", GetLang("LangMySkinCapeNameTranslator-Chinese")}, {"Translator", GetLang("LangMySkinCapeNameTranslator")}, {"Cobalt", GetLang("LangMySkinCapeNameCobalt")},
                             {"Vanilla", GetLang("LangMySkinCapeNameVanilla")}, {"Minecon2011", GetLang("LangMySkinCapeNameMinecon2011")}, {"Minecon2012", GetLang("LangMySkinCapeNameMinecon2012")},
                             {"Minecon2013", GetLang("LangMySkinCapeNameMinecon2013")}, {"Minecon2015", GetLang("LangMySkinCapeNameMinecon2015")}, {"Minecon2016", GetLang("LangMySkinCapeNameMinecon2016")},
-                            {"Cherry Blossom", GetLang("LangMySkinCapeNameCherryBlossom")}, {"15th Anniversary", GetLang("LangMySkinCapeName15th-Anniversary")}, {"Purple Heart", GetLang("LangMySkinCapeNamePurpleHeart")}, {"Follower's", GetLang("LangMySkinCapeNameFollower's")}, {"MCC 15th Year", "MCC 15 周年披风"}}
+                            {"Cherry Blossom", GetLang("LangMySkinCapeNameCherryBlossom")}, {"15th Anniversary", GetLang("LangMySkinCapeName15th-Anniversary")}, {"Purple Heart", GetLang("LangMySkinCapeNamePurpleHeart")}, {"Follower's", GetLang("LangMySkinCapeNameFollower's")}, {"MCC 15th Year", GetLang("LangMySkinCapeNameMCC15thYear")}}
                         Dim SelectionControl As New List(Of IMyRadio) From {New MyRadioBox With {.Text = GetLang("LangMySkinCapeNameNone")}}
                         For Each Cape In SkinData("capes")
                             Dim CapeName As String = Cape("alias").ToString

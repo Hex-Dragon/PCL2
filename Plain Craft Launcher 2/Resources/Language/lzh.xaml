@@ -623,6 +623,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangMySkinCapeName15th-Anniversary">15 周年紀念披風</s:String>
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">紫色心形披風</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">追隨者披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15週年披風</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">無披風</s:String>
 
     <!--FormLoginOAuth-->
@@ -1049,6 +1050,10 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
 一般選擇 僅在有重大漏洞更新時顯示提示 就可以讓你儘量不受打擾了。
 除非你在製作服務器整合包，或時常手動更新啟動器，否則極度不推薦選擇此項！</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">確認啟動器更新失敗</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod 資訊獲取</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">盡量使用官方來源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">在官方來源加載緩慢時改用鏡像來源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">盡量使用鏡像來源</s:String>
 
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概覽</s:String>
@@ -1379,6 +1384,7 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCompModStatusDescAlpha">測試版</s:String>
     <s:String x:Key="LangModCompModMilion">萬</s:String>
     <s:String x:Key="LangModCompModBilion">億</s:String>
+    <s:String x:Key="LangModCompExceptionNoResult">沒有符合條件的結果</s:String>
 
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">年</s:String>
@@ -1665,4 +1671,10 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModBaseExceptionEmptyFile">讀取到的文件為空</s:String>
     <s:String x:Key="LangModBaseExceptionInvalidJson">不是有效的 JSON 文件</s:String>
     <s:String x:Key="LangModBaseNoExceptionDetail">無可用錯誤信息！</s:String>
+    
+    <!--ModMyLoading-->
+    <s:String x:Key="LangModMyLoadingLoading">加載中</s:String>
+    <s:String x:Key="LangModMyLoadingLoadFail">加載失敗</s:String>
+    <s:String x:Key="LangModMyLoadingUnknownError">未知錯誤</s:String>
+    <s:String x:Key="LangModMyLoadingBadNetwork">網路環境不佳，請重試或嘗試使用 VPN</s:String>
 </ResourceDictionary>

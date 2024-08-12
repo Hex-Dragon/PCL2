@@ -837,7 +837,7 @@ NoSubtitle:
             Exit Sub
         ElseIf Not Task.Input.CanContinue Then
             If Not Task.Input.Storage.Results.Any() Then
-                Throw New Exception("没有符合条件的结果")
+                Throw New Exception(GetLang("LangModCompExceptionNoResult"))
             Else
                 Log($"[Comp] 已有 {Task.Input.Storage.Results.Count} 个结果，少于所需的 {Task.Input.TargetResultCount} 个结果，但无法继续获取，结束处理")
                 Exit Sub

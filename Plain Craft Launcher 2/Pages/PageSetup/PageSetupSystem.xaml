@@ -45,11 +45,11 @@
                             <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModFileNameC}" />
                             <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModFileNameD}" />
                         </local:MyComboBox>
-                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Mod 信息获取" Margin="0,0,25,0" />
+                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadModListSource}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboDownloadMod" Grid.Row="4" Grid.ColumnSpan="2" Tag="ToolDownloadMod" Grid.Column="1">
-                            <local:MyComboBoxItem Content="尽量使用官方源" IsSelected="True" />
-                            <local:MyComboBoxItem Content="在官方源加载缓慢时改用镜像源" />
-                            <local:MyComboBoxItem Content="尽量使用镜像源" />
+                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModListSourceA}" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModListSourceB}" />
+                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModListSourceC}" />
                         </local:MyComboBox>
                         <TextBlock Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadThread}" Margin="0,0,25,0" />
                         <local:MySlider x:Name="SliderDownloadThread" Grid.Row="7" Tag="ToolDownloadThread" MaxValue="255" Value="63" Grid.Column="1"
