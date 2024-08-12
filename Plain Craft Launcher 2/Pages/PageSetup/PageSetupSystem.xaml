@@ -20,6 +20,9 @@
                             <RowDefinition Height="7" />
                             <RowDefinition Height="28" />
                             <RowDefinition Height="7" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="7" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="27" />
                             <RowDefinition Height="27" />
                             <RowDefinition Height="Auto" />
@@ -42,21 +45,27 @@
                             <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModFileNameC}" />
                             <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModFileNameD}" />
                         </local:MyComboBox>
-                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadThread}" Margin="0,0,25,0" />
-                        <local:MySlider x:Name="SliderDownloadThread" Grid.Row="4" Tag="ToolDownloadThread" MaxValue="255" Value="63" Grid.Column="1"
+                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Mod 信息获取" Margin="0,0,25,0" />
+                        <local:MyComboBox x:Name="ComboDownloadMod" Grid.Row="4" Grid.ColumnSpan="2" Tag="ToolDownloadMod" Grid.Column="1">
+                            <local:MyComboBoxItem Content="尽量使用官方源" IsSelected="True" />
+                            <local:MyComboBoxItem Content="在官方源加载缓慢时改用镜像源" />
+                            <local:MyComboBoxItem Content="尽量使用镜像源" />
+                        </local:MyComboBox>
+                        <TextBlock Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadThread}" Margin="0,0,25,0" />
+                        <local:MySlider x:Name="SliderDownloadThread" Grid.Row="7" Tag="ToolDownloadThread" MaxValue="255" Value="63" Grid.Column="1"
                                         ToolTip="{DynamicResource LangPageSetupSystemDownloadThreadToolTip}" />
-                        <TextBlock VerticalAlignment="Center" Grid.Row="5" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadSpeedLimit}" Margin="0,0,25,0" />
-                        <local:MySlider x:Name="SliderDownloadSpeed" Grid.Row="5" Tag="ToolDownloadSpeed" MaxValue="42" Value="42" Grid.Column="1"
+                        <TextBlock VerticalAlignment="Center" Grid.Row="8" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadSpeedLimit}" Margin="0,0,25,0" />
+                        <local:MySlider x:Name="SliderDownloadSpeed" Grid.Row="8" Tag="ToolDownloadSpeed" MaxValue="42" Value="42" Grid.Column="1"
                                         ToolTip="{DynamicResource LangPageSetupSystemDownloadSpeedLimitToolTip}" />
-                        <TextBlock VerticalAlignment="Top" Grid.Row="6" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadTargetFolder}" Margin="0,5,25,5" />
-                        <TextBlock Margin="0,5" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadTargetFolderToolTip}" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Opacity="0.5" />
-                        <local:MyCheckBox Margin="0,5,0,4" Text="{DynamicResource LangPageSetupSystemDownloadKeepModpackArchive}" Grid.Row="7" Height="22" Grid.ColumnSpan="2"
+                        <TextBlock VerticalAlignment="Top" Grid.Row="9" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadTargetFolder}" Margin="0,5,25,5" />
+                        <TextBlock Margin="0,5" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadTargetFolderToolTip}" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Opacity="0.5" />
+                        <local:MyCheckBox Margin="0,5,0,4" Text="{DynamicResource LangPageSetupSystemDownloadKeepModpackArchive}" Grid.Row="10" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadKeepModpack" Tag="ToolDownloadKeepModpack" 
                                           ToolTip="{DynamicResource LangPageSetupSystemDownloadKeepModpackArchiveToolTip}" />
-                        <local:MyCheckBox Margin="0,2,0,4" Text="{DynamicResource LangPageSetupSystemDownloadSimplifyModLoaderDisplay}" Grid.Row="8" Height="22" Grid.ColumnSpan="2"
+                        <local:MyCheckBox Margin="0,2,0,4" Text="{DynamicResource LangPageSetupSystemDownloadSimplifyModLoaderDisplay}" Grid.Row="11" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" 
                                           ToolTip="{DynamicResource LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip}" />
-                        <local:MyCheckBox Margin="0,2,0,4" Text="{DynamicResource LangPageSetupSystemDownloadSSL}" Grid.Row="9" Height="22" Grid.ColumnSpan="2"
+                        <local:MyCheckBox Margin="0,2,0,4" Text="{DynamicResource LangPageSetupSystemDownloadSSL}" Grid.Row="12" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadCert" Tag="ToolDownloadCert" 
                                           ToolTip="{DynamicResource LangPageSetupSystemDownloadSSLToolTip}" />
                     </Grid>
