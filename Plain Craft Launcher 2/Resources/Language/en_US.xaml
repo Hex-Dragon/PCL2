@@ -623,7 +623,7 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangMySkinCapeName15th-Anniversary">15th Anniversary Cape</s:String>
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">Purple Heart Cape</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">Follower's Cape</s:String>
-    <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15th Anniversary Cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15th Year Cape</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">None</s:String>
 
     <!--FormLoginOAuth-->
@@ -1050,10 +1050,10 @@ For example, if the existing launcher is unable to login due to the changes in l
 In general, choose &quot;Display a hint when there is a critical vulnerability patch&quot; to avoid most disturbances.
 Unless you are making a modpack or updating the launcher often, this option is extremely NOT recommended!</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">Failed to confirm the launcher update.</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod Information Retrieval</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Prefer Official Sources</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Switch to Mirror Sources if Official Sources Load Slowly</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Prefer Mirror Sources</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod Source</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Official</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Balanced</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Mirror</s:String>
 
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">Overview</s:String>
@@ -1674,7 +1674,7 @@ Detailed error information: {0}</s:String>
     
     <!--ModMyLoading-->
     <s:String x:Key="LangModMyLoadingLoading">Loading...</s:String>
-    <s:String x:Key="LangModMyLoadingLoadFail">Failed to load</s:String>
-    <s:String x:Key="LangModMyLoadingUnknownError">Unknown error</s:String>
-    <s:String x:Key="LangModMyLoadingBadNetwork">Poor network environment, please retry or try using a VPN</s:String>
+    <s:String x:Key="LangModMyLoadingLoadFail">Failed to Load</s:String>
+    <s:String x:Key="LangModMyLoadingUnknownError">Unknown Error</s:String>
+    <s:String x:Key="LangModMyLoadingBadNetwork">Poor network, check the internet and retry.</s:String>
 </ResourceDictionary>

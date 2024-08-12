@@ -4,7 +4,7 @@
     <s:String x:Key="LangTaskAbort">已罷！</s:String>
     <s:String x:Key="LangDialogBtnOK">可</s:String>
     <s:String x:Key="LangDialogBtnCancel">否</s:String>
-    <s:String x:Key="LangResourcePackage">資源之包</s:String>
+    <s:String x:Key="LangResourcePackage">資囊</s:String>
     <s:String x:Key="LangDialogBtnYes">是</s:String>
     <s:String x:Key="LangDialogBtnNo">否</s:String>
     
@@ -51,13 +51,13 @@
     <s:String x:Key="LangDialogCustomHomePageReplaceTitle">覆確認</s:String>
     <s:String x:Key="LangDialogBtnCustomHomePageReplaceConfirm">覆</s:String>
     <s:String x:Key="LangHintLoadedCustomHomePage">已載主頁自定文件！</s:String>
-    <s:String x:Key="LangHintChoseLoaderBeforeInstallMod">若欲裝 Mod，請先選一可裝 Mod 之版！</s:String>
-    <s:String x:Key="LangDialogInstallModContent">欲將此文件作 Mod 裝至 {0} 乎</s:String>
-    <s:String x:Key="LangDialogInstallModsContent">欲將此等文件作 Mod 裝至 {0} 乎</s:String>
-    <s:String x:Key="LangDialogInstallModTitle">Mod 裝確認</s:String>
+    <s:String x:Key="LangHintChoseLoaderBeforeInstallMod">若欲裝改囊，請先選一可裝改囊之版！</s:String>
+    <s:String x:Key="LangDialogInstallModContent">欲將此文件作改囊裝至 {0} 乎</s:String>
+    <s:String x:Key="LangDialogInstallModsContent">欲將此等文件作改囊裝至 {0} 乎</s:String>
+    <s:String x:Key="LangDialogInstallModTitle">改囊裝確認</s:String>
     <s:String x:Key="LangHintInstallModSuccessA">已裝 {0}</s:String>
-    <s:String x:Key="LangHintInstallModSuccessB">已裝 {0} 個 Mod！</s:String>
-    <s:String x:Key="LangHintInstallModFailed">復 Mod 文件失</s:String>
+    <s:String x:Key="LangHintInstallModSuccessB">已裝 {0} 個改囊！</s:String>
+    <s:String x:Key="LangHintInstallModFailed">復改囊文件失</s:String>
     <s:String x:Key="LangHintRarNotSupport">PCL 不能處 rar 式壓包，請解壓後重壓為 zip 式再試！</s:String>
     <s:String x:Key="LangHintWindowDropUnknown">PCL 不能定當執之文件拖操……</s:String>
     <s:String x:Key="LangHintCloseMinecraftSuccess">已關運中之 Minecraft！</s:String>
@@ -68,9 +68,9 @@
     <s:String x:Key="LangPageNameDownloadManagement">下載管</s:String>
     <s:String x:Key="LangPageNameVersionConfiguration">版設</s:String>
     <s:String x:Key="LangPageNameVersionConfigurationUnknownVersion">未知版</s:String>
-    <s:String x:Key="LangPageNameModDownload">模組下</s:String>
+    <s:String x:Key="LangPageNameModDownload">改囊下</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">整合包下</s:String>
-    <s:String x:Key="LangPageNameResourcePacksDownload">資源包下</s:String>
+    <s:String x:Key="LangPageNameResourcePacksDownload">資囊下</s:String>
 
     <!--PageSetupUI-->
     <s:String x:Key="LangThemeRealWhite">目眩白</s:String>
@@ -321,7 +321,7 @@
     <s:String x:Key="LangSelectNoAvailableVersionDownloadGame">下戲</s:String>
     <s:String x:Key="LangSelectGettingVersion">正獲版簿</s:String>
     <s:String x:Key="LangSelectVersionTypeRegular">常版</s:String>
-    <s:String x:Key="LangSelectVersionTypeModAbility">可裝 Mod</s:String>
+    <s:String x:Key="LangSelectVersionTypeModAbility">可裝改囊</s:String>
     <s:String x:Key="LangSelectVersionTypeForge">Forge 版</s:String>
     <s:String x:Key="LangSelectVersionTypeNeoForge">NeoForge 版</s:String>
     <s:String x:Key="LangSelectVersionTypeLiteloader">LiteLoader 版</s:String>
@@ -344,7 +344,7 @@
     <s:String x:Key="LangSelectDeleteVersionTitle">刪版確</s:String>
     <s:String x:Key="LangSelectDeleteVersionContentA">汝確欲刪版 {0} 乎？</s:String>
     <s:String x:Key="LangSelectDeleteVersionContentB">汝確欲永刪版 {0} 乎？</s:String>
-    <s:String x:Key="LangSelectDeleteVersionContentC">因此版開版隔，刪版時此版之存檔、資包、Mod 等文亦將同刪！</s:String>
+    <s:String x:Key="LangSelectDeleteVersionContentC">因此版開版隔，刪版時此版之存檔、資囊、改囊等文亦將同刪！</s:String>
     <s:String x:Key="LangSelectVersionDeletedA">版 {0} 已永刪！</s:String>
     <s:String x:Key="LangSelectVersionDeletedB">版 {0} 已刪入回收簿！</s:String>
     <s:String x:Key="LangSelectVersionDeleteCancelled">刪版 {0} 被主動止</s:String>
@@ -415,7 +415,7 @@
     <s:String x:Key="LangDownloadCompLoadingList">方取版目</s:String>
     <s:String x:Key="LangDownloadCompApiSlow">因 API 版信更緩，或不識新版 MC，待數日自復。</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">方尋合宜之戲版……</s:String>
-    <s:String x:Key="LangDownloadCompNoSuitableInstance">今 MC 夾中無合此 Mod 之版！</s:String>
+    <s:String x:Key="LangDownloadCompNoSuitableInstance">今 MC 夾中無合此改囊之版！</s:String>
     <s:String x:Key="LangDownloadCompSelectedVersion">所選之版：</s:String>
     <s:String x:Key="LangDownloadCompDownloadModpack">整合包之下：</s:String>
     <s:String x:Key="LangDownloadCompInputInstanceName">錄版名</s:String>
@@ -426,7 +426,7 @@
 
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Fabric 略述</s:String>
-    <s:String x:Key="LangDownloadFabricDesc">Fabric Loader 乃新版 Minecraft 之輕量化 Mod 載器也，汝須先安之，方可裝諸 Fabric 模組。
+    <s:String x:Key="LangDownloadFabricDesc">Fabric Loader 乃新版 Minecraft 之輕量化改囊載器也，汝須先安之，方可裝諸 Fabric 改囊。
 此頁提供 Fabric 安裝器之下載，下載後汝需手啟安裝器以行安裝。</s:String>
     <s:String x:Key="LangDownloadFabricWebsite">開官網</s:String>
     <s:String x:Key="LangDownloadFabricVersionList">版本目</s:String>
@@ -434,16 +434,16 @@
 
     <!--PageDownloadForge-->
     <s:String x:Key="LangDownloadForgeDescTitle">Forge 略述</s:String>
-    <s:String x:Key="LangDownloadForgeDesc">Forge 乃 Mod 載器也，汝須先安之，方可裝諸 Forge 模組。</s:String>
+    <s:String x:Key="LangDownloadForgeDesc">Forge 乃改囊載器也，汝須先安之，方可裝諸 Forge 改囊。</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">開官網</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">方取 Forge 目</s:String>
 
     <!--PageDownloadInstall-->
     <s:String x:Key="LangDownloadInstallReview">安裝之預覽</s:String>
-    <s:String x:Key="LangDownloadInstallFabricApi">汝未選安 Fabric API，此將致多數 Mod 不能用！</s:String>
+    <s:String x:Key="LangDownloadInstallFabricApi">汝未選安 Fabric API，此將致多數改囊不能用！</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">汝未選安 OptiFabric，此將致 OptiFine 不能用！</s:String>
-    <s:String x:Key="LangDownloadInstallOptiFine">OptiFine 與諸 Mod 相容不佳，慎安之。</s:String>
-    <s:String x:Key="LangDownloadInstallOldOptiFabric">安畢，請於 Mod 下載中覓 OptiFabric Origins 而下之，否則 OptiFine 將不能用！</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFine">OptiFine 與諸改囊相容不佳，慎安之。</s:String>
+    <s:String x:Key="LangDownloadInstallOldOptiFabric">安畢，請於改囊下載中覓 OptiFabric Origins 而下之，否則 OptiFine 將不能用！</s:String>
     <s:String x:Key="LangDownloadInstallStart">始安裝</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">版本之名</s:String>
     <s:String x:Key="LangDownloadInstallBack">返</s:String>
@@ -463,8 +463,8 @@
     <s:String x:Key="LangDownloadInstallFailGetList">取版本目失敗：</s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">此版不支自動安裝</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">版本隔離之提</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieContent">汝未開版本隔離，此將致多個 MC 共用一 Mod 文夾。
-故切 MC 版時，MC 將因讀不符當前版之 Mod 而崩。
+    <s:String x:Key="LangDownloadInstallDialogIndieContent">汝未開版本隔離，此將致多個 MC 共用一改囊文夾。
+故切 MC 版時，MC 將因讀不符當前版之改囊而崩。
 PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">止下載</s:String>
     <s:String x:Key="LangDownloadInstallNoAdd">無附加安裝</s:String>
@@ -487,21 +487,21 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
 
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteloaderDescTitle">LiteLoader 略述</s:String>
-    <s:String x:Key="LangDownloadLiteloaderDesc">與 Forge 相似，LiteLoader 可用於載舊版 Minecraft 中之 LiteLoader 模組。</s:String>
+    <s:String x:Key="LangDownloadLiteloaderDesc">與 Forge 相似，LiteLoader 可用於載舊版 Minecraft 中之 LiteLoader 改囊。</s:String>
     <s:String x:Key="LangDownloadLiteloaderWebsite">開官網</s:String>
     <s:String x:Key="LangDownloadLiteloaderGettingList">方取 LiteLoader 目</s:String>
 
     <!--PageDownloadMod-->
-    <s:String x:Key="LangDownloadModSearchTitle">搜 Mod</s:String>
+    <s:String x:Key="LangDownloadModSearchTitle">搜改囊</s:String>
     <s:String x:Key="LangDownloadModSearchName">名</s:String>
     <s:String x:Key="LangDownloadModSearchSource">源</s:String>
     <s:String x:Key="LangDownloadModSearchSourceAll">全</s:String>
     <s:String x:Key="LangDownloadModSearchVersion">版</s:String>
     <s:String x:Key="LangDownloadModSearchVersionAll">全 (亦可自行輸入)</s:String>
-    <s:String x:Key="LangDownloadModSearchLoader">任 Mod 載器</s:String>
+    <s:String x:Key="LangDownloadModSearchLoader">任改囊載器</s:String>
     <s:String x:Key="LangDownloadModSearch">搜</s:String>
     <s:String x:Key="LangDownloadModReset">重置</s:String>
-    <s:String x:Key="LangDownloadModGettingList">取 Mod 列表</s:String>
+    <s:String x:Key="LangDownloadModGettingList">取改囊列表</s:String>
     <s:String x:Key="LangDownloadModType">類</s:String>
     <s:String x:Key="LangDownloadModTypeAll">全</s:String>
     <s:String x:Key="LangDownloadModTypeWorldElement">世界元素</s:String>
@@ -534,7 +534,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
 
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">NeoForge 之簡介</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 者，Minecraft 1.19+ 之 Mod 載具也，需先行安裝，方可安裝各類 NeoForge 模組。
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 者，Minecraft 1.19+ 之改囊載具也，需先行安裝，方可安裝各類 NeoForge 改囊。
 此頁提供 NeoForge 安裝器之下載，下載後需手動啟用安裝器以行安裝。</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">啟官網</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">正在獲取 NeoForge 之列表</s:String>
@@ -780,7 +780,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageOtherAboutThanksbangbang93">提供 BMCLAPI 鏡像源和 Forge 安裝工具，詳見 https://bmclapi.bangbang93.com</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">贊助鏡像源</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModTitle">MC 百科</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksMCMod">提供了 Mod 名稱的中文翻譯和更多相關信息！</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCMod">提供了改囊名稱的中文翻譯和更多相關信息！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">打開百科</s:String>
     <s:String x:Key="LangPageOtherAboutThanks00ll00">提供了 Java Launch Wrapper 和一些重要服務支持！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksDoodleHuang">提供了部分很難找到的 Minecraft 版本與一些技術支持！</s:String>
@@ -820,7 +820,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoft">正版皮膚</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftToolTip">使用某個正版玩家的皮膚</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeCustom">自定義</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTypeCustomToolTip">以資源包的形式加載自定義皮膚。
+    <s:String x:Key="LangPageSetupLaunchSkinTypeCustomToolTip">以資囊的形式加載自定義皮膚。
 使用此方式更換的皮膚在多人遊戲中僅自己可見，且會替換遊戲中所有的角色。</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftName">正版玩家名</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinSave">保存皮膚</s:String>
@@ -841,15 +841,15 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">該信息會顯示在遊戲主界面的左下角，與 F3 調試頁面的左上角</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">版本隔離</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">關閉</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">所有版本均使用同一檔案，存檔、Mod、資源包等均為公用。
-若存在多個安裝了 Mod 的版本，可能會導致 Mod 衝突。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">隔離可安裝 Mod 的版本</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">可安裝 Mod 的版本（例如 Forge、Fabric）均互相獨立以避免 Mod 衝突，其他版本（例如原版）則不會被隔離。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">所有版本均使用同一檔案，存檔、Mod、資囊等均為公用。
+若存在多個安裝了改囊的版本，可能會導致改囊衝突。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">隔離可安裝改囊的版本</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">可安裝改囊的版本（例如 Forge、Fabric）均互相獨立以避免改囊衝突，其他版本（例如原版）則不會被隔離。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">隔離非正式版</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">將 Minecraft 快照、預發布版、遠古版本、愚人節版本與其他版本進行隔離</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaAndMod">隔離可安裝 Mod 的版本和非正式版</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaAndMod">隔離可安裝改囊的版本和非正式版</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAll">隔離所有版本</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">不同版本之間的存檔、Mod、資源包等均不互通。
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">不同版本之間的存檔、Mod、資囊等均不互通。
 這會導致不同原版版本間的存檔不能共用，所以一般不推薦。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibility">啟動器可見性</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameStart">遊戲啟動後立即關閉</s:String>
@@ -876,7 +876,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupLaunchLaunchMem">遊戲內存</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMem32BitWarn">32 位 Java 最多只能分配 1 GB 內存，建議安裝 64 位 Java!</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjust">自動配置</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjustToolTip">根據安裝的 Mod 量與電腦剩餘內存，動態調整為遊戲分配的內存</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjustToolTip">根據安裝的改囊量與電腦剩餘內存，動態調整為遊戲分配的內存</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemCustom">自定義</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunch">啟動遊戲前進行內存優化</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunchToolTip">內存優化能將當前物理內存占用降低約 1/3，不僅限於 MC！
@@ -968,8 +968,8 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">儘量使用鏡像源（加載快，但版本可能不是最新的）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">在官方源加載緩慢時改用鏡像源（平衡）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">儘量使用官方源（保證版本為最新，但加載非常緩慢）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod 命名風格</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">決定下載的 Mod 的默認文件名中，中文譯名應該放在哪個位置
+    <s:String x:Key="LangPageSetupSystemDownloadModFileName">改囊命名風格</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">決定下載的改囊的默認文件名中，中文譯名應該放在哪個位置
 該選項僅在語言設置為簡體中文時有效</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">譯名位於文件名開頭：[遺物] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">譯名位於文件名開頭：遺物-relics-0.1.14</s:String>
@@ -985,8 +985,8 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
 在某個文件夾或遊戲版本上右鍵，即可選擇打開對應文件夾。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">安裝整合包時保留原始壓縮包</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">安裝整合包時，在版本文件夾下保留用於安裝的原始整合包壓縮包文件</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">簡化 Mod 加載器顯示</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">下載 Mod 時，若該 Mod 支持 Forge 和 Fabric，則顯示為支持任意 Mod 加載器。
+    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">簡化改囊加載器顯示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">下載改囊時，若該改囊支持 Forge 和 Fabric，則顯示為支持任意改囊加載器。
 例如，開啟時 JEI 顯示支持全版本，關閉後 JEI 就會顯示僅支持 Forge / Fabric 全版本。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">驗證 SSL 證書</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">驗證證書會提高安全性，但疑似有概率導致正版登錄失敗（#3018）。
@@ -1050,7 +1050,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
 一般選擇 僅在有重大漏洞更新時顯示提示 就可以讓你儘量不受打擾了。
 除非你在製作服務器整合包，或時常手動更新啟動器，否則極度不推薦選擇此項！</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">確認啟動器更新失敗</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod 資訊獲取</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSource">改囊資訊獲取</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">盡量使用官方來源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">在官方來源加載緩慢時改用鏡像來源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">盡量使用鏡像來源</s:String>
@@ -1058,24 +1058,24 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概覽</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">設置</s:String>
-    <s:String x:Key="LangPageVersionLeftModMangment">Mod 管理</s:String>
+    <s:String x:Key="LangPageVersionLeftModMangment">改囊管理</s:String>
     <s:String x:Key="LangPageVersionLeftModMangmentRefresh">刷新</s:String>
     <s:String x:Key="LangPageVersionLeftModMangmentRefreshing">正在刷新……</s:String>
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetContent">是否要初始化該版本的版本獨立設置？該操作不可撤銷。</s:String>
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetTitle">初始化確認</s:String>
 
     <!--PageVersionMod-->
-    <s:String x:Key="LangPageVersionModSearchTip">搜索 Mod 名稱 / 描述 / 標籤</s:String>
-    <s:String x:Key="LangPageVersionModOpenFolder">打開 Mod 文件夾</s:String>
+    <s:String x:Key="LangPageVersionModSearchTip">搜索改囊名稱 / 描述 / 標籤</s:String>
+    <s:String x:Key="LangPageVersionModOpenFolder">打開改囊文件夾</s:String>
     <s:String x:Key="LangPageVersionModSelectAll">全選</s:String>
-    <s:String x:Key="LangPageVersionModInstallMod">安裝 Mod</s:String>
-    <s:String x:Key="LangPageVersionModCheckMod">檢查 Mod</s:String>
-    <s:String x:Key="LangPageVersionModCheckModToolTip">快速檢查 Mod 的版本要求、重複、前置缺失等問題。
-結果僅供參考，由於部分 Mod 標註的信息有誤，可能並不準確。</s:String>
-    <s:String x:Key="LangPageVersionModNoModFile">未找到 Mod</s:String>
-    <s:String x:Key="LangPageVersionModDropToInstallModTip">要安裝 Mod，請直接將 Mod 文件拖入 PCL 窗口。
-如果你確定你已經安裝了 Mod，但仍然看到了這條提示，則是版本隔離設置有誤，請在啟動設置中調整版本隔離選項。</s:String>
-    <s:String x:Key="LangPageVersionModLoadingList">正在加載 Mod 列表</s:String>
+    <s:String x:Key="LangPageVersionModInstallMod">安裝改囊</s:String>
+    <s:String x:Key="LangPageVersionModCheckMod">檢查改囊</s:String>
+    <s:String x:Key="LangPageVersionModCheckModToolTip">快速檢查改囊的版本要求、重複、前置缺失等問題。
+結果僅供參考，由於部分改囊標註的信息有誤，可能並不準確。</s:String>
+    <s:String x:Key="LangPageVersionModNoModFile">未找到改囊</s:String>
+    <s:String x:Key="LangPageVersionModDropToInstallModTip">要安裝改囊，請直接將改囊文件拖入 PCL 窗口。
+如果你確定你已經安裝了改囊，但仍然看到了這條提示，則是版本隔離設置有誤，請在啟動設置中調整版本隔離選項。</s:String>
+    <s:String x:Key="LangPageVersionModLoadingList">正在加載改囊列表</s:String>
     <s:String x:Key="LangPageVersionModSelectedFile">已選擇 {0} 個文件</s:String>
     <s:String x:Key="LangPageVersionModOperationUpdate">更新</s:String>
     <s:String x:Key="LangPageVersionModOperationEnable">啟用</s:String>
@@ -1084,11 +1084,11 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionModOperationDeselect">取消選擇</s:String>
     <s:String x:Key="LangPageVersionModOpenPath">打開文件位置</s:String>
     <s:String x:Key="LangPageVersionModDetail">詳情</s:String>
-    <s:String x:Key="LangPageVersionModModList">Mod 列表</s:String>
+    <s:String x:Key="LangPageVersionModModList">改囊列表</s:String>
     <s:String x:Key="LangPageVersionModSearchResult">搜索結果</s:String>
     <s:String x:Key="LangPageVersionModSearchNoResult">無搜索結果</s:String>
-    <s:String x:Key="LangPageVersionModHintDropFileToInstall">將 Mod 文件直接拖入 PCL 窗口即可安裝！</s:String>
-    <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusContent">目前同時存在啟用和禁用的兩個 Mod 文件：
+    <s:String x:Key="LangPageVersionModHintDropFileToInstall">將改囊文件直接拖入 PCL 窗口即可安裝！</s:String>
+    <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusContent">目前同時存在啟用和禁用的兩個改囊文件：
 {0}
 {1}
 
@@ -1096,33 +1096,33 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
 
 在手動刪除或重命名其中一個文件後，才能繼續操作。</s:String>
     <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusTitle">存在文件衝突</s:String>
-    <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">由於文件被占用，Mod 的狀態切換失敗，請嘗試關閉正在運行的遊戲後再試！</s:String>
-    <s:String x:Key="LangPageVersionModDialogUpdateModContent">新版本 Mod 可能不兼容老版本的存檔或者其他 Mod，這可能導致遊戲崩潰，甚至存檔損壞！
-除非整合包作者要求你更新，否則不要私自更新整合包里的 Mod！
-在更新 Mod 前，請先備份存檔，並檢查它的更新日誌！
-更新時，老版本的 Mod 會被移動到回收站，以防萬一。
+    <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">由於文件被占用，改囊的狀態切換失敗，請嘗試關閉正在運行的遊戲後再試！</s:String>
+    <s:String x:Key="LangPageVersionModDialogUpdateModContent">新版本改囊可能不兼容老版本的存檔或者其他改囊，這可能導致遊戲崩潰，甚至存檔損壞！
+除非整合包作者要求你更新，否則不要私自更新整合包里的改囊！
+在更新改囊前，請先備份存檔，並檢查它的更新日誌！
+更新時，老版本的改囊會被移動到回收站，以防萬一。
 
 請在認真閱讀上述警告後再繼續！</s:String>
-    <s:String x:Key="LangPageVersionModDialogUpdateModTitle">Mod 更新警告</s:String>
+    <s:String x:Key="LangPageVersionModDialogUpdateModTitle">改囊更新警告</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModBtnConfirm">我已了解上述風險，繼續更新</s:String>
-    <s:String x:Key="LangPageVersionModTaskDownloadNewMod">下載新版 Mod 文件</s:String>
-    <s:String x:Key="LangPageVersionModTaskReplaceModFile">替換舊版 Mod 文件</s:String>
-    <s:String x:Key="LangPageVersionModTaskModUpdate">Mod 更新：</s:String>
-    <s:String x:Key="LangPageVersionModTaskModUpdateSuccessA">已成功更新 {0} 個 Mod！</s:String>
+    <s:String x:Key="LangPageVersionModTaskDownloadNewMod">下載新版改囊文件</s:String>
+    <s:String x:Key="LangPageVersionModTaskReplaceModFile">替換舊版改囊文件</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdate">改囊更新：</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateSuccessA">已成功更新 {0} 個改囊！</s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdateSuccessB">已成功更新：</s:String>
-    <s:String x:Key="LangPageVersionModTaskModUpdateFail">Mod 更新失敗：</s:String>
-    <s:String x:Key="LangPageVersionModTaskModUpdateAbort">Mod 更新已中止！</s:String>
-    <s:String x:Key="LangPageVersionModHintFileOccupyWhenDelete">由於文件被占用，Mod 刪除失敗，請嘗試關閉正在運行的遊戲後再試！</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateFail">改囊更新失敗：</s:String>
+    <s:String x:Key="LangPageVersionModTaskModUpdateAbort">改囊更新已中止！</s:String>
+    <s:String x:Key="LangPageVersionModHintFileOccupyWhenDelete">由於文件被占用，改囊刪除失敗，請嘗試關閉正在運行的遊戲後再試！</s:String>
     <s:String x:Key="LangPageVersionModHintFileDeleteSuccessA">已將 {0} 刪除到回收站！</s:String>
     <s:String x:Key="LangPageVersionModHintFileDeleteSuccessB">已將 {0} 個文件刪除到回收站！</s:String>
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">已徹底刪除 {0}！</s:String>
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">已徹底刪除 {0} 個文件！</s:String>
-    <s:String x:Key="LangPageVersionModDialogFailGetModDetail">無法讀取此 Mod 的信息。</s:String>
+    <s:String x:Key="LangPageVersionModDialogFailGetModDetail">無法讀取此改囊的信息。</s:String>
 
     <!--PageVersionModDisabled-->
-    <s:String x:Key="LangPageVersionModDisabledTitle">該版本不可使用 Mod</s:String>
-    <s:String x:Key="LangPageVersionModDisabledContent">你需要先安裝 Forge、Fabric 等 Mod 加載器才能使用 Mod，請在下載頁面安裝這些版本。
-如果你已經安裝過了 Mod 加載器，那麼你很可能選擇了錯誤的版本，請點擊版本選擇按鈕切換版本。</s:String>
+    <s:String x:Key="LangPageVersionModDisabledTitle">該版本不可使用改囊</s:String>
+    <s:String x:Key="LangPageVersionModDisabledContent">你需要先安裝 Forge、Fabric 等改囊加載器才能使用改囊，請在下載頁面安裝這些版本。
+如果你已經安裝過了改囊加載器，那麼你很可能選擇了錯誤的版本，請點擊版本選擇按鈕切換版本。</s:String>
     <s:String x:Key="LangPageVersionModDisabledBtnGoToDownload">轉到下載頁面</s:String>
     <s:String x:Key="LangPageVersionModDisabledBtnSelectInstance">版本選擇</s:String>
 
@@ -1148,7 +1148,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionOverallCategoryHidden">從版本列表中隱藏</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryHiddenToolTip">該版本默認將不會在版本列表中顯示。
 在版本列表頁面按下 F11，即可查看所有隱藏的版本。</s:String>
-    <s:String x:Key="LangPageVersionOverallCategoryMod">可安裝 Mod 的版本</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryMod">可安裝改囊的版本</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryRegular">常規版本</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryUncommon">不常用版本</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryAprilFool">愚人節版本</s:String>
@@ -1159,7 +1159,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionOverallShortcut">快捷方式</s:String>
     <s:String x:Key="LangPageVersionOverallFolder">版本文件夾</s:String>
     <s:String x:Key="LangPageVersionOverallFolderSaves">存檔文件夾</s:String>
-    <s:String x:Key="LangPageVersionOverallFolderMods">Mod 文件夾</s:String>
+    <s:String x:Key="LangPageVersionOverallFolderMods">改囊文件夾</s:String>
     <s:String x:Key="LangPageVersionOverallManagement">高級管理</s:String>
     <s:String x:Key="LangPageVersionOverallManagementExportCommand">導出啟動腳本</s:String>
     <s:String x:Key="LangPageVersionOverallManagementCompleteFile">補全文件</s:String>
@@ -1185,7 +1185,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionOverallCompleteFileSuccess">成功！</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileFail">失敗：</s:String>
     <s:String x:Key="LangPageVersionOverallDialogDeleteA">你確定要永久刪除版本 {0} 嗎？
-由於該版本開啟了版本隔離，刪除版本時該版本對應的存檔、資源包、Mod 等文件也將被一併刪除！</s:String>
+由於該版本開啟了版本隔離，刪除版本時該版本對應的存檔、資囊、改囊等文件也將被一併刪除！</s:String>
     <s:String x:Key="LangPageVersionOverallDialogDeleteB">你確定要刪除版本 {0} 嗎？</s:String>
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">版本刪除確認</s:String>
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">版本 {0} 已刪除到回收站！</s:String>
@@ -1205,9 +1205,9 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionSetupUseGlobal">使用全局設置</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">開啟</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">關閉</s:String>
-    <s:String x:Key="LangPageVersionSetupIndieDisable">與其餘未開啟隔離的版本均使用同一檔案，存檔、Mod 等均為公用。
-若存在不同版本的 Forge 或 Fabric，可能會由於 Mod 與版本衝突導致未知問題。</s:String>
-    <s:String x:Key="LangPageVersionSetupIndieEnable">讓這個版本與其他版本的存檔、Mod 等檔案相互獨立，互不干涉</s:String>
+    <s:String x:Key="LangPageVersionSetupIndieDisable">與其餘未開啟隔離的版本均使用同一檔案，存檔、改囊等均為公用。
+若存在不同版本的 Forge 或 Fabric，可能會由於改囊與版本衝突導致未知問題。</s:String>
+    <s:String x:Key="LangPageVersionSetupIndieEnable">讓這個版本與其他版本的存檔、改囊等檔案相互獨立，互不干涉</s:String>
     <s:String x:Key="LangPageVersionSetupServer">服務器</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">登錄方式</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">正版登錄或離線登錄</s:String>
@@ -1371,13 +1371,13 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">適用於</s:String>
-    <s:String x:Key="LangModCompModDependentCount">個前置 Mod，</s:String>
+    <s:String x:Key="LangModCompModDependentCount">個前置改囊，</s:String>
     <s:String x:Key="LangModCompModDownload">次下載，</s:String>
     <s:String x:Key="LangModCompModDownloadMillion">萬次下載，</s:String>
     <s:String x:Key="LangModCompModGameVersion">遊戲版本</s:String>
     <s:String x:Key="LangModCompModUpdateTime">{0}更新</s:String>
     <s:String x:Key="LangModCompModSaveAs">另存為</s:String>
-    <s:String x:Key="LangModCompModDependent">前置 Mod</s:String>
+    <s:String x:Key="LangModCompModDependent">前置改囊</s:String>
     <s:String x:Key="LangModCompModAlternateVersion">可選版本</s:String>
     <s:String x:Key="LangModCompModStatusDescRelease">正式版</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">測試版</s:String>
@@ -1458,10 +1458,10 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">存在錯誤，無法獲取信息</s:String>
     
     <!--ModMod-->
-    <s:String x:Key="LangModModUpdatingMod">正在更新 Mod</s:String>
-    <s:String x:Key="LangModModLoadingModList">正在加載 Mod 列表</s:String>
-    <s:String x:Key="LangModModExceptionIncorrectPath">錯誤的 Mod 文件路徑（{0}）</s:String>
-    <s:String x:Key="LangModModExceptionFileNotFound">未找到 Mod 文件（{0}）</s:String>
+    <s:String x:Key="LangModModUpdatingMod">正在更新改囊</s:String>
+    <s:String x:Key="LangModModLoadingModList">正在加載改囊列表</s:String>
+    <s:String x:Key="LangModModExceptionIncorrectPath">錯誤的改囊文件路徑（{0}）</s:String>
+    <s:String x:Key="LangModModExceptionFileNotFound">未找到改囊文件（{0}）</s:String>
     <s:String x:Key="LangModModExceptionUnauthorizedAccess">沒有讀取此文件的權限，請嘗試右鍵以管理員身份運行 PCL</s:String>
     
     <!--ModComp-->
@@ -1617,13 +1617,13 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModModpackExceptionNoMcInfo">整合包未提供 Minecraft 版本信息</s:String>
     <s:String x:Key="LangModModpackInputInstanceName">輸入版本名稱</s:String>
     <s:String x:Key="LangModModpackTaskExtraModpack">解壓整合包文件</s:String>
-    <s:String x:Key="LangModModpackTaskGetModDownloadInfo">獲取 Mod 下載信息</s:String>
-    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">整合包所需要的部分 Mod 版本已被 Mod 作者刪除，因此無法完成整合包安裝，請聯繫整合包作者更新整合包中的 Mod 版本</s:String>
-    <s:String x:Key="LangModModpackTaskInitModDownloadInfo">構造 Mod 下載信息</s:String>
+    <s:String x:Key="LangModModpackTaskGetModDownloadInfo">獲取改囊下載信息</s:String>
+    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">整合包所需要的部分改囊版本已被改囊作者刪除，因此無法完成整合包安裝，請聯繫整合包作者更新整合包中的改囊版本</s:String>
+    <s:String x:Key="LangModModpackTaskInitModDownloadInfo">構造改囊下載信息</s:String>
     <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">是否要下載整合包中的可選文件 {0}？</s:String>
     <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">下載可選文件</s:String>
-    <s:String x:Key="LangModModpackTaskDownloadMod">下載 Mod</s:String>
-    <s:String x:Key="LangModModpackTaskDownloadModMainLoader">下載 Mod（主加載器）</s:String>
+    <s:String x:Key="LangModModpackTaskDownloadMod">下載改囊</s:String>
+    <s:String x:Key="LangModModpackTaskDownloadModMainLoader">下載改囊（主加載器）</s:String>
     <s:String x:Key="LangModModpackTaskAnalysisLibSideLoader">分析遊戲支持庫文件（副加載器）</s:String>
     <s:String x:Key="LangModModpackTaskDownloadLibSideLoader">下載遊戲支持庫文件（副加載器）</s:String>
     <s:String x:Key="LangModModpackTaskInstallModpack">整合包安裝</s:String>
@@ -1633,7 +1633,7 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModModpackTaskCurseForgeModpackInstall">CurseForge 整合包安裝：</s:String>
     <s:String x:Key="LangModModpackHintInstalling">該整合包正在安裝中！</s:String>
     <s:String x:Key="LangModModpacHintQuiltNotSupport">PCL 暫不支持安裝需要 Quilt 的整合包！</s:String>
-    <s:String x:Key="LangModModpacHintUnknownModLoader">無法安裝整合包，其中出現了未知的 Mod 加載器 {0}！</s:String>
+    <s:String x:Key="LangModModpacHintUnknownModLoader">無法安裝整合包，其中出現了未知的改囊加載器 {0}！</s:String>
     <s:String x:Key="LangModModpackTaskDownloadExtraFile">下載額外文件</s:String>
     <s:String x:Key="LangModModpackTaskModrinthModpackInstall">Modrinth 整合包安裝：</s:String>
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">重命名版本 Json（副加載器）</s:String>
