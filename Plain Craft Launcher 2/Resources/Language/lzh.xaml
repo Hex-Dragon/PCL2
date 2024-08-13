@@ -568,7 +568,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangDownloadModpackTypeTech">科技</s:String>
     <s:String x:Key="LangDownloadModpackTypeMagic">魔法</s:String>
     <s:String x:Key="LangDownloadModpackTypeAdventure">冒險</s:String>
-    <s:String x:Key="LangDownloadModpackTypeCook">烹飪</s:String>
+    <s:String x:Key="LangDownloadModpackTypeCook">大雜燴</s:String>
     <s:String x:Key="LangDownloadModpackTypeExplore">探索</s:String>
     <s:String x:Key="LangDownloadModpackTypeGame">小遊戲</s:String>
     <s:String x:Key="LangDownloadModpackTypeScienceFiction">科幻</s:String>
@@ -1054,6 +1054,10 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">盡量使用官方來源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">在官方來源加載緩慢時改用鏡像來源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">盡量使用鏡像來源</s:String>
+    <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL 即將重啟以完全應用語言的切換</s:String>
+    <s:String x:Key="LangPageSetupSystemLangHelpTranslate">幫助翻譯</s:String>
+    <s:String x:Key="LangPageSetupSystemHintCloseGameBeforeChangeLanguage">請先關閉所有運行中的遊戲……</s:String>  
+    <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">請在所有下載任務完成後再來更改語言……</s:String>
 
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概覽</s:String>

@@ -1,10 +1,7 @@
 ﻿Class PageSetupSystem
 
 #Region "语言"
-    Private Sub PageSetupUI_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-        AniControlEnabled -= 1
-
-        '读取设置
+    Private Sub SelectCurrentLanguage()
         Select Case Lang
             Case "en_US"
                 ComboBackgroundSuit.SelectedIndex = 0
@@ -21,17 +18,34 @@
             Case "zh_MEME"
                 ComboBackgroundSuit.SelectedIndex = 6
         End Select
-
-        AniControlEnabled += 1
     End Sub
 
     Private Sub RefreshLang() Handles ComboBackgroundSuit.SelectionChanged
-        If IsLoaded Then
-            If Not ComboBackgroundSuit.IsLoaded Then Exit Sub
-            Lang = CType(ComboBackgroundSuit.SelectedItem, MyComboBoxItem).Tag
-            Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
-            WriteReg("Lang", Lang)
+        If Not IsLoaded Then Exit Sub
+        If Not ComboBackgroundSuit.IsLoaded Then Exit Sub
+        Dim TargetLang As String = CType(ComboBackgroundSuit.SelectedItem, MyComboBoxItem).Tag
+        If TargetLang.Equals(Lang) Then Exit Sub
+        If HasRunningMinecraft OrElse McLaunchLoader.State = LoadState.Loading Then
+            Hint(GetLang("LangPageSetupSystemHintCloseGameBeforeChangeLanguage"))
+            SelectCurrentLanguage()
+            Exit Sub
         End If
+        If HasDownloadingTask() Then
+            Hint(GetLang("LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage"))
+            SelectCurrentLanguage()
+            Exit Sub
+        End If
+        Lang = TargetLang
+        Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
+        If Lang.Equals("zh_MEME") Then MyMsgBox($"此语言仅供娱乐，请勿当真{vbCr}此語言僅供娛樂，請勿當真{vbCr}This language is for entertainment only, please don't take it seriously", IsWarn:=True)
+        WriteReg("Lang", Lang)
+        MyMsgBox(GetLang("LangPageSetupSystemDialogContentLanguageRestart"), ForceWait:=True)
+        Process.Start(New ProcessStartInfo(PathWithName))
+        FormMain.EndProgramForce()
+    End Sub
+
+    Private Sub HelpTranslate(sender As Object, e As EventArgs) Handles BtnHelpTranslate.Click
+        OpenWebsite("https://github.com/Hex-Dragon/PCL2/tree/main/Plain%20Craft%20Launcher%202/Resources/Language")
     End Sub
 #End Region
 
@@ -45,6 +59,9 @@
 #If Not BETA Then
         ItemSystemUpdateDownload.Content = GetLang("LangPageSetupSystemSystemLaunchUpdateE")
 #End If
+
+        '语言
+        SelectCurrentLanguage()
 
         '非重复加载部分
         If IsLoaded Then Exit Sub
