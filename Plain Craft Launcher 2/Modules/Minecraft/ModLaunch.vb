@@ -2143,6 +2143,8 @@ IgnoreCustomSkin:
         StartInfo.EnvironmentVariables("Path") = Join(Paths.Distinct.ToList, ";")
 
         '设置其他参数
+        StartInfo.StandardErrorEncoding = Encoding.UTF8
+        StartInfo.StandardOutputEncoding = Encoding.UTF8
         StartInfo.WorkingDirectory = McVersionCurrent.PathIndie
         StartInfo.UseShellExecute = False
         StartInfo.RedirectStandardOutput = True
