@@ -1056,6 +1056,8 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">尽量使用镜像源</s:String>
     <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL 即将重启以完全应用语言的切换</s:String>
     <s:String x:Key="LangPageSetupSystemLangHelpTranslate">帮助翻译</s:String>
+    <s:String x:Key="LangPageSetupSystemHintCloseGameBeforeChangeLanguage">请先关闭所有运行中的游戏……</s:String>
+    <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">请在所有下载任务完成后再来更改语言……</s:String>
 
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概览</s:String>
