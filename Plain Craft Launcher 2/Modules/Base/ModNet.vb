@@ -1,7 +1,8 @@
 ﻿Imports System.Net
-Imports PCL.ModNet
 
 Public Module ModNet
+
+
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
     ''' <summary>
