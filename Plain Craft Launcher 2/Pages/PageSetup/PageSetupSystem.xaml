@@ -138,19 +138,21 @@
                 </Grid>
             </local:MyCard>
 
-            <local:MyCard x:Name="CardMain" Margin="0,0,0,15" Title="{DynamicResource LangPageSetupSystemLang}">
-                <Grid x:Name="PanMainLang" Margin="25,40,25,15" Visibility="Visible">
+            <local:MyCard Margin="0,0,0,15" Title="{DynamicResource LangPageSetupSystemLang}">
+                <Grid Margin="25,40,25,20" Visibility="Visible">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="28" />
                         <RowDefinition Height="9" />
-                        <RowDefinition Height="28" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="9" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemLangLaunchLang}"/>
-                    <local:MyComboBox x:Name="ComboBackgroundSuit" Tag="UiBackgroundSuit" HorizontalAlignment="Left" Width="170" Grid.Column="1">
+                    <local:MyComboBox x:Name="ComboBackgroundSuit" Tag="UiBackgroundSuit" Grid.Row="0" Grid.Column="1">
                         <local:MyComboBoxItem Content="English (US)" Tag="en_US" />
                         <local:MyComboBoxItem Content="English (UK)" Tag="en_GB" />
                         <local:MyComboBoxItem Content="简体中文 (中国大陆)" Tag="zh_CN" IsSelected="True" />
@@ -159,7 +161,15 @@
                         <local:MyComboBoxItem Content="文言 (華夏)" Tag="lzh"/>
                         <local:MyComboBoxItem Content="梗体中文 (天朝)" Tag="zh_MEME"/>
                     </local:MyComboBox>
-                    <local:MyHint Height="25" Text="{DynamicResource LangPageSetupSystemLangWarn}" Grid.Row="2" Grid.ColumnSpan="2"/>
+                    <local:MyHint Text="{DynamicResource LangPageSetupSystemLangWarn}" Grid.Row="2" Grid.ColumnSpan="2"/>
+                    <Grid Height="35" Grid.Row="4" Grid.ColumnSpan="5" Margin="0,5,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                        </Grid.ColumnDefinitions>
+                        <local:MyButton Grid.Column="0" x:Name="BtnHelpTranslate" MinWidth="140" Text="{DynamicResource LangPageSetupSystemLangHelpTranslate}" Padding="13,0" Margin="0,0,20,0" />
+                    </Grid>
                 </Grid>
             </local:MyCard>
             <local:MyCard x:Name="CardDebug" Margin="0,0,0,15" Title="{DynamicResource LangPageSetupSystemDebug}" CanSwap="True" IsSwaped="True">

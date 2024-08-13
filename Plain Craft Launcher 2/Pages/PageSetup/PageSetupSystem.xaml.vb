@@ -30,8 +30,15 @@
             If Not ComboBackgroundSuit.IsLoaded Then Exit Sub
             Lang = CType(ComboBackgroundSuit.SelectedItem, MyComboBoxItem).Tag
             Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
+            If Lang.Equals("zh_MEME") Then MyMsgBox($"此语言仅供娱乐，请勿当真{vbCr}此語言僅供娛樂，請勿當真{vbCr}This language is for entertainment only, please don't take it seriously", IsWarn:=True)
             WriteReg("Lang", Lang)
+            MyMsgBox(GetLang("LangPageSetupSystemDialogContentLanguageRestart"), ForceWait:=True)
+            'TODO: Restart here
         End If
+    End Sub
+
+    Private Sub HelpTranslate(sender As Object, e As EventArgs) Handles BtnHelpTranslate.Click
+        OpenWebsite("https://github.com/Hex-Dragon/PCL2/tree/main/Plain%20Craft%20Launcher%202/Resources/Language")
     End Sub
 #End Region
 

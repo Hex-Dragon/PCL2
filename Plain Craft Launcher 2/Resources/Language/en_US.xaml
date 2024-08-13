@@ -1054,6 +1054,8 @@ Unless you are making a modpack or updating the launcher often, this option is e
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Official</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Balanced</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Mirror</s:String>
+    <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL is about to restart to fully apply language switching</s:String>
+    <s:String x:Key="LangPageSetupSystemLangHelpTranslate">Help Translate</s:String>
 
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">Overview</s:String>

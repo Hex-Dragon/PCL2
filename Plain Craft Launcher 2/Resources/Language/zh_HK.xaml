@@ -1054,6 +1054,8 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">盡量使用官方源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">在官方源加載緩慢時改用鏡像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">盡量使用鏡像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL 即將重啟以完全應用語言的切換</s:String>
+    <s:String x:Key="LangPageSetupSystemLangHelpTranslate">幫助翻譯</s:String>
 
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概覽</s:String>

@@ -1054,6 +1054,8 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">盡量使用官方來源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">在官方來源加載緩慢時改用鏡像來源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">盡量使用鏡像來源</s:String>
+    <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL 即將重啟以完全應用語言的切換</s:String>
+    <s:String x:Key="LangPageSetupSystemLangHelpTranslate">幫助翻譯</s:String>
 
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概覽</s:String>
