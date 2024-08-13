@@ -61,7 +61,7 @@
                             <local:MyComboBoxItem Tag="4472/technology" Content="科技" />
                             <local:MyComboBoxItem Tag="4473/magic" Content="魔法" />
                             <local:MyComboBoxItem Tag="4475/adventure" Content="冒险" />
-                            <local:MyComboBoxItem Tag="/kitchen-sink" Content="烹饪" />
+                            <local:MyComboBoxItem Tag="/kitchen-sink" Content="大杂烩" />
                             <local:MyComboBoxItem Tag="4476/" Content="探索" />
                             <local:MyComboBoxItem Tag="4477/" Content="小游戏" />
                             <local:MyComboBoxItem Tag="4471/" Content="科幻" />
