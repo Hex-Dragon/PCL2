@@ -568,7 +568,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangDownloadModpackTypeTech">科技</s:String>
     <s:String x:Key="LangDownloadModpackTypeMagic">魔法</s:String>
     <s:String x:Key="LangDownloadModpackTypeAdventure">冒险</s:String>
-    <s:String x:Key="LangDownloadModpackTypeCook">烹饪</s:String>
+    <s:String x:Key="LangDownloadModpackTypeCook">大杂烩</s:String>
     <s:String x:Key="LangDownloadModpackTypeExplore">探索</s:String>
     <s:String x:Key="LangDownloadModpackTypeGame">小游戏</s:String>
     <s:String x:Key="LangDownloadModpackTypeScienceFiction">科幻</s:String>
