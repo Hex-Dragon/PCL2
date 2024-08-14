@@ -52,7 +52,7 @@
                     </Grid.ColumnDefinitions>
                     <local:MyListItem Title="bangbang93" Margin="-5,0,15,0" IsHitTestVisible="False" Info="{DynamicResource LangPageOtherAboutThanksbangbang93}" Grid.Row="0" Grid.Column="1" />
                     <local:MyButton x:Name="BtnAboutBmclapi" Text="{DynamicResource LangPageOtherAboutThanksbangbang93Btn}" Grid.Row="0" Grid.Column="2" Height="35" />
-                    <local:MyListItem Title="{DynamicResource LangPageOtherAboutThanksMCModTitle}" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="{DynamicResource LangPageOtherAboutThanksMCMod}" Grid.Row="1" Grid.Column="1" />
+                    <local:MyListItem Title="{DynamicResource LangPageOtherAboutThanksMCModTitle}" Margin="-5,0,0,0" IsHitTestVisible="False" Info="{DynamicResource LangPageOtherAboutThanksMCMod}" Grid.Row="1" Grid.Column="1" />
                     <local:MyButton x:Name="BtnAboutWiki" Text="{DynamicResource LangPageOtherAboutThanksMCModBtn}" Grid.Row="1" Grid.Column="2" Height="35" />
                     <local:MyListItem Title="00ll00" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="{DynamicResource LangPageOtherAboutThanks00ll00}" Grid.Row="2" Grid.Column="1" />
                     <local:MyListItem Title="DoodleHuang" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="{DynamicResource LangPageOtherAboutThanksDoodleHuang}" Grid.Row="3" Grid.Column="1" />

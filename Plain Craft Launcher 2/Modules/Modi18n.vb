@@ -56,6 +56,8 @@ Module Modi18n
         Select Case Lang
             Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME"
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
+            Case "zh_GB"
+                Return Time.ToString("HH:mm dd/MM/yyyy")
             Case Else 'en_US
                 Return Time.ToString("HH:mm MM/dd/yyyy")
         End Select
@@ -71,4 +73,8 @@ Module Modi18n
             Log(ex, "[Lang] 切换字体失败，这可能导致界面显示异常", LogLevel.Msgbox)
         End Try
     End Sub
+
+    Public Function IsLocationZH() As Boolean
+        Return Lang.StartsWithF("zh") Or Lang.Equals("lzh")
+    End Function
 End Module
