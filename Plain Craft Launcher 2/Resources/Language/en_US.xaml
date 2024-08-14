@@ -1054,10 +1054,10 @@ Unless you are making a modpack or updating the launcher often, this option is e
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Official</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Balanced</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Mirror</s:String>
-    <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL is about to restart to fully apply language switching</s:String>
-    <s:String x:Key="LangPageSetupSystemLangHelpTranslate">Help Translate</s:String>
-    <s:String x:Key="LangPageSetupSystemHintCloseGameBeforeChangeLanguage">Please close all running games first...</s:String>  
-    <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">Please wait until all download tasks are completed before changing the language...</s:String>
+    <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL is about to restart to fully apply the language.</s:String>
+    <s:String x:Key="LangPageSetupSystemLangHelpTranslate">Contribute</s:String>
+    <s:String x:Key="LangPageSetupSystemHintCloseGameBeforeChangeLanguage">Please close all instances that are running first...</s:String>
+    <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">Please change the language after all download tasks are completed...</s:String>
 
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">Overview</s:String>
