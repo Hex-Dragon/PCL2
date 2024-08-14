@@ -50,7 +50,7 @@ Public Module ModBase
     ''' <summary>
     ''' 当前程序的语言。
     ''' </summary>
-    Public Lang As String = "zh_CN"
+    Public Lang As String = ReadReg("Lang", GetDefaultLang())
     ''' <summary>
     ''' 设置对象。
     ''' </summary>
