@@ -73,4 +73,8 @@ Module Modi18n
             Log(ex, "[Lang] 切换字体失败，这可能导致界面显示异常", LogLevel.Msgbox)
         End Try
     End Sub
+
+    Public Function IsLocationZH() As Boolean
+        Return Lang.StartsWithF("zh") Or Lang.Equals("lzh")
+    End Function
 End Module
