@@ -56,6 +56,8 @@ Module Modi18n
         Select Case Lang
             Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME"
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
+            Case "zh_GB"
+                Return Time.ToString("HH:mm dd/MM/yyyy")
             Case Else 'en_US
                 Return Time.ToString("HH:mm MM/dd/yyyy")
         End Select
