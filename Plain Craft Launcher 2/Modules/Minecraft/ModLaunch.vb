@@ -1,4 +1,5 @@
 ﻿Imports System.IO.Compression
+Imports Newtonsoft.Json
 
 Public Module ModLaunch
 
@@ -708,6 +709,16 @@ LoginFinish:
         Setup.Set("Cache" & Data.Input.Token & "Pass", Data.Input.Password)
         McLaunchLog("刷新登录成功（Refresh, " & Data.Input.Token & "）")
     End Sub
+
+    Public Class AuthErrorResponse
+        Public Property [error] As String
+        Public Property errorMessage As String
+    End Class
+    Private Function ParseErrorResponse(ex As Exception) As AuthErrorResponse
+        Dim SplitEx As String = ex.ToString().Split(vbCrLf)(1).Split("-")(0).ToString().Trim()
+        Dim JsonEx As AuthErrorResponse = JsonConvert.DeserializeObject(Of AuthErrorResponse)(SplitEx)
+        Return JsonEx
+    End Function
     Private Function McLoginRequestLogin(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult)) As Boolean
         Try
             Dim NeedRefresh As Boolean = False
@@ -717,10 +728,13 @@ LoginFinish:
                 New JProperty("username", Data.Input.UserName),
                 New JProperty("password", Data.Input.Password),
                 New JProperty("requestUser", True))
+            Dim LHeaders As New Dictionary(Of String, String)
+            LHeaders.Add("Accept-Language", "zh_CN")
             Dim LoginJson As JObject = GetJson(NetRequestRetry(
                 Url:=Data.Input.BaseUrl & "/authenticate",
                 Method:="POST",
                 Data:=RequestData.ToString(0),
+                Headers:=LHeaders,
                 ContentType:="application/json; charset=utf-8"))
             '检查登录结果
             If LoginJson("availableProfiles").Count = 0 Then
@@ -783,6 +797,10 @@ LoginFinish:
             If AllMessage.Contains("403") Then
                 Select Case Data.Input.Type
                     Case McLoginType.Auth
+                        Dim ErrorResponse As AuthErrorResponse = ParseErrorResponse(ex)
+                        If (ErrorResponse.errorMessage <> "") Then
+                            Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf & $" - {ErrorResponse.errorMessage}")
+                        End If
                         Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf &
                                             " - 输入的账号或密码错误。" & vbCrLf &
                                             " - 登录尝试过于频繁，导致被暂时屏蔽。请不要操作，等待 10 分钟后再试。" & vbCrLf &
