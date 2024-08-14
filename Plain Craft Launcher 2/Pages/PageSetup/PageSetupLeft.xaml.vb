@@ -150,13 +150,13 @@
                     ItemLaunch.Checked = True
                 End If
             Case FormMain.PageSubType.SetupUI
-                If MyMsgBox(GetLang("LangPageSetupLeftDialogResetLaunchConfirmContent"), GetLang("LangPageSetupLeftDialogBtnResetConfirm"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
+                If MyMsgBox(GetLang("LangPageSetupLeftDialogResetPersonalizeConfirmContent"), GetLang("LangPageSetupLeftDialogBtnResetConfirm"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
                     If IsNothing(FrmSetupUI) Then FrmSetupUI = New PageSetupUI
                     FrmSetupUI.Reset()
                     ItemUI.Checked = True
                 End If
             Case FormMain.PageSubType.SetupSystem
-                If MyMsgBox(GetLang("LangPageSetupLeftDialogResetPersonalizeConfirmContent"), GetLang("LangPageSetupLeftDialogBtnResetConfirm"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
+                If MyMsgBox(GetLang("LangPageSetupLeftDialogResetLaunchConfirmContent"), GetLang("LangPageSetupLeftDialogBtnResetConfirm"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
                     If IsNothing(FrmSetupSystem) Then FrmSetupSystem = New PageSetupSystem
                     FrmSetupSystem.Reset()
                     ItemSystem.Checked = True
