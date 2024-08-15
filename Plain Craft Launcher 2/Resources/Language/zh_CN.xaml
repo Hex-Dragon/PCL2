@@ -8,6 +8,22 @@
     <s:String x:Key="LangDialogBtnYes">是</s:String>
     <s:String x:Key="LangDialogBtnNo">否</s:String>
     
+    <!--Application-->
+    <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 没有对 {0} 的访问权限</s:String>
+    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavaliable">缓存文件夹不可用</s:String>
+    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavaliable">PCL 无法访问缓存文件夹，可能导致程序出错或无法正常使用。
+错误原因：{0}</s:String>
+    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavaliable">手动设置的缓存文件夹不可用，PCL 将使用默认缓存文件夹。
+错误原因：{0}</s:String>
+    <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境警告</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL 正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。
+请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！</s:String>
+    <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化错误</s:String>
+    <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下载并安装 .NET Framework 4.6.2 后重试！</s:String>
+    <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷烫烫烫</s:String>
+    <s:String x:Key="LangApplicationDialogContentUnknownError">程序出现未知错误</s:String>
+    
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下载</s:String>
     <s:String x:Key="LangTitleHome">启动</s:String>
@@ -1584,9 +1600,9 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 请尝试使用加速器或 VPN。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnIDK">我不知道</s:String>
     <s:String x:Key="LangModLaunchDialogContentAgeLimit">该账号年龄不足，你需要先修改出生日期，然后才能登录。
-该账号目前填写的年龄是否在 13 岁以上？</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 岁以上</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnAgeLess12">13 岁以上</s:String>
+该账号目前填写的年龄是否在 13 岁及以上？</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 岁及以上</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnAgeLess12">13 岁以下</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeA">请在打开的网页中修改账号的出生日期（至少改为 18 岁以上）。
 在修改成功后等待一分钟，然后再回到 PCL，就可以正常登录了！</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeB">请根据打开的网页的说明，修改账号的出生日期（至少改为 18 岁以上）。

@@ -8,6 +8,22 @@
     <s:String x:Key="LangDialogBtnYes">没错</s:String>
     <s:String x:Key="LangDialogBtnNo">有错</s:String>
     
+    <!--Application-->
+    <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 没有对 {0} 的访问权限</s:String>
+    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavaliable">缓存文件夹不可用</s:String>
+    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavaliable">PCL 无法访问缓存文件夹，可能导致程序出错或无法正常使用。
+错误原因：{0}</s:String>
+    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavaliable">手动设置的缓存文件夹不可用，PCL 将使用默认缓存文件夹。
+错误原因：{0}</s:String>
+    <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境警告</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL 正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。
+请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！</s:String>
+    <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化错误</s:String>
+    <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下载并安装 .NET Framework 4.6.2 后重试！</s:String>
+    <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷烫烫烫</s:String>
+    <s:String x:Key="LangApplicationDialogContentUnknownError">程序出现未知错误</s:String>
+    
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下崽</s:String>
     <s:String x:Key="LangTitleHome">启动</s:String>
@@ -372,9 +388,9 @@
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">下崽 {0} 主文件</s:String>
     <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">分析 {0} 支持库文件</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">下崽 {0} 支持库文件</s:String>
-    <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">获取 Opti不Fine 下崽地址</s:String>
-    <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">下崽 Opti不Fine 主文件</s:String>
-    <s:String x:Key="LangPageSpeedRightInstallOptiFineMethodA">安装 Opti不Fine（方式 A）</s:String>
+    <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">获取 OptiNotFine 下崽地址</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">下崽 OptiNotFine 主文件</s:String>
+    <s:String x:Key="LangPageSpeedRightInstallOptiFineMethodA">安装 OptiNotFine（方式 A）</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFabric">下崽高清布料</s:String>
 
     <!--PageDownloadClient-->
@@ -441,9 +457,9 @@
     <!--PageDownloadInstall-->
     <s:String x:Key="LangDownloadInstallReview">安装预览</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">你尚未选择安装布料API，这会导致大多数 Mod 没办法使用！</s:String>
-    <s:String x:Key="LangDownloadInstallOptiFabric">你尚未选择安装高清布料，这会导致 Opti不Fine 没办法使用！</s:String>
-    <s:String x:Key="LangDownloadInstallOptiFine">Opti不Fine 与一部分 Mod 的兼容性不佳，请谨慎安装。</s:String>
-    <s:String x:Key="LangDownloadInstallOldOptiFabric">安装结束后，请在 Mod 下崽中搜索 高清布料 Origins 并下崽，否则 Opti不Fine 会没办法使用！</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFabric">你尚未选择安装高清布料，这会导致 OptiNotFine 没办法使用！</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFine">OptiNotFine 与一部分 Mod 的兼容性不佳，请谨慎安装。</s:String>
+    <s:String x:Key="LangDownloadInstallOldOptiFabric">安装结束后，请在 Mod 下崽中搜索 高清布料 Origins 并下崽，否则 OptiNotFine 会没办法使用！</s:String>
     <s:String x:Key="LangDownloadInstallStart">开始安装</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">版本名称</s:String>
     <s:String x:Key="LangDownloadInstallBack">返回</s:String>
@@ -455,8 +471,8 @@
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">与 Opti不Fine 不兼容</s:String>
     <s:String x:Key="LangDownloadInstallForgeNeed">需要锻造</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">需要布料</s:String>
-    <s:String x:Key="LangDownloadInstallOptiFineNeed">需要 Opti不Fine</s:String>
-    <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">需要 Opti不Fine 与布料</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineNeed">需要 OptiNotFine</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">需要 OptiNotFine 与布料</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">或更高版本</s:String>
     <s:String x:Key="LangDownloadInstallNoAvailabeVersion">没有可用版本</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">获取版本列表失败：未知错误，状态为</s:String>
@@ -475,7 +491,7 @@ PCL 推荐你在开始下崽前，在 设置 → 版本隔离 中打开版本隔
     <s:String x:Key="LangDownloadPageRefresh">刷新</s:String>
     <s:String x:Key="LangDownloadPageAutoInstall">自动安装</s:String>
     <s:String x:Key="LangDownloadPageManualInstall">▼ 手动安装包</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallContent">手动安装包功能提供了 Opti不Fine、锻造等组件的 .jar 安装文件下崽，但没办法自动安装。
+    <s:String x:Key="LangDownloadPageDialogManualInstallContent">手动安装包功能提供了 OptiNotFine、锻造等组件的 .jar 安装文件下崽，但没办法自动安装。
 在自动安装页面先选择 MC 版本，然后就可以选择 Opti不Fine、锻造等组件，让 PCL 自动进行安装了。</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallTitle">自动安装提示</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">返回自动安装</s:String>
@@ -540,11 +556,11 @@ PCL 推荐你在开始下崽前，在 设置 → 版本隔离 中打开版本隔
     <s:String x:Key="LangDownloadNeoForgeGettingList">正在获取 NeoForge 列表</s:String>
 
     <!--PageDownloadOptiFine-->
-    <s:String x:Key="LangDownloadOptiFineDescTitle">Opti不Fine 简介</s:String>
-    <s:String x:Key="LangDownloadOptiFineDesc">Opti不Fine 又名低清不修复，它让你可以安装光影、使用高清材质，并且可以大幅提高游戏性能。</s:String>
+    <s:String x:Key="LangDownloadOptiFineDescTitle">OptiNotFine 简介</s:String>
+    <s:String x:Key="LangDownloadOptiFineDesc">OptiNotFine 又名低清不修复，它让你可以安装光影、使用高清材质，并且可以大幅提高游戏性能。</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">打开官网</s:String>
     <s:String x:Key="LangDownloadOptiFineChineseWebsite">打开中文网</s:String>
-    <s:String x:Key="LangDownloadOptiFineGettingList">正在获取 Opti不Fine 列表</s:String>
+    <s:String x:Key="LangDownloadOptiFineGettingList">正在获取 OptiNotFine 列表</s:String>
 
     <!--PageDownloadPack-->
     <s:String x:Key="LangDownloadModpackSearchTitle">搜索整合包</s:String>
@@ -773,12 +789,12 @@ PCL 推荐你在开始下崽前，在 设置 → 版本隔离 中打开版本隔
     <s:String x:Key="LangPageOtherAboutAbout">关于</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthor">龙腾猫跃</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthorSubtitle">Plain Craft Launcher 的作者！</s:String>
-    <s:String x:Key="LangPageOtherAboutAboutAuthorBtn">赞助作者</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutAuthorBtn">给作者打钱</s:String>
     <s:String x:Key="LangPageOtherAboutAboutVersionSubtitle">当前版本：%VERSION%（%VERSIONCODE%.%BRANCH%）</s:String>
     <s:String x:Key="LangPageOtherAboutAboutVersionBtn">查看源代码</s:String>
     <s:String x:Key="LangPageOtherAboutThanks">特别鸣谢</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93">提供 BMCLAPI 镜像源和锻造安装工具，详见 https://bmclapi.bangbang93.com</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">赞助镜像源</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">给镜像源打钱</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModTitle">MC 百科</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCMod">提供了 Mod 名称的中文翻译和更多相关信息！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">打开百科</s:String>
@@ -1584,9 +1600,9 @@ PCL 不支持其他乱七八糟的下崽协议。</s:String>
 请尝试使用加速器或 VPN。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnIDK">我不到啊</s:String>
     <s:String x:Key="LangModLaunchDialogContentAgeLimit">该账号年龄不足，你需要先修改出生日期，然后才能登录。
-该账号目前填写的年龄是否在 13 岁以上？</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 岁以上</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnAgeLess12">13 岁以上</s:String>
+该账号目前填写的年龄是否在 13 岁及以上？</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 岁及以上</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnAgeLess12">13 岁以下</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeA">请在打开的网页中修改账号的出生日期（至少改为 18 岁以上）。
 在修改成功后等待一分钟，然后再回到 PCL，就可以正常登录了！</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeB">请根据打开的网页的说明，修改账号的出生日期（至少改为 18 岁以上）。
@@ -1608,7 +1624,7 @@ PCL 不支持其他乱七八糟的下崽协议。</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">获取的正版 UUID 长度不足（{0}）</s:String>
     <s:String x:Key="LangModLaunchHintNoAvailableJava">没有可用的 Jvav，已取消启动！</s:String>
     <s:String x:Key="LangModLaunchExceptionReleaseJavaWrapperFail">释放 Jvav Wrapper 失败，请查看 PCL 日志查找详细信息</s:String>
-    <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">Opti不Fine 与自动进入服务器可能不兼容，有概率导致材质丢失甚至游戏炸掉！</s:String>
+    <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">OptiNotFine 与自动进入服务器可能不兼容，有概率导致材质丢失甚至游戏炸掉！</s:String>
     <s:String x:Key="LangModLaunchExceptionConnectServerFail">没办法连接到第三方登录服务器（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 JSON 中没有 mainClass 项！</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">没办法打开 Natives 文件（{0}），该文件可能已损坏，请重新尝试启动游戏</s:String>

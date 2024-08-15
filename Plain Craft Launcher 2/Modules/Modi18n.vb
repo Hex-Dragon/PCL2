@@ -56,7 +56,7 @@ Module Modi18n
         Select Case Lang
             Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME"
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
-            Case "zh_GB"
+            Case "en_GB"
                 Return Time.ToString("HH:mm dd/MM/yyyy")
             Case Else 'en_US
                 Return Time.ToString("HH:mm MM/dd/yyyy")
@@ -74,7 +74,32 @@ Module Modi18n
         End Try
     End Sub
 
+    ''' <summary>
+    ''' 语言是否为中文
+    ''' </summary>
+    ''' <returns></returns>
     Public Function IsLocationZH() As Boolean
         Return Lang.StartsWithF("zh") Or Lang.Equals("lzh")
+    End Function
+
+    ''' <summary>
+    ''' 获取当前系统的默认语言
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function GetDefaultLang() As String
+        Select Case Globalization.CultureInfo.CurrentCulture.Name
+            Case "en-US"
+                Return "en_US"
+            Case "en-GB"
+                Return "en_GB"
+            Case "zh-CN"
+                Return "zh_CN"
+            Case "zh-HK"
+                Return "zh_HK"
+            Case "zh-TW"
+                Return "zh_TW"
+            Case Else
+                Return "en_US"
+        End Select
     End Function
 End Module
