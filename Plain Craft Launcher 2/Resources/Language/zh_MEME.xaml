@@ -1584,9 +1584,9 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 请尝试使用加速器或 VPN。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnIDK">我不知道</s:String>
     <s:String x:Key="LangModLaunchDialogContentAgeLimit">该账号年龄不足，你需要先修改出生日期，然后才能登录。
-该账号目前填写的年龄是否在 13 岁以上？</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 岁以上</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnAgeLess12">13 岁以上</s:String>
+该账号目前填写的年龄是否在 13 岁及以上？</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 岁及以上</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnAgeLess12">13 岁以下</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeA">请在打开的网页中修改账号的出生日期（至少改为 18 岁以上）。
 在修改成功后等待一分钟，然后再回到 PCL，就可以正常登录了！</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeB">请根据打开的网页的说明，修改账号的出生日期（至少改为 18 岁以上）。
