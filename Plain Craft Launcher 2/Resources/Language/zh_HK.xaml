@@ -1584,8 +1584,8 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 請嘗試使用 VPN 或 Proxy。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnIDK">我不知道</s:String>
     <s:String x:Key="LangModLaunchDialogContentAgeLimit">該帳户年齡不足，你需要先修改出生日期，然後才能登入。
-該帳户目前填寫的年齡是否在 13 歲以上？</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 歲以上</s:String>
+該帳户目前填寫的年齡是否在 13 歲及以上？</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 歲及以上</s:String>
     <s:String x:Key="LangModLaunchDialogBtnAgeLess12">13 歲以下</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeA">請在打開的網頁中修改帳户的出生日期（至少改為 18 歲以上）。
 在修改成功後等待一分鐘，然後再回到 PCL，就可以正常登入了！</s:String>
