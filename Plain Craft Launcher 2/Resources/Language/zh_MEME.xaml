@@ -491,12 +491,12 @@
     <s:String x:Key="LangDownloadPageRefresh">刷新</s:String>
     <s:String x:Key="LangDownloadPageAutoInstall">自动帮你安装</s:String>
     <s:String x:Key="LangDownloadPageManualInstall">▼ 自己装安装包</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallContent">自己装安装包功能提供了 OptiNotFine、锻造等组件的 .jar 安装文件下崽，但没办法自动帮你安装。
+    <s:String x:Key="LangDownloadPageDialogManualInstallContent">手动安装包功能提供了 OptiNotFine、锻造等组件的 .jar 安装文件下崽，但没办法自动帮你安装。
 在自动帮你安装页面先选择 MC 版本，然后就可以选择 Opti不Fine、锻造等组件，让平原合成发射台自动帮你进行安装了。</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallTitle">自动帮你安装提示</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">返回自动帮你安装</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">继续下崽自己装安装包</s:String>
-    <s:String x:Key="LangDownloadPageManualInstallFold">自己装安装包</s:String>
+    <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">继续下崽手动安装包</s:String>
+    <s:String x:Key="LangDownloadPageManualInstallFold">手动安装包</s:String>
     <s:String x:Key="LangDownloadPageResource">资源</s:String>
     <s:String x:Key="LangDownloadPageMods">Mod</s:String>
     <s:String x:Key="LangDownloadPageModpackages">整合包</s:String>
