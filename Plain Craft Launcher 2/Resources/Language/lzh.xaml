@@ -171,7 +171,7 @@
     <s:String x:Key="LangSetThemeNameCustom">自定</s:String>
     <s:String x:Key="LangSetThemeNameCustomToolTip">需解鎖五個隱藏主題</s:String>
     <s:String x:Key="LangSetThemeShowLogoOnStart">啟動器開時顯 PCL 圖</s:String>
-    <s:String x:Key="LangSetThemeSponsorship">需小贊作者，方可改主題色（悲）……</s:String>
+    <s:String x:Key="LangSetThemeSponsorship">需小助作者，方可改主題色（悲）……</s:String>
     <s:String x:Key="LangSetThemeSupport">助作者</s:String>
     <s:String x:Key="LangSetBackgroundPic">背景圖</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptive">自適應法</s:String>
@@ -547,16 +547,16 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangDownloadOptiFineGettingList">正在獲取 OptiFine 之列表</s:String>
 
     <!--PageDownloadPack-->
-    <s:String x:Key="LangDownloadModpackSearchTitle">搜索整合包</s:String>
-    <s:String x:Key="LangDownloadModpackSearchName">名稱</s:String>
-    <s:String x:Key="LangDownloadModpackSearchSource">來源</s:String>
-    <s:String x:Key="LangDownloadModpackSearchSourceAll">全部</s:String>
+    <s:String x:Key="LangDownloadModpackSearchTitle">搜綜合包</s:String>
+    <s:String x:Key="LangDownloadModpackSearchName">名</s:String>
+    <s:String x:Key="LangDownloadModpackSearchSource">源</s:String>
+    <s:String x:Key="LangDownloadModpackSearchSourceAll">全</s:String>
     <s:String x:Key="LangDownloadModpackSearchVersion">版本</s:String>
-    <s:String x:Key="LangDownloadModpackSearchVersionAll">全部 (也可自行輸入)</s:String>
-    <s:String x:Key="LangDownloadModpackSearch">搜索</s:String>
-    <s:String x:Key="LangDownloadModpackReset">重置條件</s:String>
-    <s:String x:Key="LangDownloadModpackGettingList">正在獲取整合包列表</s:String>
-    <s:String x:Key="LangDownloadModpackInstallFromLocal">安裝已有整合包</s:String>
+    <s:String x:Key="LangDownloadModpackSearchVersionAll">全 (亦可自行輸入)</s:String>
+    <s:String x:Key="LangDownloadModpackSearch">搜</s:String>
+    <s:String x:Key="LangDownloadModpackReset">重定諸規</s:String>
+    <s:String x:Key="LangDownloadModpackGettingList">方在攈摭綜合包之目</s:String>
+    <s:String x:Key="LangDownloadModpackInstallFromLocal">置已備之綜合包</s:String>
     <s:String x:Key="LangDownloadModpackInstallFromLocalToolTip">在當前選擇的 Minecraft 文件夾下安裝整合包</s:String>
     <s:String x:Key="LangDownloadModpackType">類型</s:String>
     <s:String x:Key="LangDownloadModpackTypeAll">全部</s:String>
@@ -580,22 +580,22 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangDownloadModpackTypeLightWeight">輕量整合</s:String>
     <s:String x:Key="LangDownloadModpackTypeHeavyWeight">大型整合</s:String>
     <s:String x:Key="LangDownloadModpackTypeMisc">雜項</s:String>
-    <s:String x:Key="LangDownloadModpackConnectModrinthFail">無法連接到 Modrinth，所以目前僅顯示了來自 CurseForge 的內容，結果可能不全。
-請嘗試使用 VPN 或加速器以改善網絡。</s:String>
-    <s:String x:Key="LangDownloadModpackConnectCurseForge">無法連接到 CurseForge，所以目前僅顯示了來自 Modrinth 的內容，結果可能不全。
-請嘗試使用 VPN 或加速器以改善網絡。</s:String>
+    <s:String x:Key="LangDownloadModpackConnectModrinthFail">無法連接至 Modrinth，故現時僅展露自 CurseForge 之內容，或有所不全。
+請試用 VPN 或加速之器以優化網。</s:String>
+    <s:String x:Key="LangDownloadModpackConnectCurseForge">無法連接至 CurseForge，故現時僅展露自 Modrinth 之內容，或有所不全。
+請試用 VPN 或加速之器以優化網。</s:String>
     
     <!--MySkin-->
-    <s:String x:Key="LangMySkinSave">另存為</s:String>
-    <s:String x:Key="LangMySkinRefresh">刷新</s:String>
-    <s:String x:Key="LangMySkinChange">更換披風</s:String>
-    <s:String x:Key="LangMySkinLoading">加載中</s:String>
-    <s:String x:Key="LangMySkinClickToChange">點擊更換皮膚（右鍵查看更多選項）</s:String>
-    <s:String x:Key="LangMySkinHintLoading">皮膚正在獲取中，請稍候！</s:String>
-    <s:String x:Key="LangMySkinDialogChoseSavePath">選取保存皮膚的位置</s:String>
-    <s:String x:Key="LangMySkinHintSaveSuccess">皮膚保存成功！</s:String>
-    <s:String x:Key="LangMySkinHintSaveFail">保存皮膚失敗</s:String>
-    <s:String x:Key="LangMySkinHintSkinFileCorruption">皮膚文件已損壞：</s:String>
+    <s:String x:Key="LangMySkinSave">另置名為</s:String>
+    <s:String x:Key="LangMySkinRefresh">複載其頁</s:String>
+    <s:String x:Key="LangMySkinChange">易蓑衣</s:String>
+    <s:String x:Key="LangMySkinLoading">方載中</s:String>
+    <s:String x:Key="LangMySkinClickToChange">點擊更換外觀（右擊以察餘項）</s:String>
+    <s:String x:Key="LangMySkinHintLoading">外觀方獲之，請候！</s:String>
+    <s:String x:Key="LangMySkinDialogChoseSavePath">揀選而記外觀</s:String>
+    <s:String x:Key="LangMySkinHintSaveSuccess">外觀已記！</s:String>
+    <s:String x:Key="LangMySkinHintSaveFail">記外觀，大敗</s:String>
+    <s:String x:Key="LangMySkinHintSkinFileCorruption">外觀已毁：</s:String>
     <s:String x:Key="LangMySkinHintExistSkinFileGetTask">有正在獲取中的皮膚，請稍後再試！</s:String>
     <s:String x:Key="LangMySkinHintRefreshing">正在刷新頭像……</s:String>
     <s:String x:Key="LangMySkinHintRefreshed">已刷新頭像！</s:String>
@@ -627,29 +627,29 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangMySkinCapeNameNone">無披風</s:String>
 
     <!--FormLoginOAuth-->
-    <s:String x:Key="LangLoginOAuthLoading">正在加載登錄頁面</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipA">如果網絡環境不佳，加載可能非常緩慢甚至一直加載不出來</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipB">此時請嘗試使用 VPN 或加速器，然後重試</s:String>
-    <s:String x:Key="LangLoginOAuthToBrower">如果遇到問題，可以點擊這裡使用系統瀏覽器登錄</s:String>
-    <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL 不支持使用 GitHub 登錄微軟賬號！</s:String>
-    <s:String x:Key="LangLoginOAuthWindowTitle">Microsoft 賬戶登錄</s:String>
+    <s:String x:Key="LangLoginOAuthLoading">正載登之頁</s:String>
+    <s:String x:Key="LangLoginOAuthLoadingTipA">若網路環境欠佳，則加載或甚遲緩，乃至終不得見。</s:String>
+    <s:String x:Key="LangLoginOAuthLoadingTipB">此時請試用 VPN 或加速之器，而後複試之。</s:String>
+    <s:String x:Key="LangLoginOAuthToBrower">若遇疑難，可擊此處，用系統之覽器以登入</s:String>
+    <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL 不容以 GitHub 登微軟之號也！</s:String>
+    <s:String x:Key="LangLoginOAuthWindowTitle">Microsoft 賬戶登</s:String>
 
     <!--PageLaunchLeft-->
-    <s:String x:Key="LangLaunchLeftInstanceChoose">版本選擇</s:String>
-    <s:String x:Key="LangLaunchLeftInstanceConfig">版本設置</s:String>
+    <s:String x:Key="LangLaunchLeftInstanceChoose">版擇</s:String>
+    <s:String x:Key="LangLaunchLeftInstanceConfig">版設</s:String>
     <s:String x:Key="LangLaunchLeftAccountMicrosoft">正版</s:String>
     <s:String x:Key="LangLaunchLeftAccountOffline">離線</s:String>
-    <s:String x:Key="LangLaunchLeftAccountUnifiedPass">統一通行證</s:String>
-    <s:String x:Key="LangLaunchLeftLoadingInstance">正在加載</s:String>
-    <s:String x:Key="LangLaunchLeftLoadingInstanceTip">正在加載中，請稍候</s:String>
-    <s:String x:Key="LangLaunchLeftStartingInstance">正在啟動遊戲</s:String>
-    <s:String x:Key="LangLaunchLeftStartingStage">當前步驟</s:String>
+    <s:String x:Key="LangLaunchLeftAccountUnifiedPass">大一統通關文牒</s:String>
+    <s:String x:Key="LangLaunchLeftLoadingInstance">方载之中</s:String>
+    <s:String x:Key="LangLaunchLeftLoadingInstanceTip">方载之中，請候</s:String>
+    <s:String x:Key="LangLaunchLeftStartingInstance">正啟戲也</s:String>
+    <s:String x:Key="LangLaunchLeftStartingStage">現時之步</s:String>
     <s:String x:Key="LangLaunchLeftStageDownloadLib">下載支持</s:String>
-    <s:String x:Key="LangLaunchLeftStageLogin">登錄方式</s:String>
-    <s:String x:Key="LangLaunchLeftStageMicrosoftAccount">正版登錄</s:String>
-    <s:String x:Key="LangLaunchLeftStageStarting">啟動進度</s:String>
-    <s:String x:Key="LangLaunchLeftStageDownload">下載速度</s:String>
-    <s:String x:Key="LangLaunchLeftTip">你知道嗎</s:String>
+    <s:String x:Key="LangLaunchLeftStageLogin">登之式</s:String>
+    <s:String x:Key="LangLaunchLeftStageMicrosoftAccount">正版登</s:String>
+    <s:String x:Key="LangLaunchLeftStageStarting">啟之步</s:String>
+    <s:String x:Key="LangLaunchLeftStageDownload">下載之速</s:String>
+    <s:String x:Key="LangLaunchLeftTip">知之乎</s:String>
     <s:String x:Key="LangLaunchLeftInit">初始化</s:String>
     <s:String x:Key="LangLaunchLeftAccountOfflineLinkLogin">聯機離線登錄</s:String>
     <s:String x:Key="LangLaunchLeftAccountOfflineLogin">離線登錄</s:String>
@@ -673,7 +673,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangLaunchRightLog">啟動日誌</s:String>
     <s:String x:Key="LangLaunchRightLabHint1">快照版包含尚未正式發布的測試功能，僅用於贊助者本人嘗鮮。請不要發給其他人或者用來製作整合包哦！</s:String>
     <s:String x:Key="LangLaunchRightLabHint2">若已累積贊助￥23.33，在愛發電私信發送 “解鎖碼” 即可永久隱藏此提示。</s:String>
-    <s:String x:Key="LangLaunchRightLoadingPage">正在加載主頁……</s:String>
+    <s:String x:Key="LangLaunchRightLoadingPage">方載主頁……</s:String>
     <s:String x:Key="LangLaunchRightPageTips">你知道嗎？</s:String>
     <s:String x:Key="LangLaunchRightPageEcho">回聲洞</s:String>
 
@@ -742,7 +742,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageLoginNideForgetPassword">找回密碼</s:String>
 
     <!--PageLoginNideSkin-->
-    <s:String x:Key="LangPageLoginNideSkinLoading">加載中</s:String>
+    <s:String x:Key="LangPageLoginNideSkinLoading">方載中</s:String>
     <s:String x:Key="LangPageLoginNideSkinChangePassword">更改密碼</s:String>
     <s:String x:Key="LangPageLoginNideSkinLogout">退出登錄</s:String>
 
