@@ -18,7 +18,7 @@
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境警告</s:String>
     <s:String x:Key="LangApplicationDialogContentRunInTemp">平原合成发射台正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。
 请将平原合成发射台从压缩文件中解压，或是更换文件夹后再继续使用！</s:String>
-    <s:String x:Key="LangApplicationDialogTitleInitError">平原合成发射台初始化错误</s:String>
+    <s:String x:Key="LangApplicationDialogTitleInitError">平原合成发射台初始化不成功</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下载并安装 .NET Framework 4.6.2 后重试！</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷烫烫烫</s:String>
@@ -616,8 +616,8 @@
     <s:String x:Key="LangMySkinHintRefreshing">正在刷新头像……</s:String>
     <s:String x:Key="LangMySkinHintRefreshed">已刷新头像！</s:String>
     <s:String x:Key="LangMySkinHintRefreshFail">刷新皮肤缓存失败</s:String>
-    <s:String x:Key="LangMySkinHintChangeSuccess">换掉皮肤成功！</s:String>
-    <s:String x:Key="LangMySkinHintChanging">正在换掉海角中，等一下！</s:String>
+    <s:String x:Key="LangMySkinHintChangeSuccess">更改皮肤成功！</s:String>
+    <s:String x:Key="LangMySkinHintChanging">正在更换海角，等一下！</s:String>
     <s:String x:Key="LangMySkinHintChangFailByLoginFail">登录失败，没办法换掉海角！</s:String>
     <s:String x:Key="LangMySkinHintGettingCape">正在获取海角列表，等一下……</s:String>
     <s:String x:Key="LangMySkinDialogChooseCape">选择海角</s:String>
@@ -645,9 +645,9 @@
     <!--FormLoginOAuth-->
     <s:String x:Key="LangLoginOAuthLoading">正在加载登录页面</s:String>
     <s:String x:Key="LangLoginOAuthLoadingTipA">如果网络环境不佳，加载可能非常缓慢甚至一直加载不出来</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipB">此时请尝试使用魔法，然后重试</s:String>
+    <s:String x:Key="LangLoginOAuthLoadingTipB">此时请尝试使用黑魔法，然后重试</s:String>
     <s:String x:Key="LangLoginOAuthToBrower">如果遇到问题，可以点击这里使用系统网上冲浪用具登录</s:String>
-    <s:String x:Key="LangLoginOAuthNoGithubLogin">平原合成发射台不支持使用 GitHub 登录巨硬账号！</s:String>
+    <s:String x:Key="LangLoginOAuthNoGithubLogin">平原合成发射台不支持使用 GaytHub 登录巨硬账号！</s:String>
     <s:String x:Key="LangLoginOAuthWindowTitle">Macrohard 账户登录</s:String>
 
     <!--PageLaunchLeft-->
@@ -677,7 +677,7 @@
     <s:String x:Key="LangLaunchLeftStartInstance">Minecraft，发射！</s:String>
     <s:String x:Key="LangLaunchLeftDownloadInstance">下崽游戏</s:String>
     <s:String x:Key="LangLaunchLeftNoAvailableInstance">你倒是装一个游戏啊</s:String>
-    <s:String x:Key="LangLaunchLeftStartCancelled">发射失败……</s:String>
+    <s:String x:Key="LangLaunchLeftStartCancelled">发射不成功……</s:String>
     <s:String x:Key="LangLaunchLeftStarted">发射，成功！</s:String>
     <s:String x:Key="LangLaunchLeftWaitForWindow">等待游戏窗口出现</s:String>
     <s:String x:Key="LangLaunchLeftAbortTask">结束处理</s:String>
@@ -740,12 +740,12 @@
     <s:String x:Key="LangPageLoginMsSkinInfoChangePassword">修改密码</s:String>
     <s:String x:Key="LangPageLoginMsSkinInfoChangeID">修改运动员名</s:String>
     <s:String x:Key="LangPageLoginMsSkinSwitchID">切换账号</s:String>
-    <s:String x:Key="LangPageLoginMsSkinChangingSkinPlzWait">正在换掉皮肤中，等一下！</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangingSkinPlzWait">正在更改皮肤，等一下！</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByLoginFail">登录失败，没办法换掉皮肤！</s:String>
-    <s:String x:Key="LangPageLoginMsSkinChangingSkin">正在换掉皮肤……</s:String>
-    <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">正在登录，将在登录完成后继续换掉皮肤……</s:String>
-    <s:String x:Key="LangPageLoginMsSkinChangeSkinFail">换掉皮肤失败</s:String>
-    <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByTimeOut">换掉皮肤失败：与 Bugjump 皮肤服务器的连接超时，请检查你的网络是否通畅！</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangingSkin">正在换皮肤……</s:String>
+    <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">正在登录，将在登录完成后继续换皮肤……</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangeSkinFail">换皮肤失败</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByTimeOut">换皮肤失败：与 Bugjump 皮肤服务器的连接超时，请检查你的网络是否通畅！</s:String>
 
     <!--PageLoginNide-->
     <s:String x:Key="LangPageLoginNideAccount">账号</s:String>
@@ -759,7 +759,7 @@
 
     <!--PageLoginNideSkin-->
     <s:String x:Key="LangPageLoginNideSkinLoading">加载中</s:String>
-    <s:String x:Key="LangPageLoginNideSkinChangePassword">换掉密码</s:String>
+    <s:String x:Key="LangPageLoginNideSkinChangePassword">换密码</s:String>
     <s:String x:Key="LangPageLoginNideSkinLogout">退出登录</s:String>
 
     <!--PageOtherLeft-->
@@ -773,15 +773,15 @@
     <!--PageOtherHelp-->
     <s:String x:Key="LangPageOtherHelpSearch">搜索帮助</s:String>
     <s:String x:Key="LangPageOtherHelpLoading">正在加载帮助列表</s:String>
-    <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">很抱歉，帮助库目前只支持简体中文</s:String>
+    <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">不好意思，帮助库目前只支持简体中文</s:String>
     <s:String x:Key="LangPageOtherRefreshing">正在刷新……</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackContent">你是不是要打开反馈列表网页？
-如果没办法打开该网页，请尝试使用魔法。</s:String>
+如果没办法打开该网页，请尝试使用黑魔法。</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">反馈提示</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">提交新反馈</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">查看反馈列表</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">你是不是要打开新功能投票网页？
-如果没办法打开该网页，请尝试使用魔法。</s:String>
+如果没办法打开该网页，请尝试使用黑魔法。</s:String>
     <s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">打开</s:String>
 
@@ -816,10 +816,10 @@
     <s:String x:Key="LangPageOtherAboutLicenseCopyright">许可与版权声明</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseDoc">查看许可文档</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseWeb">查看来源网站</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoAgreement">运动员协议与免责声明</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用户协议与免责声明</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隐私说明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本软件会汇报自己的版本名与版本号，以统计运动员数量与各版本的运动员数量占比。除此之外，本软件不会上传您的任何信息。
-若您能提供未经外部修改的本软件本体上传隐私信息的确凿证据，开发者会向您支付平原合成发射台开发所获全部净收入。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本软件会汇报自己的版本名与版本号，以统计用户数量与各版本的用户数量占比。除此之外，本软件不会上传您的任何信息。
+若您能提供未经外部修改的本软件本体上传隐私信息的确凿证据，开发者会向您支付 PCL 开发所获全部净收入。</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龙腾猫跃 2016. All Rights Reserved.
 计算机软件著作权登记号：2020SR0875133
@@ -834,7 +834,7 @@
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandom">随机</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandomToolTip">随机选择一个默认皮肤</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoft">正版皮肤</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftToolTip">使用某个正版运动员的皮肤</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftToolTip">使用某个正版运动员的外壳</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeCustom">自定义</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeCustomToolTip">以亮目害眼包的形式加载自定义皮肤。
 使用此方式更换的皮肤在多人游戏中仅自己可见，且会替换游戏中所有的角色。</s:String>
@@ -842,11 +842,11 @@
     <s:String x:Key="LangPageSetupLaunchSkinSave">保存皮肤</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinRefresh">刷新缓存</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinRefreshToolTip">刷新并重新下崽平原合成发射台当前显示的皮肤</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinChange">换掉皮肤</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinChange">换皮肤</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinReset">重置皮肤</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchOptions">发射选项</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowTitle">游戏窗口抬头</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleToolTip">自定义游戏窗口的抬头，若留空则不进行换掉。
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleToolTip">自定义游戏窗口的抬头，若留空则不进行更改。
 支持以下替换标记：
  · {user}：运动员名字
  · {login}：运动员的登录方式
@@ -885,7 +885,7 @@
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeCustomToolTip">锻造 1.12.2 等个别版本存在 Bug，会导致高度设定无效</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeMaxium">最大化</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJava">游戏 Jvav</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchJavaToolTip">若将 Jvav 放在游戏文件夹子或平原合成发射台文件夹子，在进行自动帮你选择时平原合成发射台会尽量优先选择它</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchJavaToolTip">若将 Jvav 放在游戏文件夹子或平原合成发射台文件夹子，在进行自动选择时平原合成发射台会尽量优先选择它</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaLoading">捞丁……</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaAutoSearch">自动帮你搜索</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaImport">手动导入</s:String>
@@ -938,9 +938,9 @@
 如果在设置中手动选择了与当前版本不兼容的 Jvav，则自动帮你跳过兼容性警告弹窗，强制使用手动选择的 Jvav。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">关掉文件校验</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：强烈推荐在版本设置中关掉特定版本的校验，而不是在这里关掉所有版本的校验！
-完全不换掉 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。
+完全不更改 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。
 如果你莫得修改相关文件，请勿勾选此项。</s:String>
-    <s:String x:Key="LangPageSetupLaunchReloadByError">发射设置项存在异常，已被自动帮你重置</s:String>
+    <s:String x:Key="LangPageSetupLaunchReloadByError">发射设置项存在异常，已被自动重置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">重载发射设置时出错</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">已初始化发射设置！</s:String>
     <s:String x:Key="LangPageSetupLaunchInitFail">初始化发射设置失败</s:String>
@@ -962,7 +962,7 @@
 如果你在使用机械硬盘，这还可能导致一小段时间的严重卡顿。
 
 每次发射游戏，平原合成发射台都需要申请管理员权限以进行内存优化。
-若想自动帮你授予权限，可以右键平原合成发射台，打开 属性 → 兼容性 → 以管理员身份运行此程序。</s:String>
+若想自动授予权限，可以右键平原合成发射台，打开 属性 → 兼容性 → 以管理员身份运行此程序。</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">提醒</s:String>
 
     <!--PageSetupLeft-->
@@ -1033,7 +1033,7 @@
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">瞅一眼更新</s:String>
     <s:String x:Key="LangPageSetupSystemLang">语言</s:String>
     <s:String x:Key="LangPageSetupSystemLangLaunchLang">发射台语言</s:String>
-    <s:String x:Key="LangPageSetupSystemLangWarn">翻译不保证 100% 准确，修改语言后需要重启平原合成发射台&#xa;当前语言模式仅供娱乐，请勿当真</s:String>
+    <s:String x:Key="LangPageSetupSystemLangWarn">翻译不保证 100% 准确，修改语言后需要重启平原合成发射台&#xa;当前语言模式仅供娱乐，请勿当真。可能只有这一段话是认真说的。</s:String>
     <s:String x:Key="LangPageSetupSystemDebug">调试选项</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeed">动画速度</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">禁止在下崽时复制已存在的文件</s:String>
@@ -1142,14 +1142,14 @@
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">该版本用不了 Mod</s:String>
     <s:String x:Key="LangPageVersionModDisabledContent">你需要先安装锻造、布料等 Mod 加载器才能使用 Mod，请在下崽页面安装这些版本。
-如果你已经装过了 Mod 加载器，那么你很可能选择了错误的版本，请点击想玩哪个按钮切换版本。</s:String>
+如果你已经装过了 Mod 加载器，那么你很可能选择了错误的版本，请点击想玩的那个按钮切换版本。</s:String>
     <s:String x:Key="LangPageVersionModDisabledBtnGoToDownload">转到下崽页面</s:String>
     <s:String x:Key="LangPageVersionModDisabledBtnSelectInstance">想玩哪个</s:String>
 
     <!--PageVersionOverall-->
     <s:String x:Key="LangPageVersionOverallPersonalize">个性化</s:String>
     <s:String x:Key="LangPageVersionOverallIcon">图标</s:String>
-    <s:String x:Key="LangPageVersionOverallIconAuto">自动帮你</s:String>
+    <s:String x:Key="LangPageVersionOverallIconAuto">自动</s:String>
     <s:String x:Key="LangPageVersionOverallIconCustom">自定义...</s:String>
     <s:String x:Key="LangPageVersionOverallIconCobbleStone">圆石</s:String>
     <s:String x:Key="LangPageVersionOverallIconCommandBlock">滥权方块</s:String>
@@ -1164,7 +1164,7 @@
     <s:String x:Key="LangPageVersionOverallIconFabric">布料（布料）</s:String>
     <s:String x:Key="LangPageVersionOverallIconNeoForge">福克斯（NeoForge）</s:String>
     <s:String x:Key="LangPageVersionOverallCategory">分类</s:String>
-    <s:String x:Key="LangPageVersionOverallCategoryAuto">自动帮你</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryAuto">自动</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryHidden">从版本列表中隐藏</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryHiddenToolTip">该版本默认将不会在版本列表中显示。
 在版本列表页面按下 F11，即可查看所有隐藏的版本。</s:String>
@@ -1280,7 +1280,7 @@
 涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行失败。
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹子。</s:String>
     <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在设置中手动选择了与当前版本不兼容的 Jvav，则自动帮你跳过兼容性警告弹窗，强制使用手动选择的 Jvav。</s:String>
-    <s:String x:Key="LangPageVersionSetupFileVerification">完全不换掉 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。
+    <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。
 如果你莫得修改相关文件，请勿勾选此项。</s:String>
 
     <!--ModMain-->
@@ -1586,7 +1586,7 @@
     <s:String x:Key="LangModLaunchDialogSelectRole">选择使用的角色</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginFail">登录失败：{0}</s:String>
     <s:String x:Key="LangModLaunchDialogContentWebLogin">登录完成后，网页会变得完全空白，把那个空白网页的网址复制到下面的框中就行了！
-如果网络环境不佳，它可能一直加载不出来，那就只能试试用魔法了。</s:String>
+如果网络环境不佳，它可能一直加载不出来，那就只能试试用黑魔法了。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">等待网页登录</s:String>
     <s:String x:Key="LangModLaunchDialogTipWebLogin">返回网址应以 https://login.live.com/oauth20_desktop.srf?code= 开头</s:String>
     <s:String x:Key="LangModLaunchHintWebLoginSuccess">网页登录成功，你可以关掉网上冲浪用具啦！</s:String>
@@ -1597,7 +1597,7 @@
     <s:String x:Key="LangModLaunchDialogContentBanned">该账号似乎被巨硬夹了，没办法登录。</s:String>
     <s:String x:Key="LangModLaunchDialogContentNoXBoxAccount">你尚未注册 Xbox 账户，请在注册后再登录。</s:String>
     <s:String x:Key="LangModLaunchDialogContentUnableReachMicrosoft">你的网络所在的国家或地区没办法登录巨硬账号。
-请尝试使用魔法。</s:String>
+请尝试使用黑魔法。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnIDK">我不到啊</s:String>
     <s:String x:Key="LangModLaunchDialogContentAgeLimit">该账号年龄不足，你需要先修改出生日期，然后才能登录。
 该账号目前填写的年龄是否在 13 岁及以上？</s:String>
@@ -1609,7 +1609,7 @@
 在修改成功后等待一分钟，然后再回到平原合成发射台，就可以正常登录了！</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginTooFrequently">登录尝试太过频繁，请等待几分钟后再试！</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginIPIncorrect">当前 IP 的登录尝试异常。
-如果你使用了魔法，请把它们关掉或更换节点后再试！</s:String>
+如果你使用了黑魔法，请把它们关掉或更换节点后再试！</s:String>
     <s:String x:Key="LangModLaunchDialogBtnByMc">购买 Minecraft</s:String>
     <s:String x:Key="LangModLaunchDialogContentNoMc">你尚未购买正版 Minecraft，或者 Xbox Game Pass 已到期。</s:String>
     <s:String x:Key="LangModLaunchDialogContentCreateRole">请先创建 Minecraft 运动员档案，然后再重新登录。</s:String>
@@ -1696,5 +1696,5 @@
     <s:String x:Key="LangModMyLoadingLoading">加载中</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">加载失败</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">未知错误</s:String>
-    <s:String x:Key="LangModMyLoadingBadNetwork">网络环境不佳，请重试或尝试使用魔法</s:String>
+    <s:String x:Key="LangModMyLoadingBadNetwork">网络环境不佳，请重试或尝试使用黑魔法</s:String>
 </ResourceDictionary>
