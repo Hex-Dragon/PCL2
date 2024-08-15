@@ -17,7 +17,7 @@ Error Cause: {0}</s:String>
 Error Cause: {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Environment Warning</s:String>
     <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL is running in the temporary folder, which may result in settings, game saves, and other data not being stored properly, and partial feature may be unusable or erroneous.
-Please extract PCL from the compressed file or use it in a different folder!</s:String>
+Please extract PCL from the archive file or use it in a different folder!</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">Initialisation Error</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">Runtime Error</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">The version of your .NET Framework is too low or it is corrupted, please redownload and install .NET Framework 4.6.2 from the opening website and try again. </s:String>

@@ -17,7 +17,7 @@
 錯誤原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">環境警告</s:String>
     <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL 正在暫存資料夾執行，設定、遊戲存檔等很可能無法儲存，且部分功能會無法使用或出錯。
-請將 PCL 從壓縮文件中解壓縮，或是更換資料夾後再繼續使用！</s:String>
+請將 PCL 從壓縮檔案中解壓縮，或是更換資料夾後再繼續使用！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化錯誤</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">執行環境錯誤</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本過低或損壞，請在打開的網頁中重新下載並安裝 .NET Framework 4.6.2 後重試！</s:String>
@@ -1498,19 +1498,19 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCompVersionUnknownVersion">未知版本</s:String>
     
     <!--ModDownload-->
-    <s:String x:Key="LangModDownloadMcLibFixAnalysis">分析缺失支援庫文件</s:String>
-    <s:String x:Key="LangModDownloadMcLibFixDownload">下載支援庫文件</s:String>
-    <s:String x:Key="LangModDownloadMcLibFixDownloadMainLoader">下載支援庫文件（主載入器）</s:String>
-    <s:String x:Key="LangModDownloadMcAssetsAnalysis">分析資源文件索引地址</s:String>
-    <s:String x:Key="LangModDownloadExceptionAssetsAnalysis">分析資源文件索引地址失敗</s:String>
-    <s:String x:Key="LangModDownloadMcAssetsDownload">下載資源文件索引</s:String>
-    <s:String x:Key="LangModDownloadMcAssetsUpdateAnalysis">後台分析資源文件索引地址</s:String>
-    <s:String x:Key="LangModDownloadMcAssetsUpdateDownload">後台下載資源文件索引</s:String>
-    <s:String x:Key="LangModDownloadMcAssetsUpdateCopy">後台複製資源文件索引</s:String>
-    <s:String x:Key="LangModDownloadMcAssetsUpdateRefresh">後台更新資源文件索引</s:String>
-    <s:String x:Key="LangModDownloadMcResFixAnalysis">分析缺失資源文件</s:String>
-    <s:String x:Key="LangModDownloadMcResDownload">下載資源文件</s:String>
-    <s:String x:Key="LangModDownloadMcResDownloadMainLoader">下載資源文件（主載入器）</s:String>
+    <s:String x:Key="LangModDownloadMcLibFixAnalysis">分析缺失支援庫檔案</s:String>
+    <s:String x:Key="LangModDownloadMcLibFixDownload">下載支援庫檔案</s:String>
+    <s:String x:Key="LangModDownloadMcLibFixDownloadMainLoader">下載支援庫檔案（主載入器）</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsAnalysis">分析資源檔案索引地址</s:String>
+    <s:String x:Key="LangModDownloadExceptionAssetsAnalysis">分析資源檔案索引地址失敗</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsDownload">下載資源檔案索引</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateAnalysis">後台分析資源檔案索引地址</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateDownload">後台下載資源檔案索引</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateCopy">後台複製資源檔案索引</s:String>
+    <s:String x:Key="LangModDownloadMcAssetsUpdateRefresh">後台更新資源檔案索引</s:String>
+    <s:String x:Key="LangModDownloadMcResFixAnalysis">分析缺失資源檔案</s:String>
+    <s:String x:Key="LangModDownloadMcResDownload">下載資源檔案</s:String>
+    <s:String x:Key="LangModDownloadMcResDownloadMainLoader">下載資源檔案（主載入器）</s:String>
     <s:String x:Key="LangModDownloadExceptionShortVersionList">獲取到的版本清單長度不足（{0}）</s:String>
     <s:String x:Key="LangModDownloadExceptionOptiFineTime">版本與發佈時間資料無法對應</s:String>
     <s:String x:Key="LangModDownloadExceptionOptiFineNoCorresponding">版本與 Forge 相容資料無法對應</s:String>
