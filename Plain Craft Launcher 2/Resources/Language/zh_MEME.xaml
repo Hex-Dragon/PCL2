@@ -62,7 +62,7 @@
     <s:String x:Key="LangHintWindowDropFolder">请拽入一个文件，而非文件夹子！</s:String>
     <s:String x:Key="LangHintWindowDropFileNotFound">拽入的文件不存在：{0}</s:String>
     <s:String x:Key="LangHintWindowDropFileOneFileAtATime">请一次只拽入一个文件！</s:String>
-    <s:String x:Key="LangCrashReport">请在 https://github.com/Hex-Dragon/平原合成发射台2/issues 提交错误报告，以便于作者解决此问题！</s:String>
+    <s:String x:Key="LangCrashReport">请在 https://github.com/Hex-Dragon/PCL2/issues 提交错误报告，以便于作者解决此问题！</s:String>
     <s:String x:Key="LangDialogCustomHomePageReplaceContent">已存在一个自定义主页文件，你是不是要将它覆盖？</s:String>
     <s:String x:Key="LangDialogCustomHomePageReplaceTitle">覆盖确认</s:String>
     <s:String x:Key="LangDialogBtnCustomHomePageReplaceConfirm">覆盖</s:String>
