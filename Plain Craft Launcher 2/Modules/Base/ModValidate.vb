@@ -214,7 +214,6 @@ Public Class ValidateFolderName
         On Error Resume Next
         PathIgnore = New DirectoryInfo(Path).EnumerateDirectories
     End Sub
-
     Public Overrides Function Validate(Str As String) As String
         Try
             '检查是否为空
@@ -235,7 +234,7 @@ Public Class ValidateFolderName
             Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件夹名不可为 %！", True).Validate(Str)
             If Not InvalidStrCheck = "" Then Return InvalidStrCheck
             '检查波浪号 (issue #4505)
-            If Str.Contains("~") Then Return "文件名不能包含波浪号！"
+            If Str.Contains("~") Then Return "文件夹名不能包含波浪号！"
             '检查文件夹重名
             Dim Arr As New List(Of String)
             If PathIgnore IsNot Nothing Then
