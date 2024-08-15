@@ -8,6 +8,22 @@
     <s:String x:Key="LangDialogBtnYes">是</s:String>
     <s:String x:Key="LangDialogBtnNo">否</s:String>
     
+    <!--Application-->
+    <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 無權訪問 {0}</s:String>
+    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavaliable">緩存資料夾無法使用</s:String>
+    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavaliable">PCL 無法訪問緩存資料夾，可能導致程式出錯或無法正常使用。
+錯誤原因：{0}</s:String>
+    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavaliable">手動設置的緩存資料夾無法使用，PCL 將使用預設緩存資料夾。
+錯誤原因：{0}</s:String>
+    <s:String x:Key="LangApplicationDialogTitleRunInTemp">環境警告</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL 正在臨時資料夾運行，設置、遊戲存檔等很可能無法保存，且部分功能會無法使用或出錯。
+請將 PCL 從壓縮檔中解壓，或是更換資料夾後再繼續使用！</s:String>
+    <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化錯誤</s:String>
+    <s:String x:Key="LangApplicationDialogTitleNETWarn">運行環境錯誤</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">您的 .NET Framework 版本過低或已損壞，請在開啟的網頁中重新下載並安裝 .NET Framework 4.6.2 後重試！</s:String>
+    <s:String x:Key="LangApplicationDialogTitleUnknownError">錯亂碼顯示</s:String>
+    <s:String x:Key="LangApplicationDialogContentUnknownError">程式發生未知錯誤</s:String>
+    
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下載</s:String>
     <s:String x:Key="LangTitleHome">啟動</s:String>
