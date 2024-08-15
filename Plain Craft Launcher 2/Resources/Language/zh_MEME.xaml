@@ -10,8 +10,8 @@
     
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">平原合成发射台莫得对 {0} 的访问权限</s:String>
-    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavaliable">缓存文件夹不可用</s:String>
-    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavaliable">平原合成发射台无法访问缓存文件夹，可能导致程序出错或无法正常使用。
+    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavaliable">缓存文件夹已原地爆炸</s:String>
+    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavaliable">平原合成发射台无法访问缓存文件夹，可能导致程序爆炸。
 错误原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavaliable">手动设置的缓存文件夹不可用，平原合成发射台将使用默认缓存文件夹。
 错误原因：{0}</s:String>
@@ -36,15 +36,15 @@
     <s:String x:Key="LangToolTipCloseMinecraft">退游</s:String>
     <s:String x:Key="LangDialogBtnUpdateFullLog">完整更新日志</s:String>
     <s:String x:Key="LangDialogUpdateTo">平原合成发射台已更新至 {0}</s:String>
-    <s:String x:Key="LangDialogPolicyContent">在使用平原合成发射台前，请同意平原合成发射台的运动员协议与免责声明。</s:String>
+    <s:String x:Key="LangDialogPolicyContent">在使用 PCL 前，请同意 PCL 的用户协议与免责声明。</s:String>
     <s:String x:Key="LangDialogPolicyTitle">协议授权</s:String>
-    <s:String x:Key="LangDialogBtnAgree">我不拒绝</s:String>
+    <s:String x:Key="LangDialogBtnAgree">我不反对</s:String>
     <s:String x:Key="LangDialogBtnDeny">我不同意</s:String>
-    <s:String x:Key="LangDialogBtnPolicyContent">查看运动员协议与免责声明</s:String>
+    <s:String x:Key="LangDialogBtnPolicyContent">查看用户协议与免责声明</s:String>
     <s:String x:Key="LangHintDebugWarning">[调试模式]平原合成发射台正以调试模式运行，这可能会导致性能下降，若无必要请不要打开！</s:String>
     <s:String x:Key="LangDialogTitleTip">提示</s:String>
     <s:String x:Key="LangDialogHardcoreFanTheme">你已经使用了 99 次平原合成发射台啦，阿里嘎多够咋衣麻斯！
-隐藏主题 铁杆粉 已解锁！</s:String>
+隐藏主题 铁杆粉 闪亮登场！</s:String>
     <s:String x:Key="LangDialogCloseOnDownloading">还有下崽任务尚未完成，是否确定退出？</s:String>
     <s:String x:Key="LangHintHideModeOn">功能拜拜设置已重新打开！</s:String>
     <s:String x:Key="LangHintHideModeOff">功能拜拜设置已暂时关掉！</s:String>
@@ -74,10 +74,10 @@
     <s:String x:Key="LangHintInstallModSuccessA">已安装 {0}</s:String>
     <s:String x:Key="LangHintInstallModSuccessB">已安装 {0} 个 Mod！</s:String>
     <s:String x:Key="LangHintInstallModFailed">复制 Mod 文件失败</s:String>
-    <s:String x:Key="LangHintRarNotSupport">平原合成发射台没办法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试！</s:String>
-    <s:String x:Key="LangHintWindowDropUnknown">平原合成发射台没办法确定应当执行的文件拖拽操作……</s:String>
-    <s:String x:Key="LangHintCloseMinecraftSuccess">已关掉运行中的 Minecraft！</s:String>
-    <s:String x:Key="LangHintCloseMinecraftFailed">强制关掉所有 Minecraft 失败</s:String>
+    <s:String x:Key="LangHintRarNotSupport">平原合成发射台没办法处理 rar 格式的压缩毛巾，请在解压后重新挤干水分为 zip 格式再试！</s:String>
+    <s:String x:Key="LangHintWindowDropUnknown">你拖的什么东西？平原合成发射台.exe 未响应</s:String>
+    <s:String x:Key="LangHintCloseMinecraftSuccess">已了结运行中的 Minecraft！</s:String>
+    <s:String x:Key="LangHintCloseMinecraftFailed">强制了结所有 Minecraft 不成功</s:String>
     <s:String x:Key="LangHintBackToTopFailed">没办法滚回顶部，未找到合适的 RealScroll</s:String>
     <s:String x:Key="LangDialogFailedToChangePage">没办法切换到子页面（ID {0}）</s:String>
     <s:String x:Key="LangPageNameVersionChoose">想玩哪个</s:String>
@@ -92,13 +92,13 @@
     <s:String x:Key="LangThemeRealWhite">眼瞎白</s:String>
     <s:String x:Key="LangThemeRealFunny">真·滑稽彩</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip8">累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。
-右键打开赞助页面，如果觉得平原合成发射台做得还不错就支持一下吧 =w=！</s:String>
+右键打开赞助页面，如果觉得平原合成发射台做得还不错就智齿一下吧 =w=！</s:String>
     <s:String x:Key="LangThemeUnlockTip8">累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip9">· 反馈一个 Bug，在 Issue 标记为 [已完成] 后回复 Issue 要求解锁（右键打开反馈页面）
 · 向帮助库提交 Pull Request，在龙猫合并后解锁</s:String>
     <s:String x:Key="LangThemeUnlockTip9">· 反馈一个 Bug，在反馈标记为 [完成] 后回复 Issue 要求解锁
 · 向帮助库提交 Pull Request，在龙猫合并后解锁</s:String>
-    <s:String x:Key="LangHintThemeSetIncorrect">个性化设置项存在异常，已被自动帮你重置</s:String>
+    <s:String x:Key="LangHintThemeSetIncorrect">个性化设置项存在异常，已被自动重置</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">重载个性化设置时出错</s:String>
     <s:String x:Key="LangHintThemeSetInit">已初始化个性化设置</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">初始化个性化设置失败</s:String>
@@ -268,7 +268,7 @@
     <s:String x:Key="LangSetFuncHiddenSpecial">特定功能</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">邮箱隐藏</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">隐藏第三方登录的账号邮箱显示，并尽量将邮箱打码，以避免隐私泄露。
-此选项的换掉将在重启发射台后生效。</s:String>
+此选项的更改将在重启发射台后生效。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">想玩哪个</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">功能拜拜</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">仅隐藏本选项卡，设置的禁用内容依然有效。
@@ -339,7 +339,7 @@
     <s:String x:Key="LangSelectVersionTypeRegular">常规版本</s:String>
     <s:String x:Key="LangSelectVersionTypeModAbility">可安装 Mod</s:String>
     <s:String x:Key="LangSelectVersionTypeForge">锻造版本</s:String>
-    <s:String x:Key="LangSelectVersionTypeNeoForge">NeoForge 版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeNeoForge">新锻造版本</s:String>
     <s:String x:Key="LangSelectVersionTypeLiteLoader">轻飘飘加载器版本</s:String>
     <s:String x:Key="LangSelectVersionTypeFabric">布料版本</s:String>
     <s:String x:Key="LangSelectVersionTypeError">错误的版本</s:String>
@@ -501,7 +501,7 @@
     <s:String x:Key="LangDownloadPageMods">Mod</s:String>
     <s:String x:Key="LangDownloadPageModpackages">整合包</s:String>
 
-    <!--PageDownload轻飘飘加载器-->
+    <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteLoaderDescTitle">轻飘飘加载器简介</s:String>
     <s:String x:Key="LangDownloadLiteLoaderDesc">与锻造类似，轻飘飘加载器可以用于加载老版本 Minecraft 中的轻飘飘加载器模组。</s:String>
     <s:String x:Key="LangDownloadLiteLoaderWebsite">打开官网</s:String>
@@ -527,7 +527,7 @@
     <s:String x:Key="LangDownloadModTypeStructure">天然结构</s:String>
     <s:String x:Key="LangDownloadModTypeTech">科技</s:String>
     <s:String x:Key="LangDownloadModTypePipe">管道 / 物流</s:String>
-    <s:String x:Key="LangDownloadModTypeAuto">自动帮你化</s:String>
+    <s:String x:Key="LangDownloadModTypeAuto">自动化</s:String>
     <s:String x:Key="LangDownloadModTypeEnergy">能源</s:String>
     <s:String x:Key="LangDownloadModTypeRedstone">雷石东</s:String>
     <s:String x:Key="LangDownloadModTypeFood">食物 / 烹饪</s:String>
@@ -546,7 +546,7 @@
     <s:String x:Key="LangDownloadModTypeUtility">改良</s:String>
     <s:String x:Key="LangDownloadModTypeLib">支持库</s:String>
     <s:String x:Key="LangDownloadModConnectModrinthFail">没办法连接到模组迷宫，所以目前仅显示了来自诅咒锻造的内容，结果可能不全。
-请尝试使用魔法以改善网络。</s:String>
+请尝试使用黑魔法以改善网络。</s:String>
 
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">NeoForge 简介</s:String>
@@ -597,9 +597,9 @@
     <s:String x:Key="LangDownloadModpackTypeHeavyWeight">大型整合</s:String>
     <s:String x:Key="LangDownloadModpackTypeMisc">杂项</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">没办法连接到模组迷宫，所以目前仅显示了来自诅咒锻造的内容，结果可能不全。
-请尝试使用魔法以改善网络。</s:String>
+请尝试使用黑魔法以改善网络。</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">没办法连接到诅咒锻造，所以目前仅显示了来自模组迷宫的内容，结果可能不全。
-请尝试使用魔法以改善网络。</s:String>
+请尝试使用黑魔法以改善网络。</s:String>
 
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">另存为</s:String>
