@@ -773,12 +773,12 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutAbout">关于</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthor">龙腾猫跃</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthorSubtitle">Plain Craft Launcher 的作者！</s:String>
-    <s:String x:Key="LangPageOtherAboutAboutAuthorBtn">赞助作者</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutAuthorBtn">给作者打钱</s:String>
     <s:String x:Key="LangPageOtherAboutAboutVersionSubtitle">当前版本：%VERSION%（%VERSIONCODE%.%BRANCH%）</s:String>
     <s:String x:Key="LangPageOtherAboutAboutVersionBtn">查看源代码</s:String>
     <s:String x:Key="LangPageOtherAboutThanks">特别鸣谢</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93">提供 BMCLAPI 镜像源和 Forge 安装工具，详见 https://bmclapi.bangbang93.com</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">赞助镜像源</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">给镜像源打钱</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModTitle">MC 百科</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCMod">提供了 Mod 名称的中文翻译和更多相关信息！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">打开百科</s:String>
