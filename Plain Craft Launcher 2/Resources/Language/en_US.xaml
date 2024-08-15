@@ -11,18 +11,18 @@
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL does not have access permission to {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavaliable">Cache Folder Unavailable</s:String>
-    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavaliable">PCL cannot access the cache folder, which may cause errors or malfunctions in the program.
+    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavaliable">PCL is unable to access the cache folder, which may result in a program error or unusability.
 Error Cause: {0}</s:String>
-    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavaliable">The manually set cache folder is unavailable. PCL will use the default cache folder instead.
+    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavaliable">The manually selected cache folder is unavailable, PCL will use the default cache folder instead.
 Error Cause: {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Environment Warning</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL is running in the temporary folder. Settings, game saves, etc. may not be saved properly, and some features may not work or cause errors.
-    Please extract PCL from the compressed file or change the folder before continuing to use it!</s:String>
-    <s:String x:Key="LangApplicationDialogTitleInitError">PCL Initialization Error</s:String>
-    <s:String x:Key="LangApplicationDialogTitleNETWarn">Runtime Environment Error</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">Your .NET Framework version is too low or corrupted. Please redownload and install .NET Framework 4.6.2 from the opened webpage and try again!</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL is running in the temporary folder, which may result in settings, game saves, and other data not being stored properly, and partial feature may be unusable or erroneous.
+Please extract PCL from the compressed file or use it in a different folder!</s:String>
+    <s:String x:Key="LangApplicationDialogTitleInitError">Initialization Error</s:String>
+    <s:String x:Key="LangApplicationDialogTitleNETWarn">Runtime Error</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">The version of your .NET Framework is too low or it is corrupted, please redownload and install .NET Framework 4.6.2 from the opening website and try again. </s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Unknown Error</s:String>
-    <s:String x:Key="LangApplicationDialogContentUnknownError">An unknown error occurred in the program</s:String>
+    <s:String x:Key="LangApplicationDialogContentUnknownError">An unknown error occurred in the program.</s:String>
     
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">Download</s:String>
