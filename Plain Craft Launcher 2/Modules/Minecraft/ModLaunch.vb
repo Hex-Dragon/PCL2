@@ -799,7 +799,7 @@ LoginFinish:
                     Case McLoginType.Auth
                         Dim ErrorResponse As AuthErrorResponse = ParseErrorResponse(ex)
                         If (ErrorResponse.errorMessage <> "") Then
-                            Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf & $" - {ErrorResponse.errorMessage}")
+                            Throw New Exception("$登录失败，以下为认证服务器提供的信息：" & vbCrLf & $" - {ErrorResponse.errorMessage}")
                         End If
                         Throw New Exception("$登录失败，以下为可能的原因：" & vbCrLf &
                                             " - 输入的账号或密码错误。" & vbCrLf &
