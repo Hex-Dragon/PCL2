@@ -468,7 +468,7 @@
     <s:String x:Key="LangDownloadInstallClickToChose">点击选择</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">与锻造不兼容</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">与布料不兼容</s:String>
-    <s:String x:Key="LangDownloadInstallOptiFineIncompatible">与 Opti不Fine 不兼容</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineIncompatible">与 OptiNotFine 不兼容</s:String>
     <s:String x:Key="LangDownloadInstallForgeNeed">需要锻造</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">需要布料</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineNeed">需要 OptiNotFine</s:String>
@@ -492,7 +492,7 @@
     <s:String x:Key="LangDownloadPageAutoInstall">自动帮你安装</s:String>
     <s:String x:Key="LangDownloadPageManualInstall">▼ 自己装安装包</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallContent">手动安装包功能提供了 OptiNotFine、锻造等组件的 .jar 安装文件下崽，但没办法自动帮你安装。
-在自动帮你安装页面先选择 MC 版本，然后就可以选择 Opti不Fine、锻造等组件，让平原合成发射台自动帮你进行安装了。</s:String>
+在自动帮你安装页面先选择 MC 版本，然后就可以选择 OptiNotFine、锻造等组件，让平原合成发射台自动帮你进行安装了。</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallTitle">自动帮你安装提示</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">返回自动帮你安装</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">继续下崽手动安装包</s:String>
