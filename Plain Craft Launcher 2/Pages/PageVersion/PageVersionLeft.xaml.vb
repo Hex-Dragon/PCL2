@@ -98,7 +98,7 @@
         End Try
         If FrmVersionMod IsNot Nothing Then FrmVersionMod.RefreshList(True) '无需 Else，还没加载刷个鬼的新
         ItemMod.Checked = True
-        Hint(GetLang("LangPageVersionLeftModMangmentRefreshing"), Log:=False)
+        Hint(GetLang("LangPageVersionLeftModManagementRefreshing"), Log:=False)
     End Sub
 
     Public Sub Reset(sender As Object, e As EventArgs)

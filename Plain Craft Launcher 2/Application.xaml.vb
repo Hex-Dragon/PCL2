@@ -79,9 +79,9 @@ Public Class Application
                 If Not CheckPermission(PathTemp) Then Throw New Exception(GetLang("LangApplicationExceptionNoAccessPermission", PathTemp))
             Catch ex As Exception
                 If PathTemp = IO.Path.GetTempPath() & "PCL\" Then
-                    MyMsgBox(GetLang("LangApplicationDialogContentCacheFolderUnavaliable", GetExceptionDetail(ex)), GetLang("LangApplicationDialogTitleCacheFolderUnavaliable"))
+                    MyMsgBox(GetLang("LangApplicationDialogContentCacheFolderUnavailable", GetExceptionDetail(ex)), GetLang("LangApplicationDialogTitleCacheFolderUnavailable"))
                 Else
-                    MyMsgBox(GetLang("LangApplicationDialogContentCustomCacheFolderUnavaliable", GetExceptionDetail(ex)), GetLang("LangApplicationDialogTitleCacheFolderUnavaliable"))
+                    MyMsgBox(GetLang("LangApplicationDialogContentCustomCacheFolderUnavailable", GetExceptionDetail(ex)), GetLang("LangApplicationDialogTitleCacheFolderUnavailable"))
                     Setup.Set("SystemSystemCache", "")
                     PathTemp = IO.Path.GetTempPath() & "PCL\"
                 End If
@@ -125,7 +125,7 @@ Public Class Application
             Log($"[Start] 管理员权限：{IsAdmin()}")
             '检测压缩包运行
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
-                MyMsgBox(GetLang("LangApplicationDialogContentRunInTemp"), GetLang("LangApplicationDialogTitleRunInTemp"), GetLang("LangDialogThemeUnlockGameAccrpt"), IsWarn:=True)
+                MyMsgBox(GetLang("LangApplicationDialogContentRunInTemp"), GetLang("LangApplicationDialogTitleRunInTemp"), GetLang("LangDialogThemeUnlockGameAccept"), IsWarn:=True)
             End If
             '设置初始化
             Setup.Load("SystemDebugMode")

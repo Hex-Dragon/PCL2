@@ -114,7 +114,7 @@
         ToolTipService.SetVerticalOffset(BtnED, 30)
         ToolTipService.SetHorizontalOffset(BtnED, 2)
         AddHandler BtnED.Click, AddressOf ED_Click
-        If sender.Entry.State = McMod.McModState.Unavaliable Then
+        If sender.Entry.State = McMod.McModState.Unavailable Then
             sender.Buttons = {BtnCont, BtnOpen, BtnDelete}
         Else
             sender.Buttons = {BtnCont, BtnOpen, BtnED, BtnDelete}
@@ -142,7 +142,7 @@
         Next
         Dim TypeList As New List(Of String)
         If Counter(McMod.McModState.Disabled) > 0 Then TypeList.Add(GetLang("LangPageVersionModOperationDisable") & " " & Counter(McMod.McModState.Disabled))
-        If Counter(McMod.McModState.Unavaliable) > 0 Then TypeList.Add("错误 " & Counter(McMod.McModState.Unavaliable))
+        If Counter(McMod.McModState.Unavailable) > 0 Then TypeList.Add("错误 " & Counter(McMod.McModState.Unavailable))
         If Counter(McMod.McModState.Fine) > 0 Then TypeList.Insert(0, If(TypeList.Any, GetLang("LangPageVersionModOperationEnable") & " ", "") & Counter(McMod.McModState.Fine))
         If Not IsSearching Then
             PanListBack.Title = GetLang("LangPageVersionModModList") & " (" & Join(TypeList, "，") & ")"
@@ -600,7 +600,7 @@
 
             Dim ModEntry As McMod = CType(If(TypeOf sender Is MyIconButton, sender.Tag, sender), MyLocalModItem).Entry
             '加载失败信息
-            If ModEntry.State = McMod.McModState.Unavaliable Then
+            If ModEntry.State = McMod.McModState.Unavailable Then
                 MyMsgBox(GetLang("LangPageVersionModDialogFailGetModDetail") & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "Mod 读取失败")
                 Return
             End If

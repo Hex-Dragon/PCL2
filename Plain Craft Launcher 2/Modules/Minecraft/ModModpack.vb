@@ -399,10 +399,10 @@ Retry:
                     FabricVersion = Entry.Value.ToString
                     Log("[ModPack] 整合包 Fabric 版本：" & FabricVersion)
                 Case "quilt-loader" 'eg. 1.0.0
-                    Hint(GetLang("LangModModpacHintQuiltNotSupport"), HintType.Critical)
+                    Hint(GetLang("LangModModpackHintQuiltNotSupport"), HintType.Critical)
                     Exit Sub
                 Case Else
-                    Hint(GetLang("LangModModpacHintUnknownModLoader", Entry.Value), HintType.Critical)
+                    Hint(GetLang("LangModModpackHintUnknownModLoader", Entry.Value), HintType.Critical)
                     Exit Sub
             End Select
         Next
@@ -701,7 +701,7 @@ Retry:
                 Case "net.fabricmc.fabric-loader"
                     Request.FabricVersion = Component("version")
                 Case "org.quiltmc.quilt-loader" 'eg. 1.0.0
-                    Hint(GetLang("LangModModpacHintQuiltNotSupport"), HintType.Critical)
+                    Hint(GetLang("LangModModpackHintQuiltNotSupport"), HintType.Critical)
                     Exit Sub
             End Select
         Next
@@ -785,7 +785,7 @@ Retry:
             Exit Sub
         End If
         If Addons.ContainsKey("quilt") Then
-            Hint(GetLang("LangModModpacHintQuiltNotSupport"), HintType.Critical)
+            Hint(GetLang("LangModModpackHintQuiltNotSupport"), HintType.Critical)
             Exit Sub
         End If
         Dim Request As New McInstallRequest With {

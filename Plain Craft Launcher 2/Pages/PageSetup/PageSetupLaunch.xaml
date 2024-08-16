@@ -128,7 +128,7 @@
                                 <local:MyComboBoxItem Content="{DynamicResource LangPageSetupLaunchLaunchWindowSizeDefault}" IsSelected="True" />
                                 <local:MyComboBoxItem Content="{DynamicResource LangPageSetupLaunchLaunchWindowSizeSameWithLaunch}" />
                                 <local:MyComboBoxItem Content="{DynamicResource LangPageSetupLaunchLaunchWindowSizeCustom}" ToolTip="{DynamicResource LangPageSetupLaunchLaunchWindowSizeCustomToolTip}" />
-                                <local:MyComboBoxItem Content="{DynamicResource LangPageSetupLaunchLaunchWindowSizeMaxium}" />
+                                <local:MyComboBoxItem Content="{DynamicResource LangPageSetupLaunchLaunchWindowSizeMaximum}" />
                             </local:MyComboBox>
                             <local:MyTextBox Padding="0,0,5,0" Visibility="Collapsed" Grid.Column="1" Margin="50,0,0,0" x:Name="TextArgumentWindowWidth" Tag="LaunchArgumentWindowWidth" Width="60" HorizontalContentAlignment="Center" Text="854">
                                 <local:MyTextBox.ValidateRules>

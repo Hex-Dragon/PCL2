@@ -47,7 +47,7 @@ Public Module ModMod
             Get
                 Load()
                 If Not IsFileAvailable Then
-                    Return McModState.Unavaliable
+                    Return McModState.Unavailable
                 ElseIf Path.EndsWithF(".disabled", True) OrElse Path.EndsWithF(".old", True) Then
                     Return McModState.Disabled
                 Else
@@ -58,7 +58,7 @@ Public Module ModMod
         Public Enum McModState As Integer
             Fine = 0
             Disabled = 1
-            Unavaliable = 2
+            Unavailable = 2
         End Enum
 
 #End Region
@@ -886,7 +886,7 @@ Finished:
                 End If
                 ModList.Add(ModEntry)
                 '读取 Comp 缓存
-                If ModEntry.State = McMod.McModState.Unavaliable Then Continue For
+                If ModEntry.State = McMod.McModState.Unavailable Then Continue For
                 Dim CacheKey = ModEntry.ModrinthHash & PageVersionLeft.Version.Version.McName & GetTargetModLoaders().Join("")
                 If Cache.ContainsKey(CacheKey) Then
                     ModEntry.FromJson(Cache(CacheKey))
@@ -901,8 +901,8 @@ Finished:
             '排序
             ModList = Sort(ModList,
             Function(Left As McMod, Right As McMod) As Boolean
-                If (Left.State = McMod.McModState.Unavaliable) <> (Right.State = McMod.McModState.Unavaliable) Then
-                    Return Left.State = McMod.McModState.Unavaliable
+                If (Left.State = McMod.McModState.Unavailable) <> (Right.State = McMod.McModState.Unavailable) Then
+                    Return Left.State = McMod.McModState.Unavailable
                 Else
                     Return Not Right.FileName.CompareTo(Left.FileName)
                 End If

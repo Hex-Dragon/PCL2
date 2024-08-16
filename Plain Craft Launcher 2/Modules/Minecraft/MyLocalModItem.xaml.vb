@@ -104,7 +104,7 @@ RetryStart:
                     LabTitle.TextDecorations = Nothing
                 Case McMod.McModState.Disabled
                     LabTitle.TextDecorations = TextDecorations.Strikethrough
-                Case McMod.McModState.Unavaliable
+                Case McMod.McModState.Unavailable
                     LabTitle.TextDecorations = TextDecorations.Strikethrough
                     value &= " [错误]"
             End Select
@@ -435,7 +435,7 @@ RetryStart:
                     NewDescription = GetFileNameWithoutExtentionFromPath(Entry.Path)
                 Case McMod.McModState.Disabled
                     NewDescription = GetFileNameWithoutExtentionFromPath(Entry.Path.Replace(".disabled", "").Replace(".old", ""))
-                Case Else 'McMod.McModState.Unavaliable
+                Case Else 'McMod.McModState.Unavailable
                     NewDescription = GetFileNameFromPath(Entry.Path)
             End Select
             If Entry.Comp IsNot Nothing Then
@@ -466,7 +466,7 @@ RetryStart:
                     '<Image x:Name="ImgState" RenderOptions.BitmapScalingMode="HighQuality" Width="16" Height="16" Margin="0,0,-3,-1"
                     '       Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" IsHitTestVisible="False"
                     '       HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                    '       Source="/Images/Icons/Unavaliable.png" />
+                    '       Source="/Images/Icons/Unavailable.png" />
                 End If
                 ImgState.Source = New MyBitmap(PathImage & $"Icons/{Entry.State}.png")
             End If

@@ -141,13 +141,13 @@ Public Module ModDownloadLib
 
         '下载资源文件
         Dim LoadersAssets As New List(Of LoaderBase)
-        LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangModDownloadLibTaskMcDownloadAnalysisAssestIndexSubLoader"),
+        LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangModDownloadLibTaskMcDownloadAnalysisAssetsIndexSubLoader"),
         Sub(Task As LoaderTask(Of String, List(Of NetFile)))
             Try
                 Dim Version As New McVersion(VersionFolder)
                 Task.Output = New List(Of NetFile) From {DlClientAssetIndexGet(Version)}
             Catch ex As Exception
-                Throw New Exception(GetLang("LangModDownloadLibExceptionAnalysisAssestIndexFail"), ex)
+                Throw New Exception(GetLang("LangModDownloadLibExceptionAnalysisAssetsIndexFail"), ex)
             End Try
             '顺手添加 Json 项目
             Try
@@ -158,12 +158,12 @@ Public Module ModDownloadLib
                 Throw New Exception(GetLang("LangModDownloadLibExceptionAddVersionInfoFail"), ex)
             End Try
         End Sub) With {.ProgressWeight = 1, .Show = False})
-        LoadersAssets.Add(New LoaderDownload(GetLang("LangModDownloadLibTaskDownloadAssestIndexFail"), New List(Of NetFile)) With {.ProgressWeight = 3, .Show = False})
-        LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangModDownloadLibTaskAnalysisDownloadAssest"),
+        LoadersAssets.Add(New LoaderDownload(GetLang("LangModDownloadLibTaskDownloadAssetsIndexFail"), New List(Of NetFile)) With {.ProgressWeight = 3, .Show = False})
+        LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangModDownloadLibTaskAnalysisDownloadAssets"),
         Sub(Task As LoaderTask(Of String, List(Of NetFile)))
             Task.Output = McAssetsFixList(McAssetsGetIndexName(New McVersion(VersionFolder)), True, Task)
         End Sub) With {.ProgressWeight = 3, .Show = False})
-        LoadersAssets.Add(New LoaderDownload(GetLang("LangModDownloadLibTaskDownloadAssest"), New List(Of NetFile)) With {.ProgressWeight = 14, .Show = False})
+        LoadersAssets.Add(New LoaderDownload(GetLang("LangModDownloadLibTaskDownloadAssets"), New List(Of NetFile)) With {.ProgressWeight = 14, .Show = False})
         Loaders.Add(New LoaderCombo(Of String)(GetLang("LangPageSpeedRightDownloadVanillaResource"), LoadersAssets) With {.Block = False, .ProgressWeight = 21})
 
         Return Loaders
