@@ -44,7 +44,7 @@
     <s:String x:Key="LangHintDebugWarning">[调试模式]平原合成发射台正以调试模式运行，这可能会导致性能下降，若莫得必要请不要打开！</s:String>
     <s:String x:Key="LangDialogTitleTip">提示</s:String>
     <s:String x:Key="LangDialogHardcoreFanTheme">你已经使用了 99 次平原合成发射台啦，阿里嘎多够咋衣麻斯！
-隐藏主题 铁杆粉 闪亮登场！</s:String>
+雪藏主题 铁杆粉 闪亮登场！</s:String>
     <s:String x:Key="LangDialogCloseOnDownloading">还有下崽任务尚未完成，是否确定退出？</s:String>
     <s:String x:Key="LangHintHideModeOn">功能拜拜设置已重新打开！</s:String>
     <s:String x:Key="LangHintHideModeOff">功能拜拜设置已暂时关掉！</s:String>
@@ -144,7 +144,7 @@
 你可以在生成教学文件后直接刷新主页，对照着进行修改，更有助于理解。
 直接将自定义主页文件拖进平原合成发射台窗口也可以快捷加载。</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">主页自定义教程</s:String>
-    <s:String x:Key="LangThemeBackUnlock">隐藏主题 玄素黑 已解锁！</s:String>
+    <s:String x:Key="LangThemeBackUnlock">雪藏主题 玄素黑 已解锁！</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameContent">1. 不爬取或攻击相关服务或网站，不盗取相关账号，莫得谜题可以或需要以此来解决。
 2. 不得篡改或损毁相关公开信息，请尽量让它们保持原状。
 3. 在你感到迷茫的时候，看看回声洞可能会给你带来惊喜。
@@ -171,7 +171,7 @@
     <s:String x:Key="LangSetThemeSaturation">饱和度</s:String>
     <s:String x:Key="LangSetThemeBrightness">亮度</s:String>
     <s:String x:Key="LangSetThemeTitle">主题</s:String>
-    <s:String x:Key="LangSetThemeHiddenTitle">隐藏主题</s:String>
+    <s:String x:Key="LangSetThemeHiddenTitle">雪藏主题</s:String>
     <s:String x:Key="LangSetThemeNameBlue">龙猫蓝</s:String>
     <s:String x:Key="LangSetThemeNameCyan">甜柠青</s:String>
     <s:String x:Key="LangSetThemeNameGreen">原谅绿</s:String>
@@ -185,7 +185,7 @@
     <s:String x:Key="LangSetThemeNameMojang">进行一次正版登录，支持正版游戏！</s:String>
     <s:String x:Key="LangSetThemeNameGeekToolTip">右键打开解密游戏入口</s:String>
     <s:String x:Key="LangSetThemeNameCustom">自定义</s:String>
-    <s:String x:Key="LangSetThemeNameCustomToolTip">需要解锁五个隐藏主题</s:String>
+    <s:String x:Key="LangSetThemeNameCustomToolTip">需要解锁五个雪藏主题</s:String>
     <s:String x:Key="LangSetThemeShowLogoOnStart">打开发射台时显示平原合成发射台图标</s:String>
     <s:String x:Key="LangSetThemeSponsorship">需要小小赞助一下作者，才能修改主题颜色（悲）……</s:String>
     <s:String x:Key="LangSetThemeSupport">支持作者</s:String>
@@ -248,7 +248,7 @@
     <s:String x:Key="LangSetHomePagePresetPageE">每日整合包推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 皮肤推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能拜拜</s:String>
-    <s:String x:Key="LangSetFuncHiddenToolTip">你可以隐藏不需要的页面或关掉特定功能。在随意界面按 F12 可以暂时显示被隐藏的功能。</s:String>
+    <s:String x:Key="LangSetFuncHiddenToolTip">你可以雪藏不需要的页面或关掉特定功能。在随意界面按 F12 可以暂时显示被雪藏的功能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">主页面</s:String>
     <s:String x:Key="LangSetFuncHiddenDownload">下崽</s:String>
     <s:String x:Key="LangSetFuncHiddenLink">联机</s:String>
@@ -266,13 +266,13 @@
     <s:String x:Key="LangSetFuncHiddenMoreFeedback">反馈</s:String>
     <s:String x:Key="LangSetFuncHiddenMoreVote">新功能投票</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecial">特定功能</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialEmail">邮箱隐藏</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">隐藏第三方登录的账号邮箱显示，并尽量将邮箱打码，以避免隐私泄露。
+    <s:String x:Key="LangSetFuncHiddenSpecialEmail">邮箱雪藏</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">雪藏第三方登录的账号邮箱显示，并尽量将邮箱打码，以避免隐私泄露。
 此选项的更改将在重启发射台后生效。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">想玩哪个</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">功能拜拜</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">仅隐藏本选项卡，设置的禁用内容依然有效。
-可以在保留个性化设置页面的情况下避免隐藏设置被修改。</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">仅雪藏本选项卡，设置的禁用内容依然有效。
+可以在保留个性化设置页面的情况下避免雪藏设置被修改。</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">文件夹子列表</s:String>
@@ -343,14 +343,14 @@
     <s:String x:Key="LangSelectVersionTypeLiteLoader">轻飘飘加载器版本</s:String>
     <s:String x:Key="LangSelectVersionTypeFabric">布料版本</s:String>
     <s:String x:Key="LangSelectVersionTypeError">错误的版本</s:String>
-    <s:String x:Key="LangSelectVersionTypeHidden">隐藏的版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeHidden">雪藏的版本</s:String>
     <s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">不常用版本</s:String>
     <s:String x:Key="LangSelectVersionTypeFavorites">我喜欢这个夹</s:String>
     <s:String x:Key="LangSelectVersionTypeAprilFool">愚人节版本</s:String>
     <s:String x:Key="LangSelectVersionTypeUnknown">未知的卡片种类</s:String>
-    <s:String x:Key="LangSelectVersionNoHidden">莫得隐藏版本</s:String>
-    <s:String x:Key="LangSelectVersionNoHiddenTip">莫得版本被隐藏，你可以在版本设置的版本分类选项中隐藏版本。
-再次按下 F11 即可退出隐藏版本查看模式。</s:String>
+    <s:String x:Key="LangSelectVersionNoHidden">莫得雪藏版本</s:String>
+    <s:String x:Key="LangSelectVersionNoHiddenTip">莫得版本被雪藏，你可以在版本设置的版本分类选项中雪藏版本。
+再次按下 F11 即可退出雪藏版本查看模式。</s:String>
     <s:String x:Key="LangSelectVersionListLoadFail">将版本列表转换显示时失败</s:String>
     <s:String x:Key="LangSelectVersionListLoadIconFail">加载版本图标失败</s:String>
     <s:String x:Key="LangSelectBtnFavorite">我喜欢这个！</s:String>
@@ -673,7 +673,7 @@
     <s:String x:Key="LangLaunchLeftAccountUnifiedPassLogin">统一通行证登录</s:String>
     <s:String x:Key="LangLaunchLeftAccountThirdPartLogin">第三方登录</s:String>
     <s:String x:Key="LangLaunchLeftSkinNotFound">未找到离线皮肤自定义文件，可能它已被删除。平原合成发射台将使用默认的 Steve 皮肤！</s:String>
-    <s:String x:Key="LangLaunchThemeFunnyUnlock">隐藏主题 滑稽彩 已解锁！</s:String>
+    <s:String x:Key="LangLaunchThemeFunnyUnlock">雪藏主题 滑稽彩 已解锁！</s:String>
     <s:String x:Key="LangLaunchLeftStartInstance">Minecraft，发射！</s:String>
     <s:String x:Key="LangLaunchLeftDownloadInstance">下崽游戏</s:String>
     <s:String x:Key="LangLaunchLeftNoAvailableInstance">你倒是装一个游戏啊</s:String>
@@ -688,7 +688,7 @@
     <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
     <s:String x:Key="LangLaunchRightLog">发射日志</s:String>
     <s:String x:Key="LangLaunchRightLabHint1">快照版包含尚未正式发布的测试功能，仅用于赞助者本人尝鲜。请不要发给其他人或者用来制作整合包哦！</s:String>
-    <s:String x:Key="LangLaunchRightLabHint2">若已累积赞助￥23.33，在爱发电私信发送 “解锁码” 即可永久隐藏此提示。</s:String>
+    <s:String x:Key="LangLaunchRightLabHint2">若已累积赞助￥23.33，在爱发电私信发送 “解锁码” 即可永久雪藏此提示。</s:String>
     <s:String x:Key="LangLaunchRightLoadingPage">正在加载主页……</s:String>
     <s:String x:Key="LangLaunchRightPageTips">你不知道？</s:String>
     <s:String x:Key="LangLaunchRightPageEcho">回声洞</s:String>
@@ -869,8 +869,8 @@
 这会导致不同香草版本间的存档不能共用，所以一般不推荐。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibility">发射台可见性</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameStart">游戏发射后立即关掉</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameClose">游戏发射后隐藏，游戏退出后自动帮你关掉</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityRestartOnGameClose">游戏发射后隐藏，游戏退出后重新打开</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameClose">游戏发射后雪藏，游戏退出后自动帮你关掉</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityRestartOnGameClose">游戏发射后雪藏，游戏退出后重新打开</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibilityMinimizeOnGameStart">游戏发射后最小化</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibilityKeep">游戏发射后仍保持不变</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriority">进程优先级</s:String>
@@ -956,7 +956,7 @@
     <s:String x:Key="LangPageSetupLaunchJavaIncorrectJava">该 Jvav 存在异常，没办法使用</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaSearchSuccess">已找到 {0} 个 Jvav，请检查下拉框查看列表！</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">若在游戏发射后立即关掉发射台，炸掉检测、换掉游戏抬头等功能将失效。
-如果想保留这些功能，可以选择让发射台在游戏发射后隐藏，游戏退出后自动帮你关掉。</s:String>
+如果想保留这些功能，可以选择让发射台在游戏发射后雪藏，游戏退出后自动帮你关掉。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">提醒</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableContent">内存优化会显著延长发射耗时，建议仅在内存不足时打开。
 如果你在使用机械硬盘，这还可能导致一小段时间的严重卡顿。
@@ -1165,9 +1165,9 @@
     <s:String x:Key="LangPageVersionOverallIconNeoForge">福克斯（NeoForge）</s:String>
     <s:String x:Key="LangPageVersionOverallCategory">分类</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryAuto">自动</s:String>
-    <s:String x:Key="LangPageVersionOverallCategoryHidden">从版本列表中隐藏</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryHidden">从版本列表中雪藏</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryHiddenToolTip">该版本默认将不会在版本列表中显示。
-在版本列表页面按下 F11，即可查看所有隐藏的版本。</s:String>
+在版本列表页面按下 F11，即可查看所有雪藏的版本。</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryMod">可安装 Mod 的版本</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryRegular">常规版本</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryUncommon">不常用版本</s:String>
@@ -1186,9 +1186,9 @@
     <s:String x:Key="LangPageVersionOverallManagementCompleteFileToolTip">校验版本依赖文件是否完整，并重新下崽 Assets 索引与缺失、校验失败的文件。
 若游戏缺失音效，请尝试此项。</s:String>
     <s:String x:Key="LangPageVersionOverallManagementDelete">删除版本</s:String>
-    <s:String x:Key="LangPageVersionOverallDialogHideInstanceContent">确认要从版本列表中隐藏该版本吗？隐藏该版本后，它将不再出现于平原合成发射台显示的版本列表中。
-此后，在版本列表页面按下 F11 才可以查看被隐藏的版本。</s:String>
-    <s:String x:Key="LangPageVersionOverallDialogHideInstanceTitle">隐藏版本提示</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogHideInstanceContent">确认要从版本列表中雪藏该版本吗？雪藏该版本后，它将不再出现于平原合成发射台显示的版本列表中。
+此后，在版本列表页面按下 F11 才可以查看被雪藏的版本。</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogHideInstanceTitle">雪藏版本提示</s:String>
     <s:String x:Key="LangPageVersionOverallDialogEditDescHint">默认描述</s:String>
     <s:String x:Key="LangPageVersionOverallDialogEditDescContent">修改版本的描述文本，留空则使用平原合成发射台的默认描述。</s:String>
     <s:String x:Key="LangPageVersionOverallDialogEditDescTitle">换掉描述</s:String>
@@ -1578,7 +1578,7 @@
     <s:String x:Key="LangModLaunchUnknownLoginMethod">未知的登录方式</s:String>
     <s:String x:Key="LangModLaunchLogin">登录</s:String>
     <s:String x:Key="LangModLaunchDialogContentThemeUnlockMojang">感谢你对正版游戏的支持！
-隐藏主题 跳票红 已解锁！</s:String>
+雪藏主题 跳票红 已解锁！</s:String>
     <s:String x:Key="LangModLaunchExceptionInvalidSelectedRole">选择的角色 {0} 莫得效！</s:String>
     <s:String x:Key="LangModLaunchHintNoRoleChangeRole">你还莫得创建角色，没办法更换！</s:String>
     <s:String x:Key="LangModLaunchHintNoRole">你还莫得创建角色，请在创建角色后再试！</s:String>
