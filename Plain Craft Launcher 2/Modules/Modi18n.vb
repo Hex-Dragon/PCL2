@@ -26,10 +26,10 @@ Module Modi18n
     ''' <summary>
     ''' 通过中文得到其它语言，应付一些 i18n 适配较困难的场景
     ''' </summary>
-    ''' <param name="Word"></param>
+    ''' <param name="Word">中文文本</param>
     ''' <returns></returns>
     Public Function GetLangByWord(Word As String) As String
-        If Lang = "zh_CN" Then Return Word
+        If Lang = "zh_CN" Then Return Word '语言设置为中文时不需要处理，直接返回以节约处理时间
         Select Case Word
             Case "正式版"
                 Return GetLang("LangDownloadRelease")
@@ -54,18 +54,19 @@ Module Modi18n
     ''' <returns></returns>
     Public Function GetLocalTimeFormat(Time As DateTime) As String
         Select Case Lang
-            Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME"
+            Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME" '2024/08/16 11:47
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
-            Case "en_GB"
+            Case "en_GB" '11:47 16/08/2024
                 Return Time.ToString("HH:mm dd/MM/yyyy")
-            Case Else 'en_US
+            Case Else 'en_US 11:47 08/16/2024
                 Return Time.ToString("HH:mm MM/dd/yyyy")
         End Select
     End Function
 
     ''' <summary>
-    ''' 切换应用程序的字体
+    ''' 切换 PCL 界面的字体
     ''' </summary>
+    ''' <param name="Font">字体</param>
     Public Sub SwitchApplicationFont(Font As FontFamily)
         Try
             Application.Current.Resources("LaunchFontFamily") = Font
@@ -79,13 +80,14 @@ Module Modi18n
     ''' </summary>
     ''' <returns></returns>
     Public Function IsLocationZH() As Boolean
+        If String.IsNullOrEmpty(Lang) Then Return Globalization.CultureInfo.CurrentCulture.Name.StartsWithF("zh")
         Return Lang.StartsWithF("zh") Or Lang.Equals("lzh")
     End Function
 
     ''' <summary>
     ''' 获取当前系统的默认语言
     ''' </summary>
-    ''' <returns></returns>
+    ''' <returns>返回类似于 zh_CN 这样形式的文本</returns>
     Public Function GetDefaultLang() As String
         Select Case Globalization.CultureInfo.CurrentCulture.Name
             Case "en-US"
