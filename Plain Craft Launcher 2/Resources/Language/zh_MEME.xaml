@@ -10,8 +10,8 @@
     
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">平原合成发射台莫得对 {0} 的访问权限</s:String>
-    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavaliable">缓存文件夹已原地爆炸</s:String>
-    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavaliable">平原合成发射台莫得法访问缓存文件夹，可能导致程序爆炸。
+    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavaliable">缓存文件夹已原地原地螺旋升天爆炸</s:String>
+    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavaliable">平原合成发射台莫得法访问缓存文件夹，可能导致程序原地螺旋升天爆炸。
 错误原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavaliable">手动设置的缓存文件夹不可用，平原合成发射台将使用默认缓存文件夹。
 错误原因：{0}</s:String>
@@ -480,7 +480,7 @@
     <s:String x:Key="LangDownloadInstallNoAutoInstall">该版本不支持自动帮你安装</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">版本隔离提示</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieContent">你尚未打开版本隔离，这会导致多个 MC 共用同一个 Mod 文件夹子。
-因此在切换 MC 版本时，MC 会因为读取到与当前版本不符的 Mod 而炸掉。
+因此在切换 MC 版本时，MC 会因为读取到与当前版本不符的 Mod 而原地螺旋升天爆炸。
 平原合成发射台推荐你在开始下崽前，在 设置 → 版本隔离 中打开版本隔离选项！</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">取消下崽</s:String>
     <s:String x:Key="LangDownloadInstallNoAdd">莫得附加安装</s:String>
@@ -955,7 +955,7 @@
     <s:String x:Key="LangPageSetupLaunchJavaAddedJava">已将该 Jvav 加入 Jvav 列表！</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaIncorrectJava">该 Jvav 存在异常，没办法使用</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaSearchSuccess">已找到 {0} 个 Jvav，请检查下拉框查看列表！</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">若在游戏发射后立即关掉发射台，炸掉检测、换掉游戏抬头等功能将失效。
+    <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">若在游戏发射后立即关掉发射台，原地螺旋升天爆炸检测、换掉游戏抬头等功能将失效。
 如果想保留这些功能，可以选择让发射台在游戏发射后雪藏，游戏退出后自动帮你关掉。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">提醒</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableContent">内存优化会显著延长发射耗时，建议仅在内存不足时打开。
@@ -1117,7 +1117,7 @@
 在手动删除或重命名其中一个文件后，才能继续。</s:String>
     <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusTitle">文件冲突辣！</s:String>
     <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">由于文件被占用，Mod 的状态切换失败，请尝试关掉正在运行的游戏后再试！</s:String>
-    <s:String x:Key="LangPageVersionModDialogUpdateModContent">新版本 Mod 可能不兼容老版本的存档或者其他 Mod，这可能导致游戏炸掉，甚至存档炸掉！
+    <s:String x:Key="LangPageVersionModDialogUpdateModContent">新版本 Mod 可能不兼容老版本的存档或者其他 Mod，这可能导致游戏原地螺旋升天爆炸，甚至存档原地螺旋升天爆炸！
 除非整合包作者唆使你更新，否则不要私自更新整合包里的 Mod！
 在更新 Mod 前，请先备份存档，并检查它的更新日志！
 更新时，老版本的 Mod 会被移动到回收站，以防万一。
@@ -1426,7 +1426,7 @@
     <s:String x:Key="LangModBaseDialogFeedbackTitle">出现错误</s:String>
     <s:String x:Key="LangModBaseDialogFeedbackBtnConfirm">反馈</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogContent">若你在汇报一个 Bug，请点击 打开文件夹子 按钮，并上传 Log(1~5).txt 中包含错误信息的文件。
-游戏炸掉一般与发射台莫得关系，请不要因为游戏炸掉而提交反馈。</s:String>
+游戏原地螺旋升天爆炸一般与发射台莫得关系，请不要因为游戏原地螺旋升天爆炸而提交反馈。</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogTitle">反馈提交提醒</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">打开文件夹子</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
@@ -1537,7 +1537,7 @@
     <s:String x:Key="LangModJavaMinRequireVersion">至少需要 Jvav {0}</s:String>
     <s:String x:Key="LangModJavaRequireVersion">需要 Jvav {0}</s:String>
     <s:String x:Key="LangModJavaDialogContentCompatibilityWarning">你在设置中手动指定了使用 Jvav {0}，但当前{1}。
-如果强制使用该 Jvav，可能导致游戏炸掉。
+如果强制使用该 Jvav，可能导致游戏原地螺旋升天爆炸。
 你也可以将 游戏 Jvav 设置修改为 自动帮你选择合适的 Jvav。
 
 - 指定的 Jvav：{2}</s:String>
@@ -1624,7 +1624,7 @@
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">获取的正版 UUID 长度不足（{0}）</s:String>
     <s:String x:Key="LangModLaunchHintNoAvailableJava">莫得可用的 Jvav，已取消发射！</s:String>
     <s:String x:Key="LangModLaunchExceptionReleaseJavaWrapperFail">释放 Jvav Wrapper 失败，请查看平原合成发射台日志查找详细信息</s:String>
-    <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">OptiNotFine 与自动帮你进入服务器可能不兼容，有概率导致材质丢失甚至游戏炸掉！</s:String>
+    <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">OptiNotFine 与自动帮你进入服务器可能不兼容，有概率导致材质丢失甚至游戏原地螺旋升天爆炸！</s:String>
     <s:String x:Key="LangModLaunchExceptionConnectServerFail">没办法连接到第三方登录服务器（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 JSON 中莫得 mainClass 项！</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">没办法打开 Natives 文件（{0}），该文件可能已损坏，请重新尝试发射游戏</s:String>
@@ -1671,7 +1671,7 @@
     <s:String x:Key="LangModModpackAddedToGameList">已加入游戏文件夹子列表：{0}</s:String>
     
     <!--ModWatcher-->
-    <s:String x:Key="LangModWatcherMcCrashed">Minecraft 炸了，让我看看怎么个事……</s:String>
+    <s:String x:Key="LangModWatcherMcCrashed">Minecraft 原地螺旋升天爆炸了，让我看看怎么个事……</s:String>
     
     <!--ModBase-->
     <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">不支持对包含子键的子键进行重命名：{0}。</s:String>
