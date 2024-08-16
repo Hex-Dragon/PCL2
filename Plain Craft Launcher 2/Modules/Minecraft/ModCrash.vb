@@ -524,25 +524,38 @@ Done:
             If LogMc.Contains("com.electronwill.nightconfig.core.io.ParsingException: Not enough data available") Then AppendReason(CrashReason.NightConfig的Bug)
             If LogMc.Contains("Cannot find launch target fmlclient, unable to launch") Then AppendReason(CrashReason.Forge安装不完整)
             If LogMc.Contains("Invalid module name: '' is not a Java identifier") Then AppendReason(CrashReason.Mod名称包含特殊字符)
+            'Java 问题
+            Dim JavaRegexOutput As String
+            Dim TargetJava As String = Nothing
+            Dim SelectedJava As String = Nothing
             If LogMc.Contains("Unsupported major.minor version") Then AppendReason(CrashReason.Java版本不兼容)
             If LogMc.Contains("java.lang.RuntimeException: java.lang.NoSuchMethodException: no such method: sun.misc.Unsafe.defineAnonymousClass(Class,byte[],Object[])Class/invokeVirtual") Then AppendReason(CrashReason.Java版本不兼容, "11")
+            If LogMc.Contains("java.lang.IllegalArgumentException: The requested compatibility level JAVA_") Then AppendReason(CrashReason.Java版本不兼容, RegexSeek(LogMc, "(?<=compatibility level JAVA_)[1-9]{2}"))
             If LogMc.Contains("has been compiled by a more recent version of the Java Runtime (class file version") Then
-                Dim TargetJava As String = (Val(RegexSeek(LogMc, "(?<=has been compiled by a more recent version of the Java Runtime (class file version )[1-9]{2}")) - 44).ToString
-                Dim SelectedJava As String = (Val(RegexSeek(LogMc, "(?<=this version of the Java Runtime only recognizes class file versions up to )[1-9]{2}")) - 44).ToString
-                AppendReason(CrashReason.Java版本不兼容, TargetJava + ";" + SelectedJava)
-            End If
-            If LogMc.Contains("java.lang.IllegalArgumentException: The requested compatibility level JAVA_") Then
-                Dim TargetJava As String = RegexSeek(LogMc, "(?<=java.lang.IllegalArgumentException: The requested compatibility level JAVA_)[1-9]{2}")
-                AppendReason(CrashReason.Java版本不兼容, TargetJava)
+                JavaRegexOutput = RegexSeek(LogMc, "(?<=Java Runtime \(class file version )[1-9]{2}")
+                If Not JavaRegexOutput = Nothing Then
+                    TargetJava = (Val(JavaRegexOutput) - 44).ToString
+                    JavaRegexOutput = RegexSeek(LogMc, "(?<=recognizes class file versions up to )[1-9]{2}")
+                    SelectedJava = If(JavaRegexOutput IsNot Nothing, (Val(JavaRegexOutput) - 44).ToString, Nothing)
+                    AppendReason(CrashReason.Java版本不兼容, TargetJava + ";" + SelectedJava)
+                Else
+                    AppendReason(CrashReason.Java版本不兼容)
+                End If
             End If
             If LogMc.Contains("Unsupported class file major version") Then
-                Dim TargetJava As String = (Val(RegexSeek(LogMc, "(?<=Unsupported class file major version )[1-9]{2}")) - 44).ToString
+                TargetJava = (Val(RegexSeek(LogMc, "(?<=Unsupported class file major version )[1-9]{2}")) - 44).ToString
                 AppendReason(CrashReason.Java版本不兼容, TargetJava)
             End If
             If LogMc.Contains("java.lang.IllegalArgumentException: Class file major version") Then
-                Dim TargetJava As String = (Val(RegexSeek(LogMc, "(?<=Class file major version )[1-9]{2}")) - 44).ToString
-                Dim SelectedJava As String = (Val(RegexSeek(LogMc, "(?<=supports class version )[1-9]{2}")) - 44).ToString
-                AppendReason(CrashReason.Java版本不兼容, TargetJava + ";" + SelectedJava)
+                JavaRegexOutput = RegexSeek(LogMc, "(?<=Class file major version )[1-9]{2}")
+                If Not JavaRegexOutput = Nothing Then
+                    TargetJava = (Val(JavaRegexOutput) - 44).ToString
+                    JavaRegexOutput = RegexSeek(LogMc, "(?<=supports class version )[1-9]{2}")
+                    SelectedJava = If(JavaRegexOutput IsNot Nothing, (Val(JavaRegexOutput) - 44).ToString, Nothing)
+                    AppendReason(CrashReason.Java版本不兼容, TargetJava + ";" + SelectedJava)
+                Else
+                    AppendReason(CrashReason.Java版本不兼容)
+                End If
             End If
             If LogMc.Contains("Invalid maximum heap size") Then AppendReason(CrashReason.使用32位Java导致JVM无法分配足够多的内存)
             If LogMc.Contains("Could not reserve enough space") Then
@@ -939,11 +952,11 @@ NextStack:
                 Case CrashReason.Java版本过高
                     Results.Add("游戏似乎因为你所使用的 Java 版本过高而崩溃了。\n请在启动设置的 Java 选择一项中改用较低版本的 Java，然后再启动游戏。\n如果没有，可以从网络中下载、安装一个。")
                 Case CrashReason.Java版本不兼容
-                    If Additional IsNot Nothing Then
-                        If Additional(0).Contains(";") Then '同时返回了目标 Java 版本和当前使用的 Java 版本
+                    If Additional.Any() Then '返回了 Java 信息
+                        If Additional(0).Length = 5 Then '同时返回了目标 Java 版本和当前使用的 Java 版本
                             Results.Add($"游戏不兼容你当前使用的 Java，其要求使用 Java {Additional(0).Split(";")(0)}，但你使用的是 Java {Additional(0).Split(";")(1)}。\n如果没有合适的 Java，可以从网络中下载、安装一个，然后修改启动设置中的 Java 设置。")
                         Else '只返回了目标 Java 版本
-                            Results.Add($"游戏不兼容你当前使用的 Java，其要求使用 Java {Additional(0)}。\n如果没有合适的 Java，可以从网络中下载、安装一个，然后修改启动设置中的 Java 设置。")
+                            Results.Add($"游戏不兼容你当前使用的 Java，其要求使用 Java {Additional(0).Split(";")(0)}。\n如果没有合适的 Java，可以从网络中下载、安装一个，然后修改启动设置中的 Java 设置。")
                         End If
                     Else '啥 Java 信息也没返回
                         Results.Add("游戏不兼容你当前使用的 Java。\n如果没有合适的 Java，可以从网络中下载、安装一个，然后修改启动设置中的 Java 设置。")
