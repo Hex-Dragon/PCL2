@@ -20,7 +20,7 @@
 请将平原合成发射台从压缩文件中解压，或是更换文件夹后再继续使用！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">平原合成发射台初始化不成功</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下载并安装 .NET Framework 4.6.2 后重试！</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下崽并安装 .NET Framework 4.6.2 后重试！</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷烫烫烫</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">程序出现未知错误</s:String>
     
@@ -1073,7 +1073,7 @@
     <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">平原合成发射台即将重启以完全应用语言的切换</s:String>
     <s:String x:Key="LangPageSetupSystemLangHelpTranslate">去整十八国语言</s:String>
     <s:String x:Key="LangPageSetupSystemHintCloseGameBeforeChangeLanguage">您先把游戏关闭后再换语言……</s:String>  
-    <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">您先等待下载任务结束再换语言……</s:String>
+    <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">您先等待下崽任务结束再换语言……</s:String>
 
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概览</s:String>
@@ -1697,4 +1697,71 @@
     <s:String x:Key="LangModMyLoadingLoadFail">加载失败</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">未知错误</s:String>
     <s:String x:Key="LangModMyLoadingBadNetwork">网络环境不佳，请重试或尝试使用黑魔法</s:String>
+
+    <!--`ModDownloadLib-->
+    <s:String x:Key="LangModDownloadLibTaskMcDownload">Minecraft {0} 下崽</s:String>
+    <s:String x:Key="LangModDownloadLibHintInstanceDownloading">该版本正在下崽中！</s:String>
+    <s:String x:Key="LangModDownloadLibDialogContentRedownloadInstance">版本 {0} 已存在，是否重新下崽？&#x0a;这会覆盖版本的 json 与 jar 文件，但不会影响版本隔离的文件。</s:String>
+    <s:String x:Key="LangModDownloadLibDialogTitleRedownloadInstance">版本已存在</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadJson">下崽版本 json 文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadJarUrl">分析核心 jar 文件下崽地址</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadJar">下崽核心 jar 文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadVanillaJsonUrl">获取原版 json 文件下崽地址</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadVanillaAnalysisLibSubLoader">分析原版支持库文件（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadVanillaDownloadLibSubLoader">下崽原版支持库文件（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadAnalysisAssestIndexSubLoader">分析资源文件索引地址（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionAnalysisAssestIndexFail">分析资源文件索引地址失败</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionAddVersionInfoFail">添加客户端版本失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadAssestIndexFail">下崽资源文件索引（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskAnalysisDownloadAssest">分析所需资源文件（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadAssest">下崽资源文件（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">选择保存位置</s:String>
+    <s:String x:Key="LangModDownloadLibTaskOptiFineDownload">OptiFine {0} 下崽</s:String>
+    <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">Java 8 或更高版本</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">由于未找到 Java，已取消安装。</s:String>
+    <s:String x:Key="LangModDownloadLibCancelJavaDownload">已取消安装。</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallerException">安装器运行出错，末行为 {0}</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionNoCustomFolder">如果没有指定原版下崽器，则不能指定 MC 安装文件夹</s:String>
+    <s:String x:Key="LangModDownloadLibTaskOptiFineWaitForVanilla">等待原版下崽</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionOptiFineInstallerRunFail">运行 OptiFine 安装器失败</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallOptiFineMethodAFail">安装 OptiFine（方式 A）失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskInstallOptiFineMethodB">安装 OptiFine（方式 B）</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallOptiFineMethodBFail">安装 OptiFine（方式 B）失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskAnalysisOptiFineLib">分析 OptiFine 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadOptiFineLib">下崽 OptiFine 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskGetOptiFineDownloadUrl">获取 OptiFine 下崽地址</s:String>
+    <s:String x:Key="LangModDownloadLibTaskLiteLoaderDownload">LiteLoader {0} 下崽</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionNotSupportVersion">未知的 Minecraft 版本（{0}）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadMainFile">下崽主文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskLiteLoaderInstallerDownload">LiteLoader {0} 安装器下崽</s:String>
+    <s:String x:Key="LangModDownloadLibTaskLiteLoaderMcVersionDownload">启动 LiteLoader 依赖版本下崽</s:String>
+    <s:String x:Key="LangModDownloadLibTaskInstallLiteLoader">安装 LiteLoader</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallLiteLoaderFail">安装新 LiteLoader 版本失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskLiteLoaderAnalysisLib">分析 LiteLoader 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskLiteLoaderDownloadLib">下崽 LiteLoader 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskForgelikeDownload">{0} 下崽</s:String>
+    <s:String x:Key="LangModDownloadLibTaskForgelikeGetDetailInfo">获取 {0} 详细信息</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionForgelikeGetDetailInfoFail">未能找到 {0} 的详细信息！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskForgelikeReadyDownload">准备下崽 {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskForgelikeGetLibFile">获取 {0} 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionForgelikeRunInstallerFail">运行 {0} 安装器失败</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionForgelikeInstallInstanceFail">安装新 {0} 版本失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskForgelikeInstallMethodB">安装 {0}（方式 B）</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionForgelikeInstallFail">非新版方式安装 Forge 失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskFabricInstallerDownload">Fabric {0} 安装器下崽</s:String>
+    <s:String x:Key="LangModDownloadLibTaskFabricAnalysisLib">分析 Fabric 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskFabricDownloadLib">下崽 Fabric 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibSuccess">{0}成功！</s:String>
+    <s:String x:Key="LangModDownloadLibFail">{0}失败：{1}</s:String>
+    <s:String x:Key="LangModDownloadLibCancel">{0}已取消！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcInstall">{0} 安装</s:String>
+    <s:String x:Key="LangModDownloadLibHintMcExist">版本 {0} 已经存在！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskAddIgnore">添加忽略标识</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDelIgnore">删除忽略标识</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadVanilla">下崽原版 {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadOptiFine">下崽 OptiFine {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadForge">下崽 Forge {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadNeoForge">下崽 NeoForge {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">下崽 LiteLoader {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadFabric">下崽 Fabric {0}</s:String>
 </ResourceDictionary>
