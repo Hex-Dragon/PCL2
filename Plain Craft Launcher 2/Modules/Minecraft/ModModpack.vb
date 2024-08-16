@@ -842,7 +842,7 @@ Retry:
                                               New ObjectModel.Collection(Of Validate) From {New ValidateNullOrWhiteSpace, New ValidateLength(1, 30), New ValidateExcept({">", "|"})})
         If String.IsNullOrWhiteSpace(NewName) Then Exit Sub
         '解压
-        Hint(GetLang("LangModModpackExtraArchive"))
+        Hint(GetLang("LangModModpackExtractArchive"))
         UnpackFiles(TargetFolder, FileAddress, Nothing)
         '加入文件夹列表
         PageSelectLeft.AddFolder(TargetFolder, NewName, False)
