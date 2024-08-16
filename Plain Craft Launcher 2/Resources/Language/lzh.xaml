@@ -1667,7 +1667,7 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">選擇安裝目標（必須是一個空文件夾）</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 文件夾路徑中不能含有感嘆號或分號！</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">請選擇一個空文件夾作為安裝目標！</s:String>
-    <s:String x:Key="LangModModpackExtraArchive">正在解壓壓縮包……</s:String>
+    <s:String x:Key="LangModModpackExtractArchive">正在解壓壓縮包……</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">已加入遊戲文件夾列表：{0}</s:String>
     
     <!--ModWatcher-->
