@@ -566,38 +566,33 @@ Restart:
     End Class
 
     '任务栏进度条
-    Public LoaderTaskbarLock As New Object
-    Public LoaderTaskbar As New List(Of LoaderBase)
+    Public LoaderTaskbar As New Concurrent.ConcurrentBag(Of LoaderBase)
     Public LoaderTaskbarProgress As Double = 0 '平滑后的进度
     Private LoaderTaskbarProgressLast As Shell.TaskbarItemProgressState = Shell.TaskbarItemProgressState.None
 
     Public Sub LoaderTaskbarAdd(Of T)(Loader As LoaderCombo(Of T))
         If FrmSpeedLeft IsNot Nothing Then FrmSpeedLeft.TaskRemove(Loader)
-        SyncLock LoaderTaskbarLock
-            LoaderTaskbar.Add(Loader)
-            Log($"[Taskbar] {Loader.Name} 已加入任务列表")
-        End SyncLock
+        LoaderTaskbar.Add(Loader)
+        Log($"[Taskbar] {Loader.Name} 已加入任务列表")
     End Sub
     Public Sub LoaderTaskbarProgressRefresh()
         Try
             Dim NewState As Shell.TaskbarItemProgressState
             Dim NewProgress As Double = LoaderTaskbarProgressGet()
             '检查任务是否完成，若完成则移除
-            SyncLock LoaderTaskbarLock
-                '外显任务是否已经全部完成
-                Dim IsAllDownloadTaskCompleted As Boolean = True
-                For Each Loader In LoaderTaskbar
-                    If Loader.State = LoadState.Loading Then IsAllDownloadTaskCompleted = False
-                Next
-                '若单个任务已中止或全部任务已完成，则刷新并移除
-                For Each Task In LoaderTaskbar.ToList()
-                    If IsAllDownloadTaskCompleted OrElse Task.State = LoadState.Aborted OrElse Task.State = LoadState.Waiting Then
-                        If FrmSpeedLeft IsNot Nothing Then FrmSpeedLeft.TaskRefresh(Task)
-                        LoaderTaskbar.Remove(Task)
-                        Log($"[Taskbar] {Task.Name} 已移出任务列表")
-                    End If
-                Next
-            End SyncLock
+            '外显任务是否已经全部完成
+            Dim IsAllDownloadTaskCompleted As Boolean = True
+            For Each Loader In LoaderTaskbar
+                If Loader.State = LoadState.Loading Then IsAllDownloadTaskCompleted = False
+            Next
+            '若单个任务已中止或全部任务已完成，则刷新并移除
+            For Each Task In LoaderTaskbar.ToList()
+                If IsAllDownloadTaskCompleted OrElse Task.State = LoadState.Aborted OrElse Task.State = LoadState.Waiting Then
+                    If FrmSpeedLeft IsNot Nothing Then FrmSpeedLeft.TaskRefresh(Task)
+                    LoaderTaskbar.TryTake(Task)
+                    Log($"[Taskbar] {Task.Name} 已移出任务列表")
+                End If
+            Next
             '更新平滑后的进度
             If NewProgress <= 0 OrElse NewProgress >= 1 OrElse LoaderTaskbarProgress > NewProgress Then
                 LoaderTaskbarProgress = NewProgress
@@ -625,15 +620,8 @@ Restart:
     End Sub
     Public Function LoaderTaskbarProgressGet() As Double
         Try
-            Dim Total As Double = 0, Count As Integer = 0
-            SyncLock LoaderTaskbarLock
-                For Each Task In LoaderTaskbar.ToList
-                    Total += Task.Progress
-                    Count += 1 '避免多线程影响导致计数出错
-                Next
-            End SyncLock
-            If Count = 0 Then Return 1
-            Return MathClamp(Total / Count, 0, 1)
+            If Not LoaderTaskbar.Any Then Return 1
+            Return MathClamp(LoaderTaskbar.Select(Function(e) e.Progress).Average(), 0, 1)
         Catch ex As Exception
             Log(ex, "获取任务栏进度出错", LogLevel.Feedback)
             Return 0.5
