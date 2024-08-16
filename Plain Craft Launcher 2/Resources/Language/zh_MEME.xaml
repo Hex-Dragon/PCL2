@@ -172,7 +172,7 @@
     <s:String x:Key="LangSetThemeBrightness">亮度</s:String>
     <s:String x:Key="LangSetThemeTitle">主题</s:String>
     <s:String x:Key="LangSetThemeHiddenTitle">隐藏主题</s:String>
-    <s:String x:Key="LangSetThemeNameBlue">龙猫蓝</s:String>   
+    <s:String x:Key="LangSetThemeNameBlue">龙猫蓝</s:String>
     <s:String x:Key="LangSetThemeNameCyan">甜柠青</s:String>
     <s:String x:Key="LangSetThemeNameGreen">原谅绿</s:String>
     <s:String x:Key="LangSetThemeNameYellow">菠萝黄</s:String>
@@ -248,7 +248,7 @@
     <s:String x:Key="LangSetHomePagePresetPageE">每日整合包推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 皮肤推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能拜拜</s:String>
-    <s:String x:Key="LangSetFuncHiddenToolTip">你可以让不需要的页面或特定功能拜拜。在随意界面按 F12 可以暂时显示拜拜的功能。</s:String>
+    <s:String x:Key="LangSetFuncHiddenToolTip">你可以让不需要的页面或特定功能被雪藏。在随意界面按 F12 可以暂时显示拜拜的功能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">主页面</s:String>
     <s:String x:Key="LangSetFuncHiddenDownload">下崽</s:String>
     <s:String x:Key="LangSetFuncHiddenLink">联机</s:String>
@@ -388,9 +388,9 @@
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">下崽 {0} 主文件</s:String>
     <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">分析 {0} 支持库文件</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">下崽 {0} 支持库文件</s:String>
-    <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">获取 Opti不Fine 下崽地址</s:String>
-    <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">下崽 Opti不Fine 主文件</s:String>
-    <s:String x:Key="LangPageSpeedRightInstallOptiFineMethodA">安装 Opti不Fine（方式 A）</s:String>
+    <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">获取高清不修复下崽地址</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">下崽高清不修复主文件</s:String>
+    <s:String x:Key="LangPageSpeedRightInstallOptiFineMethodA">安装高清不修复（方式 A）</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFabric">下崽高清布料</s:String>
 
     <!--PageDownloadClient-->
@@ -415,8 +415,8 @@
     <s:String x:Key="LangDownloadChangelog">更新日志</s:String>
     <s:String x:Key="LangDownloadSaveAs">另存为</s:String>
     <s:String x:Key="LangDownloadReleaseOn">发布于</s:String>
-    <s:String x:Key="LangDownloadForgeIncompatible">不兼容铁砧</s:String>
-    <s:String x:Key="LangDownloadRecommendForge">推荐铁砧版本：</s:String>
+    <s:String x:Key="LangDownloadForgeIncompatible">不兼容锻造</s:String>
+    <s:String x:Key="LangDownloadRecommendForge">推荐锻造版本：</s:String>
     <s:String x:Key="LangDownloadShowAll">查看全部版本</s:String>
     <s:String x:Key="LangDownloadSaveInstaller">保存安装器</s:String>
     <s:String x:Key="LangDownloadAll">全部版本</s:String>
@@ -424,7 +424,7 @@
     <s:String x:Key="LangDownloadUnknown">未知版本</s:String>
 
     <!--PageDownloadCompDetail-->
-    <s:String x:Key="LangDownloadCompToCurseForge">转到诅咒铁砧</s:String>
+    <s:String x:Key="LangDownloadCompToCurseForge">转到诅咒锻造</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">转到模组迷宫</s:String>
     <s:String x:Key="LangDownloadCompToMCMod">去找可爱的百科娘</s:String>
     <s:String x:Key="LangDownloadCompCopyName">复制名称</s:String>
@@ -456,10 +456,10 @@
 
     <!--PageDownloadInstall-->
     <s:String x:Key="LangDownloadInstallReview">安装预览</s:String>
-    <s:String x:Key="LangDownloadInstallFabricApi">你还没选择安装布料API，这会导致大多数 Mod 没办法使用！</s:String>
-    <s:String x:Key="LangDownloadInstallOptiFabric">你还没选择安装高清布料，这会导致 Opti不Fine 没办法使用！</s:String>
-    <s:String x:Key="LangDownloadInstallOptiFine">Opti不Fine 与一部分 Mod 的兼容性不佳，请谨慎安装。</s:String>
-    <s:String x:Key="LangDownloadInstallOldOptiFabric">安装结束后，请在 Mod 下崽中搜索 高清布料 Origins 并下崽，否则 Opti不Fine 会没办法使用！</s:String>
+    <s:String x:Key="LangDownloadInstallFabricApi">你还没选择安装布料动态程序接口，这会导致大多数 Mod 没办法使用！</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFabric">你还没选择安装高清布料，这会导致高清不修复没办法使用！</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFine">高清不修复与一部分 Mod 的兼容性不佳，请谨慎安装。</s:String>
+    <s:String x:Key="LangDownloadInstallOldOptiFabric">安装结束后，请在 Mod 下崽中搜索 高清布料 Origins 并下崽，否则高清不修复会没办法使用！</s:String>
     <s:String x:Key="LangDownloadInstallStart">开始安装</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">版本名称</s:String>
     <s:String x:Key="LangDownloadInstallBack">返回</s:String>
@@ -468,11 +468,11 @@
     <s:String x:Key="LangDownloadInstallClickToChose">点击选择</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">与锻造不兼容</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">与布料不兼容</s:String>
-    <s:String x:Key="LangDownloadInstallOptiFineIncompatible">与 Opti不Fine 不兼容</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineIncompatible">与高清不修复不兼容</s:String>
     <s:String x:Key="LangDownloadInstallForgeNeed">需要锻造</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">需要布料</s:String>
-    <s:String x:Key="LangDownloadInstallOptiFineNeed">需要 Opti不Fine</s:String>
-    <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">需要 Opti不Fine 与布料</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineNeed">需要高清不修复</s:String>
+    <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">需要高清不修复与布料</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">或更高版本</s:String>
     <s:String x:Key="LangDownloadInstallNoAvailabeVersion">莫得可用版本</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">获取版本列表不成功：未知错误，状态为</s:String>
@@ -491,8 +491,8 @@
     <s:String x:Key="LangDownloadPageRefresh">刷新</s:String>
     <s:String x:Key="LangDownloadPageAutoInstall">自动帮你安装</s:String>
     <s:String x:Key="LangDownloadPageManualInstall">▼ 自己装安装包</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallContent">自己装安装包功能提供了 Opti不Fine、锻造等组件的 .jar 安装文件下崽，但没办法自动帮你安装。
-在自动帮你安装页面先选择 MC 版本，然后就可以选择 Opti不Fine、锻造等组件，让平原合成发射台自动帮你进行安装了。</s:String>
+    <s:String x:Key="LangDownloadPageDialogManualInstallContent">自己装安装包功能提供了高清不修复、锻造等组件的 .jar 安装文件下崽，但没办法自动帮你安装。
+在自动帮你安装页面先选择 MC 版本，然后就可以选择高清不修复、锻造等组件，让平原合成发射台自动帮你进行安装了。</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallTitle">自动帮你安装提示</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">返回自动帮你安装</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">继续下崽自己装安装包</s:String>
@@ -556,11 +556,11 @@
     <s:String x:Key="LangDownloadNeoForgeGettingList">正在获取新锻造列表</s:String>
 
     <!--PageDownloadOptiFine-->
-    <s:String x:Key="LangDownloadOptiFineDescTitle">Opti不Fine 简介</s:String>
-    <s:String x:Key="LangDownloadOptiFineDesc">Opti不Fine 又名低清不修复，它让你可以安装光影、使用高清材质，并且可以大幅提高游戏性能。</s:String>
+    <s:String x:Key="LangDownloadOptiFineDescTitle">高清不修复简介</s:String>
+    <s:String x:Key="LangDownloadOptiFineDesc">高清不修复又名低清不修复，它让你可以安装光影、使用高清材质，并且可以大幅提高游戏性能。</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">打开官网</s:String>
     <s:String x:Key="LangDownloadOptiFineChineseWebsite">打开中文网</s:String>
-    <s:String x:Key="LangDownloadOptiFineGettingList">正在获取 Opti不Fine 列表</s:String>
+    <s:String x:Key="LangDownloadOptiFineGettingList">正在获取高清不修复列表</s:String>
 
     <!--PageDownloadPack-->
     <s:String x:Key="LangDownloadModpackSearchTitle">搜索整合包</s:String>
@@ -1624,7 +1624,7 @@
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">获取的正版 唯一识别身份证 长度不足（{0}）</s:String>
     <s:String x:Key="LangModLaunchHintNoAvailableJava">莫得可用的 Jvav，已取消发射！</s:String>
     <s:String x:Key="LangModLaunchExceptionReleaseJavaWrapperFail">释放 Jvav Wrapper 不成功，请查看平原合成发射台日志查找详细信息</s:String>
-    <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">Opti不Fine 与自动帮你进入服务器可能不兼容，有概率导致材质拜拜甚至游戏炸掉！</s:String>
+    <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">高清不修复与自动帮你进入服务器可能不兼容，有概率导致材质拜拜甚至游戏炸掉！</s:String>
     <s:String x:Key="LangModLaunchExceptionConnectServerFail">没办法连接到第三方登录服务器（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 JSON 中莫得 mainClass 项！</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">没办法打开 Natives 文件（{0}），该文件可能已损坏，请重新尝试发射游戏</s:String>
