@@ -712,7 +712,7 @@ Please check the internet then try again.</s:String>
 
     <!--PageLoginLegacy-->
     <s:String x:Key="LangPageLoginLegacySpecialCharacters">If the username contains characters beside a-z, 0-9, and _, you may not be able to join the world after Minecraft 1.18!</s:String>
-    <s:String x:Key="LangPageLoginLegacyID">Player ID</s:String>
+    <s:String x:Key="LangPageLoginLegacyID">Username</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">Username cannot be empty!</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">Username cannot contain quotation marks!</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">The launch options have been disabled!</s:String>
