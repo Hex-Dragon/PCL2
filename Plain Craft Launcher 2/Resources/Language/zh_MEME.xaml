@@ -44,7 +44,7 @@
     <s:String x:Key="LangHintDebugWarning">[调试模式]平原合成发射台正以调试模式运行，这可能会导致性能下降，若无必要请不要打开！</s:String>
     <s:String x:Key="LangDialogTitleTip">提示</s:String>
     <s:String x:Key="LangDialogHardcoreFanTheme">你已经使用了 99 次平原合成发射台啦，阿里嘎多够咋衣麻斯！
-隐藏主题 铁杆粉 闪亮登场！</s:String>
+雪藏主题 铁杆粉 闪亮登场！</s:String>
     <s:String x:Key="LangDialogCloseOnDownloading">还有下崽任务没完成，是否确定退出？</s:String>
     <s:String x:Key="LangHintHideModeOn">功能拜拜设置已重新打开！</s:String>
     <s:String x:Key="LangHintHideModeOff">功能拜拜设置已暂时关掉！</s:String>
