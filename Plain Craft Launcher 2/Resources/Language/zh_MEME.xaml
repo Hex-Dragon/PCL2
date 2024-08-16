@@ -16,7 +16,7 @@
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavaliable">手动设置的缓存文件夹不可用，平原合成发射台将使用默认缓存文件夹。
 错误原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境警告</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">平原合成发射台正在临时文件夹运行，设置、游戏存档等很可能莫得法保存，且部分功能会莫得法使用或出错。
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">平原合成发射台正在临时文件夹运行，设置、游戏存档等很可能莫得法保存，且部分功能会莫得办法使用或出错。
 请将平原合成发射台从压缩文件中解压，或是更换文件夹后再继续使用！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">平原合成发射台初始化不成功</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
@@ -557,7 +557,7 @@
 
     <!--PageDownloadOptiFine-->
     <s:String x:Key="LangDownloadOptiFineDescTitle">OptiNotFine 简介</s:String>
-    <s:String x:Key="LangDownloadOptiFineDesc">OptiNotFine 又名低清不修复，它让你可以安装光影、使用低清材质，并且可以大幅降低游戏性能。</s:String>
+    <s:String x:Key="LangDownloadOptiFineDesc">OptiNotFine 又名低清不修复，它让你可以安装光影、使用不低清材质，并且可以不降低游戏性能。</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">打开官网</s:String>
     <s:String x:Key="LangDownloadOptiFineChineseWebsite">打开中文网</s:String>
     <s:String x:Key="LangDownloadOptiFineGettingList">正在获取 OptiNotFine 列表</s:String>
@@ -1124,7 +1124,7 @@
 
 请在认真阅读上述警告后再继续！</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModTitle">Mod 更新警告</s:String>
-    <s:String x:Key="LangPageVersionModDialogUpdateModBtnConfirm">莫得视风险继续更新</s:String>
+    <s:String x:Key="LangPageVersionModDialogUpdateModBtnConfirm">无视风险，坚持更新</s:String>
     <s:String x:Key="LangPageVersionModTaskDownloadNewMod">下崽新版 Mod 文件</s:String>
     <s:String x:Key="LangPageVersionModTaskReplaceModFile">替换旧版 Mod 文件</s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdate">Mod 更新：</s:String>
@@ -1370,7 +1370,7 @@
     <s:String x:Key="LangModMinecraftFoolName24w14potato">有毒的育碧服务器一直都被大家忽视和低估，于是我们超级加强了它！</s:String>
     <s:String x:Key="LangModMinecraftFoolName23w13ab">研究表明：运动员喜欢作出选择——越多越好！</s:String>
     <s:String x:Key="LangModMinecraftFoolName22w13oneblockatatime">一次一个方块更新！迎接全新的挖掘、合成与骑乘玩法吧！</s:String>
-    <s:String x:Key="LangModMinecraftFoolName20w14inf">我们加入了 20 亿个新的维度，让莫得限的想象变成了现实！</s:String>
+    <s:String x:Key="LangModMinecraftFoolName20w14inf">我们加入了 20 亿个新的维度，让无限的想象变成了现实！</s:String>
     <s:String x:Key="LangModMinecraftFoolName3dshareware">我们从地下室的废墟里找到了这个开发于 1994 年的杰作！</s:String>
     <s:String x:Key="LangModMinecraftFoolName1.rv-pre1">是时候将现代科技带入 Minecraft 了！</s:String>
     <s:String x:Key="LangModMinecraftFoolName15w14a">作为一款全年龄向的游戏，我们需要和平，需要爱与拥抱。</s:String>
@@ -1426,7 +1426,7 @@
     <s:String x:Key="LangModBaseDialogFeedbackTitle">出现错误</s:String>
     <s:String x:Key="LangModBaseDialogFeedbackBtnConfirm">反馈</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogContent">若你在汇报一个 Bug，请点击 打开文件夹子 按钮，并上传 Log(1~5).txt 中包含错误信息的文件。
-游戏炸掉一般与发射台莫得关，请不要因为游戏炸掉而提交反馈。</s:String>
+游戏炸掉一般与发射台莫得关系，请不要因为游戏炸掉而提交反馈。</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogTitle">反馈提交提醒</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">打开文件夹子</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
