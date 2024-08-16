@@ -260,13 +260,13 @@ Retry:
                     If(SelId = 0, "", New JObject(New JProperty("capeId", SkinData("capes")(SelId - 1)("id"))).ToString(0)),
                     "application/json", Headers:=New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}})
                 If Result.Contains("""errorMessage""") Then
-                    Hint(GetLang("LangMySkinHintChangeFail") & ":" & GetJson(Result)("errorMessage"), HintType.Critical)
+                    Hint(GetLang("LangMySkinHintChangeCapeFail") & ":" & GetJson(Result)("errorMessage"), HintType.Critical)
                     Exit Sub
                 Else
-                    Hint(GetLang("LangMySkinHintChangeSuccess"), HintType.Finish)
+                    Hint(GetLang("LangMySkinHintChangeCapeSuccess"), HintType.Finish)
                 End If
             Catch ex As Exception
-                Log(ex, GetLang("LangMySkinHintChangeFail"), LogLevel.Hint)
+                Log(ex, GetLang("LangMySkinHintChangeCapeFail"), LogLevel.Hint)
             Finally
                 IsChanging = False
             End Try
