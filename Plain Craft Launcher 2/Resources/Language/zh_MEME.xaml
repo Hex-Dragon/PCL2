@@ -377,7 +377,7 @@
     <!--PageSpeedRight-->
     <s:String x:Key="LangPageSpeedRightDownloadVanillaSupportLibrary">下崽香草支持库文件</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadVanillaJSON">下崽香草 JSON 文件</s:String>
-    <s:String x:Key="LangPageSpeedRightDownloadFabricAPI">下崽布料API</s:String>
+    <s:String x:Key="LangPageSpeedRightDownloadFabricAPI">下崽布料 API</s:String>
     <s:String x:Key="LangPageSpeedRightGetFabricMainFileDownloadAddress">获取布料主文件下崽地址</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadFabricMainFile">下崽布料主文件</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadVanillaResource">下崽香草资源文件</s:String>
@@ -456,7 +456,7 @@
 
     <!--PageDownloadInstall-->
     <s:String x:Key="LangDownloadInstallReview">安装预览</s:String>
-    <s:String x:Key="LangDownloadInstallFabricApi">你尚未选择安装布料API，这会导致大多数 Mod 没办法使用！</s:String>
+    <s:String x:Key="LangDownloadInstallFabricApi">你尚未选择安装布料 API，这会导致大多数 Mod 没办法使用！</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">你尚未选择安装高清布料，这会导致 OptiNotFine 没办法使用！</s:String>
     <s:String x:Key="LangDownloadInstallOptiFine">OptiNotFine 与一部分 Mod 的兼容性不佳，请谨慎安装。</s:String>
     <s:String x:Key="LangDownloadInstallOldOptiFabric">安装结束后，请在 Mod 下崽中搜索 高清布料 Origins 并下崽，否则 OptiNotFine 会没办法使用！</s:String>
@@ -1161,7 +1161,7 @@
     <s:String x:Key="LangPageVersionOverallIconRedstoneLampOn">雷石东灯（开）</s:String>
     <s:String x:Key="LangPageVersionOverallIconRedstoneLampOff">雷石东灯（关）</s:String>
     <s:String x:Key="LangPageVersionOverallIconEgg">这是鸡蛋还是鸭蛋？</s:String>
-    <s:String x:Key="LangPageVersionOverallIconFabric">布料（布料）</s:String>
+    <s:String x:Key="LangPageVersionOverallIconFabric">布料（Fabric）</s:String>
     <s:String x:Key="LangPageVersionOverallIconNeoForge">福克斯（NeoForge）</s:String>
     <s:String x:Key="LangPageVersionOverallCategory">分类</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryAuto">自动</s:String>
