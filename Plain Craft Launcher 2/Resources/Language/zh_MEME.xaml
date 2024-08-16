@@ -1245,7 +1245,7 @@
     <s:String x:Key="LangPageVersionSetupServerLoginServerNameToolTip">显示在登录页面的服务器名称</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServer">自动帮你进入服务器</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServerToolTip">在打开 Minecraft 后自动帮你进入某服务器。
-用英文冒号间隔 IP 与端口，例如 114.514.19.19:810。</s:String>
+用英文冒号间隔 IP 与端口，例如 114.51.41.91:9810。</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerMaster">腐竹后台</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerSetLittleSkin">设置为 LittleSkin</s:String>
     <s:String x:Key="LangPageVersionSetupJVMHead">发射 Minecraft 时使用的额外 JVM 参数，在莫得确定把握的情况下请不要尝试修改。
