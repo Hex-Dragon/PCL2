@@ -79,6 +79,7 @@ Module Modi18n
     ''' </summary>
     ''' <returns></returns>
     Public Function IsLocationZH() As Boolean
+        If String.IsNullOrEmpty(Lang) Then Return Globalization.CultureInfo.CurrentCulture.Name.StartsWithF("zh")
         Return Lang.StartsWithF("zh") Or Lang.Equals("lzh")
     End Function
 
