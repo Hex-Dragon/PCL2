@@ -1667,7 +1667,7 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">Select installation destination (must be an empty folder)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft folder paths cannot contain exclamation marks (!) or semicolon (;)!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Please select an empty folder as the installation destination!</s:String>
-    <s:String x:Key="LangModModpackExtraArchive">Extracting archive...</s:String>
+    <s:String x:Key="LangModModpackExtractArchive">Extracting archive...</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Added to the folder list: {0}</s:String>
     
     <!--ModWatcher-->
