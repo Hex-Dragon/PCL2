@@ -278,7 +278,8 @@
                     End If
                     'Tags
                     Tags = New List(Of String)
-                    For Each Category In Data("categories").Select(Of Integer)(Function(t) t("id")).Distinct.OrderByDescending(Function(c) c)
+                    For Each Category In If(Data("categories"), New JArray). '镜像源 API 可能丢失此字段：https://github.com/Hex-Dragon/PCL2/issues/4267#issuecomment-2254590831
+                        Select(Of Integer)(Function(t) t("id")).Distinct.OrderByDescending(Function(c) c)
                         Select Case Category
                         'Mod
                             Case 406 : Tags.Add("世界元素")
@@ -387,7 +388,7 @@
                             Case "adventure" : Tags.Add("冒险")
                             Case "kitchen-sink" : Tags.Add("大杂烩")
                             Case "lightweight" : Tags.Add("轻量")
-                            'FUTURE: Res
+                                'FUTURE: Res
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -962,7 +963,7 @@ Retry:
                             Log($"[Comp] 从 CurseForge 获取到了 {ProjectList.Count} 个工程（已获取 {Storage.CurseForgeOffset} 个，共 {Storage.CurseForgeTotal} 个）")
                         Catch ex As Exception
                             Log(ex, "从 CurseForge 获取工程列表失败")
-                            Storage.CurseForgeTotal = Storage.CurseForgeOffset
+                            Storage.CurseForgeTotal = -1 'Storage.CurseForgeOffset
                             [Error] = ex
                             CurseForgeFailed = True
                         End Try
@@ -995,7 +996,7 @@ Retry:
                             Log($"[Comp] 从 Modrinth 获取到了 {ProjectList.Count} 个工程（已获取 {Storage.ModrinthOffset} 个，共 {Storage.ModrinthTotal} 个）")
                         Catch ex As Exception
                             Log(ex, "从 Modrinth 获取工程列表失败")
-                            Storage.ModrinthTotal = Storage.ModrinthOffset
+                            Storage.ModrinthTotal = -1 'Storage.ModrinthOffset
                             [Error] = ex
                             ModrinthFailed = True
                         End Try
@@ -1021,7 +1022,7 @@ Retry:
                     ElseIf Task.Input.Source = CompSourceType.Modrinth AndAlso Task.Input.Tag.EndsWithF("/") Then
                         Throw New Exception("Modrinth 不兼容所选的类型")
                     Else
-                        Throw New Exception("没有符合条件的结果")
+                        Throw New Exception("没有搜索结果")
                     End If
                 End If
             ElseIf [Error] IsNot Nothing Then
@@ -1190,10 +1191,6 @@ Retry:
         ''' </summary>
         Public DownloadUrls As List(Of String)
         ''' <summary>
-        ''' 文件所有可能的镜像源。
-        ''' </summary>
-        Public MirrorUrls As List(Of String)
-        ''' <summary>
         ''' 文件的 SHA1 或 MD5。
         ''' </summary>
         Public ReadOnly Hash As String = Nothing
@@ -1211,9 +1208,7 @@ Retry:
         ''' </summary>
         ''' <param name="LocalAddress">目标本地文件夹，或完整的文件路径。会自动判断类型。</param>
         Public Function ToNetFile(LocalAddress As String) As NetFile
-            Dim urls As List(Of String) = DownloadUrls
-            urls.AddRange(MirrorUrls)
-            Return New NetFile(urls, LocalAddress & If(LocalAddress.EndsWithF("\"), FileName, ""), New FileChecker(Hash:=Hash), UseBrowserUserAgent:=True)
+            Return New NetFile(DownloadUrls, LocalAddress & If(LocalAddress.EndsWithF("\"), FileName, ""), New FileChecker(Hash:=Hash), UseBrowserUserAgent:=True)
         End Function
 
         '实例化
@@ -1259,7 +1254,9 @@ Retry:
                     DownloadUrls = (New List(Of String) From {Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://media"),
                                        Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
                                        Url.Replace("://edge", "://media"),
-                                       Url}).Distinct().ToList()
+                                       Url}).Distinct.ToList '对脑残 CurseForge 的下载地址进行多种修正
+                    DownloadUrls.AddRange(DownloadUrls.Select(Function(u) DlSourceModGet(u)).ToList) '添加镜像源，这个写法是为了让镜像源排在后面
+                    DownloadUrls = DownloadUrls.Distinct.ToList '最终去重
                     'Dependencies
                     If Type = CompType.Mod Then
                         RawDependencies = Data("dependencies").
@@ -1293,11 +1290,10 @@ Retry:
                     ReleaseDate = Data("date_published")
                     Status = If(Data("version_type").ToString = "release", CompFileStatus.Release, If(Data("version_type").ToString = "beta", CompFileStatus.Beta, CompFileStatus.Alpha))
                     DownloadCount = Data("downloads")
-                    '可能为空
-                    If CType(Data("files"), JArray).Any() Then
+                    If CType(Data("files"), JArray).Any() Then '可能为空
                         Dim File As JToken = Data("files")(0)
                         FileName = File("filename")
-                        DownloadUrls = New List(Of String) From {File("url")}
+                        DownloadUrls = New List(Of String) From {File("url"), DlSourceModGet(File("url"))}.Distinct.ToList '同时添加了镜像源
                         Hash = File("hashes")("sha1")
                     End If
                     'Dependencies
@@ -1331,11 +1327,6 @@ Retry:
                     If RawLoaders.Contains("quilt") Then ModLoaders.Add(CompModLoaderType.Quilt)
 #End Region
                 End If
-                '末尾添加备用镜像 URL
-                MirrorUrls = New List(Of String)
-                For Each u In DownloadUrls
-                    MirrorUrls.Add(DlSourceModGet(u))
-                Next
             End If
         End Sub
         ''' <summary>
@@ -1437,24 +1428,10 @@ Retry:
         Dim TargetProject As CompProject
         If CompProjectCache.ContainsKey(ProjectId) Then '存在缓存
             TargetProject = CompProjectCache(ProjectId)
-        Else
-            Dim retryCount As Integer = 0
-Retry:
-            Dim comp As Object
-            If FromCurseForge Then 'CurseForge
-                comp = DlModRequest("https://api.curseforge.com/v1/mods/" & ProjectId, IsJson:=True)
-                TargetProject = New CompProject(DlModRequest("https://api.curseforge.com/v1/mods/" & ProjectId, IsJson:=True)("data"))
-            Else 'Modrinth
-                comp = DlModRequest("https://api.modrinth.com/v2/project/" & ProjectId, IsJson:=True)
-                TargetProject = New CompProject(DlModRequest("https://api.modrinth.com/v2/project/" & ProjectId, IsJson:=True))
-            End If
-            If comp Is Nothing Then '获取 ("data") 时会报值不能为 null
-                If retryCount > 2 Then Throw New Exception("工程对象获取失败，请等待一段时间后刷新再试！")
-                retryCount += 1
-                Thread.Sleep(1000)
-                GoTo Retry
-            End If
-            TargetProject = New CompProject(If(FromCurseForge, comp("data"), comp))
+        ElseIf FromCurseForge Then 'CurseForge
+            TargetProject = New CompProject(DlModRequest("https://api.curseforge.com/v1/mods/" & ProjectId, IsJson:=True)("data"))
+        Else 'Modrinth
+            TargetProject = New CompProject(DlModRequest("https://api.modrinth.com/v2/project/" & ProjectId, IsJson:=True))
         End If
         '获取工程对象的文件列表
         Log("[Comp] 开始获取文件列表：" & ProjectId)
@@ -1464,11 +1441,11 @@ Retry:
             If TargetProject.Type = CompType.Mod Then 'Mod 使用每个版本最新的文件
                 ResultJsonArray = GetJson(DlModRequest("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(TargetProject.CurseForgeFileIds, ",") & "]}", "application/json"))("data")
             Else '否则使用全部文件
-                ResultJsonArray = NetGetCodeByRequestRetry($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=999", Accept:="application/json", IsJson:=True, BackupUrl:=DlSourceModGet($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=999"))("data")
+                ResultJsonArray = DlModRequest($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=999", IsJson:=True)("data")
             End If
         Else
             'Modrinth
-            ResultJsonArray = NetGetCodeByRequestRetry($"https://api.modrinth.com/v2/project/{ProjectId}/version", Accept:="application/json", IsJson:=True, BackupUrl:=DlSourceModGet($"https://api.modrinth.com/v2/project/{ProjectId}/version"))
+            ResultJsonArray = DlModRequest($"https://api.modrinth.com/v2/project/{ProjectId}/version", IsJson:=True)
         End If
         CompFilesCache(ProjectId) = ResultJsonArray.Select(Function(a) New CompFile(a, TargetProject.Type)).
             Where(Function(a) a.Available).ToList.Distinct(Function(a, b) a.Id = b.Id) 'CurseForge 可能会重复返回相同项（#1330）
@@ -1485,8 +1462,7 @@ Retry:
                 Projects = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
                     "POST", "{""modIds"": [" & Join(UndoneDeps, ",") & "]}", "application/json"))("data")
             Else
-                Projects = NetGetCodeByRequestRetry($"https://api.modrinth.com/v2/projects?ids=[""{Join(UndoneDeps, """,""")}""]",
-                    Accept:="application/json", IsJson:=True)
+                Projects = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{Join(UndoneDeps, """,""")}""]", IsJson:=True)
             End If
             For Each Project In Projects
                 Dim NewProject As New CompProject(Project) '在 New 的时候就添加了缓存
