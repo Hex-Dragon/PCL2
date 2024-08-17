@@ -124,6 +124,15 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 333 Then 'Snapshot 2.8.4
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "下载 Mod 时会使用 MCIM 国内镜像源"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "打开 PCL 时会自动安装同目录下的 modpack.zip"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "爱发电域名迁移至 afdian.com"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复 1.20.1+ 离线登录使用正版皮肤时无法保存游戏的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复安装的 1.14~1.15 Forge+OptiFine 无法进入世界的 Bug"))
+            FeatureCount += 13
+            BugCount += 17
+        End If
         If LastVersion < 331 Then 'Snapshot 2.8.3
             If LastVersion = 329 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复部分玩家无法启动 MC 的 Bug"))
         End If
@@ -307,17 +316,13 @@ Public Class FormMain
         RunInNewThread(
         Sub()
             If MyMsgBox(Content, GetLang("LangDialogUpdateTo", VersionDisplayName), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnUpdateFullLog")) = 2 Then
-                OpenWebsite("https://afdian.net/a/LTCat?tab=feed")
+                OpenWebsite("https://afdian.com/a/LTCat?tab=feed")
             End If
         End Sub, "UpdateLog Output")
     End Sub
 
     '窗口加载
     Private IsWindowLoadFinished As Boolean = False
-    ''' <summary>
-    ''' 是否为联机提权后自动重启。
-    ''' </summary>
-    Public Shared IsLinkRestart As Boolean = False
     Public Sub New()
         ApplicationStartTick = GetTimeTick()
         '窗体参数初始化
@@ -352,7 +357,6 @@ Public Class FormMain
         PanMainLeft.Child = FrmLaunchLeft
         PanMainRight.Child = FrmLaunchRight
         FrmLaunchRight.PageState = MyPageRight.PageStates.ContentStay
-        If IsLinkRestart Then PageChange(PageType.Link, PageSubType.LinkIoi)
         '模式提醒
 #If DEBUG Then
         Hint("[开发者模式] PCL 正以开发者模式运行，这可能会造成严重的性能下降，请务必立即向开发者反馈此问题！", HintType.Critical)
@@ -421,7 +425,7 @@ Public Class FormMain
             Sub()
                 PanBack.RenderTransform = Nothing
                 IsWindowLoadFinished = True
-                Log($"[System] DPI：{DPI}，系统版本：{OsVersion}，PCL 位置：{PathWithName}")
+                Log($"[System] DPI：{DPI}，系统版本：{Environment.OSVersion.VersionString}，PCL 位置：{PathWithName}")
             End Sub, , True)
         }, "Form Show")
         'Timer 启动
@@ -566,7 +570,7 @@ Public Class FormMain
                 RunInNewThread(
                 Sub()
                     Log("[System] 正在强行停止任务")
-                    For Each Task As LoaderBase In LoaderTaskbar.ToArray
+                    For Each Task As LoaderBase In LoaderTaskbar.ToList()
                         Task.Abort()
                     Next
                 End Sub, "强行停止下载任务")
@@ -888,10 +892,12 @@ Public Class FormMain
 Install:
                     Try
                         For Each ModFile In FilePathList
-                            CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & GetFileNameFromPath(ModFile))
+                            Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "")
+                            If Not NewFileName.Contains(".") Then NewFileName += ".jar" '#4227
+                            CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & NewFileName)
                         Next
                         If FilePathList.Count = 1 Then
-                            Hint(GetLang("LangHintInstallModSuccessA", GetFileNameFromPath(FilePathList.First)), HintType.Finish)
+                            Hint(GetLang("LangHintInstallModSuccessA", GetFileNameFromPath(FilePathList.First).Replace(".disabled", "")), HintType.Finish)
                         Else
                             Hint(GetLang("LangHintInstallModSuccessB", FilePathList.Count), HintType.Finish)
                         End If
@@ -908,7 +914,7 @@ Install:
             '安装整合包
             If {"zip", "rar", "mrpack"}.Any(Function(t) t = Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
                 Log("[System] 文件为压缩包，尝试作为整合包安装")
-                If ModpackInstall(FilePath, ShowHint:=False) Then Exit Sub
+                If ModpackInstall(FilePath, ShowHint:=False) IsNot Nothing Then Exit Sub
             End If
             'RAR 处理
             If Extension = "rar" Then

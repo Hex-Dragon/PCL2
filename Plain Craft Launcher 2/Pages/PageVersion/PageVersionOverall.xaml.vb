@@ -284,14 +284,11 @@
     Private Sub BtnManageCheck_Click(sender As Object, e As EventArgs) Handles BtnManageCheck.Click
         Try
             '重复任务检查
-            SyncLock LoaderTaskbarLock
-                For i = 0 To LoaderTaskbar.Count - 1
-                    If LoaderTaskbar(i).Name = PageVersionLeft.Version.Name & " " & GetLang("LangPageVersionOverallTaskCompleteFile") Then
-                        Hint(GetLang("LangPageVersionOverallCompleteFileInTask"), HintType.Critical)
-                        Exit Sub
-                    End If
-                Next
-            End SyncLock
+            For Each OngoingLoader In LoaderTaskbar
+                If OngoingLoader.Name <> PageVersionLeft.Version.Name & " " & GetLang("LangPageVersionOverallTaskCompleteFile") Then Continue For
+                Hint(GetLang("LangPageVersionOverallCompleteFileInTask"), HintType.Critical)
+                Exit Sub
+            Next
             '启动
             Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " " & GetLang("LangPageVersionOverallTaskCompleteFile"), DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload, False))
             Loader.OnStateChanged =

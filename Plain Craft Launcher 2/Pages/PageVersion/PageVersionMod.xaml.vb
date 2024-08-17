@@ -229,7 +229,7 @@
 
     '改变下边栏状态
     Private ShownCount As Integer = 0
-    Private Sub RefreshBottomBar()
+    Public Sub RefreshBottomBar()
         '计数
         Dim NewCount As Integer = SelectedMods.Count
         Dim Selected = NewCount > 0

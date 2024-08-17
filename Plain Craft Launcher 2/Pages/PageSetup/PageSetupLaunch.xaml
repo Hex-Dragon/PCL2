@@ -7,9 +7,9 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
-            <local:MyCard x:Name="CardSkin" Margin="0,15" Title="{DynamicResource LangPageSetupLaunchSkin}">
+            <local:MyCard x:Name="CardSkin" Margin="0,15" Title="{DynamicResource LangPageSetupLaunchSkin}" CanSwap="True" IsSwaped="True">
                 <StackPanel Margin="25,40,25,15">
-                    <local:MyHint Text="{DynamicResource LangPageSetupLaunchSkinTips}" IsWarn="False" Margin="0,0,0,10" />
+                    <local:MyHint Text="{DynamicResource LangPageSetupLaunchSkinTips}" IsWarn="True" Margin="0,0,0,10" />
                     <Grid Margin="-1,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
