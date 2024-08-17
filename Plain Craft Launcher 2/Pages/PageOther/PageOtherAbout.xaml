@@ -58,7 +58,7 @@
                     <local:MyListItem Title="DoodleHuang" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="{DynamicResource LangPageOtherAboutThanksDoodleHuang}" Grid.Row="3" Grid.Column="1" />
                     <local:MyListItem Title="Patrick" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="{DynamicResource LangPageOtherAboutThanksPatrick}" Grid.Row="4" Grid.Column="1" />
                     <local:MyListItem Title="Hao_Tian" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="{DynamicResource LangPageOtherAboutThanksHao_Tian}" Grid.Row="5" Grid.Column="1" />
-                    <local:MyListItem Title="{DynamicResource LangPageOtherAboutThanksMCBBSTitle}" Margin="-5,0,15,0" IsHitTestVisible="False" Info="{DynamicResource LangPageOtherAboutThanksMCBBS}" Grid.Row="6" Grid.Column="1" />
+                    <local:MyListItem Title="{DynamicResource LangPageOtherAboutThanksMCBBSTitle}" Margin="-5,0,15,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="{DynamicResource LangPageOtherAboutThanksMCBBS}" Grid.Row="6" Grid.Column="1" />
                     <local:MyListItem Title="{DynamicResource LangPageOtherAboutThanksUsersTitle}" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="{DynamicResource LangPageOtherAboutThanksUsers}" Grid.Row="7" Grid.Column="1" />
                     <Image Source="/Plain Craft Launcher 2;component/Images/Heads/bangbang93.png" Grid.Row="0" Margin="3">
                         <Image.Clip>
