@@ -90,7 +90,7 @@ Public Class Application
             ToolTipService.HorizontalOffsetProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(8.0))
             ToolTipService.VerticalOffsetProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(4.0))
             '设置初始窗口
-            If Setup.Get("UiLauncherLogo") AndAlso Not FormMain.IsLinkRestart Then
+            If Setup.Get("UiLauncherLogo") Then
                 FrmStart = New SplashScreen("Images\icon.ico")
                 FrmStart.Show(False, True)
             End If

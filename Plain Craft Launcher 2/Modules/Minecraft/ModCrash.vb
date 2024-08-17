@@ -881,7 +881,10 @@ NextStack:
                                 FileName = "游戏崩溃前的输出.txt"
                         End Select
                         If File.Exists(OutputFile) Then
-                            WriteFile(TempFolder & "Report\" & FileName, SecretFilter(ReadFile(OutputFile), If(FileName = "启动脚本.bat", "F", "*")))
+                            Dim FileEncoding As Encoding = GetEncoding(OutputFile)
+                            WriteFile(TempFolder & "Report\" & FileName,
+                                      SecretFilter(ReadFile(OutputFile, FileEncoding), If(FileName = "启动脚本.bat", "F", "*")),
+                                      Encoding:=FileEncoding)
                         End If
                     Next
                     '导出报告

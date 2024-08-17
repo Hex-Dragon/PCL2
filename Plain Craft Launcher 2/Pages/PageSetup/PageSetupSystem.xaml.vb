@@ -35,7 +35,10 @@
         '重复加载部分
         PanBack.ScrollToHome()
 
-#If Not BETA Then
+#If BETA Then
+        PanDonate.Visibility = Visibility.Collapsed
+#Else
+        PanDonate.Visibility = Visibility.Visible
         ItemSystemUpdateDownload.Content = "在有新版本时自动下载（更新快照版可能需要更新密钥）"
 #End If
 
@@ -213,5 +216,16 @@
             Return Nothing
         End Try
     End Function
+
+#Region "导出 / 导入设置"
+
+    Private Sub BtnSystemSettingExp_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemSettingExp.Click
+        Hint("该功能尚在开发中！")
+    End Sub
+    Private Sub BtnSystemSettingImp_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemSettingImp.Click
+        Hint("该功能尚在开发中！")
+    End Sub
+
+#End Region
 
 End Class
