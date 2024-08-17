@@ -316,7 +316,7 @@
                             Case 4476 : Tags.Add(GetLang("LangDownloadModpackTypeExplore"))
                             Case 4477 : Tags.Add(GetLang("LangDownloadModpackTypeGame"))
                             Case 4471 : Tags.Add(GetLang("LangDownloadModpackTypeScienceFiction"))
-                            Case 4736 : Tags.Add(GetLang("LangDownloadModpackTypeSkyland"))
+                            Case 4736 : Tags.Add(GetLang("LangDownloadModpackTypeSkyblock"))
                             Case 5128 : Tags.Add(GetLang("LangDownloadModpackTypeImprove"))
                             Case 4487 : Tags.Add(GetLang("LangDownloadModpackTypeFTB"))
                             Case 4480 : Tags.Add(GetLang("LangDownloadModpackTypeMapBased"))
@@ -531,8 +531,8 @@
                 NewItem.ColumnTime3.Width = New GridLength(0)
             End If
             NewItem.LabDownload.Text =
-                If(DownloadCount > 100000000, Math.Round(DownloadCount / 100000000, 2) & " " & GetLang("LangModCompModBilion"),
-                    If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " " & GetLang("LangModCompModMilion"), DownloadCount))
+                If(DownloadCount > 100000000, Math.Round(DownloadCount / 100000000, 2) & " " & GetLang("LangModCompModBillion"),
+                    If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " " & GetLang("LangModCompModMillion"), DownloadCount))
             Return NewItem
         End Function
         Public Function GetControlLogo() As String

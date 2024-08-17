@@ -112,11 +112,11 @@
                         <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchUpdateC}" />
                         <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchUpdateD}" />
                     </local:MyComboBox>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncemnet}" Margin="0,0,25,0" Grid.Row="2" />
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncement}" Margin="0,0,25,0" Grid.Row="2" />
                     <local:MyComboBox x:Name="ComboSystemActivity" Tag="SystemSystemActivity" Grid.Column="1" Grid.Row="2">
-                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncemnetA}" ToolTip="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncemnetAToolTip}" />
-                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncemnetB}" />
-                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncemnetC}" />
+                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncementA}" ToolTip="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncementAToolTip}" />
+                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncementB}" />
+                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncementC}" />
                     </local:MyComboBox>
                     <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemSystemCacheFolder}" Margin="0,0,25,0" />
                     <local:MyTextBox x:Name="TextSystemCache" Grid.Row="4" Grid.ColumnSpan="2" Tag="SystemSystemCache" Grid.Column="1" ToolTip="{DynamicResource LangPageSetupSystemSystemCacheFolderToolTip}" HintText="{DynamicResource LangSetDefault}">

@@ -23,6 +23,6 @@
         <WebBrowser x:Name="Browser1" Visibility="Collapsed" Tag="1" Margin="0,0,0,25" />
         <WebBrowser x:Name="Browser2" Visibility="Collapsed" Tag="2" Margin="0,0,0,25" />
         <WebBrowser x:Name="Browser3" Visibility="Collapsed" Tag="3" Margin="0,0,0,25" />
-        <local:MyTextButton Text="{DynamicResource LangLoginOAuthToBrower}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5" x:Name="HintSwitch" />
+        <local:MyTextButton Text="{DynamicResource LangLoginOAuthToBrowser}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,5" x:Name="HintSwitch" />
     </Grid>
 </Window>

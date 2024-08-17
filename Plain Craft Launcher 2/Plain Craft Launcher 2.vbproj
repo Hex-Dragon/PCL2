@@ -939,7 +939,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Icons\Disabled.png" />
-    <Resource Include="Images\Icons\Unavaliable.png" />
+    <Resource Include="Images\Icons\Unavailable.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Heads\MCBBS.png" />

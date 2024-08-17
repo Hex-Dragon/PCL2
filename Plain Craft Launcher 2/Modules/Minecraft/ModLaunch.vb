@@ -937,7 +937,7 @@ SystemBrowser:
                 MyMsgBox(GetLang("LangModLaunchDialogContentBanned"), GetLang("LangModLaunchLoginFail"), GetLang("LangModLaunchDialogBtnISee"), IsWarn:=True)
                 Throw New Exception("$$")
             ElseIf ex.Message.Contains("2148916233") Then
-                If MyMsgBox(GetLang("LangModLaunchDialogContentNoXBoxAccount"), GetLang("LangModLaunchDialogTitleLoginTip"), GetLang("LangModLaunchDialogBtnRegiste"), GetLang("LangDialogBtnCancel")) = 1 Then
+                If MyMsgBox(GetLang("LangModLaunchDialogContentNoXBoxAccount"), GetLang("LangModLaunchDialogTitleLoginTip"), GetLang("LangModLaunchDialogBtnRegister"), GetLang("LangDialogBtnCancel")) = 1 Then
                     OpenWebsite("https://signup.live.com/signup")
                 End If
                 Throw New Exception("$$")

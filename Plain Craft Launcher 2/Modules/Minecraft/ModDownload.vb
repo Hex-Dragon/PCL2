@@ -210,7 +210,7 @@ Public Module ModDownload
             '添加 PCL 特供项
             If File.Exists(PathTemp & "Cache\download.json") Then Versions.Merge(GetJson(ReadFile(PathTemp & "Cache\download.json")))
             '返回
-            Loader.Output = New DlClientListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "Mojang"), .Value = Json}
+            Loader.Output = New DlClientListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "Mojang"), .Value = Json}
             '解析更新提示（Release）
             Dim Version As String = Json("latest")("release")
             If Setup.Get("ToolUpdateRelease") AndAlso Not Setup.Get("ToolUpdateReleaseLast") = "" AndAlso Version IsNot Nothing AndAlso Not Setup.Get("ToolUpdateReleaseLast") = Version Then
@@ -226,7 +226,7 @@ Public Module ModDownload
             End If
             Setup.Set("ToolUpdateSnapshotLast", If(Version, "Nothing"))
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "Minecraft", "Fail"), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "Minecraft", "Fail"), ex)
         End Try
     End Sub
     ''' <summary>
@@ -389,9 +389,9 @@ Public Module ModDownload
                 Entry.NameVersion = Entry.Inherit & "-OptiFine_" & Name(i).ToString.Replace(" ", "_").Replace(Entry.Inherit & "_", "")
                 Versions.Add(Entry)
             Next
-            Loader.Output = New DlOptiFineListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "OptiFine"), .Value = Versions}
+            Loader.Output = New DlOptiFineListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "OptiFine"), .Value = Versions}
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "OptiFine", Result), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "OptiFine", Result), ex)
         End Try
     End Sub
 
@@ -476,7 +476,7 @@ Public Module ModDownload
         Dim Names As List(Of String) = RegexSearch(Result, "(?<=a href=""index_)[0-9.]+(_pre[0-9]?)?(?=.html)")
         Names.Add("1.2.4") '1.2.4 不会被匹配上
         If Names.Count < 10 Then Throw New Exception(GetLang("LangModDownloadExceptionShortVersion", Result))
-        Loader.Output = New DlForgeListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "Forge"), .Value = Names}
+        Loader.Output = New DlForgeListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "Forge"), .Value = Names}
     End Sub
 
     ''' <summary>
@@ -621,7 +621,7 @@ Public Module ModDownload
                                           ".html", UseBrowserUserAgent:=True)
         Catch ex As Exception
             If GetExceptionSummary(ex).Contains("(404)") Then
-                Throw New Exception(GetLang("LangDownloadInstallNoAvailabeVersion"))
+                Throw New Exception(GetLang("LangDownloadInstallNoAvailableVersion"))
             Else
                 Throw
             End If
@@ -677,9 +677,9 @@ Public Module ModDownload
                 End Try
             Next
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "Forge", Result), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "Forge", Result), ex)
         End Try
-        If Not Versions.Any() Then Throw New Exception(GetLang("LangDownloadInstallNoAvailabeVersion"))
+        If Not Versions.Any() Then Throw New Exception(GetLang("LangDownloadInstallNoAvailableVersion"))
         Loader.Output = Versions
     End Sub
 
@@ -734,7 +734,7 @@ Public Module ModDownload
         Catch ex As Exception
             Throw New Exception(GetLang("LangModDownloadSourceBMCLAPIForge", Json.ToString()), ex)
         End Try
-        If Not Versions.Any() Then Throw New Exception(GetLang("LangDownloadInstallNoAvailabeVersion"))
+        If Not Versions.Any() Then Throw New Exception(GetLang("LangDownloadInstallNoAvailableVersion"))
         Loader.Output = Versions
     End Sub
 
@@ -828,10 +828,10 @@ Public Module ModDownload
         If ResultLatest.Length < 100 OrElse ResultLegacy.Length < 100 Then Throw New Exception(GetLang("LangModDownloadExceptionShortVersionList", ResultLatest))
         '解析
         Try
-            Loader.Output = New DlNeoForgeListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "NeoForge"),
+            Loader.Output = New DlNeoForgeListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "NeoForge"),
                 .Value = GetNeoForgeEntries(ResultLatest, ResultLegacy)}
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "NeoForge", ResultLatest & vbCrLf & vbCrLf & ResultLegacy), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "NeoForge", ResultLatest & vbCrLf & vbCrLf & ResultLegacy), ex)
         End Try
     End Sub
 
@@ -964,9 +964,9 @@ Public Module ModDownload
                              .JsonToken = RealEntry
                          })
             Next
-            Loader.Output = New DlLiteLoaderListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "LiteLoader"), .Value = Versions}
+            Loader.Output = New DlLiteLoaderListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "LiteLoader"), .Value = Versions}
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "LiteLoader", Result.ToString()), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "LiteLoader", Result.ToString()), ex)
         End Try
     End Sub
 
@@ -1048,11 +1048,11 @@ Public Module ModDownload
     Private Sub DlFabricListOfficialMain(Loader As LoaderTask(Of Integer, DlFabricListResult))
         Dim Result As JObject = NetGetCodeByRequestRetry("https://meta.fabricmc.net/v2/versions", IsJson:=True)
         Try
-            Dim Output = New DlFabricListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "Fabric"), .Value = Result}
+            Dim Output = New DlFabricListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "Fabric"), .Value = Result}
             If Output.Value("game") Is Nothing OrElse Output.Value("loader") Is Nothing OrElse Output.Value("installer") Is Nothing Then Throw New Exception(GetLang("LangModDownloadExceptionMissNecessary"))
             Loader.Output = Output
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "Fabric", Result.ToString()), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "Fabric", Result.ToString()), ex)
         End Try
     End Sub
 
@@ -1209,7 +1209,7 @@ Public Module ModDownload
                 End If
                 '由于 Forge BMCLAPI 没有可用版本导致强制失败
                 '在没有可用版本时，官方源会一直卡住，直接使用 BMCLAPI 判定失败即可
-                If SubLoader.Key.Error IsNot Nothing AndAlso SubLoader.Key.Error.Message.Contains(GetLang("LangDownloadInstallNoAvailabeVersion")) Then
+                If SubLoader.Key.Error IsNot Nothing AndAlso SubLoader.Key.Error.Message.Contains(GetLang("LangDownloadInstallNoAvailableVersion")) Then
                     For Each SubLoader2 In LoaderList
                         If WaitCycle < SubLoader2.Value * 100 Then WaitCycle = SubLoader2.Value * 100
                     Next
@@ -1235,7 +1235,7 @@ Public Module ModDownload
                         For ii = 0 To LoaderList.Count - 1
                             LoaderList(ii).Key.Input = Nothing '重置输入，以免以同样的输入“重试加载”时直接失败
                             If LoaderList(ii).Key.Error IsNot Nothing Then
-                                If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains(GetLang("LangDownloadInstallNoAvailabeVersion")) Then
+                                If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains(GetLang("LangDownloadInstallNoAvailableVersion")) Then
                                     ErrorInfo = LoaderList(ii).Key.Error
                                 End If
                             End If

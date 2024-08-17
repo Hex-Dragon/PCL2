@@ -65,7 +65,7 @@
                             <local:MyComboBoxItem Tag="4476/" Content="{DynamicResource LangDownloadModpackTypeExplore}" />
                             <local:MyComboBoxItem Tag="4477/" Content="{DynamicResource LangDownloadModpackTypeGame}" />
                             <local:MyComboBoxItem Tag="4471/" Content="{DynamicResource LangDownloadModpackTypeScienceFiction}" />
-                            <local:MyComboBoxItem Tag="4736/" Content="{DynamicResource LangDownloadModpackTypeSkyland}" />
+                            <local:MyComboBoxItem Tag="4736/" Content="{DynamicResource LangDownloadModpackTypeSkyblock}" />
                             <local:MyComboBoxItem Tag="5128/" Content="{DynamicResource LangDownloadModpackTypeImprove}" />
                             <local:MyComboBoxItem Tag="4487/" Content="{DynamicResource LangDownloadModpackTypeFTB}" 
                                                   ToolTip="{DynamicResource LangDownloadModpackTypeFTBToolTip}" ToolTipService.HorizontalOffset="70" />

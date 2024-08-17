@@ -57,7 +57,7 @@ Public Module ModMinecraft
             Dim MojangPath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\"
             If (Not CacheMcFolderList.Any OrElse MojangPath <> CacheMcFolderList(0).Path) AndAlso '当前文件夹不是官启文件夹
                 Directory.Exists(MojangPath & "versions\") Then '具有权限且存在 versions 文件夹
-                CacheMcFolderList.Add(New McFolder With {.Name = GetLang("LangModMinecraftOfficalFolder"), .Path = MojangPath, .Type = McFolderType.Original})
+                CacheMcFolderList.Add(New McFolder With {.Name = GetLang("LangModMinecraftOfficialFolder"), .Path = MojangPath, .Type = McFolderType.Original})
             End If
 
 #End Region
@@ -2118,7 +2118,7 @@ OnLoaded:
             }")
             'End If
         Else
-            Throw New Exception(GetLang("LangModMinecraftExceptionNoAssestIndexInfo"))
+            Throw New Exception(GetLang("LangModMinecraftExceptionNoAssetsIndexInfo"))
         End If
     End Function
     ''' <summary>
@@ -2177,7 +2177,7 @@ OnLoaded:
         Try
 
             '初始化
-            If Not File.Exists(PathMcFolder & "assets\indexes\" & Name & ".json") Then Throw New FileNotFoundException(GetLang("LangModMinecraftExceptionAssestIndexFileNotFound"), PathMcFolder & "assets\indexes\" & Name & ".json")
+            If Not File.Exists(PathMcFolder & "assets\indexes\" & Name & ".json") Then Throw New FileNotFoundException(GetLang("LangModMinecraftExceptionAssetsIndexFileNotFound"), PathMcFolder & "assets\indexes\" & Name & ".json")
             McAssetsListGet = New List(Of McAssetsToken)
             Dim Json = GetJson(ReadFile(PathMcFolder & "assets\indexes\" & Name & ".json"))
 
