@@ -248,7 +248,7 @@
     <s:String x:Key="LangSetHomePagePresetPageE">每日整合包推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 外壳推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能雪藏</s:String>
-    <s:String x:Key="LangSetFuncHiddenToolTip">你可以让不需要的页面或特定功能被雪藏。在随意界面按 F12 可以暂时显示拜拜的功能。</s:String>
+    <s:String x:Key="LangSetFuncHiddenToolTip">你可以让不需要的页面或特定功能被雪藏。在随意界面按 F12 可以暂时挖出被雪藏的功能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">主页面</s:String>
     <s:String x:Key="LangSetFuncHiddenDownload">下崽</s:String>
     <s:String x:Key="LangSetFuncHiddenLink">联机</s:String>
