@@ -491,7 +491,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangDownloadPageRefresh">重新整理</s:String>
     <s:String x:Key="LangDownloadPageAutoInstall">自動安裝</s:String>
     <s:String x:Key="LangDownloadPageManualInstall">▼ 手動安裝包</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallContent">手動安裝包功能提供了 OptiFine、Forge 等元件的 .jar 安裝檔案下載，但無法自動安裝。
+    <s:String x:Key="LangDownloadPageDialogManualInstallContent">手動安裝包功能提供了 OptiFine、Forge 等元件的 JAR 安裝檔案下載，但無法自動安裝。
 在自動安裝畫面先選擇 Minecraft 版本，然後就可以選擇 OptiFine、Forge 等元件，讓 PCL 自動進行安裝了。</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallTitle">自動安裝提示</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">返回自動安裝</s:String>
@@ -938,7 +938,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 如果在設定中手動選擇了與目前實例不相容的 Java，則自動跳過相容性警吿彈出視窗，強制使用手動選擇的 Java。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">關閉檔案校驗</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警吿：強烈推薦在實例設定中關閉特定實例的校驗，而不是在這裏關閉所有實例的校驗！
-完全不更改 assets；不校驗 libraries、第三方登入庫與實例主 jar 檔案是否被修改。
+完全不更改 assets；不校驗 libraries、第三方登入庫與實例主 JAR 檔案是否被修改。
 如果你沒有修改相關檔案，請勿勾選此項。</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">啟動設定項存在異常，已被自動重設</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">重載啟動設定時出錯</s:String>
@@ -1280,7 +1280,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致執行失敗。
 執行命令時，命令列所在的目錄是目前的 .minecraft 資料夾。</s:String>
     <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在設定中手動選擇了與目前實例不相容的 Java，則自動跳過相容性警吿彈出視窗，強制使用手動選擇的 Java。</s:String>
-    <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校驗 libraries、第三方登入庫與實例主 jar 檔案是否被修改。
+    <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校驗 libraries、第三方登入庫與實例主 JAR 檔案是否被修改。
 如果你沒有修改相關檔案，請勿勾選此項。</s:String>
 
     <!--ModMain-->

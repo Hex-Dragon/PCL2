@@ -491,7 +491,7 @@ PCL suggests turning on the 'Instance Isolation' option in 'Settings → Instanc
     <s:String x:Key="LangDownloadPageRefresh">Refresh</s:String>
     <s:String x:Key="LangDownloadPageAutoInstall">Installation</s:String>
     <s:String x:Key="LangDownloadPageManualInstall">▼ Packages</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallContent">The 'Packages' feature allows you to download a .jar installation file for loaders like OptiFine and Forge, but cannot be automatically installed.
+    <s:String x:Key="LangDownloadPageDialogManualInstallContent">The 'Packages' feature allows you to download a JAR installation file for loaders like OptiFine and Forge, but cannot be automatically installed.
 Select Minecraft version first on the 'Installation' page, then choose OptiFine, Forge, or any other loader letting PCL install it automatically.</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallTitle">Installation Hint</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">Installation Page</s:String>
@@ -938,7 +938,7 @@ When executing a command, the directory where the Command Prompt is located is t
 If Java that is incompatible with the current version is manually selected in the settings, then compatibility warning will be skipped automatically and force to use the selected Java.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">Disable File Verification</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">Warning: It is highly recommended disabling the verification individually instead of globally!
-Will not change assets at all, nor verify the libraries, third-party login libraries, and version main jar files have been modified or not.
+Will not change assets at all, nor verify the libraries, third-party login libraries, and version main JAR files have been modified or not.
 Do not open this unless the relevant files are modified.</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">There is an exception in the launch options and have been automatically reset.</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">An error occurred whilst reloading the launch options.</s:String>
