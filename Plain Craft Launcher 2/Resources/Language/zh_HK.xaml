@@ -10,10 +10,10 @@
     
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 沒有對 {0} 的訪問權限</s:String>
-    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavaliable">快取資料夾不可用</s:String>
-    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavaliable">PCL 無法訪問快取資料夾，可能導致程式出錯或無法正常使用。
+    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavaliable">緩衝資料夾不可用</s:String>
+    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavaliable">PCL 無法訪問緩衝資料夾，可能導致程式出錯或無法正常使用。
 錯誤原因：{0}</s:String>
-    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavaliable">手動設置的快取資料夾不可用，PCL 將使用預設快取資料夾。
+    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavaliable">手動設置的緩衝資料夾不可用，PCL 將使用預設緩衝資料夾。
 錯誤原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">環境警吿</s:String>
     <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL 正在暫存資料夾執行，設定、遊戲存檔等很可能無法儲存，且部分功能會無法使用或出錯。
@@ -615,7 +615,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangMySkinHintExistSkinFileGetTask">有正在獲取中的皮膚，請稍後再試！</s:String>
     <s:String x:Key="LangMySkinHintRefreshing">正在重新整理大頭貼……</s:String>
     <s:String x:Key="LangMySkinHintRefreshed">已重新整理大頭貼！</s:String>
-    <s:String x:Key="LangMySkinHintRefreshFail">重新整理皮膚快取失敗</s:String>
+    <s:String x:Key="LangMySkinHintRefreshFail">重新整理皮膚緩衝失敗</s:String>
     <s:String x:Key="LangMySkinHintChangeSuccess">更改皮膚成功！</s:String>
     <s:String x:Key="LangMySkinHintChanging">正在更改披風中，請稍候！</s:String>
     <s:String x:Key="LangMySkinHintChangFailByLoginFail">登入失敗，無法更改披風！</s:String>
@@ -840,7 +840,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 使用此方式更換的皮膚在多人遊戲中僅自己可見，且會取代遊戲中所有的角色。</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftName">正版使用者名稱</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinSave">儲存皮膚</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinRefresh">重新整理快取</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinRefresh">重新整理緩衝</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinRefreshToolTip">重新整理並重新下載 PCL 目前顯示的皮膚</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinChange">更改皮膚</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinReset">重設皮膚</s:String>
@@ -1026,8 +1026,8 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetAToolTip">顯示包括啟動器功能調查、活動等在內的全部公吿</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetB">僅在有重要通知時顯示公吿</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetC">關閉所有公吿</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemCacheFolder">快取資料夾</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemCacheFolderToolTip">PCL 的下載、皮膚等快取檔案的儲存位置。
+    <s:String x:Key="LangPageSetupSystemSystemCacheFolder">緩衝資料夾</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemCacheFolderToolTip">PCL 的下載、皮膚等緩衝檔案的儲存位置。
 不推薦路徑中帶有空格。
 留空即為預設值，重啟 PCL 後生效。</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">檢查更新</s:String>
