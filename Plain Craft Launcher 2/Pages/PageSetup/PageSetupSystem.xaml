@@ -38,9 +38,9 @@
                         </local:MyComboBox>
                         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadModListSource}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboDownloadMod" Grid.Row="2" Grid.ColumnSpan="2" Tag="ToolDownloadMod" Grid.Column="1">
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModListSourceC}" />
+                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModListSourceA}" />
                             <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModListSourceB}" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModListSourceA}" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModListSourceC}" IsSelected="True" />
                         </local:MyComboBox>
                         <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadModFileName}" Margin="0,0,25,0" />
                         <local:MyComboBox Grid.Row="4" x:Name="ComboDownloadTranslate" Grid.ColumnSpan="2" Tag="ToolDownloadTranslate" Grid.Column="1" 
@@ -132,8 +132,8 @@
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
                         <local:MyButton Grid.Column="0" x:Name="BtnSystemUpdate" MinWidth="140" Text="{DynamicResource LangPageSetupSystemSystemCheckUpdate}" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton Grid.Column="1" x:Name="BtnSystemSettingExp" MinWidth="140" Text="导出设置" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton Grid.Column="2" x:Name="BtnSystemSettingImp" MinWidth="140" Text="导入设置" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="1" x:Name="BtnSystemSettingExp" MinWidth="140" Text="{DynamicResource LangPageSetupSystemExportSettings}" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="2" x:Name="BtnSystemSettingImp" MinWidth="140" Text="{DynamicResource LangPageSetupSystemImportSettings}" Padding="13,0" Margin="0,0,20,0" />
                     </Grid>
                     <Grid Height="35" Grid.Row="7" Grid.ColumnSpan="5" Margin="0,12,0,0" x:Name="PanDonate">
                         <Grid.ColumnDefinitions>

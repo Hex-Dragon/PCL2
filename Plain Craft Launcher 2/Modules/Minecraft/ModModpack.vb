@@ -833,8 +833,8 @@ Retry:
                                               New ObjectModel.Collection(Of Validate) From {New ValidateNullOrWhiteSpace, New ValidateLength(1, 30), New ValidateExcept({">", "|"})})
         If String.IsNullOrWhiteSpace(NewName) Then Return Nothing
         '解压
-        Dim Loader As New LoaderCombo(Of String)("安装压缩包", {
-             New LoaderTask(Of String, Integer)("安装压缩包",
+        Dim Loader As New LoaderCombo(Of String)(GetLang("LangModModpackInstallArchive"), {
+             New LoaderTask(Of String, Integer)(GetLang("LangModModpackInstallArchive"),
              Sub()
                  UnpackFiles(TargetFolder, FileAddress, Nothing)
                  PageSelectLeft.AddFolder(TargetFolder, NewName, False) '加入文件夹列表

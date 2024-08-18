@@ -27,7 +27,7 @@
             If File.Exists(Path & "modpack.zip") Then PackInstallPath = Path & "modpack.zip"
             If File.Exists(Path & "modpack.mrpack") Then PackInstallPath = Path & "modpack.mrpack"
             If PackInstallPath IsNot Nothing Then
-                If MyMsgBox($"PCL 即将在当前文件夹下自动安装整合包。", "自动安装", "继续", "取消") = 1 Then
+                If MyMsgBox(GetLang("LangLaunchLeftDialogContentAutoInstallModpack"), GetLang("LangLaunchLeftDialogTitleAutoInstallModpack"), GetLang("LangDialogBtnContinue"), GetLang("LangDialogBtnCancel")) = 1 Then
                     '确认自动安装
                     Log("[Launch] 需自动安装整合包：" & PackInstallPath, LogLevel.Debug)
                     Setup.Set("LaunchFolderSelect", "$.minecraft\")

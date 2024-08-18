@@ -683,6 +683,8 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangLaunchLeftAbortTask">结束处理</s:String>
     <s:String x:Key="LangLaunchLeftFinished">已完成</s:String>
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">正在导出启动脚本</s:String>
+    <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">PCL 即将在当前文件夹下自动安装整合包。</s:String>
+    <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">自动安装</s:String>
 
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
@@ -791,7 +793,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutAboutAuthorSubtitle">Plain Craft Launcher 的作者！</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthorBtn">赞助作者</s:String>
     <s:String x:Key="LangPageOtherAboutAboutVersionSubtitle">当前版本：%VERSION%（%VERSIONCODE%.%BRANCH%）</s:String>
-    <s:String x:Key="LangPageOtherAboutAboutVersionBtn">查看源代码</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutVersionBtn">开源代码</s:String>
     <s:String x:Key="LangPageOtherAboutThanks">特别鸣谢</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93">提供 BMCLAPI 镜像源和 Forge 安装工具，详见 https://bmclapi.bangbang93.com</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">赞助镜像源</s:String>
@@ -799,7 +801,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutThanksMCMod">提供了 Mod 名称的中文翻译和更多相关信息！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">打开百科</s:String>
     <s:String x:Key="LangPageOtherAboutThanks00ll00">提供了 Java Launch Wrapper 和一些重要服务支持！</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksDoodleHuang">提供了部分很难找到的 Minecraft 版本与一些技术支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksz0z0r4">提供了 MCIM 中国 Mod 下载镜像源和帮助库图床！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksPatrick">设计并制作了 PCL 图标，让我从做图标的水深火热中得到了解脱……</s:String>
     <s:String x:Key="LangPageOtherAboutThanksHao_Tian">在内测中找出了一大堆没人想得到的诡异 Bug，有非同寻常的 Bug 体质</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">Minecraft 中文论坛</s:String>
@@ -807,7 +809,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 5~6 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 7 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">赞助作者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -818,19 +820,19 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutLicenseWeb">查看来源网站</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用户协议与免责声明</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隐私说明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本软件会汇报自己的版本名与版本号，以统计用户数量与各版本的用户数量占比。除此之外，本软件不会上传您的任何信息。
-若您能提供未经外部修改的本软件本体上传隐私信息的确凿证据，开发者会向您支付 PCL 开发所获全部净收入。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本软件的 User Agent 中包含启动器的版本号，以统计各版本的用户数量。&#13;除此之外，本软件不会向开发者上传任何其他信息。</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龙腾猫跃 2016. All Rights Reserved.
 计算机软件著作权登记号：2020SR0875133
-违法违规行为举报投诉邮箱：hexdragon@vip.qq.com</s:String>
+违法违规行为举报投诉邮箱：hexdragon@vip.qq.com
+非 MINECRAFT 官方产品。未经 MOJANG 或 MICROSOFT 批准，也不与 MOJANG 或 MICROSOFT 关联。</s:String>
 
     <!--PageOtherTest-->
     <s:String x:Key="LangPageOtherTestNoUtility">为便于维护，开源内容中不包含百宝箱功能……</s:String>
 
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">离线皮肤</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTips">由于技术问题，皮肤预览与 Steve/Alex/自定义 选项暂时仅保证对 1.19.2 以前的版本有效！</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTips">由于技术问题，此功能只保证对 1.19.2 以前的版本有效！</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandom">随机</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandomToolTip">随机选择一个默认皮肤</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoft">正版皮肤</s:String>
@@ -982,8 +984,8 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupSystemDownload">下载</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本列表获取</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">尽量使用镜像源（加载快，但版本可能不是最新的）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">在官方源加载缓慢时改用镜像源（平衡）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本为最新，但加载非常缓慢）</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本最新，但加载缓慢）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod 命名风格</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">决定下载的 Mod 的默认文件名中，中文译名应该放在哪个位置
 该选项仅在语言设置为简体中文时有效</s:String>
@@ -1067,13 +1069,16 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">确认启动器更新失败</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod 信息获取</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">尽量使用官方源</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">在官方源加载缓慢时改用镜像源</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">尽量使用镜像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">尽量使用镜像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">尽量使用官方源</s:String>
     <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL 即将重启以完全应用语言的切换</s:String>
     <s:String x:Key="LangPageSetupSystemLangHelpTranslate">帮助翻译</s:String>
     <s:String x:Key="LangPageSetupSystemHintCloseGameBeforeChangeLanguage">请先关闭所有运行中的游戏……</s:String>
     <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">请在所有下载任务完成后再来更改语言……</s:String>
+    <s:String x:Key="LangPageSetupSystemExportSettings">导出设置</s:String>
+    <s:String x:Key="LangPageSetupSystemImportSettings">导入设置</s:String>
+    <s:String x:Key="LangPageSetupSystemInDev">该功能尚在开发中！</s:String>
 
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概览</s:String>
@@ -1319,7 +1324,8 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModSecretPermissionError">运行环境错误</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">开源版本说明</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">该版本中不包含以下特性：
-- CurseForge 查询：需要 API Key（你可以申请一个，然后添加到 SecretHeadersSign 方法中）
+- CurseForge API 调用：需要你自行申请 API Key，然后添加到 SecretHeadersSign 方法中
+- 正版登录：需要你自行申请 Client ID，然后添加到 ModSecret.vb 的开头
 - 更新与联网通知：避免滥用隐患
 - 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……
 - 百宝箱：开发早期往里面塞了些开发工具，整理起来太麻烦了</s:String>
@@ -1493,7 +1499,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModCompSearchInEnglish">当前资源仅支持使用英文搜索</s:String>
     <s:String x:Key="LangModCompIncompatibleOptionCurseForge">CurseForge 不兼容所选的类型</s:String>
     <s:String x:Key="LangModCompIncompatibleOptionModrinth">Modrinth 不兼容所选的类型</s:String>
-    <s:String x:Key="LangModCompSearchNoResult">没有符合条件的结果</s:String>
+    <s:String x:Key="LangModCompSearchNoResult">没有搜索结果</s:String>
     <s:String x:Key="LangModCompVersionSnapshot">快照</s:String>
     <s:String x:Key="LangModCompVersionUnknownVersion">未知版本</s:String>
     
@@ -1589,7 +1595,6 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 如果网络环境不佳，它可能一直加载不出来，那就只能试试用 VPN 或加速器了。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">等待网页登录</s:String>
     <s:String x:Key="LangModLaunchDialogTipWebLogin">返回网址应以 https://login.live.com/oauth20_desktop.srf?code= 开头</s:String>
-    <s:String x:Key="LangModLaunchHintWebLoginSuccess">网页登录成功，你可以关闭浏览器啦！</s:String>
     <s:String x:Key="LangModLaunchDialogTitleLoginFail">登录失败</s:String>
     <s:String x:Key="LangModLaunchDialogTitleLoginTip">登录提示</s:String>
     <s:String x:Key="LangModLaunchDialogBtnRegister">注册</s:String>
@@ -1667,7 +1672,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">选择安装目标（必须是一个空文件夹）</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 文件夹路径中不能含有感叹号或分号！</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">请选择一个空文件夹作为安装目标！</s:String>
-    <s:String x:Key="LangModModpackExtractArchive">正在解压压缩包……</s:String>
+    <s:String x:Key="LangModModpackInstallArchive">安装压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">已加入游戏文件夹列表：{0}</s:String>
     
     <!--ModWatcher-->
