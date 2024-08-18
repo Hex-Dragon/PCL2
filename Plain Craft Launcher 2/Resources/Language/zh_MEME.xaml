@@ -885,13 +885,13 @@
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeCustom">自定义尺寸</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeCustomToolTip">锻造 1.12.2 等个别版本存在 Bug，会导致高度设定莫得效</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeMaximum">最大化</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchJava">游戏 Jvav</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchJavaToolTip">若将 Jvav 放在游戏文件夹子或平原合成发射台文件夹子，在进行自动选择时平原合成发射台会尽量优先选择它</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchJava">游戏 爪哇</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchJavaToolTip">若将 爪哇 放在游戏文件夹子或平原合成发射台文件夹子，在进行自动选择时平原合成发射台会尽量优先选择它</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaLoading">捞丁……</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaAutoSearch">自动帮你搜索</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaImport">手动导入</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMem">游戏内存</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMem32BitWarn">32 位 Jvav 最多只能分配 1 GB 内存，建议安装 64 位 Jvav!</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMem32BitWarn">32 位 爪哇 最多只能分配 1 GB 内存，建议安装 64 位 爪哇!</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjust">自动帮你配置</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjustToolTip">根据安装的 Mod 量与电脑剩余内存，动态调整为游戏分配的内存</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemCustom">自定义</s:String>
@@ -916,7 +916,7 @@
  · {minecraft}：.minecraft 文件夹子
  · {verpath}：版本文件夹子（.minecraft\versions\版本名\）
  · {verindie}：打开版本隔离时等同版本文件夹子，未打开时等同 .minecraft 文件夹子
- · {java}：游戏运行时的 Jvav 文件夹子
+ · {java}：游戏运行时的 爪哇 文件夹子
 
 除此之外，也支持以下替换标记：
  · {user}：运动员名字
@@ -928,15 +928,15 @@
 
 例如：
  · &quot;{verpath}test.exe&quot; ：运行版本文件夹子下的 test.exe 程序
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Jvav 运行版本文件夹子下的 test.jar
+ · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 爪哇 运行版本文件夹子下的 test.jar
  · notepad &quot;{verindie}option.txt&quot; ：使用记事本打开该版本的设置文件
 
 涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行不成功。
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹子。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand">等待命令执行完成后再继续发射</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility">忽略 Jvav 兼容性警告</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility">忽略 爪哇 兼容性警告</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">警告：强烈推荐在版本设置中关掉特定版本的警告，而不是在这里关掉所有版本的警告！
-如果在设置中手动选择了与当前版本不兼容的 Jvav，则自动帮你跳过兼容性警告弹窗，强制使用手动选择的 Jvav。</s:String>
+如果在设置中手动选择了与当前版本不兼容的 爪哇，则自动帮你跳过兼容性警告弹窗，强制使用手动选择的 爪哇。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">关掉文件校验</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：强烈推荐在版本设置中关掉特定版本的校验，而不是在这里关掉所有版本的校验！
 完全不更改 assets；不校验 libraries、第三方登录库与版本主 JAR 文件是否被修改。
@@ -949,13 +949,13 @@
     <s:String x:Key="LangPageSetupLaunchSkinEmptied">离线外壳已清空！</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinEmptyFail">清空离线外壳不成功</s:String>
     <s:String x:Key="LangPageSetupLaunchMemAvailable">可用</s:String>
-    <s:String x:Key="LangPageSetupLaunchJavaAutoChoice">自动帮你选择合适的 Jvav</s:String>
-    <s:String x:Key="LangPageSetupLaunchJavaUpdateListFail">更新设置 Jvav 下拉框不成功</s:String>
-    <s:String x:Key="LangPageSetupLaunchJavaNoAvailableJava">未找到可用的 Jvav</s:String>
-    <s:String x:Key="LangPageSetupLaunchJavaSearchingJava">正在搜索 Jvav，等一下！</s:String>
-    <s:String x:Key="LangPageSetupLaunchJavaAddedJava">已将该 Jvav 加入 Jvav 名单！</s:String>
-    <s:String x:Key="LangPageSetupLaunchJavaIncorrectJava">该 Jvav 存在异常，没办法使用</s:String>
-    <s:String x:Key="LangPageSetupLaunchJavaSearchSuccess">已找到 {0} 个 Jvav，请检查下拉框查看名单！</s:String>
+    <s:String x:Key="LangPageSetupLaunchJavaAutoChoice">自动帮你选择合适的 爪哇</s:String>
+    <s:String x:Key="LangPageSetupLaunchJavaUpdateListFail">更新设置 爪哇 下拉框不成功</s:String>
+    <s:String x:Key="LangPageSetupLaunchJavaNoAvailableJava">未找到可用的 爪哇</s:String>
+    <s:String x:Key="LangPageSetupLaunchJavaSearchingJava">正在搜索 爪哇，等一下！</s:String>
+    <s:String x:Key="LangPageSetupLaunchJavaAddedJava">已将该 爪哇 加入 爪哇 名单！</s:String>
+    <s:String x:Key="LangPageSetupLaunchJavaIncorrectJava">该 爪哇 存在异常，没办法使用</s:String>
+    <s:String x:Key="LangPageSetupLaunchJavaSearchSuccess">已找到 {0} 个 爪哇，请检查下拉框查看名单！</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartContent">若在游戏发射后立即关掉发射台，炸掉检测、换掉游戏抬头等功能将失效。
 如果想保留这些功能，可以选择让发射台在游戏发射后雪藏，游戏退出后自动帮你关掉。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">提醒</s:String>
@@ -1266,7 +1266,7 @@
  · {minecraft}：.minecraft 文件夹子
  · {verpath}：版本文件夹子（.minecraft\versions\版本名\）
  · {verindie}：打开版本隔离时等同版本文件夹子，未打开时等同 .minecraft 文件夹子
- · {java}：游戏运行时的 Jvav 文件夹子
+ · {java}：游戏运行时的 爪哇 文件夹子
 
 除此之外，也支持以下替换标记：
  · {user}：运动员名字
@@ -1278,12 +1278,12 @@
 
 例如：
  · &quot;{verpath}test.exe&quot; ：运行版本文件夹子下的 test.exe 程序
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Jvav 运行版本文件夹子下的 test.jar
+ · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 爪哇 运行版本文件夹子下的 test.jar
  · notepad &quot;{verindie}option.txt&quot; ：使用记事本打开该版本的设置文件
 
 涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行不成功。
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹子。</s:String>
-    <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在设置中手动选择了与当前版本不兼容的 Jvav，则自动帮你跳过兼容性警告弹窗，强制使用手动选择的 Jvav。</s:String>
+    <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在设置中手动选择了与当前版本不兼容的 爪哇，则自动帮你跳过兼容性警告弹窗，强制使用手动选择的 爪哇。</s:String>
     <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校验 libraries、第三方登录库与版本主 JAR 文件是否被修改。
 如果你莫得修改相关文件，请嫑瞎勾选此项。</s:String>
 
@@ -1445,7 +1445,7 @@
     <s:String x:Key="LangModBaseExceptionBadNetwork">你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用魔法。</s:String>
 
     <!--ModLaunch-->
-    <s:String x:Key="LangModLaunchStartStageGetJava">获取 Jvav</s:String>
+    <s:String x:Key="LangModLaunchStartStageGetJava">获取 爪哇</s:String>
     <s:String x:Key="LangModLaunchStartStageCompleteFile">补全文件</s:String>
     <s:String x:Key="LangModLaunchStartStageGetParameters">获取发射参数</s:String>
     <s:String x:Key="LangModLaunchStartStageExtractFile">解压文件</s:String>
@@ -1530,35 +1530,35 @@
     <s:String x:Key="LangModJavaManuallyImport">手动导入</s:String>
     <s:String x:Key="LangModJava32Bit">32 位</s:String>
     <s:String x:Key="LangModJavaExceptionFileNotFound">未找到 {0} 文件</s:String>
-    <s:String x:Key="LangModJavaExceptionTryRunFail">尝试运行该 Jvav 不成功</s:String>
-    <s:String x:Key="LangModJavaExceptionRunFail">没办法运行该 Jvav，请在删除 Jvav 文件夹子中的 /lib/ext 文件夹子后再试</s:String>
-    <s:String x:Key="LangModJavaExceptionVersionNotFound">未找到该 Jvav 的版本号</s:String>
+    <s:String x:Key="LangModJavaExceptionTryRunFail">尝试运行该 爪哇 不成功</s:String>
+    <s:String x:Key="LangModJavaExceptionRunFail">没办法运行该 爪哇，请在删除 爪哇 文件夹子中的 /lib/ext 文件夹子后再试</s:String>
+    <s:String x:Key="LangModJavaExceptionVersionNotFound">未找到该 爪哇 的版本号</s:String>
     <s:String x:Key="LangModJavaExceptionGetDetailInfoFail">分析详细信息不成功，获取的版本为 {0}</s:String>
-    <s:String x:Key="LangModJavaExceptionNeed64Bit">该 Jvav 为 32 位版本，请安装 64 位的 Jvav</s:String>
+    <s:String x:Key="LangModJavaExceptionNeed64Bit">该 爪哇 为 32 位版本，请安装 64 位的 爪哇</s:String>
     <s:String x:Key="LangModJavaExceptionNeedJDK">由于高版本 JRE 对游戏的兼容性很差，因此不再允许使用。你可以使用对应版本的 JDK，而非 JRE！</s:String>
-    <s:String x:Key="LangModJavaExceptionCheckFail">检查 Jvav 不成功（{0}）</s:String>
-    <s:String x:Key="LangModJavaExceptionSearchAbort">Jvav 搜索加载器已中断</s:String>
-    <s:String x:Key="LangModJavaMaxRequireVersion">最高兼容到 Jvav {0}</s:String>
-    <s:String x:Key="LangModJavaMinRequireVersion">至少需要 Jvav {0}</s:String>
-    <s:String x:Key="LangModJavaRequireVersion">需要 Jvav {0}</s:String>
-    <s:String x:Key="LangModJavaDialogContentCompatibilityWarning">你在设置中手动指定了使用 Jvav {0}，但当前{1}。
-如果强制使用该 Jvav，可能导致游戏原地螺旋升天爆炸。
-你也可以将 游戏 Jvav 设置修改为 自动帮你选择合适的 Jvav。
+    <s:String x:Key="LangModJavaExceptionCheckFail">检查 爪哇 不成功（{0}）</s:String>
+    <s:String x:Key="LangModJavaExceptionSearchAbort">爪哇 搜索加载器已中断</s:String>
+    <s:String x:Key="LangModJavaMaxRequireVersion">最高兼容到 爪哇 {0}</s:String>
+    <s:String x:Key="LangModJavaMinRequireVersion">至少需要 爪哇 {0}</s:String>
+    <s:String x:Key="LangModJavaRequireVersion">需要 爪哇 {0}</s:String>
+    <s:String x:Key="LangModJavaDialogContentCompatibilityWarning">你在设置中手动指定了使用 爪哇 {0}，但当前{1}。
+如果强制使用该 爪哇，可能导致游戏原地螺旋升天爆炸。
+你也可以将 游戏 爪哇 设置修改为 自动帮你选择合适的 爪哇。
 
-- 指定的 Jvav：{2}</s:String>
-    <s:String x:Key="LangModJavaDialogTitleCompatibilityWarning">Jvav 兼容性警告</s:String>
+- 指定的 爪哇：{2}</s:String>
+    <s:String x:Key="LangModJavaDialogTitleCompatibilityWarning">爪哇 兼容性警告</s:String>
     <s:String x:Key="LangModJavaDialogBtn1CompatibilityWarning">让平原合成发射台自动帮你选择</s:String>
-    <s:String x:Key="LangModJavaDialogBtn2CompatibilityWarning">强制使用该 Jvav</s:String>
-    <s:String x:Key="LangModJavaTaskSearchJava">查找 Jvav</s:String>
+    <s:String x:Key="LangModJavaDialogBtn2CompatibilityWarning">强制使用该 爪哇</s:String>
+    <s:String x:Key="LangModJavaTaskSearchJava">查找 爪哇</s:String>
     <s:String x:Key="LangModJavaDialogContentJavaNotFound">平原合成发射台未找到 {0}。
-请自行搜索并安装 {1}，安装后在 设置 → 发射选项 → 游戏 Jvav 中重新搜索或导入。</s:String>
-    <s:String x:Key="LangModJavaDialogTitleJavaNotFound">未找到 Jvav</s:String>
+请自行搜索并安装 {1}，安装后在 设置 → 发射选项 → 游戏 爪哇 中重新搜索或导入。</s:String>
+    <s:String x:Key="LangModJavaDialogTitleJavaNotFound">未找到 爪哇</s:String>
     <s:String x:Key="LangModJavaDialogContentDownloadJava">平原合成发射台未找到 {0}，是否需要平原合成发射台自动帮你下崽？
-如果你已经安装了 {1}，请在 设置 → 发射选项 → 游戏 Jvav 中手动导入。</s:String>
+如果你已经安装了 {1}，请在 设置 → 发射选项 → 游戏 爪哇 中手动导入。</s:String>
     <s:String x:Key="LangModJavaDialogBtn1DownloadJava">自动帮你下崽</s:String>
-    <s:String x:Key="LangModJavaTaskDownloadJavaFile">下崽 Jvav 文件</s:String>
-    <s:String x:Key="LangModJavaTaskDownloadJava">下崽 Jvav {0}</s:String>
-    <s:String x:Key="LangModJavaTaskGetJavaDownloadInfo">获取 Jvav 下崽信息</s:String>
+    <s:String x:Key="LangModJavaTaskDownloadJavaFile">下崽 爪哇 文件</s:String>
+    <s:String x:Key="LangModJavaTaskDownloadJava">下崽 爪哇 {0}</s:String>
+    <s:String x:Key="LangModJavaTaskGetJavaDownloadInfo">获取 爪哇 下崽信息</s:String>
     
     <!--ModLaunch-->
     <s:String x:Key="LangModLaunchExceptionRunNotInUI">McLaunchStart 必须在 UI 线程调用！</s:String>
@@ -1626,8 +1626,8 @@
     <s:String x:Key="LangModLaunchExceptionOnlineProfileNotFound">正版运动员档案不存在（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDGetFail">从官网获取正版身份证号不成功（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionOnlineUUIDLenIncorrect">获取的正版身份证号长度不足（{0}）</s:String>
-    <s:String x:Key="LangModLaunchHintNoAvailableJava">莫得可用的 Jvav，已取消发射！</s:String>
-    <s:String x:Key="LangModLaunchExceptionReleaseJavaWrapperFail">释放 Jvav 擦腚纸不成功，请查看平原合成发射台日志查找详细信息</s:String>
+    <s:String x:Key="LangModLaunchHintNoAvailableJava">莫得可用的 爪哇，已取消发射！</s:String>
+    <s:String x:Key="LangModLaunchExceptionReleaseJavaWrapperFail">释放 爪哇 擦腚纸不成功，请查看平原合成发射台日志查找详细信息</s:String>
     <s:String x:Key="LangModLaunchHintOptiFineAutoEnterServer">高清不修复与自动帮你进入服务器可能不兼容，有概率导致材质丢失甚至游戏原地螺旋升天爆炸！</s:String>
     <s:String x:Key="LangModLaunchExceptionConnectServerFail">没办法连接到第三方登录服务器（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 JSON 中莫得 mainClass 项！</s:String>
@@ -1722,8 +1722,8 @@
     <s:String x:Key="LangModDownloadLibTaskDownloadAssets">下崽资源文件（副加载器）</s:String>
     <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">选择保存位置</s:String>
     <s:String x:Key="LangModDownloadLibTaskOptiFineDownload">OptiFine {0} 下崽</s:String>
-    <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">Jvav 8 或更高版本</s:String>
-    <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">由于未找到 Jvav，已取消安装。</s:String>
+    <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">爪哇 8 或更高版本</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">由于未找到 爪哇，已取消安装。</s:String>
     <s:String x:Key="LangModDownloadLibCancelJavaDownload">已取消安装。</s:String>
     <s:String x:Key="LangModDownloadLibExceptionInstallerException">安装器运行出错，末行为 {0}</s:String>
     <s:String x:Key="LangModDownloadLibExceptionNoCustomFolder">如果没有指定原版下崽器，则不能指定 MC 安装文件夹</s:String>
