@@ -684,8 +684,7 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangLaunchLeftFinished">Completed</s:String>
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">Exporting launch script...</s:String>
     <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">PCL will automatically install the modpack in the current folder.</s:String>
-    <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">Auto Install</s:String>
-
+    <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">Automatic Installation</s:String>
 
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">Snapshot Hint</s:String>
@@ -802,7 +801,7 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCMod">Provided Chinese translation of mods and more related information!</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">Visit</s:String>
     <s:String x:Key="LangPageOtherAboutThanks00ll00">Provided Java Launch Wrapper and some important support!</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksz0z0r4">MCIM China Mod Download Image Source and Help Kutu Bed are provided!</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksz0z0r4">Provided the mcmod-info-mirror for mods and image hosting services for the Help Center!</s:String>
     <s:String x:Key="LangPageOtherAboutThanksPatrick">Designed and made the PCL icon, saved LTCat from the abyss of suffering...</s:String>
     <s:String x:Key="LangPageOtherAboutThanksHao_Tian">Found a bunch of weird bugs that people wouldn't think in insider test, has an unusual bug physique.</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">MCBBS</s:String>
@@ -810,7 +809,7 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">Everyone in the PCL QQ Group</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">Thanks to the netizens in the group for their support and encouragement to LTCat and PCL for so long!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">Sponsors</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors July 2024! Thanks for your support for PCL!</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from July 2024! Thanks for your support for PCL!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">Generate Unlock Code</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">Sponsor</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">Copy Identify Code</s:String>
@@ -821,19 +820,20 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherAboutLicenseWeb">Source</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">ToS &amp; Disclaimer</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">Privacy Statement</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">The User Agent of this software contains the version number of the launcher to count the number of users for each version.&#13;In addition, this software will not upload any other information to the developers.</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">The User Agent of the software includes the version number for the purpose of quantitative statistics.
+Additionally, the software will not upload any other information.</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">Other Information</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © LTCat (龙腾猫跃) 2016. All Rights Reserved.
 Copyright of Computer Software Registration Number: 2020SR0875133
 Email for Reporting Illegal and Irregular Behavior: hexdragon@vip.qq.com
-Not an official MINECRAFT product. Not approved by or associated with MOJANG or MICROSOFT.</s:String>
+Not an official Minecraft product. Not approved by Mojang or Microsoft and not associated with Mojang or Microsoft.</s:String>
 
     <!--PageOtherTest-->
     <s:String x:Key="LangPageOtherTestNoUtility">For the ease of maintenance, the open-source version does not include the Utilities feature...</s:String>
 
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">Offline Skin</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTips">Due to technical issues, this feature is only guaranteed to be effective for versions prior to 1.19.2!</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTips">Due to the technical issue, the feature is only guaranteed to be valid for versions before 1.19.2!</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandom">Random</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandomToolTip">Select a default skin randomly.</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoft">Microsoft</s:String>
@@ -1070,9 +1070,9 @@ In general, choose &quot;Display a hint when there is a critical vulnerability p
 Unless you are making a modpack or updating the launcher often, this option is extremely NOT recommended!</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">Failed to confirm the launcher update.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod Source</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Prefer to use mirror source</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Switch to mirror source only when the official source loads slowly</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Prefer to use official source</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Mirror</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Balanced</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Official</s:String>
     <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL is about to restart to fully apply the language.</s:String>
     <s:String x:Key="LangPageSetupSystemLangHelpTranslate">Contribute</s:String>
     <s:String x:Key="LangPageSetupSystemHintCloseGameBeforeChangeLanguage">Please close all instances that are running first...</s:String>
@@ -1326,8 +1326,8 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModSecretPermissionError">Runtime Error</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">Open-source Version Notice</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">This version does not include the following features:
-- CurseForge API Queries: Requires API Key (can be requested and added to the &quot;SecretHeadersSign&quot; method);
-- Microsoft login: You need to request a client ID yourself, and then add it to the beginning of the ModSecret.vb
+- CurseForge API Call: Requires an API Key that you requested, and add to the "SecretHeadersSign" method;
+- Microsoft login: Require a Client ID that you requested and, add to the front of the "ModSecret.vb";
 - Update and Networking Notifications: To avoid potential abuse concerns;
 - Theme: This is a commemorative feature that requires sponsorship to unlock. Do not make the sponsors too sad...;
 - Utilities: Some development tools were placed here during the early stages of development, and it was difficult to sort them out.</s:String>
@@ -1673,7 +1673,7 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">Select installation destination (must be an empty folder)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft folder paths cannot contain exclamation marks (!) or semicolon (;)!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Please select an empty folder as the installation destination!</s:String>
-    <s:String x:Key="LangModModpackInstallArchive">Installing archive...</s:String>
+    <s:String x:Key="LangModModpackInstallArchive">Install Archive</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Added to the folder list: {0}</s:String>
     
     <!--ModWatcher-->

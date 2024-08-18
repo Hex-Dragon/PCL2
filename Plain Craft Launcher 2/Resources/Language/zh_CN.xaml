@@ -820,7 +820,8 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutLicenseWeb">查看来源网站</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用户协议与免责声明</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隐私说明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本软件的 User Agent 中包含启动器的版本号，以统计各版本的用户数量。&#13;除此之外，本软件不会向开发者上传任何其他信息。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本软件的 User Agent 中包含启动器的版本号，以统计各版本的用户数量。
+除此之外，本软件不会向开发者上传任何其他信息。</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龙腾猫跃 2016. All Rights Reserved.
 计算机软件著作权登记号：2020SR0875133
