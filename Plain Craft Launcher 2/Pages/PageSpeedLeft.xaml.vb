@@ -60,11 +60,9 @@ Public Class PageSpeedLeft
         End Try
         If FrmSpeedRight Is Nothing OrElse FrmSpeedRight.PanMain Is Nothing Then Exit Sub
         Try
-            SyncLock LoaderTaskbarLock
-                For Each Loader In LoaderTaskbar.ToList
-                    TaskRefresh(Loader)
-                Next
-            End SyncLock
+            For Each Loader In LoaderTaskbar.ToList
+                TaskRefresh(Loader)
+            Next
         Catch ex As Exception
             Log(ex, "下载管理右栏监视出错", LogLevel.Feedback)
         End Try
@@ -197,13 +195,11 @@ Public Class PageSpeedLeft
                     Sub(sender As MyIconButton, e As EventArgs)
                         AniDispose(sender, False)
                         AniDispose(Card, True, Sub() If FrmSpeedRight.PanMain.Children.Count = 0 AndAlso FrmMain.PageCurrent = FormMain.PageType.DownloadManager Then FrmMain.PageBack())
-                        RightCards.Remove(Loader.Name)
-                        SyncLock LoaderTaskbarLock
-                            LoaderTaskbar.Remove(Loader)
-                            Log($"[Taskbar] 由于下载管理卡片关闭，{Loader.Name} 已移出任务列表")
-                        End SyncLock
-                        Log($"[Watcher] 关闭下载管理卡片：{Loader.Name}")
-                        RunInThread(Sub() Loader.Abort())
+                        Dim LoaderName = If(Loader Is Nothing, "null", Loader.Name)
+                        RightCards.Remove(LoaderName)
+                        LoaderTaskbar.TryTake(Loader)
+                        Log($"[Taskbar] 关闭下载管理卡片：{LoaderName}，且移出任务列表")
+                        RunInThread(Sub() Loader?.Abort())
                     End Sub
                     '如果已经失败，再刷新一次，修改成失败的控件
                     If Loader.State = LoadState.Failed Then

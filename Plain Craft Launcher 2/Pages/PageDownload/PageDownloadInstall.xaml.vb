@@ -618,12 +618,9 @@
                                 Type = "愚人节版"
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
-                        End Select
-                        '所有4月1日发布的版本视为愚人节版，但不改动版本描述
-                        Dim swedenTime As Date = Version("releaseTime").Value(Of Date).ToUniversalTime().AddHours(2)
-                        Select Case swedenTime.ToString("MM'/'dd")
-                            Case "04/01"
-                                If Not Version("type") = "special" Then
+                            Case Else '4/1 自动视作愚人节版
+                                Dim ReleaseDate = Version("releaseTime").Value(Of Date).ToUniversalTime().AddHours(2)
+                                If ReleaseDate.Month = 4 AndAlso ReleaseDate.Day = 1 Then
                                     Type = "愚人节版"
                                     Version("type") = "special"
                                 End If
@@ -723,7 +720,7 @@
             End If
         Next
         If MinimalForgeVersion = "9999.9999" Then
-            Return If(NotSuitForForge, GetLang("LangDownloadInstallForgeIncompatible"), GetLang("LangDownloadInstallNoAvailabeVersion"))
+            Return If(NotSuitForForge, GetLang("LangDownloadInstallForgeIncompatible"), GetLang("LangDownloadInstallNoAvailableVersion"))
         Else
             Return GetLang("LangDownloadInstallForgeNeed") & " " & If(MinimalForgeVersion.Contains("."), "", "#") & MinimalForgeVersion & " " & GetLang("LangDownloadInstallOrHigherVersion")
         End If
@@ -805,13 +802,13 @@
     ''' 获取 LiteLoader 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadLiteLoaderGetError() As String
-        If Not SelectedMinecraftId.Contains("1.") OrElse Val(SelectedMinecraftId.Split(".")(1)) > 12 Then Return GetLang("LangDownloadInstallNoAvailabeVersion")
+        If Not SelectedMinecraftId.Contains("1.") OrElse Val(SelectedMinecraftId.Split(".")(1)) > 12 Then Return GetLang("LangDownloadInstallNoAvailableVersion")
         If LoadLiteLoader Is Nothing OrElse LoadLiteLoader.State.LoadingState = MyLoading.MyLoadingState.Run Then Return GetLang("LangDownloadInstallGettingList")
         If LoadLiteLoader.State.LoadingState = MyLoading.MyLoadingState.Error Then Return GetLang("LangDownloadInstallFailGetList") & CType(LoadLiteLoader.State, Object).Error.Message
         For Each Version As DlLiteLoaderListEntry In DlLiteLoaderListLoader.Output.Value
             If Version.Inherit = SelectedMinecraftId Then Return Nothing
         Next
-        Return GetLang("LangDownloadInstallNoAvailabeVersion")
+        Return GetLang("LangDownloadInstallNoAvailableVersion")
     End Function
 
     '限制展开
@@ -862,7 +859,7 @@
     ''' 获取 Forge 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadForgeGetError() As String
-        If Not SelectedMinecraftId.StartsWith("1.") Then Return GetLang("LangDownloadInstallNoAvailabeVersion")
+        If Not SelectedMinecraftId.StartsWith("1.") Then Return GetLang("LangDownloadInstallNoAvailableVersion")
         If Not LoadForge.State.IsLoader Then Return GetLang("LangDownloadInstallGettingList")
         Dim Loader As LoaderTask(Of String, List(Of DlForgeVersionEntry)) = LoadForge.State
         If SelectedMinecraftId <> Loader.Input Then Return GetLang("LangDownloadInstallGettingList")
@@ -870,12 +867,12 @@
         If Loader.State = LoadState.Failed Then
             Dim ErrorMessage As String = Loader.Error.Message
             If ErrorMessage.Contains("没有可用版本") Then
-                Return GetLang("LangDownloadInstallNoAvailabeVersion")
+                Return GetLang("LangDownloadInstallNoAvailableVersion")
             Else
                 Return GetLang("LangDownloadInstallFailGetList") & ErrorMessage
             End If
         End If
-        If Loader.State <> LoadState.Finished Then Return GetLang("LangDownloadInstallFailGetListUnknwonStatus") & " " & GetStringFromEnum(Loader.State)
+        If Loader.State <> LoadState.Finished Then Return GetLang("LangDownloadInstallFailGetListUnknownStatus") & " " & GetStringFromEnum(Loader.State)
         Dim NotSuitForOptiFine As Boolean = False
         For Each Version In Loader.Output
             If Version.Category = "universal" OrElse Version.Category = "client" Then Continue For '跳过无法自动安装的版本
@@ -951,7 +948,7 @@
     ''' 获取 NeoForge 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadNeoForgeGetError() As String
-        If Not SelectedMinecraftId.StartsWith("1.") Then Return GetLang("LangDownloadInstallNoAvailabeVersion")
+        If Not SelectedMinecraftId.StartsWith("1.") Then Return GetLang("LangDownloadInstallNoAvailableVersion")
         If SelectedOptiFine IsNot Nothing Then Return GetLang("LangDownloadInstallOptiFineIncompatible")
         If SelectedForge IsNot Nothing Then Return GetLang("LangDownloadInstallForgeIncompatible")
         If SelectedFabric IsNot Nothing Then Return GetLang("LangDownloadInstallFabricIncompatible")
@@ -960,7 +957,7 @@
         If DlNeoForgeListLoader.Output.Value.Any(Function(v) v.Inherit = SelectedMinecraftId) Then
             Return Nothing
         Else
-            Return GetLang("LangDownloadInstallNoAvailabeVersion")
+            Return GetLang("LangDownloadInstallNoAvailableVersion")
         End If
     End Function
 
@@ -1021,7 +1018,7 @@
                 Return Nothing
             End If
         Next
-        Return GetLang("LangDownloadInstallNoAvailabeVersion")
+        Return GetLang("LangDownloadInstallNoAvailableVersion")
     End Function
 
     '限制展开
@@ -1123,7 +1120,7 @@
             If SelectedFabric Is Nothing Then Return GetLang("LangDownloadInstallFabricNeed")
             Return Nothing
         Next
-        Return GetLang("LangDownloadInstallNoAvailabeVersion")
+        Return GetLang("LangDownloadInstallNoAvailableVersion")
     End Function
 
     '限制展开
@@ -1220,7 +1217,7 @@
             If SelectedOptiFine Is Nothing Then Return GetLang("LangDownloadInstallOptiFineNeed")
             Return Nothing '通过检查
         Next
-        Return GetLang("LangDownloadInstallNoAvailabeVersion")
+        Return GetLang("LangDownloadInstallNoAvailableVersion")
     End Function
 
     '限制展开

@@ -170,11 +170,11 @@
             Dim LogoFileAddress As String = PathTemp & "CompLogo\" & GetHash(CompItem.Logo) & ".png"
             Loaders.Add(New LoaderDownload(GetLang("LangDownloadCompTaskDownloadModpackFile"), New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 10, .Block = True})
             Loaders.Add(New LoaderTask(Of Integer, Integer)(GetLang("LangDownloadCompTaskPrepareInstallModpack"),
-                Sub()
-                    If Not ModpackInstall(Target, VersionName, Logo:=If(IO.File.Exists(LogoFileAddress), LogoFileAddress, Nothing)) Then
-                        Throw New Exception("整合包安装出现异常！")
-                    End If
-                End Sub) With {.ProgressWeight = 0.1})
+            Sub()
+                If ModpackInstall(Target, VersionName, Logo:=If(IO.File.Exists(LogoFileAddress), LogoFileAddress, Nothing)) Is Nothing Then
+                    Throw New Exception("整合包安装出现异常！")
+                End If
+            End Sub) With {.ProgressWeight = 0.1})
 
             '启动
             Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged =
@@ -205,7 +205,7 @@
         RunInNewThread(
         Sub()
             Try
-                Dim Desc As String = If(Project.Type = CompType.ModPack, GetLang("LangDownloadPageModpackages"), If(Project.Type = CompType.Mod, "Mod ", GetLang("LangResourcePackage")))
+                Dim Desc As String = If(Project.Type = CompType.ModPack, GetLang("LangDownloadPageModpack"), If(Project.Type = CompType.Mod, "Mod ", GetLang("LangResourcePack")))
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
                 If Project.Type = CompType.Mod Then

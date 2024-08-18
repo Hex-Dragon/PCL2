@@ -20,26 +20,8 @@ Public Class Application
     '开始
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
         '刷新语言
-        Lang = ReadReg("Lang")
-        If String.IsNullOrWhiteSpace(Lang) Then
-            Log("[Lang] 未设置语言，自动进行配置……")
-            Select Case Globalization.CultureInfo.CurrentCulture.Name
-                Case "en-US"
-                    Lang = "en_US"
-                Case "en-GB"
-                    Lang = "en_GB"
-                Case "zh-CN"
-                    Lang = "zh_CN"
-                Case "zh-HK"
-                    Lang = "zh_HK"
-                Case "zh-TW"
-                    Lang = "zh_TW"
-                Case Else
-                    Lang = "en_US"
-            End Select
-            WriteReg("Lang", Lang)
-        End If
         Log("[Lang] 选择启动器语言为 " & Lang)
+        WriteReg("Lang", Lang)
         Try
             Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
         Catch ex As Exception
@@ -94,12 +76,12 @@ Public Class Application
             Directory.CreateDirectory(Path & "PCL\Musics")
             Try
                 Directory.CreateDirectory(PathTemp)
-                If Not CheckPermission(PathTemp) Then Throw New Exception("PCL 没有对 " & PathTemp & " 的访问权限")
+                If Not CheckPermission(PathTemp) Then Throw New Exception(GetLang("LangApplicationExceptionNoAccessPermission", PathTemp))
             Catch ex As Exception
                 If PathTemp = IO.Path.GetTempPath() & "PCL\" Then
-                    MyMsgBox("PCL 无法访问缓存文件夹，可能导致程序出错或无法正常使用！" & vbCrLf & "错误原因：" & GetExceptionDetail(ex), "缓存文件夹不可用")
+                    MyMsgBox(GetLang("LangApplicationDialogContentCacheFolderUnavailable", GetExceptionDetail(ex)), GetLang("LangApplicationDialogTitleCacheFolderUnavailable"))
                 Else
-                    MyMsgBox("手动设置的缓存文件夹不可用，PCL 将使用默认缓存文件夹。" & vbCrLf & "错误原因：" & GetExceptionDetail(ex), "缓存文件夹不可用")
+                    MyMsgBox(GetLang("LangApplicationDialogContentCustomCacheFolderUnavailable", GetExceptionDetail(ex)), GetLang("LangApplicationDialogTitleCacheFolderUnavailable"))
                     Setup.Set("SystemSystemCache", "")
                     PathTemp = IO.Path.GetTempPath() & "PCL\"
                 End If
@@ -127,7 +109,7 @@ Public Class Application
             ToolTipService.HorizontalOffsetProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(8.0))
             ToolTipService.VerticalOffsetProperty.OverrideMetadata(GetType(DependencyObject), New FrameworkPropertyMetadata(4.0))
             '设置初始窗口
-            If Setup.Get("UiLauncherLogo") AndAlso Not FormMain.IsLinkRestart Then
+            If Setup.Get("UiLauncherLogo") Then
                 FrmStart = New SplashScreen("Images\icon.ico")
                 FrmStart.Show(False, True)
             End If
@@ -143,7 +125,7 @@ Public Class Application
             Log($"[Start] 管理员权限：{IsAdmin()}")
             '检测压缩包运行
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
-                MyMsgBox("PCL 正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。" & vbCrLf & "请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！", "环境警告", "我知道了", IsWarn:=True)
+                MyMsgBox(GetLang("LangApplicationDialogContentRunInTemp"), GetLang("LangApplicationDialogTitleRunInTemp"), GetLang("LangDialogThemeUnlockGameAccept"), IsWarn:=True)
             End If
             '设置初始化
             Setup.Load("SystemDebugMode")
@@ -168,7 +150,7 @@ Public Class Application
                 FilePath = PathWithName
             Catch
             End Try
-            MsgBox(GetExceptionDetail(ex, True) & vbCrLf & "PCL 所在路径：" & If(String.IsNullOrEmpty(FilePath), "获取失败", FilePath), MsgBoxStyle.Critical, "PCL 初始化错误")
+            MsgBox(GetExceptionDetail(ex, True) & vbCrLf & "PCL 所在路径：" & If(String.IsNullOrEmpty(FilePath), "获取失败", FilePath), MsgBoxStyle.Critical, GetLang("LangApplicationDialogTitleInitError"))
             FormMain.EndProgramForce(Result.Exception)
         End Try
     End Sub
@@ -196,11 +178,11 @@ Public Class Application
            ExceptionString.Contains(".NET Framework") OrElse ' “自动错误判断” 的结果分析
            ExceptionString.Contains("未能加载文件或程序集") Then
             OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net462-offline-installer")
-            MsgBox("你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下载并安装 .NET Framework 4.6.2 后重试！", MsgBoxStyle.Information, "运行环境错误")
+            MsgBox(GetLang("LangApplicationDialogContentNETWarn"), MsgBoxStyle.Information, GetLang("LangApplicationDialogTitleNETWarn"))
             FormMain.EndProgramForce(Result.Cancel)
         Else
             FeedbackInfo()
-            Log(e.Exception, "程序出现未知错误", LogLevel.Assert, "锟斤拷烫烫烫")
+            Log(e.Exception, GetLang("LangApplicationDialogContentUnknownError"), LogLevel.Assert, GetLang("LangApplicationDialogTitleUnknownError"))
         End If
     End Sub
 

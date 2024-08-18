@@ -4,9 +4,25 @@
     <s:String x:Key="LangTaskAbort">已取消！</s:String>
     <s:String x:Key="LangDialogBtnOK">确定</s:String>
     <s:String x:Key="LangDialogBtnCancel">取消</s:String>
-    <s:String x:Key="LangResourcePackage">资源包</s:String>
+    <s:String x:Key="LangResourcePack">资源包</s:String>
     <s:String x:Key="LangDialogBtnYes">是</s:String>
     <s:String x:Key="LangDialogBtnNo">否</s:String>
+    
+    <!--Application-->
+    <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 没有对 {0} 的访问权限</s:String>
+    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">缓存文件夹不可用</s:String>
+    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL 无法访问缓存文件夹，可能导致程序出错或无法正常使用。
+错误原因：{0}</s:String>
+    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手动设置的缓存文件夹不可用，PCL 将使用默认缓存文件夹。
+错误原因：{0}</s:String>
+    <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境警告</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL 正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。
+请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！</s:String>
+    <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化错误</s:String>
+    <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下载并安装 .NET Framework 4.6.2 后重试！</s:String>
+    <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷烫烫烫</s:String>
+    <s:String x:Key="LangApplicationDialogContentUnknownError">程序出现未知错误</s:String>
     
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下载</s:String>
@@ -88,7 +104,7 @@
     <s:String x:Key="LangHintThemeSetInitFail">初始化个性化设置失败</s:String>
     <s:String x:Key="LangBackgroundPic">背景图片</s:String>
     <s:String x:Key="LangBackgroundPicCount">背景图片 （{0} 张）</s:String>
-    <s:String x:Key="LangDialogDeleteAllBackgroundPicCntent">即将删除背景图片文件夹中的所有文件。
+    <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">即将删除背景图片文件夹中的所有文件。
 此操作不可撤销，是否确定？</s:String>
     <s:String x:Key="LangDialogTitleWarning">警告</s:String>
     <s:String x:Key="LangHintBackgroundPicDeleted">背景图片已清空！</s:String>
@@ -98,7 +114,7 @@
 你可以尝试使用画图打开该文件并重新保存，这会让图片变为标准格式。
 文件：</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailB">刷新背景图片失败（ {0} ）</s:String>
-    <s:String x:Key="LangDialogBackgroundPicRefreshFailUnknwon">刷新背景图片时出现未知错误</s:String>
+    <s:String x:Key="LangDialogBackgroundPicRefreshFailUnknown">刷新背景图片时出现未知错误</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailA">改变标题栏图片失败，该图片文件可能并非标准格式。
 你可以尝试使用画图打开该文件并重新保存，这会让图片变为标准格式。</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailB">设置标题栏图片失败</s:String>
@@ -135,7 +151,7 @@
 
 若违规，可能会被从任意相关群中踢出！</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameTitle">解密游戏的基本规则</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameAccrpt">我知道了</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameAccept">我知道了</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameDeny">恕我拒绝</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">你需要用自己的智慧来找到下一步的线索……
 初始线索：</s:String>
@@ -272,8 +288,8 @@
     <s:String x:Key="LangSelectCreateFolderToolTip">在 PCL 当前所在文件夹下创建新的 .minecraft 文件夹</s:String>
     <s:String x:Key="LangSelectAddExistFolder">添加已有文件夹</s:String>
     <s:String x:Key="LangSelectAddExistFolderToolTip">将一个已有的 Minecraft 文件夹添加到列表</s:String>
-    <s:String x:Key="LangSelectAddModpackages">导入整合包</s:String>
-    <s:String x:Key="LangSelectAddModpackagesToolTip">在当前选择的 Minecraft 文件夹下安装整合包</s:String>
+    <s:String x:Key="LangSelectAddModpack">导入整合包</s:String>
+    <s:String x:Key="LangSelectAddModpackToolTip">在当前选择的 Minecraft 文件夹下安装整合包</s:String>
     <s:String x:Key="LangSelectNoMCFolder">没有可用的 Minecraft 文件夹</s:String>
     <s:String x:Key="LangSelectUIError">构建 Minecraft 文件夹列表 UI 出错</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoAdd">在下载任务进行时，无法添加游戏文件夹！</s:String>
@@ -458,8 +474,8 @@
     <s:String x:Key="LangDownloadInstallOptiFineNeed">需要 OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">需要 OptiFine 与 Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">或更高版本</s:String>
-    <s:String x:Key="LangDownloadInstallNoAvailabeVersion">没有可用版本</s:String>
-    <s:String x:Key="LangDownloadInstallFailGetListUnknwonStatus">获取版本列表失败：未知错误，状态为</s:String>
+    <s:String x:Key="LangDownloadInstallNoAvailableVersion">没有可用版本</s:String>
+    <s:String x:Key="LangDownloadInstallFailGetListUnknownStatus">获取版本列表失败：未知错误，状态为</s:String>
     <s:String x:Key="LangDownloadInstallFailGetList">获取版本列表失败：</s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">该版本不支持自动安装</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">版本隔离提示</s:String>
@@ -475,7 +491,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangDownloadPageRefresh">刷新</s:String>
     <s:String x:Key="LangDownloadPageAutoInstall">自动安装</s:String>
     <s:String x:Key="LangDownloadPageManualInstall">▼ 手动安装包</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallContent">手动安装包功能提供了 OptiFine、Forge 等组件的 .jar 安装文件下载，但无法自动安装。
+    <s:String x:Key="LangDownloadPageDialogManualInstallContent">手动安装包功能提供了 OptiFine、Forge 等组件的 JAR 安装文件下载，但无法自动安装。
 在自动安装页面先选择 MC 版本，然后就可以选择 OptiFine、Forge 等组件，让 PCL 自动进行安装了。</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallTitle">自动安装提示</s:String>
     <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">返回自动安装</s:String>
@@ -483,7 +499,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangDownloadPageManualInstallFold">手动安装包</s:String>
     <s:String x:Key="LangDownloadPageResource">资源</s:String>
     <s:String x:Key="LangDownloadPageMods">Mod</s:String>
-    <s:String x:Key="LangDownloadPageModpackages">整合包</s:String>
+    <s:String x:Key="LangDownloadPageModpack">整合包</s:String>
 
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteloaderDescTitle">LiteLoader 简介</s:String>
@@ -568,11 +584,11 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangDownloadModpackTypeTech">科技</s:String>
     <s:String x:Key="LangDownloadModpackTypeMagic">魔法</s:String>
     <s:String x:Key="LangDownloadModpackTypeAdventure">冒险</s:String>
-    <s:String x:Key="LangDownloadModpackTypeCook">烹饪</s:String>
+    <s:String x:Key="LangDownloadModpackTypeCook">大杂烩</s:String>
     <s:String x:Key="LangDownloadModpackTypeExplore">探索</s:String>
     <s:String x:Key="LangDownloadModpackTypeGame">小游戏</s:String>
     <s:String x:Key="LangDownloadModpackTypeScienceFiction">科幻</s:String>
-    <s:String x:Key="LangDownloadModpackTypeSkyland">空岛</s:String>
+    <s:String x:Key="LangDownloadModpackTypeSkyblock">空岛</s:String>
     <s:String x:Key="LangDownloadModpackTypeImprove">原版改良</s:String>
     <s:String x:Key="LangDownloadModpackTypeFTB">FTB</s:String>
     <s:String x:Key="LangDownloadModpackTypeFTBToolTip">由 FTB 官方发布</s:String>
@@ -630,7 +646,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangLoginOAuthLoading">正在加载登录页面</s:String>
     <s:String x:Key="LangLoginOAuthLoadingTipA">如果网络环境不佳，加载可能非常缓慢甚至一直加载不出来</s:String>
     <s:String x:Key="LangLoginOAuthLoadingTipB">此时请尝试使用 VPN 或加速器，然后重试</s:String>
-    <s:String x:Key="LangLoginOAuthToBrower">如果遇到问题，可以点击这里使用系统浏览器登录</s:String>
+    <s:String x:Key="LangLoginOAuthToBrowser">如果遇到问题，可以点击这里使用系统浏览器登录</s:String>
     <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL 不支持使用 GitHub 登录微软账号！</s:String>
     <s:String x:Key="LangLoginOAuthWindowTitle">Microsoft 账户登录</s:String>
 
@@ -667,6 +683,8 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangLaunchLeftAbortTask">结束处理</s:String>
     <s:String x:Key="LangLaunchLeftFinished">已完成</s:String>
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">正在导出启动脚本</s:String>
+    <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">PCL 即将在当前文件夹下自动安装整合包。</s:String>
+    <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">自动安装</s:String>
 
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
@@ -775,7 +793,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutAboutAuthorSubtitle">Plain Craft Launcher 的作者！</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthorBtn">赞助作者</s:String>
     <s:String x:Key="LangPageOtherAboutAboutVersionSubtitle">当前版本：%VERSION%（%VERSIONCODE%.%BRANCH%）</s:String>
-    <s:String x:Key="LangPageOtherAboutAboutVersionBtn">查看源代码</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutVersionBtn">开源代码</s:String>
     <s:String x:Key="LangPageOtherAboutThanks">特别鸣谢</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93">提供 BMCLAPI 镜像源和 Forge 安装工具，详见 https://bmclapi.bangbang93.com</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">赞助镜像源</s:String>
@@ -783,7 +801,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutThanksMCMod">提供了 Mod 名称的中文翻译和更多相关信息！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">打开百科</s:String>
     <s:String x:Key="LangPageOtherAboutThanks00ll00">提供了 Java Launch Wrapper 和一些重要服务支持！</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksDoodleHuang">提供了部分很难找到的 Minecraft 版本与一些技术支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksz0z0r4">提供了 MCIM 中国 Mod 下载镜像源和帮助库图床！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksPatrick">设计并制作了 PCL 图标，让我从做图标的水深火热中得到了解脱……</s:String>
     <s:String x:Key="LangPageOtherAboutThanksHao_Tian">在内测中找出了一大堆没人想得到的诡异 Bug，有非同寻常的 Bug 体质</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">Minecraft 中文论坛</s:String>
@@ -791,7 +809,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 5~6 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 7 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">赞助作者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -802,19 +820,19 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutLicenseWeb">查看来源网站</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用户协议与免责声明</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隐私说明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本软件会汇报自己的版本名与版本号，以统计用户数量与各版本的用户数量占比。除此之外，本软件不会上传您的任何信息。
-若您能提供未经外部修改的本软件本体上传隐私信息的确凿证据，开发者会向您支付 PCL 开发所获全部净收入。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本软件的 User Agent 中包含启动器的版本号，以统计各版本的用户数量。&#13;除此之外，本软件不会向开发者上传任何其他信息。</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龙腾猫跃 2016. All Rights Reserved.
 计算机软件著作权登记号：2020SR0875133
-违法违规行为举报投诉邮箱：hexdragon@vip.qq.com</s:String>
+违法违规行为举报投诉邮箱：hexdragon@vip.qq.com
+非 MINECRAFT 官方产品。未经 MOJANG 或 MICROSOFT 批准，也不与 MOJANG 或 MICROSOFT 关联。</s:String>
 
     <!--PageOtherTest-->
     <s:String x:Key="LangPageOtherTestNoUtility">为便于维护，开源内容中不包含百宝箱功能……</s:String>
 
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">离线皮肤</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTips">由于技术问题，皮肤预览与 Steve/Alex/自定义 选项暂时仅保证对 1.19.2 以前的版本有效！</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTips">由于技术问题，此功能只保证对 1.19.2 以前的版本有效！</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandom">随机</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandomToolTip">随机选择一个默认皮肤</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoft">正版皮肤</s:String>
@@ -867,7 +885,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeSameWithLaunch">与启动器尺寸一致</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeCustom">自定义尺寸</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeCustomToolTip">Forge 1.12.2 等个别版本存在 Bug，会导致高度设定无效</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeMaxium">最大化</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeMaximum">最大化</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJava">游戏 Java</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaToolTip">若将 Java 放在游戏文件夹或 PCL 文件夹，在进行自动选择时 PCL 会尽量优先选择它</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaLoading">加载中……</s:String>
@@ -922,7 +940,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 如果在设置中手动选择了与当前版本不兼容的 Java，则自动跳过兼容性警告弹窗，强制使用手动选择的 Java。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">关闭文件校验</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：强烈推荐在版本设置中关闭特定版本的校验，而不是在这里关闭所有版本的校验！
-完全不更改 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。
+完全不更改 assets；不校验 libraries、第三方登录库与版本主 JAR 文件是否被修改。
 如果你没有修改相关文件，请勿勾选此项。</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">启动设置项存在异常，已被自动重置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">重载启动设置时出错</s:String>
@@ -931,10 +949,10 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupLaunchSkinChangeFail">改变离线皮肤失败</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinEmptied">离线皮肤已清空！</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinEmptyFail">清空离线皮肤失败</s:String>
-    <s:String x:Key="LangPageSetupLaunchMemAvailabe">可用</s:String>
+    <s:String x:Key="LangPageSetupLaunchMemAvailable">可用</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaAutoChoice">自动选择合适的 Java</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaUpdateListFail">更新设置 Java 下拉框失败</s:String>
-    <s:String x:Key="LangPageSetupLaunchJavaNoAvailabeJava">未找到可用的 Java</s:String>
+    <s:String x:Key="LangPageSetupLaunchJavaNoAvailableJava">未找到可用的 Java</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaSearchingJava">正在搜索 Java，请稍候！</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaAddedJava">已将该 Java 加入 Java 列表！</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaIncorrectJava">该 Java 存在异常，无法使用</s:String>
@@ -966,8 +984,8 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupSystemDownload">下载</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本列表获取</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">尽量使用镜像源（加载快，但版本可能不是最新的）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">在官方源加载缓慢时改用镜像源（平衡）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本为最新，但加载非常缓慢）</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本最新，但加载缓慢）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod 命名风格</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">决定下载的 Mod 的默认文件名中，中文译名应该放在哪个位置
 该选项仅在语言设置为简体中文时有效</s:String>
@@ -1005,11 +1023,11 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateB">在有新版本时显示提示</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateC">仅在有重大漏洞更新时显示提示</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateD">关闭更新提示</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnet">启动器公告</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetA">显示所有公告</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetAToolTip">显示包括启动器功能调查、活动等在内的全部公告</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetB">仅在有重要通知时显示公告</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncemnetC">关闭所有公告</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncement">启动器公告</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncementA">显示所有公告</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncementAToolTip">显示包括启动器功能调查、活动等在内的全部公告</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncementB">仅在有重要通知时显示公告</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncementC">关闭所有公告</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCacheFolder">缓存文件夹</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCacheFolderToolTip">PCL 的下载、皮肤等缓存文件的存储位置。
 不推荐路径中带有空格。
@@ -1051,16 +1069,23 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">确认启动器更新失败</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod 信息获取</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">尽量使用官方源</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">在官方源加载缓慢时改用镜像源</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">尽量使用镜像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">尽量使用镜像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">尽量使用官方源</s:String>
+    <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL 即将重启以完全应用语言的切换</s:String>
+    <s:String x:Key="LangPageSetupSystemLangHelpTranslate">帮助翻译</s:String>
+    <s:String x:Key="LangPageSetupSystemHintCloseGameBeforeChangeLanguage">请先关闭所有运行中的游戏……</s:String>
+    <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">请在所有下载任务完成后再来更改语言……</s:String>
+    <s:String x:Key="LangPageSetupSystemExportSettings">导出设置</s:String>
+    <s:String x:Key="LangPageSetupSystemImportSettings">导入设置</s:String>
+    <s:String x:Key="LangPageSetupSystemInDev">该功能尚在开发中！</s:String>
 
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概览</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">设置</s:String>
-    <s:String x:Key="LangPageVersionLeftModMangment">Mod 管理</s:String>
-    <s:String x:Key="LangPageVersionLeftModMangmentRefresh">刷新</s:String>
-    <s:String x:Key="LangPageVersionLeftModMangmentRefreshing">正在刷新……</s:String>
+    <s:String x:Key="LangPageVersionLeftModManagement">Mod 管理</s:String>
+    <s:String x:Key="LangPageVersionLeftModManagementRefresh">刷新</s:String>
+    <s:String x:Key="LangPageVersionLeftModManagementRefreshing">正在刷新……</s:String>
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetContent">是否要初始化该版本的版本独立设置？该操作不可撤销。</s:String>
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetTitle">初始化确认</s:String>
 
@@ -1260,7 +1285,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行失败。
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹。</s:String>
     <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在设置中手动选择了与当前版本不兼容的 Java，则自动跳过兼容性警告弹窗，强制使用手动选择的 Java。</s:String>
-    <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。
+    <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校验 libraries、第三方登录库与版本主 JAR 文件是否被修改。
 如果你没有修改相关文件，请勿勾选此项。</s:String>
 
     <!--ModMain-->
@@ -1299,7 +1324,8 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModSecretPermissionError">运行环境错误</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">开源版本说明</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">该版本中不包含以下特性：
-- CurseForge 查询：需要 API Key（你可以申请一个，然后添加到 SecretHeadersSign 方法中）
+- CurseForge API 调用：需要你自行申请 API Key，然后添加到 SecretHeadersSign 方法中
+- 正版登录：需要你自行申请 Client ID，然后添加到 ModSecret.vb 的开头
 - 更新与联网通知：避免滥用隐患
 - 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……
 - 百宝箱：开发早期往里面塞了些开发工具，整理起来太麻烦了</s:String>
@@ -1308,7 +1334,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 
     <!--ModMinecraft-->
     <s:String x:Key="LangModMinecraftCurrentFolder">当前文件夹</s:String>
-    <s:String x:Key="LangModMinecraftOfficalFolder">官方启动器文件夹</s:String>
+    <s:String x:Key="LangModMinecraftOfficialFolder">官方启动器文件夹</s:String>
     <s:String x:Key="LangModMinecraftCheckStatusInstanceNotFound">未找到版本</s:String>
     <s:String x:Key="LangModMinecraftCheckStatusNoPermission">PCL 没有对该文件夹的访问权限，请右键以管理员身份运行 PCL</s:String>
     <s:String x:Key="LangModMinecraftCheckStatusNeedDependency">需要安装前置版本：</s:String>
@@ -1365,8 +1391,8 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinPropertyNotFound">未从皮肤返回值中找到符合条件的 Property</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinNoData">皮肤返回值中不包含皮肤数据项，可能是未设置自定义皮肤的用户</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinNotSet">用户未设置自定义皮肤</s:String>
-    <s:String x:Key="LangModMinecraftExceptionNoAssestIndexInfo">该版本不存在资源文件索引信息</s:String>
-    <s:String x:Key="LangModMinecraftExceptionAssestIndexFileNotFound">Assets 索引文件未找到</s:String>
+    <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">该版本不存在资源文件索引信息</s:String>
+    <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Assets 索引文件未找到</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">非预期的结果（{0}）</s:String>
 
     <!--ModComp-->
@@ -1382,8 +1408,8 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModCompModStatusDescRelease">正式版</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">测试版</s:String>
     <s:String x:Key="LangModCompModStatusDescAlpha">测试版</s:String>
-    <s:String x:Key="LangModCompModMilion">万</s:String>
-    <s:String x:Key="LangModCompModBilion">亿</s:String>
+    <s:String x:Key="LangModCompModMillion">万</s:String>
+    <s:String x:Key="LangModCompModBillion">亿</s:String>
     <s:String x:Key="LangModCompExceptionNoResult">没有符合条件的结果</s:String>
 
     <!--ModBase-->
@@ -1473,7 +1499,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModCompSearchInEnglish">当前资源仅支持使用英文搜索</s:String>
     <s:String x:Key="LangModCompIncompatibleOptionCurseForge">CurseForge 不兼容所选的类型</s:String>
     <s:String x:Key="LangModCompIncompatibleOptionModrinth">Modrinth 不兼容所选的类型</s:String>
-    <s:String x:Key="LangModCompSearchNoResult">没有符合条件的结果</s:String>
+    <s:String x:Key="LangModCompSearchNoResult">没有搜索结果</s:String>
     <s:String x:Key="LangModCompVersionSnapshot">快照</s:String>
     <s:String x:Key="LangModCompVersionUnknownVersion">未知版本</s:String>
     
@@ -1495,9 +1521,9 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModDownloadExceptionOptiFineTime">版本与发布时间数据无法对应</s:String>
     <s:String x:Key="LangModDownloadExceptionOptiFineNoCorresponding">版本与 Forge 兼容数据无法对应</s:String>
     <s:String x:Key="LangModDownloadExceptionShortVersion">获取到的版本数量不足（{0}）</s:String>
-    <s:String x:Key="LangModDownloadSourceOffical">{0} 官方源</s:String>
+    <s:String x:Key="LangModDownloadSourceOfficial">{0} 官方源</s:String>
     <s:String x:Key="LangModDownloadExceptionForgeGetInfoFail">Forge 官方源版本信息提取失败（{0}）</s:String>
-    <s:String x:Key="LangModDownloadExceptionSourceOfficalListLoad">{0} 官方源版本列表解析失败（{1}）</s:String>
+    <s:String x:Key="LangModDownloadExceptionSourceOfficialListLoad">{0} 官方源版本列表解析失败（{1}）</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">{0} 版本列表解析失败（{1}）</s:String>
     <s:String x:Key="LangModDownloadExceptionMissNecessary">获取到的列表缺乏必要项</s:String>
     
@@ -1569,10 +1595,9 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 如果网络环境不佳，它可能一直加载不出来，那就只能试试用 VPN 或加速器了。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">等待网页登录</s:String>
     <s:String x:Key="LangModLaunchDialogTipWebLogin">返回网址应以 https://login.live.com/oauth20_desktop.srf?code= 开头</s:String>
-    <s:String x:Key="LangModLaunchHintWebLoginSuccess">网页登录成功，你可以关闭浏览器啦！</s:String>
     <s:String x:Key="LangModLaunchDialogTitleLoginFail">登录失败</s:String>
     <s:String x:Key="LangModLaunchDialogTitleLoginTip">登录提示</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnRegiste">注册</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnRegister">注册</s:String>
     <s:String x:Key="LangModLaunchDialogBtnISee">我知道了</s:String>
     <s:String x:Key="LangModLaunchDialogContentBanned">该账号似乎已被微软封禁，无法登录。</s:String>
     <s:String x:Key="LangModLaunchDialogContentNoXBoxAccount">你尚未注册 Xbox 账户，请在注册后再登录。</s:String>
@@ -1580,9 +1605,9 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 请尝试使用加速器或 VPN。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnIDK">我不知道</s:String>
     <s:String x:Key="LangModLaunchDialogContentAgeLimit">该账号年龄不足，你需要先修改出生日期，然后才能登录。
-该账号目前填写的年龄是否在 13 岁以上？</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 岁以上</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnAgeLess12">13 岁以上</s:String>
+该账号目前填写的年龄是否在 13 岁及以上？</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 岁及以上</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnAgeLess12">13 岁以下</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeA">请在打开的网页中修改账号的出生日期（至少改为 18 岁以上）。
 在修改成功后等待一分钟，然后再回到 PCL，就可以正常登录了！</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeB">请根据打开的网页的说明，修改账号的出生日期（至少改为 18 岁以上）。
@@ -1632,8 +1657,8 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModModpackTaskOrganizeFiles">最终整理文件</s:String>
     <s:String x:Key="LangModModpackTaskCurseForgeModpackInstall">CurseForge 整合包安装：</s:String>
     <s:String x:Key="LangModModpackHintInstalling">该整合包正在安装中！</s:String>
-    <s:String x:Key="LangModModpacHintQuiltNotSupport">PCL 暂不支持安装需要 Quilt 的整合包！</s:String>
-    <s:String x:Key="LangModModpacHintUnknownModLoader">无法安装整合包，其中出现了未知的 Mod 加载器 {0}！</s:String>
+    <s:String x:Key="LangModModpackHintQuiltNotSupport">PCL 暂不支持安装需要 Quilt 的整合包！</s:String>
+    <s:String x:Key="LangModModpackHintUnknownModLoader">无法安装整合包，其中出现了未知的 Mod 加载器 {0}！</s:String>
     <s:String x:Key="LangModModpackTaskDownloadExtraFile">下载额外文件</s:String>
     <s:String x:Key="LangModModpackTaskModrinthModpackInstall">Modrinth 整合包安装：</s:String>
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">重命名版本 Json（副加载器）</s:String>
@@ -1647,7 +1672,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">选择安装目标（必须是一个空文件夹）</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 文件夹路径中不能含有感叹号或分号！</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">请选择一个空文件夹作为安装目标！</s:String>
-    <s:String x:Key="LangModModpackExtraArchive">正在解压压缩包……</s:String>
+    <s:String x:Key="LangModModpackInstallArchive">安装压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">已加入游戏文件夹列表：{0}</s:String>
     
     <!--ModWatcher-->
@@ -1677,4 +1702,72 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">加载失败</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">未知错误</s:String>
     <s:String x:Key="LangModMyLoadingBadNetwork">网络环境不佳，请重试或尝试使用 VPN</s:String>
+    
+    <!--ModDownloadLib-->
+    <s:String x:Key="LangModDownloadLibTaskMcDownload">Minecraft {0} 下载</s:String>
+    <s:String x:Key="LangModDownloadLibHintInstanceDownloading">该版本正在下载中！</s:String>
+    <s:String x:Key="LangModDownloadLibDialogContentRedownloadInstance">版本 {0} 已存在，是否重新下载？
+这会覆盖版本的 JSON 与 JAR 文件，但不会影响版本隔离的文件。</s:String>
+    <s:String x:Key="LangModDownloadLibDialogTitleRedownloadInstance">版本已存在</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadJson">下载版本 JSON 文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadJarUrl">分析核心 JAR 文件下载地址</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadJar">下载核心 JAR 文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadVanillaJsonUrl">获取原版 JSON 文件下载地址</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadVanillaAnalysisLibSubLoader">分析原版支持库文件（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadVanillaDownloadLibSubLoader">下载原版支持库文件（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadAnalysisAssetsIndexSubLoader">分析资源文件索引地址（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionAnalysisAssetsIndexFail">分析资源文件索引地址失败</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionAddVersionInfoFail">添加客户端版本失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadAssetsIndexFail">下载资源文件索引（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskAnalysisDownloadAssets">分析所需资源文件（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadAssets">下载资源文件（副加载器）</s:String>
+    <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">选择保存位置</s:String>
+    <s:String x:Key="LangModDownloadLibTaskOptiFineDownload">OptiFine {0} 下载</s:String>
+    <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">Java 8 或更高版本</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">由于未找到 Java，已取消安装。</s:String>
+    <s:String x:Key="LangModDownloadLibCancelJavaDownload">已取消安装。</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallerException">安装器运行出错，末行为 {0}</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionNoCustomFolder">如果没有指定原版下载器，则不能指定 MC 安装文件夹</s:String>
+    <s:String x:Key="LangModDownloadLibTaskOptiFineWaitForVanilla">等待原版下载</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionOptiFineInstallerRunFail">运行 OptiFine 安装器失败</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallOptiFineMethodAFail">安装 OptiFine（方式 A）失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskInstallOptiFineMethodB">安装 OptiFine（方式 B）</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallOptiFineMethodBFail">安装 OptiFine（方式 B）失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskAnalysisOptiFineLib">分析 OptiFine 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadOptiFineLib">下载 OptiFine 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskGetOptiFineDownloadUrl">获取 OptiFine 下载地址</s:String>
+    <s:String x:Key="LangModDownloadLibTaskLiteLoaderDownload">LiteLoader {0} 下载</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionNotSupportVersion">未知的 Minecraft 版本（{0}）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadMainFile">下载主文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskLiteLoaderInstallerDownload">LiteLoader {0} 安装器下载</s:String>
+    <s:String x:Key="LangModDownloadLibTaskLiteLoaderMcVersionDownload">启动 LiteLoader 依赖版本下载</s:String>
+    <s:String x:Key="LangModDownloadLibTaskInstallLiteLoader">安装 LiteLoader</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallLiteLoaderFail">安装新 LiteLoader 版本失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskLiteLoaderAnalysisLib">分析 LiteLoader 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskLiteLoaderDownloadLib">下载 LiteLoader 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskForgelikeDownload">{0} 下载</s:String>
+    <s:String x:Key="LangModDownloadLibTaskForgelikeGetDetailInfo">获取 {0} 详细信息</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionForgelikeGetDetailInfoFail">未能找到 {0} 的详细信息！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskForgelikeReadyDownload">准备下载 {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskForgelikeGetLibFile">获取 {0} 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionForgelikeRunInstallerFail">运行 {0} 安装器失败</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionForgelikeInstallInstanceFail">安装新 {0} 版本失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskForgelikeInstallMethodB">安装 {0}（方式 B）</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionForgelikeInstallFail">非新版方式安装 Forge 失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskFabricInstallerDownload">Fabric {0} 安装器下载</s:String>
+    <s:String x:Key="LangModDownloadLibTaskFabricAnalysisLib">分析 Fabric 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskFabricDownloadLib">下载 Fabric 支持库文件</s:String>
+    <s:String x:Key="LangModDownloadLibSuccess">{0}成功！</s:String>
+    <s:String x:Key="LangModDownloadLibFail">{0}失败：{1}</s:String>
+    <s:String x:Key="LangModDownloadLibCancel">{0}已取消！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcInstall">{0} 安装</s:String>
+    <s:String x:Key="LangModDownloadLibHintMcExist">版本 {0} 已经存在！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskAddIgnore">添加忽略标识</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDelIgnore">删除忽略标识</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadVanilla">下载原版 {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadOptiFine">下载 OptiFine {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadForge">下载 Forge {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadNeoForge">下载 NeoForge {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">下载 LiteLoader {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadFabric">下载 Fabric {0}</s:String>
 </ResourceDictionary>

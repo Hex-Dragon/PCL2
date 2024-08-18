@@ -170,7 +170,7 @@
         End If
         '设置文本
         LabRamGame.Text = If(RamGame = Math.Floor(RamGame), RamGame & ".0", RamGame) & " GB" &
-                          If(RamGame <> RamGameActual, " (" & GetLang("LangPageSetupLaunchMemAvailabe") & " " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
+                          If(RamGame <> RamGameActual, " (" & GetLang("LangPageSetupLaunchMemAvailable") & " " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
         LabRamUsed.Text = If(RamUsed = Math.Floor(RamUsed), RamUsed & ".0", RamUsed) & " GB"
         LabRamTotal.Text = " / " & If(RamTotal = Math.Floor(RamTotal), RamTotal & ".0", RamTotal) & " GB"
         LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaIs64Bit(PageVersionLeft.Version) AndAlso Not Is32BitSystem, Visibility.Visible, Visibility.Collapsed)
@@ -448,13 +448,13 @@ PreFin:
         '结束处理
         If SelectedItem Is Nothing Then
             ComboArgumentJava.Items.Clear()
-            ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = GetLang("LangPageSetupLaunchJavaNoAvailabeJava"), .IsSelected = True})
+            ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = GetLang("LangPageSetupLaunchJavaNoAvailableJava"), .IsSelected = True})
         End If
         RefreshRam(True)
     End Sub
     '阻止在特定情况下展开下拉框
     Private Sub ComboArgumentJava_DropDownOpened(sender As Object, e As EventArgs) Handles ComboArgumentJava.DropDownOpened
-        If ComboArgumentJava.SelectedItem Is Nothing OrElse ComboArgumentJava.Items(0).Content = GetLang("LangPageSetupLaunchJavaNoAvailabeJava") OrElse ComboArgumentJava.Items(0).Content = GetLang("LangPageSetupLaunchLaunchJavaLoading") Then
+        If ComboArgumentJava.SelectedItem Is Nothing OrElse ComboArgumentJava.Items(0).Content = GetLang("LangPageSetupLaunchJavaNoAvailableJava") OrElse ComboArgumentJava.Items(0).Content = GetLang("LangPageSetupLaunchLaunchJavaLoading") Then
             ComboArgumentJava.IsDropDownOpen = False
         End If
     End Sub

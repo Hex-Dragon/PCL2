@@ -57,7 +57,7 @@ Public Module ModMinecraft
             Dim MojangPath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\"
             If (Not CacheMcFolderList.Any OrElse MojangPath <> CacheMcFolderList(0).Path) AndAlso '当前文件夹不是官启文件夹
                 Directory.Exists(MojangPath & "versions\") Then '具有权限且存在 versions 文件夹
-                CacheMcFolderList.Add(New McFolder With {.Name = GetLang("LangModMinecraftOfficalFolder"), .Path = MojangPath, .Type = McFolderType.Original})
+                CacheMcFolderList.Add(New McFolder With {.Name = GetLang("LangModMinecraftOfficialFolder"), .Path = MojangPath, .Type = McFolderType.Original})
             End If
 
 #End Region
@@ -565,6 +565,7 @@ Recheck:
                             Log(ex, "合并版本依赖项 json 失败（" & If(InheritVersion, "null").ToString & "）")
                         End Try
                     Catch ex As Exception
+                        Log($"[Minecraft] 传入的版本 json 文件内容（共 {Text.Length} 字符，最多输出前 5000 字符）：{vbCrLf}{Text.Substring(0, 5000)}")
                         Throw New Exception(GetLang("LangModMinecraftExceptionJsonContentIncorrect", If(Name, "null")), ex)
                     End Try
                     Try
@@ -665,7 +666,7 @@ Recheck:
             Try
                 Dim JsonObjCheck = JsonObject
             Catch ex As Exception
-                Log(ex, "版本 json 可用性检查失败（" & Path & "）")
+                Log(ex, "版本 JSON 可用性检查失败（" & Path & "）")
                 JsonText = ""
                 JsonObject = Nothing
                 Info = ex.Message
@@ -2026,8 +2027,9 @@ OnLoaded:
             If Token.Url IsNot Nothing Then
                 '获取 Url 的真实地址
                 Urls.Add(Token.Url)
-                If Token.Url.Contains("launcher.mojang.com/v1/objects") Then
-                    Urls = DlSourceLauncherOrMetaGet(Token.Url).ToList() 'Mappings
+                If Token.Url.Contains("launcher.mojang.com/v1/objects") OrElse Token.Url.Contains("client.txt") OrElse
+                   Token.Url.Contains(".tsrg") Then
+                    Urls.AddRange(DlSourceLauncherOrMetaGet(Token.Url).ToList()) 'Mappings（#4425）
                 End If
                 If Token.Url.Contains("maven") Then
                     Urls.Insert(0, Token.Url.Replace(Mid(Token.Url, 1, Token.Url.IndexOfF("maven")), "https://bmclapi2.bangbang93.com/").
@@ -2049,7 +2051,7 @@ OnLoaded:
                 '普通文件
                 Urls.AddRange(DlSourceLibraryGet("https://libraries.minecraft.net" & Token.LocalPath.Replace(If(Token.IsJumpLoader, JumpLoaderFolder, CustomMcFolder) & "libraries", "").Replace("\", "/")))
             End If
-            Result.Add(New NetFile(Urls.Distinct.ToArray, Token.LocalPath, Checker))
+            Result.Add(New NetFile(Urls.Distinct, Token.LocalPath, Checker))
         Next
         '去重并返回
         Return Result.Distinct(Function(a, b) a.LocalPath = b.LocalPath)
@@ -2118,7 +2120,7 @@ OnLoaded:
             }")
             'End If
         Else
-            Throw New Exception(GetLang("LangModMinecraftExceptionNoAssestIndexInfo"))
+            Throw New Exception(GetLang("LangModMinecraftExceptionNoAssetsIndexInfo"))
         End If
     End Function
     ''' <summary>
@@ -2177,7 +2179,7 @@ OnLoaded:
         Try
 
             '初始化
-            If Not File.Exists(PathMcFolder & "assets\indexes\" & Name & ".json") Then Throw New FileNotFoundException(GetLang("LangModMinecraftExceptionAssestIndexFileNotFound"), PathMcFolder & "assets\indexes\" & Name & ".json")
+            If Not File.Exists(PathMcFolder & "assets\indexes\" & Name & ".json") Then Throw New FileNotFoundException(GetLang("LangModMinecraftExceptionAssetsIndexFileNotFound"), PathMcFolder & "assets\indexes\" & Name & ".json")
             McAssetsListGet = New List(Of McAssetsToken)
             Dim Json = GetJson(ReadFile(PathMcFolder & "assets\indexes\" & Name & ".json"))
 

@@ -209,7 +209,7 @@
         CardBackground.TriggerForceResize()
     End Sub
     Private Sub BtnBackgroundClear_Click(sender As Object, e As EventArgs) Handles BtnBackgroundClear.Click
-        If MyMsgBox(GetLang("LangDialogDeleteAllBackgroundPicCntent"), GetLang("LangDialogTitleWarning"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
+        If MyMsgBox(GetLang("LangDialogDeleteAllBackgroundPicContent"), GetLang("LangDialogTitleWarning"),, GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
             DeleteDirectory(Path & "PCL\Pictures")
             BackgroundRefresh(False, True)
             Hint(GetLang("LangHintBackgroundPicDeleted"), HintType.Finish)
@@ -263,7 +263,7 @@
             End If
 
         Catch ex As Exception
-            Log(ex, GetLang("LangDialogBackgroundPicRefreshFailUnknwon"), LogLevel.Feedback)
+            Log(ex, GetLang("LangDialogBackgroundPicRefreshFailUnknown"), LogLevel.Feedback)
         End Try
     End Sub
 
@@ -431,7 +431,7 @@ Refresh:
     Private Sub LabLauncherTheme11Click_MouseLeftButtonUp() Handles LabLauncherTheme11Click.MouseLeftButtonUp, RadioLauncherTheme11.MouseRightButtonUp
         If LabLauncherTheme11Click.Visibility = Visibility.Collapsed OrElse If(LabLauncherTheme11Click.ToolTip, "").ToString.Contains("点击") Then
             If MyMsgBox(GetLang("LangDialogThemeUnlockGameContent"),
-                GetLang("LangDialogThemeUnlockGameTitle"), GetLang("LangDialogThemeUnlockGameAccrpt"), GetLang("LangDialogThemeUnlockGameDeny")) = 1 Then
+                GetLang("LangDialogThemeUnlockGameTitle"), GetLang("LangDialogThemeUnlockGameAccept"), GetLang("LangDialogThemeUnlockGameDeny")) = 1 Then
                 MyMsgBox(GetLang("LangDialogThemeUnlockGameFirstClueContent") &
                          "gnp.dorC61\60\20\0202\moc.x1xa.2s\\:sp" & "T".ToLower & "th", GetLang("LangDialogThemeUnlockGameFirstClueTitle")) '防止触发病毒检测规则
             End If

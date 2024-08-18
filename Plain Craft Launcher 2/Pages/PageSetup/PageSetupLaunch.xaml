@@ -7,9 +7,9 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
-            <local:MyCard x:Name="CardSkin" Margin="0,15" Title="{DynamicResource LangPageSetupLaunchSkin}">
+            <local:MyCard x:Name="CardSkin" Margin="0,15" Title="{DynamicResource LangPageSetupLaunchSkin}" CanSwap="True" IsSwaped="True">
                 <StackPanel Margin="25,40,25,15">
-                    <local:MyHint Text="{DynamicResource LangPageSetupLaunchSkinTips}" IsWarn="False" Margin="0,0,0,10" />
+                    <local:MyHint Text="{DynamicResource LangPageSetupLaunchSkinTips}" IsWarn="True" Margin="0,0,0,10" />
                     <Grid Margin="-1,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
@@ -128,7 +128,7 @@
                                 <local:MyComboBoxItem Content="{DynamicResource LangPageSetupLaunchLaunchWindowSizeDefault}" IsSelected="True" />
                                 <local:MyComboBoxItem Content="{DynamicResource LangPageSetupLaunchLaunchWindowSizeSameWithLaunch}" />
                                 <local:MyComboBoxItem Content="{DynamicResource LangPageSetupLaunchLaunchWindowSizeCustom}" ToolTip="{DynamicResource LangPageSetupLaunchLaunchWindowSizeCustomToolTip}" />
-                                <local:MyComboBoxItem Content="{DynamicResource LangPageSetupLaunchLaunchWindowSizeMaxium}" />
+                                <local:MyComboBoxItem Content="{DynamicResource LangPageSetupLaunchLaunchWindowSizeMaximum}" />
                             </local:MyComboBox>
                             <local:MyTextBox Padding="0,0,5,0" Visibility="Collapsed" Grid.Column="1" Margin="50,0,0,0" x:Name="TextArgumentWindowWidth" Tag="LaunchArgumentWindowWidth" Width="60" HorizontalContentAlignment="Center" Text="854">
                                 <local:MyTextBox.ValidateRules>

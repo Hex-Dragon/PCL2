@@ -10,6 +10,8 @@ Friend Module ModSecret
 
     '在开源内容的注册表键与普通内容的注册表键隔离
     Public Const RegFolder As String = "PCLDebug"
+    '用于微软登录的 ClientId
+    Public Const OAuthClientId As String = ""
 
     Friend Sub SecretOnApplicationStart()
         '提升 UI 线程优先级
@@ -79,7 +81,6 @@ Friend Module ModSecret
 #Region "网络鉴权"
 
     Friend Function SecretCdnSign(UrlWithMark As String)
-        '只处理以 {CDN} 结尾的链接
         If Not UrlWithMark.EndsWithF("{CDN}") Then Return UrlWithMark
         Return UrlWithMark.Replace("{CDN}", "").Replace(" ", "%20")
     End Function
@@ -87,26 +88,24 @@ Friend Module ModSecret
     ''' 设置 Headers 的 UA、Referer。
     ''' </summary>
     Friend Sub SecretHeadersSign(Url As String, ByRef Client As CookieWebClient, Optional UseBrowserUserAgent As Boolean = False)
-        If ApplicationStartTick < 1 Then Return '禁止在没有运行程序的情况下通过反射调用
         If UseBrowserUserAgent Then
             Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
         Else
             Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode
         End If
-        Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.server/"
+        Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.open.server/"
         '如果你有 CurseForge API Key，请添加到 Headers 中，以恢复对 CurseForge 的访问
     End Sub
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
     ''' </summary>
     Friend Sub SecretHeadersSign(Url As String, ByRef Request As HttpWebRequest, Optional UseBrowserUserAgent As Boolean = False)
-        If ApplicationStartTick < 1 Then Return '禁止在没有运行程序的情况下通过反射调用
         If UseBrowserUserAgent Then
             Request.UserAgent = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
         Else
             Request.UserAgent = "PCL2/" & VersionStandardCode
         End If
-        Request.Referer = "http://" & VersionCode & ".pcl2.server/"
+        Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
         '如果你有 CurseForge API Key，请添加到 Headers 中，以恢复对 CurseForge 的访问
     End Sub
 

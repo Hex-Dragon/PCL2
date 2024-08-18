@@ -1,6 +1,4 @@
-﻿Imports Newtonsoft
-
-Public Module ModDownload
+﻿Public Module ModDownload
 
 #Region "DlClient* | Minecraft 客户端"
 
@@ -210,7 +208,7 @@ Public Module ModDownload
             '添加 PCL 特供项
             If File.Exists(PathTemp & "Cache\download.json") Then Versions.Merge(GetJson(ReadFile(PathTemp & "Cache\download.json")))
             '返回
-            Loader.Output = New DlClientListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "Mojang"), .Value = Json}
+            Loader.Output = New DlClientListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "Mojang"), .Value = Json}
             '解析更新提示（Release）
             Dim Version As String = Json("latest")("release")
             If Setup.Get("ToolUpdateRelease") AndAlso Not Setup.Get("ToolUpdateReleaseLast") = "" AndAlso Version IsNot Nothing AndAlso Not Setup.Get("ToolUpdateReleaseLast") = Version Then
@@ -226,7 +224,7 @@ Public Module ModDownload
             End If
             Setup.Set("ToolUpdateSnapshotLast", If(Version, "Nothing"))
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "Minecraft", "Fail"), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "Minecraft", "Fail"), ex)
         End Try
     End Sub
     ''' <summary>
@@ -389,9 +387,9 @@ Public Module ModDownload
                 Entry.NameVersion = Entry.Inherit & "-OptiFine_" & Name(i).ToString.Replace(" ", "_").Replace(Entry.Inherit & "_", "")
                 Versions.Add(Entry)
             Next
-            Loader.Output = New DlOptiFineListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "OptiFine"), .Value = Versions}
+            Loader.Output = New DlOptiFineListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "OptiFine"), .Value = Versions}
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "OptiFine", Result), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "OptiFine", Result), ex)
         End Try
     End Sub
 
@@ -476,7 +474,7 @@ Public Module ModDownload
         Dim Names As List(Of String) = RegexSearch(Result, "(?<=a href=""index_)[0-9.]+(_pre[0-9]?)?(?=.html)")
         Names.Add("1.2.4") '1.2.4 不会被匹配上
         If Names.Count < 10 Then Throw New Exception(GetLang("LangModDownloadExceptionShortVersion", Result))
-        Loader.Output = New DlForgeListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "Forge"), .Value = Names}
+        Loader.Output = New DlForgeListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "Forge"), .Value = Names}
     End Sub
 
     ''' <summary>
@@ -621,7 +619,7 @@ Public Module ModDownload
                                           ".html", UseBrowserUserAgent:=True)
         Catch ex As Exception
             If GetExceptionSummary(ex).Contains("(404)") Then
-                Throw New Exception(GetLang("LangDownloadInstallNoAvailabeVersion"))
+                Throw New Exception(GetLang("LangDownloadInstallNoAvailableVersion"))
             Else
                 Throw
             End If
@@ -677,9 +675,9 @@ Public Module ModDownload
                 End Try
             Next
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "Forge", Result), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "Forge", Result), ex)
         End Try
-        If Not Versions.Any() Then Throw New Exception(GetLang("LangDownloadInstallNoAvailabeVersion"))
+        If Not Versions.Any() Then Throw New Exception(GetLang("LangDownloadInstallNoAvailableVersion"))
         Loader.Output = Versions
     End Sub
 
@@ -734,7 +732,7 @@ Public Module ModDownload
         Catch ex As Exception
             Throw New Exception(GetLang("LangModDownloadSourceBMCLAPIForge", Json.ToString()), ex)
         End Try
-        If Not Versions.Any() Then Throw New Exception(GetLang("LangDownloadInstallNoAvailabeVersion"))
+        If Not Versions.Any() Then Throw New Exception(GetLang("LangDownloadInstallNoAvailableVersion"))
         Loader.Output = Versions
     End Sub
 
@@ -828,18 +826,18 @@ Public Module ModDownload
         If ResultLatest.Length < 100 OrElse ResultLegacy.Length < 100 Then Throw New Exception(GetLang("LangModDownloadExceptionShortVersionList", ResultLatest))
         '解析
         Try
-            Loader.Output = New DlNeoForgeListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "NeoForge"),
+            Loader.Output = New DlNeoForgeListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "NeoForge"),
                 .Value = GetNeoForgeEntries(ResultLatest, ResultLegacy)}
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "NeoForge", ResultLatest & vbCrLf & vbCrLf & ResultLegacy), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "NeoForge", ResultLatest & vbCrLf & vbCrLf & ResultLegacy), ex)
         End Try
     End Sub
 
     ''' <summary>
     ''' NeoForge 版本列表，BMCLAPI。
     ''' </summary>
-    Public DlNeoForgeListBmclapiLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Bmclapi", AddressOf DlNeoForgeListOfficialMain)
-    Public Sub DlNeoForgeVersionBmclapiMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
+    Public DlNeoForgeListBmclapiLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Bmclapi", AddressOf DlNeoForgeListBmclapiMain)
+    Public Sub DlNeoForgeListBmclapiMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
         '获取版本列表 JSON
         Dim ResultLatest As String = NetGetCodeByDownload("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
         Dim ResultLegacy As String = NetGetCodeByDownload("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/forge", UseBrowserUserAgent:=True, IsJson:=True)
@@ -964,9 +962,9 @@ Public Module ModDownload
                              .JsonToken = RealEntry
                          })
             Next
-            Loader.Output = New DlLiteLoaderListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "LiteLoader"), .Value = Versions}
+            Loader.Output = New DlLiteLoaderListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "LiteLoader"), .Value = Versions}
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "LiteLoader", Result.ToString()), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "LiteLoader", Result.ToString()), ex)
         End Try
     End Sub
 
@@ -1048,11 +1046,11 @@ Public Module ModDownload
     Private Sub DlFabricListOfficialMain(Loader As LoaderTask(Of Integer, DlFabricListResult))
         Dim Result As JObject = NetGetCodeByRequestRetry("https://meta.fabricmc.net/v2/versions", IsJson:=True)
         Try
-            Dim Output = New DlFabricListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOffical", "Fabric"), .Value = Result}
+            Dim Output = New DlFabricListResult With {.IsOfficial = True, .SourceName = GetLang("LangModDownloadSourceOfficial", "Fabric"), .Value = Result}
             If Output.Value("game") Is Nothing OrElse Output.Value("loader") Is Nothing OrElse Output.Value("installer") Is Nothing Then Throw New Exception(GetLang("LangModDownloadExceptionMissNecessary"))
             Loader.Output = Output
         Catch ex As Exception
-            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficalListLoad", "Fabric", Result.ToString()), ex)
+            Throw New Exception(GetLang("LangModDownloadExceptionSourceOfficialListLoad", "Fabric", Result.ToString()), ex)
         End Try
     End Sub
 
@@ -1085,12 +1083,17 @@ Public Module ModDownload
 
 #End Region
 
-#Region "DlMod* | Mod 列表 / 信息 / 下载"
-    Public Function DlModRequest(Url As String, Optional IsJson As Boolean = False) As String
+#Region "DlMod | Mod 镜像源请求"
+
+    ''' <summary>
+    ''' 对可能涉及 Mod 镜像源的请求进行处理，返回字符串或 JObject。
+    ''' 调用 NetGetCodeByRequestOnce。
+    ''' </summary>
+    Public Function DlModRequest(Url As String, Optional IsJson As Boolean = False) As Object
         Dim McimUrl As String = DlSourceModGet(Url)
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         If McimUrl <> Url Then
-            Select Case Setup.Get("ToolDownloadVersion")
+            Select Case Setup.Get("ToolDownloadMod")
                 Case 0
                     Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
                     Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
@@ -1102,14 +1105,27 @@ Public Module ModDownload
                     Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
             End Select
         End If
-        Return DlModRequest(Urls, IsJson:=IsJson)
+        Dim Exs As String = ""
+        For Each Source In Urls
+            Try
+                Return NetGetCodeByRequestOnce(Source.Key, Encode:=Encoding.UTF8, Timeout:=Source.Value * 1000,
+                                               IsJson:=IsJson, UseBrowserUserAgent:=True)
+            Catch ex As Exception
+                Exs += ex.Message + vbCrLf
+            End Try
+        Next
+        Throw New Exception(Exs)
     End Function
-    Public Function DlModRequest(Url As String, Method As String, Data As String, ContentType As String,
-                                 Optional Headers As Dictionary(Of String, String) = Nothing) As String
+
+    ''' <summary>
+    ''' 对可能涉及 Mod 镜像源的请求进行处理。
+    ''' 调用 NetRequestOnce。
+    ''' </summary>
+    Public Function DlModRequest(Url As String, Method As String, Data As String, ContentType As String, Optional Headers As Dictionary(Of String, String) = Nothing) As String
         Dim McimUrl As String = DlSourceModGet(Url)
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         If McimUrl <> Url Then
-            Select Case Setup.Get("ToolDownloadVersion")
+            Select Case Setup.Get("ToolDownloadMod")
                 Case 0
                     Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
                     Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
@@ -1121,66 +1137,66 @@ Public Module ModDownload
                     Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
             End Select
         End If
-        Return DlModRequest(Urls, Method, Data, ContentType, Headers:=Headers)
-    End Function
-    Private Function DlModRequest(Urls As List(Of KeyValuePair(Of String, Integer)), Optional IsJson As Boolean = False) As String
-        Dim exMessage As String = ""
-        For Each url In Urls
+        Dim Exs As String = ""
+        For Each Source In Urls
             Try
-                Return NetGetCodeByDownload(url.Key, Timeout:=url.Value, IsJson:=IsJson)
+                Return NetRequestOnce(Source.Key, Method, Data, ContentType, Timeout:=Source.Value * 1000, Headers:=Headers)
             Catch ex As Exception
-                exMessage += ex.Message + vbCrLf
+                Exs += ex.Message + vbCrLf
             End Try
         Next
-        Throw New Exception(exMessage)
+        Throw New Exception(Exs)
     End Function
-    Private Function DlModRequest(Urls As List(Of KeyValuePair(Of String, Integer)), Method As String, Data As String,
-                                  ContentType As String, Optional Headers As Dictionary(Of String, String) = Nothing) As String
-        Dim exMessage As String = ""
-        For Each url In Urls
-            Try
-                Return NetRequestOnce(url.Key, Method, Data, ContentType, Timeout:=url.Value, Headers:=Headers)
-            Catch ex As Exception
-                exMessage += ex.Message + vbCrLf
-            End Try
-        Next
-        Throw New Exception(exMessage)
-    End Function
+
 #End Region
 
 #Region "DlSource | 镜像下载源"
 
-    Public Function DlSourceResourceGet(MojangBase As String) As String()
-        MojangBase = MojangBase.Replace("http://resources.download.minecraft.net", "https://resources.download.minecraft.net")
+    Public Function DlSourceResourceGet(Original As String) As String()
+        Original = Original.Replace("http://resources.download.minecraft.net", "https://resources.download.minecraft.net")
         Return {
-            MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/assets").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/assets").Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets"),
-            MojangBase
+            Original.
+                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/assets").
+                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/assets").
+                Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets"),
+            Original
         }
     End Function
 
-    Public Function DlSourceLibraryGet(MojangBase As String) As String()
+    Public Function DlSourceLibraryGet(Original As String) As String()
         Return {
-            MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
-            MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
-            MojangBase
+            Original.
+                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").
+                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").
+                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
+            Original.
+                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
+                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
+                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
+            Original
         }
     End Function
-    Public Function DlSourceModGet(CfMrBase As String) As String
-        'If CfMrBase Is Nothing Then Throw New Exception("无对应的 Mod 下载地址")
-        Return CfMrBase.Replace("api.modrinth.com/v2", "mod.mcmirror.top/modrinth") _
-            .Replace("staging-api.modrinth.com/v2", "mod.mcmirror.top/modrinth") _
-            .Replace("cdn.modrinth.com", "mod.mcimirror.top") _
-            .Replace("api.curseforge.com", "mod.mcimirror.top/curseforge") _
-            .Replace("edge.forgecdn.net", "mod.mcimirror.top") _
-            .Replace("mediafilez.forgecdn.net", "mod.mcimirror.top") _
-            .Replace("media.forgecdn.net", "mod.mcimirror.top")
+
+    Public Function DlSourceModGet(Original As String) As String
+        Return Original.
+            Replace("api.modrinth.com", "mod.mcimirror.top/modrinth").
+            Replace("staging-api.modrinth.com", "mod.mcimirror.top/modrinth").
+            Replace("cdn.modrinth.com", "mod.mcimirror.top").
+            Replace("api.curseforge.com", "mod.mcimirror.top/curseforge").
+            Replace("edge.forgecdn.net", "mod.mcimirror.top").
+            Replace("mediafilez.forgecdn.net", "mod.mcimirror.top").
+            Replace("media.forgecdn.net", "mod.mcimirror.top")
     End Function
 
-    Public Function DlSourceLauncherOrMetaGet(MojangBase As String) As String()
-        If MojangBase Is Nothing Then Throw New Exception("无对应的 json 下载地址")
+    Public Function DlSourceLauncherOrMetaGet(Original As String) As String()
+        If Original Is Nothing Then Throw New Exception("无对应的 json 下载地址")
         Return {
-            MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com"),
-            MojangBase
+            Original.
+                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").
+                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").
+                Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").
+                Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com"),
+            Original
         }
     End Function
 
@@ -1209,7 +1225,7 @@ Public Module ModDownload
                 End If
                 '由于 Forge BMCLAPI 没有可用版本导致强制失败
                 '在没有可用版本时，官方源会一直卡住，直接使用 BMCLAPI 判定失败即可
-                If SubLoader.Key.Error IsNot Nothing AndAlso SubLoader.Key.Error.Message.Contains(GetLang("LangDownloadInstallNoAvailabeVersion")) Then
+                If SubLoader.Key.Error IsNot Nothing AndAlso SubLoader.Key.Error.Message.Contains(GetLang("LangDownloadInstallNoAvailableVersion")) Then
                     For Each SubLoader2 In LoaderList
                         If WaitCycle < SubLoader2.Value * 100 Then WaitCycle = SubLoader2.Value * 100
                     Next
@@ -1235,7 +1251,7 @@ Public Module ModDownload
                         For ii = 0 To LoaderList.Count - 1
                             LoaderList(ii).Key.Input = Nothing '重置输入，以免以同样的输入“重试加载”时直接失败
                             If LoaderList(ii).Key.Error IsNot Nothing Then
-                                If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains(GetLang("LangDownloadInstallNoAvailabeVersion")) Then
+                                If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains(GetLang("LangDownloadInstallNoAvailableVersion")) Then
                                     ErrorInfo = LoaderList(ii).Key.Error
                                 End If
                             End If
