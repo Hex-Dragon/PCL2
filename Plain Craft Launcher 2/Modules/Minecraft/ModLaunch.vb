@@ -225,7 +225,7 @@ NextInner:
                                                "如果觉得 PCL 还算好用的话，也可以考虑赞助一下作者……一点心意也行……" & vbCrLf &
                                                "毕竟一个人开发也不容易（悲）……",
                                                "求赞助啦……", "这就赞助！", "但是我拒绝") = 1 Then
-                                       OpenWebsite("https://afdian.net/a/LTCat")
+                                       OpenWebsite("https://afdian.com/a/LTCat")
                                    End If
                            End Select
                        End Sub, "Donate")

@@ -307,7 +307,7 @@ Public Class FormMain
         RunInNewThread(
         Sub()
             If MyMsgBox(Content, "PCL 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
-                OpenWebsite("https://afdian.net/a/LTCat?tab=feed")
+                OpenWebsite("https://afdian.com/a/LTCat?tab=feed")
             End If
         End Sub, "UpdateLog Output")
     End Sub
