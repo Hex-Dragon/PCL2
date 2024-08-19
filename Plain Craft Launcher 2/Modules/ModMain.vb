@@ -642,7 +642,7 @@ NextFile:
                 Next
 
                 '回设
-                If Not Dict.Any() Then Throw New Exception("未找到可用的帮助；若不需要帮助页面，可以在 设置 → 个性化 → 功能隐藏 中将其隐藏")
+                If Not Dict.Any() Then Throw New Exception(GetLang("LangModMainExceptionNoHelpFound"))
                 If Loader.IsAborted Then Exit Sub
                 Loader.Output = Dict
 

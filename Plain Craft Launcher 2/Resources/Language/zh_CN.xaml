@@ -1294,6 +1294,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangModMainAprilFoolTipB">看到右下角的那面小白旗了吗？</s:String>
     <s:String x:Key="LangModMainAprilFoolTipC">这里建议点一下右下角的小白旗投降呢.jpg</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永远等着你……</s:String>
+    <s:String x:Key="LangModMainExceptionNoHelpFound">未找到可用的帮助；若不需要帮助页面，可以在 设置 → 个性化 → 功能隐藏 中将其隐藏</s:String>
 
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">正在开启中，请稍候……</s:String>
@@ -1311,6 +1312,20 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModMusicDeviceChanged">由于音频设备变更，音乐播放功能在重启 PCL 后才能恢复！</s:String>
     <s:String x:Key="LangModMusicMusicChanged">播放音乐失败（{0}）：PCL 不支持播放音频属性在中途发生变化的音乐</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">播放音乐失败（{0}）：PCL 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试</s:String>
+    <s:String x:Key="LangModMusicExceptionInitFail">初始化音乐列表失败</s:String>
+    <s:String x:Key="LangModMusicPaused">已暂停：{0}</s:String>
+    <s:String x:Key="LangModMusicStopClickTipA">左键恢复播放，右键播放下一曲。</s:String>
+    <s:String x:Key="LangModMusicStopClickTipB">左键恢复播放，右键重新从头播放。</s:String>
+    <s:String x:Key="LangModMusicPlaying">正在播放：{0}</s:String>
+    <s:String x:Key="LangModMusicStartClickTipA">左键暂停，右键播放下一曲。</s:String>
+    <s:String x:Key="LangModMusicStartClickTipB">左键暂停，右键重新从头播放。</s:String>
+    <s:String x:Key="LangModMusicExceptionUIRefreshFail">刷新背景音乐 UI 失败</s:String>
+    <s:String x:Key="LangModMusicNotPlayedYet">音乐播放尚未开始！</s:String>
+    <s:String x:Key="LangModMusicReplay">重新播放：{0}</s:String>
+    <s:String x:Key="LangModMusicNoMusic">未检测到可用的背景音乐！</s:String>
+    <s:String x:Key="LangModMusicMusicCleared">背景音乐已清除！</s:String>
+    <s:String x:Key="LangModMusicMusicRefreshed">背景音乐已刷新：{0}</s:String>
+    <s:String x:Key="LangModMusicExceptionMusicRefreshFail">刷新背景音乐播放失败</s:String>
 
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL 无法创建 PCL 文件夹（{0}PCL），请尝试：
@@ -1465,16 +1480,32 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <!--ModValidate-->
     <s:String x:Key="LangModValidateNoSameFolderName">不可与现有文件夹重名！</s:String>
     <s:String x:Key="LangModValidateNoEndWithDotFolderName">文件夹名不能以小数点结尾！</s:String>
-    <s:String x:Key="LangModValidateNoEndWithSpecialCharFolderName">文件夹名不可包含 % 字符！</s:String>
+    <s:String x:Key="LangModValidateNoEndWithSpecialCharFolderName">文件夹名不可包含 % 字符！</s:String> <!--Keep %,do not replace it.-->
     <s:String x:Key="LangModValidateNoEndWithSpaceFolderName">文件夹名不能以空格结尾！</s:String>
     <s:String x:Key="LangModValidateNoStartWithSpaceFolderName">文件夹名不能以空格开头！</s:String>
-    <s:String x:Key="LangModValidateNoSpacialFolderName">文件夹名不可为 %！</s:String>
+    <s:String x:Key="LangModValidateNoSpacialFolderName">文件夹名不可为 %！</s:String> <!--Keep %,do not replace it.-->
     <s:String x:Key="LangModValidateNoEmptyInput">输入内容不能为空！</s:String>
     <s:String x:Key="LangModValidateIncorrectUrl">输入的网址无效！</s:String>
     <s:String x:Key="LangModValidateNumTooLong">请输入一个大小合理的数字！</s:String>
     <s:String x:Key="LangModValidateNumInt">请输入一个整数！</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">不可超过 {0}！</s:String>
     <s:String x:Key="LangModValidateNumNoLess">不可低于 {0}！</s:String>
+    <s:String x:Key="LangModValidateRegexError">正则检查失败！</s:String>
+    <s:String x:Key="LangModValidateLen">长度必须为 {0} 个字符！</s:String>
+    <s:String x:Key="LangModValidateLenMax">长度最长为 {0} 个字符！</s:String>
+    <s:String x:Key="LangModValidateLenMin">长度至少需 {0} 个字符！</s:String>
+    <s:String x:Key="LangModValidateNoContain">输入内容不能包含 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateNoContent">输入内容不能为 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoStartWithSpace">文件名不能以空格开头！</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithSpace">文件名不能以空格结尾！</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithDot">文件名不能以小数点结尾！</s:String>
+    <s:String x:Key="LangModValidateFileNoContain">文件名不可包含 % 字符！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoContent">文件名不可为 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoSameName">不可与现有文件重名！</s:String>
+    <s:String x:Key="LangModValidateFileNoParentFolder">父文件夹不存在：{0}</s:String>
+    <s:String x:Key="LangModValidateFileHeadUriIncorrect">文件夹路径头存在错误！</s:String>
+    <s:String x:Key="LangModValidateFolderUriIncorrect">文件夹路径存在错误！</s:String>
+    <s:String x:Key="LangModValidateInvalidChar">路径中存在无效字符！</s:String>
     
     <!--MyLocalModItem-->
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">当前版本：{0} ({1})
@@ -1770,5 +1801,5 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadForge">下载 Forge {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadNeoForge">下载 NeoForge {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">下载 LiteLoader {0}</s:String>
-    <s:String x:Key="LangModDownloadLibTaskDownloadFabric">下载 Fabric {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadFabric">下载 Fabric {0}</s:String>    
 </ResourceDictionary>

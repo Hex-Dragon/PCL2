@@ -1295,6 +1295,7 @@ If you have not modified the relevant files, please do not check this item.</s:S
     <s:String x:Key="LangModMainAprilFoolTipB">Have you seen the little white flag at the bottom-right?</s:String>
     <s:String x:Key="LangModMainAprilFoolTipC">Hmm... I suggest you just take a little click to the flag :)</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">The little white flag is always waiting for you...</s:String>
+    <s:String x:Key="LangModMainExceptionNoHelpFound">No help found; if you do not need the help page, you can hide it in Settings → Personalization → Feature Hide</s:String>
 
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">Opening, please wait...</s:String>
@@ -1312,6 +1313,20 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMusicDeviceChanged">Due to the change of the audio device, music will be unusable until restart the launcher!</s:String>
     <s:String x:Key="LangModMusicMusicChanged">Failed to play ({0}): Changing audio properties during play is not support.</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">Failed to play ({0}): Format may be unsupported, try again after convert to .wav, .mp3, or .flac.</s:String>
+    <s:String x:Key="LangModMusicExceptionInitFail">Failed to initialize music list</s:String>
+    <s:String x:Key="LangModMusicPaused">Paused: {0}</s:String>
+    <s:String x:Key="LangModMusicStopClickTipA">Left click to resume playback, right click to play the next song.</s:String>
+    <s:String x:Key="LangModMusicStopClickTipB">Left click to resume playback, right click to restart from the beginning.</s:String>
+    <s:String x:Key="LangModMusicPlaying">Now playing: {0}</s:String>
+    <s:String x:Key="LangModMusicStartClickTipA">Left click to pause, right click to play the next song.</s:String>
+    <s:String x:Key="LangModMusicStartClickTipB">Left click to pause, right click to restart from the beginning.</s:String>
+    <s:String x:Key="LangModMusicExceptionUIRefreshFail">Failed to refresh background music UI</s:String>
+    <s:String x:Key="LangModMusicNotPlayedYet">Music playback has not started yet!</s:String>
+    <s:String x:Key="LangModMusicReplay">Replay: {0}</s:String>
+    <s:String x:Key="LangModMusicNoMusic">No available background music detected!</s:String>
+    <s:String x:Key="LangModMusicMusicCleared">Background music cleared!</s:String>
+    <s:String x:Key="LangModMusicMusicRefreshed">Background music refreshed: {0}</s:String>
+    <s:String x:Key="LangModMusicExceptionMusicRefreshFail">Failed to refresh background music playback</s:String>
 
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL cannot create the &quot;PCL&quot; folder ({0}PCL), please try:
@@ -1474,7 +1489,23 @@ Please update the launcher in &quot;Settings → Launcher&quot; first, then subm
     <s:String x:Key="LangModValidateNumInt">Please enter an integer!</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">Cannot be greater than {0}!</s:String>
     <s:String x:Key="LangModValidateNumNoLess">Cannot be less than {0}!</s:String>
-    
+    <s:String x:Key="LangModValidateRegexError">Regex check failed!</s:String>
+    <s:String x:Key="LangModValidateLen">Length must be {0} characters!</s:String>
+    <s:String x:Key="LangModValidateLenMax">Maximum length is {0} characters!</s:String>
+    <s:String x:Key="LangModValidateLenMin">Length must be at least {0} characters!</s:String>
+    <s:String x:Key="LangModValidateNoContain">Input content cannot contain %!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateNoContent">Input content cannot be %!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoStartWithSpace">File name cannot start with a space!</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithSpace">File name cannot end with a space!</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithDot">File name cannot end with a dot!</s:String>
+    <s:String x:Key="LangModValidateFileNoContain">File name cannot contain % character!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoContent">File name cannot be %!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoSameName">Cannot have the same name as an existing file!</s:String>
+    <s:String x:Key="LangModValidateFileNoParentFolder">Parent folder does not exist: {0}</s:String>
+    <s:String x:Key="LangModValidateFileHeadUriIncorrect">Incorrect folder path header!</s:String>
+    <s:String x:Key="LangModValidateFolderUriIncorrect">Incorrect folder path!</s:String>
+    <s:String x:Key="LangModValidateInvalidChar">Invalid characters in the path!</s:String>
+
     <!--MyLocalModItem-->
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">Current Version: {0} ({1})
 Latest Version: {2} ({3})
