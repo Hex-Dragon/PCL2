@@ -104,4 +104,20 @@ Module Modi18n
                 Return "en_US"
         End Select
     End Function
+
+    ''' <summary>
+    ''' 格式化本地化的数字描述
+    ''' </summary>
+    ''' <param name="Num">数量</param>
+    ''' <returns>11 Million、2 万等这样的表示</returns>
+    Public Function GetLocationNum(Num As Int32)
+        If IsLocationZH() Then
+            Return If(Num > 100000000, Math.Round(Num / 100000000, 2) & " " & GetLang("LangModCompModBillion"), '亿
+                If(Num > 100000, Math.Round(Num / 10000, 2) & " " & GetLang("LangModCompModMillion"), Num.ToString("N0"))) '万
+        Else 'en_US en_GB
+            Return If(Num > 1000000000, Math.Round(Num / 1000000000, 2) & " B",
+                If(Num > 1000000, Math.Round(Num / 1000000, 2) & " M",
+                If(Num > 1000, Math.Round(Num / 1000, 0) & " K", Num)))
+        End If
+    End Function
 End Module
