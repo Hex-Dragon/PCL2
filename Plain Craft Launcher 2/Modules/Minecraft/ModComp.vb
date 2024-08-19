@@ -531,9 +531,7 @@
                 NewItem.ColumnTime2.Width = New GridLength(0)
                 NewItem.ColumnTime3.Width = New GridLength(0)
             End If
-            NewItem.LabDownload.Text =
-                If(DownloadCount > 100000000, Math.Round(DownloadCount / 100000000, 2) & " " & GetLang("LangModCompModBillion"),
-                    If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " " & GetLang("LangModCompModMillion"), DownloadCount))
+            NewItem.LabDownload.Text = GetLocationNum(DownloadCount)
             Return NewItem
         End Function
         Public Function GetControlLogo() As String

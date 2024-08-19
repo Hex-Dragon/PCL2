@@ -1410,8 +1410,6 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModCompModStatusDescRelease">Release</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">Beta</s:String>
     <s:String x:Key="LangModCompModStatusDescAlpha">Alpha</s:String>
-    <s:String x:Key="LangModCompModMillion">Million</s:String>
-    <s:String x:Key="LangModCompModBillion">Billion</s:String>
     <s:String x:Key="LangModCompExceptionNoResult">No results matching the criteria</s:String>
 
     <!--ModBase-->
