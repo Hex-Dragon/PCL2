@@ -256,6 +256,7 @@
         '更新显示状态
         If AniControlEnabled = 0 Then
             If Selected Then
+                PanListBack.Margin = New Thickness(0, 0, 0, 95)
                 '仅在数量增加时播放出现/跳跃动画
                 If ShownCount >= NewCount Then
                     ShownCount = NewCount
@@ -272,6 +273,7 @@
                     AaTranslateY(CardSelect, -1, 90, 270, Ease:=New AniEaseInoutFluent(AniEasePower.Weak))
                 }, "Mod Sidebar")
             Else
+                PanListBack.Margin = New Thickness(0, 0, 0, 15)
                 '不重复播放隐藏动画
                 If ShownCount = 0 Then Return
                 ShownCount = 0
