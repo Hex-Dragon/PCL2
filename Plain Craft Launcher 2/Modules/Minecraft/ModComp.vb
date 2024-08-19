@@ -1356,21 +1356,22 @@ Retry:
 
             '获取描述信息
             Dim Info As String = ""
+            Dim Comma As String = GetLang("LangModCompModComma")
             Select Case Type
                 Case CompType.Mod
                     Info += If(ModLoaders.Any,
-                        GetLang("LangModCompModSuitFor") & " " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & "，", "")
-                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & GetLang("LangModCompModDependentCount") & "，", "")
+                        GetLang("LangModCompModSuitFor") & " " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & Comma, "")
+                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & IsPlural(Dependencies.Count, "LangModCompModDependentCount") & Comma, "")
                 Case CompType.ModPack
                     If GameVersions.All(Function(v) v.Contains("w")) Then
-                        Info += GetLang("LangModCompModGameVersion") & $" {Join(GameVersions, "、")}，"
+                        Info += GetLang("LangModCompModGameVersion") & $" {Join(GameVersions, "、")}{Comma}"
                     End If
             End Select
             If DownloadCount > 0 Then 'CurseForge 的下载次数经常错误地返回 0
-                Info += If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " " & GetLang("LangModCompModDownloadMillion") & "，", DownloadCount & " " & GetLang("LangModCompModDownload") & "，")
+                Info += GetLocationNum(DownloadCount) & IsPlural(DownloadCount, "LangModCompModDownload") & Comma
             End If
             Info += GetLang("LangModCompModUpdateTime", GetTimeSpanString(ReleaseDate - Date.Now, False))
-            Info += If(Status = CompFileStatus.Release, "", "，" & StatusDescription)
+            Info += If(Status = CompFileStatus.Release, "", Comma & StatusDescription)
 
             '建立控件
             Dim NewItem As New MyListItem With {
