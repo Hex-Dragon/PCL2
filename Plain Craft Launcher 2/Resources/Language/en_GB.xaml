@@ -1295,6 +1295,7 @@ If you have not modified the relevant files, please do not check this item.</s:S
     <s:String x:Key="LangModMainAprilFoolTipB">Have you seen the little white flag at the bottom-right?</s:String>
     <s:String x:Key="LangModMainAprilFoolTipC">Hmm... I suggest you just take a little click to the flag :)</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">The little white flag is always waiting for you...</s:String>
+    <s:String x:Key="LangModMainExceptionNoHelpFound">No available help found; if you do not need the help page, you can hide it in Settings -> Personalization -> Feature Hide</s:String>
 
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">Opening, please wait...</s:String>
@@ -1488,6 +1489,22 @@ Please update the launcher in 'Settings → Launcher' first, then submit feedbac
     <s:String x:Key="LangModValidateNumInt">Please enter an integer!</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">Cannot be greater than {0}!</s:String>
     <s:String x:Key="LangModValidateNumNoLess">Cannot be less than {0}!</s:String>
+    <s:String x:Key="LangModValidateRegexError">Regular expression check failed!</s:String>
+    <s:String x:Key="LangModValidateLen">Length must be {0} characters!</s:String>
+    <s:String x:Key="LangModValidateLenMax">Maximum length is {0} characters!</s:String>
+    <s:String x:Key="LangModValidateLenMin">Length must be at least {0} characters!</s:String>
+    <s:String x:Key="LangModValidateNoContain">Input content cannot contain %!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateNoContent">Input content cannot be %!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoStartWithSpace">File name cannot start with a space!</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithSpace">File name cannot end with a space!</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithDot">File name cannot end with a dot!</s:String>
+    <s:String x:Key="LangModValidateFileNoContain">File name cannot contain % character!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoContent">File name cannot be %!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoSameName">Cannot have the same name as an existing file!</s:String>
+    <s:String x:Key="LangModValidateFileNoParentFolder">Parent folder does not exist: {0}</s:String>
+    <s:String x:Key="LangModValidateFileHeadUriIncorrect">Incorrect folder path header!</s:String>
+    <s:String x:Key="LangModValidateFolderUriIncorrect">Incorrect folder path!</s:String>
+    <s:String x:Key="LangModValidateInvalidChar">Invalid characters in the path!</s:String>
     
     <!--MyLocalModItem-->
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">Current Version: {0} ({1})

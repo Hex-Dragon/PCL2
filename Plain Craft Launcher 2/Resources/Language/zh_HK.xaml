@@ -1293,6 +1293,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangModMainAprilFoolTipB">看到右下角的那面小白旗了嗎？</s:String>
     <s:String x:Key="LangModMainAprilFoolTipC">這裏建議點一下右下角的小白旗投降呢.jpg</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永遠等着你……</s:String>
+    <s:String x:Key="LangModMainExceptionNoHelpFound">未找到可用的幫助；若不需要幫助頁面，可以在 設定 → 個性化 → 功能隱藏 中將其隱藏</s:String>
 
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">正在開啟中，請稍候……</s:String>
@@ -1488,7 +1489,23 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModValidateNumInt">請輸入一個整數！</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">不可超過 {0}！</s:String>
     <s:String x:Key="LangModValidateNumNoLess">不可低於 {0}！</s:String>
-    
+    <s:String x:Key="LangModValidateRegexError">正則檢查失敗！</s:String>
+    <s:String x:Key="LangModValidateLen">長度必須為 {0} 個字符！</s:String>
+    <s:String x:Key="LangModValidateLenMax">長度最長為 {0} 個字符！</s:String>
+    <s:String x:Key="LangModValidateLenMin">長度至少需 {0} 個字符！</s:String>
+    <s:String x:Key="LangModValidateNoContain">輸入內容不能包含 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateNoContent">輸入內容不能為 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoStartWithSpace">檔名不能以空格開頭！</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithSpace">檔名不能以空格結尾！</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithDot">檔名不能以小數點結尾！</s:String>
+    <s:String x:Key="LangModValidateFileNoContain">檔名不可包含 % 字元！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoContent">檔名不可為 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoSameName">不可與現有檔案重名！</s:String>
+    <s:String x:Key="LangModValidateFileNoParentFolder">父資料夾不存在：{0}</s:String>
+    <s:String x:Key="LangModValidateFileHeadUriIncorrect">檔案夾路徑頭存在錯誤！</s:String>
+    <s:String x:Key="LangModValidateFolderUriIncorrect">檔案夾路徑存在錯誤！</s:String>
+    <s:String x:Key="LangModValidateInvalidChar">路徑中存在無效字元！</s:String>
+
     <!--MyLocalModItem-->
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">目前版本：{0} ({1})
 最新版本：{2} ({3})

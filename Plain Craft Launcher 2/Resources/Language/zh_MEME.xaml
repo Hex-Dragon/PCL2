@@ -1292,6 +1292,7 @@
     <s:String x:Key="LangModMainAprilFoolTipB">看到右下角的那面小白旗了吗？</s:String>
     <s:String x:Key="LangModMainAprilFoolTipC">这里建议点一下右下角的小白旗投降呢.jpg</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永远等着你……</s:String>
+    <s:String x:Key="LangModMainExceptionNoHelpFound">未找到可用的帮助；若不需要帮助页面，可以在 设置 → 个性化 → 功能雪藏 中将其雪藏</s:String>
 
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">你先别急</s:String>
@@ -1487,7 +1488,23 @@
     <s:String x:Key="LangModValidateNumInt">给我个整数！</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">不准比 {0} 大！</s:String>
     <s:String x:Key="LangModValidateNumNoLess">不准比 {0}小！</s:String>
-    
+    <s:String x:Key="LangModValidateRegexError">正则检查失败！</s:String>
+    <s:String x:Key="LangModValidateLen">长度必须为 {0} 个字符！</s:String>
+    <s:String x:Key="LangModValidateLenMax">长度最长为 {0} 个字符！</s:String>
+    <s:String x:Key="LangModValidateLenMin">长度至少需 {0} 个字符！</s:String>
+    <s:String x:Key="LangModValidateNoContain">输入内容不能包含 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateNoContent">输入内容不能为 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoStartWithSpace">文件名不能以空格开头！</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithSpace">文件名不能以空格结尾！</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithDot">文件名不能以小数点结尾！</s:String>
+    <s:String x:Key="LangModValidateFileNoContain">文件名不可包含 % 字符！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoContent">文件名不可为 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoSameName">不可与现有文件重名！</s:String>
+    <s:String x:Key="LangModValidateFileNoParentFolder">父文件夹不存在：{0}</s:String>
+    <s:String x:Key="LangModValidateFileHeadUriIncorrect">文件夹路径头存在错误！</s:String>
+    <s:String x:Key="LangModValidateFolderUriIncorrect">文件夹路径存在错误！</s:String>
+    <s:String x:Key="LangModValidateInvalidChar">路径中存在无效字符！</s:String>
+
     <!--MyLocalModItem-->
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">当前版本：{0} ({1})
 最新版本：{2} ({3})
