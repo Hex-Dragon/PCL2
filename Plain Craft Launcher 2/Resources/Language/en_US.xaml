@@ -1312,6 +1312,20 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMusicDeviceChanged">Due to the change of the audio device, music will be unusable until restart the launcher!</s:String>
     <s:String x:Key="LangModMusicMusicChanged">Failed to play ({0}): Changing audio properties during play is not support.</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">Failed to play ({0}): Format may be unsupported, try again after convert to .wav, .mp3, or .flac.</s:String>
+    <s:String x:Key="LangModMusicExceptionInitFail">Failed to initialize music list</s:String>
+    <s:String x:Key="LangModMusicPaused">Paused: {0}</s:String>
+    <s:String x:Key="LangModMusicStopClickTipA">Left click to resume playback, right click to play the next song.</s:String>
+    <s:String x:Key="LangModMusicStopClickTipB">Left click to resume playback, right click to restart from the beginning.</s:String>
+    <s:String x:Key="LangModMusicPlaying">Now playing: {0}</s:String>
+    <s:String x:Key="LangModMusicStartClickTipA">Left click to pause, right click to play the next song.</s:String>
+    <s:String x:Key="LangModMusicStartClickTipB">Left click to pause, right click to restart from the beginning.</s:String>
+    <s:String x:Key="LangModMusicExceptionUIRefreshFail">Failed to refresh background music UI</s:String>
+    <s:String x:Key="LangModMusicNotPlayedYet">Music playback has not started yet!</s:String>
+    <s:String x:Key="LangModMusicReplay">Replay: {0}</s:String>
+    <s:String x:Key="LangModMusicNoMusic">No available background music detected!</s:String>
+    <s:String x:Key="LangModMusicMusicCleared">Background music cleared!</s:String>
+    <s:String x:Key="LangModMusicMusicRefreshed">Background music refreshed: {0}</s:String>
+    <s:String x:Key="LangModMusicExceptionMusicRefreshFail">Failed to refresh background music playback</s:String>
 
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL cannot create the &quot;PCL&quot; folder ({0}PCL), please try:

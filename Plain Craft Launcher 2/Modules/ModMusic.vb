@@ -37,7 +37,7 @@
                 MusicWaitingList.Add(IgnoreFirst)
             End If
         Catch ex As Exception
-            Log(ex, "初始化音乐列表失败", LogLevel.Feedback)
+            Log(ex, GetLang("LangModMusicExceptionInitFail"), LogLevel.Feedback)
         End Try
     End Sub
     ''' <summary>
@@ -73,20 +73,20 @@
                             If MusicState = MusicStates.Pause Then
                                 FrmMain.BtnExtraMusic.Logo = Logo.IconPlay
                                 FrmMain.BtnExtraMusic.LogoScale = 0.8
-                                ToolTipText = "已暂停：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
+                                ToolTipText = GetLang("LangModMusicPaused", GetFileNameWithoutExtentionFromPath(MusicCurrent))
                                 If MusicAllList.Count > 1 Then
-                                    ToolTipText += vbCrLf & "左键恢复播放，右键播放下一曲。"
+                                    ToolTipText += vbCrLf & GetLang("LangModMusicStopClickTipA")
                                 Else
-                                    ToolTipText += vbCrLf & "左键恢复播放，右键重新从头播放。"
+                                    ToolTipText += vbCrLf & GetLang("LangModMusicStopClickTipB")
                                 End If
                             Else
                                 FrmMain.BtnExtraMusic.Logo = Logo.IconMusic
                                 FrmMain.BtnExtraMusic.LogoScale = 1
-                                ToolTipText = "正在播放：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
+                                ToolTipText = GetLang("LangModMusicPlaying", GetFileNameWithoutExtentionFromPath(MusicCurrent))
                                 If MusicAllList.Count > 1 Then
-                                    ToolTipText += vbCrLf & "左键暂停，右键播放下一曲。"
+                                    ToolTipText += vbCrLf & GetLang("LangModMusicStartClickTipA")
                                 Else
-                                    ToolTipText += vbCrLf & "左键暂停，右键重新从头播放。"
+                                    ToolTipText += vbCrLf & GetLang("LangModMusicStartClickTipB")
                                 End If
                             End If
                             FrmMain.BtnExtraMusic.ToolTip = ToolTipText
@@ -95,7 +95,7 @@
                         If FrmSetupUI IsNot Nothing Then FrmSetupUI.MusicRefreshUI()
 
                     Catch ex As Exception
-                        Log(ex, "刷新背景音乐 UI 失败", LogLevel.Feedback)
+                        Log(ex, GetLang("LangModMusicExceptionUIRefreshFail"), LogLevel.Feedback)
                     End Try
                 End Sub)
     End Sub
@@ -105,7 +105,7 @@
     ''' </summary>
     Public Sub MusicControlPause()
         If MusicNAudio Is Nothing Then
-            Hint("音乐播放尚未开始！", HintType.Critical)
+            Hint(GetLang("LangModMusicNotPlayedYet"), HintType.Critical)
         Else
             Select Case MusicState
                 Case MusicStates.Pause
@@ -125,11 +125,11 @@
     Public Sub MusicControlNext()
         If MusicAllList.Count = 1 Then
             MusicStartPlay(MusicCurrent)
-            Hint("重新播放：" & GetFileNameFromPath(MusicCurrent), HintType.Finish)
+            Hint(GetLang("LangModMusicReplay", GetFileNameFromPath(MusicCurrent)), HintType.Finish)
         Else
             Dim Address As String = DequeueNextMusicAddress()
             MusicStartPlay(Address)
-            Hint("正在播放：" & GetFileNameFromPath(Address), HintType.Finish)
+            Hint(GetLang("LangModMusicPlaying", GetFileNameFromPath(Address)), HintType.Finish)
         End If
         MusicRefreshUI()
     End Sub
@@ -172,23 +172,23 @@
             MusicListInit(True)
             If Not MusicAllList.Any() Then
                 If MusicNAudio Is Nothing Then
-                    If ShowHint Then Hint("未检测到可用的背景音乐！", HintType.Critical)
+                    If ShowHint Then Hint(GetLang("LangModMusicNoMusic"), HintType.Critical)
                 Else
                     MusicNAudio = Nothing
-                    If ShowHint Then Hint("背景音乐已清除！", HintType.Finish)
+                    If ShowHint Then Hint(GetLang("LangModMusicMusicCleared"), HintType.Finish)
                 End If
             Else
                 Dim Address As String = DequeueNextMusicAddress()
                 Try
                     MusicStartPlay(Address, IsFirstLoad)
-                    If ShowHint Then Hint("背景音乐已刷新：" & GetFileNameFromPath(Address), HintType.Finish, False)
+                    If ShowHint Then Hint(GetLang("LangModMusicMusicRefreshed", GetFileNameFromPath(Address)), HintType.Finish, False)
                 Catch
                 End Try
             End If
             MusicRefreshUI()
 
         Catch ex As Exception
-            Log(ex, "刷新背景音乐播放失败", LogLevel.Feedback)
+            Log(ex, GetLang("LangModMusicExceptionMusicRefreshFail"), LogLevel.Feedback)
         End Try
     End Sub
     ''' <summary>

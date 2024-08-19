@@ -1309,6 +1309,20 @@
     <s:String x:Key="LangModMusicDeviceChanged">由于音频设备变更，音乐播放功能在重启平原合成发射台后才能恢复！</s:String>
     <s:String x:Key="LangModMusicMusicChanged">播放音乐不成功（{0}）：平原合成发射台不支持播放音频属性在中途发生变化的音乐</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">播放音乐不成功（{0}）：平原合成发射台可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试</s:String>
+    <s:String x:Key="LangModMusicExceptionInitFail">初始化音乐列表失败</s:String>
+    <s:String x:Key="LangModMusicPaused">已暂停：{0}</s:String>
+    <s:String x:Key="LangModMusicStopClickTipA">左键恢复播放，右键播放下一曲。</s:String>
+    <s:String x:Key="LangModMusicStopClickTipB">左键恢复播放，右键重新从头播放。</s:String>
+    <s:String x:Key="LangModMusicPlaying">正在播放：{0}</s:String>
+    <s:String x:Key="LangModMusicStartClickTipA">左键暂停，右键播放下一曲。</s:String>
+    <s:String x:Key="LangModMusicStartClickTipB">左键暂停，右键重新从头播放。</s:String>
+    <s:String x:Key="LangModMusicExceptionUIRefreshFail">刷新背景音乐 UI 失败</s:String>
+    <s:String x:Key="LangModMusicNotPlayedYet">音乐播放尚未开始！</s:String>
+    <s:String x:Key="LangModMusicReplay">重新播放：{0}</s:String>
+    <s:String x:Key="LangModMusicNoMusic">未检测到可用的背景音乐！</s:String>
+    <s:String x:Key="LangModMusicMusicCleared">背景音乐已清除！</s:String>
+    <s:String x:Key="LangModMusicMusicRefreshed">背景音乐已刷新：{0}</s:String>
+    <s:String x:Key="LangModMusicExceptionMusicRefreshFail">刷新背景音乐播放失败</s:String>
 
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">平原合成发射台没办法创建平原合成发射台文件夹子（{0}平原合成发射台），请尝试：

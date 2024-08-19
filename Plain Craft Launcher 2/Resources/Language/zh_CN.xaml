@@ -1310,6 +1310,20 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModMusicDeviceChanged">由于音频设备变更，音乐播放功能在重启 PCL 后才能恢复！</s:String>
     <s:String x:Key="LangModMusicMusicChanged">播放音乐失败（{0}）：PCL 不支持播放音频属性在中途发生变化的音乐</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">播放音乐失败（{0}）：PCL 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试</s:String>
+    <s:String x:Key="LangModMusicExceptionInitFail">初始化音乐列表失败</s:String>
+    <s:String x:Key="LangModMusicPaused">已暂停：{0}</s:String>
+    <s:String x:Key="LangModMusicStopClickTipA">左键恢复播放，右键播放下一曲。</s:String>
+    <s:String x:Key="LangModMusicStopClickTipB">左键恢复播放，右键重新从头播放。</s:String>
+    <s:String x:Key="LangModMusicPlaying">正在播放：{0}</s:String>
+    <s:String x:Key="LangModMusicStartClickTipA">左键暂停，右键播放下一曲。</s:String>
+    <s:String x:Key="LangModMusicStartClickTipB">左键暂停，右键重新从头播放。</s:String>
+    <s:String x:Key="LangModMusicExceptionUIRefreshFail">刷新背景音乐 UI 失败</s:String>
+    <s:String x:Key="LangModMusicNotPlayedYet">音乐播放尚未开始！</s:String>
+    <s:String x:Key="LangModMusicReplay">重新播放：{0}</s:String>
+    <s:String x:Key="LangModMusicNoMusic">未检测到可用的背景音乐！</s:String>
+    <s:String x:Key="LangModMusicMusicCleared">背景音乐已清除！</s:String>
+    <s:String x:Key="LangModMusicMusicRefreshed">背景音乐已刷新：{0}</s:String>
+    <s:String x:Key="LangModMusicExceptionMusicRefreshFail">刷新背景音乐播放失败</s:String>
 
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL 无法创建 PCL 文件夹（{0}PCL），请尝试：
@@ -1769,5 +1783,5 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadForge">下载 Forge {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadNeoForge">下载 NeoForge {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">下载 LiteLoader {0}</s:String>
-    <s:String x:Key="LangModDownloadLibTaskDownloadFabric">下载 Fabric {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadFabric">下载 Fabric {0}</s:String>    
 </ResourceDictionary>

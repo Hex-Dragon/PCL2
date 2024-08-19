@@ -1310,6 +1310,20 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMusicDeviceChanged">由於音頻設備變更，音樂播放功能在重啟 PCL 後才能恢復！</s:String>
     <s:String x:Key="LangModMusicMusicChanged">播放音樂失敗（{0}）：PCL 不支持播放音頻屬性在中途發生變化的音樂</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">播放音樂失敗（{0}）：PCL 可能不支持此音樂格式，請將格式轉換為 .wav、.mp3 或 .flac 後再試</s:String>
+    <s:String x:Key="LangModMusicExceptionInitFail">初始化音樂列表失敗</s:String>
+    <s:String x:Key="LangModMusicPaused">已暫停：{0}</s:String>
+    <s:String x:Key="LangModMusicStopClickTipA">左鍵恢復播放，右鍵播放下一曲。</s:String>
+    <s:String x:Key="LangModMusicStopClickTipB">左鍵恢復播放，右鍵重新從頭播放。</s:String>
+    <s:String x:Key="LangModMusicPlaying">正在播放：{0}</s:String>
+    <s:String x:Key="LangModMusicStartClickTipA">左鍵暫停，右鍵播放下一曲。</s:String>
+    <s:String x:Key="LangModMusicStartClickTipB">左鍵暫停，右鍵重新從頭播放。</s:String>
+    <s:String x:Key="LangModMusicExceptionUIRefreshFail">刷新背景音樂 UI 失敗</s:String>
+    <s:String x:Key="LangModMusicNotPlayedYet">音樂播放尚未開始！</s:String>
+    <s:String x:Key="LangModMusicReplay">重新播放：{0}</s:String>
+    <s:String x:Key="LangModMusicNoMusic">未檢測到可用的背景音樂！</s:String>
+    <s:String x:Key="LangModMusicMusicCleared">背景音樂已清除！</s:String>
+    <s:String x:Key="LangModMusicMusicRefreshed">背景音樂已刷新：{0}</s:String>
+    <s:String x:Key="LangModMusicExceptionMusicRefreshFail">刷新背景音樂播放失敗</s:String>
 
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL 無法創建 PCL 文件夾（{0}PCL），請嘗試：
