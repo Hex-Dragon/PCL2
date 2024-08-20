@@ -929,9 +929,9 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
  · {version}：游戏对应的原版版本号
 
 例如：
- · &quot;{verpath}test.exe&quot; ：运行版本文件夹下的 test.exe 程序
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 运行版本文件夹下的 test.jar
- · notepad &quot;{verindie}option.txt&quot; ：使用记事本打开该版本的设置文件
+ · "{verpath}test.exe" ：运行版本文件夹下的 test.exe 程序
+ · "{java}java.exe" -jar "{verpath}test.jar" ：用 Java 运行版本文件夹下的 test.jar
+ · notepad "{verindie}option.txt" ：使用记事本打开该版本的设置文件
 
 涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行失败。
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹。</s:String>
@@ -1279,9 +1279,9 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
  · {version}：游戏对应的原版版本号
 
 例如：
- · &quot;{verpath}test.exe&quot; ：运行版本文件夹下的 test.exe 程序
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 运行版本文件夹下的 test.jar
- · notepad &quot;{verindie}option.txt&quot; ：使用记事本打开该版本的设置文件
+ · "{verpath}test.exe" ：运行版本文件夹下的 test.exe 程序
+ · "{java}java.exe" -jar "{verpath}test.jar" ：用 Java 运行版本文件夹下的 test.jar
+ · notepad "{verindie}option.txt" ：使用记事本打开该版本的设置文件
 
 涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行失败。
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹。</s:String>

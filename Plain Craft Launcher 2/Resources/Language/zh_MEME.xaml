@@ -685,6 +685,7 @@
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">正在导出发射脚本</s:String>
     <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">PCL 即将在当前文件夹子下自动安装整合包。</s:String>
     <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">自动安装</s:String>
+
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
     <s:String x:Key="LangLaunchRightLog">发射日志</s:String>
@@ -928,9 +929,9 @@
  · {version}：游戏对应的香草版本号
 
 例如：
- · &quot;{verpath}test.exe&quot; ：运行版本文件夹子下的 test.exe 程序
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 爪哇 运行版本文件夹子下的 test.jar
- · notepad &quot;{verindie}option.txt&quot; ：使用记事本打开该版本的设置文件
+ · "{verpath}test.exe" ：运行版本文件夹子下的 test.exe 程序
+ · "{java}java.exe" -jar "{verpath}test.jar" ：用 爪哇 运行版本文件夹子下的 test.jar
+ · notepad "{verindie}option.txt" ：使用记事本打开该版本的设置文件
 
 涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行不成功。
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹子。</s:String>
@@ -1278,9 +1279,9 @@
  · {version}：游戏对应的香草版本号
 
 例如：
- · &quot;{verpath}test.exe&quot; ：运行版本文件夹子下的 test.exe 程序
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 爪哇 运行版本文件夹子下的 test.jar
- · notepad &quot;{verindie}option.txt&quot; ：使用记事本打开该版本的设置文件
+ · "{verpath}test.exe" ：运行版本文件夹子下的 test.exe 程序
+ · "{java}java.exe" -jar "{verpath}test.jar" ：用 爪哇 运行版本文件夹子下的 test.jar
+ · notepad "{verindie}option.txt" ：使用记事本打开该版本的设置文件
 
 涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行不成功。
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹子。</s:String>
@@ -1339,7 +1340,7 @@
     <s:String x:Key="LangModSecretPermissionError">运行环境错误</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">开源版本说明</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">该版本中莫得以下特性：
-- 诅咒锻造 API 查询：需要 API Key（你可以要一个，然后丢到 SecretHeadersSign 方法中）
+- 诅咒锻造 API 调用：需要 API Key（你可以要一个，然后丢到 SecretHeadersSign 方法中）
 - 巨硬登录：你需要自行申请 Client ID，然后加入 ModSecret.vb 的开头
 - 更新与联网通知：避免滥用隐患
 - 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……

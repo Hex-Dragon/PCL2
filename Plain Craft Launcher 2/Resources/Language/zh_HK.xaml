@@ -929,9 +929,9 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
  · {version}：實例對應的遊戲版本號
 
 例如：
- · &quot;{verpath}test.exe&quot; ：執行實例資料夾下的 test.exe 程式
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 執行實例資料夾下的 test.jar
- · notepad &quot;{verindie}option.txt&quot; ：使用記事本開啟該實例的設定檔案
+ · "{verpath}test.exe" ：執行實例資料夾下的 test.exe 程式
+ · "{java}java.exe" -jar "{verpath}test.jar" ：用 Java 執行實例資料夾下的 test.jar
+ · notepad "{verindie}option.txt" ：使用記事本開啟該實例的設定檔案
 
 涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致執行失敗。
 執行命令時，命令列所在的目錄是目前的 .minecraft 資料夾。</s:String>
@@ -1279,9 +1279,9 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
  · {version}：實例對應的遊戲版本號
 
 例如：
- · &quot;{verpath}test.exe&quot; ：執行實例資料夾下的 test.exe 程式
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 執行實例資料夾下的 test.jar
- · notepad &quot;{verindie}option.txt&quot; ：使用記事本開啟該實例的設定檔案
+ · "{verpath}test.exe" ：執行實例資料夾下的 test.exe 程式
+ · "{java}java.exe" -jar "{verpath}test.jar" ：用 Java 執行實例資料夾下的 test.jar
+ · notepad "{verindie}option.txt" ：使用記事本開啟該實例的設定檔案
 
 涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致執行失敗。
 執行命令時，命令列所在的目錄是目前的 .minecraft 資料夾。</s:String>
@@ -1294,7 +1294,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangModMainAprilFoolTipB">看到右下角的那面小白旗了嗎？</s:String>
     <s:String x:Key="LangModMainAprilFoolTipC">這裏建議點一下右下角的小白旗投降呢.jpg</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永遠等着你……</s:String>
-    <s:String x:Key="LangModMainExceptionNoHelpFound">未找到可用的幫助；若不需要幫助頁面，可以在 設定 → 個性化 → 功能隱藏 中將其隱藏</s:String>
+    <s:String x:Key="LangModMainExceptionNoHelpFound">未找到可用的幫助；若不需要幫助畫面，可以在「設定 → 個人化 → 功能隱藏」中將其隱藏</s:String>
 
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">正在開啟中，請稍候……</s:String>
@@ -1314,18 +1314,18 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">播放音樂失敗（{0}）：PCL 可能不支援此音樂格式，請將格式轉換為 .wav、.mp3 或 .flac 後再試</s:String>
     <s:String x:Key="LangModMusicExceptionInitFail">初始化音樂列表失敗</s:String>
     <s:String x:Key="LangModMusicPaused">已暫停：{0}</s:String>
-    <s:String x:Key="LangModMusicStopClickTipA">左鍵恢復播放，右鍵播放下一曲。</s:String>
-    <s:String x:Key="LangModMusicStopClickTipB">左鍵恢復播放，右鍵重新從頭播放。</s:String>
+    <s:String x:Key="LangModMusicStopClickTipA">左鍵復原播放，右鍵播放下一曲。</s:String>
+    <s:String x:Key="LangModMusicStopClickTipB">左鍵復原播放，右鍵重新從頭播放。</s:String>
     <s:String x:Key="LangModMusicPlaying">正在播放：{0}</s:String>
     <s:String x:Key="LangModMusicStartClickTipA">左鍵暫停，右鍵播放下一曲。</s:String>
     <s:String x:Key="LangModMusicStartClickTipB">左鍵暫停，右鍵重新從頭播放。</s:String>
-    <s:String x:Key="LangModMusicExceptionUIRefreshFail">刷新背景音樂 UI 失敗</s:String>
+    <s:String x:Key="LangModMusicExceptionUIRefreshFail">重新整理背景音樂 UI 失敗</s:String>
     <s:String x:Key="LangModMusicNotPlayedYet">音樂播放尚未開始！</s:String>
     <s:String x:Key="LangModMusicReplay">重新播放：{0}</s:String>
     <s:String x:Key="LangModMusicNoMusic">未檢測到可用的背景音樂！</s:String>
     <s:String x:Key="LangModMusicMusicCleared">背景音樂已清除！</s:String>
-    <s:String x:Key="LangModMusicMusicRefreshed">背景音樂已刷新：{0}</s:String>
-    <s:String x:Key="LangModMusicExceptionMusicRefreshFail">刷新背景音樂播放失敗</s:String>
+    <s:String x:Key="LangModMusicMusicRefreshed">背景音樂已重新整理：{0}</s:String>
+    <s:String x:Key="LangModMusicExceptionMusicRefreshFail">重新整理背景音樂播放失敗</s:String>
 
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL 無法建立 PCL 資料夾（{0}PCL），請嘗試：
@@ -1501,20 +1501,20 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">不可超過 {0}！</s:String>
     <s:String x:Key="LangModValidateNumNoLess">不可低於 {0}！</s:String>
     <s:String x:Key="LangModValidateRegexError">正則檢查失敗！</s:String>
-    <s:String x:Key="LangModValidateLen">長度必須為 {0} 個字符！</s:String>
-    <s:String x:Key="LangModValidateLenMax">長度最長為 {0} 個字符！</s:String>
-    <s:String x:Key="LangModValidateLenMin">長度至少需 {0} 個字符！</s:String>
+    <s:String x:Key="LangModValidateLen">長度必須為 {0} 個字元！</s:String>
+    <s:String x:Key="LangModValidateLenMax">長度最長為 {0} 個字元！</s:String>
+    <s:String x:Key="LangModValidateLenMin">長度至少需 {0} 個字元！</s:String>
     <s:String x:Key="LangModValidateNoContain">輸入內容不能包含 %！</s:String> <!--Keep %,do not replace it.-->
     <s:String x:Key="LangModValidateNoContent">輸入內容不能為 %！</s:String> <!--Keep %,do not replace it.-->
-    <s:String x:Key="LangModValidateFileNoStartWithSpace">檔名不能以空格開頭！</s:String>
-    <s:String x:Key="LangModValidateFileNoEndWithSpace">檔名不能以空格結尾！</s:String>
-    <s:String x:Key="LangModValidateFileNoEndWithDot">檔名不能以小數點結尾！</s:String>
-    <s:String x:Key="LangModValidateFileNoContain">檔名不可包含 % 字元！</s:String> <!--Keep %,do not replace it.-->
-    <s:String x:Key="LangModValidateFileNoContent">檔名不可為 %！</s:String> <!--Keep %,do not replace it.-->
-    <s:String x:Key="LangModValidateFileNoSameName">不可與現有檔案重名！</s:String>
+    <s:String x:Key="LangModValidateFileNoStartWithSpace">檔案名不能以空格開頭！</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithSpace">檔案名不能以空格結尾！</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithDot">檔案名不能以小數點結尾！</s:String>
+    <s:String x:Key="LangModValidateFileNoContain">檔案名不可包含 % 字元！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoContent">檔案名不可為 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoSameName">不可與現有文件重名！</s:String>
     <s:String x:Key="LangModValidateFileNoParentFolder">父資料夾不存在：{0}</s:String>
-    <s:String x:Key="LangModValidateFileHeadUriIncorrect">檔案夾路徑頭存在錯誤！</s:String>
-    <s:String x:Key="LangModValidateFolderUriIncorrect">檔案夾路徑存在錯誤！</s:String>
+    <s:String x:Key="LangModValidateFileHeadUriIncorrect">資料夾路徑頭存在錯誤！</s:String>
+    <s:String x:Key="LangModValidateFolderUriIncorrect">資料夾路徑存在錯誤！</s:String>
     <s:String x:Key="LangModValidateInvalidChar">路徑中存在無效字元！</s:String>
 
     <!--MyLocalModItem-->
