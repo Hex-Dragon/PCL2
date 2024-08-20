@@ -166,7 +166,7 @@
             If di.GetDirectories.Length + di.GetFiles.Length = 0 Then Return If(AllowEmpty, 2, 0)
             '如果有一个文件不在列表，则 hasExclude = True
             Dim hasExclude As Boolean = False
-            '如果有一个文件在列表，则 hasTrue = True
+            '如果有一个文件在列表，则 hasInclude = True
             Dim hasInclude As Boolean = False
             For Each d In Directory.EnumerateDirectories(TargetPath)
                 If Directory.EnumerateFileSystemEntries(d).Count = 0 Then Continue For
