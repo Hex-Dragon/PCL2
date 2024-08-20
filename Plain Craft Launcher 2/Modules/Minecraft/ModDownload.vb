@@ -205,8 +205,9 @@
         Try
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
-            '添加 PCL 特供项
-            If File.Exists(PathTemp & "Cache\download.json") Then Versions.Merge(GetJson(ReadFile(PathTemp & "Cache\download.json")))
+            '从指定URL获取并添加未列出的版本
+            Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://zkitefly.github.io/unlisted-versions-of-minecraft/version_manifest.json", IsJson:=True)
+            Versions.Merge(UnlistedJson("versions"))
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = True, .SourceName = "Mojang 官方源", .Value = Json}
             '解析更新提示（Release）
@@ -224,7 +225,7 @@
             End If
             Setup.Set("ToolUpdateSnapshotLast", If(Version, "Nothing"))
         Catch ex As Exception
-            Throw New Exception("Minecraft 官方源版本列表解析失败", ex)
+            Throw New Exception("版本列表解析失败", ex)
         End Try
     End Sub
     ''' <summary>
@@ -236,8 +237,9 @@
         Try
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
-            '添加 PCL 特供项
-            If File.Exists(PathTemp & "Cache\download.json") Then Versions.Merge(GetJson(ReadFile(PathTemp & "Cache\download.json")))
+            '从指定URL获取并添加未列出的版本
+            Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://gitee.com/bleaker/unlisted-versions-of-minecraft/raw/main/version_manifest.json", IsJson:=True)
+            Versions.Merge(UnlistedJson("versions"))
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Json}
         Catch ex As Exception
@@ -1196,6 +1198,7 @@
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com"),
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://gitee.com/bleaker/unlisted-versions-of-minecraft/raw/main")
             Original
         }
     End Function
