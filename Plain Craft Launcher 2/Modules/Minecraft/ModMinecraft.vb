@@ -1030,7 +1030,7 @@ ExitDataLoad:
     Public Function GetMcFoolName(Name As String) As String
         Name = Name.ToLower
         If Name.StartsWith("2.0") OrElse Name.StartsWith("2point0") Then
-            Trg = ""
+            Dim Teg = ""
             If Name.StartsWith("red") Then
                 Teg = "（红色版本）"
             ElseIf Name.StartsWith("blue") Then
