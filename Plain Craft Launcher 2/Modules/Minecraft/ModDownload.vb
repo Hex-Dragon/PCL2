@@ -238,7 +238,7 @@
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
             '从指定URL获取并添加未列出的版本
-            Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://gitee.com/bleaker/unlisted-versions-of-minecraft/raw/main/version_manifest.json", IsJson:=True)
+            Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main/version_manifest.json", IsJson:=True)
             Versions.Merge(UnlistedJson("versions"))
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Json}
@@ -1198,7 +1198,7 @@
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com").
-                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://gitee.com/bleaker/unlisted-versions-of-minecraft/raw/main"),
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main"),
             Original
         }
     End Function
