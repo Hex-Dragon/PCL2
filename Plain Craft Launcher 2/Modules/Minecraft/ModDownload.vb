@@ -225,7 +225,7 @@
             End If
             Setup.Set("ToolUpdateSnapshotLast", If(Version, "Nothing"))
         Catch ex As Exception
-            Throw New Exception("版本列表解析失败", ex)
+            Throw New Exception("Minecraft 官方源版本列表解析失败", ex)
         End Try
     End Sub
     ''' <summary>
