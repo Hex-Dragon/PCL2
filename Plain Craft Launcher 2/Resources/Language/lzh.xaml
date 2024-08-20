@@ -1412,9 +1412,10 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">適用於</s:String>
-    <s:String x:Key="LangModCompModDependentCount">個前置改囊，</s:String>
-    <s:String x:Key="LangModCompModDownload">次下載，</s:String>
-    <s:String x:Key="LangModCompModDownloadMillion">萬次下載，</s:String>
+    <s:String x:Key="LangModCompModDependentCount">個前置</s:String>
+    <s:String x:Key="LangModCompModDependentCountP">個前置</s:String>
+    <s:String x:Key="LangModCompModDownload">次下載</s:String>
+    <s:String x:Key="LangModCompModDownloadP">次下載</s:String>
     <s:String x:Key="LangModCompModGameVersion">遊戲版本</s:String>
     <s:String x:Key="LangModCompModUpdateTime">{0}更新</s:String>
     <s:String x:Key="LangModCompModSaveAs">另存為</s:String>
@@ -1423,18 +1424,27 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCompModStatusDescRelease">正式版</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">測試版</s:String>
     <s:String x:Key="LangModCompModStatusDescAlpha">測試版</s:String>
-    <s:String x:Key="LangModCompModMillion">萬</s:String>
-    <s:String x:Key="LangModCompModBillion">億</s:String>
+    <s:String x:Key="LangModCompModDigit1">萬</s:String>
+    <s:String x:Key="LangModCompModDigit2">億</s:String>
+    <s:String x:Key="LangModCompModDigit3">兆</s:String>
+    <s:String x:Key="LangModCompModComma">，</s:String>
     <s:String x:Key="LangModCompExceptionNoResult">沒有符合條件的結果</s:String>
 
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">年</s:String>
+    <s:String x:Key="LangModBaseDateYearP">年</s:String>
     <s:String x:Key="LangModBaseDateMonthA">個月</s:String>
+    <s:String x:Key="LangModBaseDateMonthAP">個月</s:String>
     <s:String x:Key="LangModBaseDateMonthB">月</s:String>
+    <s:String x:Key="LangModBaseDateMonthBP">月</s:String>
     <s:String x:Key="LangModBaseDateDay">天</s:String>
+    <s:String x:Key="LangModBaseDateDayP">天</s:String>
     <s:String x:Key="LangModBaseDateHour">小時</s:String>
+    <s:String x:Key="LangModBaseDateHourP">小時</s:String>
     <s:String x:Key="LangModBaseDateMinute">分鐘</s:String>
+    <s:String x:Key="LangModBaseDateMinuteP">分鐘</s:String>
     <s:String x:Key="LangModBaseDateSecond">秒</s:String>
+    <s:String x:Key="LangModBaseDateSecondP">秒</s:String>
     <s:String x:Key="LangModBaseDateAgo">前</s:String>
     <s:String x:Key="LangModBaseDateLater">後</s:String>
     <s:String x:Key="LangModBaseDialogWebOpenFailContent">可能由於瀏覽器未正確配置，PCL 無法為你打開網頁。

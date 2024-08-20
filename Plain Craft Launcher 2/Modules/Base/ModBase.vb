@@ -1918,64 +1918,67 @@ NextElement:
     Public Function GetTimeSpanString(Span As TimeSpan, IsShortForm As Boolean) As String
         Dim EndFix = If(Span.TotalMilliseconds > 0, GetLang("LangModBaseDateLater"), GetLang("LangModBaseDateAgo"))
         If Span.TotalMilliseconds < 0 Then Span = -Span
-        Dim TotalMonthes = Math.Floor(Span.Days / 30)
+        Dim TotalMonths = Math.Floor(Span.Days / 30)
+        Dim TotalYears = Math.Floor(TotalMonths / 12)
+        Dim RemainMonths = TotalMonths Mod 12
+        Dim RemainDays = Span.Days Mod 30
         If IsShortForm Then
-            If TotalMonthes >= 12 Then
+            If TotalMonths >= 12 Then
                 '1+ 年，“3 年”
-                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " " & GetLang("LangModBaseDateYear")
-            ElseIf TotalMonthes >= 2 Then
+                GetTimeSpanString = TotalYears & " " & IsPlural(TotalYears, "LangModBaseDateYear")
+            ElseIf TotalMonths >= 2 Then
                 '2~11 月，“5 个月”
-                GetTimeSpanString = TotalMonthes & " " & GetLang("LangModBaseDateMonthA")
+                GetTimeSpanString = TotalMonths & " " & IsPlural(TotalMonths, "LangModBaseDateMonthA")
             ElseIf Span.TotalDays >= 2 Then
                 '2 天 ~ 2 月，“23 天”
-                GetTimeSpanString = Span.Days & " " & GetLang("LangModBaseDateDay")
+                GetTimeSpanString = Span.Days & " " & IsPlural(Span.Days, "LangModBaseDateDay")
             ElseIf Span.TotalHours >= 1 Then
                 '1 小时 ~ 2 天，“15 小时”
-                GetTimeSpanString = Span.Hours & " " & GetLang("LangModBaseDateHour")
+                GetTimeSpanString = Span.Hours & " " & IsPlural(Span.Hours, "LangModBaseDateHour")
             ElseIf Span.TotalMinutes >= 1 Then
                 '1 分钟 ~ 1 小时，“49 分钟”
-                GetTimeSpanString = Span.Minutes & " " & GetLang("LangModBaseDateMinute")
+                GetTimeSpanString = Span.Minutes & " " & IsPlural(Span.Minutes, "LangModBaseDateMinute")
             ElseIf Span.TotalSeconds >= 1 Then
                 '1 秒 ~ 1 分钟，“23 秒”
-                GetTimeSpanString = Span.Seconds & " " & GetLang("LangModBaseDateSecond")
+                GetTimeSpanString = Span.Seconds & " " & IsPlural(Span.Seconds, "LangModBaseDateSecond")
             Else
                 '不到 1 秒
                 GetTimeSpanString = "1 " & GetLang("LangModBaseDateSecond")
             End If
         Else
-            If TotalMonthes >= 61 Then
+            If TotalMonths >= 61 Then
                 '5+ 年，“5 年”
-                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " " & GetLang("LangModBaseDateYear")
-            ElseIf TotalMonthes >= 12 Then
+                GetTimeSpanString = TotalYears & " " & IsPlural(TotalYears, "LangModBaseDateYear")
+            ElseIf TotalMonths >= 12 Then
                 '12~60 月，“1 年 2 个月”
-                GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " " & GetLang("LangModBaseDateYear") & If((TotalMonthes Mod 12) > 0, " " & (TotalMonthes Mod 12) & " " & GetLang("LangModBaseDateMonthA"), "")
-            ElseIf TotalMonthes >= 4 Then
+                GetTimeSpanString = TotalYears & " " & IsPlural(TotalYears, "LangModBaseDateYear") & If(RemainMonths > 0, " " & RemainMonths & " " & IsPlural(RemainMonths, "LangModBaseDateMonthA"), "")
+            ElseIf TotalMonths >= 4 Then
                 '4~11 月，“5 月”
-                GetTimeSpanString = TotalMonthes & " " & GetLang("LangModBaseDateMonthB")
-            ElseIf TotalMonthes >= 1 Then
+                GetTimeSpanString = TotalMonths & " " & IsPlural(TotalMonths, "LangModBaseDateMonthB")
+            ElseIf TotalMonths >= 1 Then
                 '1~4 月，“2 月 13 天”
-                GetTimeSpanString = TotalMonthes & " " & GetLang("LangModBaseDateMonthB") & If((Span.Days Mod 30) > 0, " " & (Span.Days Mod 30) & GetLang("LangModBaseDateDay"), "")
+                GetTimeSpanString = TotalMonths & " " & IsPlural(TotalMonths, "LangModBaseDateMonthB") & If(RemainDays > 0, " " & RemainDays & " " & IsPlural(RemainDays, "LangModBaseDateDay"), "")
             ElseIf Span.TotalDays >= 4 Then
                 '4~30 天，“23 天”
-                GetTimeSpanString = Span.Days & " " & GetLang("LangModBaseDateDay")
+                GetTimeSpanString = Span.Days & " " & IsPlural(Span.Days, "LangModBaseDateDay")
             ElseIf Span.TotalDays >= 1 Then
                 '1~3 天，“2 天 20 小时”
-                GetTimeSpanString = Span.Days & " " & GetLang("LangModBaseDateDay") & If(Span.Hours > 0, " " & Span.Hours & " " & GetLang("LangModBaseDateHour"), "")
+                GetTimeSpanString = Span.Days & " " & IsPlural(Span.Days, "LangModBaseDateDay") & If(Span.Hours > 0, " " & Span.Hours & " " & IsPlural(Span.Hours, "LangModBaseDateHour"), "")
             ElseIf Span.TotalHours >= 10 Then
                 '10 小时 ~ 1 天，“15 小时”
-                GetTimeSpanString = Span.Hours & " " & GetLang("LangModBaseDateHour")
+                GetTimeSpanString = Span.Hours & " " & IsPlural(Span.Hours, "LangModBaseDateHour")
             ElseIf Span.TotalHours >= 1 Then
                 '1~10 小时，“1 小时 20 分钟”
-                GetTimeSpanString = Span.Hours & " " & GetLang("LangModBaseDateHour") & If(Span.Minutes > 0, " " & Span.Minutes & " " & GetLang("LangModBaseDateMinute"), "")
+                GetTimeSpanString = Span.Hours & " " & IsPlural(Span.Hours, "LangModBaseDateHour") & If(Span.Minutes > 0, " " & Span.Minutes & " " & IsPlural(Span.Minutes, "LangModBaseDateMinute"), "")
             ElseIf Span.TotalMinutes >= 10 Then
                 '10 分钟 ~ 1 小时，“49 分钟”
-                GetTimeSpanString = Span.Minutes & " " & GetLang("LangModBaseDateMinute")
+                GetTimeSpanString = Span.Minutes & " " & IsPlural(Span.Minutes, "LangModBaseDateMinute")
             ElseIf Span.TotalMinutes >= 1 Then
                 '1~10 分钟，“9 分 23 秒”
-                GetTimeSpanString = Span.Minutes & " " & GetLang("LangModBaseDateMinute") & If(Span.Seconds > 0, " " & Span.Seconds & " " & GetLang("LangModBaseDateSecond"), "")
+                GetTimeSpanString = Span.Minutes & " " & IsPlural(Span.Minutes, "LangModBaseDateMinute") & If(Span.Seconds > 0, " " & Span.Seconds & " " & IsPlural(Span.Seconds, "LangModBaseDateSecond"), "")
             ElseIf Span.TotalSeconds >= 1 Then
                 '1 秒 ~ 1 分钟，“23 秒”
-                GetTimeSpanString = Span.Seconds & " " & GetLang("LangModBaseDateSecond")
+                GetTimeSpanString = Span.Seconds & " " & IsPlural(Span.Seconds, "LangModBaseDateSecond")
             Else
                 '不到 1 秒
                 GetTimeSpanString = "1 " & GetLang("LangModBaseDateSecond")
