@@ -36,7 +36,7 @@
                         Select Case Version("id").ToString.ToLower
                             Case "2point0_blue", "2point0_red", "2point0_purple"
                                 Type = "愚人节版"
-                                Version("id") = Version("id").Replace("point", ".")
+                                Version("id") = Version("id").ToString().Replace("point", ".")
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
                             Case "20w14infinite", "20w14∞"
