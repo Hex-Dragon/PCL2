@@ -987,9 +987,11 @@ Retry:
 
             '步骤 1：从 Modrinth 获取 Mod 工程信息，得到 URL
             Dim Mods As New List(Of McMod)
-            For Each m In Directory.EnumerateFiles(Version.Path & "mods\")
-                If m.EndsWithF(".jar") Then Mods.Add(New McMod(m))
-            Next
+            If Directory.Exists(Version.Path & "mods\") Then
+                For Each m In Directory.EnumerateFiles(Version.Path & "mods\")
+                    If m.EndsWithF(".jar") Then Mods.Add(New McMod(m))
+                Next
+            End If
 
             '从 Modrinth 获取信息
             Dim ModrinthHashes = Mods.Select(Function(m) m.ModrinthHash).ToList()

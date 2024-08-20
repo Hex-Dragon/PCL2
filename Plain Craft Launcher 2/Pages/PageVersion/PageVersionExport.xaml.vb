@@ -14,6 +14,11 @@
             Selected = New List(Of String)
             CurrentVer = PageVersionLeft.Version.Path
         End If
+
+        TbExportName.ShowValidateResult = True
+        TbExportName.ValidateRules = New ObjectModel.Collection(Of Validate) From {New ValidateFileName() With {.AllowNull = True}}
+        TbExportName.Validate()
+
         TbExportName.HintText = PageVersionLeft.Version.Name
         TbExportDesc.HintText = PageVersionLeft.Version.Info
         PanDisplayItem.Children.Clear()
@@ -229,7 +234,9 @@
 
 #Region "整合包信息 & 预览栏"
     Private Sub TbExportName_TextChanged(sender As MyTextBox, e As TextChangedEventArgs) Handles TbExportName.TextChanged
-        ItemVersion.Title = If(String.IsNullOrWhiteSpace(sender.Text), PageVersionLeft.Version.Name, sender.Text)
+        If String.IsNullOrEmpty(TbExportName.ValidateResult) Then
+            ItemVersion.Title = If(String.IsNullOrWhiteSpace(sender.Text), PageVersionLeft.Version.Name, sender.Text)
+        End If
     End Sub
 
     Private Sub TbExportDesc_TextChanged(sender As MyTextBox, e As TextChangedEventArgs) Handles TbExportDesc.TextChanged

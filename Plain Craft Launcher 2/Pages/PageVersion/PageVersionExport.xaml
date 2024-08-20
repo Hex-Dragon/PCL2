@@ -38,11 +38,7 @@
                             <RowDefinition Height="28" />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包名称" Margin="0,0,25,0" />
-                        <local:MyTextBox Grid.Row="0" x:Name="TbExportName" Grid.ColumnSpan="2" Grid.Column="1" MaxLength="100">
-                            <local:MyTextBox.ValidateRules>
-                                <local:ValidateFileName AllowNull="True" />
-                            </local:MyTextBox.ValidateRules>
-                        </local:MyTextBox>
+                        <local:MyTextBox Grid.Row="0" x:Name="TbExportName" Grid.ColumnSpan="2" Grid.Column="1" MaxLength="100" ShowValidateResult="True" />
                         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包版本" Margin="0,0,25,0" />
                         <local:MyTextBox Grid.Row="2" x:Name="TbExportVersion" HintText="1.0.0" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" MaxLength="100" />
                         <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="图标" Margin="0,0,25,0"  />

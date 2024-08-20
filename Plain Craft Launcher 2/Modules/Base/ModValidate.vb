@@ -314,6 +314,7 @@ End Class
 Public Class ValidateFolderPath
     Inherits Validate
     Public Property UseMinecraftCharCheck As Boolean = True
+    Public Property AllowNull As Boolean = False
     Public Sub New()
     End Sub
     Public Sub New(UseMinecraftCharCheck As Boolean)
@@ -325,9 +326,9 @@ Public Class ValidateFolderPath
         If Not Str.TrimEnd("\").EndsWithF(":") Then Str = Str.TrimEnd("\")
         '检查是否为空
         Dim LengthCheck As String = New ValidateNullOrWhiteSpace().Validate(Str)
-        If Not LengthCheck = "" Then Return LengthCheck
+        If Not AllowNull AndAlso Not LengthCheck = "" Then Return LengthCheck
         '检查长度
-        LengthCheck = New ValidateLength(1, 254).Validate(Str)
+        LengthCheck = New ValidateLength(If(AllowNull, 0, 1), 254).Validate(Str)
         If Not LengthCheck = "" Then Return LengthCheck
         '检查开头
         If Str.StartsWithF("\\Mac\") Then GoTo Fin
