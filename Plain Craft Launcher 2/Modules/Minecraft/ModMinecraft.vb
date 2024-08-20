@@ -1038,7 +1038,7 @@ ExitDataLoad:
             ElseIf Name.EndsWith("purple") Then
                 Teg = "（紫色版本）"
             End If
-            Return Teg & "这个秘密计划了两年的更新将游戏推向了一个新高度！"
+            Return "这个秘密计划了两年的更新将游戏推向了一个新高度！" & Teg
         ElseIf Name.StartsWithF("20w14inf") OrElse Name = "20w14∞" Then
             Return "我们加入了 20 亿个新的维度，让无限的想象变成了现实！"
         ElseIf Name = "15w14a" Then
