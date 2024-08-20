@@ -112,12 +112,28 @@ Module Modi18n
     ''' <returns>11 Million、2 万等这样的表示</returns>
     Public Function GetLocationNum(Num As Int32) As String
         If IsLocationZH() Then
-            Return If(Num > 100000000, Math.Round(Num / 100000000, 2) & " " & GetLang("LangModCompModBillion"), '亿
-                If(Num > 100000, Math.Round(Num / 10000, 2) & " " & GetLang("LangModCompModMillion"), Num.ToString("N0"))) '万
+            Return If(Num > 1000000000000, Math.Round(Num / 1000000000000, 2) & " " & GetLang("LangModCompModDigit3"), '兆
+                If(Num > 100000000, Math.Round(Num / 100000000, 2) & " " & GetLang("LangModCompModDigit2"), '亿
+                If(Num > 100000, Math.Round(Num / 10000, 0) & " " & GetLang("LangModCompModDigit1"), Num.ToString("N0")))) '万
         Else 'en_US en_GB
-            Return If(Num > 1000000000, Math.Round(Num / 1000000000, 2) & " B",
-                If(Num > 1000000, Math.Round(Num / 1000000, 2) & " M",
-                If(Num > 1000, Math.Round(Num / 1000, 0) & " K", Num)))
+            Return If(Num > 1000000000, Math.Round(Num / 1000000000, 2) & GetLang("LangModCompModDigit3"), 'Billion
+                If(Num > 1000000, Math.Round(Num / 1000000, 2) & GetLang("LangModCompModDigit2"), 'Million
+                If(Num > 10000, Math.Round(Num / 1000, 0) & GetLang("LangModCompModDigit1"), Num))) 'Thousand(K)
         End If
     End Function
+
+    ''' <summary>
+    ''' 根据当前数量判断使用单数或复数形式，提供的键名需有对应加P的复数形式于语言文件
+    ''' </summary>
+    ''' <param name="Count">数量</param>
+    ''' <param name="Key">调用的键名</param>
+    ''' <returns></returns>
+    Public Function IsPlural(Count As Int32, Key As String) As String
+        If Count <= 1 Then
+            Return GetLang(Key)
+        Else
+            Return GetLang(Key & "P")
+        End If
+    End Function
+
 End Module

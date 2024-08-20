@@ -1414,29 +1414,41 @@ Please check whether the event type is filled correctly, whether the PCL is the 
 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">Available for</s:String>
-    <s:String x:Key="LangModCompModDependentCount">dependencies,</s:String>
-    <s:String x:Key="LangModCompModDownload">downloads,</s:String>
-    <s:String x:Key="LangModCompModDownloadMillion">downloads in 10k,</s:String>
-    <s:String x:Key="LangModCompModGameVersion">Game version</s:String>
-    <s:String x:Key="LangModCompModUpdateTime">Updated {0}</s:String>
+    <s:String x:Key="LangModCompModDependentCount">dependency</s:String>
+    <s:String x:Key="LangModCompModDependentCountP">dependencies</s:String>
+    <s:String x:Key="LangModCompModDownload"> download</s:String>
+    <s:String x:Key="LangModCompModDownloadP"> downloads</s:String>
+    <s:String x:Key="LangModCompModGameVersion">game version</s:String>
+    <s:String x:Key="LangModCompModUpdateTime">updated {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">Save as</s:String>
     <s:String x:Key="LangModCompModDependent">Dependencies</s:String>
     <s:String x:Key="LangModCompModAlternateVersion">Available Versions</s:String>
     <s:String x:Key="LangModCompModStatusDescRelease">Release</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">Beta</s:String>
     <s:String x:Key="LangModCompModStatusDescAlpha">Alpha</s:String>
+    <s:String x:Key="LangModCompModDigit1">k</s:String>
+    <s:String x:Key="LangModCompModDigit2">M</s:String>
+    <s:String x:Key="LangModCompModDigit3">B</s:String>
+    <s:String x:Key="LangModCompModComma">, </s:String>
     <s:String x:Key="LangModCompExceptionNoResult">No results matching the criteria</s:String>
 
     <!--ModBase-->
-    <s:String x:Key="LangModBaseDateYear">year(s)</s:String>
-    <s:String x:Key="LangModBaseDateMonthA">month(s)</s:String>
-    <s:String x:Key="LangModBaseDateMonthB">month(s)</s:String>
-    <s:String x:Key="LangModBaseDateDay">day(s)</s:String>
-    <s:String x:Key="LangModBaseDateHour">hour(s)</s:String>
-    <s:String x:Key="LangModBaseDateMinute">minute(s)</s:String>
-    <s:String x:Key="LangModBaseDateSecond">second(s)</s:String>
-    <s:String x:Key="LangModBaseDateAgo">ago.</s:String>
-    <s:String x:Key="LangModBaseDateLater">later.</s:String>
+    <s:String x:Key="LangModBaseDateYear">year</s:String>
+    <s:String x:Key="LangModBaseDateYearP">years</s:String>
+    <s:String x:Key="LangModBaseDateMonthA">month</s:String>
+    <s:String x:Key="LangModBaseDateMonthAP">months</s:String>
+    <s:String x:Key="LangModBaseDateMonthB">month</s:String>
+    <s:String x:Key="LangModBaseDateMonthBP">months</s:String>
+    <s:String x:Key="LangModBaseDateDay">day</s:String>
+    <s:String x:Key="LangModBaseDateDayP">days</s:String>
+    <s:String x:Key="LangModBaseDateHour">hour</s:String>
+    <s:String x:Key="LangModBaseDateHourP">hours</s:String>
+    <s:String x:Key="LangModBaseDateMinute">minute</s:String>
+    <s:String x:Key="LangModBaseDateMinuteP">minutes</s:String>
+    <s:String x:Key="LangModBaseDateSecond">second</s:String>
+    <s:String x:Key="LangModBaseDateSecondP">seconds</s:String>
+    <s:String x:Key="LangModBaseDateAgo"> ago</s:String>
+    <s:String x:Key="LangModBaseDateLater"> later</s:String>
     <s:String x:Key="LangModBaseDialogWebOpenFailContent">PCL cannot open the webpage since the browser may not be configured correctly.
 The URL has been copied to the clipboard, paste to access manually.
 URL: {0}</s:String>
