@@ -1029,8 +1029,16 @@ ExitDataLoad:
     ''' </summary>
     Public Function GetMcFoolName(Name As String) As String
         Name = Name.ToLower
-        If Name.StartsWithF("2.0") Then
-            Return "这个秘密计划了两年的更新将游戏推向了一个新高度！"
+        If Name.StartsWith("2.0") OrElse Name.StartsWith("2point0") Then
+            Trg = ""
+            If Name.StartsWith("red") Then
+                Teg = "（红色版本）"
+            ElseIf Name.StartsWith("blue") Then
+                Teg = "（蓝色版本）"
+            ElseIf Name.StartsWith("purple") Then
+                Teg = "（紫色版本）"
+            End If
+            Return Teg & "这个秘密计划了两年的更新将游戏推向了一个新高度！"
         ElseIf Name.StartsWithF("20w14inf") OrElse Name = "20w14∞" Then
             Return "我们加入了 20 亿个新的维度，让无限的想象变成了现实！"
         ElseIf Name = "15w14a" Then
