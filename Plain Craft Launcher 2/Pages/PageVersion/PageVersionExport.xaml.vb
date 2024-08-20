@@ -164,28 +164,28 @@
         If Directory.Exists(TargetPath) Then
             Dim di As New DirectoryInfo(TargetPath)
             If di.GetDirectories.Length + di.GetFiles.Length = 0 Then Return If(AllowEmpty, 2, 0)
-            '如果有一个文件不在列表，则 hasFalse = True
-            Dim hasFalse As Boolean = False
+            '如果有一个文件不在列表，则 hasExclude = True
+            Dim hasExclude As Boolean = False
             '如果有一个文件在列表，则 hasTrue = True
-            Dim hasTrue As Boolean = False
+            Dim hasInclude As Boolean = False
             For Each d In Directory.EnumerateDirectories(TargetPath)
                 If Directory.EnumerateFileSystemEntries(d).Count = 0 Then Continue For
                 Select Case IsSelected(d, True)
                     Case 0
-                        hasFalse = True
+                        hasExclude = True
                     Case 1
                         Return 1
                     Case 2
-                        hasTrue = True
+                        hasInclude = True
                 End Select
-                If hasTrue AndAlso hasFalse Then Return 1 '如果有文件在、有文件不在列表中，可以断定部分选中
+                If hasInclude AndAlso hasExclude Then Return 1 '如果有文件在、有文件不在列表中，可以断定部分选中
             Next
             For Each f In Directory.EnumerateFiles(TargetPath)
-                If Selected.Contains(f) Then hasTrue = True Else hasFalse = True
-                If hasTrue AndAlso hasFalse Then Return 1 '如果有文件在、有文件不在列表中，可以断定部分选中
+                If Selected.Contains(f) Then hasInclude = True Else hasExclude = True
+                If hasInclude AndAlso hasExclude Then Return 1 '如果有文件在、有文件不在列表中，可以断定部分选中
             Next
-            If hasFalse AndAlso Not hasTrue Then Return 0
-            If hasTrue AndAlso Not hasFalse Then Return 2
+            If hasExclude AndAlso Not hasInclude Then Return 0
+            If hasInclude AndAlso Not hasExclude Then Return 2
         End If
         Return 0
     End Function
