@@ -311,10 +311,10 @@ Public Module ModMinecraft
                             Else
                                 ReleaseTime = JsonObject("releaseTime").ToObject(Of Date)
                             End If
-                            If ReleaseTime.Year > 2000 AndAlso ReleaseTime.Year < 2013 Then
-                                _Version.McName = "Old"
-                                GoTo VersionSearchFinish
-                            End If
+                        If ReleaseTime.Year > 2000 AndAlso (ReleaseTime.Year < 2011 OrElse (ReleaseTime.Year = 2011 AndAlso ReleaseTime.Month < 9) OrElse (ReleaseTime.Year = 2011 AndAlso ReleaseTime.Month = 9 AndAlso ReleaseTime.Day <= 20)) Then ' 2000 年到 2011 年 9 月 20 日之间
+                            _Version.McName = "Old"
+                            GoTo VersionSearchFinish
+                        End If
                         Catch
                             ReleaseTime = New Date(1970, 1, 1, 15, 0, 0)
                         End Try
@@ -1031,11 +1031,11 @@ ExitDataLoad:
         Name = Name.ToLower
         If Name.StartsWith("2.0") OrElse Name.StartsWith("2point0") Then
             Dim Teg = ""
-            If Name.StartsWith("red") Then
+            If Name.EndsWith("red") Then
                 Teg = "（红色版本）"
-            ElseIf Name.StartsWith("blue") Then
+            ElseIf Name.EndsWith("blue") Then
                 Teg = "（蓝色版本）"
-            ElseIf Name.StartsWith("purple") Then
+            ElseIf Name.EndsWith("purple") Then
                 Teg = "（紫色版本）"
             End If
             Return Teg & "这个秘密计划了两年的更新将游戏推向了一个新高度！"

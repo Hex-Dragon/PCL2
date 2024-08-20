@@ -279,8 +279,6 @@ Public Module ModDownloadLib
             WikiName = "Java版RC2"
         ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
             WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Java版Deep_Dark_Experimental_Snapshot_")
-        ElseIf Id.StartsWithF("1_18_experimental-snapshot-") OrElse Id.StartsWithF("1.18_experimental-snapshot-") Then
-            WikiName = "Java版" & Id.Replace("1_18_", "1.18-").Replace("experimental-snapshot-", "-exp")
         ElseIf Id.Contains("b1.9") Then
             WikiName = "Java版" & Id.Replace("b", "Beta_").Replace("-pre", "_Prerelease_")
         ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") OrElse Id = "c0.30-1" OrElse Id = "c0.30-2" Then
@@ -292,22 +290,22 @@ Public Module ModDownloadLib
         ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
             WikiName = If(Id.Contains("w"), "", "Java版") & Id.Replace(" Pre-Release ", "-pre")
         ElseIf Id.StartsWithF("b") Then
-            WikiName = "Java版" & Id.TrimEnd("-1", "-2", "-3").Replace("b", "Beta_").Replace("tb3", "Test_Build_3")
+            WikiName = "Java版" & Id.Replace("b", "Beta_").Replace("tb3", "Test_Build_3")
         ElseIf Id.StartsWithF("a") Then
-            WikiName = "Java版" & Id.TrimEnd("-1", "-2", "-3").Replace("a", "Alpha_v")
+            WikiName = "Java版" & Id.Replace("a", "Alpha_v")
         ElseIf Id.StartsWithF("inf-") Then
-            WikiName = "Java版" & Id.TrimEnd("-1", "-2", "-3").Replace("inf-", "Infdev_")
+            WikiName = "Java版" & Id.Replace("inf-", "Infdev_")
         ElseIf Id.StartsWithF("in-") Then
-            WikiName = "Java版" & Id.TrimEnd("-1", "-2", "-3", "-2103", "-2304").Replace("in-", "Indev_")
+            WikiName = "Java版" & Id.Replace("in-", "Indev_")
         ElseIf Id.StartsWithF("c") Then
-            WikiName = "Java版" & Id.TrimEnd("-1", "-2", "-3").Replace("c", "Classic_").Replace("st", "SURVIVAL_TEST")
+            WikiName = "Java版" & Id.Replace("c", "Classic_").Replace("st", "SURVIVAL_TEST")
         ElseIf Id.StartsWithF("rd-") Then
             WikiName = "Java版Pre-classic_" & Id
         Else
             Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
             Exit Sub
         End If
-        OpenWebsite("https://zh.minecraft.wiki/w/" & WikiName.Replace("_experimental-snapshot-", "-exp"))
+        OpenWebsite("https://zh.minecraft.wiki/w/Special:%E6%90%9C%E7%B4%A2?search=" & WikiName.Replace("_experimental-snapshot-", "-exp"))
     End Sub
 
 #End Region
