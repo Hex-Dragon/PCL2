@@ -207,6 +207,11 @@
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
             '从指定URL获取并添加未列出的版本
             Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://zkitefly.github.io/unlisted-versions-of-minecraft/version_manifest.json", IsJson:=True)
+            For Each version As JObject In UnlistedJson("versions")
+                If version("type").ToString() = "pending" Then
+                    version("type") = "snapshot"
+                End If
+            Next
             Versions.Merge(UnlistedJson("versions"))
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = True, .SourceName = "Mojang 官方源", .Value = Json}
@@ -239,6 +244,12 @@
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
             '从指定URL获取并添加未列出的版本
             Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main/version_manifest.json", IsJson:=True)
+            ' 替换 "pending" 为 "snapshot"
+            For Each version As JObject In UnlistedJson("versions")
+                If version("type").ToString() = "pending" Then
+                    version("type") = "snapshot"
+                End If
+            Next
             Versions.Merge(UnlistedJson("versions"))
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Json}
