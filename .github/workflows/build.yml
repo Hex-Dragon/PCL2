@@ -41,4 +41,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.configuration }} ${{ env.describe }}
-        path: ${{ GITHUB.WORKSPACE }}\Plain Craft Launcher 2\obj\Debug
+        path: ${{ GITHUB.WORKSPACE }}\Plain Craft Launcher 2\obj\Debug\Plain Craft Launcher 2.exe
