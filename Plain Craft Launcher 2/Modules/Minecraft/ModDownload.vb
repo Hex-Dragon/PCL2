@@ -1197,8 +1197,8 @@
                 Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").
-                Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com"),
-                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://gitee.com/bleaker/unlisted-versions-of-minecraft/raw/main")
+                Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com").
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://gitee.com/bleaker/unlisted-versions-of-minecraft/raw/main"),
             Original
         }
     End Function
