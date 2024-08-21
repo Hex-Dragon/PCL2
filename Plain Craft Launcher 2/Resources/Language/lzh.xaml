@@ -488,18 +488,26 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangDownloadInstallOptiFabricManually">不相容舊版 Fabric，請手下 OptiFabric Origins</s:String>
 
     <!--PageDownloadLeft-->
-    <s:String x:Key="LangDownloadPageRefresh">更新</s:String>
-    <s:String x:Key="LangDownloadPageAutoInstall">自動裝</s:String>
-    <s:String x:Key="LangDownloadPageManualInstall">▼ 手動裝包</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallContent">手動裝包功能可下載 OptiFine、Forge 等組件之 JAR 裝文，然不能自動裝。
+    <s:String x:Key="LangDownloadPageLeftRefresh">更新</s:String>
+    <s:String x:Key="LangDownloadPageLeftAutoInstall">自動裝</s:String>
+    <s:String x:Key="LangDownloadPageLeftManualInstall">▼ 手動裝包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">手動裝包功能可下載 OptiFine、Forge 等組件之 JAR 裝文，然不能自動裝。
 於自動裝頁先選 MC 版，而後可選 OptiFine、Forge 等組件，令 PCL 自動裝之。</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallTitle">自動裝之提</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">返自動裝</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">續下手動裝包</s:String>
-    <s:String x:Key="LangDownloadPageManualInstallFold">手動裝包</s:String>
-    <s:String x:Key="LangDownloadPageResource">資源</s:String>
-    <s:String x:Key="LangDownloadPageMods">Mod</s:String>
-    <s:String x:Key="LangDownloadPageModpack">整合包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallTitle">自動裝之提</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">返自動裝</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">續下手動裝包</s:String>
+    <s:String x:Key="LangDownloadPageLeftManualInstallFold">手動裝包</s:String>
+    <s:String x:Key="LangDownloadPageLeftResource">資源</s:String>
+    <s:String x:Key="LangDownloadPageLeftMods">Mod</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpack">整合包</s:String>
+    <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
+    <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
+    <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
+    <s:String x:Key="LangDownloadPageLeftNeoForge">NeoForge</s:String>
+    <s:String x:Key="LangDownloadPageLeftFabric">Fabric</s:String>
+    <s:String x:Key="LangDownloadPageLeftLiteLoader">LiteLoader</s:String>
+    <s:String x:Key="LangDownloadPageLeftFabricAPI">Fabric API</s:String>
+    <s:String x:Key="LangDownloadPageLeftOptiFabric">OptiFabric</s:String>
 
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteloaderDescTitle">LiteLoader 略述</s:String>
