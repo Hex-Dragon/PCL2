@@ -828,7 +828,8 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageOtherAboutLicenseWeb">查看來源網站</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用戶協議與免責聲明</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隱私說明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟體的 User Agent 中包含啟動器的版本號，以統計各版本的使用者數量。&#13;除此之外，本軟體不會向開發者上傳任何其他資訊。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟體的 User Agent 中包含啟動器的版本號，以統計各版本的使用者數量。
+除此之外，本軟體不會向開發者上傳任何其他資訊。</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龍騰貓躍 2016. All Rights Reserved.
 電腦軟體著作權登記號：2020SR0875133
@@ -936,9 +937,9 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
  · {version}：遊戲對應的原版版本號
 
 例如：
- · &quot;{verpath}test.exe&quot; ：運行版本文件夾下的 test.exe 程序
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 運行版本文件夾下的 test.jar
- · notepad &quot;{verindie}option.txt&quot; ：使用記事本打開該版本的設置文件
+ · "{verpath}test.exe" ：運行版本文件夾下的 test.exe 程序
+ · "{java}java.exe" -jar "{verpath}test.jar" ：用 Java 運行版本文件夾下的 test.jar
+ · notepad "{verindie}option.txt" ：使用記事本打開該版本的設置文件
 
 涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致運行失敗。
 執行命令時，命令行所在的目錄是當前的 .minecraft 文件夾。</s:String>
@@ -1286,9 +1287,9 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
  · {version}：遊戲對應的原版版本號
 
 例如：
- · &quot;{verpath}test.exe&quot; ：運行版本文件夾下的 test.exe 程序
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 運行版本文件夾下的 test.jar
- · notepad &quot;{verindie}option.txt&quot; ：使用記事本打開該版本的設置文件
+ · "{verpath}test.exe" ：運行版本文件夾下的 test.exe 程序
+ · "{java}java.exe" -jar "{verpath}test.jar" ：用 Java 運行版本文件夾下的 test.jar
+ · notepad "{verindie}option.txt" ：使用記事本打開該版本的設置文件
 
 涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致運行失敗。
 執行命令時，命令行所在的目錄是當前的 .minecraft 文件夾。</s:String>
