@@ -151,7 +151,7 @@
                 Next
             Case ViewType.InError
                 For Each Item In Mods
-                    If Item.State.Equals(McMod.McModState.Unavaliable) Then ShowMods.Add(Item)
+                    If Item.State.Equals(McMod.McModState.Unavailable) Then ShowMods.Add(Item)
                 Next
         End Select
         PanList.Children.Clear()
@@ -172,7 +172,7 @@
             If ModItem.Value.Entry.State.Equals(McMod.McModState.Disabled) Then
                 ModDisabled += 1
             End If
-            If ModItem.Value.Entry.State.Equals(McMod.McModState.Unavaliable) Then
+            If ModItem.Value.Entry.State.Equals(McMod.McModState.Unavailable) Then
                 ModError += 1
             End If
         Next
