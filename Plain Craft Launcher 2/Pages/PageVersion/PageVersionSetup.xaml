@@ -70,8 +70,8 @@
                             <RowDefinition Height="9" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <local:MyRadioBox Text="{DynamicResource LangPageVersionSetupUseGlobal}" Width="110" Checked="True" x:Name="RadioRamType2" Tag="VersionRamType/2" Margin="0,0,20,9" />
-                        <local:MyRadioBox Grid.Row="1" Text="{DynamicResource LangPageSetupLaunchLaunchMemAutoAdjust}" Width="110" x:Name="RadioRamType0" Tag="VersionRamType/0" Margin="0,0,20,0"
+                        <local:MyRadioBox Text="{DynamicResource LangPageVersionSetupUseGlobal}" Checked="True" x:Name="RadioRamType2" Tag="VersionRamType/2" Margin="0,0,20,9" />
+                        <local:MyRadioBox Grid.Row="1" Text="{DynamicResource LangPageSetupLaunchLaunchMemAutoAdjust}" x:Name="RadioRamType0" Tag="VersionRamType/0" Margin="0,0,20,0"
                                           ToolTip="{DynamicResource LangPageSetupLaunchLaunchMemAutoAdjustToolTip}" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="-10" ToolTipService.VerticalOffset="-3" />
                         <local:MyRadioBox Grid.Row="3" Text="{DynamicResource LangPageSetupLaunchLaunchMemCustom}" x:Name="RadioRamType1" Tag="VersionRamType/1" Margin="0,0,20,0" />
                         <local:MySlider Grid.Row="3" Grid.Column="1" IsEnabled="False" x:Name="SliderRamCustom" Tag="VersionRamCustom" MaxValue="49" Value="13" />
