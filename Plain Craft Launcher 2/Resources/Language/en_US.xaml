@@ -1153,7 +1153,7 @@ Please read the warning above carefully before continuing!</s:String>
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">{0} mods have been completely deleted!</s:String>
     <s:String x:Key="LangPageVersionModDialogFailGetModDetail">Unable to read information for this mod.</s:String>
     <s:String x:Key="LangPageVersionModViewTypeAll">All</s:String>
-    <s:String x:Key="LangPageVersionModViewTypeUpdatable">Updatable</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeCanUpdate">Updatable</s:String>
     <s:String x:Key="LangPageVersionModViewTypeEnabled">Enabled</s:String>
     <s:String x:Key="LangPageVersionModViewTypeDisabled">Disabled</s:String>
     <s:String x:Key="LangPageVersionModViewTypeError">Error</s:String>
