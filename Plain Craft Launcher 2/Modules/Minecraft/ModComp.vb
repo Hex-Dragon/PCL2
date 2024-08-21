@@ -200,7 +200,7 @@
         ''' </summary>
         Public ReadOnly Property TranslatedName As String
             Get
-                If Not Lang.Equals("zh_CN") Then Return RawName '其它语言暂时没有翻译数据，使用原文本
+                If Not (Lang.Equals("zh_CN") OrElse Lang.Equals("zh_MEME")) Then Return RawName '其它语言暂时没有翻译数据，使用原文本
                 Return If(DatabaseEntry Is Nothing OrElse DatabaseEntry.ChineseName = "", RawName, DatabaseEntry.ChineseName)
             End Get
         End Property
