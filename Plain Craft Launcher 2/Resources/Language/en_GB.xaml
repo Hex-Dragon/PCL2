@@ -103,7 +103,7 @@ Right-click to open the sponsorship page and support PCL if you think it is doin
     <s:String x:Key="LangHintThemeSetInit">The personalisation settings have been initialised.</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">Failed to initialise the personalisation settings.</s:String>
     <s:String x:Key="LangBackgroundPic">Background</s:String>
-    <s:String x:Key="LangBackgroundPicCount">Background (Total {0})</s:String>
+    <s:String x:Key="LangBackgroundPicCount">Background (Total: {0})</s:String>
     <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">All files in the background folder will be deleted.
 This operation is irrevocable. Are you sure?</s:String>
     <s:String x:Key="LangDialogTitleWarning">Warning</s:String>
@@ -273,6 +273,7 @@ You need to restart the launcher after this change.</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">Feature Hiding</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Only hide this tab, the disabled content set is still valid.
 Avoid 'Feature Hiding' be changed whilst keeping the 'Personalisation' page.</s:String>
+    <s:String x:Key="LangSetBackgroundMusicVolume">Volume</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">Folder List</s:String>

@@ -273,6 +273,7 @@
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">隱功能</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">僅隱此選項卡，設置之禁用內容依然有效。
 可保留個性化設置頁面而避隱藏設置被改。</s:String>
+    <s:String x:Key="LangSetBackgroundMusicVolume">音量</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">文簿</s:String>
