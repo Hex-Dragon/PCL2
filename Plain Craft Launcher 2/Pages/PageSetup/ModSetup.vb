@@ -104,7 +104,7 @@
         {"ToolDownloadThread", New SetupEntry(63, Source:=SetupSource.Registry)},
         {"ToolDownloadSpeed", New SetupEntry(42, Source:=SetupSource.Registry)},
         {"ToolDownloadVersion", New SetupEntry(If(IsLocationZH(), 0, 2), Source:=SetupSource.Registry)},
-        {"ToolDownloadTranslate", New SetupEntry(0, Source:=SetupSource.Registry)},
+        {"ToolDownloadTranslate", New SetupEntry(If(IsLocationZH(), 0, 3), Source:=SetupSource.Registry)},
         {"ToolDownloadKeepModpack", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadIgnoreQuilt", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadCert", New SetupEntry(True, Source:=SetupSource.Registry)},

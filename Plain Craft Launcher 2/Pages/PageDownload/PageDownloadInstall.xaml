@@ -62,7 +62,7 @@
                             <TextBlock VerticalAlignment="Center" Text="{DynamicResource LangDownloadInstallBack}" Grid.Column="3" Foreground="{StaticResource ColorBrushGray4}" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="Forge" Height="40" Margin="0,15,0,0" x:Name="CardForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{DynamicResource LangDownloadPageLeftForge}" Height="40" Margin="0,15,0,0" x:Name="CardForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanForge" />
                         <Grid x:Name="PanForgeInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
@@ -80,7 +80,7 @@
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="NeoForge" Height="40" Margin="0,15,0,0" x:Name="CardNeoForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{DynamicResource LangDownloadPageLeftNeoForge}" Height="40" Margin="0,15,0,0" x:Name="CardNeoForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanNeoForge" />
                         <Grid x:Name="PanNeoForgeInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
@@ -98,7 +98,7 @@
                                   Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="Fabric" Height="40" Margin="0,15,0,0" x:Name="CardFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{DynamicResource LangDownloadPageLeftFabric}" Height="40" Margin="0,15,0,0" x:Name="CardFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanFabric" />
                         <Grid x:Name="PanFabricInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
@@ -116,7 +116,7 @@
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="Fabric API" Height="40" Margin="0,15,0,0" x:Name="CardFabricApi" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{DynamicResource LangDownloadPageLeftFabricAPI}" Height="40" Margin="0,15,0,0" x:Name="CardFabricApi" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanFabricApi" />
                         <Grid x:Name="PanFabricApiInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
@@ -134,7 +134,7 @@
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="OptiFine" Height="40" Margin="0,15,0,0" x:Name="CardOptiFine" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{DynamicResource LangDownloadPageLeftOptiFine}" Height="40" Margin="0,15,0,0" x:Name="CardOptiFine" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top">
                             <StackPanel Name="PanOptiFine" />
                         </StackPanel>
@@ -154,7 +154,7 @@
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="OptiFabric" Height="40" Margin="0,15,0,0" x:Name="CardOptiFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{DynamicResource LangDownloadPageLeftOptiFabric}" Height="40" Margin="0,15,0,0" x:Name="CardOptiFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanOptiFabric" />
                         <Grid x:Name="PanOptiFabricInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
@@ -172,7 +172,7 @@
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="LiteLoader" Height="40" Margin="0,15,0,0" x:Name="CardLiteLoader" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{DynamicResource LangDownloadPageLeftLiteLoader}" Height="40" Margin="0,15,0,0" x:Name="CardLiteLoader" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanLiteLoader" />
                         <Grid x:Name="PanLiteLoaderInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>

@@ -205,7 +205,7 @@
         RunInNewThread(
         Sub()
             Try
-                Dim Desc As String = If(Project.Type = CompType.ModPack, GetLang("LangDownloadPageModpack"), If(Project.Type = CompType.Mod, "Mod ", GetLang("LangResourcePack")))
+                Dim Desc As String = If(Project.Type = CompType.ModPack, GetLang("LangDownloadPageLeftModpack"), If(Project.Type = CompType.Mod, "Mod ", GetLang("LangResourcePack")))
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
                 If Project.Type = CompType.Mod Then

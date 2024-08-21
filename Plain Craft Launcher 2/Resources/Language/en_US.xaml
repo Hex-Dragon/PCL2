@@ -488,18 +488,26 @@ PCL suggests turning on the &quot;Instance Isolation&quot; option in &quot;Setti
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Incompatible with older versions of Fabric, please download OptiFabric Origins manually.</s:String>
 
     <!--PageDownloadLeft-->
-    <s:String x:Key="LangDownloadPageRefresh">Refresh</s:String>
-    <s:String x:Key="LangDownloadPageAutoInstall">Installation</s:String>
-    <s:String x:Key="LangDownloadPageManualInstall">▼ Packages</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallContent">The &quot;Packages&quot; feature allows you to download a JAR installation file for loaders like OptiFine and Forge, but cannot be automatically installed.
+    <s:String x:Key="LangDownloadPageLeftRefresh">Refresh</s:String>
+    <s:String x:Key="LangDownloadPageLeftAutoInstall">Installation</s:String>
+    <s:String x:Key="LangDownloadPageLeftManualInstall">▼ Packages</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">The &quot;Packages&quot; feature allows you to download a JAR installation file for loaders like OptiFine and Forge, but cannot be automatically installed.
 Select Minecraft version first on the &quot;Installation&quot; page, then choose OptiFine, Forge, or any other loader letting PCL install it automatically.</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallTitle">Installation Hint</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">Installation Page</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">Continue</s:String>
-    <s:String x:Key="LangDownloadPageManualInstallFold">Packages</s:String>
-    <s:String x:Key="LangDownloadPageResource">Resources</s:String>
-    <s:String x:Key="LangDownloadPageMods">Mods</s:String>
-    <s:String x:Key="LangDownloadPageModpack">Modpacks</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallTitle">Installation Hint</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">Installation Page</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">Continue</s:String>
+    <s:String x:Key="LangDownloadPageLeftManualInstallFold">Packages</s:String>
+    <s:String x:Key="LangDownloadPageLeftResource">Resources</s:String>
+    <s:String x:Key="LangDownloadPageLeftMods">Mods</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpack">Modpacks</s:String>
+    <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
+    <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
+    <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
+    <s:String x:Key="LangDownloadPageLeftNeoForge">NeoForge</s:String>
+    <s:String x:Key="LangDownloadPageLeftFabric">Fabric</s:String>
+    <s:String x:Key="LangDownloadPageLeftLiteLoader">LiteLoader</s:String>
+    <s:String x:Key="LangDownloadPageLeftFabricAPI">Fabric API</s:String>
+    <s:String x:Key="LangDownloadPageLeftOptiFabric">OptiFabric</s:String>
 
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteloaderDescTitle">Introduction of LiteLoader</s:String>

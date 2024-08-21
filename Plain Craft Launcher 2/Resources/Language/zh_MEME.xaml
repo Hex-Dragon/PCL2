@@ -488,18 +488,26 @@
     <s:String x:Key="LangDownloadInstallOptiFabricManually">不兼容老版本布料，请手动下崽高清布料 Origins</s:String>
 
     <!--PageDownloadLeft-->
-    <s:String x:Key="LangDownloadPageRefresh">刷新</s:String>
-    <s:String x:Key="LangDownloadPageAutoInstall">自动帮你安装</s:String>
-    <s:String x:Key="LangDownloadPageManualInstall">▼ 自己装安装包</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallContent">自己装安装包功能提供了高清不修复、锻造等组件的 .jar 安装文件下崽，但没办法自动帮你安装。
+    <s:String x:Key="LangDownloadPageLeftRefresh">刷新</s:String>
+    <s:String x:Key="LangDownloadPageLeftAutoInstall">自动帮你安装</s:String>
+    <s:String x:Key="LangDownloadPageLeftManualInstall">▼ 自己装安装包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">自己装安装包功能提供了高清不修复、锻造等组件的 .jar 安装文件下崽，但没办法自动帮你安装。
 在自动帮你安装页面先选择 MC 版本，然后就可以选择高清不修复、锻造等组件，让平原合成发射台自动帮你进行安装了。</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallTitle">自动帮你安装提示</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">返回自动帮你安装</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">继续下崽自己装安装包</s:String>
-    <s:String x:Key="LangDownloadPageManualInstallFold">自己装安装包</s:String>
-    <s:String x:Key="LangDownloadPageResource">资源</s:String>
-    <s:String x:Key="LangDownloadPageMods">Mod</s:String>
-    <s:String x:Key="LangDownloadPageModpack">整合包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallTitle">自动帮你安装提示</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">返回自动帮你安装</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">继续下崽自己装安装包</s:String>
+    <s:String x:Key="LangDownloadPageLeftManualInstallFold">自己装安装包</s:String>
+    <s:String x:Key="LangDownloadPageLeftResource">资源</s:String>
+    <s:String x:Key="LangDownloadPageLeftMods">模组</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpack">整活包</s:String>
+    <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
+    <s:String x:Key="LangDownloadPageLeftOptiFine">Opti不Fine</s:String>
+    <s:String x:Key="LangDownloadPageLeftForge">锻造</s:String>
+    <s:String x:Key="LangDownloadPageLeftNeoForge">新锻造</s:String>
+    <s:String x:Key="LangDownloadPageLeftFabric">布料</s:String>
+    <s:String x:Key="LangDownloadPageLeftLiteLoader">轻飘飘加载器</s:String>
+    <s:String x:Key="LangDownloadPageLeftFabricAPI">布料接口</s:String>
+    <s:String x:Key="LangDownloadPageLeftOptiFabric">Opti炸Fabric</s:String>
 
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteLoaderDescTitle">轻飘飘加载器简介</s:String>
