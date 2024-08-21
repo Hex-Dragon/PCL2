@@ -1152,6 +1152,11 @@
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">已彻底删除 {0}！</s:String>
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">已彻底删除 {0} 个文件！</s:String>
     <s:String x:Key="LangPageVersionModDialogFailGetModDetail">没办法读取此模组的信息。</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeAll">全部</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeCanUpdate">可更新</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeEnabled">已启用</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeDisabled">已禁用</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeError">已爆炸</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">该版本用不了模组</s:String>

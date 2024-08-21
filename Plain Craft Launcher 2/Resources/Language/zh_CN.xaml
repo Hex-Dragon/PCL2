@@ -1152,6 +1152,11 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">已彻底删除 {0}！</s:String>
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">已彻底删除 {0} 个文件！</s:String>
     <s:String x:Key="LangPageVersionModDialogFailGetModDetail">无法读取此 Mod 的信息。</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeAll">全部</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeCanUpdate">可更新</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeEnabled">已启用</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeDisabled">已禁用</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeError">错误</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">该版本不可使用 Mod</s:String>

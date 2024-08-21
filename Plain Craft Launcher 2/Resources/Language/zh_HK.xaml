@@ -1152,6 +1152,11 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">已徹底刪除 {0}！</s:String>
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">已徹底刪除 {0} 個檔案！</s:String>
     <s:String x:Key="LangPageVersionModDialogFailGetModDetail">無法讀取此模組的資訊。</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeAll">全部</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeCanUpdate">可更新</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeEnabled">已啟用</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeDisabled">已禁用</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeError">錯誤</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">該實例不可使用模組</s:String>

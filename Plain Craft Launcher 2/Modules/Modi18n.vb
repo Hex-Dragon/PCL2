@@ -1,6 +1,4 @@
-﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock
-
-Module Modi18n
+﻿Module Modi18n
     ''' <summary>
     ''' 获取语言
     ''' </summary>

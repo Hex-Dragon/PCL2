@@ -176,11 +176,11 @@
                 ModError += 1
             End If
         Next
-        BtnTypeAll.Text = $"全部 ({ModEnabled + ModDisabled + ModError}) "
-        BtnTypeCanUpdate.Text = $"可更新 ({ModCanUpdate}) "
-        BtnTypeEnabled.Text = $"已启用 ({ModEnabled}) "
-        BtnTypeDisabled.Text = $"已禁用 ({ModDisabled}) "
-        BtnTypeError.Text = $"错误 ({ModError}) "
+        BtnTypeAll.Text = $"{GetLang("LangPageVersionModViewTypeAll")} ({ModEnabled + ModDisabled + ModError}) "
+        BtnTypeCanUpdate.Text = $"{GetLang("LangPageVersionModViewTypeCanUpdate")} ({ModCanUpdate}) "
+        BtnTypeEnabled.Text = $"{GetLang("LangPageVersionModViewTypeEnabled")} ({ModEnabled}) "
+        BtnTypeDisabled.Text = $"{GetLang("LangPageVersionModViewTypeDisabled")} ({ModDisabled}) "
+        BtnTypeError.Text = $"{GetLang("LangPageVersionModViewTypeError")} ({ModError}) "
         RefreshTitle()
     End Sub
     ''' <summary>
@@ -188,11 +188,11 @@
     ''' </summary>
     Private Sub RefreshTitle()
         If Not IsSearching Then
-            PanListBack.Title = "Mod 列表 - "
+            PanListBack.Title = GetLang("LangPageVersionModModList") & " - "
         ElseIf PanList.Children.Count > 0 Then
-            PanListBack.Title = "搜索结果 - "
+            PanListBack.Title = GetLang("LangPageVersionModSearchResult") & " - "
         Else
-            PanListBack.Title = "无搜索结果 - "
+            PanListBack.Title = GetLang("LangPageVersionModSearchNoResult") & " - "
         End If
         Select Case ViewModType
             Case ViewType.All

@@ -1152,6 +1152,11 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">已徹底刪除 {0}！</s:String>
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">已徹底刪除 {0} 個文件！</s:String>
     <s:String x:Key="LangPageVersionModDialogFailGetModDetail">無法讀取此改囊的信息。</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeAll">皆</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeCanUpdate">可更</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeEnabled">已啟</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeDisabled">已禁</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeError">錯誤</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">該版本不可使用改囊</s:String>
