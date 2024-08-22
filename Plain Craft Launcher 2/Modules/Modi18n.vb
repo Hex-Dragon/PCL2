@@ -1,6 +1,4 @@
-﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock
-
-Module Modi18n
+﻿Module Modi18n
     ''' <summary>
     ''' 获取语言
     ''' </summary>
@@ -54,9 +52,9 @@ Module Modi18n
     ''' <returns></returns>
     Public Function GetLocalTimeFormat(Time As DateTime) As String
         Select Case Lang
-            Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME" '2024/08/16 11:47
+            Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME", "ja_JP", "ko_KR" '2024/08/16 11:47
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
-            Case "en_GB" '11:47 16/08/2024
+            Case "en_GB", "es_ES", "fr_FR", "ru_RU" '11:47 16/08/2024
                 Return Time.ToString("HH':'mm dd'/'MM'/'yyyy")
             Case Else 'en_US 11:47 08/16/2024
                 Return Time.ToString("HH':'mm MM'/'dd'/'yyyy")
@@ -90,18 +88,58 @@ Module Modi18n
     ''' <returns>返回类似于 zh_CN 这样形式的文本</returns>
     Public Function GetDefaultLang() As String
         Select Case Globalization.CultureInfo.CurrentCulture.Name
-            Case "en-US"
-                Return "en_US"
-            Case "en-GB"
+            Case "en-GB", "en-NZ", "en-AU"
                 Return "en_GB"
-            Case "zh-CN"
+            Case "es-ES", "es-MX", "es-UY", "es-VE", "es-AR", "es_EC", "	es_CL"
+                Return "es_ES"
+            Case "fr-FR", "fr-CA"
+                Return "fr_FR"
+            Case "ja-JP"
+                Return "ja_JP"
+            Case "ko-KR", "ko-KP"
+                Return "ko_KR"
+            Case "ru-RU"
+                Return "ru_RU"
+            Case "zh-CN", "zh-SG", "zh-Hans"
                 Return "zh_CN"
-            Case "zh-HK"
+            Case "zh-HK", "zh-MO"
                 Return "zh_HK"
-            Case "zh-TW"
+            Case "zh-TW", "zh-Hant"
                 Return "zh_TW"
             Case Else
                 Return "en_US"
         End Select
     End Function
+
+    ''' <summary>
+    ''' 格式化本地化的数字描述
+    ''' </summary>
+    ''' <param name="Num">数量</param>
+    ''' <returns>11 Million、2 万等这样的表示</returns>
+    Public Function GetLocationNum(Num As Int32) As String
+        If IsLocationZH() Then
+            Return If(Num > 1000000000000, Math.Round(Num / 1000000000000, 2) & " " & GetLang("LangModCompModDigit3"), '兆
+                If(Num > 100000000, Math.Round(Num / 100000000, 2) & " " & GetLang("LangModCompModDigit2"), '亿
+                If(Num > 100000, Math.Round(Num / 10000, 0) & " " & GetLang("LangModCompModDigit1"), Num.ToString("N0")))) '万
+        Else 'en_US en_GB
+            Return If(Num > 1000000000, Math.Round(Num / 1000000000, 2) & GetLang("LangModCompModDigit3"), 'Billion
+                If(Num > 1000000, Math.Round(Num / 1000000, 2) & GetLang("LangModCompModDigit2"), 'Million
+                If(Num > 10000, Math.Round(Num / 1000, 0) & GetLang("LangModCompModDigit1"), Num))) 'Thousand(K)
+        End If
+    End Function
+
+    ''' <summary>
+    ''' 根据当前数量判断使用单数或复数形式，提供的键名需有对应加P的复数形式于语言文件
+    ''' </summary>
+    ''' <param name="Count">数量</param>
+    ''' <param name="Key">调用的键名</param>
+    ''' <returns></returns>
+    Public Function IsPlural(Count As Int32, Key As String) As String
+        If Count <= 1 Then
+            Return GetLang(Key)
+        Else
+            Return GetLang(Key & "P")
+        End If
+    End Function
+
 End Module

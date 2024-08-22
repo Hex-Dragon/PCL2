@@ -303,7 +303,69 @@ Public Module ModDownloadLib
             Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
             Exit Sub
         End If
-        OpenWebsite("https://zh.minecraft.wiki/w/" & WikiName.Replace("_experimental-snapshot-", "-exp"))
+        '本地化
+        Dim subLocation As String = "zh."
+        Select Case Lang
+            Case "lzh"
+                subLocation = "lzh."
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", "爪哇版"}, {"Combat_Test", "鬭測"}, {"Beta", "復測版"}, {"rc", "候"}, {"RC", "候"}, {"pre", "預"}, {"prerelease", "之預"}, {".", "點"}, {"-", "之"}, {"1", "一"}, {"2", "二"}, {"3", "三"}, {"4", "四"}, {"5", "五"}, {"6", "六"}, {"7", "七"}, {"8", "八"}, {"9", "九"}, {"0", "〇"}, {"w", "週"}, {"a", "甲"}, {"b", "乙"}, {"c", "丙"}, {"_", ""}, {" ", ""}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+            Case "en_US", "en_GB", "ko_KR" '韩语 Wiki 由于更新过慢，暂时无法测试跳转是否准确
+                subLocation = ""
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", "Java Edition "}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
+                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
+                End If
+            Case "ja_JP"
+                subLocation = "ja."
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", "Java Edition "}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
+                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
+                End If
+            Case "ru_RU"
+                subLocation = "ru."
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", ""}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
+                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
+                End If
+                WikiName += "_(Java_Edition)"
+            Case "fr_FR"
+                subLocation = "fr."
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", "Édition_Java_"}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
+                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
+                End If
+            Case "es_ES"
+                subLocation = "es."
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", "Java_Edition_"}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
+                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
+                End If
+        End Select
+        OpenWebsite($"https://{subLocation}minecraft.wiki/w/{WikiName.Replace("_experimental-snapshot-", "-exp")}")
     End Sub
 
 #End Region

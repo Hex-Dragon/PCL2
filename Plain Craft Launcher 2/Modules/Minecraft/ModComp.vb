@@ -200,7 +200,7 @@
         ''' </summary>
         Public ReadOnly Property TranslatedName As String
             Get
-                If Not Lang.Equals("zh_CN") Then Return RawName '其它语言暂时没有翻译数据，使用原文本
+                If Not (Lang.Equals("zh_CN") OrElse Lang.Equals("zh_MEME")) Then Return RawName '其它语言暂时没有翻译数据，使用原文本
                 Return If(DatabaseEntry Is Nothing OrElse DatabaseEntry.ChineseName = "", RawName, DatabaseEntry.ChineseName)
             End Get
         End Property
@@ -531,9 +531,7 @@
                 NewItem.ColumnTime2.Width = New GridLength(0)
                 NewItem.ColumnTime3.Width = New GridLength(0)
             End If
-            NewItem.LabDownload.Text =
-                If(DownloadCount > 100000000, Math.Round(DownloadCount / 100000000, 2) & " " & GetLang("LangModCompModBillion"),
-                    If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " " & GetLang("LangModCompModMillion"), DownloadCount))
+            NewItem.LabDownload.Text = GetLocationNum(DownloadCount)
             Return NewItem
         End Function
         Public Function GetControlLogo() As String
@@ -1358,21 +1356,22 @@ Retry:
 
             '获取描述信息
             Dim Info As String = ""
+            Dim Comma As String = GetLang("LangModCompModComma")
             Select Case Type
                 Case CompType.Mod
                     Info += If(ModLoaders.Any,
-                        GetLang("LangModCompModSuitFor") & " " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & "，", "")
-                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & GetLang("LangModCompModDependentCount") & "，", "")
+                        GetLang("LangModCompModSuitFor") & " " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & Comma, "")
+                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & IsPlural(Dependencies.Count, "LangModCompModDependentCount") & Comma, "")
                 Case CompType.ModPack
                     If GameVersions.All(Function(v) v.Contains("w")) Then
-                        Info += GetLang("LangModCompModGameVersion") & $" {Join(GameVersions, "、")}，"
+                        Info += GetLang("LangModCompModGameVersion") & $" {Join(GameVersions, "、")}{Comma}"
                     End If
             End Select
             If DownloadCount > 0 Then 'CurseForge 的下载次数经常错误地返回 0
-                Info += If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " " & GetLang("LangModCompModDownloadMillion") & "，", DownloadCount & " " & GetLang("LangModCompModDownload") & "，")
+                Info += GetLocationNum(DownloadCount) & IsPlural(DownloadCount, "LangModCompModDownload") & Comma
             End If
             Info += GetLang("LangModCompModUpdateTime", GetTimeSpanString(ReleaseDate - Date.Now, False))
-            Info += If(Status = CompFileStatus.Release, "", "，" & StatusDescription)
+            Info += If(Status = CompFileStatus.Release, "", Comma & StatusDescription)
 
             '建立控件
             Dim NewItem As New MyListItem With {

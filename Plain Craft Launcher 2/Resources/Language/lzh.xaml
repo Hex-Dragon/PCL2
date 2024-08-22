@@ -273,6 +273,7 @@
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">隱功能</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">僅隱此選項卡，設置之禁用內容依然有效。
 可保留個性化設置頁面而避隱藏設置被改。</s:String>
+    <s:String x:Key="LangSetBackgroundMusicVolume">音量</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">文簿</s:String>
@@ -488,18 +489,26 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangDownloadInstallOptiFabricManually">不相容舊版 Fabric，請手下 OptiFabric Origins</s:String>
 
     <!--PageDownloadLeft-->
-    <s:String x:Key="LangDownloadPageRefresh">更新</s:String>
-    <s:String x:Key="LangDownloadPageAutoInstall">自動裝</s:String>
-    <s:String x:Key="LangDownloadPageManualInstall">▼ 手動裝包</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallContent">手動裝包功能可下載 OptiFine、Forge 等組件之 JAR 裝文，然不能自動裝。
+    <s:String x:Key="LangDownloadPageLeftRefresh">更新</s:String>
+    <s:String x:Key="LangDownloadPageLeftAutoInstall">自動裝</s:String>
+    <s:String x:Key="LangDownloadPageLeftManualInstall">▼ 手動裝包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">手動裝包功能可下載 OptiFine、Forge 等組件之 JAR 裝文，然不能自動裝。
 於自動裝頁先選 MC 版，而後可選 OptiFine、Forge 等組件，令 PCL 自動裝之。</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallTitle">自動裝之提</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">返自動裝</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">續下手動裝包</s:String>
-    <s:String x:Key="LangDownloadPageManualInstallFold">手動裝包</s:String>
-    <s:String x:Key="LangDownloadPageResource">資源</s:String>
-    <s:String x:Key="LangDownloadPageMods">Mod</s:String>
-    <s:String x:Key="LangDownloadPageModpack">整合包</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallTitle">自動裝之提</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">返自動裝</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">續下手動裝包</s:String>
+    <s:String x:Key="LangDownloadPageLeftManualInstallFold">手動裝包</s:String>
+    <s:String x:Key="LangDownloadPageLeftResource">資源</s:String>
+    <s:String x:Key="LangDownloadPageLeftMods">Mod</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpack">整合包</s:String>
+    <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
+    <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
+    <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
+    <s:String x:Key="LangDownloadPageLeftNeoForge">NeoForge</s:String>
+    <s:String x:Key="LangDownloadPageLeftFabric">Fabric</s:String>
+    <s:String x:Key="LangDownloadPageLeftLiteLoader">LiteLoader</s:String>
+    <s:String x:Key="LangDownloadPageLeftFabricAPI">Fabric API</s:String>
+    <s:String x:Key="LangDownloadPageLeftOptiFabric">OptiFabric</s:String>
 
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteloaderDescTitle">LiteLoader 略述</s:String>
@@ -820,7 +829,8 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageOtherAboutLicenseWeb">查看來源網站</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用戶協議與免責聲明</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隱私說明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟體的 User Agent 中包含啟動器的版本號，以統計各版本的使用者數量。&#13;除此之外，本軟體不會向開發者上傳任何其他資訊。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟體的 User Agent 中包含啟動器的版本號，以統計各版本的使用者數量。
+除此之外，本軟體不會向開發者上傳任何其他資訊。</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龍騰貓躍 2016. All Rights Reserved.
 電腦軟體著作權登記號：2020SR0875133
@@ -928,9 +938,9 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
  · {version}：遊戲對應的原版版本號
 
 例如：
- · &quot;{verpath}test.exe&quot; ：運行版本文件夾下的 test.exe 程序
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 運行版本文件夾下的 test.jar
- · notepad &quot;{verindie}option.txt&quot; ：使用記事本打開該版本的設置文件
+ · "{verpath}test.exe" ：運行版本文件夾下的 test.exe 程序
+ · "{java}java.exe" -jar "{verpath}test.jar" ：用 Java 運行版本文件夾下的 test.jar
+ · notepad "{verindie}option.txt" ：使用記事本打開該版本的設置文件
 
 涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致運行失敗。
 執行命令時，命令行所在的目錄是當前的 .minecraft 文件夾。</s:String>
@@ -1143,6 +1153,11 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">已徹底刪除 {0}！</s:String>
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">已徹底刪除 {0} 個文件！</s:String>
     <s:String x:Key="LangPageVersionModDialogFailGetModDetail">無法讀取此改囊的信息。</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeAll">皆</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeCanUpdate">可更</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeEnabled">已啟</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeDisabled">已禁</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeError">錯誤</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">該版本不可使用改囊</s:String>
@@ -1278,9 +1293,9 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
  · {version}：遊戲對應的原版版本號
 
 例如：
- · &quot;{verpath}test.exe&quot; ：運行版本文件夾下的 test.exe 程序
- · &quot;{java}java.exe&quot; -jar &quot;{verpath}test.jar&quot; ：用 Java 運行版本文件夾下的 test.jar
- · notepad &quot;{verindie}option.txt&quot; ：使用記事本打開該版本的設置文件
+ · "{verpath}test.exe" ：運行版本文件夾下的 test.exe 程序
+ · "{java}java.exe" -jar "{verpath}test.jar" ：用 Java 運行版本文件夾下的 test.jar
+ · notepad "{verindie}option.txt" ：使用記事本打開該版本的設置文件
 
 涉及路徑的操作最好都打上雙引號，以避免路徑中的空格導致運行失敗。
 執行命令時，命令行所在的目錄是當前的 .minecraft 文件夾。</s:String>
@@ -1293,6 +1308,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangModMainAprilFoolTipB">看到右下角的那面小白旗了嗎？</s:String>
     <s:String x:Key="LangModMainAprilFoolTipC">這裡建議點一下右下角的小白旗投降呢.jpg</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永遠等著你……</s:String>
+    <s:String x:Key="LangModMainExceptionNoHelpFound">未找到可用的幫助；若不需要幫助頁面，可以在 設置 → 個性化 → 功能隱藏 中將其隱藏</s:String>
 
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">正在開啟中，請稍候……</s:String>
@@ -1310,6 +1326,20 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMusicDeviceChanged">由於音頻設備變更，音樂播放功能在重啟 PCL 後才能恢復！</s:String>
     <s:String x:Key="LangModMusicMusicChanged">播放音樂失敗（{0}）：PCL 不支持播放音頻屬性在中途發生變化的音樂</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">播放音樂失敗（{0}）：PCL 可能不支持此音樂格式，請將格式轉換為 .wav、.mp3 或 .flac 後再試</s:String>
+    <s:String x:Key="LangModMusicExceptionInitFail">初始化音樂列表失敗</s:String>
+    <s:String x:Key="LangModMusicPaused">已暫停：{0}</s:String>
+    <s:String x:Key="LangModMusicStopClickTipA">左鍵恢復播放，右鍵播放下一曲。</s:String>
+    <s:String x:Key="LangModMusicStopClickTipB">左鍵恢復播放，右鍵重新從頭播放。</s:String>
+    <s:String x:Key="LangModMusicPlaying">正在播放：{0}</s:String>
+    <s:String x:Key="LangModMusicStartClickTipA">左鍵暫停，右鍵播放下一曲。</s:String>
+    <s:String x:Key="LangModMusicStartClickTipB">左鍵暫停，右鍵重新從頭播放。</s:String>
+    <s:String x:Key="LangModMusicExceptionUIRefreshFail">刷新背景音樂 UI 失敗</s:String>
+    <s:String x:Key="LangModMusicNotPlayedYet">音樂播放尚未開始！</s:String>
+    <s:String x:Key="LangModMusicReplay">重新播放：{0}</s:String>
+    <s:String x:Key="LangModMusicNoMusic">未檢測到可用的背景音樂！</s:String>
+    <s:String x:Key="LangModMusicMusicCleared">背景音樂已清除！</s:String>
+    <s:String x:Key="LangModMusicMusicRefreshed">背景音樂已刷新：{0}</s:String>
+    <s:String x:Key="LangModMusicExceptionMusicRefreshFail">刷新背景音樂播放失敗</s:String>
 
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL 無法創建 PCL 文件夾（{0}PCL），請嘗試：
@@ -1397,9 +1427,10 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">適用於</s:String>
-    <s:String x:Key="LangModCompModDependentCount">個前置改囊，</s:String>
-    <s:String x:Key="LangModCompModDownload">次下載，</s:String>
-    <s:String x:Key="LangModCompModDownloadMillion">萬次下載，</s:String>
+    <s:String x:Key="LangModCompModDependentCount">個前置</s:String>
+    <s:String x:Key="LangModCompModDependentCountP">個前置</s:String>
+    <s:String x:Key="LangModCompModDownload">次下載</s:String>
+    <s:String x:Key="LangModCompModDownloadP">次下載</s:String>
     <s:String x:Key="LangModCompModGameVersion">遊戲版本</s:String>
     <s:String x:Key="LangModCompModUpdateTime">{0}更新</s:String>
     <s:String x:Key="LangModCompModSaveAs">另存為</s:String>
@@ -1408,18 +1439,27 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCompModStatusDescRelease">正式版</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">測試版</s:String>
     <s:String x:Key="LangModCompModStatusDescAlpha">測試版</s:String>
-    <s:String x:Key="LangModCompModMillion">萬</s:String>
-    <s:String x:Key="LangModCompModBillion">億</s:String>
+    <s:String x:Key="LangModCompModDigit1">萬</s:String>
+    <s:String x:Key="LangModCompModDigit2">億</s:String>
+    <s:String x:Key="LangModCompModDigit3">兆</s:String>
+    <s:String x:Key="LangModCompModComma">，</s:String>
     <s:String x:Key="LangModCompExceptionNoResult">沒有符合條件的結果</s:String>
 
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">年</s:String>
+    <s:String x:Key="LangModBaseDateYearP">年</s:String>
     <s:String x:Key="LangModBaseDateMonthA">個月</s:String>
+    <s:String x:Key="LangModBaseDateMonthAP">個月</s:String>
     <s:String x:Key="LangModBaseDateMonthB">月</s:String>
+    <s:String x:Key="LangModBaseDateMonthBP">月</s:String>
     <s:String x:Key="LangModBaseDateDay">天</s:String>
+    <s:String x:Key="LangModBaseDateDayP">天</s:String>
     <s:String x:Key="LangModBaseDateHour">小時</s:String>
+    <s:String x:Key="LangModBaseDateHourP">小時</s:String>
     <s:String x:Key="LangModBaseDateMinute">分鐘</s:String>
+    <s:String x:Key="LangModBaseDateMinuteP">分鐘</s:String>
     <s:String x:Key="LangModBaseDateSecond">秒</s:String>
+    <s:String x:Key="LangModBaseDateSecondP">秒</s:String>
     <s:String x:Key="LangModBaseDateAgo">前</s:String>
     <s:String x:Key="LangModBaseDateLater">後</s:String>
     <s:String x:Key="LangModBaseDialogWebOpenFailContent">可能由於瀏覽器未正確配置，PCL 無法為你打開網頁。
@@ -1474,7 +1514,23 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModValidateNumInt">請輸入一個整數！</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">不可超過 {0}！</s:String>
     <s:String x:Key="LangModValidateNumNoLess">不可低於 {0}！</s:String>
-    
+    <s:String x:Key="LangModValidateRegexError">正則檢查失敗！</s:String>
+    <s:String x:Key="LangModValidateLen">長度必須為 {0} 個字符！</s:String>
+    <s:String x:Key="LangModValidateLenMax">長度最長為 {0} 個字符！</s:String>
+    <s:String x:Key="LangModValidateLenMin">長度至少需 {0} 個字符！</s:String>
+    <s:String x:Key="LangModValidateNoContain">輸入內容不能包含 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateNoContent">輸入內容不能為 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoStartWithSpace">檔名不能以空格開頭！</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithSpace">檔名不能以空格結尾！</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithDot">檔名不能以小數點結尾！</s:String>
+    <s:String x:Key="LangModValidateFileNoContain">檔名不可包含 % 字元！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoContent">檔名不可為 %！</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoSameName">不可與現有檔案重名！</s:String>
+    <s:String x:Key="LangModValidateFileNoParentFolder">父資料夾不存在：{0}</s:String>
+    <s:String x:Key="LangModValidateFileHeadUriIncorrect">檔案夾路徑頭存在錯誤！</s:String>
+    <s:String x:Key="LangModValidateFolderUriIncorrect">檔案夾路徑存在錯誤！</s:String>
+    <s:String x:Key="LangModValidateInvalidChar">路徑中存在無效字元！</s:String>
+
     <!--MyLocalModItem-->
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">當前版本：{0} ({1})
 最新版本：{2} ({3})

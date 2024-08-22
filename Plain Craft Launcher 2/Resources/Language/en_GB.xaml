@@ -103,7 +103,7 @@ Right-click to open the sponsorship page and support PCL if you think it is doin
     <s:String x:Key="LangHintThemeSetInit">The personalisation settings have been initialised.</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">Failed to initialise the personalisation settings.</s:String>
     <s:String x:Key="LangBackgroundPic">Background</s:String>
-    <s:String x:Key="LangBackgroundPicCount">Background (Total {0})</s:String>
+    <s:String x:Key="LangBackgroundPicCount">Background (Total: {0})</s:String>
     <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">All files in the background folder will be deleted.
 This operation is irrevocable. Are you sure?</s:String>
     <s:String x:Key="LangDialogTitleWarning">Warning</s:String>
@@ -273,6 +273,7 @@ You need to restart the launcher after this change.</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">Feature Hiding</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Only hide this tab, the disabled content set is still valid.
 Avoid 'Feature Hiding' be changed whilst keeping the 'Personalisation' page.</s:String>
+    <s:String x:Key="LangSetBackgroundMusicVolume">Volume</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">Folder List</s:String>
@@ -488,18 +489,26 @@ PCL suggests turning on the 'Instance Isolation' option in 'Settings → Instanc
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Incompatible with older versions of Fabric, please download OptiFabric Origins manually.</s:String>
 
     <!--PageDownloadLeft-->
-    <s:String x:Key="LangDownloadPageRefresh">Refresh</s:String>
-    <s:String x:Key="LangDownloadPageAutoInstall">Installation</s:String>
-    <s:String x:Key="LangDownloadPageManualInstall">▼ Packages</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallContent">The 'Packages' feature allows you to download a JAR installation file for loaders like OptiFine and Forge, but cannot be automatically installed.
+    <s:String x:Key="LangDownloadPageLeftRefresh">Refresh</s:String>
+    <s:String x:Key="LangDownloadPageLeftAutoInstall">Installation</s:String>
+    <s:String x:Key="LangDownloadPageLeftManualInstall">▼ Packages</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">The 'Packages' feature allows you to download a JAR installation file for loaders like OptiFine and Forge, but cannot be automatically installed.
 Select Minecraft version first on the 'Installation' page, then choose OptiFine, Forge, or any other loader letting PCL install it automatically.</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallTitle">Installation Hint</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn1">Installation Page</s:String>
-    <s:String x:Key="LangDownloadPageDialogManualInstallBtn2">Continue</s:String>
-    <s:String x:Key="LangDownloadPageManualInstallFold">Packages</s:String>
-    <s:String x:Key="LangDownloadPageResource">Resources</s:String>
-    <s:String x:Key="LangDownloadPageMods">Mods</s:String>
-    <s:String x:Key="LangDownloadPageModpack">Modpacks</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallTitle">Installation Hint</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">Installation Page</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">Continue</s:String>
+    <s:String x:Key="LangDownloadPageLeftManualInstallFold">Packages</s:String>
+    <s:String x:Key="LangDownloadPageLeftResource">Resources</s:String>
+    <s:String x:Key="LangDownloadPageLeftMods">Mods</s:String>
+    <s:String x:Key="LangDownloadPageLeftModpack">Modpacks</s:String>
+    <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
+    <s:String x:Key="LangDownloadPageLeftOptiFine">OptiFine</s:String>
+    <s:String x:Key="LangDownloadPageLeftForge">Forge</s:String>
+    <s:String x:Key="LangDownloadPageLeftNeoForge">NeoForge</s:String>
+    <s:String x:Key="LangDownloadPageLeftFabric">Fabric</s:String>
+    <s:String x:Key="LangDownloadPageLeftLiteLoader">LiteLoader</s:String>
+    <s:String x:Key="LangDownloadPageLeftFabricAPI">Fabric API</s:String>
+    <s:String x:Key="LangDownloadPageLeftOptiFabric">OptiFabric</s:String>
 
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteloaderDescTitle">Introduction of LiteLoader</s:String>
@@ -684,7 +693,7 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangLaunchLeftFinished">Completed</s:String>
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">Exporting launch script...</s:String>
     <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">PCL will automatically install the modpack in the current folder.</s:String>
-    <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">Auto Install</s:String>
+    <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">Automatic Installation</s:String>
 
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">Snapshot Hint</s:String>
@@ -801,7 +810,7 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCMod">Provided Chinese translation of mods and more related information!</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">Visit</s:String>
     <s:String x:Key="LangPageOtherAboutThanks00ll00">Provided Java Launch Wrapper and some important support!</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksz0z0r4">MCIM China Mod Download Image Source and Help Kutu Bed are provided!</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksz0z0r4">Provided the mcmod-info-mirror for mods and image hosting services for the Help Centre!</s:String>
     <s:String x:Key="LangPageOtherAboutThanksPatrick">Designed and made the PCL icon, saved LTCat from the abyss of suffering...</s:String>
     <s:String x:Key="LangPageOtherAboutThanksHao_Tian">Found a bunch of weird bugs that people wouldn't think in insider test, has an unusual bug physique.</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">MCBBS</s:String>
@@ -809,7 +818,7 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">Everyone in the PCL QQ Group</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">Thanks to the netizens in the group for their support and encouragement to LTCat and PCL for so long!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">Sponsors</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors July 2024! Thanks for your support for PCL!</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from July 2024! Thanks for your support for PCL!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">Generate Unlock Code</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">Sponsor</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">Copy Identify Code</s:String>
@@ -820,20 +829,20 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherAboutLicenseWeb">Source</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">ToS &amp; Disclaimer</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">Privacy Statement</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">The User Agent of this software contains the version number of the launcher to count the number of users for each version.&#13;In addition, this software will not upload any other information to the developers.</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">The User Agent of the software includes the version number for the purpose of quantitative statistics.
+Additionally, the software will not upload any other information.</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">Other Information</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © LTCat (龙腾猫跃) 2016. All Rights Reserved.
 Copyright of Computer Software Registration Number: 2020SR0875133
 Email for Reporting Illegal and Irregular Behaviour: hexdragon@vip.qq.com
-Not an official MINECRAFT product. Not approved by or associated with MOJANG or MICROSOFT.</s:String>
-
+Not an official Minecraft product. Not approved by Mojang or Microsoft and not associated with Mojang or Microsoft.</s:String>
 
     <!--PageOtherTest-->
     <s:String x:Key="LangPageOtherTestNoUtility">For the ease of maintenance, the open-source version does not include the Utilities feature...</s:String>
 
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">Offline Skin</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTips">Due to technical issues, this feature is only guaranteed to be effective for versions prior to 1.19.2!</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTips">Due to the technical issue, the feature is only guaranteed to be valid for versions before 1.19.2!</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandom">Random</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeRandomToolTip">Select a default skin randomly.</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoft">Microsoft</s:String>
@@ -1070,9 +1079,9 @@ In general, choose 'Display a hint when there is a critical vulnerability patch'
 Unless you are making a modpack or updating the launcher often, this option is extremely NOT recommended!</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">Failed to confirm the launcher update.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod Source</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Prefer to use mirror source</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Switch to mirror source only when the official source loads slowly</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Prefer to use official source</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Mirror</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Balanced</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Official</s:String>
     <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL is about to restart to fully apply the language.</s:String>
     <s:String x:Key="LangPageSetupSystemLangHelpTranslate">Contribute</s:String>
     <s:String x:Key="LangPageSetupSystemHintCloseGameBeforeChangeLanguage">Please close all instances that are running first...</s:String>
@@ -1144,6 +1153,11 @@ Please read the warning above carefully before continuing!</s:String>
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessA">The mod {0} has been completely deleted!</s:String>
     <s:String x:Key="LangPageVersionModHintFilePermanentDeleteSuccessB">{0} mods have been completely deleted!</s:String>
     <s:String x:Key="LangPageVersionModDialogFailGetModDetail">Unable to read information for this mod.</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeAll">All</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeCanUpdate">Updatable</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeEnabled">Enabled</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeDisabled">Disabled</s:String>
+    <s:String x:Key="LangPageVersionModViewTypeError">Error</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">This Instance is NOT Available with Mods</s:String>
@@ -1295,6 +1309,7 @@ If you have not modified the relevant files, please do not check this item.</s:S
     <s:String x:Key="LangModMainAprilFoolTipB">Have you seen the little white flag at the bottom-right?</s:String>
     <s:String x:Key="LangModMainAprilFoolTipC">Hmm... I suggest you just take a little click to the flag :)</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">The little white flag is always waiting for you...</s:String>
+    <s:String x:Key="LangModMainExceptionNoHelpFound">Available helps are not found. You are able to hide the Help Centre in 'Settings → Personalisation → Feature Hiding' if it is not needed.</s:String>
 
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">Opening, please wait...</s:String>
@@ -1312,6 +1327,20 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMusicDeviceChanged">Due to the change of the audio device, music will be unusable until restart the launcher!</s:String>
     <s:String x:Key="LangModMusicMusicChanged">Failed to play ({0}): Changing audio properties during play is not support.</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">Failed to play ({0}): Format may be unsupported, try again after convert to .wav, .mp3, or .flac.</s:String>
+    <s:String x:Key="LangModMusicExceptionInitFail">Failed to initialise the music list.</s:String>
+    <s:String x:Key="LangModMusicPaused">Paused: {0}</s:String>
+    <s:String x:Key="LangModMusicStopClickTipA">Left-click play, right-click next.</s:String>
+    <s:String x:Key="LangModMusicStopClickTipB">Left-click play, right-click replay.</s:String>
+    <s:String x:Key="LangModMusicPlaying">Now playing: {0}</s:String>
+    <s:String x:Key="LangModMusicStartClickTipA">Left-click pause, right-click next.</s:String>
+    <s:String x:Key="LangModMusicStartClickTipB">Left-click pause, right-click replay.</s:String>
+    <s:String x:Key="LangModMusicExceptionUIRefreshFail">Failed to refresh the background music UI.</s:String>
+    <s:String x:Key="LangModMusicNotPlayedYet">Music has not started yet!</s:String>
+    <s:String x:Key="LangModMusicReplay">Replay: {0}</s:String>
+    <s:String x:Key="LangModMusicNoMusic">No available background music detected!</s:String>
+    <s:String x:Key="LangModMusicMusicCleared">Background music cleared!</s:String>
+    <s:String x:Key="LangModMusicMusicRefreshed">Background music refreshed: {0}</s:String>
+    <s:String x:Key="LangModMusicExceptionMusicRefreshFail">Failed to refresh background music.</s:String>
 
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL cannot create the 'PCL' folder ({0}PCL), please try:
@@ -1326,8 +1355,8 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModSecretPermissionError">Runtime Error</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">Open-source Version Notice</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">This version does not include the following features:
-- CurseForge API Queries: Requires API Key (can be requested and added to the 'SecretHeadersSign' method);
-- Microsoft login: You need to request a client ID yourself, and then add it to the beginning of the ModSecret.vb
+- CurseForge API Call: Requires an API Key that you requested, and add to the 'SecretHeadersSign' method;
+- Microsoft login: Require a Client ID that you requested and, add to the front of the 'ModSecret.vb';
 - Update and Networking Notifications: To avoid potential abuse concerns;
 - Theme: This is a commemorative feature that requires sponsorship to unlock. Do not make the sponsors too sad...;
 - Utilities: Some development tools were placed here during the early stages of development, and it was difficult to sort them out.</s:String>
@@ -1399,9 +1428,10 @@ Please check whether the event type is filled correctly, whether the PCL is the 
 
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">Available for</s:String>
-    <s:String x:Key="LangModCompModDependentCount">dependencies,</s:String>
-    <s:String x:Key="LangModCompModDownload">downloads,</s:String>
-    <s:String x:Key="LangModCompModDownloadMillion">downloads in 10k,</s:String>
+    <s:String x:Key="LangModCompModDependentCount">dependency</s:String>
+    <s:String x:Key="LangModCompModDependentCountP">dependencies</s:String>
+    <s:String x:Key="LangModCompModDownload"> download</s:String>
+    <s:String x:Key="LangModCompModDownloadP"> downloads</s:String>
     <s:String x:Key="LangModCompModGameVersion">Game version</s:String>
     <s:String x:Key="LangModCompModUpdateTime">Updated {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">Save as</s:String>
@@ -1410,20 +1440,29 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModCompModStatusDescRelease">Release</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">Beta</s:String>
     <s:String x:Key="LangModCompModStatusDescAlpha">Alpha</s:String>
-    <s:String x:Key="LangModCompModMillion">Million</s:String>
-    <s:String x:Key="LangModCompModBillion">Billion</s:String>
+    <s:String x:Key="LangModCompModDigit1">k</s:String>
+    <s:String x:Key="LangModCompModDigit2">M</s:String>
+    <s:String x:Key="LangModCompModDigit3">B</s:String>
+    <s:String x:Key="LangModCompModComma">, </s:String>
     <s:String x:Key="LangModCompExceptionNoResult">No Results</s:String>
 
     <!--ModBase-->
-    <s:String x:Key="LangModBaseDateYear">year(s)</s:String>
-    <s:String x:Key="LangModBaseDateMonthA">month(s)</s:String>
-    <s:String x:Key="LangModBaseDateMonthB">month(s)</s:String>
-    <s:String x:Key="LangModBaseDateDay">day(s)</s:String>
-    <s:String x:Key="LangModBaseDateHour">hour(s)</s:String>
-    <s:String x:Key="LangModBaseDateMinute">minute(s)</s:String>
-    <s:String x:Key="LangModBaseDateSecond">second(s)</s:String>
-    <s:String x:Key="LangModBaseDateAgo">ago.</s:String>
-    <s:String x:Key="LangModBaseDateLater">later.</s:String>
+    <s:String x:Key="LangModBaseDateYear">year</s:String>
+    <s:String x:Key="LangModBaseDateYearP">years</s:String>
+    <s:String x:Key="LangModBaseDateMonthA">month</s:String>
+    <s:String x:Key="LangModBaseDateMonthAP">months</s:String>
+    <s:String x:Key="LangModBaseDateMonthB">month</s:String>
+    <s:String x:Key="LangModBaseDateMonthBP">months</s:String>
+    <s:String x:Key="LangModBaseDateDay">day</s:String>
+    <s:String x:Key="LangModBaseDateDayP">days</s:String>
+    <s:String x:Key="LangModBaseDateHour">hour</s:String>
+    <s:String x:Key="LangModBaseDateHourP">hours</s:String>
+    <s:String x:Key="LangModBaseDateMinute">minute</s:String>
+    <s:String x:Key="LangModBaseDateMinuteP">minutes</s:String>
+    <s:String x:Key="LangModBaseDateSecond">second</s:String>
+    <s:String x:Key="LangModBaseDateSecondP">seconds</s:String>
+    <s:String x:Key="LangModBaseDateAgo"> ago</s:String>
+    <s:String x:Key="LangModBaseDateLater"> later</s:String>
     <s:String x:Key="LangModBaseDialogWebOpenFailContent">PCL cannot open the webpage since the browser may not be configured correctly.
 The URL has been copied to the clipboard, paste to access manually.
 URL: {0}</s:String>
@@ -1476,6 +1515,22 @@ Please update the launcher in 'Settings → Launcher' first, then submit feedbac
     <s:String x:Key="LangModValidateNumInt">Please enter an integer!</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">Cannot be greater than {0}!</s:String>
     <s:String x:Key="LangModValidateNumNoLess">Cannot be less than {0}!</s:String>
+    <s:String x:Key="LangModValidateRegexError">Failed to check the regex!</s:String>
+    <s:String x:Key="LangModValidateLen">The length must be {0} characters!</s:String>
+    <s:String x:Key="LangModValidateLenMax">The maximum length is {0} characters!</s:String>
+    <s:String x:Key="LangModValidateLenMin">The length must be at least {0} characters!</s:String>
+    <s:String x:Key="LangModValidateNoContain">The input cannot contain '%'!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateNoContent">The input cannot be '%'!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoStartWithSpace">The file name cannot start with a space!</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithSpace">The file name cannot end with a space!</s:String>
+    <s:String x:Key="LangModValidateFileNoEndWithDot">The file name cannot end with a dot!</s:String>
+    <s:String x:Key="LangModValidateFileNoContain">The file name cannot contain '%'!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoContent">The file name cannot be '%'!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoSameName">The file name already exists!</s:String>
+    <s:String x:Key="LangModValidateFileNoParentFolder">The parent folder does not exist: {0}</s:String>
+    <s:String x:Key="LangModValidateFileHeadUriIncorrect">Incorrect folder path header!</s:String>
+    <s:String x:Key="LangModValidateFolderUriIncorrect">Incorrect folder path!</s:String>
+    <s:String x:Key="LangModValidateInvalidChar">Invalid characters exist in the path!</s:String>
     
     <!--MyLocalModItem-->
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">Current Version: {0} ({1})
@@ -1673,7 +1728,7 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">Select installation destination (must be an empty folder)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft folder paths cannot contain exclamation marks (!) or semicolon (;)!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Please select an empty folder as the installation destination!</s:String>
-    <s:String x:Key="LangModModpackInstallArchive">Installing archive...</s:String>
+    <s:String x:Key="LangModModpackInstallArchive">Install Archive</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Added to the folder list: {0}</s:String>
     
     <!--ModWatcher-->
