@@ -161,13 +161,18 @@
                     </Grid.RowDefinitions>
                     <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemLangLaunchLang}"/>
                     <local:MyComboBox x:Name="ComboBackgroundSuit" Tag="UiBackgroundSuit" Grid.Row="0" Grid.Column="1">
-                        <local:MyComboBoxItem Content="English (US)" Tag="en_US" FontFamily="Resources/#PCL English"/>
-                        <local:MyComboBoxItem Content="English (UK)" Tag="en_GB" FontFamily="Resources/#PCL English"/>
-                        <local:MyComboBoxItem Content="简体中文 (中国大陆)" Tag="zh_CN" IsSelected="True" FontFamily="Resources/#PCL English, Microsoft YaHei UI"/>
-                        <local:MyComboBoxItem Content="繁體中文 (香港特別行政區)" Tag="zh_HK" FontFamily="Resources/#PCL English, Microsoft JhengHei UI"/>
-                        <local:MyComboBoxItem Content="繁體中文 (台灣)" Tag="zh_TW" FontFamily="Resources/#PCL English, Microsoft JhengHei UI"/>
-                        <local:MyComboBoxItem Content="文言 (華夏)" Tag="lzh" FontFamily="Resources/#PCL English, Microsoft JhengHei UI"/>
-                        <local:MyComboBoxItem Content="梗体中文 (天朝)" Tag="zh_MEME" FontFamily="Resources/#PCL English, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="English (United Kingdom)" Tag="en_GB" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="English (US)" Tag="en_US" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="Español" Tag="es_ES" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="Français" Tag="fr_FR" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="日本語" Tag="ja_JP" FontFamily="Resources/#PCL English, Segoe UI, Yu Gothic UI"/>
+                        <local:MyComboBoxItem Content="한국어" Tag="ko_KR" FontFamily="Resources/#PCL English, Segoe UI, Malgun Gothic"/>
+                        <local:MyComboBoxItem Content="文言 (華夏)" Tag="lzh" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
+                        <local:MyComboBoxItem Content="Русский" Tag="ru_RU" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="简体中文 (中国大陆)" Tag="zh_CN" IsSelected="True" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="繁體中文 (香港特別行政區)" Tag="zh_HK" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
+                        <local:MyComboBoxItem Content="梗体中文 (天朝)" Tag="zh_MEME" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="繁體中文 (台灣)" Tag="zh_TW" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
                     </local:MyComboBox>
                     <local:MyHint Text="{DynamicResource LangPageSetupSystemLangWarn}" Grid.Row="2" Grid.ColumnSpan="2"/>
                     <Grid Height="35" Grid.Row="4" Grid.ColumnSpan="5" Margin="0,5,0,0">

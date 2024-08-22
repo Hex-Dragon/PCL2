@@ -3,20 +3,30 @@
 #Region "语言"
     Private Sub SelectCurrentLanguage()
         Select Case Lang
-            Case "en_US"
-                ComboBackgroundSuit.SelectedIndex = 0
             Case "en_GB"
+                ComboBackgroundSuit.SelectedIndex = 0
+            Case "en_US"
                 ComboBackgroundSuit.SelectedIndex = 1
-            Case "zh_CN"
+            Case "es_ES"
                 ComboBackgroundSuit.SelectedIndex = 2
-            Case "zh_HK"
+            Case "fr_FR"
                 ComboBackgroundSuit.SelectedIndex = 3
-            Case "zh_TW"
+            Case "ja_JP"
                 ComboBackgroundSuit.SelectedIndex = 4
-            Case "lzh"
+            Case "ko_KR"
                 ComboBackgroundSuit.SelectedIndex = 5
-            Case "zh_MEME"
+            Case "lzh"
                 ComboBackgroundSuit.SelectedIndex = 6
+            Case "ru_RU"
+                ComboBackgroundSuit.SelectedIndex = 7
+            Case "zh_CN"
+                ComboBackgroundSuit.SelectedIndex = 8
+            Case "zh_HK"
+                ComboBackgroundSuit.SelectedIndex = 9
+            Case "zh_MEME"
+                ComboBackgroundSuit.SelectedIndex = 10
+            Case "zh_TW"
+                ComboBackgroundSuit.SelectedIndex = 11
         End Select
     End Sub
 
