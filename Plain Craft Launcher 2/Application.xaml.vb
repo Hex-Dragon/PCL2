@@ -31,10 +31,14 @@ Public Class Application
         '依照选择语言切换字体
         Dim LaunchFont As FontFamily
         Select Case Lang
-            Case "zh_TW", "zh_HK"
-                LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Microsoft JhengHei UI")
+            Case "zh_TW", "zh_HK", "lzh"
+                LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft JhengHei UI")
+            Case "ja_JP"
+                LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, MS UI Gothic, Microsoft YaHei UI")
+            Case "ko_KR"
+                LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Malgun Gothic, Microsoft YaHei UI")
             Case Else
-                LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Microsoft YaHei UI")
+                LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft YaHei UI")
         End Select
         SwitchApplicationFont(LaunchFont)
 
