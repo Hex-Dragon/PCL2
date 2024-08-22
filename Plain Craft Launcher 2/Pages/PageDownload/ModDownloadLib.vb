@@ -316,7 +316,7 @@ Public Module ModDownloadLib
             Case "en_US", "en_GB"
                 subLocation = ""
                 Dim keyWord As New Dictionary(Of String, String) From {
-                      {"Java版", "Java Edition "}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-releases"}, {" ", "_"}}
+                      {"Java版", "Java Edition "}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
                 For Each key In keyWord.Keys
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
