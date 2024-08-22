@@ -165,7 +165,7 @@
                         <local:MyComboBoxItem Content="English (US)" Tag="en_US" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
                         <local:MyComboBoxItem Content="Español" Tag="es_ES" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
                         <local:MyComboBoxItem Content="Français" Tag="fr_FR" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
-                        <local:MyComboBoxItem Content="日本語" Tag="ja_JP" FontFamily="Resources/#PCL English, Segoe UI, MS UI Gothic"/>
+                        <local:MyComboBoxItem Content="日本語" Tag="ja_JP" FontFamily="Resources/#PCL English, Segoe UI, Yu Gothic UI"/>
                         <local:MyComboBoxItem Content="한국어" Tag="ko_KR" FontFamily="Resources/#PCL English, Segoe UI, Malgun Gothic"/>
                         <local:MyComboBoxItem Content="文言 (華夏)" Tag="lzh" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
                         <local:MyComboBoxItem Content="Русский" Tag="ru_RU" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>

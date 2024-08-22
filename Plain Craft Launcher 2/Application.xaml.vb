@@ -34,7 +34,7 @@ Public Class Application
             Case "zh_TW", "zh_HK", "lzh"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft JhengHei UI")
             Case "ja_JP"
-                LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, MS UI Gothic, Microsoft YaHei UI")
+                LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Yu Gothic UI, Microsoft YaHei UI")
             Case "ko_KR"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Malgun Gothic, Microsoft YaHei UI")
             Case Else
