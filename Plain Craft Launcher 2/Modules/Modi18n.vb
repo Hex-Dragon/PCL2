@@ -52,9 +52,9 @@
     ''' <returns></returns>
     Public Function GetLocalTimeFormat(Time As DateTime) As String
         Select Case Lang
-            Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME" '2024/08/16 11:47
+            Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME", "ja_JP", "ko_KR" '2024/08/16 11:47
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
-            Case "en_GB" '11:47 16/08/2024
+            Case "en_GB", "es_ES", "fr_FR", "ru_RU" '11:47 16/08/2024
                 Return Time.ToString("HH':'mm dd'/'MM'/'yyyy")
             Case Else 'en_US 11:47 08/16/2024
                 Return Time.ToString("HH':'mm MM'/'dd'/'yyyy")
@@ -88,15 +88,23 @@
     ''' <returns>返回类似于 zh_CN 这样形式的文本</returns>
     Public Function GetDefaultLang() As String
         Select Case Globalization.CultureInfo.CurrentCulture.Name
-            Case "en-US"
-                Return "en_US"
-            Case "en-GB"
+            Case "en-GB", "en-NZ", "en-AU"
                 Return "en_GB"
-            Case "zh-CN"
+            Case "es-ES", "es-MX", "es-UY", "es-VE", "es-AR", "es_EC", "	es_CL"
+                Return "es_ES"
+            Case "fr-FR", "fr-CA"
+                Return "fr_FR"
+            Case "ja-JP"
+                Return "ja_JP"
+            Case "ko-KR", "ko-KP"
+                Return "ko_KR"
+            Case "ru-RU"
+                Return "ru_RU"
+            Case "zh-CN", "zh-SG", "zh-Hans"
                 Return "zh_CN"
-            Case "zh-HK"
+            Case "zh-HK", "zh-MO"
                 Return "zh_HK"
-            Case "zh-TW"
+            Case "zh-TW", "zh-Hant"
                 Return "zh_TW"
             Case Else
                 Return "en_US"
