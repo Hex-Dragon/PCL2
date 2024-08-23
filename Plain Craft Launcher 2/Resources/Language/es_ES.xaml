@@ -909,7 +909,7 @@ Por ejemplo, escribir "--demo" lanzará el juego en modo de demostración.</s:St
 Las rutas relativas se pueden implementar con las siguientes etiquetas alternativas (las rutas terminan con "\"):
  · {path}: La carpeta donde se encuentra el PCL;
  · {minecraft}: Carpeta .minecraft;
- · {verpath}: Carpeta de Instancia (.minecraft\versions\<nombre de instancia>\);
+ · {verpath}: Carpeta de Instancia (.minecraft\versions\nombre de instancia\);
  · {verindie}: La carpeta de la instancia cuando "Aislamiento de Instancia" está habilitado, o la carpeta .minecraft cuando está deshabilitado;
  · {java}: La carpeta de Java que usa el juego.
 
