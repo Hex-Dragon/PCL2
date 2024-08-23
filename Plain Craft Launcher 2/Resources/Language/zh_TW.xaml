@@ -243,7 +243,7 @@
     <s:String x:Key="LangSetHomePagePresetPage">首頁預設</s:String>
     <s:String x:Key="LangSetHomePagePresetPageA">你知道嗎？</s:String>
     <s:String x:Key="LangSetHomePagePresetPageB">回聲洞</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageC">Minecraft 新聞（作者：Light-Beacon）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageC">Minecraft 新聞（作者：Nattiden）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageD">簡單首頁（作者：MFn233）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">每日模組包推薦（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 外觀推薦（作者：wkea）</s:String>

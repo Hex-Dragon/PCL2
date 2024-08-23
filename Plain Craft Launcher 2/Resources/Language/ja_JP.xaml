@@ -1430,10 +1430,10 @@ PCL は他の様々なダウンロードプロトコルをサポートしてい�
     <s:String x:Key="LangModCompModSuitFor">適応於</s:String>
     <s:String x:Key="LangModCompModDependentCount">個先行</s:String>
     <s:String x:Key="LangModCompModDependentCountP">個先行</s:String>
-    <s:String x:Key="LangModCompModDownload">次下载</s:String>
-    <s:String x:Key="LangModCompModDownloadP">次下载</s:String>
+    <s:String x:Key="LangModCompModDownload">回のダウンロード</s:String>
+    <s:String x:Key="LangModCompModDownloadP">回のダウンロード</s:String>
     <s:String x:Key="LangModCompModGameVersion">ゲームバージョン</s:String>
-    <s:String x:Key="LangModCompModUpdateTime">{0}更新</s:String>
+    <s:String x:Key="LangModCompModUpdateTime">{0}に更新</s:String>
     <s:String x:Key="LangModCompModSaveAs">別名保存</s:String>
     <s:String x:Key="LangModCompModDependent">先行Mod</s:String>
     <s:String x:Key="LangModCompModAlternateVersion">オプションバージョン</s:String>

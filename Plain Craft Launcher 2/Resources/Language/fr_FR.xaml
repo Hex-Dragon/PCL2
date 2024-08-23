@@ -243,7 +243,7 @@ Il n'est pas recommandé d'activer le flou lors de la création d'un modpack pou
     <s:String x:Key="LangSetHomePagePresetPage">Préréglages de la Page d'Accueil</s:String>
     <s:String x:Key="LangSetHomePagePresetPageA">Trivia</s:String>
     <s:String x:Key="LangSetHomePagePresetPageB">Echo Hole</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageC">Actualités Minecraft (Auteur : Light-Beacon)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageC">Actualités Minecraft (Auteur : Nattiden)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageD">Page d'Accueil Simple (Auteur : MFn233)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">Recommandation de Modpack Quotidienne (Auteur : wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Recommandation de Skins Minecraft (Auteur : wkea)</s:String>

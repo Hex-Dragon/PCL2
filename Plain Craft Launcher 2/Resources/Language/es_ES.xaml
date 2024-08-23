@@ -243,7 +243,7 @@ No se recomienda habilitar el desenfoque al hacer un modpack para asegurar que P
     <s:String x:Key="LangSetHomePagePresetPage">Preajustes de Página de Inicio</s:String>
     <s:String x:Key="LangSetHomePagePresetPageA">Trivia</s:String>
     <s:String x:Key="LangSetHomePagePresetPageB">Echo Hole</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageC">Noticias de Minecraft (Autor: Light-Beacon)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageC">Noticias de Minecraft (Autor: Nattiden)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageD">Página de Inicio Simple (Autor: MFn233)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">Recomendación Diaria de Modpack (Autor: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Recomendación de Skins de Minecraft (Autor: wkea)</s:String>

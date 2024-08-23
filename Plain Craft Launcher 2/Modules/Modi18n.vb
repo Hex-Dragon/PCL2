@@ -117,15 +117,16 @@
     ''' <param name="Num">数量</param>
     ''' <returns>11 Million、2 万等这样的表示</returns>
     Public Function GetLocationNum(Num As Int32) As String
-        If IsLocationZH() Then
-            Return If(Num > 1000000000000, Math.Round(Num / 1000000000000, 2) & " " & GetLang("LangModCompModDigit3"), '兆
+        Select Case Lang
+            Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME", "ja_JP", "ko_KR"
+                Return If(Num > 1000000000000, Math.Round(Num / 1000000000000, 2) & " " & GetLang("LangModCompModDigit3"), '兆
                 If(Num > 100000000, Math.Round(Num / 100000000, 2) & " " & GetLang("LangModCompModDigit2"), '亿
                 If(Num > 100000, Math.Round(Num / 10000, 0) & " " & GetLang("LangModCompModDigit1"), Num.ToString("N0")))) '万
-        Else 'en_US en_GB
-            Return If(Num > 1000000000, Math.Round(Num / 1000000000, 2) & GetLang("LangModCompModDigit3"), 'Billion
+            Case Else 'en_US, en_GB, fr_FR etc.
+                Return If(Num > 1000000000, Math.Round(Num / 1000000000, 2) & GetLang("LangModCompModDigit3"), 'Billion
                 If(Num > 1000000, Math.Round(Num / 1000000, 2) & GetLang("LangModCompModDigit2"), 'Million
                 If(Num > 10000, Math.Round(Num / 1000, 0) & GetLang("LangModCompModDigit1"), Num))) 'Thousand(K)
-        End If
+        End Select
     End Function
 
     ''' <summary>
