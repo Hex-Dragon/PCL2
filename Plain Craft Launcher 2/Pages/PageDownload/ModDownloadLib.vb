@@ -313,14 +313,55 @@ Public Module ModDownloadLib
                 For Each key In keyWord.Keys
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
-            Case "en_US", "en_GB"
+            Case "en_US", "en_GB", "ko_KR" '韩语 Wiki 由于更新过慢，暂时无法测试跳转是否准确
                 subLocation = ""
                 Dim keyWord As New Dictionary(Of String, String) From {
                       {"Java版", "Java Edition "}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
                 For Each key In keyWord.Keys
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
-                If Char.IsDigit(WikiName(WikiName.Length - 1)) Then
+                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
+                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
+                End If
+            Case "ja_JP"
+                subLocation = "ja."
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", "Java Edition "}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
+                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
+                End If
+            Case "ru_RU"
+                subLocation = "ru."
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", ""}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
+                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
+                End If
+                WikiName += "_(Java_Edition)"
+            Case "fr_FR"
+                subLocation = "fr."
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", "Édition_Java_"}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
+                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
+                End If
+            Case "es_ES"
+                subLocation = "es."
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", "Java_Edition_"}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
                     WikiName = WikiName.Insert(WikiName.Length - 1, "_")
                 End If
         End Select

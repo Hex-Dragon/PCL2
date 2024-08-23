@@ -2,32 +2,13 @@
 
 #Region "语言"
     Private Sub SelectCurrentLanguage()
-        Select Case Lang
-            Case "en_GB"
-                ComboBackgroundSuit.SelectedIndex = 0
-            Case "en_US"
-                ComboBackgroundSuit.SelectedIndex = 1
-            Case "es_ES"
-                ComboBackgroundSuit.SelectedIndex = 2
-            Case "fr_FR"
-                ComboBackgroundSuit.SelectedIndex = 3
-            Case "ja_JP"
-                ComboBackgroundSuit.SelectedIndex = 4
-            Case "ko_KR"
-                ComboBackgroundSuit.SelectedIndex = 5
-            Case "lzh"
-                ComboBackgroundSuit.SelectedIndex = 6
-            Case "ru_RU"
-                ComboBackgroundSuit.SelectedIndex = 7
-            Case "zh_CN"
-                ComboBackgroundSuit.SelectedIndex = 8
-            Case "zh_HK"
-                ComboBackgroundSuit.SelectedIndex = 9
-            Case "zh_MEME"
-                ComboBackgroundSuit.SelectedIndex = 10
-            Case "zh_TW"
-                ComboBackgroundSuit.SelectedIndex = 11
-        End Select
+        For i As Integer = 0 To ComboBackgroundSuit.Items.Count - 1
+            Dim item As MyComboBoxItem = CType(ComboBackgroundSuit.Items(i), MyComboBoxItem)
+            If item.Tag.Equals(Lang) Then
+                ComboBackgroundSuit.SelectedIndex = i
+                Exit For
+            End If
+        Next
     End Sub
 
     Private Sub RefreshLang() Handles ComboBackgroundSuit.SelectionChanged
