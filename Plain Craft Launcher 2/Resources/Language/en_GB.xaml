@@ -243,7 +243,7 @@ It is not recommended enabling blur when making a modpack to ensure that PCL can
     <s:String x:Key="LangSetHomePagePresetPage">Homepage Presets</s:String>
     <s:String x:Key="LangSetHomePagePresetPageA">Trivia</s:String>
     <s:String x:Key="LangSetHomePagePresetPageB">Echo Hole</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageC">Minecraft News (Author: Light-Beacon)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageC">Minecraft News (Author: Nattiden)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageD">Simple Homepage (Author: MFn233)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">Daily Modpack Recommendation (Author: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft Skin Recommendation (Author: wkea)</s:String>
@@ -1699,7 +1699,7 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModModpackInputInstanceName">Enter Instance Name</s:String>
     <s:String x:Key="LangModModpackTaskExtraModpack">Extract Modpack</s:String>
     <s:String x:Key="LangModModpackTaskGetModDownloadInfo">Obtain Mods Download Information</s:String>
-    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">Unable to install the modpack since some required mods has been deleted by the author. Please contact the modpack author to update the mods in the modpack.</s:String>
+    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">Unable to install the modpack since some required mods have been deleted by the author. Please contact the modpack author to update the mods in the modpack.</s:String>
     <s:String x:Key="LangModModpackTaskInitModDownloadInfo">Prepare Mods Download Information</s:String>
     <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">Do you want to download optional files {0} from the modpack?</s:String>
     <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">Download Optional Files</s:String>
