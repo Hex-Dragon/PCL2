@@ -4,7 +4,7 @@
     <s:String x:Key="LangTaskAbort">Annulé!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Annuler</s:String>
-    <s:String x:Key="LangResourcePack">Paquet de ressources</s:String>
+    <s:String x:Key="LangResourcePack">Packs de ressources</s:String>
     <s:String x:Key="LangDialogBtnYes">Oui</s:String>
     <s:String x:Key="LangDialogBtnNo">Non</s:String>
     
