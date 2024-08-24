@@ -274,6 +274,7 @@
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">僅隱藏本選項卡，設定的禁用內容依然有效。
 可以在保留個人化設定畫面的情況下避免隱藏設定被修改。</s:String>
     <s:String x:Key="LangSetBackgroundMusicVolume">音量</s:String>
+    <s:String x:Key="LangSetHomePagePresetSCOnly">抱歉，大部分預設主頁僅支援簡體中文</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">資料夾清單</s:String>

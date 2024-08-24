@@ -274,6 +274,7 @@ Vous devez redémarrer le lanceur après ce changement.</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Masquez uniquement cet onglet, le contenu désactivé reste valide.
 Évitez que le "Masquage de Fonctionnalités" soit modifié tout en gardant la page "Personnalisation".</s:String>
     <s:String x:Key="LangSetBackgroundMusicVolume">Volume</s:String>
+    <s:String x:Key="LangSetHomePagePresetSCOnly">Désolé, la plupart des pages d'accueil prédéfinies ne prennent en charge que le chinois simplifié</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">Liste des Dossiers</s:String>

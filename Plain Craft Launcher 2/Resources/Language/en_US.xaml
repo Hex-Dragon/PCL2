@@ -274,6 +274,7 @@ You need to restart the launcher after this change.</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Only hide this tab, the disabled content set is still valid.
 Avoid "Feature Hiding" be changed while keeping the "Personalization" page.</s:String>
     <s:String x:Key="LangSetBackgroundMusicVolume">Volume</s:String>
+    <s:String x:Key="LangSetHomePagePresetSCOnly">Sorry, most preset homepages only support Simplified Chinese</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">Folder List</s:String>

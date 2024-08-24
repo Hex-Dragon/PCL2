@@ -274,6 +274,7 @@
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Скрывает только эту вкладку, установленное отключение содержимого остаётся в силе.
 Избегайте изменения "Скрытия функций", сохраняя страницу "Персонализация".</s:String>
     <s:String x:Key="LangSetBackgroundMusicVolume">Громкость</s:String>
+    <s:String x:Key="LangSetHomePagePresetSCOnly">Извините, большинство предустановленных главных страниц поддерживает только упрощенный китайский язык</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">Список папок</s:String>

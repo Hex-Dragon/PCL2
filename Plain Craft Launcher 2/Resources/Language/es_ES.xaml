@@ -274,6 +274,7 @@ Necesitas reiniciar el lanzador después de este cambio.</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Solo oculta esta pestaña, el conjunto de contenido deshabilitado sigue siendo válido.
 Evita que se cambie "Ocultación de Funciones" mientras mantienes la página de "Personalización".</s:String>
     <s:String x:Key="LangSetBackgroundMusicVolume">Volumen</s:String>
+    <s:String x:Key="LangSetHomePagePresetSCOnly">Lo sentimos, la mayoría de las páginas de inicio preestablecidas solo admiten chino simplificado</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">Lista de Carpetas</s:String>

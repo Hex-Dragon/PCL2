@@ -274,6 +274,7 @@
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">仅雪藏本选项卡，设置的禁用内容依然有效。
 可以在保留个性化设置页面的情况下避免雪藏设置被修改。</s:String>
     <s:String x:Key="LangSetBackgroundMusicVolume">音量</s:String>
+    <s:String x:Key="LangSetHomePagePresetSCOnly">抱歉，大部分预设主页仅支持简体中文</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">文件夹子名单</s:String>

@@ -276,6 +276,7 @@ PCL を圧縮ファイルから展開するか、フォルダを変更してか�
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">このタブのみを隠し、設定した無効化内容は引き続き有効です。
 パーソナライズ設定ページを保持しながら、設定変更を隠すことができます。</s:String>
     <s:String x:Key="LangSetBackgroundMusicVolume">音量</s:String>
+    <s:String x:Key="LangSetHomePagePresetSCOnly">すみませんが、大部分のプリセットホームページは簡体中文のみをサポートしています</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">フォルダリスト</s:String>

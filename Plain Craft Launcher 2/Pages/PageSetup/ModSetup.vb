@@ -522,11 +522,13 @@
         If FrmSetupUI Is Nothing Then Exit Sub
         Select Case Value
             Case 0 '无
+                FrmSetupUI.HintCustomPresetSCOnly.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomPreset.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
                 FrmSetupUI.HintCustom.Visibility = Visibility.Collapsed
             Case 1 '本地
+                FrmSetupUI.HintCustomPresetSCOnly.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomPreset.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Visible
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
@@ -535,6 +537,7 @@
                 FrmSetupUI.HintCustom.EventType = ""
                 FrmSetupUI.HintCustom.EventData = ""
             Case 2 '联网
+                FrmSetupUI.HintCustomPresetSCOnly.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomPreset.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Visible
@@ -547,6 +550,11 @@
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
                 FrmSetupUI.HintCustom.Visibility = Visibility.Collapsed
+                If Lang.Equals("zh_CN") Then
+                    FrmSetupUI.HintCustomPresetSCOnly.Visibility = Visibility.Collapsed
+                Else
+                    FrmSetupUI.HintCustomPresetSCOnly.Visibility = Visibility.Visible
+                End If
         End Select
         FrmSetupUI.CardCustom.TriggerForceResize()
     End Sub

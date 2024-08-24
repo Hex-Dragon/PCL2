@@ -271,6 +271,7 @@ PCL을 압축 파일에서 추출하거나 폴더를 변경한 후 계속 사용
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">기능 숨기기</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">이 탭만 숨기며, 설정된 비활성화 내용은 여전히 유효합니다. 개인화 설정 페이지를 유지하면서 숨겨진 설정이 수정되는 것을 방지할 수 있습니다.</s:String>
     <s:String x:Key="LangSetBackgroundMusicVolume">음량</s:String>
+    <s:String x:Key="LangSetHomePagePresetSCOnly">죄송합니다, 대부분의 기본 설정 홈페이지는 간체 중국어만 지원합니다</s:String>
 
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">폴더 목록</s:String>
