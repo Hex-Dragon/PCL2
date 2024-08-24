@@ -2188,6 +2188,7 @@ IgnoreCustomSkin:
         StartInfo.RedirectStandardError = True
         StartInfo.CreateNoWindow = False
         StartInfo.Arguments = McLaunchArgument
+        If Not IsLocationZH() And Not Setup.Get("HintBuy") Then StartInfo.Arguments += " --demo"
         GameProcess.StartInfo = StartInfo
 
         '开始进程
