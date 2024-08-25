@@ -28,6 +28,8 @@ Public Class Application
             Log("无法找到语言资源：" & Lang & vbCrLf & "Language resource cannot be found:" & Lang, LogLevel.Assert)
         End Try
 
+        Log("[Location] 当前系统环境是否为中国大陆：" & IsLocationZH())
+
         '依照选择语言切换字体
         Dim LaunchFont As FontFamily
         Select Case Lang

@@ -2195,7 +2195,7 @@ IgnoreCustomSkin:
         StartInfo.RedirectStandardError = True
         StartInfo.CreateNoWindow = False
         StartInfo.Arguments = McLaunchArgument
-        If Not IsLocationZH() And String.IsNullOrWhiteSpace(PageLoginMs.GetLoginData().Uuid) Then StartInfo.Arguments += " --demo" '非中国大陆地区限制离线登录
+        If Not IsLocationZH() And String.IsNullOrWhiteSpace(PageLoginMs.GetLoginData().OAuthRefreshToken) Then StartInfo.Arguments += " --demo" '非中国大陆地区限制离线登录
         GameProcess.StartInfo = StartInfo
 
         '开始进程
