@@ -85,7 +85,7 @@ Module Modi18n
         IsZH = IsZH And Globalization.CultureInfo.CurrentUICulture.Name.Equals("zh-CN") '语言检测
         IsZH = IsZH And TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Equals(New TimeSpan(8, 0, 0)) '时区检测
         IsZH = IsZH And InputLanguage.InstalledInputLanguages.OfType(Of InputLanguage).ToList().Any(Function(i) i.Culture.Name.Equals("zh-CN")) '是否存在中文输入法
-        Log("[Location]当前系统环境是否为中国大陆：" & IsZH.ToString())
+        Log("[Location] 当前系统环境是否为中国大陆：" & IsZH.ToString())
         Return IsZH
     End Function
 
