@@ -76,15 +76,25 @@ Module Modi18n
     End Sub
 
     ''' <summary>
+    ''' 地区检测缓存
+    ''' -1 未检测
+    ''' 0 非中国大陆
+    ''' 1 中国大陆
+    ''' </summary>
+    Private _IsLocationZH As Integer = -1
+
+    ''' <summary>
     ''' 地区是否为中国大陆
     ''' 君子协议
     ''' </summary>
     ''' <returns></returns>
     Public Function IsLocationZH() As Boolean
+        If Not _IsLocationZH.Equals(-1) Then Return _IsLocationZH.Equals(1)
         Dim IsZH As Boolean = Globalization.CultureInfo.CurrentCulture.Name.Equals("zh-CN") '语言检测
         IsZH = IsZH And Globalization.CultureInfo.CurrentUICulture.Name.Equals("zh-CN") '语言检测
         IsZH = IsZH And TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Equals(New TimeSpan(8, 0, 0)) '时区检测
         IsZH = IsZH And InputLanguage.InstalledInputLanguages.OfType(Of InputLanguage).ToList().Any(Function(i) i.Culture.Name.Equals("zh-CN")) '是否存在中文输入法
+        _IsLocationZH = If(IsZH, 1, 0)
         Return IsZH
     End Function
 
