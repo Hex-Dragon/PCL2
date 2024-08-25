@@ -1902,8 +1902,15 @@ NextVersion:
             '1.11 ~ 12：zh_cn 时正常，zh_CN 时虽然显示了中文但语言设置会错误地显示选择英文
             '1.13+    ：zh_cn 时正常，zh_CN 时自动切换为英文
             Dim CurrentLang As String = ReadIni(SetupFileAddress, "lang", "none")
-            Dim RequiredLang As String = If(CurrentLang = "none" OrElse Not Directory.Exists(McVersionCurrent.PathIndie & "saves"), '#3844，整合包可能已经自带了 options.txt
-                If(Setup.Get("ToolHelpChinese"), "zh_cn", "en_us"), CurrentLang.ToLower)
+            Dim RequiredLang As String = CurrentLang.ToLower
+            If CurrentLang = "none" OrElse String.IsNullOrWhiteSpace(CurrentLang) OrElse Not Directory.Exists(McVersionCurrent.PathIndie & "saves") Then '#3844，整合包可能已经自带了 options.txt
+                If Setup.Get("ToolHelpLanguage") Then
+                    RequiredLang = Lang.ToLower
+                End If
+            End If
+            If McVersionCurrent.Version.McCodeMain < 17 And RequiredLang.Equals("lzh") Then '1.17 之前的版本不支持 lzh
+                RequiredLang = "zh_cn"
+            End If
             If McVersionCurrent.Version.McCodeMain < 12 Then '注意老版本（包含 MC 1.1）的 McCodeMain 可能为 -1
                 '将最后两位改为大写，前面的部分保留
                 RequiredLang = RequiredLang.Substring(0, RequiredLang.Length - 2) & RequiredLang.Substring(RequiredLang.Length - 2).ToUpper
@@ -1916,7 +1923,7 @@ NextVersion:
                 McLaunchLog($"已将语言从 {CurrentLang} 修改为 {RequiredLang}")
             End If
             ''如果是初次设置，一并修改 forceUnicodeFont
-            'If Setup.Get("ToolHelpChinese") AndAlso (CurrentLang = "none" OrElse Not Directory.Exists(McVersionCurrent.PathIndie & "saves")) Then
+            'If Setup.Get("ToolHelpLanguage") AndAlso (CurrentLang = "none" OrElse Not Directory.Exists(McVersionCurrent.PathIndie & "saves")) Then
             '    WriteIni(SetupFileAddress, "forceUnicodeFont", "true")
             '    McLaunchLog("已开启 forceUnicodeFont")
             'End If

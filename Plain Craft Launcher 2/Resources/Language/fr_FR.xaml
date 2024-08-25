@@ -1022,7 +1022,7 @@ Si la connexion Microsoft échoue parce que "Le certificat distant est invalide 
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">Mise à jour de version</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">Afficher un indice lorsqu'une nouvelle version de sortie de Minecraft est publiée.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">Langue du jeu</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">Définir automatiquement sur le chinois simplifié</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">Langue du jeu automatiquement ajustée</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">Système</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">Mise à jour</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">Télécharger la nouvelle version automatiquement.</s:String>

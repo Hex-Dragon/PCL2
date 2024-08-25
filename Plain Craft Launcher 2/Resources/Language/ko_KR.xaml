@@ -1020,7 +1020,7 @@ assets를 완전히 변경하지 않으며, libraries, 제3자 로그인 라이�
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">정식 버전 업데이트 알림</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">Minecraft 정식 버전 업데이트 시 팝업 알림</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">게임 언어</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">간체 중국어로 자동 설정</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">게임 언어 자동 설정</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">시스템</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">런처 업데이트</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">새 버전이 있을 때 자동 다운로드</s:String>

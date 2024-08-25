@@ -1027,7 +1027,7 @@ If Microsoft Login fails because "The remote certificate is invalid according to
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">Release Update</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">Display a hint when a new Minecraft release version is released.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">Game Language</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">Automatically Set to Simplified Chinese</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">Auto Adjust Game Language</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">System</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">Update</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">Download the new version automatically.</s:String>

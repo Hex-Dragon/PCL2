@@ -1027,7 +1027,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">Обновление релиза</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">Отображать подсказку при выпуске новой версии Minecraft релиза.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">Язык игры</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">Автоматически установить на упрощенный китайский</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">Автоматически установить на русский</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">Система</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">Обновление</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">Автоматически скачивать новую версию.</s:String>

@@ -1027,7 +1027,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">正式版更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">在 Minecraft 正式版更新时弹窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">游戏语言</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">自动设置为简体中文</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">自动调整游戏语言</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">系统</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">启动器更新</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">在有新版本时自动下载</s:String>

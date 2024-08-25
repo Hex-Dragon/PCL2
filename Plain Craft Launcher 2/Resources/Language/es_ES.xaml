@@ -1011,7 +1011,7 @@ Si el inicio de sesión de Microsoft falla porque "El certificado remoto no es v
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">Actualización de Lanzamiento</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">Mostrar un aviso cuando se lanza una nueva versión de lanzamiento de Minecraft.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">Idioma del Juego</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">Establecer Automáticamente en Chino Simplificado</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">Ajuste automático del idioma del juego</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">Sistema</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">Actualizar</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">Descargar la nueva versión automáticamente.</s:String>

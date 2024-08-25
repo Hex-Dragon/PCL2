@@ -86,7 +86,7 @@
                     <local:MyCheckBox Text="{DynamicResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease}" Grid.Column="1" x:Name="CheckUpdateRelease" Tag="ToolUpdateRelease" ToolTip="{DynamicResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip}" />
                     <local:MyCheckBox Text="{DynamicResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta}" Grid.Column="2" Height="22" x:Name="CheckUpdateSnapshot" Tag="ToolUpdateSnapshot" ToolTip="{DynamicResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip}" />
                     <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadAccessibilitySetGameLanguage}" Margin="0,0,25,0" />
-                    <local:MyCheckBox Text="{DynamicResource LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" x:Name="CheckHelpChinese" Tag="ToolHelpChinese" />
+                    <local:MyCheckBox Text="{DynamicResource LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" x:Name="CheckHelpChinese" Tag="ToolHelpLanguage" />
                 </Grid>
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="{DynamicResource LangPageSetupSystemSystem}">

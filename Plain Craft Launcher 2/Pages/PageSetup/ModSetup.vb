@@ -100,7 +100,7 @@
         {"LinkHiperCertTime", New SetupEntry("", Source:=SetupSource.Registry)},
         {"LinkHiperCertWarn", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"LinkIoiVersion", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
-        {"ToolHelpChinese", New SetupEntry(IsLangZH(), Source:=SetupSource.Registry)},
+        {"ToolHelpLanguage", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadThread", New SetupEntry(63, Source:=SetupSource.Registry)},
         {"ToolDownloadSpeed", New SetupEntry(42, Source:=SetupSource.Registry)},
         {"ToolDownloadVersion", New SetupEntry(If(IsLocationZH(), 0, 2), Source:=SetupSource.Registry)},

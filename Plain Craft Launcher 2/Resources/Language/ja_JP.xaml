@@ -1028,7 +1028,7 @@ PCLを起動するたびに、管理者権限の申請が必要です。自動�
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">正式版更新の通知</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">Minecraft正式版の更新時に通知を表示します。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">ゲーム言語の設定</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">簡体中国語に自動設定</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">ゲーム言語を自動調整</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">システム</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">ランチャーの更新</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">新バージョンがある場合は自動的にダウンロード</s:String>

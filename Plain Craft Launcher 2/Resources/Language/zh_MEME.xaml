@@ -1027,7 +1027,7 @@
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">正式版更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">在 Minecraft 正式版更新时弹窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">游戏语言</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese">自动帮你设置为简体中文</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">自动帮你设置游戏语言</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">系统</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">发射台更新</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">在有新版本时自动帮你下崽</s:String>
