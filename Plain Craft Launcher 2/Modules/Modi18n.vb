@@ -75,10 +75,14 @@
 
     ''' <summary>
     ''' 地区是否为中国大陆
+    ''' 君子协议
     ''' </summary>
     ''' <returns></returns>
     Public Function IsLocationZH() As Boolean
-        Return Globalization.CultureInfo.CurrentCulture.Name.Equals("zh-CN")
+        Dim IsZH As Boolean = Globalization.CultureInfo.CurrentCulture.Name.Equals("zh-CN") '语言检测
+        IsZH = IsZH And Globalization.CultureInfo.CurrentUICulture.Name.Equals("zh-CN") '语言检测
+        IsZH = IsZH And TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Equals(New TimeSpan(8, 0, 0)) '时区检测
+        Return IsZH
     End Function
 
     ''' <summary>
