@@ -74,20 +74,11 @@
     End Sub
 
     ''' <summary>
-    ''' 语言是否为中文
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function IsLangZH() As Boolean
-        If String.IsNullOrEmpty(Lang) Then Return Globalization.CultureInfo.CurrentCulture.Name.StartsWithF("zh")
-        Return Lang.StartsWithF("zh") Or Lang.Equals("lzh")
-    End Function
-
-    ''' <summary>
-    ''' 地区是否为 zh 地区
+    ''' 地区是否为中国大陆
     ''' </summary>
     ''' <returns></returns>
     Public Function IsLocationZH() As Boolean
-        Return Globalization.CultureInfo.CurrentCulture.Name.StartsWithF("zh")
+        Return Globalization.CultureInfo.CurrentCulture.Name.Equals("zh-CN")
     End Function
 
     ''' <summary>
