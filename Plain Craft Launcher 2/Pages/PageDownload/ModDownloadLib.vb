@@ -249,124 +249,517 @@ Public Module ModDownloadLib
     ''' </summary>
     ''' <param name="VersionJson">在 version_manifest.json 中的对应项。</param>
     Public Sub McUpdateLogShow(VersionJson As JToken)
-        Dim WikiName As String
         Dim Id As String = VersionJson("id").ToString.ToLower
-        If Id = "3d shareware v1.34" Then
-            WikiName = "3D_Shareware_v1.34"
-        ElseIf Id = "2.0" Then
-            WikiName = "Java版2.0"
-        ElseIf Id = "1.rv-pre1" Then
-            WikiName = "Java版1.RV-Pre1"
-        ElseIf Id = "combat test 1" OrElse Id.Contains("combat-1") OrElse Id.Contains("combat-212796") Then
-            WikiName = "Java版1.14.3_-_Combat_Test"
-        ElseIf Id = "combat test 2" OrElse Id.Contains("combat-2") OrElse Id.Contains("combat-0") Then
-            WikiName = "Java版Combat_Test_2"
-        ElseIf Id = "combat test 3" OrElse Id = "1.14_combat-3" Then
-            WikiName = "Java版Combat_Test_3"
-        ElseIf Id = "combat test 4" OrElse Id = "1.15_combat-1" Then
-            WikiName = "Java版Combat_Test_4"
-        ElseIf Id = "combat test 5" OrElse Id = "1.15_combat-6" Then
-            WikiName = "Java版Combat_Test_5"
-        ElseIf Id = "combat test 6" OrElse Id = "1.16_combat-0" Then
-            WikiName = "Java版Combat_Test_6"
-        ElseIf Id = "combat test 7c" OrElse Id = "1.16_combat-3" Then
-            WikiName = "Java版Combat_Test_7c"
-        ElseIf Id = "combat test 8b" OrElse Id = "1.16_combat-5" Then
-            WikiName = "Java版Combat_Test_8b"
-        ElseIf Id = "combat test 8c" OrElse Id = "1.16_combat-6" Then
-            WikiName = "Java版Combat_Test_8c"
-        ElseIf Id = "1.0.0-rc2-2" Then
-            WikiName = "Java版RC2"
-        ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
-            WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Java版Deep_Dark_Experimental_Snapshot_")
-        ElseIf Id = "b1.9-pre6" Then
-            WikiName = "Java版Beta_1.9_Prerelease_6"
-        ElseIf Id.Contains("b1.9") Then
-            WikiName = "Java版Beta_1.9_Prerelease"
-        ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
-            WikiName = If(Id.Contains("w"), "", "Java版") & Id.Replace(" Pre-Release ", "-pre")
-        ElseIf Id.StartsWithF("b") Then
-            WikiName = "Java版" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("b", "Beta_")
-        ElseIf Id.StartsWithF("a") Then
-            WikiName = "Java版" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("a", "Alpha_v")
-        ElseIf Id = "inf-20100618" Then
-            WikiName = "Java版Infdev_20100618"
-        ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") Then
-            WikiName = "Java版Classic_0.30（生存模式）"
-        ElseIf Id.StartsWithF("c0.31") Then
-            WikiName = "Java版Indev_0.31_20100130"
-        ElseIf Id.StartsWithF("c") Then
-            WikiName = "Java版" & Id.Replace("c", "Classic_")
-        ElseIf Id.StartsWithF("rd-") Then
-            WikiName = "Java版Pre-classic_" & Id
-        Else
-            Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
-            Exit Sub
-        End If
+        Dim WikiName As String = Id
         '本地化
-        Dim subLocation As String = "zh."
+        Dim subLocation As String = ""
         Select Case Lang
+            Case "zh_CN", "zh_HK", "zh_TW"
+                subLocation = "zh."
+                If Id = "3d shareware v1.34" Then
+                    WikiName = "3D_Shareware_v1.34"
+                ElseIf Id = "20w14∞" Then
+                    WikiName = "20w14infinite"
+                ElseIf Id = "2.0" Then
+                    WikiName = "Java版2.0"
+                ElseIf Id = "1.rv-pre1" Then
+                    WikiName = "Java版1.RV-Pre1"
+                ElseIf Id = "combat test 1" OrElse Id.Contains("combat-1") OrElse Id.Contains("combat-212796") Then
+                    WikiName = "Java版1.14.3_-_Combat_Test"
+                ElseIf Id = "combat test 2" OrElse Id.Contains("combat-2") OrElse Id.Contains("combat-0") Then
+                    WikiName = "Java版Combat_Test_2"
+                ElseIf Id = "combat test 3" OrElse Id = "1.14_combat-3" Then
+                    WikiName = "Java版Combat_Test_3"
+                ElseIf Id = "combat test 4" OrElse Id = "1.15_combat-1" Then
+                    WikiName = "Java版Combat_Test_4"
+                ElseIf Id = "combat test 5" OrElse Id = "1.15_combat-6" Then
+                    WikiName = "Java版Combat_Test_5"
+                ElseIf Id = "combat test 6" OrElse Id = "1.16_combat-0" Then
+                    WikiName = "Java版Combat_Test_6"
+                ElseIf Id = "combat test 7c" OrElse Id = "1.16_combat-3" Then
+                    WikiName = "Java版Combat_Test_7c"
+                ElseIf Id = "combat test 8b" OrElse Id = "1.16_combat-5" Then
+                    WikiName = "Java版Combat_Test_8b"
+                ElseIf Id = "combat test 8c" OrElse Id = "1.16_combat-6" Then
+                    WikiName = "Java版Combat_Test_8c"
+                ElseIf Id = "1.0.0-rc2-2" Then
+                    WikiName = "Java版1.0.0-rc2"
+                ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
+                    WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Java版Deep_Dark_Experimental_Snapshot_")
+                ElseIf Id = "b1.9-pre6" Then
+                    WikiName = "Java版Beta_1.9_Prerelease_6"
+                ElseIf Id.Contains("b1.9") Then
+                    WikiName = "Java版Beta_1.9_Prerelease"
+                ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
+                    WikiName = If(Id.Contains("w"), "", "Java版") & Id.Replace(" Pre-Release ", "-pre")
+                ElseIf Id.StartsWithF("b") Then
+                    WikiName = "Java版" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("b", "Beta_")
+                ElseIf Id.StartsWithF("a") Then
+                    WikiName = "Java版" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("a", "Alpha_v")
+                ElseIf Id = "inf-20100618" Then
+                    WikiName = "Java版Infdev_20100618"
+                ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") Then
+                    WikiName = "Java版Classic_0.30（生存模式）"
+                ElseIf Id.StartsWithF("c0.31") Then
+                    WikiName = "Java版Indev_0.31_20100130"
+                ElseIf Id.StartsWithF("c") Then
+                    WikiName = "Java版" & Id.Replace("c", "Classic_")
+                ElseIf Id.StartsWithF("rd-") Then
+                    WikiName = "Java版Pre-classic_" & Id
+                Else
+                    Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
+                    Exit Sub
+                End If
             Case "lzh"
                 subLocation = "lzh."
-                Dim keyWord As New Dictionary(Of String, String) From {
-                      {"Java版", "爪哇版"}, {"Combat_Test", "鬭測"}, {"Beta", "復測版"}, {"rc", "候"}, {"RC", "候"}, {"pre", "預"}, {"prerelease", "之預"}, {".", "點"}, {"-", "之"}, {"1", "一"}, {"2", "二"}, {"3", "三"}, {"4", "四"}, {"5", "五"}, {"6", "六"}, {"7", "七"}, {"8", "八"}, {"9", "九"}, {"0", "〇"}, {"w", "週"}, {"a", "甲"}, {"b", "乙"}, {"c", "丙"}, {"_", ""}, {" ", ""}}
-                For Each key In keyWord.Keys
-                    WikiName = WikiName.Replace(key, keyWord(key))
-                Next
-            Case "en_US", "en_GB", "ko_KR" '韩语 Wiki 由于更新过慢，暂时无法测试跳转是否准确
-                subLocation = ""
-                Dim keyWord As New Dictionary(Of String, String) From {
-                      {"Java版", "Java Edition "}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
-                For Each key In keyWord.Keys
-                    WikiName = WikiName.Replace(key, keyWord(key))
-                Next
-                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
-                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
+                If Id = "3d shareware v1.34" Then
+                    subLocation = "zh."
+                    WikiName = "3D_Shareware_v1.34"
+                ElseIf Id = "2.0" Then
+                    WikiName = "爪哇版爪哇版二點〇"
+                ElseIf Id = "1.rv-pre1" Then
+                    WikiName = "爪哇版爪哇版一點真視之預一"
+                ElseIf Id = "combat test 1" OrElse Id.Contains("combat-1") OrElse Id.Contains("combat-212796") Then
+                    subLocation = "zh."
+                    WikiName = "Java版1.14.3_-_Combat_Test"
+                ElseIf Id = "combat test 2" OrElse Id.Contains("combat-2") OrElse Id.Contains("combat-0") Then
+                    subLocation = "zh."
+                    WikiName = "Java版Combat_Test_2"
+                ElseIf Id = "combat test 3" OrElse Id = "1.14_combat-3" Then
+                    subLocation = "zh."
+                    WikiName = "Java版Combat_Test_3"
+                ElseIf Id = "combat test 4" OrElse Id = "1.15_combat-1" Then
+                    subLocation = "zh."
+                    WikiName = "Java版Combat_Test_4"
+                ElseIf Id = "combat test 5" OrElse Id = "1.15_combat-6" Then
+                    subLocation = "zh."
+                    WikiName = "Java版Combat_Test_5"
+                ElseIf Id = "combat test 6" OrElse Id = "1.16_combat-0" Then
+                    subLocation = "zh."
+                    WikiName = "Java版Combat_Test_6"
+                ElseIf Id = "combat test 7c" OrElse Id = "1.16_combat-3" Then
+                    subLocation = "zh."
+                    WikiName = "Java版Combat_Test_7c"
+                ElseIf Id = "combat test 8b" OrElse Id = "1.16_combat-5" Then
+                    WikiName = "爪哇版爪哇版鬭測八乙"
+                ElseIf Id = "combat test 8c" OrElse Id = "1.16_combat-6" Then
+                    WikiName = "爪哇版爪哇版鬭測八丙"
+                ElseIf Id = "1.0.0-rc2-2" Then
+                    WikiName = "爪哇版一點〇點〇之候二"
+                ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
+                    subLocation = "zh." 'lzh 无此
+                    WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Java版Deep_Dark_Experimental_Snapshot_")
+                ElseIf Id = "b1.9-pre6" Then
+                    WikiName = "爪哇版Beta_1.9_Prerelease_6"
+                ElseIf Id.Contains("b1.9") Then
+                    WikiName = "爪哇版Beta_1.9_Prerelease"
+                ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
+                    WikiName = If(Id.Contains("w"), "", "爪哇版") & Id.Replace(" Pre-Release ", "-pre")
+                ElseIf Id.StartsWithF("b") Then
+                    WikiName = "爪哇版" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("b", "復測版")
+                ElseIf Id.StartsWithF("a") Then
+                    WikiName = "爪哇版" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("a", "首測版")
+                ElseIf Id = "inf-20100618" Then
+                    WikiName = "爪哇版方製無垠版二〇一〇〇六一八"
+                ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") Then
+                    WikiName = "爪哇版爪哇版古典版〇點三〇"
+                ElseIf Id.StartsWithF("c0.31") Then
+                    subLocation = "zh." 'lzh 无此
+                    WikiName = "Java版Indev_0.31_20100130"
+                    Exit Select
+                ElseIf Id.StartsWithF("c") Then
+                    WikiName = "爪哇版" & Id.Replace("c", "古典版")
+                ElseIf Id.StartsWithF("rd-") Then
+                    WikiName = "爪哇版" & Id
+                Else
+                    Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
+                    Exit Sub
                 End If
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", "爪哇版"}, {"Combat_Test", "鬭測"}, {"Beta", "復測版"}, {"rc", "候"}, {"rd-", "先典版璐璧鐺"}, {"RC", "候"}, {"pre", "預"}, {"prerelease", "之預"}, {".", "點"}, {"-", "之"}, {"1", "一"}, {"2", "二"}, {"3", "三"}, {"4", "四"}, {"5", "五"}, {"6", "六"}, {"7", "七"}, {"8", "八"}, {"9", "九"}, {"0", "〇"}, {"w", "週"}, {"a", "甲"}, {"b", "乙"}, {"c", "丙"}, {"_", ""}, {" ", ""}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+            Case "en_US", "en_GB"
+                subLocation = ""
+                If Id = "3d shareware v1.34" Then
+                    WikiName = "Java_Edition_3D_Shareware_v1.34"
+                ElseIf Id = "2.0" Then
+                    WikiName = "Java_Edition_2.0"
+                ElseIf Id = "1.rv-pre1" Then
+                    WikiName = "Java_Edition_1.RV-Pre1"
+                ElseIf Id = "combat test 1" OrElse Id.Contains("combat-1") OrElse Id.Contains("combat-212796") Then
+                    WikiName = "Java_Edition_1.14.3_-_Combat_Test"
+                ElseIf Id = "combat test 2" OrElse Id.Contains("combat-2") OrElse Id.Contains("combat-0") Then
+                    WikiName = "Java_Edition_Combat_Test_2"
+                ElseIf Id = "combat test 3" OrElse Id = "1.14_combat-3" Then
+                    WikiName = "Java_Edition_Combat_Test_3"
+                ElseIf Id = "combat test 4" OrElse Id = "1.15_combat-1" Then
+                    WikiName = "Java_Edition_Combat_Test_4"
+                ElseIf Id = "combat test 5" OrElse Id = "1.15_combat-6" Then
+                    WikiName = "Java_Edition_Combat_Test_5"
+                ElseIf Id = "combat test 6" OrElse Id = "1.16_combat-0" Then
+                    WikiName = "Java_Edition_Combat_Test_6"
+                ElseIf Id = "combat test 7c" OrElse Id = "1.16_combat-3" Then
+                    WikiName = "Java_Edition_Combat_Test_7c"
+                ElseIf Id = "combat test 8b" OrElse Id = "1.16_combat-5" Then
+                    WikiName = "Java_Edition_Combat_Test_8b"
+                ElseIf Id = "combat test 8c" OrElse Id = "1.16_combat-6" Then
+                    WikiName = "Java_Edition_Combat_Test_8c"
+                ElseIf Id = "1.0.0-rc2-2" Then
+                    WikiName = "Java_Edition_RC2"
+                ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
+                    WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Java_Edition_Deep_Dark_Experimental_Snapshot_")
+                ElseIf Id = "b1.9-pre6" Then
+                    WikiName = "Java_Edition_Beta_1.9_Prerelease_6"
+                ElseIf Id.Contains("b1.9") Then
+                    WikiName = "Java_Edition_Beta_1.9_Prerelease"
+                ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
+                    WikiName = If(Id.Contains("w"), "", "Java_Edition_") & Id.Replace(" Pre-Release ", "-pre")
+                ElseIf Id.StartsWithF("b") Then
+                    WikiName = "Java_Edition_" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("b", "Beta_")
+                ElseIf Id.StartsWithF("a") Then
+                    WikiName = "Java_Edition_" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("a", "Alpha_v")
+                ElseIf Id = "inf-20100618" Then
+                    WikiName = "Java_Edition_Infdev_20100618"
+                ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") Then
+                    WikiName = "Java_Edition_Classic_0.30"
+                ElseIf Id.StartsWithF("c0.31") Then
+                    WikiName = "Java_Edition_Indev_0.31_20100130"
+                ElseIf Id.StartsWithF("c") Then
+                    WikiName = "Java_Edition_" & Id.Replace("c", "Classic_")
+                ElseIf Id.StartsWithF("rd-") Then
+                    WikiName = "Java_Edition_Pre-classic_" & Id
+                Else
+                    Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
+                    Exit Sub
+                End If
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", "Java Edition "}, {"-rc", "_Release_Candidate"}, {"-RC", "_Release_Candidate"}, {"-pre", "_Pre-release"}, {"pre-release", "Pre-release"}, {" ", "_"}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+                WikiName = FormatWikiNameEndDigit(WikiName)
+            Case "ko_KR"
+                subLocation = "ko."
+                If Id = "3d shareware v1.34" Then
+                    WikiName = "Java_Edition_3D_Shareware_v1.34"
+                ElseIf Id = "2.0" Then
+                    WikiName = "Java_Edition_2.0"
+                ElseIf Id = "1.rv-pre1" Then
+                    WikiName = "Java_Edition_1.RV-Pre1"
+                ElseIf Id = "combat test 1" OrElse Id.Contains("combat-1") OrElse Id.Contains("combat-212796") Then
+                    WikiName = "Java_Edition_1.14.3_-_Combat_Test"
+                ElseIf Id = "combat test 2" OrElse Id.Contains("combat-2") OrElse Id.Contains("combat-0") Then
+                    WikiName = "Java_Edition_Combat_Test_2"
+                ElseIf Id = "combat test 3" OrElse Id = "1.14_combat-3" Then
+                    WikiName = "Java_Edition_Combat_Test_3"
+                ElseIf Id = "combat test 4" OrElse Id = "1.15_combat-1" Then
+                    WikiName = "Java_Edition_Combat_Test_4"
+                ElseIf Id = "combat test 5" OrElse Id = "1.15_combat-6" Then
+                    WikiName = "Java_Edition_Combat_Test_5"
+                ElseIf Id = "combat test 6" OrElse Id = "1.16_combat-0" Then
+                    WikiName = "Java_Edition_Combat_Test_6"
+                ElseIf Id = "combat test 7c" OrElse Id = "1.16_combat-3" Then
+                    WikiName = "Java_Edition_Combat_Test_7c"
+                ElseIf Id = "combat test 8b" OrElse Id = "1.16_combat-5" Then
+                    WikiName = "Java_Edition_Combat_Test_8b"
+                ElseIf Id = "combat test 8c" OrElse Id = "1.16_combat-6" Then
+                    WikiName = "Java_Edition_Combat_Test_8c"
+                ElseIf Id = "1.0.0-rc2-2" Then
+                    WikiName = "Java_Edition_RC2"
+                ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
+                    WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Java_Edition_Deep_Dark_Experimental_Snapshot_")
+                ElseIf Id = "b1.9-pre6" Then
+                    WikiName = "Java_Edition_Beta_1.9_Prerelease_6"
+                ElseIf Id.Contains("b1.9") Then
+                    WikiName = "Java_Edition_Beta_1.9_Prerelease"
+                ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
+                    WikiName = If(Id.Contains("w"), "", "Java_Edition_") & Id.Replace(" Pre-Release ", "-pre")
+                ElseIf Id.StartsWithF("b") Then
+                    WikiName = "Java_Edition_" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("b", "Beta_")
+                ElseIf Id.StartsWithF("a") Then
+                    WikiName = "Java_Edition_" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("a", "Alpha_v")
+                ElseIf Id = "inf-20100618" Then
+                    WikiName = "Java_Edition_Infdev_20100618"
+                ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") Then
+                    WikiName = "Java_Edition_Classic_0.30"
+                ElseIf Id.StartsWithF("c0.31") Then
+                    WikiName = "Java_Edition_Indev_0.31_20100130"
+                ElseIf Id.StartsWithF("c") Then
+                    WikiName = "Java_Edition_" & Id.Replace("c", "Classic_")
+                ElseIf Id.StartsWithF("rd-") Then
+                    WikiName = "Java_Edition_Pre-classic_" & Id
+                Else
+                    Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
+                    Exit Sub
+                End If
+                Dim keyWord As New Dictionary(Of String, String) From {
+                      {"Java版", "Java Edition "}, {"-rc", "_RC#"}, {"-RC", "_RC#"}, {"pre", "프리릴리스"}, {"pre-release", "프리릴리스"}, {" ", "_"}}
+                For Each key In keyWord.Keys
+                    WikiName = WikiName.Replace(key, keyWord(key))
+                Next
+                WikiName = FormatWikiNameEndDigit(WikiName)
             Case "ja_JP"
                 subLocation = "ja."
+                If Id = "3d shareware v1.34" Then
+                    WikiName = "Java_Edition_3D_Shareware_v1.34"
+                ElseIf Id = "2.0" Then
+                    WikiName = "Java_Edition_2.0"
+                ElseIf Id = "1.rv-pre1" Then
+                    WikiName = "Java_Edition_1.RV-Pre1"
+                ElseIf Id = "combat test 1" OrElse Id.Contains("combat-1") OrElse Id.Contains("combat-212796") Then
+                    WikiName = "Java_Edition_1.14.3_-_Combat_Test"
+                ElseIf Id = "combat test 2" OrElse Id.Contains("combat-2") OrElse Id.Contains("combat-0") Then
+                    WikiName = "Java_Edition_Combat_Test_2"
+                ElseIf Id = "combat test 3" OrElse Id = "1.14_combat-3" Then
+                    WikiName = "Java_Edition_Combat_Test_3"
+                ElseIf Id = "combat test 4" OrElse Id = "1.15_combat-1" Then
+                    WikiName = "Java_Edition_Combat_Test_4"
+                ElseIf Id = "combat test 5" OrElse Id = "1.15_combat-6" Then
+                    WikiName = "Java_Edition_Combat_Test_5"
+                ElseIf Id = "combat test 6" OrElse Id = "1.16_combat-0" Then
+                    WikiName = "Java_Edition_Combat_Test_6"
+                ElseIf Id = "combat test 7c" OrElse Id = "1.16_combat-3" Then
+                    WikiName = "Java_Edition_Combat_Test_7c"
+                ElseIf Id = "combat test 8b" OrElse Id = "1.16_combat-5" Then
+                    WikiName = "Java_Edition_Combat_Test_8b"
+                ElseIf Id = "combat test 8c" OrElse Id = "1.16_combat-6" Then
+                    WikiName = "Java_Edition_Combat_Test_8c"
+                ElseIf Id = "1.0.0-rc2-2" Then
+                    WikiName = "Java_Edition_RC2"
+                ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
+                    WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Java_Edition_Deep_Dark_Experimental_Snapshot_")
+                ElseIf Id = "b1.9-pre6" Then
+                    WikiName = "Java_Edition_Beta_1.9_Prerelease_6"
+                ElseIf Id.Contains("b1.9") Then
+                    WikiName = "Java_Edition_Beta_1.9_Prerelease"
+                ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
+                    WikiName = If(Id.Contains("w"), "", "Java_Edition_") & Id.Replace(" Pre-Release ", "-pre")
+                ElseIf Id.StartsWithF("b") Then
+                    WikiName = "Java_Edition_" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("b", "Beta_")
+                ElseIf Id.StartsWithF("a") Then
+                    WikiName = "Java_Edition_" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("a", "Alpha_v")
+                ElseIf Id = "inf-20100618" Then
+                    WikiName = "Java_Edition_Infdev_20100618"
+                ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") Then
+                    WikiName = "Java_Edition_Classic_0.30"
+                ElseIf Id.StartsWithF("c0.31") Then
+                    WikiName = "Java_Edition_Indev_0.31_20100130"
+                ElseIf Id.StartsWithF("c") Then
+                    WikiName = "Java_Edition_" & Id.Replace("c", "Classic_")
+                ElseIf Id.StartsWithF("rd-") Then
+                    WikiName = "Java_Edition_Pre-classic_" & Id
+                Else
+                    Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
+                    Exit Sub
+                End If
                 Dim keyWord As New Dictionary(Of String, String) From {
-                      {"Java版", "Java Edition "}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                      {"-rc", "_Release_Candidate"}, {"-RC", "_Release_Candidate"}, {"pre", "Pre-release"}, {"pre-release", "Pre-release"}, {" ", "_"}}
                 For Each key In keyWord.Keys
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
-                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
-                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
-                End If
+                WikiName = FormatWikiNameEndDigit(WikiName)
             Case "ru_RU"
                 subLocation = "ru."
+                If Id = "3d shareware v1.34" Then
+                    WikiName = "3D_Shareware_v1.34_(Java_Edition)"
+                ElseIf Id = "22w13oneblockatatime" Then
+                    WikiName = "22w13oneBlockAtATime_(Java_Edition)"
+                ElseIf Id = "20w14∞" Then
+                    WikiName = "20w14infinite_(Java_Edition)"
+                ElseIf Id = "2.0" Then
+                    WikiName = "2.0_(Java_Edition)"
+                ElseIf Id = "1.rv-pre1" Then
+                    WikiName = "1.RV-Pre1_(Java_Edition)"
+                ElseIf Id = "combat test 1" OrElse Id.Contains("combat-1") OrElse Id.Contains("combat-212796") Then
+                    WikiName = "1.14.3_-_Combat_Test_(Java_Edition)"
+                ElseIf Id = "combat test 2" OrElse Id.Contains("combat-2") OrElse Id.Contains("combat-0") Then
+                    WikiName = "Combat_Test_2_(Java_Edition)"
+                ElseIf Id = "combat test 3" OrElse Id = "1.14_combat-3" Then
+                    WikiName = "Combat_Test_3_(Java_Edition)"
+                ElseIf Id = "combat test 4" OrElse Id = "1.15_combat-1" Then
+                    WikiName = "Combat_Test_4_(Java_Edition)"
+                ElseIf Id = "combat test 5" OrElse Id = "1.15_combat-6" Then
+                    WikiName = "Combat_Test_5_(Java_Edition)"
+                ElseIf Id = "combat test 6" OrElse Id = "1.16_combat-0" Then
+                    WikiName = "Combat_Test_6_(Java_Edition)"
+                ElseIf Id = "combat test 7c" OrElse Id = "1.16_combat-3" Then
+                    WikiName = "Combat_Test_7c_(Java_Edition)"
+                ElseIf Id = "combat test 8b" OrElse Id = "1.16_combat-5" Then
+                    WikiName = "Combat_Test_8b_(Java_Edition)"
+                ElseIf Id = "combat test 8c" OrElse Id = "1.16_combat-6" Then
+                    WikiName = "Combat_Test_8c_(Java_Edition)"
+                ElseIf Id = "1.0.0-rc2-2" Then
+                    WikiName = "RC2_(Java_Edition)"
+                ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
+                    WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Deep_Dark_Experimental_Snapshot_") & "_(Java_Edition)"
+                ElseIf Id = "b1.9-pre6" Then
+                    WikiName = "Beta_1.9_Prerelease_6_(Java_Edition)"
+                ElseIf Id.Contains("b1.9") Then
+                    WikiName = "Beta_1.9_Prerelease_(Java_Edition)"
+                ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
+                    WikiName = Id.Replace("-pre", "_Pre-release")
+                ElseIf Id.StartsWithF("b") Then
+                    WikiName = Id.TrimEnd("a", "b", "c", "d", "e").Replace("b", "Beta_") & "_(Java_Edition)"
+                ElseIf Id.StartsWithF("a") Then
+                    WikiName = Id.TrimEnd("a", "b", "c", "d", "e").Replace("a", "Alpha_v") & "_(Java_Edition)"
+                ElseIf Id = "inf-20100618" Then
+                    WikiName = "Infdev_20100618_(Java_Edition)"
+                ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") Then
+                    WikiName = "Classic_0.30_(Java_Edition)"
+                ElseIf Id.StartsWithF("c0.31") Then
+                    WikiName = "Indev_0.31_20100130_(Java_Edition)"
+                ElseIf Id.StartsWithF("c") Then
+                    WikiName = Id.Replace("c", "Classic_") & "_(Java_Edition)"
+                ElseIf Id.StartsWithF("rd-") Then
+                    WikiName = "Pre-classic_" & Id & "_(Java_Edition)"
+                Else
+                    Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
+                    Exit Sub
+                End If
                 Dim keyWord As New Dictionary(Of String, String) From {
-                      {"Java版", ""}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                    {"-rc", "_Release_Candidate"}, {"-RC", "_Release_Candidate"}, {"-pre", "_Pre-release"}, {"pre-release", "Pre-release"}, {" ", "_"}}
                 For Each key In keyWord.Keys
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
-                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
-                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
-                End If
-                WikiName += "_(Java_Edition)"
+                WikiName = FormatWikiNameEndDigit(WikiName)
+                If Not WikiName.EndsWithF("_(Java_Edition)") Then WikiName += "_(Java_Edition)"
             Case "fr_FR"
                 subLocation = "fr."
+                If Id = "3d shareware v1.34" Then
+                    WikiName = "Édition_Java_3D_Shareware_v1.34"
+                ElseIf Id = "2.0" Then
+                    WikiName = "Édition_Java_2.0"
+                ElseIf Id = "1.rv-pre1" Then
+                    WikiName = "Édition_Java_1.RV-Pre1"
+                ElseIf Id = "combat test 1" OrElse Id.Contains("combat-1") OrElse Id.Contains("combat-212796") Then
+                    WikiName = "Édition_Java_1.14.3_-_Combat_Test"
+                ElseIf Id = "combat test 2" OrElse Id.Contains("combat-2") OrElse Id.Contains("combat-0") Then
+                    WikiName = "Édition_Java_Combat_Test_2"
+                ElseIf Id = "combat test 3" OrElse Id = "1.14_combat-3" Then
+                    WikiName = "Édition_Java_Combat_Test_3"
+                ElseIf Id = "combat test 4" OrElse Id = "1.15_combat-1" Then
+                    WikiName = "Édition_Java_Combat_Test_4"
+                ElseIf Id = "combat test 5" OrElse Id = "1.15_combat-6" Then
+                    WikiName = "Édition_Java_Combat_Test_5"
+                ElseIf Id = "combat test 6" OrElse Id = "1.16_combat-0" Then
+                    WikiName = "Édition_Java_Combat_Test_6"
+                ElseIf Id = "combat test 7c" OrElse Id = "1.16_combat-3" Then
+                    WikiName = "Édition_Java_Combat_Test_7c"
+                ElseIf Id = "combat test 8b" OrElse Id = "1.16_combat-5" Then
+                    WikiName = "Édition_Java_Combat_Test_8b"
+                ElseIf Id = "combat test 8c" OrElse Id = "1.16_combat-6" Then
+                    WikiName = "Édition_Java_Combat_Test_8c"
+                ElseIf Id = "1.0.0-rc2-2" Then
+                    WikiName = "Édition_Java_RC2"
+                    Exit Select
+                ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
+                    WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Édition_Java_Deep_Dark_Experimental_Snapshot_")
+                ElseIf Id = "b1.9-pre6" Then
+                    WikiName = "Édition_Java_Beta_1.9_Prerelease_6"
+                ElseIf Id.Contains("b1.9") Then
+                    WikiName = "Édition_Java_Beta_1.9_Prerelease"
+                ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
+                    WikiName = If(Id.Contains("w"), "", "Édition_Java_") & Id.Replace(" Pre-Release ", "-pre")
+                ElseIf Id.StartsWithF("b") Then
+                    WikiName = "Édition_Java_" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("b", "Beta_")
+                ElseIf Id.StartsWithF("a") Then
+                    WikiName = "Édition_Java_" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("a", "Alpha_v")
+                ElseIf Id = "inf-20100618" Then
+                    WikiName = "Édition_Java_Infdev_20100618"
+                ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") Then
+                    WikiName = "Édition_Java_Classic_0.30"
+                ElseIf Id.StartsWithF("c0.31") Then
+                    WikiName = "Édition_Java_Indev_0.31_20100130"
+                ElseIf Id.StartsWithF("c") Then
+                    WikiName = "Édition_Java_" & Id.Replace("c", "Classic_")
+                ElseIf Id.StartsWithF("rd-") Then
+                    WikiName = "Édition_Java_Pre-classic_" & Id
+                Else
+                    Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
+                    Exit Sub
+                End If
                 Dim keyWord As New Dictionary(Of String, String) From {
-                      {"Java版", "Édition_Java_"}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                       {"-rc", "_Release_Candidate"}, {"-RC", "_Release_Candidate"}, {"-pre", "_Pre-Release"}, {"pre-release", "Pre-Release"}, {" ", "_"}}
                 For Each key In keyWord.Keys
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
-                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
-                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
-                End If
+                WikiName = FormatWikiNameEndDigit(WikiName)
             Case "es_ES"
                 subLocation = "es."
+                If Id = "3d shareware v1.34" Then
+                    WikiName = "3D_Shareware_v1.34_(Java_Edition)"
+                ElseIf Id = "22w13oneblockatatime" Then
+                    WikiName = "22w13oneBlockAtATime_(Java_Edition)"
+                ElseIf Id = "20w14∞" Then
+                    WikiName = "20w14infinite_(Java_Edition)"
+                ElseIf Id = "2.0" Then
+                    WikiName = "2.0_(Java_Edition)"
+                ElseIf Id = "1.rv-pre1" Then
+                    WikiName = "1.RV-Pre1_(Java_Edition)"
+                ElseIf Id = "combat test 1" OrElse Id.Contains("combat-1") OrElse Id.Contains("combat-212796") Then
+                    WikiName = "1.14.3_-_Combat_Test_(Java_Edition)"
+                ElseIf Id = "combat test 2" OrElse Id.Contains("combat-2") OrElse Id.Contains("combat-0") Then
+                    WikiName = "Combat_Test_2_(Java_Edition)"
+                ElseIf Id = "combat test 3" OrElse Id = "1.14_combat-3" Then
+                    WikiName = "Combat_Test_3_(Java_Edition)"
+                ElseIf Id = "combat test 4" OrElse Id = "1.15_combat-1" Then
+                    WikiName = "Combat_Test_4_(Java_Edition)"
+                ElseIf Id = "combat test 5" OrElse Id = "1.15_combat-6" Then
+                    WikiName = "Combat_Test_5_(Java_Edition)"
+                ElseIf Id = "combat test 6" OrElse Id = "1.16_combat-0" Then
+                    WikiName = "Combat_Test_6_(Java_Edition)"
+                ElseIf Id = "combat test 7c" OrElse Id = "1.16_combat-3" Then
+                    WikiName = "Combat_Test_7c_(Java_Edition)"
+                ElseIf Id = "combat test 8b" OrElse Id = "1.16_combat-5" Then
+                    WikiName = "Combat_Test_8b_(Java_Edition)"
+                ElseIf Id = "combat test 8c" OrElse Id = "1.16_combat-6" Then
+                    WikiName = "Combat_Test_8c_(Java_Edition)"
+                ElseIf Id = "1.0.0-rc2-2" Then
+                    WikiName = "RC2_(Java_Edition)"
+                ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
+                    WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Deep_Dark_Experimental_Snapshot_") & "_(Java_Edition)"
+                ElseIf Id = "b1.9-pre6" Then
+                    WikiName = "Beta_1.9_Prerelease_6_(Java_Edition)"
+                ElseIf Id.Contains("b1.9") Then
+                    WikiName = "Beta_1.9_Prerelease_(Java_Edition)"
+                ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
+                    WikiName = Id.Replace("-pre", "_Pre-release")
+                ElseIf Id.StartsWithF("b") Then
+                    WikiName = Id.TrimEnd("a", "b", "c", "d", "e").Replace("b", "Beta_") & "_(Java_Edition)"
+                ElseIf Id.StartsWithF("a") Then
+                    WikiName = Id.TrimEnd("a", "b", "c", "d", "e").Replace("a", "Alpha_v") & "_(Java_Edition)"
+                ElseIf Id = "inf-20100618" Then
+                    WikiName = "Infdev_20100618_(Java_Edition)"
+                ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") Then
+                    WikiName = "Classic_0.30_(Java_Edition)"
+                ElseIf Id.StartsWithF("c0.31") Then
+                    WikiName = "Indev_0.31_20100130_(Java_Edition)"
+                ElseIf Id.StartsWithF("c") Then
+                    WikiName = Id.Replace("c", "Classic_") & "_(Java_Edition)"
+                ElseIf Id.StartsWithF("rd-") Then
+                    WikiName = "Pre-classic_" & Id & "_(Java_Edition)"
+                Else
+                    Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
+                    Exit Sub
+                End If
                 Dim keyWord As New Dictionary(Of String, String) From {
-                      {"Java版", "Java_Edition_"}, {"rc", "Release_Candidate"}, {"RC", "Release_Candidate"}, {"-", "_"}, {"pre", "Pre-release"}, {" ", "_"}}
+                      {"Java版", "Java_Edition_"}, {"-rc", "_Release_Candidate"}, {"-RC", "_Release_Candidate"}, {"-pre", "_Pre-release"}, {"pre-release", "Pre-Release"}, {" ", "_"}}
                 For Each key In keyWord.Keys
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
-                If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not WikiName(WikiName.Length - 2).Equals("_") Then
-                    WikiName = WikiName.Insert(WikiName.Length - 1, "_")
-                End If
+                WikiName = FormatWikiNameEndDigit(WikiName)
         End Select
         OpenWebsite($"https://{subLocation}minecraft.wiki/w/{WikiName.Replace("_experimental-snapshot-", "-exp")}")
     End Sub
+
+    Private Function FormatWikiNameEndDigit(WikiName As String) As String
+        If Char.IsDigit(WikiName(WikiName.Length - 1)) And Not {".", "_", " "}.Any(Function(i) i.Equals(WikiName(WikiName.Length - 2))) And Not Char.IsDigit(WikiName(WikiName.Length - 2)) Then
+            Return WikiName.Insert(WikiName.Length - 1, "_")
+        End If
+        Return WikiName
+    End Function
 
 #End Region
 
