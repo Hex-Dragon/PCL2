@@ -137,7 +137,7 @@ Module Modi18n
             Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME", "ja_JP", "ko_KR"
                 Return If(Num > 1000000000000, Math.Round(Num / 1000000000000, 2) & " " & GetLang("LangModCompModDigit3"), '兆
                 If(Num > 100000000, Math.Round(Num / 100000000, 2) & " " & GetLang("LangModCompModDigit2"), '亿
-                If(Num > 100000, Math.Round(Num / 10000, 0) & " " & GetLang("LangModCompModDigit1"), Num.ToString("N0")))) '万
+                If(Num > 100000, Math.Round(Num / 10000, 0) & " " & GetLang("LangModCompModDigit1"), Num & " "))) '万
             Case Else 'en_US, en_GB, fr_FR etc.
                 Return If(Num > 1000000000, Math.Round(Num / 1000000000, 2) & GetLang("LangModCompModDigit3"), 'Billion
                 If(Num > 1000000, Math.Round(Num / 1000000, 2) & GetLang("LangModCompModDigit2"), 'Million
