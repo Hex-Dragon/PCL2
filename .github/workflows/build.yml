@@ -1,5 +1,4 @@
 name: Build
-
 on:
   push:
     paths:
@@ -12,37 +11,34 @@ on:
   workflow_dispatch:
 
 jobs:
-
   build:
-
-    strategy: 
-      matrix: 
-        configuration: [Debug, Release, Snapshot, BETA, ReleaseUpdate]
-
+    name: Build
     runs-on: windows-latest
-
+    env:
+      configuration: Debug
     steps:
     - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
     - name: Set Describe
       shell: bash
       run: |
-          Describe=`git describe --tags --always`
-          echo "Describe=$Describe" >> $GITHUB_ENV
-
+          describe=`git describe --tags --always`
+          echo "describe=$describe" >> $GITHUB_ENV
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
       with:
         msbuild-architecture: x64
-
+    - name: Replace
+      run: |
+        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const OAuthClientId As String = ""', 'Public Const OAuthClientId As String = "${{ secrets.CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
+        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Client.Headers\("x-api-key"\) = ""', 'Client.Headers("x-api-key") = "${{ secrets.CURSEFORGE_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
+        (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Request.Headers\("x-api-key"\) = ""', 'Request.Headers("x-api-key") = "${{ secrets.CURSEFORGE_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
     - name: Build
-      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
-
+      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ env.configuration }}
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.configuration }} ${{ env.Describe }}
-        path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
+        name: ${{ env.configuration }} ${{ env.describe }}
+        path: ${{ GITHUB.WORKSPACE }}\Plain Craft Launcher 2\obj\Debug\Plain Craft Launcher 2.exe
