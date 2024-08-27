@@ -11,12 +11,12 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.3" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.3." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.8.4" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.8.4." & VersionBranchCode '标准格式的四段式版本号
 #If BETA Then
     Public Const VersionCode As Integer = 332 'Release
 #Else
-    Public Const VersionCode As Integer = 331 'Snapshot
+    Public Const VersionCode As Integer = 333 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -79,10 +79,6 @@ Public Module ModBase
     ''' 是否使用 GBK 编码。
     ''' </summary>
     Public IsGBKEncoding As Boolean = Encoding.Default.CodePage = 936
-    ''' <summary>
-    ''' 操作系统版本。Win10 为 10.0。
-    ''' </summary>
-    Public OsVersion As Version = Environment.OSVersion.Version
     ''' <summary>
     ''' 系统盘盘符，以 \ 结尾。例如 “C:\”。
     ''' </summary>
@@ -1108,8 +1104,6 @@ Re:
         Dim Retry As Boolean = False
 Re:
         Try
-            ''检测该文件是否在下载中，若在下载则放弃检测
-            'If IgnoreOnDownloading AndAlso NetManage.Files.ContainsKey(FilePath) AndAlso NetManage.Files(FilePath).State <= NetState.Merge Then Return ""
             '获取 SHA1
             Dim file As New FileStream(FilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)
             Dim sha1 As SHA1 = New SHA1CryptoServiceProvider()
@@ -1587,14 +1581,14 @@ RetryDir:
     ''' 获取处于两个子字符串之间的部分。
     ''' 会裁切尽可能多的内容：匹配开始使用 LastIndexOf，匹配结束使用 IndexOf，但如果未找到子字符串则不裁切。
     ''' </summary>
-    <Extension> Public Function Between(Str As String, Before As String, After As String, Optional IgnoreCase As Boolean = False) As String
-        Dim StartPos As Integer = If(String.IsNullOrEmpty(Before), -1, Str.LastIndexOfF(Before, IgnoreCase))
+    <Extension> Public Function Between(Str As String, After As String, Before As String, Optional IgnoreCase As Boolean = False) As String
+        Dim StartPos As Integer = If(String.IsNullOrEmpty(After), -1, Str.LastIndexOfF(After, IgnoreCase))
         If StartPos >= 0 Then
-            StartPos += Before.Length
+            StartPos += After.Length
         Else
             StartPos = 0
         End If
-        Dim EndPos As Integer = If(String.IsNullOrEmpty(After), -1, Str.IndexOfF(After, StartPos, IgnoreCase))
+        Dim EndPos As Integer = If(String.IsNullOrEmpty(Before), -1, Str.IndexOfF(Before, StartPos, IgnoreCase))
         If EndPos >= 0 Then
             Return Str.Substring(StartPos, EndPos - StartPos)
         ElseIf StartPos > 0 Then
@@ -2682,7 +2676,7 @@ Retry:
     Public Sub FeedbackInfo()
         On Error Resume Next
         Log("[System] 诊断信息：" & vbCrLf &
-            "操作系统：" & My.Computer.Info.OSFullName & vbCrLf &
+            "操作系统：" & My.Computer.Info.OSFullName & "（32 位：" & Is32BitSystem & "）" & vbCrLf &
             "剩余内存：" & Int(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024) & " M / " & Int(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024) & " M" & vbCrLf &
             "DPI：" & DPI & "（" & Math.Round(DPI / 96, 2) * 100 & "%）" & vbCrLf &
             "MC 文件夹：" & If(PathMcFolder, "Nothing") & vbCrLf &
