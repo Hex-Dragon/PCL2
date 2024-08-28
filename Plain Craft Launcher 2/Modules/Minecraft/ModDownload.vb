@@ -836,8 +836,8 @@
     ''' <summary>
     ''' NeoForge 版本列表，BMCLAPI。
     ''' </summary>
-    Public DlNeoForgeListBmclapiLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Bmclapi", AddressOf DlNeoForgeListOfficialMain)
-    Public Sub DlNeoForgeVersionBmclapiMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
+    Public DlNeoForgeListBmclapiLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Bmclapi", AddressOf DlNeoForgeListBmclapiMain)
+    Public Sub DlNeoForgeListBmclapiMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
         '获取版本列表 JSON
         Dim ResultLatest As String = NetGetCodeByDownload("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
         Dim ResultLegacy As String = NetGetCodeByDownload("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/forge", UseBrowserUserAgent:=True, IsJson:=True)
@@ -1083,29 +1083,120 @@
 
 #End Region
 
+#Region "DlMod | Mod 镜像源请求"
+
+    ''' <summary>
+    ''' 对可能涉及 Mod 镜像源的请求进行处理，返回字符串或 JObject。
+    ''' 调用 NetGetCodeByRequestOnce。
+    ''' </summary>
+    Public Function DlModRequest(Url As String, Optional IsJson As Boolean = False) As Object
+        Dim McimUrl As String = DlSourceModGet(Url)
+        Dim Urls As New List(Of KeyValuePair(Of String, Integer))
+        If McimUrl <> Url Then
+            Select Case Setup.Get("ToolDownloadMod")
+                Case 0
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                Case 1
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 35))
+                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+            End Select
+        End If
+        Dim Exs As String = ""
+        For Each Source In Urls
+            Try
+                Return NetGetCodeByRequestOnce(Source.Key, Encode:=Encoding.UTF8, Timeout:=Source.Value * 1000,
+                                               IsJson:=IsJson, UseBrowserUserAgent:=True)
+            Catch ex As Exception
+                Exs += ex.Message + vbCrLf
+            End Try
+        Next
+        Throw New Exception(Exs)
+    End Function
+
+    ''' <summary>
+    ''' 对可能涉及 Mod 镜像源的请求进行处理。
+    ''' 调用 NetRequestOnce。
+    ''' </summary>
+    Public Function DlModRequest(Url As String, Method As String, Data As String, ContentType As String, Optional Headers As Dictionary(Of String, String) = Nothing) As String
+        Dim McimUrl As String = DlSourceModGet(Url)
+        Dim Urls As New List(Of KeyValuePair(Of String, Integer))
+        If McimUrl <> Url Then
+            Select Case Setup.Get("ToolDownloadMod")
+                Case 0
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                Case 1
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 35))
+                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+            End Select
+        End If
+        Dim Exs As String = ""
+        For Each Source In Urls
+            Try
+                Return NetRequestOnce(Source.Key, Method, Data, ContentType, Timeout:=Source.Value * 1000, Headers:=Headers)
+            Catch ex As Exception
+                Exs += ex.Message + vbCrLf
+            End Try
+        Next
+        Throw New Exception(Exs)
+    End Function
+
+#End Region
+
 #Region "DlSource | 镜像下载源"
 
-    Public Function DlSourceResourceGet(MojangBase As String) As String()
-        MojangBase = MojangBase.Replace("http://resources.download.minecraft.net", "https://resources.download.minecraft.net")
+    Public Function DlSourceResourceGet(Original As String) As String()
+        Original = Original.Replace("http://resources.download.minecraft.net", "https://resources.download.minecraft.net")
         Return {
-            MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/assets").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/assets").Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets"),
-            MojangBase
+            Original.
+                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/assets").
+                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/assets").
+                Replace("https://resources.download.minecraft.net", "https://bmclapi2.bangbang93.com/assets"),
+            Original
         }
     End Function
 
-    Public Function DlSourceLibraryGet(MojangBase As String) As String()
+    Public Function DlSourceLibraryGet(Original As String) As String()
         Return {
-            MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
-            MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
-            MojangBase
+            Original.
+                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").
+                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").
+                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
+            Original.
+                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
+                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
+                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
+            Original
         }
     End Function
 
-    Public Function DlSourceLauncherOrMetaGet(MojangBase As String) As String()
-        If MojangBase Is Nothing Then Throw New Exception("无对应的 json 下载地址")
+    Public Function DlSourceModGet(Original As String) As String
+        Return Original.
+            Replace("api.modrinth.com", "mod.mcimirror.top/modrinth").
+            Replace("staging-api.modrinth.com", "mod.mcimirror.top/modrinth").
+            Replace("cdn.modrinth.com", "mod.mcimirror.top").
+            Replace("api.curseforge.com", "mod.mcimirror.top/curseforge").
+            Replace("edge.forgecdn.net", "mod.mcimirror.top").
+            Replace("mediafilez.forgecdn.net", "mod.mcimirror.top").
+            Replace("media.forgecdn.net", "mod.mcimirror.top")
+    End Function
+
+    Public Function DlSourceLauncherOrMetaGet(Original As String) As String()
+        If Original Is Nothing Then Throw New Exception("无对应的 json 下载地址")
         Return {
-            MojangBase.Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com"),
-            MojangBase
+            Original.
+                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").
+                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").
+                Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").
+                Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com"),
+            Original
         }
     End Function
 
