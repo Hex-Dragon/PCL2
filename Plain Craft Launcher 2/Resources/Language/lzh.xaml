@@ -578,7 +578,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangDownloadModpackSearchSourceAll">全</s:String>
     <s:String x:Key="LangDownloadModpackSearchVersion">版本</s:String>
     <s:String x:Key="LangDownloadModpackSearchVersionAll">全 (亦可自行輸入)</s:String>
-    <s:String x:Key="LangDownloadModpackSearch">搜</s:String>
+    <s:String x:Key="LangDownloadModpackSearch">寻</s:String>
     <s:String x:Key="LangDownloadModpackReset">重定諸規</s:String>
     <s:String x:Key="LangDownloadModpackGettingList">方在攈摭綜合包之目</s:String>
     <s:String x:Key="LangDownloadModpackInstallFromLocal">置已備之綜合包</s:String>
