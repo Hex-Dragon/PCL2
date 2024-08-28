@@ -9,8 +9,8 @@
         PanHint.Visibility = Visibility.Collapsed
 #Else
         PanHint.Visibility = If(ThemeCheckGold(), Visibility.Collapsed, Visibility.Visible)
-        LabHint1.Text = "快照版包含尚未正式发布的测试功能，仅用于赞助者本人尝鲜。请不要发给其他人或者用来制作整合包哦！"
-        LabHint2.Text = $"若已累积赞助￥23.33，在爱发电私信发送 {vbLQ}解锁码{vbRQ} 即可永久隐藏此提示。"
+        LabHint1.Text = "PR Collection 版包含尚未在正式版及快照版发布的测试性功能和错误修复，仅用于开发测试。因此请不要发给其他人或者用于制作整合包！"
+        LabHint2.Text = $"如果遇到了官方版本没有的问题，请前往反馈打开 Issue。"
 #End If
     End Sub
 

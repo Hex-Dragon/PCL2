@@ -1,6 +1,7 @@
 ﻿'由于包含加解密等安全信息，本文件中的部分代码已被删除
 
 Imports System.Net
+Imports System.Net.WebRequestMethods
 Imports System.Reflection
 Imports System.Security.Cryptography
 
@@ -42,13 +43,16 @@ Friend Module ModSecret
                 MsgBoxStyle.Critical, "运行环境错误")
             Environment.[Exit](Result.Cancel)
         End If
-        '开源版本提示
-        MyMsgBox($"该版本中无法使用以下特性：
-- CurseForge API 调用：需要你自行申请 API Key，然后添加到 SecretHeadersSign 方法中
-- 正版登录：需要你自行申请 Client ID，然后添加到 ModSecret.vb 的开头
-- 更新与联网通知：避免滥用隐患
-- 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……
-- 百宝箱：开发早期往里面塞了些开发工具，整理起来太麻烦了", "开源版本说明")
+        'PR Collection 版本提示
+        Select Case MyMsgBox($"你正在使用 PR Collection 版本的 PCL！
+此版本中包含测试中的新功能与错误修复，可能存在较多问题。
+本程序名称仍然为 PCL，但部分信息储存在别的地方，因此不会影响官方版的数据。
+如果你不知道这是什么，请立即关闭此程序并下载官方版本 PCL 使用！", "PR Collection 版本说明", "下载官方版本 PCL", "确定", "查看更多信息")
+            Case 1
+                OpenWebsite("https://afdian.com/p/0164034c016c11ebafcb52540025c377")
+            Case 3
+                OpenWebsite("https://github.com/allMagicNB/PCL2")
+        End Select
     End Sub
 
     ''' <summary>
@@ -264,13 +268,33 @@ Friend Module ModSecret
     Public IsUpdateStarted As Boolean = False
     Public IsUpdateWaitingRestart As Boolean = False
     Public Sub UpdateCheckByButton()
-        Hint("该版本中不包含更新功能……")
+        Dim Download As New NetFile({"https://github.com/allMagicNB/PCL2/releases/latest/download/Plain.Craft.Launcher.2.exe"}, Path & "PCL\Plain Craft Launcher 2.exe")
+        Dim Loaders As New List(Of LoaderBase) From {New LoaderDownload("下载启动器更新", New List(Of NetFile) From {Download})}
+        Dim Loader As New LoaderCombo(Of String)("启动器更新", Loaders) With {.ProgressWeight = 16}
+        Loader.Start()
+        LoaderTaskbarAdd(Loader)
+        Dim ProcessId As String = Process.GetCurrentProcess().Id
+        Dim PathName As String = """" & AppDomain.CurrentDomain.SetupInformation.ApplicationName & """"
+        Dim FileNotExists As Boolean = True
+        Do While FileNotExists
+            If (IO.File.Exists(Path & "PCL\Plain Craft Launcher 2.exe")) Then
+                FileNotExists = False
+                ShellOnly("""" & Path & "PCL\Plain Craft Launcher 2.exe""", "--update " & ProcessId & " " & PathName & " " & """Plain Craft Launcher 2.exe""" & " True")
+            End If
+        Loop
     End Sub
     Public Sub UpdateStart(BaseUrl As String, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
     End Sub
     Public Sub UpdateRestart(TriggerRestartAndByEnd As Boolean)
     End Sub
     Public Sub UpdateReplace(ProcessId As Integer, OldFileName As String, NewFileName As String, TriggerRestart As Boolean)
+        ShellOnly("taskkill.exe", "/f /PID " & ProcessId)
+        Dim NewDirectoryInfo As New DirectoryInfo(Path)
+        Dim OldDirectory As String = NewDirectoryInfo.Parent.ToString
+        CopyFile(Path & NewFileName, OldDirectory & OldFileName)
+        If TriggerRestart Then
+            ShellOnly(OldDirectory & OldFileName)
+        End If
     End Sub
 
 #End Region

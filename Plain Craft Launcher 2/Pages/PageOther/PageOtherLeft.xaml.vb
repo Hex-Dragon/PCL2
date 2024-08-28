@@ -132,7 +132,7 @@
             Case 1
                 Feedback(True, False)
             Case 2
-                OpenWebsite("https://github.com/Hex-Dragon/PCL2/issues/")
+                OpenWebsite("https://github.com/allMagicNB/PCL2/issues/")
         End Select
     End Sub
     Public Shared Sub TryVote() Handles ItemVote.Click
