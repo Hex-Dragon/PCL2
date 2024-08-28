@@ -1361,14 +1361,14 @@ Retry:
                 Case CompType.Mod
                     Info += If(ModLoaders.Any,
                         GetLang("LangModCompModSuitFor") & " " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & Comma, "")
-                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & IsPlural(Dependencies.Count, "LangModCompModDependentCount") & Comma, "")
+                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & GetLangByNumIsPlural(Dependencies.Count, "LangModCompModDependentCount") & Comma, "")
                 Case CompType.ModPack
                     If GameVersions.All(Function(v) v.Contains("w")) Then
                         Info += GetLang("LangModCompModGameVersion") & $" {Join(GameVersions, "、")}{Comma}"
                     End If
             End Select
             If DownloadCount > 0 Then 'CurseForge 的下载次数经常错误地返回 0
-                Info += GetLocationNum(DownloadCount) & IsPlural(DownloadCount, "LangModCompModDownload") & Comma
+                Info += GetLocationNum(DownloadCount) & GetLangByNumIsPlural(DownloadCount, "LangModCompModDownload") & Comma
             End If
             Info += GetLang("LangModCompModUpdateTime", GetTimeSpanString(ReleaseDate - Date.Now, False))
             Info += If(Status = CompFileStatus.Release, "", Comma & StatusDescription)

@@ -151,7 +151,7 @@ Module Modi18n
     ''' <param name="Count">数量</param>
     ''' <param name="Key">调用的键名</param>
     ''' <returns></returns>
-    Public Function IsPlural(Count As Int32, Key As String) As String
+    Public Function GetLangByNumIsPlural(Count As Int32, Key As String) As String
         If Count <= 1 Then
             Return GetLang(Key)
         Else
