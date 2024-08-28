@@ -697,8 +697,8 @@ NextStack:
                     "forge", "setup", "block", "model", "mixin", "event", "unimi", "netty", "world",
                     "gitlab", "common", "server", "config", "loader", "launch", "entity", "assist", "client", "plugin", "modapi", "mojang", "shader", "events", "github", "recipe", "render", "packet", "events",
                     "preinit", "preload", "machine", "reflect", "channel", "general", "handler", "content", "systems", "modules", "service",
-                    "fastutil", "optifine", "internal", "platform", "override", "fabricmc",
-                    "injection", "listeners", "scheduler", "minecraft", "transformer", "transformers", "universal", "multipart", "minecraftforge", "blockentity", "spongepowered", "electronwill"
+                    "fastutil", "optifine", "internal", "platform", "override", "fabricmc", "neoforge",
+                    "injection", "listeners", "scheduler", "minecraft", "transformer", "transformers", "neoforged", "universal", "multipart", "minecraftforge", "blockentity", "spongepowered", "electronwill"
                    }.Contains(Word.ToLower) Then Continue For
                 PossibleWords.Add(Word.Trim)
             Next
@@ -881,7 +881,10 @@ NextStack:
                                 FileName = "游戏崩溃前的输出.txt"
                         End Select
                         If File.Exists(OutputFile) Then
-                            WriteFile(TempFolder & "Report\" & FileName, SecretFilter(ReadFile(OutputFile), If(FileName = "启动脚本.bat", "F", "*")))
+                            Dim FileEncoding As Encoding = GetEncoding(OutputFile)
+                            WriteFile(TempFolder & "Report\" & FileName,
+                                      SecretFilter(ReadFile(OutputFile, FileEncoding), If(FileName = "启动脚本.bat", "F", "*")),
+                                      Encoding:=FileEncoding)
                         End If
                     Next
                     '导出报告

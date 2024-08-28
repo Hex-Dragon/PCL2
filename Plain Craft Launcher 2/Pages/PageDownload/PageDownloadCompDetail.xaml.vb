@@ -170,24 +170,25 @@
             Dim LogoFileAddress As String = PathTemp & "CompLogo\" & GetHash(CompItem.Logo) & ".png"
             Loaders.Add(New LoaderDownload("下载整合包文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 10, .Block = True})
             Loaders.Add(New LoaderTask(Of Integer, Integer)("准备安装整合包",
-                Sub()
-                    If Not ModpackInstall(Target, VersionName, Logo:=If(IO.File.Exists(LogoFileAddress), LogoFileAddress, Nothing)) Then
-                        Throw New Exception("整合包安装出现异常！")
-                    End If
-                End Sub) With {.ProgressWeight = 0.1})
+            Sub()
+                If ModpackInstall(Target, VersionName, Logo:=If(IO.File.Exists(LogoFileAddress), LogoFileAddress, Nothing)) Is Nothing Then
+                    Throw New Exception("整合包安装出现异常！")
+                End If
+            End Sub) With {.ProgressWeight = 0.1})
 
             '启动
-            Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged = Sub(MyLoader)
-                                                                                                      Select Case MyLoader.State
-                                                                                                          Case LoadState.Failed
-                                                                                                              Hint(MyLoader.Name & "失败：" & GetExceptionSummary(MyLoader.Error), HintType.Critical)
-                                                                                                          Case LoadState.Aborted
-                                                                                                              Hint(MyLoader.Name & "已取消！", HintType.Info)
-                                                                                                          Case LoadState.Loading
-                                                                                                              Exit Sub '不重新加载版本列表
-                                                                                                      End Select
-                                                                                                      McInstallFailedClearFolder(MyLoader)
-                                                                                                  End Sub}
+            Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged =
+            Sub(MyLoader)
+                Select Case MyLoader.State
+                    Case LoadState.Failed
+                        Hint(MyLoader.Name & "失败：" & GetExceptionSummary(MyLoader.Error), HintType.Critical)
+                    Case LoadState.Aborted
+                        Hint(MyLoader.Name & "已取消！", HintType.Info)
+                    Case LoadState.Loading
+                        Exit Sub '不重新加载版本列表
+                End Select
+                McInstallFailedClearFolder(MyLoader)
+            End Sub}
             Loader.Start(PathMcFolder & "versions\" & VersionName & "\")
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()
@@ -197,7 +198,7 @@
             Log(ex, "下载资源整合包失败", LogLevel.Feedback)
         End Try
     End Sub
-    'Mod 下载；整合包另存为
+    'Mod、资源包下载；整合包另存为
     Public Shared CachedFolder As String = Nothing '仅在本次缓存的下载文件夹
     Public Sub Save_Click(sender As Object, e As EventArgs)
         Dim File As CompFile = If(TypeOf sender Is MyListItem, sender, sender.Parent).Tag
@@ -211,10 +212,10 @@
                     '获取 Mod 所需的加载器种类
                     Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing
                     If File.ModLoaders.Any Then '从文件中获取
-                        AllowForge = File.ModLoaders.Contains(CompModLoaderType.Forge)
+                        AllowForge = File.ModLoaders.Contains(CompModLoaderType.Forge) OrElse File.ModLoaders.Contains(CompModLoaderType.NeoForge)
                         AllowFabric = File.ModLoaders.Contains(CompModLoaderType.Fabric)
                     ElseIf Project.ModLoaders.Any Then '从工程中获取
-                        AllowForge = Project.ModLoaders.Contains(CompModLoaderType.Forge)
+                        AllowForge = Project.ModLoaders.Contains(CompModLoaderType.Forge) OrElse File.ModLoaders.Contains(CompModLoaderType.NeoForge)
                         AllowFabric = Project.ModLoaders.Contains(CompModLoaderType.Fabric)
                     End If
                     If AllowForge IsNot Nothing AndAlso Not AllowForge AndAlso
@@ -230,7 +231,7 @@
                         If File.GameVersions.Any(Function(v) v.Contains(".")) AndAlso
                            Not File.GameVersions.Any(Function(v) v.Contains(".") AndAlso v.Split(".")(1) = Version.Version.McCodeMain.ToString) Then Return False
                         If AllowForge Is Nothing OrElse AllowFabric Is Nothing Then Return True
-                        If AllowForge AndAlso Version.Version.HasForge Then Return True
+                        If AllowForge AndAlso (Version.Version.HasForge OrElse Version.Version.HasNeoForge) Then Return True
                         If AllowFabric AndAlso Version.Version.HasFabric Then Return True
                         Return False
                     End Function
@@ -260,10 +261,11 @@
                                 Log("[Comp] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
                             End If
                         Else '选择 Mod 数量最多的版本
-                            Dim SelectedVersion = SuitableVersions.OrderBy(Function(v)
-                                                                               Dim Info As New DirectoryInfo(v.PathIndie & "mods\")
-                                                                               Return If(Info.Exists, Info.GetFiles().Length, -1)
-                                                                           End Function).LastOrDefault()
+                            Dim SelectedVersion = SuitableVersions.OrderBy(
+                            Function(v)
+                                Dim Info As New DirectoryInfo(v.PathIndie & "mods\")
+                                Return If(Info.Exists, Info.GetFiles().Length, -1)
+                            End Function).LastOrDefault()
                             DefaultFolder = SelectedVersion.PathIndie & "mods\"
                             Directory.CreateDirectory(DefaultFolder)
                             Log("[Comp] 使用适合的游戏版本作为默认下载位置（" & SelectedVersion.Name & "）")

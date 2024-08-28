@@ -1,5 +1,5 @@
 ﻿Public Module ModJava
-    Public JavaListCacheVersion As Integer = 6
+    Public JavaListCacheVersion As Integer = 7
 
     ''' <summary>
     ''' 目前所有可用的 Java。
@@ -220,6 +220,8 @@
                 JavaSearchFolder(GetPathFromFullPath(PathMcFolder), JavaPreList, False, True) 'Minecraft 文件夹的父文件夹（如果不是根目录的话）
             End If
             JavaSearchFolder(PathMcFolder, JavaPreList, False, True) 'Minecraft 文件夹
+            JavaPreList = JavaPreList.Where(Function(j) Not j.Key.Contains(".minecraft\runtime")).
+                ToDictionary(Function(j) j.Key, Function(j) j.Value) '排除官启自带 Java（#4286）
             If RelatedVersion IsNot Nothing Then JavaSearchFolder(RelatedVersion.Path, JavaPreList, False, True) '所选版本文件夹
             Dim TargetJavaList As New List(Of JavaEntry)
             For Each Entry In JavaPreList
@@ -240,21 +242,25 @@
             Dim UserJava As JavaEntry = Nothing
 
             '获取版本独立设置中指定的 Java
-            If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion).ToString.StartsWithF("{") Then
-                Try
-                    UserJava = JavaEntry.FromJson(GetJson(Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)))
-                    UserJava.Check()
-                Catch ex As ThreadInterruptedException
-                    Throw
-                Catch ex As Exception
-                    UserJava = Nothing
-                    Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
-                    Log(ex, "版本独立设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
-                End Try
+            Dim VersionSelect As String = ""
+            If RelatedVersion IsNot Nothing Then
+                VersionSelect = Setup.Get("VersionArgumentJavaSelect", Version:=RelatedVersion)
+                If VersionSelect.StartsWithF("{") Then
+                    Try
+                        UserJava = JavaEntry.FromJson(GetJson(VersionSelect))
+                        UserJava.Check()
+                    Catch ex As ThreadInterruptedException
+                        Throw
+                    Catch ex As Exception
+                        UserJava = Nothing
+                        Setup.Reset("VersionArgumentJavaSelect", Version:=RelatedVersion)
+                        Log(ex, "版本独立设置中指定的 Java 已无法使用，此设置已重置", LogLevel.Hint)
+                    End Try
+                End If
             End If
 
             '获取全局设置中指定的 Java
-            If UserJava Is Nothing AndAlso Setup.Get("LaunchArgumentJavaSelect") <> "" Then
+            If UserJava Is Nothing AndAlso VersionSelect <> "" AndAlso Setup.Get("LaunchArgumentJavaSelect") <> "" Then
                 Try
                     UserJava = JavaEntry.FromJson(GetJson(Setup.Get("LaunchArgumentJavaSelect")))
                     UserJava.Check()
@@ -546,7 +552,7 @@ NoUserJava:
             '若不全为特殊引用，则清除特殊引用的地址
             Dim JavaWithoutInherit As New Dictionary(Of String, Boolean)
             For Each Pair In JavaPreList
-                If Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") Then
+                If Pair.Key.Contains("java8path_target_") OrElse Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") Then
                     Log("[Java] 位于 " & Pair.Key & " 的 Java 包含特殊引用")
                 Else
                     Log("[Java] 位于 " & Pair.Key & " 的 Java 不含特殊引用")
@@ -665,34 +671,18 @@ Wait:
             '若该目录有 Java，则加入结果
             If File.Exists(Path & "javaw.exe") Then Results(Path) = Source
             '查找其下的所有文件夹
+            Dim Keywords = {"java", "jdk", "env", "环境", "run", "软件", "jre", "mc", "dragon",
+                            "soft", "cache", "temp", "corretto", "roaming", "users", "craft", "program", "世界", "net",
+                            "游戏", "oracle", "game", "file", "data", "jvm", "服务", "server", "客户", "client", "整合",
+                            "应用", "运行", "前置", "mojang", "官启", "新建文件夹", "eclipse", "microsoft", "hotspot",
+                            "runtime", "x86", "x64", "forge", "原版", "optifine", "官方", "启动", "hmcl", "mod", "高清",
+                            "download", "launch", "程序", "path", "version", "baka", "pcl", "zulu", "local", "packages",
+                            "4297127d64ec6", "国服", "网易", "ext", "netease", "1.", "启动"}
             For Each FolderInfo As DirectoryInfo In OriginalPath.EnumerateDirectories
                 If FolderInfo.Attributes.HasFlag(FileAttributes.ReparsePoint) Then Continue For '跳过符号链接
                 Dim SearchEntry = GetFolderNameFromPath(FolderInfo.Name).ToLower '用于搜索的字符串
-                If IsFullSearch OrElse
-                        FolderInfo.Parent.Name.ToLower = "users" OrElse
-                        SearchEntry.Contains("java") OrElse SearchEntry.Contains("jdk") OrElse SearchEntry.Contains("env") OrElse
-                        SearchEntry.Contains("环境") OrElse SearchEntry.Contains("run") OrElse SearchEntry.Contains("软件") OrElse
-                        SearchEntry.Contains("jre") OrElse SearchEntry = "bin" OrElse SearchEntry.Contains("mc") OrElse
-                        SearchEntry.Contains("soft") OrElse SearchEntry.Contains("cache") OrElse SearchEntry.Contains("temp") OrElse
-                        SearchEntry.Contains("corretto") OrElse SearchEntry.Contains("roaming") OrElse SearchEntry.Contains("users") OrElse
-                        SearchEntry.Contains("craft") OrElse SearchEntry.Contains("program") OrElse SearchEntry.Contains("世界") OrElse
-                        SearchEntry.Contains("net") OrElse SearchEntry.Contains("游戏") OrElse SearchEntry.Contains("oracle") OrElse
-                        SearchEntry.Contains("game") OrElse SearchEntry.Contains("file") OrElse SearchEntry.Contains("data") OrElse
-                        SearchEntry.Contains("jvm") OrElse SearchEntry.Contains("服务") OrElse SearchEntry.Contains("server") OrElse
-                        SearchEntry.Contains("客户") OrElse SearchEntry.Contains("client") OrElse SearchEntry.Contains("整合") OrElse
-                        SearchEntry.Contains("应用") OrElse SearchEntry.Contains("运行") OrElse SearchEntry.Contains("前置") OrElse
-                        SearchEntry.Contains("mojang") OrElse SearchEntry.Contains("官启") OrElse SearchEntry.Contains("新建文件夹") OrElse
-                        SearchEntry.Contains("eclipse") OrElse SearchEntry.Contains("microsoft") OrElse SearchEntry.Contains("hotspot") OrElse
-                        SearchEntry.Contains("runtime") OrElse SearchEntry.Contains("x86") OrElse SearchEntry.Contains("x64") OrElse
-                        SearchEntry.Contains("forge") OrElse SearchEntry.Contains("原版") OrElse SearchEntry.Contains("optifine") OrElse
-                        SearchEntry.Contains("官方") OrElse SearchEntry.Contains("启动") OrElse SearchEntry.Contains("hmcl") OrElse
-                        SearchEntry.Contains("mod") OrElse SearchEntry.Contains("高清") OrElse SearchEntry.Contains("download") OrElse
-                        SearchEntry.Contains("launch") OrElse SearchEntry.Contains("程序") OrElse SearchEntry.Contains("path") OrElse
-                        SearchEntry.Contains("version") OrElse SearchEntry.Contains("baka") OrElse SearchEntry.Contains("pcl") OrElse
-                        SearchEntry.Contains("zulu") OrElse
-                        SearchEntry.Contains("local") OrElse SearchEntry.Contains("packages") OrElse SearchEntry.Contains("4297127d64ec6") OrElse '官启文件夹
-                        SearchEntry.Contains("国服") OrElse SearchEntry.Contains("网易") OrElse SearchEntry.Contains("ext") OrElse '网易 Java 文件夹名
-                        SearchEntry.Contains("netease") OrElse SearchEntry.Contains("1.") OrElse SearchEntry.Contains("启动") Then
+                If IsFullSearch OrElse FolderInfo.Parent.Name.ToLower = "users" OrElse
+                   Keywords.Any(Function(w) SearchEntry.Contains(w)) OrElse SearchEntry = "bin" Then
                     JavaSearchFolder(FolderInfo, Results, Source)
                 End If
             Next

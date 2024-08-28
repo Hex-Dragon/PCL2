@@ -127,6 +127,8 @@
             '重命名主文件夹
             My.Computer.FileSystem.RenameDirectory(OldPath, TempName)
             My.Computer.FileSystem.RenameDirectory(TempPath, NewName)
+            '清理 ini 缓存
+            IniClearCache(PageVersionLeft.Version.Path & "PCL\Setup.ini")
             '遍历重命名所有文件与文件夹
             For Each Entry As DirectoryInfo In New DirectoryInfo(NewPath).EnumerateDirectories
                 If Not Entry.Name.Contains(OldName) Then Continue For
@@ -282,26 +284,24 @@
     Private Sub BtnManageCheck_Click(sender As Object, e As EventArgs) Handles BtnManageCheck.Click
         Try
             '重复任务检查
-            SyncLock LoaderTaskbarLock
-                For i = 0 To LoaderTaskbar.Count - 1
-                    If LoaderTaskbar(i).Name = PageVersionLeft.Version.Name & " 文件补全" Then
-                        Hint("正在处理中，请稍候！", HintType.Critical)
-                        Exit Sub
-                    End If
-                Next
-            End SyncLock
+            For Each OngoingLoader In LoaderTaskbar
+                If OngoingLoader.Name <> PageVersionLeft.Version.Name & " 文件补全" Then Continue For
+                Hint("正在处理中，请稍候！", HintType.Critical)
+                Exit Sub
+            Next
             '启动
             Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " 文件补全", DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload, False))
-            Loader.OnStateChanged = Sub()
-                                        Select Case Loader.State
-                                            Case LoadState.Finished
-                                                Hint(Loader.Name & "成功！", HintType.Finish)
-                                            Case LoadState.Failed
-                                                Hint(Loader.Name & "失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
-                                            Case LoadState.Aborted
-                                                Hint(Loader.Name & "已取消！", HintType.Info)
-                                        End Select
-                                    End Sub
+            Loader.OnStateChanged =
+            Sub()
+                Select Case Loader.State
+                    Case LoadState.Finished
+                        Hint(Loader.Name & "成功！", HintType.Finish)
+                    Case LoadState.Failed
+                        Hint(Loader.Name & "失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
+                    Case LoadState.Aborted
+                        Hint(Loader.Name & "已取消！", HintType.Info)
+                End Select
+            End Sub
             Loader.Start(PageVersionLeft.Version.Name)
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()
@@ -312,8 +312,8 @@
     End Sub
 
     '删除版本
+    '修改此代码时，同时修改 PageSelectRight 中的代码
     Private Sub BtnManageDelete_Click(sender As Object, e As EventArgs) Handles BtnManageDelete.Click
-        '修改此代码时，同时修改 PageSelectRight 中的代码
         Try
             Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
             Dim IsHintIndie As Boolean = PageVersionLeft.Version.State <> McVersionState.Error AndAlso PageVersionLeft.Version.PathIndie <> PathMcFolder
@@ -321,6 +321,7 @@
                         If(IsHintIndie, vbCrLf & "由于该版本开启了版本隔离，删除版本时该版本对应的存档、资源包、Mod 等文件也将被一并删除！", ""),
                         "版本删除确认", , "取消",, IsHintIndie OrElse IsShiftPressed)
                 Case 1
+                    IniClearCache(PageVersionLeft.Version.Path & "PCL\Setup.ini")
                     If IsShiftPressed Then
                         DeleteDirectory(PageVersionLeft.Version.Path)
                         Hint("版本 " & PageVersionLeft.Version.Name & " 已永久删除！", HintType.Finish)
