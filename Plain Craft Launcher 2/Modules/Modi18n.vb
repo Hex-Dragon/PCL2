@@ -1,4 +1,5 @@
 ﻿Imports System.Windows.Forms
+Imports System.Globalization
 
 Module Modi18n
     ''' <summary>
@@ -90,8 +91,9 @@ Module Modi18n
     ''' <returns></returns>
     Public Function IsLocationZH() As Boolean
         If Not _IsLocationZH.Equals(-1) Then Return _IsLocationZH.Equals(1)
-        Dim IsZH As Boolean = Globalization.CultureInfo.CurrentCulture.Name.Equals("zh-CN") '语言检测
-        IsZH = IsZH And Globalization.CultureInfo.CurrentUICulture.Name.Equals("zh-CN") '语言检测
+        Dim IsZH As Boolean = CultureInfo.CurrentCulture.Name.Equals("zh-CN") '语言检测
+        IsZH = IsZH And CultureInfo.CurrentUICulture.Name.Equals("zh-CN") '语言检测
+        IsZH = IsZH And RegionInfo.CurrentRegion.ISOCurrencySymbol.Equals("CNY") '货币类型是否为 CNY
         IsZH = IsZH And TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Equals(New TimeSpan(8, 0, 0)) '时区检测
         IsZH = IsZH And InputLanguage.InstalledInputLanguages.OfType(Of InputLanguage).ToList().Any(Function(i) i.Culture.Name.Equals("zh-CN")) '是否存在中文输入法
         _IsLocationZH = If(IsZH, 1, 0)
@@ -103,7 +105,7 @@ Module Modi18n
     ''' </summary>
     ''' <returns>返回类似于 zh_CN 这样形式的文本</returns>
     Public Function GetDefaultLang() As String
-        Select Case Globalization.CultureInfo.CurrentCulture.Name
+        Select Case CultureInfo.CurrentCulture.Name
             Case "en-GB", "en-NZ", "en-AU"
                 Return "en_GB"
             Case "es-ES", "es-MX", "es-UY", "es-VE", "es-AR", "es_EC", "	es_CL"
