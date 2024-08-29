@@ -58,9 +58,9 @@ Module Modi18n
             Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME", "ja_JP", "ko_KR" '2024/08/16 11:47
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
             Case "en_GB", "es_ES", "fr_FR", "ru_RU" '11:47 16/08/2024
-                Return Time.ToString("HH':'mm dd'/'MM'/'yyyy")
+                Return Time.ToString("dd'/'MM'/'yyyy HH':'mm")
             Case Else 'en_US 11:47 08/16/2024
-                Return Time.ToString("HH':'mm MM'/'dd'/'yyyy")
+                Return Time.ToString("MM'/'dd'/'yyyy HH':'mm")
         End Select
     End Function
 
