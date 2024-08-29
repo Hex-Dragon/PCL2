@@ -1908,10 +1908,10 @@ NextVersion:
                     RequiredLang = Lang.ToLower
                 End If
             End If
-            If McVersionCurrent.Version.McCodeMain < 17 Or (McVersionCurrent.Version.McCodeMain = 17 And McVersionCurrent.Version.McCodeSub < 1) And RequiredLang.Equals("lzh") Then '1.17.1 之前的版本不支持 lzh
+            If McVersionCurrent.Version.McCodeMain < 15 And RequiredLang.Equals("lzh") Then '1.15 之前的版本不支持 lzh
                 RequiredLang = "zh_cn"
             End If
-            If McVersionCurrent.Version.McCodeMain < 17 And RequiredLang.Equals("zh_hk") Then '1.17 之前的版本不支持 繁体中文（香港特别行政区）
+            If McVersionCurrent.Version.McCodeMain < 15 And RequiredLang.Equals("zh_hk") Then '1.15 之前的版本不支持 zh_hk
                 RequiredLang = "zh_tw"
             End If
 
