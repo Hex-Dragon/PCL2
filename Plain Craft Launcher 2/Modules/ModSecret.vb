@@ -13,6 +13,8 @@ Friend Module ModSecret
     Public Const RegFolder As String = "PCLDebug"
     '用于微软登录的 ClientId
     Public Const OAuthClientId As String = ""
+    'CurseForge API Key
+    Public Const CurseForgeAPIKey As String = ""
 
     Friend Sub SecretOnApplicationStart()
         '提升 UI 线程优先级
@@ -44,15 +46,15 @@ Friend Module ModSecret
             Environment.[Exit](Result.Cancel)
         End If
         'PR Collection 版本提示
-        Select Case MyMsgBox($"你正在使用 PR Collection 版本的 PCL！
-此版本中包含测试中的新功能与错误修复，可能存在较多问题。
-本程序名称仍然为 PCL，但部分信息储存在别的地方，因此不会影响官方版的数据。
-如果你不知道这是什么，请立即关闭此程序并下载官方版本 PCL 使用！", "PR Collection 版本说明", "下载官方版本 PCL", "确定", "查看更多信息")
-            Case 1
-                OpenWebsite("https://afdian.com/p/0164034c016c11ebafcb52540025c377")
-            Case 3
-                OpenWebsite("https://github.com/allMagicNB/PCL2")
-        End Select
+        If Environment.GetEnvironmentVariable("PCL_PRS_WARN") <> "Ignore" Then
+            Select Case MsgBox($"你正在使用 PR Collection 版本的 PCL！
+此版本包含尚未合并到官方版的新功能和错误修复，但也较不稳定。
+若遇到此版本特有问题，请前往反馈界面反馈。
+查看 https://github.com/allMagicNB/PCL2/pulls 获取更多信息。", MsgBoxStyle.Exclamation + MsgBoxStyle.OkCancel, "PR Collection 版本说明")
+                Case 2
+                    Environment.[Exit](Result.Cancel)
+            End Select
+        End If
     End Sub
 
     ''' <summary>
@@ -110,7 +112,7 @@ Friend Module ModSecret
         End If
         Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.open.server/"
         '如果你有 CurseForge API Key，可以添加到下面，以恢复对 CurseForge 的访问
-        Client.Headers("x-api-key") = ""
+        Client.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
@@ -123,7 +125,7 @@ Friend Module ModSecret
         End If
         Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
         '如果你有 CurseForge API Key，可以添加到下面，以恢复对 CurseForge 的访问
-        Request.Headers("x-api-key") = ""
+        Request.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
 
 #End Region

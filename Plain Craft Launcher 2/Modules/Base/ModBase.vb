@@ -13,6 +13,7 @@ Public Module ModBase
     '下列版本信息由更新器自动修改
     Public Const VersionBaseName As String = "2.8.4" '不含分支前缀的显示用版本名
     Public Const VersionStandardCode As String = "2.8.4." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionPRSCode As String = "" 'PRS 版本号
 #If BETA Then
     Public Const VersionCode As Integer = 332 'Release
 #Else
