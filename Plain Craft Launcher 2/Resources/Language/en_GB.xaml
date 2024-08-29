@@ -234,7 +234,10 @@ It is not recommended enabling blur when making a modpack to ensure that PCL can
     <s:String x:Key="LangSetHomePageEmpty">Empty</s:String>
     <s:String x:Key="LangSetHomePagePreset">Presets</s:String>
     <s:String x:Key="LangSetHomePageLocal">Local</s:String>
-    <s:String x:Key="LangSetHomePageLocalTip">See more on ModSetup</s:String>
+    <s:String x:Key="LangSetHomePageTipLocal">Read homepage content from Custom.xaml in the PCL folder.
+You can manually edit this file to add text, images, frequently used websites, quick launch and other features to the homepage.</s:String>
+    <s:String x:Key="LangSetHomePageTipOnline">Get homepage content online from a specified URL. Server administrators can also use it to dynamically update server announcements.
+If you have created a stable online homepage, you can click this tip to submit it. If eligible, it can be added to the presets!</s:String>
     <s:String x:Key="LangSetHomePageOnline">Online</s:String>
     <s:String x:Key="LangSetHomePageRefresh">Refresh</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">Generate Documentations</s:String>

@@ -234,7 +234,10 @@ No se recomienda habilitar el desenfoque al hacer un modpack para asegurar que P
     <s:String x:Key="LangSetHomePageEmpty">Vacío</s:String>
     <s:String x:Key="LangSetHomePagePreset">Preajustes</s:String>
     <s:String x:Key="LangSetHomePageLocal">Local</s:String>
-    <s:String x:Key="LangSetHomePageLocalTip">Ver más en ModSetup</s:String>
+    <s:String x:Key="LangSetHomePageTipLocal">Lee el contenido de la página de inicio desde Custom.xaml en la carpeta de PCL.
+Puedes editar manualmente este archivo para añadir texto, imágenes, sitios web frecuentes, accesos directos de inicio y otras funciones a la página de inicio.</s:String>
+    <s:String x:Key="LangSetHomePageTipOnline">Obtiene el contenido de la página de inicio en línea desde una URL especificada. Los administradores de servidores también pueden usarlo para actualizar dinámicamente los anuncios del servidor.
+Si has creado una página de inicio en línea estable, puedes hacer clic en esta sugerencia para enviarla. Si es elegible, ¡se puede añadir a los preajustes!</s:String>
     <s:String x:Key="LangSetHomePageOnline">En Línea</s:String>
     <s:String x:Key="LangSetHomePageRefresh">Actualizar</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">Generar Documentaciones</s:String>

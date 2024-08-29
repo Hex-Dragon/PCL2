@@ -234,7 +234,10 @@
     <s:String x:Key="LangSetHomePageEmpty">空白</s:String>
     <s:String x:Key="LangSetHomePagePreset">預設</s:String>
     <s:String x:Key="LangSetHomePageLocal">讀本地文</s:String>
-    <s:String x:Key="LangSetHomePageLocalTip">內容見 ModSetup</s:String>
+    <s:String x:Key="LangSetHomePageTipLocal">從 PCL 文簿下之 Custom.xaml 讀主頁內容。
+汝可手編此文，添文、圖、常用網址、速啟等功於主頁。</s:String>
+    <s:String x:Key="LangSetHomePageTipOnline">從指定網址聯網取主頁內容。主亦可用以動更服務器告示。
+若汝制穩定運行之聯網主頁，可點此示投稿，合格即可入預設！</s:String>
     <s:String x:Key="LangSetHomePageOnline">聯網更</s:String>
     <s:String x:Key="LangSetHomePageRefresh">刷主頁</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">生教學之文</s:String>

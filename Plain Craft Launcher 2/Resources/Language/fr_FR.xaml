@@ -234,7 +234,10 @@ Il n'est pas recommandé d'activer le flou lors de la création d'un modpack pou
     <s:String x:Key="LangSetHomePageEmpty">Vide</s:String>
     <s:String x:Key="LangSetHomePagePreset">Préréglages</s:String>
     <s:String x:Key="LangSetHomePageLocal">Local</s:String>
-    <s:String x:Key="LangSetHomePageLocalTip">Voir plus sur ModSetup</s:String>
+    <s:String x:Key="LangSetHomePageTipLocal">Lit le contenu de la page d'accueil à partir du fichier Custom.xaml dans le dossier PCL.
+Vous pouvez éditer manuellement ce fichier pour ajouter du texte, des images, des sites web fréquemment utilisés, des raccourcis de lancement et d'autres fonctionnalités à la page d'accueil.</s:String>
+    <s:String x:Key="LangSetHomePageTipOnline">Obtient le contenu de la page d'accueil en ligne à partir d'une URL spécifiée. Les administrateurs de serveur peuvent également l'utiliser pour mettre à jour dynamiquement les annonces du serveur.
+Si vous avez créé une page d'accueil en ligne stable, vous pouvez cliquer sur cette astuce pour la soumettre. Si elle est qualifiée, elle pourra être ajoutée aux préréglages !</s:String>
     <s:String x:Key="LangSetHomePageOnline">En Ligne</s:String>
     <s:String x:Key="LangSetHomePageRefresh">Rafraîchir</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">Générer des Documentations</s:String>

@@ -234,7 +234,10 @@
     <s:String x:Key="LangSetHomePageEmpty">空白</s:String>
     <s:String x:Key="LangSetHomePagePreset">预设</s:String>
     <s:String x:Key="LangSetHomePageLocal">读取本地文件</s:String>
-    <s:String x:Key="LangSetHomePageLocalTip">内容见 ModSetup</s:String>
+    <s:String x:Key="LangSetHomePageTipLocal">从 PCL 文件夹下的 Custom.xaml 读取主页内容。
+你可以手动编辑该文件，向主页添加文本、图片、常用网站、快捷启动等功能。</s:String>
+    <s:String x:Key="LangSetHomePageTipOnline">从指定网址联网获取主页内容。服主也可以用于动态更新服务器公告。
+如果你制作了稳定运行的联网主页，可以点击这条提示投稿，若合格即可加入预设！</s:String>
     <s:String x:Key="LangSetHomePageOnline">联网更新</s:String>
     <s:String x:Key="LangSetHomePageRefresh">刷亲斤主页</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">生成教学文件</s:String>

@@ -233,7 +233,10 @@ PCL을 압축 파일에서 추출하거나 폴더를 변경한 후 계속 사용
     <s:String x:Key="LangSetHomePageEmpty">빈 페이지</s:String>
     <s:String x:Key="LangSetHomePagePreset">프리셋</s:String>
     <s:String x:Key="LangSetHomePageLocal">로컬 파일 읽기</s:String>
-    <s:String x:Key="LangSetHomePageLocalTip">내용은 ModSetup을 참조하세요</s:String>
+    <s:String x:Key="LangSetHomePageTipLocal">PCL 폴더의 Custom.xaml 파일에서 홈페이지 내용을 읽습니다.
+이 파일을 수동으로 편집하여 홈페이지에 텍스트, 이미지, 자주 사용하는 웹사이트, 빠른 실행 등의 기능을 추가할 수 있습니다.</s:String>
+    <s:String x:Key="LangSetHomePageTipOnline">지정된 URL에서 홈페이지 내용을 온라인으로 가져옵니다. 서버 관리자는 이를 통해 서버 공지사항을 동적으로 업데이트할 수 있습니다.
+안정적으로 작동하는 온라인 홈페이지를 만들었다면, 이 팁을 클릭하여 제출할 수 있습니다. 적합하다고 판단되면 프리셋에 추가될 수 있습니다!</s:String>
     <s:String x:Key="LangSetHomePageOnline">온라인 업데이트</s:String>
     <s:String x:Key="LangSetHomePageRefresh">홈페이지 새로 고침</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">교육 파일 생성</s:String>

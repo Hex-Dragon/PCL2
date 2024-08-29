@@ -234,7 +234,10 @@
     <s:String x:Key="LangSetHomePageEmpty">Пусто</s:String>
     <s:String x:Key="LangSetHomePagePreset">Предустановки</s:String>
     <s:String x:Key="LangSetHomePageLocal">Локально</s:String>
-    <s:String x:Key="LangSetHomePageLocalTip">Узнайте больше на ModSetup</s:String>
+    <s:String x:Key="LangSetHomePageTipLocal">Читать содержимое главной страницы из файла Custom.xaml в папке PCL.
+Вы можете вручную редактировать этот файл, чтобы добавить на главную страницу текст, изображения, часто используемые веб-сайты, быстрый запуск и другие функции.</s:String>
+    <s:String x:Key="LangSetHomePageTipOnline">Получать содержимое главной страницы онлайн с указанного URL-адреса. Администраторы серверов также могут использовать это для динамического обновления объявлений сервера.
+Если вы создали стабильно работающую онлайн-главную страницу, вы можете нажать на эту подсказку, чтобы отправить ее. Если она соответствует требованиям, она может быть добавлена в предустановки!</s:String>
     <s:String x:Key="LangSetHomePageOnline">Онлайн</s:String>
     <s:String x:Key="LangSetHomePageRefresh">Обновить</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">Сгенерировать документацию</s:String>

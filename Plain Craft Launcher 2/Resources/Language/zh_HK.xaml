@@ -234,7 +234,10 @@
     <s:String x:Key="LangSetHomePageEmpty">空白</s:String>
     <s:String x:Key="LangSetHomePagePreset">預設</s:String>
     <s:String x:Key="LangSetHomePageLocal">讀取本機檔案</s:String>
-    <s:String x:Key="LangSetHomePageLocalTip">內容見 ModSetup</s:String>
+    <s:String x:Key="LangSetHomePageTipLocal">從 PCL 資料夾下的 Custom.xaml 讀取首頁內容。
+你可以手動編輯該檔案，向首頁新增文字、圖片、常用網站、快速啟動等功能。</s:String>
+    <s:String x:Key="LangSetHomePageTipOnline">從指定網址連網取得首頁內容。伺服器管理員也可以用於動態更新伺服器公告。
+如果你製作了穩定運行的連網首頁，可以點擊這條提示投稿，若合格即可加入預設！</s:String>
     <s:String x:Key="LangSetHomePageOnline">聯網更新</s:String>
     <s:String x:Key="LangSetHomePageRefresh">重新整理首頁</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">生成教學檔案</s:String>
