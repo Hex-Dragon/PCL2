@@ -71,7 +71,7 @@ Download:
                     Case 0
                         Log("[Page] 主页预设：你知道吗")
                         Content = "
-                            <local:MyCard Title=""{DynamicResource LangLaunchRightPageTips}"" Margin=""0,0,0,15"">
+                            <local:MyCard Title=""{StaticResource LangLaunchRightPageTips}"" Margin=""0,0,0,15"">
                                 <TextBlock Margin=""25,38,23,15"" FontSize=""13.5"" IsHitTestVisible=""False"" Text=""{hint}"" TextWrapping=""Wrap"" Foreground=""{DynamicResource ColorBrush1}"" />
                                 <local:MyIconButton Height=""22"" Width=""22"" Margin=""9"" VerticalAlignment=""Top"" HorizontalAlignment=""Right"" 
                                     EventType=""刷新主页"" EventData=""/""
@@ -80,7 +80,7 @@ Download:
                     Case 1
                         Log("[Page] 主页预设：回声洞")
                         Content = "
-                            <local:MyCard Title=""{DynamicResource LangLaunchRightPageEcho}"" Margin=""0,0,0,15"">
+                            <local:MyCard Title=""{StaticResource LangLaunchRightPageEcho}"" Margin=""0,0,0,15"">
                                 <TextBlock Margin=""25,38,23,15"" FontSize=""13.5"" IsHitTestVisible=""False"" Text=""{cave}"" TextWrapping=""Wrap"" Foreground=""{DynamicResource ColorBrush1}"" />
                                 <local:MyIconButton Height=""22"" Width=""22"" Margin=""9"" VerticalAlignment=""Top"" HorizontalAlignment=""Right"" 
                                     EventType=""刷新主页"" EventData=""/""
