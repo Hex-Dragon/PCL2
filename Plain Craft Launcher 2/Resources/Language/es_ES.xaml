@@ -976,7 +976,7 @@ Para otorgar automáticamente, haz clic derecho en PCL y abre "Propiedades → C
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">¿Deseas inicializar todas las configuraciones en la página "Personalización"? Esta operación es irreversible.
 (Los archivos externos como fondo, música y la página de inicio personalizada no serán eliminados.)</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">¿Deseas inicializar todas las configuraciones en la página "Alojamiento"? Esta operación es irreversible.</s:String>
-    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">Confirmación de Inicialización</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetTitle">Confirmación de Inicialización</s:String>
 
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">Descargar</s:String>

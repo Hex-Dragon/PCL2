@@ -992,7 +992,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">是否要初始化個人化頁的所有設定？該操作不可復原。
 （背景圖像與音樂、自訂首頁等外部檔案不會被刪除）</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">是否要初始化連線頁的所有設定？該操作不可復原。</s:String>
-    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">初始化確認</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetTitle">初始化確認</s:String>
 
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">下載</s:String>

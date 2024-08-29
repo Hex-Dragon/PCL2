@@ -992,7 +992,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">是否要初始化個性化頁的所有設置？該操作不可撤銷。
 （背景圖片與音樂、自定義主頁等外部文件不會被刪除）</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">是否要初始化聯機頁的所有設置？該操作不可撤銷。</s:String>
-    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">初始化確認</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetTitle">初始化確認</s:String>
 
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">下載</s:String>

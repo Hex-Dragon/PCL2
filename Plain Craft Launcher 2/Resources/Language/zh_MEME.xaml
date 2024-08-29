@@ -992,7 +992,7 @@
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">你是不是要初始化个性化页的所有设置？莫得后悔药哦。
 （背景图片与音乐、自定义主页等外部文件不会被删除）</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">你是不是要初始化联机页的所有设置？莫得后悔药哦。</s:String>
-    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">初始化确认</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetTitle">初始化确认</s:String>
 
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">下崽</s:String>
