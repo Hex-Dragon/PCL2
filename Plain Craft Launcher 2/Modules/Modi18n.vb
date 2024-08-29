@@ -57,7 +57,7 @@ Module Modi18n
         Select Case Lang
             Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME", "ja_JP", "ko_KR" '2024/08/16 11:47
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
-            Case "en_GB", "es_ES", "fr_FR", "ru_RU" '11:47 16/08/2024
+            Case "en_GB", "es_ES", "fr_FR", "ru_RU", "el_GR" '11:47 16/08/2024
                 Return Time.ToString("dd'/'MM'/'yyyy HH':'mm")
             Case Else 'en_US 11:47 08/16/2024
                 Return Time.ToString("MM'/'dd'/'yyyy HH':'mm")
@@ -106,6 +106,8 @@ Module Modi18n
     ''' <returns>返回类似于 zh_CN 这样形式的文本</returns>
     Public Function GetDefaultLang() As String
         Select Case CultureInfo.CurrentCulture.Name
+            Case "el-GR", "el-CY"
+                Return "el_GR"
             Case "en-GB", "en-NZ", "en-AU"
                 Return "en_GB"
             Case "es-ES", "es-MX", "es-UY", "es-VE", "es-AR", "es_EC", "	es_CL"
