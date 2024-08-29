@@ -179,7 +179,7 @@
     <s:String x:Key="LangSetThemeNameBrown">橡木褐</s:String>
     <s:String x:Key="LangSetThemeNameBlack">玄素黑</s:String>
     <s:String x:Key="LangSetThemeNameGreyToolTip">灰色乃虛言</s:String>
-    <s:String x:Key="LangSetThemeNameFunny">滑稽樹上滑稽果，滑稽樹下汝與吾，滑稽之日作亂事，歡樂多又多</s:String>
+    <s:String x:Key="LangSetThemeNameFunny">詼諧樹上詼諧果，樹下笑語伴你我。逢此詼諧良辰日，嬉笑弄事樂更多。</s:String>
     <s:String x:Key="LangSetThemeNameHardcoreFan">九十九次重逢之喜</s:String>
     <s:String x:Key="LangSetThemeNameLucky">此乃傳說中之歐皇耶</s:String>
     <s:String x:Key="LangSetThemeNameMojang">行一次正版登錄，以支持正版遊戲！</s:String>
@@ -524,7 +524,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangDownloadModSearchVersion">版</s:String>
     <s:String x:Key="LangDownloadModSearchVersionAll">全 (亦可自行輸入)</s:String>
     <s:String x:Key="LangDownloadModSearchLoader">任改囊載器</s:String>
-    <s:String x:Key="LangDownloadModSearch">搜</s:String>
+    <s:String x:Key="LangDownloadModSearch">寻</s:String>
     <s:String x:Key="LangDownloadModReset">重置</s:String>
     <s:String x:Key="LangDownloadModGettingList">取改囊列表</s:String>
     <s:String x:Key="LangDownloadModType">類</s:String>
@@ -613,43 +613,43 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">另置名為</s:String>
     <s:String x:Key="LangMySkinRefresh">複載其頁</s:String>
-    <s:String x:Key="LangMySkinChange">易蓑衣</s:String>
+    <s:String x:Key="LangMySkinChange">易外觀</s:String>
     <s:String x:Key="LangMySkinLoading">方載中</s:String>
     <s:String x:Key="LangMySkinClickToChange">點擊更換外觀（右擊以察餘項）</s:String>
     <s:String x:Key="LangMySkinHintLoading">外觀方獲之，請候！</s:String>
     <s:String x:Key="LangMySkinDialogChoseSavePath">揀選而記外觀</s:String>
     <s:String x:Key="LangMySkinHintSaveSuccess">外觀已記！</s:String>
-    <s:String x:Key="LangMySkinHintSaveFail">記外觀，大敗</s:String>
+    <s:String x:Key="LangMySkinHintSaveFail">記外觀敗</s:String>
     <s:String x:Key="LangMySkinHintSkinFileCorruption">外觀已毁：</s:String>
-    <s:String x:Key="LangMySkinHintExistSkinFileGetTask">有正在獲取中的皮膚，請稍後再試！</s:String>
-    <s:String x:Key="LangMySkinHintRefreshing">正在刷新頭像……</s:String>
-    <s:String x:Key="LangMySkinHintRefreshed">已刷新頭像！</s:String>
-    <s:String x:Key="LangMySkinHintRefreshFail">刷新皮膚緩存失敗</s:String>
-    <s:String x:Key="LangMySkinHintChangeSuccess">更改皮膚成功！</s:String>
-    <s:String x:Key="LangMySkinHintChanging">正在更改披風中，請稍候！</s:String>
-    <s:String x:Key="LangMySkinHintChangFailByLoginFail">登錄失敗，無法更改披風！</s:String>
-    <s:String x:Key="LangMySkinHintGettingCape">正在獲取披風列表，請稍候……</s:String>
-    <s:String x:Key="LangMySkinDialogChooseCape">選擇披風</s:String>
-    <s:String x:Key="LangMySkinHintChangeCapeFail">更改披風失敗</s:String>
-    <s:String x:Key="LangMySkinHintChangeCapeSuccess">更改披風成功！</s:String>
-    <s:String x:Key="LangMySkinCapeNameMigrator">遷移者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMapMaker">Realms 地圖製作者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameModerator">Mojira 管理員披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameTranslator-Chinese">Crowdin 中文翻譯者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameTranslator">Crowdin 翻譯者披風</s:String>
+    <s:String x:Key="LangMySkinHintExistSkinFileGetTask">外觀正載中，請候！</s:String>
+    <s:String x:Key="LangMySkinHintRefreshing">方載肖像……</s:String>
+    <s:String x:Key="LangMySkinHintRefreshed">已載肖像！</s:String>
+    <s:String x:Key="LangMySkinHintRefreshFail">載外觀暫蓄敗</s:String>
+    <s:String x:Key="LangMySkinHintChangeSuccess">已易外觀！</s:String>
+    <s:String x:Key="LangMySkinHintChanging">方易披風，請候！</s:String>
+    <s:String x:Key="LangMySkinHintChangFailByLoginFail">易披風敗，故不得登！</s:String>
+    <s:String x:Key="LangMySkinHintGettingCape">方載披風之表，請候……</s:String>
+    <s:String x:Key="LangMySkinDialogChooseCape">擇披風</s:String>
+    <s:String x:Key="LangMySkinHintChangeCapeFail">易披風敗</s:String>
+    <s:String x:Key="LangMySkinHintChangeCapeSuccess">已易披風！</s:String>
+    <s:String x:Key="LangMySkinCapeNameMigrator">徙者之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMapMaker">Realms 圖作者之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameModerator">Mojira 司管之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameTranslator-Chinese">Crowdin 漢文譯者之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameTranslator">Crowdin 譯者之披風</s:String>
     <s:String x:Key="LangMySkinCapeNameCobalt">Cobalt 披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameVanilla">原版披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2011">MINECON 2011 參與者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2012">MINECON 2012 參與者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2013">MINECON 2013 參與者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2015">MINECON 2015 參與者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecon2016">MINECON 2016 參與者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameCherryBlossom">櫻花披風</s:String>
-    <s:String x:Key="LangMySkinCapeName15th-Anniversary">15 周年紀念披風</s:String>
-    <s:String x:Key="LangMySkinCapeNamePurpleHeart">紫色心形披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameFollower's">追隨者披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15週年披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameNone">無披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameVanilla">原版之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2011">MINECON 2011 與事者之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2012">MINECON 2012 與事者之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2013">MINECON 2013 與事者之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2015">MINECON 2015 與事者之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecon2016">MINECON 2016 與事者之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameCherryBlossom">櫻之花披風</s:String>
+    <s:String x:Key="LangMySkinCapeName15th-Anniversary">十五歲紀之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNamePurpleHeart">紫韻心形之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameFollower's">從者之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 十五岁之披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameNone">無</s:String>
 
     <!--FormLoginOAuth-->
     <s:String x:Key="LangLoginOAuthLoading">正載登之頁</s:String>
@@ -675,236 +675,236 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangLaunchLeftStageStarting">啟之步</s:String>
     <s:String x:Key="LangLaunchLeftStageDownload">下載之速</s:String>
     <s:String x:Key="LangLaunchLeftTip">知之乎</s:String>
-    <s:String x:Key="LangLaunchLeftInit">初始化</s:String>
-    <s:String x:Key="LangLaunchLeftAccountOfflineLinkLogin">聯機離線登錄</s:String>
-    <s:String x:Key="LangLaunchLeftAccountOfflineLogin">離線登錄</s:String>
-    <s:String x:Key="LangLaunchLeftAccountMicrosoftLogin">正版登錄</s:String>
-    <s:String x:Key="LangLaunchLeftAccountUnifiedPassLogin">統一通行證登錄</s:String>
-    <s:String x:Key="LangLaunchLeftAccountThirdPartLogin">第三方登錄</s:String>
-    <s:String x:Key="LangLaunchLeftSkinNotFound">未找到離線皮膚自定義文件，可能它已被刪除。PCL 將使用默認的 Steve 皮膚！</s:String>
-    <s:String x:Key="LangLaunchThemeFunnyUnlock">隱藏主題 滑稽彩 已解鎖！</s:String>
-    <s:String x:Key="LangLaunchLeftStartInstance">啟動遊戲</s:String>
-    <s:String x:Key="LangLaunchLeftDownloadInstance">下載遊戲</s:String>
-    <s:String x:Key="LangLaunchLeftNoAvailableInstance">未找到可用的遊戲版本</s:String>
-    <s:String x:Key="LangLaunchLeftStartCancelled">已取消啟動</s:String>
-    <s:String x:Key="LangLaunchLeftStarted">已啟動遊戲</s:String>
-    <s:String x:Key="LangLaunchLeftWaitForWindow">等待遊戲窗口出現</s:String>
-    <s:String x:Key="LangLaunchLeftAbortTask">結束處理</s:String>
-    <s:String x:Key="LangLaunchLeftFinished">已完成</s:String>
-    <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">正在導出啟動腳本</s:String>
-    <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">PCL 將會在當前資料夾下自動安裝整合包。</s:String>
-    <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">自動安裝</s:String>
+    <s:String x:Key="LangLaunchLeftInit">始置之</s:String>
+    <s:String x:Key="LangLaunchLeftAccountOfflineLinkLogin">聯於機，然離線登</s:String>
+    <s:String x:Key="LangLaunchLeftAccountOfflineLogin">離線登</s:String>
+    <s:String x:Key="LangLaunchLeftAccountMicrosoftLogin">正版登</s:String>
+    <s:String x:Key="LangLaunchLeftAccountUnifiedPassLogin">大一統通關文牒登</s:String>
+    <s:String x:Key="LangLaunchLeftAccountThirdPartLogin">他方登</s:String>
+    <s:String x:Key="LangLaunchLeftSkinNotFound">未寻離線外觀自定之文，或其已为除。将以 Steve 之外觀替之！</s:String>
+    <s:String x:Key="LangLaunchThemeFunnyUnlock">隱主題 滑稽彩 已解！</s:String>
+    <s:String x:Key="LangLaunchLeftStartInstance">始遊戲</s:String>
+    <s:String x:Key="LangLaunchLeftDownloadInstance">獲遊戲</s:String>
+    <s:String x:Key="LangLaunchLeftNoAvailableInstance">未寻可用之遊戲</s:String>
+    <s:String x:Key="LangLaunchLeftStartCancelled">始已罢</s:String>
+    <s:String x:Key="LangLaunchLeftStarted">遊戲已始</s:String>
+    <s:String x:Key="LangLaunchLeftWaitForWindow">候遊戲之始</s:String>
+    <s:String x:Key="LangLaunchLeftAbortTask">畢而處置之</s:String>
+    <s:String x:Key="LangLaunchLeftFinished">已成</s:String>
+    <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">方導出始之腳本</s:String>
+    <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">综合包將为 PCL 置于當前之資料夾中。</s:String>
+    <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">自動裝</s:String>
 
     <!--PageLaunchRight-->
-    <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
-    <s:String x:Key="LangLaunchRightLog">啟動日誌</s:String>
-    <s:String x:Key="LangLaunchRightLabHint1">快照版包含尚未正式發布的測試功能，僅用於贊助者本人嘗鮮。請不要發給其他人或者用來製作整合包哦！</s:String>
-    <s:String x:Key="LangLaunchRightLabHint2">若已累積贊助￥23.33，在愛發電私信發送 “解鎖碼” 即可永久隱藏此提示。</s:String>
+    <s:String x:Key="LangLaunchRightSnapshot">快照之告</s:String>
+    <s:String x:Key="LangLaunchRightLog">始之誌</s:String>
+    <s:String x:Key="LangLaunchRightLabHint1">快照之功能，未公之於眾，測試也，僅為贊助者本人所享。切勿分於他人！切勿以之制綜合包！</s:String>
+    <s:String x:Key="LangLaunchRightLabHint2">記其總數，若已贊助二十三元三角三分，於愛發電私信發“解鎖碼”，可永匿此告。</s:String>
     <s:String x:Key="LangLaunchRightLoadingPage">方載主頁……</s:String>
-    <s:String x:Key="LangLaunchRightPageTips">你知道嗎？</s:String>
-    <s:String x:Key="LangLaunchRightPageEcho">回聲洞</s:String>
+    <s:String x:Key="LangLaunchRightPageTips">知之乎？</s:String>
+    <s:String x:Key="LangLaunchRightPageEcho">回聲之洞</s:String>
 
     <!--PageLoginAuth-->
     <s:String x:Key="LangPageLoginAuthMail">郵箱</s:String>
-    <s:String x:Key="LangPageLoginAuthPassword">密碼</s:String>
-    <s:String x:Key="LangPageLoginAuthRememberPassword">記住密碼</s:String>
-    <s:String x:Key="LangPageLoginAuthRegister">註冊賬號</s:String>
-    <s:String x:Key="LangPageLoginAuthNoEmptyMail">賬號不能為空！</s:String>
-    <s:String x:Key="LangPageLoginAuthNoEmptyPassword">密碼不能為空！</s:String>
-    <s:String x:Key="LangPageLoginAuthForgetPassword">找回密碼</s:String>
+    <s:String x:Key="LangPageLoginAuthPassword">密匙</s:String>
+    <s:String x:Key="LangPageLoginAuthRememberPassword">記密匙</s:String>
+    <s:String x:Key="LangPageLoginAuthRegister">建賬</s:String>
+    <s:String x:Key="LangPageLoginAuthNoEmptyMail">賬無法為空！</s:String>
+    <s:String x:Key="LangPageLoginAuthNoEmptyPassword">密匙無法為空！</s:String>
+    <s:String x:Key="LangPageLoginAuthForgetPassword">寻回密匙</s:String>
 
     <!--PageLoginAuthSkin-->
-    <s:String x:Key="LangPageLoginAuthSkinLoading">加載中</s:String>
-    <s:String x:Key="LangPageLoginAuthSkinChangeRole">更換角色</s:String>
-    <s:String x:Key="LangPageLoginAuthSkinLogout">退出登錄</s:String>
-    <s:String x:Key="LangPageLoginAuthSkinLogining">正在登錄中，請稍後再更換角色！</s:String>
-    <s:String x:Key="LangPageLoginAuthSkinChanging">正在嘗試更換，請稍候！</s:String>
-    <s:String x:Key="LangPageLoginAuthSkinChangeFail">更換角色失敗</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinLoading">方載之中</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinChangeRole">易角色</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinLogout">退而出登</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinLogining">方登，若需易角色，請後！</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinChanging">方试易之，請候！</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinChangeFail">易角色敗</s:String>
 
     <!--PageLoginLegacy-->
-    <s:String x:Key="LangPageLoginLegacySpecialCharacters">玩家名如果包含英文、數字、下劃線以外的內容，可能會無法進入 Minecraft 1.18 以後的世界！</s:String>
-    <s:String x:Key="LangPageLoginLegacyID">遊戲用戶名</s:String>
-    <s:String x:Key="LangPageLoginLegacyNoEmptyID">玩家名不能為空！</s:String>
-    <s:String x:Key="LangPageLoginLegacyNoQuotationInID">玩家名不能包含英文引號！</s:String>
-    <s:String x:Key="LangPageLoginLegacyConfigHidden">啟動設置已被禁用！</s:String>
+    <s:String x:Key="LangPageLoginLegacySpecialCharacters">玩家之名除英文、數、底線以外，若有餘字，或不得入 1.18 後之世界！</s:String>
+    <s:String x:Key="LangPageLoginLegacyID">遊戲之名</s:String>
+    <s:String x:Key="LangPageLoginLegacyNoEmptyID">玩家之名不得空！</s:String>
+    <s:String x:Key="LangPageLoginLegacyNoQuotationInID">玩家之名不得含外文之引號！</s:String>
+    <s:String x:Key="LangPageLoginLegacyConfigHidden">始之設已为禁！</s:String>
 
     <!--PageLoginMs-->
-    <s:String x:Key="LangPageLoginMsLogin">登錄</s:String>
-    <s:String x:Key="LangPageLoginMsBuy">»  購買正版</s:String>
-    <s:String x:Key="LangPageLoginMsWebsite">»  前往官網</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccount">添加新賬號</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">請在登錄賬號後再啟動遊戲！</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountCancel">已取消登錄！</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFail">正版登錄驗證失敗，請嘗試在 [設置 → 啟動器] 中關閉 [驗證 SSL 證書] 然後再試。
+    <s:String x:Key="LangPageLoginMsLogin">登</s:String>
+    <s:String x:Key="LangPageLoginMsBuy">»  購正版</s:String>
+    <s:String x:Key="LangPageLoginMsWebsite">»  诣官網</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccount">添賬</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountBeforeStart">請登賬號，方可始遊戲！</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountCancel">登已废！</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFail">正版登之驗證敗，請試于 [設 → 啟動器] 中關 [驗證 SSL 證書]。
 
-原始錯誤信息：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">已取消登錄！</s:String>
+原始之告：</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">登已废！</s:String>
 
     <!--PageLoginMsSkin-->
-    <s:String x:Key="LangPageLoginMsLoading">加載中</s:String>
-    <s:String x:Key="LangPageLoginMsSkinSkin">皮膚與披風</s:String>
-    <s:String x:Key="LangPageLoginMsSkinSkinChange">修改皮膚</s:String>
-    <s:String x:Key="LangPageLoginMsSkinSkinSave">保存皮膚</s:String>
-    <s:String x:Key="LangPageLoginMsSkinSkinRefresh">刷新頭像</s:String>
-    <s:String x:Key="LangPageLoginMsSkinCapeChange">修改披風</s:String>
-    <s:String x:Key="LangPageLoginMsSkinInfoChange">修改信息</s:String>
-    <s:String x:Key="LangPageLoginMsSkinInfoChangePassword">修改密碼</s:String>
-    <s:String x:Key="LangPageLoginMsSkinInfoChangeID">修改玩家名</s:String>
-    <s:String x:Key="LangPageLoginMsSkinSwitchID">切換賬號</s:String>
-    <s:String x:Key="LangPageLoginMsSkinChangingSkinPlzWait">正在更改皮膚中，請稍候！</s:String>
-    <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByLoginFail">登錄失敗，無法更改皮膚！</s:String>
-    <s:String x:Key="LangPageLoginMsSkinChangingSkin">正在更改皮膚……</s:String>
-    <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">正在登錄，將在登錄完成後繼續更改皮膚……</s:String>
-    <s:String x:Key="LangPageLoginMsSkinChangeSkinFail">更改皮膚失敗</s:String>
-    <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByTimeOut">更改皮膚失敗：與 Mojang 皮膚服務器的連接超時，請檢查你的網絡是否通暢！</s:String>
+    <s:String x:Key="LangPageLoginMsLoading">方載中</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkin">外觀與披風</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkinChange">易外觀</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkinSave">存外觀</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkinRefresh">重載肖像</s:String>
+    <s:String x:Key="LangPageLoginMsSkinCapeChange">易披風</s:String>
+    <s:String x:Key="LangPageLoginMsSkinInfoChange">易信息</s:String>
+    <s:String x:Key="LangPageLoginMsSkinInfoChangePassword">易密匙</s:String>
+    <s:String x:Key="LangPageLoginMsSkinInfoChangeID">易玩家之名</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSwitchID">易賬</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangingSkinPlzWait">方易外觀，請候！</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByLoginFail">登已敗，無法易外觀！</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangingSkin">方易外觀……</s:String>
+    <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">方登，於登後易外觀……</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangeSkinFail">易外觀敗</s:String>
+    <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByTimeOut">易外觀敗：接 Mojang 外观服務逾時，請验網之连接！</s:String>
 
     <!--PageLoginNide-->
-    <s:String x:Key="LangPageLoginNideAccount">賬號</s:String>
-    <s:String x:Key="LangPageLoginNidePassword">密碼</s:String>
-    <s:String x:Key="LangPageLoginNideRememberPassword">記住密碼</s:String>
-    <s:String x:Key="LangPageLoginNideRegister">註冊賬號</s:String>
-    <s:String x:Key="LangPageLoginNideDesc">統一通行證</s:String>
-    <s:String x:Key="LangPageLoginNideNoEmptyAccount">賬號不能為空！</s:String>
-    <s:String x:Key="LangPageLoginNideNoEmptyPassword">密碼不能為空！</s:String>
-    <s:String x:Key="LangPageLoginNideForgetPassword">找回密碼</s:String>
+    <s:String x:Key="LangPageLoginNideAccount">賬</s:String>
+    <s:String x:Key="LangPageLoginNidePassword">密匙</s:String>
+    <s:String x:Key="LangPageLoginNideRememberPassword">記密匙</s:String>
+    <s:String x:Key="LangPageLoginNideRegister">建賬</s:String>
+    <s:String x:Key="LangPageLoginNideDesc">大一統通關文牒</s:String>
+    <s:String x:Key="LangPageLoginNideNoEmptyAccount">賬不得為空！</s:String>
+    <s:String x:Key="LangPageLoginNideNoEmptyPassword">密匙不得為空！</s:String>
+    <s:String x:Key="LangPageLoginNideForgetPassword">寻回密匙</s:String>
 
     <!--PageLoginNideSkin-->
     <s:String x:Key="LangPageLoginNideSkinLoading">方載中</s:String>
-    <s:String x:Key="LangPageLoginNideSkinChangePassword">更改密碼</s:String>
-    <s:String x:Key="LangPageLoginNideSkinLogout">退出登錄</s:String>
+    <s:String x:Key="LangPageLoginNideSkinChangePassword">易密匙</s:String>
+    <s:String x:Key="LangPageLoginNideSkinLogout">退而出登</s:String>
 
     <!--PageOtherLeft-->
-    <s:String x:Key="LangPageOtherLeftHelp">幫助</s:String>
-    <s:String x:Key="LangPageOtherLeftRefresh">刷新</s:String>
-    <s:String x:Key="LangPageOtherLeftAbout">關於與鳴謝</s:String>
-    <s:String x:Key="LangPageOtherLeftTools">百寶箱</s:String>
-    <s:String x:Key="LangPageOtherLeftFeedback">反饋</s:String>
-    <s:String x:Key="LangPageOtherLeftVoteNew">新功能投票</s:String>
+    <s:String x:Key="LangPageOtherLeftHelp">助</s:String>
+    <s:String x:Key="LangPageOtherLeftRefresh">重載之</s:String>
+    <s:String x:Key="LangPageOtherLeftAbout">關於與謝</s:String>
+    <s:String x:Key="LangPageOtherLeftTools">百寶之盒</s:String>
+    <s:String x:Key="LangPageOtherLeftFeedback">回告</s:String>
+    <s:String x:Key="LangPageOtherLeftVoteNew">功能举议</s:String>
 
     <!--PageOtherHelp-->
-    <s:String x:Key="LangPageOtherHelpSearch">搜索幫助</s:String>
-    <s:String x:Key="LangPageOtherHelpLoading">正在加載幫助列表</s:String>
-    <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">很抱歉，幫助庫目前只支持簡體中文</s:String>
-    <s:String x:Key="LangPageOtherRefreshing">正在刷新……</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackContent">是否要打開反饋列表網頁？
-如果無法打開該網頁，請嘗試使用加速器或 VPN。</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackTitle">反饋提示</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackBtn1">提交新反饋</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackBtn2">查看反饋列表</s:String>
-    <s:String x:Key="LangPageOtherDialogVoteContent">是否要打開新功能投票網頁？
-如果無法打開該網頁，請嘗試使用加速器或 VPN。</s:String>
-    <s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
-    <s:String x:Key="LangPageOtherDialogVoteBtn1">打開</s:String>
+    <s:String x:Key="LangPageOtherHelpSearch">搜于助</s:String>
+    <s:String x:Key="LangPageOtherHelpLoading">方載助之表</s:String>
+    <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">於今，助之文僅為簡體漢文</s:String>
+    <s:String x:Key="LangPageOtherRefreshing">方重载……</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackContent">欲启回告之頁乎？
+若無法启此頁，請試用加速之器或 VPN。</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackTitle">回告之示</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackBtn1">交回告</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackBtn2">观回告之表</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteContent">欲启功能举议之頁乎？
+若無法启此頁，請試用加速之器或 VPN。</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteTitle">示</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteBtn1">開</s:String>
 
     <!--PageOtherAbout-->
     <s:String x:Key="LangPageOtherAboutAbout">關於</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthor">龍騰貓躍</s:String>
-    <s:String x:Key="LangPageOtherAboutAboutAuthorSubtitle">Plain Craft Launcher 的作者！</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutAuthorSubtitle">Plain Craft Launcher 之作者！</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthorBtn">贊助作者</s:String>
-    <s:String x:Key="LangPageOtherAboutAboutVersionSubtitle">當前版本：%VERSION%（%VERSIONCODE%.%BRANCH%）</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutVersionSubtitle">當前之版本：%VERSION%（%VERSIONCODE%.%BRANCH%）</s:String>
     <s:String x:Key="LangPageOtherAboutAboutVersionBtn">開源代碼</s:String>
-    <s:String x:Key="LangPageOtherAboutThanks">特別鳴謝</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksbangbang93">提供 BMCLAPI 鏡像源和 Forge 安裝工具，詳見 https://bmclapi.bangbang93.com</s:String>
+    <s:String x:Key="LangPageOtherAboutThanks">謝</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksbangbang93">供 BMCLAPI 鏡像源與 Forge 裝之器，參見 https://bmclapi.bangbang93.com</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">贊助鏡像源</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModTitle">MC 百科</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksMCMod">提供了改囊名稱的中文翻譯和更多相關信息！</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksMCModBtn">打開百科</s:String>
-    <s:String x:Key="LangPageOtherAboutThanks00ll00">提供了 Java Launch Wrapper 和一些重要服務支持！</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksz0z0r4">提供了 MCIM 中國 Mod 下載鏡像源和説明庫圖床！</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksPatrick">設計並製作了 PCL 圖標，讓我從做圖標的水深火熱中得到了解脫……</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksHao_Tian">在內測中找出了一大堆沒人想得到的詭異 Bug，有非同尋常的 Bug 體質</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">Minecraft 中文論壇</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksMCBBS">雖然已經關站了，但感謝此前提供了 MCBBS 鏡像源……</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 內群的各位</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksUsers">感謝內群的沙雕網友們這麼久以來對我和 PCL 的支持與鼓勵！</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCMod">供改囊名稱之汉文譯与相關之信息！</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCModBtn">覽</s:String>
+    <s:String x:Key="LangPageOtherAboutThanks00ll00">供 Java Launch Wrapper 与重要服務之支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksz0z0r4">供 MCIM 華夏改囊之鏡像源与説明庫圖之床！</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksPatrick">設計並製 PCL 之圖標，使餘於制圖標之水深火熱解脫</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksHao_Tian">於內測中尋無人問津之詭異問題不計其數，擁非比尋常之問題體質</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">Minecraft 汉文論之壇</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCBBS">雖已關閉，然此前提供 MCBBS 鏡像源，不勝感激……</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 內群之大衆</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksUsers">不勝感激內群之沙雕網友，長此以往對餘與 PCL 之支持、鼓勵！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">贊助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 7 月的高級贊助者們！感謝各位對 PCL 和偉大的咕咕咕事業的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">下乃甲辰年七月之高級贊助者！ 謝大眾對 PCL 與偉大咕咕咕事業之支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解鎖碼</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">贊助作者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">複製識別碼</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSetUnlockCode">輸入解鎖碼</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfo">法律信息</s:String>
-    <s:String x:Key="LangPageOtherAboutLicenseCopyright">許可與版權聲明</s:String>
-    <s:String x:Key="LangPageOtherAboutLicenseDoc">查看許可文檔</s:String>
-    <s:String x:Key="LangPageOtherAboutLicenseWeb">查看來源網站</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSetUnlockCode">輸解鎖碼</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfo">法律之信息</s:String>
+    <s:String x:Key="LangPageOtherAboutLicenseCopyright">許可與版權之聲明</s:String>
+    <s:String x:Key="LangPageOtherAboutLicenseDoc">覽許可之文</s:String>
+    <s:String x:Key="LangPageOtherAboutLicenseWeb">覽來源之站</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用戶協議與免責聲明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隱私說明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟體的 User Agent 中包含啟動器的版本號，以統計各版本的使用者數量。
-除此之外，本軟體不會向開發者上傳任何其他資訊。</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隱私之說明</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本軟體之 User Agent 含啟動器之版本號，以計各版本使用者之數。
+除此，本軟體不上傳任何其他資訊于開發者。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">余</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龍騰貓躍 2016. All Rights Reserved.
 電腦軟體著作權登記號：2020SR0875133
-違法違規行為檢舉投訴電子信箱：hexdragon@vip.qq.com
-非 Minecraft 官方產品。未經 Mojang 或 Microsoft 批准，也不與 Mojang 或 Microsoft 有任何關聯。</s:String>
+違律悖制之行檢舉投訴電子信箱：hexdragon@vip.qq.com
+非 Minecraft 官方之產品。未經 Mojang 或 Microsoft 批准，亦不與 Mojang 或 Microsoft 關聯。</s:String>
 
     <!--PageOtherTest-->
     <s:String x:Key="LangPageOtherTestNoUtility">為便於維護，開源內容中不包含百寶箱功能……</s:String>
 
     <!--PageSetupLaunch-->
-    <s:String x:Key="LangPageSetupLaunchSkin">離線皮膚</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTips">由於技術問題，此功能僅保證對 1.19.2 以前的版本有效！</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTypeRandom">隨機</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTypeRandomToolTip">隨機選擇一個默認皮膚</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoft">正版皮膚</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftToolTip">使用某個正版玩家的皮膚</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTypeCustom">自定義</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTypeCustomToolTip">以資囊的形式加載自定義皮膚。
-使用此方式更換的皮膚在多人遊戲中僅自己可見，且會替換遊戲中所有的角色。</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftName">正版玩家名</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinSave">保存皮膚</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinRefresh">刷新緩存</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinRefreshToolTip">刷新並重新下載 PCL 當前顯示的皮膚</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinChange">更改皮膚</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinReset">重置皮膚</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchOptions">啟動選項</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitle">遊戲窗口標題</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleToolTip">自定義遊戲窗口的標題，若留空則不進行更改。
-支持以下替換標記：
- · {user}：玩家名字
- · {login}：玩家的登錄方式
- · {name}：遊戲版本名
- · {date}、{time}：當前的系統時間
- · {version}：遊戲對應的原版版本號</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">自定義信息</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">該信息會顯示在遊戲主界面的左下角，與 F3 調試頁面的左上角</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">版本隔離</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">關閉</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">所有版本均使用同一檔案，存檔、Mod、資囊等均為公用。
-若存在多個安裝了改囊的版本，可能會導致改囊衝突。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">隔離可安裝改囊的版本</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">可安裝改囊的版本（例如 Forge、Fabric）均互相獨立以避免改囊衝突，其他版本（例如原版）則不會被隔離。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">隔離非正式版</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">將 Minecraft 快照、預發布版、遠古版本、愚人節版本與其他版本進行隔離</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaAndMod">隔離可安裝改囊的版本和非正式版</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAll">隔離所有版本</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">不同版本之間的存檔、Mod、資囊等均不互通。
-這會導致不同原版版本間的存檔不能共用，所以一般不推薦。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibility">啟動器可見性</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameStart">遊戲啟動後立即關閉</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameClose">遊戲啟動後隱藏，遊戲退出後自動關閉</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityRestartOnGameClose">遊戲啟動後隱藏，遊戲退出後重新打開</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityMinimizeOnGameStart">遊戲啟動後最小化</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityKeep">遊戲啟動後仍保持不變</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchGamePriority">進程優先級</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityHigh">高（優先保證遊戲運行，遊戲性能更佳，但可能造成其他程序卡頓）</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityMedium">中（平衡）</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityLow">低（優先保證其他程序運行，但可能讓遊戲卡頓，適合掛機時使用）</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchWindowSize">窗口大小</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeFullscreen">全屏</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkin">離線之外觀</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTips">因科技之問題，僅保此功能於 1.19.2 前之版生效！</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTypeRandom">隨</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTypeRandomToolTip">隨機擇一默認之外觀</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoft">正版外觀</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftToolTip">用某正版玩家之外觀</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTypeCustom">自定</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTypeCustomToolTip">以資囊之形載自定外觀。
+以此法易外觀，于多人遊戲僅自己可見，且易遊戲中所有角色之外觀。</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftName">正版玩家之名</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinSave">存外觀</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinRefresh">重载緩存</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinRefreshToolTip">重载 PCL 當前顯示之外觀</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinChange">易外觀</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinReset">除外觀</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchOptions">始之選項</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitle">遊戲窗口之題</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleToolTip">自定遊戲窗口之標題，留空則不定。
+支持以下易之記：
+ · {user}：玩家之名
+ · {login}：玩家登之法
+ · {name}：遊戲版之名
+ · {date}、{time}：系統之時間
+ · {version}：遊戲原版之版本號</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">自定信息</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">於遊戲主頁之左下角，與 F3 調試之頁之左上角展示</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">版之隔</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">關</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">版本共用同一檔案，存檔、改囊、資囊等公用。
+若存多個裝改囊之版，或致改囊衝突。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">隔可裝改囊之版</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">可裝改囊之版（如 Forge、Fabric）均互相獨立，以免改囊衝突，其余之版（如原版）不为隔。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">隔非正式之版</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">將 Minecraft 快照、預發布之版、遠古版本、愚人節之版與其余之版隔</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaAndMod">隔可裝改囊之版本與非正式之版</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAll">隔全部版</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">版之間之存檔、改囊、資囊等均不互通。
+不同原版之版間之存檔不得共用，故不推崇。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibility">啟動器之見性</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameStart">遊戲始後立即閉</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameClose">遊戲始後藏匿，退後打開</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityRestartOnGameClose">遊戲始後藏匿，退後重開</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityMinimizeOnGameStart">遊戲始後最小化</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityKeep">遊戲始後仍持</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchGamePriority">進程之優先級</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityHigh">高（先保遊戲運行，遊戲之速佳，或致其余程序卡頓）</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityMedium">中（衡）</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityLow">低（先保其余程序運行，或致遊戲卡頓，宜掛機時用）</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowSize">窗之尺寸</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeFullscreen">全</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeDefault">默認</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeSameWithLaunch">與啟動器尺寸一致</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeCustom">自定義尺寸</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeCustomToolTip">Forge 1.12.2 等個別版本存在 Bug，會導致高度設定無效</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeSameWithLaunch">與啟動器之尺寸一致</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeCustom">自定</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeCustomToolTip">Forge 1.12.2 等個別版存有问题，致高之設無效</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowSizeMaximum">最大化</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchJava">遊戲 Java</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchJavaToolTip">若將 Java 放在遊戲文件夾或 PCL 文件夾，在進行自動選擇時 PCL 會儘量優先選擇它</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchJavaLoading">加載中……</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchJavaAutoSearch">自動搜索</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchJavaImport">手動導入</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMem">遊戲內存</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMem32BitWarn">32 位 Java 最多只能分配 1 GB 內存，建議安裝 64 位 Java!</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjust">自動配置</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjustToolTip">根據安裝的改囊量與電腦剩餘內存，動態調整為遊戲分配的內存</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchJava">遊戲之 Java</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchJavaToolTip">若將 Java 置于遊戲资料夾或 PCL 资料夾，自動擇時可優先擇之</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchJavaLoading">方載中……</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchJavaAutoSearch">自動搜</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchJavaImport">手動增</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMem">遊戲之內存</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMem32BitWarn">若用三十二位之 Java，至多仅可用 1 GB 內存，建議裝六十四位之 Java!</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjust">自動配</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjustToolTip">據改囊之量與餘之記憶體，以為遊戲分配</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemCustom">自定義</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunch">啟動遊戲前進行內存優化</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunchToolTip">內存優化能將當前物理內存占用降低約 1/3，不僅限於 MC！
