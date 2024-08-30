@@ -993,7 +993,7 @@ PCLを起動するたびに、管理者権限の申請が必要です。自動�
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">パーソナライズページのすべての設定を初期化してもよろしいですか？この操作は取り消せません。
 （背景画像と音楽、カスタムホームなど外部ファイルは削除されません）</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">オンラインページのすべての設定を初期化してもよろしいですか？この操作は取り消せません。</s:String>
-    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">初期化を確認</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetTitle">初期化を確認</s:String>
 
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">ダウンロード</s:String>

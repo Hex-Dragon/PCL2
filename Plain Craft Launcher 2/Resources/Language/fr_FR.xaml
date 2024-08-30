@@ -987,7 +987,7 @@ Pour accorder automatiquement ce privilège, faites un clic droit sur PCL et ouv
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">Voulez-vous initialiser tous les paramètres de la page "Personnalisation" ? Cette opération est irréversible.
 (Les fichiers externes tels que l'arrière-plan, la musique et la page d'accueil personnalisée ne seront pas supprimés.)</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">Voulez-vous initialiser tous les paramètres de la page "Hébergement" ? Cette opération est irréversible.</s:String>
-    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">Confirmation d'initialisation</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetTitle">Confirmation d'initialisation</s:String>
 
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">Télécharger</s:String>

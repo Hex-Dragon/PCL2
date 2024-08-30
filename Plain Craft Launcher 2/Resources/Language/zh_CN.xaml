@@ -992,7 +992,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">是否要初始化个性化页的所有设置？该操作不可撤销。
 （背景图片与音乐、自定义主页等外部文件不会被删除）</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">是否要初始化联机页的所有设置？该操作不可撤销。</s:String>
-    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">初始化确认</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetTitle">初始化确认</s:String>
 
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">下载</s:String>

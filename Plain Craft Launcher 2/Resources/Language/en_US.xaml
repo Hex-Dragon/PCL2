@@ -992,7 +992,7 @@ To automatically grant, right-click PCL and open "Properties â†’ Compatibility â
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">Do you want to initialize all the settings at the "Personalization" page? This operation is irrevocable.
 (External files such as background, music, and the custom homepage will not be deleted.)</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">Do you want to initialize all the settings at the "Hosting" page? This operation is irrevocable.</s:String>
-    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">Initialization Confirmation</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetTitle">Initialization Confirmation</s:String>
 
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">Download</s:String>
@@ -1144,8 +1144,8 @@ Older versions will be move to the recycle bin just in case.
 Please read the warning above carefully before continuing!</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModTitle">Mods Update Warning</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModBtnConfirm">I have understood the risks, keep updating</s:String>
-    <s:String x:Key="LangPageVersionModTaskDownloadNewMod">Download the new version of mod files</s:String>
-    <s:String x:Key="LangPageVersionModTaskReplaceModFile">Replace older mod files</s:String>
+    <s:String x:Key="LangPageVersionModTaskDownloadNewMod">Download New Version Mods</s:String>
+    <s:String x:Key="LangPageVersionModTaskReplaceModFile">Replace Old Mods</s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdate">Mod Updates: </s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdateSuccessA">{0} mods have been successfully updated!</s:String>
     <s:String x:Key="LangPageVersionModTaskModUpdateSuccessB">Successfully updated: </s:String>

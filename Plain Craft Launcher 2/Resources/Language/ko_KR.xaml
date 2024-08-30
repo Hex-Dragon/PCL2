@@ -985,7 +985,7 @@ assets를 완전히 변경하지 않으며, libraries, 제3자 로그인 라이�
     <s:String x:Key="LangPageSetupLeftDialogResetPersonalizeConfirmContent">개인화 페이지의 모든 설정을 초기화하시겠습니까? 이 작업은 취소할 수 없습니다.
 (배경 이미지 및 음악, 사용자 정의 홈페이지 등 외부 파일은 삭제되지 않습니다.)</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">연결 페이지의 모든 설정을 초기화하시겠습니까? 이 작업은 취소할 수 없습니다.</s:String>
-    <s:String x:Key="LangPageSetupLeftDialogBtnResetConfirm">초기화 확인</s:String>
+    <s:String x:Key="LangPageSetupLeftDialogResetTitle">초기화 확인</s:String>
 
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">다운로드</s:String>
