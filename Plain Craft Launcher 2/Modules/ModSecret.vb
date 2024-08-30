@@ -106,7 +106,7 @@ Friend Module ModSecret
         Else
             Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode
         End If
-        Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.server/"
+        Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.open.server/"
         Client.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
     ''' <summary>
