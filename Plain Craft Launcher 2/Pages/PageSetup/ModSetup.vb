@@ -547,12 +547,12 @@
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
                 If Lang.Equals("zh_CN") Then
+                    FrmSetupUI.HintCustom.Visibility = Visibility.Collapsed
+                Else
                     FrmSetupUI.HintCustom.Visibility = Visibility.Visible
                     FrmSetupUI.HintCustom.Text = GetLang("LangSetHomePagePresetSCOnly")
                     FrmSetupUI.HintCustom.EventType = ""
                     FrmSetupUI.HintCustom.EventData = ""
-                Else
-                    FrmSetupUI.HintCustom.Visibility = Visibility.Collapsed
                 End If
         End Select
         FrmSetupUI.CardCustom.TriggerForceResize()
