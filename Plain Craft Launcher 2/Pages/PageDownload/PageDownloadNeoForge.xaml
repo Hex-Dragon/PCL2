@@ -8,7 +8,7 @@
         <StackPanel Orientation="Vertical" Margin="5">
             <local:MyCard Margin="20,20,20,0" Grid.IsSharedSizeScope="True" Title="NeoForge 简介" x:Name="CardTip">
                 <StackPanel Margin="25,40,15,20">
-                    <TextBlock Margin="0,0,0,11" Text="NeoForge 是 Minecraft 1.19+ 的 Mod 加载器，你需要先安装它才能安装各种 NeoForge 模组。&#xa;本页面提供 NeoForge 安装器下载，在下载后你需要手动打开安装器进行安装。" TextWrapping="Wrap" />
+                    <TextBlock Margin="0,0,0,11" Text="NeoForge 是支持 Minecraft 1.20.1 及以上的 Mod 加载器，你需要先安装它才能安装各种 NeoForge 模组。&#xa;本页面提供 NeoForge 安装器下载，在下载后你需要手动打开安装器进行安装。" TextWrapping="Wrap" />
                     <Grid Height="35">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
