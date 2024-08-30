@@ -1162,6 +1162,9 @@
     <s:String x:Key="LangPageVersionModViewTypeEnabled">已启用</s:String>
     <s:String x:Key="LangPageVersionModViewTypeDisabled">已禁用</s:String>
     <s:String x:Key="LangPageVersionModViewTypeError">已爆炸</s:String>
+    <s:String x:Key="LangPageVersionModBack">回去</s:String>
+    <s:String x:Key="LangPageVersionModSearchInMcmod">百科搜索</s:String>
+    <s:String x:Key="LangPageVersionModWebsite">打开官网</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">该版本用不了模组</s:String>

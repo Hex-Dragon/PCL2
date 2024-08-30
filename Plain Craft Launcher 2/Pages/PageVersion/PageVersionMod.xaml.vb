@@ -744,11 +744,11 @@
                 ModSearchName = ModSearchName.Replace("++", "+").Replace("pti+Fine", "ptiFine")
                 '显示
                 If ModEntry.Url Is Nothing Then
-                    If MyMsgBox(Join(ContentLines, vbCrLf), ModEntry.Name, "百科搜索", "返回") = 1 Then
+                    If MyMsgBox(Join(ContentLines, vbCrLf), ModEntry.Name, GetLang("LangPageVersionModSearchInMcmod"), GetLang("LangPageVersionModBack")) = 1 Then
                         OpenWebsite("https://www.mcmod.cn/s?key=" & ModSearchName & "&site=all&filter=0")
                     End If
                 Else
-                    Select Case MyMsgBox(Join(ContentLines, vbCrLf), ModEntry.Name, "打开官网", "百科搜索", "返回")
+                    Select Case MyMsgBox(Join(ContentLines, vbCrLf), ModEntry.Name, GetLang("LangPageVersionModWebsite"), GetLang("LangPageVersionModSearchInMcmod"), GetLang("LangPageVersionModBack"))
                         Case 1
                             OpenWebsite(ModEntry.Url)
                         Case 2

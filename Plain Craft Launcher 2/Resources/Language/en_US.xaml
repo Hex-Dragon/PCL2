@@ -1162,6 +1162,9 @@ Please read the warning above carefully before continuing!</s:String>
     <s:String x:Key="LangPageVersionModViewTypeEnabled">Enabled</s:String>
     <s:String x:Key="LangPageVersionModViewTypeDisabled">Disabled</s:String>
     <s:String x:Key="LangPageVersionModViewTypeError">Error</s:String>
+    <s:String x:Key="LangPageVersionModBack">Back</s:String>
+    <s:String x:Key="LangPageVersionModSearchInMcmod">Search in Wiki</s:String>
+    <s:String x:Key="LangPageVersionModWebsite">Open Official Website</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">This Instance is NOT Available with Mods</s:String>

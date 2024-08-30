@@ -1162,6 +1162,9 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageVersionModViewTypeEnabled">Ενεργοποιημένο</s:String>
     <s:String x:Key="LangPageVersionModViewTypeDisabled">Απενεργοποιημένο</s:String>
     <s:String x:Key="LangPageVersionModViewTypeError">Σφάλμα</s:String>
+    <s:String x:Key="LangPageVersionModBack">Επιστροφή</s:String>
+    <s:String x:Key="LangPageVersionModSearchInMcmod">Αναζήτηση στην εγκυκλοπαίδεια</s:String>
+    <s:String x:Key="LangPageVersionModWebsite">Άνοιγμα επίσημης ιστοσελίδας</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">Αυτή η Παρουσία ΔΕΝ είναι Διαθέσιμη με Mods</s:String>

@@ -1162,6 +1162,9 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionModViewTypeEnabled">已啟</s:String>
     <s:String x:Key="LangPageVersionModViewTypeDisabled">已禁</s:String>
     <s:String x:Key="LangPageVersionModViewTypeError">錯誤</s:String>
+    <s:String x:Key="LangPageVersionModBack">還</s:String>
+    <s:String x:Key="LangPageVersionModSearchInMcmod">尋百科</s:String>
+    <s:String x:Key="LangPageVersionModWebsite">開官網</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">該版本不可使用改囊</s:String>

@@ -1162,6 +1162,9 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageVersionModViewTypeEnabled">Включены</s:String>
     <s:String x:Key="LangPageVersionModViewTypeDisabled">Отключены</s:String>
     <s:String x:Key="LangPageVersionModViewTypeError">С ошибкой</s:String>
+    <s:String x:Key="LangPageVersionModBack">Назад</s:String>
+    <s:String x:Key="LangPageVersionModSearchInMcmod">Поиск в энциклопедии</s:String>
+    <s:String x:Key="LangPageVersionModWebsite">Открыть официальный сайт</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">Этот экземпляр недоступен с модами</s:String>

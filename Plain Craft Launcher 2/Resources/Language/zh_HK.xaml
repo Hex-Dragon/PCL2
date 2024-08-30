@@ -1162,6 +1162,9 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageVersionModViewTypeEnabled">已啟用</s:String>
     <s:String x:Key="LangPageVersionModViewTypeDisabled">已禁用</s:String>
     <s:String x:Key="LangPageVersionModViewTypeError">錯誤</s:String>
+    <s:String x:Key="LangPageVersionModBack">返回</s:String>
+    <s:String x:Key="LangPageVersionModSearchInMcmod">百科搜尋</s:String>
+    <s:String x:Key="LangPageVersionModWebsite">開啟官網</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">該實例不可使用模組</s:String>

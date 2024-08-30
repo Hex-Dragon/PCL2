@@ -1149,6 +1149,9 @@ Mod를 업데이트하기 전에 저장 파일을 백업하고 업데이트 로�
     <s:String x:Key="LangPageVersionModViewTypeEnabled">활성화됨</s:String>
     <s:String x:Key="LangPageVersionModViewTypeDisabled">비활성화됨</s:String>
     <s:String x:Key="LangPageVersionModViewTypeError">오류</s:String>
+    <s:String x:Key="LangPageVersionModBack">돌아가기</s:String>
+    <s:String x:Key="LangPageVersionModSearchInMcmod">백과사전 검색</s:String>
+    <s:String x:Key="LangPageVersionModWebsite">공식 웹사이트 열기</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">이 버전은 Mod를 사용할 수 없습니다</s:String>

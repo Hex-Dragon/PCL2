@@ -1146,6 +1146,9 @@ Las versiones anteriores se moverán a la papelera de reciclaje por si acaso.
     <s:String x:Key="LangPageVersionModViewTypeEnabled">Habilitado</s:String>
     <s:String x:Key="LangPageVersionModViewTypeDisabled">Deshabilitado</s:String>
     <s:String x:Key="LangPageVersionModViewTypeError">Error</s:String>
+    <s:String x:Key="LangPageVersionModBack">Volver</s:String>
+    <s:String x:Key="LangPageVersionModSearchInMcmod">Buscar en la Wiki</s:String>
+    <s:String x:Key="LangPageVersionModWebsite">Abrir sitio web oficial</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">Esta instancia NO está disponible con mods</s:String>

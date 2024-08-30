@@ -1157,6 +1157,9 @@ Veuillez lire attentivement l'avertissement ci-dessus avant de continuer !</s:St
     <s:String x:Key="LangPageVersionModViewTypeEnabled">Activé</s:String>
     <s:String x:Key="LangPageVersionModViewTypeDisabled">Désactivé</s:String>
     <s:String x:Key="LangPageVersionModViewTypeError">Erreur</s:String>
+    <s:String x:Key="LangPageVersionModBack">Retour</s:String>
+    <s:String x:Key="LangPageVersionModSearchInMcmod">Rechercher dans l'encyclopédie</s:String>
+    <s:String x:Key="LangPageVersionModWebsite">Ouvrir le site officiel</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">Cette instance n'est PAS disponible avec des mods</s:String>

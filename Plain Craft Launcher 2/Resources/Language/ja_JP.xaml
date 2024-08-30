@@ -1163,6 +1163,9 @@ Mod を更新する前に、セーブデータをバックアップし、更新�
     <s:String x:Key="LangPageVersionModViewTypeEnabled">有効</s:String>
     <s:String x:Key="LangPageVersionModViewTypeDisabled">無効</s:String>
     <s:String x:Key="LangPageVersionModViewTypeError">エラー</s:String>
+    <s:String x:Key="LangPageVersionModBack">戻る</s:String>
+    <s:String x:Key="LangPageVersionModSearchInMcmod">百科事典で検索</s:String>
+    <s:String x:Key="LangPageVersionModWebsite">公式サイトを開く</s:String>
 
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">このバージョンではModを使用できません</s:String>
