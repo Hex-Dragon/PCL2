@@ -4,22 +4,22 @@
 
     Private IsLoad As Boolean = False
     Public Sub PageOther_Loaded() Handles Me.Loaded
-        BtnTypeAll.Tag = ViewType.All
-        BtnTypeEnabled.Tag = ViewType.Enabled
-        BtnTypeDisabled.Tag = ViewType.Disabled
-        BtnTypeCanUpdate.Tag = ViewType.CanUpdate
-        BtnTypeError.Tag = ViewType.InError
 
         If FrmMain.PageLast.Page <> FormMain.PageType.CompDetail Then PanBack.ScrollToHome()
         AniControlEnabled += 1
         SelectedMods.Clear()
-        RefreshList()
+        ReloadModList()
         ChangeAllSelected(False)
         AniControlEnabled -= 1
 
         '非重复加载部分
         If IsLoad Then Exit Sub
         IsLoad = True
+
+        '调整按钮边距（这玩意儿没法从 XAML 改）
+        For Each Btn As MyRadioButton In PanFilter.Children
+            Btn.LabText.Margin = New Thickness(-2, 0, 8, 0)
+        Next
 
 #If DEBUG Then
         BtnManageCheck.Visibility = Visibility.Visible
@@ -29,11 +29,10 @@
     ''' <summary>
     ''' 刷新 Mod 列表。
     ''' </summary>
-    Public Sub RefreshList(Optional ForceReload As Boolean = False)
+    Public Sub ReloadModList(Optional ForceReload As Boolean = False)
         If LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", If(ForceReload, LoaderFolderRunType.ForceRun, LoaderFolderRunType.RunOnUpdated)) Then
             Log("[System] 已刷新 Mod 列表")
-            ViewModType = ViewType.All
-            BtnTypeAll.Checked = True
+            Filter = FilterType.All
             PanBack.ScrollToHome()
             SearchBox.Text = ""
         End If
@@ -60,10 +59,9 @@
     ''' 将加载器结果的 Mod 列表加载为 UI。
     ''' </summary>
     Private Sub LoadUIFromLoaderOutput()
-        Dim Mods As List(Of McMod) = McModLoader.Output
         Try
             '判断应该显示哪一个页面
-            If Mods.Any() Then
+            If McModLoader.Output.Any() Then
                 PanBack.Visibility = Visibility.Visible
                 PanEmpty.Visibility = Visibility.Collapsed
             Else
@@ -71,13 +69,15 @@
                 PanBack.Visibility = Visibility.Collapsed
                 Exit Sub
             End If
-            '输出结果
+            '修改缓存
             ModItems.Clear()
-            For Each ModEntity As McMod In Mods
+            For Each ModEntity As McMod In McModLoader.Output
                 ModItems(ModEntity.RawFileName) = McModListItem(ModEntity)
             Next
+            '显示结果
+            Filter = FilterType.All
             SearchBox.Text = "" '这会触发结果刷新，所以需要在 ModItems 更新之后，详见 #3124 的视频
-            RefreshResult(Mods)
+            RefreshUI()
         Catch ex As Exception
             Log(ex, "加载 Mod 列表 UI 失败", LogLevel.Feedback)
         End Try
@@ -129,85 +129,137 @@
     End Sub
 
     ''' <summary>
-    ''' 刷新结果显示。
+    ''' 刷新整个 UI。
     ''' </summary>
-    Private Sub RefreshResult(Mods As List(Of McMod))
+    Public Sub RefreshUI()
         If PanList Is Nothing Then Exit Sub
-        Dim ShowMods As List(Of McMod) = New List(Of McMod)
-        Select Case ViewModType
-            Case ViewType.All
-                ShowMods = Mods
-            Case ViewType.Enabled
-                For Each Item In Mods
-                    If Item.State.Equals(McMod.McModState.Fine) Then ShowMods.Add(Item)
-                Next
-            Case ViewType.Disabled
-                For Each Item In Mods
-                    If Item.State.Equals(McMod.McModState.Disabled) Then ShowMods.Add(Item)
-                Next
-            Case ViewType.CanUpdate
-                For Each Item In Mods
-                    If Item.CanUpdate Then ShowMods.Add(Item)
-                Next
-            Case ViewType.InError
-                For Each Item In Mods
-                    If Item.State.Equals(McMod.McModState.Unavaliable) Then ShowMods.Add(Item)
-                Next
-        End Select
-        PanList.Children.Clear()
-        For Each TargetMod In ShowMods
-            PanList.Children.Add(ModItems(TargetMod.RawFileName))
-        Next
-        Dim ModEnabled As Integer = 0
-        Dim ModDisabled As Integer = 0
-        Dim ModCanUpdate As Integer = 0
-        Dim ModError As Integer = 0
-        For Each ModItem In ModItems
-            If ModItem.Value.Entry.CanUpdate Then
-                ModCanUpdate += 1
-            End If
-            If ModItem.Value.Entry.State.Equals(McMod.McModState.Fine) Then
-                ModEnabled += 1
-            End If
-            If ModItem.Value.Entry.State.Equals(McMod.McModState.Disabled) Then
-                ModDisabled += 1
-            End If
-            If ModItem.Value.Entry.State.Equals(McMod.McModState.Unavaliable) Then
-                ModError += 1
-            End If
-        Next
-        BtnTypeAll.Text = $"全部 ({ModEnabled + ModDisabled + ModError}) "
-        BtnTypeCanUpdate.Text = $"可更新 ({ModCanUpdate}) "
-        BtnTypeEnabled.Text = $"已启用 ({ModEnabled}) "
-        BtnTypeDisabled.Text = $"已禁用 ({ModDisabled}) "
-        BtnTypeError.Text = $"错误 ({ModError}) "
-        RefreshTitle()
-    End Sub
-    ''' <summary>
-    ''' 刷新卡片标题。
-    ''' </summary>
-    Private Sub RefreshTitle()
-        If Not IsSearching Then
-            PanListBack.Title = "Mod 列表 - "
-        ElseIf PanList.Children.Count > 0 Then
-            PanListBack.Title = "搜索结果 - "
+        Dim ShowMods = GetShowingMods(True).ToList()
+        '重新列出列表
+        AniControlEnabled += 1
+        If ShowMods.Any() Then
+            PanList.Visibility = Visibility.Visible
+            PanList.Children.Clear()
+            For Each TargetMod In ShowMods
+                Dim Item As MyLocalModItem = ModItems(TargetMod.RawFileName)
+                Item.Checked = SelectedMods.Contains(TargetMod.RawFileName) '更新选中状态
+                PanList.Children.Add(Item)
+            Next
         Else
-            PanListBack.Title = "无搜索结果 - "
+            PanList.Visibility = Visibility.Collapsed
         End If
-        Select Case ViewModType
-            Case ViewType.All
-                PanListBack.Title += BtnTypeAll.Text
-            Case ViewType.Enabled
-                PanListBack.Title += BtnTypeEnabled.Text
-            Case ViewType.Disabled
-                PanListBack.Title += BtnTypeDisabled.Text
-            Case ViewType.CanUpdate
-                PanListBack.Title += BtnTypeCanUpdate.Text
-            Case ViewType.InError
-                PanListBack.Title += BtnTypeError.Text
-        End Select
-        PanList.Visibility = If(PanList.Children.Count > 0, Visibility.Visible, Visibility.Collapsed)
+        AniControlEnabled -= 1
+        SelectedMods = SelectedMods.Where(Function(m) ShowMods.Any(Function(s) s.RawFileName = m)).ToList '取消选中已经不显示的 Mod
+        RefreshBars()
     End Sub
+
+    ''' <summary>
+    ''' 刷新顶栏和底栏显示。
+    ''' </summary>
+    Public Sub RefreshBars()
+        '-----------------
+        ' 顶部栏
+        '-----------------
+
+        '计数
+        Dim AnyCount As Integer = 0
+        Dim EnabledCount As Integer = 0
+        Dim DisabledCount As Integer = 0
+        Dim UpdateCount As Integer = 0
+        Dim UnavalialeCount As Integer = 0
+        For Each ModItem In GetShowingMods(False)
+            AnyCount += 1
+            If ModItem.CanUpdate Then UpdateCount += 1
+            If ModItem.State.Equals(McMod.McModState.Fine) Then EnabledCount += 1
+            If ModItem.State.Equals(McMod.McModState.Disabled) Then DisabledCount += 1
+            If ModItem.State.Equals(McMod.McModState.Unavaliable) Then UnavalialeCount += 1
+        Next
+        '显示
+        BtnFilterAll.Text = If(IsSearching, "搜索结果", "全部") & $" ({AnyCount})"
+        BtnFilterCanUpdate.Text = $"可更新 ({UpdateCount})"
+        BtnFilterCanUpdate.Visibility = If(Filter = FilterType.CanUpdate OrElse
+            UpdateCount > 0, Visibility.Visible, Visibility.Collapsed)
+        BtnFilterEnabled.Text = $"启用 ({EnabledCount})"
+        BtnFilterEnabled.Visibility = If(Filter = FilterType.Enabled OrElse Filter = FilterType.Disabled OrElse
+            EnabledCount > 0 AndAlso EnabledCount <> AnyCount, Visibility.Visible, Visibility.Collapsed)
+        BtnFilterDisabled.Text = $"禁用 ({DisabledCount})"
+        BtnFilterDisabled.Visibility = If(Filter = FilterType.Enabled OrElse Filter = FilterType.Disabled OrElse
+            DisabledCount > 0, Visibility.Visible, Visibility.Collapsed)
+        BtnFilterError.Text = $"错误 ({UnavalialeCount})"
+        BtnFilterError.Visibility = If(Filter = FilterType.Unavaliable OrElse
+            UnavalialeCount > 0, Visibility.Visible, Visibility.Collapsed)
+
+        '-----------------
+        ' 底部栏
+        '-----------------
+
+        '计数
+        Dim NewCount As Integer = SelectedMods.Count
+        Dim Selected = NewCount > 0
+        If Selected Then LabSelect.Text = $"已选择 {NewCount} 个文件" '取消所有选择时不更新数字
+        '按钮可用性
+        If Selected Then
+            Dim HasUpdate As Boolean = False
+            Dim HasEnabled As Boolean = False
+            Dim HasDisabled As Boolean = False
+            For Each ModEntity In McModLoader.Output
+                If SelectedMods.Contains(ModEntity.RawFileName) Then
+                    If ModEntity.CanUpdate Then HasUpdate = True
+                    If ModEntity.State = McMod.McModState.Fine Then
+                        HasEnabled = True
+                    ElseIf ModEntity.State = McMod.McModState.Disabled Then
+                        HasDisabled = True
+                    End If
+                End If
+            Next
+            BtnSelectDisable.IsEnabled = HasEnabled
+            BtnSelectEnable.IsEnabled = HasDisabled
+            BtnSelectUpdate.IsEnabled = HasUpdate
+        End If
+        '更新显示状态
+        If AniControlEnabled = 0 Then
+            PanListBack.Margin = New Thickness(0, 0, 0, If(Selected, 95, 15))
+            If Selected Then
+                '仅在数量增加时播放出现/跳跃动画
+                If BottomBarShownCount >= NewCount Then
+                    BottomBarShownCount = NewCount
+                    Return
+                Else
+                    BottomBarShownCount = NewCount
+                End If
+                '出现/跳跃动画
+                CardSelect.Visibility = Visibility.Visible
+                AniStart({
+                    AaOpacity(CardSelect, 1 - CardSelect.Opacity, 60),
+                    AaTranslateY(CardSelect, -27 - TransSelect.Y, 120, Ease:=New AniEaseOutFluent(AniEasePower.Weak)),
+                    AaTranslateY(CardSelect, 3, 150, 120, Ease:=New AniEaseInoutFluent(AniEasePower.Weak)),
+                    AaTranslateY(CardSelect, -1, 90, 270, Ease:=New AniEaseInoutFluent(AniEasePower.Weak))
+                }, "Mod Sidebar")
+            Else
+                '不重复播放隐藏动画
+                If BottomBarShownCount = 0 Then Return
+                BottomBarShownCount = 0
+                '隐藏动画
+                AniStart({
+                    AaOpacity(CardSelect, -CardSelect.Opacity, 90),
+                    AaTranslateY(CardSelect, -10 - TransSelect.Y, 90, Ease:=New AniEaseInFluent(AniEasePower.Weak)),
+                    AaCode(Sub() CardSelect.Visibility = Visibility.Collapsed, After:=True)
+                }, "Mod Sidebar")
+            End If
+        Else
+            AniStop("Mod Sidebar")
+            BottomBarShownCount = NewCount
+            If Selected Then
+                CardSelect.Visibility = Visibility.Visible
+                CardSelect.Opacity = 1
+                TransSelect.Y = -25
+            Else
+                CardSelect.Visibility = Visibility.Collapsed
+                CardSelect.Opacity = 0
+                TransSelect.Y = -10
+            End If
+        End If
+    End Sub
+    Private BottomBarShownCount As Integer = 0
 
 #End Region
 
@@ -247,15 +299,7 @@
     ''' 全选。
     ''' </summary>
     Private Sub BtnManageSelectAll_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageSelectAll.Click
-        Dim CurrentSelected As Integer = 0
-        For Each Item In PanList.Children.OfType(Of MyLocalModItem).ToList
-            If Item.Checked Then CurrentSelected += 1
-        Next
-        If CurrentSelected < PanList.Children.Count Then
-            ChangeCurrentSelected(True)
-        Else
-            ChangeCurrentSelected(False)
-        End If
+        ChangeAllSelected(SelectedMods.Count < GetShowingMods(True).Count)
     End Sub
 
     ''' <summary>
@@ -282,110 +326,20 @@
         Else
             SelectedMods.Remove(SelectedKey)
         End If
-        '更新下边栏 UI
-        RefreshBottomBar()
-    End Sub
-
-    '改变下边栏状态
-    Private ShownCount As Integer = 0
-    Public Sub RefreshBottomBar()
-        '计数
-        Dim NewCount As Integer = SelectedMods.Count
-        Dim Selected = NewCount > 0
-        If Selected Then LabSelect.Text = $"已选择 {NewCount} 个文件" '取消所有选择时不更新数字
-        '按钮可用性
-        If Selected Then
-            Dim HasUpdate As Boolean = False
-            Dim HasEnabled As Boolean = False
-            Dim HasDisabled As Boolean = False
-            For Each ModEntity In McModLoader.Output
-                If SelectedMods.Contains(ModEntity.RawFileName) Then
-                    If ModEntity.CanUpdate Then HasUpdate = True
-                    If ModEntity.State = McMod.McModState.Fine Then
-                        HasEnabled = True
-                    ElseIf ModEntity.State = McMod.McModState.Disabled Then
-                        HasDisabled = True
-                    End If
-                End If
-            Next
-            BtnSelectDisable.IsEnabled = HasEnabled
-            BtnSelectEnable.IsEnabled = HasDisabled
-            BtnSelectUpdate.IsEnabled = HasUpdate
-        End If
-        '更新显示状态
-        If AniControlEnabled = 0 Then
-            If Selected Then
-                PanListBack.Margin = New Thickness(0, 0, 0, 95)
-                '仅在数量增加时播放出现/跳跃动画
-                If ShownCount >= NewCount Then
-                    ShownCount = NewCount
-                    Return
-                Else
-                    ShownCount = NewCount
-                End If
-                '出现/跳跃动画
-                CardSelect.Visibility = Visibility.Visible
-                AniStart({
-                    AaOpacity(CardSelect, 1 - CardSelect.Opacity, 60),
-                    AaTranslateY(CardSelect, -27 - TransSelect.Y, 120, Ease:=New AniEaseOutFluent(AniEasePower.Weak)),
-                    AaTranslateY(CardSelect, 3, 150, 120, Ease:=New AniEaseInoutFluent(AniEasePower.Weak)),
-                    AaTranslateY(CardSelect, -1, 90, 270, Ease:=New AniEaseInoutFluent(AniEasePower.Weak))
-                }, "Mod Sidebar")
-            Else
-                PanListBack.Margin = New Thickness(0, 0, 0, 15)
-                '不重复播放隐藏动画
-                If ShownCount = 0 Then Return
-                ShownCount = 0
-                '隐藏动画
-                AniStart({
-                    AaOpacity(CardSelect, -CardSelect.Opacity, 90),
-                    AaTranslateY(CardSelect, -10 - TransSelect.Y, 90, Ease:=New AniEaseInFluent(AniEasePower.Weak)),
-                    AaCode(Sub() CardSelect.Visibility = Visibility.Collapsed, After:=True)
-                }, "Mod Sidebar")
-            End If
-        Else
-            AniStop("Mod Sidebar")
-            ShownCount = NewCount
-            If Selected Then
-                CardSelect.Visibility = Visibility.Visible
-                CardSelect.Opacity = 1
-                TransSelect.Y = -25
-            Else
-                CardSelect.Visibility = Visibility.Collapsed
-                CardSelect.Opacity = 0
-                TransSelect.Y = -10
-            End If
-        End If
+        RefreshBars()
     End Sub
 
     '切换所有项的选择状态
     Private Sub ChangeAllSelected(Value As Boolean)
         AniControlEnabled += 1
         SelectedMods.Clear()
-        For Each Item As MyLocalModItem In ModItems.Values.ToList
+        For Each Item As MyLocalModItem In GetShowingMods(True).Select(Function(m) ModItems(m.RawFileName))
             Item.Checked = Value
             If Value Then SelectedMods.Add(Item.Entry.RawFileName)
         Next
         AniControlEnabled -= 1
-        '更新下边栏 UI
-        RefreshBottomBar()
+        RefreshBars()
     End Sub
-
-    Private Sub ChangeCurrentSelected(Value As Boolean)
-        AniControlEnabled += 1
-        For Each Item As MyLocalModItem In PanList.Children
-            Item.Checked = Value
-            If Value Then
-                If Not SelectedMods.Contains(Item.Entry.RawFileName) Then SelectedMods.Add(Item.Entry.RawFileName)
-            Else
-                If SelectedMods.Contains(Item.Entry.RawFileName) Then SelectedMods.Remove(Item.Entry.RawFileName)
-            End If
-        Next
-        AniControlEnabled -= 1
-        '更新下边栏 UI
-        RefreshBottomBar()
-    End Sub
-
     Private Sub UnselectedAllWithAnimation() Handles Load.StateChanged, Me.PageExit
         Dim CacheAniControlEnabled = AniControlEnabled
         AniControlEnabled = 0
@@ -393,26 +347,76 @@
         AniControlEnabled += CacheAniControlEnabled
     End Sub
     Private Sub PageVersionMod_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
-        If My.Computer.Keyboard.CtrlKeyDown AndAlso e.Key = Key.A Then ChangeCurrentSelected(True)
+        If My.Computer.Keyboard.CtrlKeyDown AndAlso e.Key = Key.A Then ChangeAllSelected(True)
     End Sub
 
-    Private ViewModType As ViewType = ViewType.All
+#End Region
 
-    Private Enum ViewType As Integer
-        All
-        Enabled
-        Disabled
-        CanUpdate
-        InError
+#Region "筛选"
+
+    Private _Filter As FilterType = FilterType.All
+    Private Property Filter As FilterType
+        Get
+            Return _Filter
+        End Get
+        Set(value As FilterType)
+            If _Filter = value Then Return
+            _Filter = value
+            Select Case value
+                Case FilterType.All
+                    BtnFilterAll.Checked = True
+                Case FilterType.Enabled
+                    BtnFilterEnabled.Checked = True
+                Case FilterType.Disabled
+                    BtnFilterDisabled.Checked = True
+                Case FilterType.CanUpdate
+                    BtnFilterCanUpdate.Checked = True
+                Case Else
+                    BtnFilterError.Checked = True
+            End Select
+            RefreshUI()
+        End Set
+    End Property
+    Private Enum FilterType As Integer
+        All = 0
+        Enabled = 1
+        Disabled = 2
+        CanUpdate = 3
+        Unavaliable = 4
     End Enum
 
-    Private Sub ChangeViewType(sender As MyRadioButton, raiseByMouse As Boolean) Handles BtnTypeAll.Check, BtnTypeCanUpdate.Check, BtnTypeDisabled.Check, BtnTypeEnabled.Check, BtnTypeError.Check
-        ViewModType = sender.Tag
-        If IsSearching Then
-            SearchRun()
-        Else
-            RefreshResult(McModLoader.Output)
-        End If
+    ''' <summary>
+    ''' 获取所有应该显示在 UI 中的 Mod。
+    ''' </summary>
+    Private Function GetShowingMods(ApplyFilter As Boolean) As IEnumerable(Of McMod)
+        If McModLoader.Output Is Nothing Then Return New List(Of McMod)
+        Return If(IsSearching, SearchResult, McModLoader.Output).Where(Function(m) Not ApplyFilter OrElse CanPassFilter(m))
+    End Function
+
+    ''' <summary>
+    ''' 检查该 Mod 项是否符合当前筛选的类别。
+    ''' </summary>
+    Private Function CanPassFilter(CheckingMod As McMod) As Boolean
+        Select Case Filter
+            Case FilterType.All
+                Return True
+            Case FilterType.Enabled
+                Return CheckingMod.State = McMod.McModState.Fine
+            Case FilterType.Disabled
+                Return CheckingMod.State = McMod.McModState.Disabled
+            Case FilterType.CanUpdate
+                Return CheckingMod.CanUpdate
+            Case FilterType.Unavaliable
+                Return CheckingMod.State = McMod.McModState.Unavaliable
+            Case Else
+                Return False
+        End Select
+    End Function
+
+    '点击筛选项触发的改变
+    Private Sub ChangeFilter(sender As MyRadioButton, raiseByMouse As Boolean) Handles BtnFilterAll.Check, BtnFilterCanUpdate.Check, BtnFilterDisabled.Check, BtnFilterEnabled.Check, BtnFilterError.Check
+        Filter = sender.Tag
+        RefreshUI()
     End Sub
 
 #End Region
@@ -424,7 +428,6 @@
         EDMods(McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)),
                Not sender.Equals(BtnSelectDisable))
         ChangeAllSelected(False)
-        RefreshResult(McModLoader.Output)
     End Sub
     Private Sub EDMods(ModList As IEnumerable(Of McMod), IsEnable As Boolean)
         Dim IsSuccessful As Boolean = True
@@ -459,7 +462,7 @@
                 FileSystem.Rename(ModEntity.Path, NewPath)
             Catch ex As FileNotFoundException
                 Log(ex, $"未找到需要重命名的 Mod（{If(ModEntity.Path, "null")}）", LogLevel.Feedback)
-                RefreshList(True)
+                ReloadModList(True)
                 Return
             Catch ex As Exception
                 Log(ex, $"重命名 Mod 失败（{If(ModEntity.Path, "null")}）")
@@ -479,12 +482,11 @@
             PanList.Children.RemoveAt(IndexOfUi)
             PanList.Children.Insert(IndexOfUi, NewItem)
         Next
-        RefreshTitle() '改变数量显示
-        If Not IsSuccessful Then
-            Hint("由于文件被占用，Mod 的状态切换失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
-            RefreshList(True)
+        If IsSuccessful Then
+            RefreshBars()
         Else
-            RefreshBottomBar()
+            Hint("由于文件被占用，Mod 的状态切换失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
+            ReloadModList(True)
         End If
     End Sub
 
@@ -601,7 +603,7 @@
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()
             FrmMain.BtnExtraDownload.Ribble()
-            RefreshList(True)
+            ReloadModList(True)
         Catch ex As Exception
             Log(ex, "初始化 Mod 更新失败")
         End Try
@@ -635,7 +637,7 @@
                     End If
                 Catch ex As OperationCanceledException
                     Log(ex, "删除 Mod 被主动取消")
-                    RefreshList(True)
+                    ReloadModList(True)
                     Return
                 Catch ex As Exception
                     Log(ex, $"删除 Mod 失败（{ModEntity.Path}）", LogLevel.Msgbox)
@@ -649,14 +651,14 @@
                 Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
                 If IndexOfUi >= 0 Then PanList.Children.RemoveAt(IndexOfUi)
             Next
-            RefreshTitle()
+            RefreshBars()
             If Not IsSuccessful Then
                 Hint("由于文件被占用，Mod 删除失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
-                RefreshList(True)
+                ReloadModList(True)
             ElseIf PanList.Children.Count = 0 Then
-                RefreshList(True) '删除了全部文件
+                ReloadModList(True) '删除了全部文件
             Else
-                RefreshBottomBar()
+                RefreshBars()
             End If
             '显示结果提示
             If Not IsSuccessful Then Exit Sub
@@ -675,10 +677,10 @@
             End If
         Catch ex As OperationCanceledException
             Log(ex, "删除 Mod 被主动取消")
-            RefreshList(True)
+            ReloadModList(True)
         Catch ex As Exception
             Log(ex, "删除 Mod 出现未知错误", LogLevel.Feedback)
-            RefreshList(True)
+            ReloadModList(True)
         End Try
     End Sub
 
@@ -791,8 +793,8 @@
             Return Not String.IsNullOrWhiteSpace(SearchBox.Text)
         End Get
     End Property
+    Private SearchResult As List(Of McMod)
     Public Sub SearchRun() Handles SearchBox.TextChanged
-        ChangeAllSelected(False)
         If IsSearching Then
             '构造请求
             Dim QueryList As New List(Of SearchEntry(Of McMod))
@@ -815,12 +817,9 @@
                 QueryList.Add(New SearchEntry(Of McMod) With {.Item = Entry, .SearchSource = SearchSource})
             Next
             '进行搜索
-            Dim SearchResult = Search(QueryList, SearchBox.Text, MaxBlurCount:=6, MinBlurSimilarity:=0.35)
-            RefreshResult(SearchResult.Select(Function(r) r.Item).ToList)
-        Else
-            '退出搜索状态
-            RefreshResult(McModLoader.Output)
+            SearchResult = Search(QueryList, SearchBox.Text, MaxBlurCount:=6, MinBlurSimilarity:=0.35).Select(Function(r) r.Item).ToList
         End If
+        RefreshUI()
     End Sub
 
 #End Region

@@ -7,8 +7,7 @@
     <Grid>
         <Grid x:Name="PanAllBack">
             <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
-                <StackPanel x:Name="PanMain" Margin="25,10,25,10" Grid.IsSharedSizeScope="True">
-                    <!-- 若显示多选模块则为 92 -->
+                <StackPanel x:Name="PanMain" Margin="25,10,25,10" Grid.IsSharedSizeScope="True"> <!-- 若显示多选模块则为 92 -->
                     <local:MySearchBox Margin="0,15" HintText="搜索 Mod 名称 / 描述 / 标签" x:Name="SearchBox" />
                     <local:MyCard Grid.Row="0" Margin="0,0,0,15" x:Name="PanManage">
                         <Grid Margin="15,15,0,15" Height="35">
@@ -24,19 +23,15 @@
                             <local:MyButton x:Name="BtnManageCheck" Grid.Column="3" MinWidth="140" Text="检查 Mod" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ToolTip="快速检查 Mod 的版本要求、重复、前置缺失等问题。&#xa;结果仅供参考，由于部分 Mod 标注的信息有误，可能并不准确。" Visibility="Collapsed" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard x:Name="PanListBack" VerticalAlignment="Top" Opacity="0" Margin="0,0,0,15" Title=" " MinHeight="40">
-                        <StackPanel Margin="0,8,9,0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Height="24">
-                            <local:MyRadioButton VerticalAlignment="Center" Height="24" Margin="2,0" Text="全部" x:Name="BtnTypeAll" ColorType="Highlight" Checked="True"/>
-                            <TextBlock Text="|" Foreground="{StaticResource ColorBrushGray1}" VerticalAlignment="Center"/>
-                            <local:MyRadioButton VerticalAlignment="Center" Height="24" Margin="2,0" Text="已启用" x:Name="BtnTypeEnabled" ColorType="Highlight"/>
-                            <TextBlock Text="|" Foreground="{StaticResource ColorBrushGray1}" VerticalAlignment="Center"/>
-                            <local:MyRadioButton VerticalAlignment="Center" Height="24" Margin="2,0" Text="已禁用" x:Name="BtnTypeDisabled" ColorType="Highlight"/>
-                            <TextBlock Text="|" Foreground="{StaticResource ColorBrushGray1}" VerticalAlignment="Center"/>
-                            <local:MyRadioButton VerticalAlignment="Center" Height="24" Margin="2,0" Text="可更新" x:Name="BtnTypeCanUpdate" ColorType="Highlight"/>
-                            <TextBlock Text="|" Foreground="{StaticResource ColorBrushGray1}" VerticalAlignment="Center"/>
-                            <local:MyRadioButton VerticalAlignment="Center" Height="24" Margin="2,0" Text="错误" x:Name="BtnTypeError" ColorType="Highlight"/>
+                    <local:MyCard x:Name="PanListBack" VerticalAlignment="Top" Opacity="0" Margin="0,0,0,14" Title=" " MinHeight="55">
+                        <StackPanel x:Name="PanFilter" Margin="15,13,0,0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Height="28">
+                            <local:MyRadioButton Tag="0" ColorType="Highlight" VerticalAlignment="Center" Margin="2,0" Text="全部" x:Name="BtnFilterAll" Checked="True" />
+                            <local:MyRadioButton Tag="1" ColorType="Highlight" VerticalAlignment="Center" Margin="2,0" Text="已启用" x:Name="BtnFilterEnabled" />
+                            <local:MyRadioButton Tag="2" ColorType="Highlight" VerticalAlignment="Center" Margin="2,0" Text="已禁用" x:Name="BtnFilterDisabled" />
+                            <local:MyRadioButton Tag="3" ColorType="Highlight" VerticalAlignment="Center" Margin="2,0" Text="可更新" x:Name="BtnFilterCanUpdate" />
+                            <local:MyRadioButton Tag="4" ColorType="Highlight" VerticalAlignment="Center" Margin="2,0" Text="错误" x:Name="BtnFilterError" />
                         </StackPanel>
-                        <StackPanel Margin="20,38,18,18" Name="PanList" VerticalAlignment="Top" />
+                        <StackPanel Margin="20,48,18,22" Name="PanList" VerticalAlignment="Top" />
                     </local:MyCard>
                 </StackPanel>
             </local:MyScrollViewer>

@@ -66,7 +66,7 @@
                                           ToolTip="下载 Mod 时，若该 Mod 支持 Forge 和 Fabric，则显示为支持任意 Mod 加载器。&#xa;例如，开启时 JEI 显示支持全版本，关闭后 JEI 就会显示仅支持 Forge / Fabric 全版本。" />
                         <local:MyCheckBox Margin="0,2,0,4" Text="验证 SSL 证书" Grid.Row="12" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadCert" Tag="ToolDownloadCert" 
-                                          ToolTip="验证证书会提高安全性，但疑似有概率导致正版登录失败（#3018）。&#xa;如果在正版登录时因为 [根据验证过程，远程证书无效] 失败，可以尝试关闭此项。" />
+                                          ToolTip="开启验证会提高安全性、降低盗号风险（见 #2767），但也可能导致正版登录失败（见 #3018）。" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
