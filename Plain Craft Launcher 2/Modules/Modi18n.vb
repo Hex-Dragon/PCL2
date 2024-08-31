@@ -13,13 +13,13 @@ Module Modi18n
             If String.IsNullOrWhiteSpace(Key) Then Throw New Exception("Key 值未提供;No key value provided")
             Return String.Format(Application.Current.FindResource(Key), Param)
         Catch ex As FormatException
-            Log(ex, $"[Lang] 格式化文本失败：{Key};传入参数：{Param.Join(",")}", LogLevel.Hint)
+            Log(ex, $"[Location] 格式化文本失败：{Key};传入参数：{Param.Join(",")}", LogLevel.Hint)
             Return Application.Current.FindResource(Key)
         Catch ex As ResourceReferenceKeyNotFoundException
-            Log(ex, $"[Lang] 找不到对应的语言资源：{Key}")
+            Log(ex, $"[Location] 找不到对应的语言资源：{Key}")
             Return Key
         Catch ex As Exception
-            Log(ex, $"[Lang] 获取语言资源失败：{Key}（{ex.Message}）", LogLevel.Hint)
+            Log(ex, $"[Location] 获取语言资源失败：{Key}（{ex.Message}）", LogLevel.Hint)
             Return Key
         End Try
     End Function
@@ -43,7 +43,7 @@ Module Modi18n
             Case "未知版本"
                 Return GetLang("LangDownloadUnknown")
             Case Else
-                Log("[Lang] 没有找到词语""" & Word & """的对应翻译")
+                Log("[Location] 没有找到词语""" & Word & """的对应翻译")
                 Return Word
         End Select
     End Function
@@ -72,7 +72,7 @@ Module Modi18n
         Try
             Application.Current.Resources("LaunchFontFamily") = Font
         Catch ex As Exception
-            Log(ex, "[Lang] 切换字体失败，这可能导致界面显示异常", LogLevel.Msgbox)
+            Log(ex, "[Location] 切换字体失败，这可能导致界面显示异常", LogLevel.Msgbox)
         End Try
     End Sub
 

@@ -20,15 +20,12 @@ Public Class Application
     '开始
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
         '刷新语言
-        Log("[Lang] 选择启动器语言为 " & Lang)
         WriteReg("Lang", Lang)
         Try
             Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
         Catch ex As Exception
-            Log("无法找到语言资源：" & Lang & vbCrLf & "Language resource cannot be found:" & Lang, LogLevel.Assert)
+            MsgBox("无法找到语言资源：" & Lang & vbCrLf & "Language resource cannot be found:" & Lang, MsgBoxStyle.Critical)
         End Try
-
-        Log("[Location] 当前系统环境是否为中国大陆：" & IsLocationZH())
 
         '依照选择语言切换字体
         Dim LaunchFont As FontFamily
@@ -131,6 +128,8 @@ Public Class Application
             Log($"[Start] 程序路径：{PathWithName}")
             Log($"[Start] 系统编码：{Encoding.Default} ({Encoding.Default.CodePage}, GBK={IsGBKEncoding})")
             Log($"[Start] 管理员权限：{IsAdmin()}")
+            Log("[Location] 启动器语言：" & Lang)
+            Log("[Location] 当前系统环境是否为中国大陆：" & IsLocationZH())
             '检测压缩包运行
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
                 MyMsgBox(GetLang("LangApplicationDialogContentRunInTemp"), GetLang("LangApplicationDialogTitleRunInTemp"), GetLang("LangDialogThemeUnlockGameAccept"), IsWarn:=True)
