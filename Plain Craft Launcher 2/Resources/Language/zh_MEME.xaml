@@ -501,10 +501,10 @@
     <s:String x:Key="LangDownloadPageLeftFabricAPI">布料接口</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFabric">Opti炸Fabric</s:String>
     <!--PageDownloadLiteLoader-->
-    <s:String x:Key="LangDownloadLiteLoaderDescTitle">轻飘飘加载器简介</s:String>
-    <s:String x:Key="LangDownloadLiteLoaderDesc">与锻造类似，轻飘飘加载器可以用于加载老版本 Minecraft 中的轻飘飘加载器模组。</s:String>
-    <s:String x:Key="LangDownloadLiteLoaderWebsite">打开官网</s:String>
-    <s:String x:Key="LangDownloadLiteLoaderGettingList">正在获取轻飘飘加载器名单</s:String>
+    <s:String x:Key="LangDownloadLiteloaderDescTitle">轻飘飘加载器简介</s:String>
+    <s:String x:Key="LangDownloadLiteloaderDesc">与锻造类似，轻飘飘加载器可以用于加载老版本 Minecraft 中的轻飘飘加载器模组。</s:String>
+    <s:String x:Key="LangDownloadLiteloaderWebsite">打开官网</s:String>
+    <s:String x:Key="LangDownloadLiteloaderGettingList">正在获取轻飘飘加载器名单</s:String>
     <!--PageDownloadMod-->
     <s:String x:Key="LangDownloadModSearchTitle">搜索模组</s:String>
     <s:String x:Key="LangDownloadModSearchName">名称</s:String>
@@ -1775,9 +1775,4 @@
     <s:String x:Key="LangModDownloadLibTaskDownloadNeoForge">下崽 NeoForge {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">下崽 LiteLoader {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">下崽 Fabric {0}</s:String>
-    <s:String x:Key="LangSelectVersionTypeLiteloader">轻飘飘加载器版本</s:String>
-    <s:String x:Key="LangDownloadLiteloaderDescTitle">轻飘飘加载器简介</s:String>
-    <s:String x:Key="LangDownloadLiteloaderDesc">与锻造类似，轻飘飘加载器可以用于加载老版本 Minecraft 中的轻飘飘加载器模组。</s:String>
-    <s:String x:Key="LangDownloadLiteloaderWebsite">打开官网</s:String>
-    <s:String x:Key="LangDownloadLiteloaderGettingList">正在获取轻飘飘加载器名单</s:String>
 </ResourceDictionary>
