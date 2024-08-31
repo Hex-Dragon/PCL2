@@ -28,7 +28,7 @@
                             Not Version("id").ToString.ToLower.Contains("combat") AndAlso
                             Not Version("id").ToString.ToLower.Contains("rc") AndAlso
                             Not Version("id").ToString.ToLower.Contains("experimental") AndAlso
-                            Not Version("id").ToString.ToLower.Contains("1.2") AndAlso
+                            Not Version("id").ToString.ToLower.Equals("1.2") AndAlso
                             Not Version("id").ToString.ToLower.Contains("pre") Then
                             Type = "正式版"
                             Version("type") = "release"
