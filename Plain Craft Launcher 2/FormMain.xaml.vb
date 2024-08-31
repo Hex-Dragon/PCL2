@@ -124,6 +124,15 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 334 Then 'Snapshot 2.8.5
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面允许筛选可更新/启用/禁用的 Mod"))
+            If LastVersion = 333 Then
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装愚人节和预发布版本的 Bug"))
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法导出错误报告的 Bug"))
+            End If
+            FeatureCount += 6
+            BugCount += 7
+        End If
         If LastVersion < 333 Then 'Snapshot 2.8.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "下载 Mod 时会使用 MCIM 国内镜像源"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "打开 PCL 时会自动安装同目录下的 modpack.zip"))
@@ -744,7 +753,7 @@ Public Class FormMain
         Try
             If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
                 'Mod 管理自动刷新
-                FrmVersionMod.RefreshList()
+                FrmVersionMod.ReloadModList()
             ElseIf PageCurrent = PageType.VersionSelect Then
                 '版本选择自动刷新
                 LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.RunOnUpdated, MaxDepth:=1, ExtraPath:="versions\")
