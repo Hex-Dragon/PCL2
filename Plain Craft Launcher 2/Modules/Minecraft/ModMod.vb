@@ -707,7 +707,7 @@ Finished:
                     End If
                     '读取文件
                     Dim data As New List(Of Byte)
-                    For Each b As Byte In File.ReadAllBytes(Path)
+                    For Each b As Byte In ReadFileBytes(Path)
                         If b = 9 OrElse b = 10 OrElse b = 13 OrElse b = 32 Then Continue For
                         data.Add(b)
                     Next
@@ -1130,13 +1130,13 @@ Finished:
         Mods = Mods.Where(Function(m) m.Comp IsNot Nothing).ToList()
         Log($"[Mod] 联网获取本地 Mod 信息完成，为 {Mods.Count} 个 Mod 更新缓存")
         If Not Mods.Any() Then Exit Sub
-        For Each Entry In Mods 'TODO: Bookshelf 的 Logo 会在两个网站间横跳
+        For Each Entry In Mods
             Entry.CompLoaded = SucceedThreadCount = 2
             Cache(Entry.ModrinthHash & McVersion & ModLoaders.Join("")) = Entry.ToJson()
         Next
         WriteFile(PathTemp & "Cache\LocalMod.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))
-        '刷新下边栏（#4377）
-        RunInUi(Sub() FrmVersionMod?.RefreshBottomBar())
+        '刷新边栏
+        RunInUi(Sub() FrmVersionMod?.RefreshBars())
     End Sub
     Private Function GetTargetModLoaders() As List(Of CompModLoaderType)
         Dim ModLoaders As New List(Of CompModLoaderType)

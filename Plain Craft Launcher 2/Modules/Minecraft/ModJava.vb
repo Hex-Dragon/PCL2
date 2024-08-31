@@ -216,8 +216,8 @@
 
             '添加特定的 Java
             Dim JavaPreList As New Dictionary(Of String, Boolean)
-            If PathMcFolder.Split("\").Count > 3 Then
-                JavaSearchFolder(GetPathFromFullPath(PathMcFolder), JavaPreList, False, True) 'Minecraft 文件夹的父文件夹（如果不是根目录的话）
+            If PathMcFolder.Split("\").Count > 3 AndAlso Not PathMcFolder.Contains("AppData\Roaming") Then
+                JavaSearchFolder(GetPathFromFullPath(PathMcFolder), JavaPreList, False, True) 'Minecraft 文件夹的父文件夹（如果不是根目录或 %APPDATA% 的话）
             End If
             JavaSearchFolder(PathMcFolder, JavaPreList, False, True) 'Minecraft 文件夹
             JavaPreList = JavaPreList.Where(Function(j) Not j.Key.Contains(".minecraft\runtime")).

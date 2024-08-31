@@ -66,7 +66,7 @@
                                           ToolTip="{StaticResource LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip}" />
                         <local:MyCheckBox Margin="0,2,0,4" Text="{StaticResource LangPageSetupSystemDownloadSSL}" Grid.Row="12" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadCert" Tag="ToolDownloadCert" 
-                                          ToolTip="{StaticResource LangPageSetupSystemDownloadSSLToolTip}" />
+                                          ToolTip="{StaticResource LangPageSetupSystemDownloadSSLToolTip}" /><!--TODO-->
                     </Grid>
                 </StackPanel>
             </local:MyCard>

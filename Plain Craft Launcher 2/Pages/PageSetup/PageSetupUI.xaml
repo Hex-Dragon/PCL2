@@ -242,6 +242,7 @@
                             <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageD}" />
                             <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageE}" />
                             <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageF}" />
+                            <local:MyComboBoxItem Content="OpenBMCLAPI 仪表盘 Lite（作者：Silverteal、Mxmilu666）" />
                         </local:MyComboBox>
                     </Grid>
                 </StackPanel>
