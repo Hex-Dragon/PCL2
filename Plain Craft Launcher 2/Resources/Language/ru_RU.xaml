@@ -250,6 +250,7 @@
     <s:String x:Key="LangSetHomePagePresetPageD">Простая главная страница (Автор: MFn233)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">Ежедневные рекомендации модпаков (Автор: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Рекомендации шкур для Minecraft (Автор: wkea)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI Панель инструментов Lite (авторы: Silverteal, Mxmilu666)</s:String>
     <s:String x:Key="LangSetFuncHidden">Скрытие функций</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Вы можете скрыть ненужные страницы или отключить определенные функции. Нажмите "F12" в любой интерфейсе, чтобы временно показать скрытые функции.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Главный интерфейс</s:String>
@@ -563,8 +564,7 @@ PCL рекомендует включить опцию "Изоляция экз�
 
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">Введение в NeoForge</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge — это загрузчик модов для Minecraft 1.19+. Необходимо установить его перед установкой различных модов NeoForge.
-На этой странице представлены загрузчики NeoForge для скачивания. После скачивания необходимо вручную открыть загрузчик для установки.</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge - это загрузчик модов для Minecraft 1.20.1+. Вам нужно сначала установить его, чтобы иметь возможность устанавливать различные моды NeoForge. Он также совместим с некоторыми модами Forge.&#xa;На этой странице предоставляется загрузка установщика NeoForge. После загрузки вам нужно будет вручную открыть установщик для выполнения установки.</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">Официальный сайт</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">Получение списка NeoForge...</s:String>
 
@@ -1021,8 +1021,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">Если мод поддерживает Forge и Fabric, при скачивании мода кажется, что он поддерживает все загрузчики модов.
 Например, когда включено, JEI покажет, что поддерживает все загрузчики, а когда отключено, JEI покажет, что поддерживает только Forge / Fabric.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">Проверять SSL-сертификаты</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Проверка сертификатов повышает безопасность, но есть подозрение, что Microsoft Login может завершиться неудачей (#3018).
-Если Microsoft Login завершается неудачей из-за "Удаленный сертификат недействителен в соответствии с процессом аутентификации", попробуйте отключить эту опцию.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Включение проверки повысит безопасность и снизит риск кражи аккаунта (см. #2767), но также может привести к сбою входа в лицензионную учетную запись (см. #3018).</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">Доступность</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">Напоминание об обновлении игры</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">Бета-обновление</s:String>
@@ -1123,7 +1122,6 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageVersionModOperationDeselect">Снять выбор</s:String>
     <s:String x:Key="LangPageVersionModOpenPath">Расположение файла</s:String>
     <s:String x:Key="LangPageVersionModDetail">Подробности</s:String>
-    <s:String x:Key="LangPageVersionModModList">Список модов</s:String>
     <s:String x:Key="LangPageVersionModSearchResult">Результаты поиска</s:String>
     <s:String x:Key="LangPageVersionModSearchNoResult">Нет результатов поиска</s:String>
     <s:String x:Key="LangPageVersionModHintDropFileToInstall">Перетащите файлы модов прямо в окно PCL для установки!</s:String>

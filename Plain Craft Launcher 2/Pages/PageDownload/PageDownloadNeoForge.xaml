@@ -8,7 +8,7 @@
         <StackPanel Orientation="Vertical" Margin="5">
             <local:MyCard Margin="20,20,20,0" Grid.IsSharedSizeScope="True" Title="{StaticResource LangDownloadNeoForgeDescTitle}" x:Name="CardTip">
                 <StackPanel Margin="25,40,15,20">
-                    <TextBlock Margin="0,0,0,11" Text="{StaticResource LangDownloadNeoForgeDesc}" TextWrapping="Wrap" /><!--TODO-->
+                    <TextBlock Margin="0,0,0,11" Text="{StaticResource LangDownloadNeoForgeDesc}" TextWrapping="Wrap" />
                     <Grid Height="35">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />

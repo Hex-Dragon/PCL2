@@ -171,7 +171,7 @@
             If ModItem.CanUpdate Then UpdateCount += 1
             If ModItem.State.Equals(McMod.McModState.Fine) Then EnabledCount += 1
             If ModItem.State.Equals(McMod.McModState.Disabled) Then DisabledCount += 1
-            If ModItem.State.Equals(McMod.McModState.Unavaliable) Then UnavalialeCount += 1
+            If ModItem.State.Equals(McMod.McModState.Unavailable) Then UnavalialeCount += 1
         Next
         '显示
         BtnFilterAll.Text = If(IsSearching, GetLang("LangPageVersionModSearchResult"), GetLang("LangPageVersionModViewTypeAll")) & $" ({AnyCount})"
@@ -195,7 +195,7 @@
         '计数
         Dim NewCount As Integer = SelectedMods.Count
         Dim Selected = NewCount > 0
-        If Selected Then LabSelect.Text = $"已选择 {NewCount} 个文件" '取消所有选择时不更新数字
+        If Selected Then LabSelect.Text = GetLang("LangPageVersionModSelectedFile", NewCount) '取消所有选择时不更新数字
         '按钮可用性
         If Selected Then
             Dim HasUpdate As Boolean = False
@@ -407,7 +407,7 @@
             Case FilterType.CanUpdate
                 Return CheckingMod.CanUpdate
             Case FilterType.Unavaliable
-                Return CheckingMod.State = McMod.McModState.Unavaliable
+                Return CheckingMod.State = McMod.McModState.Unavailable
             Case Else
                 Return False
         End Select

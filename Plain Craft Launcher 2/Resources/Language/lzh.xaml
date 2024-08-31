@@ -250,6 +250,7 @@
     <s:String x:Key="LangSetHomePagePresetPageD">簡主頁（作者：MFn233）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">日薦整合包（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 皮膚薦（作者：wkea）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 儀表盤 Lite（作者：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetFuncHidden">隱功能</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">汝可隱不需之頁，或關特定功。於任界按 F12 可暫顯隱功。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">主頁</s:String>
@@ -563,8 +564,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
 
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">NeoForge 之簡介</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 者，Minecraft 1.19+ 之改囊載具也，需先行安裝，方可安裝各類 NeoForge 改囊。
-此頁提供 NeoForge 安裝器之下載，下載後需手動啟用安裝器以行安裝。</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 乃 Minecraft 1.20.1+ 之改囊載器也，爾須先安之，方可安諸 NeoForge 改囊，亦可兼容部分 Forge 改囊。&#xa;此頁提供 NeoForge 安裝器之下載，爾須下載後，手動開啟安裝器以行安裝。</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">啟官網</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">正在獲取 NeoForge 之列表</s:String>
 
@@ -1021,8 +1021,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">下載改囊時，若該改囊支持 Forge 和 Fabric，則顯示為支持任意改囊加載器。
 例如，開啟時 JEI 顯示支持全版本，關閉後 JEI 就會顯示僅支持 Forge / Fabric 全版本。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">驗證 SSL 證書</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">驗證證書會提高安全性，但疑似有概率導致正版登錄失敗（#3018）。
-如果在正版登錄時因為 [根據驗證過程，遠程證書無效] 失敗，可以嘗試關閉此項。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">開驗證則安全增、盜號風險減（見 #2767），然或致正版登錄失敗（見 #3018）。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">輔助功能</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">遊戲更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">測試版更新提示</s:String>
@@ -1123,7 +1122,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionModOperationDeselect">取消選擇</s:String>
     <s:String x:Key="LangPageVersionModOpenPath">打開文件位置</s:String>
     <s:String x:Key="LangPageVersionModDetail">詳情</s:String>
-    <s:String x:Key="LangPageVersionModModList">改囊列表</s:String>
     <s:String x:Key="LangPageVersionModSearchResult">搜索結果</s:String>
     <s:String x:Key="LangPageVersionModSearchNoResult">無搜索結果</s:String>
     <s:String x:Key="LangPageVersionModHintDropFileToInstall">將改囊文件直接拖入 PCL 窗口即可安裝！</s:String>

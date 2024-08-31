@@ -250,6 +250,7 @@
     <s:String x:Key="LangSetHomePagePresetPageD">简单主页（作者：MFn233）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">每日整活包推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 外壳推荐（作者：wkea）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 仪表盘 Lite（作者：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能雪藏</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">你可以让不需要的页面或特定功能被雪藏。在随意界面按 F12 可以暂时挖出被雪藏的功能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">主页面</s:String>
@@ -563,8 +564,7 @@
 
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">新锻造简介</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">新锻造是 Minecraft 1.19+ 的模组加载器，你需要先安装它才能安装各种新锻造模组。
-本页面提供新锻造安装器下崽，在下崽后你需要手动打开安装器进行安装。</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">新锻造是 Minecraft 1.20.1+ 的模组加载器，你需要先安装它才能安装各种新锻造模组，它也兼容一些锻造模组。&#xa;本页面提供新锻造安装器下载，在下载后你需要手动打开安装器进行安装。</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">打开官网</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">正在获取新锻造名单</s:String>
 
@@ -1021,8 +1021,7 @@
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">下崽模组时，若该模组支持锻造和布料，则显示为支持随意模组加载器。
 例如，打开时 JEI 显示支持全版本，关掉后 JEI 就会显示仅支持锻造/布料全版本。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">验证 SSL 证书</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">验证证书会提高安全性，但好像有概率登不上正版（井三千零一十八）。
-如果在正版登录时因为 [根据验证过程，远程证书无效] 不成功，可以尝试关掉此项。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">开启验证会提高安全性、降低盗号风险（见 #2767），但也可能导致正版登录失败（见 #3018）。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">辅助功能</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">游戏更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">测试版更新提示</s:String>
@@ -1123,7 +1122,6 @@
     <s:String x:Key="LangPageVersionModOperationDeselect">取消选择</s:String>
     <s:String x:Key="LangPageVersionModOpenPath">打开文件位置</s:String>
     <s:String x:Key="LangPageVersionModDetail">详情</s:String>
-    <s:String x:Key="LangPageVersionModModList">模组名单</s:String>
     <s:String x:Key="LangPageVersionModSearchResult">搜索结果</s:String>
     <s:String x:Key="LangPageVersionModSearchNoResult">莫得搜索结果</s:String>
     <s:String x:Key="LangPageVersionModHintDropFileToInstall">将模组文件直接拽入平原合成发射台窗口即可安装！</s:String>

@@ -249,6 +249,7 @@ PCL을 압축 파일에서 추출하거나 폴더를 변경한 후 계속 사용
     <s:String x:Key="LangSetHomePagePresetPageD">간단한 홈페이지 (작성자: MFn233)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">매일 추천하는 통합 패키지 (작성자: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 스킨 추천 (작성자: wkea)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 대시보 Lite（작성자：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetFuncHidden">기능 숨기기</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">필요 없는 페이지를 숨기거나 특정 기능을 끌 수 있습니다. 어떤 화면에서든 F12를 눌러 숨겨진 기능을 일시적으로 표시할 수 있습니다.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">메인 페이지</s:String>
@@ -559,7 +560,7 @@ PCL은 다운로드를 시작하기 전에 설정 → 버전 격리에서 버전
 
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">NeoForge 소개</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge는 Minecraft 1.19+의 모드 로더로, 다양한 NeoForge 모드를 설치하기 위해 먼저 설치해야 합니다. 이 페이지에서는 NeoForge 설치 프로그램을 다운로드할 수 있으며, 다운로드 후 수동으로 설치 프로그램을 열어 설치해야 합니다.</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge는 Minecraft 1.20.1+ 버전을 위한 모드 로더입니다. 다양한 NeoForge 모드를 설치하려면 먼저 이것을 설치해야 하며, 일부 Forge 모드와도 호환됩니다.&#xa;이 페이지에서는 NeoForge 설치 프로그램을 다운로드할 수 있으며, 다운로드 후 수동으로 설치 프로그램을 실행하여 설치해야 합니다.</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">공식 웹사이트 열기</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">NeoForge 목록을 가져오는 중입니다</s:String>
 
@@ -1014,8 +1015,7 @@ assets를 완전히 변경하지 않으며, libraries, 제3자 로그인 라이�
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">Mod를 다운로드할 때, 해당 Mod가 Forge와 Fabric을 지원하면 모든 Mod 로더를 지원하는 것으로 표시됩니다.
 예를 들어, 활성화 시 JEI는 모든 버전을 지원한다고 표시하고, 비활성화 시 JEI는 Forge / Fabric 모든 버전만 지원한다고 표시합니다.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">SSL 인증서 검증</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">인증서 검증은 보안을 강화하지만, 정품 로그인 실패(#3018)를 유발할 수 있습니다.
-정품 로그인 시 [검증 과정에 따라 원격 인증서가 유효하지 않음]으로 실패하는 경우, 이 항목을 비활성화해 보세요.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">인증을 활성화하면 보안성이 향상되고 계정 도용 위험이 감소합니다(#2767 참조). 하지만 정품 로그인에 실패할 수도 있습니다(#3018 참조).</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">접근성</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">게임 업데이트 알림</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">베타 업데이트 알림</s:String>
@@ -1110,7 +1110,6 @@ Mod를 이미 설치했다고 확신하지만 이 메시지가 계속 표시된�
     <s:String x:Key="LangPageVersionModOperationDeselect">선택 해제</s:String>
     <s:String x:Key="LangPageVersionModOpenPath">파일 위치 열기</s:String>
     <s:String x:Key="LangPageVersionModDetail">상세 정보</s:String>
-    <s:String x:Key="LangPageVersionModModList">Mod 목록</s:String>
     <s:String x:Key="LangPageVersionModSearchResult">검색 결과</s:String>
     <s:String x:Key="LangPageVersionModSearchNoResult">검색 결과가 없습니다</s:String>
     <s:String x:Key="LangPageVersionModHintDropFileToInstall">Mod 파일을 PCL 창으로 직접 드래그하여 설치하세요!</s:String>

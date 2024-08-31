@@ -252,6 +252,7 @@ PCL を圧縮ファイルから展開するか、フォルダを変更してか�
     <s:String x:Key="LangSetHomePagePresetPageD">シンプルホームページ（著者：MFn233）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">毎日のパックおすすめ（著者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft スキンおすすめ（著者：wkea）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI ダッシュボード Lite（作者：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetFuncHidden">機能隠し</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">不要なページを隠したり、特定の機能をオフにしたりできます。任意の画面で F12 を押すと、隠された機能を一時的に表示できます。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">メインページ</s:String>
@@ -565,8 +566,7 @@ PCL では、ダウンロードを開始する前に、設定 → バージョ�
 
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">NeoForge の紹介</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge は Minecraft 1.19+ 用の Mod ローダーで、各種 NeoForge モッドをインストールする前にまずこれをインストールする必要があります。
-このページでは NeoForge インストーラーのダウンロードを提供しており、ダウンロード後は手動でインストーラーを開いてインストールする必要があります。</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge は Minecraft 1.20.1+ 用の Mod ローダーです。様々な NeoForge モッドをインストールするには、まずこれをインストールする必要があります。また、一部の Forge モッドとも互換性があります。&#xa;このページでは NeoForge インストーラーのダウンロードを提供しています。ダウンロード後、手動でインストーラーを開いてインストールする必要があります。</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">公式サイトを開く</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">NeoForge リストの取得中</s:String>
 
@@ -1022,8 +1022,7 @@ PCLを起動するたびに、管理者権限の申請が必要です。自動�
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">Modをダウンロードする際、ForgeとFabricの両方に対応している場合は、任意のModローダーに対応していると表示します。
 例えば、有効にするとJEIは全バージョンに対応していると表示され、無効にするとJEIはForge / Fabric全バージョンに対応していると表示されます。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">SSL証明書の検証</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">証明書の検証は安全性を高めますが、正規版ログインに失敗する可能性があります（#3018）。
-正規版ログイン時に「リモート証明書無効」エラーが発生した場合は、この項目を無効にしてみてください。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">検証を有効にすると、セキュリティが向上し、アカウント盗難のリスクが低下します（#2767参照）。ただし、正規版のログインに失敗する可能性もあります（#3018参照）。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">アクセシビリティ</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">ゲーム更新の通知</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">ベータ版更新の通知</s:String>
@@ -1124,7 +1123,6 @@ PCLを起動するたびに、管理者権限の申請が必要です。自動�
     <s:String x:Key="LangPageVersionModOperationDeselect">選択を解除</s:String>
     <s:String x:Key="LangPageVersionModOpenPath">ファイルの場所を開く</s:String>
     <s:String x:Key="LangPageVersionModDetail">詳細</s:String>
-    <s:String x:Key="LangPageVersionModModList">Mod リスト</s:String>
     <s:String x:Key="LangPageVersionModSearchResult">検索結果</s:String>
     <s:String x:Key="LangPageVersionModSearchNoResult">検索結果がありません</s:String>
     <s:String x:Key="LangPageVersionModHintDropFileToInstall">Mod ファイルを直接 PCL ウィンドウにドラッグしてインストールできます！</s:String>

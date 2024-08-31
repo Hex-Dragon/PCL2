@@ -250,6 +250,7 @@ Si has creado una página de inicio en línea estable, puedes hacer clic en esta
     <s:String x:Key="LangSetHomePagePresetPageD">Página de Inicio Simple (Autor: MFn233)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">Recomendación Diaria de Modpack (Autor: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Recomendación de Skins de Minecraft (Autor: wkea)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageG">Panel de Control OpenBMCLAPI Lite（Autores：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetFuncHidden">Ocultación de Funciones</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Puedes ocultar páginas innecesarias o desactivar funciones específicas. Presiona "F12" en cualquier interfaz para mostrar funciones ocultas temporalmente.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Interfaz Principal</s:String>
@@ -550,7 +551,7 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
 
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">Introducción a NeoForge</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge es el cargador de mods para Minecraft 1.19+. Necesitas instalarlo primero para poder instalar varios mods de NeoForge. Esta página proporciona la descarga del instalador de NeoForge. Después de descargar, debes abrir manualmente el instalador para instalar.</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge es un cargador de mods para Minecraft 1.20.1+. Necesitas instalarlo primero para poder instalar varios mods de NeoForge, también es compatible con algunos mods de Forge.&#xa;Esta página proporciona la descarga del instalador de NeoForge. Después de descargarlo, deberás abrir manualmente el instalador para proceder con la instalación.</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">Sitio Oficial</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">Obteniendo lista de NeoForge...</s:String>
 
@@ -1005,8 +1006,7 @@ Haz clic derecho en una carpeta o instancia para abrir la carpeta correspondient
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">Si el mod es compatible con Forge y Fabric, parece ser compatible con todos los cargadores de mods al descargar el mod.
 Por ejemplo, cuando está habilitado, JEI mostrará que es compatible con todos los cargadores, y cuando está deshabilitado, JEI mostrará que solo se admiten Forge / Fabric.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">Verificar Certificados SSL</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Verificar certificados mejora la seguridad, pero hay una probabilidad sospechosa de que el inicio de sesión de Microsoft falle (#3018). 
-Si el inicio de sesión de Microsoft falla porque "El certificado remoto no es válido según el proceso de autenticación", intenta cerrar esta opción.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Activar la verificación mejorará la seguridad y reducirá el riesgo de robo de cuenta (ver #2767), pero también puede causar que el inicio de sesión original falle (ver #3018).</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">Accesibilidad</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">Recordatorio de Actualización del Juego</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">Actualización Beta</s:String>
@@ -1107,7 +1107,6 @@ Si estás seguro de que has instalado mods pero aún ves este aviso, entonces la
     <s:String x:Key="LangPageVersionModOperationDeselect">Deseleccionar</s:String>
     <s:String x:Key="LangPageVersionModOpenPath">Ubicación del Archivo</s:String>
     <s:String x:Key="LangPageVersionModDetail">Detalles</s:String>
-    <s:String x:Key="LangPageVersionModModList">Lista de Mods</s:String>
     <s:String x:Key="LangPageVersionModSearchResult">Resultados de Búsqueda</s:String>
     <s:String x:Key="LangPageVersionModSearchNoResult">Sin Resultados de Búsqueda</s:String>
     <s:String x:Key="LangPageVersionModHintDropFileToInstall">¡Arrastra los archivos de mod directamente a la ventana de PCL para instalarlos!</s:String>

@@ -250,6 +250,7 @@
     <s:String x:Key="LangSetHomePagePresetPageD">Απλή Αρχική Σελίδα (Συγγραφέας: MFn233)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">Καθημερινή Σύσταση Modpack (Συγγραφέας: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Σύσταση Δέρματος Minecraft (Συγγραφέας: wkea)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageG">Πίνακας Ελέγχου OpenBMCLAPI Lite (Συντάκτες: Silverteal, Mxmilu666)</s:String>
     <s:String x:Key="LangSetFuncHidden">Απόκρυψη Λειτουργιών</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Μπορείτε να αποκρύψετε περιττές σελίδες ή να απενεργοποιήσετε συγκεκριμένες λειτουργίες. Πατήστε «F12» σε οποιαδήποτε διεπαφή για να εμφανιστούν προσωρινά οι κρυφές λειτουργίες.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Κύρια Διεπαφή</s:String>
@@ -563,8 +564,7 @@
 
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">Εισαγωγή του NeoForge</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">Το NeoForge είναι το Mod Φορτωτής για το Minecraft 1.19+. Πρέπει να το εγκαταστήσετε πρώτα για να εγκαταστήσετε διάφορα mod NeoForge.
-Αυτή η σελίδα παρέχει λήψη του προγράμματος εγκατάστασης NeoForge. Μετά τη λήψη, πρέπει να ανοίξετε μη αυτόματα το πρόγραμμα εγκατάστασης για εγκατάσταση.</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">Το NeoForge είναι ένας φορτωτής Mod για το Minecraft 1.20.1+. Πρέπει να το εγκαταστήσετε πρώτα για να μπορέσετε να εγκαταστήσετε διάφορα mods NeoForge. Είναι επίσης συμβατό με ορισμένα mods Forge.&#xa;Αυτή η σελίδα παρέχει τη λήψη του εγκαταστάτη NeoForge. Μετά τη λήψη, πρέπει να ανοίξετε χειροκίνητα τον εγκαταστάτη για να ολοκληρώσετε την εγκατάσταση.</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">Επίσημος Ιστότοπος</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">Λήψη Λίστας NeoForge...</s:String>
 
@@ -1021,8 +1021,7 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">Εάν το mod υποστηρίζει Forge και Fabric, φαίνεται να υποστηρίζει όλα τα Mod Φορτωτής κατά τη λήψη του mod.
 Για παράδειγμα, όταν είναι ενεργοποιημένο, το JEI θα δείξει ότι υποστηρίζει όλους τους φορτωτές και όταν είναι απενεργοποιημένο, το JEI θα δείξει ότι υποστηρίζονται μόνο το Forge / Fabric.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">Επαλήθευση Πιστοποιητικών SSL</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Η επαλήθευση των πιστοποιητικών βελτιώνει την ασφάλεια, αλλά υπάρχει μια ύποπτη πιθανότητα να αποτύχει η σύνδεση της Microsoft (#3018).
-Εάν η σύνδεση της Microsoft αποτύχει επειδή «Το απομακρυσμένο πιστοποιητικό δεν είναι έγκυρο σύμφωνα με τη διαδικασία ελέγχου ταυτότητας», προσπαθήστε να κλείσετε αυτήν την επιλογή.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Η ενεργοποίηση της επαλήθευσης θα βελτιώσει την ασφάλεια και θα μειώσει τον κίνδυνο κλοπής λογαριασμού (βλ. #2767), αλλά μπορεί επίσης να προκαλέσει αποτυχία σύνδεσης για τους έγκυρους λογαριασμούς (βλ. #3018)。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">Προσβασιμότητα</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">Υπενθύμιση Ενημέρωσης Παιχνιδιού</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">Beta</s:String>
@@ -1123,7 +1122,6 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageVersionModOperationDeselect">Αποεπιλογή</s:String>
     <s:String x:Key="LangPageVersionModOpenPath">Τοποθεσία αρχείου</s:String>
     <s:String x:Key="LangPageVersionModDetail">Λεπτομέρειες</s:String>
-    <s:String x:Key="LangPageVersionModModList">Λίστα Mods</s:String>
     <s:String x:Key="LangPageVersionModSearchResult">Αποτελέσματα αναζήτησης</s:String>
     <s:String x:Key="LangPageVersionModSearchNoResult">Δεν υπάρχουν αποτελέσματα αναζήτησης</s:String>
     <s:String x:Key="LangPageVersionModHintDropFileToInstall">Σύρετε τα αρχεία mod απευθείας στο παράθυρο PCL για να τα εγκαταστήσετε!</s:String>

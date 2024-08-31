@@ -250,6 +250,7 @@
     <s:String x:Key="LangSetHomePagePresetPageD">簡單首頁（作者：MFn233）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">每日模組包推薦（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 外觀推薦（作者：wkea）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 儀表盤 Lite（作者：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能隱藏</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">你可以隱藏不需要的畫面或關閉特定功能。在任意畫面按 F12 可以暫時顯示被隱藏的功能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">首畫面</s:String>
@@ -563,8 +564,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">NeoForge 簡介</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 是 Minecraft 1.19+ 的模組載入器，你需要先安裝它才能安裝各種 NeoForge 模組。
-本畫面提供 NeoForge 安裝器下載，在下載後你需要手動開啟安裝器進行安裝。</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 是 Minecraft 1.20.1+ 的模組載入器，你需要先安裝它才能安裝各種 NeoForge 模組，它也相容一些 Forge 模組。&#xa;本頁面提供 NeoForge 安裝程式下載，在下載後你需要手動開啟安裝程式進行安裝。</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">開啟官網</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">正在獲取 NeoForge 清單</s:String>
 
@@ -1021,8 +1021,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">下載模組時，若該模組支援 Forge 和 Fabric，則顯示為支援任意模組載入器。
 例如，開啟時 JEI 顯示支援全版本，關閉後 JEI 就會顯示僅支援 Forge / Fabric 全版本。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">驗證 SSL 認證</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">驗證認證會提高安全性，但疑似有機率導致正版登入失敗（#3018）。
-如果在正版登入時因為「根據驗證過程，遠端認證無效」失敗，可以嘗試關閉此項。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">開啟驗證會提高安全性、降低盜號風險（見 #2767），但也可能導致正版登入失敗（見 #3018）。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">協助工具</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">遊戲更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">開發版更新提示</s:String>
@@ -1123,7 +1122,6 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageVersionModOperationDeselect">取消選擇</s:String>
     <s:String x:Key="LangPageVersionModOpenPath">開啟檔案位置</s:String>
     <s:String x:Key="LangPageVersionModDetail">詳情</s:String>
-    <s:String x:Key="LangPageVersionModModList">模組清單</s:String>
     <s:String x:Key="LangPageVersionModSearchResult">搜尋結果</s:String>
     <s:String x:Key="LangPageVersionModSearchNoResult">無搜尋結果</s:String>
     <s:String x:Key="LangPageVersionModHintDropFileToInstall">將模組檔案直接拖入 PCL 視窗即可安裝！</s:String>

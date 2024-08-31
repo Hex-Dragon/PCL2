@@ -250,6 +250,7 @@ If you have created a stable online homepage, you can click this tip to submit i
     <s:String x:Key="LangSetHomePagePresetPageD">Simple Homepage (Author: MFn233)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">Daily Modpack Recommendation (Author: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft Skin Recommendation (Author: wkea)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI Dashboard Lite (Authors: Silverteal, Mxmilu666)</s:String>
     <s:String x:Key="LangSetFuncHidden">Feature Hiding</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">You can hide unnecessary pages or disable specific features. Press 'F12' in any interface to show hidden features temporarily.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Main Interface</s:String>
@@ -563,8 +564,7 @@ Please check the internet then try again.</s:String>
 
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">Introduction of NeoForge</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge is the mod loader for Minecraft 1.19+. You need to install it first to install various NeoForge mods.
-This page provides download of NeoForge installer. After downloading, you need to manually open the installer to install.</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge is a Mod loader for Minecraft 1.20.1+. You need to install it first before you can install various NeoForge mods, and it's also compatible with some Forge mods.&#xa;This page provides the NeoForge installer download. After downloading, you need to manually open the installer to proceed with the installation.</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">Official Website</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">Getting NeoForge List...</s:String>
 
@@ -1021,8 +1021,7 @@ Right-click a folder or instance to open the corresponding folder.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">If the mod supports Forge and Fabric, it appears to support all mod loader when downloading the mod.
 For example, when it is enabled, JEI will show that it supports all loaders, and when it is disabled, JEI will show that only Forge / Fabric are supported.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">Verify SSL Certificates</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Verifying certificates improves security, but there is a suspected probability that Microsoft Login will fail (#3018). 
-If Microsoft Login fails because 'The remote certificate is invalid according to the authentication process', try to close this option.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Enabling verification will increase security and reduce the risk of account theft (see #2767), but it may also cause legitimate login failures (see #3018).</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">Accessibility</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">Game Update Reminder</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">Beta Update</s:String>
@@ -1123,7 +1122,6 @@ If you are sure that you have installed mods but still see this hint, then the '
     <s:String x:Key="LangPageVersionModOperationDeselect">Deselect</s:String>
     <s:String x:Key="LangPageVersionModOpenPath">File Location</s:String>
     <s:String x:Key="LangPageVersionModDetail">Details</s:String>
-    <s:String x:Key="LangPageVersionModModList">Mods List</s:String>
     <s:String x:Key="LangPageVersionModSearchResult">Search Results</s:String>
     <s:String x:Key="LangPageVersionModSearchNoResult">No Search Results</s:String>
     <s:String x:Key="LangPageVersionModHintDropFileToInstall">Drag the mod files directly into the PCL window to install it!</s:String>
