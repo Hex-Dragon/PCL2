@@ -99,7 +99,7 @@ Public Class Application
             '日志初始化
             LogStart()
             '添加日志
-            Log($"[Start] 程序版本：{VersionDisplayName} ({VersionCode}){If(CommitHash <> "", "，Commit Hash：{CommitHash}", "")})
+            Log($"[Start] 程序版本：{VersionDisplayName} ({VersionCode}){If(CommitHash <> "", "，Commit Hash：{CommitHash}", "")}")
             Log($"[Start] 识别码：{UniqueAddress}{If(ThemeCheckOne(9), "，已解锁反馈主题", "")}")
             Log($"[Start] 程序路径：{PathWithName}")
             Log($"[Start] 系统编码：{Encoding.Default} ({Encoding.Default.CodePage}, GBK={IsGBKEncoding})")
