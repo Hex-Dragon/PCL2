@@ -341,7 +341,7 @@
     <s:String x:Key="LangSelectVersionTypeModAbility">可安装模组</s:String>
     <s:String x:Key="LangSelectVersionTypeForge">锻造版本</s:String>
     <s:String x:Key="LangSelectVersionTypeNeoForge">新锻造版本</s:String>
-    <s:String x:Key="LangSelectVersionTypeLiteLoader">轻飘飘加载器版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeLiteloader">轻飘飘加载器版本</s:String>
     <s:String x:Key="LangSelectVersionTypeFabric">布料版本</s:String>
     <s:String x:Key="LangSelectVersionTypeError">错误的版本</s:String>
     <s:String x:Key="LangSelectVersionTypeHidden">雪藏的版本</s:String>
