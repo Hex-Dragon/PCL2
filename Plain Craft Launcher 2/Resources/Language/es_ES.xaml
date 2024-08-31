@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">¡Cancelado!</s:String>
@@ -7,7 +7,6 @@
     <s:String x:Key="LangResourcePack">Paquete de Recursos</s:String>
     <s:String x:Key="LangDialogBtnYes">Sí</s:String>
     <s:String x:Key="LangDialogBtnNo">No</s:String>
-    
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL no tiene permiso de acceso a {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Carpeta de Caché No Disponible</s:String>
@@ -23,7 +22,6 @@ Causa del Error: {0}</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">La versión de su .NET Framework es demasiado baja o está dañada, por favor, vuelva a descargar e instalar .NET Framework 4.6.2 desde el sitio web de apertura y vuelva a intentarlo.</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Error Desconocido</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">Ocurrió un error desconocido en el programa.</s:String>
-    
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">Descargar</s:String>
     <s:String x:Key="LangTitleHome">Iniciar</s:String>
@@ -87,7 +85,6 @@ Puedes modificar el método de inicio de sesión en "Propiedades de la Instancia
     <s:String x:Key="LangPageNameModDownload">Descarga de Mods</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">Descarga de Modpacks</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">Descarga de Paquetes de Recursos</s:String>
-
     <!--PageSetupUI-->
     <s:String x:Key="LangThemeRealWhite">BLANCO VERDADERO</s:String>
     <s:String x:Key="LangThemeRealFunny">COLOR DIVERTIDO VERDADERO</s:String>
@@ -279,7 +276,6 @@ Necesitas reiniciar el lanzador después de este cambio.</s:String>
 Evita que se cambie "Ocultación de Funciones" mientras mantienes la página de "Personalización".</s:String>
     <s:String x:Key="LangSetBackgroundMusicVolume">Volumen</s:String>
     <s:String x:Key="LangSetHomePagePresetSCOnly">Lo sentimos, la mayoría de las páginas de inicio preestablecidas solo admiten chino simplificado</s:String>
-
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">Lista de Carpetas</s:String>
     <s:String x:Key="LangSelectRename">Renombrar</s:String>
@@ -335,7 +331,6 @@ Carpeta objetivo: {0}
     <s:String x:Key="LangSelectHintNameUpdated">¡El nombre de la carpeta ha sido renombrado a </s:String>
     <s:String x:Key="LangSelectFailToRename">Error al renombrar la carpeta.</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoChange">¡No puedes cambiar las carpetas del juego mientras la tarea de descarga está en progreso!</s:String>
-
     <!--PageSelectRight-->
     <s:String x:Key="LangSelectNoAvailableVersion">No Hay Instancias Disponibles</s:String>
     <s:String x:Key="LangSelectNoAvailableVersionTip">No se encontraron instancias. Por favor, descarga cualquier versión del juego primero.
@@ -371,7 +366,6 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangSelectVersionDeletedB">¡La instancia {0} ha sido eliminada a la papelera!</s:String>
     <s:String x:Key="LangSelectVersionDeleteCancelled">La eliminación de la instancia {0} ha sido cancelada manualmente.</s:String>
     <s:String x:Key="LangSelectVersionDeleteFail">Error al eliminar la instancia {0}.</s:String>
-
     <!--PageSpeedRight-->
     <s:String x:Key="LangPageSpeedRightDownloadVanillaSupportLibrary">Descargar bibliotecas de Vanilla</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadVanillaJSON">Descargar JSON de Vanilla</s:String>
@@ -390,12 +384,10 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">Descargar archivo principal de OptiFine</s:String>
     <s:String x:Key="LangPageSpeedRightInstallOptiFineMethodA">Instalación de OptiFine (Método A)</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFabric">Descargar OptiFabric</s:String>
-
     <!--PageDownloadClient-->
     <s:String x:Key="LangDownloadClientLoadingList">Obteniendo lista de versiones...</s:String>
     <s:String x:Key="LangDownloadClientReleaseReleaseOn">Última versión, lanzada el</s:String>
     <s:String x:Key="LangDownloadClientBetaReleaseOn">Último desarrollo, lanzado el</s:String>
-
     <!--PageDownload-->
     <s:String x:Key="LangDownloadLatest">Último</s:String>
     <s:String x:Key="LangDownloadRelease">Lanzamiento</s:String>
@@ -420,7 +412,6 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangDownloadAll">Todas las versiones</s:String>
     <s:String x:Key="LangDownloadCategory">Tipo: </s:String>
     <s:String x:Key="LangDownloadUnknown">Versión desconocida</s:String>
-
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">CurseForge</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">Modrinth</s:String>
@@ -437,20 +428,17 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangDownloadCompTaskPrepareInstallModpack">Instalación del Modpack</s:String>
     <s:String x:Key="LangDownloadCompTaskDownloadFile">Descargar archivo</s:String>
     <s:String x:Key="LangDownloadCompTaskDownloadFileDetail">Descargar: </s:String>
-
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Introducción a Fabric</s:String>
     <s:String x:Key="LangDownloadFabricDesc">Fabric Loader es un cargador de mods ligero para la versión más reciente de Minecraft. Necesitas instalarlo primero antes de poder instalar varios mods de Fabric. Esta página proporciona descargas del instalador de Fabric. Después de descargar, necesitas abrir manualmente el instalador para instalar.</s:String>
     <s:String x:Key="LangDownloadFabricWebsite">Sitio web oficial</s:String>
     <s:String x:Key="LangDownloadFabricVersionList">Lista de versiones</s:String>
     <s:String x:Key="LangDownloadFabricGettingList">Obteniendo lista de Fabric...</s:String>
-
     <!--PageDownloadForge-->
     <s:String x:Key="LangDownloadForgeDescTitle">Introducción a Forge</s:String>
     <s:String x:Key="LangDownloadForgeDesc">Forge es un cargador de mods. Necesitas instalar Forge primero para instalar varios mods de Forge.</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">Sitio web oficial</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">Obteniendo lista de Forge...</s:String>
-
     <!--PageDownloadInstall-->
     <s:String x:Key="LangDownloadInstallReview">Vista previa de la instalación</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">¡La mayoría de los mods no funcionarán si no se elige Fabric API!</s:String>
@@ -481,7 +469,6 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangDownloadInstallNoAdd">Sin instalación adicional</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">Incompatible con NeoForge</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Incompatible con versiones anteriores de Fabric, por favor descarga OptiFabric Origins manualmente.</s:String>
-
     <!--PageDownloadLeft-->
     <s:String x:Key="LangDownloadPageLeftRefresh">Actualizar</s:String>
     <s:String x:Key="LangDownloadPageLeftAutoInstall">Instalación</s:String>
@@ -502,13 +489,11 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangDownloadPageLeftLiteLoader">LiteLoader</s:String>
     <s:String x:Key="LangDownloadPageLeftFabricAPI">Fabric API</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFabric">OptiFabric</s:String>
-
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteloaderDescTitle">Introducción a LiteLoader</s:String>
     <s:String x:Key="LangDownloadLiteloaderDesc">Similar a Forge, LiteLoader se puede usar para cargar mods de LiteLoader en versiones anteriores de Minecraft.</s:String>
     <s:String x:Key="LangDownloadLiteloaderWebsite">Sitio Oficial</s:String>
     <s:String x:Key="LangDownloadLiteloaderGettingList">Obteniendo lista de LiteLoader...</s:String>
-
     <!--PageDownloadMod-->
     <s:String x:Key="LangDownloadModSearchTitle">Buscar Mods</s:String>
     <s:String x:Key="LangDownloadModSearchName">Nombre</s:String>
@@ -548,20 +533,18 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangDownloadModTypeUtility">Utilidad y Calidad de Vida</s:String>
     <s:String x:Key="LangDownloadModTypeLib">API y Biblioteca</s:String>
     <s:String x:Key="LangDownloadModConnectModrinthFail">No se pudo conectar a Modrinth, por lo que actualmente solo se muestra contenido de CurseForge, los resultados pueden estar incompletos. Por favor, verifica la conexión a internet y vuelve a intentarlo.</s:String>
-
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">Introducción a NeoForge</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge es un cargador de mods para Minecraft 1.20.1+. Necesitas instalarlo primero para poder instalar varios mods de NeoForge, también es compatible con algunos mods de Forge.&#xa;Esta página proporciona la descarga del instalador de NeoForge. Después de descargarlo, deberás abrir manualmente el instalador para proceder con la instalación.</s:String>
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge es un cargador de mods para Minecraft 1.20.1+. Necesitas instalarlo primero para poder instalar varios mods de NeoForge, también es compatible con algunos mods de Forge.
+Esta página proporciona la descarga del instalador de NeoForge. Después de descargarlo, deberás abrir manualmente el instalador para proceder con la instalación.</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">Sitio Oficial</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">Obteniendo lista de NeoForge...</s:String>
-
     <!--PageDownloadOptiFine-->
     <s:String x:Key="LangDownloadOptiFineDescTitle">Introducción a OptiFine</s:String>
     <s:String x:Key="LangDownloadOptiFineDesc">OptiFine te permite instalar shaders, usar paquetes de recursos HD y mejorar significativamente el rendimiento del juego.</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">Sitio Oficial</s:String>
     <s:String x:Key="LangDownloadOptiFineChineseWebsite">Sitio Chino</s:String>
     <s:String x:Key="LangDownloadOptiFineGettingList">Obteniendo lista de OptiFine...</s:String>
-
     <!--PageDownloadPack-->
     <s:String x:Key="LangDownloadModpackSearchTitle">Buscar Modpacks</s:String>
     <s:String x:Key="LangDownloadModpackSearchName">Nombre</s:String>
@@ -598,7 +581,6 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangDownloadModpackTypeMisc">Varios</s:String>
     <s:String x:Key="LangDownloadModpackConnectModrinthFail">No se pudo conectar a Modrinth, por lo que actualmente solo se muestra contenido de CurseForge, los resultados pueden estar incompletos. Por favor, verifica la conexión a internet y vuelve a intentarlo.</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">No se pudo conectar a CurseForge, por lo que actualmente solo se muestra contenido de Modrinth, los resultados pueden estar incompletos. Por favor, verifica la conexión a internet y vuelve a intentarlo.</s:String>
-
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">Guardar como</s:String>
     <s:String x:Key="LangMySkinRefresh">Actualizar</s:String>
@@ -639,7 +621,6 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangMySkinCapeNameFollower's">Capa de Seguidor</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">Capa del 15º Año de MCC</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">Ninguna</s:String>
-
     <!--FormLoginOAuth-->
     <s:String x:Key="LangLoginOAuthLoading">Cargando página de inicio de sesión...</s:String>
     <s:String x:Key="LangLoginOAuthLoadingTipA">Si el entorno de red no es bueno, la carga puede ser muy lenta o incluso imposible de cargar.</s:String>
@@ -647,7 +628,6 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangLoginOAuthToBrowser">Si hay un problema, haz clic aquí para iniciar sesión con tu navegador del sistema.</s:String>
     <s:String x:Key="LangLoginOAuthNoGithubLogin">¡PCL no soporta iniciar sesión en cuentas de Microsoft con GitHub!</s:String>
     <s:String x:Key="LangLoginOAuthWindowTitle">Inicio de sesión de cuenta de Microsoft</s:String>
-
     <!--PageLaunchLeft-->
     <s:String x:Key="LangLaunchLeftInstanceChoose">Selección</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Propiedades</s:String>
@@ -683,7 +663,6 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">Exportando script de lanzamiento...</s:String>
     <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">PCL instalará automáticamente el modpack en la carpeta actual.</s:String>
     <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">Instalación automática</s:String>
-
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">Sugerencia de instantánea</s:String>
     <s:String x:Key="LangLaunchRightLog">Registro de lanzamiento</s:String>
@@ -692,7 +671,6 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangLaunchRightLoadingPage">Cargando página de inicio...</s:String>
     <s:String x:Key="LangLaunchRightPageTips">Trivia</s:String>
     <s:String x:Key="LangLaunchRightPageEcho">Agujero de Eco</s:String>
-
     <!--PageLoginAuth-->
     <s:String x:Key="LangPageLoginAuthMail">Correo electrónico</s:String>
     <s:String x:Key="LangPageLoginAuthPassword">Contraseña</s:String>
@@ -701,7 +679,6 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangPageLoginAuthNoEmptyMail">¡La cuenta no puede estar vacía!</s:String>
     <s:String x:Key="LangPageLoginAuthNoEmptyPassword">¡La contraseña no puede estar vacía!</s:String>
     <s:String x:Key="LangPageLoginAuthForgetPassword">Recuperar contraseña</s:String>
-
     <!--PageLoginAuthSkin-->
     <s:String x:Key="LangPageLoginAuthSkinLoading">Cargando...</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChangeRole">Cambiar personaje</s:String>
@@ -709,14 +686,12 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangPageLoginAuthSkinLogining">Aún iniciando sesión, ¡por favor cambia el personaje más tarde!</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChanging">Intentando cambiar, ¡por favor espera!</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChangeFail">Error al cambiar el personaje.</s:String>
-
     <!--PageLoginLegacy-->
     <s:String x:Key="LangPageLoginLegacySpecialCharacters">¡Si el nombre de usuario contiene caracteres además de a-z, 0-9 y _, es posible que no puedas unirte al mundo después de Minecraft 1.18!</s:String>
     <s:String x:Key="LangPageLoginLegacyID">Nombre de usuario</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">¡El nombre de usuario no puede estar vacío!</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">¡El nombre de usuario no puede contener comillas!</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">¡Las opciones de lanzamiento han sido deshabilitadas!</s:String>
-
     <!--PageLoginMs-->
     <s:String x:Key="LangPageLoginMsLogin">Iniciar sesión</s:String>
     <s:String x:Key="LangPageLoginMsBuy">» Comprar</s:String>
@@ -728,7 +703,6 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
 
 Mensaje de error original: </s:String>
     <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">¡La sesión ha sido cancelada!</s:String>
-
     <!--PageLoginMsSkin-->
     <s:String x:Key="LangPageLoginMsLoading">Cargando...</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">Pieles y capas</s:String>
@@ -746,7 +720,6 @@ Mensaje de error original: </s:String>
     <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">Iniciando sesión, el cambio de piel continuará después de que se complete el inicio de sesión...</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangeSkinFail">Error al cambiar la piel.</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByTimeOut">Error al cambiar la piel: La conexión al servidor de pieles de Mojang ha expirado. ¡Por favor, verifica la calidad de tu red!</s:String>
-
     <!--PageLoginNide-->
     <s:String x:Key="LangPageLoginNideAccount">Cuenta</s:String>
     <s:String x:Key="LangPageLoginNidePassword">Contraseña</s:String>
@@ -756,12 +729,10 @@ Mensaje de error original: </s:String>
     <s:String x:Key="LangPageLoginNideNoEmptyAccount">¡La cuenta no puede estar vacía!</s:String>
     <s:String x:Key="LangPageLoginNideNoEmptyPassword">¡La contraseña no puede estar vacía!</s:String>
     <s:String x:Key="LangPageLoginNideForgetPassword">Recuperar contraseña</s:String>
-
     <!--PageLoginNideSkin-->
     <s:String x:Key="LangPageLoginNideSkinLoading">Cargando...</s:String>
     <s:String x:Key="LangPageLoginNideSkinChangePassword">Editar contraseña</s:String>
     <s:String x:Key="LangPageLoginNideSkinLogout">Cerrar sesión</s:String>
-
     <!--PageOtherLeft-->
     <s:String x:Key="LangPageOtherLeftHelp">Centro de ayuda</s:String>
     <s:String x:Key="LangPageOtherLeftRefresh">Actualizar</s:String>
@@ -769,22 +740,18 @@ Mensaje de error original: </s:String>
     <s:String x:Key="LangPageOtherLeftTools">Utilidades</s:String>
     <s:String x:Key="LangPageOtherLeftFeedback">Comentarios</s:String>
     <s:String x:Key="LangPageOtherLeftVoteNew">Votación de características</s:String>
-
     <!--PageOtherHelp-->
     <s:String x:Key="LangPageOtherHelpSearch">Buscar ayuda</s:String>
     <s:String x:Key="LangPageOtherHelpLoading">Cargando lista de ayuda...</s:String>
     <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">Lo siento, el centro de ayuda es solo en chino simplificado.</s:String>
     <s:String x:Key="LangPageOtherRefreshing">Actualizando...</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackContent">¿Quieres abrir la página de la lista de comentarios?</s:String>
-
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">Sugerencia de comentarios</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">Nuevo comentario</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">Lista de comentarios</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">¿Quieres abrir la nueva página de votación de características?</s:String>
-    
     <s:String x:Key="LangPageOtherDialogVoteTitle">Sugerencia</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">Abrir</s:String>
-
     <!--PageOtherAbout-->
     <s:String x:Key="LangPageOtherAboutAbout">Acerca de</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthor">LTCat (龙腾猫跃)</s:String>
@@ -825,10 +792,8 @@ Además, el software no subirá ninguna otra información.</s:String>
 Número de registro de derechos de autor de software informático: 2020SR0875133
 Correo electrónico para reportar comportamientos ilegales e irregulares: hexdragon@vip.qq.com
 No es un producto oficial de Minecraft. No está aprobado por Mojang o Microsoft y no está asociado con Mojang o Microsoft.</s:String>
-
     <!--PageOtherTest-->
     <s:String x:Key="LangPageOtherTestNoUtility">Para facilitar el mantenimiento, la versión de código abierto no incluye la función de Utilidades...</s:String>
-
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">Skin Offline</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTips">Debido a un problema técnico, la función solo está garantizada para versiones anteriores a 1.19.2!</s:String>
@@ -965,7 +930,6 @@ Si estás utilizando un disco duro mecánico, esto también puede llevar a un co
 Cada vez que inicias un juego, el PCL requiere privilegios de administrador para optimizar la memoria.
 Para otorgar automáticamente, haz clic derecho en PCL y abre "Propiedades → Compatibilidad → Ejecutar este programa como administrador".</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">Sugerencia</s:String>
-
     <!--PageSetupLeft-->
     <s:String x:Key="LangPageSetupLeftGame">Juego</s:String>
     <s:String x:Key="LangPageSetupLeftPersonalize">Personalización</s:String>
@@ -978,7 +942,6 @@ Para otorgar automáticamente, haz clic derecho en PCL y abre "Propiedades → C
 (Los archivos externos como fondo, música y la página de inicio personalizada no serán eliminados.)</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">¿Deseas inicializar todas las configuraciones en la página "Alojamiento"? Esta operación es irreversible.</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">Confirmación de Inicialización</s:String>
-
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">Descargar</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">Fuente</s:String>
@@ -1077,7 +1040,6 @@ A menos que estés haciendo un modpack o actualizando el lanzador a menudo, esta
     <s:String x:Key="LangPageSetupSystemExportSettings">Exportar Configuraciones</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">Importar Configuraciones</s:String>
     <s:String x:Key="LangPageSetupSystemInDev">¡Esta función aún está en desarrollo!</s:String>
-
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">Resumen</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">Configuraciones</s:String>
@@ -1086,7 +1048,6 @@ A menos que estés haciendo un modpack o actualizando el lanzador a menudo, esta
     <s:String x:Key="LangPageVersionLeftModManagementRefreshing">Actualizando...</s:String>
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetContent">¿Deseas inicializar las configuraciones para esta instancia? Esta operación es irreversible.</s:String>
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetTitle">Confirmación de Inicialización</s:String>
-
     <!--PageVersionMod-->
     <s:String x:Key="LangPageVersionModSearchTip">Buscar por Nombres / Descripciones / Etiquetas</s:String>
     <s:String x:Key="LangPageVersionModOpenFolder">Carpeta de Mods</s:String>
@@ -1148,14 +1109,12 @@ Las versiones anteriores se moverán a la papelera de reciclaje por si acaso.
     <s:String x:Key="LangPageVersionModBack">Volver</s:String>
     <s:String x:Key="LangPageVersionModSearchInMcmod">Buscar en la Wiki</s:String>
     <s:String x:Key="LangPageVersionModWebsite">Abrir sitio web oficial</s:String>
-
     <!--PageVersionModDisabled-->
     <s:String x:Key="LangPageVersionModDisabledTitle">Esta instancia NO está disponible con mods</s:String>
     <s:String x:Key="LangPageVersionModDisabledContent">Necesitas instalar Forge, Fabric u otros cargadores de mods para usar los mods. Por favor, instala estos cargadores de mods en la página de "Descarga".
 Si el cargador de mods está instalado, es posible que hayas seleccionado una instancia incorrecta. Haz clic en el botón "Selección" para cambiar a la correcta.</s:String>
     <s:String x:Key="LangPageVersionModDisabledBtnGoToDownload">Ir a Descargar</s:String>
     <s:String x:Key="LangPageVersionModDisabledBtnSelectInstance">Selección</s:String>
-
     <!--PageVersionOverall-->
     <s:String x:Key="LangPageVersionOverallPersonalize">Personalización</s:String>
     <s:String x:Key="LangPageVersionOverallIcon">Ícono</s:String>
@@ -1220,7 +1179,6 @@ Dado que "Aislamiento de Instancia" está habilitado para esta instancia, cuando
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">Confirmación de Eliminación de Instancia</s:String>
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">¡La instancia {0} ha sido eliminada a la papelera de reciclaje!</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">¡La instancia {0} ha sido eliminada permanentemente!</s:String>
-
     <!--PageVersionSetup-->
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">¡Las configuraciones de la instancia han sido inicializadas!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Error al inicializar las configuraciones de la instancia.</s:String>
@@ -1293,14 +1251,12 @@ Al ejecutar un comando, el directorio donde se encuentra el símbolo del sistema
     <s:String x:Key="LangPageVersionSetupJavaCompatibility">Si se selecciona manualmente un Java que es incompatible con las instancias actuales en la configuración, la ventana emergente de advertencia de compatibilidad se omite automáticamente y se forzará el uso del Java seleccionado manualmente.</s:String>
     <s:String x:Key="LangPageVersionSetupFileVerification">No cambies los activos en absoluto; no verifiques si las bibliotecas, bibliotecas de inicio de sesión de terceros y client.jar han sido modificadas.
 Si no has modificado los archivos relevantes, por favor no marques este elemento.</s:String>
-
     <!--ModMain-->
     <s:String x:Key="LangModMainAprilFoolTipA">¡Ríndete! Haz clic en la pequeña bandera blanca en la esquina inferior derecha...</s:String>
     <s:String x:Key="LangModMainAprilFoolTipB">¿Has visto la pequeña bandera blanca en la esquina inferior derecha?</s:String>
     <s:String x:Key="LangModMainAprilFoolTipC">Hmm... Te sugiero que simplemente hagas clic en la bandera :)</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">La pequeña bandera blanca siempre te está esperando...</s:String>
     <s:String x:Key="LangModMainExceptionNoHelpFound">No se encontraron ayudas disponibles. Puedes ocultar el Centro de Ayuda en "Configuración → Personalización → Ocultación de Funciones" si no es necesario.</s:String>
-
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">Abriendo, por favor espera...</s:String>
     <s:String x:Key="LangModEventStartInstance">Iniciando {0}...</s:String>
@@ -1312,7 +1268,6 @@ PCL no soporta otros protocolos de descarga extraños.</s:String>
     <s:String x:Key="LangModEventDialogUnknownEventContent">Tipo de evento desconocido: {0}
 Por favor verifica si el tipo de evento está correctamente completado, y si PCL es la última versión.</s:String>
     <s:String x:Key="LangModEventGettingResource">Obteniendo recursos, por favor espera...</s:String>
-
     <!--ModMusic-->
     <s:String x:Key="LangModMusicDeviceChanged">Debido al cambio del dispositivo de audio, la música no será utilizable hasta reiniciar el lanzador!</s:String>
     <s:String x:Key="LangModMusicMusicChanged">Error al reproducir ({0}): Cambiar las propiedades de audio durante la reproducción no es soportado.</s:String>
@@ -1331,7 +1286,6 @@ Por favor verifica si el tipo de evento está correctamente completado, y si PCL
     <s:String x:Key="LangModMusicMusicCleared">¡Música de fondo eliminada!</s:String>
     <s:String x:Key="LangModMusicMusicRefreshed">Música de fondo actualizada: {0}</s:String>
     <s:String x:Key="LangModMusicExceptionMusicRefreshFail">Error al actualizar la música de fondo.</s:String>
-
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL no puede crear la carpeta "PCL" ({0}PCL), por favor intenta:
 1. Mover PCL a otra carpeta {1};
@@ -1352,7 +1306,6 @@ Por favor verifica si el tipo de evento está correctamente completado, y si PCL
 - Utilidades: Algunas herramientas de desarrollo se colocaron aquí durante las primeras etapas de desarrollo, y fue difícil clasificarlas.</s:String>
     <s:String x:Key="LangModSecretHintNoTheme">La versión actual de PCL no incluye la función de Tema...</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">La versión actual de PCL no incluye la función de Actualización...</s:String>
-
     <!--ModMinecraft-->
     <s:String x:Key="LangModMinecraftCurrentFolder">Carpeta Actual</s:String>
     <s:String x:Key="LangModMinecraftOfficialFolder">Carpeta del Lanzador de Minecraft</s:String>
@@ -1415,7 +1368,6 @@ Por favor verifica si el tipo de evento está correctamente completado, y si PCL
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">Esta versión no tiene información de índice de archivo de activos.</s:String>
     <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Archivo de índice de activos no encontrado.</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">Resultado inesperado. ({0})</s:String>
-
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">Disponible para</s:String>
     <s:String x:Key="LangModCompModDependentCount">dependencia</s:String>
@@ -1435,7 +1387,6 @@ Por favor verifica si el tipo de evento está correctamente completado, y si PCL
     <s:String x:Key="LangModCompModDigit3">B</s:String>
     <s:String x:Key="LangModCompModComma">, </s:String>
     <s:String x:Key="LangModCompExceptionNoResult">No hay resultados que coincidan con los criterios</s:String>
-
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">año</s:String>
     <s:String x:Key="LangModBaseDateYearP">años</s:String>
@@ -1475,7 +1426,6 @@ Por favor, actualiza el lanzador en "Configuración → Lanzador" primero, luego
     <s:String x:Key="LangModBaseExceptionOutOfMemoryException">Tu computadora se está quedando sin memoria, lo que impide que PCL funcione. Por favor, cierra algunos programas innecesarios y vuelve a intentarlo.</s:String>
     <s:String x:Key="LangModBaseExceptionCOMException">Ocurrió un error debido a un problema con el sistema operativo o la tarjeta gráfica. Por favor, intenta reiniciar PCL.</s:String>
     <s:String x:Key="LangModBaseExceptionBadNetwork">Es difícil conectarse al servidor debido a un entorno de red deficiente. Por favor, verifica la conexión a internet y vuelve a intentarlo varias veces.</s:String>
-
     <!--ModLaunch-->
     <s:String x:Key="LangModLaunchStartStageGetJava">Obtener Java</s:String>
     <s:String x:Key="LangModLaunchStartStageCompleteFile">Reparar Archivos</s:String>
@@ -1491,7 +1441,6 @@ Por favor, actualiza el lanzador en "Configuración → Lanzador" primero, luego
     <s:String x:Key="LangModLaunchStartSuccess">¡Lanzado con éxito!</s:String>
     <s:String x:Key="LangModLaunchCancelStart">¡Lanzamiento Cancelado!</s:String>
     <s:String x:Key="LangModLaunchCancelExportCommand">¡La exportación del script de lanzamiento ha sido cancelada!</s:String>
-
     <!--ModValidate-->
     <s:String x:Key="LangModValidateNoSameFolderName">¡El nombre no puede ser el mismo que el de una instancia existente!</s:String>
     <s:String x:Key="LangModValidateNoEndWithDotFolderName">¡El nombre no puede terminar con un punto (.)!</s:String>
@@ -1509,19 +1458,22 @@ Por favor, actualiza el lanzador en "Configuración → Lanzador" primero, luego
     <s:String x:Key="LangModValidateLen">¡La longitud debe ser de {0} caracteres!</s:String>
     <s:String x:Key="LangModValidateLenMax">¡La longitud máxima es de {0} caracteres!</s:String>
     <s:String x:Key="LangModValidateLenMin">¡La longitud debe ser al menos de {0} caracteres!</s:String>
-    <s:String x:Key="LangModValidateNoContain">¡La entrada no puede contener "%"!</s:String> <!--Keep %,do not replace it.-->
-    <s:String x:Key="LangModValidateNoContent">¡La entrada no puede ser "%"!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateNoContain">¡La entrada no puede contener "%"!</s:String>
+    <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateNoContent">¡La entrada no puede ser "%"!</s:String>
+    <!--Keep %,do not replace it.-->
     <s:String x:Key="LangModValidateFileNoStartWithSpace">¡El nombre del archivo no puede comenzar con un espacio!</s:String>
     <s:String x:Key="LangModValidateFileNoEndWithSpace">¡El nombre del archivo no puede terminar con un espacio!</s:String>
     <s:String x:Key="LangModValidateFileNoEndWithDot">¡El nombre del archivo no puede terminar con un punto!</s:String>
-    <s:String x:Key="LangModValidateFileNoContain">¡El nombre del archivo no puede contener "%"!</s:String> <!--Keep %,do not replace it.-->
-    <s:String x:Key="LangModValidateFileNoContent">¡El nombre del archivo no puede ser "%"!</s:String> <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoContain">¡El nombre del archivo no puede contener "%"!</s:String>
+    <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoContent">¡El nombre del archivo no puede ser "%"!</s:String>
+    <!--Keep %,do not replace it.-->
     <s:String x:Key="LangModValidateFileNoSameName">¡El nombre del archivo ya existe!</s:String>
     <s:String x:Key="LangModValidateFileNoParentFolder">¡La carpeta padre no existe: {0}!</s:String>
     <s:String x:Key="LangModValidateFileHeadUriIncorrect">¡Encabezado de ruta de carpeta incorrecto!</s:String>
     <s:String x:Key="LangModValidateFolderUriIncorrect">¡Ruta de carpeta incorrecta!</s:String>
     <s:String x:Key="LangModValidateInvalidChar">¡Existen caracteres no válidos en la ruta!</s:String>
-
     <!--MyLocalModItem-->
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">Versión Actual: {0} ({1})
 Última Versión: {2} ({3})
@@ -1529,14 +1481,12 @@ Haz clic para actualizar, haz clic derecho para ver los registros de cambios.</s
     <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">¿En qué sitio web te gustaría ver el registro de cambios?</s:String>
     <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">Visualización del Registro de Cambios</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">Ocurrió un error y no se pudo obtener la información.</s:String>
-    
     <!--ModMod-->
     <s:String x:Key="LangModModUpdatingMod">Actualizando Mods...</s:String>
     <s:String x:Key="LangModModLoadingModList">Cargando Lista de Mods...</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">Ruta de archivo de mod incorrecta. ({0})</s:String>
     <s:String x:Key="LangModModExceptionFileNotFound">Archivo de mod no encontrado. ({0})</s:String>
     <s:String x:Key="LangModModExceptionUnauthorizedAccess">No tienes permiso para leer este archivo, por favor haz clic derecho e intenta ejecutar PCL como administrador.</s:String>
-    
     <!--ModComp-->
     <s:String x:Key="LangModCompVersionUnknown">Desconocido</s:String>
     <s:String x:Key="LangModCompVersionAll">Todas las Versiones</s:String>
@@ -1549,7 +1499,6 @@ Haz clic para actualizar, haz clic derecho para ver los registros de cambios.</s
     <s:String x:Key="LangModCompSearchNoResult">Sin Resultados</s:String>
     <s:String x:Key="LangModCompVersionSnapshot">Instantánea</s:String>
     <s:String x:Key="LangModCompVersionUnknownVersion">Versión Desconocida</s:String>
-    
     <!--ModDownload-->
     <s:String x:Key="LangModDownloadMcLibFixAnalysis">Analizar bibliotecas faltantes</s:String>
     <s:String x:Key="LangModDownloadMcLibFixDownload">Descargar bibliotecas</s:String>
@@ -1573,7 +1522,6 @@ Haz clic para actualizar, haz clic derecho para ver los registros de cambios.</s
     <s:String x:Key="LangModDownloadExceptionSourceOfficialListLoad">Error al analizar la lista de versiones de la fuente oficial {0}. ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">Error al analizar la lista de versiones de {0}. ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionMissNecessary">La lista obtenida carece de elementos necesarios.</s:String>
-    
     <!--ModJava-->
     <s:String x:Key="LangModJavaManuallyImport">Importar manualmente</s:String>
     <s:String x:Key="LangModJava32Bit">32 bits</s:String>
@@ -1607,7 +1555,6 @@ Si ya has instalado {1}, por favor impórtalo manualmente en "Configuración →
     <s:String x:Key="LangModJavaTaskDownloadJavaFile">Descargar archivo Java</s:String>
     <s:String x:Key="LangModJavaTaskDownloadJava">Descargar Java {0}</s:String>
     <s:String x:Key="LangModJavaTaskGetJavaDownloadInfo">Obtener información de descarga de Java</s:String>
-    
     <!--ModLaunch-->
     <s:String x:Key="LangModLaunchExceptionRunNotInUI">¡McLaunchStart debe ser llamado en el hilo de la interfaz de usuario!</s:String>
     <s:String x:Key="LangModLaunchAlreadyLaunchGame">¡Un juego ya se está lanzando!</s:String>
@@ -1680,7 +1627,6 @@ Información detallada del error: {0}</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">¡Falta "mainClass" en el JSON de la versión!</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">No se puede abrir el archivo Natives ({0}), el archivo puede estar dañado, por favor intenta relanzar el juego.</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">El modelo delgado no es compatible en esta versión, tu piel puede aparecer como modelo clásico.</s:String>
-    
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">Archivo de Modpack</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">Seleccionar Archivo de Modpack</s:String>
@@ -1720,10 +1666,8 @@ Información detallada del error: {0}</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">¡Por favor selecciona una carpeta vacía como destino de instalación!</s:String>
     <s:String x:Key="LangModModpackInstallArchive">Instalar Archivo</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Añadido a la lista de carpetas: {0}</s:String>
-    
     <!--ModWatcher-->
     <s:String x:Key="LangModWatcherMcCrashed">Se detectó un fallo en Minecraft, el análisis de errores ha comenzado...</s:String>
-    
     <!--ModBase-->
     <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">Renombrar una subclave que contiene subclaves no es compatible: {0}.</s:String>
     <s:String x:Key="LangModBaseExceptionPathIncorrect">Ruta no incluida: {0}</s:String>
@@ -1742,13 +1686,11 @@ Información detallada del error: {0}</s:String>
     <s:String x:Key="LangModBaseExceptionEmptyFile">El archivo leído está vacío</s:String>
     <s:String x:Key="LangModBaseExceptionInvalidJson">No es un archivo JSON válido.</s:String>
     <s:String x:Key="LangModBaseNoExceptionDetail">¡No hay información de error disponible!</s:String>
-    
     <!--ModMyLoading-->
     <s:String x:Key="LangModMyLoadingLoading">Cargando...</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">Error al Cargar</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">Error Desconocido</s:String>
     <s:String x:Key="LangModMyLoadingBadNetwork">Conexión deficiente, verifica el internet y vuelve a intentarlo.</s:String>
-
     <!--ModDownloadLib-->
     <s:String x:Key="LangModDownloadLibTaskMcDownload">Descargar Minecraft {0}</s:String>
     <s:String x:Key="LangModDownloadLibHintInstanceDownloading">¡Esta instancia se está descargando actualmente!</s:String>
@@ -1816,4 +1758,10 @@ Esto sobrescribirá el archivo JSON y el archivo JAR, pero no afectará a los ar
     <s:String x:Key="LangModDownloadLibTaskDownloadNeoForge">Descargar NeoForge {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">Descargar LiteLoader {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">Descargar Fabric {0}</s:String>
+    <s:String x:Key="LangSpeedHintClickCopyError">¡Se han copiado los detalles del error!</s:String>
+    <s:String x:Key="LangSpeedClickCopyError">Haga clic para copiar los detalles del error</s:String>
+    <s:String x:Key="LangSpeedLeftFiles">Documentos restantes</s:String>
+    <s:String x:Key="LangSpeedLeftThreads">Hilo restante</s:String>
+    <s:String x:Key="LangSpeedSpeed">Velocidad de descarga</s:String>
+    <s:String x:Key="LangSpeedTotalProgress">Progreso general</s:String>
 </ResourceDictionary>
