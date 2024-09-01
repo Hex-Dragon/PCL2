@@ -605,7 +605,7 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangMySkinDialogChoseSavePath">Select a location to save the skin file.</s:String>
     <s:String x:Key="LangMySkinHintSaveSuccess">Skin saved successfully!</s:String>
     <s:String x:Key="LangMySkinHintSaveFail">Failed to save the skin file.</s:String>
-    <s:String x:Key="LangMySkinHintSkinFileCorruption">Skin file corrupted: </s:String>
+    <s:String x:Key="LangMySkinHintSkinFileCorruption">Skin file is corrupted:</s:String>
     <s:String x:Key="LangMySkinHintExistSkinFileGetTask">Still obtaining the skin, please try again later!</s:String>
     <s:String x:Key="LangMySkinHintRefreshing">Updating avatar...</s:String>
     <s:String x:Key="LangMySkinHintRefreshed">The avatar has been refreshed!</s:String>
