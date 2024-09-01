@@ -126,7 +126,7 @@ You can try to use Paint to open and save it again, which will save the image in
     <s:String x:Key="LangBackgroundMusic">Music</s:String>
     <s:String x:Key="LangDialogBackgroundMusicDeleteContent">All files in the music folder will be deleted.
 This operation is irrevocable. Are you sure?</s:String>
-    <s:String x:Key="LangHintBackgroundMusicDeleting">Removing background music…</s:String>
+    <s:String x:Key="LangHintBackgroundMusicDeleting">Deleting background music…</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleted">The music has been deleted!</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">Failed to remove background music.</s:String>
     <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Failed to re-create the music folder.</s:String>
