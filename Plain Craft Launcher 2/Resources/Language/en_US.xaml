@@ -782,7 +782,7 @@ Original error message:</s:String>
     <s:String x:Key="LangPageOtherAboutThanks00ll00">Provided Java Launch Wrapper and some important support!</s:String>
     <s:String x:Key="LangPageOtherAboutThanksz0z0r4">Provided the mcmod-info-mirror for mods and image hosting services for the Help Center!</s:String>
     <s:String x:Key="LangPageOtherAboutThanksPatrick">Designed and made the PCL icon, saved LTCat from the abyss of suffering...</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksHao_Tian">Found a ton of weird bugs during the beta test that nobody expected, must have a talent for finding unusual bugs.</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksHao_Tian">Found a ton of weird bugs during the insider test that people wouldn't expect, must have a talent for finding bugs.</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">MCBBS</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBS">Still thanks for providing the MCBBS mirror, although it has been closed...</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">Everyone in the PCL QQ Group</s:String>
