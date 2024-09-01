@@ -11,13 +11,13 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.4" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.4." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.8.5" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.8.5." & VersionBranchCode '标准格式的四段式版本号
     Public Const VersionPRSCode As String = "" 'PRS 版本号
 #If BETA Then
     Public Const VersionCode As Integer = 332 'Release
 #Else
-    Public Const VersionCode As Integer = 333 'Snapshot
+    Public Const VersionCode As Integer = 334 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -697,7 +697,7 @@ Public Module ModBase
             If Not FileName.Contains(":\") Then FileName = $"{Path}PCL\{FileName}.ini"
             WriteFile(FileName, FileContent.ToString)
         Catch ex As Exception
-            Log(ex, $"写入文件失败（{FileName} -> {Key}:{Value}）")
+            Log(ex, $"写入文件失败（{FileName} → {Key}:{Value}）", LogLevel.Hint)
         End Try
     End Sub
 
@@ -771,10 +771,10 @@ Public Module ModBase
         End Try
     End Sub
     ''' <summary>
-    ''' 读取文件，如果失败则返回空字符串。
+    ''' 读取文件，如果失败则返回空数组。
     ''' </summary>
     ''' <param name="FilePath">文件完整或相对路径。</param>
-    Public Function ReadFile(FilePath As String, Optional Encoding As Encoding = Nothing) As String
+    Public Function ReadFileBytes(FilePath As String, Optional Encoding As Encoding = Nothing) As Byte()
         Try
             '还原文件路径
             If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
@@ -784,15 +784,23 @@ Public Module ModBase
                     ReDim FileBytes(ReadStream.Length - 1)
                     ReadStream.Read(FileBytes, 0, ReadStream.Length)
                 End Using
-                ReadFile = If(Encoding Is Nothing, DecodeBytes(FileBytes), Encoding.GetString(FileBytes))
+                Return FileBytes
             Else
-                Log("[System] 欲读取的文件不存在，已返回空字符串：" & FilePath)
-                Return ""
+                Log("[System] 欲读取的文件不存在，已返回空内容：" & FilePath)
+                Return {}
             End If
         Catch ex As Exception
             Log(ex, "读取文件出错：" & FilePath)
-            Return ""
+            Return {}
         End Try
+    End Function
+    ''' <summary>
+    ''' 读取文件，如果失败则返回空字符串。
+    ''' </summary>
+    ''' <param name="FilePath">文件完整或相对路径。</param>
+    Public Function ReadFile(FilePath As String, Optional Encoding As Encoding = Nothing) As String
+        Dim FileBytes = ReadFileBytes(FilePath)
+        ReadFile = If(Encoding Is Nothing, DecodeBytes(FileBytes), Encoding.GetString(FileBytes))
     End Function
     ''' <summary>
     ''' 读取流中的所有文本。
@@ -819,50 +827,39 @@ Public Module ModBase
     ''' <param name="FilePath">文件完整或相对路径。</param>
     ''' <param name="Text">文件内容。</param>
     ''' <param name="Append">是否将文件内容追加到当前文件，而不是覆盖它。</param>
-    Public Function WriteFile(FilePath As String, Text As String, Optional Append As Boolean = False, Optional Encoding As Encoding = Nothing) As Boolean
-        Try
-            '还原文件路径
-            If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
-            '确保目录存在
-            Directory.CreateDirectory(GetPathFromFullPath(FilePath))
-            '写入文件
-            If File.Exists(FilePath) Then
-                '如果文件存在，刷新目前文件
-                Using writer As New StreamWriter(FilePath, Append, If(Encoding, GetEncoding(FilePath)))
-                    writer.Write(Text)
-                    writer.Flush()
-                    writer.Close()
-                End Using
-            Else
-                '如果文件不存在，则新建并写入
-                File.WriteAllText(FilePath, Text, If(Encoding, New UTF8Encoding(False)))
-            End If
-            Return True
-        Catch ex As Exception
-            Log(ex, "写入文件时出错：" & FilePath)
-            Return False
-        End Try
-    End Function
+    Public Sub WriteFile(FilePath As String, Text As String, Optional Append As Boolean = False, Optional Encoding As Encoding = Nothing)
+        '还原文件路径
+        If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
+        '确保目录存在
+        Directory.CreateDirectory(GetPathFromFullPath(FilePath))
+        '写入文件
+        If File.Exists(FilePath) Then
+            '如果文件存在，刷新目前文件
+            Using writer As New StreamWriter(FilePath, Append, If(Encoding, GetEncoding(ReadFileBytes(FilePath))))
+                writer.Write(Text)
+                writer.Flush()
+                writer.Close()
+            End Using
+        Else
+            '如果文件不存在，则新建并写入
+            File.WriteAllText(FilePath, Text, If(Encoding, New UTF8Encoding(False)))
+        End If
+    End Sub
     ''' <summary>
     ''' 写入文件。
+    ''' 如果 CanThrow 设置为 False，返回是否写入成功。
     ''' </summary>
     ''' <param name="FilePath">文件完整或相对路径。</param>
     ''' <param name="Content">文件内容。</param>
     ''' <param name="Append">是否将文件内容追加到当前文件，而不是覆盖它。</param>
-    Public Function WriteFile(FilePath As String, Content As Byte(), Optional Append As Boolean = False) As Boolean
-        Try
-            '还原文件路径
-            If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
-            '确保目录存在
-            Directory.CreateDirectory(GetPathFromFullPath(FilePath))
-            '写入文件
-            File.WriteAllBytes(FilePath, Content)
-            Return True
-        Catch ex As Exception
-            Log(ex, "写入文件时出错：" & FilePath)
-            Return False
-        End Try
-    End Function
+    Public Sub WriteFile(FilePath As String, Content As Byte(), Optional Append As Boolean = False)
+        '还原文件路径
+        If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
+        '确保目录存在
+        Directory.CreateDirectory(GetPathFromFullPath(FilePath))
+        '写入文件
+        File.WriteAllBytes(FilePath, Content)
+    End Sub
     ''' <summary>
     ''' 将流写入文件。
     ''' </summary>
@@ -892,21 +889,11 @@ Public Module ModBase
 
     '文件编码
     ''' <summary>
-    ''' 获取文件编码。
-    ''' </summary>
-    ''' <param name="FilePath">文件完整或相对路径。</param>
-    Public Function GetEncoding(FilePath As String) As Encoding
-        '还原文件路径
-        If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
-        '获取编码
-        GetEncoding = GetEncoding(File.ReadAllBytes(FilePath))
-    End Function
-    ''' <summary>
-    ''' 获取 Bytes 的编码。
+    ''' 根据字节数组分析其编码。
     ''' </summary>
     Public Function GetEncoding(Bytes As Byte()) As Encoding
         Dim Length As Integer = Bytes.Count
-        If Length <= 2 Then Return New UTF8Encoding(False) '不带 BOM 的 UTF8
+        If Length < 3 Then Return New UTF8Encoding(False) '不带 BOM 的 UTF8
         '根据 BOM 判断编码
         If Bytes(0) >= &HEF Then
             '有 BOM 类型
@@ -1650,10 +1637,15 @@ RetryDir:
     End Function
 
     ''' <summary>
-    ''' 输入 And 字符不会报错的 Val。
+    ''' 不会报错的 Val。
+    ''' 如果输入有误，返回 0。
     ''' </summary>
     Public Function Val(Str As Object) As Double
-        Return If(TypeOf Str Is String AndAlso Str = "&", 0, Conversion.Val(Str))
+        Try
+            Return If(TypeOf Str Is String AndAlso Str = "&", 0, Conversion.Val(Str))
+        Catch
+            Return 0
+        End Try
     End Function
 
     '转义

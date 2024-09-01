@@ -670,6 +670,7 @@ LoginFinish:
             Url:=Data.Input.BaseUrl & "/validate",
             Method:="POST",
             Data:=RequestData.ToString(0),
+            Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
             ContentType:="application/json; charset=utf-8") '没有返回值的
         '将登录结果输出
         Data.Output.AccessToken = AccessToken
@@ -693,6 +694,7 @@ LoginFinish:
                    ""name"":""" & Setup.Get("Cache" & Data.Input.Token & "Name") & """},", "") & "
                ""accessToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Access") & """,
                ""clientToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Client") & """}",
+               Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
                ContentType:="application/json; charset=utf-8"))
         '将登录结果输出
         If LoginJson("selectedProfile") Is Nothing Then Throw New Exception("选择的角色 " & Setup.Get("Cache" & Data.Input.Token & "Name") & " 无效！")
@@ -723,6 +725,7 @@ LoginFinish:
                 Url:=Data.Input.BaseUrl & "/authenticate",
                 Method:="POST",
                 Data:=RequestData.ToString(0),
+                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
                 ContentType:="application/json; charset=utf-8"))
             '检查登录结果
             If LoginJson("availableProfiles").Count = 0 Then
@@ -782,6 +785,16 @@ LoginFinish:
         Catch ex As Exception
             Dim AllMessage As String = GetExceptionSummary(ex)
             Log(ex, "登录失败原始错误信息", LogLevel.Normal)
+            '读取服务器返回的错误
+            If TypeOf ex Is ResponsedWebException Then
+                Dim ErrorMessage As String = Nothing
+                Try
+                    ErrorMessage = GetJson(DirectCast(ex, ResponsedWebException).Response)("errorMessage")
+                Catch
+                End Try
+                If Not String.IsNullOrWhiteSpace(ErrorMessage) Then Throw New Exception("$登录失败：" & ErrorMessage)
+            End If
+            '通用关键字检测
             If AllMessage.Contains("403") Then
                 Select Case Data.Input.Type
                     Case McLoginType.Auth
@@ -1331,20 +1344,28 @@ LoginFinish:
         Dim WrapperPath As String = BaseDir & "\JavaWrapper.jar"
         Log("[Java] 选定的 Java Wrapper 路径：" & WrapperPath)
         SyncLock ExtractJavaWrapperLock '避免 OptiFine 和 Forge 安装时同时释放 Java Wrapper 导致冲突
-            Dim IsWrapperWritten As Boolean = WriteFile(WrapperPath, GetResources("JavaWrapper"))
-            If Not IsWrapperWritten AndAlso File.Exists(WrapperPath) Then
-                '以下为 #4243 的修复，因为未知原因 Java Wrapper 可能变为只读文件
-                Log("[Java] Java Wrapper 文件释放失败，但文件已存在，将在删除后尝试重新生成", LogLevel.Debug)
-                Try
-                    File.Delete(WrapperPath)
-                    IsWrapperWritten = WriteFile(WrapperPath, GetResources("JavaWrapper"))
-                Catch ex As Exception
-                    Log(ex, "Java Wrapper 文件重新释放失败，将尝试更换文件名重新生成")
-                    WrapperPath = BaseDir & "\JavaWrapper2.jar"
-                    IsWrapperWritten = WriteFile(WrapperPath, GetResources("JavaWrapper"))
-                End Try
-            End If
-            If Not IsWrapperWritten Then Throw New FileNotFoundException("释放 Java Wrapper 失败，请查看 PCL 日志查找详细信息")
+            Try
+                WriteFile(WrapperPath, GetResources("JavaWrapper"))
+            Catch ex As Exception
+                If File.Exists(WrapperPath) Then
+                    '因为未知原因 Java Wrapper 可能变为只读文件（#4243）
+                    Log(ex, "Java Wrapper 文件释放失败，但文件已存在，将在删除后尝试重新生成", LogLevel.Developer)
+                    Try
+                        File.Delete(WrapperPath)
+                        WriteFile(WrapperPath, GetResources("JavaWrapper"))
+                    Catch ex2 As Exception
+                        Log(ex2, "Java Wrapper 文件重新释放失败，将尝试更换文件名重新生成", LogLevel.Developer)
+                        WrapperPath = BaseDir & "\JavaWrapper2.jar"
+                        Try
+                            WriteFile(WrapperPath, GetResources("JavaWrapper"))
+                        Catch ex3 As Exception
+                            Throw New FileNotFoundException("释放 Java Wrapper 最终尝试失败", ex3)
+                        End Try
+                    End Try
+                Else
+                    Throw New FileNotFoundException("释放 Java Wrapper 失败", ex)
+                End If
+            End Try
         End SyncLock
         Return WrapperPath
     End Function

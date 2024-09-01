@@ -1077,7 +1077,7 @@ Retry:
         If String.IsNullOrEmpty(Task.Input.SearchText) Then
             '如果没有搜索文本，按下载量将结果排序
             For Each Result As CompProject In RealResults
-                Scores.Add(Result, Result.DownloadCount * If(Result.FromCurseForge, 1, 30))
+                Scores.Add(Result, Result.DownloadCount * If(Result.FromCurseForge, 1, 10))
             Next
         Else
             '如果有搜索文本，按关联度将结果排序
@@ -1085,7 +1085,7 @@ Retry:
             Dim Entry As New List(Of SearchEntry(Of CompProject))
             For Each Result As CompProject In RealResults
                 Scores.Add(Result, If(Result.WikiId > 0, 0.2, 0) +
-                           Math.Log10(Math.Max(Result.DownloadCount, 1) * If(Result.FromCurseForge, 1, 30)) / 9)
+                           Math.Log10(Math.Max(Result.DownloadCount, 1) * If(Result.FromCurseForge, 1, 10)) / 9)
                 Entry.Add(New SearchEntry(Of CompProject) With {.Item = Result, .SearchSource = New List(Of KeyValuePair(Of String, Double)) From {
                           New KeyValuePair(Of String, Double)(If(IsChineseSearch, Result.TranslatedName, Result.RawName), 1),
                           New KeyValuePair(Of String, Double)(Result.Description, 0.05)}})
