@@ -872,7 +872,7 @@ This will cause saves that are not shared between Vanilla instances, so it is ge
     <s:String x:Key="LangPageSetupLaunchLaunchMem">Game Memory</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMem32BitWarn">32-bit Java can only allocate a maximum of 1 GB of memory. It is recommended to install 64-bit Java!</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjust">Automatic</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjustToolTip">Dynamically adjust the memory allocated to the game based on the number of installed mods and the remaining system memory.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjustToolTip">Dynamically adjust the memory allocated to the game based on the number of mods and remaining memory.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemCustom">Custom</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunch">Optimize memory before launching the game.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunchToolTip">Memory Optimization can reduce the current physical memory footprint by about 1/3, not limited to Minecraft!
