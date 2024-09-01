@@ -176,7 +176,7 @@ Initial clue:</s:String>
     <s:String x:Key="LangSetThemeNameBrown">Oak Brown</s:String>
     <s:String x:Key="LangSetThemeNameBlack">Xuansu Black</s:String>
     <s:String x:Key="LangSetThemeNameGreyToolTip">Gray is a lie.</s:String>
-    <s:String x:Key="LangSetThemeNameFunny">Funny fruits on the funny tree, you and I are sitting under it, doing memes on funny days, fun and more fun that we'll make.</s:String>
+    <s:String x:Key="LangSetThemeNameFunny">Funny fruits on the funny tree, under the funny tree there's you and me, doing memes on funny days, fun and more fun that we'll make.</s:String>
     <s:String x:Key="LangSetThemeNameHardcoreFan">Play the game 99 times.</s:String>
     <s:String x:Key="LangSetThemeNameLucky">What a lucky dog, right?</s:String>
     <s:String x:Key="LangSetThemeNameMojang">Login with Microsoft account to support the game!</s:String>
@@ -207,14 +207,14 @@ It is not recommended enabling blur when making a modpack to ensure that PCL can
     <s:String x:Key="LangSetOpenFolder">Folder</s:String>
     <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">Put the background image in this folder, and PCL will randomly load one of them each time.</s:String>
     <s:String x:Key="LangSetBackgroundPicRefresh">Refresh</s:String>
-    <s:String x:Key="LangSetBackgroundPicRefreshToolTip">Randomly load an image in the folder.</s:String>
+    <s:String x:Key="LangSetBackgroundPicRefreshToolTip">Randomly load an background image in the folder.</s:String>
     <s:String x:Key="LangSetBackgroundPicEmpty">Clear All</s:String>
     <s:String x:Key="LangSetBackgroundMusicTitle">Music</s:String>
     <s:String x:Key="LangSetBackgroundMusicPlayRandom">Shuffle Play</s:String>
     <s:String x:Key="LangSetBackgroundMusicPlayOnStart">Play when launcher starts</s:String>
     <s:String x:Key="LangSetBackgroundMusicPlayDuringGaming">Play when the game is running</s:String>
     <s:String x:Key="LangSetBackgroundMusicPlayDuringLaunching">Play when the game is not running</s:String>
-    <s:String x:Key="LangSetBackgroundMusicOpenFolderToolTip">Put the music in this folder, and PCL will play all of them.</s:String>
+    <s:String x:Key="LangSetBackgroundMusicOpenFolderToolTip">Place the background music in this folder, and PCL will play all the audio in the folder.</s:String>
     <s:String x:Key="LangSetBackgroundMusicRefresh">Refresh</s:String>
     <s:String x:Key="LangSetBackgroundMusicRefreshToolTip">Refresh the playlist and play the music on the list.</s:String>
     <s:String x:Key="LangSetBackgroundMusicEmpty">Clear All</s:String>
