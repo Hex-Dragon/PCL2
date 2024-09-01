@@ -924,7 +924,7 @@ Do not open this unless the relevant files are modified.</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">An error occurred while reloading the launch options.</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">The launch options have been initialized!</s:String>
     <s:String x:Key="LangPageSetupLaunchInitFail">Failed to initialize the launch options.</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinChangeFail">Changing offline skin failed.</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinChangeFail">Failed to change the offiline skin.</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinEmptied">The offline skin has been cleared!</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinEmptyFail">Failed to clear offline skin.</s:String>
     <s:String x:Key="LangPageSetupLaunchMemAvailable">Available</s:String>
