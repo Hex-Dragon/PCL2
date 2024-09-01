@@ -216,7 +216,7 @@ It is not recommended enabling blur when making a modpack to ensure that PCL can
     <s:String x:Key="LangSetBackgroundMusicPlayDuringLaunching">Play when the game is not running</s:String>
     <s:String x:Key="LangSetBackgroundMusicOpenFolderToolTip">Put the background music in this folder, and PCL will play all of them.</s:String>
     <s:String x:Key="LangSetBackgroundMusicRefresh">Refresh</s:String>
-    <s:String x:Key="LangSetBackgroundMusicRefreshToolTip">Refresh the playlist and play the music on the list.</s:String>
+    <s:String x:Key="LangSetBackgroundMusicRefreshToolTip">Refresh the playlist and play the background music on the list.</s:String>
     <s:String x:Key="LangSetBackgroundMusicEmpty">Clear All</s:String>
     <s:String x:Key="LangSetTitle">Title Bar</s:String>
     <s:String x:Key="LangSetNone">None</s:String>
