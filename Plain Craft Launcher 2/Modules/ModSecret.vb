@@ -89,9 +89,9 @@ Friend Module ModSecret
     ''' </summary>
     Friend Sub SecretHeadersSign(Url As String, ByRef Client As WebClient, Optional UseBrowserUserAgent As Boolean = False)
         If Url.Contains("modrinth.com") Then '根据 #4334，不添加 PCL 的 UA 反而能正常访问
-            Client.Headers("User-Agent") = "Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+            Client.Headers("User-Agent") = "Mozilla/5.0 AppleWebKit/537.36 Chrome/128.0.0.0 Safari/537.36"
         ElseIf UseBrowserUserAgent Then
-            Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+            Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/128.0.0.0 Safari/537.36"
         Else
             Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode
         End If
