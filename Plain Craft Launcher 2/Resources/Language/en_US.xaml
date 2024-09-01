@@ -731,7 +731,7 @@ Original error message:</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangingSkinPlzWait">Changing the skin, please wait!</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByLoginFail">Failed to login, the skin cannot be changed!</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangingSkin">Changing the skin...</s:String>
-    <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">Logging in, skin change will continue after login is complete…</s:String>
+    <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">Logging in, will continue to change the skin after login is completed...</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangeSkinFail">Failed to change the skin.</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByTimeOut">Failed to change the skin: The connection to the Mojang skin server timed out. Please check your network quality!</s:String>
     <!--PageLoginNide-->
