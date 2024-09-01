@@ -128,7 +128,7 @@ You can try to use Paint to open and save it again, which will save the image in
 This operation is irrevocable. Are you sure?</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleting">Removing background music…</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleted">The music has been deleted!</s:String>
-    <s:String x:Key="LangHintBackgroundMusicDeleteFail">Failed to delete the music.</s:String>
+    <s:String x:Key="LangHintBackgroundMusicDeleteFail">Failed to remove background music.</s:String>
     <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Failed to re-create the music folder.</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">A layout file already exists. Continuing to generate the documentation file will override the existing layout file!</s:String>
     <s:String x:Key="LangDialogBtnContinue">Continue</s:String>
