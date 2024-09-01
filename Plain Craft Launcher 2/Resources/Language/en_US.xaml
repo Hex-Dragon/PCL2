@@ -287,7 +287,7 @@ Avoid "Feature Hiding" be changed while keeping the "Personalization" page.</s:S
     <s:String x:Key="LangSelectEmpty">Empty</s:String>
     <s:String x:Key="LangSelectAddFolder">Add or Import</s:String>
     <s:String x:Key="LangSelectCreateFolder">Create New Folder</s:String>
-    <s:String x:Key="LangSelectCreateFolderToolTip">Generate a new ".minecraft" directory within the current directory of PCL.</s:String>
+    <s:String x:Key="LangSelectCreateFolderToolTip">Create a new ".minecraft" directory at the location of PCL.</s:String>
     <s:String x:Key="LangSelectAddExistFolder">Add Existing Folders</s:String>
     <s:String x:Key="LangSelectAddExistFolderToolTip">Add an existing Minecraft folder to the list.</s:String>
     <s:String x:Key="LangSelectAddModpack">Import Modpacks</s:String>
