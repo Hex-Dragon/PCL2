@@ -129,7 +129,7 @@ This operation is irrevocable. Are you sure?</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleting">Deleting background music…</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleted">The music has been deleted!</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">Failed to remove background music.</s:String>
-    <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Failed to re-create the music folder.</s:String>
+    <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Failed to re-create the background music folder.</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">A layout file already exists. Continuing to generate the documentation file will override the existing layout file!</s:String>
     <s:String x:Key="LangDialogBtnContinue">Continue</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteFail">Failed to generate the documentation file</s:String>
@@ -184,7 +184,7 @@ Initial clue:</s:String>
     <s:String x:Key="LangSetThemeNameCustom">Custom</s:String>
     <s:String x:Key="LangSetThemeNameCustomToolTip">You need to unlock at least five hidden themes.</s:String>
     <s:String x:Key="LangSetThemeShowLogoOnStart">Display PCL logo when opening the launcher</s:String>
-    <s:String x:Key="LangSetThemeSponsorship">You need a little sponsorship of the developer to change the theme color... :(</s:String>
+    <s:String x:Key="LangSetThemeSponsorship">A small donation to the author is required to modify the theme color... :(</s:String>
     <s:String x:Key="LangSetThemeSupport">Support Developers</s:String>
     <s:String x:Key="LangSetBackgroundPic">Background</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptive">Adaptive</s:String>
@@ -205,7 +205,7 @@ Initial clue:</s:String>
 It is not recommended enabling blur when making a modpack to ensure that PCL can run smoothly on low-performance devices.</s:String>
     <s:String x:Key="LangSetBackgroundPicColorfulBack">Colored Background</s:String>
     <s:String x:Key="LangSetOpenFolder">Folder</s:String>
-    <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">Put the background in this folder, and PCL will randomly load one of them each time.</s:String>
+    <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">Put the background image in this folder, and PCL will randomly load one of them each time.</s:String>
     <s:String x:Key="LangSetBackgroundPicRefresh">Refresh</s:String>
     <s:String x:Key="LangSetBackgroundPicRefreshToolTip">Randomly load an image in the folder.</s:String>
     <s:String x:Key="LangSetBackgroundPicEmpty">Clear All</s:String>
@@ -432,7 +432,7 @@ Press "F11" again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadCompDownloadModpack">Download Modpack: </s:String>
     <s:String x:Key="LangDownloadCompInputInstanceName">Enter Instance Name</s:String>
     <s:String x:Key="LangDownloadCompTaskDownloadModpackFile">Download Modpack File</s:String>
-    <s:String x:Key="LangDownloadCompTaskPrepareInstallModpack">Modpack Installation</s:String>
+    <s:String x:Key="LangDownloadCompTaskPrepareInstallModpack">Preparing for Modpack Installation</s:String>
     <s:String x:Key="LangDownloadCompTaskDownloadFile">Download File</s:String>
     <s:String x:Key="LangDownloadCompTaskDownloadFileDetail">Download:</s:String>
     <!--PageDownloadFabric-->
@@ -470,7 +470,7 @@ This page provides Fabric installer downloads. After downloading, you need to ma
     <s:String x:Key="LangDownloadInstallNoAvailableVersion">No Version Available</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknownStatus">Failed to get version list: Unknown error, status is</s:String>
     <s:String x:Key="LangDownloadInstallFailGetList">Failed to get version list:</s:String>
-    <s:String x:Key="LangDownloadInstallNoAutoInstall">Cannot be installed by the launcher.</s:String>
+    <s:String x:Key="LangDownloadInstallNoAutoInstall">Cannot be installed by the launcher automatically.</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">Instance Isolation Hint</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieContent">"Instance Isolation" has not been enabled yet, which will result in multiple instances sharing the same mods folder.
 Therefore, when switching instances, Minecraft will crash because it reads mods that do not match the current version or the loader.
@@ -568,7 +568,7 @@ This page provides the NeoForge installer download. After downloading, you need 
     <s:String x:Key="LangDownloadModpackReset">Reset</s:String>
     <s:String x:Key="LangDownloadModpackGettingList">Getting Modpack List...</s:String>
     <s:String x:Key="LangDownloadModpackInstallFromLocal">Install from Files</s:String>
-    <s:String x:Key="LangDownloadModpackInstallFromLocalToolTip">Install the modpack under the currently selected Minecraft folder.</s:String>
+    <s:String x:Key="LangDownloadModpackInstallFromLocalToolTip">Install the modpack into the currently selected Minecraft folder.</s:String>
     <s:String x:Key="LangDownloadModpackType">Type</s:String>
     <s:String x:Key="LangDownloadModpackTypeAll">All</s:String>
     <s:String x:Key="LangDownloadModpackTypeMulti">Multiplayer</s:String>
@@ -602,9 +602,9 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangMySkinLoading">Loading...</s:String>
     <s:String x:Key="LangMySkinClickToChange">Click to Replace (Right-click for More Options)</s:String>
     <s:String x:Key="LangMySkinHintLoading">Obtaining the skin, please wait!</s:String>
-    <s:String x:Key="LangMySkinDialogChoseSavePath">Select a location to save the skin.</s:String>
+    <s:String x:Key="LangMySkinDialogChoseSavePath">Select a location to save the skin file.</s:String>
     <s:String x:Key="LangMySkinHintSaveSuccess">Skin saved successfully!</s:String>
-    <s:String x:Key="LangMySkinHintSaveFail">Failed to save the skin.</s:String>
+    <s:String x:Key="LangMySkinHintSaveFail">Failed to save the skin file.</s:String>
     <s:String x:Key="LangMySkinHintSkinFileCorruption">Skin file corrupted: </s:String>
     <s:String x:Key="LangMySkinHintExistSkinFileGetTask">Still obtaining the skin, please try again later!</s:String>
     <s:String x:Key="LangMySkinHintRefreshing">Updating avatar...</s:String>
@@ -1047,7 +1047,7 @@ Unless you are making a modpack or updating the launcher often, this option is e
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Mirror</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Balanced</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Official</s:String>
-    <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL is about to restart to fully apply the language.</s:String>
+    <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL is about to restart to fully apply the language switch.</s:String>
     <s:String x:Key="LangPageSetupSystemLangHelpTranslate">Contribute</s:String>
     <s:String x:Key="LangPageSetupSystemHintCloseGameBeforeChangeLanguage">Please close all instances that are running first...</s:String>
     <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">Please change the language after all download tasks are completed...</s:String>
