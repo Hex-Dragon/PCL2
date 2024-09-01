@@ -639,7 +639,7 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangLoginOAuthLoading">Loading Login Page...</s:String>
     <s:String x:Key="LangLoginOAuthLoadingTipA">If the network connection is poor, loading may be very slow or may not complete at all.</s:String>
     <s:String x:Key="LangLoginOAuthLoadingTipB">Check the internet or try to use VPN or proxy at this time, then try again.</s:String>
-    <s:String x:Key="LangLoginOAuthToBrowser">If there is a problem, click here to log in with your system browser.</s:String>
+    <s:String x:Key="LangLoginOAuthToBrowser">If you encounter any problems, click here to log in using the system browser.</s:String>
     <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL does not support logging in to Microsoft accounts with GitHub!</s:String>
     <s:String x:Key="LangLoginOAuthWindowTitle">Microsoft Account Login</s:String>
     <!--PageLaunchLeft-->
