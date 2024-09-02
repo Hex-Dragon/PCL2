@@ -19,9 +19,9 @@ Error Cause: {0}</s:String>
 Please extract PCL from the archive file or use it in a different folder!</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">Initialization Error</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">Runtime Error</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">The version of your .NET Framework is too low or it is corrupted, please redownload and install .NET Framework 4.6.2 from the opening website and try again!</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">The version of your .NET Framework is too low or it is corrupted. Please redownload and install .NET Framework 4.6.2 from the opening website and try again!</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Unknown Error</s:String>
-    <s:String x:Key="LangApplicationDialogContentUnknownError">An unknown error occurred in the program</s:String>
+    <s:String x:Key="LangApplicationDialogContentUnknownError">An unknown error occurred in the program.</s:String>
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">Download</s:String>
     <s:String x:Key="LangTitleHome">Launch</s:String>
@@ -50,12 +50,12 @@ The hidden theme "Hardcore Fans" has been unlocked!</s:String>
     <s:String x:Key="LangHintAuthlibUrlIncorrect">The Authlib verification server entered does not match the URL format! ({0})</s:String>
     <s:String x:Key="LangHintAuthlibDownloadGame">Please download the game first and then set up a third-party login!</s:String>
     <s:String x:Key="LangDialogAuthlibEnableLittleSkin">Do you want to log in using LittleSkin in the instance {0}?
-You can modify the login method in "Instance Properties → Settings → Server".</s:String>
+You can modify the login method in "Properties → Settings → Server".</s:String>
     <s:String x:Key="LangDialogTitleAuthlibEnableLittleSkin">Third-party Login Confirmation</s:String>
     <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">Do you want to log in using LittleSkin in the instance {0}?
-Authlib Server: {1}
+Login Server: {1}
 
-You can modify the login method in "Instance Properties → Settings → Server".</s:String>
+You can modify the login method in "Properties → Settings → Server".</s:String>
     <s:String x:Key="LangHintWindowDropExtract">Please extract the file before dragging it!</s:String>
     <s:String x:Key="LangHintWindowDropFolder">Please drag a file instead of a folder!</s:String>
     <s:String x:Key="LangHintWindowDropFileNotFound">The file you dragged does not exist: {0}</s:String>
@@ -66,8 +66,8 @@ You can modify the login method in "Instance Properties → Settings → Server"
     <s:String x:Key="LangDialogBtnCustomHomePageReplaceConfirm">Override</s:String>
     <s:String x:Key="LangHintLoadedCustomHomePage">Custom homepage file loaded!</s:String>
     <s:String x:Key="LangHintChoseLoaderBeforeInstallMod">To install mods, please choose an instance that allow to install mods!</s:String>
-    <s:String x:Key="LangDialogInstallModContent">Do you want to install this file as mod to instance {0}?</s:String>
-    <s:String x:Key="LangDialogInstallModsContent">Do you want to install these files as mods to instance {0}?</s:String>
+    <s:String x:Key="LangDialogInstallModContent">Do you want to install this file as mod to instance {0} ?</s:String>
+    <s:String x:Key="LangDialogInstallModsContent">Do you want to install these files as mods to instance {0} ?</s:String>
     <s:String x:Key="LangDialogInstallModTitle">Mods Installation Confirmation</s:String>
     <s:String x:Key="LangHintInstallModSuccessA">Mod {0} installed!</s:String>
     <s:String x:Key="LangHintInstallModSuccessB">Installed {0} mods!</s:String>
