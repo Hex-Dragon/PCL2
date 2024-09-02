@@ -14,8 +14,8 @@
 错误原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手动设置的缓存文件夹子不可用，平原合成发射台将使用默认缓存文件夹子。
 错误原因：{0}</s:String>
-    <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境警告</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">平原合成发射台正在临时文件夹子运行，设置、游戏存档等很可能莫得办法保存，且部分功能会莫得办法使用或出错。
+    <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境不对劲</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">平原合成发射台正在临时文件夹子运行，齿轮、游戏存档等很可能莫得办法保存，且部分功能会莫得办法使用或出错。
 请将平原合成发射台从压缩文件中解压，或是更换文件夹子后再继续使用！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">平原合成发射台初始化不成功</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
