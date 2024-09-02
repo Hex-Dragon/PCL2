@@ -25,7 +25,7 @@
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下崽</s:String>
     <s:String x:Key="LangTitleHome">发射</s:String>
-    <s:String x:Key="LangTitleSetup">设置</s:String>
+    <s:String x:Key="LangTitleSetup">齿轮</s:String>
     <s:String x:Key="LangTitleLink">联机</s:String>
     <s:String x:Key="LangTitleOther">更多</s:String>
     <s:String x:Key="LangToolTipBackToTop">滚回顶部</s:String>
@@ -73,7 +73,7 @@
     <s:String x:Key="LangHintInstallModSuccessB">已安装 {0} 个模组！</s:String>
     <s:String x:Key="LangHintInstallModFailed">复制模组文件不成功</s:String>
     <s:String x:Key="LangHintRarNotSupport">平原合成发射台没办法处理 rar 格式的压缩毛巾，请在解压后重新挤干水分为 zip 格式再试！</s:String>
-    <s:String x:Key="LangHintWindowDropUnknown">你拖的什么东西？平原合成发射台.exe 未响应</s:String>
+    <s:String x:Key="LangHintWindowDropUnknown">你拖的什么东西？平原合成发射台.exe 未响应……</s:String>
     <s:String x:Key="LangHintCloseMinecraftSuccess">已了结运行中的 Minecraft！</s:String>
     <s:String x:Key="LangHintCloseMinecraftFailed">强制了结所有 Minecraft 不成功</s:String>
     <s:String x:Key="LangHintBackToTopFailed">没办法滚回顶部，未找到合适的 RealScroll</s:String>
@@ -669,7 +669,7 @@
     <s:String x:Key="LangLaunchLeftStartInstance">Minecraft，发射！</s:String>
     <s:String x:Key="LangLaunchLeftDownloadInstance">下崽游戏</s:String>
     <s:String x:Key="LangLaunchLeftNoAvailableInstance">你倒是装一个游戏啊</s:String>
-    <s:String x:Key="LangLaunchLeftStartCancelled">发射不成功……</s:String>
+    <s:String x:Key="LangLaunchLeftStartCancelled">发射不成功</s:String>
     <s:String x:Key="LangLaunchLeftStarted">发射，成功！</s:String>
     <s:String x:Key="LangLaunchLeftWaitForWindow">等待游戏窗口出现</s:String>
     <s:String x:Key="LangLaunchLeftAbortTask">结束处理</s:String>
@@ -1012,8 +1012,8 @@
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">瞅一眼更新</s:String>
     <s:String x:Key="LangPageSetupSystemLang">语言</s:String>
     <s:String x:Key="LangPageSetupSystemLangLaunchLang">发射台语言</s:String>
-    <s:String x:Key="LangPageSetupSystemLangWarn">翻译不保证 100% 准确，修改语言后需要重启平原合成发射台。
-当前语言仅供娱乐，请勿当真。</s:String>
+    <s:String x:Key="LangPageSetupSystemLangWarn">翻译不保证 100% 准确，修改语言后需要重启平原合成发射台
+当前语言仅供娱乐，请勿当真</s:String>
     <s:String x:Key="LangPageSetupSystemDebug">调试选项</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeed">动画速度</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">禁止在下崽时复制已存在的文件</s:String>
@@ -1665,7 +1665,7 @@
     <s:String x:Key="LangModModpackTaskDownloadLib">下崽游戏支持库文件</s:String>
     <s:String x:Key="LangModModpackTaskOrganizeFiles">最终整理文件</s:String>
     <s:String x:Key="LangModModpackTaskCurseForgeModpackInstall">诅咒锻造整活包安装：</s:String>
-    <s:String x:Key="LangModModpackHintInstalling">整活包？在装了在装了……</s:String>
+    <s:String x:Key="LangModModpackHintInstalling">整活包？在装了在装了！</s:String>
     <s:String x:Key="LangModModpackHintQuiltNotSupport">平原合成发射台暂不支持安装需要缝补布料的整活包！</s:String>
     <s:String x:Key="LangModModpackHintUnknownModLoader">没办法安装整活包，其中出现了未知的模组加载器 {0}！</s:String>
     <s:String x:Key="LangModModpackTaskDownloadExtraFile">下崽额外文件</s:String>
