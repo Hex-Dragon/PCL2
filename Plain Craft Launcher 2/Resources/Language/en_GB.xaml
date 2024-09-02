@@ -29,7 +29,7 @@ Please extract PCL from the archive file or use it in a different folder!</s:Str
     <s:String x:Key="LangTitleLink">Hosting</s:String>
     <s:String x:Key="LangTitleOther">More</s:String>
     <s:String x:Key="LangToolTipBackToTop">Back to Top</s:String>
-    <s:String x:Key="LangToolTipDownload">Download Management</s:String>
+    <s:String x:Key="LangToolTipDownload">Downloads</s:String>
     <s:String x:Key="LangToolTipSurrender">Surrender</s:String>
     <s:String x:Key="LangToolTipCloseMinecraft">Close Minecraft</s:String>
     <s:String x:Key="LangDialogBtnUpdateFullLog">Full Change Log</s:String>
