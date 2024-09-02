@@ -29,7 +29,7 @@ Please extract PCL from the archive file or use it in a different folder!</s:Str
     <s:String x:Key="LangTitleLink">Hosting</s:String>
     <s:String x:Key="LangTitleOther">More</s:String>
     <s:String x:Key="LangToolTipBackToTop">Back to Top</s:String>
-    <s:String x:Key="LangToolTipDownload">Download Management</s:String>
+    <s:String x:Key="LangToolTipDownload">Downloads</s:String>
     <s:String x:Key="LangToolTipSurrender">Surrender</s:String>
     <s:String x:Key="LangToolTipCloseMinecraft">Close Minecraft</s:String>
     <s:String x:Key="LangDialogBtnUpdateFullLog">Full Change Log</s:String>
@@ -95,7 +95,7 @@ Right-click to open the sponsorship page and support PCL if you think it is doin
 · Submit a pull request to the Help Center repository then unlock after LTCat merge.</s:String>
     <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (Resolved);
 · Submit a pull request to the Help Center repository then unlock after LTCat merge.</s:String>
-    <s:String x:Key="LangHintThemeSetIncorrect">There is an exception in the personalization settings and has been automatically reset.</s:String>
+    <s:String x:Key="LangHintThemeSetIncorrect">There is an exception in the Personalization settings and has been automatically reset.</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">Error while loading the personalization settings.</s:String>
     <s:String x:Key="LangHintThemeSetInit">The personalization settings have been initialized.</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">Failed to initialize the personalization settings.</s:String>
