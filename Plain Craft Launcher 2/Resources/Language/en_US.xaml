@@ -73,7 +73,7 @@ You can modify the login method in "Properties → Settings → Server".</s:Stri
     <s:String x:Key="LangHintInstallModSuccessB">Installed {0} mods!</s:String>
     <s:String x:Key="LangHintInstallModFailed">Failed to copy mod files!</s:String>
     <s:String x:Key="LangHintRarNotSupport">PCL cannot handle archive files in .rar format. Please extract and re-archive to .zip format and try again!</s:String>
-    <s:String x:Key="LangHintWindowDropUnknown">PCL cannot determine which file drag operation should be performed…</s:String>
+    <s:String x:Key="LangHintWindowDropUnknown">PCL cannot determine which file drag operation should be performed...</s:String>
     <s:String x:Key="LangHintCloseMinecraftSuccess">Minecraft closed!</s:String>
     <s:String x:Key="LangHintCloseMinecraftFailed">Failed to force close all Minecraft.</s:String>
     <s:String x:Key="LangHintBackToTopFailed">Unable to return to top, no suitable "RealScroll" was found.</s:String>
@@ -91,7 +91,7 @@ You can modify the login method in "Properties → Settings → Server".</s:Stri
     <s:String x:Key="LangThemeUnlockCopyTip8">After the accumulated sponsorship reaches ¥23.33, message the term "解锁码" (Unlock Code) to the developer on Afdian to unlock.
 Right-click to open the sponsorship page and support PCL if you think it is doing a good job =w=!</s:String>
     <s:String x:Key="LangThemeUnlockTip8">After the accumulated sponsorship reaches ¥23.33, message the term "解锁码" (Unlock Code) to the developer on Afdian to unlock.</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (Resolved)  (right-click to open the feedback page);
+    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (Resolved) (right-click to open the feedback page);
 · Submit a pull request to the Help Center repository then unlock after LTCat merge.</s:String>
     <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (Resolved);
 · Submit a pull request to the Help Center repository then unlock after LTCat merge.</s:String>
@@ -126,7 +126,7 @@ You can try to use Paint to open and save it again, which will save the image in
     <s:String x:Key="LangBackgroundMusic">Music</s:String>
     <s:String x:Key="LangDialogBackgroundMusicDeleteContent">All files in the music folder will be deleted.
 This operation is irrevocable. Are you sure?</s:String>
-    <s:String x:Key="LangHintBackgroundMusicDeleting">Deleting background music…</s:String>
+    <s:String x:Key="LangHintBackgroundMusicDeleting">Deleting background music...</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleted">The music has been deleted!</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">Failed to delete background music.</s:String>
     <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Failed to re-create the background music folder.</s:String>
@@ -151,7 +151,7 @@ If you violate the rules, you may be kicked out of any relevant group!</s:String
     <s:String x:Key="LangDialogThemeUnlockGameAccept">I See</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameDeny">Pardon My Rejection</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">You need to use your wisdom to find the next clue...
-Initial clue:</s:String>
+Initial Clue: </s:String>
     <s:String x:Key="LangDialogThemeUnlockGameFirstClueTitle">Decryption Games</s:String>
     <s:String x:Key="LangOtherHelp">Help Center</s:String>
     <s:String x:Key="LangOtherAbout">About</s:String>
@@ -160,7 +160,7 @@ Initial clue:</s:String>
     <s:String x:Key="LangHiddenModeTitleA">Feature Hiding (Disabled temporarily, press "F12" to re-enable)</s:String>
     <s:String x:Key="LangHiddenModeTitleB">Feature Hiding</s:String>
     <s:String x:Key="LangHiddenModeFail">Failed to refresh the "Feature Hiding" item.</s:String>
-    <s:String x:Key="LangHintHiddenModeTip">Press F12 to disable "Feature Hiding" settings temporarily. Do not forget it or you will not be able to change the settings back…</s:String>
+    <s:String x:Key="LangHintHiddenModeTip">Press F12 to disable "Feature Hiding" settings temporarily. Do not forget it or you will not be able to change the settings back...</s:String>
     <s:String x:Key="LangSetTheme">Basic Options</s:String>
     <s:String x:Key="LangSetThemeOpacity">Opacity</s:String>
     <s:String x:Key="LangSetThemeHue">Hue</s:String>
@@ -270,7 +270,7 @@ If you have created a stable online homepage, you can click this tip to submit i
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">Email</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">Hide the email display of third-party login accounts and try to asterisk the email to avoid privacy disclosure.
 You need to restart the launcher after this change.</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">Instance Selection</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">Selection</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">Feature Hiding</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Only hide this tab, the disabled content set is still valid.
 Avoid "Feature Hiding" be changed while keeping the "Personalization" page.</s:String>
@@ -413,11 +413,11 @@ Press "F11" again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadSaveAs">Save as</s:String>
     <s:String x:Key="LangDownloadReleaseOn">Released on</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Incompatible with Forge</s:String>
-    <s:String x:Key="LangDownloadRecommendForge">Recommended Forge Version:</s:String>
+    <s:String x:Key="LangDownloadRecommendForge">Recommended Forge Version: </s:String>
     <s:String x:Key="LangDownloadShowAll">Show All Versions</s:String>
     <s:String x:Key="LangDownloadSaveInstaller">Save Installer</s:String>
     <s:String x:Key="LangDownloadAll">All Versions</s:String>
-    <s:String x:Key="LangDownloadCategory">Type:</s:String>
+    <s:String x:Key="LangDownloadCategory">Type: </s:String>
     <s:String x:Key="LangDownloadUnknown">Unknown Version</s:String>
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">CurseForge</s:String>
@@ -428,13 +428,13 @@ Press "F11" again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadCompApiSlow">Since version information from the API is updated slowly, it may not be able to recognize the version updated recently. Just wait a jiffy and it will automatically return to normal.</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">Looking for an applicable instance...</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">No applicable instance found in this Minecraft folder for this mod!</s:String>
-    <s:String x:Key="LangDownloadCompSelectedVersion">Selected Version:</s:String>
+    <s:String x:Key="LangDownloadCompSelectedVersion">Selected Version: </s:String>
     <s:String x:Key="LangDownloadCompDownloadModpack">Download Modpack: </s:String>
     <s:String x:Key="LangDownloadCompInputInstanceName">Enter Instance Name</s:String>
     <s:String x:Key="LangDownloadCompTaskDownloadModpackFile">Download Modpack File</s:String>
     <s:String x:Key="LangDownloadCompTaskPrepareInstallModpack">Preparing for Modpack Installation</s:String>
     <s:String x:Key="LangDownloadCompTaskDownloadFile">Download File</s:String>
-    <s:String x:Key="LangDownloadCompTaskDownloadFileDetail">Download:</s:String>
+    <s:String x:Key="LangDownloadCompTaskDownloadFileDetail">Download: </s:String>
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Introduction of Fabric</s:String>
     <s:String x:Key="LangDownloadFabricDesc">Fabric Loader is a lightweight mod loader under the newer version of Minecraft. You need to install it first before you can install various Fabric mods.
@@ -469,7 +469,7 @@ This page provides Fabric installer downloads. After downloading, you need to ma
     <s:String x:Key="LangDownloadInstallOrHigherVersion">or higher</s:String>
     <s:String x:Key="LangDownloadInstallNoAvailableVersion">No Version Available</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknownStatus">Failed to get version list: Unknown error, status is</s:String>
-    <s:String x:Key="LangDownloadInstallFailGetList">Failed to get version list:</s:String>
+    <s:String x:Key="LangDownloadInstallFailGetList">Failed to get version list: </s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">Cannot be installed by the launcher automatically.</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">Instance Isolation Hint</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieContent">"Instance Isolation" has not been enabled yet, which will result in multiple instances sharing the same mods folder.
@@ -715,7 +715,7 @@ Please check the internet then try again.</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountCancel">The login has been cancelled!</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountFail">Microsoft login verification failed. Please try to disable the "Verify SSL Certificates" in "Settings → Launcher" and try again.
 
-Original error message:</s:String>
+Original error message: </s:String>
     <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">The login has been cancelled!</s:String>
     <!--PageLoginMsSkin-->
     <s:String x:Key="LangPageLoginMsLoading">Loading...</s:String>
@@ -1341,7 +1341,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftDialogNewVersionContentC">Updated on: </s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft Update Hint</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">Download</s:String>
-    <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">View Change Log</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">Change Log</s:String>
     <s:String x:Key="LangModMinecraftVersionVanilla">Vanilla</s:String>
     <s:String x:Key="LangModMinecraftInvalidMcFolder">Invalid Minecraft folder: {0}</s:String>
     <s:String x:Key="LangModMinecraftNotLoaded">This instance has not been loaded, please report this issue to the author.</s:String>
