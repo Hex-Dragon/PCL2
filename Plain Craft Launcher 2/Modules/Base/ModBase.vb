@@ -13,8 +13,7 @@ Public Module ModBase
     '下列版本信息由更新器自动修改
     Public Const VersionBaseName As String = "2.8.5" '不含分支前缀的显示用版本名
     Public Const VersionStandardCode As String = "2.8.5." & VersionBranchCode '标准格式的四段式版本号
-    'CommitHash
-    Public Const CommitHash As String = ""
+    Public Const CommitHash As String = "" 'Commit Hash
 #If BETA Then
     Public Const VersionCode As Integer = 332 'Release
 #Else
