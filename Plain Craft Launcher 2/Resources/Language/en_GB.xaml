@@ -91,7 +91,7 @@ You can modify the login method in 'Properties → Settings → Server'.</s:Stri
     <s:String x:Key="LangThemeUnlockCopyTip8">After the accumulated sponsorship reaches ¥23.33, message the term '解锁码' (Unlock Code) to the developer on Afdian to unlock.
 Right-click to open the sponsorship page and support PCL if you think it is doing a good job =w=!</s:String>
     <s:String x:Key="LangThemeUnlockTip8">After the accumulated sponsorship reaches ¥23.33, message the term '解锁码' (Unlock Code) to the developer on Afdian to unlock.</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as '已完成' (Resolved)  (right-click to open the feedback page);
+    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as '已完成' (Resolved) (right-click to open the feedback page);
 · Submit a pull request to the Help Centre repository then unlock after LTCat merge.</s:String>
     <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as '已完成' (Resolved);
 · Submit a pull request to the Help Centre repository then unlock after LTCat merge.</s:String>
@@ -151,7 +151,7 @@ If you violate the rules, you may be kicked out of any relevant group!</s:String
     <s:String x:Key="LangDialogThemeUnlockGameAccept">I See</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameDeny">Pardon My Rejection</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">You need to use your wisdom to find the next clue...
-Initial clue: </s:String>
+Initial Clue: </s:String>
     <s:String x:Key="LangDialogThemeUnlockGameFirstClueTitle">Decryption Games</s:String>
     <s:String x:Key="LangOtherHelp">Help Centre</s:String>
     <s:String x:Key="LangOtherAbout">About</s:String>
@@ -270,7 +270,7 @@ If you have created a stable online homepage, you can click this tip to submit i
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">Email</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">Hide the email display of third-party login accounts and try to asterisk the email to avoid privacy disclosure.
 You need to restart the launcher after this change.</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">Instance Selection</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">Selection</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">Feature Hiding</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Only hide this tab, the disabled content set is still valid.
 Avoid 'Feature Hiding' be changed whilst keeping the 'Personalisation' page.</s:String>
@@ -1341,7 +1341,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftDialogNewVersionContentC">Updated on: </s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft Update Hint</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">Download</s:String>
-    <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">View Change Log</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">Change Log</s:String>
     <s:String x:Key="LangModMinecraftVersionVanilla">Vanilla</s:String>
     <s:String x:Key="LangModMinecraftInvalidMcFolder">Invalid Minecraft folder: {0}</s:String>
     <s:String x:Key="LangModMinecraftNotLoaded">This instance has not been loaded, please report this issue to the author.</s:String>
