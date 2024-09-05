@@ -15,7 +15,7 @@
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手动设置的缓存文件夹子不可用，平原合成发射台将使用默认缓存文件夹子。
 错误原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境不对劲</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">平原合成发射台正在临时文件夹子运行，齿轮、游戏存档等很可能莫得办法保存，且部分功能会莫得办法使用或出错。
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">平原合成发射台正在临时文件夹子运行，齿轮、游戏存档等很可能莫得办法拯救，且部分功能会莫得办法使用或出错。
 请将平原合成发射台从压缩文件中解压，或是更换文件夹子后再继续使用！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">平原合成发射台初始化不成功</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
@@ -108,15 +108,15 @@
     <s:String x:Key="LangHintBackgroundPicNotFound">未检测到可用背景图片！</s:String>
     <s:String x:Key="LangHintBackgroundPicRefreshed">背景图片已刷亲斤：</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailA">刷亲斤背景图片不成功，该图片文件可能并非标准格式。
-你可以尝试使用画图打开该文件并重新保存，这会让图片变为标准格式。
+你可以尝试使用画图打开该文件并重新拯救，这会让图片变为标准格式。
 文件：</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailB">刷亲斤背景图片不成功（ {0} ）</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailUnknown">刷亲斤背景图片时出现未知错误</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailA">改变抬头栏图片不成功，该图片文件可能并非标准格式。
-你可以尝试使用画图打开该文件并重新保存，这会让图片变为标准格式。</s:String>
+你可以尝试使用画图打开该文件并重新拯救，这会让图片变为标准格式。</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailB">设置抬头栏图片不成功</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailC">调整抬头栏图片不成功，该图片文件可能并非标准格式。
-你可以尝试使用画图打开该文件并重新保存，这会让图片变为标准格式。</s:String>
+你可以尝试使用画图打开该文件并重新拯救，这会让图片变为标准格式。</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailD">调整抬头栏图片不成功</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailE">清理错误的抬头栏图片不成功</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailF">复制抬头栏图片不成功</s:String>
@@ -136,7 +136,7 @@
     <s:String x:Key="LangHintCustomPageOverwriteSuccess">教学文件已生成！</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">已刷亲斤主页！</s:String>
     <s:String x:Key="LangDialogCustomPageTeachContent">1. 点击 生成教学文件 按钮，这会在平原合成发射台文件夹子下生成 Custom.xaml 布局文件。
-2. 使用记事本本等工具打开这个文件并进行修改，修改完记得保存。
+2. 使用记事本本等工具打开这个文件并进行修改，修改完记得拯救。
 3. 点击 刷亲斤主页 按钮，查看主页现在长啥子样了。
 你可以在生成教学文件后直接刷亲斤主页，对照着进行修改，更有助于理解。
 直接将自定义主页文件拖进平原合成发射台窗口也可以快捷加载。</s:String>
@@ -275,10 +275,10 @@
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">仅雪藏本选项卡，设置的禁用内容依然有效。
 可以在保留个性化设置页面的情况下避免雪藏设置被修改。</s:String>
     <s:String x:Key="LangSetBackgroundMusicVolume">音量</s:String>
-    <s:String x:Key="LangSetHomePagePresetSCOnly">抱歉，大部分预设主页仅支持简体中文</s:String>
+    <s:String x:Key="LangSetHomePagePresetSCOnly">抱歉，帮助库还没整活</s:String>
     <!--PageSelectLeft-->
     <s:String x:Key="LangSelectFolderList">文件夹子名单</s:String>
-    <s:String x:Key="LangSelectRename">重命名</s:String>
+    <s:String x:Key="LangSelectRename">改名换姓</s:String>
     <s:String x:Key="LangSelectOpen">打开</s:String>
     <s:String x:Key="LangSelectRefresh">刷亲斤</s:String>
     <s:String x:Key="LangSelectDelete">删除</s:String>
@@ -320,7 +320,7 @@
 
 这会导致该文件夹子中的所有存档与其他文件永久丢失，且不可恢复！</s:String>
     <s:String x:Key="LangSelectDialogDeleteConfirmTitleA">删除警告</s:String>
-    <s:String x:Key="LangSelectDialogDeleteConfirmContentB">如果你在该文件夹子中存放了除 MC 以外的其他文件，这些文件也会被一同删除！
+    <s:String x:Key="LangSelectDialogDeleteConfirmContentB">如果你在该文件夹子中存放了除安慕希以外的其他文件，这些文件也会被一同删除！
 继续删除会导致该文件夹子中的所有文件永久丢失，请在仔细确认后再继续！
 目标文件夹子：{0}
 
@@ -329,7 +329,7 @@
     <s:String x:Key="LangSelectFolderDeleted">文件夹子 {0} 已删除！</s:String>
     <s:String x:Key="LangSelectDialogInputNewName">输入新名称</s:String>
     <s:String x:Key="LangSelectHintNameUpdated">文件夹子名称已更新为 </s:String>
-    <s:String x:Key="LangSelectFailToRename">重命名文件夹子不成功</s:String>
+    <s:String x:Key="LangSelectFailToRename">文件夹子改名换姓不成功</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoChange">在下崽任务进行时，没办法切换游戏文件夹子！</s:String>
     <!--PageSelectRight-->
     <s:String x:Key="LangSelectNoAvailableVersion">莫得可用版本</s:String>
@@ -345,7 +345,7 @@
     <s:String x:Key="LangSelectVersionTypeFabric">布料版本</s:String>
     <s:String x:Key="LangSelectVersionTypeError">错误的版本</s:String>
     <s:String x:Key="LangSelectVersionTypeHidden">雪藏的版本</s:String>
-    <s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">不常用版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">积灰版本</s:String>
     <s:String x:Key="LangSelectVersionTypeFavorites">我喜欢这个夹</s:String>
     <s:String x:Key="LangSelectVersionTypeAprilFool">愚人节版本</s:String>
     <s:String x:Key="LangSelectVersionTypeUnknown">未知的卡片种类</s:String>
@@ -415,7 +415,7 @@
     <s:String x:Key="LangDownloadForgeIncompatible">不兼容锻造</s:String>
     <s:String x:Key="LangDownloadRecommendForge">推荐锻造版本：</s:String>
     <s:String x:Key="LangDownloadShowAll">查看全部版本</s:String>
-    <s:String x:Key="LangDownloadSaveInstaller">保存安装器</s:String>
+    <s:String x:Key="LangDownloadSaveInstaller">拯救安装器</s:String>
     <s:String x:Key="LangDownloadAll">全部版本</s:String>
     <s:String x:Key="LangDownloadCategory">种类：</s:String>
     <s:String x:Key="LangDownloadUnknown">未知版本</s:String>
@@ -425,9 +425,9 @@
     <s:String x:Key="LangDownloadCompToMCMod">去找可爱的百科娘</s:String>
     <s:String x:Key="LangDownloadCompCopyName">复制名称</s:String>
     <s:String x:Key="LangDownloadCompLoadingList">正在获取版本名单</s:String>
-    <s:String x:Key="LangDownloadCompApiSlow">由于 API 的版本信息更新缓慢，可能没办法识别刚更新不久的 MC 版本，只需等待几天即可自动帮你恢复正常。</s:String>
+    <s:String x:Key="LangDownloadCompApiSlow">由于 API 的版本信息更新缓慢，可能没办法识别刚更新不久的安慕希版本，只需等待几天即可自动帮你恢复正常。</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">正在查找适合的游戏版本……</s:String>
-    <s:String x:Key="LangDownloadCompNoSuitableInstance">当前 MC 文件夹子中莫得找到适合这个模组的版本！</s:String>
+    <s:String x:Key="LangDownloadCompNoSuitableInstance">当前安慕希文件夹子中莫得找到适合这个模组的版本！</s:String>
     <s:String x:Key="LangDownloadCompSelectedVersion">所选版本：</s:String>
     <s:String x:Key="LangDownloadCompDownloadModpack">整活包下崽：</s:String>
     <s:String x:Key="LangDownloadCompInputInstanceName">输入版本名称</s:String>
@@ -455,9 +455,9 @@
     <s:String x:Key="LangDownloadInstallOldOptiFabric">安装结束后，请在模组下崽中搜索高清布料 Origins 并下崽，否则高清不修复会没办法使用！</s:String>
     <s:String x:Key="LangDownloadInstallStart">开始安装</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">版本名称</s:String>
-    <s:String x:Key="LangDownloadInstallBack">返回</s:String>
+    <s:String x:Key="LangDownloadInstallBack">回去</s:String>
     <s:String x:Key="LangDownloadInstallGettingList">正在获取版本名单</s:String>
-    <s:String x:Key="LangDownloadInstallHintBackTip">点击 Minecraft 项即可返回游戏主版本选择页面！</s:String>
+    <s:String x:Key="LangDownloadInstallHintBackTip">点击 Minecraft 项即可回去游戏主版本选择页面！</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">点击选择</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">与锻造不兼容</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">与布料不兼容</s:String>
@@ -472,8 +472,8 @@
     <s:String x:Key="LangDownloadInstallFailGetList">获取版本名单不成功：</s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">该版本不支持自动帮你安装</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">版本隔离提示</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieContent">你还没打开版本隔离，这会导致多个 MC 共用同一个模组文件夹子。
-因此在切换 MC 版本时，MC 会因为读取到与当前版本不符的模组而原地螺旋升天爆炸。
+    <s:String x:Key="LangDownloadInstallDialogIndieContent">你还没打开版本隔离，这会导致多个安慕希共用同一个模组文件夹子。
+因此在切换安慕希版本时，安慕希会因为读取到与当前版本不符的模组而原地螺旋升天爆炸。
 平原合成发射台推荐你在开始下崽前，在 设置 → 版本隔离 中打开版本隔离选项！</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">取消下崽</s:String>
     <s:String x:Key="LangDownloadInstallNoAdd">莫得附加安装</s:String>
@@ -483,10 +483,10 @@
     <s:String x:Key="LangDownloadPageLeftRefresh">刷亲斤</s:String>
     <s:String x:Key="LangDownloadPageLeftAutoInstall">自动帮你安装</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstall">▼ 自己装安装包</s:String>
-    <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">自己装安装包功能提供了高清不修复、锻造等组件的 .jar 安装文件下崽，但没办法自动帮你安装。
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">自己装安装包功能提供了高清不修复、锻造等组件的罐子安装文件下崽，但没办法自动帮你安装。
 在自动帮你安装页面先选择 MC 版本，然后就可以选择高清不修复、锻造等组件，让平原合成发射台自动帮你进行安装了。</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallTitle">自动帮你安装提示</s:String>
-    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">返回自动帮你安装</s:String>
+    <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">回去自动帮你安装</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">继续下崽自己装安装包</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">自己装安装包</s:String>
     <s:String x:Key="LangDownloadPageLeftResource">资源</s:String>
@@ -573,7 +573,7 @@
     <s:String x:Key="LangDownloadModpackTypeAll">全部</s:String>
     <s:String x:Key="LangDownloadModpackTypeMulti">多人</s:String>
     <s:String x:Key="LangDownloadModpackTypeOptimization">性能优化</s:String>
-    <s:String x:Key="LangDownloadModpackTypeChallenging">硬核</s:String>
+    <s:String x:Key="LangDownloadModpackTypeChallenging">硬♂核</s:String>
     <s:String x:Key="LangDownloadModpackTypeCombat">战斗</s:String>
     <s:String x:Key="LangDownloadModpackTypeQuests">任务</s:String>
     <s:String x:Key="LangDownloadModpackTypeTech">科技</s:String>
@@ -601,19 +601,19 @@
     <s:String x:Key="LangMySkinChange">更换海角</s:String>
     <s:String x:Key="LangMySkinLoading">加载中</s:String>
     <s:String x:Key="LangMySkinClickToChange">点击更换外壳（右键查看更多选项）</s:String>
-    <s:String x:Key="LangMySkinHintLoading">外壳正在获取中，等一下！</s:String>
-    <s:String x:Key="LangMySkinDialogChoseSavePath">选取保存外壳的位置</s:String>
-    <s:String x:Key="LangMySkinHintSaveSuccess">外壳保存成功！</s:String>
-    <s:String x:Key="LangMySkinHintSaveFail">保存外壳不成功</s:String>
+    <s:String x:Key="LangMySkinHintLoading">在获取外壳了，你先别急！</s:String>
+    <s:String x:Key="LangMySkinDialogChoseSavePath">选取拯救外壳的位置</s:String>
+    <s:String x:Key="LangMySkinHintSaveSuccess">外壳拯救成功！</s:String>
+    <s:String x:Key="LangMySkinHintSaveFail">拯救外壳不成功</s:String>
     <s:String x:Key="LangMySkinHintSkinFileCorruption">外壳文件已损坏：</s:String>
-    <s:String x:Key="LangMySkinHintExistSkinFileGetTask">有正在获取中的外壳，请稍后再试！</s:String>
+    <s:String x:Key="LangMySkinHintExistSkinFileGetTask">有在获取的外壳了，你先别急！</s:String>
     <s:String x:Key="LangMySkinHintRefreshing">正在刷亲斤头像……</s:String>
     <s:String x:Key="LangMySkinHintRefreshed">已刷亲斤头像！</s:String>
     <s:String x:Key="LangMySkinHintRefreshFail">刷亲斤外壳缓存不成功</s:String>
     <s:String x:Key="LangMySkinHintChangeSuccess">更改外壳成功！</s:String>
-    <s:String x:Key="LangMySkinHintChanging">正在更换海角，等一下！</s:String>
+    <s:String x:Key="LangMySkinHintChanging">在更换海角了，你先别急！</s:String>
     <s:String x:Key="LangMySkinHintChangFailByLoginFail">登录不成功，没办法换掉海角！</s:String>
-    <s:String x:Key="LangMySkinHintGettingCape">正在获取海角名单，等一下……</s:String>
+    <s:String x:Key="LangMySkinHintGettingCape">在获取海角名单了，你先别急……</s:String>
     <s:String x:Key="LangMySkinDialogChooseCape">选择海角</s:String>
     <s:String x:Key="LangMySkinHintChangeCapeFail">换掉海角不成功</s:String>
     <s:String x:Key="LangMySkinHintChangeCapeSuccess">换掉海角成功！</s:String>
@@ -649,7 +649,7 @@
     <s:String x:Key="LangLaunchLeftAccountOffline">离线</s:String>
     <s:String x:Key="LangLaunchLeftAccountUnifiedPass">统一通行证</s:String>
     <s:String x:Key="LangLaunchLeftLoadingInstance">正在加载</s:String>
-    <s:String x:Key="LangLaunchLeftLoadingInstanceTip">正在加载中，等一下</s:String>
+    <s:String x:Key="LangLaunchLeftLoadingInstanceTip">在加载了，你先别急</s:String>
     <s:String x:Key="LangLaunchLeftStartingInstance">正在发射游戏</s:String>
     <s:String x:Key="LangLaunchLeftStartingStage">当前步骤</s:String>
     <s:String x:Key="LangLaunchLeftStageDownloadLib">下崽支持</s:String>
@@ -698,7 +698,7 @@
     <s:String x:Key="LangPageLoginAuthSkinChangeRole">更换角色</s:String>
     <s:String x:Key="LangPageLoginAuthSkinLogout">退出登录</s:String>
     <s:String x:Key="LangPageLoginAuthSkinLogining">正在登录中，请稍后再更换角色！</s:String>
-    <s:String x:Key="LangPageLoginAuthSkinChanging">正在尝试更换，等一下！</s:String>
+    <s:String x:Key="LangPageLoginAuthSkinChanging">在尝试更换了，你先别急！</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChangeFail">更换角色不成功</s:String>
     <!--PageLoginLegacy-->
     <s:String x:Key="LangPageLoginLegacySpecialCharacters">运动员名如果包含英文、数字、下划线以外的内容，可能会没办法进入 Minecraft 1.18 以后的世界！</s:String>
@@ -721,7 +721,7 @@
     <s:String x:Key="LangPageLoginMsLoading">加载中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">外壳与海角</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">修改外壳</s:String>
-    <s:String x:Key="LangPageLoginMsSkinSkinSave">保存外壳</s:String>
+    <s:String x:Key="LangPageLoginMsSkinSkinSave">拯救外壳</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinRefresh">刷亲斤头像</s:String>
     <s:String x:Key="LangPageLoginMsSkinCapeChange">修改海角</s:String>
     <s:String x:Key="LangPageLoginMsSkinInfoChange">修改信息</s:String>
@@ -772,12 +772,12 @@
     <s:String x:Key="LangPageOtherAboutAbout">关于</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthor">龙腾猫跃</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthorSubtitle">平原合成发射台的作者！</s:String>
-    <s:String x:Key="LangPageOtherAboutAboutAuthorBtn">给作者打钱</s:String>
+    <s:String x:Key="LangPageOtherAboutAboutAuthorBtn">V 作者 50</s:String>
     <s:String x:Key="LangPageOtherAboutAboutVersionSubtitle">当前版本：%VERSION%（%VERSIONCODE%.%BRANCH%）</s:String>
     <s:String x:Key="LangPageOtherAboutAboutVersionBtn">开源代码</s:String>
     <s:String x:Key="LangPageOtherAboutThanks">特别鸣谢</s:String>
     <s:String x:Key="LangPageOtherAboutThanksbangbang93">提供 BMCLAPI 镜像源和锻造安装工具，详见 https://bmclapi.bangbang93.com</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">给镜像源打钱</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksbangbang93Btn">V 镜像源 50</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModTitle">MC 百科</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCMod">提供了模组名称的中文翻译和更多相关信息！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCModBtn">打开百科</s:String>
@@ -792,7 +792,7 @@
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 8 月的高级赞助者们！感谢各位对平原合成发射台和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsDonate">赞助作者</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsDonate">V 作者 50</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsSetUnlockCode">输入解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutLawInfo">法律信息</s:String>
@@ -821,7 +821,7 @@
     <s:String x:Key="LangPageSetupLaunchSkinTypeCustomToolTip">以亮目害眼包的形式加载自定义外壳。
 使用此方式更换的外壳在多人游戏中仅自己可见，且会替换游戏中所有的角色。</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTypeMicrosoftName">正版运动员名</s:String>
-    <s:String x:Key="LangPageSetupLaunchSkinSave">保存外壳</s:String>
+    <s:String x:Key="LangPageSetupLaunchSkinSave">拯救外壳</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinRefresh">刷亲斤缓存</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinRefreshToolTip">刷亲斤并重新下崽平原合成发射台当前显示的外壳</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinChange">换外壳</s:String>
@@ -877,8 +877,8 @@
     <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjustToolTip">根据安装的模组量与电脑剩余内存，动态调整为游戏分配的内存</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemCustom">自定义</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunch">发射游戏前进行内存优化</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunchToolTip">内存优化能将当前物理内存占用降低约 1/3，不仅限于 MC！
-如果使用机械硬盘，这还可能会导致一小段时间的严重卡顿。
+    <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunchToolTip">内存优化能将当前物理内存占用降低约 1/3，不仅限于安慕希！
+如果使用机械硬♂盘，这还可能会导致一小段时间的严重卡顿。
 使用 --memory 参数发射平原合成发射台可以偷偷执行内存优化。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">已使用内存</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">游戏分配</s:String>
@@ -890,7 +890,7 @@
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">文本框中的内容将会被直接拼合在发射参数的末尾。
 例如输入 --demo 则会以试玩模式发射游戏。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">发射前执行命令</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">在 MC 发射前执行特定命令或程序，语法与 Windows 的命令提示符一致。
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">在安慕希发射前执行特定命令或程序，语法与 Windows 的命令提示符一致。
 
 可以使用以下替换标记实现相对路径（路径均以 \ 结尾）：
  · {path}：平原合成发射台的 exe 文件所在的文件夹子
@@ -920,7 +920,7 @@
 如果在设置中手动选择了与当前版本不兼容的爪哇，则自动帮你跳过兼容性警告弹窗，强制使用手动选择的爪哇。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">关掉文件校验</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：强烈推荐在版本设置中关掉特定版本的校验，而不是在这里关掉所有版本的校验！
-完全不更改 assets；不校验 libraries、第三方登录库与版本主 JAR 文件是否被修改。
+完全不更改 assets；不校验 libraries、第三方登录库与版本主罐子文件是否被修改。
 如果你莫得修改相关文件，别瞎勾选此项。</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">发射设置项存在异常，已被自动重置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">重载发射设置时出错</s:String>
@@ -933,7 +933,7 @@
     <s:String x:Key="LangPageSetupLaunchJavaAutoChoice">自动帮你选择合适的爪哇</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaUpdateListFail">更新设置爪哇下拉框不成功</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaNoAvailableJava">未找到可用的爪哇</s:String>
-    <s:String x:Key="LangPageSetupLaunchJavaSearchingJava">正在搜索爪哇，等一下！</s:String>
+    <s:String x:Key="LangPageSetupLaunchJavaSearchingJava">在搜索爪哇了，你先别急！</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaAddedJava">已将该爪哇加入爪哇名单！</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaIncorrectJava">该爪哇存在异常，没办法使用</s:String>
     <s:String x:Key="LangPageSetupLaunchJavaSearchSuccess">已找到 {0} 个爪哇，请检查下拉框查看名单！</s:String>
@@ -941,7 +941,7 @@
 如果想保留这些功能，可以选择让发射台在游戏发射后雪藏，游戏退出后自动帮你关掉。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchDialogCloseOnGameStartTitle">提醒</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableContent">内存优化会显著延长发射耗时，建议仅在内存不足时打开。
-如果你在使用机械硬盘，这还可能导致一小段时间的严重卡顿。
+如果你在使用机械硬♂盘，这还可能导致一小段时间的严重卡顿。
 
 每次发射游戏，平原合成发射台都需要申请管理员权限以进行内存优化。
 若想自动授予权限，可以右键平原合成发射台，打开 属性 → 兼容性 → 以管理员身份运行此程序。</s:String>
@@ -970,7 +970,7 @@
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">译名位于文件名开头：[遗物] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">译名位于文件名开头：遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">译名位于文件名末尾：relics-0.1.14-遗物</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">不添加中文译名：relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">我英语很好：relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">最大线程数</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">线程数越多，限速的文件下崽越快，但过高的线程数会造成下崽时非常严重的卡顿。
 一般而言，64 线程已可以保证足够的下崽速度。</s:String>
@@ -1056,7 +1056,7 @@
     <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">你先别急，等下载任务结束再换语言也不迟……</s:String>
     <s:String x:Key="LangPageSetupSystemExportSettings">导出设置</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">导入设置</s:String>
-    <s:String x:Key="LangPageSetupSystemInDev">功能已在画饼，你先别急。</s:String>
+    <s:String x:Key="LangPageSetupSystemInDev">功能已在画饼，你先别急，让我先急。</s:String>
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概览</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">设置</s:String>
@@ -1094,7 +1094,7 @@
 
 注意，这两个文件的内容不！一！样！
 
-在手动删除或重命名其中一个文件后，才能继续。</s:String>
+在手动删除或改名换姓其中一个文件后，才能继续。</s:String>
     <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusTitle">文件冲突辣！</s:String>
     <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">由于文件被占用，模组的状态切换不成功，请尝试关掉正在运行的游戏后再试！</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModContent">新版本模组可能不兼容老版本的存档或者其他模组，这可能导致游戏原地螺旋升天爆炸，甚至存档原地螺旋升天爆炸！
@@ -1146,7 +1146,7 @@
     <s:String x:Key="LangPageVersionOverallIconRedstoneBlock">雷石东块</s:String>
     <s:String x:Key="LangPageVersionOverallIconRedstoneLampOn">雷石东灯（开）</s:String>
     <s:String x:Key="LangPageVersionOverallIconRedstoneLampOff">雷石东灯（关）</s:String>
-    <s:String x:Key="LangPageVersionOverallIconEgg">又鸟蛋</s:String>
+    <s:String x:Key="LangPageVersionOverallIconEgg">这是鸡蛋还是鸭蛋？</s:String>
     <s:String x:Key="LangPageVersionOverallIconFabric">布料（布料）</s:String>
     <s:String x:Key="LangPageVersionOverallIconNeoForge">福克斯（新锻造）</s:String>
     <s:String x:Key="LangPageVersionOverallCategory">分类</s:String>
@@ -1156,7 +1156,7 @@
 在版本列表页面按下 F11，即可查看所有雪藏的版本。</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryMod">可安装模组的版本</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryRegular">常规版本</s:String>
-    <s:String x:Key="LangPageVersionOverallCategoryUncommon">不常用版本</s:String>
+    <s:String x:Key="LangPageVersionOverallCategoryUncommon">积灰版本</s:String>
     <s:String x:Key="LangPageVersionOverallCategoryAprilFool">愚人节版本</s:String>
     <s:String x:Key="LangPageVersionOverallEditName">修改版本名</s:String>
     <s:String x:Key="LangPageVersionOverallEditDesc">修改版本描述</s:String>
@@ -1178,16 +1178,16 @@
     <s:String x:Key="LangPageVersionOverallDialogEditDescHint">默认描述</s:String>
     <s:String x:Key="LangPageVersionOverallDialogEditDescContent">修改版本的描述文本，留空则使用平原合成发射台的默认描述。</s:String>
     <s:String x:Key="LangPageVersionOverallDialogEditDescTitle">换掉描述</s:String>
-    <s:String x:Key="LangPageVersionOverallDialogEditNameTitle">重命名版本</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEditNameSuccess">重命名成功！</s:String>
-    <s:String x:Key="LangPageVersionOverallEditNameFail">重命名版本不成功</s:String>
-    <s:String x:Key="LangPageVersionOverallSelectSaveCommandFile">选择脚本保存位置</s:String>
+    <s:String x:Key="LangPageVersionOverallDialogEditNameTitle">版本改名换姓</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEditNameSuccess">改名换姓成功！</s:String>
+    <s:String x:Key="LangPageVersionOverallEditNameFail">版本改名换姓不成功</s:String>
+    <s:String x:Key="LangPageVersionOverallSelectSaveCommandFile">选择脚本拯救位置</s:String>
     <s:String x:Key="LangPageVersionOverallHintWaitForTaskOver">请在当前发射任务结束后再试！</s:String>
     <s:String x:Key="LangPageVersionOverallHintExportingCommandA">正在导出发射脚本……</s:String>
     <s:String x:Key="LangPageVersionOverallHintExportingCommandB">正在导出发射脚本……（注意，使用脚本发射可能会导致登录失效！）</s:String>
     <s:String x:Key="LangPageVersionOverallHintExportingCommandFail">导出发射脚本不成功</s:String>
     <s:String x:Key="LangPageVersionOverallTaskCompleteFile">文件补全</s:String>
-    <s:String x:Key="LangPageVersionOverallCompleteFileInTask">在处理了，等一下！</s:String>
+    <s:String x:Key="LangPageVersionOverallCompleteFileInTask">在处理了，你先别急！</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileSuccess">成功！</s:String>
     <s:String x:Key="LangPageVersionOverallCompleteFileFail">不成功：</s:String>
     <s:String x:Key="LangPageVersionOverallDialogDeleteA">你确定要永远删掉版本 {0} 吗？
@@ -1240,7 +1240,7 @@
 若留空，则使用全局设置的值。</s:String>
     <s:String x:Key="LangPageVersionSetupCommand">该项不会覆盖全局设置：发射时会先执行全局设置的命令，再执行版本设置的命令。
 
-在 MC 发射前执行特定命令或程序，语法与 Windows 的命令提示符一致。
+在安慕希发射前执行特定命令或程序，语法与 Windows 的命令提示符一致。
 
 可以使用以下替换标记实现相对路径（路径均以 \ 结尾）：
  · {path}：平原合成发射台的 exe 文件所在的文件夹子
@@ -1265,7 +1265,7 @@
 涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行不成功。
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹子。</s:String>
     <s:String x:Key="LangPageVersionSetupJavaCompatibility">如果在设置中手动选择了与当前版本不兼容的爪哇，则自动帮你跳过兼容性警告弹窗，强制使用手动选择的爪哇。</s:String>
-    <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校验 libraries、第三方登录库与版本主 JAR 文件是否被修改。
+    <s:String x:Key="LangPageVersionSetupFileVerification">完全不更改 assets；不校验 libraries、第三方登录库与版本主罐子文件是否被修改。
 如果你莫得修改相关文件，请嫑瞎勾选此项。</s:String>
     <!--ModMain-->
     <s:String x:Key="LangModMainAprilFoolTipA">放弃吧！只需要点一下右下角的小白旗……</s:String>
@@ -1283,7 +1283,7 @@
     <s:String x:Key="LangModEventDialogEventFailTitle">事件执行不成功</s:String>
     <s:String x:Key="LangModEventDialogUnknownEventContent">未知的事件类型：{0}
 请检查事件类型填写是否正确，或者平原合成发射台是否为最新版本。</s:String>
-    <s:String x:Key="LangModEventGettingResource">正在获取资源，等一下……</s:String>
+    <s:String x:Key="LangModEventGettingResource">在获取资源了，你先别急……</s:String>
     <!--ModMusic-->
     <s:String x:Key="LangModMusicDeviceChanged">由于音频设备变更，音乐播放功能在重启平原合成发射台后才能恢复！</s:String>
     <s:String x:Key="LangModMusicMusicChanged">播放音乐不成功（{0}）：平原合成发射台不支持播放音频属性在中途发生变化的音乐</s:String>
@@ -1336,18 +1336,18 @@
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeTitle">选择外壳种类</s:String>
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeSteve">Steve 模型</s:String>
     <s:String x:Key="LangModMinecraftSkinDialogSkinTypeAlex">Alex 模型</s:String>
-    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">我不到啊</s:String>
+    <s:String x:Key="LangModMinecraftSkinDialogSkinTypeIDK">我不造啊</s:String>
     <s:String x:Key="LangModMinecraftSkinSkinTypeIDK">请在外壳下崽页面确认外壳种类后再使用此外壳！</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionContentA">新版本：</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionContentB">更新时间：</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionContentC">更新于：</s:String>
-    <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Minecraft 更新提示</s:String>
+    <s:String x:Key="LangModMinecraftDialogNewVersionTitle">Bugjump 生啦！</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">下崽</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">更新日志</s:String>
     <s:String x:Key="LangModMinecraftVersionVanilla">香草</s:String>
     <s:String x:Key="LangModMinecraftInvalidMcFolder">莫得效的 Minecraft 文件夹子：{0}</s:String>
     <s:String x:Key="LangModMinecraftNotLoaded">该版本未被加载，请向作者反馈此问题</s:String>
-    <s:String x:Key="LangModMinecraftUnableGetVersion">平原合成发射台没办法识别该版本的 MC 版本号</s:String>
+    <s:String x:Key="LangModMinecraftUnableGetVersion">平原合成发射台没办法识别该版本的安慕希版本号</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">识别不了：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">未找到版本 JSON 文件：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionReadJsonFail">版本 JSON 文件为空或读取不成功</s:String>
@@ -1582,9 +1582,9 @@
     <s:String x:Key="LangModLaunchDialogContentSponsorship">平原合成发射台已经为你发射了 {0} 次游戏啦！
 如果觉得平原合成发射台还算好用的话，也可以考虑赞助一下作者……一点心意也行……
 毕竟一个人开发也不容易（悲）……</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleSponsorship">求赞助啦……</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">这就赞助！</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn2Sponsorship">但是我拒绝</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleSponsorship">疯狂星期四 V 我 50 好不好……</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">这就 V 你 50！</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2Sponsorship">我建议你吃麦当当</s:String>
     <s:String x:Key="LangModLaunchDialogContentBuyMc">你已经发射了 {0} 次 Minecraft 啦！
 如果觉得 Minecraft 还不错，也可以考虑购买正版支持一下，毕竟开发游戏也很不容易……
 在你登录一次正版账号后，就不会再出现这个提示了。</s:String>
@@ -1613,11 +1613,11 @@
     <s:String x:Key="LangModLaunchDialogContentNoXBoxAccount">你还没注册 Xbox 账户，请在注册后再登录。</s:String>
     <s:String x:Key="LangModLaunchDialogContentUnableReachMicrosoft">你的网络所在的国家或地区没办法登录巨硬账号。
 请尝试使用黑魔法。</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnIDK">我不到啊</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnIDK">我不造啊</s:String>
     <s:String x:Key="LangModLaunchDialogContentAgeLimit">该账号年龄不足，你需要先修改出生日期，然后才能登录。
 该账号目前填写的年龄是否在 13 岁及以上？</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 岁及以上</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnAgeLess12">13 岁以下</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">早满 13 岁了~</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnAgeLess12">没满 13 岁~</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeA">请在打开的网页中修改账号的出生日期（至少改为 18 岁以上）。
 在修改成功后等待一分钟，然后再回到平原合成发射台，就可以正常登录了！</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeB">请根据打开的网页的说明，修改账号的出生日期（至少改为 18 岁以上）。
@@ -1670,7 +1670,7 @@
     <s:String x:Key="LangModModpackHintUnknownModLoader">没办法安装整活包，其中出现了未知的模组加载器 {0}！</s:String>
     <s:String x:Key="LangModModpackTaskDownloadExtraFile">下崽额外文件</s:String>
     <s:String x:Key="LangModModpackTaskModrinthModpackInstall">模组迷宫整活包安装：</s:String>
-    <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">重命名版本 Json（副加载器）</s:String>
+    <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">版本 Json 改名换姓（副加载器）</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL 整活包安装：</s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC 整活包安装：</s:String>
     <s:String x:Key="LangModModpackNoAddons">该整活包未提供游戏版本附加信息，没办法安装！</s:String>
@@ -1686,7 +1686,7 @@
     <!--ModWatcher-->
     <s:String x:Key="LangModWatcherMcCrashed">Minecraft 原地螺旋升天爆炸了，让我看看怎么个事……</s:String>
     <!--ModBase-->
-    <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">不支持对包含子键的子键进行重命名：{0}。</s:String>
+    <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">不支持对包含子键的子键进行改名换姓：{0}。</s:String>
     <s:String x:Key="LangModBaseExceptionPathIncorrect">莫得路径：{0}</s:String>
     <s:String x:Key="LangModBaseExceptionFileNameIncorrect">莫得文件名：{0}</s:String>
     <s:String x:Key="LangModBaseExceptionFileNameTooLong">文件名过长：{0}</s:String>
@@ -1712,11 +1712,11 @@
     <s:String x:Key="LangModDownloadLibTaskMcDownload">Minecraft {0} 下崽</s:String>
     <s:String x:Key="LangModDownloadLibHintInstanceDownloading">该版本正在下崽中！</s:String>
     <s:String x:Key="LangModDownloadLibDialogContentRedownloadInstance">版本 {0} 已存在，是否重新下崽？
-这会覆盖版本的 JSON 与 JAR 文件，但不会影响版本隔离的文件。</s:String>
+这会覆盖版本的 JSON 与罐子文件，但不会影响版本隔离的文件。</s:String>
     <s:String x:Key="LangModDownloadLibDialogTitleRedownloadInstance">版本已存在</s:String>
     <s:String x:Key="LangModDownloadLibTaskMcDownloadJson">下崽版本 JSON 文件</s:String>
-    <s:String x:Key="LangModDownloadLibTaskMcDownloadJarUrl">分析核心 JAR 文件下崽地址</s:String>
-    <s:String x:Key="LangModDownloadLibTaskMcDownloadJar">下崽核心 JAR 文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadJarUrl">分析核心罐子文件下崽地址</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownloadJar">下崽核心罐子文件</s:String>
     <s:String x:Key="LangModDownloadLibTaskMcDownloadVanillaJsonUrl">获取原版 JSON 文件下崽地址</s:String>
     <s:String x:Key="LangModDownloadLibTaskMcDownloadVanillaAnalysisLibSubLoader">分析原版支持库文件（副加载器）</s:String>
     <s:String x:Key="LangModDownloadLibTaskMcDownloadVanillaDownloadLibSubLoader">下崽原版支持库文件（副加载器）</s:String>
@@ -1726,7 +1726,7 @@
     <s:String x:Key="LangModDownloadLibTaskDownloadAssetsIndexFail">下崽资源文件索引（副加载器）</s:String>
     <s:String x:Key="LangModDownloadLibTaskAnalysisDownloadAssets">分析所需资源文件（副加载器）</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssets">下崽资源文件（副加载器）</s:String>
-    <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">选择保存位置</s:String>
+    <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">选择拯救位置</s:String>
     <s:String x:Key="LangModDownloadLibTaskOptiFineDownload">OptiFine {0} 下崽</s:String>
     <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">爪哇 8 或更高版本</s:String>
     <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">由于未找到爪哇，已取消安装。</s:String>
