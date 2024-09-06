@@ -97,31 +97,31 @@
         AddHandler sender.Click, Sub(ss As MyLocalModItem, ee As EventArgs) ss.Checked = Not ss.Checked
         '图标按钮
         Dim BtnOpen As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonOpen, .Tag = sender}
-        BtnOpen.ToolTip = "打开文件位置"
+        BtnOpen.ToolTip = GetLang("LangPageVersionModOpenPath")
         ToolTipService.SetPlacement(BtnOpen, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnOpen, 30)
         ToolTipService.SetHorizontalOffset(BtnOpen, 2)
         AddHandler BtnOpen.Click, AddressOf Open_Click
         Dim BtnCont As New MyIconButton With {.LogoScale = 1, .Logo = Logo.IconButtonInfo, .Tag = sender}
-        BtnCont.ToolTip = "详情"
+        BtnCont.ToolTip = GetLang("LangPageVersionModDetail")
         ToolTipService.SetPlacement(BtnCont, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnCont, 30)
         ToolTipService.SetHorizontalOffset(BtnCont, 2)
         AddHandler BtnCont.Click, AddressOf Info_Click
         AddHandler sender.MouseRightButtonUp, AddressOf Info_Click
         Dim BtnDelete As New MyIconButton With {.LogoScale = 1, .Logo = Logo.IconButtonDelete, .Tag = sender}
-        BtnDelete.ToolTip = "删除"
+        BtnDelete.ToolTip = GetLang("LangPageVersionModOperationDelete")
         ToolTipService.SetPlacement(BtnDelete, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnDelete, 30)
         ToolTipService.SetHorizontalOffset(BtnDelete, 2)
         AddHandler BtnDelete.Click, AddressOf Delete_Click
         Dim BtnED As New MyIconButton With {.LogoScale = 1, .Logo = If(sender.Entry.State = McMod.McModState.Fine, Logo.IconButtonStop, Logo.IconButtonCheck), .Tag = sender}
-        BtnED.ToolTip = If(sender.Entry.State = McMod.McModState.Fine, "禁用", "启用")
+        BtnED.ToolTip = If(sender.Entry.State = McMod.McModState.Fine, GetLang("LangPageVersionModOperationDisable"), GetLang("LangPageVersionModOperationEnable"))
         ToolTipService.SetPlacement(BtnED, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnED, 30)
         ToolTipService.SetHorizontalOffset(BtnED, 2)
         AddHandler BtnED.Click, AddressOf ED_Click
-        If sender.Entry.State = McMod.McModState.Unavaliable Then
+        If sender.Entry.State = McMod.McModState.Unavailable Then
             sender.Buttons = {BtnCont, BtnOpen, BtnDelete}
         Else
             sender.Buttons = {BtnCont, BtnOpen, BtnED, BtnDelete}
@@ -171,20 +171,20 @@
             If ModItem.CanUpdate Then UpdateCount += 1
             If ModItem.State.Equals(McMod.McModState.Fine) Then EnabledCount += 1
             If ModItem.State.Equals(McMod.McModState.Disabled) Then DisabledCount += 1
-            If ModItem.State.Equals(McMod.McModState.Unavaliable) Then UnavalialeCount += 1
+            If ModItem.State.Equals(McMod.McModState.Unavailable) Then UnavalialeCount += 1
         Next
         '显示
-        BtnFilterAll.Text = If(IsSearching, "搜索结果", "全部") & $" ({AnyCount})"
-        BtnFilterCanUpdate.Text = $"可更新 ({UpdateCount})"
+        BtnFilterAll.Text = If(IsSearching, GetLang("LangPageVersionModSearchResult"), GetLang("LangPageVersionModViewTypeAll")) & $" ({AnyCount})"
+        BtnFilterCanUpdate.Text = $"{GetLang("LangPageVersionModViewTypeCanUpdate")} ({UpdateCount})"
         BtnFilterCanUpdate.Visibility = If(Filter = FilterType.CanUpdate OrElse
             UpdateCount > 0, Visibility.Visible, Visibility.Collapsed)
-        BtnFilterEnabled.Text = $"启用 ({EnabledCount})"
+        BtnFilterEnabled.Text = $"{GetLang("LangPageVersionModViewTypeEnabled")} ({EnabledCount})"
         BtnFilterEnabled.Visibility = If(Filter = FilterType.Enabled OrElse Filter = FilterType.Disabled OrElse
             EnabledCount > 0 AndAlso EnabledCount <> AnyCount, Visibility.Visible, Visibility.Collapsed)
-        BtnFilterDisabled.Text = $"禁用 ({DisabledCount})"
+        BtnFilterDisabled.Text = $"{GetLang("LangPageVersionModViewTypeDisabled")} ({DisabledCount})"
         BtnFilterDisabled.Visibility = If(Filter = FilterType.Enabled OrElse Filter = FilterType.Disabled OrElse
             DisabledCount > 0, Visibility.Visible, Visibility.Collapsed)
-        BtnFilterError.Text = $"错误 ({UnavalialeCount})"
+        BtnFilterError.Text = $"{GetLang("LangPageVersionModViewTypeError")} ({UnavalialeCount})"
         BtnFilterError.Visibility = If(Filter = FilterType.Unavaliable OrElse
             UnavalialeCount > 0, Visibility.Visible, Visibility.Collapsed)
 
@@ -195,7 +195,7 @@
         '计数
         Dim NewCount As Integer = SelectedMods.Count
         Dim Selected = NewCount > 0
-        If Selected Then LabSelect.Text = $"已选择 {NewCount} 个文件" '取消所有选择时不更新数字
+        If Selected Then LabSelect.Text = GetLang("LangPageVersionModSelectedFile", NewCount) '取消所有选择时不更新数字
         '按钮可用性
         If Selected Then
             Dim HasUpdate As Boolean = False
@@ -306,7 +306,7 @@
     ''' 安装 Mod。
     ''' </summary>
     Private Sub BtnManageInstall_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageInstall.Click
-        Hint("将 Mod 文件直接拖入 PCL 窗口即可安装！")
+        Hint(GetLang("LangPageVersionModHintDropFileToInstall"))
     End Sub
 
 #End Region
@@ -407,7 +407,7 @@
             Case FilterType.CanUpdate
                 Return CheckingMod.CanUpdate
             Case FilterType.Unavaliable
-                Return CheckingMod.State = McMod.McModState.Unavaliable
+                Return CheckingMod.State = McMod.McModState.Unavailable
             Case Else
                 Return False
         End Select
@@ -449,7 +449,7 @@
                     If File.Exists(ModEntity.Path) Then
                         '同时存在两个名称的 Mod
                         If GetFileMD5(ModEntity.Path) <> GetFileMD5(NewPath) Then
-                            MyMsgBox($"目前同时存在启用和禁用的两个 Mod 文件：{vbCrLf} - {NewPath}{vbCrLf} - {ModEntity.Path}{vbCrLf}{vbCrLf}注意，这两个文件的内容并不相同。{vbCrLf}在手动删除或重命名其中一个文件后，才能继续操作。", "存在文件冲突")
+                            MyMsgBox(GetLang("LangPageVersionModDialogSameModFileInDiffStatusContent", NewPath, ModEntity.Path), GetLang("LangPageVersionModDialogSameModFileInDiffStatusTitle"))
                             Continue For
                         End If
                     Else
@@ -485,7 +485,7 @@
         If IsSuccessful Then
             RefreshBars()
         Else
-            Hint("由于文件被占用，Mod 的状态切换失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
+            Hint(GetLang("LangPageVersionModHintFileOccupyWhenChangeStatus"), HintType.Critical)
             ReloadModList(True)
         End If
     End Sub
@@ -501,7 +501,7 @@
     Public Sub UpdateMods(ModList As IEnumerable(Of McMod))
         '更新前警告
         If Not Setup.Get("HintUpdateMod") Then
-            If MyMsgBox($"新版本 Mod 可能不兼容老版本的存档或者其他 Mod，这可能导致游戏崩溃，甚至存档损坏！{vbCrLf}除非整合包作者要求你更新，否则不要私自更新整合包里的 Mod！{vbCrLf}在更新 Mod 前，请先备份存档，并检查它的更新日志！{vbCrLf}更新时，老版本的 Mod 会被移动到回收站，以防万一。{vbCrLf}{vbCrLf}请在认真阅读上述警告后再继续！", "Mod 更新警告", "我已了解上述风险，继续更新", "取消", IsWarn:=True) = 1 Then
+            If MyMsgBox(GetLang("LangPageVersionModDialogUpdateModContent"), GetLang("LangPageVersionModDialogUpdateModTitle"), GetLang("LangPageVersionModDialogUpdateModBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
                 Setup.Set("HintUpdateMod", True)
             Else
                 Exit Sub
@@ -540,8 +540,8 @@
             '构造加载器
             Dim InstallLoaders As New List(Of LoaderBase)
             Dim FinishedFileNames As New List(Of String)
-            InstallLoaders.Add(New LoaderDownload("下载新版 Mod 文件", FileList) With {.ProgressWeight = ModList.Count * 1.5}) '每个 Mod 需要 1.5s
-            InstallLoaders.Add(New LoaderTask(Of Integer, Integer)("替换旧版 Mod 文件",
+            InstallLoaders.Add(New LoaderDownload(GetLang("LangPageVersionModTaskDownloadNewMod"), FileList) With {.ProgressWeight = ModList.Count * 1.5}) '每个 Mod 需要 1.5s
+            InstallLoaders.Add(New LoaderTask(Of Integer, Integer)(GetLang("LangPageVersionModTaskReplaceModFile"),
             Sub()
                 Try
                     For Each Entry As McMod In ModList
@@ -568,18 +568,18 @@
                 End Try
             End Sub))
             '结束处理
-            Dim Loader As New LoaderCombo(Of IEnumerable(Of McMod))("Mod 更新：" & PageVersionLeft.Version.Name, InstallLoaders)
+            Dim Loader As New LoaderCombo(Of IEnumerable(Of McMod))(GetLang("LangPageVersionModTaskModUpdate") & PageVersionLeft.Version.Name, InstallLoaders)
             Dim PathMods As String = PageVersionLeft.Version.PathIndie & "mods\"
             Loader.OnStateChanged =
             Sub()
                 '结果提示
                 Select Case Loader.State
                     Case LoadState.Finished
-                        Hint(If(FinishedFileNames.Count > 1, $"已成功更新 {FinishedFileNames.Count} 个 Mod！", $"已成功更新：{FinishedFileNames.Single}"), HintType.Finish)
+                        Hint(If(FinishedFileNames.Count > 1, GetLang("LangPageVersionModTaskModUpdateSuccessA", FinishedFileNames.Count), GetLang("LangPageVersionModTaskModUpdateSuccessB") & FinishedFileNames.Single), HintType.Finish)
                     Case LoadState.Failed
-                        Hint("Mod 更新失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
+                        Hint(GetLang("LangPageVersionModTaskModUpdateFail") & GetExceptionSummary(Loader.Error), HintType.Critical)
                     Case LoadState.Aborted
-                        Hint("Mod 更新已中止！", HintType.Info)
+                        Hint(GetLang("LangPageVersionModTaskModUpdateAbort"), HintType.Info)
                     Case Else
                         Exit Sub
                 End Select
@@ -654,7 +654,7 @@
             Next
             RefreshBars()
             If Not IsSuccessful Then
-                Hint("由于文件被占用，Mod 删除失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
+                Hint(GetLang("LangPageVersionModHintFileOccupyWhenDelete"), HintType.Critical)
                 ReloadModList(True)
             ElseIf PanList.Children.Count = 0 Then
                 ReloadModList(True) '删除了全部文件
@@ -665,15 +665,15 @@
             If Not IsSuccessful Then Exit Sub
             If IsShiftPressed Then
                 If ModList.Count = 1 Then
-                    Hint($"已彻底删除 {ModList.Single.FileName}！", HintType.Finish)
+                    Hint(GetLang("LangPageVersionModHintFilePermanentDeleteSuccessA", ModList.Single.FileName), HintType.Finish)
                 Else
-                    Hint($"已彻底删除 {ModList.Count} 个文件！", HintType.Finish)
+                    Hint(GetLang("LangPageVersionModHintFilePermanentDeleteSuccessB", ModList.Count), HintType.Finish)
                 End If
             Else
                 If ModList.Count = 1 Then
-                    Hint($"已将 {ModList.Single.FileName} 删除到回收站！", HintType.Finish)
+                    Hint(GetLang("LangPageVersionModHintFileDeleteSuccessA", ModList.Single.FileName), HintType.Finish)
                 Else
-                    Hint($"已将 {ModList.Count} 个文件删除到回收站！", HintType.Finish)
+                    Hint(GetLang("LangPageVersionModHintFileDeleteSuccessB", ModList.Count), HintType.Finish)
                 End If
             End If
         Catch ex As OperationCanceledException
@@ -700,8 +700,8 @@
 
             Dim ModEntry As McMod = CType(If(TypeOf sender Is MyIconButton, sender.Tag, sender), MyLocalModItem).Entry
             '加载失败信息
-            If ModEntry.State = McMod.McModState.Unavaliable Then
-                MyMsgBox("无法读取此 Mod 的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "Mod 读取失败")
+            If ModEntry.State = McMod.McModState.Unavailable Then
+                MyMsgBox(GetLang("LangPageVersionModDialogFailGetModDetail") & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "Mod 读取失败")
                 Return
             End If
             If ModEntry.Comp IsNot Nothing Then
@@ -747,11 +747,11 @@
                 ModSearchName = ModSearchName.Replace("++", "+").Replace("pti+Fine", "ptiFine")
                 '显示
                 If ModEntry.Url Is Nothing Then
-                    If MyMsgBox(Join(ContentLines, vbCrLf), ModEntry.Name, "百科搜索", "返回") = 1 Then
+                    If MyMsgBox(Join(ContentLines, vbCrLf), ModEntry.Name, GetLang("LangPageVersionModSearchInMcmod"), GetLang("LangPageVersionModBack")) = 1 Then
                         OpenWebsite("https://www.mcmod.cn/s?key=" & ModSearchName & "&site=all&filter=0")
                     End If
                 Else
-                    Select Case MyMsgBox(Join(ContentLines, vbCrLf), ModEntry.Name, "打开官网", "百科搜索", "返回")
+                    Select Case MyMsgBox(Join(ContentLines, vbCrLf), ModEntry.Name, GetLang("LangPageVersionModWebsite"), GetLang("LangPageVersionModSearchInMcmod"), GetLang("LangPageVersionModBack"))
                         Case 1
                             OpenWebsite(ModEntry.Url)
                         Case 2

@@ -47,7 +47,7 @@
                 Case "启动游戏"
                     If Data(0) = "\current" Then
                         If McVersionCurrent Is Nothing Then
-                            Hint("请先选择一个 Minecraft 版本！", HintType.Critical)
+                            Hint(GetLang("LangModEventChoseAnInstance"), HintType.Critical)
                             Exit Sub
                         Else
                             Data(0) = McVersionCurrent.Name
@@ -55,7 +55,7 @@
                     End If
                     If McLaunchStart(New McLaunchOptions With
                                      {.ServerIp = If(Data.Length >= 2, Data(1), Nothing), .Version = New McVersion(Data(0))}) Then
-                        Hint("正在启动 " & Data(0) & "……")
+                        Hint(GetLang("LangModEventStartInstance", Data(0)))
                     End If
 
                 Case "复制文本"
@@ -63,7 +63,7 @@
 
                 Case "刷新主页"
                     FrmLaunchRight.ForceRefresh()
-                    If Data(0) = "" Then Hint("已刷新主页！", HintType.Finish)
+                    If Data(0) = "" Then Hint(GetLang("LangModEventHomePageRefreshed"), HintType.Finish)
 
                 Case "刷新帮助"
                     PageOtherLeft.RefreshHelp()
@@ -89,13 +89,13 @@
                 Case "下载文件"
                     Data(0) = Data(0).Replace("\", "/")
                     If Not (Data(0).StartsWithF("http://", True) OrElse Data(0).StartsWithF("https://", True)) Then
-                        MyMsgBox("EventData 必须为以 http:// 或 https:// 开头的网址。" & vbCrLf & "PCL 不支持其他乱七八糟的下载协议。", "事件执行失败")
+                        MyMsgBox(GetLang("LangModEventDialogDownloadIncorrectContent"), GetLang("LangModEventDialogEventFailTitle"))
                         Exit Sub
                     End If
                     PageOtherTest.StartCustomDownload(Data(0), GetFileNameFromPath(Data(0)))
 
                 Case Else
-                    MyMsgBox("未知的事件类型：" & Type & vbCrLf & "请检查事件类型填写是否正确，或者 PCL 是否为最新版本。", "事件执行失败")
+                    MyMsgBox(GetLang("LangModEventDialogUnknownEventContent", Type), GetLang("LangModEventDialogEventFailTitle"))
             End Select
         Catch ex As Exception
             Log(ex, "事件执行失败", LogLevel.Msgbox)
@@ -128,7 +128,7 @@
             Dim LocalTemp1 As String = PathTemp & "CustomEvent\" & RawFileName
             Dim LocalTemp2 As String = PathTemp & "CustomEvent\" & RawFileName.Replace(".json", ".xaml")
             Log("[Event] 转换网络资源：" & RelativeUrl & " -> " & LocalTemp1)
-            Hint("正在获取资源，请稍候……")
+            Hint(GetLang("LangModEventGettingResource"))
             Try
                 NetDownload(RelativeUrl, LocalTemp1)
                 NetDownload(RelativeUrl.Replace(".json", ".xaml"), LocalTemp1.Replace(".json", ".xaml"))

@@ -104,7 +104,7 @@ RetryStart:
                     LabTitle.TextDecorations = Nothing
                 Case McMod.McModState.Disabled
                     LabTitle.TextDecorations = TextDecorations.Strikethrough
-                Case McMod.McModState.Unavaliable
+                Case McMod.McModState.Unavailable
                     LabTitle.TextDecorations = TextDecorations.Strikethrough
                     value &= " [错误]"
             End Select
@@ -143,12 +143,20 @@ RetryStart:
             PanTags.Children.Clear()
             PanTags.Visibility = If(value.Any(), Visibility.Visible, Visibility.Collapsed)
             For Each TagText In value
-                Dim NewTag = GetObjectFromXML(
-                "<Border xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
-                         Background=""#11000000"" Padding=""3,1"" CornerRadius=""3"" Margin=""0,0,3,0"" 
-                         SnapsToDevicePixels=""True"" UseLayoutRounding=""False"">
-                   <TextBlock Text=""" & TagText & """ Foreground=""#868686"" FontSize=""11"" />
-                </Border>")
+                Dim NewTag As New Border With {
+                    .Background = New SolidColorBrush(Color.FromArgb(17, 0, 0, 0)),
+                    .Padding = New Thickness(3, 1, 3, 1),
+                    .CornerRadius = New CornerRadius(3),
+                    .Margin = New Thickness(0, 0, 3, 0),
+                    .SnapsToDevicePixels = True,
+                    .UseLayoutRounding = False
+                }
+                Dim TagTextBlock As New TextBlock With {
+                    .Text = TagText,
+                    .Foreground = New SolidColorBrush(Color.FromRgb(134, 134, 134)),
+                    .FontSize = 11
+                }
+                NewTag.Child = TagTextBlock
                 PanTags.Children.Add(NewTag)
             Next
         End Set
@@ -402,7 +410,7 @@ RetryStart:
                     NewestName = Join(NewestSegs, "-")
                     Entry._Version = CurrentName '使用网络信息作为显示的版本号
                 End If
-                BtnUpdate.ToolTip = $"当前版本：{CurrentName} ({Entry.CompFile.ReleaseDate:yyyy/MM/dd HH:mm:ss}){vbCrLf}最新版本：{NewestName} ({Entry.UpdateFile.ReleaseDate:yyyy/MM/dd HH:mm:ss}){vbCrLf}点击以更新，右键查看更新日志。"
+                BtnUpdate.ToolTip = GetLang("LangMyLocalModItemToolTipModUpdate", CurrentName, GetLocalTimeFormat(Entry.CompFile.ReleaseDate), NewestName, GetLocalTimeFormat(Entry.UpdateFile.ReleaseDate))
             Else
                 BtnUpdate.Visibility = Visibility.Collapsed
             End If
@@ -427,7 +435,7 @@ RetryStart:
                     NewDescription = GetFileNameWithoutExtentionFromPath(Entry.Path)
                 Case McMod.McModState.Disabled
                     NewDescription = GetFileNameWithoutExtentionFromPath(Entry.Path.Replace(".disabled", "").Replace(".old", ""))
-                Case Else 'McMod.McModState.Unavaliable
+                Case Else 'McMod.McModState.Unavailable
                     NewDescription = GetFileNameFromPath(Entry.Path)
             End Select
             If Entry.Comp IsNot Nothing Then
@@ -435,7 +443,7 @@ RetryStart:
             ElseIf Entry.Description IsNot Nothing Then
                 NewDescription += ": " & Entry.Description.Replace(vbCr, "").Replace(vbLf, "")
             ElseIf Not Entry.IsFileAvailable Then
-                NewDescription += ": " & "存在错误，无法获取信息"
+                NewDescription += ": " & GetLang("LangMyLocalModItemFailGetModInfo")
             End If
             Description = NewDescription
             '主 Logo
@@ -458,7 +466,7 @@ RetryStart:
                     '<Image x:Name="ImgState" RenderOptions.BitmapScalingMode="HighQuality" Width="16" Height="16" Margin="0,0,-3,-1"
                     '       Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" IsHitTestVisible="False"
                     '       HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                    '       Source="/Images/Icons/Unavaliable.png" />
+                    '       Source="/Images/Icons/Unavailable.png" />
                 End If
                 ImgState.Source = New MyBitmap(PathImage & $"Icons/{Entry.State}.png")
             End If
@@ -521,7 +529,7 @@ RetryStart:
         If CurseForgeUrl Is Nothing OrElse ModrinthUrl Is Nothing Then
             OpenWebsite(Entry.ChangelogUrls.First)
         Else
-            Select Case MyMsgBox("要在哪个网站上查看更新日志？", "查看更新日志", "Modrinth", "CurseForge", "取消")
+            Select Case MyMsgBox(GetLang("LangMyLocalModItemDialogContentOpenChangelog"), GetLang("LangMyLocalModItemDialogTitleOpenChangelog"), "Modrinth", "CurseForge", GetLang("LangDialogBtnCancel"))
                 Case 1
                     OpenWebsite(ModrinthUrl)
                 Case 2

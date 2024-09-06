@@ -27,28 +27,17 @@ Friend Module ModSecret
         Try
             Directory.CreateDirectory(Path & "PCL")
         Catch ex As Exception
-            MsgBox($"PCL 无法创建 PCL 文件夹（{Path & "PCL"}），请尝试：" & vbCrLf &
-                  "1. 将 PCL 移动到其他文件夹" & If(Path.StartsWithF("C:", True), "，例如 C 盘和桌面以外的其他位置。", "。") & vbCrLf &
-                  "2. 删除当前目录中的 PCL 文件夹，然后再试。" & vbCrLf &
-                  "3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。",
-                MsgBoxStyle.Critical, "运行环境错误")
+            MsgBox(GetLang("LangModSecretPermissionA", Path, If(Path.StartsWithF("C:", True), GetLang("LangModSecretPermissionAddition"), "")),
+                MsgBoxStyle.Critical, GetLang("LangModSecretPermissionError"))
             Environment.[Exit](Result.Cancel)
         End Try
         If Not CheckPermission(Path & "PCL") Then
-            MsgBox("PCL 没有对当前文件夹的写入权限，请尝试：" & vbCrLf &
-                  "1. 将 PCL 移动到其他文件夹" & If(Path.StartsWithF("C:", True), "，例如 C 盘和桌面以外的其他位置。", "。") & vbCrLf &
-                  "2. 删除当前目录中的 PCL 文件夹，然后再试。" & vbCrLf &
-                  "3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。",
-                MsgBoxStyle.Critical, "运行环境错误")
+            MsgBox(GetLang("LangModSecretPermissionB", If(Path.StartsWithF("C:", True), GetLang("LangModSecretPermissionAddition"), "")),
+                MsgBoxStyle.Critical, GetLang("LangModSecretPermissionError"))
             Environment.[Exit](Result.Cancel)
         End If
         '开源版本提示
-        MyMsgBox($"该版本中无法使用以下特性：
-- CurseForge API 调用：需要你自行申请 API Key，然后添加到 SecretHeadersSign 方法中
-- 正版登录：需要你自行申请 Client ID，然后添加到 ModSecret.vb 的开头
-- 更新与联网通知：避免滥用隐患
-- 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……
-- 百宝箱：开发早期往里面塞了些开发工具，整理起来太麻烦了", "开源版本说明")
+        MyMsgBox(GetLang("LangModSecretDialogOpenSourceVersionContent"), GetLang("LangModSecretDialogOpenSourceVersionTitle"))
     End Sub
 
     ''' <summary>
@@ -100,9 +89,9 @@ Friend Module ModSecret
     ''' </summary>
     Friend Sub SecretHeadersSign(Url As String, ByRef Client As WebClient, Optional UseBrowserUserAgent As Boolean = False)
         If Url.Contains("modrinth.com") Then '根据 #4334，不添加 PCL 的 UA 反而能正常访问
-            Client.Headers("User-Agent") = "Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+            Client.Headers("User-Agent") = "Mozilla/5.0 AppleWebKit/537.36 Chrome/128.0.0.0 Safari/537.36"
         ElseIf UseBrowserUserAgent Then
-            Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+            Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/128.0.0.0 Safari/537.36"
         Else
             Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode
         End If
@@ -198,7 +187,7 @@ Friend Module ModSecret
     Public ThemeDontClick As Integer = 0
 
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
-        Hint("该版本中不包含主题功能……")
+        Hint(GetLang("LangModSecretHintNoTheme"))
     End Sub
     Public Sub ThemeRefreshMain()
         RunInUi(
@@ -266,7 +255,7 @@ Friend Module ModSecret
     Public IsUpdateStarted As Boolean = False
     Public IsUpdateWaitingRestart As Boolean = False
     Public Sub UpdateCheckByButton()
-        Hint("该版本中不包含更新功能……")
+        Hint(GetLang("LangModSecretHintNoUpdate"))
     End Sub
     Public Sub UpdateStart(BaseUrl As String, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
     End Sub

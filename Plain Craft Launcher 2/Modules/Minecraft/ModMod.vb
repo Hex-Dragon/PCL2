@@ -47,7 +47,7 @@ Public Module ModMod
             Get
                 Load()
                 If Not IsFileAvailable Then
-                    Return McModState.Unavaliable
+                    Return McModState.Unavailable
                 ElseIf Path.EndsWithF(".disabled", True) OrElse Path.EndsWithF(".old", True) Then
                     Return McModState.Disabled
                 Else
@@ -58,7 +58,7 @@ Public Module ModMod
         Public Enum McModState As Integer
             Fine = 0
             Disabled = 1
-            Unavaliable = 2
+            Unavailable = 2
         End Enum
 
 #End Region
@@ -284,14 +284,14 @@ Public Module ModMod
             Dim Jar As ZipArchive = Nothing
             Try
                 '基础可用性检查、打开 Jar 文件
-                If Path.Length < 2 Then Throw New FileNotFoundException("错误的 Mod 文件路径（" & If(Path, "null") & "）")
-                If Not File.Exists(Path) Then Throw New FileNotFoundException("未找到 Mod 文件（" & Path & "）")
+                If Path.Length < 2 Then Throw New FileNotFoundException(GetLang("LangModModExceptionIncorrectPath", If(Path, "null")))
+                If Not File.Exists(Path) Then Throw New FileNotFoundException(GetLang("LangModModExceptionFileNotFound", Path))
                 Jar = New ZipArchive(New FileStream(Path, FileMode.Open))
                 '信息获取
                 LookupMetadata(Jar)
             Catch ex As UnauthorizedAccessException
                 Log(ex, "Mod 文件由于无权限无法打开（" & Path & "）", LogLevel.Developer)
-                _FileUnavailableReason = New UnauthorizedAccessException("没有读取此文件的权限，请尝试右键以管理员身份运行 PCL", ex)
+                _FileUnavailableReason = New UnauthorizedAccessException(GetLang("LangModModExceptionUnauthorizedAccess"), ex)
             Catch ex As Exception
                 Log(ex, "Mod 文件无法打开（" & Path & "）", LogLevel.Developer)
                 _FileUnavailableReason = ex
@@ -816,13 +816,13 @@ Finished:
             If PageVersionMod.UpdatingVersions.Contains(Loader.Input) Then
                 Log($"[Mod] 等待 Mod 更新完成后才能继续加载 Mod 列表")
                 Try
-                    RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = "正在更新 Mod")
+                    RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = GetLang("LangModModUpdatingMod"))
                     Do Until Not PageVersionMod.UpdatingVersions.Contains(Loader.Input)
                         If Loader.IsAborted Then Exit Sub
                         Thread.Sleep(100)
                     Loop
                 Finally
-                    RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = "正在加载 Mod 列表")
+                    RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = GetLang("LangModModLoadingModList"))
                 End Try
             End If
 
@@ -886,7 +886,7 @@ Finished:
                 End If
                 ModList.Add(ModEntry)
                 '读取 Comp 缓存
-                If ModEntry.State = McMod.McModState.Unavaliable Then Continue For
+                If ModEntry.State = McMod.McModState.Unavailable Then Continue For
                 Dim CacheKey = ModEntry.ModrinthHash & PageVersionLeft.Version.Version.McName & GetTargetModLoaders().Join("")
                 If Cache.ContainsKey(CacheKey) Then
                     ModEntry.FromJson(Cache(CacheKey))
@@ -901,8 +901,8 @@ Finished:
             '排序
             ModList = Sort(ModList,
             Function(Left As McMod, Right As McMod) As Boolean
-                If (Left.State = McMod.McModState.Unavaliable) <> (Right.State = McMod.McModState.Unavaliable) Then
-                    Return Left.State = McMod.McModState.Unavaliable
+                If (Left.State = McMod.McModState.Unavailable) <> (Right.State = McMod.McModState.Unavailable) Then
+                    Return Left.State = McMod.McModState.Unavailable
                 Else
                     Return Not Right.FileName.CompareTo(Left.FileName)
                 End If
