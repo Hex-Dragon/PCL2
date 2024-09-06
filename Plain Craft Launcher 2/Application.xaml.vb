@@ -36,7 +36,7 @@ Public Class Application
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Yu Gothic UI, Microsoft YaHei UI")
             Case "ko_KR"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Malgun Gothic, Microsoft YaHei UI")
-            Case "en_US", "en_GB"
+            Case "en_US", "en_GB", "zh_CN", "zh_MEME"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft YaHei UI")
             Case Else '非英语的其他西欧语言统一使用 Segoe UI
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "Segoe UI, ./Resources/#PCL English, Microsoft YaHei UI")
