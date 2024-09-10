@@ -647,7 +647,7 @@
                 SelectedMods.Remove(ModEntity.RawFileName)
                 '更改 Loader 和 UI 中的列表
                 McModLoader.Output.Remove(ModEntity)
-                SearchResult.Remove(ModEntity)
+                SearchResult?.Remove(ModEntity)
                 ModItems.Remove(ModEntity.RawFileName)
                 Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
                 If IndexOfUi >= 0 Then PanList.Children.RemoveAt(IndexOfUi)
