@@ -790,7 +790,7 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">Everyone in the PCL QQ Group</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">Thanks to the netizens in the group for their support and encouragement to LTCat and PCL for so long!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">Sponsors</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from September 2024! Thanks for your support for PCL!</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from August 2024! Thanks for your support for PCL!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">Generate Unlock Code</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">Sponsor</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">Copy Identify Code</s:String>
