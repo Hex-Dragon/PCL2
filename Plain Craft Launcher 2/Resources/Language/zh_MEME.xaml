@@ -7,6 +7,8 @@
     <s:String x:Key="LangResourcePack">亮目害眼包</s:String>
     <s:String x:Key="LangDialogBtnYes">没错</s:String>
     <s:String x:Key="LangDialogBtnNo">有错</s:String>
+    <s:String x:Key="LangComma">，</s:String>
+    <s:String x:Key="LangColon">：</s:String>
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">平原合成发射台莫得对 {0} 的访问权限</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">缓存文件夹子已原地原地螺旋升天爆炸</s:String>
@@ -1401,7 +1403,6 @@
     <s:String x:Key="LangModCompModDigit1">万</s:String>
     <s:String x:Key="LangModCompModDigit2">个小目标</s:String>
     <s:String x:Key="LangModCompModDigit3">兆</s:String>
-    <s:String x:Key="LangModCompModComma">，</s:String>
     <s:String x:Key="LangModCompExceptionNoResult">莫得符合条件的结果</s:String>
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">年</s:String>

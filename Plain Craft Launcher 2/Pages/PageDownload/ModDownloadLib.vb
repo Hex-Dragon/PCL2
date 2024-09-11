@@ -1129,8 +1129,8 @@ Retry:
         Dim NewItem As New MyListItem With {
             .Title = Entry.NameDisplay, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = If(Entry.IsPreview, GetLang("LangDownloadPreviewOptiFine"), GetLang("LangDownloadStable")) &
-                    If(Entry.ReleaseTime = "", "", "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime) &
-                    If(Entry.RequiredForgeVersion Is Nothing, "，" & GetLang("LangDownloadForgeIncompatible"), If(Entry.RequiredForgeVersion = "", "", "，" & GetLang("LangDownloadRecommendForge") & Entry.RequiredForgeVersion)),
+                    If(Entry.ReleaseTime = "", "", GetLang("LangComma") & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime) &
+                    If(Entry.RequiredForgeVersion Is Nothing, GetLang("LangComma") & GetLang("LangDownloadForgeIncompatible"), If(Entry.RequiredForgeVersion = "", "", GetLang("LangComma") & GetLang("LangDownloadRecommendForge") & Entry.RequiredForgeVersion)),
             .Logo = PathImage & "Blocks/GrassPath.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1341,7 +1341,7 @@ Retry:
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.Inherit, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = If(Entry.IsPreview, GetLang("LangDownloadPreviewLiteLoader"), GetLang("LangDownloadStable")) & If(Entry.ReleaseTime = "", "", "，" & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime),
+            .Info = If(Entry.IsPreview, GetLang("LangDownloadPreviewLiteLoader"), GetLang("LangDownloadStable")) & If(Entry.ReleaseTime = "", "", GetLang("LangComma") & GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime),
             .Logo = PathImage & "Blocks/Egg.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -1931,12 +1931,12 @@ Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
         '显示各个版本
         If RecommendedVersion IsNot Nothing Then
             Dim Recommended = ForgeDownloadListItem(RecommendedVersion, OnClick, IsSaveOnly)
-            Recommended.Info = GetLang("LangDownloadRecommend") & If(Recommended.Info = "", "", "，" & Recommended.Info)
+            Recommended.Info = GetLang("LangDownloadRecommend") & If(Recommended.Info = "", "", GetLang("LangComma") & Recommended.Info)
             Stack.Children.Add(Recommended)
         End If
         If FreshVersion IsNot Nothing Then
             Dim Fresh = ForgeDownloadListItem(FreshVersion, OnClick, IsSaveOnly)
-            Fresh.Info = GetLang("LangDownloadLatest") & If(Fresh.Info = "", "", "，" & Fresh.Info)
+            Fresh.Info = GetLang("LangDownloadLatest") & If(Fresh.Info = "", "", GetLang("LangComma") & Fresh.Info)
             Stack.Children.Add(Fresh)
         End If
         '添加间隔
@@ -1947,7 +1947,7 @@ Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
         Dim NewItem As New MyListItem With {
             .Title = Entry.VersionName, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = {If(Entry.ReleaseTime = "", "", GetLang("LangDownloadReleaseOn") & " " & Entry.ReleaseTime), If(ModeDebug, GetLang("LangDownloadCategory") & Entry.Category, "")}.
-                Where(Function(d) d <> "").Join("，"),
+                Where(Function(d) d <> "").Join(GetLang("LangComma")),
             .Logo = PathImage & "Blocks/Anvil.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -2254,7 +2254,7 @@ Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Before("+").Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = Entry.StatusDescription & "，" & GetLang("LangDownloadReleaseOn") & " " & GetLocalTimeFormat(Entry.ReleaseDate),
+            .Info = Entry.StatusDescription & GetLang("LangComma") & GetLang("LangDownloadReleaseOn") & " " & GetLocalTimeFormat(Entry.ReleaseDate),
             .Logo = PathImage & "Blocks/Fabric.png"
         }
         AddHandler NewItem.Click, OnClick
@@ -2265,7 +2265,7 @@ Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
         '建立控件
         Dim NewItem As New MyListItem With {
             .Title = Entry.DisplayName.ToLower.Replace("optifabric-", "").Replace(".jar", "").Trim.TrimStart("v"), .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
-            .Info = Entry.StatusDescription & "，" & GetLang("LangDownloadReleaseOn") & " " & GetLocalTimeFormat(Entry.ReleaseDate),
+            .Info = Entry.StatusDescription & GetLang("LangComma") & GetLang("LangDownloadReleaseOn") & " " & GetLocalTimeFormat(Entry.ReleaseDate),
             .Logo = PathImage & "Blocks/OptiFabric.png"
         }
         AddHandler NewItem.Click, OnClick

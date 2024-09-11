@@ -7,6 +7,8 @@
     <s:String x:Key="LangResourcePack">Paquet de ressources</s:String>
     <s:String x:Key="LangDialogBtnYes">Oui</s:String>
     <s:String x:Key="LangDialogBtnNo">Non</s:String>
+    <s:String x:Key="LangComma">, </s:String>
+    <s:String x:Key="LangColon">: </s:String>
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL n'a pas la permission d'accès à {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Dossier de cache indisponible</s:String>
@@ -1394,7 +1396,6 @@ Veuillez vérifier si le type d'événement est correctement rempli, si le PCL e
     <s:String x:Key="LangModCompModDigit1">k</s:String>
     <s:String x:Key="LangModCompModDigit2">M</s:String>
     <s:String x:Key="LangModCompModDigit3">B</s:String>
-    <s:String x:Key="LangModCompModComma">, </s:String>
     <s:String x:Key="LangModCompExceptionNoResult">Aucun résultat correspondant aux critères</s:String>
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">année</s:String>
