@@ -1356,22 +1356,21 @@ Retry:
 
             '获取描述信息
             Dim Info As String = ""
-            Dim Comma As String = GetLang("LangModCompModComma")
             Select Case Type
                 Case CompType.Mod
                     Info += If(ModLoaders.Any,
-                        GetLang("LangModCompModSuitFor") & " " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & Comma, "")
-                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & GetLangByNumIsPlural(Dependencies.Count, "LangModCompModDependentCount") & Comma, "")
+                        GetLang("LangModCompModSuitFor") & " " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & GetLang("LangComma"), "")
+                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & GetLangByNumIsPlural(Dependencies.Count, "LangModCompModDependentCount") & GetLang("LangComma"), "")
                 Case CompType.ModPack
                     If GameVersions.All(Function(v) v.Contains("w")) Then
-                        Info += GetLang("LangModCompModGameVersion") & $" {Join(GameVersions, "、")}{Comma}"
+                        Info += GetLang("LangModCompModGameVersion") & $" {Join(GameVersions, "、")}{GetLang("LangComma")}"
                     End If
             End Select
             If DownloadCount > 0 Then 'CurseForge 的下载次数经常错误地返回 0
-                Info += GetLocationNum(DownloadCount) & GetLangByNumIsPlural(DownloadCount, "LangModCompModDownload") & Comma
+                Info += GetLocationNum(DownloadCount) & GetLangByNumIsPlural(DownloadCount, "LangModCompModDownload") & GetLang("LangComma")
             End If
             Info += GetLang("LangModCompModUpdateTime", GetTimeSpanString(ReleaseDate - Date.Now, False))
-            Info += If(Status = CompFileStatus.Release, "", Comma & StatusDescription)
+            Info += If(Status = CompFileStatus.Release, "", GetLang("LangComma") & StatusDescription)
 
             '建立控件
             Dim NewItem As New MyListItem With {

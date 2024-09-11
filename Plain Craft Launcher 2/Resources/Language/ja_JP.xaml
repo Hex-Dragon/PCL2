@@ -7,6 +7,8 @@
     <s:String x:Key="LangResourcePack">リソースパック</s:String>
     <s:String x:Key="LangDialogBtnYes">はい</s:String>
     <s:String x:Key="LangDialogBtnNo">いいえ</s:String>
+    <s:String x:Key="LangComma">、</s:String>
+    <s:String x:Key="LangColon">：</s:String>
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL は {0} へのアクセス権限がありません</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">キャッシュフォルダが利用できません</s:String>
@@ -1401,7 +1403,6 @@ PCL は他の様々なダウンロードプロトコルをサポートしてい�
     <s:String x:Key="LangModCompModDigit1">万</s:String>
     <s:String x:Key="LangModCompModDigit2">億</s:String>
     <s:String x:Key="LangModCompModDigit3">兆</s:String>
-    <s:String x:Key="LangModCompModComma">、</s:String>
     <s:String x:Key="LangModCompExceptionNoResult">条件に合う結果がありません</s:String>
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">年</s:String>

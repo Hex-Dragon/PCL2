@@ -7,6 +7,8 @@
     <s:String x:Key="LangResourcePack">Пакет ресурсов</s:String>
     <s:String x:Key="LangDialogBtnYes">Да</s:String>
     <s:String x:Key="LangDialogBtnNo">Нет</s:String>
+    <s:String x:Key="LangComma">, </s:String>
+    <s:String x:Key="LangColon">: </s:String>
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL не имеет разрешения на доступ к {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Каталог кэша недоступен</s:String>
@@ -1399,7 +1401,6 @@ PCL не поддерживает другие странные протокол
     <s:String x:Key="LangModCompModDigit1">k</s:String>
     <s:String x:Key="LangModCompModDigit2">M</s:String>
     <s:String x:Key="LangModCompModDigit3">B</s:String>
-    <s:String x:Key="LangModCompModComma">, </s:String>
     <s:String x:Key="LangModCompExceptionNoResult">Нет результатов, соответствующих критериям</s:String>
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">год</s:String>

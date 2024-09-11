@@ -79,7 +79,7 @@
         Public Overrides Function ToString() As String
             Dim VersionString = Version.ToString
             If VersionString.StartsWithF("1.") Then VersionString = Mid(VersionString, 3)
-            Return If(IsJre, "JRE ", "JDK ") & VersionCode & " (" & VersionString & ")" & If(Is64Bit, "", "，" & GetLang("LangModJava32Bit")) & If(IsUserImport, "，" & GetLang("LangModJavaManuallyImport"), "") & "：" & PathFolder
+            Return If(IsJre, "JRE ", "JDK ") & VersionCode & " (" & VersionString & ")" & If(Is64Bit, "", GetLang("LangComma") & GetLang("LangModJava32Bit")) & If(IsUserImport, GetLang("LangComma") & GetLang("LangModJavaManuallyImport"), "") & GetLang("LangColon") & PathFolder
         End Function
 
         '构造

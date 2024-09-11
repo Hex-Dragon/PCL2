@@ -7,6 +7,8 @@
     <s:String x:Key="LangResourcePack">資囊</s:String>
     <s:String x:Key="LangDialogBtnYes">是</s:String>
     <s:String x:Key="LangDialogBtnNo">否</s:String>
+    <s:String x:Key="LangComma">，</s:String>
+    <s:String x:Key="LangColon">：</s:String>
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 没有对 {0} 的访问权限</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">缓存文件夹不可用</s:String>
@@ -1400,7 +1402,6 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCompModDigit1">萬</s:String>
     <s:String x:Key="LangModCompModDigit2">億</s:String>
     <s:String x:Key="LangModCompModDigit3">兆</s:String>
-    <s:String x:Key="LangModCompModComma">，</s:String>
     <s:String x:Key="LangModCompExceptionNoResult">沒有符合條件的結果</s:String>
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">年</s:String>
