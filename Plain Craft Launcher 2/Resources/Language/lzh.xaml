@@ -11,19 +11,19 @@
     <s:String x:Key="LangColon">：</s:String>
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 没有对 {0} 的访问权限</s:String>
-    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">缓存文件夹不可用</s:String>
+    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">快取資料夾不可用</s:String>
     <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL 无法访问缓存文件夹，可能导致程序出错或无法正常使用。
 错误原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手动设置的缓存文件夹不可用，PCL 将使用默认缓存文件夹。
 错误原因：{0}</s:String>
-    <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境警告</s:String>
+    <s:String x:Key="LangApplicationDialogTitleRunInTemp">環境警告</s:String>
     <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL 正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。
 请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化错误</s:String>
-    <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下载并安装 .NET Framework 4.6.2 后重试！</s:String>
-    <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷烫烫烫</s:String>
-    <s:String x:Key="LangApplicationDialogContentUnknownError">程序出现未知错误</s:String>
+    <s:String x:Key="LangApplicationDialogTitleNETWarn">執行環境錯誤</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">君之 .NET Framework 版本或低或損，請於所開網頁中重下載並安裝 .NET Framework 4.6.2，再試之！</s:String>
+    <s:String x:Key="LangApplicationDialogTitleUnknownError">嚙踝蕭昍昍昍</s:String>
+    <s:String x:Key="LangApplicationDialogContentUnknownError">程式出現未知錯誤</s:String>
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下載</s:String>
     <s:String x:Key="LangTitleHome">啟</s:String>
@@ -792,7 +792,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 內群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感謝內群的沙雕網友們這麼久以來對我和 PCL 的支持與鼓勵！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">贊助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 8 月的高級贊助者們！感謝各位對 PCL 和偉大的咕咕咕事業的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是二〇二四年八月之高級贊助者，感謝諸君對 PCL 及偉大咕咕咕事業之鼎力支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解鎖碼</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">贊助作者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">複製識別碼</s:String>
