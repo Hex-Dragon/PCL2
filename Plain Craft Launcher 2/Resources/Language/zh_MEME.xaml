@@ -190,7 +190,7 @@
     <s:String x:Key="LangSetThemeSupport">V 作者 50</s:String>
     <s:String x:Key="LangSetBackgroundPic">背景图片</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptive">自适应方式</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptiveAuto">智能</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptiveAuto">智障</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveAutoToolTip">当图片娇小时选择平铺，较大时选择适应</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveCentered">居中</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveAdapt">适应</s:String>
