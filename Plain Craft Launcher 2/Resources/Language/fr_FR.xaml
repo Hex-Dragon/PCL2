@@ -4,37 +4,37 @@
     <s:String x:Key="LangTaskAbort">Annulé!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Annuler</s:String>
-    <s:String x:Key="LangResourcePack">Paquet de ressources</s:String>
+    <s:String x:Key="LangResourcePack">Packs de ressources</s:String>
     <s:String x:Key="LangDialogBtnYes">Oui</s:String>
     <s:String x:Key="LangDialogBtnNo">Non</s:String>
     <s:String x:Key="LangComma">, </s:String>
     <s:String x:Key="LangColon">: </s:String>
     <!--Application-->
-    <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL n'a pas la permission d'accès à {0}</s:String>
-    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Dossier de cache indisponible</s:String>
-    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL ne peut pas accéder au dossier de cache, ce qui peut entraîner une erreur de programme ou une inutilisabilité.
-Cause de l'erreur : {0}</s:String>
-    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">Le dossier de cache sélectionné manuellement est indisponible, PCL utilisera à la place le dossier de cache par défaut.
-Cause de l'erreur : {0}</s:String>
-    <s:String x:Key="LangApplicationDialogTitleRunInTemp">Avertissement d'environnement</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL s'exécute dans le dossier temporaire, ce qui peut entraîner un stockage incorrect des paramètres, des sauvegardes de jeu et d'autres données, et certaines fonctionnalités peuvent être inutilisables ou erronées.
-Veuillez extraire PCL de l'archive ou l'utiliser dans un autre dossier!</s:String>
-    <s:String x:Key="LangApplicationDialogTitleInitError">Erreur d'initialisation</s:String>
-    <s:String x:Key="LangApplicationDialogTitleNETWarn">Erreur d'exécution</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">La version de votre .NET Framework est trop basse ou corrompue, veuillez télécharger à nouveau et installer .NET Framework 4.6.2 depuis le site d'ouverture et réessayer.</s:String>
+    <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL n'a pas les permissions d'accès à {0}</s:String>
+    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Le dossier de cache est indisponible</s:String>
+    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">“PCL ne peut pas accéder au dossier de cache, ce qui peut entraîner un fonctionnement incorrect de PCL.
+Causé par : {0}”</s:String>
+    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">Le dossier de cache sélectionné manuellement est indisponible, PCL utilisera le dossier de cache par défaut.
+Causé par : {0}</s:String>
+    <s:String x:Key="LangApplicationDialogTitleRunInTemp">Avertissement sur l'environnement d'exécution</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL s'exécute dans un dossier temporaire. Il est possible que les paramètres, les sauvegardes de jeux, et d'autres fichiers importants ne puissent pas être enregistrés, et certaines fonctionnalités pourraient être inutilisables ou entraîner des erreurs.
+Veuillez extraire PCL du fichier compressé ou changer de dossier avant de continuer à l'utiliser!</s:String>
+    <s:String x:Key="LangApplicationDialogTitleInitError">Erreur d'initialisation de PCL</s:String>
+    <s:String x:Key="LangApplicationDialogTitleNETWarn">Erreur d'environnement d'exécution</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">Votre version de .NET Framework est trop ancienne ou endommagée. Veuillez télécharger et installer .NET Framework 4.6.2 depuis la page web ouverte, puis réessayez!</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Erreur inconnue</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">Une erreur inconnue s'est produite dans le programme.</s:String>
     <!--FormMain-->
-    <s:String x:Key="LangTitleDownload">Télécharger</s:String>
+    <s:String x:Key="LangTitleDownload">téléchargement</s:String>
     <s:String x:Key="LangTitleHome">Lancer</s:String>
     <s:String x:Key="LangTitleSetup">Paramètres</s:String>
-    <s:String x:Key="LangTitleLink">Hébergement</s:String>
+    <s:String x:Key="LangTitleLink">Multijoueur</s:String>
     <s:String x:Key="LangTitleOther">Plus</s:String>
     <s:String x:Key="LangToolTipBackToTop">Retour en haut</s:String>
     <s:String x:Key="LangToolTipDownload">Gestion des téléchargements</s:String>
-    <s:String x:Key="LangToolTipSurrender">Abandonner</s:String>
+    <s:String x:Key="LangToolTipSurrender">Se rendre</s:String>
     <s:String x:Key="LangToolTipCloseMinecraft">Fermer Minecraft</s:String>
-    <s:String x:Key="LangDialogBtnUpdateFullLog">Journal des modifications complet</s:String>
+    <s:String x:Key="LangDialogBtnUpdateFullLog">Journal des mises à jour complet</s:String>
     <s:String x:Key="LangDialogUpdateTo">PCL {0} mis à jour</s:String>
     <s:String x:Key="LangDialogPolicyContent">Avant d'utiliser PCL, veuillez accepter les conditions d'utilisation et la clause de non-responsabilité de PCL.</s:String>
     <s:String x:Key="LangDialogPolicyTitle">Autorisation d'accord</s:String>
