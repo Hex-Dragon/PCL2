@@ -1,4 +1,5 @@
 ﻿Imports System.Net
+Imports Downloader
 
 Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
@@ -266,15 +267,29 @@ RequestFinished:
         End Try
 
         '下载
-        Using Client As New WebClient
-            Try
-                SecretHeadersSign(Url, Client, UseBrowserUserAgent)
-                Client.DownloadFile(Url, LocalFile)
-            Catch ex As Exception
-                File.Delete(LocalFile)
-                Throw New WebException("直接下载文件失败（" & Url & "）。", ex)
-            End Try
-        End Using
+        Dim Client As New WebClient()
+        SecretHeadersSign(Url, Client, UseBrowserUserAgent)
+        Dim downloadOpt = New DownloadConfiguration() With
+        {
+            .ChunkCount = 4,
+            .ParallelDownload = True,
+            .MaxTryAgainOnFailover = 10,
+            .Timeout = 10000,
+            .RequestConfiguration = New RequestConfiguration() With {
+                .Accept = "*/*",
+                .UserAgent = Client.Headers.Get("User-Agent"),
+                .KeepAlive = True,
+                .Referer = Client.Headers.Get("Referer")
+            }
+        }
+        Dim downloader As New DownloadService(downloadOpt)
+        Try
+            Dim DlTask = downloader.DownloadFileTaskAsync(Url, LocalFile)
+            DlTask.Wait()
+        Catch ex As Exception
+            If File.Exists(LocalFile) Then File.Delete(LocalFile)
+            Throw New WebException("直接下载文件失败（" & Url & "）。", ex)
+        End Try
 
     End Sub
 
