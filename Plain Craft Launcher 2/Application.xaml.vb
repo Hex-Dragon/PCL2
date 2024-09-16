@@ -130,6 +130,7 @@ Public Class Application
             Log($"[Start] 管理员权限：{IsAdmin()}")
             Log("[Location] 启动器语言：" & Lang)
             Log("[Location] 当前系统环境是否为中国大陆：" & IsLocationZH())
+            If Not File.Exists(Path & "libwebp.dll") Then NetDownload("https://s3.amazonaws.com/resizer-dynamic-downloads/webp/0.5.2/x86/libwebp.dll", Path & "libwebp.dll")
             '检测压缩包运行
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
                 MyMsgBox(GetLang("LangApplicationDialogContentRunInTemp"), GetLang("LangApplicationDialogTitleRunInTemp"), GetLang("LangDialogThemeUnlockGameAccept"), IsWarn:=True)
