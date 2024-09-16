@@ -191,6 +191,7 @@ RequestFinished:
         Dim Result As New List(Of Byte)
         Try
             If Url.StartsWithF("https", True) Then Request.ProtocolVersion = HttpVersion.Version11
+            Request.KeepAlive = True
             Request.Timeout = Timeout
             Request.Accept = Accept
             SecretHeadersSign(Url, Request, UseBrowserUserAgent)

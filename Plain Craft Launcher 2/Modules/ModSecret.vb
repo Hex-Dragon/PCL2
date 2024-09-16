@@ -100,12 +100,10 @@ Friend Module ModSecret
     ''' 设置 Headers 的 UA、Referer。
     ''' </summary>
     Friend Sub SecretHeadersSign(Url As String, ByRef Request As HttpWebRequest, Optional UseBrowserUserAgent As Boolean = False)
-        If Url.Contains("modrinth.com") Then '根据 #4334，不添加 PCL 的 UA 反而能正常访问
-            Request.UserAgent = "Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
-        ElseIf UseBrowserUserAgent Then
-            Request.UserAgent = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+        If UseBrowserUserAgent Then
+            Request.UserAgent = "Hex-Dragon/PCL2/" & VersionStandardCode & " (hexdragon@vip.qq.com) Mozilla/5.0 AppleWebKit/537.36 Chrome/128.0.0.0 Safari/537.36"
         Else
-            Request.UserAgent = "PCL2/" & VersionStandardCode
+            Request.UserAgent = "Hex-Dragon/PCL2/" & VersionStandardCode & " (hexdragon@vip.qq.com)"
         End If
         Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
         '如果你有 CurseForge API Key，请添加到 Headers 中，以恢复对 CurseForge 的访问

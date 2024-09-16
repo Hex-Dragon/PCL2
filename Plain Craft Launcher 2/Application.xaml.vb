@@ -120,6 +120,12 @@ Public Class Application
             End If
             '动态 DLL 调用
             AddHandler AppDomain.CurrentDomain.AssemblyResolve, AddressOf AssemblyResolve
+            SetDllDirectory(Path & "PCL\")
+            If Is32BitSystem Then
+                File.WriteAllBytes(Path & "PCL\libwebp.dll", GetResources("libwebp32"))
+            Else
+                File.WriteAllBytes(Path & "PCL\libwebp.dll", GetResources("libwebp64"))
+            End If
             '日志初始化
             LogStart()
             '添加日志
@@ -130,11 +136,6 @@ Public Class Application
             Log($"[Start] 管理员权限：{IsAdmin()}")
             Log("[Location] 启动器语言：" & Lang)
             Log("[Location] 当前系统环境是否为中国大陆：" & IsLocationZH())
-            If Is32BitSystem Then
-                File.WriteAllBytes(Path & "libwebp.dll", GetResources("libwebp32"))
-            Else
-                File.WriteAllBytes(Path & "libwebp.dll", GetResources("libwebp64"))
-            End If
             '检测压缩包运行
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
                 MyMsgBox(GetLang("LangApplicationDialogContentRunInTemp"), GetLang("LangApplicationDialogTitleRunInTemp"), GetLang("LangDialogThemeUnlockGameAccept"), IsWarn:=True)
