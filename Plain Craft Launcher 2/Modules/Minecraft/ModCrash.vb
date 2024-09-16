@@ -844,8 +844,8 @@ NextStack:
     Public Sub Output(IsHandAnalyze As Boolean, Optional ExtraFiles As List(Of String) = Nothing)
         '弹窗提示
         FrmMain.ShowWindowToTop()
-        Select Case MyMsgBox(GetAnalyzeResult(IsHandAnalyze), If(IsHandAnalyze, "错误报告分析结果", "Minecraft 出现错误"),
-            "确定", If(IsHandAnalyze OrElse DirectFile Is Nothing, "", "查看日志"), If(IsHandAnalyze, "", "导出错误报告"),
+        Select Case MyMsgBox(GetAnalyzeResult(IsHandAnalyze), If(IsHandAnalyze, GetLang("LangModCrashDialogTitleAnalysisResult"), GetLang("LangModCrashDialogTitleMcError")),
+            GetLang("LangDialogBtnOK"), If(IsHandAnalyze OrElse DirectFile Is Nothing, "", GetLang("LangModCrashViewLog")), If(IsHandAnalyze, "", GetLang("LangModCrashExportCrashReport")),
             Button2Action:=If(IsHandAnalyze OrElse DirectFile Is Nothing, Nothing,
             Sub()
                 '弹窗选择：查看日志
@@ -891,7 +891,7 @@ NextStack:
                     '导出报告
                     Compression.ZipFile.CreateFromDirectory(TempFolder & "Report\", FileAddress)
                     DeleteDirectory(TempFolder & "Report\")
-                    Hint("错误报告已导出！", HintType.Finish)
+                    Hint(GetLang("LangModCrashHintExportCrashReportSuccess"), HintType.Finish)
                 Catch ex As Exception
                     Log(ex, "导出错误报告失败", LogLevel.Feedback)
                     Exit Sub
@@ -907,9 +907,9 @@ NextStack:
         '没有结果的处理
         If Not CrashReasons.Any() Then
             If IsHandAnalyze Then
-                Return "很抱歉，PCL 无法确定错误原因。"
+                Return GetLang("LangModCrashCrashReasonNoReason")
             Else
-                Return $"很抱歉，你的游戏出现了一些问题……{vbCrLf}如果要寻求帮助，请导出错误报告并发给他人，而不是发送这个窗口的截图。"
+                Return GetLang("LangModCrashCrashReasonHelpTip")
             End If
         End If
 
