@@ -1056,6 +1056,7 @@ StartThread:
                 '请求头
                 HttpRequest = WebRequest.Create(Info.Source.Url)
                 If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
+                HttpRequest.KeepAlive = True
                 'HttpRequest.Proxy = Nothing 'new WebProxy(Ip, Port)
                 HttpRequest.Timeout = Timeout
                 HttpRequest.AddRange(Info.DownloadStart)
