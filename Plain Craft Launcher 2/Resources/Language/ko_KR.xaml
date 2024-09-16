@@ -7,6 +7,8 @@
     <s:String x:Key="LangResourcePack">리소스 팩</s:String>
     <s:String x:Key="LangDialogBtnYes">예</s:String>
     <s:String x:Key="LangDialogBtnNo">아니오</s:String>
+    <s:String x:Key="LangComma">，</s:String>
+    <s:String x:Key="LangColon">：</s:String>
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL은 {0}에 대한 접근 권한이 없습니다.</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">캐시 폴더를 사용할 수 없습니다.</s:String>
@@ -1387,7 +1389,6 @@ PCL은 다른 엉뚱한 다운로드 프로토콜을 지원하지 않습니다.<
     <s:String x:Key="LangModCompModDigit1">만</s:String>
     <s:String x:Key="LangModCompModDigit2">억</s:String>
     <s:String x:Key="LangModCompModDigit3">조</s:String>
-    <s:String x:Key="LangModCompModComma">,</s:String>
     <s:String x:Key="LangModCompExceptionNoResult">조건에 맞는 결과가 없습니다</s:String>
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">년</s:String>

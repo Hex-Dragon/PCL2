@@ -1,5 +1,5 @@
-﻿Imports System.Windows.Forms
-Imports System.Globalization
+﻿Imports System.Globalization
+Imports System.Windows.Forms
 
 Module Modi18n
     ''' <summary>
@@ -105,30 +105,34 @@ Module Modi18n
     ''' </summary>
     ''' <returns>返回类似于 zh_CN 这样形式的文本</returns>
     Public Function GetDefaultLang() As String
-        Select Case CultureInfo.CurrentCulture.Name
-            Case "el-GR", "el-CY"
-                Return "el_GR"
-            Case "en-GB", "en-NZ", "en-AU"
+        Dim CurrentCulture As String = CultureInfo.CurrentCulture.Name
+        Dim PrefixMap As New Dictionary(Of String, String) From {
+            {"el-", "el_GR"},
+            {"es-", "es_ES"},
+            {"fr-", "fr_FR"},
+            {"ja-", "ja_JP"},
+            {"ko-", "ko_KR"},
+            {"ru-", "ru_RU"}
+        }
+
+        For Each prefixPair In PrefixMap
+            If CurrentCulture.StartsWith(prefixPair.Key) Then
+                Return prefixPair.Value
+            End If
+        Next
+
+        Select Case CurrentCulture
+            Case "en-GB", "en-NZ", "en-AU", "en-CA"
                 Return "en_GB"
-            Case "es-ES", "es-MX", "es-UY", "es-VE", "es-AR", "es_EC", "	es_CL"
-                Return "es_ES"
-            Case "fr-FR", "fr-CA"
-                Return "fr_FR"
-            Case "ja-JP"
-                Return "ja_JP"
-            Case "ko-KR", "ko-KP"
-                Return "ko_KR"
-            Case "ru-RU"
-                Return "ru_RU"
             Case "zh-CN", "zh-SG", "zh-Hans"
                 Return "zh_CN"
             Case "zh-HK", "zh-MO"
                 Return "zh_HK"
             Case "zh-TW", "zh-Hant"
                 Return "zh_TW"
-            Case Else
-                Return "en_US"
         End Select
+
+        Return "en_US"
     End Function
 
     ''' <summary>

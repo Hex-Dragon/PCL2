@@ -7,6 +7,8 @@
     <s:String x:Key="LangResourcePack">Πακέτο Πόρων</s:String>
     <s:String x:Key="LangDialogBtnYes">Ναι</s:String>
     <s:String x:Key="LangDialogBtnNo">Όχι</s:String>
+    <s:String x:Key="LangComma">, </s:String>
+    <s:String x:Key="LangColon">: </s:String>
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL δεν έχει δικαιώματα πρόσβασης σε {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Μη Διαθέσιμος Φάκελος Προσωρινής Αποθήκευσης</s:String>
@@ -1399,7 +1401,6 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangModCompModDigit1">k</s:String>
     <s:String x:Key="LangModCompModDigit2">M</s:String>
     <s:String x:Key="LangModCompModDigit3">B</s:String>
-    <s:String x:Key="LangModCompModComma">, </s:String>
     <s:String x:Key="LangModCompExceptionNoResult">Δεν υπάρχουν αποτελέσματα που να ταιριάζουν με τα κριτήρια</s:String>
     <!--ModBase-->
     <s:String x:Key="LangModBaseDateYear">έτος</s:String>
