@@ -36,7 +36,7 @@
     End Sub
 
     Private Sub HelpTranslate(sender As Object, e As EventArgs) Handles BtnHelpTranslate.Click
-        OpenWebsite("https://github.com/Hex-Dragon/PCL2/tree/main/Plain%20Craft%20Launcher%202/Resources/Language")
+        OpenWebsite("https://weblate.tangge233.cn/engage/PCL/")
     End Sub
 #End Region
 
