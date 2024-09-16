@@ -130,7 +130,11 @@ Public Class Application
             Log($"[Start] 管理员权限：{IsAdmin()}")
             Log("[Location] 启动器语言：" & Lang)
             Log("[Location] 当前系统环境是否为中国大陆：" & IsLocationZH())
-            If Not File.Exists(Path & "libwebp.dll") Then NetDownload("https://s3.amazonaws.com/resizer-dynamic-downloads/webp/0.5.2/x86/libwebp.dll", Path & "libwebp.dll")
+            If Is32BitSystem Then
+                File.WriteAllBytes(Path & "libwebp.dll", GetResources("libwebp32"))
+            Else
+                File.WriteAllBytes(Path & "libwebp.dll", GetResources("libwebp64"))
+            End If
             '检测压缩包运行
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
                 MyMsgBox(GetLang("LangApplicationDialogContentRunInTemp"), GetLang("LangApplicationDialogTitleRunInTemp"), GetLang("LangDialogThemeUnlockGameAccept"), IsWarn:=True)
@@ -195,36 +199,16 @@ Public Class Application
     End Sub
 
     '动态 DLL 调用
-    Private Shared AssemblyNAudio As Assembly
-    Private Shared AssemblyJson As Assembly
-    Private Shared AssemblyDialog As Assembly
-    Private Shared ReadOnly AssemblyNAudioLock As New Object
-    Private Shared ReadOnly AssemblyJsonLock As New Object
-    Private Shared ReadOnly AssemblyDialogLock As New Object
+    Private Shared AssemblyWebp As Assembly
+    Private Shared ReadOnly AssemblyWebpLock As New Object
     Public Shared Function AssemblyResolve(sender As Object, args As ResolveEventArgs) As Assembly
-        If args.Name.StartsWithF("NAudio") Then
-            SyncLock AssemblyNAudioLock
-                If AssemblyNAudio Is Nothing Then
-                    Log("[Start] 加载 DLL：NAudio")
-                    AssemblyNAudio = Assembly.Load(GetResources("NAudio"))
+        If args.Name.Contains("libwebp") Then
+            SyncLock AssemblyWebpLock
+                If AssemblyWebp Is Nothing Then
+                    Log("[Start] 加载 DLL：libwebp")
+                    AssemblyWebp = Assembly.Load(GetResources("libwebp"))
                 End If
-                Return AssemblyNAudio
-            End SyncLock
-        ElseIf args.Name.StartsWithF("Newtonsoft.Json") Then
-            SyncLock AssemblyJsonLock
-                If AssemblyJson Is Nothing Then
-                    Log("[Start] 加载 DLL：Json")
-                    AssemblyJson = Assembly.Load(GetResources("Json"))
-                End If
-                Return AssemblyJson
-            End SyncLock
-        ElseIf args.Name.StartsWithF("Ookii.Dialogs.Wpf") Then
-            SyncLock AssemblyDialogLock
-                If AssemblyDialog Is Nothing Then
-                    Log("[Start] 加载 DLL：Dialogs")
-                    AssemblyDialog = Assembly.Load(GetResources("Dialogs"))
-                End If
-                Return AssemblyDialog
+                Return AssemblyWebp
             End SyncLock
         Else
             Return Nothing

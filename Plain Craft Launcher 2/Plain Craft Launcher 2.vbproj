@@ -1140,6 +1140,8 @@
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\libwebp64.dll" />
+    <Content Include="Resources\libwebp32.dll" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\NeoForge.png" />

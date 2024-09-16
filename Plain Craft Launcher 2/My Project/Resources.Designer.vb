@@ -103,6 +103,26 @@ Namespace My.Resources
         '''<summary>
         '''  查找 System.Byte[] 类型的本地化资源。
         '''</summary>
+        Friend ReadOnly Property libwebp32() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("libwebp32", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找 System.Byte[] 类型的本地化资源。
+        '''</summary>
+        Friend ReadOnly Property libwebp64() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("libwebp64", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找 System.Byte[] 类型的本地化资源。
+        '''</summary>
         Friend ReadOnly Property ModData() As Byte()
             Get
                 Dim obj As Object = ResourceManager.GetObject("ModData", resourceCulture)
