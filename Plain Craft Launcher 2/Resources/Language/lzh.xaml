@@ -9,20 +9,20 @@
     <s:String x:Key="LangDialogBtnNo">否</s:String>
     
     <!--Application-->
-    <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 没有对 {0} 的访问权限</s:String>
-    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">缓存文件夹不可用</s:String>
-    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL 无法访问缓存文件夹，可能导致程序出错或无法正常使用。
-错误原因：{0}</s:String>
-    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手动设置的缓存文件夹不可用，PCL 将使用默认缓存文件夹。
-错误原因：{0}</s:String>
-    <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境警告</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL 正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。
-请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！</s:String>
-    <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化错误</s:String>
-    <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下载并安装 .NET Framework 4.6.2 后重试！</s:String>
-    <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷烫烫烫</s:String>
-    <s:String x:Key="LangApplicationDialogContentUnknownError">程序出现未知错误</s:String>
+    <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 尚無此權勢以用 {0}</s:String>
+    <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">弗可用臨時資料夾</s:String>
+    <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL 不得用臨時資料夾，或致錯，或致功效弗可用。
+錯之故：{0}</s:String>
+    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">汝設之臨時資料夾不得用，以既定臨時資料夾替之。
+錯之故：{0}</s:String>
+    <s:String x:Key="LangApplicationDialogTitleRunInTemp">告</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">汝用 PCL 於臨時資料夾，設與存檔之類或不得存，或致功效弗可用。
+請於減縮文卷之中抽取 PCL，或易資料夾後用！</s:String>
+    <s:String x:Key="LangApplicationDialogTitleInitError">初始錯</s:String>
+    <s:String x:Key="LangApplicationDialogTitleNETWarn">境地有誤</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">汝之 .NET Framework 之版過低或毀，請於新頁中再裝 .NET Framework 4.6.2 後試！</s:String>
+    <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷，類奇异之文；烫烫烫，如火之焚心。</s:String>
+    <s:String x:Key="LangApplicationDialogContentUnknownError">現不詳之錯</s:String>
     
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下載</s:String>
@@ -902,22 +902,22 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupLaunchLaunchJavaAutoSearch">自動搜</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchJavaImport">手動增</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMem">遊戲之內存</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMem32BitWarn">若用三十二位之 Java，至多仅可用 1 GB 內存，建議裝六十四位之 Java!</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMem32BitWarn">若用三十二比特之 Java，至多僅可用一千兆位元組記憶體，建議裝六十四比特之 Java！</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjust">自動配</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemAutoAdjustToolTip">據改囊之量與餘之記憶體，以為遊戲分配</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMemCustom">自定義</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunch">啟動遊戲前進行內存優化</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunchToolTip">內存優化能將當前物理內存占用降低約 1/3，不僅限於 MC！
-如果使用機械硬盤，這還可能會導致一小段時間的嚴重卡頓。
-使用 --memory 參數啟動 PCL 可以靜默執行內存優化。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">已使用內存</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">遊戲分配</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">高級啟動選項</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 參數頭</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">啟動 Minecraft 時使用的額外 JVM 參數，在沒有確定把握的情況下請不要嘗試修改。
-你可以通過點擊左側選項卡的初始化按鈕來恢復到默認設置。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM 參數尾</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">文本框中的內容將會被直接拼合在啟動參數的末尾。
+    <s:String x:Key="LangPageSetupLaunchLaunchMemCustom">自定</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunch">始遊戲前清記憶體</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMemReduceMemBeforeLaunchToolTip">清記憶體可降物理之記憶體於三一，非獨為遊戲！
+若用機械之硬碟，或致片刻之頓。
+以 --memory 之參數始 PCL，可靜清記憶體。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">已用之記憶體</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">已用之記憶體</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">高級始遊戲之項</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 參之頭</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">始 Minecraft 時用外加之 JVM 參，若汝不知其用途，請勿易之。
+汝可擊左之初始化鈕以復默認設置。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM 參之尾</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">此內容將會被直接拼合在啟動參數的末尾。
 例如輸入 --demo 則會以試玩模式啟動遊戲。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">啟動前執行命令</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">在 MC 啟動前執行特定命令或程序，語法與 Windows 的命令提示符一致。
