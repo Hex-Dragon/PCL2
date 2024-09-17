@@ -43,7 +43,7 @@ Module Modi18n
             Case "未知版本"
                 Return GetLang("LangDownloadUnknown")
             Case Else
-                Log("[Location] 没有找到词语""" & Word & """的对应翻译")
+                '这里不要输出未找到日志
                 Return Word
         End Select
     End Function
