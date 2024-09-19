@@ -972,12 +972,9 @@
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< Language
-=======
     <Content Include="Resources\Imazen.WebP.dll" />
     <Content Include="Resources\libwebp32.dll" />
     <Content Include="Resources\libwebp64.dll" />
->>>>>>> main
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\NeoForge.png" />
