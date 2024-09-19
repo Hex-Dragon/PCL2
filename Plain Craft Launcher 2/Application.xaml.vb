@@ -120,6 +120,12 @@ Public Class Application
             End If
             '动态 DLL 调用
             AddHandler AppDomain.CurrentDomain.AssemblyResolve, AddressOf AssemblyResolve
+            SetDllDirectory(Path & "PCL\")
+            If Is32BitSystem Then
+                File.WriteAllBytes(Path & "PCL\libwebp.dll", GetResources("libwebp32"))
+            Else
+                File.WriteAllBytes(Path & "PCL\libwebp.dll", GetResources("libwebp64"))
+            End If
             '日志初始化
             LogStart()
             '添加日志
@@ -197,9 +203,11 @@ Public Class Application
     Private Shared AssemblyNAudio As Assembly
     Private Shared AssemblyJson As Assembly
     Private Shared AssemblyDialog As Assembly
+    Private Shared AssemblyWebp As Assembly
     Private Shared ReadOnly AssemblyNAudioLock As New Object
     Private Shared ReadOnly AssemblyJsonLock As New Object
     Private Shared ReadOnly AssemblyDialogLock As New Object
+    Private Shared ReadOnly AssemblyWebpLock As New Object
     Public Shared Function AssemblyResolve(sender As Object, args As ResolveEventArgs) As Assembly
         If args.Name.StartsWithF("NAudio") Then
             SyncLock AssemblyNAudioLock
@@ -224,6 +232,14 @@ Public Class Application
                     AssemblyDialog = Assembly.Load(GetResources("Dialogs"))
                 End If
                 Return AssemblyDialog
+            End SyncLock
+        ElseIf args.Name.StartsWithF("Imazen.WebP") Then
+            SyncLock AssemblyWebpLock
+                If AssemblyWebp Is Nothing Then
+                    Log("[Start] 加载 DLL：Imazen.WebP")
+                    AssemblyWebp = Assembly.Load(GetResources("WebP"))
+                End If
+                Return AssemblyWebp
             End SyncLock
         Else
             Return Nothing
