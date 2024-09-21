@@ -95,7 +95,7 @@ Public Class PageVersionScreenshot
             .Name = "BtnCopy",
             .Text = "复制",
             .LogoScale = 0.8,
-            .Logo = Logo.IconButtonInfo
+            .Logo = Logo.IconButtonCopy
             }
             AddHandler btnCopy.Click, AddressOf btnCopy_Click
             stackPanel.Children.Add(btnCopy)
