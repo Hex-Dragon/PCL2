@@ -7,7 +7,7 @@ Public Class PageVersionScreenshot
 
         '重复加载部分
         PanBack.ScrollToHome()
-        ScreenshotPath = PageVersionLeft.Version.Path + "screenshots"
+        ScreenshotPath = PageVersionLeft.Version.PathIndie + "screenshots"
         Reload()
 
         '非重复加载部分
