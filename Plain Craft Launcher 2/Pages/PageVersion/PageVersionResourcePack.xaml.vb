@@ -1,4 +1,5 @@
-﻿Imports System.Security.Principal
+﻿Imports System.IO.Compression
+Imports System.Security.Principal
 
 Public Class PageVersionResourcePack
 
@@ -47,9 +48,15 @@ Public Class PageVersionResourcePack
         FileList = Directory.EnumerateFiles(ResourcepacksPath, "*.zip").ToList()
         If ModeDebug Then Log("[World] 共发现 " & FileList.Count & " 个资源包文件", LogLevel.Debug)
         PanList.Children.Clear()
+        Directory.Delete(PageVersionLeft.Version.PathIndie & "PCL\Resourcepacks\", True)
+        Directory.CreateDirectory(PageVersionLeft.Version.PathIndie & "PCL\Resourcepacks\")
         For Each i In FileList
+            Dim Archive = New ZipArchive(New FileStream(i, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            Dim ResTempFile = PageVersionLeft.Version.PathIndie & "PCL\Resourcepacks\" & GetHash(i) & ".png"
+            Archive.GetEntry("pack.png").ExtractToFile(ResTempFile)
             Dim worldItem As MyListItem = New MyListItem With {
             .Title = GetFileNameWithoutExtentionFromPath(i),
+            .Logo = ResTempFile,
             .Info = $"引入时间：{ File.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}",
             .Tag = i
             }
