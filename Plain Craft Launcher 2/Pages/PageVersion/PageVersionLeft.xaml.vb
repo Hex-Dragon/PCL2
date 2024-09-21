@@ -115,6 +115,12 @@
                 Case FormMain.PageSubType.VersionWorld
                     If FrmVersionWorld IsNot Nothing Then FrmVersionWorld.Reload()
                     ItemWorld.Checked = True
+                Case FormMain.PageSubType.VersionResourcePack
+                    If FrmVersionWorld IsNot Nothing Then FrmVersionResourcePack.Reload()
+                    ItemResourcePack.Checked = True
+                Case FormMain.PageSubType.VersionShader
+                    If FrmVersionWorld IsNot Nothing Then FrmVersionShader.Reload()
+                    ItemShader.Checked = True
             End Select
         Catch ex As Exception
             Log(ex, "强制刷新出错")
