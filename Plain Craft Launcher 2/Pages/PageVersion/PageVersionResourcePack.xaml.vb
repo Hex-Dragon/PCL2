@@ -9,7 +9,7 @@ Public Class PageVersionResourcePack
         '重复加载部分
         PanBack.ScrollToHome()
         ResourcepacksPath = PageVersionLeft.Version.PathIndie + "resourcepacks"
-        If Not Directory.Exists(ResourcepacksPath) Then Directory.CreateDirectory(ResourcepacksPath)
+        Directory.CreateDirectory(ResourcepacksPath)
         Reload()
 
         '非重复加载部分
@@ -48,7 +48,8 @@ Public Class PageVersionResourcePack
         FileList = Directory.EnumerateFiles(ResourcepacksPath, "*.zip").ToList()
         If ModeDebug Then Log("[World] 共发现 " & FileList.Count & " 个资源包文件", LogLevel.Debug)
         PanList.Children.Clear()
-        Directory.Delete(PageVersionLeft.Version.PathIndie & "PCL\Resourcepacks\", True)
+        Dim ResCachaPath = PageVersionLeft.Version.PathIndie & "PCL\Resourcepacks\"
+        If Directory.Exists(ResCachaPath) Then Directory.Delete(ResCachaPath, True)
         Directory.CreateDirectory(PageVersionLeft.Version.PathIndie & "PCL\Resourcepacks\")
         For Each i In FileList
             Dim Archive = New ZipArchive(New FileStream(i, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
