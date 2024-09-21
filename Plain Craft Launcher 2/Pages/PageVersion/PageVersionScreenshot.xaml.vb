@@ -73,6 +73,7 @@ Public Class PageVersionScreenshot
             '按钮
             Dim stackPanel As New StackPanel
             stackPanel.Orientation = Orientation.Horizontal
+            stackPanel.HorizontalAlignment = HorizontalAlignment.Center
             stackPanel.Margin = New Thickness(3,5,3,2)
             Grid.SetRow(stackPanel, 1)
             grid.Children.Add(stackPanel)
