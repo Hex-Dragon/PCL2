@@ -7,7 +7,7 @@ Public Class PageVersionScreenshot
 
         '重复加载部分
         PanBack.ScrollToHome()
-
+        ScreenshotPath = PageVersionLeft.Version.Path + "screenshots"
         Reload()
 
         '非重复加载部分
@@ -17,7 +17,7 @@ Public Class PageVersionScreenshot
     End Sub
 
     Dim FileList As List(Of String) = New List(Of String)
-    Dim ScreenshotPath As String = PageVersionLeft.Version.Path + "screenshots"
+    Dim ScreenshotPath As String
 
     ''' <summary>
     ''' 确保当前页面上的信息已正确显示。
@@ -26,6 +26,11 @@ Public Class PageVersionScreenshot
         AniControlEnabled += 1
         PanBack.ScrollToHome()
         LoadFileList()
+        If FileList.Count.Equals(0) Then
+            PanNoPic.Visibility = Visibility.Visible
+        Else
+            PanNoPic.Visibility = Visibility.Collapsed
+        End If
         AniControlEnabled -= 1
     End Sub
 
@@ -140,5 +145,10 @@ Public Class PageVersionScreenshot
         Else
             Hint("截图文件不存在！")
         End If
+    End Sub
+
+    Private Sub BtnOpenFolder_Click(sender As Object, e As MouseButtonEventArgs)
+        If Not Directory.Exists(ScreenshotPath) Then Directory.CreateDirectory(ScreenshotPath)
+        OpenExplorer("""" & ScreenshotPath & """")
     End Sub
 End Class
