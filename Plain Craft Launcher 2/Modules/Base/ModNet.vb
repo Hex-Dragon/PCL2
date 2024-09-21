@@ -268,12 +268,7 @@ RequestFinished:
         '下载
         Using Client As New WebClient
             Try
-                If UseBrowserUserAgent Then
-                    Client.Headers(HttpRequestHeader.UserAgent) = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
-                Else
-                    Client.Headers(HttpRequestHeader.UserAgent) = "PCL2/" & VersionStandardCode
-                End If
-                Client.Headers(HttpRequestHeader.Referer) = "http://" & VersionCode & ".pcl2.server/"
+                SecretHeadersSign(Url, Client, UseBrowserUserAgent)
                 Client.DownloadFile(Url, LocalFile)
             Catch ex As Exception
                 File.Delete(LocalFile)
@@ -315,7 +310,7 @@ Retry:
         Catch ex As ThreadInterruptedException
             Throw
         Catch ex As Exception
-            If ex.InnerException IsNot Nothing AndAlso ex.InnerException.Message.Contains("(40") AndAlso DontRetryOnRefused Then RetryCount = 999
+            If ex.InnerException IsNot Nothing AndAlso ex.InnerException.Message.Contains("(40") AndAlso DontRetryOnRefused Then Throw
             Select Case RetryCount
                 Case 0
                     If ModeDebug Then Log(ex, "[Net] 网络请求第一次失败（" & Url & "）")
@@ -432,7 +427,11 @@ RequestFinished:
                     End Using
                 Catch
                 End Try
-                ex = New WebException($"网络请求失败（{ex.Status}，{ex.Message}，{Url}）{If(String.IsNullOrEmpty(Res), "", vbCrLf & Res)}", ex)
+                If Res = "" Then
+                    ex = New WebException($"网络请求失败（{ex.Status}，{ex.Message}，{Url}）", ex)
+                Else
+                    ex = New ResponsedWebException($"服务器返回错误（{ex.Status}，{ex.Message}，{Url}）{vbCrLf}{Res}", Res, ex)
+                End If
             End If
             If MakeLog Then Log(ex, "NetRequestOnce 失败", LogLevel.Developer)
             Throw ex
@@ -445,6 +444,17 @@ RequestFinished:
             If Resp IsNot Nothing Then Resp.Dispose()
         End Try
     End Function
+    Public Class ResponsedWebException
+        Inherits WebException
+        ''' <summary>
+        ''' 远程服务器给予的回复。
+        ''' </summary>
+        Public Overloads Property Response As String
+        Public Sub New(Message As String, Response As String, InnerException As Exception)
+            MyBase.New(Message, InnerException)
+            Me.Response = Response
+        End Sub
+    End Class
 
     ''' <summary>
     ''' 最大线程数。
