@@ -54,6 +54,12 @@ Public Class PageVersionWorld
             .Info = $"创建时间：{ Directory.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}，最后修改时间：{Directory.GetLastWriteTime(i).ToString("yyyy'/'MM'/'dd")}",
             .Tag = i
             }
+            Dim BtnOpen As MyIconButton = New MyIconButton With {
+                .Logo = Logo.IconButtonOpen,
+                .ToolTip = "打开",
+                .Tag = i
+            }
+            AddHandler BtnOpen.Click, AddressOf BtnOpen_Click
             Dim BtnDelete As MyIconButton = New MyIconButton With {
                 .Logo = Logo.IconButtonDelete,
                 .ToolTip = "删除",
@@ -72,7 +78,7 @@ Public Class PageVersionWorld
                 .Tag = i
             }
             AddHandler BtnInfo.Click, AddressOf BtnInfo_Click
-            worldItem.Buttons = {BtnDelete, BtnCopy, BtnInfo}
+            worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy, BtnInfo}
             PanList.Children.Add(worldItem)
         Next
         RefreshUI()
@@ -125,5 +131,8 @@ Public Class PageVersionWorld
     Private Sub BtnOpenFolder_Click(sender As Object, e As MouseButtonEventArgs)
         If Not Directory.Exists(WorldPath) Then Directory.CreateDirectory(WorldPath)
         OpenExplorer("""" & WorldPath & """")
+    End Sub
+    Private Sub BtnOpen_Click(sender As Object, e As MouseButtonEventArgs)
+        OpenExplorer("""" & sender.Tag & """")
     End Sub
 End Class

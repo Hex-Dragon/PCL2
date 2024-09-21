@@ -53,6 +53,12 @@ Public Class PageVersionShader
             .Info = $"引入时间：{ File.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}",
             .Tag = i
             }
+            Dim BtnOpen As MyIconButton = New MyIconButton With {
+                .Logo = Logo.IconButtonOpen,
+                .ToolTip = "打开",
+                .Tag = i
+            }
+            AddHandler BtnOpen.Click, AddressOf BtnOpen_Click
             Dim BtnDelete As MyIconButton = New MyIconButton With {
                 .Logo = Logo.IconButtonDelete,
                 .ToolTip = "删除",
@@ -65,7 +71,7 @@ Public Class PageVersionShader
                 .Tag = i
             }
             AddHandler BtnCopy.Click, AddressOf BtnCopy_Click
-            worldItem.Buttons = {BtnDelete, BtnCopy}
+            worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy}
             PanList.Children.Add(worldItem)
         Next
         RefreshUI()
@@ -109,5 +115,9 @@ Public Class PageVersionShader
     Private Sub BtnOpenFolder_Click(sender As Object, e As MouseButtonEventArgs)
         If Not Directory.Exists(ShaderPath) Then Directory.CreateDirectory(ShaderPath)
         OpenExplorer("""" & ShaderPath & """")
+    End Sub
+
+    Private Sub BtnOpen_Click(sender As Object, e As MouseButtonEventArgs)
+        OpenExplorer("""" & sender.Tag & """")
     End Sub
 End Class
