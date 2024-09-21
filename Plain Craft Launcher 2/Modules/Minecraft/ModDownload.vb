@@ -1204,11 +1204,13 @@
             Original.
                 Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").
-                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
+                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven").
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main"),
             Original.
                 Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
-                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
+                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries").
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main"),
             Original
         }
     End Function
