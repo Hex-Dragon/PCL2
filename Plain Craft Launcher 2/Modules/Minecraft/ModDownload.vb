@@ -270,9 +270,7 @@
                 Catch ex As Exception
                     Log("[Download] 未列出的版本镜像源下载失败: " & ex.Message)
                 End Try
-            End If
-            '如果缓存文件存在，则将其读取并合并到版本列表中
-            If File.Exists(CacheFilePath) Then
+            Else '如果缓存文件存在，则将其读取并合并到版本列表中
                 Dim CachedJson As JObject = GetJson(ReadFile(CacheFilePath))
                 Versions.Merge(CachedJson("versions"))
             End If
