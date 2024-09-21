@@ -8,7 +8,9 @@ Public Class PageVersionScreenshot
         '重复加载部分
         PanBack.ScrollToHome()
         ScreenshotPath = PageVersionLeft.Version.PathIndie + "screenshots"
+        If Not Directory.Exists(ScreenshotPath) Then Directory.CreateDirectory(ScreenshotPath)
         Reload()
+
 
         '非重复加载部分
         If IsLoad Then Exit Sub

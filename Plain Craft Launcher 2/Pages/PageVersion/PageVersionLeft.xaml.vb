@@ -25,7 +25,7 @@
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemScreenshot.Check, ItemWorld.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemScreenshot.Check, ItemWorld.Check, ItemResourcePack.Check, ItemShader.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -52,6 +52,12 @@
             Case FormMain.PageSubType.VersionScreenshot
                 If FrmVersionScreenshot Is Nothing Then FrmVersionScreenshot = New PageVersionScreenshot
                 Return FrmVersionScreenshot
+            Case FormMain.PageSubType.VersionResourcePack
+                If FrmVersionResourcePack Is Nothing Then FrmVersionResourcePack = New PageVersionResourcePack
+                Return FrmVersionResourcePack
+            Case FormMain.PageSubType.VersionShader
+                If FrmVersionShader Is Nothing Then FrmVersionShader = New PageVersionShader
+                Return FrmVersionShader
             Case Else
                 Throw New Exception("未知的版本设置子页面种类：" & ID)
         End Select
