@@ -121,17 +121,11 @@ Public Class PageVersionScreenshot
         OpenExplorer("""" & GetPathFromSender(sender) & """")
     End Sub
     Private Sub btnDelete_Click(sender As MyIconTextButton, e As EventArgs)
-        Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
         Path = GetPathFromSender(sender)
         RemoveItem(Path)
         Try
-            If IsShiftPressed Then
-                File.Delete(Path)
-                Hint("已永久删除截图！")
-            Else
-                My.Computer.FileSystem.DeleteFile(Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
-                Hint("已将截图移至回收站！")
-            End If
+            My.Computer.FileSystem.DeleteFile(Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+            Hint("已将截图移至回收站！")
         Catch ex As Exception
             Log(ex, "删除截图失败！", LogLevel.Hint)
         End Try
