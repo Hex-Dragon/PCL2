@@ -426,6 +426,7 @@ EndHint:
     Public FrmVersionOverall As PageVersionOverall
     Public FrmVersionMod As PageVersionMod
     Public FrmVersionModDisabled As PageVersionModDisabled
+    Public FrmVersionScreenshot As PageVersionScreenshot
     Public FrmVersionSetup As PageVersionSetup
 
     '资源信息分页声明

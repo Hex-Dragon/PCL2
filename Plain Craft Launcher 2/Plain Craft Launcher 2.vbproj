@@ -293,6 +293,9 @@
     <Compile Include="Pages\PageVersion\PageVersionModDisabled.xaml.vb">
       <DependentUpon>PageVersionModDisabled.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageVersion\PageVersionScreenshot.xaml.vb">
+      <DependentUpon>PageVersionScreenshot.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageVersion\PageVersionOverall.xaml.vb">
       <DependentUpon>PageVersionOverall.xaml</DependentUpon>
     </Compile>
@@ -551,6 +554,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\PageLink\PageLinkLeft.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageVersion\PageVersionScreenshot.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
