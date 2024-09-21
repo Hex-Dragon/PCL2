@@ -139,8 +139,7 @@ Public Class PageVersionScreenshot
     Private Sub btnCopy_Click(sender As MyIconTextButton, e As EventArgs)
         Dim imagePath As String = GetPathFromSender(sender)
         If File.Exists(imagePath) Then
-            Dim bitmap As BitmapImage = New BitmapImage(New Uri(imagePath))
-            Clipboard.SetImage(bitmap)
+            Clipboard.SetFileDropList(New Specialized.StringCollection() From {imagePath})
             Hint("已复制截图到剪贴板！")
         Else
             Hint("截图文件不存在！")
