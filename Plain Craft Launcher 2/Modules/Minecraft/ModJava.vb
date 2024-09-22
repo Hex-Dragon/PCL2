@@ -1,5 +1,5 @@
 ﻿Public Module ModJava
-    Public JavaListCacheVersion As Integer = 6
+    Public JavaListCacheVersion As Integer = 7
 
     ''' <summary>
     ''' 目前所有可用的 Java。
@@ -216,10 +216,12 @@
 
             '添加特定的 Java
             Dim JavaPreList As New Dictionary(Of String, Boolean)
-            If PathMcFolder.Split("\").Count > 3 Then
-                JavaSearchFolder(GetPathFromFullPath(PathMcFolder), JavaPreList, False, True) 'Minecraft 文件夹的父文件夹（如果不是根目录的话）
+            If PathMcFolder.Split("\").Count > 3 AndAlso Not PathMcFolder.Contains("AppData\Roaming") Then
+                JavaSearchFolder(GetPathFromFullPath(PathMcFolder), JavaPreList, False, True) 'Minecraft 文件夹的父文件夹（如果不是根目录或 %APPDATA% 的话）
             End If
             JavaSearchFolder(PathMcFolder, JavaPreList, False, True) 'Minecraft 文件夹
+            JavaPreList = JavaPreList.Where(Function(j) Not j.Key.Contains(".minecraft\runtime")).
+                ToDictionary(Function(j) j.Key, Function(j) j.Value) '排除官启自带 Java（#4286）
             If RelatedVersion IsNot Nothing Then JavaSearchFolder(RelatedVersion.Path, JavaPreList, False, True) '所选版本文件夹
             Dim TargetJavaList As New List(Of JavaEntry)
             For Each Entry In JavaPreList
@@ -550,7 +552,7 @@ NoUserJava:
             '若不全为特殊引用，则清除特殊引用的地址
             Dim JavaWithoutInherit As New Dictionary(Of String, Boolean)
             For Each Pair In JavaPreList
-                If Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") Then
+                If Pair.Key.Contains("java8path_target_") OrElse Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") Then
                     Log("[Java] 位于 " & Pair.Key & " 的 Java 包含特殊引用")
                 Else
                     Log("[Java] 位于 " & Pair.Key & " 的 Java 不含特殊引用")

@@ -10,6 +10,8 @@ Friend Module ModSecret
 
     '在开源内容的注册表键与普通内容的注册表键隔离
     Public Const RegFolder As String = "PCLDebug"
+    '用于微软登录的 ClientId
+    Public Const OAuthClientId As String = ""
 
     Friend Sub SecretOnApplicationStart()
         '提升 UI 线程优先级
@@ -41,8 +43,9 @@ Friend Module ModSecret
             Environment.[Exit](Result.Cancel)
         End If
         '开源版本提示
-        MyMsgBox($"该版本中不包含以下特性：
-- CurseForge 查询：需要 API Key（你可以申请一个，然后添加到 SecretHeadersSign 方法中）
+        MyMsgBox($"该版本中无法使用以下特性：
+- CurseForge API 调用：需要你自行申请 API Key，然后添加到 SecretHeadersSign 方法中
+- 正版登录：需要你自行申请 Client ID，然后添加到 ModSecret.vb 的开头
 - 更新与联网通知：避免滥用隐患
 - 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……
 - 百宝箱：开发早期往里面塞了些开发工具，整理起来太麻烦了", "开源版本说明")
@@ -89,34 +92,35 @@ Friend Module ModSecret
 #Region "网络鉴权"
 
     Friend Function SecretCdnSign(UrlWithMark As String)
-        '只处理以 {CDN} 结尾的链接
         If Not UrlWithMark.EndsWithF("{CDN}") Then Return UrlWithMark
         Return UrlWithMark.Replace("{CDN}", "").Replace(" ", "%20")
     End Function
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
     ''' </summary>
-    Friend Sub SecretHeadersSign(Url As String, ByRef Client As CookieWebClient, Optional UseBrowserUserAgent As Boolean = False)
-        If ApplicationStartTick < 1 Then Return '禁止在没有运行程序的情况下通过反射调用
-        If UseBrowserUserAgent Then
+    Friend Sub SecretHeadersSign(Url As String, ByRef Client As WebClient, Optional UseBrowserUserAgent As Boolean = False)
+        If Url.Contains("modrinth.com") Then '根据 #4334，不添加 PCL 的 UA 反而能正常访问
+            Client.Headers("User-Agent") = "Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+        ElseIf UseBrowserUserAgent Then
             Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
         Else
             Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode
         End If
-        Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.server/"
+        Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.open.server/"
         '如果你有 CurseForge API Key，请添加到 Headers 中，以恢复对 CurseForge 的访问
     End Sub
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
     ''' </summary>
     Friend Sub SecretHeadersSign(Url As String, ByRef Request As HttpWebRequest, Optional UseBrowserUserAgent As Boolean = False)
-        If ApplicationStartTick < 1 Then Return '禁止在没有运行程序的情况下通过反射调用
-        If UseBrowserUserAgent Then
+        If Url.Contains("modrinth.com") Then '根据 #4334，不添加 PCL 的 UA 反而能正常访问
+            Request.UserAgent = "Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+        ElseIf UseBrowserUserAgent Then
             Request.UserAgent = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
         Else
             Request.UserAgent = "PCL2/" & VersionStandardCode
         End If
-        Request.Referer = "http://" & VersionCode & ".pcl2.server/"
+        Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
         '如果你有 CurseForge API Key，请添加到 Headers 中，以恢复对 CurseForge 的访问
     End Sub
 

@@ -43,6 +43,12 @@
                                 Type = "愚人节版"
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
+                            Case Else '4/1 自动视作愚人节版
+                                Dim ReleaseDate = Version("releaseTime").Value(Of Date).ToUniversalTime().AddHours(2)
+                                If ReleaseDate.Month = 4 AndAlso ReleaseDate.Day = 1 Then
+                                    Type = "愚人节版"
+                                    Version("type") = "special"
+                                End If
                         End Select
                     Case "special"
                         '已被处理的愚人节版
@@ -56,7 +62,7 @@
             '排序
             For i = 0 To Dict.Keys.Count - 1
                 Dict(Dict.Keys(i)) = Sort(Dict.Values(i),
-                                          Function(a, b) a("releaseTime").Value(Of Date) > b("releaseTime").Value(Of Date))
+                    Function(a, b) a("releaseTime").Value(Of Date) > b("releaseTime").Value(Of Date))
             Next
             '清空当前
             PanMain.Children.Clear()
