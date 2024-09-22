@@ -205,7 +205,13 @@
         RunInNewThread(
         Sub()
             Try
-                Dim Desc As String = If(Project.Type = CompType.ModPack, "整合包", If(Project.Type = CompType.Mod, "Mod ", "资源包"))
+                Dim Desc As String = "资源"
+                Select Case Project.Type
+                    Case CompType.ModPack : Desc = "整合包"
+                    Case CompType.Mod : Desc = "Mod "
+                    Case CompType.ResourcePack : Desc = "资源包"
+                    Case CompType.Shader : Desc = "光影包"
+                End Select
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
                 If Project.Type = CompType.Mod Then
