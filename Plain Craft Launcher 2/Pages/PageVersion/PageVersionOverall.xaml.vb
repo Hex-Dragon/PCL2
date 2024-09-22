@@ -284,14 +284,11 @@
     Private Sub BtnManageCheck_Click(sender As Object, e As EventArgs) Handles BtnManageCheck.Click
         Try
             '重复任务检查
-            SyncLock LoaderTaskbarLock
-                For i = 0 To LoaderTaskbar.Count - 1
-                    If LoaderTaskbar(i).Name = PageVersionLeft.Version.Name & " 文件补全" Then
-                        Hint("正在处理中，请稍候！", HintType.Critical)
-                        Exit Sub
-                    End If
-                Next
-            End SyncLock
+            For Each OngoingLoader In LoaderTaskbar
+                If OngoingLoader.Name <> PageVersionLeft.Version.Name & " 文件补全" Then Continue For
+                Hint("正在处理中，请稍候！", HintType.Critical)
+                Exit Sub
+            Next
             '启动
             Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " 文件补全", DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload, False))
             Loader.OnStateChanged =

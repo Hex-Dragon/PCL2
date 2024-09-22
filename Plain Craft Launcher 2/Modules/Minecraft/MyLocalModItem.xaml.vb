@@ -20,9 +20,6 @@ Public Class MyLocalModItem
                     '网络图片
                     If File.Exists(FileAddress) Then
                         PathLogo.Source = New MyBitmap(FileAddress)
-                    ElseIf _Logo.EndsWithF(".webp", True) Then 'Modrinth 林业 Mod 使用了不支持的 WebP 格式 Logo
-                        Log($"[LocalModItem] 发现不支持的 WebP 格式图标，已更改为默认图标：{_Logo}")
-                        PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
                     Else
                         PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
                         RunInNewThread(Sub() LogoLoader(FileAddress), "Comp Logo Loader " & Uuid & "#", ThreadPriority.BelowNormal)
@@ -60,6 +57,12 @@ RetryStart:
             End If
             '下载图片
             NetDownload(Url, LocalFileAddress & DownloadEnd, True)
+            If Url.EndsWithF("webp") Then
+                Log($"[Comp] Webp 格式转换：{LocalFileAddress}")
+                Dim dec = New Imazen.WebP.SimpleDecoder()
+                Dim picFile = File.ReadAllBytes(LocalFileAddress & DownloadEnd)
+                dec.DecodeFromBytes(picFile, picFile.Length).Save(LocalFileAddress & DownloadEnd)
+            End If
             Dim LoadError As Exception = Nothing
             RunInUiWait(
             Sub()

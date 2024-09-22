@@ -7,9 +7,9 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
-            <local:MyCard x:Name="CardSkin" Margin="0,15" Title="离线皮肤">
+            <local:MyCard x:Name="CardSkin" Margin="0,15" Title="离线皮肤" CanSwap="True" IsSwaped="True">
                 <StackPanel Margin="25,40,25,15">
-                    <local:MyHint Text="由于技术问题，皮肤预览与 Steve/Alex/自定义 选项暂时仅保证对 1.19.2 以前的版本有效！" IsWarn="False" Margin="0,0,0,10" />
+                    <local:MyHint Text="由于技术问题，此功能只保证对 1.19.2 以前的版本有效！" IsWarn="True" Margin="0,0,0,10" />
                     <Grid Margin="-1,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />

@@ -96,7 +96,7 @@
         Catch ex As Exception
             Log(ex, "强制刷新时清理本地 Mod 信息缓存失败")
         End Try
-        If FrmVersionMod IsNot Nothing Then FrmVersionMod.RefreshList(True) '无需 Else，还没加载刷个鬼的新
+        If FrmVersionMod IsNot Nothing Then FrmVersionMod.ReloadModList(True) '无需 Else，还没加载刷个鬼的新
         ItemMod.Checked = True
         Hint("正在刷新……", Log:=False)
     End Sub

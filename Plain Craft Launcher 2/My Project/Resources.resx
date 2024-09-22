@@ -136,6 +136,12 @@
   <data name="Json" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Newtonsoft.Json.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="libwebp32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\libwebp32.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="libwebp64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\libwebp64.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="ModData" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ModData.txt;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -144,5 +150,8 @@
   </data>
   <data name="Transformer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\transformer.jar;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="WebP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Imazen.WebP.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

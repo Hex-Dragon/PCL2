@@ -564,7 +564,8 @@ Recheck:
                             Log(ex, "合并版本依赖项 Json 失败（" & If(InheritVersion, "null").ToString & "）")
                         End Try
                     Catch ex As Exception
-                        Throw New Exception("版本 Json 不规范（" & If(Name, "null") & "）", ex)
+                        Log($"[Minecraft] 传入的版本 json 文件内容（共 {Text.Length} 字符，最多输出前 5000 字符）：{vbCrLf}{Text.Substring(0, 5000)}")
+                        Throw New Exception("版本 json 不规范（" & If(Name, "null") & "）", ex)
                     End Try
                     Try
                         '处理 JumpLoader
@@ -664,7 +665,7 @@ Recheck:
             Try
                 Dim JsonObjCheck = JsonObject
             Catch ex As Exception
-                Log(ex, "版本 Json 可用性检查失败（" & Path & "）")
+                Log(ex, "版本 JSON 可用性检查失败（" & Path & "）")
                 JsonText = ""
                 JsonObject = Nothing
                 Info = ex.Message
@@ -2056,8 +2057,9 @@ OnLoaded:
             If Token.Url IsNot Nothing Then
                 '获取 Url 的真实地址
                 Urls.Add(Token.Url)
-                If Token.Url.Contains("launcher.mojang.com/v1/objects") Then
-                    Urls = DlSourceLauncherOrMetaGet(Token.Url).ToList() 'Mappings
+                If Token.Url.Contains("launcher.mojang.com/v1/objects") OrElse Token.Url.Contains("client.txt") OrElse
+                   Token.Url.Contains(".tsrg") Then
+                    Urls.AddRange(DlSourceLauncherOrMetaGet(Token.Url).ToList()) 'Mappings（#4425）
                 End If
                 If Token.Url.Contains("maven") Then
                     Urls.Insert(0, Token.Url.Replace(Mid(Token.Url, 1, Token.Url.IndexOfF("maven")), "https://bmclapi2.bangbang93.com/").
@@ -2079,7 +2081,7 @@ OnLoaded:
                 '普通文件
                 Urls.AddRange(DlSourceLibraryGet("https://libraries.minecraft.net" & Token.LocalPath.Replace(If(Token.IsJumpLoader, JumpLoaderFolder, CustomMcFolder) & "libraries", "").Replace("\", "/")))
             End If
-            Result.Add(New NetFile(Urls.Distinct.ToArray, Token.LocalPath, Checker))
+            Result.Add(New NetFile(Urls.Distinct, Token.LocalPath, Checker))
         Next
         '去重并返回
         Return Result.Distinct(Function(a, b) a.LocalPath = b.LocalPath)
