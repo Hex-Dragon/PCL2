@@ -35,9 +35,11 @@ Public Class PageVersionShader
         If FileList.Count.Equals(0) Then
             PanNoWorld.Visibility = Visibility.Visible
             PanContent.Visibility = Visibility.Collapsed
+            PanNoWorld.UpdateLayout()
         Else
             PanNoWorld.Visibility = Visibility.Collapsed
             PanContent.Visibility = Visibility.Visible
+            PanContent.UpdateLayout()
         End If
     End Sub
 

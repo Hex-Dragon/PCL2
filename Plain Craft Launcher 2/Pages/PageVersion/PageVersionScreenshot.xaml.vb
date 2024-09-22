@@ -35,9 +35,11 @@ Public Class PageVersionScreenshot
         If FileList.Count.Equals(0) Then
             PanNoPic.Visibility = Visibility.Visible
             PanContent.Visibility = Visibility.Collapsed
+            PanNoPic.UpdateLayout()
         Else
             PanNoPic.Visibility = Visibility.Collapsed
             PanContent.Visibility = Visibility.Visible
+            PanContent.UpdateLayout()
         End If
     End Sub
 
