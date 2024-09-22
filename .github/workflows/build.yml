@@ -17,7 +17,7 @@ jobs:
 
     strategy: 
       matrix: 
-        configuration: [Debug]
+        configuration: [Debug, Release, Snapshot, BETA, ReleaseUpdate]
 
     runs-on: windows-latest
 
@@ -37,11 +37,6 @@ jobs:
       uses: microsoft/setup-msbuild@v2
       with:
         msbuild-architecture: x64
-
-    - name: Restore NuGet Packages
-      run: |
-        nuget restore "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -PackagesDirectory "Plain Craft Launcher 2\packages"
-        nuget install NETStandard.Library -Version 2.0.3 -OutputDirectory "Plain Craft Launcher 2\packages"
 
     - name: Build
       run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}

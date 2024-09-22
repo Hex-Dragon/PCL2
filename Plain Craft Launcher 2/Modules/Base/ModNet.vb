@@ -1,5 +1,4 @@
 ﻿Imports System.Net
-Imports Downloader
 
 Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
@@ -191,7 +190,6 @@ RequestFinished:
         Dim Result As New List(Of Byte)
         Try
             If Url.StartsWithF("https", True) Then Request.ProtocolVersion = HttpVersion.Version11
-            Request.KeepAlive = True
             Request.Timeout = Timeout
             Request.Accept = Accept
             SecretHeadersSign(Url, Request, UseBrowserUserAgent)
@@ -268,29 +266,15 @@ RequestFinished:
         End Try
 
         '下载
-        Dim Client As New WebClient()
-        SecretHeadersSign(Url, Client, UseBrowserUserAgent)
-        Dim downloadOpt = New DownloadConfiguration() With
-        {
-            .ChunkCount = 4,
-            .ParallelDownload = True,
-            .MaxTryAgainOnFailover = 10,
-            .Timeout = 10000,
-            .RequestConfiguration = New RequestConfiguration() With {
-                .Accept = "*/*",
-                .UserAgent = Client.Headers.Get("User-Agent"),
-                .KeepAlive = True,
-                .Referer = Client.Headers.Get("Referer")
-            }
-        }
-        Dim downloader As New DownloadService(downloadOpt)
-        Try
-            Dim DlTask = downloader.DownloadFileTaskAsync(Url, LocalFile)
-            DlTask.Wait()
-        Catch ex As Exception
-            If File.Exists(LocalFile) Then File.Delete(LocalFile)
-            Throw New WebException("直接下载文件失败（" & Url & "）。", ex)
-        End Try
+        Using Client As New WebClient
+            Try
+                SecretHeadersSign(Url, Client, UseBrowserUserAgent)
+                Client.DownloadFile(Url, LocalFile)
+            Catch ex As Exception
+                File.Delete(LocalFile)
+                Throw New WebException("直接下载文件失败（" & Url & "）。", ex)
+            End Try
+        End Using
 
     End Sub
 
@@ -1056,7 +1040,6 @@ StartThread:
                 '请求头
                 HttpRequest = WebRequest.Create(Info.Source.Url)
                 If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
-                HttpRequest.KeepAlive = True
                 'HttpRequest.Proxy = Nothing 'new WebProxy(Ip, Port)
                 HttpRequest.Timeout = Timeout
                 HttpRequest.AddRange(Info.DownloadStart)
