@@ -160,7 +160,7 @@ Public Class PageVersionResourcePack
                     End Try
                 End If
             Next
-            Hint("已复制 " & CopiedFiles & "个文件")
+            Hint("已粘贴 " & CopiedFiles & " 个文件")
             LoadFileList()
         Catch ex As Exception
             Log(ex, "粘贴存档文件夹失败", LogLevel.Hint)

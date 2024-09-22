@@ -157,7 +157,7 @@ Public Class PageVersionWorld
                 Continue For
             End Try
         Next
-        Hint("已复制 " & Copied & " 个文件夹")
+        Hint("已粘贴 " & Copied & " 个文件夹")
         LoadFileList()
     End Sub
 End Class
