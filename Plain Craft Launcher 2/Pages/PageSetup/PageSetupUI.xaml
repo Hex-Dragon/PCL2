@@ -242,6 +242,7 @@
                             <local:MyComboBoxItem Content="简单主页（作者：MFn233）" />
                             <local:MyComboBoxItem Content="每日整合包推荐（作者：wkea）" />
                             <local:MyComboBoxItem Content="Minecraft 皮肤推荐（作者：wkea）" />
+                            <local:MyComboBoxItem Content="OpenBMCLAPI 仪表盘 Lite（作者：Silverteal、Mxmilu666）" />
                         </local:MyComboBox>
                     </Grid>
                 </StackPanel>

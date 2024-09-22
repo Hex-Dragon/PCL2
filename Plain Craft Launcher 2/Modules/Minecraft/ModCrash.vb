@@ -844,8 +844,11 @@ NextStack:
     Public Sub Output(IsHandAnalyze As Boolean, Optional ExtraFiles As List(Of String) = Nothing)
         '弹窗提示
         FrmMain.ShowWindowToTop()
-        Dim ShowLog As Action =
+        Select Case MyMsgBox(GetAnalyzeResult(IsHandAnalyze), If(IsHandAnalyze, "错误报告分析结果", "Minecraft 出现错误"),
+            "确定", If(IsHandAnalyze OrElse DirectFile Is Nothing, "", "查看日志"), If(IsHandAnalyze, "", "导出错误报告"),
+            Button2Action:=If(IsHandAnalyze OrElse DirectFile Is Nothing, Nothing,
             Sub()
+                '弹窗选择：查看日志
                 If File.Exists(DirectFile.Value.Key) Then
                     ShellOnly("notepad", DirectFile.Value.Key)
                 Else
@@ -853,11 +856,9 @@ NextStack:
                     WriteFile(FilePath, Join(DirectFile.Value.Value, vbCrLf))
                     ShellOnly(FilePath)
                 End If
-            End Sub
-        Select Case MyMsgBox(GetAnalyzeResult(IsHandAnalyze), If(IsHandAnalyze, "错误报告分析结果", "Minecraft 出现错误"),
-                             "确定", If(IsHandAnalyze OrElse DirectFile Is Nothing, "", "查看日志"), If(IsHandAnalyze, "", "导出错误报告"),
-                             Button2Action:=If(IsHandAnalyze OrElse DirectFile Is Nothing, Nothing, ShowLog))
+            End Sub))
             Case 3
+                '弹窗选择：导出错误报告
                 Dim FileAddress As String = Nothing
                 Try
                     '获取文件路径
@@ -881,7 +882,10 @@ NextStack:
                                 FileName = "游戏崩溃前的输出.txt"
                         End Select
                         If File.Exists(OutputFile) Then
-                            WriteFile(TempFolder & "Report\" & FileName, SecretFilter(ReadFile(OutputFile), If(FileName = "启动脚本.bat", "F", "*")))
+                            Dim FileEncoding As Encoding = GetEncoding(ReadFileBytes(OutputFile))
+                            WriteFile(TempFolder & "Report\" & FileName,
+                                      SecretFilter(ReadFile(OutputFile, FileEncoding), If(FileName = "启动脚本.bat", "F", "*")),
+                                      Encoding:=FileEncoding)
                         End If
                     Next
                     '导出报告

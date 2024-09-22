@@ -32,6 +32,7 @@
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="版本" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="1" IsEditable="True" MaxDropDownHeight="320">
                             <local:MyComboBoxItem Content="全部 (也可自行输入)" IsSelected="True" />
+                            <local:MyComboBoxItem Content="1.21.1" />
                             <local:MyComboBoxItem Content="1.21" />
                             <local:MyComboBoxItem Content="1.20.6" />
                             <local:MyComboBoxItem Content="1.20.4" />
@@ -60,7 +61,7 @@
                             <local:MyComboBoxItem Tag="4472/technology" Content="科技" />
                             <local:MyComboBoxItem Tag="4473/magic" Content="魔法" />
                             <local:MyComboBoxItem Tag="4475/adventure" Content="冒险" />
-                            <local:MyComboBoxItem Tag="/kitchen-sink" Content="烹饪" />
+                            <local:MyComboBoxItem Tag="/kitchen-sink" Content="大杂烩" />
                             <local:MyComboBoxItem Tag="4476/" Content="探索" />
                             <local:MyComboBoxItem Tag="4477/" Content="小游戏" />
                             <local:MyComboBoxItem Tag="4471/" Content="科幻" />
