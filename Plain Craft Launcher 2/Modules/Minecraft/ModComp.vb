@@ -359,7 +359,7 @@
                         Case "mod" : Type = CompType.Mod
                         Case "modpack" : Type = CompType.ModPack
                         Case "resourcepack" : Type = CompType.ResourcePack
-                        Case "shaders" : Type = CompType.Shader
+                        Case "shader" : Type = CompType.Shader
                     End Select
                     'Tags & ModLoaders
                     Tags = New List(Of String)
