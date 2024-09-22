@@ -412,7 +412,6 @@ Retry:
                     Log("[ModPack] 整合包 Quilt 版本：" & QuiltVersion)
                 Case Else
                     Hint($"无法安装整合包，其中出现了未知的 Mod 加载器 {Entry.Name}（版本为 {Entry.Value.ToString}）！", HintType.Critical)
-                    Exit Sub
             End Select
         Next
         '获取版本名

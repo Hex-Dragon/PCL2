@@ -320,14 +320,11 @@ Public Module ModDownloadLib
                 PathMcFolder & "libraries\optifine\OptiFine\" & DownloadInfo.NameFile.Replace("OptiFine_", "").Replace(".jar", "").Replace("preview_", "") & "\" & DownloadInfo.NameFile.Replace("OptiFine_", "OptiFine-").Replace("preview_", ""))
 
             '重复任务检查
-            SyncLock LoaderTaskbarLock
-                For i = 0 To LoaderTaskbar.Count - 1
-                    If LoaderTaskbar(i).Name = "OptiFine " & DownloadInfo.NameDisplay & " 下载" Then
-                        Hint("该版本正在下载中！", HintType.Critical)
-                        Exit Sub
-                    End If
-                Next
-            End SyncLock
+            For Each OngoingLoader In LoaderTaskbar
+                If OngoingLoader.Name <> $"OptiFine {DownloadInfo.NameDisplay} 下载" Then Continue For
+                Hint("该版本正在下载中！", HintType.Critical)
+                Exit Sub
+            Next
 
             '已有版本检查
             If File.Exists(VersionFolder & Id & ".json") Then
@@ -1872,14 +1869,11 @@ Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
-            SyncLock LoaderTaskbarLock
-                For i = 0 To LoaderTaskbar.Count - 1
-                    If LoaderTaskbar(i).Name = "Quilt " & Version & " 安装器下载" Then
-                        Hint("该版本正在下载中！", HintType.Critical)
-                        Exit Sub
-                    End If
-                Next
-            End SyncLock
+            For Each OngoingLoader In LoaderTaskbar
+                If OngoingLoader.Name <> $"Quilt {Version} 安装器下载" Then Continue For
+                Hint("该版本正在下载中！", HintType.Critical)
+                Exit Sub
+            Next
 
             '构造步骤加载器
             Dim Loaders As New List(Of LoaderBase)
