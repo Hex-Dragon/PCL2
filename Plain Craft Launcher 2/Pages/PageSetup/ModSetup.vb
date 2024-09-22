@@ -539,9 +539,9 @@
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Visible
                 FrmSetupUI.HintCustom.Visibility = Visibility.Visible
-                FrmSetupUI.HintCustom.Text = $"从指定网址联网获取主页内容。服主也可以用于动态更新服务器公告。{vbCrLf}如果你制作了稳定运行的联网主页，可以点击这条提示投稿，若合格即可加入预设！"
+                FrmSetupUI.HintCustom.Text = $"从指定网址联网获取主页内容。服主也可以用于动态更新服务器公告。{vbCrLf}如果你制作了稳定运行的联网主页，可以点击这条提示投稿，填入你的主页名字和简介并发布，若合格即可加入预设！"
                 FrmSetupUI.HintCustom.EventType = "打开网页"
-                FrmSetupUI.HintCustom.EventData = "https://github.com/Hex-Dragon/PCL2/discussions/new?category=%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A1%B5"
+                FrmSetupUI.HintCustom.EventData = "https://github.com/Hex-Dragon/PCL2/discussions/new?category=%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A1%B5&title=%E8%87%AA%E5%AE%9A%E4%B9%89%E4%B8%BB%E9%A1%B5%EF%BC%9A"
             Case 3 '预设
                 FrmSetupUI.PanCustomPreset.Visibility = Visibility.Visible
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
