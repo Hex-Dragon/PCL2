@@ -51,15 +51,13 @@ Public Class PageVersionScreenshot
             Dim myCard As New MyCard With {
             .Height = Double.NaN, ' 允许高度自适应
             .Width = Double.NaN,  ' 允许宽度自适应
-            .MinWidth = 230,
             .Margin = New Thickness(7),
-            .Tag = i,
-            .ToolTip = i.Replace(ScreenshotPath, "")
+            .Tag = i
             }
             Dim grid As New Grid
-            grid.Margin = New Thickness(4)
             myCard.Children.Add(grid)
 
+            grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(7)})
             grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(120)})
             grid.RowDefinitions.Add(New RowDefinition)
 
@@ -73,15 +71,15 @@ Public Class PageVersionScreenshot
             bitmapImage.Freeze() ' 冻结图像以提高性能
             image.Source = bitmapImage
             image.Stretch = Stretch.Uniform ' 使图片自适应控件大小
-            Grid.SetRow(image, 0)
+            Grid.SetRow(image, 1)
             grid.Children.Add(image)
 
             '按钮
             Dim stackPanel As New StackPanel
             stackPanel.Orientation = Orientation.Horizontal
             stackPanel.HorizontalAlignment = HorizontalAlignment.Center
-            stackPanel.Margin = New Thickness(3, 5, 3, 2)
-            Grid.SetRow(stackPanel, 1)
+            stackPanel.Margin = New Thickness(3, 5, 3, 5)
+            Grid.SetRow(stackPanel, 2)
             grid.Children.Add(stackPanel)
 
             Dim btnOpen As New MyIconTextButton With {
