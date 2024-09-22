@@ -118,6 +118,10 @@
         ''' </summary>
         Public ReadOnly Type As CompType
         ''' <summary>
+        ''' 是否为 Mod / 数据包融合工程。
+        ''' </summary>
+        Public ReadOnly IsMix As Boolean
+        ''' <summary>
         ''' 工程的短名。例如 technical-enchant。
         ''' </summary>
         Public ReadOnly Slug As String
@@ -365,6 +369,10 @@
                         Case "resourcepack" : Type = CompType.ResourcePack
                         Case "datapack" : Type = CompType.DataPack
                     End Select
+                    If Data("categories").ToArray.Contains("datapack") Then 'Modrinth 上的数据包由于未知原因，返回的 project_type 为 mod，这里做兜底处理
+                        Type = CompType.DataPack
+                        IsMix = Data("categories").ToArray.Contains("forge") OrElse Data("categories").ToArray.Contains("fabric") OrElse Data("categories").ToArray.Contains("neoforge") OrElse Data("categories").ToArray.Contains("quilt")
+                    End If
                     'Tags & ModLoaders
                     Tags = New List(Of String)
                     ModLoaders = New List(Of CompModLoaderType)
