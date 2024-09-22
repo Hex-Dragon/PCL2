@@ -28,12 +28,17 @@ Public Class PageVersionScreenshot
         AniControlEnabled += 1
         PanBack.ScrollToHome()
         LoadFileList()
+        AniControlEnabled -= 1
+    End Sub
+
+    Private Sub RefreshUI()
         If FileList.Count.Equals(0) Then
             PanNoPic.Visibility = Visibility.Visible
+            PanContent.Visibility = Visibility.Collapsed
         Else
             PanNoPic.Visibility = Visibility.Collapsed
+            PanContent.Visibility = Visibility.Visible
         End If
-        AniControlEnabled -= 1
     End Sub
 
     Private Sub LoadFileList()
@@ -48,7 +53,8 @@ Public Class PageVersionScreenshot
             .Width = Double.NaN,  ' 允许宽度自适应
             .MinWidth = 230,
             .Margin = New Thickness(7),
-            .Tag = i
+            .Tag = i,
+            .ToolTip = i.Replace(ScreenshotPath, "")
             }
             Dim grid As New Grid
             grid.Margin = New Thickness(4)
@@ -74,7 +80,7 @@ Public Class PageVersionScreenshot
             Dim stackPanel As New StackPanel
             stackPanel.Orientation = Orientation.Horizontal
             stackPanel.HorizontalAlignment = HorizontalAlignment.Center
-            stackPanel.Margin = New Thickness(3,5,3,2)
+            stackPanel.Margin = New Thickness(3, 5, 3, 2)
             Grid.SetRow(stackPanel, 1)
             grid.Children.Add(stackPanel)
 
@@ -105,6 +111,7 @@ Public Class PageVersionScreenshot
 
             PanList.Children.Add(myCard)
         Next
+        RefreshUI()
     End Sub
 
     Private Sub RemoveItem(Path As String)
