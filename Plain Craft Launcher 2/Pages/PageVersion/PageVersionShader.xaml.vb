@@ -125,7 +125,7 @@ Public Class PageVersionShader
         Try
             Dim files As Specialized.StringCollection = Clipboard.GetFileDropList()
             If files.Count.Equals(0) Then
-                Hint("剪切板内无文件可粘贴")
+                Hint("剪贴板内无文件可粘贴")
                 Exit Sub
             End If
             Dim CopiedFiles = 0

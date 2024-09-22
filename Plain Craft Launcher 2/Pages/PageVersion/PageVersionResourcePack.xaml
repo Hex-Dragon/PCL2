@@ -25,7 +25,7 @@
                     <Rectangle Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" Height="2" Fill="{DynamicResource ColorBrush3}" />
                     <TextBlock Grid.Row="2" Grid.ColumnSpan="4" Margin="10,15,10,5" Text="资源包可以改变世界的外观" TextWrapping="Wrap" />
                     <local:MyButton Grid.Row="3" Grid.Column="1" Height="35" HorizontalAlignment="Center" Click="BtnOpenFolder_Click" MinWidth="140" Text="打开资源包文件夹" Margin="10,10,10,0" Padding="13,0" ColorType="Highlight" />
-                    <local:MyButton Grid.Row="3" Grid.Column="2" Height="35" HorizontalAlignment="Center" Click="BtnPaste_Click" MinWidth="140" Text="粘贴剪切板文件" Margin="10,10,10,0" Padding="13,0"/>
+                    <local:MyButton Grid.Row="3" Grid.Column="2" Height="35" HorizontalAlignment="Center" Click="BtnPaste_Click" MinWidth="140" Text="粘贴剪贴板文件" Margin="10,10,10,0" Padding="13,0"/>
                 </Grid>
             </local:MyCard>
             <StackPanel Orientation="Vertical" Margin="25,25,25,10" x:Name="PanContent">
@@ -36,7 +36,7 @@
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
                         <local:MyButton Grid.Column="0" MinWidth="140" Text="打开资源包文件夹" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" Click="BtnOpenFolder_Click" ColorType="Highlight"/>
-                        <local:MyButton Grid.Column="1" MinWidth="140" Text="粘贴剪切板文件" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" Click="BtnPaste_Click"/>
+                        <local:MyButton Grid.Column="1" MinWidth="140" Text="粘贴剪贴板文件" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" Click="BtnPaste_Click"/>
                     </Grid>
                 </local:MyCard>
                 <local:MyCard Margin="0,0,0,15" Title="资源包列表" x:Name="PanCard">

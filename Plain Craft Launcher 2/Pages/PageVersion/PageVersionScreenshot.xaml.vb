@@ -139,7 +139,7 @@ Public Class PageVersionScreenshot
             Dim TryTime = 0
             While TryTime <= 5
                 Try
-                    Log("[Screenshot] 尝试复制" & imagePath & "到剪切板")
+                    Log("[Screenshot] 尝试复制" & imagePath & "到剪贴板")
                     Clipboard.SetImage(New BitmapImage(New Uri(imagePath)))
                     Hint("已复制截图到剪贴板！")
                     TryTime = 6
