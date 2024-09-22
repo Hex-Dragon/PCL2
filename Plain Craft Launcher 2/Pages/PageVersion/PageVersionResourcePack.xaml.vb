@@ -8,7 +8,7 @@ Public Class PageVersionResourcePack
 
         '重复加载部分
         PanBack.ScrollToHome()
-        ResourcepacksPath = PageVersionLeft.Version.PathIndie + "resourcepacks"
+        ResourcepacksPath = PageVersionLeft.Version.PathIndie + "resourcepacks\"
         Directory.CreateDirectory(ResourcepacksPath)
         Reload()
 
@@ -43,18 +43,28 @@ Public Class PageVersionResourcePack
     End Sub
 
     Private Sub LoadFileList()
-        Log("[World] 刷新资源包文件")
+        Log("[Resourcepack] 刷新资源包文件")
         FileList.Clear()
         FileList = Directory.EnumerateFiles(ResourcepacksPath, "*.zip").ToList()
-        If ModeDebug Then Log("[World] 共发现 " & FileList.Count & " 个资源包文件", LogLevel.Debug)
+        If ModeDebug Then Log("[Resourcepack] 共发现 " & FileList.Count & " 个资源包文件", LogLevel.Debug)
         PanList.Children.Clear()
-        Dim ResCachaPath = PageVersionLeft.Version.PathIndie & "PCL\Resourcepacks\"
+        Dim ResCachaPath = PageVersionLeft.Version.PathIndie & "PCL\Cache\resourcepacks\"
         If Directory.Exists(ResCachaPath) Then Directory.Delete(ResCachaPath, True)
-        Directory.CreateDirectory(PageVersionLeft.Version.PathIndie & "PCL\Resourcepacks\")
+        Directory.CreateDirectory(ResCachaPath)
         For Each i In FileList
-            Dim Archive = New ZipArchive(New FileStream(i, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            Dim ResTempFile = PageVersionLeft.Version.PathIndie & "PCL\Resourcepacks\" & GetHash(i) & ".png"
-            Archive.GetEntry("pack.png").ExtractToFile(ResTempFile)
+            Dim ResTempFile = ResCachaPath & GetHash(i) & ".png"
+            Try
+                Dim Archive = New ZipArchive(New FileStream(i, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                Dim pack = Archive.GetEntry("pack.png")
+                If pack Is Nothing Then
+                    ResTempFile = PathImage & "Icons/NoIcon.png"
+                Else
+                    pack.ExtractToFile(ResTempFile)
+                End If
+            Catch ex As Exception
+                Log(ex, "[Resourcepack] 提取整合包图片失败！")
+                ResTempFile = PathImage & "Icons/NoIcon.png"
+            End Try
             Dim worldItem As MyListItem = New MyListItem With {
             .Title = GetFileNameWithoutExtentionFromPath(i),
             .Logo = ResTempFile,
@@ -104,7 +114,7 @@ Public Class PageVersionResourcePack
         Path = GetPathFromSender(sender)
         RemoveItem(Path)
         Try
-            My.Computer.FileSystem.DeleteDirectory(Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+            My.Computer.FileSystem.DeleteFile(Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
             Hint("已将资源包移至回收站！")
         Catch ex As Exception
             Log(ex, "删除资源包失败！", LogLevel.Hint)
@@ -126,5 +136,34 @@ Public Class PageVersionResourcePack
     End Sub
     Private Sub BtnOpen_Click(sender As Object, e As MouseButtonEventArgs)
         OpenExplorer("""" & sender.Tag & """")
+    End Sub
+    Private Sub BtnPaste_Click(sender As Object, e As MouseButtonEventArgs)
+        Try
+            Dim files As Specialized.StringCollection = Clipboard.GetFileDropList()
+            If files.Count.Equals(0) Then
+                Hint("剪切板内无文件可粘贴")
+                Exit Sub
+            End If
+            Dim CopiedFiles = 0
+            For Each i In files
+                If File.Exists(i) Then
+                    Try
+                        If File.Exists(ResourcepacksPath & GetFileNameFromPath(i)) Then
+                            Hint("已存在同名文件：" & GetFileNameWithoutExtentionFromPath(i))
+                        Else
+                            File.Copy(i, ResourcepacksPath & GetFileNameFromPath(i))
+                            CopiedFiles += 1
+                        End If
+                    Catch ex As Exception
+                        Log(ex, "[Shader] 复制文件时出错")
+                        Continue For
+                    End Try
+                End If
+            Next
+            Hint("已复制 " & CopiedFiles & "个文件")
+            LoadFileList()
+        Catch ex As Exception
+            Log(ex, "粘贴存档文件夹失败", LogLevel.Hint)
+        End Try
     End Sub
 End Class

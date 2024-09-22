@@ -7,7 +7,7 @@ Public Class PageVersionShader
 
         '重复加载部分
         PanBack.ScrollToHome()
-        ShaderPath = PageVersionLeft.Version.PathIndie + "shaderpacks"
+        ShaderPath = PageVersionLeft.Version.PathIndie + "shaderpacks\"
         If Not Directory.Exists(ShaderPath) Then Directory.CreateDirectory(ShaderPath)
         Reload()
 
@@ -42,10 +42,10 @@ Public Class PageVersionShader
     End Sub
 
     Private Sub LoadFileList()
-        Log("[World] 刷新光影包文件")
+        Log("[Shader] 刷新光影包文件")
         FileList.Clear()
         FileList = Directory.EnumerateFiles(ShaderPath, "*.zip").ToList()
-        If ModeDebug Then Log("[World] 共发现 " & FileList.Count & " 个光影包文件", LogLevel.Debug)
+        If ModeDebug Then Log("[Shader] 共发现 " & FileList.Count & " 个光影包文件", LogLevel.Debug)
         PanList.Children.Clear()
         For Each i In FileList
             Dim worldItem As MyListItem = New MyListItem With {
@@ -96,7 +96,7 @@ Public Class PageVersionShader
         Path = GetPathFromSender(sender)
         RemoveItem(Path)
         Try
-            My.Computer.FileSystem.DeleteDirectory(Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+            My.Computer.FileSystem.DeleteFile(Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
             Hint("已将光影包移至回收站！")
         Catch ex As Exception
             Log(ex, "删除光影包失败！", LogLevel.Hint)
@@ -119,5 +119,35 @@ Public Class PageVersionShader
 
     Private Sub BtnOpen_Click(sender As Object, e As MouseButtonEventArgs)
         OpenExplorer("""" & sender.Tag & """")
+    End Sub
+
+    Private Sub BtnPaste_Click(sender As Object, e As MouseButtonEventArgs)
+        Try
+            Dim files As Specialized.StringCollection = Clipboard.GetFileDropList()
+            If files.Count.Equals(0) Then
+                Hint("剪切板内无文件可粘贴")
+                Exit Sub
+            End If
+            Dim CopiedFiles = 0
+            For Each i In files
+                If File.Exists(i) Then
+                    Try
+                        If File.Exists(ShaderPath & GetFileNameFromPath(i)) Then
+                            Hint("已存在同名文件：" & GetFileNameWithoutExtentionFromPath(i))
+                        Else
+                            File.Copy(i, ShaderPath & GetFileNameFromPath(i))
+                            CopiedFiles += 1
+                        End If
+                    Catch ex As Exception
+                        Log(ex, "[Shader] 复制文件时出错")
+                        Continue For
+                    End Try
+                End If
+            Next
+            Hint("已复制 " & CopiedFiles & "个文件")
+            LoadFileList()
+        Catch ex As Exception
+            Log(ex, "粘贴存档文件夹失败", LogLevel.Hint)
+        End Try
     End Sub
 End Class

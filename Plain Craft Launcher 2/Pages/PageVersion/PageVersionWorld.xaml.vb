@@ -7,7 +7,7 @@ Public Class PageVersionWorld
 
         '重复加载部分
         PanBack.ScrollToHome()
-        WorldPath = PageVersionLeft.Version.PathIndie + "saves"
+        WorldPath = PageVersionLeft.Version.PathIndie + "saves\"
         If Not Directory.Exists(WorldPath) Then Directory.CreateDirectory(WorldPath)
         Reload()
 
@@ -48,9 +48,11 @@ Public Class PageVersionWorld
         If ModeDebug Then Log("[World] 共发现 " & FileList.Count & " 个存档文件夹", LogLevel.Debug)
         PanList.Children.Clear()
         For Each i In FileList
+            Dim SaveLogo = i + "\icon.png"
+            If Not File.Exists(SaveLogo) Then SaveLogo = PathImage & "Icons/NoIcon.png"
             Dim worldItem As MyListItem = New MyListItem With {
-            .Logo = i + "\icon.png",
-            .Title = GetFileNameFromPath(i),
+            .Logo = SaveLogo,
+            .Title = GetFolderNameFromPath(i),
             .Info = $"创建时间：{ Directory.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}，最后修改时间：{Directory.GetLastWriteTime(i).ToString("yyyy'/'MM'/'dd")}",
             .Tag = i
             }
@@ -134,5 +136,28 @@ Public Class PageVersionWorld
     End Sub
     Private Sub BtnOpen_Click(sender As Object, e As MouseButtonEventArgs)
         OpenExplorer("""" & sender.Tag & """")
+    End Sub
+    Private Sub BtnPaste_Click(sender As Object, e As MouseButtonEventArgs)
+        Dim files As Specialized.StringCollection = Clipboard.GetFileDropList()
+        Dim Copied = 0
+        For Each i In files
+            Try
+                If Directory.Exists(i) Then
+                    If (Directory.Exists(WorldPath & GetFolderNameFromPath(i))) Then
+                        Hint("发现同名文件夹，无法粘贴：" & GetFolderNameFromPath(i))
+                    Else
+                        CopyDirectory(i, WorldPath & GetFolderNameFromPath(i))
+                        Copied += 1
+                    End If
+                Else
+                    Hint("源文件夹不存在或源目标不是文件夹")
+                End If
+            Catch ex As Exception
+                Log(ex, "粘贴存档文件夹失败", LogLevel.Hint)
+                Continue For
+            End Try
+        Next
+        Hint("已复制 " & Copied & " 个文件夹")
+        LoadFileList()
     End Sub
 End Class
