@@ -116,10 +116,10 @@
                     If FrmVersionWorld IsNot Nothing Then FrmVersionWorld.Reload()
                     ItemWorld.Checked = True
                 Case FormMain.PageSubType.VersionResourcePack
-                    If FrmVersionWorld IsNot Nothing Then FrmVersionResourcePack.Reload()
+                    If FrmVersionResourcePack IsNot Nothing Then FrmVersionResourcePack.Reload()
                     ItemResourcePack.Checked = True
                 Case FormMain.PageSubType.VersionShader
-                    If FrmVersionWorld IsNot Nothing Then FrmVersionShader.Reload()
+                    If FrmVersionShader IsNot Nothing Then FrmVersionShader.Reload()
                     ItemShader.Checked = True
             End Select
         Catch ex As Exception
