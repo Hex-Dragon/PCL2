@@ -41,8 +41,8 @@
         '设置解锁
         If Not RadioLauncherTheme8.IsEnabled Then LabLauncherTheme8Copy.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。" & vbCrLf & "右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！"
         RadioLauncherTheme8.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁"
-        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在 Issue 标记为 [已完成] 后回复 Issue 要求解锁（右键打开反馈页面）" & vbCrLf & "· 向帮助库提交 Pull Request，在龙猫合并后解锁"
-        RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在反馈标记为 [完成] 后回复 Issue 要求解锁" & vbCrLf & "· 向帮助库提交 Pull Request，在龙猫合并后解锁"
+        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）" & vbCrLf & "· 提交一个 Pull Request，在合并后回复识别码要求解锁"
+        RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁" & vbCrLf & "· 提交一个 Pull Request，在合并后回复识别码要求解锁"
         '极客蓝的处理在 ThemeCheck 中
 
     End Sub
@@ -83,7 +83,11 @@
             MusicRefreshUI()
 
             '主页
-            ComboCustomPreset.SelectedIndex = Setup.Get("UiCustomPreset")
+            Try
+                ComboCustomPreset.SelectedIndex = Setup.Get("UiCustomPreset")
+            Catch
+                Setup.Reset("UiCustomPreset")
+            End Try
             CType(FindName("RadioCustomType" & Setup.Load("UiCustomType")), MyRadioBox).Checked = True
             TextCustomNet.Text = Setup.Get("UiCustomNet")
 
@@ -360,27 +364,28 @@ Refresh:
     End Sub
     Private Sub BtnMusicClear_Click(sender As Object, e As EventArgs) Handles BtnMusicClear.Click
         If MyMsgBox("即将删除背景音乐文件夹中的所有文件。" & vbCrLf & "此操作不可撤销，是否确定？", "警告",, "取消", IsWarn:=True) = 1 Then
-            RunInThread(Sub()
-                            Hint("正在删除背景音乐……")
-                            '停止播放音乐
-                            MusicNAudio = Nothing
-                            MusicWaitingList = New List(Of String)
-                            MusicAllList = New List(Of String)
-                            Thread.Sleep(200)
-                            '删除文件
-                            Try
-                                DeleteDirectory(Path & "PCL\Musics")
-                                Hint("背景音乐已删除！", HintType.Finish)
-                            Catch ex As Exception
-                                Log(ex, "删除背景音乐失败", LogLevel.Msgbox)
-                            End Try
-                            Try
-                                Directory.CreateDirectory(Path & "PCL\Musics")
-                                RunInUi(Sub() MusicRefreshPlay(False))
-                            Catch ex As Exception
-                                Log(ex, "重建背景音乐文件夹失败", LogLevel.Msgbox)
-                            End Try
-                        End Sub)
+            RunInThread(
+            Sub()
+                Hint("正在删除背景音乐……")
+                '停止播放音乐
+                MusicNAudio = Nothing
+                MusicWaitingList = New List(Of String)
+                MusicAllList = New List(Of String)
+                Thread.Sleep(200)
+                '删除文件
+                Try
+                    DeleteDirectory(Path & "PCL\Musics")
+                    Hint("背景音乐已删除！", HintType.Finish)
+                Catch ex As Exception
+                    Log(ex, "删除背景音乐失败", LogLevel.Msgbox)
+                End Try
+                Try
+                    Directory.CreateDirectory(Path & "PCL\Musics")
+                    RunInUi(Sub() MusicRefreshPlay(False))
+                Catch ex As Exception
+                    Log(ex, "重建背景音乐文件夹失败", LogLevel.Msgbox)
+                End Try
+            End Sub)
         End If
     End Sub
     Private Sub CheckMusicStart_Change() Handles CheckMusicStart.Change
@@ -423,9 +428,9 @@ Refresh:
         RadioLauncherTheme5Gray.Opacity -= 0.23
         RadioLauncherTheme5.Opacity += 0.23
         AniStart({
-                     AaOpacity(RadioLauncherTheme5Gray, 1, 1000),
-                     AaOpacity(RadioLauncherTheme5, -1, 1000)
-                 }, "ThemeUnlock")
+            AaOpacity(RadioLauncherTheme5Gray, 1, 1000),
+            AaOpacity(RadioLauncherTheme5, -1, 1000)
+        }, "ThemeUnlock")
         If RadioLauncherTheme5Gray.Opacity < 0.08 Then
             ThemeUnlock(5, UnlockHint:="隐藏主题 玄素黑 已解锁！")
             AniStop("ThemeUnlock")
@@ -433,7 +438,7 @@ Refresh:
         End If
     End Sub
     Private Sub LabLauncherTheme11Click_MouseLeftButtonUp() Handles LabLauncherTheme11Click.MouseLeftButtonUp, RadioLauncherTheme11.MouseRightButtonUp
-        If LabLauncherTheme11Click.Visibility = Visibility.Collapsed OrElse LabLauncherTheme11Click.ToolTip.ToString.Contains("点击") Then
+        If LabLauncherTheme11Click.Visibility = Visibility.Collapsed OrElse If(LabLauncherTheme11Click.ToolTip, "").ToString.Contains("点击") Then
             If MyMsgBox(
                 "1. 不爬取或攻击相关服务或网站，不盗取相关账号，没有谜题可以或需要以此来解决。" & vbCrLf &
                 "2. 不得篡改或损毁相关公开信息，请尽量让它们保持原状。" & vbCrLf &
@@ -446,7 +451,7 @@ Refresh:
         End If
     End Sub
     Private Sub LabLauncherTheme8Copy_MouseRightButtonUp() Handles LabLauncherTheme8Copy.MouseRightButtonUp
-        OpenWebsite("https://afdian.net/a/LTCat")
+        OpenWebsite("https://afdian.com/a/LTCat")
     End Sub
     Private Sub LabLauncherTheme9Copy_MouseRightButtonUp() Handles LabLauncherTheme9Copy.MouseRightButtonUp
         PageOtherLeft.TryFeedback()
@@ -659,23 +664,15 @@ Refresh:
 
     '公开预览版
     Private Sub BtnLauncherDonate_Click(sender As Object, e As EventArgs) Handles BtnLauncherDonate.Click
-        OpenWebsite("https://afdian.net/a/LTCat")
+        OpenWebsite("https://afdian.com/a/LTCat")
     End Sub
 
     '滑动条
     Private Sub SliderLoad()
-        SliderMusicVolume.GetHintText = Function(Value As Integer)
-                                            Return Math.Ceiling(Value * 0.1) & "%"
-                                        End Function
-        SliderLauncherOpacity.GetHintText = Function(Value As Integer)
-                                                Return Math.Round(40 + Value * 0.1) & "%"
-                                            End Function
-        SliderLauncherHue.GetHintText = Function(Value As Integer)
-                                            Return Value & "°"
-                                        End Function
-        SliderLauncherSat.GetHintText = Function(Value As Integer)
-                                            Return Value & "%"
-                                        End Function
+        SliderMusicVolume.GetHintText = Function(v) Math.Ceiling(v * 0.1) & "%"
+        SliderLauncherOpacity.GetHintText = Function(v) Math.Round(40 + v * 0.1) & "%"
+        SliderLauncherHue.GetHintText = Function(v) v & "°"
+        SliderLauncherSat.GetHintText = Function(v) v & "%"
         SliderLauncherDelta.GetHintText = Function(Value As Integer)
                                               If Value > 90 Then
                                                   Return "+" & (Value - 90)
@@ -694,12 +691,8 @@ Refresh:
                                                   Return Value - 20
                                               End If
                                           End Function
-        SliderBackgroundOpacity.GetHintText = Function(Value As Integer)
-                                                  Return Math.Round(Value * 0.1) & "%"
-                                              End Function
-        SliderBackgroundBlur.GetHintText = Function(Value As Integer)
-                                               Return Value & " 像素"
-                                           End Function
+        SliderBackgroundOpacity.GetHintText = Function(v) Math.Round(v * 0.1) & "%"
+        SliderBackgroundBlur.GetHintText = Function(v) v & " 像素"
     End Sub
 
 End Class

@@ -19,7 +19,7 @@
     End Sub
 
     Private Sub BtnAboutBmclapi_Click(sender As Object, e As EventArgs) Handles BtnAboutBmclapi.Click
-        OpenWebsite("https://afdian.net/a/bangbang93")
+        OpenWebsite("https://afdian.com/a/bangbang93")
     End Sub
     Private Sub BtnAboutWiki_Click(sender As Object, e As EventArgs) Handles BtnAboutWiki.Click
         OpenWebsite("https://www.mcmod.cn")
@@ -27,7 +27,7 @@
     Public Shared Sub CopyUniqueAddress() Handles BtnDonateCopy.Click
         ClipboardSet(UniqueAddress)
     End Sub
-    Private Sub DonateCodeInput() Handles BtnDonateInput.Click
+    Private Sub BtnDonateCodeInput_Click() Handles BtnDonateInput.Click
         DonateCodeInput()
     End Sub
 

@@ -27,15 +27,16 @@
     ''' 刷新自定义主页。
     ''' </summary>
     Private Sub Refresh() Handles Me.Loaded
-        RunInNewThread(Sub()
-                           Try
-                               SyncLock RefreshLock
-                                   RefreshReal()
-                               End SyncLock
-                           Catch ex As Exception
-                               Log(ex, "加载 PCL 主页自定义信息失败", LogLevel.Msgbox)
-                           End Try
-                       End Sub, $"刷新自定义主页 #{GetUuid()}")
+        RunInNewThread(
+        Sub()
+            Try
+                SyncLock RefreshLock
+                    RefreshReal()
+                End SyncLock
+            Catch ex As Exception
+                Log(ex, "加载 PCL 主页自定义信息失败", LogLevel.Msgbox)
+            End Try
+        End Sub, $"刷新自定义主页 #{GetUuid()}")
     End Sub
     Private Sub RefreshReal()
         Dim Content As String = ""
@@ -101,6 +102,10 @@ Download:
                         Log("[Page] 主页预设：Minecraft 皮肤推荐")
                         Url = "https://forgepixel.com/pcl_sub_file"
                         GoTo Download
+                    Case 6
+                        Log("[Page] 主页预设：OpenBMCLAPI 仪表盘 Lite")
+                        Url = "https://pcl-bmcl.milulu.xyz/"
+                        GoTo Download
                 End Select
         End Select
         RunInUi(Sub() LoadContent(Content))
@@ -155,7 +160,6 @@ Download:
             Else
                 Log(ex, $"联网下载自定义主页失败（{Address}）")
             End If
-            Address = ""
         End Try
     End Sub
 
@@ -204,7 +208,7 @@ Download:
             End If
             Content = "<StackPanel xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns:local=""clr-namespace:PCL;assembly=Plain Craft Launcher 2"">" & Content & "</StackPanel>"
             Content = HelpArgumentReplace(Content)
-            Log($"[Page] 实例化：加载自定义主页 UI，最终内容长度：{Content.Count}")
+            Log($"[Page] 实例化：加载自定义主页 UI 开始，最终内容长度：{Content.Count}")
             Try
                 PanCustom.Children.Add(GetObjectFromXML(Content))
             Catch ex As Exception

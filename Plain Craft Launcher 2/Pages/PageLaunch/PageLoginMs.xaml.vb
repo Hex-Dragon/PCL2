@@ -39,14 +39,15 @@
     Public Shared Function GetLoginData() As McLoginMs
         If FrmLoginMs Is Nothing Then Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsOAuthRefresh"), .UserName = Setup.Get("CacheMsName")}
         Dim Result As McLoginMs = Nothing
-        RunInUiWait(Sub()
-                        If FrmLoginMs.ComboAccounts.SelectedIndex = 0 Then
-                            Result = New McLoginMs
-                        Else
-                            Dim Item As MyListItem = FrmLoginMs.ComboAccounts.SelectedItem
-                            Result = New McLoginMs With {.OAuthRefreshToken = Item.Tag, .UserName = Item.Title}
-                        End If
-                    End Sub)
+        RunInUiWait(
+        Sub()
+            If FrmLoginMs.ComboAccounts.SelectedIndex = 0 Then
+                Result = New McLoginMs
+            Else
+                Dim Item As MyListItem = FrmLoginMs.ComboAccounts.SelectedItem
+                Result = New McLoginMs With {.OAuthRefreshToken = Item.Tag, .UserName = Item.Title}
+            End If
+        End Sub)
         Return Result
     End Function
     ''' <summary>

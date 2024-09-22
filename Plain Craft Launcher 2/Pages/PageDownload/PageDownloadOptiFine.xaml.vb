@@ -13,7 +13,7 @@
             '归类
             Dim Dict As New Dictionary(Of String, List(Of DlOptiFineListEntry))
             Dict.Add("快照版本", New List(Of DlOptiFineListEntry))
-            For VersionCode As Integer = 30 To 0 Step -1
+            For VersionCode As Integer = 50 To 0 Step -1
                 Dict.Add("1." & VersionCode, New List(Of DlOptiFineListEntry))
             Next
             For Each Version As DlOptiFineListEntry In DlOptiFineListLoader.Output.Value
@@ -42,12 +42,8 @@
                 PanMain.Children.Add(NewCard)
             Next
         Catch ex As Exception
-            Log(ex, "可视化版本列表出错", LogLevel.Feedback)
+            Log(ex, "可视化 OptiFine 版本列表出错", LogLevel.Feedback)
         End Try
-    End Sub
-
-    Public Sub DownloadStart(sender As MyListItem, e As Object)
-        McDownloadOptiFine(sender.Tag)
     End Sub
 
     Private Sub BtnWeb_Click(sender As Object, e As EventArgs) Handles BtnWeb.Click

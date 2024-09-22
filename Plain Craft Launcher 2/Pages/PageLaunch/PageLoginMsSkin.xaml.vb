@@ -99,7 +99,7 @@ Retry:
                 Client.DefaultRequestHeaders.UserAgent.Add(New Net.Http.Headers.ProductInfoHeaderValue("MojangSharp", "0.1"))
                 Dim Contents As New Net.Http.MultipartFormDataContent From {
                     {New Net.Http.StringContent(If(SkinInfo.IsSlim, "slim", "classic")), "variant"},
-                    {New Net.Http.ByteArrayContent(File.ReadAllBytes(SkinInfo.LocalFile)), "file", GetFileNameFromPath(SkinInfo.LocalFile)}
+                    {New Net.Http.ByteArrayContent(ReadFileBytes(SkinInfo.LocalFile)), "file", GetFileNameFromPath(SkinInfo.LocalFile)}
                 }
                 Dim Result As String = Await (Await Client.PostAsync(New Uri("https://api.minecraftservices.com/minecraft/profile/skins"), Contents)).Content.ReadAsStringAsync
                 If Result.Contains("request requires user authentication") Then
