@@ -52,12 +52,13 @@ Public Class PageVersionScreenshot
             .Height = Double.NaN, ' 允许高度自适应
             .Width = Double.NaN,  ' 允许宽度自适应
             .Margin = New Thickness(7),
-            .Tag = i
+            .Tag = i,
+            .ToolTip = i.Replace(ScreenshotPath, "") '适配高清截图模组
             }
             Dim grid As New Grid
             myCard.Children.Add(grid)
 
-            grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(7)})
+            grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(9)})
             grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(120)})
             grid.RowDefinitions.Add(New RowDefinition)
 
