@@ -14,8 +14,9 @@ jobs:
   build:
     name: Build
     runs-on: windows-latest
-    env:
-      configuration: Debug
+    strategy:  
+       matrix:  
+         configuration: [Debug, Release]
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -36,9 +37,9 @@ jobs:
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const CurseForgeAPIKey As String = ""', 'Public Const CurseForgeAPIKey As String = "${{ secrets.CURSEFORGE_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
         (gc "Plain Craft Launcher 2\Modules\Base\ModBase.vb") -replace 'Public Const CommitHash As String = ""', 'Public Const CommitHash As String = "${{ github.sha }}"' | Out-File "Plain Craft Launcher 2\Modules\Base\ModBase.vb"
     - name: Build
-      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ env.configuration }}
+      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ env.configuration }} ${{ env.describe }}
-        path: Plain Craft Launcher 2\obj\${{ env.configuration }}\Plain Craft Launcher 2.exe
+        name: ${{ matrix.configuration }} ${{ env.describe }}
+        path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
