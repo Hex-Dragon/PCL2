@@ -149,7 +149,7 @@ Public Class PageVersionShader
             Hint("已粘贴 " & CopiedFiles & " 个文件")
             LoadFileList()
         Catch ex As Exception
-            Log(ex, "粘贴存档文件夹失败", LogLevel.Hint)
+            Log(ex, "粘贴光影包文件失败", LogLevel.Hint)
         End Try
     End Sub
 End Class

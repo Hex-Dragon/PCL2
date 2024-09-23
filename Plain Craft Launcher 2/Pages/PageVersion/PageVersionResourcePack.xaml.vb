@@ -75,7 +75,7 @@ Public Class PageVersionResourcePack
                     ResTempFile = i + "\pack.png"
                 End If
             Catch ex As Exception
-                Log(ex, "[Resourcepack] 提取整合包图片失败！")
+                Log(ex, "[Resourcepack] 提取资源包图片失败！")
                 ResTempFile = PathImage & "Icons/NoIcon.png"
             End Try
             If Not File.Exists(ResTempFile) Then ResTempFile = PathImage & "Icons/NoIcon.png" '防止未考虑到的错误
@@ -194,7 +194,7 @@ Public Class PageVersionResourcePack
             Hint("已粘贴 " & CopiedFiles & " 个文件和 " & CopiedFolders & " 个文件夹")
             LoadFileList()
         Catch ex As Exception
-            Log(ex, "粘贴存档文件夹失败", LogLevel.Hint)
+            Log(ex, "粘贴资源包文件失败", LogLevel.Hint)
         End Try
     End Sub
 End Class
