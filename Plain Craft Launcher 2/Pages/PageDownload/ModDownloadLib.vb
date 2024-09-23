@@ -207,9 +207,19 @@ Public Module ModDownloadLib
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
         AddHandler BtnInfo.Click, AddressOf McDownloadMenuLog
-        sender.Buttons = {BtnInfo}
+        Dim BtnServer As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonServer, .ToolTip = "下载服务端"}
+        ToolTipService.SetPlacement(BtnServer, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnServer, 30)
+        ToolTipService.SetHorizontalOffset(BtnServer, 2)
+        AddHandler BtnServer.Click, AddressOf McDownloadMenuServer
+        sender.Buttons = {BtnServer, BtnInfo}
     End Sub
     Private Sub McDownloadMenuBuild(sender As Object, e As EventArgs)
+        Dim BtnServer As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonServer, .ToolTip = "下载服务端"}
+        ToolTipService.SetPlacement(BtnServer, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnServer, 30)
+        ToolTipService.SetHorizontalOffset(BtnServer, 2)
+        AddHandler BtnServer.Click, AddressOf McDownloadMenuServer
         Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
@@ -220,7 +230,7 @@ Public Module ModDownloadLib
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
         AddHandler BtnInfo.Click, AddressOf McDownloadMenuLog
-        sender.Buttons = {BtnSave, BtnInfo}
+        sender.Buttons = {BtnServer, BtnSave, BtnInfo}
     End Sub
     Private Sub McDownloadMenuLog(sender As Object, e As RoutedEventArgs)
         Dim Version As JToken
@@ -232,6 +242,25 @@ Public Module ModDownloadLib
             Version = sender.Parent.Parent.Tag
         End If
         McUpdateLogShow(Version)
+    End Sub
+    Private Sub McDownloadMenuServer(sender As Object, e As RoutedEventArgs)
+        Dim Version As JToken
+        If sender.Tag IsNot Nothing Then
+            Version = sender.Tag
+        ElseIf sender.Parent.Tag IsNot Nothing Then
+            Version = sender.Parent.Tag
+        Else
+            Version = sender.Parent.Parent.Tag
+        End If
+        RunInThread(Sub()
+                        Dim Json As JObject = NetGetCodeByRequestRetry(Version("url"), IsJson:=True)
+                        If Json("downloads")?("server") Is Nothing Then
+                            Hint("此版本暂未有服务端文件提供下载")
+                        Else
+                            PageOtherTest.StartCustomDownload(Json("downloads")("server")("url").ToString(), Version("id").ToString() & "-server.jar")
+                        End If
+                    End Sub
+            )
     End Sub
     Public Sub McDownloadMenuSave(sender As Object, e As RoutedEventArgs)
         Dim Version As MyListItem
