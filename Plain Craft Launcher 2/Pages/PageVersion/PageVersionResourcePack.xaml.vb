@@ -18,6 +18,9 @@ Public Class PageVersionResourcePack
 
     End Sub
 
+    ''' <summary>
+    ''' 文件和文件夹列表
+    ''' </summary>
     Dim FileList As List(Of String) = New List(Of String)
     Dim ResourcepacksPath As String
 
@@ -47,31 +50,40 @@ Public Class PageVersionResourcePack
     Private Sub LoadFileList()
         Log("[Resourcepack] 刷新资源包文件")
         FileList.Clear()
-        FileList = Directory.EnumerateFiles(ResourcepacksPath, "*.zip").ToList()
-        If ModeDebug Then Log("[Resourcepack] 共发现 " & FileList.Count & " 个资源包文件", LogLevel.Debug)
+        Dim fileRes = Directory.EnumerateFiles(ResourcepacksPath, "*.zip").ToList()
+        FileList.AddRange(fileRes)
+        Dim FolderRes = Directory.EnumerateDirectories(ResourcepacksPath).ToList()
+        FileList.AddRange(FolderRes)
+        If ModeDebug Then Log($"[Resourcepack] 共发现 {FileList.Count} 个资源包文件（{fileRes.Count} 个文件，{FolderRes.Count} 个文件夹）", LogLevel.Debug)
         PanList.Children.Clear()
         Dim ResCachaPath = PageVersionLeft.Version.PathIndie & "PCL\Cache\resourcepacks\"
         If Directory.Exists(ResCachaPath) Then Directory.Delete(ResCachaPath, True)
         Directory.CreateDirectory(ResCachaPath)
         For Each i In FileList
             Dim ResTempFile = ResCachaPath & GetHash(i) & ".png"
+            Dim isFile = File.Exists(i)
             Try
-                Dim Archive = New ZipArchive(New FileStream(i, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                Dim pack = Archive.GetEntry("pack.png")
-                If pack Is Nothing Then
-                    ResTempFile = PathImage & "Icons/NoIcon.png"
-                Else
-                    pack.ExtractToFile(ResTempFile)
+                If isFile Then '文件类型的资源包
+                    Dim Archive = New ZipArchive(New FileStream(i, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    Dim pack = Archive.GetEntry("pack.png")
+                    If pack Is Nothing Then
+                        ResTempFile = PathImage & "Icons/NoIcon.png"
+                    Else
+                        pack.ExtractToFile(ResTempFile)
+                    End If
+                Else '文件夹型资源包
+                    ResTempFile = i + "\pack.png"
                 End If
             Catch ex As Exception
                 Log(ex, "[Resourcepack] 提取整合包图片失败！")
                 ResTempFile = PathImage & "Icons/NoIcon.png"
             End Try
+            If Not File.Exists(ResTempFile) Then ResTempFile = PathImage & "Icons/NoIcon.png" '防止未考虑到的错误
             Dim worldItem As MyListItem = New MyListItem With {
-            .Title = GetFileNameWithoutExtentionFromPath(i),
-            .Logo = ResTempFile,
-            .Info = $"引入时间：{ File.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}",
-            .Tag = i
+                .Title = If(isFile, GetFileNameWithoutExtentionFromPath(i), GetFolderNameFromPath(i)),
+                .Logo = ResTempFile,
+                .Info = $"引入时间：{ If(isFile, File.GetCreationTime(i), Directory.GetCreationTime(i)).ToString("yyyy'/'MM'/'dd")}",
+                .Tag = i
             }
             Dim BtnOpen As MyIconButton = New MyIconButton With {
                 .Logo = Logo.IconButtonOpen,
@@ -116,7 +128,11 @@ Public Class PageVersionResourcePack
         Path = GetPathFromSender(sender)
         RemoveItem(Path)
         Try
-            My.Computer.FileSystem.DeleteFile(Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+            If File.Exists(Path) Then
+                My.Computer.FileSystem.DeleteFile(Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+            Else
+                My.Computer.FileSystem.DeleteDirectory(Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
+            End If
             Hint("已将资源包移至回收站！")
         Catch ex As Exception
             Log(ex, "删除资源包失败！", LogLevel.Hint)
@@ -124,7 +140,7 @@ Public Class PageVersionResourcePack
     End Sub
     Private Sub BtnCopy_Click(sender As Object, e As MouseButtonEventArgs)
         Dim Path As String = GetPathFromSender(sender)
-        If File.Exists(Path) Then
+        If File.Exists(Path) Or Directory.Exists(Path) Then
             Clipboard.SetFileDropList(New Specialized.StringCollection() From {Path})
             Hint("已复制资源包文件到剪贴板！")
         Else
@@ -147,6 +163,7 @@ Public Class PageVersionResourcePack
                 Exit Sub
             End If
             Dim CopiedFiles = 0
+            Dim CopiedFolders = 0
             For Each i In files
                 If File.Exists(i) Then
                     Try
@@ -157,12 +174,24 @@ Public Class PageVersionResourcePack
                             CopiedFiles += 1
                         End If
                     Catch ex As Exception
-                        Log(ex, "[Shader] 复制文件时出错")
+                        Log(ex, "[Reourcepack] 复制文件时出错")
+                        Continue For
+                    End Try
+                Else
+                    Try
+                        If Directory.Exists(ResourcepacksPath & GetFolderNameFromPath(i)) Then
+                            Hint("已存在同名文件夹：" & GetFolderNameFromPath(i))
+                        Else
+                            CopyDirectory(i, ResourcepacksPath & GetFolderNameFromPath(i))
+                            CopiedFolders += 1
+                        End If
+                    Catch ex As Exception
+                        Log(ex, "[Resourcepack] 复制文件时出错")
                         Continue For
                     End Try
                 End If
             Next
-            Hint("已粘贴 " & CopiedFiles & " 个文件")
+            Hint("已粘贴 " & CopiedFiles & " 个文件和 " & CopiedFolders & " 个文件夹")
             LoadFileList()
         Catch ex As Exception
             Log(ex, "粘贴存档文件夹失败", LogLevel.Hint)
