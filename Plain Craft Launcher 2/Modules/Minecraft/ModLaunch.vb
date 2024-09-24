@@ -506,6 +506,7 @@ NextInner:
         End If
         '尝试登录
         Dim OAuthTokens As String()
+        Dim ClientId As String = ""
         If Input.OAuthRefreshToken = "" Then
             '无 RefreshToken
 Relogin:
@@ -513,10 +514,10 @@ Relogin:
             If OAuthCode = "Cancel" Then Exit Sub
             If Data.IsAborted Then Throw New ThreadInterruptedException
             Data.Progress = 0.2
-            OAuthTokens = MsLoginStep2(OAuthCode, False)
+            OAuthTokens = MsLoginStep2(OAuthCode, False, ClientId)
         Else
             '有 RefreshToken
-            OAuthTokens = MsLoginStep2(Input.OAuthRefreshToken, True)
+            OAuthTokens = MsLoginStep2(Input.OAuthRefreshToken, True, ClientId)
         End If
         '要求重新打开登录网页认证
         If OAuthTokens(0) = "Cancel" Then Exit Sub
@@ -837,39 +838,59 @@ LoginFinish:
             Return RegexSeek(Result, "(?<=code\=)[^&]+")
         End If
     End Function
+
     '微软登录步骤 2：从 OAuth Code 或 OAuth RefreshToken 获取 {OAuth AccessToken, OAuth RefreshToken}
-    Private Function MsLoginStep2(Code As String, IsRefresh As Boolean) As String()
+    Private Function MsLoginStep2(Code As String, IsRefresh As Boolean, ClientId As String, Optional ExpiresIn As String = "900") As String()
         McLaunchLog("开始微软登录步骤 2（" & If(IsRefresh, "", "非") & "刷新登录）")
 
         Dim Request As String
         If IsRefresh Then
-            Request = "client_id=00000000402b5328" & "&" &
+            Request = "grant_type=refresh_token" & "&" &
+                      "client_id=" & ClientId & "&" &
+                      "device_code=" & Code & "&" &
                       "refresh_token=" & Uri.EscapeDataString(Code) & "&" &
-                      "grant_type=refresh_token" & "&" &
-                      "redirect_uri=" & Uri.EscapeDataString("https://login.live.com/oauth20_desktop.srf") & "&" &
-                      "scope=" & Uri.EscapeDataString("service::user.auth.xboxlive.com::MBI_SSL")
+                      "scope=XboxLive.signin%20offline_access"
         Else
-            Request = "client_id=00000000402b5328" & "&" &
-                      "code=" & Uri.EscapeDataString(Code) & "&" &
-                      "grant_type=authorization_code" & "&" &
-                      "redirect_uri=" & Uri.EscapeDataString("https://login.live.com/oauth20_desktop.srf") & "&" &
-                      "scope=" & Uri.EscapeDataString("service::user.auth.xboxlive.com::MBI_SSL")
+            Request = "grant_type=urn:ietf:params:oauth:grant-type:device_code" & "&" &
+                      "client_id=" & ClientId & "&" &
+                      "device_code=" & Code & "&" &
+                      "scope=XboxLive.signin%20offline_access"
         End If
         Dim Result As String
-        Try
-            Result = NetRequestMulty("https://login.live.com/oauth20_token.srf", "POST", Request, "application/x-www-form-urlencoded", 2)
-        Catch ex As Exception
-            If ex.Message.Contains("must sign in again") OrElse ex.Message.Contains("invalid_grant") Then '#269
-                Return {"Relogin", ""}
-            Else
-                Throw
-            End If
-        End Try
+        Dim stopwatch As Stopwatch = Stopwatch.StartNew()
 
-        Dim ResultJson As JObject = GetJson(Result)
-        Dim AccessToken As String = ResultJson("access_token").ToString
-        Dim RefreshToken As String = ResultJson("refresh_token").ToString
-        Return {AccessToken, RefreshToken}
+        While stopwatch.Elapsed < TimeSpan.FromSeconds(ExpiresIn)
+            Try
+                Result = NetRequestMulty("https://login.microsoftonline.com/consumers/oauth2/v2.0/token", "POST", Request, "application/x-www-form-urlencoded", 2)
+            Catch ex As Exception
+                If ex.Message.Contains("must sign in again") OrElse ex.Message.Contains("invalid_grant") Then '#269
+                    Return {"Relogin", ""}
+                ElseIf ex.Message.Contains("authorization_declined") Then
+                    Hint("你拒绝了 PCL2 的访问权限申请，验证过程被中断！")
+                    Return {"Cancel", ""}
+                ElseIf ex.Message.Contains("expired_token") Then
+                    Hint("Token 已过期，请尝试重新验证！")
+                    Exit While
+                ElseIf ex.Message.Contains("AADSTS70016") Then
+                    Continue While
+                Else
+                    Throw
+                End If
+            End Try
+
+            If Result IsNot Nothing Then
+                Dim ResultJson As JObject = GetJson(Result)
+                Dim AccessToken As String = ResultJson("access_token").ToString
+                Dim RefreshToken As String = ResultJson("refresh_token").ToString
+                Return {AccessToken, RefreshToken}
+            End If
+
+            Thread.Sleep(1000)
+        End While
+
+        Hint("验证超时，请尝试重新验证！")
+        Return {"Cancel", ""}
+
     End Function
 
     ''微软登录步骤 1：获取 DeviceCode 并显示验证提示
