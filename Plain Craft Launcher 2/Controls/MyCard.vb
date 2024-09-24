@@ -164,6 +164,8 @@
                     Stack.Children.Add(FabricDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Fabric_Selected))
                 Case 13
                     Stack.Children.Add(NeoForgeDownloadListItem(Data, AddressOf NeoForgeSave_Click, True))
+                Case 14
+                    Stack.Children.Add(QuiltDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Quilt_Selected))
                 Case Else
                     Log("未知的虚拟化种类：" & Type, LogLevel.Feedback)
             End Select

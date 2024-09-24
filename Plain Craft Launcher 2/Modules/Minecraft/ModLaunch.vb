@@ -1517,7 +1517,7 @@ LoginFinish:
 
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
-            Throw New Exception("版本 json 中没有 mainClass 项！")
+            Throw New Exception("版本 Json 中没有 mainClass 项！")
         Else
             DataList.Add(Version.JsonObject("mainClass"))
         End If
@@ -1608,7 +1608,7 @@ NextVersion:
 
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
-            Throw New Exception("版本 json 中没有 mainClass 项！")
+            Throw New Exception("版本 Json 中没有 mainClass 项！")
         Else
             Result += " " & Version.JsonObject("mainClass").ToString
         End If

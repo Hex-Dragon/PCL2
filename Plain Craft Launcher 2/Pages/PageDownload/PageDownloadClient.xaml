@@ -9,7 +9,7 @@
             <StackPanel Orientation="Vertical" Margin="5">
                 <!--<local:MyCard Margin="20,20,20,0" Grid.IsSharedSizeScope="True" Title="自动安装提示" x:Name="CardTip">
                 <StackPanel Margin="25,40,15,20">
-                    <TextBlock Margin="0,0,0,2" Text="本页只提供需要在下载后手动进行安装的游戏 jar 与 json 下载。" TextWrapping="Wrap" />
+                    <TextBlock Margin="0,0,0,2" Text="本页只提供需要在下载后手动进行安装的游戏 Jar 与 Json 下载。" TextWrapping="Wrap" />
                     <TextBlock Margin="0,0,0,11" Text="如果你想要进行自动安装，在游戏安装页选择游戏版本，然后直接安装即可。" TextWrapping="Wrap" />
                     <Grid Height="35">
                         <Grid.ColumnDefinitions>

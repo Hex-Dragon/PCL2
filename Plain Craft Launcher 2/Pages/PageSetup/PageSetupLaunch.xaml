@@ -246,7 +246,7 @@
                         <local:MyCheckBox Text="忽略 Java 兼容性警告" x:Name="CheckAdvanceJava" Tag="LaunchAdvanceJava" Margin="0,0,60,0"
                                         ToolTip="警告：强烈推荐在版本设置中关闭特定版本的警告，而不是在这里关闭所有版本的警告！&#xa;如果在设置中手动选择了与当前版本不兼容的 Java，则自动跳过兼容性警告弹窗，强制使用手动选择的 Java。" />
                         <local:MyCheckBox Text="关闭文件校验" x:Name="CheckAdvanceAssets" Tag="LaunchAdvanceAssets"
-                                        ToolTip="警告：强烈推荐在版本设置中关闭特定版本的校验，而不是在这里关闭所有版本的校验！&#xa;完全不更改 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。&#xa;如果你没有修改相关文件，请勿勾选此项。" />
+                                        ToolTip="警告：强烈推荐在版本设置中关闭特定版本的校验，而不是在这里关闭所有版本的校验！&#xa;完全不更改 assets；不校验 libraries、第三方登录库与版本主 Jar 文件是否被修改。&#xa;如果你没有修改相关文件，请勿勾选此项。" />
                     </StackPanel>
                 </Grid>
             </local:MyCard>
