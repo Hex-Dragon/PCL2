@@ -1,6 +1,7 @@
 ﻿Imports System.IO.Compression
 
 Public Module ModMod
+    Private Const LocalModCacheVersion As Integer = 7
 
     Public Class McMod
 
@@ -47,7 +48,7 @@ Public Module ModMod
             Get
                 Load()
                 If Not IsFileAvailable Then
-                    Return McModState.Unavaliable
+                    Return McModState.Unavailable
                 ElseIf Path.EndsWithF(".disabled", True) OrElse Path.EndsWithF(".old", True) Then
                     Return McModState.Disabled
                 Else
@@ -58,7 +59,7 @@ Public Module ModMod
         Public Enum McModState As Integer
             Fine = 0
             Disabled = 1
-            Unavaliable = 2
+            Unavailable = 2
         End Enum
 
 #End Region
@@ -814,7 +815,7 @@ Finished:
 
             '等待 Mod 更新完成
             If PageVersionMod.UpdatingVersions.Contains(Loader.Input) Then
-                Log($"[Mod] 等待 Mod 更新完成后才能继续加载 Mod 列表")
+                Log($"[Mod] 等待 Mod 更新完成后才能继续加载 Mod 列表：" & Loader.Input)
                 Try
                     RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = "正在更新 Mod")
                     Do Until Not PageVersionMod.UpdatingVersions.Contains(Loader.Input)
@@ -852,7 +853,7 @@ Finished:
             Dim Cache As New JObject
             Try
                 Dim CacheContent As String = ReadFile(CachePath)
-                If CacheContent <> "" Then
+                If Not String.IsNullOrWhiteSpace(CacheContent) Then
                     Cache = GetJson(CacheContent)
                     If Not Cache.ContainsKey("version") OrElse Cache("version").ToObject(Of Integer) <> LocalModCacheVersion Then
                         Log($"[Mod] 本地 Mod 信息缓存版本已过期，将弃用这些缓存信息", LogLevel.Debug)
@@ -861,6 +862,7 @@ Finished:
                 End If
             Catch ex As Exception
                 Log(ex, "读取本地 Mod 信息缓存失败，已重置")
+                Cache = New JObject
             End Try
             Cache("version") = LocalModCacheVersion
 
@@ -886,7 +888,7 @@ Finished:
                 End If
                 ModList.Add(ModEntry)
                 '读取 Comp 缓存
-                If ModEntry.State = McMod.McModState.Unavaliable Then Continue For
+                If ModEntry.State = McMod.McModState.Unavailable Then Continue For
                 Dim CacheKey = ModEntry.ModrinthHash & PageVersionLeft.Version.Version.McName & GetTargetModLoaders().Join("")
                 If Cache.ContainsKey(CacheKey) Then
                     ModEntry.FromJson(Cache(CacheKey))
@@ -901,8 +903,8 @@ Finished:
             '排序
             ModList = Sort(ModList,
             Function(Left As McMod, Right As McMod) As Boolean
-                If (Left.State = McMod.McModState.Unavaliable) <> (Right.State = McMod.McModState.Unavaliable) Then
-                    Return Left.State = McMod.McModState.Unavaliable
+                If (Left.State = McMod.McModState.Unavailable) <> (Right.State = McMod.McModState.Unavailable) Then
+                    Return Left.State = McMod.McModState.Unavailable
                 Else
                     Return Not Right.FileName.CompareTo(Left.FileName)
                 End If
@@ -924,7 +926,6 @@ Finished:
         End Try
     End Sub
     '联网加载 Mod 详情
-    Private Const LocalModCacheVersion As Integer = 6
     Public McModDetailLoader As New LoaderTask(Of KeyValuePair(Of List(Of McMod), JObject), Integer)("Mod List Detail Loader", AddressOf McModDetailLoad)
     Private Sub McModDetailLoad(Loader As LoaderTask(Of KeyValuePair(Of List(Of McMod), JObject), Integer))
         Dim Mods As List(Of McMod) = Loader.Input.Key
@@ -944,7 +945,7 @@ Finished:
         'McVersions = McVersions.Distinct().ToList()
         '开始网络获取
         Log($"[Mod] 目标加载器：{ModLoaders.Join("/")}，版本：{McVersion}")
-        Dim EndedThreadCount As Integer = 0, SucceedThreadCount As Integer = 0
+        Dim EndedThreadCount As Integer = 0, IsFailed As Boolean = False
         Dim MainThread As Thread = Thread.CurrentThread
         '从 Modrinth 获取信息
         RunInNewThread(
@@ -979,7 +980,6 @@ Finished:
                 For Each ProjectJson In ModrinthProject
                     Dim Project As New CompProject(ProjectJson)
                     For Each Entry In ModrinthMapping(Project.Id)
-                        If Entry.Comp IsNot Nothing AndAlso Entry.Comp.FromCurseForge Then Project.LogoUrl = Entry.Comp.LogoUrl 'Modrinth 的部分 Logo 不是图片，如果可能，使用 CurseForge 的 Logo
                         Entry.Comp = Project
                     Next
                 Next
@@ -1005,9 +1005,9 @@ Finished:
                     End If
                 Next
                 Log($"[Mod] 从 Modrinth 获取本地 Mod 信息结束")
-                SucceedThreadCount += 1
             Catch ex As Exception
                 Log(ex, "从 Modrinth 获取本地 Mod 信息失败")
+                IsFailed = True
             Finally
                 EndedThreadCount += 1
             End Try
@@ -1023,7 +1023,7 @@ Finished:
                     If Loader.IsAbortedWithThread(MainThread) Then Exit Sub
                 Next
                 Dim CurseForgeRaw = CType(CType(GetJson(DlModRequest("https://api.curseforge.com/v1/fingerprints/432", "POST",
-                                    $"{{""fingerprints"": [{CurseForgeHashes.Join(",")}]}}", "application/json")), JObject)("data")("exactMatches"), JContainer)
+                    $"{{""fingerprints"": [{CurseForgeHashes.Join(",")}]}}", "application/json")), JObject)("data")("exactMatches"), JContainer)
                 Log($"[Mod] 从 CurseForge 获取到 {CurseForgeRaw.Count} 个本地 Mod 的对应信息")
                 '步骤 2：尝试读取工程信息缓存，构建其他 Mod 的对应关系
                 If Not CurseForgeRaw.Any() Then Exit Sub
@@ -1046,7 +1046,7 @@ Finished:
                 '步骤 3：获取工程信息
                 If Not CurseForgeMapping.Any() Then Exit Sub
                 Dim CurseForgeProject = CType(GetJson(DlModRequest("https://api.curseforge.com/v1/mods", "POST",
-                                    $"{{""modIds"": [{CurseForgeMapping.Keys.Join(",")}]}}", "application/json")), JObject)("data")
+                    $"{{""modIds"": [{CurseForgeMapping.Keys.Join(",")}]}}", "application/json")), JObject)("data")
                 Dim UpdateFileIds As New Dictionary(Of Integer, List(Of McMod)) 'FileId -> 本地 Mod 文件列表
                 Dim FileIdToProjectSlug As New Dictionary(Of Integer, String)
                 For Each ProjectJson In CurseForgeProject
@@ -1055,7 +1055,6 @@ Finished:
                     Dim Project As New CompProject(ProjectJson)
                     For Each Entry In CurseForgeMapping(Project.Id) '倒查防止 CurseForge 返回的内容有漏
                         If Entry.Comp IsNot Nothing AndAlso Not Entry.Comp.FromCurseForge Then
-                            Entry.Comp.LogoUrl = Project.LogoUrl 'Modrinth 部分 Logo 加载不出来
                             Entry.Comp = Entry.Comp '再次触发修改事件
                             Continue For
                         End If
@@ -1066,10 +1065,9 @@ Finished:
                         Dim NewestVersion As String = Nothing
                         Dim NewestFileIds As New List(Of Integer)
                         For Each IndexEntry In ProjectJson("latestFilesIndexes")
-                            If IndexEntry("modLoader") Is Nothing OrElse Not IndexEntry("modLoader").HasValues OrElse '镜像源会返回一个值为 null 的键
-                            ModLoaders.Single <> IndexEntry("modLoader").ToObject(Of Integer) Then Continue For 'ModLoader 唯一且匹配
+                            If IndexEntry("modLoader") Is Nothing OrElse ModLoaders.Single <> IndexEntry("modLoader").ToObject(Of Integer) Then Continue For 'ModLoader 唯一且匹配
                             Dim IndexVersion As String = IndexEntry("gameVersion")
-                            If McVersion <> IndexVersion Then Continue For 'MC 版本匹配
+                            If IndexVersion <> McVersion Then Continue For 'MC 版本匹配
                             '由于 latestFilesIndexes 是按时间从新到老排序的，所以只需取第一个；如果需要检查多个 releaseType 下的文件，将 > -1 改为 = 1，但这应当并不会获取到更新的文件
                             If NewestVersion IsNot Nothing AndAlso VersionSortInteger(NewestVersion, IndexVersion) > -1 Then Continue For '只保留最新 MC 版本
                             If NewestVersion <> IndexVersion Then
@@ -1114,9 +1112,9 @@ Finished:
                     End If
                 Next
                 Log($"[Mod] 从 CurseForge 获取 Mod 更新信息结束")
-                SucceedThreadCount += 1
             Catch ex As Exception
                 Log(ex, "从 CurseForge 获取本地 Mod 信息失败")
+                IsFailed = True
             Finally
                 EndedThreadCount += 1
             End Try
@@ -1131,7 +1129,7 @@ Finished:
         Log($"[Mod] 联网获取本地 Mod 信息完成，为 {Mods.Count} 个 Mod 更新缓存")
         If Not Mods.Any() Then Exit Sub
         For Each Entry In Mods
-            Entry.CompLoaded = SucceedThreadCount = 2
+            Entry.CompLoaded = Not IsFailed
             Cache(Entry.ModrinthHash & McVersion & ModLoaders.Join("")) = Entry.ToJson()
         Next
         WriteFile(PathTemp & "Cache\LocalMod.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))

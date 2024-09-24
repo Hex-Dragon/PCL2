@@ -106,6 +106,10 @@ Download:
                         Log("[Page] 主页预设：OpenBMCLAPI 仪表盘 Lite")
                         Url = "https://pcl-bmcl.milulu.xyz/"
                         GoTo Download
+                    Case 7
+                        Log("[Page] 主页预设：主页市场")
+                        Url = "https://homepage-market.pages.dev/Custom.xaml"
+                        GoTo Download
                 End Select
         End Select
         RunInUi(Sub() LoadContent(Content))

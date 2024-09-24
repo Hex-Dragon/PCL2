@@ -28,7 +28,7 @@ Public Module ModDownloadLib
             Dim VersionFolder As String = PathMcFolder & "versions\" & Id & "\"
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"Minecraft {Id} 下载" Then Continue For
                 If Behaviour = NetPreDownloadBehaviour.ExitWhileExistsOrDownloading Then Return OngoingLoader
                 Hint("该版本正在下载中！", HintType.Critical)
@@ -71,7 +71,7 @@ Public Module ModDownloadLib
             VersionFolder = VersionFolder & Id & "\"
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"Minecraft {Id} 下载" Then Continue For
                 If Behaviour = NetPreDownloadBehaviour.ExitWhileExistsOrDownloading Then Exit Sub
                 Hint("该版本正在下载中！", HintType.Critical)
@@ -155,7 +155,7 @@ Public Module ModDownloadLib
         LoadersAssets.Add(New LoaderDownload("下载资源文件索引（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 3, .Show = False})
         LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("分析所需资源文件（副加载器）",
         Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-            Task.Output = McAssetsFixList(McAssetsGetIndexName(New McVersion(VersionFolder)), True, Task)
+            Task.Output = McAssetsFixList(New McVersion(VersionFolder), True, Task)
         End Sub) With {.ProgressWeight = 3, .Show = False})
         LoadersAssets.Add(New LoaderDownload("下载资源文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 14, .Show = False})
         Loaders.Add(New LoaderCombo(Of String)("下载原版资源文件", LoadersAssets) With {.Block = False, .ProgressWeight = 21})
@@ -382,7 +382,7 @@ Public Module ModDownloadLib
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"OptiFine {DownloadInfo.NameDisplay} 下载" Then Continue For
                 Hint("该版本正在下载中！", HintType.Critical)
                 Exit Sub
@@ -809,7 +809,7 @@ Retry:
             Dim VersionFolder As String = PathMcFolder & "versions\" & VersionName & "\"
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"LiteLoader {Id} 下载" Then Continue For
                 Hint("该版本正在下载中！", HintType.Critical)
                 Exit Sub
@@ -843,7 +843,7 @@ Retry:
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"LiteLoader {Id} 下载" Then Continue For
                 Hint("该版本正在下载中！", HintType.Critical)
                 Exit Sub
@@ -1025,7 +1025,7 @@ Retry:
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"{DisplayName} 下载" Then Continue For
                 Hint("该版本正在下载中！", HintType.Critical)
                 Exit Sub
@@ -1779,7 +1779,7 @@ Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> $"Fabric {Version} 安装器下载" Then Continue For
                 Hint("该版本正在下载中！", HintType.Critical)
                 Exit Sub

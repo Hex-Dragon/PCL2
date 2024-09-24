@@ -91,17 +91,18 @@
                 _State = value
                 Log("[Loader] 加载器 " & Name & " 状态改变：" & GetStringFromEnum(value))
                 '实现 ILoadingTrigger 接口与 OnStateChanged 回调
-                RunInUi(Sub()
-                            Select Case value
-                                Case LoadState.Loading
-                                    LoadingState = MyLoading.MyLoadingState.Run
-                                Case LoadState.Failed
-                                    LoadingState = MyLoading.MyLoadingState.Error
-                                Case Else
-                                    LoadingState = MyLoading.MyLoadingState.Stop
-                            End Select
-                            RaiseEvent OnStateChangedUi(Me, value, OldState)
-                        End Sub)
+                RunInUi(
+                Sub()
+                    Select Case value
+                        Case LoadState.Loading
+                            LoadingState = MyLoading.MyLoadingState.Run
+                        Case LoadState.Failed
+                            LoadingState = MyLoading.MyLoadingState.Error
+                        Case Else
+                            LoadingState = MyLoading.MyLoadingState.Stop
+                    End Select
+                    RaiseEvent OnStateChangedUi(Me, value, OldState)
+                End Sub)
                 If HasOnStateChangedThread Then RunInThread(Sub() RaiseEvent OnStateChangedThread(Me, value, OldState))
             End Set
         End Property
@@ -566,7 +567,7 @@ Restart:
     End Class
 
     '任务栏进度条
-    Public LoaderTaskbar As New Concurrent.ConcurrentBag(Of LoaderBase)
+    Public LoaderTaskbar As New SynchronizedCollection(Of LoaderBase)
     Public LoaderTaskbarProgress As Double = 0 '平滑后的进度
     Private LoaderTaskbarProgressLast As Shell.TaskbarItemProgressState = Shell.TaskbarItemProgressState.None
 
@@ -582,14 +583,14 @@ Restart:
             '检查任务是否完成，若完成则移除
             '外显任务是否已经全部完成
             Dim IsAllDownloadTaskCompleted As Boolean = True
-            For Each Loader In LoaderTaskbar
+            For Each Loader In LoaderTaskbar.ToList()
                 If Loader.State = LoadState.Loading Then IsAllDownloadTaskCompleted = False
             Next
             '若单个任务已中止或全部任务已完成，则刷新并移除
             For Each Task In LoaderTaskbar.ToList()
                 If IsAllDownloadTaskCompleted OrElse Task.State = LoadState.Aborted OrElse Task.State = LoadState.Waiting Then
                     If FrmSpeedLeft IsNot Nothing Then FrmSpeedLeft.TaskRefresh(Task)
-                    LoaderTaskbar.TryTake(Task)
+                    LoaderTaskbar.Remove(Task)
                     Log($"[Taskbar] {Task.Name} 已移出任务列表")
                 End If
             Next

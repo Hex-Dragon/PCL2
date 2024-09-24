@@ -21,12 +21,7 @@
         End If
         '检查文件
         Dim Checker As New FileChecker(MinSize:=1024, ActualSize:=If(Version.JsonObject("downloads")("client")("size"), -1), Hash:=Version.JsonObject("downloads")("client")("sha1"))
-        If ReturnNothingOnFileUseable Then
-            '是否跳过
-            Dim IsSetupSkip As Boolean = ShouldIgnoreFileCheck(Version)
-            If IsSetupSkip AndAlso File.Exists(Version.Path & Version.Name & ".jar") Then Return Nothing '跳过校验
-            If Checker.Check(Version.Path & Version.Name & ".jar") Is Nothing Then Return Nothing '通过校验
-        End If
+        If ReturnNothingOnFileUseable AndAlso Checker.Check(Version.Path & Version.Name & ".jar") Is Nothing Then Return Nothing '通过校验
         '返回下载信息
         Dim JarUrl As String = Version.JsonObject("downloads")("client")("url")
         Return New NetFile(DlSourceLauncherOrMetaGet(JarUrl), Version.Path & Version.Name & ".jar", Checker)
@@ -56,7 +51,7 @@
     ''' <summary>
     ''' 构造补全某 Minecraft 版本的所有文件的加载器列表。失败会抛出异常。
     ''' </summary>
-    Public Function DlClientFix(Version As McVersion, CheckAssetsHash As Boolean, AssetsIndexBehaviour As AssetsIndexExistsBehaviour, SkipAssetsDownloadWhileSetupRequired As Boolean) As List(Of LoaderBase)
+    Public Function DlClientFix(Version As McVersion, CheckAssetsHash As Boolean, AssetsIndexBehaviour As AssetsIndexExistsBehaviour) As List(Of LoaderBase)
         Dim Loaders As New List(Of LoaderBase)
 
 #Region "下载支持库文件"
@@ -69,9 +64,9 @@
 #End Region
 
 #Region "下载资源文件"
-        Dim IsSetupSkip As Boolean = ShouldIgnoreFileCheck(Version)
-        If IsSetupSkip Then Log("[Download] 已跳过 Assets 下载")
-        If (Not SkipAssetsDownloadWhileSetupRequired) OrElse Not IsSetupSkip Then
+        If ShouldIgnoreFileCheck(Version) Then
+            Log("[Download] 已跳过所有 Assets 检查")
+        Else
             Dim LoadersAssets As New List(Of LoaderBase)
             '获取资源文件索引地址
             LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("分析资源文件索引地址",
@@ -121,7 +116,7 @@
             '获取资源文件地址
             LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("分析缺失资源文件",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                Task.Output = McAssetsFixList(McAssetsGetIndexName(Version), CheckAssetsHash, Task)
+                Task.Output = McAssetsFixList(Version, CheckAssetsHash, Task)
             End Sub) With {.ProgressWeight = 3})
             '下载资源文件
             LoadersAssets.Add(New LoaderDownload("下载资源文件", New List(Of NetFile)) With {.ProgressWeight = 25})
@@ -1087,29 +1082,46 @@
 
     ''' <summary>
     ''' 对可能涉及 Mod 镜像源的请求进行处理，返回字符串或 JObject。
-    ''' 调用 NetGetCodeByRequestOnce。
+    ''' 调用 NetGetCodeByRequest。
     ''' </summary>
     Public Function DlModRequest(Url As String, Optional IsJson As Boolean = False) As Object
         Dim McimUrl As String = DlSourceModGet(Url)
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         If McimUrl <> Url Then
             Select Case Setup.Get("ToolDownloadMod")
+                'UNDONE: 受 #4811 影响
                 Case 0
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    If ModeDebug Then
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 20))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Else
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                    End If
                 Case 1
                     Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 35))
-                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
                     Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
                     Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
             End Select
         End If
         Dim Exs As String = ""
         For Each Source In Urls
             Try
-                Return NetGetCodeByRequestOnce(Source.Key, Encode:=Encoding.UTF8, Timeout:=Source.Value * 1000,
-                                               IsJson:=IsJson, UseBrowserUserAgent:=True)
+                Return NetGetCodeByRequestOnce(Source.Key, Encode:=Encoding.UTF8, Timeout:=Source.Value * 1000, IsJson:=IsJson, UseBrowserUserAgent:=True)
             Catch ex As Exception
                 Exs += ex.Message + vbCrLf
             End Try
@@ -1119,28 +1131,46 @@
 
     ''' <summary>
     ''' 对可能涉及 Mod 镜像源的请求进行处理。
-    ''' 调用 NetRequestOnce。
+    ''' 调用 NetRequest。
     ''' </summary>
-    Public Function DlModRequest(Url As String, Method As String, Data As String, ContentType As String, Optional Headers As Dictionary(Of String, String) = Nothing) As String
+    Public Function DlModRequest(Url As String, Method As String, Data As String, ContentType As String) As String
         Dim McimUrl As String = DlSourceModGet(Url)
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         If McimUrl <> Url Then
             Select Case Setup.Get("ToolDownloadMod")
+                'UNDONE: 受 #4811 影响
                 Case 0
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    If ModeDebug Then
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 20))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Else
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                    End If
                 Case 1
                     Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 35))
-                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
                     Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
                     Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
             End Select
         End If
         Dim Exs As String = ""
         For Each Source In Urls
             Try
-                Return NetRequestOnce(Source.Key, Method, Data, ContentType, Timeout:=Source.Value * 1000, Headers:=Headers)
+                Return NetRequestOnce(Source.Key, Method, Data, ContentType, Timeout:=Source.Value * 1000)
             Catch ex As Exception
                 Exs += ex.Message + vbCrLf
             End Try

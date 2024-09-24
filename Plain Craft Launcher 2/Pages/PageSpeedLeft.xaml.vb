@@ -92,15 +92,12 @@ Public Class PageSpeedLeft
                             Card.Children.Add(GetObjectFromXML("<Path xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" Stretch=""Uniform"" Tag=""Failed"" Data=""F1 M2.5,0 L0,2.5 7.5,10 0,17.5 2.5,20 10,12.5 17.5,20 20,17.5 12.5,10 20,2.5 17.5,0 10,7.5 2.5,0Z"" Height=""15"" Width=""15"" HorizontalAlignment=""Center"" Grid.Column=""0"" Grid.Row=""0"" Fill=""{DynamicResource ColorBrush3}"" Margin=""0,1,0,0"" VerticalAlignment=""Top""/>"))
                             Dim Tb As TextBlock = GetObjectFromXML("<TextBlock xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation"" TextWrapping=""Wrap"" HorizontalAlignment=""Left"" ToolTip=""单击复制错误详情"" Grid.Column=""1"" Grid.Row=""0"" Margin=""0,0,0,5"" />")
                             Tb.Text = GetExceptionDetail(Loader.Error)
-                            AddHandler Tb.MouseLeftButtonDown, Sub(sender As TextBlock, e As EventArgs)
-                                                                   ClipboardSet(sender.Text, False)
-                                                                   Hint("已复制错误详情！", HintType.Finish)
-                                                               End Sub
+                            AddHandler Tb.MouseLeftButtonDown,
+                            Sub(sender As TextBlock, e As EventArgs)
+                                ClipboardSet(sender.Text, False)
+                                Hint("已复制错误详情！", HintType.Finish)
+                            End Sub
                             Card.Children.Add(Tb)
-                            ''删除取消按钮
-                            'For Each Element As FrameworkElement In CType(Card.Parent, Panel).Children
-                            '    If Element.Name = "BtnCancel" Then AniDispose(CType(Element, MyIconButton), True)
-                            'Next
 #End Region
                         Case LoadState.Finished
 #Region "完成，销毁卡片并返回"
@@ -195,11 +192,10 @@ Public Class PageSpeedLeft
                     Sub(sender As MyIconButton, e As EventArgs)
                         AniDispose(sender, False)
                         AniDispose(Card, True, Sub() If FrmSpeedRight.PanMain.Children.Count = 0 AndAlso FrmMain.PageCurrent = FormMain.PageType.DownloadManager Then FrmMain.PageBack())
-                        Dim LoaderName = If(Loader Is Nothing, "null", Loader.Name)
-                        RightCards.Remove(LoaderName)
-                        LoaderTaskbar.TryTake(Loader)
-                        Log($"[Taskbar] 关闭下载管理卡片：{LoaderName}，且移出任务列表")
-                        RunInThread(Sub() Loader?.Abort())
+                        RightCards.Remove(Loader.Name)
+                        LoaderTaskbar.Remove(Loader)
+                        Log($"[Taskbar] 关闭下载管理卡片：{Loader.Name}，且移出任务列表")
+                        RunInThread(Sub() Loader.Abort())
                     End Sub
                     '如果已经失败，再刷新一次，修改成失败的控件
                     If Loader.State = LoadState.Failed Then
