@@ -329,7 +329,7 @@ Retry:
     ''' <summary>
     ''' 同时发送多个网络请求并要求返回内容。
     ''' </summary>
-    Public Function NetRequestMulty(Url As String, Method As String, Data As Object, ContentType As String, Optional RequestCount As Integer = 4, Optional Headers As Dictionary(Of String, String) = Nothing)
+    Public Function NetRequestMulty(Url As String, Method As String, Data As Object, ContentType As String, Optional RequestCount As Integer = 4, Optional Headers As Dictionary(Of String, String) = Nothing, Optional MakeLog As Boolean = True)
         Dim Threads As New List(Of Thread)
         Dim RequestResult = Nothing
         Dim RequestEx As Exception = Nothing
@@ -338,7 +338,7 @@ Retry:
             Dim th As New Thread(
             Sub()
                 Try
-                    RequestResult = NetRequestOnce(Url, Method, Data, ContentType, 30000, Headers)
+                    RequestResult = NetRequestOnce(Url, Method, Data, ContentType, 30000, Headers, MakeLog)
                 Catch ex As Exception
                     FailCount += 1
                     RequestEx = ex
@@ -1232,7 +1232,7 @@ SourceBreak:
                 '根据情况判断，是否在多线程下禁用下载源（连续错误过多，或不支持断点续传）
                 If ex.Message.Contains("该下载源不支持") OrElse ex.Message.Contains("未能解析") OrElse ex.Message.Contains("(404)") OrElse
                    ex.Message.Contains("(502)") OrElse ex.Message.Contains("无返回数据") OrElse ex.Message.Contains("空间不足") OrElse ex.Message.Contains("获取到的分段大小不一致") OrElse
-                   (ex.Message.Contains("(403)") AndAlso Not Info.Source.Url.ContainsF("bmclapi")) OrElse 'BMCLAPI 的部分源在高频率请求下会返回 403，所以不应因此禁用下载源
+                   ((ex.Message.Contains("(403)") OrElse ex.Message.Contains("(429)")) AndAlso Not Info.Source.Url.ContainsF("bmclapi")) OrElse 'BMCLAPI 的部分源在高频率请求下会返回 403、429，所以不应因此禁用下载源
                    (Info.Source.FailCount >= MathClamp(NetTaskThreadLimit, 5, 30) AndAlso DownloadDone < 1) OrElse
                     Info.Source.FailCount > NetTaskThreadLimit + 2 Then
                     Dim IsThisFail As Boolean = False
@@ -1344,7 +1344,7 @@ Retry:
                         If Check.ActualSize = -1 Then
                             Check.ActualSize = FileSize
                         ElseIf Check.ActualSize <> FileSize Then
-                            Throw New Exception("文件大小不一致：任务要求为 " & Check.ActualSize & " B，网络获取结果为 " & FileSize & "B")
+                            Throw New Exception($"文件大小不一致：任务要求为 {Check.ActualSize} B，网络获取结果为 {FileSize}B")
                         End If
                     End If
                     '检查文件
@@ -1654,6 +1654,9 @@ NextElement:
                 '复制已存在的文件
                 For Each FileToken In ExistFiles
                     Dim File As NetFile = FileToken.Key
+                    SyncLock LockState
+                        If File.State > NetState.WaitForCopy Then Exit Sub
+                    End SyncLock
                     Dim LocalPath As String = FileToken.Value
                     Dim RetryCount As Integer = 0
 Retry:
@@ -1882,7 +1885,7 @@ Retry:
                         For Each File As NetFile In WaitingFiles
                             If NetTaskThreadCount >= NetTaskThreadLimit Then Continue While '最大线程数检查
                             Dim NewThread = File.TryBeginThread()
-                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi.") Then Thread.Sleep(40) '减少 BMCLAPI 请求频率，避免 Too Many Requests
+                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi") Then Thread.Sleep(70) '减少 BMCLAPI 请求频率，避免 Too Many Requests
                         Next
                         '为进行中的文件追加线程
                         If Speed >= NetTaskSpeedLimitLow Then Continue While '下载速度足够，无需新增
@@ -1902,7 +1905,7 @@ Retry:
                             '新增线程
                             If PreparingCount > DownloadingCount Then Continue For '准备中的线程已多于下载中的线程，不再新增
                             Dim NewThread = File.TryBeginThread()
-                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi.") Then Thread.Sleep(40) '减少 BMCLAPI 请求频率，避免 Too Many Requests
+                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi") Then Thread.Sleep(70) '减少 BMCLAPI 请求频率，避免 Too Many Requests
                         Next
                     End While
                 Catch ex As Exception
@@ -2000,7 +2003,7 @@ Retry:
     ''' 是否有正在进行中、需要在下载管理页面显示的下载任务？
     ''' </summary>
     Public Function HasDownloadingTask(Optional IgnoreCustomDownload As Boolean = False) As Boolean
-        For Each Task In LoaderTaskbar
+        For Each Task In LoaderTaskbar.ToList()
             If (Task.Show AndAlso Task.State = LoadState.Loading) AndAlso
                (Not IgnoreCustomDownload OrElse Not Task.Name.ToString.Contains("自定义下载")) Then
                 Return True

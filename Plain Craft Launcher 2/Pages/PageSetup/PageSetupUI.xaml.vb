@@ -662,7 +662,7 @@ Refresh:
 
 #End Region
 
-    '公开预览版
+    '赞助
     Private Sub BtnLauncherDonate_Click(sender As Object, e As EventArgs) Handles BtnLauncherDonate.Click
         OpenWebsite("https://afdian.com/a/LTCat")
     End Sub

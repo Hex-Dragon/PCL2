@@ -96,23 +96,20 @@ Public Class Application
             End If
             '动态 DLL 调用
             AddHandler AppDomain.CurrentDomain.AssemblyResolve, AddressOf AssemblyResolve
-            SetDllDirectory(Path & "PCL\")
-            If Is32BitSystem Then
-                File.WriteAllBytes(Path & "PCL\libwebp.dll", GetResources("libwebp32"))
-            Else
-                File.WriteAllBytes(Path & "PCL\libwebp.dll", GetResources("libwebp64"))
-            End If
             '日志初始化
             LogStart()
             '添加日志
-            Log($"[Start] 程序版本：{VersionDisplayName} ({VersionCode}){If(CommitHash <> "", $"，Commit Hash：{CommitHash}", "")}")
+            Log($"[Start] 程序版本：{VersionDisplayName} ({VersionCode}{If(CommitHash = "", "", $"，#{CommitHash}")})")
             Log($"[Start] 识别码：{UniqueAddress}{If(ThemeCheckOne(9), "，已解锁反馈主题", "")}")
             Log($"[Start] 程序路径：{PathWithName}")
             Log($"[Start] 系统编码：{Encoding.Default} ({Encoding.Default.CodePage}, GBK={IsGBKEncoding})")
             Log($"[Start] 管理员权限：{IsAdmin()}")
-            '检测压缩包运行
+            '检测异常环境
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
-                MyMsgBox("PCL 正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。" & vbCrLf & "请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！", "环境警告", "我知道了", IsWarn:=True)
+                MyMsgBox("请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！" & vbCrLf & "程序目前在临时文件夹中运行，设置、游戏存档等可能无法保存，且部分功能将无法使用。", "环境警告", "我知道了", IsWarn:=True)
+            End If
+            If Is32BitSystem Then
+                MyMsgBox("PCL 和新版 Minecraft 均不再支持 32 位系统，部分功能将无法使用。" & vbCrLf & "非常建议重装为 64 位系统后再进行游戏！", "环境警告", "我知道了", IsWarn:=True)
             End If
             '设置初始化
             Setup.Load("SystemDebugMode")
@@ -177,11 +174,12 @@ Public Class Application
     Private Shared AssemblyNAudio As Assembly
     Private Shared AssemblyJson As Assembly
     Private Shared AssemblyDialog As Assembly
-    Private Shared AssemblyWebp As Assembly
+    Private Shared AssemblyImazenWebp As Assembly
     Private Shared ReadOnly AssemblyNAudioLock As New Object
     Private Shared ReadOnly AssemblyJsonLock As New Object
     Private Shared ReadOnly AssemblyDialogLock As New Object
-    Private Shared ReadOnly AssemblyWebpLock As New Object
+    Private Shared ReadOnly AssemblyImazenWebpLock As New Object
+    Private Declare Function SetDllDirectory Lib "kernel32" Alias "SetDllDirectoryA" (lpPathName As String) As Boolean
     Public Shared Function AssemblyResolve(sender As Object, args As ResolveEventArgs) As Assembly
         If args.Name.StartsWithF("NAudio") Then
             SyncLock AssemblyNAudioLock
@@ -208,12 +206,14 @@ Public Class Application
                 Return AssemblyDialog
             End SyncLock
         ElseIf args.Name.StartsWithF("Imazen.WebP") Then
-            SyncLock AssemblyWebpLock
-                If AssemblyWebp Is Nothing Then
+            SyncLock AssemblyImazenWebpLock
+                If AssemblyImazenWebp Is Nothing Then
                     Log("[Start] 加载 DLL：Imazen.WebP")
-                    AssemblyWebp = Assembly.Load(GetResources("WebP"))
+                    AssemblyImazenWebp = Assembly.Load(GetResources("Imazen_WebP"))
+                    SetDllDirectory(PathTemp)
+                    File.WriteAllBytes(PathTemp & "libwebp.dll", GetResources("libwebp64"))
                 End If
-                Return AssemblyWebp
+                Return AssemblyImazenWebp
             End SyncLock
         Else
             Return Nothing
