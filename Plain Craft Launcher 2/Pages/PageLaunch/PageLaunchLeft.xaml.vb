@@ -131,7 +131,7 @@
         '初始化页面
         LabLaunchingName.Text = McVersionCurrent.Name
         LabLaunchingStage.Text = GetLang("LangLaunchLeftInit")
-        LabLaunchingTitle.Text = If(McLaunchLoader.Input Is Nothing OrElse McLaunchLoader.Input.SaveBatch Is Nothing, GetLang("LangLaunchLeftStartingInstance"), GetLang("LangLaunchLeftExportStartingInstanceCommand"))
+        LabLaunchingTitle.Text = If(CurrentLaunchOptions?.SaveBatch Is Nothing, GetLang("LangLaunchLeftStartingInstance"), GetLang("LangLaunchLeftExportStartingInstanceCommand"))
         LabLaunchingProgress.Text = "0.00 %"
         LabLaunchingProgress.Opacity = 1
         LabLaunchingDownload.Visibility = Visibility.Visible
@@ -734,7 +734,7 @@ ExitRefresh:
             If ActualProgress <= ShowProgress Then ShowProgress = ActualProgress '原来或处理后变得比实际进度高，直接回退
             If IsLaunched Then ShowProgress = 1 '如果已经完成了，就不卖关子了
             '文本
-            LabLaunchingTitle.Text = If(IsLaunched, GetLang("LangLaunchLeftStarted"), If(McLaunchLoader.Input.SaveBatch Is Nothing, GetLang("LangLaunchLeftStartingInstance"), GetLang("LangLaunchLeftExportStartingInstanceCommand")))
+            LabLaunchingTitle.Text = If(IsLaunched, GetLang("LangLaunchLeftStarted"), If(CurrentLaunchOptions.SaveBatch Is Nothing, GetLang("LangLaunchLeftStartingInstance"), GetLang("LangLaunchLeftExportStartingInstanceCommand")))
             LabLaunchingProgress.Text = StrFillNum(ShowProgress * 100, 2) & " %"
             Dim HasLaunchDownloader As Boolean = False
             Try

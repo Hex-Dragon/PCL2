@@ -1,4 +1,5 @@
-﻿Imports System.IO.Compression
+﻿Imports System.Globalization
+Imports System.IO.Compression
 Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
@@ -11,12 +12,13 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.6" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.6." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.8.7" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.8.7." & VersionBranchCode '标准格式的四段式版本号
+    Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
 #If BETA Then
     Public Const VersionCode As Integer = 336 'Release
 #Else
-    Public Const VersionCode As Integer = 335 'Snapshot
+    Public Const VersionCode As Integer = 337 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -64,7 +66,7 @@ Public Module ModBase
     ''' </summary>
     Public ApplicationOpenTime As Date = Date.Now
     ''' <summary>
-    ''' 设备唯一标识符。
+    ''' 识别码。
     ''' </summary>
     Public UniqueAddress As String = SecretGetUniqueAddress()
     ''' <summary>
@@ -1237,9 +1239,15 @@ Re:
     Public Function DeleteDirectory(Path As String, Optional IgnoreIssue As Boolean = False) As Integer
         If Not Directory.Exists(Path) Then Return 0
         Dim DeletedCount As Integer = 0
-        Dim Temp As String()
-        Temp = Directory.GetFiles(Path)
-        For Each FilePath As String In Temp
+        Dim Files As String()
+        Try
+            Files = Directory.GetFiles(Path)
+        Catch ex As DirectoryNotFoundException '#4549
+            Log(ex, $"疑似为孤立符号链接，尝试直接删除（{Path}）", LogLevel.Developer)
+            Directory.Delete(Path)
+            Return 0
+        End Try
+        For Each FilePath As String In Files
             Dim RetriedFile As Boolean = False
 RetryFile:
             Try
@@ -1258,8 +1266,7 @@ RetryFile:
                 End If
             End Try
         Next
-        Temp = Directory.GetDirectories(Path)
-        For Each str As String In Temp
+        For Each str As String In Directory.GetDirectories(Path)
             DeleteDirectory(str, IgnoreIssue)
         Next
         Dim RetriedDir As Boolean = False
@@ -1440,14 +1447,14 @@ RetryDir:
     End Function
 
     ''' <summary>
-    ''' 获取 Json 对象。
+    ''' 获取 JSON 对象。
     ''' </summary>
     Public Function GetJson(Data As String)
         Try
             Return JsonConvert.DeserializeObject(Data, New JsonSerializerSettings With {.DateTimeZoneHandling = DateTimeZoneHandling.Local})
         Catch ex As Exception
             Dim Length As Integer = If(Data, "").Length
-            Throw New Exception("格式化 json 对象失败：" & If(Length > 10000, Data.Substring(0, 100) & $"...(全长 {Length} 个字符)..." & Right(Data, 100), Data))
+            Throw New Exception("格式化 JSON 失败：" & If(Length > 2000, Data.Substring(0, 500) & $"...(全长 {Length} 个字符)..." & Right(Data, 500), Data))
         End Try
     End Function
 
@@ -1849,6 +1856,13 @@ RetryDir:
         Dim NewProcess = Process.Start(New ProcessStartInfo(PathWithName) With {.Verb = "runas", .Arguments = Argument})
         NewProcess.WaitForExit()
         Return NewProcess.ExitCode
+    End Function
+
+    ''' <summary>
+    ''' 判断当前系统语言是否为中文。
+    ''' </summary>
+    Public Function IsSystemLanguageChinese() As Boolean
+        Return CultureInfo.CurrentCulture.TwoLetterISOLanguageName = "zh" OrElse CultureInfo.CurrentUICulture.TwoLetterISOLanguageName = "zh"
     End Function
 
     Private Uuid As Integer = 1
@@ -2660,6 +2674,11 @@ Retry:
     Public Function CanFeedback(ShowHint As Boolean) As Boolean
         If False.Equals(PageSetupSystem.IsLauncherNewest) Then
             If ShowHint Then MyMsgBox(GetLang("LangModBaseDialogUpdateBeforeFeedbackContent"), GetLang("LangModBaseDialogUpdateBeforeFeedbackTitle"))
+            If ShowHint Then
+                If MyMsgBox(GetLang("LangModBaseDialogUpdateBeforeFeedbackContent"), GetLang("LangModBaseDialogUpdateBeforeFeedbackTitle"), "更新", GetLang("LangDialogBtnCancel")) = 1 Then
+                    UpdateCheckByButton()
+                End If
+            End If
             Return False
         Else
             Return True

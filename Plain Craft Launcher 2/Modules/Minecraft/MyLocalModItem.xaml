@@ -27,27 +27,24 @@
         <Image x:Name="PathLogo" RenderOptions.BitmapScalingMode="HighQuality" />
     </Border>
     <!-- 标题 -->
-    <StackPanel Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,1,0,0" Orientation="Horizontal" 
-                SnapsToDevicePixels="False" UseLayoutRounding="False">
-        <TextBlock x:Name="LabTitle" TextTrimming="WordEllipsis" FontSize="14" IsHitTestVisible="False" />
-        <TextBlock x:Name="LabTitleRaw" TextTrimming="WordEllipsis" FontSize="12" IsHitTestVisible="False"
-            Foreground="{StaticResource ColorBrushGray1}" Opacity="0.4" VerticalAlignment="Bottom" Visibility="Collapsed" />
-        <!-- 更新按钮 -->
-        <local:MyIconButton Width="21" Height="21" Margin="-2,-1.6,0,0" x:Name="BtnUpdate" Theme="Black" Opacity="0.4" Visibility="Collapsed"
-            ToolTipService.Placement="Right" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-9" 
-            Logo="M640 768H384l-32-32V509H213L190 454l298-298h45l298 298L810 509h-138v226z m-224-64h192V477l32-32h93L512 223 290 445H384l32 32zM352 831h320v64h-320z" />
-    </StackPanel>
-    <!--<Grid Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,1,0,0" IsHitTestVisible="False" SnapsToDevicePixels="False" UseLayoutRounding="False">
+    <Grid Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,1,0,0"
+                SnapsToDevicePixels="False" UseLayoutRounding="False" x:Name="PanTitle">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="Auto" x:Name="ColumnSubtitle" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="1*" x:Name="ColumnExtend" />
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="LabTitle" TextTrimming="WordEllipsis" FontSize="14" Grid.Column="0" />
-        <TextBlock x:Name="LabTitleRaw" TextTrimming="WordEllipsis" FontSize="12" Grid.Column="1" 
-                   Foreground="{StaticResource ColorBrushGray1}" Opacity="0.4" VerticalAlignment="Bottom" Visibility="Collapsed" />
-        <local:MyIconTextButton Grid.Column="2" Text="更新" />
-    </Grid>-->
+        <TextBlock x:Name="LabTitle" TextTrimming="WordEllipsis" FontSize="14" IsHitTestVisible="False" />
+        <TextBlock x:Name="LabSubtitle" Grid.Column="1" HorizontalAlignment="Left"
+            TextTrimming="CharacterEllipsis" FontSize="12" IsHitTestVisible="False" 
+            Foreground="{StaticResource ColorBrushGray1}" Opacity="0.4" VerticalAlignment="Bottom" Visibility="Collapsed" />
+        <!-- 更新按钮 -->
+        <local:MyIconButton Grid.Column="2"
+            Width="21" Height="21" Margin="-2,-1.6,0,0" x:Name="BtnUpdate" Theme="Black" Opacity="0.4" Visibility="Collapsed"
+            ToolTipService.Placement="Right" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-9" 
+            Logo="M640 768H384l-32-32V509H213L190 454l298-298h45l298 298L810 509h-138v226z m-224-64h192V477l32-32h93L512 223 290 445H384l32 32zM352 831h320v64h-320z" />
+    </Grid>
     <!-- Tag 与 详情 -->
     <StackPanel x:Name="PanTags" Grid.Row="2" Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="-1,0,1,0" Visibility="Collapsed" IsHitTestVisible="False">
         <!--<Border Background="{DynamicResource ColorBrush6}" Padding="3,1" CornerRadius="3" Margin="0,0,4,0" SnapsToDevicePixels="True" UseLayoutRounding="False">

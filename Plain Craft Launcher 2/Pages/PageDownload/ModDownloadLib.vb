@@ -28,7 +28,7 @@ Public Module ModDownloadLib
             Dim VersionFolder As String = PathMcFolder & "versions\" & Id & "\"
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> GetLang("LangModDownloadLibTaskMcDownload", Id) Then Continue For
                 If Behaviour = NetPreDownloadBehaviour.ExitWhileExistsOrDownloading Then Return OngoingLoader
                 Hint(GetLang("LangModDownloadLibHintInstanceDownloading"), HintType.Critical)
@@ -71,7 +71,7 @@ Public Module ModDownloadLib
             VersionFolder = VersionFolder & Id & "\"
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> GetLang("LangModDownloadLibTaskMcDownload", Id) Then Continue For
                 If Behaviour = NetPreDownloadBehaviour.ExitWhileExistsOrDownloading Then Exit Sub
                 Hint(GetLang("LangModDownloadLibHintInstanceDownloading"), HintType.Critical)
@@ -155,7 +155,7 @@ Public Module ModDownloadLib
         LoadersAssets.Add(New LoaderDownload(GetLang("LangModDownloadLibTaskDownloadAssetsIndexFail"), New List(Of NetFile)) With {.ProgressWeight = 3, .Show = False})
         LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangModDownloadLibTaskAnalysisDownloadAssets"),
         Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-            Task.Output = McAssetsFixList(McAssetsGetIndexName(New McVersion(VersionFolder)), True, Task)
+            Task.Output = McAssetsFixList(New McVersion(VersionFolder), True, Task)
         End Sub) With {.ProgressWeight = 3, .Show = False})
         LoadersAssets.Add(New LoaderDownload(GetLang("LangModDownloadLibTaskDownloadAssets"), New List(Of NetFile)) With {.ProgressWeight = 14, .Show = False})
         Loaders.Add(New LoaderCombo(Of String)(GetLang("LangPageSpeedRightDownloadVanillaResource"), LoadersAssets) With {.Block = False, .ProgressWeight = 21})
@@ -772,7 +772,7 @@ Public Module ModDownloadLib
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> GetLang("LangModDownloadLibTaskOptiFineDownload", DownloadInfo.NameDisplay) Then Continue For
                 Hint(GetLang("LangModDownloadLibHintInstanceDownloading"), HintType.Critical)
                 Exit Sub
@@ -1199,7 +1199,7 @@ Retry:
             Dim VersionFolder As String = PathMcFolder & "versions\" & VersionName & "\"
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> GetLang("LangModDownloadLibTaskLiteLoaderDownload", Id) Then Continue For
                 Hint(GetLang("LangModDownloadLibHintInstanceDownloading"), HintType.Critical)
                 Exit Sub
@@ -1233,7 +1233,7 @@ Retry:
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> GetLang("LangModDownloadLibTaskLiteLoaderDownload", Id) Then Continue For
                 Hint(GetLang("LangModDownloadLibHintInstanceDownloading"), HintType.Critical)
                 Exit Sub
@@ -1415,7 +1415,7 @@ Retry:
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> GetLang("LangModDownloadLibTaskForgelikeDownload", DisplayName) Then Continue For
                 Hint(GetLang("LangModDownloadLibHintInstanceDownloading"), HintType.Critical)
                 Exit Sub
@@ -2169,7 +2169,7 @@ Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
-            For Each OngoingLoader In LoaderTaskbar
+            For Each OngoingLoader In LoaderTaskbar.ToList()
                 If OngoingLoader.Name <> GetLang("LangModDownloadLibTaskFabricInstallerDownload", Version) Then Continue For
                 Hint(GetLang("LangModDownloadLibHintInstanceDownloading"), HintType.Critical)
                 Exit Sub

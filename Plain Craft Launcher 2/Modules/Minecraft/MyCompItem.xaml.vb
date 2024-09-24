@@ -55,12 +55,6 @@ RetryStart:
             End If
             '下载图片
             NetDownload(Url, LocalFileAddress & DownloadEnd, True)
-            If Url.EndsWithF("webp") Then
-                Log($"[Comp] Webp 格式转换：{LocalFileAddress}")
-                Dim dec = New Imazen.WebP.SimpleDecoder()
-                Dim picFile = File.ReadAllBytes(LocalFileAddress & DownloadEnd)
-                dec.DecodeFromBytes(picFile, picFile.Length).Save(LocalFileAddress & DownloadEnd)
-            End If
             Dim LoadError As Exception = Nothing
             RunInUiWait(
             Sub()

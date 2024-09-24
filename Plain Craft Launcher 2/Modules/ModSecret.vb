@@ -8,10 +8,12 @@ Friend Module ModSecret
 
 #Region "杂项"
 
-    '在开源内容的注册表键与普通内容的注册表键隔离
+    '在开源版的注册表与常规版的注册表隔离，以防数据冲突
     Public Const RegFolder As String = "PCLDebug"
     '用于微软登录的 ClientId
     Public Const OAuthClientId As String = ""
+    'CurseForge API Key
+    Public Const CurseForgeAPIKey As String = ""
 
     Friend Sub SecretOnApplicationStart()
         '提升 UI 线程优先级
@@ -96,7 +98,7 @@ Friend Module ModSecret
             Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode
         End If
         Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.open.server/"
-        '如果你有 CurseForge API Key，请添加到 Headers 中，以恢复对 CurseForge 的访问
+        Client.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
@@ -110,7 +112,7 @@ Friend Module ModSecret
             Request.UserAgent = "PCL2/" & VersionStandardCode
         End If
         Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
-        '如果你有 CurseForge API Key，请添加到 Headers 中，以恢复对 CurseForge 的访问
+        Request.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
 
 #End Region

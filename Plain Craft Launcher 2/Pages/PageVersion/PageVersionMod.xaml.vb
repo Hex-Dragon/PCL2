@@ -176,17 +176,13 @@
         '显示
         BtnFilterAll.Text = If(IsSearching, GetLang("LangPageVersionModSearchResult"), GetLang("LangPageVersionModViewTypeAll")) & $" ({AnyCount})"
         BtnFilterCanUpdate.Text = $"{GetLang("LangPageVersionModViewTypeCanUpdate")} ({UpdateCount})"
-        BtnFilterCanUpdate.Visibility = If(Filter = FilterType.CanUpdate OrElse
-            UpdateCount > 0, Visibility.Visible, Visibility.Collapsed)
+        BtnFilterCanUpdate.Visibility = If(Filter = FilterType.CanUpdate OrElse UpdateCount > 0, Visibility.Visible, Visibility.Collapsed)
         BtnFilterEnabled.Text = $"{GetLang("LangPageVersionModViewTypeEnabled")} ({EnabledCount})"
-        BtnFilterEnabled.Visibility = If(Filter = FilterType.Enabled OrElse Filter = FilterType.Disabled OrElse
-            EnabledCount > 0 AndAlso EnabledCount <> AnyCount, Visibility.Visible, Visibility.Collapsed)
+        BtnFilterEnabled.Visibility = If(Filter = FilterType.Enabled OrElse (EnabledCount > 0 AndAlso EnabledCount < AnyCount), Visibility.Visible, Visibility.Collapsed)
         BtnFilterDisabled.Text = $"{GetLang("LangPageVersionModViewTypeDisabled")} ({DisabledCount})"
-        BtnFilterDisabled.Visibility = If(Filter = FilterType.Enabled OrElse Filter = FilterType.Disabled OrElse
-            DisabledCount > 0, Visibility.Visible, Visibility.Collapsed)
+        BtnFilterDisabled.Visibility = If(Filter = FilterType.Disabled OrElse DisabledCount > 0, Visibility.Visible, Visibility.Collapsed)
         BtnFilterError.Text = $"{GetLang("LangPageVersionModViewTypeError")} ({UnavalialeCount})"
-        BtnFilterError.Visibility = If(Filter = FilterType.Unavaliable OrElse
-            UnavalialeCount > 0, Visibility.Visible, Visibility.Collapsed)
+        BtnFilterError.Visibility = If(Filter = FilterType.Unavailable OrElse UnavalialeCount > 0, Visibility.Visible, Visibility.Collapsed)
 
         '-----------------
         ' 底部栏
@@ -382,7 +378,7 @@
         Enabled = 1
         Disabled = 2
         CanUpdate = 3
-        Unavaliable = 4
+        Unavailable = 4
     End Enum
 
     ''' <summary>
@@ -406,7 +402,7 @@
                 Return CheckingMod.State = McMod.McModState.Disabled
             Case FilterType.CanUpdate
                 Return CheckingMod.CanUpdate
-            Case FilterType.Unavaliable
+            Case FilterType.Unavailable
                 Return CheckingMod.State = McMod.McModState.Unavailable
             Case Else
                 Return False
@@ -492,7 +488,10 @@
 
     '更新
     Private Sub BtnSelectUpdate_Click() Handles BtnSelectUpdate.Click
-        UpdateMods(McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.CanUpdate))
+        Dim UpdateList As List(Of McMod) = McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.CanUpdate).ToList()
+        If Not UpdateList.Any() Then Return
+        UpdateMods(UpdateList)
+        ChangeAllSelected(False)
     End Sub
     ''' <summary>
     ''' 记录正在进行 Mod 更新的 mods 文件夹路径。
@@ -583,6 +582,7 @@
                     Case Else
                         Exit Sub
                 End Select
+                Log($"[Mod] 已从正在进行 Mod 更新的文件夹列表移除：{PathMods}")
                 UpdatingVersions.Remove(PathMods)
                 '清理缓存
                 RunInNewThread(
@@ -597,7 +597,7 @@
                 End Sub, "Clean Mod Update Cache", ThreadPriority.BelowNormal)
             End Sub
             '启动加载器
-            Log($"[Mod] 开始更新 {ModList.Count} 个 Mod")
+            Log($"[Mod] 开始更新 {ModList.Count} 个 Mod：{PathMods}")
             UpdatingVersions.Add(PathMods)
             Loader.Start()
             LoaderTaskbarAdd(Loader)
@@ -612,6 +612,7 @@
     '删除
     Private Sub BtnSelectDelete_Click() Handles BtnSelectDelete.Click
         DeleteMods(McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)))
+        ChangeAllSelected(False)
     End Sub
     Private Sub DeleteMods(ModList As IEnumerable(Of McMod))
         Try

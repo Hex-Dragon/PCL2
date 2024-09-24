@@ -66,8 +66,20 @@ Public Class MyBitmap
             Else
                 '使用这种自己接管 FileStream 的方法加载才能解除文件占用
                 Using InputStream As New FileStream(FilePathOrResourceName, FileMode.Open)
-                    Pic = New System.Drawing.Bitmap(InputStream)
-                    InputStream.Dispose()
+                    '判断是否为 WebP 文件头
+                    Dim Header(1) As Byte
+                    InputStream.Read(Header, 0, 2)
+                    InputStream.Seek(0, SeekOrigin.Begin)
+                    If Header(0) = 82 AndAlso Header(1) = 73 Then
+                        '读取 WebP
+                        If Is32BitSystem Then Throw New Exception("不支持在 32 位系统下加载 WebP 图片。")
+                        Dim FileBytes(InputStream.Length - 1) As Byte
+                        InputStream.Read(FileBytes, 0, FileBytes.Length)
+                        Dim Decoder As New Imazen.WebP.SimpleDecoder()
+                        Pic = Decoder.DecodeFromBytes(FileBytes, FileBytes.Length)
+                    Else
+                        Pic = New System.Drawing.Bitmap(InputStream)
+                    End If
                 End Using
             End If
         Catch ex As Exception

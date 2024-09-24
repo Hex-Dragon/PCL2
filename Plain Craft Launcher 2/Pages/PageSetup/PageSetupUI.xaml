@@ -243,6 +243,7 @@
                             <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageE}" />
                             <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageF}" />
                             <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageG}" />
+                            <local:MyComboBoxItem Content="PCL 主页市场（作者：凌云）" />
                         </local:MyComboBox>
                     </Grid>
                 </StackPanel>
