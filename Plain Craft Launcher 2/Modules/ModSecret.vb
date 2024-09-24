@@ -12,6 +12,8 @@ Friend Module ModSecret
     Public Const RegFolder As String = "PCLDebug"
     '用于微软登录的 ClientId
     Public Const OAuthClientId As String = ""
+    'CurseForge API Key
+    Public Const CurseForgeAPIKey As String = ""
 
     Friend Sub SecretOnApplicationStart()
         '提升 UI 线程优先级
@@ -44,7 +46,7 @@ Friend Module ModSecret
         End If
         '开源版本提示
         MyMsgBox($"该版本中无法使用以下特性：
-- CurseForge API 调用：需要你自行申请 API Key，然后添加到 SecretHeadersSign 方法中
+- CurseForge API 调用：需要你自行申请 API Key，然后添加到 ModSecret.vb 的开头
 - 正版登录：需要你自行申请 Client ID，然后添加到 ModSecret.vb 的开头
 - 更新与联网通知：避免滥用隐患
 - 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……
@@ -107,7 +109,7 @@ Friend Module ModSecret
             Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode
         End If
         Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.open.server/"
-        '如果你有 CurseForge API Key，请添加到 Headers 中，以恢复对 CurseForge 的访问
+        Client.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
@@ -121,7 +123,7 @@ Friend Module ModSecret
             Request.UserAgent = "PCL2/" & VersionStandardCode
         End If
         Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
-        '如果你有 CurseForge API Key，请添加到 Headers 中，以恢复对 CurseForge 的访问
+        Request.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
 
 #End Region
