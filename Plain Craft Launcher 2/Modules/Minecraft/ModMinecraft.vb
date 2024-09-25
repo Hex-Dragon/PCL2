@@ -1034,21 +1034,21 @@ ExitDataLoad:
     Public Function GetMcFoolName(Name As String) As String
         Name = Name.ToLower
         If Name.StartsWithF("2.0") Then
-            Return GetLang("LangModMinecraftFoolName2.0")
+            Return "2013 | " & GetLang("LangModMinecraftFoolName2.0")
         ElseIf Name = "15w14a" Then
-            Return GetLang("LangModMinecraftFoolName15w14a")
+            Return "2015 | " & GetLang("LangModMinecraftFoolName15w14a")
         ElseIf Name = "1.rv-pre1" Then
-            Return GetLang("LangModMinecraftFoolName1.rv-pre1")
+            Return "2016 | " & GetLang("LangModMinecraftFoolName1.rv-pre1")
         ElseIf Name = "3d shareware v1.34" Then
-            Return GetLang("LangModMinecraftFoolName3dshareware")
+            Return "2019 | " & GetLang("LangModMinecraftFoolName3dshareware")
         ElseIf Name.StartsWithF("20w14inf") OrElse Name = "20w14∞" Then
-            Return GetLang("LangModMinecraftFoolName20w14inf")
+            Return "2020 | " & GetLang("LangModMinecraftFoolName20w14inf")
         ElseIf Name = "22w13oneblockatatime" Then
-            Return GetLang("LangModMinecraftFoolName22w13oneblockatatime")
+            Return "2022 | " & GetLang("LangModMinecraftFoolName22w13oneblockatatime")
         ElseIf Name = "23w13a_or_b" Then
-            Return GetLang("LangModMinecraftFoolName23w13ab")
+            Return "2023 | " & GetLang("LangModMinecraftFoolName23w13ab")
         ElseIf Name = "24w14potato" Then
-            Return GetLang("LangModMinecraftFoolName24w14potato")
+            Return "2024 | " & GetLang("LangModMinecraftFoolName24w14potato")
         Else
             Return ""
         End If

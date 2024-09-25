@@ -17,8 +17,10 @@
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">Выбранный вручную каталог кэша недоступен, PCL будет использовать каталог кэша по умолчанию вместо этого.
 Причина ошибки: {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Предупреждение среды</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL запущен в временном каталоге, что может привести к неправильному хранению настроек, сохранений игры и другой информации, а также к невозможности использования или появлению ошибок в некоторых функциях.
-Пожалуйста, извлеките PCL из архивного файла или запустите его в другой папке!</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">Пожалуйста, извлеките PCL из архива, или замените папку перед продолжением использования!
+Программа в данный момент работает в временной папке, настройки, сохранения игры и т.д. могут не сохраняться, а некоторые функции могут быть недоступны.</s:String>
+    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL и новые версии Minecraft больше не поддерживают 32-битные системы, некоторые функции могут быть недоступны.
+Советуем переустановить на 64-битную систему перед продолжением игры!</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">Ошибка инициализации</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">Ошибка во время выполнения</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">Версия вашего .NET Framework слишком низкая или повреждена, пожалуйста, перезагрузите и установите .NET Framework 4.6.2 с официального сайта и попробуйте снова.</s:String>
@@ -1195,6 +1197,8 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">Подтверждение удаления экземпляра</s:String>
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">Экземпляр {0} перемещен в корзину!</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">Экземпляр {0} удален навсегда!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Сначала закройте [Настройки версии → Настройки → Расширенные параметры запуска → Отключить проверку файлов], а затем попытайтесь восстановить файлы!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Сначала закройте [Настройки → Расширенные параметры запуска → Отключить проверку файлов], а затем попытайтесь восстановить файлы!</s:String>
     <!--PageVersionSetup-->
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">Настройки экземпляра инициализированы!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Не удалось инициализировать настройки экземпляра.</s:String>
@@ -1350,7 +1354,6 @@ PCL не поддерживает другие странные протокол
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL не может определить номер этой версии.</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">Не удалось определить: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">Файл JSON версии не найден: {0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionReadJsonFail">Файл JSON версии пуст или не удалось прочитать.</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">Файл JSON версии некорректен, содержимое: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">В версиях зависимостей появляется вложенность: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">JSON версии нестандартен. ({0})</s:String>
@@ -1433,8 +1436,9 @@ URL: {0}</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogTitle">Подсказка для отправки обратной связи</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">Папка</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">Нет, спасибо</s:String>
-    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Ваш PCL не является последней версией, отправка обратной связи не поддерживается.
-Пожалуйста, обновите запускатель в "Настройки → Запускатель" сначала, затем отправьте обратную связь, если проблема все еще существует в последней версии.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Ваш PCL не является последней версией, поэтому невозможно отправить обратную связь.
+Пожалуйста, после обновления убедитесь, что проблема все еще существует в последней версии, и затем отправьте обратную связь.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">Обновить</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Невозможно отправить</s:String>
     <s:String x:Key="LangModBaseExceptionBadEnvironment">Существует проблема с временем выполнения PCL. Пожалуйста, попробуйте переустановить ".NET Framework 4.6.2" и затем попробуйте снова.</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL не имеет достаточных разрешений. Пожалуйста, попробуйте щелкнуть правой кнопкой мыши PCL и выбрать "Запустить от имени администратора".</s:String>
@@ -1642,6 +1646,12 @@ URL: {0}</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">Отсутствует "mainClass" в JSON версии!</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">Не удалось открыть файл Natives ({0}), файл может быть повреждён, попробуйте перезапустить игру.</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">В этой версии не поддерживается скин в стиле Стройный, ваш скин может отображаться как Классический.</s:String>
+    <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">Вы должны сначала авторизоваться в оригинальной учетной записи, чтобы выполнить оффлайн-авторизацию!</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">Аутентификация</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">Купить оригинал</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">Попробовать</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">Вернуться</s:String>
+    <s:String x:Key="LangModLaunchHintPlayInDemo">Игра будет запущена в демонстрационном режиме!</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">файл модпака</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">Выберите файл модпака</s:String>
@@ -1961,4 +1971,18 @@ URL: {0}</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">此外，你正在使用老版本 PCL，更新 PCL 或许也能解决这个问题。
 你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。</s:String>
+    <!--MyMsgLogin-->
+    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">Открыть страницу заново</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">Скопировать код</s:String>
+    <s:String x:Key="LangMyMsgLoginHintInitFail">Ошибка инициализации окна входа</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">Вход в Minecraft</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogContent">Страница входа откроется автоматически, пожалуйста, введите {0} на странице (уже скопировано).
+
+
+Если сетевое соединение плохое, страница может долго загружаться, в этом случае попробуйте использовать VPN.
+Вы также можете открыть {1} на другом устройстве и ввести вышеуказанный код.</s:String>
+    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">Успешный вход на страницу!</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionDecline">Вы отклонили запрос PCL о разрешении……</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionTimeout">Время входа слишком долгое, попробуйте еще раз!</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Ошибка при проверке входа</s:String>
 </ResourceDictionary>

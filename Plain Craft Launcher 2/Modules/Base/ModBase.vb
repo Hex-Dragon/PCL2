@@ -2675,7 +2675,7 @@ Retry:
         If False.Equals(PageSetupSystem.IsLauncherNewest) Then
             If ShowHint Then MyMsgBox(GetLang("LangModBaseDialogUpdateBeforeFeedbackContent"), GetLang("LangModBaseDialogUpdateBeforeFeedbackTitle"))
             If ShowHint Then
-                If MyMsgBox(GetLang("LangModBaseDialogUpdateBeforeFeedbackContent"), GetLang("LangModBaseDialogUpdateBeforeFeedbackTitle"), "更新", GetLang("LangDialogBtnCancel")) = 1 Then
+                If MyMsgBox(GetLang("LangModBaseDialogUpdateBeforeFeedbackContent"), GetLang("LangModBaseDialogUpdateBeforeFeedbackTitle"), GetLang("LangModBaseDialogUpdateBeforeFeedbackBtnUpdate"), GetLang("LangDialogBtnCancel")) = 1 Then
                     UpdateCheckByButton()
                 End If
             End If

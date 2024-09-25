@@ -17,8 +17,10 @@
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">Ο χειριστικά επιλεγμένος φάκελο κρυφής μνήμης είναι αδιαθέσιμος, PCL θα χρησιμοποιήσει τον προεπιλεγμένο φάκελο κρυφής μνήμης αντίθετα.
 Λάθος Αιτία: {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Περιβαλλοντική Προειδοποίηση</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL λειτουργεί στον φάκελο προσωρινών, το οποίο μπορεί να προκαλέσει τα ρυθμίσματα, αποθήκευση παιχνιδιών και άλλα δεδομένα να μην αποθηκεύονται σωστά, και μέρος των λειτουργιών μπορεί να είναι ανενεργό ή λάθος.
-Παρακαλώ αποσυμπιέστε το PCL από το αρχείο αρχείου ή χρησιμοποιήστε το σε άλλο φάκελο!</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">Παρακαλώ αποσυμπιέστε το PCL από το συμπιεσμένο αρχείο ή αλλάξτε τον φάκελο πριν συνεχίσετε να χρησιμοποιείτε!
+Το πρόγραμμα τρέχει αυτή τη στιγμή σε προσωρινό φάκελο, οπότε οι ρυθμίσεις, τα αρχεία αποθήκευσης του παιχνιδιού κ.λπ. μπορεί να μην μπορούν να αποθηκευτούν, ενώ ορισμένες λειτουργίες μπορεί να μην είναι διαθέσιμες.</s:String>
+    <s:String x:Key="LangApplicationDialogContent32BitWarn">Το PCL και οι νέες εκδόσεις του Minecraft δεν υποστηρίζουν πλέον τα 32 bit συστήματα, οπότε ορισμένες λειτουργίες μπορεί να μην είναι διαθέσιμες.
+Συνιστούμε ένθερμα να επανεγκαταστήσετε το σύστημα σας σε 64 bit πριν συνεχίσετε να παίζετε!</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">Σφάλμα Αρχικοποίησης</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">Σφάλμα Χρόνου Εκτέλεσης</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">Η έκδοση του .NET Framework σας είναι πολύ χαμηλή ή είναι βλαμμένη, παρακαλώ μεταγράψτε και εγκαταστήστε το .NET Framework 4.6.2 από τον ιστότοπο ανοίγματος και δοκιμάστε ξανά.</s:String>
@@ -1195,6 +1197,8 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">Διαγραφή Επιβεβαίωσης Παρουσίας</s:String>
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">Η παρουσία {0} έχει διαγραφεί στον κάδο ανακύκλωσης!</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">Η παρουσία {0} έχει διαγραφεί οριστικά!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Παρακαλώ κλείστε πρώτα το [Ρύθμισης Έκδοσης → Ρυθμίσεις → Προηγμένες Επιλογές Εκκίνησης → Κλείσιμο Ελέγχου Αρχείου] και στη συνέχεια προσπαθήστε να συμπληρώσετε το αρχείο！</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Παρακαλώ κλείστε πρώτα το [Ρυθμίσεις → Προηγμένες Επιλογές Εκκίνησης → Κλείσιμο Ελέγχου Αρχείου] και στη συνέχεια προσπαθήστε να συμπληρώσετε το αρχείο！</s:String>
     <!--PageVersionSetup-->
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">Οι ρυθμίσεις της παρουσίας έχουν αρχικοποιηθεί!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Απέτυχε η προετοιμασία των ρυθμίσεων παρουσίας.</s:String>
@@ -1350,7 +1354,6 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangModMinecraftUnableGetVersion">Το PCL δεν μπορεί να αναγνωρίσει τον αριθμό αυτής της έκδοσης.</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">Δεν είναι δυνατός ο προσδιορισμός: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">Το αρχείο JSON έκδοσης δεν βρέθηκε: {0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionReadJsonFail">Το αρχείο JSON έκδοσης είναι κενό από αποτυχία ανάγνωσης.</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">Το αρχείο JSON έκδοσης είναι λανθασμένο, περιεχόμενο: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">Η ένθεση εμφανίζεται στις εξαρτήσεις έκδοσης: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">Η έκδοση JSON δεν είναι τυπική. ({0})</s:String>
@@ -1433,8 +1436,9 @@ URL: {0}</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogTitle">Υποβολή Συμβουλής Σχολίων</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">Φάκελος</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">Όχι, ευχαριστώ</s:String>
-    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Το PCL σας δεν είναι η πιο πρόσφατη έκδοση, η υποβολή σχολίων δεν είναι δυνατή.
-Ενημερώστε πρώτα τη λειτουργία εκκίνησης στις «Ρυθμίσεις → Εκκίνηση» και μετά υποβάλετε σχόλια εάν το πρόβλημα εξακολουθεί να υπάρχει στην πιο πρόσφατη έκδοση.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Το PCL σας δεν είναι η τελευταία έκδοση, οπότε δεν μπορείτε να υποβάλετε ανατροφή.
+Παρακαλώ ενημερώστε πρώτα, στη συνέχεια επιβεβαιώστε αν το πρόβλημα εξακολουθεί να υπάρχει στην τελευταία έκδοση και μετά υποβάλετε ανατροφή.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">Ενημέρωση</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Δεν Είναι Δυνατή η Υποβολή</s:String>
     <s:String x:Key="LangModBaseExceptionBadEnvironment">Υπάρχει πρόβλημα με το χρόνο εκτέλεσης του PCL. Δοκιμάστε να εγκαταστήσετε ξανά το «.NET Framework 4.6.2» και μετά δοκιμάστε ξανά.</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">Το PCL δεν έχει επαρκή άδεια. Δοκιμάστε να κάνετε δεξί κλικ στο PCL και επιλέξτε «Εκτέλεση ως διαχειριστής».</s:String>
@@ -1642,6 +1646,12 @@ URL: {0}</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">Λείπει το «mainClass» στην έκδοση JSON!</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">Δεν είναι δυνατό να ανοίξει το αρχείο Natives ({0}), το αρχείο ενδέχεται να είναι κατεστραμμένο, δοκιμάστε να επανεκκινήσετε το παιχνίδι.</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">Το λεπτό μοντέλο δεν υποστηρίζεται σε αυτήν την έκδοση, το δέρμα σας μπορεί να εμφανίζεται ως κλασικό μοντέλο.</s:String>
+    <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">Πρέπει πρώτα να συνδεθείτε με ένα γνήσιο λογαριασμό για να μπορέσετε να συνδεθείτε εκτός σύνδεσης!</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">Επιβεβαίωση Γνήσιου Λογαριασμού</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">Αγοράστε το Γνήσιο</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">Δοκιμάστε</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">Επιστροφή</s:String>
+    <s:String x:Key="LangModLaunchHintPlayInDemo">Το παιχνίδι θα ξεκινήσει σε λειτουργία δοκιμής!</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">Αρχείο Modpack</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">Επιλέξτε Αρχείο Modpack</s:String>
@@ -1962,4 +1972,18 @@ URL: {0}</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">此外，你正在使用老版本 PCL，更新 PCL 或许也能解决这个问题。
 你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。</s:String>
+    <!--MyMsgLogin-->
+    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">Επαναφορά σελίδας</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">Αντιγραφή κώδικα</s:String>
+    <s:String x:Key="LangMyMsgLoginHintInitFail">Αποτυχία αρχικοποίησης του πλαισίου σύνδεσης</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">Σύνδεση στο Minecraft</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogContent">Η σελίδα σύνδεσης θα ανοίξει αυτόματα, παρακαλώ εισαγάγετε {0} (έχει ήδη αντιγραφεί).
+
+
+Εάν η σύνδεση στο διαδίκτυο δεν είναι καλή, η σελίδα μπορεί να μην φορτώνει, τότε παρακαλώ χρησιμοποιήστε VPN και προσπαθήστε ξανά.
+Μπορείτε επίσης να χρησιμοποιήσετε άλλο συσκευή για να ανοίξετε {1} και να εισαγάγετε τον παραπάνω κώδικα.</s:String>
+    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">Επιτυχής σύνδεση στη σελίδα！</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionDecline">Αρνήθηκες τα δικαιώματα που ζήτησε το PCL……</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionTimeout">Πέρασε πολύς χρόνος για τη σύνδεση, προσπάθησε ξανά！</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Αποτυχία ελέγχου σύνδεσης</s:String>
 </ResourceDictionary>

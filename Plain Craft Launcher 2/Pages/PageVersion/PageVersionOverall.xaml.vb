@@ -286,9 +286,9 @@
             '忽略文件检查提示
             If ShouldIgnoreFileCheck(PageVersionLeft.Version) Then
                 If Setup.Get("LaunchAdvanceAssets") Then
-                    Hint("请先关闭 [设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！", HintType.Info)
+                    Hint(GetLang("LangPageVersionOverallHintEnableAssetsCheck"), HintType.Info)
                 Else
-                    Hint("请先关闭 [版本设置 → 设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！", HintType.Info)
+                    Hint(GetLang("LangPageVersionOverallHintEnableInstanceAssetsCheck"), HintType.Info)
                 End If
                 Exit Sub
             End If

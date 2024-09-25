@@ -241,10 +241,10 @@ NextInner:
                         End If
                 End Select
             ElseIf Setup.Get("LoginType") = McLoginType.Legacy Then
-                Select Case MyMsgBox("你必须先登录正版账号，才能进行离线登录！", "正版验证", "购买正版", "试玩", "返回",
+                Select Case MyMsgBox(GetLang("LangModLaunchDialogContentMsLoginRequire"), GetLang("LangModLaunchDialogTitleMsLoginRequire"), GetLang("LangModLaunchDialogBtn1MsLoginRequire"), GetLang("LangModLaunchDialogBtn2MsLoginRequire"), GetLang("LangModLaunchDialogBtn3MsLoginRequire"),
                     Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
                     Case 2
-                        Hint("游戏将以试玩模式启动！", HintType.Critical)
+                        Hint(GetLang("LangModLaunchHintPlayInDemo"), HintType.Critical)
                         CurrentLaunchOptions.ExtraArgs.Add("--demo")
                     Case 3
                         Throw New Exception("$$")

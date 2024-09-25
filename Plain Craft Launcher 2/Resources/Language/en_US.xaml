@@ -17,8 +17,10 @@ Error Cause: {0}</s:String>
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">The manually selected cache folder is unavailable, PCL will use the default cache folder instead.
 Error Cause: {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Environment Warning</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL is running in the temporary folder, which may result in settings, game saves, and other data not being stored properly, and partial feature may be unusable or erroneous.
-Please extract PCL from the archive file or use it in a different folder!</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">Please extract PCL from the compressed file, or change the folder before continuing to use it!
+The program is currently running in a temporary folder, and settings, game saves, etc. may not be saved, and some features may not be available.</s:String>
+    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL and the new version of Minecraft no longer support 32-bit systems, and some features may not be available.
+It is highly recommended to reinstall as a 64-bit system before continuing the game!</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">Initialization Error</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">Runtime Error</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">The version of your .NET Framework is too low or it is corrupted. Please redownload and install .NET Framework 4.6.2 from the opening website and try again!</s:String>
@@ -1195,6 +1197,8 @@ Since "Instance Isolation" is enabled for this instance, when you delete the ins
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">Delete Instance Confirmation</s:String>
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">The instance {0} has been deleted to the recycle bin!</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">The instance {0} has been permanently deleted!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Please disable [Version Settings → Settings → Advanced Launch Options → Disable File Verification] before attempting to complete the files!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Please disable [Settings → Advanced Launch Options → Disable File Verification] before attempting to complete the files!</s:String>
     <!--PageVersionSetup-->
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">The instance settings have been initialized!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Failed to initialize the instance settings.</s:String>
@@ -1350,7 +1354,6 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL is unable to identify the number of this version.</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">Unable to identify: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">Version JSON file not found: {0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionReadJsonFail">Version JSON file is empty of failed to read.</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">Version JSON file is incorrect, content: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">Nesting appears in version dependencies: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">Version JSON is non-standard. ({0})</s:String>
@@ -1433,8 +1436,9 @@ Game crashes are not related to the launcher commonly. Please do not submit feed
     <s:String x:Key="LangModBaseDialogUploadLogTitle">Submit Feedback Hint</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">Folder</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">No, thanks</s:String>
-    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Your PCL is not the latest version, feedback submittal is unsupportable.
-Please update the launcher in "Settings → Launcher" first, then submit feedback if the problem still exists in the latest version.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Your PCL is not the latest version, so you cannot submit feedback.
+Please update and confirm that the issue still exists in the latest version before submitting feedback.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">Update</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Unable to Submit</s:String>
     <s:String x:Key="LangModBaseExceptionBadEnvironment">There is a problem with the runtime of PCL. Please try to reinstall the ".NET Framework 4.6.2" and then try again.</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL does not have a sufficient permission. Please try to right-click PCL and select "Run as administrator".</s:String>
@@ -1642,6 +1646,12 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">Missing "mainClass" in version JSON!</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">Unable to open Natives file ({0}), the file may be corrupted, please try to relaunch the game.</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">Slim model is unsupported in this version, your skin may appear as Classic model.</s:String>
+    <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">You must first log in with a valid account to play offline!</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">Account Verification</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">Purchase</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">Demo</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">Back</s:String>
+    <s:String x:Key="LangModLaunchHintPlayInDemo">The game will start in demo mode!</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">Modpack File</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">Select Modpack File</s:String>
@@ -1961,4 +1971,18 @@ If you haven't seen error information, you can view the error report to understa
     <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">If you need help, please send the error report file to others, not a screenshot of this window.</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">Additionally, you are using an old version of PCL, updating PCL might also solve this problem.
 You can click Settings → Launcher → Check for Updates to update PCL.</s:String>
+    <!--MyMsgLogin-->
+    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">Reopen Web Page</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">Copy Code</s:String>
+    <s:String x:Key="LangMyMsgLoginHintInitFail">Login Dialog Initialization Failed</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">Login to Minecraft</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogContent">The login webpage will automatically open, please enter {0} in the webpage (already copied automatically).
+
+
+If the network environment is poor, the webpage may not load, in which case please use a VPN and retry.
+You can also open {1} on another device and enter the above code.</s:String>
+    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">Webpage login successful!</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionDecline">You declined PCL's request for permission……</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionTimeout">Login took too long, try again!</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Login polling failed</s:String>
 </ResourceDictionary>

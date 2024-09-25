@@ -17,8 +17,10 @@
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">수동으로 설정한 캐시 폴더를 사용할 수 없습니다. PCL은 기본 캐시 폴더를 사용합니다.
 오류 원인: {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">환경 경고</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL이 임시 폴더에서 실행되고 있습니다. 설정, 게임 저장 데이터 등이 저장되지 않을 수 있으며, 일부 기능이 사용 불가능하거나 오류가 발생할 수 있습니다.
-PCL을 압축 파일에서 추출하거나 폴더를 변경한 후 계속 사용해 주세요!</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL을 압축 파일에서 해제하거나 폴더를 변경한 후 계속 사용하십시오!
+현재 프로그램은 임시 폴더에서 실행되며 설정, 게임 저장 등이 저장되지 않을 수 있으며 일부 기능이 작동하지 않을 수 있습니다.</s:String>
+    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL과 새로운 Minecraft는 더 이상 32 비트 시스템을 지원하지 않으며 일부 기능이 작동하지 않을 수 있습니다.
+게임을 진행하기 전에 64 비트 시스템으로 다시 설치하는 것이 좋습니다!</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL 초기화 오류</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">실행 환경 오류</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">당신의 .NET Framework 버전이 낮거나 손상되었습니다. 열린 웹 페이지에서 .NET Framework 4.6.2를 다시 다운로드하고 설치한 후 다시 시도해 주세요!</s:String>
@@ -1184,6 +1186,8 @@ Mod를 업데이트하기 전에 저장 파일을 백업하고 업데이트 로�
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">버전 삭제 확인</s:String>
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">버전 {0}이(가) 휴지통으로 삭제되었습니다!</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">버전 {0}이(가) 영구 삭제되었습니다!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">파일을 완성하려면 먼저 [버전 설정 → 설정 → 고급 시작 옵션 → 파일 검증 해제]를 해제하세요!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">파일을 완성하려면 먼저 [설정 → 고급 시작 옵션 → 파일 검증 해제]를 해제하세요!</s:String>
     <!--PageVersionSetup-->
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">버전 독립 설정이 초기화되었습니다!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">버전 독립 설정 초기화 실패</s:String>
@@ -1338,7 +1342,6 @@ PCL은 다른 엉뚱한 다운로드 프로토콜을 지원하지 않습니다.<
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL이 해당 버전의 MC 버전 번호를 인식할 수 없습니다</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">인식할 수 없습니다: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">버전 JSON 파일을 찾을 수 없습니다: {0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionReadJsonFail">버전 JSON 파일이 비어 있거나 읽기 실패</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">버전 JSON 파일에 오류가 있습니다. 내용: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">버전 의존성에 중첩이 발생했습니다: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">버전 JSON이 비정상적입니다({0})</s:String>
@@ -1421,8 +1424,9 @@ URL: {0}</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogTitle">피드백 제출 알림</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">폴더 열기</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">필요 없음</s:String>
-    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">당신의 PCL이 최신 버전이 아니므로 피드백을 제출할 수 없습니다.
-먼저 설정 → 런처에서 런처를 업데이트하고, 최신 버전에서도 문제가 여전히 존재하는지 확인한 후 피드백을 제출하세요.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">당신의 PCL이 최신 버전이 아니어서 피드백을 제출할 수 없습니다.
+최신 버전으로 업데이트한 후, 해당 문제가 최신 버전에서도 여전히 존재하는지 확인한 후에 피드백을 제출하세요.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">업데이트</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">피드백을 제출할 수 없습니다</s:String>
     <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL의 실행 환경에 문제가 있습니다. .NET Framework 4.6.2를 재설치한 후 다시 시도하세요.</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL의 권한이 부족합니다. PCL을 마우스 오른쪽 버튼으로 클릭하고 관리자 권한으로 실행을 선택하세요.</s:String>
@@ -1633,6 +1637,12 @@ VPN이나 가속기를 사용 중이라면, 이를 끄거나 노드를 변경한
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">버전 JSON에 mainClass 항목이 없습니다!</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">Natives 파일({0})을 열 수 없습니다. 해당 파일이 손상되었을 수 있으니, 게임을 다시 시작해 보세요.</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">이 Minecraft 버전은 Alex 스킨을 지원하지 않으며, 당신의 스킨은 Steve로 표시될 수 있습니다!</s:String>
+    <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">정품 계정을 먼저 로그인해야 오프라인 로그인을 할 수 있습니다！</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">정품 인증</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">정품 구입</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">시도해 보기</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">돌아가기</s:String>
+    <s:String x:Key="LangModLaunchHintPlayInDemo">게임이 시도해 보기 모드로 시작됩니다！</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">모드팩 파일</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">모드팩 압축 파일 선택</s:String>
@@ -1952,4 +1962,18 @@ VPN이나 가속기를 사용 중이라면, 이를 끄거나 노드를 변경한
     <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">此外，你正在使用老版本 PCL，更新 PCL 或许也能解决这个问题。
 你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。</s:String>
+    <!--MyMsgLogin-->
+    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">웹페이지 다시 열기</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">코드 복사</s:String>
+    <s:String x:Key="LangMyMsgLoginHintInitFail">로그인 팝업 초기화 실패</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">Minecraft 로그인</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogContent">로그인 웹페이지가 자동으로 열립니다. 웹페이지에서 {0}을(를) 입력하세요（자동 복사되었습니다）.
+
+
+네트워크 환경이 좋지 않으면 웹페이지가 계속 로드되지 않을 수 있습니다. 그 경우 VPN을 사용하고 다시 시도하세요.
+다른 기기를 사용하여 {1}을(를) 열고 위 코드를 입력할 수도 있습니다.</s:String>
+    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">웹페이지 로그인 성공！</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionDecline">PCL이 요청한 권한을 거절했습니다……</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionTimeout">로그인 시간이 너무 오래 걸렸습니다. 다시 시도하세요！</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">로그인 확인 실패</s:String>
 </ResourceDictionary>

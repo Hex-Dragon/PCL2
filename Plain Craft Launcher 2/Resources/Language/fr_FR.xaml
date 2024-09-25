@@ -17,8 +17,10 @@ Causé par : {0}”</s:String>
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">Le dossier de cache sélectionné manuellement est indisponible, PCL utilisera le dossier de cache par défaut.
 Causé par : {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Avertissement sur l'environnement d'exécution</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL s'exécute dans un dossier temporaire. Il est possible que les paramètres, les sauvegardes de jeux, et d'autres fichiers importants ne puissent pas être enregistrés, et certaines fonctionnalités pourraient être inutilisables ou entraîner des erreurs.
-Veuillez extraire PCL du fichier compressé ou changer de dossier avant de continuer à l'utiliser!</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">Veuillez extraire PCL d'un fichier compressé ou changer de dossier avant de continuer à utiliser !
+Le programme s'exécute actuellement dans un dossier temporaire, ce qui peut empêcher les paramètres et les sauvegardes du jeu d'être enregistrés, et certaines fonctionnalités ne pourront pas être utilisées.</s:String>
+    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL et les nouvelles versions de Minecraft ne supportent plus les systèmes 32 bits, ce qui peut rendre certaines fonctionnalités inutilisables.
+Il est très recommandé de réinstaller en 64 bits avant de jouer !</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">Erreur d'initialisation de PCL</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">Erreur d'environnement d'exécution</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">Votre version de .NET Framework est trop ancienne ou endommagée. Veuillez télécharger et installer .NET Framework 4.6.2 depuis la page web ouverte, puis réessayez!</s:String>
@@ -1190,6 +1192,8 @@ Puisque "L'isolement d'instance" est activé pour cette instance, lorsque vous s
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">Confirmation de suppression de l'instance</s:String>
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">L'instance {0} a été supprimée dans la corbeille !</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">L'instance {0} a été supprimée définitivement !</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Veuillez d'abord désactiver [Paramètres de version → Paramètres → Options avancées de démarrage → Désactiver la vérification des fichiers], puis essayez de compléter les fichiers !</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Veuillez d'abord désactiver [Paramètres → Options avancées de démarrage → Désactiver la vérification des fichiers], puis essayez de compléter les fichiers !</s:String>
     <!--PageVersionSetup-->
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">Les paramètres de l'instance ont été initialisés !</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Échec de l'initialisation des paramètres de l'instance.</s:String>
@@ -1345,7 +1349,6 @@ Veuillez vérifier si le type d'événement est correctement rempli, si le PCL e
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL est incapable d'identifier le numéro de cette version.</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">Impossible d'identifier : {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">Fichier JSON de version non trouvé : {0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionReadJsonFail">Le fichier JSON de version est vide ou n'a pas pu être lu.</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">Le fichier JSON de version est incorrect, contenu : {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">Une imbrication apparaît dans les dépendances de version : {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">Le JSON de version n'est pas standard. ({0})</s:String>
@@ -1428,8 +1431,9 @@ Les plantages de jeu ne sont généralement pas liés au lanceur. Veuillez ne pa
     <s:String x:Key="LangModBaseDialogUploadLogTitle">Conseil pour soumettre un retour</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">Dossier</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">Non, merci</s:String>
-    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Votre PCL n'est pas à jour, la soumission de retour n'est pas supportée.
-Veuillez d'abord mettre à jour le lanceur dans "Paramètres → Lanceur", puis soumettez un retour si le problème persiste dans la dernière version.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Votre PCL n'est pas à jour, donc vous ne pouvez pas envoyer de retour.
+Veuillez mettre à jour, puis confirmer que le problème persiste dans la dernière version, avant de soumettre un retour.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">Mettre à jour</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Impossible de soumettre</s:String>
     <s:String x:Key="LangModBaseExceptionBadEnvironment">Il y a un problème avec l'environnement d'exécution de PCL. Veuillez essayer de réinstaller le ".NET Framework 4.6.2" puis réessayez.</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL n'a pas les permissions suffisantes. Veuillez essayer de faire un clic droit sur PCL et sélectionner "Exécuter en tant qu'administrateur".</s:String>
@@ -1628,6 +1632,12 @@ Après vous être connecté avec votre compte Microsoft une fois, cet indice n'a
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">"mainClass" manquant dans le JSON de version !</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">Impossible d'ouvrir le fichier Natives ({0}), le fichier peut être corrompu, veuillez essayer de relancer le jeu.</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">Le modèle Slim n'est pas pris en charge dans cette version, votre skin peut apparaître comme un modèle Classique.</s:String>
+    <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">Vous devez d'abord vous connecter avec un compte officiel pour pouvoir jouer en mode hors ligne !</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">Validation officielle</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">Acheter l'édition officielle</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">Essayer</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">Retour</s:String>
+    <s:String x:Key="LangModLaunchHintPlayInDemo">Le jeu démarrera en mode démo !</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">Fichier Modpack</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">Sélectionner le fichier Modpack</s:String>
@@ -1947,4 +1957,18 @@ Cela remplacera le fichier JSON et le fichier JAR, mais n'affectera pas les fich
     <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">此外，你正在使用老版本 PCL，更新 PCL 或许也能解决这个问题。
 你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。</s:String>
+    <!--MyMsgLogin-->
+    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">Rouvrir la page web</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">Copier le code</s:String>
+    <s:String x:Key="LangMyMsgLoginHintInitFail">Échec de l'initialisation de la fenêtre de login</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">Se connecter à Minecraft</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogContent">La page web de login s'ouvrira automatiquement, veuillez entrer {0} (déjà copié).
+
+
+Si votre environnement réseau est mauvais, la page web peut ne pas charger, dans ce cas, veuillez utiliser un VPN et réessayer.
+Vous pouvez également utiliser un autre appareil pour ouvrir {1} et entrer le code ci-dessus.</s:String>
+    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">Connexion web réussie !</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionDecline">Vous avez refusé les autorisations demandées par PCL……</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionTimeout">Le temps de connexion est trop long, réessayez !</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Échec de la vérification de connexion</s:String>
 </ResourceDictionary>

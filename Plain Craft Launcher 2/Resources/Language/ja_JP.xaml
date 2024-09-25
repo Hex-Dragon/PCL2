@@ -17,8 +17,10 @@
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手動で設定したキャッシュフォルダが利用できません。PCL はデフォルトのキャッシュフォルダを使用します。
 エラーの原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">環境警告</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL は一時フォルダで実行されています。設定やゲームのセーブデータなどが保存できない可能性があり、一部の機能が使用できなかったりエラーが発生する可能性があります。
-PCL を圧縮ファイルから展開するか、フォルダを変更してから使用を続けてください！</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCLを圧縮ファイルから解凍し、またはフォルダを変更してから再度使用してください！
+現在、PCLは一時的なフォルダで実行されており、設定やゲームのセーブデータなどが保存できなくなる可能性があり、また一部の機能が使用できなくなる可能性があります。</s:String>
+    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCLと新しいMinecraftのバージョンは、32ビットシステムをサポートしなくなりました、一部の機能が使用できなくなる可能性があります。
+64ビットシステムに再インストールしてからゲームを続けることを強くお勧めします！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初期化エラー</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">実行環境エラー</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">お使いの .NET Framework のバージョンが低いか破損しています。開いているウェブページから .NET Framework 4.6.2 を再ダウンロードしてインストールした後、もう一度お試しください！</s:String>
@@ -1198,6 +1200,8 @@ Modローダーを既にインストールしている場合は、おそらく�
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">バージョン削除の確認</s:String>
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">バージョン {0} がごみ箱に移動されました！」</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">バージョン {0} が永久に削除されました！」</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">まず [バージョン設定 → 設定 → 高度な起動オプション → ファイル検証を無効にする] を無効にしてから、ファイルを補完してみてください！</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">まず [設定 → 高度な起動オプション → ファイル検証を無効にする] を無効にしてから、ファイルを補完してみてください！</s:String>
     <!--PageVersionSetup-->
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">バージョン独立設定が初期化されました！</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">バージョン独立設定の初期化に失敗しました</s:String>
@@ -1352,7 +1356,6 @@ PCL は他の様々なダウンロードプロトコルをサポートしてい�
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL はこのバージョンの MC バージョン番号を認識できません</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">認識できません：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">バージョン JSON ファイルが見つかりません：{0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionReadJsonFail">バージョン JSON ファイルが空または読み取りに失敗しました</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">バージョン JSON ファイルに誤りがあります、内容は：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">バージョン依存関係にネストが出現しました：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">バージョン JSON が不規則です（{0}）</s:String>
@@ -1435,7 +1438,9 @@ URL：{0}</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogTitle">フィードバック提出の注意</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">フォルダを開く</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不要</s:String>
-    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">あなたの PCL は最新版ではありません。まず、設定 → ランチャー でランチャーを更新し、この問題が最新版でもまだ存在するかどうかを確認してから、フィードバックを提出してください。</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">あなたの PCL は最新版ではないため、フィードバックを提出できません。
+更新後、問題が最新版でも続くかどうかを確認し、その後にフィードバックを提出してください。</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">更新</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">フィードバックを提出できません</s:String>
     <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL の実行環境に問題があります。.NET Framework 4.6.2 を再インストールしてから再試行してください。</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL の権限が不足しています。PCL を右クリックして、管理者として実行を選択してください。</s:String>
@@ -1646,6 +1651,12 @@ URL：{0}</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">バージョン JSON に mainClass 項目がありません！</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">Natives ファイルを開けません（{0}）。ファイルが破損している可能性があります。もう一度ゲームを起動してみてください。</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">この Minecraft バージョンはまだ Alex スキンをサポートしていません。スキンは Steve として表示される可能性があります。</s:String>
+    <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">正版アカウントにログインしてから、オフラインログインを行う必要があります！</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">正版認証</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">正版を購入</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">体験版</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">戻る</s:String>
+    <s:String x:Key="LangModLaunchHintPlayInDemo">ゲームは体験版モードで起動します！</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">統合パックファイル</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">統合パック圧縮ファイルを選択してください</s:String>
@@ -1965,4 +1976,18 @@ URL：{0}</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">此外，你正在使用老版本 PCL，更新 PCL 或许也能解决这个问题。
 你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。</s:String>
+    <!--MyMsgLogin-->
+    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">ウェブページを再度開く</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">コードをコピー</s:String>
+    <s:String x:Key="LangMyMsgLoginHintInitFail">ログインダイアログの初期化に失敗しました</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">Minecraftにログイン</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogContent">ログインウェブページが自動的に開きます。ウェブページに {0} を入力してください（自動的にコピーされました）。
+
+
+ネットワーク環境が良くない場合、ウェブページがロードされないことがあります。その場合はVPNを使用して再試行してください。
+他のデバイスで {1} を開き、上記のコードを入力することもできます。</s:String>
+    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">ウェブページへのログインに成功しました！</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionDecline">あなたはPCLのリクエストを拒否しました……</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionTimeout">ログインに時間がかかりすぎます。もう一度試してみてください！</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">ログインのポーリングに失敗しました</s:String>
 </ResourceDictionary>

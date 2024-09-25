@@ -273,9 +273,9 @@
 
                     <TextBlock Grid.Row="12" Grid.Column="0" Text="libwebp wrapper for .NET" TextWrapping="Wrap" FontWeight="Bold" />
                     <TextBlock Grid.Row="12" Grid.Column="2" Grid.ColumnSpan="2" Text="Copyright © 2012 Imazen&#xa;Licensed under the MIT License." TextWrapping="Wrap" />
-                    <local:MyButton Grid.Row="13" Grid.Column="2" MinWidth="140" Text="查看来源网站" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+                    <local:MyButton Grid.Row="13" Grid.Column="2" MinWidth="140" Text="{StaticResource LangPageOtherAboutLicenseWeb}" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
                                     EventType="打开网页" EventData="https://github.com/imazen/libwebp-net" />
-                    <local:MyButton Grid.Row="13" Grid.Column="3" MinWidth="140" Text="查看许可文档" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+                    <local:MyButton Grid.Row="13" Grid.Column="3" MinWidth="140" Text="{StaticResource LangPageOtherAboutLicenseDoc}" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
                                     EventType="打开网页" EventData="https://github.com/imazen/libwebp-net/blob/master/LICENSE.txt" />
 
                 </Grid>

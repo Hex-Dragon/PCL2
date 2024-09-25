@@ -17,8 +17,10 @@
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手动设置的缓存文件夹不可用，PCL 将使用默认缓存文件夹。
 错误原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">環境警告</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">PCL 正在临时文件夹运行，设置、游戏存档等很可能无法保存，且部分功能会无法使用或出错。
-请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">請將 PCL 從壓縮文件中解壓縮，或是更換文件夾後再繼續使用！
+程序目前在臨時文件夾中運行，設定、遊戲存檔等可能無法保存，且部分功能將無法使用。</s:String>
+    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL 和新版 Minecraft 均不再支持 32 位系統，部分功能將無法使用。
+非常建議重裝為 64 位系統後再進行遊戲！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化错误</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">執行環境錯誤</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">君之 .NET Framework 版本或低或損，請於所開網頁中重下載並安裝 .NET Framework 4.6.2，再試之！</s:String>
@@ -1197,6 +1199,8 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">版本刪除確認</s:String>
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">版本 {0} 已刪除到回收站！</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">版本 {0} 已永久刪除！</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">請先關閉 [版本設定 → 設定 → 高級啟動選項 → 關閉檔案驗證]，然後再嘗試補全檔案！</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">請先關閉 [設定 → 高級啟動選項 → 關閉檔案驗證]，然後再嘗試補全檔案！</s:String>
     <!--PageVersionSetup-->
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">已初始化版本獨立設置！</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">初始化版本獨立設置失敗</s:String>
@@ -1351,7 +1355,6 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL 無法識別該版本的 MC 版本號</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">無法識別：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">未找到版本 JSON 文件：{0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionReadJsonFail">版本 JSON 文件為空或讀取失敗</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">版本 JSON 文件有誤，內容為：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">版本依賴項出現嵌套：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">版本 JSON 不規範（{0}）</s:String>
@@ -1434,8 +1437,9 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogTitle">反饋提交提醒</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">打開文件夾</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
-    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">你的 PCL 不是最新版，因此無法提交反饋。
-請先在 設置 → 啟動器 中更新啟動器，確認該問題在最新版中依然存在，然後再提交反饋。</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">你的 PCL 不是最新版，因此无法提交反馈。
+请在更新后，确认该问题在最新版中依然存在，然后再提交反馈。</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">更新</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">無法提交反饋</s:String>
     <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL 的運行環境存在問題。請嘗試重新安裝 .NET Framework 4.6.2 然後再試。</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL 的權限不足。請嘗試右鍵 PCL，選擇以管理員身份運行。</s:String>
@@ -1644,6 +1648,12 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 JSON 中沒有 mainClass 項！</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">無法打開 Natives 文件（{0}），該文件可能已損壞，請重新嘗試啟動遊戲</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">此 Minecraft 版本尚不支持 Alex 皮膚，你的皮膚可能會顯示為 Steve！</s:String>
+    <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">你必须先登录正版账号，才能进行离线登录！</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">正版验证</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">购买正版</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">试玩</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">返回</s:String>
+    <s:String x:Key="LangModLaunchHintPlayInDemo">游戏将以试玩模式启动！</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">整合包文件</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">選擇整合包壓縮文件</s:String>
@@ -1963,4 +1973,17 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">此外，你正在使用老版本 PCL，更新 PCL 或许也能解决这个问题。
 你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。</s:String>
+    <!--MyMsgLogin-->
+    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">重新開啟網頁</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">複製代碼</s:String>
+    <s:String x:Key="LangMyMsgLoginHintInitFail">登入彈窗初始化失敗</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">登入 Minecraft</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogContent">登入網頁將自動開啟，請在網頁中輸入 {0}（已自動複製）。
+
+如果網路環境不佳，網頁可能一直加載不出來，屆時請使用 VPN 並重試。
+你也可以用其他設備開啟 {1} 並輸入上述代碼。</s:String>
+    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">網頁登入成功！</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionDecline">你拒絕了 PCL 申請的權限……</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionTimeout">登入用時太長啦，重新試試吧！</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">登入輪詢失敗</s:String>
 </ResourceDictionary>
