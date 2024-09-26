@@ -1775,14 +1775,14 @@ VPN이나 가속기를 사용 중이라면, 이를 끄거나 노드를 변경한
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">LiteLoader {0} 다운로드</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">Fabric {0} 다운로드</s:String>
     <!--ModCrash-->
-    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">错误报告分析结果</s:String>
-    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 出现错误</s:String>
-    <s:String x:Key="LangModCrashViewLog">查看日志</s:String>
-    <s:String x:Key="LangModCrashExportCrashReport">导出错误报告</s:String>
-    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">错误报告已导出！</s:String>
-    <s:String x:Key="LangModCrashCrashReasonNoReason">很抱歉，PCL 无法确定错误原因。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonHelpTip">很抱歉，你的游戏出现了一些问题……
-如果要寻求帮助，请导出错误报告并发给他人，而不是发送这个窗口的截图。</s:String>
+    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">오류 보고서 분석 결과</s:String>
+    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 오류 발생</s:String>
+    <s:String x:Key="LangModCrashViewLog">로그 보기</s:String>
+    <s:String x:Key="LangModCrashExportCrashReport">오류 보고서 내보내기</s:String>
+    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">오류 보고서가 내보되었습니다！</s:String>
+    <s:String x:Key="LangModCrashCrashReasonNoReason">죄송합니다, PCL이 오류 원인을 확인할 수 없습니다.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonHelpTip">죄송합니다, 당신의 게임에 문제가 발생했습니다……
+도움을 찾으려면 오류 보고서를 내보내고 다른 사람에게 보내주세요, 이 창의 스크린샷을 보내는 것이 아닙니다.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAA">由于 Mod 文件被解压了，导致游戏无法继续运行。
 直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。
 

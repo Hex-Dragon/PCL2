@@ -1784,14 +1784,14 @@ URL: {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">Загрузить LiteLoader {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">Загрузить Fabric {0}</s:String>
     <!--ModCrash-->
-    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">错误报告分析结果</s:String>
-    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 出现错误</s:String>
-    <s:String x:Key="LangModCrashViewLog">查看日志</s:String>
-    <s:String x:Key="LangModCrashExportCrashReport">导出错误报告</s:String>
-    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">错误报告已导出！</s:String>
-    <s:String x:Key="LangModCrashCrashReasonNoReason">很抱歉，PCL 无法确定错误原因。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonHelpTip">很抱歉，你的游戏出现了一些问题……
-如果要寻求帮助，请导出错误报告并发给他人，而不是发送这个窗口的截图。</s:String>
+    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">Результат анализа отчета об ошибке</s:String>
+    <s:String x:Key="LangModCrashDialogTitleMcError">Ошибка в Minecraft</s:String>
+    <s:String x:Key="LangModCrashViewLog">Просмотреть журнал</s:String>
+    <s:String x:Key="LangModCrashExportCrashReport">Экспортировать отчет об ошибке</s:String>
+    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">Отчет об ошибке успешно экспортирован!</s:String>
+    <s:String x:Key="LangModCrashCrashReasonNoReason">К сожалению, PCL не может определить причину ошибки.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonHelpTip">К сожалению, у вашей игры возникли некоторые проблемы…
+Если вам нужна помощь, пожалуйста, экспортируйте отчет об ошибке и отправьте его другим, а не делайте скриншот этого окна.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAA">由于 Mod 文件被解压了，导致游戏无法继续运行。
 直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。
 

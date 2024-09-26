@@ -1776,14 +1776,14 @@ Esto sobrescribirá el archivo JSON y el archivo JAR, pero no afectará a los ar
     <s:String x:Key="LangSpeedSpeed">Velocidad de descarga</s:String>
     <s:String x:Key="LangSpeedTotalProgress">Progreso general</s:String>
     <!--ModCrash-->
-    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">错误报告分析结果</s:String>
-    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 出现错误</s:String>
-    <s:String x:Key="LangModCrashViewLog">查看日志</s:String>
-    <s:String x:Key="LangModCrashExportCrashReport">导出错误报告</s:String>
-    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">错误报告已导出！</s:String>
-    <s:String x:Key="LangModCrashCrashReasonNoReason">很抱歉，PCL 无法确定错误原因。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonHelpTip">很抱歉，你的游戏出现了一些问题……
-如果要寻求帮助，请导出错误报告并发给他人，而不是发送这个窗口的截图。</s:String>
+    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">Resultados del Análisis del Informe de Error</s:String>
+    <s:String x:Key="LangModCrashDialogTitleMcError">Error de Minecraft</s:String>
+    <s:String x:Key="LangModCrashViewLog">Ver Registro</s:String>
+    <s:String x:Key="LangModCrashExportCrashReport">Exportar Informe de Error</s:String>
+    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">¡Informe de Error exportado!</s:String>
+    <s:String x:Key="LangModCrashCrashReasonNoReason">Lo sentimos, PCL no puede determinar la razón del error.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonHelpTip">Lo sentimos, tu juego ha experimentado algunos problemas…
+Si deseas buscar ayuda, por favor exporta el informe de error y envíaselo a alguien, en lugar de enviar una captura de pantalla de esta ventana.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAA">由于 Mod 文件被解压了，导致游戏无法继续运行。
 直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。
 

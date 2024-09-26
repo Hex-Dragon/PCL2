@@ -1789,14 +1789,14 @@ URL：{0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">LiteLoader {0} のダウンロード</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">Fabric {0} のダウンロード</s:String>
     <!--ModCrash-->
-    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">错误报告分析结果</s:String>
-    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 出现错误</s:String>
-    <s:String x:Key="LangModCrashViewLog">查看日志</s:String>
-    <s:String x:Key="LangModCrashExportCrashReport">导出错误报告</s:String>
-    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">错误报告已导出！</s:String>
-    <s:String x:Key="LangModCrashCrashReasonNoReason">很抱歉，PCL 无法确定错误原因。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonHelpTip">很抱歉，你的游戏出现了一些问题……
-如果要寻求帮助，请导出错误报告并发给他人，而不是发送这个窗口的截图。</s:String>
+    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">エラー報告分析結果</s:String>
+    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft エラー発生</s:String>
+    <s:String x:Key="LangModCrashViewLog">ログを表示</s:String>
+    <s:String x:Key="LangModCrashExportCrashReport">エラー報告をエクスポート</s:String>
+    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">エラー報告がエクスポートされました！</s:String>
+    <s:String x:Key="LangModCrashCrashReasonNoReason">申し訳ありませんが、PCLはエラーの原因を特定できません。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonHelpTip">申し訳ありませんが、ゲームに問題が発生しました……
+助けを求める場合は、エラー報告をエクスポートして他人に送ってください、このウィンドウのスクリーンショットを送信するのではなく。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAA">由于 Mod 文件被解压了，导致游戏无法继续运行。
 直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。
 

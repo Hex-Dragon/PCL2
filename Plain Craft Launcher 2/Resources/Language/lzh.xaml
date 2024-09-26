@@ -1786,14 +1786,14 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">下載 LiteLoader {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">下載 Fabric {0}</s:String>
     <!--ModCrash-->
-    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">错误报告分析结果</s:String>
-    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 出现错误</s:String>
-    <s:String x:Key="LangModCrashViewLog">查看日志</s:String>
-    <s:String x:Key="LangModCrashExportCrashReport">导出错误报告</s:String>
-    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">错误报告已导出！</s:String>
-    <s:String x:Key="LangModCrashCrashReasonNoReason">很抱歉，PCL 无法确定错误原因。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonHelpTip">很抱歉，你的游戏出现了一些问题……
-如果要寻求帮助，请导出错误报告并发给他人，而不是发送这个窗口的截图。</s:String>
+    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">錯誤報告分析結果</s:String>
+    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 出現錯誤</s:String>
+    <s:String x:Key="LangModCrashViewLog">查看日誌</s:String>
+    <s:String x:Key="LangModCrashExportCrashReport">導出錯誤報告</s:String>
+    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">錯誤報告已導出！</s:String>
+    <s:String x:Key="LangModCrashCrashReasonNoReason">很抱歉，PCL 無法確定錯誤原因。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonHelpTip">很抱歉，你的遊戲出現了一些問題……
+如果要尋求幫助，請導出錯誤報告並發給他人，而不是發送這個窗口的截圖。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAA">由于 Mod 文件被解压了，导致游戏无法继续运行。
 直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。
 

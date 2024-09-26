@@ -1785,14 +1785,14 @@ URL: {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">Λήψη Fabric {0}</s:String>
     <s:String x:Key="LangPageVersionOverallDialogEditDescHint">Descripción predeterminada</s:String>
     <!--ModCrash-->
-    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">错误报告分析结果</s:String>
-    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 出现错误</s:String>
-    <s:String x:Key="LangModCrashViewLog">查看日志</s:String>
-    <s:String x:Key="LangModCrashExportCrashReport">导出错误报告</s:String>
-    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">错误报告已导出！</s:String>
-    <s:String x:Key="LangModCrashCrashReasonNoReason">很抱歉，PCL 无法确定错误原因。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonHelpTip">很抱歉，你的游戏出现了一些问题……
-如果要寻求帮助，请导出错误报告并发给他人，而不是发送这个窗口的截图。</s:String>
+    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">Ανάλυση Αποτελεσμάτων Σφάλματος</s:String>
+    <s:String x:Key="LangModCrashDialogTitleMcError">Σφάλμα στο Minecraft</s:String>
+    <s:String x:Key="LangModCrashViewLog">Προβολή Λογαριασμού</s:String>
+    <s:String x:Key="LangModCrashExportCrashReport">Εξαγωγή Αναφοράς Σφάλματος</s:String>
+    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">Η αναφορά σφάλματος εξαγωγή!</s:String>
+    <s:String x:Key="LangModCrashCrashReasonNoReason">Πολύ συγγνώμη, το PCL δεν μπορεί να προσδιορίσει το λόγο του σφάλματος.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonHelpTip">Πολύ συγγνώμη, το παιχνίδι σας εμφάνισε κάποια προβλήματα…
+Εάν θέλετε να ζητήσετε βοήθεια, παρακαλώ εξαγάγετε την αναφορά σφάλματος και στείλτε την σε άλλους, όχι ένα στιγμιότυπο αυτού του παραθύρου.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAA">由于 Mod 文件被解压了，导致游戏无法继续运行。
 直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。
 
