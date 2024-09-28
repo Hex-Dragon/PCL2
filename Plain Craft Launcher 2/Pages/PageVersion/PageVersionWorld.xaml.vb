@@ -123,17 +123,22 @@ Public Class PageVersionWorld
         End If
     End Sub
     Private Sub BtnInfo_Click(sender As Object, e As MouseButtonEventArgs)
-        Dim Path As String = GetPathFromSender(sender)
-        Dim infos As List(Of String) = New List(Of String)
-        infos.Add("名称：" & GetFileNameFromPath(Path))
-        infos.Add("创建日期：" & Directory.GetCreationTime(Path).ToString("yyyy'/'MM'/'dd"))
-        infos.Add("最后一次修改日期：" & Directory.GetLastWriteTime(Path).ToString("yyyy'/'MM'/'dd"))
-        infos.Add("玩家数量：" & Directory.GetFiles(Path & "\playerdata", "*.dat", SearchOption.TopDirectoryOnly).Count())
-        infos.Add("数据包数量：" & (Directory.GetDirectories(Path + "\datapacks").Count() + Directory.GetFiles(Path + "\datapacks").Count()).ToString())
-        MyMsgBox(infos.Join(vbCrLf), "存档详细信息")
+        Try
+            Dim Path As String = GetPathFromSender(sender)
+            Dim infos As List(Of String) = New List(Of String)
+            infos.Add("名称：" & GetFileNameFromPath(Path))
+            infos.Add("创建日期：" & Directory.GetCreationTime(Path).ToString("yyyy'/'MM'/'dd"))
+            infos.Add("最后一次修改日期：" & Directory.GetLastWriteTime(Path).ToString("yyyy'/'MM'/'dd"))
+            Directory.CreateDirectory(Path & "\playerdata")
+            infos.Add("玩家数量：" & Directory.GetFiles(Path & "\playerdata", "*.dat", SearchOption.TopDirectoryOnly).Count())
+            Directory.CreateDirectory(Path + "\datapacks")
+            infos.Add("数据包数量：" & (Directory.GetDirectories(Path + "\datapacks").Count() + Directory.GetFiles(Path + "\datapacks").Count()).ToString())
+            MyMsgBox(infos.Join(vbCrLf), "存档详细信息")
+        Catch ex As Exception
+            Log(ex, "获取存档详细信息失败……", LogLevel.Hint)
+        End Try
     End Sub
     Private Sub BtnOpenFolder_Click(sender As Object, e As MouseButtonEventArgs)
-        If Not Directory.Exists(WorldPath) Then Directory.CreateDirectory(WorldPath)
         OpenExplorer("""" & WorldPath & """")
     End Sub
     Private Sub BtnOpen_Click(sender As Object, e As MouseButtonEventArgs)
