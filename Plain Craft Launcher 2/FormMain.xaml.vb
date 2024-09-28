@@ -134,6 +134,14 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 337 Then 'Snapshot 2.8.7
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "使用新的正版登录方式，以提高安全性"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化安装整合包、检索 Mod 的稳定性"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法加载部分 Mod 的图标的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复在 Mod 管理页面删除 Mod 导致报错的 Bug"))
+            FeatureCount += 11
+            BugCount += 21
+        End If
         If LastVersion < 335 Then 'Snapshot 2.8.6
             BugCount += 2
         End If
@@ -432,6 +440,10 @@ Public Class FormMain
             Height = MinHeight + 50
             Width = MinWidth + 50
         End Try
+#If DEBUG Then
+        MinHeight = 50
+        MinWidth = 50
+#End If
         Topmost = False
         If FrmStart IsNot Nothing Then FrmStart.Close(New TimeSpan(0, 0, 0, 0, 400 / AniSpeed))
         '更改窗口
@@ -1011,18 +1023,19 @@ Install:
     ''' 把当前窗口拖到最前面。
     ''' </summary>
     Public Sub ShowWindowToTop()
-        RunInUi(Sub()
-                    '这一坨乱七八糟的，别改，改了指不定就炸了，自己电脑还复现不出来
-                    Visibility = Visibility.Visible
-                    ShowInTaskbar = True
-                    WindowState = WindowState.Normal
-                    Hidden = False
-                    Topmost = True '偶尔 SetForegroundWindow 失效
-                    Topmost = False
-                    SetForegroundWindow(Handle)
-                    Focus()
-                    Log("[System] 窗口已置顶，位置：(" & Left & ", " & Top & "), " & Width & " x " & Height)
-                End Sub)
+        RunInUi(
+        Sub()
+            '这一坨乱七八糟的，别改，改了指不定就炸了，自己电脑还复现不出来
+            Visibility = Visibility.Visible
+            ShowInTaskbar = True
+            WindowState = WindowState.Normal
+            Hidden = False
+            Topmost = True '偶尔 SetForegroundWindow 失效
+            Topmost = False
+            SetForegroundWindow(Handle)
+            Focus()
+            Log($"[System] 窗口已置顶，位置：({Left}, {Top}), {Width} x {Height}")
+        End Sub)
     End Sub
 
 #End Region
