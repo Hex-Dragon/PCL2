@@ -60,29 +60,44 @@ Public Class PageVersionResourcePack
         If Directory.Exists(ResCachaPath) Then Directory.Delete(ResCachaPath, True)
         Directory.CreateDirectory(ResCachaPath)
         For Each i In FileList
-            Dim ResTempFile = ResCachaPath & GetHash(i) & ".png"
+            Dim ResTempIconFile = ResCachaPath & GetHash(i) & ".png"
+            Dim ResTempDescFile = ResCachaPath & GetHash(i) & ".json"
+            Dim ResDesc As String = ""
             Dim isFile = File.Exists(i)
+
+            '提取资源
             Try
                 If isFile Then '文件类型的资源包
                     Dim Archive = New ZipArchive(New FileStream(i, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     Dim pack = Archive.GetEntry("pack.png")
+                    Dim desc = Archive.GetEntry("pack.mcmeta")
                     If pack Is Nothing Then
-                        ResTempFile = PathImage & "Icons/NoIcon.png"
+                        ResTempIconFile = PathImage & "Icons/NoIcon.png"
                     Else
-                        pack.ExtractToFile(ResTempFile)
+                        pack.ExtractToFile(ResTempIconFile)
+                    End If
+                    If desc IsNot Nothing Then
+                        desc.ExtractToFile(ResTempDescFile)
+                        ResDesc = GetJson(File.ReadAllText(ResTempDescFile, Encoding.UTF8))?("pack")?("description")
                     End If
                 Else '文件夹型资源包
-                    ResTempFile = i + "\pack.png"
+                    ResTempIconFile = i + "\pack.png"
+                    ResDesc = GetJson(File.ReadAllText(i & "\pack.mcmeta", Encoding.UTF8))?("pack")?("description")
                 End If
             Catch ex As Exception
-                Log(ex, "[Resourcepack] 提取资源包图片失败！")
-                ResTempFile = PathImage & "Icons/NoIcon.png"
+                Log(ex, "[Resourcepack] 提取资源包信息失败！")
+                ResTempIconFile = PathImage & "Icons/NoIcon.png"
+                ResDesc = $"引入时间：{ If(isFile, File.GetCreationTime(i), Directory.GetCreationTime(i)).ToString("yyyy'/'MM'/'dd")}"
             End Try
-            If Not File.Exists(ResTempFile) Then ResTempFile = PathImage & "Icons/NoIcon.png" '防止未考虑到的错误
+
+            '防止错误
+            If String.IsNullOrEmpty(ResDesc) Then ResDesc = $"引入时间：{ If(isFile, File.GetCreationTime(i), Directory.GetCreationTime(i)).ToString("yyyy'/'MM'/'dd")}"
+            If Not File.Exists(ResTempIconFile) Then ResTempIconFile = PathImage & "Icons/NoIcon.png"
+
             Dim worldItem As MyListItem = New MyListItem With {
                 .Title = If(isFile, GetFileNameWithoutExtentionFromPath(i), GetFolderNameFromPath(i)),
-                .Logo = ResTempFile,
-                .Info = $"引入时间：{ If(isFile, File.GetCreationTime(i), Directory.GetCreationTime(i)).ToString("yyyy'/'MM'/'dd")}",
+                .Logo = ResTempIconFile,
+                .Info = ResDesc,
                 .Tag = i
             }
             Dim BtnOpen As MyIconButton = New MyIconButton With {
