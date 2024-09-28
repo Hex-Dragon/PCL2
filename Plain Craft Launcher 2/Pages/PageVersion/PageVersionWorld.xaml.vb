@@ -93,13 +93,17 @@ Public Class PageVersionWorld
     End Function
 
     Private Sub RemoveItem(Path As String)
-        For Each i In PanList.Children
-            If CType(i, MyListItem).Tag.Equals(Path) Then
-                PanList.Children.Remove(CType(i, MyListItem))
-                FileList.Remove(Path)
-                Exit For
-            End If
-        Next
+        Try
+            For Each i In PanList.Children
+                If CType(i, MyListItem).Tag.Equals(Path) Then
+                    PanList.Children.Remove(CType(i, MyListItem))
+                    FileList.Remove(Path)
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            Log(ex, "未能找到对应 UI")
+        End Try
         RefreshUI()
     End Sub
 
@@ -115,12 +119,16 @@ Public Class PageVersionWorld
     End Sub
     Private Sub BtnCopy_Click(sender As Object, e As MouseButtonEventArgs)
         Dim Path As String = GetPathFromSender(sender)
-        If Directory.Exists(Path) Then
-            Clipboard.SetFileDropList(New Specialized.StringCollection() From {Path})
-            Hint("已复制存档文件夹到剪贴板！")
-        Else
-            Hint("存档文件夹不存在！")
-        End If
+        Try
+            If Directory.Exists(Path) Then
+                Clipboard.SetFileDropList(New Specialized.StringCollection() From {Path})
+                Hint("已复制存档文件夹到剪贴板！")
+            Else
+                Hint("存档文件夹不存在！")
+            End If
+        Catch ex As Exception
+            Log(ex, "复制失败……", LogLevel.Hint)
+        End Try
     End Sub
     Private Sub BtnInfo_Click(sender As Object, e As MouseButtonEventArgs)
         Try

@@ -116,12 +116,16 @@ Public Class PageVersionScreenshot
     End Sub
 
     Private Sub RemoveItem(Path As String)
-        For Each i In PanList.Children
-            If CType(i, MyCard).Tag.Equals(Path) Then
-                PanList.Children.Remove(i)
-                Exit For
-            End If
-        Next
+        Try
+            For Each i In PanList.Children
+                If CType(i, MyCard).Tag.Equals(Path) Then
+                    PanList.Children.Remove(i)
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            Log(ex, "未能找到对应 UI")
+        End Try
     End Sub
 
     Private Function GetPathFromSender(sender As MyIconTextButton) As String
@@ -154,6 +158,7 @@ Public Class PageVersionScreenshot
                     Exit Sub
                 Catch ex As Exception
                     TryTime += 1
+                    Log(ex, $"[Screenshot]第 {TryTime} 次复制尝试失败")
                 End Try
             End While
             Hint("截图复制失败！", HintType.Critical)
