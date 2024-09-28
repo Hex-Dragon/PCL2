@@ -89,7 +89,8 @@ Public Class PageVersionScreenshot
                 .Name = "BtnOpen",
                 .Text = "打开",
                 .LogoScale = 0.8,
-                .Logo = Logo.IconButtonOpen
+                .Logo = Logo.IconButtonOpen,
+                .Tag = i
             }
             AddHandler btnOpen.Click, AddressOf btnOpen_Click
             stackPanel.Children.Add(btnOpen)
@@ -97,7 +98,8 @@ Public Class PageVersionScreenshot
                 .Name = "BtnDelete",
                 .Text = "删除",
                 .LogoScale = 0.8,
-                .Logo = Logo.IconButtonDelete
+                .Logo = Logo.IconButtonDelete,
+                .Tag = i
             }
             AddHandler btnDelete.Click, AddressOf btnDelete_Click
             stackPanel.Children.Add(btnDelete)
@@ -105,7 +107,8 @@ Public Class PageVersionScreenshot
             .Name = "BtnCopy",
             .Text = "复制",
             .LogoScale = 0.8,
-            .Logo = Logo.IconButtonCopy
+            .Logo = Logo.IconButtonCopy,
+                .Tag = i
             }
             AddHandler btnCopy.Click, AddressOf btnCopy_Click
             stackPanel.Children.Add(btnCopy)
@@ -129,7 +132,7 @@ Public Class PageVersionScreenshot
     End Sub
 
     Private Function GetPathFromSender(sender As MyIconTextButton) As String
-        Return CType(CType(CType(sender.Parent, StackPanel).Parent, Grid).Parent, MyCard).Tag
+        Return sender.Tag
     End Function
 
     Private Sub btnOpen_Click(sender As MyIconTextButton, e As EventArgs)

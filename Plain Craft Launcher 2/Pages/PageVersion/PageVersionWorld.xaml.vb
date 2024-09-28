@@ -89,7 +89,7 @@ Public Class PageVersionWorld
     End Sub
 
     Private Function GetPathFromSender(sender As Object) As String
-        Return CType(sender, MyIconButton).Tag
+        Return sender.Tag
     End Function
 
     Private Sub RemoveItem(Path As String)
