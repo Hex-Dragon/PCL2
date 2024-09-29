@@ -1356,7 +1356,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">Version JSON file not found: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">Version JSON file is incorrect, content: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">Nesting appears in version dependencies: {0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">Version JSON is non-standard. ({0})</s:String>
+    <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">Failed to initialize the version JSON. ({0})</s:String>
     <s:String x:Key="LangModMinecraftVersionPre">Pre-release</s:String>
     <s:String x:Key="LangModMinecraftVersionRC">Release Candidate</s:String>
     <s:String x:Key="LangModMinecraftVersionExperimental">Experimental Snapshot</s:String>
@@ -1385,7 +1385,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftExceptionSkinNoData">Skin return value does not contain skin data item, possibly a user without a custom skin set.</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinNotSet">User has not set a custom skin.</s:String>
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">This version does not have asset file index information.</s:String>
-    <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Assets index file not found.</s:String>
+    <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Asset Index file not found.</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">Unexpected result. ({0})</s:String>
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">Available for</s:String>

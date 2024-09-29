@@ -1357,7 +1357,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">未找到版本 JSON 檔案：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">版本 JSON 檔案有誤，內容為：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">版本依賴項出現嵌套：{0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">版本 JSON 不規範（{0}）</s:String>
+    <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">初始化版本 JSON 時失敗（{0}）</s:String>
     <s:String x:Key="LangModMinecraftVersionPre">預發佈版</s:String>
     <s:String x:Key="LangModMinecraftVersionRC">發佈候選</s:String>
     <s:String x:Key="LangModMinecraftVersionExperimental">實驗性快相</s:String>
@@ -1386,7 +1386,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinNoData">皮膚返回值中不包含皮膚資料項，可能是未設定自訂皮膚的使用者</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinNotSet">使用者未設定自訂皮膚</s:String>
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">該版本不存在資源檔案索引資訊</s:String>
-    <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Assets 索引檔案未找到</s:String>
+    <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">未找到 Asset Index</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">非預期的結果（{0}）</s:String>
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">適用於</s:String>
@@ -1590,10 +1590,10 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">這就贊助！</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2Sponsorship">但是我拒絕</s:String>
     <s:String x:Key="LangModLaunchDialogContentBuyMc">你已經啟動了 {0} 次 Minecraft 啦！
-如果覺得 Minecraft 還不錯，也可以考慮購買正版支援一下，畢竟開發遊戲也很不容易……
+如果覺得 Minecraft 還不錯，也可以考慮購買正版支援一下，畢竟開發遊戲也真的很不容易……
 在你登入一次正版帳户後，就不會再出現這個提示了。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleBuyMc">考慮一下正版？</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1BuyMc">購買正版遊戲</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1BuyMc">支援正版遊戲！</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2BuyMc">下次一定</s:String>
     <s:String x:Key="LangModLaunchUnknownLoginMethod">未知的登入方式</s:String>
     <s:String x:Key="LangModLaunchLogin">登入</s:String>
