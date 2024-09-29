@@ -37,7 +37,7 @@
                         <local:MyButton Grid.Column="0" MinWidth="140" Text="打开截图文件夹" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" Click="BtnOpenFolder_Click" ColorType="Highlight"/>
                     </Grid>
                 </local:MyCard>
-                <WrapPanel Margin="8,0,8,25" Name="PanList">
+                <WrapPanel Margin="8,0,8,25" Name="PanList" HorizontalAlignment="Center" Orientation="Horizontal">
                     <!--<local:MyCard Height="220" Width="120" Margin="7" Tag="Path">
             <Grid>
                 <Grid.RowDefinitions>
