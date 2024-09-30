@@ -231,8 +231,8 @@ NextInner:
         End Sub, "Donate")
 #End If
         '正版购买提示
-        If Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
-            If IsSystemLanguageChinese() Then
+        If String.IsNullOrEmpty(PageLoginMs.GetLoginData().OAuthRefreshToken) AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
+            If IsLocationZH() Then
                 Select Case Setup.Get("SystemLaunchCount")
                     Case 2, 5, 10, 15, 20, 40, 60, 80, 100, 125, 150, 175, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
                         If MyMsgBox(GetLang("LangModLaunchDialogContentBuyMc", Setup.Get("SystemLaunchCount"),
@@ -240,7 +240,7 @@ NextInner:
                             OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
                         End If
                 End Select
-            ElseIf Setup.Get("LoginType") = McLoginType.Legacy Then
+            Else '限制使用离线登录（包括第三方登录）
                 Select Case MyMsgBox(GetLang("LangModLaunchDialogContentMsLoginRequire"), GetLang("LangModLaunchDialogTitleMsLoginRequire"), GetLang("LangModLaunchDialogBtn1MsLoginRequire"), GetLang("LangModLaunchDialogBtn2MsLoginRequire"), GetLang("LangModLaunchDialogBtn3MsLoginRequire"),
                     Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
                     Case 2
@@ -2139,7 +2139,6 @@ IgnoreCustomSkin:
         StartInfo.RedirectStandardError = True
         StartInfo.CreateNoWindow = False
         StartInfo.Arguments = McLaunchArgument
-        If Not IsLocationZH() And String.IsNullOrWhiteSpace(PageLoginMs.GetLoginData().OAuthRefreshToken) Then StartInfo.Arguments += " --demo" '非中国大陆地区限制离线登录
         GameProcess.StartInfo = StartInfo
 
         '开始进程

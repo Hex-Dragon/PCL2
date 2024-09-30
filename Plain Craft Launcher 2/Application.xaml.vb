@@ -20,11 +20,12 @@ Public Class Application
     '开始
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
         '刷新语言
-        WriteReg("Lang", Lang)
         Try
             Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
         Catch ex As Exception
             MsgBox("无法找到语言资源：" & Lang & vbCrLf & "Language resource cannot be found:" & Lang, MsgBoxStyle.Critical)
+            Lang = GetDefaultLang()
+            WriteReg("Lang", Lang)
         End Try
 
         '依照选择语言切换字体
