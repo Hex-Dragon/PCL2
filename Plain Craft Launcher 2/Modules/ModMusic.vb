@@ -280,7 +280,7 @@
             '当前音乐已播放结束，继续下一曲
             If CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Stopped AndAlso MusicAllList.Any Then MusicStartPlay(DequeueNextMusicAddress)
         Catch ex As Exception
-            Log("[Music] 播放音乐失败的文件完整路径：" & MusicCurrent)
+            Log(ex, "播放音乐出现内部错误（" & MusicCurrent & "）", LogLevel.Developer)
             If TypeOf ex Is NAudio.MmException AndAlso (ex.Message.Contains("NoDriver") OrElse ex.Message.Contains("BadDeviceId")) Then
                 Hint("由于音频设备变更，音乐播放功能在重启 PCL 后才能恢复！", HintType.Critical)
                 Thread.Sleep(1000000000)
