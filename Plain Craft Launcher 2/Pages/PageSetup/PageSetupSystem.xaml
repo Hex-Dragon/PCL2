@@ -174,7 +174,7 @@
                         <local:MyComboBoxItem Content="繁體中文 (香港特別行政區)" Tag="zh_HK" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
                         <local:MyComboBoxItem Content="梗体中文 (天朝)" Tag="zh_MEME" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
                         <local:MyComboBoxItem Content="繁體中文 (台灣)" Tag="zh_TW" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
-                        <local:MyComboBoxItem Content="焱暒妏" Tag="zh_MA" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
+                        <local:MyComboBoxItem Content="焱暒妏" Tag="zh_MARS" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
                     </local:MyComboBox>
                     <local:MyHint Text="{StaticResource LangPageSetupSystemLangWarn}" Grid.Row="2" Grid.ColumnSpan="2"/>
                     <Grid Height="35" Grid.Row="4" Grid.ColumnSpan="5" Margin="0,5,0,0">
