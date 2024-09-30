@@ -170,7 +170,7 @@
         {"VersionArgumentIndie", New SetupEntry(-1, Source:=SetupSource.Version)},
         {"VersionArgumentJavaSelect", New SetupEntry("使用全局设置", Source:=SetupSource.Version)},
         {"VersionServerEnter", New SetupEntry("", Source:=SetupSource.Version)},
-        {"VersionServerLogin", New SetupEntry(0, Source:=SetupSource.Version)},
+        {"VersionServerLogin", New SetupEntry(If(IsLocationZH(), 0, 1), Source:=SetupSource.Version)},
         {"VersionServerNide", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthRegister", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthName", New SetupEntry("", Source:=SetupSource.Version)},
