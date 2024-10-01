@@ -99,7 +99,7 @@
                     Task.Output = New List(Of NetFile) From {BackAssetsFile}
                     '检查是否需要更新：每天只更新一次
                     If File.Exists(RealAddress) AndAlso Math.Abs((File.GetLastWriteTime(RealAddress).Date - Now.Date).TotalDays) < 1 Then
-                        Log("[Download] 无需更新资源文件索引")
+                        Log("[Download] 无需更新资源文件索引，取消")
                         Task.Abort()
                     End If
                 End Sub))
@@ -1089,7 +1089,7 @@
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         If McimUrl <> Url Then
             Select Case Setup.Get("ToolDownloadMod")
-                'UNDONE: 受 #4811 影响
+                'UNDONE: 在 MCIM 源稳定后回调
                 Case 0
                     If ModeDebug Then
                         Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
@@ -1138,7 +1138,7 @@
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         If McimUrl <> Url Then
             Select Case Setup.Get("ToolDownloadMod")
-                'UNDONE: 受 #4811 影响
+                'UNDONE: 在 MCIM 源稳定后回调
                 Case 0
                     If ModeDebug Then
                         Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))

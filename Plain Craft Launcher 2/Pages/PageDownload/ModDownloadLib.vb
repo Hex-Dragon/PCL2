@@ -814,7 +814,7 @@ Public Module ModDownloadLib
         '添加 Java Wrapper 作为主 Jar
         Dim Arguments As String
         If UseJavaWrapper Then
-            Arguments = $"-Doolloo.jlw.tmpdir=""{GetJavaWrapperDir()}"" -Duser.home=""{BaseMcFolderHome}"" -cp ""{Target}"" -jar ""{ExtractJavaWrapper()}"" optifine.Installer"
+            Arguments = $"-Doolloo.jlw.tmpdir=""{GetPureASCIIDir()}"" -Duser.home=""{BaseMcFolderHome}"" -cp ""{Target}"" -jar ""{ExtractJavaWrapper()}"" optifine.Installer"
         Else
             Arguments = $"-Duser.home=""{BaseMcFolderHome}"" -cp ""{Target}"" optifine.Installer"
         End If
@@ -1481,7 +1481,7 @@ Retry:
         '添加 Java Wrapper 作为主 Jar
         Dim Arguments As String
         If UseJavaWrapper Then
-            Arguments = $"-Doolloo.jlw.tmpdir=""{GetJavaWrapperDir()}"" -cp ""{PathTemp}Cache\forge_installer.jar;{Target}"" -jar ""{ExtractJavaWrapper()}"" com.bangbang93.ForgeInstaller ""{McFolder}"
+            Arguments = $"-Doolloo.jlw.tmpdir=""{GetPureASCIIDir()}"" -cp ""{PathTemp}Cache\forge_installer.jar;{Target}"" -jar ""{ExtractJavaWrapper()}"" com.bangbang93.ForgeInstaller ""{McFolder}"
         Else
             Arguments = $"-cp ""{PathTemp}Cache\forge_installer.jar;{Target}"" com.bangbang93.ForgeInstaller ""{McFolder}"
         End If

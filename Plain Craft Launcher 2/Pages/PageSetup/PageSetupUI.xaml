@@ -244,6 +244,7 @@
                             <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageF}" />
                             <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageG}" />
                             <local:MyComboBoxItem Content="PCL 主页市场（作者：凌云）" />
+                            <local:MyComboBoxItem Content="PCL 更新日志（作者：Joker2184）" />
                         </local:MyComboBox>
                     </Grid>
                 </StackPanel>

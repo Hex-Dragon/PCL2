@@ -110,6 +110,10 @@ Download:
                         Log("[Page] 主页预设：主页市场")
                         Url = "https://homepage-market.pages.dev/Custom.xaml"
                         GoTo Download
+                    Case 8
+                        Log("[Page] 主页预设：更新日志")
+                        Url = "https://updatehomepage.pages.dev/UpdateHomepage.xaml"
+                        GoTo Download
                 End Select
         End Select
         RunInUi(Sub() LoadContent(Content))
@@ -136,7 +140,7 @@ Download:
             Dim NeedDownload As Boolean = True
             Try
                 Version = NetGetCodeByRequestOnce(VersionAddress, Timeout:=10000)
-                If Version.Length > 100 Then Throw New Exception($"获取的自定义主页版本过长（{Version.Length} 字符）")
+                If Version.Length > 1000 Then Throw New Exception($"获取的自定义主页版本过长（{Version.Length} 字符）")
                 Dim CurrentVersion As String = Setup.Get("CacheSavedPageVersion")
                 If Version <> "" AndAlso CurrentVersion <> "" AndAlso Version = CurrentVersion Then
                     Log($"[Page] 当前缓存的自定义主页已为最新，当前版本：{Version}，检查源：{VersionAddress}")
