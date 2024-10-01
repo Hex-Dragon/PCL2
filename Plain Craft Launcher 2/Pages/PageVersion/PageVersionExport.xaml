@@ -1,0 +1,123 @@
+﻿<local:MyPageRight
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:System="clr-namespace:System;assembly=mscorlib" 
+    mc:Ignorable="d" x:Class="PageVersionExport"
+    PanScroll="{Binding ElementName=PanBack}">
+    <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="25,10">
+
+            <local:MyCard Margin="0,15" Title="">
+                <Grid Margin="0,0,25,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="150" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Margin="10,7,10,7" Name="PanDisplayItem" Grid.Column="0" />
+                    <local:MyButton x:Name="BtnExportExport" Grid.Column="1" HorizontalAlignment="Right" 
+                                    Text="导出整合包" Width="150" Height="35" ColorType="Highlight" />
+                </Grid>
+            </local:MyCard>
+
+            <local:MyCard x:Name="CardExport" Margin="0,0,0,15" Title="整合包信息">
+                <StackPanel Margin="25,40,25,21">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="60" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="9" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="9" />
+                            <RowDefinition Height="28" />
+                            <RowDefinition Height="9" />
+                            <RowDefinition Height="28" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包名称" Margin="0,0,25,0" />
+                        <local:MyTextBox Grid.Row="0" x:Name="TbExportName" Grid.ColumnSpan="2" Grid.Column="1" MaxLength="100" ShowValidateResult="True" />
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包版本" Margin="0,0,25,0" />
+                        <local:MyTextBox Grid.Row="2" x:Name="TbExportVersion" HintText="1.0.0" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" MaxLength="100" />
+                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="图标" Margin="0,0,25,0"  />
+                        <local:MyComboBox x:Name="ComboDisplayLogo" Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="1">
+                            <local:MyComboBoxItem Content="自动" IsSelected="True" Tag="" />
+                            <local:MyComboBoxItem x:Name="ItemDisplayLogoCustom" Content="自定义..." />
+                            <local:MyComboBoxItem Content="圆石" Tag="pack://application:,,,/images/Blocks/CobbleStone.png" />
+                            <local:MyComboBoxItem Content="命令方块" Tag="pack://application:,,,/images/Blocks/CommandBlock.png" />
+                            <local:MyComboBoxItem Content="金块" Tag="pack://application:,,,/images/Blocks/GoldBlock.png" />
+                            <local:MyComboBoxItem Content="草方块" Tag="pack://application:,,,/images/Blocks/Grass.png" />
+                            <local:MyComboBoxItem Content="草径" Tag="pack://application:,,,/images/Blocks/GrassPath.png" />
+                            <local:MyComboBoxItem Content="铁砧" Tag="pack://application:,,,/images/Blocks/Anvil.png" />
+                            <local:MyComboBoxItem Content="红石块" Tag="pack://application:,,,/images/Blocks/RedstoneBlock.png" />
+                            <local:MyComboBoxItem Content="红石灯（开）" Tag="pack://application:,,,/images/Blocks/RedstoneLampOn.png" />
+                            <local:MyComboBoxItem Content="红石灯（关）" Tag="pack://application:,,,/images/Blocks/RedstoneLampOff.png" />
+                            <local:MyComboBoxItem Content="鸡蛋" Tag="pack://application:,,,/images/Blocks/Egg.png" />
+                            <local:MyComboBoxItem Content="布料（Fabric）" Tag="pack://application:,,,/images/Blocks/Fabric.png" />
+                            <local:MyComboBoxItem Content="狐狸（NeoForge）" Tag="pack://application:,,,/images/Blocks/NeoForge.png" />
+                        </local:MyComboBox>
+                        <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="描述" Margin="0,0,25,0" />
+                        <local:MyTextBox Grid.Row="6" x:Name="TbExportDesc" Grid.ColumnSpan="2" Grid.Column="1" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="0,5" />
+                    </Grid>
+                </StackPanel>
+            </local:MyCard>
+
+            <local:MyCard x:Name="CardSwitch" Margin="0,0,0,15" Title="基础选项">
+                <StackPanel Margin="25,38,15,15">
+                    <TextBlock x:Name="TbHint" Margin="0,1,0,1" Text="你可以在此勾选需要包含进整合包的文件或文件夹，其他文件或文件夹在高级选项添加。" TextWrapping="Wrap" />
+                    <!-- 注意：以上 TextBlock 的 Text 属性可能会在代码中被改动。 -->
+                    <Grid x:Name="PanCommonFiles">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="18" />
+                            <ColumnDefinition Width="1.7*" />
+                            <ColumnDefinition Width="1.9*" />
+                            <ColumnDefinition Width="1.4*" />
+                            <ColumnDefinition Width="1.0*" />
+                            <ColumnDefinition Width="1.0*" />
+                            <ColumnDefinition Width="1.0*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="4" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="游戏配置" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Text="服务器列表"
+                                          Tag="servers.dat" ToolTip="servers.dat 文件" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="3" Text="Mod 配置"
+                                          Tag="config" ToolTip="config 文件夹" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="1" Grid.Column="4" Text="游戏配置"
+                                          Tag="options.txt" ToolTip="options.txt 文件" />
+                        <TextBlock Text="游戏文件" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Text="存档"
+                                          Tag="saves" ToolTip="saves 文件夹" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="资源包"
+                                          Tag="resourcepacks" ToolTip="resourcepacks 文件夹" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="4" Text="光影包"
+                                          Tag="shaderpacks" ToolTip="shaderpacks 文件夹" />
+                        <TextBlock Text="PCL 配置" VerticalAlignment="Center" Grid.Column="0" Grid.Row="3" />
+                        <local:MyCheckBox x:Name="CheckIncludePCL" Height="22" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" Text="包含启动器"
+                                          Tag="" ToolTip="将 PCL 程序包含在整合包内" />
+                        <local:MyCheckBox x:Name="CheckIncludeSetup" Height="22" VerticalAlignment="Center" Grid.Row="3" Grid.Column="3" Text="PCL 全局配置"
+                                          Tag="" ToolTip="将 PCL 全局配置包含在整合包内" />
+                    </Grid>
+                </StackPanel>
+
+            </local:MyCard>
+            <local:MyCard x:Name="CardMore" Title="高级选项" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
+                <StackPanel x:Name="PanFileList" Margin="25,40,23,15">
+                    <TextBlock Margin="0,1,0,10" Text="你可以在此勾选其他需要包含进整合包的文件或文件夹。&#xa;请注意：部分冗余的文件或文件夹、必须包含在整合包的文件或文件夹不被展示在列表中。" TextWrapping="Wrap" />
+                    <local:MyListItem Type="CheckBox" Title="游戏存档" Height="35" Logo="M889.018182 418.909091H884.363636V316.509091a93.090909 93.090909 0 0 0-99.607272-89.832727h-302.545455l-93.090909-76.334546A46.545455 46.545455 0 0 0 358.865455 139.636364H146.152727A93.090909 93.090909 0 0 0 46.545455 229.469091V837.818182a46.545455 46.545455 0 0 0 46.545454 46.545454 46.545455 46.545455 0 0 0 16.756364-3.258181 109.381818 109.381818 0 0 0 25.134545 3.258181h586.472727a85.178182 85.178182 0 0 0 87.04-63.301818l163.374546-302.545454a46.545455 46.545455 0 0 0 5.585454-21.876364A82.385455 82.385455 0 0 0 889.018182 418.909091z m-744.727273-186.181818h198.283636l93.09091 76.334545a46.545455 46.545455 0 0 0 29.323636 10.705455h319.301818a12.101818 12.101818 0 0 1 6.516364 0V418.909091H302.545455a85.178182 85.178182 0 0 0-87.04 63.301818L139.636364 622.778182V232.727273a19.549091 19.549091 0 0 1 6.516363 0z m578.094546 552.029091a27.461818 27.461818 0 0 0-2.792728 6.516363H154.530909l147.083636-272.290909a27.461818 27.461818 0 0 0 2.792728-6.981818h565.061818z" />
+                    <local:MyListItem Type="CheckBox" Title="游戏存档" Height="35" Logo="M586.9 436h-74.7V62.4H177.1c-20.6 0-37.4 16.7-37.4 37.4v821.9c0 20.6 16.7 37.4 37.4 37.4h672.5c20.6 0 37.4-16.7 37.4-37.4V436H586.9z m0-74.7h297.8c-7.3-57.4-31.2-70.9-58.4-98.1l-66.5-66.5-0.1-0.1 0.1 0.1-0.9-0.9-22.8-22.8-0.9-0.9 0.1 0.1-0.1-0.1-66.5-66.5c-21.8-21.8-38.8-36.5-81.7-41.4l-0.1 297.1z" />
+                    <local:MyListItem Type="CheckBox" Title="游戏存档" Height="35" Logo="M757.792745 435.407215L419.597482 96.904967c-40.010393-40.010393-104.886579-40.010393-144.896972 0-40.010393 40.010393-40.010393 104.988908 0 144.9993L540.344959 507.855701 274.70051 773.807135c-40.010393 40.112721-40.010393 104.988908 0 144.9993 40.010393 40.010393 104.886579 40.010393 144.896972 0l338.092935-338.39992c40.112721-40.010393 40.112721-104.988908 0.102328-144.9993z" />
+                </StackPanel>
+            </local:MyCard>
+
+        </StackPanel>
+    </local:MyScrollViewer>
+</local:MyPageRight>
