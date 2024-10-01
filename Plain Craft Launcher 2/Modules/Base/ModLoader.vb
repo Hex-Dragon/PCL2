@@ -288,15 +288,13 @@
                 End SyncLock
             End Try
             '检验输入以确定情况
-            If (Not IsForceRestart) AndAlso '不要求强行重启
-               ((Input IsNot Nothing AndAlso Input.Equals(Me.Input)) OrElse (Input Is Nothing AndAlso Me.Input Is Nothing)) AndAlso '输入相同
-               (State = LoadState.Loading OrElse State = LoadState.Finished) AndAlso '正在加载或已加载成功
+            If IsForceRestart Then Return True '强制要求重启
+            If ((Input Is Nothing) <> (Me.Input Is Nothing)) OrElse (Input IsNot Nothing AndAlso Not Input.Equals(Me.Input)) Then Return True '输入不同
+            If (State = LoadState.Loading OrElse State = LoadState.Finished) AndAlso '正在加载或已结束
                (IgnoreReloadTimeout OrElse ReloadTimeout = -1 OrElse LastFinishedTime = 0 OrElse GetTimeTick() - LastFinishedTime < ReloadTimeout) Then '没有超时
-                '如果输入相同且未出错则不重试
-                Return False
+                Return False '则不重试
             Else
-                '需要开始
-                Return True
+                Return True '需要开始
             End If
         End Function
         Public Overrides Sub Start(Optional Input As Object = Nothing, Optional IsForceRestart As Boolean = False)
@@ -317,7 +315,7 @@
                 Sub()
                     Try
                         IsForceRestarting = IsForceRestart
-                        If ModeDebug Then Log("[Loader] 加载线程 " & Name & " (" & Thread.CurrentThread.ManagedThreadId & ") 已启动")
+                        If ModeDebug Then Log("[Loader] 加载线程 " & Name & " (" & Thread.CurrentThread.ManagedThreadId & ") 已" & If(IsForceRestarting, "强制", "") & "启动")
                         LoadDelegate(Me)
                         If IsAborted Then
                             Log("[Loader] 加载线程 " & Name & " (" & Thread.CurrentThread.ManagedThreadId & ") 已中断但线程正常运行至结束，输出被弃用（最新线程：" & If(LastRunningThread Is Nothing, -1, LastRunningThread.ManagedThreadId) & "）", LogLevel.Developer)
@@ -441,12 +439,13 @@
                     Exit Sub
                 End If
             End SyncLock
-            RunInThread(Sub()
-                            '中断加载器
-                            For Each Loader In Loaders
-                                Loader.Abort()
-                            Next
-                        End Sub)
+            RunInThread(
+            Sub()
+                '中断加载器
+                For Each Loader In Loaders
+                    Loader.Abort()
+                Next
+            End Sub)
         End Sub
 
         ''' <summary>
@@ -485,7 +484,7 @@
         Private Sub Update()
             If State = LoadState.Finished OrElse State = LoadState.Failed OrElse State = LoadState.Aborted Then Exit Sub
             Dim IsFinished As Boolean = True
-            Dim Ignore As Boolean = False
+            Dim Blocked As Boolean = False
             Dim Input As Object = Me.Input
             For Each Loader In Loaders
                 Select Case Loader.State
@@ -493,28 +492,30 @@
                         '检查是否需要重启
                         If Loader.GetType.Name.StartsWithF("LoaderTask") Then '类型名后面带有泛型，必须用 StartsWith
                             If CType(Loader, Object).ShouldStart(If(Input IsNot Nothing AndAlso Loader.GetType.GenericTypeArguments.First Is Input.GetType, Input, Nothing), IgnoreReloadTimeout:=True) Then
-                                If ModeDebug Then Log("[Loader] 由于输入条件变更，重启已完成的加载器 " & Loader.Name)
+                                Log("[Loader] 由于输入条件变更，重启已完成的加载器 " & Loader.Name)
                                 GoTo Restart
                             End If
                             '更新下一个加载器的输入
                             Input = CType(Loader, Object).Output
                         End If
+                        '如果不让继续启动，且已有加载器正在加载中，就不继续启动
+                        If Loader.Block AndAlso Not IsFinished Then Blocked = True
                     Case LoadState.Loading
                         '检查是否需要重启
                         If Loader.GetType.Name.StartsWithF("LoaderTask") Then
                             If CType(Loader, Object).ShouldStart(If(Input IsNot Nothing AndAlso Loader.GetType.GenericTypeArguments.First Is Input.GetType, Input, Nothing), IgnoreReloadTimeout:=True) Then
-                                If ModeDebug Then Log("[Loader] 由于输入条件变更，重启进行中的加载器 " & Loader.Name, LogLevel.Developer)
+                                Log("[Loader] 由于输入条件变更，重启进行中的加载器 " & Loader.Name, LogLevel.Developer)
                                 GoTo Restart
                             End If
                         End If
                         '已经有正在加载中的了，不需要再启动了
                         IsFinished = False
-                        Ignore = True
+                        Blocked = True
                     Case Else
 Restart:
                         '未启动，则启动加载器
                         IsFinished = False
-                        If Ignore Then Continue For
+                        If Blocked Then Continue For
                         If Input IsNot Nothing Then
                             '若输入类型与下一个加载器相同才继续
                             Dim LoaderType As String = Loader.GetType.Name
@@ -528,8 +529,8 @@ Restart:
                         Else
                             Loader.Start(IsForceRestart:=IsForceRestarting)
                         End If
-                        '如果不让继续启动，那就不启动呗
-                        If Loader.Block Then Ignore = True
+                        '阻止继续
+                        If Loader.Block Then Blocked = True
                 End Select
             Next
             If IsFinished Then
