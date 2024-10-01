@@ -1,0 +1,7 @@
+﻿<Border x:Class="MyImage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FocusVisualStyle="{x:Null}" x:Name="PanBack"
+             ClipToBounds="True" UseLayoutRounding="False" SnapsToDevicePixels="False" Background="{StaticResource ColorBrushSemiTransparent}">
+    <Image x:Name="PanContent"/>
+</Border>
