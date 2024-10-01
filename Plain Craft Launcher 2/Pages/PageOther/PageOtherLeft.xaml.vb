@@ -49,7 +49,7 @@
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemAbout.Check, ItemHelp.Check, ItemTest.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemAbout.Check, ItemHelp.Check, ItemTest.Check, ItemFeedback.Check, ItemVote.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -67,6 +67,12 @@
             Case FormMain.PageSubType.OtherTest
                 If FrmOtherTest Is Nothing Then FrmOtherTest = New PageOtherTest
                 Return FrmOtherTest
+            Case FormMain.PageSubType.OtherFeedback
+                If FrmOtherFeedback Is Nothing Then FrmOtherFeedback = New PageOtherFeedback
+                Return FrmOtherFeedback
+            Case FormMain.PageSubType.OtherVote
+                If FrmOtherVote Is Nothing Then FrmOtherVote = New PageOtherVote
+                Return FrmOtherVote
             Case Else
                 Throw New Exception("未知的更多子页面种类：" & ID)
         End Select
@@ -125,7 +131,7 @@
     End Sub
 
     '打开网页
-    Public Shared Sub TryFeedback() Handles ItemFeedback.Click
+    Public Shared Sub TryFeedback() 'Handles ItemFeedback.Click
         If Not CanFeedback(True) Then Exit Sub
         Select Case MyMsgBox("是否要打开反馈列表网页？" & vbCrLf & "如果无法打开该网页，请尝试使用加速器或 VPN。",
                     "反馈提示", "提交新反馈", "查看反馈列表", "取消")
@@ -135,7 +141,7 @@
                 OpenWebsite("https://github.com/Hex-Dragon/PCL2/issues/")
         End Select
     End Sub
-    Public Shared Sub TryVote() Handles ItemVote.Click
+    Public Shared Sub TryVote() 'Handles ItemVote.Click
         If MyMsgBox("是否要打开新功能投票网页？" & vbCrLf & "如果无法打开该网页，请尝试使用加速器或 VPN。",
                     "提醒", "打开", "取消") = 2 Then Exit Sub
         OpenWebsite("https://github.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8?discussions_q=category%3A%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8+sort%3Adate_created")
