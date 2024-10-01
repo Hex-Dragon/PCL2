@@ -207,9 +207,19 @@ Public Module ModDownloadLib
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
         AddHandler BtnInfo.Click, AddressOf McDownloadMenuLog
-        sender.Buttons = {BtnInfo}
+        Dim BtnServer As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonServer, .ToolTip = "下载服务端"}
+        ToolTipService.SetPlacement(BtnServer, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnServer, 30)
+        ToolTipService.SetHorizontalOffset(BtnServer, 2)
+        AddHandler BtnServer.Click, AddressOf McDownloadMenuServer
+        sender.Buttons = {BtnServer, BtnInfo}
     End Sub
     Private Sub McDownloadMenuBuild(sender As Object, e As EventArgs)
+        Dim BtnServer As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonServer, .ToolTip = "下载服务端"}
+        ToolTipService.SetPlacement(BtnServer, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(BtnServer, 30)
+        ToolTipService.SetHorizontalOffset(BtnServer, 2)
+        AddHandler BtnServer.Click, AddressOf McDownloadMenuServer
         Dim BtnSave As New MyIconButton With {.Logo = Logo.IconButtonSave, .ToolTip = "另存为"}
         ToolTipService.SetPlacement(BtnSave, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnSave, 30)
@@ -220,7 +230,7 @@ Public Module ModDownloadLib
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
         AddHandler BtnInfo.Click, AddressOf McDownloadMenuLog
-        sender.Buttons = {BtnSave, BtnInfo}
+        sender.Buttons = {BtnServer, BtnSave, BtnInfo}
     End Sub
     Private Sub McDownloadMenuLog(sender As Object, e As RoutedEventArgs)
         Dim Version As JToken
@@ -232,6 +242,61 @@ Public Module ModDownloadLib
             Version = sender.Parent.Parent.Tag
         End If
         McUpdateLogShow(Version)
+    End Sub
+    Private Sub McDownloadMenuServer(sender As Object, e As RoutedEventArgs)
+        Dim Version As JToken
+        If sender.Tag IsNot Nothing Then
+            Version = sender.Tag
+        ElseIf sender.Parent.Tag IsNot Nothing Then
+            Version = sender.Parent.Tag
+        Else
+            Version = sender.Parent.Parent.Tag
+        End If
+        RunInThread(Sub()
+                        Dim Json As JObject
+                        Try
+                            Json = NetGetCodeByRequestRetry(Version("url"), IsJson:=True)
+                        Catch ex As Exception
+                            Log(ex, "未找能获取到服务端文件，文件可能不存在")
+                        End Try
+                        If Json?("downloads")?("server") Is Nothing Then
+                            Hint("此版本暂未有服务端文件提供下载")
+                        Else
+                            RunInUi(Sub()
+                                        Try
+                                            Dim Url As String = Json("downloads")("server")("url").ToString()
+                                            Dim FileName As String = Version("id").ToString() & "-server.jar"
+                                            Dim VersionID As String = Version("id").ToString()
+                                            Dim Target As String = SelectAs("选择保存位置", FileName, "原版服务端 (*.jar)|*.jar")
+                                            If Not Target.Contains("\") Then Exit Sub
+
+                                            '重复任务检查
+                                            For Each OngoingLoader In LoaderTaskbar
+                                                If OngoingLoader.Name <> $"{VersionID} 服务端下载" Then Continue For
+                                                Hint("该服务端文件正在下载中！", HintType.Critical)
+                                                Exit Sub
+                                            Next
+
+                                            '构造步骤加载器
+                                            Dim Loaders As New List(Of LoaderBase)
+                                            '下载
+                                            Dim Address As New List(Of String)
+                                            Address.Add(Url)
+                                            Loaders.Add(New LoaderDownload("下载服务端文件", New List(Of NetFile) From {New NetFile(Address.ToArray, Target, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
+                                            '启动
+                                            Dim Loader As New LoaderCombo(Of JObject)($"{VersionID} 服务端下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+                                            Loader.Start(Json("downloads")("server"))
+                                            LoaderTaskbarAdd(Loader)
+                                            FrmMain.BtnExtraDownload.ShowRefresh()
+                                            FrmMain.BtnExtraDownload.Ribble()
+
+                                        Catch ex As Exception
+                                            Log(ex, "开始服务端文件下载失败", LogLevel.Feedback)
+                                        End Try
+                                    End Sub)
+                        End If
+                    End Sub
+            )
     End Sub
     Public Sub McDownloadMenuSave(sender As Object, e As RoutedEventArgs)
         Dim Version As MyListItem
@@ -1446,9 +1511,9 @@ Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
             If File.Exists(InstallerAddress) Then File.Delete(InstallerAddress)
             If Directory.Exists(InstallerAddress & "_unrar\") Then DeleteDirectory(InstallerAddress & "_unrar\")
         Catch ex As Exception
-                        Log(ex, "非新版方式安装 Forge 清理文件时出错")
-                    End Try
-                End Try
+            Log(ex, "非新版方式安装 Forge 清理文件时出错")
+        End Try
+    End Try
             End Sub) With {.ProgressWeight = 1})
         End If
 
