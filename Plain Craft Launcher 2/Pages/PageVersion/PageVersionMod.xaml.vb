@@ -583,7 +583,7 @@
                             Case 0 '一般是由于 Mod 文件被占用，然后玩家主动取消
                                 Log($"[Mod] 没有 Mod 被成功更新")
                             Case 1
-                                Hint(GetLang("LangPageVersionModTaskModUpdateSuccessB") & FinishedFileNames.Single), HintType.Finish)
+                                Hint(GetLang("LangPageVersionModTaskModUpdateSuccessB") & FinishedFileNames.Single, HintType.Finish)
                             Case Else
                                 Hint(GetLang("LangPageVersionModTaskModUpdateSuccessA", FinishedFileNames.Count), HintType.Finish)
                         End Select
