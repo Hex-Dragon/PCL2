@@ -13,6 +13,10 @@
         ''' 资源包。
         ''' </summary>
         ResourcePack = 2
+        ''' <summary>
+        ''' 数据包。
+        ''' </summary>
+        DataPack = 4
     End Enum
     Public Enum CompModLoaderType
         'https://docs.curseforge.com/?http#tocS_ModLoaderType
@@ -113,6 +117,10 @@
         ''' 工程的种类。
         ''' </summary>
         Public ReadOnly Type As CompType
+        ''' <summary>
+        ''' 是否为 Mod / 数据包融合工程。
+        ''' </summary>
+        Public ReadOnly IsMix As Boolean
         ''' <summary>
         ''' 工程的短名。例如 technical-enchant。
         ''' </summary>
@@ -279,8 +287,10 @@
                         Type = CompType.Mod
                     ElseIf Website.Contains("/modpacks/") Then
                         Type = CompType.ModPack
-                    Else
+                    ElseIf Website.Contains("/resourcepacks/") Then
                         Type = CompType.ResourcePack
+                    Else
+                        Type = CompType.DataPack
                     End If
                     'Tags
                     Tags = New List(Of String)
@@ -328,7 +338,15 @@
                             Case 4480 : Tags.Add("基于地图")
                             Case 4481 : Tags.Add("轻量")
                             Case 4482 : Tags.Add("大型")
-                                'FUTURE: Res
+                        '数据包
+                            Case 6946 : Tags.Add("Mod 支持")
+                            Case 6947 : Tags.Add("杂项")
+                            Case 6948 : Tags.Add("冒险")
+                            Case 6949 : Tags.Add("幻想")
+                            Case 6950 : Tags.Add("支持库")
+                            Case 6951 : Tags.Add("科技")
+                            Case 6952 : Tags.Add("魔法")
+                            Case 6953 : Tags.Add("实用工具")
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -356,7 +374,12 @@
                         Case "mod" : Type = CompType.Mod
                         Case "modpack" : Type = CompType.ModPack
                         Case "resourcepack" : Type = CompType.ResourcePack
+                        Case "datapack" : Type = CompType.DataPack
                     End Select
+                    If Data("categories").ToArray.Contains("datapack") Then 'Modrinth 上的数据包由于未知原因，返回的 project_type 为 mod，这里做兜底处理
+                        Type = CompType.DataPack
+                        IsMix = Data("categories").ToArray.Contains("forge") OrElse Data("categories").ToArray.Contains("fabric") OrElse Data("categories").ToArray.Contains("neoforge") OrElse Data("categories").ToArray.Contains("quilt")
+                    End If
                     'Tags & ModLoaders
                     Tags = New List(Of String)
                     ModLoaders = New List(Of CompModLoaderType)
@@ -394,7 +417,26 @@
                             Case "adventure" : Tags.Add("冒险")
                             Case "kitchen-sink" : Tags.Add("大杂烩")
                             Case "lightweight" : Tags.Add("轻量")
-                                'FUTURE: Res
+                            '数据包
+                            Case "adventure" : Tags.Add("冒险")
+                            Case "cursed" : Tags.Add("Cursed")
+                            Case "decoration" : Tags.Add("装饰")
+                            Case "economy" : Tags.Add("经济")
+                            Case "equipment" : Tags.Add("装备")
+                            Case "food" : Tags.Add("食物")
+                            Case "game-mechanics" : Tags.Add("游戏机制")
+                            Case "library" : Tags.Add("支持库")
+                            Case "magic" : Tags.Add("魔法")
+                            Case "management" : Tags.Add("管理")
+                            Case "minigame" : Tags.Add("小游戏")
+                            Case "mobs" : Tags.Add("生物")
+                            Case "optimization" : Tags.Add("优化")
+                            Case "social" : Tags.Add("社交")
+                            Case "storage" : Tags.Add("存储")
+                            Case "technology" : Tags.Add("科技")
+                            Case "transportation" : Tags.Add("交通")
+                            Case "utility" : Tags.Add("实用工具")
+                            Case "worldgen" : Tags.Add("世界生成")
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -755,8 +797,8 @@ NoSubtitle:
                     Address += "&classId=6"
                 Case CompType.ModPack
                     Address += "&classId=4471"
-                Case CompType.ResourcePack
-                    'FUTURE: Res
+                Case CompType.DataPack
+                    Address += "&classId=6945"
             End Select
             Address += "&categoryId=" & If(Tag = "", "0", Tag.Before("/"))
             If ModLoader <> CompModLoaderType.Any Then Address += "&modLoaderType=" & CType(ModLoader, Integer)
