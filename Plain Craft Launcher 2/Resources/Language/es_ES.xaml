@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">¡Cancelado!</s:String>
@@ -252,6 +252,8 @@ Si has creado una página de inicio en línea estable, puedes hacer clic en esta
     <s:String x:Key="LangSetHomePagePresetPageE">Recomendación Diaria de Modpack (Autor: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Recomendación de Skins de Minecraft (Autor: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">Panel de Control OpenBMCLAPI Lite（Autores：Silverteal、Mxmilu666）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageH">Mercado de la Página de Inicio de PCL (Autor: Nublado)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">Registro de Actualizaciones de PCL (Autor: Joker2184)</s:String>
     <s:String x:Key="LangSetFuncHidden">Ocultación de Funciones</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Puedes ocultar páginas innecesarias o desactivar funciones específicas. Presiona "F12" en cualquier interfaz para mostrar funciones ocultas temporalmente.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Interfaz Principal</s:String>
@@ -625,13 +627,6 @@ Esta página proporciona la descarga del instalador de NeoForge. Después de des
     <s:String x:Key="LangMySkinCapeNameFollower's">Capa de Seguidor</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">Capa del 15º Año de MCC</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">Ninguna</s:String>
-    <!--FormLoginOAuth-->
-    <s:String x:Key="LangLoginOAuthLoading">Cargando página de inicio de sesión...</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipA">Si el entorno de red no es bueno, la carga puede ser muy lenta o incluso imposible de cargar.</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipB">Verifica la conexión a internet o intenta usar VPN o proxy en este momento, luego intenta de nuevo.</s:String>
-    <s:String x:Key="LangLoginOAuthToBrowser">Si hay un problema, haz clic aquí para iniciar sesión con tu navegador del sistema.</s:String>
-    <s:String x:Key="LangLoginOAuthNoGithubLogin">¡PCL no soporta iniciar sesión en cuentas de Microsoft con GitHub!</s:String>
-    <s:String x:Key="LangLoginOAuthWindowTitle">Inicio de sesión de cuenta de Microsoft</s:String>
     <!--PageLaunchLeft-->
     <s:String x:Key="LangLaunchLeftInstanceChoose">Selección</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Propiedades</s:String>
@@ -1638,6 +1633,11 @@ Información detallada del error: {0}</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">Jugar en Demo</s:String>
     <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">Volver</s:String>
     <s:String x:Key="LangModLaunchHintPlayInDemo">¡El juego se lanzará en modo de demostración!</s:String>
+    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">Por favor, selecciona "Otro método de inicio de sesión" y luego elige "Usar mi contraseña" al iniciar sesión.
+Si no ves esa opción, selecciona "Establecer contraseña" y luego inicia sesión después de configurarla.</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">Se requiere iniciar sesión con contraseña</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">Iniciar sesión de nuevo</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">Establecer contraseña</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">Archivo de Modpack</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">Seleccionar Archivo de Modpack</s:String>

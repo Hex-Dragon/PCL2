@@ -90,6 +90,7 @@ Module Modi18n
     ''' </summary>
     ''' <returns></returns>
     Public Function IsLocationZH() As Boolean
+        'Return False '测试使用
         If Not _IsLocationZH.Equals(-1) Then Return _IsLocationZH.Equals(1)
         Dim IsZH As Boolean = CultureInfo.CurrentCulture.Name.Equals("zh-CN") '语言检测
         IsZH = IsZH And CultureInfo.CurrentUICulture.Name.Equals("zh-CN") '语言检测

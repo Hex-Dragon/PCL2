@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">已取消！</s:String>
@@ -252,6 +252,8 @@
     <s:String x:Key="LangSetHomePagePresetPageE">每日整合包推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 皮肤推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 仪表盘 Lite（作者：Silverteal、Mxmilu666）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageH">PCL 主页市场（作者：凌云）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">PCL 更新日志（作者：Joker2184）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能隐藏</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">你可以隐藏不需要的页面或关闭特定功能。在任意界面按 F12 可以暂时显示被隐藏的功能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">主页面</s:String>
@@ -639,13 +641,6 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangMySkinCapeNameFollower's">追随者披风</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15 周年披风</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">无披风</s:String>
-    <!--FormLoginOAuth-->
-    <s:String x:Key="LangLoginOAuthLoading">正在加载登录页面</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipA">如果网络环境不佳，加载可能非常缓慢甚至一直加载不出来</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipB">此时请尝试使用 VPN 或加速器，然后重试</s:String>
-    <s:String x:Key="LangLoginOAuthToBrowser">如果遇到问题，可以点击这里使用系统浏览器登录</s:String>
-    <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL 不支持使用 GitHub 登录微软账号！</s:String>
-    <s:String x:Key="LangLoginOAuthWindowTitle">Microsoft 账户登录</s:String>
     <!--PageLaunchLeft-->
     <s:String x:Key="LangLaunchLeftInstanceChoose">版本选择</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">版本设置</s:String>
@@ -1656,6 +1651,11 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">试玩</s:String>
     <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">返回</s:String>
     <s:String x:Key="LangModLaunchHintPlayInDemo">游戏将以试玩模式启动！</s:String>
+    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">请在登录时选择 “其他登录方法”，然后选择 “使用我的密码”。
+如果没有该选项，请选择 “设置密码”，设置完毕后再登录。</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">需要使用密码登录</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">重新登录</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">设置密码</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">整合包文件</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">选择整合包压缩文件</s:String>

@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">작업이 취소되었습니다!</s:String>
@@ -251,6 +251,8 @@
     <s:String x:Key="LangSetHomePagePresetPageE">매일 추천하는 통합 패키지 (작성자: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 스킨 추천 (작성자: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 대시보 Lite（작성자：Silverteal、Mxmilu666）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageH">PCL 홈페이지 시장（작성자：凌云）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">PCL 업데이트 로그（작성자：Joker2184）</s:String>
     <s:String x:Key="LangSetFuncHidden">기능 숨기기</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">필요 없는 페이지를 숨기거나 특정 기능을 끌 수 있습니다. 어떤 화면에서든 F12를 눌러 숨겨진 기능을 일시적으로 표시할 수 있습니다.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">메인 페이지</s:String>
@@ -633,13 +635,6 @@ PCL은 다운로드를 시작하기 전에 설정 → 버전 격리에서 버전
     <s:String x:Key="LangMySkinCapeNameFollower's">추종자 망토</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15주년 망토</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">망토 없음</s:String>
-    <!--FormLoginOAuth-->
-    <s:String x:Key="LangLoginOAuthLoading">로그인 페이지 로딩 중</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipA">네트워크 환경이 좋지 않으면 로딩이 매우 느리거나 아예 로딩되지 않을 수 있습니다</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipB">이 경우 VPN이나 가속기를 사용해 보시고 다시 시도해 주세요</s:String>
-    <s:String x:Key="LangLoginOAuthToBrowser">문제가 발생하면 여기에서 시스템 브라우저로 로그인할 수 있습니다</s:String>
-    <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL은 GitHub를 사용하여 Microsoft 계정에 로그인하는 것을 지원하지 않습니다!</s:String>
-    <s:String x:Key="LangLoginOAuthWindowTitle">Microsoft 계정 로그인</s:String>
     <!--PageLaunchLeft-->
     <s:String x:Key="LangLaunchLeftInstanceChoose">버전 선택</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">버전 설정</s:String>
@@ -1643,6 +1638,11 @@ VPN이나 가속기를 사용 중이라면, 이를 끄거나 노드를 변경한
     <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">시도해 보기</s:String>
     <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">돌아가기</s:String>
     <s:String x:Key="LangModLaunchHintPlayInDemo">게임이 시도해 보기 모드로 시작됩니다！</s:String>
+    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">로그인 시 "다른 로그인 방법"을 선택한 후 "내 비밀번호 사용"을 선택하세요.
+해당 옵션이 없으면 "비밀번호 설정"을 선택하여 설정한 후 로그인하세요.</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">비밀번호 로그인 필요</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">다시 로그인</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">비밀번호 설정</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">모드팩 파일</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">모드팩 압축 파일 선택</s:String>

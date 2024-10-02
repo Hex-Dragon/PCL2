@@ -846,8 +846,8 @@ Retry:
             Thread.Sleep(100)
         End While
         If TypeOf Converter.Result Is RetryException Then
-            If MyMsgBox($"请在登录时选择 {vbLQ}其他登录方法{vbRQ}，然后选择 {vbLQ}使用我的密码{vbRQ}。{vbCrLf}如果没有该选项，请选择 {vbLQ}设置密码{vbRQ}，设置完毕后再登录。",
-                "需要使用密码登录", "重新登录", "设置密码", "取消",
+            If MyMsgBox(GetLang("LangModLaunchDialogContentLoginWithPassword"),
+                GetLang("LangModLaunchDialogTitleLoginWithPassword"), GetLang("LangModLaunchDialogBtn1LoginWithPassword"), GetLang("LangModLaunchDialogBtn2LoginWithPassword"), GetLang("LangDialogBtnCancel"),
                 Button2Action:=Sub() OpenWebsite("https://account.live.com/password/Change")) = 1 Then
                 GoTo Retry
             Else

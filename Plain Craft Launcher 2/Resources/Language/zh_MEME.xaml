@@ -252,6 +252,8 @@
     <s:String x:Key="LangSetHomePagePresetPageE">每日整活包推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 外壳推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 仪表盘 Lite（作者：Silverteal、Mxmilu666）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageH">PCL 主页市场（作者：凌云）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">PCL 更新日志（作者：Joker2184）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能雪藏</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">你可以让不需要的页面或特定功能被雪藏。在随意界面按 F12 可以暂时挖出被雪藏的功能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">主页面</s:String>
@@ -639,13 +641,6 @@
     <s:String x:Key="LangMySkinCapeNameFollower's">追随者海角</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15 周年海角</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">莫得海角</s:String>
-    <!--FormLoginOAuth-->
-    <s:String x:Key="LangLoginOAuthLoading">正在加载登录页面</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipA">如果网络环境不好，加载可能非常缓慢甚至一直加载不出来</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipB">此时请尝试使用黑魔法，然后重试</s:String>
-    <s:String x:Key="LangLoginOAuthToBrowser">如果遇到问题，可以点击这里使用系统网上冲浪用具登录</s:String>
-    <s:String x:Key="LangLoginOAuthNoGithubLogin">平原合成发射台不支持使用 GaytHub 登录巨硬账号！</s:String>
-    <s:String x:Key="LangLoginOAuthWindowTitle">Macrohard 账户登录</s:String>
     <!--PageLaunchLeft-->
     <s:String x:Key="LangLaunchLeftInstanceChoose">想玩哪个</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">版本设置</s:String>
@@ -1655,6 +1650,12 @@
     <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">试玩</s:String>
     <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">返回</s:String>
     <s:String x:Key="LangModLaunchHintPlayInDemo">游戏将以试玩模式启动！</s:String>
+    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">请在登录时选择 “其他登录方法”，然后选择 “使用我的密码”。
+如果没有该选项，请选择 “设置密码”，设置完毕后再登录。</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">需要使用密码登录</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">重新登录</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">设置密码</s:String>
+
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">整活包文件</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">选择整活包压缩文件</s:String>

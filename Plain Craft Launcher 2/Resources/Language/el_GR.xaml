@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">Ακυρώθηκε!</s:String>
@@ -252,6 +252,8 @@
     <s:String x:Key="LangSetHomePagePresetPageE">Καθημερινή Σύσταση Modpack (Συγγραφέας: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Σύσταση Δέρματος Minecraft (Συγγραφέας: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">Πίνακας Ελέγχου OpenBMCLAPI Lite (Συντάκτες: Silverteal, Mxmilu666)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageH">Αγορά Αρχικής Σελίδας PCL (Συντάκτης: Λινγκ Γιουν)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">Ενημερωτικό Ημερολόγιο PCL (Συντάκτης: Joker2184)</s:String>
     <s:String x:Key="LangSetFuncHidden">Απόκρυψη Λειτουργιών</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Μπορείτε να αποκρύψετε περιττές σελίδες ή να απενεργοποιήσετε συγκεκριμένες λειτουργίες. Πατήστε «F12» σε οποιαδήποτε διεπαφή για να εμφανιστούν προσωρινά οι κρυφές λειτουργίες.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Κύρια Διεπαφή</s:String>
@@ -639,13 +641,6 @@
     <s:String x:Key="LangMySkinCapeNameFollower's">Μανδύα του Ακόλουθου</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">Μανδύα 15ου Έτους MCC</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">Κανένα</s:String>
-    <!--FormLoginOAuth-->
-    <s:String x:Key="LangLoginOAuthLoading">Φόρτωση Σελίδας Σύνδεσης...</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipA">Εάν το περιβάλλον δικτύου δεν είναι καλό, η φόρτωση μπορεί να είναι πολύ αργή ή ακόμα και αδύνατη να φορτωθεί.</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipB">Ελέγξτε το διαδίκτυο ή δοκιμάστε να χρησιμοποιήσετε VPN ή διακομιστή μεσολάβησης αυτήν τη στιγμή και, στη συνέχεια, δοκιμάστε ξανά.</s:String>
-    <s:String x:Key="LangLoginOAuthToBrowser">Εάν υπάρχει πρόβλημα, κάντε κλικ εδώ για να συνδεθείτε με το πρόγραμμα περιήγησης του συστήματός σας.</s:String>
-    <s:String x:Key="LangLoginOAuthNoGithubLogin">Το PCL δεν υποστηρίζει τη σύνδεση σε λογαριασμούς Microsoft με το GitHub!</s:String>
-    <s:String x:Key="LangLoginOAuthWindowTitle">Σύνδεση Λογαριασμού Microsoft</s:String>
     <!--PageLaunchLeft-->
     <s:String x:Key="LangLaunchLeftInstanceChoose">Επιλογή</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Ιδιότητες</s:String>
@@ -1652,6 +1647,11 @@ URL: {0}</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">Δοκιμάστε</s:String>
     <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">Επιστροφή</s:String>
     <s:String x:Key="LangModLaunchHintPlayInDemo">Το παιχνίδι θα ξεκινήσει σε λειτουργία δοκιμής!</s:String>
+    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">Παρακαλώ επιλέξτε "Άλλη μέθοδος σύνδεσης" κατά την είσοδο, και μετά επιλέξτε "Χρήση του κωδικού μου".
+Εάν δεν υπάρχει αυτή η επιλογή, παρακαλώ επιλέξτε "Ορισμός κωδικού", και μετά επιστρέψτε στην είσοδο.</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">Απαιτείται η Χρήση του Κωδικού</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">Επανασύνδεση</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">Ορισμός Κωδικού</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">Αρχείο Modpack</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">Επιλέξτε Αρχείο Modpack</s:String>

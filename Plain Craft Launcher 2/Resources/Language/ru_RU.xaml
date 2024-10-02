@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">Отменено!</s:String>
@@ -252,6 +252,8 @@
     <s:String x:Key="LangSetHomePagePresetPageE">Ежедневные рекомендации модпаков (Автор: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Рекомендации шкур для Minecraft (Автор: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI Панель инструментов Lite (авторы: Silverteal, Mxmilu666)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageH">PCL Главная страница рынка（автор：凌云）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">PCL Журнал обновлений（автор：Joker2184）</s:String>
     <s:String x:Key="LangSetFuncHidden">Скрытие функций</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Вы можете скрыть ненужные страницы или отключить определенные функции. Нажмите "F12" в любой интерфейсе, чтобы временно показать скрытые функции.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Главный интерфейс</s:String>
@@ -639,13 +641,6 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangMySkinCapeNameFollower's">Плащ Follower's</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">Плащ 15-летия MCC</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">Нет</s:String>
-    <!--FormLoginOAuth-->
-    <s:String x:Key="LangLoginOAuthLoading">Загрузка страницы входа...</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipA">Если с сетевым окружением проблемы, загрузка может быть очень медленной или даже невозможной.</s:String>
-    <s:String x:Key="LangLoginOAuthLoadingTipB">Проверьте интернет или попробуйте использовать VPN или прокси в это время, затем попробуйте снова.</s:String>
-    <s:String x:Key="LangLoginOAuthToBrowser">Если возникли проблемы, нажмите здесь для входа с помощью браузера системы.</s:String>
-    <s:String x:Key="LangLoginOAuthNoGithubLogin">PCL не поддерживает вход в учётные записи Microsoft через GitHub!</s:String>
-    <s:String x:Key="LangLoginOAuthWindowTitle">Вход в учётную запись Microsoft</s:String>
     <!--PageLaunchLeft-->
     <s:String x:Key="LangLaunchLeftInstanceChoose">Выбор</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Свойства</s:String>
@@ -1652,6 +1647,11 @@ URL: {0}</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">Попробовать</s:String>
     <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">Вернуться</s:String>
     <s:String x:Key="LangModLaunchHintPlayInDemo">Игра будет запущена в демонстрационном режиме!</s:String>
+    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">При входе выберите “Другой способ входа”, а затем “Использовать мой пароль”.
+Если этого варианта нет, выберите “Установить пароль”, а после установки снова войдите.</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">Требуется вход с паролем</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">Войти снова</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">Установить пароль</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">файл модпака</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">Выберите файл модпака</s:String>
