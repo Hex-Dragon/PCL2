@@ -28,7 +28,7 @@
         If List Is Nothing Then Exit Sub
 
         For Each i As JObject In list
-            Dim item As MyListItem = New MyListItem With {.Title = i("title").ToString(), .Info = "用户：" & i("user")("login").ToString() & "；时间：" & Date.Parse(i("created_at").ToString()).ToLocalTime().ToString()}
+            Dim item As MyListItem = New MyListItem With {.Title = i("title").ToString(), .Info = "反馈者：" & i("user")("login").ToString() & " | 时间：" & Date.Parse(i("created_at").ToString()).ToLocalTime().ToString(), .Logo = $"https://github.com/{i("user")("login").ToString()}.png"}
             PanContent.Children.Add(item)
         Next
     End Sub
