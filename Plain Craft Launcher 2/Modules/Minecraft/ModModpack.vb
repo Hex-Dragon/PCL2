@@ -765,6 +765,14 @@ Retry:
             '开启版本隔离
             WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
         End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
+        If Json("launchInfo") Is Nothing Then
+            Log("[ModPack] 整合包中未找到启动信息，已跳过")
+        Else
+            Dim launchArgument As String = String.Join(" ", Json("launchInfo")("launchArgument"))
+            Dim javaArgument As String = String.Join(" ", Json("launchInfo")("javaArgument"))
+            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionAdvanceJvm", javaArgument)
+            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionAdvanceGame", launchArgument)
+        End If                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
         '构造加载器
         If Json("addons") Is Nothing Then
             Hint("该整合包未提供游戏版本附加信息，无法安装！", HintType.Critical)
