@@ -86,7 +86,7 @@
     <s:String x:Key="LangPageNameDownloadManagement">下載管理</s:String>
     <s:String x:Key="LangPageNameVersionConfiguration">實例設定</s:String>
     <s:String x:Key="LangPageNameVersionConfigurationUnknownVersion">未知實例</s:String>
-    <s:String x:Key="LangPageNameModDownload">模組下載</s:String>
+    <s:String x:Key="LangPageNameModDownload">Mod 下載</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">模組包下載</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">資源包下載</s:String>
     <!--PageSetupUI-->
@@ -441,14 +441,14 @@
     <s:String x:Key="LangDownloadCompTaskDownloadFileDetail">下載：</s:String>
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Fabric 簡介</s:String>
-    <s:String x:Key="LangDownloadFabricDesc">Fabric Loader 是新版 Minecraft 下的輕量化模組加載器，你需要先安裝它才能安裝各種 Fabric 模組。
+    <s:String x:Key="LangDownloadFabricDesc">Fabric Loader 是新版 Minecraft 下的輕量化 Mod 加載器，你需要先安裝它才能安裝各種 Fabric Mod。
 本畫面提供 Fabric 安裝器下載，在下載後你需要手動開啟安裝器進行安裝。</s:String>
     <s:String x:Key="LangDownloadFabricWebsite">開啟官網</s:String>
     <s:String x:Key="LangDownloadFabricVersionList">版本清單</s:String>
     <s:String x:Key="LangDownloadFabricGettingList">正在獲取 Fabric 清單</s:String>
     <!--PageDownloadForge-->
     <s:String x:Key="LangDownloadForgeDescTitle">Forge 簡介</s:String>
-    <s:String x:Key="LangDownloadForgeDesc">Forge 是一個模組加載器，你需要先安裝 Forge 才能安裝各種 Forge 模組。</s:String>
+    <s:String x:Key="LangDownloadForgeDesc">Forge 是一個 Mod 加載器，你需要先安裝 Forge 才能安裝各種 Forge Mod。</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">開啟官網</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">正在獲取 Forge 清單</s:String>
     <!--PageDownloadInstall-->
@@ -506,7 +506,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangDownloadPageLeftOptiFabric">OptiFabric</s:String>
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteloaderDescTitle">LiteLoader 簡介</s:String>
-    <s:String x:Key="LangDownloadLiteloaderDesc">與 Forge 類似，LiteLoader 可以用於加載老版本 Minecraft 中的 LiteLoader 模組。</s:String>
+    <s:String x:Key="LangDownloadLiteloaderDesc">與 Forge 類似，LiteLoader 可以用於加載老版本 Minecraft 中的 LiteLoader Mod。</s:String>
     <s:String x:Key="LangDownloadLiteloaderWebsite">開啟官網</s:String>
     <s:String x:Key="LangDownloadLiteloaderGettingList">正在獲取 LiteLoader 清單</s:String>
     <!--PageDownloadMod-->
@@ -551,7 +551,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 請嘗試使用 VPN 或 Proxy 以改善網絡。</s:String>
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">NeoForge 簡介</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 是 Minecraft 1.20.1+ 的 Mod 載入器，你需要先安裝它才能安裝各種 NeoForge 模組，它也兼容一些 Forge 模組。
+    <s:String x:Key="LangDownloadNeoForgeDesc">NeoForge 是 Minecraft 1.20.1+ 的 Mod 載入器，你需要先安裝它才能安裝各種 NeoForge Mod，它也兼容一些 Forge Mod。
 本頁面提供 NeoForge 安裝程式下載，在下載後你需要手動打開安裝程式進行安裝。</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">開啟官網</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">正在獲取 NeoForge 清單</s:String>
@@ -1931,7 +1931,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 如果你正在使用高清材质，请将它移除。
 如果你没有使用材质，那么你可能需要更新显卡驱动，或者换个更好的显卡……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBP">由于 Night Config 存在问题，导致了游戏崩溃。
-你可以尝试安装 Night Config Fixes 模组，这或许能解决此问题。</s:String>
+你可以尝试安装 Night Config Fixes Mod，这或许能解决此问题。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBQ">你所使用的光影或材质导致游戏出现了一些问题……
         
 请尝试删除你所添加的这些额外资源。</s:String>

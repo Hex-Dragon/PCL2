@@ -759,8 +759,8 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageOtherLeftFeedback">反饋</s:String>
     <s:String x:Key="LangPageOtherLeftVoteNew">新功能投票</s:String>
     <!--PageOtherHelp-->
-    <s:String x:Key="LangPageOtherHelpSearch">搜索幫助</s:String>
-    <s:String x:Key="LangPageOtherHelpLoading">正在加載幫助列表</s:String>
+    <s:String x:Key="LangPageOtherHelpSearch">檢助</s:String>
+    <s:String x:Key="LangPageOtherHelpLoading">方載檢助表</s:String>
     <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">很抱歉，幫助庫目前只支持簡體中文</s:String>
     <s:String x:Key="LangPageOtherRefreshing">正在刷新……</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackContent">是否要打開反饋列表網頁？
