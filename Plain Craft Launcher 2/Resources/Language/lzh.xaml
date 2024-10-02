@@ -748,26 +748,26 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageLoginNideNoEmptyPassword">密碼不能為空！</s:String>
     <s:String x:Key="LangPageLoginNideForgetPassword">找回密碼</s:String>
     <!--PageLoginNideSkin-->
-    <s:String x:Key="LangPageLoginNideSkinLoading">加載中</s:String>
-    <s:String x:Key="LangPageLoginNideSkinChangePassword">更改密碼</s:String>
-    <s:String x:Key="LangPageLoginNideSkinLogout">退出登錄</s:String>
+    <s:String x:Key="LangPageLoginNideSkinLoading">方加載</s:String>
+    <s:String x:Key="LangPageLoginNideSkinChangePassword">易密碼</s:String>
+    <s:String x:Key="LangPageLoginNideSkinLogout">登出</s:String>
     <!--PageOtherLeft-->
-    <s:String x:Key="LangPageOtherLeftHelp">幫助</s:String>
+    <s:String x:Key="LangPageOtherLeftHelp">助</s:String>
     <s:String x:Key="LangPageOtherLeftRefresh">刷新</s:String>
     <s:String x:Key="LangPageOtherLeftAbout">關於與鳴謝</s:String>
     <s:String x:Key="LangPageOtherLeftTools">百寶箱</s:String>
     <s:String x:Key="LangPageOtherLeftFeedback">反饋</s:String>
-    <s:String x:Key="LangPageOtherLeftVoteNew">新功能投票</s:String>
+    <s:String x:Key="LangPageOtherLeftVoteNew">新物選</s:String>
     <!--PageOtherHelp-->
     <s:String x:Key="LangPageOtherHelpSearch">檢助</s:String>
     <s:String x:Key="LangPageOtherHelpLoading">方載檢助表</s:String>
-    <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">很抱歉，幫助庫目前只支持簡體中文</s:String>
+    <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">歉之甚也，簡體中文外者，愛莫能助之</s:String>
     <s:String x:Key="LangPageOtherRefreshing">正在刷新……</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackContent">是否要打開反饋列表網頁？
-如果無法打開該網頁，請嘗試使用加速器或 VPN。</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackContent">開回授表網頁否？
+若開之敗者，請試加速器或 VPN。</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">反饋提示</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">提交新反饋</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackBtn2">查看反饋列表</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackBtn2">閲反饋表</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">是否要打開新功能投票網頁？
 如果無法打開該網頁，請嘗試使用加速器或 VPN。</s:String>
     <s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
