@@ -64,29 +64,36 @@ Public Class MyBitmap
                     BitmapCache.Add(FilePathOrResourceName, Pic)
                 End If
             Else
-                Dim tempFile = PathTemp & "Cache\MyImage\" & GetHash(FilePathOrResourceName)
-                If FilePathOrResourceName.StartsWith("http") Then
+                If FilePathOrResourceName.StartsWithF("http") Then '在线图片（这里判断 https:\\ 或 http:\\ 会出问题）
+                    Dim tempFile = PathTemp & "Cache\MyImage\" & GetHash(FilePathOrResourceName)
                     NetDownload(FilePathOrResourceName, tempFile, True)
                     FilePathOrResourceName = tempFile
+                ElseIf FilePathOrResourceName.StartsWithF("data:image/png;base64,") Then 'base64 图片
+                    Dim base64Data = FilePathOrResourceName.Split(",")(1)
+                    Dim imageData = Convert.FromBase64String(base64Data)
+                    Using ms = New MemoryStream(imageData)
+                        Pic = New System.Drawing.Bitmap(ms)
+                    End Using
+                    Return
                 End If
                 '使用这种自己接管 FileStream 的方法加载才能解除文件占用
                 Using InputStream As New FileStream(FilePathOrResourceName, FileMode.Open)
-                        '判断是否为 WebP 文件头
-                        Dim Header(1) As Byte
-                        InputStream.Read(Header, 0, 2)
-                        InputStream.Seek(0, SeekOrigin.Begin)
-                        If Header(0) = 82 AndAlso Header(1) = 73 Then
-                            '读取 WebP
-                            If Is32BitSystem Then Throw New Exception("不支持在 32 位系统下加载 WebP 图片。")
-                            Dim FileBytes(InputStream.Length - 1) As Byte
-                            InputStream.Read(FileBytes, 0, FileBytes.Length)
-                            Dim Decoder As New Imazen.WebP.SimpleDecoder()
-                            Pic = Decoder.DecodeFromBytes(FileBytes, FileBytes.Length)
-                        Else
-                            Pic = New System.Drawing.Bitmap(InputStream)
-                        End If
-                    End Using
-                End If
+                    '判断是否为 WebP 文件头
+                    Dim Header(1) As Byte
+                    InputStream.Read(Header, 0, 2)
+                    InputStream.Seek(0, SeekOrigin.Begin)
+                    If Header(0) = 82 AndAlso Header(1) = 73 Then
+                        '读取 WebP
+                        If Is32BitSystem Then Throw New Exception("不支持在 32 位系统下加载 WebP 图片。")
+                        Dim FileBytes(InputStream.Length - 1) As Byte
+                        InputStream.Read(FileBytes, 0, FileBytes.Length)
+                        Dim Decoder As New Imazen.WebP.SimpleDecoder()
+                        Pic = Decoder.DecodeFromBytes(FileBytes, FileBytes.Length)
+                    Else
+                        Pic = New System.Drawing.Bitmap(InputStream)
+                    End If
+                End Using
+            End If
         Catch ex As Exception
             Pic = My.Application.TryFindResource(FilePathOrResourceName)
             If Pic Is Nothing Then
