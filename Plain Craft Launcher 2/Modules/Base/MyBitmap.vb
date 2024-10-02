@@ -68,13 +68,6 @@ Public Class MyBitmap
                     Dim tempFile = PathTemp & "Cache\MyImage\" & GetHash(FilePathOrResourceName)
                     NetDownload(FilePathOrResourceName, tempFile, True)
                     FilePathOrResourceName = tempFile
-                ElseIf FilePathOrResourceName.StartsWithF("data:image/png;base64,") Then 'base64 图片
-                    Dim base64Data = FilePathOrResourceName.Split(",")(1)
-                    Dim imageData = Convert.FromBase64String(base64Data)
-                    Using ms = New MemoryStream(imageData)
-                        Pic = New System.Drawing.Bitmap(ms)
-                    End Using
-                    Return
                 End If
                 '使用这种自己接管 FileStream 的方法加载才能解除文件占用
                 Using InputStream As New FileStream(FilePathOrResourceName, FileMode.Open)

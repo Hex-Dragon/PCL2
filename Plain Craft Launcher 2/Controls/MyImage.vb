@@ -3,8 +3,6 @@
 
     '事件
 
-    Public Uuid As Integer = GetUuid()
-
     Private _SourceData As String = ""
 
     ''' <summary>
@@ -15,20 +13,17 @@
             Return _SourceData
         End Get
         Set(value As String)
-            SetImage(value)
+            If String.IsNullOrEmpty(value) Then Exit Property
+            _SourceData = value
+            MyBase.Source = New MyBitmap(_SourceData)
         End Set
     End Property
     Public Shared Shadows ReadOnly SourceProperty As DependencyProperty = DependencyProperty.Register("Source", GetType(String), GetType(MyImage), New PropertyMetadata(New PropertyChangedCallback(
                                                                                                                                                                Sub(sender As DependencyObject, e As DependencyPropertyChangedEventArgs)
                                                                                                                                                                    If Not IsNothing(sender) Then
-                                                                                                                                                                       CType(sender, MyImage).SetImage(e.NewValue)
+                                                                                                                                                                       If String.IsNullOrEmpty(e.NewValue.ToString()) Then Exit Sub
+                                                                                                                                                                       CType(sender, MyImage).Source = e.NewValue.ToString()
                                                                                                                                                                    End If
                                                                                                                                                                End Sub)))
 
-    Private Sub SetImage(source As String)
-        If Me Is Nothing Then Exit Sub
-        If String.IsNullOrEmpty(source) Then Exit Sub
-        _SourceData = source
-        MyBase.Source = New MyBitmap(_SourceData)
-    End Sub
 End Class
