@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">已罷！</s:String>
@@ -86,7 +86,7 @@
     <s:String x:Key="LangPageNameDownloadManagement">下載管</s:String>
     <s:String x:Key="LangPageNameVersionConfiguration">版設</s:String>
     <s:String x:Key="LangPageNameVersionConfigurationUnknownVersion">未知版</s:String>
-    <s:String x:Key="LangPageNameModDownload">改囊下</s:String>
+    <s:String x:Key="LangPageNameModDownload">取Mod</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">整合包下</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">資囊下</s:String>
     <!--PageSetupUI-->
@@ -444,7 +444,7 @@
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">Fabric 略述</s:String>
     <s:String x:Key="LangDownloadFabricDesc">Fabric Loader 乃新版 Minecraft 之輕量化改囊載器也，汝須先安之，方可裝諸 Fabric 改囊。
-此頁提供 Fabric 安裝器之下載，下載後汝需手啟安裝器以行安裝。</s:String>
+此頁供 Fabric 安裝器之下載，下載後汝需手啟安裝器以行安裝。</s:String>
     <s:String x:Key="LangDownloadFabricWebsite">開官網</s:String>
     <s:String x:Key="LangDownloadFabricVersionList">版本目</s:String>
     <s:String x:Key="LangDownloadFabricGettingList">方取 Fabric 目</s:String>
@@ -748,10 +748,10 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageLoginNideSkinLogout">登出</s:String>
     <!--PageOtherLeft-->
     <s:String x:Key="LangPageOtherLeftHelp">助</s:String>
-    <s:String x:Key="LangPageOtherLeftRefresh">刷新</s:String>
+    <s:String x:Key="LangPageOtherLeftRefresh">復載</s:String>
     <s:String x:Key="LangPageOtherLeftAbout">關於與鳴謝</s:String>
-    <s:String x:Key="LangPageOtherLeftTools">百寶箱</s:String>
-    <s:String x:Key="LangPageOtherLeftFeedback">反饋</s:String>
+    <s:String x:Key="LangPageOtherLeftTools">寶物之域</s:String>
+    <s:String x:Key="LangPageOtherLeftFeedback">回授</s:String>
     <s:String x:Key="LangPageOtherLeftVoteNew">新物選</s:String>
     <!--PageOtherHelp-->
     <s:String x:Key="LangPageOtherHelpSearch">檢助</s:String>
@@ -1352,7 +1352,7 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">未找到版本 JSON 文件：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">版本 JSON 文件有誤，內容為：{0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">版本依賴項出現嵌套：{0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">版本 JSON 不規範（{0}）</s:String>
+    <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">版本 JSON 時失敗（{0}）</s:String>
     <s:String x:Key="LangModMinecraftVersionPre">預發布版</s:String>
     <s:String x:Key="LangModMinecraftVersionRC">發布候選</s:String>
     <s:String x:Key="LangModMinecraftVersionExperimental">實驗性快照</s:String>
@@ -1381,7 +1381,7 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinNoData">皮膚返回值中不包含皮膚數據項，可能是未設置自定義皮膚的用戶</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinNotSet">用戶未設置自定義皮膚</s:String>
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">該版本不存在資源文件索引信息</s:String>
-    <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Assets 索引文件未找到</s:String>
+    <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Assets 索引文件不可考之</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">非預期的結果（{0}）</s:String>
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">適用於</s:String>
@@ -1584,11 +1584,11 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleSponsorship">求贊助啦……</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">這就贊助！</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2Sponsorship">但是我拒絕</s:String>
-    <s:String x:Key="LangModLaunchDialogContentBuyMc">你已經啟動了 {0} 次 Minecraft 啦！
-如果覺得 Minecraft 還不錯，也可以考慮購買正版支持一下，畢竟開發遊戲也很不容易……
-在你登錄一次正版賬號後，就不會再出現這個提示了。</s:String>
+    <s:String x:Key="LangModLaunchDialogContentBuyMc">汝已啓 {0} 次 Minecraft ，可喜可賀！
+若汝優 Minecraft ，宜市正版助之，乃開發諸戲不易也。
+夫以正版登入之後，乃不復示矣。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleBuyMc">考慮一下正版？</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1BuyMc">購買正版遊戲</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1BuyMc">市正版遊戲</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2BuyMc">下次一定</s:String>
     <s:String x:Key="LangModLaunchUnknownLoginMethod">未知的登錄方式</s:String>
     <s:String x:Key="LangModLaunchLogin">登錄</s:String>
@@ -1649,10 +1649,10 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">试玩</s:String>
     <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">返回</s:String>
     <s:String x:Key="LangModLaunchHintPlayInDemo">游戏将以试玩模式启动！</s:String>
-    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">请在登录时选择 “其他登录方法”，然后选择 “使用我的密码”。
-如果没有该选项，请选择 “设置密码”，设置完毕后再登录。</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">需要使用密码登录</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">重新登录</s:String>
+    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">請於登錄時選擇「其他登錄方法」，繼而選擇「使用吾密碼」。
+若無此選項，請選「設置密碼」，設置畢再行登錄。</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">需使用密碼登錄</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">重新登錄</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">设置密码</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">整合包文件</s:String>
@@ -1930,8 +1930,8 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
         
 如果你正在使用高清材质，请将它移除。
 如果你没有使用材质，那么你可能需要更新显卡驱动，或者换个更好的显卡……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBP">由于 Night Config 存在问题，导致了游戏崩溃。
-你可以尝试安装 Night Config Fixes 模组，这或许能解决此问题。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBP">以 Night Config 存事，致戲不可使也。
+汝宜安装 Night Config Fixes 改囊，蓋能解此者。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBQ">你所使用的光影或材质导致游戏出现了一些问题……
         
 请尝试删除你所添加的这些额外资源。</s:String>

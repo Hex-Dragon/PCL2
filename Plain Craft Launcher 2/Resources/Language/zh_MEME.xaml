@@ -2,7 +2,7 @@
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">已取消！</s:String>
-    <s:String x:Key="LangDialogBtnOK">我好了</s:String>
+    <s:String x:Key="LangDialogBtnOK">好的</s:String>
     <s:String x:Key="LangDialogBtnCancel">算了</s:String>
     <s:String x:Key="LangResourcePack">亮目害眼包</s:String>
     <s:String x:Key="LangDialogBtnYes">没错</s:String>
@@ -19,7 +19,7 @@
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境不对劲</s:String>
     <s:String x:Key="LangApplicationDialogContentRunInTemp">请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！
 程序目前在临时文件夹中运行，设置、游戏存档等可能无法保存，且部分功能将无法使用。</s:String>
-    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL 和新版 Minecraft 均不再支持 32 位系统，部分功能将无法使用。
+    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL 和新版麦恩克拉夫特均不再支持 32 位系统，部分功能将无法使用。
 非常建议重装为 64 位系统后再进行游戏！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">平原合成发射台初始化不成功</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
@@ -40,10 +40,10 @@
     <s:String x:Key="LangDialogUpdateTo">平原合成发射台已更新至 {0}</s:String>
     <s:String x:Key="LangDialogPolicyContent">在使用 PCL 前，请同意 PCL 的用户协议与免责声明。</s:String>
     <s:String x:Key="LangDialogPolicyTitle">协议授权</s:String>
-    <s:String x:Key="LangDialogBtnAgree">我不反对</s:String>
+    <s:String x:Key="LangDialogBtnAgree">我不拒绝</s:String>
     <s:String x:Key="LangDialogBtnDeny">我不同意</s:String>
     <s:String x:Key="LangDialogBtnPolicyContent">查看用户协议与免责声明</s:String>
-    <s:String x:Key="LangHintDebugWarning">[调试模式]平原合成发射台正以调试模式运行，这可能会导致性能下降，若莫得必要请不要打开！</s:String>
+    <s:String x:Key="LangHintDebugWarning">[调试模式] 平原合成发射台正以调试模式运行，这可能会导致性能下降，若莫得必要请不要打开！</s:String>
     <s:String x:Key="LangDialogTitleTip">提示</s:String>
     <s:String x:Key="LangDialogHardcoreFanTheme">你已经使用了 99 次平原合成发射台啦，阿里嘎多够咋衣麻斯！
 雪藏主题 铁杆粉 闪亮登场！</s:String>
@@ -78,8 +78,8 @@
     <s:String x:Key="LangHintInstallModFailed">复制模组文件不成功</s:String>
     <s:String x:Key="LangHintRarNotSupport">平原合成发射台没办法处理 rar 格式的压缩毛巾，请在解压后重新挤干水分为 zip 格式再试！</s:String>
     <s:String x:Key="LangHintWindowDropUnknown">你拖的什么东西？平原合成发射台.exe 未响应……</s:String>
-    <s:String x:Key="LangHintCloseMinecraftSuccess">已了结运行中的 Minecraft！</s:String>
-    <s:String x:Key="LangHintCloseMinecraftFailed">强制了结所有 Minecraft 不成功</s:String>
+    <s:String x:Key="LangHintCloseMinecraftSuccess">已了结运行中的麦恩克拉夫特！</s:String>
+    <s:String x:Key="LangHintCloseMinecraftFailed">强制了结所有麦恩克拉夫特不成功</s:String>
     <s:String x:Key="LangHintBackToTopFailed">没办法滚回顶部，未找到合适的 RealScroll</s:String>
     <s:String x:Key="LangDialogFailedToChangePage">没办法切换到子页面（ID {0}）</s:String>
     <s:String x:Key="LangPageNameVersionChoose">想玩哪个</s:String>
@@ -247,10 +247,10 @@
     <s:String x:Key="LangSetHomePagePresetPage">主页预设</s:String>
     <s:String x:Key="LangSetHomePagePresetPageA">你不知道？</s:String>
     <s:String x:Key="LangSetHomePagePresetPageB">回声洞</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageC">Minecraft 新闻（作者：最亮的信标）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageC">麦恩克拉夫特新闻（作者：最亮的信标）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageD">简单主页（作者：MFn233）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">每日整活包推荐（作者：wkea）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 外壳推荐（作者：wkea）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageF">麦恩克拉夫特外壳推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 仪表盘 Lite（作者：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageH">PCL 主页市场（作者：凌云）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageI">PCL 更新日志（作者：Joker2184）</s:String>
@@ -295,14 +295,14 @@
     <s:String x:Key="LangSelectCreateFolder">新建 .minecraft 文件夹子</s:String>
     <s:String x:Key="LangSelectCreateFolderToolTip">在平原合成发射台当前所在文件夹子下创建新的 .minecraft 文件夹子</s:String>
     <s:String x:Key="LangSelectAddExistFolder">添加已有文件夹子</s:String>
-    <s:String x:Key="LangSelectAddExistFolderToolTip">将一个已有的 Minecraft 文件夹子添加到名单</s:String>
+    <s:String x:Key="LangSelectAddExistFolderToolTip">将一个已有的麦恩克拉夫特文件夹子添加到名单</s:String>
     <s:String x:Key="LangSelectAddModpack">导入整活包</s:String>
-    <s:String x:Key="LangSelectAddModpackToolTip">在当前选择的 Minecraft 文件夹子下安装整活包</s:String>
-    <s:String x:Key="LangSelectNoMCFolder">莫得可用的 Minecraft 文件夹子</s:String>
-    <s:String x:Key="LangSelectUIError">构建 Minecraft 文件夹子名单 UI 出错</s:String>
+    <s:String x:Key="LangSelectAddModpackToolTip">在当前选择的麦恩克拉夫特文件夹子下安装整活包</s:String>
+    <s:String x:Key="LangSelectNoMCFolder">莫得可用的麦恩克拉夫特文件夹子</s:String>
+    <s:String x:Key="LangSelectUIError">构建麦恩克拉夫特文件夹子名单 UI 出错</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoAdd">在下崽任务进行时，没办法添加游戏文件夹子！</s:String>
     <s:String x:Key="LangSelectDownloadingTaskExistsNoCreate">在下崽任务进行时，没办法创建游戏文件夹子！</s:String>
-    <s:String x:Key="LangSelectNoSpecialSymbol">Minecraft 文件夹子路径中不能含有感叹号或分号！</s:String>
+    <s:String x:Key="LangSelectNoSpecialSymbol">麦恩克拉夫特文件夹子路径中不能含有感叹号或分号！</s:String>
     <s:String x:Key="LangSelectDialogInputNameTitle">输入显示名称</s:String>
     <s:String x:Key="LangSelectDialogInputNameContent">输入该文件夹子在左边栏名单中显示的名称。</s:String>
     <s:String x:Key="LangSelectFailToAddFolder">添加文件夹子不成功 （{0}）</s:String>
@@ -351,7 +351,7 @@
     <s:String x:Key="LangSelectVersionTypeFabric">布料版本</s:String>
     <s:String x:Key="LangSelectVersionTypeError">错误的版本</s:String>
     <s:String x:Key="LangSelectVersionTypeHidden">雪藏的版本</s:String>
-    <s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">积灰版本</s:String>
+    <s:String x:Key="LangSelectVersionTypeNotCommonlyUsed">积灰的版本</s:String>
     <s:String x:Key="LangSelectVersionTypeFavorites">我喜欢这个夹</s:String>
     <s:String x:Key="LangSelectVersionTypeAprilFool">愚人节版本</s:String>
     <s:String x:Key="LangSelectVersionTypeUnknown">未知的卡片种类</s:String>
@@ -443,7 +443,7 @@
     <s:String x:Key="LangDownloadCompTaskDownloadFileDetail">下崽：</s:String>
     <!--PageDownloadFabric-->
     <s:String x:Key="LangDownloadFabricDescTitle">布料简介</s:String>
-    <s:String x:Key="LangDownloadFabricDesc">布料加载器是新版 Minecraft 下的轻量化模组加载器，你需要先安装它才能安装各种布料模组。
+    <s:String x:Key="LangDownloadFabricDesc">布料加载器是新版麦恩克拉夫特下的轻量化模组加载器，你需要先安装它才能安装各种布料模组。
 本页面提供布料安装器下崽，在下崽后你需要手动打开安装器进行安装。</s:String>
     <s:String x:Key="LangDownloadFabricWebsite">打开官网</s:String>
     <s:String x:Key="LangDownloadFabricVersionList">版本名单</s:String>
@@ -463,7 +463,7 @@
     <s:String x:Key="LangDownloadInstallVersionName">版本名称</s:String>
     <s:String x:Key="LangDownloadInstallBack">回去</s:String>
     <s:String x:Key="LangDownloadInstallGettingList">正在获取版本名单</s:String>
-    <s:String x:Key="LangDownloadInstallHintBackTip">点击 Minecraft 项即可回去游戏主版本选择页面！</s:String>
+    <s:String x:Key="LangDownloadInstallHintBackTip">点击麦恩克拉夫特项即可回去游戏主版本选择页面！</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">点击选择</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">与锻造不兼容</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">与布料不兼容</s:String>
@@ -498,7 +498,7 @@
     <s:String x:Key="LangDownloadPageLeftResource">资源</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">模组</s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">整活包</s:String>
-    <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
+    <s:String x:Key="LangDownloadPageLeftMinecraft">麦恩克拉夫特</s:String>
     <s:String x:Key="LangDownloadPageLeftOptiFine">Opti不Fine</s:String>
     <s:String x:Key="LangDownloadPageLeftForge">锻造</s:String>
     <s:String x:Key="LangDownloadPageLeftNeoForge">新锻造</s:String>
@@ -508,7 +508,7 @@
     <s:String x:Key="LangDownloadPageLeftOptiFabric">Opti炸Fabric</s:String>
     <!--PageDownloadLiteLoader-->
     <s:String x:Key="LangDownloadLiteloaderDescTitle">轻飘飘加载器简介</s:String>
-    <s:String x:Key="LangDownloadLiteloaderDesc">与锻造类似，轻飘飘加载器可以用于加载老版本 Minecraft 中的轻飘飘加载器模组。</s:String>
+    <s:String x:Key="LangDownloadLiteloaderDesc">与锻造类似，轻飘飘加载器可以用于加载老版本麦恩克拉夫特中的轻飘飘加载器模组。</s:String>
     <s:String x:Key="LangDownloadLiteloaderWebsite">打开官网</s:String>
     <s:String x:Key="LangDownloadLiteloaderGettingList">正在获取轻飘飘加载器名单</s:String>
     <!--PageDownloadMod-->
@@ -553,7 +553,7 @@
 请尝试使用黑魔法以改善网络。</s:String>
     <!--PageDownloadNeoForge-->
     <s:String x:Key="LangDownloadNeoForgeDescTitle">新锻造简介</s:String>
-    <s:String x:Key="LangDownloadNeoForgeDesc">新锻造是 Minecraft 1.20.1+ 的模组加载器，你需要先安装它才能安装各种新锻造模组，它也兼容一些锻造模组。
+    <s:String x:Key="LangDownloadNeoForgeDesc">新锻造是麦恩克拉夫特 1.20.1+ 的模组加载器，你需要先安装它才能安装各种新锻造模组，它也兼容一些锻造模组。
 本页面提供新锻造安装器下载，在下载后你需要手动打开安装器进行安装。</s:String>
     <s:String x:Key="LangDownloadNeoForgeWebsite">打开官网</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">正在获取新锻造名单</s:String>
@@ -574,7 +574,7 @@
     <s:String x:Key="LangDownloadModpackReset">重置条件</s:String>
     <s:String x:Key="LangDownloadModpackGettingList">正在获取整活包名单</s:String>
     <s:String x:Key="LangDownloadModpackInstallFromLocal">安装已有整活包</s:String>
-    <s:String x:Key="LangDownloadModpackInstallFromLocalToolTip">在当前选择的 Minecraft 文件夹子下安装整活包</s:String>
+    <s:String x:Key="LangDownloadModpackInstallFromLocalToolTip">在当前选择的麦恩克拉夫特文件夹子下安装整活包</s:String>
     <s:String x:Key="LangDownloadModpackType">类型</s:String>
     <s:String x:Key="LangDownloadModpackTypeAll">全部</s:String>
     <s:String x:Key="LangDownloadModpackTypeMulti">多人</s:String>
@@ -665,7 +665,7 @@
     <s:String x:Key="LangLaunchLeftAccountThirdPartLogin">第三方登录</s:String>
     <s:String x:Key="LangLaunchLeftSkinNotFound">未找到离线外壳自定义文件，可能它已被删除。平原合成发射台将使用默认的 Steve 外壳！</s:String>
     <s:String x:Key="LangLaunchThemeFunnyUnlock">雪藏主题 滑稽彩 已解锁！</s:String>
-    <s:String x:Key="LangLaunchLeftStartInstance">Minecraft，发射！</s:String>
+    <s:String x:Key="LangLaunchLeftStartInstance">麦恩克拉夫特，发射！</s:String>
     <s:String x:Key="LangLaunchLeftDownloadInstance">下崽游戏</s:String>
     <s:String x:Key="LangLaunchLeftNoAvailableInstance">你倒是装一个游戏啊</s:String>
     <s:String x:Key="LangLaunchLeftStartCancelled">发射不成功</s:String>
@@ -700,7 +700,7 @@
     <s:String x:Key="LangPageLoginAuthSkinChanging">在尝试更换了，你先别急！</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChangeFail">更换角色不成功</s:String>
     <!--PageLoginLegacy-->
-    <s:String x:Key="LangPageLoginLegacySpecialCharacters">运动员名如果包含英文、数字、下划线以外的内容，可能会没办法进入 Minecraft 1.18 以后的世界！</s:String>
+    <s:String x:Key="LangPageLoginLegacySpecialCharacters">运动员名如果包含英文、数字、下划线以外的内容，可能会没办法进入麦恩克拉夫特 1.18 以后的世界！</s:String>
     <s:String x:Key="LangPageLoginLegacyID">游戏运动员名</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">运动员名不能为空！</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">运动员名不能包含英文引号！</s:String>
@@ -784,7 +784,7 @@
     <s:String x:Key="LangPageOtherAboutThanksz0z0r4">提供了 MCIM 中国模组下载镜像源和帮助库图床！</s:String>
     <s:String x:Key="LangPageOtherAboutThanksPatrick">设计并制作了平原合成发射台图标，让我从做图标的水深火热中得到了解脱……</s:String>
     <s:String x:Key="LangPageOtherAboutThanksHao_Tian">在内测中找出了一大堆没人想得到的诡异 Bug，有非同寻常的 Bug 体质</s:String>
-    <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">Minecraft 中文论坛</s:String>
+    <s:String x:Key="LangPageOtherAboutThanksMCBBSTitle">麦恩克拉夫特中文论坛</s:String>
     <s:String x:Key="LangPageOtherAboutThanksMCBBS">虽然已经关站了，但感谢此前提供了 MCBBS 镜像源……</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">平原合成发射台内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和平原合成发射台的支持与鼓励！</s:String>
@@ -843,7 +843,7 @@
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">隔离可安装模组的版本</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">可安装模组的版本（例如锻造、布料）均互相独立以避免模组冲突，其他版本（例如香草）则不会被隔离。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">隔离非正式版</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">将 Minecraft 快照、预发布版、古代版本、愚人节版本与其他版本进行隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip">将麦恩克拉夫特快照、预发布版、古代版本、愚人节版本与其他版本进行隔离</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaAndMod">隔离可安装模组的版本和非正式版</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAll">隔离所有版本</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">不同版本之间的存档、模组、亮目害眼包等均不互通。
@@ -883,7 +883,7 @@
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">游戏分配</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">高级发射选项</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 参数头</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">发射 Minecraft 时使用的额外 JVM 参数，在莫得确定把握的情况下请不要尝试修改。
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">发射麦恩克拉夫特时使用的额外 JVM 参数，在莫得确定把握的情况下请不要尝试修改。
 你可以通过点击左侧选项卡的初始化按钮来恢复到默认设置。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM 参数尾</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">文本框中的内容将会被直接拼合在发射参数的末尾。
@@ -988,9 +988,9 @@
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">辅助功能</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">游戏更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">测试版更新提示</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">在 Minecraft 测试版（快照、预发布版）更新时弹窗提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip">在麦恩克拉夫特测试版（快照、预发布版）更新时弹窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease">正式版更新提示</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">在 Minecraft 正式版更新时弹窗提示</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip">在麦恩克拉夫特正式版更新时弹窗提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilitySetGameLanguage">游戏语言</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">自动帮你设置游戏语言</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">系统</s:String>
@@ -1230,11 +1230,11 @@
     <s:String x:Key="LangPageVersionSetupServerLoginServerName">服务器名称</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerNameToolTip">显示在登录页面的服务器名称</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServer">自动帮你进入服务器</s:String>
-    <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServerToolTip">在打开 Minecraft 后自动帮你进入某服务器。
+    <s:String x:Key="LangPageVersionSetupServerLoginAutoEnterServerToolTip">在打开麦恩克拉夫特后自动帮你进入某服务器。
 用英文冒号间隔 IP 与端口，例如 114.51.41.91:9810。</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerMaster">腐竹后台</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginServerSetLittleSkin">设置为 LittleSkin</s:String>
-    <s:String x:Key="LangPageVersionSetupJVMHead">发射 Minecraft 时使用的额外 JVM 参数，在莫得确定把握的情况下请不要尝试修改。
+    <s:String x:Key="LangPageVersionSetupJVMHead">发射麦恩克拉夫特时使用的额外 JVM 参数，在莫得确定把握的情况下请不要尝试修改。
 若留空，则使用全局设置的值。</s:String>
     <s:String x:Key="LangPageVersionSetupJVMTail">文本框中的内容将会被直接拼合在发射参数的末尾。
 例如输入 --demo 则会以试玩模式发射游戏。
@@ -1277,7 +1277,7 @@
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">你先别急……</s:String>
     <s:String x:Key="LangModEventStartInstance">正在发射 {0}……</s:String>
-    <s:String x:Key="LangModEventChoseAnInstance">请先选择一个 Minecraft 版本！</s:String>
+    <s:String x:Key="LangModEventChoseAnInstance">请先选择一个麦恩克拉夫特版本！</s:String>
     <s:String x:Key="LangModEventHomePageRefreshed">已刷亲斤主页！</s:String>
     <s:String x:Key="LangModEventDialogDownloadIncorrectContent">EventData 必须为以 http:// 或 https:// 开头的网址。
 平原合成发射台不支持其他乱七八糟的下崽协议。</s:String>
@@ -1346,7 +1346,7 @@
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">下崽</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">更新日志</s:String>
     <s:String x:Key="LangModMinecraftVersionVanilla">香草</s:String>
-    <s:String x:Key="LangModMinecraftInvalidMcFolder">莫得效的 Minecraft 文件夹子：{0}</s:String>
+    <s:String x:Key="LangModMinecraftInvalidMcFolder">莫得效的麦恩克拉夫特文件夹子：{0}</s:String>
     <s:String x:Key="LangModMinecraftNotLoaded">该版本未被加载，请向作者反馈此问题</s:String>
     <s:String x:Key="LangModMinecraftUnableGetVersion">平原合成发射台没办法识别该版本的安慕希版本号</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">识别不了：{0}</s:String>
@@ -1368,7 +1368,7 @@
     <s:String x:Key="LangModMinecraftFoolName22w13oneblockatatime">一次一个方块更新！迎接全新的挖掘、合成与骑乘玩法吧！</s:String>
     <s:String x:Key="LangModMinecraftFoolName20w14inf">我们加入了 20 亿个新的维度，让无限的想象变成了现实！</s:String>
     <s:String x:Key="LangModMinecraftFoolName3dshareware">我们从地下室的废墟里找到了这个开发于 1994 年的杰作！</s:String>
-    <s:String x:Key="LangModMinecraftFoolName1.rv-pre1">是时候让 Minecraft 变得更加现代化了！</s:String>
+    <s:String x:Key="LangModMinecraftFoolName1.rv-pre1">是时候让麦恩克拉夫特变得更加现代化了！</s:String>
     <s:String x:Key="LangModMinecraftFoolName15w14a">作为一款全年龄向的游戏，我们需要和平，需要爱与拥抱。</s:String>
     <s:String x:Key="LangModMinecraftFoolName2.0">这个秘密计划了两年的更新将游戏推向了一个新高度！</s:String>
     <s:String x:Key="LangModMinecraftExceptionGetFolderListFail">没办法读取版本文件夹子，可能是因为莫得权限（{0}versions）</s:String>
@@ -1453,7 +1453,7 @@
     <s:String x:Key="LangModLaunchStartStageWaitForWindow">等游戏窗口出来冒泡</s:String>
     <s:String x:Key="LangModLaunchStartStageLaunchEnd">结束处理</s:String>
     <s:String x:Key="LangModLaunchStartStageMemReduce">内存优化</s:String>
-    <s:String x:Key="LangModLaunchStartStageMCStarted">Minecraft 发射</s:String>
+    <s:String x:Key="LangModLaunchStartStageMCStarted">麦恩克拉夫特发射</s:String>
     <s:String x:Key="LangModLaunchStartSuccess">发射成功！</s:String>
     <s:String x:Key="LangModLaunchCancelStart">已取消发射！</s:String>
     <s:String x:Key="LangModLaunchCancelExportCommand">已取消导出发射脚本！</s:String>
@@ -1574,19 +1574,19 @@
     <!--ModLaunch-->
     <s:String x:Key="LangModLaunchExceptionRunNotInUI">McLaunchStart 必须在 UI 线程调用！</s:String>
     <s:String x:Key="LangModLaunchAlreadyLaunchGame">已有游戏正在发射中！</s:String>
-    <s:String x:Key="LangModLaunchLaunchFail">没办法发射 Minecraft：{0}</s:String>
+    <s:String x:Key="LangModLaunchLaunchFail">没办法发射麦恩克拉夫特：{0}</s:String>
     <s:String x:Key="LangModLaunchExceptionStateSwitchError">错误的状态改变：{0}</s:String>
     <s:String x:Key="LangModLaunchExceptionPathIncorrect">游戏路径中不可包含 ! 或 ;（{0}）</s:String>
-    <s:String x:Key="LangModLaunchExceptionNoInstanceSelected">未选择 Minecraft 版本！</s:String>
-    <s:String x:Key="LangModLaunchExceptionInstanceError">Minecraft 存在问题：{0}</s:String>
+    <s:String x:Key="LangModLaunchExceptionNoInstanceSelected">未选择麦恩克拉夫特版本！</s:String>
+    <s:String x:Key="LangModLaunchExceptionInstanceError">麦恩克拉夫特存在问题：{0}</s:String>
     <s:String x:Key="LangModLaunchDialogContentSponsorship">平原合成发射台已经为你发射了 {0} 次游戏啦！
 如果觉得平原合成发射台还算好用的话，也可以考虑赞助一下作者……一点心意也行……
 毕竟一个人开发也不容易（悲）……</s:String>
     <s:String x:Key="LangModLaunchDialogTitleSponsorship">疯狂星期四 V 我 50 好不好……</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">这就 V 你 50！</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2Sponsorship">我建议你吃麦当当</s:String>
-    <s:String x:Key="LangModLaunchDialogContentBuyMc">你已经发射了 {0} 次 Minecraft 啦！
-如果觉得 Minecraft 还不错，也可以考虑购买正版支持一下，毕竟开发游戏也真的很不容易……
+    <s:String x:Key="LangModLaunchDialogContentBuyMc">你已经发射了 {0} 次麦恩克拉夫特啦！
+如果觉得麦恩克拉夫特还不错，也可以考虑购买正版支持一下，毕竟开发游戏也真的很不容易……
 在你登录一次正版账号后，就不会再出现这个提示了。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleBuyMc">考虑一下正版？</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1BuyMc">支持正版游戏！</s:String>
@@ -1625,9 +1625,9 @@
     <s:String x:Key="LangModLaunchExceptionLoginTooFrequently">登录尝试太过频繁，请等待几分钟后再试！</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginIPIncorrect">当前 IP 的登录尝试异常。
 如果你使用了黑魔法，请把它们关掉或更换节点后再试！</s:String>
-    <s:String x:Key="LangModLaunchDialogBtnByMc">购买 Minecraft</s:String>
-    <s:String x:Key="LangModLaunchDialogContentNoMc">你还没买正版 Minecraft，或者 Xbox Game Pass 已到期。</s:String>
-    <s:String x:Key="LangModLaunchDialogContentCreateRole">请先创建 Minecraft 运动员档案，然后再重新登录。</s:String>
+    <s:String x:Key="LangModLaunchDialogBtnByMc">购买麦恩克拉夫特</s:String>
+    <s:String x:Key="LangModLaunchDialogContentNoMc">你还没买正版麦恩克拉夫特，或者 Xbox Game Pass 已到期。</s:String>
+    <s:String x:Key="LangModLaunchDialogContentCreateRole">请先创建麦恩克拉夫特运动员档案，然后再重新登录。</s:String>
     <s:String x:Key="LangModLaunchDialogBtnCreateRole">创建档案</s:String>
     <s:String x:Key="LangModLaunchDialogContentGetSkinFail">由于设置的离线发射时使用的正版外壳获取不成功，游戏将以无外壳的方式发射。
 请检查你的网络是否通畅，或尝试使用魔法！
@@ -1643,7 +1643,7 @@
     <s:String x:Key="LangModLaunchExceptionConnectServerFail">没办法连接到第三方登录服务器（{0}）</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">版本 JSON 中莫得 mainClass 项！</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">没办法打开 Natives 文件（{0}），该文件可能已损坏，请重新尝试发射游戏</s:String>
-    <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">此 Minecraft 版本尚不支持艾利克斯外壳，你的外壳可能会显示为史蒂夫!</s:String>
+    <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">此麦恩克拉夫特版本尚不支持艾利克斯外壳，你的外壳可能会显示为史蒂夫!</s:String>
     <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">你必须先登录正版账号，才能进行离线登录！</s:String>
     <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">正版验证</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">购买正版</s:String>
@@ -1655,12 +1655,11 @@
     <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">需要使用密码登录</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">重新登录</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">设置密码</s:String>
-
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">整活包文件</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">选择整活包压缩文件</s:String>
     <s:String x:Key="LangModModpackUnknownType">未能识别该整活包的种类，没办法安装！</s:String>
-    <s:String x:Key="LangModModpackExceptionNoMcInfo">整活包未提供 Minecraft 版本信息</s:String>
+    <s:String x:Key="LangModModpackExceptionNoMcInfo">整活包未提供麦恩克拉夫特版本信息</s:String>
     <s:String x:Key="LangModModpackInputInstanceName">输入版本名称</s:String>
     <s:String x:Key="LangModModpackTaskExtraModpack">解压整活包文件</s:String>
     <s:String x:Key="LangModModpackTaskGetModDownloadInfo">获取模组下崽信息</s:String>
@@ -1691,12 +1690,12 @@
     <s:String x:Key="LangModModpackDialogContentInstallTip">请在接下来打开的窗口中选择安装目标文件夹子，它必须是一个空文件夹子。</s:String>
     <s:String x:Key="LangModModpackDialogTitleInstallTip">安装提示</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">选择安装目标（必须是一个空文件夹子）</s:String>
-    <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 文件夹子路径中不能含有感叹号或分号！</s:String>
+    <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">麦恩克拉夫特文件夹子路径中不能含有感叹号或分号！</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">请选择一个空文件夹子作为安装目标！</s:String>
     <s:String x:Key="LangModModpackInstallArchive">安装压缩毛巾</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">已加入游戏文件夹子名单：{0}</s:String>
     <!--ModWatcher-->
-    <s:String x:Key="LangModWatcherMcCrashed">Minecraft 原地螺旋升天爆炸了，让我看看怎么个事……</s:String>
+    <s:String x:Key="LangModWatcherMcCrashed">麦恩克拉夫特原地螺旋升天爆炸了，让我看看怎么个事……</s:String>
     <!--ModBase-->
     <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">不支持对包含子键的子键进行改名换姓：{0}。</s:String>
     <s:String x:Key="LangModBaseExceptionPathIncorrect">莫得路径：{0}</s:String>
@@ -1721,7 +1720,7 @@
     <s:String x:Key="LangModMyLoadingUnknownError">未知不成功</s:String>
     <s:String x:Key="LangModMyLoadingBadNetwork">网络环境不佳，请重试或尝试使用黑魔法</s:String>
     <!--ModDownloadLib-->
-    <s:String x:Key="LangModDownloadLibTaskMcDownload">Minecraft {0} 下崽</s:String>
+    <s:String x:Key="LangModDownloadLibTaskMcDownload">麦恩克拉夫特 {0} 下崽</s:String>
     <s:String x:Key="LangModDownloadLibHintInstanceDownloading">该版本正在下崽中！</s:String>
     <s:String x:Key="LangModDownloadLibDialogContentRedownloadInstance">版本 {0} 已存在，是否重新下崽？
 这会覆盖版本的 JSON 与罐子文件，但不会影响版本隔离的文件。</s:String>
@@ -1754,7 +1753,7 @@
     <s:String x:Key="LangModDownloadLibTaskDownloadOptiFineLib">下崽 OptiFine 支持库文件</s:String>
     <s:String x:Key="LangModDownloadLibTaskGetOptiFineDownloadUrl">获取 OptiFine 下崽地址</s:String>
     <s:String x:Key="LangModDownloadLibTaskLiteLoaderDownload">LiteLoader {0} 下崽</s:String>
-    <s:String x:Key="LangModDownloadLibExceptionNotSupportVersion">未知的 Minecraft 版本（{0}）</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionNotSupportVersion">未知的麦恩克拉夫特版本（{0}）</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadMainFile">下崽主文件</s:String>
     <s:String x:Key="LangModDownloadLibTaskLiteLoaderInstallerDownload">LiteLoader {0} 安装器下崽</s:String>
     <s:String x:Key="LangModDownloadLibTaskLiteLoaderMcVersionDownload">启动 LiteLoader 依赖版本下崽</s:String>
@@ -1789,7 +1788,7 @@
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">下崽 Fabric {0}</s:String>
     <!--ModCrash-->
     <s:String x:Key="LangModCrashDialogTitleAnalysisResult">错误报告分析结果</s:String>
-    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 出现错误</s:String>
+    <s:String x:Key="LangModCrashDialogTitleMcError">麦恩克拉夫特出现错误</s:String>
     <s:String x:Key="LangModCrashViewLog">查看日志</s:String>
     <s:String x:Key="LangModCrashExportCrashReport">导出错误报告</s:String>
     <s:String x:Key="LangModCrashHintExportCrashReportSuccess">错误报告已导出！</s:String>
@@ -1800,7 +1799,7 @@
 直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。
 
 请删除 Mod 文件夹中已被解压的 Mod，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAB">Minecraft 内存不足，导致其无法继续运行。
+    <s:String x:Key="LangModCrashCrashReasonReasonAB">麦恩克拉夫特内存不足，导致其无法继续运行。
 这很可能是因为电脑内存不足、游戏分配的内存不足，或是配置要求过高。
             
 你可以尝试在 更多 → 百宝箱 中选择 内存优化，然后再启动游戏。
@@ -1820,11 +1819,11 @@
 请尝试修改 Mod 文件名，让它只包含英文字母、数字、减号（-）、下划线（_）和小数点，然后再启动游戏。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAH">由于缺失 MixinBootstrap，导致游戏崩溃。
 请尝试安装 MixinBootstrap。若安装后依然崩溃，可以尝试在文件名前添加英文感叹号。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAI">你似乎正在使用 32 位 Java，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。
+    <s:String x:Key="LangModCrashCrashReasonReasonAI">你似乎正在使用 32 位 Java，这会导致 麦恩克拉夫特无法使用所需的内存，进而造成崩溃。
         
 请在启动设置的 Java 选择一项中改用 64 位的 Java 再启动游戏，然后再启动游戏。
 如果你没有安装 64 位的 Java，你可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAJ">你正在使用 32 位的操作系统，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。
+    <s:String x:Key="LangModCrashCrashReasonReasonAJ">你正在使用 32 位的操作系统，这会导致 麦恩克拉夫特无法使用所需的内存，进而造成崩溃。
         
 你或许只能重装 64 位的操作系统来解决此问题。
 如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……</s:String>
@@ -1920,7 +1919,7 @@
 该问题只在特定 OptiFine 版本中出现，你可以尝试更换 OptiFine 的版本。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBM">你的显卡驱动存在问题，或未使用独立显卡，导致游戏无法正常运行。
         
-如果你的电脑存在独立显卡，请使用独立显卡而非 Intel 核显启动 PCL 与 Minecraft。
+如果你的电脑存在独立显卡，请使用独立显卡而非 Intel 核显启动 PCL 与麦恩克拉夫特。
 如果问题依然存在，请尝试升级你的显卡驱动到最新版本，或回退到出厂版本。
 如果还是不行，还可以尝试使用 8.0.51 或更低版本的 Java。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBN">你的显卡驱动存在问题，导致游戏无法正常运行。
@@ -1979,7 +1978,7 @@
     <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">重新打开网页</s:String>
     <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">复制代码</s:String>
     <s:String x:Key="LangMyMsgLoginHintInitFail">登录弹窗初始化失败</s:String>
-    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">登录 Minecraft</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">登录麦恩克拉夫特</s:String>
     <s:String x:Key="LangMyMsgLoginDialogContent">登录网页将自动开启，请在网页中输入 {0}（已自动复制）。
 
 

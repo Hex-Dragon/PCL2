@@ -1,10 +1,10 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">Canceled!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
-    <s:String x:Key="LangResourcePack">Resource Pack</s:String>
+    <s:String x:Key="LangResourcePack">Resource Packs</s:String>
     <s:String x:Key="LangDialogBtnYes">Yes</s:String>
     <s:String x:Key="LangDialogBtnNo">No</s:String>
     <s:String x:Key="LangComma">, </s:String>
@@ -1587,7 +1587,7 @@ It is not easy developing alone to be honest (sadly)...</s:String>
 If you enjoy Minecraft, consider support the game developer by purchase it, making the game is not a piece of cake...
 After logging in with your Microsoft account once, this hint will not appear again.</s:String>
     <s:String x:Key="LangModLaunchDialogTitleBuyMc">Purchase the Game?</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1BuyMc">Purchase</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1BuyMc">Support Microsoft games!</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2BuyMc">Next Time</s:String>
     <s:String x:Key="LangModLaunchUnknownLoginMethod">Unknown Login Method</s:String>
     <s:String x:Key="LangModLaunchLogin">Login</s:String>
@@ -1647,7 +1647,8 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">Demo</s:String>
     <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">Back</s:String>
     <s:String x:Key="LangModLaunchHintPlayInDemo">The game will start in demo mode!</s:String>
-    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">Please select "Other login methods" when logging in, then choose "Use my password". If that option is not available, please select "Set password", and log in after setting it.</s:String>
+    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">Please select "Other login methods" when logging in, then choose "Use my password".
+If that option is not available, please select "Set password", and log in after setting it.</s:String>
     <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">Password login required</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">Re-login</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">Set password</s:String>

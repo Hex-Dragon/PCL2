@@ -1,10 +1,10 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">Cancelled!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
-    <s:String x:Key="LangResourcePack">Resource Pack</s:String>
+    <s:String x:Key="LangResourcePack">Resource Packs</s:String>
     <s:String x:Key="LangDialogBtnYes">Yes</s:String>
     <s:String x:Key="LangDialogBtnNo">No</s:String>
     <s:String x:Key="LangComma">, </s:String>
@@ -1351,7 +1351,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftExceptionJsonNotFound">Version JSON file not found: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonIncorrect">Version JSON file is incorrect, content: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionDependencyNestingAppears">Nesting appears in version dependencies: {0}</s:String>
-    <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">Version JSON is non-standard. ({0})</s:String>
+    <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">Failed to initialize the initial version JSON. ({0})</s:String>
     <s:String x:Key="LangModMinecraftVersionPre">Pre-release</s:String>
     <s:String x:Key="LangModMinecraftVersionRC">Release Candidate</s:String>
     <s:String x:Key="LangModMinecraftVersionExperimental">Experimental Snapshot</s:String>
@@ -1380,7 +1380,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftExceptionSkinNoData">Skin return value does not contain skin data item, possibly a user without a custom skin set.</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinNotSet">User has not set a custom skin.</s:String>
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">This version does not have asset file index information.</s:String>
-    <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Assets index file not found.</s:String>
+    <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Asset Index not found.</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">Unexpected result. ({0})</s:String>
     <!--ModComp-->
     <s:String x:Key="LangModCompModSuitFor">Available for</s:String>
@@ -1587,7 +1587,7 @@ It is not easy developing alone to be honest (sadly)...</s:String>
 If you enjoy Minecraft, consider support the game developer by purchase it, making the game is not a piece of cake...
 After logging in with your Microsoft account once, this hint will not appear again.</s:String>
     <s:String x:Key="LangModLaunchDialogTitleBuyMc">Purchase the Game?</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1BuyMc">Purchase</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1BuyMc">Support Microsoft games!</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2BuyMc">Next Time</s:String>
     <s:String x:Key="LangModLaunchUnknownLoginMethod">Unknown Login Method</s:String>
     <s:String x:Key="LangModLaunchLogin">Login</s:String>
