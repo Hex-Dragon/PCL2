@@ -470,6 +470,11 @@
             Dim IndexOfLoader As Integer = McModLoader.Output.IndexOf(ModEntity)
             McModLoader.Output.RemoveAt(IndexOfLoader)
             McModLoader.Output.Insert(IndexOfLoader, NewModEntity)
+            If SearchResult IsNot Nothing Then
+                Dim IndexOfResult As Integer = SearchResult.IndexOf(ModEntity)
+                SearchResult.Remove(ModEntity)
+                SearchResult.Insert(IndexOfResult, NewModEntity)
+            End If
             '更改 UI 中的列表
             Dim NewItem As MyLocalModItem = McModListItem(NewModEntity)
             ModItems(ModEntity.RawFileName) = NewItem
@@ -574,7 +579,14 @@
                 '结果提示
                 Select Case Loader.State
                     Case LoadState.Finished
-                        Hint(If(FinishedFileNames.Count > 1, $"已成功更新 {FinishedFileNames.Count} 个 Mod！", $"已成功更新：{FinishedFileNames.Single}"), HintType.Finish)
+                        Select Case FinishedFileNames.Count
+                            Case 0 '一般是由于 Mod 文件被占用，然后玩家主动取消
+                                Log($"[Mod] 没有 Mod 被成功更新")
+                            Case 1
+                                Hint($"已成功更新 {FinishedFileNames.Single}！", HintType.Finish)
+                            Case Else
+                                Hint($"已成功更新 {FinishedFileNames.Count} 个 Mod！", HintType.Finish)
+                        End Select
                     Case LoadState.Failed
                         Hint("Mod 更新失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
                     Case LoadState.Aborted

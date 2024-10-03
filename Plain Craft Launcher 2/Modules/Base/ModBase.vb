@@ -12,13 +12,13 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.7" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.7." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.8.8" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.8.8." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
 #If BETA Then
-    Public Const VersionCode As Integer = 336 'Release
+    Public Const VersionCode As Integer = 340 'Release
 #Else
-    Public Const VersionCode As Integer = 337 'Snapshot
+    Public Const VersionCode As Integer = 339 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1845,6 +1845,13 @@ RetryDir:
 #Region "系统"
 
     ''' <summary>
+    ''' 指示接取到这个异常的函数进行重试。
+    ''' </summary>
+    Public Class RetryException
+        Inherits Exception
+    End Class
+
+    ''' <summary>
     ''' 当前程序是否拥有管理员权限。
     ''' </summary>
     Public Function IsAdmin() As Boolean
@@ -2432,6 +2439,14 @@ Retry:
         Dim bounds As Rect = element.TransformToAncestor(FrmMain).TransformBounds(New Rect(0, 0, element.ActualWidth, element.ActualHeight))
         Dim rect As New Rect(0, 0, FrmMain.ActualWidth, FrmMain.ActualHeight)
         Return rect.Contains(bounds.TopLeft) OrElse rect.Contains(bounds.BottomRight)
+    End Function
+
+    ''' <summary>
+    ''' 控件是否受到 TextTrimming 属性影响，导致内容被截取。
+    ''' </summary>
+    <Extension> Public Function IsTextTrimmed(Control As TextBlock) As Boolean
+        Control.Measure(New Size(Double.MaxValue, Double.MaxValue))
+        Return Control.DesiredSize.Width > Control.ActualWidth
     End Function
 
 #End Region

@@ -210,8 +210,8 @@ Public Class Application
                 If AssemblyImazenWebp Is Nothing Then
                     Log("[Start] 加载 DLL：Imazen.WebP")
                     AssemblyImazenWebp = Assembly.Load(GetResources("Imazen_WebP"))
-                    SetDllDirectory(PathTemp)
-                    File.WriteAllBytes(PathTemp & "libwebp.dll", GetResources("libwebp64"))
+                    SetDllDirectory(GetPureAsciiDir())
+                    File.WriteAllBytes(GetPureAsciiDir() & "\libwebp.dll", GetResources("libwebp64"))
                 End If
                 Return AssemblyImazenWebp
             End SyncLock

@@ -56,6 +56,9 @@
         }, "MyMsgBox " & Uuid)
     End Sub
 
+    '实现回车和 Esc 的接口（#4857）
+    Public Sub Btn1_Click() Handles Btn1.Click
+    End Sub
     Public Sub Btn3_Click() Handles Btn3.Click
         Finished(New ThreadInterruptedException)
     End Sub
@@ -93,7 +96,7 @@
     End Sub
 
     Private Sub WorkThread()
-        Thread.Sleep(4000)
+        Thread.Sleep(3000)
         If MyConverter.IsExited Then Exit Sub
         OpenWebsite(Website)
         ClipboardSet(UserCode)
@@ -122,12 +125,15 @@
                 ElseIf ex.Message.Contains("expired_token") Then
                     Finished(New Exception("$登录用时太长啦，重新试试吧！"))
                     Return
+                ElseIf ex.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
+                    Finished(New RetryException)
+                    Return
                 ElseIf ex.Message.Contains("authorization_pending") Then
-                    Thread.Sleep(1000)
+                    Thread.Sleep(2000)
                 ElseIf UnknownFailureCount <= 2 Then
                     UnknownFailureCount += 1
                     Log(ex, $"登录轮询第 {UnknownFailureCount} 次失败")
-                    Thread.Sleep(1000)
+                    Thread.Sleep(2000)
                 Else
                     Finished(New Exception("登录轮询失败", ex))
                     Return

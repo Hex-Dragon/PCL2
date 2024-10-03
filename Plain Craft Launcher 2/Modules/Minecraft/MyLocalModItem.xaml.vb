@@ -539,7 +539,7 @@ RetryStart:
             '压缩 Subtitle
             ColumnSubtitle.Width = New GridLength(1, GridUnitType.Star)
             ColumnExtend.Width = New GridLength(0, GridUnitType.Pixel)
-        ElseIf Not ColumnExtend.Width.IsStar AndAlso ColumnSubtitle.ActualWidth > LabSubtitle.ActualWidth + 10 Then
+        ElseIf Not ColumnExtend.Width.IsStar AndAlso Not LabSubtitle.IsTextTrimmed Then
             '向右展开 Subtitle
             ColumnSubtitle.Width = GridLength.Auto
             ColumnExtend.Width = New GridLength(1, GridUnitType.Star)
