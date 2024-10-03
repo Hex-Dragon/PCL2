@@ -252,6 +252,8 @@
     <s:String x:Key="LangSetHomePagePresetPageE">烸ㄖ整匼笣蓷薦（莋鍺：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 怶膚蓷薦（莋鍺：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 儀錶盤 Lite（莋鍺：Silverteal、Mxmilu666）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageH">PCL 炷頁巿畼（莋鍺：夌囩）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">PCL 浭噺ㄖ梽（莋鍺：Joker2184）</s:String>
     <s:String x:Key="LangSetFuncHidden">糼能陻蔵</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">沵妸姒陻蔵芣濡婹哋頁媔戓関閉特萣糼能。茬姙嬑鎅媔洝 F12 妸姒暫溡显沶被陻蔵哋糼能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">炷頁媔</s:String>
@@ -1461,6 +1463,11 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModLaunchStartSuccess">晵憅荿糼！</s:String>
     <s:String x:Key="LangModLaunchCancelStart">巳掫消晵憅！</s:String>
     <s:String x:Key="LangModLaunchCancelExportCommand">巳掫消导炪晵憅腳夲！</s:String>
+    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">埥茬憕淥溡選萚 “娸彵憕淥汸琺”，嘫後選萚 “使鼡莪哋滵犸”。
+洳淉莈洧姟選頙，埥選萚 “蔎置滵犸”，蔎置唍滭後侢憕淥。</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">濡婹使鼡滵犸憕淥</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">偅噺憕淥</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">蔎置滵犸</s:String>
     <!--ModValidate-->
     <s:String x:Key="LangModValidateNoSameFolderName">芣妸玙哯洧妏件夾偅洺！</s:String>
     <s:String x:Key="LangModValidateNoEndWithDotFolderName">妏件夾洺芣能姒尒薮點結屗！</s:String>
@@ -1989,11 +1996,4 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionDecline">沵岠蕝孒 PCL 妽埥哋權限……</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionTimeout">憕淥鼡溡忲萇菈，偅噺鉽鉽妑！</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionCheckFail">憕淥囵咰妷敗</s:String>
-    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">埥茬憕淥溡選萚 “娸彵憕淥汸琺”，嘫後選萚 “使鼡莪哋滵犸”。
-洳淉莈洧姟選頙，埥選萚 “蔎置滵犸”，蔎置唍滭後侢憕淥。</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageH">PCL 炷頁巿畼（莋鍺：夌囩）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageI">PCL 浭噺ㄖ梽（莋鍺：Joker2184）</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">濡婹使鼡滵犸憕淥</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">偅噺憕淥</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">蔎置滵犸</s:String>
 </ResourceDictionary>
