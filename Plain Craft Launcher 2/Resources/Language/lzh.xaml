@@ -1798,12 +1798,12 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
 直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。
 
 请删除 Mod 文件夹中已被解压的 Mod，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAB">Minecraft 内存不足，导致其无法继续运行。
-这很可能是因为电脑内存不足、游戏分配的内存不足，或是配置要求过高。
-            
-你可以尝试在 更多 → 百宝箱 中选择 内存优化，然后再启动游戏。
-如果还是不行，请在启动设置中增加为游戏分配的内存，并删除配置要求较高的材质、Mod、光影。
-如果依然不奏效，请在开始游戏前尽量关闭其他软件，或者……换台电脑？</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAB">Minecraft 記憶體不足，導致其無法繼續執行。
+這很可能是因為電腦記憶體不足、遊戲分配的記憶體不足，或是配置要求過高。
+
+你可以嘗試在「更多 → 百寶箱」中選擇「記憶體最佳化」，然後再啟動遊戲。
+如果還是不行，請在啟動設定中增加為遊戲分配的記憶體，並刪除配置要求較高的紋理、模組、光影。
+如果依然不起作用，請在開始遊戲前盡量關閉其他軟件，或者……換台電腦？</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAC">游戏因为使用 Open J9 而崩溃了。
 请在启动设置的 Java 选择一项中改用非 OpenJ9 的 Java，然后再启动游戏。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAD">游戏似乎因为使用 JDK，或 Java 版本过高而崩溃了。
@@ -1818,14 +1818,14 @@ PCL 不支持其他亂七八糟的下載協議。</s:String>
 请尝试修改 Mod 文件名，让它只包含英文字母、数字、减号（-）、下划线（_）和小数点，然后再启动游戏。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAH">由于缺失 MixinBootstrap，导致游戏崩溃。
 请尝试安装 MixinBootstrap。若安装后依然崩溃，可以尝试在文件名前添加英文感叹号。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAI">你似乎正在使用 32 位 Java，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。
-        
-请在启动设置的 Java 选择一项中改用 64 位的 Java 再启动游戏，然后再启动游戏。
-如果你没有安装 64 位的 Java，你可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAJ">你正在使用 32 位的操作系统，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。
-        
-你或许只能重装 64 位的操作系统来解决此问题。
-如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAI">你似乎正在使用 32 位元的 Java，這會導致 Minecraft 無法使用所需的記憶體，進而造成崩潰。
+
+請在啟動設定的 Java 選擇一項中改用 64 位元的 Java 再啟動遊戲。
+如果你沒有安裝 64 位元的 Java，你可以從網絡中下載、安裝一個。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAJ">你正在使用 32 位元的作業系統，這會導致 Minecraft 無法使用所需的記憶體，進而造成崩潰。
+
+你或許只能重裝 64 位元的作業系統來解決此問題。
+如果你的電腦在 2GB 以內，那或許只能換台電腦了……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAK">由于未满足 Mod 的依赖项，导致游戏退出。
 未满足的依赖项：
  - {0}
