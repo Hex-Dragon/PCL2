@@ -14,7 +14,7 @@
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">緩衝資料夾不可用</s:String>
     <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL 無法訪問緩衝資料夾，可能導致程式出錯或無法正常使用。
 錯誤原因：{0}</s:String>
-    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手動設置的緩衝資料夾不可用，PCL 將使用預設緩衝資料夾。
+    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手動設定的緩衝資料夾不可用，PCL 將使用預設緩衝資料夾。
 錯誤原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">環境警吿</s:String>
     <s:String x:Key="LangApplicationDialogContentRunInTemp">請將 PCL 從壓縮檔案中解壓縮，或是更換資料夾後再繼續使用！
@@ -1804,12 +1804,12 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 如果還是不行，請在啟動設定中增加為遊戲分配的記憶體，並刪除配置要求較高的材質、模組、光影。
 如果依然不起作用，請在開始遊戲前盡量關閉其他軟件，或者……換台電腦？</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAC">遊戲因為使用 Open J9 而崩潰了。
-請在啟動設置的 Java 選擇一項中改用非 OpenJ9 的 Java，然後再啟動遊戲。</s:String>
+請在啟動設定的 Java 選擇一項中改用非 OpenJ9 的 Java，然後再啟動遊戲。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAD">遊戲似乎因為使用 JDK，或 Java 版本過高而崩潰了。
-請在啟動設置的 Java 選擇一項中改用 JRE 8（Java 8），然後再啟動遊戲。
+請在啟動設定的 Java 選擇一項中改用 JRE 8（Java 8），然後再啟動遊戲。
 如果你沒有安裝 JRE 8，你可以從網絡中下載、安裝一個。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAE">遊戲似乎因為你所使用的 Java 版本過高而崩潰了。
-請在啟動設置的 Java 選擇一項中改用較低版本的 Java，然後再啟動遊戲。
+請在啟動設定的 Java 選擇一項中改用較低版本的 Java，然後再啟動遊戲。
 如果沒有，可以從網絡中下載、安裝一個。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAF">遊戲與你目前使用的 Java 不相容。
 如果沒有合適的 Java，可以從網絡中下載、安裝一個。</s:String>
@@ -1819,7 +1819,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 請嘗試安裝 MixinBootstrap。若安裝後依然崩潰，可以嘗試在檔案名前添加英文驚嘆號。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAI">你似乎正在使用 32 位元的 Java，這會導致 Minecraft 無法使用所需的記憶體，進而造成崩潰。
 
-請在啟動設置的 Java 選擇一項中改用 64 位元的 Java 再啟動遊戲。
+請在啟動設定的 Java 選擇一項中改用 64 位元的 Java 再啟動遊戲。
 如果你沒有安裝 64 位元的 Java，你可以從網絡中下載、安裝一個。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAJ">你正在使用 32 位元的作業系統，這會導致 Minecraft 無法使用所需的記憶體，進而造成崩潰。
 
@@ -1909,7 +1909,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* 事實上，你的遊戲沒有任何問題，這是你自己觸發的崩潰。
 * 你難道沒有更重要的事要做嗎？</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBJ">你所安裝的部分模組似乎需要使用 Java 11 啟動。
-請在啟動設置的 Java 選擇一項中改用 Java 11，然後再啟動遊戲。
+請在啟動設定的 Java 選擇一項中改用 Java 11，然後再啟動遊戲。
 如果你沒有安裝 Java 11，你可以從網絡中下載、安裝一個。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBK">程式返回了以下資訊：{0}</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBL">你所使用的 OptiFine 可能導致了你的遊戲出現問題。

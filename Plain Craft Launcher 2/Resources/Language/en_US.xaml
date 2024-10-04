@@ -18,7 +18,7 @@ Error Cause: {0}</s:String>
 Error Cause: {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Environment Warning</s:String>
     <s:String x:Key="LangApplicationDialogContentRunInTemp">Please extract PCL from the compressed file, or move it to a different folder before continuing to use!
-The program is currently running in a temporary folder, settings, saves, and other features may not be saved, and some features may not be available.</s:String>
+The program is currently running in a temporary folder, settings, saves, etc. may not be saved, and some features may not be available.</s:String>
     <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL and the newer version of Minecraft no longer support 32-bit systems, some features will not be available.
 It is highly recommended to reinstall the game after switching to a 64-bit system!</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">Initialization Error</s:String>
@@ -1957,13 +1957,13 @@ If no information is provided, consider reviewing the crash reports to identify 
 
 Please take appropriate actions based on the information provided.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric may have provided solutions. Please take appropriate actions based on the logs and crash reports.
-If no solution is provided, you can view the error report to understand how the error occurred.</s:String>
+If no solution is provided, you can view the crash reports to understand how the error occurred.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCA">Forge provided the following error information:
 {0}
 
 Please take appropriate actions based on the information provided.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge may have provided solutions. Please take appropriate actions based on the logs and crash reports.
-If no solution is provided, you can view the error report to understand how the error occurred.</s:String>
+If no solution is provided, you can view the crash reports to understand how the error occurred.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCC">The game crashed, but analysis is impossible because PCL was unable to locate the related log files.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL received an error reason without detailed information ({0}). Please submit feedback to the author to get the detailed information.</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">Additionally, </s:String>
