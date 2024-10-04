@@ -1065,7 +1065,7 @@ NextStack:
             End Select
         Next
 
-        Return Join(Results, "\n\n此外，").
+        Return Join(Results, "\n\n" & GetLang("LangModCrashCrashReasonDialogContentAdditional")).
                     Replace("\n", vbCrLf).
                     Replace("\h", "").
                     Replace("\e", If(IsHandAnalyze, "", vbCrLf & GetLang("LangModCrashCrashReasonDialogContentViewLogTip"))).
