@@ -1908,7 +1908,7 @@ Consider reinstalling the Forge instance from the beginning, instead of relying 
 * Don't you have other important things to do?</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBJ">Some mods require Java 11 to launch.
 Consider selecting Java 11 in 'Settings → Launch → Java' and relaunch the game.
-Download and install one on the internet if you do not have JAVA 11 installed.</s:String>
+Download and install one on the internet if you do not have Java 11 installed.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBK">The game returned the following information: {0}</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBL">OptiFine might be the source of the issues.
 

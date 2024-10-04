@@ -700,7 +700,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageLoginAuthSkinChanging">正在嘗試更換，請稍候！</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChangeFail">更換角色失敗</s:String>
     <!--PageLoginLegacy-->
-    <s:String x:Key="LangPageLoginLegacySpecialCharacters">玩家名如果包含英文、數字、下劃線以外的內容，可能會無法進入 Minecraft 1.18 以後的世界！</s:String>
+    <s:String x:Key="LangPageLoginLegacySpecialCharacters">玩家名如果包含英文、數字、底線以外的內容，可能會無法進入 Minecraft 1.18 以後的世界！</s:String>
     <s:String x:Key="LangPageLoginLegacyID">遊戲使用者名稱</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">玩家名不能為空！</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">玩家名不能包含英文引號！</s:String>
@@ -1432,7 +1432,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogTitle">回報提交提醒</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">開啟資料夾</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">不需要</s:String>
-    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">你的 PCL 不是最新版，因此無法提交回饋。
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">你的 PCL 不是最新版，因此無法提交回報。
 請在更新後，確認該問題在最新版中依然存在，然後再提交回報。</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">更新</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">無法提交回報</s:String>
@@ -1802,7 +1802,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 這很可能是因為電腦記憶體不足、遊戲分配的記憶體不足，或是配置要求過高。
 
 你可以嘗試在「更多 → 百寶箱」中選擇「記憶體最佳化」，然後再啟動遊戲。
-如果還是不行，請在啟動設定中增加為遊戲分配的記憶體，並刪除配置要求較高的材質、模組、光影。
+如果還是不行，請在啟動設定中增加為遊戲分配的記憶體，並刪除配置要求較高的紋理、模組、光影。
 如果依然不起作用，請在開始遊戲前盡量關閉其他軟體，或者……換台電腦？</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAC">遊戲因為使用 Open J9 而崩潰了。
 請在啟動設定的 Java 選擇一項中改用非 OpenJ9 的 Java，然後再啟動遊戲。</s:String>
@@ -1815,7 +1815,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAF">遊戲與你目前使用的 Java 不相容。
 如果沒有合適的 Java，可以從網路中下載、安裝一個。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAG">由於有模組的名稱包含特殊字元，導致遊戲崩潰。
-請嘗試修改模組檔案名，讓它只包含英文字母、數字、減號（-）、下劃線（_）和小數點，然後再啟動遊戲。</s:String>
+請嘗試修改模組檔案名，讓它只包含英文字母、數字、減號（-）、底線（_）和小數點，然後再啟動遊戲。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAH">由於缺失 MixinBootstrap，導致遊戲崩潰。
 請嘗試安裝 MixinBootstrap。若安裝後依然崩潰，可以嘗試在檔案名前添加英文驚嘆號。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAI">你似乎正在使用 32 位元 Java，這會導致 Minecraft 無法使用所需的記憶體，進而造成崩潰。
@@ -1926,13 +1926,13 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 請嘗試升級你的顯示卡驅動到最新版本，或回退到出廠版本，然後再啟動遊戲。
 如果還是不行，可以嘗試使用 8.0.51 或更低版本的 Java。
 如果問題依然存在，那麼你可能需要換個更好的顯示卡……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBO">你所使用的材質解析度過高，或顯示卡配置不足，導致遊戲無法繼續執行。
+    <s:String x:Key="LangModCrashCrashReasonReasonBO">你所使用的紋理解析度過高，或顯示卡配置不足，導致遊戲無法繼續執行。
 
-如果你正在使用高畫質材質，請將它移除。
-如果你沒有使用材質，那麼你可能需要更新顯示卡驅動，或者換個更好的顯示卡……</s:String>
+如果你正在使用高畫質紋理，請將它移除。
+如果你沒有使用紋理，那麼你可能需要更新顯示卡驅動，或者換個更好的顯示卡……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBP">由於 Night Config 存在問題，導致了遊戲崩潰。
 你可以嘗試安裝 Night Config Fixes 模組，這或許能解決此問題。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBQ">你所使用的光影或材質導致遊戲出現了一些問題……
+    <s:String x:Key="LangModCrashCrashReasonReasonBQ">你所使用的光影或紋理導致遊戲出現了一些問題……
 
 請嘗試刪除你所添加的這些額外資源。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBR">你所安裝的模組過多，超出了遊戲的 ID 限制，導致了遊戲崩潰。
@@ -1967,7 +1967,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge 可能已經提供了錯誤資訊，請根據錯誤報告中的日誌資訊進行對應處理，如果看不懂英文可以使用翻譯軟體。
 如果沒有看到報錯資訊，可以檢視錯誤報告瞭解錯誤具體是如何發生的。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCC">你的遊戲出現了一些問題，但 PCL 未能找到相關記錄檔案，因此無法進行分析。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL 獲取到了沒有詳細資訊的錯誤原因（{0}），請向 PCL 作者提交回饋以獲取詳情。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL 獲取到了沒有詳細資訊的錯誤原因（{0}），請向 PCL 作者提交回報以獲取詳情。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">此外，</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">你可以檢視錯誤報告瞭解錯誤具體是如何發生的。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">如果要尋求幫助，請向他人發送錯誤報告檔案，而不是發送這個視窗的截圖。</s:String>
