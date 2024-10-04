@@ -55,12 +55,12 @@ Module Modi18n
     ''' <returns></returns>
     Public Function GetLocalTimeFormat(Time As DateTime) As String
         Select Case Lang
-            Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME", "ja_JP", "ko_KR" '2024/08/16 11:47
+            Case "ja_JP", "ko_KR", "lzh", "zh_CN", "zh_HK", "zh_MARS", "zh_MEME", "zh_TW" '2024/08/16 11:47
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
-            Case "en_GB", "es_ES", "fr_FR", "ru_RU", "el_GR" '11:47 16/08/2024
-                Return Time.ToString("dd'/'MM'/'yyyy HH':'mm")
-            Case Else 'en_US 11:47 08/16/2024
+            Case "en_US" '11:47 08/16/2024
                 Return Time.ToString("MM'/'dd'/'yyyy HH':'mm")
+            Case Else '11:47 16/08/2024
+                Return Time.ToString("dd'/'MM'/'yyyy HH':'mm")
         End Select
     End Function
 
@@ -113,7 +113,8 @@ Module Modi18n
             {"fr-", "fr_FR"},
             {"ja-", "ja_JP"},
             {"ko-", "ko_KR"},
-            {"ru-", "ru_RU"}
+            {"ru-", "ru_RU"},
+            {"sk-", "sk_SK"}
         }
 
         For Each prefixPair In PrefixMap

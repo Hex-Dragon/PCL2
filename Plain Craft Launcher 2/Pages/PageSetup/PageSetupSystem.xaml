@@ -170,7 +170,7 @@
                         <local:MyComboBoxItem Content="한국어 (대한민국)" Tag="ko_KR" FontFamily="Resources/#PCL English, Segoe UI, Malgun Gothic"/>
                         <local:MyComboBoxItem Content="文言 (華夏)" Tag="lzh" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
                         <local:MyComboBoxItem Content="Русский (Россия)" Tag="ru_RU" FontFamily="Segoe UI, Resources/#PCL English, Microsoft YaHei UI"/>
-                        <local:MyComboBoxItem Content="Slovenčina" Tag="sk_SK" FontFamily="Segoe UI, Resources/#PCL English, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="Slovenčina (Slovensko)" Tag="sk_SK" FontFamily="Segoe UI, Resources/#PCL English, Microsoft YaHei UI"/>
                         <local:MyComboBoxItem Content="简体中文 (中国大陆)" Tag="zh_CN" IsSelected="True" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
                         <local:MyComboBoxItem Content="繁體中文 (香港特別行政區)" Tag="zh_HK" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
                         <local:MyComboBoxItem Content="焱暒妏" Tag="zh_MARS" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
