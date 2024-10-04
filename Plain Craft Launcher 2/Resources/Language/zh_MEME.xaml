@@ -1801,9 +1801,9 @@
 请删除 Mod 文件夹中已被解压的 Mod，然后再启动游戏。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAB">麦恩克拉夫特内存不足，导致其无法继续运行。
 这很可能是因为电脑内存不足、游戏分配的内存不足，或是配置要求过高。
-            
-你可以尝试在 更多 → 百宝箱 中选择 内存优化，然后再启动游戏。
-如果还是不行，请在启动设置中增加为游戏分配的内存，并删除配置要求较高的材质、Mod、光影。
+
+你可以尝试在 更多 → 哆啦A梦 中选择 内存优化，然后再启动游戏。
+如果还是不行，请在启动设置中增加为游戏分配的内存，并删除配置要求较高的材质、模组、光影。
 如果依然不奏效，请在开始游戏前尽量关闭其他软件，或者……换台电脑？</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAC">游戏因为使用 Open J9 而崩溃了。
 请在启动设置的 Java 选择一项中改用非 OpenJ9 的 Java，然后再启动游戏。</s:String>
@@ -1819,12 +1819,12 @@
 请尝试修改 Mod 文件名，让它只包含英文字母、数字、减号（-）、下划线（_）和小数点，然后再启动游戏。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAH">由于缺失 MixinBootstrap，导致游戏崩溃。
 请尝试安装 MixinBootstrap。若安装后依然崩溃，可以尝试在文件名前添加英文感叹号。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAI">你似乎正在使用 32 位 Java，这会导致 麦恩克拉夫特无法使用所需的内存，进而造成崩溃。
-        
-请在启动设置的 Java 选择一项中改用 64 位的 Java 再启动游戏，然后再启动游戏。
-如果你没有安装 64 位的 Java，你可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAJ">你正在使用 32 位的操作系统，这会导致 麦恩克拉夫特无法使用所需的内存，进而造成崩溃。
-        
+    <s:String x:Key="LangModCrashCrashReasonReasonAI">你似乎正在使用 32 位爪哇，这会导致麦恩克拉夫特无法使用所需的内存，进而造成崩溃。
+
+请在启动设置的爪哇选择一项中改用 64 位的爪哇再启动游戏，然后再启动游戏。
+如果你没有安装 64 位的爪哇，你可以从网络中下载、安装一个。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAJ">你正在使用 32 位的操作系统，这会导致麦恩克拉夫特无法使用所需的内存，进而造成崩溃。
+
 你或许只能重装 64 位的操作系统来解决此问题。
 如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAK">由于未满足 Mod 的依赖项，导致游戏退出。
