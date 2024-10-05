@@ -1835,7 +1835,7 @@
     <s:String x:Key="LangModCrashCrashReasonReasonAL">由于未满足 Mod 的依赖项，导致游戏退出。
 请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAM">你的游戏遇到了一些问题，PCL 为此找到了一个可疑的关键词：{0}。
-        
+
 如果你知道某个关键词对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAN">你的游戏遇到了一些问题，PCL 为此找到了以下可疑的关键词：
  - {0}
