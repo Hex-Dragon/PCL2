@@ -95,9 +95,9 @@ You can modify the login method in "Properties → Settings → Server".</s:Stri
     <s:String x:Key="LangThemeUnlockCopyTip8">After the accumulated sponsorship reaches ¥23.33, message the term "解锁码" (Unlock Code) to the developer on Afdian to unlock.
 Right-click to open the sponsorship page and support PCL if you think it is doing a good job =w=!</s:String>
     <s:String x:Key="LangThemeUnlockTip8">After the accumulated sponsorship reaches ¥23.33, message the term "解锁码" (Unlock Code) to the developer on Afdian to unlock.</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (Resolved) (right-click to open the feedback page);
+    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (Resolved) (right-click to open the feedback page).
 · Submit a pull request to the Help Center repository then unlock after LTCat merge.</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (Resolved);
+    <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (Resolved).
 · Submit a pull request to the Help Center repository then unlock after LTCat merge.</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">There is an exception in the Personalization settings and has been automatically reset.</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">Error while loading the personalization settings.</s:String>
@@ -139,15 +139,15 @@ This operation is irrevocable. Are you sure?</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteFail">Failed to generate the documentation file</s:String>
     <s:String x:Key="LangHintCustomPageOverwriteSuccess">The documentation file has been generated!</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">The homepage has been refreshed!</s:String>
-    <s:String x:Key="LangDialogCustomPageTeachContent">1. Click the "Generate the Documentation" button, which will generate the "Custom.xaml" layout file under the PCL folder;
-2. Modify the file with tools like Notepad, remember to save it after the modification;
+    <s:String x:Key="LangDialogCustomPageTeachContent">1. Click the "Generate the Documentation" button, which will generate the "Custom.xaml" layout file under the PCL folder.
+2. Modify the file with tools like Notepad, remember to save it after the modification.
 3. Click the "Refresh Home" button to see what the homepage looks like now.
 You can directly refresh the homepage after generating the documentation file and make changes accordingly, which will be more helpful for understanding.
 You can also load the custom homepage file directly by dragging it into the PCL window.</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">Homepage Custom Tutorials</s:String>
     <s:String x:Key="LangThemeBackUnlock">The hidden theme "Xuansu Black" has been unlocked!</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameContent">1. Do not crawl or attack related services or websites, do not steal related accounts, no puzzles can or need to be solved;
-2. Relevant public information must not be tampered with or destroyed. Please try to keep it as it is;
+    <s:String x:Key="LangDialogThemeUnlockGameContent">1. Do not crawl or attack related services or websites, do not steal related accounts, no puzzles can or need to be solved.
+2. Relevant public information must not be tampered with or destroyed. Please try to keep it as it is.
 3. When you are feeling confused, "Echo Hole" may surprise you.
 
 If you violate the rules, you may be kicked out of any relevant group!</s:String>
@@ -211,7 +211,7 @@ It is not recommended enabling blur when making a modpack to ensure that PCL can
     <s:String x:Key="LangSetOpenFolder">Folder</s:String>
     <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">Put the background image in this folder, and PCL will randomly load one of them each time.</s:String>
     <s:String x:Key="LangSetBackgroundPicRefresh">Refresh</s:String>
-    <s:String x:Key="LangSetBackgroundPicRefreshToolTip">Randomly load an background image in the folder.</s:String>
+    <s:String x:Key="LangSetBackgroundPicRefreshToolTip">Randomly load a background image in the folder.</s:String>
     <s:String x:Key="LangSetBackgroundPicEmpty">Clear All</s:String>
     <s:String x:Key="LangSetBackgroundMusicTitle">Music</s:String>
     <s:String x:Key="LangSetBackgroundMusicPlayRandom">Shuffle Play</s:String>
@@ -252,7 +252,7 @@ If you have created a stable online homepage, you can click this tip to submit i
     <s:String x:Key="LangSetHomePagePresetPageE">Daily Modpack Recommendation (Author: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft Skin Recommendation (Author: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI Dashboard Lite (Authors: Silverteal, Mxmilu666)</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageH">PCL Homepage Market (Author: 凌云)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageH">PCL Homepage Market (Author: Lingyun)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageI">PCL Update Log (Author: Joker2184)</s:String>
     <s:String x:Key="LangSetFuncHidden">Feature Hiding</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">You can hide unnecessary pages or disable specific features. Press "F12" in any interface to show hidden features temporarily.</s:String>
@@ -827,11 +827,11 @@ The skin replacement in this way will only be visible to player itself in multip
     <s:String x:Key="LangPageSetupLaunchLaunchWindowTitle">Window Title</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleToolTip">Customize the title of the game window, without changing it if left blank.
 Supports the following alternate tags:
- · {user}: Username;
- · {login}: Login Method;
- · {name}: Instance Name;
- · {date}, {time}: System Time;
- · {version}: Vanilla Game Version.</s:String>
+ · {user}: Username
+ · {login}: Login Method
+ · {name}: Instance Name
+ · {date}, {time}: System Time
+ · {version}: Vanilla Game Version</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">Custom Text</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">This information will be displayed in the title screen and the debug screen.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">Instance Isolation</s:String>
@@ -847,11 +847,11 @@ If there are multiple instances with mods installed, it may cause mod conflicts.
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationAllToolTip">Saves, mods, resource packs, etc. are not interoperable between instances.
 This will cause saves that are not shared between Vanilla instances, so it is generally not recommended.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVisibility">Visibility</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameStart">Close immediately after the game launched.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameClose">Hide after the game started, close after the game closed.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityRestartOnGameClose">Hide after the game started, reopen after the game closed.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityMinimizeOnGameStart">Minimize after the game started.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityKeep">Remain unchanged.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameStart">Close immediately after the game launched</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityCloseOnGameClose">Hide after the game started, close after the game closed</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityRestartOnGameClose">Hide after the game started, reopen after the game closed</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityMinimizeOnGameStart">Minimize after the game started</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVisibilityKeep">Remain unchanged</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriority">Priority</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityHigh">High (Ensure game performance but may cause lag in another program)</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchGamePriorityMedium">Medium (Balanced)</s:String>
@@ -890,23 +890,23 @@ For example, typing "--demo" will launch the game in demo mode.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">Executes the specific command or program before Minecraft is launched. The syntax is same as the batch script.
 
 Relative paths can be implemented with the following alternate tags (paths end with "\" ):
- · {path}: The folder where the PCL is located;
- · {minecraft}: .minecraft Folder;
- · {verpath}: Instance Folder (.minecraft\versions\&lt;instance name&gt;\);
- · {verindie}: The instance folder when "Instance Isolation" is enabled, or the .minecraft folder when it is disable;
- · {java}: The folder of Java which used by the game.
+ · {path}: The folder where the PCL is located
+ · {minecraft}: .minecraft Folder
+ · {verpath}: Instance Folder (.minecraft\versions\&lt;instance name&gt;\)
+ · {verindie}: The instance folder when "Instance Isolation" is enabled, or the .minecraft folder when it is disable
+ · {java}: The folder of Java which used by the game
 
 In addition, the following alternate tags are also supported:
- · {user}: Username;
- · {login}: Login Method;
- · {uuid}: Player's UUID;
- · {name}: Instance Name;
- · {date}, {time}: System Time;
- · {version}: Vanilla Game Version.
+ · {user}: Username
+ · {login}: Login Method
+ · {uuid}: Player's UUID
+ · {name}: Instance Name
+ · {date}, {time}: System Time
+ · {version}: Vanilla Game Version
 
 For example:
- · [ {verpath}test.exe ] : Run the test.exe program in the instance folder;
- · [ "{java}java.exe" -jar "{verpath}test.jar" ] : Run the test.jar file in the example folder using Java;
+ · [ {verpath}test.exe ] : Run the test.exe program in the instance folder.
+ · [ "{java}java.exe" -jar "{verpath}test.jar" ] : Run the test.jar file in the example folder using Java.
  · [ notepad "{verindie}option.txt" ] : Use Notepad to open option.txt of this instance.
 
 It is best to put quotation marks (") around operations involving paths to avoid failures due to spaces in the path.
@@ -993,14 +993,14 @@ For example, when it is enabled, JEI will show that it supports all loaders, and
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage">Auto Adjust Game Language</s:String>
     <s:String x:Key="LangPageSetupSystemSystem">System</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdate">Update</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">Download the new version automatically.</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateB">Hint when a new version is available.</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateC">Hint only when a critical vulnerability update is found.</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateA">Download the new version automatically</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateB">Hint when a new version is available</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateC">Hint only when a critical vulnerability update is found</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateD">Disable</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncement">Announcement</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncementA">Show All</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncementAToolTip">Restricted to feature surveys, events etc.</s:String>
-    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncementB">Restricted to important notification.</s:String>
+    <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncementB">Restricted to important notification</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchAnnouncementC">Disable</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCacheFolder">Cache</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCacheFolderToolTip">Location of cache like download files and skins stored by PCL.
@@ -1031,7 +1031,7 @@ Download requirement can be assured when it is set to 64. Threads above 64 is NO
     <s:String x:Key="LangDialogBtnIC">I See</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNeedRestart">Some debugging information will be switched after refreshing or restarting the launcher!</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchDialogAnnouncementSilentContent">Choose this option means you will NOT be able to receive any announcement even if there are some fatal problems.
-For example, if some serious bug in the game is found in the future, unpredictable consequences may happen because of the ignoration.
+For example, if some serious bug in the game is found in the future, unpredictable consequences may happen due to the ignoration.
 
 In general, choose "Display announcements only when there are important notices" to avoid most disturbances.
 Unless you are making a modpack or updating the launcher often, this option is extremely NOT recommended!</s:String>
@@ -1093,7 +1093,7 @@ Notice that the contents of the two files are not the same.
 Delete or rename one of the files to continue.</s:String>
     <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusTitle">File Conflict Exists</s:String>
     <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">Failed to switch the mod status due to the occupation, please try again after the game is closed.</s:String>
-    <s:String x:Key="LangPageVersionModDialogUpdateModContent">Newer versions might NOT be compatible with older versions or other mods, which may cause game crashing or even save corruption!
+    <s:String x:Key="LangPageVersionModDialogUpdateModContent">Newer versions may NOT be compatible with older versions or other mods, which may cause game crashing or even save corruption!
 DO NOT update the mods in the modpack unless the author asks you to!
 Please backup the saves and check the change log of the mod first!
 Older versions will be move to the recycle bin just in case.
@@ -1192,8 +1192,8 @@ Since "Instance Isolation" is enabled for this instance, when you delete the ins
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">Delete Instance Confirmation</s:String>
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">The instance {0} has been deleted to the recycle bin!</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">The instance {0} has been permanently deleted!</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Please disable [Version Settings → Settings → Advanced Launch Options → Disable File Verification] before attempting to complete the files!</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Please disable [Settings → Advanced Launch Options → Disable File Verification] before attempting to complete the files!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Please close the "Properties → Settings → Advanced Launch Options → Disable File Verification" option first before attempting to repair the files!</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Please close the "Settings → Advanced Launch Options → Disable File Verification" option first before attempting to repair the files!</s:String>
     <!--PageVersionSetup-->
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">The instance settings have been initialized!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Failed to initialize the instance settings.</s:String>
@@ -1242,23 +1242,23 @@ If left as blank, the value of the global setting is used.</s:String>
 Executes the specific command or program before Minecraft is launched. The syntax is same as the batch script.
 
 Relative paths can be implemented with the following alternate tags (paths end with "\" ):
- · {path}: The folder where the PCL is located;
- · {minecraft}: .minecraft Folder;
- · {verpath}: Instance Folder (.minecraft\versions\&lt;instance name&gt;\);
- · {verindie}: The instance folder when "Instance Isolation" is enabled, or the .minecraft folder when it is disable;
- · {java}: The folder of Java which used by the game.
+ · {path}: The folder where the PCL is located
+ · {minecraft}: .minecraft Folder
+ · {verpath}: Instance Folder (.minecraft\versions\&lt;instance name&gt;\)
+ · {verindie}: The instance folder when "Instance Isolation" is enabled, or the .minecraft folder when it is disable
+ · {java}: The folder of Java which used by the game
 
 In addition, the following alternate tags are also supported:
- · {user}: Username;
- · {login}: Login Method;
- · {uuid}: Player's UUID;
- · {name}: Instance Name;
- · {date}, {time}: System Time;
- · {version}: Vanilla Game Version.
+ · {user}: Username
+ · {login}: Login Method
+ · {uuid}: Player's UUID
+ · {name}: Instance Name
+ · {date}, {time}: System Time
+ · {version}: Vanilla Game Version
 
 For example:
- · [ {verpath}test.exe ] : Run the test.exe program in the instance folder;
- · [ "{java}java.exe" -jar "{verpath}test.jar" ] : Run the test.jar file in the example folder using Java;
+ · [ {verpath}test.exe ] : Run the test.exe program in the instance folder.
+ · [ "{java}java.exe" -jar "{verpath}test.jar" ] : Run the test.jar file in the example folder using Java.
  · [ notepad "{verindie}option.txt" ] : Use Notepad to open option.txt of this instance.
 
 It is best to put quotation marks (") around operations involving paths to avoid failures due to spaces in the path.
@@ -1277,7 +1277,7 @@ If you have not modified the relevant files, please do not check this item.</s:S
     <s:String x:Key="LangModEventStartInstance">Launching {0}...</s:String>
     <s:String x:Key="LangModEventChoseAnInstance">Please select an instance first!</s:String>
     <s:String x:Key="LangModEventHomePageRefreshed">The homepage has been refreshed!</s:String>
-    <s:String x:Key="LangModEventDialogDownloadIncorrectContent">"EventData" must be a URL that starts with "http://" or "https://".
+    <s:String x:Key="LangModEventDialogDownloadIncorrectContent">"EventData" must be an URL that starts with "http://" or "https://".
 PCL does not support other topsy-turvy download protocols.</s:String>
     <s:String x:Key="LangModEventDialogEventFailTitle">Event Execution Failed</s:String>
     <s:String x:Key="LangModEventDialogUnknownEventContent">Unknown event type: {0}
@@ -1303,21 +1303,21 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMusicExceptionMusicRefreshFail">Failed to refresh background music.</s:String>
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL cannot create the "PCL" folder ({0}PCL), please try:
-1. Move PCL to another folder {1};
-2. Delete the "PCL" folder in the current directory and try again;
+1. Move PCL to another folder {1}.
+2. Delete the "PCL" folder in the current directory and try again.
 3. Right-click on PCL executable file and open "Properties → Compatibility → Run this program as an administrator".</s:String>
     <s:String x:Key="LangModSecretPermissionB">PCL does not have write permissions to the current folder. Please try: 
-1. Move PCL to another folder {0};
-2. Delete the "PCL" folder in the current directory and try again;
+1. Move PCL to another folder {0}.
+2. Delete the "PCL" folder in the current directory and try again.
 3. Right-click on PCL executable file and open "Properties → Compatibility → Run this program as an administrator".</s:String>
     <s:String x:Key="LangModSecretPermissionAddition">(Like folder beside C:\ and Desktop)</s:String>
     <s:String x:Key="LangModSecretPermissionError">Runtime Error</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">Open-source Version Notice</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">This version does not include the following features:
-- CurseForge API Call: Requires an API Key that you requested, and add to the "SecretHeadersSign" method;
-- Microsoft login: Require a Client ID that you requested and, add to the front of the "ModSecret.vb";
-- Update and Networking Notifications: To avoid potential abuse concerns;
-- Theme: This is a commemorative feature that requires sponsorship to unlock. Do not make the sponsors too sad...;
+- CurseForge API Call: Requires an API Key that you requested, and add to the "SecretHeadersSign" method.
+- Microsoft login: Require a Client ID that you requested and, add to the front of the "ModSecret.vb".
+- Update and Networking Notifications: To avoid potential abuse concerns.
+- Theme: This is a commemorative feature that requires sponsorship to unlock. Do not make the sponsors too sad...
 - Utilities: Some development tools were placed here during the early stages of development, and it was difficult to sort them out.</s:String>
     <s:String x:Key="LangModSecretHintNoTheme">The current version of PCL does not include the Theme feature...</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">The current version of PCL does not include the Update feature...</s:String>
@@ -1374,10 +1374,10 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModMinecraftSelectTitleSkin">Select Skin File</s:String>
     <s:String x:Key="LangModMinecraftExceptionUuidNoOnlineProfile">Offline UUID has no official skin file.</s:String>
     <s:String x:Key="LangModMinecraftExceptionEmptyUuid">UUID is empty.</s:String>
-    <s:String x:Key="LangModMinecraftExceptionEmptySkin">Skin return value is empty, possibly a user without a custom skin set.</s:String>
+    <s:String x:Key="LangModMinecraftExceptionEmptySkin">Skin return value is empty, possibly an user without a custom skin set.</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinTypeInvalid">Invalid skin address type: {0}</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinPropertyNotFound">No matching "Property" found in skin return value.</s:String>
-    <s:String x:Key="LangModMinecraftExceptionSkinNoData">Skin return value does not contain skin data item, possibly a user without a custom skin set.</s:String>
+    <s:String x:Key="LangModMinecraftExceptionSkinNoData">Skin return value does not contain skin data item, possibly an user without a custom skin set.</s:String>
     <s:String x:Key="LangModMinecraftExceptionSkinNotSet">User has not set a custom skin.</s:String>
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">This version does not have asset file index information.</s:String>
     <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Asset Index file not found.</s:String>
@@ -1431,8 +1431,8 @@ Game crashes are not related to the launcher commonly. Please do not submit feed
     <s:String x:Key="LangModBaseDialogUploadLogTitle">Submit Feedback Hint</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">Folder</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">No, thanks</s:String>
-    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Your PCL is not the latest version, so you cannot submit feedback.
-Please update and confirm that the issue still exists in the latest version before submitting feedback.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">PCL is not the latest version, feedback submittal is unsupportable.
+Please confirm that the issue persists in the latest version after updating, and then submit feedback.</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">Update</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Unable to Submit</s:String>
     <s:String x:Key="LangModBaseExceptionBadEnvironment">There is a problem with the runtime of PCL. Please try to reinstall the ".NET Framework 4.6.2" and then try again.</s:String>
@@ -1584,10 +1584,10 @@ It is not easy developing alone to be honest (sadly)...</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">Sponsor Now!</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2Sponsorship">But I Decline</s:String>
     <s:String x:Key="LangModLaunchDialogContentBuyMc">You have launched Minecraft for {0} times!
-If you enjoy Minecraft, consider support the game developer by purchase it, making the game is not a piece of cake...
+If you enjoy Minecraft, consider supporting the game developer by purchase it, making the game is not a piece of cake...
 After logging in with your Microsoft account once, this hint will not appear again.</s:String>
     <s:String x:Key="LangModLaunchDialogTitleBuyMc">Purchase the Game?</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1BuyMc">Purchase</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1BuyMc">Support!</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2BuyMc">Next Time</s:String>
     <s:String x:Key="LangModLaunchUnknownLoginMethod">Unknown Login Method</s:String>
     <s:String x:Key="LangModLaunchLogin">Login</s:String>
@@ -1607,7 +1607,7 @@ If the network environment is poor, it may be unable to load, check the internet
     <s:String x:Key="LangModLaunchDialogBtnRegister">Register</s:String>
     <s:String x:Key="LangModLaunchDialogBtnISee">I See</s:String>
     <s:String x:Key="LangModLaunchDialogContentBanned">This account appears to be banned by Microsoft and cannot login.</s:String>
-    <s:String x:Key="LangModLaunchDialogContentNoXBoxAccount">You have not registered an Xbox account yet, please try again after the registration.</s:String>
+    <s:String x:Key="LangModLaunchDialogContentNoXBoxAccount">You have not registered a Xbox account yet, please try again after the registration.</s:String>
     <s:String x:Key="LangModLaunchDialogContentUnableReachMicrosoft">The country or region where your network is located cannot login to Microsoft accounts.
 Please try to use a VPN.</s:String>
     <s:String x:Key="LangModLaunchDialogBtnIDK">I Don't Know</s:String>
@@ -1641,16 +1641,17 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">Missing "mainClass" in version JSON!</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">Unable to open Natives file ({0}), the file may be corrupted, please try to relaunch the game.</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">Slim model is unsupported in this version, your skin may appear as Classic model.</s:String>
-    <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">You must first log in with a valid account to play offline!</s:String>
+    <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">You must first log in with a Microsoft account to play in offline!</s:String>
     <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">Account Verification</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">Purchase</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">Demo</s:String>
     <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">Back</s:String>
     <s:String x:Key="LangModLaunchHintPlayInDemo">The game will start in demo mode!</s:String>
-    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">Please select "Other login methods" when logging in, then choose "Use my password". If that option is not available, please select "Set password", and log in after setting it.</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">Password login required</s:String>
+    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">Please select "Other login methods" when logging in, then choose "Use my password".
+If that option is not available, please select "Set password", and log in after setting it.</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">Password Login Required</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">Re-login</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">Set password</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">Set Password</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">Modpack File</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">Select Modpack File</s:String>
@@ -1783,205 +1784,205 @@ This will override the JSON and the JAR file, but will not affect the instance i
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">Download LiteLoader {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">Download Fabric {0}</s:String>
     <!--ModCrash-->
-    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">Error Report Analysis Result</s:String>
-    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft Encountered an Error</s:String>
-    <s:String x:Key="LangModCrashViewLog">View Log</s:String>
-    <s:String x:Key="LangModCrashExportCrashReport">Export Error Report</s:String>
-    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">Error Report Exported Successfully!</s:String>
-    <s:String x:Key="LangModCrashCrashReasonNoReason">Sorry, PCL cannot determine the cause of the error.</s:String>
+    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">Analysis Result</s:String>
+    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft Crashed</s:String>
+    <s:String x:Key="LangModCrashViewLog">Log</s:String>
+    <s:String x:Key="LangModCrashExportCrashReport">Export Crash Report</s:String>
+    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">Crash report exported successfully!</s:String>
+    <s:String x:Key="LangModCrashCrashReasonNoReason">Sorry, PCL cannot determine the cause of the crash.</s:String>
     <s:String x:Key="LangModCrashCrashReasonHelpTip">Sorry, your game encountered some problems...
-If you want to seek help, please export the error report and send it to others, instead of sending a screenshot of this window.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAA">The game crashed because the Mod file was unzipped, causing the game to be unable to continue running.
-You can simply put the entire Mod file into the Mod folder, if unzipped, it will cause the game to crash.
+If you are seeking assistance, please export the crash report instead of taking a screenshot of this window, and send it to others.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAA">The game crashed because the mod files have been extracted.
+Simply place the mod files into the folder without extracting them; otherwise, the game will crash.
 
-Please delete the unzipped Mods in the Mod folder, and then start the game.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAB">Minecraft ran out of memory, causing it to be unable to continue running.
-This is likely due to insufficient computer memory, insufficient memory allocated to the game, or high configuration requirements.
-            
-You can try to optimize memory in More → Toolbox, and then start the game.
-If it still doesn't work, please increase the memory allocated to the game in the startup settings, and delete high-requirement textures, Mods, and shaders.
-If it still doesn't work, please try to close other software before starting the game, or... change to another computer?</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAC">The game crashed because it was using Open J9.
-Please change to non-OpenJ9 Java in the Java selection of the startup settings, and then start the game.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAD">The game seems to have crashed because it was using JDK, or the Java version is too high.
-Please change to JRE 8 (Java 8) in the Java selection of the startup settings, and then start the game.
-If you don't have JRE 8 installed, you can download and install one from the internet.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAE">The game seems to have crashed because the Java version you are using is too high.
-Please change to a lower version of Java in the Java selection of the startup settings, and then start the game.
-If not, you can download and install one from the internet.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAF">The game is not compatible with the Java you are currently using.
-If there is no suitable Java, you can download and install one from the internet.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAG">The game crashed because a Mod's name contains special characters.
-Please try to modify the Mod file name, so that it only contains letters, numbers, hyphens (-), underscores (_), and periods, and then start the game.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAH">The game crashed because MixinBootstrap is missing.
-Please try to install MixinBootstrap. If it still crashes after installation, you can try to add an English exclamation mark in front of the file name.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAI">You seem to be using 32-bit Java, which can cause Minecraft to be unable to use the required memory, and then crash.
-        
-Please change to 64-bit Java in the Java selection of the startup settings, and then start the game.
-If you don't have 64-bit Java installed, you can download and install one from the internet.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAJ">You are using a 32-bit operating system, which can cause Minecraft to be unable to use the required memory, and then crash.
-        
-You may only be able to solve this problem by reinstalling a 64-bit operating system.
-If your computer has less than 2GB of memory, you may only be able to change to another computer...</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAK">The game exited because the Mod's dependencies were not met.
-Unmet dependencies:
+Launch the game when you have dealt with the mod file.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAB">The game crashed because Minecraft has exhausted its memory allocation.
+This is likely due to insufficient computer memory, insufficient memory allocated, or excessively high configuration requirements.
+
+Consider the "Memory Optimization" in "More → Utilities", and relaunching the game.
+If issues persist, consider increasing the memory allocation for the game in the launch settings, removing high-requirement textures, mods, and shaders.
+Should the problem continue, try to close other applications before launching the game, or... use a different computer?</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAC">The game crashed due to the use of Open J9.
+Switch to a non-OpenJ9 Java version in "Settings → Launch → Java" and relaunch the game.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAD">The game appears to have crashed due to the use of JDK or an excessively high Java version.
+Switch to JRE 8 (Java 8) in "Settings → Launch → Java" and relaunch the game.
+Download and install one on the internet if you do not have JRE 8 installed.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAE">The game appears to have crashed due to the use of excessively high Java version.
+Consider selecting a lower Java version in "Settings → Launch → Java" and relaunch the game.
+Download and install one on the internet if you do not have any installed.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAF">The game is incompatible with the Java version you are currently using.
+Download and install one on the internet if you do not have any suitable installed.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAG">The game crashed because the mod names contains special characters.
+Consider modifying the file names to include only letters, numbers, hyphens, underscores, and periods, then relaunch the game.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAH">The game crashed because the MixinBootstrap is missing.
+Consider installing MixinBootstrap. If the problem continues, try to add an exclamation mark at the beginning of the file name.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAI">The game crashed due to the use of a 32-bit Java, which can prevent Minecraft from accessing the necessary memory.
+
+Consider selecting a 64-bit Java in "Settings → Launch → Java" and relaunch the game.
+Download and install one on the internet if you do not have 64-bit Java installed.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAJ">The game crashed due to the use of a 32-bit operating system, which can prevent Minecraft from accessing the necessary memory.
+
+You may only resolve this issue by installing a 64-bit operating system.
+If your computer has less than 2GB of memory, you may need to consider using a different computer with more memory...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAK">The game exited due to the missing dependencies.
+Missing Dependencies:
  - {0}
-        
-Please take corresponding actions based on the above information. If you don't understand English, you can use translation software.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAL">The game exited due to unmet dependencies of the Mod.
-Please take corresponding actions based on the log information in the error report. If you don't understand English, you can use translation software.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAM">Your game encountered some issues, and PCL found a suspicious keyword: {0}.
-        
-If you know which Mod corresponds to this keyword, it might be causing the error. You can also view the error report for details.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAN">Your game encountered some issues, and PCL found the following suspicious keywords:
+
+Please take appropriate actions based on the information provided.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAL">The game exited due to the missing dependencies.
+Please take appropriate actions based on the logs and crash reports.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAM">The game encountered some issues, PCL identified a suspicious keyword: {0}.
+
+The error might be caused by the mod associated with the keyword. Consider viewing the crash report for detailed information.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAN">The game encountered some issues, PCL identified some suspicious keywords:
  - {0}
-        
-If you know which Mod corresponds to this keyword, it might be causing the error. You can also view the error report for details.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAO">PCL suspects that the Mod named {0} caused the game to crash, but cannot be certain.
-You can try disabling this Mod and then observe if the game still crashes.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAP">PCL suspects that the following Mods caused the game to crash, but cannot be certain:
+
+The error might be caused by the mod associated with the keywords. Consider viewing the crash report for detailed information.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAO">PCL suspects that the game crashed due to the mod {0}, but cannot be confirmed certainly.
+Consider disabling the mod and monitoring whether the game continues to crash.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAP">PCL suspects that the game crashed due to the following mods, but cannot be confirmed certainly:
  - {0}
-        
-You can try disabling these Mods one by one and then observe if the game still crashes.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAQ">The Mod named {0} caused the game to crash.
-You can try disabling this Mod and then observe if the game still crashes.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAR">The following Mods caused the game to crash:
+
+Consider disabling the mod and monitoring whether the game continues to crash.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAQ">The game crashed due to the mod {0}.
+Consider disabling the mod and monitoring whether the game continues to crash.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAR">The game crashed due to the following mods:
  - {0}
-        
-You can try disabling these Mods one by one and then observe if the game still crashes.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAS">The Mod named {0} failed to inject, causing the game to crash.
-This usually means it is incompatible with other Mods or the current environment, or it has a bug.
-You can try disabling this Mod and then observe if the game still crashes.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAT">The following Mods caused the game to crash:
+
+Consider disabling the mod and monitoring whether the game continues to crash.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAS">The game crashed because the mod {0} failed to inject.
+This typically indicates an incompatibility with other mods or the current environment, or it could be due to a bug.
+Consider disabling the mod and monitoring whether the game continues to crash.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAT">The game crashed due to the following mods:
   - {0}
-This usually means they are incompatible with other Mods or the current environment, or they have a bug.
-You can try disabling these Mods one by one and then observe if the game still crashes.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAU">The Mod named {0} caused the game to crash.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAV">The Mod named {0} caused the game to crash:
-Its configuration file {1} has an exception and cannot be read.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAW">The Mod named {0} failed to initialize, causing the game to fail to load.
-You can try disabling this Mod and then observe if the game still crashes.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAX">The following Mods failed to initialize, causing the game to fail to load:
+This typically indicates an incompatibility with other mods or the current environment, or it could be due to a bug.
+Consider disabling the mods and monitoring whether the game continues to crash.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAU">The game crashed due to the mod {0}.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAV">The game crashed due to the mod {0}:
+An exception exists in the configuration file {1} and cannot be read.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAW">The game crashed because the mod {0} failed to initialize.
+Consider disabling the mod and monitoring whether the game continues to crash.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAX">The game crashed because the following mods failed to initialize:
  - {0}
-        
-You can try disabling these Mods one by one and then observe if the game still crashes.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAY">The game seems to have encountered a problem with block {0}.
-        
-You can create a new world and observe the game's running situation:
- - If it runs normally, then it's likely that this block caused the error, and you might need to use some method to delete this block.
- - If it still crashes, the problem might come from other reasons……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAZ">The game seems to have encountered a problem with some blocks in the world.
-        
-You can create a new world and observe the game's running situation:
- - If it runs normally, then it's likely that some blocks caused the error, and you might need to delete this world.
- - If it still crashes, the problem might come from other reasons……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBA">You have installed multiple instances of the same Mod:
+
+Consider disabling the mods and monitoring whether the game continues to crash.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAY">The game encountered an issue with block {0}.
+
+Consider creating a new world and monitor the performance of the game:
+ - If it operates normally, it is likely that this block was the source of the error, and you may need to employ a method to remove this block.
+ - If it persists, the issue may originate from other factors...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAZ">The game encountered an issue with some blocks in the world.
+
+Consider creating a new world and monitor the performance of the game:
+ - If it operates normally, it is likely that some blocks were the source of the error, and you may need to delete this world.
+ - If it persists, the issue may originate from other factors...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBA">TThe game crashed because the following mods were installed repeatedly:
  - {0}
-        
-Each Mod can only appear once, please delete the duplicate Mod and then restart the game.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBB">You may have installed multiple instances of the same Mod, causing the game to fail to load.
-        
-Each Mod can only appear once, please delete the duplicate Mod and then restart the game.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBC">The game seems to have encountered a problem with entity {0}.
-        
-You can create a new world and generate this entity, then observe the game's running situation:
- - If it runs normally, then it's likely that this entity caused the error, and you might need to use some method to delete this entity.
- - If it still crashes, the problem might come from other reasons……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBD">The game seems to have encountered a problem with some entities in the world.
-        
-You can create a new world and generate various entities, observing the game's running situation:
- - If it runs normally, then it's likely that some entities caused the error, and you might need to delete this world.
- - If it still crashes, the problem might come from other reasons……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBE">Due to incompatibility between OptiFine and the current version of Forge, the game crashed.
-        
-Please visit the OptiFine website (https://optifine.net/downloads) to check the Forge versions compatible with OptiFine and strictly follow the corresponding version to reinstall the game.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBF">There is no need to install both OptiFine and Shaders Mod, as OptiFine has already integrated the functionality of Shaders Mod.
-The game can run normally after removing Shaders Mod.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBG">Due to incompatibility between the low version of Forge and the current Java, the game crashed.
-        
-Please try the following solutions:
- - Update Forge to version 36.2.26 or higher
- - Use a Java version lower than 1.8.0.320</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBH">It's possible that using other launchers to modify the Forge version caused the game to crash due to abnormal files.
-Please try reinstalling Forge from scratch, rather than using other launchers to modify the Forge version.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBI">* In fact, your game has no problems, this is a crash you triggered yourself.
-* Don't you have more important things to do?</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBJ">Some of the Mods you installed seem to require Java 11 to start.
-Please change to use Java 11 in the Java selection item in the startup settings, and then restart the game.
-If you haven't installed Java 11, you can download and install one from the internet.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBK">The program returned the following information: {0}</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBL">Your OptiFine might be causing problems with your game.
-        
-This problem only occurs in specific OptiFine versions, you can try changing the version of OptiFine.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBM">Your graphics driver has issues, or you're not using a dedicated graphics card, causing the game to fail to run normally.
-        
-If your computer has a dedicated graphics card, please use the dedicated graphics card instead of the Intel Core graphics to start PCL and Minecraft.
-If the problem still exists, please try updating your graphics driver to the latest version, or reverting to the factory version.
-If it still doesn't work, you can also try using Java 8.0.51 or a lower version.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBN">Your graphics driver has issues, causing the game to fail to run normally.
-        
-Please try updating your graphics driver to the latest version, or reverting to the factory version, and then restart the game.
-If it still doesn't work, you can try using Java 8.0.51 or a lower version.
-If the problem still exists, then you might need a better graphics card……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBO">You're using a texture resolution that's too high, or your graphics configuration is insufficient, causing the game to fail to continue running.
-        
-If you're using high-definition textures, please remove them.
-If you're not using textures, then you might need to update your graphics driver, or get a better graphics card……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBP">Due to issues with Night Config, the game crashed.
-You can try installing the Night Config Fixes mod, which might solve this problem.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBQ">Your use of shaders or textures has caused some issues with the game……
-        
-Please try deleting these additional resources you've added.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBR">You have installed too many Mods, exceeding the game's ID limit, causing the game to crash.
-Please try installing JEID or other fix mods, or delete some large mods.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBS">Some files or content verification failed, causing issues with the game.
-        
-Please try deleting the game (including Mods) and re-downloading, or try using a VPN during re-download.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBT">Due to incomplete Forge installation, the game cannot run normally.
-Please try reinstalling Forge.</s:String>
+
+Each mod must be unique; ensure to remove any duplicate mods before relaunching the game.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBB">The game crashed because the mods were installed repeatedly.
+
+Each mod must be unique; ensure to remove any duplicate mods before relaunching the game.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBC">The game encountered an issue with entity {0}.
+
+Consider creating a new world, spawning the entity, and monitoring the performance of the game:
+ - If it operates normally, it is likely that this entity was the source of the error, and you may need to employ a method to remove this entity.
+ - If it persists, the issue may originate from other factors...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBD">The game encountered an issue with some entities in the world.
+
+Consider creating a new world, spawning the entities, and monitoring the performance of the game:
+ - If it operates normally, it is likely that some entities were the source of the error, and you may need to delete this world.
+ - If it persists, the issue may originate from other factors...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBE">The game crashed due to the incompatibility between OptiFine and the current version of Forge.
+
+Consider visiting the OptiFine website (https://optifine.net/downloads) and reinstalling the game using the corresponding compatible version.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBF">Shader mods are unnecessary as OptiFine has incorporated their features
+Removing shader mods allows the game to run normally.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBG">The game crashed due to the incompatibility between the outdated version of Forge and the current Java version.
+
+Consider the following solutions:
+ - Update Forge to version 36.2.26 or higher.
+ - Use a Java version lower than 1.8.0.320.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBH">The game crashed potentially due to modifications made to the Forge version by other launchers, resulting in abnormal files within the instance.
+Consider reinstalling the Forge instance from the beginning, instead of relying on other launchers to alter the Forge version.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBI">* In fact, your game has no issues, this crash is triggered by yourself.
+* Don't you have other important things to do?</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBJ">Some mods require Java 11 to launch.
+Consider selecting Java 11 in "Settings → Launch → Java" and relaunch the game.
+Download and install one on the internet if you do not have Java 11 installed.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBK">The game returned the following information: {0}</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBL">OptiFine might be the source of the issues.
+
+This issue is specific to certain OptiFine versions. Consider selecting with a different OptiFine version.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBM">The game crashed due to graphics driver issues or because a dedicated graphics card was not being used.
+
+Use the dedicated graphics card instead of the Intel integrated graphics when launching PCL and Minecraft.
+If issues persist, consider updating your graphics card driver to the latest version, or rolling back to the factory version.
+Should the problem continue, consider using Java version 8.0.51 or lower.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBN">The game crashed due to graphics driver issues.
+
+Consider updating your graphics card driver to the latest version, or rolling back to the factory version, and relaunch the game.
+If issues persist, consider using Java version 8.0.51 or lower.
+Should the problem continue, consider using a better graphics card...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBO">The game crashed due to the high-resolution resource pack or the low-performance graphics card.
+
+Consider removing the high-resolution resource pack if it is being used.
+If not, consider updating the graphics driver or using a better graphics card.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBP">The game crashed due to issues with the Night Config.
+Consider installing the Night Config Fixes mod to fix the issue.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBQ">The game crashed due to the use of shaders and resource packs.
+
+Consider removing the additional resources that have been applied.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBR">The game crashed due to an excessive number of mods installed, exceeding the game's ID limit.
+Consider installing JEID or other fix mods, or removing some of the larger mods.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBS">The game crashed due to file or content verification failure.
+
+Consider uninstalling the game (including any mods) and reinstalling it, or using a VPN during the reinstallation process.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBT">The game crashed due to an incomplete Forge instance.
+Consider reinstalling the Forge instance.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBU">Fabric provided the following error information:
 {0}
-        
-Please handle accordingly based on the above information, and if you don't understand English, you can use translation software.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBV">Fabric may have provided error information, please handle accordingly based on the log information in the error report, and if you don't understand English, you can use translation software.
-If you haven't seen error information, you can view the error report to understand how the error occurred.</s:String>
+
+Please take appropriate actions based on the information provided.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBV">Fabric may have provided error information. Please take appropriate actions based on the logs and crash reports.
+If no information is provided, consider reviewing the crash reports to identify the issues.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBW">The mod loader provided the following error information:
 {0}
-        
-Please handle accordingly based on the above information, and if you don't understand English, you can use translation software.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBX">The mod loader may have provided error information, please handle accordingly based on the log information in the error report, and if you don't understand English, you can use translation software.
-If you haven't seen error information, you can view the error report to understand how the error occurred.</s:String>
+
+Please take appropriate actions based on the information provided.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBX">The mod loader may have provided error information. Please take appropriate actions based on the logs and crash reports.
+If no information is provided, consider reviewing the crash reports to identify the issues.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBY">Fabric provided the following solutions:
 {0}
-        
-Please handle accordingly based on the above information, and if you don't understand English, you can use translation software.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric may have provided solutions, please handle accordingly based on the log information in the error report, and if you don't understand English, you can use translation software.
-If you haven't seen solutions, you can view the error report to understand how the error occurred.</s:String>
+
+Please take appropriate actions based on the information provided.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric may have provided solutions. Please take appropriate actions based on the logs and crash reports.
+If no solution is provided, you can view the crash reports to understand how the error occurred.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCA">Forge provided the following error information:
 {0}
-        
-Please handle accordingly based on the above information, and if you don't understand English, you can use translation software.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge may have provided error information, please handle accordingly based on the log information in the error report, and if you don't understand English, you can use translation software.
-If you haven't seen error information, you can view the error report to understand how the error occurred.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCC">Your game encountered some issues, but PCL was unable to find related log files, so analysis is not possible.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL received an error reason with no detailed information ({0}), please submit feedback to the PCL author to get details.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">Additionally,</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">You can view the error report to understand how the error occurred.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">If you need help, please send the error report file to others, not a screenshot of this window.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">Additionally, you are using an old version of PCL, updating PCL might also solve this problem.
-You can click Settings → Launcher → Check for Updates to update PCL.</s:String>
+
+Please take appropriate actions based on the information provided.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge may have provided solutions. Please take appropriate actions based on the logs and crash reports.
+If no solution is provided, you can view the crash reports to understand how the error occurred.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCC">The game crashed, but analysis is impossible because PCL was unable to locate the related log files.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL received an error reason without detailed information ({0}). Please submit feedback to the author to get the detailed information.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">Additionally, </s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">consider reviewing the crash reports to identify the issues.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">if you are seeking assistance, please export the crash report instead of taking a screenshot of this window, and send it to others.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">Additionally, you are currently using an outdated version of PCL. Updating to the latest version may resolve this issue.
+To update PCL, navigate to "Settings → Launcher → Check for Updates".</s:String>
     <!--MyMsgLogin-->
-    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">Reopen Web Page</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">Reopen Webpage</s:String>
     <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">Copy Code</s:String>
-    <s:String x:Key="LangMyMsgLoginHintInitFail">Login Dialog Initialization Failed</s:String>
+    <s:String x:Key="LangMyMsgLoginHintInitFail">Login dialog initialization failed.</s:String>
     <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">Login to Minecraft</s:String>
-    <s:String x:Key="LangMyMsgLoginDialogContent">The login webpage will automatically open, please enter {0} in the webpage (already copied automatically).
+    <s:String x:Key="LangMyMsgLoginDialogContent">The login webpage will open automatically. Please enter the code {0} in the webpage (already copied).
 
 
-If the network environment is poor, the webpage may not load, in which case please use a VPN and retry.
-You can also open {1} on another device and enter the above code.</s:String>
-    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">Webpage login successful!</s:String>
-    <s:String x:Key="LangMyMsgLoginExceptionDecline">You declined PCL's request for permission……</s:String>
-    <s:String x:Key="LangMyMsgLoginExceptionTimeout">Login took too long, try again!</s:String>
-    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Login polling failed</s:String>
+If the network environment is poor, it may be unable to load, check the internet and try again.
+You can also access {1} on a different device and input the code.</s:String>
+    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">Successfully logged in through the webpage!</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionDecline">PCL's request for permission was declined...</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionTimeout">Login timed out, please try again!</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Login polling failed.</s:String>
 </ResourceDictionary>
