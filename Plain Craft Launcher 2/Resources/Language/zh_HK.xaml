@@ -1975,7 +1975,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <!--MyMsgLogin-->
     <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">重新打開網頁</s:String>
     <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">複製代號</s:String>
-    <s:String x:Key="LangMyMsgLoginHintInitFail">登入跳出視窗初始化失敗</s:String>
+    <s:String x:Key="LangMyMsgLoginHintInitFail">登入彈出視窗初始化失敗</s:String>
     <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">登入 Minecraft</s:String>
     <s:String x:Key="LangMyMsgLoginDialogContent">登入網頁將自動開啟，請在網頁中輸入 {0}（已自動複製）。
 

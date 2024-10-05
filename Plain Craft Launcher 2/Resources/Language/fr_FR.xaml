@@ -17,10 +17,10 @@ Causé par : {0}”</s:String>
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">Le dossier de cache sélectionné manuellement est indisponible, PCL utilisera le dossier de cache par défaut.
 Causé par : {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Avertissement sur l'environnement d'exécution</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">Veuillez extraire PCL d'un fichier compressé ou changer de dossier avant de continuer à utiliser !
-Le programme s'exécute actuellement dans un dossier temporaire, ce qui peut empêcher les paramètres et les sauvegardes du jeu d'être enregistrés, et certaines fonctionnalités ne pourront pas être utilisées.</s:String>
-    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL et les nouvelles versions de Minecraft ne supportent plus les systèmes 32 bits, ce qui peut rendre certaines fonctionnalités inutilisables.
-Il est très recommandé de réinstaller en 64 bits avant de jouer !</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">Veuillez extraire PCL du fichier compressé ou le déplacer vers un autre dossier avant de continuer à l'utiliser !
+Le programme est actuellement exécuté dans un dossier temporaire, les paramètres, les sauvegardes, etc. peuvent ne pas être enregistrés et certaines fonctionnalités peuvent ne pas être disponibles.</s:String>
+    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL et la nouvelle version de Minecraft ne prennent plus en charge les systèmes 32 bits, certaines fonctionnalités ne seront pas disponibles.
+Il est fortement recommandé de réinstaller le jeu après le passage à un système 64 bits !</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">Erreur d'initialisation de PCL</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">Erreur d'environnement d'exécution</s:String>
     <s:String x:Key="LangApplicationDialogContentNETWarn">Votre version de .NET Framework est trop ancienne ou endommagée. Veuillez télécharger et installer .NET Framework 4.6.2 depuis la page web ouverte, puis réessayez!</s:String>
@@ -95,9 +95,9 @@ Vous pouvez modifier la méthode de connexion dans "Propriétés de l'instance �
     <s:String x:Key="LangThemeUnlockCopyTip8">Après que le parrainage cumulé atteigne ¥23,33, envoyez le terme "解锁码" (Code de Déverrouillage) au développeur sur Afdian pour déverrouiller.
 Cliquez avec le bouton droit pour ouvrir la page de parrainage et soutenez PCL si vous pensez qu'il fait du bon travail =w=!</s:String>
     <s:String x:Key="LangThemeUnlockTip8">Après que le parrainage cumulé atteigne ¥23,33, envoyez le terme "解锁码" (Code de Déverrouillage) au développeur sur Afdian pour déverrouiller.</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· Signalez un bug, répondez au problème pour demander le déverrouillage après que le problème soit marqué comme "已完成" (Résolu) (cliquez avec le bouton droit pour ouvrir la page de retour d'information);
+    <s:String x:Key="LangThemeUnlockCopyTip9">· Signalez un bug, répondez au problème pour demander le déverrouillage après que le problème soit marqué comme "已完成" (Résolu) (cliquez avec le bouton droit pour ouvrir la page de retour d'information).
 · Soumettez une demande de tirage au dépôt du Centre d'Aide puis déverrouillez après la fusion de LTCat.</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· Signalez un bug, répondez au problème pour demander le déverrouillage après que le problème soit marqué comme "已完成" (Résolu);
+    <s:String x:Key="LangThemeUnlockTip9">· Signalez un bug, répondez au problème pour demander le déverrouillage après que le problème soit marqué comme "已完成" (Résolu).
 · Soumettez une demande de tirage au dépôt du Centre d'Aide puis déverrouillez après la fusion de LTCat.</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">Il y a une exception dans les paramètres de personnalisation et a été automatiquement réinitialisé.</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">Erreur lors du chargement des paramètres de personnalisation.</s:String>
@@ -139,15 +139,15 @@ Cette opération est irrévocable. Êtes-vous sûr ?</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteFail">Échec de la génération du fichier de documentation</s:String>
     <s:String x:Key="LangHintCustomPageOverwriteSuccess">Le fichier de documentation a été généré !</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">La page d'accueil a été rafraîchie !</s:String>
-    <s:String x:Key="LangDialogCustomPageTeachContent">1. Cliquez sur le bouton "Générer la Documentation", qui générera le fichier de mise en page "Custom.xaml" dans le dossier PCL ;
-2. Modifiez le fichier avec des outils comme Notepad, n'oubliez pas de l'enregistrer après la modification ;
+    <s:String x:Key="LangDialogCustomPageTeachContent">1. Cliquez sur le bouton "Générer la Documentation", qui générera le fichier de mise en page "Custom.xaml" dans le dossier PCL .
+2. Modifiez le fichier avec des outils comme Notepad, n'oubliez pas de l'enregistrer après la modification .
 3. Cliquez sur le bouton "Rafraîchir Accueil" pour voir à quoi ressemble maintenant la page d'accueil.
 Vous pouvez directement rafraîchir la page d'accueil après avoir généré le fichier de documentation et apporter des modifications en conséquence, ce qui sera plus utile pour comprendre.
 Vous pouvez également charger le fichier de page d'accueil personnalisé directement en le faisant glisser dans la fenêtre PCL.</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">Tutoriels de Personnalisation de la Page d'Accueil</s:String>
     <s:String x:Key="LangThemeBackUnlock">Le thème caché "Xuansu Black" a été déverrouillé !</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameContent">1. Ne pas ramper ou attaquer des services ou sites Web connexes, ne pas voler de comptes connexes, aucun puzzle ne peut ou doit être résolu ;
-2. Les informations publiques pertinentes ne doivent pas être altérées ou détruites. Veuillez essayer de les conserver telles quelles ;
+    <s:String x:Key="LangDialogThemeUnlockGameContent">1. Ne pas ramper ou attaquer des services ou sites Web connexes, ne pas voler de comptes connexes, aucun puzzle ne peut ou doit être résolu .
+2. Les informations publiques pertinentes ne doivent pas être altérées ou détruites. Veuillez essayer de les conserver telles quelles .
 3. Lorsque vous vous sentez confus, "Echo Hole" peut vous surprendre.
 
 Si vous enfreignez les règles, vous pourriez être expulsé de tout groupe pertinent !</s:String>
@@ -252,8 +252,8 @@ Si vous avez créé une page d'accueil en ligne stable, vous pouvez cliquer sur 
     <s:String x:Key="LangSetHomePagePresetPageE">Recommandation de Modpack Quotidienne (Auteur : wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Recommandation de Skins Minecraft (Auteur : wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">Tableau de bord OpenBMCLAPI Lite (Auteurs : Silverteal, Mxmilu666)</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageH">Marché de la Page d'Accueil PCL (auteur : 凌云)</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageI">Journal des Mises à Jour PCL (auteur : Joker2184)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageH">Page d'accueil du marché PCL (Auteur : Lingyun)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">Journal de mise à jour PCL (Auteur : Joker2184)</s:String>
     <s:String x:Key="LangSetFuncHidden">Masquage de Fonctionnalités</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Vous pouvez masquer des pages inutiles ou désactiver des fonctionnalités spécifiques. Appuyez sur "F12" dans n'importe quelle interface pour afficher temporairement les fonctionnalités cachées.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Interface Principale</s:String>
@@ -822,11 +822,11 @@ Le remplacement de skin de cette manière ne sera visible que par le joueur lui-
     <s:String x:Key="LangPageSetupLaunchLaunchWindowTitle">Titre de la fenêtre</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleToolTip">Personnalisez le titre de la fenêtre du jeu, sans le changer s'il est laissé vide.
 Prend en charge les balises alternatives suivantes :
- · {user} : Nom d'utilisateur ;
- · {login} : Méthode de connexion ;
- · {name} : Nom de l'instance ;
- · {date}, {time} : Heure système ;
- · {version} : Version du jeu Vanilla.</s:String>
+ · {user} : Nom d'utilisateur
+ · {login} : Méthode de connexion
+ · {name} : Nom de l'instance
+ · {date}, {time} : Heure système
+ · {version} : Version du jeu Vanilla</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">Texte personnalisé</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">Cette information sera affichée à l'écran titre et à l'écran de débogage.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">Isolation d'instance</s:String>
@@ -885,23 +885,23 @@ Par exemple, taper "--demo" lancera le jeu en mode démo.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">Exécute la commande ou le programme spécifique avant que Minecraft ne soit lancé. La syntaxe est la même que celle du script batch.
 
 Les chemins relatifs peuvent être implémentés avec les balises alternatives suivantes (les chemins se terminent par "\") :
- · {path} : Le dossier où se trouve le PCL ;
- · {minecraft} : Dossier .minecraft ;
- · {verpath} : Dossier d'instance (.minecraft\versions\&lt;nom de l'instance&gt;\) ;
- · {verindie} : Le dossier d'instance lorsque "L'isolement d'instance" est activé, ou le dossier .minecraft lorsque cela est désactivé ;
- · {java} : Le dossier de Java utilisé par le jeu.
+ · {path} : Le dossier où se trouve le PCL
+ · {minecraft} : Dossier .minecraft
+ · {verpath} : Dossier d'instance (.minecraft\versions\&lt;nom de l'instance&gt;\)
+ · {verindie} : Le dossier d'instance lorsque "L'isolement d'instance" est activé, ou le dossier .minecraft lorsque cela est désactivé
+ · {java} : Le dossier de Java utilisé par le jeu
 
 De plus, les balises alternatives suivantes sont également prises en charge :
- · {user} : Nom d'utilisateur ;
- · {login} : Méthode de connexion ;
- · {uuid} : UUID du joueur ;
- · {name} : Nom de l'instance ;
- · {date}, {time} : Heure système ;
- · {version} : Version du jeu Vanilla.
+ · {user} : Nom d'utilisateur
+ · {login} : Méthode de connexion
+ · {uuid} : UUID du joueur
+ · {name} : Nom de l'instance
+ · {date}, {time} : Heure système
+ · {version} : Version du jeu Vanilla
 
 Par exemple :
- · [ {verpath}test.exe ] : Exécute le programme test.exe dans le dossier d'instance ;
- · [ "{java}java.exe" -jar "{verpath}test.jar" ] : Exécute le fichier test.jar dans le dossier d'exemple en utilisant Java ;
+ · [ {verpath}test.exe ] : Exécute le programme test.exe dans le dossier d'instance.
+ · [ "{java}java.exe" -jar "{verpath}test.jar" ] : Exécute le fichier test.jar dans le dossier d'exemple en utilisant Java.
  · [ notepad "{verindie}option.txt" ] : Utilise Notepad pour ouvrir option.txt de cette instance.
 
 Il est préférable de mettre des guillemets (") autour des opérations impliquant des chemins pour éviter les échecs dus aux espaces dans le chemin.
@@ -1187,8 +1187,8 @@ Puisque "L'isolement d'instance" est activé pour cette instance, lorsque vous s
     <s:String x:Key="LangPageVersionOverallDialogDeleteTitle">Confirmation de suppression de l'instance</s:String>
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">L'instance {0} a été supprimée dans la corbeille !</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">L'instance {0} a été supprimée définitivement !</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Veuillez d'abord désactiver [Paramètres de version → Paramètres → Options avancées de démarrage → Désactiver la vérification des fichiers], puis essayez de compléter les fichiers !</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Veuillez d'abord désactiver [Paramètres → Options avancées de démarrage → Désactiver la vérification des fichiers], puis essayez de compléter les fichiers !</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Veuillez fermer l'option « Propriétés → Paramètres → Options de lancement avancées → Désactiver la vérification des fichiers » avant de tenter de réparer les fichiers !</s:String>
+    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Veuillez fermer l'option « Paramètres → Options de lancement avancées → Désactiver la vérification des fichiers » avant de tenter de réparer les fichiers !</s:String>
     <!--PageVersionSetup-->
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">Les paramètres de l'instance ont été initialisés !</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Échec de l'initialisation des paramètres de l'instance.</s:String>
@@ -1237,23 +1237,23 @@ S'il est laissé vide, la valeur du paramètre global est utilisée.</s:String>
 Exécute la commande ou le programme spécifique avant le lancement de Minecraft. La syntaxe est la même que celle du script batch.
 
 Les chemins relatifs peuvent être implémentés avec les balises alternatives suivantes (les chemins se terminent par "\") :
- · {path} : Le dossier où se trouve le PCL ;
- · {minecraft} : Dossier .minecraft ;
- · {verpath} : Dossier de l'instance (.minecraft\versions\&lt;nom de l'instance&gt;\) ;
- · {verindie} : Le dossier de l'instance lorsque "Isolation d'instance" est activée, ou le dossier .minecraft lorsque cela est désactivé ;
- · {java} : Le dossier de Java utilisé par le jeu.
+ · {path} : Le dossier où se trouve le PCL
+ · {minecraft} : Dossier .minecraft
+ · {verpath} : Dossier de l'instance (.minecraft\versions\&lt;nom de l'instance&gt;\)
+ · {verindie} : Le dossier de l'instance lorsque "Isolation d'instance" est activée, ou le dossier .minecraft lorsque cela est désactivé
+ · {java} : Le dossier de Java utilisé par le jeu
 
 De plus, les balises alternatives suivantes sont également prises en charge :
- · {user} : Nom d'utilisateur ;
- · {login} : Méthode de connexion ;
- · {uuid} : UUID du joueur ;
- · {name} : Nom de l'instance ;
- · {date}, {time} : Heure système ;
- · {version} : Version du jeu Vanilla.
+ · {user} : Nom d'utilisateur
+ · {login} : Méthode de connexion
+ · {uuid} : UUID du joueur
+ · {name} : Nom de l'instance
+ · {date}, {time} : Heure système
+ · {version} : Version du jeu Vanilla
 
 Par exemple :
- · [ {verpath}test.exe ] : Exécute le programme test.exe dans le dossier de l'instance ;
- · [ "{java}java.exe" -jar "{verpath}test.jar" ] : Exécute le fichier test.jar dans le dossier d'exemple en utilisant Java ;
+ · [ {verpath}test.exe ] : Exécute le programme test.exe dans le dossier de l'instance.
+ · [ "{java}java.exe" -jar "{verpath}test.jar" ] : Exécute le fichier test.jar dans le dossier d'exemple en utilisant Java.
  · [ notepad "{verindie}option.txt" ] : Utilise Notepad pour ouvrir option.txt de cette instance.
 
 Il est préférable de mettre des guillemets (") autour des opérations impliquant des chemins pour éviter les échecs dus aux espaces dans le chemin.
@@ -1298,21 +1298,21 @@ Veuillez vérifier si le type d'événement est correctement rempli, si le PCL e
     <s:String x:Key="LangModMusicExceptionMusicRefreshFail">Échec de l'actualisation de la musique de fond.</s:String>
     <!--ModSecret-->
     <s:String x:Key="LangModSecretPermissionA">PCL ne peut pas créer le dossier "PCL" ({0}PCL), veuillez essayer :
-1. Déplacez PCL dans un autre dossier {1} ;
-2. Supprimez le dossier "PCL" dans le répertoire actuel et réessayez ;
+1. Déplacez PCL dans un autre dossier {1}.
+2. Supprimez le dossier "PCL" dans le répertoire actuel et réessayez.
 3. Cliquez avec le bouton droit sur le fichier exécutable PCL et ouvrez "Propriétés → Compatibilité → Exécuter ce programme en tant qu'administrateur".</s:String>
     <s:String x:Key="LangModSecretPermissionB">PCL n'a pas les permissions d'écriture dans le dossier actuel. Veuillez essayer : 
-1. Déplacez PCL dans un autre dossier {0} ;
-2. Supprimez le dossier "PCL" dans le répertoire actuel et réessayez ;
+1. Déplacez PCL dans un autre dossier {0}.
+2. Supprimez le dossier "PCL" dans le répertoire actuel et réessayez.
 3. Cliquez avec le bouton droit sur le fichier exécutable PCL et ouvrez "Propriétés → Compatibilité → Exécuter ce programme en tant qu'administrateur".</s:String>
     <s:String x:Key="LangModSecretPermissionAddition">(Comme un dossier à côté de C:\ et du Bureau)</s:String>
     <s:String x:Key="LangModSecretPermissionError">Erreur d'exécution</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">Avis de version open-source</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">Cette version n'inclut pas les fonctionnalités suivantes :
-- Appel API CurseForge : Nécessite une clé API que vous avez demandée, et à ajouter à la méthode "SecretHeadersSign" ;
-- Connexion Microsoft : Nécessite un ID client que vous avez demandé et à ajouter au début de "ModSecret.vb" ;
-- Notifications de mise à jour et de réseau : Pour éviter des préoccupations d'abus potentielles ;
-- Thème : Il s'agit d'une fonctionnalité commémorative qui nécessite un parrainage pour être déverrouillée. Ne rendez pas les sponsors trop tristes... ;
+- Appel API CurseForge : Nécessite une clé API que vous avez demandée, et à ajouter à la méthode "SecretHeadersSign".
+- Connexion Microsoft : Nécessite un ID client que vous avez demandé et à ajouter au début de "ModSecret.vb".
+- Notifications de mise à jour et de réseau : Pour éviter des préoccupations d'abus potentielles.
+- Thème : Il s'agit d'une fonctionnalité commémorative qui nécessite un parrainage pour être déverrouillée. Ne rendez pas les sponsors trop tristes...
 - Utilitaires : Certains outils de développement ont été placés ici lors des premières étapes de développement, et il était difficile de les trier.</s:String>
     <s:String x:Key="LangModSecretHintNoTheme">La version actuelle de PCL n'inclut pas la fonctionnalité Thème...</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">La version actuelle de PCL n'inclut pas la fonctionnalité Mise à jour...</s:String>
@@ -1426,8 +1426,8 @@ Les plantages de jeu ne sont généralement pas liés au lanceur. Veuillez ne pa
     <s:String x:Key="LangModBaseDialogUploadLogTitle">Conseil pour soumettre un retour</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnOpenFolder">Dossier</s:String>
     <s:String x:Key="LangModBaseDialogUploadLogBtnNoNeed">Non, merci</s:String>
-    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">Votre PCL n'est pas à jour, donc vous ne pouvez pas envoyer de retour.
-Veuillez mettre à jour, puis confirmer que le problème persiste dans la dernière version, avant de soumettre un retour.</s:String>
+    <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackContent">PCL n'est pas la dernière version, la soumission de commentaires n'est pas prise en charge.
+Veuillez confirmer que le problème persiste dans la dernière version après la mise à jour, puis envoyez vos commentaires.</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">Mettre à jour</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Impossible de soumettre</s:String>
     <s:String x:Key="LangModBaseExceptionBadEnvironment">Il y a un problème avec l'environnement d'exécution de PCL. Veuillez essayer de réinstaller le ".NET Framework 4.6.2" puis réessayez.</s:String>
@@ -1627,16 +1627,16 @@ Après vous être connecté avec votre compte Microsoft une fois, cet indice n'a
     <s:String x:Key="LangModLaunchExceptionJsonMiss-mainClass">"mainClass" manquant dans le JSON de version !</s:String>
     <s:String x:Key="LangModLaunchExceptionOpenNativesFail">Impossible d'ouvrir le fichier Natives ({0}), le fichier peut être corrompu, veuillez essayer de relancer le jeu.</s:String>
     <s:String x:Key="LangModLaunchHintAlexSkinNotSupport">Le modèle Slim n'est pas pris en charge dans cette version, votre skin peut apparaître comme un modèle Classique.</s:String>
-    <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">Vous devez d'abord vous connecter avec un compte officiel pour pouvoir jouer en mode hors ligne !</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">Validation officielle</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">Acheter l'édition officielle</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">Essayer</s:String>
+    <s:String x:Key="LangModLaunchDialogContentMsLoginRequire">Vous devez d'abord vous connecter avec un compte Microsoft pour jouer hors ligne !</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleMsLoginRequire">Vérification du compte</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1MsLoginRequire">Achat</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn2MsLoginRequire">Démo</s:String>
     <s:String x:Key="LangModLaunchDialogBtn3MsLoginRequire">Retour</s:String>
-    <s:String x:Key="LangModLaunchHintPlayInDemo">Le jeu démarrera en mode démo !</s:String>
-    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">Lors de la connexion, veuillez choisir "Autre méthode de connexion", puis "Utiliser mon mot de passe".
-Si cette option n'est pas disponible, veuillez choisir "Définir un mot de passe", puis reconnectez-vous après avoir défini le mot de passe.</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">Connexion nécessitant un mot de passe</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">Se reconnecter</s:String>
+    <s:String x:Key="LangModLaunchHintPlayInDemo">Le jeu va démarrer en mode démo !</s:String>
+    <s:String x:Key="LangModLaunchDialogContentLoginWithPassword">Veuillez sélectionner « Autres méthodes de connexion » lors de la connexion, puis choisissez « Utiliser mon mot de passe ».
+Si cette option n'est pas disponible, sélectionnez « Définir un mot de passe » et connectez-vous après l'avoir défini.</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleLoginWithPassword">Connexion par mot de passe requise</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1LoginWithPassword">Reconnexion</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">Définir un mot de passe</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">Fichier Modpack</s:String>
@@ -1770,205 +1770,205 @@ Cela remplacera le fichier JSON et le fichier JAR, mais n'affectera pas les fich
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">Télécharger LiteLoader {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">Télécharger Fabric {0}</s:String>
     <!--ModCrash-->
-    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">Résultats de l'analyse du rapport d'erreur</s:String>
-    <s:String x:Key="LangModCrashDialogTitleMcError">Erreur avec Minecraft</s:String>
-    <s:String x:Key="LangModCrashViewLog">Voir le journal</s:String>
-    <s:String x:Key="LangModCrashExportCrashReport">Exporter le rapport d'erreur</s:String>
-    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">Le rapport d'erreur a été exporté !</s:String>
-    <s:String x:Key="LangModCrashCrashReasonNoReason">Désolé, PCL ne peut pas déterminer la raison de l'erreur.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonHelpTip">Désolé, votre jeu a rencontré quelques problèmes…
-Si vous cherchez de l'aide, veuillez exporter le rapport d'erreur et l'envoyer à d'autres personnes, plutôt que de partager une capture d'écran de cette fenêtre.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAA">由于 Mod 文件被解压了，导致游戏无法继续运行。
-直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。
+    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">Résultat de l'analyse</s:String>
+    <s:String x:Key="LangModCrashDialogTitleMcError">Crash Minecraft</s:String>
+    <s:String x:Key="LangModCrashViewLog">Journal</s:String>
+    <s:String x:Key="LangModCrashExportCrashReport">Exporter le rapport de crash</s:String>
+    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">Rapport de crash exporté avec succès !</s:String>
+    <s:String x:Key="LangModCrashCrashReasonNoReason">Désolé, PCL ne peut pas déterminer la cause du crash.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonHelpTip">Désolé, votre jeu a rencontré quelques problèmes...
+Si vous avez besoin d'aide, veuillez exporter le rapport de plantage au lieu de prendre une capture d'écran de cette fenêtre et l'envoyer à d'autres personnes.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAA">Le jeu a planté car les fichiers mod ont été extraits.
+Placez simplement les fichiers mod dans le dossier sans les extraire ; sinon, le jeu plantera.
 
-请删除 Mod 文件夹中已被解压的 Mod，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAB">Minecraft 内存不足，导致其无法继续运行。
-这很可能是因为电脑内存不足、游戏分配的内存不足，或是配置要求过高。
-            
-你可以尝试在 更多 → 百宝箱 中选择 内存优化，然后再启动游戏。
-如果还是不行，请在启动设置中增加为游戏分配的内存，并删除配置要求较高的材质、Mod、光影。
-如果依然不奏效，请在开始游戏前尽量关闭其他软件，或者……换台电脑？</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAC">游戏因为使用 Open J9 而崩溃了。
-请在启动设置的 Java 选择一项中改用非 OpenJ9 的 Java，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAD">游戏似乎因为使用 JDK，或 Java 版本过高而崩溃了。
-请在启动设置的 Java 选择一项中改用 JRE 8（Java 8），然后再启动游戏。
-如果你没有安装 JRE 8，你可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAE">游戏似乎因为你所使用的 Java 版本过高而崩溃了。
-请在启动设置的 Java 选择一项中改用较低版本的 Java，然后再启动游戏。
-如果没有，可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAF">游戏不兼容你当前使用的 Java。
-如果没有合适的 Java，可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAG">由于有 Mod 的名称包含特殊字符，导致游戏崩溃。
-请尝试修改 Mod 文件名，让它只包含英文字母、数字、减号（-）、下划线（_）和小数点，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAH">由于缺失 MixinBootstrap，导致游戏崩溃。
-请尝试安装 MixinBootstrap。若安装后依然崩溃，可以尝试在文件名前添加英文感叹号。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAI">你似乎正在使用 32 位 Java，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。
-        
-请在启动设置的 Java 选择一项中改用 64 位的 Java 再启动游戏，然后再启动游戏。
-如果你没有安装 64 位的 Java，你可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAJ">你正在使用 32 位的操作系统，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。
-        
-你或许只能重装 64 位的操作系统来解决此问题。
-如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAK">由于未满足 Mod 的依赖项，导致游戏退出。
-未满足的依赖项：
+Lancez le jeu lorsque vous avez traité le fichier mod.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAB">Le jeu a planté car Minecraft a épuisé son allocation de mémoire.
+Cela est probablement dû à une mémoire informatique insuffisante, à une mémoire allouée insuffisante ou à des exigences de configuration excessivement élevées.
+
+Envisagez l'"Optimisation de la mémoire" dans "Plus → Utilitaires" et relancez le jeu.
+Si les problèmes persistent, envisagez d'augmenter l'allocation de mémoire pour le jeu dans les paramètres de lancement, en supprimant les textures, mods et shaders exigeants.
+Si le problème persiste, essayez de fermer les autres applications avant de lancer le jeu, ou... utilisez un autre ordinateur ?</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAC">Le jeu a planté en raison de l'utilisation d'Open J9.
+Passez à une version Java non OpenJ9 dans « Paramètres → Lancer → Java » et relancez le jeu.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAD">Le jeu semble avoir planté en raison de l'utilisation du JDK ou d'une version Java trop élevée.
+Passez à JRE 8 (Java 8) dans « Paramètres → Lancer → Java » et relancez le jeu.
+Téléchargez-en un et installez-en un sur Internet si vous n'avez pas installé JRE 8.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAE">Le jeu semble avoir planté en raison de l'utilisation d'une version Java trop élevée.
+Pensez à sélectionner une version Java inférieure dans « Paramètres → Lancer → Java » et relancez le jeu.
+Téléchargez-en un et installez-en un sur Internet si vous n'en avez pas installé.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAF">Le jeu est incompatible avec la version Java que vous utilisez actuellement.
+Téléchargez-en un et installez-en un sur Internet si vous n'en avez pas installé de compatible.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAG">Le jeu a planté car les noms des mods contiennent des caractères spéciaux.
+Pensez à modifier les noms de fichiers pour n'inclure que des lettres, des chiffres, des tirets, des traits de soulignement et des points, puis relancez le jeu.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAH">Le jeu a planté car MixinBootstrap est manquant.
+Pensez à installer MixinBootstrap. Si le problème persiste, essayez d'ajouter un point d'exclamation au début du nom de fichier.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAI">Le jeu a planté en raison de l'utilisation d'un Java 32 bits, ce qui peut empêcher Minecraft d'accéder à la mémoire nécessaire.
+
+Pensez à sélectionner un Java 64 bits dans « Paramètres → Lancer → Java » et relancez le jeu.
+Téléchargez et installez-en un sur Internet si vous n'avez pas installé Java 64 bits.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAJ">Le jeu a planté en raison de l'utilisation d'un système d'exploitation 32 bits, ce qui peut empêcher Minecraft d'accéder à la mémoire nécessaire.
+
+Vous ne pouvez résoudre ce problème qu'en installant un système d'exploitation 64 bits.
+Si votre ordinateur dispose de moins de 2 Go de mémoire, vous devrez peut-être envisager d'utiliser un autre ordinateur avec plus de mémoire...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAK">Le jeu s'est arrêté en raison des dépendances manquantes.
+Dépendances manquantes :
  - {0}
-        
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAL">由于未满足 Mod 的依赖项，导致游戏退出。
-请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAM">你的游戏遇到了一些问题，PCL 为此找到了一个可疑的关键词：{0}。
-        
-如果你知道某个关键词对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAN">你的游戏遇到了一些问题，PCL 为此找到了以下可疑的关键词：
+
+Veuillez prendre les mesures appropriées en fonction des informations fournies.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAL">Le jeu s'est arrêté en raison des dépendances manquantes.
+Veuillez prendre les mesures appropriées en fonction des journaux et des rapports de plantage.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAM">Le jeu a rencontré quelques problèmes, PCL a identifié un mot-clé suspect : {0}.
+
+L'erreur peut être causée par le mod associé au mot-clé. Pensez à consulter le rapport de plantage pour obtenir des informations détaillées.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAN">Le jeu a rencontré quelques problèmes, PCL a identifié des mots-clés suspects :
  - {0}
-        
- 如果你知道某个关键词对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAO">PCL 怀疑名为 {0} 的 Mod 导致了游戏出错，但不能完全确定。
-你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAP">PCL 怀疑以下 Mod 导致了游戏出错，但不能完全确定：
+
+L'erreur peut être causée par le mod associé aux mots-clés. Pensez à consulter le rapport de plantage pour obtenir des informations détaillées.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAO">PCL suspecte que le jeu a planté à cause du mod {0}, mais cela ne peut pas être confirmé avec certitude.
+Envisagez de désactiver le mod et de surveiller si le jeu continue de planter.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAP">PCL suspecte que le jeu a planté à cause des mods suivants, mais cela ne peut pas être confirmé avec certitude :
  - {0}
-        
-你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAQ">名为 {0} 的 Mod 导致了游戏出错。
-你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAR">以下 Mod 导致了游戏出错：
+
+Envisagez de désactiver le mod et de surveiller si le jeu continue de planter.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAQ">Le jeu a planté à cause du mod {0}.
+Pensez à désactiver le mod et à surveiller si le jeu continue de planter.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAR">Le jeu a planté à cause des mods suivants :
  - {0}
-        
-你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAS">名为 {0} 的 Mod 注入失败，导致游戏出错。
-这一般代表着它与其他 Mod 或当前环境不兼容，或是它存在 Bug。
-你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAT">以下 Mod 导致了游戏出错：
-  - {0}
-这一般代表着它们与其他 Mod 或当前环境不兼容，或是它存在 Bug。
-你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAU">名为 {0} 的 Mod 导致了游戏出错。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAV">名为 {0} 的 Mod 导致了游戏出错：
-其配置文件 {1} 存在异常，无法读取。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAW">名为 {0} 的 Mod 初始化失败，导致游戏无法继续加载。
-你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAX">以下 Mod 初始化失败，导致游戏无法继续加载：
+
+Pensez à désactiver le mod et à surveiller si le jeu continue de planter.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAS">Le jeu a planté parce que le mod {0} n'a pas pu s'injecter.
+Cela indique généralement une incompatibilité avec d'autres mods ou l'environnement actuel, ou cela peut être dû à un bug.
+Pensez à désactiver le mod et à surveiller si le jeu continue de planter.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAT">Le jeu a planté à cause des mods suivants :
  - {0}
-        
-你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAY">游戏似乎因为方块 {0} 出现了问题。
-        
-你可以创建一个新世界，并观察游戏的运行情况：
- - 若正常运行，则是该方块导致出错，你或许需要使用一些方式删除此方块。
- - 若仍然出错，问题就可能来自其他原因……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAZ">游戏似乎因为世界中的某些方块出现了问题。
-        
-你可以创建一个新世界，并观察游戏的运行情况：
- - 若正常运行，则是某些方块导致出错，你或许需要删除该世界。
- - 若仍然出错，问题就可能来自其他原因……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBA">你重复安装了多个相同的 Mod：
+Cela indique généralement une incompatibilité avec d'autres mods ou l'environnement actuel, ou cela peut être dû à un bug.
+Pensez à désactiver les mods et à surveiller si le jeu continue de planter.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAU">Le jeu a planté à cause du mod {0}.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAV">Le jeu a planté à cause du mod {0} :
+Une exception existe dans le fichier de configuration {1} et ne peut pas être lue.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAW">Le jeu a planté car le mod {0} n'a pas pu s'initialiser.
+Pensez à désactiver le mod et à surveiller si le jeu continue de planter.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAX">Le jeu a planté car les mods suivants n'ont pas pu s'initialiser :
  - {0}
-        
-每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBB">你可能重复安装了多个相同的 Mod，导致游戏无法继续加载。
-        
-每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBC">游戏似乎因为实体 {0} 出现了问题。
-        
-你可以创建一个新世界，并生成一个该实体，然后观察游戏的运行情况：
- - 若正常运行，则是该实体导致出错，你或许需要使用一些方式删除此实体。
- - 若仍然出错，问题就可能来自其他原因……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBD">游戏似乎因为世界中的某些实体出现了问题。
-        
-你可以创建一个新世界，并生成各种实体，观察游戏的运行情况：
- - 若正常运行，则是某些实体导致出错，你或许需要删除该世界。
- - 若仍然出错，问题就可能来自其他原因……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBE">由于 OptiFine 与当前版本的 Forge 不兼容，导致了游戏崩溃。
-        
-请前往 OptiFine 官网（https://optifine.net/downloads）查看 OptiFine 所兼容的 Forge 版本，并严格按照对应版本重新安装游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBF">无需同时安装 OptiFine 和 Shaders Mod，OptiFine 已经集成了 Shaders Mod 的功能。
-在删除 Shaders Mod 后，游戏即可正常运行。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBG">由于低版本 Forge 与当前 Java 不兼容，导致了游戏崩溃。
-        
-请尝试以下解决方案：
- - 更新 Forge 到 36.2.26 或更高版本
- - 换用版本低于 1.8.0.320 的 Java</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBH">可能由于使用其他启动器修改了 Forge 版本，当前版本的文件存在异常，导致了游戏崩溃。
-请尝试重新全新安装 Forge，而非使用其他启动器修改 Forge 版本。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBI">* 事实上，你的游戏没有任何问题，这是你自己触发的崩溃。
-* 你难道没有更重要的事要做吗？</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBJ">你所安装的部分 Mod 似乎需要使用 Java 11 启动。
-请在启动设置的 Java 选择一项中改用 Java 11，然后再启动游戏。
-如果你没有安装 Java 11，你可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBK">程序返回了以下信息：{0}</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBL">你所使用的 OptiFine 可能导致了你的游戏出现问题。
-        
-该问题只在特定 OptiFine 版本中出现，你可以尝试更换 OptiFine 的版本。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBM">你的显卡驱动存在问题，或未使用独立显卡，导致游戏无法正常运行。
-        
-如果你的电脑存在独立显卡，请使用独立显卡而非 Intel 核显启动 PCL 与 Minecraft。
-如果问题依然存在，请尝试升级你的显卡驱动到最新版本，或回退到出厂版本。
-如果还是不行，还可以尝试使用 8.0.51 或更低版本的 Java。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBN">你的显卡驱动存在问题，导致游戏无法正常运行。
-        
-请尝试升级你的显卡驱动到最新版本，或回退到出厂版本，然后再启动游戏。
-如果还是不行，可以尝试使用 8.0.51 或更低版本的 Java。
-如果问题依然存在，那么你可能需要换个更好的显卡……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBO">你所使用的材质分辨率过高，或显卡配置不足，导致游戏无法继续运行。
-        
-如果你正在使用高清材质，请将它移除。
-如果你没有使用材质，那么你可能需要更新显卡驱动，或者换个更好的显卡……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBP">由于 Night Config 存在问题，导致了游戏崩溃。
-你可以尝试安装 Night Config Fixes 模组，这或许能解决此问题。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBQ">你所使用的光影或材质导致游戏出现了一些问题……
-        
-请尝试删除你所添加的这些额外资源。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBR">你所安装的 Mod 过多，超出了游戏的 ID 限制，导致了游戏崩溃。
-请尝试安装 JEID 等修复 Mod，或删除部分大型 Mod。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBS">部分文件或内容校验失败，导致游戏出现了问题。
-        
-请尝试删除游戏（包括 Mod）并重新下载，或尝试在重新下载时使用 VPN。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBT">由于 Forge 安装不完整，导致游戏无法正常运行。
-请尝试重新安装 Forge。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBU">Fabric 提供了以下错误信息：
+
+Pensez à désactiver les mods et à surveiller si le jeu continue de planter.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAY">Le jeu a rencontré un problème avec le bloc {0}.
+
+Pensez à créer un nouveau monde et à surveiller les performances du jeu :
+ - S'il fonctionne normalement, il est probable que ce bloc soit la source de l'erreur, et vous devrez peut-être employer une méthode pour supprimer ce bloc.
+ - Si le problème persiste, il peut provenir d'autres facteurs...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAZ">Le jeu a rencontré un problème avec certains blocs du monde.
+
+Pensez à créer un nouveau monde et surveillez les performances du jeu :
+ - S'il fonctionne normalement, il est probable que certains blocs soient à l'origine de l'erreur, et vous devrez peut-être supprimer ce monde.
+ - Si cela persiste, le problème peut provenir d'autres facteurs...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBA">Le jeu a planté car les mods suivants ont été installés à plusieurs reprises :
+ - {0}
+
+Chaque mod doit être unique ; veillez à supprimer tous les mods en double avant de relancer le jeu.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBB">Le jeu a planté car les mods ont été installés à plusieurs reprises.
+
+Chaque mod doit être unique ; Assurez-vous de supprimer tous les mods en double avant de relancer le jeu.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBC">Le jeu a rencontré un problème avec l'entité {0}.
+
+Envisagez de créer un nouveau monde, de générer l'entité et de surveiller les performances du jeu :
+ - S'il fonctionne normalement, il est probable que cette entité soit la source de l'erreur, et vous devrez peut-être employer une méthode pour supprimer cette entité.
+ - S'il persiste, le problème peut provenir d'autres facteurs...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBD">Le jeu a rencontré un problème avec certaines entités du monde.
+
+Envisagez de créer un nouveau monde, de générer les entités et de surveiller les performances du jeu :
+ - S'il fonctionne normalement, il est probable que certaines entités soient la source de l'erreur, et vous devrez peut-être supprimer ce monde.
+ - Si le problème persiste, il peut provenir d'autres facteurs...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBE">Le jeu a planté en raison de l'incompatibilité entre OptiFine et la version actuelle de Forge.
+
+Pensez à visiter le site Web d'Optifine (https://optifine.net/downloads) et à réinstaller le jeu en utilisant la version compatible correspondante.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBF">Les mods shader sont inutiles car OptiFine a intégré leurs fonctionnalités
+La suppression des mods shader permet au jeu de fonctionner normalement.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBG">Le jeu a planté en raison de l'incompatibilité entre la version obsolète de Forge et la version actuelle de Java.
+
+Envisagez les solutions suivantes :
+ - Mettez à jour Forge vers la version 36.2.26 ou supérieure.
+ - Utilisez une version Java inférieure à 1.8.0.320.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBH">Le jeu a planté potentiellement en raison de modifications apportées à la version Forge par d'autres lanceurs, ce qui a entraîné des fichiers anormaux dans l'instance.
+Envisagez de réinstaller l'instance Forge depuis le début, au lieu de compter sur d'autres lanceurs pour modifier la version Forge.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBI">* En fait, votre jeu n'a aucun problème, ce crash est déclenché par vous-même.
+* Vous n'avez pas d'autres choses importantes à faire ?</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBJ">Certains mods nécessitent Java 11 pour se lancer.
+Pensez à sélectionner Java 11 dans « Paramètres → Lancer → Java » et à relancer le jeu.
+Téléchargez et installez-en un sur Internet si vous n'avez pas installé Java 11.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBK">Le jeu a renvoyé les informations suivantes : {0}</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBL">OptiFine pourrait être la source des problèmes.
+
+Ce problème est spécifique à certaines versions d'OptiFine. Pensez à sélectionner une autre version d'OptiFine.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBM">Le jeu a planté en raison de problèmes de pilote graphique ou parce qu'une carte graphique dédiée n'était pas utilisée.
+
+Utilisez la carte graphique dédiée au lieu de la carte graphique intégrée Intel lors du lancement de PCL et Minecraft.
+Si les problèmes persistent, pensez à mettre à jour le pilote de votre carte graphique vers la dernière version ou à revenir à la version d'usine.
+Si le problème persiste, pensez à utiliser la version Java 8.0.51 ou inférieure.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBN">Le jeu a planté en raison de problèmes de pilote graphique.
+
+Pensez à mettre à jour le pilote de votre carte graphique vers la dernière version ou à revenir à la version d'usine, puis relancez le jeu.
+Si les problèmes persistent, pensez à utiliser la version Java 8.0.51 ou inférieure.
+Si le problème persiste, envisagez d'utiliser une meilleure carte graphique...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBO">Le jeu a planté en raison du pack de ressources haute résolution ou de la carte graphique peu performante.
+
+Envisagez de supprimer le pack de ressources haute résolution s'il est utilisé.
+Si ce n'est pas le cas, envisagez de mettre à jour le pilote graphique ou d'utiliser une meilleure carte graphique.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBP">Le jeu a planté en raison de problèmes avec Night Config.
+Envisagez d'installer le mod Night Config Fixes pour résoudre le problème.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBQ">Le jeu a planté en raison de l'utilisation de shaders et de packs de ressources.
+
+Envisagez de supprimer les ressources supplémentaires qui ont été appliquées.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBR">Le jeu a planté en raison d'un nombre excessif de mods installés, dépassant la limite d'ID du jeu.
+Envisagez d'installer JEID ou d'autres mods de correction, ou de supprimer certains des mods les plus volumineux.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBS">Le jeu a planté en raison d'un échec de vérification du fichier ou du contenu.
+
+Envisagez de désinstaller le jeu (y compris les mods) et de le réinstaller, ou d'utiliser un VPN pendant le processus de réinstallation.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBT">Le jeu a planté en raison d'une instance Forge incomplète.
+Pensez à réinstaller l'instance Forge.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBU">Fabric a fourni les informations d'erreur suivantes :
 {0}
-        
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBV">Fabric 可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。
-如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBW">Mod 加载器提供了以下错误信息：
+
+Veuillez prendre les mesures appropriées en fonction des informations fournies.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBV">Fabric a peut-être fourni des informations d'erreur. Veuillez prendre les mesures appropriées en fonction des journaux et des rapports d'incident.
+Si aucune information n'est fournie, pensez à consulter les rapports d'incident pour identifier les problèmes.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBW">Le chargeur de mod a fourni les informations d'erreur suivantes :
 {0}
-        
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBX">Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。
-如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBY">Fabric 提供了以下解决方案：
+
+Veuillez prendre les mesures appropriées en fonction des informations fournies.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBX">Le chargeur de mod a peut-être fourni des informations d'erreur. Veuillez prendre les mesures appropriées en fonction des journaux et des rapports d'incident.
+Si aucune information n'est fournie, envisagez de consulter les rapports d'incident pour identifier les problèmes.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBY">Fabric a fourni les solutions suivantes :
 {0}
-        
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric 可能已经提供了解决方案，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。
-如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCA">Forge 提供了以下错误信息：
+
+Veuillez prendre les mesures appropriées en fonction des informations fournies.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric a peut-être fourni des solutions. Veuillez prendre les mesures appropriées en fonction des journaux et des rapports d'incident.
+Si aucune solution n'est fournie, vous pouvez consulter les rapports d'incident pour comprendre comment l'erreur s'est produite.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCA">Forge a fourni les informations d'erreur suivantes :
 {0}
-        
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge 可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。
-如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCC">你的游戏出现了一些问题，但 PCL 未能找到相关记录文件，因此无法进行分析。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL 获取到了没有详细信息的错误原因（{0}），请向 PCL 作者提交反馈以获取详情。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">此外，</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">你可以查看错误报告了解错误具体是如何发生的。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">此外，你正在使用老版本 PCL，更新 PCL 或许也能解决这个问题。
-你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。</s:String>
+
+Veuillez prendre les mesures appropriées en fonction des informations fournies.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge a peut-être fourni des solutions. Veuillez prendre les mesures appropriées en fonction des journaux et des rapports de plantage.
+Si aucune solution n'est fournie, vous pouvez consulter les rapports de plantage pour comprendre comment l'erreur s'est produite.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCC">Le jeu a planté, mais l'analyse est impossible car PCL n'a pas pu localiser les fichiers journaux associés.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL a reçu une raison d'erreur sans informations détaillées ({0}). Veuillez envoyer vos commentaires à l'auteur pour obtenir des informations détaillées.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">De plus, </s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">pensez à consulter les rapports d'incident pour identifier les problèmes.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">si vous avez besoin d'aide, veuillez exporter le rapport d'incident au lieu de prendre une capture d'écran de cette fenêtre et l'envoyer à d'autres personnes.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">De plus, vous utilisez actuellement une version obsolète de PCL. La mise à jour vers la dernière version peut résoudre ce problème.
+Pour mettre à jour PCL, accédez à « Paramètres → Lanceur → Rechercher les mises à jour ».</s:String>
     <!--MyMsgLogin-->
-    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">Rouvrir la page web</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">Rouvrir la page Web</s:String>
     <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">Copier le code</s:String>
-    <s:String x:Key="LangMyMsgLoginHintInitFail">Échec de l'initialisation de la fenêtre de login</s:String>
-    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">Se connecter à Minecraft</s:String>
-    <s:String x:Key="LangMyMsgLoginDialogContent">La page web de login s'ouvrira automatiquement, veuillez entrer {0} (déjà copié).
+    <s:String x:Key="LangMyMsgLoginHintInitFail">Échec de l'initialisation de la boîte de dialogue de connexion.</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">Connexion à Minecraft</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogContent">La page Web de connexion s'ouvre automatiquement. Veuillez saisir le code {0} dans la page Web (déjà copié).
 
 
-Si votre environnement réseau est mauvais, la page web peut ne pas charger, dans ce cas, veuillez utiliser un VPN et réessayer.
-Vous pouvez également utiliser un autre appareil pour ouvrir {1} et entrer le code ci-dessus.</s:String>
-    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">Connexion web réussie !</s:String>
-    <s:String x:Key="LangMyMsgLoginExceptionDecline">Vous avez refusé les autorisations demandées par PCL……</s:String>
-    <s:String x:Key="LangMyMsgLoginExceptionTimeout">Le temps de connexion est trop long, réessayez !</s:String>
-    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Échec de la vérification de connexion</s:String>
+Si l'environnement réseau est médiocre, il se peut qu'il ne puisse pas se charger, vérifiez Internet et réessayez.
+Vous pouvez également accéder à {1} sur un autre appareil et saisir le code.</s:String>
+    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">Connexion réussie via la page Web !</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionDecline">La demande d'autorisation de PCL a été refusée...</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionTimeout">Délai de connexion expiré, veuillez réessayer !</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Échec de l'interrogation de connexion.</s:String>
 </ResourceDictionary>

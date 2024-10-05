@@ -1789,205 +1789,205 @@ URL：{0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">LiteLoader {0} のダウンロード</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">Fabric {0} のダウンロード</s:String>
     <!--ModCrash-->
-    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">エラー報告分析結果</s:String>
-    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft エラー発生</s:String>
-    <s:String x:Key="LangModCrashViewLog">ログを表示</s:String>
-    <s:String x:Key="LangModCrashExportCrashReport">エラー報告をエクスポート</s:String>
-    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">エラー報告がエクスポートされました！</s:String>
-    <s:String x:Key="LangModCrashCrashReasonNoReason">申し訳ありませんが、PCLはエラーの原因を特定できません。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonHelpTip">申し訳ありませんが、ゲームに問題が発生しました……
-助けを求める場合は、エラー報告をエクスポートして他人に送ってください、このウィンドウのスクリーンショットを送信するのではなく。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAA">由于 Mod 文件被解压了，导致游戏无法继续运行。
-直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。
+    <s:String x:Key="LangModCrashDialogTitleAnalysisResult">エラー レポートの分析結果</s:String>
+    <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft エラー</s:String>
+    <s:String x:Key="LangModCrashViewLog">ログの表示</s:String>
+    <s:String x:Key="LangModCrashExportCrashReport">エラー レポートのエクスポート</s:String>
+    <s:String x:Key="LangModCrashHintExportCrashReportSuccess">エラー レポートがエクスポートされました。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonNoReason">申し訳ありませんが、PCL はエラーの原因を特定できません。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonHelpTip">申し訳ありませんが、ゲームにいくつか問題があります...
+サポートが必要な場合は、このウィンドウのスクリーンショットを送信する代わりに、バグ レポートをエクスポートして他の人に送信してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAA">Mod ファイルが解凍されているため、ゲームを続行できません。
+Mod ファイル全体を Mod フォルダーに解凍すると、ゲームエラーが発生します。
 
-请删除 Mod 文件夹中已被解压的 Mod，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAB">Minecraft 内存不足，导致其无法继续运行。
-这很可能是因为电脑内存不足、游戏分配的内存不足，或是配置要求过高。
-            
-你可以尝试在 更多 → 百宝箱 中选择 内存优化，然后再启动游戏。
-如果还是不行，请在启动设置中增加为游戏分配的内存，并删除配置要求较高的材质、Mod、光影。
-如果依然不奏效，请在开始游戏前尽量关闭其他软件，或者……换台电脑？</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAC">游戏因为使用 Open J9 而崩溃了。
-请在启动设置的 Java 选择一项中改用非 OpenJ9 的 Java，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAD">游戏似乎因为使用 JDK，或 Java 版本过高而崩溃了。
-请在启动设置的 Java 选择一项中改用 JRE 8（Java 8），然后再启动游戏。
-如果你没有安装 JRE 8，你可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAE">游戏似乎因为你所使用的 Java 版本过高而崩溃了。
-请在启动设置的 Java 选择一项中改用较低版本的 Java，然后再启动游戏。
-如果没有，可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAF">游戏不兼容你当前使用的 Java。
-如果没有合适的 Java，可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAG">由于有 Mod 的名称包含特殊字符，导致游戏崩溃。
-请尝试修改 Mod 文件名，让它只包含英文字母、数字、减号（-）、下划线（_）和小数点，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAH">由于缺失 MixinBootstrap，导致游戏崩溃。
-请尝试安装 MixinBootstrap。若安装后依然崩溃，可以尝试在文件名前添加英文感叹号。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAI">你似乎正在使用 32 位 Java，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。
-        
-请在启动设置的 Java 选择一项中改用 64 位的 Java 再启动游戏，然后再启动游戏。
-如果你没有安装 64 位的 Java，你可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAJ">你正在使用 32 位的操作系统，这会导致 Minecraft 无法使用所需的内存，进而造成崩溃。
-        
-你或许只能重装 64 位的操作系统来解决此问题。
-如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAK">由于未满足 Mod 的依赖项，导致游戏退出。
-未满足的依赖项：
+Modフォルダ内の解凍したModを削除し、再度ゲームを起動してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAB">Minecraft はメモリ不足のため、実行を続行できません。
+これは、コンピューターのメモリ不足、ゲームによって割り当てられたメモリの不足、または過剰な構成要件が原因である可能性が高くなります。
+
+「その他」→「宝箱」で「メモリの最適化」を選択してゲームを開始してみてください。
+それでも動作しない場合は、起動設定でゲームに割り当てられるメモリを増やし、より高い構成要件を持つマテリアル、MOD、ライトとシャドウを削除してください。
+それでも問題が解決しない場合は、ゲームを開始する前に他のソフトウェアを終了してみてください。または...コンピューターを変更しますか? </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAC">Open J9 を使用するとゲームがクラッシュしました。
+起動設定のJava選択でOpenJ9以外のJavaに切り替えてからゲームを起動してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAD">JDK または古い Java バージョンの使用が原因でゲームがクラッシュしたようです。
+ゲームを起動する前に起動設定のJava選択でJRE 8(Java 8)に切り替えてください。
+JRE 8 がインストールされていない場合は、インターネットからダウンロードしてインストールできます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAE">古いバージョンの Java を使用しているため、ゲームがクラッシュしたようです。
+ゲームを起動する前に、起動設定の Java 選択で Java の低いバージョンに切り替えてください。
+そうでない場合は、インターネットからダウンロードしてインストールできます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAF">このゲームは、現在使用している Java と互換性がありません。
+適切な Java がない場合は、インターネットからダウンロードしてインストールできます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAG">Mod の名前に特殊文字が含まれているため、ゲームがクラッシュします。
+ゲームを起動する前に、英語の文字、数字、マイナス記号 (-)、アンダースコア (_)、および小数点のみが含まれるように Mod ファイル名を変更してみてください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAH">MixinBootstrap が見つからないため、ゲームがクラッシュします。
+MixinBootstrap をインストールしてみてください。インストール後もクラッシュする場合は、ファイル名の前に英語の感嘆符を追加してみてください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAI">32 ビット Java を使用しているようです。これにより、Minecraft が必要なメモリを使用できなくなり、クラッシュする可能性があります。
+
+起動設定のJava選択で64ビットJavaに切り替えてゲームを起動し、再度ゲームを起動してください。
+64 ビット Java がインストールされていない場合は、インターネットからダウンロードしてインストールできます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAJ">32 ビット オペレーティング システムを使用しているため、Minecraft が必要なメモリを使用できなくなり、クラッシュが発生します。
+
+この問題は、64 ビット オペレーティング システムを再インストールすることによってのみ解決できる場合があります。
+コンピュータのメモリが 2GB 未満の場合は、コンピュータを変更する必要がある可能性があります...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAK">Mod の依存関係が満たされなかったため、ゲームは終了しました。
+満たされていない依存関係:
  - {0}
-        
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAL">由于未满足 Mod 的依赖项，导致游戏退出。
-请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAM">你的游戏遇到了一些问题，PCL 为此找到了一个可疑的关键词：{0}。
-        
-如果你知道某个关键词对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAN">你的游戏遇到了一些问题，PCL 为此找到了以下可疑的关键词：
+
+英語が読めない場合は、翻訳ソフトをご利用ください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAL">Mod の依存関係が満たされなかったため、ゲームは終了しました。
+英語が読めない場合は、エラーレポートのログ情報に従って対処してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAM">ゲームでいくつかの問題が発生し、PCL が不審なキーワードを検出しました: {0}。
+
+特定のキーワードに対応する Mod がわかっている場合は、それが原因でエラーが発生している可能性があります。詳細についてはエラー レポートを確認することもできます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAN">ゲームでいくつかの問題が発生し、PCL は次の不審なキーワードを検出しました:
  - {0}
-        
- 如果你知道某个关键词对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAO">PCL 怀疑名为 {0} 的 Mod 导致了游戏出错，但不能完全确定。
-你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAP">PCL 怀疑以下 Mod 导致了游戏出错，但不能完全确定：
+
+特定のキーワードに対応する Mod がわかっている場合は、それが原因でエラーが発生している可能性があります。詳細についてはエラー レポートを確認することもできます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAO">PCL は、{0} という名前の MOD がゲーム エラーの原因であると考えていますが、完全には確信がありません。
+この MOD を無効にして、ゲームが引き続きクラッシュするかどうかを確認してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAP">PCL は、次の MOD がゲーム エラーの原因であると考えていますが、完全には確信がありません。
  - {0}
-        
-你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAQ">名为 {0} 的 Mod 导致了游戏出错。
-你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAR">以下 Mod 导致了游戏出错：
+
+上記の MOD を 1 つずつ無効にして、ゲームが引き続きクラッシュするかどうかを確認してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAQ">{0} という名前の MOD が原因でゲームがクラッシュします。
+この MOD を無効にして、ゲームが引き続きクラッシュするかどうかを確認してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAR">次の MOD はゲーム エラーを引き起こします:
  - {0}
-        
-你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAS">名为 {0} 的 Mod 注入失败，导致游戏出错。
-这一般代表着它与其他 Mod 或当前环境不兼容，或是它存在 Bug。
-你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAT">以下 Mod 导致了游戏出错：
-  - {0}
-这一般代表着它们与其他 Mod 或当前环境不兼容，或是它存在 Bug。
-你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAU">名为 {0} 的 Mod 导致了游戏出错。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAV">名为 {0} 的 Mod 导致了游戏出错：
-其配置文件 {1} 存在异常，无法读取。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAW">名为 {0} 的 Mod 初始化失败，导致游戏无法继续加载。
-你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAX">以下 Mod 初始化失败，导致游戏无法继续加载：
+
+上記の MOD を 1 つずつ無効にして、ゲームが引き続きクラッシュするかどうかを確認してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAS">{0} という名前の Mod の挿入に失敗したため、ゲーム エラーが発生しました。
+これは通常、他の MOD や現在の環境と互換性がない、またはバグがあることを意味します。
+この MOD を無効にして、ゲームが引き続きクラッシュするかどうかを確認してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAT">次の MOD はゲーム エラーを引き起こします:
  - {0}
-        
-你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAY">游戏似乎因为方块 {0} 出现了问题。
-        
-你可以创建一个新世界，并观察游戏的运行情况：
- - 若正常运行，则是该方块导致出错，你或许需要使用一些方式删除此方块。
- - 若仍然出错，问题就可能来自其他原因……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAZ">游戏似乎因为世界中的某些方块出现了问题。
-        
-你可以创建一个新世界，并观察游戏的运行情况：
- - 若正常运行，则是某些方块导致出错，你或许需要删除该世界。
- - 若仍然出错，问题就可能来自其他原因……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBA">你重复安装了多个相同的 Mod：
+これは通常、他の MOD や現在の環境と互換性がない、またはバグがあることを意味します。
+上記の MOD を 1 つずつ無効にして、ゲームが引き続きクラッシュするかどうかを確認してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAU">{0} という名前の MOD がゲームでエラーを引き起こしています。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAV">{0} という名前の Mod がゲームでエラーを引き起こしています:
+構成ファイル {1} に例外があるため、読み取ることができません。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAW">{0} という名前の Mod の初期化に失敗したため、ゲームの読み込みを続行できません。
+この MOD を無効にして、ゲームが引き続きクラッシュするかどうかを確認してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAX">次の Mod の初期化に失敗したため、ゲームの読み込みを続行できません:
  - {0}
-        
-每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBB">你可能重复安装了多个相同的 Mod，导致游戏无法继续加载。
-        
-每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBC">游戏似乎因为实体 {0} 出现了问题。
-        
-你可以创建一个新世界，并生成一个该实体，然后观察游戏的运行情况：
- - 若正常运行，则是该实体导致出错，你或许需要使用一些方式删除此实体。
- - 若仍然出错，问题就可能来自其他原因……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBD">游戏似乎因为世界中的某些实体出现了问题。
-        
-你可以创建一个新世界，并生成各种实体，观察游戏的运行情况：
- - 若正常运行，则是某些实体导致出错，你或许需要删除该世界。
- - 若仍然出错，问题就可能来自其他原因……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBE">由于 OptiFine 与当前版本的 Forge 不兼容，导致了游戏崩溃。
-        
-请前往 OptiFine 官网（https://optifine.net/downloads）查看 OptiFine 所兼容的 Forge 版本，并严格按照对应版本重新安装游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBF">无需同时安装 OptiFine 和 Shaders Mod，OptiFine 已经集成了 Shaders Mod 的功能。
-在删除 Shaders Mod 后，游戏即可正常运行。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBG">由于低版本 Forge 与当前 Java 不兼容，导致了游戏崩溃。
-        
-请尝试以下解决方案：
- - 更新 Forge 到 36.2.26 或更高版本
- - 换用版本低于 1.8.0.320 的 Java</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBH">可能由于使用其他启动器修改了 Forge 版本，当前版本的文件存在异常，导致了游戏崩溃。
-请尝试重新全新安装 Forge，而非使用其他启动器修改 Forge 版本。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBI">* 事实上，你的游戏没有任何问题，这是你自己触发的崩溃。
-* 你难道没有更重要的事要做吗？</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBJ">你所安装的部分 Mod 似乎需要使用 Java 11 启动。
-请在启动设置的 Java 选择一项中改用 Java 11，然后再启动游戏。
-如果你没有安装 Java 11，你可以从网络中下载、安装一个。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBK">程序返回了以下信息：{0}</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBL">你所使用的 OptiFine 可能导致了你的游戏出现问题。
-        
-该问题只在特定 OptiFine 版本中出现，你可以尝试更换 OptiFine 的版本。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBM">你的显卡驱动存在问题，或未使用独立显卡，导致游戏无法正常运行。
-        
-如果你的电脑存在独立显卡，请使用独立显卡而非 Intel 核显启动 PCL 与 Minecraft。
-如果问题依然存在，请尝试升级你的显卡驱动到最新版本，或回退到出厂版本。
-如果还是不行，还可以尝试使用 8.0.51 或更低版本的 Java。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBN">你的显卡驱动存在问题，导致游戏无法正常运行。
-        
-请尝试升级你的显卡驱动到最新版本，或回退到出厂版本，然后再启动游戏。
-如果还是不行，可以尝试使用 8.0.51 或更低版本的 Java。
-如果问题依然存在，那么你可能需要换个更好的显卡……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBO">你所使用的材质分辨率过高，或显卡配置不足，导致游戏无法继续运行。
-        
-如果你正在使用高清材质，请将它移除。
-如果你没有使用材质，那么你可能需要更新显卡驱动，或者换个更好的显卡……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBP">由于 Night Config 存在问题，导致了游戏崩溃。
-你可以尝试安装 Night Config Fixes 模组，这或许能解决此问题。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBQ">你所使用的光影或材质导致游戏出现了一些问题……
-        
-请尝试删除你所添加的这些额外资源。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBR">你所安装的 Mod 过多，超出了游戏的 ID 限制，导致了游戏崩溃。
-请尝试安装 JEID 等修复 Mod，或删除部分大型 Mod。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBS">部分文件或内容校验失败，导致游戏出现了问题。
-        
-请尝试删除游戏（包括 Mod）并重新下载，或尝试在重新下载时使用 VPN。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBT">由于 Forge 安装不完整，导致游戏无法正常运行。
-请尝试重新安装 Forge。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBU">Fabric 提供了以下错误信息：
+
+上記の MOD を 1 つずつ無効にして、ゲームが引き続きクラッシュするかどうかを確認してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAY">ゲームにはブロック {0} で問題があるようです。
+
+新しい世界を作成して、ゲームの動作を観察できます。
+ - 正常に動作する場合、このブロックがエラーの原因となっているため、何らかの方法でこのブロックを削除する必要がある場合があります。
+ - エラーが解決しない場合は、他の理由から問題が発生している可能性があります...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAZ">ワールド内の特定のブロックが原因でゲームに問題が発生しているようです。
+
+新しい世界を作成して、ゲームの動作を観察できます。
+ - 正常に動作する場合、一部のブロックがエラーの原因となっているため、ワールドを削除する必要がある場合があります。
+ - エラーが解決しない場合は、他の理由から問題が発生している可能性があります...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBA">複数の同一の Mod を繰り返しインストールしました:
+ - {0}
+
+各 Mod は 1 回しか表示できません。重複した Mod を削除してからゲームを再度開始してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBB">複数の同一の Mod を繰り返しインストールしたため、ゲームの読み込みを続行できなくなった可能性があります。
+
+各 Mod は 1 回しか表示できません。重複した Mod を削除してからゲームを再度開始してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBC">ゲームにはエンティティ {0} に問題があるようです。
+
+新しいワールドを作成し、このエンティティのインスタンスを生成し、ゲームの実行を観察できます。
+ - 正常に実行される場合、エンティティがエラーの原因となっているため、このエンティティを削除するには何らかの方法を使用する必要がある場合があります。
+ - エラーが解決しない場合は、他の理由から問題が発生している可能性があります...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBD">ワールド内のいくつかのエンティティが原因でゲームに問題が発生しているようです。
+
+新しい世界を作成し、さまざまなエンティティを生成して、ゲームの動作を観察できます。
+ - 正常に動作する場合は、何らかのエンティティがエラーの原因となっているため、ワールドを削除する必要がある可能性があります。
+ - エラーが解決しない場合は、他の理由から問題が発生している可能性があります...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBE">OptiFine が現在のバージョンの Forge と互換性がないため、ゲームがクラッシュしました。
+
+OptiFine 公式 Web サイト (https://optifine.net/downloads) にアクセスして、OptiFine と互換性のある Forge バージョンを確認し、対応するバージョンに従って厳密にゲームを再インストールしてください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBF">OptiFine と Shaders Mod を同時にインストールする必要はありません。OptiFine には Shaders Mod の機能が統合されています。
+Shaders Modを削除すると、ゲームは正常に実行されます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBG">下位バージョンの Forge が現在の Java と互換性がないため、ゲームがクラッシュしました。
+
+次の解決策を試してください。
+ - Forge を 36.2.26 以降に更新する
+ - 1.8.0.320 より前の Java バージョンに切り替えます</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBH">他のランチャーを使用して Forge バージョンが変更されており、現在のバージョンのファイルに異常があり、ゲームがクラッシュする可能性があります。
+別のランチャーを使用して Forge のバージョンを変更するのではなく、Forge のクリーン再インストールを試してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBI">* 実際、ゲームには何も問題はありません。これはあなた自身が引き起こしたクラッシュです。
+* もっと大事なことがあるんじゃないの？ </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBJ">インストールした一部の MOD では Java 11 を起動する必要があるようです。
+ゲームを起動する前に、起動設定の Java 選択で Java 11 に切り替えてください。
+Java 11 がインストールされていない場合は、インターネットからダウンロードしてインストールできます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBK">プログラムは次の情報を返しました: {0}</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBL">使用している OptiFine がゲームで問題を引き起こしている可能性があります。
+
+この問題は、OptiFine の特定のバージョンでのみ発生します。OptiFine のバージョンを変更してみてください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBM">グラフィック カード ドライバに問題があるか、専用グラフィック カードを使用していないため、ゲームが適切に実行されません。
+
+コンピューターにディスクリート グラフィック カードが搭載されている場合は、Intel Core Graphics の代わりにディスクリート グラフィック カードを使用して PCL および Minecraft を起動してください。
+問題が解決しない場合は、グラフィック カード ドライバーを最新バージョンにアップグレードするか、工場出荷時のバージョンにロールバックしてください。
+それでも問題が解決しない場合は、Java 8.0.51 以前を使用してみることもできます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBN">グラフィック カード ドライバーに問題があるため、ゲームが適切に実行されません。
+
+グラフィック カード ドライバーを最新バージョンにアップグレードするか、工場出荷時のバージョンにロールバックしてから、ゲームを再度開始してください。
+これが機能しない場合は、Java 8.0.51 以前を使用してみてください。
+問題が解決しない場合は、より優れたグラフィック カードに変更する必要がある可能性があります...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBO">使用しているマテリアルの解像度が高すぎるか、グラフィック カードの構成が不十分なため、ゲームの実行を続行できません。
+
+HD 素材を使用している場合は、それを削除します。
+マテリアルを使用していない場合は、グラフィック カード ドライバを更新するか、より優れたグラフィック カードに変更する必要がある可能性があります...</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBP">Night Config の問題によりゲームがクラッシュしました。
+Night Config Fixes Mod をインストールしてみると、この問題が解決される可能性があります。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBQ">使用する照明やマテリアルがゲーム内で問題を引き起こす可能性があります...
+
+追加したこれらの追加リソースを削除してみてください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBR">インストールした Mod が多すぎて、ゲーム ID の制限を超えたため、ゲームがクラッシュしました。
+JEIDなどの修復MODを導入するか、大きなMODを削除してみてください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBS">一部のファイルまたはコンテンツが検証できなかったため、ゲームに問題が発生しました。
+
+ゲーム (MOD を含む) を削除して再ダウンロードするか、再ダウンロード中に VPN を使用してみてください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBT">Forge のインストールが不完全なため、ゲームを適切に実行できません。
+Forge を再インストールしてみてください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBU">ファブリックにより、次のエラー メッセージが表示されます。
 {0}
-        
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBV">Fabric 可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。
-如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBW">Mod 加载器提供了以下错误信息：
+
+英語が読めない場合は、翻訳ソフトをご利用ください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonBV">ファブリックがエラー情報を提供している可能性があります。英語が読めない場合は、エラー レポートのログ情報に従って対処してください。
+エラー メッセージが表示されない場合は、エラー レポートを確認して、エラーがどのように発生したかを確認できます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBW">Mod ローダーにより次のエラー メッセージが表示されました:
 {0}
-        
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBX">Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。
-如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBY">Fabric 提供了以下解决方案：
+
+英語が読めない場合は、翻訳ソフトをご利用ください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBX">Mod ローダーがエラー情報を提供している可能性があります。英語が読めない場合は、エラー レポートのログ情報に従って対処してください。
+エラー メッセージが表示されない場合は、エラー レポートを確認して、エラーがどのように発生したかを確認できます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBY">ファブリックは、次のソリューションを提供します。
 {0}
-        
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric 可能已经提供了解决方案，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。
-如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCA">Forge 提供了以下错误信息：
+
+英語が読めない場合は、翻訳ソフトをご利用ください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric が解決策を提供している可能性があります。英語が読めない場合は、エラー レポートのログ情報に従って対処してください。
+エラー メッセージが表示されない場合は、エラー レポートを確認して、エラーがどのように発生したかを確認できます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCA">Forge では次のエラー メッセージが表示されます。
 {0}
-        
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge 可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。
-如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCC">你的游戏出现了一些问题，但 PCL 未能找到相关记录文件，因此无法进行分析。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL 获取到了没有详细信息的错误原因（{0}），请向 PCL 作者提交反馈以获取详情。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">此外，</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">你可以查看错误报告了解错误具体是如何发生的。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">此外，你正在使用老版本 PCL，更新 PCL 或许也能解决这个问题。
-你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。</s:String>
+
+英語が読めない場合は、翻訳ソフトをご利用ください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge がエラー情報を提供している可能性があります。英語が読めない場合は、エラー レポートのログ情報に従って適切に対処してください。
+エラー メッセージが表示されない場合は、エラー レポートを確認して、エラーがどのように発生したかを確認できます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCC">ゲームにいくつかの問題がありますが、PCL は関連するログ ファイルを見つけられず、分析できません。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL は、詳細情報のないエラー理由 ({0}) を受け取りました。詳細については、PCL 作成者にフィードバックを送信してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">さらに</s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">エラー レポートを表示して、エラーがどのように発生したかを確認できます。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">サポートが必要な場合は、このウィンドウのスクリーンショットではなくバグ レポート ファイルを送信してください。 </s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">また、古いバージョンの PCL を使用している場合は、PCL を更新すると、この問題が解決される可能性があります。
+PCL を更新するには、[設定] → [ランチャー] → [アップデートの確認] をクリックします。 </s:String>
     <!--MyMsgLogin-->
-    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">ウェブページを再度開く</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">Web ページを再度開きます</s:String>
     <s:String x:Key="LangMyMsgLoginDialogBtnCopyCode">コードをコピー</s:String>
-    <s:String x:Key="LangMyMsgLoginHintInitFail">ログインダイアログの初期化に失敗しました</s:String>
-    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">Minecraftにログイン</s:String>
-    <s:String x:Key="LangMyMsgLoginDialogContent">ログインウェブページが自動的に開きます。ウェブページに {0} を入力してください（自動的にコピーされました）。
+    <s:String x:Key="LangMyMsgLoginHintInitFail">ログイン ポップアップ ウィンドウの初期化に失敗しました</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogTitleLoginMc">Minecraft にログイン</s:String>
+    <s:String x:Key="LangMyMsgLoginDialogContent">ログイン Web ページが自動的に開きます。Web ページに {0} (自動的にコピーされた) を入力してください。
 
 
-ネットワーク環境が良くない場合、ウェブページがロードされないことがあります。その場合はVPNを使用して再試行してください。
-他のデバイスで {1} を開き、上記のコードを入力することもできます。</s:String>
-    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">ウェブページへのログインに成功しました！</s:String>
-    <s:String x:Key="LangMyMsgLoginExceptionDecline">あなたはPCLのリクエストを拒否しました……</s:String>
-    <s:String x:Key="LangMyMsgLoginExceptionTimeout">ログインに時間がかかりすぎます。もう一度試してみてください！</s:String>
-    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">ログインのポーリングに失敗しました</s:String>
+ネットワーク環境が悪い場合はWebページが読み込まれない場合がありますので、その場合はVPNをご利用の上、再度お試しください。
+別のデバイスから {1} を開いて上記のコードを入力することもできます。 </s:String>
+    <s:String x:Key="LangMyMsgLoginHintLoginSuccess">Web ページのログインに成功しました。 </s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionDecline">PCL から要求された権限を拒否しました...</s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionTimeout">ログインに時間がかかりすぎました。もう一度お試しください。 </s:String>
+    <s:String x:Key="LangMyMsgLoginExceptionCheckFail">ログイン ポーリングに失敗しました</s:String>
 </ResourceDictionary>

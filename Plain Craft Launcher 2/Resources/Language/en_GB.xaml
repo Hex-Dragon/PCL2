@@ -1853,7 +1853,7 @@ Consider disabling the mod and monitoring whether the game continues to crash.</
 This typically indicates an incompatibility with other mods or the current environment, or it could be due to a bug.
 Consider disabling the mod and monitoring whether the game continues to crash.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAT">The game crashed due to the following mods:
-  - {0}
+ - {0}
 This typically indicates an incompatibility with other mods or the current environment, or it could be due to a bug.
 Consider disabling the mods and monitoring whether the game continues to crash.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAU">The game crashed due to the mod {0}.</s:String>

@@ -188,7 +188,7 @@ Public Class Application
            ExceptionString.Contains("MS.Internal.AppModel.ITaskbarList.HrInit") OrElse
            ExceptionString.Contains(".NET Framework") OrElse ' “自动错误判断” 的结果分析
            ExceptionString.Contains("未能加载文件或程序集") Then
-            OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net462-offline-installer")
+            OpenWebsite("https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net462-offline-installer")
             MsgBox(GetLang("LangApplicationDialogContentNETWarn"), MsgBoxStyle.Information, GetLang("LangApplicationDialogTitleNETWarn"))
             FormMain.EndProgramForce(Result.Cancel)
         Else

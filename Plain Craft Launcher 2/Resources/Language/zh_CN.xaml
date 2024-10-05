@@ -1841,7 +1841,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAN">你的游戏遇到了一些问题，PCL 为此找到了以下可疑的关键词：
  - {0}
 
- 如果你知道某个关键词对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。</s:String>
+如果你知道某个关键词对应的 Mod，那么有可能就是它引起的错误，你也可以查看错误报告获取详情。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAO">PCL 怀疑名为 {0} 的 Mod 导致了游戏出错，但不能完全确定。
 你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAP">PCL 怀疑以下 Mod 导致了游戏出错，但不能完全确定：
@@ -1858,7 +1858,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 这一般代表着它与其他 Mod 或当前环境不兼容，或是它存在 Bug。
 你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAT">以下 Mod 导致了游戏出错：
-  - {0}
+ - {0}
 这一般代表着它们与其他 Mod 或当前环境不兼容，或是它存在 Bug。
 你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAU">名为 {0} 的 Mod 导致了游戏出错。</s:String>
