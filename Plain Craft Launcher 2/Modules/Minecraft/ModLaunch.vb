@@ -237,12 +237,12 @@ NextInner:
                     Case 2, 5, 10, 15, 20, 40, 60, 80, 100, 125, 150, 175, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
                         If MyMsgBox(GetLang("LangModLaunchDialogContentBuyMc", Setup.Get("SystemLaunchCount"),
                                     GetLang("LangModLaunchDialogTitleBuyMc"), GetLang("LangModLaunchDialogBtn1BuyMc"), GetLang("LangModLaunchDialogBtn2BuyMc"))) = 1 Then
-                            OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
+                            OpenWebsite("https://www.xbox.com/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
                         End If
                 End Select
             Else '限制使用离线登录（包括第三方登录）
                 Select Case MyMsgBox(GetLang("LangModLaunchDialogContentMsLoginRequire"), GetLang("LangModLaunchDialogTitleMsLoginRequire"), GetLang("LangModLaunchDialogBtn1MsLoginRequire"), GetLang("LangModLaunchDialogBtn2MsLoginRequire"), GetLang("LangModLaunchDialogBtn3MsLoginRequire"),
-                    Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
+                    Button1Action:=Sub() OpenWebsite("https://www.xbox.com/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
                     Case 2
                         Hint(GetLang("LangModLaunchHintPlayInDemo"), HintType.Critical)
                         CurrentLaunchOptions.ExtraArgs.Add("--demo")
@@ -830,7 +830,7 @@ LoginFinish:
 
     '微软登录步骤 1，原始登录：获取 DeviceCode 并开启登录网页
     Private Function MsLoginStep1New(Data As LoaderTask(Of McLoginMs, McLoginResult)) As String()
-        '参考：https://learn.microsoft.com/zh-cn/entra/identity-platform/v2-oauth2-device-code
+        '参考：https://learn.microsoft.com/entra/identity-platform/v2-oauth2-device-code
 
         '初始请求
 Retry:
@@ -935,7 +935,7 @@ Retry:
                     OpenWebsite("https://account.live.com/editprof.aspx")
                     MyMsgBox(GetLang("LangModLaunchDialogContentChangeAgeA"), GetLang("LangModLaunchDialogTitleLoginTip"))
                 Else
-                    OpenWebsite("https://support.microsoft.com/zh-cn/account-billing/如何更改-microsoft-帐户上的出生日期-837badbc-999e-54d2-2617-d19206b9540a")
+                    OpenWebsite("https://support.microsoft.com/account-billing/如何更改-microsoft-帐户上的出生日期-837badbc-999e-54d2-2617-d19206b9540a")
                     MyMsgBox(GetLang("LangModLaunchDialogContentChangeAgeB"), GetLang("LangModLaunchDialogTitleLoginTip"))
                 End If
                 Throw New Exception("$$")
@@ -984,7 +984,7 @@ Retry:
             If Not (ResultJson.ContainsKey("items") AndAlso ResultJson("items").Any) Then
                 Select Case MyMsgBox(GetLang("LangModLaunchDialogContentNoMc"), GetLang("LangModLaunchDialogTitleLoginFail"), GetLang("LangModLaunchDialogBtnByMc"), GetLang("LangDialogBtnCancel"))
                     Case 1
-                        OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
+                        OpenWebsite("https://www.xbox.com/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
                 End Select
                 Throw New Exception("$$")
             End If
@@ -1011,7 +1011,7 @@ Retry:
                 Sub()
                     Select Case MyMsgBox(GetLang("LangModLaunchDialogContentCreateRole"), GetLang("LangModLaunchDialogTitleLoginFail"), GetLang("LangModLaunchDialogBtnCreateRole"), GetLang("LangDialogBtnCancel"))
                         Case 1
-                            OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
+                            OpenWebsite("https://www.minecraft.net/msaprofile/mygames/editprofile")
                     End Select
                 End Sub, "Login Failed: Create Profile")
                 Throw New Exception("$$")

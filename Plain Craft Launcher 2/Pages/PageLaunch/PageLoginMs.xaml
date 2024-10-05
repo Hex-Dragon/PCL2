@@ -27,9 +27,9 @@
                 <ColumnDefinition Width="30" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <local:MyTextButton Text="{StaticResource LangPageLoginMsBuy}" EventType="打开网页" EventData="https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"
+            <local:MyTextButton Text="{StaticResource LangPageLoginMsBuy}" EventType="打开网页" EventData="https://www.xbox.com/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"
                             Grid.Column="0" />
-            <local:MyTextButton Text="{StaticResource LangPageLoginMsWebsite}" EventType="打开网页" EventData="https://www.minecraft.net/zh-hans"
+            <local:MyTextButton Text="{StaticResource LangPageLoginMsWebsite}" EventType="打开网页" EventData="https://www.minecraft.net"
                             Grid.Column="2" />
         </Grid>
     </Grid>

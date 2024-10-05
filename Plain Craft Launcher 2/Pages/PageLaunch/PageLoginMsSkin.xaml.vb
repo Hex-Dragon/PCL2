@@ -45,7 +45,7 @@
         OpenWebsite("https://account.live.com/password/Change")
     End Sub
     Public Sub BtnEditName_Click(sender As Object, e As RoutedEventArgs)
-        OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
+        OpenWebsite("https://www.minecraft.net/msaprofile/mygames/editprofile")
     End Sub
 
     '退出登录
