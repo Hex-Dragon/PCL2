@@ -283,6 +283,15 @@
     '补全文件
     Private Sub BtnManageCheck_Click(sender As Object, e As EventArgs) Handles BtnManageCheck.Click
         Try
+            '忽略文件检查提示
+            If ShouldIgnoreFileCheck(PageVersionLeft.Version) Then
+                If Setup.Get("LaunchAdvanceAssets") Then
+                    Hint(GetLang("LangPageVersionOverallHintEnableAssetsCheck"), HintType.Info)
+                Else
+                    Hint(GetLang("LangPageVersionOverallHintEnableInstanceAssetsCheck"), HintType.Info)
+                End If
+                Exit Sub
+            End If
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar
                 If OngoingLoader.Name <> PageVersionLeft.Version.Name & " " & GetLang("LangPageVersionOverallTaskCompleteFile") Then Continue For
@@ -290,7 +299,7 @@
                 Exit Sub
             Next
             '启动
-            Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " " & GetLang("LangPageVersionOverallTaskCompleteFile"), DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload, False))
+            Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " " & GetLang("LangPageVersionOverallTaskCompleteFile"), DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload))
             Loader.OnStateChanged =
             Sub()
                 Select Case Loader.State

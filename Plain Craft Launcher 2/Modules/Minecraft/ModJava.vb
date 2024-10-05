@@ -79,7 +79,7 @@
         Public Overrides Function ToString() As String
             Dim VersionString = Version.ToString
             If VersionString.StartsWithF("1.") Then VersionString = Mid(VersionString, 3)
-            Return If(IsJre, "JRE ", "JDK ") & VersionCode & " (" & VersionString & ")" & If(Is64Bit, "", "，" & GetLang("LangModJava32Bit")) & If(IsUserImport, "，" & GetLang("LangModJavaManuallyImport"), "") & "：" & PathFolder
+            Return If(IsJre, "JRE ", "JDK ") & VersionCode & " (" & VersionString & ")" & If(Is64Bit, "", GetLang("LangComma") & GetLang("LangModJava32Bit")) & If(IsUserImport, GetLang("LangComma") & GetLang("LangModJavaManuallyImport"), "") & GetLang("LangColon") & PathFolder
         End Function
 
         '构造
@@ -216,8 +216,8 @@
 
             '添加特定的 Java
             Dim JavaPreList As New Dictionary(Of String, Boolean)
-            If PathMcFolder.Split("\").Count > 3 Then
-                JavaSearchFolder(GetPathFromFullPath(PathMcFolder), JavaPreList, False, True) 'Minecraft 文件夹的父文件夹（如果不是根目录的话）
+            If PathMcFolder.Split("\").Count > 3 AndAlso Not PathMcFolder.Contains("AppData\Roaming") Then
+                JavaSearchFolder(GetPathFromFullPath(PathMcFolder), JavaPreList, False, True) 'Minecraft 文件夹的父文件夹（如果不是根目录或 %APPDATA% 的话）
             End If
             JavaSearchFolder(PathMcFolder, JavaPreList, False, True) 'Minecraft 文件夹
             JavaPreList = JavaPreList.Where(Function(j) Not j.Key.Contains(".minecraft\runtime")).

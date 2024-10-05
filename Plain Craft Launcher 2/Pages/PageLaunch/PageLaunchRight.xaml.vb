@@ -71,7 +71,7 @@ Download:
                     Case 0
                         Log("[Page] 主页预设：你知道吗")
                         Content = "
-                            <local:MyCard Title=""{DynamicResource LangLaunchRightPageTips}"" Margin=""0,0,0,15"">
+                            <local:MyCard Title=""{StaticResource LangLaunchRightPageTips}"" Margin=""0,0,0,15"">
                                 <TextBlock Margin=""25,38,23,15"" FontSize=""13.5"" IsHitTestVisible=""False"" Text=""{hint}"" TextWrapping=""Wrap"" Foreground=""{DynamicResource ColorBrush1}"" />
                                 <local:MyIconButton Height=""22"" Width=""22"" Margin=""9"" VerticalAlignment=""Top"" HorizontalAlignment=""Right"" 
                                     EventType=""刷新主页"" EventData=""/""
@@ -80,7 +80,7 @@ Download:
                     Case 1
                         Log("[Page] 主页预设：回声洞")
                         Content = "
-                            <local:MyCard Title=""{DynamicResource LangLaunchRightPageEcho}"" Margin=""0,0,0,15"">
+                            <local:MyCard Title=""{StaticResource LangLaunchRightPageEcho}"" Margin=""0,0,0,15"">
                                 <TextBlock Margin=""25,38,23,15"" FontSize=""13.5"" IsHitTestVisible=""False"" Text=""{cave}"" TextWrapping=""Wrap"" Foreground=""{DynamicResource ColorBrush1}"" />
                                 <local:MyIconButton Height=""22"" Width=""22"" Margin=""9"" VerticalAlignment=""Top"" HorizontalAlignment=""Right"" 
                                     EventType=""刷新主页"" EventData=""/""
@@ -101,6 +101,18 @@ Download:
                     Case 5
                         Log("[Page] 主页预设：Minecraft 皮肤推荐")
                         Url = "https://forgepixel.com/pcl_sub_file"
+                        GoTo Download
+                    Case 6
+                        Log("[Page] 主页预设：OpenBMCLAPI 仪表盘 Lite")
+                        Url = "https://pcl-bmcl.milulu.xyz/"
+                        GoTo Download
+                    Case 7
+                        Log("[Page] 主页预设：主页市场")
+                        Url = "https://homepage-market.pages.dev/Custom.xaml"
+                        GoTo Download
+                    Case 8
+                        Log("[Page] 主页预设：更新日志")
+                        Url = "https://updatehomepage.pages.dev/UpdateHomepage.xaml"
                         GoTo Download
                 End Select
         End Select
@@ -128,7 +140,7 @@ Download:
             Dim NeedDownload As Boolean = True
             Try
                 Version = NetGetCodeByRequestOnce(VersionAddress, Timeout:=10000)
-                If Version.Length > 100 Then Throw New Exception($"获取的自定义主页版本过长（{Version.Length} 字符）")
+                If Version.Length > 1000 Then Throw New Exception($"获取的自定义主页版本过长（{Version.Length} 字符）")
                 Dim CurrentVersion As String = Setup.Get("CacheSavedPageVersion")
                 If Version <> "" AndAlso CurrentVersion <> "" AndAlso Version = CurrentVersion Then
                     Log($"[Page] 当前缓存的自定义主页已为最新，当前版本：{Version}，检查源：{VersionAddress}")

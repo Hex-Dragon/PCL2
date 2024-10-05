@@ -7,8 +7,8 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
-            <local:MyHint Text="{DynamicResource LangPageVersionSetupTips}" IsWarn="False" Margin="0,15" />
-            <local:MyCard x:Name="CardArgument" Margin="0,0,0,15" Title="{DynamicResource LangPageSetupLaunchLaunchOptions}">
+            <local:MyHint Text="{StaticResource LangPageVersionSetupTips}" IsWarn="False" Margin="0,15" />
+            <local:MyCard x:Name="CardArgument" Margin="0,0,0,15" Title="{StaticResource LangPageSetupLaunchLaunchOptions}">
                 <StackPanel Margin="25,40,25,21">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -25,10 +25,10 @@
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupLaunchLaunchWindowTitle}" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextArgumentTitle" Grid.Row="0" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" ToolTip="{DynamicResource LangPageSetupLaunchLaunchWindowTitleToolTip}" HintText="{DynamicResource LangPageVersionSetupUseGlobal}" MaxLength="100" />
-                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupLaunchLaunchCustomInfo}" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextArgumentInfo" Grid.Row="2" Grid.ColumnSpan="2" Tag="VersionArgumentInfo" Grid.Column="1" HintText="{DynamicResource LangPageVersionSetupUseGlobal}" ToolTip="{DynamicResource LangPageSetupLaunchLaunchCustomInfoToolTip}">
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchWindowTitle}" Margin="0,0,25,0" />
+                        <local:MyTextBox x:Name="TextArgumentTitle" Grid.Row="0" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchWindowTitleToolTip}" HintText="{StaticResource LangPageVersionSetupUseGlobal}" MaxLength="100" />
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchCustomInfo}" Margin="0,0,25,0" />
+                        <local:MyTextBox x:Name="TextArgumentInfo" Grid.Row="2" Grid.ColumnSpan="2" Tag="VersionArgumentInfo" Grid.Column="1" HintText="{StaticResource LangPageVersionSetupUseGlobal}" ToolTip="{StaticResource LangPageSetupLaunchLaunchCustomInfoToolTip}">
                             <local:MyTextBox.ValidateRules>
                                 <local:ValidateExcept>
                                     <local:ValidateExcept.Excepts>
@@ -39,26 +39,26 @@
                                 </local:ValidateExcept>
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
-                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupLaunchLaunchVersionIsolation}" Margin="0,0,25,0" />
+                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchVersionIsolation}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboArgumentIndie" Grid.Row="4" Grid.ColumnSpan="2" Tag="VersionArgumentIndie" Grid.Column="1">
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageVersionSetupUseGlobal}" IsSelected="True" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageVersionSetupEnable}" 
-                                                  ToolTip="{DynamicResource LangPageVersionSetupIndieEnable}" ToolTipService.HorizontalOffset="100"/>
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageVersionSetupDisable}" 
-                                                  ToolTip="{DynamicResource LangPageVersionSetupIndieDisable}" ToolTipService.HorizontalOffset="100"/>
+                            <local:MyComboBoxItem Content="{StaticResource LangPageVersionSetupUseGlobal}" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageVersionSetupEnable}" 
+                                                  ToolTip="{StaticResource LangPageVersionSetupIndieEnable}" ToolTipService.HorizontalOffset="100"/>
+                            <local:MyComboBoxItem Content="{StaticResource LangPageVersionSetupDisable}" 
+                                                  ToolTip="{StaticResource LangPageVersionSetupIndieDisable}" ToolTipService.HorizontalOffset="100"/>
                         </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupLaunchLaunchJava}" Margin="0,0,25,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchJava}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboArgumentJava" Grid.ColumnSpan="2" Grid.Row="6" Grid.Column="1" MaxDropDownHeight="240"
-                                          ToolTip="{DynamicResource LangPageSetupLaunchLaunchJavaToolTip}">
-                            <ComboBoxItem Content="{DynamicResource LangPageSetupLaunchLaunchJavaLoading}" IsSelected="True" />
+                                          ToolTip="{StaticResource LangPageSetupLaunchLaunchJavaToolTip}">
+                            <ComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchJavaLoading}" IsSelected="True" />
                             <!--<local:MyComboBoxItem Content="Java 8 (1.8.0_171)，64 位：C:\Program Files (x86)\Common Files\Oracle\Java\javapath\javaw.exe" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5" IsSelected="True" ToolTip="C:\Program Files (x86)\Common Files\Oracle\Java\javapath\javaw.exe" />-->
                         </local:MyComboBox>
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard Margin="0,0,0,15" Title="{DynamicResource LangPageSetupLaunchLaunchMem}">
+            <local:MyCard Margin="0,0,0,15" Title="{StaticResource LangPageSetupLaunchLaunchMem}">
                 <StackPanel Margin="25,40,25,15">
-                    <local:MyHint x:Name="LabRamWarn" Text="{DynamicResource LangPageSetupLaunchLaunchMem32BitWarn}" IsWarn="True" Margin="0,0,0,12" />
+                    <local:MyHint x:Name="LabRamWarn" Text="{StaticResource LangPageSetupLaunchLaunchMem32BitWarn}" IsWarn="True" Margin="0,0,0,12" />
                     <Grid Margin="0,0,0,3">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -70,10 +70,10 @@
                             <RowDefinition Height="9" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <local:MyRadioBox Text="{DynamicResource LangPageVersionSetupUseGlobal}" Checked="True" x:Name="RadioRamType2" Tag="VersionRamType/2" Margin="0,0,20,9" />
-                        <local:MyRadioBox Grid.Row="1" Text="{DynamicResource LangPageSetupLaunchLaunchMemAutoAdjust}" x:Name="RadioRamType0" Tag="VersionRamType/0" Margin="0,0,20,0"
-                                          ToolTip="{DynamicResource LangPageSetupLaunchLaunchMemAutoAdjustToolTip}" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="-10" ToolTipService.VerticalOffset="-3" />
-                        <local:MyRadioBox Grid.Row="3" Text="{DynamicResource LangPageSetupLaunchLaunchMemCustom}" x:Name="RadioRamType1" Tag="VersionRamType/1" Margin="0,0,20,0" />
+                        <local:MyRadioBox Text="{StaticResource LangPageVersionSetupUseGlobal}" Checked="True" x:Name="RadioRamType2" Tag="VersionRamType/2" Margin="0,0,20,9" />
+                        <local:MyRadioBox Grid.Row="1" Text="{StaticResource LangPageSetupLaunchLaunchMemAutoAdjust}" x:Name="RadioRamType0" Tag="VersionRamType/0" Margin="0,0,20,0"
+                                          ToolTip="{StaticResource LangPageSetupLaunchLaunchMemAutoAdjustToolTip}" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="-10" ToolTipService.VerticalOffset="-3" />
+                        <local:MyRadioBox Grid.Row="3" Text="{StaticResource LangPageSetupLaunchLaunchMemCustom}" x:Name="RadioRamType1" Tag="VersionRamType/1" Margin="0,0,20,0" />
                         <local:MySlider Grid.Row="3" Grid.Column="1" IsEnabled="False" x:Name="SliderRamCustom" Tag="VersionRamCustom" MaxValue="49" Value="13" />
                         <!--<local:MyTextBox Grid.Row="2" Grid.Column="3" Width="100" VerticalAlignment="Center" Margin="30,0,0,0" Text="2048 MB" />-->
                     </Grid>
@@ -86,11 +86,11 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="28" />
                         </Grid.RowDefinitions>
-                        <TextBlock Margin="0,6,30,0" Text="{DynamicResource LangPageSetupLaunchLaunchMemReduceMemBeforeLaunch}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" />
+                        <TextBlock Margin="0,6,30,0" Text="{StaticResource LangPageSetupLaunchLaunchMemReduceMemBeforeLaunch}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" />
                         <local:MyComboBox x:Name="ComboRamOptimize" Margin="10,0,0,0" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="2" Tag="VersionRamOptimize">
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageVersionSetupUseGlobal}" IsSelected="True" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageVersionSetupEnable}" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageVersionSetupDisable}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageVersionSetupUseGlobal}" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageVersionSetupEnable}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageVersionSetupDisable}" />
                         </local:MyComboBox>
                     </Grid>
                     <Grid x:Name="PanRamDisplay" Margin="0,11,2,0" SnapsToDevicePixels="True" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1">
@@ -114,8 +114,8 @@
                         </Rectangle>
                         <Rectangle Grid.Row="1" StrokeThickness="0" Grid.Column="1" Fill="{DynamicResource ColorBrush3}" Opacity="0.5" x:Name="RectRamGame" />
                         <Rectangle x:Name="RectRamEmpty" Grid.Row="1" StrokeThickness="0" Grid.Column="2" Fill="{DynamicResource ColorBrush6}" Opacity="0.7" />
-                        <TextBlock x:Name="LabRamUsedTitle" Text="{DynamicResource LangPageSetupLaunchLaunchMemUsedMem}" Grid.ColumnSpan="3" Opacity="0.7" TextTrimming="None" Margin="2,0,0,5" FontSize="11" HorizontalAlignment="Left" />
-                        <TextBlock x:Name="LabRamGameTitle" Text="{DynamicResource LangPageSetupLaunchLaunchMemMemForGame}" Opacity="0.7" Grid.ColumnSpan="3" TextTrimming="None" Margin="2,0,0,5" FontSize="11" HorizontalAlignment="Left" />
+                        <TextBlock x:Name="LabRamUsedTitle" Text="{StaticResource LangPageSetupLaunchLaunchMemUsedMem}" Grid.ColumnSpan="3" Opacity="0.7" TextTrimming="None" Margin="2,0,0,5" FontSize="11" HorizontalAlignment="Left" />
+                        <TextBlock x:Name="LabRamGameTitle" Text="{StaticResource LangPageSetupLaunchLaunchMemMemForGame}" Opacity="0.7" Grid.ColumnSpan="3" TextTrimming="None" Margin="2,0,0,5" FontSize="11" HorizontalAlignment="Left" />
                         <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="3" Margin="2,3,0,0" HorizontalAlignment="Left">
                             <TextBlock x:Name="LabRamUsed" Text="4.7 GB" FontSize="16" Foreground="Black" TextTrimming="None" />
                             <TextBlock x:Name="LabRamTotal" Text=" / 7.9 GB" FontSize="16" Foreground="Black" TextTrimming="None" />
@@ -124,7 +124,7 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard x:Name="CardServer" Margin="0,0,0,15" Title="{DynamicResource LangPageVersionSetupServer}">
+            <local:MyCard x:Name="CardServer" Margin="0,0,0,15" Title="{StaticResource LangPageVersionSetupServer}">
                 <StackPanel Margin="25,42,25,18">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -140,36 +140,36 @@
                             <RowDefinition Height="28" />
                             <RowDefinition Height="3" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageVersionSetupServerLogin}" Margin="0,0,25,0" />
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageVersionSetupServerLogin}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboServerLogin" Grid.Row="0" Grid.ColumnSpan="2" Tag="VersionServerLogin" Grid.Column="1">
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageVersionSetupServerLoginOnlineOrOffline}" IsSelected="True" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageVersionSetupServerLoginOnline}" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageVersionSetupServerLoginOffline}" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageVersionSetupServerLoginThirdParty}" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageVersionSetupServerLoginThirdPartyAuthlib}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageVersionSetupServerLoginOnlineOrOffline}" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageVersionSetupServerLoginOnline}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageVersionSetupServerLoginOffline}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageVersionSetupServerLoginThirdParty}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageVersionSetupServerLoginThirdPartyAuthlib}" />
                         </local:MyComboBox>
-                        <TextBlock Name="LabServerNide" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageVersionSetupServerLoginServerID}" Margin="0,8,25,0" Visibility="Collapsed" />
-                        <local:MyTextBox x:Name="TextServerNide" Grid.Row="1" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerNide" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="{DynamicResource LangPageVersionSetupServerLoginServerIDToolTip}">
+                        <TextBlock Name="LabServerNide" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageVersionSetupServerLoginServerID}" Margin="0,8,25,0" Visibility="Collapsed" />
+                        <local:MyTextBox x:Name="TextServerNide" Grid.Row="1" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerNide" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="{StaticResource LangPageVersionSetupServerLoginServerIDToolTip}">
                             <local:MyTextBox.ValidateRules>
                                 <local:ValidateLength Min="32" Max="32" />
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
-                        <TextBlock Name="LabServerAuthServer" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageVersionSetupServerLoginAuthServer}" Margin="0,8,25,0" Visibility="Collapsed" />
-                        <local:MyTextBox x:Name="TextServerAuthServer" Grid.Row="1" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerAuthServer" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="{DynamicResource LangPageVersionSetupServerLoginYggdrasil}">
+                        <TextBlock Name="LabServerAuthServer" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageVersionSetupServerLoginAuthServer}" Margin="0,8,25,0" Visibility="Collapsed" />
+                        <local:MyTextBox x:Name="TextServerAuthServer" Grid.Row="1" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerAuthServer" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="{StaticResource LangPageVersionSetupServerLoginYggdrasil}">
                             <local:MyTextBox.ValidateRules>
                                 <local:ValidateHttp />
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
-                        <TextBlock Name="LabServerAuthRegister" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageVersionSetupServerLoginRegister}" Margin="0,8,25,0" Visibility="Collapsed" />
-                        <local:MyTextBox x:Name="TextServerAuthRegister" Grid.Row="2" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerAuthRegister" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="{DynamicResource LangPageVersionSetupServerLoginRegisterWeb}">
+                        <TextBlock Name="LabServerAuthRegister" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageVersionSetupServerLoginRegister}" Margin="0,8,25,0" Visibility="Collapsed" />
+                        <local:MyTextBox x:Name="TextServerAuthRegister" Grid.Row="2" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerAuthRegister" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="{StaticResource LangPageVersionSetupServerLoginRegisterWeb}">
                             <local:MyTextBox.ValidateRules>
                                 <local:ValidateHttp />
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
-                        <TextBlock Name="LabServerAuthName" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageVersionSetupServerLoginServerName}" Margin="0,8,25,0" Visibility="Collapsed" />
-                        <local:MyTextBox x:Name="TextServerAuthName" Grid.Row="3" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerAuthName" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="{DynamicResource LangPageVersionSetupServerLoginServerNameToolTip}" />
-                        <TextBlock VerticalAlignment="Center" Grid.Row="5" HorizontalAlignment="Left" Text="{DynamicResource LangPageVersionSetupServerLoginAutoEnterServer}" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextServerEnter" Grid.ColumnSpan="2" Grid.Row="5" Tag="VersionServerEnter" Grid.Column="1" ToolTip="{DynamicResource LangPageVersionSetupServerLoginAutoEnterServerToolTip}">
+                        <TextBlock Name="LabServerAuthName" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageVersionSetupServerLoginServerName}" Margin="0,8,25,0" Visibility="Collapsed" />
+                        <local:MyTextBox x:Name="TextServerAuthName" Grid.Row="3" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerAuthName" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="{StaticResource LangPageVersionSetupServerLoginServerNameToolTip}" />
+                        <TextBlock VerticalAlignment="Center" Grid.Row="5" HorizontalAlignment="Left" Text="{StaticResource LangPageVersionSetupServerLoginAutoEnterServer}" Margin="0,0,25,0" />
+                        <local:MyTextBox x:Name="TextServerEnter" Grid.ColumnSpan="2" Grid.Row="5" Tag="VersionServerEnter" Grid.Column="1" ToolTip="{StaticResource LangPageVersionSetupServerLoginAutoEnterServerToolTip}">
                             <local:MyTextBox.ValidateRules>
                                 <local:ValidateExcept>
                                     <local:ValidateExcept.Excepts>
@@ -185,12 +185,12 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnServerNideWeb" Grid.Column="0" MinWidth="140" Text="{DynamicResource LangPageVersionSetupServerLoginServerMaster}" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
+                        <local:MyButton x:Name="BtnServerNideWeb" Grid.Column="0" MinWidth="140" Text="{StaticResource LangPageVersionSetupServerLoginServerMaster}" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
                     </Grid>
-                    <local:MyButton x:Name="BtnServerAuthLittle" Height="35" MinWidth="150" Margin="0,12,0,0" Text="{DynamicResource LangPageVersionSetupServerLoginServerSetLittleSkin}" HorizontalAlignment="Left" ColorType="Highlight" />
+                    <local:MyButton x:Name="BtnServerAuthLittle" Height="35" MinWidth="150" Margin="0,12,0,0" Text="{StaticResource LangPageVersionSetupServerLoginServerSetLittleSkin}" HorizontalAlignment="Left" ColorType="Highlight" />
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard x:Name="CardAdvance" Margin="0,0,0,15" Title="{DynamicResource LangPageSetupLaunchLaunchAdvanceOptions}" IsSwaped="True" CanSwap="True">
+            <local:MyCard x:Name="CardAdvance" Margin="0,0,0,15" Title="{StaticResource LangPageSetupLaunchLaunchAdvanceOptions}" IsSwaped="True" CanSwap="True">
                 <Grid Margin="25,40,25,21">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
@@ -206,21 +206,21 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupLaunchLaunchAdvanceOptionsJVMHead}" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextAdvanceJvm" Grid.Row="0" Grid.ColumnSpan="2" Tag="VersionAdvanceJvm" Grid.Column="1" MaxLength="4000" ToolTip="{DynamicResource LangPageVersionSetupJVMHead}" HintText="{DynamicResource LangPageVersionSetupUseGlobal}"
+                    <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMHead}" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextAdvanceJvm" Grid.Row="0" Grid.ColumnSpan="2" Tag="VersionAdvanceJvm" Grid.Column="1" MaxLength="4000" ToolTip="{StaticResource LangPageVersionSetupJVMHead}" HintText="{StaticResource LangPageVersionSetupUseGlobal}"
                                      Height="57" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="0,5" />
-                    <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupLaunchLaunchAdvanceOptionsJVMTail}" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextAdvanceGame" Grid.Row="2" Grid.ColumnSpan="2" Tag="VersionAdvanceGame" Grid.Column="1" ToolTip="{DynamicResource LangPageVersionSetupJVMTail}" HintText="{DynamicResource LangPageVersionSetupUseGlobal}" />
-                    <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart}" Margin="0,0,25,3" />
+                    <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMTail}" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextAdvanceGame" Grid.Row="2" Grid.ColumnSpan="2" Tag="VersionAdvanceGame" Grid.Column="1" ToolTip="{StaticResource LangPageVersionSetupJVMTail}" HintText="{StaticResource LangPageVersionSetupUseGlobal}" />
+                    <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart}" Margin="0,0,25,3" />
                     <local:MyTextBox x:Name="TextAdvanceRun" Grid.Row="4" Grid.ColumnSpan="2" Tag="VersionAdvanceRun" Grid.Column="1" HintText="" Margin="0,0,0,3"
-                                     ToolTip="{DynamicResource LangPageVersionSetupCommand}" />
+                                     ToolTip="{StaticResource LangPageVersionSetupCommand}" />
                     <local:MyCheckBox Grid.Row="5" Grid.Column="1" x:Name="CheckAdvanceRunWait" Tag="VersionAdvanceRunWait" Visibility="Collapsed"
-                                      Text="{DynamicResource LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand}" Margin="0,5,0,0" />
+                                      Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand}" Margin="0,5,0,0" />
                     <StackPanel Margin="0,10,0,0" Orientation="Horizontal" Grid.Row="6" Grid.ColumnSpan="2">
-                        <local:MyCheckBox Text="{DynamicResource LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility}" x:Name="CheckAdvanceJava" Tag="VersionAdvanceJava" Margin="0,0,60,0"
-                                        ToolTip="{DynamicResource LangPageVersionSetupJavaCompatibility}" />
-                        <local:MyCheckBox Text="{DynamicResource LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification}" x:Name="CheckAdvanceAssetsV2" Tag="VersionAdvanceAssetsV2"
-                                        ToolTip="{DynamicResource LangPageVersionSetupFileVerification}" />
+                        <local:MyCheckBox Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility}" x:Name="CheckAdvanceJava" Tag="VersionAdvanceJava" Margin="0,0,60,0"
+                                        ToolTip="{StaticResource LangPageVersionSetupJavaCompatibility}" />
+                        <local:MyCheckBox Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification}" x:Name="CheckAdvanceAssetsV2" Tag="VersionAdvanceAssetsV2"
+                                        ToolTip="{StaticResource LangPageVersionSetupFileVerification}" />
                     </StackPanel>
                 </Grid>
             </local:MyCard>

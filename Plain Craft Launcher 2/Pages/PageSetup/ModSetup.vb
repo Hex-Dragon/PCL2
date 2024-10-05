@@ -86,7 +86,7 @@
         {"LaunchArgumentWindowHeight", New SetupEntry(480)},
         {"LaunchArgumentWindowType", New SetupEntry(1)},
         {"LaunchArgumentRam", New SetupEntry(False, Source:=SetupSource.Registry)},
-        {"LaunchAdvanceJvm", New SetupEntry("-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true")},
+        {"LaunchAdvanceJvm", New SetupEntry("-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Djdk.lang.Process.allowAmbiguousCommands=true -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true")},
         {"LaunchAdvanceGame", New SetupEntry("")},
         {"LaunchAdvanceRun", New SetupEntry("")},
         {"LaunchAdvanceRunWait", New SetupEntry(True)},
@@ -100,14 +100,14 @@
         {"LinkHiperCertTime", New SetupEntry("", Source:=SetupSource.Registry)},
         {"LinkHiperCertWarn", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"LinkIoiVersion", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
-        {"ToolHelpChinese", New SetupEntry(IsLocationZH(), Source:=SetupSource.Registry)},
+        {"ToolHelpLanguage", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadThread", New SetupEntry(63, Source:=SetupSource.Registry)},
         {"ToolDownloadSpeed", New SetupEntry(42, Source:=SetupSource.Registry)},
         {"ToolDownloadVersion", New SetupEntry(If(IsLocationZH(), 0, 2), Source:=SetupSource.Registry)},
         {"ToolDownloadTranslate", New SetupEntry(If(IsLocationZH(), 0, 3), Source:=SetupSource.Registry)},
         {"ToolDownloadKeepModpack", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadIgnoreQuilt", New SetupEntry(True, Source:=SetupSource.Registry)},
-        {"ToolDownloadCert", New SetupEntry(True, Source:=SetupSource.Registry)},
+        {"ToolDownloadCert", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadMod", New SetupEntry(1, Source:=SetupSource.Registry)},
         {"ToolUpdateAlpha", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
         {"ToolUpdateRelease", New SetupEntry(False, Source:=SetupSource.Registry)},
@@ -170,7 +170,7 @@
         {"VersionArgumentIndie", New SetupEntry(-1, Source:=SetupSource.Version)},
         {"VersionArgumentJavaSelect", New SetupEntry("使用全局设置", Source:=SetupSource.Version)},
         {"VersionServerEnter", New SetupEntry("", Source:=SetupSource.Version)},
-        {"VersionServerLogin", New SetupEntry(0, Source:=SetupSource.Version)},
+        {"VersionServerLogin", New SetupEntry(If(IsLocationZH(), 0, 1), Source:=SetupSource.Version)},
         {"VersionServerNide", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthRegister", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthName", New SetupEntry("", Source:=SetupSource.Version)},
@@ -531,7 +531,7 @@
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Visible
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
                 FrmSetupUI.HintCustom.Visibility = Visibility.Visible
-                FrmSetupUI.HintCustom.Text = $"从 PCL 文件夹下的 Custom.xaml 读取主页内容。{vbCrLf}你可以手动编辑该文件，向主页添加文本、图片、常用网站、快捷启动等功能。"
+                FrmSetupUI.HintCustom.Text = GetLang("LangSetHomePageTipLocal")
                 FrmSetupUI.HintCustom.EventType = ""
                 FrmSetupUI.HintCustom.EventData = ""
             Case 2 '联网
@@ -539,14 +539,21 @@
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Visible
                 FrmSetupUI.HintCustom.Visibility = Visibility.Visible
-                FrmSetupUI.HintCustom.Text = $"从指定网址联网获取主页内容。服主也可以用于动态更新服务器公告。{vbCrLf}如果你制作了稳定运行的联网主页，可以点击这条提示投稿，若合格即可加入预设！"
+                FrmSetupUI.HintCustom.Text = GetLang("LangSetHomePageTipOnline")
                 FrmSetupUI.HintCustom.EventType = "打开网页"
                 FrmSetupUI.HintCustom.EventData = "https://github.com/Hex-Dragon/PCL2/discussions/2528"
             Case 3 '预设
                 FrmSetupUI.PanCustomPreset.Visibility = Visibility.Visible
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
-                FrmSetupUI.HintCustom.Visibility = Visibility.Collapsed
+                If Lang.Equals("zh_CN") Then
+                    FrmSetupUI.HintCustom.Visibility = Visibility.Collapsed
+                Else
+                    FrmSetupUI.HintCustom.Visibility = Visibility.Visible
+                    FrmSetupUI.HintCustom.Text = GetLang("LangSetHomePagePresetSCOnly")
+                    FrmSetupUI.HintCustom.EventType = ""
+                    FrmSetupUI.HintCustom.EventData = ""
+                End If
         End Select
         FrmSetupUI.CardCustom.TriggerForceResize()
     End Sub

@@ -36,7 +36,7 @@
     End Sub
 
     Private Sub HelpTranslate(sender As Object, e As EventArgs) Handles BtnHelpTranslate.Click
-        OpenWebsite("https://github.com/Hex-Dragon/PCL2/tree/main/Plain%20Craft%20Launcher%202/Resources/Language")
+        OpenWebsite("https://weblate.tangge233.cn/engage/PCL/")
     End Sub
 #End Region
 
@@ -84,7 +84,7 @@
         CheckUpdateSnapshot.Checked = Setup.Get("ToolUpdateSnapshot")
 
         '辅助设置
-        CheckHelpChinese.Checked = Setup.Get("ToolHelpChinese")
+        CheckHelpChinese.Checked = Setup.Get("ToolHelpLanguage")
 
         '系统设置
         ComboSystemUpdate.SelectedIndex = Setup.Get("SystemSystemUpdate")
@@ -112,7 +112,7 @@
             Setup.Reset("ToolDownloadMod")
             Setup.Reset("ToolUpdateRelease")
             Setup.Reset("ToolUpdateSnapshot")
-            Setup.Reset("ToolHelpChinese")
+            Setup.Reset("ToolHelpLanguage")
             Setup.Reset("SystemDebugMode")
             Setup.Reset("SystemDebugAnim")
             Setup.Reset("SystemDebugDelay")
@@ -184,20 +184,18 @@
     End Sub
 
     '自动更新
-    Private Sub ComboSystemActivity_SizeChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemActivity.SelectionChanged
+    Private Sub ComboSystemActivity_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemActivity.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
-        If ComboSystemActivity.SelectedIndex = 2 Then
-            If MyMsgBox(GetLang("LangPageSetupSystemLaunchDialogAnnouncementSilentContent"), GetLang("LangDialogTitleWarning"), GetLang("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
-                ComboSystemActivity.SelectedItem = e.RemovedItems(0)
-            End If
+        If ComboSystemActivity.SelectedIndex <> 2 Then Exit Sub
+        If MyMsgBox(GetLang("LangPageSetupSystemLaunchDialogAnnouncementSilentContent"), GetLang("LangDialogTitleWarning"), GetLang("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
+            ComboSystemActivity.SelectedItem = e.RemovedItems(0)
         End If
     End Sub
-    Private Sub ComboSystemUpdate_SizeChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemUpdate.SelectionChanged
+    Private Sub ComboSystemUpdate_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemUpdate.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
-        If ComboSystemUpdate.SelectedIndex = 3 Then
-            If MyMsgBox(GetLang("LangPageSetupSystemLaunchDialogAnnouncementDisableContent"), GetLang("LangDialogTitleWarning"), GetLang("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
-                ComboSystemUpdate.SelectedItem = e.RemovedItems(0)
-            End If
+        If ComboSystemUpdate.SelectedIndex <> 3 Then Exit Sub
+        If MyMsgBox(GetLang("LangPageSetupSystemLaunchDialogAnnouncementDisableContent"), GetLang("LangDialogTitleWarning"), GetLang("LangPageSetupSystemLaunchDialogAnnouncementBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 2 Then
+            ComboSystemUpdate.SelectedItem = e.RemovedItems(0)
         End If
     End Sub
     Private Sub BtnSystemUpdate_Click(sender As Object, e As EventArgs) Handles BtnSystemUpdate.Click

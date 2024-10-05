@@ -14,15 +14,13 @@ Public Class MyLocalModItem
         Set(value As String)
             If _Logo = value OrElse value Is Nothing Then Exit Property
             _Logo = value
+            If ModeDebug AndAlso Not _Logo = PathImage & "Icons/NoIcon.png" Then Log($"[LocalModItem] Mod {Title} 的图标：{value}")
             Dim FileAddress = PathTemp & "CompLogo\" & GetHash(_Logo) & ".png"
             Try
                 If _Logo.StartsWithF("http", True) Then
                     '网络图片
                     If File.Exists(FileAddress) Then
                         PathLogo.Source = New MyBitmap(FileAddress)
-                    ElseIf _Logo.EndsWithF(".webp", True) Then 'Modrinth 林业 Mod 使用了不支持的 WebP 格式 Logo
-                        Log($"[LocalModItem] 发现不支持的 WebP 格式图标，已更改为默认图标：{_Logo}")
-                        PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
                     Else
                         PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
                         RunInNewThread(Sub() LogoLoader(FileAddress), "Comp Logo Loader " & Uuid & "#", ThreadPriority.BelowNormal)
@@ -55,8 +53,8 @@ RetryStart:
         Try
             'CurseForge 图片使用缩略图
             Dim Url As String = _Logo
-            If Url.Contains("/256/256/") AndAlso GetPixelSize(1) <= 1.25 AndAlso Not Retried Then
-                Url = Url.Replace("/256/256/", "/64/64/") '#3075：部分 Mod 不存在 64x64 图标，所以重试时不再缩小
+            If Url.Contains("/256/256/") AndAlso GetPixelSize(1) <= 1.25 AndAlso Not Retried Then '#3075：部分 Mod 不存在 64x64 图标，所以重试时不再缩小
+                Url = Url.Replace("/256/256/", "/64/64/")
             End If
             '下载图片
             NetDownload(Url, LocalFileAddress & DownloadEnd, True)
@@ -117,12 +115,12 @@ RetryStart:
     '副标题
     Public Property SubTitle As String
         Get
-            Return If(LabTitleRaw?.Text, "")
+            Return If(LabSubtitle?.Text, "")
         End Get
         Set(value As String)
-            If LabTitleRaw.Text = value Then Exit Property
-            LabTitleRaw.Text = value
-            LabTitleRaw.Visibility = If(value = "", Visibility.Collapsed, Visibility.Visible)
+            If LabSubtitle.Text = value Then Exit Property
+            LabSubtitle.Text = value
+            LabSubtitle.Visibility = If(value = "", Visibility.Collapsed, Visibility.Visible)
         End Set
     End Property
 
@@ -541,6 +539,19 @@ RetryStart:
     '触发更新
     Private Sub BtnUpdate_Click(sender As Object, e As EventArgs) Handles BtnUpdate.Click
         FrmVersionMod.UpdateMods({Entry})
+    End Sub
+
+    '自适应（#4465）
+    Private Sub PanTitle_SizeChanged(sender As Object, e As SizeChangedEventArgs) Handles PanTitle.SizeChanged
+        If ColumnExtend.Width.IsStar AndAlso ColumnExtend.ActualWidth < 0.5 Then
+            '压缩 Subtitle
+            ColumnSubtitle.Width = New GridLength(1, GridUnitType.Star)
+            ColumnExtend.Width = New GridLength(0, GridUnitType.Pixel)
+        ElseIf Not ColumnExtend.Width.IsStar AndAlso Not LabSubtitle.IsTextTrimmed Then
+            '向右展开 Subtitle
+            ColumnSubtitle.Width = GridLength.Auto
+            ColumnExtend.Width = New GridLength(1, GridUnitType.Star)
+        End If
     End Sub
 
 End Class

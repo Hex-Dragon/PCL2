@@ -1,4 +1,5 @@
-﻿Imports System.IO.Compression
+﻿Imports System.Globalization
+Imports System.IO.Compression
 Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
@@ -11,12 +12,13 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.4" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.4." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.8.8" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.8.8." & VersionBranchCode '标准格式的四段式版本号
+    Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
 #If BETA Then
-    Public Const VersionCode As Integer = 332 'Release
+    Public Const VersionCode As Integer = 340 'Release
 #Else
-    Public Const VersionCode As Integer = 333 'Snapshot
+    Public Const VersionCode As Integer = 339 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -64,7 +66,7 @@ Public Module ModBase
     ''' </summary>
     Public ApplicationOpenTime As Date = Date.Now
     ''' <summary>
-    ''' 设备唯一标识符。
+    ''' 识别码。
     ''' </summary>
     Public UniqueAddress As String = SecretGetUniqueAddress()
     ''' <summary>
@@ -696,7 +698,7 @@ Public Module ModBase
             If Not FileName.Contains(":\") Then FileName = $"{Path}PCL\{FileName}.ini"
             WriteFile(FileName, FileContent.ToString)
         Catch ex As Exception
-            Log(ex, $"写入文件失败（{FileName} -> {Key}:{Value}）")
+            Log(ex, $"写入文件失败（{FileName} → {Key}:{Value}）", LogLevel.Hint)
         End Try
     End Sub
 
@@ -770,10 +772,10 @@ Public Module ModBase
         End Try
     End Sub
     ''' <summary>
-    ''' 读取文件，如果失败则返回空字符串。
+    ''' 读取文件，如果失败则返回空数组。
     ''' </summary>
     ''' <param name="FilePath">文件完整或相对路径。</param>
-    Public Function ReadFile(FilePath As String, Optional Encoding As Encoding = Nothing) As String
+    Public Function ReadFileBytes(FilePath As String, Optional Encoding As Encoding = Nothing) As Byte()
         Try
             '还原文件路径
             If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
@@ -783,15 +785,23 @@ Public Module ModBase
                     ReDim FileBytes(ReadStream.Length - 1)
                     ReadStream.Read(FileBytes, 0, ReadStream.Length)
                 End Using
-                ReadFile = If(Encoding Is Nothing, DecodeBytes(FileBytes), Encoding.GetString(FileBytes))
+                Return FileBytes
             Else
-                Log("[System] 欲读取的文件不存在，已返回空字符串：" & FilePath)
-                Return ""
+                Log("[System] 欲读取的文件不存在，已返回空内容：" & FilePath)
+                Return {}
             End If
         Catch ex As Exception
             Log(ex, "读取文件出错：" & FilePath)
-            Return ""
+            Return {}
         End Try
+    End Function
+    ''' <summary>
+    ''' 读取文件，如果失败则返回空字符串。
+    ''' </summary>
+    ''' <param name="FilePath">文件完整或相对路径。</param>
+    Public Function ReadFile(FilePath As String, Optional Encoding As Encoding = Nothing) As String
+        Dim FileBytes = ReadFileBytes(FilePath)
+        ReadFile = If(Encoding Is Nothing, DecodeBytes(FileBytes), Encoding.GetString(FileBytes))
     End Function
     ''' <summary>
     ''' 读取流中的所有文本。
@@ -818,50 +828,39 @@ Public Module ModBase
     ''' <param name="FilePath">文件完整或相对路径。</param>
     ''' <param name="Text">文件内容。</param>
     ''' <param name="Append">是否将文件内容追加到当前文件，而不是覆盖它。</param>
-    Public Function WriteFile(FilePath As String, Text As String, Optional Append As Boolean = False, Optional Encoding As Encoding = Nothing) As Boolean
-        Try
-            '还原文件路径
-            If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
-            '确保目录存在
-            Directory.CreateDirectory(GetPathFromFullPath(FilePath))
-            '写入文件
-            If File.Exists(FilePath) Then
-                '如果文件存在，刷新目前文件
-                Using writer As New StreamWriter(FilePath, Append, If(Encoding, GetEncoding(FilePath)))
-                    writer.Write(Text)
-                    writer.Flush()
-                    writer.Close()
-                End Using
-            Else
-                '如果文件不存在，则新建并写入
-                File.WriteAllText(FilePath, Text, If(Encoding, New UTF8Encoding(False)))
-            End If
-            Return True
-        Catch ex As Exception
-            Log(ex, "写入文件时出错：" & FilePath)
-            Return False
-        End Try
-    End Function
+    Public Sub WriteFile(FilePath As String, Text As String, Optional Append As Boolean = False, Optional Encoding As Encoding = Nothing)
+        '还原文件路径
+        If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
+        '确保目录存在
+        Directory.CreateDirectory(GetPathFromFullPath(FilePath))
+        '写入文件
+        If File.Exists(FilePath) Then
+            '如果文件存在，刷新目前文件
+            Using writer As New StreamWriter(FilePath, Append, If(Encoding, GetEncoding(ReadFileBytes(FilePath))))
+                writer.Write(Text)
+                writer.Flush()
+                writer.Close()
+            End Using
+        Else
+            '如果文件不存在，则新建并写入
+            File.WriteAllText(FilePath, Text, If(Encoding, New UTF8Encoding(False)))
+        End If
+    End Sub
     ''' <summary>
     ''' 写入文件。
+    ''' 如果 CanThrow 设置为 False，返回是否写入成功。
     ''' </summary>
     ''' <param name="FilePath">文件完整或相对路径。</param>
     ''' <param name="Content">文件内容。</param>
     ''' <param name="Append">是否将文件内容追加到当前文件，而不是覆盖它。</param>
-    Public Function WriteFile(FilePath As String, Content As Byte(), Optional Append As Boolean = False) As Boolean
-        Try
-            '还原文件路径
-            If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
-            '确保目录存在
-            Directory.CreateDirectory(GetPathFromFullPath(FilePath))
-            '写入文件
-            File.WriteAllBytes(FilePath, Content)
-            Return True
-        Catch ex As Exception
-            Log(ex, "写入文件时出错：" & FilePath)
-            Return False
-        End Try
-    End Function
+    Public Sub WriteFile(FilePath As String, Content As Byte(), Optional Append As Boolean = False)
+        '还原文件路径
+        If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
+        '确保目录存在
+        Directory.CreateDirectory(GetPathFromFullPath(FilePath))
+        '写入文件
+        File.WriteAllBytes(FilePath, Content)
+    End Sub
     ''' <summary>
     ''' 将流写入文件。
     ''' </summary>
@@ -891,21 +890,11 @@ Public Module ModBase
 
     '文件编码
     ''' <summary>
-    ''' 获取文件编码。
-    ''' </summary>
-    ''' <param name="FilePath">文件完整或相对路径。</param>
-    Public Function GetEncoding(FilePath As String) As Encoding
-        '还原文件路径
-        If Not FilePath.Contains(":\") Then FilePath = Path & FilePath
-        '获取编码
-        GetEncoding = GetEncoding(File.ReadAllBytes(FilePath))
-    End Function
-    ''' <summary>
-    ''' 获取 Bytes 的编码。
+    ''' 根据字节数组分析其编码。
     ''' </summary>
     Public Function GetEncoding(Bytes As Byte()) As Encoding
         Dim Length As Integer = Bytes.Count
-        If Length <= 2 Then Return New UTF8Encoding(False) '不带 BOM 的 UTF8
+        If Length < 3 Then Return New UTF8Encoding(False) '不带 BOM 的 UTF8
         '根据 BOM 判断编码
         If Bytes(0) >= &HEF Then
             '有 BOM 类型
@@ -1250,9 +1239,15 @@ Re:
     Public Function DeleteDirectory(Path As String, Optional IgnoreIssue As Boolean = False) As Integer
         If Not Directory.Exists(Path) Then Return 0
         Dim DeletedCount As Integer = 0
-        Dim Temp As String()
-        Temp = Directory.GetFiles(Path)
-        For Each FilePath As String In Temp
+        Dim Files As String()
+        Try
+            Files = Directory.GetFiles(Path)
+        Catch ex As DirectoryNotFoundException '#4549
+            Log(ex, $"疑似为孤立符号链接，尝试直接删除（{Path}）", LogLevel.Developer)
+            Directory.Delete(Path)
+            Return 0
+        End Try
+        For Each FilePath As String In Files
             Dim RetriedFile As Boolean = False
 RetryFile:
             Try
@@ -1271,8 +1266,7 @@ RetryFile:
                 End If
             End Try
         Next
-        Temp = Directory.GetDirectories(Path)
-        For Each str As String In Temp
+        For Each str As String In Directory.GetDirectories(Path)
             DeleteDirectory(str, IgnoreIssue)
         Next
         Dim RetriedDir As Boolean = False
@@ -1453,14 +1447,14 @@ RetryDir:
     End Function
 
     ''' <summary>
-    ''' 获取 Json 对象。
+    ''' 获取 JSON 对象。
     ''' </summary>
     Public Function GetJson(Data As String)
         Try
             Return JsonConvert.DeserializeObject(Data, New JsonSerializerSettings With {.DateTimeZoneHandling = DateTimeZoneHandling.Local})
         Catch ex As Exception
             Dim Length As Integer = If(Data, "").Length
-            Throw New Exception("格式化 json 对象失败：" & If(Length > 10000, Data.Substring(0, 100) & $"...(全长 {Length} 个字符)..." & Right(Data, 100), Data))
+            Throw New Exception("格式化 JSON 失败：" & If(Length > 2000, Data.Substring(0, 500) & $"...(全长 {Length} 个字符)..." & Right(Data, 500), Data))
         End Try
     End Function
 
@@ -1649,10 +1643,15 @@ RetryDir:
     End Function
 
     ''' <summary>
-    ''' 输入 And 字符不会报错的 Val。
+    ''' 不会报错的 Val。
+    ''' 如果输入有误，返回 0。
     ''' </summary>
     Public Function Val(Str As Object) As Double
-        Return If(TypeOf Str Is String AndAlso Str = "&", 0, Conversion.Val(Str))
+        Try
+            Return If(TypeOf Str Is String AndAlso Str = "&", 0, Conversion.Val(Str))
+        Catch
+            Return 0
+        End Try
     End Function
 
     '转义
@@ -1842,6 +1841,13 @@ RetryDir:
 #Region "系统"
 
     ''' <summary>
+    ''' 指示接取到这个异常的函数进行重试。
+    ''' </summary>
+    Public Class RetryException
+        Inherits Exception
+    End Class
+
+    ''' <summary>
     ''' 当前程序是否拥有管理员权限。
     ''' </summary>
     Public Function IsAdmin() As Boolean
@@ -1857,6 +1863,13 @@ RetryDir:
         Dim NewProcess = Process.Start(New ProcessStartInfo(PathWithName) With {.Verb = "runas", .Arguments = Argument})
         NewProcess.WaitForExit()
         Return NewProcess.ExitCode
+    End Function
+
+    ''' <summary>
+    ''' 判断当前系统语言是否为中文。
+    ''' </summary>
+    Public Function IsSystemLanguageChinese() As Boolean
+        Return CultureInfo.CurrentCulture.TwoLetterISOLanguageName = "zh" OrElse CultureInfo.CurrentUICulture.TwoLetterISOLanguageName = "zh"
     End Function
 
     Private Uuid As Integer = 1
@@ -1925,22 +1938,22 @@ NextElement:
         If IsShortForm Then
             If TotalMonths >= 12 Then
                 '1+ 年，“3 年”
-                GetTimeSpanString = TotalYears & " " & IsPlural(TotalYears, "LangModBaseDateYear")
+                GetTimeSpanString = TotalYears & " " & GetLangByNumIsPlural(TotalYears, "LangModBaseDateYear")
             ElseIf TotalMonths >= 2 Then
                 '2~11 月，“5 个月”
-                GetTimeSpanString = TotalMonths & " " & IsPlural(TotalMonths, "LangModBaseDateMonthA")
+                GetTimeSpanString = TotalMonths & " " & GetLangByNumIsPlural(TotalMonths, "LangModBaseDateMonthA")
             ElseIf Span.TotalDays >= 2 Then
                 '2 天 ~ 2 月，“23 天”
-                GetTimeSpanString = Span.Days & " " & IsPlural(Span.Days, "LangModBaseDateDay")
+                GetTimeSpanString = Span.Days & " " & GetLangByNumIsPlural(Span.Days, "LangModBaseDateDay")
             ElseIf Span.TotalHours >= 1 Then
                 '1 小时 ~ 2 天，“15 小时”
-                GetTimeSpanString = Span.Hours & " " & IsPlural(Span.Hours, "LangModBaseDateHour")
+                GetTimeSpanString = Span.Hours & " " & GetLangByNumIsPlural(Span.Hours, "LangModBaseDateHour")
             ElseIf Span.TotalMinutes >= 1 Then
                 '1 分钟 ~ 1 小时，“49 分钟”
-                GetTimeSpanString = Span.Minutes & " " & IsPlural(Span.Minutes, "LangModBaseDateMinute")
+                GetTimeSpanString = Span.Minutes & " " & GetLangByNumIsPlural(Span.Minutes, "LangModBaseDateMinute")
             ElseIf Span.TotalSeconds >= 1 Then
                 '1 秒 ~ 1 分钟，“23 秒”
-                GetTimeSpanString = Span.Seconds & " " & IsPlural(Span.Seconds, "LangModBaseDateSecond")
+                GetTimeSpanString = Span.Seconds & " " & GetLangByNumIsPlural(Span.Seconds, "LangModBaseDateSecond")
             Else
                 '不到 1 秒
                 GetTimeSpanString = "1 " & GetLang("LangModBaseDateSecond")
@@ -1948,37 +1961,37 @@ NextElement:
         Else
             If TotalMonths >= 61 Then
                 '5+ 年，“5 年”
-                GetTimeSpanString = TotalYears & " " & IsPlural(TotalYears, "LangModBaseDateYear")
+                GetTimeSpanString = TotalYears & " " & GetLangByNumIsPlural(TotalYears, "LangModBaseDateYear")
             ElseIf TotalMonths >= 12 Then
                 '12~60 月，“1 年 2 个月”
-                GetTimeSpanString = TotalYears & " " & IsPlural(TotalYears, "LangModBaseDateYear") & If(RemainMonths > 0, " " & RemainMonths & " " & IsPlural(RemainMonths, "LangModBaseDateMonthA"), "")
+                GetTimeSpanString = TotalYears & " " & GetLangByNumIsPlural(TotalYears, "LangModBaseDateYear") & If(RemainMonths > 0, " " & RemainMonths & " " & GetLangByNumIsPlural(RemainMonths, "LangModBaseDateMonthA"), "")
             ElseIf TotalMonths >= 4 Then
                 '4~11 月，“5 月”
-                GetTimeSpanString = TotalMonths & " " & IsPlural(TotalMonths, "LangModBaseDateMonthB")
+                GetTimeSpanString = TotalMonths & " " & GetLangByNumIsPlural(TotalMonths, "LangModBaseDateMonthB")
             ElseIf TotalMonths >= 1 Then
                 '1~4 月，“2 月 13 天”
-                GetTimeSpanString = TotalMonths & " " & IsPlural(TotalMonths, "LangModBaseDateMonthB") & If(RemainDays > 0, " " & RemainDays & " " & IsPlural(RemainDays, "LangModBaseDateDay"), "")
+                GetTimeSpanString = TotalMonths & " " & GetLangByNumIsPlural(TotalMonths, "LangModBaseDateMonthB") & If(RemainDays > 0, " " & RemainDays & " " & GetLangByNumIsPlural(RemainDays, "LangModBaseDateDay"), "")
             ElseIf Span.TotalDays >= 4 Then
                 '4~30 天，“23 天”
-                GetTimeSpanString = Span.Days & " " & IsPlural(Span.Days, "LangModBaseDateDay")
+                GetTimeSpanString = Span.Days & " " & GetLangByNumIsPlural(Span.Days, "LangModBaseDateDay")
             ElseIf Span.TotalDays >= 1 Then
                 '1~3 天，“2 天 20 小时”
-                GetTimeSpanString = Span.Days & " " & IsPlural(Span.Days, "LangModBaseDateDay") & If(Span.Hours > 0, " " & Span.Hours & " " & IsPlural(Span.Hours, "LangModBaseDateHour"), "")
+                GetTimeSpanString = Span.Days & " " & GetLangByNumIsPlural(Span.Days, "LangModBaseDateDay") & If(Span.Hours > 0, " " & Span.Hours & " " & GetLangByNumIsPlural(Span.Hours, "LangModBaseDateHour"), "")
             ElseIf Span.TotalHours >= 10 Then
                 '10 小时 ~ 1 天，“15 小时”
-                GetTimeSpanString = Span.Hours & " " & IsPlural(Span.Hours, "LangModBaseDateHour")
+                GetTimeSpanString = Span.Hours & " " & GetLangByNumIsPlural(Span.Hours, "LangModBaseDateHour")
             ElseIf Span.TotalHours >= 1 Then
                 '1~10 小时，“1 小时 20 分钟”
-                GetTimeSpanString = Span.Hours & " " & IsPlural(Span.Hours, "LangModBaseDateHour") & If(Span.Minutes > 0, " " & Span.Minutes & " " & IsPlural(Span.Minutes, "LangModBaseDateMinute"), "")
+                GetTimeSpanString = Span.Hours & " " & GetLangByNumIsPlural(Span.Hours, "LangModBaseDateHour") & If(Span.Minutes > 0, " " & Span.Minutes & " " & GetLangByNumIsPlural(Span.Minutes, "LangModBaseDateMinute"), "")
             ElseIf Span.TotalMinutes >= 10 Then
                 '10 分钟 ~ 1 小时，“49 分钟”
-                GetTimeSpanString = Span.Minutes & " " & IsPlural(Span.Minutes, "LangModBaseDateMinute")
+                GetTimeSpanString = Span.Minutes & " " & GetLangByNumIsPlural(Span.Minutes, "LangModBaseDateMinute")
             ElseIf Span.TotalMinutes >= 1 Then
                 '1~10 分钟，“9 分 23 秒”
-                GetTimeSpanString = Span.Minutes & " " & IsPlural(Span.Minutes, "LangModBaseDateMinute") & If(Span.Seconds > 0, " " & Span.Seconds & " " & IsPlural(Span.Seconds, "LangModBaseDateSecond"), "")
+                GetTimeSpanString = Span.Minutes & " " & GetLangByNumIsPlural(Span.Minutes, "LangModBaseDateMinute") & If(Span.Seconds > 0, " " & Span.Seconds & " " & GetLangByNumIsPlural(Span.Seconds, "LangModBaseDateSecond"), "")
             ElseIf Span.TotalSeconds >= 1 Then
                 '1 秒 ~ 1 分钟，“23 秒”
-                GetTimeSpanString = Span.Seconds & " " & IsPlural(Span.Seconds, "LangModBaseDateSecond")
+                GetTimeSpanString = Span.Seconds & " " & GetLangByNumIsPlural(Span.Seconds, "LangModBaseDateSecond")
             Else
                 '不到 1 秒
                 GetTimeSpanString = "1 " & GetLang("LangModBaseDateSecond")
@@ -2426,6 +2439,14 @@ Retry:
         Return rect.Contains(bounds.TopLeft) OrElse rect.Contains(bounds.BottomRight)
     End Function
 
+    ''' <summary>
+    ''' 控件是否受到 TextTrimming 属性影响，导致内容被截取。
+    ''' </summary>
+    <Extension> Public Function IsTextTrimmed(Control As TextBlock) As Boolean
+        Control.Measure(New Size(Double.MaxValue, Double.MaxValue))
+        Return Control.DesiredSize.Width > Control.ActualWidth
+    End Function
+
 #End Region
 
 #Region "Debug"
@@ -2668,6 +2689,11 @@ Retry:
     Public Function CanFeedback(ShowHint As Boolean) As Boolean
         If False.Equals(PageSetupSystem.IsLauncherNewest) Then
             If ShowHint Then MyMsgBox(GetLang("LangModBaseDialogUpdateBeforeFeedbackContent"), GetLang("LangModBaseDialogUpdateBeforeFeedbackTitle"))
+            If ShowHint Then
+                If MyMsgBox(GetLang("LangModBaseDialogUpdateBeforeFeedbackContent"), GetLang("LangModBaseDialogUpdateBeforeFeedbackTitle"), GetLang("LangModBaseDialogUpdateBeforeFeedbackBtnUpdate"), GetLang("LangDialogBtnCancel")) = 1 Then
+                    UpdateCheckByButton()
+                End If
+            End If
             Return False
         Else
             Return True

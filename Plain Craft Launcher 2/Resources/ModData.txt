@@ -3234,7 +3234,7 @@ memory-cleaner-mod|内存自动清理*
 ore-flowers|矿物花卉*
 aqua-creepers|水下苦力怕 (Aqua Creepers!)
 extrastorage|更多存储 (ExtraStorage)
-thermal-locomotion@thermal-integration|热力运输*
+thermal-locomotion|热力运输*
 external-tweaker
 morebiomesxl
 notes@|笔记*
@@ -3821,7 +3821,7 @@ cat-jammies
 rhino@|犀牛*
 fastsuite|配方性能优化 (FastSuite)
 twerkitmeal|跳舞生长一切 (Twerk To Grow All The Things)
-thermal-integration@thermal-locomotion|热力集成*
+thermal-integration|热力集成*
 piggybanks|存钱罐*
 in-control@
 mystical-agriculture-refabricated|神秘农业：Fabric版 (Mystical Agriculture: Refabricated)

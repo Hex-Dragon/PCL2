@@ -10,6 +10,29 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 340 Then 'Release 2.8.8
+            If LastVersion = 338 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复数个与新正版登录相关的严重 Bug"))
+            FeatureCount += 3
+            BugCount += 7
+        End If
+        If LastVersion < 338 Then 'Release 2.8.7
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "使用新的正版登录方式，以提高安全性"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化安装整合包、检索 Mod 的稳定性"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法加载部分 Mod 的图标的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复在 Mod 管理页面删除 Mod 导致报错的 Bug"))
+            FeatureCount += 11
+            BugCount += 21
+        End If
+        If LastVersion < 336 Then 'Release 2.8.6
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "下载 Mod 时会使用 MCIM 国内镜像源"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面允许筛选可更新/启用/禁用的 Mod"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "打开 PCL 时会自动安装同目录下的 modpack.zip"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "爱发电域名迁移至 afdian.com"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复 1.20.1+ 离线登录使用正版皮肤时无法保存游戏的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复安装的 1.14~1.15 Forge+OptiFine 无法进入世界的 Bug"))
+            FeatureCount += 19
+            BugCount += 24
+        End If
         If LastVersion < 332 Then 'Release 2.8.3
             If LastVersion = 330 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复部分玩家无法启动 MC 的 Bug"))
         End If
@@ -124,6 +147,31 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 339 Then 'Snapshot 2.8.8
+            If LastVersion = 337 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复数个与新正版登录相关的严重 Bug"))
+            FeatureCount += 3
+            BugCount += 7
+        End If
+        If LastVersion < 337 Then 'Snapshot 2.8.7
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "使用新的正版登录方式，以提高安全性"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化安装整合包、检索 Mod 的稳定性"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法加载部分 Mod 的图标的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复在 Mod 管理页面删除 Mod 导致报错的 Bug"))
+            FeatureCount += 11
+            BugCount += 21
+        End If
+        If LastVersion < 335 Then 'Snapshot 2.8.6
+            BugCount += 2
+        End If
+        If LastVersion < 334 Then 'Snapshot 2.8.5
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面允许筛选可更新/启用/禁用的 Mod"))
+            If LastVersion = 333 Then
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装愚人节和预发布版本的 Bug"))
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法导出错误报告的 Bug"))
+            End If
+            FeatureCount += 6
+            BugCount += 7
+        End If
         If LastVersion < 333 Then 'Snapshot 2.8.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "下载 Mod 时会使用 MCIM 国内镜像源"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "打开 PCL 时会自动安装同目录下的 modpack.zip"))
@@ -307,7 +355,7 @@ Public Class FormMain
         If SortedFeatures.Count > 10 Then FeatureCount += SortedFeatures.Count - 10
         If FeatureCount > 0 OrElse BugCount > 0 Then
             ContentList.Add(If(FeatureCount > 0, FeatureCount & " 项小调整与修改", "") &
-                If(FeatureCount > 0 AndAlso BugCount > 0, "，", "") &
+                If(FeatureCount > 0 AndAlso BugCount > 0, GetLang("LangComma"), "") &
                 If(BugCount > 0, "修复了 " & BugCount & " 个 Bug", "") &
                 "，详见完整更新日志")
         End If
@@ -407,6 +455,10 @@ Public Class FormMain
             Height = MinHeight + 50
             Width = MinWidth + 50
         End Try
+#If DEBUG Then
+        MinHeight = 50
+        MinWidth = 50
+#End If
         Topmost = False
         If FrmStart IsNot Nothing Then FrmStart.Close(New TimeSpan(0, 0, 0, 0, 400 / AniSpeed))
         '更改窗口
@@ -683,7 +735,7 @@ Public Class FormMain
                 Exit Sub
             ElseIf e.Key = Key.Escape Then
                 Dim Msg As Object = PanMsg.Children(0)
-                If TypeOf Msg Is MyMsgText AndAlso Msg.Btn3.Visibility = Visibility.Visible Then
+                If TypeOf Msg IsNot MyMsgInput AndAlso TypeOf Msg IsNot MyMsgSelect AndAlso Msg.Btn3.Visibility = Visibility.Visible Then
                     Msg.Btn3_Click()
                 ElseIf Msg.Btn2.Visibility = Visibility.Visible Then
                     Msg.Btn2_Click()
@@ -740,7 +792,7 @@ Public Class FormMain
         Try
             If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
                 'Mod 管理自动刷新
-                FrmVersionMod.RefreshList()
+                FrmVersionMod.ReloadModList()
             ElseIf PageCurrent = PageType.VersionSelect Then
                 '版本选择自动刷新
                 LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.RunOnUpdated, MaxDepth:=1, ExtraPath:="versions\")
@@ -988,18 +1040,19 @@ Install:
     ''' 把当前窗口拖到最前面。
     ''' </summary>
     Public Sub ShowWindowToTop()
-        RunInUi(Sub()
-                    '这一坨乱七八糟的，别改，改了指不定就炸了，自己电脑还复现不出来
-                    Visibility = Visibility.Visible
-                    ShowInTaskbar = True
-                    WindowState = WindowState.Normal
-                    Hidden = False
-                    Topmost = True '偶尔 SetForegroundWindow 失效
-                    Topmost = False
-                    SetForegroundWindow(Handle)
-                    Focus()
-                    Log("[System] 窗口已置顶，位置：(" & Left & ", " & Top & "), " & Width & " x " & Height)
-                End Sub)
+        RunInUi(
+        Sub()
+            '这一坨乱七八糟的，别改，改了指不定就炸了，自己电脑还复现不出来
+            Visibility = Visibility.Visible
+            ShowInTaskbar = True
+            WindowState = WindowState.Normal
+            Hidden = False
+            Topmost = True '偶尔 SetForegroundWindow 失效
+            Topmost = False
+            SetForegroundWindow(Handle)
+            Focus()
+            Log($"[System] 窗口已置顶，位置：({Left}, {Top}), {Width} x {Height}")
+        End Sub)
     End Sub
 
 #End Region

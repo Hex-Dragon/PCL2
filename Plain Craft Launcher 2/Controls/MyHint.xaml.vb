@@ -35,6 +35,7 @@
             Return GetValue(TextProperty)
         End Get
         Set(value As String)
+            LabText.Text = value
             SetValue(TextProperty, value)
         End Set
     End Property
@@ -55,7 +56,6 @@
         If CanClose AndAlso Setup.Get(RelativeSetup) Then
             Visibility = Visibility.Collapsed
         End If
-        LabText.Text = Text
     End Sub
     Private Sub BtnClose_Click(sender As Object, e As EventArgs) Handles BtnClose.Click
         Setup.Set(RelativeSetup, True)

@@ -103,7 +103,7 @@
 
     ''介绍栏
     'Private Sub BtnWeb_Click(sender As Object, e As EventArgs) Handles BtnWeb.Click
-    '    OpenWebsite("https://www.minecraft.net/zh-hans")
+    '    OpenWebsite("https://www.minecraft.net/")
     'End Sub
     'Private Sub BtnInstall_Click(sender As Object, e As EventArgs) Handles BtnInstall.Click
     '    FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)

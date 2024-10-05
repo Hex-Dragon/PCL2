@@ -6,22 +6,22 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel Orientation="Vertical" Margin="5">
-            <local:MyCard Margin="20,20,20,0" Grid.IsSharedSizeScope="True" Title="{DynamicResource LangDownloadFabricDescTitle}" x:Name="CardTip">
+            <local:MyCard Margin="20,20,20,0" Grid.IsSharedSizeScope="True" Title="{StaticResource LangDownloadFabricDescTitle}" x:Name="CardTip">
                 <StackPanel Margin="25,40,15,20">
-                    <TextBlock Margin="0,0,0,11" Text="{DynamicResource LangDownloadFabricDesc}" TextWrapping="Wrap" />
+                    <TextBlock Margin="0,0,0,11" Text="{StaticResource LangDownloadFabricDesc}" TextWrapping="Wrap" />
                     <Grid Height="35">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnWeb" Grid.Column="0" MinWidth="140" Text="{DynamicResource LangDownloadFabricWebsite}" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
+                        <local:MyButton x:Name="BtnWeb" Grid.Column="0" MinWidth="140" Text="{StaticResource LangDownloadFabricWebsite}" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard x:Name="CardVersions" Margin="20,15,20,20" Title="{DynamicResource LangDownloadFabricVersionList}">
+            <local:MyCard x:Name="CardVersions" Margin="20,15,20,20" Title="{StaticResource LangDownloadFabricVersionList}">
                 <StackPanel x:Name="PanVersions" Margin="20,40,18,20" />
             </local:MyCard>
             <local:MyCard HorizontalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
-                <local:MyLoading Text="{DynamicResource LangDownloadFabricGettingList}" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <local:MyLoading Text="{StaticResource LangDownloadFabricGettingList}" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </local:MyCard>
         </StackPanel>
     </local:MyScrollViewer>

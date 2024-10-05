@@ -8,7 +8,7 @@
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
 
-            <local:MyCard Margin="0,15" Title="{DynamicResource LangPageSetupSystemDownload}">
+            <local:MyCard Margin="0,15" Title="{StaticResource LangPageSetupSystemDownload}">
                 <StackPanel Margin="25,37,25,12">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -30,47 +30,47 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadVersionListSource}" Margin="0,0,25,0" />
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadVersionListSource}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboDownloadVersion" Grid.ColumnSpan="2" Tag="ToolDownloadVersion" Grid.Column="1">
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadVersionListSourceA}" IsSelected="True" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadVersionListSourceB}" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadVersionListSourceC}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadVersionListSourceA}" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadVersionListSourceB}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadVersionListSourceC}" />
                         </local:MyComboBox>
-                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadModListSource}" Margin="0,0,25,0" />
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadModListSource}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboDownloadMod" Grid.Row="2" Grid.ColumnSpan="2" Tag="ToolDownloadMod" Grid.Column="1">
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModListSourceA}" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModListSourceB}" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModListSourceC}" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModListSourceA}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModListSourceB}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModListSourceC}" IsSelected="True" />
                         </local:MyComboBox>
-                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadModFileName}" Margin="0,0,25,0" />
+                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadModFileName}" Margin="0,0,25,0" />
                         <local:MyComboBox Grid.Row="4" x:Name="ComboDownloadTranslate" Grid.ColumnSpan="2" Tag="ToolDownloadTranslate" Grid.Column="1" 
-                                          ToolTip="{DynamicResource LangPageSetupSystemDownloadModFileNameToolTip}">
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModFileNameA}" IsSelected="True" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModFileNameB}" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModFileNameC}" />
-                            <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemDownloadModFileNameD}" />
+                                          ToolTip="{StaticResource LangPageSetupSystemDownloadModFileNameToolTip}">
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameA}" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameB}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameC}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameD}" />
                         </local:MyComboBox>
-                        <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadThread}" Margin="0,0,25,0" />
+                        <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadThread}" Margin="0,0,25,0" />
                         <local:MySlider x:Name="SliderDownloadThread" Grid.Row="6" Tag="ToolDownloadThread" MaxValue="255" Value="63" Grid.Column="1"
-                                        ToolTip="{DynamicResource LangPageSetupSystemDownloadThreadToolTip}" />
-                        <TextBlock VerticalAlignment="Center" Grid.Row="7" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadSpeedLimit}" Margin="0,0,25,0" />
+                                        ToolTip="{StaticResource LangPageSetupSystemDownloadThreadToolTip}" />
+                        <TextBlock VerticalAlignment="Center" Grid.Row="7" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadSpeedLimit}" Margin="0,0,25,0" />
                         <local:MySlider x:Name="SliderDownloadSpeed" Grid.Row="7" Tag="ToolDownloadSpeed" MaxValue="42" Value="42" Grid.Column="1"
-                                        ToolTip="{DynamicResource LangPageSetupSystemDownloadSpeedLimitToolTip}" />
-                        <TextBlock VerticalAlignment="Top" Grid.Row="9" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadTargetFolder}" Margin="0,5,25,5" />
-                        <TextBlock Margin="0,5" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadTargetFolderToolTip}" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Opacity="0.5" />
-                        <local:MyCheckBox Margin="0,5,0,4" Text="{DynamicResource LangPageSetupSystemDownloadKeepModpackArchive}" Grid.Row="10" Height="22" Grid.ColumnSpan="2"
+                                        ToolTip="{StaticResource LangPageSetupSystemDownloadSpeedLimitToolTip}" />
+                        <TextBlock VerticalAlignment="Top" Grid.Row="9" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadTargetFolder}" Margin="0,5,25,5" />
+                        <TextBlock Margin="0,5" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadTargetFolderToolTip}" Grid.Row="9" Grid.Column="1" VerticalAlignment="Center" Opacity="0.5" />
+                        <local:MyCheckBox Margin="0,5,0,4" Text="{StaticResource LangPageSetupSystemDownloadKeepModpackArchive}" Grid.Row="10" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadKeepModpack" Tag="ToolDownloadKeepModpack" 
-                                          ToolTip="{DynamicResource LangPageSetupSystemDownloadKeepModpackArchiveToolTip}" />
-                        <local:MyCheckBox Margin="0,2,0,4" Text="{DynamicResource LangPageSetupSystemDownloadSimplifyModLoaderDisplay}" Grid.Row="11" Height="22" Grid.ColumnSpan="2"
+                                          ToolTip="{StaticResource LangPageSetupSystemDownloadKeepModpackArchiveToolTip}" />
+                        <local:MyCheckBox Margin="0,2,0,4" Text="{StaticResource LangPageSetupSystemDownloadSimplifyModLoaderDisplay}" Grid.Row="11" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" 
-                                          ToolTip="{DynamicResource LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip}" />
-                        <local:MyCheckBox Margin="0,2,0,4" Text="{DynamicResource LangPageSetupSystemDownloadSSL}" Grid.Row="12" Height="22" Grid.ColumnSpan="2"
+                                          ToolTip="{StaticResource LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip}" />
+                        <local:MyCheckBox Margin="0,2,0,4" Text="{StaticResource LangPageSetupSystemDownloadSSL}" Grid.Row="12" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadCert" Tag="ToolDownloadCert" 
-                                          ToolTip="{DynamicResource LangPageSetupSystemDownloadSSLToolTip}" />
+                                          ToolTip="{StaticResource LangPageSetupSystemDownloadSSLToolTip}" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard Margin="0,0,0,15" Title="{DynamicResource LangPageSetupSystemDownloadAccessibility}">
+            <local:MyCard Margin="0,0,0,15" Title="{StaticResource LangPageSetupSystemDownloadAccessibility}">
                 <Grid Margin="25,40,25,17">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -82,14 +82,14 @@
                         <RowDefinition Height="8" />
                         <RowDefinition Height="22" />
                     </Grid.RowDefinitions>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdate}" Margin="0,0,25,0" />
-                    <local:MyCheckBox Text="{DynamicResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease}" Grid.Column="1" x:Name="CheckUpdateRelease" Tag="ToolUpdateRelease" ToolTip="{DynamicResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip}" />
-                    <local:MyCheckBox Text="{DynamicResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta}" Grid.Column="2" Height="22" x:Name="CheckUpdateSnapshot" Tag="ToolUpdateSnapshot" ToolTip="{DynamicResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip}" />
-                    <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDownloadAccessibilitySetGameLanguage}" Margin="0,0,25,0" />
-                    <local:MyCheckBox Text="{DynamicResource LangPageSetupSystemDownloadAccessibilitySetGameLanguageToChinese}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" x:Name="CheckHelpChinese" Tag="ToolHelpChinese" />
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdate}" Margin="0,0,25,0" />
+                    <local:MyCheckBox Text="{StaticResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateRelease}" Grid.Column="1" x:Name="CheckUpdateRelease" Tag="ToolUpdateRelease" ToolTip="{StaticResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateReleaseToolTip}" />
+                    <local:MyCheckBox Text="{StaticResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta}" Grid.Column="2" Height="22" x:Name="CheckUpdateSnapshot" Tag="ToolUpdateSnapshot" ToolTip="{StaticResource LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBetaToolTip}" />
+                    <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadAccessibilitySetGameLanguage}" Margin="0,0,25,0" />
+                    <local:MyCheckBox Text="{StaticResource LangPageSetupSystemDownloadAccessibilityAutoSetGameLanguage}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" x:Name="CheckHelpChinese" Tag="ToolHelpLanguage" />
                 </Grid>
             </local:MyCard>
-            <local:MyCard Margin="0,0,0,15" Title="{DynamicResource LangPageSetupSystemSystem}">
+            <local:MyCard Margin="0,0,0,15" Title="{StaticResource LangPageSetupSystemSystem}">
                 <Grid Margin="25,40,25,20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
@@ -105,21 +105,21 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemSystemLaunchUpdate}" Margin="0,0,25,0" />
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemSystemLaunchUpdate}" Margin="0,0,25,0" />
                     <local:MyComboBox x:Name="ComboSystemUpdate" Tag="SystemSystemUpdate" Grid.Column="1">
-                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchUpdateA}" x:Name="ItemSystemUpdateDownload" />
-                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchUpdateB}" />
-                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchUpdateC}" />
-                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchUpdateD}" />
+                        <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemSystemLaunchUpdateA}" x:Name="ItemSystemUpdateDownload" />
+                        <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemSystemLaunchUpdateB}" />
+                        <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemSystemLaunchUpdateC}" />
+                        <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemSystemLaunchUpdateD}" />
                     </local:MyComboBox>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncement}" Margin="0,0,25,0" Grid.Row="2" />
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemSystemLaunchAnnouncement}" Margin="0,0,25,0" Grid.Row="2" />
                     <local:MyComboBox x:Name="ComboSystemActivity" Tag="SystemSystemActivity" Grid.Column="1" Grid.Row="2">
-                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncementA}" ToolTip="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncementAToolTip}" />
-                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncementB}" />
-                        <local:MyComboBoxItem Content="{DynamicResource LangPageSetupSystemSystemLaunchAnnouncementC}" />
+                        <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemSystemLaunchAnnouncementA}" ToolTip="{StaticResource LangPageSetupSystemSystemLaunchAnnouncementAToolTip}" />
+                        <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemSystemLaunchAnnouncementB}" />
+                        <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemSystemLaunchAnnouncementC}" />
                     </local:MyComboBox>
-                    <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemSystemCacheFolder}" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextSystemCache" Grid.Row="4" Grid.ColumnSpan="2" Tag="SystemSystemCache" Grid.Column="1" ToolTip="{DynamicResource LangPageSetupSystemSystemCacheFolderToolTip}" HintText="{DynamicResource LangSetDefault}">
+                    <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemSystemCacheFolder}" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextSystemCache" Grid.Row="4" Grid.ColumnSpan="2" Tag="SystemSystemCache" Grid.Column="1" ToolTip="{StaticResource LangPageSetupSystemSystemCacheFolderToolTip}" HintText="{StaticResource LangSetDefault}">
                         <local:MyTextBox.ValidateRules>
                             <local:ValidateNullable />
                             <local:ValidateFolderPath UseMinecraftCharCheck="False" />
@@ -131,22 +131,22 @@
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
-                        <local:MyButton Grid.Column="0" x:Name="BtnSystemUpdate" MinWidth="140" Text="{DynamicResource LangPageSetupSystemSystemCheckUpdate}" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton Grid.Column="1" x:Name="BtnSystemSettingExp" MinWidth="140" Text="{DynamicResource LangPageSetupSystemExportSettings}" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton Grid.Column="2" x:Name="BtnSystemSettingImp" MinWidth="140" Text="{DynamicResource LangPageSetupSystemImportSettings}" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="0" x:Name="BtnSystemUpdate" MinWidth="140" Text="{StaticResource LangPageSetupSystemSystemCheckUpdate}" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="1" x:Name="BtnSystemSettingExp" MinWidth="140" Text="{StaticResource LangPageSetupSystemExportSettings}" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="2" x:Name="BtnSystemSettingImp" MinWidth="140" Text="{StaticResource LangPageSetupSystemImportSettings}" Padding="13,0" Margin="0,0,20,0" />
                     </Grid>
                     <Grid Height="35" Grid.Row="7" Grid.ColumnSpan="5" Margin="0,12,0,0" x:Name="PanDonate">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
-                        <local:MyButton Grid.Column="0" x:Name="BtnSystemIdentify" MinWidth="140" Text="{DynamicResource LangPageOtherAboutSponsorsCopyUUID}" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton Grid.Column="1" x:Name="BtnSystemUnlock" MinWidth="140" Text="{DynamicResource LangPageOtherAboutSponsorsSetUnlockCode}" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="0" x:Name="BtnSystemIdentify" MinWidth="140" Text="{StaticResource LangPageOtherAboutSponsorsCopyUUID}" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="1" x:Name="BtnSystemUnlock" MinWidth="140" Text="{StaticResource LangPageOtherAboutSponsorsSetUnlockCode}" Padding="13,0" Margin="0,0,20,0" />
                     </Grid>
                 </Grid>
             </local:MyCard>
 
-            <local:MyCard Margin="0,0,0,15" Title="{DynamicResource LangPageSetupSystemLang}">
+            <local:MyCard Margin="0,0,0,15" Title="{StaticResource LangPageSetupSystemLang}">
                 <Grid Margin="25,40,25,20" Visibility="Visible">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
@@ -159,40 +159,43 @@
                         <RowDefinition Height="9" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemLangLaunchLang}"/>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemLangLaunchLang}"/>
                     <local:MyComboBox x:Name="ComboBackgroundSuit" Tag="UiBackgroundSuit" Grid.Row="0" Grid.Column="1">
+                        <local:MyComboBoxItem Content="Ελληνικά (Ελλάδα)" Tag="el_GR" FontFamily="Segoe UI, Resources/#PCL English, Microsoft YaHei UI"/>
                         <local:MyComboBoxItem Content="English (United Kingdom)" Tag="en_GB" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
                         <local:MyComboBoxItem Content="English (US)" Tag="en_US" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
-                        <local:MyComboBoxItem Content="Español" Tag="es_ES" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
-                        <local:MyComboBoxItem Content="Français" Tag="fr_FR" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
-                        <local:MyComboBoxItem Content="日本語" Tag="ja_JP" FontFamily="Resources/#PCL English, Segoe UI, Yu Gothic UI"/>
-                        <local:MyComboBoxItem Content="한국어" Tag="ko_KR" FontFamily="Resources/#PCL English, Segoe UI, Malgun Gothic"/>
+                        <local:MyComboBoxItem Content="Español (España)" Tag="es_ES" FontFamily="Segoe UI, Resources/#PCL English, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="Français (France)" Tag="fr_FR" FontFamily="Segoe UI, Resources/#PCL English, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="日本語 (日本)" Tag="ja_JP" FontFamily="Resources/#PCL English, Segoe UI, Yu Gothic UI"/>
+                        <local:MyComboBoxItem Content="한국어 (대한민국)" Tag="ko_KR" FontFamily="Resources/#PCL English, Segoe UI, Malgun Gothic"/>
                         <local:MyComboBoxItem Content="文言 (華夏)" Tag="lzh" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
-                        <local:MyComboBoxItem Content="Русский" Tag="ru_RU" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="Русский (Россия)" Tag="ru_RU" FontFamily="Segoe UI, Resources/#PCL English, Microsoft YaHei UI"/>
+                        <local:MyComboBoxItem Content="Slovenčina (Slovensko)" Tag="sk_SK" FontFamily="Segoe UI, Resources/#PCL English, Microsoft YaHei UI"/>
                         <local:MyComboBoxItem Content="简体中文 (中国大陆)" Tag="zh_CN" IsSelected="True" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
                         <local:MyComboBoxItem Content="繁體中文 (香港特別行政區)" Tag="zh_HK" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
+                        <local:MyComboBoxItem Content="焱暒妏" Tag="zh_MARS" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
                         <local:MyComboBoxItem Content="梗体中文 (天朝)" Tag="zh_MEME" FontFamily="Resources/#PCL English, Segoe UI, Microsoft YaHei UI"/>
                         <local:MyComboBoxItem Content="繁體中文 (台灣)" Tag="zh_TW" FontFamily="Resources/#PCL English, Segoe UI, Microsoft JhengHei UI"/>
                     </local:MyComboBox>
-                    <local:MyHint Text="{DynamicResource LangPageSetupSystemLangWarn}" Grid.Row="2" Grid.ColumnSpan="2"/>
+                    <local:MyHint Text="{StaticResource LangPageSetupSystemLangWarn}" Grid.Row="2" Grid.ColumnSpan="2"/>
                     <Grid Height="35" Grid.Row="4" Grid.ColumnSpan="5" Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
-                        <local:MyButton Grid.Column="0" x:Name="BtnHelpTranslate" MinWidth="140" Text="{DynamicResource LangPageSetupSystemLangHelpTranslate}" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton Grid.Column="0" x:Name="BtnHelpTranslate" MinWidth="140" Text="{StaticResource LangPageSetupSystemLangHelpTranslate}" Padding="13,0" Margin="0,0,20,0" />
                     </Grid>
                 </Grid>
             </local:MyCard>
-            <local:MyCard x:Name="CardDebug" Margin="0,0,0,15" Title="{DynamicResource LangPageSetupSystemDebug}" CanSwap="True" IsSwaped="True">
+            <local:MyCard x:Name="CardDebug" Margin="0,0,0,15" Title="{StaticResource LangPageSetupSystemDebug}" CanSwap="True" IsSwaped="True">
                 <StackPanel Margin="25,40,25,15">
                     <Grid x:Name="PanDebugAnim" Height="22" Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{DynamicResource LangPageSetupSystemDebugAnimSpeed}" Margin="0,0,25,0" />
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDebugAnimSpeed}" Margin="0,0,25,0" />
                         <local:MySlider x:Name="SliderDebugAnim" Tag="SystemDebugAnim" MaxValue="30" Grid.Column="1" />
                     </Grid>
                     <Grid>
@@ -201,9 +204,9 @@
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <local:MyCheckBox Grid.Column="0" Text="{DynamicResource LangPageSetupSystemDebugNotCopyExistFileWhenDownload}" Height="22" x:Name="CheckDebugSkipCopy" Tag="SystemDebugSkipCopy" ToolTip="{DynamicResource LangPageSetupSystemDebugNotCopyExistFileWhenDownloadToolTip}" />
-                        <local:MyCheckBox Grid.Column="1" Text="{DynamicResource LangPageSetupSystemDebugDebugMode}" Height="22" x:Name="CheckDebugMode" Tag="SystemDebugMode" ToolTip="{DynamicResource LangPageSetupSystemDebugDebugModeToolTip}" />
-                        <local:MyCheckBox Grid.Column="2" Text="{DynamicResource LangPageSetupSystemDebugDelay}" Height="22" x:Name="CheckDebugDelay" Tag="SystemDebugDelay" ToolTip="{DynamicResource LangPageSetupSystemDebugDelayToolTip}" />
+                        <local:MyCheckBox Grid.Column="0" Text="{StaticResource LangPageSetupSystemDebugNotCopyExistFileWhenDownload}" Height="22" x:Name="CheckDebugSkipCopy" Tag="SystemDebugSkipCopy" ToolTip="{StaticResource LangPageSetupSystemDebugNotCopyExistFileWhenDownloadToolTip}" />
+                        <local:MyCheckBox Grid.Column="1" Text="{StaticResource LangPageSetupSystemDebugDebugMode}" Height="22" x:Name="CheckDebugMode" Tag="SystemDebugMode" ToolTip="{StaticResource LangPageSetupSystemDebugDebugModeToolTip}" />
+                        <local:MyCheckBox Grid.Column="2" Text="{StaticResource LangPageSetupSystemDebugDelay}" Height="22" x:Name="CheckDebugDelay" Tag="SystemDebugDelay" ToolTip="{StaticResource LangPageSetupSystemDebugDelayToolTip}" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

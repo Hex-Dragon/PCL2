@@ -20,25 +20,27 @@ Public Class Application
     '开始
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
         '刷新语言
-        Log("[Lang] 选择启动器语言为 " & Lang)
-        WriteReg("Lang", Lang)
         Try
             Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("pack://application:,,,/Resources/Language/" & Lang & ".xaml", UriKind.RelativeOrAbsolute)}
         Catch ex As Exception
-            Log("无法找到语言资源：" & Lang & vbCrLf & "Language resource cannot be found:" & Lang, LogLevel.Assert)
+            MsgBox("无法找到语言资源：" & Lang & vbCrLf & "Language resource cannot be found:" & Lang, MsgBoxStyle.Critical)
+            Lang = GetDefaultLang()
+            WriteReg("Lang", Lang)
         End Try
 
         '依照选择语言切换字体
         Dim LaunchFont As FontFamily
         Select Case Lang
-            Case "zh_TW", "zh_HK", "lzh"
+            Case "zh_TW", "zh_HK", "lzh", "zh_MARS"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft JhengHei UI")
             Case "ja_JP"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Yu Gothic UI, Microsoft YaHei UI")
             Case "ko_KR"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Malgun Gothic, Microsoft YaHei UI")
-            Case Else
+            Case "en_US", "en_GB", "zh_CN", "zh_MEME"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft YaHei UI")
+            Case Else '非英语的其他西欧语言统一使用 Segoe UI
+                LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "Segoe UI, ./Resources/#PCL English, Microsoft YaHei UI")
         End Select
         SwitchApplicationFont(LaunchFont)
 
@@ -122,14 +124,19 @@ Public Class Application
             '日志初始化
             LogStart()
             '添加日志
-            Log($"[Start] 程序版本：{VersionDisplayName} ({VersionCode})")
+            Log($"[Start] 程序版本：{VersionDisplayName} ({VersionCode}{If(CommitHash = "", "", $"，#{CommitHash}")})")
             Log($"[Start] 识别码：{UniqueAddress}{If(ThemeCheckOne(9), "，已解锁反馈主题", "")}")
             Log($"[Start] 程序路径：{PathWithName}")
             Log($"[Start] 系统编码：{Encoding.Default} ({Encoding.Default.CodePage}, GBK={IsGBKEncoding})")
             Log($"[Start] 管理员权限：{IsAdmin()}")
-            '检测压缩包运行
+            Log("[Location] 启动器语言：" & Lang)
+            Log("[Location] 当前系统环境是否为中国大陆：" & IsLocationZH())
+            '检测异常环境
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
                 MyMsgBox(GetLang("LangApplicationDialogContentRunInTemp"), GetLang("LangApplicationDialogTitleRunInTemp"), GetLang("LangDialogThemeUnlockGameAccept"), IsWarn:=True)
+            End If
+            If Is32BitSystem Then
+                MyMsgBox(GetLang("LangApplicationDialogContent32BitWarn"), GetLang("LangApplicationDialogTitleRunInTemp"), GetLang("LangDialogThemeUnlockGameAccept"), IsWarn:=True)
             End If
             '设置初始化
             Setup.Load("SystemDebugMode")
@@ -181,7 +188,7 @@ Public Class Application
            ExceptionString.Contains("MS.Internal.AppModel.ITaskbarList.HrInit") OrElse
            ExceptionString.Contains(".NET Framework") OrElse ' “自动错误判断” 的结果分析
            ExceptionString.Contains("未能加载文件或程序集") Then
-            OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net462-offline-installer")
+            OpenWebsite("https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net462-offline-installer")
             MsgBox(GetLang("LangApplicationDialogContentNETWarn"), MsgBoxStyle.Information, GetLang("LangApplicationDialogTitleNETWarn"))
             FormMain.EndProgramForce(Result.Cancel)
         Else
@@ -194,9 +201,12 @@ Public Class Application
     Private Shared AssemblyNAudio As Assembly
     Private Shared AssemblyJson As Assembly
     Private Shared AssemblyDialog As Assembly
+    Private Shared AssemblyImazenWebp As Assembly
     Private Shared ReadOnly AssemblyNAudioLock As New Object
     Private Shared ReadOnly AssemblyJsonLock As New Object
     Private Shared ReadOnly AssemblyDialogLock As New Object
+    Private Shared ReadOnly AssemblyImazenWebpLock As New Object
+    Private Declare Function SetDllDirectory Lib "kernel32" Alias "SetDllDirectoryA" (lpPathName As String) As Boolean
     Public Shared Function AssemblyResolve(sender As Object, args As ResolveEventArgs) As Assembly
         If args.Name.StartsWithF("NAudio") Then
             SyncLock AssemblyNAudioLock
@@ -221,6 +231,16 @@ Public Class Application
                     AssemblyDialog = Assembly.Load(GetResources("Dialogs"))
                 End If
                 Return AssemblyDialog
+            End SyncLock
+        ElseIf args.Name.StartsWithF("Imazen.WebP") Then
+            SyncLock AssemblyImazenWebpLock
+                If AssemblyImazenWebp Is Nothing Then
+                    Log("[Start] 加载 DLL：Imazen.WebP")
+                    AssemblyImazenWebp = Assembly.Load(GetResources("Imazen_WebP"))
+                    SetDllDirectory(GetPureAsciiDir())
+                    File.WriteAllBytes(GetPureAsciiDir() & "\libwebp.dll", GetResources("libwebp64"))
+                End If
+                Return AssemblyImazenWebp
             End SyncLock
         Else
             Return Nothing

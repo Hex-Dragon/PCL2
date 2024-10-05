@@ -1,4 +1,7 @@
-﻿Module Modi18n
+﻿Imports System.Globalization
+Imports System.Windows.Forms
+
+Module Modi18n
     ''' <summary>
     ''' 获取语言
     ''' </summary>
@@ -10,13 +13,13 @@
             If String.IsNullOrWhiteSpace(Key) Then Throw New Exception("Key 值未提供;No key value provided")
             Return String.Format(Application.Current.FindResource(Key), Param)
         Catch ex As FormatException
-            Log(ex, $"[Lang] 格式化文本失败：{Key};传入参数：{Param.Join(",")}", LogLevel.Hint)
+            Log(ex, $"[Location] 格式化文本失败：{Key};传入参数：{Param.Join(",")}", LogLevel.Hint)
             Return Application.Current.FindResource(Key)
         Catch ex As ResourceReferenceKeyNotFoundException
-            Log(ex, $"[Lang] 找不到对应的语言资源：{Key}")
+            Log(ex, $"[Location] 找不到对应的语言资源：{Key}")
             Return Key
         Catch ex As Exception
-            Log(ex, $"[Lang] 获取语言资源失败：{Key}（{ex.Message}）", LogLevel.Hint)
+            Log(ex, $"[Location] 获取语言资源失败：{Key}（{ex.Message}）", LogLevel.Hint)
             Return Key
         End Try
     End Function
@@ -40,7 +43,7 @@
             Case "未知版本"
                 Return GetLang("LangDownloadUnknown")
             Case Else
-                Log("[Lang] 没有找到词语""" & Word & """的对应翻译")
+                '这里不要输出未找到日志
                 Return Word
         End Select
     End Function
@@ -52,12 +55,12 @@
     ''' <returns></returns>
     Public Function GetLocalTimeFormat(Time As DateTime) As String
         Select Case Lang
-            Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME", "ja_JP", "ko_KR" '2024/08/16 11:47
+            Case "ja_JP", "ko_KR", "lzh", "zh_CN", "zh_HK", "zh_MARS", "zh_MEME", "zh_TW" '2024/08/16 11:47
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
-            Case "en_GB", "es_ES", "fr_FR", "ru_RU" '11:47 16/08/2024
-                Return Time.ToString("HH':'mm dd'/'MM'/'yyyy")
-            Case Else 'en_US 11:47 08/16/2024
-                Return Time.ToString("HH':'mm MM'/'dd'/'yyyy")
+            Case "en_US" '11:47 08/16/2024
+                Return Time.ToString("MM'/'dd'/'yyyy HH':'mm")
+            Case Else '11:47 16/08/2024
+                Return Time.ToString("dd'/'MM'/'yyyy HH':'mm")
         End Select
     End Function
 
@@ -69,17 +72,33 @@
         Try
             Application.Current.Resources("LaunchFontFamily") = Font
         Catch ex As Exception
-            Log(ex, "[Lang] 切换字体失败，这可能导致界面显示异常", LogLevel.Msgbox)
+            Log(ex, "[Location] 切换字体失败，这可能导致界面显示异常", LogLevel.Msgbox)
         End Try
     End Sub
 
     ''' <summary>
-    ''' 语言是否为中文
+    ''' 地区检测缓存
+    ''' -1 未检测
+    ''' 0 非中国大陆
+    ''' 1 中国大陆
+    ''' </summary>
+    Private _IsLocationZH As Integer = -1
+
+    ''' <summary>
+    ''' 地区是否为中国大陆
+    ''' 君子协议
     ''' </summary>
     ''' <returns></returns>
     Public Function IsLocationZH() As Boolean
-        If String.IsNullOrEmpty(Lang) Then Return Globalization.CultureInfo.CurrentCulture.Name.StartsWithF("zh")
-        Return Lang.StartsWithF("zh") Or Lang.Equals("lzh")
+        'Return False '测试使用
+        If Not _IsLocationZH.Equals(-1) Then Return _IsLocationZH.Equals(1)
+        Dim IsZH As Boolean = CultureInfo.CurrentCulture.Name.Equals("zh-CN") '语言检测
+        IsZH = IsZH And CultureInfo.CurrentUICulture.Name.Equals("zh-CN") '语言检测
+        IsZH = IsZH And RegionInfo.CurrentRegion.ISOCurrencySymbol.Equals("CNY") '货币类型是否为 CNY
+        IsZH = IsZH And TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now).Equals(New TimeSpan(8, 0, 0)) '时区检测
+        IsZH = IsZH And InputLanguage.InstalledInputLanguages.OfType(Of InputLanguage).ToList().Any(Function(i) i.Culture.Name.Equals("zh-CN")) '是否存在中文输入法
+        _IsLocationZH = If(IsZH, 1, 0)
+        Return IsZH
     End Function
 
     ''' <summary>
@@ -87,28 +106,35 @@
     ''' </summary>
     ''' <returns>返回类似于 zh_CN 这样形式的文本</returns>
     Public Function GetDefaultLang() As String
-        Select Case Globalization.CultureInfo.CurrentCulture.Name
-            Case "en-GB", "en-NZ", "en-AU"
+        Dim CurrentCulture As String = CultureInfo.CurrentCulture.Name
+        Dim PrefixMap As New Dictionary(Of String, String) From {
+            {"el-", "el_GR"},
+            {"es-", "es_ES"},
+            {"fr-", "fr_FR"},
+            {"ja-", "ja_JP"},
+            {"ko-", "ko_KR"},
+            {"ru-", "ru_RU"},
+            {"sk-", "sk_SK"}
+        }
+
+        For Each prefixPair In PrefixMap
+            If CurrentCulture.StartsWith(prefixPair.Key) Then
+                Return prefixPair.Value
+            End If
+        Next
+
+        Select Case CurrentCulture
+            Case "en-GB", "en-NZ", "en-AU", "en-CA"
                 Return "en_GB"
-            Case "es-ES", "es-MX", "es-UY", "es-VE", "es-AR", "es_EC", "	es_CL"
-                Return "es_ES"
-            Case "fr-FR", "fr-CA"
-                Return "fr_FR"
-            Case "ja-JP"
-                Return "ja_JP"
-            Case "ko-KR", "ko-KP"
-                Return "ko_KR"
-            Case "ru-RU"
-                Return "ru_RU"
             Case "zh-CN", "zh-SG", "zh-Hans"
                 Return "zh_CN"
             Case "zh-HK", "zh-MO"
                 Return "zh_HK"
             Case "zh-TW", "zh-Hant"
                 Return "zh_TW"
-            Case Else
-                Return "en_US"
         End Select
+
+        Return "en_US"
     End Function
 
     ''' <summary>
@@ -117,15 +143,16 @@
     ''' <param name="Num">数量</param>
     ''' <returns>11 Million、2 万等这样的表示</returns>
     Public Function GetLocationNum(Num As Int32) As String
-        If IsLocationZH() Then
-            Return If(Num > 1000000000000, Math.Round(Num / 1000000000000, 2) & " " & GetLang("LangModCompModDigit3"), '兆
+        Select Case Lang
+            Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME", "ja_JP", "ko_KR"
+                Return If(Num > 1000000000000, Math.Round(Num / 1000000000000, 2) & " " & GetLang("LangModCompModDigit3"), '兆
                 If(Num > 100000000, Math.Round(Num / 100000000, 2) & " " & GetLang("LangModCompModDigit2"), '亿
-                If(Num > 100000, Math.Round(Num / 10000, 0) & " " & GetLang("LangModCompModDigit1"), Num.ToString("N0")))) '万
-        Else 'en_US en_GB
-            Return If(Num > 1000000000, Math.Round(Num / 1000000000, 2) & GetLang("LangModCompModDigit3"), 'Billion
+                If(Num > 100000, Math.Round(Num / 10000, 0) & " " & GetLang("LangModCompModDigit1"), Num.ToString("N0") & " "))) '万
+            Case Else 'en_US, en_GB, fr_FR etc.
+                Return If(Num > 1000000000, Math.Round(Num / 1000000000, 2) & GetLang("LangModCompModDigit3"), 'Billion
                 If(Num > 1000000, Math.Round(Num / 1000000, 2) & GetLang("LangModCompModDigit2"), 'Million
-                If(Num > 10000, Math.Round(Num / 1000, 0) & GetLang("LangModCompModDigit1"), Num))) 'Thousand(K)
-        End If
+                If(Num > 10000, Math.Round(Num / 1000, 0) & GetLang("LangModCompModDigit1"), Num.ToString("N0")))) 'Thousand(K)
+        End Select
     End Function
 
     ''' <summary>
@@ -134,7 +161,7 @@
     ''' <param name="Count">数量</param>
     ''' <param name="Key">调用的键名</param>
     ''' <returns></returns>
-    Public Function IsPlural(Count As Int32, Key As String) As String
+    Public Function GetLangByNumIsPlural(Count As Int32, Key As String) As String
         If Count <= 1 Then
             Return GetLang(Key)
         Else

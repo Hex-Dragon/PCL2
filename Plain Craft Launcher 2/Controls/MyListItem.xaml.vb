@@ -188,18 +188,19 @@
             Return GetValue(InfoProperty)
         End Get
         Set(value As String)
-            value = value.Replace(vbCr, "").Replace(vbLf, "")
             SetValue(InfoProperty, value)
-            OnInfoPropertyChanged()
+            value = value.Replace(vbCr, "").Replace(vbLf, "")
+            If LabInfo Is Nothing Then Exit Property
+            LabInfo.Text = value
+            LabInfo.Visibility = If(String.IsNullOrWhiteSpace(value), Visibility.Collapsed, Visibility.Visible)
         End Set
     End Property
-    Public Shared ReadOnly InfoProperty As DependencyProperty = DependencyProperty.Register("Info", GetType(String), GetType(MyListItem), New PropertyMetadata(""))
-
-    Public Sub OnInfoPropertyChanged()
-        If LabInfo Is Nothing Then Exit Sub
-        LabInfo.Text = Info
-        LabInfo.Visibility = If(String.IsNullOrWhiteSpace(LabInfo.Text), Visibility.Collapsed, Visibility.Visible)
-    End Sub
+    Public Shared ReadOnly InfoProperty As DependencyProperty = DependencyProperty.Register("Info", GetType(String), GetType(MyListItem), New PropertyMetadata(New PropertyChangedCallback(
+                                                                                                                                                               Sub(sender As DependencyObject, e As DependencyPropertyChangedEventArgs)
+                                                                                                                                                                   If Not IsNothing(sender) Then
+                                                                                                                                                                       CType(sender, MyListItem).Info = e.NewValue
+                                                                                                                                                                   End If
+                                                                                                                                                               End Sub)))
 
     '图片
     Private _Logo As String = ""
@@ -667,7 +668,6 @@
                 Log(ex, "设置帮助 MyListItem 失败", LogLevel.Msgbox)
             End Try
         End If
-        OnInfoPropertyChanged()
     End Sub
     Public Overrides Function ToString() As String
         Return Title
