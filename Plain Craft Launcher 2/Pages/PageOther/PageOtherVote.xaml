@@ -8,7 +8,7 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,25,25,25">
-            <local:MyCard Title="参与投票">
+            <local:MyCard Title="参与投票" x:Name="PanInfo">
                 <StackPanel Orientation="Vertical" Margin="20,40,18,22">
                     <TextBlock Text="新功能？我全都要！参与投票，催催你想加入的新功能。（为 PCL 伟大的咕咕咕事业咕咕咕）"/>
                     <Grid Margin="0,15,0,0" Height="35">
@@ -22,10 +22,13 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard Title="反馈列表" Margin="0,15,0,0">
-                <StackPanel Name="PanContent" Orientation="Vertical" Margin="20,36,18,22">
+            <local:MyCard Title="反馈列表" Margin="0,15,0,0" x:Name="PanContent">
+                <StackPanel Name="PanList" Orientation="Vertical" Margin="20,36,18,22">
 
                 </StackPanel>
+            </local:MyCard>
+            <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
+                <local:MyLoading Text="正在获取反馈列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </local:MyCard>
         </StackPanel>
     </local:MyScrollViewer>
