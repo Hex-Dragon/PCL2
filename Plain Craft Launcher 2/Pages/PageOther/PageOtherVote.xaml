@@ -7,5 +7,26 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
+        <StackPanel x:Name="PanMain" Margin="25,25,25,25">
+            <local:MyCard Title="参与投票">
+                <StackPanel Orientation="Vertical" Margin="20,40,18,22">
+                    <TextBlock Text="新功能？我全都要！参与投票，催催你想加入的新功能。（为 PCL 伟大的咕咕咕事业咕咕咕）"/>
+                    <Grid Margin="0,15,0,0" Height="35">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                        </Grid.ColumnDefinitions>
+                        <local:MyButton x:Name="BtnManageOpen" Grid.Column="0" MinWidth="140" Text="前往投票" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" Click="Vote_Click"/>
+                    </Grid>
+                </StackPanel>
+            </local:MyCard>
+            <local:MyCard Title="反馈列表" Margin="0,15,0,0">
+                <StackPanel Name="PanContent" Orientation="Vertical" Margin="20,36,18,22">
+
+                </StackPanel>
+            </local:MyCard>
+        </StackPanel>
     </local:MyScrollViewer>
 </local:MyPageRight>

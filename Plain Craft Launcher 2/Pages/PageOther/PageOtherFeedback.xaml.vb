@@ -5,12 +5,12 @@
 
         '重复加载部分
         PanBack.ScrollToHome()
-        RefreshList()
 
         '非重复加载部分
         If IsLoaded Then Exit Sub
         IsLoaded = True
 
+        RefreshList()
 
     End Sub
 
@@ -28,10 +28,19 @@
         If List Is Nothing Then Exit Sub
 
         For Each i As JObject In list
-            Dim item As MyListItem = New MyListItem With {.Title = i("title").ToString(), .Info = "反馈者：" & i("user")("login").ToString() & " | 时间：" & Date.Parse(i("created_at").ToString()).ToLocalTime().ToString(), .Logo = $"https://github.com/{i("user")("login").ToString()}.png"}
+            Dim item As MyListItem = New MyListItem With {.Title = i("title").ToString(), .Info = "反馈者：" & i("user")("login").ToString() & " | 时间：" & Date.Parse(i("created_at").ToString()).ToLocalTime().ToString(), .Logo = $"https://github.com/{i("user")("login").ToString()}.png", .Type = MyListItem.CheckType.Clickable, .Tag = i}
+            AddHandler item.Click, AddressOf SeeDetail
             PanContent.Children.Add(item)
         Next
     End Sub
+
+    Private Sub SeeDetail(sender As Object, e As MouseButtonEventArgs)
+        Dim data As JObject = sender.Tag
+        MyMsgBox(data("body").ToString(), data("user")("login").ToString() & " | " & data("title").ToString(), Button2:="查看详情", Button2Action:=Sub()
+                                                                                                                                                   OpenWebsite(data("html_url"))
+                                                                                                                                               End Sub)
+    End Sub
+
 
     Private Sub Feedback_Click(sender As Object, e As MouseButtonEventArgs)
         PageOtherLeft.TryFeedback()

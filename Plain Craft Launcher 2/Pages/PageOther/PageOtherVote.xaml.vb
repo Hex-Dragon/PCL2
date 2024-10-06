@@ -12,5 +12,7 @@
 
 
     End Sub
-
+    Private Sub Vote_Click(sender As Object, e As MouseButtonEventArgs)
+        PageOtherLeft.TryVote()
+    End Sub
 End Class
