@@ -22,7 +22,7 @@
                                                   list = NetGetCodeByRequestRetry("https://api.github.com/repos/Hex-Dragon/PCL2/issues", IsJson:=True, UseBrowserUserAgent:=True)
                                               End Sub, "GetFeedbackList")
         While thread.IsAlive
-
+            Thread.Sleep(100)
         End While
         PanContent.Children.Clear()
         If List Is Nothing Then Exit Sub
