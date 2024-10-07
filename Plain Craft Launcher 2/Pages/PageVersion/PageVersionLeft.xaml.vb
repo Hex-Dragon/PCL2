@@ -25,7 +25,7 @@
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemScreenshot.Check, ItemWorld.Check, ItemResourcePack.Check, ItemShader.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -46,6 +46,18 @@
             Case FormMain.PageSubType.VersionSetup
                 If IsNothing(FrmVersionSetup) Then FrmVersionSetup = New PageVersionSetup
                 Return FrmVersionSetup
+            Case FormMain.PageSubType.VersionWorld
+                If FrmVersionWorld Is Nothing Then FrmVersionWorld = New PageVersionWorld
+                Return FrmVersionWorld
+            Case FormMain.PageSubType.VersionScreenshot
+                If FrmVersionScreenshot Is Nothing Then FrmVersionScreenshot = New PageVersionScreenshot
+                Return FrmVersionScreenshot
+            Case FormMain.PageSubType.VersionResourcePack
+                If FrmVersionResourcePack Is Nothing Then FrmVersionResourcePack = New PageVersionResourcePack
+                Return FrmVersionResourcePack
+            Case FormMain.PageSubType.VersionShader
+                If FrmVersionShader Is Nothing Then FrmVersionShader = New PageVersionShader
+                Return FrmVersionShader
             Case Else
                 Throw New Exception("未知的版本设置子页面种类：" & ID)
         End Select
@@ -90,14 +102,29 @@
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
         '强制刷新
         Try
-            CompProjectCache.Clear()
-            File.Delete(PathTemp & "Cache\LocalMod.json")
-            Log("[Mod] 由于点击刷新按钮，清理本地 Mod 信息缓存")
+            Select Case Val(sender.Tag)
+                Case FormMain.PageSubType.VersionMod
+                    CompProjectCache.Clear()
+                    File.Delete(PathTemp & "Cache\LocalMod.json")
+                    Log("[Mod] 由于点击刷新按钮，清理本地 Mod 信息缓存")
+                    If FrmVersionMod IsNot Nothing Then FrmVersionMod.ReloadModList(True) '无需 Else，还没加载刷个鬼的新
+                    ItemMod.Checked = True
+                Case FormMain.PageSubType.VersionScreenshot
+                    If FrmVersionScreenshot IsNot Nothing Then FrmVersionScreenshot.Reload()
+                    ItemScreenshot.Checked = True
+                Case FormMain.PageSubType.VersionWorld
+                    If FrmVersionWorld IsNot Nothing Then FrmVersionWorld.Reload()
+                    ItemWorld.Checked = True
+                Case FormMain.PageSubType.VersionResourcePack
+                    If FrmVersionResourcePack IsNot Nothing Then FrmVersionResourcePack.Reload()
+                    ItemResourcePack.Checked = True
+                Case FormMain.PageSubType.VersionShader
+                    If FrmVersionShader IsNot Nothing Then FrmVersionShader.Reload()
+                    ItemShader.Checked = True
+            End Select
         Catch ex As Exception
-            Log(ex, "强制刷新时清理本地 Mod 信息缓存失败")
+            Log(ex, "强制刷新出错")
         End Try
-        If FrmVersionMod IsNot Nothing Then FrmVersionMod.ReloadModList(True) '无需 Else，还没加载刷个鬼的新
-        ItemMod.Checked = True
         Hint("正在刷新……", Log:=False)
     End Sub
 
