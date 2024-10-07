@@ -21,7 +21,7 @@ Public Class PageOtherVote
         IsLoaded = True
 
     End Sub
-    Public Shared Loader As New LoaderTask(Of String, List(Of Vote))("VoteList", AddressOf VoteListGet, AddressOf LoaderInput) With {.ReloadTimeout = 60 * 1000}
+    Public Shared Loader As New LoaderTask(Of String, List(Of Vote))("VoteList", AddressOf VoteListGet, AddressOf LoaderInput)
 
     Private Shared Function LoaderInput() As String
         Return "" ' awa?
@@ -48,6 +48,7 @@ Public Class PageOtherVote
 
 
     Public Sub LoadList()
+        PanList.Children.Clear()
         For Each item In Loader.Output
             Dim ele As MyListItem = New MyListItem With {.Logo = "https://github.githubassets.com/assets/1fa9c-fd94340a7b39.png", .Type = MyListItem.CheckType.Clickable, .Title = item.Title}
             AddHandler ele.Click, Sub()

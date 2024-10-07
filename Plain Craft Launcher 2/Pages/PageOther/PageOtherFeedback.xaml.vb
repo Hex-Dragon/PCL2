@@ -6,6 +6,7 @@
         Public Time As String
         Public Content As String
         Public Url As String
+        Public ID As String
     End Class
 
     Private Shadows IsLoaded As Boolean = False
@@ -19,7 +20,7 @@
 
     End Sub
 
-    Public Shared Loader As New LoaderTask(Of String, List(Of Feedback))("FeedbackList", AddressOf FeedbackListGet, AddressOf LoaderInput) With {.ReloadTimeout = 60 * 1000}
+    Public Shared Loader As New LoaderTask(Of String, List(Of Feedback))("FeedbackList", AddressOf FeedbackListGet, AddressOf LoaderInput)
 
     Private Shared Function LoaderInput() As String
         Return "" ' awa?
@@ -31,19 +32,20 @@
         If list Is Nothing Then Throw New Exception("无法获取到内容")
         Dim res As List(Of Feedback) = New List(Of Feedback)
         For Each i As JObject In list
-            Dim item As Feedback = New Feedback With {.Title = i("title").ToString(), .Url = i("html_url").ToString(), .Content = i("body").ToString(), .Time = Date.Parse(i("created_at").ToString()).ToLocalTime().ToString(), .User = i("user")("login").ToString()}
+            Dim item As Feedback = New Feedback With {.Title = i("title").ToString(), .Url = i("html_url").ToString(), .Content = i("body").ToString(), .Time = Date.Parse(i("created_at").ToString()).ToLocalTime().ToString(), .User = i("user")("login").ToString(), .ID = i("number")}
             res.Add(item)
         Next
         Task.Output = res
     End Sub
 
     Public Sub RefreshList()
+        PanList.Children.Clear()
         For Each item In Loader.Output
             Dim ele As New MyListItem With {.Title = item.Title, .Info = item.User & " | " & item.Time, .Logo = $"https://github.com/{item.User}.png", .Type = MyListItem.CheckType.Clickable}
             AddHandler ele.Click, Sub()
-                                      MyMsgBox(item.Content, item.User & " | " & item.Title, Button2:="查看详情", Button2Action:=Sub()
-                                                                                                                                 OpenWebsite(item.Url)
-                                                                                                                             End Sub)
+                                      MyMsgBox(item.Content, "#" & item.ID & " " & item.Title, Button2:="查看详情", Button2Action:=Sub()
+                                                                                                                                   OpenWebsite(item.Url)
+                                                                                                                               End Sub)
                                   End Sub
             PanList.Children.Add(ele)
         Next
