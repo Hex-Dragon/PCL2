@@ -890,7 +890,7 @@ Napríklad, napísanie "--demo" spustí hru v demo režime.</s:String>
 Relatívne cesty môžu byť implementované pomocou nasledujúcich alternatívnych značiek (cesty končia "\" ):
  · {path}: Priečinok, kde sa nachádza PCL
  · {minecraft}: Priečinok .minecraft
- · {verpath}: Priečinok inštancie (.minecraft\versions\<názov inštancie>\)
+ · {verpath}: Priečinok inštancie (.minecraft\versions\[názov inštancie]\)
  · {verindie}: Priečinok inštancie, keď je "Izolácia inštancie" aktivovaná, alebo priečinok .minecraft, keď je deaktivovaná
  · {java}: Priečinok Java, ktorá sa používa v hre
 
@@ -1242,7 +1242,7 @@ Vykonáva špecifický prikaz alebo program pred spustením Minecraft. Syntaxa j
 Môžete implementovať relatívne cesty pomocou nasledujúcich alternatívnych značiek (cesty končia "\" ):
  · {path}: Priečinky, kde sa nachádza PCL
  · {minecraft}: Priečinky .minecraft
- · {verpath}: Priečinky inštancie (.minecraft\versions\<názov inštancie>\)
+ · {verpath}: Priečinky inštancie (.minecraft\versions\[názov inštancie]\)
  · {verindie}: Priečinky inštancie, keď je "Izolácia inštancií" zapnutá, alebo priečinky .minecraft, keď je vypnutá
  · {java}: Priečinky Javy, ktorá sa používa hrou
 
