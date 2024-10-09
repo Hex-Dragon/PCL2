@@ -49,7 +49,7 @@
     End Class
     Private Sub Load_OnFinish()
         Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
-            $"所选版本：{TargetVersion} {If(TargetLoader <> CompModLoaderType.Any, TargetLoader, "")}", "")
+            GetLang("LangDownloadCompSelectedVersion") & $"{TargetVersion} {If(TargetLoader <> CompModLoaderType.Any, TargetLoader, "")}", "")
         '初始化字典
         Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New VersionSorterWithSelect(TargetCardName))
         Dict.Add("未知版本", New List(Of CompFile))
@@ -90,7 +90,7 @@
             For Each Pair As KeyValuePair(Of String, List(Of CompFile)) In Dict
                 If Not Pair.Value.Any() Then Continue For
                 '增加卡片
-                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(Project.Type = CompType.ModPack, 9, 8)} 'FUTURE: Res
+                Dim NewCard As New MyCard With {.Title = GetLangByWord(Pair.Key), .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(Project.Type = CompType.ModPack, 9, 8)} 'FUTURE: Res
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
@@ -105,7 +105,7 @@
                 End If
                 '增加提示
                 If Pair.Key = "未知版本" Then
-                    NewStack.Children.Add(New MyHint With {.Text = "由于 API 的版本信息更新缓慢，可能无法识别刚更新不久的 MC 版本，只需等待几天即可自动恢复正常。", .IsWarn = False, .Margin = New Thickness(0, 0, 0, 7)})
+                    NewStack.Children.Add(New MyHint With {.Text = GetLang("LangDownloadCompApiSlow"), .IsWarn = False, .Margin = New Thickness(0, 0, 0, 7)})
                 End If
             Next
             '如果只有一张卡片，展开第一张卡片
@@ -143,7 +143,7 @@
         PanIntro.Children.Insert(0, CompItem)
 
         '决定按钮显示
-        BtnIntroWeb.Text = If(Project.FromCurseForge, "转到 CurseForge", "转到 Modrinth")
+        BtnIntroWeb.Text = If(Project.FromCurseForge, GetLang("LangDownloadCompToCurseForge"), GetLang("LangDownloadCompToModrinth"))
         BtnIntroWiki.Visibility = If(Project.WikiId = 0, Visibility.Collapsed, Visibility.Visible)
 
         AniControlEnabled -= 1
@@ -155,21 +155,21 @@
 
             '获取基本信息
             Dim File As CompFile = sender.Tag
-            Dim LoaderName As String = $"{If(Project.FromCurseForge, "CurseForge", "Modrinth")} 整合包下载：{Project.TranslatedName} "
+            Dim LoaderName As String = $"{If(Project.FromCurseForge, "CurseForge", "Modrinth")} {GetLang("LangDownloadCompDownloadModpack")}{Project.TranslatedName} "
 
             '获取版本名
             Dim PackName As String = Project.TranslatedName.Replace(".zip", "").Replace(".rar", "").Replace(".mrpack", "").Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")
             Dim Validate As New ValidateFolderName(PathMcFolder & "versions")
             If Validate.Validate(PackName) <> "" Then PackName = ""
-            Dim VersionName As String = MyMsgBoxInput("输入版本名称", "", PackName, New ObjectModel.Collection(Of Validate) From {Validate})
+            Dim VersionName As String = MyMsgBoxInput(GetLang("LangDownloadCompInputInstanceName"), "", PackName, New ObjectModel.Collection(Of Validate) From {Validate})
             If String.IsNullOrEmpty(VersionName) Then Exit Sub
 
             '构造步骤加载器
             Dim Loaders As New List(Of LoaderBase)
             Dim Target As String = $"{PathMcFolder}versions\{VersionName}\原始整合包.{If(Project.FromCurseForge, "zip", "mrpack")}"
             Dim LogoFileAddress As String = PathTemp & "CompLogo\" & GetHash(CompItem.Logo) & ".png"
-            Loaders.Add(New LoaderDownload("下载整合包文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 10, .Block = True})
-            Loaders.Add(New LoaderTask(Of Integer, Integer)("准备安装整合包",
+            Loaders.Add(New LoaderDownload(GetLang("LangDownloadCompTaskDownloadModpackFile"), New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 10, .Block = True})
+            Loaders.Add(New LoaderTask(Of Integer, Integer)(GetLang("LangDownloadCompTaskPrepareInstallModpack"),
             Sub()
                 If ModpackInstall(Target, VersionName, Logo:=If(IO.File.Exists(LogoFileAddress), LogoFileAddress, Nothing)) Is Nothing Then
                     Throw New Exception("整合包安装出现异常！")
@@ -183,7 +183,7 @@
                     Case LoadState.Failed
                         Hint(MyLoader.Name & "失败：" & GetExceptionSummary(MyLoader.Error), HintType.Critical)
                     Case LoadState.Aborted
-                        Hint(MyLoader.Name & "已取消！", HintType.Info)
+                        Hint(MyLoader.Name & GetLang("LangTaskAbort"), HintType.Info)
                     Case LoadState.Loading
                         Exit Sub '不重新加载版本列表
                 End Select
@@ -205,7 +205,7 @@
         RunInNewThread(
         Sub()
             Try
-                Dim Desc As String = If(Project.Type = CompType.ModPack, "整合包", If(Project.Type = CompType.Mod, "Mod ", "资源包"))
+                Dim Desc As String = If(Project.Type = CompType.ModPack, GetLang("LangDownloadPageLeftModpack"), If(Project.Type = CompType.Mod, "Mod ", GetLang("LangResourcePack")))
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
                 If Project.Type = CompType.Mod Then
@@ -246,7 +246,7 @@
                     Else
                         Dim NeedLoad As Boolean = McVersionListLoader.State <> LoadState.Finished
                         If NeedLoad Then
-                            Hint("正在查找适合的游戏版本……")
+                            Hint(GetLang("LangDownloadCompSearchingSuitableInstance"))
                             LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
                         End If
                         Dim SuitableVersions As New List(Of McVersion)
@@ -256,7 +256,7 @@
                         If Not SuitableVersions.Any() Then
                             DefaultFolder = PathMcFolder
                             If NeedLoad Then
-                                Hint("当前 MC 文件夹中没有找到适合这个 Mod 的版本！")
+                                Hint(GetLang("LangDownloadCompNoSuitableInstance"))
                             Else
                                 Log("[Comp] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
                             End If
@@ -301,10 +301,10 @@
                                           If(File.FileName.EndsWith(".mrpack"), "*.mrpack", "*.zip")), DefaultFolder)
                     If Not Target.Contains("\") Then Exit Sub
                     '构造步骤加载器
-                    Dim LoaderName As String = Desc & "下载：" & GetFileNameWithoutExtentionFromPath(Target) & " "
+                    Dim LoaderName As String = Desc & GetLang("LangDownloadCompTaskDownloadFileDetail") & GetFileNameWithoutExtentionFromPath(Target) & " "
                     If Target <> DefaultFolder AndAlso Project.Type = CompType.Mod Then CachedFolder = GetPathFromFullPath(Target)
                     Dim Loaders As New List(Of LoaderBase)
-                    Loaders.Add(New LoaderDownload("下载文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 6, .Block = True})
+                    Loaders.Add(New LoaderDownload(GetLang("LangDownloadCompTaskDownloadFile"), New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 6, .Block = True})
                     '启动
                     Dim Loader As New LoaderCombo(Of Integer)(LoaderName, Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
                     Loader.Start(1)

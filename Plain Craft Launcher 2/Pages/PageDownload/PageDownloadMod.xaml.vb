@@ -15,7 +15,7 @@
         If FrmDownloadMod IsNot Nothing Then
             With Request
                 .SearchText = FrmDownloadMod.TextSearchName.Text
-                .GameVersion = If(FrmDownloadMod.TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
+                .GameVersion = If(FrmDownloadMod.TextSearchVersion.Text = GetLang("LangDownloadModSearchVersionAll"), Nothing,
                     If(FrmDownloadMod.TextSearchVersion.Text.Contains(".") OrElse FrmDownloadMod.TextSearchVersion.Text.Contains("w"), FrmDownloadMod.TextSearchVersion.Text, Nothing))
                 .Tag = FrmDownloadMod.ComboSearchTag.SelectedItem.Tag
                 .ModLoader = Val(FrmDownloadMod.ComboSearchLoader.SelectedItem.Tag)
@@ -114,7 +114,7 @@
     '重置按钮
     Private Sub BtnSearchReset_Click(sender As Object, e As EventArgs) Handles BtnSearchReset.Click
         TextSearchName.Text = ""
-        TextSearchVersion.Text = "全部 (也可自行输入)"
+        TextSearchVersion.Text = GetLang("LangDownloadModSearchVersionAll")
         TextSearchVersion.SelectedIndex = 0
         ComboSearchSource.SelectedIndex = 0
         ComboSearchTag.SelectedIndex = 0
