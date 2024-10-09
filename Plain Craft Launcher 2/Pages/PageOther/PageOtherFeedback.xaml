@@ -22,13 +22,22 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard Title="反馈列表" Margin="0,15,0,0" x:Name="PanContent">
-                    <StackPanel x:Name="PanList" Orientation="Vertical" Margin="20,36,18,22">
-                
+            <StackPanel x:Name="PanContent" Margin="0,15,0,0">
+                <local:MyCard Title="已完成" Margin="0,0,0,15" x:Name="PanContentCompleted" CanSwap="True">
+                    <StackPanel x:Name="PanListCompleted" Orientation="Vertical" Margin="20,36,18,22"/>
+                </local:MyCard>
+                <local:MyCard Title="等待反馈者" Margin="0,0,0,15" x:Name="PanContentWaitingResponse">
+                    <StackPanel x:Name="PanListWaitingResponse" Orientation="Vertical" Margin="20,36,18,22"/>
+                </local:MyCard>
+                <local:MyCard Title="正在处理" Margin="0,0,0,15" x:Name="PanContentProcessing">
+                    <StackPanel x:Name="PanListProcessing" Orientation="Vertical" Margin="20,36,18,22"/>
+                </local:MyCard>
+                <local:MyCard Title="新反馈" Margin="0,0,0,15" x:Name="PanContentNewIssue">
+                    <StackPanel x:Name="PanListNewIssue" Orientation="Vertical" Margin="20,36,18,22"/>
+                </local:MyCard>
             </StackPanel>
-        </local:MyCard>
-        <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
-            <local:MyLoading Text="正在获取投票列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
+            <local:MyLoading Text="正在获取反馈列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
         </local:MyCard>
         </StackPanel>
     </local:MyScrollViewer>
