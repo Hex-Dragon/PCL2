@@ -26,7 +26,7 @@
                 <local:MyCard Title="已完成" Margin="0,0,0,15" x:Name="PanContentCompleted" CanSwap="True">
                     <StackPanel x:Name="PanListCompleted" Orientation="Vertical" Margin="20,36,18,22"/>
                 </local:MyCard>
-                <local:MyCard Title="等待反馈者" Margin="0,0,0,15" x:Name="PanContentWaitingResponse" CanSwap="True">
+                <local:MyCard Title="等待提交者" Margin="0,0,0,15" x:Name="PanContentWaitingResponse" CanSwap="True">
                     <StackPanel x:Name="PanListWaitingResponse" Orientation="Vertical" Margin="20,36,18,22"/>
                 </local:MyCard>
                 <local:MyCard Title="正在处理" Margin="0,0,0,15" x:Name="PanContentProcessing" CanSwap="True">
