@@ -1,13 +1,13 @@
 ﻿Public Class PageOtherFeedback
 
     Public Class Feedback
-        Public User As String
-        Public Title As String
-        Public Time As Date
-        Public Content As String
-        Public Url As String
-        Public ID As String
-        Public Tags As New List(Of String)
+        Public Property User As String
+        Public Property Title As String
+        Public Property Time As Date
+        Public Property Content As String
+        Public Property Url As String
+        Public Property ID As String
+        Public Property Tags As New List(Of String)
     End Class
 
     Enum TagID As Int64
