@@ -805,6 +805,8 @@ Okrem toho softvér nebude nahrávať žiadne ďalšie informácie.</s:String>
 Copyright čísla registrácie počítačového softvéru: 2020SR0875133
 Email na nahlásenie nelegálneho a nepravidelného správania: hexdragon@vip.qq.com
 Nie je to oficiálny produkt Minecraftu. Nie je schválené Mojangom alebo Microsoftom a nie je spojené s Mojangom alebo Microsoftom.</s:String>
+    <!--PageOtherTest-->
+    <s:String x:Key="LangPageOtherTestNoUtility">Pre ľahšiu údržbu, otvorený obsah neobsahuje funkciu Treasure Box...</s:String>
     <!--PageSetupLaunch-->
     <s:String x:Key="LangPageSetupLaunchSkin">Offline Skin</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTips">Vzhľadom na technický problém je táto funkcia zaručená len pre verzie pred 1.19.2!</s:String>
