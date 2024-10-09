@@ -19,6 +19,8 @@
         Completed = 4365809832
         Decline = 4365654603
         NewFeture = 4365949953
+        Ignored = 4365654601
+        Duplicate = 4365654597
     End Enum
 
     Private Shadows IsLoaded As Boolean = False
@@ -40,7 +42,7 @@
 
     Public Shared Sub FeedbackListGet(Task As LoaderTask(Of String, List(Of Feedback)))
         Dim list As JArray
-        list = NetGetCodeByRequestRetry("https://api.github.com/repos/Hex-Dragon/PCL2/issues?state=all&sort=created&per_page=200", IsJson:=True, UseBrowserUserAgent:=True) ' 获取近期 200 条数据就够了
+        list = NetGetCodeByRequestRetry("https://api.github.com/repos/Hex-Dragon/PCL2/issues?state=all&sort=created&per_page=200", BackupUrl:="https://api.kkgithub.com/repos/Hex-Dragon/PCL2/issues?state=all&sort=created&per_page=200", IsJson:=True, UseBrowserUserAgent:=True) ' 获取近期 200 条数据就够了
         If list Is Nothing Then Throw New Exception("无法获取到内容")
         Dim res As List(Of Feedback) = New List(Of Feedback)
         For Each i As JObject In list
@@ -63,9 +65,11 @@
         PanListCompleted.Children.Clear()
         PanListProcessing.Children.Clear()
         PanListWaitingResponse.Children.Clear()
+        PanListDecline.Children.Clear()
         For Each item In Loader.Output
             Dim ele As New MyListItem With {.Title = item.Title, .Type = MyListItem.CheckType.Clickable}
             Dim StatusDesc As String = "???"
+            If item.Tags.Contains(TagID.Duplicate) Then Continue For
             If item.Tags.Contains(TagID.NewIssue) Then
                 ele.Logo = PathImage & "Blocks/Grass.png"
                 StatusDesc = "未查看"
@@ -94,6 +98,14 @@
                 ele.Logo = PathImage & "Blocks/Egg.png"
                 StatusDesc = "处理中-新功能"
             End If
+            If item.Tags.Contains(TagID.Decline) Then
+                ele.Logo = PathImage & "Blocks/CobbleStone.png"
+                StatusDesc = "已拒绝"
+            End If
+            If item.Tags.Contains(TagID.Ignored) Then
+                ele.Logo = PathImage & "Blocks/CobbleStone.png"
+                StatusDesc = "已忽略"
+            End If
             ele.Info = StatusDesc & " | " & item.User & " | " & item.Time
             AddHandler ele.Click, Sub()
                                       MyMsgBox($"提交者：{item.User}（{GetTimeSpanString(item.Time - DateTime.Now, False)}）{vbCrLf}状态：{StatusDesc}{vbCrLf}{vbCrLf}{item.Content}", "#" & item.ID & " " & item.Title, Button2:="查看详情", Button2Action:=Sub()
@@ -108,7 +120,10 @@
                 PanListCompleted.Children.Add(ele)
             ElseIf StatusDesc.Equals("未查看") Then
                 PanListNewIssue.Children.Add(ele)
+            ElseIf StatusDesc.Equals("已拒绝") Then
+                PanListDecline.Children.Add(ele)
             End If
+            PanContentDecline.Visibility = If(PanListDecline.Children.Count.Equals(0), Visibility.Collapsed, Visibility.Visible)
             PanContentCompleted.Visibility = If(PanListCompleted.Children.Count.Equals(0), Visibility.Collapsed, Visibility.Visible)
             PanContentNewIssue.Visibility = If(PanListNewIssue.Children.Count.Equals(0), Visibility.Collapsed, Visibility.Visible)
             PanContentWaitingResponse.Visibility = If(PanListWaitingResponse.Children.Count.Equals(0), Visibility.Collapsed, Visibility.Visible)
