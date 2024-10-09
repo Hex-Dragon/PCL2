@@ -40,7 +40,7 @@
 
     Public Shared Sub FeedbackListGet(Task As LoaderTask(Of String, List(Of Feedback)))
         Dim list As JArray
-        list = NetGetCodeByRequestRetry("https://api.github.com/repos/Hex-Dragon/PCL2/issues", IsJson:=True, UseBrowserUserAgent:=True)
+        list = NetGetCodeByRequestRetry("https://api.github.com/repos/Hex-Dragon/PCL2/issues?state=all&sort=created&per_page=200", IsJson:=True, UseBrowserUserAgent:=True) ' 获取近期 200 条数据就够了
         If list Is Nothing Then Throw New Exception("无法获取到内容")
         Dim res As List(Of Feedback) = New List(Of Feedback)
         For Each i As JObject In list
@@ -104,12 +104,10 @@
                 PanListProcessing.Children.Add(ele)
             ElseIf StatusDesc.Equals("等待提交者") Then
                 PanListWaitingResponse.Children.Add(ele)
-            ElseIf StatusDesc.Equals("完成") Then
+            ElseIf StatusDesc.Equals("已完成") Then
                 PanListCompleted.Children.Add(ele)
             ElseIf StatusDesc.Equals("未查看") Then
                 PanListNewIssue.Children.Add(ele)
-            Else
-                Log("出现了未知的项：" & ele.Title)
             End If
             PanContentCompleted.Visibility = If(PanListCompleted.Children.Count.Equals(0), Visibility.Collapsed, Visibility.Visible)
             PanContentNewIssue.Visibility = If(PanListNewIssue.Children.Count.Equals(0), Visibility.Collapsed, Visibility.Visible)
