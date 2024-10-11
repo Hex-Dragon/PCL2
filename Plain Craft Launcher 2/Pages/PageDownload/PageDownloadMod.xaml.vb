@@ -122,6 +122,11 @@
         Loader.LastFinishedTime = 0 '要求强制重新开始
     End Sub
 
+    '收藏夹按钮
+    Private Sub BtnFavorites_Click(sender As Object, e As EventArgs) Handles BtnFavorites.Click
+        FrmMain.PageChange(New FormMain.PageStackData() With {.Page = FormMain.PageType.CompFavorites, .Additional = FormMain.PageSubType.CompFavoritesMod})
+    End Sub
+
     '版本选择
     '#3067：当下拉菜单展开时，程序会被 WPF 挂起，因而无法更新 Grid 布局，所以必须延迟到下拉菜单收起后才能更新
     Private Sub TextSearchVersion_TextChanged() Handles TextSearchVersion.TextChanged

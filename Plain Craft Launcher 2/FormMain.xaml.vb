@@ -1106,6 +1106,10 @@ Install:
         ''' 帮助详情。这是一个副页面。
         ''' </summary>
         HelpDetail = 9
+        ''' <summary>
+        ''' 资源工程收藏。这是一个副页面。
+        ''' </summary>
+        CompFavorites = 10
     End Enum
     ''' <summary>
     ''' 次要页面种类。其数值必须与 StackPanel 中的下标一致。
@@ -1137,6 +1141,8 @@ Install:
         VersionSetup = 1
         VersionMod = 2
         VersionModDisabled = 3
+        CompFavoritesMod = 0
+        CompFavoritesModpack = 1
     End Enum
     ''' <summary>
     ''' 获取次级页面的名称。若并非次级页面则返回空字符串，故可以以此判断是否为次级页面。
@@ -1162,6 +1168,8 @@ Install:
             Case PageType.HelpDetail
                 Dim Entry As HelpEntry = Stack.Additional(0)
                 Return Entry.Title
+            Case PageType.CompFavorites
+                Return "资源收藏"
             Case Else
                 Return ""
         End Select
@@ -1403,6 +1411,10 @@ Install:
                     PageChangeAnim(New MyPageLeft, FrmDownloadCompDetail)
                 Case PageType.HelpDetail '帮助详情
                     PageChangeAnim(New MyPageLeft, Stack.Additional(1))
+                Case PageType.CompFavorites '资源收藏
+                    If FrmDownloadCompFavoritesMod Is Nothing Then FrmDownloadCompFavoritesMod = New PageDownloadCompFavorites
+                    If FrmDownloadCompFavoritesLeft Is Nothing Then FrmDownloadCompFavoritesLeft = New PageDownloadCompFavoritesLeft
+                    PageChangeAnim(FrmDownloadCompFavoritesLeft, FrmDownloadCompFavoritesMod)
             End Select
 #End Region
 

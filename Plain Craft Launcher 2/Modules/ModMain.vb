@@ -438,6 +438,11 @@ EndHint:
     '资源信息分页声明
     Public FrmDownloadCompDetail As PageDownloadCompDetail
 
+    '资源收藏页面声明
+    Public FrmDownloadCompFavoritesMod As PageDownloadCompFavorites
+    Public FrmDownloadCompFavoritesModpack As PageDownloadCompFavorites
+    Public FrmDownloadCompFavoritesLeft As PageDownloadCompFavoritesLeft
+
 #End Region
 
 #Region "帮助"
