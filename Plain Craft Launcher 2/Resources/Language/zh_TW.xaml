@@ -1839,7 +1839,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAN">你的遊戲遇到了一些問題，PCL 為此找到了以下可疑的關鍵字：
  - {0}
 
- 如果你知道某個關鍵字對應的模組，那麼有可能就是它引起的錯誤，你也可以檢視錯誤報告獲取詳情。</s:String>
+如果你知道某個關鍵字對應的模組，那麼有可能就是它引起的錯誤，你也可以檢視錯誤報告獲取詳情。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAO">PCL 懷疑名為 {0} 的模組導致了遊戲出錯，但不能完全確定。
 你可以嘗試禁用此模組，然後觀察遊戲是否還會崩潰。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAP">PCL 懷疑以下模組導致了遊戲出錯，但不能完全確定：
@@ -1856,7 +1856,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 這一般代表著它與其他模組或目前環境不相容，或是它存在 Bug。
 你可以嘗試禁用此模組，然後觀察遊戲是否還會崩潰。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAT">以下模組導致了遊戲出錯：
-  - {0}
+ - {0}
 這一般代表著它們與其他模組或目前環境不相容，或是它存在 Bug。
 你可以嘗試依次禁用上述模組，然後觀察遊戲是否還會崩潰。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAU">名為 {0} 的模組導致了遊戲出錯。</s:String>

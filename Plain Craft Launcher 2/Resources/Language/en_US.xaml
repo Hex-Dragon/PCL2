@@ -886,7 +886,7 @@ You can restore the default settings by clicking the "Initialize" button on the 
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">Parameter Tail</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">Text fields will be joined directly at the end of the launch parameter.
 For example, typing "--demo" will launch the game in demo mode.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">Executed Command</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">Pre-launch Command</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip">Executes the specific command or program before Minecraft is launched. The syntax is same as the batch script.
 
 Relative paths can be implemented with the following alternate tags (paths end with "\" ):
@@ -1136,7 +1136,7 @@ If the mod loader is installed, you may have selected an incorrect instance. Cli
     <s:String x:Key="LangPageVersionOverallIconCobbleStone">Cobblestone</s:String>
     <s:String x:Key="LangPageVersionOverallIconCommandBlock">Command Block</s:String>
     <s:String x:Key="LangPageVersionOverallIconGoldBlock">Block of Gold</s:String>
-    <s:String x:Key="LangPageVersionOverallIconGrass">Grass</s:String>
+    <s:String x:Key="LangPageVersionOverallIconGrass">Grass Block</s:String>
     <s:String x:Key="LangPageVersionOverallIconGrassPath">Dirt Path</s:String>
     <s:String x:Key="LangPageVersionOverallIconAnvil">Anvil</s:String>
     <s:String x:Key="LangPageVersionOverallIconRedstoneBlock">Block of Redstone</s:String>
@@ -1286,7 +1286,7 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <!--ModMusic-->
     <s:String x:Key="LangModMusicDeviceChanged">Due to the change of the audio device, music will be unusable until restart the launcher!</s:String>
     <s:String x:Key="LangModMusicMusicChanged">Failed to play ({0}): Changing audio properties during play is not support.</s:String>
-    <s:String x:Key="LangModMusicMusicFormatNotSupport">Failed to play ({0}): Format may be unsupported, try again after convert to .wav, .mp3, or .flac.</s:String>
+    <s:String x:Key="LangModMusicMusicFormatNotSupport">Failed to play ({0}): Format may be unsupported, try again after converting it to .wav, .mp3, or .flac.</s:String>
     <s:String x:Key="LangModMusicExceptionInitFail">Failed to initialize the music list.</s:String>
     <s:String x:Key="LangModMusicPaused">Paused: {0}</s:String>
     <s:String x:Key="LangModMusicStopClickTipA">Left-click play, right-click next.</s:String>
