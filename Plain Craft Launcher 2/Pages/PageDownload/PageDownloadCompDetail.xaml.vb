@@ -18,6 +18,13 @@
         Project = FrmMain.PageCurrent.Additional(0)
         TargetVersion = FrmMain.PageCurrent.Additional(2)
         TargetLoader = FrmMain.PageCurrent.Additional(3)
+        If CompFavorites.Has(Project) Then
+            BtnFavorites.Text = "取消收藏"
+            BtnFavorites.Logo = Logo.IconButtonLikeFill
+        Else
+            BtnFavorites.Text = "收藏"
+            BtnFavorites.Logo = Logo.IconButtonLikeLine
+        End If
     End Sub
     Private Project As CompProject
     Private TargetVersion As String, TargetLoader As CompModLoaderType
@@ -48,14 +55,6 @@
         End Sub
     End Class
     Private Sub Load_OnFinish()
-        If CompFavorites.Has(Project) Then
-            BtnFavorites.Text = "取消收藏"
-            BtnFavorites.Logo = Logo.IconButtonLikeFill
-        Else
-            BtnFavorites.Text = "收藏"
-            BtnFavorites.Logo = Logo.IconButtonLikeLine
-        End If
-
         Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
             $"所选版本：{TargetVersion} {If(TargetLoader <> CompModLoaderType.Any, TargetLoader, "")}", "")
         '初始化字典
