@@ -34,6 +34,7 @@
                 CardProjectsModpack.Visibility = Visibility.Collapsed
                 CardNoContent.Visibility = Visibility.Visible
             End If
+            HintGetFail.Visibility = If(Loader.Input.Count = Loader.Output.Count, Visibility.Collapsed, Visibility.Visible)
 
             RefreshCardTitle()
         Catch ex As Exception

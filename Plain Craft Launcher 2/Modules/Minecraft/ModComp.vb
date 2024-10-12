@@ -1610,15 +1610,28 @@ Retry:
                 End If
             Next
             Dim RawProjectsData As JArray
-            RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
+            If CurseForgeProjectIds.Any() Then
+                Try
+                    RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
                     "POST", "{""modIds"": [" & CurseForgeProjectIds.Join(",") & "]}", "application/json"))("data")
-            For Each RawData In RawProjectsData
-                Res.Add(New CompProject(RawData))
-            Next
-            RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{ModrinthProjectIds.Join(""",""")}""]", IsJson:=True)
-            For Each RawData In RawProjectsData
-                Res.Add(New CompProject(RawData))
-            Next
+                    For Each RawData In RawProjectsData
+                        Res.Add(New CompProject(RawData))
+                    Next
+                Catch ex As Exception
+                    Log(ex, "[Favorites] 获取 CurseForge 数据失败")
+                End Try
+            End If
+            If ModrinthProjectIds.Any() Then
+                Try
+                    RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{ModrinthProjectIds.Join(""",""")}""]", IsJson:=True)
+                    For Each RawData In RawProjectsData
+                        Res.Add(New CompProject(RawData))
+                    Next
+                Catch ex As Exception
+                    Log(ex, "[Favorites] 获取 Modrinth 数据失败")
+                End Try
+            End If
+
             Return Res
         End Function
 
