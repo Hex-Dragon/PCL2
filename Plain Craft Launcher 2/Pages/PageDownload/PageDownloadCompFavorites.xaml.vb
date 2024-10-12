@@ -23,58 +23,58 @@
                 CardProjectsModpack.Visibility = Visibility.Collapsed
                 CardNoContent.Visibility = Visibility.Visible
             Else '有收藏
-                'PanSearchBox.Visibility = Visibility.Visible
+                PanSearchBox.Visibility = Visibility.Visible
                 CardProjectsMod.Visibility = Visibility.Visible
                 CardProjectsModpack.Visibility = Visibility.Visible
                 CardNoContent.Visibility = Visibility.Collapsed
 
-                PanProjectsMod.Children.Clear()
-                PanProjectsModpack.Children.Clear()
-                For Each item As CompProject In Loader.Output
-                    Dim EleItem As MyCompItem = item.ToCompItem(True, True)
-                    If item.Type = CompType.Mod Then
-                        PanProjectsMod.Children.Add(EleItem)
-                    ElseIf item.Type = CompType.ModPack Then
-                        PanProjectsModpack.Children.Add(EleItem)
-                    Else
-                        Log("未知工程类型：" & item.Type)
-                    End If
-                Next
-
-                Dim NoContentTip As TextBlock = New TextBlock With {.Text = "暂时没有收藏内容", .Margin = New Thickness(0, 0, 0, 9), .HorizontalAlignment = HorizontalAlignment.Center, .FontSize = 19, .UseLayoutRounding = True, .SnapsToDevicePixels = True, .Foreground = DirectCast(FindResource("ColorBrush3"), SolidColorBrush)}
-                If PanProjectsMod.Children.Count.Equals(0) Then
-                    PanProjectsMod.Children.Add(NoContentTip)
-                End If
-
-                If PanProjectsModpack.Children.Count.Equals(0) Then
-                    PanProjectsModpack.Children.Add(NoContentTip)
-                End If
+                RefreshContent()
             End If
-
             RefreshCardTitle()
         Catch ex As Exception
             Log(ex, "可视化收藏夹列表出错", LogLevel.Feedback)
         End Try
     End Sub
 
+    Private Sub RefreshContent()
+        PanProjectsMod.Children.Clear()
+        PanProjectsModpack.Children.Clear()
+        Dim DataSource As List(Of CompProject)
+        If IsSearching Then
+            DataSource = SearchResult
+        Else
+            DataSource = Loader.Output
+        End If
+        For Each item As CompProject In DataSource
+            Dim EleItem As MyCompItem = item.ToCompItem(True, True)
+            If item.Type = CompType.Mod Then
+                PanProjectsMod.Children.Add(EleItem)
+            ElseIf item.Type = CompType.ModPack Then
+                PanProjectsModpack.Children.Add(EleItem)
+            Else
+                Log("未知工程类型：" & item.Type)
+            End If
+        Next
+    End Sub
+
     Private Sub RefreshCardTitle()
-        'If String.IsNullOrWhiteSpace(PanSearchBox.Text) Then '不在搜索
-        CardProjectsMod.Title = $"Mod ({If(Loader.Input.Exists(Function(e) e.Type = CompType.Mod), PanProjectsMod.Children.Count, 0)})"
-            CardProjectsModpack.Title = $"整合包 ({If(Loader.Input.Exists(Function(e) e.Type = CompType.ModPack), PanProjectsModpack.Children.Count, 0)})"
-        'Else
-        '    Dim ModRes As Integer = 0
-        '    Dim ModpackRes As Integer = 0
-        '    For Each item In PanProjectsMod.Children
-        '        If TypeOf item IsNot MyCompItem Then Continue For
-        '        If item.Visibility.Equals(Visibility.Visible) Then ModRes += 1
-        '    Next
-        '    For Each item As MyCompItem In PanProjectsModpack.Children
-        '        If TypeOf item IsNot MyCompItem Then Continue For
-        '        If item.Visibility.Equals(Visibility.Visible) Then ModpackRes += 1
-        '    Next
-        '    CardProjectsMod.Title = $"Mod 搜索结果 ({ModRes})"
-        '    CardProjectsModpack.Title = $"整合包搜索结果 ({ModpackRes})"
-        'End If
+        Dim ModRes As Integer = 0
+        Dim ModpackRes As Integer = 0
+        If IsSearching Then
+            For Each item As MyCompItem In PanProjectsMod.Children
+                If item.Visibility.Equals(Visibility.Visible) Then ModRes += 1
+            Next
+            For Each item As MyCompItem In PanProjectsModpack.Children
+                If item.Visibility.Equals(Visibility.Visible) Then ModpackRes += 1
+            Next
+            CardProjectsMod.Title = $"Mod 搜索结果 ({ModRes})"
+            CardProjectsModpack.Title = $"整合包搜索结果 ({ModpackRes})"
+        Else
+            ModRes = If(Loader.Input.Exists(Function(e) e.Type = CompType.Mod), PanProjectsMod.Children.Count, 0)
+            CardProjectsMod.Title = $"Mod ({ModRes})"
+            ModpackRes = If(Loader.Input.Exists(Function(e) e.Type = CompType.ModPack), PanProjectsModpack.Children.Count, 0)
+            CardProjectsModpack.Title = $"整合包 ({ModpackRes})"
+        End If
     End Sub
 
     '自动重试
@@ -93,10 +93,33 @@
 
 #Region "搜索"
 
-    ''搜索按钮
-    'Private Sub StartNewSearch() Handles PanSearchBox.TextChanged
-    '    ' 以后再说吧……
-    'End Sub
+    Private ReadOnly Property IsSearching As Boolean
+        Get
+            Return Not String.IsNullOrWhiteSpace(PanSearchBox.Text)
+        End Get
+    End Property
+
+    Private SearchResult As List(Of CompProject)
+    Public Sub SearchRun() Handles PanSearchBox.TextChanged
+        If IsSearching Then
+            '构造请求
+            Dim QueryList As New List(Of SearchEntry(Of CompProject))
+            For Each Entry As CompProject In Loader.Output
+                Dim SearchSource As New List(Of KeyValuePair(Of String, Double))
+                SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.RawName, 1))
+                If Entry.Description IsNot Nothing AndAlso Entry.Description <> "" Then
+                    SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Description, 0.4))
+                End If
+                If Entry.TranslatedName <> Entry.RawName Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.TranslatedName, 1))
+                SearchSource.Add(New KeyValuePair(Of String, Double)(String.Join("", Entry.Tags), 0.2))
+                QueryList.Add(New SearchEntry(Of CompProject) With {.Item = Entry, .SearchSource = SearchSource})
+            Next
+            '进行搜索
+            SearchResult = Search(QueryList, PanSearchBox.Text, MaxBlurCount:=6, MinBlurSimilarity:=0.35).Select(Function(r) r.Item).ToList
+        End If
+        RefreshContent()
+        RefreshCardTitle()
+    End Sub
 
 #End Region
 

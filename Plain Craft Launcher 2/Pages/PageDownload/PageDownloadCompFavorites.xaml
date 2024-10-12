@@ -9,7 +9,7 @@
             <Grid x:Name="PanContent">
                 <StackPanel Orientation="Vertical" Margin="25">
                     <StackPanel>
-                        <!--<local:MySearchBox HintText="搜索收藏夹内容" x:Name="PanSearchBox" Margin="0,0,0,15"/>-->
+                        <local:MySearchBox HintText="搜索收藏夹内容" x:Name="PanSearchBox" Margin="0,0,0,15"/>
                         <local:MyCard x:Name="CardProjectsMod" Title="Mod" IsSwaped="True" CanSwap="True" Margin="0,0,0,15">
                             <StackPanel x:Name="PanProjectsMod" Margin="12,38,12,12" />
                         </local:MyCard>
