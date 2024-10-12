@@ -13,7 +13,7 @@
     End Sub
 
     Private Shared Function LoaderInput() As List(Of CompFavorites.Data)
-        Return CompFavorites.GetAll()
+        Return CompFavorites.GetAll().Clone() '复制而不是直接引用！
     End Function
     Private Shared Sub CompFavoritesGet(Task As LoaderTask(Of List(Of CompFavorites.Data), List(Of CompProject)))
         Task.Output = CompFavorites.GetAllCompProjects(Task.Input)

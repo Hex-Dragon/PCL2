@@ -1519,26 +1519,44 @@ Retry:
         ''' </summary>
         ''' <returns></returns>
         Public Shared Function GetAll() As List(Of Data)
-            Dim res As New List(Of Data)
+            If FavoritesList IsNot Nothing Then Return FavoritesList
             Dim RawData As String = Setup.Get("CustomCompFavorites")
-            If String.IsNullOrWhiteSpace(RawData) Then Return res
+            If String.IsNullOrWhiteSpace(RawData) Then
+                FavoritesList = New List(Of Data)
+                Return FavoritesList
+            End If
+            FavoritesList = New List(Of Data)
             Dim RawList As JArray = JArray.Parse(RawData)
             For Each CompRawItem As JObject In RawList
-                res.Add(New Data(CompRawItem))
+                FavoritesList.Add(New Data(CompRawItem))
             Next
-            Return res
+            Return FavoritesList
         End Function
 
-        Public Shared Sub SaveAll(items As List(Of CompProject))
+        ''' <summary>
+        ''' 将指定的内容直接覆盖
+        ''' </summary>
+        ''' <param name="items"></param>
+        Public Shared Sub ReplaceAll(items As List(Of CompProject))
             Dim RawList As JArray = New JArray()
             For Each item As CompProject In items
                 RawList.Add(New Data(item.Id, item.FromCurseForge, item.Type))
             Next
             Setup.Set("CustomCompFavorites", RawList.ToString())
+            FavoritesList = Nothing
         End Sub
-        Public Shared Sub SaveAll(items As List(Of Data))
+        Public Shared Sub ReplaceAll(items As List(Of Data))
             Dim RawList As JArray = New JArray()
             For Each item As Data In items
+                RawList.Add(item.ToJson())
+            Next
+            Setup.Set("CustomCompFavorites", RawList.ToString())
+            FavoritesList = items
+        End Sub
+
+        Public Shared Sub Save()
+            Dim RawList As JArray = New JArray()
+            For Each item As Data In GetAll()
                 RawList.Add(item.ToJson())
             Next
             Setup.Set("CustomCompFavorites", RawList.ToString())
@@ -1555,6 +1573,7 @@ Retry:
         Public Shared Function Has(item As Data) As Boolean
             Return GetAll().Find(Function(e) e.Id = item.Id) IsNot Nothing
         End Function
+
         ''' <summary>
         ''' 添加收藏
         ''' </summary>
@@ -1562,16 +1581,14 @@ Retry:
         ''' <returns>如果有重复会返回 False</returns>
         Public Shared Function Add(item As CompProject) As Boolean
             If Has(item) Then Return False
-            Dim res As List(Of Data) = GetAll()
-            res.Add(New Data(item))
-            SaveAll(res)
+            GetAll().Add(New Data(item))
+            Save()
             Return True
         End Function
         Public Shared Function Add(item As Data) As Boolean
             If Has(item) Then Return False
-            Dim res As List(Of Data) = GetAll()
-            res.Add(item)
-            SaveAll(res)
+            GetAll().Add(item)
+            Save()
             Return True
         End Function
         ''' <summary>
@@ -1580,19 +1597,17 @@ Retry:
         ''' <param name="item">想要删除收藏的工程</param>
         ''' <returns>如果不存在会返回 False</returns>
         Public Shared Function Del(item As CompProject) As Boolean
-            Dim RawList As List(Of Data) = GetAll()
-            Dim SearchRes = RawList.Where(Function(e) e.Id = item.Id).ToList()
+            Dim SearchRes = GetAll().Where(Function(e) e.Id = item.Id).ToList()
             If Not SearchRes.Any() Then Return False
-            RawList.Remove(SearchRes.First())
-            SaveAll(RawList)
+            GetAll().Remove(SearchRes.First())
+            Save()
             Return True
         End Function
         Public Shared Function Del(item As Data) As Boolean
-            Dim RawList As List(Of Data) = GetAll()
-            Dim SearchRes = RawList.Where(Function(e) e.Id = item.Id).ToList()
+            Dim SearchRes = GetAll().Where(Function(e) e.Id = item.Id).ToList()
             If Not SearchRes.Any() Then Return False
-            RawList.Remove(SearchRes.First())
-            SaveAll(RawList)
+            GetAll().Remove(SearchRes.First())
+            Save()
             Return True
         End Function
 
@@ -1643,6 +1658,12 @@ Retry:
             Loop
             Return Res
         End Function
+
+        ''' <summary>
+        ''' 首次读取后创建的列表，之后改动只需要保存此列表即可
+        ''' 请使用 GetAll 获取而不是直接对此改动……
+        ''' </summary>
+        Public Shared FavoritesList As List(Of Data)
 
         Public Class Data
             Public Id As String
