@@ -3,9 +3,16 @@
     '加载器信息
     Public Shared Loader As New LoaderTask(Of List(Of CompProject), Integer)("CompProject Favorites", AddressOf CompFavoritesGet, AddressOf LoaderInput)
 
+    Private IsSearching As Boolean = False
+
     Private Sub PageDownloadMod_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         PageLoaderInit(Load, PanLoad, PanContent, Nothing, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
     End Sub
+    Private Sub PageDownloadCompDetail_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
+        'Initialized 只会执行一次
+        If Loader.ShouldStart(LoaderInput()) Then Loader.Start()
+    End Sub
+
     Private Shared Function LoaderInput() As List(Of CompProject)
         Return CompFavorites.GetAll()
     End Function
@@ -50,9 +57,20 @@
                     PanProjectsModpack.Children.Add(NoContentTip)
                 End If
             End If
+
+            RefreshCardTitle()
         Catch ex As Exception
             Log(ex, "可视化收藏夹列表出错", LogLevel.Feedback)
         End Try
+    End Sub
+
+    Private Sub RefreshCardTitle()
+        If IsSearching Then
+
+        Else
+            CardProjectsMod.Title = $"Mod ({If(Loader.Input.Exists(Function(e) e.Type = CompType.Mod), PanProjectsMod.Children.Count, 0)})"
+            CardProjectsModpack.Title = $"整合包 ({If(Loader.Input.Exists(Function(e) e.Type = CompType.ModPack), PanProjectsModpack.Children.Count, 0)})"
+        End If
     End Sub
 
     '自动重试

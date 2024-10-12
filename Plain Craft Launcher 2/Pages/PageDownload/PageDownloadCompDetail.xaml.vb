@@ -48,6 +48,14 @@
         End Sub
     End Class
     Private Sub Load_OnFinish()
+        If CompFavorites.Has(Project) Then
+            BtnFavorites.Text = "取消收藏"
+            BtnFavorites.Logo = Logo.IconButtonLikeFill
+        Else
+            BtnFavorites.Text = "收藏"
+            BtnFavorites.Logo = Logo.IconButtonLikeLine
+        End If
+
         Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
             $"所选版本：{TargetVersion} {If(TargetLoader <> CompModLoaderType.Any, TargetLoader, "")}", "")
         '初始化字典
@@ -111,14 +119,6 @@
             '如果只有一张卡片，展开第一张卡片
             If PanMain.Children.Count = 1 Then
                 CType(PanMain.Children(0), MyCard).IsSwaped = False
-            End If
-
-            If CompFavorites.Has(Project) Then
-                BtnFavorites.Text = "取消收藏"
-                BtnFavorites.Logo = Logo.IconButtonLikeFill
-            Else
-                BtnFavorites.Text = "收藏"
-                BtnFavorites.Logo = Logo.IconButtonLikeLine
             End If
         Catch ex As Exception
             Log(ex, "可视化工程下载列表出错", LogLevel.Feedback)
