@@ -1610,28 +1610,37 @@ Retry:
                 End If
             Next
             Dim RawProjectsData As JArray
+            Dim FinishedTask = 0
             If CurseForgeProjectIds.Any() Then
-                Try
-                    RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
-                    "POST", "{""modIds"": [" & CurseForgeProjectIds.Join(",") & "]}", "application/json"))("data")
-                    For Each RawData In RawProjectsData
-                        Res.Add(New CompProject(RawData))
-                    Next
-                Catch ex As Exception
-                    Log(ex, "[Favorites] 获取 CurseForge 数据失败")
-                End Try
+                RunInNewThread(Sub()
+                                   Try
+                                       RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
+                                       "POST", "{""modIds"": [" & CurseForgeProjectIds.Join(",") & "]}", "application/json"))("data")
+                                       For Each RawData In RawProjectsData
+                                           Res.Add(New CompProject(RawData))
+                                       Next
+                                       FinishedTask += 1
+                                   Catch ex As Exception
+                                       Log(ex, "[Favorites] 获取 CurseForge 数据失败")
+                                   End Try
+                               End Sub, "CompFavorites CurseForge")
             End If
             If ModrinthProjectIds.Any() Then
-                Try
-                    RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{ModrinthProjectIds.Join(""",""")}""]", IsJson:=True)
-                    For Each RawData In RawProjectsData
-                        Res.Add(New CompProject(RawData))
-                    Next
-                Catch ex As Exception
-                    Log(ex, "[Favorites] 获取 Modrinth 数据失败")
-                End Try
+                RunInNewThread(Sub()
+                                   Try
+                                       RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{ModrinthProjectIds.Join(""",""")}""]", IsJson:=True)
+                                       For Each RawData In RawProjectsData
+                                           Res.Add(New CompProject(RawData))
+                                       Next
+                                       FinishedTask += 1
+                                   Catch ex As Exception
+                                       Log(ex, "[Favorites] 获取 Modrinth 数据失败")
+                                   End Try
+                               End Sub, "CompFavorites Modrinth")
             End If
-
+            Do Until FinishedTask = 2
+                Thread.Sleep(50)
+            Loop
             Return Res
         End Function
 
