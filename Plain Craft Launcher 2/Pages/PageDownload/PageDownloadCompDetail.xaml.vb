@@ -18,13 +18,6 @@
         Project = FrmMain.PageCurrent.Additional(0)
         TargetVersion = FrmMain.PageCurrent.Additional(2)
         TargetLoader = FrmMain.PageCurrent.Additional(3)
-        If CompFavorites.Has(Project) Then
-            BtnFavorites.Text = "取消收藏"
-            BtnFavorites.Logo = Logo.IconButtonLikeFill
-        Else
-            BtnFavorites.Text = "收藏"
-            BtnFavorites.Logo = Logo.IconButtonLikeLine
-        End If
     End Sub
     Private Project As CompProject
     Private TargetVersion As String, TargetLoader As CompModLoaderType
@@ -133,7 +126,13 @@
         AniControlEnabled += 1
         Project = FrmMain.PageCurrent.Additional(0)
         PanBack.ScrollToHome()
-
+        If CompFavorites.Has(Project) Then
+            BtnFavorites.Text = "取消收藏"
+            BtnFavorites.Logo = Logo.IconButtonLikeFill
+        Else
+            BtnFavorites.Text = "收藏"
+            BtnFavorites.Logo = Logo.IconButtonLikeLine
+        End If
         '重启加载器
         If IsFirstInit Then
             '在 Me.Initialized 已经初始化了加载器，不再重复初始化
