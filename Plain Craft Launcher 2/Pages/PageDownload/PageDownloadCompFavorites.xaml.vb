@@ -22,19 +22,19 @@
     '结果 UI 化
     Private Sub Load_OnFinish()
         Try
-            If Loader.Output.Count.Equals(0) Then '没收藏
-                PanSearchBox.Visibility = Visibility.Collapsed
-                CardProjectsMod.Visibility = Visibility.Collapsed
-                CardProjectsModpack.Visibility = Visibility.Collapsed
-                CardNoContent.Visibility = Visibility.Visible
-            Else '有收藏
+            If Loader.Output.Any() Then '有收藏
                 PanSearchBox.Visibility = Visibility.Visible
                 CardProjectsMod.Visibility = Visibility.Visible
                 CardProjectsModpack.Visibility = Visibility.Visible
                 CardNoContent.Visibility = Visibility.Collapsed
-
                 RefreshContent()
+            Else '没有收藏
+                PanSearchBox.Visibility = Visibility.Collapsed
+                CardProjectsMod.Visibility = Visibility.Collapsed
+                CardProjectsModpack.Visibility = Visibility.Collapsed
+                CardNoContent.Visibility = Visibility.Visible
             End If
+
             RefreshCardTitle()
         Catch ex As Exception
             Log(ex, "可视化收藏夹列表出错", LogLevel.Feedback)
@@ -47,6 +47,15 @@
         Dim DataSource As List(Of CompProject) = If(IsSearching, SearchResult, Loader.Output)
         For Each item As CompProject In DataSource
             Dim EleItem As MyCompItem = item.ToCompItem(True, True)
+            If IsSearching Then
+                CardProjectsMod.Visibility = Visibility.Visible
+                CardProjectsModpack.Visibility = Visibility.Collapsed
+                PanProjectsMod.Children.Add(EleItem)
+                Continue For
+            Else
+                CardProjectsModpack.Visibility = Visibility.Visible
+                CardProjectsMod.Visibility = Visibility.Visible
+            End If
             If item.Type = CompType.Mod Then
                 PanProjectsMod.Children.Add(EleItem)
             ElseIf item.Type = CompType.ModPack Then
@@ -61,14 +70,8 @@
         Dim ModRes As Integer = 0
         Dim ModpackRes As Integer = 0
         If IsSearching Then
-            For Each item As MyCompItem In PanProjectsMod.Children
-                If item.Visibility.Equals(Visibility.Visible) Then ModRes += 1
-            Next
-            For Each item As MyCompItem In PanProjectsModpack.Children
-                If item.Visibility.Equals(Visibility.Visible) Then ModpackRes += 1
-            Next
-            CardProjectsMod.Title = $"Mod 搜索结果 ({ModRes})"
-            CardProjectsModpack.Title = $"整合包搜索结果 ({ModpackRes})"
+            ModRes = PanProjectsMod.Children.Count
+            CardProjectsMod.Title = $"搜索结果 ({ModRes})"
         Else
             ModRes = If(Loader.Input.Exists(Function(e) e.Type = CompType.Mod), PanProjectsMod.Children.Count, 0)
             CardProjectsMod.Title = $"Mod ({ModRes})"

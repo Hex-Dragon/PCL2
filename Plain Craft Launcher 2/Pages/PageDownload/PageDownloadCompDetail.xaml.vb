@@ -335,11 +335,11 @@
     End Sub
     Private Sub BtnFavorites_Click(sender As Object, e As EventArgs) Handles BtnFavorites.Click
         If CompFavorites.Has(Project) Then
-            If CompFavorites.Del(Project) Then Hint("已取消收藏！")
+            If CompFavorites.Del(Project) Then Hint("已取消收藏！", HintType.Finish)
             BtnFavorites.Text = "收藏"
             BtnFavorites.Logo = Logo.IconButtonLikeLine
         Else
-            If CompFavorites.Add(Project) Then Hint("已收藏！")
+            If CompFavorites.Add(Project) Then Hint("已收藏！", HintType.Finish)
             BtnFavorites.Text = "取消收藏"
             BtnFavorites.Logo = Logo.IconButtonLikeFill
         End If
