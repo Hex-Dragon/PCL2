@@ -1,24 +1,19 @@
 ﻿Public Class PageDownloadCompFavorites
 
     '加载器信息
-    Public Shared Loader As New LoaderTask(Of List(Of CompProject), Integer)("CompProject Favorites", AddressOf CompFavoritesGet, AddressOf LoaderInput)
+    Public Shared Loader As New LoaderTask(Of List(Of CompFavorites.Data), List(Of CompProject))("CompProject Favorites", AddressOf CompFavoritesGet, AddressOf LoaderInput)
 
     Private IsSearching As Boolean = False
 
     Private Sub PageDownloadMod_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         PageLoaderInit(Load, PanLoad, PanContent, Nothing, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
     End Sub
-    Private Sub PageDownloadCompDetail_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
-        'Initialized 只会执行一次
-        If Loader.ShouldStart(LoaderInput()) Then Loader.Start()
-    End Sub
 
-    Private Shared Function LoaderInput() As List(Of CompProject)
+    Private Shared Function LoaderInput() As List(Of CompFavorites.Data)
         Return CompFavorites.GetAll()
     End Function
-    Private Shared Sub CompFavoritesGet(Task As LoaderTask(Of List(Of CompProject), Integer))
-        Task.Output = Task.Input.Count
-        ' TODO: 刷新已存储的收藏
+    Private Shared Sub CompFavoritesGet(Task As LoaderTask(Of List(Of CompFavorites.Data), List(Of CompProject)))
+        Task.Output = CompFavorites.GetAllCompProjects(Task.Input)
     End Sub
 
     '结果 UI 化
@@ -37,7 +32,7 @@
 
                 PanProjectsMod.Children.Clear()
                 PanProjectsModpack.Children.Clear()
-                For Each item As CompProject In Loader.Input
+                For Each item As CompProject In Loader.Output
                     Dim EleItem As MyCompItem = item.ToCompItem(True, True)
                     If item.Type = CompType.Mod Then
                         PanProjectsMod.Children.Add(EleItem)

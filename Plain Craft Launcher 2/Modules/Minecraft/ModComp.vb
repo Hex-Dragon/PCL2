@@ -1518,30 +1518,42 @@ Retry:
         ''' 获取全部的收藏工程
         ''' </summary>
         ''' <returns></returns>
-        Public Shared Function GetAll() As List(Of CompProject)
-            Dim res As New List(Of CompProject)
+        Public Shared Function GetAll() As List(Of Data)
+            Dim res As New List(Of Data)
             Dim RawData As String = ReadReg("CustomCompFavorites")
             If String.IsNullOrWhiteSpace(RawData) Then Return res
             Dim RawList As JArray = JArray.Parse(RawData)
             For Each CompRawItem As JObject In RawList
-                res.Add(New CompProject(CompRawItem))
+                res.Add(New Data(CompRawItem))
             Next
             Return res
         End Function
+
         Public Shared Sub SaveAll(items As List(Of CompProject))
             Dim RawList As JArray = New JArray()
             For Each item As CompProject In items
+                RawList.Add(New Data(item.Id, item.FromCurseForge, item.Type))
+            Next
+            WriteReg("CustomCompFavorites", RawList.ToString())
+        End Sub
+        Public Shared Sub SaveAll(items As List(Of Data))
+            Dim RawList As JArray = New JArray()
+            For Each item As Data In items
                 RawList.Add(item.ToJson())
             Next
             WriteReg("CustomCompFavorites", RawList.ToString())
         End Sub
+
         ''' <summary>
         ''' 是否已经收藏
         ''' </summary>
         ''' <param name="item">工程</param>
         ''' <returns></returns>
         Public Shared Function Has(item As CompProject) As Boolean
-            Return GetAll().Find(Function(e) e.IsLike(item)) IsNot Nothing
+            Return GetAll().Find(Function(e) e.Id = item.Id) IsNot Nothing
+        End Function
+        Public Shared Function Has(item As Data) As Boolean
+            Return GetAll().Find(Function(e) e.Id = item.Id) IsNot Nothing
         End Function
         ''' <summary>
         ''' 添加收藏
@@ -1550,7 +1562,14 @@ Retry:
         ''' <returns>如果有重复会返回 False</returns>
         Public Shared Function Add(item As CompProject) As Boolean
             If Has(item) Then Return False
-            Dim res As List(Of CompProject) = GetAll()
+            Dim res As List(Of Data) = GetAll()
+            res.Add(New Data(item))
+            SaveAll(res)
+            Return True
+        End Function
+        Public Shared Function Add(item As Data) As Boolean
+            If Has(item) Then Return False
+            Dim res As List(Of Data) = GetAll()
             res.Add(item)
             SaveAll(res)
             Return True
@@ -1561,14 +1580,91 @@ Retry:
         ''' <param name="item">想要删除收藏的工程</param>
         ''' <returns>如果不存在会返回 False</returns>
         Public Shared Function Del(item As CompProject) As Boolean
-            'If Not Has(item) Then Return False
-            Dim RawList As List(Of CompProject) = GetAll()
-            Dim SearchRes = RawList.Where(Function(e) e.IsLike(item)).ToList()
+            Dim RawList As List(Of Data) = GetAll()
+            Dim SearchRes = RawList.Where(Function(e) e.Id = item.Id).ToList()
             If Not SearchRes.Any() Then Return False
             RawList.Remove(SearchRes.First())
             SaveAll(RawList)
             Return True
         End Function
-    End Class
+        Public Shared Function Del(item As Data) As Boolean
+            Dim RawList As List(Of Data) = GetAll()
+            Dim SearchRes = RawList.Where(Function(e) e.Id = item.Id).ToList()
+            If Not SearchRes.Any() Then Return False
+            RawList.Remove(SearchRes.First())
+            SaveAll(RawList)
+            Return True
+        End Function
 
+        Public Shared Function GetAllCompProjects(Input As List(Of Data)) As List(Of CompProject)
+            If Not Input.Any() Then Return New List(Of CompProject)
+            Dim RawList As List(Of Data) = Input
+            Dim ModrinthProjectIds As List(Of String) = New List(Of String)
+            Dim CurseForgeProjectIds As List(Of String) = New List(Of String)
+            Dim Res As List(Of CompProject) = New List(Of CompProject)
+            For Each Item In RawList
+                If Item.IsFromCurseForge Then
+                    CurseForgeProjectIds.Add(Item.Id)
+                Else
+                    ModrinthProjectIds.Add(Item.Id)
+                End If
+            Next
+            Dim RawProjectsData As JArray
+            RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
+                    "POST", "{""modIds"": [" & CurseForgeProjectIds.Join(",") & "]}", "application/json"))("data")
+            For Each RawData In RawProjectsData
+                Res.Add(New CompProject(RawData))
+            Next
+            RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{ModrinthProjectIds.Join(""",""")}""]", IsJson:=True)
+            For Each RawData In RawProjectsData
+                Res.Add(New CompProject(RawData))
+            Next
+            Return Res
+        End Function
+
+        Public Class Data
+            Public Id As String
+            Public IsFromCurseForge As Boolean
+            Public Type As CompType
+            Public FormatData As CompProject
+
+            Public Sub New(RawId As String, RawIsFromCurseForge As Boolean, RawType As CompType)
+                Id = RawId
+                IsFromCurseForge = RawIsFromCurseForge
+                Type = RawType
+            End Sub
+            Public Sub New(Json As JObject)
+                Id = Json("Id")
+                IsFromCurseForge = Json("IsCF")
+                Type = Integer.Parse(Json("Type"))
+            End Sub
+            Public Sub New(CompItem As CompProject)
+                Id = CompItem.Id
+                IsFromCurseForge = CompItem.FromCurseForge
+                Type = CompItem.Type
+            End Sub
+
+            Public Function ToJson() As JObject
+                Dim Json As New JObject
+                Json("Id") = Id
+                Json("IsCF") = IsFromCurseForge
+                Json("Type") = Type
+                Return Json
+            End Function
+
+            Public Function ToCompProject() As CompProject
+                Dim Projects As JArray
+                If IsFromCurseForge Then
+                    Projects = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
+                        "POST", "{""modIds"": [" & Id & "]}", "application/json"))("data")
+                Else
+                    Projects = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{Id}""]", IsJson:=True)
+                End If
+                For Each Project As JObject In Projects
+                    Return New CompProject(Project)
+                Next
+                Return Nothing
+            End Function
+        End Class
+    End Class
 End Module
