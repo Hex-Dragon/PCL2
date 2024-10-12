@@ -3,8 +3,13 @@
     '加载器信息
     Public Shared Loader As New LoaderTask(Of List(Of CompFavorites.Data), List(Of CompProject))("CompProject Favorites", AddressOf CompFavoritesGet, AddressOf LoaderInput)
 
-    Private Sub PageDownloadMod_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
+    Private Sub PageDownloadCompFavorites_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         PageLoaderInit(Load, PanLoad, PanContent, Nothing, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
+    End Sub
+    Private Sub PageDownloadCompFavorites_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
+        If Loader.Input IsNot Nothing AndAlso Not Loader.Input.Equals(CompFavorites.GetAll()) Then
+            Loader.Start()
+        End If
     End Sub
 
     Private Shared Function LoaderInput() As List(Of CompFavorites.Data)
