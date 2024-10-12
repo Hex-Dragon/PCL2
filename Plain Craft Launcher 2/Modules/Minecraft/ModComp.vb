@@ -1520,7 +1520,7 @@ Retry:
         ''' <returns></returns>
         Public Shared Function GetAll() As List(Of Data)
             Dim res As New List(Of Data)
-            Dim RawData As String = ReadReg("CustomCompFavorites")
+            Dim RawData As String = Setup.Get("CustomCompFavorites")
             If String.IsNullOrWhiteSpace(RawData) Then Return res
             Dim RawList As JArray = JArray.Parse(RawData)
             For Each CompRawItem As JObject In RawList
@@ -1534,14 +1534,14 @@ Retry:
             For Each item As CompProject In items
                 RawList.Add(New Data(item.Id, item.FromCurseForge, item.Type))
             Next
-            WriteReg("CustomCompFavorites", RawList.ToString())
+            Setup.Set("CustomCompFavorites", RawList.ToString())
         End Sub
         Public Shared Sub SaveAll(items As List(Of Data))
             Dim RawList As JArray = New JArray()
             For Each item As Data In items
                 RawList.Add(item.ToJson())
             Next
-            WriteReg("CustomCompFavorites", RawList.ToString())
+            Setup.Set("CustomCompFavorites", RawList.ToString())
         End Sub
 
         ''' <summary>
