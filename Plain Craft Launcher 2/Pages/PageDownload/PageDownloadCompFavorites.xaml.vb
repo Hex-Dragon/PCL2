@@ -3,8 +3,6 @@
     '加载器信息
     Public Shared Loader As New LoaderTask(Of List(Of CompFavorites.Data), List(Of CompProject))("CompProject Favorites", AddressOf CompFavoritesGet, AddressOf LoaderInput)
 
-    Private IsSearching As Boolean = False
-
     Private Sub PageDownloadMod_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         PageLoaderInit(Load, PanLoad, PanContent, Nothing, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
     End Sub
@@ -20,12 +18,12 @@
     Private Sub Load_OnFinish()
         Try
             If Loader.Output.Count.Equals(0) Then '没收藏
-                PanSearchBox.Visibility = Visibility.Collapsed
+                'PanSearchBox.Visibility = Visibility.Collapsed
                 CardProjectsMod.Visibility = Visibility.Collapsed
                 CardProjectsModpack.Visibility = Visibility.Collapsed
                 CardNoContent.Visibility = Visibility.Visible
             Else '有收藏
-                PanSearchBox.Visibility = Visibility.Visible
+                'PanSearchBox.Visibility = Visibility.Visible
                 CardProjectsMod.Visibility = Visibility.Visible
                 CardProjectsModpack.Visibility = Visibility.Visible
                 CardNoContent.Visibility = Visibility.Collapsed
@@ -60,12 +58,23 @@
     End Sub
 
     Private Sub RefreshCardTitle()
-        If IsSearching Then
-
-        Else
-            CardProjectsMod.Title = $"Mod ({If(Loader.Input.Exists(Function(e) e.Type = CompType.Mod), PanProjectsMod.Children.Count, 0)})"
+        'If String.IsNullOrWhiteSpace(PanSearchBox.Text) Then '不在搜索
+        CardProjectsMod.Title = $"Mod ({If(Loader.Input.Exists(Function(e) e.Type = CompType.Mod), PanProjectsMod.Children.Count, 0)})"
             CardProjectsModpack.Title = $"整合包 ({If(Loader.Input.Exists(Function(e) e.Type = CompType.ModPack), PanProjectsModpack.Children.Count, 0)})"
-        End If
+        'Else
+        '    Dim ModRes As Integer = 0
+        '    Dim ModpackRes As Integer = 0
+        '    For Each item In PanProjectsMod.Children
+        '        If TypeOf item IsNot MyCompItem Then Continue For
+        '        If item.Visibility.Equals(Visibility.Visible) Then ModRes += 1
+        '    Next
+        '    For Each item As MyCompItem In PanProjectsModpack.Children
+        '        If TypeOf item IsNot MyCompItem Then Continue For
+        '        If item.Visibility.Equals(Visibility.Visible) Then ModpackRes += 1
+        '    Next
+        '    CardProjectsMod.Title = $"Mod 搜索结果 ({ModRes})"
+        '    CardProjectsModpack.Title = $"整合包搜索结果 ({ModpackRes})"
+        'End If
     End Sub
 
     '自动重试
@@ -84,10 +93,10 @@
 
 #Region "搜索"
 
-    '搜索按钮
-    Private Sub StartNewSearch() Handles PanSearchBox.TextInput
-        Loader.Start()
-    End Sub
+    ''搜索按钮
+    'Private Sub StartNewSearch() Handles PanSearchBox.TextChanged
+    '    ' 以后再说吧……
+    'End Sub
 
 #End Region
 
