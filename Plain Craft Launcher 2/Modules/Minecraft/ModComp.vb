@@ -1648,7 +1648,6 @@ Retry:
             Public Id As String
             Public IsFromCurseForge As Boolean
             Public Type As CompType
-            Public FormatData As CompProject
 
             Public Sub New(RawId As String, RawIsFromCurseForge As Boolean, RawType As CompType)
                 Id = RawId
