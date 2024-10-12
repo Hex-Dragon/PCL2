@@ -112,6 +112,14 @@
             If PanMain.Children.Count = 1 Then
                 CType(PanMain.Children(0), MyCard).IsSwaped = False
             End If
+
+            If CompFavorites.Has(Project) Then
+                BtnFavorites.Text = "取消收藏"
+                BtnFavorites.Logo = Logo.IconButtonLikeFill
+            Else
+                BtnFavorites.Text = "收藏"
+                BtnFavorites.Logo = Logo.IconButtonLikeLine
+            End If
         Catch ex As Exception
             Log(ex, "可视化工程下载列表出错", LogLevel.Feedback)
         End Try
@@ -326,6 +334,17 @@
     End Sub
     Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
         ClipboardSet(CompItem.LabTitle.Text)
+    End Sub
+    Private Sub BtnFavorites_Click(sender As Object, e As EventArgs) Handles BtnFavorites.Click
+        If CompFavorites.Has(Project) Then
+            If CompFavorites.Del(Project) Then Hint("已取消收藏！")
+            BtnFavorites.Text = "收藏"
+            BtnFavorites.Logo = Logo.IconButtonLikeLine
+        Else
+            If CompFavorites.Add(Project) Then Hint("已收藏！")
+            BtnFavorites.Text = "取消收藏"
+            BtnFavorites.Logo = Logo.IconButtonLikeFill
+        End If
     End Sub
 
 End Class

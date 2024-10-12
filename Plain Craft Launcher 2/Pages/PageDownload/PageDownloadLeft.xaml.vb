@@ -135,6 +135,9 @@
             Case FormMain.PageSubType.DownloadFabric
                 DlFabricListLoader.Start(IsForceRestart:=True)
                 ItemFabric.Checked = True
+            Case FormMain.PageSubType.DownloadCompFavorites
+                If FrmDownloadCompFavorites IsNot Nothing Then FrmDownloadCompFavorites.PageLoaderRestart()
+                ItemFavorites.Checked = True
         End Select
         Hint("正在刷新……", Log:=False)
     End Sub

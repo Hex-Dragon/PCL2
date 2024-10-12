@@ -1513,5 +1513,62 @@ Retry:
     End Sub
 
 #End Region
+    Class CompFavorites
+        ''' <summary>
+        ''' 获取全部的收藏工程
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared Function GetAll() As List(Of CompProject)
+            Dim res As New List(Of CompProject)
+            Dim RawData As String = ReadReg("CustomCompFavorites")
+            If String.IsNullOrWhiteSpace(RawData) Then Return res
+            Dim RawList As JArray = JArray.Parse(RawData)
+            For Each CompRawItem As JObject In RawList
+                res.Add(New CompProject(CompRawItem))
+            Next
+            Return res
+        End Function
+        Public Shared Sub SaveAll(items As List(Of CompProject))
+            Dim RawList As JArray = New JArray()
+            For Each item As CompProject In items
+                RawList.Add(item.ToJson())
+            Next
+            WriteReg("CustomCompFavorites", RawList.ToString())
+        End Sub
+        ''' <summary>
+        ''' 是否已经收藏
+        ''' </summary>
+        ''' <param name="item">工程</param>
+        ''' <returns></returns>
+        Public Shared Function Has(item As CompProject) As Boolean
+            Return GetAll().Find(Function(e) e.IsLike(item)) IsNot Nothing
+        End Function
+        ''' <summary>
+        ''' 添加收藏
+        ''' </summary>
+        ''' <param name="item">想要收藏的工程</param>
+        ''' <returns>如果有重复会返回 False</returns>
+        Public Shared Function Add(item As CompProject) As Boolean
+            If Has(item) Then Return False
+            Dim res As List(Of CompProject) = GetAll()
+            res.Add(item)
+            SaveAll(res)
+            Return True
+        End Function
+        ''' <summary>
+        ''' 删除收藏
+        ''' </summary>
+        ''' <param name="item">想要删除收藏的工程</param>
+        ''' <returns>如果不存在会返回 False</returns>
+        Public Shared Function Del(item As CompProject) As Boolean
+            'If Not Has(item) Then Return False
+            Dim RawList As List(Of CompProject) = GetAll()
+            Dim SearchRes = RawList.Where(Function(e) e.IsLike(item)).ToList()
+            If Not SearchRes.Any() Then Return False
+            RawList.Remove(SearchRes.First())
+            SaveAll(RawList)
+            Return True
+        End Function
+    End Class
 
 End Module
