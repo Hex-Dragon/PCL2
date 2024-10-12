@@ -44,12 +44,7 @@
     Private Sub RefreshContent()
         PanProjectsMod.Children.Clear()
         PanProjectsModpack.Children.Clear()
-        Dim DataSource As List(Of CompProject)
-        If IsSearching Then
-            DataSource = SearchResult
-        Else
-            DataSource = Loader.Output
-        End If
+        Dim DataSource As List(Of CompProject) = If(IsSearching, SearchResult, Loader.Output)
         For Each item As CompProject In DataSource
             Dim EleItem As MyCompItem = item.ToCompItem(True, True)
             If item.Type = CompType.Mod Then
@@ -57,7 +52,7 @@
             ElseIf item.Type = CompType.ModPack Then
                 PanProjectsModpack.Children.Add(EleItem)
             Else
-                Log("未知工程类型：" & item.Type)
+                Log("[Favorites] 未知工程类型：" & item.Type)
             End If
         Next
     End Sub
