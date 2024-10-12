@@ -23,7 +23,7 @@
     Private Sub Load_OnFinish()
         Try
             If Loader.Output.Count.Equals(0) Then '没收藏
-                'PanSearchBox.Visibility = Visibility.Collapsed
+                PanSearchBox.Visibility = Visibility.Collapsed
                 CardProjectsMod.Visibility = Visibility.Collapsed
                 CardProjectsModpack.Visibility = Visibility.Collapsed
                 CardNoContent.Visibility = Visibility.Visible
