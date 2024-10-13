@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:PCL"> <!-- 不知道为啥只有这个文件不能在 XAML 设置 PanScroll -->
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel Name="PanMain" Margin="25,25,25,10" Grid.IsSharedSizeScope="True">
+            <local:MyImage UseCache="True" Source="https://objects.lihaoyu.cn/bigcake-blog-images/2024/10/05/6700c8f7cd4b2.jpeg"/>
             <StackPanel x:Name="PanCustom">
             </StackPanel>
             <local:MyCard Margin="0,0,0,15" Title="快照版提示" x:Name="PanHint">

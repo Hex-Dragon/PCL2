@@ -7,7 +7,6 @@ Public Class MyImage
 
     Private _SourceData As String = ""
     Private _UseCache As Boolean = False
-    Private _DownloadTask As Task
 
     Private FileCacheExpiredTime As TimeSpan = New TimeSpan(7, 0, 0, 0) ' 一个星期的缓存有效期
 
@@ -35,9 +34,6 @@ Public Class MyImage
                     MyBase.Source = New MyBitmap(_SourceData)
                     Exit Property
                 End If
-                If _DownloadTask IsNot Nothing AndAlso Not _DownloadTask.IsCompleted Then ' 之前下载任务还在，直接砍了
-                    _DownloadTask.Dispose()
-                End If
                 Dim NeedDownload As Boolean = True '是否需要下载/本地是否有有效缓存
                 Dim TempFilePath As String = PathTemp & "Cache\MyImage\" & GetHash(_SourceData) & ".png"
                 If _UseCache And File.Exists(TempFilePath) And (DateTime.Now - File.GetCreationTime(TempFilePath)) < FileCacheExpiredTime Then NeedDownload = False ' 缓存文件存在且未过期，不需要重下
@@ -45,18 +41,9 @@ Public Class MyImage
                     MyBase.Source = New MyBitmap(TempFilePath)
                     Exit Property
                 End If
-                ' 异步下载图片
-                Dim TaskID = 0
-                _DownloadTask = New Task(Sub()
-                                             NetDownload(_SourceData, TempFilePath, True)
-                                         End Sub)
-                TaskID = _DownloadTask.Id
-                _DownloadTask.Start()
-                _DownloadTask.ContinueWith(Sub(t)
-                                               If t.IsCompleted AndAlso t.Id = TaskID Then ' 任务没有被干掉
-                                                   MyBase.Source = New MyBitmap(TempFilePath)
-                                               End If
-                                           End Sub, TaskScheduler.FromCurrentSynchronizationContext())
+                ' 开一个线程处理在线图片
+                RunInNewThread(Sub() PicLoader(_SourceData, TempFilePath), "MyImage PicLoader " & GetUuid() & "#", ThreadPriority.BelowNormal)
+
             Catch ex As Exception
                 Log(ex, "加载图片失败")
             End Try
@@ -69,5 +56,31 @@ Public Class MyImage
                                                                                                                                                                        CType(sender, MyImage).Source = e.NewValue.ToString()
                                                                                                                                                                    End If
                                                                                                                                                                End Sub)))
+
+    Private Sub PicLoader(FileUrl As String, TempFilePath As String)
+        Dim Retried As Boolean = False
+RetryStart:
+        Try
+            If File.Exists(TempFilePath) Then '先显示着旧图片，下载新图片
+                Rename(TempFilePath, TempFilePath & ".old")
+                RunInUi(Sub()
+                            MyBase.Source = New MyBitmap(TempFilePath & ".old")
+                        End Sub)
+            End If
+            NetDownload(FileUrl, TempFilePath)
+            RunInUi(Sub()
+                        MyBase.Source = New MyBitmap(TempFilePath)
+                    End Sub)
+            File.Delete(TempFilePath & ".old")
+        Catch ex As Exception
+            If Not Retried Then
+                Retried = True
+                GoTo RetryStart
+            Else
+                Log(ex, $"[MyImage] 下载图片失败")
+                RunInUi(Sub() MyBase.Source = New MyBitmap(PathImage & "Icons/NoIcon.png"))
+            End If
+        End Try
+    End Sub
 
 End Class
