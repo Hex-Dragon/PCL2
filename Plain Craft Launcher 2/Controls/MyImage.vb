@@ -1,28 +1,23 @@
-﻿Imports System.Threading.Tasks
-
-Public Class MyImage
+﻿Public Class MyImage
     Inherits Image
-
-    '事件
-
-    Private _SourceData As String = ""
-    Private _UseCache As Boolean = False
 
     Private FileCacheExpiredTime As TimeSpan = New TimeSpan(7, 0, 0, 0) ' 一个星期的缓存有效期
 
     ''' <summary>
-    ''' 是否使用缓存，需要先于 Source 属性设置，否则无效
+    ''' 是否使用缓存
     ''' </summary>
     ''' <returns></returns>
     Public Property UseCache As Boolean
         Get
-            Return _UseCache
+            Return GetValue(UseCacheProperty)
         End Get
         Set(value As Boolean)
-            _UseCache = value
+            SetValue(UseCacheProperty, value)
         End Set
     End Property
+    Public Shared ReadOnly UseCacheProperty As DependencyProperty = DependencyProperty.Register("UseCache", GetType(Boolean), GetType(MyImage), New PropertyMetadata(True))
 
+    Private _SourceData As String = ""
     ''' <summary>
     ''' 重写Image的Source属性
     ''' </summary>
@@ -40,12 +35,17 @@ Public Class MyImage
                 End If
                 Dim NeedDownload As Boolean = True '是否需要下载/本地是否有有效缓存
                 Dim TempFilePath As String = PathTemp & "Cache\MyImage\" & GetHash(_SourceData) & ".png"
-                If _UseCache And File.Exists(TempFilePath) And (DateTime.Now - File.GetCreationTime(TempFilePath)) < FileCacheExpiredTime Then NeedDownload = False ' 缓存文件存在且未过期，不需要重下
+                If UseCache AndAlso File.Exists(TempFilePath) AndAlso (DateTime.Now - File.GetCreationTime(TempFilePath)) < FileCacheExpiredTime Then NeedDownload = False ' 缓存文件存在且未过期，不需要重下
                 If Not NeedDownload Then
                     MyBase.Source = New MyBitmap(TempFilePath)
                     Exit Property
                 End If
-                ' 开一个线程处理在线图片
+
+                If File.Exists(TempFilePath) Then '先显示着旧图片，下载新图片
+                    Rename(TempFilePath, TempFilePath & ".old")
+                    MyBase.Source = New MyBitmap(TempFilePath & ".old")
+                End If
+                ' 开一个线程下载在线图片
                 RunInNewThread(Sub() PicLoader(_SourceData, TempFilePath), "MyImage PicLoader " & GetUuid() & "#", ThreadPriority.BelowNormal)
 
             Catch ex As Exception
@@ -65,13 +65,9 @@ Public Class MyImage
         Dim Retried As Boolean = False
 RetryStart:
         Try
-            If File.Exists(TempFilePath) Then '先显示着旧图片，下载新图片
-                Rename(TempFilePath, TempFilePath & ".old")
-                RunInUi(Sub()
-                            MyBase.Source = New MyBitmap(TempFilePath & ".old")
-                        End Sub)
-            End If
-            NetDownload(FileUrl, TempFilePath)
+            Dim UnCompleteFile As String = TempFilePath & ".dl" '加一个下载中的后缀，防止中途关闭程序下载中断但是没下完，从而导致第二次显示的是损坏的图片……
+            NetDownload(FileUrl, UnCompleteFile)
+            Rename(UnCompleteFile, TempFilePath)
             RunInUi(Sub()
                         MyBase.Source = New MyBitmap(TempFilePath)
                     End Sub)
