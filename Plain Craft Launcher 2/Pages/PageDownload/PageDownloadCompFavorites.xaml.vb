@@ -1,7 +1,7 @@
 ﻿Public Class PageDownloadCompFavorites
 
     '加载器信息
-    Public Shared Loader As New LoaderTask(Of List(Of CompFavorites.Data), List(Of CompProject))("CompProject Favorites", AddressOf CompFavoritesGet, AddressOf LoaderInput)
+    Public Shared Loader As New LoaderTask(Of List(Of String), List(Of CompProject))("CompProject Favorites", AddressOf CompFavoritesGet, AddressOf LoaderInput)
 
     Private Sub PageDownloadCompFavorites_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         PageLoaderInit(Load, PanLoad, PanContent, Nothing, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
@@ -12,17 +12,17 @@
         End If
     End Sub
 
-    Private Shared Function LoaderInput() As List(Of CompFavorites.Data)
+    Private Shared Function LoaderInput() As List(Of String)
         Return CompFavorites.GetAll().Clone() '复制而不是直接引用！
     End Function
-    Private Shared Sub CompFavoritesGet(Task As LoaderTask(Of List(Of CompFavorites.Data), List(Of CompProject)))
+    Private Shared Sub CompFavoritesGet(Task As LoaderTask(Of List(Of String), List(Of CompProject)))
         Task.Output = CompFavorites.GetAllCompProjects(Task.Input)
     End Sub
 
     '结果 UI 化
     Private Sub Load_OnFinish()
         Try
-            If Loader.Output.Any() Then '有收藏
+            If Loader.Input.Any() Then '有收藏
                 PanSearchBox.Visibility = Visibility.Visible
                 CardProjectsMod.Visibility = Visibility.Visible
                 CardProjectsModpack.Visibility = Visibility.Visible
@@ -74,9 +74,9 @@
             ModRes = PanProjectsMod.Children.Count
             CardProjectsMod.Title = $"搜索结果 ({ModRes})"
         Else
-            ModRes = If(Loader.Input.Exists(Function(e) e.Type = CompType.Mod), PanProjectsMod.Children.Count, 0)
+            ModRes = If(Loader.Output.Exists(Function(e) e.Type = CompType.Mod), PanProjectsMod.Children.Count, 0)
             CardProjectsMod.Title = $"Mod ({ModRes})"
-            ModpackRes = If(Loader.Input.Exists(Function(e) e.Type = CompType.ModPack), PanProjectsModpack.Children.Count, 0)
+            ModpackRes = If(Loader.Output.Exists(Function(e) e.Type = CompType.ModPack), PanProjectsModpack.Children.Count, 0)
             CardProjectsModpack.Title = $"整合包 ({ModpackRes})"
         End If
     End Sub
