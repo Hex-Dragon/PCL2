@@ -10,6 +10,10 @@ Public Class MyImage
 
     Private FileCacheExpiredTime As TimeSpan = New TimeSpan(7, 0, 0, 0) ' 一个星期的缓存有效期
 
+    ''' <summary>
+    ''' 是否使用缓存，需要先于 Source 属性设置，否则无效
+    ''' </summary>
+    ''' <returns></returns>
     Public Property UseCache As Boolean
         Get
             Return _UseCache
@@ -78,7 +82,6 @@ RetryStart:
                 GoTo RetryStart
             Else
                 Log(ex, $"[MyImage] 下载图片失败")
-                RunInUi(Sub() MyBase.Source = New MyBitmap(PathImage & "Icons/NoIcon.png"))
             End If
         End Try
     End Sub
