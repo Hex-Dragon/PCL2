@@ -1,85 +1,116 @@
-﻿Public Class MyImage
+Public Class MyImage
     Inherits Image
 
-    Private FileCacheExpiredTime As TimeSpan = New TimeSpan(7, 0, 0, 0) ' 一个星期的缓存有效期
+#Region "辅助属性注册"
 
     ''' <summary>
-    ''' 是否使用缓存
+    ''' 网络图片的缓存有效期。
+    ''' 在这个时间后，才会重新尝试下载图片。
     ''' </summary>
-    ''' <returns></returns>
-    Public Property UseCache As Boolean
+    Public FileCacheExpiredTime As New TimeSpan(7, 0, 0, 0) '7 天
+
+    ''' <summary>
+    ''' 是否允许将网络图片存储到本地用作缓存。
+    ''' </summary>
+    Public Property EnableCache As Boolean
         Get
-            Return GetValue(UseCacheProperty)
+            Return _EnableCache
         End Get
         Set(value As Boolean)
-            SetValue(UseCacheProperty, value)
+            _EnableCache = value
         End Set
     End Property
-    Public Shared ReadOnly UseCacheProperty As DependencyProperty = DependencyProperty.Register("UseCache", GetType(Boolean), GetType(MyImage), New PropertyMetadata(True))
+    Private _EnableCache As Boolean = True
 
-    Private _SourceData As String = ""
+    '将 Source 属性映射到 XAML
+    Public Shared Shadows ReadOnly SourceProperty As DependencyProperty = DependencyProperty.Register(
+        "Source", GetType(String), GetType(MyImage), New PropertyMetadata(New PropertyChangedCallback(
+    Sub(sender, e) If sender IsNot Nothing Then CType(sender, MyImage).Source = e.NewValue.ToString())))
+
+#End Region
+
+    Private _Source As String = ""
     ''' <summary>
-    ''' 重写Image的Source属性
+    ''' 与 Image 的 Source 类似。
+    ''' 若输入以 http 开头的字符串，则会尝试下载图片然后显示，图片会保存为本地缓存。
+    ''' 支持 WebP 格式的图片。
     ''' </summary>
-    Public Shadows Property Source As String
+    Public Shadows Property Source As String '覆写 Image 的 Source 属性
         Get
-            Return _SourceData
+            Return _Source
         End Get
         Set(value As String)
-            If String.IsNullOrEmpty(value) Then Exit Property
-            _SourceData = value
+            If value = "" Then value = Nothing
+            If _Source = value Then Exit Property
+            _Source = value
+            Dim TempPath As String = $"{PathTemp}MyImage\{GetHash(value)}.png"
             Try
-                If Not value.StartsWithF("http") Then ' 本地资源直接使用
-                    MyBase.Source = New MyBitmap(_SourceData)
+                '空
+                If value Is Nothing Then
+                    MyBase.Source = Nothing
                     Exit Property
                 End If
-                Dim NeedDownload As Boolean = True '是否需要下载/本地是否有有效缓存
-                Dim TempFilePath As String = PathTemp & "Cache\MyImage\" & GetHash(_SourceData) & ".png"
-                If UseCache AndAlso File.Exists(TempFilePath) AndAlso (DateTime.Now - File.GetCreationTime(TempFilePath)) < FileCacheExpiredTime Then NeedDownload = False ' 缓存文件存在且未过期，不需要重下
-                If Not NeedDownload Then
-                    MyBase.Source = New MyBitmap(TempFilePath)
+                '本地图片
+                If Not value.StartsWithF("http") Then
+                    MyBase.Source = New MyBitmap(value)
                     Exit Property
                 End If
-
-                If File.Exists(TempFilePath) Then '先显示着旧图片，下载新图片
-                    Rename(TempFilePath, TempFilePath & ".old")
-                    MyBase.Source = New MyBitmap(TempFilePath & ".old")
+                '从缓存加载网络图片
+                If EnableCache AndAlso File.Exists(TempPath) Then
+                    MyBase.Source = New MyBitmap(TempPath)
+                    If (Date.Now - File.GetCreationTime(TempPath)) < FileCacheExpiredTime Then
+                        Exit Property '无需刷新缓存
+                    Else
+                        File.Delete(TempPath) '需要刷新缓存
+                    End If
+                Else
+                    MyBase.Source = Nothing '清空显示
                 End If
-                ' 开一个线程下载在线图片
-                RunInNewThread(Sub() PicLoader(_SourceData, TempFilePath), "MyImage PicLoader " & GetUuid() & "#", ThreadPriority.BelowNormal)
-
+                '下载网络图片
+                RunInNewThread(
+                Sub()
+                    Dim Url As String = value '重新捕获变量，以检测在下载过程中 Source 被修改的情况
+                    Dim Retried As Boolean = False
+RetryStart:
+                    Dim TempDownloadingPath As String = TempPath & RandomInteger(0, 10000000)
+                    Try
+                        Log("[MyImage] 正在下载图片：" & Url)
+                        NetDownload(Url, TempDownloadingPath, True)
+                        If Url <> Source Then
+                            '若 Source 在下载时被修改，则不显示
+                            File.Delete(TempDownloadingPath)
+                        ElseIf EnableCache Then
+                            '保存缓存并显示
+                            Rename(TempDownloadingPath, TempPath)
+                            RunInUi(Sub() MyBase.Source = New MyBitmap(TempPath))
+                        Else
+                            '直接显示
+                            RunInUiWait(Sub() MyBase.Source = New MyBitmap(TempDownloadingPath))
+                            File.Delete(TempDownloadingPath)
+                        End If
+                    Catch ex As Exception
+                        Try
+                            File.Delete(TempDownloadingPath)
+                        Catch
+                        End Try
+                        If Not Retried Then
+                            Log(ex, $"下载图片可重试地失败（{Url}）", LogLevel.Developer)
+                            Retried = True
+                            Thread.Sleep(1000)
+                            GoTo RetryStart
+                        Else
+                            Log(ex, $"下载图片失败（{Url}）", LogLevel.Hint)
+                        End If
+                    End Try
+                End Sub, "MyImage PicLoader " & GetUuid() & "#", ThreadPriority.BelowNormal)
             Catch ex As Exception
-                Log(ex, "加载图片失败")
+                Log(ex, $"加载图片失败（{value}）", LogLevel.Hint)
+                Try
+                    File.Delete(TempPath) '删除缓存，以免缓存出现问题导致一直加载失败
+                Catch
+                End Try
             End Try
         End Set
     End Property
-    Public Shared Shadows ReadOnly SourceProperty As DependencyProperty = DependencyProperty.Register("Source", GetType(String), GetType(MyImage), New PropertyMetadata(New PropertyChangedCallback(
-                                                                                                                                                               Sub(sender As DependencyObject, e As DependencyPropertyChangedEventArgs)
-                                                                                                                                                                   If Not IsNothing(sender) Then
-                                                                                                                                                                       If String.IsNullOrEmpty(e.NewValue.ToString()) Then Exit Sub
-                                                                                                                                                                       CType(sender, MyImage).Source = e.NewValue.ToString()
-                                                                                                                                                                   End If
-                                                                                                                                                               End Sub)))
-
-    Private Sub PicLoader(FileUrl As String, TempFilePath As String)
-        Dim Retried As Boolean = False
-RetryStart:
-        Try
-            Dim UnCompleteFile As String = TempFilePath & ".dl" '加一个下载中的后缀，防止中途关闭程序下载中断但是没下完，从而导致第二次显示的是损坏的图片……
-            NetDownload(FileUrl, UnCompleteFile)
-            Rename(UnCompleteFile, TempFilePath)
-            RunInUi(Sub()
-                        MyBase.Source = New MyBitmap(TempFilePath)
-                    End Sub)
-            File.Delete(TempFilePath & ".old")
-        Catch ex As Exception
-            If Not Retried Then
-                Retried = True
-                GoTo RetryStart
-            Else
-                Log(ex, $"[MyImage] 下载图片失败")
-            End If
-        End Try
-    End Sub
 
 End Class
