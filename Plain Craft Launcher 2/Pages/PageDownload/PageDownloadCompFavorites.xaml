@@ -35,7 +35,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Row="0" Grid.ColumnSpan="4" Margin="0,0,0,9" HorizontalAlignment="Center" Text="还没有收藏内容" FontSize="19" UseLayoutRounding="True" SnapsToDevicePixels="True" Foreground="{DynamicResource ColorBrush3}" />
                         <Rectangle Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" Height="2" Fill="{DynamicResource ColorBrush3}" />
-                        <TextBlock Grid.Row="2" Grid.ColumnSpan="4" Margin="10,15,10,5" Text="在资源详细信息界面的右上角可以点击收藏按钮进行收藏" TextWrapping="Wrap" />
+                        <TextBlock Grid.Row="2" Grid.ColumnSpan="4" Margin="10,15,10,5" Text="在资源详细信息界面中可以点击收藏按钮进行收藏" TextWrapping="Wrap" />
                     </Grid>
                 </local:MyCard>
             </Grid>
