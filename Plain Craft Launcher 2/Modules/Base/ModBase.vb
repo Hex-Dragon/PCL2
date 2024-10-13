@@ -1721,6 +1721,16 @@ RetryDir:
     Public Function RegexReplaceEach(Input As String, Replacement As MatchEvaluator, Regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As String
         Return RegularExpressions.Regex.Replace(Input, Regex, Replacement, options)
     End Function
+    ''' <summary>
+    ''' 检查传入字符串会不会引发 Issue #4505
+    ''' </summary>
+    Public Function Ntfs83NameCheck(name As String) As Boolean
+        Dim regex As New Regex("(.*)~(\d*)")
+        Dim namePart As Byte() = Encoding.UTF8.GetBytes(regex.Match(name).Groups(1).Value)
+        Dim numPart As Integer = regex.Match(name).Groups(2).Value.Length
+
+        Return namePart.Length >= 6 AndAlso numPart = 1
+    End Function
 
 #End Region
 
