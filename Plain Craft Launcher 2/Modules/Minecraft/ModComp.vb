@@ -1626,9 +1626,11 @@ Retry:
             Next
             Dim RawProjectsData As JArray
             Dim FinishedTask = 0
+            Dim NeedCompleteTask = 0
             If CurseForgeProjectIds.Any() Then
                 RunInNewThread(Sub()
                                    Try
+                                       NeedCompleteTask += 1
                                        RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
                                        "POST", "{""modIds"": [" & CurseForgeProjectIds.Join(",") & "]}", "application/json"))("data")
                                        For Each RawData In RawProjectsData
@@ -1643,6 +1645,7 @@ Retry:
             If ModrinthProjectIds.Any() Then
                 RunInNewThread(Sub()
                                    Try
+                                       NeedCompleteTask += 1
                                        RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{ModrinthProjectIds.Join(""",""")}""]", IsJson:=True)
                                        For Each RawData In RawProjectsData
                                            Res.Add(New CompProject(RawData))
@@ -1653,7 +1656,7 @@ Retry:
                                    End Try
                                End Sub, "CompFavorites Modrinth")
             End If
-            Do Until FinishedTask = 2
+            Do Until FinishedTask = NeedCompleteTask
                 Thread.Sleep(50)
             Loop
             Return Res
