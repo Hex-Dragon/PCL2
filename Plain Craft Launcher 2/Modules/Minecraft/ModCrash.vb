@@ -389,9 +389,8 @@ Extracted:
         版本Json中存在多个Forge
         Mod过多导致超出ID限制
         NightConfig的Bug
-        ShadersMod与Optifine同时安装
+        ShadersMod与OptiFine同时安装
         Forge安装不完整
-        Mod需要Java11
         Mod缺少前置或MC版本错误
     End Enum
     ''' <summary>
@@ -516,20 +515,48 @@ Done:
             If LogMc.Contains("java.lang.ClassNotFoundException: org.spongepowered.asm.launch.MixinTweaker") Then AppendReason(CrashReason.MixinBootstrap缺失)
             If LogMc.Contains("Couldn't set pixel format") Then AppendReason(CrashReason.显卡驱动不支持导致无法设置像素格式)
             If LogMc.Contains("java.lang.OutOfMemoryError") OrElse LogMc.Contains("an out of memory error") Then AppendReason(CrashReason.内存不足)
-            If LogMc.Contains("java.lang.RuntimeException: Shaders Mod detected. Please remove it, OptiFine has built-in support for shaders.") Then AppendReason(CrashReason.ShadersMod与Optifine同时安装)
+            If LogMc.Contains("java.lang.RuntimeException: Shaders Mod detected. Please remove it, OptiFine has built-in support for shaders.") Then AppendReason(CrashReason.ShadersMod与OptiFine同时安装)
             If LogMc.Contains("java.lang.NoSuchMethodError: sun.security.util.ManifestEntryVerifier") Then AppendReason(CrashReason.低版本Forge与高版本Java不兼容)
             If LogMc.Contains("1282: Invalid operation") Then AppendReason(CrashReason.光影或资源包导致OpenGL1282错误)
             If LogMc.Contains("signer information does not match signer information of other classes in the same package") Then AppendReason(CrashReason.文件或内容校验失败, If(RegexSeek(LogMc, "(?<=class "")[^']+(?=""'s signer information)"), "").TrimEnd(vbCrLf))
             If LogMc.Contains("Maybe try a lower resolution resourcepack?") Then AppendReason(CrashReason.材质过大或显卡配置不足)
             If LogMc.Contains("java.lang.NoSuchMethodError: net.minecraft.world.server.ChunkManager$ProxyTicketManager.shouldForceTicks(J)Z") AndAlso LogMc.Contains("OptiFine") Then AppendReason(CrashReason.OptiFine导致无法加载世界)
-            If LogMc.Contains("Unsupported class file major version") Then AppendReason(CrashReason.Java版本不兼容)
             If LogMc.Contains("com.electronwill.nightconfig.core.io.ParsingException: Not enough data available") Then AppendReason(CrashReason.NightConfig的Bug)
             If LogMc.Contains("Cannot find launch target fmlclient, unable to launch") Then AppendReason(CrashReason.Forge安装不完整)
             If LogMc.Contains("Invalid module name: '' is not a Java identifier") Then AppendReason(CrashReason.Mod名称包含特殊字符)
-            If LogMc.Contains("has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to") Then AppendReason(CrashReason.Mod需要Java11)
-            If LogMc.Contains("java.lang.RuntimeException: java.lang.NoSuchMethodException: no such method: sun.misc.Unsafe.defineAnonymousClass(Class,byte[],Object[])Class/invokeVirtual") Then AppendReason(CrashReason.Mod需要Java11)
-            If LogMc.Contains("java.lang.IllegalArgumentException: The requested compatibility level JAVA_11 could not be set. Level is not supported by the active JRE or ASM version") Then AppendReason(CrashReason.Mod需要Java11)
+            'Java 问题
+            Dim JavaRegexOutput As String
+            Dim TargetJava As String = Nothing
+            Dim SelectedJava As String = Nothing
             If LogMc.Contains("Unsupported major.minor version") Then AppendReason(CrashReason.Java版本不兼容)
+            If LogMc.Contains("java.lang.RuntimeException: java.lang.NoSuchMethodException: no such method: sun.misc.Unsafe.defineAnonymousClass(Class,byte[],Object[])Class/invokeVirtual") Then AppendReason(CrashReason.Java版本不兼容, "11")
+            If LogMc.Contains("java.lang.IllegalArgumentException: The requested compatibility level JAVA_") Then AppendReason(CrashReason.Java版本不兼容, RegexSeek(LogMc, "(?<=compatibility level JAVA_)[1-9]{2}"))
+            If LogMc.Contains("has been compiled by a more recent version of the Java Runtime (class file version") Then
+                JavaRegexOutput = RegexSeek(LogMc, "(?<=Java Runtime \(class file version )[1-9]{2}")
+                If Not JavaRegexOutput = Nothing Then
+                    TargetJava = (Val(JavaRegexOutput) - 44).ToString
+                    JavaRegexOutput = RegexSeek(LogMc, "(?<=recognizes class file versions up to )[1-9]{2}")
+                    SelectedJava = If(JavaRegexOutput IsNot Nothing, (Val(JavaRegexOutput) - 44).ToString, Nothing)
+                    AppendReason(CrashReason.Java版本不兼容, TargetJava + ";" + SelectedJava)
+                Else
+                    AppendReason(CrashReason.Java版本不兼容)
+                End If
+            End If
+            If LogMc.Contains("Unsupported class file major version") Then
+                TargetJava = (Val(RegexSeek(LogMc, "(?<=Unsupported class file major version )[1-9]{2}")) - 44).ToString
+                AppendReason(CrashReason.Java版本不兼容, TargetJava)
+            End If
+            If LogMc.Contains("java.lang.IllegalArgumentException: Class file major version") Then
+                JavaRegexOutput = RegexSeek(LogMc, "(?<=Class file major version )[1-9]{2}")
+                If Not JavaRegexOutput = Nothing Then
+                    TargetJava = (Val(JavaRegexOutput) - 44).ToString
+                    JavaRegexOutput = RegexSeek(LogMc, "(?<=supports class version )[1-9]{2}")
+                    SelectedJava = If(JavaRegexOutput IsNot Nothing, (Val(JavaRegexOutput) - 44).ToString, Nothing)
+                    AppendReason(CrashReason.Java版本不兼容, TargetJava + ";" + SelectedJava)
+                Else
+                    AppendReason(CrashReason.Java版本不兼容)
+                End If
+            End If
             If LogMc.Contains("Invalid maximum heap size") Then AppendReason(CrashReason.使用32位Java导致JVM无法分配足够多的内存)
             If LogMc.Contains("Could not reserve enough space") Then
                 If LogMc.Contains("for 1048576KB object heap") Then
@@ -923,13 +950,21 @@ NextStack:
                 Case CrashReason.内存不足
                     Results.Add("Minecraft 内存不足，导致其无法继续运行。\n这很可能是因为电脑内存不足、游戏分配的内存不足，或是配置要求过高。\n\n你可以尝试在 更多 → 百宝箱 中选择 内存优化，然后再启动游戏。\n如果还是不行，请在启动设置中增加为游戏分配的内存，并删除配置要求较高的材质、Mod、光影。\n如果依然不奏效，请在开始游戏前尽量关闭其他软件，或者……换台电脑？\h")
                 Case CrashReason.使用OpenJ9
-                    Results.Add("游戏因为使用 Open J9 而崩溃了。\n请在启动设置的 Java 选择一项中改用非 OpenJ9 的 Java，然后再启动游戏。")
+                    Results.Add("游戏因为使用 OpenJ9 而崩溃了。\n请在启动设置的 Java 选择一项中改用非 OpenJ9 的 Java，然后再启动游戏。")
                 Case CrashReason.使用JDK
                     Results.Add("游戏似乎因为使用 JDK，或 Java 版本过高而崩溃了。\n请在启动设置的 Java 选择一项中改用 JRE 8（Java 8），然后再启动游戏。\n如果你没有安装 JRE 8，你可以从网络中下载、安装一个。")
                 Case CrashReason.Java版本过高
                     Results.Add("游戏似乎因为你所使用的 Java 版本过高而崩溃了。\n请在启动设置的 Java 选择一项中改用较低版本的 Java，然后再启动游戏。\n如果没有，可以从网络中下载、安装一个。")
                 Case CrashReason.Java版本不兼容
-                    Results.Add("游戏不兼容你当前使用的 Java。\n如果没有合适的 Java，可以从网络中下载、安装一个。")
+                    If Additional.Any() Then '返回了 Java 信息
+                        If Additional(0).Length = 5 Then '同时返回了目标 Java 版本和当前使用的 Java 版本
+                            Results.Add($"游戏不兼容你当前使用的 Java，其要求使用 Java {Additional(0).Split(";")(0)}，但你使用的是 Java {Additional(0).Split(";")(1)}。\n如果没有合适的 Java，可以从网络中下载、安装一个，然后修改启动设置中的 Java 设置。")
+                        Else '只返回了目标 Java 版本
+                            Results.Add($"游戏不兼容你当前使用的 Java，其要求使用 Java {Additional(0).Split(";")(0)}。\n如果没有合适的 Java，可以从网络中下载、安装一个，然后修改启动设置中的 Java 设置。")
+                        End If
+                    Else '啥 Java 信息也没返回
+                        Results.Add("游戏不兼容你当前使用的 Java。\n如果没有合适的 Java，可以从网络中下载、安装一个，然后修改启动设置中的 Java 设置。")
+                    End If
                 Case CrashReason.Mod名称包含特殊字符
                     Results.Add("由于有 Mod 的名称包含特殊字符，导致游戏崩溃。\n请尝试修改 Mod 文件名，让它只包含英文字母、数字、减号（-）、下划线（_）和小数点，然后再启动游戏。")
                 Case CrashReason.MixinBootstrap缺失
@@ -1002,16 +1037,14 @@ NextStack:
                     End If
                 Case CrashReason.OptiFine与Forge不兼容
                     Results.Add("由于 OptiFine 与当前版本的 Forge 不兼容，导致了游戏崩溃。\n\n请前往 OptiFine 官网（https://optifine.net/downloads）查看 OptiFine 所兼容的 Forge 版本，并严格按照对应版本重新安装游戏。")
-                Case CrashReason.ShadersMod与Optifine同时安装
-                    Results.Add("无需同时安装 Optifine 和 Shaders Mod，Optifine 已经集成了 Shaders Mod 的功能。\n在删除 Shaders Mod 后，游戏即可正常运行。")
+                Case CrashReason.ShadersMod与OptiFine同时安装
+                    Results.Add("无需同时安装 OptiFine 和 Shaders Mod，OptiFine 已经集成了 Shaders Mod 的功能。\n在删除 Shaders Mod 后，游戏即可正常运行。")
                 Case CrashReason.低版本Forge与高版本Java不兼容
                     Results.Add("由于低版本 Forge 与当前 Java 不兼容，导致了游戏崩溃。\n\n请尝试以下解决方案：\n - 更新 Forge 到 36.2.26 或更高版本\n - 换用版本低于 1.8.0.320 的 Java")
                 Case CrashReason.版本Json中存在多个Forge
                     Results.Add("可能由于使用其他启动器修改了 Forge 版本，当前版本的文件存在异常，导致了游戏崩溃。\n请尝试重新全新安装 Forge，而非使用其他启动器修改 Forge 版本。")
                 Case CrashReason.玩家手动触发调试崩溃
                     Results.Add("* 事实上，你的游戏没有任何问题，这是你自己触发的崩溃。\n* 你难道没有更重要的事要做吗？")
-                Case CrashReason.Mod需要Java11
-                    Results.Add("你所安装的部分 Mod 似乎需要使用 Java 11 启动。\n请在启动设置的 Java 选择一项中改用 Java 11，然后再启动游戏。\n如果你没有安装 Java 11，你可以从网络中下载、安装一个。")
                 Case CrashReason.极短的程序输出
                     Results.Add($"程序返回了以下信息：\n{Additional.First}\n\h")
                 Case CrashReason.OptiFine导致无法加载世界 'https://www.minecraftforum.net/forums/support/java-edition-support/3051132-exception-ticking-world
