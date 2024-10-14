@@ -1546,7 +1546,7 @@ Retry:
         ''' 将指定的内容直接覆盖
         ''' </summary>
         ''' <param name="items"></param>
-        Public Shared Sub ReplaceAll(items As List(Of CompProject))
+        Public Shared Sub Replace(items As List(Of CompProject))
             Dim RawList As JArray = New JArray()
             For Each item As CompProject In items
                 RawList.Add(item.Id)
@@ -1554,7 +1554,7 @@ Retry:
             Setup.Set("CustomCompFavorites", RawList.ToString())
             FavoritesList = Nothing
         End Sub
-        Public Shared Sub ReplaceAll(items As List(Of String))
+        Public Shared Sub Replace(items As List(Of String))
             Dim RawList As JArray = New JArray()
             For Each item As String In items
                 RawList.Add(item)
@@ -1613,9 +1613,8 @@ Retry:
             Return True
         End Function
         Public Shared Function Del(item As String) As Boolean
-            Dim SearchRes = GetAll().Where(Function(e) e = item).ToList()
-            If Not SearchRes.Any() Then Return False
-            GetAll().Remove(SearchRes.First())
+            If Not Has(item) Then Return False
+            FavoritesList.Remove(item)
             Save()
             Return True
         End Function
