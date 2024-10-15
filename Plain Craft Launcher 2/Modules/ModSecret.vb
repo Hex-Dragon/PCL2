@@ -116,7 +116,7 @@ Friend Module ModSecret
     ''' </summary>
     Friend Sub SecretHeadersSign(Url As String, ByRef Request As HttpWebRequest, Optional UseBrowserUserAgent As Boolean = False)
         If Url.Contains("baidupcs.com") OrElse Url.Contains("baidu.com") Then
-            Client.Headers("User-Agent") = "LogStatistic" '#4951
+            Request.UserAgent = "LogStatistic" '#4951
         ElseIf UseBrowserUserAgent Then
             Request.UserAgent = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
         Else
