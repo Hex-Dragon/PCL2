@@ -126,7 +126,7 @@
                     Finished(New Exception("$登录用时太长啦，重新试试吧！"))
                     Return
                 ElseIf ex.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
-                    Finished(New RetryException)
+                    Finished(New RestartException)
                     Return
                 ElseIf ex.Message.Contains("authorization_pending") Then
                     Thread.Sleep(2000)

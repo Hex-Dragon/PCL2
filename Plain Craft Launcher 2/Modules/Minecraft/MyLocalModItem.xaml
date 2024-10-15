@@ -24,7 +24,7 @@
         <Border.Clip>
             <RectangleGeometry Rect="0,0,34,34" RadiusX="6" RadiusY="6" />
         </Border.Clip>
-        <Image x:Name="PathLogo" RenderOptions.BitmapScalingMode="HighQuality" />
+        <local:MyImage x:Name="PathLogo" RenderOptions.BitmapScalingMode="HighQuality" FallbackSource="pack://application:,,,/images/Icons/NoIcon.png" />
     </Border>
     <!-- 标题 -->
     <Grid Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,1,0,0"
@@ -52,6 +52,6 @@
         </Border>-->
     </StackPanel>
     <TextBlock x:Name="LabInfo" Grid.Row="2" Grid.Column="4" VerticalAlignment="Bottom" Margin="0,0,3,1"
-               TextTrimming="CharacterEllipsis" FontSize="12" Foreground="{StaticResource ColorBrushGray3}"
+               TextTrimming="CharacterEllipsis" FontSize="12" Foreground="{StaticResource ColorBrushGray4}"
                IsHitTestVisible="False" SnapsToDevicePixels="False" UseLayoutRounding="False" />
 </Grid>
