@@ -254,6 +254,8 @@
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 仪表盘 Lite（作者：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageH">PCL 主页市场（作者：凌云）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageI">PCL 更新日志（作者：Joker2184）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能隐藏</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">你可以隐藏不需要的页面或关闭特定功能。在任意界面按 F12 可以暂时显示被隐藏的功能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">主页面</s:String>
@@ -425,6 +427,7 @@
     <s:String x:Key="LangDownloadAll">全部版本</s:String>
     <s:String x:Key="LangDownloadCategory">种类：</s:String>
     <s:String x:Key="LangDownloadUnknown">未知版本</s:String>
+    <s:String x:Key="LangDownloadServer">下载服务端</s:String>
     <!--PageDownloadCompDetail-->
     <s:String x:Key="LangDownloadCompToCurseForge">转到 CurseForge</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">转到 Modrinth</s:String>
@@ -758,14 +761,14 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherHelpLoading">正在加载帮助列表</s:String>
     <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">很抱歉，帮助库目前只支持简体中文</s:String>
     <s:String x:Key="LangPageOtherRefreshing">正在刷新……</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackContent">是否要打开反馈列表网页？
+    <s:String x:Key="LangPageOtherDialogFeedbackContent">在提交新反馈前，建议先搜索反馈列表，以避免重复提交。
 如果无法打开该网页，请尝试使用加速器或 VPN。</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">反馈提示</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">提交新反馈</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">查看反馈列表</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">是否要打开新功能投票网页？
 如果无法打开该网页，请尝试使用加速器或 VPN。</s:String>
-    <s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteTitle">新功能投票</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">打开</s:String>
     <!--PageOtherAbout-->
     <s:String x:Key="LangPageOtherAboutAbout">关于</s:String>
@@ -959,13 +962,12 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">初始化确认</s:String>
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">下载</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本列表获取</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本列表源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">尽量使用镜像源（加载快，但版本可能不是最新的）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本最新，但加载缓慢）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod 命名风格</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">决定下载的 Mod 的默认文件名中，中文译名应该放在哪个位置
-该选项仅在语言设置为简体中文时有效</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileName">下载文件名</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">下载 Mod 时，Mod 的默认文件名中，中文译名应该放在哪个位置</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">译名位于文件名开头：[遗物] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">译名位于文件名开头：遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">译名位于文件名末尾：relics-0.1.14-遗物</s:String>
@@ -1044,8 +1046,8 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 一般选择 仅在有重大漏洞更新时显示提示 就可以让你尽量不受打扰了。
 除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">确认启动器更新失败</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod 信息获取</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">尽量使用镜像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSource">下载源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">尽量使用镜像源（暂时无效）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">尽量使用官方源</s:String>
     <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL 即将重启以完全应用语言的切换</s:String>
@@ -1055,6 +1057,10 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupSystemExportSettings">导出设置</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">导入设置</s:String>
     <s:String x:Key="LangPageSetupSystemInDev">该功能尚在开发中！</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyle">Mod 管理样式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">在 Mod 管理页面中，Mod 项的显示方式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">标题显示译名，详情显示文件名</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleB">标题显示文件名，详情显示译名</s:String>
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概览</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">设置</s:String>
@@ -1436,7 +1442,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 请在更新后，确认该问题在最新版中依然存在，然后再提交反馈。</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">更新</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">无法提交反馈</s:String>
-    <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。</s:String>
+    <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。</s:String>
     <s:String x:Key="LangModBaseExceptionOutOfMemoryException">你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。</s:String>
     <s:String x:Key="LangModBaseExceptionCOMException">由于操作系统或显卡存在问题，导致出现错误。请尝试重启 PCL。</s:String>
@@ -1486,6 +1492,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <!--Keep %,do not replace it.-->
     <s:String x:Key="LangModValidateFileNoContent">文件名不可为 %！</s:String>
     <!--Keep %,do not replace it.-->
+    <s:String x:Key="LangModValidateFileNoSpecialName">文件名不能包含这一特殊格式！</s:String>
     <s:String x:Key="LangModValidateFileNoSameName">不可与现有文件重名！</s:String>
     <s:String x:Key="LangModValidateFileNoParentFolder">父文件夹不存在：{0}</s:String>
     <s:String x:Key="LangModValidateFileHeadUriIncorrect">文件夹路径头存在错误！</s:String>
@@ -1787,6 +1794,11 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadNeoForge">下载 NeoForge {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">下载 LiteLoader {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">下载 Fabric {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServer">Minecraft {0} 服务端下载</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerGetDownloadUrl">构建服务端</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">该服务端正在下载中！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">下载服务端文件</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">{0} 版本没有提供服务端文件</s:String>
     <!--ModCrash-->
     <s:String x:Key="LangModCrashDialogTitleAnalysisResult">错误报告分析结果</s:String>
     <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 出现错误</s:String>
@@ -1828,12 +1840,12 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 
 你或许只能重装 64 位的操作系统来解决此问题。
 如果你的电脑内存在 2GB 以内，那或许只能换台电脑了……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAK">由于未满足 Mod 的依赖项，导致游戏退出。
-未满足的依赖项：
+    <s:String x:Key="LangModCrashCrashReasonReasonAK">由于未安装正确的前置 Mod，导致游戏退出。
+缺失的依赖项：
  - {0}
 
 请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAL">由于未满足 Mod 的依赖项，导致游戏退出。
+    <s:String x:Key="LangModCrashCrashReasonReasonAL">由于未安装正确的前置 Mod，导致游戏退出。
 请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAM">你的游戏遇到了一些问题，PCL 为此找到了一个可疑的关键词：{0}。
 
@@ -1866,7 +1878,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 其配置文件 {1} 存在异常，无法读取。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAW">名为 {0} 的 Mod 初始化失败，导致游戏无法继续加载。
 你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAX">以下 Mod 初始化失败，导致游戏无法继续加载：
+    <s:String x:Key="LangModCrashCrashReasonReasonAX">以下 Mod 初始化失败，导致游戏出错：
  - {0}
 
 你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
@@ -1884,7 +1896,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
  - {0}
 
 每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBB">你可能重复安装了多个相同的 Mod，导致游戏无法继续加载。
+    <s:String x:Key="LangModCrashCrashReasonReasonBB">你可能重复安装了多个相同的 Mod，导致游戏出错。
 
 每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBC">游戏似乎因为实体 {0} 出现了问题。
@@ -1907,7 +1919,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 请尝试以下解决方案：
  - 更新 Forge 到 36.2.26 或更高版本
  - 换用版本低于 1.8.0.320 的 Java</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBH">可能由于使用其他启动器修改了 Forge 版本，当前版本的文件存在异常，导致了游戏崩溃。
+    <s:String x:Key="LangModCrashCrashReasonReasonBH">可能由于其他启动器修改了 Forge 版本，当前版本的文件存在异常，导致了游戏崩溃。
 请尝试重新全新安装 Forge，而非使用其他启动器修改 Forge 版本。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* 事实上，你的游戏没有任何问题，这是你自己触发的崩溃。
 * 你难道没有更重要的事要做吗？</s:String>
@@ -1942,8 +1954,9 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBS">部分文件或内容校验失败，导致游戏出现了问题。
 
 请尝试删除游戏（包括 Mod）并重新下载，或尝试在重新下载时使用 VPN。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBT">由于 Forge 安装不完整，导致游戏无法正常运行。
-请尝试重新安装 Forge。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBT">由于安装的 Forge 文件丢失，导致游戏无法正常运行。
+请重新安装一次相同版本的 Forge，然后再启动游戏。
+在打包游戏时删除 libraries 文件夹可能导致此错误。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBU">Fabric 提供了以下错误信息：
 {0}
 

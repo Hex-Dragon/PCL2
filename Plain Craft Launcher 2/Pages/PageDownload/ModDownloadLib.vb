@@ -167,7 +167,7 @@ Public Module ModDownloadLib
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
         AddHandler BtnInfo.Click, AddressOf McDownloadMenuLog
-        Dim BtnServer As New MyIconButton With {.LogoScale = 1, .Logo = Logo.IconButtonServer, .ToolTip = "下载服务端"}
+        Dim BtnServer As New MyIconButton With {.LogoScale = 1, .Logo = Logo.IconButtonServer, .ToolTip = GetLang("LangDownloadServer")}
         ToolTipService.SetPlacement(BtnServer, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnServer, 30)
         ToolTipService.SetHorizontalOffset(BtnServer, 2)
@@ -185,7 +185,7 @@ Public Module ModDownloadLib
         ToolTipService.SetVerticalOffset(BtnInfo, 30)
         ToolTipService.SetHorizontalOffset(BtnInfo, 2)
         AddHandler BtnInfo.Click, AddressOf McDownloadMenuLog
-        Dim BtnServer As New MyIconButton With {.LogoScale = 1, .Logo = Logo.IconButtonServer, .ToolTip = "下载服务端"}
+        Dim BtnServer As New MyIconButton With {.LogoScale = 1, .Logo = Logo.IconButtonServer, .ToolTip = GetLang("LangDownloadServer")}
         ToolTipService.SetPlacement(BtnServer, Primitives.PlacementMode.Center)
         ToolTipService.SetVerticalOffset(BtnServer, 30)
         ToolTipService.SetHorizontalOffset(BtnServer, 2)
@@ -221,22 +221,22 @@ Public Module ModDownloadLib
 
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar.ToList()
-                If OngoingLoader.Name <> $"Minecraft {Id} 服务端下载" Then Continue For
-                Hint("该服务端正在下载中！", HintType.Critical)
+                If OngoingLoader.Name <> GetLang("LangModDownloadLibTaskDownloadServer", Id) Then Continue For
+                Hint(GetLang("LangModDownloadLibTaskDownloadServerHintDownloading"), HintType.Critical)
                 Exit Sub
             Next
 
             Dim Loaders As New List(Of LoaderBase)
             '下载版本 JSON 文件
-            Loaders.Add(New LoaderDownload("下载版本 JSON 文件", New List(Of NetFile) From {
+            Loaders.Add(New LoaderDownload(GetLang("LangModDownloadLibTaskMcDownloadJson"), New List(Of NetFile) From {
                 New NetFile(DlSourceLauncherOrMetaGet(JsonUrl), VersionFolder & Id & ".json", New FileChecker(CanUseExistsFile:=False, IsJson:=True))
             }) With {.ProgressWeight = 2})
             '构建服务端
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("构建服务端",
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangModDownloadLibTaskDownloadServerGetDownloadUrl"),
                 Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                     '分析服务端 JAR 文件下载地址
                     Dim McVersion As New McVersion(VersionFolder)
-                    If McVersion.JsonObject("downloads") Is Nothing OrElse McVersion.JsonObject("downloads")("server") Is Nothing OrElse McVersion.JsonObject("downloads")("server")("url") Is Nothing Then Throw New Exception($"{Id} 版本没有提供服务端文件")
+                    If McVersion.JsonObject("downloads") Is Nothing OrElse McVersion.JsonObject("downloads")("server") Is Nothing OrElse McVersion.JsonObject("downloads")("server")("url") Is Nothing Then Throw New Exception(GetLang("LangModDownloadLibExceptionTaskDownloadServerNoResource", Id))
                     Dim JarUrl As String = McVersion.JsonObject("downloads")("server")("url")
                     Dim Checker As New FileChecker(MinSize:=1024, ActualSize:=If(McVersion.JsonObject("downloads")("server")("size"), -1), Hash:=McVersion.JsonObject("downloads")("server")("sha1"))
                     Task.Output = New List(Of NetFile) From {New NetFile(DlSourceLauncherOrMetaGet(JarUrl), VersionFolder & Id & "-server.jar", Checker)}
@@ -260,10 +260,10 @@ pause"
                 End Sub
             ) With {.ProgressWeight = 0.5, .Show = False})
             '下载服务端文件
-            Loaders.Add(New LoaderDownload("下载服务端文件", New List(Of NetFile)) With {.ProgressWeight = 5})
+            Loaders.Add(New LoaderDownload(GetLang("LangModDownloadLibTaskDownloadServerDownloading"), New List(Of NetFile)) With {.ProgressWeight = 5})
 
             '启动
-            Dim Loader As New LoaderCombo(Of String)("Minecraft " & Id & " 服务端下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+            Dim Loader As New LoaderCombo(Of String)(GetLang("LangModDownloadLibTaskDownloadServer", Id), Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
             Loader.Start(Id)
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()
@@ -290,25 +290,25 @@ pause"
 
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar.ToList()
-                If OngoingLoader.Name <> $"Minecraft {Id} 下载" Then Continue For
-                Hint("该版本正在下载中！", HintType.Critical)
+                If OngoingLoader.Name <> GetLang("LangModDownloadLibTaskMcDownload") Then Continue For
+                Hint(GetLang("LangModDownloadLibHintInstanceDownloading"), HintType.Critical)
                 Exit Sub
             Next
 
             Dim Loaders As New List(Of LoaderBase)
             '下载版本 JSON 文件
-            Loaders.Add(New LoaderDownload("下载版本 JSON 文件", New List(Of NetFile) From {
+            Loaders.Add(New LoaderDownload(GetLang("LangModDownloadLibTaskMcDownloadJson"), New List(Of NetFile) From {
                 New NetFile(DlSourceLauncherOrMetaGet(JsonUrl), VersionFolder & Id & ".json", New FileChecker(CanUseExistsFile:=False, IsJson:=True))
             }) With {.ProgressWeight = 2})
             '获取支持库文件地址
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析核心 JAR 文件下载地址",
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangModDownloadLibTaskMcDownloadJarUrl"),
                 Sub(Task) Task.Output = New List(Of NetFile) From {DlClientJarGet(New McVersion(VersionFolder), False)}
             ) With {.ProgressWeight = 0.5, .Show = False})
             '下载支持库文件
-            Loaders.Add(New LoaderDownload("下载核心 JAR 文件", New List(Of NetFile)) With {.ProgressWeight = 5})
+            Loaders.Add(New LoaderDownload(GetLang("LangModDownloadLibTaskMcDownloadJar"), New List(Of NetFile)) With {.ProgressWeight = 5})
 
             '启动
-            Dim Loader As New LoaderCombo(Of String)("Minecraft " & Id & " 下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+            Dim Loader As New LoaderCombo(Of String)(GetLang("LangModDownloadLibTaskMcDownload", Id), Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
             Loader.Start(Id)
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()

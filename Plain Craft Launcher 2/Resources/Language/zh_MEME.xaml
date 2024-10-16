@@ -1056,6 +1056,10 @@
     <s:String x:Key="LangPageSetupSystemExportSettings">导出设置</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">导入设置</s:String>
     <s:String x:Key="LangPageSetupSystemInDev">功能已在画饼，你先别急，让我先急。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyle">Mod 管理样式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">在 Mod 管理页面中，Mod 项的显示方式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">标题显示译名，详情显示文件名</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleB">标题显示文件名，详情显示译名</s:String>
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概览</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">设置</s:String>

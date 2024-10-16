@@ -1069,6 +1069,9 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupSystemExportSettings">匯出設定</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">匯入設定</s:String>
     <s:String x:Key="LangPageSetupSystemInDev">該功能尚在開發中！</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">在 Mod 管理页面中，Mod 项的显示方式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">标题显示译名，详情显示文件名</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleB">标题显示文件名，详情显示译名</s:String>
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概覽</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">設置</s:String>

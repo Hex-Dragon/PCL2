@@ -1055,6 +1055,9 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupSystemExportSettings">匯出設定</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">匯入設定</s:String>
     <s:String x:Key="LangPageSetupSystemInDev">該功能尚在開發中！</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">在 Mod 管理页面中，Mod 项的显示方式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">标题显示译名，详情显示文件名</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleB">标题显示文件名，详情显示译名</s:String>
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">概覽</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">設定</s:String>

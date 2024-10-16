@@ -1048,6 +1048,9 @@ En général, choisissez "Afficher un indice lorsqu'il y a un correctif de vuln�
     <s:String x:Key="LangPageSetupSystemExportSettings">Exporter les paramètres</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">Importer les paramètres</s:String>
     <s:String x:Key="LangPageSetupSystemInDev">Cette fonctionnalité est encore en développement !</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">在 Mod 管理页面中，Mod 项的显示方式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">标题显示译名，详情显示文件名</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleB">标题显示文件名，详情显示译名</s:String>
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">Aperçu</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">Paramètres</s:String>

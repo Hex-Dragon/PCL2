@@ -1348,19 +1348,18 @@ RetryDir:
         Dim Stack As String = If(StackList.Any, vbCrLf & Join(StackList, vbCrLf), "")
 
         '常见错误（记得同时修改下面的）
-        Dim CommonReason As String = GetCommonExceptionReason(InnerEx, Desc)
         Dim CommonReason As String = Nothing
         If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is BadImageFormatException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
-            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
+            CommonReason = GetLang("LangModBaseExceptionBadEnvironment")
         ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
-            CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
+            CommonReason = GetLang("LangModBaseExceptionUnauthorizedAccessException")
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
-            CommonReason = "你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。"
+            CommonReason = GetLang("LangModBaseExceptionOutOfMemoryException")
         ElseIf TypeOf InnerEx Is Runtime.InteropServices.COMException Then
-            CommonReason = "由于操作系统或显卡存在问题，导致出现错误。请尝试重启 PCL。"
+            CommonReason = GetLang("LangModBaseExceptionCOMException")
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
                 "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
-            CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
+            CommonReason = GetLang("LangModBaseExceptionBadNetwork")
         End If
 
         '获取错误类型
@@ -1399,36 +1398,6 @@ RetryDir:
         '常见错误（记得同时修改上面的）
         Dim CommonReason As String = Nothing
         If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is BadImageFormatException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
-            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
-        ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
-            CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
-        ElseIf TypeOf InnerEx Is OutOfMemoryException Then
-            CommonReason = "你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。"
-        ElseIf TypeOf InnerEx Is Runtime.InteropServices.COMException Then
-            CommonReason = "由于操作系统或显卡存在问题，导致出现错误。请尝试重启 PCL。"
-        ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
-                "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
-            CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
-        End If
-
-        '构造输出信息
-        If CommonReason IsNot Nothing Then
-            Return CommonReason & "详细错误：" & DescList.First
-        Else
-            DescList.Reverse() '让最深层错误在最左边
-            Return Join(DescList, " → ")
-        End If
-    End Function
-
-    ''' <summary>
-    ''' 常见错误（把上面的聚合起来了）
-    ''' </summary>
-    ''' <param name="InnerEx"></param>
-    ''' <param name="Desc"></param>
-    ''' <returns></returns>
-    Public Function GetCommonExceptionReason(InnerEx As Exception, Desc As String) As String
-        Dim CommonReason As String = Nothing
-        If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
             CommonReason = GetLang("LangModBaseExceptionBadEnvironment")
         ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
             CommonReason = GetLang("LangModBaseExceptionUnauthorizedAccessException")
@@ -1440,7 +1409,14 @@ RetryDir:
                 "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
             CommonReason = GetLang("LangModBaseExceptionBadNetwork")
         End If
-        Return CommonReason
+
+        '构造输出信息
+        If CommonReason IsNot Nothing Then
+            Return CommonReason & "详细错误：" & DescList.First
+        Else
+            DescList.Reverse() '让最深层错误在最左边
+            Return Join(DescList, " → ")
+        End If
     End Function
 
     ''' <summary>

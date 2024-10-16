@@ -1053,6 +1053,9 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageSetupSystemExportSettings">Εξαγωγή Ρυθμίσεων</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">Εισαγωγή Ρυθμίσεων</s:String>
     <s:String x:Key="LangPageSetupSystemInDev">Αυτή η δυνατότητα βρίσκεται ακόμη σε εξέλιξη!</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">在 Mod 管理页面中，Mod 项的显示方式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">标题显示译名，详情显示文件名</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleB">标题显示文件名，详情显示译名</s:String>
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">Επισκόπηση</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">Ρυθμίσεις</s:String>

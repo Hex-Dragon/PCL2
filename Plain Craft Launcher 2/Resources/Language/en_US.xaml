@@ -1053,6 +1053,9 @@ Unless you are making a modpack or updating the launcher often, this option is e
     <s:String x:Key="LangPageSetupSystemExportSettings">Export Settings</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">Import Settings</s:String>
     <s:String x:Key="LangPageSetupSystemInDev">This feature is still in development!</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">在 Mod 管理页面中，Mod 项的显示方式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">标题显示译名，详情显示文件名</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleB">标题显示文件名，详情显示译名</s:String>
     <!--PageVersionLeft-->
     <s:String x:Key="LangPageVersionLeftOverview">Overview</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">Settings</s:String>
