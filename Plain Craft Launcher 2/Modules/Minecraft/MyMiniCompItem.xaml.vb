@@ -221,7 +221,7 @@ Public Class MyMiniCompItem
     End Property
 
     '按钮
-    Public ButtonHandler As Action(Of MyLocalModItem, EventArgs)
+    Public ButtonHandler As Action(Of MyMiniCompItem, EventArgs)
     Public ButtonStack As FrameworkElement
     Private _Buttons As IEnumerable(Of MyIconButton)
     Public Property Buttons As IEnumerable(Of MyIconButton)

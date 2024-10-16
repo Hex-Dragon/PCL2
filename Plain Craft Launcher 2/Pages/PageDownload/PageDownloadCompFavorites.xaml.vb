@@ -20,23 +20,37 @@
     End Sub
 
     Private CompItemList As New List(Of MyMiniCompItem)
+    Private SelectedItemList As New List(Of MyMiniCompItem)
 
     '结果 UI 化
     Private Sub Load_OnFinish()
         CompItemList.Clear()
         For Each item In Loader.Output
             Dim CompItem = item.ToMiniCompItem()
+
+            '----添加按钮----
             '删除按钮
             Dim Btn_Delete As New MyIconButton
-            Btn_Delete.Logo = Logo.IconButtonDelete
-            AddHandler Btn_Delete.Click, Sub()
+            Btn_Delete.Logo = Logo.IconButtonLikeFill
+            Btn_Delete.ToolTip = "取消收藏"
+            ToolTipService.SetPlacement(Btn_Delete, Primitives.PlacementMode.Center)
+            ToolTipService.SetVerticalOffset(Btn_Delete, 30)
+            ToolTipService.SetHorizontalOffset(Btn_Delete, 2)
+            AddHandler Btn_Delete.Click, Sub(sender As Object, e As EventArgs)
                                              If CompItem Is Nothing Then Exit Sub
-                                             If CompFavorites.Del(item.Id) Then Hint($"已取消收藏 {item.TranslatedName}！", HintType.Finish)
+                                             If CompFavorites.Del(CompItem.Entry.Id) Then Hint($"已取消收藏 {CompItem.Entry.TranslatedName}！", HintType.Finish)
                                              CompItemList.Remove(CompItem)
                                              RefreshContent()
                                              RefreshCardTitle()
                                          End Sub
             CompItem.Buttons = {Btn_Delete}
+            '---操作逻辑---
+            '右键查看详细信息界面
+            AddHandler CompItem.MouseRightButtonUp, Sub(sender As Object, e As EventArgs)
+                                                        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
+                   .Additional = {CompItem.Entry, New List(Of String), String.Empty, CompModLoaderType.Any}})
+                                                    End Sub
+
             CompItemList.Add(CompItem)
         Next
         Try
