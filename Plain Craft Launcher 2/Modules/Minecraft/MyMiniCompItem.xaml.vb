@@ -159,7 +159,7 @@ Public Class MyMiniCompItem
                         Anim.Add(AaHeight(RectCheck, -RectCheck.ActualHeight, 120,, New AniEaseInFluent(AniEasePower.Weak)))
                         Anim.Add(AaOpacity(RectCheck, -RectCheck.Opacity, 70, 40))
                         RectCheck.VerticalAlignment = VerticalAlignment.Center
-                        Anim.Add(AaColor(LabTitle, TextBlock.ForegroundProperty, If(LabTitle.TextDecorations Is Nothing, "ColorBrush1", "ColorBrushGray4"), 120))
+                        Anim.Add(AaColor(LabTitle, TextBlock.ForegroundProperty, "ColorBrush1", 120))
                     End If
                     AniStart(Anim, "MyMiniCompItem Checked " & Uuid)
                 Else

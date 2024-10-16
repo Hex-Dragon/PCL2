@@ -1,5 +1,6 @@
 ﻿Public Class PageDownloadCompFavorites
 
+#Region "加载器信息"
     '加载器信息
     Public Shared Loader As New LoaderTask(Of List(Of String), List(Of CompProject))("CompProject Favorites", AddressOf CompFavoritesGet, AddressOf LoaderInput)
 
@@ -18,10 +19,12 @@
     Private Shared Sub CompFavoritesGet(Task As LoaderTask(Of List(Of String), List(Of CompProject)))
         Task.Output = CompFavorites.GetAllCompProjects(Task.Input)
     End Sub
+#End Region
 
     Private CompItemList As New List(Of MyMiniCompItem)
     Private SelectedItemList As New List(Of MyMiniCompItem)
 
+#Region "UI 化"
     '结果 UI 化
     Private Sub Load_OnFinish()
         CompItemList.Clear()
@@ -37,11 +40,10 @@
             ToolTipService.SetVerticalOffset(Btn_Delete, 30)
             ToolTipService.SetHorizontalOffset(Btn_Delete, 2)
             AddHandler Btn_Delete.Click, Sub(sender As Object, e As EventArgs)
-                                             If CompItem Is Nothing Then Exit Sub
-                                             If CompFavorites.Del(CompItem.Entry.Id) Then Hint($"已取消收藏 {CompItem.Entry.TranslatedName}！", HintType.Finish)
-                                             CompItemList.Remove(CompItem)
+                                             Items_CancelFavorites(CompItem)
                                              RefreshContent()
                                              RefreshCardTitle()
+                                             RefreshBar()
                                          End Sub
             CompItem.Buttons = {Btn_Delete}
             '---操作逻辑---
@@ -50,7 +52,8 @@
                                                         FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
                    .Additional = {CompItem.Entry, New List(Of String), String.Empty, CompModLoaderType.Any}})
                                                     End Sub
-
+            '---其它事件---
+            AddHandler CompItem.Changed, AddressOf ItemCheckStatusChanged
             CompItemList.Add(CompItem)
         Next
         Try
@@ -99,17 +102,77 @@
     End Sub
 
     Private Sub RefreshCardTitle()
-        Dim ModRes As Integer = 0
-        Dim ModpackRes As Integer = 0
         If IsSearching Then
-            ModRes = PanProjectsMod.Children.Count
-            CardProjectsMod.Title = $"搜索结果 ({ModRes})"
+            CardProjectsMod.Title = $"搜索结果 ({SearchResult.Count})"
         Else
-            ModRes = If(Loader.Output.Exists(Function(e) e.Type = CompType.Mod), PanProjectsMod.Children.Count, 0)
+            Dim ModRes As Integer = 0
+            Dim ModpackRes As Integer = 0
+            ModRes = CompItemList.Where(Function(e) e.Entry.Type.Equals(CompType.Mod)).Count()
             CardProjectsMod.Title = $"Mod ({ModRes})"
-            ModpackRes = If(Loader.Output.Exists(Function(e) e.Type = CompType.ModPack), PanProjectsModpack.Children.Count, 0)
+            ModpackRes = CompItemList.Where(Function(e) e.Entry.Type.Equals(CompType.ModPack)).Count()
             CardProjectsModpack.Title = $"整合包 ({ModpackRes})"
         End If
+    End Sub
+
+    Private BottomBarShownCount As Integer = 0
+
+    Private Sub RefreshBar()
+        Dim NewCount As Integer = SelectedItemList.Count
+        Dim Selected = NewCount > 0
+        If Selected Then LabSelect.Text = $"已选择 {NewCount} 个收藏项目" '取消所有选择时不更新数字
+        '更新显示状态
+        If AniControlEnabled = 0 Then
+            CardProjectsModpack.Margin = New Thickness(0, 0, 0, If(Selected, 95, 15))
+            If Selected Then
+                '仅在数量增加时播放出现/跳跃动画
+                If BottomBarShownCount >= NewCount Then
+                    BottomBarShownCount = NewCount
+                    Return
+                Else
+                    BottomBarShownCount = NewCount
+                End If
+                '出现/跳跃动画
+                CardSelect.Visibility = Visibility.Visible
+                AniStart({
+                    AaOpacity(CardSelect, 1 - CardSelect.Opacity, 60),
+                    AaTranslateY(CardSelect, -27 - TransSelect.Y, 120, Ease:=New AniEaseOutFluent(AniEasePower.Weak)),
+                    AaTranslateY(CardSelect, 3, 150, 120, Ease:=New AniEaseInoutFluent(AniEasePower.Weak)),
+                    AaTranslateY(CardSelect, -1, 90, 270, Ease:=New AniEaseInoutFluent(AniEasePower.Weak))
+                }, "CompFavorites Sidebar")
+            Else
+                '不重复播放隐藏动画
+                If BottomBarShownCount = 0 Then Return
+                BottomBarShownCount = 0
+                '隐藏动画
+                AniStart({
+                    AaOpacity(CardSelect, -CardSelect.Opacity, 90),
+                    AaTranslateY(CardSelect, -10 - TransSelect.Y, 90, Ease:=New AniEaseInFluent(AniEasePower.Weak)),
+                    AaCode(Sub() CardSelect.Visibility = Visibility.Collapsed, After:=True)
+                }, "CompFavorites Sidebar")
+            End If
+        Else
+            AniStop("CompFavorites Sidebar")
+            BottomBarShownCount = NewCount
+            If Selected Then
+                CardSelect.Visibility = Visibility.Visible
+                CardSelect.Opacity = 1
+                TransSelect.Y = -25
+            Else
+                CardSelect.Visibility = Visibility.Collapsed
+                CardSelect.Opacity = 0
+                TransSelect.Y = -10
+            End If
+        End If
+    End Sub
+
+#End Region
+
+    '选中状态改变
+    Private Sub ItemCheckStatusChanged(sender As Object, e As RouteEventArgs)
+        Dim SenderItem As MyMiniCompItem = sender
+        If SelectedItemList.Contains(SenderItem) Then SelectedItemList.Remove(SenderItem)
+        If SenderItem.Checked Then SelectedItemList.Add(SenderItem)
+        RefreshBar()
     End Sub
 
     '自动重试
@@ -125,6 +188,33 @@
         End Select
     End Sub
 
+    Private Sub Btn_FavoritesCancel_Clicked(sender As Object, e As RouteEventArgs) Handles Btn_FavoritesCancel.Click
+        For Each Items In SelectedItemList.Clone()
+            Items_CancelFavorites(Items)
+        Next
+        RefreshContent()
+        RefreshCardTitle()
+        RefreshBar()
+    End Sub
+
+    Private Sub Btn_SelectCancel_Clicked(sender As Object, e As RouteEventArgs) Handles Btn_SelectCancel.Click
+        SelectedItemList.Clear()
+        Items_SetSelectAll(False)
+    End Sub
+
+    Private Sub Items_SetSelectAll(TargetStatus As Boolean)
+        For Each item In CompItemList
+            item.Checked = TargetStatus
+        Next
+        SelectedItemList = CompItemList.Where(Function(e) e.Checked).ToList()
+    End Sub
+
+    Private Sub Items_CancelFavorites(Item As MyMiniCompItem)
+        CompItemList.Remove(Item)
+        If SelectedItemList.Contains(Item) Then SelectedItemList.Remove(Item)
+        If SearchResult.Contains(Item) Then SearchResult.Remove(Item)
+        CompFavorites.Del(Item.Entry.Id)
+    End Sub
 
 #Region "搜索"
 
