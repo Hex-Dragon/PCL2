@@ -825,6 +825,7 @@ Finished:
                 Finally
                     RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = "正在加载 Mod 列表")
                 End Try
+                FrmVersionMod.LoaderRun(LoaderFolderRunType.UpdateOnly)
             End If
 
             '获取 Mod 文件夹下的可用文件列表

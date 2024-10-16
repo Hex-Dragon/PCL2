@@ -30,7 +30,7 @@
     ''' 刷新 Mod 列表。
     ''' </summary>
     Public Sub ReloadModList(Optional ForceReload As Boolean = False)
-        If LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", If(ForceReload, LoaderFolderRunType.ForceRun, LoaderFolderRunType.RunOnUpdated)) Then
+        If LoaderRun(If(ForceReload, LoaderFolderRunType.ForceRun, LoaderFolderRunType.RunOnUpdated)) Then
             Log("[System] 已刷新 Mod 列表")
             Filter = FilterType.All
             PanBack.ScrollToHome()
@@ -43,9 +43,12 @@
     End Sub
     Private Sub Load_Click(sender As Object, e As MouseButtonEventArgs) Handles Load.Click
         If McModLoader.State = LoadState.Failed Then
-            LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
+            LoaderRun(LoaderFolderRunType.ForceRun)
         End If
     End Sub
+    Public Function LoaderRun(Type As LoaderFolderRunType) As Boolean
+        Return LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", Type)
+    End Function
 
 #End Region
 
@@ -329,7 +332,7 @@
     Private Sub ChangeAllSelected(Value As Boolean)
         AniControlEnabled += 1
         SelectedMods.Clear()
-        For Each Item As MyLocalModItem In GetShowingMods(True).Select(Function(m) ModItems(m.RawFileName))
+        For Each Item As MyLocalModItem In GetShowingMods(True).Where(Function(m) ModItems.ContainsKey(m.RawFileName)).Select(Function(m) ModItems(m.RawFileName))
             Item.Checked = Value
             If Value Then SelectedMods.Add(Item.Entry.RawFileName)
         Next
@@ -467,10 +470,12 @@
             '更改 Loader 中的列表
             Dim NewModEntity As New McMod(NewPath)
             NewModEntity.FromJson(ModEntity.ToJson)
-            Dim IndexOfLoader As Integer = McModLoader.Output.IndexOf(ModEntity)
-            McModLoader.Output.RemoveAt(IndexOfLoader)
-            McModLoader.Output.Insert(IndexOfLoader, NewModEntity)
-            If SearchResult IsNot Nothing Then
+            If McModLoader.Output.Contains(ModEntity) Then
+                Dim IndexOfLoader As Integer = McModLoader.Output.IndexOf(ModEntity)
+                McModLoader.Output.RemoveAt(IndexOfLoader)
+                McModLoader.Output.Insert(IndexOfLoader, NewModEntity)
+            End If
+            If SearchResult IsNot Nothing AndAlso SearchResult.Contains(ModEntity) Then '#4862
                 Dim IndexOfResult As Integer = SearchResult.IndexOf(ModEntity)
                 SearchResult.Remove(ModEntity)
                 SearchResult.Insert(IndexOfResult, NewModEntity)
@@ -489,6 +494,7 @@
             Hint("由于文件被占用，Mod 的状态切换失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
             ReloadModList(True)
         End If
+        LoaderRun(LoaderFolderRunType.UpdateOnly)
     End Sub
 
     '更新
@@ -696,6 +702,7 @@
             Log(ex, "删除 Mod 出现未知错误", LogLevel.Feedback)
             ReloadModList(True)
         End Try
+        LoaderRun(LoaderFolderRunType.UpdateOnly)
     End Sub
 
     '取消选择

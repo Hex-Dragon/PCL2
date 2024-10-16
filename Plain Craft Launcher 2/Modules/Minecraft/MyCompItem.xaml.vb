@@ -4,87 +4,14 @@
     Public Uuid As Integer = GetUuid()
 
     'Logo
-    Private _Logo As String = ""
     Public Property Logo As String
         Get
-            Return _Logo
+            Return PathLogo.Source
         End Get
         Set(value As String)
-            If _Logo = value OrElse value Is Nothing Then Exit Property
-            _Logo = value
-            Dim FileAddress = PathTemp & "CompLogo\" & GetHash(_Logo) & ".png"
-            Try
-                If _Logo.StartsWithF("http", True) Then
-                    '网络图片
-                    If File.Exists(FileAddress) Then
-                        PathLogo.Source = New MyBitmap(FileAddress)
-                    Else
-                        PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
-                        RunInNewThread(Sub() LogoLoader(FileAddress), "Comp Logo Loader " & Uuid & "#", ThreadPriority.BelowNormal)
-                    End If
-                Else
-                    '位图
-                    PathLogo.Source = New MyBitmap(_Logo)
-                End If
-            Catch ex As IOException
-                Log(ex, "加载资源工程图标时读取失败（" & FileAddress & "）")
-            Catch ex As ArgumentException
-                '考虑缓存的图片本身可能有误
-                Log(ex, "可视化资源工程图标失败（" & FileAddress & "）")
-                Try
-                    File.Delete(FileAddress)
-                    Log("[Comp] 已清理损坏的资源工程图标：" & FileAddress)
-                Catch exx As Exception
-                    Log(exx, "清理损坏的资源工程图标缓存失败（" & FileAddress & "）", LogLevel.Hint)
-                End Try
-            Catch ex As Exception
-                Log(ex, "加载资源工程图标失败（" & value & "）")
-            End Try
+            PathLogo.Source = value
         End Set
     End Property
-    '后台加载 Logo
-    Private Sub LogoLoader(LocalFileAddress As String)
-        Dim Retried As Boolean = False
-        Dim DownloadEnd As String = GetUuid()
-RetryStart:
-        Try
-            'CurseForge 图片使用缩略图
-            Dim Url As String = _Logo
-            If Url.Contains("/256/256/") AndAlso GetPixelSize(1) <= 1.25 AndAlso Not Retried Then
-                Url = Url.Replace("/256/256/", "/64/64/") '#3075：部分 Mod 不存在 64x64 图标，所以重试时不再缩小
-            End If
-            '下载图片
-            NetDownload(Url, LocalFileAddress & DownloadEnd, True)
-            Dim LoadError As Exception = Nothing
-            RunInUiWait(
-            Sub()
-                Try
-                    '在地址更换时取消加载
-                    If LocalFileAddress <> $"{PathTemp}CompLogo\{GetHash(_Logo)}.png" Then Exit Sub
-                    '在完成正常加载后才保存缓存图片
-                    PathLogo.Source = New MyBitmap(LocalFileAddress & DownloadEnd)
-                Catch ex As Exception
-                    Log(ex, $"读取资源工程图标失败（{LocalFileAddress}）")
-                    File.Delete(LocalFileAddress & DownloadEnd)
-                    LoadError = ex
-                End Try
-            End Sub)
-            If LoadError IsNot Nothing Then Throw LoadError
-            If File.Exists(LocalFileAddress) Then
-                File.Delete(LocalFileAddress & DownloadEnd)
-            Else
-                FileIO.FileSystem.MoveFile(LocalFileAddress & DownloadEnd, LocalFileAddress)
-            End If
-        Catch ex As Exception
-            If Not Retried Then
-                Retried = True
-                GoTo RetryStart
-            Else
-                Log(ex, $"下载资源工程图标失败（{_Logo}）")
-                RunInUi(Sub() PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png"))
-            End If
-        End Try
-    End Sub
 
     '标题
     Public Property Title As String

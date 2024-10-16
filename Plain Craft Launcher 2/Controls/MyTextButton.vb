@@ -90,21 +90,21 @@
         Get
             Return GetValue(EventTypeProperty)
         End Get
-
         Set(value As String)
             SetValue(EventTypeProperty, value)
         End Set
     End Property
-    Public Shared ReadOnly EventTypeProperty As DependencyProperty = DependencyProperty.Register("EventType", GetType(String), GetType(MyTextButton), New PropertyMetadata(Nothing))
+    Public Shared ReadOnly EventTypeProperty As DependencyProperty = DependencyProperty.Register(
+        "EventType", GetType(String), GetType(MyTextButton), New PropertyMetadata(Nothing))
     Public Property EventData As String
         Get
             Return GetValue(EventDataProperty)
         End Get
-
         Set(value As String)
             SetValue(EventDataProperty, value)
         End Set
     End Property
-    Public Shared ReadOnly EventDataProperty As DependencyProperty = DependencyProperty.Register("EventData", GetType(String), GetType(MyTextButton), New PropertyMetadata(Nothing))
+    Public Shared ReadOnly EventDataProperty As DependencyProperty = DependencyProperty.Register(
+        "EventData", GetType(String), GetType(MyTextButton), New PropertyMetadata(Nothing))
 
 End Class

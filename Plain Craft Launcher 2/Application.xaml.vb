@@ -102,7 +102,7 @@ Public Class Application
             Log($"[Start] 程序版本：{VersionDisplayName} ({VersionCode}{If(CommitHash = "", "", $"，#{CommitHash}")})")
             Log($"[Start] 识别码：{UniqueAddress}{If(ThemeCheckOne(9), "，已解锁反馈主题", "")}")
             Log($"[Start] 程序路径：{PathWithName}")
-            Log($"[Start] 系统编码：{Encoding.Default} ({Encoding.Default.CodePage}, GBK={IsGBKEncoding})")
+            Log($"[Start] 系统编码：{Encoding.Default.HeaderName} ({Encoding.Default.CodePage}, GBK={IsGBKEncoding})")
             Log($"[Start] 管理员权限：{IsAdmin()}")
             '检测异常环境
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
@@ -210,8 +210,8 @@ Public Class Application
                 If AssemblyImazenWebp Is Nothing Then
                     Log("[Start] 加载 DLL：Imazen.WebP")
                     AssemblyImazenWebp = Assembly.Load(GetResources("Imazen_WebP"))
-                    SetDllDirectory(GetPureAsciiDir())
-                    File.WriteAllBytes(GetPureAsciiDir() & "\libwebp.dll", GetResources("libwebp64"))
+                    SetDllDirectory(PathPure.TrimEnd("\"))
+                    WriteFile(PathPure & "libwebp.dll", GetResources("libwebp64"))
                 End If
                 Return AssemblyImazenWebp
             End SyncLock

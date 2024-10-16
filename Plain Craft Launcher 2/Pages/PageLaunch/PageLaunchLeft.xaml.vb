@@ -296,7 +296,7 @@
             Case 0 '正版或离线
 UnknownType:
                 If RadioLoginType5.Checked Then
-                    If Setup.Get("CacheMsAccess") = "" Then
+                    If Setup.Get("CacheMsV2Access") = "" Then
                         Type = PageType.Ms
                     Else
                         Type = PageType.MsSkin
@@ -311,7 +311,7 @@ UnknownType:
                 RadioLoginType5.Visibility = Visibility.Visible
                 RadioLoginType0.Visibility = Visibility.Visible
             Case 1 '仅正版
-                If Setup.Get("CacheMsAccess") = "" Then
+                If Setup.Get("CacheMsV2Access") = "" Then
                     Type = PageType.Ms
                 Else
                     Type = PageType.MsSkin
@@ -375,7 +375,7 @@ UnknownType:
     Public Shared SkinMs As New LoaderTask(Of EqualableList(Of String), String)("Loader Skin Ms", AddressOf SkinMsLoad, AddressOf SkinMsInput, ThreadPriority.AboveNormal)
     Private Shared Function SkinMsInput() As EqualableList(Of String)
         '获取名称
-        Return New EqualableList(Of String) From {Setup.Get("CacheMsName"), Setup.Get("CacheMsUuid")}
+        Return New EqualableList(Of String) From {Setup.Get("CacheMsV2Name"), Setup.Get("CacheMsV2Uuid")}
     End Function
     Private Shared Sub SkinMsLoad(Data As LoaderTask(Of EqualableList(Of String), String))
         '清空已有皮肤
