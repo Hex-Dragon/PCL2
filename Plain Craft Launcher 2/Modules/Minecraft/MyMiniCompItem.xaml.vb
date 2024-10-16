@@ -111,6 +111,9 @@ Public Class MyMiniCompItem
         IsMouseDown = False
         If ButtonStack IsNot Nothing Then ButtonStack.IsHitTestVisible = True
     End Sub
+    Private Sub Button_MouseClick(sender As Object, e As MouseButtonEventArgs) Handles Me.Click
+        Checked = Not Checked
+    End Sub
 
     '勾选状态
     Public Event Check(sender As Object, e As RouteEventArgs)

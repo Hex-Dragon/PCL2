@@ -19,8 +19,26 @@
         Task.Output = CompFavorites.GetAllCompProjects(Task.Input)
     End Sub
 
+    Private CompItemList As New List(Of MyMiniCompItem)
+
     '结果 UI 化
     Private Sub Load_OnFinish()
+        CompItemList.Clear()
+        For Each item In Loader.Output
+            Dim CompItem = item.ToMiniCompItem()
+            '删除按钮
+            Dim Btn_Delete As New MyIconButton
+            Btn_Delete.Logo = Logo.IconButtonDelete
+            AddHandler Btn_Delete.Click, Sub()
+                                             If CompItem Is Nothing Then Exit Sub
+                                             If CompFavorites.Del(item.Id) Then Hint($"已取消收藏 {item.TranslatedName}！", HintType.Finish)
+                                             CompItemList.Remove(CompItem)
+                                             RefreshContent()
+                                             RefreshCardTitle()
+                                         End Sub
+            CompItem.Buttons = {Btn_Delete}
+            CompItemList.Add(CompItem)
+        Next
         Try
             If Loader.Input.Any() Then '有收藏
                 PanSearchBox.Visibility = Visibility.Visible
@@ -45,24 +63,23 @@
     Private Sub RefreshContent()
         PanProjectsMod.Children.Clear()
         PanProjectsModpack.Children.Clear()
-        Dim DataSource As List(Of CompProject) = If(IsSearching, SearchResult, Loader.Output)
-        For Each item As CompProject In DataSource
-            Dim EleItem As MyMiniCompItem = item.ToMiniCompItem()
+        Dim DataSource As List(Of MyMiniCompItem) = If(IsSearching, SearchResult, CompItemList)
+        For Each item As MyMiniCompItem In DataSource
             If IsSearching Then
                 CardProjectsMod.Visibility = Visibility.Visible
                 CardProjectsModpack.Visibility = Visibility.Collapsed
-                PanProjectsMod.Children.Add(EleItem)
+                PanProjectsMod.Children.Add(item)
                 Continue For
             Else
                 CardProjectsModpack.Visibility = Visibility.Visible
                 CardProjectsMod.Visibility = Visibility.Visible
             End If
-            If item.Type = CompType.Mod Then
-                PanProjectsMod.Children.Add(EleItem)
-            ElseIf item.Type = CompType.ModPack Then
-                PanProjectsModpack.Children.Add(EleItem)
+            If item.Entry.Type = CompType.Mod Then
+                PanProjectsMod.Children.Add(item)
+            ElseIf item.Entry.Type = CompType.ModPack Then
+                PanProjectsModpack.Children.Add(item)
             Else
-                Log("[Favorites] 未知工程类型：" & item.Type)
+                Log("[Favorites] 未知工程类型：" & item.Entry.Type)
             End If
         Next
     End Sub
@@ -103,20 +120,20 @@
         End Get
     End Property
 
-    Private SearchResult As List(Of CompProject)
+    Private SearchResult As List(Of MyMiniCompItem)
     Public Sub SearchRun() Handles PanSearchBox.TextChanged
         If IsSearching Then
             '构造请求
-            Dim QueryList As New List(Of SearchEntry(Of CompProject))
-            For Each Entry As CompProject In Loader.Output
+            Dim QueryList As New List(Of SearchEntry(Of MyMiniCompItem))
+            For Each Entry As MyMiniCompItem In CompItemList
                 Dim SearchSource As New List(Of KeyValuePair(Of String, Double))
-                SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.RawName, 1))
+                SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Entry.RawName, 1))
                 If Entry.Description IsNot Nothing AndAlso Entry.Description <> "" Then
                     SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Description, 0.4))
                 End If
-                If Entry.TranslatedName <> Entry.RawName Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.TranslatedName, 1))
-                SearchSource.Add(New KeyValuePair(Of String, Double)(String.Join("", Entry.Tags), 0.2))
-                QueryList.Add(New SearchEntry(Of CompProject) With {.Item = Entry, .SearchSource = SearchSource})
+                If Entry.Entry.TranslatedName <> Entry.Entry.RawName Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Entry.TranslatedName, 1))
+                SearchSource.Add(New KeyValuePair(Of String, Double)(String.Join("", Entry.Entry.Tags), 0.2))
+                QueryList.Add(New SearchEntry(Of MyMiniCompItem) With {.Item = Entry, .SearchSource = SearchSource})
             Next
             '进行搜索
             SearchResult = Search(QueryList, PanSearchBox.Text, MaxBlurCount:=6, MinBlurSimilarity:=0.35).Select(Function(r) r.Item).ToList

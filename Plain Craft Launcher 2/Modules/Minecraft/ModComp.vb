@@ -543,10 +543,10 @@
         End Function
         Public Function ToMiniCompItem() As MyMiniCompItem
             Dim Result As New MyMiniCompItem()
-            Result.Title = Me.TranslatedName
-            Result.Description = Me.Description
-            Result.Logo = Me.LogoUrl
-            Result.Tag = Me.Tags
+            Result.Title = TranslatedName
+            Result.Description = Description.Replace(vbCr, "").Replace(vbLf, "")
+            Result.Logo = LogoUrl
+            Result.Tags = Tags
             Result.Entry = Me
             Return Result
         End Function
