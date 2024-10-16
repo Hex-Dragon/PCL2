@@ -92,7 +92,18 @@
                         MyMsgBox(GetLang("LangModEventDialogDownloadIncorrectContent"), GetLang("LangModEventDialogEventFailTitle"))
                         Exit Sub
                     End If
-                    PageOtherTest.StartCustomDownload(Data(0), GetFileNameFromPath(Data(0)))
+                    Try
+                        Select Case Data.Length
+                            Case 1
+                                PageOtherTest.StartCustomDownload(Data(0), GetFileNameFromPath(Data(0)))
+                            Case 2
+                                PageOtherTest.StartCustomDownload(Data(0), Data(1))
+                            Case Else
+                                PageOtherTest.StartCustomDownload(Data(0), Data(1), Data(2))
+                        End Select
+                    Catch
+                        PageOtherTest.StartCustomDownload(Data(0), "未知")
+                    End Try
 
                 Case Else
                     MyMsgBox(GetLang("LangModEventDialogUnknownEventContent", Type), GetLang("LangModEventDialogEventFailTitle"))

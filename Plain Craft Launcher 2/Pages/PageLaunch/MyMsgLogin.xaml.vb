@@ -123,7 +123,7 @@
                     Finished(New Exception("$" & GetLang("LangMyMsgLoginExceptionTimeout")))
                     Return
                 ElseIf ex.Message.Contains("AADSTS70000") Then '可能不能判 “invalid_grant”，见 #269
-                    Finished(New RetryException)
+                    Finished(New RestartException)
                     Return
                 ElseIf ex.Message.Contains("authorization_pending") Then
                     Thread.Sleep(2000)

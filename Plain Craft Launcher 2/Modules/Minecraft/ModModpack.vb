@@ -342,8 +342,8 @@ Retry:
             End If
             '删除原始整合包文件
             For Each Target As String In {VersionFolder & "原始整合包.zip", VersionFolder & "原始整合包.mrpack"}
-                If Not Setup.Get("ToolDownloadKeepModpack") AndAlso File.Exists(Target) Then
-                    Log("[ModPack] 根据设置要求删除原始整合包文件：" & Target)
+                If File.Exists(Target) Then
+                    Log("[ModPack] 删除原始整合包文件：" & Target)
                     File.Delete(Target)
                 End If
             Next
@@ -491,8 +491,8 @@ Retry:
             End If
             '删除原始整合包文件
             For Each Target As String In {VersionFolder & "原始整合包.zip", VersionFolder & "原始整合包.mrpack"}
-                If Not Setup.Get("ToolDownloadKeepModpack") AndAlso File.Exists(Target) Then
-                    Log("[ModPack] 根据设置要求删除原始整合包文件：" & Target)
+                If File.Exists(Target) Then
+                    Log("[ModPack] 删除原始整合包文件：" & Target)
                     File.Delete(Target)
                 End If
             Next

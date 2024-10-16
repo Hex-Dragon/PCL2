@@ -939,7 +939,6 @@ RequestFinished:
                 Dim StartPosition As Long, StartSource As NetSource = Nothing
                 Dim Th As Thread, ThreadInfo As NetThread
                 SyncLock LockChain
-
                     '获取线程起点与下载源
                     '不分割
                     If IsNoSplit Then GoTo Capture
@@ -1049,6 +1048,15 @@ StartThread:
                     If ModeDebug AndAlso HttpResponse.ResponseUri.OriginalString <> Info.Source.Url Then
                         Log($"[Download] {LocalName} {Info.Uuid}#：重定向至 {HttpResponse.ResponseUri.OriginalString}")
                     End If
+                    ''从响应头获取文件名
+                    'If Info.IsFirstThread Then
+                    '    Dim FileName As String = GetFileNameFromResponse(HttpResponse)
+                    '    If ModeDebug Then Log($"[Download] {LocalName} {Info.Uuid}#：远程文件名：{If(FileName, "未提供")}")
+                    '    If FileName IsNot Nothing AndAlso LocalName = "待定" Then
+                    '        LocalName = FileName
+                    '        Log($"[Download] {LocalName} {Info.Uuid}#：从响应头获取到文件名")
+                    '    End If
+                    'End If
                     '文件大小校验
                     ContentLength = HttpResponse.ContentLength
                     If ContentLength = -1 Then
@@ -1133,7 +1141,7 @@ NotSupportRange:
                                 If NetTaskSpeedLimitHigh > 0 Then NetTaskSpeedLimitLeft -= RealDataCount
                             End SyncLock
                             Dim DeltaTime = GetTimeTick() - Info.LastReceiveTime
-                            If DeltaTime > 1000000 Then DeltaTime = 0 '时间刻反转导致出现极大值
+                            If DeltaTime > 1000000 Then DeltaTime = 1 '时间刻反转导致出现极大值
                             If RealDataCount > 0 Then
                                 '有数据
                                 If Info.DownloadDone = 0 Then
@@ -1174,7 +1182,7 @@ NotSupportRange:
                                     ResultStream.Write(HttpData, 0, RealDataCount)
                                 End If
                                 '检查速度是否过慢
-                                If DeltaTime > 1000 AndAlso DeltaTime > RealDataCount Then '数据包间隔大于 1s，且速度小于 1K/s
+                                If DeltaTime > 1500 AndAlso DeltaTime > RealDataCount Then '数据包间隔大于 1.5s，且速度小于 1.5K/s
                                     Throw New TimeoutException("由于速度过慢断开链接，下载 " & RealDataCount & " B，消耗 " & DeltaTime & " ms。")
                                 End If
                                 Info.LastReceiveTime = GetTimeTick()
@@ -1286,6 +1294,17 @@ Wrong:
                 If ((FileSize >= 0 AndAlso DownloadDone >= FileSize) OrElse (FileSize = -1 AndAlso DownloadDone > 0)) AndAlso State < NetState.Merge Then Merge()
             End Try
         End Sub
+        ''' <summary>
+        ''' 从 HTTP 响应头中获取文件名。
+        ''' 如果没有，返回 Nothing。
+        ''' </summary>
+        Private Function GetFileNameFromResponse(response As HttpWebResponse) As String
+            Dim header As String = response.Headers("Content-Disposition")
+            If String.IsNullOrEmpty(header) Then Return Nothing
+            'attachment; filename="filename.ext"
+            If Not header.Contains("filename=") Then Return Nothing
+            Return header.After("filename=").Trim(""""c, " "c).Before(";")
+        End Function
 
         '下载文件的最终收束事件
         ''' <summary>

@@ -12,7 +12,7 @@
     ''' 刷新页面显示的所有信息。
     ''' </summary>
     Public Sub Reload(KeepInput As Boolean)
-        TextName.Text = Setup.Get("CacheMsName")
+        TextName.Text = Setup.Get("CacheMsV2Name")
         '皮肤在 Loaded 加载
     End Sub
     ''' <summary>
@@ -20,9 +20,9 @@
     ''' </summary>
     Public Shared Function GetLoginData() As McLoginMs
         If McLoginMsLoader.State = LoadState.Finished Then
-            Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsOAuthRefresh"), .UserName = Setup.Get("CacheMsName"), .AccessToken = Setup.Get("CacheMsAccess"), .Uuid = Setup.Get("CacheMsUuid"), .ProfileJson = Setup.Get("CacheMsProfileJson")}
+            Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsV2OAuthRefresh"), .UserName = Setup.Get("CacheMsV2Name"), .AccessToken = Setup.Get("CacheMsV2Access"), .Uuid = Setup.Get("CacheMsV2Uuid"), .ProfileJson = Setup.Get("CacheMsV2ProfileJson")}
         Else
-            Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsOAuthRefresh"), .UserName = Setup.Get("CacheMsName")}
+            Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsV2OAuthRefresh"), .UserName = Setup.Get("CacheMsV2Name")}
         End If
     End Function
 
@@ -50,11 +50,11 @@
 
     '退出登录
     Private Sub BtnExit_Click() Handles BtnExit.Click
-        Setup.Set("CacheMsOAuthRefresh", "")
-        Setup.Set("CacheMsAccess", "")
-        Setup.Set("CacheMsProfileJson", "")
-        Setup.Set("CacheMsUuid", "")
-        Setup.Set("CacheMsName", "")
+        Setup.Set("CacheMsV2OAuthRefresh", "")
+        Setup.Set("CacheMsV2Access", "")
+        Setup.Set("CacheMsV2ProfileJson", "")
+        Setup.Set("CacheMsV2Uuid", "")
+        Setup.Set("CacheMsV2Name", "")
         McLoginMsLoader.Abort()
         FrmLaunchLeft.RefreshPage(False, True)
     End Sub
@@ -90,8 +90,8 @@
             Try
 Retry:
                 If McLoginMsLoader.State = LoadState.Loading Then McLoginMsLoader.WaitForExit() '等待登录结束
-                Dim AccessToken As String = Setup.Get("CacheMsAccess")
-                Dim Uuid As String = Setup.Get("CacheMsUuid")
+                Dim AccessToken As String = Setup.Get("CacheMsV2Access")
+                Dim Uuid As String = Setup.Get("CacheMsV2Uuid")
 
                 Dim Client As New Net.Http.HttpClient With {.Timeout = New TimeSpan(0, 0, 30)}
                 Client.DefaultRequestHeaders.Authorization = New Net.Http.Headers.AuthenticationHeaderValue("Bearer", AccessToken)

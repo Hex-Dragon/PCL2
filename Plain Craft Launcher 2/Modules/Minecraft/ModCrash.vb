@@ -525,6 +525,7 @@ Done:
             If LogMc.Contains("Unsupported class file major version") Then AppendReason(CrashReason.Java版本不兼容)
             If LogMc.Contains("com.electronwill.nightconfig.core.io.ParsingException: Not enough data available") Then AppendReason(CrashReason.NightConfig的Bug)
             If LogMc.Contains("Cannot find launch target fmlclient, unable to launch") Then AppendReason(CrashReason.Forge安装不完整)
+            If LogMc.Contains("Invalid paths argument, contained no existing paths") AndAlso LogMc.Contains("libraries\net\minecraftforge\fmlcore") Then AppendReason(CrashReason.Forge安装不完整)
             If LogMc.Contains("Invalid module name: '' is not a Java identifier") Then AppendReason(CrashReason.Mod名称包含特殊字符)
             If LogMc.Contains("has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to") Then AppendReason(CrashReason.Mod需要Java11)
             If LogMc.Contains("java.lang.RuntimeException: java.lang.NoSuchMethodException: no such method: sun.misc.Unsafe.defineAnonymousClass(Class,byte[],Object[])Class/invokeVirtual") Then AppendReason(CrashReason.Mod需要Java11)
@@ -623,8 +624,11 @@ Done:
         '崩溃报告分析
         If LogCrash IsNot Nothing Then
             If LogCrash.Contains("Suspected Mod") Then
-                Dim Suspects = RegexSearch(LogCrash.Between("Suspected Mod", "Stacktrace"), "(?<=\n\t[^(\t]+\()[^)\n]+")
-                If Suspects.Any Then AppendReason(CrashReason.怀疑Mod导致游戏崩溃, TryAnalyzeModName(Suspects))
+                Dim SuspectsRaw As String = LogCrash.Between("Suspected Mod", "Stacktrace")
+                If Not SuspectsRaw.StartsWithF("s: None") Then 'Suspected Mods: None
+                    Dim Suspects = RegexSearch(SuspectsRaw, "(?<=\n\t[^(\t]+\()[^)\n]+")
+                    If Suspects.Any Then AppendReason(CrashReason.怀疑Mod导致游戏崩溃, TryAnalyzeModName(Suspects))
+                End If
             End If
         End If
 
@@ -744,7 +748,7 @@ NextStack:
             '[Fabric] 获取所有包含 Mod 信息的行
             Dim ModNameLines As New List(Of String)
             For Each Line In Details.Split(vbLf)
-                If Line.ContainsF(".jar", True) OrElse
+                If (Line.ContainsF(".jar", True) AndAlso Line.Length - Line.Replace(".jar", "").Length = 4) OrElse '只有一个 .jar
                    (IsFabricDetail AndAlso Line.StartsWithF(vbTab & vbTab) AndAlso Not RegexCheck(Line, "\t\tfabric[\w-]*: Fabric")) Then ModNameLines.Add(Line)
             Next
             Log("[Crash] 崩溃报告中找到 " & ModNameLines.Count & " 个可能的 Mod 项目行")
@@ -886,6 +890,7 @@ NextStack:
                             WriteFile(TempFolder & "Report\" & FileName,
                                       SecretFilter(ReadFile(OutputFile, FileEncoding), If(FileName = "启动脚本.bat", "F", "*")),
                                       Encoding:=FileEncoding)
+                            Log($"[Crash] 导出文件：{FileName}，编码：{FileEncoding.HeaderName}")
                         End If
                     Next
                     '导出报告

@@ -114,6 +114,14 @@ Download:
                         Log("[Page] 主页预设：更新日志")
                         Url = "https://updatehomepage.pages.dev/UpdateHomepage.xaml"
                         GoTo Download
+                    Case 9
+                        Log("[Page] 主页预设：PCL 新功能说明书")
+                        Url = "https://gitee.com/wforstbreeze/whats-new-pcl/raw/main/Custom.xaml"
+                        GoTo Download
+                    Case 10
+                        Log("[Page] 主页预设：OpenMCIM Dashboard")
+                        Url = "https://files.mcimirror.top/PCL"
+                        GoTo Download
                 End Select
         End Select
         RunInUi(Sub() LoadContent(Content))

@@ -12,13 +12,13 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.8" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.8." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.8.9" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.8.9." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
 #If BETA Then
     Public Const VersionCode As Integer = 340 'Release
 #Else
-    Public Const VersionCode As Integer = 339 'Snapshot
+    Public Const VersionCode As Integer = 341 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -175,6 +175,10 @@ Public Module ModBase
         ''' 图标按钮，离线，0.85x
         ''' </summary>
         Public Const IconButtonOffline As String = "M533.293176 788.841412a60.235294 60.235294 0 1 1 85.202824 85.202823l-42.616471 42.586353c-129.355294 129.385412-339.124706 129.385412-468.510117 0-129.385412-129.385412-129.385412-339.124706 0-468.510117l42.586353-42.616471a60.235294 60.235294 0 1 1 85.202823 85.202824l-42.61647 42.586352a210.823529 210.823529 0 1 0 298.164706 298.164706l42.586352-42.61647z m255.548236-255.548236l42.61647-42.586352a210.823529 210.823529 0 1 0-298.164706-298.164706l-42.586352 42.61647a60.235294 60.235294 0 1 1-85.202824-85.202823l42.616471-42.586353c129.355294-129.385412 339.124706-129.385412 468.510117 0 129.385412 129.385412 129.385412 339.124706 0 468.510117l-42.586353 42.616471a60.235294 60.235294 0 1 1-85.202823-85.202824zM192.542118 192.542118a60.235294 60.235294 0 0 1 85.202823 0l553.712941 553.712941a60.235294 60.235294 0 0 1-85.202823 85.202823L192.542118 277.744941a60.235294 60.235294 0 0 1 0-85.202823z"
+        ''' <summary>
+        ''' 图标，服务端，1x
+        ''' </summary>
+        Public Const IconButtonServer As String = "M224 160a64 64 0 0 0-64 64v576a64 64 0 0 0 64 64h576a64 64 0 0 0 64-64V224a64 64 0 0 0-64-64H224z m0 384h576v256H224v-256z m192 96v64h320v-64H416z m-128 0v64h64v-64H288zM224 224h576v256H224V224z m192 96v64h320v-64H416z m-128 0v64h64v-64H288z"
         ''' <summary>
         ''' 图标，音符，1x
         ''' </summary>
@@ -1345,6 +1349,19 @@ RetryDir:
 
         '常见错误（记得同时修改下面的）
         Dim CommonReason As String = GetCommonExceptionReason(InnerEx, Desc)
+        Dim CommonReason As String = Nothing
+        If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is BadImageFormatException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
+            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
+        ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
+            CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
+        ElseIf TypeOf InnerEx Is OutOfMemoryException Then
+            CommonReason = "你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。"
+        ElseIf TypeOf InnerEx Is Runtime.InteropServices.COMException Then
+            CommonReason = "由于操作系统或显卡存在问题，导致出现错误。请尝试重启 PCL。"
+        ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
+                "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
+            CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
+        End If
 
         '获取错误类型
         Dim TypeDesc As String = If(InnerEx.GetType.FullName = "System.Exception", "", vbCrLf & "错误类型：" & InnerEx.GetType.FullName)
@@ -1353,7 +1370,7 @@ RetryDir:
         If CommonReason Is Nothing Then
             Return Desc & Stack & TypeDesc
         Else
-            Dim Result As String = DescList.First & vbCrLf & CommonReason & vbCrLf & "————————————" & vbCrLf
+            Dim Result As String = CommonReason & vbCrLf & DescList.First & vbCrLf & "————————————" & vbCrLf
             DescList(0) = "详细错误信息："
             Return Result & Join(DescList, vbCrLf & "→ ") & Stack & TypeDesc
         End If
@@ -1379,12 +1396,24 @@ RetryDir:
         DescList = DescList.Distinct.ToList
         Dim Desc As String = Join(DescList, vbCrLf & "→ ")
 
-        '常见错误
-        Dim CommonReason As String = GetCommonExceptionReason(InnerEx, Desc)
+        '常见错误（记得同时修改上面的）
+        Dim CommonReason As String = Nothing
+        If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is BadImageFormatException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
+            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
+        ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
+            CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
+        ElseIf TypeOf InnerEx Is OutOfMemoryException Then
+            CommonReason = "你的电脑运行内存不足，导致 PCL 无法继续运行。请在关闭一部分不需要的程序后再试。"
+        ElseIf TypeOf InnerEx Is Runtime.InteropServices.COMException Then
+            CommonReason = "由于操作系统或显卡存在问题，导致出现错误。请尝试重启 PCL。"
+        ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
+                "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
+            CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
+        End If
 
         '构造输出信息
         If CommonReason IsNot Nothing Then
-            Return DescList.First & "：" & CommonReason
+            Return CommonReason & "详细错误：" & DescList.First
         Else
             DescList.Reverse() '让最深层错误在最左边
             Return Join(DescList, " → ")
@@ -1717,16 +1746,6 @@ RetryDir:
     Public Function RegexReplaceEach(Input As String, Replacement As MatchEvaluator, Regex As String, Optional options As RegexOptions = RegularExpressions.RegexOptions.None) As String
         Return RegularExpressions.Regex.Replace(Input, Regex, Replacement, options)
     End Function
-    ''' <summary>
-    ''' 检查传入字符串会不会引发 Issue #4505
-    ''' </summary>
-    Public Function Ntfs83NameCheck(name As String) As Boolean
-        Dim regex As New Regex("(.*)~(\d*)")
-        Dim namePart As Byte() = Encoding.UTF8.GetBytes(regex.Match(name).Groups(1).Value)
-        Dim numPart As Integer = regex.Match(name).Groups(2).Value.Length
-
-        Return namePart.Length >= 6 AndAlso numPart = 1
-    End Function
 
 #End Region
 
@@ -1818,10 +1837,10 @@ RetryDir:
         '进行搜索，获取相似信息
         For Each Entry In Entries
             Entry.Similarity = SearchSimilarityWeighted(Entry.SearchSource, Query)
-            Entry.AbsoluteRight = False
-            For Each Pair In Entry.SearchSource
-                If Pair.Key.Replace(" ", "").ContainsF(Query.Replace(" ", ""), True) Then Entry.AbsoluteRight = True
-            Next
+            Entry.AbsoluteRight =
+                Query.Split(" ").All( '对于按空格分割的每一段
+                Function(QueryPart) Entry.SearchSource.Any( '若与任意一个搜索源完全匹配，则标记为完全匹配项
+                Function(Source) Source.Key.Replace(" ", "").ContainsF(QueryPart, True)))
         Next
         '按照相似度进行排序
         Entries = Sort(Entries,
@@ -1851,9 +1870,25 @@ RetryDir:
 #Region "系统"
 
     ''' <summary>
+    ''' 可用于临时存放文件的，不含任何特殊字符的文件夹路径，以“\”结尾。
+    ''' </summary>
+    Public PathPure As String = GetPureASCIIDir()
+    Private Function GetPureASCIIDir() As String
+        If (Path & "PCL").IsASCII() Then
+            Return Path & "PCL\"
+        ElseIf PathAppdata.IsASCII() Then
+            Return PathAppdata
+        ElseIf PathTemp.IsASCII() Then
+            Return PathTemp
+        Else
+            Return OsDrive & "ProgramData\PCL\"
+        End If
+    End Function
+
+    ''' <summary>
     ''' 指示接取到这个异常的函数进行重试。
     ''' </summary>
-    Public Class RetryException
+    Public Class RestartException
         Inherits Exception
     End Class
 
