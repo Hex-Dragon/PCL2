@@ -47,7 +47,7 @@
         PanProjectsModpack.Children.Clear()
         Dim DataSource As List(Of CompProject) = If(IsSearching, SearchResult, Loader.Output)
         For Each item As CompProject In DataSource
-            Dim EleItem As MyCompItem = item.ToCompItem(True, True)
+            Dim EleItem As MyMiniCompItem = item.ToMiniCompItem()
             If IsSearching Then
                 CardProjectsMod.Visibility = Visibility.Visible
                 CardProjectsModpack.Visibility = Visibility.Collapsed

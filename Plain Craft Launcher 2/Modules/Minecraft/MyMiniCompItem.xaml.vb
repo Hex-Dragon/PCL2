@@ -6,88 +6,14 @@ Public Class MyMiniCompItem
     Public Uuid As Integer = GetUuid()
 
     'Logo
-    Private _Logo As String = ""
     Public Property Logo As String
         Get
-            Return _Logo
+            Return PathLogo.Source
         End Get
         Set(value As String)
-            If _Logo = value OrElse value Is Nothing Then Exit Property
-            _Logo = value
-            If ModeDebug AndAlso Not _Logo = PathImage & "Icons/NoIcon.png" Then Log($"[LocalModItem] Mod {Title} 的图标：{value}")
-            Dim FileAddress = PathTemp & "CompLogo\" & GetHash(_Logo) & ".png"
-            Try
-                If _Logo.StartsWithF("http", True) Then
-                    '网络图片
-                    If File.Exists(FileAddress) Then
-                        PathLogo.Source = New MyBitmap(FileAddress)
-                    Else
-                        PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
-                        RunInNewThread(Sub() LogoLoader(FileAddress), "Comp Logo Loader " & Uuid & "#", ThreadPriority.BelowNormal)
-                    End If
-                Else
-                    '位图
-                    PathLogo.Source = New MyBitmap(_Logo)
-                End If
-            Catch ex As IOException
-                Log(ex, "加载本地 Mod 图标时读取失败（" & FileAddress & "）")
-            Catch ex As ArgumentException
-                '考虑缓存的图片本身可能有误
-                Log(ex, "可视化本地 Mod 图标失败（" & FileAddress & "）")
-                Try
-                    File.Delete(FileAddress)
-                    Log("[LocalModItem] 已清理损坏的本地 Mod 图标：" & FileAddress)
-                Catch exx As Exception
-                    Log(exx, "清理损坏的本地 Mod 图标缓存失败（" & FileAddress & "）", LogLevel.Hint)
-                End Try
-            Catch ex As Exception
-                Log(ex, "加载本地 Mod 图标失败（" & value & "）")
-            End Try
+            PathLogo.Source = value
         End Set
     End Property
-    '后台加载 Logo
-    Private Sub LogoLoader(LocalFileAddress As String)
-        Dim Retried As Boolean = False
-        Dim DownloadEnd As String = GetUuid()
-RetryStart:
-        Try
-            'CurseForge 图片使用缩略图
-            Dim Url As String = _Logo
-            If Url.Contains("/256/256/") AndAlso GetPixelSize(1) <= 1.25 AndAlso Not Retried Then '#3075：部分 Mod 不存在 64x64 图标，所以重试时不再缩小
-                Url = Url.Replace("/256/256/", "/64/64/")
-            End If
-            '下载图片
-            NetDownload(Url, LocalFileAddress & DownloadEnd, True)
-            Dim LoadError As Exception = Nothing
-            RunInUiWait(
-            Sub()
-                Try
-                    '在地址更换时取消加载
-                    If LocalFileAddress <> $"{PathTemp}CompLogo\{GetHash(_Logo)}.png" Then Exit Sub
-                    '在完成正常加载后才保存缓存图片
-                    PathLogo.Source = New MyBitmap(LocalFileAddress & DownloadEnd)
-                Catch ex As Exception
-                    Log(ex, "读取本地 Mod 图标失败（" & LocalFileAddress & "）")
-                    File.Delete(LocalFileAddress & DownloadEnd)
-                    LoadError = ex
-                End Try
-            End Sub)
-            If LoadError IsNot Nothing Then Throw LoadError
-            If File.Exists(LocalFileAddress) Then
-                File.Delete(LocalFileAddress & DownloadEnd)
-            Else
-                FileIO.FileSystem.MoveFile(LocalFileAddress & DownloadEnd, LocalFileAddress)
-            End If
-        Catch ex As Exception
-            If Not Retried Then
-                Retried = True
-                GoTo RetryStart
-            Else
-                Log(ex, $"下载本地 Mod 图标失败（{_Logo}）")
-                RunInUi(Sub() PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png"))
-            End If
-        End Try
-    End Sub
 
     '标题
     Private _Title As String
@@ -170,7 +96,7 @@ RetryStart:
         If IsMouseDown Then
             RaiseEvent Click(sender, e)
             If e.Handled Then Exit Sub
-            Log("[Control] 按下收藏列表项：" & LabTitle.Text)
+            Log("[Control] 按下工程列表项：" & LabTitle.Text)
         End If
     End Sub
 
@@ -184,41 +110,6 @@ RetryStart:
     Private Sub Button_MouseLeave(sender As Object, e As Object) Handles Me.MouseLeave, Me.PreviewMouseLeftButtonUp
         IsMouseDown = False
         If ButtonStack IsNot Nothing Then ButtonStack.IsHitTestVisible = True
-    End Sub
-
-    '滑动选中
-    Private Shared SwipeStart As Integer, SwipeEnd As Integer
-    Private Shared Swiping As Boolean = False
-    Private Shared SwipToState As Boolean '被滑动到的目标应将 Checked 改为此值
-    Private Sub Button_MouseSwipeStart(sender As Object, e As Object) Handles Me.MouseLeftButtonDown
-        If Parent Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
-        '开始滑动
-        Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
-        SwipeStart = Index
-        SwipeEnd = Index
-        Swiping = True
-        SwipToState = Not Checked
-        FrmVersionMod.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
-    End Sub
-    Private Sub Button_MouseSwipe(sender As Object, e As Object) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonUp
-        If Parent Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
-        '结束滑动
-        If Mouse.LeftButton <> MouseButtonState.Pressed OrElse Not Swiping Then
-            Swiping = False
-            FrmVersionMod.CardSelect.IsHitTestVisible = True
-            Exit Sub
-        End If
-        '计算滑动范围
-        Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
-        SwipeStart = Math.Min(SwipeStart, Index)
-        SwipeEnd = Math.Max(SwipeEnd, Index)
-        '勾选所有范围中的项
-        If SwipeStart = SwipeEnd Then Exit Sub
-        For i = SwipeStart To SwipeEnd
-            Dim Item As MyMiniCompItem = CType(Parent, StackPanel).Children(i)
-            Item.InitLate(Item, e)
-            Item.Checked = SwipToState
-        Next
     End Sub
 
     '勾选状态
@@ -267,7 +158,7 @@ RetryStart:
                         RectCheck.VerticalAlignment = VerticalAlignment.Center
                         Anim.Add(AaColor(LabTitle, TextBlock.ForegroundProperty, If(LabTitle.TextDecorations Is Nothing, "ColorBrush1", "ColorBrushGray4"), 120))
                     End If
-                    AniStart(Anim, "MyLocalModItem Checked " & Uuid)
+                    AniStart(Anim, "MyMiniCompItem Checked " & Uuid)
                 Else
                     '不在窗口上时直接设置
                     RectCheck.VerticalAlignment = VerticalAlignment.Center
@@ -410,7 +301,7 @@ RetryStart:
                 AaScaleTransform(RectBack, -0.196, 1,,, True)
             })
         End If
-        AniStart(Ani, "LocalModItem Color " & Uuid)
+        AniStart(Ani, "MyMiniCompItem Color " & Uuid)
     End Sub
 
     '触发虚拟化内容

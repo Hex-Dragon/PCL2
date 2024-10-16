@@ -541,6 +541,15 @@
                     If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " 万", DownloadCount))
             Return NewItem
         End Function
+        Public Function ToMiniCompItem() As MyMiniCompItem
+            Dim Result As New MyMiniCompItem()
+            Result.Title = Me.TranslatedName
+            Result.Description = Me.Description
+            Result.Logo = Me.LogoUrl
+            Result.Tag = Me.Tags
+            Result.Entry = Me
+            Return Result
+        End Function
         Public Function GetControlLogo() As String
             If String.IsNullOrEmpty(LogoUrl) Then
                 Return PathImage & "Icons/NoIcon.png"
