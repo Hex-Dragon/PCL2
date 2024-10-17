@@ -8,6 +8,8 @@
         PageLoaderInit(Load, PanLoad, PanContent, Nothing, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
     End Sub
     Private Sub PageDownloadCompFavorites_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
+        SelectedItemList.Clear()
+        RefreshBar()
         If Loader.Input IsNot Nothing AndAlso Not Loader.Input.Equals(CompFavorites.GetAll()) Then
             Loader.Start()
         End If
@@ -27,57 +29,62 @@
 #Region "UI 化"
     '结果 UI 化
     Private Sub Load_OnFinish()
-        CompItemList.Clear()
-        For Each item In Loader.Output
-            Dim CompItem = item.ToMiniCompItem()
-
-            '----添加按钮----
-            '删除按钮
-            Dim Btn_Delete As New MyIconButton
-            Btn_Delete.Logo = Logo.IconButtonLikeFill
-            Btn_Delete.ToolTip = "取消收藏"
-            ToolTipService.SetPlacement(Btn_Delete, Primitives.PlacementMode.Center)
-            ToolTipService.SetVerticalOffset(Btn_Delete, 30)
-            ToolTipService.SetHorizontalOffset(Btn_Delete, 2)
-            AddHandler Btn_Delete.Click, Sub(sender As Object, e As EventArgs)
-                                             Items_CancelFavorites(CompItem)
-                                             RefreshContent()
-                                             RefreshCardTitle()
-                                             RefreshBar()
-                                         End Sub
-            CompItem.Buttons = {Btn_Delete}
-            '---操作逻辑---
-            '右键查看详细信息界面
-            AddHandler CompItem.MouseRightButtonUp, Sub(sender As Object, e As EventArgs)
-                                                        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
-                   .Additional = {CompItem.Entry, New List(Of String), String.Empty, CompModLoaderType.Any}})
-                                                    End Sub
-            '---其它事件---
-            AddHandler CompItem.Changed, AddressOf ItemCheckStatusChanged
-            CompItemList.Add(CompItem)
-        Next
         Try
-            If Loader.Input.Any() Then '有收藏
-                PanSearchBox.Visibility = Visibility.Visible
-                CardProjectsMod.Visibility = Visibility.Visible
-                CardProjectsModpack.Visibility = Visibility.Visible
-                CardNoContent.Visibility = Visibility.Collapsed
-                RefreshContent()
-            Else '没有收藏
-                PanSearchBox.Visibility = Visibility.Collapsed
-                CardProjectsMod.Visibility = Visibility.Collapsed
-                CardProjectsModpack.Visibility = Visibility.Collapsed
-                CardNoContent.Visibility = Visibility.Visible
-            End If
+            RemoveHandler PanSearchBox.TextChanged, AddressOf SearchRun
+            PanSearchBox.Text = String.Empty
+            AddHandler PanSearchBox.TextChanged, AddressOf SearchRun
+            CompItemList.Clear()
             HintGetFail.Visibility = If(Loader.Input.Count = Loader.Output.Count, Visibility.Collapsed, Visibility.Visible)
+            For Each item In Loader.Output
+                Dim CompItem = item.ToMiniCompItem()
 
+                '----添加按钮----
+                '删除按钮
+                Dim Btn_Delete As New MyIconButton
+                Btn_Delete.Logo = Logo.IconButtonLikeFill
+                Btn_Delete.ToolTip = "取消收藏"
+                ToolTipService.SetPlacement(Btn_Delete, Primitives.PlacementMode.Center)
+                ToolTipService.SetVerticalOffset(Btn_Delete, 30)
+                ToolTipService.SetHorizontalOffset(Btn_Delete, 2)
+                AddHandler Btn_Delete.Click, Sub(sender As Object, e As EventArgs)
+                                                 Items_CancelFavorites(CompItem)
+                                                 RefreshContent()
+                                                 RefreshCardTitle()
+                                                 RefreshBar()
+                                             End Sub
+                CompItem.Buttons = {Btn_Delete}
+                '---操作逻辑---
+                '右键查看详细信息界面
+                AddHandler CompItem.MouseRightButtonUp, Sub(sender As Object, e As EventArgs)
+                                                            FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
+                   .Additional = {CompItem.Entry, New List(Of String), String.Empty, CompModLoaderType.Any}})
+                                                        End Sub
+                '---其它事件---
+                AddHandler CompItem.Changed, AddressOf ItemCheckStatusChanged
+                CompItemList.Add(CompItem)
+            Next
             RefreshCardTitle()
+            RefreshContent()
         Catch ex As Exception
             Log(ex, "可视化收藏夹列表出错", LogLevel.Feedback)
         End Try
     End Sub
 
-    Private Sub RefreshContent()
+    Private Sub RefreshContent() 'TODO: fix:在搜索时，使用下边栏取消收藏会使得整个界面变空
+        If CompItemList.Any() Then '有收藏
+            If Not IsSearching Then
+                PanSearchBox.Visibility = Visibility.Visible
+                CardProjectsMod.Visibility = Visibility.Visible
+                CardProjectsModpack.Visibility = Visibility.Visible
+                CardNoContent.Visibility = Visibility.Collapsed
+            End If
+        Else '没有收藏
+            PanSearchBox.Visibility = Visibility.Collapsed
+            CardProjectsMod.Visibility = Visibility.Collapsed
+            CardProjectsModpack.Visibility = Visibility.Collapsed
+            CardNoContent.Visibility = Visibility.Visible
+        End If
+
         PanProjectsMod.Children.Clear()
         PanProjectsModpack.Children.Clear()
         Dim DataSource As List(Of MyMiniCompItem) = If(IsSearching, SearchResult, CompItemList)
@@ -182,7 +189,7 @@
                 Dim ErrorMessage As String = ""
                 If Loader.Error IsNot Nothing Then ErrorMessage = Loader.Error.Message
                 If ErrorMessage.Contains("不是有效的 json 文件") Then
-                    Log("[Download] 下载的 Mod 列表 json 文件损坏，已自动重试", LogLevel.Debug)
+                    Log("[Download] 下载的工程列表 JSON 文件损坏，已自动重试", LogLevel.Debug)
                     PageLoaderRestart()
                 End If
         End Select
@@ -216,6 +223,10 @@
         CompFavorites.Del(Item.Entry.Id)
     End Sub
 
+    Private Sub Page_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
+        If My.Computer.Keyboard.CtrlKeyDown AndAlso e.Key = Key.A Then Items_SetSelectAll(True)
+    End Sub
+
 #Region "搜索"
 
     Private ReadOnly Property IsSearching As Boolean
@@ -224,8 +235,8 @@
         End Get
     End Property
 
-    Private SearchResult As List(Of MyMiniCompItem)
-    Public Sub SearchRun() Handles PanSearchBox.TextChanged
+    Private SearchResult As New List(Of MyMiniCompItem)
+    Public Sub SearchRun()
         If IsSearching Then
             '构造请求
             Dim QueryList As New List(Of SearchEntry(Of MyMiniCompItem))
