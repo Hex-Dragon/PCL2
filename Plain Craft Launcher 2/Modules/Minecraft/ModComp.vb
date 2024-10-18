@@ -541,6 +541,15 @@
                     If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " 万", DownloadCount))
             Return NewItem
         End Function
+        Public Function ToMiniCompItem() As MyMiniCompItem
+            Dim Result As New MyMiniCompItem()
+            Result.Title = TranslatedName
+            Result.Description = Description.Replace(vbCr, "").Replace(vbLf, "")
+            Result.Logo = LogoUrl
+            Result.Tags = Tags
+            Result.Entry = Me
+            Return Result
+        End Function
         Public Function GetControlLogo() As String
             If String.IsNullOrEmpty(LogoUrl) Then
                 Return PathImage & "Icons/NoIcon.png"
@@ -1513,5 +1522,168 @@ Retry:
     End Sub
 
 #End Region
+    Class CompFavorites
+        ''' <summary>
+        ''' 通过项目 Id 判断是否来自 CurseForge
+        ''' </summary>
+        ''' <param name="Id"></param>
+        ''' <returns></returns>
+        Public Shared Function IsFromCurseForge(Id As String) As Boolean
+            Dim res As Integer = 0
+            Return Integer.TryParse(Id, res) 'CurseForge 数字 ID Modrinth 乱序 ID
+        End Function
 
+        ''' <summary>
+        ''' 获取全部的收藏工程
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared Function GetAll() As List(Of String)
+            If FavoritesList IsNot Nothing Then Return FavoritesList
+            Dim RawData As String = Setup.Get("CustomCompFavorites")
+            FavoritesList = New List(Of String)
+            If String.IsNullOrWhiteSpace(RawData) Then
+                Return FavoritesList
+            End If
+            Dim RawList As JArray = JArray.Parse(RawData)
+            For Each CompRawItem As JValue In RawList
+                FavoritesList.Add(CompRawItem.Value)
+            Next
+            Return FavoritesList
+        End Function
+
+        ''' <summary>
+        ''' 将指定的内容直接覆盖
+        ''' </summary>
+        ''' <param name="items"></param>
+        Public Shared Sub Replace(items As List(Of CompProject))
+            Dim RawList As JArray = New JArray()
+            For Each item As CompProject In items
+                RawList.Add(item.Id)
+            Next
+            Setup.Set("CustomCompFavorites", RawList.ToString())
+            FavoritesList = Nothing
+        End Sub
+        Public Shared Sub Replace(items As List(Of String))
+            Dim RawList As JArray = New JArray()
+            For Each item As String In items
+                RawList.Add(item)
+            Next
+            Setup.Set("CustomCompFavorites", RawList.ToString())
+            FavoritesList = items
+        End Sub
+
+        Public Shared Sub Save()
+            Dim RawList As JArray = New JArray()
+            For Each item As String In GetAll()
+                RawList.Add(item)
+            Next
+            Setup.Set("CustomCompFavorites", RawList.ToString())
+        End Sub
+
+        ''' <summary>
+        ''' 是否已经收藏
+        ''' </summary>
+        ''' <param name="item">工程</param>
+        ''' <returns></returns>
+        Public Shared Function Has(item As CompProject) As Boolean
+            Return GetAll().Find(Function(e) e = item.Id) IsNot Nothing
+        End Function
+        Public Shared Function Has(item As String) As Boolean
+            Return GetAll().Find(Function(e) e = item) IsNot Nothing
+        End Function
+
+        ''' <summary>
+        ''' 添加收藏
+        ''' </summary>
+        ''' <param name="item">想要收藏的工程</param>
+        ''' <returns>如果有重复会返回 False</returns>
+        Public Shared Function Add(item As CompProject) As Boolean
+            If Has(item) Then Return False
+            GetAll().Add(item.Id)
+            Save()
+            Return True
+        End Function
+        Public Shared Function Add(item As String) As Boolean
+            If Has(item) Then Return False
+            GetAll().Add(item)
+            Save()
+            Return True
+        End Function
+        ''' <summary>
+        ''' 删除收藏
+        ''' </summary>
+        ''' <param name="item">想要删除收藏的工程</param>
+        ''' <returns>如果不存在会返回 False</returns>
+        Public Shared Function Del(item As CompProject) As Boolean
+            Dim SearchRes = GetAll().Where(Function(e) e = item.Id).ToList()
+            If Not SearchRes.Any() Then Return False
+            GetAll().Remove(SearchRes.First())
+            Save()
+            Return True
+        End Function
+        Public Shared Function Del(item As String) As Boolean
+            If Not Has(item) Then Return False
+            FavoritesList.Remove(item)
+            Save()
+            Return True
+        End Function
+
+        Public Shared Function GetAllCompProjects(Input As List(Of String)) As List(Of CompProject)
+            If Not Input.Any() Then Return New List(Of CompProject)
+            Dim RawList As List(Of String) = Input
+            Dim ModrinthProjectIds As List(Of String) = New List(Of String)
+            Dim CurseForgeProjectIds As List(Of String) = New List(Of String)
+            Dim Res As List(Of CompProject) = New List(Of CompProject)
+            For Each Item In RawList
+                If CompFavorites.IsFromCurseForge(Item) Then
+                    CurseForgeProjectIds.Add(Item)
+                Else
+                    ModrinthProjectIds.Add(Item)
+                End If
+            Next
+            Dim RawProjectsData As JArray
+            Dim FinishedTask = 0
+            Dim NeedCompleteTask = 0
+            If CurseForgeProjectIds.Any() Then
+                NeedCompleteTask += 1
+                RunInNewThread(Sub()
+                                   Try
+                                       RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
+                                       "POST", "{""modIds"": [" & CurseForgeProjectIds.Join(",") & "]}", "application/json"))("data")
+                                       For Each RawData In RawProjectsData
+                                           Res.Add(New CompProject(RawData))
+                                       Next
+                                       FinishedTask += 1
+                                   Catch ex As Exception
+                                       Log(ex, "[Favorites] 获取 CurseForge 数据失败")
+                                   End Try
+                               End Sub, "CompFavorites CurseForge")
+            End If
+            If ModrinthProjectIds.Any() Then
+                NeedCompleteTask += 1
+                RunInNewThread(Sub()
+                                   Try
+                                       RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{ModrinthProjectIds.Join(""",""")}""]", IsJson:=True)
+                                       For Each RawData In RawProjectsData
+                                           Res.Add(New CompProject(RawData))
+                                       Next
+                                       FinishedTask += 1
+                                   Catch ex As Exception
+                                       Log(ex, "[Favorites] 获取 Modrinth 数据失败")
+                                   End Try
+                               End Sub, "CompFavorites Modrinth")
+            End If
+            Do Until FinishedTask = NeedCompleteTask
+                Thread.Sleep(50)
+            Loop
+            Return Res
+        End Function
+
+        ''' <summary>
+        ''' 首次读取后创建的列表，之后改动只需要保存此列表即可
+        ''' 请使用 GetAll 获取而不是直接对此改动……
+        ''' </summary>
+        Public Shared FavoritesList As List(Of String)
+
+    End Class
 End Module
