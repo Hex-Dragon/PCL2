@@ -126,11 +126,7 @@
         AniControlEnabled += 1
         Project = FrmMain.PageCurrent.Additional(0)
         PanBack.ScrollToHome()
-        If CompFavorites.Has(Project) Then
-            BtnFavorites.Text = "取消收藏"
-        Else
-            BtnFavorites.Text = "收藏"
-        End If
+        BtnFavorites.Text = If(CompFavorites.Has(Project), "取消收藏", "收藏")
         '重启加载器
         If IsFirstInit Then
             '在 Me.Initialized 已经初始化了加载器，不再重复初始化
