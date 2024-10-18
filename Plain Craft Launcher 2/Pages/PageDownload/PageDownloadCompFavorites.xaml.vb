@@ -129,7 +129,7 @@
         If Selected Then LabSelect.Text = $"已选择 {NewCount} 个收藏项目" '取消所有选择时不更新数字
         '更新显示状态
         If AniControlEnabled = 0 Then
-            CardProjectsModpack.Margin = New Thickness(0, 0, 0, If(Selected, 95, 15))
+            PanContentList.Margin = New Thickness(0, 0, 0, If(Selected, 80, 0))
             If Selected Then
                 '仅在数量增加时播放出现/跳跃动画
                 If BottomBarShownCount >= NewCount Then

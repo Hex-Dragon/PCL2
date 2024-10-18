@@ -8,7 +8,7 @@
         <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
             <Grid x:Name="PanContent">
                 <StackPanel Orientation="Vertical" Margin="25">
-                    <StackPanel>
+                    <StackPanel x:Name="PanContentList">
                         <local:MySearchBox HintText="搜索收藏夹内容" x:Name="PanSearchBox" Margin="0,0,0,15"/>
                         <local:MyHint Text="部分资源在线信息获取失败，当前收藏夹内容可能不齐全。" IsWarn="True" Margin="0,0,0,15" x:Name="HintGetFail" Visibility="Collapsed"/>
                         <local:MyCard x:Name="CardProjectsMod" Title="Mod" IsSwaped="True" CanSwap="True" Margin="0,0,0,15">
