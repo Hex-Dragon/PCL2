@@ -214,7 +214,10 @@
     End Sub
 
     Private Sub Items_SetSelectAll(TargetStatus As Boolean)
-        For Each item In CompItemList
+        For Each item As MyMiniCompItem In PanProjectsMod.Children
+            item.Checked = TargetStatus
+        Next
+        For Each item As MyMiniCompItem In PanProjectsModpack.Children
             item.Checked = TargetStatus
         Next
         SelectedItemList = CompItemList.Where(Function(e) e.Checked).ToList()
