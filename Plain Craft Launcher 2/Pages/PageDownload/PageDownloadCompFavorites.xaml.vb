@@ -63,6 +63,20 @@
                 AddHandler CompItem.Changed, AddressOf ItemCheckStatusChanged
                 CompItemList.Add(CompItem)
             Next
+            If CompItemList.Any() Then '有收藏
+                If Not IsSearching Then
+                    PanSearchBox.Visibility = Visibility.Visible
+                    CardProjectsMod.Visibility = Visibility.Visible
+                    CardProjectsModpack.Visibility = Visibility.Visible
+                    CardNoContent.Visibility = Visibility.Collapsed
+                End If
+            Else '没有收藏
+                PanSearchBox.Visibility = Visibility.Collapsed
+                CardProjectsMod.Visibility = Visibility.Collapsed
+                CardProjectsModpack.Visibility = Visibility.Collapsed
+                CardNoContent.Visibility = Visibility.Visible
+            End If
+
             RefreshCardTitle()
             RefreshContent()
         Catch ex As Exception
@@ -70,21 +84,7 @@
         End Try
     End Sub
 
-    Private Sub RefreshContent() 'TODO: fix:在搜索时，使用下边栏取消收藏会使得整个界面变空
-        If CompItemList.Any() Then '有收藏
-            If Not IsSearching Then
-                PanSearchBox.Visibility = Visibility.Visible
-                CardProjectsMod.Visibility = Visibility.Visible
-                CardProjectsModpack.Visibility = Visibility.Visible
-                CardNoContent.Visibility = Visibility.Collapsed
-            End If
-        Else '没有收藏
-            PanSearchBox.Visibility = Visibility.Collapsed
-            CardProjectsMod.Visibility = Visibility.Collapsed
-            CardProjectsModpack.Visibility = Visibility.Collapsed
-            CardNoContent.Visibility = Visibility.Visible
-        End If
-
+    Private Sub RefreshContent()
         PanProjectsMod.Children.Clear()
         PanProjectsModpack.Children.Clear()
         Dim DataSource As List(Of MyMiniCompItem) = If(IsSearching, SearchResult, CompItemList)
@@ -199,8 +199,12 @@
         For Each Items In SelectedItemList.Clone()
             Items_CancelFavorites(Items)
         Next
-        RefreshContent()
-        RefreshCardTitle()
+        If CompItemList.Any Then
+            RefreshContent()
+            RefreshCardTitle()
+        Else
+            Loader.Start()
+        End If
         RefreshBar()
     End Sub
 
