@@ -1795,7 +1795,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">下载 LiteLoader {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">下载 Fabric {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServer">Minecraft {0} 服务端下载</s:String>
-    <s:String x:Key="LangModDownloadLibTaskDownloadServerGetDownloadUrl">构建服务端</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerBuildServer">构建服务端</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">该服务端正在下载中！</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">下载服务端文件</s:String>
     <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">{0} 版本没有提供服务端文件</s:String>

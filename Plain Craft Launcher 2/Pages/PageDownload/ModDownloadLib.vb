@@ -232,7 +232,7 @@ Public Module ModDownloadLib
                 New NetFile(DlSourceLauncherOrMetaGet(JsonUrl), VersionFolder & Id & ".json", New FileChecker(CanUseExistsFile:=False, IsJson:=True))
             }) With {.ProgressWeight = 2})
             '构建服务端
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangModDownloadLibTaskDownloadServerGetDownloadUrl"),
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))(GetLang("LangModDownloadLibTaskDownloadServerBuildServer"),
                 Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                     '分析服务端 JAR 文件下载地址
                     Dim McVersion As New McVersion(VersionFolder)
