@@ -1539,11 +1539,8 @@ Retry:
         ''' <returns></returns>
         Public Shared Function GetAll() As List(Of String)
             If FavoritesList IsNot Nothing Then Return FavoritesList
-            Dim RawData As String = Setup.Get("CustomCompFavorites")
+            Dim RawData As String = Setup.Get("Favorites")
             FavoritesList = New List(Of String)
-            If String.IsNullOrWhiteSpace(RawData) Then
-                Return FavoritesList
-            End If
             Dim RawList As JArray = JArray.Parse(RawData)
             For Each CompRawItem As JValue In RawList
                 FavoritesList.Add(CompRawItem.Value)
@@ -1560,7 +1557,7 @@ Retry:
             For Each item As CompProject In items
                 RawList.Add(item.Id)
             Next
-            Setup.Set("CustomCompFavorites", RawList.ToString())
+            Setup.Set("Favorites", RawList.ToString())
             FavoritesList = Nothing
         End Sub
         Public Shared Sub Replace(items As List(Of String))
@@ -1568,7 +1565,7 @@ Retry:
             For Each item As String In items
                 RawList.Add(item)
             Next
-            Setup.Set("CustomCompFavorites", RawList.ToString())
+            Setup.Set("Favorites", RawList.ToString())
             FavoritesList = items
         End Sub
 
@@ -1577,7 +1574,7 @@ Retry:
             For Each item As String In GetAll()
                 RawList.Add(item)
             Next
-            Setup.Set("CustomCompFavorites", RawList.ToString())
+            Setup.Set("Favorites", RawList.ToString())
         End Sub
 
         ''' <summary>
@@ -1631,17 +1628,13 @@ Retry:
         Public Shared Function GetAllCompProjects(Input As List(Of String)) As List(Of CompProject)
             If Not Input.Any() Then Return New List(Of CompProject)
             Dim RawList As List(Of String) = Input
-            Dim ModrinthProjectIds As List(Of String) = New List(Of String)
-            Dim CurseForgeProjectIds As List(Of String) = New List(Of String)
+            Dim ModrinthProjectIds As List(Of String)
+            Dim CurseForgeProjectIds As List(Of String)
             Dim Res As List(Of CompProject) = New List(Of CompProject)
-            For Each Item In RawList
-                If CompFavorites.IsFromCurseForge(Item) Then
-                    CurseForgeProjectIds.Add(Item)
-                Else
-                    ModrinthProjectIds.Add(Item)
-                End If
-            Next
+            CurseForgeProjectIds = RawList.Where(Function(e) IsFromCurseForge(e)).ToList()
+            ModrinthProjectIds = RawList.Where(Function(e) Not IsFromCurseForge(e)).ToList()
             Dim RawProjectsData As JArray
+            '在线信息获取
             Dim FinishedTask = 0
             Dim NeedCompleteTask = 0
             If CurseForgeProjectIds.Any() Then
@@ -1657,7 +1650,7 @@ Retry:
                                    Catch ex As Exception
                                        Log(ex, "[Favorites] 获取 CurseForge 数据失败")
                                    End Try
-                               End Sub, "CompFavorites CurseForge")
+                               End Sub, "Favorites CurseForge")
             End If
             If ModrinthProjectIds.Any() Then
                 NeedCompleteTask += 1
@@ -1671,7 +1664,7 @@ Retry:
                                    Catch ex As Exception
                                        Log(ex, "[Favorites] 获取 Modrinth 数据失败")
                                    End Try
-                               End Sub, "CompFavorites Modrinth")
+                               End Sub, "Favorites Modrinth")
             End If
             Do Until FinishedTask = NeedCompleteTask
                 Thread.Sleep(50)
