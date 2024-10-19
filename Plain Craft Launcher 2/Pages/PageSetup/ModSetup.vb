@@ -68,7 +68,7 @@
         {"CacheAuthServerRegister", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheDownloadFolder", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheJavaListVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
-        {"Favorites", New SetupEntry("[]", Source:=SetupSource.Registry)},
+        {"CompFavorites", New SetupEntry("[]", Source:=SetupSource.Registry)},
         {"LoginRemember", New SetupEntry(True, Source:=SetupSource.Registry, Encoded:=True)},
         {"LoginLegacyName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"LoginMsJson", New SetupEntry("{}", Source:=SetupSource.Registry, Encoded:=True)}, '{UserName: OAuthToken, ...}
