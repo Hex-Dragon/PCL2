@@ -967,7 +967,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本最新，但加载缓慢）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">下载文件名</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">下载 Mod 时，Mod 的默认文件名中，中文译名应该放在哪个位置
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">下载 Mod 时，Mod 的默认文件名中，简体中文译名应该放在哪个位置
 此项只在语言为简体中文时有效</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">译名位于文件名开头：[遗物] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">译名位于文件名开头：遗物-relics-0.1.14</s:String>
