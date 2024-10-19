@@ -758,14 +758,14 @@
     <s:String x:Key="LangPageOtherHelpLoading">正在加载帮助名单</s:String>
     <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">不好意思，帮助库目前只支持简体中文</s:String>
     <s:String x:Key="LangPageOtherRefreshing">正在刷亲斤……</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackContent">你是不是要打开反馈名单网页？
+    <s:String x:Key="LangPageOtherDialogFeedbackContent">在提交新反馈前，建议先搜索反馈列表，以避免重复提交。
 如果没办法打开该网页，请尝试使用黑魔法。</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">反馈提示</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">提交新反馈</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">查看反馈名单</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">你是不是要打开新功能投票网页？
 如果没办法打开该网页，请尝试使用黑魔法。</s:String>
-    <s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteTitle">新功能投票</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">打开</s:String>
     <!--PageOtherAbout-->
     <s:String x:Key="LangPageOtherAboutAbout">关于</s:String>
@@ -959,13 +959,13 @@
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">初始化确认</s:String>
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">下崽</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本名单获取</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本列表源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">尽量使用镜像源（加载很快嗷，但版本可能不是最新的）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本最新，但加载缓慢）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileName">模组命名风格</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">决定下崽的模组的默认文件名中，中文译名应该放在哪个位置
-该选项仅在语言设置为简体中文时有效</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileName">下崽文件名</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">决定下崽的模组的默认文件名中，简体中文译名应该放在哪个位置
+你不会觉得我们有功夫给模组译名搞简体吧？</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">译名位于文件名开头：[遗物] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">译名位于文件名开头：遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">译名位于文件名末尾：relics-0.1.14-遗物</s:String>
@@ -1045,8 +1045,8 @@
 一般选择 仅在有重大漏洞更新时显示提示 就可以让你尽量不受打扰了。
 除非你在制作服务器整活包，或时常手动更新发射台，否则极度不推荐选择此项！</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">确认发射台更新不成功</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSource">模组信息获取</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">尽量使用镜像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSource">下载源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">尽量使用镜像源（鸽着呢）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">尽量使用官方源</s:String>
     <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">平原合成发射台即将重启以完全应用语言的切换</s:String>
@@ -1441,7 +1441,7 @@
 请在更新后，确认该问题在最新版中依然存在，然后再提交反馈。</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">更新</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">没办法提交反馈</s:String>
-    <s:String x:Key="LangModBaseExceptionBadEnvironment">平原合成发射台的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。</s:String>
+    <s:String x:Key="LangModBaseExceptionBadEnvironment">平原合成发射台的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">平原合成发射台的权限不足。请尝试右键平原合成发射台，选择以管理员身份运行。</s:String>
     <s:String x:Key="LangModBaseExceptionOutOfMemoryException">你的电脑运行内存不足，导致平原合成发射台没办法继续运行。请在关掉一部分不需要的程序后再试。</s:String>
     <s:String x:Key="LangModBaseExceptionCOMException">由于操作系统或显卡存在问题，导致出现错误。请尝试重启平原合成发射台。</s:String>
@@ -1992,4 +1992,14 @@
     <s:String x:Key="LangMyMsgLoginExceptionDecline">你拒绝了 PCL 申请的权限……</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionTimeout">登录用时太长啦，重新试试吧！</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionCheckFail">登录轮询失败</s:String>
+    <s:String x:Key="LangDownloadServer">下载服务端</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">该服务端正在下载中！</s:String>
+    <s:String x:Key="LangModValidateFileNoSpecialName">文件名不能包含这一特殊格式！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServer">Minecraft {0} 服务端下载</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerGetDownloadUrl">构建服务端</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">下载服务端文件</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">{0} 版本没有提供服务端文件</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerBuildServer">构建服务端</s:String>
 </ResourceDictionary>

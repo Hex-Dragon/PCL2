@@ -9,7 +9,6 @@
     <s:String x:Key="LangDialogBtnNo">否</s:String>
     <s:String x:Key="LangComma">，</s:String>
     <s:String x:Key="LangColon">：</s:String>
-    
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 尚無此權勢以用 {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">弗可用臨時資料夾</s:String>
@@ -25,7 +24,6 @@
     <s:String x:Key="LangApplicationDialogContentNETWarn">或君之 .NET Framework 版本低，或其損，請於新頁中再裝 .NET Framework 4.6.2 後試！</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">嚙踝蕭昍昍昍</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">程式現不詳之錯</s:String>
-    
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下載</s:String>
     <s:String x:Key="LangTitleHome">啟</s:String>
@@ -601,7 +599,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
 請試用 VPN 或加速之器以優化網。</s:String>
     <s:String x:Key="LangDownloadModpackConnectCurseForge">無法連接至 CurseForge，故現時僅展露自 Modrinth 之內容，或有所不全。
 請試用 VPN 或加速之器以優化網。</s:String>
-    
     <!--MySkin-->
     <s:String x:Key="LangMySkinSave">另置名為</s:String>
     <s:String x:Key="LangMySkinRefresh">複載其頁</s:String>
@@ -642,7 +639,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangMySkinCapeNameFollower's">從者之披風</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 十五岁之披風</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">無</s:String>
-    
     <!--PageLaunchLeft-->
     <s:String x:Key="LangLaunchLeftInstanceChoose">版擇</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">版設</s:String>
@@ -678,7 +674,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">方導出始之腳本</s:String>
     <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">综合包將为 PCL 置于當前之資料夾中。</s:String>
     <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">自動裝</s:String>
-
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">快照之告</s:String>
     <s:String x:Key="LangLaunchRightLog">始之誌</s:String>
@@ -687,7 +682,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangLaunchRightLoadingPage">方載主頁……</s:String>
     <s:String x:Key="LangLaunchRightPageTips">知之乎？</s:String>
     <s:String x:Key="LangLaunchRightPageEcho">回聲之洞</s:String>
-
     <!--PageLoginAuth-->
     <s:String x:Key="LangPageLoginAuthMail">郵箱</s:String>
     <s:String x:Key="LangPageLoginAuthPassword">密匙</s:String>
@@ -696,7 +690,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageLoginAuthNoEmptyMail">賬無法為空！</s:String>
     <s:String x:Key="LangPageLoginAuthNoEmptyPassword">密匙無法為空！</s:String>
     <s:String x:Key="LangPageLoginAuthForgetPassword">寻回密匙</s:String>
-
     <!--PageLoginAuthSkin-->
     <s:String x:Key="LangPageLoginAuthSkinLoading">方載之中</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChangeRole">易角色</s:String>
@@ -704,14 +697,12 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageLoginAuthSkinLogining">方登，若需易角色，請後！</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChanging">方试易之，請候！</s:String>
     <s:String x:Key="LangPageLoginAuthSkinChangeFail">易角色敗</s:String>
-
     <!--PageLoginLegacy-->
     <s:String x:Key="LangPageLoginLegacySpecialCharacters">玩家之名除英文、數、底線以外，若有餘字，或不得入 1.18 後之世界！</s:String>
     <s:String x:Key="LangPageLoginLegacyID">遊戲之名</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">玩家之名不得空！</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">玩家之名不得含外文之引號！</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">始之設已为禁！</s:String>
-
     <!--PageLoginMs-->
     <s:String x:Key="LangPageLoginMsLogin">登</s:String>
     <s:String x:Key="LangPageLoginMsBuy">»  購正版</s:String>
@@ -723,7 +714,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
 
 原始之告：</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">登已废！</s:String>
-
     <!--PageLoginMsSkin-->
     <s:String x:Key="LangPageLoginMsLoading">方載中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">外觀與披風</s:String>
@@ -741,7 +731,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageLoginMsSkinLoginBeforeChangeSkin">方登，於登後易外觀……</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangeSkinFail">易外觀敗</s:String>
     <s:String x:Key="LangPageLoginMsSkinChangeSkinFailByTimeOut">易外觀敗：接 Mojang 外观服務逾時，請验網之连接！</s:String>
-
     <!--PageLoginNide-->
     <s:String x:Key="LangPageLoginNideAccount">賬</s:String>
     <s:String x:Key="LangPageLoginNidePassword">密匙</s:String>
@@ -751,12 +740,10 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageLoginNideNoEmptyAccount">賬不得為空！</s:String>
     <s:String x:Key="LangPageLoginNideNoEmptyPassword">密匙不得為空！</s:String>
     <s:String x:Key="LangPageLoginNideForgetPassword">寻回密匙</s:String>
-
     <!--PageLoginNideSkin-->
     <s:String x:Key="LangPageLoginNideSkinLoading">方載中</s:String>
     <s:String x:Key="LangPageLoginNideSkinChangePassword">易密匙</s:String>
     <s:String x:Key="LangPageLoginNideSkinLogout">退而出登</s:String>
-
     <!--PageOtherLeft-->
     <s:String x:Key="LangPageOtherLeftHelp">助</s:String>
     <s:String x:Key="LangPageOtherLeftRefresh">重載之</s:String>
@@ -764,7 +751,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageOtherLeftTools">百寶之盒</s:String>
     <s:String x:Key="LangPageOtherLeftFeedback">回告</s:String>
     <s:String x:Key="LangPageOtherLeftVoteNew">功能举议</s:String>
-
     <!--PageOtherHelp-->
     <s:String x:Key="LangPageOtherHelpSearch">搜于助</s:String>
     <s:String x:Key="LangPageOtherHelpLoading">方載助之表</s:String>
@@ -779,7 +765,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
 若無法启此頁，請試用加速之器或 VPN。</s:String>
     <s:String x:Key="LangPageOtherDialogVoteTitle">示</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">開</s:String>
-
     <!--PageOtherAbout-->
     <s:String x:Key="LangPageOtherAboutAbout">關於</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthor">龍騰貓躍</s:String>
@@ -820,7 +805,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
 電腦軟體著作權登記號：2020SR0875133
 違律悖制之行檢舉投訴電子信箱：hexdragon@vip.qq.com
 非 Minecraft 官方之產品。未經 Mojang 或 Microsoft 批准，亦不與 Mojang 或 Microsoft 關聯。</s:String>
-
     <!--PageOtherTest-->
     <s:String x:Key="LangPageOtherTestNoUtility">為便於維護，開源內容中不包含百寶箱功能……</s:String>
     <!--PageSetupLaunch-->

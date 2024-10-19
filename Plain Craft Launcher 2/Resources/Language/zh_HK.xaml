@@ -251,7 +251,7 @@
     <s:String x:Key="LangSetHomePagePresetPageD">簡單首頁（作者：MFn233）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">每日模組包推薦（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 皮膚推薦（作者：wkea）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 儀表盤 Lite（作者：Silverteal、Mxmilu666）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 儀表板 Lite（作者：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageH">PCL 首頁市場（作者：凌雲）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageI">PCL 更新日誌（作者：Joker2184）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能隱藏</s:String>
@@ -758,14 +758,14 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageOtherHelpLoading">正在加載幫助列表</s:String>
     <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">很抱歉，幫助庫目前只支援簡體中文</s:String>
     <s:String x:Key="LangPageOtherRefreshing">正在重新整理……</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackContent">是否要開啟回報列表網頁？
+    <s:String x:Key="LangPageOtherDialogFeedbackContent">在提交新回報前，建議先搜尋回報列表，以避免重複提交。
 如果無法開啟該網頁，請嘗試使用 VPN 或 Proxy。</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">回報提示</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">提交新回報</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">檢視回報列表</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">是否要開啟新功能投票網頁？
 如果無法開啟該網頁，請嘗試使用 VPN 或 Proxy。</s:String>
-    <s:String x:Key="LangPageOtherDialogVoteTitle">提醒</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteTitle">新功能投票</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">開啟</s:String>
     <!--PageOtherAbout-->
     <s:String x:Key="LangPageOtherAboutAbout">關於</s:String>
@@ -959,11 +959,11 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">初始化確認</s:String>
     <!--PageSetupSystem-->
     <s:String x:Key="LangPageSetupSystemDownload">下載</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本列表獲取</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">版本列表源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">盡量使用鏡像源（加載快，但版本可能不是最新的）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">僅在官方源加載緩慢時改用鏡像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">盡量使用官方源（保證版本最新，但加載緩慢）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileName">模組命名風格</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileName">下載檔案名</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">決定下載的模組的預設檔案名中，簡體中文譯名應該放在哪個位置
 該選項僅在語言設定為簡體中文時有效</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">譯名位於檔案名開頭：[遗物] relics-0.1.14</s:String>
@@ -1044,8 +1044,8 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 一般選擇 僅在有重大漏洞更新時顯示提示 就可以讓你盡量不受打擾了。
 除非你在製作伺服器模組包，或時常手動更新啟動器，否則極度不推薦選擇此項！</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">確認啟動器更新失敗</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSource">模組資訊獲取</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">盡量使用鏡像源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSource">下載源</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">盡量使用鏡像源（暫時無效）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">僅在官方源加載緩慢時改用鏡像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">盡量使用官方源</s:String>
     <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL 即將重啟以完全應用語言的切換</s:String>
@@ -1439,7 +1439,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 請在更新後，確認該問題在最新版中依然存在，然後再提交回報。</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">更新</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">無法提交回報</s:String>
-    <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL 的執行環境存在問題。請嘗試重新安裝 .NET Framework 4.6.2 然後再試。</s:String>
+    <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL 的執行環境存在問題。請嘗試重新安裝 .NET Framework 4.6.2 然後再試。若無法安裝，請先移除較新版本的 .NET Framework，然後再嘗試安裝。</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL 的權限不足。請嘗試右鍵 PCL，選擇以系統管理員身分執行。</s:String>
     <s:String x:Key="LangModBaseExceptionOutOfMemoryException">你的電腦執行記憶體不足，導致 PCL 無法繼續執行。請在關閉一部分不需要的程式後再試。</s:String>
     <s:String x:Key="LangModBaseExceptionCOMException">由於作業系統或顯示卡存在問題，導致出現錯誤。請嘗試重啟 PCL。</s:String>
@@ -1829,12 +1829,12 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 
 你或許只能重裝 64 位元的作業系統來解決此問題。
 如果你的電腦在 2GB 以內，那或許只能換台電腦了……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAK">由於未滿足模組的依賴項，導致遊戲退出。
-未滿足的依賴項：
+    <s:String x:Key="LangModCrashCrashReasonReasonAK">由於未安裝正確的前置 Mod，導致遊戲退出。
+缺失的依賴項：
  - {0}
 
 請根據上述資訊進行對應處理，如果看不懂英文可以使用翻譯軟件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAL">由於未滿足模組的依賴項，導致遊戲退出。
+    <s:String x:Key="LangModCrashCrashReasonReasonAL">由於未安裝正確的前置模組，導致遊戲退出。
 請根據錯誤報吿中的日誌資訊進行對應處理，如果看不懂英文可以使用翻譯軟件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAM">你的遊戲遇到了一些問題，PCL 為此找到了一個可疑的關鍵字：{0}。
 
@@ -1867,7 +1867,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 其配置檔案 {1} 存在異常，無法存取。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAW">名為 {0} 的模組初始化失敗，導致遊戲無法繼續加載。
 你可以嘗試禁用此模組，然後觀察遊戲是否還會崩潰。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAX">以下模組初始化失敗，導致遊戲無法繼續加載：
+    <s:String x:Key="LangModCrashCrashReasonReasonAX">以下模組初始化失敗，導致遊戲出錯：
  - {0}
 
 你可以嘗試依次禁用上述模組，然後觀察遊戲是否還會崩潰。</s:String>
@@ -1885,7 +1885,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
  - {0}
 
 每個模組只能出現一次，請刪除重複的模組，然後再啟動遊戲。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBB">你可能重複安裝了多個相同的模組，導致遊戲無法繼續加載。
+    <s:String x:Key="LangModCrashCrashReasonReasonBB">你可能重複安裝了多個相同的模組，導致遊戲出錯。
 
 每個模組只能出現一次，請刪除重複的模組，然後再啟動遊戲。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBC">遊戲似乎因為實體 {0} 出現了問題。
@@ -1908,7 +1908,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 請嘗試以下解決方案：
  - 更新 Forge 到 36.2.26 或更高版本
  - 換用版本低於 1.8.0.320 的 Java</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBH">可能由於使用其他啟動器修改了 Forge 版本，目前版本的檔案存在異常，導致了遊戲崩潰。
+    <s:String x:Key="LangModCrashCrashReasonReasonBH">可能由於其他啟動器修改了 Forge 版本，目前版本的檔案存在異常，導致了遊戲崩潰。
 請嘗試重新全新安裝 Forge，而非使用其他啟動器修改 Forge 版本。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* 事實上，你的遊戲沒有任何問題，這是你自己觸發的崩潰。
 * 你難道沒有更重要的事要做嗎？</s:String>
@@ -1943,8 +1943,9 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBS">部分檔案或內容校驗失敗，導致遊戲出現了問題。
 
 請嘗試刪除遊戲（包括模組）並重新下載，或嘗試在重新下載時使用 VPN。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBT">由於 Forge 安裝不完整，導致遊戲無法正常執行。
-請嘗試重新安裝 Forge。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBT">由於安裝的 Forge 檔案遺失，導致遊戲無法正常執行。
+請重新安裝一次相同版本的 Forge，然後再啟動遊戲。
+在打包遊戲時刪除 libraries 資料夾可能導致此錯誤。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBU">Fabric 提供了以下錯誤資訊：
 {0}
 
@@ -1990,4 +1991,14 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionDecline">你拒絕了 PCL 申請的權限……</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionTimeout">登入用時太長啦，重新試試吧！</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionCheckFail">登入輪詢失敗</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能説明書（作者：WForst-Breeze）</s:String>
+    <s:String x:Key="LangDownloadServer">下載服務端</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 儀表板（作者：SALTWOOD）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerBuildServer">構建服務端</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyle">模組管理樣式</s:String>
+    <s:String x:Key="LangModValidateFileNoSpecialName">檔案名不能包含這一特殊格式！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServer">Minecraft {0} 服務端下載</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">該服務端正在下載中！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">下載服務端檔案</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">{0} 版本沒有提供服務端檔案</s:String>
 </ResourceDictionary>

@@ -758,12 +758,12 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherHelpLoading">Loading Help List...</s:String>
     <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">Sorry, the Help Centre is Simplified Chinese only.</s:String>
     <s:String x:Key="LangPageOtherRefreshing">Refreshing...</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackContent">Do you want to open the feedback list page?</s:String>
+    <s:String x:Key="LangPageOtherDialogFeedbackContent">Please check the feedback list for similar issues before submitting new feedback to prevent duplicate submissions.</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">Feedback Hint</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">New Feedback</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">Feedback List</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">Do you want to open the new feature voting page?</s:String>
-    <s:String x:Key="LangPageOtherDialogVoteTitle">Hint</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteTitle">Feature Voting</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">Open</s:String>
     <!--PageOtherAbout-->
     <s:String x:Key="LangPageOtherAboutAbout">About</s:String>
@@ -961,7 +961,7 @@ To automatically grant, right-click PCL and open 'Properties → Compatibility �
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">Mirror (Versions may delay)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">Balanced (Switch to mirror when official source load slowly)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">Official (Versions are newest)</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod Naming</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileName">File Naming</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Determine the location and the style of the Simplified Chinese Translation for the mod that will be downloaded.
 This option is only valid when the language is set to Simplified Chinese.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">Front: [遗物] relics-0.1.14</s:String>
@@ -1042,8 +1042,8 @@ For example, if the existing launcher is unable to login due to the changes in l
 In general, choose 'Display a hint when there is a critical vulnerability patch' to avoid most disturbances.
 Unless you are making a modpack or updating the launcher often, this option is extremely NOT recommended!</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">Failed to confirm the launcher update.</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod Source</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Mirror</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSource">Source</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Mirror (Temporarily Invalid)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Balanced</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Official</s:String>
     <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL is about to restart to fully apply the language switch.</s:String>
@@ -1438,7 +1438,7 @@ Game crashes are not related to the launcher commonly. Please do not submit feed
 Please confirm that the issue persists in the latest version after updating, and then submit feedback.</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">Update</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">Unable to Submit</s:String>
-    <s:String x:Key="LangModBaseExceptionBadEnvironment">There is a problem with the runtime of PCL. Please try to reinstall the '.NET Framework 4.6.2' and then try again.</s:String>
+    <s:String x:Key="LangModBaseExceptionBadEnvironment">There is a problem with the runtime of PCL. Please try to reinstall the ".NET Framework 4.6.2" and then try again. Delete the newer version of .NET Framework if the installation failed and try again.</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL does not have a sufficient permission. Please try to right-click PCL and select 'Run as administrator'.</s:String>
     <s:String x:Key="LangModBaseExceptionOutOfMemoryException">Your computer is running out of memory, which cause PCL unable to run. Please close some unnecessary programmes and try again.</s:String>
     <s:String x:Key="LangModBaseExceptionCOMException">An error occurred due to a problem with the operating system or graphics card. Please try to restart PCL.</s:String>
@@ -1826,12 +1826,12 @@ Download and install one on the internet if you do not have 64-bit Java installe
 
 You may only resolve this issue by installing a 64-bit operating system.
 If your computer has less than 2GB of memory, you may need to consider using a different computer with more memory...</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAK">The game exited due to the missing dependencies.
+    <s:String x:Key="LangModCrashCrashReasonReasonAK">The game crashed due to incorrect installation of dependencies.
 Missing Dependencies:
  - {0}
 
 Please take appropriate actions based on the information provided.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAL">The game exited due to the missing dependencies.
+    <s:String x:Key="LangModCrashCrashReasonReasonAL">The game crashed due to incorrect installation of dependencies.
 Please take appropriate actions based on the logs and crash reports.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAM">The game encountered some issues, PCL identified a suspicious keyword: {0}.
 
@@ -1940,8 +1940,9 @@ Consider installing JEID or other fix mods, or removing some of the larger mods.
     <s:String x:Key="LangModCrashCrashReasonReasonBS">The game crashed due to file or content verification failure.
 
 Consider uninstalling the game (including any mods) and reinstalling it, or using a VPN during the reinstallation process.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBT">The game crashed due to an incomplete Forge instance.
-Consider reinstalling the Forge instance.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBT">The game crashed due to missing files of Forge instance.
+Consider reinstalling a same Forge instance and relaunching the game.
+Deleting the libraries folder while packaging the game may cause this error.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBU">Fabric provided the following error information:
 {0}
 
@@ -1987,4 +1988,14 @@ You can also access {1} on a different device and input the code.</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionDecline">PCL's request for permission was declined...</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionTimeout">Login timed out, please try again!</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Login polling failed.</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerBuildServer">Build Server</s:String>
+    <s:String x:Key="LangModValidateFileNoSpecialName">The file name cannot contain this special format!</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServer">Download {0} Server</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageJ">PCL New Feature Manual (Author: WForst-Breeze)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM Dashboard (Author: SALTWOOD)</s:String>
+    <s:String x:Key="LangDownloadServer">Download Server</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyle">Management Style</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">The server is currently in download!</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">Download Server Files</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">Version {0} does not provide server files.</s:String>
 </ResourceDictionary>
