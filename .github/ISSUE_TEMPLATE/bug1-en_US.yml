@@ -8,11 +8,11 @@ body:
     label: "Checklist"
     description: "Please check each item below and tick to confirm."
     options:
-    - label: "**I have not installed any Mod and my game is not a bundled package.** Crashes after installing Mod are basically not caused by PCL, please **do not** submit feedback. You can seek help on forums or communities, but this is not the place to seek help."
+    - label: "**I have not installed any mod and my game is not a modpack.** Crashes after installing mod are basically not caused by PCL, please **do not** submit feedback. You can seek help on forums or communities, but this is not the place to seek help."
       required: false
-    - label: "**I have tried launching with HMCL, and HMCL has no issues.** If HMCL also cannot launch, it's not a PCL issue, please **do not** submit feedback. [Download HMCL](https://hmcl.huangyuhui.net/download)"
+    - label: "**I have tried launching with HMCL, and HMCL has no problems.** If HMCL also cannot launch, it is not a PCL issue, please **do not** submit feedback. [Download HMCL](https://hmcl.huangyuhui.net/download)"
       required: true
-    - label: "I have searched on the [Issues page](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) and [Common & Hard-to-Check Feedback and Issue List](https://github.com/Hex-Dragon/PCL2/discussions/1930) to confirm that this Bug has not been submitted before."
+    - label: "I have searched on the [Issues page](https://github.com/Hex-Dragon/PCL2/issues?q=is%3Aissue+) and [FAQ & Hard-to-Check Feedback and Issue List](https://github.com/Hex-Dragon/PCL2/discussions/1930) to confirm that this bug has not been submitted before."
       required: true
 - type: textarea
   id: "yml-2"
@@ -25,7 +25,7 @@ body:
   id: "yml-3"
   attributes:
     label: PCL Error Report, Logs, and Attachments
-    description: "Upload the error report provided by PCL (select Export Error Report when crashing). If not, you can also upload Log1~5.txt from the PCL folder."
+    description: "Upload the error report provided by PCL (select Export Error Report when crashing). If not, you can also upload Log1~5.txt from the PCL directory."
     placeholder: "Click this text box first, then drag and drop the file into the text box to upload."
   validations:
     required: true
@@ -33,7 +33,7 @@ body:
   id: "yml-4"
   attributes:
     label: HMCL Launch Script
-    description: "In HMCL, go to the version list, click the three dots on the right side of the version, and select Generate Launch Script."
+    description: "In HMCL, go to the instance list (All Instances), click the three dots on the right side of the instance, and select Export Launch Script."
     placeholder: "Click this text box first, then drag and drop the file into the text box to upload."
   validations:
     required: false
