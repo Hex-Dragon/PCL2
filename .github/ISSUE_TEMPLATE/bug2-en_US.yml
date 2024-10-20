@@ -1,5 +1,5 @@
 name: "Download or Login Issues"
-description: "Problems with downloading games, mods, modpack, or logging into the microsoft account"
+description: "Problems with downloading games, mods, modpack, or logging into the Microsoft account"
 labels: [· Bug, 新提交]
 body:
 - type: checkboxes
