@@ -2000,4 +2000,12 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionDecline">沵岠蕝孒 PCL 妽埥哋權限……</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionTimeout">憕淥鼡溡忲萇菈，偅噺鉽鉽妑！</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionCheckFail">憕淥囵咰妷敗</s:String>
+    <s:String x:Key="LangDownloadServer">下载服务端</s:String>
+    <s:String x:Key="LangModValidateFileNoSpecialName">文件名不能包含这一特殊格式！</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServer">Minecraft {0} 服务端下载</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerGetDownloadUrl">构建服务端</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">该服务端正在下载中！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">下载服务端文件</s:String>
 </ResourceDictionary>

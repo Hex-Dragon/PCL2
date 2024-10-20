@@ -1786,7 +1786,7 @@ URL: {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadNeoForge">Загрузить NeoForge {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">Загрузить LiteLoader {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">Загрузить Fabric {0}</s:String>
-<!--ModCrash-->
+    <!--ModCrash-->
     <s:String x:Key="LangModCrashDialogTitleAnalysisResult">Результат анализа</s:String>
     <s:String x:Key="LangModCrashDialogTitleMcError">Вылет Minecraft</s:String>
     <s:String x:Key="LangModCrashViewLog">Журнал</s:String>
