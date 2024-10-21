@@ -199,6 +199,9 @@
     <Compile Include="Modules\Minecraft\ModJava.vb" />
     <Compile Include="Modules\Minecraft\ModMod.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
+    <Compile Include="Modules\Minecraft\MyMiniCompItem.xaml.vb">
+      <DependentUpon>MyMiniCompItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Modules\Minecraft\MyLocalModItem.xaml.vb">
       <DependentUpon>MyLocalModItem.xaml</DependentUpon>
     </Compile>
@@ -238,6 +241,9 @@
     <Compile Include="Pages\PageDownload\ModDownloadLib.vb" />
     <Compile Include="Modules\Minecraft\MyCompItem.xaml.vb">
       <DependentUpon>MyCompItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadCompFavorites.xaml.vb">
+      <DependentUpon>PageDownloadCompFavorites.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadMod.xaml.vb">
       <DependentUpon>PageDownloadMod.xaml</DependentUpon>
@@ -480,11 +486,19 @@
       <SubType>Code</SubType>
     </Compile>
 
+    <Page Include="Modules\Minecraft\MyMiniCompItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Modules\Minecraft\MyLocalModItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Modules\Minecraft\MyCompItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadCompFavorites.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
