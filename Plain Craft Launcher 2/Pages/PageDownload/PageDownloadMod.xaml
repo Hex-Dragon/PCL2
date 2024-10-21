@@ -6,7 +6,7 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel Orientation="Vertical" Margin="25">
-            <local:MyCard Title="搜索 Mod" Margin="0,0,0,15" x:Name="PanAlways">
+            <local:MyCard Title="{StaticResource LangDownloadModSearchTitle}" Margin="0,0,0,15" x:Name="PanAlways">
                 <StackPanel Margin="25,40,25,15">
                     <Grid Margin="0,0,0,11" HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
@@ -22,17 +22,17 @@
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
                         </Grid.RowDefinitions>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="名称" Margin="0,0,18,0" />
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangDownloadModSearchName}" Margin="0,0,18,0" />
                         <local:MyTextBox x:Name="TextSearchName" Grid.Column="1" Grid.ColumnSpan="2" />
-                        <TextBlock VerticalAlignment="Center" Grid.Column="4" HorizontalAlignment="Left" Text="来源" Margin="0,0,18,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Column="4" HorizontalAlignment="Left" Text="{StaticResource LangDownloadModSearchSource}" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="ComboSearchSource" Grid.Column="5">
-                            <local:MyComboBoxItem Content="全部" Tag="3" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModSearchSourceAll}" Tag="3" IsSelected="True" />
                             <local:MyComboBoxItem Content="CurseForge" Tag="1" />
                             <local:MyComboBoxItem Content="Modrinth" Tag="2" />
                         </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="版本" Margin="0,0,18,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="{StaticResource LangDownloadModSearchVersion}" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" IsEditable="True" MaxDropDownHeight="320">
-                            <local:MyComboBoxItem Content="全部 (也可自行输入)" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModSearchVersionAll}" IsSelected="True" />
                             <local:MyComboBoxItem Content="1.21.1" />
                             <local:MyComboBoxItem Content="1.21" />
                             <local:MyComboBoxItem Content="1.20.6" />
@@ -52,40 +52,40 @@
                             <local:MyComboBoxItem Content="1.7.10" />
                         </local:MyComboBox>
                         <local:MyComboBox x:Name="ComboSearchLoader" Visibility="Collapsed" Grid.Row="2" Grid.Column="2" MaxDropDownHeight="320" Margin="10,0,0,0">
-                            <local:MyComboBoxItem Content="任意 Mod 加载器" IsSelected="True" Tag="0" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModSearchLoader}" IsSelected="True" Tag="0" />
                             <local:MyComboBoxItem Content="Forge" Tag="1" />
                             <local:MyComboBoxItem Content="Fabric" Tag="4" />
                             <local:MyComboBoxItem Content="Quilt" Tag="5" />
                             <local:MyComboBoxItem Content="NeoForge" Tag="6" />
                         </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Left" Text="类型" Margin="0,0,18,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Left" Text="{StaticResource LangDownloadModType}" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="5" Grid.Row="2" MaxDropDownHeight="320">
-                            <local:MyComboBoxItem Content="全部" Tag="" IsSelected="True" />
-                            <local:MyComboBoxItem Content="世界元素" Tag="406/worldgen" />
-                            <local:MyComboBoxItem Content="生物群系" Tag="407/" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="维度" Tag="410/" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="矿物与资源" Tag="408/" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="天然结构" Tag="409/" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="科技" Tag="412/technology" />
-                            <local:MyComboBoxItem Content="管道与物流" Tag="415/" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="自动化" Tag="4843/" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="能源" Tag="417/" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="红石" Tag="4558/" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="食物与烹饪" Tag="436/food" />
-                            <local:MyComboBoxItem Content="农业" Tag="416/" Margin="15,0,0,0" />
-                            <local:MyComboBoxItem Content="游戏机制" Tag="/game-mechanics" />
-                            <local:MyComboBoxItem Content="运输" Tag="414/transportation" />
-                            <local:MyComboBoxItem Content="仓储" Tag="420/storage" />
-                            <local:MyComboBoxItem Content="魔法" Tag="419/magic" />
-                            <local:MyComboBoxItem Content="冒险" Tag="422/adventure" />
-                            <local:MyComboBoxItem Content="装饰" Tag="424/decoration" />
-                            <local:MyComboBoxItem Content="生物" Tag="411/mobs" />
-                            <local:MyComboBoxItem Content="装备与工具" Tag="434/equipment" />
-                            <local:MyComboBoxItem Content="性能优化" Tag="/optimization" />
-                            <local:MyComboBoxItem Content="信息显示" Tag="423/" />
-                            <local:MyComboBoxItem Content="服务器" Tag="435/social" />
-                            <local:MyComboBoxItem Content="改良" Tag="5191/utility" />
-                            <local:MyComboBoxItem Content="支持库" Tag="421/library" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeAll}" Tag="" IsSelected="True" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeWorldElement}" Tag="406/worldgen" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeBiome}" Tag="407/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeDimension}" Tag="410/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeMineral}" Tag="408/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeStructure}" Tag="409/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeTech}" Tag="412/technology" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypePipe}" Tag="415/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeAuto}" Tag="4843/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeEnergy}" Tag="417/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeRedstone}" Tag="4558/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeFood}" Tag="436/food" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeAgriculture}" Tag="416/" Margin="15,0,0,0" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeGameMechanics}" Tag="/game-mechanics" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeTransportation}" Tag="414/transportation" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeStorage}" Tag="420/storage" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeMagic}" Tag="419/magic" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeAdventure}" Tag="422/adventure" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeDecoration}" Tag="424/decoration" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeMobs}" Tag="411/mobs" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeEquipment}" Tag="434/equipment" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeOptimization}" Tag="/optimization" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeDisplay}" Tag="423/" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeServer}" Tag="435/social" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeUtility}" Tag="5191/utility" />
+                            <local:MyComboBoxItem Content="{StaticResource LangDownloadModTypeLib}" Tag="421/library" />
                         </local:MyComboBox>
                     </Grid>
                     <Grid Margin="0,4,0,6" Height="35">
@@ -93,13 +93,13 @@
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnSearchRun" Text="搜索" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Highlight" />
-                        <local:MyButton x:Name="BtnSearchReset" Text="重置条件" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" />
+                        <local:MyButton x:Name="BtnSearchRun" Text="{StaticResource LangDownloadModSearch}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Highlight" />
+                        <local:MyButton x:Name="BtnSearchReset" Text="{StaticResource LangDownloadModReset}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
             <StackPanel x:Name="PanContent">
-                <local:MyHint x:Name="HintError" Text="无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，结果可能不全。&#xa;请尝试使用 VPN 或加速器以改善网络。" IsWarn="True" Margin="0,0,0,15" />
+                <local:MyHint x:Name="HintError" Text="{StaticResource LangDownloadModConnectModrinthFail}" IsWarn="True" Margin="0,0,0,15" />
                 <local:MyCard x:Name="CardProjects" UseAnimation="False">
                     <StackPanel x:Name="PanProjects" Margin="12" />
                 </local:MyCard>
@@ -117,7 +117,7 @@
                 </local:MyCard>
             </StackPanel>
             <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
-                <local:MyLoading Text="正在获取 Mod 列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <local:MyLoading Text="{StaticResource LangDownloadModGettingList}" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </local:MyCard>
         </StackPanel>
     </local:MyScrollViewer>
