@@ -54,6 +54,6 @@ body:
       In HMCL, go to the instance list (All Instances), click the three dots on the right side of the instance, and select Export Launch Script.
     placeholder: |
       先点击这个文本框，然后再将文件直接拖拽到文本框中以上传。
-      Click this text box first, then drag and drop the file into the text box to upload.
+      Click on this text box first, then drag and drop the file directly into the text box to upload.
   validations:
     required: false
