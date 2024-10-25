@@ -17,6 +17,7 @@ body:
     - label: "我已经确认我的上一 Issue 提交是在 10 分钟之前或更早。否则，此 Issue 将被自动删除。"
       required: true
     - label: "我已经明确即使此 Issue 处理完成我也可能无法获取活跃橙。如果想要获取活跃橙，我会反馈一个 Bug，或去帮助库或者此仓库提交 PR。"
+      required: true
 - type: textarea
   id: "yml-2"
   attributes:
