@@ -1033,7 +1033,7 @@ ExitDataLoad:
     ''' </summary>
     Public Function GetMcFoolName(Name As String) As String
         Name = Name.ToLower
-        If Name.StartsWithF("2.0") OrElse Name.StartsWith("2point0") Then
+        If Name.StartsWithF("2.0") OrElse Name.StartsWithF("2point0") Then
             Dim Tag = ""
             If Name.EndsWith("red") Then
                 Tag = "（红色版本）"
