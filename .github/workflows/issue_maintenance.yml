@@ -17,6 +17,6 @@ jobs:
           issue-state: 'open'
           labels: '等待提交者'
           body: |
-            此 Issue 因长时间无回复而超时关闭，您仍可在下方回复内容
-            This Issue has been closed due to long time inactive, you can still comment here.
+            此 Issue 因长时间无回复而关闭，您仍可在下方回复内容。
+            This issue has been closed due to long time inactive, you can still comment here.
           close-reason: 'not_planned'
