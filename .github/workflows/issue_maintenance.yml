@@ -1,0 +1,22 @@
+name: Issue Maintenance
+
+on:
+  schedule:
+    - cron: "0 0 * * 2"
+
+jobs:
+  check-inactive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check-inactive
+        uses: actions-cool/issues-helper@v3.6.0
+        with:
+          actions: 'check-inactive'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          inactive-day: 14
+          issue-state: 'open'
+          labels: '等待提交者'
+          body: |
+            此 Issue 因长时间无回复而超时关闭，您仍可在下方回复内容
+            This Issue has been closed due to long time inactive, you can still comment here.
+          close-reason: 'not_planned'

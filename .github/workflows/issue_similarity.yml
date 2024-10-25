@@ -16,4 +16,3 @@ jobs:
           comment-body: '${index}. ${similarity} #${number}'
           show-footer: false
           show-mentioned: true
-          since-days: 730
