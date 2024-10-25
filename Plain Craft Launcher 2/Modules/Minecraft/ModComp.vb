@@ -247,7 +247,13 @@
                     Website = Data("links")("websiteUrl").ToString.TrimEnd("/")
                     LastUpdate = Data("dateReleased") '#1194
                     DownloadCount = Data("downloadCount")
-                    If Data("logo").Count > 0 Then LogoUrl = Data("logo")("thumbnailUrl")
+                    If Data("logo").Count > 0 Then
+                        If Data("logo")("thumbnailUrl") Is Nothing OrElse Data("logo")("thumbnailUrl") = "" Then
+                            LogoUrl = Data("logo")("url")
+                        Else
+                            LogoUrl = Data("logo")("thumbnailUrl")
+                        End If
+                    End If
                     'FileIndexes / GameVersions / ModLoaders
                     ModLoaders = New List(Of CompModLoaderType)
                     Dim Files As New List(Of KeyValuePair(Of Integer, List(Of String))) 'FileId, GameVersions
@@ -417,7 +423,7 @@
             Json("DownloadCount") = DownloadCount
             If ModLoaders IsNot Nothing AndAlso ModLoaders.Any Then Json("ModLoaders") = New JArray(ModLoaders.Select(Function(m) CInt(m)))
             Json("Tags") = New JArray(Tags)
-            If LogoUrl IsNot Nothing Then Json("LogoUrl") = LogoUrl
+            If Not String.IsNullOrEmpty(LogoUrl) Then Json("LogoUrl") = LogoUrl
             If GameVersions.Any Then Json("GameVersions") = New JArray(GameVersions)
             Json("CacheTime") = Date.Now '用于检查缓存时间
             Return Json
@@ -536,7 +542,7 @@
             Return NewItem
         End Function
         Public Function GetControlLogo() As String
-            If LogoUrl Is Nothing Then
+            If String.IsNullOrEmpty(LogoUrl) Then
                 Return PathImage & "Icons/NoIcon.png"
             Else
                 Return LogoUrl
@@ -944,30 +950,30 @@ Retry:
             Dim CurseForgeFailed As Boolean = False
             If CurseForgeUrl IsNot Nothing Then
                 CurseForgeThread = RunInNewThread(
-                    Sub()
-                        Try
-                            '获取工程列表
-                            Log("[Comp] 开始从 CurseForge 获取工程列表：" & CurseForgeUrl)
-                            Dim RequestResult As JObject = DlModRequest(CurseForgeUrl, IsJson:=True)
-                            Task.Progress += 0.2
-                            Dim ProjectList As New List(Of CompProject)
-                            For Each JsonEntry As JObject In RequestResult("data")
-                                ProjectList.Add(New CompProject(JsonEntry))
-                            Next
-                            '更新结果
-                            SyncLock ResultsLock
-                                RawResults.AddRange(ProjectList)
-                            End SyncLock
-                            Storage.CurseForgeOffset += ProjectList.Count
-                            Storage.CurseForgeTotal = RequestResult("pagination")("totalCount").ToObject(Of Integer)
-                            Log($"[Comp] 从 CurseForge 获取到了 {ProjectList.Count} 个工程（已获取 {Storage.CurseForgeOffset} 个，共 {Storage.CurseForgeTotal} 个）")
-                        Catch ex As Exception
-                            Log(ex, "从 CurseForge 获取工程列表失败")
-                            Storage.CurseForgeTotal = -1 'Storage.CurseForgeOffset
-                            [Error] = ex
-                            CurseForgeFailed = True
-                        End Try
-                    End Sub, "CurseForge Project Request")
+                Sub()
+                    Try
+                        '获取工程列表
+                        Log("[Comp] 开始从 CurseForge 获取工程列表：" & CurseForgeUrl)
+                        Dim RequestResult As JObject = DlModRequest(CurseForgeUrl, IsJson:=True)
+                        Task.Progress += 0.2
+                        Dim ProjectList As New List(Of CompProject)
+                        For Each JsonEntry As JObject In RequestResult("data")
+                            ProjectList.Add(New CompProject(JsonEntry))
+                        Next
+                        '更新结果
+                        SyncLock ResultsLock
+                            RawResults.AddRange(ProjectList)
+                        End SyncLock
+                        Storage.CurseForgeOffset += ProjectList.Count
+                        Storage.CurseForgeTotal = RequestResult("pagination")("totalCount").ToObject(Of Integer)
+                        Log($"[Comp] 从 CurseForge 获取到了 {ProjectList.Count} 个工程（已获取 {Storage.CurseForgeOffset} 个，共 {Storage.CurseForgeTotal} 个）")
+                    Catch ex As Exception
+                        Log(ex, "从 CurseForge 获取工程列表失败")
+                        Storage.CurseForgeTotal = -1 'Storage.CurseForgeOffset
+                        [Error] = ex
+                        CurseForgeFailed = True
+                    End Try
+                End Sub, "CurseForge Project Request")
             End If
 
             '启动 Modrinth 线程
@@ -975,32 +981,32 @@ Retry:
             Dim ModrinthFailed As Boolean = False
             If ModrinthUrl IsNot Nothing Then
                 ModrinthThread = RunInNewThread(
-                    Sub()
-                        Try
-                            Log("[Comp] 开始从 Modrinth 获取工程列表：" & ModrinthUrl)
-                            Dim RequestResult As JObject = DlModRequest(ModrinthUrl, IsJson:=True)
-                            Task.Progress += 0.2
-                            Dim ProjectList As New List(Of CompProject)
-                            For Each JsonEntry As JObject In RequestResult("hits")
-                                ProjectList.Add(New CompProject(JsonEntry))
+                Sub()
+                    Try
+                        Log("[Comp] 开始从 Modrinth 获取工程列表：" & ModrinthUrl)
+                        Dim RequestResult As JObject = DlModRequest(ModrinthUrl, IsJson:=True)
+                        Task.Progress += 0.2
+                        Dim ProjectList As New List(Of CompProject)
+                        For Each JsonEntry As JObject In RequestResult("hits")
+                            ProjectList.Add(New CompProject(JsonEntry))
+                        Next
+                        '更新结果
+                        SyncLock ResultsLock
+                            For Each Project In ProjectList
+                                If Task.Input.Type = CompType.Mod AndAlso Not Project.ModLoaders.Any() Then Continue For '过滤插件（#2458）
+                                RawResults.Add(Project)
                             Next
-                            '更新结果
-                            SyncLock ResultsLock
-                                For Each Project In ProjectList
-                                    If Task.Input.Type = CompType.Mod AndAlso Not Project.ModLoaders.Any() Then Continue For '过滤插件（#2458）
-                                    RawResults.Add(Project)
-                                Next
-                            End SyncLock
-                            Storage.ModrinthOffset += ProjectList.Count
-                            Storage.ModrinthTotal = RequestResult("total_hits").ToObject(Of Integer)
-                            Log($"[Comp] 从 Modrinth 获取到了 {ProjectList.Count} 个工程（已获取 {Storage.ModrinthOffset} 个，共 {Storage.ModrinthTotal} 个）")
-                        Catch ex As Exception
-                            Log(ex, "从 Modrinth 获取工程列表失败")
-                            Storage.ModrinthTotal = -1 'Storage.ModrinthOffset
-                            [Error] = ex
-                            ModrinthFailed = True
-                        End Try
-                    End Sub, "Modrinth Project Request")
+                        End SyncLock
+                        Storage.ModrinthOffset += ProjectList.Count
+                        Storage.ModrinthTotal = RequestResult("total_hits").ToObject(Of Integer)
+                        Log($"[Comp] 从 Modrinth 获取到了 {ProjectList.Count} 个工程（已获取 {Storage.ModrinthOffset} 个，共 {Storage.ModrinthTotal} 个）")
+                    Catch ex As Exception
+                        Log(ex, "从 Modrinth 获取工程列表失败")
+                        Storage.ModrinthTotal = -1 'Storage.ModrinthOffset
+                        [Error] = ex
+                        ModrinthFailed = True
+                    End Try
+                End Sub, "Modrinth Project Request")
             End If
 
             '等待线程结束
@@ -1470,7 +1476,7 @@ Retry:
         End If
         '更新前置 Mod 信息
         If Deps.Any Then
-            For Each DepProject In Deps.Select(Function(id) CompProjectCache(id))
+            For Each DepProject In Deps.Where(Function(id) CompProjectCache.ContainsKey(id)).Select(Function(id) CompProjectCache(id))
                 For Each File In CompFilesCache(ProjectId)
                     If File.RawDependencies.Contains(DepProject.Id) AndAlso DepProject.Id <> ProjectId Then
                         File.Dependencies.Add(DepProject.Id)
@@ -1490,10 +1496,11 @@ Retry:
         Dim Deps As List(Of String) = Files.SelectMany(Function(f) f.Dependencies).Distinct.ToList()
         Deps.Sort()
         If Not Deps.Any() Then Exit Sub
-        Deps = Deps.Where(Function(dep)
-                              If Not CompProjectCache.ContainsKey(dep) Then Log($"[Comp] 未找到 ID {dep} 的前置 Mod 信息", LogLevel.Debug)
-                              Return CompProjectCache.ContainsKey(dep)
-                          End Function).ToList
+        Deps = Deps.Where(
+        Function(dep)
+            If Not CompProjectCache.ContainsKey(dep) Then Log($"[Comp] 未找到 ID {dep} 的前置 Mod 信息", LogLevel.Debug)
+            Return CompProjectCache.ContainsKey(dep)
+        End Function).ToList
         '添加开头间隔
         Stack.Children.Add(New TextBlock With {.Text = "前置 Mod", .FontSize = 14, .HorizontalAlignment = HorizontalAlignment.Left, .Margin = New Thickness(6, 2, 0, 5)})
         '添加前置 Mod 列表

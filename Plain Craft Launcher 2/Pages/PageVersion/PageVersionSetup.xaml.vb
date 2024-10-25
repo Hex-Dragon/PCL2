@@ -282,6 +282,11 @@
         If Setup.Get("VersionRamType", Version:=Version) = 2 Then
             Return PageSetupLaunch.GetRam(Version, True, Is32BitJava)
         End If
+
+        '------------------------------------------
+        ' 修改下方代码时需要一并修改 PageSetupLaunch
+        '------------------------------------------
+
         '使用当前版本的设置
         Dim RamGive As Double
         If Setup.Get("VersionRamType", Version:=Version) = 0 Then
@@ -297,19 +302,19 @@
                 '可安装 Mod 的版本
                 Dim ModDir As New DirectoryInfo(Version.PathIndie & "mods\")
                 Dim ModCount As Integer = If(ModDir.Exists, ModDir.GetFiles.Length, 0)
-                RamMininum = 0.4 + ModCount / 150
-                RamTarget1 = 1.5 + ModCount / 100
-                RamTarget2 = 3 + ModCount / 60
-                RamTarget3 = 6 + ModCount / 30
+                RamMininum = 0.5 + ModCount / 150
+                RamTarget1 = 1.5 + ModCount / 90
+                RamTarget2 = 2.7 + ModCount / 50
+                RamTarget3 = 4.5 + ModCount / 25
             ElseIf Version IsNot Nothing AndAlso Version.Version.HasOptiFine Then
                 'OptiFine 版本
-                RamMininum = 0.3
+                RamMininum = 0.5
                 RamTarget1 = 1.5
                 RamTarget2 = 3
-                RamTarget3 = 6
+                RamTarget3 = 5
             Else
                 '普通版本
-                RamMininum = 0.3
+                RamMininum = 0.5
                 RamTarget1 = 1.5
                 RamTarget2 = 2.5
                 RamTarget3 = 4
@@ -317,27 +322,23 @@
             Dim RamDelta As Double
             '预分配内存，阶段一，0 ~ T1，100%
             RamDelta = RamTarget1
-            RamAvailable = Math.Max(0, RamAvailable - 0.1)
-            RamGive += Math.Min(RamAvailable * 1, RamDelta)
-            RamAvailable -= RamDelta / 1 + 0.1
+            RamGive += Math.Min(RamAvailable, RamDelta)
+            RamAvailable -= RamDelta
             If RamAvailable < 0.1 Then GoTo PreFin
-            '预分配内存，阶段二，T1 ~ T2，80%
+            '预分配内存，阶段二，T1 ~ T2，70%
             RamDelta = RamTarget2 - RamTarget1
-            RamAvailable = Math.Max(0, RamAvailable - 0.1)
-            RamGive += Math.Min(RamAvailable * 0.8, RamDelta)
-            RamAvailable -= RamDelta / 0.8 + 0.1
+            RamGive += Math.Min(RamAvailable * 0.7, RamDelta)
+            RamAvailable -= RamDelta / 0.7
             If RamAvailable < 0.1 Then GoTo PreFin
-            '预分配内存，阶段三，T2 ~ T3，60%
+            '预分配内存，阶段三，T2 ~ T3，40%
             RamDelta = RamTarget3 - RamTarget2
-            RamAvailable = Math.Max(0, RamAvailable - 0.2)
-            RamGive += Math.Min(RamAvailable * 0.6, RamDelta)
-            RamAvailable -= RamDelta / 0.6 + 0.2
-            If RamAvailable < 0.1 Then GoTo PreFin
-            '预分配内存，阶段四，T3 ~ T3 * 2，40%
-            RamDelta = RamTarget3
-            RamAvailable = Math.Max(0, RamAvailable - 0.3)
             RamGive += Math.Min(RamAvailable * 0.4, RamDelta)
-            RamAvailable -= RamDelta / 0.4 + 0.3
+            RamAvailable -= RamDelta / 0.4
+            If RamAvailable < 0.1 Then GoTo PreFin
+            '预分配内存，阶段四，T3 ~ T3 * 2，15%
+            RamDelta = RamTarget3
+            RamGive += Math.Min(RamAvailable * 0.15, RamDelta)
+            RamAvailable -= RamDelta / 0.15
             If RamAvailable < 0.1 Then GoTo PreFin
 PreFin:
             '不低于最低值
@@ -480,6 +481,23 @@ PreFin:
             Log("[Java] 修改版本 Java 选择设置：" & SelectedJava.ToString)
         End If
         RefreshRam(True)
+    End Sub
+
+#End Region
+
+#Region "其他设置"
+
+    '版本隔离警告
+    Private Sub ComboArgumentIndie_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboArgumentIndie.SelectionChanged
+        If AniControlEnabled <> 0 Then Exit Sub
+        If MyMsgBox("调整版本隔离后，你可能得把游戏存档、Mod 等文件手动迁移到新的游戏文件夹中。" & vbCrLf &
+                    "如果修改后发现存档消失，把这项设置改回来就能恢复。" & vbCrLf &
+                    "如果你不会迁移存档，不建议修改这项设置！",
+                    "警告", "我知道我在做什么", "取消", IsWarn:=True) = 2 Then
+            AniControlEnabled += 1
+            ComboArgumentIndie.SelectedItem = e.RemovedItems(0)
+            AniControlEnabled -= 1
+        End If
     End Sub
 
 #End Region

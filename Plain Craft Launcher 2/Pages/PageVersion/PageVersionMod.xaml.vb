@@ -30,7 +30,7 @@
     ''' 刷新 Mod 列表。
     ''' </summary>
     Public Sub ReloadModList(Optional ForceReload As Boolean = False)
-        If LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", If(ForceReload, LoaderFolderRunType.ForceRun, LoaderFolderRunType.RunOnUpdated)) Then
+        If LoaderRun(If(ForceReload, LoaderFolderRunType.ForceRun, LoaderFolderRunType.RunOnUpdated)) Then
             Log("[System] 已刷新 Mod 列表")
             Filter = FilterType.All
             PanBack.ScrollToHome()
@@ -43,9 +43,12 @@
     End Sub
     Private Sub Load_Click(sender As Object, e As MouseButtonEventArgs) Handles Load.Click
         If McModLoader.State = LoadState.Failed Then
-            LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
+            LoaderRun(LoaderFolderRunType.ForceRun)
         End If
     End Sub
+    Public Function LoaderRun(Type As LoaderFolderRunType) As Boolean
+        Return LoaderFolderRun(McModLoader, PageVersionLeft.Version.PathIndie & "mods\", Type)
+    End Function
 
 #End Region
 
@@ -121,7 +124,7 @@
         ToolTipService.SetVerticalOffset(BtnED, 30)
         ToolTipService.SetHorizontalOffset(BtnED, 2)
         AddHandler BtnED.Click, AddressOf ED_Click
-        If sender.Entry.State = McMod.McModState.Unavaliable Then
+        If sender.Entry.State = McMod.McModState.Unavailable Then
             sender.Buttons = {BtnCont, BtnOpen, BtnDelete}
         Else
             sender.Buttons = {BtnCont, BtnOpen, BtnED, BtnDelete}
@@ -171,22 +174,18 @@
             If ModItem.CanUpdate Then UpdateCount += 1
             If ModItem.State.Equals(McMod.McModState.Fine) Then EnabledCount += 1
             If ModItem.State.Equals(McMod.McModState.Disabled) Then DisabledCount += 1
-            If ModItem.State.Equals(McMod.McModState.Unavaliable) Then UnavalialeCount += 1
+            If ModItem.State.Equals(McMod.McModState.Unavailable) Then UnavalialeCount += 1
         Next
         '显示
         BtnFilterAll.Text = If(IsSearching, "搜索结果", "全部") & $" ({AnyCount})"
         BtnFilterCanUpdate.Text = $"可更新 ({UpdateCount})"
-        BtnFilterCanUpdate.Visibility = If(Filter = FilterType.CanUpdate OrElse
-            UpdateCount > 0, Visibility.Visible, Visibility.Collapsed)
+        BtnFilterCanUpdate.Visibility = If(Filter = FilterType.CanUpdate OrElse UpdateCount > 0, Visibility.Visible, Visibility.Collapsed)
         BtnFilterEnabled.Text = $"启用 ({EnabledCount})"
-        BtnFilterEnabled.Visibility = If(Filter = FilterType.Enabled OrElse Filter = FilterType.Disabled OrElse
-            EnabledCount > 0 AndAlso EnabledCount <> AnyCount, Visibility.Visible, Visibility.Collapsed)
+        BtnFilterEnabled.Visibility = If(Filter = FilterType.Enabled OrElse (EnabledCount > 0 AndAlso EnabledCount < AnyCount), Visibility.Visible, Visibility.Collapsed)
         BtnFilterDisabled.Text = $"禁用 ({DisabledCount})"
-        BtnFilterDisabled.Visibility = If(Filter = FilterType.Enabled OrElse Filter = FilterType.Disabled OrElse
-            DisabledCount > 0, Visibility.Visible, Visibility.Collapsed)
+        BtnFilterDisabled.Visibility = If(Filter = FilterType.Disabled OrElse DisabledCount > 0, Visibility.Visible, Visibility.Collapsed)
         BtnFilterError.Text = $"错误 ({UnavalialeCount})"
-        BtnFilterError.Visibility = If(Filter = FilterType.Unavaliable OrElse
-            UnavalialeCount > 0, Visibility.Visible, Visibility.Collapsed)
+        BtnFilterError.Visibility = If(Filter = FilterType.Unavailable OrElse UnavalialeCount > 0, Visibility.Visible, Visibility.Collapsed)
 
         '-----------------
         ' 底部栏
@@ -333,7 +332,7 @@
     Private Sub ChangeAllSelected(Value As Boolean)
         AniControlEnabled += 1
         SelectedMods.Clear()
-        For Each Item As MyLocalModItem In GetShowingMods(True).Select(Function(m) ModItems(m.RawFileName))
+        For Each Item As MyLocalModItem In GetShowingMods(True).Where(Function(m) ModItems.ContainsKey(m.RawFileName)).Select(Function(m) ModItems(m.RawFileName))
             Item.Checked = Value
             If Value Then SelectedMods.Add(Item.Entry.RawFileName)
         Next
@@ -382,7 +381,7 @@
         Enabled = 1
         Disabled = 2
         CanUpdate = 3
-        Unavaliable = 4
+        Unavailable = 4
     End Enum
 
     ''' <summary>
@@ -406,8 +405,8 @@
                 Return CheckingMod.State = McMod.McModState.Disabled
             Case FilterType.CanUpdate
                 Return CheckingMod.CanUpdate
-            Case FilterType.Unavaliable
-                Return CheckingMod.State = McMod.McModState.Unavaliable
+            Case FilterType.Unavailable
+                Return CheckingMod.State = McMod.McModState.Unavailable
             Case Else
                 Return False
         End Select
@@ -471,9 +470,16 @@
             '更改 Loader 中的列表
             Dim NewModEntity As New McMod(NewPath)
             NewModEntity.FromJson(ModEntity.ToJson)
-            Dim IndexOfLoader As Integer = McModLoader.Output.IndexOf(ModEntity)
-            McModLoader.Output.RemoveAt(IndexOfLoader)
-            McModLoader.Output.Insert(IndexOfLoader, NewModEntity)
+            If McModLoader.Output.Contains(ModEntity) Then
+                Dim IndexOfLoader As Integer = McModLoader.Output.IndexOf(ModEntity)
+                McModLoader.Output.RemoveAt(IndexOfLoader)
+                McModLoader.Output.Insert(IndexOfLoader, NewModEntity)
+            End If
+            If SearchResult IsNot Nothing AndAlso SearchResult.Contains(ModEntity) Then '#4862
+                Dim IndexOfResult As Integer = SearchResult.IndexOf(ModEntity)
+                SearchResult.Remove(ModEntity)
+                SearchResult.Insert(IndexOfResult, NewModEntity)
+            End If
             '更改 UI 中的列表
             Dim NewItem As MyLocalModItem = McModListItem(NewModEntity)
             ModItems(ModEntity.RawFileName) = NewItem
@@ -488,11 +494,15 @@
             Hint("由于文件被占用，Mod 的状态切换失败，请尝试关闭正在运行的游戏后再试！", HintType.Critical)
             ReloadModList(True)
         End If
+        LoaderRun(LoaderFolderRunType.UpdateOnly)
     End Sub
 
     '更新
     Private Sub BtnSelectUpdate_Click() Handles BtnSelectUpdate.Click
-        UpdateMods(McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.CanUpdate))
+        Dim UpdateList As List(Of McMod) = McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.CanUpdate).ToList()
+        If Not UpdateList.Any() Then Return
+        UpdateMods(UpdateList)
+        ChangeAllSelected(False)
     End Sub
     ''' <summary>
     ''' 记录正在进行 Mod 更新的 mods 文件夹路径。
@@ -575,7 +585,14 @@
                 '结果提示
                 Select Case Loader.State
                     Case LoadState.Finished
-                        Hint(If(FinishedFileNames.Count > 1, $"已成功更新 {FinishedFileNames.Count} 个 Mod！", $"已成功更新：{FinishedFileNames.Single}"), HintType.Finish)
+                        Select Case FinishedFileNames.Count
+                            Case 0 '一般是由于 Mod 文件被占用，然后玩家主动取消
+                                Log($"[Mod] 没有 Mod 被成功更新")
+                            Case 1
+                                Hint($"已成功更新 {FinishedFileNames.Single}！", HintType.Finish)
+                            Case Else
+                                Hint($"已成功更新 {FinishedFileNames.Count} 个 Mod！", HintType.Finish)
+                        End Select
                     Case LoadState.Failed
                         Hint("Mod 更新失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
                     Case LoadState.Aborted
@@ -583,6 +600,7 @@
                     Case Else
                         Exit Sub
                 End Select
+                Log($"[Mod] 已从正在进行 Mod 更新的文件夹列表移除：{PathMods}")
                 UpdatingVersions.Remove(PathMods)
                 '清理缓存
                 RunInNewThread(
@@ -597,7 +615,7 @@
                 End Sub, "Clean Mod Update Cache", ThreadPriority.BelowNormal)
             End Sub
             '启动加载器
-            Log($"[Mod] 开始更新 {ModList.Count} 个 Mod")
+            Log($"[Mod] 开始更新 {ModList.Count} 个 Mod：{PathMods}")
             UpdatingVersions.Add(PathMods)
             Loader.Start()
             LoaderTaskbarAdd(Loader)
@@ -612,6 +630,7 @@
     '删除
     Private Sub BtnSelectDelete_Click() Handles BtnSelectDelete.Click
         DeleteMods(McModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)))
+        ChangeAllSelected(False)
     End Sub
     Private Sub DeleteMods(ModList As IEnumerable(Of McMod))
         Try
@@ -683,6 +702,7 @@
             Log(ex, "删除 Mod 出现未知错误", LogLevel.Feedback)
             ReloadModList(True)
         End Try
+        LoaderRun(LoaderFolderRunType.UpdateOnly)
     End Sub
 
     '取消选择
@@ -700,7 +720,7 @@
 
             Dim ModEntry As McMod = CType(If(TypeOf sender Is MyIconButton, sender.Tag, sender), MyLocalModItem).Entry
             '加载失败信息
-            If ModEntry.State = McMod.McModState.Unavaliable Then
+            If ModEntry.State = McMod.McModState.Unavailable Then
                 MyMsgBox("无法读取此 Mod 的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "Mod 读取失败")
                 Return
             End If
