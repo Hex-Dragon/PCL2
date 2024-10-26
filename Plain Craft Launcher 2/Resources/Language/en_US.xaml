@@ -974,7 +974,7 @@ Leave blank as default, require restarting the launcher to apply.</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">Check for Updates</s:String>
     <s:String x:Key="LangPageSetupSystemLang">Language</s:String>
     <s:String x:Key="LangPageSetupSystemLangLaunchLang">Language</s:String>
-    <s:String x:Key="LangPageSetupSystemLangWarn">Language translations may not be 100% accurate, need to restart the launcher after the modification.</s:String>
+    <s:String x:Key="LangPageSetupSystemLangWarn">Language translations may not be 100% accurate, and the launcher needs to be restarted after modification.</s:String>
     <s:String x:Key="LangPageSetupSystemDebug">Debug</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeed">Animation Speed</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">Prevent to copy existing files on download</s:String>

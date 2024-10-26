@@ -85,81 +85,81 @@
     <s:String x:Key="LangPageNameModDownload">Mod ダウンロード</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">Modpack ダウンロード</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">リソースパックダウンロード</s:String>
-    <s:String x:Key="LangThemeRealWhite">目が見えない白</s:String>
-    <s:String x:Key="LangThemeRealFunny">真・滑稽彩</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip8">累積支援額が ¥23.33 に達した後、愛発電のプライベートメッセージで【解除コード】を送信してロックを解除してください。
-右クリックで支援ページを開き、PCL が良いと思えばサポートしてください =w=！</s:String>
-    <s:String x:Key="LangThemeUnlockTip8">累積支援額が ¥23.33 に達した後、愛発電のプライベートメッセージで【解除コード】を送信してロックを解除してください</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· 1つの Bug を報告し、Issue が [完了] とマークされた後に解除を要求する（右クリックでフィードバックページを開く）
-· ヘルプリポジトリに Pull Request を提出し、龍猫がマージした後にロックを解除する</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· 1つの Bug を報告し、フィードバックが [完了] とマークされた後に解除を要求する
-· ヘルプリポジトリに Pull Request を提出し、龍猫がマージした後にロックを解除する</s:String>
+    <s:String x:Key="LangThemeRealWhite">ブラインドホワイト</s:String>
+    <s:String x:Key="LangThemeRealFunny">本物·面白い色</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip8">累計スポンサー金額が ¥23.33 に達した後、爱发电でプライベートメッセージを送信し「解锁码」を取得してアンロックしてください。
+右クリックでスポンサーリンクを開き、もし PCL を気に入ったらサポートしてください =w=！</s:String>
+    <s:String x:Key="LangThemeUnlockTip8">累計スポンサー金額が ¥23.33 に達した後、愛発電でプライベートメッセージを送信し「解锁码」を取得してアンロックしてください。</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip9">· バグを報告し、Issue が「完了」としてマークされた後に Issue でアンロックを要求します（右クリックでフィードバックページを開く）
+· ヘルプセンターに Pull Request を送信し、合并が完了した後にアンロックされます</s:String>
+    <s:String x:Key="LangThemeUnlockTip9">· バグを報告し、フィードバックが「完了」としてマークされた後、Issueでアンロックを要求します
+· ヘルプセンターに Pull Request を送信し、合并が完了した後にアンロックされます</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">パーソナライズ設定に異常があり、自動的にリセットされました</s:String>
-    <s:String x:Key="LangHintThemeSetLoadFail">パーソナライズ設定の再読み込みに失敗しました</s:String>
+    <s:String x:Key="LangHintThemeSetLoadFail">パーソナライズ設定の再ロード中にエラーが発生しました</s:String>
     <s:String x:Key="LangHintThemeSetInit">パーソナライズ設定が初期化されました</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">パーソナライズ設定の初期化に失敗しました</s:String>
     <s:String x:Key="LangBackgroundPic">背景画像</s:String>
     <s:String x:Key="LangBackgroundPicCount">背景画像（{0} 枚）</s:String>
-    <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">すべての背景画像ファイルを削除します。
-この操作は取り消しできません。確定しますか？</s:String>
+    <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">背景画像フォルダ内のすべてのファイルを削除しようとしています。
+この操作は元に戻せません。実行してもよろしいですか？</s:String>
     <s:String x:Key="LangDialogTitleWarning">警告</s:String>
-    <s:String x:Key="LangHintBackgroundPicDeleted">背景画像がクリアされました！</s:String>
-    <s:String x:Key="LangHintBackgroundPicNotFound">利用可能な背景画像が検出されませんでした！</s:String>
+    <s:String x:Key="LangHintBackgroundPicDeleted">背景画像が削除されました！</s:String>
+    <s:String x:Key="LangHintBackgroundPicNotFound">利用可能な背景画像が見つかりません！</s:String>
     <s:String x:Key="LangHintBackgroundPicRefreshed">背景画像が更新されました：</s:String>
-    <s:String x:Key="LangDialogBackgroundPicRefreshFailA">背景画像の更新に失敗しました。画像ファイルが標準形式でない可能性があります。
-画像をペイントで開いて再保存すると、標準形式に変換されるかもしれません。
+    <s:String x:Key="LangDialogBackgroundPicRefreshFailA">背景画像の更新に失敗しました、この画像ファイルは標準フォーマットではない可能性があります。
+ペイントを使ってこのファイルを開いて再保存してみてください、これにより画像が標準フォーマットになります。
 ファイル：</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailB">背景画像の更新に失敗しました（ {0} ）</s:String>
     <s:String x:Key="LangDialogBackgroundPicRefreshFailUnknown">背景画像の更新中に未知のエラーが発生しました</s:String>
-    <s:String x:Key="LangDialogTitlePicChangeFailA">タイトルバー画像の変更に失敗しました。画像ファイルが標準形式でない可能性があります。
-画像をペイントで開いて再保存すると、標準形式に変換されるかもしれません。</s:String>
+    <s:String x:Key="LangDialogTitlePicChangeFailA">タイトルバー画像の変更に失敗しました。この画像ファイルは標準フォーマットではない可能性があります。
+ペイントを使ってこのファイルを開いて再保存してみてください。これにより画像が標準フォーマットになります。</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailB">タイトルバー画像の設定に失敗しました</s:String>
-    <s:String x:Key="LangDialogTitlePicChangeFailC">タイトルバー画像の調整に失敗しました。画像ファイルが標準形式でない可能性があります。
-画像をペイントで開いて再保存すると、標準形式に変換されるかもしれません。</s:String>
+    <s:String x:Key="LangDialogTitlePicChangeFailC">タイトルバー画像の調整に失敗しました。この画像ファイルは標準フォーマットではない可能性があります。
+ペイントを使ってこのファイルを開いて再保存してみてください。これにより画像が標準フォーマットになります。</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailD">タイトルバー画像の調整に失敗しました</s:String>
-    <s:String x:Key="LangDialogTitlePicChangeFailE">タイトルバー画像の誤ったクリアに失敗しました</s:String>
+    <s:String x:Key="LangDialogTitlePicChangeFailE">誤ったタイトルバー画像の削除に失敗しました</s:String>
     <s:String x:Key="LangDialogTitlePicChangeFailF">タイトルバー画像のコピーに失敗しました</s:String>
-    <s:String x:Key="LangHintTitlePicEmptied">タイトルバー画像がクリアされました！</s:String>
-    <s:String x:Key="LangDialogTitlePicEmptyFail">タイトルバー画像のクリアに失敗しました</s:String>
+    <s:String x:Key="LangHintTitlePicEmptied">タイトルバー画像が削除されました！</s:String>
+    <s:String x:Key="LangDialogTitlePicEmptyFail">タイトルバー画像の削除に失敗しました</s:String>
     <s:String x:Key="LangBackgroundMusicCount">背景音楽（ {0} 曲）</s:String>
     <s:String x:Key="LangBackgroundMusic">背景音楽</s:String>
-    <s:String x:Key="LangDialogBackgroundMusicDeleteContent">すべての背景音楽ファイルを削除します。
-この操作は取り消しできません。確定しますか？</s:String>
-    <s:String x:Key="LangHintBackgroundMusicDeleting">背景音楽の削除中です……</s:String>
+    <s:String x:Key="LangDialogBackgroundMusicDeleteContent">背景音楽フォルダ内のすべてのファイルを削除しようとしています。
+この操作は元に戻せません。、実行してもよろしいですか？</s:String>
+    <s:String x:Key="LangHintBackgroundMusicDeleting">背景音楽を削除中……</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleted">背景音楽が削除されました！</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">背景音楽の削除に失敗しました</s:String>
     <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">背景音楽フォルダの再作成に失敗しました</s:String>
-    <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">現在レイアウトファイルが存在します。教学ファイルの生成は既存のレイアウトファイルを上書きします！</s:String>
-    <s:String x:Key="LangDialogBtnContinue">続ける</s:String>
-    <s:String x:Key="LangDialogCustomPageOverwriteFail">教学ファイルの生成に失敗しました</s:String>
-    <s:String x:Key="LangHintCustomPageOverwriteSuccess">教学ファイルが生成されました！</s:String>
+    <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">現在レイアウトファイルが存在します、指導文書の生成は既存のレイアウトファイルを上書きします！</s:String>
+    <s:String x:Key="LangDialogBtnContinue">続行</s:String>
+    <s:String x:Key="LangDialogCustomPageOverwriteFail">指導文書の生成に失敗しました</s:String>
+    <s:String x:Key="LangHintCustomPageOverwriteSuccess">指導文書が生成されました！</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">ホームページが更新されました！</s:String>
-    <s:String x:Key="LangDialogCustomPageTeachContent">1. 「教学ファイル生成」ボタンをクリックすると、PCL フォルダ下に Custom.xaml レイアウトファイルが生成されます。
-2. このファイルをメモ帳などのツールで開いて編集し、編集後は保存してください。
-3. 「ホームページを更新」ボタンをクリックして、ホームページがどのように変化したか確認してください。
-教学ファイル生成後にホームページを直接更新すると、変更内容を確認しながら編集できるため、理解が深まります。
-カスタムホームページファイルを PCL ウィンドウに直接ドラッグしても、素早く読み込むことができます。</s:String>
+    <s:String x:Key="LangDialogCustomPageTeachContent">1.「指導文書生成」ボタンをクリックすると、PCLフォルダに Custom.xaml レイアウトファイルが生成されます。
+2. このファイルをメモ帳などで開いて編集し、編集後に保存してください。
+3.「ホームページ更新」ボタンをクリックして、ホームページがどのように変わったか確認してください。
+教育ファイルを生成してからホームページを更新し、比較しながら編集することで理解が深まります。
+カスタムホームページファイルをPCLウィンドウに直接ドラッグすることで、簡単に読み込むことができます。</s:String>
     <s:String x:Key="LangDialogCustomPageTeachTitle">ホームページカスタマイズチュートリアル</s:String>
-    <s:String x:Key="LangThemeBackUnlock">隠しテーマ 玄素黒 が解除されました！</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameContent">1. 関連サービスやウェブサイトをクロールしたり攻撃したりせず、関連アカウントを盗用しないでください。謎を解くためにこれを解決する必要はありません。
-2. 公開情報を改ざんしたり損傷させたりせず、できるだけ元の状態を保ってください。
-3. 迷ったときは、エコーの洞窟を覗いてみると驚きがあるかもしれません。
+    <s:String x:Key="LangThemeBackUnlock">隠しテーマ「玄素黒」がアンロックされました！</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameContent">1. 関連サービスやサイトをクロールしたり、攻撃したり、関連アカウントを盗んだりしないでください。パズルを解くにはこのような行動は必要ありません。
+2. 公開されている情報を改ざんまたは破壊しないでください。できるだけ元の状態を維持してください。
+3. 困ったときは、エコーホールを見てみると、意外なヒントが得られるかもしれません。
 
-規約違反の場合、関連するグループから強制退出される可能性があります！</s:String>
+違反すると、関連するグループから追放される可能性があります！</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameTitle">デコードゲームの基本ルール</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameAccept">わかりました</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameDeny">申し訳ありませんが、お断りします</s:String>
-    <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">次の手がかりを見つけるために、自分の知恵を働かせてください……
+    <s:String x:Key="LangDialogThemeUnlockGameAccept">了解しました</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameDeny">お断りします</s:String>
+    <s:String x:Key="LangDialogThemeUnlockGameFirstClueContent">次の手がかりを見つけるためには、自分の知恵を使う必要があります……
 最初の手がかり：</s:String>
     <s:String x:Key="LangDialogThemeUnlockGameFirstClueTitle">デコードゲーム</s:String>
     <s:String x:Key="LangOtherHelp">ヘルプ</s:String>
     <s:String x:Key="LangOtherAbout">について</s:String>
-    <s:String x:Key="LangOtherTool">宝箱</s:String>
-    <s:String x:Key="LangOtherMore">その他</s:String>
-    <s:String x:Key="LangHiddenModeTitleA">機能隠し（一時的に無効、F12 を押して再有効化）</s:String>
-    <s:String x:Key="LangHiddenModeTitleB">機能隠し</s:String>
-    <s:String x:Key="LangHiddenModeFail">機能隠し項目のリフレッシュに失敗しました</s:String>
-    <s:String x:Key="LangHintHiddenModeTip">F12 を押すと機能隠し設定を一時的に無効にできます。忘れずに、そうでないと設定が戻せなくなります……</s:String>
+    <s:String x:Key="LangOtherTool">ツールボックス</s:String>
+    <s:String x:Key="LangOtherMore">もっと</s:String>
+    <s:String x:Key="LangHiddenModeTitleA">機能の隠し（一時的に無効、F12 を押して再有効化）</s:String>
+    <s:String x:Key="LangHiddenModeTitleB">機能の隠し</s:String>
+    <s:String x:Key="LangHiddenModeFail">機能の隠しの更新に失敗しました</s:String>
+    <s:String x:Key="LangHintHiddenModeTip">F12キーを押すと、機能の隠し設定を一時的にオフにできます。忘れないようにしてください。設定を元に戻すことができなくなります……</s:String>
     <s:String x:Key="LangSetTheme">基本</s:String>
     <s:String x:Key="LangSetThemeOpacity">不透明度</s:String>
     <s:String x:Key="LangSetThemeHue">色調</s:String>
@@ -168,80 +168,80 @@
     <s:String x:Key="LangSetThemeBrightness">明るさ</s:String>
     <s:String x:Key="LangSetThemeTitle">テーマ</s:String>
     <s:String x:Key="LangSetThemeHiddenTitle">隠しテーマ</s:String>
-    <s:String x:Key="LangSetThemeNameBlue">ドラゴンキャットブルー</s:String>
+    <s:String x:Key="LangSetThemeNameBlue">竜猫ブルー</s:String>
     <s:String x:Key="LangSetThemeNameCyan">スウィートレモンシアン</s:String>
     <s:String x:Key="LangSetThemeNameGreen">草原グリーン</s:String>
     <s:String x:Key="LangSetThemeNameYellow">パイナップルイエロー</s:String>
     <s:String x:Key="LangSetThemeNameBrown">オークブラウン</s:String>
     <s:String x:Key="LangSetThemeNameBlack">玄素黒</s:String>
-    <s:String x:Key="LangSetThemeNameGreyToolTip">グレーは嘘です</s:String>
-    <s:String x:Key="LangSetThemeNameFunny">滑稽な木に滑稽な果実、滑稽な木の下で君と私、滑稽な日には何かを起こし、楽しさはたくさん</s:String>
+    <s:String x:Key="LangSetThemeNameGreyToolTip">灰色は嘘だ</s:String>
+    <s:String x:Key="LangSetThemeNameFunny">滑稽な木の上に滑稽な実、滑稽な木の下には君と僕。滑稽な日に騒ぎを起こし、楽しさはどんどん増す。</s:String>
     <s:String x:Key="LangSetThemeNameHardcoreFan">99 回目の再会の喜び</s:String>
-    <s:String x:Key="LangSetThemeNameLucky">これが伝説の欧皇でしょう</s:String>
-    <s:String x:Key="LangSetThemeNameMojang">正版ログインを実行して、正版ゲームをサポートしましょう！</s:String>
-    <s:String x:Key="LangSetThemeNameGeekToolTip">右クリックでデコードゲームの入口を開く</s:String>
+    <s:String x:Key="LangSetThemeNameLucky">これが伝説のラッキーキングか？</s:String>
+    <s:String x:Key="LangSetThemeNameMojang">Microsoft アカウントでログインし、正規版のゲームをサポートしましょう！</s:String>
+    <s:String x:Key="LangSetThemeNameGeekToolTip">右クリックでデコードゲームの入口を開</s:String>
     <s:String x:Key="LangSetThemeNameCustom">カスタム</s:String>
-    <s:String x:Key="LangSetThemeNameCustomToolTip">5つの隠しテーマをアンロックする必要があります</s:String>
+    <s:String x:Key="LangSetThemeNameCustomToolTip">隠しテーマ 5 つをアンロックする必要があります</s:String>
     <s:String x:Key="LangSetThemeShowLogoOnStart">起動時に PCL のロゴを表示する</s:String>
-    <s:String x:Key="LangSetThemeSponsorship">作者へのちょっとした支援が必要です。テーマカラーを変更するには……（悲）</s:String>
+    <s:String x:Key="LangSetThemeSponsorship">テーマカラーの変更には、作者への小さなスポンサーが必要です（悲しい）……</s:String>
     <s:String x:Key="LangSetThemeSupport">作者をサポートする</s:String>
     <s:String x:Key="LangSetBackgroundPic">背景画像</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptive">アダプティブ方法</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptive">自動適応</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveAuto">スマート</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptiveAutoToolTip">画像が小さいときはタイル、大きいときは適応を選択します</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptiveCentered">中央寄せ</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptiveAutoToolTip">画像が小さい場合はタイル表示、大きい場合は適応表示を選択</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptiveCentered">中央</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveAdapt">適応</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptiveAdaptToolTip">画像を引き伸ばして長方形比を変えずに画面全体を埋めます</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptiveStretch">引き伸ばし</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptiveStretchToolTip">画像を引き伸ばして画面全体にぴったり合わせ、長方形比が変わる可能性があります</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptiveAdaptToolTip">画像を伸縮し、アスペクト比を維持しながらウィンドウ全体を埋めます</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptiveStretch">ストレッチ</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptiveStretchToolTip">画像を引き伸ばしてウィンドウ全体を埋めます。アスペクト比が変わる可能性があります</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveTile">タイル</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptivePosA">左上に寄せる</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptivePosB">右上に寄せる</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptivePosC">左下に寄せる</s:String>
-    <s:String x:Key="LangSetBackgroundPicAdaptivePosD">右下に寄せる</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptivePosA">左上</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptivePosB">右上</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptivePosC">左下</s:String>
+    <s:String x:Key="LangSetBackgroundPicAdaptivePosD">右下</s:String>
     <s:String x:Key="LangSetBackgroundPicBlur">背景ぼかし</s:String>
-    <s:String x:Key="LangSetBackgroundPicBlurToolTip">強いぼかしは起動時にフレームレートが大幅に下がる可能性があります。慎重に使用してください。
-パック制作時にはぼかしをオフにすることをお勧めします。PCL が低性能パソコンでスムーズに動作するようにするためです。</s:String>
+    <s:String x:Key="LangSetBackgroundPicBlurToolTip">強いぼかしはランチャーのフレームレートを大幅に低下させる可能性がありますので、慎重に使用してください。
+低性能のコンピュータでスムーズに動作させるために、統合パッケージを作成する際にぼかしを使用することはお勧めしません。</s:String>
     <s:String x:Key="LangSetBackgroundPicColorfulBack">カラフルな背景を使用する</s:String>
     <s:String x:Key="LangSetOpenFolder">フォルダを開く</s:String>
-    <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">背景画像をこのフォルダに入れておくと、PCL は起動時にフォルダ内の画像をランダムに読み込みます</s:String>
+    <s:String x:Key="LangSetBackgroundPicOpenFolderToolTip">背景画像をこのフォルダに入れると、PCL が起動時にランダムに画像を読み込みます</s:String>
     <s:String x:Key="LangSetBackgroundPicRefresh">背景画像を更新する</s:String>
-    <s:String x:Key="LangSetBackgroundPicRefreshToolTip">フォルダ内の画像をランダムに読み込みます</s:String>
-    <s:String x:Key="LangSetBackgroundPicEmpty">背景画像をクリアする</s:String>
+    <s:String x:Key="LangSetBackgroundPicRefreshToolTip">フォルダ内の画像をランダムに読み込む</s:String>
+    <s:String x:Key="LangSetBackgroundPicEmpty">背景画像をクリア</s:String>
     <s:String x:Key="LangSetBackgroundMusicTitle">背景音楽</s:String>
     <s:String x:Key="LangSetBackgroundMusicPlayRandom">ランダム再生</s:String>
-    <s:String x:Key="LangSetBackgroundMusicPlayOnStart">起動時に自動再生</s:String>
-    <s:String x:Key="LangSetBackgroundMusicPlayDuringGaming">ゲーム起動後に自動再生、ゲーム終了後に自動一時停止</s:String>
-    <s:String x:Key="LangSetBackgroundMusicPlayDuringLaunching">ゲーム起動後に自動一時停止、ゲーム終了後に自動再生</s:String>
-    <s:String x:Key="LangSetBackgroundMusicOpenFolderToolTip">背景音楽をこのフォルダに入れておくと、PCL はフォルダ内のすべての音楽を再生します</s:String>
+    <s:String x:Key="LangSetBackgroundMusicPlayOnStart">起動時に自動再生を開始する</s:String>
+    <s:String x:Key="LangSetBackgroundMusicPlayDuringGaming">ゲームが開始されたら自動で再生を開始し、終了後に自動で停止する</s:String>
+    <s:String x:Key="LangSetBackgroundMusicPlayDuringLaunching">ゲームが開始されたら自動で再生を一時停止し、終了後に自動で再生を開始する</s:String>
+    <s:String x:Key="LangSetBackgroundMusicOpenFolderToolTip">背景音楽をこのフォルダに入れると、その中の音楽がすべて再生されます</s:String>
     <s:String x:Key="LangSetBackgroundMusicRefresh">背景音楽を更新する</s:String>
-    <s:String x:Key="LangSetBackgroundMusicRefreshToolTip">再生リストをリフレッシュして、リスト内の音楽を再生します</s:String>
-    <s:String x:Key="LangSetBackgroundMusicEmpty">背景音楽をクリアする</s:String>
+    <s:String x:Key="LangSetBackgroundMusicRefreshToolTip">プレイリストを更新して、その中の音楽を再生します</s:String>
+    <s:String x:Key="LangSetBackgroundMusicEmpty">背景音楽をクリア</s:String>
     <s:String x:Key="LangSetTitle">タイトルバー</s:String>
     <s:String x:Key="LangSetNone">なし</s:String>
     <s:String x:Key="LangSetDefault">デフォルト</s:String>
     <s:String x:Key="LangSetText">テキスト</s:String>
     <s:String x:Key="LangSetPicture">画像</s:String>
     <s:String x:Key="LangSetTitleLeft">タイトルバー左寄せ</s:String>
-    <s:String x:Key="LangSetTitleContent">タイトルバーのテキスト</s:String>
-    <s:String x:Key="LangSetTitlePicChange">画像を変更する</s:String>
-    <s:String x:Key="LangSetTitlePicEmpty">画像をクリアする</s:String>
+    <s:String x:Key="LangSetTitleContent">タイトルバーテキスト</s:String>
+    <s:String x:Key="LangSetTitlePicChange">画像を変更</s:String>
+    <s:String x:Key="LangSetTitlePicEmpty">画像をクリア</s:String>
     <s:String x:Key="LangSetHomePageTitle">ホームページ</s:String>
     <s:String x:Key="LangSetHomePageEmpty">空白</s:String>
     <s:String x:Key="LangSetHomePagePreset">プリセット</s:String>
     <s:String x:Key="LangSetHomePageLocal">ローカルファイルを読み込む</s:String>
-    <s:String x:Key="LangSetHomePageTipLocal">PCL フォルダ内の Custom.xaml からホームページの内容を読み込みます。
-このファイルを手動で編集して、ホームページにテキスト、画像、よく使うウェブサイト、クイック起動などの機能を追加できます。</s:String>
-    <s:String x:Key="LangSetHomePageTipOnline">指定したURLからオンラインでホームページの内容を取得します。サーバー管理者はこれを使ってサーバーのお知らせを動的に更新することもできます。
-安定して動作するオンラインホームページを作成した場合は、このヒントをクリックして投稿できます。適格と判断されればプリセットに追加されるかもしれません！</s:String>
+    <s:String x:Key="LangSetHomePageTipLocal">PCLフォルダの Custom.xaml からホームページの内容を読み込みます。
+このファイルを手動で編集して、ホームページにテキスト、画像、よく使用するサイト、ショートカットなどを追加できます。</s:String>
+    <s:String x:Key="LangSetHomePageTipOnline">指定された URL からホームページの内容を取得します。サーバーオーナーは、これを使ってサーバーのアナウンスをダイナミックに更新できます。
+安定したオンラインホームページを作成した場合、このヒントをクリックして投稿してください。合格すればプリセットに追加されます！</s:String>
     <s:String x:Key="LangSetHomePageOnline">オンライン更新</s:String>
-    <s:String x:Key="LangSetHomePageRefresh">ホームページを更新する</s:String>
-    <s:String x:Key="LangSetHomePageReleaseTeachFile">教学ファイルを生成する</s:String>
-    <s:String x:Key="LangSetHomePageSeeDoc">チュートリアルを見る</s:String>
-    <s:String x:Key="LangSetHomePageDownload">ダウンロード先</s:String>
+    <s:String x:Key="LangSetHomePageRefresh">ホームページを更新</s:String>
+    <s:String x:Key="LangSetHomePageReleaseTeachFile">指導文書を生成する</s:String>
+    <s:String x:Key="LangSetHomePageSeeDoc">チュートリアルを参照</s:String>
+    <s:String x:Key="LangSetHomePageDownload">ダウンロードリンク</s:String>
     <s:String x:Key="LangSetHomePagePresetPage">ホームページプリセット</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageA">知ってますか？</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageB">エコーの洞窟</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageA">トリビア</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageB">エコー穴</s:String>
     <s:String x:Key="LangSetHomePagePresetPageC">Minecraft ニュース（著者：最亮的信标）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageD">シンプルホームページ（著者：MFn233）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageE">毎日のパックおすすめ（著者：wkea）</s:String>
