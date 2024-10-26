@@ -1,4 +1,7 @@
-﻿Public Module ModMusic
+﻿Imports NAudio.CoreAudioApi
+Imports NAudio.CoreAudioApi.Interfaces
+
+Public Module ModMusic
 
 #Region "播放列表"
 
@@ -248,6 +251,8 @@
     ''' </summary>
     Private MusicCurrent As String = ""
 
+    Dim deviceHandler As New AudioDeviceChangeHandler
+
     ''' <summary>
     ''' 在 MusicUuid 不变的前提下，持续播放某地址的音乐，且在播放结束后随机播放下一曲。
     ''' </summary>
@@ -304,5 +309,78 @@
             MusicRefreshUI()
         End Try
     End Sub
+
+    Public Class AudioDeviceChangeHandler
+        Implements Interfaces.IMMNotificationClient
+        Private deviceWatcher As MMDeviceEnumerator
+        Private callback As IMMNotificationClient
+
+        Public Sub New()
+            ' 初始化音频设备枚举器
+            deviceWatcher = New MMDeviceEnumerator()
+            ' 创建设备通知回调对象
+            callback = New DeviceNotificationClient(Me)
+            ' 注册回调以接收音频设备更改通知
+            deviceWatcher.RegisterEndpointNotificationCallback(callback)
+        End Sub
+
+        ' 实现IMMNotificationClient接口的方法以处理设备更改事件
+        Public Sub OnDefaultDeviceChanged(dataFlow As DataFlow, role As Role, defaultDeviceId As String) Implements IMMNotificationClient.OnDefaultDeviceChanged
+            ' 处理默认音频设备更改事件
+            If MusicNAudio Is Nothing Then Exit Sub
+            CType(MusicNAudio, NAudio.Wave.WaveOut).DeviceNumber = 0
+        End Sub
+
+        Public Sub OnDeviceAdded(deviceId As String) Implements IMMNotificationClient.OnDeviceAdded
+            ' 处理音频设备添加事件
+            If MusicNAudio Is Nothing Then Exit Sub
+            CType(MusicNAudio, NAudio.Wave.WaveOut).DeviceNumber = 0
+        End Sub
+
+        Public Sub OnDeviceRemoved(deviceId As String) Implements IMMNotificationClient.OnDeviceRemoved
+            ' 处理音频设备移除事件
+            If MusicNAudio Is Nothing Then Exit Sub
+            CType(MusicNAudio, NAudio.Wave.WaveOut).DeviceNumber = 0
+        End Sub
+
+        Public Sub OnDeviceStateChanged(deviceId As String, newState As DeviceState) Implements IMMNotificationClient.OnDeviceStateChanged
+            ' 处理音频设备状态更改事件
+        End Sub
+
+        Public Sub OnPropertyValueChanged(deviceId As String, key As PropertyKey) Implements IMMNotificationClient.OnPropertyValueChanged
+            ' 处理音频设备属性值更改事件
+        End Sub
+    End Class
+
+    ' 实现IMMNotificationClient接口的类
+    Friend Class DeviceNotificationClient
+        Implements IMMNotificationClient
+
+        Private container As AudioDeviceChangeHandler
+
+        Public Sub New(container As AudioDeviceChangeHandler)
+            Me.container = container
+        End Sub
+
+        Public Sub OnDefaultDeviceChanged(dataFlow As DataFlow, role As Role, defaultDeviceId As String) Implements IMMNotificationClient.OnDefaultDeviceChanged
+            container.OnDefaultDeviceChanged(dataFlow, role, defaultDeviceId)
+        End Sub
+
+        Public Sub OnDeviceAdded(deviceId As String) Implements IMMNotificationClient.OnDeviceAdded
+            container.OnDeviceAdded(deviceId)
+        End Sub
+
+        Public Sub OnDeviceRemoved(deviceId As String) Implements IMMNotificationClient.OnDeviceRemoved
+            container.OnDeviceRemoved(deviceId)
+        End Sub
+
+        Public Sub OnDeviceStateChanged(deviceId As String, newState As DeviceState) Implements IMMNotificationClient.OnDeviceStateChanged
+            container.OnDeviceStateChanged(deviceId, newState)
+        End Sub
+
+        Public Sub OnPropertyValueChanged(deviceId As String, key As PropertyKey) Implements IMMNotificationClient.OnPropertyValueChanged
+            container.OnPropertyValueChanged(deviceId, key)
+        End Sub
+    End Class
 
 End Module
