@@ -103,7 +103,7 @@
                 Stack.Tag = Sort(CType(Stack.Tag, List(Of DlLiteLoaderListEntry)), Function(a, b) VersionSortBoolean(a.Inherit, b.Inherit))
             Case 6
                 Stack.Tag = Sort(CType(Stack.Tag, List(Of DlForgeVersionEntry)), Function(a, b) a.Version > b.Version)
-            Case 8, 9
+            Case 9
                 Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
         End Select
         '控件转换

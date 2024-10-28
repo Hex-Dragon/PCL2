@@ -13,6 +13,7 @@
         TargetLoader = FrmMain.PageCurrent.Additional(3)
         PageLoaderInit(Load, PanLoad, PanMain, CardIntro, CompFileLoader, AddressOf Load_OnFinish)
     End Sub
+
     Private Sub PageDownloadCompDetail_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
         'Initialized 只会执行一次
         Project = FrmMain.PageCurrent.Additional(0)
@@ -25,7 +26,7 @@
     Private Sub Load_State(sender As Object, state As MyLoading.MyLoadingState, oldState As MyLoading.MyLoadingState) Handles Load.StateChanged
         Select Case CompFileLoader.State
             Case LoadState.Failed
-                Dim ErrorMessage As String = ""
+                Dim ErrorMessage = ""
                 If CompFileLoader.Error IsNot Nothing Then ErrorMessage = CompFileLoader.Error.Message
                 If ErrorMessage.Contains("不是有效的 json 文件") Then
                     Log("[Comp] 下载的文件 json 列表损坏，已自动重试", LogLevel.Debug)
@@ -43,11 +44,14 @@
             If y = Top Then Return 1
             Return -VersionSortInteger(x, y)
         End Function
+
         Public Sub New(Optional Top As String = "")
             Me.Top = If(Top, "")
         End Sub
     End Class
+
     Private Sub Load_OnFinish()
+        
         Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
             $"所选版本：{TargetVersion} {If(TargetLoader <> CompModLoaderType.Any, TargetLoader, "")}", "")
         '初始化字典
@@ -81,7 +85,41 @@
                 End If
             Next
         End If
-
+        
+        
+        'mod排序器
+        '先按照数量排序
+        '再按照支持的loader排序
+        '再按照releaseDate排序
+        Dim Modcomparison As Comparison(Of CompFile) = Function(x, y)
+            ' 比较 ModLoaders 的数量
+            If x.ModLoaders.Count > y.ModLoaders.Count Then
+                Return 1
+            ElseIf x.ModLoaders.Count < y.ModLoaders.Count Then
+                Return -1
+            ElseIf x.ModLoaders.Count = 0 Then
+                ' 如果 ModLoaders 数量为 0，直接比较 ReleaseDate
+                If x.ReleaseDate > y.ReleaseDate Then Return -1
+                If x.ReleaseDate = y.ReleaseDate Then Return 0
+                If y.ReleaseDate > x.ReleaseDate Then Return 1
+            End If
+            ' 如果数量相同，按支持的 loader 排序
+            Dim i As Integer = 0
+            While i < x.ModLoaders.Count AndAlso i < y.ModLoaders.Count
+                If x.ModLoaders.Item(i) <> y.ModLoaders.Item(i) Then
+                    Return If(CInt(x.ModLoaders.Item(i)) < CInt(y.ModLoaders.Item(i)), -1, 1)
+                End If
+                i += 1
+            End While
+            ' 如果支持的 loader 排序相同，按照 releaseDate 排序
+            If x.ReleaseDate > y.ReleaseDate Then Return -1
+            If x.ReleaseDate = y.ReleaseDate Then Return 0
+            If y.ReleaseDate > x.ReleaseDate Then Return 1
+            Return 0
+        End Function
+        for Each CompFiles as List(Of CompFile) in Dict.Values
+            CompFiles.Sort(Modcomparison)
+        Next
 #Region "转化为 UI"
         Try
             '清空当前
@@ -97,8 +135,8 @@
                 PanMain.Children.Add(NewCard)
                 '确定卡片是否展开
                 If Pair.Key = TargetCardName OrElse
-                   (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
-                   CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
+                   (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761 _
+                    CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
                     MyCard.StackInstall(NewStack, If(Project.Type = CompType.ModPack, 9, 8), Pair.Key) 'FUTURE: Res
                 Else
                     NewCard.IsSwaped = True
@@ -116,7 +154,6 @@
             Log(ex, "可视化工程下载列表出错", LogLevel.Feedback)
         End Try
 #End Region
-
     End Sub
 
 #End Region
@@ -321,11 +358,12 @@
     Private Sub BtnIntroWeb_Click(sender As Object, e As EventArgs) Handles BtnIntroWeb.Click
         OpenWebsite(Project.Website)
     End Sub
+
     Private Sub BtnIntroWiki_Click(sender As Object, e As EventArgs) Handles BtnIntroWiki.Click
         OpenWebsite("https://www.mcmod.cn/class/" & Project.WikiId & ".html")
     End Sub
+
     Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
         ClipboardSet(CompItem.LabTitle.Text)
     End Sub
-
 End Class
