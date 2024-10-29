@@ -69,84 +69,19 @@ Public Class FormMain
             FeatureCount += 10
             BugCount += 10
         End If
-        If LastVersion < 317 Then 'Release 2.6.15
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法安装 Forge 的 Bug"))
-            FeatureCount += 2
-            BugCount += 2
-        End If
-        If LastVersion < 315 Then 'Release 2.6.14
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 MC 下载，尝试解决各种导致 MC 下载失败的问题"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "由于 MCBBS 关站，移除其相关内容"))
-            FeatureCount += 17
-            BugCount += 16
-        End If
-        If LastVersion < 313 Then 'Release 2.6.13
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动 Forge 1.18.3+ 的 Bug"))
-            FeatureCount += 6
-            BugCount += 10
-        End If
-        If LastVersion < 311 Then 'Release 2.6.12
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面将显示 Mod 的中文名、图标、标签等信息"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "从 Mod 管理页面查看 Mod 信息时会跳转到其下载详情页面"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新设计 Mod 管理页面的交互与样式"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 Forge 1.18.3+ 的 Bug"))
-            FeatureCount += 27
-            BugCount += 25
-        End If
-        If LastVersion < 308 Then 'Release 2.6.10
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为版本独立设置添加忽略 Java 兼容性警告选项"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复开始或结束游戏时可能报错的 Bug"))
-            FeatureCount += 31
-            BugCount += 37
-        End If
-        If LastVersion < 302 Then 'Release 2.6.7
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "再次修复网络条件差时可能无法下载 MC 的 Bug"))
-            BugCount += 1
-        End If
-        If LastVersion < 300 Then 'Release 2.6.6
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持选择多种预设的主页"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理中允许多选 Mod 进行批量操作"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化联网获取的主页的加载与缓存"))
-            FeatureCount += 40
-            BugCount += 34
-        End If
-        If LastVersion < 296 Then 'Release 2.6.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "新增内存优化功能，可以将所有程序的物理内存占用降低约 1/3"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择 OptiFine 与 Fabric 后会自动选择 OptiFabric"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
-            FeatureCount += 21
-            BugCount += 30
-        End If
-        If LastVersion < 293 Then 'Release 2.6.1
-            BugCount += 1
-        End If
-        If LastVersion < 292 Then 'Release 2.6.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在多个正版账号间切换"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "在缺少 Java 时会自动下载所需的 Java"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新制作正版登录页面"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "彻底移除 Mojang 登录"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 CurseForge / Modrinth 来源筛选"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "Mod / 整合包下载会单独列出筛选的版本"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为下载管理和音乐播放按钮添加进度条"))
-            FeatureCount += 24
-            BugCount += 24
-        End If
-        If LastVersion < 286 Then 'Release 2.5.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持搜索、安装 Modrinth 的 Mod 与整合包"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "资源搜索页面支持翻页"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在全局启动设置中添加了 启动前执行命令 选项"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "重做资源下载的资源项界面"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择下载 Fabric 时会自动选择 Fabric API"))
-            FeatureCount += 35
-            BugCount += 36
-        End If
 #Else
         '5：          FEAT+
         '4：     IMP+ FEAT*
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 341 Then 'Snapshot 2.8.9
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持下载原版服务端"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "本地 Mod 的标题支持选择显示 Mod 原始文件名"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复搜索后启用/禁用 Mod 时出错的 Bug"))
+            FeatureCount += 17
+            BugCount += 13
+        End If
         If LastVersion < 339 Then 'Snapshot 2.8.8
             If LastVersion = 337 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复数个与新正版登录相关的严重 Bug"))
             FeatureCount += 3
@@ -233,117 +168,6 @@ Public Class FormMain
             FeatureCount += 10
             BugCount += 10
         End If
-        If LastVersion < 316 Then 'Snapshot 2.6.15
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法安装 Forge 的 Bug"))
-            FeatureCount += 2
-            BugCount += 2
-        End If
-        If LastVersion < 314 Then 'Snapshot 2.6.14
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 MC 下载，尝试解决各种导致 MC 下载失败的问题"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "由于 MCBBS 关站，移除其相关内容"))
-            FeatureCount += 17
-            BugCount += 16
-        End If
-        If LastVersion < 312 Then 'Snapshot 2.6.13
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动 Forge 1.18.3+ 的 Bug"))
-            FeatureCount += 6
-            BugCount += 10
-        End If
-        If LastVersion < 310 Then 'Snapshot 2.6.12
-            If LastVersion = 309 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理页面添加启用、禁用单个 Mod 的快捷按钮"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 Forge 1.18.3+ 的 Bug"))
-            FeatureCount += 13
-            BugCount += 12
-        End If
-        If LastVersion < 309 Then 'Snapshot 2.6.11
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面将显示 Mod 的中文名、图标、标签等信息"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "从 Mod 管理页面查看 Mod 信息时会跳转到其下载详情页面"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新设计 Mod 管理页面的交互与样式"))
-            FeatureCount += 15
-            BugCount += 13
-        End If
-        If LastVersion < 307 Then 'Snapshot 2.6.10
-            FeatureCount += 2
-            BugCount += 3
-        End If
-        If LastVersion < 306 Then 'Snapshot 2.6.9
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为版本独立设置添加忽略 Java 兼容性警告选项"))
-            FeatureCount += 9
-            BugCount += 11
-        End If
-        If LastVersion < 305 Then 'Snapshot 2.6.8
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复开始或结束游戏时可能报错的 Bug"))
-            FeatureCount += 20
-            BugCount += 25
-        End If
-        If LastVersion < 303 Then 'Snapshot 2.6.7
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "再次修复网络条件差时可能无法下载 MC 的 Bug"))
-            BugCount += 1
-        End If
-        If LastVersion < 301 Then 'Snapshot 2.6.6
-            FeatureCount += 4
-            BugCount += 2
-        End If
-        If LastVersion < 299 Then 'Snapshot 2.6.5
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持选择多种预设的主页"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化联网获取的主页的加载与缓存"))
-            FeatureCount += 18
-            BugCount += 13
-        End If
-        If LastVersion < 298 Then 'Snapshot 2.6.4
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理中允许多选 Mod 进行批量操作"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
-            FeatureCount += 18
-            BugCount += 19
-        End If
-        If LastVersion < 297 Then 'Snapshot 2.6.3
-            FeatureCount += 12
-            BugCount += 14
-        End If
-        If LastVersion < 294 Then 'Snapshot 2.6.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "新增内存优化功能，可以将所有程序的物理内存占用降低约 1/3"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择 OptiFine 与 Fabric 后会自动选择 OptiFabric"))
-            FeatureCount += 9
-            BugCount += 16
-        End If
-        If LastVersion < 291 Then 'Snapshot 2.6.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在多个正版账号间切换"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "Mod / 整合包下载会单独列出筛选的版本"))
-            FeatureCount += 10
-            BugCount += 2
-        End If
-        If LastVersion < 289 Then 'Snapshot 2.5.4
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新制作正版登录页面"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "彻底移除 Mojang 登录"))
-            FeatureCount += 6
-            BugCount += 14
-        End If
-        If LastVersion < 288 Then 'Snapshot 2.5.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "在缺少 Java 时会自动下载所需的 Java"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 CurseForge / Modrinth 来源筛选"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为下载管理和音乐播放按钮添加进度条"))
-            FeatureCount += 8
-            BugCount += 8
-        End If
-        If LastVersion < 285 Then 'Snapshot 2.5.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "重做资源下载的资源项界面"))
-            If LastVersion = 284 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复打开部分帮助报错的 Bug"))
-            FeatureCount += 8
-            BugCount += 8
-        End If
-        If LastVersion < 284 Then 'Snapshot 2.5.1
-            If LastVersion >= 275 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在全局启动设置中添加了 启动前执行命令 选项"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择下载 Fabric 时会自动选择 Fabric API"))
-            FeatureCount += 22
-            BugCount += 21
-        End If
-        If LastVersion < 283 Then 'Snapshot 2.5.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持搜索、下载 Modrinth 中的 Mod 与整合包"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "资源搜索页面支持翻页"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持安装 Modrinth 整合包"))
-            FeatureCount += 5
-            BugCount += 5
-        End If
 #End If
         '整理更新日志文本
         Dim ContentList As New List(Of String)
@@ -386,9 +210,6 @@ Public Class FormMain
             '触发降级
             DowngradeSub(LastVersion)
         End If
-        ''刷新语言
-        'Lang = ReadReg("Lang", "zh_CN")
-        'Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("Resources\Language\" & Lang & ".xaml", UriKind.Relative)}
         '刷新主题
         ThemeCheckAll(False)
         Setup.Load("UiLauncherTheme")
@@ -451,12 +272,12 @@ Public Class FormMain
         '加载窗口
         ThemeRefreshMain()
         Try
-            Height = ReadReg("WindowHeight", MinHeight + 50)
-            Width = ReadReg("WindowWidth", MinWidth + 50)
+            Height = Setup.Get("WindowHeight")
+            Width = Setup.Get("WindowWidth")
         Catch ex As Exception '修复 #2019
             Log(ex, "读取窗口默认大小失败", LogLevel.Hint)
-            Height = MinHeight + 50
-            Width = MinWidth + 50
+            Height = MinHeight + 100
+            Width = MinWidth + 100
         End Try
 #If DEBUG Then
         MinHeight = 50
@@ -595,6 +416,16 @@ Public Class FormMain
             Setup.Set("UiHiddenOtherHelp", False)
             Log("[Start] 已解除帮助页面的隐藏")
         End If
+        '单向迁移微软登录结果（#4836）
+        If Not Setup.Get("CacheMsV2Migrated") Then
+            Setup.Set("CacheMsV2Migrated", True)
+            Setup.Set("CacheMsV2OAuthRefresh", Setup.Get("CacheMsOAuthRefresh"))
+            Setup.Set("CacheMsV2Access", Setup.Get("CacheMsAccess"))
+            Setup.Set("CacheMsV2ProfileJson", Setup.Get("CacheMsProfileJson"))
+            Setup.Set("CacheMsV2Uuid", Setup.Get("CacheMsUuid"))
+            Setup.Set("CacheMsV2Name", Setup.Get("CacheMsName"))
+            Log("[Start] 已从老版本迁移微软登录结果")
+        End If
         '输出更新日志
         If LastVersionCode = 0 Then Exit Sub
         If LowerVersionCode >= VersionCode Then Exit Sub
@@ -636,35 +467,35 @@ Public Class FormMain
         End If
         '关闭
         RunInUiWait(
-            Sub()
-                IsHitTestVisible = False
-                If PanBack.RenderTransform Is Nothing Then
-                    Dim TransformPos As New TranslateTransform(0, 0)
-                    Dim TransformRotate As New RotateTransform(0)
-                    Dim TransformScale As New ScaleTransform(1, 1)
-                    PanBack.RenderTransform = New TransformGroup() With {.Children = New TransformCollection({TransformRotate, TransformPos, TransformScale})}
-                    AniStart({
-                        AaOpacity(Me, -Opacity, 140, 40, New AniEaseOutFluent(AniEasePower.Weak)),
-                        AaDouble(
-                        Sub(i)
-                            TransformScale.ScaleX += i
-                            TransformScale.ScaleY += i
-                        End Sub, 0.88 - TransformScale.ScaleX, 180),
-                        AaDouble(Sub(i) TransformPos.Y += i, 20 - TransformPos.Y, 180, 0, New AniEaseOutFluent(AniEasePower.Weak)),
-                        AaDouble(Sub(i) TransformRotate.Angle += i, 0.6 - TransformRotate.Angle, 180, 0, New AniEaseInoutFluent(AniEasePower.Weak)),
-                        AaCode(
-                        Sub()
-                            IsHitTestVisible = False
-                            Top = -10000
-                            ShowInTaskbar = False
-                        End Sub, 210),
-                        AaCode(AddressOf EndProgramForce, 230)
-                    }, "Form Close")
-                Else
-                    EndProgramForce()
-                End If
-                Log("[System] 收到关闭指令")
-            End Sub)
+        Sub()
+            IsHitTestVisible = False
+            If PanBack.RenderTransform Is Nothing Then
+                Dim TransformPos As New TranslateTransform(0, 0)
+                Dim TransformRotate As New RotateTransform(0)
+                Dim TransformScale As New ScaleTransform(1, 1)
+                PanBack.RenderTransform = New TransformGroup() With {.Children = New TransformCollection({TransformRotate, TransformPos, TransformScale})}
+                AniStart({
+                    AaOpacity(Me, -Opacity, 140, 40, New AniEaseOutFluent(AniEasePower.Weak)),
+                    AaDouble(
+                    Sub(i)
+                        TransformScale.ScaleX += i
+                        TransformScale.ScaleY += i
+                    End Sub, 0.88 - TransformScale.ScaleX, 180),
+                    AaDouble(Sub(i) TransformPos.Y += i, 20 - TransformPos.Y, 180, 0, New AniEaseOutFluent(AniEasePower.Weak)),
+                    AaDouble(Sub(i) TransformRotate.Angle += i, 0.6 - TransformRotate.Angle, 180, 0, New AniEaseInoutFluent(AniEasePower.Weak)),
+                    AaCode(
+                    Sub()
+                        IsHitTestVisible = False
+                        Top = -10000
+                        ShowInTaskbar = False
+                    End Sub, 210),
+                    AaCode(AddressOf EndProgramForce, 230)
+                }, "Form Close")
+            Else
+                EndProgramForce()
+            End If
+            Log("[System] 收到关闭指令")
+        End Sub)
     End Sub
     Private Shared IsLogShown As Boolean = False
     Public Shared Sub EndProgramForce(Optional ReturnCode As Result = Result.Success)
@@ -709,8 +540,8 @@ Public Class FormMain
     Public IsSizeSaveable As Boolean = False
     Private Sub FormMain_SizeChanged() Handles Me.SizeChanged, Me.Loaded
         If IsSizeSaveable Then
-            WriteReg("WindowHeight", Height)
-            WriteReg("WindowWidth", Width)
+            Setup.Set("WindowHeight", Height)
+            Setup.Set("WindowWidth", Width)
         End If
         RectForm.Rect = New Rect(0, 0, BorderForm.ActualWidth, BorderForm.ActualHeight)
         PanForm.Width = BorderForm.ActualWidth + 0.001
@@ -921,11 +752,12 @@ Public Class FormMain
                     End If
                 End If
                 CopyFile(FilePath, Path & "PCL\Custom.xaml")
-                RunInUi(Sub()
-                            Setup.Set("UiCustomType", 1)
-                            FrmLaunchRight.ForceRefresh()
-                            Hint("已加载主页自定义文件！", HintType.Finish)
-                        End Sub)
+                RunInUi(
+                Sub()
+                    Setup.Set("UiCustomType", 1)
+                    FrmLaunchRight.ForceRefresh()
+                    Hint("已加载主页自定义文件！", HintType.Finish)
+                End Sub)
                 Exit Sub
             End If
             'Mod 安装

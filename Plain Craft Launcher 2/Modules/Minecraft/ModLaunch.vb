@@ -378,7 +378,7 @@ NextInner:
         '根据当前登录方式优先返回
         Select Case Setup.Get("LoginType")
             Case McLoginType.Ms
-                If Setup.Get("CacheMsName") <> "" Then Return Setup.Get("CacheMsName")
+                If Setup.Get("CacheMsV2Name") <> "" Then Return Setup.Get("CacheMsV2Name")
             Case McLoginType.Legacy
                 If Setup.Get("LoginLegacyName") <> "" Then Return Setup.Get("LoginLegacyName").ToString.Before("¨")
             Case McLoginType.Nide
@@ -387,7 +387,7 @@ NextInner:
                 If Setup.Get("CacheAuthName") <> "" Then Return Setup.Get("CacheAuthName")
         End Select
         '查找所有可能的项
-        If Setup.Get("CacheMsName") <> "" Then Return Setup.Get("CacheMsName")
+        If Setup.Get("CacheMsV2Name") <> "" Then Return Setup.Get("CacheMsV2Name")
         If Setup.Get("CacheNideName") <> "" Then Return Setup.Get("CacheNideName")
         If Setup.Get("CacheAuthName") <> "" Then Return Setup.Get("CacheAuthName")
         If Setup.Get("LoginLegacyName") <> "" Then Return Setup.Get("LoginLegacyName").ToString.Before("¨")
@@ -399,7 +399,7 @@ NextInner:
     Public Function McLoginAble() As String
         Select Case Setup.Get("LoginType")
             Case McLoginType.Ms
-                If Setup.Get("CacheMsOAuthRefresh") = "" Then
+                If Setup.Get("CacheMsV2OAuthRefresh") = "" Then
                     Return FrmLoginMs.IsVaild()
                 Else
                     Return ""
@@ -450,7 +450,7 @@ NextInner:
                 Case McLoginType.Legacy
                     LoginData = PageLoginLegacy.GetLoginData()
                 Case McLoginType.Ms
-                    If Setup.Get("CacheMsOAuthRefresh") = "" Then
+                    If Setup.Get("CacheMsV2OAuthRefresh") = "" Then
                         LoginData = PageLoginMs.GetLoginData()
                     Else
                         LoginData = PageLoginMsSkin.GetLoginData()
@@ -552,11 +552,11 @@ Relogin:
         Dim Result = MsLoginStep6(AccessToken)
         Data.Progress = 0.98
         '输出登录结果
-        Setup.Set("CacheMsOAuthRefresh", OAuthRefreshToken)
-        Setup.Set("CacheMsAccess", AccessToken)
-        Setup.Set("CacheMsUuid", Result(0))
-        Setup.Set("CacheMsName", Result(1))
-        Setup.Set("CacheMsProfileJson", Result(2))
+        Setup.Set("CacheMsV2OAuthRefresh", OAuthRefreshToken)
+        Setup.Set("CacheMsV2Access", AccessToken)
+        Setup.Set("CacheMsV2Uuid", Result(0))
+        Setup.Set("CacheMsV2Name", Result(1))
+        Setup.Set("CacheMsV2ProfileJson", Result(2))
         Dim MsJson As JObject = GetJson(Setup.Get("LoginMsJson"))
         MsJson.Remove(Input.UserName) '如果更改了玩家名……
         MsJson(Result(1)) = OAuthRefreshToken
@@ -850,7 +850,7 @@ Retry:
         While Converter.Result Is Nothing
             Thread.Sleep(100)
         End While
-        If TypeOf Converter.Result Is RetryException Then
+        If TypeOf Converter.Result Is RestartException Then
             If MyMsgBox($"请在登录时选择 {vbLQ}其他登录方法{vbRQ}，然后选择 {vbLQ}使用我的密码{vbRQ}。{vbCrLf}如果没有该选项，请选择 {vbLQ}设置密码{vbRQ}，设置完毕后再登录。",
                 "需要使用密码登录", "重新登录", "设置密码", "取消",
                 Button2Action:=Sub() OpenWebsite("https://account.live.com/password/Change")) = 1 Then
@@ -1262,8 +1262,7 @@ Retry:
     ''' 释放 Java Wrapper 并返回完整文件路径。
     ''' </summary>
     Public Function ExtractJavaWrapper() As String
-        Dim BaseDir As String = GetPureASCIIDir()
-        Dim WrapperPath As String = BaseDir & "\JavaWrapper.jar"
+        Dim WrapperPath As String = PathPure & "JavaWrapper.jar"
         Log("[Java] 选定的 Java Wrapper 路径：" & WrapperPath)
         SyncLock ExtractJavaWrapperLock '避免 OptiFine 和 Forge 安装时同时释放 Java Wrapper 导致冲突
             Try
@@ -1277,7 +1276,7 @@ Retry:
                         WriteFile(WrapperPath, GetResources("JavaWrapper"))
                     Catch ex2 As Exception
                         Log(ex2, "Java Wrapper 文件重新释放失败，将尝试更换文件名重新生成", LogLevel.Developer)
-                        WrapperPath = BaseDir & "\JavaWrapper2.jar"
+                        WrapperPath = PathPure & "JavaWrapper2.jar"
                         Try
                             WriteFile(WrapperPath, GetResources("JavaWrapper"))
                         Catch ex3 As Exception
@@ -1292,22 +1291,6 @@ Retry:
         Return WrapperPath
     End Function
     Private ExtractJavaWrapperLock As New Object
-
-    ''' <summary>
-    ''' 获取一个可用于临时存放文件的，不含任何特殊字符的文件夹路径。
-    ''' 返回值不以 \ 结尾。
-    ''' </summary>
-    Public Function GetPureASCIIDir() As String
-        If (Path & "PCL").IsASCII() Then
-            Return Path & "PCL"
-        ElseIf PathAppdata.IsASCII() Then
-            Return PathAppdata.TrimEnd("\")
-        ElseIf PathTemp.IsASCII() Then
-            Return PathTemp.TrimEnd("\")
-        Else
-            Return OsDrive & "ProgramData\PCL"
-        End If
-    End Function
 
     '主方法，合并 Jvm、Game、Replace 三部分的参数数据
     Private Sub McLaunchArgumentMain(Loader As LoaderTask(Of String, List(Of McLibToken)))
@@ -1408,7 +1391,7 @@ Retry:
                 Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent))
             Try
                 Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
-                DataList.Insert(0, "-javaagent:""" & PathAppdata & "authlib-injector.jar""=" & Server &
+                DataList.Insert(0, "-javaagent:""" & PathPure & "authlib-injector.jar""=" & Server &
                               " -Dauthlibinjector.side=client" &
                               " -Dauthlibinjector.yggdrasil.prefetched=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(Response)))
             Catch ex As Exception
@@ -1418,7 +1401,7 @@ Retry:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        DataList.Add("-Doolloo.jlw.tmpdir=""" & GetPureASCIIDir() & """")
+        DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
         DataList.Add("-jar """ & ExtractJavaWrapper() & """")
 
         '添加 MainClass
@@ -1475,7 +1458,7 @@ NextVersion:
                 Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent))
             Try
                 Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
-                DataList.Insert(0, "-javaagent:""" & PathAppdata & "authlib-injector.jar""=" & Server &
+                DataList.Insert(0, "-javaagent:""" & PathPure & "authlib-injector.jar""=" & Server &
                               " -Dauthlibinjector.side=client" &
                               " -Dauthlibinjector.yggdrasil.prefetched=" & Convert.ToBase64String(Encoding.UTF8.GetBytes(Response)))
             Catch ex As Exception
@@ -1485,7 +1468,7 @@ NextVersion:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        DataList.Add("-Doolloo.jlw.tmpdir=""" & GetPureASCIIDir() & """")
+        DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
         DataList.Add("-jar """ & ExtractJavaWrapper() & """")
 
         '将 "-XXX" 与后面 "XXX" 合并到一起

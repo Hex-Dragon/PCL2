@@ -7,7 +7,7 @@ Public Class MyBitmap
     ''' <summary>
     ''' 位图缓存。
     ''' </summary>
-    Public Shared BitmapCache As New Dictionary(Of String, MyBitmap)
+    Public Shared BitmapCache As New Concurrent.ConcurrentDictionary(Of String, MyBitmap)
 
     ''' <summary>
     ''' 存储的图片
@@ -61,7 +61,7 @@ Public Class MyBitmap
                     Pic = BitmapCache(FilePathOrResourceName).Pic
                 Else
                     Pic = New MyBitmap(CType((New ImageSourceConverter).ConvertFromString(FilePathOrResourceName), ImageSource))
-                    BitmapCache.Add(FilePathOrResourceName, Pic)
+                    BitmapCache.TryAdd(FilePathOrResourceName, Pic)
                 End If
             Else
                 '使用这种自己接管 FileStream 的方法加载才能解除文件占用
@@ -72,11 +72,9 @@ Public Class MyBitmap
                     InputStream.Seek(0, SeekOrigin.Begin)
                     If Header(0) = 82 AndAlso Header(1) = 73 Then
                         '读取 WebP
-                        If Is32BitSystem Then Throw New Exception("不支持在 32 位系统下加载 WebP 图片。")
                         Dim FileBytes(InputStream.Length - 1) As Byte
                         InputStream.Read(FileBytes, 0, FileBytes.Length)
-                        Dim Decoder As New Imazen.WebP.SimpleDecoder()
-                        Pic = Decoder.DecodeFromBytes(FileBytes, FileBytes.Length)
+                        Pic = WebPDecoder.DecodeFromBytes(FileBytes) '将代码隔离在另外一个类中，这样只要不走进这个分支就不会加载 Imazen.WebP.dll
                     Else
                         Pic = New System.Drawing.Bitmap(InputStream)
                     End If
@@ -86,10 +84,9 @@ Public Class MyBitmap
             Pic = My.Application.TryFindResource(FilePathOrResourceName)
             If Pic Is Nothing Then
                 Pic = New System.Drawing.Bitmap(1, 1)
-                Log(ex, $"加载位图失败（{FilePathOrResourceName}）")
-                Throw
+                Throw New Exception($"加载 MyBitmap 失败（{FilePathOrResourceName}）", ex)
             Else
-                Log(ex, $"指定类型有误的位图加载（{FilePathOrResourceName}）", LogLevel.Developer)
+                Log(ex, $"指定类型有误的 MyBitmap 加载（{FilePathOrResourceName}）", LogLevel.Developer)
                 Exit Try
             End If
         End Try
@@ -116,6 +113,13 @@ Public Class MyBitmap
             Pic = New System.Drawing.Bitmap(MS)
         End Using
     End Sub
+    Private Class WebPDecoder '将代码隔离在另外一个类中，这样只要不调用这个方法就不会加载 Imazen.WebP.dll
+        Public Shared Function DecodeFromBytes(Bytes As Byte()) As System.Drawing.Bitmap
+            If Is32BitSystem Then Throw New Exception("不支持在 32 位系统下加载 WebP 图片。")
+            Dim Decoder As New Imazen.WebP.SimpleDecoder()
+            Return Decoder.DecodeFromBytes(Bytes, Bytes.Length)
+        End Function
+    End Class
 
     ''' <summary>
     ''' 获取裁切的图片，这个方法不会导致原对象改变且会返回一个新的对象。

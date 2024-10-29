@@ -167,7 +167,7 @@
             '构造步骤加载器
             Dim Loaders As New List(Of LoaderBase)
             Dim Target As String = $"{PathMcFolder}versions\{VersionName}\原始整合包.{If(Project.FromCurseForge, "zip", "mrpack")}"
-            Dim LogoFileAddress As String = PathTemp & "CompLogo\" & GetHash(CompItem.Logo) & ".png"
+            Dim LogoFileAddress As String = MyImage.GetTempPath(CompItem.Logo)
             Loaders.Add(New LoaderDownload("下载整合包文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 10, .Block = True})
             Loaders.Add(New LoaderTask(Of Integer, Integer)("准备安装整合包",
             Sub()

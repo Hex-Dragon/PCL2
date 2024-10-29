@@ -9,6 +9,8 @@
     ''' </summary>
     Private ReadOnly SetupDict As New Dictionary(Of String, SetupEntry) From {
         {"Identify", New SetupEntry("", Source:=SetupSource.Registry)},
+        {"WindowHeight", New SetupEntry(550)},
+        {"WindowWidth", New SetupEntry(900)},
         {"HintDownloadThread", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"HintNotice", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"HintDownload", New SetupEntry(0, Source:=SetupSource.Registry)},
@@ -42,6 +44,12 @@
         {"CacheMsProfileJson", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheMsUuid", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheMsName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheMsV2Migrated", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"CacheMsV2OAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheMsV2Access", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheMsV2ProfileJson", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheMsV2Uuid", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheMsV2Name", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheNideAccess", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheNideClient", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheNideUuid", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
@@ -105,10 +113,10 @@
         {"ToolDownloadSpeed", New SetupEntry(42, Source:=SetupSource.Registry)},
         {"ToolDownloadVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolDownloadTranslate", New SetupEntry(0, Source:=SetupSource.Registry)},
-        {"ToolDownloadKeepModpack", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadIgnoreQuilt", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadCert", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadMod", New SetupEntry(1, Source:=SetupSource.Registry)},
+        {"ToolModLocalNameStyle", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolUpdateAlpha", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
         {"ToolUpdateRelease", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolUpdateSnapshot", New SetupEntry(False, Source:=SetupSource.Registry)},
@@ -592,7 +600,7 @@
                     FrmSetupUI.PanLogoChange.Visibility = Visibility.Visible
                 End If
                 Try
-                    FrmMain.ImageTitleLogo.Source = New MyBitmap(Path & "PCL\Logo.png")
+                    FrmMain.ImageTitleLogo.Source = Path & "PCL\Logo.png"
                 Catch ex As Exception
                     FrmMain.ImageTitleLogo.Source = Nothing
                     Log(ex, "显示标题栏图片失败", LogLevel.Msgbox)

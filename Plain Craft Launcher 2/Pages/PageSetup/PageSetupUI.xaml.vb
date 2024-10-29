@@ -25,14 +25,15 @@
             Next
         End If
 
+        AniControlEnabled += 1
+        Reload() '#4826，在每次进入页面时都刷新一下
+        AniControlEnabled -= 1
+
         '非重复加载部分
         If IsLoaded Then Exit Sub
         IsLoaded = True
 
-        AniControlEnabled += 1
         SliderLoad()
-        Reload()
-        AniControlEnabled -= 1
 
 #If BETA Then
         PanLauncherHide.Visibility = Visibility.Visible
@@ -269,17 +270,16 @@
         End Try
     End Sub
 
-
     '顶部栏
     Private Sub BtnLogoChange_Click(sender As Object, e As EventArgs) Handles BtnLogoChange.Click
-        Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif)|*.png;*.jpg;*.gif", "选择图片")
+        Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif;*.webp)|*.png;*.jpg;*.gif;*.webp", "选择图片")
         If FileName = "" Then Exit Sub
         Try
             '拷贝文件
             File.Delete(Path & "PCL\Logo.png")
             CopyFile(FileName, Path & "PCL\Logo.png")
             '设置当前显示
-            FrmMain.ImageTitleLogo.Source = New MyBitmap(Path & "PCL\Logo.png")
+            FrmMain.ImageTitleLogo.Source = Path & "PCL\Logo.png"
         Catch ex As Exception
             If ex.Message.Contains("参数无效") Then
                 Log("改变标题栏图片失败，该图片文件可能并非标准格式。" & vbCrLf &
@@ -296,7 +296,7 @@ Refresh:
         '已有图片则不再选择
         If File.Exists(Path & "PCL\Logo.png") Then
             Try
-                FrmMain.ImageTitleLogo.Source = New MyBitmap(Path & "PCL\Logo.png")
+                FrmMain.ImageTitleLogo.Source = Path & "PCL\Logo.png"
             Catch ex As Exception
                 If ex.Message.Contains("参数无效") Then
                     Log("调整标题栏图片失败，该图片文件可能并非标准格式。" & vbCrLf &
@@ -315,7 +315,7 @@ Refresh:
             Exit Sub
         End If
         '没有图片则要求选择
-        Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif)|*.png;*.jpg;*.gif", "选择图片")
+        Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif;*.webp)|*.png;*.jpg;*.gif;*.webp", "选择图片")
         If FileName = "" Then
             FrmMain.ImageTitleLogo.Source = Nothing
             e.Handled = True
@@ -428,8 +428,8 @@ Refresh:
         RadioLauncherTheme5Gray.Opacity -= 0.23
         RadioLauncherTheme5.Opacity += 0.23
         AniStart({
-            AaOpacity(RadioLauncherTheme5Gray, 1, 1000),
-            AaOpacity(RadioLauncherTheme5, -1, 1000)
+            AaOpacity(RadioLauncherTheme5Gray, 1, 1000 * AniSpeed),
+            AaOpacity(RadioLauncherTheme5, -1, 1000 * AniSpeed)
         }, "ThemeUnlock")
         If RadioLauncherTheme5Gray.Opacity < 0.08 Then
             ThemeUnlock(5, UnlockHint:="隐藏主题 玄素黑 已解锁！")

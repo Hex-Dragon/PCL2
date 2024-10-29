@@ -63,7 +63,7 @@
             PageChangeRun(PageGet(ID))
             PageID = ID
         Catch ex As Exception
-            Log(ex, "切换设置分页面失败（ID " & ID & "）", LogLevel.Feedback)
+            Log(ex, "切换分页面失败（ID " & ID & "）", LogLevel.Feedback)
         Finally
             AniControlEnabled -= 1
         End Try

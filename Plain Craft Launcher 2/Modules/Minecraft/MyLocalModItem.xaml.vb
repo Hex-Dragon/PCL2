@@ -6,88 +6,14 @@ Public Class MyLocalModItem
     Public Uuid As Integer = GetUuid()
 
     'Logo
-    Private _Logo As String = ""
     Public Property Logo As String
         Get
-            Return _Logo
+            Return PathLogo.Source
         End Get
         Set(value As String)
-            If _Logo = value OrElse value Is Nothing Then Exit Property
-            _Logo = value
-            If ModeDebug AndAlso Not _Logo = PathImage & "Icons/NoIcon.png" Then Log($"[LocalModItem] Mod {Title} 的图标：{value}")
-            Dim FileAddress = PathTemp & "CompLogo\" & GetHash(_Logo) & ".png"
-            Try
-                If _Logo.StartsWithF("http", True) Then
-                    '网络图片
-                    If File.Exists(FileAddress) Then
-                        PathLogo.Source = New MyBitmap(FileAddress)
-                    Else
-                        PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png")
-                        RunInNewThread(Sub() LogoLoader(FileAddress), "Comp Logo Loader " & Uuid & "#", ThreadPriority.BelowNormal)
-                    End If
-                Else
-                    '位图
-                    PathLogo.Source = New MyBitmap(_Logo)
-                End If
-            Catch ex As IOException
-                Log(ex, "加载本地 Mod 图标时读取失败（" & FileAddress & "）")
-            Catch ex As ArgumentException
-                '考虑缓存的图片本身可能有误
-                Log(ex, "可视化本地 Mod 图标失败（" & FileAddress & "）")
-                Try
-                    File.Delete(FileAddress)
-                    Log("[LocalModItem] 已清理损坏的本地 Mod 图标：" & FileAddress)
-                Catch exx As Exception
-                    Log(exx, "清理损坏的本地 Mod 图标缓存失败（" & FileAddress & "）", LogLevel.Hint)
-                End Try
-            Catch ex As Exception
-                Log(ex, "加载本地 Mod 图标失败（" & value & "）")
-            End Try
+            PathLogo.Source = value
         End Set
     End Property
-    '后台加载 Logo
-    Private Sub LogoLoader(LocalFileAddress As String)
-        Dim Retried As Boolean = False
-        Dim DownloadEnd As String = GetUuid()
-RetryStart:
-        Try
-            'CurseForge 图片使用缩略图
-            Dim Url As String = _Logo
-            If Url.Contains("/256/256/") AndAlso GetPixelSize(1) <= 1.25 AndAlso Not Retried Then '#3075：部分 Mod 不存在 64x64 图标，所以重试时不再缩小
-                Url = Url.Replace("/256/256/", "/64/64/")
-            End If
-            '下载图片
-            NetDownload(Url, LocalFileAddress & DownloadEnd, True)
-            Dim LoadError As Exception = Nothing
-            RunInUiWait(
-            Sub()
-                Try
-                    '在地址更换时取消加载
-                    If LocalFileAddress <> $"{PathTemp}CompLogo\{GetHash(_Logo)}.png" Then Exit Sub
-                    '在完成正常加载后才保存缓存图片
-                    PathLogo.Source = New MyBitmap(LocalFileAddress & DownloadEnd)
-                Catch ex As Exception
-                    Log(ex, "读取本地 Mod 图标失败（" & LocalFileAddress & "）")
-                    File.Delete(LocalFileAddress & DownloadEnd)
-                    LoadError = ex
-                End Try
-            End Sub)
-            If LoadError IsNot Nothing Then Throw LoadError
-            If File.Exists(LocalFileAddress) Then
-                File.Delete(LocalFileAddress & DownloadEnd)
-            Else
-                FileIO.FileSystem.MoveFile(LocalFileAddress & DownloadEnd, LocalFileAddress)
-            End If
-        Catch ex As Exception
-            If Not Retried Then
-                Retried = True
-                GoTo RetryStart
-            Else
-                Log(ex, $"下载本地 Mod 图标失败（{_Logo}）")
-                RunInUi(Sub() PathLogo.Source = New MyBitmap(PathImage & "Icons/NoIcon.png"))
-            End If
-        End Try
-    End Sub
 
     '标题
     Private _Title As String
@@ -143,9 +69,9 @@ RetryStart:
             For Each TagText In value
                 Dim NewTag = GetObjectFromXML(
                 "<Border xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
-                         Background=""#11000000"" Padding=""3,1"" CornerRadius=""3"" Margin=""0,0,3,0"" 
+                         Background=""#0C000000"" Padding=""3,1"" CornerRadius=""3"" Margin=""0,0,3,0"" 
                          SnapsToDevicePixels=""True"" UseLayoutRounding=""False"">
-                   <TextBlock Text=""" & TagText & """ Foreground=""#868686"" FontSize=""11"" />
+                   <TextBlock Text=""" & TagText & """ Foreground=""#88000000"" FontSize=""11"" />
                 </Border>")
                 PanTags.Children.Add(NewTag)
             Next
@@ -377,7 +303,7 @@ RetryStart:
 
 #End Region
 
-    Public Sub Refresh()
+    Public Sub Refresh() Handles Me.Loaded
         RunInUi(
         Sub()
             '更新
@@ -404,30 +330,45 @@ RetryStart:
             Else
                 BtnUpdate.Visibility = Visibility.Collapsed
             End If
-            '标题
-            If Entry.Comp Is Nothing Then
-                Title = Entry.Name
-                SubTitle = If(Entry.Version Is Nothing, "", "  |  " & Entry.Version)
-            Else
-                Dim Titles = Entry.Comp.GetControlTitle(False)
-                Title = Titles.Key
-                SubTitle = Titles.Value & If(Entry.Version Is Nothing, "", "  |  " & Entry.Version)
-            End If
-            If Checked Then
-                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush2", "ColorBrush5"))
-            Else
-                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush1", "ColorBrushGray4"))
-            End If
-            '描述
-            Dim NewDescription As String
+            '标题与描述
+            Dim DescFileName As String
             Select Case Entry.State
                 Case McMod.McModState.Fine
-                    NewDescription = GetFileNameWithoutExtentionFromPath(Entry.Path)
+                    DescFileName = GetFileNameWithoutExtentionFromPath(Entry.Path)
                 Case McMod.McModState.Disabled
-                    NewDescription = GetFileNameWithoutExtentionFromPath(Entry.Path.Replace(".disabled", "").Replace(".old", ""))
+                    DescFileName = GetFileNameWithoutExtentionFromPath(Entry.Path.Replace(".disabled", "").Replace(".old", ""))
                 Case Else 'McMod.McModState.Unavailable
-                    NewDescription = GetFileNameFromPath(Entry.Path)
+                    DescFileName = GetFileNameFromPath(Entry.Path)
             End Select
+            Dim NewDescription As String
+            If Setup.Get("ToolModLocalNameStyle") = 1 Then
+                '标题显示文件名，详情显示译名
+                '标题
+                Title = DescFileName
+                SubTitle = ""
+                '描述
+                If Entry.Comp Is Nothing Then
+                    NewDescription = Entry.Name
+                Else
+                    Dim Titles = Entry.Comp.GetControlTitle(False)
+                    NewDescription = Titles.Key & Titles.Value
+                End If
+                NewDescription = NewDescription.Replace("  |  ", " / ")
+                If Entry.Version IsNot Nothing Then NewDescription &= $" ({Entry.Version})"
+            Else
+                '标题显示译名，详情显示文件名
+                '标题
+                If Entry.Comp Is Nothing Then
+                    Title = Entry.Name
+                    SubTitle = If(Entry.Version Is Nothing, "", "  |  " & Entry.Version)
+                Else
+                    Dim Titles = Entry.Comp.GetControlTitle(False)
+                    Title = Titles.Key
+                    SubTitle = Titles.Value & If(Entry.Version Is Nothing, "", "  |  " & Entry.Version)
+                End If
+                '描述
+                NewDescription = DescFileName
+            End If
             If Entry.Comp IsNot Nothing Then
                 NewDescription += ": " & Entry.Comp.Description.Replace(vbCr, "").Replace(vbLf, "")
             ElseIf Entry.Description IsNot Nothing Then
@@ -436,6 +377,11 @@ RetryStart:
                 NewDescription += ": " & "存在错误，无法获取信息"
             End If
             Description = NewDescription
+            If Checked Then
+                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush2", "ColorBrush5"))
+            Else
+                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush1", "ColorBrushGray4"))
+            End If
             '主 Logo
             Logo = If(Entry.Comp Is Nothing, PathImage & "Icons/NoIcon.png", Entry.Comp.GetControlLogo())
             '图标右下角的 Logo
