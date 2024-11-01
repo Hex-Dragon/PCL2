@@ -2004,4 +2004,17 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionDecline">你拒绝了 PCL 申请的权限……</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionTimeout">登录用时太长啦，重新试试吧！</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionCheckFail">登录轮询失败</s:String>
+    <!--ModNet-->
+    <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
+    <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
+    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>
+    <s:String x:Key="LangModExceptionTimeOutAskCheck">连接服务器超时，请检查你的网络环境是否良好（{0}）</s:String>
+    <s:String x:Key="LangModExceptionRequestFailed">网络请求失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionReturnErrorCode">服务器返回错误（{0}）</s:String>
+    <s:String x:Key="LangModExceptionUnknownFileStatus">文件状态未知：{0}</s:String>
 </ResourceDictionary>
