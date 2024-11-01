@@ -4,6 +4,8 @@
         PanBack.ScrollToHome()
         PanScroll = PanBack '不知道为啥不能在 XAML 设置
         PanLog.Visibility = If(ModeDebug, Visibility.Visible, Visibility.Collapsed)
+        ' 
+        AddHandler Me.KeyDown, AddressOf PressF5
         '快照版提示
 #If BETA Then
         PanHint.Visibility = Visibility.Collapsed
@@ -26,6 +28,12 @@
     ''' <summary>
     ''' 刷新自定义主页。
     ''' </summary>
+    Private Sub PressF5(sender As Object, e As KeyEventArgs)
+        If e.Key = Key.F5 Then
+            ForceRefresh()
+        End If
+    End Sub
+
     Private Sub Refresh() Handles Me.Loaded
         RunInNewThread(
         Sub()
