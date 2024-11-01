@@ -4,7 +4,6 @@
         PanBack.ScrollToHome()
         PanScroll = PanBack '不知道为啥不能在 XAML 设置
         PanLog.Visibility = If(ModeDebug, Visibility.Visible, Visibility.Collapsed)
-        ' 
         AddHandler Me.KeyDown, AddressOf PressF5
         '快照版提示
 #If BETA Then
