@@ -11,16 +11,16 @@
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Cache Folder Unavailable</s:String>
     <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL is unable to access the cache folder, which may result in a program error or unusability.
 Error Cause: {0}</s:String>
-    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">The manually selected cache folder is unavailable, PCL will use the default cache folder instead.
+    <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">The manually set cache folder is unavailable, PCL will use the default one instead.
 Error Cause: {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Environment Warning</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">Please extract PCL from the compressed file, or move it to a different folder before continuing to use!
-The program is currently running in a temporary folder, settings, saves, etc. may not be saved, and some features may not be available.</s:String>
-    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL and the newer version of Minecraft no longer support 32-bit systems, some features will not be available.
-It is highly recommended to reinstall the game after switching to a 64-bit system!</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">Please extract PCL from the compressed file or change the folder before continuing to use!
+The program is currently running in a temporary folder, which may prevent the saving of settings, game saves, and other data. Also, some functions may not be available.</s:String>
+    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL and newer versions of Minecraft no longer support 32-bit systems, and some features are unavailable.
+It is strongly recommended to switch to a 64-bit system before continuing!</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">Initialization Error</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">Runtime Error</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">The version of your .NET Framework is too low or it is corrupted. Please redownload and install .NET Framework 4.6.2 from the opening website and try again!</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">The current .NET Framework is outdated or corrupted. Please download and install .NET Framework 4.6.2 from the opening website and try again!</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Unknown Error</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">An unknown error occurred in the program.</s:String>
     <s:String x:Key="LangTitleDownload">Download</s:String>
@@ -32,52 +32,52 @@ It is highly recommended to reinstall the game after switching to a 64-bit syste
     <s:String x:Key="LangToolTipDownload">Downloads</s:String>
     <s:String x:Key="LangToolTipSurrender">Surrender</s:String>
     <s:String x:Key="LangToolTipCloseMinecraft">Close Minecraft</s:String>
-    <s:String x:Key="LangDialogBtnUpdateFullLog">Full Change Log</s:String>
+    <s:String x:Key="LangDialogBtnUpdateFullLog">Full Changelog</s:String>
     <s:String x:Key="LangDialogUpdateTo">PCL {0} Updated</s:String>
-    <s:String x:Key="LangDialogPolicyContent">Before using PCL, please agree to the Term of Service and Disclaimer of PCL.</s:String>
+    <s:String x:Key="LangDialogPolicyContent">Before using PCL, please review and agree to the Terms of Service and Disclaimer.</s:String>
     <s:String x:Key="LangDialogPolicyTitle">Agreement Authorization</s:String>
     <s:String x:Key="LangDialogBtnAgree">Agree</s:String>
     <s:String x:Key="LangDialogBtnDeny">Deny</s:String>
     <s:String x:Key="LangDialogBtnPolicyContent">ToS &amp; Disclaimer</s:String>
     <s:String x:Key="LangHintDebugWarning">[Debug Mode] PCL is running in debug mode, which may cause performance degradation. Please DO NOT enable it unless necessary!</s:String>
     <s:String x:Key="LangDialogTitleTip">Hint</s:String>
-    <s:String x:Key="LangDialogHardcoreFanTheme">Yay! You have used PCL 99 times, thank you for your long-term support!
+    <s:String x:Key="LangDialogHardcoreFanTheme">Yay! You have used PCL 99 times. Thank you for your long-term support!
 The hidden theme "Hardcore Fans" has been unlocked!</s:String>
-    <s:String x:Key="LangDialogCloseOnDownloading">There is still an uncompleted download task. Are you sure you want to quit?</s:String>
+    <s:String x:Key="LangDialogCloseOnDownloading">There is a download task in progress. Are you sure you want to quit?</s:String>
     <s:String x:Key="LangHintHideModeOn">The "Feature Hiding" setting has been re-enabled!</s:String>
-    <s:String x:Key="LangHintHideModeOff">The "Feature Hiding" setting has been disabled temporarily!</s:String>
+    <s:String x:Key="LangHintHideModeOff">The "Feature Hiding" setting has been temporarily disabled!</s:String>
     <s:String x:Key="LangHintIJustWantToStart">Muda!</s:String>
-    <s:String x:Key="LangHintAuthlibUrlIncorrect">The Authlib verification server entered does not match the URL format! ({0})</s:String>
-    <s:String x:Key="LangHintAuthlibDownloadGame">Please download the game first and then set up a third-party login!</s:String>
-    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">Do you want to log in using LittleSkin in the instance {0}?
-You can modify the login method in "Properties → Settings → Server".</s:String>
+    <s:String x:Key="LangHintAuthlibUrlIncorrect">The Authlib verification server does not match the URL format ({0})!</s:String>
+    <s:String x:Key="LangHintAuthlibDownloadGame">Please download the game first, and then set up the third-party login!</s:String>
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">Do you want to login using LittleSkin in instance {0}?
+You can change the login method in "Properties → Settings → Server".</s:String>
     <s:String x:Key="LangDialogTitleAuthlibEnableLittleSkin">Third-party Login Confirmation</s:String>
-    <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">Do you want to log in using LittleSkin in the instance {0}?
-Login Server: {1}
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">Do you want to login using LittleSkin in the instance {0}?
+Authentication server: {1}
 
-You can modify the login method in "Properties → Settings → Server".</s:String>
-    <s:String x:Key="LangHintWindowDropExtract">Please extract the file before dragging it!</s:String>
+You can change the login method in "Properties → Settings → Server".</s:String>
+    <s:String x:Key="LangHintWindowDropExtract">Please extract the file before dragging it in!</s:String>
     <s:String x:Key="LangHintWindowDropFolder">Please drag a file instead of a folder!</s:String>
-    <s:String x:Key="LangHintWindowDropFileNotFound">The file you dragged does not exist: {0}</s:String>
+    <s:String x:Key="LangHintWindowDropFileNotFound">The file dragged in does not exist: {0}</s:String>
     <s:String x:Key="LangHintWindowDropFileOneFileAtATime">Please drag only one file at a time!</s:String>
-    <s:String x:Key="LangCrashReport">Please submit an issue at "https://github.com/Hex-Dragon/PCL2/issues" so that the developer can resolve this issue!</s:String>
+    <s:String x:Key="LangCrashReport">Please submit an issue at "https://github.com/Hex-Dragon/PCL2/issues" to help the developer resolve the problem!</s:String>
     <s:String x:Key="LangDialogCustomHomePageReplaceContent">A custom homepage file already exists. Do you want to override it?</s:String>
     <s:String x:Key="LangDialogCustomHomePageReplaceTitle">Override Confirmation</s:String>
     <s:String x:Key="LangDialogBtnCustomHomePageReplaceConfirm">Override</s:String>
     <s:String x:Key="LangHintLoadedCustomHomePage">Custom homepage file loaded!</s:String>
-    <s:String x:Key="LangHintChoseLoaderBeforeInstallMod">To install mods, please choose an instance that allow to install mods!</s:String>
-    <s:String x:Key="LangDialogInstallModContent">Do you want to install this file as mod to instance {0} ?</s:String>
-    <s:String x:Key="LangDialogInstallModsContent">Do you want to install these files as mods to instance {0} ?</s:String>
+    <s:String x:Key="LangHintChoseLoaderBeforeInstallMod">To install mods, please choose a supported instance!</s:String>
+    <s:String x:Key="LangDialogInstallModContent">Do you want to install this file as a mod to the instance {0}?</s:String>
+    <s:String x:Key="LangDialogInstallModsContent">Do you want to install these files as mods to the instance {0}?</s:String>
     <s:String x:Key="LangDialogInstallModTitle">Mods Installation Confirmation</s:String>
     <s:String x:Key="LangHintInstallModSuccessA">Mod {0} installed!</s:String>
-    <s:String x:Key="LangHintInstallModSuccessB">Installed {0} mods!</s:String>
-    <s:String x:Key="LangHintInstallModFailed">Failed to copy mod files!</s:String>
-    <s:String x:Key="LangHintRarNotSupport">PCL cannot handle archive files in .rar format. Please extract and re-archive to .zip format and try again!</s:String>
-    <s:String x:Key="LangHintWindowDropUnknown">PCL cannot determine which file drag operation should be performed...</s:String>
+    <s:String x:Key="LangHintInstallModSuccessB">{0} mods installed!</s:String>
+    <s:String x:Key="LangHintInstallModFailed">Failed to copy mod files</s:String>
+    <s:String x:Key="LangHintRarNotSupport">PCL cannot handle .rar archive files. Please extract and re-archive them in .zip format and try again!</s:String>
+    <s:String x:Key="LangHintWindowDropUnknown">PCL cannot determine which file drag operation to perform...</s:String>
     <s:String x:Key="LangHintCloseMinecraftSuccess">Minecraft closed!</s:String>
-    <s:String x:Key="LangHintCloseMinecraftFailed">Failed to force close all Minecraft.</s:String>
-    <s:String x:Key="LangHintBackToTopFailed">Unable to return to top, no suitable "RealScroll" was found.</s:String>
-    <s:String x:Key="LangDialogFailedToChangePage">Failed to switch the sub-page. (ID {0})</s:String>
+    <s:String x:Key="LangHintCloseMinecraftFailed">Failed to force close all Minecraft</s:String>
+    <s:String x:Key="LangHintBackToTopFailed">Unable to return to top, as no suitable "RealScroll" was found.</s:String>
+    <s:String x:Key="LangDialogFailedToChangePage">Failed to switch to the sub-page. (ID {0})</s:String>
     <s:String x:Key="LangPageNameVersionChoose">Selection</s:String>
     <s:String x:Key="LangPageNameDownloadManagement">Downloads</s:String>
     <s:String x:Key="LangPageNameVersionConfiguration">Properties</s:String>
@@ -87,13 +87,13 @@ You can modify the login method in "Properties → Settings → Server".</s:Stri
     <s:String x:Key="LangPageNameResourcePacksDownload">Resource Packs Download</s:String>
     <s:String x:Key="LangThemeRealWhite">TRUE WHITE</s:String>
     <s:String x:Key="LangThemeRealFunny">TRUE FUNNY COLOR</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip8">After the accumulated sponsorship reaches ¥23.33, message the term "解锁码" (Unlock Code) to the developer on Afdian to unlock.
-Right-click to open the sponsorship page and support PCL if you think it is doing a good job =w=!</s:String>
-    <s:String x:Key="LangThemeUnlockTip8">After the accumulated sponsorship reaches ¥23.33, message the term "解锁码" (Unlock Code) to the developer on Afdian to unlock.</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (Resolved) (right-click to open the feedback page).
-· Submit a pull request to the Help Center repository then unlock after LTCat merge.</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· Report a bug, reply to issue to request unlock after issue is marked as "已完成" (Resolved).
-· Submit a pull request to the Help Center repository then unlock after LTCat merge.</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip8">When the sponsorship amount reaches ¥23.33, send the term "解锁码" (Unlock Code) to the developer on Afdian to unlock.
+Right-click to open the sponsorship page, and support PCL with a donation if you appreciate our work =w=!</s:String>
+    <s:String x:Key="LangThemeUnlockTip8">When the sponsorship amount reaches ¥23.33, send the term "解锁码" (Unlock Code) to the developer on Afdian to unlock.</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug and request an unlock by replying in the issue thread once it is marked as resolved. (Right-click to open the feedback page.)
+· Submit a Pull Request to the Help Center repository and receive an unlock once it is merged.</s:String>
+    <s:String x:Key="LangThemeUnlockTip9">· Report a bug and request an unlock by replying in the issue thread once it is marked as resolved.
+· Submit a Pull Request to the Help Center repository and receive an unlock once it is merged.</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">There is an exception in the Personalization settings and has been automatically reset.</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">Error while loading the personalization settings.</s:String>
     <s:String x:Key="LangHintThemeSetInit">The personalization settings have been initialized.</s:String>
@@ -974,10 +974,10 @@ Leave blank as default, require restarting the launcher to apply.</s:String>
     <s:String x:Key="LangPageSetupSystemSystemCheckUpdate">Check for Updates</s:String>
     <s:String x:Key="LangPageSetupSystemLang">Language</s:String>
     <s:String x:Key="LangPageSetupSystemLangLaunchLang">Language</s:String>
-    <s:String x:Key="LangPageSetupSystemLangWarn">Language translations may not be 100% accurate, need to restart the launcher after the modification.</s:String>
+    <s:String x:Key="LangPageSetupSystemLangWarn">Language translations may not be 100% accurate. A restart is required after the change.</s:String>
     <s:String x:Key="LangPageSetupSystemDebug">Debug</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeed">Animation Speed</s:String>
-    <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">Prevent to copy existing files on download</s:String>
+    <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownload">Disable copying existing files on download</s:String>
     <s:String x:Key="LangPageSetupSystemDebugNotCopyExistFileWhenDownloadToolTip">Re-download every file instead of copying existing files.
 Only recommended in download speed test.</s:String>
     <s:String x:Key="LangPageSetupSystemDebugDebugMode">Debug Mode</s:String>
@@ -1011,7 +1011,7 @@ Unless you are making a modpack or updating the launcher often, this option is e
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">Mirror (Temporarily Invalid)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">Balanced</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">Official</s:String>
-    <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL is about to restart to fully apply the language switch.</s:String>
+    <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL will restart to apply the language change.</s:String>
     <s:String x:Key="LangPageSetupSystemLangHelpTranslate">Contribute</s:String>
     <s:String x:Key="LangPageSetupSystemHintCloseGameBeforeChangeLanguage">Please close all instances that are running first...</s:String>
     <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">Please change the language after all download tasks are completed...</s:String>
@@ -1246,7 +1246,7 @@ PCL does not support other topsy-turvy download protocols.</s:String>
     <s:String x:Key="LangModEventDialogUnknownEventContent">Unknown event type: {0}
 Please check whether the event type is filled correctly, whether the PCL is the latest version.</s:String>
     <s:String x:Key="LangModEventGettingResource">Obtaining resources, please wait...</s:String>
-    <s:String x:Key="LangModMusicDeviceChanged">Due to the change of the audio device, music will be unusable until restart the launcher!</s:String>
+    <s:String x:Key="LangModMusicDeviceChanged">Due to the change of the audio device, music playback is unavailable before a restart!</s:String>
     <s:String x:Key="LangModMusicMusicChanged">Failed to play ({0}): Changing audio properties during play is not support.</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">Failed to play ({0}): Format may be unsupported, try again after converting it to .wav, .mp3, or .flac.</s:String>
     <s:String x:Key="LangModMusicExceptionInitFail">Failed to initialize the music list.</s:String>
@@ -1275,11 +1275,11 @@ Please check whether the event type is filled correctly, whether the PCL is the 
     <s:String x:Key="LangModSecretPermissionError">Runtime Error</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">Open-source Version Notice</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">This version does not include the following features:
-- CurseForge API Call: Requires an API Key that you requested, and add to the "SecretHeadersSign" method.
-- Microsoft login: Require a Client ID that you requested and, add to the front of the "ModSecret.vb".
-- Update and Networking Notifications: To avoid potential abuse concerns.
-- Theme: This is a commemorative feature that requires sponsorship to unlock. Do not make the sponsors too sad...
-- Utilities: Some development tools were placed here during the early stages of development, and it was difficult to sort them out.</s:String>
+- CurseForge API Call: Requires an API key for which you have applied, to be added to the "SecretHeadersSign" method.
+- Microsoft Login: Requires a Client ID for which you have applied, to be added to the front of "ModSecret.vb".
+- Update and Networking Notifications: Omitted to avoid potential abuse concerns.
+- Theme: This is a commemorative feature that requires sponsorship to unlock. Don't make the sponsors disappointed...
+- Utilities: Some development tools were placed here during the early stages of development, making them difficult to sort out.</s:String>
     <s:String x:Key="LangModSecretHintNoTheme">The current version of PCL does not include the Theme feature...</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">The current version of PCL does not include the Update feature...</s:String>
     <s:String x:Key="LangModMinecraftCurrentFolder">Current Folder</s:String>
@@ -1420,7 +1420,7 @@ Please confirm that the issue persists in the latest version after updating, and
     <s:String x:Key="LangModValidateNoSpacialFolderName">The name cannot be "%"!</s:String>
     <s:String x:Key="LangModValidateNoEmptyInput">The input content cannot be empty!</s:String>
     <s:String x:Key="LangModValidateIncorrectUrl">The URL entered is invalid!</s:String>
-    <s:String x:Key="LangModValidateNumTooLong">Please enter a number with an appropriate range!</s:String>
+    <s:String x:Key="LangModValidateNumTooLong">Please enter a number in an appropriate range!</s:String>
     <s:String x:Key="LangModValidateNumInt">Please enter an integer!</s:String>
     <s:String x:Key="LangModValidateNumNoGreater">Cannot be greater than {0}!</s:String>
     <s:String x:Key="LangModValidateNumNoLess">Cannot be less than {0}!</s:String>
