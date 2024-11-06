@@ -307,6 +307,14 @@
     Private Sub BtnManageInstall_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageInstall.Click
         Hint("将 Mod 文件直接拖入 PCL 窗口即可安装！")
     End Sub
+    
+    ''' <summary>
+    ''' 跳转到下载mod界面
+    ''' </summary>
+    Private Sub BtnManageDownload_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageDownload.Click
+        Dim page As New PageDownloadLeft
+        page.PageChange(FormMain.PageSubType.DownloadMod)
+    End Sub
 
 #End Region
 
