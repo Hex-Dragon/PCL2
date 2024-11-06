@@ -181,7 +181,6 @@
     
     '#4902 可以不用再切换到别的预设图标才能再次切换自定义图标'
     Private Sub ItemDisplayLogoCustom_PreviewMouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles ItemDisplayLogoCustom.PreviewMouseLeftButtonDown
-        
         Try
             If ComboDisplayLogo.SelectedItem Is ItemDisplayLogoCustom
                 ComboDisplayLogo.SelectedItem = ItemDisplayLogoCustom  
@@ -189,7 +188,8 @@
                 comboBoxItemsList.Add(ComboDisplayLogo.SelectedItem)
                 Dim removedItems As IList = New List(Of Object)()
                 Dim args As New SelectionChangedEventArgs(ComboBox.SelectionChangedEvent, removedItems, comboBoxItemsList)
-                ComboDisplayLogo_SelectionChanged(ComboDisplayLogo, args)  ' 触发事件2
+                '事件触发器'
+                ComboDisplayLogo_SelectionChanged(ComboDisplayLogo, args)
             End If
         Catch ex As Exception
             Log(ex, "更改自定义版本图标失败（" & PageVersionLeft.Version.Name & "）", LogLevel.Feedback)
