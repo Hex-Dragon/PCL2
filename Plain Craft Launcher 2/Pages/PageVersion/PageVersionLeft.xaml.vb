@@ -88,17 +88,7 @@
 #End Region
 
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
-        '强制刷新
-        Try
-            CompProjectCache.Clear()
-            File.Delete(PathTemp & "Cache\LocalMod.json")
-            Log("[Mod] 由于点击刷新按钮，清理本地 Mod 信息缓存")
-        Catch ex As Exception
-            Log(ex, "强制刷新时清理本地 Mod 信息缓存失败")
-        End Try
-        If FrmVersionMod IsNot Nothing Then FrmVersionMod.ReloadModList(True) '无需 Else，还没加载刷个鬼的新
-        ItemMod.Checked = True
-        Hint("正在刷新……", Log:=False)
+        PageVersionMod.Refresh()
     End Sub
 
     Public Sub Reset(sender As Object, e As EventArgs)

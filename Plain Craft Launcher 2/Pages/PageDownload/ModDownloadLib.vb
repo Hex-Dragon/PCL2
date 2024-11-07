@@ -236,7 +236,15 @@ Public Module ModDownloadLib
                 Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                     '分析服务端 JAR 文件下载地址
                     Dim McVersion As New McVersion(VersionFolder)
-                    If McVersion.JsonObject("downloads") Is Nothing OrElse McVersion.JsonObject("downloads")("server") Is Nothing OrElse McVersion.JsonObject("downloads")("server")("url") Is Nothing Then Throw New Exception($"{Id} 版本没有提供服务端文件")
+                    If McVersion.JsonObject("downloads") Is Nothing OrElse McVersion.JsonObject("downloads")("server") Is Nothing OrElse McVersion.JsonObject("downloads")("server")("url") Is Nothing Then
+                        File.Delete(VersionFolder & Id & ".json")
+                        If Not New DirectoryInfo(VersionFolder).GetFileSystemInfos.Any() Then Directory.Delete(VersionFolder)
+                        Task.Output = New List(Of NetFile)
+                        Hint($"Mojang 没有给 Minecraft {Id} 提供官方服务端下载，没法下，撤退！", HintType.Critical)
+                        Thread.Sleep(2000) '等玩家把上一个提示看完
+                        Task.Abort()
+                        Exit Sub
+                    End If
                     Dim JarUrl As String = McVersion.JsonObject("downloads")("server")("url")
                     Dim Checker As New FileChecker(MinSize:=1024, ActualSize:=If(McVersion.JsonObject("downloads")("server")("size"), -1), Hash:=McVersion.JsonObject("downloads")("server")("sha1"))
                     Task.Output = New List(Of NetFile) From {New NetFile(DlSourceLauncherOrMetaGet(JarUrl), VersionFolder & Id & "-server.jar", Checker)}
@@ -551,10 +559,12 @@ pause"
                 Task.Progress = 0.1
                 Dim Sources As New List(Of String)
                 'BMCLAPI 源
+                Dim BmclapiInherit As String = DownloadInfo.Inherit
+                If BmclapiInherit = "1.8" OrElse BmclapiInherit = "1.9" Then BmclapiInherit &= ".0" '#4281
                 If DownloadInfo.IsPreview Then
-                    Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & DownloadInfo.Inherit & "/HD_U_" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", "").Replace(" ", "/"))
+                    Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & BmclapiInherit & "/HD_U_" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", "").Replace(" ", "/"))
                 Else
-                    Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & DownloadInfo.Inherit & "/HD_U/" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", ""))
+                    Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & BmclapiInherit & "/HD_U/" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", ""))
                 End If
                 '官方源
                 Dim PageData As String
@@ -562,12 +572,10 @@ pause"
                     PageData = NetGetCodeByClient("https://optifine.net/adloadx?f=" & DownloadInfo.NameFile, New UTF8Encoding(False), 15000, "text/html", True)
                     Task.Progress = 0.8
                     Sources.Add("https://optifine.net/" & RegexSearch(PageData, "downloadx\?f=[^""']+")(0))
-                    Log("[Download] OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址：" & Sources(0))
+                    Log("[Download] OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址：" & Sources.Last)
                 Catch ex As Exception
                     Log(ex, "获取 OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址失败")
                 End Try
-                'OptiFine 中文镜像源
-                Sources.Add("https://optifine.cn/download/" & DownloadInfo.NameFile)
                 '构造文件请求
                 Task.Output = New List(Of NetFile) From {New NetFile(Sources.ToArray, Target, New FileChecker(MinSize:=300 * 1024))}
             End Sub) With {.ProgressWeight = 8})
@@ -714,10 +722,12 @@ Retry:
         Sub(Task As LoaderTask(Of DlOptiFineListEntry, List(Of NetFile)))
             Dim Sources As New List(Of String)
             'BMCLAPI 源
+            Dim BmclapiInherit As String = DownloadInfo.Inherit
+            If BmclapiInherit = "1.8" OrElse BmclapiInherit = "1.9" Then BmclapiInherit &= ".0" '#4281
             If DownloadInfo.IsPreview Then
-                Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & DownloadInfo.Inherit & "/HD_U_" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", "").Replace(" ", "/"))
+                Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & BmclapiInherit & "/HD_U_" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", "").Replace(" ", "/"))
             Else
-                Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & DownloadInfo.Inherit & "/HD_U/" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", ""))
+                Sources.Add("https://bmclapi2.bangbang93.com/optifine/" & BmclapiInherit & "/HD_U/" & DownloadInfo.NameDisplay.Replace(DownloadInfo.Inherit & " ", ""))
             End If
             '官方源
             Dim PageData As String
@@ -725,7 +735,7 @@ Retry:
                 PageData = NetGetCodeByClient("https://optifine.net/adloadx?f=" & DownloadInfo.NameFile, New UTF8Encoding(False), 15000, "text/html", True)
                 Task.Progress = 0.8
                 Sources.Add("https://optifine.net/" & RegexSearch(PageData, "downloadx\?f=[^""']+")(0))
-                Log("[Download] OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址：" & Sources(0))
+                Log("[Download] OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址：" & Sources.Last)
             Catch ex As Exception
                 Log(ex, "获取 OptiFine " & DownloadInfo.NameDisplay & " 官方下载地址失败")
             End Try
@@ -1248,8 +1258,8 @@ Retry:
         End If
         If Not IsNeoForge AndAlso LoaderVersion.StartsWithF("1.") AndAlso LoaderVersion.Contains("-") Then
             '类似 1.19.3-41.2.8 格式，优先使用 Version 中要求的版本而非 Inherit（例如 1.19.3 却使用了 1.19 的 Forge）
-            Inherit = LoaderVersion.Before("-")
-            LoaderVersion = LoaderVersion.After("-")
+            Inherit = LoaderVersion.BeforeFirst("-")
+            LoaderVersion = LoaderVersion.AfterLast("-")
         End If
         Dim LoaderName As String = If(IsNeoForge, "NeoForge", "Forge")
         Dim IsCustomFolder As Boolean = McFolder <> PathMcFolder
@@ -1309,7 +1319,7 @@ Retry:
         Loaders.Add(New LoaderDownload($"下载 {LoaderName} 主文件", New List(Of NetFile)) With {.ProgressWeight = 9})
 
         '安装（仅在新版安装时需要原版 Jar）
-        If IsNeoForge OrElse LoaderVersion.Before(".") >= 20 Then
+        If IsNeoForge OrElse LoaderVersion.BeforeFirst(".") >= 20 Then
             Log($"[Download] 检测为{If(IsNeoForge, " Neo", "新版 ")}Forge：" & LoaderVersion)
             Dim Libs As List(Of McLibToken) = Nothing
             Loaders.Add(New LoaderTask(Of String, List(Of NetFile))($"分析 {LoaderName} 支持库文件",
@@ -1331,7 +1341,7 @@ Retry:
                         Task.Progress = 0.4
                         Dim RawJson As JObject = GetJson(NetGetCodeByDownload(DlSourceLauncherOrMetaGet(DlClientListGet(Inherit)), IsJson:=True))
                         '[net.minecraft:client:1.17.1-20210706.113038:mappings@txt] 或 @tsrg]
-                        Dim OriginalName As String = Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Before("@")
+                        Dim OriginalName As String = Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).BeforeFirst("@")
                         Dim Address = McLibGet(OriginalName).Replace(".jar", "-mappings." & Json("data")("MOJMAPS")("client").ToString.Trim("[]".ToCharArray()).Split("@")(1))
                         Dim ClientMappings As JToken = RawJson("downloads")("client_mappings")
                         Libs.Add(New McLibToken With {
@@ -1865,7 +1875,7 @@ Retry:
     Public Function FabricApiDownloadListItem(Entry As CompFile, OnClick As MyListItem.ClickEventHandler) As MyListItem
         '建立控件
         Dim NewItem As New MyListItem With {
-            .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").Before("+").Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Title = Entry.DisplayName.Split("]")(1).Replace("Fabric API ", "").Replace(" build ", ".").BeforeFirst("+").Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
             .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
             .Logo = PathImage & "Blocks/Fabric.png"
         }
@@ -2030,6 +2040,8 @@ Retry:
             FrmMain.BtnExtraDownload.Ribble()
             Return True
 
+        Catch ex As CancelledException
+            Return False
         Catch ex As Exception
             Log(ex, "开始合并安装失败", LogLevel.Feedback)
             Return False
@@ -2037,8 +2049,8 @@ Retry:
     End Function
     ''' <summary>
     ''' 获取合并安装加载器列表，并进行前期的缓存清理与 Java 检查工作。
-    ''' 如果出现已知问题且已提示用户，则返回 Nothing。出现异常则直接抛出。
     ''' </summary>
+    ''' <exception cref="CancelledException" />
     Public Function McInstallLoader(Request As McInstallRequest, Optional DontFixLibraries As Boolean = False) As List(Of LoaderBase)
         '获取缓存目录
         Dim PathInstallTemp As String
@@ -2050,11 +2062,10 @@ Retry:
 
         '清理缓存
         Try
-            If Not IsInstallTempCleared Then
-                IsInstallTempCleared = True
-                DeleteDirectory(PathInstallTemp, True)
-                Log("[Download] 已清理合并安装缓存")
-            End If
+            If IsInstallTempCleared Then Exit Try
+            IsInstallTempCleared = True
+            DeleteDirectory(PathInstallTemp, True)
+            Log("[Download] 已清理合并安装缓存")
         Catch ex As Exception
             Log(ex, "清理合并安装缓存失败")
         End Try
@@ -2065,7 +2076,7 @@ Retry:
         If Directory.Exists(TempMcFolder) Then DeleteDirectory(TempMcFolder)
         Dim OptiFineFolder As String = Nothing
         If Request.OptiFineVersion IsNot Nothing Then
-            If Request.OptiFineVersion.Contains("_HD_U_") Then Request.OptiFineVersion = "HD_U_" & Request.OptiFineVersion.After("_HD_U_") '#735
+            If Request.OptiFineVersion.Contains("_HD_U_") Then Request.OptiFineVersion = "HD_U_" & Request.OptiFineVersion.AfterLast("_HD_U_") '#735
             Request.OptiFineEntry = New DlOptiFineListEntry With {
                 .NameDisplay = Request.MinecraftName & " " & Request.OptiFineVersion.Replace("HD_U_", "").Replace("_", "").Replace("pre", " pre"),
                 .Inherit = Request.MinecraftName,
@@ -2110,7 +2121,7 @@ Retry:
         '重复版本检查
         If File.Exists(OutputFolder & Request.TargetVersionName & ".json") Then
             Hint("版本 " & Request.TargetVersionName & " 已经存在！", HintType.Critical)
-            Return Nothing
+            Throw New CancelledException
         End If
 
         Dim LoaderList As New List(Of LoaderBase)
@@ -2166,7 +2177,7 @@ Retry:
             End Sub) With {.ProgressWeight = 2, .Block = True})
         '补全文件
         If Not DontFixLibraries AndAlso
-        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.Before(".") >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
+        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.BeforeFirst(".") >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
             Dim LoadersLib As New List(Of LoaderBase)
             LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(OutputFolder))) With {.ProgressWeight = 1, .Show = False})
             LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})

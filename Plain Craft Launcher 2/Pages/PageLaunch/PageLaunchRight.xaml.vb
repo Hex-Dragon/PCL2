@@ -1,4 +1,5 @@
 ﻿Public Class PageLaunchRight
+    Implements IRefreshable
 
     Private Sub Init() Handles Me.Loaded
         PanBack.ScrollToHome()
@@ -26,12 +27,6 @@
     ''' <summary>
     ''' 刷新自定义主页。
     ''' </summary>
-    Private Sub PressF5(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
-        If e.Key = Key.F5 Then
-            ForceRefresh()
-        End If
-    End Sub
-
     Private Sub Refresh() Handles Me.Loaded
         RunInNewThread(
         Sub()
@@ -98,7 +93,7 @@ Download:
                         GoTo Download
                     Case 3
                         Log("[Page] 主页预设：简单主页")
-                        Url = "https://gitee.com/mfn233/PCL-Mainpage/raw/main/Custom.xaml"
+                        Url = "https://raw.gitcode.com/mfn233/PCL-Mainpage/raw/main/Custom.xaml"
                         GoTo Download
                     Case 4
                         Log("[Page] 主页预设：每日整合包推荐")
@@ -122,7 +117,7 @@ Download:
                         GoTo Download
                     Case 9
                         Log("[Page] 主页预设：PCL 新功能说明书")
-                        Url = "https://gitee.com/wforstbreeze/whats-new-pcl/raw/main/Custom.xaml"
+                        Url = "https://raw.gitcode.com/WForst-Breeze/WhatsNewPCL/raw/main/Custom.xaml"
                         GoTo Download
                     Case 10
                         Log("[Page] 主页预设：OpenMCIM Dashboard")
@@ -144,10 +139,10 @@ Download:
             If Address.Contains(".xaml") Then
                 VersionAddress = Address.Replace(".xaml", ".xaml.ini")
             Else
-                VersionAddress = Address.Before("?")
+                VersionAddress = Address.BeforeFirst("?")
                 If Not VersionAddress.EndsWith("/") Then VersionAddress += "/"
                 VersionAddress += "version"
-                If Address.Contains("?") Then VersionAddress += Address.After("?")
+                If Address.Contains("?") Then VersionAddress += Address.AfterLast("?")
             End If
             '校验版本
             Dim Version As String = ""
@@ -189,7 +184,7 @@ Download:
     ''' 立即强制刷新自定义主页。
     ''' 必须在 UI 线程调用。
     ''' </summary>
-    Public Sub ForceRefresh()
+    Public Sub ForceRefresh() Implements IRefreshable.Refresh
         Log("[Page] 要求强制刷新自定义主页")
         ClearCache()
         '实际的刷新
