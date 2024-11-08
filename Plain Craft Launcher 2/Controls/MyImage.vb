@@ -128,7 +128,7 @@ RetryStart:
                 '下载
                 ActualSource = LoadingSource '显示加载中图片
                 TempDownloadingPath = TempPath & RandomInteger(0, 10000000)
-                NetDownload(Url, TempDownloadingPath, True)
+                NetDownload(Url, TempDownloadingPath, True, False)
                 If Url <> Source AndAlso Url <> FallbackSource Then
                     '已经更换了地址
                     File.Delete(TempDownloadingPath)
