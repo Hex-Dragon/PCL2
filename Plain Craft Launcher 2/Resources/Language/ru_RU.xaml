@@ -1,10 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
-  <s:String x:Key="LangTaskAbort">Отменено!</s:String>
+    <s:String x:Key="LangTaskAbort">Отменено!</s:String>
     <s:String x:Key="LangDialogBtnOK">ОК</s:String>
     <s:String x:Key="LangDialogBtnCancel">Отмена</s:String>
     <s:String x:Key="LangResourcePack">Пакет ресурсов</s:String>
     <s:String x:Key="LangDialogBtnYes">Да</s:String>
     <s:String x:Key="LangDialogBtnNo">Нет</s:String>
+    <s:String x:Key="LangDialogBtnContinue">Продолжить</s:String>
     <s:String x:Key="LangComma">, </s:String>
     <s:String x:Key="LangColon">: </s:String>
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL не имеет разрешения на доступ к {0}</s:String>
@@ -85,6 +87,7 @@
     <s:String x:Key="LangPageNameModDownload">Скачивание модов</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">Скачивание модпаков</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">Скачивание ресурс-паков</s:String>
+    <s:String x:Key="LangHintDropFileFromRecycleBin">请先将文件从回收站还原，再拖入 PCL！</s:String>
     <s:String x:Key="LangThemeRealWhite">ИСТИННЫЙ БЕЛЫЙ</s:String>
     <s:String x:Key="LangThemeRealFunny">ИСТИННЫЕ СМЕШНЫЕ ЦВЕТА</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip8">После того как сумма спонсорства достигнет ¥23.33, отправьте разработчику на Afdian сообщение с термином "解锁码" (Код разблокировки), чтобы разблокировать.
@@ -130,7 +133,6 @@
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">Не удалось удалить музыку.</s:String>
     <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Не удалось воссоздать папку музыки.</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">Файл макета уже существует. Продолжение генерации файла документации приведет к перезаписи существующего файла макета!</s:String>
-    <s:String x:Key="LangDialogBtnContinue">Продолжить</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteFail">Не удалось сгенерировать файл документации</s:String>
     <s:String x:Key="LangHintCustomPageOverwriteSuccess">Файл документации сгенерирован!</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">Главная страница обновлена!</s:String>
@@ -273,7 +275,10 @@
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">Электронная почта</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">Скройте отображение электронной почты учётных записей сторонних сервисов входа и попробуйте заменить её на звёздочки, чтобы избежать раскрытия персональных данных.
 Необходим перезапуск запускателя после этого изменения.</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">Выбор экземпляра</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">版本管理</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">隐藏启动按钮下方的版本选择与版本设置入口。</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialModUpdate">Mod 更新</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialModUpdateToolTip">禁止在 Mod 管理页面更新 Mod。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">Скрытие функций</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Скрывает только эту вкладку, установленное отключение содержимого остаётся в силе.
 Избегайте изменения "Скрытия функций", сохраняя страницу "Персонализация".</s:String>
@@ -544,7 +549,6 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangDownloadOptiFineDescTitle">Введение в OptiFine</s:String>
     <s:String x:Key="LangDownloadOptiFineDesc">OptiFine позволяет устанавливать шейдеры, использовать HD-ресурспаки и значительно улучшать производительность игры.</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">Официальный сайт</s:String>
-    <s:String x:Key="LangDownloadOptiFineChineseWebsite">Китайский сайт</s:String>
     <s:String x:Key="LangDownloadOptiFineGettingList">Получение списка OptiFine...</s:String>
     <s:String x:Key="LangDownloadModpackSearchTitle">Поиск модпаков</s:String>
     <s:String x:Key="LangDownloadModpackSearchName">Имя</s:String>
@@ -654,8 +658,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangLaunchLeftAbortTask">Завершение обработки</s:String>
     <s:String x:Key="LangLaunchLeftFinished">Завершено</s:String>
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">Экспорт скрипта запуска...</s:String>
-    <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">PCL автоматически установит модпак в текущей папке.</s:String>
-    <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">Автоматическая установка</s:String>
+    <s:String x:Key="LangLaunchLeftExceptionModpackInstallFail">自动安装整合包失败：{0}</s:String>
     <s:String x:Key="LangLaunchRightSnapshot">Подсказка о снимке</s:String>
     <s:String x:Key="LangLaunchRightLog">Журнал запуска</s:String>
     <s:String x:Key="LangLaunchRightLabHint1">Версия снимка содержит тестовые функции, которые еще не официально выпущены и доступны только спонсорам. Пожалуйста, не отправляйте её никому другому и не используйте для создания модпаков!</s:String>
@@ -1236,6 +1239,10 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangModMainAprilFoolTipC">Хмм... Я предлагаю вам просто кликнуть по флагу :)</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">Маленький белый флаг всегда ждет вас...</s:String>
     <s:String x:Key="LangModMainExceptionNoHelpFound">Не найдено доступных подсказок. Вы можете скрыть Центр помощи в "Настройки → Персонализация → Скрытие функций", если он вам не нужен.</s:String>
+    <s:String x:Key="LangModMainExceptionNoFileFound">未找到帮助文件：{0}</s:String>
+    <s:String x:Key="LangModMainExceptionNoTitleArgFound">未找到 Title 项</s:String>
+    <s:String x:Key="LangModMainExceptionNoEventTypeArgFound">未找到 EventType 项</s:String>
+    <s:String x:Key="LangModMainExceptionNoXamlFileFound">未找到帮助条目 .json 对应的 .xaml 文件（{0}）</s:String>
     <s:String x:Key="LangModEventOpeningWeb">Открытие, пожалуйста, подождите...</s:String>
     <s:String x:Key="LangModEventStartInstance">Запуск {0}...</s:String>
     <s:String x:Key="LangModEventChoseAnInstance">Пожалуйста, сначала выберите экземпляр!</s:String>
@@ -1245,7 +1252,6 @@ PCL не поддерживает другие странные протокол
     <s:String x:Key="LangModEventDialogEventFailTitle">Неудачное выполнение события</s:String>
     <s:String x:Key="LangModEventDialogUnknownEventContent">Неизвестный тип события: {0}
 Пожалуйста, проверьте, правильно ли заполнен тип события, и является ли PCL последней версией.</s:String>
-    <s:String x:Key="LangModEventGettingResource">Получение ресурсов, пожалуйста, подождите...</s:String>
     <s:String x:Key="LangModMusicDeviceChanged">Из-за смены аудиоустройства, музыка будет неиспользуемой до перезапуска запускателя!</s:String>
     <s:String x:Key="LangModMusicMusicChanged">Не удалось воспроизвести ({0}): Изменение аудиопараметров во время воспроизведения не поддерживается.</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">Не удалось воспроизвести ({0}): Формат может быть не поддерживаемым, попробуйте снова после преобразования в .wav, .mp3 или .flac.</s:String>
@@ -1342,7 +1348,6 @@ PCL не поддерживает другие странные протокол
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">Эта версия не имеет информации об индексе файла ресурсов.</s:String>
     <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Файл индекса ресурсов не найден.</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">Неожиданный результат. ({0})</s:String>
-    <s:String x:Key="LangModCompModSuitFor">Доступно для</s:String>
     <s:String x:Key="LangModCompModDependentCount">зависимость</s:String>
     <s:String x:Key="LangModCompModDependentCountP">зависимостей</s:String>
     <s:String x:Key="LangModCompModDownload"> скачать</s:String>
@@ -1363,8 +1368,6 @@ PCL не поддерживает другие странные протокол
     <s:String x:Key="LangModBaseDateYearP">года</s:String>
     <s:String x:Key="LangModBaseDateMonthA">месяц</s:String>
     <s:String x:Key="LangModBaseDateMonthAP">месяцев</s:String>
-    <s:String x:Key="LangModBaseDateMonthB">месяц</s:String>
-    <s:String x:Key="LangModBaseDateMonthBP">месяцев</s:String>
     <s:String x:Key="LangModBaseDateDay">день</s:String>
     <s:String x:Key="LangModBaseDateDayP">дней</s:String>
     <s:String x:Key="LangModBaseDateHour">час</s:String>
@@ -1601,8 +1604,6 @@ URL: {0}</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">Установить пароль</s:String>
     <s:String x:Key="LangModModpackSelectModpack">файл модпака</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">Выберите файл модпака</s:String>
-    <s:String x:Key="LangModModpackUnknownType">Невозможно определить тип файла, невозможно установить!</s:String>
-    <s:String x:Key="LangModModpackExceptionNoMcInfo">Модпак не предоставляет информацию о версии Minecraft.</s:String>
     <s:String x:Key="LangModModpackInputInstanceName">Введите имя экземпляра</s:String>
     <s:String x:Key="LangModModpackTaskExtraModpack">Извлечь модпак</s:String>
     <s:String x:Key="LangModModpackTaskGetModDownloadInfo">Получить информацию о загрузке модов</s:String>
@@ -1628,15 +1629,34 @@ URL: {0}</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">Установка модпака HMCL: </s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">Установка модпака MMC: </s:String>
     <s:String x:Key="LangModModpackNoAddons">Невозможно установить, так как модпак не предоставляет дополнительную информацию о версии игры!</s:String>
-    <s:String x:Key="LangModModpackNoGameInfo">Невозможно установить, так как модпак не предоставляет информацию о версии игры!</s:String>
+    <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackModrinthNoGameInfo">该 Modrinth 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackCurseforgeNoGameInfo">该 CurseForge 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackTaskMCBBSModpackInstall">Установка модпака MCBBS: </s:String>
     <s:String x:Key="LangModModpackDialogContentInstallTip">В открывшемся окне выберите папку для установки. Она должна быть пустой.</s:String>
-    <s:String x:Key="LangModModpackDialogTitleInstallTip">Совет по установке</s:String>
+    <s:String x:Key="LangModModpackDialogTitleInstall">安装</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">Выберите место установки (папка должна быть пустой)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Пути к папкам Minecraft не могут содержать восклицательные знаки (!) или точку с запятой (;)!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Пожалуйста, выберите пустую папку в качестве места установки!</s:String>
-    <s:String x:Key="LangModModpackInstallArchive">Установить архив</s:String>
+    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Добавлено в список папок: {0}</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
+    <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
+    <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
+    <s:String x:Key="LangModModpackExceptionModpackTooOld">该整合包版本过老，已不支持进行安装！</s:String>
+    <s:String x:Key="LangModModpackExceptionModrinthModpackError">Modrinth 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionHMCLModpackError">HMCL 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionCurseforgeModpackError">CurseForge 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionMMCModpackError">MMC 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionMCBBSModpackError">MCBBS 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackDialogTitleAnotherLauncher">换用整合包启动器？</s:String>
+    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">整合包中似乎自带了启动器，是否换用它继续安装？
+通常推荐这样做，以获得最佳体验。
+即将打开：{0}</s:String>
+    <s:String x:Key="LangModModpackExceptionNoModpackFound">未能找到适合的文件结构，这可能不是一个 MC 压缩包</s:String>
     <s:String x:Key="LangModWatcherMcCrashed">Обнаружен сбой Minecraft, начат анализ ошибок...</s:String>
     <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">Переименование подключаемого ключа, содержащего подключаемые ключи, не поддерживается: {0}.</s:String>
     <s:String x:Key="LangModBaseExceptionPathIncorrect">Путь не включен: {0}</s:String>
@@ -1730,6 +1750,7 @@ URL: {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">该服务端正在下载中！</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">下载服务端文件</s:String>
     <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">{0} 版本没有提供服务端文件</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallInstallFail">开始合并安装失败</s:String>
     <s:String x:Key="LangModCrashDialogTitleAnalysisResult">Результат анализа</s:String>
     <s:String x:Key="LangModCrashDialogTitleMcError">Вылет Minecraft</s:String>
     <s:String x:Key="LangModCrashViewLog">Журнал</s:String>
@@ -1911,6 +1932,14 @@ URL: {0}</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge может предоставить решения. Примите соответствующие меры на основании журналов и отчетов о сбоях.
 Если решение не предоставлено, вы можете просмотреть отчеты о сбоях, чтобы понять, как произошла ошибка.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCC">Игра вылетела, но анализ невозможен, поскольку PCL не удалось найти соответствующие файлы журналов.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCD">部分 Mod 注入失败，导致游戏出错。
+这一般代表着部分 Mod 与其他 Mod 或当前环境不兼容，或是它存在 Bug。
+你可以尝试逐步禁用 Mod，然后观察游戏是否还会崩溃，以此定位导致崩溃的 Mod。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCE">你所安装的 Mod 不兼容：
+{0}
+
+请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCF">你所安装的 Mod 不兼容，Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL 获取到了没有详细信息的错误原因（{0}），请向 PCL 作者提交反馈以获取详情。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">Кроме того, </s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">рассмотрите возможность просмотра отчетов о сбоях, чтобы выявить проблемы.</s:String>
@@ -1930,4 +1959,16 @@ URL: {0}</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionDecline">Запрос PCL на разрешение был отклонен...</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionTimeout">Время входа истекло, повторите попытку!</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Опрос входа в систему не выполнен.</s:String>
+    <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
+    <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
+    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>
+    <s:String x:Key="LangModExceptionTimeOutAskCheck">连接服务器超时，请检查你的网络环境是否良好（{0}）</s:String>
+    <s:String x:Key="LangModExceptionRequestFailed">网络请求失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionReturnErrorCode">服务器返回错误（{0}）</s:String>
+    <s:String x:Key="LangModExceptionUnknownFileStatus">文件状态未知：{0}</s:String>
 </ResourceDictionary>

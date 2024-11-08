@@ -1,10 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
-  <s:String x:Key="LangTaskAbort">Annulé!</s:String>
+    <s:String x:Key="LangTaskAbort">Annulé!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Annuler</s:String>
     <s:String x:Key="LangResourcePack">Packs de ressources</s:String>
     <s:String x:Key="LangDialogBtnYes">Oui</s:String>
     <s:String x:Key="LangDialogBtnNo">Non</s:String>
+    <s:String x:Key="LangDialogBtnContinue">Continuer</s:String>
     <s:String x:Key="LangComma">, </s:String>
     <s:String x:Key="LangColon">: </s:String>
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL n'a pas les permissions d'accès à {0}</s:String>
@@ -85,6 +87,7 @@ Vous pouvez modifier la méthode de connexion dans "Propriétés de l'instance �
     <s:String x:Key="LangPageNameModDownload">Téléchargement de mods</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">Téléchargement de modpacks</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">Téléchargement de paquets de ressources</s:String>
+    <s:String x:Key="LangHintDropFileFromRecycleBin">请先将文件从回收站还原，再拖入 PCL！</s:String>
     <s:String x:Key="LangThemeRealWhite">BLANC VRAI</s:String>
     <s:String x:Key="LangThemeRealFunny">COULEUR VRAIMENT DRÔLE</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip8">Après que le parrainage cumulé atteigne ¥23,33, envoyez le terme "解锁码" (Code de Déverrouillage) au développeur sur Afdian pour déverrouiller.
@@ -130,7 +133,6 @@ Cette opération est irrévocable. Êtes-vous sûr ?</s:String>
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">Échec de la suppression de la musique.</s:String>
     <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">Échec de la recréation du dossier de musique.</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">Un fichier de mise en page existe déjà. Continuer à générer le fichier de documentation remplacera le fichier de mise en page existant !</s:String>
-    <s:String x:Key="LangDialogBtnContinue">Continuer</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteFail">Échec de la génération du fichier de documentation</s:String>
     <s:String x:Key="LangHintCustomPageOverwriteSuccess">Le fichier de documentation a été généré !</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">La page d'accueil a été rafraîchie !</s:String>
@@ -273,7 +275,10 @@ Si vous avez créé une page d'accueil en ligne stable, vous pouvez cliquer sur 
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">Email</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">Masquez l'affichage de l'email des comptes de connexion tiers et essayez d'asterisk l'email pour éviter la divulgation de la vie privée.
 Vous devez redémarrer le lanceur après ce changement.</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">Sélection d'Instance</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">版本管理</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">隐藏启动按钮下方的版本选择与版本设置入口。</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialModUpdate">Mod 更新</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialModUpdateToolTip">禁止在 Mod 管理页面更新 Mod。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">Masquage de Fonctionnalités</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Masquez uniquement cet onglet, le contenu désactivé reste valide.
 Évitez que le "Masquage de Fonctionnalités" soit modifié tout en gardant la page "Personnalisation".</s:String>
@@ -541,7 +546,6 @@ Cette page fournit le téléchargement de l'installateur NeoForge. Après le té
     <s:String x:Key="LangDownloadOptiFineDescTitle">Introduction à OptiFine</s:String>
     <s:String x:Key="LangDownloadOptiFineDesc">OptiFine vous permet d'installer des shaders, d'utiliser des packs de ressources HD et d'améliorer considérablement les performances du jeu.</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">Site officiel</s:String>
-    <s:String x:Key="LangDownloadOptiFineChineseWebsite">Site chinois</s:String>
     <s:String x:Key="LangDownloadOptiFineGettingList">Obtention de la liste OptiFine...</s:String>
     <s:String x:Key="LangDownloadModpackSearchTitle">Rechercher des Modpacks</s:String>
     <s:String x:Key="LangDownloadModpackSearchName">Nom</s:String>
@@ -649,8 +653,7 @@ Cette page fournit le téléchargement de l'installateur NeoForge. Après le té
     <s:String x:Key="LangLaunchLeftAbortTask">Terminer le traitement</s:String>
     <s:String x:Key="LangLaunchLeftFinished">Terminé</s:String>
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">Exportation du script de lancement...</s:String>
-    <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">PCL installera automatiquement le modpack dans le dossier actuel.</s:String>
-    <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">Installation automatique</s:String>
+    <s:String x:Key="LangLaunchLeftExceptionModpackInstallFail">自动安装整合包失败：{0}</s:String>
     <s:String x:Key="LangLaunchRightSnapshot">Aperçu de l'instantané</s:String>
     <s:String x:Key="LangLaunchRightLog">Journal de lancement</s:String>
     <s:String x:Key="LangLaunchRightLabHint1">La version instantanée contient des fonctionnalités de test qui ne sont pas officiellement publiées et ne sont disponibles que pour le sponsor. Veuillez ne pas l'envoyer à d'autres ou l'utiliser pour créer des modpacks !</s:String>
@@ -1231,6 +1234,10 @@ Si vous n'avez pas modifié les fichiers concernés, veuillez ne pas cocher cet 
     <s:String x:Key="LangModMainAprilFoolTipC">Hmm... Je vous suggère de cliquer un peu sur le drapeau :)</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">Le petit drapeau blanc vous attend toujours...</s:String>
     <s:String x:Key="LangModMainExceptionNoHelpFound">Aide disponible introuvable. Vous pouvez cacher le Centre d'aide dans "Paramètres → Personnalisation → Masquage des fonctionnalités" si ce n'est pas nécessaire.</s:String>
+    <s:String x:Key="LangModMainExceptionNoFileFound">未找到帮助文件：{0}</s:String>
+    <s:String x:Key="LangModMainExceptionNoTitleArgFound">未找到 Title 项</s:String>
+    <s:String x:Key="LangModMainExceptionNoEventTypeArgFound">未找到 EventType 项</s:String>
+    <s:String x:Key="LangModMainExceptionNoXamlFileFound">未找到帮助条目 .json 对应的 .xaml 文件（{0}）</s:String>
     <s:String x:Key="LangModEventOpeningWeb">Ouverture, veuillez patienter...</s:String>
     <s:String x:Key="LangModEventStartInstance">Lancement de {0}...</s:String>
     <s:String x:Key="LangModEventChoseAnInstance">Veuillez d'abord sélectionner une instance !</s:String>
@@ -1240,7 +1247,6 @@ PCL ne prend pas en charge d'autres protocoles de téléchargement.</s:String>
     <s:String x:Key="LangModEventDialogEventFailTitle">Échec de l'exécution de l'événement</s:String>
     <s:String x:Key="LangModEventDialogUnknownEventContent">Type d'événement inconnu : {0}
 Veuillez vérifier si le type d'événement est correctement rempli, si le PCL est à jour.</s:String>
-    <s:String x:Key="LangModEventGettingResource">Obtention des ressources, veuillez patienter...</s:String>
     <s:String x:Key="LangModMusicDeviceChanged">En raison du changement de l'appareil audio, la musique sera inutilisable jusqu'au redémarrage du lanceur !</s:String>
     <s:String x:Key="LangModMusicMusicChanged">Échec de la lecture ({0}) : Changer les propriétés audio pendant la lecture n'est pas pris en charge.</s:String>
     <s:String x:Key="LangModMusicMusicFormatNotSupport">Échec de la lecture ({0}) : Le format peut ne pas être pris en charge, essayez à nouveau après conversion en .wav, .mp3 ou .flac.</s:String>
@@ -1337,7 +1343,6 @@ Veuillez vérifier si le type d'événement est correctement rempli, si le PCL e
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">Cette version n'a pas d'informations sur l'index des fichiers d'actifs.</s:String>
     <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Fichier d'index des actifs non trouvé.</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">Résultat inattendu. ({0})</s:String>
-    <s:String x:Key="LangModCompModSuitFor">Disponible pour</s:String>
     <s:String x:Key="LangModCompModDependentCount">dépendance</s:String>
     <s:String x:Key="LangModCompModDependentCountP">dépendances</s:String>
     <s:String x:Key="LangModCompModDownload"> télécharger</s:String>
@@ -1358,8 +1363,6 @@ Veuillez vérifier si le type d'événement est correctement rempli, si le PCL e
     <s:String x:Key="LangModBaseDateYearP">années</s:String>
     <s:String x:Key="LangModBaseDateMonthA">mois</s:String>
     <s:String x:Key="LangModBaseDateMonthAP">mois</s:String>
-    <s:String x:Key="LangModBaseDateMonthB">mois</s:String>
-    <s:String x:Key="LangModBaseDateMonthBP">mois</s:String>
     <s:String x:Key="LangModBaseDateDay">jour</s:String>
     <s:String x:Key="LangModBaseDateDayP">jours</s:String>
     <s:String x:Key="LangModBaseDateHour">heure</s:String>
@@ -1587,8 +1590,6 @@ Si cette option n'est pas disponible, sélectionnez « Définir un mot de passe 
     <s:String x:Key="LangModLaunchDialogBtn2LoginWithPassword">Définir un mot de passe</s:String>
     <s:String x:Key="LangModModpackSelectModpack">Fichier Modpack</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">Sélectionner le fichier Modpack</s:String>
-    <s:String x:Key="LangModModpackUnknownType">Impossible d'identifier le type de fichier, installation impossible !</s:String>
-    <s:String x:Key="LangModModpackExceptionNoMcInfo">Le modpack ne fournit pas d'informations sur la version de Minecraft.</s:String>
     <s:String x:Key="LangModModpackInputInstanceName">Entrer le nom de l'instance</s:String>
     <s:String x:Key="LangModModpackTaskExtraModpack">Extraire le Modpack</s:String>
     <s:String x:Key="LangModModpackTaskGetModDownloadInfo">Obtenir les informations de téléchargement des mods</s:String>
@@ -1614,15 +1615,34 @@ Si cette option n'est pas disponible, sélectionnez « Définir un mot de passe 
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">Installation du Modpack HMCL : </s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">Installation du Modpack MMC : </s:String>
     <s:String x:Key="LangModModpackNoAddons">Impossible d'installer car le modpack ne fournit pas d'informations supplémentaires sur la version du jeu !</s:String>
-    <s:String x:Key="LangModModpackNoGameInfo">Impossible d'installer car le modpack ne fournit pas d'informations sur la version du jeu !</s:String>
+    <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackModrinthNoGameInfo">该 Modrinth 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackCurseforgeNoGameInfo">该 CurseForge 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackTaskMCBBSModpackInstall">Installation du Modpack MCBBS : </s:String>
     <s:String x:Key="LangModModpackDialogContentInstallTip">Veuillez sélectionner le dossier d'installation ciblé dans la prochaine fenêtre qui s'ouvre, il doit s'agir d'un dossier vide.</s:String>
-    <s:String x:Key="LangModModpackDialogTitleInstallTip">Conseil d'installation</s:String>
+    <s:String x:Key="LangModModpackDialogTitleInstall">安装</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">Sélectionner le dossier d'installation (doit être un dossier vide)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Les chemins de dossier Minecraft ne peuvent pas contenir de points d'exclamation (!) ou de points-virgules (;) !</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Veuillez sélectionner un dossier vide comme destination d'installation !</s:String>
-    <s:String x:Key="LangModModpackInstallArchive">Installer l'archive</s:String>
+    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Ajouté à la liste des dossiers : {0}</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
+    <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
+    <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
+    <s:String x:Key="LangModModpackExceptionModpackTooOld">该整合包版本过老，已不支持进行安装！</s:String>
+    <s:String x:Key="LangModModpackExceptionModrinthModpackError">Modrinth 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionHMCLModpackError">HMCL 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionCurseforgeModpackError">CurseForge 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionMMCModpackError">MMC 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionMCBBSModpackError">MCBBS 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackDialogTitleAnotherLauncher">换用整合包启动器？</s:String>
+    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">整合包中似乎自带了启动器，是否换用它继续安装？
+通常推荐这样做，以获得最佳体验。
+即将打开：{0}</s:String>
+    <s:String x:Key="LangModModpackExceptionNoModpackFound">未能找到适合的文件结构，这可能不是一个 MC 压缩包</s:String>
     <s:String x:Key="LangModWatcherMcCrashed">Crash de Minecraft détecté, l'analyse des erreurs a commencé...</s:String>
     <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">Renommer une sous-clé contenant des sous-clés n'est pas pris en charge : {0}.</s:String>
     <s:String x:Key="LangModBaseExceptionPathIncorrect">Chemin non inclus : {0}</s:String>
@@ -1716,6 +1736,7 @@ Cela remplacera le fichier JSON et le fichier JAR, mais n'affectera pas les fich
     <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">该服务端正在下载中！</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">下载服务端文件</s:String>
     <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">{0} 版本没有提供服务端文件</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallInstallFail">开始合并安装失败</s:String>
     <s:String x:Key="LangModCrashDialogTitleAnalysisResult">Résultat de l'analyse</s:String>
     <s:String x:Key="LangModCrashDialogTitleMcError">Crash Minecraft</s:String>
     <s:String x:Key="LangModCrashViewLog">Journal</s:String>
@@ -1897,6 +1918,14 @@ Veuillez prendre les mesures appropriées en fonction des informations fournies.
     <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge a peut-être fourni des solutions. Veuillez prendre les mesures appropriées en fonction des journaux et des rapports de plantage.
 Si aucune solution n'est fournie, vous pouvez consulter les rapports de plantage pour comprendre comment l'erreur s'est produite.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCC">Le jeu a planté, mais l'analyse est impossible car PCL n'a pas pu localiser les fichiers journaux associés.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCD">部分 Mod 注入失败，导致游戏出错。
+这一般代表着部分 Mod 与其他 Mod 或当前环境不兼容，或是它存在 Bug。
+你可以尝试逐步禁用 Mod，然后观察游戏是否还会崩溃，以此定位导致崩溃的 Mod。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCE">你所安装的 Mod 不兼容：
+{0}
+
+请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCF">你所安装的 Mod 不兼容，Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL a reçu une raison d'erreur sans informations détaillées ({0}). Veuillez envoyer vos commentaires à l'auteur pour obtenir des informations détaillées.</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">De plus, </s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">pensez à consulter les rapports d'incident pour identifier les problèmes.</s:String>
@@ -1916,4 +1945,16 @@ Vous pouvez également accéder à {1} sur un autre appareil et saisir le code.<
     <s:String x:Key="LangMyMsgLoginExceptionDecline">La demande d'autorisation de PCL a été refusée...</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionTimeout">Délai de connexion expiré, veuillez réessayer !</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Échec de l'interrogation de connexion.</s:String>
+    <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
+    <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
+    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>
+    <s:String x:Key="LangModExceptionTimeOutAskCheck">连接服务器超时，请检查你的网络环境是否良好（{0}）</s:String>
+    <s:String x:Key="LangModExceptionRequestFailed">网络请求失败（{0}）</s:String>
+    <s:String x:Key="LangModExceptionReturnErrorCode">服务器返回错误（{0}）</s:String>
+    <s:String x:Key="LangModExceptionUnknownFileStatus">文件状态未知：{0}</s:String>
 </ResourceDictionary>
