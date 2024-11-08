@@ -16,7 +16,7 @@ Public Module ModModpack
                 ModpackInstall(File)
             Catch ex As CancelledException
             Catch ex As Exception
-                Log(ex, "手动安装整合包失败", LogLevel.Msgbox)
+                Log(ex, GetLang("LangModModpackExceptionManualInsatllFail"), LogLevel.Msgbox)
             End Try
         End Sub)
     End Sub
@@ -71,11 +71,11 @@ Public Module ModModpack
                 Next
             Catch ex As Exception
                 If GetExceptionDetail(ex, True).Contains("Error.WinIOError") Then
-                    Throw New Exception("打开整合包文件失败", ex)
+                    Throw New Exception(GetLang("LangModModpackExceptionOpenFileFail"), ex)
                 ElseIf File.EndsWithF(".rar", True) Then
-                    Throw New Exception("PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试", ex)
+                    Throw New Exception(GetLang("LangModModpackExceptionRarFormat"), ex)
                 Else
-                    Throw New Exception("打开整合包文件失败，文件可能损坏或为不支持的压缩包格式", ex)
+                    Throw New Exception(GetLang("LangModModpackExceptionReadFileFail"), ex)
                 End If
             End Try
             '执行对应的安装方法
@@ -166,9 +166,9 @@ Retry:
         Try
             Json = GetJson(ReadFile(Archive.GetEntry(ArchiveBaseFolder & "manifest.json").Open))
         Catch ex As Exception
-            Throw New Exception("CurseForge 整合包安装信息存在问题", ex)
+            Throw New Exception(GetLang("LangModModpackExceptionCurseforgeModpackError"), ex)
         End Try
-        If Json("minecraft") Is Nothing OrElse Json("minecraft")("version") Is Nothing Then Throw New Exception("CurseForge 整合包未提供 Minecraft 版本信息")
+        If Json("minecraft") Is Nothing OrElse Json("minecraft")("version") Is Nothing Then Throw New Exception(GetLang("LangModModpackCurseforgeNoGameInfo"))
 
         '获取版本名
         If VersionName Is Nothing Then
@@ -187,7 +187,7 @@ Retry:
             Dim Id As String = If(Entry("id"), "").ToString.ToLower
             If Id.StartsWithF("forge-") Then
                 'Forge 指定
-                If Id.Contains("recommended") Then Throw New Exception("该整合包版本过老，已不支持进行安装！")
+                If Id.Contains("recommended") Then Throw New Exception(GetLang("LangModModpackExceptionModpackTooOld"))
                 Log("[ModPack] 整合包 Forge 版本：" & Id)
                 ForgeVersion = Id.Replace("forge-", "")
             ElseIf Id.StartsWithF("neoforge-") Then
@@ -355,9 +355,9 @@ Retry:
         Try
             Json = GetJson(ReadFile(Archive.GetEntry(ArchiveBaseFolder & "modrinth.index.json").Open))
         Catch ex As Exception
-            Throw New Exception("Modrinth 整合包安装信息存在问题", ex)
+            Throw New Exception(GetLang("LangModModpackExceptionModrinthModpackError"), ex)
         End Try
-        If Json("dependencies") Is Nothing OrElse Json("dependencies")("minecraft") Is Nothing Then Throw New Exception("Modrinth 整合包未提供 Minecraft 版本信息")
+        If Json("dependencies") Is Nothing OrElse Json("dependencies")("minecraft") Is Nothing Then Throw New Exception(GetLang("LangModModpackModrinthNoGameInfo"))
         '获取 Mod API 版本信息
         Dim MinecraftVersion As String = Nothing
         Dim ForgeVersion As String = Nothing
@@ -502,7 +502,7 @@ Retry:
         Try
             Json = GetJson(ReadFile(Archive.GetEntry(ArchiveBaseFolder & "modpack.json").Open, Encoding.UTF8))
         Catch ex As Exception
-            Throw New Exception("HMCL 整合包安装信息存在问题", ex)
+            Throw New Exception(GetLang("LangModModpackExceptionHMCLModpackError"), ex)
         End Try
         '获取版本名
         Dim VersionName As String = If(Json("name"), "")
@@ -585,7 +585,7 @@ Retry:
             PackJson = GetJson(ReadFile(Archive.GetEntry(ArchiveBaseFolder & "mmc-pack.json").Open, Encoding.UTF8))
             PackInstance = ReadFile(Archive.GetEntry(ArchiveBaseFolder & "instance.cfg").Open, Encoding.UTF8)
         Catch ex As Exception
-            Throw New Exception("MMC 整合包安装信息存在问题", ex)
+            Throw New Exception(GetLang("LangModModpackExceptionMMCModpackError"), ex)
         End Try
         '获取版本名
         Dim VersionName As String = If(RegexSeek(PackInstance, "(?<=\nname\=)[^\n]+"), "")
@@ -706,7 +706,7 @@ Retry:
             Dim Entry = If(Archive.GetEntry(ArchiveBaseFolder & "mcbbs.packmeta"), Archive.GetEntry(ArchiveBaseFolder & "manifest.json"))
             Json = GetJson(ReadFile(Entry.Open, Encoding.UTF8))
         Catch ex As Exception
-            Throw New Exception("MCBBS 整合包安装信息存在问题", ex)
+            Throw New Exception(GetLang("LangModModpackExceptionMCBBSModpackError"), ex)
         End Try
         '获取版本名
         If VersionName Is Nothing Then
@@ -785,14 +785,14 @@ Retry:
     '带启动器的压缩包
     Private Function InstallPackLauncherPack(FileAddress As String, Archive As Compression.ZipArchive, ArchiveBaseFolder As String) As LoaderCombo(Of String)
         '获取解压路径
-        MyMsgBox("接下来请选择一个空文件夹，它会被安装到这个文件夹里。", "安装", "继续", ForceWait:=True)
-        Dim TargetFolder As String = SelectFolder("选择安装目标（必须是一个空文件夹）")
+        MyMsgBox(GetLang("LangModModpackDialogContentInstallTip"), GetLang("LangModModpackDialogTitleInstall"), GetLang("LangDialogBtnContinue"), ForceWait:=True)
+        Dim TargetFolder As String = SelectFolder(GetLang("LangModModpackSelectInstallFolder"))
         If String.IsNullOrEmpty(TargetFolder) Then Throw New CancelledException
-        If TargetFolder.Contains("!") OrElse TargetFolder.Contains(";") Then Hint("Minecraft 文件夹路径中不能含有感叹号或分号！", HintType.Critical) : Throw New CancelledException
-        If Directory.GetFileSystemEntries(TargetFolder).Length > 0 Then Hint("请选择一个空文件夹作为安装目标！", HintType.Critical) : Throw New CancelledException
+        If TargetFolder.Contains("!") OrElse TargetFolder.Contains(";") Then Hint(GetLang("LangModModpackFolderNoExclamationOrSemicolon"), HintType.Critical) : Throw New CancelledException
+        If Directory.GetFileSystemEntries(TargetFolder).Length > 0 Then Hint(GetLang("LangModModpackFolderShouldBeEmpty"), HintType.Critical) : Throw New CancelledException
         '解压
-        Dim Loader As New LoaderCombo(Of String)("解压压缩包", {
-            New LoaderTask(Of String, Integer)("解压压缩包",
+        Dim Loader As New LoaderCombo(Of String)(GetLang("LangModModpackExtractArchive"), {
+            New LoaderTask(Of String, Integer)(GetLang("LangModModpackExtractArchive"),
             Sub(Task As LoaderTask(Of String, Integer))
                 ExtractModpackFiles(TargetFolder, FileAddress, Task, 0.9)
                 Thread.Sleep(400) '避免文件争用
@@ -812,7 +812,7 @@ Retry:
                 '尝试使用附带的启动器打开
                 If Launcher IsNot Nothing Then
                     Log("[Modpack] 找到压缩包中附带的启动器：" & Launcher)
-                    If MyMsgBox($"整合包中似乎自带了启动器，是否换用它继续安装？{vbCrLf}通常推荐这样做，以获得最佳体验。{vbCrLf}即将打开：{Launcher}", "换用整合包启动器？", "继续", "取消") = 1 Then
+                    If MyMsgBox(GetLang("LangModModpackDialogContentAnotherLauncher", Launcher), GetLang("LangModModpackDialogTitleAnotherLauncher"), GetLang("LangDialogBtnContinue"), GetLang("LangDialogBtnCancel")) = 1 Then
                         ShellOnly(Launcher, "--wait")
                         Log("[Modpack] 为换用整合包中的启动器启动，强制结束程序")
                         FrmMain.EndProgram(False)
@@ -851,19 +851,19 @@ Retry:
                 Exit For
             End If
         Next
-        If Match Is Nothing Then Throw New Exception("未能找到适合的文件结构，这可能不是一个 MC 压缩包") '没有匹配
+        If Match Is Nothing Then Throw New Exception(GetLang("LangModModpackExceptionNoModpackFound")) '没有匹配
         Dim ArchiveBaseFolder As String = Match.Value.Replace("/", "\").TrimStart("\") '格式例如：包裹文件夹\.minecraft\（最短为空字符串）
         Dim VersionName As String = Match.Groups(1).Value
         Log("[ModPack] 检测到压缩包的 .minecraft 根目录：" & ArchiveBaseFolder & "，命中的版本名：" & VersionName)
         '获取解压路径
-        MyMsgBox("接下来请选择一个空文件夹，它会被安装到这个文件夹里。", "安装", "继续", ForceWait:=True)
-        Dim TargetFolder As String = SelectFolder("选择安装目标（必须是一个空文件夹）")
+        MyMsgBox(GetLang("LangModModpackDialogContentInstallTip"), GetLang("LangModModpackDialogTitleInstall"), GetLang("LangDialogBtnContinue"), ForceWait:=True)
+        Dim TargetFolder As String = SelectFolder(GetLang("LangModModpackSelectInstallFolder"))
         If String.IsNullOrEmpty(TargetFolder) Then Throw New CancelledException
-        If TargetFolder.Contains("!") OrElse TargetFolder.Contains(";") Then Hint("Minecraft 文件夹路径中不能含有感叹号或分号！", HintType.Critical) : Throw New CancelledException
-        If Directory.GetFileSystemEntries(TargetFolder).Length > 0 Then Hint("请选择一个空文件夹作为安装目标！", HintType.Critical) : Throw New CancelledException
+        If TargetFolder.Contains("!") OrElse TargetFolder.Contains(";") Then Hint(GetLang("LangModModpackFolderNoExclamationOrSemicolon"), HintType.Critical) : Throw New CancelledException
+        If Directory.GetFileSystemEntries(TargetFolder).Length > 0 Then Hint(GetLang("LangModModpackFolderShouldBeEmpty"), HintType.Critical) : Throw New CancelledException
         '解压
-        Dim Loader As New LoaderCombo(Of String)("解压压缩包", {
-            New LoaderTask(Of String, Integer)("解压压缩包",
+        Dim Loader As New LoaderCombo(Of String)(GetLang("LangModModpackExtractArchive"), {
+            New LoaderTask(Of String, Integer)(GetLang("LangModModpackExtractArchive"),
             Sub(Task As LoaderTask(Of String, Integer))
                 ExtractModpackFiles(TargetFolder, FileAddress, Task, 0.95)
                 '加入文件夹列表

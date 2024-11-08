@@ -1371,7 +1371,7 @@ Retry:
                     If GameVersions.All(Function(v) v.Contains("w")) Then Info.Add($"{GetLang("LangModCompModGameVersion")} {Join(GameVersions, GetLang("LangComma"))}")
             End Select
             If DownloadCount > 0 Then 'CurseForge 的下载次数经常错误地返回 0
-                Info.Add("下载 " & If(DownloadCount > 100000, Math.Round(DownloadCount / 10000) & " 万次", DownloadCount & " 次"))
+                Info.Add(GetLocationNum(DownloadCount) & GetLangByNumIsPlural(DownloadCount, "LangModCompModDownload"))
             End If
             Info.Add(GetLang("LangModCompModUpdateTime", GetTimeSpanString(ReleaseDate - Date.Now, False)))
             If Status <> CompFileStatus.Release Then Info.Add(StatusDescription)
@@ -1380,7 +1380,7 @@ Retry:
             Dim NewItem As New MyListItem With {
                 .Title = Title,
                 .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Me,
-                .Info = Info.Join("，")
+                .Info = Info.Join(GetLang("LangComma"))
             }
             Select Case Status
                 Case CompFileStatus.Release

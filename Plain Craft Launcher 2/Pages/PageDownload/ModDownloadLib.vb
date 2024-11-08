@@ -2498,7 +2498,7 @@ Retry:
         Catch ex As CancelledException
             Return False
         Catch ex As Exception
-            Log(ex, "开始合并安装失败", LogLevel.Feedback)
+            Log(ex, GetLang("LangModDownloadLibExceptionInstallInstallFail"), LogLevel.Feedback)
             Return False
         End Try
     End Function

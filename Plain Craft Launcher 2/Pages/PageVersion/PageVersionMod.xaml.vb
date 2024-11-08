@@ -53,7 +53,7 @@
         End Try
         If FrmVersionMod IsNot Nothing Then FrmVersionMod.ReloadModList(True) '无需 Else，还没加载刷个鬼的新
         FrmVersionLeft.ItemMod.Checked = True
-        Hint("正在刷新……", Log:=False)
+        Hint(GetLang("LangPageOtherRefreshing"), Log:=False)
     End Sub
 
     Private Sub LoaderInit() Handles Me.Initialized

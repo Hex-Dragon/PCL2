@@ -783,7 +783,7 @@ Public Class FormMain
                 Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
                 '检查回收站：回收站中的文件有错误的文件名
                 If FilePathList.First.Contains(":\$RECYCLE.BIN\") Then
-                    Hint("请先将文件从回收站还原，再拖入 PCL！", HintType.Critical)
+                    Hint(GetLang("LangHintDropFileFromRecycleBin"), HintType.Critical)
                     Exit Sub
                 End If
                 '获取并检查目标版本

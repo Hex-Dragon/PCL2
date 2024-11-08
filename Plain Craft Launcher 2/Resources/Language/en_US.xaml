@@ -1354,9 +1354,9 @@ Please check whether the event type is filled correctly, and whether PCL is the 
     <s:String x:Key="LangModCompModStatusDescRelease">Release</s:String>
     <s:String x:Key="LangModCompModStatusDescBeta">Beta</s:String>
     <s:String x:Key="LangModCompModStatusDescAlpha">Alpha</s:String>
-    <s:String x:Key="LangModCompModDigit1">x10k</s:String>
-    <s:String x:Key="LangModCompModDigit2">x10M</s:String>
-    <s:String x:Key="LangModCompModDigit3">x10B</s:String>
+    <s:String x:Key="LangModCompModDigit1">k</s:String>
+    <s:String x:Key="LangModCompModDigit2">M</s:String>
+    <s:String x:Key="LangModCompModDigit3">B</s:String>
     <s:String x:Key="LangModCompExceptionNoResult">No results matching the requirement</s:String>
     <s:String x:Key="LangModBaseDateYear">year</s:String>
     <s:String x:Key="LangModBaseDateYearP">years</s:String>

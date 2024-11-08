@@ -1071,15 +1071,9 @@ NextStack:
                     End If
                 Case CrashReason.Mod互不兼容
                     If Additional.Count = 1 Then
-                        Results.Add("你所安装的 Mod 不兼容：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
+                        Results.Add(GetLang("LangModCrashCrashReasonReasonCE", Additional.First))
                     Else
-                        Results.Add(GetLang("LangModCrashCrashReasonReasonBV"))
-                    End If
-                Case CrashReason.Mod互不兼容
-                    If Additional.Count = 1 Then
-                        Results.Add("你所安装的 Mod 不兼容：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
-                    Else
-                        Results.Add("你所安装的 Mod 不兼容，Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。\h")
+                        Results.Add(GetLang("LangModCrashCrashReasonReasonCF"))
                     End If
                 Case CrashReason.Mod加载器报错
                     If Additional.Count = 1 Then

@@ -64,7 +64,7 @@
                 Catch ex As CancelledException
                     Log(ex, "自动安装整合包被用户取消：" & PackInstallPath)
                 Catch ex As Exception
-                    Log(ex, "自动安装整合包失败：" & PackInstallPath, LogLevel.Msgbox)
+                    Log(ex, GetLang("LangLaunchLeftExceptionModpackInstallFail", PackInstallPath), LogLevel.Msgbox)
                 End Try
             End If
             '确认 Minecraft 版本存在
