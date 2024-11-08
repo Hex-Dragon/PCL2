@@ -26,7 +26,7 @@ Public Class PageLoginLegacy
                 ComboName.ItemsSource = Nothing
             Else
                 ComboName.ItemsSource = Setup.Get("LoginLegacyName").ToString.Split("¨")
-                ComboName.Text = Setup.Get("LoginLegacyName").ToString.Before("¨").Trim
+                ComboName.Text = Setup.Get("LoginLegacyName").ToString.BeforeFirst("¨").Trim
             End If
         End If
         IsReloaded = True

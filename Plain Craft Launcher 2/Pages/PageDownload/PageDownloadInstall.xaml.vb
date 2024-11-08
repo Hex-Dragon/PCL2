@@ -1076,12 +1076,12 @@
             If DisplayName.StartsWith("[" & MinecraftVersion & "]") Then Return True
             If Not DisplayName.Contains("/") OrElse Not DisplayName.Contains("]") Then Return False
             '直接的判断（例如 1.18.1/22w03a）
-            For Each Part As String In DisplayName.Before("]").TrimStart("[").Split("/")
+            For Each Part As String In DisplayName.BeforeFirst("]").TrimStart("[").Split("/")
                 If Part = MinecraftVersion Then Return True
             Next
             '将版本名分割语素（例如 1.16.4/5）
-            Dim Lefts = RegexSearch(DisplayName.Before("]"), "[a-z/]+|[0-9/]+")
-            Dim Rights = RegexSearch(MinecraftVersion.Before("]"), "[a-z/]+|[0-9/]+")
+            Dim Lefts = RegexSearch(DisplayName.BeforeFirst("]"), "[a-z/]+|[0-9/]+")
+            Dim Rights = RegexSearch(MinecraftVersion.BeforeFirst("]"), "[a-z/]+|[0-9/]+")
             '对每段进行判断
             Dim i As Integer = 0
             While True

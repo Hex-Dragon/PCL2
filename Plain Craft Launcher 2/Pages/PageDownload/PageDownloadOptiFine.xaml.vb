@@ -49,8 +49,5 @@
     Private Sub BtnWeb_Click(sender As Object, e As EventArgs) Handles BtnWeb.Click
         OpenWebsite("https://www.optifine.net/")
     End Sub
-    Private Sub BtnChina_Click(sender As Object, e As EventArgs) Handles BtnChina.Click
-        OpenWebsite("https://optifine.cn/home")
-    End Sub
 
 End Class

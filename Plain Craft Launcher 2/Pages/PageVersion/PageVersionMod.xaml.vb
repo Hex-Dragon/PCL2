@@ -1,4 +1,5 @@
 ﻿Public Class PageVersionMod
+    Implements IRefreshable
 
 #Region "初始化"
 
@@ -36,6 +37,23 @@
             PanBack.ScrollToHome()
             SearchBox.Text = ""
         End If
+    End Sub
+    '强制刷新
+    Private Sub RefreshSelf() Implements IRefreshable.Refresh
+        Refresh()
+    End Sub
+    Public Shared Sub Refresh()
+        '强制刷新
+        Try
+            CompProjectCache.Clear()
+            File.Delete(PathTemp & "Cache\LocalMod.json")
+            Log("[Mod] 由于点击刷新按钮，清理本地 Mod 信息缓存")
+        Catch ex As Exception
+            Log(ex, "强制刷新时清理本地 Mod 信息缓存失败")
+        End Try
+        If FrmVersionMod IsNot Nothing Then FrmVersionMod.ReloadModList(True) '无需 Else，还没加载刷个鬼的新
+        FrmVersionLeft.ItemMod.Checked = True
+        Hint("正在刷新……", Log:=False)
     End Sub
 
     Private Sub LoaderInit() Handles Me.Initialized
@@ -136,13 +154,13 @@
     ''' </summary>
     Public Sub RefreshUI()
         If PanList Is Nothing Then Exit Sub
-        Dim ShowMods = GetShowingMods(True).ToList()
+        Dim ShowingMods = If(IsSearching, SearchResult, If(McModLoader.Output, New List(Of McMod))).Where(Function(m) CanPassFilter(m)).ToList
         '重新列出列表
         AniControlEnabled += 1
-        If ShowMods.Any() Then
+        If ShowingMods.Any() Then
             PanList.Visibility = Visibility.Visible
             PanList.Children.Clear()
-            For Each TargetMod In ShowMods
+            For Each TargetMod In ShowingMods
                 Dim Item As MyLocalModItem = ModItems(TargetMod.RawFileName)
                 Item.Checked = SelectedMods.Contains(TargetMod.RawFileName) '更新选中状态
                 PanList.Children.Add(Item)
@@ -151,7 +169,7 @@
             PanList.Visibility = Visibility.Collapsed
         End If
         AniControlEnabled -= 1
-        SelectedMods = SelectedMods.Where(Function(m) ShowMods.Any(Function(s) s.RawFileName = m)).ToList '取消选中已经不显示的 Mod
+        SelectedMods = SelectedMods.Where(Function(m) ShowingMods.Any(Function(s) s.RawFileName = m)).ToList '取消选中已经不显示的 Mod
         RefreshBars()
     End Sub
 
@@ -169,7 +187,7 @@
         Dim DisabledCount As Integer = 0
         Dim UpdateCount As Integer = 0
         Dim UnavalialeCount As Integer = 0
-        For Each ModItem In GetShowingMods(False)
+        For Each ModItem In If(IsSearching, SearchResult, If(McModLoader.Output, New List(Of McMod)))
             AnyCount += 1
             If ModItem.CanUpdate Then UpdateCount += 1
             If ModItem.State.Equals(McMod.McModState.Fine) Then EnabledCount += 1
@@ -298,7 +316,7 @@
     ''' 全选。
     ''' </summary>
     Private Sub BtnManageSelectAll_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageSelectAll.Click
-        ChangeAllSelected(SelectedMods.Count < GetShowingMods(True).Count)
+        ChangeAllSelected(SelectedMods.Count < PanList.Children.Count)
     End Sub
 
     ''' <summary>
@@ -332,9 +350,11 @@
     Private Sub ChangeAllSelected(Value As Boolean)
         AniControlEnabled += 1
         SelectedMods.Clear()
-        For Each Item As MyLocalModItem In GetShowingMods(True).Where(Function(m) ModItems.ContainsKey(m.RawFileName)).Select(Function(m) ModItems(m.RawFileName))
-            Item.Checked = Value
-            If Value Then SelectedMods.Add(Item.Entry.RawFileName)
+        For Each Item As MyLocalModItem In ModItems.Values
+            '#4992，Mod 从过滤器看可能不应在列表中，但因为刚切换状态所以依然保留在列表中，所以应该从列表 UI 判断，而非从过滤器判断
+            Dim ShouldSelected As Boolean = Value AndAlso PanList.Children.Contains(Item)
+            Item.Checked = ShouldSelected
+            If ShouldSelected Then SelectedMods.Add(Item.Entry.RawFileName)
         Next
         AniControlEnabled -= 1
         RefreshBars()
@@ -383,14 +403,6 @@
         CanUpdate = 3
         Unavailable = 4
     End Enum
-
-    ''' <summary>
-    ''' 获取所有应该显示在 UI 中的 Mod。
-    ''' </summary>
-    Private Function GetShowingMods(ApplyFilter As Boolean) As IEnumerable(Of McMod)
-        If McModLoader.Output Is Nothing Then Return New List(Of McMod)
-        Return If(IsSearching, SearchResult, McModLoader.Output).Where(Function(m) Not ApplyFilter OrElse CanPassFilter(m))
-    End Function
 
     ''' <summary>
     ''' 检查该 Mod 项是否符合当前筛选的类别。

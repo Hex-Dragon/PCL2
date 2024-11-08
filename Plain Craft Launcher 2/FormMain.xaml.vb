@@ -10,6 +10,13 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 342 Then 'Release 2.8.9
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持下载原版服务端"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "本地 Mod 的标题支持选择显示 Mod 原始文件名"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复搜索后启用/禁用 Mod 时出错的 Bug"))
+            FeatureCount += 17
+            BugCount += 13
+        End If
         If LastVersion < 340 Then 'Release 2.8.8
             If LastVersion = 338 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复数个与新正版登录相关的严重 Bug"))
             FeatureCount += 3
@@ -75,6 +82,13 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 343 Then 'Snapshot 2.8.10
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 详情页面会按 Mod 加载器分类卡片"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持安装同时包含 modpack 文件和启动器的懒人包"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "优化整合包导入流程"))
+            FeatureCount += 20
+            BugCount += 16
+        End If
         If LastVersion < 341 Then 'Snapshot 2.8.9
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持下载原版服务端"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "本地 Mod 的标题支持选择显示 Mod 原始文件名"))
@@ -227,7 +241,9 @@ Public Class FormMain
         If Not IsNothing(FrmLaunchLeft.Parent) Then FrmLaunchLeft.SetValue(ContentPresenter.ContentProperty, Nothing)
         If Not IsNothing(FrmLaunchRight.Parent) Then FrmLaunchRight.SetValue(ContentPresenter.ContentProperty, Nothing)
         PanMainLeft.Child = FrmLaunchLeft
+        PageLeft = FrmLaunchLeft
         PanMainRight.Child = FrmLaunchRight
+        PageRight = FrmLaunchRight
         FrmLaunchRight.PageState = MyPageRight.PageStates.ContentStay
         '模式提醒
 #If DEBUG Then
@@ -598,6 +614,12 @@ Public Class FormMain
             PageSetupUI.HiddenRefresh()
             Exit Sub
         End If
+        '按 F5 刷新页面
+        If e.Key = Key.F5 Then
+            If TypeOf PageLeft Is IRefreshable Then CType(PageLeft, IRefreshable).Refresh()
+            If TypeOf PageRight Is IRefreshable Then CType(PageRight, IRefreshable).Refresh()
+            Exit Sub
+        End If
         '调用启动游戏
         If e.Key = Key.Enter AndAlso PageCurrent = FormMain.PageType.Launch Then
             If IsAprilEnabled AndAlso Not IsAprilGiveup Then
@@ -732,14 +754,14 @@ Public Class FormMain
             If FilePathList.Count > 1 Then
                 '必须要求全部为 jar 文件
                 For Each File In FilePathList
-                    If Not {"jar", "litemod", "disabled", "old"}.Contains(File.After(".").ToLower) Then
+                    If Not {"jar", "litemod", "disabled", "old"}.Contains(File.AfterLast(".").ToLower) Then
                         Hint(GetLang("LangHintWindowDropFileOneFileAtATime"), HintType.Critical)
                         Exit Sub
                     End If
                 Next
             End If
             '自定义主页
-            Dim Extension As String = FilePath.After(".").ToLower
+            Dim Extension As String = FilePath.AfterLast(".").ToLower
             If Extension = "xaml" Then
                 Log("[System] 文件后缀为 XAML，作为自定义主页加载")
                 If File.Exists(Path & "PCL\Custom.xaml") Then
@@ -759,6 +781,11 @@ Public Class FormMain
             'Mod 安装
             If {"jar", "litemod", "disabled", "old"}.Any(Function(t) t = Extension) Then
                 Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
+                '检查回收站：回收站中的文件有错误的文件名
+                If FilePathList.First.Contains(":\$RECYCLE.BIN\") Then
+                    Hint("请先将文件从回收站还原，再拖入 PCL！", HintType.Critical)
+                    Exit Sub
+                End If
                 '获取并检查目标版本
                 Dim TargetVersion As McVersion = McVersionCurrent
                 If PageCurrent = PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
@@ -801,7 +828,14 @@ Install:
             '安装整合包
             If {"zip", "rar", "mrpack"}.Any(Function(t) t = Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
                 Log("[System] 文件为压缩包，尝试作为整合包安装")
-                If ModpackInstall(FilePath, ShowHint:=False) IsNot Nothing Then Exit Sub
+                Try
+                    ModpackInstall(FilePath)
+                    Exit Sub
+                Catch ex As CancelledException
+                    Exit Sub '用户主动取消
+                Catch ex As Exception
+                    '安装失败，继续往后尝试
+                End Try
             End If
             'RAR 处理
             If Extension = "rar" Then
