@@ -381,6 +381,7 @@ Extracted:
         没有可用的分析文件
         使用32位Java导致JVM无法分配足够多的内存
         Mod重复安装
+        Mod互不兼容
         OptiFine与Forge不兼容
         Fabric报错
         Fabric报错并给出解决方案
@@ -413,7 +414,7 @@ Extracted:
             '崩溃日志
             If LogCrash IsNot Nothing Then
                 Log("[Crash] 开始进行崩溃日志堆栈分析")
-                Keywords.AddRange(AnalyzeStackKeyword(LogCrash.Before("System Details")))
+                Keywords.AddRange(AnalyzeStackKeyword(LogCrash.BeforeFirst("System Details")))
             End If
             'Minecraft 日志
             If LogMc IsNot Nothing Then
@@ -541,12 +542,14 @@ Done:
             End If
             '确定的 Mod 导致崩溃
             If LogMc.Contains("Caught exception from ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(RegexSeek(LogMc, "(?<=Caught exception from )[^\n]+?")?.TrimEnd((vbCrLf & " ").ToCharArray)))
-            'Mod 重复安装
+            'Mod 重复 / 前置问题
             If LogMc.Contains("DuplicateModsFoundException") Then AppendReason(CrashReason.Mod重复安装, RegexSearch(LogMc, "(?<=\n\t[\w]+ : [A-Z]{1}:[^\n]+(/|\\))[^/\\\n]+?.jar", RegularExpressions.RegexOptions.IgnoreCase))
             If LogMc.Contains("Found a duplicate mod") Then AppendReason(CrashReason.Mod重复安装, RegexSearch(If(RegexSeek(LogMc, "Found a duplicate mod[^\n]+"), ""), "[^\\/]+.jar", RegularExpressions.RegexOptions.IgnoreCase))
             If LogMc.Contains("Found duplicate mods") Then AppendReason(CrashReason.Mod重复安装, RegexSearch(LogMc, "(?<=Mod ID: ')\w+?(?=' from mod files:)").Distinct.ToList)
             If LogMc.Contains("ModResolutionException: Duplicate") Then AppendReason(CrashReason.Mod重复安装, RegexSearch(If(RegexSeek(LogMc, "ModResolutionException: Duplicate[^\n]+"), ""), "[^\\/]+.jar", RegularExpressions.RegexOptions.IgnoreCase))
-            'Mod 缺少前置
+            If LogMc.Contains("Incompatible mods found!") Then '#5006
+                AppendReason(CrashReason.Mod互不兼容, If(RegexSeek(LogMc, "(?<=Incompatible mods found![\s\S]+: )[\s\S]+?(?=\tat )"), ""))
+            End If
             If LogMc.Contains("Missing or unsupported mandatory dependencies:") Then
                 AppendReason(CrashReason.Mod缺少前置或MC版本错误,
                     RegexSearch(LogMc, "(?<=Missing or unsupported mandatory dependencies:)([\n\r]+\t(.*))+", RegularExpressions.RegexOptions.IgnoreCase).
@@ -592,37 +595,51 @@ Done:
     ''' </summary>
     Private Sub AnalyzeCrit2()
 
+        'Mixin 分析
+        Dim MixinAnalyze =
+        Function(LogText As String) As Boolean
+            Dim IsMixin As Boolean =
+                LogText.Contains("Mixin prepare failed ") OrElse LogText.Contains("Mixin apply failed ") OrElse
+                LogText.Contains("MixinApplyError") OrElse LogText.Contains("MixinTransformerError") OrElse
+                LogText.Contains("mixin.injection.throwables.") OrElse LogText.Contains(".json] FAILED during )")
+            If Not IsMixin Then Return False
+            'Mod 名称匹配
+            Dim ModName As String = RegexSeek(LogText, "(?<=from mod )[^.\/ ]+(?=\] from)")
+            If ModName Is Nothing Then ModName = RegexSeek(LogText, "(?<=for mod )[^.\/ ]+(?= failed)")
+            If ModName IsNot Nothing Then
+                AppendReason(CrashReason.ModMixin失败, TryAnalyzeModName(ModName.TrimEnd((vbCrLf & " ").ToCharArray)))
+                Return True
+            End If
+            'JSON 名称匹配
+            For Each JsonName In RegexSearch(LogText, "(?<=^[^\t]+[ \[{(]{1})[^ \[{(]+\.[^ ]+(?=\.json)", RegularExpressions.RegexOptions.Multiline)
+                AppendReason(CrashReason.ModMixin失败,
+                             TryAnalyzeModName(JsonName.Replace("mixins", "mixin").Replace(".mixin", "").Replace("mixin.", "")))
+                Return True
+            Next
+            '没有明确匹配
+            AppendReason(CrashReason.ModMixin失败)
+            Return True
+        End Function
+
         '游戏日志分析
         If LogMc IsNot Nothing Then
+            'Mixin 崩溃
+            Dim IsMixin As Boolean = MixinAnalyze(LogMc)
             '常规信息
             If LogMc.Contains("An exception was thrown, the game will display an error screen and halt.") Then AppendReason(CrashReason.Forge报错, RegexSeek(LogMc, "(?<=the game will display an error screen and halt.[\n\r]+[^\n]+?Exception: )[\s\S]+?(?=\n\tat)")?.Trim(vbCrLf))
             If LogMc.Contains("A potential solution has been determined:") Then AppendReason(CrashReason.Fabric报错并给出解决方案, Join(RegexSearch(If(RegexSeek(LogMc, "(?<=A potential solution has been determined:\n)((\t)+ - [^\n]+\n)+"), ""), "(?<=(\t)+)[^\n]+"), vbLf))
             If LogMc.Contains("A potential solution has been determined, this may resolve your problem:") Then AppendReason(CrashReason.Fabric报错并给出解决方案, Join(RegexSearch(If(RegexSeek(LogMc, "(?<=A potential solution has been determined, this may resolve your problem:\n)((\t)+ - [^\n]+\n)+"), ""), "(?<=(\t)+)[^\n]+"), vbLf))
             If LogMc.Contains("确定了一种可能的解决方法，这样做可能会解决你的问题：") Then AppendReason(CrashReason.Fabric报错并给出解决方案, Join(RegexSearch(If(RegexSeek(LogMc, "(?<=确定了一种可能的解决方法，这样做可能会解决你的问题：\n)((\t)+ - [^\n]+\n)+"), ""), "(?<=(\t)+)[^\n]+"), vbLf))
-            'Mixin 崩溃
-            If LogMc.Contains("Mixin prepare failed ") OrElse LogMc.Contains("Mixin apply failed ") OrElse LogMc.Contains("MixinApplyError") OrElse
-               LogMc.Contains("mixin.injection.throwables.") OrElse LogMc.Contains(".json] FAILED during )") Then
-                Dim ModId As String = RegexSeek(LogMc, "(?<=in )[^./ ]+(?=.mixins.json.+failed injection check)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=in mixins.)[^./ ]+(?=.json.+failed injection check)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in )[^./ ]+(?=.mixins.json)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed .+ in mixins.)[^./ ]+(?=.json)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= failed mixins.)[^./ ]+(?=.json:)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[)[^./ ]+(?=.mixins.json\] FAILED during )")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<= in config \[mixins.)[^./ ]+(?=.json\] FAILED during )")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=from mod )[^./ ]+(?=\] from)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=for mod )[^./ ]+(?= failed)")
-                '兜底名称判断
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "[^./ \]]+(?=.mixins.json)")
-                If ModId Is Nothing Then ModId = RegexSeek(LogMc, "(?<=mixins.)[^./ \]]+(?=.json)")
-                AppendReason(CrashReason.ModMixin失败, TryAnalyzeModName(If(ModId, "").TrimEnd((vbCrLf & " ").ToCharArray)))
-            Else
-                '在 #3104 的情况下，这一句导致 OptiFabric 的 Mixin 失败错判为 Fabric Loader 加载失败
-                If LogMc.Contains("due to errors, provided by ") Then AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogMc, "(?<=due to errors, provided by ')[^']+"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
+            If Not IsMixin AndAlso LogMc.Contains("due to errors, provided by ") Then '在 #3104 的情况下，这一句导致 OptiFabric 的 Mixin 失败错判为 Fabric Loader 加载失败
+                AppendReason(CrashReason.确定Mod导致游戏崩溃, TryAnalyzeModName(If(RegexSeek(LogMc, "(?<=due to errors, provided by ')[^']+"), "").TrimEnd((vbCrLf & " ").ToCharArray)))
             End If
         End If
 
         '崩溃报告分析
         If LogCrash IsNot Nothing Then
+            'Mixin 崩溃
+            MixinAnalyze(LogCrash)
+            '常规信息
             If LogCrash.Contains("Suspected Mod") Then
                 Dim SuspectsRaw As String = LogCrash.Between("Suspected Mod", "Stacktrace")
                 If Not SuspectsRaw.StartsWithF("s: None") Then 'Suspected Mods: None
@@ -644,6 +661,8 @@ Done:
             If Not (LogMc.Contains("at net.") OrElse LogMc.Contains("INFO]")) AndAlso LogHs Is Nothing AndAlso LogCrash Is Nothing AndAlso LogMc.Length < 100 Then
                 AppendReason(CrashReason.极短的程序输出, LogMc)
             End If
+            'Mod 解析错误（常见于 Fabric 前置校验失败）
+            If LogMc.Contains("Mod resolution failed") Then AppendReason(CrashReason.Mod加载器报错)
             'Mixin 失败可以导致大量 Mod 实例创建失败
             If LogMc.Contains("Failed to create mod instance.") Then AppendReason(CrashReason.Mod初始化失败, TryAnalyzeModName(If(RegexSeek(LogMc, "(?<=Failed to create mod instance. ModID: )[^,]+"), If(RegexSeek(LogMc, "(?<=Failed to create mod instance. ModId )[^\n]+(?= for )"), "")).TrimEnd(vbCrLf)))
             '注意：Fabric 的 Warnings were found! 不一定是崩溃原因，它可能是单纯的警报
@@ -699,7 +718,7 @@ NextStack:
                 If {"com", "org", "net", "asm", "fml", "mod", "jar", "sun", "lib", "map", "gui", "dev", "nio", "api", "dsi", "top", "mcp",
                     "core", "init", "mods", "main", "file", "game", "load", "read", "done", "util", "tile", "item", "base", "oshi", "impl", "data", "pool", "task",
                     "forge", "setup", "block", "model", "mixin", "event", "unimi", "netty", "world",
-                    "gitlab", "common", "server", "config", "loader", "launch", "entity", "assist", "client", "plugin", "modapi", "mojang", "shader", "events", "github", "recipe", "render", "packet", "events",
+                    "gitlab", "common", "server", "config", "mixins", "compat", "loader", "launch", "entity", "assist", "client", "plugin", "modapi", "mojang", "shader", "events", "github", "recipe", "render", "packet", "events",
                     "preinit", "preload", "machine", "reflect", "channel", "general", "handler", "content", "systems", "modules", "service",
                     "fastutil", "optifine", "internal", "platform", "override", "fabricmc", "neoforge",
                     "injection", "listeners", "scheduler", "minecraft", "transformer", "transformers", "neoforged", "universal", "multipart", "minecraftforge", "blockentity", "spongepowered", "electronwill"
@@ -742,7 +761,7 @@ NextStack:
                 Details = Details.Replace("Fabric Mods", "¨")
                 Log("[Crash] 崩溃报告中检测到 Fabric Mod 信息格式")
             End If
-            Details = Details.After("¨")
+            Details = Details.AfterLast("¨")
 
             '[Forge] 获取所有包含 .jar 的行
             '[Fabric] 获取所有包含 Mod 信息的行
@@ -877,16 +896,19 @@ NextStack:
                     If ExtraFiles IsNot Nothing Then OutputFiles.AddRange(ExtraFiles)
                     For Each OutputFile In OutputFiles
                         Dim FileName As String = GetFileNameFromPath(OutputFile)
+                        Dim FileEncoding As Encoding = Nothing
                         Select Case FileName
                             Case "LatestLaunch.bat"
                                 FileName = "启动脚本.bat"
                             Case "Log1.txt"
                                 FileName = "PCL 启动器日志.txt"
+                                FileEncoding = Encoding.UTF8
                             Case "RawOutput.log"
                                 FileName = "游戏崩溃前的输出.txt"
+                                FileEncoding = Encoding.UTF8
                         End Select
                         If File.Exists(OutputFile) Then
-                            Dim FileEncoding As Encoding = GetEncoding(ReadFileBytes(OutputFile))
+                            If FileEncoding Is Nothing Then FileEncoding = GetEncoding(ReadFileBytes(OutputFile))
                             WriteFile(TempFolder & "Report\" & FileName,
                                       SecretFilter(ReadFile(OutputFile, FileEncoding), If(FileName = "启动脚本.bat", "F", "*")),
                                       Encoding:=FileEncoding)
@@ -970,7 +992,9 @@ NextStack:
                         Results.Add(GetLang("LangModCrashCrashReasonReasonAR", Join(Additional, "\n - ")))
                     End If
                 Case CrashReason.ModMixin失败
-                    If Additional.Count = 1 Then
+                    If Additional.Count = 0 Then
+                        Results.Add(GetLang("LangModCrashCrashReasonReasonCD"))
+                    ElseIf Additional.Count = 1 Then
                         Results.Add(GetLang("LangModCrashCrashReasonReasonAS", Additional.First))
                     Else
                         Results.Add(GetLang("LangModCrashCrashReasonReasonAT", Join(Additional, "\n - ")))
@@ -1044,6 +1068,12 @@ NextStack:
                         Results.Add(GetLang("LangModCrashCrashReasonReasonBU", Additional.First))
                     Else
                         Results.Add(GetLang("LangModCrashCrashReasonReasonBV"))
+                    End If
+                Case CrashReason.Mod互不兼容
+                    If Additional.Count = 1 Then
+                        Results.Add(GetLang("LangModCrashCrashReasonReasonCE", Additional.First))
+                    Else
+                        Results.Add(GetLang("LangModCrashCrashReasonReasonCF"))
                     End If
                 Case CrashReason.Mod加载器报错
                     If Additional.Count = 1 Then

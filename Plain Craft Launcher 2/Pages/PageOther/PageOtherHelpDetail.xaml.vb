@@ -1,5 +1,10 @@
 ﻿Public Class PageOtherHelpDetail
+    Implements IRefreshable
     Public Entry As HelpEntry
+
+    Public Sub Refresh() Implements IRefreshable.Refresh
+        Init(New HelpEntry(Entry.RawPath))
+    End Sub
 
     Private Sub PageOtherHelpDetail_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         PanBack.ScrollToTop()

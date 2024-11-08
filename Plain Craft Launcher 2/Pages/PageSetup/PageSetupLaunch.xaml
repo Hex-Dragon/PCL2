@@ -7,54 +7,7 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
-            <local:MyCard x:Name="CardSkin" Margin="0,15" Title="{StaticResource LangPageSetupLaunchSkin}" CanSwap="True" IsSwaped="True">
-                <StackPanel Margin="25,40,25,15">
-                    <local:MyHint Text="{StaticResource LangPageSetupLaunchSkinTips}" IsWarn="True" Margin="0,0,0,10" />
-                    <Grid Margin="-1,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <local:MyRadioBox Text="{StaticResource LangPageSetupLaunchSkinTypeRandom}" x:Name="RadioSkinType0" Height="22" Tag="LaunchSkinType/0" Grid.Column="0" ToolTip="{StaticResource LangPageSetupLaunchSkinTypeRandomToolTip}" />
-                        <local:MyRadioBox Text="Steve" x:Name="RadioSkinType1" Height="22" Tag="LaunchSkinType/1" Grid.Column="1" />
-                        <local:MyRadioBox Text="Alex" x:Name="RadioSkinType2" Height="22" Tag="LaunchSkinType/2" Grid.Column="2" />
-                        <local:MyRadioBox Text="{StaticResource LangPageSetupLaunchSkinTypeMicrosoft}" x:Name="RadioSkinType3" Height="22" Tag="LaunchSkinType/3" Grid.Column="3" ToolTip="{StaticResource LangPageSetupLaunchSkinTypeMicrosoftToolTip}" />
-                        <local:MyRadioBox Text="{StaticResource LangPageSetupLaunchSkinTypeCustom}" x:Name="RadioSkinType4" Height="22" Tag="LaunchSkinType/4" Grid.Column="4" ToolTip="{StaticResource LangPageSetupLaunchSkinTypeCustomToolTip}" />
-                    </Grid>
-                    <Grid x:Name="PanSkinID" Margin="0,14,0,2" Visibility="Collapsed">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchSkinTypeMicrosoftName}" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextSkinID" Tag="LaunchSkinID" Grid.Column="1" MaxLength="50" />
-                        <Grid Height="35" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,14,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            </Grid.ColumnDefinitions>
-                            <local:MyButton x:Name="BtnSkinSave" Text="{StaticResource LangPageSetupLaunchSkinSave}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Row="1" />
-                            <local:MyButton x:Name="BtnSkinCache" Text="{StaticResource LangPageSetupLaunchSkinRefresh}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ToolTip="{StaticResource LangPageSetupLaunchSkinRefreshToolTip}" Grid.Row="1" Grid.Column="1" />
-                        </Grid>
-                    </Grid>
-                    <Grid x:Name="PanSkinChange" Margin="0,14,0,2" Height="35" Visibility="Collapsed">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                        </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnSkinChange" Text="{StaticResource LangPageSetupLaunchSkinChange}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton x:Name="BtnSkinDelete" Text="{StaticResource LangPageSetupLaunchSkinReset}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Red" Grid.Column="1" />
-                    </Grid>
-                </StackPanel>
-            </local:MyCard>
-            <local:MyCard x:Name="CardArgument" Margin="0,0,0,15" Title="{StaticResource LangPageSetupLaunchLaunchOptions}">
+            <local:MyCard x:Name="CardArgument" Margin="0,15" Title="{StaticResource LangPageSetupLaunchLaunchOptions}">
                 <StackPanel Margin="25,40,25,15">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -214,6 +167,53 @@
                             <TextBlock x:Name="LabRamTotal" Text=" / 7.9 GB" FontSize="16" Foreground="Black" TextTrimming="None" />
                         </StackPanel>
                         <TextBlock Grid.Row="2" x:Name="LabRamGame" Text="2.5 GB" Grid.ColumnSpan="3" TextTrimming="None" Margin="2,3,0,0" FontSize="16" Foreground="Black" HorizontalAlignment="Left" />
+                    </Grid>
+                </StackPanel>
+            </local:MyCard>
+            <local:MyCard x:Name="CardSkin" Margin="0,0,0,15" Title="{StaticResource LangPageSetupLaunchSkin}" CanSwap="True" IsSwaped="True">
+                <StackPanel Margin="25,40,25,15">
+                    <local:MyHint Text="{StaticResource LangPageSetupLaunchSkinTips}" IsWarn="True" Margin="0,0,0,10" />
+                    <Grid Margin="-1,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <local:MyRadioBox Text="{StaticResource LangPageSetupLaunchSkinTypeRandom}" x:Name="RadioSkinType0" Height="22" Tag="LaunchSkinType/0" Grid.Column="0" ToolTip="{StaticResource LangPageSetupLaunchSkinTypeRandomToolTip}" />
+                        <local:MyRadioBox Text="Steve" x:Name="RadioSkinType1" Height="22" Tag="LaunchSkinType/1" Grid.Column="1" />
+                        <local:MyRadioBox Text="Alex" x:Name="RadioSkinType2" Height="22" Tag="LaunchSkinType/2" Grid.Column="2" />
+                        <local:MyRadioBox Text="{StaticResource LangPageSetupLaunchSkinTypeMicrosoft}" x:Name="RadioSkinType3" Height="22" Tag="LaunchSkinType/3" Grid.Column="3" ToolTip="{StaticResource LangPageSetupLaunchSkinTypeMicrosoftToolTip}" />
+                        <local:MyRadioBox Text="{StaticResource LangPageSetupLaunchSkinTypeCustom}" x:Name="RadioSkinType4" Height="22" Tag="LaunchSkinType/4" Grid.Column="4" ToolTip="{StaticResource LangPageSetupLaunchSkinTypeCustomToolTip}" />
+                    </Grid>
+                    <Grid x:Name="PanSkinID" Margin="0,14,0,2" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchSkinTypeMicrosoftName}" Margin="0,0,25,0" />
+                        <local:MyTextBox x:Name="TextSkinID" Tag="LaunchSkinID" Grid.Column="1" MaxLength="50" />
+                        <Grid Height="35" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,14,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            </Grid.ColumnDefinitions>
+                            <local:MyButton x:Name="BtnSkinSave" Text="{StaticResource LangPageSetupLaunchSkinSave}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Row="1" />
+                            <local:MyButton x:Name="BtnSkinCache" Text="{StaticResource LangPageSetupLaunchSkinRefresh}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ToolTip="{StaticResource LangPageSetupLaunchSkinRefreshToolTip}" Grid.Row="1" Grid.Column="1" />
+                        </Grid>
+                    </Grid>
+                    <Grid x:Name="PanSkinChange" Margin="0,14,0,2" Height="35" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                        </Grid.ColumnDefinitions>
+                        <local:MyButton x:Name="BtnSkinChange" Text="{StaticResource LangPageSetupLaunchSkinChange}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" />
+                        <local:MyButton x:Name="BtnSkinDelete" Text="{StaticResource LangPageSetupLaunchSkinReset}" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Red" Grid.Column="1" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

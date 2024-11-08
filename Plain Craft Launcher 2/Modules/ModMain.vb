@@ -449,6 +449,10 @@ EndHint:
 #Region "帮助"
 
     Public Class HelpEntry
+        ''' <summary>
+        ''' 原始信息路径。用于刷新。
+        ''' </summary>
+        Public RawPath As String
 
         '基础
 
@@ -507,13 +511,14 @@ EndHint:
         ''' 从文件初始化 HelpEntry 对象，失败会抛出异常。
         ''' </summary>
         Public Sub New(FilePath As String)
+            RawPath = FilePath
             Dim JsonData As JObject = GetJson(HelpArgumentReplace(ReadFile(FilePath)))
-            If JsonData Is Nothing Then Throw New FileNotFoundException("未找到帮助文件：" & FilePath, FilePath)
+            If JsonData Is Nothing Then Throw New FileNotFoundException(GetLang("LangModMainExceptionNoFileFound", FilePath), FilePath)
             '加载常规信息
             If JsonData("Title") IsNot Nothing Then
                 Title = JsonData("Title")
             Else
-                Throw New ArgumentException("未找到 Title 项")
+                Throw New ArgumentException(GetLang("LangModMainExceptionNoTitleArgFound"))
             End If
             Desc = If(JsonData("Description"), "")
             Search = If(JsonData("Keywords"), "")
@@ -528,7 +533,7 @@ EndHint:
             '加载事件信息
             If If(JsonData("IsEvent"), False) Then
                 EventType = JsonData("EventType")
-                If EventType Is Nothing Then Throw New ArgumentException("未找到 EventType 项")
+                If EventType Is Nothing Then Throw New ArgumentException(GetLang("LangModMainExceptionNoEventTypeArgFound"))
                 EventData = If(JsonData("EventData"), "")
                 IsEvent = True
             Else
@@ -537,7 +542,7 @@ EndHint:
                     XamlContent = ReadFile(XamlAddress)
                     IsEvent = False
                 Else
-                    Throw New FileNotFoundException("未找到帮助条目 .json 对应的 .xaml 文件（" & XamlAddress & "）")
+                    Throw New FileNotFoundException(GetLang("LangModMainExceptionNoXamlFileFound", XamlAddress))
                 End If
             End If
         End Sub
@@ -604,7 +609,7 @@ EndHint:
                                     '加载忽略列表
                                     Log("[Help] 发现 .helpignore 文件：" & File.FullName)
                                     For Each Line In ReadFile(File.FullName).Split(vbCrLf.ToCharArray)
-                                        Dim RealString As String = Line.Before("#").Trim
+                                        Dim RealString As String = Line.BeforeFirst("#").Trim
                                         If String.IsNullOrWhiteSpace(RealString) Then Continue For
                                         IgnoreList.Add(RealString)
                                         If ModeDebug Then Log("[Help]  > " & RealString)

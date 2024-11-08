@@ -1,4 +1,5 @@
 ﻿Public Class PageSelectLeft
+    Implements IRefreshable
 
     Private Sub PageSelectLeft_Initialized(sender As Object, e As EventArgs) Handles Me.Initialized
         AddHandler McFolderListLoader.PreviewFinish, Sub() If FrmSelectLeft IsNot Nothing Then RunInUiWait(AddressOf McFolderListUI)
@@ -295,7 +296,7 @@
             For i = 0 To Folders.Count - 1
                 If Folders(i) = "" Then Exit For
                 If Folders(i).ToString.EndsWith(Folder.Path) Then
-                    Name = Folders(i).ToString.Before(">")
+                    Name = Folders(i).ToString.BeforeFirst(">")
                     Folders.RemoveAt(i)
                     Exit For
                 End If
@@ -347,8 +348,14 @@
     End Sub
     Public Sub Refresh_Click(sender As Object, e As RoutedEventArgs)
         Dim Data As McFolder = CType(CType(CType(sender.Parent, ContextMenu).Parent, Primitives.Popup).PlacementTarget, MyListItem).Tag
-        WriteIni(Data.Path & "PCL.ini", "VersionCache", "") '删除缓存以强制要求下一次加载时更新列表
-        If Data.Path = PathMcFolder Then LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
+        RefreshCurrent(Data.Path)
+    End Sub
+    Public Sub RefreshCurrent() Implements IRefreshable.Refresh
+        RefreshCurrent(PathMcFolder)
+    End Sub
+    Public Shared Sub RefreshCurrent(Folder As String)
+        WriteIni(Folder & "PCL.ini", "VersionCache", "") '删除缓存以强制要求下一次加载时更新列表
+        If Folder = PathMcFolder Then LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
     End Sub
     Public Sub Rename_Click(sender As Object, e As RoutedEventArgs)
         Dim Folder As McFolder = CType(CType(CType(sender.Parent, ContextMenu).Parent, Primitives.Popup).PlacementTarget, MyListItem).Tag

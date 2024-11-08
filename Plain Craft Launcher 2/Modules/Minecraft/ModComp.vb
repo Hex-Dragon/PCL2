@@ -272,7 +272,7 @@
                     Next
                     CurseForgeFileIds = Files.Select(Function(f) f.Key).Distinct.ToList
                     GameVersions = Files.SelectMany(Function(f) f.Value).Where(Function(v) v.StartsWithF("1.")).
-                        Select(Function(v) CInt(Val(v.Split(".")(1).Before("-")))).Where(Function(v) v > 0).
+                        Select(Function(v) CInt(Val(v.Split(".")(1).BeforeFirst("-")))).Where(Function(v) v > 0).
                         Distinct.OrderByDescending(Function(v) v).ToList
                     ModLoaders = ModLoaders.Distinct.OrderBy(Of Integer)(Function(t) t).ToList
                     'Type
@@ -350,7 +350,7 @@
                     '搜索结果的键为 versions，获取特定工程的键为 game_versions
                     GameVersions = If(CType(If(Data("game_versions"), Data("versions")), JArray), New JArray).
                                        Select(Function(v) v.ToString).Where(Function(v) v.StartsWithF("1.")).
-                                       Select(Of Integer)(Function(v) Val(v.Split(".")(1).Before("-"))).Where(Function(v) v > 0).
+                                       Select(Of Integer)(Function(v) Val(v.Split(".")(1).BeforeFirst("-"))).Where(Function(v) v > 0).
                                        Distinct.OrderByDescending(Function(v) v).ToList
                     'Type
                     Select Case Data("project_type").ToString
@@ -582,9 +582,9 @@
                 '有中文翻译
                 '尝试将文本分为三段：Title (EnglishName) - Suffix
                 '检查时注意 Carpet：它没有中文译名，但有 Suffix
-                Title = TranslatedName.Before(" (").Before(" - ")
+                Title = TranslatedName.BeforeFirst(" (").BeforeFirst(" - ")
                 Dim Suffix As String = ""
-                If TranslatedName.After(")").Contains(" - ") Then Suffix = TranslatedName.After(")").After(" - ")
+                If TranslatedName.AfterLast(")").Contains(" - ") Then Suffix = TranslatedName.AfterLast(")").AfterLast(" - ")
                 Dim EnglishName As String = TranslatedName
                 If Suffix <> "" Then EnglishName = EnglishName.Replace(" - " & Suffix, "")
                 EnglishName = EnglishName.Replace(Title, "").Trim("("c, ")"c, " "c)
@@ -757,7 +757,7 @@ NoSubtitle:
                 Case CompType.ResourcePack
                     'FUTURE: Res
             End Select
-            Address += "&categoryId=" & If(Tag = "", "0", Tag.Before("/"))
+            Address += "&categoryId=" & If(Tag = "", "0", Tag.BeforeFirst("/"))
             If ModLoader <> CompModLoaderType.Any Then Address += "&modLoaderType=" & CType(ModLoader, Integer)
             If Not String.IsNullOrEmpty(GameVersion) Then Address += "&gameVersion=" & GameVersion
             If Not String.IsNullOrEmpty(SearchText) Then Address += "&searchFilter=" & Net.WebUtility.UrlEncode(SearchText)
@@ -778,7 +778,7 @@ NoSubtitle:
             'facets=[["categories:'game-mechanics'"],["categories:'forge'"],["versions:1.19.3"],["project_type:mod"]]
             Dim Facets As New List(Of String)
             Facets.Add($"[""project_type:{GetStringFromEnum(Type).ToLower}""]")
-            If Not String.IsNullOrEmpty(Tag) Then Facets.Add($"[""categories:'{Tag.After("/")}'""]")
+            If Not String.IsNullOrEmpty(Tag) Then Facets.Add($"[""categories:'{Tag.AfterLast("/")}'""]")
             If ModLoader <> CompModLoaderType.Any Then Facets.Add($"[""categories:'{GetStringFromEnum(ModLoader).ToLower}'""]")
             If Not String.IsNullOrEmpty(GameVersion) Then Facets.Add($"[""versions:'{GameVersion}'""]")
             Address += "&facets=[" & String.Join(",", Facets) & "]"
@@ -886,7 +886,7 @@ NoSubtitle:
                 If Not SearchResults(i).AbsoluteRight AndAlso i >= Math.Min(2, SearchResults.Count - 1) Then Exit For '把 3 个结果拼合以提高准确度
                 If SearchResults(i).Item.CurseForgeSlug IsNot Nothing Then SearchResult += SearchResults(i).Item.CurseForgeSlug.Replace("-", " ").Replace("/", " ") & " "
                 If SearchResults(i).Item.ModrinthSlug IsNot Nothing Then SearchResult += SearchResults(i).Item.ModrinthSlug.Replace("-", " ").Replace("/", " ") & " "
-                SearchResult += SearchResults(i).Item.ChineseName.After(" (").TrimEnd(") ").Before(" - ").
+                SearchResult += SearchResults(i).Item.ChineseName.AfterLast(" (").TrimEnd(") ").BeforeFirst(" - ").
                     Replace(":", "").Replace("(", "").Replace(")", "").ToLower.Replace("/", " ") & " "
             Next
             Log("[Comp] 中文搜索原始关键词：" & SearchResult, LogLevel.Developer)
@@ -1312,7 +1312,7 @@ Retry:
                     'GameVersions
                     Dim RawVersions As List(Of String) = Data("game_versions").Select(Function(t) t.ToString.Trim.ToLower).ToList
                     GameVersions = RawVersions.Where(Function(v) v.StartsWithF("1.") OrElse v.StartsWithF("b1.")).
-                                               Select(Function(v) If(v.Contains("-"), v.Before("-") & " " & GetLang("LangModCompVersionSnapshot"), If(v.StartsWithF("b1."), GetLang("LangDownloadAncientVersion"), v))).ToList
+                                               Select(Function(v) If(v.Contains("-"), v.BeforeFirst("-") & " " & GetLang("LangModCompVersionSnapshot"), If(v.StartsWithF("b1."), GetLang("LangDownloadAncientVersion"), v))).ToList
                     If GameVersions.Count > 1 Then
                         GameVersions = Sort(GameVersions, AddressOf VersionSortBoolean).ToList
                         If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)}
@@ -1361,28 +1361,26 @@ Retry:
                                    Optional BadDisplayName As Boolean = False) As MyListItem
 
             '获取描述信息
-            Dim Info As String = ""
+            Dim Title As String = If(BadDisplayName, FileName, DisplayName)
+            Dim Info As New List(Of String)
+            If Title <> FileName.BeforeLast(".") Then Info.Add(FileName.BeforeLast("."))
             Select Case Type
                 Case CompType.Mod
-                    Info += If(ModLoaders.Any,
-                        GetLang("LangModCompModSuitFor") & " " & Join(ModLoaders.Select(Function(m) GetStringFromEnum(m)).ToList, "/") & GetLang("LangComma"), "")
-                    Info += If(ModeDebug AndAlso Dependencies.Any, Dependencies.Count & " " & GetLangByNumIsPlural(Dependencies.Count, "LangModCompModDependentCount") & GetLang("LangComma"), "")
+                    If Dependencies.Any Then Info.Add(GetLangByNumIsPlural(Dependencies.Count, "LangModCompModDependentCount") & GetLang("LangComma"))
                 Case CompType.ModPack
-                    If GameVersions.All(Function(v) v.Contains("w")) Then
-                        Info += GetLang("LangModCompModGameVersion") & $" {Join(GameVersions, "、")}{GetLang("LangComma")}"
-                    End If
+                    If GameVersions.All(Function(v) v.Contains("w")) Then Info.Add($"{GetLang("LangModCompModGameVersion")} {Join(GameVersions, GetLang("LangComma"))}")
             End Select
             If DownloadCount > 0 Then 'CurseForge 的下载次数经常错误地返回 0
-                Info += GetLocationNum(DownloadCount) & GetLangByNumIsPlural(DownloadCount, "LangModCompModDownload") & GetLang("LangComma")
+                Info.Add(GetLocationNum(DownloadCount) & GetLangByNumIsPlural(DownloadCount, "LangModCompModDownload"))
             End If
-            Info += GetLang("LangModCompModUpdateTime", GetTimeSpanString(ReleaseDate - Date.Now, False))
-            Info += If(Status = CompFileStatus.Release, "", GetLang("LangComma") & StatusDescription)
+            Info.Add(GetLang("LangModCompModUpdateTime", GetTimeSpanString(ReleaseDate - Date.Now, False)))
+            If Status <> CompFileStatus.Release Then Info.Add(StatusDescription)
 
             '建立控件
             Dim NewItem As New MyListItem With {
-                .Title = If(BadDisplayName, FileName, DisplayName),
+                .Title = Title,
                 .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Me,
-                .Info = Info
+                .Info = Info.Join(GetLang("LangComma"))
             }
             Select Case Status
                 Case CompFileStatus.Release

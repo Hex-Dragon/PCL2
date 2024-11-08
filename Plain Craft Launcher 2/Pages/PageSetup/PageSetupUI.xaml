@@ -290,8 +290,9 @@
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="3" Grid.Column="6" Text="{StaticResource LangSetFuncHiddenMoreVote}" x:Name="CheckHiddenOtherVote" Tag="UiHiddenOtherVote" />
                         <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangSetFuncHiddenSpecial}" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="2" Text="{StaticResource LangSetFuncHiddenSpecialEmail}" x:Name="CheckLauncherEmail" Tag="UiLauncherEmail" ToolTip="{StaticResource LangSetFuncHiddenSpecialEmailToolTip}" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="3" Text="{StaticResource LangSetFuncHiddenSpecialVersionChoose}" x:Name="CheckHiddenFunctionSelect" Tag="UiHiddenFunctionSelect" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="4" Text="{StaticResource LangSetFuncHiddenSpecialFuncHidden}" x:Name="CheckHiddenFunctionHidden" Tag="UiHiddenFunctionHidden" ToolTip="{StaticResource LangSetFuncHiddenSpecialFuncHiddenToolTip}" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="3" Text="{StaticResource LangSetFuncHiddenSpecialInstanceSetting}" x:Name="CheckHiddenFunctionSelect" Tag="UiHiddenFunctionSelect" ToolTip="{StaticResource LangSetFuncHiddenSpecialInstanceSettingToolTip}" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="4" Text="{StaticResource LangSetFuncHiddenSpecialModUpdate}" x:Name="CheckHiddenFunctionModUpdate" Tag="UiHiddenFunctionModUpdate" ToolTip="{StaticResource LangSetFuncHiddenSpecialModUpdateToolTip}" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="4" Grid.Column="5" Text="{StaticResource LangSetFuncHiddenSpecialFuncHidden}" x:Name="CheckHiddenFunctionHidden" Tag="UiHiddenFunctionHidden" ToolTip="{StaticResource LangSetFuncHiddenSpecialFuncHiddenToolTip}" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

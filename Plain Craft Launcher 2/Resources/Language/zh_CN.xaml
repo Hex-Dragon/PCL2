@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     
     <!--Common-->
     <s:String x:Key="LangTaskAbort">已取消！</s:String>
@@ -7,6 +7,7 @@
     <s:String x:Key="LangResourcePack">资源包</s:String>
     <s:String x:Key="LangDialogBtnYes">是</s:String>
     <s:String x:Key="LangDialogBtnNo">否</s:String>
+    <s:String x:Key="LangDialogBtnContinue">继续</s:String>
     <s:String x:Key="LangComma">，</s:String>
     <s:String x:Key="LangColon">：</s:String>
     <!--Application-->
@@ -23,7 +24,7 @@
 非常建议重装为 64 位系统后再进行游戏！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化错误</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下载并安装 .NET Framework 4.6.2 后重试！</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请下载并重新安装 .NET Framework 4.6.2！</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷烫烫烫</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">程序出现未知错误</s:String>
     <!--FormMain-->
@@ -89,6 +90,7 @@
     <s:String x:Key="LangPageNameModDownload">Mod 下载</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">整合包下载</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">资源包下载</s:String>
+    <s:String x:Key="LangHintDropFileFromRecycleBin">请先将文件从回收站还原，再拖入 PCL！</s:String>
     <!--PageSetupUI-->
     <s:String x:Key="LangThemeRealWhite">眼瞎白</s:String>
     <s:String x:Key="LangThemeRealFunny">真·滑稽彩</s:String>
@@ -135,7 +137,6 @@
     <s:String x:Key="LangHintBackgroundMusicDeleteFail">删除背景音乐失败</s:String>
     <s:String x:Key="LangHintBackgroundMusicCreateFolderFail">重建背景音乐文件夹失败</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteConfirmationContent">当前已存在布局文件，继续生成教学文件将会覆盖现有布局文件！</s:String>
-    <s:String x:Key="LangDialogBtnContinue">继续</s:String>
     <s:String x:Key="LangDialogCustomPageOverwriteFail">生成教学文件失败</s:String>
     <s:String x:Key="LangHintCustomPageOverwriteSuccess">教学文件已生成！</s:String>
     <s:String x:Key="LangHintCustomPageRefreshed">已刷新主页！</s:String>
@@ -278,7 +279,10 @@
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">邮箱隐藏</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">隐藏第三方登录的账号邮箱显示，并尽量将邮箱打码，以避免隐私泄露。
 此选项的更改将在重启启动器后生效。</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialVersionChoose">版本选择</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">版本管理</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">隐藏启动按钮下方的版本选择与版本设置入口。</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialModUpdate">Mod 更新</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialModUpdateToolTip">禁止在 Mod 管理页面更新 Mod。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">功能隐藏</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">仅隐藏本选项卡，设置的禁用内容依然有效。
 可以在保留个性化设置页面的情况下避免隐藏设置被修改。</s:String>
@@ -562,9 +566,8 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangDownloadNeoForgeGettingList">正在获取 NeoForge 列表</s:String>
     <!--PageDownloadOptiFine-->
     <s:String x:Key="LangDownloadOptiFineDescTitle">OptiFine 简介</s:String>
-    <s:String x:Key="LangDownloadOptiFineDesc">OptiFine 又名高清修复，它让你可以安装光影、使用高清材质，并且可以大幅提高游戏性能。</s:String>
+    <s:String x:Key="LangDownloadOptiFineDesc">OptiFine 又称为高清修复，以允许安装光影、使用高清材质、提高游戏性能，但与 Mod 的兼容性不佳。</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">打开官网</s:String>
-    <s:String x:Key="LangDownloadOptiFineChineseWebsite">打开中文网</s:String>
     <s:String x:Key="LangDownloadOptiFineGettingList">正在获取 OptiFine 列表</s:String>
     <!--PageDownloadPack-->
     <s:String x:Key="LangDownloadModpackSearchTitle">搜索整合包</s:String>
@@ -677,8 +680,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangLaunchLeftAbortTask">结束处理</s:String>
     <s:String x:Key="LangLaunchLeftFinished">已完成</s:String>
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">正在导出启动脚本</s:String>
-    <s:String x:Key="LangLaunchLeftDialogContentAutoInstallModpack">PCL 即将在当前文件夹下自动安装整合包。</s:String>
-    <s:String x:Key="LangLaunchLeftDialogTitleAutoInstallModpack">自动安装</s:String>
+    <s:String x:Key="LangLaunchLeftExceptionModpackInstallFail">自动安装整合包失败：{0}</s:String>
     <!--PageLaunchRight-->
     <s:String x:Key="LangLaunchRightSnapshot">快照版提示</s:String>
     <s:String x:Key="LangLaunchRightLog">启动日志</s:String>
@@ -792,7 +794,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 8 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 10 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">赞助作者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -1281,6 +1283,10 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangModMainAprilFoolTipC">这里建议点一下右下角的小白旗投降呢.jpg</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">右下角的小白旗永远等着你……</s:String>
     <s:String x:Key="LangModMainExceptionNoHelpFound">未找到可用的帮助；若不需要帮助页面，可以在 设置 → 个性化 → 功能隐藏 中将其隐藏</s:String>
+    <s:String x:Key="LangModMainExceptionNoFileFound">未找到帮助文件：{0}</s:String>
+    <s:String x:Key="LangModMainExceptionNoTitleArgFound">未找到 Title 项</s:String>
+    <s:String x:Key="LangModMainExceptionNoEventTypeArgFound">未找到 EventType 项</s:String>
+    <s:String x:Key="LangModMainExceptionNoXamlFileFound">未找到帮助条目 .json 对应的 .xaml 文件（{0}）</s:String>
     <!--ModEvent-->
     <s:String x:Key="LangModEventOpeningWeb">正在开启中，请稍候……</s:String>
     <s:String x:Key="LangModEventStartInstance">正在启动 {0}……</s:String>
@@ -1291,7 +1297,6 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModEventDialogEventFailTitle">事件执行失败</s:String>
     <s:String x:Key="LangModEventDialogUnknownEventContent">未知的事件类型：{0}
 请检查事件类型填写是否正确，或者 PCL 是否为最新版本。</s:String>
-    <s:String x:Key="LangModEventGettingResource">正在获取资源，请稍候……</s:String>
     <!--ModMusic-->
     <s:String x:Key="LangModMusicDeviceChanged">由于音频设备变更，音乐播放功能在重启 PCL 后才能恢复！</s:String>
     <s:String x:Key="LangModMusicMusicChanged">播放音乐失败（{0}）：PCL 不支持播放音频属性在中途发生变化的音乐</s:String>
@@ -1392,13 +1397,12 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">未找到 Asset Index</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">非预期的结果（{0}）</s:String>
     <!--ModComp-->
-    <s:String x:Key="LangModCompModSuitFor">适用于</s:String>
-    <s:String x:Key="LangModCompModDependentCount">个前置</s:String>
-    <s:String x:Key="LangModCompModDependentCountP">个前置</s:String>
-    <s:String x:Key="LangModCompModDownload">次下载</s:String>
-    <s:String x:Key="LangModCompModDownloadP">次下载</s:String>
+    <s:String x:Key="LangModCompModDependentCount">个前置 Mod</s:String>
+    <s:String x:Key="LangModCompModDependentCountP">个前置 Mod</s:String>
+    <s:String x:Key="LangModCompModDownload">下载{0}次</s:String>
+    <s:String x:Key="LangModCompModDownloadP">下载{0}次</s:String>
     <s:String x:Key="LangModCompModGameVersion">游戏版本</s:String>
-    <s:String x:Key="LangModCompModUpdateTime">{0}更新</s:String>
+    <s:String x:Key="LangModCompModUpdateTime">更新于 {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">另存为</s:String>
     <s:String x:Key="LangModCompModDependent">前置 Mod</s:String>
     <s:String x:Key="LangModCompModAlternateVersion">可选版本</s:String>
@@ -1414,8 +1418,6 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModBaseDateYearP">年</s:String>
     <s:String x:Key="LangModBaseDateMonthA">个月</s:String>
     <s:String x:Key="LangModBaseDateMonthAP">个月</s:String>
-    <s:String x:Key="LangModBaseDateMonthB">月</s:String>
-    <s:String x:Key="LangModBaseDateMonthBP">月</s:String>
     <s:String x:Key="LangModBaseDateDay">天</s:String>
     <s:String x:Key="LangModBaseDateDayP">天</s:String>
     <s:String x:Key="LangModBaseDateHour">小时</s:String>
@@ -1668,12 +1670,10 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <!--ModModpack-->
     <s:String x:Key="LangModModpackSelectModpack">整合包文件</s:String>
     <s:String x:Key="LangModModpackSelectTitleModpack">选择整合包压缩文件</s:String>
-    <s:String x:Key="LangModModpackUnknownType">未能识别该整合包的种类，无法安装！</s:String>
-    <s:String x:Key="LangModModpackExceptionNoMcInfo">整合包未提供 Minecraft 版本信息</s:String>
     <s:String x:Key="LangModModpackInputInstanceName">输入版本名称</s:String>
     <s:String x:Key="LangModModpackTaskExtraModpack">解压整合包文件</s:String>
     <s:String x:Key="LangModModpackTaskGetModDownloadInfo">获取 Mod 下载信息</s:String>
-    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">整合包所需要的部分 Mod 版本已被 Mod 作者删除，因此无法完成整合包安装，请联系整合包作者更新整合包中的 Mod 版本</s:String>
+    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">整合包中的部分 Mod 版本已被 Mod 作者删除，所以没法继续安装了，请向整合包作者反馈该问题</s:String>
     <s:String x:Key="LangModModpackTaskInitModDownloadInfo">构造 Mod 下载信息</s:String>
     <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">是否要下载整合包中的可选文件 {0}？</s:String>
     <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">下载可选文件</s:String>
@@ -1694,16 +1694,35 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">重命名版本 Json（副加载器）</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL 整合包安装：</s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC 整合包安装：</s:String>
-    <s:String x:Key="LangModModpackNoAddons">该整合包未提供游戏版本附加信息，无法安装！</s:String>
-    <s:String x:Key="LangModModpackNoGameInfo">该整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackNoAddons">该 MCBBS 整合包未提供游戏版本附加信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackModrinthNoGameInfo">该 Modrinth 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackCurseforgeNoGameInfo">该 CurseForge 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackTaskMCBBSModpackInstall">MCBBS 整合包安装：</s:String>
-    <s:String x:Key="LangModModpackDialogContentInstallTip">请在接下来打开的窗口中选择安装目标文件夹，它必须是一个空文件夹。</s:String>
-    <s:String x:Key="LangModModpackDialogTitleInstallTip">安装提示</s:String>
+    <s:String x:Key="LangModModpackDialogContentInstallTip">接下来请选择一个空文件夹，它会被安装到这个文件夹里。</s:String>
+    <s:String x:Key="LangModModpackDialogTitleInstall">安装</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">选择安装目标（必须是一个空文件夹）</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 文件夹路径中不能含有感叹号或分号！</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">请选择一个空文件夹作为安装目标！</s:String>
-    <s:String x:Key="LangModModpackInstallArchive">安装压缩包</s:String>
+    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">已加入游戏文件夹列表：{0}</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
+    <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
+    <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
+    <s:String x:Key="LangModModpackExceptionModpackTooOld">该整合包版本过老，已不支持进行安装！</s:String>
+    <s:String x:Key="LangModModpackExceptionModrinthModpackError">Modrinth 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionHMCLModpackError">HMCL 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionCurseforgeModpackError">CurseForge 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionMMCModpackError">MMC 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackExceptionMCBBSModpackError">MCBBS 整合包安装信息存在问题</s:String>
+    <s:String x:Key="LangModModpackDialogTitleAnotherLauncher">换用整合包启动器？</s:String>
+    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">整合包中似乎自带了启动器，是否换用它继续安装？
+通常推荐这样做，以获得最佳体验。
+即将打开：{0}</s:String>
+    <s:String x:Key="LangModModpackExceptionNoModpackFound">未能找到适合的文件结构，这可能不是一个 MC 压缩包</s:String>
     <!--ModWatcher-->
     <s:String x:Key="LangModWatcherMcCrashed">检测到 Minecraft 出现错误，错误分析已开始……</s:String>
     <!--ModBase-->
@@ -1800,7 +1819,8 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServerBuildServer">构建服务端</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">该服务端正在下载中！</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">下载服务端文件</s:String>
-    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">{0} 版本没有提供服务端文件</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">Mojang 没有给 Minecraft {0} 提供官方服务端下载，没法下，撤退！</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallInstallFail">开始合并安装失败</s:String>
     <!--ModCrash-->
     <s:String x:Key="LangModCrashDialogTitleAnalysisResult">错误报告分析结果</s:String>
     <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 出现错误</s:String>
@@ -1809,7 +1829,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModCrashHintExportCrashReportSuccess">错误报告已导出！</s:String>
     <s:String x:Key="LangModCrashCrashReasonNoReason">很抱歉，PCL 无法确定错误原因。</s:String>
     <s:String x:Key="LangModCrashCrashReasonHelpTip">很抱歉，你的游戏出现了一些问题……
-如果要寻求帮助，请导出错误报告并发给他人，而不是发送这个窗口的截图。</s:String>
+如果要寻求帮助，请把错误报告文件发给对方，而不是发送这个窗口的照片或者截图。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAA">由于 Mod 文件被解压了，导致游戏无法继续运行。
 直接把整个 Mod 文件放进 Mod 文件夹中即可，若解压就会导致游戏出错。
 
@@ -1969,25 +1989,30 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
 {0}
 
 请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBX">Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。
-如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBX">Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBY">Fabric 提供了以下解决方案：
 {0}
 
 请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric 可能已经提供了解决方案，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。
-如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric 可能已经提供了解决方案，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCA">Forge 提供了以下错误信息：
 {0}
 
 请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge 可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。
-如果没有看到报错信息，可以查看错误报告了解错误具体是如何发生的。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge 可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCC">你的游戏出现了一些问题，但 PCL 未能找到相关记录文件，因此无法进行分析。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCD">部分 Mod 注入失败，导致游戏出错。
+这一般代表着部分 Mod 与其他 Mod 或当前环境不兼容，或是它存在 Bug。
+你可以尝试逐步禁用 Mod，然后观察游戏是否还会崩溃，以此定位导致崩溃的 Mod。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCE">你所安装的 Mod 不兼容：
+{0}
+
+请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCF">你所安装的 Mod 不兼容，Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL 获取到了没有详细信息的错误原因（{0}），请向 PCL 作者提交反馈以获取详情。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">此外，</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">你可以查看错误报告了解错误具体是如何发生的。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">如果要寻求帮助，请向他人发送错误报告文件，而不是发送这个窗口的截图。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">如果要寻求帮助，请把错误报告文件发给对方，而不是发送这个窗口的照片或者截图。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">此外，你正在使用老版本 PCL，更新 PCL 或许也能解决这个问题。
 你可以点击 设置 → 启动器 → 检查更新 来更新 PCL。</s:String>
     <!--MyMsgLogin-->

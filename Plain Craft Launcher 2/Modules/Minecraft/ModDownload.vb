@@ -780,7 +780,7 @@
                 Inherit = "1.20.1"
             Else '20.4.30-beta
                 VersionName = ApiName
-                Version = New Version(ApiName.Before("-"))
+                Version = New Version(ApiName.BeforeFirst("-"))
                 Inherit = $"1.{Version.Major}" & If(Version.Minor = 0, "", "." & Version.Minor)
             End If
         End Sub
@@ -1089,7 +1089,7 @@
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         If McimUrl <> Url Then
             Select Case Setup.Get("ToolDownloadMod")
-                'UNDONE: 在 MCIM 源稳定后回调
+                'TODO: 在 MCIM 源稳定后回调
                 Case 0
                     If ModeDebug Then
                         Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
@@ -1138,7 +1138,7 @@
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         If McimUrl <> Url Then
             Select Case Setup.Get("ToolDownloadMod")
-                'UNDONE: 在 MCIM 源稳定后回调
+                'TODO: 在 MCIM 源稳定后回调
                 Case 0
                     If ModeDebug Then
                         Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
