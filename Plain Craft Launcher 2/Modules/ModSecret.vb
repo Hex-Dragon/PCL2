@@ -100,7 +100,7 @@ Friend Module ModSecret
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
     ''' </summary>
-    Friend Sub SecretHeadersSign(Url As String, ByRef Client As WebClient, Optional UseBrowserUserAgent As Boolean = False, Optional AddReferer As Boolean = True)
+    Friend Sub SecretHeadersSign(Url As String, ByRef Client As WebClient, Optional UseBrowserUserAgent As Boolean = False)
         If Url.Contains("baidupcs.com") OrElse Url.Contains("baidu.com") Then
             Client.Headers("User-Agent") = "LogStatistic" '#4951
         ElseIf UseBrowserUserAgent Then
@@ -108,9 +108,7 @@ Friend Module ModSecret
         Else
             Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode
         End If
-        If AddReferer Then
-            Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.open.server/"
-        End If
+        Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.open.server/"
         If Url.Contains("api.curseforge") Then
             Client.Headers("x-api-key") = CurseForgeAPIKey
         End If
@@ -118,7 +116,7 @@ Friend Module ModSecret
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
     ''' </summary>
-    Friend Sub SecretHeadersSign(Url As String, ByRef Request As HttpWebRequest, Optional UseBrowserUserAgent As Boolean = False, Optional AddReferer As Boolean = True)
+    Friend Sub SecretHeadersSign(Url As String, ByRef Request As HttpWebRequest, Optional UseBrowserUserAgent As Boolean = False)
         If Url.Contains("baidupcs.com") OrElse Url.Contains("baidu.com") Then
             Request.UserAgent = "LogStatistic" '#4951
         ElseIf UseBrowserUserAgent Then
@@ -126,9 +124,7 @@ Friend Module ModSecret
         Else
             Request.UserAgent = "PCL2/" & VersionStandardCode
         End If
-        If AddReferer Then
-            Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
-        End If
+        Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
         If Url.Contains("api.curseforge") Then
             Request.Headers("x-api-key") = CurseForgeAPIKey
         End If

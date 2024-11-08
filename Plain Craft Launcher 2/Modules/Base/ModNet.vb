@@ -252,7 +252,7 @@ RequestFinished:
     ''' </summary>
     ''' <param name="Url">网络 Url。</param>
     ''' <param name="LocalFile">下载的本地地址。</param>
-    Public Sub NetDownload(Url As String, LocalFile As String, Optional UseBrowserUserAgent As Boolean = False, Optional AddReferer As Boolean = True)
+    Public Sub NetDownload(Url As String, LocalFile As String, Optional UseBrowserUserAgent As Boolean = False)
         Log("[Net] 直接下载文件：" & Url)
 
         '初始化
@@ -268,7 +268,7 @@ RequestFinished:
         '下载
         Using Client As New WebClient
             Try
-                SecretHeadersSign(Url, Client, UseBrowserUserAgent, AddReferer)
+                SecretHeadersSign(Url, Client, UseBrowserUserAgent)
                 Client.DownloadFile(Url, LocalFile)
             Catch ex As Exception
                 File.Delete(LocalFile)
