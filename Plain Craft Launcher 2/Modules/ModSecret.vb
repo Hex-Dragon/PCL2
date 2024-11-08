@@ -111,7 +111,9 @@ Friend Module ModSecret
         If AddReferer Then
             Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.open.server/"
         End If
-        Client.Headers("x-api-key") = CurseForgeAPIKey
+        If Url.Contains("api.curseforge") Then
+            Client.Headers("x-api-key") = CurseForgeAPIKey
+        End If
     End Sub
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
