@@ -12,17 +12,17 @@
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL δεν έχει δικαιώματα πρόσβασης σε {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Μη Διαθέσιμος Φάκελος Προσωρινής Αποθήκευσης</s:String>
     <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL δεν μπορεί να προσπελάσει το φάκελο κρυφής μνήμης, το οποίο μπορεί να προκαλέσει σφάλμα προγράμματος ή ανενεργότητα.
-Λάθος Αιτία: {0}</s:String>
+Αιτίες Σφάλματος: {0}</s:String>
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">Ο χειριστικά επιλεγμένος φάκελο κρυφής μνήμης είναι αδιαθέσιμος, PCL θα χρησιμοποιήσει τον προεπιλεγμένο φάκελο κρυφής μνήμης αντίθετα.
-Λάθος Αιτία: {0}</s:String>
+Αιτίες Σφάλματος: {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Περιβαλλοντική Προειδοποίηση</s:String>
     <s:String x:Key="LangApplicationDialogContentRunInTemp">Εξαγάγετε το PCL από το συμπιεσμένο αρχείο ή μετακινήστε το σε διαφορετικό φάκελο πριν συνεχίσετε να χρησιμοποιείτε!
 Το πρόγραμμα εκτελείται αυτήν τη στιγμή σε προσωρινό φάκελο, ενδέχεται να μην αποθηκευτούν ρυθμίσεις, αποθηκεύσεις κ.λπ. και ορισμένες λειτουργίες ενδέχεται να μην είναι διαθέσιμες.</s:String>
     <s:String x:Key="LangApplicationDialogContent32BitWarn">Το PCL και η νεότερη έκδοση του Minecraft δεν υποστηρίζουν πλέον συστήματα 32-bit, ορισμένες λειτουργίες δεν θα είναι διαθέσιμες.
 Συνιστάται ιδιαίτερα η επανεγκατάσταση του παιχνιδιού μετά τη μετάβαση σε σύστημα 64-bit!</s:String>
-    <s:String x:Key="LangApplicationDialogTitleInitError">Σφάλμα Αρχικοποίησης</s:String>
-    <s:String x:Key="LangApplicationDialogTitleNETWarn">Σφάλμα Χρόνου Εκτέλεσης</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">Η έκδοση του .NET Framework σας είναι πολύ χαμηλή ή είναι βλαμμένη, παρακαλώ μεταγράψτε και εγκαταστήστε το .NET Framework 4.6.2 από τον ιστότοπο ανοίγματος και δοκιμάστε ξανά.</s:String>
+    <s:String x:Key="LangApplicationDialogTitleInitError">PCL Σφάλμα Αρχικοποίησης</s:String>
+    <s:String x:Key="LangApplicationDialogTitleNETWarn">Σφάλμα Εκτέλεσης Περιβάλλοντος</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">Η έκδοση του .NET Framework είναι πολύ χαμηλή ή κατεστραμμένη. Κάντε λήψη και εγκαταστήστε το .NET Framework 4.6.2 από την τοποθεσία Web που ανοίξατε και προσπαθήστε ξανά.</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Άγνωστο Σφάλμα</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">Παρουσιάστηκε άγνωστο σφάλμα στο πρόγραμμα.</s:String>
     <s:String x:Key="LangTitleDownload">Λήψη</s:String>
@@ -1959,11 +1959,11 @@ URL: {0}</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionDecline">Το αίτημα του PCL για άδεια απορρίφθηκε...</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionTimeout">Ο χρόνος σύνδεσης έληξε, δοκιμάστε ξανά!</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionCheckFail">Η δημοσκόπηση σύνδεσης απέτυχε.</s:String>
-    <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
-    <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
-    <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
-    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModExceptionFailedToGet">Αποτυχία Λήψης Αποτελεσμάτων ({0})</s:String>
+    <s:String x:Key="LangModExceptionTimeOut">χρονικό όριο της σύνδεσης διακομιστή έληξε</s:String>
+    <s:String x:Key="LangModExceptionRunInUI">Εκτελέστηκε μια αίτηση δικτύου στο νήμα περιβάλλοντος εργασίας χρήστη</s:String>
+    <s:String x:Key="LangModTaskDownlaodCode">Απόκτηση πηγαίου κώδικα {0}</s:String>
+    <s:String x:Key="LangModExceptionDownlaodCodeSource">Λήξη χρονικού ορίου σύνδεσης με διακομιστή (πρώτη πηγή λήψης: {0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>
