@@ -118,7 +118,7 @@ Friend Module ModSecret
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
     ''' </summary>
-    Friend Sub SecretHeadersSign(Url As String, ByRef Request As HttpWebRequest, Optional UseBrowserUserAgent As Boolean = False)
+    Friend Sub SecretHeadersSign(Url As String, ByRef Request As HttpWebRequest, Optional UseBrowserUserAgent As Boolean = False, Optional AddReferer As Boolean = True)
         If Url.Contains("baidupcs.com") OrElse Url.Contains("baidu.com") Then
             Request.UserAgent = "LogStatistic" '#4951
         ElseIf UseBrowserUserAgent Then
@@ -126,8 +126,12 @@ Friend Module ModSecret
         Else
             Request.UserAgent = "PCL2/" & VersionStandardCode
         End If
-        Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
-        Request.Headers("x-api-key") = CurseForgeAPIKey
+        If AddReferer Then
+            Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
+        End If
+        If Url.Contains("api.curseforge") Then
+            Request.Headers("x-api-key") = CurseForgeAPIKey
+        End If
     End Sub
 
 #End Region
