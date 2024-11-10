@@ -304,7 +304,6 @@
             MusicWaitingList.Remove(MusicCurrent)
             If TypeOf ex Is FileNotFoundException Then
                 MusicRefreshPlay(True, IsFirstLoad)
-            ElseIf MusicAllList.Count > 1 Then
             Else
                 MusicStartPlay(DequeueNextMusicAddress(), IsFirstLoad)
             End If
