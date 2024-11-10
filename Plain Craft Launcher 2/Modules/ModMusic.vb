@@ -298,7 +298,6 @@
             Else
                 Log(ex, "播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）", LogLevel.Hint)
             End If
-            Thread.Sleep(1000)
             '将播放错误的音乐从列表中移除
             MusicAllList.Remove(MusicCurrent)
             MusicWaitingList.Remove(MusicCurrent)
