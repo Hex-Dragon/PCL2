@@ -26,21 +26,15 @@
             If File.Exists(Path & "modpack.zip") Then PackInstallPath = Path & "modpack.zip"
             If File.Exists(Path & "modpack.mrpack") Then PackInstallPath = Path & "modpack.mrpack"
             If PackInstallPath IsNot Nothing Then
-                If MyMsgBox($"PCL 即将在当前文件夹下自动安装整合包。", "自动安装", "继续", "取消") = 1 Then
-                    '确认自动安装
-                    Log("[Launch] 需自动安装整合包：" & PackInstallPath, LogLevel.Debug)
-                    Setup.Set("LaunchFolderSelect", "$.minecraft\")
-                    If Not Directory.Exists(Path & ".minecraft\") Then
-                        Directory.CreateDirectory(Path & ".minecraft\")
-                        Directory.CreateDirectory(Path & ".minecraft\versions\")
-                        McFolderLauncherProfilesJsonCreate(Path & ".minecraft\")
-                    End If
-                    McFolderListLoader.WaitForExit(IsForceRestart:=True)
-                Else
-                    '取消自动安装
-                    Log("[Launch] 取消自动安装整合包：" & PackInstallPath, LogLevel.Debug)
-                    PackInstallPath = Nothing
+                Log("[Launch] 需自动安装整合包：" & PackInstallPath, LogLevel.Debug)
+                Setup.Set("LaunchFolderSelect", "$.minecraft\")
+                If Not Directory.Exists(Path & ".minecraft\") Then
+                    Directory.CreateDirectory(Path & ".minecraft\")
+                    Directory.CreateDirectory(Path & ".minecraft\versions\")
+                    McFolderLauncherProfilesJsonCreate(Path & ".minecraft\")
                 End If
+                PageSelectLeft.AddFolder(Path & ".minecraft\", GetFolderNameFromPath(Path), False)
+                McFolderListLoader.WaitForExit()
             End If
             '确认 Minecraft 文件夹存在
             PathMcFolder = Setup.Get("LaunchFolderSelect").ToString.Replace("$", Path)
@@ -58,18 +52,19 @@
             If Setup.Get("SystemDebugDelay") Then Thread.Sleep(RandomInteger(500, 3000))
             '自动整合包安装
             If PackInstallPath IsNot Nothing Then
-                Dim InstallLoader = ModpackInstall(PackInstallPath)
-                If InstallLoader Is Nothing Then
-                    Log("[Launch] 自动安装整合包失败：" & PackInstallPath)
-                Else
-                    Log("[Launch] 自动安装整合包开始：" & PackInstallPath)
-                    RunInUi(Sub() FrmMain.PageChange(FormMain.PageType.DownloadManager))
+                Try
+                    Dim InstallLoader = ModpackInstall(PackInstallPath, GetFolderNameFromPath(Path))
+                    Log("[Launch] 自动安装整合包已开始：" & PackInstallPath)
                     InstallLoader.WaitForExit()
                     If InstallLoader.State = LoadState.Finished Then
                         Log("[Launch] 自动安装整合包成功，删除安装包：" & PackInstallPath)
                         File.Delete(PackInstallPath)
                     End If
-                End If
+                Catch ex As CancelledException
+                    Log(ex, "自动安装整合包被用户取消：" & PackInstallPath)
+                Catch ex As Exception
+                    Log(ex, "自动安装整合包失败：" & PackInstallPath, LogLevel.Msgbox)
+                End Try
             End If
             '确认 Minecraft 版本存在
             Dim Selection As String = Setup.Get("LaunchVersionSelect")
@@ -431,7 +426,7 @@ Finish:
                 ElseIf Setup.Get("LoginLegacyName") = "" Then
                     Return New EqualableList(Of String) From {0, ""}
                 Else
-                    Return New EqualableList(Of String) From {0, If(Setup.Get("LoginLegacyName").ToString.Before("¨"), "")}
+                    Return New EqualableList(Of String) From {0, If(Setup.Get("LoginLegacyName").ToString.BeforeFirst("¨"), "")}
                 End If
             Case 3
                 Return New EqualableList(Of String) From {3, Setup.Get("LaunchSkinID")}

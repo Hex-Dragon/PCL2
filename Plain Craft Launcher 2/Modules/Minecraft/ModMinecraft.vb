@@ -1291,8 +1291,11 @@ OnLoaded:
 
             '单独列出收藏的版本
             Dim StaredVersions As New List(Of McVersion)
-            For Each Version As McVersion In VersionList
-                If Version.IsStar AndAlso Not Version.DisplayType = McVersionCardType.Hidden Then StaredVersions.Add(Version)
+            For Each Version As McVersion In VersionList.ToList
+                If Version.IsStar AndAlso Not Version.DisplayType = McVersionCardType.Hidden Then
+                    StaredVersions.Add(Version)
+                    VersionList.Remove(Version)
+                End If
             Next
             If StaredVersions.Any Then VersionListOriginal.Add(McVersionCardType.Star, StaredVersions)
 

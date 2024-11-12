@@ -34,41 +34,65 @@
         End Select
     End Sub
     '结果 UI 化
-    Private Class VersionSorterWithSelect
+    Private Class CardSorter
         Implements IComparer(Of String)
-        Public Top As String = ""
+        Public Topmost As String = ""
         Public Function Compare(x As String, y As String) As Integer Implements IComparer(Of String).Compare
+            '相同
             If x = y Then Return 0
-            If x = Top Then Return -1
-            If y = Top Then Return 1
+            '置顶
+            If x = Topmost Then Return -1
+            If y = Topmost Then Return 1
+            '特殊版本
+            Dim IsXSpecial As Boolean = x.EndsWithF("版本")
+            Dim IsYSpecial As Boolean = y.EndsWithF("版本")
+            If IsXSpecial AndAlso IsYSpecial Then Return x.CompareTo(y)
+            If IsXSpecial Then Return 1
+            If IsYSpecial Then Return -1
+            '比较版本号
+            Dim VersionCodeSort = -VersionSortInteger(x.Replace(x.BeforeFirst(" ") & " ", ""), y.Replace(y.BeforeFirst(" ") & " ", ""))
+            If VersionCodeSort <> 0 Then Return VersionCodeSort
+            '比较全部
             Return -VersionSortInteger(x, y)
         End Function
-        Public Sub New(Optional Top As String = "")
-            Me.Top = If(Top, "")
+        Public Sub New(Optional Topmost As String = "")
+            Me.Topmost = If(Topmost, "")
         End Sub
     End Class
     Private Sub Load_OnFinish()
         Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
-            $"所选版本：{TargetVersion} {If(TargetLoader <> CompModLoaderType.Any, TargetLoader, "")}", "")
+            $"所选版本：{If(TargetLoader <> CompModLoaderType.Any, TargetLoader.ToString & " ", "")}{TargetVersion}", "")
         '初始化字典
-        Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New VersionSorterWithSelect(TargetCardName))
+        Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New CardSorter(TargetCardName))
         Dict.Add("未知版本", New List(Of CompFile))
+        Dim SupportedLoaders As New List(Of Integer)([Enum].GetValues(GetType(CompModLoaderType)))
         For Each Version As CompFile In CompFileLoader.Output
             For Each GameVersion In Version.GameVersions
-                '决定添加到哪个版本
-                Dim TargetCard As String
+                '决定添加到哪个卡片
+                Dim Ver As String
                 If GameVersion Is Nothing Then
-                    TargetCard = "未知版本"
+                    Ver = "未知版本"
                 ElseIf GameVersion.Contains("w") OrElse GameVersion.Contains("pre") OrElse GameVersion.Contains("rc") Then
-                    TargetCard = "快照版本"
-                ElseIf GameVersion.StartsWith("1.0") Then
-                    TargetCard = "远古版本"
+                    Ver = "快照版本"
+                ElseIf GameVersion.StartsWithF("1.0") Then
+                    Ver = "远古版本"
                 Else
-                    TargetCard = GameVersion
+                    Ver = GameVersion
                 End If
-                '实际进行添加
-                If Not Dict.ContainsKey(TargetCard) Then Dict.Add(TargetCard, New List(Of CompFile))
-                If Not Dict(TargetCard).Contains(Version) Then Dict(TargetCard).Add(Version)
+                '遍历加入的加载器列表
+                Dim Loaders As New List(Of String)
+                If Project.Type = CompType.Mod Then
+                    For Each Loader In Version.ModLoaders
+                        If SupportedLoaders.Contains(Loader) Then Loaders.Add(Loader.ToString & " ")
+                    Next
+                End If
+                If Not Loaders.Any() Then Loaders.Add("") '保底加一个空的，确保它在一张卡片里
+                '实际添加
+                For Each Loader In Loaders
+                    Dim TargetCard As String = Loader & Ver
+                    If Not Dict.ContainsKey(TargetCard) Then Dict.Add(TargetCard, New List(Of CompFile))
+                    If Not Dict(TargetCard).Contains(Version) Then Dict(TargetCard).Add(Version)
+                Next
             Next
         Next
         '添加筛选的版本的卡片
@@ -170,11 +194,7 @@
             Dim LogoFileAddress As String = MyImage.GetTempPath(CompItem.Logo)
             Loaders.Add(New LoaderDownload("下载整合包文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 10, .Block = True})
             Loaders.Add(New LoaderTask(Of Integer, Integer)("准备安装整合包",
-            Sub()
-                If ModpackInstall(Target, VersionName, Logo:=If(IO.File.Exists(LogoFileAddress), LogoFileAddress, Nothing)) Is Nothing Then
-                    Throw New Exception("整合包安装出现异常！")
-                End If
-            End Sub) With {.ProgressWeight = 0.1})
+            Sub() ModpackInstall(Target, VersionName, If(IO.File.Exists(LogoFileAddress), LogoFileAddress, Nothing))) With {.ProgressWeight = 0.1})
 
             '启动
             Dim Loader As New LoaderCombo(Of String)(LoaderName, Loaders) With {.OnStateChanged =
@@ -277,7 +297,7 @@
                 If Project.TranslatedName = Project.RawName Then
                     FileName = File.FileName
                 Else
-                    Dim ChineseName As String = Project.TranslatedName.Before(" (").Before(" - ").
+                    Dim ChineseName As String = Project.TranslatedName.BeforeFirst(" (").BeforeFirst(" - ").
                         Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")
                     Select Case Setup.Get("ToolDownloadTranslate")
                         Case 0
