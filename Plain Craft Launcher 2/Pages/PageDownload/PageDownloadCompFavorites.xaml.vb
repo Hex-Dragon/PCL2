@@ -10,7 +10,7 @@
     Private Sub PageDownloadCompFavorites_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
         SelectedItemList.Clear()
         RefreshBar()
-        If Loader.Input IsNot Nothing AndAlso Not Loader.Input.Equals(CompFavorites.GetAll()) Then
+        If Loader.Input IsNot Nothing AndAlso (Not Loader.Input.Count.Equals(CompFavorites.GetAll().Count) OrElse Loader.Input.Except(CompFavorites.GetAll()).Any()) Then
             Loader.Start()
         End If
     End Sub
