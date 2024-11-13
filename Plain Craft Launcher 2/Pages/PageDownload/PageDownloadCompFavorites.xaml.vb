@@ -23,8 +23,8 @@
     End Sub
 #End Region
 
-    Private CompItemList As New List(Of MyMiniCompItem)
-    Private SelectedItemList As New List(Of MyMiniCompItem)
+    Private CompItemList As New List(Of MyListItem)
+    Private SelectedItemList As New List(Of MyListItem)
 
 #Region "UI 化"
     '结果 UI 化
@@ -36,8 +36,9 @@
             CompItemList.Clear()
             HintGetFail.Visibility = If(Loader.Input.Count = Loader.Output.Count, Visibility.Collapsed, Visibility.Visible)
             For Each item In Loader.Output
-                Dim CompItem = item.ToMiniCompItem()
+                Dim CompItem = item.ToListItem()
 
+                CompItem.Type = MyListItem.CheckType.CheckBox
                 '----添加按钮----
                 '删除按钮
                 Dim Btn_Delete As New MyIconButton
@@ -57,7 +58,7 @@
                 '右键查看详细信息界面
                 AddHandler CompItem.MouseRightButtonUp, Sub(sender As Object, e As EventArgs)
                                                             FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
-                   .Additional = {CompItem.Entry, New List(Of String), String.Empty, CompModLoaderType.Any}})
+                   .Additional = {CompItem.Tag, New List(Of String), String.Empty, CompModLoaderType.Any}})
                                                         End Sub
                 '---其它事件---
                 AddHandler CompItem.Changed, AddressOf ItemCheckStatusChanged
@@ -87,8 +88,8 @@
     Private Sub RefreshContent()
         PanProjectsMod.Children.Clear()
         PanProjectsModpack.Children.Clear()
-        Dim DataSource As List(Of MyMiniCompItem) = If(IsSearching, SearchResult, CompItemList)
-        For Each item As MyMiniCompItem In DataSource
+        Dim DataSource As List(Of MyListItem) = If(IsSearching, SearchResult, CompItemList)
+        For Each item As MyListItem In DataSource
             If IsSearching Then
                 CardProjectsMod.Visibility = Visibility.Visible
                 CardProjectsModpack.Visibility = Visibility.Collapsed
@@ -98,12 +99,12 @@
                 CardProjectsModpack.Visibility = Visibility.Visible
                 CardProjectsMod.Visibility = Visibility.Visible
             End If
-            If item.Entry.Type = CompType.Mod Then
+            If item.Tag.Type = CompType.Mod Then
                 PanProjectsMod.Children.Add(item)
-            ElseIf item.Entry.Type = CompType.ModPack Then
+            ElseIf item.Tag.Type = CompType.ModPack Then
                 PanProjectsModpack.Children.Add(item)
             Else
-                Log("[Favorites] 未知工程类型：" & item.Entry.Type)
+                Log("[Favorites] 未知工程类型：" & item.Tag.Type)
             End If
         Next
     End Sub
@@ -114,9 +115,9 @@
         Else
             Dim ModRes As Integer = 0
             Dim ModpackRes As Integer = 0
-            ModRes = CompItemList.Where(Function(e) e.Entry.Type.Equals(CompType.Mod)).Count()
+            ModRes = CompItemList.Where(Function(e) e.Tag.Type.Equals(CompType.Mod)).Count()
             CardProjectsMod.Title = $"Mod ({ModRes})"
-            ModpackRes = CompItemList.Where(Function(e) e.Entry.Type.Equals(CompType.ModPack)).Count()
+            ModpackRes = CompItemList.Where(Function(e) e.Tag.Type.Equals(CompType.ModPack)).Count()
             CardProjectsModpack.Title = $"整合包 ({ModpackRes})"
         End If
     End Sub
@@ -176,7 +177,7 @@
 
     '选中状态改变
     Private Sub ItemCheckStatusChanged(sender As Object, e As RouteEventArgs)
-        Dim SenderItem As MyMiniCompItem = sender
+        Dim SenderItem As MyListItem = sender
         If SelectedItemList.Contains(SenderItem) Then SelectedItemList.Remove(SenderItem)
         If SenderItem.Checked Then SelectedItemList.Add(SenderItem)
         RefreshBar()
@@ -214,20 +215,20 @@
     End Sub
 
     Private Sub Items_SetSelectAll(TargetStatus As Boolean)
-        For Each item As MyMiniCompItem In PanProjectsMod.Children
+        For Each item As MyListItem In PanProjectsMod.Children
             item.Checked = TargetStatus
         Next
-        For Each item As MyMiniCompItem In PanProjectsModpack.Children
+        For Each item As MyListItem In PanProjectsModpack.Children
             item.Checked = TargetStatus
         Next
         SelectedItemList = CompItemList.Where(Function(e) e.Checked).ToList()
     End Sub
 
-    Private Sub Items_CancelFavorites(Item As MyMiniCompItem)
+    Private Sub Items_CancelFavorites(Item As MyListItem)
         CompItemList.Remove(Item)
         If SelectedItemList.Contains(Item) Then SelectedItemList.Remove(Item)
         If SearchResult.Contains(Item) Then SearchResult.Remove(Item)
-        CompFavorites.Del(Item.Entry.Id)
+        CompFavorites.Del(Item.Tag.Id)
     End Sub
 
     Private Sub Page_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
@@ -242,20 +243,21 @@
         End Get
     End Property
 
-    Private SearchResult As New List(Of MyMiniCompItem)
+    Private SearchResult As New List(Of MyListItem)
     Public Sub SearchRun()
         If IsSearching Then
             '构造请求
-            Dim QueryList As New List(Of SearchEntry(Of MyMiniCompItem))
-            For Each Entry As MyMiniCompItem In CompItemList
+            Dim QueryList As New List(Of SearchEntry(Of MyListItem))
+            For Each Item As MyListItem In CompItemList
+                Dim Entry As CompProject = Item.Tag
                 Dim SearchSource As New List(Of KeyValuePair(Of String, Double))
-                SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Entry.RawName, 1))
+                SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.RawName, 1))
                 If Entry.Description IsNot Nothing AndAlso Entry.Description <> "" Then
                     SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Description, 0.4))
                 End If
-                If Entry.Entry.TranslatedName <> Entry.Entry.RawName Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Entry.TranslatedName, 1))
-                SearchSource.Add(New KeyValuePair(Of String, Double)(String.Join("", Entry.Entry.Tags), 0.2))
-                QueryList.Add(New SearchEntry(Of MyMiniCompItem) With {.Item = Entry, .SearchSource = SearchSource})
+                If Entry.TranslatedName <> Entry.RawName Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.TranslatedName, 1))
+                SearchSource.Add(New KeyValuePair(Of String, Double)(String.Join("", Entry.Tags), 0.2))
+                QueryList.Add(New SearchEntry(Of MyListItem) With {.Item = Item, .SearchSource = SearchSource})
             Next
             '进行搜索
             SearchResult = Search(QueryList, PanSearchBox.Text, MaxBlurCount:=6, MinBlurSimilarity:=0.35).Select(Function(r) r.Item).ToList

@@ -541,13 +541,13 @@
                     If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " 万", DownloadCount))
             Return NewItem
         End Function
-        Public Function ToMiniCompItem() As MyMiniCompItem
-            Dim Result As New MyMiniCompItem()
+        Public Function ToListItem() As MyListItem
+            Dim Result As New MyListItem()
             Result.Title = TranslatedName
-            Result.Description = Description.Replace(vbCr, "").Replace(vbLf, "")
+            Result.Info = Description.Replace(vbCr, "").Replace(vbLf, "")
             Result.Logo = LogoUrl
             Result.Tags = Tags
-            Result.Entry = Me
+            Result.Tag = Me
             Return Result
         End Function
         Public Function GetControlLogo() As String
