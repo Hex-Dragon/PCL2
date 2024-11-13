@@ -1626,12 +1626,16 @@ Retry:
         Public Shared Function GetAllCompProjects(Input As List(Of String)) As List(Of CompProject)
             If Not Input.Any() Then Return New List(Of CompProject)
             Dim RawList As List(Of String) = Input
-            Dim ModrinthProjectIds As List(Of String)
-            Dim CurseForgeProjectIds As List(Of String)
+            Dim ModrinthProjectIds As New List(Of String)
+            Dim CurseForgeProjectIds As New List(Of String)
             Dim Res As List(Of CompProject) = New List(Of CompProject)
-            CurseForgeProjectIds = RawList.Where(Function(e) IsFromCurseForge(e)).ToList()
-            ModrinthProjectIds = RawList.Where(Function(e) Not IsFromCurseForge(e)).ToList()
-            Dim RawProjectsData As JArray
+            For Each Id In RawList
+                If IsFromCurseForge(Id) Then
+                    CurseForgeProjectIds.Add(Id)
+                Else
+                    ModrinthProjectIds.Add(Id)
+                End If
+            Next
             '在线信息获取
             Dim FinishedTask = 0
             Dim NeedCompleteTask = 0
@@ -1639,14 +1643,10 @@ Retry:
                 NeedCompleteTask += 1
                 RunInNewThread(Sub()
                                    Try
-                                       RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
-                                       "POST", "{""modIds"": [" & CurseForgeProjectIds.Join(",") & "]}", "application/json"))("data")
-                                       For Each RawData In RawProjectsData
-                                           Res.Add(New CompProject(RawData))
-                                       Next
+                                       Res.AddRange(CompRequest.GetListByIdsFromCurseforge(CurseForgeProjectIds))
                                        FinishedTask += 1
                                    Catch ex As Exception
-                                       Log(ex, "[Favorites] 获取 CurseForge 数据失败")
+                                       Log(ex, "[Favorites] 获取 CurseForge 数据失败", LogLevel.Hint)
                                    End Try
                                End Sub, "Favorites CurseForge")
             End If
@@ -1654,13 +1654,10 @@ Retry:
                 NeedCompleteTask += 1
                 RunInNewThread(Sub()
                                    Try
-                                       RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{ModrinthProjectIds.Join(""",""")}""]", IsJson:=True)
-                                       For Each RawData In RawProjectsData
-                                           Res.Add(New CompProject(RawData))
-                                       Next
+                                       Res.AddRange(CompRequest.GetListByIdsFromModrinth(ModrinthProjectIds))
                                        FinishedTask += 1
                                    Catch ex As Exception
-                                       Log(ex, "[Favorites] 获取 Modrinth 数据失败")
+                                       Log(ex, "[Favorites] 获取 Modrinth 数据失败", LogLevel.Hint)
                                    End Try
                                End Sub, "Favorites Modrinth")
             End If
@@ -1676,5 +1673,36 @@ Retry:
         ''' </summary>
         Public Shared FavoritesList As List(Of String)
 
+    End Class
+
+    Class CompRequest
+        ''' <summary>
+        ''' 通过一堆 ID 从 Modrinth 那获取项目信息 
+        ''' </summary>
+        ''' <param name="Ids"></param>
+        ''' <returns></returns>
+        Public Shared Function GetListByIdsFromModrinth(Ids As List(Of String)) As List(Of CompProject)
+            Dim Res As New List(Of CompProject)
+            Dim RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{Ids.Join(""",""")}""]", IsJson:=True)
+            For Each RawData In RawProjectsData
+                Res.Add(New CompProject(RawData))
+            Next
+            Return Res
+        End Function
+
+        ''' <summary>
+        ''' 通过一堆 ID 从 CurseForge 那获取项目信息 
+        ''' </summary>
+        ''' <param name="Ids"></param>
+        ''' <returns></returns>
+        Public Shared Function GetListByIdsFromCurseforge(Ids As List(Of String)) As List(Of CompProject)
+            Dim Res As New List(Of CompProject)
+            Dim RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
+                                       "POST", "{""modIds"": [" & Ids.Join(",") & "]}", "application/json"))("data")
+            For Each RawData In RawProjectsData
+                Res.Add(New CompProject(RawData))
+            Next
+            Return Res
+        End Function
     End Class
 End Module
