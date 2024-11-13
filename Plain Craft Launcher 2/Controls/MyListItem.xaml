@@ -22,7 +22,7 @@
     <!--<Border x:Name="RectBack" CornerRadius="3" RenderTransformOrigin="0.5,0.5" SnapsToDevicePixels="True" IsHitTestVisible="False" Opacity="0" Grid.ColumnSpan="4" Background="{DynamicResource ColorBrush7}" BorderBrush="{DynamicResource ColorBrush6}" BorderThickness="1" />-->
     <!--<StackPanel VerticalAlignment="Center">-->
     <TextBlock Grid.Row="1" SnapsToDevicePixels="False" UseLayoutRounding="False" HorizontalAlignment="Left" x:Name="LabTitle" IsHitTestVisible="False" Grid.Column="3" Text="{Binding Title, ElementName=PanBack}" TextTrimming="CharacterEllipsis" FontSize="{Binding FontSize, ElementName=PanBack}" Foreground="{Binding Foreground, ElementName=PanBack}" Margin="4,0,0,0" />
-    <StackPanel Orientation="Horizontal" x:Name="PanInfo" Grid.Row="2" Grid.Column="3" Visibility="Collapsed">
+    <StackPanel Orientation="Horizontal" x:Name="PanInfo" Grid.Row="2" Grid.Column="3" Visibility="Collapsed" IsHitTestVisible="False">
         <StackPanel x:Name="PanTags" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,0,-3,0">
             <!--<Border Background="{DynamicResource ColorBrush6}" Padding="3,1" CornerRadius="3" Margin="0,0,4,0" SnapsToDevicePixels="True" UseLayoutRounding="False">
                 <TextBlock Text="科技" Foreground="{DynamicResource ColorBrush2}" FontSize="11" />

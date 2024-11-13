@@ -30,9 +30,9 @@
     '结果 UI 化
     Private Sub Load_OnFinish()
         Try
-            RemoveHandler PanSearchBox.TextChanged, AddressOf SearchRun
+            AllowSearch = False
             PanSearchBox.Text = String.Empty
-            AddHandler PanSearchBox.TextChanged, AddressOf SearchRun
+            AllowSearch = True
             CompItemList.Clear()
             HintGetFail.Visibility = If(Loader.Input.Count = Loader.Output.Count, Visibility.Collapsed, Visibility.Visible)
             For Each item In Loader.Output
@@ -243,8 +243,10 @@
         End Get
     End Property
 
+    Private AllowSearch As Boolean = True
     Private SearchResult As New List(Of MyListItem)
-    Public Sub SearchRun()
+    Public Sub SearchRun() Handles PanSearchBox.TextChanged
+        If Not AllowSearch Then Exit Sub
         If IsSearching Then
             '构造请求
             Dim QueryList As New List(Of SearchEntry(Of MyListItem))
