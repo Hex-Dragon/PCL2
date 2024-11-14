@@ -46,6 +46,31 @@
     '勾选条
     Public RectCheck As Border
 
+
+    ''' <summary>
+    ''' Tags 的存放 StackPanel
+    ''' </summary>
+    Public _PanTags As StackPanel
+    Public ReadOnly Property PanTags As StackPanel
+        Get
+            If _PanTags IsNot Nothing Then Return _PanTags
+            Dim NewStack As New StackPanel With {
+            .IsHitTestVisible = False,
+            .Orientation = Orientation.Horizontal,
+            .VerticalAlignment = VerticalAlignment.Bottom,
+            .Margin = New Thickness(0, 0, -3, 0)
+            }
+            SetColumn(NewStack, 3)
+            SetRow(NewStack, 2)
+            PanBack.Children.Add(NewStack)
+            _PanTags = NewStack
+            Return _PanTags
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' 标签，可以传入 String 和 List(Of String)
+    ''' </summary>
     Public WriteOnly Property Tags As Object
         Set(value As Object)
             Dim list As New List(Of String)
@@ -56,6 +81,7 @@
                 list = CType(value, List(Of String))
             End If
             PanTags.Children.Clear()
+            PanTags.Visibility = If(list.Any(), Visibility.Visible, Visibility.Collapsed)
             For Each TagText In list
                 Dim NewTag As New Border With {
                     .Background = New SolidColorBrush(Color.FromArgb(17, 0, 0, 0)),
@@ -93,8 +119,9 @@
                     .Margin = New Thickness(4, 0, 0, 0),
                     .Opacity = 0.6
                 }
-                PanInfo.Children.Add(Lab)
-                PanInfo.Visibility = Visibility.Visible
+                SetColumn(Lab, 4)
+                SetRow(Lab, 2)
+                PanBack.Children.Add(Lab)
                 _LabInfo = Lab
                 '<TextBlock Grid.Row="2" SnapsToDevicePixels="False" UseLayoutRounding="False" HorizontalAlignment="Left" x:Name = "LabInfo" IsHitTestVisible="False" Grid.Column="2" 
                 'TextTrimming = "CharacterEllipsis" Visibility="Collapsed" FontSize="12" Foreground="{StaticResource ColorBrushGray2}" Margin="4,0,0,0" />
