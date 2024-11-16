@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Canceled!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
@@ -87,7 +86,7 @@ You can change the login method in "Properties → Settings → Server".</s:Stri
     <s:String x:Key="LangPageNameModDownload">Mods Download</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">Modpacks Download</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">Resource Packs Download</s:String>
-    <s:String x:Key="LangHintDropFileFromRecycleBin">请先将文件从回收站还原，再拖入 PCL！</s:String>
+    <s:String x:Key="LangHintDropFileFromRecycleBin">Please restore the file from the Recycle Bin and then drag it into PCL!</s:String>
     <s:String x:Key="LangThemeRealWhite">TRUE WHITE</s:String>
     <s:String x:Key="LangThemeRealFunny">TRUE FUNNY COLOR</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip8">When the mount of sponsorship reaches ¥23.33, send the term "解锁码" (Unlock Code) to the developer on Afdian to unlock.

@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Zrušené!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
@@ -251,8 +250,8 @@ Ak ste vytvorili stabilnú online domovskú stránku, môžete kliknutím na ten
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI Dashboard Lite (Autori: Silverteal, Mxmilu666)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageH">PCL Homepage Market (Autor: Lingyun)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageI">PCL Update Log (Autor: Joker2184)</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageJ">Špecifikácia nových funkcií PCL (Autor: WForst-Breeze)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageK">Rozcestník OpenMCIM (Autor: SALTWOOD)</s:String>
     <s:String x:Key="LangSetFuncHidden">Skrytie funkcií</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Môžete skryť nepotrebné stránky alebo zakázať konkrétne funkcie. Stlačením klávesy "F12" v akomkoľvek rozhraní môžete dočasne zobraziť skryté funkcie.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Hlavné rozhranie</s:String>
@@ -275,10 +274,10 @@ Ak ste vytvorili stabilnú online domovskú stránku, môžete kliknutím na ten
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">Email</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">Skryje zobrazenie emailu tretích strán a pokúsi sa zaheslovať email, aby sa zabránilo zverejneniu súkromia.
 Po tejto zmene musíte reštartovať spúšťač.</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">版本管理</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">隐藏启动按钮下方的版本选择与版本设置入口。</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialModUpdate">Mod 更新</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialModUpdateToolTip">禁止在 Mod 管理页面更新 Mod。</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">Správa verzií</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">Skryť vstup pre výber a nastavenie verzie pod tlačidlom spustenia.</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialModUpdate">Aktualizácia módu</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialModUpdateToolTip">Zakázať aktualizáciu módov na stránke správy módov.</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">Skrytie funkcií</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">Iba skryje túto kartu, nastavený obsah je stále platný.
 Vyhnite sa tomu, aby sa "Skrytie funkcií" zmenilo, keď máte otvorenú stránku "Personalizácia".</s:String>
@@ -421,7 +420,7 @@ Stlačte znovu "F11" na opustenie režimu zobrazenia skrytých inštancií.</s:S
     <s:String x:Key="LangDownloadAll">Všetky verzie</s:String>
     <s:String x:Key="LangDownloadCategory">Typ: </s:String>
     <s:String x:Key="LangDownloadUnknown">Neznáma verzia</s:String>
-    <s:String x:Key="LangDownloadServer">下载服务端</s:String>
+    <s:String x:Key="LangDownloadServer">Stiahnutie servera</s:String>
     <s:String x:Key="LangDownloadCompToCurseForge">CurseForge</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">Modrinth</s:String>
     <s:String x:Key="LangDownloadCompToMCMod">MCMod</s:String>
@@ -658,7 +657,7 @@ Prosím, skontrolujte internet a potom sa znovu pokúste.</s:String>
     <s:String x:Key="LangLaunchLeftAbortTask">Koniec spracovania</s:String>
     <s:String x:Key="LangLaunchLeftFinished">Dokončené</s:String>
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">Exportovanie spustiteľného skriptu...</s:String>
-    <s:String x:Key="LangLaunchLeftExceptionModpackInstallFail">自动安装整合包失败：{0}</s:String>
+    <s:String x:Key="LangLaunchLeftExceptionModpackInstallFail">Automatická inštalácia balíka zlyhala: {0}</s:String>
     <s:String x:Key="LangLaunchRightSnapshot">Tip snapshotu</s:String>
     <s:String x:Key="LangLaunchRightLog">Log spustenia</s:String>
     <s:String x:Key="LangLaunchRightLabHint1">Verzia snapshot obsahuje testované funkcie, ktoré neboli oficiálne vydané a je dostupná iba sponzorom. Prosím, neposielajte ju nikomu inému ani nepoužívajte na vytváranie modpackov!</s:String>
@@ -1021,11 +1020,11 @@ Ak nie ste vytvárali modpack alebo často aktualizujete spúšťač, táto voľ
     <s:String x:Key="LangPageSetupSystemExportSettings">Export nastavení</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">Import nastavení</s:String>
     <s:String x:Key="LangPageSetupSystemInDev">Táto funkcia je stále vo vývoji!</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModManageStyle">Mod 管理样式</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">在 Mod 管理页面中，Mod 项的显示方式</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">标题显示译名，详情显示文件名</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleB">标题显示文件名，详情显示译名</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModTitle">Mod 与整合包</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyle">Štýl správy módov</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">Spôsob zobrazenia položiek módov na stránke správy módov.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">Názov zobrazuje preklad, detaily zobrazujú názov súboru.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleB">Názov zobrazuje názov súboru, detaily zobrazujú preklad.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModTitle">Módy a integračné balíky</s:String>
     <s:String x:Key="LangPageVersionLeftOverview">Prehľad</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">Nastavenia</s:String>
     <s:String x:Key="LangPageVersionLeftModManagement">Modifikácie</s:String>
@@ -1239,10 +1238,10 @@ Ak ste nezměnili relevantné súbory, prosím, nekontrolujte túto položku.</s
     <s:String x:Key="LangModMainAprilFoolTipC">Hmm... Sugerujem, že len kliknete na vlajku :)</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">Malá biela vlajka vždy čaká na vás...</s:String>
     <s:String x:Key="LangModMainExceptionNoHelpFound">Neboli nájdené žiadne dostupné pomoci. Môžete skryť Centrum pomoci v "Nastaveniach → Osobné nastavenie → Skrývanie funkcií", ak nie je potrebné.</s:String>
-    <s:String x:Key="LangModMainExceptionNoFileFound">未找到帮助文件：{0}</s:String>
+    <s:String x:Key="LangModMainExceptionNoFileFound">Súbor nápovedy nenájdený: {0}</s:String>
     <s:String x:Key="LangModMainExceptionNoTitleArgFound">未找到 Title 项</s:String>
-    <s:String x:Key="LangModMainExceptionNoEventTypeArgFound">未找到 EventType 项</s:String>
-    <s:String x:Key="LangModMainExceptionNoXamlFileFound">未找到帮助条目 .json 对应的 .xaml 文件（{0}）</s:String>
+    <s:String x:Key="LangModMainExceptionNoEventTypeArgFound">Položka EventType nenájdená.</s:String>
+    <s:String x:Key="LangModMainExceptionNoXamlFileFound">Súbor .xaml zodpovedajúci položke nápovedy .json ({0}) nenájdený.</s:String>
     <s:String x:Key="LangModEventOpeningWeb">Otvára sa, prosím čakajte...</s:String>
     <s:String x:Key="LangModEventStartInstance">Spúšťa sa {0}...</s:String>
     <s:String x:Key="LangModEventChoseAnInstance">Prosím, najprv vyberte inštanciu!</s:String>
@@ -1350,10 +1349,10 @@ Prosím, skontrolujte, či je typ udalosti správne vyplnený, či je PCL najnov
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">Neočakávaný výsledok. ({0})</s:String>
     <s:String x:Key="LangModCompModDependentCount">závislosť</s:String>
     <s:String x:Key="LangModCompModDependentCountP">závislosti</s:String>
-    <s:String x:Key="LangModCompModDownload">stiahnuť</s:String>
-    <s:String x:Key="LangModCompModDownloadP">stiahnutia</s:String>
+    <s:String x:Key="LangModCompModDownload">Stiahnuté {0}-krát</s:String>
+    <s:String x:Key="LangModCompModDownloadP">Stiahnuté {0}-krát</s:String>
     <s:String x:Key="LangModCompModGameVersion">verzia hry</s:String>
-    <s:String x:Key="LangModCompModUpdateTime">aktualizované {0}</s:String>
+    <s:String x:Key="LangModCompModUpdateTime">Aktualizované {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">Uložiť ako</s:String>
     <s:String x:Key="LangModCompModDependent">Závislosti</s:String>
     <s:String x:Key="LangModCompModAlternateVersion">Dostupné verzie</s:String>
@@ -1438,7 +1437,7 @@ Prosím, potvrďte, že problém pretrváva v najnovšej verzii po aktualizácii
     <s:String x:Key="LangModValidateFileNoEndWithDot">Názov súboru nemôže končiť bodkou!</s:String>
     <s:String x:Key="LangModValidateFileNoContain">Názov súboru nemôže obsahovať "%"!</s:String>
     <s:String x:Key="LangModValidateFileNoContent">Názov súboru nemôže byť "%"!</s:String>
-    <s:String x:Key="LangModValidateFileNoSpecialName">文件名不能包含这一特殊格式！</s:String>
+    <s:String x:Key="LangModValidateFileNoSpecialName">Názov súboru nemôže obsahovať tento špeciálny formát!</s:String>
     <s:String x:Key="LangModValidateFileNoSameName">Názov súboru už existuje!</s:String>
     <s:String x:Key="LangModValidateFileNoParentFolder">Rodičovský priečinok neexistuje: {0}</s:String>
     <s:String x:Key="LangModValidateFileHeadUriIncorrect">Nesprávna hlava cesty priečinku!</s:String>
@@ -1628,35 +1627,35 @@ Ak táto možnosť nie je dostupná, prosím, vyberte "Nastaviť heslo", a prihl
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">Preimenovanie JSON súboru inštancie (Stranný načítavateľ)</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">Inštalácia modpacku HMCL: </s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">Inštalácia modpacku MMC: </s:String>
-    <s:String x:Key="LangModModpackNoAddons">Nemôžem inštalovaliť, pretože modpack neposkytuje dodatočné informácie o verzii hry!</s:String>
-    <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
-    <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
-    <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
-    <s:String x:Key="LangModModpackModrinthNoGameInfo">该 Modrinth 整合包未提供游戏版本信息，无法安装！</s:String>
-    <s:String x:Key="LangModModpackCurseforgeNoGameInfo">该 CurseForge 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackNoAddons">Tento integračný balík MCBBS neposkytuje dodatočné informácie o verzii hry, a preto sa nedá nainštalovať!</s:String>
+    <s:String x:Key="LangModModpackHMCLNoGameInfo">Tento integračný balík HMCL neposkytuje informácie o verzii hry, a preto sa nedá nainštalovať!</s:String>
+    <s:String x:Key="LangModModpackMMCNoGameInfo">Tento integračný balík MMC neposkytuje informácie o verzii hry, a preto sa nedá nainštalovať!</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfo">Tento integračný balík MCBBS neposkytuje informácie o verzii hry, a preto sa nedá nainštalovať!</s:String>
+    <s:String x:Key="LangModModpackModrinthNoGameInfo">Tento integračný balík z Modrinth neposkytuje informácie o verzii hry, a preto sa nedá nainštalovať!</s:String>
+    <s:String x:Key="LangModModpackCurseforgeNoGameInfo">Tento integračný balík z CurseForge neposkytuje informácie o verzii hry, a preto sa nedá nainštalovať!</s:String>
     <s:String x:Key="LangModModpackTaskMCBBSModpackInstall">Inštalácia modpacku MCBBS: </s:String>
-    <s:String x:Key="LangModModpackDialogContentInstallTip">Prosím, vyberte cieľovú priečinku inštalácie v nasledujúcom okne, musí to byť prázdny priečinok.</s:String>
-    <s:String x:Key="LangModModpackDialogTitleInstall">安装</s:String>
+    <s:String x:Key="LangModModpackDialogContentInstallTip">Ďalej vyberte prázdny priečinok, do ktorého sa bude inštalácia vykonávať.</s:String>
+    <s:String x:Key="LangModModpackDialogTitleInstall">Inštalácia</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">Vyberte cieľovú priečinku inštalácie (musí to byť prázdny priečinok)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Cesty priečinkov Minecraft nemôžu obsahovať vykričníky (!) alebo bodkočiarky (;)!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Prosím, vyberte prázdny priečinok ako cieľovú priečinku inštalácie!</s:String>
-    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
+    <s:String x:Key="LangModModpackExtractArchive">Rozbalenie archívu</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Pridané do zoznamu priečinkov: {0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
-    <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
-    <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
-    <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
-    <s:String x:Key="LangModModpackExceptionModpackTooOld">该整合包版本过老，已不支持进行安装！</s:String>
-    <s:String x:Key="LangModModpackExceptionModrinthModpackError">Modrinth 整合包安装信息存在问题</s:String>
-    <s:String x:Key="LangModModpackExceptionHMCLModpackError">HMCL 整合包安装信息存在问题</s:String>
-    <s:String x:Key="LangModModpackExceptionCurseforgeModpackError">CurseForge 整合包安装信息存在问题</s:String>
-    <s:String x:Key="LangModModpackExceptionMMCModpackError">MMC 整合包安装信息存在问题</s:String>
-    <s:String x:Key="LangModModpackExceptionMCBBSModpackError">MCBBS 整合包安装信息存在问题</s:String>
-    <s:String x:Key="LangModModpackDialogTitleAnotherLauncher">换用整合包启动器？</s:String>
-    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">整合包中似乎自带了启动器，是否换用它继续安装？
-通常推荐这样做，以获得最佳体验。
-即将打开：{0}</s:String>
-    <s:String x:Key="LangModModpackExceptionNoModpackFound">未能找到适合的文件结构，这可能不是一个 MC 压缩包</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInsatllFail">Manuálna inštalácia integračného balíka zlyhala.</s:String>
+    <s:String x:Key="LangModModpackExceptionOpenFileFail">Otváranie súboru integračného balíka zlyhalo.</s:String>
+    <s:String x:Key="LangModModpackExceptionRarFormat">PCL nedokáže spracovať archívy vo formáte RAR.  Prosím, rozbaľte archív a následne ho znova zabaľte do formátu ZIP a skúste to znova.</s:String>
+    <s:String x:Key="LangModModpackExceptionReadFileFail">Otváranie súboru integračného balíka zlyhalo. Súbor môže byť poškodený alebo v nepodporovanom formáte archívu.</s:String>
+    <s:String x:Key="LangModModpackExceptionModpackTooOld">Tento integračný balík je príliš na starej verzie a už nie je možné ho nainštalovať!</s:String>
+    <s:String x:Key="LangModModpackExceptionModrinthModpackError">Informácie o inštalácii integračného balíka z Modrinth obsahujú chyby.</s:String>
+    <s:String x:Key="LangModModpackExceptionHMCLModpackError">Informácie o inštalácii integračného balíka HMCL obsahujú chyby.</s:String>
+    <s:String x:Key="LangModModpackExceptionCurseforgeModpackError">Informácie o inštalácii integračného balíka z CurseForge obsahujú chyby.</s:String>
+    <s:String x:Key="LangModModpackExceptionMMCModpackError">Informácie o inštalácii integračného balíka z MMC obsahujú chyby.</s:String>
+    <s:String x:Key="LangModModpackExceptionMCBBSModpackError">Informácie o inštalácii integračného balíka z MCBBS obsahujú chyby.</s:String>
+    <s:String x:Key="LangModModpackDialogTitleAnotherLauncher">Použiť iný spúšťač integračných balíkov?</s:String>
+    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">Zdá sa, že integračný balík obsahuje vlastný spúšťač. Chceli by ste ho použiť na dokončenie inštalácie?
+Odporúča sa použiť tento spôsob pre optimálny zážitok.
+Otvorenie: {0}</s:String>
+    <s:String x:Key="LangModModpackExceptionNoModpackFound">Nebola nájdená vhodná štruktúra súboru. Toto nemusí byť balík pre Minecraft.</s:String>
     <s:String x:Key="LangModWatcherMcCrashed">Detekovaný pád Minecraft, začala analýza chyby...</s:String>
     <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">Preimenovanie podkľúča, ktoré obsahuje podkľúče, nie je podporované: {0}.</s:String>
     <s:String x:Key="LangModBaseExceptionPathIncorrect">Cesta nie je zahrnutá: {0}</s:String>
@@ -1745,20 +1744,20 @@ Týmto prepíšete JSON a JAR súbor, ale neovplyvní to súbory izolácie inšt
     <s:String x:Key="LangModDownloadLibTaskDownloadNeoForge">Stiahnite NeoForge {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">Stiahnite LiteLoader {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">Stiahnite Fabric {0}</s:String>
-    <s:String x:Key="LangModDownloadLibTaskDownloadServer">Minecraft {0} 服务端下载</s:String>
-    <s:String x:Key="LangModDownloadLibTaskDownloadServerBuildServer">构建服务端</s:String>
-    <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">该服务端正在下载中！</s:String>
-    <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">下载服务端文件</s:String>
-    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">{0} 版本没有提供服务端文件</s:String>
-    <s:String x:Key="LangModDownloadLibExceptionInstallInstallFail">开始合并安装失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServer">Stiahnutie servera Minecraft {0}</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerBuildServer">Vytvorenie servera</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">Server sa práve sťahuje!</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">Stiahnutie súborov servera</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">Mojang neposkytuje oficiálne súbory servera pre Minecraft {0}, preto ich nie je možné stiahnuť.  Ústup!</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallInstallFail">Spustenie zlúčenia inštalácie zlyhalo.</s:String>
     <s:String x:Key="LangModCrashDialogTitleAnalysisResult">Výsledok analýzy</s:String>
     <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft sa zrútil</s:String>
     <s:String x:Key="LangModCrashViewLog">Log</s:String>
     <s:String x:Key="LangModCrashExportCrashReport">Exportovať hlásenie o páde</s:String>
     <s:String x:Key="LangModCrashHintExportCrashReportSuccess">Hlásenie o páde úspešne exportované!</s:String>
     <s:String x:Key="LangModCrashCrashReasonNoReason">Ľutujeme, PCL nemôže určiť dôvod pádu.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonHelpTip">Ľutujeme, váš hru sa niečo pokazilo...
-Ak hľadáte pomoc, prosím, exportujte hlásenie o páde namiesto toho, aby ste robili snímku tejto obrazovky, a odosielajte ho iným.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonHelpTip">Je nám ľúto, ale vaša hra má nejaké problémy…
+Ak potrebujete pomoc, pošlite chybový protokol adresátovi, nie fotografiu alebo snímku obrazovky tohto okna.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAA">Hra sa zrútila, pretože súbory modifikácií boli extrahované.
 Jednoducho umiestnite súbory modifikácií do priečinka bez extrahovania; inak sa hra zrúti.
 
@@ -1918,33 +1917,30 @@ Ak nie sú poskytnuté žiadne informácie, rozwažte prehliadnutie správ o chy
 {0}
 
 Prosím, prijmite vhodné opatrenia na základe poskytnutých informácií.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBX">Mod loader mohol poskytnúť informácie o chybe. Prosím, prijmite vhodné opatrenia na základe protokolov a správ o chybách.
-Ak nie sú poskytnuté žiadne informácie, rozwažte prehliadnutie správ o chybách na identifikáciu problémov.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBX">Načítač módov pravdepodobne poskytol chybovú správu.  Riešte problém na základe protokolu chýb. Ak nerozumiete angličtine, použite prekladač.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBY">Fabric poskytol nasledujúce riešenia:
 {0}
 
 Prosím, prijmite vhodné opatrenia na základe poskytnutých informácií.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric mohol poskytnúť riešenia. Prosím, prijmite vhodné opatrenia na základe protokolov a správ o chybách.
-Ak nie je poskytnuté žiadne riešenie, môžete si prezrieť správy o chybách, aby ste pochopili, ako k chybe došlo.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric pravdepodobne poskytol riešenie.  Riešte problém na základe protokolu chýb.  Ak nerozumiete angličtine, použite prekladač.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCA">Forge poskytol nasledujúce informácie o chybe:
 {0}
 
 Prosím, prijmite vhodné opatrenia na základe poskytnutých informácií.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge mohol poskytnúť riešenia. Prosím, prijmite vhodné opatrenia na základe protokolov a správ o chybách.
-Ak nie je poskytnuté žiadne riešenie, môžete si prezrieť správy o chybách, aby ste pochopili, ako k chybe došlo.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge pravdepodobne poskytol chybovú správu. Riešte problém na základe informácií v protokole chýb. Ak nerozumiete angličtine, použite prekladač.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCC">Hra sa zrútila, ale analýza je nemožná, pretože PCL nedokázal nájsť príslušné logovacie súbory.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCD">部分 Mod 注入失败，导致游戏出错。
-这一般代表着部分 Mod 与其他 Mod 或当前环境不兼容，或是它存在 Bug。
-你可以尝试逐步禁用 Mod，然后观察游戏是否还会崩溃，以此定位导致崩溃的 Mod。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCE">你所安装的 Mod 不兼容：
+    <s:String x:Key="LangModCrashCrashReasonReasonCD">Injekcia niektorých módov zlyhala, čo spôsobilo chybu v hre.
+To zvyčajne znamená, že niektoré módy nie sú kompatibilné s inými módmi alebo aktuálnym prostredím, alebo obsahujú chybu.
+Môžete skúsiť postupne vypínať módy a pozorovať, či hra stále havaruje, aby ste identifikovali mód spôsobujúci haváriu.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCE">Inštalované módy nie sú kompatibilné:
 {0}
 
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCF">你所安装的 Mod 不兼容，Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
+Riešte problém na základe uvedených informácií. Ak nerozumiete angličtine, použite prekladač.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCF">Inštalované módy nie sú kompatibilné. Načítač módov pravdepodobne poskytol chybovú správu.  Riešte problém na základe protokolu chýb. Ak nerozumiete angličtine, použite prekladač.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL prijal dôvod chyby bez podrobných informácií ({0}). Prosím, zašlite spätnú väzbu autorovi, aby ste získali podrobné informácie.</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">Okrem toho, </s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">rozwažte prehliadnutie správ o chybách na identifikáciu problémov.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">ak hľadáte pomoc, exportujte radu o chybe namiesto toho, aby ste si zobrali snímku obrazovky tohto okna, a pošlite ju iným.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">Ak potrebujete pomoc, pošlite chybový protokol, nie fotografiu alebo snímku tohto okna.</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">Okrem toho, momentálne používate zastaranú verziu PCL. Aktualizáciou na najnovšiu verziu môžete vyriešiť tento problém.
 Na aktualizáciu PCL, prejdite na "Nastavenia → Spustenie → Kontrola aktualizácií".</s:String>
     <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">Znovu otvoriť webovú stránku</s:String>
