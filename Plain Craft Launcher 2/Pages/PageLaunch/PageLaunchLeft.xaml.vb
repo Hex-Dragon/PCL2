@@ -677,6 +677,7 @@ ExitRefresh:
         If CurrentState = 3 Then
             FrmLaunchLeft.BtnMore.Visibility = FrmLaunchLeft.BtnVersion.Visibility
         End If
+        SetColumnSpan(BtnVersion, If(FrmLaunchLeft.BtnMore.Visibility.Equals(Visibility.Visible), 1, 2)) ' #4145 多语言界面适配
     End Sub
     '取消按钮
     Private Sub BtnCancel_Click() Handles BtnCancel.Click
