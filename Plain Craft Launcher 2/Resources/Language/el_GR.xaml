@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Ακυρώθηκε!</s:String>
     <s:String x:Key="LangDialogBtnOK">Εντάξει</s:String>
@@ -22,27 +21,27 @@
 Συνιστάται ιδιαίτερα η επανεγκατάσταση του παιχνιδιού μετά τη μετάβαση σε σύστημα 64-bit!</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL Σφάλμα Αρχικοποίησης</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">Σφάλμα Εκτέλεσης Περιβάλλοντος</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">Η έκδοση του .NET Framework είναι πολύ χαμηλή ή κατεστραμμένη. Κάντε λήψη και εγκαταστήστε το .NET Framework 4.6.2 από την τοποθεσία Web που ανοίξατε και προσπαθήστε ξανά.</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">Η έκδοση του .NET Framework που έχετε είναι πολύ χαμηλή ή κατεστραμμένη. Παρακαλούμε κατεβάσετε και εγκαταστήστε ξανά το .NET Framework 4.6.2!</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Άγνωστο Σφάλμα</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">Παρουσιάστηκε άγνωστο σφάλμα στο πρόγραμμα.</s:String>
     <s:String x:Key="LangTitleDownload">Λήψη</s:String>
     <s:String x:Key="LangTitleHome">Εκκίνηση</s:String>
     <s:String x:Key="LangTitleSetup">Ρυθμίσεις</s:String>
-    <s:String x:Key="LangTitleLink">Φιλοξενία</s:String>
+    <s:String x:Key="LangTitleLink">Σε απευθείας σύνδεση</s:String>
     <s:String x:Key="LangTitleOther">Περισσότερα</s:String>
     <s:String x:Key="LangToolTipBackToTop">Επιστροφή στην Κορυφή</s:String>
     <s:String x:Key="LangToolTipDownload">Διαχείριση Λήψεων</s:String>
     <s:String x:Key="LangToolTipSurrender">Παράδοση</s:String>
     <s:String x:Key="LangToolTipCloseMinecraft">Κλείστε το Minecraft</s:String>
-    <s:String x:Key="LangDialogBtnUpdateFullLog">Γεμάτος</s:String>
-    <s:String x:Key="LangDialogUpdateTo">Το PCL {0} Ενημερώθηκε</s:String>
-    <s:String x:Key="LangDialogPolicyContent">Πριν χρησιμοποιήσετε το PCL, παρακαλώ συμφωνήστε με τους Όρους Υπηρεσίας και την Αποποίηση Ευθύνης του PCL.</s:String>
-    <s:String x:Key="LangDialogPolicyTitle">Εξουσιοδότηση Συμφωνίας</s:String>
+    <s:String x:Key="LangDialogBtnUpdateFullLog">Πλήρες Ημερολόγιο Ενημερώσεων</s:String>
+    <s:String x:Key="LangDialogUpdateTo">Το PCL έχει ενημερωθεί σε {0}</s:String>
+    <s:String x:Key="LangDialogPolicyContent">Πριν χρησιμοποιήσετε το PCL, συμφωνήστε με τη Συμφωνία Χρήστη του PCL και την Αποποίηση ευθυνών.</s:String>
+    <s:String x:Key="LangDialogPolicyTitle">Έγκριση πρωτοκόλλου</s:String>
     <s:String x:Key="LangDialogBtnAgree">Συμφωνώ</s:String>
     <s:String x:Key="LangDialogBtnDeny">Απόρριψη</s:String>
-    <s:String x:Key="LangDialogBtnPolicyContent">ToS &amp; Αρνηση</s:String>
-    <s:String x:Key="LangHintDebugWarning">[Λειτουργία Αποσφαλμάτωσης] Το PCL εκτελείται σε λειτουργία εντοπισμού σφαλμάτων, γεγονός που μπορεί να προκαλέσει υποβάθμιση της απόδοσης. Παρακαλώ ΜΗΝ το ενεργοποιήσετε εκτός εάν είναι απαραίτητο!</s:String>
-    <s:String x:Key="LangDialogTitleTip">Συμβουλή</s:String>
+    <s:String x:Key="LangDialogBtnPolicyContent">Προβολή συμφωνίας χρήστη και αποποίησης ευθύνης</s:String>
+    <s:String x:Key="LangHintDebugWarning">[Λειτουργία εντοπισμού σφαλμάτων] Το PCL εκτελείται σε λειτουργία εντοπισμού σφαλμάτων, η οποία μπορεί να προκαλέσει υποβάθμιση της απόδοσης, γι' αυτό μην την ενεργοποιείτε, εκτός αν είναι απαραίτητο!</s:String>
+    <s:String x:Key="LangDialogTitleTip">προτροπή</s:String>
     <s:String x:Key="LangDialogHardcoreFanTheme">Ναι! Έχετε χρησιμοποιήσει PCL 99 φορές, σας ευχαριστούμε για τη μακροχρόνια υποστήριξή σας!
 Το κρυφό θέμα «Σκληροί Οπαδοί» ξεκλειδώθηκε!</s:String>
     <s:String x:Key="LangDialogCloseOnDownloading">Υπάρχει ακόμη μια μη ολοκληρωμένη εργασία λήψης. Είστε βέβαιοι ότι θέλετε να σταματήσετε;</s:String>
