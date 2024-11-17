@@ -89,9 +89,9 @@
         '设置 UI
         LabTitle.Text = "登录 Minecraft"
         LabCaption.Text =
-            $"登录网页将自动开启，请在网页中输入 {UserCode}（已自动复制）。" & vbCrLf & vbCrLf &
+            $"登录网页将自动开启，请在网页中输入授权码 {UserCode}（已自动复制）。" & vbCrLf & vbCrLf &
             $"如果网络环境不佳，网页可能一直加载不出来，届时请使用 VPN 并重试。" & vbCrLf &
-            $"你也可以用其他设备打开 {Website} 并输入上述代码。"
+            $"你也可以用其他设备打开 {Website} 并输入上述授权码。"
         Btn1.EventData = Website
         Btn2.EventData = UserCode
         '启动工作线程
@@ -108,9 +108,11 @@
         Dim UnknownFailureCount As Integer = 0
         Do While Not MyConverter.IsExited
             Try
+                Dim Scope As String = ""
                 Dim ClientId As String = ""
                 If OAuthUrl.ToLower().Contains("microsoftonline.com") Then
                     ClientId = OAuthClientId
+                    Scope = "scope=XboxLive.signin%20offline_access"
                 Else
                     ClientId = LittleSkinClientId
                 End If
@@ -119,7 +121,7 @@
                     "grant_type=urn:ietf:params:oauth:grant-type:device_code" & "&" &
                     "client_id=" & ClientId & "&" &
                     "device_code=" & DeviceCode & "&" &
-                    "scope=XboxLive.signin%20offline_access",
+                    Scope,
                     "application/x-www-form-urlencoded", 5000 + UnknownFailureCount * 5000, MakeLog:=False)
                 '获取结果
                 Dim ResultJson As JObject = GetJson(Result)

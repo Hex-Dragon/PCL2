@@ -1,5 +1,4 @@
 ﻿Imports System.IO.Compression
-Imports PCL.ModBase.Base64Decode
 
 Public Module ModLaunch
 
@@ -709,10 +708,11 @@ LoginFinish:
         Dim LittleSkinToken As NetResponse
         Dim LoginJson As JObject
         'AccessToken 和 RefreshToken 都要有，不然没法刷新
-        If LittleSkinAccess IsNot Nothing Or LittleSkinRefresh IsNot Nothing Then
+        If Not LittleSkinAccess = "" AndAlso Not LittleSkinRefresh = "" Then
             RefreshData.Add(New JProperty("grant_type", "refresh_token"))
             RefreshData.Add(New JProperty("refresh_token", LittleSkinRefresh))
             RefreshData.Add(New JProperty("access_token", LittleSkinAccess))
+            RefreshData.Add(New JProperty("client_id", LittleSkinClientId))
             LittleSkinToken = NetRequestOnce(
                 Url:="https://open.littleskin.cn/oauth/token",
                 Method:="POST",
@@ -721,16 +721,18 @@ LoginFinish:
                 ContentType:="application/json; charset=utf-8",
                 ReturnAllResponse:=True)
             LoginJson = GetJson(LittleSkinToken.GetResponseData())
-            AccessToken = LoginJson("access_token").ToString
-            RefreshToken = LoginJson("refresh_token").ToString
-            IDToken = LoginJson("id_token").ToString
+            AccessToken = LoginJson("access_token").ToString(0)
+            RefreshToken = LoginJson("refresh_token").ToString(0)
+            IDToken = LoginJson("id_token").ToString(0)
             Dim SelectPrpfile As String = Base64Decode(IDToken.Split(".")(1))
-            UserName = GetJson(SelectPrpfile)("name").ToString
-            UUID = GetJson(SelectPrpfile)("name").ToString
+            UserName = GetJson(GetJson(SelectPrpfile)("selectedProfile").ToString)("name").ToString
+            UUID = GetJson(GetJson(SelectPrpfile)("selectedProfile").ToString)("id").ToString
             Data.Output.Uuid = UUID
             Data.Output.Name = UserName
             Setup.Set("Cache" & Data.Input.Token & "Refresh", RefreshToken)
             Setup.Set("Cache" & Data.Input.Token & "APIToken", AccessToken)
+        Else
+            Throw New Exception("登录信息无效")
         End If
         LoginJson = GetJson(NetRequestRetry(
                Url:=Data.Input.BaseUrl & "/refresh",
@@ -810,12 +812,6 @@ LoginFinish:
                 ContentType:="application/json; charset=utf-8",
                 ReturnAllResponse:=True)
                 LoginJson = GetJson(LittleSkinJson.GetResponseData())
-
-                If Not 200 >= LittleSkinJson.GetStatusCode() <= 299 Then
-                    Throw New Exception($"LittleSkin 登录失败,本次请求 ID 为 {GetJson(LittleSkinJson.GetResponseHeader())("X-Yggdralt-Req-ID")}")
-                End If
-
-
             Else
                 LoginJson = GetJson(NetRequestRetry(
                 Url:=Data.Input.BaseUrl & "/authenticate",
@@ -832,15 +828,10 @@ LoginFinish:
                 ' 轮询验证
                 '花了点时间改了逻辑。现在按照 OAuth 标准编写的服务端应该都能用这个处理轮询登录
                 Dim Converter As New MyMsgBoxConverter With {.Content = LoginJson, .ForceWait = True, .Type = MyMsgBoxType.Login, .AuthUrl = "https://open.littleskin.cn/oauth/token"}
-                Try
-                    WaitingMyMsgBox.Add(Converter)
-                    While Converter.Result Is Nothing
-                        Thread.Sleep(100)
-                    End While
-                Catch ex As Exception
-                    '通常按下了取消按钮
-                    Return False
-                End Try
+                WaitingMyMsgBox.Add(Converter)
+                While Converter.Result Is Nothing
+                    Thread.Sleep(100)
+                End While
                 'LittleSkin OAuth 登录步骤 2: 获取用户选定档案
                 McLaunchLog("LittleSkin OAuth 登录步骤 2/3")
                 '因为还有个 ID Token，硬编码只解析 AccessToken 和 RefreshToken
@@ -871,9 +862,6 @@ LoginFinish:
                                                                ReturnAllResponse:=True
             )
 
-                If Not 200 >= Token.GetStatusCode() <= 299 Then
-                    Throw New Exception($"LittleSkin 登录失败,本次请求 ID 为 {GetJson(Token.GetResponseHeader())("X-Yggdralt-Req-ID")}")
-                End If
                 Result = GetJson(Token.GetResponseData())
 
                 Dim ClientToken = Result("clientToken").ToString
@@ -1049,14 +1037,10 @@ Retry:
 
 
 
-        Log(Result, LogLevel.Msgbox)
         Dim ResultJson As JObject = GetJson(Result)
-        Log(ResultJson, LogLevel.Msgbox)
 
         Dim AccessToken As String = ResultJson("access_token").ToString
         Dim RefreshToken As String = ResultJson("refresh_token").ToString
-        Log(AccessToken, LogLevel.Msgbox)
-        Log(RefreshToken, LogLevel.Msgbox)
         Return {AccessToken, RefreshToken}
     End Function
     '微软登录步骤 2：从 OAuth AccessToken 获取 XBLToken
