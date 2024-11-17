@@ -1,4 +1,5 @@
 ﻿Imports System.IO.Compression
+Imports PCL.ModBase.Base64Decode
 
 Public Module ModLaunch
 
@@ -501,7 +502,7 @@ NextInner:
 #Region "分方式登录模块"
 
     '各个登录方式的主对象与输入构造
-    Public McLoginMsLoader As New LoaderTask(Of McLoginMs, McLoginResult)("Loader Login Ms", AddressOf McLoginMsStart) With {.ReloadTimeout = 1}
+    Public McLoginMsLoader As New LoaderTask(Of McLoginMs, McLoginResult)("Loader Login Ms", AddressOf McLoginMsStart)
     Public McLoginLegacyLoader As New LoaderTask(Of McLoginLegacy, McLoginResult)("Loader Login Legacy", AddressOf McLoginLegacyStart)
     Public McLoginNideLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Nide", AddressOf McLoginServerStart) With {.ReloadTimeout = 1000 * 60 * 10}
     Public McLoginAuthLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Auth", AddressOf McLoginServerStart) With {.ReloadTimeout = 1000 * 60 * 10}
@@ -629,6 +630,7 @@ LoginFinish:
         Dim Dict As New Dictionary(Of String, String)
         Dim Emails As New List(Of String)
         Dim Passwords As New List(Of String)
+
         Try
             If Not Setup.Get("Login" & Input.Token & "Email") = "" Then Emails.AddRange(Setup.Get("Login" & Input.Token & "Email").ToString.Split("¨"))
             If Not Setup.Get("Login" & Input.Token & "Pass") = "" Then Passwords.AddRange(Setup.Get("Login" & Input.Token & "Pass").ToString.Split("¨"))
@@ -696,7 +698,41 @@ LoginFinish:
     End Sub
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
         McLaunchLog("刷新登录开始（Refresh, " & Data.Input.Token & "）")
-        Dim LoginJson As JObject = GetJson(NetRequestRetry(
+        Dim LittleSkinAccess = Setup.Get("Cache" & Data.Input.Token & "APIToken")
+        Dim LittleSkinRefresh = Setup.Get("Cache" & Data.Input.Token & "Refresh")
+        Dim RefreshData As New JObject()
+        Dim UserName As String
+        Dim UUID As String
+        Dim AccessToken As String
+        Dim RefreshToken As String
+        Dim IDToken As String
+        Dim LittleSkinToken As NetResponse
+        Dim LoginJson As JObject
+        'AccessToken 和 RefreshToken 都要有，不然没法刷新
+        If LittleSkinAccess IsNot Nothing Or LittleSkinRefresh IsNot Nothing Then
+            RefreshData.Add(New JProperty("grant_type", "refresh_token"))
+            RefreshData.Add(New JProperty("refresh_token", LittleSkinRefresh))
+            RefreshData.Add(New JProperty("access_token", LittleSkinAccess))
+            LittleSkinToken = NetRequestOnce(
+                Url:="https://open.littleskin.cn/oauth/token",
+                Method:="POST",
+                Data:=RefreshData,
+                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+                ContentType:="application/json; charset=utf-8",
+                ReturnAllResponse:=True)
+            LoginJson = GetJson(LittleSkinToken.GetResponseData())
+            AccessToken = LoginJson("access_token").ToString
+            RefreshToken = LoginJson("refresh_token").ToString
+            IDToken = LoginJson("id_token").ToString
+            Dim SelectPrpfile As String = Base64Decode(IDToken.Split(".")(1))
+            UserName = GetJson(SelectPrpfile)("name").ToString
+            UUID = GetJson(SelectPrpfile)("name").ToString
+            Data.Output.Uuid = UUID
+            Data.Output.Name = UserName
+            Setup.Set("Cache" & Data.Input.Token & "Refresh", RefreshToken)
+            Setup.Set("Cache" & Data.Input.Token & "APIToken", AccessToken)
+        End If
+        LoginJson = GetJson(NetRequestRetry(
                Url:=Data.Input.BaseUrl & "/refresh",
                Method:="POST",
                Data:="{" &
@@ -713,39 +749,168 @@ LoginFinish:
         If LoginJson("selectedProfile") Is Nothing Then Throw New Exception("选择的角色 " & Setup.Get("Cache" & Data.Input.Token & "Name") & " 无效！")
         Data.Output.AccessToken = LoginJson("accessToken").ToString
         Data.Output.ClientToken = LoginJson("clientToken").ToString
-        Data.Output.Uuid = LoginJson("selectedProfile")("id").ToString
-        Data.Output.Name = LoginJson("selectedProfile")("name").ToString
         Data.Output.Type = Data.Input.Token
+        If Data.Output.Uuid = LoginJson("selectedProfile")("id").ToString AndAlso Data.Output.Name = LoginJson("selectedProfile")("name").ToString Then
+
+        Else
+            Data.Output.Uuid = LoginJson("selectedProfile")("id").ToString
+            Data.Output.Name = LoginJson("selectedProfile")("name").ToString
+        End If
+
         '保存缓存
+
         Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
         Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
         Setup.Set("Cache" & Data.Input.Token & "Uuid", Data.Output.Uuid)
         Setup.Set("Cache" & Data.Input.Token & "Name", Data.Output.Name)
-        Setup.Set("Cache" & Data.Input.Token & "Username", Data.Input.UserName)
-        Setup.Set("Cache" & Data.Input.Token & "Pass", Data.Input.Password)
+        If Data.Input.UserName Is Nothing Then
+            ' 用一个通用字符模板填充内容
+            Setup.Set("Cache" & Data.Input.Token & "Username", "LittleSkinOAuth 登录")
+            Setup.Set("Cache" & Data.Input.Token & "Pass", "LittleSkinOAuth 登录")
+        End If
         McLaunchLog("刷新登录成功（Refresh, " & Data.Input.Token & "）")
+
     End Sub
+
+    'Base64 解码
+
     Private Function McLoginRequestLogin(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult)) As Boolean
         Try
             Dim NeedRefresh As Boolean = False
-            McLaunchLog("登录开始（Login, " & Data.Input.Token & "）")
-            Dim RequestData As New JObject(
-                New JProperty("agent", New JObject(New JProperty("name", "Minecraft"), New JProperty("version", 1))),
-                New JProperty("username", Data.Input.UserName),
-                New JProperty("password", Data.Input.Password),
-                New JProperty("requestUser", True))
-            Dim LoginJson As JObject = GetJson(NetRequestRetry(
+            Dim RequestData As New JObject()
+            Dim LittleSkinOAuth As Boolean = False
+            Dim LoginJson
+            Dim AccessToken As String
+            Dim RefreshToken As String
+            Dim LittleSkinJson As NetResponse
+            'LittleSkin OAuth 登录检查
+
+            If Data.Input.BaseUrl.ToLower.Contains("littleskin.cn") And Not LittleSkinClientId = "" Then
+                'ClientId
+                RequestData.Add(New JProperty("client_id", LittleSkinClientId))
+                '一堆权限
+                RequestData.Add(New JProperty("scope", "User.Read offline_access openid Yggdrasil.PlayerProfiles.Select Yggdrasil.MinecraftToken.Create"))
+                LittleSkinOAuth = True
+            Else
+                RequestData.Add(New JProperty("agent", New JObject(New JProperty("name", "Minecraft"), New JProperty("version", 1))))
+                RequestData.Add(New JProperty("username", Data.Input.UserName))
+                RequestData.Add(New JProperty("password", Data.Input.Password))
+                RequestData.Add(New JProperty("requestUser", True))
+                LittleSkinOAuth = False
+            End If
+
+            ' LittleSkin OAuth 登录步骤 1: 获取授权代码
+            If LittleSkinOAuth Then
+                McLaunchLog("开始 LittleSkin OAuth 登录步骤 1/3（原始登录）")
+                LittleSkinJson = NetRequestOnce(
+                Url:="https://open.littleskin.cn/oauth/device_code",
+                Method:="POST",
+                Data:=RequestData.ToString(0),
+                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+                ContentType:="application/json; charset=utf-8",
+                ReturnAllResponse:=True)
+                LoginJson = GetJson(LittleSkinJson.GetResponseData())
+
+                If Not 200 >= LittleSkinJson.GetStatusCode() <= 299 Then
+                    Throw New Exception($"LittleSkin 登录失败,本次请求 ID 为 {GetJson(LittleSkinJson.GetResponseHeader())("X-Yggdralt-Req-ID")}")
+                End If
+
+
+            Else
+                LoginJson = GetJson(NetRequestRetry(
                 Url:=Data.Input.BaseUrl & "/authenticate",
                 Method:="POST",
                 Data:=RequestData.ToString(0),
                 Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
                 ContentType:="application/json; charset=utf-8"))
+
+
+            End If
             '检查登录结果
-            If LoginJson("availableProfiles").Count = 0 Then
-                If Data.Input.ForceReselectProfile Then Hint("你还没有创建角色，无法更换！", HintType.Critical)
-                Throw New Exception("$你还没有创建角色，请在创建角色后再试！")
-            ElseIf Data.Input.ForceReselectProfile AndAlso LoginJson("availableProfiles").Count = 1 Then
-                Hint("你的账户中只有一个角色，无法更换！", HintType.Critical)
+            ' LittleSkin
+            If LittleSkinOAuth Then
+                ' 轮询验证
+                '花了点时间改了逻辑。现在按照 OAuth 标准编写的服务端应该都能用这个处理轮询登录
+                Dim Converter As New MyMsgBoxConverter With {.Content = LoginJson, .ForceWait = True, .Type = MyMsgBoxType.Login, .AuthUrl = "https://open.littleskin.cn/oauth/token"}
+                Try
+                    WaitingMyMsgBox.Add(Converter)
+                    While Converter.Result Is Nothing
+                        Thread.Sleep(100)
+                    End While
+                Catch ex As Exception
+                    '通常按下了取消按钮
+                    Return False
+                End Try
+                'LittleSkin OAuth 登录步骤 2: 获取用户选定档案
+                McLaunchLog("LittleSkin OAuth 登录步骤 2/3")
+                '因为还有个 ID Token，硬编码只解析 AccessToken 和 RefreshToken
+                Dim Result = Converter.Result
+                Dim IDToken As String
+                AccessToken = Result("access_token")
+                RefreshToken = Result("refresh_token")
+                Dim ProfileData As New JObject()
+                Dim UserName As String
+                Dim UUID As String
+                ' IDToken 编码的档案
+                ' 这一行不能用 Try Catch，否则后面解析会抛出 NullReferenceException
+                IDToken = Result("id_token")
+                Dim SelectProfile = GetJson(Base64Decode(IDToken.ToString.Split(".")(1)))("selectedProfile").ToString
+                UserName = GetJson(SelectProfile)("name")
+                UUID = GetJson(SelectProfile)("id")
+
+                'LittleSkin OAuth 登录步骤 3:：获取 Minecraft AccessToken 启动令牌
+                McLaunchLog("LittleSkin OAuth 登录步骤 3/3")
+                Dim RequestInfo = New JObject()
+                RequestInfo.Add(New JProperty("uuid", UUID))
+                '需要 Yggdrasil.MinecraftToken.Create
+                Dim Token As NetResponse = NetRequestOnce(Url:=Data.Input.BaseUrl & "/oauth",
+                                                                  Method:="POST",
+                                                                  Data:=RequestInfo.ToString(0),
+                                                                  Headers:=New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}},
+                                                                  ContentType:="application/json; charset=utf-8",
+                                                               ReturnAllResponse:=True
+            )
+
+                If Not 200 >= Token.GetStatusCode() <= 299 Then
+                    Throw New Exception($"LittleSkin 登录失败,本次请求 ID 为 {GetJson(Token.GetResponseHeader())("X-Yggdralt-Req-ID")}")
+                End If
+                Result = GetJson(Token.GetResponseData())
+
+                Dim ClientToken = Result("clientToken").ToString
+                Dim MCAccessToken = Result("accessToken").ToString
+
+                McLaunchLog("LittleSkin OAuth 登录完成")
+
+                Data.Output.AccessToken = MCAccessToken
+                Data.Output.ClientToken = ClientToken
+                Data.Output.Name = UserName
+                Data.Output.Uuid = UUID
+                Data.Output.Type = Data.Input.Token
+
+                Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
+                Setup.Set("Cache" & Data.Input.Token & "Refresh", RefreshToken)
+                Setup.Set("Cache" & Data.Input.Token & "Uuid", Data.Output.Uuid)
+                Setup.Set("Cache" & Data.Input.Token & "Name", Data.Output.Name)
+                '刷新需要 AccessToken 和 RefreshToken 配合使用
+                Setup.Set("Cache" & Data.Input.Token & "APIToken", AccessToken)
+                If Data.Input.UserName Is Nothing AndAlso Data.Input.Password Is Nothing Then
+                    Setup.Set("Cache" & Data.Input.Token & "Username", "LittleSkinOAuth 登录")
+                    Setup.Set("Cache" & Data.Input.Token & "Pass", "LittleSkinOAuth 登录")
+                Else
+                    Setup.Set("Cache" & Data.Input.Token & "Username", Data.Input.UserName)
+                    Setup.Set("Cache" & Data.Input.Token & "Pass", Data.Input.Password)
+                End If
+                Return True
+                '原始登录
+            Else
+                If LoginJson("availableProfiles").Count = 0 Then
+                    If Data.Input.ForceReselectProfile Then Hint("你还没有创建角色， 无法更换！", HintType.Critical)
+                    Throw New Exception("$你还没有创建角色， 请在创建角色后再试！")
+                ElseIf Data.Input.ForceReselectProfile AndAlso LoginJson("availableProfiles").Count = 1 Then
+                    Hint("你的账户中只有一个角色， 无法更换！", HintType.Critical)
+
+                End If
+
             End If
             Dim SelectedName As String = Nothing
             Dim SelectedId As String = Nothing
@@ -757,7 +922,7 @@ LoginFinish:
                     If Profile("id").ToString = CacheId Then
                         SelectedName = Profile("name").ToString
                         SelectedId = Profile("id").ToString
-                        McLaunchLog("根据缓存选择的角色：" & SelectedName)
+                        McLaunchLog("根据缓存选择的角色： " & SelectedName)
                     End If
                 Next
                 '缓存无效，要求玩家选择
@@ -861,7 +1026,8 @@ Retry:
         ElseIf TypeOf Converter.Result Is Exception Then
             Throw CType(Converter.Result, Exception)
         Else
-            Return Converter.Result
+            Dim LoginData = Converter.Result
+            Return {LoginData("access_token"), LoginData("refresh_token")}
         End If
     End Function
     '微软登录步骤 1，刷新登录：从 OAuth Code 或 OAuth RefreshToken 获取 {OAuth AccessToken, OAuth RefreshToken}
@@ -881,15 +1047,21 @@ Retry:
             End If
         End Try
 
+
+
+        Log(Result, LogLevel.Msgbox)
         Dim ResultJson As JObject = GetJson(Result)
+        Log(ResultJson, LogLevel.Msgbox)
+
         Dim AccessToken As String = ResultJson("access_token").ToString
         Dim RefreshToken As String = ResultJson("refresh_token").ToString
+        Log(AccessToken, LogLevel.Msgbox)
+        Log(RefreshToken, LogLevel.Msgbox)
         Return {AccessToken, RefreshToken}
     End Function
     '微软登录步骤 2：从 OAuth AccessToken 获取 XBLToken
     Private Function MsLoginStep2(AccessToken As String) As String
         McLaunchLog("开始微软登录步骤 2/6")
-
         Dim Request As String = "{
            ""Properties"": {
                ""AuthMethod"": ""RPS"",

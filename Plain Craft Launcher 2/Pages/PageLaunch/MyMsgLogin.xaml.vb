@@ -3,6 +3,8 @@
     Private UserCode As String '需要用户在网页上输入的设备代码
     Private DeviceCode As String '用于轮询的设备代码
     Private Website As String '验证网页的网址
+    Private OAuthUrl As String = "" 'OAuth 轮询验证地址
+
 
 #Region "弹窗"
 
@@ -18,6 +20,7 @@
             MyConverter = Converter
             ShapeLine.StrokeThickness = GetWPFSize(1)
             Data = Converter.Content
+            OAuthUrl = Converter.AuthUrl
             Init()
         Catch ex As Exception
             Log(ex, "登录弹窗初始化失败", LogLevel.Hint)
@@ -105,10 +108,16 @@
         Dim UnknownFailureCount As Integer = 0
         Do While Not MyConverter.IsExited
             Try
+                Dim ClientId As String = ""
+                If OAuthUrl.ToLower().Contains("microsoftonline.com") Then
+                    ClientId = OAuthClientId
+                Else
+                    ClientId = LittleSkinClientId
+                End If
                 Dim Result = NetRequestOnce(
-                    "https://login.microsoftonline.com/consumers/oauth2/v2.0/token", "POST",
+                    OAuthUrl, "POST",
                     "grant_type=urn:ietf:params:oauth:grant-type:device_code" & "&" &
-                    "client_id=" & OAuthClientId & "&" &
+                    "client_id=" & ClientId & "&" &
                     "device_code=" & DeviceCode & "&" &
                     "scope=XboxLive.signin%20offline_access",
                     "application/x-www-form-urlencoded", 5000 + UnknownFailureCount * 5000, MakeLog:=False)
@@ -116,7 +125,7 @@
                 Dim ResultJson As JObject = GetJson(Result)
                 McLaunchLog($"令牌过期时间：{ResultJson("expires_in")} 秒")
                 Hint("网页登录成功！", HintType.Finish)
-                Finished({ResultJson("access_token").ToString, ResultJson("refresh_token").ToString})
+                Finished(ResultJson)
                 Return
             Catch ex As Exception
                 If ex.Message.Contains("authorization_declined") Then
