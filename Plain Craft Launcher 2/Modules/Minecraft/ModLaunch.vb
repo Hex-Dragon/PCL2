@@ -774,7 +774,6 @@ LoginFinish:
 
     End Sub
 
-    'Base64 解码
 
     Private Function McLoginRequestLogin(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult)) As Boolean
         Try
@@ -791,7 +790,7 @@ LoginFinish:
                 'ClientId
                 RequestData.Add(New JProperty("client_id", LittleSkinClientId))
                 '一堆权限
-                RequestData.Add(New JProperty("scope", "User.Read offline_access openid Yggdrasil.PlayerProfiles.Select Yggdrasil.MinecraftToken.Create"))
+                RequestData.Add(New JProperty("scope", "offline_access openid Yggdrasil.PlayerProfiles.Select Yggdrasil.MinecraftToken.Create"))
                 LittleSkinOAuth = True
             Else
                 RequestData.Add(New JProperty("agent", New JObject(New JProperty("name", "Minecraft"), New JProperty("version", 1))))
