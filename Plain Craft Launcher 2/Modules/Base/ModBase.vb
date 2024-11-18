@@ -2638,8 +2638,8 @@ Retry:
         Else
             LogList.Append(AppendText)
         End If
-#If Debug Then
-            Console.Write(AppendText)
+#If DEBUG Then
+        Console.Write(AppendText)
 #End If
         If IsProgramEnded OrElse Level = LogLevel.Normal Then Exit Sub
 
