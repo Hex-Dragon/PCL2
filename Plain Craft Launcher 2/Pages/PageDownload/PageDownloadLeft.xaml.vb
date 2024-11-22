@@ -1,4 +1,5 @@
 ﻿Public Class PageDownloadLeft
+    Implements IRefreshable
 
 #Region "页面切换"
 
@@ -91,7 +92,13 @@
 
     '强制刷新
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
-        Select Case Val(sender.Tag)
+        Refresh(Val(sender.Tag))
+    End Sub
+    Public Sub Refresh() Implements IRefreshable.Refresh
+        Refresh(FrmMain.PageCurrentSub)
+    End Sub
+    Public Sub Refresh(SubType As FormMain.PageSubType)
+        Select Case SubType
             Case FormMain.PageSubType.DownloadInstall
                 DlClientListLoader.Start(IsForceRestart:=True)
                 DlOptiFineListLoader.Start(IsForceRestart:=True)

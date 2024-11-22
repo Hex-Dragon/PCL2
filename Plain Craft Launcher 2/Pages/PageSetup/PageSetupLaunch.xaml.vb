@@ -551,15 +551,17 @@ PreFin:
     End Sub
 
     '版本隔离警告
+    Private IsReverting As Boolean = False
     Private Sub ComboArgumentIndie_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboArgumentIndie.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
+        If IsReverting Then Exit Sub
         If MyMsgBox("调整版本隔离后，你可能得把游戏存档、Mod 等文件手动迁移到新的游戏文件夹中。" & vbCrLf &
                     "如果修改后发现存档消失，把这项设置改回来就能恢复。" & vbCrLf &
                     "如果你不会迁移存档，不建议修改这项设置！",
                     "警告", "我知道我在做什么", "取消", IsWarn:=True) = 2 Then
-            AniControlEnabled += 1
+            IsReverting = True
             ComboArgumentIndie.SelectedItem = e.RemovedItems(0)
-            AniControlEnabled -= 1
+            IsReverting = False
         End If
     End Sub
 

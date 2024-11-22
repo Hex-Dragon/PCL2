@@ -153,6 +153,7 @@
         {"UiHiddenPageSetup", New SetupEntry(False)},
         {"UiHiddenPageOther", New SetupEntry(False)},
         {"UiHiddenFunctionSelect", New SetupEntry(False)},
+        {"UiHiddenFunctionModUpdate", New SetupEntry(False)},
         {"UiHiddenFunctionHidden", New SetupEntry(False)},
         {"UiHiddenSetupLaunch", New SetupEntry(False)},
         {"UiHiddenSetupUi", New SetupEntry(False)},
@@ -630,6 +631,9 @@
         PageSetupUI.HiddenRefresh()
     End Sub
     Public Sub UiHiddenFunctionSelect(Value As Boolean)
+        PageSetupUI.HiddenRefresh()
+    End Sub
+    Public Sub UiHiddenFunctionModUpdate(Value As Boolean)
         PageSetupUI.HiddenRefresh()
     End Sub
     Public Sub UiHiddenFunctionHidden(Value As Boolean)

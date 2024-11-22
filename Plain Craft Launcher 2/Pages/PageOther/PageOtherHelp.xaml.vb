@@ -1,4 +1,5 @@
 ﻿Public Class PageOtherHelp
+    Implements IRefreshable
 
 #Region "初始化"
 
@@ -79,31 +80,35 @@
         End Try
     End Sub
     Public Shared Sub EnterHelpPage(Location As String)
-        RunInThread(Sub()
-                        If Not HelpLoader.State = LoadState.Finished Then HelpLoader.WaitForExit(GetUuid)
-                        Dim Entry As New HelpEntry(Location)
-                        RunInUi(Sub()
-                                    Dim FrmHelpDetail As New PageOtherHelpDetail
-                                    If FrmHelpDetail.Init(Entry) Then
-                                        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.HelpDetail, .Additional = {Entry, FrmHelpDetail}})
-                                    Else
-                                        Log("[Help] 已取消进入帮助项目，这一般是由于 xaml 初始化失败，且用户在弹窗中手动放弃", LogLevel.Debug)
-                                    End If
-                                End Sub)
-                    End Sub)
+        RunInThread(
+        Sub()
+            If Not HelpLoader.State = LoadState.Finished Then HelpLoader.WaitForExit(GetUuid)
+            Dim Entry As New HelpEntry(Location)
+            RunInUi(
+            Sub()
+                Dim FrmHelpDetail As New PageOtherHelpDetail
+                If FrmHelpDetail.Init(Entry) Then
+                    FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.HelpDetail, .Additional = {Entry, FrmHelpDetail}})
+                Else
+                    Log("[Help] 已取消进入帮助项目，这一般是由于 xaml 初始化失败，且用户在弹窗中手动放弃", LogLevel.Debug)
+                End If
+            End Sub)
+        End Sub)
     End Sub
     Public Shared Sub EnterHelpPage(Entry As HelpEntry)
-        RunInThread(Sub()
-                        If Not HelpLoader.State = LoadState.Finished Then HelpLoader.WaitForExit(GetUuid)
-                        RunInUi(Sub()
-                                    Dim FrmHelpDetail As New PageOtherHelpDetail
-                                    If FrmHelpDetail.Init(Entry) Then
-                                        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.HelpDetail, .Additional = {Entry, FrmHelpDetail}})
-                                    Else
-                                        Log("[Help] 已取消进入帮助项目，这一般是由于 xaml 初始化失败，且用户在弹窗中手动放弃", LogLevel.Debug)
-                                    End If
-                                End Sub)
-                    End Sub)
+        RunInThread(
+        Sub()
+            If Not HelpLoader.State = LoadState.Finished Then HelpLoader.WaitForExit(GetUuid)
+            RunInUi(
+            Sub()
+                Dim FrmHelpDetail As New PageOtherHelpDetail
+                If FrmHelpDetail.Init(Entry) Then
+                    FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.HelpDetail, .Additional = {Entry, FrmHelpDetail}})
+                Else
+                    Log("[Help] 已取消进入帮助项目，这一般是由于 xaml 初始化失败，且用户在弹窗中手动放弃", LogLevel.Debug)
+                End If
+            End Sub)
+        End Sub)
     End Sub
     Public Shared Function GetHelpPage(Location As String) As PageOtherHelpDetail
         If Not HelpLoader.State = LoadState.Finished Then HelpLoader.WaitForExit(GetUuid)
@@ -122,14 +127,15 @@
         If String.IsNullOrWhiteSpace(SearchBox.Text) Then
             '隐藏
             AniStart({
-                     AaOpacity(PanSearch, -PanSearch.Opacity, 100),
-                     AaCode(Sub()
-                                PanSearch.Height = 0
-                                PanSearch.Visibility = Visibility.Collapsed
-                                PanList.Visibility = Visibility.Visible
-                            End Sub,, True),
-                     AaOpacity(PanList, 1 - PanList.Opacity, 150, 30)
-                }, "FrmOtherHelp Search Switch")
+                 AaOpacity(PanSearch, -PanSearch.Opacity, 100),
+                 AaCode(
+                 Sub()
+                     PanSearch.Height = 0
+                     PanSearch.Visibility = Visibility.Collapsed
+                     PanList.Visibility = Visibility.Visible
+                 End Sub,, True),
+                 AaOpacity(PanList, 1 - PanList.Opacity, 150, 30)
+            }, "FrmOtherHelp Search Switch")
         Else
             '构造请求
             Dim QueryList As New List(Of SearchEntry(Of HelpEntry))
@@ -163,15 +169,19 @@
             End If
             '显示
             AniStart({
-                     AaOpacity(PanList, -PanList.Opacity, 100),
-                     AaCode(Sub()
-                                PanList.Visibility = Visibility.Collapsed
-                                PanSearch.Visibility = Visibility.Visible
-                                PanSearch.TriggerForceResize()
-                            End Sub,, True),
-                     AaOpacity(PanSearch, 1 - PanSearch.Opacity, 150, 30)
-                }, "FrmOtherHelp Search Switch")
+                 AaOpacity(PanList, -PanList.Opacity, 100),
+                 AaCode(
+                 Sub()
+                     PanList.Visibility = Visibility.Collapsed
+                     PanSearch.Visibility = Visibility.Visible
+                     PanSearch.TriggerForceResize()
+                 End Sub,, True),
+                 AaOpacity(PanSearch, 1 - PanSearch.Opacity, 150, 30)
+            }, "FrmOtherHelp Search Switch")
         End If
     End Sub
 
+    Public Sub Refresh() Implements IRefreshable.Refresh
+        PageOtherLeft.RefreshHelp()
+    End Sub
 End Class
