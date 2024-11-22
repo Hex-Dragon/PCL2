@@ -253,7 +253,7 @@
             If Not File.Exists(CacheFilePath) Then
                 Try
                     '下载未列出的版本文件
-                    Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main/version_manifest.json", IsJson:=True)
+                    Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft/version_manifest.json", IsJson:=True)
                     '替换 "pending" 和 "release" 为 "snapshot"
                     For Each versionuvmc As JObject In UnlistedJson("versions")
                         If versionuvmc("type").ToString() = "pending" OrElse versionuvmc("type").ToString() = "release" Then
@@ -1235,12 +1235,12 @@
                 Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").
                 Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven").
-                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main"),
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft"),
             Original.
                 Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
                 Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries").
-                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main"),
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft"),
             Original
         }
     End Function
@@ -1264,7 +1264,7 @@
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com").
-                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://raw.gitcode.com/zkitefly/unlisted-versions-of-minecraft/raw/main"),
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft"),
             Original
         }
     End Function
