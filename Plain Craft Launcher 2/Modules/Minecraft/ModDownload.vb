@@ -205,10 +205,13 @@
                 Try
                     '下载未列出的版本文件
                     Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://zkitefly.github.io/unlisted-versions-of-minecraft/version_manifest.json", IsJson:=True)
-                    '替换 "pending" 和 "release" 为 "snapshot"
                     For Each versionuvmc As JObject In UnlistedJson("versions")
+                        '替换 "pending" 和 "release" 为 "snapshot"
                         If versionuvmc("type").ToString() = "pending" OrElse versionuvmc("type").ToString() = "release" Then
                             versionuvmc("type") = "snapshot"
+                        End If
+                        If versionuvmc("id").ToString().StartsWithF("1.0.0-rc") OrElse versionuvmc("id").ToString.StartsWithF("b1.9-pre") AndAlso versionuvmc("type").ToString() = "snapshot" Then
+                            versionuvmc("type") = "old_beta"
                         End If
                     Next
                     '将下载的内容保存至缓存文件
@@ -258,6 +261,9 @@
                     For Each versionuvmc As JObject In UnlistedJson("versions")
                         If versionuvmc("type").ToString() = "pending" OrElse versionuvmc("type").ToString() = "release" Then
                             versionuvmc("type") = "snapshot"
+                        End If
+                        If versionuvmc("id").ToString().StartsWithF("1.0.0-rc") OrElse versionuvmc("id").ToString.StartsWithF("b1.9-pre") AndAlso versionuvmc("type").ToString() = "snapshot" Then
+                            versionuvmc("type") = "old_beta"
                         End If
                     Next
                     '将下载的内容保存至缓存文件
