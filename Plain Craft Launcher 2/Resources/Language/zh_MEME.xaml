@@ -15,13 +15,13 @@
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手动设置的缓存文件夹子不可用，平原合成发射台将使用默认缓存文件夹子。
 错误原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境不对劲</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！
-程序目前在临时文件夹中运行，设置、游戏存档等可能无法保存，且部分功能将无法使用。</s:String>
-    <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL 和新版麦恩克拉夫特均不再支持 32 位系统，部分功能将无法使用。
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">请将平原合成发射台从压缩文件中解压，或是更换文件夹后再继续使用！
+程序目前在临时文件夹中运行，设置、游戏存档等可能无法保存，且部分功能将莫得法使用。</s:String>
+    <s:String x:Key="LangApplicationDialogContent32BitWarn">平原合成发射台和新版麦恩克拉夫特均不再支持 32 位系统，部分功能将无法使用。
 非常建议重装为 64 位系统后再进行游戏！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">平原合成发射台初始化不成功</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">运行环境错误</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请在打开的网页中重新下崽并安装 .NET Framework 4.6.2 后重试！</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请下崽并重新安装 .NET Framework 4.6.2 ！</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷烫烫烫</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">程序出现未知错误</s:String>
     <s:String x:Key="LangTitleDownload">下崽</s:String>
@@ -35,7 +35,7 @@
     <s:String x:Key="LangToolTipCloseMinecraft">退游</s:String>
     <s:String x:Key="LangDialogBtnUpdateFullLog">完整更新日志</s:String>
     <s:String x:Key="LangDialogUpdateTo">平原合成发射台已更新至 {0}</s:String>
-    <s:String x:Key="LangDialogPolicyContent">在使用 PCL 前，请同意 PCL 的用户协议与免责声明。</s:String>
+    <s:String x:Key="LangDialogPolicyContent">在使用平原合成发射台前，请同意平原合成发射台的用户协议与免责声明。</s:String>
     <s:String x:Key="LangDialogPolicyTitle">协议授权</s:String>
     <s:String x:Key="LangDialogBtnAgree">我不拒绝</s:String>
     <s:String x:Key="LangDialogBtnDeny">我不同意</s:String>
