@@ -116,6 +116,9 @@ WaitRetry:
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
                 MyMsgBox("请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！" & vbCrLf & "程序目前在临时文件夹中运行，设置、游戏存档等可能无法保存，且部分功能将无法使用。", "环境警告", "我知道了", IsWarn:=True)
             End If
+            If Path.Contains(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)) Then
+                MyMsgBox("不建议将 PCL 存储到桌面中运行！" & vbCrLf & "将 PCL 存储在桌面运行可能造成游戏无法启动。", "环境警告", "我知道了", IsWarn:=True)
+            End If
             If Is32BitSystem Then
                 MyMsgBox("PCL 和新版 Minecraft 均不再支持 32 位系统，部分功能将无法使用。" & vbCrLf & "非常建议重装为 64 位系统后再进行游戏！", "环境警告", "我知道了", IsWarn:=True)
             End If
