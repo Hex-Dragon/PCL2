@@ -120,7 +120,7 @@ WaitRetry:
             Dim currentDirectory As String = My.Computer.FileSystem.CurrentDirectory
             ' 在下载文件加中运行时给予提示以告知用户
             If currentDirectory.ToLower().Contains("download") OrElse currentDirectory.Contains("下载") Then
-                MyMsgBox("不建议在下载文件夹中运行 PCL！" & vbCrLf & "程序目前似乎在下载文件夹中运行，虽然这可能不会影响运行，但是你下次可能会找不到 PCL 在哪。建议你尽快将 PCL 移动到别处或单独的文件夹中运行", "环境警告", "我知道了", IsWarn:=True)
+                MyMsgBox("不建议在下载文件夹中运行 PCL！" & vbCrLf & "程序目前似乎在下载文件夹中运行，虽然这可能不会影响运行，但是你下次可能会找不到 PCL 在哪。建议你尽快将 PCL 移动到别处或单独的文件夹中运行。", "环境警告", "我知道了", IsWarn:=True)
             End If
             If Is32BitSystem Then
                 MyMsgBox("PCL 和新版 Minecraft 均不再支持 32 位系统，部分功能将无法使用。" & vbCrLf & "非常建议重装为 64 位系统后再进行游戏！", "环境警告", "我知道了", IsWarn:=True)
