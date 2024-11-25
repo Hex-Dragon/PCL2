@@ -12,7 +12,9 @@
 
 This repository provides most of the source code of PCL, including the UI library, animation module, download module, Minecraft launch module, and more!
 
-Most of the code was actually created several years ago during my student days... Back then, my English wasn't good so there're many weird namings, also problems like high coupling, no singleton, and messy code... Obviously, I'm not going to rewrite all this stuff from scratch, so just bear with it based on the principle of *if it runs, it is fine*, don't be too harsh on me...
+The repository isn't updated in real-time. Instead, it is synchronized (manually) with each update.
+
+Many thanks for the support from the community!
 
 <br/>
 
@@ -21,11 +23,3 @@ Most of the code was actually created several years ago during my student days..
 - [PCL Feature Voting](https://github.com/Hex-Dragon/PCL2/discussions/2)：Come and participate the vote! The developer will deal the feature with higher votes!
 - [Software Download](https://afdian.com/p/0164034c016c11ebafcb52540025c377)：Download the free official release of PCL.
 - [Help Center Repository](https://github.com/LTCatt/PCL2Help)：The repository of PCL's Help Center on GitHub (yes, it's in the another repo...)
-
-<br/>
-
-## Fun Facts
-
-- Don't think you'll find any clues of the decrypt game here, it has been removed
-- The code related to unlocking hidden themes has also been removed, don't think about using the source code to bypass the decryption :D
-- The repository isn't updated in real-time but manually sync when PCL releases a update
