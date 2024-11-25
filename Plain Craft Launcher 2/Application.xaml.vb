@@ -116,6 +116,7 @@ WaitRetry:
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
                 MyMsgBox("请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！" & vbCrLf & "程序目前在临时文件夹中运行，设置、游戏存档等可能无法保存，且部分功能将无法使用。", "环境警告", "我知道了", IsWarn:=True)
             End If
+            ' 在下载文件加中运行时给予提示以告知用户
             If currentDirectory.ToLower().Contains("download") OrElse currentDirectory.Contains("下载") Then
                 MyMsgBox("不建议在下载文件夹中运行 PCL！" & vbCrLf & "PCL 目前似乎在您的下载文件夹中运行，这虽然大概率不会影响运行，但是您下次可能会找不到 PCL 在哪，建议您尽快将 PCL 复制到别处或单独的文件夹中运行", "环境警告", "我知道了", IsWarn:=True)
             End If
