@@ -119,7 +119,7 @@ WaitRetry:
             ' 获取当前程序运行的文件夹路径
             Dim currentDirectory As String = My.Computer.FileSystem.CurrentDirectory
             ' 在下载文件加中运行时给予提示以告知用户
-            If currentDirectory.ToLower().Contains("download") OrElse currentDirectory.Contains("下载") Then
+            If currentDirectory.IndexOfAny({"download", "下载"}.Select(Function(s) currentDirectory.ToLower().Contains(s)).ToArray()) Then
                 MyMsgBox("不建议在下载文件夹中运行 PCL！" & vbCrLf & "程序目前似乎在下载文件夹中运行，虽然这可能不会影响运行，但是你下次可能会找不到 PCL 在哪。建议你尽快将 PCL 移动到别处或单独的文件夹中运行。", "环境警告", "我知道了", IsWarn:=True)
             End If
             If Is32BitSystem Then
