@@ -47,9 +47,13 @@
         '初始化，确保存在音乐
         If MusicAllList Is Nothing OrElse Not MusicAllList.Any() OrElse Not MusicWaitingList.Any() Then MusicListInit(False)
         '出列下一个音乐，如果出列结束则生成新列表
-        DequeueNextMusicAddress = MusicWaitingList(0)
-        MusicWaitingList.RemoveAt(0)
-        If Not MusicWaitingList.Any() Then MusicListInit(False, DequeueNextMusicAddress)
+        If MusicWaitingList.Any() Then
+            DequeueNextMusicAddress = MusicWaitingList(0)
+            MusicWaitingList.RemoveAt(0)
+            If Not MusicWaitingList.Any() Then MusicListInit(False, DequeueNextMusicAddress)
+        Else
+            DequeueNextMusicAddress = ""
+        End If
     End Function
 
 #End Region
@@ -195,9 +199,11 @@
     ''' 开始播放音乐。
     ''' </summary>
     Private Sub MusicStartPlay(Address As String, Optional IsFirstLoad As Boolean = False)
-        Log("[Music] 播放开始：" & Address)
-        MusicCurrent = Address
-        RunInNewThread(Sub() MusicLoop(IsFirstLoad), "Music", ThreadPriority.BelowNormal)
+        If Not Address = "" Then
+            Log("[Music] 播放开始：" & Address)
+            MusicCurrent = Address
+            RunInNewThread(Sub() MusicLoop(IsFirstLoad), "Music", ThreadPriority.BelowNormal)
+        End If
     End Sub
 
     '播放与暂停
@@ -292,10 +298,12 @@
             Else
                 Log(ex, "播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）", LogLevel.Hint)
             End If
-            Thread.Sleep(1000)
+            '将播放错误的音乐从列表中移除
+            MusicAllList.Remove(MusicCurrent)
+            MusicWaitingList.Remove(MusicCurrent)
             If TypeOf ex Is FileNotFoundException Then
                 MusicRefreshPlay(True, IsFirstLoad)
-            ElseIf MusicAllList.Count > 1 Then
+            Else
                 MusicStartPlay(DequeueNextMusicAddress(), IsFirstLoad)
             End If
         Finally
