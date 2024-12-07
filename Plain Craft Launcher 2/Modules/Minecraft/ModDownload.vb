@@ -200,8 +200,29 @@
         Try
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
-            '添加 PCL 特供项
-            If File.Exists(PathTemp & "Cache\download.json") Then Versions.Merge(GetJson(ReadFile(PathTemp & "Cache\download.json")))
+            Dim CacheFilePath As String = PathTemp & "Cache\uvmc-download.json"
+            If Not File.Exists(CacheFilePath) Then
+                Try
+                    '下载未列出的版本文件
+                    Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://zkitefly.github.io/unlisted-versions-of-minecraft/version_manifest.json", IsJson:=True)
+                    For Each versionuvmc As JObject In UnlistedJson("versions")
+                        '替换 "pending" 和 "release" 为 "snapshot"
+                        If versionuvmc("type").ToString() = "pending" OrElse versionuvmc("type").ToString() = "release" Then
+                            versionuvmc("type") = "snapshot"
+                        End If
+                        If versionuvmc("id").ToString().StartsWithF("1.0.0-rc") OrElse versionuvmc("id").ToString.StartsWithF("b1.9-pre") AndAlso versionuvmc("type").ToString() = "snapshot" Then
+                            versionuvmc("type") = "old_beta"
+                        End If
+                    Next
+                    '将下载的内容保存至缓存文件
+                    File.WriteAllText(CacheFilePath, UnlistedJson.ToString())
+                Catch ex As Exception
+                    Log("[Download] 未列出的版本官方源下载失败: " & ex.Message)
+                End Try
+            Else '如果缓存文件存在，则将其读取并合并到版本列表中
+                Dim CachedJson As JObject = GetJson(ReadFile(CacheFilePath))
+                Versions.Merge(CachedJson("versions"))
+            End If
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = True, .SourceName = "Mojang 官方源", .Value = Json}
             '解析更新提示（Release）
@@ -231,8 +252,29 @@
         Try
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
-            '添加 PCL 特供项
-            If File.Exists(PathTemp & "Cache\download.json") Then Versions.Merge(GetJson(ReadFile(PathTemp & "Cache\download.json")))
+            Dim CacheFilePath As String = PathTemp & "Cache\uvmc-download.json"
+            If Not File.Exists(CacheFilePath) Then
+                Try
+                    '下载未列出的版本文件
+                    Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft/version_manifest.json", IsJson:=True)
+                    '替换 "pending" 和 "release" 为 "snapshot"
+                    For Each versionuvmc As JObject In UnlistedJson("versions")
+                        If versionuvmc("type").ToString() = "pending" OrElse versionuvmc("type").ToString() = "release" Then
+                            versionuvmc("type") = "snapshot"
+                        End If
+                        If versionuvmc("id").ToString().StartsWithF("1.0.0-rc") OrElse versionuvmc("id").ToString.StartsWithF("b1.9-pre") AndAlso versionuvmc("type").ToString() = "snapshot" Then
+                            versionuvmc("type") = "old_beta"
+                        End If
+                    Next
+                    '将下载的内容保存至缓存文件
+                    File.WriteAllText(CacheFilePath, UnlistedJson.ToString())
+                Catch ex As Exception
+                    Log("[Download] 未列出的版本镜像源下载失败: " & ex.Message)
+                End Try
+            Else '如果缓存文件存在，则将其读取并合并到版本列表中
+                Dim CachedJson As JObject = GetJson(ReadFile(CacheFilePath))
+                Versions.Merge(CachedJson("versions"))
+            End If
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Json}
         Catch ex As Exception
@@ -1198,11 +1240,13 @@
             Original.
                 Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").
-                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
+                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven").
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft"),
             Original.
                 Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
-                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
+                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries").
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft"),
             Original
         }
     End Function
@@ -1225,7 +1269,8 @@
                 Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com").
                 Replace("https://launcher.mojang.com", "https://bmclapi2.bangbang93.com").
-                Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com"),
+                Replace("https://launchermeta.mojang.com", "https://bmclapi2.bangbang93.com").
+                Replace("https://zkitefly.github.io/unlisted-versions-of-minecraft", "https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft"),
             Original
         }
     End Function

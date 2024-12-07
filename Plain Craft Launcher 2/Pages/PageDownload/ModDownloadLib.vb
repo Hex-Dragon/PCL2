@@ -150,7 +150,7 @@ Public Module ModDownloadLib
         Else
             NewItem.Info = Entry("lore").ToString
         End If
-        If Entry("url").ToString.Contains("pcl") Then NewItem.Info = "[PCL 特供下载] " & NewItem.Info
+        If Entry("url").ToString.Contains("unlisted-versions-of-minecraft") Then NewItem.Info = "[UVMC 特供下载] " & NewItem.Info
         AddHandler NewItem.Click, OnClick
         '建立菜单
         If IsSaveOnly Then
@@ -334,7 +334,7 @@ pause"
         Dim Id As String = VersionJson("id").ToString.ToLower
         If Id = "3d shareware v1.34" Then
             WikiName = "3D_Shareware_v1.34"
-        ElseIf Id = "2.0" Then
+        ElseIf Id = "2.0" OrElse Id.StartsWithF("2point0") Then
             WikiName = "Java版2.0"
         ElseIf Id = "1.rv-pre1" Then
             WikiName = "Java版1.RV-Pre1"
@@ -360,31 +360,33 @@ pause"
             WikiName = "Java版RC2"
         ElseIf Id.StartsWithF("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWithF("1_19_deep_dark_experimental_snapshot-") Then
             WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Java版Deep_Dark_Experimental_Snapshot_")
-        ElseIf Id = "b1.9-pre6" Then
-            WikiName = "Java版Beta_1.9_Prerelease_6"
         ElseIf Id.Contains("b1.9") Then
-            WikiName = "Java版Beta_1.9_Prerelease"
+            WikiName = "Java版" & Id.Replace("b", "Beta_").Replace("-pre", "_Prerelease_")
+        ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") OrElse Id = "c0.30-1" OrElse Id = "c0.30-2" Then
+            WikiName = "Java版Classic_0.30（生存模式）"
+        ElseIf Id.StartsWithF("c0.31") OrElse Id = "in-20100130" Then
+            WikiName = "Java版Indev_0.31_20100130"
+        ElseIf Id = "b1.6-tb3" Then
+            WikiName = "Java版Beta_1.6_Test_Build_3"
         ElseIf VersionJson("type") = "release" OrElse VersionJson("type") = "snapshot" OrElse VersionJson("type") = "special" Then
             WikiName = If(Id.Contains("w"), "", "Java版") & Id.Replace(" Pre-Release ", "-pre")
         ElseIf Id.StartsWithF("b") Then
-            WikiName = "Java版" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("b", "Beta_")
+            WikiName = "Java版" & Id.Replace("b", "Beta_").Replace("tb3", "Test_Build_3")
         ElseIf Id.StartsWithF("a") Then
-            WikiName = "Java版" & Id.TrimEnd("a", "b", "c", "d", "e").Replace("a", "Alpha_v")
-        ElseIf Id = "inf-20100618" Then
-            WikiName = "Java版Infdev_20100618"
-        ElseIf Id = "c0.30_01c" OrElse Id = "c0.30_survival" OrElse Id.Contains("生存测试") Then
-            WikiName = "Java版Classic_0.30（生存模式）"
-        ElseIf Id.StartsWithF("c0.31") Then
-            WikiName = "Java版Indev_0.31_20100130"
+            WikiName = "Java版" & Id.Replace("a", "Alpha_v")
+        ElseIf Id.StartsWithF("inf-") Then
+            WikiName = "Java版" & Id.Replace("inf-", "Infdev_")
+        ElseIf Id.StartsWithF("in-") Then
+            WikiName = "Java版" & Id.Replace("in-", "Indev_")
         ElseIf Id.StartsWithF("c") Then
-            WikiName = "Java版" & Id.Replace("c", "Classic_")
+            WikiName = "Java版" & Id.Replace("c", "Classic_").Replace("st", "SURVIVAL_TEST")
         ElseIf Id.StartsWithF("rd-") Then
             WikiName = "Java版Pre-classic_" & Id
         Else
             Log("[Error] 未知的版本格式：" & Id & "。", LogLevel.Feedback)
             Exit Sub
         End If
-        OpenWebsite("https://zh.minecraft.wiki/w/" & WikiName.Replace("_experimental-snapshot-", "-exp"))
+        OpenWebsite("https://zh.minecraft.wiki/w/Special:%E6%90%9C%E7%B4%A2?search=" & WikiName.Replace("_experimental-snapshot-", "-exp"))
     End Sub
 
 #End Region
