@@ -12,7 +12,7 @@
     Public Shared Sub MemoryOptimize(ShowHint As Boolean)
         If ShowHint Then Hint("为便于维护，开源内容中不包含百宝箱功能……")
     End Sub
-    Public Shared Sub MemoryOptimizeInternal()
+    Public Shared Sub MemoryOptimizeInternal(ShowHint As Boolean)
     End Sub
     Public Shared Function GetRandomCave() As String
         Return "为便于维护，开源内容中不包含百宝箱功能……"
