@@ -85,7 +85,7 @@ Public Module ModMinecraft
                     Next
                     If Not Renamed Then CacheMcFolderList.Add(New McFolder With {.Name = Name, .Path = Path, .Type = McFolderType.Custom})
                 Else
-                    Hint("无效的 Minecraft 文件夹：" & Path, HintType.Critical)
+                    Hint("无法访问 Minecraft 文件夹：" & Path, HintType.Critical)
                 End If
             Next
 
@@ -2308,8 +2308,8 @@ OnLoaded:
         End If
         Left = Left.ToLowerInvariant
         Right = Right.ToLowerInvariant
-        Dim Lefts = RegexSearch(Left.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
-        Dim Rights = RegexSearch(Right.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
+        Dim Lefts = RegexSearch(Left.Replace("快照", "snapshot").Replace("预览版", "pre"), "[a-z]+|[0-9]+")
+        Dim Rights = RegexSearch(Right.Replace("快照", "snapshot").Replace("预览版", "pre"), "[a-z]+|[0-9]+")
         Dim i As Integer = 0
         While True
             '两边均缺失，感觉是一个东西
@@ -2358,15 +2358,11 @@ NextEntry:
     ''' <summary>
     ''' 比较两个版本名的排序器。
     ''' </summary>
-    Public Class VersionSorter
+    Public Class VersionComparer
         Implements IComparer(Of String)
-        Public IsDecreased As Boolean = True
         Public Function Compare(x As String, y As String) As Integer Implements IComparer(Of String).Compare
-            Return VersionSortInteger(x, y) * If(IsDecreased, -1, 1)
+            Return VersionSortInteger(x, y)
         End Function
-        Public Sub New(Optional IsDecreased As Boolean = True)
-            Me.IsDecreased = IsDecreased
-        End Sub
     End Class
 
     ''' <summary>

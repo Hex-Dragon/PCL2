@@ -111,8 +111,6 @@ Public Class PageLinkIoi
     End Sub
     '复制联机码
     Public Shared Sub BtnLeftCopy_Click() Handles BtnLeftCopy.Click
-        ClipboardSet(IoiId.Substring(4) & SecretEncrypt(GetPlayerName), False)
-        Hint("已复制联机码！", HintType.Finish)
     End Sub
 
 #End Region
