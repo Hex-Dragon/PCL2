@@ -3,6 +3,29 @@
 Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
+    Public Class NetResponse
+        Private _StatusCode As Object
+        Private _ResponseHeader As String
+        Private _Response As Object
+
+        Public Sub New(StatusCode As Integer, ResponseHeader As String, Response As Object)
+            _StatusCode = StatusCode
+            _ResponseHeader = ResponseHeader
+            _Response = Response
+        End Sub
+
+        Public Function GetResponseData() As String
+            Return _Response
+        End Function
+
+        Public Function GetResponseHeader() As String
+            Return _ResponseHeader
+        End Function
+        Public Function GetStatusCode() As Integer
+            Return _StatusCode
+        End Function
+    End Class
+
     ''' <summary>
     ''' 测试 Ping。失败则返回 -1。
     ''' </summary>
@@ -369,13 +392,15 @@ RequestFinished:
     ''' <summary>
     ''' 发送一次网络请求并获取返回内容。
     ''' </summary>
-    Public Function NetRequestOnce(Url As String, Method As String, Data As Object, ContentType As String, Optional Timeout As Integer = 25000, Optional Headers As Dictionary(Of String, String) = Nothing, Optional MakeLog As Boolean = True, Optional UseBrowserUserAgent As Boolean = False) As String
+    Public Function NetRequestOnce(Url As String, Method As String, Data As Object, ContentType As String, Optional Timeout As Integer = 25000, Optional Headers As Dictionary(Of String, String) = Nothing, Optional MakeLog As Boolean = True, Optional UseBrowserUserAgent As Boolean = False, Optional ReturnAllResponse As Boolean = False) As Object
         If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
         Url = SecretCdnSign(Url)
         If MakeLog Then Log("[Net] 发起网络请求（" & Method & "，" & Url & "），最大超时 " & Timeout)
         Dim DataStream As Stream = Nothing
         Dim Resp As WebResponse = Nothing
         Dim Req As HttpWebRequest
+        Dim Res = ""
+
         Try
             Req = WebRequest.Create(Url)
             Req.Method = Method
@@ -406,9 +431,16 @@ RequestFinished:
             DataStream = Resp.GetResponseStream()
             DataStream.WriteTimeout = Timeout
             DataStream.ReadTimeout = Timeout
+            Dim Status As Integer = CType(Resp, HttpWebResponse).StatusCode
             Using Reader As New StreamReader(DataStream)
-                Return Reader.ReadToEnd()
+                Res = Reader.ReadToEnd()
             End Using
+            If ReturnAllResponse Then
+                Dim StatusCode As Integer = CType(Resp, HttpWebResponse).StatusCode
+                Return New NetResponse(StatusCode, Resp.Headers.ToString, Res)
+            Else
+                Return Res
+            End If
         Catch ex As ThreadInterruptedException
             Throw
         Catch ex As WebException
@@ -416,7 +448,6 @@ RequestFinished:
                 ex = New WebException($"连接服务器超时，请检查你的网络环境是否良好（{ex.Message}，{Url}）", ex)
             Else
                 '获取请求失败的返回
-                Dim Res As String = ""
                 Try
                     If ex.Response Is Nothing Then Exit Try
                     DataStream = ex.Response.GetResponseStream()
@@ -429,6 +460,15 @@ RequestFinished:
                 End Try
                 If Res = "" Then
                     ex = New WebException($"网络请求失败（{ex.Status}，{ex.Message}，{Url}）", ex)
+                    Throw ex
+                ElseIf ReturnAllResponse Then
+                    Try
+                        Dim HeaderData = ex.Response.Headers.ToString
+                        Dim StatusCode = ex.Status
+                        Return New NetResponse(StatusCode, HeaderData, Res)
+                    Catch exc As Exception
+                        Return Res
+                    End Try
                 Else
                     ex = New ResponsedWebException($"服务器返回错误（{ex.Status}，{ex.Message}，{Url}）{vbCrLf}{Res}", Res, ex)
                 End If
@@ -443,6 +483,7 @@ RequestFinished:
             If DataStream IsNot Nothing Then DataStream.Dispose()
             If Resp IsNot Nothing Then Resp.Dispose()
         End Try
+        Return Res
     End Function
     Public Class ResponsedWebException
         Inherits WebException
