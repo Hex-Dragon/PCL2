@@ -18,7 +18,7 @@ Public Module ModBase
 #If BETA Then
     Public Const VersionCode As Integer = 342 'Release
 #Else
-    Public Const VersionCode As Integer = 344 'Snapshot
+    Public Const VersionCode As Integer = 345 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
