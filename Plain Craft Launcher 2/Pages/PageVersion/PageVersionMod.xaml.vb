@@ -46,6 +46,7 @@
         '强制刷新
         Try
             CompProjectCache.Clear()
+            CompFilesCache.Clear()
             File.Delete(PathTemp & "Cache\LocalMod.json")
             Log("[Mod] 由于点击刷新按钮，清理本地 Mod 信息缓存")
         Catch ex As Exception
@@ -322,8 +323,65 @@
     ''' <summary>
     ''' 安装 Mod。
     ''' </summary>
-    Private Sub BtnManageInstall_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageInstall.Click
-        Hint("将 Mod 文件直接拖入 PCL 窗口即可安装！")
+    Private Sub BtnManageInstall_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageInstall.Click, BtnHintInstall.Click
+        Dim FileList = SelectFiles("Mod 文件(*.jar;*.litemod;*.disabled;*.old)|*.jar;*.litemod;*.disabled;*.old", "选择要安装的 Mod")
+        If Not FileList.Any Then Return
+        InstallMods(FileList)
+    End Sub
+    ''' <summary>
+    ''' 尝试安装 Mod。
+    ''' 返回输入的文件是否为一个 Mod 文件，仅用于判断拖拽行为。
+    ''' </summary>
+    Public Shared Function InstallMods(FilePathList As IEnumerable(Of String)) As Boolean
+        Dim Extension As String = FilePathList.First.AfterLast(".").ToLower
+        '检查文件扩展名
+        If Not {"jar", "litemod", "disabled", "old"}.Any(Function(t) t = Extension) Then Return False
+        Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
+        '检查回收站：回收站中的文件有错误的文件名
+        If FilePathList.First.Contains(":\$RECYCLE.BIN\") Then
+            Hint("请先将文件从回收站还原，再尝试安装！", HintType.Critical)
+            Return True
+        End If
+        '获取并检查目标版本
+        Dim TargetVersion As McVersion = McVersionCurrent
+        If FrmMain.PageCurrent = FormMain.PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
+        If FrmMain.PageCurrent = FormMain.PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Modable Then
+            '正在选择版本，或当前版本不能安装 Mod
+            Hint("若要安装 Mod，请先选择一个可以安装 Mod 的版本！")
+        ElseIf Not (FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.VersionMod) Then
+            '未处于 Mod 管理页面
+            If MyMsgBox($"是否要将这{If(FilePathList.Count = 1, "个", "些")}文件作为 Mod 安装到 {TargetVersion.Name}？", "Mod 安装确认", "确定", "取消") = 1 Then GoTo Install
+        Else
+            '处于 Mod 管理页面
+Install:
+            Try
+                For Each ModFile In FilePathList
+                    Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "")
+                    If Not NewFileName.Contains(".") Then NewFileName += ".jar" '#4227
+                    CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & NewFileName)
+                Next
+                If FilePathList.Count = 1 Then
+                    Hint($"已安装 {GetFileNameFromPath(FilePathList.First).Replace(".disabled", "")}！", HintType.Finish)
+                Else
+                    Hint($"已安装 {FilePathList.Count} 个 Mod！", HintType.Finish)
+                End If
+                '刷新列表
+                If FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.VersionMod Then
+                    LoaderFolderRun(McModLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
+                End If
+            Catch ex As Exception
+                Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
+            End Try
+        End If
+        Return True
+    End Function
+
+    ''' <summary>
+    ''' 下载 Mod。
+    ''' </summary>
+    Private Sub BtnManageDownload_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageDownload.Click, BtnHintDownload.Click
+        PageDownloadMod.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
+        FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadMod)
     End Sub
 
 #End Region
@@ -522,8 +580,8 @@
     Public Shared UpdatingVersions As New List(Of String)
     Public Sub UpdateMods(ModList As IEnumerable(Of McMod))
         '更新前警告
-        If Not Setup.Get("HintUpdateMod") Then
-            If MyMsgBox($"新版本 Mod 可能不兼容老版本的存档或者其他 Mod，这可能导致游戏崩溃，甚至存档损坏！{vbCrLf}除非整合包作者要求你更新，否则不要私自更新整合包里的 Mod！{vbCrLf}在更新 Mod 前，请先备份存档，并检查它的更新日志！{vbCrLf}更新时，老版本的 Mod 会被移动到回收站，以防万一。{vbCrLf}{vbCrLf}请在认真阅读上述警告后再继续！", "Mod 更新警告", "我已了解上述风险，继续更新", "取消", IsWarn:=True) = 1 Then
+        If Not Setup.Get("HintUpdateMod") OrElse ModList.Count >= 15 Then
+            If MyMsgBox($"新版本 Mod 可能不兼容旧存档或者其他 Mod，这可能导致游戏崩溃，甚至永久损坏存档！{vbCrLf}如果你在游玩整合包，请千万不要自行更新 Mod！{vbCrLf}{vbCrLf}在更新前，请先备份存档，并检查 Mod 的更新日志。{vbCrLf}如果更新后出现问题，你也可以在回收站找回更新前的 Mod。", "Mod 更新警告", "我已了解风险，继续更新", "取消", IsWarn:=True) = 1 Then
                 Setup.Set("HintUpdateMod", True)
             Else
                 Exit Sub

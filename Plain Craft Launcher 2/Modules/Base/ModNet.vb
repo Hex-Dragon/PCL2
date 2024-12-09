@@ -971,7 +971,7 @@ RequestFinished:
 
                 '条件检测
                 If NetTaskThreadCount >= NetTaskThreadLimit OrElse IsSourceFailed() OrElse
-               (IsNoSplit AndAlso Threads IsNot Nothing AndAlso Threads.State <> NetState.Error) Then Return Nothing
+                    (IsNoSplit AndAlso Threads IsNot Nothing AndAlso Threads.State <> NetState.Error) Then Return Nothing
                 If State >= NetState.Merge OrElse State = NetState.WaitForCheck Then Return Nothing
                 SyncLock LockState
                     If State < NetState.Connect Then State = NetState.Connect

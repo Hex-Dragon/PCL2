@@ -128,8 +128,8 @@ RetryStart:
                 '下载
                 ActualSource = LoadingSource '显示加载中图片
                 TempDownloadingPath = TempPath & RandomInteger(0, 10000000)
-                Directory.CreateDirectory(GetPathFromFullPath(TempPath))
-                Using Client As New System.Net.WebClient
+                Directory.CreateDirectory(GetPathFromFullPath(TempPath)) '重新实现下载，以避免携带 Header（#5072）
+                Using Client As New Net.WebClient
                     Client.DownloadFile(Url, TempDownloadingPath)
                 End Using
                 If Url <> Source AndAlso Url <> FallbackSource Then

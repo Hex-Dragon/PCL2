@@ -36,6 +36,13 @@ jobs:
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const OAuthClientId As String = ""', 'Public Const OAuthClientId As String = "${{ secrets.CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const CurseForgeAPIKey As String = ""', 'Public Const CurseForgeAPIKey As String = "${{ secrets.CURSEFORGE_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
         (gc "Plain Craft Launcher 2\Modules\Base\ModBase.vb") -replace 'Public Const CommitHash As String = ""', 'Public Const CommitHash As String = "${{ github.sha }}"' | Out-File "Plain Craft Launcher 2\Modules\Base\ModBase.vb"
+        rm "Plain Craft Launcher 2\Resources\Help.zip"
+        aria2c "--out=Plain Craft Launcher 2\Resources\Help.zip" "https://codeload.github.com/LTCatt/PCL2Help/zip/refs/heads/master"
+        7z x "Plain Craft Launcher 2\Resources\Help.zip" -o"Plain Craft Launcher 2\Resources"
+        rm "Plain Craft Launcher 2\Resources\Help.zip"
+        rm "Plain Craft Launcher 2\Resources\PCL2Help-master\*.*"
+        7z a "Plain Craft Launcher 2\Resources\Help.zip" ".\Plain Craft Launcher 2\Resources\PCL2Help-master\*"
+        rm "Plain Craft Launcher 2\Resources\PCL2Help-master\" -Recurse
     - name: Build
       run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
     - name: Upload a Build Artifact
