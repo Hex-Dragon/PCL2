@@ -439,10 +439,10 @@ Refresh:
             End If
         End If
     End Sub
-    Private Sub LabLauncherTheme8Copy_MouseRightButtonUp() Handles LabLauncherTheme8Copy.MouseRightButtonUp
+    Private Sub LabLauncherTheme8Copy_MouseRightButtonUp() Handles LabLauncherTheme8Copy.MouseRightButtonUp, RadioLauncherTheme8.MouseRightButtonUp
         OpenWebsite("https://afdian.com/a/LTCat")
     End Sub
-    Private Sub LabLauncherTheme9Copy_MouseRightButtonUp() Handles LabLauncherTheme9Copy.MouseRightButtonUp
+    Private Sub LabLauncherTheme9Copy_MouseRightButtonUp() Handles LabLauncherTheme9Copy.MouseRightButtonUp, RadioLauncherTheme9.MouseRightButtonUp
         PageOtherLeft.TryFeedback()
     End Sub
 
@@ -662,24 +662,26 @@ Refresh:
         SliderLauncherOpacity.GetHintText = Function(v) Math.Round(40 + v * 0.1) & "%"
         SliderLauncherHue.GetHintText = Function(v) v & "°"
         SliderLauncherSat.GetHintText = Function(v) v & "%"
-        SliderLauncherDelta.GetHintText = Function(Value As Integer)
-                                              If Value > 90 Then
-                                                  Return "+" & (Value - 90)
-                                              ElseIf Value = 90 Then
-                                                  Return 0
-                                              Else
-                                                  Return Value - 90
-                                              End If
-                                          End Function
-        SliderLauncherLight.GetHintText = Function(Value As Integer)
-                                              If Value > 20 Then
-                                                  Return "+" & (Value - 20)
-                                              ElseIf Value = 20 Then
-                                                  Return 0
-                                              Else
-                                                  Return Value - 20
-                                              End If
-                                          End Function
+        SliderLauncherDelta.GetHintText =
+        Function(Value As Integer)
+            If Value > 90 Then
+                Return "+" & (Value - 90)
+            ElseIf Value = 90 Then
+                Return 0
+            Else
+                Return Value - 90
+            End If
+        End Function
+        SliderLauncherLight.GetHintText =
+        Function(Value As Integer)
+            If Value > 20 Then
+                Return "+" & (Value - 20)
+            ElseIf Value = 20 Then
+                Return 0
+            Else
+                Return Value - 20
+            End If
+        End Function
         SliderBackgroundOpacity.GetHintText = Function(v) Math.Round(v * 0.1) & "%"
         SliderBackgroundBlur.GetHintText = Function(v) v & " 像素"
     End Sub

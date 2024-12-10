@@ -72,10 +72,10 @@
                         </Grid>
                         <local:MyCheckBox Text="{StaticResource LangSetThemeShowLogoOnStart}" Margin="-1,0,0,1" Height="22" x:Name="CheckLauncherLogo" Tag="UiLauncherLogo" />
                     </StackPanel>
-                    <Border Background="#CCCCCCCC" Margin="-5,22,-5,-5" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed">
+                    <Border Background="#DDDDDDDD" Margin="-8,23,-5,28" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed">
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock Text="{StaticResource LangSetThemeSponsorship}" FontSize="15" Margin="0,2,0,0" />
-                            <local:MyButton Height="35" x:Name="BtnLauncherDonate" MinWidth="150" Text="{StaticResource LangSetThemeSupport}" Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0" ColorType="Highlight" />
+                            <TextBlock Text="{StaticResource LangSetThemeSponsorship}" FontSize="13" Margin="0,0,0,0" />
+                            <local:MyButton Height="32" x:Name="BtnLauncherDonate" MinWidth="140" Text="{StaticResource LangSetThemeSupport}" Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0" ColorType="Highlight" />
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -225,6 +225,7 @@
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangSetHomePageDownload}" Margin="0,0,25,0" />
                         <local:MyTextBox x:Name="TextCustomNet" Tag="UiCustomNet" Grid.Column="1" MaxHeight="28">
                             <local:MyTextBox.ValidateRules>
+                                <local:ValidateNullable />
                                 <local:ValidateHttp />
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
@@ -247,6 +248,7 @@
                             <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageI}" />
                             <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageJ}" />
                             <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageK}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangSetHomePagePresetPageL}" />
                         </local:MyComboBox>
                     </Grid>
                 </StackPanel>

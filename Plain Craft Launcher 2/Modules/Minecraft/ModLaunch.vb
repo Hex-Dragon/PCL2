@@ -224,7 +224,7 @@ NextInner:
         Sub()
             Select Case Setup.Get("SystemLaunchCount")
                 Case 10, 20, 40, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
-                    If MyMsgBox(GetLang("LangModLaunchDialogContentSponsorship", Setup.Get("SystemLaunchCount")), GetLang("LangModLaunchDialogBtn1Sponsorship"), GetLang("LangModLaunchDialogBtn2Sponsorship")) = 1 Then
+                    If MyMsgBox(GetLang("LangModLaunchDialogContentSponsorship", Setup.Get("SystemLaunchCount")),GetLang("LangModLaunchDialogTitleSponsorship", Setup.Get("SystemLaunchCount")), GetLang("LangModLaunchDialogBtn1Sponsorship"), GetLang("LangModLaunchDialogBtn2Sponsorship")) = 1 Then
                         OpenWebsite("https://afdian.com/a/LTCat")
                     End If
             End Select
@@ -234,10 +234,10 @@ NextInner:
         If String.IsNullOrEmpty(PageLoginMs.GetLoginData().OAuthRefreshToken) AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
             If IsLocationZH() Then
                 Select Case Setup.Get("SystemLaunchCount")
-                    Case 2, 5, 10, 15, 20, 40, 60, 80, 100, 125, 150, 175, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
-                        If MyMsgBox(GetLang("LangModLaunchDialogContentBuyMc", Setup.Get("SystemLaunchCount"),
-                                    GetLang("LangModLaunchDialogTitleBuyMc"), GetLang("LangModLaunchDialogBtn1BuyMc"), GetLang("LangModLaunchDialogBtn2BuyMc"))) = 1 Then
-                            OpenWebsite("https://www.xbox.com/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
+                    Case 3, 8, 15, 30, 50, 70, 90, 110, 130, 180, 220, 280, 330, 380, 450, 550, 660, 750, 880, 950, 1100, 1300, 1500, 1700, 1900
+                        If MyMsgBox(GetLang("LangModLaunchDialogContentBuyMc", Setup.Get("SystemLaunchCount")),
+                                    GetLang("LangModLaunchDialogTitleBuyMc"), GetLang("LangModLaunchDialogBtn1BuyMc"), GetLang("LangModLaunchDialogBtn2BuyMc")) = 1 Then
+                            OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
                         End If
                 End Select
             Else '限制使用离线登录（包括第三方登录）
@@ -800,7 +800,19 @@ LoginFinish:
                     ErrorMessage = GetJson(DirectCast(ex, ResponsedWebException).Response)("errorMessage")
                 Catch
                 End Try
-                If Not String.IsNullOrWhiteSpace(ErrorMessage) Then Throw New Exception("$登录失败：" & ErrorMessage)
+                If Not String.IsNullOrWhiteSpace(ErrorMessage) Then
+                    If ErrorMessage.Contains("密码错误") OrElse ErrorMessage.ContainsF("Incorrect username or password", True) Then
+                        '密码错误，退出登录 (#5090)
+                        McLaunchLog("密码错误，退出登录")
+                        Select Case Data.Input.Type
+                            Case McLoginType.Auth
+                                RunInUi(AddressOf PageLoginAuthSkin.ExitLogin)
+                            Case McLoginType.Nide
+                                RunInUi(AddressOf PageLoginNideSkin.ExitLogin)
+                        End Select
+                    End If
+                    Throw New Exception("$登录失败：" & ErrorMessage)
+                End If
             End If
             '通用关键字检测
             If AllMessage.Contains("403") Then
@@ -1635,8 +1647,11 @@ NextVersion:
                 GameSize = New Size(875 - 2, 540 - 2)
         End Select
         GameSize.Height -= 29.5 * DPI / 96 '标题栏高度
-        If McVersionCurrent.Version.McCodeMain <= 12 AndAlso McLaunchJavaSelected.VersionCode <= 8 AndAlso
-            Not McVersionCurrent.Version.HasOptiFine AndAlso Not McVersionCurrent.Version.HasForge Then '修复 #3463：1.12.2-，JRE 8 下窗口大小为设置大小的 DPI% 倍
+        If McVersionCurrent.Version.McCodeMain <= 12 AndAlso
+            McLaunchJavaSelected.VersionCode <= 8 AndAlso McLaunchJavaSelected.Version.Revision >= 200 AndAlso McLaunchJavaSelected.Version.Revision <= 321 AndAlso
+            Not McVersionCurrent.Version.HasOptiFine AndAlso Not McVersionCurrent.Version.HasForge Then
+            '修复 #3463：1.12.2-，JRE 8u200~321 下窗口大小为设置大小的 DPI% 倍
+            McLaunchLog($"已应用窗口大小过大修复（{McLaunchJavaSelected.Version.Revision}）")
             GameSize.Width /= DPI / 96
             GameSize.Height /= DPI / 96
         End If

@@ -32,7 +32,7 @@
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="{StaticResource LangDownloadModpackSearchVersion}" Margin="0,0,18,0" />
                         <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="1" IsEditable="True" MaxDropDownHeight="320">
                             <local:MyComboBoxItem Content="{StaticResource LangDownloadModpackSearchVersionAll}" IsSelected="True" />
-                            <local:MyComboBoxItem Content="1.21.3" />
+                            <local:MyComboBoxItem Content="1.21.4" />
                             <local:MyComboBoxItem Content="1.21.1" />
                             <local:MyComboBoxItem Content="1.20.6" />
                             <local:MyComboBoxItem Content="1.20.1" />
