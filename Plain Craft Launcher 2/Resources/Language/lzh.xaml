@@ -24,7 +24,7 @@
 非常建议重装为 64 位系统后再进行游戏！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">初始錯</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">境地有誤</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">或君之 .NET Framework 版本低，或其損，請於新頁中再裝 .NET Framework 4.6.2 後試！</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">或君之 .NET Framework 版本低，或其損，請下載並再裝 .NET Framework 4.6.2 ！</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">嚙踝蕭昍昍昍</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">程式現不詳之錯</s:String>
     <s:String x:Key="LangApplicationDialogContentMemReduceFail">内存优化失败</s:String>
@@ -90,7 +90,7 @@
     <s:String x:Key="LangPageNameModDownload">取Mod</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">整合包下</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">資囊下</s:String>
-    <s:String x:Key="LangHintDropFileFromRecycleBin">请先将文件从回收站还原，再拖入 PCL！</s:String>
+    <s:String x:Key="LangHintDropFileFromRecycleBin">請先自回收簿復原文檔，復拖入於 PCL！</s:String>
     <s:String x:Key="LangThemeRealWhite">目眩白</s:String>
     <s:String x:Key="LangThemeRealFunny">真·滑稽彩</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip8">累積贊助達二十三元三角三分，於愛發電私信發【解鎖碼】以解鎖。
@@ -255,8 +255,8 @@
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 儀表盤 Lite（作者：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageH">PCL 主頁市場（作者：凌雲）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageI">PCL 更新日誌（作者：Joker2184）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能說明書（撰者：WForst-Breeze）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 儀表板（撰者：SALTWOOD）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
     <s:String x:Key="LangSetFuncHidden">隱功能</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">汝可隱不需之頁，或關特定功。於任界按 F12 可暫顯隱功。</s:String>
@@ -280,8 +280,8 @@
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">隱郵箱</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">隱第三方登錄之賬郵，並盡碼之，以避隱私泄。
 此選更改將重啟啟動器後生效。</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">版本管理</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">隐藏启动按钮下方的版本选择与版本设置入口。</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">版本之管</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">隱启动鈕下方之版選与版本之管入口。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialModUpdate">Mod 更新</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialModUpdateToolTip">禁止在 Mod 管理页面更新 Mod。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">隱功能</s:String>

@@ -281,7 +281,7 @@ If you have created a stable online homepage, you can click this tip to submit i
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">Hide the email of third-party login accounts and try to asterisk the email to avoid privacy leaking.
 A restart is required to apply this change.</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">版本管理</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">隐藏启动按钮下方的版本选择与版本设置入口。</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">Hide the Selection and Properties buttons below the Launch button.</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialModUpdate">Mod 更新</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialModUpdateToolTip">禁止在 Mod 管理页面更新 Mod。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">Feature Hiding</s:String>
@@ -764,7 +764,7 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">Everyone in PCL QQ Groups</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">Thanks to guys in the groups for their support and encouragement to me and PCL for so long!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">Sponsors</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from August 2024! Thanks for your support for PCL!</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from October 2024! Thanks for your support for PCL!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">Generate Unlock Code</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">Sponsor</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">Copy Identify Code</s:String>

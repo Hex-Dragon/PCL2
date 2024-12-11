@@ -39,7 +39,7 @@
     <s:String x:Key="LangToolTipCloseMinecraft">退游</s:String>
     <s:String x:Key="LangDialogBtnUpdateFullLog">完整更新日志</s:String>
     <s:String x:Key="LangDialogUpdateTo">平原合成发射台已更新至 {0}</s:String>
-    <s:String x:Key="LangDialogPolicyContent">在使用平原合成发射台前，请同意平原合成发射台的用户协议与免责声明。</s:String>
+    <s:String x:Key="LangDialogPolicyContent">在使用 PCL 前，请同意平原合成发射台的用户协议与免责声明。</s:String>
     <s:String x:Key="LangDialogPolicyTitle">协议授权</s:String>
     <s:String x:Key="LangDialogBtnAgree">我不拒绝</s:String>
     <s:String x:Key="LangDialogBtnDeny">我不同意</s:String>
@@ -78,7 +78,7 @@
     <s:String x:Key="LangHintInstallModSuccessB">已安装 {0} 个模组！</s:String>
     <s:String x:Key="LangHintInstallModFailed">复制模组文件不成功</s:String>
     <s:String x:Key="LangHintRarNotSupport">平原合成发射台没办法处理 rar 格式的压缩毛巾，请在解压后重新挤干水分为 zip 格式再试！</s:String>
-    <s:String x:Key="LangHintWindowDropUnknown">你拖的什么东西？平原合成发射台.exe 未响应……</s:String>
+    <s:String x:Key="LangHintWindowDropUnknown">你拖的什么玩意？平原合成发射台.exe 未响应……</s:String>
     <s:String x:Key="LangHintCloseMinecraftSuccess">已了结运行中的麦恩克拉夫特！</s:String>
     <s:String x:Key="LangHintCloseMinecraftFailed">强制了结所有麦恩克拉夫特不成功</s:String>
     <s:String x:Key="LangHintBackToTopFailed">没办法滚回顶部，未找到合适的 RealScroll</s:String>
@@ -90,11 +90,11 @@
     <s:String x:Key="LangPageNameModDownload">模组下崽</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">整活包下崽</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">亮目害眼包下崽</s:String>
-    <s:String x:Key="LangHintDropFileFromRecycleBin">请先将文件从回收站还原，再拖入 PCL！</s:String>
+    <s:String x:Key="LangHintDropFileFromRecycleBin">呸呸呸，喂我吃垃圾啊！把它从垃圾桶里拿出来再给我！</s:String>
     <s:String x:Key="LangThemeRealWhite">眼瞎白</s:String>
     <s:String x:Key="LangThemeRealFunny">真·滑稽彩</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip8">累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。
-右键打开赞助页面，如果觉得平原合成发射台做得还不错就智齿一下吧 =w=！</s:String>
+右键打开赞助页面，如果觉得平原合成发射台做得还不错就给龙猫打点钱吧 =w=！</s:String>
     <s:String x:Key="LangThemeUnlockTip8">累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip9">· 反馈一个 Bug，在 Issue 标记为 [已完成] 后回复 Issue 要求解锁（右键打开反馈页面）
 · 向帮助库提交 Pull Request，在龙猫合并后解锁</s:String>
