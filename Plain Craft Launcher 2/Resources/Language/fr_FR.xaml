@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Annulé!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
@@ -8,6 +9,8 @@
     <s:String x:Key="LangDialogBtnContinue">Continuer</s:String>
     <s:String x:Key="LangComma">, </s:String>
     <s:String x:Key="LangColon">: </s:String>
+    <s:String x:Key="LangSaveAs">Sélectionner l'emplacement de sauvegarde</s:String>
+    <s:String x:Key="LangSaveAsFile">文件</s:String>
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL n'a pas les permissions d'accès à {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Le dossier de cache est indisponible</s:String>
     <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">“PCL ne peut pas accéder au dossier de cache, ce qui peut entraîner un fonctionnement incorrect de PCL.
@@ -24,6 +27,7 @@ Il est fortement recommandé de réinstaller le jeu après le passage à un syst
     <s:String x:Key="LangApplicationDialogContentNETWarn">Votre version de .NET Framework est trop ancienne ou endommagée. Veuillez télécharger et installer .NET Framework 4.6.2 depuis la page web ouverte, puis réessayez!</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Erreur inconnue</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">Une erreur inconnue s'est produite dans le programme.</s:String>
+    <s:String x:Key="LangApplicationDialogContentMemReduceFail">内存优化失败</s:String>
     <s:String x:Key="LangTitleDownload">téléchargement</s:String>
     <s:String x:Key="LangTitleHome">Lancer</s:String>
     <s:String x:Key="LangTitleSetup">Paramètres</s:String>
@@ -101,6 +105,7 @@ Cliquez avec le bouton droit pour ouvrir la page de parrainage et soutenez PCL s
     <s:String x:Key="LangHintThemeSetInit">Les paramètres de personnalisation ont été initialisés.</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">Échec de l'initialisation des paramètres de personnalisation.</s:String>
     <s:String x:Key="LangBackgroundPic">Arrière-plan</s:String>
+    <s:String x:Key="LangSetupUIBackgroundPicPixel">像素</s:String>
     <s:String x:Key="LangBackgroundPicCount">Arrière-plan (Total : {0})</s:String>
     <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">Tous les fichiers dans le dossier d'arrière-plan seront supprimés.
 Cette opération est irrévocable. Êtes-vous sûr ?</s:String>
@@ -252,6 +257,7 @@ Si vous avez créé une page d'accueil en ligne stable, vous pouvez cliquer sur 
     <s:String x:Key="LangSetHomePagePresetPageI">Journal de mise à jour PCL (Auteur : Joker2184)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
     <s:String x:Key="LangSetFuncHidden">Masquage de Fonctionnalités</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Vous pouvez masquer des pages inutiles ou désactiver des fonctionnalités spécifiques. Appuyez sur "F12" dans n'importe quelle interface pour afficher temporairement les fonctionnalités cachées.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Interface Principale</s:String>
@@ -847,6 +853,7 @@ Ouvrir PCL avec le paramètre "--memory" exécutera l'optimisation de la mémoir
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">En-tête de paramètre</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Paramètres JVM supplémentaires à utiliser lors du lancement de Minecraft, ne tentez pas de modifier sans détermination.
 Vous pouvez restaurer les paramètres par défaut en cliquant sur le bouton "Initialiser" dans l'onglet de gauche.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">Queue de paramètre</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">Les champs de texte seront directement ajoutés à la fin du paramètre de lancement.
 Par exemple, taper "--demo" lancera le jeu en mode démo.</s:String>
@@ -940,9 +947,7 @@ En général, 64 fils suffisent pour garantir la vitesse de téléchargement.</s
 Cliquez avec le bouton droit sur un dossier ou une instance pour ouvrir le dossier correspondant.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">Conserver le fichier modpack original</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">Conserver le fichier modpack utilisé pour l'installation sous le dossier de l'instance lors de l'installation du modpack.</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">Simplifier l'affichage du mod loader</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">Si le mod prend en charge Forge et Fabric, il semble prendre en charge tous les mod loaders lors du téléchargement du mod.
-Par exemple, lorsqu'il est activé, JEI montrera qu'il prend en charge tous les loaders, et lorsqu'il est désactivé, JEI montrera que seuls Forge / Fabric sont pris en charge.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">显示 Mod 加载器时忽略 Quilt</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">Vérifier les certificats SSL</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">L'activation de la vérification améliore la sécurité et réduit le risque de vol de compte (voir #2767), mais peut également entraîner l'échec de la connexion officielle (voir #3018).</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">Accessibilité</s:String>
@@ -1031,6 +1036,7 @@ En général, choisissez "Afficher un indice lorsqu'il y a un correctif de vuln�
     <s:String x:Key="LangPageVersionModOpenFolder">Dossier des mods</s:String>
     <s:String x:Key="LangPageVersionModSelectAll">Tout sélectionner</s:String>
     <s:String x:Key="LangPageVersionModInstallMod">Installer</s:String>
+    <s:String x:Key="LangPageVersionModInstallModFromFile">从文件安装</s:String>
     <s:String x:Key="LangPageVersionModCheckMod">Vérifier</s:String>
     <s:String x:Key="LangPageVersionModCheckModToolTip">Vérifiez rapidement les exigences, les duplications, les dépendances manquantes, etc. des mods.
 Pour référence uniquement, car les informations étiquetées des mods peuvent être incorrectes.</s:String>
@@ -1441,9 +1447,15 @@ Veuillez confirmer que le problème persiste dans la dernière version après la
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">Version actuelle : {0} ({1})
 Dernière version : {2} ({3})
 Cliquez pour mettre à jour, clic droit pour voir les journaux de modifications.</s:String>
+    <s:String x:Key="LangMyLocalModItemToolTipModUpdateUpgradable">点击以更新，右键查看更新日志。</s:String>
     <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">Sur quel site souhaitez-vous consulter le journal des modifications ?</s:String>
     <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">Consultation du journal des modifications</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">Une erreur s'est produite et les informations n'ont pas pu être obtenues.</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogTitleUpdateConfirm">Mod 更新确认</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogBtn1UpdateConfirm">更新</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentUpdateConfirm">是否要更新 {0}？
+
+{1}</s:String>
     <s:String x:Key="LangModModUpdatingMod">Mise à jour des mods...</s:String>
     <s:String x:Key="LangModModLoadingModList">Chargement de la liste des mods...</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">Chemin de fichier mod incorrect. ({0})</s:String>
@@ -1482,6 +1494,8 @@ Cliquez pour mettre à jour, clic droit pour voir les journaux de modifications.
     <s:String x:Key="LangModDownloadExceptionSourceOfficialListLoad">Échec de l'analyse de la liste des versions de la source officielle {0}. ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">Échec de l'analyse de la liste des versions {0}. ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionMissNecessary">La liste obtenue manque d'éléments nécessaires.</s:String>
+    <s:String x:Key="LangModDownloadExceptionBMCLMissInstance">BMCLAPI 源未包含目标版本 {0}</s:String>
+    <s:String x:Key="LangModDownloadExceptionConnectionTimeout">下载源连接超时</s:String>
     <s:String x:Key="LangModJavaManuallyImport">Importer manuellement</s:String>
     <s:String x:Key="LangModJava32Bit">32 bits</s:String>
     <s:String x:Key="LangModJavaExceptionFileNotFound">Fichier {0} introuvable.</s:String>
@@ -1542,6 +1556,8 @@ Après vous être connecté avec votre compte Microsoft une fois, cet indice n'a
     <s:String x:Key="LangModLaunchHintNoRoleOnlyOne">Vous n'avez qu'un seul personnage dans votre compte, impossible de changer !</s:String>
     <s:String x:Key="LangModLaunchDialogSelectRole">Sélection de personnage</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginFail">Échec de la connexion : {0}</s:String>
+    <s:String x:Key="LangModLaunchExceptionTimeout">登录失败：连接登录服务器超时。
+请检查你的网络状况是否良好，或尝试使用 VPN！</s:String>
     <s:String x:Key="LangModLaunchDialogContentWebLogin">Après la connexion, la page deviendra complètement blanche, il suffit de copier l'URL de cette page dans la zone de texte ci-dessous ! Si l'environnement réseau est mauvais, il se peut qu'il ne puisse pas se charger, vérifiez Internet et réessayez.</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">En attente de connexion Web</s:String>
     <s:String x:Key="LangModLaunchDialogTipWebLogin">L'URL doit commencer par https://login.live.com/oauth20_desktop.srf?code=</s:String>
@@ -1681,7 +1697,6 @@ Cela remplacera le fichier JSON et le fichier JAR, mais n'affectera pas les fich
     <s:String x:Key="LangModDownloadLibTaskDownloadAssetsIndexFail">Télécharger l'index des actifs (Chargeur secondaire)</s:String>
     <s:String x:Key="LangModDownloadLibTaskAnalysisDownloadAssets">Analyser les actifs requis (Chargeur secondaire)</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssets">Télécharger les actifs (Chargeur secondaire)</s:String>
-    <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">Sélectionner l'emplacement de sauvegarde</s:String>
     <s:String x:Key="LangModDownloadLibTaskOptiFineDownload">Télécharger OptiFine {0}</s:String>
     <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">Java 8 ou supérieur</s:String>
     <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">L'installation a été annulée car Java n'a pas été trouvé.</s:String>

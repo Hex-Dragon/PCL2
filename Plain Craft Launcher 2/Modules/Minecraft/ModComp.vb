@@ -1372,7 +1372,7 @@ Retry:
             If Title <> FileName.BeforeLast(".") Then Info.Add(FileName.BeforeLast("."))
             Select Case Type
                 Case CompType.Mod
-                    If Dependencies.Any Then Info.Add(GetLangByNumIsPlural(Dependencies.Count, "LangModCompModDependentCount") & GetLang("LangComma"))
+                    If Dependencies.Any Then Info.Add(GetLangByNumIsPlural(Dependencies.Count, "LangModCompModDependentCount", Dependencies.Count))
                 Case CompType.ModPack
                     If GameVersions.All(Function(v) v.Contains("w")) Then Info.Add($"{GetLang("LangModCompModGameVersion")} {Join(GameVersions, GetLang("LangComma"))}")
             End Select

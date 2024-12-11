@@ -811,7 +811,7 @@ LoginFinish:
                                 RunInUi(AddressOf PageLoginNideSkin.ExitLogin)
                         End Select
                     End If
-                    Throw New Exception("$登录失败：" & ErrorMessage)
+                    Throw New Exception(GetLang("LangModLaunchExceptionLoginFail", ErrorMessage))
                 End If
             End If
             '通用关键字检测
@@ -830,7 +830,7 @@ LoginFinish:
                                             " - 只注册了账号，但没有加入对应服务器。")
                 End Select
             ElseIf AllMessage.Contains("超时") OrElse AllMessage.Contains("imeout") OrElse AllMessage.Contains("网络请求失败") Then
-                Throw New Exception("$登录失败：连接登录服务器超时。" & vbCrLf & "请检查你的网络状况是否良好，或尝试使用 VPN！")
+                Throw New Exception(GetLang("LangModLaunchExceptionTimeout"))
             ElseIf ex.Message.StartsWithF("$") Then
                 Throw
             Else

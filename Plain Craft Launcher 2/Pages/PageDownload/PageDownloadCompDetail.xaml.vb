@@ -379,8 +379,8 @@
                 Sub()
                     '弹窗要求选择保存位置
                     Dim Target As String
-                    Target = SelectAs("选择保存位置", FileName,
-                        Desc & "文件|" &
+                    Target = SelectAs(GetLang("LangSaveAs"), FileName,
+                        Desc & GetLang("LangSaveAsFile") & "|" &
                         If(Project.Type = CompType.Mod,
                             If(File.FileName.EndsWith(".litemod"), "*.litemod", "*.jar"),
                             If(File.FileName.EndsWith(".mrpack"), "*.mrpack", "*.zip")), DefaultFolder)

@@ -337,7 +337,7 @@ Public Class MyLocalModItem
             '更新
             If Entry.CanUpdate Then
                 BtnUpdate.Visibility = Visibility.Visible
-                BtnUpdate.ToolTip = $"{GetUpdateCompareDescription()}{vbCrLf}{GetLang('LangMyLocalModItemToolTipModUpdateUpgradable')}"
+                BtnUpdate.ToolTip = $"{GetUpdateCompareDescription()}{vbCrLf}{GetLang("LangMyLocalModItemToolTipModUpdateUpgradable")}"
             Else
                 BtnUpdate.Visibility = Visibility.Collapsed
             End If
@@ -487,7 +487,7 @@ Public Class MyLocalModItem
 
     '触发更新
     Private Sub BtnUpdate_Click(sender As Object, e As EventArgs) Handles BtnUpdate.Click
-        If MyMsgBox($"是否要更新 {Entry.Name}？{vbCrLf}{vbCrLf}{GetUpdateCompareDescription()}", "Mod 更新确认", "更新", "取消") = 2 Then Return
+        If MyMsgBox(GetLang("LangMyLocalModItemDialogContentUpdateConfirm", Entry.Name, GetUpdateCompareDescription()), GetLang("LangMyLocalModItemDialogTitleUpdateConfirm"), GetLang("LangMyLocalModItemDialogBtn1UpdateConfirm"), GetLang("LangDialogBtnCancel")) = 2 Then Return
         FrmVersionMod.UpdateMods({Entry})
     End Sub
 

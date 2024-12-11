@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">작업이 취소되었습니다!</s:String>
     <s:String x:Key="LangDialogBtnOK">확인</s:String>
@@ -8,6 +9,8 @@
     <s:String x:Key="LangDialogBtnContinue">계속</s:String>
     <s:String x:Key="LangComma">，</s:String>
     <s:String x:Key="LangColon">：</s:String>
+    <s:String x:Key="LangSaveAs">저장 위치 선택</s:String>
+    <s:String x:Key="LangSaveAsFile">文件</s:String>
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL은 {0}에 대한 접근 권한이 없습니다.</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">캐시 폴더를 사용할 수 없습니다.</s:String>
     <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL이 캐시 폴더에 접근할 수 없습니다. 이로 인해 프로그램에 오류가 발생하거나 정상적으로 작동하지 않을 수 있습니다.
@@ -24,6 +27,7 @@
     <s:String x:Key="LangApplicationDialogContentNETWarn">당신의 .NET Framework 버전이 낮거나 손상되었습니다. 열린 웹 페이지에서 .NET Framework 4.6.2를 다시 다운로드하고 설치한 후 다시 시도해 주세요!</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">알 수 없는 오류</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">프로그램에서 알 수 없는 오류가 발생했습니다.</s:String>
+    <s:String x:Key="LangApplicationDialogContentMemReduceFail">内存优化失败</s:String>
     <s:String x:Key="LangTitleDownload">다운로드</s:String>
     <s:String x:Key="LangTitleHome">시작</s:String>
     <s:String x:Key="LangTitleSetup">설정</s:String>
@@ -101,6 +105,7 @@
     <s:String x:Key="LangHintThemeSetInit">개인화 설정이 초기화되었습니다.</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">개인화 설정 초기화에 실패했습니다.</s:String>
     <s:String x:Key="LangBackgroundPic">배경 이미지</s:String>
+    <s:String x:Key="LangSetupUIBackgroundPicPixel">像素</s:String>
     <s:String x:Key="LangBackgroundPicCount">배경 이미지 ({0} 장)</s:String>
     <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">배경 이미지 폴더의 모든 파일을 삭제하려고 합니다.
 이 작업은 취소할 수 없으며, 정말로 진행하시겠습니까?</s:String>
@@ -251,6 +256,7 @@
     <s:String x:Key="LangSetHomePagePresetPageI">PCL 업데이트 로그（작성자：Joker2184）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
     <s:String x:Key="LangSetFuncHidden">기능 숨기기</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">필요 없는 페이지를 숨기거나 특정 기능을 끌 수 있습니다. 어떤 화면에서든 F12를 눌러 숨겨진 기능을 일시적으로 표시할 수 있습니다.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">메인 페이지</s:String>
@@ -848,6 +854,7 @@ PCL은 다운로드를 시작하기 전에 설정 → 버전 격리에서 버전
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 매개변수 헤드</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Minecraft를 시작할 때 사용하는 추가 JVM 매개변수이며, 확신이 없을 경우 수정하지 마십시오. 
 왼쪽 탭의 초기화 버튼을 클릭하여 기본 설정으로 복원할 수 있습니다.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM 매개변수 테일</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">텍스트 상자의 내용은 시작 매개변수의 끝에 직접 결합됩니다. 
 예를 들어 --demo를 입력하면 게임이 체험 모드로 시작됩니다.</s:String>
@@ -941,9 +948,7 @@ assets를 완전히 변경하지 않으며, libraries, 제3자 로그인 라이�
 특정 폴더나 게임 버전에서 마우스 오른쪽 버튼을 클릭하면 해당 폴더를 열 수 있습니다.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">모드 팩 설치 시 원본 압축 파일 보존</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">모드 팩 설치 시, 버전 폴더 아래에 설치에 사용된 원본 모드 팩 압축 파일을 보존합니다.</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">Mod 로더 표시 간소화</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">Mod를 다운로드할 때, 해당 Mod가 Forge와 Fabric을 지원하면 모든 Mod 로더를 지원하는 것으로 표시됩니다.
-예를 들어, 활성화 시 JEI는 모든 버전을 지원한다고 표시하고, 비활성화 시 JEI는 Forge / Fabric 모든 버전만 지원한다고 표시합니다.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">显示 Mod 加载器时忽略 Quilt</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">SSL 인증서 검증</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">인증을 활성화하면 보안성이 향상되고 계정 도용 위험이 감소합니다(#2767 참조). 하지만 정품 로그인에 실패할 수도 있습니다(#3018 참조).</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">접근성</s:String>
@@ -1026,6 +1031,7 @@ assets를 완전히 변경하지 않으며, libraries, 제3자 로그인 라이�
     <s:String x:Key="LangPageVersionModOpenFolder">Mod 폴더 열기</s:String>
     <s:String x:Key="LangPageVersionModSelectAll">모두 선택</s:String>
     <s:String x:Key="LangPageVersionModInstallMod">Mod 설치</s:String>
+    <s:String x:Key="LangPageVersionModInstallModFromFile">从文件安装</s:String>
     <s:String x:Key="LangPageVersionModCheckMod">Mod 확인</s:String>
     <s:String x:Key="LangPageVersionModCheckModToolTip">Mod의 버전 요구 사항, 중복, 전제 조건 누락 등을 빠르게 확인합니다.
 결과는 참고용이며, 일부 Mod의 표기 정보가 부정확할 수 있습니다.</s:String>
@@ -1434,9 +1440,15 @@ URL: {0}</s:String>
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">현재 버전: {0} ({1})
 최신 버전: {2} ({3})
 업데이트하려면 클릭하고, 오른쪽 클릭하여 업데이트 로그를 확인하세요.</s:String>
+    <s:String x:Key="LangMyLocalModItemToolTipModUpdateUpgradable">点击以更新，右键查看更新日志。</s:String>
     <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">어떤 웹사이트에서 업데이트 로그를 확인하시겠습니까?</s:String>
     <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">업데이트 로그 보기</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">오류가 발생하여 정보를 가져올 수 없습니다.</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogTitleUpdateConfirm">Mod 更新确认</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogBtn1UpdateConfirm">更新</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentUpdateConfirm">是否要更新 {0}？
+
+{1}</s:String>
     <s:String x:Key="LangModModUpdatingMod">Mod 업데이트 중</s:String>
     <s:String x:Key="LangModModLoadingModList">Mod 목록 로딩 중</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">잘못된 Mod 파일 경로({0})</s:String>
@@ -1475,6 +1487,8 @@ URL: {0}</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceOfficialListLoad">{0} 공식 소스 버전 목록 파싱 실패({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">{0} 버전 목록 파싱 실패({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionMissNecessary">가져온 목록에 필수 항목이 부족합니다.</s:String>
+    <s:String x:Key="LangModDownloadExceptionBMCLMissInstance">BMCLAPI 源未包含目标版本 {0}</s:String>
+    <s:String x:Key="LangModDownloadExceptionConnectionTimeout">下载源连接超时</s:String>
     <s:String x:Key="LangModJavaManuallyImport">수동 가져오기</s:String>
     <s:String x:Key="LangModJava32Bit">32 비트</s:String>
     <s:String x:Key="LangModJavaExceptionFileNotFound">파일 {0}을(를) 찾을 수 없습니다.</s:String>
@@ -1536,6 +1550,8 @@ Minecraft가 괜찮다고 생각되면, 정품을 구매하여 지원하는 것�
     <s:String x:Key="LangModLaunchHintNoRoleOnlyOne">계정에 역할이 하나만 있어 변경할 수 없습니다!</s:String>
     <s:String x:Key="LangModLaunchDialogSelectRole">사용할 역할 선택</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginFail">로그인 실패: {0}</s:String>
+    <s:String x:Key="LangModLaunchExceptionTimeout">登录失败：连接登录服务器超时。
+请检查你的网络状况是否良好，或尝试使用 VPN！</s:String>
     <s:String x:Key="LangModLaunchDialogContentWebLogin">로그인 완료 후, 웹페이지가 완전히 비어있게 됩니다. 그 빈 웹페이지의 URL을 아래 상자에 복사하면 됩니다!
 네트워크 환경이 좋지 않으면 계속 로딩되지 않을 수 있으니, VPN이나 가속기를 사용해 보세요.</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">웹 로그인 대기 중</s:String>
@@ -1684,7 +1700,6 @@ VPN이나 가속기를 사용 중이라면, 이를 끄거나 노드를 변경한
     <s:String x:Key="LangModDownloadLibTaskDownloadAssetsIndexFail">자원 파일 인덱스 다운로드(부 로더)</s:String>
     <s:String x:Key="LangModDownloadLibTaskAnalysisDownloadAssets">필요한 자원 파일 분석(부 로더)</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssets">자원 파일 다운로드(부 로더)</s:String>
-    <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">저장 위치 선택</s:String>
     <s:String x:Key="LangModDownloadLibTaskOptiFineDownload">OptiFine {0} 다운로드</s:String>
     <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">Java 8 이상</s:String>
     <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">Java를 찾을 수 없어 설치가 취소되었습니다.</s:String>

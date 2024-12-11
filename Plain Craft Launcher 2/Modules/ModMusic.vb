@@ -135,7 +135,7 @@
         Else
             Dim Address As String = DequeueNextMusicAddress()
             If Address Is Nothing Then
-                Hint("没有可以播放的音乐！", HintType.Critical)
+                Hint(GetLang("LangModMusicNoMusic"), HintType.Critical)
             Else
                 MusicStartPlay(Address)
                 Hint(GetLang("LangModMusicPlaying", GetFileNameFromPath(Address)), HintType.Finish)
@@ -190,7 +190,7 @@
             Else
                 Dim Address As String = DequeueNextMusicAddress()
                 If Address Is Nothing Then
-                    If ShowHint Then Hint("没有可以播放的音乐！", HintType.Critical)
+                    If ShowHint Then Hint(GetLang("LangModMusicNoMusic"), HintType.Critical)
                 Else
                     Try
                         MusicStartPlay(Address, IsFirstLoad)

@@ -238,7 +238,7 @@
             If Not String.IsNullOrEmpty(Loader.Input) Then
                 Dim Id = Loader.Input
                 If Not DlClientListLoader.Output.Value("versions").Any(Function(v) v("id") = Id) Then
-                    Throw New Exception("BMCLAPI 源未包含目标版本 " & Id)
+                    Throw New Exception(GetLang("LangModDownloadExceptionBMCLMissInstance", Id))
                 End If
             End If
             '返回
@@ -1291,7 +1291,7 @@
                             End If
                         End If
                     Next
-                    If ErrorInfo Is Nothing Then ErrorInfo = New TimeoutException("下载源连接超时")
+                    If ErrorInfo Is Nothing Then ErrorInfo = New TimeoutException(GetLang("LangModDownloadExceptionConnectionTimeout"))
                     DlSourceLoaderAbort(LoaderList)
                     Throw ErrorInfo
                 End If

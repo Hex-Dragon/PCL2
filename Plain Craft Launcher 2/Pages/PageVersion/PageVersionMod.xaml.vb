@@ -339,7 +339,7 @@
         Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
         '检查回收站：回收站中的文件有错误的文件名
         If FilePathList.First.Contains(":\$RECYCLE.BIN\") Then
-            Hint("请先将文件从回收站还原，再尝试安装！", HintType.Critical)
+            Hint(GetLang("LangHintDropFileFromRecycleBin"), HintType.Critical)
             Return True
         End If
         '获取并检查目标版本
@@ -347,10 +347,16 @@
         If FrmMain.PageCurrent = FormMain.PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
         If FrmMain.PageCurrent = FormMain.PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Modable Then
             '正在选择版本，或当前版本不能安装 Mod
-            Hint("若要安装 Mod，请先选择一个可以安装 Mod 的版本！")
+            Hint(GetLang("LangHintChoseLoaderBeforeInstallMod"))
         ElseIf Not (FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.VersionMod) Then
             '未处于 Mod 管理页面
-            If MyMsgBox($"是否要将这{If(FilePathList.Count = 1, "个", "些")}文件作为 Mod 安装到 {TargetVersion.Name}？", "Mod 安装确认", "确定", "取消") = 1 Then GoTo Install
+            Dim ModInstallConfirm As Int32
+            If FilePathList.Count = 1 Then
+                ModInstallConfirm = MyMsgBox(GetLang("LangDialogInstallModContent", TargetVersion.Name), GetLang("LangDialogInstallModTitle"), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnCancel"))
+            ElseIf FilePathList.Count >= 2 Then
+                ModInstallConfirm = MyMsgBox(GetLang("LangDialogInstallModsContent", TargetVersion.Name), GetLang("LangDialogInstallModTitle"), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnCancel"))
+            End If
+            If ModInstallConfirm = 1 Then GoTo Install
         Else
             '处于 Mod 管理页面
 Install:
@@ -361,16 +367,16 @@ Install:
                     CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & NewFileName)
                 Next
                 If FilePathList.Count = 1 Then
-                    Hint($"已安装 {GetFileNameFromPath(FilePathList.First).Replace(".disabled", "")}！", HintType.Finish)
+                    Hint(GetLang("LangHintInstallModSuccessA", GetFileNameFromPath(FilePathList.First).Replace(".disabled", "")), HintType.Finish)
                 Else
-                    Hint($"已安装 {FilePathList.Count} 个 Mod！", HintType.Finish)
+                    Hint(GetLang("LangHintInstallModSuccessB", FilePathList.Count), HintType.Finish)
                 End If
                 '刷新列表
                 If FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.VersionMod Then
                     LoaderFolderRun(McModLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
                 End If
             Catch ex As Exception
-                Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
+                Log(ex, GetLang("LangHintInstallModFailed"), LogLevel.Msgbox)
             End Try
         End If
         Return True

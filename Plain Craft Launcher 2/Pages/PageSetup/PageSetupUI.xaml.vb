@@ -683,7 +683,7 @@ Refresh:
             End If
         End Function
         SliderBackgroundOpacity.GetHintText = Function(v) Math.Round(v * 0.1) & "%"
-        SliderBackgroundBlur.GetHintText = Function(v) v & " 像素"
+        SliderBackgroundBlur.GetHintText = Function(v) v & " " & GetLang("LangSetupUIBackgroundPicPixel")
     End Sub
 
 End Class

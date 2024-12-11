@@ -849,7 +849,7 @@ pause"
     Private Sub McDownloadOptiFineSave(DownloadInfo As DlOptiFineListEntry)
         Try
             Dim Id As String = DownloadInfo.NameVersion
-            Dim Target As String = SelectAs(GetLang("LangModDownloadLibSelectTitleSaveAs"), DownloadInfo.NameFile, "OptiFine Jar (*.jar)|*.jar")
+            Dim Target As String = SelectAs(GetLang("LangSaveAs"), DownloadInfo.NameFile, "OptiFine Jar (*.jar)|*.jar")
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
@@ -1312,7 +1312,7 @@ Retry:
     Private Sub McDownloadLiteLoaderSave(DownloadInfo As DlLiteLoaderListEntry)
         Try
             Dim Id As String = DownloadInfo.Inherit
-            Dim Target As String = SelectAs(GetLang("LangModDownloadLibSelectTitleSaveAs"), DownloadInfo.FileName.Replace("-SNAPSHOT", ""), "LiteLoader 安装器 (*.jar)|*.jar")
+            Dim Target As String = SelectAs(GetLang("LangSaveAs"), DownloadInfo.FileName.Replace("-SNAPSHOT", ""), "LiteLoader 安装器 (*.jar)|*.jar")
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
@@ -1492,7 +1492,7 @@ Retry:
 
     Public Sub McDownloadForgelikeSave(Info As DlForgelikeEntry)
         Try
-            Dim Target As String = SelectAs(GetLang("LangModDownloadLibSelectTitleSaveAs"), $"{Info.LoaderName}-{Info.Inherit}-{Info.VersionName}.{Info.FileExtension}",
+            Dim Target As String = SelectAs(GetLang("LangSaveAs"), $"{Info.LoaderName}-{Info.Inherit}-{Info.VersionName}.{Info.FileExtension}",
                                             $"{Info.LoaderName} 安装器 (*.{Info.FileExtension})|*.{Info.FileExtension}")
             Dim DisplayName As String = $"{Info.LoaderName} {Info.Inherit} - {Info.VersionName}"
             If Not Target.Contains("\") Then Exit Sub
@@ -2244,7 +2244,7 @@ Retry:
             Dim Url As String = DownloadInfo("url").ToString
             Dim FileName As String = GetFileNameFromPath(Url)
             Dim Version As String = GetFileNameFromPath(DownloadInfo("version").ToString)
-            Dim Target As String = SelectAs(GetLang("LangModDownloadLibSelectTitleSaveAs"), FileName, "Fabric 安装器 (*.jar)|*.jar")
+            Dim Target As String = SelectAs(GetLang("LangSaveAs"), FileName, "Fabric 安装器 (*.jar)|*.jar")
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查

@@ -1,3 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Отменено!</s:String>
     <s:String x:Key="LangDialogBtnOK">ОК</s:String>
@@ -8,6 +9,8 @@
     <s:String x:Key="LangDialogBtnContinue">Продолжить</s:String>
     <s:String x:Key="LangComma">, </s:String>
     <s:String x:Key="LangColon">: </s:String>
+    <s:String x:Key="LangSaveAs">Выбрать место сохранения</s:String>
+    <s:String x:Key="LangSaveAsFile">文件</s:String>
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL не имеет разрешения на доступ к {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Каталог кэша недоступен</s:String>
     <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL не может получить доступ к каталогу кэша, что может привести к ошибке программы или невозможности использования.
@@ -24,6 +27,7 @@
     <s:String x:Key="LangApplicationDialogContentNETWarn">Версия вашего .NET Framework слишком низкая или повреждена, пожалуйста, перезагрузите и установите .NET Framework 4.6.2 с официального сайта и попробуйте снова.</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Неизвестная ошибка</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">В программе произошла неизвестная ошибка.</s:String>
+    <s:String x:Key="LangApplicationDialogContentMemReduceFail">内存优化失败</s:String>
     <s:String x:Key="LangTitleDownload">Скачать</s:String>
     <s:String x:Key="LangTitleHome">Запуск</s:String>
     <s:String x:Key="LangTitleSetup">Настройки</s:String>
@@ -101,6 +105,7 @@
     <s:String x:Key="LangHintThemeSetInit">Настройки персонализации инициализированы.</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">Не удалось инициализировать настройки персонализации.</s:String>
     <s:String x:Key="LangBackgroundPic">Фон</s:String>
+    <s:String x:Key="LangSetupUIBackgroundPicPixel">像素</s:String>
     <s:String x:Key="LangBackgroundPicCount">Фон (Всего: {0})</s:String>
     <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">Все файлы в папке фона будут удалены.
 Эта операция необратима. Вы уверены?</s:String>
@@ -252,6 +257,7 @@
     <s:String x:Key="LangSetHomePagePresetPageI">Журнал обновлений PCL (Автор: Joker2184)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
     <s:String x:Key="LangSetFuncHidden">Скрытие функций</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Вы можете скрыть ненужные страницы или отключить определенные функции. Нажмите "F12" в любой интерфейсе, чтобы временно показать скрытые функции.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Главный интерфейс</s:String>
@@ -852,6 +858,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">Заголовок параметра</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Дополнительные параметры JVM для использования при запуске Minecraft, не пытайтесь изменять без решимости.
 Вы можете восстановить настройки по умолчанию, нажав кнопку "Initialize" на вкладке слева.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">Конец параметра</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">Текстовые поля будут присоединены непосредственно в конце параметра запуска.
 Например, ввод "--demo" запустит игру в демонстрационном режиме.</s:String>
@@ -945,9 +952,7 @@ PCL рекомендует включить опцию "Изоляция экз�
 Щелкните правой кнопкой мыши папку или экземпляр, чтобы открыть соответствующую папку.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">Сохранить архив модпака</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">Сохранить файл модпака, используемый для установки, в папке экземпляра при установке модпака.</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">Упростить отображение загрузчика модов</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">Если мод поддерживает Forge и Fabric, при скачивании мода кажется, что он поддерживает все загрузчики модов.
-Например, когда включено, JEI покажет, что поддерживает все загрузчики, а когда отключено, JEI покажет, что поддерживает только Forge / Fabric.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">显示 Mod 加载器时忽略 Quilt</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">Проверять SSL-сертификаты</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Включение проверки повысит безопасность и снизит риск кражи аккаунта (см. #2767), но также может привести к сбою входа в лицензионную учетную запись (см. #3018).</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">Доступность</s:String>
@@ -1036,6 +1041,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageVersionModOpenFolder">Папка с модами</s:String>
     <s:String x:Key="LangPageVersionModSelectAll">Выбрать все</s:String>
     <s:String x:Key="LangPageVersionModInstallMod">Установить</s:String>
+    <s:String x:Key="LangPageVersionModInstallModFromFile">从文件安装</s:String>
     <s:String x:Key="LangPageVersionModCheckMod">Проверить</s:String>
     <s:String x:Key="LangPageVersionModCheckModToolTip">Быстрая проверка требований, дублирования, отсутствующих зависимостей и т.д. у модов.
 Для справки только, так как информация, указанная модами, может быть неверной.</s:String>
@@ -1446,9 +1452,15 @@ URL: {0}</s:String>
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">Текущая версия: {0} ({1})
 Последняя версия: {2} ({3})
 Щелкните для обновления, щелкните правой кнопкой мыши для просмотра журнала изменений.</s:String>
+    <s:String x:Key="LangMyLocalModItemToolTipModUpdateUpgradable">点击以更新，右键查看更新日志。</s:String>
     <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">На какой веб-сайте вы хотите просмотреть журнал изменений?</s:String>
     <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">Просмотр журнала изменений</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">Произошла ошибка, и информация не может быть получена.</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogTitleUpdateConfirm">Mod 更新确认</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogBtn1UpdateConfirm">更新</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentUpdateConfirm">是否要更新 {0}？
+
+{1}</s:String>
     <s:String x:Key="LangModModUpdatingMod">Обновление модов...</s:String>
     <s:String x:Key="LangModModLoadingModList">Загрузка списка модов...</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">Неверный путь к файлу мода. ({0})</s:String>
@@ -1487,6 +1499,8 @@ URL: {0}</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceOfficialListLoad">Ошибка при разборе списка версий официального источника {0}. ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">Ошибка при разборе списка версий {0}. ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionMissNecessary">Полученный список не содержит необходимых элементов.</s:String>
+    <s:String x:Key="LangModDownloadExceptionBMCLMissInstance">BMCLAPI 源未包含目标版本 {0}</s:String>
+    <s:String x:Key="LangModDownloadExceptionConnectionTimeout">下载源连接超时</s:String>
     <s:String x:Key="LangModJavaManuallyImport">Импорт вручную</s:String>
     <s:String x:Key="LangModJava32Bit">32-битная версия</s:String>
     <s:String x:Key="LangModJavaExceptionFileNotFound">Файл {0} не найден.</s:String>
@@ -1547,6 +1561,8 @@ URL: {0}</s:String>
     <s:String x:Key="LangModLaunchHintNoRoleOnlyOne">У вас в аккаунте только один персонаж, невозможно переключиться!</s:String>
     <s:String x:Key="LangModLaunchDialogSelectRole">Выбор персонажа</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginFail">Ошибка входа: {0}</s:String>
+    <s:String x:Key="LangModLaunchExceptionTimeout">登录失败：连接登录服务器超时。
+请检查你的网络状况是否良好，或尝试使用 VPN！</s:String>
     <s:String x:Key="LangModLaunchDialogContentWebLogin">После входа страница станет полностью пустой, просто скопируйте URL этой страницы в текстовое поле ниже!
 Если с сетевым окружением проблемы, возможно не удастся загрузить, проверьте интернет и попробуйте снова.</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">Ожидание веб-входа</s:String>
@@ -1695,7 +1711,6 @@ URL: {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssetsIndexFail">Загрузить индекс ресурсов (боковой загрузчик)</s:String>
     <s:String x:Key="LangModDownloadLibTaskAnalysisDownloadAssets">Анализ требуемых ресурсов (боковой загрузчик)</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssets">Загрузить ресурсы (боковой загрузчик)</s:String>
-    <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">Выбрать место сохранения</s:String>
     <s:String x:Key="LangModDownloadLibTaskOptiFineDownload">Загрузить OptiFine {0}</s:String>
     <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">Java 8 или выше</s:String>
     <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">Установка отменена, так как Java не найдена.</s:String>
