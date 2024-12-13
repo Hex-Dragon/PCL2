@@ -159,7 +159,7 @@
                 Case Is <= 41
                     Return (v - 21) & " M/s"
                 Case Else
-                    Return GetLang("LangPageSetupSystemDownloadSpeedUnlimit")
+                    Return GetLang("LangPageSetupSystemDownloadSpeedUnlimited")
             End Select
         End Function
         SliderDebugAnim.GetHintText = Function(v) If(v > 29, GetLang("LangPageSetupSystemDebugAnimSpeedDisable"), (v / 10 + 0.1) & "x")

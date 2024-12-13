@@ -393,7 +393,7 @@ Stlačte znovu "F11" na opustenie režimu zobrazenia skrytých inštancií.</s:S
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">Inštalácia Forge (Metóda A)</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">Inštalácia NeoForge</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">Stiahniť hlavný súbor {0}</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Analyzovať knižnice {0}</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyzeModLoaderSupportLibrary">Analyzovať knižnice {0}</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">Stiahniť knižnice {0}</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">Získať adresu stiahnutia OptiFine</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">Stiahniť hlavný súbor OptiFine</s:String>
@@ -995,7 +995,7 @@ To vážne ovplyvní fungovanie spúšťača, neodporúča sa otvárať bez zvl�
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">Automaticky stiahnuť novú verziu</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">Nastavenia na stránke "Spúšťač" boli inicializované!</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">Nepodarilo sa inicializovať nastavenia na stránke "Spúšťač".</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">Neobmedzené</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimited">Neobmedzené</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">Zakázané</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">Príliš mnoho vlákien nastavených spôsobí kritické oneskorenia pri stiahnutí.
 Požiadavka na stiahnutie môže byť zabezpečená, keď je nastavené na 64. Vlákna nad 64 sa neodporúčajú, ak nie ste si istí, čo robíte!</s:String>
@@ -1656,7 +1656,7 @@ Ak táto možnosť nie je dostupná, prosím, vyberte "Nastaviť heslo", a prihl
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Prosím, vyberte prázdny priečinok ako cieľovú priečinku inštalácie!</s:String>
     <s:String x:Key="LangModModpackExtractArchive">Rozbalenie archívu</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Pridané do zoznamu priečinkov: {0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInsatllFail">Manuálna inštalácia integračného balíka zlyhala.</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInstallFail">Manuálna inštalácia integračného balíka zlyhala.</s:String>
     <s:String x:Key="LangModModpackExceptionOpenFileFail">Otváranie súboru integračného balíka zlyhalo.</s:String>
     <s:String x:Key="LangModModpackExceptionRarFormat">PCL nedokáže spracovať archívy vo formáte RAR.  Prosím, rozbaľte archív a následne ho znova zabaľte do formátu ZIP a skúste to znova.</s:String>
     <s:String x:Key="LangModModpackExceptionReadFileFail">Otváranie súboru integračného balíka zlyhalo. Súbor môže byť poškodený alebo v nepodporovanom formáte archívu.</s:String>
@@ -1882,7 +1882,7 @@ Odstránenie shader modifikácií umožňuje hre bežať normálne.</s:String>
 
 Rozwažte nasledujúce riešenia:
  - Aktualizujte Forge na verziu 36.2.26 alebo vyššiu.
- - Použite verziu Javy nižšiu ako 1.8.0.320.</s:String>
+ - Použite verziu Javy nižšiu ako 1.8.0_320.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBH">Hra sa zrútila, čo môže byť spôsobené úpravami verzie Forge vykonanými inými spustiteľmi, čo vedie k abnormálnym súborom v inštancii.
 Rozwažte reinstaláciu inštancie Forge od začiatku, namiesto toho, aby ste sa spoliehali na iné spustiteľe, aby upravili verziu Forge.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* Skutočnosť je taká, že váš herný systém nemá problémy, tento pád bol spôsobený vámi samým.
@@ -1973,8 +1973,8 @@ Môžete tiež pristupovať k {1} na inom zariadení a zadať kód.</s:String>
     <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
     <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
-    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModTaskDownloadCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>

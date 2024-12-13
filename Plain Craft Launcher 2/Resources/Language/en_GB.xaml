@@ -393,7 +393,7 @@ Press 'F11' again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">Forge Installation (Method A)</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">NeoForge Installation</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">Download {0} Main File</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Analyse {0} Libraries</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyzeModLoaderSupportLibrary">Analyse {0} Libraries</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">Download {0} Libraries</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">Obtain OptiFine Address</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">Download OptiFine Main File</s:String>
@@ -995,7 +995,7 @@ Will seriously affect the operation of the launcher, not recommended opening wit
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">Download the new version automatically (May require update key to update snapshot version)</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">Settings in the page 'Launcher' have been initialised!</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">Failed to initialise settings in the 'Launcher' page.</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">Unlimited</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimited">Unlimited</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">Disabled</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">Too many threads are set will cause critical lags during the download.
 Download requirement can be assured when it is set to 64. Threads above 64 is NOT recommended unless you know what exactly are doing!</s:String>
@@ -1641,7 +1641,7 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">Rename Instance JSON (Side Loader)</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL Modpack Installation: </s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC Modpack Installation: </s:String>
-    <s:String x:Key="LangModModpackNoAddons">Unable to install since the modpack does not provide the additional game version information!</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">Unable to install since the modpack does not provide the additional game version information!</s:String>
     <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
@@ -1653,9 +1653,9 @@ Detailed error information: {0}</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">Select installation destination (must be an empty folder)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft folder paths cannot contain exclamation marks (!) or semicolon (;)!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Please select an empty folder as the installation destination!</s:String>
-    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
+    <s:String x:Key="LangModModpackTaskExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Added to the folder list: {0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInstallFail">手动安装整合包失败</s:String>
     <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
     <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
     <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
@@ -1881,7 +1881,7 @@ Removing shader mods allows the game to run normally.</s:String>
 
 Consider the following solutions:
  - Update Forge to version 36.2.26 or higher.
- - Use a Java version lower than 1.8.0.320.</s:String>
+ - Use a Java version lower than 1.8.0_320.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBH">The game crashed potentially due to modifications made to the Forge version by other launchers, resulting in abnormal files within the instance.
 Consider reinstalling the Forge instance from the beginning, instead of relying on other launchers to alter the Forge version.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* In fact, your game has no issues, this crash is triggered by yourself.
@@ -1975,8 +1975,8 @@ You can also access {1} on a different device and input the code.</s:String>
     <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
     <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
-    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModTaskDownloadCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>

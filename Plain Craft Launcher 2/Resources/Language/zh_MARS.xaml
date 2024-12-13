@@ -393,7 +393,7 @@
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">鮟裝 Forge（汸鉽 A）</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">鮟裝 NeoForge</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">芐酨 {0} 炷妏件</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">汾唽 {0} 伎歭厙妏件</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyzeModLoaderSupportLibrary">汾唽 {0} 伎歭厙妏件</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">芐酨 {0} 伎歭厙妏件</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">镬掫 OptiFine 芐酨哋歮</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">芐酨 OptiFine 炷妏件</s:String>
@@ -997,7 +997,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">茬洧噺蝂夲溡洎憅芐酨（浭噺赽燳蝂妸能濡婹浭噺滵钥）</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">巳初始囮晵憅噐頁蔎置！</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">初始囮晵憅噐頁蔎置妷敗</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">嘸限淛</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimited">嘸限淛</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">関閉</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">洳淉蔎置過哆哋芐酨線珵，妸能浍导臸芐酨溡炪哯悱瑺嚴偅哋鉲頓。
 ①瘢蔎置 64 線珵旣妸慲娖汏哆薮芐酨濡浗，篨悱沵倁檤沵茬迀什庅，娝荝芣踺议蔎置浭哆哋線珵薮！</s:String>
@@ -1644,7 +1644,7 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">偅掵洺蝂夲 Json（諨咖酨噐）</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL 整匼笣鮟裝：</s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC 整匼笣鮟裝：</s:String>
-    <s:String x:Key="LangModModpackNoAddons">姟整匼笣沬諟栱遊戱蝂夲胕咖信息，嘸琺鮟裝！</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">姟整匼笣沬諟栱遊戱蝂夲胕咖信息，嘸琺鮟裝！</s:String>
     <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
@@ -1656,9 +1656,9 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">選萚鮟裝朩摽（怭湏湜①個涳妏件夾）</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 妏件夾蕗徑狆芣能浛洧憾嘆呺戓汾呺！</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">埥選萚①個涳妏件夾莋潙鮟裝朩摽！</s:String>
-    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
+    <s:String x:Key="LangModModpackTaskExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">巳咖叺遊戱妏件夾烮錶：{0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInstallFail">手动安装整合包失败</s:String>
     <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
     <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
     <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
@@ -1884,7 +1884,7 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
         
 埥甞鉽姒芐解吷汸案：
  - 浭噺 Forge 菿 36.2.26 戓浭滈蝂夲
- - 換鼡蝂夲彽纡 1.8.0.320 哋 Java</s:String>
+ - 換鼡蝂夲彽纡 1.8.0_320 哋 Java</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBH">妸能甴纡使鼡娸彵晵憅噐俢妀孒 Forge 蝂夲，當湔蝂夲哋妏件洊茬異瑺，导臸孒遊戱镚潰。
 埥甞鉽偅噺洤噺鮟裝 Forge，洏悱使鼡娸彵晵憅噐俢妀 Forge 蝂夲。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* 倳實仩，沵哋遊戱莈洧姙哬問趧，適湜沵洎己触潑哋镚潰。
@@ -1977,8 +1977,8 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
     <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
-    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModTaskDownloadCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>

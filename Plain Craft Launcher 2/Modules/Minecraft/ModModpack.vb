@@ -16,7 +16,7 @@ Public Module ModModpack
                 ModpackInstall(File)
             Catch ex As CancelledException
             Catch ex As Exception
-                Log(ex, GetLang("LangModModpackExceptionManualInsatllFail"), LogLevel.Msgbox)
+                Log(ex, GetLang("LangModModpackExceptionManualInstallFail"), LogLevel.Msgbox)
             End Try
         End Sub)
     End Sub
@@ -735,7 +735,7 @@ Retry:
             WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
         End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         '构造加载器
-        If Json("addons") Is Nothing Then Throw New Exception(GetLang("LangModModpackNoAddons"))
+        If Json("addons") Is Nothing Then Throw New Exception(GetLang("LangModModpackMCBBSNoGameInfoAddons"))
         Dim Addons As New Dictionary(Of String, String)
         For Each Entry In Json("addons")
             Addons.Add(Entry("id"), Entry("version"))
@@ -791,8 +791,8 @@ Retry:
         If TargetFolder.Contains("!") OrElse TargetFolder.Contains(";") Then Hint(GetLang("LangModModpackFolderNoExclamationOrSemicolon"), HintType.Critical) : Throw New CancelledException
         If Directory.GetFileSystemEntries(TargetFolder).Length > 0 Then Hint(GetLang("LangModModpackFolderShouldBeEmpty"), HintType.Critical) : Throw New CancelledException
         '解压
-        Dim Loader As New LoaderCombo(Of String)(GetLang("LangModModpackExtractArchive"), {
-            New LoaderTask(Of String, Integer)(GetLang("LangModModpackExtractArchive"),
+        Dim Loader As New LoaderCombo(Of String)(GetLang("LangModModpackTaskExtractArchive"), {
+            New LoaderTask(Of String, Integer)(GetLang("LangModModpackTaskExtractArchive"),
             Sub(Task As LoaderTask(Of String, Integer))
                 ExtractModpackFiles(TargetFolder, FileAddress, Task, 0.9)
                 Thread.Sleep(400) '避免文件争用
@@ -862,8 +862,8 @@ Retry:
         If TargetFolder.Contains("!") OrElse TargetFolder.Contains(";") Then Hint(GetLang("LangModModpackFolderNoExclamationOrSemicolon"), HintType.Critical) : Throw New CancelledException
         If Directory.GetFileSystemEntries(TargetFolder).Length > 0 Then Hint(GetLang("LangModModpackFolderShouldBeEmpty"), HintType.Critical) : Throw New CancelledException
         '解压
-        Dim Loader As New LoaderCombo(Of String)(GetLang("LangModModpackExtractArchive"), {
-            New LoaderTask(Of String, Integer)(GetLang("LangModModpackExtractArchive"),
+        Dim Loader As New LoaderCombo(Of String)(GetLang("LangModModpackTaskExtractArchive"), {
+            New LoaderTask(Of String, Integer)(GetLang("LangModModpackTaskExtractArchive"),
             Sub(Task As LoaderTask(Of String, Integer))
                 ExtractModpackFiles(TargetFolder, FileAddress, Task, 0.95)
                 '加入文件夹列表

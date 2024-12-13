@@ -393,7 +393,7 @@
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">安裝 Forge（方式 A）</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">安裝 NeoForge</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">下載 {0} 主檔案</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">分析 {0} 支援庫檔案</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyzeModLoaderSupportLibrary">分析 {0} 支援庫檔案</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">下載 {0} 支援庫檔案</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">獲取 OptiFine 下載連結</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">下載 OptiFine 主檔案</s:String>
@@ -997,7 +997,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">在有新版本時自動下載（更新快照版可能需要更新金鑰）</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">已初始化啟動器頁設定！</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">初始化啟動器頁設定失敗</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">無限制</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimited">無限制</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">關閉</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">如果設定過多的下載執行緒，可能會導致下載時出現非常嚴重的卡頓。
 一般設定 64 執行緒即可滿足大多數下載需求，除非你知道你在幹什麼，否則不建議設定更多的執行緒數！</s:String>
@@ -1644,7 +1644,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">重新命名版本 JSON（副載入器）</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL 模組包安裝：</s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC 模組包安裝：</s:String>
-    <s:String x:Key="LangModModpackNoAddons">該模組包未提供遊戲版本附加資訊，無法安裝！</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">該模組包未提供遊戲版本附加資訊，無法安裝！</s:String>
     <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
@@ -1656,9 +1656,9 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">選擇安裝目標（必須是一個空白資料夾）</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 資料夾路徑中不能含有驚嘆號或分號！</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">請選擇一個空白資料夾作為安裝目標！</s:String>
-    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
+    <s:String x:Key="LangModModpackTaskExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">已加入遊戲資料夾列表：{0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInstallFail">手动安装整合包失败</s:String>
     <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
     <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
     <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
@@ -1884,7 +1884,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
 
 請嘗試以下解決方案：
  - 更新 Forge 到 36.2.26 或更高版本
- - 換用版本低於 1.8.0.320 的 Java</s:String>
+ - 換用版本低於 1.8.0_320 的 Java</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBH">可能由於其他啟動器修改了 Forge 版本，目前版本的檔案存在異常，導致了遊戲崩潰。
 請嘗試重新全新安裝 Forge，而非使用其他啟動器修改 Forge 版本。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* 事實上，你的遊戲沒有任何問題，這是你自己觸發的崩潰。
@@ -1978,8 +1978,8 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
     <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
-    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModTaskDownloadCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>
