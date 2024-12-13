@@ -1831,7 +1831,7 @@ Consider disabling the mod and monitoring whether the game continues to crash.</
     <s:String x:Key="LangModCrashCrashReasonReasonAS">The game crashed because the mod {0} failed to inject.
 This typically indicates an incompatibility with other mods or the current environment, or it could be caused by a bug.
 Consider disabling the mod and monitoring whether the game continues to crash.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAT">The game crashed due to the following Mods:
+    <s:String x:Key="LangModCrashCrashReasonReasonAT">The game crashed due to the following mods:
  - {0}
 This typically indicates an incompatibility with other mods or the current environment, or it could be caused by a bug.
 Consider disabling the mods and monitoring whether the game continues to crash.</s:String>
