@@ -659,6 +659,8 @@
                 Dim Unused = New HelpEntry(GetEventAbsoluteUrls(EventData, EventType)(0)).SetToListItem(Me)
             Catch ex As Exception
                 Log(ex, "设置帮助 MyListItem 失败", LogLevel.Msgbox)
+                EventType = Nothing
+                EventData = Nothing
             End Try
         End If
     End Sub

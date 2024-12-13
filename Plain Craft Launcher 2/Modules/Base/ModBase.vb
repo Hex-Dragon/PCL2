@@ -12,13 +12,13 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.10" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.10." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.8.11" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.8.11." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
 #If BETA Then
     Public Const VersionCode As Integer = 342 'Release
 #Else
-    Public Const VersionCode As Integer = 343 'Snapshot
+    Public Const VersionCode As Integer = 345 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -971,7 +971,7 @@ Public Module ModBase
         End Using
     End Function
     ''' <summary>
-    ''' 弹出选取文件对话框并且要求选取文件。
+    ''' 弹出选取文件对话框，要求选择一个文件。
     ''' </summary>
     ''' <param name="FileFilter">要求的格式。如：“常用图片文件(*.png;*.jpg)|*.png;*.jpg”。</param>
     ''' <param name="Title">弹窗的标题。</param>
@@ -985,12 +985,32 @@ Public Module ModBase
             fileDialog.Title = Title
             fileDialog.ValidateNames = True
             fileDialog.ShowDialog()
-            SelectFile = fileDialog.FileName
-            Log("[UI] 选择文件返回：" & SelectFile)
+            Log("[UI] 选择单个文件返回：" & fileDialog.FileName)
+            Return fileDialog.FileName
         End Using
     End Function
     ''' <summary>
-    ''' 弹出选取文件夹对话框并且要求选取文件夹，以 \ 结尾。如果没有选择就返回空字符串。
+    ''' 弹出选取文件对话框，要求选择多个文件。
+    ''' </summary>
+    ''' <param name="FileFilter">要求的格式。如：“常用图片文件(*.png;*.jpg)|*.png;*.jpg”。</param>
+    ''' <param name="Title">弹窗的标题。</param>
+    Public Function SelectFiles(FileFilter As String, Title As String) As String()
+        Using fileDialog As New Forms.OpenFileDialog
+            fileDialog.AddExtension = True
+            fileDialog.AutoUpgradeEnabled = True
+            fileDialog.CheckFileExists = True
+            fileDialog.Filter = FileFilter
+            fileDialog.Multiselect = True
+            fileDialog.Title = Title
+            fileDialog.ValidateNames = True
+            fileDialog.ShowDialog()
+            Log("[UI] 选择多个文件返回：" & fileDialog.FileNames.Join(","))
+            Return fileDialog.FileNames
+        End Using
+    End Function
+    ''' <summary>
+    ''' 弹出选取文件夹对话框，要求选取文件夹。
+    ''' 返回以 \ 结尾的完整路径，如果没有选择则返回空字符串。
     ''' </summary>
     Public Function SelectFolder(Optional Title As String = "选择文件夹") As String
         If Title = "选择文件夹" Then Title = GetLang("LangModBaseSelectFolder")
@@ -1881,6 +1901,8 @@ RetryDir:
     ''' </summary>
     Public Class SafeList(Of T)
         Inherits SynchronizedCollection(Of T)
+        Implements IEnumerable, IEnumerable(Of T)
+        '构造函数
         Public Sub New()
             MyBase.New()
         End Sub
@@ -1893,7 +1915,13 @@ RetryDir:
         Public Shared Widening Operator CType(Data As SafeList(Of T)) As List(Of T)
             Return New List(Of T)(Data)
         End Operator
-        Public Overloads Function GetEnumerator() As IEnumerator(Of T)
+        '基于 SyncLock 覆写
+        Public Overloads Function GetEnumerator() As IEnumerator(Of T) Implements IEnumerable(Of T).GetEnumerator
+            SyncLock SyncRoot
+                Return Items.ToList.GetEnumerator()
+            End SyncLock
+        End Function
+        Private Overloads Function GetEnumeratorGeneral() As IEnumerator Implements IEnumerable.GetEnumerator
             SyncLock SyncRoot
                 Return Items.ToList.GetEnumerator()
             End SyncLock
@@ -2052,7 +2080,7 @@ NextElement:
                 GetTimeSpanString = TotalMonths & " 个" & GetLangByNumIsPlural(TotalMonths, "LangModBaseDateMonthA")
             ElseIf TotalMonths >= 1 Then
                 '1~4 月，“2 个月 13 天”
-                GetTimeSpanString = TotalMonths & " 个" & GetLangByNumIsPlural(TotalMonths, "LangModBaseDateMonthA") & If(RemainDays > 0, " " & RemainDays & " " & GetLangByNumIsPlural(RemainDays, "LangModBaseDateDay"), "")
+                GetTimeSpanString = TotalMonths & " " & GetLangByNumIsPlural(TotalMonths, "LangModBaseDateMonthA") & If(RemainDays > 0, " " & RemainDays & " " & GetLangByNumIsPlural(RemainDays, "LangModBaseDateDay"), "")
             ElseIf Span.TotalDays >= 4 Then
                 '4~30 天，“23 天”
                 GetTimeSpanString = Span.Days & " " & GetLangByNumIsPlural(Span.Days, "LangModBaseDateDay")

@@ -78,9 +78,8 @@
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModManageStyleA}" IsSelected="True" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModManageStyleB}" />
                         </local:MyComboBox>
-                        <local:MyCheckBox Margin="0,2,0,4" Text="{StaticResource LangPageSetupSystemDownloadSimplifyModLoaderDisplay}" Grid.Row="6" Height="22" Grid.ColumnSpan="2"
-                                          x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" 
-                                          ToolTip="{StaticResource LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip}" />
+                        <local:MyCheckBox Margin="0,2,0,4" Text="{StaticResource LangPageSetupSystemDownloadIgnoreQuiltDisplay}" Grid.Row="6" Height="22" Grid.ColumnSpan="2"
+                                          x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

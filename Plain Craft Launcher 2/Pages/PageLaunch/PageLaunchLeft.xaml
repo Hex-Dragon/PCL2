@@ -18,7 +18,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="20" />
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="10" />
         </Grid.ColumnDefinitions>
         <Grid.RenderTransform>

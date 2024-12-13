@@ -10,6 +10,8 @@
     <s:String x:Key="LangDialogBtnContinue">继续</s:String>
     <s:String x:Key="LangComma">，</s:String>
     <s:String x:Key="LangColon">：</s:String>
+    <s:String x:Key="LangSaveAs">选择保存位置</s:String>
+    <s:String x:Key="LangSaveAsFile">文件</s:String>
     <!--Application-->
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 没有对 {0} 的访问权限</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">缓存文件夹不可用</s:String>
@@ -18,8 +20,8 @@
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手动设置的缓存文件夹不可用，PCL 将使用默认缓存文件夹。
 错误原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境警告</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！
-程序目前在临时文件夹中运行，设置、游戏存档等可能无法保存，且部分功能将无法使用。</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">请将 PCL 从压缩包中解压之后再使用！
+在当前环境下运行可能会导致丢失游戏存档或设置，部分功能也可能无法使用！</s:String>
     <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL 和新版 Minecraft 均不再支持 32 位系统，部分功能将无法使用。
 非常建议重装为 64 位系统后再进行游戏！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化错误</s:String>
@@ -27,6 +29,7 @@
     <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本过低或损坏，请下载并重新安装 .NET Framework 4.6.2！</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">锟斤拷烫烫烫</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">程序出现未知错误</s:String>
+    <s:String x:Key="LangApplicationDialogContentMemReduceFail">内存优化失败</s:String>
     <!--FormMain-->
     <s:String x:Key="LangTitleDownload">下载</s:String>
     <s:String x:Key="LangTitleHome">启动</s:String>
@@ -90,7 +93,7 @@
     <s:String x:Key="LangPageNameModDownload">Mod 下载</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">整合包下载</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">资源包下载</s:String>
-    <s:String x:Key="LangHintDropFileFromRecycleBin">请先将文件从回收站还原，再拖入 PCL！</s:String>
+    <s:String x:Key="LangHintDropFileFromRecycleBin">请先将文件从回收站还原，再尝试安装！</s:String>
     <!--PageSetupUI-->
     <s:String x:Key="LangThemeRealWhite">眼瞎白</s:String>
     <s:String x:Key="LangThemeRealFunny">真·滑稽彩</s:String>
@@ -106,6 +109,7 @@
     <s:String x:Key="LangHintThemeSetInit">已初始化个性化设置</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">初始化个性化设置失败</s:String>
     <s:String x:Key="LangBackgroundPic">背景图片</s:String>
+    <s:String x:Key="LangSetupUIBackgroundPicPixel">像素</s:String>
     <s:String x:Key="LangBackgroundPicCount">背景图片 （{0} 张）</s:String>
     <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">即将删除背景图片文件夹中的所有文件。
 此操作不可撤销，是否确定？</s:String>
@@ -189,8 +193,9 @@
     <s:String x:Key="LangSetThemeNameCustom">自定义</s:String>
     <s:String x:Key="LangSetThemeNameCustomToolTip">需要解锁五个隐藏主题</s:String>
     <s:String x:Key="LangSetThemeShowLogoOnStart">打开启动器时显示 PCL 图标</s:String>
-    <s:String x:Key="LangSetThemeSponsorship">需要小小赞助一下作者，才能修改主题颜色（悲）……</s:String>
-    <s:String x:Key="LangSetThemeSupport">支持作者</s:String>
+    <s:String x:Key="LangSetThemeSponsorship">如果可以小小赞助一下 PCL，就能解锁主题颜色更换功能啦……
+多亏了大家的支持，PCL 才能在免费、无任何广告的情况下维持数年的更新（磕头）！</s:String>
+    <s:String x:Key="LangSetThemeSupport">支持 PCL 开发！</s:String>
     <s:String x:Key="LangSetBackgroundPic">背景图片</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptive">自适应方式</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveAuto">智能</s:String>
@@ -257,6 +262,7 @@
     <s:String x:Key="LangSetHomePagePresetPageI">PCL 更新日志（作者：Joker2184）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能隐藏</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">你可以隐藏不需要的页面或关闭特定功能。在任意界面按 F12 可以暂时显示被隐藏的功能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">主页面</s:String>
@@ -438,7 +444,7 @@
     <s:String x:Key="LangDownloadCompToMCMod">转到 MC 百科</s:String>
     <s:String x:Key="LangDownloadCompCopyName">复制名称</s:String>
     <s:String x:Key="LangDownloadCompLoadingList">正在获取版本列表</s:String>
-    <s:String x:Key="LangDownloadCompApiSlow">由于 API 的版本信息更新缓慢，可能无法识别刚更新不久的 MC 版本，只需等待几天即可自动恢复正常。</s:String>
+    <s:String x:Key="LangDownloadCompApiSlow">由于版本信息更新缓慢，可能无法识别刚更新的 MC 版本，只需等待几天即可自动恢复正常。</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">正在查找适合的游戏版本……</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">当前 MC 文件夹中没有找到适合这个 Mod 的版本！</s:String>
     <s:String x:Key="LangDownloadCompSelectedVersion">所选版本：</s:String>
@@ -794,7 +800,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 10 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 11 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">赞助作者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -888,8 +894,8 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">游戏分配</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">高级启动选项</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 参数头</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
-你可以通过点击左侧选项卡的初始化按钮来恢复到默认设置。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">启动 Minecraft 时使用的额外 JVM 参数，除非有确定把握，否则请不要修改</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM 参数尾</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">文本框中的内容将会被直接拼合在启动参数的末尾。
 例如输入 --demo 则会以试玩模式启动游戏。</s:String>
@@ -914,7 +920,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 例如：
  · "{verpath}test.exe" ：运行版本文件夹下的 test.exe 程序
  · "{java}java.exe" -jar "{verpath}test.jar" ：用 Java 运行版本文件夹下的 test.jar
- · notepad "{verindie}option.txt" ：使用记事本打开该版本的设置文件
+ · notepad "{verindie}options.txt" ：使用记事本打开该版本的设置文件
 
 涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行失败。
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹。</s:String>
@@ -985,9 +991,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 在某个文件夹或游戏版本上右键，即可选择打开对应文件夹。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">安装整合包时保留原始压缩包</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">安装整合包时，在版本文件夹下保留用于安装的原始整合包压缩包文件</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">简化 Mod 加载器显示</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">下载 Mod 时，若该 Mod 支持 Forge 和 Fabric，则显示为支持任意 Mod 加载器。
-例如，开启时 JEI 显示支持全版本，关闭后 JEI 就会显示仅支持 Forge / Fabric 全版本。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">显示 Mod 加载器时忽略 Quilt</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">验证 SSL 证书</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">开启验证会提高安全性、降低盗号风险（见 #2767），但也可能导致正版登录失败（见 #3018）。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">辅助功能</s:String>
@@ -1075,15 +1079,16 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetTitle">初始化确认</s:String>
     <!--PageVersionMod-->
     <s:String x:Key="LangPageVersionModSearchTip">搜索 Mod 名称 / 描述 / 标签</s:String>
-    <s:String x:Key="LangPageVersionModOpenFolder">打开 Mod 文件夹</s:String>
+    <s:String x:Key="LangPageVersionModOpenFolder">打开文件夹</s:String>
     <s:String x:Key="LangPageVersionModSelectAll">全选</s:String>
-    <s:String x:Key="LangPageVersionModInstallMod">安装 Mod</s:String>
+    <s:String x:Key="LangPageVersionModInstallMod">下载新 Mod</s:String>
+    <s:String x:Key="LangPageVersionModInstallModFromFile">从文件安装</s:String>
     <s:String x:Key="LangPageVersionModCheckMod">检查 Mod</s:String>
     <s:String x:Key="LangPageVersionModCheckModToolTip">快速检查 Mod 的版本要求、重复、前置缺失等问题。
 结果仅供参考，由于部分 Mod 标注的信息有误，可能并不准确。</s:String>
-    <s:String x:Key="LangPageVersionModNoModFile">未找到 Mod</s:String>
-    <s:String x:Key="LangPageVersionModDropToInstallModTip">要安装 Mod，请直接将 Mod 文件拖入 PCL 窗口。
-如果你确定你已经安装了 Mod，但仍然看到了这条提示，则是版本隔离设置有误，请在启动设置中调整版本隔离选项。</s:String>
+    <s:String x:Key="LangPageVersionModNoModFile">尚未安装 Mod</s:String>
+    <s:String x:Key="LangPageVersionModDropToInstallModTip">你可以下载新的 Mod，或者从已经下载好的文件安装 Mod。
+如果你已经安装了 Mod，可能是版本隔离设置有误，请在设置中调整版本隔离选项。</s:String>
     <s:String x:Key="LangPageVersionModLoadingList">正在加载 Mod 列表</s:String>
     <s:String x:Key="LangPageVersionModSelectedFile">已选择 {0} 个文件</s:String>
     <s:String x:Key="LangPageVersionModOperationUpdate">更新</s:String>
@@ -1105,12 +1110,11 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 在手动删除或重命名其中一个文件后，才能继续操作。</s:String>
     <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusTitle">存在文件冲突</s:String>
     <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">由于文件被占用，Mod 的状态切换失败，请尝试关闭正在运行的游戏后再试！</s:String>
-    <s:String x:Key="LangPageVersionModDialogUpdateModContent">新版本 Mod 可能不兼容老版本的存档或者其他 Mod，这可能导致游戏崩溃，甚至存档损坏！
-除非整合包作者要求你更新，否则不要私自更新整合包里的 Mod！
-在更新 Mod 前，请先备份存档，并检查它的更新日志！
-更新时，老版本的 Mod 会被移动到回收站，以防万一。
+    <s:String x:Key="LangPageVersionModDialogUpdateModContent">新版本 Mod 可能不兼容旧存档或者其他 Mod，这可能导致游戏崩溃，甚至永久损坏存档！
+如果你在游玩整合包，请千万不要自行更新 Mod！
 
-请在认真阅读上述警告后再继续！</s:String>
+在更新前，请先备份存档，并检查 Mod 的更新日志。
+如果更新后出现问题，你也可以在回收站找回更新前的 Mod。</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModTitle">Mod 更新警告</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModBtnConfirm">我已了解上述风险，继续更新</s:String>
     <s:String x:Key="LangPageVersionModTaskDownloadNewMod">下载新版 Mod 文件</s:String>
@@ -1270,7 +1274,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 例如：
  · "{verpath}test.exe" ：运行版本文件夹下的 test.exe 程序
  · "{java}java.exe" -jar "{verpath}test.jar" ：用 Java 运行版本文件夹下的 test.jar
- · notepad "{verindie}option.txt" ：使用记事本打开该版本的设置文件
+ · notepad "{verindie}options.txt" ：使用记事本打开该版本的设置文件
 
 涉及路径的操作最好都打上双引号，以避免路径中的空格导致运行失败。
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹。</s:String>
@@ -1358,7 +1362,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">下载</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">更新日志</s:String>
     <s:String x:Key="LangModMinecraftVersionVanilla">原版</s:String>
-    <s:String x:Key="LangModMinecraftInvalidMcFolder">无效的 Minecraft 文件夹：{0}</s:String>
+    <s:String x:Key="LangModMinecraftInvalidMcFolder">无法访问 Minecraft 文件夹：{0}</s:String>
     <s:String x:Key="LangModMinecraftNotLoaded">该版本未被加载，请向作者反馈此问题</s:String>
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL 无法识别该版本的 MC 版本号</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">无法识别：{0}</s:String>
@@ -1397,10 +1401,10 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">未找到 Asset Index</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">非预期的结果（{0}）</s:String>
     <!--ModComp-->
-    <s:String x:Key="LangModCompModDependentCount">个前置 Mod</s:String>
-    <s:String x:Key="LangModCompModDependentCountP">个前置 Mod</s:String>
-    <s:String x:Key="LangModCompModDownload">下载{0}次</s:String>
-    <s:String x:Key="LangModCompModDownloadP">下载{0}次</s:String>
+    <s:String x:Key="LangModCompModDependentCount">{0} 个前置 Mod</s:String>
+    <s:String x:Key="LangModCompModDependentCountP">{0} 个前置 Mod</s:String>
+    <s:String x:Key="LangModCompModDownload">下载 {0} 次</s:String>
+    <s:String x:Key="LangModCompModDownloadP">下载 {0} 次</s:String>
     <s:String x:Key="LangModCompModGameVersion">游戏版本</s:String>
     <s:String x:Key="LangModCompModUpdateTime">更新于 {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">另存为</s:String>
@@ -1504,11 +1508,16 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModValidateInvalidChar">路径中存在无效字符！</s:String>
     <!--MyLocalModItem-->
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">当前版本：{0} ({1})
-最新版本：{2} ({3})
-点击以更新，右键查看更新日志。</s:String>
+最新版本：{2} ({3})</s:String>
+    <s:String x:Key="LangMyLocalModItemToolTipModUpdateUpgradable">点击以更新，右键查看更新日志。</s:String>
     <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">要在哪个网站上查看更新日志？</s:String>
     <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">查看更新日志</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">存在错误，无法获取信息</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogTitleUpdateConfirm">Mod 更新确认</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogBtn1UpdateConfirm">更新</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentUpdateConfirm">是否要更新 {0}？
+
+{1}</s:String>
     <!--ModMod-->
     <s:String x:Key="LangModModUpdatingMod">正在更新 Mod</s:String>
     <s:String x:Key="LangModModLoadingModList">正在加载 Mod 列表</s:String>
@@ -1550,6 +1559,8 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceOfficialListLoad">{0} 官方源版本列表解析失败（{1}）</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">{0} 版本列表解析失败（{1}）</s:String>
     <s:String x:Key="LangModDownloadExceptionMissNecessary">获取到的列表缺乏必要项</s:String>
+    <s:String x:Key="LangModDownloadExceptionBMCLMissInstance">BMCLAPI 源未包含目标版本 {0}</s:String>
+    <s:String x:Key="LangModDownloadExceptionConnectionTimeout">下载源连接超时</s:String>
     <!--ModJava-->
     <s:String x:Key="LangModJavaManuallyImport">手动导入</s:String>
     <s:String x:Key="LangModJava32Bit">32 位</s:String>
@@ -1592,14 +1603,14 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModLaunchExceptionNoInstanceSelected">未选择 Minecraft 版本！</s:String>
     <s:String x:Key="LangModLaunchExceptionInstanceError">Minecraft 存在问题：{0}</s:String>
     <s:String x:Key="LangModLaunchDialogContentSponsorship">PCL 已经为你启动了 {0} 次游戏啦！
-如果觉得 PCL 还算好用的话，也可以考虑赞助一下作者……一点心意也行……
-毕竟一个人开发也不容易（悲）……</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleSponsorship">求赞助啦……</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">这就赞助！</s:String>
+如果 PCL 还算好用的话，能不能考虑赞助一下 PCL……
+如果没有大家的支持，PCL 很难在免费、无任何广告的情况下维持数年的更新（磕头）……！</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleSponsorship">{0} 次启动！</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">支持 PCL！</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2Sponsorship">但是我拒绝</s:String>
     <s:String x:Key="LangModLaunchDialogContentBuyMc">你已经启动了 {0} 次 Minecraft 啦！
-如果觉得 Minecraft 还不错，也可以考虑购买正版支持一下，毕竟开发游戏也真的很不容易……
-在你登录一次正版账号后，就不会再出现这个提示了。</s:String>
+如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易……不要一直白嫖啦。
+在登录一次正版账号后，就不会再出现这个提示了！</s:String>
     <s:String x:Key="LangModLaunchDialogTitleBuyMc">考虑一下正版？</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1BuyMc">支持正版游戏！</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2BuyMc">下次一定</s:String>
@@ -1613,6 +1624,8 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModLaunchHintNoRoleOnlyOne">你的账户中只有一个角色， 无法更换！</s:String>
     <s:String x:Key="LangModLaunchDialogSelectRole">选择使用的角色</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginFail">登录失败：{0}</s:String>
+    <s:String x:Key="LangModLaunchExceptionTimeout">登录失败：连接登录服务器超时。
+请检查你的网络状况是否良好，或尝试使用 VPN！</s:String>
     <s:String x:Key="LangModLaunchDialogContentWebLogin">登录完成后，网页会变得完全空白，把那个空白网页的网址复制到下面的框中就行了！
 如果网络环境不佳，它可能一直加载不出来，那就只能试试用 VPN 或加速器了。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">等待网页登录</s:String>
@@ -1766,7 +1779,6 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssetsIndexFail">下载资源文件索引（副加载器）</s:String>
     <s:String x:Key="LangModDownloadLibTaskAnalysisDownloadAssets">分析所需资源文件（副加载器）</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssets">下载资源文件（副加载器）</s:String>
-    <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">选择保存位置</s:String>
     <s:String x:Key="LangModDownloadLibTaskOptiFineDownload">OptiFine {0} 下载</s:String>
     <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">Java 8 或更高版本</s:String>
     <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">由于未找到 Java，已取消安装。</s:String>

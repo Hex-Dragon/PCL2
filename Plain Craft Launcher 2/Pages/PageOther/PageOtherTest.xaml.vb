@@ -12,7 +12,7 @@
     Public Shared Sub MemoryOptimize(ShowHint As Boolean)
         If ShowHint Then Hint(GetLang("LangPageOtherTestNoUtility"))
     End Sub
-    Public Shared Sub MemoryOptimizeInternal()
+    Public Shared Sub MemoryOptimizeInternal(ShowHint As Boolean)
     End Sub
     Public Shared Function GetRandomCave() As String
         Return GetLang("LangPageOtherTestNoUtility")

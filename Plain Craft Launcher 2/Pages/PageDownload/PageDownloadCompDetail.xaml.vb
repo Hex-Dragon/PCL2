@@ -59,30 +59,86 @@
             Me.Topmost = If(Topmost, "")
         End Sub
     End Class
+
+    Private VersionFilter As String
+    Private IsMajorVersionFilter As Boolean '是否按大版本号筛选（1.21 / 1.20 / 1.19 / ...）而非小版本号（1.21.1 / 1.21 / 1.20.4 / ...）
     Private Sub Load_OnFinish()
+        '初始化筛选器
+        Dim VersionFilters As List(Of String)
+
+        '按小版本号筛选？
+        IsMajorVersionFilter = False
+        VersionFilters = CompFileLoader.Output.SelectMany(Function(v) v.GameVersions).Select(Function(v) GetGroupedVersionName(v, IsMajorVersionFilter, True)).
+            Distinct.OrderByDescending(Function(s) s, New VersionComparer).ToList
+        '按大版本号筛选？
+        If VersionFilters.Count >= 9 Then
+            IsMajorVersionFilter = True
+            VersionFilters = CompFileLoader.Output.SelectMany(Function(v) v.GameVersions).Select(Function(v) GetGroupedVersionName(v, IsMajorVersionFilter, True)).
+                Distinct.OrderByDescending(Function(s) s, New VersionComparer).ToList
+        End If
+
+        'UI 化筛选器
+        PanFilter.Children.Clear()
+        If VersionFilters.Count <= 2 Then
+            CardFilter.Visibility = Visibility.Collapsed
+            VersionFilter = Nothing
+        Else
+            CardFilter.Visibility = Visibility.Visible
+            VersionFilters.Insert(0, "全部")
+            '转化为按钮
+            For Each Version As String In VersionFilters
+                Dim NewButton As New MyRadioButton With {
+                    .Text = Version, .Margin = New Thickness(2, 0, 2, 0), .ColorType = MyRadioButton.ColorState.Highlight}
+                NewButton.LabText.Margin = New Thickness(-2, 0, 8, 0)
+                AddHandler NewButton.Check,
+                Sub(sender As MyRadioButton, raiseByMouse As Boolean)
+                    PanScroll.ScrollToHome()
+                    VersionFilter = If(sender.Text = "全部", Nothing, sender.Text)
+                    UpdateFilterResult()
+                End Sub
+                PanFilter.Children.Add(NewButton)
+            Next
+            '自动选择
+            Dim ToCheck As MyRadioButton = Nothing
+            If TargetVersion <> "" Then
+                Dim TargetFile = CompFileLoader.Output.FirstOrDefault(Function(v) v.GameVersions.Contains(TargetVersion))
+                If TargetFile IsNot Nothing Then
+                    Dim TargetGroup = GetGroupedVersionName(TargetVersion, IsMajorVersionFilter, True)
+                    For Each Button As MyRadioButton In PanFilter.Children
+                        If Button.Text <> TargetGroup Then Continue For
+                        ToCheck = Button
+                        Exit For
+                    Next
+                End If
+            End If
+            If ToCheck Is Nothing Then ToCheck = PanFilter.Children(0)
+            ToCheck.Checked = True
+        End If
+
+        '更新筛选结果（文件列表 UI 化）
+        UpdateFilterResult()
+    End Sub
+    Private Sub UpdateFilterResult()
         Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
             GetLang("LangDownloadCompSelectedVersion") & $"{If(TargetLoader <> CompModLoaderType.Any, TargetLoader.ToString & " ", "")}{TargetVersion}", "")
-        '初始化字典
+        '归类到卡片下
         Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New CardSorter(TargetCardName))
-        Dict.Add("未知版本", New List(Of CompFile))
+        Dict.Add("其他版本", New List(Of CompFile))
         Dim SupportedLoaders As New List(Of Integer)([Enum].GetValues(GetType(CompModLoaderType)))
         For Each Version As CompFile In CompFileLoader.Output
             For Each GameVersion In Version.GameVersions
+                '检查是否符合版本筛选器
+                If VersionFilter IsNot Nothing AndAlso
+                    GetGroupedVersionName(GameVersion, IsMajorVersionFilter, True) <> VersionFilter Then Continue For
                 '决定添加到哪个卡片
-                Dim Ver As String
-                If GameVersion Is Nothing Then
-                    Ver = "未知版本"
-                ElseIf GameVersion.Contains("w") OrElse GameVersion.Contains("pre") OrElse GameVersion.Contains("rc") Then
-                    Ver = "快照版本"
-                ElseIf GameVersion.StartsWithF("1.0") Then
-                    Ver = "远古版本"
-                Else
-                    Ver = GameVersion
-                End If
+                Dim Ver As String = GetGroupedVersionName(GameVersion, False, False)
                 '遍历加入的加载器列表
                 Dim Loaders As New List(Of String)
-                If Project.Type = CompType.Mod Then
+                If Project.ModLoaders.Count > 1 AndAlso '至少有两个加载器
+                    Project.Type = CompType.Mod AndAlso '是 Mod
+                    Ver.StartsWith("1.") Then '不是 “快照版本” 之类的
                     For Each Loader In Version.ModLoaders
+                        If Loader = CompModLoaderType.Quilt AndAlso Setup.Get("ToolDownloadIgnoreQuilt") Then Continue For
                         If SupportedLoaders.Contains(Loader) Then Loaders.Add(Loader.ToString & " ")
                     Next
                 End If
@@ -101,16 +157,16 @@
             For Each Version As CompFile In CompFileLoader.Output
                 If Version.GameVersions.Contains(TargetVersion) AndAlso
                    (TargetLoader = CompModLoaderType.Any OrElse Version.ModLoaders.Contains(TargetLoader)) Then
+                    '检查是否符合版本筛选器
+                    If VersionFilter IsNot Nothing AndAlso
+                        Not Version.GameVersions.Any(Function(v) GetGroupedVersionName(v, IsMajorVersionFilter, True) = VersionFilter) Then Continue For
                     If Not Dict(TargetCardName).Contains(Version) Then Dict(TargetCardName).Add(Version)
                 End If
             Next
         End If
-
-#Region "转化为 UI"
+        '转化为 UI
         Try
-            '清空当前
-            PanMain.Children.Clear()
-            '转化为 UI
+            PanResults.Children.Clear()
             For Each Pair As KeyValuePair(Of String, List(Of CompFile)) In Dict
                 If Not Pair.Value.Any() Then Continue For
                 '增加卡片
@@ -118,7 +174,7 @@
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
-                PanMain.Children.Add(NewCard)
+                PanResults.Children.Add(NewCard)
                 '确定卡片是否展开
                 If Pair.Key = TargetCardName OrElse
                    (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
@@ -128,20 +184,29 @@
                     NewCard.IsSwaped = True
                 End If
                 '增加提示
-                If Pair.Key = "未知版本" Then
+                If Pair.Key = "其他版本" Then
                     NewStack.Children.Add(New MyHint With {.Text = GetLang("LangDownloadCompApiSlow"), .IsWarn = False, .Margin = New Thickness(0, 0, 0, 7)})
                 End If
             Next
             '如果只有一张卡片，展开第一张卡片
-            If PanMain.Children.Count = 1 Then
-                CType(PanMain.Children(0), MyCard).IsSwaped = False
+            If PanResults.Children.Count = 1 Then
+                CType(PanResults.Children(0), MyCard).IsSwaped = False
             End If
         Catch ex As Exception
             Log(ex, "可视化工程下载列表出错", LogLevel.Feedback)
         End Try
-#End Region
-
     End Sub
+    Private Function GetGroupedVersionName(Name As String, MajorOnly As Boolean, FoldOldRelease As Boolean) As String
+        If Name Is Nothing Then
+            Return "其他版本"
+        ElseIf Name.Contains("w") Then
+            Return "快照版本"
+        ElseIf Name.StartsWith("1.0") OrElse Not Name.StartsWith("1.") OrElse (FoldOldRelease AndAlso Val(Name.Split(".")(1)) < 10) Then
+            Return "远古版本"
+        Else
+            Return If(MajorOnly, "1." & Name.Split(".")(1).BeforeFirst(" "), Name)
+        End If
+    End Function
 
 #End Region
 
@@ -249,7 +314,7 @@
                         If Not Version.IsLoaded Then Version.Load()
                         If Not Version.Modable Then Return False
                         If File.GameVersions.Any(Function(v) v.Contains(".")) AndAlso
-                           Not File.GameVersions.Any(Function(v) v.Contains(".") AndAlso v.Split(".")(1) = Version.Version.McCodeMain.ToString) Then Return False
+                           Not File.GameVersions.Any(Function(v) v.Contains(".") AndAlso v = Version.Version.McName) Then Return False
                         If AllowForge Is Nothing OrElse AllowFabric Is Nothing Then Return True
                         If AllowForge AndAlso (Version.Version.HasForge OrElse Version.Version.HasNeoForge) Then Return True
                         If AllowFabric AndAlso Version.Version.HasFabric Then Return True
@@ -314,11 +379,11 @@
                 Sub()
                     '弹窗要求选择保存位置
                     Dim Target As String
-                    Target = SelectAs("选择保存位置", FileName,
-                                      Desc & "文件|" &
-                                      If(Project.Type = CompType.Mod,
-                                          If(File.FileName.EndsWith(".litemod"), "*.litemod", "*.jar"),
-                                          If(File.FileName.EndsWith(".mrpack"), "*.mrpack", "*.zip")), DefaultFolder)
+                    Target = SelectAs(GetLang("LangSaveAs"), FileName,
+                        Desc & GetLang("LangSaveAsFile") & "|" &
+                        If(Project.Type = CompType.Mod,
+                            If(File.FileName.EndsWith(".litemod"), "*.litemod", "*.jar"),
+                            If(File.FileName.EndsWith(".mrpack"), "*.mrpack", "*.zip")), DefaultFolder)
                     If Not Target.Contains("\") Then Exit Sub
                     '构造步骤加载器
                     Dim LoaderName As String = Desc & GetLang("LangDownloadCompTaskDownloadFileDetail") & GetFileNameWithoutExtentionFromPath(Target) & " "

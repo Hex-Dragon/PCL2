@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">¡Cancelado!</s:String>
     <s:String x:Key="LangDialogBtnOK">Aceptar</s:String>
@@ -9,6 +8,8 @@
     <s:String x:Key="LangDialogBtnContinue">Continuar</s:String>
     <s:String x:Key="LangComma">, </s:String>
     <s:String x:Key="LangColon">: </s:String>
+    <s:String x:Key="LangSaveAs">Seleccionar ubicación de guardado</s:String>
+    <s:String x:Key="LangSaveAsFile">文件</s:String>
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL no tiene permiso de acceso a {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Carpeta de Caché No Disponible</s:String>
     <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL no puede acceder a la carpeta de caché, lo que puede resultar en un error del programa o inutilidad.
@@ -25,6 +26,7 @@ El programa se está ejecutando actualmente en una carpeta temporal, es posible 
     <s:String x:Key="LangApplicationDialogContentNETWarn">La versión de su .NET Framework es demasiado baja o está dañada, por favor, vuelva a descargar e instalar .NET Framework 4.6.2 desde el sitio web de apertura y vuelva a intentarlo.</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Error Desconocido</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">Ocurrió un error desconocido en el programa.</s:String>
+    <s:String x:Key="LangApplicationDialogContentMemReduceFail">内存优化失败</s:String>
     <s:String x:Key="LangTitleDownload">Descargar</s:String>
     <s:String x:Key="LangTitleHome">Iniciar</s:String>
     <s:String x:Key="LangTitleSetup">Configuraciones</s:String>
@@ -102,6 +104,7 @@ Haz clic derecho para abrir la página de patrocinio y apoya a PCL si crees que 
     <s:String x:Key="LangHintThemeSetInit">La configuración de personalización ha sido inicializada.</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">Error al inicializar la configuración de personalización.</s:String>
     <s:String x:Key="LangBackgroundPic">Fondo</s:String>
+    <s:String x:Key="LangSetupUIBackgroundPicPixel">像素</s:String>
     <s:String x:Key="LangBackgroundPicCount">Fondo (Total: {0})</s:String>
     <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">Todos los archivos en la carpeta de fondo serán eliminados.
 Esta operación es irrevocable. ¿Estás seguro?</s:String>
@@ -253,6 +256,7 @@ Si has creado una página de inicio en línea estable, puedes hacer clic en esta
     <s:String x:Key="LangSetHomePagePresetPageI">Registro de Actualizaciones de PCL (Autor: Joker2184)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
     <s:String x:Key="LangSetFuncHidden">Ocultación de Funciones</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Puedes ocultar páginas innecesarias o desactivar funciones específicas. Presiona "F12" en cualquier interfaz para mostrar funciones ocultas temporalmente.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Interfaz Principal</s:String>
@@ -846,6 +850,7 @@ Abrir PCL con el parámetro "--memory" ejecutará la optimización de memoria en
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">Encabezado de Parámetro</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Parámetros adicionales de JVM para usar al lanzar Minecraft, no intentes modificar sin determinación.
 Puedes restaurar la configuración predeterminada haciendo clic en el botón "Inicializar" en la pestaña izquierda.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">Cola de Parámetro</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">Los campos de texto se unirán directamente al final del parámetro de lanzamiento.
 Por ejemplo, escribir "--demo" lanzará el juego en modo de demostración.</s:String>
@@ -939,9 +944,7 @@ En general, 64 hilos son suficientes para asegurar la velocidad de descarga.</s:
 Haz clic derecho en una carpeta o instancia para abrir la carpeta correspondiente.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">Mantener el Archivo Original del Modpack</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">Mantener el archivo del modpack que se utiliza para la instalación en la carpeta de la instancia al instalar el modpack.</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">Simplificar la Visualización del Cargador de Mods</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">Si el mod es compatible con Forge y Fabric, parece ser compatible con todos los cargadores de mods al descargar el mod.
-Por ejemplo, cuando está habilitado, JEI mostrará que es compatible con todos los cargadores, y cuando está deshabilitado, JEI mostrará que solo se admiten Forge / Fabric.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">显示 Mod 加载器时忽略 Quilt</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">Verificar Certificados SSL</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Activar la verificación mejorará la seguridad y reducirá el riesgo de robo de cuenta (ver #2767), pero también puede causar que el inicio de sesión original falle (ver #3018).</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">Accesibilidad</s:String>
@@ -1030,6 +1033,7 @@ A menos que estés haciendo un modpack o actualizando el lanzador a menudo, esta
     <s:String x:Key="LangPageVersionModOpenFolder">Carpeta de Mods</s:String>
     <s:String x:Key="LangPageVersionModSelectAll">Seleccionar Todo</s:String>
     <s:String x:Key="LangPageVersionModInstallMod">Instalar</s:String>
+    <s:String x:Key="LangPageVersionModInstallModFromFile">从文件安装</s:String>
     <s:String x:Key="LangPageVersionModCheckMod">Verificar</s:String>
     <s:String x:Key="LangPageVersionModCheckModToolTip">Verifica rápidamente los requisitos, duplicados, dependencias faltantes, etc. de los mods.
 Solo para referencia, ya que la información etiquetada de los mods puede ser incorrecta.</s:String>
@@ -1440,9 +1444,15 @@ Confirme que el problema persista en la última versión después de la actualiz
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">Versión Actual: {0} ({1})
 Última Versión: {2} ({3})
 Haz clic para actualizar, haz clic derecho para ver los registros de cambios.</s:String>
+    <s:String x:Key="LangMyLocalModItemToolTipModUpdateUpgradable">点击以更新，右键查看更新日志。</s:String>
     <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">¿En qué sitio web te gustaría ver el registro de cambios?</s:String>
     <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">Visualización del Registro de Cambios</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">Ocurrió un error y no se pudo obtener la información.</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogTitleUpdateConfirm">Mod 更新确认</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogBtn1UpdateConfirm">更新</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentUpdateConfirm">是否要更新 {0}？
+
+{1}</s:String>
     <s:String x:Key="LangModModUpdatingMod">Actualizando Mods...</s:String>
     <s:String x:Key="LangModModLoadingModList">Cargando Lista de Mods...</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">Ruta de archivo de mod incorrecta. ({0})</s:String>
@@ -1481,6 +1491,8 @@ Haz clic para actualizar, haz clic derecho para ver los registros de cambios.</s
     <s:String x:Key="LangModDownloadExceptionSourceOfficialListLoad">Error al analizar la lista de versiones de la fuente oficial {0}. ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">Error al analizar la lista de versiones de {0}. ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionMissNecessary">La lista obtenida carece de elementos necesarios.</s:String>
+    <s:String x:Key="LangModDownloadExceptionBMCLMissInstance">BMCLAPI 源未包含目标版本 {0}</s:String>
+    <s:String x:Key="LangModDownloadExceptionConnectionTimeout">下载源连接超时</s:String>
     <s:String x:Key="LangModJavaManuallyImport">Importar manualmente</s:String>
     <s:String x:Key="LangModJava32Bit">32 bits</s:String>
     <s:String x:Key="LangModJavaExceptionFileNotFound">Archivo {0} no encontrado.</s:String>
@@ -1541,6 +1553,8 @@ Después de iniciar sesión con tu cuenta de Microsoft una vez, este aviso no vo
     <s:String x:Key="LangModLaunchHintNoRoleOnlyOne">¡Solo tienes un personaje en tu cuenta, no puedes cambiar!</s:String>
     <s:String x:Key="LangModLaunchDialogSelectRole">Selección de personaje</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginFail">Error al iniciar sesión: {0}</s:String>
+    <s:String x:Key="LangModLaunchExceptionTimeout">登录失败：连接登录服务器超时。
+请检查你的网络状况是否良好，或尝试使用 VPN！</s:String>
     <s:String x:Key="LangModLaunchDialogContentWebLogin">Después de iniciar sesión, la página se volverá completamente en blanco, ¡simplemente copia la URL de esa página en el cuadro de texto a continuación!
 Si el entorno de red es deficiente, puede que no se cargue, verifica la conexión a internet y vuelve a intentarlo.</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">Esperando inicio de sesión web</s:String>
@@ -1689,7 +1703,6 @@ Esto sobrescribirá el archivo JSON y el archivo JAR, pero no afectará a los ar
     <s:String x:Key="LangModDownloadLibTaskDownloadAssetsIndexFail">Descargar índice de activos (Cargador Secundario)</s:String>
     <s:String x:Key="LangModDownloadLibTaskAnalysisDownloadAssets">Analizar activos requeridos (Cargador Secundario)</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssets">Descargar activos (Cargador Secundario)</s:String>
-    <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">Seleccionar ubicación de guardado</s:String>
     <s:String x:Key="LangModDownloadLibTaskOptiFineDownload">Descargar OptiFine {0}</s:String>
     <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">Java 8 o superior</s:String>
     <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">La instalación fue cancelada ya que no se encontró Java.</s:String>

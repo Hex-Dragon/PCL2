@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Ακυρώθηκε!</s:String>
     <s:String x:Key="LangDialogBtnOK">Εντάξει</s:String>
@@ -9,6 +8,8 @@
     <s:String x:Key="LangDialogBtnContinue">Συνέχεια</s:String>
     <s:String x:Key="LangComma">, </s:String>
     <s:String x:Key="LangColon">: </s:String>
+    <s:String x:Key="LangSaveAs">Επιλέξτε Αποθήκευση Τοποθεσίας</s:String>
+    <s:String x:Key="LangSaveAsFile">文件</s:String>
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL δεν έχει δικαιώματα πρόσβασης σε {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Μη Διαθέσιμος Φάκελος Προσωρινής Αποθήκευσης</s:String>
     <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL δεν μπορεί να προσπελάσει το φάκελο κρυφής μνήμης, το οποίο μπορεί να προκαλέσει σφάλμα προγράμματος ή ανενεργότητα.
@@ -22,27 +23,28 @@
 Συνιστάται ιδιαίτερα η επανεγκατάσταση του παιχνιδιού μετά τη μετάβαση σε σύστημα 64-bit!</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL Σφάλμα Αρχικοποίησης</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">Σφάλμα Εκτέλεσης Περιβάλλοντος</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">Η έκδοση του .NET Framework είναι πολύ χαμηλή ή κατεστραμμένη. Κάντε λήψη και εγκαταστήστε το .NET Framework 4.6.2 από την τοποθεσία Web που ανοίξατε και προσπαθήστε ξανά.</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">Η έκδοση του .NET Framework που έχετε είναι πολύ χαμηλή ή κατεστραμμένη. Παρακαλούμε κατεβάσετε και εγκαταστήστε ξανά το .NET Framework 4.6.2!</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Άγνωστο Σφάλμα</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">Παρουσιάστηκε άγνωστο σφάλμα στο πρόγραμμα.</s:String>
+    <s:String x:Key="LangApplicationDialogContentMemReduceFail">内存优化失败</s:String>
     <s:String x:Key="LangTitleDownload">Λήψη</s:String>
     <s:String x:Key="LangTitleHome">Εκκίνηση</s:String>
     <s:String x:Key="LangTitleSetup">Ρυθμίσεις</s:String>
-    <s:String x:Key="LangTitleLink">Φιλοξενία</s:String>
+    <s:String x:Key="LangTitleLink">Σε απευθείας σύνδεση</s:String>
     <s:String x:Key="LangTitleOther">Περισσότερα</s:String>
     <s:String x:Key="LangToolTipBackToTop">Επιστροφή στην Κορυφή</s:String>
     <s:String x:Key="LangToolTipDownload">Διαχείριση Λήψεων</s:String>
     <s:String x:Key="LangToolTipSurrender">Παράδοση</s:String>
     <s:String x:Key="LangToolTipCloseMinecraft">Κλείστε το Minecraft</s:String>
-    <s:String x:Key="LangDialogBtnUpdateFullLog">Γεμάτος</s:String>
-    <s:String x:Key="LangDialogUpdateTo">Το PCL {0} Ενημερώθηκε</s:String>
-    <s:String x:Key="LangDialogPolicyContent">Πριν χρησιμοποιήσετε το PCL, παρακαλώ συμφωνήστε με τους Όρους Υπηρεσίας και την Αποποίηση Ευθύνης του PCL.</s:String>
-    <s:String x:Key="LangDialogPolicyTitle">Εξουσιοδότηση Συμφωνίας</s:String>
+    <s:String x:Key="LangDialogBtnUpdateFullLog">Πλήρες Ημερολόγιο Ενημερώσεων</s:String>
+    <s:String x:Key="LangDialogUpdateTo">Το PCL έχει ενημερωθεί σε {0}</s:String>
+    <s:String x:Key="LangDialogPolicyContent">Πριν χρησιμοποιήσετε το PCL, συμφωνήστε με τη Συμφωνία Χρήστη του PCL και την Αποποίηση ευθυνών.</s:String>
+    <s:String x:Key="LangDialogPolicyTitle">Έγκριση πρωτοκόλλου</s:String>
     <s:String x:Key="LangDialogBtnAgree">Συμφωνώ</s:String>
     <s:String x:Key="LangDialogBtnDeny">Απόρριψη</s:String>
-    <s:String x:Key="LangDialogBtnPolicyContent">ToS &amp; Αρνηση</s:String>
-    <s:String x:Key="LangHintDebugWarning">[Λειτουργία Αποσφαλμάτωσης] Το PCL εκτελείται σε λειτουργία εντοπισμού σφαλμάτων, γεγονός που μπορεί να προκαλέσει υποβάθμιση της απόδοσης. Παρακαλώ ΜΗΝ το ενεργοποιήσετε εκτός εάν είναι απαραίτητο!</s:String>
-    <s:String x:Key="LangDialogTitleTip">Συμβουλή</s:String>
+    <s:String x:Key="LangDialogBtnPolicyContent">Προβολή συμφωνίας χρήστη και αποποίησης ευθύνης</s:String>
+    <s:String x:Key="LangHintDebugWarning">[Λειτουργία εντοπισμού σφαλμάτων] Το PCL εκτελείται σε λειτουργία εντοπισμού σφαλμάτων, η οποία μπορεί να προκαλέσει υποβάθμιση της απόδοσης, γι' αυτό μην την ενεργοποιείτε, εκτός αν είναι απαραίτητο!</s:String>
+    <s:String x:Key="LangDialogTitleTip">προτροπή</s:String>
     <s:String x:Key="LangDialogHardcoreFanTheme">Ναι! Έχετε χρησιμοποιήσει PCL 99 φορές, σας ευχαριστούμε για τη μακροχρόνια υποστήριξή σας!
 Το κρυφό θέμα «Σκληροί Οπαδοί» ξεκλειδώθηκε!</s:String>
     <s:String x:Key="LangDialogCloseOnDownloading">Υπάρχει ακόμη μια μη ολοκληρωμένη εργασία λήψης. Είστε βέβαιοι ότι θέλετε να σταματήσετε;</s:String>
@@ -102,6 +104,7 @@
     <s:String x:Key="LangHintThemeSetInit">Οι ρυθμίσεις εξατομίκευσης έχουν προετοιμαστεί.</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">Απέτυχε η προετοιμασία των ρυθμίσεων εξατομίκευσης.</s:String>
     <s:String x:Key="LangBackgroundPic">Φόντο</s:String>
+    <s:String x:Key="LangSetupUIBackgroundPicPixel">像素</s:String>
     <s:String x:Key="LangBackgroundPicCount">Φόντο (Σύνολο: {0})</s:String>
     <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">Όλα τα αρχεία στον φάκελο φόντου θα διαγραφούν.
 Αυτή η πράξη είναι αμετάκλητη. Είστε σίγουροι;</s:String>
@@ -253,6 +256,7 @@
     <s:String x:Key="LangSetHomePagePresetPageI">Αρχείο Ενημέρωσης PCL (Συγγραφέας: Joker2184)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageJ">Εγχειρίδιο Νέων Χαρακτηριστικών PCL (Συγγραφέας: WForst-Breeze)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">Πίνακας Ελέγχου OpenMCIM (Συγγραφέας: SALTWOOD)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
     <s:String x:Key="LangSetFuncHidden">Απόκρυψη Λειτουργιών</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">Μπορείτε να αποκρύψετε περιττές σελίδες ή να απενεργοποιήσετε συγκεκριμένες λειτουργίες. Πατήστε «F12» σε οποιαδήποτε διεπαφή για να εμφανιστούν προσωρινά οι κρυφές λειτουργίες.</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">Κύρια Διεπαφή</s:String>
@@ -853,6 +857,7 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">Κεφαλίδα Παραμέτρου</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Πρόσθετες παράμετροι JVM που θα χρησιμοποιηθούν κατά την εκκίνηση του Minecraft, μην επιχειρήσετε να τις τροποποιήσετε χωρίς τον καθορισμό.
 Μπορείτε να επαναφέρετε τις προεπιλεγμένες ρυθμίσεις κάνοντας κλικ στο κουμπί «Αρχικοποίηση» στην αριστερή καρτέλα.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">Ουρά Παραμέτρου</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">Τα πεδία κειμένου θα ενωθούν απευθείας στο τέλος της παραμέτρου εκκίνησης.
 Για παράδειγμα, πληκτρολογώντας «--demo» θα ξεκινήσει το παιχνίδι σε λειτουργία επίδειξης.</s:String>
@@ -946,9 +951,7 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
 Κάντε δεξί κλικ σε έναν φάκελο ή μια παρουσία για να ανοίξετε τον αντίστοιχο φάκελο.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">Διατηρήστε το Αρχικό Αρχείο Modpack</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">Διατηρήστε το αρχείο modpack που χρησιμοποιείται για εγκατάσταση κάτω από το φάκελο παρουσίας κατά την εγκατάσταση του modpack.</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">Απλοποίηση Εμφάνισης Mod Φορτωτής</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">Εάν το mod υποστηρίζει Forge και Fabric, φαίνεται να υποστηρίζει όλα τα Mod Φορτωτής κατά τη λήψη του mod.
-Για παράδειγμα, όταν είναι ενεργοποιημένο, το JEI θα δείξει ότι υποστηρίζει όλους τους φορτωτές και όταν είναι απενεργοποιημένο, το JEI θα δείξει ότι υποστηρίζονται μόνο το Forge / Fabric.</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">显示 Mod 加载器时忽略 Quilt</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">Επαλήθευση Πιστοποιητικών SSL</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Η ενεργοποίηση της επαλήθευσης θα βελτιώσει την ασφάλεια και θα μειώσει τον κίνδυνο κλοπής λογαριασμού (βλ. #2767), αλλά μπορεί επίσης να προκαλέσει αποτυχία σύνδεσης για τους έγκυρους λογαριασμούς (βλ. #3018)。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">Προσβασιμότητα</s:String>
@@ -1037,6 +1040,7 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageVersionModOpenFolder">Φάκελος Mods</s:String>
     <s:String x:Key="LangPageVersionModSelectAll">Επιλογή όλων</s:String>
     <s:String x:Key="LangPageVersionModInstallMod">Εγκατάσταση</s:String>
+    <s:String x:Key="LangPageVersionModInstallModFromFile">从文件安装</s:String>
     <s:String x:Key="LangPageVersionModCheckMod">Έλεγχος</s:String>
     <s:String x:Key="LangPageVersionModCheckModToolTip">Ελέγξτε γρήγορα τις απαιτήσεις, τις αντιγραφές, τις εξαρτήσεις που λείπουν κ.λπ. των mods.
 Μόνο για αναφορά, καθώς οι πληροφορίες ότι τα mods που επισημαίνονται ενδέχεται να είναι εσφαλμένες.</s:String>
@@ -1447,9 +1451,15 @@ URL: {0}</s:String>
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">Τρέχουσα έκδοση: {0} ({1})
 Τελευταία έκδοση: {2} ({3})
 Κάντε κλικ για ενημέρωση, κάντε δεξί κλικ για να δείτε τα αρχεία καταγραφής αλλαγών.</s:String>
+    <s:String x:Key="LangMyLocalModItemToolTipModUpdateUpgradable">点击以更新，右键查看更新日志。</s:String>
     <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">Σε ποιον ιστότοπο θα θέλατε να προβάλετε τη σύνδεση αλλαγών;</s:String>
     <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">Αλλαγή Προβολής Αρχείου Καταγραφής</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">Παρουσιάστηκε σφάλμα και δεν ήταν δυνατή η λήψη πληροφοριών.</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogTitleUpdateConfirm">Mod 更新确认</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogBtn1UpdateConfirm">更新</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentUpdateConfirm">是否要更新 {0}？
+
+{1}</s:String>
     <s:String x:Key="LangModModUpdatingMod">Ενημέρωση Mods...</s:String>
     <s:String x:Key="LangModModLoadingModList">Φόρτωση Λίστας Τροπολογιών...</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">Εσφαλμένη διαδρομή αρχείου mod. ({0})</s:String>
@@ -1488,6 +1498,8 @@ URL: {0}</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceOfficialListLoad">Απέτυχε η ανάλυση της λίστας επίσημης έκδοσης {0} πηγής. ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">Απέτυχε η ανάλυση της λίστας εκδόσεων {0}. ({1})</s:String>
     <s:String x:Key="LangModDownloadExceptionMissNecessary">Η ληφθείσα λίστα δεν διαθέτει απαραίτητα στοιχεία.</s:String>
+    <s:String x:Key="LangModDownloadExceptionBMCLMissInstance">BMCLAPI 源未包含目标版本 {0}</s:String>
+    <s:String x:Key="LangModDownloadExceptionConnectionTimeout">下载源连接超时</s:String>
     <s:String x:Key="LangModJavaManuallyImport">Μη αυτόματη εισαγωγή</s:String>
     <s:String x:Key="LangModJava32Bit">32-bit</s:String>
     <s:String x:Key="LangModJavaExceptionFileNotFound">Το αρχείο {0} δεν βρέθηκε.</s:String>
@@ -1548,6 +1560,8 @@ URL: {0}</s:String>
     <s:String x:Key="LangModLaunchHintNoRoleOnlyOne">Έχετε μόνο έναν χαρακτήρα στον λογαριασμό σας, δεν είναι δυνατή η εναλλαγή!</s:String>
     <s:String x:Key="LangModLaunchDialogSelectRole">Επιλογή χαρακτήρων</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginFail">Απέτυχε η σύνδεση: {0}</s:String>
+    <s:String x:Key="LangModLaunchExceptionTimeout">登录失败：连接登录服务器超时。
+请检查你的网络状况是否良好，或尝试使用 VPN！</s:String>
     <s:String x:Key="LangModLaunchDialogContentWebLogin">Μετά τη σύνδεση, η σελίδα θα γίνει εντελώς κενή, απλώς αντιγράψτε τη διεύθυνση URL αυτής της σελίδας στο παρακάτω πλαίσιο κειμένου!
 Εάν το περιβάλλον δικτύου είναι κακό, ενδέχεται να μην είναι δυνατή η φόρτωσή του, ελέγξτε το Διαδίκτυο και δοκιμάστε ξανά.</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">Αναμονή για Σύνδεση στον Ιστό</s:String>
@@ -1696,7 +1710,6 @@ URL: {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssetsIndexFail">Λήψη Ευρετηρίου Στοιχείων (Πλευρικός Φορτωτής)</s:String>
     <s:String x:Key="LangModDownloadLibTaskAnalysisDownloadAssets">Ανάλυση Απαιτούμενων Στοιχείων (Πλευρικός Φορτωτής)</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssets">Λήψη Στοιχείων (Πλευρικός Φορτωτής)</s:String>
-    <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">Επιλέξτε Αποθήκευση Τοποθεσίας</s:String>
     <s:String x:Key="LangModDownloadLibTaskOptiFineDownload">Λήψη OptiFine {0}</s:String>
     <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">Java 8 ή νεότερη έκδοση</s:String>
     <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">Η εγκατάσταση ακυρώθηκε επειδή δεν βρέθηκε η Java.</s:String>

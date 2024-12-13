@@ -56,9 +56,9 @@ Public Class Application
                     '内存优化
                     Dim Ram = My.Computer.Info.AvailablePhysicalMemory
                     Try
-                        PageOtherTest.MemoryOptimizeInternal()
+                        PageOtherTest.MemoryOptimizeInternal(False)
                     Catch ex As Exception
-                        MsgBox(ex.Message, MsgBoxStyle.Critical, "内存优化失败")
+                        MsgBox(ex.Message, MsgBoxStyle.Critical, GetLang("LangApplicationDialogContentMemReduceFail"))
                         Environment.Exit(-1)
                     End Try
                     If My.Computer.Info.AvailablePhysicalMemory < Ram Then '避免 ULong 相减出现负数

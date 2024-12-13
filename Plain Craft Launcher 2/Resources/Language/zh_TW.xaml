@@ -1,4 +1,3 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">已取消！</s:String>
     <s:String x:Key="LangDialogBtnOK">確認</s:String>
@@ -9,6 +8,8 @@
     <s:String x:Key="LangDialogBtnContinue">繼續</s:String>
     <s:String x:Key="LangComma">，</s:String>
     <s:String x:Key="LangColon">：</s:String>
+    <s:String x:Key="LangSaveAs">選擇儲存位置</s:String>
+    <s:String x:Key="LangSaveAsFile">文件</s:String>
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 沒有對 {0} 的訪問權限</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">快取資料夾不可用</s:String>
     <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">PCL 無法訪問快取資料夾，可能導致程式出錯或無法正常使用。
@@ -22,9 +23,10 @@
 非常建議重裝為 64 位元系統後再進行遊戲！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始化錯誤</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">執行環境錯誤</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本過低或損壞，請在打開的網頁中重新下載並安裝 .NET Framework 4.6.2 後重試！</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">你的 .NET Framework 版本過低或損壞，請下載並重新安裝 .NET Framework 4.6.2 ！</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">嚙踝蕭昍昍昍</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">程式出現未知錯誤</s:String>
+    <s:String x:Key="LangApplicationDialogContentMemReduceFail">内存优化失败</s:String>
     <s:String x:Key="LangTitleDownload">下載</s:String>
     <s:String x:Key="LangTitleHome">啟動</s:String>
     <s:String x:Key="LangTitleSetup">設定</s:String>
@@ -102,6 +104,7 @@
     <s:String x:Key="LangHintThemeSetInit">已初始化個人化設定</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">初始化個人化設定失敗</s:String>
     <s:String x:Key="LangBackgroundPic">背景圖像</s:String>
+    <s:String x:Key="LangSetupUIBackgroundPicPixel">像素</s:String>
     <s:String x:Key="LangBackgroundPicCount">背景圖像（{0} 張）</s:String>
     <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">即將刪除背景圖像資料夾中的所有檔案。
 此操作不可復原，是否確認？</s:String>
@@ -253,6 +256,7 @@
     <s:String x:Key="LangSetHomePagePresetPageI">PCL 更新日誌（作者：Joker2184）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能說明書（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 儀表板（作者：SALTWOOD）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
     <s:String x:Key="LangSetFuncHidden">功能隱藏</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">你可以隱藏不需要的畫面或關閉特定功能。在任意畫面按 F12 可以暫時顯示被隱藏的功能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">首畫面</s:String>
@@ -855,6 +859,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 參數頭</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">啟動 Minecraft 時使用的額外 JVM 參數，在沒有確認把握的情況下請不要嘗試修改。
 你可以通過點擊左側頁籤的初始化按鈕來復原到預設設定。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM 參數尾</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">文字框中的內容將會被直接拼合在啟動參數的末尾。
 例如輸入 --demo 則會以試玩模式啟動遊戲。</s:String>
@@ -948,9 +953,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
 在某個資料夾或遊戲實例上右鍵，即可選擇開啟對應資料夾。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">安裝模組包時保留原始壓縮檔案</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">安裝模組包時，在實例資料夾下保留用於安裝的原始模組包壓縮檔案</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplay">簡化模組載入器顯示</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSimplifyModLoaderDisplayToolTip">下載模組時，若該模組支援 Forge 和 Fabric，則顯示為支援任意模組載入器。
-例如，開啟時 JEI 顯示支援全版本，關閉後 JEI 就會顯示僅支援 Forge / Fabric 全版本。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">显示 Mod 加载器时忽略 Quilt</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">驗證 SSL 認證</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">開啟驗證會提高安全性、降低盜號風險（見 #2767），但也可能導致正版登入失敗（見 #3018）。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">協助工具</s:String>
@@ -1039,6 +1042,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageVersionModOpenFolder">開啟模組資料夾</s:String>
     <s:String x:Key="LangPageVersionModSelectAll">全選</s:String>
     <s:String x:Key="LangPageVersionModInstallMod">安裝模組</s:String>
+    <s:String x:Key="LangPageVersionModInstallModFromFile">从文件安装</s:String>
     <s:String x:Key="LangPageVersionModCheckMod">檢查模組</s:String>
     <s:String x:Key="LangPageVersionModCheckModToolTip">快速檢查模組的版本要求、重複、前置缺失等問題。
 結果僅供參考，由於部分模組標註的資訊有誤，可能並不準確。</s:String>
@@ -1448,9 +1452,15 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">目前版本：{0} ({1})
 最新版本：{2} ({3})
 點擊以更新，右鍵檢視更新日誌。</s:String>
+    <s:String x:Key="LangMyLocalModItemToolTipModUpdateUpgradable">点击以更新，右键查看更新日志。</s:String>
     <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">要在哪個網站上檢視更新日誌？</s:String>
     <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">檢視更新日誌</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">存在錯誤，無法獲取資訊</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogTitleUpdateConfirm">Mod 更新确认</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogBtn1UpdateConfirm">更新</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentUpdateConfirm">是否要更新 {0}？
+
+{1}</s:String>
     <s:String x:Key="LangModModUpdatingMod">正在更新模組</s:String>
     <s:String x:Key="LangModModLoadingModList">正在載入模組清單</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">錯誤的模組檔案路徑（{0}）</s:String>
@@ -1489,6 +1499,8 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceOfficialListLoad">{0} 官方源版本清單解析失敗（{1}）</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">{0} 版本清單解析失敗（{1}）</s:String>
     <s:String x:Key="LangModDownloadExceptionMissNecessary">獲取到的清單缺乏必要項</s:String>
+    <s:String x:Key="LangModDownloadExceptionBMCLMissInstance">BMCLAPI 源未包含目标版本 {0}</s:String>
+    <s:String x:Key="LangModDownloadExceptionConnectionTimeout">下载源连接超时</s:String>
     <s:String x:Key="LangModJavaManuallyImport">手動匯入</s:String>
     <s:String x:Key="LangModJava32Bit">32 位元</s:String>
     <s:String x:Key="LangModJavaExceptionFileNotFound">未找到 {0} 檔案</s:String>
@@ -1550,6 +1562,8 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModLaunchHintNoRoleOnlyOne">你的帳戶中只有一個角色， 無法更換！</s:String>
     <s:String x:Key="LangModLaunchDialogSelectRole">選擇使用的角色</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginFail">登入失敗：{0}</s:String>
+    <s:String x:Key="LangModLaunchExceptionTimeout">登录失败：连接登录服务器超时。
+请检查你的网络状况是否良好，或尝试使用 VPN！</s:String>
     <s:String x:Key="LangModLaunchDialogContentWebLogin">登入完成後，網頁會變得完全空白，把那個空白網頁的網址複製到下面的框中就行了！
 如果網路環境不佳，它可能一直載入不出來，那就只能試試用 VPN 或 Proxy 了。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">等待網頁登入</s:String>
@@ -1698,7 +1712,6 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssetsIndexFail">下載資源檔案索引（副載入器）</s:String>
     <s:String x:Key="LangModDownloadLibTaskAnalysisDownloadAssets">分析所需資源檔案（副載入器）</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadAssets">下載資源檔案（副載入器）</s:String>
-    <s:String x:Key="LangModDownloadLibSelectTitleSaveAs">選擇儲存位置</s:String>
     <s:String x:Key="LangModDownloadLibTaskOptiFineDownload">OptiFine {0} 下載</s:String>
     <s:String x:Key="LangModDownloadLibOptiFineDownloadJava">Java 8 或更高版本</s:String>
     <s:String x:Key="LangModDownloadLibExceptionOptiFineDownloadCancelJava">由於未找到 Java，已取消安裝。</s:String>

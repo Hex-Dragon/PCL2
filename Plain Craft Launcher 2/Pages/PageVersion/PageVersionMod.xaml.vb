@@ -46,6 +46,7 @@
         '强制刷新
         Try
             CompProjectCache.Clear()
+            CompFilesCache.Clear()
             File.Delete(PathTemp & "Cache\LocalMod.json")
             Log("[Mod] 由于点击刷新按钮，清理本地 Mod 信息缓存")
         Catch ex As Exception
@@ -322,8 +323,71 @@
     ''' <summary>
     ''' 安装 Mod。
     ''' </summary>
-    Private Sub BtnManageInstall_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageInstall.Click
-        Hint(GetLang("LangPageVersionModHintDropFileToInstall"))
+    Private Sub BtnManageInstall_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageInstall.Click, BtnHintInstall.Click
+        Dim FileList = SelectFiles("Mod 文件(*.jar;*.litemod;*.disabled;*.old)|*.jar;*.litemod;*.disabled;*.old", "选择要安装的 Mod")
+        If Not FileList.Any Then Return
+        InstallMods(FileList)
+    End Sub
+    ''' <summary>
+    ''' 尝试安装 Mod。
+    ''' 返回输入的文件是否为一个 Mod 文件，仅用于判断拖拽行为。
+    ''' </summary>
+    Public Shared Function InstallMods(FilePathList As IEnumerable(Of String)) As Boolean
+        Dim Extension As String = FilePathList.First.AfterLast(".").ToLower
+        '检查文件扩展名
+        If Not {"jar", "litemod", "disabled", "old"}.Any(Function(t) t = Extension) Then Return False
+        Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
+        '检查回收站：回收站中的文件有错误的文件名
+        If FilePathList.First.Contains(":\$RECYCLE.BIN\") Then
+            Hint(GetLang("LangHintDropFileFromRecycleBin"), HintType.Critical)
+            Return True
+        End If
+        '获取并检查目标版本
+        Dim TargetVersion As McVersion = McVersionCurrent
+        If FrmMain.PageCurrent = FormMain.PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
+        If FrmMain.PageCurrent = FormMain.PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Modable Then
+            '正在选择版本，或当前版本不能安装 Mod
+            Hint(GetLang("LangHintChoseLoaderBeforeInstallMod"))
+        ElseIf Not (FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.VersionMod) Then
+            '未处于 Mod 管理页面
+            Dim ModInstallConfirm As Int32
+            If FilePathList.Count = 1 Then
+                ModInstallConfirm = MyMsgBox(GetLang("LangDialogInstallModContent", TargetVersion.Name), GetLang("LangDialogInstallModTitle"), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnCancel"))
+            ElseIf FilePathList.Count >= 2 Then
+                ModInstallConfirm = MyMsgBox(GetLang("LangDialogInstallModsContent", TargetVersion.Name), GetLang("LangDialogInstallModTitle"), GetLang("LangDialogBtnOK"), GetLang("LangDialogBtnCancel"))
+            End If
+            If ModInstallConfirm = 1 Then GoTo Install
+        Else
+            '处于 Mod 管理页面
+Install:
+            Try
+                For Each ModFile In FilePathList
+                    Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "")
+                    If Not NewFileName.Contains(".") Then NewFileName += ".jar" '#4227
+                    CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & NewFileName)
+                Next
+                If FilePathList.Count = 1 Then
+                    Hint(GetLang("LangHintInstallModSuccessA", GetFileNameFromPath(FilePathList.First).Replace(".disabled", "")), HintType.Finish)
+                Else
+                    Hint(GetLang("LangHintInstallModSuccessB", FilePathList.Count), HintType.Finish)
+                End If
+                '刷新列表
+                If FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.VersionMod Then
+                    LoaderFolderRun(McModLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
+                End If
+            Catch ex As Exception
+                Log(ex, GetLang("LangHintInstallModFailed"), LogLevel.Msgbox)
+            End Try
+        End If
+        Return True
+    End Function
+
+    ''' <summary>
+    ''' 下载 Mod。
+    ''' </summary>
+    Private Sub BtnManageDownload_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageDownload.Click, BtnHintDownload.Click
+        PageDownloadMod.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
+        FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadMod)
     End Sub
 
 #End Region
@@ -522,7 +586,7 @@
     Public Shared UpdatingVersions As New List(Of String)
     Public Sub UpdateMods(ModList As IEnumerable(Of McMod))
         '更新前警告
-        If Not Setup.Get("HintUpdateMod") Then
+        If Not Setup.Get("HintUpdateMod") OrElse ModList.Count >= 15 Then
             If MyMsgBox(GetLang("LangPageVersionModDialogUpdateModContent"), GetLang("LangPageVersionModDialogUpdateModTitle"), GetLang("LangPageVersionModDialogUpdateModBtnConfirm"), GetLang("LangDialogBtnCancel"), IsWarn:=True) = 1 Then
                 Setup.Set("HintUpdateMod", True)
             Else
