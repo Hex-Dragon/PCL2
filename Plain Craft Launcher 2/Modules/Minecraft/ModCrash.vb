@@ -1066,7 +1066,7 @@ NextStack:
                 Case CrashReason.Forge安装不完整
                     Results.Add("由于安装的 Forge 文件丢失，导致游戏无法正常运行。\n请重新安装一次相同版本的 Forge，然后再启动游戏。\n在打包游戏时删除 libraries 文件夹可能导致此错误。\h")
                 Case CrashReason.SerializationIsBad模组缺少配置文件
-                    Results.Add("由于 SerializationIsBad 模组缺少配置文件，游戏无法正常运行，你可以尝试以下解决方案：\n - 使用 VPN\n - 手动下载配置文件\n - 禁用此模组\n注意，此模组是一个修复安全漏洞的模组，如果禁用此模组，可能会导致游戏安全性降低。")
+                    Results.Add("由于 SerializationIsBad Mod 缺少配置文件，游戏无法正常运行。你可以尝试以下解决方案：\n - 使用 VPN\n - 手动下载配置文件\n - 禁用此 Mod\n注意：此 Mod 是一个修复安全漏洞的 Mod，如果禁用此 Mod，可能会导致游戏安全性降低。")
                 Case CrashReason.Fabric报错
                     If Additional.Count = 1 Then
                         Results.Add("Fabric 提供了以下错误信息：\n" & Additional.First & "\n\n请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。")
