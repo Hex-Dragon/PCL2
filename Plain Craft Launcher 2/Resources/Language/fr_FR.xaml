@@ -393,7 +393,7 @@ Appuyez à nouveau sur "F11" pour quitter le mode de visualisation des instances
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">Installation de Forge (Méthode A)</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">Installation de NeoForge</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">Télécharger le fichier principal {0}</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Analyser les bibliothèques {0}</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyzeModLoaderSupportLibrary">Analyser les bibliothèques {0}</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">Télécharger les bibliothèques {0}</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">Obtenir l'adresse de téléchargement d'OptiFine</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">Télécharger le fichier principal OptiFine</s:String>
@@ -990,7 +990,7 @@ Cela affectera sérieusement le fonctionnement du lanceur, il n'est pas recomman
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">Télécharger la nouvelle version automatiquement (peut nécessiter une clé de mise à jour pour mettre à jour la version instantanée)</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">Les paramètres de la page "Lanceur" ont été initialisés !</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">Échec de l'initialisation des paramètres de la page "Lanceur".</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">Illimité</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimited">Illimité</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">Désactivé</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">Trop de fils définis provoqueront des lags critiques pendant le téléchargement.
 Les exigences de téléchargement peuvent être assurées lorsqu'elles sont réglées sur 64. Les fils au-dessus de 64 ne sont PAS recommandés à moins que vous ne sachiez exactement ce que vous faites !</s:String>
@@ -1628,7 +1628,7 @@ Si cette option n'est pas disponible, sélectionnez « Définir un mot de passe 
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">Renommer le JSON de l'instance (Chargeur secondaire)</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">Installation du Modpack HMCL : </s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">Installation du Modpack MMC : </s:String>
-    <s:String x:Key="LangModModpackNoAddons">Impossible d'installer car le modpack ne fournit pas d'informations supplémentaires sur la version du jeu !</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">Impossible d'installer car le modpack ne fournit pas d'informations supplémentaires sur la version du jeu !</s:String>
     <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
@@ -1640,9 +1640,9 @@ Si cette option n'est pas disponible, sélectionnez « Définir un mot de passe 
     <s:String x:Key="LangModModpackSelectInstallFolder">Sélectionner le dossier d'installation (doit être un dossier vide)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Les chemins de dossier Minecraft ne peuvent pas contenir de points d'exclamation (!) ou de points-virgules (;) !</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Veuillez sélectionner un dossier vide comme destination d'installation !</s:String>
-    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
+    <s:String x:Key="LangModModpackTaskExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Ajouté à la liste des dossiers : {0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInstallFail">手动安装整合包失败</s:String>
     <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
     <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
     <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
@@ -1868,7 +1868,7 @@ La suppression des mods shader permet au jeu de fonctionner normalement.</s:Stri
 
 Envisagez les solutions suivantes :
  - Mettez à jour Forge vers la version 36.2.26 ou supérieure.
- - Utilisez une version Java inférieure à 1.8.0.320.</s:String>
+ - Utilisez une version Java inférieure à 1.8.0_320.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBH">Le jeu a planté potentiellement en raison de modifications apportées à la version Forge par d'autres lanceurs, ce qui a entraîné des fichiers anormaux dans l'instance.
 Envisagez de réinstaller l'instance Forge depuis le début, au lieu de compter sur d'autres lanceurs pour modifier la version Forge.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* En fait, votre jeu n'a aucun problème, ce crash est déclenché par vous-même.
@@ -1961,8 +1961,8 @@ Vous pouvez également accéder à {1} sur un autre appareil et saisir le code.<
     <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
     <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
-    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModTaskDownloadCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>

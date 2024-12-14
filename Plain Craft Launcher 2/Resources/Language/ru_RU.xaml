@@ -393,7 +393,7 @@
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">Установка Forge (Метод A)</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">Установка NeoForge</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">Скачать основной файл {0}</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Анализировать библиотеки {0}</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyzeModLoaderSupportLibrary">Анализировать библиотеки {0}</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">Скачать библиотеки {0}</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">Получить адрес скачивания OptiFine</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">Скачать основной файл OptiFine</s:String>
@@ -995,7 +995,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">Автоматически скачивать новую версию (может потребоваться ключ обновления для обновления снимка версии)</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">Настройки в разделе "Запускатель" были инициализированы!</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">Не удалось инициализировать настройки в разделе "Запускатель".</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">Неограниченная</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimited">Неограниченная</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">Отключено</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">Установлено слишком много потоков вызовет критические задержки во время загрузки.
 Требования к загрузке можно обеспечить при установке на 64 потока. Потоки выше 64 не рекомендуются, если вы не знаете точно, что делаете!</s:String>
@@ -1642,7 +1642,7 @@ URL: {0}</s:String>
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">Переименовать экземпляр JSON (боковой загрузчик)</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">Установка модпака HMCL: </s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">Установка модпака MMC: </s:String>
-    <s:String x:Key="LangModModpackNoAddons">Невозможно установить, так как модпак не предоставляет дополнительную информацию о версии игры!</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">Невозможно установить, так как модпак не предоставляет дополнительную информацию о версии игры!</s:String>
     <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
@@ -1654,9 +1654,9 @@ URL: {0}</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">Выберите место установки (папка должна быть пустой)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Пути к папкам Minecraft не могут содержать восклицательные знаки (!) или точку с запятой (;)!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Пожалуйста, выберите пустую папку в качестве места установки!</s:String>
-    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
+    <s:String x:Key="LangModModpackTaskExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Добавлено в список папок: {0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInstallFail">手动安装整合包失败</s:String>
     <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
     <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
     <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
@@ -1882,7 +1882,7 @@ URL: {0}</s:String>
 
 Рассмотрите следующие решения:
  - Обновите Forge до версии 36.2.26 или выше.
- - Используйте версию Java ниже 1.8.0.320.</s:String>
+ - Используйте версию Java ниже 1.8.0_320.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBH">Игра могла аварийно завершить работу из-за изменений, внесенных в версию Forge другими программами запуска, что привело к появлению ненормальных файлов в экземпляре.
 Рассмотрите возможность переустановки экземпляра Forge с самого начала, вместо того, чтобы полагаться на другие программы запуска для изменения версии Forge.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* На самом деле в вашей игре нет проблем, этот сбой вызван вами.
@@ -1975,8 +1975,8 @@ URL: {0}</s:String>
     <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
     <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
-    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModTaskDownloadCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>

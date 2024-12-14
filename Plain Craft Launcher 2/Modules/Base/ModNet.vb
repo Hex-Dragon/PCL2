@@ -222,7 +222,7 @@ RequestFinished:
     ''' <param name="Url">网页的 Url。</param>
     Public Function NetGetCodeByDownload(Url As String, Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
         Dim Temp As String = PathTemp & "Cache\Code\" & Url.GetHashCode() & "_" & GetUuid()
-        Dim NewTask As New LoaderDownload(GetLang("LangModTaskDownlaodCode", GetUuid() & "#"), New List(Of NetFile) From {New NetFile({Url}, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
+        Dim NewTask As New LoaderDownload(GetLang("LangModTaskDownloadCode", GetUuid() & "#"), New List(Of NetFile) From {New NetFile({Url}, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
             NewTask.WaitForExitTime(Timeout, TimeoutMessage:=GetLang("LangModExceptionTimeOut", Url))
             NetGetCodeByDownload = ReadFile(Temp)
@@ -237,9 +237,9 @@ RequestFinished:
     ''' <param name="Urls">网页的 Url 列表。</param>
     Public Function NetGetCodeByDownload(Urls As IEnumerable(Of String), Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
         Dim Temp As String = PathTemp & "Cache\Code\" & Urls.First.GetHashCode() & "_" & GetUuid()
-        Dim NewTask As New LoaderDownload(GetLang("LangModTaskDownlaodCode", GetUuid() & "#"), New List(Of NetFile) From {New NetFile(Urls, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
+        Dim NewTask As New LoaderDownload(GetLang("LangModTaskDownloadCode", GetUuid() & "#"), New List(Of NetFile) From {New NetFile(Urls, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
-            NewTask.WaitForExitTime(Timeout, TimeoutMessage:=GetLang("LangModExceptionDownlaodCodeSource", Urls.First))
+            NewTask.WaitForExitTime(Timeout, TimeoutMessage:=GetLang("LangModExceptionDownloadCodeSource", Urls.First))
             NetGetCodeByDownload = ReadFile(Temp)
             File.Delete(Temp)
         Finally

@@ -123,7 +123,7 @@ Module Modi18n
             End If
         Next
 
-        Select Case CurrentCulture
+        Select Case CurrentCulture '部分需要特殊匹配的语言
             Case "en-GB", "en-NZ", "en-AU", "en-CA"
                 Return "en_GB"
             Case "zh-CN", "zh-SG", "zh-Hans"
@@ -134,7 +134,7 @@ Module Modi18n
                 Return "zh_TW"
         End Select
 
-        Return "en_US"
+        Return "en_US" '无匹配则返回 en_us
     End Function
 
     ''' <summary>
@@ -144,7 +144,7 @@ Module Modi18n
     ''' <returns>11 Million、2 万等这样的表示</returns>
     Public Function GetLocationNum(Num As Int32) As String
         Select Case Lang
-            Case "zh_CN", "zh_HK", "zh_TW", "lzh", "zh_MEME", "ja_JP", "ko_KR"
+            Case "ja_JP", "ko_KR", "lzh", "zh_CN", "zh_HK", "zh_MARS", "zh_MEME", "zh_TW"
                 Return If(Num > 1000000000000, Math.Round(Num / 1000000000000, 2) & " " & GetLang("LangModCompModDigit3"), '兆
                 If(Num > 100000000, Math.Round(Num / 100000000, 2) & " " & GetLang("LangModCompModDigit2"), '亿
                 If(Num > 100000, Math.Round(Num / 10000, 0) & " " & GetLang("LangModCompModDigit1"), Num.ToString("N0") & " "))) '万

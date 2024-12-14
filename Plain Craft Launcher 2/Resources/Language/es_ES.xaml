@@ -393,7 +393,7 @@ Presiona "F11" nuevamente para salir del modo de visualización de instancias oc
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">Instalación de Forge (Método A)</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">Instalación de NeoForge</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">Descargar archivo principal de {0}</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Analizar bibliotecas de {0}</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyzeModLoaderSupportLibrary">Analizar bibliotecas de {0}</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">Descargar bibliotecas de {0}</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">Obtener dirección de OptiFine</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">Descargar archivo principal de OptiFine</s:String>
@@ -988,7 +988,7 @@ Afectará seriamente la operación del lanzador, no se recomienda abrir sin nece
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">Descargar la nueva versión automáticamente (Puede requerir clave de actualización para actualizar la versión instantánea)</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">¡Las configuraciones en la página "Lanzador" han sido inicializadas!</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">Error al inicializar las configuraciones en la página "Lanzador".</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">Ilimitado</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimited">Ilimitado</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">Deshabilitado</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">Demasiados hilos configurados causarán retrasos críticos durante la descarga.
 Los requisitos de descarga se pueden asegurar cuando se establece en 64. ¡Los hilos por encima de 64 NO se recomiendan a menos que sepas exactamente lo que estás haciendo!</s:String>
@@ -1635,7 +1635,7 @@ Si esa opción no está disponible, seleccione "Establecer contraseña" e inicie
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">Renombrar JSON de Instancia (Cargador Secundario)</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">Instalación de Modpack de HMCL: </s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">Instalación de Modpack de MMC: </s:String>
-    <s:String x:Key="LangModModpackNoAddons">No se puede instalar ya que el modpack no proporciona información adicional sobre la versión del juego.</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">No se puede instalar ya que el modpack no proporciona información adicional sobre la versión del juego.</s:String>
     <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
@@ -1647,9 +1647,9 @@ Si esa opción no está disponible, seleccione "Establecer contraseña" e inicie
     <s:String x:Key="LangModModpackSelectInstallFolder">Seleccionar destino de instalación (debe ser una carpeta vacía)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">¡Las rutas de las carpetas de Minecraft no pueden contener signos de exclamación (!) o punto y coma (;)!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">¡Por favor selecciona una carpeta vacía como destino de instalación!</s:String>
-    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
+    <s:String x:Key="LangModModpackTaskExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Añadido a la lista de carpetas: {0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInstallFail">手动安装整合包失败</s:String>
     <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
     <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
     <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
@@ -1876,7 +1876,7 @@ Eliminar los mods de sombreado permite que el juego funcione normalmente.</s:Str
 
 Considere las siguientes soluciones:
  - Actualice Forge a la versión 36.2.26 o superior.
- - Use una versión de Java anterior a la 1.8.0.320.</s:String>
+ - Use una versión de Java anterior a la 1.8.0_320.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBH">El juego se bloqueó posiblemente debido a modificaciones realizadas a la versión de Forge por otros lanzadores, lo que generó archivos anormales dentro de la instancia.
 Considere reinstalar la instancia de Forge desde el principio, en lugar de confiar en otros lanzadores para modificar la versión de Forge.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* De hecho, su juego no tiene problemas, este bloqueo lo provocó usted mismo.
@@ -1969,8 +1969,8 @@ También puede acceder a {1} en un dispositivo diferente e ingresar el código.<
     <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
     <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
-    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModTaskDownloadCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>

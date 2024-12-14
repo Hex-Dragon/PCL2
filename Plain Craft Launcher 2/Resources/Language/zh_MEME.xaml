@@ -394,7 +394,7 @@
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">安装锻造（方式 A）</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">安装新锻造</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">下崽 {0} 主文件</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">分析 {0} 支持库文件</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyzeModLoaderSupportLibrary">分析 {0} 支持库文件</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">下崽 {0} 支持库文件</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">获取高清不修复下崽地址</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">下崽高清不修复主文件</s:String>
@@ -998,7 +998,7 @@
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">在有新版本时自动帮你下崽（更新快照版可能需要更新密钥）</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">已初始化发射台页设置！</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">初始化发射台页设置不成功</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">起飞~</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimited">起飞~</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">关掉</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">如果设置过多的下崽线程，可能会导致下崽时电脑特别卡。
 一般设置 64 线程即可满足大多数下崽需求，除非你知道你在干啥子，否则不建议设置更多的线程数！</s:String>
@@ -1657,7 +1657,7 @@
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">请选择一个空文件夹子作为安装目标！</s:String>
     <s:String x:Key="LangModModpackExtractArchive">解压压缩毛巾</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">已加入游戏文件夹子名单：{0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整活包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInstallFail">手动安装整活包失败</s:String>
     <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整活包文件失败</s:String>
     <s:String x:Key="LangModModpackExceptionRarFormat">平原合成发射台无法处理 rar 格式的压缩毛巾，请在解压后重新压缩为 zip 格式再试</s:String>
     <s:String x:Key="LangModModpackExceptionReadFileFail">打开整活包文件失败，文件可能损坏或为不支持的压缩毛巾格式</s:String>
@@ -1883,7 +1883,7 @@
         
 请尝试以下解决方案：
  - 更新 Forge 到 36.2.26 或更高版本
- - 换用版本低于 1.8.0.320 的 Java</s:String>
+ - 换用版本低于 1.8.0_320 的 Java</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBH">可能由于使用其他启动器修改了 Forge 版本，当前版本的文件存在异常，导致了游戏崩溃。
 请尝试重新全新安装 Forge，而非使用其他启动器修改 Forge 版本。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* 事实上，你的游戏没有任何问题，这是你自己触发的崩溃。
@@ -1973,8 +1973,8 @@
     <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
     <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
-    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModTaskDownloadCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>

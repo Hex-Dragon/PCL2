@@ -393,7 +393,7 @@
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">Εγκατάσταση Forge (Μέθοδος Α)</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">Εγκατάσταση NeoForge</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">Λήψη {0} Κύριου Αρχείου</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">Ανάλυση {0} Βιβλιοθηκών</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyzeModLoaderSupportLibrary">Ανάλυση {0} Βιβλιοθηκών</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">Λήψη {0} Βιβλιοθηκών</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">Λήψη Διεύθυνσης OptiFine</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">Λήψη Κύριου Αρχείου OptiFine</s:String>
@@ -995,7 +995,7 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">Λήψη της νέας έκδοσης αυτόματα (Μπορεί να απαιτείται το κλειδί ενημέρωσης για την ενημέρωση της έκδοσης στιγμιότυπου)</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">Οι ρυθμίσεις στη σελίδα «Εκκίνηση» έχουν προετοιμαστεί!</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">Απέτυχε η προετοιμασία των ρυθμίσεων στη σελίδα «Εκκίνηση».</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">Απεριόριστο</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimited">Απεριόριστο</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">Απενεργοποιημένο</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">Η ρύθμιση πολλών νημάτων θα προκαλέσει σημαντικές καθυστερήσεις κατά τη λήψη.
 Η απαίτηση λήψης μπορεί να είναι εξασφαλισμένη όταν έχει οριστεί σε 64. Τα νήματα πάνω από το 64 ΔΕΝ προτείνονται εκτός και αν γνωρίζετε τι ακριβώς κάνετε!</s:String>
@@ -1642,7 +1642,7 @@ URL: {0}</s:String>
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">Μετονομασία Παρουσίας JSON (Πλευρικός Φορτωτής)</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">Εγκατάσταση HMCL Modpack: </s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">Εγκατάσταση MMC Modpack: </s:String>
-    <s:String x:Key="LangModModpackNoAddons">Δεν είναι δυνατή η εγκατάσταση καθώς το modpack δεν παρέχει τις πρόσθετες πληροφορίες έκδοσης παιχνιδιού!</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">Δεν είναι δυνατή η εγκατάσταση καθώς το modpack δεν παρέχει τις πρόσθετες πληροφορίες έκδοσης παιχνιδιού!</s:String>
     <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
@@ -1654,9 +1654,9 @@ URL: {0}</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">Επιλέξτε προορισμό εγκατάστασης (πρέπει να είναι κενός φάκελος)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Οι διαδρομές του φακέλου Minecraft δεν μπορούν να περιέχουν θαυμαστικά (!) ή ερωτηματικό (;)!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Επιλέξτε έναν κενό φάκελο ως προορισμό εγκατάστασης!</s:String>
-    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
+    <s:String x:Key="LangModModpackTaskExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Προστέθηκε στη λίστα φακέλων: {0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInstallFail">手动安装整合包失败</s:String>
     <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
     <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
     <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
@@ -1882,7 +1882,7 @@ URL: {0}</s:String>
 
 Εξετάστε τις ακόλουθες λύσεις:
  - Ενημερώστε το Forge στην έκδοση 36.2.26 ή νεότερη.
- - Χρησιμοποιήστε μια έκδοση Java χαμηλότερη από 1.8.0.320.</s:String>
+ - Χρησιμοποιήστε μια έκδοση Java χαμηλότερη από 1.8.0_320.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBH">Το παιχνίδι πιθανόν να διακοπεί λόγω τροποποιήσεων που έγιναν στην έκδοση Forge από άλλους εκτοξευτές, με αποτέλεσμα μη φυσιολογικά αρχεία εντός της παρουσίας.
 Εξετάστε το ενδεχόμενο να εγκαταστήσετε ξανά την παρουσία του Forge από την αρχή, αντί να βασίζεστε σε άλλους εκτοξευτές για να τροποποιήσετε την έκδοση Forge.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* Στην πραγματικότητα, το παιχνίδι σας δεν έχει προβλήματα, αυτό το crash ενεργοποιείται από εσάς.
@@ -1975,8 +1975,8 @@ URL: {0}</s:String>
     <s:String x:Key="LangModExceptionFailedToGet">Αποτυχία Λήψης Αποτελεσμάτων ({0})</s:String>
     <s:String x:Key="LangModExceptionTimeOut">χρονικό όριο της σύνδεσης διακομιστή έληξε</s:String>
     <s:String x:Key="LangModExceptionRunInUI">Εκτελέστηκε μια αίτηση δικτύου στο νήμα περιβάλλοντος εργασίας χρήστη</s:String>
-    <s:String x:Key="LangModTaskDownlaodCode">Απόκτηση πηγαίου κώδικα {0}</s:String>
-    <s:String x:Key="LangModExceptionDownlaodCodeSource">Λήξη χρονικού ορίου σύνδεσης με διακομιστή (πρώτη πηγή λήψης: {0}）</s:String>
+    <s:String x:Key="LangModTaskDownloadCode">Απόκτηση πηγαίου κώδικα {0}</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">Λήξη χρονικού ορίου σύνδεσης με διακομιστή (πρώτη πηγή λήψης: {0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>

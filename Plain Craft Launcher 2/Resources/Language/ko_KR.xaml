@@ -390,7 +390,7 @@ F11을 다시 눌러 숨겨진 버전 보기 모드를 종료하세요.</s:Strin
     <s:String x:Key="LangPageSpeedRightInstallForgeMethodA">Forge 설치 (방법 A)</s:String>
     <s:String x:Key="LangPageSpeedRightInstallNeoForge">NeoForge 설치</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderMainFile">다운로드 {0} 주요 파일</s:String>
-    <s:String x:Key="LangPageSpeedRightAnalyseModLoaderSupportLibrary">분석 {0} 지원 라이브러리 파일</s:String>
+    <s:String x:Key="LangPageSpeedRightAnalyzeModLoaderSupportLibrary">분석 {0} 지원 라이브러리 파일</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadModLoaderSupportLibrary">다운로드 {0} 지원 라이브러리 파일</s:String>
     <s:String x:Key="LangPageSpeedRightGetOptiFineDownloadAddress">OptiFine 다운로드 주소 가져오기</s:String>
     <s:String x:Key="LangPageSpeedRightDownloadOptiFineMainFile">OptiFine 주요 파일 다운로드</s:String>
@@ -986,7 +986,7 @@ assets를 완전히 변경하지 않으며, libraries, 제3자 로그인 라이�
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateE">새 버전이 있을 때 자동 다운로드(스냅샷 버전 업데이트는 키 업데이트가 필요할 수 있음)</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetSuccess">런처 페이지 설정이 초기화되었습니다!</s:String>
     <s:String x:Key="LangPageSetupSystemLaunchResetFail">런처 페이지 설정 초기화 실패</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimit">제한 없음</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSpeedUnlimited">제한 없음</s:String>
     <s:String x:Key="LangPageSetupSystemDebugAnimSpeedDisable">끄기</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSpeedDialogThreadTooMuchContent">다운로드 스레드를 너무 많이 설정하면 다운로드 중 심각한 지연이 발생할 수 있습니다. 일반적으로 64 스레드로 설정하면 대부분의 다운로드 요구를 충족할 수 있으며, 무엇을 하고 있는지 모른다면 더 많은 스레드를 설정하지 않는 것이 좋습니다!</s:String>
     <s:String x:Key="LangDialogBtnIC">알겠습니다</s:String>
@@ -1631,7 +1631,7 @@ VPN이나 가속기를 사용 중이라면, 이를 끄거나 노드를 변경한
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">버전 Json 이름 변경(부 로더)</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL 모드팩 설치:</s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC 모드팩 설치:</s:String>
-    <s:String x:Key="LangModModpackNoAddons">해당 모드팩이 게임 버전 추가 정보를 제공하지 않아 설치할 수 없습니다!</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">해당 모드팩이 게임 버전 추가 정보를 제공하지 않아 설치할 수 없습니다!</s:String>
     <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
@@ -1643,9 +1643,9 @@ VPN이나 가속기를 사용 중이라면, 이를 끄거나 노드를 변경한
     <s:String x:Key="LangModModpackSelectInstallFolder">설치 대상 선택(빈 폴더여야 함)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 폴더 경로에 느낌표나 세미콜론이 포함될 수 없습니다!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">설치 대상으로 빈 폴더를 선택하세요!</s:String>
-    <s:String x:Key="LangModModpackExtractArchive">解压压缩包</s:String>
+    <s:String x:Key="LangModModpackTaskExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">게임 파일 목록에 추가됨: {0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInsatllFail">手动安装整合包失败</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInstallFail">手动安装整合包失败</s:String>
     <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
     <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
     <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
@@ -1871,7 +1871,7 @@ OptiFine 공식 홈페이지(https://optifine.net/downloads)에 접속하셔서 
 
 다음 해결 방법을 시도해 보십시오.
  - Forge를 36.2.26 이상으로 업데이트하세요.
- - 1.8.0.320 이전의 Java 버전으로 전환</s:String>
+ - 1.8.0_320 이전의 Java 버전으로 전환</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBH">Forge 버전이 다른 런처를 사용하여 수정되었을 수 있으며, 현재 버전의 파일에 이상이 있어 게임이 충돌하는 경우가 있습니다.
 Forge 버전을 수정하려면 다른 실행기를 사용하는 대신 Forge를 완전히 다시 설치해 보세요. </s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* 실제로 게임에는 아무런 문제가 없습니다. 이는 사용자가 직접 촉발한 충돌입니다.
@@ -1964,8 +1964,8 @@ Forge를 다시 설치해 보세요. </s:String>
     <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
     <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
-    <s:String x:Key="LangModTaskDownlaodCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownlaodCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModTaskDownloadCode">源码获取 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>
