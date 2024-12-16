@@ -104,7 +104,7 @@
     <s:String x:Key="LangHintThemeSetInit">已初始化个性化设置</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">初始化个性化设置不成功</s:String>
     <s:String x:Key="LangBackgroundPic">背景图片</s:String>
-    <s:String x:Key="LangSetupUIBackgroundPicPixel">像素</s:String>
+    <s:String x:Key="LangSetupUIBackgroundPicPixel">小方块</s:String>
     <s:String x:Key="LangBackgroundPicCount">背景图片 （{0} 张）</s:String>
     <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">即将删除背景图片文件夹子中的所有文件。
 莫得后悔药哦，是否确定？</s:String>
@@ -280,7 +280,7 @@
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">邮箱雪藏</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">雪藏第三方登录的账号邮箱显示，并尽量将邮箱打码，以避免隐私泄露。
 此选项的更改将在重启发射台后生效。</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">版本管理</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">随便改改</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">隐藏发射按钮下方的版本选择与版本设置入口。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialModUpdate">模组更新</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialModUpdateToolTip">禁止在模组管理页面更新模组。</s:String>
@@ -1287,10 +1287,10 @@
     <s:String x:Key="LangModSecretDialogOpenSourceVersionTitle">开源版本说明</s:String>
     <s:String x:Key="LangModSecretDialogOpenSourceVersionContent">该版本中莫得以下特性：
 - 诅咒锻造 API 调用：需要 API Key（你可以要一个，然后丢到 SecretHeadersSign 方法中）
-- 巨硬登录：你需要自行申请 Client ID，然后丢到 ModSecret.vb 的开头
-- 更新与联网通知：避免滥用隐患
+- 巨硬登录：你需要自己要 Client ID，然后丢到 ModSecret.vb 的开头
+- 更新与联网通知：防止乱玩
 - 主题切换：这是需要赞助解锁的纪念性质的功能，别让赞助者太伤心啦……
-- 哆啦A梦：开发早期往里面塞了些开发工具，整理起来太麻烦了</s:String>
+- 哆啦A梦：早期的浩大屎山，整理太麻烦了</s:String>
     <s:String x:Key="LangModSecretHintNoTheme">该版本中莫得主题功能……</s:String>
     <s:String x:Key="LangModSecretHintNoUpdate">该版本中莫得更新功能……</s:String>
     <s:String x:Key="LangModMinecraftCurrentFolder">当前文件夹子</s:String>
@@ -1974,7 +1974,7 @@
     <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
     <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
     <s:String x:Key="LangModTaskDownloadCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超……时……（第一下崽源：{0}）</s:String>
     <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>
@@ -1982,4 +1982,6 @@
     <s:String x:Key="LangModExceptionRequestFailed">网络请求失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionReturnErrorCode">服务器返回错误（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknownFileStatus">文件状态未知：{0}</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">该 Minecraft 中文论坛整活包未提供游戏版本附加信息，装不了，撤撤撤！</s:String>
+    <s:String x:Key="LangModModpackTaskExtractArchive">解压压缩毛巾</s:String>
 </ResourceDictionary>
