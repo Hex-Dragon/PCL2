@@ -69,6 +69,7 @@
         {"CacheAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheAuthIDToken", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheAuthAPIToken", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheAuthLogin",New SetupEntry("{'https://littleskin.cn/api/yggdrasil':'"&LittleSkinClientId&"'",Source:=SetupSource.Registry, Encoded:=True)}
         {"CacheDownloadFolder", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheJavaListVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"LoginRemember", New SetupEntry(True, Source:=SetupSource.Registry, Encoded:=True)},
@@ -187,8 +188,6 @@
         {"VersionServerAuthRegister", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthName", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)}
-        {"LittleSkinClientLogin",GetJson("{'ClitntId':'','Auth':{'setp1':{'url':'https://open.littleskin.cn/oauth/device_code','Method':'POST','Data'='client_id=${client_id}&scope=${scope}','Poll':"&False&"},'step2':{'url':'https://open.littleskin.cn/oauth/token','Method':'POST','Data':''}}}")}
-    }
 
 #Region "基础"
 
