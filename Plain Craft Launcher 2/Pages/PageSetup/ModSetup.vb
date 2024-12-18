@@ -187,6 +187,7 @@
         {"VersionServerAuthRegister", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthName", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)}
+        {"LittleSkinClientLogin",GetJson("{'ClitntId':'','Auth':{'setp1':{'url':'https://open.littleskin.cn/oauth/device_code','Method':'POST','Data'='client_id=${client_id}&scope=${scope}','Poll':"&False&"},'step2':{'url':'https://open.littleskin.cn/oauth/token','Method':'POST','Data':''}}}")}
     }
 
 #Region "基础"
