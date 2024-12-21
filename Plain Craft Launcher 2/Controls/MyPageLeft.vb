@@ -104,3 +104,7 @@
     End Sub
 
 End Class
+
+Public Interface IRefreshable
+    Sub Refresh()
+End Interface

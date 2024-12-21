@@ -171,14 +171,16 @@
             ToolTipService.SetPlacement(BtnCont, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnCont, 30)
             ToolTipService.SetHorizontalOffset(BtnCont, 2)
-            AddHandler BtnCont.Click, Sub()
-                                          PageVersionLeft.Version = Version
-                                          FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
-                                      End Sub
-            AddHandler sender.MouseRightButtonUp, Sub()
-                                                      PageVersionLeft.Version = Version
-                                                      FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
-                                                  End Sub
+            AddHandler BtnCont.Click,
+            Sub()
+                PageVersionLeft.Version = Version
+                FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
+            End Sub
+            AddHandler sender.MouseRightButtonUp,
+            Sub()
+                PageVersionLeft.Version = Version
+                FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
+            End Sub
             sender.Buttons = {BtnStar, BtnDel, BtnCont}
         Else
             Dim BtnCont As New MyIconButton With {.LogoScale = 1.15, .Logo = Logo.IconButtonOpen}
@@ -186,12 +188,8 @@
             ToolTipService.SetPlacement(BtnCont, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnCont, 30)
             ToolTipService.SetHorizontalOffset(BtnCont, 2)
-            AddHandler BtnCont.Click, Sub()
-                                          PageVersionOverall.OpenVersionFolder(Version)
-                                      End Sub
-            AddHandler sender.MouseRightButtonUp, Sub()
-                                                      PageVersionOverall.OpenVersionFolder(Version)
-                                                  End Sub
+            AddHandler BtnCont.Click, Sub() PageVersionOverall.OpenVersionFolder(Version)
+            AddHandler sender.MouseRightButtonUp, Sub() PageVersionOverall.OpenVersionFolder(Version)
             sender.Buttons = {BtnStar, BtnDel, BtnCont}
         End If
     End Sub

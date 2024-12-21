@@ -1,16 +1,17 @@
 ﻿Public Class PageLaunchRight
+    Implements IRefreshable
 
     Private Sub Init() Handles Me.Loaded
         PanBack.ScrollToHome()
         PanScroll = PanBack '不知道为啥不能在 XAML 设置
         PanLog.Visibility = If(ModeDebug, Visibility.Visible, Visibility.Collapsed)
-        '快照版提示
+        '社区版提示
 #If BETA Then
         PanHint.Visibility = Visibility.Collapsed
 #Else
         PanHint.Visibility = If(ThemeCheckGold(), Visibility.Collapsed, Visibility.Visible)
-        LabHint1.Text = "快照版包含尚未正式发布的测试功能，仅用于赞助者本人尝鲜。请不要发给其他人或者用来制作整合包哦！"
-        LabHint2.Text = $"若已累积赞助￥23.33，在爱发电私信发送 {vbLQ}解锁码{vbRQ} 即可永久隐藏此提示。"
+        LabHint1.Text = "社区版包含尚未在官方主线版本发布的测试功能，仅用于尝鲜。请不要向官方仓库反馈社区版的问题哦！"
+        LabHint2.Text = $"若要永久隐藏此提示，请自行 Clone 代码并删除此提示相关内容。"
 #End If
     End Sub
 
@@ -92,7 +93,7 @@ Download:
                         GoTo Download
                     Case 3
                         Log("[Page] 主页预设：简单主页")
-                        Url = "https://gitee.com/mfn233/PCL-Mainpage/raw/main/Custom.xaml"
+                        Url = "https://raw.gitcode.com/mfn233/PCL-Mainpage/raw/main/Custom.xaml"
                         GoTo Download
                     Case 4
                         Log("[Page] 主页预设：每日整合包推荐")
@@ -104,7 +105,27 @@ Download:
                         GoTo Download
                     Case 6
                         Log("[Page] 主页预设：OpenBMCLAPI 仪表盘 Lite")
-                        Url = "https://pcl-bmcl.milulu.xyz/"
+                        Url = "https://pcl-bmcl.milu.ink/"
+                        GoTo Download
+                    Case 7
+                        Log("[Page] 主页预设：主页市场")
+                        Url = "https://homepage-market.pages.dev/Custom.xaml"
+                        GoTo Download
+                    Case 8
+                        Log("[Page] 主页预设：更新日志")
+                        Url = "https://updatehomepage.pages.dev/UpdateHomepage.xaml"
+                        GoTo Download
+                    Case 9
+                        Log("[Page] 主页预设：PCL 新功能说明书")
+                        Url = "https://raw.gitcode.com/WForst-Breeze/WhatsNewPCL/raw/main/Custom.xaml"
+                        GoTo Download
+                    Case 10
+                        Log("[Page] 主页预设：OpenMCIM Dashboard")
+                        Url = "https://files.mcimirror.top/PCL"
+                        GoTo Download
+                    Case 11
+                        Log("[Page] 主页预设：杂志主页")
+                        Url = "http://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Ext1nguisher/Custom.xaml"
                         GoTo Download
                 End Select
         End Select
@@ -122,17 +143,17 @@ Download:
             If Address.Contains(".xaml") Then
                 VersionAddress = Address.Replace(".xaml", ".xaml.ini")
             Else
-                VersionAddress = Address.Before("?")
+                VersionAddress = Address.BeforeFirst("?")
                 If Not VersionAddress.EndsWith("/") Then VersionAddress += "/"
                 VersionAddress += "version"
-                If Address.Contains("?") Then VersionAddress += Address.After("?")
+                If Address.Contains("?") Then VersionAddress += Address.AfterLast("?")
             End If
             '校验版本
             Dim Version As String = ""
             Dim NeedDownload As Boolean = True
             Try
                 Version = NetGetCodeByRequestOnce(VersionAddress, Timeout:=10000)
-                If Version.Length > 100 Then Throw New Exception($"获取的自定义主页版本过长（{Version.Length} 字符）")
+                If Version.Length > 1000 Then Throw New Exception($"获取的自定义主页版本过长（{Version.Length} 字符）")
                 Dim CurrentVersion As String = Setup.Get("CacheSavedPageVersion")
                 If Version <> "" AndAlso CurrentVersion <> "" AndAlso Version = CurrentVersion Then
                     Log($"[Page] 当前缓存的自定义主页已为最新，当前版本：{Version}，检查源：{VersionAddress}")
@@ -167,7 +188,7 @@ Download:
     ''' 立即强制刷新自定义主页。
     ''' 必须在 UI 线程调用。
     ''' </summary>
-    Public Sub ForceRefresh()
+    Public Sub ForceRefresh() Implements IRefreshable.Refresh
         Log("[Page] 要求强制刷新自定义主页")
         ClearCache()
         '实际的刷新

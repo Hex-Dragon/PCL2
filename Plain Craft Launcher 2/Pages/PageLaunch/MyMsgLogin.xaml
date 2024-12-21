@@ -1,4 +1,4 @@
-﻿<Grid x:Class="MyMsgText"
+﻿<Grid x:Class="MyMsgLogin"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:my="clr-namespace:PCL"
@@ -29,9 +29,11 @@
                            Foreground="#FF5C5C5C" FontWeight="Normal" Padding="1" />
             </my:MyScrollViewer>
             <StackPanel Grid.Row="4" Name="PanBtn" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="150,0,8,0" Orientation="Horizontal">
-                <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="测试按钮1" x:Name="Btn1" Margin="12,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" UseLayoutRounding="False" />
-                <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="测试按钮2" x:Name="Btn2" Margin="12,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" UseLayoutRounding="False" />
-                <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="测试按钮3" x:Name="Btn3" Margin="12,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" UseLayoutRounding="False" />
+                <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="重新打开网页" x:Name="Btn1" Margin="12,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" UseLayoutRounding="False"
+                             EventType="打开网页" />
+                <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="复制代码" x:Name="Btn2" Margin="12,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" UseLayoutRounding="False"
+                             EventType="复制文本" />
+                <my:MyButton ColorType="Normal" x:FieldModifier="public" Text="取消" x:Name="Btn3" Margin="12,0,0,0" TextPadding="7" SnapsToDevicePixels="False" Padding="5,0" UseLayoutRounding="False" />
             </StackPanel>
         </Grid>
     </Border>
