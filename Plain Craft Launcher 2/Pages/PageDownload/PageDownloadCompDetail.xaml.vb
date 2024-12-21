@@ -215,7 +215,7 @@
         AniControlEnabled += 1
         Project = FrmMain.PageCurrent.Additional(0)
         PanBack.ScrollToHome()
-
+        BtnFavorites.Text = If(CompFavorites.FavoritesList.Contains(Project.Id), "取消收藏", "收藏")
         '重启加载器
         If IsFirstInit Then
             '在 Me.Initialized 已经初始化了加载器，不再重复初始化
@@ -411,6 +411,17 @@
     End Sub
     Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
         ClipboardSet(CompItem.LabTitle.Text)
+    End Sub
+    Private Sub BtnFavorites_Click(sender As Object, e As EventArgs) Handles BtnFavorites.Click
+        If CompFavorites.FavoritesList.Contains(Project.Id) Then
+            CompFavorites.FavoritesList.Remove(Project.Id)
+            Hint($"已取消收藏 {Project.TranslatedName}！", HintType.Finish)
+            BtnFavorites.Text = "收藏"
+        Else
+            CompFavorites.FavoritesList.Add(Project.Id)
+            Hint($"已收藏 {Project.TranslatedName}！", HintType.Finish)
+            BtnFavorites.Text = "取消收藏"
+        End If
     End Sub
 
 End Class
