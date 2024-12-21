@@ -137,7 +137,7 @@
                 Finished(ResultJson)
                 Return
             Catch ex As Exception
-                If ex.Message.Contains("authorization_declined") Then
+                If ex.Message.Contains("authorization_declined") Or ex.Message.Contains("access_denied") Then
                     Finished(New Exception("$你拒绝了 PCL 申请的权限……"))
                     Return
                 ElseIf ex.Message.Contains("expired_token") Then

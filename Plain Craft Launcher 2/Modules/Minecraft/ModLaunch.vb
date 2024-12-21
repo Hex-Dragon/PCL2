@@ -705,7 +705,6 @@ LoginFinish:
         Dim AccessToken As String
         Dim RefreshToken As String
         Dim IDToken As String
-        Dim LittleSkinToken As NetResponse
         Dim LoginJson As JObject
         'AccessToken 和 RefreshToken 都要有，不然没法刷新
         If Not LittleSkinAccess = "" AndAlso Not LittleSkinRefresh = "" Then
@@ -713,14 +712,12 @@ LoginFinish:
             RefreshData.Add(New JProperty("refresh_token", LittleSkinRefresh))
             RefreshData.Add(New JProperty("access_token", LittleSkinAccess))
             RefreshData.Add(New JProperty("client_id", LittleSkinClientId))
-            LittleSkinToken = NetRequestOnce(
+            LoginJson = GetJson(NetRequestOnce(
                 Url:="https://open.littleskin.cn/oauth/token",
                 Method:="POST",
                 Data:=RefreshData,
                 Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
-                ContentType:="application/json; charset=utf-8",
-                ReturnAllResponse:=True)
-            LoginJson = GetJson(LittleSkinToken.GetResponseData())
+                ContentType:="application/json; charset=utf-8"))
             AccessToken = LoginJson("access_token").ToString(0)
             RefreshToken = LoginJson("refresh_token").ToString(0)
             IDToken = LoginJson("id_token").ToString(0)
@@ -783,7 +780,6 @@ LoginFinish:
             Dim LoginJson
             Dim AccessToken As String
             Dim RefreshToken As String
-            Dim LittleSkinJson As NetResponse
             'LittleSkin OAuth 登录检查
 
             If Data.Input.BaseUrl.ToLower.Contains("littleskin.cn") And Not LittleSkinClientId = "" Then
@@ -803,14 +799,12 @@ LoginFinish:
             ' LittleSkin OAuth 登录步骤 1: 获取授权代码
             If LittleSkinOAuth Then
                 McLaunchLog("开始 LittleSkin OAuth 登录步骤 1/3（原始登录）")
-                LittleSkinJson = NetRequestOnce(
+                LoginJson = GetJson(NetRequestOnce(
                 Url:="https://open.littleskin.cn/oauth/device_code",
                 Method:="POST",
                 Data:=RequestData.ToString(0),
                 Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
-                ContentType:="application/json; charset=utf-8",
-                ReturnAllResponse:=True)
-                LoginJson = GetJson(LittleSkinJson.GetResponseData())
+                ContentType:="application/json; charset=utf-8"))
             Else
                 LoginJson = GetJson(NetRequestRetry(
                 Url:=Data.Input.BaseUrl & "/authenticate",
@@ -853,15 +847,13 @@ LoginFinish:
                 Dim RequestInfo = New JObject()
                 RequestInfo.Add(New JProperty("uuid", UUID))
                 '需要 Yggdrasil.MinecraftToken.Create
-                Dim Token As NetResponse = NetRequestOnce(Url:=Data.Input.BaseUrl & "/oauth",
+                Result = GetJson(NetRequestOnce(Url:=Data.Input.BaseUrl & "/oauth",
                                                                   Method:="POST",
                                                                   Data:=RequestInfo.ToString(0),
                                                                   Headers:=New Dictionary(Of String, String) From {{"Authorization", "Bearer " & AccessToken}},
-                                                                  ContentType:="application/json; charset=utf-8",
-                                                               ReturnAllResponse:=True
-            )
+                                                                  ContentType:="application/json; charset=utf-8"))
 
-                Result = GetJson(Token.GetResponseData())
+
 
                 Dim ClientToken = Result("clientToken").ToString
                 Dim MCAccessToken = Result("accessToken").ToString
