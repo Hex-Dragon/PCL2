@@ -16,6 +16,8 @@ Friend Module ModSecret
     Public Const OAuthClientId As String = ""
     'CurseForge API Key
     Public Const CurseForgeAPIKey As String = ""
+    ' LittleSkin OAuth ClientId
+    Public Const LittleSkinClientId As String = ""
 
     Friend Sub SecretOnApplicationStart()
         '提升 UI 线程优先级
