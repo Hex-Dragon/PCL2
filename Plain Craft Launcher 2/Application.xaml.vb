@@ -31,7 +31,7 @@ Public Class Application
                     '内存优化
                     Dim Ram = My.Computer.Info.AvailablePhysicalMemory
                     Try
-                        PageOtherTest.MemoryOptimizeInternal()
+                        PageOtherTest.MemoryOptimizeInternal(False)
                     Catch ex As Exception
                         MsgBox(ex.Message, MsgBoxStyle.Critical, "内存优化失败")
                         Environment.Exit(-1)
@@ -114,7 +114,7 @@ WaitRetry:
             Log($"[Start] 管理员权限：{IsAdmin()}")
             '检测异常环境
             If Path.Contains(IO.Path.GetTempPath()) OrElse Path.Contains("AppData\Local\Temp\") Then
-                MyMsgBox("请将 PCL 从压缩文件中解压，或是更换文件夹后再继续使用！" & vbCrLf & "程序目前在临时文件夹中运行，设置、游戏存档等可能无法保存，且部分功能将无法使用。", "环境警告", "我知道了", IsWarn:=True)
+                MyMsgBox("请将 PCL 从压缩包中解压之后再使用！" & vbCrLf & "在当前环境下运行可能会导致丢失游戏存档或设置，部分功能也可能无法使用！", "环境警告", "我知道了", IsWarn:=True)
             End If
             If Is32BitSystem Then
                 MyMsgBox("PCL 和新版 Minecraft 均不再支持 32 位系统，部分功能将无法使用。" & vbCrLf & "非常建议重装为 64 位系统后再进行游戏！", "环境警告", "我知道了", IsWarn:=True)
