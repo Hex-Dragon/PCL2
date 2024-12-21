@@ -108,6 +108,9 @@
         If FrmMain.PageCurrent.Page = FormMain.PageType.CompDetail Then
             TargetVersion = FrmMain.PageCurrent.Additional(2)
             TargetLoader = FrmMain.PageCurrent.Additional(3)
+        ElseIf FrmMain.PageCurrent.Page = FormMain.PageType.Download AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.DownloadCompFavorites Then
+            TargetVersion = ""
+            TargetLoader = CompModLoaderType.Any
         Else
             Select Case CType(sender.Tag, CompProject).Type
                 Case CompType.Mod
