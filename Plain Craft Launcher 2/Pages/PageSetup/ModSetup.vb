@@ -69,7 +69,6 @@
         {"CacheAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheAuthIDToken", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheAuthAPIToken", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
-        {"CacheAuthLogin",New SetupEntry($"{'https://littleskin.cn/api/yggdrasil':'{LittleSkinClientId}'",Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheDownloadFolder", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheJavaListVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"LoginRemember", New SetupEntry(True, Source:=SetupSource.Registry, Encoded:=True)},
@@ -187,8 +186,7 @@
         {"VersionServerNide", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthRegister", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthName", New SetupEntry("", Source:=SetupSource.Version)},
-        {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)}
-
+        {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)}}
 #Region "基础"
 
     Private Enum SetupSource
