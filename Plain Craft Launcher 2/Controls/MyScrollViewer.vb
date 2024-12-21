@@ -45,4 +45,7 @@
         ScrollBar = GetTemplateChild("PART_VerticalScrollBar")
     End Sub
 
+    Private Sub MyScrollViewer_PreviewGotKeyboardFocus(sender As Object, e As KeyboardFocusChangedEventArgs) Handles Me.PreviewGotKeyboardFocus
+        If e.NewFocus IsNot Nothing AndAlso TypeOf e.NewFocus Is MySlider Then e.Handled = True '#3854，阻止获得焦点时自动滚动
+    End Sub
 End Class

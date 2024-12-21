@@ -30,12 +30,12 @@
     <Grid Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,1,0,0"
                 SnapsToDevicePixels="False" UseLayoutRounding="False" x:Name="PanTitle">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" x:Name="ColumnTitle" />
             <ColumnDefinition Width="Auto" x:Name="ColumnSubtitle" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="1*" x:Name="ColumnExtend" />
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="LabTitle" TextTrimming="WordEllipsis" FontSize="14" IsHitTestVisible="False" />
+        <TextBlock x:Name="LabTitle" TextTrimming="CharacterEllipsis" FontSize="14" IsHitTestVisible="False" />
         <TextBlock x:Name="LabSubtitle" Grid.Column="1" HorizontalAlignment="Left"
             TextTrimming="CharacterEllipsis" FontSize="12" IsHitTestVisible="False" 
             Foreground="{StaticResource ColorBrushGray1}" Opacity="0.4" VerticalAlignment="Bottom" Visibility="Collapsed" />

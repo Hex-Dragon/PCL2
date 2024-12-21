@@ -109,7 +109,7 @@ Friend Module ModSecret
             Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode
         End If
         Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.open.server/"
-        Client.Headers("x-api-key") = CurseForgeAPIKey
+        If Url.Contains("api.curseforge.com") Then Client.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
     ''' <summary>
     ''' 设置 Headers 的 UA、Referer。
@@ -123,7 +123,7 @@ Friend Module ModSecret
             Request.UserAgent = "PCL2/" & VersionStandardCode
         End If
         Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
-        Request.Headers("x-api-key") = CurseForgeAPIKey
+        If Url.Contains("api.curseforge.com") Then Request.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
 
 #End Region

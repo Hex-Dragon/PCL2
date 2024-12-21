@@ -489,16 +489,18 @@ NoUserJava:
     Public JavaSearchLoader As New LoaderTask(Of Integer, Integer)("查找 Java", AddressOf JavaSearchLoaderSub) With {.ProgressWeight = 2}
     Private Sub JavaSearchLoaderSub(Loader As LoaderTask(Of Integer, Integer))
         If FrmSetupLaunch IsNot Nothing Then
-            RunInUiWait(Sub()
-                            FrmSetupLaunch.ComboArgumentJava.Items.Clear()
-                            FrmSetupLaunch.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = "加载中……", .IsSelected = True})
-                        End Sub)
+            RunInUiWait(
+            Sub()
+                FrmSetupLaunch.ComboArgumentJava.Items.Clear()
+                FrmSetupLaunch.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = "加载中……", .IsSelected = True})
+            End Sub)
         End If
         If FrmVersionSetup IsNot Nothing Then
-            RunInUiWait(Sub()
-                            FrmVersionSetup.ComboArgumentJava.Items.Clear()
-                            FrmVersionSetup.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = "加载中……", .IsSelected = True})
-                        End Sub)
+            RunInUiWait(
+            Sub()
+                FrmVersionSetup.ComboArgumentJava.Items.Clear()
+                FrmVersionSetup.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = "加载中……", .IsSelected = True})
+            End Sub)
         End If
 
         Try
@@ -520,6 +522,7 @@ NoUserJava:
             Next
             '查找磁盘中的 Java
             For Each Disk As DriveInfo In DriveInfo.GetDrives()
+                If Disk.DriveType = DriveType.Network Then Continue For '跳过网络驱动器（#3705）
                 JavaSearchFolder(Disk.Name, JavaPreList, False)
             Next
             '查找 APPDATA 文件夹中的 Java

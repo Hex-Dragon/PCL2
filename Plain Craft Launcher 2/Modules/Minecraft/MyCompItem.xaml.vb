@@ -96,7 +96,7 @@
         '记录当前展开的卡片标题（#2712）
         Dim Titles As New List(Of String)
         If FrmMain.PageCurrent.Page = FormMain.PageType.CompDetail Then
-            For Each Card As MyCard In FrmDownloadCompDetail.PanMain.Children
+            For Each Card As MyCard In FrmDownloadCompDetail.PanResults.Children
                 If Card.Title <> "" AndAlso Not Card.IsSwaped Then Titles.Add(Card.Title)
             Next
             Log("[Comp] 记录当前已展开的卡片：" & String.Join("、", Titles))
