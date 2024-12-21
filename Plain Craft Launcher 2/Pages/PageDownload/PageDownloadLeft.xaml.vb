@@ -11,7 +11,7 @@
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemInstall.Check, ItemClient.Check, ItemOptiFine.Check, ItemForge.Check, ItemNeoForge.Check, ItemLiteLoader.Check, ItemMod.Check, ItemFabric.Check, ItemPack.Check, ItemFavorites.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemInstall.Check, ItemClient.Check, ItemOptiFine.Check, ItemForge.Check, ItemNeoForge.Check, ItemLiteLoader.Check, ItemMod.Check, ItemFabric.Check, ItemQuilt.Check, ItemPack.Check, ItemFavorites.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -41,6 +41,9 @@
             Case FormMain.PageSubType.DownloadFabric
                 If FrmDownloadFabric Is Nothing Then FrmDownloadFabric = New PageDownloadFabric
                 Return FrmDownloadFabric
+            Case FormMain.PageSubType.DownloadQuilt
+                If FrmDownloadQuilt Is Nothing Then FrmDownloadQuilt = New PageDownloadQuilt
+                Return FrmDownloadQuilt
             Case FormMain.PageSubType.DownloadMod
                 If FrmDownloadMod Is Nothing Then FrmDownloadMod = New PageDownloadMod
                 Return FrmDownloadMod
@@ -110,6 +113,8 @@
                 DlLiteLoaderListLoader.Start(IsForceRestart:=True)
                 DlFabricListLoader.Start(IsForceRestart:=True)
                 DlFabricApiLoader.Start(IsForceRestart:=True)
+                DlQuiltListLoader.Start(IsForceRestart:=True)
+                DlQSLLoader.Start(IsForceRestart:=True)
                 DlOptiFabricLoader.Start(IsForceRestart:=True)
                 ItemInstall.Checked = True
             Case FormMain.PageSubType.DownloadMod
@@ -144,6 +149,9 @@
             Case FormMain.PageSubType.DownloadFabric
                 DlFabricListLoader.Start(IsForceRestart:=True)
                 ItemFabric.Checked = True
+            Case FormMain.PageSubType.DownloadQuilt
+                DlQuiltListLoader.Start(IsForceRestart:=True)
+                ItemQuilt.Checked = True
             Case FormMain.PageSubType.DownloadCompFavorites
                 If FrmDownloadCompFavorites IsNot Nothing Then FrmDownloadCompFavorites.PageLoaderRestart()
                 ItemFavorites.Checked = True
@@ -177,6 +185,7 @@
         ItemClient.Visibility = Visibility.Visible
         ItemOptiFine.Visibility = Visibility.Visible
         ItemFabric.Visibility = Visibility.Visible
+        ItemQuilt.Visibility = Visibility.Visible
         ItemForge.Visibility = Visibility.Visible
         ItemNeoForge.Visibility = Visibility.Visible
         ItemLiteLoader.Visibility = Visibility.Visible
@@ -198,6 +207,7 @@
         ItemOptiFine.Visibility = Visibility.Collapsed
         ItemNeoForge.Visibility = Visibility.Collapsed
         ItemFabric.Visibility = Visibility.Collapsed
+        ItemQuilt.Visibility = Visibility.Collapsed
         ItemForge.Visibility = Visibility.Collapsed
         ItemLiteLoader.Visibility = Visibility.Collapsed
         RunInThread(

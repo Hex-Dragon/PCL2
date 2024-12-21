@@ -185,7 +185,7 @@ RequestFinished:
     Public Function NetGetCodeByRequestOnce(Url As String, Optional Encode As Encoding = Nothing, Optional Timeout As Integer = 30000, Optional IsJson As Boolean = False, Optional Accept As String = "", Optional UseBrowserUserAgent As Boolean = False)
         If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
         Url = SecretCdnSign(Url)
-        Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 json", "")}")
+        Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 Json", "")}")
         Dim Request As HttpWebRequest = WebRequest.Create(Url)
         Dim Result As New List(Of Byte)
         Try

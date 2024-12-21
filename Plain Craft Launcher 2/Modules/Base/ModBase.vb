@@ -1212,7 +1212,7 @@ Re:
                     Try
                         GetJson(Content)
                     Catch ex As Exception
-                        Throw New Exception("不是有效的 json 文件", ex)
+                        Throw New Exception("不是有效的 Json 文件", ex)
                     End Try
                 End If
                 Return Nothing
@@ -1224,7 +1224,7 @@ Re:
     End Class
 
     ''' <summary>
-    ''' 尝试根据后缀名判断文件种类并解压文件，支持 gz 与 zip，会尝试将 jar 以 zip 方式解压。
+    ''' 尝试根据后缀名判断文件种类并解压文件，支持 gz 与 zip，会尝试将 Jar 以 zip 方式解压。
     ''' 会尝试创建，但不会清空目标文件夹。
     ''' </summary>
     Public Sub ExtractFile(CompressFilePath As String, DestDirectory As String, Optional Encode As Encoding = Nothing,

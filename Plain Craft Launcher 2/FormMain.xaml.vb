@@ -772,7 +772,7 @@ Public Class FormMain
             End If
             '多文件拖拽
             If FilePathList.Count > 1 Then
-                '必须要求全部为 jar 文件
+                '必须要求全部为 Jar 文件
                 For Each File In FilePathList
                     If Not {"jar", "litemod", "disabled", "old"}.Contains(File.AfterLast(".").ToLower) Then
                         Hint("一次请只拖入一个文件！", HintType.Critical)
@@ -961,6 +961,7 @@ Public Class FormMain
         DownloadForge = 6
         DownloadNeoForge = 7
         DownloadFabric = 8
+        DownloadQuilt = 10
         DownloadLiteLoader = 9
         DownloadMod = 11
         DownloadPack = 12
