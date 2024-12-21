@@ -547,6 +547,15 @@
                     If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " 万", DownloadCount))
             Return NewItem
         End Function
+        Public Function ToListItem() As MyListItem
+            Dim Result As New MyListItem()
+            Result.Title = TranslatedName
+            Result.Info = Description.Replace(vbCr, "").Replace(vbLf, "")
+            Result.Logo = LogoUrl
+            Result.Tags = Tags
+            Result.Tag = Me
+            Return Result
+        End Function
         Public Function GetControlLogo() As String
             If String.IsNullOrEmpty(LogoUrl) Then
                 Return PathImage & "Icons/NoIcon.png"
@@ -1516,5 +1525,115 @@ Retry:
     End Sub
 
 #End Region
+    Class CompFavorites
 
+        ''' <summary>
+        ''' 收藏的工程列表
+        ''' </summary>
+        Private Shared _FavoritesList As List(Of String) = Nothing
+        Public Shared Property FavoritesList As List(Of String)
+            Get
+                If _FavoritesList Is Nothing Then
+                    Dim RawData As String = Setup.Get("CompFavorites")
+                    Dim RawList As JArray = JArray.Parse(RawData)
+                    _FavoritesList = RawList.ToObject(Of List(Of String))()
+                End If
+                Return _FavoritesList
+            End Get
+            Set
+                _FavoritesList = Value
+                Dim RawList As New JArray
+                For Each item In _FavoritesList
+                    RawList.Add(item)
+                Next
+                Setup.Set("CompFavorites", RawList.ToString())
+            End Set
+        End Property
+
+    End Class
+
+    Class CompRequest
+        ''' <summary>
+        ''' 通过项目 Id 判断是否来自 CurseForge
+        ''' </summary>
+        ''' <param name="Id"></param>
+        ''' <returns></returns>
+        Public Shared Function IsFromCurseForge(Id As String) As Boolean
+            Dim res As Integer = 0
+            Return Integer.TryParse(Id, res) 'CurseForge 数字 ID Modrinth 乱序 ID
+        End Function
+
+        ''' <summary>
+        ''' 通过一堆 ID 从 Modrinth 那获取项目信息 
+        ''' </summary>
+        ''' <param name="Ids"></param>
+        ''' <returns></returns>
+        Public Shared Function GetListByIdsFromModrinth(Ids As List(Of String)) As List(Of CompProject)
+            Dim Res As New List(Of CompProject)
+            Dim RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{Ids.Join(""",""")}""]", IsJson:=True)
+            For Each RawData In RawProjectsData
+                Res.Add(New CompProject(RawData))
+            Next
+            Return Res
+        End Function
+
+        ''' <summary>
+        ''' 通过一堆 ID 从 CurseForge 那获取项目信息 
+        ''' </summary>
+        ''' <param name="Ids"></param>
+        ''' <returns></returns>
+        Public Shared Function GetListByIdsFromCurseforge(Ids As List(Of String)) As List(Of CompProject)
+            Dim Res As New List(Of CompProject)
+            Dim RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
+                                       "POST", "{""modIds"": [" & Ids.Join(",") & "]}", "application/json"))("data")
+            For Each RawData In RawProjectsData
+                Res.Add(New CompProject(RawData))
+            Next
+            Return Res
+        End Function
+
+        Public Shared Function GetCompProjectsByIds(Input As List(Of String)) As List(Of CompProject)
+            If Not Input.Any() Then Return New List(Of CompProject)
+            Dim RawList As List(Of String) = Input
+            Dim ModrinthProjectIds As New List(Of String)
+            Dim CurseForgeProjectIds As New List(Of String)
+            Dim Res As List(Of CompProject) = New List(Of CompProject)
+            For Each Id In RawList
+                If IsFromCurseForge(Id) Then
+                    CurseForgeProjectIds.Add(Id)
+                Else
+                    ModrinthProjectIds.Add(Id)
+                End If
+            Next
+            '在线信息获取
+            Dim FinishedTask = 0
+            Dim NeedCompleteTask = 0
+            If CurseForgeProjectIds.Any() Then
+                NeedCompleteTask += 1
+                RunInNewThread(Sub()
+                                   Try
+                                       Res.AddRange(CompRequest.GetListByIdsFromCurseforge(CurseForgeProjectIds))
+                                       FinishedTask += 1
+                                   Catch ex As Exception
+                                       Log(ex, "[Favorites] 获取 CurseForge 数据失败", LogLevel.Hint)
+                                   End Try
+                               End Sub, "Favorites CurseForge")
+            End If
+            If ModrinthProjectIds.Any() Then
+                NeedCompleteTask += 1
+                RunInNewThread(Sub()
+                                   Try
+                                       Res.AddRange(CompRequest.GetListByIdsFromModrinth(ModrinthProjectIds))
+                                       FinishedTask += 1
+                                   Catch ex As Exception
+                                       Log(ex, "[Favorites] 获取 Modrinth 数据失败", LogLevel.Hint)
+                                   End Try
+                               End Sub, "Favorites Modrinth")
+            End If
+            Do Until FinishedTask = NeedCompleteTask
+                Thread.Sleep(50)
+            Loop
+            Return Res
+        End Function
+    End Class
 End Module

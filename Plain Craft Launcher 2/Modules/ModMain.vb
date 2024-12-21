@@ -406,6 +406,7 @@ EndHint:
     Public FrmDownloadQuilt As PageDownloadQuilt
     Public FrmDownloadMod As PageDownloadMod
     Public FrmDownloadPack As PageDownloadPack
+    Public FrmDownloadCompFavorites As PageDownloadCompFavorites
 
     '设置页面声明
     Public FrmSetupLeft As PageSetupLeft
