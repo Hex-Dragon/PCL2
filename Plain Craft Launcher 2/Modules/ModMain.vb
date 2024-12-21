@@ -403,8 +403,10 @@ EndHint:
     Public FrmDownloadForge As PageDownloadForge
     Public FrmDownloadNeoForge As PageDownloadNeoForge
     Public FrmDownloadFabric As PageDownloadFabric
+    Public FrmDownloadQuilt As PageDownloadQuilt
     Public FrmDownloadMod As PageDownloadMod
     Public FrmDownloadPack As PageDownloadPack
+    Public FrmDownloadCompFavorites As PageDownloadCompFavorites
 
     '设置页面声明
     Public FrmSetupLeft As PageSetupLeft
@@ -616,7 +618,7 @@ EndHint:
                     Log("[Help] 已扫描 PCL 文件夹下的帮助文件，目前总计 " & FileList.Count & " 条")
                     '读取自带文件
                     For Each File In EnumerateFiles(PathTemp & "Help")
-                        '跳过非 json 文件与以 . 开头的文件夹
+                        '跳过非 Json 文件与以 . 开头的文件夹
                         If File.Extension.ToLower <> ".json" OrElse File.Directory.FullName.Replace(PathTemp & "Help", "").Contains("\.") Then Continue For
                         '检查忽略列表
                         Dim RealPath As String = File.FullName.Replace(PathTemp & "Help\", "")

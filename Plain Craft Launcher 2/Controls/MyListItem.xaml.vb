@@ -46,6 +46,62 @@
     '勾选条
     Public RectCheck As Border
 
+
+    ''' <summary>
+    ''' Tags 的存放 StackPanel
+    ''' </summary>
+    Public _PanTags As StackPanel
+    Public ReadOnly Property PanTags As StackPanel
+        Get
+            If _PanTags IsNot Nothing Then Return _PanTags
+            Dim NewStack As New StackPanel With {
+            .IsHitTestVisible = False,
+            .Orientation = Orientation.Horizontal,
+            .VerticalAlignment = VerticalAlignment.Bottom,
+            .Margin = New Thickness(0, 0, -3, 0)
+            }
+            SetColumn(NewStack, 3)
+            SetRow(NewStack, 2)
+            PanBack.Children.Add(NewStack)
+            _PanTags = NewStack
+            Return _PanTags
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' 标签，可以传入 String 和 List(Of String)
+    ''' </summary>
+    Public WriteOnly Property Tags As Object
+        Set(value As Object)
+            Dim list As New List(Of String)
+            If TypeOf (value) Is String Then
+                list = CType(value, String).Split("|").ToList()
+            End If
+            If TypeOf (value) Is List(Of String) Then
+                list = CType(value, List(Of String))
+            End If
+            PanTags.Children.Clear()
+            PanTags.Visibility = If(list.Any(), Visibility.Visible, Visibility.Collapsed)
+            For Each TagText In list
+                Dim NewTag As New Border With {
+                    .Background = New SolidColorBrush(Color.FromArgb(17, 0, 0, 0)),
+                    .Padding = New Thickness(3, 1, 3, 1),
+                    .CornerRadius = New CornerRadius(3),
+                    .Margin = New Thickness(0, 0, 3, 0),
+                    .SnapsToDevicePixels = True,
+                    .UseLayoutRounding = False
+                }
+                Dim TagTextBlock As New TextBlock With {
+                    .Text = TagText,
+                    .Foreground = New SolidColorBrush(Color.FromRgb(134, 134, 134)),
+                    .FontSize = 11
+                }
+                NewTag.Child = TagTextBlock
+                PanTags.Children.Add(NewTag)
+            Next
+        End Set
+    End Property
+
     '副文本
     Private _LabInfo As TextBlock = Nothing
     Public ReadOnly Property LabInfo As TextBlock
@@ -63,9 +119,9 @@
                     .Margin = New Thickness(4, 0, 0, 0),
                     .Opacity = 0.6
                 }
-                SetColumn(Lab, 3)
+                SetColumn(Lab, 4)
                 SetRow(Lab, 2)
-                Children.Add(Lab)
+                PanBack.Children.Add(Lab)
                 _LabInfo = Lab
                 '<TextBlock Grid.Row="2" SnapsToDevicePixels="False" UseLayoutRounding="False" HorizontalAlignment="Left" x:Name = "LabInfo" IsHitTestVisible="False" Grid.Column="2" 
                 'TextTrimming = "CharacterEllipsis" Visibility="Collapsed" FontSize="12" Foreground="{StaticResource ColorBrushGray2}" Margin="4,0,0,0" />

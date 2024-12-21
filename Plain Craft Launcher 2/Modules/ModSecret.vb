@@ -1,8 +1,10 @@
 ﻿'由于包含加解密等安全信息，本文件中的部分代码已被删除
 
+Imports System.ComponentModel
 Imports System.Net
 Imports System.Reflection
 Imports System.Security.Cryptography
+Imports NAudio.Midi
 
 Friend Module ModSecret
 
@@ -270,7 +272,7 @@ Friend Module ModSecret
     Public Sub UpdateCheckByButton()
         Hint("该版本中不包含更新功能……")
     End Sub
-    Public Sub UpdateStart(BaseUrl As String, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
+    Public Sub UpdateStart(VersionStr As String, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
     End Sub
     Public Sub UpdateRestart(TriggerRestartAndByEnd As Boolean)
     End Sub

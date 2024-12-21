@@ -39,7 +39,7 @@ Public Module ModDownloadLib
             '已有版本检查
             If Behaviour <> NetPreDownloadBehaviour.IgnoreCheck AndAlso File.Exists(VersionFolder & Id & ".json") AndAlso File.Exists(VersionFolder & Id & ".jar") Then
                 If Behaviour = NetPreDownloadBehaviour.ExitWhileExistsOrDownloading Then Return Nothing
-                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 与 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
+                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 与 Jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
                     File.Delete(VersionFolder & Id & ".jar")
                     File.Delete(VersionFolder & Id & ".json")
                 Else
@@ -60,6 +60,47 @@ Public Module ModDownloadLib
             Return Nothing
         End Try
     End Function
+    ''' <summary>
+    ''' 保存某个 Minecraft 版本的核心文件（仅 Json 与核心 Jar）。
+    ''' </summary>
+    ''' <param name="Id">所下载的 Minecraft 的版本名。</param>
+    ''' <param name="JsonUrl">Json 文件的 Mojang 官方地址。</param>
+    Public Sub McDownloadClientCore(Id As String, JsonUrl As String, Behaviour As NetPreDownloadBehaviour)
+        Try
+            Dim VersionFolder As String = SelectFolder()
+            If Not VersionFolder.Contains("\") Then Exit Sub
+            VersionFolder = VersionFolder & Id & "\"
+
+            '重复任务检查
+            For Each OngoingLoader In LoaderTaskbar
+                If OngoingLoader.Name <> $"Minecraft {Id} 下载" Then Continue For
+                If Behaviour = NetPreDownloadBehaviour.ExitWhileExistsOrDownloading Then Exit Sub
+                Hint("该版本正在下载中！", HintType.Critical)
+                Exit Sub
+            Next
+
+            Dim Loaders As New List(Of LoaderBase)
+            '下载版本 Json 文件
+            Loaders.Add(New LoaderDownload("下载版本 Json 文件", New List(Of NetFile) From {
+                New NetFile(DlSourceLauncherOrMetaGet(JsonUrl), VersionFolder & Id & ".json", New FileChecker(CanUseExistsFile:=False, IsJson:=True))
+            }) With {.ProgressWeight = 2})
+            '获取支持库文件地址
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析核心 Jar 文件下载地址",
+                                                            Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 0.5, .Show = False})
+            '下载支持库文件
+            Loaders.Add(New LoaderDownload("下载核心 Jar 文件", New List(Of NetFile)) With {.ProgressWeight = 5})
+
+            '启动
+            Dim Loader As New LoaderCombo(Of String)("Minecraft " & Id & " 下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+            Loader.Start(Id)
+            LoaderTaskbarAdd(Loader)
+            FrmMain.BtnExtraDownload.ShowRefresh()
+            FrmMain.BtnExtraDownload.Ribble()
+
+        Catch ex As Exception
+            Log(ex, "开始 Minecraft 下载失败", LogLevel.Feedback)
+        End Try
+    End Sub
 
     ''' <summary>
     ''' 获取下载某个 Minecraft 版本的加载器列表。
@@ -73,7 +114,7 @@ Public Module ModDownloadLib
 
         '下载版本 Json 文件
         If JsonUrl Is Nothing Then
-            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取原版 json 文件下载地址",
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取原版 Json 文件下载地址",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
                 Dim JsonAddress As String = DlClientListGet(Id)
                 Task.Output = New List(Of NetFile) From {New NetFile(DlSourceLauncherOrMetaGet(JsonAddress), VersionFolder & VersionName & ".json")}
@@ -124,7 +165,7 @@ Public Module ModDownloadLib
 
     End Function
     Private Const McDownloadClientLibName As String = "下载原版支持库文件"
-    Private Const McDownloadClientJsonName As String = "下载原版 json 文件"
+    Private Const McDownloadClientJsonName As String = "下载原版 Json 文件"
 
 #End Region
 
@@ -390,6 +431,44 @@ pause"
 #End Region
 
 #Region "OptiFine 下载"
+
+    Public Sub McDownloadOptiFine(DownloadInfo As DlOptiFineListEntry)
+        Try
+            Dim Id As String = DownloadInfo.NameVersion
+            Dim VersionFolder As String = PathMcFolder & "versions\" & Id & "\"
+            Dim IsNewVersion As Boolean = Val(DownloadInfo.Inherit.Split(".")(1)) >= 14
+            Dim Target As String = If(IsNewVersion,
+                PathTemp & "Cache\Code\" & DownloadInfo.NameVersion & "_" & GetUuid(),
+                PathMcFolder & "libraries\optifine\OptiFine\" & DownloadInfo.NameFile.Replace("OptiFine_", "").Replace(".jar", "").Replace("preview_", "") & "\" & DownloadInfo.NameFile.Replace("OptiFine_", "OptiFine-").Replace("preview_", ""))
+
+            '重复任务检查
+            For Each OngoingLoader In LoaderTaskbar
+                If OngoingLoader.Name <> $"OptiFine {DownloadInfo.NameDisplay} 下载" Then Continue For
+                Hint("该版本正在下载中！", HintType.Critical)
+                Exit Sub
+            Next
+
+            '已有版本检查
+            If File.Exists(VersionFolder & Id & ".json") Then
+                If MyMsgBox("版本 " & Id & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 和 Jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
+                    File.Delete(VersionFolder & Id & ".jar")
+                    File.Delete(VersionFolder & Id & ".json")
+                Else
+                    Exit Sub
+                End If
+            End If
+
+            '启动
+            Dim Loader As New LoaderCombo(Of String)("OptiFine " & DownloadInfo.NameDisplay & " 下载", McDownloadOptiFineLoader(DownloadInfo)) With {.OnStateChanged = AddressOf McInstallState}
+            Loader.Start(VersionFolder)
+            LoaderTaskbarAdd(Loader)
+            FrmMain.BtnExtraDownload.ShowRefresh()
+            FrmMain.BtnExtraDownload.Ribble()
+
+        Catch ex As Exception
+            Log(ex, "开始 OptiFine 下载失败", LogLevel.Feedback)
+        End Try
+    End Sub
 
     Private Sub McDownloadOptiFineSave(DownloadInfo As DlOptiFineListEntry)
         Try
@@ -835,7 +914,7 @@ Retry:
 
             '已有版本检查
             If File.Exists(VersionFolder & VersionName & ".json") Then
-                If MyMsgBox("版本 " & VersionName & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 json 和 jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
+                If MyMsgBox("版本 " & VersionName & " 已存在，是否重新下载？" & vbCrLf & "这会覆盖版本的 Json 和 Jar 文件，但不会影响版本隔离的文件。", "版本已存在", "继续", "取消") = 1 Then
                     File.Delete(VersionFolder & VersionName & ".jar")
                     File.Delete(VersionFolder & VersionName & ".json")
                 Else
@@ -1453,10 +1532,10 @@ Retry:
                     End If
                     If DeltaList.Count = 1 Then
                         '如果没有新增文件夹，那么预测的文件夹名就是正确的
-                        '如果只新增 1 个文件夹，那么拷贝 json 文件
+                        '如果只新增 1 个文件夹，那么拷贝 Json 文件
                         Dim JsonFile As FileInfo = DeltaList(0).EnumerateFiles.First()
                         WriteFile(VersionFolder & TargetVersion & ".json", ReadFile(JsonFile.FullName))
-                        Log($"[Download] 已拷贝新增的版本 JSON 文件：{JsonFile.FullName} -> {VersionFolder}{TargetVersion}.json")
+                        Log($"[Download] 已拷贝新增的版本 Json 文件：{JsonFile.FullName} -> {VersionFolder}{TargetVersion}.json")
                     ElseIf DeltaList.Count > 1 Then
                         '新增了多个文件夹
                         Log($"[Download] 有多个疑似的新增版本，无法确定：{DeltaList.Select(Function(d) d.Name).Join(";")}")
@@ -1897,6 +1976,111 @@ Retry:
 
 #End Region
 
+#Region "Quilt 下载"
+
+    Public Sub McDownloadQuiltLoaderSave(DownloadInfo As JObject)
+        Try
+            Dim Url As String = DownloadInfo("url").ToString
+            Dim FileName As String = GetFileNameFromPath(Url)
+            Dim Version As String = GetFileNameFromPath(DownloadInfo("version").ToString)
+            Dim Target As String = SelectAs("选择保存位置", FileName, "Quilt 安装器 (*.jar)|*.jar")
+            If Not Target.Contains("\") Then Exit Sub
+
+            '重复任务检查
+            For Each OngoingLoader In LoaderTaskbar
+                If OngoingLoader.Name <> $"Quilt {Version} 安装器下载" Then Continue For
+                Hint("该版本正在下载中！", HintType.Critical)
+                Exit Sub
+            Next
+
+            '构造步骤加载器
+            Dim Loaders As New List(Of LoaderBase)
+            '下载
+            'TODO: BMCLAPI 不支持 Quilt Installer 下载
+            Dim Address As New List(Of String)
+            Address.Add(Url)
+            Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile) From {New NetFile(Address.ToArray, Target, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
+            '启动
+            Dim Loader As New LoaderCombo(Of JObject)("Quilt " & Version & " 安装器下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+            Loader.Start(DownloadInfo)
+            LoaderTaskbarAdd(Loader)
+            FrmMain.BtnExtraDownload.ShowRefresh()
+            FrmMain.BtnExtraDownload.Ribble()
+
+        Catch ex As Exception
+            Log(ex, "开始 Quilt 安装器下载失败", LogLevel.Feedback)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' 获取下载某个 Quilt 版本的加载器列表。
+    ''' </summary>
+    Private Function McDownloadQuiltLoader(QuiltVersion As String, MinecraftName As String, Optional McFolder As String = Nothing, Optional FixLibrary As Boolean = True) As List(Of LoaderBase)
+
+        '参数初始化
+        McFolder = If(McFolder, PathMcFolder)
+        Dim IsCustomFolder As Boolean = McFolder <> PathMcFolder
+        Dim Id As String = "quilt-loader-" & QuiltVersion & "-" & MinecraftName
+        Dim VersionFolder As String = McFolder & "versions\" & Id & "\"
+        Dim Loaders As New List(Of LoaderBase)
+
+        '下载 Json
+        MinecraftName = MinecraftName.Replace("∞", "infinite") '放在 ID 后面避免影响版本文件夹名称
+        Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("获取 Quilt 主文件下载地址",
+                                                            Sub(Task As LoaderTask(Of String, List(Of NetFile)))
+                                                                '启动依赖版本的下载
+                                                                If FixLibrary Then
+                                                                    McDownloadClient(NetPreDownloadBehaviour.ExitWhileExistsOrDownloading, MinecraftName)
+                                                                End If
+                                                                Task.Progress = 0.5
+                                                                '构造文件请求
+                                                                Task.Output = New List(Of NetFile) From {New NetFile({
+                                                                    "https://meta.quiltmc.org/v3/versions/loader/" & MinecraftName & "/" & QuiltVersion & "/profile/json"
+                                                                }, VersionFolder & Id & ".json", New FileChecker(IsJson:=True))}
+                                                                '新建 mods 文件夹
+                                                                Directory.CreateDirectory(New McVersion(VersionFolder).GetPathIndie(True) & "mods\")
+                                                            End Sub) With {.ProgressWeight = 0.5})
+        Loaders.Add(New LoaderDownload("下载 Quilt 主文件", New List(Of NetFile)) With {.ProgressWeight = 2.5})
+
+        '下载支持库
+        If FixLibrary Then
+            Loaders.Add(New LoaderTask(Of String, List(Of NetFile))("分析 Quilt 支持库文件",
+                                                                Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(VersionFolder))) With {.ProgressWeight = 1, .Show = False})
+            Loaders.Add(New LoaderDownload("下载 Quilt 支持库文件", New List(Of NetFile)) With {.ProgressWeight = 8})
+        End If
+
+        Return Loaders
+    End Function
+
+#End Region
+
+#Region "Quilt 下载菜单"
+
+    Public Function QuiltDownloadListItem(Entry As JObject, OnClick As MyListItem.ClickEventHandler) As MyListItem
+        '建立控件
+        Dim NewItem As New MyListItem With {
+            .Title = Entry("version").ToString, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Info = If(Entry("maven").ToString.Contains("installer"), "安装器", If(Entry("version").ToString.Contains("beta") OrElse Entry("version").ToString.Contains("pre"), "测试版", "稳定版")),
+            .Logo = PathImage & "Blocks/Quilt.png"
+        }
+        AddHandler NewItem.Click, OnClick
+        '结束
+        Return NewItem
+    End Function
+    Public Function QSLDownloadListItem(Entry As CompFile, OnClick As MyListItem.ClickEventHandler) As MyListItem
+        '建立控件
+        Dim NewItem As New MyListItem With {
+            .Title = Entry.DisplayName.Split("]")(1).Replace(" build ", ".").Split("+")(0).Trim, .SnapsToDevicePixels = True, .Height = 42, .Type = MyListItem.CheckType.Clickable, .Tag = Entry,
+            .Info = Entry.StatusDescription & "，发布于 " & Entry.ReleaseDate.ToString("yyyy'/'MM'/'dd HH':'mm"),
+            .Logo = PathImage & "Blocks/Quilt.png"
+        }
+        AddHandler NewItem.Click, OnClick
+        '结束
+        Return NewItem
+    End Function
+
+#End Region
+
 #Region "合并安装"
 
     ''' <summary>
@@ -1961,6 +2145,16 @@ Retry:
         ''' 欲下载的 Fabric API 信息。
         ''' </summary>
         Public FabricApi As CompFile = Nothing
+
+        ''' <summary>
+        ''' 欲下载的 Quilt Loader 版本名。
+        ''' </summary>
+        Public QuiltVersion As String = Nothing
+
+        ''' <summary>
+        ''' 欲下载的 Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL) 信息。
+        ''' </summary>
+        Public QSL As CompFile = Nothing
 
         ''' <summary>
         ''' 欲下载的 OptiFabric 信息。
@@ -2095,6 +2289,8 @@ Retry:
         If Request.NeoForgeVersion IsNot Nothing Then NeoForgeFolder = TempMcFolder & "versions\neoforge-" & Request.NeoForgeVersion
         Dim FabricFolder As String = Nothing
         If Request.FabricVersion IsNot Nothing Then FabricFolder = TempMcFolder & "versions\fabric-loader-" & Request.FabricVersion & "-" & Request.MinecraftName
+        Dim QuiltFolder As String = Nothing
+        If Request.QuiltVersion IsNot Nothing Then QuiltFolder = TempMcFolder & "versions\quilt-loader-" & Request.QuiltVersion & "-" & Request.MinecraftName
         Dim LiteLoaderFolder As String = Nothing
         If Request.LiteLoaderEntry IsNot Nothing Then LiteLoaderFolder = TempMcFolder & "versions\" & Request.MinecraftName & "-LiteLoader"
 
@@ -2115,6 +2311,7 @@ Retry:
         If ForgeFolder IsNot Nothing Then Log("[Download] Forge 缓存：" & ForgeFolder)
         If NeoForgeFolder IsNot Nothing Then Log("[Download] NeoForge 缓存：" & NeoForgeFolder)
         If FabricFolder IsNot Nothing Then Log("[Download] Fabric 缓存：" & FabricFolder)
+        If QuiltFolder IsNot Nothing Then Log("[Download] Quilt 缓存：" & QuiltFolder)
         If LiteLoaderFolder IsNot Nothing Then Log("[Download] LiteLoader 缓存：" & LiteLoaderFolder)
         Log("[Download] 对应的原版版本：" & Request.MinecraftName)
 
@@ -2130,6 +2327,10 @@ Retry:
         'Fabric API
         If Request.FabricApi IsNot Nothing Then
             LoaderList.Add(New LoaderDownload("下载 Fabric API", New List(Of NetFile) From {Request.FabricApi.ToNetFile(ModsFolder)}) With {.ProgressWeight = 3, .Block = False})
+        End If
+        'Quilted Fabric API (QFAPI) / Quilt Standard Libraries (QSL)
+        If Request.QSL IsNot Nothing Then
+            LoaderList.Add(New LoaderDownload("下载 QFAPI / QSL", New List(Of NetFile) From {Request.QSL.ToNetFile(New McVersion(OutputFolder).GetPathIndie(True) & "mods\")}) With {.ProgressWeight = 3, .Block = False})
         End If
         'OptiFabric
         If Request.OptiFabric IsNot Nothing Then
@@ -2162,10 +2363,14 @@ Retry:
         If Request.FabricVersion IsNot Nothing Then
             LoaderList.Add(New LoaderCombo(Of String)("下载 Fabric " & Request.FabricVersion, McDownloadFabricLoader(Request.FabricVersion, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2, .Block = True})
         End If
+        'Quilt
+        If Request.QuiltVersion IsNot Nothing Then
+            LoaderList.Add(New LoaderCombo(Of String)("下载 Quilt " & Request.QuiltVersion, McDownloadQuiltLoader(Request.QuiltVersion, Request.MinecraftName, TempMcFolder, False)) With {.Show = False, .ProgressWeight = 2, .Block = True})
+        End If
         '合并安装
         LoaderList.Add(New LoaderTask(Of String, String)("安装游戏",
             Sub(Task As LoaderTask(Of String, String))
-                InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, FabricFolder, LiteLoaderFolder)
+                InstallMerge(OutputFolder, OutputFolder, OptiFineFolder, OptiFineAsMod, ForgeFolder, Request.ForgeVersion, NeoForgeFolder, Request.NeoForgeVersion, FabricFolder, QuiltFolder, LiteLoaderFolder)
                 Task.Progress = 0.3
                 If Directory.Exists(TempMcFolder & "libraries") Then CopyDirectory(TempMcFolder & "libraries", PathMcFolder & "libraries")
                 If Directory.Exists(TempMcFolder & "mods") Then CopyDirectory(TempMcFolder & "mods", ModsFolder)
@@ -2177,7 +2382,7 @@ Retry:
             End Sub) With {.ProgressWeight = 2, .Block = True})
         '补全文件
         If Not DontFixLibraries AndAlso
-        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.BeforeFirst(".") >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
+        (Request.OptiFineEntry IsNot Nothing OrElse (Request.ForgeVersion IsNot Nothing AndAlso Request.ForgeVersion.Split(".")(0) >= 20) OrElse Request.NeoForgeVersion IsNot Nothing OrElse Request.FabricVersion IsNot Nothing OrElse Request.QuiltVersion IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) Then
             Dim LoadersLib As New List(Of LoaderBase)
             LoadersLib.Add(New LoaderTask(Of String, List(Of NetFile))("分析游戏支持库文件（副加载器）", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(New McVersion(OutputFolder))) With {.ProgressWeight = 1, .Show = False})
             LoadersLib.Add(New LoaderDownload("下载游戏支持库文件（副加载器）", New List(Of NetFile)) With {.ProgressWeight = 7, .Show = False})
@@ -2193,18 +2398,19 @@ Retry:
     ''' <summary>
     ''' 将多个版本 Json 进行合并，如果目标已存在则直接覆盖。失败会抛出异常。
     ''' </summary>
-    Private Sub InstallMerge(OutputFolder As String, MinecraftFolder As String, Optional OptiFineFolder As String = Nothing, Optional OptiFineAsMod As Boolean = False, Optional ForgeFolder As String = Nothing, Optional ForgeVersion As String = Nothing, Optional NeoForgeFolder As String = Nothing, Optional NeoForgeVersion As String = Nothing, Optional FabricFolder As String = Nothing, Optional LiteLoaderFolder As String = Nothing)
+    Private Sub InstallMerge(OutputFolder As String, MinecraftFolder As String, Optional OptiFineFolder As String = Nothing, Optional OptiFineAsMod As Boolean = False, Optional ForgeFolder As String = Nothing, Optional ForgeVersion As String = Nothing, Optional NeoForgeFolder As String = Nothing, Optional NeoForgeVersion As String = Nothing, Optional FabricFolder As String = Nothing, Optional QuiltFolder As String = Nothing, Optional LiteLoaderFolder As String = Nothing)
         Log("[Download] 开始进行版本合并，输出：" & OutputFolder & "，Minecraft：" & MinecraftFolder &
             If(OptiFineFolder IsNot Nothing, "，OptiFine：" & OptiFineFolder, "") &
             If(ForgeFolder IsNot Nothing, "，Forge：" & ForgeFolder, "") &
             If(NeoForgeFolder IsNot Nothing, "，NeoForge：" & NeoForgeFolder, "") &
             If(LiteLoaderFolder IsNot Nothing, "，LiteLoader：" & LiteLoaderFolder, "") &
-            If(FabricFolder IsNot Nothing, "，Fabric：" & FabricFolder, ""))
+            If(FabricFolder IsNot Nothing, "，Fabric：" & FabricFolder, "") &
+            If(QuiltFolder IsNot Nothing, "，Quilt：" & QuiltFolder, ""))
         Directory.CreateDirectory(OutputFolder)
 
-        Dim HasOptiFine As Boolean = OptiFineFolder IsNot Nothing AndAlso Not OptiFineAsMod, HasForge As Boolean = ForgeFolder IsNot Nothing, HasNeoForge As Boolean = NeoForgeFolder IsNot Nothing, HasLiteLoader As Boolean = LiteLoaderFolder IsNot Nothing, HasFabric As Boolean = FabricFolder IsNot Nothing
-        Dim OutputName As String, MinecraftName As String, OptiFineName As String, ForgeName As String, NeoForgeName As String, LiteLoaderName As String, FabricName As String
-        Dim OutputJsonPath As String, MinecraftJsonPath As String, OptiFineJsonPath As String = Nothing, ForgeJsonPath As String = Nothing, NeoForgeJsonPath As String = Nothing, LiteLoaderJsonPath As String = Nothing, FabricJsonPath As String = Nothing
+        Dim HasOptiFine As Boolean = OptiFineFolder IsNot Nothing AndAlso Not OptiFineAsMod, HasForge As Boolean = ForgeFolder IsNot Nothing, HasNeoForge As Boolean = NeoForgeFolder IsNot Nothing, HasLiteLoader As Boolean = LiteLoaderFolder IsNot Nothing, HasFabric As Boolean = FabricFolder IsNot Nothing, HasQuilt As Boolean = QuiltFolder IsNot Nothing
+        Dim OutputName As String, MinecraftName As String, OptiFineName As String, ForgeName As String, NeoForgeName As String, LiteLoaderName As String, FabricName As String, QuiltName As String
+        Dim OutputJsonPath As String, MinecraftJsonPath As String, OptiFineJsonPath As String = Nothing, ForgeJsonPath As String = Nothing, NeoForgeJsonPath As String = Nothing, LiteLoaderJsonPath As String = Nothing, FabricJsonPath As String = Nothing, QuiltJsonPath As String = Nothing
         Dim OutputJar As String, MinecraftJar As String
 #Region "初始化路径信息"
         If Not OutputFolder.EndsWithF("\") Then OutputFolder += "\"
@@ -2246,42 +2452,54 @@ Retry:
             FabricName = GetFolderNameFromPath(FabricFolder)
             FabricJsonPath = FabricFolder & FabricName & ".json"
         End If
+
+        If HasQuilt Then
+            If Not QuiltFolder.EndsWithF("\") Then QuiltFolder += "\"
+            QuiltName = GetFolderNameFromPath(QuiltFolder)
+            QuiltJsonPath = QuiltFolder & QuiltName & ".json"
+        End If
 #End Region
 
-        Dim OutputJson As JObject, MinecraftJson As JObject, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, NeoForgeJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing
+        Dim OutputJson As JObject, MinecraftJson As JObject, OptiFineJson As JObject = Nothing, ForgeJson As JObject = Nothing, NeoForgeJson As JObject = Nothing, LiteLoaderJson As JObject = Nothing, FabricJson As JObject = Nothing, QuiltJson As JObject = Nothing
 #Region "读取文件并检查文件是否合规"
         Dim MinecraftJsonText As String = ReadFile(MinecraftJsonPath)
-        If Not MinecraftJsonText.StartsWithF("{") Then Throw New Exception("Minecraft json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
+        If Not MinecraftJsonText.StartsWithF("{") Then Throw New Exception("Minecraft Json 有误，地址：" & MinecraftJsonPath & "，前段内容：" & MinecraftJsonText.Substring(0, Math.Min(MinecraftJsonText.Length, 1000)))
         MinecraftJson = GetJson(MinecraftJsonText)
 
         If HasOptiFine Then
             Dim OptiFineJsonText As String = ReadFile(OptiFineJsonPath)
-            If Not OptiFineJsonText.StartsWithF("{") Then Throw New Exception("OptiFine json 有误，地址：" & OptiFineJsonPath & "，前段内容：" & OptiFineJsonText.Substring(0, Math.Min(OptiFineJsonText.Length, 1000)))
+            If Not OptiFineJsonText.StartsWithF("{") Then Throw New Exception("OptiFine Json 有误，地址：" & OptiFineJsonPath & "，前段内容：" & OptiFineJsonText.Substring(0, Math.Min(OptiFineJsonText.Length, 1000)))
             OptiFineJson = GetJson(OptiFineJsonText)
         End If
 
         If HasForge Then
             Dim ForgeJsonText As String = ReadFile(ForgeJsonPath)
-            If Not ForgeJsonText.StartsWithF("{") Then Throw New Exception("Forge json 有误，地址：" & ForgeJsonPath & "，前段内容：" & ForgeJsonText.Substring(0, Math.Min(ForgeJsonText.Length, 1000)))
+            If Not ForgeJsonText.StartsWithF("{") Then Throw New Exception("Forge Json 有误，地址：" & ForgeJsonPath & "，前段内容：" & ForgeJsonText.Substring(0, Math.Min(ForgeJsonText.Length, 1000)))
             ForgeJson = GetJson(ForgeJsonText)
         End If
 
         If HasNeoForge Then
             Dim NeoForgeJsonText As String = ReadFile(NeoForgeJsonPath)
-            If Not NeoForgeJsonText.StartsWithF("{") Then Throw New Exception("NeoForge json 有误，地址：" & NeoForgeJsonPath & "，前段内容：" & NeoForgeJsonText.Substring(0, Math.Min(NeoForgeJsonText.Length, 1000)))
+            If Not NeoForgeJsonText.StartsWithF("{") Then Throw New Exception("NeoForge Json 有误，地址：" & NeoForgeJsonPath & "，前段内容：" & NeoForgeJsonText.Substring(0, Math.Min(NeoForgeJsonText.Length, 1000)))
             NeoForgeJson = GetJson(NeoForgeJsonText)
         End If
 
         If HasLiteLoader Then
             Dim LiteLoaderJsonText As String = ReadFile(LiteLoaderJsonPath)
-            If Not LiteLoaderJsonText.StartsWithF("{") Then Throw New Exception("LiteLoader json 有误，地址：" & LiteLoaderJsonPath & "，前段内容：" & LiteLoaderJsonText.Substring(0, Math.Min(LiteLoaderJsonText.Length, 1000)))
+            If Not LiteLoaderJsonText.StartsWithF("{") Then Throw New Exception("LiteLoader Json 有误，地址：" & LiteLoaderJsonPath & "，前段内容：" & LiteLoaderJsonText.Substring(0, Math.Min(LiteLoaderJsonText.Length, 1000)))
             LiteLoaderJson = GetJson(LiteLoaderJsonText)
         End If
 
         If HasFabric Then
             Dim FabricJsonText As String = ReadFile(FabricJsonPath)
-            If Not FabricJsonText.StartsWithF("{") Then Throw New Exception("Fabric json 有误，地址：" & FabricJsonPath & "，前段内容：" & FabricJsonText.Substring(0, Math.Min(FabricJsonText.Length, 1000)))
+            If Not FabricJsonText.StartsWithF("{") Then Throw New Exception("Fabric Json 有误，地址：" & FabricJsonPath & "，前段内容：" & FabricJsonText.Substring(0, Math.Min(FabricJsonText.Length, 1000)))
             FabricJson = GetJson(FabricJsonText)
+        End If
+
+        If HasQuilt Then
+            Dim QuiltJsonText As String = ReadFile(QuiltJsonPath)
+            If Not QuiltJsonText.StartsWithF("{") Then Throw New Exception("Quilt Json 有误，地址：" & QuiltJsonPath & "，前段内容：" & QuiltJsonText.Substring(0, Math.Min(QuiltJsonText.Length, 1000)))
+            QuiltJson = GetJson(QuiltJsonText)
         End If
 #End Region
 
@@ -2338,6 +2556,12 @@ Retry:
             FabricJson.Remove("releaseTime")
             FabricJson.Remove("time")
             OutputJson.Merge(FabricJson)
+        End If
+        If HasQuilt Then
+            '合并 Quilt
+            QuiltJson.Remove("releaseTime")
+            QuiltJson.Remove("time")
+            OutputJson.Merge(QuiltJson)
         End If
         '修改
         If RealArguments IsNot Nothing AndAlso RealArguments.Replace(" ", "") <> "" Then OutputJson("minecraftArguments") = RealArguments
