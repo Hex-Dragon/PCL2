@@ -10,16 +10,16 @@
     Private Sub PageDownloadCompFavorites_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
         SelectedItemList.Clear()
         RefreshBar()
-        If Loader.Input IsNot Nothing AndAlso (Not Loader.Input.Count.Equals(CompFavorites.GetAll().Count) OrElse Loader.Input.Except(CompFavorites.GetAll()).Any()) Then
+        If Loader.Input IsNot Nothing AndAlso (Not Loader.Input.Count.Equals(CompFavorites.FavoritesList.Count) OrElse Loader.Input.Except(CompFavorites.FavoritesList).Any()) Then
             Loader.Start()
         End If
     End Sub
 
     Private Shared Function LoaderInput() As List(Of String)
-        Return CompFavorites.GetAll().Clone() '复制而不是直接引用！
+        Return CompFavorites.FavoritesList.Clone() '复制而不是直接引用！
     End Function
     Private Shared Sub CompFavoritesGet(Task As LoaderTask(Of List(Of String), List(Of CompProject)))
-        Task.Output = CompFavorites.GetAllCompProjects(Task.Input)
+        Task.Output = CompRequest.GetCompProjectsByIds(Task.Input)
     End Sub
 #End Region
 
@@ -228,7 +228,7 @@
         CompItemList.Remove(Item)
         If SelectedItemList.Contains(Item) Then SelectedItemList.Remove(Item)
         If SearchResult.Contains(Item) Then SearchResult.Remove(Item)
-        CompFavorites.Del(Item.Tag.Id)
+        CompFavorites.FavoritesList.Remove(Item.Tag.Id)
     End Sub
 
     Private Sub Page_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
