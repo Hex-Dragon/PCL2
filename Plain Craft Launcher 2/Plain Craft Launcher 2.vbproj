@@ -238,6 +238,7 @@
     </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadQuilt.xaml.vb">
       <DependentUpon>PageDownloadQuilt.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadCompFavorites.xaml.vb">
       <DependentUpon>PageDownloadCompFavorites.xaml</DependentUpon>
     </Compile>
@@ -490,6 +491,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\PageDownload\PageDownloadQuilt.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\PageDownload\PageDownloadCompFavorites.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
