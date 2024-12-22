@@ -16,7 +16,7 @@ jobs:
     runs-on: windows-latest
     strategy:  
        matrix:  
-         configuration: [Debug, Release]
+         configuration: [Beta, Release]
     steps:
     - name: Checkout
       uses: actions/checkout@v4
