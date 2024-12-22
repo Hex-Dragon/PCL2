@@ -236,6 +236,9 @@
     <Compile Include="Modules\Minecraft\MyCompItem.xaml.vb">
       <DependentUpon>MyCompItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadResourcePack.xaml.vb">
+      <DependentUpon>PageDownloadResourcePack.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadQuilt.xaml.vb">
       <DependentUpon>PageDownloadQuilt.xaml</DependentUpon>
     </Compile>
@@ -487,6 +490,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Modules\Minecraft\MyCompItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadResourcePack.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
