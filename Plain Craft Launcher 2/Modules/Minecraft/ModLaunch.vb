@@ -218,7 +218,7 @@ NextInner:
         Dim CheckResult As String = ""
         RunInUiWait(Sub() CheckResult = McLoginAble(McLoginInput()))
         If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
-#If BETA Then
+#If RELEASE Then
         '求赞助
         RunInNewThread(
         Sub()

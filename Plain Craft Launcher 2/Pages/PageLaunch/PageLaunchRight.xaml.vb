@@ -6,13 +6,9 @@
         PanScroll = PanBack '不知道为啥不能在 XAML 设置
         PanLog.Visibility = If(ModeDebug, Visibility.Visible, Visibility.Collapsed)
         '社区版提示
-#If BETA Then
-        PanHint.Visibility = Visibility.Collapsed
-#Else
         PanHint.Visibility = If(ThemeCheckGold(), Visibility.Collapsed, Visibility.Visible)
         LabHint1.Text = "社区版包含尚未在官方主线版本发布的测试功能，仅用于尝鲜。请不要向官方仓库反馈社区版的问题哦！"
         LabHint2.Text = $"若要永久隐藏此提示，请自行 Clone 代码并删除此提示相关内容。"
-#End If
     End Sub
 
     '暂时关闭快照版提示
