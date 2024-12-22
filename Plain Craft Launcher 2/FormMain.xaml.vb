@@ -10,6 +10,9 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If RELEASE Then
+        If LastVersion < 350 Then 'Release 2.9.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持下载资源包和光影包"))
+        End If
         If LastVersion < 349 Then 'Release 2.9.1
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了本体更新（实验性）"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "关于页面新增了详细的版本信息"))
@@ -94,6 +97,9 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 350 Then 'Snapshot 2.9.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持下载资源包和光影包"))
+        End If
         If LastVersion < 349 Then 'Snapshot 2.9.1
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了本体更新（实验性）"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "关于页面新增了详细的版本信息"))
