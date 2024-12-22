@@ -121,7 +121,7 @@
             Try
                 JsonObject = GetJson(ReadFile(PageVersionLeft.Version.Path & PageVersionLeft.Version.Name & ".json"))
             Catch ex As Exception
-                Log(ex, "重命名读取 json 时失败")
+                Log(ex, "重命名读取 Json 时失败")
                 JsonObject = PageVersionLeft.Version.JsonObject
             End Try
             '重命名主文件夹
@@ -164,7 +164,7 @@
                     JsonObject("id") = NewName
                     WriteFile(NewPath & NewName & ".json", JsonObject.ToString)
                 Catch ex As Exception
-                    Log(ex, "重命名版本 json 失败")
+                    Log(ex, "重命名版本 Json 失败")
                 End Try
             End If
             '刷新与提示
@@ -283,6 +283,15 @@
     '补全文件
     Private Sub BtnManageCheck_Click(sender As Object, e As EventArgs) Handles BtnManageCheck.Click
         Try
+            '忽略文件检查提示
+            If ShouldIgnoreFileCheck(PageVersionLeft.Version) Then
+                If Setup.Get("LaunchAdvanceAssets") Then
+                    Hint("请先关闭 [设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！", HintType.Info)
+                Else
+                    Hint("请先关闭 [版本设置 → 设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！", HintType.Info)
+                End If
+                Exit Sub
+            End If
             '重复任务检查
             For Each OngoingLoader In LoaderTaskbar
                 If OngoingLoader.Name <> PageVersionLeft.Version.Name & " 文件补全" Then Continue For
@@ -290,7 +299,7 @@
                 Exit Sub
             Next
             '启动
-            Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " 文件补全", DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload, False))
+            Dim Loader As New LoaderCombo(Of String)(PageVersionLeft.Version.Name & " 文件补全", DlClientFix(PageVersionLeft.Version, True, AssetsIndexExistsBehaviour.AlwaysDownload))
             Loader.OnStateChanged =
             Sub()
                 Select Case Loader.State

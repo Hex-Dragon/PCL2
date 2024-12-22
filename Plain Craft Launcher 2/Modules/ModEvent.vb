@@ -92,7 +92,18 @@
                         MyMsgBox("EventData 必须为以 http:// 或 https:// 开头的网址。" & vbCrLf & "PCL 不支持其他乱七八糟的下载协议。", "事件执行失败")
                         Exit Sub
                     End If
-                    PageOtherTest.StartCustomDownload(Data(0), GetFileNameFromPath(Data(0)))
+                    Try
+                        Select Case Data.Length
+                            Case 1
+                                PageOtherTest.StartCustomDownload(Data(0), GetFileNameFromPath(Data(0)))
+                            Case 2
+                                PageOtherTest.StartCustomDownload(Data(0), Data(1))
+                            Case Else
+                                PageOtherTest.StartCustomDownload(Data(0), Data(1), Data(2))
+                        End Select
+                    Catch
+                        PageOtherTest.StartCustomDownload(Data(0), "未知")
+                    End Try
 
                 Case Else
                     MyMsgBox("未知的事件类型：" & Type & vbCrLf & "请检查事件类型填写是否正确，或者 PCL 是否为最新版本。", "事件执行失败")
@@ -128,7 +139,6 @@
             Dim LocalTemp1 As String = PathTemp & "CustomEvent\" & RawFileName
             Dim LocalTemp2 As String = PathTemp & "CustomEvent\" & RawFileName.Replace(".json", ".xaml")
             Log("[Event] 转换网络资源：" & RelativeUrl & " -> " & LocalTemp1)
-            Hint("正在获取资源，请稍候……")
             Try
                 NetDownload(RelativeUrl, LocalTemp1)
                 NetDownload(RelativeUrl.Replace(".json", ".xaml"), LocalTemp1.Replace(".json", ".xaml"))

@@ -104,7 +104,7 @@
                             <GradientStop Color="{StaticResource ColorObject3}" Offset="1"/>
                         </LinearGradientBrush>
                     </Grid.Background>
-                    <Image x:Name="ImgTitle" IsHitTestVisible="False" Stretch="UniformToFill" IsEnabled="False" RenderOptions.BitmapScalingMode="LowQuality" />
+                    <local:MyImage x:Name="ImgTitle" IsHitTestVisible="False" Stretch="UniformToFill" IsEnabled="False" RenderOptions.BitmapScalingMode="LowQuality" />
                     <local:MyIconButton x:Name="BtnTitleClose" HorizontalAlignment="Right" Height="28" VerticalAlignment="Center" Width="28" Margin="0,0,12,0" Theme="White" 
                                        LogoScale="0.72" Logo="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                     <local:MyIconButton x:Name="BtnTitleMin" HorizontalAlignment="Right" Height="28" VerticalAlignment="Center" Width="28" Margin="0,0,44,0" Theme="White" 
@@ -117,7 +117,7 @@
                         </Grid.ColumnDefinitions>
                         <Path x:Name="ShapeTitleLogo" Data="M26,29 v-25 h5 a7,7 180 0 1 0,14 h-5 M61,6.5 a10,11.5 180 1 0 0,18 M68,2.5 v24.5 h12 M98,2 v27 M107,2 v27" SnapsToDevicePixels="False" UseLayoutRounding="False" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="19,15.5,0,15.5" Stretch="fill" Stroke="White" StrokeThickness="1.9" Width="53" />
                         <TextBlock x:Name="LabTitleLogo" Visibility="Collapsed" SnapsToDevicePixels="False" UseLayoutRounding="False" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="18,0,0,0" Foreground="White" FontSize="17" VerticalAlignment="Center" />
-                        <Image x:Name="ImageTitleLogo" SnapsToDevicePixels="False" UseLayoutRounding="False" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="7" VerticalAlignment="Center" Visibility="Collapsed" />
+                        <local:MyImage x:Name="ImageTitleLogo" SnapsToDevicePixels="False" UseLayoutRounding="False" IsHitTestVisible="False" HorizontalAlignment="Left" Margin="7" VerticalAlignment="Center" Visibility="Collapsed" />
                         <StackPanel Grid.Column="1" x:Name="PanTitleSelect" HorizontalAlignment="Left" Height="27" VerticalAlignment="Center" Orientation="Horizontal" Margin="13,0">
                             <local:MyRadioButton x:Name="BtnTitleSelect0" Text="{DynamicResource LangTitleHome}" Tag="0" Margin="5,0" Checked="True" Padding="2,0"
                                              LogoScale="0.95" Logo="M985.403 552.96C985.403 812.702 773.041 1024 512 1024S38.597 812.702 38.597 552.96c0-158.208 79.163-304.955 211.771-392.625 31.074-20.52 72.94-11.973 93.46 19.101s12.012 72.94-19.062 93.46c-94.681 62.622-151.237 167.306-151.237 280.064 0 185.344 151.788 336.108 338.471 336.108S850.471 738.304 850.471 552.96c0-114.649-57.974-220.278-155.096-282.585-31.35-20.125-40.448-61.833-20.362-93.184s61.794-40.448 93.184-20.4c135.995 87.236 217.206 235.362 217.206 396.169zM512 560.128c37.258 0 67.466-30.208 67.466-67.466V67.466C579.466 30.208 549.258 0 512 0s-67.466 30.208-67.466 67.466v425.196c0 37.258 30.208 67.466 67.466 67.466z" />
@@ -166,7 +166,7 @@
                         </Border>
                     </Border>
                 </Grid>
-                <StackPanel x:Name="PanHint" IsHitTestVisible="False" UseLayoutRounding="True" SnapsToDevicePixels="True" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,25" Grid.RowSpan="2" />
+                <StackPanel x:Name="PanHint" IsHitTestVisible="False" UseLayoutRounding="True" SnapsToDevicePixels="True" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,20" Grid.RowSpan="2" />
                 <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1" Margin="15">
                     <local:MyExtraButton x:Name="BtnExtraBack" HorizontalAlignment="Right" VerticalAlignment="Center" ToolTip="返回顶部" Visibility="Collapsed"
                                        Logo="M858.496 188.9024 173.1072 188.9024c-30.2848 0-54.8352-24.5504-54.8352-54.8352L118.272 106.6496c0-30.2848 24.5504-54.8352 54.8352-54.8352l685.3888 0c30.2848 0 54.8352 24.5504 54.8352 54.8352l0 27.4176C913.3312 164.352 888.7808 188.9024 858.496 188.9024L858.496 188.9024zM150.6048 550.8608c0 0 300.0064-240.3584 303.0272-243.328 13.9776-13.5936 31.1808-21.8624 48.8192-24.7552 1.7152-0.3072 3.4304-0.5888 5.1456-0.768 2.7392-0.3072 5.4528-0.3584 8.192-0.3328 2.7392-0.0256 5.4272 0.0256 8.1664 0.3328 1.7408 0.1792 3.4304 0.4864 5.1456 0.768 17.664 2.8928 34.8672 11.1616 48.8192 24.7552 3.0464 2.944 303.0016 243.328 303.0016 243.328 32.384 31.5136 29.6192 63.9744-2.7392 95.5136-32.3328 31.5392-75.648 2.9696-108.0064-28.544l-185.8816-147.1232 0 485.8368c0 30.3104-24.5248 54.8608-54.8352 54.8608l-27.392 0c-30.2848 0-54.8352-24.5504-54.8352-54.8608L447.232 470.7072l-185.8304 147.0976c-32.3584 31.5392-75.6992 60.1344-108.032 28.5696C121.0368 614.8352 118.272 582.3744 150.6048 550.8608L150.6048 550.8608zM150.6048 550.8608" />

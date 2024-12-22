@@ -164,6 +164,8 @@
                     Stack.Children.Add(FabricDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Fabric_Selected))
                 Case 13
                     Stack.Children.Add(NeoForgeDownloadListItem(Data, AddressOf NeoForgeSave_Click, True))
+                Case 14
+                    Stack.Children.Add(QuiltDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Quilt_Selected))
                 Case Else
                     Log("未知的虚拟化种类：" & Type, LogLevel.Feedback)
             End Select
@@ -293,26 +295,28 @@
     Public Const SwapedHeight As Integer = 40
     Private Sub MyCard_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseLeftButtonDown
         Dim Pos As Double = Mouse.GetPosition(Me).Y
-        If Not IsSwaped AndAlso (IsNothing(SwapControl) OrElse Pos > SwapedHeight OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
+        If Not IsSwaped AndAlso
+            (SwapControl Is Nothing OrElse Pos > SwapedHeight OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
         IsMouseDown = True
     End Sub
     Private Sub MyCard_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseLeftButtonUp
-        If IsMouseDown Then
+        If Not IsMouseDown Then Return
+        IsMouseDown = False
+
+        Dim Pos As Double = Mouse.GetPosition(Me).Y
+        If Not IsSwaped AndAlso
+            (SwapControl Is Nothing OrElse Pos > SwapedHeight OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
+
+        Dim ee = New RouteEventArgs(True)
+        RaiseEvent PreviewSwap(Me, ee)
+        If ee.Handled Then
             IsMouseDown = False
-            Dim Pos As Double = Mouse.GetPosition(Me).Y
-            If Not IsSwaped AndAlso (IsNothing(SwapControl) OrElse Pos > SwapedHeight OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
-
-            Dim ee = New RouteEventArgs(True)
-            RaiseEvent PreviewSwap(Me, ee)
-            If ee.Handled Then
-                IsMouseDown = False
-                Exit Sub
-            End If
-
-            IsSwaped = Not IsSwaped
-            Log("[Control] " & If(IsSwaped, "折叠卡片", "展开卡片") & If(Title Is Nothing, "", "：" & Title))
-            RaiseEvent Swap(Me, ee)
+            Return
         End If
+
+        IsSwaped = Not IsSwaped
+        Log("[Control] " & If(IsSwaped, "折叠卡片", "展开卡片") & If(Title Is Nothing, "", "：" & Title))
+        RaiseEvent Swap(Me, ee)
     End Sub
     Private Sub MyCard_MouseLeave_Swap(sender As Object, e As MouseEventArgs) Handles Me.MouseLeave
         IsMouseDown = False

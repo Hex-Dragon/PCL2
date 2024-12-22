@@ -1,33 +1,5 @@
 ﻿Class PageSetupSystem
 
-#Region "语言"
-    'Private Sub PageSetupUI_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
-    '  AniControlEnabled -= 1
-
-    '  '读取设置
-    '  Select Case Lang
-    '      Case "zh_CN"
-    '          ComboLang.SelectedIndex = 0
-    '      Case "zh_HK"
-    '          ComboLang.SelectedIndex = 1
-    '      Case "en_US"
-    '          ComboLang.SelectedIndex = 2
-    '  End Select
-    '  CheckDebug.Checked = ReadReg("SystemDebugMode", "False")
-
-    '  AniControlEnabled += 1
-    'End Sub
-
-    'Private Sub RefreshLang() Handles ComboLang.SelectionChanged
-    '  If IsLoaded Then
-    '      If Not ComboLang.IsLoaded Then Exit Sub
-    '      Lang = CType(ComboLang.SelectedItem, MyComboBoxItem).Tag
-    '      Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Url("Languages\" & Lang & ".xaml", UrlKind.Relative)}
-    '      WriteReg("Lang", Lang)
-    '  End If
-    'End Sub
-#End Region
-
     Private Shadows IsLoaded As Boolean = False
 
     Private Sub PageSetupSystem_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
@@ -35,7 +7,7 @@
         '重复加载部分
         PanBack.ScrollToHome()
 
-#If BETA Then
+#If RELEASE Then
         PanDonate.Visibility = Visibility.Collapsed
 #Else
         PanDonate.Visibility = Visibility.Visible
@@ -58,11 +30,13 @@
         SliderDownloadThread.Value = Setup.Get("ToolDownloadThread")
         SliderDownloadSpeed.Value = Setup.Get("ToolDownloadSpeed")
         ComboDownloadVersion.SelectedIndex = Setup.Get("ToolDownloadVersion")
+        CheckDownloadCert.Checked = Setup.Get("ToolDownloadCert")
+
+        'Mod 与整合包
         ComboDownloadTranslate.SelectedIndex = Setup.Get("ToolDownloadTranslate")
         ComboDownloadMod.SelectedIndex = Setup.Get("ToolDownloadMod")
-        CheckDownloadKeepModpack.Checked = Setup.Get("ToolDownloadKeepModpack")
+        ComboModLocalNameStyle.SelectedIndex = Setup.Get("ToolModLocalNameStyle")
         CheckDownloadIgnoreQuilt.Checked = Setup.Get("ToolDownloadIgnoreQuilt")
-        CheckDownloadCert.Checked = Setup.Get("ToolDownloadCert")
 
         'Minecraft 更新提示
         CheckUpdateRelease.Checked = Setup.Get("ToolUpdateRelease")
@@ -91,10 +65,10 @@
             Setup.Reset("ToolDownloadSpeed")
             Setup.Reset("ToolDownloadVersion")
             Setup.Reset("ToolDownloadTranslate")
-            Setup.Reset("ToolDownloadKeepModpack")
             Setup.Reset("ToolDownloadIgnoreQuilt")
             Setup.Reset("ToolDownloadCert")
             Setup.Reset("ToolDownloadMod")
+            Setup.Reset("ToolModLocalNameStyle")
             Setup.Reset("ToolUpdateRelease")
             Setup.Reset("ToolUpdateSnapshot")
             Setup.Reset("ToolHelpChinese")
@@ -116,13 +90,13 @@
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadKeepModpack.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboDownloadTranslate.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboDownloadMod.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslate.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboDownloadMod.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged
@@ -170,26 +144,24 @@
     End Sub
 
     '自动更新
-    Private Sub ComboSystemActivity_SizeChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemActivity.SelectionChanged
+    Private Sub ComboSystemActivity_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemActivity.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
-        If ComboSystemActivity.SelectedIndex = 2 Then
-            If MyMsgBox("若选择此项，即使在将来出现严重问题时，你也无法获取相关通知。" & vbCrLf &
-                        "例如，如果发现某个版本游戏存在严重 Bug，你可能就会因为无法得到通知而导致无法预知的后果。" & vbCrLf & vbCrLf &
-                        "一般选择 仅在有重要通知时显示公告 就可以让你尽量不受打扰了。" & vbCrLf &
-                        "除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！", "警告", "我知道我在做什么", "取消", IsWarn:=True) = 2 Then
-                ComboSystemActivity.SelectedItem = e.RemovedItems(0)
-            End If
+        If ComboSystemActivity.SelectedIndex <> 2 Then Exit Sub
+        If MyMsgBox("若选择此项，即使在将来出现严重问题时，你也无法获取相关通知。" & vbCrLf &
+                    "例如，如果发现某个版本游戏存在严重 Bug，你可能就会因为无法得到通知而导致无法预知的后果。" & vbCrLf & vbCrLf &
+                    "一般选择 仅在有重要通知时显示公告 就可以让你尽量不受打扰了。" & vbCrLf &
+                    "除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！", "警告", "我知道我在做什么", "取消", IsWarn:=True) = 2 Then
+            ComboSystemActivity.SelectedItem = e.RemovedItems(0)
         End If
     End Sub
-    Private Sub ComboSystemUpdate_SizeChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemUpdate.SelectionChanged
+    Private Sub ComboSystemUpdate_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemUpdate.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
-        If ComboSystemUpdate.SelectedIndex = 3 Then
-            If MyMsgBox("若选择此项，即使在启动器将来出现严重问题时，你也无法获取更新并获得修复。" & vbCrLf &
-                        "例如，如果官方修改了登录方式，从而导致现有启动器无法登录，你可能就会因为无法更新而无法开始游戏。" & vbCrLf & vbCrLf &
-                        "一般选择 仅在有重大漏洞更新时显示提示 就可以让你尽量不受打扰了。" & vbCrLf &
-                        "除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！", "警告", "我知道我在做什么", "取消", IsWarn:=True) = 2 Then
-                ComboSystemUpdate.SelectedItem = e.RemovedItems(0)
-            End If
+        If ComboSystemUpdate.SelectedIndex <> 3 Then Exit Sub
+        If MyMsgBox("若选择此项，即使在启动器将来出现严重问题时，你也无法获取更新并获得修复。" & vbCrLf &
+                    "例如，如果官方修改了登录方式，从而导致现有启动器无法登录，你可能就会因为无法更新而无法开始游戏。" & vbCrLf & vbCrLf &
+                    "一般选择 仅在有重大漏洞更新时显示提示 就可以让你尽量不受打扰了。" & vbCrLf &
+                    "除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！", "警告", "我知道我在做什么", "取消", IsWarn:=True) = 2 Then
+            ComboSystemUpdate.SelectedItem = e.RemovedItems(0)
         End If
     End Sub
     Private Sub BtnSystemUpdate_Click(sender As Object, e As EventArgs) Handles BtnSystemUpdate.Click
@@ -205,7 +177,7 @@
             Dim ServerContent As String = ReadFile(PathTemp & "Cache\Notice.cfg")
             If ServerContent.Split("|").Count < 3 Then Return Nothing
             '确认是否为最新
-#If BETA Then
+#If RELEASE Then
             Dim NewVersionCode As Integer = ServerContent.Split("|")(2)
 #Else
             Dim NewVersionCode As Integer = ServerContent.Split("|")(1)
