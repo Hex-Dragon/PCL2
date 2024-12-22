@@ -46,6 +46,62 @@
     '勾选条
     Public RectCheck As Border
 
+
+    ''' <summary>
+    ''' Tags 的存放 StackPanel
+    ''' </summary>
+    Public _PanTags As StackPanel
+    Public ReadOnly Property PanTags As StackPanel
+        Get
+            If _PanTags IsNot Nothing Then Return _PanTags
+            Dim NewStack As New StackPanel With {
+            .IsHitTestVisible = False,
+            .Orientation = Orientation.Horizontal,
+            .VerticalAlignment = VerticalAlignment.Bottom,
+            .Margin = New Thickness(0, 0, -3, 0)
+            }
+            SetColumn(NewStack, 3)
+            SetRow(NewStack, 2)
+            PanBack.Children.Add(NewStack)
+            _PanTags = NewStack
+            Return _PanTags
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' 标签，可以传入 String 和 List(Of String)
+    ''' </summary>
+    Public WriteOnly Property Tags As Object
+        Set(value As Object)
+            Dim list As New List(Of String)
+            If TypeOf (value) Is String Then
+                list = CType(value, String).Split("|").ToList()
+            End If
+            If TypeOf (value) Is List(Of String) Then
+                list = CType(value, List(Of String))
+            End If
+            PanTags.Children.Clear()
+            PanTags.Visibility = If(list.Any(), Visibility.Visible, Visibility.Collapsed)
+            For Each TagText In list
+                Dim NewTag As New Border With {
+                    .Background = New SolidColorBrush(Color.FromArgb(17, 0, 0, 0)),
+                    .Padding = New Thickness(3, 1, 3, 1),
+                    .CornerRadius = New CornerRadius(3),
+                    .Margin = New Thickness(0, 0, 3, 0),
+                    .SnapsToDevicePixels = True,
+                    .UseLayoutRounding = False
+                }
+                Dim TagTextBlock As New TextBlock With {
+                    .Text = TagText,
+                    .Foreground = New SolidColorBrush(Color.FromRgb(134, 134, 134)),
+                    .FontSize = 11
+                }
+                NewTag.Child = TagTextBlock
+                PanTags.Children.Add(NewTag)
+            Next
+        End Set
+    End Property
+
     '副文本
     Private _LabInfo As TextBlock = Nothing
     Public ReadOnly Property LabInfo As TextBlock
@@ -63,9 +119,9 @@
                     .Margin = New Thickness(4, 0, 0, 0),
                     .Opacity = 0.6
                 }
-                SetColumn(Lab, 3)
+                SetColumn(Lab, 4)
                 SetRow(Lab, 2)
-                Children.Add(Lab)
+                PanBack.Children.Add(Lab)
                 _LabInfo = Lab
                 '<TextBlock Grid.Row="2" SnapsToDevicePixels="False" UseLayoutRounding="False" HorizontalAlignment="Left" x:Name = "LabInfo" IsHitTestVisible="False" Grid.Column="2" 
                 'TextTrimming = "CharacterEllipsis" Visibility="Collapsed" FontSize="12" Foreground="{StaticResource ColorBrushGray2}" Margin="4,0,0,0" />
@@ -212,33 +268,26 @@
             If Not _Logo = "" Then
                 If _Logo.StartsWithF("http", True) Then
                     '网络图片
-                    PathLogo = New Image With {
+                    PathLogo = New MyImage With {
                             .Tag = Me,
                             .IsHitTestVisible = LogoClickable,
-                            .Source = New ImageSourceConverter().ConvertFromString(_Logo),
+                            .Source = _Logo,
                             .RenderTransformOrigin = New Point(0.5, 0.5),
                             .RenderTransform = New ScaleTransform With {.ScaleX = LogoScale, .ScaleY = LogoScale},
                             .SnapsToDevicePixels = True, .UseLayoutRounding = False}
                     RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.Linear)
-                ElseIf _Logo.EndsWithF(".png", True) OrElse _Logo.EndsWithF(".jpg", True) Then
+                ElseIf _Logo.EndsWithF(".png", True) OrElse _Logo.EndsWithF(".jpg", True) OrElse _Logo.EndsWithF(".webp", True) Then
                     '位图
-                    Dim Bitmap = New MyBitmap(_Logo)
                     PathLogo = New Canvas With {
                             .Tag = Me,
                             .IsHitTestVisible = LogoClickable,
-                            .Background = Bitmap,
+                            .Background = New MyBitmap(_Logo),
                             .RenderTransformOrigin = New Point(0.5, 0.5),
                             .RenderTransform = New ScaleTransform With {.ScaleX = LogoScale, .ScaleY = LogoScale},
-                            .SnapsToDevicePixels = True, .UseLayoutRounding = False}
-                    'If Bitmap.Pic.Width = 16 AndAlso Bitmap.Pic.Height = 16 Then
-                    '    '使用最适合 16x16 物品图片显示的大小
-                    '    RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.NearestNeighbor)
-                    '    PathLogo.HorizontalAlignment = HorizontalAlignment.Center : PathLogo.VerticalAlignment = VerticalAlignment.Center
-                    '    PathLogo.Width = GetWPFSize(Math.Floor(GetPixelSize(32) / 16) * 16) : PathLogo.Height = PathLogo.Width
-                    'Else
-                    PathLogo.HorizontalAlignment = HorizontalAlignment.Stretch : PathLogo.VerticalAlignment = VerticalAlignment.Stretch
-                    RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.HighQuality)
-                    'End If
+                            .SnapsToDevicePixels = True, .UseLayoutRounding = False,
+                            .HorizontalAlignment = HorizontalAlignment.Stretch, .VerticalAlignment = VerticalAlignment.Stretch
+                    }
+                    RenderOptions.SetBitmapScalingMode(PathLogo, BitmapScalingMode.Linear)
                 Else
                     '矢量图
                     PathLogo = New Shapes.Path With {
@@ -327,8 +376,8 @@
     Private Sub OnSizeChanged() Handles Me.SizeChanged
         ColumnCheck.Width = New GridLength(If(_Type = CheckType.None OrElse _Type = CheckType.Clickable, If(Height < 40, 4, 2), 6))
         ColumnLogo.Width = New GridLength(If(_Logo = "", 0, 34) + If(Height < 40, 0, 4))
-        If Not IsNothing(PathLogo) Then
-            If _Logo.EndsWithF(".png", True) Then
+        If PathLogo IsNot Nothing Then
+            If _Logo.EndsWithF(".png", True) OrElse _Logo.EndsWithF(".jpg", True) OrElse _Logo.EndsWithF(".webp", True) Then
                 PathLogo.Margin = New Thickness(4, 5, 3, 5)
             Else
                 PathLogo.Margin = New Thickness(If(Height < 40, 6, 8), 8, If(Height < 40, 4, 6), 8)
@@ -661,6 +710,8 @@
                 Dim Unused = New HelpEntry(GetEventAbsoluteUrls(EventData, EventType)(0)).SetToListItem(Me)
             Catch ex As Exception
                 Log(ex, "设置帮助 MyListItem 失败", LogLevel.Msgbox)
+                EventType = Nothing
+                EventData = Nothing
             End Try
         End If
     End Sub

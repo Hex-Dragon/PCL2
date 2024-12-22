@@ -9,7 +9,49 @@ Public Class FormMain
         Dim FeatureCount As Integer = 0, BugCount As Integer = 0
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
-#If BETA Then
+#If RELEASE Then
+        If LastVersion < 349 Then 'Release 2.9.1
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了本体更新（实验性）"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "关于页面新增了详细的版本信息"))
+        End If
+        If LastVersion < 347 Then 'Release 2.8.12
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面添加下载 Mod、安装 Mod 选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 详情页面支持按加载器、游戏版本进行分类和筛选"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持安装同时包含 modpack 文件和启动器的懒人包"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "优化整合包导入流程"))
+            FeatureCount += 43
+            BugCount += 37
+        End If
+        If LastVersion < 342 Then 'Release 2.8.9
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持下载原版服务端"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "本地 Mod 的标题支持选择显示 Mod 原始文件名"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复搜索后启用/禁用 Mod 时出错的 Bug"))
+            FeatureCount += 17
+            BugCount += 13
+        End If
+        If LastVersion < 340 Then 'Release 2.8.8
+            If LastVersion = 338 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复数个与新正版登录相关的严重 Bug"))
+            FeatureCount += 3
+            BugCount += 7
+        End If
+        If LastVersion < 338 Then 'Release 2.8.7
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "使用新的正版登录方式，以提高安全性"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化安装整合包、检索 Mod 的稳定性"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法加载部分 Mod 的图标的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复在 Mod 管理页面删除 Mod 导致报错的 Bug"))
+            FeatureCount += 11
+            BugCount += 21
+        End If
+        If LastVersion < 336 Then 'Release 2.8.6
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "下载 Mod 时会使用 MCIM 国内镜像源"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面允许筛选可更新/启用/禁用的 Mod"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "打开 PCL 时会自动安装同目录下的 modpack.zip"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "爱发电域名迁移至 afdian.com"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复 1.20.1+ 离线登录使用正版皮肤时无法保存游戏的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复安装的 1.14~1.15 Forge+OptiFine 无法进入世界的 Bug"))
+            FeatureCount += 19
+            BugCount += 24
+        End If
         If LastVersion < 332 Then 'Release 2.8.3
             If LastVersion = 330 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复部分玩家无法启动 MC 的 Bug"))
         End If
@@ -46,84 +88,63 @@ Public Class FormMain
             FeatureCount += 10
             BugCount += 10
         End If
-        If LastVersion < 317 Then 'Release 2.6.15
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法安装 Forge 的 Bug"))
-            FeatureCount += 2
-            BugCount += 2
-        End If
-        If LastVersion < 315 Then 'Release 2.6.14
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 MC 下载，尝试解决各种导致 MC 下载失败的问题"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "由于 MCBBS 关站，移除其相关内容"))
-            FeatureCount += 17
-            BugCount += 16
-        End If
-        If LastVersion < 313 Then 'Release 2.6.13
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动 Forge 1.18.3+ 的 Bug"))
-            FeatureCount += 6
-            BugCount += 10
-        End If
-        If LastVersion < 311 Then 'Release 2.6.12
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面将显示 Mod 的中文名、图标、标签等信息"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "从 Mod 管理页面查看 Mod 信息时会跳转到其下载详情页面"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新设计 Mod 管理页面的交互与样式"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 Forge 1.18.3+ 的 Bug"))
-            FeatureCount += 27
-            BugCount += 25
-        End If
-        If LastVersion < 308 Then 'Release 2.6.10
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为版本独立设置添加忽略 Java 兼容性警告选项"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复开始或结束游戏时可能报错的 Bug"))
-            FeatureCount += 31
-            BugCount += 37
-        End If
-        If LastVersion < 302 Then 'Release 2.6.7
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "再次修复网络条件差时可能无法下载 MC 的 Bug"))
-            BugCount += 1
-        End If
-        If LastVersion < 300 Then 'Release 2.6.6
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持选择多种预设的主页"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理中允许多选 Mod 进行批量操作"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化联网获取的主页的加载与缓存"))
-            FeatureCount += 40
-            BugCount += 34
-        End If
-        If LastVersion < 296 Then 'Release 2.6.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "新增内存优化功能，可以将所有程序的物理内存占用降低约 1/3"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择 OptiFine 与 Fabric 后会自动选择 OptiFabric"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
-            FeatureCount += 21
-            BugCount += 30
-        End If
-        If LastVersion < 293 Then 'Release 2.6.1
-            BugCount += 1
-        End If
-        If LastVersion < 292 Then 'Release 2.6.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在多个正版账号间切换"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "在缺少 Java 时会自动下载所需的 Java"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新制作正版登录页面"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "彻底移除 Mojang 登录"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 CurseForge / Modrinth 来源筛选"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "Mod / 整合包下载会单独列出筛选的版本"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为下载管理和音乐播放按钮添加进度条"))
-            FeatureCount += 24
-            BugCount += 24
-        End If
-        If LastVersion < 286 Then 'Release 2.5.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持搜索、安装 Modrinth 的 Mod 与整合包"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "资源搜索页面支持翻页"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在全局启动设置中添加了 启动前执行命令 选项"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "重做资源下载的资源项界面"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择下载 Fabric 时会自动选择 Fabric API"))
-            FeatureCount += 35
-            BugCount += 36
-        End If
 #Else
         '5：          FEAT+
         '4：     IMP+ FEAT*
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 349 Then 'Snapshot 2.9.1
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了本体更新（实验性）"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "关于页面新增了详细的版本信息"))
+        End If
+        If LastVersion < 346 Then 'Snapshot 2.8.12
+            If LastVersion = 345 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复帮助页面报错的 Bug"))
+        End If
+        If LastVersion < 345 Then 'Snapshot 2.8.11
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面添加下载 Mod、安装 Mod 选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 详情页面支持按加载器、游戏版本进行分类和筛选"))
+            FeatureCount += 23
+            BugCount += 21
+        End If
+        If LastVersion < 343 Then 'Snapshot 2.8.10
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持安装同时包含 modpack 文件和启动器的懒人包"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "优化整合包导入流程"))
+            FeatureCount += 20
+            BugCount += 16
+        End If
+        If LastVersion < 341 Then 'Snapshot 2.8.9
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持下载原版服务端"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "本地 Mod 的标题支持选择显示 Mod 原始文件名"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复搜索后启用/禁用 Mod 时出错的 Bug"))
+            FeatureCount += 17
+            BugCount += 13
+        End If
+        If LastVersion < 339 Then 'Snapshot 2.8.8
+            If LastVersion = 337 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复数个与新正版登录相关的严重 Bug"))
+            FeatureCount += 3
+            BugCount += 7
+        End If
+        If LastVersion < 337 Then 'Snapshot 2.8.7
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "使用新的正版登录方式，以提高安全性"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化安装整合包、检索 Mod 的稳定性"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法加载部分 Mod 的图标的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复在 Mod 管理页面删除 Mod 导致报错的 Bug"))
+            FeatureCount += 11
+            BugCount += 21
+        End If
+        If LastVersion < 335 Then 'Snapshot 2.8.6
+            BugCount += 2
+        End If
+        If LastVersion < 334 Then 'Snapshot 2.8.5
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面允许筛选可更新/启用/禁用的 Mod"))
+            If LastVersion = 333 Then
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装愚人节和预发布版本的 Bug"))
+                FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法导出错误报告的 Bug"))
+            End If
+            FeatureCount += 6
+            BugCount += 7
+        End If
         If LastVersion < 333 Then 'Snapshot 2.8.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "下载 Mod 时会使用 MCIM 国内镜像源"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "打开 PCL 时会自动安装同目录下的 modpack.zip"))
@@ -185,117 +206,6 @@ Public Class FormMain
             FeatureCount += 10
             BugCount += 10
         End If
-        If LastVersion < 316 Then 'Snapshot 2.6.15
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复无法安装 Forge 的 Bug"))
-            FeatureCount += 2
-            BugCount += 2
-        End If
-        If LastVersion < 314 Then 'Snapshot 2.6.14
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化 MC 下载，尝试解决各种导致 MC 下载失败的问题"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "由于 MCBBS 关站，移除其相关内容"))
-            FeatureCount += 17
-            BugCount += 16
-        End If
-        If LastVersion < 312 Then 'Snapshot 2.6.13
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法启动 Forge 1.18.3+ 的 Bug"))
-            FeatureCount += 6
-            BugCount += 10
-        End If
-        If LastVersion < 310 Then 'Snapshot 2.6.12
-            If LastVersion = 309 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理页面添加启用、禁用单个 Mod 的快捷按钮"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复无法安装 Forge 1.18.3+ 的 Bug"))
-            FeatureCount += 13
-            BugCount += 12
-        End If
-        If LastVersion < 309 Then 'Snapshot 2.6.11
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面将显示 Mod 的中文名、图标、标签等信息"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "从 Mod 管理页面查看 Mod 信息时会跳转到其下载详情页面"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新设计 Mod 管理页面的交互与样式"))
-            FeatureCount += 15
-            BugCount += 13
-        End If
-        If LastVersion < 307 Then 'Snapshot 2.6.10
-            FeatureCount += 2
-            BugCount += 3
-        End If
-        If LastVersion < 306 Then 'Snapshot 2.6.9
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为版本独立设置添加忽略 Java 兼容性警告选项"))
-            FeatureCount += 9
-            BugCount += 11
-        End If
-        If LastVersion < 305 Then 'Snapshot 2.6.8
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复开始或结束游戏时可能报错的 Bug"))
-            FeatureCount += 20
-            BugCount += 25
-        End If
-        If LastVersion < 303 Then 'Snapshot 2.6.7
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "再次修复网络条件差时可能无法下载 MC 的 Bug"))
-            BugCount += 1
-        End If
-        If LastVersion < 301 Then 'Snapshot 2.6.6
-            FeatureCount += 4
-            BugCount += 2
-        End If
-        If LastVersion < 299 Then 'Snapshot 2.6.5
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持选择多种预设的主页"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化联网获取的主页的加载与缓存"))
-            FeatureCount += 18
-            BugCount += 13
-        End If
-        If LastVersion < 298 Then 'Snapshot 2.6.4
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Mod 管理中允许多选 Mod 进行批量操作"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化崩溃分析，添加多种崩溃情况的判断"))
-            FeatureCount += 18
-            BugCount += 19
-        End If
-        If LastVersion < 297 Then 'Snapshot 2.6.3
-            FeatureCount += 12
-            BugCount += 14
-        End If
-        If LastVersion < 294 Then 'Snapshot 2.6.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "新增内存优化功能，可以将所有程序的物理内存占用降低约 1/3"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择 OptiFine 与 Fabric 后会自动选择 OptiFabric"))
-            FeatureCount += 9
-            BugCount += 16
-        End If
-        If LastVersion < 291 Then 'Snapshot 2.6.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持在多个正版账号间切换"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "Mod / 整合包下载会单独列出筛选的版本"))
-            FeatureCount += 10
-            BugCount += 2
-        End If
-        If LastVersion < 289 Then 'Snapshot 2.5.4
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "重新制作正版登录页面"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "彻底移除 Mojang 登录"))
-            FeatureCount += 6
-            BugCount += 14
-        End If
-        If LastVersion < 288 Then 'Snapshot 2.5.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "在缺少 Java 时会自动下载所需的 Java"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "添加 CurseForge / Modrinth 来源筛选"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "为下载管理和音乐播放按钮添加进度条"))
-            FeatureCount += 8
-            BugCount += 8
-        End If
-        If LastVersion < 285 Then 'Snapshot 2.5.2
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "重做资源下载的资源项界面"))
-            If LastVersion = 284 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复打开部分帮助报错的 Bug"))
-            FeatureCount += 8
-            BugCount += 8
-        End If
-        If LastVersion < 284 Then 'Snapshot 2.5.1
-            If LastVersion >= 275 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "在全局启动设置中添加了 启动前执行命令 选项"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "在选择下载 Fabric 时会自动选择 Fabric API"))
-            FeatureCount += 22
-            BugCount += 21
-        End If
-        If LastVersion < 283 Then 'Snapshot 2.5.0
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持搜索、下载 Modrinth 中的 Mod 与整合包"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "资源搜索页面支持翻页"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持安装 Modrinth 整合包"))
-            FeatureCount += 5
-            BugCount += 5
-        End If
 #End If
         '整理更新日志文本
         Dim ContentList As New List(Of String)
@@ -338,9 +248,6 @@ Public Class FormMain
             '触发降级
             DowngradeSub(LastVersion)
         End If
-        ''刷新语言
-        'Lang = ReadReg("Lang", "zh_CN")
-        'Application.Current.Resources.MergedDictionaries(1) = New ResourceDictionary With {.Source = New Uri("Resources\Language\" & Lang & ".xaml", UriKind.Relative)}
         '刷新主题
         ThemeCheckAll(False)
         Setup.Load("UiLauncherTheme")
@@ -358,7 +265,9 @@ Public Class FormMain
         If Not IsNothing(FrmLaunchLeft.Parent) Then FrmLaunchLeft.SetValue(ContentPresenter.ContentProperty, Nothing)
         If Not IsNothing(FrmLaunchRight.Parent) Then FrmLaunchRight.SetValue(ContentPresenter.ContentProperty, Nothing)
         PanMainLeft.Child = FrmLaunchLeft
+        PageLeft = FrmLaunchLeft
         PanMainRight.Child = FrmLaunchRight
+        PageRight = FrmLaunchRight
         FrmLaunchRight.PageState = MyPageRight.PageStates.ContentStay
         '模式提醒
 #If DEBUG Then
@@ -403,13 +312,17 @@ Public Class FormMain
         '加载窗口
         ThemeRefreshMain()
         Try
-            Height = ReadReg("WindowHeight", MinHeight + 50)
-            Width = ReadReg("WindowWidth", MinWidth + 50)
+            Height = Setup.Get("WindowHeight")
+            Width = Setup.Get("WindowWidth")
         Catch ex As Exception '修复 #2019
             Log(ex, "读取窗口默认大小失败", LogLevel.Hint)
-            Height = MinHeight + 50
-            Width = MinWidth + 50
+            Height = MinHeight + 100
+            Width = MinWidth + 100
         End Try
+        '#If DEBUG Then
+        '        MinHeight = 50
+        '        MinWidth = 50
+        '#End If
         Topmost = False
         If FrmStart IsNot Nothing Then FrmStart.Close(New TimeSpan(0, 0, 0, 0, 400 / AniSpeed))
         '更改窗口
@@ -440,7 +353,7 @@ Public Class FormMain
             'EULA 提示
             If Not Setup.Get("SystemEula") Then
                 Select Case MyMsgBox("在使用 PCL 前，请同意 PCL 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明",
-                                   Button3Action:=Sub() OpenWebsite("https://shimo.im/docs/rGrd8pY8xWkt6ryW"))
+                        Button3Action:=Sub() OpenWebsite("https://shimo.im/docs/rGrd8pY8xWkt6ryW"))
                     Case 1
                         Setup.Set("SystemEula", True)
                     Case 2
@@ -471,12 +384,6 @@ Public Class FormMain
     Private Sub RunCountSub()
         Setup.Set("SystemCount", Setup.Get("SystemCount") + 1)
 #If Not BETA Then
-        Select Case Setup.Get("SystemCount")
-            Case 1
-                MyMsgBox("欢迎使用 PCL 快照版！" & vbCrLf &
-                         "快照版包含尚未在正式版发布的测试性功能，仅用于赞助者本人尝鲜。所以请不要发给其他人或者用于制作整合包哦！" & vbCrLf &
-                         "如果你并非通过赞助或赞助者本人邀请进群获得的本程序，那么可能是有人在违规传播，记得提醒他一下啦。", "快照版使用说明")
-        End Select
         If Setup.Get("SystemCount") >= 99 Then
             If ThemeUnlock(6, False) Then
                 MyMsgBox("你已经使用了 99 次 PCL 啦，感谢你长期以来的支持！" & vbCrLf &
@@ -543,6 +450,16 @@ Public Class FormMain
             Setup.Set("UiHiddenOtherHelp", False)
             Log("[Start] 已解除帮助页面的隐藏")
         End If
+        '单向迁移微软登录结果（#4836）
+        If Not Setup.Get("CacheMsV2Migrated") Then
+            Setup.Set("CacheMsV2Migrated", True)
+            Setup.Set("CacheMsV2OAuthRefresh", Setup.Get("CacheMsOAuthRefresh"))
+            Setup.Set("CacheMsV2Access", Setup.Get("CacheMsAccess"))
+            Setup.Set("CacheMsV2ProfileJson", Setup.Get("CacheMsProfileJson"))
+            Setup.Set("CacheMsV2Uuid", Setup.Get("CacheMsUuid"))
+            Setup.Set("CacheMsV2Name", Setup.Get("CacheMsName"))
+            Log("[Start] 已从老版本迁移微软登录结果")
+        End If
         '输出更新日志
         If LastVersionCode = 0 Then Exit Sub
         If LowerVersionCode >= VersionCode Then Exit Sub
@@ -584,35 +501,35 @@ Public Class FormMain
         End If
         '关闭
         RunInUiWait(
-            Sub()
-                IsHitTestVisible = False
-                If PanBack.RenderTransform Is Nothing Then
-                    Dim TransformPos As New TranslateTransform(0, 0)
-                    Dim TransformRotate As New RotateTransform(0)
-                    Dim TransformScale As New ScaleTransform(1, 1)
-                    PanBack.RenderTransform = New TransformGroup() With {.Children = New TransformCollection({TransformRotate, TransformPos, TransformScale})}
-                    AniStart({
-                        AaOpacity(Me, -Opacity, 140, 40, New AniEaseOutFluent(AniEasePower.Weak)),
-                        AaDouble(
-                        Sub(i)
-                            TransformScale.ScaleX += i
-                            TransformScale.ScaleY += i
-                        End Sub, 0.88 - TransformScale.ScaleX, 180),
-                        AaDouble(Sub(i) TransformPos.Y += i, 20 - TransformPos.Y, 180, 0, New AniEaseOutFluent(AniEasePower.Weak)),
-                        AaDouble(Sub(i) TransformRotate.Angle += i, 0.6 - TransformRotate.Angle, 180, 0, New AniEaseInoutFluent(AniEasePower.Weak)),
-                        AaCode(
-                        Sub()
-                            IsHitTestVisible = False
-                            Top = -10000
-                            ShowInTaskbar = False
-                        End Sub, 210),
-                        AaCode(AddressOf EndProgramForce, 230)
-                    }, "Form Close")
-                Else
-                    EndProgramForce()
-                End If
-                Log("[System] 收到关闭指令")
-            End Sub)
+        Sub()
+            IsHitTestVisible = False
+            If PanBack.RenderTransform Is Nothing Then
+                Dim TransformPos As New TranslateTransform(0, 0)
+                Dim TransformRotate As New RotateTransform(0)
+                Dim TransformScale As New ScaleTransform(1, 1)
+                PanBack.RenderTransform = New TransformGroup() With {.Children = New TransformCollection({TransformRotate, TransformPos, TransformScale})}
+                AniStart({
+                    AaOpacity(Me, -Opacity, 140, 40, New AniEaseOutFluent(AniEasePower.Weak)),
+                    AaDouble(
+                    Sub(i)
+                        TransformScale.ScaleX += i
+                        TransformScale.ScaleY += i
+                    End Sub, 0.88 - TransformScale.ScaleX, 180),
+                    AaDouble(Sub(i) TransformPos.Y += i, 20 - TransformPos.Y, 180, 0, New AniEaseOutFluent(AniEasePower.Weak)),
+                    AaDouble(Sub(i) TransformRotate.Angle += i, 0.6 - TransformRotate.Angle, 180, 0, New AniEaseInoutFluent(AniEasePower.Weak)),
+                    AaCode(
+                    Sub()
+                        IsHitTestVisible = False
+                        Top = -10000
+                        ShowInTaskbar = False
+                    End Sub, 210),
+                    AaCode(AddressOf EndProgramForce, 230)
+                }, "Form Close")
+            Else
+                EndProgramForce()
+            End If
+            Log("[System] 收到关闭指令")
+        End Sub)
     End Sub
     Private Shared IsLogShown As Boolean = False
     Public Shared Sub EndProgramForce(Optional ReturnCode As Result = Result.Success)
@@ -657,8 +574,8 @@ Public Class FormMain
     Public IsSizeSaveable As Boolean = False
     Private Sub FormMain_SizeChanged() Handles Me.SizeChanged, Me.Loaded
         If IsSizeSaveable Then
-            WriteReg("WindowHeight", Height)
-            WriteReg("WindowWidth", Width)
+            Setup.Set("WindowHeight", Height)
+            Setup.Set("WindowWidth", Width)
         End If
         RectForm.Rect = New Rect(0, 0, BorderForm.ActualWidth, BorderForm.ActualHeight)
         PanForm.Width = BorderForm.ActualWidth + 0.001
@@ -687,7 +604,7 @@ Public Class FormMain
                 Exit Sub
             ElseIf e.Key = Key.Escape Then
                 Dim Msg As Object = PanMsg.Children(0)
-                If TypeOf Msg Is MyMsgText AndAlso Msg.Btn3.Visibility = Visibility.Visible Then
+                If TypeOf Msg IsNot MyMsgInput AndAlso TypeOf Msg IsNot MyMsgSelect AndAlso Msg.Btn3.Visibility = Visibility.Visible Then
                     Msg.Btn3_Click()
                 ElseIf Msg.Btn2.Visibility = Visibility.Visible Then
                     Msg.Btn2_Click()
@@ -714,6 +631,12 @@ Public Class FormMain
                 Hint("功能隐藏设置已重新开启！", HintType.Finish)
             End If
             PageSetupUI.HiddenRefresh()
+            Exit Sub
+        End If
+        '按 F5 刷新页面
+        If e.Key = Key.F5 Then
+            If TypeOf PageLeft Is IRefreshable Then CType(PageLeft, IRefreshable).Refresh()
+            If TypeOf PageRight Is IRefreshable Then CType(PageRight, IRefreshable).Refresh()
             Exit Sub
         End If
         '调用启动游戏
@@ -744,7 +667,7 @@ Public Class FormMain
         Try
             If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
                 'Mod 管理自动刷新
-                FrmVersionMod.RefreshList()
+                FrmVersionMod.ReloadModList()
             ElseIf PageCurrent = PageType.VersionSelect Then
                 '版本选择自动刷新
                 LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.RunOnUpdated, MaxDepth:=1, ExtraPath:="versions\")
@@ -851,16 +774,16 @@ Public Class FormMain
             End If
             '多文件拖拽
             If FilePathList.Count > 1 Then
-                '必须要求全部为 jar 文件
+                '必须要求全部为 Jar 文件
                 For Each File In FilePathList
-                    If Not {"jar", "litemod", "disabled", "old"}.Contains(File.After(".").ToLower) Then
+                    If Not {"jar", "litemod", "disabled", "old"}.Contains(File.AfterLast(".").ToLower) Then
                         Hint("一次请只拖入一个文件！", HintType.Critical)
                         Exit Sub
                     End If
                 Next
             End If
             '自定义主页
-            Dim Extension As String = FilePath.After(".").ToLower
+            Dim Extension As String = FilePath.AfterLast(".").ToLower
             If Extension = "xaml" Then
                 Log("[System] 文件后缀为 XAML，作为自定义主页加载")
                 If File.Exists(Path & "PCL\Custom.xaml") Then
@@ -869,53 +792,27 @@ Public Class FormMain
                     End If
                 End If
                 CopyFile(FilePath, Path & "PCL\Custom.xaml")
-                RunInUi(Sub()
-                            Setup.Set("UiCustomType", 1)
-                            FrmLaunchRight.ForceRefresh()
-                            Hint("已加载主页自定义文件！", HintType.Finish)
-                        End Sub)
+                RunInUi(
+                Sub()
+                    Setup.Set("UiCustomType", 1)
+                    FrmLaunchRight.ForceRefresh()
+                    Hint("已加载主页自定义文件！", HintType.Finish)
+                End Sub)
                 Exit Sub
             End If
-            'Mod 安装
-            If {"jar", "litemod", "disabled", "old"}.Any(Function(t) t = Extension) Then
-                Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
-                '获取并检查目标版本
-                Dim TargetVersion As McVersion = McVersionCurrent
-                If PageCurrent = PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
-                If PageCurrent = PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Modable Then
-                    '正在选择版本，或当前版本不能安装 Mod
-                    Hint("若要安装 Mod，请先选择一个可以安装 Mod 的版本！")
-                ElseIf Not (PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod) Then
-                    '未处于 Mod 管理页面
-                    If MyMsgBox($"是否要将这{If(FilePathList.Count = 1, "个", "些")}文件作为 Mod 安装到 {TargetVersion.Name}？", "Mod 安装确认", "确定", "取消") = 1 Then GoTo Install
-                Else
-                    '处于 Mod 管理页面
-Install:
-                    Try
-                        For Each ModFile In FilePathList
-                            Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "")
-                            If Not NewFileName.Contains(".") Then NewFileName += ".jar" '#4227
-                            CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & NewFileName)
-                        Next
-                        If FilePathList.Count = 1 Then
-                            Hint($"已安装 {GetFileNameFromPath(FilePathList.First).Replace(".disabled", "")}！", HintType.Finish)
-                        Else
-                            Hint($"已安装 {FilePathList.Count} 个 Mod！", HintType.Finish)
-                        End If
-                        '刷新列表
-                        If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
-                            LoaderFolderRun(McModLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
-                        End If
-                    Catch ex As Exception
-                        Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
-                    End Try
-                End If
-                Exit Sub
-            End If
+            '安装 Mod
+            If PageVersionMod.InstallMods(FilePathList) Then Exit Sub
             '安装整合包
             If {"zip", "rar", "mrpack"}.Any(Function(t) t = Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
                 Log("[System] 文件为压缩包，尝试作为整合包安装")
-                If ModpackInstall(FilePath, ShowHint:=False) IsNot Nothing Then Exit Sub
+                Try
+                    ModpackInstall(FilePath)
+                    Exit Sub
+                Catch ex As CancelledException
+                    Exit Sub '用户主动取消
+                Catch ex As Exception
+                    '安装失败，继续往后尝试
+                End Try
             End If
             'RAR 处理
             If Extension = "rar" Then
@@ -989,18 +886,19 @@ Install:
     ''' 把当前窗口拖到最前面。
     ''' </summary>
     Public Sub ShowWindowToTop()
-        RunInUi(Sub()
-                    '这一坨乱七八糟的，别改，改了指不定就炸了，自己电脑还复现不出来
-                    Visibility = Visibility.Visible
-                    ShowInTaskbar = True
-                    WindowState = WindowState.Normal
-                    Hidden = False
-                    Topmost = True '偶尔 SetForegroundWindow 失效
-                    Topmost = False
-                    SetForegroundWindow(Handle)
-                    Focus()
-                    Log("[System] 窗口已置顶，位置：(" & Left & ", " & Top & "), " & Width & " x " & Height)
-                End Sub)
+        RunInUi(
+        Sub()
+            '这一坨乱七八糟的，别改，改了指不定就炸了，自己电脑还复现不出来
+            Visibility = Visibility.Visible
+            ShowInTaskbar = True
+            WindowState = WindowState.Normal
+            Hidden = False
+            Topmost = True '偶尔 SetForegroundWindow 失效
+            Topmost = False
+            SetForegroundWindow(Handle)
+            Focus()
+            Log($"[System] 窗口已置顶，位置：({Left}, {Top}), {Width} x {Height}")
+        End Sub)
     End Sub
 
 #End Region
@@ -1065,10 +963,12 @@ Install:
         DownloadForge = 6
         DownloadNeoForge = 7
         DownloadFabric = 8
+        DownloadQuilt = 10
         DownloadLiteLoader = 9
         DownloadMod = 11
         DownloadPack = 12
         DownloadResourcePack = 13
+        DownloadCompFavorites = 15
         SetupLaunch = 0
         SetupUI = 1
         SetupSystem = 2
@@ -1147,9 +1047,6 @@ Install:
                 Case PageType.Download
                     If FrmDownloadLeft Is Nothing Then FrmDownloadLeft = New PageDownloadLeft
                     Return FrmDownloadLeft.PageID
-                Case PageType.Link
-                    If FrmLinkLeft Is Nothing Then FrmLinkLeft = New PageLinkLeft
-                    Return FrmLinkLeft.PageID
                 Case PageType.Setup
                     If FrmSetupLeft Is Nothing Then FrmSetupLeft = New PageSetupLeft
                     Return FrmSetupLeft.PageID
@@ -1218,9 +1115,6 @@ Install:
             CType(PanTitleSelect.Children(Stack), MyRadioButton).SetChecked(True, True, PageNameGet(PageCurrent) = "")
             IsChangingPage = False
             Select Case Stack.Page
-                Case PageType.Link
-                    If FrmLinkLeft Is Nothing Then FrmLinkLeft = New PageLinkLeft
-                    CType(FrmLinkLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
                 Case PageType.Download
                     If FrmDownloadLeft Is Nothing Then FrmDownloadLeft = New PageDownloadLeft
                     CType(FrmDownloadLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
@@ -1248,14 +1142,6 @@ Install:
     Private Sub BtnTitleSelect_Click(sender As MyRadioButton, raiseByMouse As Boolean) Handles BtnTitleSelect0.Check, BtnTitleSelect1.Check, BtnTitleSelect2.Check, BtnTitleSelect3.Check, BtnTitleSelect4.Check
         If IsChangingPage Then Exit Sub
         PageChangeActual(Val(sender.Tag))
-    End Sub
-    Private Sub CancelLink(sender As Object, e As RouteEventArgs) Handles BtnTitleSelect2.PreviewClick
-        If MyMsgBox("由于联机提供商要求新联机强制付费，且高度商业化，PCL 将暂时关闭联机功能，不再使用该联机模块。" & vbCrLf &
-                    "PCL、HMCL、BakaXL 将合作开发新的跨启动器联机功能，在开发结束后将同步开放，请各位多多理解。",
-                    "联机功能已暂时关闭", "查看详情", "确定") = 1 Then
-            OpenWebsite("https://www.bilibili.com/read/cv19845645")
-        End If
-        e.Handled = True
     End Sub
     ''' <summary>
     ''' 通过点击返回按钮或手动触发返回来改变页面。
@@ -1287,9 +1173,9 @@ Install:
                 If PageStack.Any Then
                     '子页面 → 另一个子页面，更新
                     AniStart({
-                             AaOpacity(LabTitleInner, -LabTitleInner.Opacity, 130),
-                             AaCode(Sub() LabTitleInner.Text = PageName,, True),
-                             AaOpacity(LabTitleInner, 1, 150, 30)
+                        AaOpacity(LabTitleInner, -LabTitleInner.Opacity, 130),
+                        AaCode(Sub() LabTitleInner.Text = PageName,, True),
+                        AaOpacity(LabTitleInner, 1, 150, 30)
                     }, "FrmMain Titlebar SubLayer")
                     If PageStack.Contains(Stack) Then
                         '返回到更上层的子页面
@@ -1383,37 +1269,41 @@ Install:
         AniControlEnabled -= 1
         '执行动画
         AniStart({
-            AaCode(Sub()
-                       AniControlEnabled += 1
-                       '把新页面添加进容器
-                       PanMainLeft.Child = PageLeft
-                       PageLeft.Opacity = 0
-                       PanMainLeft.Background = Nothing
-                       AniControlEnabled -= 1
-                       RunInUi(Sub() PanMainLeft_Resize(PanMainLeft.ActualWidth), True)
-                   End Sub, 130),
-            AaCode(Sub()
-                       '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
-                       PageLeft.Opacity = 1
-                       PageLeft.TriggerShowAnimation()
-                   End Sub, 30, True)
+            AaCode(
+            Sub()
+                AniControlEnabled += 1
+                '把新页面添加进容器
+                PanMainLeft.Child = PageLeft
+                PageLeft.Opacity = 0
+                PanMainLeft.Background = Nothing
+                AniControlEnabled -= 1
+                RunInUi(Sub() PanMainLeft_Resize(PanMainLeft.ActualWidth), True)
+            End Sub, 130),
+            AaCode(
+            Sub()
+                '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
+                PageLeft.Opacity = 1
+                PageLeft.TriggerShowAnimation()
+            End Sub, 30, True)
             }, "FrmMain PageChangeLeft")
         AniStart({
-            AaCode(Sub()
-                       AniControlEnabled += 1
-                       CType(PanMainRight.Child, MyPageRight).PageOnForceExit()
-                       '把新页面添加进容器
-                       PanMainRight.Child = PageRight
-                       PageRight.Opacity = 0
-                       PanMainRight.Background = Nothing
-                       AniControlEnabled -= 1
-                       RunInUi(Sub() BtnExtraBack.ShowRefresh(), True)
-                   End Sub, 130),
-            AaCode(Sub()
-                       '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
-                       PageRight.Opacity = 1
-                       PageRight.PageOnEnter()
-                   End Sub, 30, True)
+            AaCode(
+            Sub()
+                AniControlEnabled += 1
+                CType(PanMainRight.Child, MyPageRight).PageOnForceExit()
+                '把新页面添加进容器
+                PanMainRight.Child = PageRight
+                PageRight.Opacity = 0
+                PanMainRight.Background = Nothing
+                AniControlEnabled -= 1
+                RunInUi(Sub() BtnExtraBack.ShowRefresh(), True)
+            End Sub, 130),
+            AaCode(
+            Sub()
+                '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
+                PageRight.Opacity = 1
+                PageRight.PageOnEnter()
+            End Sub, 30, True)
             }, "FrmMain PageChangeRight")
     End Sub
     ''' <summary>
@@ -1426,12 +1316,12 @@ Install:
             PanTitleMain.IsHitTestVisible = True
             PanTitleInner.IsHitTestVisible = False
             AniStart({
-                         AaOpacity(PanTitleInner, -PanTitleInner.Opacity, 150),
-                         AaX(PanTitleInner, -18 - PanTitleInner.Margin.Left, 150,, New AniEaseInFluent),
-                         AaOpacity(PanTitleMain, 1 - PanTitleMain.Opacity, 150, 200),
-                         AaX(PanTitleMain, -PanTitleMain.Margin.Left, 350, 200, New AniEaseOutBack(AniEasePower.Weak)),
-                         AaCode(Sub() PanTitleInner.Visibility = Visibility.Collapsed,, True)
-                }, "FrmMain Titlebar FirstLayer")
+                AaOpacity(PanTitleInner, -PanTitleInner.Opacity, 150),
+                AaX(PanTitleInner, -18 - PanTitleInner.Margin.Left, 150,, New AniEaseInFluent),
+                AaOpacity(PanTitleMain, 1 - PanTitleMain.Opacity, 150, 200),
+                AaX(PanTitleMain, -PanTitleMain.Margin.Left, 350, 200, New AniEaseOutBack(AniEasePower.Weak)),
+                AaCode(Sub() PanTitleInner.Visibility = Visibility.Collapsed,, True)
+            }, "FrmMain Titlebar FirstLayer")
             PageStack.Clear()
         Else
             '主页面 → 主页面，无事发生
@@ -1450,16 +1340,16 @@ Install:
             If NewWidth > 0 Then
                 '宽度足够，显示
                 AniStart({
-                     AaWidth(RectLeftBackground, NewWidth - RectLeftBackground.Width, 400,, New AniEaseOutFluent(AniEasePower.ExtraStrong)),
-                     AaOpacity(RectLeftShadow, 1 - RectLeftShadow.Opacity, 200),
-                     AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 250)
+                    AaWidth(RectLeftBackground, NewWidth - RectLeftBackground.Width, 400,, New AniEaseOutFluent(AniEasePower.ExtraStrong)),
+                    AaOpacity(RectLeftShadow, 1 - RectLeftShadow.Opacity, 200),
+                    AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 250)
                 }, "FrmMain LeftChange", True)
             Else
                 '宽度不足，隐藏
                 AniStart({
-                     AaWidth(RectLeftBackground, -RectLeftBackground.Width, 200,, New AniEaseOutFluent),
-                     AaOpacity(RectLeftShadow, -RectLeftShadow.Opacity, 200),
-                     AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 170)
+                    AaWidth(RectLeftBackground, -RectLeftBackground.Width, 200,, New AniEaseOutFluent),
+                    AaOpacity(RectLeftShadow, -RectLeftShadow.Opacity, 200),
+                    AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 170)
                 }, "FrmMain LeftChange", True)
             End If
         Else

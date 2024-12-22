@@ -140,6 +140,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Imazen.WebP, Version=10.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Resources\Imazen.WebP.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="NAudio, Version=1.7.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
@@ -160,6 +165,7 @@
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System" />
@@ -180,6 +186,7 @@
     <Compile Include="Controls\MyComboBox.vb" />
     <Compile Include="Controls\MyComboBoxItem.vb" />
     <Compile Include="Controls\MyCard.vb" />
+    <Compile Include="Controls\MyImage.vb" />
     <Compile Include="Controls\MyPageRight.vb" />
     <Compile Include="Controls\MyPageLeft.vb" />
     <Compile Include="Controls\MyIconTextButton.xaml.vb">
@@ -232,6 +239,12 @@
     <Compile Include="Pages\PageDownload\PageDownloadResourcePack.xaml.vb">
       <DependentUpon>PageDownloadResourcePack.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadQuilt.xaml.vb">
+      <DependentUpon>PageDownloadQuilt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadCompFavorites.xaml.vb">
+      <DependentUpon>PageDownloadCompFavorites.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadMod.xaml.vb">
       <DependentUpon>PageDownloadMod.xaml</DependentUpon>
     </Compile>
@@ -250,8 +263,8 @@
     <Compile Include="Pages\PageDownload\PageDownloadPack.xaml.vb">
       <DependentUpon>PageDownloadPack.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageLaunch\FormLoginOAuth.xaml.vb">
-      <DependentUpon>FormLoginOAuth.xaml</DependentUpon>
+    <Compile Include="Pages\PageLaunch\MyMsgLogin.xaml.vb">
+      <DependentUpon>MyMsgLogin.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageLaunch\PageLoginAuth.xaml.vb">
       <DependentUpon>PageLoginAuth.xaml</DependentUpon>
@@ -484,6 +497,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\PageDownload\PageDownloadQuilt.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadCompFavorites.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\PageDownload\PageDownloadMod.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -508,9 +529,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\PageLaunch\FormLoginOAuth.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Pages\PageLaunch\MyMsgLogin.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\PageLaunch\PageLoginAuth.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -885,26 +906,6 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="NATUPNPLib">
-      <Guid>{1C565858-F302-471E-B409-F180AA4ABEC6}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="NetFwTypeLib">
-      <Guid>{58FBCF7C-E7A9-467C-80B3-FC65E8FCCA08}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Blocks\OptiFabric.png" />
   </ItemGroup>
   <ItemGroup>
@@ -924,18 +925,23 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Icons\Disabled.png" />
-    <Resource Include="Images\Icons\Unavaliable.png" />
+    <Resource Include="Images\Icons\Unavailable.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Blocks\Quilt.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\NeoForge.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Heads\z0z0r4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Imazen.WebP.dll" />
+    <None Include="Resources\libwebp64.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

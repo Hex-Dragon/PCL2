@@ -40,14 +40,16 @@
                         Dim IsForgeExists As Boolean = False
                         Dim IsNeoForgeExists As Boolean = False
                         Dim IsFabricExists As Boolean = False
+                        Dim IsQuiltExists As Boolean = False
                         Dim IsLiteExists As Boolean = False
                         For Each Version As McVersion In Card.Value
                             If Version.Version.HasFabric Then IsFabricExists = True
+                            If Version.Version.HasQuilt Then IsQuiltExists = True
                             If Version.Version.HasLiteLoader Then IsLiteExists = True
                             If Version.Version.HasForge Then IsForgeExists = True
                             If Version.Version.HasNeoForge Then IsNeoForgeExists = True
                         Next
-                        If If(IsLiteExists, 1, 0) + If(IsForgeExists, 1, 0) + If(IsFabricExists, 1, 0) + If(IsNeoForgeExists, 1, 0) > 1 Then
+                        If If(IsLiteExists, 1, 0) + If(IsForgeExists, 1, 0) + If(IsFabricExists, 1, 0) + If(IsNeoForgeExists, 1, 0) + If(IsQuiltExists, 1, 0) > 1 Then
                             CardName = "可安装 Mod"
                         ElseIf IsForgeExists Then
                             CardName = "Forge 版本"
@@ -55,6 +57,8 @@
                             CardName = "NeoForge 版本"
                         ElseIf IsLiteExists Then
                             CardName = "LiteLoader 版本"
+                        ElseIf IsQuiltExists Then
+                            CardName = "Quilt 版本"
                         Else
                             CardName = "Fabric 版本"
                         End If
@@ -167,14 +171,16 @@
             ToolTipService.SetPlacement(BtnCont, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnCont, 30)
             ToolTipService.SetHorizontalOffset(BtnCont, 2)
-            AddHandler BtnCont.Click, Sub()
-                                          PageVersionLeft.Version = Version
-                                          FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
-                                      End Sub
-            AddHandler sender.MouseRightButtonUp, Sub()
-                                                      PageVersionLeft.Version = Version
-                                                      FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
-                                                  End Sub
+            AddHandler BtnCont.Click,
+            Sub()
+                PageVersionLeft.Version = Version
+                FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
+            End Sub
+            AddHandler sender.MouseRightButtonUp,
+            Sub()
+                PageVersionLeft.Version = Version
+                FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
+            End Sub
             sender.Buttons = {BtnStar, BtnDel, BtnCont}
         Else
             Dim BtnCont As New MyIconButton With {.LogoScale = 1.15, .Logo = Logo.IconButtonOpen}
@@ -182,12 +188,8 @@
             ToolTipService.SetPlacement(BtnCont, Primitives.PlacementMode.Center)
             ToolTipService.SetVerticalOffset(BtnCont, 30)
             ToolTipService.SetHorizontalOffset(BtnCont, 2)
-            AddHandler BtnCont.Click, Sub()
-                                          PageVersionOverall.OpenVersionFolder(Version)
-                                      End Sub
-            AddHandler sender.MouseRightButtonUp, Sub()
-                                                      PageVersionOverall.OpenVersionFolder(Version)
-                                                  End Sub
+            AddHandler BtnCont.Click, Sub() PageVersionOverall.OpenVersionFolder(Version)
+            AddHandler sender.MouseRightButtonUp, Sub() PageVersionOverall.OpenVersionFolder(Version)
             sender.Buttons = {BtnStar, BtnDel, BtnCont}
         End If
     End Sub

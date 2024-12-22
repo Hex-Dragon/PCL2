@@ -17,8 +17,8 @@
                 ComboName.ItemsSource = Nothing
             Else
                 ComboName.ItemsSource = Setup.Get("LoginAuthEmail").ToString.Split("¨")
-                ComboName.Text = Setup.Get("LoginAuthEmail").ToString.Before("¨")
-                If Setup.Get("LoginRemember") Then TextPass.Password = Setup.Get("LoginAuthPass").ToString.Before("¨").Trim
+                ComboName.Text = Setup.Get("LoginAuthEmail").ToString.BeforeFirst("¨")
+                If Setup.Get("LoginRemember") Then TextPass.Password = Setup.Get("LoginAuthPass").ToString.BeforeFirst("¨").Trim
             End If
         End If
         IsFirstLoad = False
@@ -38,6 +38,7 @@
     ''' 当前页面的登录信息是否有效。
     ''' </summary>
     Public Shared Function IsVaild(LoginData As McLoginServer) As String
+        If Not LittleSkinClientId = "" Then Return ""
         If LoginData.UserName = "" Then Return "账号不能为空！"
         If LoginData.Password = "" Then Return "密码不能为空！"
         Return ""

@@ -88,26 +88,27 @@
             AddHandler GameProcess.ErrorDataReceived, AddressOf LogReceived
 
             '初始化时钟
-            RunInNewThread(Sub()
-                               Try
-                                   Do Until State = MinecraftState.Ended OrElse State = MinecraftState.Crashed OrElse State = MinecraftState.Canceled OrElse Loader.State = LoadState.Aborted
-                                       TimerWindow()
-                                       TimerLog()
-                                       '设置窗口标题
-                                       For i = 1 To 3
-                                           If IsWindowFinished AndAlso IsWindowAppeared AndAlso WindowTitle <> "" AndAlso State = MinecraftState.Running AndAlso Not GameProcess.HasExited Then
-                                               Dim RealTitle As String = WindowTitle.Replace("{date}", Date.Now.ToString("yyyy/M/d")).Replace("{time}", Date.Now.ToString("HH:mm:ss"))
-                                               SetWindowText(WindowHandle, RealTitle.ToCharArray)
-                                           End If
-                                           Thread.Sleep(64)
-                                       Next
-                                   Loop
-                                   WatcherLog("Minecraft 日志监控已退出")
-                               Catch ex As Exception
-                                   Log(ex, "Minecraft 日志监控主循环出错", LogLevel.Feedback)
-                                   State = MinecraftState.Ended
-                               End Try
-                           End Sub, "Minecraft Watcher PID " & PID)
+            RunInNewThread(
+            Sub()
+                Try
+                    Do Until State = MinecraftState.Ended OrElse State = MinecraftState.Crashed OrElse State = MinecraftState.Canceled OrElse Loader.State = LoadState.Aborted
+                        TimerWindow()
+                        TimerLog()
+                        '设置窗口标题
+                        For i = 1 To 3
+                            If IsWindowFinished AndAlso IsWindowAppeared AndAlso WindowTitle <> "" AndAlso State = MinecraftState.Running AndAlso Not GameProcess.HasExited Then
+                                Dim RealTitle As String = WindowTitle.Replace("{date}", Date.Now.ToString("yyyy/M/d")).Replace("{time}", Date.Now.ToString("HH:mm:ss"))
+                                SetWindowText(WindowHandle, RealTitle.ToCharArray)
+                            End If
+                            Thread.Sleep(64)
+                        Next
+                    Loop
+                    WatcherLog("Minecraft 日志监控已退出")
+                Catch ex As Exception
+                    Log(ex, "Minecraft 日志监控主循环出错", LogLevel.Feedback)
+                    State = MinecraftState.Ended
+                End Try
+            End Sub, "Minecraft Watcher PID " & PID)
         End Sub
 
         '状态
@@ -349,22 +350,21 @@
             WatcherLog("Minecraft 已崩溃，将在 2 秒后开始崩溃分析")
             Hint("检测到 Minecraft 出现错误，错误分析已开始……")
             FeedbackInfo()
-            RunInNewThread(Sub()
-                               Try
-                                   Thread.Sleep(2000)
-                                   WatcherLog("崩溃分析开始")
-                                   Dim Analyzer As New CrashAnalyzer(PID)
-                                   Analyzer.Collect(Version.PathIndie, LatestLog.ToList)
-                                   Analyzer.Prepare()
-                                   Analyzer.Analyze(Version)
-                                   Analyzer.Output(False, New List(Of String) From
-                                                           {Version.Path & Version.Name & ".json",
-                                                            Path & "PCL\Log1.txt",
-                                                            Path & "PCL\LatestLaunch.bat"})
-                               Catch ex As Exception
-                                   Log(ex, "崩溃分析失败", LogLevel.Feedback)
-                               End Try
-                           End Sub, "Crash Analyzer")
+            RunInNewThread(
+            Sub()
+                Try
+                    Thread.Sleep(2000)
+                    WatcherLog("崩溃分析开始")
+                    Dim Analyzer As New CrashAnalyzer(PID)
+                    Analyzer.Collect(Version.PathIndie, LatestLog.ToList)
+                    Analyzer.Prepare()
+                    Analyzer.Analyze(Version)
+                    Analyzer.Output(False, New List(Of String) From
+                        {Version.Path & Version.Name & ".json", Path & "PCL\Log1.txt", Path & "PCL\LatestLaunch.bat"})
+                Catch ex As Exception
+                    Log(ex, "崩溃分析失败", LogLevel.Feedback)
+                End Try
+            End Sub, "Crash Analyzer")
         End Sub
 
         '强制关闭

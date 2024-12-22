@@ -17,16 +17,11 @@
         End Try
         '检查 Json 是否标准
         If Version.JsonObject("downloads") Is Nothing OrElse Version.JsonObject("downloads")("client") Is Nothing OrElse Version.JsonObject("downloads")("client")("url") Is Nothing Then
-            Throw New Exception("底层版本 " & Version.Name & " 中无 jar 文件下载信息")
+            Throw New Exception("底层版本 " & Version.Name & " 中无 Jar 文件下载信息")
         End If
         '检查文件
         Dim Checker As New FileChecker(MinSize:=1024, ActualSize:=If(Version.JsonObject("downloads")("client")("size"), -1), Hash:=Version.JsonObject("downloads")("client")("sha1"))
-        If ReturnNothingOnFileUseable Then
-            '是否跳过
-            Dim IsSetupSkip As Boolean = ShouldIgnoreFileCheck(Version)
-            If IsSetupSkip AndAlso File.Exists(Version.Path & Version.Name & ".jar") Then Return Nothing '跳过校验
-            If Checker.Check(Version.Path & Version.Name & ".jar") Is Nothing Then Return Nothing '通过校验
-        End If
+        If ReturnNothingOnFileUseable AndAlso Checker.Check(Version.Path & Version.Name & ".jar") Is Nothing Then Return Nothing '通过校验
         '返回下载信息
         Dim JarUrl As String = Version.JsonObject("downloads")("client")("url")
         Return New NetFile(DlSourceLauncherOrMetaGet(JarUrl), Version.Path & Version.Name & ".jar", Checker)
@@ -56,7 +51,7 @@
     ''' <summary>
     ''' 构造补全某 Minecraft 版本的所有文件的加载器列表。失败会抛出异常。
     ''' </summary>
-    Public Function DlClientFix(Version As McVersion, CheckAssetsHash As Boolean, AssetsIndexBehaviour As AssetsIndexExistsBehaviour, SkipAssetsDownloadWhileSetupRequired As Boolean) As List(Of LoaderBase)
+    Public Function DlClientFix(Version As McVersion, CheckAssetsHash As Boolean, AssetsIndexBehaviour As AssetsIndexExistsBehaviour) As List(Of LoaderBase)
         Dim Loaders As New List(Of LoaderBase)
 
 #Region "下载支持库文件"
@@ -69,9 +64,9 @@
 #End Region
 
 #Region "下载资源文件"
-        Dim IsSetupSkip As Boolean = ShouldIgnoreFileCheck(Version)
-        If IsSetupSkip Then Log("[Download] 已跳过 Assets 下载")
-        If (Not SkipAssetsDownloadWhileSetupRequired) OrElse Not IsSetupSkip Then
+        If ShouldIgnoreFileCheck(Version) Then
+            Log("[Download] 已跳过所有 Assets 检查")
+        Else
             Dim LoadersAssets As New List(Of LoaderBase)
             '获取资源文件索引地址
             LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("分析资源文件索引地址",
@@ -104,7 +99,7 @@
                     Task.Output = New List(Of NetFile) From {BackAssetsFile}
                     '检查是否需要更新：每天只更新一次
                     If File.Exists(RealAddress) AndAlso Math.Abs((File.GetLastWriteTime(RealAddress).Date - Now.Date).TotalDays) < 1 Then
-                        Log("[Download] 无需更新资源文件索引")
+                        Log("[Download] 无需更新资源文件索引，取消")
                         Task.Abort()
                     End If
                 End Sub))
@@ -121,7 +116,7 @@
             '获取资源文件地址
             LoadersAssets.Add(New LoaderTask(Of String, List(Of NetFile))("分析缺失资源文件",
             Sub(Task As LoaderTask(Of String, List(Of NetFile)))
-                Task.Output = McAssetsFixList(McAssetsGetIndexName(Version), CheckAssetsHash, Task)
+                Task.Output = McAssetsFixList(Version, CheckAssetsHash, Task)
             End Sub) With {.ProgressWeight = 3})
             '下载资源文件
             LoadersAssets.Add(New LoaderDownload("下载资源文件", New List(Of NetFile)) With {.ProgressWeight = 25})
@@ -172,24 +167,25 @@
     End Structure
     ''' <summary>
     ''' Minecraft 客户端 版本列表，主加载器。
+    ''' 若要求镜像源必须包含某个版本，则将该版本 ID 作为输入（#5195）。
     ''' </summary>
-    Public DlClientListLoader As New LoaderTask(Of Integer, DlClientListResult)("DlClientList Main", AddressOf DlClientListMain)
-    Private Sub DlClientListMain(Loader As LoaderTask(Of Integer, DlClientListResult))
+    Public DlClientListLoader As New LoaderTask(Of String, DlClientListResult)("DlClientList Main", AddressOf DlClientListMain)
+    Private Sub DlClientListMain(Loader As LoaderTask(Of String, DlClientListResult))
         Select Case Setup.Get("ToolDownloadVersion")
             Case 0
-                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlClientListResult), Integer)) From {
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlClientListResult), Integer)(DlClientListBmclapiLoader, 30),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlClientListResult), Integer)(DlClientListMojangLoader, 60)
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, DlClientListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of String, DlClientListResult), Integer)(DlClientListBmclapiLoader, 30),
+                    New KeyValuePair(Of LoaderTask(Of String, DlClientListResult), Integer)(DlClientListMojangLoader, 30 + 60)
                 }, Loader.IsForceRestarting)
             Case 1
-                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlClientListResult), Integer)) From {
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlClientListResult), Integer)(DlClientListMojangLoader, 5),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlClientListResult), Integer)(DlClientListBmclapiLoader, 35)
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, DlClientListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of String, DlClientListResult), Integer)(DlClientListMojangLoader, 5),
+                    New KeyValuePair(Of LoaderTask(Of String, DlClientListResult), Integer)(DlClientListBmclapiLoader, 5 + 30)
                 }, Loader.IsForceRestarting)
             Case Else
-                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlClientListResult), Integer)) From {
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlClientListResult), Integer)(DlClientListMojangLoader, 60),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlClientListResult), Integer)(DlClientListBmclapiLoader, 60)
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, DlClientListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of String, DlClientListResult), Integer)(DlClientListMojangLoader, 60),
+                    New KeyValuePair(Of LoaderTask(Of String, DlClientListResult), Integer)(DlClientListBmclapiLoader, 60 + 60)
                 }, Loader.IsForceRestarting)
         End Select
     End Sub
@@ -198,9 +194,9 @@
     ''' <summary>
     ''' Minecraft 客户端 版本列表，Mojang 官方源加载器。
     ''' </summary>
-    Public DlClientListMojangLoader As New LoaderTask(Of Integer, DlClientListResult)("DlClientList Mojang", AddressOf DlClientListMojangMain)
+    Public DlClientListMojangLoader As New LoaderTask(Of String, DlClientListResult)("DlClientList Mojang", AddressOf DlClientListMojangMain)
     Private IsNewClientVersionHinted As Boolean = False
-    Private Sub DlClientListMojangMain(Loader As LoaderTask(Of Integer, DlClientListResult))
+    Private Sub DlClientListMojangMain(Loader As LoaderTask(Of String, DlClientListResult))
         Dim Json As JObject = NetGetCodeByRequestRetry("https://launchermeta.mojang.com/mc/game/version_manifest.json", IsJson:=True)
         Try
             Dim Versions As JArray = Json("versions")
@@ -230,14 +226,21 @@
     ''' <summary>
     ''' Minecraft 客户端 版本列表，BMCLAPI 源加载器。
     ''' </summary>
-    Public DlClientListBmclapiLoader As New LoaderTask(Of Integer, DlClientListResult)("DlClientList Bmclapi", AddressOf DlClientListBmclapiMain)
-    Private Sub DlClientListBmclapiMain(Loader As LoaderTask(Of Integer, DlClientListResult))
+    Public DlClientListBmclapiLoader As New LoaderTask(Of String, DlClientListResult)("DlClientList Bmclapi", AddressOf DlClientListBmclapiMain)
+    Private Sub DlClientListBmclapiMain(Loader As LoaderTask(Of String, DlClientListResult))
         Dim Json As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/mc/game/version_manifest.json", IsJson:=True)
         Try
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
             '添加 PCL 特供项
             If File.Exists(PathTemp & "Cache\download.json") Then Versions.Merge(GetJson(ReadFile(PathTemp & "Cache\download.json")))
+            '检查是否有要求的版本（#5195）
+            If Not String.IsNullOrEmpty(Loader.Input) Then
+                Dim Id = Loader.Input
+                If Not DlClientListLoader.Output.Value("versions").Any(Function(v) v("id") = Id) Then
+                    Throw New Exception("BMCLAPI 源未包含目标版本 " & Id)
+                End If
+            End If
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Json}
         Catch ex As Exception
@@ -250,26 +253,31 @@
     ''' </summary>
     Public Function DlClientListGet(Id As String)
         Try
-            '确认 Minecraft 版本列表已完成获取
-            Select Case DlClientListLoader.State
-                Case LoadState.Loading
-                    DlClientListLoader.WaitForExit()
-                Case LoadState.Failed, LoadState.Aborted, LoadState.Waiting
-                    DlClientListLoader.WaitForExit(IsForceRestart:=True)
-            End Select
             '确认版本格式标准
             Id = Id.Replace("_", "-") '1.7.10_pre4 在版本列表中显示为 1.7.10-pre4
             If Id <> "1.0" AndAlso Id.EndsWithF(".0") Then Id = Left(Id, Id.Length - 2) 'OptiFine 1.8 的下载会触发此问题，显示版本为 1.8.0
-            '查找版本并开始
+            '获取 Minecraft 版本列表
+            Select Case DlClientListLoader.State
+                Case LoadState.Finished
+                    '从当前的结果获取目标版本…
+                    For Each Version As JObject In DlClientListLoader.Output.Value("versions")
+                        If Version("id") = Id Then Return Version("url").ToString
+                    Next
+                    '…如果没有，则重新尝试获取（在版本刚更新时可能出现这种情况，#5195）
+                    DlClientListLoader.WaitForExit(Id, IsForceRestart:=True)
+                Case LoadState.Loading
+                    DlClientListLoader.WaitForExit(Id)
+                Case LoadState.Failed, LoadState.Aborted, LoadState.Waiting
+                    DlClientListLoader.WaitForExit(Id, IsForceRestart:=True)
+            End Select
+            '重新查找版本
             For Each Version As JObject In DlClientListLoader.Output.Value("versions")
-                If Version("id") = Id Then
-                    Return Version("url").ToString
-                End If
+                If Version("id") = Id Then Return Version("url").ToString
             Next
-            Log("未发现版本 " & Id & " 的 json 下载地址，版本列表返回为：" & vbCrLf & DlClientListLoader.Output.Value.ToString, LogLevel.Debug)
+            Log($"未发现版本 {Id} 的 json 下载地址，版本列表返回为：{vbCrLf}{DlClientListLoader.Output.Value.ToString}", LogLevel.Debug)
             Return Nothing
         Catch ex As Exception
-            Log(ex, "获取版本 " & Id & " 的 json 下载地址失败")
+            Log(ex, $"获取版本 {Id} 的 json 下载地址失败")
             Return Nothing
         End Try
     End Function
@@ -342,17 +350,17 @@
             Case 0
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)(DlOptiFineListBmclapiLoader, 30),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)(DlOptiFineListOfficialLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)(DlOptiFineListOfficialLoader, 30 + 60)
                 }, Loader.IsForceRestarting)
             Case 1
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)(DlOptiFineListOfficialLoader, 5),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)(DlOptiFineListBmclapiLoader, 35)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)(DlOptiFineListBmclapiLoader, 5 + 30)
                 }, Loader.IsForceRestarting)
             Case Else
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)(DlOptiFineListOfficialLoader, 60),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)(DlOptiFineListBmclapiLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlOptiFineListResult), Integer)(DlOptiFineListBmclapiLoader, 60 + 60)
                 }, Loader.IsForceRestarting)
         End Select
     End Sub
@@ -448,17 +456,17 @@
             Case 0
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)(DlForgeListBmclapiLoader, 30),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)(DlForgeListOfficialLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)(DlForgeListOfficialLoader, 30 + 60)
                 }, Loader.IsForceRestarting)
             Case 1
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)(DlForgeListOfficialLoader, 5),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)(DlForgeListBmclapiLoader, 35)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)(DlForgeListBmclapiLoader, 5 + 30)
                 }, Loader.IsForceRestarting)
             Case Else
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)(DlForgeListOfficialLoader, 60),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)(DlForgeListBmclapiLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlForgeListResult), Integer)(DlForgeListBmclapiLoader, 60 + 60)
                 }, Loader.IsForceRestarting)
         End Select
     End Sub
@@ -593,17 +601,17 @@
             Case 0
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)(DlForgeVersionBmclapiLoader, 30),
-                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)(DlForgeVersionOfficialLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)(DlForgeVersionOfficialLoader, 30 + 60)
                 }, Loader.IsForceRestarting)
             Case 1
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)(DlForgeVersionOfficialLoader, 5),
-                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)(DlForgeVersionBmclapiLoader, 35)
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)(DlForgeVersionBmclapiLoader, 5 + 30)
                 }, Loader.IsForceRestarting)
             Case Else
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)(DlForgeVersionOfficialLoader, 60),
-                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)(DlForgeVersionBmclapiLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of String, List(Of DlForgeVersionEntry)), Integer)(DlForgeVersionBmclapiLoader, 60 + 60)
                 }, Loader.IsForceRestarting)
         End Select
     End Sub
@@ -785,7 +793,7 @@
                 Inherit = "1.20.1"
             Else '20.4.30-beta
                 VersionName = ApiName
-                Version = New Version(ApiName.Before("-"))
+                Version = New Version(ApiName.BeforeFirst("-"))
                 Inherit = $"1.{Version.Major}" & If(Version.Minor = 0, "", "." & Version.Minor)
             End If
         End Sub
@@ -800,17 +808,17 @@
             Case 0
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListBmclapiLoader, 30),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 30 + 60)
                 }, Loader.IsForceRestarting)
             Case 1
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 5),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListBmclapiLoader, 35)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListBmclapiLoader, 5 + 30)
                 }, Loader.IsForceRestarting)
             Case Else
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListOfficialLoader, 60),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListBmclapiLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlNeoForgeListResult), Integer)(DlNeoForgeListBmclapiLoader, 60 + 60)
                 }, Loader.IsForceRestarting)
         End Select
     End Sub
@@ -925,17 +933,17 @@
             Case 0
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)(DlLiteLoaderListBmclapiLoader, 30),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)(DlLiteLoaderListOfficialLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)(DlLiteLoaderListOfficialLoader, 30 + 60)
                 }, Loader.IsForceRestarting)
             Case 1
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)(DlLiteLoaderListOfficialLoader, 5),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)(DlLiteLoaderListBmclapiLoader, 35)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)(DlLiteLoaderListBmclapiLoader, 5 + 30)
                 }, Loader.IsForceRestarting)
             Case Else
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)(DlLiteLoaderListOfficialLoader, 60),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)(DlLiteLoaderListBmclapiLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlLiteLoaderListResult), Integer)(DlLiteLoaderListBmclapiLoader, 60 + 60)
                 }, Loader.IsForceRestarting)
         End Select
     End Sub
@@ -1024,17 +1032,17 @@
             Case 0
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)(DlFabricListBmclapiLoader, 30),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)(DlFabricListOfficialLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)(DlFabricListOfficialLoader, 30 + 60)
                 }, Loader.IsForceRestarting)
             Case 1
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)(DlFabricListOfficialLoader, 5),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)(DlFabricListBmclapiLoader, 35)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)(DlFabricListBmclapiLoader, 5 + 30)
                 }, Loader.IsForceRestarting)
             Case Else
                 DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)) From {
                     New KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)(DlFabricListOfficialLoader, 60),
-                    New KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)(DlFabricListBmclapiLoader, 60)
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlFabricListResult), Integer)(DlFabricListBmclapiLoader, 60 + 60)
                 }, Loader.IsForceRestarting)
         End Select
     End Sub
@@ -1083,33 +1091,128 @@
 
 #End Region
 
+#Region "DlQuiltList | Quilt 列表"
+
+    Public Structure DlQuiltListResult
+        ''' <summary>
+        ''' 数据来源名称，如“Official”，“BMCLAPI”。
+        ''' </summary>
+        Public SourceName As String
+        ''' <summary>
+        ''' 是否为官方的实时数据。
+        ''' </summary>
+        Public IsOfficial As Boolean
+        ''' <summary>
+        ''' 获取到的数据。
+        ''' </summary>
+        Public Value As JObject
+    End Structure
+
+    ''' <summary>
+    ''' Quilt 列表，主加载器。
+    ''' </summary>
+    Public DlQuiltListLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Main", AddressOf DlQuiltListMain)
+    Private Sub DlQuiltListMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
+        Select Case Setup.Get("ToolDownloadVersion")
+            Case 0
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 30),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 60)
+                }, Loader.IsForceRestarting)
+            Case 1
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 5),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 35)
+                }, Loader.IsForceRestarting)
+            Case Else
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 60),
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlQuiltListResult), Integer)(DlQuiltListOfficialLoader, 60)
+                }, Loader.IsForceRestarting)
+        End Select
+    End Sub
+
+    ''' <summary>
+    ''' Quilt 列表，官方源。
+    ''' </summary>
+    Public DlQuiltListOfficialLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Official", AddressOf DlQuiltListOfficialMain)
+    Private Sub DlQuiltListOfficialMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
+        Dim Result As JObject = NetGetCodeByRequestRetry("https://meta.quiltmc.org/v3/versions", IsJson:=True)
+        Try
+            Dim Output = New DlQuiltListResult With {.IsOfficial = True, .SourceName = "Quilt 官方源", .Value = Result}
+            If Output.Value("game") Is Nothing OrElse Output.Value("loader") Is Nothing OrElse Output.Value("installer") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
+            Loader.Output = Output
+        Catch ex As Exception
+            Throw New Exception("Quilt 官方源版本列表解析失败（" & Result.ToString & "）", ex)
+        End Try
+    End Sub
+
+    '''' <summary>
+    '''' TODO: Quilt 列表，BMCLAPI。
+    '''' </summary>
+    'Public DlQuiltListBmclapiLoader As New LoaderTask(Of Integer, DlQuiltListResult)("DlQuiltList Bmclapi", AddressOf DlQuiltListBmclapiMain)
+    'Private Sub DlQuiltListBmclapiMain(Loader As LoaderTask(Of Integer, DlQuiltListResult))
+    '    Dim Result As JObject = NetGetCodeByRequestRetry("https://bmclapi2.bangbang93.com/Quilt-meta/v2/versions", IsJson:=True)
+    '    Try
+    '        Dim Output = New DlQuiltListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Result}
+    '        If Output.Value("game") Is Nothing OrElse Output.Value("loader") Is Nothing OrElse Output.Value("installer") Is Nothing Then Throw New Exception("获取到的列表缺乏必要项")
+    '        Loader.Output = Output
+    '    Catch ex As Exception
+    '        Throw New Exception("Quilt BMCLAPI 版本列表解析失败（" & Result.ToString & "）", ex)
+    '    End Try
+    'End Sub
+
+    ''' <summary>
+    ''' QSL 列表，官方源。
+    ''' </summary>
+    Public DlQSLLoader As New LoaderTask(Of Integer, List(Of CompFile))("QSL List Loader",
+        Sub(Task As LoaderTask(Of Integer, List(Of CompFile))) Task.Output = CompFilesGet("qsl", False))
+#End Region
+
 #Region "DlMod | Mod 镜像源请求"
 
     ''' <summary>
     ''' 对可能涉及 Mod 镜像源的请求进行处理，返回字符串或 JObject。
-    ''' 调用 NetGetCodeByRequestOnce。
+    ''' 调用 NetGetCodeByRequest。
     ''' </summary>
     Public Function DlModRequest(Url As String, Optional IsJson As Boolean = False) As Object
         Dim McimUrl As String = DlSourceModGet(Url)
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         If McimUrl <> Url Then
             Select Case Setup.Get("ToolDownloadMod")
+                'TODO: 在 MCIM 源稳定后回调
                 Case 0
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    If ModeDebug Then
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 20))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Else
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                    End If
                 Case 1
                     Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 35))
-                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
                     Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
                     Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
             End Select
         End If
         Dim Exs As String = ""
         For Each Source In Urls
             Try
-                Return NetGetCodeByRequestOnce(Source.Key, Encode:=Encoding.UTF8, Timeout:=Source.Value * 1000,
-                                               IsJson:=IsJson, UseBrowserUserAgent:=True)
+                Return NetGetCodeByRequestOnce(Source.Key, Encode:=Encoding.UTF8, Timeout:=Source.Value * 1000, IsJson:=IsJson, UseBrowserUserAgent:=True)
             Catch ex As Exception
                 Exs += ex.Message + vbCrLf
             End Try
@@ -1119,28 +1222,46 @@
 
     ''' <summary>
     ''' 对可能涉及 Mod 镜像源的请求进行处理。
-    ''' 调用 NetRequestOnce。
+    ''' 调用 NetRequest。
     ''' </summary>
-    Public Function DlModRequest(Url As String, Method As String, Data As String, ContentType As String, Optional Headers As Dictionary(Of String, String) = Nothing) As String
+    Public Function DlModRequest(Url As String, Method As String, Data As String, ContentType As String) As String
         Dim McimUrl As String = DlSourceModGet(Url)
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         If McimUrl <> Url Then
             Select Case Setup.Get("ToolDownloadMod")
+                'TODO: 在 MCIM 源稳定后回调
                 Case 0
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    If ModeDebug Then
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 20))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Else
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                    End If
                 Case 1
                     Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 35))
-                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
                     Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
+                Case Else
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
+                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
                     Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
             End Select
         End If
         Dim Exs As String = ""
         For Each Source In Urls
             Try
-                Return NetRequestOnce(Source.Key, Method, Data, ContentType, Timeout:=Source.Value * 1000, Headers:=Headers)
+                Return NetRequestOnce(Source.Key, Method, Data, ContentType, Timeout:=Source.Value * 1000)
             Catch ex As Exception
                 Exs += ex.Message + vbCrLf
             End Try
@@ -1205,71 +1326,63 @@
                                                          Optional IsForceRestart As Boolean = False)
         Dim WaitCycle As Integer = 0
         Do While True
-            '检查加载结束
-            Dim IsAllFailed As Boolean = True
+            '检查状态
+            Dim BeforeLoadersAllFailed As Boolean = True
             For Each SubLoader In LoaderList
-                If WaitCycle = 0 Then
-                    '如果要强制刷新，就不使用已经加载好的值
-                    If IsForceRestart Then Exit For
-                    '如果输入不一样，就不使用已经加载好的值
+                If WaitCycle = 0 Then '判断是否可以不加载，直接使用已经加载好的结果
+                    If IsForceRestart Then Continue For '强制刷新，不行
                     If (SubLoader.Key.Input Is Nothing Xor MainLoader.Input Is Nothing) OrElse
-                       (SubLoader.Key.Input IsNot Nothing AndAlso Not SubLoader.Key.Input.Equals(MainLoader.Input)) Then Continue For
+                       (SubLoader.Key.Input IsNot Nothing AndAlso Not SubLoader.Key.Input.Equals(MainLoader.Input)) Then Continue For '父子加载器的输入不一样，也不行
                 End If
-                If SubLoader.Key.State <> LoadState.Failed Then IsAllFailed = False
+                If SubLoader.Key.State <> LoadState.Failed Then BeforeLoadersAllFailed = False
                 If SubLoader.Key.State = LoadState.Finished Then
+                    '检查加载器成功
                     MainLoader.Output = SubLoader.Key.Output
                     DlSourceLoaderAbort(LoaderList)
                     Exit Sub
-                ElseIf IsAllFailed Then
+                ElseIf BeforeLoadersAllFailed Then
+                    '此前的加载器全部失败，直接启动后续加载器
                     If WaitCycle < SubLoader.Value * 100 Then WaitCycle = SubLoader.Value * 100
                 End If
-                '由于 Forge BMCLAPI 没有可用版本导致强制失败
-                '在没有可用版本时，官方源会一直卡住，直接使用 BMCLAPI 判定失败即可
-                If SubLoader.Key.Error IsNot Nothing AndAlso SubLoader.Key.Error.Message.Contains("没有可用版本") Then
-                    For Each SubLoader2 In LoaderList
-                        If WaitCycle < SubLoader2.Value * 100 Then WaitCycle = SubLoader2.Value * 100
-                    Next
-                End If
             Next
-            '启动加载源
+            '第一轮时：既然不直接使用已经加载好的结果，那就启动第一个加载器
             If WaitCycle = 0 Then
-                '启动第一个源
-                LoaderList(0).Key.Start(MainLoader.Input, IsForceRestart)
-                '将其他源标记为未启动，以确保可以切换下载源（#184）
-                For i = 1 To LoaderList.Count - 1
-                    LoaderList(i).Key.State = LoadState.Waiting
+                LoaderList.First.Key.Start(MainLoader.Input, IsForceRestart)
+                For Each Loader In LoaderList.Skip(1)
+                    Loader.Key.State = LoadState.Waiting '将其他源标记为未启动，以确保可以切换下载源（#184）
                 Next
             End If
+            '检查加载器失败或超时
             For i = 0 To LoaderList.Count - 1
-                If WaitCycle = LoaderList(i).Value * 100 Then
-                    If i < LoaderList.Count - 1 Then
-                        '启动下一个源
-                        LoaderList(i + 1).Key.Start(MainLoader.Input, IsForceRestart)
-                    Else
-                        '失败
-                        Dim ErrorInfo As Exception = Nothing
-                        For ii = 0 To LoaderList.Count - 1
-                            LoaderList(ii).Key.Input = Nothing '重置输入，以免以同样的输入“重试加载”时直接失败
-                            If LoaderList(ii).Key.Error IsNot Nothing Then
-                                If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains("没有可用版本") Then
-                                    ErrorInfo = LoaderList(ii).Key.Error
-                                End If
+                If WaitCycle <> LoaderList(i).Value * 100 Then Continue For
+                If i < LoaderList.Count - 1 AndAlso Not LoaderList.All(Function(l) l.Key.State = LoadState.Failed) Then
+                    '若还有下一个源，则启动下一个源
+                    LoaderList(i + 1).Key.Start(MainLoader.Input, IsForceRestart)
+                Else
+                    '若没有，则失败
+                    Dim ErrorInfo As Exception = Nothing
+                    For ii = 0 To LoaderList.Count - 1
+                        LoaderList(ii).Key.Input = Nothing '重置输入，以免以同样的输入“重试加载”时直接失败
+                        If LoaderList(ii).Key.Error IsNot Nothing Then
+                            If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains("没有可用版本") Then
+                                ErrorInfo = LoaderList(ii).Key.Error
                             End If
-                        Next
-                        If ErrorInfo Is Nothing Then ErrorInfo = New TimeoutException("下载源连接超时")
-                        DlSourceLoaderAbort(LoaderList)
-                        Throw ErrorInfo
-                    End If
-                    Exit For
+                        End If
+                    Next
+                    If ErrorInfo Is Nothing Then ErrorInfo = New TimeoutException("下载源连接超时")
+                    DlSourceLoaderAbort(LoaderList)
+                    Throw ErrorInfo
                 End If
+                Exit For
             Next
             '计时
+            Thread.Sleep(10)
+            WaitCycle += 1
+            '检查父加载器中断
             If MainLoader.IsAborted Then
                 DlSourceLoaderAbort(LoaderList)
                 Exit Sub
             End If
-            Thread.Sleep(10)
-            WaitCycle += 1
         Loop
     End Sub
     Private Sub DlSourceLoaderAbort(Of InputType, OutputType)(LoaderList As List(Of KeyValuePair(Of LoaderTask(Of InputType, OutputType), Integer)))
