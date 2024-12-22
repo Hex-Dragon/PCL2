@@ -410,6 +410,7 @@ EndHint:
     Public FrmDownloadMod As PageDownloadMod
     Public FrmDownloadPack As PageDownloadPack
     Public FrmDownloadResourcePack As PageDownloadResourcePack
+    Public FrmDownloadShader As PageDownloadShader
     Public FrmDownloadCompFavorites As PageDownloadCompFavorites
 
     '设置页面声明
