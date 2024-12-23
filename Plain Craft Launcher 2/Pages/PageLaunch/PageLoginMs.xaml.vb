@@ -37,7 +37,7 @@
     ''' 获取当前页面的登录信息。
     ''' </summary>
     Public Shared Function GetLoginData() As McLoginMs
-        If FrmLoginMs Is Nothing Then Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsOAuthRefresh"), .UserName = Setup.Get("CacheMsName")}
+        If FrmLoginMs Is Nothing Then Return New McLoginMs With {.OAuthRefreshToken = Setup.Get("CacheMsV2OAuthRefresh"), .UserName = Setup.Get("CacheMsV2Name")}
         Dim Result As McLoginMs = Nothing
         RunInUiWait(
         Sub()

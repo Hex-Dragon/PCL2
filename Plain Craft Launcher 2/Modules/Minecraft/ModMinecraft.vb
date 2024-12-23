@@ -85,7 +85,7 @@ Public Module ModMinecraft
                     Next
                     If Not Renamed Then CacheMcFolderList.Add(New McFolder With {.Name = Name, .Path = Path, .Type = McFolderType.Custom})
                 Else
-                    Hint("无效的 Minecraft 文件夹：" & Path, HintType.Critical)
+                    Hint("无法访问 Minecraft 文件夹：" & Path, HintType.Critical)
                 End If
             Next
 
@@ -1256,9 +1256,8 @@ OnLoaded:
         Dim VersionList As New List(Of McVersion)
 
 #Region "循环加载每个版本的信息"
-        Dim Dirs As DirectoryInfo() = New DirectoryInfo(Path & "versions").GetDirectories
-        For Each Folder As DirectoryInfo In Dirs
-            If Not Folder.EnumerateFiles.Any Then
+        For Each Folder As DirectoryInfo In New DirectoryInfo(Path & "versions").GetDirectories
+            If Not Folder.Exists OrElse Not Folder.EnumerateFiles.Any Then
                 Log("[Minecraft] 跳过空文件夹：" & Folder.FullName)
                 Continue For
             End If
@@ -1292,8 +1291,11 @@ OnLoaded:
 
             '单独列出收藏的版本
             Dim StaredVersions As New List(Of McVersion)
-            For Each Version As McVersion In VersionList
-                If Version.IsStar AndAlso Not Version.DisplayType = McVersionCardType.Hidden Then StaredVersions.Add(Version)
+            For Each Version As McVersion In VersionList.ToList
+                If Version.IsStar AndAlso Not Version.DisplayType = McVersionCardType.Hidden Then
+                    StaredVersions.Add(Version)
+                    VersionList.Remove(Version)
+                End If
             Next
             If StaredVersions.Any Then VersionListOriginal.Add(McVersionCardType.Star, StaredVersions)
 
@@ -1528,7 +1530,7 @@ OnLoaded:
     ''' 要求玩家选择一个皮肤文件，并进行相关校验。
     ''' </summary>
     Public Function McSkinSelect() As McSkinInfo
-        Dim FileName As String = SelectFile("皮肤文件(*.png)|*.png", "选择皮肤文件")
+        Dim FileName As String = SelectFile("皮肤文件(*.png;*.jpg;*.webp)|*.png;*.jpg;*.webp", "选择皮肤文件")
 
         '验证有效性
         If FileName = "" Then Return New McSkinInfo With {.IsVaild = False}
@@ -1935,7 +1937,7 @@ OnLoaded:
     ''' <summary>
     ''' 获取版本缺失的支持库文件所对应的 NetTaskFile。
     ''' </summary>
-    Public Function McLibFix(Version As McVersion, Optional CoreJarOnly As Boolean = False) As List(Of NetFile)
+    Public Function McLibFix(Version As McVersion) As List(Of NetFile)
         If Not Version.IsLoaded Then Version.Load() '确保例如 JumpLoader 等项被合并入 Json
         Dim Result As New List(Of NetFile)
 
@@ -1948,7 +1950,6 @@ OnLoaded:
         Catch ex As Exception
             Log(ex, "版本缺失主 jar 文件所必须的信息", LogLevel.Developer)
         End Try
-        If CoreJarOnly Then Return Result
 
         'Library 文件
         Result.AddRange(McLibFixFromLibToken(McLibListGet(Version, False), JumpLoaderFolder:=Version.PathIndie & ".jumploader\"))
@@ -1957,15 +1958,15 @@ OnLoaded:
         If Setup.Get("VersionServerLogin", Version:=Version) = 3 Then
             Dim TargetFile = PathAppdata & "nide8auth.jar"
             Dim DownloadInfo As JObject = Nothing
-                '获取下载信息
-                Try
-                    Log("[Minecraft] 开始获取统一通行证下载信息")
-                    '测试链接：https://auth.mc-user.com:233/00000000000000000000000000000000/
-                    DownloadInfo = GetJson(NetGetCodeByDownload({
+            '获取下载信息
+            Try
+                Log("[Minecraft] 开始获取统一通行证下载信息")
+                '测试链接：https://auth.mc-user.com:233/00000000000000000000000000000000/
+                DownloadInfo = GetJson(NetGetCodeByDownload({
                         "https://auth.mc-user.com:233/" & Setup.Get("VersionServerNide", Version:=Version)}, IsJson:=True))
-                Catch ex As Exception
-                    Log(ex, "获取统一通行证下载信息失败")
-                End Try
+            Catch ex As Exception
+                Log(ex, "获取统一通行证下载信息失败")
+            End Try
             '校验文件
             If DownloadInfo IsNot Nothing Then
                 Dim Checker As New FileChecker(Hash:=DownloadInfo("jarHash").ToString)
@@ -1978,9 +1979,8 @@ OnLoaded:
         End If
 
         'Authlib-Injector 文件
-        If Setup.Get("VersionServerLogin", Version:=Version) = 4 OrElse
-           (PageLinkHiper.HiperState = LoadState.Finished AndAlso Setup.Get("LoginType") = McLoginType.Legacy) Then 'HiPer 登录转接
-            Dim TargetFile = PathAppdata & "authlib-injector.jar"
+        If Setup.Get("VersionServerLogin", Version:=Version) = 4 Then
+            Dim TargetFile = PathPure & "\authlib-injector.jar"
             Dim DownloadInfo As JObject = Nothing
             '获取下载信息
             Try
@@ -2001,9 +2001,9 @@ OnLoaded:
                             Replace("bmclapi2.bangbang93.com/mirrors/authlib-injector", "authlib-injector.yushi.moe")
                     Log("[Minecraft] Authlib-Injector 需要更新：" & DownloadAddress, LogLevel.Developer)
                     Result.Add(New NetFile({
-                            DownloadAddress,
-                            DownloadAddress.Replace("authlib-injector.yushi.moe", "bmclapi2.bangbang93.com/mirrors/authlib-injector")
-                        }, TargetFile, New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)))
+                        DownloadAddress,
+                        DownloadAddress.Replace("authlib-injector.yushi.moe", "bmclapi2.bangbang93.com/mirrors/authlib-injector")
+                    }, TargetFile, New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)))
                 End If
             End If
         End If
@@ -2308,8 +2308,8 @@ OnLoaded:
         End If
         Left = Left.ToLowerInvariant
         Right = Right.ToLowerInvariant
-        Dim Lefts = RegexSearch(Left.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
-        Dim Rights = RegexSearch(Right.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
+        Dim Lefts = RegexSearch(Left.Replace("快照", "snapshot").Replace("预览版", "pre"), "[a-z]+|[0-9]+")
+        Dim Rights = RegexSearch(Right.Replace("快照", "snapshot").Replace("预览版", "pre"), "[a-z]+|[0-9]+")
         Dim i As Integer = 0
         While True
             '两边均缺失，感觉是一个东西
@@ -2358,15 +2358,11 @@ NextEntry:
     ''' <summary>
     ''' 比较两个版本名的排序器。
     ''' </summary>
-    Public Class VersionSorter
+    Public Class VersionComparer
         Implements IComparer(Of String)
-        Public IsDecreased As Boolean = True
         Public Function Compare(x As String, y As String) As Integer Implements IComparer(Of String).Compare
-            Return VersionSortInteger(x, y) * If(IsDecreased, -1, 1)
+            Return VersionSortInteger(x, y)
         End Function
-        Public Sub New(Optional IsDecreased As Boolean = True)
-            Me.IsDecreased = IsDecreased
-        End Sub
     End Class
 
     ''' <summary>

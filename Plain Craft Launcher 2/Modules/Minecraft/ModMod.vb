@@ -688,7 +688,7 @@ Finished:
         ''' </summary>
         Public ReadOnly Property CanUpdate As Boolean
             Get
-                Return ChangelogUrls.Any()
+                Return Not Setup.Get("UiHiddenFunctionModUpdate") AndAlso ChangelogUrls.Any()
             End Get
         End Property
 
@@ -702,7 +702,7 @@ Finished:
                     Dim Info As New FileInfo(Path)
                     Dim CacheKey As String = GetHash($"{RawPath}-{Info.LastWriteTime.ToLongTimeString}-{Info.Length}-C")
                     Dim Cached As String = ReadIni(PathTemp & "Cache\ModHash.ini", CacheKey)
-                    If Cached <> "" Then
+                    If Cached <> "" AndAlso RegexCheck(Cached, "^\d+$") Then '#5062
                         _CurseForgeHash = Cached
                         Return _CurseForgeHash
                     End If
@@ -825,6 +825,7 @@ Finished:
                 Finally
                     RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = "正在加载 Mod 列表")
                 End Try
+                FrmVersionMod.LoaderRun(LoaderFolderRunType.UpdateOnly)
             End If
 
             '获取 Mod 文件夹下的可用文件列表

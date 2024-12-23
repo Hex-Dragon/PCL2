@@ -9,6 +9,8 @@
     ''' </summary>
     Private ReadOnly SetupDict As New Dictionary(Of String, SetupEntry) From {
         {"Identify", New SetupEntry("", Source:=SetupSource.Registry)},
+        {"WindowHeight", New SetupEntry(550)},
+        {"WindowWidth", New SetupEntry(900)},
         {"HintDownloadThread", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"HintNotice", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"HintDownload", New SetupEntry(0, Source:=SetupSource.Registry)},
@@ -42,6 +44,12 @@
         {"CacheMsProfileJson", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheMsUuid", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheMsName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheMsV2Migrated", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"CacheMsV2OAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheMsV2Access", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheMsV2ProfileJson", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheMsV2Uuid", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheMsV2Name", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheNideAccess", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheNideClient", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheNideUuid", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
@@ -105,10 +113,10 @@
         {"ToolDownloadSpeed", New SetupEntry(42, Source:=SetupSource.Registry)},
         {"ToolDownloadVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolDownloadTranslate", New SetupEntry(0, Source:=SetupSource.Registry)},
-        {"ToolDownloadKeepModpack", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadIgnoreQuilt", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadCert", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadMod", New SetupEntry(1, Source:=SetupSource.Registry)},
+        {"ToolModLocalNameStyle", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolUpdateAlpha", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
         {"ToolUpdateRelease", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolUpdateSnapshot", New SetupEntry(False, Source:=SetupSource.Registry)},
@@ -145,6 +153,7 @@
         {"UiHiddenPageSetup", New SetupEntry(False)},
         {"UiHiddenPageOther", New SetupEntry(False)},
         {"UiHiddenFunctionSelect", New SetupEntry(False)},
+        {"UiHiddenFunctionModUpdate", New SetupEntry(False)},
         {"UiHiddenFunctionHidden", New SetupEntry(False)},
         {"UiHiddenSetupLaunch", New SetupEntry(False)},
         {"UiHiddenSetupUi", New SetupEntry(False)},
@@ -194,15 +203,19 @@
 
         '加载状态：0/未读取  1/已读取未处理  2/已处理
         Public State As Byte = 0
-        Public Type
+        Public Type As Type
 
         Public Sub New(Value, Optional Source = SetupSource.Normal, Optional Encoded = False)
-            Me.DefaultValue = Value
-            Me.DefaultValueEncoded = If(Encoded, SecretEncrypt(Value, "PCL" & UniqueAddress), Value)
-            Me.Encoded = Encoded
-            Me.Value = Value
-            Me.Source = Source
-            Type = If(Value, New Object).GetType
+            Try
+                Me.DefaultValue = Value
+                Me.Encoded = Encoded
+                Me.Value = Value
+                Me.Source = Source
+                Me.Type = If(Value, New Object).GetType
+                Me.DefaultValueEncoded = If(Encoded, SecretEncrypt(Value, "PCL" & UniqueAddress), Value)
+            Catch ex As Exception
+                Log(ex, "初始化 SetupEntry 失败", LogLevel.Feedback) '#5095 的 fallback
+            End Try
         End Sub
 
     End Class
@@ -304,6 +317,12 @@
         Dim E As SetupEntry = SetupDict(Key)
         [Set](Key, E.DefaultValue, E, ForceReload, Version)
     End Sub
+    ''' <summary>
+    ''' 获取某个设置项的默认值。
+    ''' </summary>
+    Public Function GetDefault(Key As String) As String
+        Return SetupDict(Key).DefaultValue
+    End Function
 
     Private Sub Read(Key As String, ByRef E As SetupEntry, Version As McVersion)
         Try
@@ -592,7 +611,7 @@
                     FrmSetupUI.PanLogoChange.Visibility = Visibility.Visible
                 End If
                 Try
-                    FrmMain.ImageTitleLogo.Source = New MyBitmap(Path & "PCL\Logo.png")
+                    FrmMain.ImageTitleLogo.Source = Path & "PCL\Logo.png"
                 Catch ex As Exception
                     FrmMain.ImageTitleLogo.Source = Nothing
                     Log(ex, "显示标题栏图片失败", LogLevel.Msgbox)
@@ -622,6 +641,9 @@
         PageSetupUI.HiddenRefresh()
     End Sub
     Public Sub UiHiddenFunctionSelect(Value As Boolean)
+        PageSetupUI.HiddenRefresh()
+    End Sub
+    Public Sub UiHiddenFunctionModUpdate(Value As Boolean)
         PageSetupUI.HiddenRefresh()
     End Sub
     Public Sub UiHiddenFunctionHidden(Value As Boolean)

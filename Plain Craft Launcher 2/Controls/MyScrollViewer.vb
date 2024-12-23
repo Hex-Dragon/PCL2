@@ -1,7 +1,7 @@
 ﻿Public Class MyScrollViewer
     Inherits ScrollViewer
 
-    Public Property DeltaMuity As Double = 1
+    Public Property DeltaMult As Double = 1
 
 
     Private RealOffset As Double
@@ -25,10 +25,12 @@
         Next
     End Sub
     Public Sub PerformVerticalOffsetDelta(Delta As Double)
-        AniStart(AaDouble(Sub(AnimDelta As Double)
-                              RealOffset = MathClamp(RealOffset + AnimDelta, 0, ExtentHeight - ActualHeight)
-                              ScrollToVerticalOffset(RealOffset)
-                          End Sub, Delta * DeltaMuity, 300,, New AniEaseOutFluent(6)))
+        AniStart(
+            AaDouble(
+            Sub(AnimDelta As Double)
+                RealOffset = MathClamp(RealOffset + AnimDelta, 0, ExtentHeight - ActualHeight)
+                ScrollToVerticalOffset(RealOffset)
+            End Sub, Delta * DeltaMult, 300,, New AniEaseOutFluent(6)))
     End Sub
     Private Sub MyScrollViewer_ScrollChanged(sender As Object, e As ScrollChangedEventArgs) Handles Me.ScrollChanged
         RealOffset = VerticalOffset
@@ -43,4 +45,7 @@
         ScrollBar = GetTemplateChild("PART_VerticalScrollBar")
     End Sub
 
+    Private Sub MyScrollViewer_PreviewGotKeyboardFocus(sender As Object, e As KeyboardFocusChangedEventArgs) Handles Me.PreviewGotKeyboardFocus
+        If e.NewFocus IsNot Nothing AndAlso TypeOf e.NewFocus Is MySlider Then e.Handled = True '#3854，阻止获得焦点时自动滚动
+    End Sub
 End Class

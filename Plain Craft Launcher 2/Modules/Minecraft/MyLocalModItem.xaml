@@ -24,18 +24,18 @@
         <Border.Clip>
             <RectangleGeometry Rect="0,0,34,34" RadiusX="6" RadiusY="6" />
         </Border.Clip>
-        <Image x:Name="PathLogo" RenderOptions.BitmapScalingMode="HighQuality" />
+        <local:MyImage x:Name="PathLogo" RenderOptions.BitmapScalingMode="HighQuality" FallbackSource="pack://application:,,,/images/Icons/NoIcon.png" />
     </Border>
     <!-- 标题 -->
     <Grid Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,1,0,0"
                 SnapsToDevicePixels="False" UseLayoutRounding="False" x:Name="PanTitle">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" x:Name="ColumnTitle" />
             <ColumnDefinition Width="Auto" x:Name="ColumnSubtitle" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="1*" x:Name="ColumnExtend" />
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="LabTitle" TextTrimming="WordEllipsis" FontSize="14" IsHitTestVisible="False" />
+        <TextBlock x:Name="LabTitle" TextTrimming="CharacterEllipsis" FontSize="14" IsHitTestVisible="False" />
         <TextBlock x:Name="LabSubtitle" Grid.Column="1" HorizontalAlignment="Left"
             TextTrimming="CharacterEllipsis" FontSize="12" IsHitTestVisible="False" 
             Foreground="{StaticResource ColorBrushGray1}" Opacity="0.4" VerticalAlignment="Bottom" Visibility="Collapsed" />
@@ -52,6 +52,6 @@
         </Border>-->
     </StackPanel>
     <TextBlock x:Name="LabInfo" Grid.Row="2" Grid.Column="4" VerticalAlignment="Bottom" Margin="0,0,3,1"
-               TextTrimming="CharacterEllipsis" FontSize="12" Foreground="{StaticResource ColorBrushGray3}"
+               TextTrimming="CharacterEllipsis" FontSize="12" Foreground="{StaticResource ColorBrushGray4}"
                IsHitTestVisible="False" SnapsToDevicePixels="False" UseLayoutRounding="False" />
 </Grid>

@@ -186,6 +186,7 @@
     <Compile Include="Controls\MyComboBox.vb" />
     <Compile Include="Controls\MyComboBoxItem.vb" />
     <Compile Include="Controls\MyCard.vb" />
+    <Compile Include="Controls\MyImage.vb" />
     <Compile Include="Controls\MyPageRight.vb" />
     <Compile Include="Controls\MyPageLeft.vb" />
     <Compile Include="Controls\MyIconTextButton.xaml.vb">
