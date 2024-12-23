@@ -2,6 +2,14 @@
 Imports System.Security.Principal
 
 Public Class PageVersionResourcePack
+    Implements IRefreshable
+    Private Sub RefreshSelf() Implements IRefreshable.Refresh
+        Refresh()
+    End Sub
+    Public Shared Sub Refresh()
+        If FrmVersionResourcePack IsNot Nothing Then FrmVersionResourcePack.Reload()
+        FrmVersionLeft.ItemResourcePack.Checked = True
+    End Sub
 
     Private IsLoad As Boolean = False
     Private Sub PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

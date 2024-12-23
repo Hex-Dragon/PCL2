@@ -1,6 +1,14 @@
 ﻿Imports System.Security.Principal
 
 Public Class PageVersionScreenshot
+    Implements IRefreshable
+    Private Sub RefreshSelf() Implements IRefreshable.Refresh
+        Refresh()
+    End Sub
+    Public Shared Sub Refresh()
+        If FrmVersionScreenshot IsNot Nothing Then FrmVersionScreenshot.Reload()
+        FrmVersionLeft.ItemScreenshot.Checked = True
+    End Sub
 
     Private IsLoad As Boolean = False
     Private Sub PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

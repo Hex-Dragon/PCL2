@@ -1,6 +1,14 @@
 ﻿Imports System.Security.Principal
 
 Public Class PageVersionShader
+    Implements IRefreshable
+    Private Sub RefreshSelf() Implements IRefreshable.Refresh
+        Refresh()
+    End Sub
+    Public Shared Sub Refresh()
+        If FrmVersionShader IsNot Nothing Then FrmVersionShader.Reload()
+        FrmVersionLeft.ItemShader.Checked = True
+    End Sub
 
     Private IsLoad As Boolean = False
     Private Sub PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

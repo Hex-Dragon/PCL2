@@ -1,4 +1,6 @@
-﻿Public Class PageVersionLeft
+﻿Imports PCL.PageLinkHiper
+
+Public Class PageVersionLeft
 
     ''' <summary>
     ''' 当前显示设置的 MC 版本。
@@ -100,7 +102,18 @@
 #End Region
 
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
-        PageVersionMod.Refresh()
+        Select Case Val(sender.Tag)
+            Case FormMain.PageSubType.VersionMod
+                PageVersionMod.Refresh()
+            Case FormMain.PageSubType.VersionScreenshot
+                PageVersionScreenshot.Refresh()
+            Case FormMain.PageSubType.VersionWorld
+                PageVersionWorld.Refresh()
+            Case FormMain.PageSubType.VersionResourcePack
+                PageVersionResourcePack.Refresh()
+            Case FormMain.PageSubType.VersionShader
+                PageVersionShader.Refresh()
+        End Select
     End Sub
 
     Public Sub Reset(sender As Object, e As EventArgs)

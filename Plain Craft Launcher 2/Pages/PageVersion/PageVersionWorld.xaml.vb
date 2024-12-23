@@ -1,7 +1,14 @@
 ﻿Imports System.Security.Principal
 
 Public Class PageVersionWorld
-
+    Implements IRefreshable
+    Private Sub RefreshSelf() Implements IRefreshable.Refresh
+        Refresh()
+    End Sub
+    Public Shared Sub Refresh()
+        If FrmVersionWorld IsNot Nothing Then FrmVersionWorld.Reload()
+        FrmVersionLeft.ItemWorld.Checked = True
+    End Sub
     Private IsLoad As Boolean = False
     Private Sub PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
 
