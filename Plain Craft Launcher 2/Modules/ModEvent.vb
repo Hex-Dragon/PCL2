@@ -139,7 +139,6 @@
             Dim LocalTemp1 As String = PathTemp & "CustomEvent\" & RawFileName
             Dim LocalTemp2 As String = PathTemp & "CustomEvent\" & RawFileName.Replace(".json", ".xaml")
             Log("[Event] 转换网络资源：" & RelativeUrl & " -> " & LocalTemp1)
-            Hint("正在获取资源，请稍候……")
             Try
                 NetDownload(RelativeUrl, LocalTemp1)
                 NetDownload(RelativeUrl.Replace(".json", ".xaml"), LocalTemp1.Replace(".json", ".xaml"))

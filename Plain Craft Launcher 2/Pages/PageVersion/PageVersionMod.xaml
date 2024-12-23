@@ -16,11 +16,13 @@
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                                <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             </Grid.ColumnDefinitions>
-                            <local:MyButton x:Name="BtnManageOpen" Grid.Column="0" MinWidth="140" Text="打开 Mod 文件夹" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ColorType="Highlight" />
-                            <local:MyButton x:Name="BtnManageSelectAll" Grid.Column="1" MinWidth="140" Text="全选" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
-                            <local:MyButton x:Name="BtnManageInstall" Grid.Column="2" MinWidth="140" Text="安装 Mod" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" />
-                            <local:MyButton x:Name="BtnManageCheck" Grid.Column="3" MinWidth="140" Text="检查 Mod" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" ToolTip="快速检查 Mod 的版本要求、重复、前置缺失等问题。&#xa;结果仅供参考，由于部分 Mod 标注的信息有误，可能并不准确。" Visibility="Collapsed" />
+                            <local:MyButton x:Name="BtnManageOpen" Grid.Column="0" MinWidth="110" Text="打开文件夹" Padding="13,0" Margin="0,0,15,0" HorizontalAlignment="Left" ColorType="Highlight" />
+                            <local:MyButton x:Name="BtnManageInstall" Grid.Column="1" MinWidth="110" Text="从文件安装" Padding="13,0" Margin="0,0,15,0" HorizontalAlignment="Left" />
+                            <local:MyButton x:Name="BtnManageDownload" Grid.Column="2" MinWidth="110" Text="下载新 Mod" Padding="13,0" Margin="0,0,15,0" HorizontalAlignment="Left" />
+                            <local:MyButton x:Name="BtnManageSelectAll" Grid.Column="3" MinWidth="110" Text="全选" Padding="13,0" Margin="0,0,15,0" HorizontalAlignment="Left" />
+                            <local:MyButton x:Name="BtnManageCheck" Grid.Column="4" MinWidth="110" Text="检查 Mod" Padding="13,0" Margin="0,0,15,0" HorizontalAlignment="Left" ToolTip="快速检查 Mod 的版本要求、重复、前置缺失等问题。&#xa;结果仅供参考，由于部分 Mod 标注的信息有误，可能并不准确。" Visibility="Collapsed" />
                         </Grid>
                     </local:MyCard>
                     <local:MyCard x:Name="PanListBack" VerticalAlignment="Top" Opacity="0" Margin="0,0,0,14" Title=" " MinHeight="55">
@@ -37,10 +39,19 @@
             </local:MyScrollViewer>
             <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40" x:Name="PanEmpty">
                 <StackPanel Margin="20,17">
-                    <TextBlock Margin="0,0,0,9" HorizontalAlignment="Center" Text="未找到 Mod" FontSize="19" UseLayoutRounding="True" SnapsToDevicePixels="True" Foreground="{DynamicResource ColorBrush3}" />
+                    <TextBlock Margin="0,0,0,9" HorizontalAlignment="Center" Text="尚未安装 Mod" FontSize="19" UseLayoutRounding="True" SnapsToDevicePixels="True" Foreground="{DynamicResource ColorBrush3}" />
                     <Rectangle HorizontalAlignment="Stretch" Height="2" Fill="{DynamicResource ColorBrush3}" />
-                    <TextBlock Margin="10,15,10,0" Text="要安装 Mod，请直接将 Mod 文件拖入 PCL 窗口。&#xa;如果你确定你已经安装了 Mod，但仍然看到了这条提示，则是版本隔离设置有误，请在启动设置中调整版本隔离选项。" TextWrapping="Wrap" />
-                    <local:MyButton Height="35" HorizontalAlignment="Center" x:Name="BtnHintOpen" MinWidth="140" Text="打开 Mod 文件夹" Margin="0,15,0,0" Padding="13,0" ColorType="Highlight" />
+                    <TextBlock Margin="10,10,10,0" Text="你可以下载新的 Mod，或者从已经下载好的文件安装 Mod。&#xa;如果你已经安装了 Mod，可能是版本隔离设置有误，请在设置中调整版本隔离选项。" TextWrapping="Wrap" />
+                    <Grid Margin="15,20,0,5" Height="35" HorizontalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                        </Grid.ColumnDefinitions>
+                        <local:MyButton Height="35" HorizontalAlignment="Center" Grid.Column="0" x:Name="BtnHintDownload" MinWidth="140" Text="下载 Mod" Margin="0,0,17,0" Padding="13,0" ColorType="Highlight" />
+                        <local:MyButton Height="35" HorizontalAlignment="Center" Grid.Column="1" x:Name="BtnHintInstall" MinWidth="140" Text="从文件安装 Mod" Margin="0,0,17,0" Padding="13,0" />
+                        <local:MyButton Height="35" HorizontalAlignment="Center" Grid.Column="2" x:Name="BtnHintOpen" MinWidth="140" Text="打开 Mod 文件夹" Margin="0,0,17,0" Padding="13,0" />
+                    </Grid>
                 </StackPanel>
             </local:MyCard>
         </Grid>

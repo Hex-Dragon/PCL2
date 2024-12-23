@@ -17,15 +17,19 @@ Public Class MyBitmap
     '自动类型转换
     '支持的类：Image，ImageSource，Bitmap，ImageBrush，BitmapSource
     Public Shared Widening Operator CType(Image As System.Drawing.Image) As MyBitmap
+        If Image Is Nothing Then Return Nothing
         Return New MyBitmap(Image)
     End Operator
     Public Shared Widening Operator CType(Image As MyBitmap) As System.Drawing.Image
+        If Image Is Nothing Then Return Nothing
         Return Image.Pic
     End Operator
     Public Shared Widening Operator CType(Image As ImageSource) As MyBitmap
+        If Image Is Nothing Then Return Nothing
         Return New MyBitmap(Image)
     End Operator
     Public Shared Widening Operator CType(Image As MyBitmap) As ImageSource
+        If Image Is Nothing Then Return Nothing
         Dim Bitmap = Image.Pic
         Dim rect = New System.Drawing.Rectangle(0, 0, Bitmap.Width, Bitmap.Height)
         Dim bitmapData = Bitmap.LockBits(rect, ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb)
@@ -37,15 +41,19 @@ Public Class MyBitmap
         End Try
     End Operator
     Public Shared Widening Operator CType(Image As System.Drawing.Bitmap) As MyBitmap
+        If Image Is Nothing Then Return Nothing
         Return New MyBitmap(Image)
     End Operator
     Public Shared Widening Operator CType(Image As MyBitmap) As System.Drawing.Bitmap
+        If Image Is Nothing Then Return Nothing
         Return Image.Pic
     End Operator
     Public Shared Widening Operator CType(Image As ImageBrush) As MyBitmap
+        If Image Is Nothing Then Return Nothing
         Return New MyBitmap(Image)
     End Operator
     Public Shared Widening Operator CType(Image As MyBitmap) As ImageBrush
+        If Image Is Nothing Then Return Nothing
         Return New ImageBrush(New MyBitmap(Image.Pic))
     End Operator
 

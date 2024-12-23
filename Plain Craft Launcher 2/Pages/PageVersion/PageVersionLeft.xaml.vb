@@ -100,32 +100,7 @@
 #End Region
 
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
-        '强制刷新
-        Try
-            Select Case Val(sender.Tag)
-                Case FormMain.PageSubType.VersionMod
-                    CompProjectCache.Clear()
-                    File.Delete(PathTemp & "Cache\LocalMod.json")
-                    Log("[Mod] 由于点击刷新按钮，清理本地 Mod 信息缓存")
-                    If FrmVersionMod IsNot Nothing Then FrmVersionMod.ReloadModList(True) '无需 Else，还没加载刷个鬼的新
-                    ItemMod.Checked = True
-                Case FormMain.PageSubType.VersionScreenshot
-                    If FrmVersionScreenshot IsNot Nothing Then FrmVersionScreenshot.Reload()
-                    ItemScreenshot.Checked = True
-                Case FormMain.PageSubType.VersionWorld
-                    If FrmVersionWorld IsNot Nothing Then FrmVersionWorld.Reload()
-                    ItemWorld.Checked = True
-                Case FormMain.PageSubType.VersionResourcePack
-                    If FrmVersionResourcePack IsNot Nothing Then FrmVersionResourcePack.Reload()
-                    ItemResourcePack.Checked = True
-                Case FormMain.PageSubType.VersionShader
-                    If FrmVersionShader IsNot Nothing Then FrmVersionShader.Reload()
-                    ItemShader.Checked = True
-            End Select
-        Catch ex As Exception
-            Log(ex, "强制刷新出错")
-        End Try
-        Hint("正在刷新……", Log:=False)
+        PageVersionMod.Refresh()
     End Sub
 
     Public Sub Reset(sender As Object, e As EventArgs)

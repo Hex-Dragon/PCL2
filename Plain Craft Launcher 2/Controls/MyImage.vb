@@ -14,13 +14,14 @@
     ''' </summary>
     Public Property EnableCache As Boolean
         Get
-            Return _EnableCache
+            Return GetValue(EnableCacheProperty)
         End Get
         Set(value As Boolean)
-            _EnableCache = value
+            SetValue(EnableCacheProperty, value)
         End Set
     End Property
-    Private _EnableCache As Boolean = True
+    Public Shared Shadows ReadOnly EnableCacheProperty As DependencyProperty = DependencyProperty.Register(
+        "EnableCache", GetType(Boolean), GetType(MyImage), New PropertyMetadata(True))
 
     ''' <summary>
     ''' 与 Image 的 Source 类似。
@@ -114,9 +115,10 @@
         Dim Retried As Boolean = False
         Dim TempPath As String = GetTempPath(Url)
         Dim TempFile As New FileInfo(TempPath)
+        Dim EnableCache As Boolean = Me.EnableCache
         If EnableCache AndAlso TempFile.Exists Then
             ActualSource = TempPath
-            If (Date.Now - TempFile.CreationTime) < FileCacheExpiredTime Then Exit Sub '无需刷新缓存
+            If (Date.Now - TempFile.LastWriteTime) < FileCacheExpiredTime Then Exit Sub '无需刷新缓存
         End If
         RunInNewThread(
         Sub()
@@ -126,7 +128,10 @@ RetryStart:
                 '下载
                 ActualSource = LoadingSource '显示加载中图片
                 TempDownloadingPath = TempPath & RandomInteger(0, 10000000)
-                NetDownload(Url, TempDownloadingPath, True)
+                Directory.CreateDirectory(GetPathFromFullPath(TempPath)) '重新实现下载，以避免携带 Header（#5072）
+                Using Client As New Net.WebClient
+                    Client.DownloadFile(Url, TempDownloadingPath)
+                End Using
                 If Url <> Source AndAlso Url <> FallbackSource Then
                     '已经更换了地址
                     File.Delete(TempDownloadingPath)

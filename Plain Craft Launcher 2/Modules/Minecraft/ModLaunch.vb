@@ -225,9 +225,9 @@ NextInner:
             Select Case Setup.Get("SystemLaunchCount")
                 Case 10, 20, 40, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
                     If MyMsgBox("PCL 已经为你启动了 " & Setup.Get("SystemLaunchCount") & " 次游戏啦！" & vbCrLf &
-                                "如果觉得 PCL 还算好用的话，也可以考虑赞助一下作者……一点心意也行……" & vbCrLf &
-                                "毕竟一个人开发也不容易（悲）……",
-                                "求赞助啦……", "这就赞助！", "但是我拒绝") = 1 Then
+                                "如果 PCL 还算好用的话，能不能考虑赞助一下 PCL……" & vbCrLf &
+                                "如果没有大家的支持，PCL 很难在免费、无任何广告的情况下维持数年的更新（磕头）……！",
+                                Setup.Get("SystemLaunchCount") & " 次启动！", "支持 PCL！", "但是我拒绝") = 1 Then
                         OpenWebsite("https://afdian.com/a/LTCat")
                     End If
             End Select
@@ -237,10 +237,10 @@ NextInner:
         If Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
             If IsSystemLanguageChinese() Then
                 Select Case Setup.Get("SystemLaunchCount")
-                    Case 2, 5, 10, 15, 20, 40, 60, 80, 100, 125, 150, 175, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
+                    Case 3, 8, 15, 30, 50, 70, 90, 110, 130, 180, 220, 280, 330, 380, 450, 550, 660, 750, 880, 950, 1100, 1300, 1500, 1700, 1900
                         If MyMsgBox("你已经启动了 " & Setup.Get("SystemLaunchCount") & " 次 Minecraft 啦！" & vbCrLf &
-                                    "如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易……" & vbCrLf & vbCrLf &
-                                    "在你登录一次正版账号后，就不会再出现这个提示了！",
+                                    "如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易……不要一直白嫖啦。" & vbCrLf & vbCrLf &
+                                    "在登录一次正版账号后，就不会再出现这个提示了！",
                                     "考虑一下正版？", "支持正版游戏！", "下次一定") = 1 Then
                             OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
                         End If
@@ -380,7 +380,7 @@ NextInner:
             Case McLoginType.Ms
                 If Setup.Get("CacheMsV2Name") <> "" Then Return Setup.Get("CacheMsV2Name")
             Case McLoginType.Legacy
-                If Setup.Get("LoginLegacyName") <> "" Then Return Setup.Get("LoginLegacyName").ToString.Before("¨")
+                If Setup.Get("LoginLegacyName") <> "" Then Return Setup.Get("LoginLegacyName").ToString.BeforeFirst("¨")
             Case McLoginType.Nide
                 If Setup.Get("CacheNideName") <> "" Then Return Setup.Get("CacheNideName")
             Case McLoginType.Auth
@@ -390,7 +390,7 @@ NextInner:
         If Setup.Get("CacheMsV2Name") <> "" Then Return Setup.Get("CacheMsV2Name")
         If Setup.Get("CacheNideName") <> "" Then Return Setup.Get("CacheNideName")
         If Setup.Get("CacheAuthName") <> "" Then Return Setup.Get("CacheAuthName")
-        If Setup.Get("LoginLegacyName") <> "" Then Return Setup.Get("LoginLegacyName").ToString.Before("¨")
+        If Setup.Get("LoginLegacyName") <> "" Then Return Setup.Get("LoginLegacyName").ToString.BeforeFirst("¨")
         Return Nothing
     End Function
     ''' <summary>
@@ -501,7 +501,7 @@ NextInner:
 #Region "分方式登录模块"
 
     '各个登录方式的主对象与输入构造
-    Public McLoginMsLoader As New LoaderTask(Of McLoginMs, McLoginResult)("Loader Login Ms", AddressOf McLoginMsStart)
+    Public McLoginMsLoader As New LoaderTask(Of McLoginMs, McLoginResult)("Loader Login Ms", AddressOf McLoginMsStart) With {.ReloadTimeout = 1}
     Public McLoginLegacyLoader As New LoaderTask(Of McLoginLegacy, McLoginResult)("Loader Login Legacy", AddressOf McLoginLegacyStart)
     Public McLoginNideLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Nide", AddressOf McLoginServerStart) With {.ReloadTimeout = 1000 * 60 * 10}
     Public McLoginAuthLoader As New LoaderTask(Of McLoginServer, McLoginResult)("Loader Login Auth", AddressOf McLoginServerStart) With {.ReloadTimeout = 1000 * 60 * 10}
@@ -805,7 +805,19 @@ LoginFinish:
                     ErrorMessage = GetJson(DirectCast(ex, ResponsedWebException).Response)("errorMessage")
                 Catch
                 End Try
-                If Not String.IsNullOrWhiteSpace(ErrorMessage) Then Throw New Exception("$登录失败：" & ErrorMessage)
+                If Not String.IsNullOrWhiteSpace(ErrorMessage) Then
+                    If ErrorMessage.Contains("密码错误") OrElse ErrorMessage.ContainsF("Incorrect username or password", True) Then
+                        '密码错误，退出登录 (#5090)
+                        McLaunchLog("密码错误，退出登录")
+                        Select Case Data.Input.Type
+                            Case McLoginType.Auth
+                                RunInUi(AddressOf PageLoginAuthSkin.ExitLogin)
+                            Case McLoginType.Nide
+                                RunInUi(AddressOf PageLoginNideSkin.ExitLogin)
+                        End Select
+                    End If
+                    Throw New Exception("$登录失败：" & ErrorMessage)
+                End If
             End If
             '通用关键字检测
             If AllMessage.Contains("403") Then
@@ -1643,8 +1655,11 @@ NextVersion:
                 GameSize = New Size(875 - 2, 540 - 2)
         End Select
         GameSize.Height -= 29.5 * DPI / 96 '标题栏高度
-        If McVersionCurrent.Version.McCodeMain <= 12 AndAlso McLaunchJavaSelected.VersionCode <= 8 AndAlso
-            Not McVersionCurrent.Version.HasOptiFine AndAlso Not McVersionCurrent.Version.HasForge Then '修复 #3463：1.12.2-，JRE 8 下窗口大小为设置大小的 DPI% 倍
+        If McVersionCurrent.Version.McCodeMain <= 12 AndAlso
+            McLaunchJavaSelected.VersionCode <= 8 AndAlso McLaunchJavaSelected.Version.Revision >= 200 AndAlso McLaunchJavaSelected.Version.Revision <= 321 AndAlso
+            Not McVersionCurrent.Version.HasOptiFine AndAlso Not McVersionCurrent.Version.HasForge Then
+            '修复 #3463：1.12.2-，JRE 8u200~321 下窗口大小为设置大小的 DPI% 倍
+            McLaunchLog($"已应用窗口大小过大修复（{McLaunchJavaSelected.Version.Revision}）")
             GameSize.Width /= DPI / 96
             GameSize.Height /= DPI / 96
         End If
