@@ -27,8 +27,58 @@
     Private SelectedItemList As New List(Of MyListItem)
 
 #Region "UI 化"
+    Class CompListItemContainer ' 用来存储自动依据类型生成的卡片及其相关信息
+        Public Property Card As MyCard
+        Public Property ContentList As StackPanel
+        Public Property Title As String
+        Public Property CompType As Integer
+    End Class
+
+    Dim ItemList As New List(Of CompListItemContainer)
+
+    ''' <summary>
+    ''' 返回适合当前工程项目的卡片记录
+    ''' </summary>
+    ''' <param name="Type">工程项目类型</param>
+    ''' <returns></returns>
+    Private Function GetSuitListContainer(Type As Integer) As CompListItemContainer
+        If ItemList.Any(Function(e) e.CompType.Equals(Type)) Then
+            Return ItemList.First(Function(e) e.CompType.Equals(Type))
+        Else
+            Dim NewItem As New CompListItemContainer With {
+            .Card = New MyCard With {
+                .IsSwaped = True,
+                .CanSwap = True,
+                .Margin = New Thickness(0, 0, 0, 15)
+            },
+            .ContentList = New StackPanel With {
+                .Orientation = Orientation.Vertical,
+                .Margin = New Thickness(12, 38, 12, 12)
+            },
+            .CompType = Type
+            }
+            Select Case Type
+                Case -1
+                    NewItem.Title = "搜索结果 ({0})" ' 搜索结果
+                Case CompType.Mod
+                    NewItem.Title = "Mod ({0})"
+                Case CompType.ModPack
+                    NewItem.Title = "整合包 ({0})"
+                Case CompType.ResourcePack
+                    NewItem.Title = "资源包 ({0})"
+                Case Else
+                    NewItem.Title = "未分类类型 ({0})"
+            End Select
+            NewItem.Card.Title = String.Format(NewItem.Title, 0)
+            NewItem.Card.Children.Add(NewItem.ContentList)
+            ItemList.Add(NewItem)
+            Return NewItem
+        End If
+    End Function
+
     '结果 UI 化
     Private Sub Load_OnFinish()
+        ItemList.Clear()
         Try
             AllowSearch = False
             PanSearchBox.Text = String.Empty
@@ -67,58 +117,45 @@
             If CompItemList.Any() Then '有收藏
                 If Not IsSearching Then
                     PanSearchBox.Visibility = Visibility.Visible
-                    CardProjectsMod.Visibility = Visibility.Visible
-                    CardProjectsModpack.Visibility = Visibility.Visible
+                    PanContentList.Visibility = Visibility.Visible
                     CardNoContent.Visibility = Visibility.Collapsed
                 End If
             Else '没有收藏
                 PanSearchBox.Visibility = Visibility.Collapsed
-                CardProjectsMod.Visibility = Visibility.Collapsed
-                CardProjectsModpack.Visibility = Visibility.Collapsed
+                PanContentList.Visibility = Visibility.Collapsed
                 CardNoContent.Visibility = Visibility.Visible
             End If
 
-            RefreshCardTitle()
             RefreshContent()
+            RefreshCardTitle()
         Catch ex As Exception
             Log(ex, "可视化收藏夹列表出错", LogLevel.Feedback)
         End Try
     End Sub
 
     Private Sub RefreshContent()
-        PanProjectsMod.Children.Clear()
-        PanProjectsModpack.Children.Clear()
+        For Each item In ItemList ' 清除逻辑父子关系
+            item.ContentList.Children.Clear()
+        Next
+        PanContentList.Children.Clear()
         Dim DataSource As List(Of MyListItem) = If(IsSearching, SearchResult, CompItemList)
         For Each item As MyListItem In DataSource
-            If IsSearching Then
-                CardProjectsMod.Visibility = Visibility.Visible
-                CardProjectsModpack.Visibility = Visibility.Collapsed
-                PanProjectsMod.Children.Add(item)
-                Continue For
-            Else
-                CardProjectsModpack.Visibility = Visibility.Visible
-                CardProjectsMod.Visibility = Visibility.Visible
-            End If
-            If item.Tag.Type = CompType.Mod Then
-                PanProjectsMod.Children.Add(item)
-            ElseIf item.Tag.Type = CompType.ModPack Then
-                PanProjectsModpack.Children.Add(item)
-            Else
-                Log("[Favorites] 未知工程类型：" & item.Tag.Type)
-            End If
+            GetSuitListContainer(If(IsSearching, -1, CType(item.Tag, CompProject).Type)).ContentList.Children.Add(item)
+        Next
+        For Each item In ItemList
+            If item.ContentList.Children.Count = 0 Then Continue For
+            PanContentList.Children.Add(item.Card)
         Next
     End Sub
 
     Private Sub RefreshCardTitle()
-        If IsSearching Then
-            CardProjectsMod.Title = $"搜索结果 ({SearchResult.Count})"
-        Else
-            Dim ModRes As Integer = 0
-            Dim ModpackRes As Integer = 0
-            ModRes = CompItemList.Where(Function(e) e.Tag.Type.Equals(CompType.Mod)).Count()
-            CardProjectsMod.Title = $"Mod ({ModRes})"
-            ModpackRes = CompItemList.Where(Function(e) e.Tag.Type.Equals(CompType.ModPack)).Count()
-            CardProjectsModpack.Title = $"整合包 ({ModpackRes})"
+        For Each item In ItemList
+            item.Card.Title = String.Format(item.Title, CompItemList.Where(Function(e) CType(e.Tag, CompProject).Type = item.CompType).Count())
+        Next
+        If Not ItemList.Any(Function(e) e.CompType.Equals(-1)) Then Return
+        Dim SearchItem = ItemList.First(Function(e) e.CompType.Equals(-1))
+        If SearchItem IsNot Nothing Then
+            SearchItem.Card.Title = String.Format(SearchItem.Title, SearchResult.Count)
         End If
     End Sub
 
@@ -215,12 +252,15 @@
     End Sub
 
     Private Sub Items_SetSelectAll(TargetStatus As Boolean)
-        For Each item As MyListItem In PanProjectsMod.Children
-            item.Checked = TargetStatus
-        Next
-        For Each item As MyListItem In PanProjectsModpack.Children
-            item.Checked = TargetStatus
-        Next
+        If IsSearching Then
+            For Each Item As MyListItem In SearchResult
+                Item.Checked = TargetStatus
+            Next
+        Else
+            For Each Item As MyListItem In CompItemList
+                Item.Checked = TargetStatus
+            Next
+        End If
         SelectedItemList = CompItemList.Where(Function(e) e.Checked).ToList()
     End Sub
 
@@ -229,6 +269,7 @@
         If SelectedItemList.Contains(Item) Then SelectedItemList.Remove(Item)
         If SearchResult.Contains(Item) Then SearchResult.Remove(Item)
         CompFavorites.FavoritesList.Remove(Item.Tag.Id)
+        CompFavorites.Save()
     End Sub
 
     Private Sub Page_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown

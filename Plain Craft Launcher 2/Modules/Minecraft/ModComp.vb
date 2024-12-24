@@ -1628,14 +1628,14 @@ Retry:
             End Get
             Set
                 _FavoritesList = Value
-                Dim RawList As New JArray
-                For Each item In _FavoritesList
-                    RawList.Add(item)
-                Next
+                Dim RawList = JArray.FromObject(_FavoritesList)
                 Setup.Set("CompFavorites", RawList.ToString())
             End Set
         End Property
 
+        Public Shared Sub Save()
+            FavoritesList = _FavoritesList
+        End Sub
     End Class
 
     Class CompRequest
@@ -1699,9 +1699,10 @@ Retry:
                 RunInNewThread(Sub()
                                    Try
                                        Res.AddRange(CompRequest.GetListByIdsFromCurseforge(CurseForgeProjectIds))
-                                       FinishedTask += 1
                                    Catch ex As Exception
                                        Log(ex, "[Favorites] 获取 CurseForge 数据失败", LogLevel.Hint)
+                                   Finally
+                                       FinishedTask += 1
                                    End Try
                                End Sub, "Favorites CurseForge")
             End If
@@ -1710,9 +1711,10 @@ Retry:
                 RunInNewThread(Sub()
                                    Try
                                        Res.AddRange(CompRequest.GetListByIdsFromModrinth(ModrinthProjectIds))
-                                       FinishedTask += 1
                                    Catch ex As Exception
                                        Log(ex, "[Favorites] 获取 Modrinth 数据失败", LogLevel.Hint)
+                                   Finally
+                                       FinishedTask += 1
                                    End Try
                                End Sub, "Favorites Modrinth")
             End If
