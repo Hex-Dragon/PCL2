@@ -422,6 +422,7 @@
             Hint($"已收藏 {Project.TranslatedName}！", HintType.Finish)
             BtnFavorites.Text = "取消收藏"
         End If
+        CompFavorites.Save()
     End Sub
 
 End Class
