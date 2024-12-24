@@ -47,7 +47,6 @@
         Else
             Dim NewItem As New CompListItemContainer With {
             .Card = New MyCard With {
-                .IsSwaped = True,
                 .CanSwap = True,
                 .Margin = New Thickness(0, 0, 0, 15)
             },
@@ -66,6 +65,8 @@
                     NewItem.Title = "整合包 ({0})"
                 Case CompType.ResourcePack
                     NewItem.Title = "资源包 ({0})"
+                Case CompType.Shader
+                    NewItem.Title = "光影包 ({0})"
                 Case Else
                     NewItem.Title = "未分类类型 ({0})"
             End Select
