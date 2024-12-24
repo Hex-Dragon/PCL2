@@ -47,7 +47,6 @@
         Else
             Dim NewItem As New CompListItemContainer With {
             .Card = New MyCard With {
-                .IsSwaped = True,
                 .CanSwap = True,
                 .Margin = New Thickness(0, 0, 0, 15)
             },
