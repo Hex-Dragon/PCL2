@@ -1,24 +1,24 @@
-﻿Public Class PageDownloadPack
+Public Class PageDownloadResourcePack
 
     Public Const PageSize = 40
 
     '加载器信息
-    Public Shared Loader As New LoaderTask(Of CompProjectRequest, Integer)("CompProject ModPack", AddressOf CompProjectsGet, AddressOf LoaderInput) With {.ReloadTimeout = 60 * 1000}
+    Public Shared Loader As New LoaderTask(Of CompProjectRequest, Integer)("CompProject ResourcePack", AddressOf CompProjectsGet, AddressOf LoaderInput) With {.ReloadTimeout = 60 * 1000}
     Public Shared Storage As New CompProjectStorage
     Public Shared Page As Integer = 0
-    Private Sub PageDownloadPack_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
+    Private Sub PageDownloadResourcePack_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         PageLoaderInit(Load, PanLoad, PanContent, PanAlways, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
         If McVersionHighest = -1 Then McVersionHighest = Math.Max(McVersionHighest, Integer.Parse(CType(TextSearchVersion.Items(1), MyComboBoxItem).Content.ToString.Split(".")(1)))
     End Sub
     Private Shared Function LoaderInput() As CompProjectRequest
-        Dim Request As New CompProjectRequest(CompType.ModPack, Storage, (Page + 1) * PageSize)
-        If FrmDownloadPack IsNot Nothing Then
+        Dim Request As New CompProjectRequest(CompType.ResourcePack, Storage, (Page + 1) * PageSize)
+        If FrmDownloadResourcePack IsNot Nothing Then
             With Request
-                .SearchText = FrmDownloadPack.TextSearchName.Text
-                .GameVersion = If(FrmDownloadPack.TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
-                    If(FrmDownloadPack.TextSearchVersion.Text.Contains(".") OrElse FrmDownloadPack.TextSearchVersion.Text.Contains("w"), FrmDownloadPack.TextSearchVersion.Text, Nothing))
-                .Tag = FrmDownloadPack.ComboSearchTag.SelectedItem.Tag
-                .Source = CType(Val(FrmDownloadPack.ComboSearchSource.SelectedItem.Tag), CompSourceType)
+                .SearchText = FrmDownloadResourcePack.TextSearchName.Text
+                .GameVersion = If(FrmDownloadResourcePack.TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
+                    If(FrmDownloadResourcePack.TextSearchVersion.Text.Contains(".") OrElse FrmDownloadResourcePack.TextSearchVersion.Text.Contains("w"), FrmDownloadResourcePack.TextSearchVersion.Text, Nothing))
+                .Tag = FrmDownloadResourcePack.ComboSearchTag.SelectedItem.Tag
+                .Source = CType(Val(FrmDownloadResourcePack.ComboSearchSource.SelectedItem.Tag), CompSourceType)
             End With
         End If
         Return Request
@@ -27,11 +27,11 @@
     '结果 UI 化
     Private Sub Load_OnFinish()
         Try
-            Log($"[Comp] 开始可视化整合包列表，已储藏 {Storage.Results.Count} 个结果，当前在第 {Page + 1} 页")
+            Log($"[Comp] 开始可视化资源包列表，已储藏 {Storage.Results.Count} 个结果，当前在第 {Page + 1} 页")
             '列表项
             PanProjects.Children.Clear()
             For i = Math.Min(Page * PageSize, Storage.Results.Count - 1) To Math.Min((Page + 1) * PageSize - 1, Storage.Results.Count - 1)
-                PanProjects.Children.Add(Storage.Results(i).ToCompItem(Loader.Input.GameVersion Is Nothing, True))
+                PanProjects.Children.Add(Storage.Results(i).ToCompItem(Loader.Input.GameVersion Is Nothing, False))
             Next
             '页码
             CardPages.Visibility = If(Storage.Results.Count > 40 OrElse
@@ -57,7 +57,7 @@
             '强制返回顶部
             PanBack.ScrollToTop()
         Catch ex As Exception
-            Log(ex, "可视化整合包列表出错", LogLevel.Feedback)
+            Log(ex, "可视化资源包列表出错", LogLevel.Feedback)
         End Try
     End Sub
 
@@ -67,8 +67,8 @@
             Case LoadState.Failed
                 Dim ErrorMessage As String = ""
                 If Loader.Error IsNot Nothing Then ErrorMessage = Loader.Error.Message
-                If ErrorMessage.Contains("不是有效的 Json 文件") Then
-                    Log("[Download] 下载的整合包列表 Json 文件损坏，已自动重试", LogLevel.Debug)
+                If ErrorMessage.Contains("不是有效的 json 文件") Then
+                    Log("[Download] 下载的资源包列表 json 文件损坏，已自动重试", LogLevel.Debug)
                     PageLoaderRestart()
                 End If
         End Select
@@ -89,16 +89,12 @@
         CardPages.IsEnabled = False
         Page = NewPage
         FrmMain.BackToTop()
-        Log($"[Download] 整合包切换到第 {Page + 1} 页")
+        Log($"[Download] 资源包切换到第 {Page + 1} 页")
         RunInThread(Sub()
                         Thread.Sleep(100) '等待向上滚的动画结束
                         RunInUi(Sub() CardPages.IsEnabled = True)
                         Loader.Start()
                     End Sub)
-    End Sub
-
-    Private Sub BtnSearchInstall_Click(sender As Object, e As EventArgs) Handles BtnSearchInstall.Click
-        ModpackInstall()
     End Sub
 
 #Region "搜索"
