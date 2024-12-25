@@ -181,6 +181,9 @@ EndHint:
         ''' 登录模式：登录步骤 1 中返回的 JSON。
         ''' </summary>
         Public Content As Object
+
+        '设置轮询 Url
+        Public AuthUrl = "https://login.microsoftonline.com/consumers/oauth2/v2.0/token"
         ''' <summary>
         ''' 输入模式：输入验证规则。
         ''' </summary>
@@ -403,8 +406,12 @@ EndHint:
     Public FrmDownloadForge As PageDownloadForge
     Public FrmDownloadNeoForge As PageDownloadNeoForge
     Public FrmDownloadFabric As PageDownloadFabric
+    Public FrmDownloadQuilt As PageDownloadQuilt
     Public FrmDownloadMod As PageDownloadMod
     Public FrmDownloadPack As PageDownloadPack
+    Public FrmDownloadResourcePack As PageDownloadResourcePack
+    Public FrmDownloadShader As PageDownloadShader
+    Public FrmDownloadCompFavorites As PageDownloadCompFavorites
 
     '设置页面声明
     Public FrmSetupLeft As PageSetupLeft
@@ -418,6 +425,8 @@ EndHint:
     Public FrmOtherHelp As PageOtherHelp
     Public FrmOtherAbout As PageOtherAbout
     Public FrmOtherTest As PageOtherTest
+    Public FrmOtherFeedback As PageOtherFeedback
+    Public FrmOtherVote As PageOtherVote
 
     '登录页面声明
     Public FrmLoginLegacy As PageLoginLegacy
@@ -620,7 +629,7 @@ EndHint:
                     Log("[Help] 已扫描 PCL 文件夹下的帮助文件，目前总计 " & FileList.Count & " 条")
                     '读取自带文件
                     For Each File In EnumerateFiles(PathTemp & "Help")
-                        '跳过非 json 文件与以 . 开头的文件夹
+                        '跳过非 Json 文件与以 . 开头的文件夹
                         If File.Extension.ToLower <> ".json" OrElse File.Directory.FullName.Replace(PathTemp & "Help", "").Contains("\.") Then Continue For
                         '检查忽略列表
                         Dim RealPath As String = File.FullName.Replace(PathTemp & "Help\", "")

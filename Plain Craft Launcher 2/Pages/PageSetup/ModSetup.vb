@@ -66,8 +66,12 @@
         {"CacheAuthServerServer", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheAuthServerName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheAuthServerRegister", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheAuthIDToken", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"CacheAuthAPIToken", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheDownloadFolder", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheJavaListVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
+        {"CompFavorites", New SetupEntry("[]", Source:=SetupSource.Registry)},
         {"LoginRemember", New SetupEntry(True, Source:=SetupSource.Registry, Encoded:=True)},
         {"LoginLegacyName", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"LoginMsJson", New SetupEntry("{}", Source:=SetupSource.Registry, Encoded:=True)}, '{UserName: OAuthToken, ...}
@@ -183,9 +187,7 @@
         {"VersionServerNide", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthRegister", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerAuthName", New SetupEntry("", Source:=SetupSource.Version)},
-        {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)}
-    }
-
+        {"VersionServerAuthServer", New SetupEntry("", Source:=SetupSource.Version)}}
 #Region "基础"
 
     Private Enum SetupSource

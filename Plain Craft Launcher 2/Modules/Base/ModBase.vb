@@ -12,21 +12,22 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.12" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.12." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.9.2" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.9.2." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
-#If BETA Then
-    Public Const VersionCode As Integer = 347 'Release
+    Public Const UpstreamVersion As String = "2.8.12" '上游版本
+#If RELEASE Then
+    Public Const VersionCode As Integer = 350 'Release
 #Else
-    Public Const VersionCode As Integer = 346 'Snapshot
+    Public Const VersionCode As Integer = 350 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
 #If RELEASE Then
-    Public Const VersionBranchName As String = "Snapshot"
+    Public Const VersionBranchName As String = "Release"
     Public Const VersionBranchCode As String = "0"
 #ElseIf BETA Then
-    Public Const VersionBranchName As String = "Release"
+    Public Const VersionBranchName As String = "Snapshot"
     Public Const VersionBranchCode As String = "50"
 #Else
     Public Const VersionBranchName As String = "Debug"
@@ -1216,7 +1217,7 @@ Re:
                     Try
                         GetJson(Content)
                     Catch ex As Exception
-                        Throw New Exception("不是有效的 json 文件", ex)
+                        Throw New Exception("不是有效的 Json 文件", ex)
                     End Try
                 End If
                 Return Nothing
@@ -1228,7 +1229,7 @@ Re:
     End Class
 
     ''' <summary>
-    ''' 尝试根据后缀名判断文件种类并解压文件，支持 gz 与 zip，会尝试将 jar 以 zip 方式解压。
+    ''' 尝试根据后缀名判断文件种类并解压文件，支持 gz 与 zip，会尝试将 Jar 以 zip 方式解压。
     ''' 会尝试创建，但不会清空目标文件夹。
     ''' </summary>
     Public Sub ExtractFile(CompressFilePath As String, DestDirectory As String, Optional Encode As Encoding = Nothing,
@@ -2786,7 +2787,12 @@ Retry:
         End Select
 
     End Sub
+    Public Function Base64Decode(Text As String) As String
 
+        Dim decodedBytes As Byte() = Convert.FromBase64String(Text)
+        Return System.Text.Encoding.UTF8.GetString(decodedBytes)
+
+    End Function
     '反馈
     Public Sub Feedback(Optional ShowMsgbox As Boolean = True, Optional ForceOpenLog As Boolean = False)
         On Error Resume Next

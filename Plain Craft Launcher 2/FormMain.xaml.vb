@@ -9,7 +9,14 @@ Public Class FormMain
         Dim FeatureCount As Integer = 0, BugCount As Integer = 0
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
-#If BETA Then
+#If RELEASE Then
+        If LastVersion < 350 Then 'Release 2.9.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持下载资源包和光影包"))
+        End If
+        If LastVersion < 349 Then 'Release 2.9.1
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了本体更新（实验性）"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "关于页面新增了详细的版本信息"))
+        End If
         If LastVersion < 347 Then 'Release 2.8.12
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面添加下载 Mod、安装 Mod 选项"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 详情页面支持按加载器、游戏版本进行分类和筛选"))
@@ -90,6 +97,13 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 350 Then 'Snapshot 2.9.2
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持下载资源包和光影包"))
+        End If
+        If LastVersion < 349 Then 'Snapshot 2.9.1
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了本体更新（实验性）"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "关于页面新增了详细的版本信息"))
+        End If
         If LastVersion < 346 Then 'Snapshot 2.8.12
             If LastVersion = 345 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复帮助页面报错的 Bug"))
         End If
@@ -376,12 +390,6 @@ Public Class FormMain
     Private Sub RunCountSub()
         Setup.Set("SystemCount", Setup.Get("SystemCount") + 1)
 #If Not BETA Then
-        Select Case Setup.Get("SystemCount")
-            Case 1
-                MyMsgBox("欢迎使用 PCL 快照版！" & vbCrLf &
-                         "快照版包含尚未在正式版发布的测试性功能，仅用于赞助者本人尝鲜。所以请不要发给其他人或者用于制作整合包哦！" & vbCrLf &
-                         "如果你并非通过赞助或赞助者本人邀请进群获得的本程序，那么可能是有人在违规传播，记得提醒他一下啦。", "快照版使用说明")
-        End Select
         If Setup.Get("SystemCount") >= 99 Then
             If ThemeUnlock(6, False) Then
                 MyMsgBox("你已经使用了 99 次 PCL 啦，感谢你长期以来的支持！" & vbCrLf &
@@ -772,7 +780,7 @@ Public Class FormMain
             End If
             '多文件拖拽
             If FilePathList.Count > 1 Then
-                '必须要求全部为 jar 文件
+                '必须要求全部为 Jar 文件
                 For Each File In FilePathList
                     If Not {"jar", "litemod", "disabled", "old"}.Contains(File.AfterLast(".").ToLower) Then
                         Hint("一次请只拖入一个文件！", HintType.Critical)
@@ -961,9 +969,13 @@ Public Class FormMain
         DownloadForge = 6
         DownloadNeoForge = 7
         DownloadFabric = 8
+        DownloadQuilt = 10
         DownloadLiteLoader = 9
         DownloadMod = 11
         DownloadPack = 12
+        DownloadResourcePack = 13
+        DownloadShader = 14
+        DownloadCompFavorites = 15
         SetupLaunch = 0
         SetupUI = 1
         SetupSystem = 2
@@ -976,6 +988,8 @@ Public Class FormMain
         OtherHelp = 0
         OtherAbout = 1
         OtherTest = 2
+        OtherFeedback = 3
+        OtherVote = 4
         VersionOverall = 0
         VersionSetup = 1
         VersionWorld = 3
@@ -1003,8 +1017,10 @@ Public Class FormMain
                         Return "Mod 下载 - " & Project.TranslatedName
                     Case CompType.ModPack
                         Return "整合包下载 - " & Project.TranslatedName
-                    Case Else 'CompType.ResourcePack
+                    Case CompType.ResourcePack
                         Return "资源包下载 - " & Project.TranslatedName
+                    Case Else 'CompType.Shader
+                        Return "光影包下载 - " & Project.TranslatedName
                 End Select
             Case PageType.HelpDetail
                 Dim Entry As HelpEntry = Stack.Additional(0)

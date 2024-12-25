@@ -192,9 +192,6 @@
     <Compile Include="Controls\MyIconTextButton.xaml.vb">
       <DependentUpon>MyIconTextButton.xaml</DependentUpon>
     </Compile>
-
-
-
     <Compile Include="Modules\Minecraft\ModComp.vb" />
     <Compile Include="Modules\Minecraft\ModJava.vb" />
     <Compile Include="Modules\Minecraft\ModMod.vb" />
@@ -239,6 +236,15 @@
     <Compile Include="Modules\Minecraft\MyCompItem.xaml.vb">
       <DependentUpon>MyCompItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadResourcePack.xaml.vb">
+      <DependentUpon>PageDownloadResourcePack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadQuilt.xaml.vb">
+      <DependentUpon>PageDownloadQuilt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadCompFavorites.xaml.vb">
+      <DependentUpon>PageDownloadCompFavorites.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadMod.xaml.vb">
       <DependentUpon>PageDownloadMod.xaml</DependentUpon>
     </Compile>
@@ -256,6 +262,9 @@
     </Compile>
     <Compile Include="Pages\PageDownload\PageDownloadPack.xaml.vb">
       <DependentUpon>PageDownloadPack.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageDownload\PageDownloadShader.xaml.vb">
+      <DependentUpon>PageDownloadShader.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageLaunch\MyMsgLogin.xaml.vb">
       <DependentUpon>MyMsgLogin.xaml</DependentUpon>
@@ -281,6 +290,9 @@
     <Compile Include="Pages\PageLink\PageLinkHiper.xaml.vb">
       <DependentUpon>PageLinkHiper.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageOther\PageOtherVote.xaml.vb">
+      <DependentUpon>PageOtherVote.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageOther\PageOtherHelpDetail.xaml.vb">
       <DependentUpon>PageOtherHelpDetail.xaml</DependentUpon>
     </Compile>
@@ -289,6 +301,9 @@
     </Compile>
     <Compile Include="Pages\PageLink\PageLinkLeft.xaml.vb">
       <DependentUpon>PageLinkLeft.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageOther\PageOtherFeedback.xaml.vb">
+      <DependentUpon>PageOtherFeedback.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageVersion\PageVersionLeft.xaml.vb">
       <DependentUpon>PageVersionLeft.xaml</DependentUpon>
@@ -491,12 +506,23 @@
       <DependentUpon>FormMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-
     <Page Include="Modules\Minecraft\MyLocalModItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Modules\Minecraft\MyCompItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadResourcePack.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadQuilt.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadCompFavorites.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -523,6 +549,10 @@
     <Page Include="Pages\PageDownload\PageDownloadPack.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PageDownload\PageDownloadShader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\PageLaunch\MyMsgLogin.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -561,6 +591,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\PageOther\PageOtherVote.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\PageOther\PageOtherHelpDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -586,6 +620,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\PageVersion\PageVersionScreenshot.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageOther\PageOtherFeedback.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -942,7 +980,7 @@
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
   <ItemGroup>
-
+    <Resource Include="Images\Blocks\Quilt.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\NeoForge.png" />

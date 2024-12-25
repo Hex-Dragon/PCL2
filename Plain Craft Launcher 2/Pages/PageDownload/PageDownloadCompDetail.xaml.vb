@@ -27,8 +27,8 @@
             Case LoadState.Failed
                 Dim ErrorMessage As String = ""
                 If CompFileLoader.Error IsNot Nothing Then ErrorMessage = CompFileLoader.Error.Message
-                If ErrorMessage.Contains("不是有效的 json 文件") Then
-                    Log("[Comp] 下载的文件 json 列表损坏，已自动重试", LogLevel.Debug)
+                If ErrorMessage.Contains("不是有效的 Json 文件") Then
+                    Log("[Comp] 下载的文件 Json 列表损坏，已自动重试", LogLevel.Debug)
                     PageLoaderRestart()
                 End If
         End Select
@@ -215,7 +215,7 @@
         AniControlEnabled += 1
         Project = FrmMain.PageCurrent.Additional(0)
         PanBack.ScrollToHome()
-
+        BtnFavorites.Text = If(CompFavorites.FavoritesList.Contains(Project.Id), "取消收藏", "收藏")
         '重启加载器
         If IsFirstInit Then
             '在 Me.Initialized 已经初始化了加载器，不再重复初始化
@@ -290,7 +290,13 @@
         RunInNewThread(
         Sub()
             Try
-                Dim Desc As String = If(Project.Type = CompType.ModPack, "整合包", If(Project.Type = CompType.Mod, "Mod ", "资源包"))
+                Dim Desc As String = "资源"
+                Select Case Project.Type
+                    Case CompType.ModPack : Desc = "整合包"
+                    Case CompType.Mod : Desc = "Mod "
+                    Case CompType.ResourcePack : Desc = "资源包"
+                    Case CompType.Shader : Desc = "光影包"
+                End Select
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
                 If Project.Type = CompType.Mod Then
@@ -411,6 +417,18 @@
     End Sub
     Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
         ClipboardSet(CompItem.LabTitle.Text)
+    End Sub
+    Private Sub BtnFavorites_Click(sender As Object, e As EventArgs) Handles BtnFavorites.Click
+        If CompFavorites.FavoritesList.Contains(Project.Id) Then
+            CompFavorites.FavoritesList.Remove(Project.Id)
+            Hint($"已取消收藏 {Project.TranslatedName}！", HintType.Finish)
+            BtnFavorites.Text = "收藏"
+        Else
+            CompFavorites.FavoritesList.Add(Project.Id)
+            Hint($"已收藏 {Project.TranslatedName}！", HintType.Finish)
+            BtnFavorites.Text = "取消收藏"
+        End If
+        CompFavorites.Save()
     End Sub
 
 End Class
