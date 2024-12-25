@@ -988,6 +988,8 @@ Public Class FormMain
         OtherHelp = 0
         OtherAbout = 1
         OtherTest = 2
+        OtherFeedback = 3
+        OtherVote = 4
         VersionOverall = 0
         VersionSetup = 1
         VersionMod = 2

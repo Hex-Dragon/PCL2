@@ -425,6 +425,8 @@ EndHint:
     Public FrmOtherHelp As PageOtherHelp
     Public FrmOtherAbout As PageOtherAbout
     Public FrmOtherTest As PageOtherTest
+    Public FrmOtherFeedback As PageOtherFeedback
+    Public FrmOtherVote As PageOtherVote
 
     '登录页面声明
     Public FrmLoginLegacy As PageLoginLegacy
