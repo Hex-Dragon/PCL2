@@ -992,8 +992,12 @@ Public Class FormMain
         OtherVote = 4
         VersionOverall = 0
         VersionSetup = 1
-        VersionMod = 2
-        VersionModDisabled = 3
+        VersionWorld = 3
+        VersionScreenshot = 4
+        VersionMod = 5
+        VersionModDisabled = 6
+        VersionResourcePack = 7
+        VersionShader = 8
     End Enum
     ''' <summary>
     ''' 获取次级页面的名称。若并非次级页面则返回空字符串，故可以以此判断是否为次级页面。
