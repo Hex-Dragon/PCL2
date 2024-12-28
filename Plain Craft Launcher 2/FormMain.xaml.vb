@@ -1130,9 +1130,13 @@ Public Class FormMain
             Select Case Stack.Page
                 Case PageType.Download
                     If FrmDownloadLeft Is Nothing Then FrmDownloadLeft = New PageDownloadLeft
-                    CType(FrmDownloadLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                    Try
+                        CType(FrmDownloadLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                    Catch
+                        CType(FrmDownloadLeft.PanItem.Children(SubType + 1), MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                    End Try
                 Case PageType.Setup
-                    If FrmSetupLeft Is Nothing Then FrmSetupLeft = New PageSetupLeft
+                        If FrmSetupLeft Is Nothing Then FrmSetupLeft = New PageSetupLeft
                     CType(FrmSetupLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
                 Case PageType.Other
                     If FrmOtherLeft Is Nothing Then FrmOtherLeft = New PageOtherLeft
