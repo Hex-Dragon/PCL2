@@ -100,4 +100,8 @@
         End If
     End Sub
 
+    Public Sub NetStatusUpdate(Status As String)
+        ItemNetStatus.Title = Status
+    End Sub
+
 End Class

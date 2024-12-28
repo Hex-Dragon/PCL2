@@ -2,110 +2,143 @@
 Imports STUN
 Imports STUN.Attributes
 Public Class PageLinkNetStatus
+    Public NetQualityCounter As Integer = 0
+
     Public NATType As String = Nothing
     Public NATTypeFriendly As String = Nothing
     Public UPnPStatus As String = Nothing
+
     Public IPv4Status As String = Nothing
     Public IPv4StatusFriendly As String = Nothing
     Public IPv6Status As String = Nothing
     Public IPv6StatusFriendly As String = Nothing
+
     Public Sub NetStatusTest()
-        Hint("正在检测，请稍等...")
+        RunInUi(Sub()
+                    FrmLinkLeft.NetStatusUpdate("正在检测...")
 
+                    LabNetStatusNATTitle.Text = "NAT 类型：正在检测"
+                    LabNetStatusNATDesc.Text = "正在检测 NAT 类型，这可能需要几秒钟"
+
+                    LabNetStatusIPv6Title.Text = "IP 版本：正在检测"
+                    LabNetStatusIPv6Desc.Text = "正在检测 IP 版本，这可能需要几秒钟"
+                End Sub)
+
+        RunInNewThread(Sub()
+                           NATTest()
+                           IPTest()
+                           ChangeNetQualityText()
+                       End Sub)
+    End Sub
+    Public Sub NATTest()
         'IPv4 NAT 类型检测
-        RunInNewThread(Sub()
-                           Dim STUNServerDomain As String = "stun.miwifi.com" '指定 STUN 服务器
-                           Log("[STUN] 指定的 STUN 服务器: " + STUNServerDomain)
-                           Try
-                               Dim STUNServerIP As String = Dns.GetHostAddresses(STUNServerDomain)(0).ToString() '解析 STUN 服务器 IP
-                               Log("[STUN] 解析目标 STUN 服务器 IP: " + STUNServerIP)
-                               Dim STUNServerEndPoint As IPEndPoint = New IPEndPoint(IPAddress.Parse(STUNServerIP), 3478) '设置 IPEndPoint
+        Dim STUNServerDomain As String = "stun.miwifi.com" '指定 STUN 服务器
+        Log("[STUN] 指定的 STUN 服务器: " + STUNServerDomain)
+        Try
+            Dim STUNServerIP As String = Dns.GetHostAddresses(STUNServerDomain)(0).ToString() '解析 STUN 服务器 IP
+            Log("[STUN] 解析目标 STUN 服务器 IP: " + STUNServerIP)
+            Dim STUNServerEndPoint As IPEndPoint = New IPEndPoint(IPAddress.Parse(STUNServerIP), 3478) '设置 IPEndPoint
 
-                               STUNClient.ReceiveTimeout = 500 '设置超时
-                               Log("[STUN] 开始进行 NAT 测试")
-                               Dim STUNTestResult = STUNClient.Query(STUNServerEndPoint, STUNQueryType.ExactNAT, True) '进行 STUN 测试
+            STUNClient.ReceiveTimeout = 500 '设置超时
+            Log("[STUN] 开始进行 NAT 测试")
+            Dim STUNTestResult = STUNClient.Query(STUNServerEndPoint, STUNQueryType.ExactNAT, True) '进行 STUN 测试
 
-                               If Not STUNTestResult.QueryError = STUNQueryError.Success Then
-                                   Log("[STUN] NAT 测试失败")
-                                   NATType = "TestFailed"
-                                   Throw New Exception()
-                                   Exit Sub
-                               End If
+            If Not STUNTestResult.QueryError = STUNQueryError.Success Then
+                Log("[STUN] NAT 测试失败")
+                NATType = "TestFailed"
+                Throw New Exception()
+                Exit Sub
+            End If
 
-                               NATType = STUNTestResult.NATType.ToString()
-                               Log("[STUN] NAT 检测完成，本地 NAT 类型为: " + NATType)
+            NATType = STUNTestResult.NATType.ToString()
+            Log("[STUN] NAT 检测完成，本地 NAT 类型为: " + NATType)
 
-                               If NATType = "OpenInternet" Then IPv4Status = "Public"
-                           Catch ex As Exception
-                               Log("[STUN] 进行 NAT 测试失败: " + ex.ToString())
-                               NATType = "TestFailed"
-                           End Try
+            If NATType = "OpenInternet" Then IPv4Status = "Public"
+        Catch ex As Exception
+            Log("[STUN] 进行 NAT 测试失败: " + ex.ToString())
+            NATType = "TestFailed"
+        End Try
 
-                           RunInUi(Sub()
-                                       ChangeNATText()
-                                   End Sub)
-                       End Sub)
-
+        RunInUi(Sub()
+                    ChangeNATText()
+                End Sub)
+    End Sub
+    Public Sub IPTest()
         'IP 检测
-        RunInNewThread(Sub()
-                           Log("[IP] 开始进行 IP 检测")
-                           '获取本地 IP 地址
-                           Dim LocalIPAddresses = Dns.GetHostAddresses(Dns.GetHostName())
+        Log("[IP] 开始进行 IP 检测")
+        '获取本地 IP 地址
+        Dim LocalIPAddresses = Dns.GetHostAddresses(Dns.GetHostName())
 
-                           Try
-                               For Each IP In LocalIPAddresses
-                                   If Sockets.AddressFamily.InterNetwork.Equals(IP.AddressFamily) Then 'IPv4
-                                       Dim PublicIPv4Address As String = NetRequestRetry("http://4.ipw.cn", "GET", "", "application/x-www-form-urlencoded")
+        Try
+            For Each IP In LocalIPAddresses
+                If Sockets.AddressFamily.InterNetwork.Equals(IP.AddressFamily) Then 'IPv4
+                    Dim PublicIPv4Address As String = NetRequestRetry("http://4.ipw.cn", "GET", "", "application/x-www-form-urlencoded")
 
-                                       If IP.ToString() = PublicIPv4Address Then '判断是否是公网地址
-                                           IPv4Status = "Public"
-                                           Log("[IP] 检测到 IPv4 公网地址")
-                                           Exit For
-                                       ElseIf IP.ToString().StartsWithF("169.254.") Then '判断是否是本地回环地址
-                                           Continue For
-                                       End If
+                    If IP.ToString() = PublicIPv4Address Then '判断是否是公网地址
+                        IPv4Status = "Public"
+                        Log("[IP] 检测到 IPv4 公网地址")
+                        Exit For
+                    ElseIf IP.ToString().StartsWithF("169.254.") Then '判断是否是本地回环地址
+                        Continue For
+                    End If
 
-                                       IPv4Status = "Supported"
-                                       Log("[IP] 检测到 IPv4 支持")
-                                       Exit For
-                                   End If
-                               Next
-                           Catch ex As Exception
-                               Log("[IP] IPv4 检测失败: " + ex.ToString())
-                               IPv4Status = "Unsupported"
-                           End Try
+                    IPv4Status = "Supported"
+                    Log("[IP] 检测到 IPv4 支持")
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            Log("[IP] IPv4 检测失败: " + ex.ToString())
+            IPv4Status = "Unsupported"
+        End Try
 
-                           Try
-                               For Each IP In LocalIPAddresses
-                                   If Sockets.AddressFamily.InterNetworkV6.Equals(IP.AddressFamily) Then 'IPv6
-                                       Dim PublicIPv6Address As String = NetRequestRetry("http://6.ipw.cn", "GET", "", "application/x-www-form-urlencoded")
+        Try
+            For Each IP In LocalIPAddresses
+                If Sockets.AddressFamily.InterNetworkV6.Equals(IP.AddressFamily) Then 'IPv6
+                    Dim PublicIPv6Address As String = NetRequestRetry("http://6.ipw.cn", "GET", "", "application/x-www-form-urlencoded")
 
-                                       If IP.ToString() = PublicIPv6Address Then '判断是否是公网地址
-                                           IPv6Status = "Public"
-                                           Log("[IP] 检测到 IPv6 公网地址")
-                                           Exit For
-                                       ElseIf IP.ToString().StartsWithF("fe80") Then '判断是否是本地回环地址
-                                           Continue For
-                                       End If
+                    If IP.ToString() = PublicIPv6Address Then '判断是否是公网地址
+                        IPv6Status = "Public"
+                        Log("[IP] 检测到 IPv6 公网地址")
+                        Exit For
+                    ElseIf IP.ToString().StartsWithF("fe80") Then '判断是否是本地回环地址
+                        Continue For
+                    End If
 
-                                       IPv6Status = "Supported"
-                                       Log("[IP] 检测到 IPv6 地址")
-                                   End If
-                               Next
-                           Catch ex As Exception
-                               Log("[IP] IPv6 检测失败: " + ex.ToString())
-                               IPv6Status = "Unsupported"
-                           End Try
+                    IPv6Status = "Supported"
+                    Log("[IP] 检测到 IPv6 地址")
+                End If
+            Next
+        Catch ex As Exception
+            Log("[IP] IPv6 检测失败: " + ex.ToString())
+            IPv6Status = "Unsupported"
+        End Try
 
-                           If IPv4Status Is Nothing Then IPv4Status = "Unsupported" '致敬每一位勇士
-                           If IPv6Status Is Nothing Then IPv6Status = "Unsupported" '如果轮了一圈出来还是没 IPv6 地址，那就是没有
+        If IPv4Status Is Nothing Then IPv4Status = "Unsupported" '致敬每一位勇士
+        If IPv6Status Is Nothing Then IPv6Status = "Unsupported" '如果轮了一圈出来还是没 IPv6 地址，那就是没有
 
-                           Log($"[IP] IP 检测完成，IPv4 支持情况: {IPv4Status}，IPv6 支持情况: {IPv6Status}")
+        Log($"[IP] IP 检测完成，IPv4 支持情况: {IPv4Status}，IPv6 支持情况: {IPv6Status}")
 
-                           RunInUi(Sub()
-                                       ChangeIPText()
-                                   End Sub)
-                       End Sub)
+        RunInUi(Sub()
+                    ChangeIPText()
+                End Sub)
+    End Sub
+    Public Sub ChangeNetQualityText()
+        Thread.Sleep(200)
+        Dim NetQualityText As String = Nothing
+        If NetQualityCounter >= 4 Then
+            NetQualityText = "网络优秀"
+        ElseIf NetQualityCounter >= 2 Then
+            NetQualityText = "网络良好"
+        Else
+            NetQualityText = "网络较差"
+        End If
+
+        Log($"[Link] 最终网络质量指数: {NetQualityCounter}，判定网络质量: {NetQualityText}")
+
+        RunInUi(Sub()
+                    FrmLinkLeft.NetStatusUpdate(NetQualityText)
+                End Sub)
     End Sub
     Public Sub ChangeNATText()
         Select Case NATType
@@ -113,10 +146,13 @@ Public Class PageLinkNetStatus
                 NATTypeFriendly = "开放"
             Case = "FullCone"
                 NATTypeFriendly = "中等（完全圆锥）"
+                NetQualityCounter += 3
             Case = "Restricted"
                 NATTypeFriendly = "中等（受限圆锥）"
+                NetQualityCounter += 2
             Case = "PortRestricted"
                 NATTypeFriendly = "中等（端口受限圆锥）"
+                NetQualityCounter += 1
             Case = "Symmetric"
                 NATTypeFriendly = "严格（对称）"
             Case = "SymmetricUDPFirewall"
@@ -139,6 +175,7 @@ Public Class PageLinkNetStatus
         Select Case IPv4Status
             Case = "Public"
                 IPv4StatusFriendly = "公网"
+                NetQualityCounter += 2
             Case = "Supported"
                 IPv4StatusFriendly = "支持"
             Case = "Unsupported"
@@ -148,8 +185,10 @@ Public Class PageLinkNetStatus
         Select Case IPv6Status
             Case = "Public"
                 IPv6StatusFriendly = "公网"
+                NetQualityCounter += 2
             Case = "Supported"
                 IPv6StatusFriendly = "支持"
+                NetQualityCounter += 1
             Case = "Unsupported"
                 IPv6StatusFriendly = "不支持"
         End Select
@@ -174,7 +213,7 @@ Public Class PageLinkNetStatus
         LabNetStatusIPv6Desc.Text = $"本地 IPv4 状态: {IPv4StatusFriendly}，本地 IPv6 状态: {IPv6StatusFriendly}。{vbCrLf}{IPStatusDesc}"
     End Sub
 
-    Private Sub BtnNATTest_Click(sender As Object, e As EventArgs) Handles BtnNATTest.Click
+    Private Sub BtnNetTest_Click(sender As Object, e As EventArgs) Handles BtnNetTest.Click
         NetStatusTest()
     End Sub
 End Class
