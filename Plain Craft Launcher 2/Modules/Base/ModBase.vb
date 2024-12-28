@@ -14,7 +14,7 @@ Public Module ModBase
     '下列版本信息由更新器自动修改
     Public Const VersionBaseName As String = "2.9.2" '不含分支前缀的显示用版本名
     Public Const VersionStandardCode As String = "2.9.2." & VersionBranchCode '标准格式的四段式版本号
-    Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
+    Public Const CommitHash As String = "11451419" 'Commit Hash，由 GitHub Workflow 自动替换
     Public CommitHashShort As String = CommitHash.Substring(0, 7) 'Commit Hash，取前 7 位
     Public Const UpstreamVersion As String = "2.8.12" '上游版本
 #If RELEASE Then
