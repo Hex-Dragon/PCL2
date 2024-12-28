@@ -158,6 +158,9 @@
       <HintPath>Resources\Ookii.Dialogs.Wpf.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="STUN, Version=0.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\STUN.0.5.0\lib\net45\STUN.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
@@ -286,6 +289,9 @@
     </Compile>
     <Compile Include="Pages\PageLink\PageLinkFeedback.xaml.vb">
       <DependentUpon>PageLinkFeedback.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageLink\PageLinkNetStatus.xaml.vb">
+      <DependentUpon>PageLinkNetStatus.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageLink\PageLinkHiper.xaml.vb">
       <DependentUpon>PageLinkHiper.xaml</DependentUpon>
@@ -567,11 +573,16 @@
       <SubType>Designer</SubType>
     </Page>
     <None Include="app.manifest" />
+    <None Include="packages.config" />
     <None Include="Resources\Custom.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </None>
     <Page Include="Pages\PageLink\PageLinkFeedback.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageLink\PageLinkNetStatus.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
