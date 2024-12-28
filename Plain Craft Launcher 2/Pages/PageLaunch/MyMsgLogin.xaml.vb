@@ -92,7 +92,7 @@
             $"如果没有自动填充，请在页面内粘贴此授权码 {UserCode} （将自动复制）" & vbCrLf &
             $"你也可以用其他设备打开 {Website} 并输入授权码。"
         Else
-            Website = Website = Data("verification_uri")
+            Website = Data("verification_uri")
             LabCaption.Text = $"登录网页将自动开启，请在网页中输入授权码 {UserCode}（将自动复制）。" & vbCrLf & vbCrLf &
             $"如果网络环境不佳，网页可能一直加载不出来，届时请使用 VPN 并重试。" & vbCrLf &
             $"你也可以用其他设备打开 {Website} 并输入上述授权码。"
