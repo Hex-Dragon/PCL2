@@ -30,14 +30,8 @@ Public Class PageLinkHiper
 
 #Region "加载步骤"
 
-    Public Shared PathHiper As String = PathAppdata & "联机模块\"
     Public Shared WithEvents InitLoader As New LoaderCombo(Of Integer)("HiPer 初始化", {
-        New LoaderTask(Of Integer, Integer)("网络环境：连通检测", AddressOf InitPingCheck) With {.Block = False, .ProgressWeight = 0.5},
-        New LoaderTask(Of Integer, Integer)("网络环境：IP 检测", AddressOf InitIpCheck) With {.Block = False, .ProgressWeight = 1},
-        New LoaderTask(Of Integer, Integer)("检查网络环境", AddressOf InitCheck) With {.ProgressWeight = 0.5},
-        New LoaderTask(Of Integer, List(Of NetFile))("获取所需文件", AddressOf InitGetFile) With {.ProgressWeight = 4},
-        New LoaderDownload("下载所需文件", New List(Of NetFile)) With {.ProgressWeight = 4},
-        New LoaderTask(Of Integer, Integer)("启动联机模块", AddressOf InitLaunch) With {.ProgressWeight = 7}
+        New LoaderTask(Of Integer, Integer)("检查网络环境", AddressOf InitCheck) With {.ProgressWeight = 0.5}
     })
 
     '检查网络状态

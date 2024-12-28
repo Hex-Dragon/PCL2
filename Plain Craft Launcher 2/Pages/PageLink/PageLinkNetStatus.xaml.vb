@@ -1,4 +1,6 @@
 ﻿Imports System.Net
+Imports System.Net.NetworkInformation
+Imports System.Net.Sockets
 Imports STUN
 Imports STUN.Attributes
 Public Class PageLinkNetStatus
@@ -14,11 +16,23 @@ Public Class PageLinkNetStatus
     Public IPv6StatusFriendly As String = Nothing
 
     Public Sub NetStatusTest()
+        If Convert.ToBoolean(ReadReg("LinkFirstTimeNetTest", "True")) Then
+            MyMsgBox($"你似乎是第一次打开 PCL 的联机模块。为了正常运行联机模块，PCL 接下来会申请 Windows 防火墙权限。{vbCrLf}{vbCrLf}请在接下来出现的弹窗中点击 ""允许""。", "首次联机提示", "我知道了", ForceWait:=True)
+            Dim TestTcpListener = TcpListener.Create("5600")
+            TestTcpListener.Start()
+            Thread.Sleep(200)
+            TestTcpListener.Stop()
+            WriteReg("LinkFirstTimeNetTest", "True")
+        End If
+
         RunInUi(Sub()
                     FrmLinkLeft.NetStatusUpdate("正在检测...")
 
                     LabNetStatusNATTitle.Text = "NAT 类型：正在检测"
                     LabNetStatusNATDesc.Text = "正在检测 NAT 类型，这可能需要几秒钟"
+
+                    LabNetStatusPingTitle.Text = "Ping 值：正在检测"
+                    LabNetStatusPingDesc.Text = "正在检测 Ping 值，这可能需要几秒钟"
 
                     LabNetStatusIPv6Title.Text = "IP 版本：正在检测"
                     LabNetStatusIPv6Desc.Text = "正在检测 IP 版本，这可能需要几秒钟"
@@ -26,6 +40,7 @@ Public Class PageLinkNetStatus
 
         RunInNewThread(Sub()
                            NATTest()
+                           PingTest()
                            IPTest()
                            ChangeNetQualityText()
                        End Sub)
@@ -61,6 +76,36 @@ Public Class PageLinkNetStatus
 
         RunInUi(Sub()
                     ChangeNATText()
+                End Sub)
+    End Sub
+    Public Sub PingTest()
+        Dim PingSender = New Ping()
+        Dim PingReplied As PingReply = Nothing
+        Dim PingRtt As String = Nothing
+        Dim PingServerDomain As String = "www.baidu.com" '指定 Ping 服务器
+        Log("[Ping] Ping 目标服务器: " + PingServerDomain)
+        Try
+            Dim PingServerIP As String = Dns.GetHostAddresses(PingServerDomain)(0).ToString() '解析 Ping 服务器 IP
+            Log("[Ping] 解析 Ping 目标服务器 IP: " + PingServerIP)
+
+            Log("[Ping] 开始进行 Ping 测试")
+            PingReplied = PingSender.Send(PingServerIP)
+            If PingReplied.Status = IPStatus.Success Then
+                PingRtt = PingReplied.RoundtripTime
+            End If
+
+            Log($"[Ping] Ping 测试完成，Ping 值: {PingRtt} ms")
+
+            If PingRtt >= 100 Then
+                NetQualityCounter -= 1
+            End If
+        Catch ex As Exception
+            Log("[Ping] 进行 Ping 测试失败: " + ex.ToString())
+        End Try
+
+        RunInUi(Sub()
+                    LabNetStatusPingTitle.Text = $"Ping 值：{PingRtt} ms"
+                    LabNetStatusPingDesc.Text = "Ping 值可以反映你的网络延迟水平，一般来说越低越好。"
                 End Sub)
     End Sub
     Public Sub IPTest()
@@ -211,9 +256,5 @@ Public Class PageLinkNetStatus
 
         LabNetStatusIPv6Title.Text = "IP 版本：" + IPStatusTitle
         LabNetStatusIPv6Desc.Text = $"本地 IPv4 状态: {IPv4StatusFriendly}，本地 IPv6 状态: {IPv6StatusFriendly}。{vbCrLf}{IPStatusDesc}"
-    End Sub
-
-    Private Sub BtnNetTest_Click(sender As Object, e As EventArgs) Handles BtnNetTest.Click
-        NetStatusTest()
     End Sub
 End Class

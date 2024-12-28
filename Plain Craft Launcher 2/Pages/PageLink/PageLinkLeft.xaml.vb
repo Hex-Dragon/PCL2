@@ -100,6 +100,10 @@
         End If
     End Sub
 
+    Public Sub Recheck(sender As Object, e As EventArgs)
+        Hint("正在重新检测网络环境，请稍后...")
+        FrmLinkNetStatus.NetStatusTest()
+    End Sub
     Public Sub NetStatusUpdate(Status As String)
         ItemNetStatus.Title = Status
     End Sub
