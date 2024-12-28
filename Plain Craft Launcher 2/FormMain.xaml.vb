@@ -1133,7 +1133,7 @@ Public Class FormMain
                     Try
                         CType(FrmDownloadLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
                     Catch
-                        CType(FrmDownloadLeft.PanItem.Children(12), MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                        CType(FrmDownloadLeft.PanItem.Children(SubType + 1), MyListItem).SetChecked(True, True, Stack = PageCurrent)
                     End Try
                 Case PageType.Setup
                         If FrmSetupLeft Is Nothing Then FrmSetupLeft = New PageSetupLeft
