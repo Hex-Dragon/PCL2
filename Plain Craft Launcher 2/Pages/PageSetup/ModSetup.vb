@@ -367,8 +367,8 @@
 #If BETA Then
         If Key = "UiLauncherTheme" Then Return "0"
 #End If
-        If Key = "UiHiddenPageLink" Then Return True
-        If Key = "UiHiddenSetupLink" Then Return True
+        If Key = "UiHiddenPageLink" Then Return False
+        If Key = "UiHiddenSetupLink" Then Return False
         Return Nothing
     End Function
 
