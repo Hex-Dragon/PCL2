@@ -102,8 +102,6 @@ WaitRetry:
                 FrmStart = New SplashScreen("Images\icon.ico")
                 FrmStart.Show(False, True)
             End If
-            '动态 DLL 调用
-            AddHandler AppDomain.CurrentDomain.AssemblyResolve, AddressOf AssemblyResolve
             '日志初始化
             LogStart()
             '添加日志
@@ -124,6 +122,9 @@ WaitRetry:
             Setup.Load("SystemDebugAnim")
             Setup.Load("ToolDownloadThread")
             Setup.Load("ToolDownloadCert")
+            '释放资源
+            SetDllDirectory(PathPure.TrimEnd("\"))
+            WriteFile(PathPure & "libwebp.dll", GetResources("libwebp64"))
             '网络配置初始化
             ServicePointManager.Expect100Continue = True
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 Or SecurityProtocolType.Tls Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls12
@@ -178,55 +179,8 @@ WaitRetry:
         End If
     End Sub
 
-    '动态 DLL 调用
-    Private Shared AssemblyNAudio As Assembly
-    Private Shared AssemblyJson As Assembly
-    Private Shared AssemblyDialog As Assembly
-    Private Shared AssemblyImazenWebp As Assembly
-    Private Shared ReadOnly AssemblyNAudioLock As New Object
-    Private Shared ReadOnly AssemblyJsonLock As New Object
-    Private Shared ReadOnly AssemblyDialogLock As New Object
-    Private Shared ReadOnly AssemblyImazenWebpLock As New Object
     Private Declare Function SetDllDirectory Lib "kernel32" Alias "SetDllDirectoryA" (lpPathName As String) As Boolean
-    Public Shared Function AssemblyResolve(sender As Object, args As ResolveEventArgs) As Assembly
-        If args.Name.StartsWithF("NAudio") Then
-            SyncLock AssemblyNAudioLock
-                If AssemblyNAudio Is Nothing Then
-                    Log("[Start] 加载 DLL：NAudio")
-                    AssemblyNAudio = Assembly.Load(GetResources("NAudio"))
-                End If
-                Return AssemblyNAudio
-            End SyncLock
-        ElseIf args.Name.StartsWithF("Newtonsoft.Json") Then
-            SyncLock AssemblyJsonLock
-                If AssemblyJson Is Nothing Then
-                    Log("[Start] 加载 DLL：Json")
-                    AssemblyJson = Assembly.Load(GetResources("Json"))
-                End If
-                Return AssemblyJson
-            End SyncLock
-        ElseIf args.Name.StartsWithF("Ookii.Dialogs.Wpf") Then
-            SyncLock AssemblyDialogLock
-                If AssemblyDialog Is Nothing Then
-                    Log("[Start] 加载 DLL：Dialogs")
-                    AssemblyDialog = Assembly.Load(GetResources("Dialogs"))
-                End If
-                Return AssemblyDialog
-            End SyncLock
-        ElseIf args.Name.StartsWithF("Imazen.WebP") Then
-            SyncLock AssemblyImazenWebpLock
-                If AssemblyImazenWebp Is Nothing Then
-                    Log("[Start] 加载 DLL：Imazen.WebP")
-                    AssemblyImazenWebp = Assembly.Load(GetResources("Imazen_WebP"))
-                    SetDllDirectory(PathPure.TrimEnd("\"))
-                    WriteFile(PathPure & "libwebp.dll", GetResources("libwebp64"))
-                End If
-                Return AssemblyImazenWebp
-            End SyncLock
-        Else
-            Return Nothing
-        End If
-    End Function
+
 
     '切换窗口
 
