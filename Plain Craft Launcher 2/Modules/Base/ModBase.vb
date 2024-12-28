@@ -14,7 +14,7 @@ Public Module ModBase
     '下列版本信息由更新器自动修改
     Public Const VersionBaseName As String = "2.9.2" '不含分支前缀的显示用版本名
     Public Const VersionStandardCode As String = "2.9.2." & VersionBranchCode '标准格式的四段式版本号
-    Public Const CommitHash As String = "1111111111" 'Commit Hash，由 GitHub Workflow 自动替换
+    Public Const CommitHash As String = "11451419" 'Commit Hash，由 GitHub Workflow 自动替换
     Public CommitHashShort As String = CommitHash.Substring(0, 7) 'Commit Hash，取前 7 位
     Public Const UpstreamVersion As String = "2.8.12" '上游版本
 #If RELEASE Then
@@ -181,6 +181,10 @@ Public Module ModBase
         ''' 图标，服务端，1x
         ''' </summary>
         Public Const IconButtonServer As String = "M224 160a64 64 0 0 0-64 64v576a64 64 0 0 0 64 64h576a64 64 0 0 0 64-64V224a64 64 0 0 0-64-64H224z m0 384h576v256H224v-256z m192 96v64h320v-64H416z m-128 0v64h64v-64H288zM224 224h576v256H224V224z m192 96v64h320v-64H416z m-128 0v64h64v-64H288z"
+        ''' <summary>
+        ''' 图标按钮，复制
+        ''' </summary>
+        Public Const IconButtonCopy As String = "M394.666667 106.666667h448a74.666667 74.666667 0 0 1 74.666666 74.666666v448a74.666667 74.666667 0 0 1-74.666666 74.666667H394.666667a74.666667 74.666667 0 0 1-74.666667-74.666667V181.333333a74.666667 74.666667 0 0 1 74.666667-74.666666z m0 64a10.666667 10.666667 0 0 0-10.666667 10.666666v448a10.666667 10.666667 0 0 0 10.666667 10.666667h448a10.666667 10.666667 0 0 0 10.666666-10.666667V181.333333a10.666667 10.666667 0 0 0-10.666666-10.666666H394.666667z m245.333333 597.333333a32 32 0 0 1 64 0v74.666667a74.666667 74.666667 0 0 1-74.666667 74.666666H181.333333a74.666667 74.666667 0 0 1-74.666666-74.666666V394.666667a74.666667 74.666667 0 0 1 74.666666-74.666667h74.666667a32 32 0 0 1 0 64h-74.666667a10.666667 10.666667 0 0 0-10.666666 10.666667v448a10.666667 10.666667 0 0 0 10.666666 10.666666h448a10.666667 10.666667 0 0 0 10.666667-10.666666v-74.666667z"
         ''' <summary>
         ''' 图标，音符，1x
         ''' </summary>

@@ -8,6 +8,7 @@
         Public Property Url As String
         Public Property ID As String
         Public Property Tags As New List(Of String)
+        Public Property Open As Boolean = True
     End Class
 
     Enum TagID As Int64
@@ -51,7 +52,8 @@
                 .Content = i("body").ToString(),
                 .Time = Date.Parse(i("created_at").ToString()),
                 .User = i("user")("login").ToString(),
-                .ID = i("number")}
+                .ID = i("number"),
+                .Open = i("state").ToString().Equals("open")}
             Dim thisTags As JArray = i("labels")
             For Each thisTag As JObject In thisTags
                 item.Tags.Add(thisTag("id"))
@@ -74,29 +76,31 @@
                 ele.Logo = PathImage & "Blocks/Grass.png"
                 StatusDesc = "未查看"
             End If
-            If item.Tags.Contains(TagID.Processing) Then
-                ele.Logo = PathImage & "Blocks/CommandBlock.png"
-                StatusDesc = "处理中"
-            End If
-            If item.Tags.Contains(TagID.Bug) Then
-                ele.Logo = PathImage & "Blocks/RedstoneBlock.png"
-                StatusDesc = "处理中-Bug"
-            End If
-            If item.Tags.Contains(TagID.Improve) Then
-                ele.Logo = PathImage & "Blocks/Anvil.png"
-                StatusDesc = "处理中-优化"
+            If item.Open Then
+                If item.Tags.Contains(TagID.Processing) Then
+                    ele.Logo = PathImage & "Blocks/CommandBlock.png"
+                    StatusDesc = "处理中"
+                End If
+                If item.Tags.Contains(TagID.Bug) Then
+                    ele.Logo = PathImage & "Blocks/RedstoneBlock.png"
+                    StatusDesc = "处理中-Bug"
+                End If
+                If item.Tags.Contains(TagID.Improve) Then
+                    ele.Logo = PathImage & "Blocks/Anvil.png"
+                    StatusDesc = "处理中-优化"
+                End If
+                If item.Tags.Contains(TagID.WaitingResponse) Then
+                    ele.Logo = PathImage & "Blocks/RedstoneLampOff.png"
+                    StatusDesc = "等待提交者"
+                End If
+                If item.Tags.Contains(TagID.NewFeture) Then
+                    ele.Logo = PathImage & "Blocks/Egg.png"
+                    StatusDesc = "处理中-新功能"
+                End If
             End If
             If item.Tags.Contains(TagID.Completed) Then
                 ele.Logo = PathImage & "Blocks/GrassPath.png"
                 StatusDesc = "已完成"
-            End If
-            If item.Tags.Contains(TagID.WaitingResponse) Then
-                ele.Logo = PathImage & "Blocks/RedstoneLampOff.png"
-                StatusDesc = "等待提交者"
-            End If
-            If item.Tags.Contains(TagID.NewFeture) Then
-                ele.Logo = PathImage & "Blocks/Egg.png"
-                StatusDesc = "处理中-新功能"
             End If
             If item.Tags.Contains(TagID.Decline) Then
                 ele.Logo = PathImage & "Blocks/CobbleStone.png"
@@ -106,7 +110,8 @@
                 ele.Logo = PathImage & "Blocks/CobbleStone.png"
                 StatusDesc = "已忽略"
             End If
-            ele.Info = StatusDesc & " | " & item.User & " | " & item.Time
+            ele.Info = item.User & " | " & item.Time
+            ele.Tags = StatusDesc
             AddHandler ele.Click, Sub()
                                       MyMsgBox($"提交者：{item.User}（{GetTimeSpanString(item.Time - DateTime.Now, False)}）{vbCrLf}状态：{StatusDesc}{vbCrLf}{vbCrLf}{item.Content}", "#" & item.ID & " " & item.Title, Button2:="查看详情", Button2Action:=Sub()
                                                                                                                                                                                                                                                     OpenWebsite(item.Url)
