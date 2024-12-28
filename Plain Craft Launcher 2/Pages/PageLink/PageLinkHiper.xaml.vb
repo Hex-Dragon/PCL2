@@ -1,4 +1,6 @@
 ﻿Imports System.Security.Cryptography.X509Certificates
+Imports NAudio.CoreAudioApi
+Imports Open.Nat
 
 Public Class PageLinkHiper
     Public Const RequestVersion As Char = "2"
@@ -33,24 +35,12 @@ Public Class PageLinkHiper
     Public Shared WithEvents InitLoader As New LoaderCombo(Of Integer)("HiPer 初始化", {
         New LoaderTask(Of Integer, Integer)("检查网络环境", AddressOf InitCheck) With {.ProgressWeight = 0.5}
     })
-
-    '检查网络状态
-    Private Shared Sub InitPingCheck(Task As LoaderTask(Of Integer, Integer))
-    End Sub
-    Private Shared Sub InitIpCheck()
-    End Sub
-    Private Shared PingTime As Integer, IpCheckStatus As LoadState = LoadState.Loading, IpIsInChina As Boolean
     Private Shared Sub InitCheck(Task As LoaderTask(Of Integer, Integer))
     End Sub
-
-    '获取所需文件
-    Private Shared Sub InitGetFile(Task As LoaderTask(Of Integer, List(Of NetFile)))
-    End Sub
-    Public Class CertOutdatedException
-        Inherits Exception
-    End Class
     '启动联机模块
-    Private Shared Sub InitLaunch(Task As LoaderTask(Of Integer, Integer))
+    Private Shared Sub InitLaunch()
+        ModLink.MCInstanceFinding()
+        Hint("UPnP 映射已创建")
     End Sub
     Private Shared PingNodes As Integer, AllNodes As List(Of String)
 
@@ -121,8 +111,8 @@ Public Class PageLinkHiper
         If HiperState <> LoadState.Finished Then Exit Sub
         RunInUi(Sub()
                     '网络质量
-                    Dim QualityScore As Integer = If(IpIsInChina, 0, -2)
-                    QualityScore -= Math.Ceiling((Math.Min(PingTime, 600) + Math.Min(PingNodes, 600)) / 80)
+                    Dim QualityScore As Integer = 0
+                    QualityScore -= Math.Ceiling((Math.Min(0, 600) + Math.Min(PingNodes, 600)) / 80)
                     Select Case QualityScore
                         Case Is >= -1
                             LabFinishQuality.Text = "优秀"
@@ -156,6 +146,7 @@ Public Class PageLinkHiper
 
     '创建房间
     Private Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
+        InitLaunch()
     End Sub
     Private Sub RoomCreate(Port As Integer)
         '记录信息
