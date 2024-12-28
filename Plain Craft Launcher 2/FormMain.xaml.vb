@@ -216,7 +216,7 @@ Public Class FormMain
         '整理更新日志文本
         Dim ContentList As New List(Of String)
         Dim SortedFeatures = Sort(FeatureList, Function(Left, Right) Left.Key > Right.Key)
-        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("龙猫忘记写更新日志啦！可以去提醒他一下……")
+        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("Pigeon0v0 忘记写更新日志啦！可以去提醒他一下……")
         For i = 0 To Math.Min(9, SortedFeatures.Count - 1) '最多取 10 项
             ContentList.Add(SortedFeatures(i).Value)
         Next
