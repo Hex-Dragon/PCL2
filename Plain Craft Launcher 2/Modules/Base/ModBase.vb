@@ -18,9 +18,9 @@ Public Module ModBase
     Public CommitHashShort As String = CommitHash.Substring(0, 7) 'Commit Hash，取前 7 位
     Public Const UpstreamVersion As String = "2.8.12" '上游版本
 #If RELEASE Then
-    Public Const VersionCode As Integer = 351 'Release
+    Public Const VersionCode As Integer = 352 'Release
 #Else
-    Public Const VersionCode As Integer = 351 'Snapshot
+    Public Const VersionCode As Integer = 352 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
