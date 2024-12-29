@@ -5,6 +5,7 @@ Imports System.Net
 Imports System.Reflection
 Imports System.Security.Cryptography
 Imports NAudio.Midi
+Imports System.Management
 
 Friend Module ModSecret
 
@@ -64,7 +65,22 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' 获取设备标识码。
     ''' </summary>
     Friend Function SecretGetUniqueAddress() As String
-        Return "0000-0000-0000-0000"
+        Dim code As String = "0000-0000-0000-0000"
+        Try
+            Dim searcher As New ManagementObjectSearcher("select ProcessorId from Win32_Processor") ' 获取 CPU 序列号
+            For Each obj As ManagementObject In searcher.Get()
+                code = obj("ProcessorId").ToString()
+                Exit For
+            Next
+            Using md5 As MD5 = MD5.Create() ' MD5 加密
+                Dim hash As Byte() = md5.ComputeHash(Encoding.UTF8.GetBytes(code))
+                code = BitConverter.ToString(hash).Replace("-", "").Substring(0, 16)
+            End Using
+            code = code.Insert(4, "-").Insert(9, "-").Insert(14, "-")
+        Catch ex As Exception
+            Log(ex, "[Secret] 获取设备标识码失败")
+        End Try
+        Return code
     End Function
 
     Friend Sub SecretLaunchJvmArgs(ByRef DataList As List(Of String))
