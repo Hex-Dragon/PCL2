@@ -13,7 +13,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35" />
                     </Grid.RowDefinitions>
-                    <local:MyButton x:Name="BtnClear" Grid.Column="0" MinWidth="140" Text="清理游戏垃圾" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" Click="BtnClear_Click"/>
+                    <local:MyButton x:Name="BtnClear" Grid.Column="0" MinWidth="140" Text="清理游戏垃圾" ToolTip="清理 PCL 的缓存与 MC 的日志、崩溃报告等垃圾文件" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" Click="BtnClear_Click"/>
                 </Grid>
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="下载自定义文件">
