@@ -84,7 +84,92 @@ Public Class PageOtherTest
         Hint("为便于维护，开源内容中不包含百宝箱功能……")
     End Sub
     Public Shared Sub RubbishClear()
-        Hint("尚未制作……")
+        RunInUi(
+            Sub()
+                FrmOtherTest.BtnClear.IsEnabled = False
+            End Sub)
+        RunInNewThread(
+            Sub()
+                Try
+                    If Not HasRunningMinecraft Or ModLaunch.McLaunchLoader.State = LoadState.Loading Then
+                        If HasDownloadingTask() Then
+                            Hint("请在所有下载任务完成后再来清理吧……")
+                            Return
+                        End If
+                        If Not McFolderList.Any() Then
+                            McFolderListLoader.Start()
+                        End If
+                        Log(String.Format("[Test] 当前缓存文件夹：{0}，默认缓存文件夹：{1}", PathTemp, IO.Path.GetTempPath() + "PCL\"))
+                        If String.Compare(PathTemp, IO.Path.GetTempPath() + "PCL\") = 0 Then
+                            If Setup.Get("HintClearRubbish") <= 2 Then
+                                If MyMsgBox("即将清理游戏日志、错误报告、缓存等文件。" & vbCrLf & "虽然应该没人往这些地方放重要文件，但还是问一下，是否确认继续？" & vbCrLf & vbCrLf & "在完成清理后，PCL 将自动重启。", "清理确认", "确定", "取消") = 2 Then
+                                    Return
+                                End If
+                                Setup.Set("HintClearRubbish", Setup.Get("HintClearRubbish") + 1)
+                            End If
+                        ElseIf MyMsgBox("即将清理游戏日志、错误报告、缓存等文件。" & vbCrLf & vbCrLf & "你已将缓存文件夹手动修改为：" + PathTemp + vbCrLf & "清理过程中，将删除该文件夹中的所有内容，且无法恢复。请确认其中没有除了 PCL 缓存以外的重要文件！" & vbCrLf & vbCrLf & "在完成清理后，PCL 将自动重启。", "清理确认", "确定", "取消") = 2 Then
+                            Return
+                        End If
+
+                        '清理的文件数量
+                        Dim num As Integer = 0
+                        '所有 Minecraft 文件夹
+                        Dim cleanMcFolderList As List(Of DirectoryInfo) = New List(Of DirectoryInfo)()
+
+                        If Not McFolderList.Any() Then
+                            McFolderListLoader.WaitForExit()
+                        End If
+
+                        '寻找所有 Minecraft 文件夹
+                        For Each mcFolder As McFolder In McFolderList
+                            cleanMcFolderList.Add(New DirectoryInfo(mcFolder.Path))
+                            Dim dirInfo As DirectoryInfo = New DirectoryInfo(mcFolder.Path + "versions")
+                            If dirInfo.Exists Then
+                                For Each item As DirectoryInfo In dirInfo.EnumerateDirectories()
+                                    cleanMcFolderList.Add(item)
+                                Next
+                            End If
+                        Next
+
+                        '删除 Minecraft 的缓存
+                        For Each dirInfo As DirectoryInfo In cleanMcFolderList
+                            '删除日志和崩溃报告并计数
+                            num += DeleteDirectory(dirInfo.FullName + If(dirInfo.FullName.EndsWith("\"), "", "\") + "crash-reports\", True)
+                            num += DeleteDirectory(dirInfo.FullName + If(dirInfo.FullName.EndsWith("\"), "", "\") + "logs\", True)
+                            For Each fileInfo As FileInfo In dirInfo.EnumerateFiles("*")
+                                If fileInfo.Name.StartsWith("hs_err_pid") OrElse fileInfo.Name.EndsWith(".log") OrElse fileInfo.Name = "WailaErrorOutput.txt" Then
+                                    fileInfo.Delete()
+                                    num += 1
+                                End If
+                            Next
+
+                            '删除 Natives 文件
+                            For Each dirInfo2 As DirectoryInfo In dirInfo.EnumerateDirectories()
+                                If dirInfo2.Name = dirInfo2.Name + "-natives" OrElse dirInfo2.Name = "natives-windows-x86_64" Then
+                                    num += DeleteDirectory(dirInfo2.FullName, True)
+                                End If
+                            Next
+                        Next
+
+                        '删除 PCL 的缓存
+                        num += DeleteDirectory(PathTemp, True)
+                        num += DeleteDirectory(OsDrive + "ProgramData\PCL\", True)
+
+                        MyMsgBox(String.Format("清理了 {0} 个文件！", num) + vbCrLf & "PCL 即将自动重启……", "缓存已清理", "确定", "", "", False, True, True, Nothing, Nothing, Nothing)
+
+                        Process.Start(New ProcessStartInfo(PathWithName))
+                        FormMain.EndProgramForce(Result.Success)
+                    End If
+                    Hint("请先关闭所有运行中的游戏……")
+                Catch ex As Exception
+                    Log(ex, "清理垃圾失败", LogLevel.Hint, "出现错误")
+                Finally
+                    RunInUiWait(
+                        Sub()
+                            FrmOtherTest.BtnClear.IsEnabled = True
+                        End Sub)
+                End Try
+            End Sub, "Rubbish Clear")
     End Sub
     Public Shared Sub MemoryOptimize(ShowHint As Boolean)
         If ShowHint Then Hint("为便于维护，开源内容中不包含百宝箱功能……")
