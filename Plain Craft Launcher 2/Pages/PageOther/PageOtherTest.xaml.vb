@@ -31,8 +31,54 @@ Public Class PageOtherTest
         Setup.Set("CacheDownloadFolder", TextDownloadFolder.Text)
         TextDownloadName.Validate()
     End Sub
+    Private Shared Sub DownloadState(Loader As ModLoader.LoaderCombo(Of Integer))
+        Try
+            Select Case Loader.State
+                Case LoadState.Finished
+                    Hint(Loader.Name + "完成！", ModMain.HintType.Finish, True)
+                    Beep()
+                Case LoadState.Failed
+                    Log(Loader.Error, Loader.Name + "失败", ModBase.LogLevel.Msgbox, "出现错误")
+                    Beep()
+                Case LoadState.Aborted
+                    Hint(Loader.Name + "已取消！", ModMain.HintType.Info, True)
+            End Select
+        Catch ex As Exception
+        End Try
+    End Sub
+
     Public Shared Sub StartCustomDownload(Url As String, FileName As String, Optional Folder As String = Nothing)
-        Hint("为便于维护，开源内容中不包含百宝箱功能……")
+        Try
+            If String.IsNullOrWhiteSpace(Folder) Then
+                Folder = SelectAs("选择文件保存位置", FileName, Nothing, Nothing)
+                If Not Folder.Contains("\") Then
+                    Return
+                End If
+                If Folder.EndsWith(FileName) Then
+                    Folder = Strings.Mid(Folder, 1, Folder.Length - FileName.Length)
+                End If
+            End If
+            Folder = Folder.Replace("/", "\").TrimEnd(New Char() {"\"c}) + "\"
+            Try
+                Directory.CreateDirectory(Folder)
+                CheckPermissionWithException(Folder)
+            Catch ex As Exception
+                Log(ex, "访问文件夹失败（" + Folder + "）", ModBase.LogLevel.Hint, "出现错误")
+                Return
+            End Try
+            Log("[Download] 自定义下载文件名：" + FileName, LogLevel.Normal, "出现错误")
+            Log("[Download] 自定义下载文件目标：" + Folder, ModBase.LogLevel.Normal, "出现错误")
+            Dim uuid As Integer = GetUuid()
+            Dim loaderDownload As LoaderDownload = New ModNet.LoaderDownload("自定义下载文件：" + FileName + " ", New List(Of NetFile)() From {New NetFile(New String() {Url}, Folder + FileName, Nothing, True)})
+            Dim loaderCombo As LoaderCombo(Of Integer) = New LoaderCombo(Of Integer)("自定义下载 (" + uuid.ToString() + ") ", New LoaderBase() {loaderDownload}) With {.OnStateChanged = AddressOf DownloadState}
+            loaderCombo.Start()
+            LoaderTaskbarAdd(Of Integer)(loaderCombo)
+            FrmMain.BtnExtraDownload.ShowRefresh()
+            FrmMain.BtnExtraDownload.Ribble()
+
+        Catch ex As Exception
+            Log(ex, "开始自定义下载失败", LogLevel.Feedback, "出现错误")
+        End Try
     End Sub
     Public Shared Sub Jrrp()
         Hint("为便于维护，开源内容中不包含百宝箱功能……")
