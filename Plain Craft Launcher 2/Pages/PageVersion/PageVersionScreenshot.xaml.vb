@@ -56,9 +56,9 @@ Public Class PageVersionScreenshot
         FileList.Clear()
         If Directory.Exists(ScreenshotPath) Then FileList = Directory.EnumerateFiles(ScreenshotPath, "*.png", SearchOption.AllDirectories).ToList()
         PanList.Children.Clear()
+        FileList = FileList.Where(Function(e) Not e.ContainsF("\debug\")) ' 排除资源包调试输出
         If ModeDebug Then Log("[Screenshot] 共发现 " & FileList.Count & " 个截图文件", LogLevel.Debug)
         For Each i In FileList
-            If i.ContainsF("\debug\") Then Continue For ' 排除资源包调试输出
             Dim myCard As New MyCard With {
             .Height = Double.NaN, ' 允许高度自适应
             .Width = Double.NaN,  ' 允许宽度自适应
