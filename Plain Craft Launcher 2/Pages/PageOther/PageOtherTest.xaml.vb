@@ -84,7 +84,7 @@ Public Class PageOtherTest
         Hint("为便于维护，开源内容中不包含百宝箱功能……")
     End Sub
     Public Shared Sub RubbishClear()
-        Hint("为便于维护，开源内容中不包含百宝箱功能……")
+        Hint("尚未制作……")
     End Sub
     Public Shared Sub MemoryOptimize(ShowHint As Boolean)
         If ShowHint Then Hint("为便于维护，开源内容中不包含百宝箱功能……")
@@ -147,5 +147,9 @@ Public Class PageOtherTest
     End Sub
     Private Sub TextDownloadName_ValidateChanged(sender As Object, e As EventArgs) Handles TextDownloadName.ValidateChanged
         StartButtonRefresh()
+    End Sub
+
+    Private Sub BtnClear_Click(sender As Object, e As MouseButtonEventArgs)
+        RubbishClear()
     End Sub
 End Class
