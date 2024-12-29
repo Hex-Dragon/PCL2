@@ -10,6 +10,13 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If RELEASE Then
+        If LastVersion < 351 Then 'Release 2.9.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "完整支持 LittleSkin OAuh 登录"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "恢复了百宝箱的部分内容"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了 WebP 图片无法加载问题"))
+            FeatureCount += 6
+            BugCount += 4
+        End If
         If LastVersion < 350 Then 'Release 2.9.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持下载资源包和光影包"))
         End If
