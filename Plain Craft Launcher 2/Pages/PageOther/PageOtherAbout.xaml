@@ -18,7 +18,7 @@
                         <ColumnDefinition Width="150" />
                     </Grid.ColumnDefinitions>
                     <local:MyListItem IsHitTestVisible="False" Title="龙腾猫跃" Margin="-5,0,15,0" Info="Plain Craft Launcher 的作者！" Grid.Row="0" Grid.Column="1" />
-                    <local:MyListItem IsHitTestVisible="False" Title="Plain Craft Launcher 2" Margin="-5,0,15,0" Info="当前版本: %VERSION%（%VERSIONCODE%, %BRANCH% 通道） / Commit: %COMMIT_HASH% / 主线版本: %UPSTREAM_VERSION%" Grid.Row="1" Grid.Column="1" x:Name="ItemAboutPcl" />
+                    <local:MyListItem IsHitTestVisible="False" Title="Plain Craft Launcher 2" Margin="-5,0,15,0" Info="当前版本: %BRANCH% %VERSION% (%VERSIONCODE%.%COMMIT_HASH%, 基于 %UPSTREAM_VERSION%)" Grid.Row="1" Grid.Column="1" x:Name="ItemAboutPcl" />
                     <Image Source="/Plain Craft Launcher 2;component/Images/Heads/Logo.png" Grid.Row="1" Margin="3">
                         <Image.Clip>
                             <EllipseGeometry Center="17 17" RadiusX="17" RadiusY="17" />
