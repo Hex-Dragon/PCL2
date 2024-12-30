@@ -65,17 +65,26 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' 获取设备标识码。
     ''' </summary>
     Friend Function SecretGetUniqueAddress() As String
-        Dim code As String = "0000-0000-0000-0000"
+        Dim code As String = "PCL2-CECE-GOOD-2024"
+        Dim rawCode As String = "4202-DOOG-ECEC-2LCP"
         Try
             Dim searcher As New ManagementObjectSearcher("select ProcessorId from Win32_Processor") ' 获取 CPU 序列号
             For Each obj As ManagementObject In searcher.Get()
-                code = obj("ProcessorId").ToString()
+                rawCode = obj("ProcessorId").ToString()
                 Exit For
             Next
-            Using md5 As MD5 = MD5.Create() ' MD5 加密
-                Dim hash As Byte() = md5.ComputeHash(Encoding.UTF8.GetBytes(code))
-                code = BitConverter.ToString(hash).Replace("-", "").Substring(0, 16)
+            Using sha256 As SHA256 = SHA256.Create() ' SHA256 加密
+                Dim hash As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawCode))
+                code = BitConverter.ToString(hash).Replace("-", "")
             End Using
+            Dim sum As Integer = 0
+            For Each c As Char In rawCode ' 获取数字和
+                If Char.IsDigit(c) Then
+                    sum += Val(c)
+                End If
+            Next
+            Dim startIndex = sum + 5
+            code = code.Substring(startIndex, 16)
             code = code.Insert(4, "-").Insert(9, "-").Insert(14, "-")
         Catch ex As Exception
             Log(ex, "[Secret] 获取设备标识码失败")
