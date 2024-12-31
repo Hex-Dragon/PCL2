@@ -146,8 +146,10 @@ Public Class PageLinkLobby
     Public LocalPort As String = Nothing
     '创建房间
     Private Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
-        InitLaunch()
         LocalPort = MyMsgBoxInput("输入端口号", HintText:="例如：25565")
+        CreateUPnPMapping(LocalPort)
+        CurrentSubpage = Subpages.PanFinish
+        InitLaunch()
     End Sub
     Private Sub RoomCreate(Port As Integer)
         '记录信息
@@ -235,7 +237,12 @@ Public Class PageLinkLobby
 
     '退出
     Private Sub BtnFinishExit_Click(sender As Object, e As EventArgs) Handles BtnFinishExit.Click
-        If IsServerSide AndAlso MyMsgBox("你确定要关闭联机房间吗？", "确认退出", "确定", "取消", IsWarn:=True) = 2 Then Exit Sub
+        If MyMsgBox("你确定要关闭联机房间吗？", "确认退出", "确定", "取消", IsWarn:=True) = 1 Then
+            RemoveUPnPMapping()
+            LocalPort = Nothing
+            CurrentSubpage = Subpages.PanSelect
+            Exit Sub
+        End If
     End Sub
 
     '复制联机码
