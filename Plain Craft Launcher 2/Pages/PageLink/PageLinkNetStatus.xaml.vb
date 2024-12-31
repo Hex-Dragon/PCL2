@@ -22,7 +22,7 @@ Public Class PageLinkNetStatus
             TestTcpListener.Start()
             Thread.Sleep(200)
             TestTcpListener.Stop()
-            WriteReg("LinkFirstTimeNetTest", "True")
+            WriteReg("LinkFirstTimeNetTest", "False")
         End If
 
         RunInUi(Sub()
