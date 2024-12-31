@@ -40,7 +40,6 @@ Public Class PageLinkLobby
     '启动联机模块
     Private Shared Sub InitLaunch()
         ModLink.MCInstanceFinding()
-        Hint("UPnP 映射已创建")
     End Sub
     Private Shared PingNodes As Integer, AllNodes As List(Of String)
 

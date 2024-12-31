@@ -12,7 +12,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
-            <RowDefinition Height="130" />
+            <RowDefinition Height="150" />
             <RowDefinition Height="20" />
             <RowDefinition Height="130" />
             <RowDefinition Height="20" />
@@ -51,8 +51,9 @@
                 <TextBlock x:Name="LabNetStatusNATTitle" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="1"
            Text="NAT 环境：尚未检测" FontSize="20" Foreground="{DynamicResource ColorBrush3}" />
                 <TextBlock x:Name="LabNetStatusNATDesc" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Margin="0,10,0,12" 
-           Text="点击测试按钮以开始测试。"
-           FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
+           Text="点击测试按钮以开始测试。" FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
+                <TextBlock x:Name="LabNetStatusNATDesc1" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="3" Margin="0,0,0,0" 
+           Text="NAT 类型决定了你是否能与对方建立直接连接。你可以尝试调整光猫和路由器设置以改善 NAT 环境。" FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
             </Grid>
         </local:MyCard>
         
@@ -87,8 +88,7 @@
                 <TextBlock x:Name="LabNetStatusPingTitle" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="1"
            Text="Ping 值：尚未检测" FontSize="20" Foreground="{DynamicResource ColorBrush3}" />
                 <TextBlock x:Name="LabNetStatusPingDesc" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Margin="0,10,0,12" 
-           Text="点击测试按钮以开始测试。"
-           FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
+           Text="点击测试按钮以开始测试。&#xD;&#xA;Ping 值可以反映你的网络延迟水平，一般来说越低越好。" FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
             </Grid>
         </local:MyCard>
 
@@ -123,8 +123,7 @@
                 <TextBlock x:Name="LabNetStatusIPv6Title" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="1"
                    Text="IP 版本：尚未检测" FontSize="20" Foreground="{DynamicResource ColorBrush3}" />
                 <TextBlock x:Name="LabNetStatusIPv6Desc" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Margin="0,10,0,12" 
-                   Text="点击测试按钮以开始测试。"
-                   FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
+                   Text="点击测试按钮以开始测试。" FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
             </Grid>
         </local:MyCard>
     </Grid>
