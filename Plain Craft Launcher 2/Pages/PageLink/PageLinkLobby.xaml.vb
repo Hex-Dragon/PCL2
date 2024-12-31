@@ -143,9 +143,11 @@ Public Class PageLinkLobby
 
 #Region "PanSelect | 种类选择页面"
 
+    Public LocalPort As String = Nothing
     '创建房间
     Private Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
         InitLaunch()
+        LocalPort = MyMsgBoxInput("输入端口号", HintText:="例如：25565")
     End Sub
     Private Sub RoomCreate(Port As Integer)
         '记录信息

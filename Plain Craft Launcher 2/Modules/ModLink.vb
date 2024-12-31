@@ -62,35 +62,64 @@ Public Module ModLink
 #Region "Minecraft 实例探测"
     Public Sub MCInstanceFinding()
         'Java 进程 PID 查询
-        'Dim PIDLookupResult As String() = Nothing
-        'Dim JavaNames As String() = Nothing
-        'JavaNames.Append("java.exe")
-        'JavaNames.Append("javaw.exe")
+        Log("[MCDetect] 开始检测 Java 进程及其监听端口")
+        Dim PIDLookupResultArrayList As ArrayList = New ArrayList
 
-        'For Each java In JavaNames
-        '    Dim JavaProcesses As Process() = Process.GetProcessesByName(java)
-        '    If JavaProcesses Is Nothing OrElse JavaProcesses.Length <= 0 Then
-        '        Continue For
-        '    Else
-        '        For Each p In JavaProcesses
-        '            Log("[MCDetect] 检测到 Java 进程，PID: " + p.Id.ToString())
-        '            PIDLookupResult.Append(p.Id.ToString())
-        '        Next
-        '    End If
-        'Next
+        Dim JavaNames As ArrayList = New ArrayList
+        JavaNames.Add("javaw")
+        JavaNames.Add("java")
+
+        For Each java In JavaNames
+            Dim JavaProcesses As Process() = Process.GetProcessesByName(java)
+            If JavaProcesses Is Nothing OrElse JavaProcesses.Length <= 0 Then
+                Log("[MCDetect] 未检测到 Java 进程")
+                Exit Sub
+            Else
+                For Each p In JavaProcesses
+                    Log("[MCDetect] 检测到 Java 进程，PID: " + p.Id.ToString())
+                    PIDLookupResultArrayList.Add(p.Id.ToString())
+                Next
+            End If
+        Next
 
         '通过 PID 查询对应进程监听的端口号
         'Dim Pro As Process = New Process
 
         'Try
         '    Dim NetStatOutput As String = ShellAndGetOutput("netstat", "-ano")
+        '    Log("[MCDetect] 查询 NetStat 信息成功")
         '    'Log(NetStatOutput)
         '    Dim reg As Regex = New Regex("\\s+", RegexOptions.Compiled)
+        '    'Dim line As String = Nothing
+        '    Dim lines As String() = NetStatOutput.Split("\r")
+        '    Log("line length: " + lines.Length.ToString())
+
+        'For Each line In lines
+        'Log("当前行：" + line)
+        'line = line.Trim()
+
+        'If Not line.StartsWithF("TCP") AndAlso Not line.StartsWithF("UDP") Then
+        '    Continue For
+        'End If
+
+        'line = reg.Replace(line, ",")
+        'Log(line)
+        'Dim pid As String = line.Split(",")(4)
+        'Dim fullip As String = line.Split(",")(1)
+        'Dim port As String = fullip.Split(":")(1)
+        'If fullip.StartsWithF("0.0.0.0") AndAlso PIDLookupResultArrayList.Contains(pid) Then
+        '    Log($"Java 进程 PID {pid} 识别到监听端口 {port}")
+        'End If
+        'Next
+
         '    Dim line As String = Nothing
-        '    Dim line1 As String = Nothing
-        '    Dim reader As StringReader = New StringReader(NetStatOutput)
-        '    While Not line = reader.ReadLine()
-        '        line1 = reader.ReadLine().Trim()
+        '    Dim sr As StringReader = New StringReader(NetStatOutput)
+        '    While True
+        '        line = line.Trim()
+        '        If line.Contains("[") Then
+        '            Exit While
+        '        End If
+        '        Log("当前行：" + line)
 
         '        If Not line.StartsWithF("TCP") AndAlso Not line.StartsWithF("UDP") Then
         '            Continue While
@@ -98,11 +127,16 @@ Public Module ModLink
 
         '        line = reg.Replace(line, ",")
         '        Log(line)
-        '        Dim soc As String = line.Split(",")(1)
+        '        Dim pid As String = line.Split(",")(4)
+        '        Dim fullip As String = line.Split(",")(1)
+        '        Dim port As String = fullip.Split(":")(1)
+        '        If fullip.StartsWithF("0.0.0.0") AndAlso PIDLookupResultArrayList.Contains(pid) Then
+        '            Log($"Java 进程 PID {pid} 识别到监听端口 {port}")
+        '        End If
 
         '    End While
         'Catch ex As Exception
-
+        '    Log("[MCDetect] 通过 PID 查询端口号异常: " + ex.ToString())
         'End Try
 
     End Sub
