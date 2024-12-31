@@ -15,6 +15,8 @@ Public Class PageLinkNetStatus
     Public IPv6Status As String = Nothing
     Public IPv6StatusFriendly As String = Nothing
 
+    Public Shared PublicIPv4Address As String = Nothing
+
     Public Sub NetStatusTest()
         If Convert.ToBoolean(ReadReg("LinkFirstTimeNetTest", "True")) Then
             MyMsgBox($"你似乎是第一次打开 PCL 的联机模块。为了正常运行联机模块，PCL 接下来会申请 Windows 防火墙权限。{vbCrLf}{vbCrLf}请在接下来出现的弹窗中点击 ""允许""。", "首次联机提示", "我知道了", ForceWait:=True)
@@ -133,7 +135,7 @@ Public Class PageLinkNetStatus
         Try
             For Each IP In LocalIPAddresses
                 If Sockets.AddressFamily.InterNetwork.Equals(IP.AddressFamily) Then 'IPv4
-                    Dim PublicIPv4Address As String = NetRequestRetry("http://4.ipw.cn", "GET", "", "application/x-www-form-urlencoded")
+                    PublicIPv4Address = NetRequestRetry("http://4.ipw.cn", "GET", "", "application/x-www-form-urlencoded")
 
                     If IP.ToString() = PublicIPv4Address Then '判断是否是公网地址
                         IPv4Status = "Public"

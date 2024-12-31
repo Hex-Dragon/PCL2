@@ -11,6 +11,7 @@ Public Module ModLink
     Public UPnPMappingName As String = "PCL2 CE Link Lobby"
     Public UPnPDevice = Nothing
     Public CurrentUPnPMapping As Mapping = Nothing
+    Public UPnPPublicPort As String = Nothing
 
     ''' <summary>
     ''' 寻找 UPnP 设备并尝试创建一个 UPnP 映射
@@ -18,6 +19,7 @@ Public Module ModLink
     Public Async Sub CreateUPnPMapping(Optional LocalPort As Integer = 25565, Optional PublicPort As Integer = 10240)
         Log($"[UPnP] 尝试创建 UPnP 映射，本地端口：{LocalPort}，远程端口：{PublicPort}，映射名称：{UPnPMappingName}")
 
+        UPnPPublicPort = PublicPort
         Dim UPnPDiscoverer = New NatDiscoverer()
         Dim cts = New CancellationTokenSource(10000)
         Try

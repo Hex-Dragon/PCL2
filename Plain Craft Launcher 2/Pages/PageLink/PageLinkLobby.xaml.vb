@@ -147,6 +147,7 @@ Public Class PageLinkLobby
     '创建房间
     Private Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
         LocalPort = MyMsgBoxInput("输入端口号", HintText:="例如：25565")
+        If LocalPort = Nothing Then Exit Sub
         CreateUPnPMapping(LocalPort)
         CurrentSubpage = Subpages.PanFinish
         InitLaunch()
