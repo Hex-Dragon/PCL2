@@ -396,6 +396,7 @@ EndHint:
     Public FrmLinkHiper As PageLinkHiper
     Public FrmLinkHelp As PageOtherHelpDetail
     Public FrmLinkFeedback As PageLinkFeedback
+    Public FrmLinkNetStatus As PageLinkNetStatus
 
     '下载页面声明
     Public FrmDownloadLeft As PageDownloadLeft
