@@ -2,7 +2,7 @@
 Imports NAudio.CoreAudioApi
 Imports Open.Nat
 
-Public Class PageLinkHiper
+Public Class PageLinkLobby
     Public Const RequestVersion As Char = "2"
 
     '记录的启动情况
@@ -55,7 +55,7 @@ Public Class PageLinkHiper
         End Get
         Set(value As LoadState)
             _HiperState = value
-            RunInUi(Sub() If FrmLinkLeft IsNot Nothing Then CType(FrmLinkLeft.ItemHiper.Buttons(0), MyIconButton).Visibility = If(HiperState = LoadState.Finished OrElse HiperState = LoadState.Loading, Visibility.Visible, Visibility.Collapsed))
+            RunInUi(Sub() If FrmLinkLeft IsNot Nothing Then CType(FrmLinkLeft.ItemLobby.Buttons(0), MyIconButton).Visibility = If(HiperState = LoadState.Finished OrElse HiperState = LoadState.Loading, Visibility.Visible, Visibility.Collapsed))
         End Set
     End Property
 
@@ -129,8 +129,8 @@ Public Class PageLinkHiper
                     End Select
                     'Ping
                     If HostPing <> -1 Then
-                        If FrmLinkHiper IsNot Nothing AndAlso FrmLinkHiper.LabFinishPing.IsLoaded Then
-                            FrmLinkHiper.LabFinishPing.Text = HostPing & "ms"
+                        If FrmLinkLobby IsNot Nothing AndAlso FrmLinkLobby.LabFinishPing.IsLoaded Then
+                            FrmLinkLobby.LabFinishPing.Text = HostPing & "ms"
                         End If
                     End If
                 End Sub)
@@ -180,9 +180,9 @@ Public Class PageLinkHiper
         Log("[Hiper] 连接步骤：" & Intro)
         LoadStep = [Step]
         RunInUiWait(Sub()
-                        If FrmLinkHiper Is Nothing OrElse Not FrmLinkHiper.LabLoadDesc.IsLoaded Then Exit Sub
-                        FrmLinkHiper.LabLoadDesc.Text = Intro
-                        FrmLinkHiper.UpdateProgress()
+                        If FrmLinkLobby Is Nothing OrElse Not FrmLinkLobby.LabLoadDesc.IsLoaded Then Exit Sub
+                        FrmLinkLobby.LabLoadDesc.Text = Intro
+                        FrmLinkLobby.UpdateProgress()
                     End Sub)
     End Sub
 
@@ -274,9 +274,9 @@ Public Class PageLinkHiper
         End Set
     End Property
 
-    Private Sub PageLinkHiper_OnPageEnter() Handles Me.PageEnter
-        FrmLinkHiper.PanSelect.Visibility = If(CurrentSubpage = Subpages.PanSelect, Visibility.Visible, Visibility.Collapsed)
-        FrmLinkHiper.PanFinish.Visibility = If(CurrentSubpage = Subpages.PanFinish, Visibility.Visible, Visibility.Collapsed)
+    Private Sub PageLinkLobby_OnPageEnter() Handles Me.PageEnter
+        FrmLinkLobby.PanSelect.Visibility = If(CurrentSubpage = Subpages.PanSelect, Visibility.Visible, Visibility.Collapsed)
+        FrmLinkLobby.PanFinish.Visibility = If(CurrentSubpage = Subpages.PanFinish, Visibility.Visible, Visibility.Collapsed)
     End Sub
 
     Private Shared Sub HiperExit(ExitToCertPage As Boolean)
@@ -284,9 +284,9 @@ Public Class PageLinkHiper
         If InitLoader.State = LoadState.Loading Then InitLoader.Abort()
         If InitLoader.State = LoadState.Failed Then InitLoader.State = LoadState.Waiting
         RunInUi(Sub()
-                    If FrmLinkHiper Is Nothing OrElse Not FrmLinkHiper.IsLoaded Then Exit Sub
-                    FrmLinkHiper.CurrentSubpage = Subpages.PanSelect
-                    FrmLinkHiper.PageOnContentExit()
+                    If FrmLinkLobby Is Nothing OrElse Not FrmLinkLobby.IsLoaded Then Exit Sub
+                    FrmLinkLobby.CurrentSubpage = Subpages.PanSelect
+                    FrmLinkLobby.PageOnContentExit()
                 End Sub)
     End Sub
 

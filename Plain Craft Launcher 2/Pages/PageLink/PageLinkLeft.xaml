@@ -16,7 +16,7 @@
         </local:MyListItem>
         
         <TextBlock Text="联机方式" Margin="13,6,5,4" Opacity="0.6" FontSize="12" />
-        <local:MyListItem x:Name="ItemHiper" IsScaleAnimationEnabled="False" Type="RadioBox" Tag="1" MinPaddingRight="35" Height="36" VerticalAlignment="Top" Title="HiPer"
+        <local:MyListItem x:Name="ItemLobby" IsScaleAnimationEnabled="False" Type="RadioBox" Tag="1" MinPaddingRight="35" Height="36" VerticalAlignment="Top" Title="大厅"
                           LogoScale="0.85" Logo="M554.496 170.496c141.312 0 256 114.688 256 256s-114.688 256-256 256H402.432c-22.016-1.536-39.424-19.968-39.424-42.496a42.391 42.391 0 0 1 42.496-42.496h149.504c94.208 0 170.496-76.288 170.496-170.496S648.704 256 554.496 256h-256C204.288 256 128 332.288 128 426.496c0 38.4 12.8 73.728 33.792 102.4 5.632 7.168 8.704 15.872 8.704 25.6A42.391 42.391 0 0 1 128 596.992c-11.264 0-20.992-4.096-28.672-11.264l-0.512 0.512c-35.328-44.032-56.32-99.328-56.32-159.744 0-141.312 114.688-256 256-256h256z m64 192h3.072c22.016 1.536 39.424 19.968 39.424 42.496a42.391 42.391 0 0 1-42.496 42.496H469.504c-94.208 0-170.496 76.288-170.496 170.496S375.296 788.48 469.504 788.48h256C819.712 788.48 896 712.192 896 617.984c0-38.4-12.8-73.728-33.792-102.4-5.632-7.168-8.704-15.872-8.704-25.6A42.391 42.391 0 0 1 896 447.488c11.264 0 20.992 4.096 28.672 11.264l0.512-0.512c35.328 44.032 56.32 99.328 56.32 159.744 0 141.312-114.688 256-256 256h-256c-141.312 0-256-114.688-256-256s114.688-256 256-256h148.992z">
         </local:MyListItem>
         <local:MyListItem x:Name="ItemIoi" IsScaleAnimationEnabled="False" Type="RadioBox" Tag="2" MinPaddingRight="35" Height="36" VerticalAlignment="Top" Title="IOI"

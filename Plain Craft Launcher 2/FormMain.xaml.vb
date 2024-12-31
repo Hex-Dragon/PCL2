@@ -992,7 +992,7 @@ Public Class FormMain
         SetupUI = 1
         SetupSystem = 2
         SetupLink = 3
-        LinkHiper = 1
+        LinkLobby = 1
         LinkIoi = 2
         LinkSetup = 4
         LinkHelp = 5

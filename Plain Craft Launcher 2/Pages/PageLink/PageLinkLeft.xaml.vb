@@ -7,7 +7,7 @@
         IsLoad = True
         '切换默认页面
         If IsPageSwitched Then Exit Sub
-        ItemHiper.SetChecked(True, False, False)
+        ItemLobby.SetChecked(True, False, False)
     End Sub
     Private Sub PageOtherLeft_Unloaded(sender As Object, e As RoutedEventArgs) Handles Me.Unloaded
         IsPageSwitched = False
@@ -18,12 +18,12 @@
     ''' <summary>
     ''' 当前页面的编号。
     ''' </summary>
-    Public PageID As FormMain.PageSubType = FormMain.PageSubType.LinkHiper
+    Public PageID As FormMain.PageSubType = FormMain.PageSubType.LinkLobby
 
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemHiper.Check, ItemIoi.Check, ItemSetup.Check, ItemHelp.Check, ItemFeedback.Check, ItemNetStatus.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemLobby.Check, ItemIoi.Check, ItemSetup.Check, ItemHelp.Check, ItemFeedback.Check, ItemNetStatus.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -32,9 +32,9 @@
     Public Function PageGet(Optional ID As FormMain.PageSubType = -1)
         If ID = -1 Then ID = PageID
         Select Case ID
-            Case 0, FormMain.PageSubType.LinkHiper
-                If FrmLinkHiper Is Nothing Then FrmLinkHiper = New PageLinkHiper
-                Return FrmLinkHiper
+            Case 0, FormMain.PageSubType.LinkLobby
+                If FrmLinkLobby Is Nothing Then FrmLinkLobby = New PageLinkLobby
+                Return FrmLinkLobby
             Case FormMain.PageSubType.LinkIoi
                 If FrmLinkIoi Is Nothing Then FrmLinkIoi = New PageLinkIoi
                 Return FrmLinkIoi
