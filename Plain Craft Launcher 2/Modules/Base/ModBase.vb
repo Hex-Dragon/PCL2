@@ -12,26 +12,26 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.9.2" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.9.2." & VersionBranchCode '标准格式的四段式版本号
-    Public Const CommitHash As String = "11451419" 'Commit Hash，由 GitHub Workflow 自动替换
-    Public CommitHashShort As String = CommitHash.Substring(0, 7) 'Commit Hash，取前 7 位
+    Public Const VersionBaseName As String = "2.9.3" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.9.3." & VersionBranchCode '标准格式的四段式版本号
+    Public Const CommitHash As String = "native" 'Commit Hash，由 GitHub Workflow 自动替换
+    Public CommitHashShort As String = If(CommitHash = "native", "native", CommitHash.Substring(0, 7)) 'Commit Hash，取前 7 位
     Public Const UpstreamVersion As String = "2.8.12" '上游版本
 #If RELEASE Then
-    Public Const VersionCode As Integer = 350 'Release
+    Public Const VersionCode As Integer = 352 'Release
 #Else
-    Public Const VersionCode As Integer = 350 'Snapshot
+    Public Const VersionCode As Integer = 352 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
 #If RELEASE Then
-    Public Const VersionBranchName As String = "Release"
+    Public Const VersionBranchName As String = "CE"
     Public Const VersionBranchCode As String = "0"
 #ElseIf BETA Then
-    Public Const VersionBranchName As String = "Snapshot"
+    Public Const VersionBranchName As String = "CE Preview"
     Public Const VersionBranchCode As String = "50"
 #Else
-    Public Const VersionBranchName As String = "Debug"
+    Public Const VersionBranchName As String = "CE Debug"
     Public Const VersionBranchCode As String = "100"
 #End If
 
@@ -1381,7 +1381,7 @@ RetryDir:
         '常见错误（记得同时修改下面的）
         Dim CommonReason As String = Nothing
         If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is BadImageFormatException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
-            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
+            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.8 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
         ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
             CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then
@@ -1429,7 +1429,7 @@ RetryDir:
         '常见错误（记得同时修改上面的）
         Dim CommonReason As String = Nothing
         If TypeOf InnerEx Is TypeLoadException OrElse TypeOf InnerEx Is BadImageFormatException OrElse TypeOf InnerEx Is MissingMethodException OrElse TypeOf InnerEx Is NotImplementedException OrElse TypeOf InnerEx Is TypeInitializationException Then
-            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.6.2 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
+            CommonReason = "PCL 的运行环境存在问题。请尝试重新安装 .NET Framework 4.8 然后再试。若无法安装，请先卸载较新版本的 .NET Framework，然后再尝试安装。"
         ElseIf TypeOf InnerEx Is UnauthorizedAccessException Then
             CommonReason = "PCL 的权限不足。请尝试右键 PCL，选择以管理员身份运行。"
         ElseIf TypeOf InnerEx Is OutOfMemoryException Then

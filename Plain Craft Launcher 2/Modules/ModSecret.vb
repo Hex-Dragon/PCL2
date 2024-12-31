@@ -5,6 +5,7 @@ Imports System.Net
 Imports System.Reflection
 Imports System.Security.Cryptography
 Imports NAudio.Midi
+Imports System.Management
 
 Friend Module ModSecret
 
@@ -55,6 +56,8 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 该版本中暂时无法使用以下特性：
 - 更新与联网通知：在做了在做了.jpg
 - 主题切换：这是需要赞助解锁的纪念性质的功能，社区版不会制作
+
+该版本中的以下特性与原版有所区别：
 - 百宝箱：主线分支没有提供相关内容", "社区版本说明", "我知道了")
     End Sub
 
@@ -62,7 +65,31 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' 获取设备标识码。
     ''' </summary>
     Friend Function SecretGetUniqueAddress() As String
-        Return "0000-0000-0000-0000"
+        Dim code As String = "PCL2-CECE-GOOD-2024"
+        Dim rawCode As String = "4202-DOOG-ECEC-2LCP"
+        Try
+            Dim searcher As New ManagementObjectSearcher("select ProcessorId from Win32_Processor") ' 获取 CPU 序列号
+            For Each obj As ManagementObject In searcher.Get()
+                rawCode = obj("ProcessorId").ToString()
+                Exit For
+            Next
+            Using sha256 As SHA256 = SHA256.Create() ' SHA256 加密
+                Dim hash As Byte() = sha256.ComputeHash(Encoding.UTF8.GetBytes(rawCode))
+                code = BitConverter.ToString(hash).Replace("-", "")
+            End Using
+            Dim sum As Integer = 0
+            For Each c As Char In rawCode ' 获取数字和
+                If Char.IsDigit(c) Then
+                    sum += Val(c)
+                End If
+            Next
+            Dim startIndex = sum + 5
+            code = code.Substring(startIndex, 16)
+            code = code.Insert(4, "-").Insert(9, "-").Insert(14, "-")
+        Catch ex As Exception
+            Log(ex, "[Secret] 获取设备标识码失败")
+        End Try
+        Return code
     End Function
 
     Friend Sub SecretLaunchJvmArgs(ByRef DataList As List(Of String))

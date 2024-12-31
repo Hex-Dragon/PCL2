@@ -10,6 +10,13 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If RELEASE Then
+        If LastVersion < 352 Then 'Release 2.9.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "完整支持 LittleSkin OAuh 登录"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "恢复了百宝箱的部分内容"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了 WebP 图片无法加载问题"))
+            FeatureCount += 6
+            BugCount += 4
+        End If
         If LastVersion < 350 Then 'Release 2.9.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持下载资源包和光影包"))
         End If
@@ -97,6 +104,13 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 352 Then 'Snapshot 2.9.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "完整支持 LittleSkin OAuh 登录"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "恢复了百宝箱的部分内容"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了 WebP 图片无法加载问题"))
+            FeatureCount += 6
+            BugCount += 4
+        End If
         If LastVersion < 350 Then 'Snapshot 2.9.2
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持下载资源包和光影包"))
         End If
@@ -216,7 +230,7 @@ Public Class FormMain
         '整理更新日志文本
         Dim ContentList As New List(Of String)
         Dim SortedFeatures = Sort(FeatureList, Function(Left, Right) Left.Key > Right.Key)
-        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("龙猫忘记写更新日志啦！可以去提醒他一下……")
+        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("Pigeon0v0 忘记写更新日志啦！可以去提醒他一下……")
         For i = 0 To Math.Min(9, SortedFeatures.Count - 1) '最多取 10 项
             ContentList.Add(SortedFeatures(i).Value)
         Next
@@ -1129,7 +1143,11 @@ Public Class FormMain
             Select Case Stack.Page
                 Case PageType.Download
                     If FrmDownloadLeft Is Nothing Then FrmDownloadLeft = New PageDownloadLeft
-                    CType(FrmDownloadLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                    Try
+                        CType(FrmDownloadLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                    Catch
+                        CType(FrmDownloadLeft.PanItem.Children(SubType + 1), MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                    End Try
                 Case PageType.Setup
                     If FrmSetupLeft Is Nothing Then FrmSetupLeft = New PageSetupLeft
                     CType(FrmSetupLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)

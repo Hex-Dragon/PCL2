@@ -171,7 +171,7 @@ WaitRetry:
            ExceptionString.Contains(".NET Framework") OrElse ' “自动错误判断” 的结果分析
            ExceptionString.Contains("未能加载文件或程序集") Then
             OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net462-offline-installer")
-            MsgBox("你的 .NET Framework 版本过低或损坏，请下载并重新安装 .NET Framework 4.6.2！", MsgBoxStyle.Information, "运行环境错误")
+            MsgBox("你的 .NET Framework 版本过低或损坏，请下载并重新安装 .NET Framework 4.8！", MsgBoxStyle.Information, "运行环境错误")
             FormMain.EndProgramForce(Result.Cancel)
         Else
             FeedbackInfo()
