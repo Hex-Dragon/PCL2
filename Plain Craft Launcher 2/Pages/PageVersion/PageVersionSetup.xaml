@@ -126,7 +126,7 @@
             </local:MyCard>
             <local:MyCard x:Name="CardServer" Margin="0,0,0,15" Title="服务器">
                 <StackPanel Margin="25,42,25,18">
-                    <local:MyHint x:Name="LabServerAuthServerIsStartsWithHttp" Text="使用 HTTP 协议进行登录操作可能存在较高的安全风险&#xA;部分皮肤站可能不支持使用 HTTP 协议进行登录操作，如果皮肤站没有特殊要求，请使用 HTTPS 协议！" Visibility="Collapsed"/>
+                    <local:MyHint x:Name="LabServerAuthServerIsStartsWithHttp" Text="使用 HTTP 协议进行登录操作可能存在较高的安全风险。&#xA;部分皮肤站可能不支持使用 HTTP 协议进行登录操作，如果皮肤站没有特殊要求，请使用 HTTPS 协议！" Visibility="Collapsed"/>
                     <TextBlock Name="LabServerAuthServerIsStartsWithHttpCL" Text="&#xA;" Visibility="Collapsed"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
