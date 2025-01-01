@@ -684,7 +684,7 @@ LoginFinish:
             Url:=Data.Input.BaseUrl & "/validate",
             Method:="POST",
             Data:=RequestData.ToString(0),
-            Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+            Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
             ContentType:="application/json; charset=utf-8") '没有返回值的
         '将登录结果输出
         Data.Output.AccessToken = AccessToken
@@ -716,7 +716,7 @@ LoginFinish:
                 Url:="https://open.littleskin.cn/oauth/token",
                 Method:="POST",
                 Data:=RefreshData,
-                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                 ContentType:="application/json; charset=utf-8"))
             AccessToken = LoginJson("access_token").ToString(0)
             RefreshToken = LoginJson("refresh_token").ToString(0)
@@ -742,7 +742,7 @@ LoginFinish:
                    ""name"":""" & Setup.Get("Cache" & Data.Input.Token & "Name") & """},", "") & "
                ""accessToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Access") & """,
                ""clientToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Client") & """}",
-               Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+               Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                ContentType:="application/json; charset=utf-8"))
         '将登录结果输出
         If LoginJson("selectedProfile") Is Nothing Then Throw New Exception("选择的角色 " & Setup.Get("Cache" & Data.Input.Token & "Name") & " 无效！")
@@ -803,14 +803,14 @@ LoginFinish:
                 Url:="https://open.littleskin.cn/oauth/device_code",
                 Method:="POST",
                 Data:=RequestData.ToString(0),
-                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                 ContentType:="application/json; charset=utf-8"))
             Else
                 LoginJson = GetJson(NetRequestRetry(
                 Url:=Data.Input.BaseUrl & "/authenticate",
                 Method:="POST",
                 Data:=RequestData.ToString(0),
-                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                 ContentType:="application/json; charset=utf-8"))
 
 
