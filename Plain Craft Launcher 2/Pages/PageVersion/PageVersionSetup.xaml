@@ -126,6 +126,8 @@
             </local:MyCard>
             <local:MyCard x:Name="CardServer" Margin="0,0,0,15" Title="服务器">
                 <StackPanel Margin="25,42,25,18">
+                    <local:MyHint x:Name="LabServerAuthServerIsStartsWithHttp" Text="使用不安全的 HTTP 协议会导致账号和密码以明文形式发送到验证服务器。&#xA;如果验证服务器位于不安全的网络环境（例如公共互联网），可能导致账号被盗！&#xA;请始终考虑使用 HTTPS 协议！" Visibility="Collapsed"/>
+                    <TextBlock Name="LabServerAuthServerIsStartsWithHttpCL" Text="&#xA;" Visibility="Collapsed"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
