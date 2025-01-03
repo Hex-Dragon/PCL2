@@ -5,18 +5,21 @@ Imports System.Net
 Imports System.Net.Sockets
 
 Public Class ModLink
-    Public Class MCPing
-        Public Class WorldInfo
-            Public Property VersionName
-            Public Property PlayerMax
-            Public Property PlayerOnline
-            Public Property Description
-            Public Property Favicon
+    Public Class WorldInfo
+        Public Property Port As Integer
+        Public Property VersionName As String
+        Public Property PlayerMax As Integer
+        Public Property PlayerOnline As Integer
+        Public Property Description As String
+        Public Property Favicon As String
 
-            Public Overrides Function ToString() As String
-                Return $"[MCPing] Version: {VersionName}, Players: {PlayerOnline}/{PlayerMax}, Description: {Description}"
-            End Function
-        End Class
+        Public Overrides Function ToString() As String
+            Return $"[MCPing] Version: {VersionName}, Players: {PlayerOnline}/{PlayerMax}, Description: {Description}"
+        End Function
+    End Class
+
+    Public Class MCPing
+
 
         Sub New(IP As String, Port As Integer)
             _IP = IP
@@ -26,7 +29,7 @@ Public Class ModLink
         Private _IP As String
         Private _Port As Integer
 
-        Public Function GetInfo() As WorldInfo
+        Public Async Function GetInfo() As Tasks.Task(Of WorldInfo)
             Try
                 ' 创建TCP客户端并连接到服务器
                 Using client As New TcpClient(_IP, _Port)
@@ -35,19 +38,19 @@ Public Class ModLink
                         If Not stream.CanWrite OrElse Not stream.CanRead Then Return New WorldInfo
 
                         Dim handshake As Byte() = BuildHandshake(_IP, _Port)
-                        stream.Write(handshake, 0, handshake.Length)
+                        Await stream.WriteAsync(handshake, 0, handshake.Length)
                         Log($"[MCPing] Send {String.Join(" ", handshake)}", LogLevel.Debug)
 
                         ' 向服务器发送查询状态信息的数据包
                         Dim statusRequest As Byte() = BuildStatusRequest()
-                        stream.Write(statusRequest, 0, statusRequest.Length)
+                        Await stream.WriteAsync(statusRequest, 0, statusRequest.Length)
                         Log($"[MCPing] Send {String.Join(" ", statusRequest)}")
 
                         ' 读取服务器响应的数据
                         Dim result As New List(Of Byte)
                         While True
                             Dim responseBuffer(1024) As Byte
-                            Dim bytesRead As Integer = stream.Read(responseBuffer, 0, responseBuffer.Length)
+                            Dim bytesRead As Integer = Await stream.ReadAsync(responseBuffer, 0, responseBuffer.Length)
                             If bytesRead = 0 Then Exit While
                             result.AddRange(responseBuffer.Take(bytesRead))
                         End While
@@ -70,12 +73,13 @@ Public Class ModLink
                         .PlayerMax = j("players")("max"),
                         .PlayerOnline = j("players")("online"),
                         .Description = j("description")("text"),
-                        .Favicon = j("favicon")
+                        .Favicon = j("favicon"),
+                        .Port = _Port
                         }
                     End Using
                 End Using
             Catch ex As Exception
-                Log(ex, "Error: " & ex.Message)
+                Log(ex, "[MCPing] Error: " & ex.Message)
             End Try
             Return New WorldInfo
         End Function
@@ -121,80 +125,80 @@ Public Class ModLink
     End Class
 
     Public Class PortFinder
-            ' 定义需要的结构和常量
-            <StructLayout(LayoutKind.Sequential)>
-            Public Structure MIB_TCPROW_OWNER_PID
-                Public dwState As Integer
-                Public dwLocalAddr As Integer
-                Public dwLocalPort As Integer
-                Public dwRemoteAddr As Integer
-                Public dwRemotePort As Integer
-                Public dwOwningPid As Integer
-            End Structure
+        ' 定义需要的结构和常量
+        <StructLayout(LayoutKind.Sequential)>
+        Public Structure MIB_TCPROW_OWNER_PID
+            Public dwState As Integer
+            Public dwLocalAddr As Integer
+            Public dwLocalPort As Integer
+            Public dwRemoteAddr As Integer
+            Public dwRemotePort As Integer
+            Public dwOwningPid As Integer
+        End Structure
 
-            <DllImport("iphlpapi.dll", SetLastError:=True)>
-            Public Shared Function GetExtendedTcpTable(
-            ByVal pTcpTable As IntPtr,
-            ByRef dwOutBufLen As Integer,
-            ByVal bOrder As Boolean,
-            ByVal ulAf As Integer,
-            ByVal TableClass As Integer,
-            ByVal reserved As Integer) As Integer
-            End Function
+        <DllImport("iphlpapi.dll", SetLastError:=True)>
+        Public Shared Function GetExtendedTcpTable(
+        ByVal pTcpTable As IntPtr,
+        ByRef dwOutBufLen As Integer,
+        ByVal bOrder As Boolean,
+        ByVal ulAf As Integer,
+        ByVal TableClass As Integer,
+        ByVal reserved As Integer) As Integer
+        End Function
 
-            Public Shared Function GetProcessPort(ByVal dwProcessId As Integer) As List(Of Integer)
-                Dim ports As New List(Of Integer)
-                Dim tcpTable As IntPtr = IntPtr.Zero
-                Dim dwSize As Integer = 0
-                Dim dwRetVal As Integer
+        Public Shared Function GetProcessPort(ByVal dwProcessId As Integer) As List(Of Integer)
+            Dim ports As New List(Of Integer)
+            Dim tcpTable As IntPtr = IntPtr.Zero
+            Dim dwSize As Integer = 0
+            Dim dwRetVal As Integer
 
-                If dwProcessId = 0 Then
-                    Return ports
-                End If
-
-                dwRetVal = GetExtendedTcpTable(IntPtr.Zero, dwSize, True, 2, 5, 0)
-                If dwRetVal <> 0 AndAlso dwRetVal <> 122 Then ' 122 表示缓冲区不足
-                    Return ports
-                End If
-
-                tcpTable = Marshal.AllocHGlobal(dwSize)
-                Try
-                    If GetExtendedTcpTable(tcpTable, dwSize, True, 2, 5, 0) <> 0 Then
-                        Return ports
-                    End If
-
-                    Dim tablePtr As IntPtr = tcpTable
-                    Dim dwNumEntries As Integer = Marshal.ReadInt32(tablePtr)
-                    tablePtr = IntPtr.Add(tablePtr, 4)
-
-                    For i As Integer = 0 To dwNumEntries - 1
-                        Dim row As MIB_TCPROW_OWNER_PID = Marshal.PtrToStructure(Of MIB_TCPROW_OWNER_PID)(tablePtr)
-                        If row.dwOwningPid = dwProcessId Then
-                            ports.Add(row.dwLocalPort >> 8 Or (row.dwLocalPort And &HFF) << 8) ' 转换端口号
-                        End If
-                        tablePtr = IntPtr.Add(tablePtr, Marshal.SizeOf(Of MIB_TCPROW_OWNER_PID)())
-                    Next
-                Finally
-                    Marshal.FreeHGlobal(tcpTable)
-                End Try
-
+            If dwProcessId = 0 Then
                 Return ports
-            End Function
-        End Class
+            End If
+
+            dwRetVal = GetExtendedTcpTable(IntPtr.Zero, dwSize, True, 2, 5, 0)
+            If dwRetVal <> 0 AndAlso dwRetVal <> 122 Then ' 122 表示缓冲区不足
+                Return ports
+            End If
+
+            tcpTable = Marshal.AllocHGlobal(dwSize)
+            Try
+                If GetExtendedTcpTable(tcpTable, dwSize, True, 2, 5, 0) <> 0 Then
+                    Return ports
+                End If
+
+                Dim tablePtr As IntPtr = tcpTable
+                Dim dwNumEntries As Integer = Marshal.ReadInt32(tablePtr)
+                tablePtr = IntPtr.Add(tablePtr, 4)
+
+                For i As Integer = 0 To dwNumEntries - 1
+                    Dim row As MIB_TCPROW_OWNER_PID = Marshal.PtrToStructure(Of MIB_TCPROW_OWNER_PID)(tablePtr)
+                    If row.dwOwningPid = dwProcessId Then
+                        ports.Add(row.dwLocalPort >> 8 Or (row.dwLocalPort And &HFF) << 8) ' 转换端口号
+                    End If
+                    tablePtr = IntPtr.Add(tablePtr, Marshal.SizeOf(Of MIB_TCPROW_OWNER_PID)())
+                Next
+            Finally
+                Marshal.FreeHGlobal(tcpTable)
+            End Try
+
+            Return ports
+        End Function
+    End Class
 
 #Region "UPnP 映射"
-        Public Shared Async Sub StartUPnPRequest(Optional LocalPort As Integer = 25565, Optional PublicPort As Integer = 10240)
-            Dim UPnPDiscoverer = New NatDiscoverer()
-            Dim cts = New CancellationTokenSource(10000)
-            Dim UPnPDevice = Await UPnPDiscoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts)
+    Public Shared Async Sub StartUPnPRequest(Optional LocalPort As Integer = 25565, Optional PublicPort As Integer = 10240)
+        Dim UPnPDiscoverer = New NatDiscoverer()
+        Dim cts = New CancellationTokenSource(10000)
+        Dim UPnPDevice = Await UPnPDiscoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts)
 
-            Await UPnPDevice.CreatePortMapAsync(New Mapping(Protocol.Tcp, LocalPort, PublicPort, "PCL2 Link Lobby"))
-            Hint("UPnP 映射已创建")
-        End Sub
+        Await UPnPDevice.CreatePortMapAsync(New Mapping(Protocol.Tcp, LocalPort, PublicPort, "PCL2 Link Lobby"))
+        Hint("UPnP 映射已创建")
+    End Sub
 #End Region
 
 #Region "Minecraft 实例探测"
-    Public Shared Function MCInstanceFinding() As List(Of MCPing.WorldInfo)
+    Public Shared Async Function MCInstanceFinding() As Tasks.Task(Of List(Of WorldInfo))
         'Java 进程 PID 查询
         Dim PIDLookupResult As New List(Of String)
         Dim JavaNames As New List(Of String)
@@ -215,35 +219,20 @@ Public Class ModLink
             End If
         Next
 
-        Dim res As New List(Of MCPing.WorldInfo)
+        Dim res As New List(Of WorldInfo)
         Try
             If Not PIDLookupResult.Any Then Return res
             Dim ports = PortFinder.GetProcessPort(Integer.Parse(PIDLookupResult.First))
             Log($"[MCDetect] 获取到端口数量 {ports.Count}")
-            Dim ttotal = 0
-            Dim tcomplete = 0
             For Each port In ports
                 Log($"[MCDetect] 找到疑似端口，开始验证：{port}")
-                RunInNewThread(Sub()
-                                   Try
-                                       ttotal += 1
-                                       Dim test As New MCPing("127.0.0.1", port)
-                                       Dim info = test.GetInfo()
-                                       If Not String.IsNullOrWhiteSpace(info.VersionName) Then
-                                           Log($"[MCDetect] 端口 {port} 为有效 Minecraft 世界")
-                                           res.Add(info)
-                                           MsgBox(res.ToString())
-                                       End If
-                                   Catch ex As Exception
-
-                                   Finally
-                                       tcomplete += 1
-                                   End Try
-                               End Sub)
+                Dim test As New MCPing("127.0.0.1", port)
+                Dim info = Await test.GetInfo()
+                    If Not String.IsNullOrWhiteSpace(info.VersionName) Then
+                    Log($"[MCDetect] 端口 {port} 为有效 Minecraft 世界")
+                    res.Add(info)
+                End If
             Next
-            While tcomplete <> ttotal
-                Thread.Sleep(100)
-            End While
         Catch ex As Exception
             Log(ex, "[MCDetect] 获取端口信息错误", LogLevel.Debug)
         End Try

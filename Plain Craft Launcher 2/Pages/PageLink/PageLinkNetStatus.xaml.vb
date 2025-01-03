@@ -117,7 +117,7 @@ Public Class PageLinkNetStatus
         Try
             For Each IP In LocalIPAddresses
                 If Sockets.AddressFamily.InterNetwork.Equals(IP.AddressFamily) Then 'IPv4
-                    Dim PublicIPv4Address As String = NetRequestRetry("http://4.ipw.cn", "GET", "", "application/x-www-form-urlencoded")
+                    Dim PublicIPv4Address As String = NetRequestOnce("http://4.ipw.cn", "GET", "", "application/x-www-form-urlencoded", 4000)
 
                     If IP.ToString() = PublicIPv4Address Then '判断是否是公网地址
                         IPv4Status = "Public"
@@ -140,7 +140,7 @@ Public Class PageLinkNetStatus
         Try
             For Each IP In LocalIPAddresses
                 If Sockets.AddressFamily.InterNetworkV6.Equals(IP.AddressFamily) Then 'IPv6
-                    Dim PublicIPv6Address As String = NetRequestRetry("http://6.ipw.cn", "GET", "", "application/x-www-form-urlencoded")
+                    Dim PublicIPv6Address As String = NetRequestOnce("http://6.ipw.cn", "GET", "", "application/x-www-form-urlencoded", 4000)
 
                     If IP.ToString() = PublicIPv6Address Then '判断是否是公网地址
                         IPv6Status = "Public"

@@ -110,7 +110,7 @@
         '修改登陆方式
         Select Case Setup.Get("LoginType")
             Case McLoginType.Legacy
-                If PageLinkHiper.HiperState = LoadState.Finished Then
+                If PageLinkDirect.HiperState = LoadState.Finished Then
                     LabLaunchingMethod.Text = "联机离线登录"
                 Else
                     LabLaunchingMethod.Text = "离线登录"

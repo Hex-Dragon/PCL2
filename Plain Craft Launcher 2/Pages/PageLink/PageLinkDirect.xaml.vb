@@ -2,7 +2,7 @@
 Imports NAudio.CoreAudioApi
 Imports Open.Nat
 
-Public Class PageLinkHiper
+Public Class PageLinkDirect
     Public Const RequestVersion As Char = "2"
 
     '记录的启动情况
@@ -38,10 +38,14 @@ Public Class PageLinkHiper
     Private Shared Sub InitCheck(Task As LoaderTask(Of Integer, Integer))
     End Sub
     '启动联机模块
-    Private Shared Sub InitLaunch()
-        ModLink.MCInstanceFinding()
-        Hint("UPnP 映射已创建")
-    End Sub
+    Private Shared Async Function InitLaunch() As Tasks.Task
+        Dim worlds = Await ModLink.MCInstanceFinding()
+        If Not worlds.Any Then
+            Hint("没有找到可用的联机世界")
+            Exit Function
+        End If
+        Hint($"找到了 {worlds.Count} 个世界")
+    End Function
     Private Shared PingNodes As Integer, AllNodes As List(Of String)
 
 #End Region
@@ -55,7 +59,7 @@ Public Class PageLinkHiper
         End Get
         Set(value As LoadState)
             _HiperState = value
-            RunInUi(Sub() If FrmLinkLeft IsNot Nothing Then CType(FrmLinkLeft.ItemHiper.Buttons(0), MyIconButton).Visibility = If(HiperState = LoadState.Finished OrElse HiperState = LoadState.Loading, Visibility.Visible, Visibility.Collapsed))
+            RunInUi(Sub() If FrmLinkLeft IsNot Nothing Then CType(FrmLinkLeft.ItemDirect.Buttons(0), MyIconButton).Visibility = If(HiperState = LoadState.Finished OrElse HiperState = LoadState.Loading, Visibility.Visible, Visibility.Collapsed))
         End Set
     End Property
 
@@ -129,8 +133,8 @@ Public Class PageLinkHiper
                     End Select
                     'Ping
                     If HostPing <> -1 Then
-                        If FrmLinkHiper IsNot Nothing AndAlso FrmLinkHiper.LabFinishPing.IsLoaded Then
-                            FrmLinkHiper.LabFinishPing.Text = HostPing & "ms"
+                        If FrmLinkDirect IsNot Nothing AndAlso FrmLinkDirect.LabFinishPing.IsLoaded Then
+                            FrmLinkDirect.LabFinishPing.Text = HostPing & "ms"
                         End If
                     End If
                 End Sub)
@@ -144,9 +148,16 @@ Public Class PageLinkHiper
 
 #Region "PanSelect | 种类选择页面"
 
+    Private Property _LoadingWorldInfo As Boolean = False
     '创建房间
-    Private Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
-        InitLaunch()
+    Private Async Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
+        If _LoadingWorldInfo Then
+            Hint("加载中，请稍候……")
+            Exit Sub
+        End If
+        _LoadingWorldInfo = True
+        Await InitLaunch()
+        _LoadingWorldInfo = False
     End Sub
     Private Sub RoomCreate(Port As Integer)
         '记录信息
@@ -180,9 +191,9 @@ Public Class PageLinkHiper
         Log("[Hiper] 连接步骤：" & Intro)
         LoadStep = [Step]
         RunInUiWait(Sub()
-                        If FrmLinkHiper Is Nothing OrElse Not FrmLinkHiper.LabLoadDesc.IsLoaded Then Exit Sub
-                        FrmLinkHiper.LabLoadDesc.Text = Intro
-                        FrmLinkHiper.UpdateProgress()
+                        If FrmLinkDirect Is Nothing OrElse Not FrmLinkDirect.LabLoadDesc.IsLoaded Then Exit Sub
+                        FrmLinkDirect.LabLoadDesc.Text = Intro
+                        FrmLinkDirect.UpdateProgress()
                     End Sub)
     End Sub
 
@@ -275,8 +286,8 @@ Public Class PageLinkHiper
     End Property
 
     Private Sub PageLinkHiper_OnPageEnter() Handles Me.PageEnter
-        FrmLinkHiper.PanSelect.Visibility = If(CurrentSubpage = Subpages.PanSelect, Visibility.Visible, Visibility.Collapsed)
-        FrmLinkHiper.PanFinish.Visibility = If(CurrentSubpage = Subpages.PanFinish, Visibility.Visible, Visibility.Collapsed)
+        FrmLinkDirect.PanSelect.Visibility = If(CurrentSubpage = Subpages.PanSelect, Visibility.Visible, Visibility.Collapsed)
+        FrmLinkDirect.PanFinish.Visibility = If(CurrentSubpage = Subpages.PanFinish, Visibility.Visible, Visibility.Collapsed)
     End Sub
 
     Private Shared Sub HiperExit(ExitToCertPage As Boolean)
@@ -284,9 +295,9 @@ Public Class PageLinkHiper
         If InitLoader.State = LoadState.Loading Then InitLoader.Abort()
         If InitLoader.State = LoadState.Failed Then InitLoader.State = LoadState.Waiting
         RunInUi(Sub()
-                    If FrmLinkHiper Is Nothing OrElse Not FrmLinkHiper.IsLoaded Then Exit Sub
-                    FrmLinkHiper.CurrentSubpage = Subpages.PanSelect
-                    FrmLinkHiper.PageOnContentExit()
+                    If FrmLinkDirect Is Nothing OrElse Not FrmLinkDirect.IsLoaded Then Exit Sub
+                    FrmLinkDirect.CurrentSubpage = Subpages.PanSelect
+                    FrmLinkDirect.PageOnContentExit()
                 End Sub)
     End Sub
 
