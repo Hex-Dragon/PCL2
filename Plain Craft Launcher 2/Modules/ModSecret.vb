@@ -50,7 +50,8 @@ Friend Module ModSecret
             Environment.[Exit](Result.Cancel)
         End If
         '开源版本提示
-        MyMsgBox($"你正在使用来自 PCL-Community 的 PCL2 社区版本，遇到问题请不要向官方仓库反馈！
+        If Convert.ToBoolean(ReadReg("UiLauncherCEHint", "True")) Then
+            MyMsgBox($"你正在使用来自 PCL-Community 的 PCL2 社区版本，遇到问题请不要向官方仓库反馈！
 PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的使用做担保。
 
 该版本中暂时无法使用以下特性：
@@ -59,6 +60,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 
 该版本中的以下特性与原版有所区别：
 - 百宝箱：主线分支没有提供相关内容", "社区版本说明", "我知道了")
+        End If
     End Sub
 
     ''' <summary>

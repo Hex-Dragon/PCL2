@@ -556,8 +556,6 @@ Public Class FormMain
         On Error Resume Next
         IsProgramEnded = True
         AniControlEnabled += 1
-        PageLinkIoi.IoiStop(False)
-        PageLinkHiper.HiperStop(False)
         If IsUpdateWaitingRestart Then UpdateRestart(False)
         If ReturnCode = Result.Exception Then
             If Not IsLogShown Then
@@ -994,11 +992,11 @@ Public Class FormMain
         SetupUI = 1
         SetupSystem = 2
         SetupLink = 3
-        LinkHiper = 1
-        LinkIoi = 2
+        LinkDirect = 1
         LinkSetup = 4
         LinkHelp = 5
         LinkFeedback = 6
+        LinkNetStatus = 7
         OtherHelp = 0
         OtherAbout = 1
         OtherTest = 2
