@@ -571,7 +571,7 @@ Public Class FormMain
         If ReturnCode = Result.Success Then
             Process.GetCurrentProcess.Kill()
         Else
-            Environment.Exit(ReturnCode)4
+            Environment.Exit(ReturnCode)
             Process.GetCurrentProcess.Kill()
         End If
     End Sub
