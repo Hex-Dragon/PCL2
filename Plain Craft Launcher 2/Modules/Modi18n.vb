@@ -3,11 +3,13 @@ Imports System.Windows.Forms
 
 Module Modi18n
     ''' <summary>
-    ''' 获取语言
+    ''' 获取译文，如果支持可在键值后方加上需要替换原文占位符（<c>{0}, {1}</c>等）的文本。
     ''' </summary>
+    ''' <remarks>
+    ''' </remarks>
     ''' <param name="Key">键值</param>
     ''' <param name="Param">字段中对应要展示的内容</param>
-    ''' <returns></returns>
+    ''' <returns>键值所对应的译文</returns>
     Public Function GetLang(Key As String, ParamArray Param As String()) As String
         Try
             If String.IsNullOrWhiteSpace(Key) Then Throw New Exception("Key 值未提供;No key value provided")
@@ -28,7 +30,7 @@ Module Modi18n
     ''' 通过中文得到其它语言，应付一些 i18n 适配较困难的场景
     ''' </summary>
     ''' <param name="Word">中文文本</param>
-    ''' <returns></returns>
+    ''' <returns>对应语言的译文</returns>
     Public Function GetLangByWord(Word As String) As String
         If Lang = "zh_CN" Then Return Word '语言设置为中文时不需要处理，直接返回以节约处理时间
         Select Case Word
@@ -52,7 +54,7 @@ Module Modi18n
     ''' 获取当前语言的时间表达方式
     ''' </summary>
     ''' <param name="Time">时间</param>
-    ''' <returns></returns>
+    ''' <returns>当前地区的时间格式字符串</returns>
     Public Function GetLocalTimeFormat(Time As DateTime) As String
         Select Case Lang
             Case "ja_JP", "ko_KR", "lzh", "zh_CN", "zh_HK", "zh_MARS", "zh_MEME", "zh_TW" '2024/08/16 11:47
@@ -160,7 +162,8 @@ Module Modi18n
     ''' </summary>
     ''' <param name="Count">数量</param>
     ''' <param name="Key">调用的键名</param>
-    ''' <returns></returns>
+    ''' <param name="Param">字段中对应要展示的内容</param>
+    ''' <returns>对应单复数形式的译文</returns>
     Public Function GetLangByNumIsPlural(Count As Int32, Key As String, ParamArray Param As String()) As String
         If Count <= 1 Then
             Return GetLang(Key, Param)
