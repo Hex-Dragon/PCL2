@@ -14,6 +14,6 @@
 <br/>
 
 ### 相關資源
-- [PCL 下載](https://afdian.com/p/0164034c016c11ebafcb52540025c377)：下载可免费使用的正式版 PCL！
+- [PCL 下載](https://afdian.com/p/0164034c016c11ebafcb52540025c377)：下載可免費使用的正式版 PCL！
 - [PCL 功能投票](https://github.com/Hex-Dragon/PCL2/discussions/2)：來參加投票吧，開發者會優先處理票數較高的項目！
 - [幫助文件庫](https://github.com/LTCatt/PCL2Help)：PCL 內建幫助文件的儲存庫
