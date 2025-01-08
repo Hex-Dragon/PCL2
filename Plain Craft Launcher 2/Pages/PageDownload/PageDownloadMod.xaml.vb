@@ -158,6 +158,7 @@
         ComboSearchTag.SelectedIndex = 0
         ComboSearchLoader.SelectedIndex = 0
         Loader.LastFinishedTime = 0 '要求强制重新开始
+        StartNewSearch()
     End Sub
 
     '来源选择
