@@ -160,20 +160,24 @@
         Loader.LastFinishedTime = 0 '要求强制重新开始
     End Sub
 
-    '版本选择
-    '#3067：当下拉菜单展开时，程序会被 WPF 挂起，因而无法更新 Grid 布局，所以必须延迟到下拉菜单收起后才能更新
-    Private Sub TextSearchVersion_TextChanged() Handles TextSearchVersion.TextChanged
-        If Not TextSearchVersion.IsDropDownOpen Then UpdateSearchLoaderVisibility()
+    '来源选择
+    Private Sub ComboSearchSource_SelectionChanged() Handles ComboSearchSource.SelectionChanged
+        StartNewSearch()
     End Sub
-    Private Sub UpdateSearchLoaderVisibility() Handles TextSearchVersion.DropDownClosed
-        If TextSearchVersion.Text.Contains(".") OrElse TextSearchVersion.Text.Contains("w") Then
-            ComboSearchLoader.Visibility = Visibility.Visible
-            Grid.SetColumnSpan(TextSearchVersion, 1)
-        Else
-            ComboSearchLoader.Visibility = Visibility.Collapsed
-            Grid.SetColumnSpan(TextSearchVersion, 2)
-            ComboSearchLoader.SelectedIndex = 0
-        End If
+
+    '版本选择
+    Private Sub TextSearchVersion_TextChanged() Handles TextSearchVersion.TextChanged
+            StartNewSearch()
+    End Sub
+
+    'Mod加载器选择
+    Private Sub ComboSearchLoader_SelectionChanged() Handles ComboSearchLoader.SelectionChanged
+        StartNewSearch()
+    End Sub
+
+    '类型选择
+    Private Sub ComboSearchTag_SelectionChanged() Handles ComboSearchTag.SelectionChanged
+        StartNewSearch()
     End Sub
 
 #End Region
