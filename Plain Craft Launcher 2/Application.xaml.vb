@@ -158,11 +158,7 @@ WaitRetry:
         On Error Resume Next
         e.Handled = True
         If IsProgramEnded Then Exit Sub
-        If IsCritErrored Then
-            '在汇报错误后继续引发错误，知道这次压不住了
-            FormMain.EndProgramForce(Result.Exception)
-            Exit Sub
-        End If
+        If IsCritErrored Then Exit Sub
         IsCritErrored = True
         Dim ExceptionString As String = GetExceptionDetail(e.Exception, True)
         If ExceptionString.Contains("System.Windows.Threading.Dispatcher.Invoke") OrElse
