@@ -115,9 +115,62 @@
             ToCheck.Checked = True
         End If
 
+        ' Mod 类型才有加载器筛选
+        If Project.Type = CompType.Mod Then
+            CardModLoaderFilter.Visibility = Visibility.Visible
+            CreateModLoaderButtons()    
+        Else
+            CardModLoaderFilter.Visibility = Visibility.Collapsed '
+        End If
         '更新筛选结果（文件列表 UI 化）
         UpdateFilterResult()
     End Sub
+
+    '创建加载器筛选按钮
+    Private Sub CreateModLoaderButtons()
+        PanModLoaderFilter.Children.Clear()
+
+        Dim ModLoaderButtons As New List(Of String) From {
+            "全部", "Forge", "Fabric", "Quilt", "NeoForge"
+        }
+
+        Dim SelectedButton As MyRadioButton = Nothing
+
+        For Each loader As String In ModLoaderButtons
+            Dim NewButton As New MyRadioButton With {
+                .Text = loader,
+                .Margin = New Thickness(2, 0, 2, 0),
+                .ColorType = MyRadioButton.ColorState.Highlight
+            }
+            NewButton.LabText.Margin = New Thickness(-2, 0, 8, 0)
+            AddHandler NewButton.Check,
+                Sub(sender As MyRadioButton, raiseByMouse As Boolean)
+                    PanScroll.ScrollToHome()
+                    Select Case sender.Text
+                        Case "Forge" : TargetLoader = CompModLoaderType.Forge
+                        Case "Fabric" : TargetLoader = CompModLoaderType.Fabric
+                        Case "Quilt" : TargetLoader = CompModLoaderType.Quilt
+                        Case "NeoForge" : TargetLoader = CompModLoaderType.NeoForge
+                        Case Else : TargetLoader = CompModLoaderType.Any
+                    End Select
+                    UpdateFilterResult()
+                End Sub
+
+            PanModLoaderFilter.Children.Add(NewButton)
+
+            If TargetLoader.ToString() = loader Then
+                SelectedButton = NewButton
+            End If
+        Next
+
+        '自动选择
+        If SelectedButton IsNot Nothing Then
+            SelectedButton.Checked = True
+        ElseIf PanModLoaderFilter.Children.Count > 0 Then
+            CType(PanModLoaderFilter.Children(0), MyRadioButton).Checked = True
+        End If
+    End Sub
+
     Private Sub UpdateFilterResult()
         Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
             $"所选版本：{If(TargetLoader <> CompModLoaderType.Any, TargetLoader.ToString & " ", "")}{TargetVersion}", "")
@@ -130,6 +183,9 @@
                 '检查是否符合版本筛选器
                 If VersionFilter IsNot Nothing AndAlso
                     GetGroupedVersionName(GameVersion, IsMajorVersionFilter, True) <> VersionFilter Then Continue For
+                '检查是否符合加载器筛选器
+                If TargetLoader <> CompModLoaderType.Any AndAlso
+                Not Version.ModLoaders.Contains(TargetLoader) Then Continue For
                 '决定添加到哪个卡片
                 Dim Ver As String = GetGroupedVersionName(GameVersion, False, False)
                 '遍历加入的加载器列表
