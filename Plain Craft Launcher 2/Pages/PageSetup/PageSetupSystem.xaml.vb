@@ -31,6 +31,7 @@
         SliderDownloadSpeed.Value = Setup.Get("ToolDownloadSpeed")
         ComboDownloadVersion.SelectedIndex = Setup.Get("ToolDownloadVersion")
         CheckDownloadCert.Checked = Setup.Get("ToolDownloadCert")
+        TextSystemHttpProxy.Text = Setup.Get("SystemHttpProxy")
 
         'Mod 与整合包
         ComboDownloadTranslate.SelectedIndex = Setup.Get("ToolDownloadTranslate")
@@ -99,7 +100,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslate.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboDownloadMod.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged
+    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged, TextSystemHttpProxy.TextChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Text)
     End Sub
 

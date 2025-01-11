@@ -3,6 +3,23 @@
 Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
+    Private Property _Proxy As WebProxy
+    ''' <summary>
+    ''' 获取 Proxy 代理
+    ''' </summary>
+    ''' <returns>返回 WebProxy 或者 Nothing</returns>
+    Public Function GetProxy()
+        Dim proxy As String = Setup.Get("SystemHttpProxy")
+        If _Proxy IsNot Nothing AndAlso _Proxy.Address.AbsoluteUri = proxy Then
+            Return _Proxy
+        End If
+        If Not String.IsNullOrWhiteSpace(proxy) Then
+            _Proxy = New WebProxy(proxy)
+            Log($"[Net] 使用 Proxy 代理")
+            Return _Proxy
+        End If
+        Return Nothing
+    End Function
 
     ''' <summary>
     ''' 测试 Ping。失败则返回 -1。
@@ -381,6 +398,7 @@ RequestFinished:
 
         Try
             Req = WebRequest.Create(Url)
+            Req.Proxy = GetProxy()
             Req.Method = Method
             Dim SendData As Byte()
             If TypeOf Data Is Byte() Then
@@ -1045,7 +1063,7 @@ StartThread:
                 '请求头
                 HttpRequest = WebRequest.Create(Info.Source.Url)
                 If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
-                'HttpRequest.Proxy = Nothing 'new WebProxy(Ip, Port)
+                HttpRequest.Proxy = GetProxy()
                 HttpRequest.Timeout = Timeout
                 HttpRequest.AddRange(Info.DownloadStart)
                 SecretHeadersSign(Info.Source.Url, HttpRequest, UseBrowserUserAgent)
