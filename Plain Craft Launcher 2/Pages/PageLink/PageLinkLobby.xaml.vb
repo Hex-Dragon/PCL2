@@ -1,8 +1,4 @@
-﻿Imports System.Security.Cryptography.X509Certificates
-Imports NAudio.CoreAudioApi
-Imports Open.Nat
-
-Public Class PageLinkLobby
+﻿Public Class PageLinkLobby
     Public Const RequestVersion As Char = "2"
 
     '记录的启动情况
@@ -148,7 +144,7 @@ Public Class PageLinkLobby
     Private Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
         LocalPort = MyMsgBoxInput("输入端口号", HintText:="例如：25565")
         If LocalPort = Nothing Then Exit Sub
-        CreateUPnPMapping(LocalPort)
+        ModLink.CreateUPnPMapping(LocalPort)
         CurrentSubpage = Subpages.PanFinish
         InitLaunch()
     End Sub
@@ -239,7 +235,7 @@ Public Class PageLinkLobby
     '退出
     Private Sub BtnFinishExit_Click(sender As Object, e As EventArgs) Handles BtnFinishExit.Click
         If MyMsgBox("你确定要关闭联机房间吗？", "确认退出", "确定", "取消", IsWarn:=True) = 1 Then
-            RemoveUPnPMapping()
+            ModLink.RemoveUPnPMapping()
             LocalPort = Nothing
             CurrentSubpage = Subpages.PanSelect
             Exit Sub

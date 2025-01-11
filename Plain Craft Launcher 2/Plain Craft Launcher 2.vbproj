@@ -322,6 +322,9 @@
     <Compile Include="Pages\PageLink\PageLinkFeedback.xaml.vb">
       <DependentUpon>PageLinkFeedback.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageLink\PageLinkIoi.xaml.vb">
+      <DependentUpon>PageLinkIoi.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageLink\PageLinkNetStatus.xaml.vb">
       <DependentUpon>PageLinkNetStatus.xaml</DependentUpon>
     </Compile>
@@ -620,6 +623,10 @@
       <SubType>Designer</SubType>
     </None>
     <Page Include="Pages\PageLink\PageLinkFeedback.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageLink\PageLinkIoi.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

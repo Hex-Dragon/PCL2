@@ -77,16 +77,16 @@ Public Class PageLinkNetStatus
         End Try
 
         'UPnP 映射测试
-        CreateUPnPMapping()
+        ModLink.CreateUPnPMapping()
         Thread.Sleep(500) '因为异步不会处理直接硬等 0.5s
-        If UPnPStatus = "Enabled" Then
+        If ModLink.UPnPStatus = "Enabled" Then
             UPnPStatusFriendly = "已启用"
-            RemoveUPnPMapping()
+            ModLink.RemoveUPnPMapping()
             Thread.Sleep(500)
-            If UPnPStatus = "Failed" Then
+            If ModLink.UPnPStatus = "Failed" Then
                 UPnPStatusFriendly = "异常"
             End If
-        ElseIf UPnPStatus = "Unsupported" Then
+        ElseIf ModLink.UPnPStatus = "Unsupported" Then
             UPnPStatusFriendly = "不兼容"
         Else
             UPnPStatusFriendly = "异常"
