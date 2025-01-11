@@ -1,10 +1,10 @@
-﻿Public Class PageLinkLobby
+﻿Imports PCL.ModLink
+Public Class PageLinkLobby
     Public Const RequestVersion As Char = "2"
 
     '记录的启动情况
-    Public Shared IsServerSide As Boolean
-    Private Shared HostIp As String
-    Private Shared HostPort As Integer
+    Public Shared IsHost As Boolean = Nothing
+    Public Shared LobbyServerLink As String = Nothing
 
 #Region "初始化"
 
@@ -33,11 +33,6 @@
     })
     Private Shared Sub InitCheck(Task As LoaderTask(Of Integer, Integer))
     End Sub
-    '启动联机模块
-    Private Shared Sub InitLaunch()
-        ModLink.MCInstanceFinding()
-    End Sub
-    Private Shared PingNodes As Integer, AllNodes As List(Of String)
 
 #End Region
 
@@ -107,7 +102,7 @@
         RunInUi(Sub()
                     '网络质量
                     Dim QualityScore As Integer = 0
-                    QualityScore -= Math.Ceiling((Math.Min(0, 600) + Math.Min(PingNodes, 600)) / 80)
+                    'QualityScore -= Math.Ceiling((Math.Min(0, 600) + Math.Min(PingNodes, 600)) / 80)
                     Select Case QualityScore
                         Case Is >= -1
                             LabFinishQuality.Text = "优秀"
@@ -144,14 +139,15 @@
     Private Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
         LocalPort = MyMsgBoxInput("输入端口号", HintText:="例如：25565")
         If LocalPort = Nothing Then Exit Sub
-        ModLink.CreateUPnPMapping(LocalPort)
+        RunInNewThread(Sub()
+                           CreateNATTranversal(LocalPort)
+                       End Sub)
+        'ModLink.CreateUPnPMapping(LocalPort)
         CurrentSubpage = Subpages.PanFinish
-        InitLaunch()
     End Sub
     Private Sub RoomCreate(Port As Integer)
         '记录信息
-        HostIp = Nothing : HostPort = Port
-        IsServerSide = True
+        IsHost = True
         '启动
         InitLoader.Start(IsForceRestart:=True)
     End Sub
@@ -162,8 +158,7 @@
     End Sub
     Private Sub RoomJoin(Ip As String, Port As Integer)
         '记录信息
-        HostIp = Ip : HostPort = Port
-        IsServerSide = False
+        IsHost = False
         '启动
         InitLoader.Start(IsForceRestart:=True)
     End Sub
@@ -227,6 +222,8 @@
 
 #Region "PanFinish | 加载完成页面"
 
+    Public Shared PublicIPPort As String = Nothing
+
     '复制 IP
     Private Sub BtnFinishIp_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnFinishIp.MouseLeftButtonUp
         ClipboardSet(LabFinishIp.Text)
@@ -235,7 +232,8 @@
     '退出
     Private Sub BtnFinishExit_Click(sender As Object, e As EventArgs) Handles BtnFinishExit.Click
         If MyMsgBox("你确定要关闭联机房间吗？", "确认退出", "确定", "取消", IsWarn:=True) = 1 Then
-            ModLink.RemoveUPnPMapping()
+            RemoveNATTranversal()
+            'ModLink.RemoveUPnPMapping()
             LocalPort = Nothing
             CurrentSubpage = Subpages.PanSelect
             Exit Sub
@@ -244,6 +242,7 @@
 
     '复制联机码
     Private Sub BtnFinishCopy_Click(sender As Object, e As EventArgs) Handles BtnFinishCopy.Click
+        ClipboardSet(PublicIPPort)
     End Sub
 
     'Ping 房主
@@ -255,7 +254,6 @@
     Private Shared TaskPingHost As New LoaderTask(Of Boolean, Integer)("HiPer Ping Host",
     Sub(Task As LoaderTask(Of Boolean, Integer))
         HostPing = -1
-        HostPing = Ping(HostIp, 5000, Task.Input)
     End Sub)
 
 #End Region

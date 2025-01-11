@@ -3,6 +3,9 @@ Imports System.Text.RegularExpressions
 Imports Open.Nat
 Imports System.Net
 Imports System.Net.Sockets
+Imports Makaretu.Nat
+Imports STUN
+Imports System.Net.NetworkInformation
 
 Public Class ModLink
 
@@ -303,6 +306,45 @@ Public Class ModLink
         End Try
         Return res
     End Function
+#End Region
+
+#Region "NAT 穿透"
+    Public Shared NATEndpoints As List(Of LeasedEndpoint) = Nothing
+    ''' <summary>
+    ''' 尝试进行 NAT 映射
+    ''' </summary>
+    ''' <param name="localPort">本地端口</param>
+    Public Shared Async Sub CreateNATTranversal(LocalPort As String)
+        Log($"开始尝试进行 NAT 穿透，本地端口 {LocalPort}")
+        Try
+            NATEndpoints = New List(Of LeasedEndpoint) '寻找 NAT 设备
+            For Each nat In NatDiscovery.GetNats()
+                Dim lease = Await nat.CreatePublicEndpointAsync(ProtocolType.Tcp, LocalPort)
+                Dim endpoint = New LeasedEndpoint(lease)
+                NATEndpoints.Add(endpoint)
+                PageLinkLobby.PublicIPPort = endpoint.ToString()
+                Log($"NAT 穿透完成，公网地址: {endpoint}")
+            Next
+        Catch ex As Exception
+            Log("尝试进行 NAT 穿透失败: " + ex.ToString())
+        End Try
+
+    End Sub
+
+    ''' <summary>
+    ''' 移除 NAT 映射
+    ''' </summary>
+    Public Shared Sub RemoveNATTranversal()
+        Log("开始尝试移除 NAT 映射")
+        Try
+            For Each endpoint In NATEndpoints
+                endpoint.Dispose()
+            Next
+            Log("NAT 映射已移除")
+        Catch ex As Exception
+            Log("尝试移除 NAT 映射失败: " + ex.ToString())
+        End Try
+    End Sub
 #End Region
 
 End Class
