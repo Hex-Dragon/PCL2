@@ -1546,7 +1546,7 @@ Retry:
         'Authlib-Injector
         If McLoginLoader.Output.Type = "Auth" Then
             Dim Server As String = If(McLoginLoader.Input.Type = McLoginType.Legacy,
-                "http://hiperauth.tech/api/yggdrasil-hiper/", 'HiPer 登录
+                "http://todo.lobby/link", '联机登录
                 Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent))
             Try
                 Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
@@ -1613,7 +1613,7 @@ NextVersion:
         'Authlib-Injector
         If McLoginLoader.Output.Type = "Auth" Then
             Dim Server As String = If(McLoginLoader.Input.Type = McLoginType.Legacy,
-                "http://hiperauth.tech/api/yggdrasil-hiper/", 'HiPer 登录
+                "http://todo.lobby/link", '联机登录
                 Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent))
             Try
                 Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
@@ -2414,7 +2414,7 @@ IgnoreCustomSkin:
         End If
         Select Case McLoginLoader.Input.Type
             Case McLoginType.Legacy
-                If PageLinkDirect.HiperState = LoadState.Finished Then
+                If PageLinkLobby.HiperState = LoadState.Finished Then
                     Raw = Raw.Replace("{login}", "联机离线")
                 Else
                     Raw = Raw.Replace("{login}", "离线")

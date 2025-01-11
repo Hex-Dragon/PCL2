@@ -6,6 +6,17 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel Name="PanMain" Margin="25,25,25,10" Grid.IsSharedSizeScope="True">
+            <local:MyCard Title="关于" Margin="0,0,0,15">
+                <StackPanel Margin="20,40,18,18">
+                    <TextBlock TextWrapping="Wrap" Text="这是一段介绍" 
+                           Margin="0,0,0,3" />
+                    <TextBlock TextWrapping="Wrap" Text="这是另一段介绍" 
+                           Margin="0,0,0,6" />
+                    <local:MyListItem Title="用户协议与隐私政策" Info="查看用户协议与隐私政策文档"
+                              Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
+                              Logo="pack://application:,,,/images/Blocks/Grass.png" />
+                </StackPanel>
+            </local:MyCard>
             <local:MyCard Title="发送反馈" Margin="0,0,0,15">
                 <StackPanel Margin="20,40,18,18">
                     <local:MyListItem Title="违法违规举报" Info="投诉、举报联机使用者的各类违法违规行为"

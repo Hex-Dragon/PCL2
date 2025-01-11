@@ -325,8 +325,8 @@
     <Compile Include="Pages\PageLink\PageLinkNetStatus.xaml.vb">
       <DependentUpon>PageLinkNetStatus.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageLink\PageLinkDirect.xaml.vb">
-      <DependentUpon>PageLinkDirect.xaml</DependentUpon>
+    <Compile Include="Pages\PageLink\PageLinkLobby.xaml.vb">
+      <DependentUpon>PageLinkLobby.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageOther\PageOtherVote.xaml.vb">
       <DependentUpon>PageOtherVote.xaml</DependentUpon>
@@ -627,7 +627,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\PageLink\PageLinkDirect.xaml">
+    <Page Include="Pages\PageLink\PageLinkLobby.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
