@@ -1,4 +1,4 @@
-﻿Public Class PageVersionLeft
+Public Class PageVersionLeft
 
     ''' <summary>
     ''' 当前显示设置的 MC 版本。

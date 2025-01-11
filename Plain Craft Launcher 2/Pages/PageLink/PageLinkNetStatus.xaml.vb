@@ -8,12 +8,14 @@ Public Class PageLinkNetStatus
 
     Public NATType As String = Nothing
     Public NATTypeFriendly As String = Nothing
-    Public UPnPStatus As String = Nothing
+    Public UPnPStatusFriendly As String = Nothing
 
     Public IPv4Status As String = Nothing
     Public IPv4StatusFriendly As String = Nothing
     Public IPv6Status As String = Nothing
     Public IPv6StatusFriendly As String = Nothing
+
+    Public Shared PublicIPv4Address As String = Nothing
 
     Public Sub NetStatusTest()
         If Convert.ToBoolean(ReadReg("LinkFirstTimeNetTest", "True")) Then
@@ -22,7 +24,7 @@ Public Class PageLinkNetStatus
             TestTcpListener.Start()
             Thread.Sleep(200)
             TestTcpListener.Stop()
-            WriteReg("LinkFirstTimeNetTest", "True")
+            WriteReg("LinkFirstTimeNetTest", "False")
         End If
 
         RunInUi(Sub()
@@ -74,6 +76,22 @@ Public Class PageLinkNetStatus
             NATType = "TestFailed"
         End Try
 
+        'UPnP 映射测试
+        ModLink.CreateUPnPMapping()
+        Thread.Sleep(500) '因为异步不会处理直接硬等 0.5s
+        If ModLink.UPnPStatus = "Enabled" Then
+            UPnPStatusFriendly = "已启用"
+            ModLink.RemoveUPnPMapping()
+            Thread.Sleep(500)
+            If ModLink.UPnPStatus = "Failed" Then
+                UPnPStatusFriendly = "异常"
+            End If
+        ElseIf ModLink.UPnPStatus = "Unsupported" Then
+            UPnPStatusFriendly = "不兼容"
+        Else
+            UPnPStatusFriendly = "异常"
+        End If
+
         RunInUi(Sub()
                     ChangeNATText()
                 End Sub)
@@ -105,7 +123,7 @@ Public Class PageLinkNetStatus
 
         RunInUi(Sub()
                     LabNetStatusPingTitle.Text = $"Ping 值：{PingRtt} ms"
-                    LabNetStatusPingDesc.Text = "Ping 值可以反映你的网络延迟水平，一般来说越低越好。"
+                    LabNetStatusPingDesc.Text = $"{If(PingRtt >= 100, "当前网络延迟较高，可能会影响联机体验", "当前网络延迟较低")}{vbCrLf}Ping 值可以反映你的网络延迟水平，一般来说越低越好。"
                 End Sub)
     End Sub
     Public Sub IPTest()
@@ -203,34 +221,45 @@ Public Class PageLinkNetStatus
                 End Sub)
     End Sub
     Public Sub ChangeNATText()
+        Dim NATTypeDesc As String = Nothing
+
         Select Case NATType
             Case = "OpenInternet"
                 NATTypeFriendly = "开放"
+                NATTypeDesc = "当前网络环境不会影响联机体验，适合作为大厅创建者"
+                NetQualityCounter += 3
             Case = "FullCone"
                 NATTypeFriendly = "中等（完全圆锥）"
+                NATTypeDesc = "当前网络环境不会影响联机体验，适合作为大厅创建者"
                 NetQualityCounter += 3
             Case = "Restricted"
                 NATTypeFriendly = "中等（受限圆锥）"
+                NATTypeDesc = "这可能会影响您的联机体验"
                 NetQualityCounter += 2
             Case = "PortRestricted"
                 NATTypeFriendly = "中等（端口受限圆锥）"
+                NATTypeDesc = "部分路由器和防火墙设置可能会影响您的联机体验"
                 NetQualityCounter += 1
             Case = "Symmetric"
                 NATTypeFriendly = "严格（对称）"
+                NATTypeDesc = "这将严重影响您的联机体验"
             Case = "SymmetricUDPFirewall"
                 NATTypeFriendly = "严格（对称 + 防火墙）"
+                NATTypeDesc = "这将严重影响您的联机体验"
             Case = "Unspecified"
                 NATTypeFriendly = "未知"
+                NATTypeDesc = "这将严重影响您的联机体验"
             Case = "TestFailed"
                 NATTypeFriendly = "测试失败"
+                NATTypeDesc = "这将严重影响您的联机体验，请检查你的防火墙和互联网连接"
         End Select
 
         If Not NATType = "TestFailed" Then
-            LabNetStatusNATTitle.Text = "NAT 类型：" + NATTypeFriendly.Substring(0, 2)
-            LabNetStatusNATDesc.Text = $"当前 NAT 类型为 {NATTypeFriendly}，UPnP 已启用。{vbCrLf}NAT 类型决定了你是否能与对方建立直接连接。你可以尝试调整光猫和路由器设置以改善 NAT 环境。"
+            LabNetStatusNATTitle.Text = "NAT 类型：" + NATTypeFriendly.Substring(0, 2) + If(UPnPStatusFriendly = "已启用", " + UPnP", "")
+            LabNetStatusNATDesc.Text = $"当前 NAT 类型为 {NATTypeFriendly}，UPnP {UPnPStatusFriendly}{vbCrLf}{NATTypeDesc}"
         Else
             LabNetStatusNATTitle.Text = "NAT 类型：测试失败"
-            LabNetStatusNATDesc.Text = $"NAT 测试失败，请检查你的防火墙和互联网连接。{vbCrLf}NAT 类型决定了你是否能与对方建立直接连接。你可以尝试调整光猫和路由器设置以改善 NAT 环境。"
+            LabNetStatusNATDesc.Text = $"NAT 测试失败，UPnP {UPnPStatusFriendly}{vbCrLf}{NATTypeDesc}"
         End If
     End Sub
     Public Sub ChangeIPText()

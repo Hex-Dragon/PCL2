@@ -5,6 +5,8 @@ Imports System.Net
 Imports System.Net.Sockets
 
 Public Class ModLink
+
+#Region "MCPing"
     Public Class WorldInfo
         Public Property Port As Integer
         Public Property VersionName As String
@@ -29,9 +31,12 @@ Public Class ModLink
         Private _IP As String
         Private _Port As Integer
 
+        ''' <summary>
+        ''' 对疑似 MC 端口进行 MCPing，并返回相关信息
+        ''' </summary>
         Public Async Function GetInfo() As Tasks.Task(Of WorldInfo)
             Try
-                ' 创建TCP客户端并连接到服务器
+                ' 创建 TCP 客户端并连接到服务器
                 Using client As New TcpClient(_IP, _Port)
                     ' 向服务器发送握手数据包
                     Using stream = client.GetStream()
@@ -123,7 +128,9 @@ Public Class ModLink
             Return result.ToArray()
         End Function
     End Class
+#End Region
 
+#Region "端口查找"
     Public Class PortFinder
         ' 定义需要的结构和常量
         <StructLayout(LayoutKind.Sequential)>
@@ -185,16 +192,65 @@ Public Class ModLink
             Return ports
         End Function
     End Class
+#End Region
 
 #Region "UPnP 映射"
-    Public Shared Async Sub StartUPnPRequest(Optional LocalPort As Integer = 25565, Optional PublicPort As Integer = 10240)
+    ''' <summary>
+    ''' UPnP 状态，可能值："Disabled", "Enabled", "Unsupported", "Failed"
+    ''' </summary>
+    Public Shared UPnPStatus As String = "Disabled"
+    Public Shared UPnPMappingName As String = "PCL2 CE Link Lobby"
+    Public Shared UPnPDevice = Nothing
+    Public Shared CurrentUPnPMapping As Mapping = Nothing
+    Public Shared UPnPPublicPort As String = Nothing
+
+    ''' <summary>
+    ''' 寻找 UPnP 设备并尝试创建一个 UPnP 映射
+    ''' </summary>
+    Public Shared Async Sub CreateUPnPMapping(Optional LocalPort As Integer = 25565, Optional PublicPort As Integer = 10240)
+        Log($"[UPnP] 尝试创建 UPnP 映射，本地端口：{LocalPort}，远程端口：{PublicPort}，映射名称：{UPnPMappingName}")
+
+        UPnPPublicPort = PublicPort
         Dim UPnPDiscoverer = New NatDiscoverer()
         Dim cts = New CancellationTokenSource(10000)
-        Dim UPnPDevice = Await UPnPDiscoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts)
+        Try
+            UPnPDevice = Await UPnPDiscoverer.DiscoverDeviceAsync(PortMapper.Upnp, cts)
 
-        Await UPnPDevice.CreatePortMapAsync(New Mapping(Protocol.Tcp, LocalPort, PublicPort, "PCL2 Link Lobby"))
-        Hint("UPnP 映射已创建")
+            CurrentUPnPMapping = New Mapping(Protocol.Tcp, LocalPort, PublicPort, UPnPMappingName)
+            Await UPnPDevice.CreatePortMapAsync(CurrentUPnPMapping)
+
+            Await UPnPDevice.CreatePortMapAsync(New Mapping(Protocol.Tcp, LocalPort, PublicPort, "PCL2 Link Lobby"))
+            Hint("UPnP 映射已创建")
+        Catch NotFoundEx As NatDeviceNotFoundException
+            UPnPStatus = "Unsupported"
+            CurrentUPnPMapping = Nothing
+            Log("[UPnP] 找不到可用的 UPnP 设备")
+        Catch ex As Exception
+            UPnPStatus = "Failed"
+            CurrentUPnPMapping = Nothing
+            Log("[UPnP] UPnP 映射创建失败: " + ex.ToString())
+        End Try
     End Sub
+
+    ''' <summary>
+    ''' 尝试移除现有 UPnP 映射记录
+    ''' </summary>
+    Public Shared Async Sub RemoveUPnPMapping()
+        Log($"[UPnP] 尝试移除 UPnP 映射，本地端口：{CurrentUPnPMapping.PrivatePort}，远程端口：{CurrentUPnPMapping.PublicPort}，映射名称：{UPnPMappingName}")
+
+        Try
+            Await UPnPDevice.DeletePortMapAsync(CurrentUPnPMapping)
+
+            UPnPStatus = "Disabled"
+            CurrentUPnPMapping = Nothing
+            Log("[UPnP] UPnP 映射移除成功")
+        Catch ex As Exception
+            UPnPStatus = "Failed"
+            CurrentUPnPMapping = Nothing
+            Log("[UPnP] UPnP 映射移除失败: " + ex.ToString())
+        End Try
+    End Sub
+
 #End Region
 
 #Region "Minecraft 实例探测"
@@ -228,7 +284,7 @@ Public Class ModLink
                 Log($"[MCDetect] 找到疑似端口，开始验证：{port}")
                 Dim test As New MCPing("127.0.0.1", port)
                 Dim info = Await test.GetInfo()
-                    If Not String.IsNullOrWhiteSpace(info.VersionName) Then
+                If Not String.IsNullOrWhiteSpace(info.VersionName) Then
                     Log($"[MCDetect] 端口 {port} 为有效 Minecraft 世界")
                     res.Add(info)
                 End If
@@ -239,4 +295,5 @@ Public Class ModLink
         Return res
     End Function
 #End Region
+
 End Class
