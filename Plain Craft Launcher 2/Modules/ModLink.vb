@@ -195,10 +195,17 @@ Public Class ModLink
 #End Region
 
 #Region "UPnP 映射"
+
+    Public Enum UPnPStatusType
+        Disabled
+        Enabled
+        Unsupported
+        Failed
+    End Enum
     ''' <summary>
     ''' UPnP 状态，可能值："Disabled", "Enabled", "Unsupported", "Failed"
     ''' </summary>
-    Public Shared UPnPStatus As String = "Disabled"
+    Public Shared UPnPStatus As UPnPStatusType = Nothing
     Public Shared UPnPMappingName As String = "PCL2 CE Link Lobby"
     Public Shared UPnPDevice = Nothing
     Public Shared CurrentUPnPMapping As Mapping = Nothing
@@ -220,13 +227,15 @@ Public Class ModLink
             Await UPnPDevice.CreatePortMapAsync(CurrentUPnPMapping)
 
             Await UPnPDevice.CreatePortMapAsync(New Mapping(Protocol.Tcp, LocalPort, PublicPort, "PCL2 Link Lobby"))
+
+            UPnPStatus = UPnPStatusType.Enabled
             Hint("UPnP 映射已创建")
         Catch NotFoundEx As NatDeviceNotFoundException
-            UPnPStatus = "Unsupported"
+            UPnPStatus = UPnPStatusType.Unsupported
             CurrentUPnPMapping = Nothing
             Log("[UPnP] 找不到可用的 UPnP 设备")
         Catch ex As Exception
-            UPnPStatus = "Failed"
+            UPnPStatus = UPnPStatusType.Failed
             CurrentUPnPMapping = Nothing
             Log("[UPnP] UPnP 映射创建失败: " + ex.ToString())
         End Try
@@ -241,11 +250,11 @@ Public Class ModLink
         Try
             Await UPnPDevice.DeletePortMapAsync(CurrentUPnPMapping)
 
-            UPnPStatus = "Disabled"
+            UPnPStatus = UPnPStatusType.Disabled
             CurrentUPnPMapping = Nothing
             Log("[UPnP] UPnP 映射移除成功")
         Catch ex As Exception
-            UPnPStatus = "Failed"
+            UPnPStatus = UPnPStatusType.Failed
             CurrentUPnPMapping = Nothing
             Log("[UPnP] UPnP 映射移除失败: " + ex.ToString())
         End Try
