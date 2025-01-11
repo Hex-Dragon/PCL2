@@ -1,5 +1,3 @@
-﻿Imports PCL.PageLinkLobby
-
 Public Class PageVersionLeft
 
     ''' <summary>

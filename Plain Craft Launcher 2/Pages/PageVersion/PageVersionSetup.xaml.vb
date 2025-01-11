@@ -393,6 +393,19 @@ PreFin:
         TextServerAuthServer.Visibility = If(Type = 4, Visibility.Visible, Visibility.Collapsed)
         BtnServerAuthLittle.Visibility = If(Type = 4, Visibility.Visible, Visibility.Collapsed)
         CardServer.TriggerForceResize()
+        '显然只有 Authlib-Injector 才允许自定义验证服务器的 Uri
+        If Not Type = 4 Then
+            LabServerAuthServerIsStartsWithHttp.Visibility = Visibility.Collapsed
+            LabServerAuthServerIsStartsWithHttpCL.Visibility = Visibility.Collapsed
+            ' 如果开头为 http:// 给予警告
+        ElseIf TextServerAuthServer.Text.StartsWithF("http://") Then
+            LabServerAuthServerIsStartsWithHttp.Visibility = Visibility.Visible
+            LabServerAuthServerIsStartsWithHttpCL.Visibility = Visibility.Visible
+            ' 当不以 http:// 开头时隐藏警告
+        Else
+            LabServerAuthServerIsStartsWithHttp.Visibility = Visibility.Collapsed
+            LabServerAuthServerIsStartsWithHttpCL.Visibility = Visibility.Collapsed
+        End If
     End Sub
 
     '统一通行证

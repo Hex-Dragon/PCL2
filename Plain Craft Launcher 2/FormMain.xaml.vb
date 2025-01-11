@@ -560,7 +560,7 @@ Public Class FormMain
         If ReturnCode = Result.Exception Then
             If Not IsLogShown Then
                 FeedbackInfo()
-                Log("请在 https://github.com/Hex-Dragon/PCL2/issues 提交错误报告，以便于作者解决此问题！")
+                Log("请在 https://github.com/PCL-Community/PCL2-CE/issues 提交错误报告，以便于社区解决此问题！（这也有可能是原版 PCL 的问题）")
                 IsLogShown = True
                 ShellOnly(Path & "PCL\Log1.txt")
             End If

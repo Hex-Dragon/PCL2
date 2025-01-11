@@ -42,7 +42,23 @@
                 If FrmSetupLink Is Nothing Then FrmSetupLink = New PageSetupLink
                 Return FrmSetupLink
             Case FormMain.PageSubType.LinkHelp
-                If FrmLinkHelp Is Nothing Then FrmLinkHelp = PageOtherHelp.GetHelpPage(PathTemp & "Help\启动器\联机.json")
+                Dim page = New PageOtherHelpDetail
+                Dim panel = New StackPanel With {
+                    .Orientation = Orientation.Vertical
+                }
+                Dim card = New MyCard With {
+                    .Height = 200
+                }
+                panel.Children.Add(card)
+                Dim textblock As New TextBlock With {
+                    .Text = "暂时没写好 qwq",
+                    .FontSize = 20,
+                    .HorizontalAlignment = HorizontalAlignment.Center,
+                    .VerticalAlignment = VerticalAlignment.Center
+                }
+                card.Children.Add(textblock)
+                page.PanCustom.Children.Add(panel)
+                If FrmLinkHelp Is Nothing Then FrmLinkHelp = page
                 Return FrmLinkHelp
             Case FormMain.PageSubType.LinkFeedback
                 If FrmLinkFeedback Is Nothing Then FrmLinkFeedback = New PageLinkFeedback

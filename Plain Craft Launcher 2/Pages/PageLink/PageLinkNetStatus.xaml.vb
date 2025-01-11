@@ -132,50 +132,67 @@ Public Class PageLinkNetStatus
         '获取本地 IP 地址
         Dim LocalIPAddresses = Dns.GetHostAddresses(Dns.GetHostName())
 
-        Try
-            For Each IP In LocalIPAddresses
-                If Sockets.AddressFamily.InterNetwork.Equals(IP.AddressFamily) Then 'IPv4
-                    PublicIPv4Address = NetRequestRetry("http://4.ipw.cn", "GET", "", "application/x-www-form-urlencoded")
+        Dim TaskTotal = 0
+        Dim TaskCompleted = 0
 
-                    If IP.ToString() = PublicIPv4Address Then '判断是否是公网地址
-                        IPv4Status = "Public"
-                        Log("[IP] 检测到 IPv4 公网地址")
-                        Exit For
-                    ElseIf IP.ToString().StartsWithF("169.254.") Then '判断是否是本地回环地址
-                        Continue For
-                    End If
+        TaskTotal += 1
+        RunInNewThread(Sub()
+                           Try
+                               For Each IP In LocalIPAddresses
+                                   If Sockets.AddressFamily.InterNetwork.Equals(IP.AddressFamily) Then 'IPv4
+                                       Dim PublicIPv4Address As String = NetRequestOnce("http://4.ipw.cn", "GET", "", "application/x-www-form-urlencoded", 4000)
 
-                    IPv4Status = "Supported"
-                    Log("[IP] 检测到 IPv4 支持")
-                    Exit For
-                End If
-            Next
-        Catch ex As Exception
-            Log("[IP] IPv4 检测失败: " + ex.ToString())
-            IPv4Status = "Unsupported"
-        End Try
+                                       If IP.ToString() = PublicIPv4Address Then '判断是否是公网地址
+                                           IPv4Status = "Public"
+                                           Log("[IP] 检测到 IPv4 公网地址")
+                                           Exit For
+                                       ElseIf IP.ToString().StartsWithF("169.254.") Then '判断是否是本地回环地址
+                                           Continue For
+                                       End If
 
-        Try
-            For Each IP In LocalIPAddresses
-                If Sockets.AddressFamily.InterNetworkV6.Equals(IP.AddressFamily) Then 'IPv6
-                    Dim PublicIPv6Address As String = NetRequestRetry("http://6.ipw.cn", "GET", "", "application/x-www-form-urlencoded")
+                                       IPv4Status = "Supported"
+                                       Log("[IP] 检测到 IPv4 支持")
+                                       Exit For
+                                   End If
+                               Next
+                           Catch ex As Exception
+                               Log("[IP] IPv4 检测失败: " + ex.ToString())
+                               IPv4Status = "Unsupported"
+                           Finally
+                               TaskCompleted += 1
+                           End Try
+                       End Sub, "NetStatus V4")
 
-                    If IP.ToString() = PublicIPv6Address Then '判断是否是公网地址
-                        IPv6Status = "Public"
-                        Log("[IP] 检测到 IPv6 公网地址")
-                        Exit For
-                    ElseIf IP.ToString().StartsWithF("fe80") Then '判断是否是本地回环地址
-                        Continue For
-                    End If
+        TaskTotal += 1
+        RunInNewThread(Sub()
+                           Try
+                               For Each IP In LocalIPAddresses
+                                   If Sockets.AddressFamily.InterNetworkV6.Equals(IP.AddressFamily) Then 'IPv6
+                                       Dim PublicIPv6Address As String = NetRequestOnce("http://6.ipw.cn", "GET", "", "application/x-www-form-urlencoded", 4000)
 
-                    IPv6Status = "Supported"
-                    Log("[IP] 检测到 IPv6 地址")
-                End If
-            Next
-        Catch ex As Exception
-            Log("[IP] IPv6 检测失败: " + ex.ToString())
-            IPv6Status = "Unsupported"
-        End Try
+                                       If IP.ToString() = PublicIPv6Address Then '判断是否是公网地址
+                                           IPv6Status = "Public"
+                                           Log("[IP] 检测到 IPv6 公网地址")
+                                           Exit For
+                                       ElseIf IP.ToString().StartsWithF("fe80") Then '判断是否是本地回环地址
+                                           Continue For
+                                       End If
+
+                                       IPv6Status = "Supported"
+                                       Log("[IP] 检测到 IPv6 地址")
+                                   End If
+                               Next
+                           Catch ex As Exception
+                               Log("[IP] IPv6 检测失败: " + ex.ToString())
+                               IPv6Status = "Unsupported"
+                           Finally
+                               TaskCompleted += 1
+                           End Try
+                       End Sub, "NetStatus V6")
+
+        While TaskCompleted <> TaskTotal
+            Thread.Sleep(200)
+        End While
 
         If IPv4Status Is Nothing Then IPv4Status = "Unsupported" '致敬每一位勇士
         If IPv6Status Is Nothing Then IPv6Status = "Unsupported" '如果轮了一圈出来还是没 IPv6 地址，那就是没有

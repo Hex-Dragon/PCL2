@@ -334,9 +334,6 @@
     <Compile Include="Pages\PageOther\PageOtherHelpDetail.xaml.vb">
       <DependentUpon>PageOtherHelpDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageLink\PageLinkIoi.xaml.vb">
-      <DependentUpon>PageLinkIoi.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\PageLink\PageLinkLeft.xaml.vb">
       <DependentUpon>PageLinkLeft.xaml</DependentUpon>
     </Compile>
@@ -639,10 +636,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\PageOther\PageOtherHelpDetail.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\PageLink\PageLinkIoi.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
