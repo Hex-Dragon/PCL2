@@ -1481,7 +1481,9 @@ Retry:
         If Deps.Any Then
             For Each DepProject In Deps.Where(Function(id) CompProjectCache.ContainsKey(id)).Select(Function(id) CompProjectCache(id))
                 For Each File In CompFilesCache(ProjectId)
-                    If File.RawDependencies.Contains(DepProject.Id) AndAlso DepProject.Id <> ProjectId Then
+                    If File.RawDependencies.Contains(DepProject.Id) AndAlso
+                    DepProject.Id <> ProjectId AndAlso 
+                    Not File.Dependencies.Contains(DepProject.Id) Then
                         File.Dependencies.Add(DepProject.Id)
                     End If
                 Next
