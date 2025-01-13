@@ -153,6 +153,7 @@
         {"UiHiddenPageSetup", New SetupEntry(False)},
         {"UiHiddenPageOther", New SetupEntry(False)},
         {"UiHiddenFunctionSelect", New SetupEntry(False)},
+        {"UiHiddenFunctionModUpdate", New SetupEntry(False)},
         {"UiHiddenFunctionHidden", New SetupEntry(False)},
         {"UiHiddenSetupLaunch", New SetupEntry(False)},
         {"UiHiddenSetupUi", New SetupEntry(False)},
@@ -202,15 +203,19 @@
 
         '加载状态：0/未读取  1/已读取未处理  2/已处理
         Public State As Byte = 0
-        Public Type
+        Public Type As Type
 
         Public Sub New(Value, Optional Source = SetupSource.Normal, Optional Encoded = False)
-            Me.DefaultValue = Value
-            Me.DefaultValueEncoded = If(Encoded, SecretEncrypt(Value, "PCL" & UniqueAddress), Value)
-            Me.Encoded = Encoded
-            Me.Value = Value
-            Me.Source = Source
-            Type = If(Value, New Object).GetType
+            Try
+                Me.DefaultValue = Value
+                Me.Encoded = Encoded
+                Me.Value = Value
+                Me.Source = Source
+                Me.Type = If(Value, New Object).GetType
+                Me.DefaultValueEncoded = If(Encoded, SecretEncrypt(Value, "PCL" & UniqueAddress), Value)
+            Catch ex As Exception
+                Log(ex, "初始化 SetupEntry 失败", LogLevel.Feedback) '#5095 的 fallback
+            End Try
         End Sub
 
     End Class
@@ -312,6 +317,12 @@
         Dim E As SetupEntry = SetupDict(Key)
         [Set](Key, E.DefaultValue, E, ForceReload, Version)
     End Sub
+    ''' <summary>
+    ''' 获取某个设置项的默认值。
+    ''' </summary>
+    Public Function GetDefault(Key As String) As String
+        Return SetupDict(Key).DefaultValue
+    End Function
 
     Private Sub Read(Key As String, ByRef E As SetupEntry, Version As McVersion)
         Try
@@ -630,6 +641,9 @@
         PageSetupUI.HiddenRefresh()
     End Sub
     Public Sub UiHiddenFunctionSelect(Value As Boolean)
+        PageSetupUI.HiddenRefresh()
+    End Sub
+    Public Sub UiHiddenFunctionModUpdate(Value As Boolean)
         PageSetupUI.HiddenRefresh()
     End Sub
     Public Sub UiHiddenFunctionHidden(Value As Boolean)

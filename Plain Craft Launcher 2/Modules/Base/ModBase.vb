@@ -12,13 +12,13 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.8.9" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.8.9." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.8.12" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.8.12." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
 #If BETA Then
-    Public Const VersionCode As Integer = 340 'Release
+    Public Const VersionCode As Integer = 347 'Release
 #Else
-    Public Const VersionCode As Integer = 341 'Snapshot
+    Public Const VersionCode As Integer = 346 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -971,7 +971,7 @@ Public Module ModBase
         End Using
     End Function
     ''' <summary>
-    ''' 弹出选取文件对话框并且要求选取文件。
+    ''' 弹出选取文件对话框，要求选择一个文件。
     ''' </summary>
     ''' <param name="FileFilter">要求的格式。如：“常用图片文件(*.png;*.jpg)|*.png;*.jpg”。</param>
     ''' <param name="Title">弹窗的标题。</param>
@@ -985,12 +985,32 @@ Public Module ModBase
             fileDialog.Title = Title
             fileDialog.ValidateNames = True
             fileDialog.ShowDialog()
-            SelectFile = fileDialog.FileName
-            Log("[UI] 选择文件返回：" & SelectFile)
+            Log("[UI] 选择单个文件返回：" & fileDialog.FileName)
+            Return fileDialog.FileName
         End Using
     End Function
     ''' <summary>
-    ''' 弹出选取文件夹对话框并且要求选取文件夹。如果没有选择就返回空字符串。
+    ''' 弹出选取文件对话框，要求选择多个文件。
+    ''' </summary>
+    ''' <param name="FileFilter">要求的格式。如：“常用图片文件(*.png;*.jpg)|*.png;*.jpg”。</param>
+    ''' <param name="Title">弹窗的标题。</param>
+    Public Function SelectFiles(FileFilter As String, Title As String) As String()
+        Using fileDialog As New Forms.OpenFileDialog
+            fileDialog.AddExtension = True
+            fileDialog.AutoUpgradeEnabled = True
+            fileDialog.CheckFileExists = True
+            fileDialog.Filter = FileFilter
+            fileDialog.Multiselect = True
+            fileDialog.Title = Title
+            fileDialog.ValidateNames = True
+            fileDialog.ShowDialog()
+            Log("[UI] 选择多个文件返回：" & fileDialog.FileNames.Join(","))
+            Return fileDialog.FileNames
+        End Using
+    End Function
+    ''' <summary>
+    ''' 弹出选取文件夹对话框，要求选取文件夹。
+    ''' 返回以 \ 结尾的完整路径，如果没有选择则返回空字符串。
     ''' </summary>
     Public Function SelectFolder(Optional Title As String = "选择文件夹") As String
         Dim folderDialog As New Ookii.Dialogs.Wpf.VistaFolderBrowserDialog With {.ShowNewFolderButton = True, .RootFolder = Environment.SpecialFolder.Desktop, .Description = Title, .UseDescriptionForTitle = True}
@@ -1207,7 +1227,8 @@ Re:
     ''' 尝试根据后缀名判断文件种类并解压文件，支持 gz 与 zip，会尝试将 jar 以 zip 方式解压。
     ''' 会尝试创建，但不会清空目标文件夹。
     ''' </summary>
-    Public Sub ExtractFile(CompressFilePath As String, DestDirectory As String, Optional Encode As Encoding = Nothing)
+    Public Sub ExtractFile(CompressFilePath As String, DestDirectory As String, Optional Encode As Encoding = Nothing,
+                           Optional ProgressIncrementHandler As Action(Of Double) = Nothing)
         Directory.CreateDirectory(DestDirectory)
         If CompressFilePath.EndsWithF(".gz", True) Then
             '以 gz 方式解压
@@ -1223,7 +1244,9 @@ Re:
         Else
             '以 zip 方式解压
             Using Archive = ZipFile.Open(CompressFilePath, ZipArchiveMode.Read, If(Encode, Encoding.GetEncoding("GB18030")))
+                Dim TotalCount As Integer = Archive.Entries.Count
                 For Each Entry As ZipArchiveEntry In Archive.Entries
+                    If ProgressIncrementHandler IsNot Nothing Then ProgressIncrementHandler(1 / TotalCount)
                     Dim DestinationPath As String = IO.Path.Combine(DestDirectory, Entry.FullName)
                     If DestinationPath.EndsWithF("\") OrElse DestinationPath.EndsWithF("/") Then
                         Continue For '不创建空文件夹
@@ -1293,13 +1316,16 @@ RetryDir:
     ''' <summary>
     ''' 复制文件夹，失败会抛出异常。
     ''' </summary>
-    Public Sub CopyDirectory(FromPath As String, ToPath As String)
+    Public Sub CopyDirectory(FromPath As String, ToPath As String, Optional ProgressIncrementHandler As Action(Of Double) = Nothing)
         FromPath = FromPath.Replace("/", "\")
         If Not FromPath.EndsWithF("\") Then FromPath &= "\"
         ToPath = ToPath.Replace("/", "\")
         If Not ToPath.EndsWithF("\") Then ToPath &= "\"
-        For Each File In EnumerateFiles(FromPath)
+        Dim AllFiles = EnumerateFiles(FromPath).ToList
+        Dim FileCount As Integer = AllFiles.Count
+        For Each File In AllFiles
             CopyFile(File.FullName, File.FullName.Replace(FromPath, ToPath))
+            If ProgressIncrementHandler IsNot Nothing Then ProgressIncrementHandler(1 / FileCount)
         Next
     End Sub
     ''' <summary>
@@ -1552,10 +1578,10 @@ RetryDir:
     End Function
 
     ''' <summary>
-    ''' 获取在子字符串之前的部分。
-    ''' 会裁切尽可能多的内容，但如果未找到子字符串则不裁切。
+    ''' 获取在子字符串第一次出现之前的部分，例如对 2024/11/08 拆切 / 会得到 2024。
+    ''' 如果未找到子字符串则不裁切。
     ''' </summary>
-    <Extension> Public Function Before(Str As String, Text As String, Optional IgnoreCase As Boolean = False) As String
+    <Extension> Public Function BeforeFirst(Str As String, Text As String, Optional IgnoreCase As Boolean = False) As String
         Dim Pos As Integer = If(String.IsNullOrEmpty(Text), -1, Str.IndexOfF(Text, IgnoreCase))
         If Pos >= 0 Then
             Return Str.Substring(0, Pos)
@@ -1564,10 +1590,34 @@ RetryDir:
         End If
     End Function
     ''' <summary>
-    ''' 获取在子字符串之后的部分。
-    ''' 会裁切尽可能多的内容，但如果未找到子字符串则不裁切。
+    ''' 获取在子字符串最后一次出现之前的部分，例如对 2024/11/08 拆切 / 会得到 2024/11。
+    ''' 如果未找到子字符串则不裁切。
     ''' </summary>
-    <Extension> Public Function After(Str As String, Text As String, Optional IgnoreCase As Boolean = False) As String
+    <Extension> Public Function BeforeLast(Str As String, Text As String, Optional IgnoreCase As Boolean = False) As String
+        Dim Pos As Integer = If(String.IsNullOrEmpty(Text), -1, Str.LastIndexOfF(Text, IgnoreCase))
+        If Pos >= 0 Then
+            Return Str.Substring(0, Pos)
+        Else
+            Return Str
+        End If
+    End Function
+    ''' <summary>
+    ''' 获取在子字符串第一次出现之后的部分，例如对 2024/11/08 拆切 / 会得到 11/08。
+    ''' 如果未找到子字符串则不裁切。
+    ''' </summary>
+    <Extension> Public Function AfterFirst(Str As String, Text As String, Optional IgnoreCase As Boolean = False) As String
+        Dim Pos As Integer = If(String.IsNullOrEmpty(Text), -1, Str.IndexOfF(Text, IgnoreCase))
+        If Pos >= 0 Then
+            Return Str.Substring(Pos + Text.Length)
+        Else
+            Return Str
+        End If
+    End Function
+    ''' <summary>
+    ''' 获取在子字符串最后一次出现之后的部分，例如对 2024/11/08 拆切 / 会得到 08。
+    ''' 如果未找到子字符串则不裁切。
+    ''' </summary>
+    <Extension> Public Function AfterLast(Str As String, Text As String, Optional IgnoreCase As Boolean = False) As String
         Dim Pos As Integer = If(String.IsNullOrEmpty(Text), -1, Str.LastIndexOfF(Text, IgnoreCase))
         If Pos >= 0 Then
             Return Str.Substring(Pos + Text.Length)
@@ -1576,8 +1626,8 @@ RetryDir:
         End If
     End Function
     ''' <summary>
-    ''' 获取处于两个子字符串之间的部分。
-    ''' 会裁切尽可能多的内容：匹配开始使用 LastIndexOf，匹配结束使用 IndexOf，但如果未找到子字符串则不裁切。
+    ''' 获取处于两个子字符串之间的部分，裁切尽可能多的内容。
+    ''' 如果未找到子字符串则不裁切。
     ''' </summary>
     <Extension> Public Function Between(Str As String, After As String, Before As String, Optional IgnoreCase As Boolean = False) As String
         Dim StartPos As Integer = If(String.IsNullOrEmpty(After), -1, Str.LastIndexOfF(After, IgnoreCase))
@@ -1845,6 +1895,39 @@ RetryDir:
 #Region "系统"
 
     ''' <summary>
+    ''' 线程安全的，可以直接使用 For Each 的 List。
+    ''' 在使用 For Each 循环时，列表的结果可能并非最新，但不会抛出异常。
+    ''' </summary>
+    Public Class SafeList(Of T)
+        Inherits SynchronizedCollection(Of T)
+        Implements IEnumerable, IEnumerable(Of T)
+        '构造函数
+        Public Sub New()
+            MyBase.New()
+        End Sub
+        Public Sub New(Data As IEnumerable(Of T))
+            MyBase.New(New Object, Data)
+        End Sub
+        Public Shared Widening Operator CType(Data As List(Of T)) As SafeList(Of T)
+            Return New SafeList(Of T)(Data)
+        End Operator
+        Public Shared Widening Operator CType(Data As SafeList(Of T)) As List(Of T)
+            Return New List(Of T)(Data)
+        End Operator
+        '基于 SyncLock 覆写
+        Public Overloads Function GetEnumerator() As IEnumerator(Of T) Implements IEnumerable(Of T).GetEnumerator
+            SyncLock SyncRoot
+                Return Items.ToList.GetEnumerator()
+            End SyncLock
+        End Function
+        Private Overloads Function GetEnumeratorGeneral() As IEnumerator Implements IEnumerable.GetEnumerator
+            SyncLock SyncRoot
+                Return Items.ToList.GetEnumerator()
+            End SyncLock
+        End Function
+    End Class
+
+    ''' <summary>
     ''' 可用于临时存放文件的，不含任何特殊字符的文件夹路径，以“\”结尾。
     ''' </summary>
     Public PathPure As String = GetPureASCIIDir()
@@ -1864,6 +1947,12 @@ RetryDir:
     ''' 指示接取到这个异常的函数进行重试。
     ''' </summary>
     Public Class RestartException
+        Inherits Exception
+    End Class
+    ''' <summary>
+    ''' 指示用户手动取消了操作，或用户已知晓操作被取消的原因。
+    ''' </summary>
+    Public Class CancelledException
         Inherits Exception
     End Class
 
@@ -1983,10 +2072,10 @@ NextElement:
                 '12~60 月，“1 年 2 个月”
                 GetTimeSpanString = Math.Floor(TotalMonthes / 12) & " 年" & If((TotalMonthes Mod 12) > 0, " " & (TotalMonthes Mod 12) & " 个月", "")
             ElseIf TotalMonthes >= 4 Then
-                '4~11 月，“5 月”
-                GetTimeSpanString = TotalMonthes & " 月"
+                '4~11 月，“5 个月”
+                GetTimeSpanString = TotalMonthes & " 个月"
             ElseIf TotalMonthes >= 1 Then
-                '1~4 月，“2 月 13 天”
+                '1~4 月，“2 个月 13 天”
                 GetTimeSpanString = TotalMonthes & " 月" & If((Span.Days Mod 30) > 0, " " & (Span.Days Mod 30) & " 天", "")
             ElseIf Span.TotalDays >= 4 Then
                 '4~30 天，“23 天”
@@ -2108,7 +2197,7 @@ NextElement:
     ''' <summary>
     ''' 在新的工作线程中执行代码。
     ''' </summary>
-    Public Function RunInNewThread(Action As Action, Name As String, Optional Priority As ThreadPriority = ThreadPriority.Normal) As Thread
+    Public Function RunInNewThread(Action As Action, Optional Name As String = Nothing, Optional Priority As ThreadPriority = ThreadPriority.Normal) As Thread
         Dim th As New Thread(
         Sub()
             Try
@@ -2118,7 +2207,7 @@ NextElement:
             Catch ex As Exception
                 Log(ex, Name & "：线程执行失败", LogLevel.Feedback)
             End Try
-        End Sub) With {.Name = Name, .Priority = Priority}
+        End Sub) With {.Name = If(Name, "Runtime New Invoke " & GetUuid() & "#"), .Priority = Priority}
         th.Start()
         Return th
     End Function
