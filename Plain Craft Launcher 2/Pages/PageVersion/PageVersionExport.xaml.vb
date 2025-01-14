@@ -46,7 +46,8 @@
     ''' </summary>
     Private CurrentPath As String = ""
     Private Sub ReloadFileList(Optional NewPath As String = "")
-        If String.IsNullOrWhiteSpace(NewPath) Then NewPath = PageVersionLeft.Version.Path
+        If String.IsNullOrWhiteSpace(NewPath) OrElse NewPath = PathMcFolder Then NewPath = PageVersionLeft.Version.Path
+        If Not NewPath.EndsWithF("\") Then NewPath &= "\"
         Dim tb As TextBlock = PanFileList.Children(0)
         PanFileList.Children.Clear()
         PanFileList.Children.Add(tb)
@@ -58,31 +59,37 @@
         End If
 
         Dim fileCount As Integer = 0
+        Dim directories = Directory.EnumerateDirectories(NewPath)
+        Dim files = Directory.EnumerateFiles(NewPath)
+        If (NewPath = PageVersionLeft.Version.Path) AndAlso PageVersionLeft.Version.PathIndie = PathMcFolder Then
+            '未开启版本隔离时 .minecraft 下的文件
+            directories = directories.Concat(Directory.EnumerateDirectories(PathMcFolder))
+            files = files.Concat(Directory.EnumerateFiles(PathMcFolder))
+        End If
 
-        For Each d In Directory.EnumerateDirectories(NewPath)
+        For Each d In directories
             If Directory.EnumerateFileSystemEntries(d).Count = 0 Then Continue For
-            d = GetFolderNameFromPath(d)
-            If IsVerRedundant(NewPath & d) OrElse IsMustExport(d) Then Continue For
+            If IsVerRedundant(d) OrElse IsMustExport(d) Then Continue For
             Dim title As String = ""
             Dim listItem As New MyListItem
-            If Titles.TryGetValue(d, title) Then 'title 作为引用类型传入
+            If Titles.TryGetValue(GetFolderNameFromPath(d), title) Then 'title 作为引用类型传入
                 listItem.Title = title
-                listItem.Info = d
             Else
-                listItem.Title = d
+                listItem.Title = GetFolderNameFromPath(d)
             End If
+            listItem.Info = d
             '图标按钮
             Dim btnSwap As New MyIconButton
             btnSwap.Logo = Logo.IconButtonRight
             btnSwap.LogoScale = 1.0
-            btnSwap.Tag = d
+            btnSwap.Tag = d & "\"
             AddHandler btnSwap.Click, AddressOf BtnSwap_Click
             listItem.Buttons = {btnSwap}
             listItem.Type = MyListItem.CheckType.CheckBox
             listItem.Height = 35
             listItem.Logo = Logo.IconButtonOpen
             listItem.Tag = d & "\"
-            Select Case IsSelected(NewPath & d & "\")
+            Select Case IsSelected(d & "\")
                 Case 1
                     listItem.Half = True
                 Case 2
@@ -93,21 +100,20 @@
             fileCount += 1
         Next
 
-        For Each f In Directory.EnumerateFiles(NewPath)
-            f = GetFileNameFromPath(f)
-            If IsVerRedundant(NewPath & f) OrElse IsMustExport(f) Then Continue For
+        For Each f In files
+            If IsVerRedundant(f) OrElse IsMustExport(f) Then Continue For
             Dim title As String = ""
             Dim listItem As New MyListItem
             If Titles.TryGetValue(f, title) Then 'title 作为引用类型传入
                 listItem.Title = title
-                listItem.Info = f
             Else
-                listItem.Title = f
+                listItem.Title = GetFileNameFromPath(f)
             End If
+            listItem.Info = f
             listItem.Type = MyListItem.CheckType.CheckBox
             listItem.Height = 35
             listItem.Tag = f
-            listItem.Checked = (IsSelected(NewPath & f) = 2)
+            listItem.Checked = (IsSelected(f) = 2)
             AddHandler listItem.Click, AddressOf ListItem_Click
             PanFileList.Children.Add(listItem)
             fileCount += 1
@@ -125,7 +131,7 @@
         {"servers.dat", "服务器列表"}
     }
     Private Sub BtnSwap_Click(sender As MyIconButton, e As Object)
-        Dim actualPath As String = CurrentPath & sender.Tag & "\"
+        Dim actualPath As String = sender.Tag
         'Dim relative As String = actualPath.Replace(PageVersionLeft.Version.Path, "")
 
         If Not Directory.Exists(actualPath) Then
@@ -195,7 +201,7 @@
             Exit Sub
         End If
         SelectedChange(Not sender.Checked, '非常难绷的逻辑，很难描述清楚，自己打断点看 Checked 属性值吧……
-                       CurrentPath & sender.Tag)
+                       sender.Tag)
     End Sub
 
     'Private ReadOnly Property Saves As List(Of String)
@@ -226,7 +232,7 @@
     Private Sub PanFileList_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles PanFileList.MouseLeftButtonUp
         For Each c In PanCommonFiles.Children
             If TypeOf c Is MyCheckBox Then
-                c.Checked = (IsSelected(PageVersionLeft.Version.Path & c.Tag) = 2)
+                c.Checked = IsSelected(PageVersionLeft.Version.Path & c.Tag) = 2 OrElse IsSelected(PathMcFolder & c.Tag) = 2
             End If
         Next
     End Sub
