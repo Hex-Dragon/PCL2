@@ -618,6 +618,12 @@
                                 Type = "愚人节版"
                                 Version("type") = "special"
                                 Version.Add("lore", GetMcFoolName(Version("id")))
+                            Case Else '4/1 自动视作愚人节版
+                                Dim ReleaseDate = Version("releaseTime").Value(Of Date).ToUniversalTime().AddHours(2)
+                                If ReleaseDate.Month = 4 AndAlso ReleaseDate.Day = 1 Then
+                                    Type = "愚人节版"
+                                    Version("type") = "special"
+                                End If
                         End Select
                     Case "special"
                         '已被处理的愚人节版
@@ -724,6 +730,7 @@
     Private Function IsOptiFineSuitForForge(OptiFine As DlOptiFineListEntry, Forge As DlForgeVersionEntry)
         If Forge.Inherit <> OptiFine.Inherit Then Return False '不是同一个大版本
         If OptiFine.RequiredForgeVersion Is Nothing Then Return False '不兼容 Forge
+        If String.IsNullOrWhiteSpace(OptiFine.RequiredForgeVersion) Then Return True '#4183
         If OptiFine.RequiredForgeVersion.Contains(".") Then 'XX.X.XXX
             Return VersionSortInteger(Forge.Version.ToString, OptiFine.RequiredForgeVersion) >= 0
         Else 'XXXX
@@ -1069,12 +1076,12 @@
             If DisplayName.StartsWith("[" & MinecraftVersion & "]") Then Return True
             If Not DisplayName.Contains("/") OrElse Not DisplayName.Contains("]") Then Return False
             '直接的判断（例如 1.18.1/22w03a）
-            For Each Part As String In DisplayName.Before("]").TrimStart("[").Split("/")
+            For Each Part As String In DisplayName.BeforeFirst("]").TrimStart("[").Split("/")
                 If Part = MinecraftVersion Then Return True
             Next
             '将版本名分割语素（例如 1.16.4/5）
-            Dim Lefts = RegexSearch(DisplayName.Before("]"), "[a-z/]+|[0-9/]+")
-            Dim Rights = RegexSearch(MinecraftVersion.Before("]"), "[a-z/]+|[0-9/]+")
+            Dim Lefts = RegexSearch(DisplayName.BeforeFirst("]"), "[a-z/]+|[0-9/]+")
+            Dim Rights = RegexSearch(MinecraftVersion.BeforeFirst("]"), "[a-z/]+|[0-9/]+")
             '对每段进行判断
             Dim i As Integer = 0
             While True

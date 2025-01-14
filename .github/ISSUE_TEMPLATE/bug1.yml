@@ -1,6 +1,6 @@
 name: "Minecraft 崩溃"
 description: "PCL 提示 “Minecraft 出现错误”，或游戏崩溃"
-labels: [· Bug, 新反馈]
+labels: [· Bug, 新提交]
 body:
 - type: checkboxes
   id: "yml-1"

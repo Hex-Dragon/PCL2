@@ -21,26 +21,28 @@
                     OpenWebsite(Data(0))
 
                 Case "打开文件", "打开帮助"
-                    RunInThread(Sub()
-                                    Try
-                                        '确认实际路径
-                                        Dim ActualPaths = GetEventAbsoluteUrls(Data(0), Type)
-                                        Dim Location = ActualPaths(0), WorkingDir = ActualPaths(1)
-                                        '执行
-                                        If Type = "打开文件" Then
-                                            Dim Info As New ProcessStartInfo With {
-                                                .Arguments = If(Data.Length >= 2, Data(1), ""),
-                                                .FileName = Location,
-                                                .WorkingDirectory = WorkingDir
-                                            }
-                                            Process.Start(Info)
-                                        Else '打开帮助
-                                            PageOtherHelp.EnterHelpPage(Location)
-                                        End If
-                                    Catch ex As Exception
-                                        Log(ex, "执行打开类自定义事件失败", LogLevel.Msgbox)
-                                    End Try
-                                End Sub)
+                    RunInThread(
+                    Sub()
+                        Try
+                            '确认实际路径
+                            Dim ActualPaths = GetEventAbsoluteUrls(Data(0), Type)
+                            Dim Location = ActualPaths(0), WorkingDir = ActualPaths(1)
+                            Log($"[Control] 打开类自定义事件实际路径：{Location}，工作目录：{WorkingDir}")
+                            '执行
+                            If Type = "打开文件" Then
+                                Dim Info As New ProcessStartInfo With {
+                                    .Arguments = If(Data.Length >= 2, Data(1), ""),
+                                    .FileName = Location,
+                                    .WorkingDirectory = WorkingDir
+                                }
+                                Process.Start(Info)
+                            Else '打开帮助
+                                PageOtherHelp.EnterHelpPage(Location)
+                            End If
+                        Catch ex As Exception
+                            Log(ex, "执行打开类自定义事件失败", LogLevel.Msgbox)
+                        End Try
+                    End Sub)
 
                 Case "启动游戏"
                     If Data(0) = "\current" Then
@@ -90,7 +92,18 @@
                         MyMsgBox("EventData 必须为以 http:// 或 https:// 开头的网址。" & vbCrLf & "PCL 不支持其他乱七八糟的下载协议。", "事件执行失败")
                         Exit Sub
                     End If
-                    PageOtherTest.StartCustomDownload(Data(0), GetFileNameFromPath(Data(0)))
+                    Try
+                        Select Case Data.Length
+                            Case 1
+                                PageOtherTest.StartCustomDownload(Data(0), GetFileNameFromPath(Data(0)))
+                            Case 2
+                                PageOtherTest.StartCustomDownload(Data(0), Data(1))
+                            Case Else
+                                PageOtherTest.StartCustomDownload(Data(0), Data(1), Data(2))
+                        End Select
+                    Catch
+                        PageOtherTest.StartCustomDownload(Data(0), "未知")
+                    End Try
 
                 Case Else
                     MyMsgBox("未知的事件类型：" & Type & vbCrLf & "请检查事件类型填写是否正确，或者 PCL 是否为最新版本。", "事件执行失败")
@@ -126,7 +139,6 @@
             Dim LocalTemp1 As String = PathTemp & "CustomEvent\" & RawFileName
             Dim LocalTemp2 As String = PathTemp & "CustomEvent\" & RawFileName.Replace(".json", ".xaml")
             Log("[Event] 转换网络资源：" & RelativeUrl & " -> " & LocalTemp1)
-            Hint("正在获取资源，请稍候……")
             Try
                 NetDownload(RelativeUrl, LocalTemp1)
                 NetDownload(RelativeUrl.Replace(".json", ".xaml"), LocalTemp1.Replace(".json", ".xaml"))

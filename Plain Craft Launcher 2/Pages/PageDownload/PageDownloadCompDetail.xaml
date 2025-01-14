@@ -20,8 +20,13 @@
                     </StackPanel>
                 </StackPanel>
             </local:MyCard>
-            <StackPanel Grid.Row="1" Grid.RowSpan="2" Name="PanMain" Grid.IsSharedSizeScope="True" />
-            <local:MyCard Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="0,0,0,8">
+            <StackPanel Grid.Row="1" Grid.RowSpan="2" Name="PanMain" Grid.IsSharedSizeScope="True">
+                <local:MyCard Margin="0,0,0,15" x:Name="CardFilter">
+                    <StackPanel x:Name="PanFilter" Margin="10,10,0,10" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" />
+                </local:MyCard>
+                <StackPanel Name="PanResults" />
+            </StackPanel>
+            <local:MyCard Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="0,0,0,8">
                 <local:MyLoading Text="正在获取版本列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </local:MyCard>
         </Grid>

@@ -25,14 +25,15 @@
             Next
         End If
 
+        AniControlEnabled += 1
+        Reload() '#4826，在每次进入页面时都刷新一下
+        AniControlEnabled -= 1
+
         '非重复加载部分
         If IsLoaded Then Exit Sub
         IsLoaded = True
 
-        AniControlEnabled += 1
         SliderLoad()
-        Reload()
-        AniControlEnabled -= 1
 
 #If BETA Then
         PanLauncherHide.Visibility = Visibility.Visible
@@ -97,6 +98,7 @@
             CheckHiddenPageSetup.Checked = Setup.Get("UiHiddenPageSetup")
             CheckHiddenPageOther.Checked = Setup.Get("UiHiddenPageOther")
             CheckHiddenFunctionSelect.Checked = Setup.Get("UiHiddenFunctionSelect")
+            CheckHiddenFunctionModUpdate.Checked = Setup.Get("UiHiddenFunctionModUpdate")
             CheckHiddenFunctionHidden.Checked = Setup.Get("UiHiddenFunctionHidden")
             CheckHiddenSetupLaunch.Checked = Setup.Get("UiHiddenSetupLaunch")
             CheckHiddenSetupUI.Checked = Setup.Get("UiHiddenSetupUi")
@@ -147,6 +149,7 @@
             Setup.Reset("UiHiddenPageSetup")
             Setup.Reset("UiHiddenPageOther")
             Setup.Reset("UiHiddenFunctionSelect")
+            Setup.Reset("UiHiddenFunctionModUpdate")
             Setup.Reset("UiHiddenFunctionHidden")
             Setup.Reset("UiHiddenSetupLaunch")
             Setup.Reset("UiHiddenSetupUi")
@@ -174,7 +177,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboBackgroundSuit.SelectionChanged, ComboCustomPreset.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckMusicStop.Change, CheckMusicRandom.Change, CheckMusicAuto.Change, CheckBackgroundColorful.Change, CheckLogoLeft.Change, CheckLauncherLogo.Change, CheckHiddenFunctionHidden.Change, CheckHiddenFunctionSelect.Change, CheckHiddenPageDownload.Change, CheckHiddenPageLink.Change, CheckHiddenPageOther.Change, CheckHiddenPageSetup.Change, CheckHiddenSetupLaunch.Change, CheckHiddenSetupSystem.Change, CheckHiddenSetupLink.Change, CheckHiddenSetupUI.Change, CheckHiddenOtherAbout.Change, CheckHiddenOtherFeedback.Change, CheckHiddenOtherVote.Change, CheckHiddenOtherHelp.Change, CheckHiddenOtherTest.Change, CheckMusicStart.Change, CheckLauncherEmail.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckMusicStop.Change, CheckMusicRandom.Change, CheckMusicAuto.Change, CheckBackgroundColorful.Change, CheckLogoLeft.Change, CheckLauncherLogo.Change, CheckHiddenFunctionHidden.Change, CheckHiddenFunctionSelect.Change, CheckHiddenFunctionModUpdate.Change, CheckHiddenPageDownload.Change, CheckHiddenPageLink.Change, CheckHiddenPageOther.Change, CheckHiddenPageSetup.Change, CheckHiddenSetupLaunch.Change, CheckHiddenSetupSystem.Change, CheckHiddenSetupLink.Change, CheckHiddenSetupUI.Change, CheckHiddenOtherAbout.Change, CheckHiddenOtherFeedback.Change, CheckHiddenOtherVote.Change, CheckHiddenOtherHelp.Change, CheckHiddenOtherTest.Change, CheckMusicStart.Change, CheckLauncherEmail.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextLogoText.ValidatedTextChanged, TextCustomNet.ValidatedTextChanged
@@ -269,17 +272,16 @@
         End Try
     End Sub
 
-
     '顶部栏
     Private Sub BtnLogoChange_Click(sender As Object, e As EventArgs) Handles BtnLogoChange.Click
-        Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif)|*.png;*.jpg;*.gif", "选择图片")
+        Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif;*.webp)|*.png;*.jpg;*.gif;*.webp", "选择图片")
         If FileName = "" Then Exit Sub
         Try
             '拷贝文件
             File.Delete(Path & "PCL\Logo.png")
             CopyFile(FileName, Path & "PCL\Logo.png")
             '设置当前显示
-            FrmMain.ImageTitleLogo.Source = New MyBitmap(Path & "PCL\Logo.png")
+            FrmMain.ImageTitleLogo.Source = Path & "PCL\Logo.png"
         Catch ex As Exception
             If ex.Message.Contains("参数无效") Then
                 Log("改变标题栏图片失败，该图片文件可能并非标准格式。" & vbCrLf &
@@ -296,7 +298,7 @@ Refresh:
         '已有图片则不再选择
         If File.Exists(Path & "PCL\Logo.png") Then
             Try
-                FrmMain.ImageTitleLogo.Source = New MyBitmap(Path & "PCL\Logo.png")
+                FrmMain.ImageTitleLogo.Source = Path & "PCL\Logo.png"
             Catch ex As Exception
                 If ex.Message.Contains("参数无效") Then
                     Log("调整标题栏图片失败，该图片文件可能并非标准格式。" & vbCrLf &
@@ -315,7 +317,7 @@ Refresh:
             Exit Sub
         End If
         '没有图片则要求选择
-        Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif)|*.png;*.jpg;*.gif", "选择图片")
+        Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif;*.webp)|*.png;*.jpg;*.gif;*.webp", "选择图片")
         If FileName = "" Then
             FrmMain.ImageTitleLogo.Source = Nothing
             e.Handled = True
@@ -364,27 +366,28 @@ Refresh:
     End Sub
     Private Sub BtnMusicClear_Click(sender As Object, e As EventArgs) Handles BtnMusicClear.Click
         If MyMsgBox("即将删除背景音乐文件夹中的所有文件。" & vbCrLf & "此操作不可撤销，是否确定？", "警告",, "取消", IsWarn:=True) = 1 Then
-            RunInThread(Sub()
-                            Hint("正在删除背景音乐……")
-                            '停止播放音乐
-                            MusicNAudio = Nothing
-                            MusicWaitingList = New List(Of String)
-                            MusicAllList = New List(Of String)
-                            Thread.Sleep(200)
-                            '删除文件
-                            Try
-                                DeleteDirectory(Path & "PCL\Musics")
-                                Hint("背景音乐已删除！", HintType.Finish)
-                            Catch ex As Exception
-                                Log(ex, "删除背景音乐失败", LogLevel.Msgbox)
-                            End Try
-                            Try
-                                Directory.CreateDirectory(Path & "PCL\Musics")
-                                RunInUi(Sub() MusicRefreshPlay(False))
-                            Catch ex As Exception
-                                Log(ex, "重建背景音乐文件夹失败", LogLevel.Msgbox)
-                            End Try
-                        End Sub)
+            RunInThread(
+            Sub()
+                Hint("正在删除背景音乐……")
+                '停止播放音乐
+                MusicNAudio = Nothing
+                MusicWaitingList = New List(Of String)
+                MusicAllList = New List(Of String)
+                Thread.Sleep(200)
+                '删除文件
+                Try
+                    DeleteDirectory(Path & "PCL\Musics")
+                    Hint("背景音乐已删除！", HintType.Finish)
+                Catch ex As Exception
+                    Log(ex, "删除背景音乐失败", LogLevel.Msgbox)
+                End Try
+                Try
+                    Directory.CreateDirectory(Path & "PCL\Musics")
+                    RunInUi(Sub() MusicRefreshPlay(False))
+                Catch ex As Exception
+                    Log(ex, "重建背景音乐文件夹失败", LogLevel.Msgbox)
+                End Try
+            End Sub)
         End If
     End Sub
     Private Sub CheckMusicStart_Change() Handles CheckMusicStart.Change
@@ -427,9 +430,9 @@ Refresh:
         RadioLauncherTheme5Gray.Opacity -= 0.23
         RadioLauncherTheme5.Opacity += 0.23
         AniStart({
-                     AaOpacity(RadioLauncherTheme5Gray, 1, 1000),
-                     AaOpacity(RadioLauncherTheme5, -1, 1000)
-                 }, "ThemeUnlock")
+            AaOpacity(RadioLauncherTheme5Gray, 1, 1000 * AniSpeed),
+            AaOpacity(RadioLauncherTheme5, -1, 1000 * AniSpeed)
+        }, "ThemeUnlock")
         If RadioLauncherTheme5Gray.Opacity < 0.08 Then
             ThemeUnlock(5, UnlockHint:="隐藏主题 玄素黑 已解锁！")
             AniStop("ThemeUnlock")
@@ -437,7 +440,7 @@ Refresh:
         End If
     End Sub
     Private Sub LabLauncherTheme11Click_MouseLeftButtonUp() Handles LabLauncherTheme11Click.MouseLeftButtonUp, RadioLauncherTheme11.MouseRightButtonUp
-        If LabLauncherTheme11Click.Visibility = Visibility.Collapsed OrElse LabLauncherTheme11Click.ToolTip.ToString.Contains("点击") Then
+        If LabLauncherTheme11Click.Visibility = Visibility.Collapsed OrElse If(LabLauncherTheme11Click.ToolTip, "").ToString.Contains("点击") Then
             If MyMsgBox(
                 "1. 不爬取或攻击相关服务或网站，不盗取相关账号，没有谜题可以或需要以此来解决。" & vbCrLf &
                 "2. 不得篡改或损毁相关公开信息，请尽量让它们保持原状。" & vbCrLf &
@@ -449,10 +452,10 @@ Refresh:
             End If
         End If
     End Sub
-    Private Sub LabLauncherTheme8Copy_MouseRightButtonUp() Handles LabLauncherTheme8Copy.MouseRightButtonUp
-        OpenWebsite("https://afdian.net/a/LTCat")
+    Private Sub LabLauncherTheme8Copy_MouseRightButtonUp() Handles LabLauncherTheme8Copy.MouseRightButtonUp, RadioLauncherTheme8.MouseRightButtonUp
+        OpenWebsite("https://afdian.com/a/LTCat")
     End Sub
-    Private Sub LabLauncherTheme9Copy_MouseRightButtonUp() Handles LabLauncherTheme9Copy.MouseRightButtonUp
+    Private Sub LabLauncherTheme9Copy_MouseRightButtonUp() Handles LabLauncherTheme9Copy.MouseRightButtonUp, RadioLauncherTheme9.MouseRightButtonUp
         PageOtherLeft.TryFeedback()
     End Sub
 
@@ -661,49 +664,39 @@ Refresh:
 
 #End Region
 
-    '公开预览版
+    '赞助
     Private Sub BtnLauncherDonate_Click(sender As Object, e As EventArgs) Handles BtnLauncherDonate.Click
-        OpenWebsite("https://afdian.net/a/LTCat")
+        OpenWebsite("https://afdian.com/a/LTCat")
     End Sub
 
     '滑动条
     Private Sub SliderLoad()
-        SliderMusicVolume.GetHintText = Function(Value As Integer)
-                                            Return Math.Ceiling(Value * 0.1) & "%"
-                                        End Function
-        SliderLauncherOpacity.GetHintText = Function(Value As Integer)
-                                                Return Math.Round(40 + Value * 0.1) & "%"
-                                            End Function
-        SliderLauncherHue.GetHintText = Function(Value As Integer)
-                                            Return Value & "°"
-                                        End Function
-        SliderLauncherSat.GetHintText = Function(Value As Integer)
-                                            Return Value & "%"
-                                        End Function
-        SliderLauncherDelta.GetHintText = Function(Value As Integer)
-                                              If Value > 90 Then
-                                                  Return "+" & (Value - 90)
-                                              ElseIf Value = 90 Then
-                                                  Return 0
-                                              Else
-                                                  Return Value - 90
-                                              End If
-                                          End Function
-        SliderLauncherLight.GetHintText = Function(Value As Integer)
-                                              If Value > 20 Then
-                                                  Return "+" & (Value - 20)
-                                              ElseIf Value = 20 Then
-                                                  Return 0
-                                              Else
-                                                  Return Value - 20
-                                              End If
-                                          End Function
-        SliderBackgroundOpacity.GetHintText = Function(Value As Integer)
-                                                  Return Math.Round(Value * 0.1) & "%"
-                                              End Function
-        SliderBackgroundBlur.GetHintText = Function(Value As Integer)
-                                               Return Value & " 像素"
-                                           End Function
+        SliderMusicVolume.GetHintText = Function(v) Math.Ceiling(v * 0.1) & "%"
+        SliderLauncherOpacity.GetHintText = Function(v) Math.Round(40 + v * 0.1) & "%"
+        SliderLauncherHue.GetHintText = Function(v) v & "°"
+        SliderLauncherSat.GetHintText = Function(v) v & "%"
+        SliderLauncherDelta.GetHintText =
+        Function(Value As Integer)
+            If Value > 90 Then
+                Return "+" & (Value - 90)
+            ElseIf Value = 90 Then
+                Return 0
+            Else
+                Return Value - 90
+            End If
+        End Function
+        SliderLauncherLight.GetHintText =
+        Function(Value As Integer)
+            If Value > 20 Then
+                Return "+" & (Value - 20)
+            ElseIf Value = 20 Then
+                Return 0
+            Else
+                Return Value - 20
+            End If
+        End Function
+        SliderBackgroundOpacity.GetHintText = Function(v) Math.Round(v * 0.1) & "%"
+        SliderBackgroundBlur.GetHintText = Function(v) v & " 像素"
     End Sub
 
 End Class

@@ -233,6 +233,8 @@ Public Class ValidateFolderName
             '检查特殊字符串
             Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件夹名不可为 %！", True).Validate(Str)
             If Not InvalidStrCheck = "" Then Return InvalidStrCheck
+            '检查 NTFS 8.3 文件名（#4505）
+            If RegexCheck(Str, ".{2,}~\d") Then Return "文件夹名不能包含这一特殊格式！"
             '检查文件夹重名
             Dim Arr As New List(Of String)
             If PathIgnore IsNot Nothing Then
@@ -289,6 +291,8 @@ Public Class ValidateFileName
             '检查特殊字符串
             Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件名不可为 %！", True).Validate(Str)
             If Not InvalidStrCheck = "" Then Return InvalidStrCheck
+            '检查 NTFS 8.3 文件名（#4505）
+            If RegexCheck(Str, ".{2,}~\d") Then Return "文件名不能包含这一特殊格式！"
             '检查文件重名
             If ParentFolder IsNot Nothing Then
                 Dim DirInfo As New DirectoryInfo(ParentFolder)
@@ -355,6 +359,8 @@ Fin:
             '检查特殊字符串
             Dim InvalidStrCheck As String = New ValidateExceptSame({"CON", "PRN", "AUX", "CLOCK$", "NUL", "COM0", "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT0", "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"}, "文件夹名不可为 %！").Validate(SubStr)
             If Not InvalidStrCheck = "" Then Return InvalidStrCheck
+            '检查 NTFS 8.3 文件名（#4505）
+            If RegexCheck(Str, ".{2,}~\d") Then Return "文件夹名不能包含这一特殊格式！"
         Next
         Return ""
     End Function

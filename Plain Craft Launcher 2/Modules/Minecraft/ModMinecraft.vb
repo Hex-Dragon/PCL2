@@ -85,7 +85,7 @@ Public Module ModMinecraft
                     Next
                     If Not Renamed Then CacheMcFolderList.Add(New McFolder With {.Name = Name, .Path = Path, .Type = McFolderType.Custom})
                 Else
-                    Hint("无效的 Minecraft 文件夹：" & Path, HintType.Critical)
+                    Hint("无法访问 Minecraft 文件夹：" & Path, HintType.Critical)
                 End If
             Next
 
@@ -475,22 +475,27 @@ VersionSearchFinish:
         ''' </summary>
         Public Property JsonText As String
             Get
+                '快速检查 JSON 是否以 { 开头、} 结尾；忽略空白字符
+                Dim FastJsonCheck =
+                Function(Json As String) As Boolean
+                    Dim TrimedJson As String = Json.Trim()
+                    Return TrimedJson.StartsWithF("{") AndAlso TrimedJson.EndsWithF("}")
+                End Function
                 If _JsonText Is Nothing Then
-                    If Not File.Exists(Path & Name & ".json") Then Throw New Exception("未找到版本 json 文件：" & Path & Name & ".json")
+                    If Not File.Exists(Path & Name & ".json") Then Throw New Exception($"未找到版本 JSON 文件：{Path}{Name}.json")
                     _JsonText = ReadFile(Path & Name & ".json")
                     '如果 ReadFile 失败会返回空字符串；这可能是由于文件被临时占用，故延时后重试
-                    If _JsonText.Length = 0 Then
+                    If Not FastJsonCheck(_JsonText) Then
                         If RunInUi() Then
-                            Log("[Minecraft] 版本 json 文件为空或读取失败，由于代码在主线程运行，将不再进行重试", LogLevel.Debug)
-                            Throw New Exception("版本 Json 文件为空或读取失败")
+                            Log("[Minecraft] 版本 JSON 文件为空或有误，由于代码在主线程运行，将不再进行重试", LogLevel.Debug)
+                            GetJson(_JsonText) '触发异常
                         Else
-                            Log("[Minecraft] 版本 json 文件为空或读取失败，将在 2s 后重试读取（" & Path & Name & ".json）", LogLevel.Debug)
+                            Log("[Minecraft] 版本 JSON 文件为空或有误，将在 2s 后重试读取（" & Path & Name & ".json）", LogLevel.Debug)
                             Thread.Sleep(2000)
                             _JsonText = ReadFile(Path & Name & ".json")
-                            If _JsonText.Length = 0 Then Throw New Exception("版本 json 文件为空或读取失败")
+                            If Not FastJsonCheck(_JsonText) Then GetJson(_JsonText) '触发异常
                         End If
                     End If
-                    If _JsonText.Length < 100 Then Throw New Exception("版本 json 文件有误，内容为：" & _JsonText)
                 End If
                 Return _JsonText
             End Get
@@ -562,10 +567,10 @@ Recheck:
                                 GoTo Recheck
                             End If
                         Catch ex As Exception
-                            Log(ex, "合并版本依赖项 json 失败（" & If(InheritVersion, "null").ToString & "）")
+                            Log(ex, "合并版本依赖项 JSON 失败（" & If(InheritVersion, "null").ToString & "）")
                         End Try
                     Catch ex As Exception
-                        Throw New Exception("版本 json 不规范（" & If(Name, "null") & "）", ex)
+                        Throw New Exception("初始化版本 JSON 时失败（" & If(Name, "null") & "）", ex)
                     End Try
                     Try
                         '处理 JumpLoader
@@ -665,7 +670,7 @@ Recheck:
             Try
                 Dim JsonObjCheck = JsonObject
             Catch ex As Exception
-                Log(ex, "版本 json 可用性检查失败（" & Path & "）")
+                Log(ex, "版本 JSON 可用性检查失败（" & Path & "）")
                 JsonText = ""
                 JsonObject = Nothing
                 Info = ex.Message
@@ -1029,21 +1034,21 @@ ExitDataLoad:
     Public Function GetMcFoolName(Name As String) As String
         Name = Name.ToLower
         If Name.StartsWithF("2.0") Then
-            Return "这个秘密计划了两年的更新将游戏推向了一个新高度！"
-        ElseIf Name.StartsWithF("20w14inf") OrElse Name = "20w14∞" Then
-            Return "我们加入了 20 亿个新的维度，让无限的想象变成了现实！"
+            Return "2013 | 这个秘密计划了两年的更新将游戏推向了一个新高度！"
         ElseIf Name = "15w14a" Then
-            Return "作为一款全年龄向的游戏，我们需要和平，需要爱与拥抱。"
+            Return "2015 | 作为一款全年龄向的游戏，我们需要和平，需要爱与拥抱。"
         ElseIf Name = "1.rv-pre1" Then
-            Return "是时候将现代科技带入 Minecraft 了！"
+            Return "2016 | 是时候将现代科技带入 Minecraft 了！"
         ElseIf Name = "3d shareware v1.34" Then
-            Return "我们从地下室的废墟里找到了这个开发于 1994 年的杰作！"
+            Return "2019 | 我们从地下室的废墟里找到了这个开发于 1994 年的杰作！"
+        ElseIf Name.StartsWithF("20w14inf") OrElse Name = "20w14∞" Then
+            Return "2020 | 我们加入了 20 亿个新的维度，让无限的想象变成了现实！"
         ElseIf Name = "22w13oneblockatatime" Then
-            Return "一次一个方块更新！迎接全新的挖掘、合成与骑乘玩法吧！"
+            Return "2022 | 一次一个方块更新！迎接全新的挖掘、合成与骑乘玩法吧！"
         ElseIf Name = "23w13a_or_b" Then
-            Return "研究表明：玩家喜欢作出选择——越多越好！"
+            Return "2023 | 研究表明：玩家喜欢作出选择——越多越好！"
         ElseIf Name = "24w14potato" Then
-            Return "毒马铃薯一直都被大家忽视和低估，于是我们超级加强了它！"
+            Return "2024 | 毒马铃薯一直都被大家忽视和低估，于是我们超级加强了它！"
         Else
             Return ""
         End If
@@ -1251,9 +1256,8 @@ OnLoaded:
         Dim VersionList As New List(Of McVersion)
 
 #Region "循环加载每个版本的信息"
-        Dim Dirs As DirectoryInfo() = New DirectoryInfo(Path & "versions").GetDirectories
-        For Each Folder As DirectoryInfo In Dirs
-            If Not Folder.EnumerateFiles.Any Then
+        For Each Folder As DirectoryInfo In New DirectoryInfo(Path & "versions").GetDirectories
+            If Not Folder.Exists OrElse Not Folder.EnumerateFiles.Any Then
                 Log("[Minecraft] 跳过空文件夹：" & Folder.FullName)
                 Continue For
             End If
@@ -1287,8 +1291,11 @@ OnLoaded:
 
             '单独列出收藏的版本
             Dim StaredVersions As New List(Of McVersion)
-            For Each Version As McVersion In VersionList
-                If Version.IsStar AndAlso Not Version.DisplayType = McVersionCardType.Hidden Then StaredVersions.Add(Version)
+            For Each Version As McVersion In VersionList.ToList
+                If Version.IsStar AndAlso Not Version.DisplayType = McVersionCardType.Hidden Then
+                    StaredVersions.Add(Version)
+                    VersionList.Remove(Version)
+                End If
             Next
             If StaredVersions.Any Then VersionListOriginal.Add(McVersionCardType.Star, StaredVersions)
 
@@ -1523,7 +1530,7 @@ OnLoaded:
     ''' 要求玩家选择一个皮肤文件，并进行相关校验。
     ''' </summary>
     Public Function McSkinSelect() As McSkinInfo
-        Dim FileName As String = SelectFile("皮肤文件(*.png)|*.png", "选择皮肤文件")
+        Dim FileName As String = SelectFile("皮肤文件(*.png;*.jpg;*.webp)|*.png;*.jpg;*.webp", "选择皮肤文件")
 
         '验证有效性
         If FileName = "" Then Return New McSkinInfo With {.IsVaild = False}
@@ -1930,7 +1937,7 @@ OnLoaded:
     ''' <summary>
     ''' 获取版本缺失的支持库文件所对应的 NetTaskFile。
     ''' </summary>
-    Public Function McLibFix(Version As McVersion, Optional CoreJarOnly As Boolean = False) As List(Of NetFile)
+    Public Function McLibFix(Version As McVersion) As List(Of NetFile)
         If Not Version.IsLoaded Then Version.Load() '确保例如 JumpLoader 等项被合并入 Json
         Dim Result As New List(Of NetFile)
 
@@ -1943,64 +1950,76 @@ OnLoaded:
         Catch ex As Exception
             Log(ex, "版本缺失主 jar 文件所必须的信息", LogLevel.Developer)
         End Try
-        If CoreJarOnly Then Return Result
-
-        '是否跳过校验
-        Dim IsSetupSkip As Boolean = ShouldIgnoreFileCheck(Version)
 
         'Library 文件
-        Result.AddRange(McLibFixFromLibToken(McLibListGet(Version, False), JumpLoaderFolder:=Version.PathIndie & ".jumploader\", AllowUnsameFile:=IsSetupSkip))
+        Result.AddRange(McLibFixFromLibToken(McLibListGet(Version, False), JumpLoaderFolder:=Version.PathIndie & ".jumploader\"))
 
         '统一通行证文件
         If Setup.Get("VersionServerLogin", Version:=Version) = 3 Then
             Dim TargetFile = PathAppdata & "nide8auth.jar"
-            If Not (IsSetupSkip AndAlso File.Exists(TargetFile)) Then
-                Dim DownloadInfo As JObject = Nothing
-                '获取下载信息
-                Try
-                    Log("[Minecraft] 开始获取统一通行证下载信息")
-                    '测试链接：https://auth.mc-user.com:233/00000000000000000000000000000000/
-                    DownloadInfo = GetJson(NetGetCodeByDownload({
+            Dim DownloadInfo As JObject = Nothing
+            '获取下载信息
+            Try
+                Log("[Minecraft] 开始获取统一通行证下载信息")
+                '测试链接：https://auth.mc-user.com:233/00000000000000000000000000000000/
+                DownloadInfo = GetJson(NetGetCodeByDownload({
                         "https://auth.mc-user.com:233/" & Setup.Get("VersionServerNide", Version:=Version)}, IsJson:=True))
-                Catch ex As Exception
-                    Log(ex, "获取统一通行证下载信息失败")
-                End Try
-                '校验文件
-                If DownloadInfo IsNot Nothing Then
-                    Dim Checker As New FileChecker(Hash:=DownloadInfo("jarHash").ToString)
-                    If (IsSetupSkip AndAlso File.Exists(TargetFile)) OrElse Checker.Check(TargetFile) IsNot Nothing Then
-                        '开始下载
-                        Log("[Minecraft] 统一通行证需要更新：Hash - " & Checker.Hash, LogLevel.Developer)
-                        Result.Add(New NetFile({"https://login.mc-user.com:233/index/jar"}, TargetFile, Checker))
-                    End If
+            Catch ex As Exception
+                Log(ex, "获取统一通行证下载信息失败")
+            End Try
+            '校验文件
+            If DownloadInfo IsNot Nothing Then
+                Dim Checker As New FileChecker(Hash:=DownloadInfo("jarHash").ToString)
+                If Checker.Check(TargetFile) IsNot Nothing Then
+                    '开始下载
+                    Log("[Minecraft] 统一通行证需要更新：Hash - " & Checker.Hash, LogLevel.Developer)
+                    Result.Add(New NetFile({"https://login.mc-user.com:233/index/jar"}, TargetFile, Checker))
                 End If
             End If
         End If
 
         'Authlib-Injector 文件
-        If Setup.Get("VersionServerLogin", Version:=Version) = 4 OrElse
-           (PageLinkHiper.HiperState = LoadState.Finished AndAlso Setup.Get("LoginType") = McLoginType.Legacy) Then 'HiPer 登录转接
-            Dim TargetFile = PathAppdata & "authlib-injector.jar"
-            If Not (IsSetupSkip AndAlso File.Exists(TargetFile)) Then
-                Dim DownloadInfo As JObject = Nothing
-                '获取下载信息
-                Try
-                    Log("[Minecraft] 开始获取 Authlib-Injector 下载信息")
-                    DownloadInfo = GetJson(NetGetCodeByDownload({"https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json"}, IsJson:=True))
-                Catch ex As Exception
-                    Log(ex, "获取 Authlib-Injector 下载信息失败")
-                End Try
-                '校验文件
-                If DownloadInfo IsNot Nothing Then
-                    Dim Checker As New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)
-                    If (IsSetupSkip AndAlso File.Exists(TargetFile)) OrElse Checker.Check(TargetFile) IsNot Nothing Then
-                        '开始下载
-                        Dim DownloadAddress As String = DownloadInfo("download_url")
-                        Log("[Minecraft] Authlib-Injector 需要更新：" & DownloadAddress, LogLevel.Developer)
-                        Result.Add(New NetFile({DownloadAddress}, TargetFile, New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)))
-                    End If
+        If Setup.Get("VersionServerLogin", Version:=Version) = 4 Then
+            Dim TargetFile = PathPure & "\authlib-injector.jar"
+            Dim DownloadInfo As JObject = Nothing
+            '获取下载信息
+            Try
+                Log("[Minecraft] 开始获取 Authlib-Injector 下载信息")
+                DownloadInfo = GetJson(NetGetCodeByDownload({
+                        "https://authlib-injector.yushi.moe/artifact/latest.json",
+                        "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json"
+                    }, IsJson:=True))
+            Catch ex As Exception
+                Log(ex, "获取 Authlib-Injector 下载信息失败")
+            End Try
+            '校验文件
+            If DownloadInfo IsNot Nothing Then
+                Dim Checker As New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)
+                If Checker.Check(TargetFile) IsNot Nothing Then
+                    '开始下载
+                    Dim DownloadAddress As String = DownloadInfo("download_url").ToString.
+                            Replace("bmclapi2.bangbang93.com/mirrors/authlib-injector", "authlib-injector.yushi.moe")
+                    Log("[Minecraft] Authlib-Injector 需要更新：" & DownloadAddress, LogLevel.Developer)
+                    Result.Add(New NetFile({
+                        DownloadAddress,
+                        DownloadAddress.Replace("authlib-injector.yushi.moe", "bmclapi2.bangbang93.com/mirrors/authlib-injector")
+                    }, TargetFile, New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)))
                 End If
             End If
+        End If
+
+        '跳过校验
+        If ShouldIgnoreFileCheck(Version) Then
+            Log("[Minecraft] 用户要求尽量忽略文件检查，这可能会保留有误的文件")
+            Result = Result.Where(
+            Function(f)
+                If File.Exists(f.LocalPath) Then
+                    Log("[Minecraft] 跳过下载的支持库文件：" & f.LocalPath, LogLevel.Debug)
+                    Return False
+                Else
+                    Return True
+                End If
+            End Function).ToList
         End If
 
         Return Result
@@ -2008,26 +2027,22 @@ OnLoaded:
     ''' <summary>
     ''' 将 McLibToken 列表转换为 NetFile。无需下载的文件会被自动过滤。
     ''' </summary>
-    Public Function McLibFixFromLibToken(Libs As List(Of McLibToken), Optional CustomMcFolder As String = Nothing, Optional JumpLoaderFolder As String = Nothing, Optional AllowUnsameFile As Boolean = False) As List(Of NetFile)
+    Public Function McLibFixFromLibToken(Libs As List(Of McLibToken), Optional CustomMcFolder As String = Nothing, Optional JumpLoaderFolder As String = Nothing) As List(Of NetFile)
         CustomMcFolder = If(CustomMcFolder, PathMcFolder)
         Dim Result As New List(Of NetFile)
         '获取
         For Each Token As McLibToken In Libs
             '检查文件
-            Dim Checker As FileChecker
-            If AllowUnsameFile Then '只要文件存在则通过检查，用于放宽完整性校验的情况
-                Checker = New FileChecker(MinSize:=1)
-            Else
-                Checker = New FileChecker(ActualSize:=If(Token.Size = 0, -1, Token.Size), Hash:=Token.SHA1)
-            End If
+            Dim Checker As New FileChecker(ActualSize:=If(Token.Size = 0, -1, Token.Size), Hash:=Token.SHA1)
             If Checker.Check(Token.LocalPath) Is Nothing Then Continue For
             '文件不符合，添加下载
             Dim Urls As New List(Of String)
             If Token.Url IsNot Nothing Then
                 '获取 Url 的真实地址
                 Urls.Add(Token.Url)
-                If Token.Url.Contains("launcher.mojang.com/v1/objects") Then
-                    Urls = DlSourceLauncherOrMetaGet(Token.Url).ToList() 'Mappings
+                If Token.Url.Contains("launcher.mojang.com/v1/objects") OrElse Token.Url.Contains("client.txt") OrElse
+                   Token.Url.Contains(".tsrg") Then
+                    Urls.AddRange(DlSourceLauncherOrMetaGet(Token.Url).ToList()) 'Mappings（#4425）
                 End If
                 If Token.Url.Contains("maven") Then
                     Urls.Insert(0, Token.Url.Replace(Mid(Token.Url, 1, Token.Url.IndexOfF("maven")), "https://bmclapi2.bangbang93.com/").
@@ -2049,7 +2064,7 @@ OnLoaded:
                 '普通文件
                 Urls.AddRange(DlSourceLibraryGet("https://libraries.minecraft.net" & Token.LocalPath.Replace(If(Token.IsJumpLoader, JumpLoaderFolder, CustomMcFolder) & "libraries", "").Replace("\", "/")))
             End If
-            Result.Add(New NetFile(Urls.Distinct.ToArray, Token.LocalPath, Checker))
+            Result.Add(New NetFile(Urls.Distinct, Token.LocalPath, Checker))
         Next
         '去重并返回
         Return Result.Distinct(Function(a, b) a.LocalPath = b.LocalPath)
@@ -2157,77 +2172,50 @@ OnLoaded:
         ''' </summary>
         Public Size As Long
         ''' <summary>
-        ''' 是否为 Virtual 资源文件。
-        ''' </summary>
-        Public IsVirtual As Boolean
-        ''' <summary>
         ''' 文件的 Hash 校验码。
         ''' </summary>
         Public Hash As String
 
         Public Overrides Function ToString() As String
-            Return If(IsVirtual, "[Virtual] ", "") & GetString(Size) & " | " & LocalPath
+            Return GetString(Size) & " | " & LocalPath
         End Function
     End Structure
     ''' <summary>
     ''' 获取 Minecraft 的资源文件列表。失败会抛出异常。
     ''' </summary>
-    ''' <param name="Name">版本的资源名称，如“1.13.1”。</param>
-    Private Function McAssetsListGet(Name As String) As List(Of McAssetsToken)
+    Private Function McAssetsListGet(Version As McVersion) As List(Of McAssetsToken)
+        Dim IndexName = McAssetsGetIndexName(Version)
         Try
 
             '初始化
-            If Not File.Exists(PathMcFolder & "assets\indexes\" & Name & ".json") Then Throw New FileNotFoundException("Assets 索引文件未找到", PathMcFolder & "assets\indexes\" & Name & ".json")
-            McAssetsListGet = New List(Of McAssetsToken)
-            Dim Json = GetJson(ReadFile(PathMcFolder & "assets\indexes\" & Name & ".json"))
+            If Not File.Exists($"{PathMcFolder}assets\indexes\{IndexName}.json") Then Throw New FileNotFoundException("未找到 Asset Index", PathMcFolder & "assets\indexes\" & IndexName & ".json")
+            Dim Result As New List(Of McAssetsToken)
+            Dim Json As JObject = GetJson(ReadFile($"{PathMcFolder}assets\indexes\{IndexName}.json"))
 
-            '确认 Virtual 与 Map 状态
-            Dim IsVirtual As Boolean = False
-            If Json("virtual") IsNot Nothing AndAlso Json("virtual").ToString Then IsVirtual = True
-            If Json("map_to_resources") IsNot Nothing AndAlso Json("map_to_resources").ToString Then
-                IsVirtual = True
-                '刷新 resources 文件夹符号链接（#2182）
-                'Dim Info As FileSystemInfo = New FileInfo(PathMcFolder & "resources\pack.mcmeta")
-                'If Info.Attributes.HasFlag(FileAttributes.ReparsePoint) Then
-                If Not File.Exists(PathMcFolder & "resources\pack.mcmeta") Then
-                    Log("[Minecraft] 尝试刷新 resources 文件夹符号链接", LogLevel.Debug)
-                    Try
-                        DeleteDirectory(PathMcFolder & "resources\", True)
-                        Directory.CreateDirectory(PathMcFolder & "assets\virtual\legacy\")
-                        Dim Result = ShellAndGetOutput("cmd", $"/C mklink /D /J ""{PathMcFolder}resources"" ""{PathMcFolder}assets\virtual\legacy""")
-                        Log($"[Minecraft] 符号链接创建结果：{Result}")
-                        If Not Result.Contains("<<===>>") Then Throw New Exception($"非预期的结果（{Result}）")
-                    Catch ex As Exception
-                        Log(ex, "创建资源文件夹链接失败，游戏可能会没有声音", LogLevel.Msgbox)
-                    End Try
+            '读取列表
+            For Each File As JProperty In Json("objects").Children
+                Dim LocalPath As String
+                If Json("map_to_resources") IsNot Nothing AndAlso Json("map_to_resources").ToObject(Of Boolean) Then
+                    'Remap
+                    LocalPath = Version.PathIndie & "resources\" & File.Name.Replace("/", "\")
+                ElseIf Json("virtual") IsNot Nothing AndAlso Json("virtual").ToObject(Of Boolean) Then
+                    'Virtual
+                    LocalPath = PathMcFolder & "assets\virtual\legacy\" & File.Name.Replace("/", "\")
+                Else
+                    '正常
+                    LocalPath = PathMcFolder & "assets\objects\" & Left(File.Value("hash").ToString, 2) & "\" & File.Value("hash").ToString
                 End If
-            End If
-
-            '加载列表
-            If IsVirtual Then
-                For Each File As JProperty In Json("objects").Children
-                    McAssetsListGet.Add(New McAssetsToken With {
-                        .IsVirtual = True,
-                        .LocalPath = PathMcFolder & "assets\virtual\legacy\" & File.Name.Replace("/", "\"),
-                        .SourcePath = File.Name,
-                        .Hash = File.Value("hash").ToString,
-                        .Size = File.Value("size").ToString
-                    })
-                Next
-            Else
-                For Each File As JProperty In Json("objects").Children
-                    McAssetsListGet.Add(New McAssetsToken With {
-                        .IsVirtual = False,
-                        .LocalPath = PathMcFolder & "assets\objects\" & Left(File.Value("hash").ToString, 2) & "\" & File.Value("hash").ToString,
-                        .SourcePath = File.Name,
-                        .Hash = File.Value("hash").ToString,
-                        .Size = File.Value("size").ToString
-                    })
-                Next
-            End If
+                Result.Add(New McAssetsToken With {
+                    .LocalPath = LocalPath,
+                    .SourcePath = File.Name,
+                    .Hash = File.Value("hash").ToString,
+                    .Size = File.Value("size").ToString
+                })
+            Next
+            Return Result
 
         Catch ex As Exception
-            Log(ex, "获取资源文件列表失败：" & Name)
+            Log(ex, "获取资源文件列表失败：" & IndexName)
             Throw
         End Try
     End Function
@@ -2236,12 +2224,12 @@ OnLoaded:
     ''' <summary>
     ''' 获取版本缺失的资源文件所对应的 NetTaskFile。
     ''' </summary>
-    Public Function McAssetsFixList(IndexAddress As String, CheckHash As Boolean, Optional ByRef ProgressFeed As LoaderBase = Nothing) As List(Of NetFile)
+    Public Function McAssetsFixList(Version As McVersion, CheckHash As Boolean, Optional ByRef ProgressFeed As LoaderBase = Nothing) As List(Of NetFile)
         Dim Result As New List(Of NetFile)
 
         Dim AssetsList As List(Of McAssetsToken)
         Try
-            AssetsList = McAssetsListGet(IndexAddress)
+            AssetsList = McAssetsListGet(Version)
             Dim Token As McAssetsToken
             If ProgressFeed IsNot Nothing Then ProgressFeed.Progress = 0.04
             For i = 0 To AssetsList.Count - 1
@@ -2320,8 +2308,8 @@ OnLoaded:
         End If
         Left = Left.ToLowerInvariant
         Right = Right.ToLowerInvariant
-        Dim Lefts = RegexSearch(Left.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
-        Dim Rights = RegexSearch(Right.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
+        Dim Lefts = RegexSearch(Left.Replace("快照", "snapshot").Replace("预览版", "pre"), "[a-z]+|[0-9]+")
+        Dim Rights = RegexSearch(Right.Replace("快照", "snapshot").Replace("预览版", "pre"), "[a-z]+|[0-9]+")
         Dim i As Integer = 0
         While True
             '两边均缺失，感觉是一个东西
@@ -2370,15 +2358,11 @@ NextEntry:
     ''' <summary>
     ''' 比较两个版本名的排序器。
     ''' </summary>
-    Public Class VersionSorter
+    Public Class VersionComparer
         Implements IComparer(Of String)
-        Public IsDecreased As Boolean = True
         Public Function Compare(x As String, y As String) As Integer Implements IComparer(Of String).Compare
-            Return VersionSortInteger(x, y) * If(IsDecreased, -1, 1)
+            Return VersionSortInteger(x, y)
         End Function
-        Public Sub New(Optional IsDecreased As Boolean = True)
-            Me.IsDecreased = IsDecreased
-        End Sub
     End Class
 
     ''' <summary>

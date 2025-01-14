@@ -58,19 +58,23 @@
         Hint("正在尝试更换，请稍候！")
         Setup.Set("CacheAuthUuid", "") '清空选择缓存
         Setup.Set("CacheAuthName", "")
-        RunInThread(Sub()
-                        Try
-                            Dim Data As McLoginServer = GetLoginData()
-                            Data.ForceReselectProfile = True
-                            McLoginLoader.WaitForExit(Data, IsForceRestart:=True)
-                            RunInUi(Sub() Reload(True))
-                        Catch ex As Exception
-                            Log(ex, "更换角色失败", LogLevel.Hint)
-                        End Try
-                    End Sub)
+        RunInThread(
+        Sub()
+            Try
+                Dim Data As McLoginServer = GetLoginData()
+                Data.ForceReselectProfile = True
+                McLoginLoader.WaitForExit(Data, IsForceRestart:=True)
+                RunInUi(Sub() Reload(True))
+            Catch ex As Exception
+                Log(ex, "更换角色失败", LogLevel.Hint)
+            End Try
+        End Sub)
     End Sub
-    Private Sub BtnExit_Click() Handles BtnExit.Click
+    Public Shared Sub ExitLogin() Handles BtnExit.Click
         Setup.Set("CacheAuthAccess", "")
+        Setup.Set("CacheAuthUuid", "")
+        Setup.Set("CacheAuthName", "")
+        McLoginAuthLoader.Input = Nothing '防止因为输入的用户名密码相同，直接使用了上次登录的加载器结果
         FrmLaunchLeft.RefreshPage(False, True)
     End Sub
 
