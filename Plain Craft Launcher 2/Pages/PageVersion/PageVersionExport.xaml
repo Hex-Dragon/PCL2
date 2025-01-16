@@ -8,21 +8,18 @@
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="25,10">
 
-            <local:MyCard Margin="0,15" Title="">
-                <Grid Margin="0,0,25,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="150" />
-                    </Grid.ColumnDefinitions>
-                    <Grid Margin="10,7,10,7" Name="PanDisplayItem" Grid.Column="0" />
-                    <local:MyButton x:Name="BtnExportExport" Grid.Column="1" HorizontalAlignment="Right" 
+            <local:MyCard Margin="0,15" Title="导出预览">
+                <StackPanel Margin="25,38,15,15">
+                    <Grid Margin="-10,-5,10,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Margin="10,7,10,7" Name="PanDisplayItem" Grid.Column="0" />
+                        <local:MyButton x:Name="BtnExportExport" Grid.Column="1" HorizontalAlignment="Right" 
                                     Text="导出整合包" Width="150" Height="35" ColorType="Highlight" />
-                </Grid>
-            </local:MyCard>
-
-            <local:MyCard x:Name="CardExport" Margin="0,0,0,15" Title="整合包信息">
-                <StackPanel Margin="25,40,25,21">
-                    <Grid>
+                    </Grid>
+                    <Grid Margin="0,5,10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
                             <ColumnDefinition Width="1*" />
