@@ -1,5 +1,6 @@
 ﻿Imports System.IO.Compression
 Imports System.Linq.Expressions
+Imports NAudio.Wave.SampleProviders
 
 Public Module ModModpack
 
@@ -1017,38 +1018,37 @@ Retry:
             Directory.CreateDirectory(tempDir)
 
             '步骤 1：从 Modrinth 获取 Mod 工程信息，得到 URL
-            Dim Mods As New List(Of McMod)
+            Dim Mods As New Dictionary(Of String, McMod)
             If Directory.Exists(Version.Path & "mods\") Then
                 For Each m In Directory.EnumerateFiles(Version.Path & "mods\")
-                    If m.EndsWithF(".jar") Then Mods.Add(New McMod(m))
+                    If m.EndsWithF(".jar") Then Mods.Add(GetFileNameFromPath(m), New McMod(m))
                 Next
             End If
 
             '从 Modrinth 获取信息
-            Dim ModrinthHashes = Mods.Select(Function(m) m.ModrinthHash).ToList()
+            Dim ModrinthMapping As New Dictionary(Of String, JObject) 'Modrinth 获取到的 Mod
+            Dim CurseForgeMapping As New Dictionary(Of String, JObject) 'CurseForge 获取到的 Mod
+            Dim ModrinthFailed As New Dictionary(Of String, McMod) 'Modrinth 获取失败的 Mod
+            Dim ModrinthHashes = Mods.Select(Function(m) m.Value.ModrinthHash).ToList()
+            If Mods.Count = 0 Then GoTo JumpMod
             Dim ModrinthVersion = CType(GetJson(NetRequestRetry("https://api.modrinth.com/v2/version_files", "POST",
     $"{{""hashes"": [""{ModrinthHashes.Join(""",""")}""], ""algorithm"": ""sha1""}}", "application/json")), JObject)
             Log($"[Export] 从 Modrinth 获取到 {ModrinthVersion.Count} 个本地 Mod 的对应信息")
 
-            Dim ModrinthMapping As New Dictionary(Of String, JObject) 'Modrinth 获取到的 Mod
-            Dim ModrinthFailed As New List(Of McMod) 'Modrinth 获取失败的 Mod
             For Each Entry In Mods
-                If (Not ModrinthVersion.ContainsKey(Entry.ModrinthHash)) OrElse
-                   (ModrinthVersion(Entry.ModrinthHash)("files")(0)("hashes")("sha1") <> Entry.ModrinthHash) Then
-                    ModrinthFailed.Add(Entry)
+                If (Not ModrinthVersion.ContainsKey(Entry.Value.ModrinthHash)) OrElse
+                   (ModrinthVersion(Entry.Value.ModrinthHash)("files")(0)("hashes")("sha1") <> Entry.Value.ModrinthHash) Then
+                    ModrinthFailed.Add(Entry.Key, Entry.Value)
                     Continue For
                 End If
-                ModrinthMapping.Add(Entry.FileName, ModrinthVersion(Entry.ModrinthHash)("files")(0))
+                ModrinthMapping.Add(Entry.Key, ModrinthVersion(Entry.Value.ModrinthHash)("files")(0))
             Next
 
             '步骤 2：把获取失败的 Mod 从 CurseForge 继续获取
-            Dim CurseForgeHashes = ModrinthFailed.Select(Function(m) m.CurseForgeHash).ToList()
+            Dim CurseForgeHashes = ModrinthFailed.Select(Function(m) m.Value.CurseForgeHash).ToList()
             Dim CurseForgeRaw = CType(CType(GetJson(NetRequestRetry("https://api.curseforge.com/v1/fingerprints/432/", "POST",
                                     $"{{""fingerprints"": [{CurseForgeHashes.Join(",")}]}}", "application/json")), JObject)("data")("exactMatches"), JContainer)
             Log($"[Export] 从 CurseForge 获取到 {CurseForgeRaw.Count} 个本地 Mod 的对应信息")
-
-
-            Dim CurseForgeMapping As New Dictionary(Of String, JObject) 'CurseForge 获取到的 Mod
             For Each m In CurseForgeRaw
                 Dim hash As String = ""
                 For Each h In m("file")("hashes") '获取 Modrinth Hash
@@ -1060,15 +1060,16 @@ Retry:
                 If String.IsNullOrEmpty(hash) OrElse String.IsNullOrEmpty(m("file")("downloadUrl")) Then Continue For
 
                 m("file")("ModrinthHash") = hash
-                CurseForgeMapping.Add(m("file")("fileName"), m("file"))
                 For Each file In ModrinthFailed
-                    If file.ModrinthHash = hash Then
-                        ModrinthFailed.Remove(file)
+                    If file.Value.ModrinthHash = hash Then
+                        CurseForgeMapping.Add(file.Key, m("file"))
+                        ModrinthFailed.Remove(file.Key)
                         Exit For
                     End If
                 Next
             Next
 
+JumpMod:
             '步骤 3：写入 Json 文件
             '获取作为检查目标的加载器和版本
             Dim ModLoaders = GetTargetModLoaders()
@@ -1114,7 +1115,7 @@ Retry:
 
             '步骤 4：将获取不到的保存到 overrides 目录
             For Each m In ModrinthFailed
-                CopyFile(m.Path, tempDir & "overrides\mods\" & m.FileName)
+                CopyFile(m.Value.Path, tempDir & "overrides\mods\" & m.Value.FileName)
             Next
 
             '额外文件
