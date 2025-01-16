@@ -1028,7 +1028,7 @@ Retry:
             '从 Modrinth 获取信息
             Dim ModrinthMapping As New Dictionary(Of String, JObject) 'Modrinth 获取到的 Mod
             Dim CurseForgeMapping As New Dictionary(Of String, JObject) 'CurseForge 获取到的 Mod
-            Dim ModrinthFailed As New Dictionary(Of String, McMod) 'Modrinth 获取失败的 Mod
+            Dim Failed = Mods.ToArray().ToDictionary(Function(a) a.Key, Function(a) a.Value) '获取失败的 Mod
             Dim ModrinthHashes = Mods.Select(Function(m) m.Value.ModrinthHash).ToList()
             If Mods.Count = 0 Then GoTo JumpMod
             Dim ModrinthVersion = CType(GetJson(NetRequestRetry("https://api.modrinth.com/v2/version_files", "POST",
@@ -1038,14 +1038,14 @@ Retry:
             For Each Entry In Mods
                 If (Not ModrinthVersion.ContainsKey(Entry.Value.ModrinthHash)) OrElse
                    (ModrinthVersion(Entry.Value.ModrinthHash)("files")(0)("hashes")("sha1") <> Entry.Value.ModrinthHash) Then
-                    ModrinthFailed.Add(Entry.Key, Entry.Value)
                     Continue For
                 End If
+                Failed.Remove(Entry.Key)
                 ModrinthMapping.Add(Entry.Key, ModrinthVersion(Entry.Value.ModrinthHash)("files")(0))
             Next
 
-            '步骤 2：把获取失败的 Mod 从 CurseForge 继续获取
-            Dim CurseForgeHashes = ModrinthFailed.Select(Function(m) m.Value.CurseForgeHash).ToList()
+            '步骤 2：从 CurseForge 继续获取
+            Dim CurseForgeHashes = Mods.Select(Function(m) m.Value.CurseForgeHash).ToList()
             Dim CurseForgeRaw = CType(CType(GetJson(NetRequestRetry("https://api.curseforge.com/v1/fingerprints/432/", "POST",
                                     $"{{""fingerprints"": [{CurseForgeHashes.Join(",")}]}}", "application/json")), JObject)("data")("exactMatches"), JContainer)
             Log($"[Export] 从 CurseForge 获取到 {CurseForgeRaw.Count} 个本地 Mod 的对应信息")
@@ -1060,40 +1060,51 @@ Retry:
                 If String.IsNullOrEmpty(hash) OrElse String.IsNullOrEmpty(m("file")("downloadUrl")) Then Continue For
 
                 m("file")("ModrinthHash") = hash
-                For Each file In ModrinthFailed
+                Dim f = Mods.ToArray()
+                For Each file In f
                     If file.Value.ModrinthHash = hash Then
                         CurseForgeMapping.Add(file.Key, m("file"))
-                        ModrinthFailed.Remove(file.Key)
+                        Failed.Remove(file.Key)
                         Exit For
                     End If
                 Next
             Next
 
 JumpMod:
-            '步骤 3：写入 Json 文件
+            '步骤 3：合并下载链接，写入 Json 文件
             '获取作为检查目标的加载器和版本
             Dim ModLoaders = GetTargetModLoaders()
             Dim McVersion = Version.Version.McName
             Log($"[Export] 目标加载器：{ModLoaders.Join("/")}，版本：{McVersion}")
 
+            '合并下载链接
+            Dim BothUrls As New Dictionary(Of String, String()) '两个下载源都有 URL 的 Mod
+            For Each modrinth In ModrinthMapping
+                Dim curseforge As New JObject
+                If CurseForgeMapping.TryGetValue(modrinth.Key, curseforge) Then
+                    BothUrls.Add(modrinth.Key, {modrinth.Value("url"), curseforge("downloadUrl")})
+                End If
+            Next
             Dim files As New JArray
             For Each m In ModrinthMapping
                 files.Add(New JObject From {
                     {"path", $"mods/{m.Key}"},
                     {"hashes", m.Value("hashes")},
                     {"env", New JObject From {{"client", "required"}, {"server", "required"}}},
-                    {"downloads", New JArray From {m.Value("url")}},
+                    {"downloads", If(BothUrls.ContainsKey(m.Key), JArray.FromObject(BothUrls(m.Key)), New JArray From {m.Value("url")})},
                     {"fileSize", m.Value("size")}
                 })
             Next
             For Each m In CurseForgeMapping
-                files.Add(New JObject From {
-                    {"path", $"mods/{m.Key}"},
-                    {"hashes", New JObject From {{"sha1", m.Value("ModrinthHash").ToString}}},
-                    {"env", New JObject From {{"client", "required"}, {"server", "required"}}},
-                    {"downloads", New JArray From {m.Value("downloadUrl")}},
-                    {"fileSize", m.Value("fileLength")}
-                })
+                If Not BothUrls.ContainsKey(m.Key) Then
+                    files.Add(New JObject From {
+                        {"path", $"mods/{m.Key}"},
+                        {"hashes", New JObject From {{"sha1", m.Value("ModrinthHash").ToString}}},
+                        {"env", New JObject From {{"client", "required"}, {"server", "required"}}},
+                        {"downloads", New JArray From {m.Value("downloadUrl")}},
+                        {"fileSize", m.Value("fileLength")}
+                    })
+                End If
             Next
 
             Dim depend As New JObject From {{"minecraft", McVersion}}
@@ -1114,7 +1125,7 @@ JumpMod:
             File.WriteAllText(tempDir & "modrinth.index.json", json.ToString)
 
             '步骤 4：将获取不到的保存到 overrides 目录
-            For Each m In ModrinthFailed
+            For Each m In Failed
                 CopyFile(m.Value.Path, tempDir & "overrides\mods\" & m.Value.FileName)
             Next
 
