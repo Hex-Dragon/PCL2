@@ -330,7 +330,7 @@ Public Module ModMusic
     ''' <summary>
     ''' 响应 SMTC 交互
     ''' </summary>
-    Public Sub _smtc_ButtonPressed(sender As SystemMediaTransportControls, args As SystemMediaTransportControlsButtonPressedEventArgs) Handles SystemMediaTransportControls.butto
+    Public Sub _smtc_ButtonPressed(sender As SystemMediaTransportControls, args As SystemMediaTransportControlsButtonPressedEventArgs)
         Select Case args.Button
             Case SystemMediaTransportControlsButton.Play
                 Log("[SMTC] 收到 SMTC 控件事件，切换播放状态为：Playing")
