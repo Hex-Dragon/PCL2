@@ -138,8 +138,13 @@ Public Class MyLocalModItem
         End If
         '计算滑动范围
         Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
+        If Index < 0 OrElse Index >= CType(Parent, StackPanel).Children.Count Then Exit Sub
         SwipeStart = Math.Min(SwipeStart, Index)
         SwipeEnd = Math.Max(SwipeEnd, Index)
+        If SwipeStart < 0 Then SwipeStart = 0
+        If SwipeEnd < 0 Then SwipeEnd = 0
+        If SwipeStart >= CType(Parent, StackPanel).Children.Count Then SwipeStart = CType(Parent, StackPanel).Children.Count - 1
+        If SwipeEnd >= CType(Parent, StackPanel).Children.Count Then SwipeEnd = CType(Parent, StackPanel).Children.Count - 1
         '勾选所有范围中的项
         If SwipeStart = SwipeEnd Then Exit Sub
         For i = SwipeStart To SwipeEnd
