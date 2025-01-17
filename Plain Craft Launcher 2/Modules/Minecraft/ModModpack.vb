@@ -1,6 +1,7 @@
 ﻿Imports System.IO.Compression
 Imports System.Linq.Expressions
 Imports NAudio.Wave.SampleProviders
+Imports PCL.ModLoader
 
 Public Module ModModpack
 
@@ -951,23 +952,11 @@ Retry:
         End Sub
     End Class
     ''' <summary>
-    ''' 导出整合包。不阻塞。
+    ''' 导出整合包，返回是否成功。
     ''' </summary>
-    Public Sub ModpackExport(Options As ExportOptions)
-        Hint("正在导出……")
-        RunInNewThread(
-            Sub()
-                If ModpackExportBlocking(Options) Then
-                    Hint("导出成功！", HintType.Finish)
-                    OpenExplorer($"/select,""{Options.Dest}""")
-                End If
-            End Sub, "Modpack Export")
-    End Sub
-    Private Function ModpackExportBlocking(Options As ExportOptions) As Boolean
-        If Options.IncludePCL Then
-            Return ExportCompressed(Options.Version, Options.Dest, Options.Additional, Options.Name, Options.VerID, Options.PCLSetupGlobal)
-        End If
-        Return ExportModrinth(Options.Version, Options.Dest, Options.Additional, Options.Name, Options.VerID)
+    Public Function ModpackExport(Task As LoaderTask(Of ExportOptions, Boolean)) As Boolean
+        If Task.Input.IncludePCL Then Return ExportCompressed(Task)
+        Return ExportModrinth(Task)
     End Function
 
 #Region "冗余"
@@ -1007,17 +996,22 @@ Retry:
         Next
         Return False
     End Function
-#End Region
 
+#End Region
 #Region "不同类型整合包的导出方法"
-    Private Function ExportModrinth(Version As McVersion, DestPath As String, Additional As String(), Name As String, VerID As String) As Boolean
+    Private Function ExportModrinth(Task As LoaderTask(Of ExportOptions, Boolean)) As Boolean
         Try
-            Log($"[Export] 导出整合包（Modrinth）：{Version.Path} -> {DestPath}，额外版本文件 {If(Additional Is Nothing OrElse Not Additional.Any, "不导出", Additional.Join(", "))}")
+            Dim Version = Task.Input.Version
+            Dim DestPath = Task.Input.Dest
+            Dim Additional = Task.Input.Additional
+            Dim Name = Task.Input.Name
+            Dim VerID = Task.Input.VerID
+            Log($"[Export] 导出整合包（Modrinth）：{Version.Path} -> {DestPath}，额外版本文件 {Additional.Count} 个")
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
             Log($"[Export] 缓存文件夹：{tempDir}")
             Directory.CreateDirectory(tempDir)
 
-            '步骤 1：从 Modrinth 获取 Mod 工程信息，得到 URL
+#Region "0.04-0.40：从 Modrinth 获取 Mod 工程信息，得到 URL"
             Dim Mods As New Dictionary(Of String, McMod)
             If Directory.Exists(Version.Path & "mods\") Then
                 For Each m In Directory.EnumerateFiles(Version.Path & "mods\")
@@ -1031,24 +1025,29 @@ Retry:
             Dim Failed = Mods.ToArray().ToDictionary(Function(a) a.Key, Function(a) a.Value) '获取失败的 Mod
             Dim ModrinthHashes = Mods.Select(Function(m) m.Value.ModrinthHash).ToList()
             If Mods.Count = 0 Then GoTo JumpMod
-            Dim ModrinthVersion = CType(GetJson(NetRequestRetry("https://api.modrinth.com/v2/version_files", "POST",
+            Dim ModrinthRaw = CType(GetJson(NetRequestRetry("https://api.modrinth.com/v2/version_files", "POST",
     $"{{""hashes"": [""{ModrinthHashes.Join(""",""")}""], ""algorithm"": ""sha1""}}", "application/json")), JObject)
-            Log($"[Export] 从 Modrinth 获取到 {ModrinthVersion.Count} 个本地 Mod 的对应信息")
+            Log($"[Export] 从 Modrinth 获取到 {ModrinthRaw.Count} 个本地 Mod 的对应信息")
+            Task.Progress = 0.35
 
             For Each Entry In Mods
-                If (Not ModrinthVersion.ContainsKey(Entry.Value.ModrinthHash)) OrElse
-                   (ModrinthVersion(Entry.Value.ModrinthHash)("files")(0)("hashes")("sha1") <> Entry.Value.ModrinthHash) Then
+                If (Not ModrinthRaw.ContainsKey(Entry.Value.ModrinthHash)) OrElse
+                   (ModrinthRaw(Entry.Value.ModrinthHash)("files")(0)("hashes")("sha1") <> Entry.Value.ModrinthHash) Then
                     Continue For
                 End If
                 Failed.Remove(Entry.Key)
-                ModrinthMapping.Add(Entry.Key, ModrinthVersion(Entry.Value.ModrinthHash)("files")(0))
+                ModrinthMapping.Add(Entry.Key, ModrinthRaw(Entry.Value.ModrinthHash)("files")(0))
             Next
+            Task.Progress = 0.4
+#End Region
 
-            '步骤 2：从 CurseForge 继续获取
+#Region "0.40-0.80：从 CurseForge 继续获取"
             Dim CurseForgeHashes = Mods.Select(Function(m) m.Value.CurseForgeHash).ToList()
             Dim CurseForgeRaw = CType(CType(GetJson(NetRequestRetry("https://api.curseforge.com/v1/fingerprints/432/", "POST",
                                     $"{{""fingerprints"": [{CurseForgeHashes.Join(",")}]}}", "application/json")), JObject)("data")("exactMatches"), JContainer)
             Log($"[Export] 从 CurseForge 获取到 {CurseForgeRaw.Count} 个本地 Mod 的对应信息")
+            Task.Progress = 0.7
+
             For Each m In CurseForgeRaw
                 Dim hash As String = ""
                 For Each h In m("file")("hashes") '获取 Modrinth Hash
@@ -1069,9 +1068,11 @@ Retry:
                     End If
                 Next
             Next
+            Task.Progress = 0.8
+#End Region
 
 JumpMod:
-            '步骤 3：合并下载链接，写入 Json 文件
+#Region "0.80-0.90：合并下载链接，写入 Json 文件"
             '获取作为检查目标的加载器和版本
             Dim ModLoaders = GetTargetModLoaders()
             Dim McVersion = Version.Version.McName
@@ -1085,6 +1086,8 @@ JumpMod:
                     BothUrls.Add(modrinth.Key, {modrinth.Value("url"), curseforge("downloadUrl")})
                 End If
             Next
+            Task.Progress = 0.83
+
             Dim files As New JArray
             For Each m In ModrinthMapping
                 files.Add(New JObject From {
@@ -1106,6 +1109,7 @@ JumpMod:
                     })
                 End If
             Next
+            Task.Progress = 0.87
 
             Dim depend As New JObject From {{"minecraft", McVersion}}
             If Version.Version.HasForge Then depend.Add("forge", Version.Version.ForgeVersion)
@@ -1123,11 +1127,14 @@ JumpMod:
             }
 
             File.WriteAllText(tempDir & "modrinth.index.json", json.ToString)
+            Task.Progress = 0.9
+#End Region
 
-            '步骤 4：将获取不到的保存到 overrides 目录
+#Region "0.90-0.99：将其余文件保存到 overrides 目录"
             For Each m In Failed
                 CopyFile(m.Value.Path, tempDir & "overrides\mods\" & m.Value.FileName)
             Next
+            Task.Progress = 0.92
 
             '额外文件
             For Each p In Additional
@@ -1138,6 +1145,8 @@ JumpMod:
                     CopyFile(p, $"{tempDir}overrides\{relative}")
                 End If
             Next
+            Task.Progress = 0.99
+#End Region
 
             If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换
             ZipFile.CreateFromDirectory(tempDir, DestPath)
@@ -1148,15 +1157,24 @@ JumpMod:
             Return False
         End Try
     End Function
-    Private Function ExportCompressed(Version As McVersion, DestPath As String, Additional As String(), Name As String, VerID As String, PCLSetupGlobal As Boolean) As Boolean
+    Private Function ExportCompressed(Task As LoaderTask(Of ExportOptions, Boolean)) As Boolean
         Try
+            Dim Version = Task.Input.Version
+            Dim DestPath = Task.Input.Dest
+            Dim Additional = Task.Input.Additional
+            Dim Name = Task.Input.Name
+            Dim VerID = Task.Input.VerID
+            Dim PCLSetupGlobal = Task.Input.PCLSetupGlobal
             Log($"[Export] 导出整合包（含启动器）：{Version.Path} -> {DestPath}，额外版本文件 {Additional.Count} 个，全局设置 {If(PCLSetupGlobal, "导出", "不导出")}")
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
             Log($"[Export] 最终压缩包的缓存文件夹：{tempDir}")
             Directory.CreateDirectory(tempDir)
 
+            Task.Progress = 0.04
+
             Log("[Export] 开始导出 Modrinth 整合包")
-            ExportModrinth(Version, $"{tempDir}modpack.mrpack", Additional, Name, VerID)
+            Task.Input.Dest = $"{tempDir}modpack.mrpack"
+            ExportModrinth(Task)
 
             Log($"[Export] 正在复制 PCL 本体")
             CopyFile(PathWithName, tempDir & GetFileNameFromPath(PathWithName))

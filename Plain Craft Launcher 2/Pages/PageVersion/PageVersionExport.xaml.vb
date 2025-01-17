@@ -313,8 +313,26 @@
             If String.IsNullOrEmpty(c.Tag) Then Continue For
             If c.Checked Then contains.Add(PageVersionLeft.Version.Path & c.Tag)
         Next
-        ModpackExport(New ExportOptions(PageVersionLeft.Version, savePath, CheckIncludePCL.Checked, contains.Distinct.ToArray,
-                                        PCLSetupGlobal:=CheckIncludeSetup.Checked, Name:=TbExportName.Text, VerID:=TbExportVersion.Text))
+        '重复任务检查
+        For Each OngoingLoader In LoaderTaskbar
+            If OngoingLoader.Name <> $"导出整合包 {PageVersionLeft.Version.Name}" Then Continue For
+            Hint("正在处理中，请稍候！", HintType.Critical)
+            Exit Sub
+        Next
+        '启动！
+        Dim Loader As New LoaderTask(Of ExportOptions, Boolean)($"导出整合包 {PageVersionLeft.Version.Name}",
+        Sub(Task As LoaderTask(Of ExportOptions, Boolean))
+            Task.Output = ModpackExport(Task)
+            Task.Progress = 1.0
+            If Task.Output Then
+                Hint($"{Task.Name} 成功！", HintType.Finish)
+                OpenExplorer($"/select,""{Task.Input.Dest}""")
+            End If
+        End Sub)
+        Dim Combo = New LoaderCombo(Of ExportOptions)($"导出整合包 {PageVersionLeft.Version.Name}", {Loader})
+        Combo.Start(New ExportOptions(PageVersionLeft.Version, savePath, CheckIncludePCL.Checked, contains.Distinct.ToArray,
+                                       PCLSetupGlobal:=CheckIncludeSetup.Checked, Name:=TbExportName.Text, VerID:=TbExportVersion.Text))
+        LoaderTaskbarAdd(Combo)
     End Sub
 
 #End Region
