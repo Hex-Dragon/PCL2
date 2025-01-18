@@ -1,7 +1,5 @@
-﻿Imports TagLib
-Imports Windows.Media
+﻿Imports Windows.Media
 Imports Windows.Storage
-Imports Windows.Storage.Pickers
 Public Module ModMusic
 
 #Region "播放列表"
@@ -217,6 +215,7 @@ Public Module ModMusic
         If _smtc Is Nothing Then EnableSMTCSupport()
         Log("[Music] 播放开始：" & Address)
         MusicCurrent = Address
+        UpdateSMTCInfo()
         RunInNewThread(Sub() MusicLoop(IsFirstLoad), "Music", ThreadPriority.BelowNormal)
     End Sub
 
@@ -263,13 +262,15 @@ Public Module ModMusic
 
 #Region "SMTC 控件"
     Private ReadOnly _player = New Playback.MediaPlayer
-    Private _smtc As SystemMediaTransportControls = Nothing
-    Public MediaTitle As String = Nothing
-    Public MediaArtist As String() = Nothing
+    Private WithEvents _smtc As SystemMediaTransportControls = Nothing
     ''' <summary>
     ''' 启用 SMTC 支持
     ''' </summary>
     Public Sub EnableSMTCSupport()
+        If Not Environment.OSVersion.Version.ToString().Substring(0, 4) = "10.0" Then
+            Log("[SMTC] 当前系统不支持 SMTC 控件，不进行 SMTC 控件初始化")
+            Exit Sub
+        End If
         Log("[SMTC] 初始化 SMTC 支持")
         '初始化
         _player.CommandManager.IsEnabled = False
@@ -281,32 +282,23 @@ Public Module ModMusic
         _smtc.IsPauseEnabled = True
         _smtc.IsNextEnabled = True
         _smtc.IsPreviousEnabled = False '暂时没有上一首
-    End Sub
-    ''' <summary>
-    ''' 获取媒体文件信息
-    ''' </summary>
-    ''' <param name="file">文件路径</param>
-    Public Async Sub GetMediaFileInfo(path As String)
-        'Dim openpicker = New FileOpenPicker()
-        'Dim file As StorageFile = Await openpicker.PickSingleFileAsync()
-        'Dim filestream = Await file.OpenStreamForReadAsync()
 
-        'Dim tag As TagLib.File = TagLib.File.Create(New StreamFileAbstraction(path, filestream, filestream))
-
-        'MediaTitle = tag.Tag.Title
-        'MediaArtist = tag.Tag.AlbumArtists
+        '绑定事件处理
+        AddHandler _smtc.ButtonPressed, AddressOf _smtc_ButtonPressed
     End Sub
     ''' <summary>
     ''' 更新 SMTC 信息
     ''' </summary>
-    Public Sub UpdateSMTCInfo()
-        Log($"[SMTC] 更新 SMTC 媒体信息，标题: {MediaTitle}，艺术家: {MediaArtist}")
+    Public Async Sub UpdateSMTCInfo()
+        If _smtc Is Nothing Then Exit Sub
+        Log($"[SMTC] 更新 SMTC 媒体信息，文件路径: {MusicCurrent}")
         Dim Updater = _smtc.DisplayUpdater
 
         Updater.AppMediaId = "Plain Craft Launcher 2 CE" '媒体来源信息
         Updater.Type = MediaPlaybackType.Music '指定媒体类型
-        If Not MediaTitle = Nothing Then Updater.MusicProperties.Title = MediaTitle '标题
-        If Not MediaArtist(0) = Nothing Then Updater.MusicProperties.Artist = MediaArtist(0) '标题
+
+        Dim sf = Await StorageFile.GetFileFromPathAsync(MusicCurrent)
+        Await Updater.CopyFromFileAsync(MediaPlaybackType.Music, sf) '从文件获取媒体信息
 
         '生效设置
         Updater.Update()
@@ -315,6 +307,7 @@ Public Module ModMusic
     ''' 设置 SMTC 媒体播放状态
     ''' </summary>
     Public Sub SetSMTCStatus()
+        If _smtc Is Nothing Then Exit Sub
         If MusicState = MusicStates.Play Then
             Log("[SMTC] 更新 SMTC 播放状态为：Playing")
             _smtc.PlaybackStatus = MediaPlaybackStatus.Playing
@@ -326,11 +319,11 @@ Public Module ModMusic
             _smtc.PlaybackStatus = MediaPlaybackStatus.Stopped
         End If
     End Sub
-
     ''' <summary>
     ''' 响应 SMTC 交互
     ''' </summary>
     Public Sub _smtc_ButtonPressed(sender As SystemMediaTransportControls, args As SystemMediaTransportControlsButtonPressedEventArgs)
+        If _smtc Is Nothing Then Exit Sub
         Select Case args.Button
             Case SystemMediaTransportControlsButton.Play
                 Log("[SMTC] 收到 SMTC 控件事件，切换播放状态为：Playing")
@@ -352,25 +345,32 @@ Public Module ModMusic
     ''' </summary>
     ''' <param name="CurrentTime">当前播放进度</param>
     ''' <param name="TotalTime">曲目全长</param>
-    Public Sub UpdateSMTCTimeline(CurrentTime As Integer, TotalTime As Integer)
+    Public Sub UpdateSMTCTimeline(CurrentTime As TimeSpan, TotalTime As TimeSpan)
         Dim Properties = New SystemMediaTransportControlsTimelineProperties
 
         Properties.StartTime = TimeSpan.FromSeconds(0)
         Properties.MinSeekTime = TimeSpan.FromSeconds(0)
-        Properties.Position = TimeSpan.FromSeconds(CurrentTime)
-        Properties.MaxSeekTime = TimeSpan.FromSeconds(TotalTime)
-        Properties.EndTime = TimeSpan.FromSeconds(TotalTime)
+        Properties.Position = CurrentTime
+        Properties.MaxSeekTime = CurrentTime
+        Properties.EndTime = TotalTime
 
         _smtc.UpdateTimelineProperties(Properties)
     End Sub
     ''' <summary>
-    ''' 以 1000 ms 为刷新间隔的 SMTC 时间线更新
+    ''' 以 700 ms 为刷新间隔的 SMTC 时间线更新
     ''' </summary>
     Public Sub SMTCTimelineUpdater(CurrentWave As NAudio.Wave.WaveOut, Reader As NAudio.Wave.WaveStream)
-        While CurrentWave.Equals(MusicNAudio) AndAlso CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Playing
-            RunInNewThread(Sub() UpdateSMTCTimeline(Reader.CurrentTime.TotalMilliseconds, Reader.TotalTime.TotalMilliseconds))
-            Thread.Sleep(1000)
-        End While
+        If _smtc Is Nothing Then Exit Sub
+        RunInNewThread(Sub()
+                           While CurrentWave.Equals(MusicNAudio) AndAlso CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Playing
+                               RunInNewThread(Sub() UpdateSMTCTimeline(Reader.CurrentTime, Reader.TotalTime))
+                               Thread.Sleep(700)
+                           End While
+                           While CurrentWave.Equals(MusicNAudio) AndAlso CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Paused
+                               Thread.Sleep(700)
+                           End While
+                           SMTCTimelineUpdater(CurrentWave, Reader)
+                       End Sub)
     End Sub
 #End Region
 
@@ -382,14 +382,12 @@ Public Module ModMusic
     ''' 当前播放的音乐地址。
     ''' </summary>
     Private MusicCurrent As String = ""
-
     ''' <summary>
     ''' 在 MusicUuid 不变的前提下，持续播放某地址的音乐，且在播放结束后随机播放下一曲。
     ''' </summary>
     Private Sub MusicLoop(Optional IsFirstLoad As Boolean = False)
         Dim CurrentWave As NAudio.Wave.WaveOut = Nothing
         Dim Reader As NAudio.Wave.WaveStream = Nothing
-        GetMediaFileInfo(MusicCurrent)
         Try
             '开始播放
             CurrentWave = New NAudio.Wave.WaveOut()
@@ -401,8 +399,8 @@ Public Module ModMusic
             '第一次打开的暂停
             If IsFirstLoad AndAlso Not Setup.Get("UiMusicAuto") Then
                 CurrentWave.Pause()
-                EnableSMTCSupport()
-                UpdateSMTCInfo()
+                EnableSMTCSupport() '启用 SMTC 支持
+                UpdateSMTCInfo() '更新 SMTC 媒体信息
             End If
             MusicRefreshUI()
             '停止条件：播放完毕或变化
