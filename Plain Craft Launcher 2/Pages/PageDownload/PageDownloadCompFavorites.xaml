@@ -1,0 +1,63 @@
+﻿<local:MyPageRight
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" x:Class="PageDownloadCompFavorites"
+    PanScroll="{Binding ElementName=PanBack}">
+    <Grid>
+        <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
+            <Grid x:Name="PanContent">
+                <StackPanel Orientation="Vertical" Margin="25">
+                    <StackPanel>
+                        <local:MySearchBox HintText="搜索收藏夹内容" x:Name="PanSearchBox" Margin="0,0,0,15"/>
+                        <local:MyHint Text="部分资源在线信息获取失败，当前收藏夹内容可能不齐全。" IsWarn="True" Margin="0,0,0,15" x:Name="HintGetFail" Visibility="Collapsed"/>
+                        <StackPanel  x:Name="PanContentList">
+                            
+                        </StackPanel>
+                        <!--<local:MyCard x:Name="CardProjectsMod" Title="Mod" IsSwaped="True" CanSwap="True" Margin="0,0,0,15">
+                            <StackPanel x:Name="PanProjectsMod" Margin="12,38,12,12" />
+                        </local:MyCard>
+                        <local:MyCard x:Name="CardProjectsModpack" Title="整合包" IsSwaped="True" CanSwap="True" Margin="0,0,0,15">
+                            <StackPanel x:Name="PanProjectsModpack" Margin="12,38,12,12" />
+                        </local:MyCard>-->
+                    </StackPanel>
+                </StackPanel>
+                <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40" x:Name="CardNoContent">
+                    <Grid Margin="20,17">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.ColumnSpan="4" Margin="0,0,0,9" HorizontalAlignment="Center" Text="还没有收藏内容" FontSize="19" UseLayoutRounding="True" SnapsToDevicePixels="True" Foreground="{DynamicResource ColorBrush3}" />
+                        <Rectangle Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" Height="2" Fill="{DynamicResource ColorBrush3}" />
+                        <TextBlock Grid.Row="2" Grid.ColumnSpan="4" Margin="10,15,10,5" Text="在资源详细信息界面中可以点击收藏按钮进行收藏" TextWrapping="Wrap" />
+                    </Grid>
+                </local:MyCard>
+            </Grid>
+        </local:MyScrollViewer>
+        <local:MyCard x:Name="CardSelect" Visibility="Collapsed" Opacity="0"
+HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="25,25,25,0" UseAnimation="False" HasMouseAnimation="False">
+            <local:MyCard.RenderTransform>
+                <TranslateTransform x:Name="TransSelect" Y="-10" />
+            </local:MyCard.RenderTransform>
+            <TextBlock x:Name="LabSelect" Text="已选择 8 个文件" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="9" Foreground="{DynamicResource ColorBrush2}" />
+            <StackPanel Orientation="Horizontal" Margin="5,28,5,5">
+                <local:MyIconTextButton x:Name="Btn_FavoritesCancel" Text="取消收藏"
+                  LogoScale="1" Logo="M700.856 155.543c-74.769 0-144.295 72.696-190.046 127.26-45.737-54.576-115.247-127.26-190.056-127.26-134.79 0-244.443 105.78-244.443 235.799 0 77.57 39.278 131.988 70.845 175.713C238.908 694.053 469.62 852.094 479.39 858.757c9.41 6.414 20.424 9.629 31.401 9.629 11.006 0 21.998-3.215 31.398-9.63 9.782-6.662 240.514-164.703 332.238-291.701 31.587-43.724 70.874-98.143 70.874-175.713-0.001-130.02-109.656-235.8-244.445-235.8z m0 0" />
+                <local:MyIconTextButton x:Name="Btn_SelectCancel" Text="取消选择"
+                  LogoScale="0.8" Logo="M867.648 951.296 512 595.648l-355.648 355.648c-11.52 11.52-30.272 11.52-41.856 0L72.64 909.44c-11.52-11.52-11.52-30.272 0-41.856L428.352 512 72.64 156.352c-11.52-11.52-11.52-30.272 0-41.856l41.856-41.856c11.52-11.52 30.272-11.52 41.856 0L512 428.288l355.648-355.648c11.52-11.52 30.272-11.52 41.856 0l41.856 41.856c11.52 11.52 11.52 30.272 0 41.856L595.648 512l355.648 355.648c11.52 11.52 11.52 30.272 0 41.856l-41.856 41.856C897.984 962.88 879.168 962.88 867.648 951.296L867.648 951.296z" />
+            </StackPanel>
+        </local:MyCard>
+        <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
+            <local:MyLoading Text="正在加载收藏夹列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </local:MyCard>
+    </Grid>
+</local:MyPageRight>

@@ -13,6 +13,10 @@
         ''' 资源包。
         ''' </summary>
         ResourcePack = 2
+        ''' <summary>
+        ''' 光影包。
+        ''' </summary>
+        Shader = 3
     End Enum
     Public Enum CompModLoaderType
         'https://docs.curseforge.com/?http#tocS_ModLoaderType
@@ -279,8 +283,10 @@
                         Type = CompType.Mod
                     ElseIf Website.Contains("/modpacks/") Then
                         Type = CompType.ModPack
-                    Else
+                    ElseIf Website.Contains("/texture-packs/") Then
                         Type = CompType.ResourcePack
+                    Else 'Website.Contains("/shaders/")
+                        Type = CompType.Shader
                     End If
                     'Tags
                     Tags = New List(Of String)
@@ -328,7 +334,28 @@
                             Case 4480 : Tags.Add("基于地图")
                             Case 4481 : Tags.Add("轻量")
                             Case 4482 : Tags.Add("大型")
-                                'FUTURE: Res
+                        '光影包
+                            Case 6553 : Tags.Add("写实")
+                            Case 6554 : Tags.Add("幻想")
+                            Case 6555 : Tags.Add("原版风")
+                        '资源包
+                            Case 5244 : Tags.Add("字体包")
+                            Case 5193 : Tags.Add("数据包")
+                            Case 399 : Tags.Add("蒸汽朋克")
+                            Case 396 : Tags.Add("128x")
+                            Case 398 : Tags.Add("512x 或更高")
+                            Case 397 : Tags.Add("256x")
+                            Case 405 : Tags.Add("其他")
+                            Case 395 : Tags.Add("64x")
+                            Case 400 : Tags.Add("仿真")
+                            Case 393 : Tags.Add("16x")
+                            Case 403 : Tags.Add("传统")
+                            Case 394 : Tags.Add("32x")
+                            Case 404 : Tags.Add("动态效果")
+                            Case 4465 : Tags.Add("模组支持")
+                            Case 402 : Tags.Add("中世纪")
+                            Case 401 : Tags.Add("现代")
+
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -356,6 +383,7 @@
                         Case "mod" : Type = CompType.Mod
                         Case "modpack" : Type = CompType.ModPack
                         Case "resourcepack" : Type = CompType.ResourcePack
+                        Case "shader" : Type = CompType.Shader
                     End Select
                     'Tags & ModLoaders
                     Tags = New List(Of String)
@@ -394,7 +422,63 @@
                             Case "adventure" : Tags.Add("冒险")
                             Case "kitchen-sink" : Tags.Add("大杂烩")
                             Case "lightweight" : Tags.Add("轻量")
-                                'FUTURE: Res
+                            '光影包
+                            Case "cartoon" : Tags.Add("卡通")
+                            Case "cursed" : Tags.Add("Cursed")
+                            Case "fantasy" : Tags.Add("幻想")
+                            Case "realistic" : Tags.Add("写实")
+                            Case "semi-realistic" : Tags.Add("半写实")
+                            Case "vanilla-like" : Tags.Add("原版风")
+
+                            Case "atmosphere" : Tags.Add("大气环境")
+                            Case "bloom" : Tags.Add("植被")
+                            Case "colored-lighting" : Tags.Add("光源着色")
+                            Case "foliage" : Tags.Add("树叶")
+                            Case "path-tracing" : Tags.Add("路径追踪")
+                            Case "pbr" : Tags.Add("PBR")
+                            Case "reflections" : Tags.Add("反射")
+                            Case "shadows" : Tags.Add("阴影")
+
+                            Case "potato" : Tags.Add("土豆画质")
+                            Case "low" : Tags.Add("低性能影响")
+                            Case "medium" : Tags.Add("中性能影响")
+                            Case "high" : Tags.Add("高性能影响")
+                            Case "screenshot" : Tags.Add("极致画质")
+
+                            Case "canvas" : Tags.Add("Canvas")
+                            Case "iris" : Tags.Add("Iris")
+                            Case "optifine" : Tags.Add("OptiFine")
+                            Case "vanilla" : Tags.Add("原版光影")
+                            '资源包
+                            Case "8x-" : Tags.Add("8x-")
+                            Case "16x" : Tags.Add("16x")
+                            Case "32x" : Tags.Add("32x")
+                            Case "48x" : Tags.Add("48x")
+                            Case "64x" : Tags.Add("64x")
+                            Case "128x" : Tags.Add("128x")
+                            Case "256x" : Tags.Add("256x")
+                            Case "512x+" : Tags.Add("512x+")
+                            Case "audio" : Tags.Add("声音")
+                            Case "blocks" : Tags.Add("方块")
+                            Case "combat" : Tags.Add("战斗")
+                            Case "core-shaders" : Tags.Add("核心着色器")
+                            Case "cursed" : Tags.Add("Cursed")
+                            Case "decoration" : Tags.Add("装饰")
+                            Case "entities" : Tags.Add("实体")
+                            Case "environment" : Tags.Add("环境")
+                            Case "equipment" : Tags.Add("装备")
+                            Case "fonts" : Tags.Add("字体")
+                            Case "gui" : Tags.Add("GUI")
+                            Case "items" : Tags.Add("物品")
+                            Case "locale" : Tags.Add("本地化")
+                            Case "modded" : Tags.Add("Modded")
+                            Case "models" : Tags.Add("模型")
+                            Case "realistic" : Tags.Add("写实")
+                            Case "simplistic" : Tags.Add("扁平")
+                            Case "themed" : Tags.Add("主题")
+                            Case "tweaks" : Tags.Add("优化")
+                            Case "utility" : Tags.Add("实用")
+                            Case "vanilla-like" : Tags.Add("类原生")
                         End Select
                     Next
                     If Not Tags.Any() Then Tags.Add("杂项")
@@ -556,6 +640,15 @@
                 If(DownloadCount > 100000000, Math.Round(DownloadCount / 100000000, 2) & " 亿",
                     If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " 万", DownloadCount))
             Return NewItem
+        End Function
+        Public Function ToListItem() As MyListItem
+            Dim Result As New MyListItem()
+            Result.Title = TranslatedName
+            Result.Info = Description.Replace(vbCr, "").Replace(vbLf, "")
+            Result.Logo = LogoUrl
+            Result.Tags = Tags
+            Result.Tag = Me
+            Return Result
         End Function
         Public Function GetControlLogo() As String
             If String.IsNullOrEmpty(LogoUrl) Then
@@ -772,7 +865,9 @@ NoSubtitle:
                 Case CompType.ModPack
                     Address += "&classId=4471"
                 Case CompType.ResourcePack
-                    'FUTURE: Res
+                    Address += "&classId=12"
+                Case CompType.Shader
+                    Address += "&classId=6552"
             End Select
             Address += "&categoryId=" & If(Tag = "", "0", Tag.BeforeFirst("/"))
             If ModLoader <> CompModLoaderType.Any Then Address += "&modLoaderType=" & CType(ModLoader, Integer)
@@ -1528,5 +1623,117 @@ Retry:
     End Sub
 
 #End Region
+    Class CompFavorites
 
+        ''' <summary>
+        ''' 收藏的工程列表
+        ''' </summary>
+        Private Shared _FavoritesList As List(Of String) = Nothing
+        Public Shared Property FavoritesList As List(Of String)
+            Get
+                If _FavoritesList Is Nothing Then
+                    Dim RawData As String = Setup.Get("CompFavorites")
+                    Dim RawList As JArray = JArray.Parse(RawData)
+                    _FavoritesList = RawList.ToObject(Of List(Of String))()
+                End If
+                Return _FavoritesList
+            End Get
+            Set
+                _FavoritesList = Value
+                Dim RawList = JArray.FromObject(_FavoritesList)
+                Setup.Set("CompFavorites", RawList.ToString())
+            End Set
+        End Property
+
+        Public Shared Sub Save()
+            FavoritesList = _FavoritesList
+        End Sub
+    End Class
+
+    Class CompRequest
+        ''' <summary>
+        ''' 通过项目 Id 判断是否来自 CurseForge
+        ''' </summary>
+        ''' <param name="Id"></param>
+        ''' <returns></returns>
+        Public Shared Function IsFromCurseForge(Id As String) As Boolean
+            Dim res As Integer = 0
+            Return Integer.TryParse(Id, res) 'CurseForge 数字 ID Modrinth 乱序 ID
+        End Function
+
+        ''' <summary>
+        ''' 通过一堆 ID 从 Modrinth 那获取项目信息 
+        ''' </summary>
+        ''' <param name="Ids"></param>
+        ''' <returns></returns>
+        Public Shared Function GetListByIdsFromModrinth(Ids As List(Of String)) As List(Of CompProject)
+            Dim Res As New List(Of CompProject)
+            Dim RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{Ids.Join(""",""")}""]", IsJson:=True)
+            For Each RawData In RawProjectsData
+                Res.Add(New CompProject(RawData))
+            Next
+            Return Res
+        End Function
+
+        ''' <summary>
+        ''' 通过一堆 ID 从 CurseForge 那获取项目信息 
+        ''' </summary>
+        ''' <param name="Ids"></param>
+        ''' <returns></returns>
+        Public Shared Function GetListByIdsFromCurseforge(Ids As List(Of String)) As List(Of CompProject)
+            Dim Res As New List(Of CompProject)
+            Dim RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
+                                       "POST", "{""modIds"": [" & Ids.Join(",") & "]}", "application/json"))("data")
+            For Each RawData In RawProjectsData
+                Res.Add(New CompProject(RawData))
+            Next
+            Return Res
+        End Function
+
+        Public Shared Function GetCompProjectsByIds(Input As List(Of String)) As List(Of CompProject)
+            If Not Input.Any() Then Return New List(Of CompProject)
+            Dim RawList As List(Of String) = Input
+            Dim ModrinthProjectIds As New List(Of String)
+            Dim CurseForgeProjectIds As New List(Of String)
+            Dim Res As List(Of CompProject) = New List(Of CompProject)
+            For Each Id In RawList
+                If IsFromCurseForge(Id) Then
+                    CurseForgeProjectIds.Add(Id)
+                Else
+                    ModrinthProjectIds.Add(Id)
+                End If
+            Next
+            '在线信息获取
+            Dim FinishedTask = 0
+            Dim NeedCompleteTask = 0
+            If CurseForgeProjectIds.Any() Then
+                NeedCompleteTask += 1
+                RunInNewThread(Sub()
+                                   Try
+                                       Res.AddRange(CompRequest.GetListByIdsFromCurseforge(CurseForgeProjectIds))
+                                   Catch ex As Exception
+                                       Log(ex, "[Favorites] 获取 CurseForge 数据失败", LogLevel.Hint)
+                                   Finally
+                                       FinishedTask += 1
+                                   End Try
+                               End Sub, "Favorites CurseForge")
+            End If
+            If ModrinthProjectIds.Any() Then
+                NeedCompleteTask += 1
+                RunInNewThread(Sub()
+                                   Try
+                                       Res.AddRange(CompRequest.GetListByIdsFromModrinth(ModrinthProjectIds))
+                                   Catch ex As Exception
+                                       Log(ex, "[Favorites] 获取 Modrinth 数据失败", LogLevel.Hint)
+                                   Finally
+                                       FinishedTask += 1
+                                   End Try
+                               End Sub, "Favorites Modrinth")
+            End If
+            Do Until FinishedTask = NeedCompleteTask
+                Thread.Sleep(50)
+            Loop
+            Return Res
+        End Function
+    End Class
 End Module
