@@ -212,7 +212,7 @@ Public Module ModMusic
     ''' </summary>
     Private Sub MusicStartPlay(Address As String, Optional IsFirstLoad As Boolean = False)
         If Address Is Nothing Then Return
-        If _smtc Is Nothing Then EnableSMTCSupport()
+        If _smtc Is Nothing OrElse Not _smtc.IsEnabled Then EnableSMTCSupport()
         Log("[Music] 播放开始：" & Address)
         MusicCurrent = Address
         UpdateSMTCInfo()
@@ -261,8 +261,8 @@ Public Module ModMusic
 #End Region
 
 #Region "SMTC 控件"
-    Private ReadOnly _player = New Playback.MediaPlayer
-    Private WithEvents _smtc As SystemMediaTransportControls = Nothing
+    Private ReadOnly _player = If(Environment.OSVersion.Version.ToString().Substring(0, 4) = "10.0", New Playback.MediaPlayer, Nothing)
+    Private _smtc As SystemMediaTransportControls = Nothing
 
     ''' <summary>
     ''' 启用 SMTC 支持
@@ -286,6 +286,18 @@ Public Module ModMusic
 
         '绑定事件处理
         AddHandler _smtc.ButtonPressed, AddressOf _smtc_ButtonPressed
+    End Sub
+
+    ''' <summary>
+    ''' 关闭 SMTC 支持
+    ''' </summary>
+    Public Sub DisableSMTCSupport()
+        If _smtc IsNot Nothing AndAlso _smtc.IsEnabled Then
+            Log("[SMTC] 移除 SMTC 信息源")
+            _smtc.IsEnabled = False
+        Else
+            Log("[SMTC] 未添加 SMTC 信息，无需移除")
+        End If
     End Sub
 
     ''' <summary>

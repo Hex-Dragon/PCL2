@@ -377,6 +377,7 @@ Refresh:
                 '删除文件
                 Try
                     DeleteDirectory(Path & "PCL\Musics")
+                    DisableSMTCSupport()
                     Hint("背景音乐已删除！", HintType.Finish)
                 Catch ex As Exception
                     Log(ex, "删除背景音乐失败", LogLevel.Msgbox)
