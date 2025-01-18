@@ -393,6 +393,26 @@ PreFin:
         TextServerAuthServer.Visibility = If(Type = 4, Visibility.Visible, Visibility.Collapsed)
         BtnServerAuthLittle.Visibility = If(Type = 4, Visibility.Visible, Visibility.Collapsed)
         CardServer.TriggerForceResize()
+        '避免微软登录、离线登录和第三方登录：统一通行证出现此提示
+        If Not Type = 4 Then
+            LabServerAuthServerSecurity.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Collapsed
+            ' 如果开头为 http:// 给予警告
+        ElseIf TextServerAuthServer.Text.StartsWithF("https://") AndAlso Setup.Get("ToolDownloadCert") = "False" Then
+            LabServerAuthServerSecurity.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Visible
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Visible
+        ElseIf TextServerAuthServer.Text.StartsWithF("http://") Then
+            LabServerAuthServerSecurity.Visibility = Visibility.Visible
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Visible
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Collapsed
+
+        Else
+            LabServerAuthServerSecurity.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Collapsed
+        End If
     End Sub
 
     '统一通行证
