@@ -263,6 +263,7 @@ Public Module ModMusic
 #Region "SMTC 控件"
     Private ReadOnly _player = New Playback.MediaPlayer
     Private WithEvents _smtc As SystemMediaTransportControls = Nothing
+
     ''' <summary>
     ''' 启用 SMTC 支持
     ''' </summary>
@@ -286,6 +287,7 @@ Public Module ModMusic
         '绑定事件处理
         AddHandler _smtc.ButtonPressed, AddressOf _smtc_ButtonPressed
     End Sub
+
     ''' <summary>
     ''' 更新 SMTC 信息
     ''' </summary>
@@ -303,6 +305,7 @@ Public Module ModMusic
         '生效设置
         Updater.Update()
     End Sub
+
     ''' <summary>
     ''' 设置 SMTC 媒体播放状态
     ''' </summary>
@@ -319,6 +322,7 @@ Public Module ModMusic
             _smtc.PlaybackStatus = MediaPlaybackStatus.Stopped
         End If
     End Sub
+
     ''' <summary>
     ''' 响应 SMTC 交互
     ''' </summary>
@@ -356,6 +360,7 @@ Public Module ModMusic
 
         _smtc.UpdateTimelineProperties(Properties)
     End Sub
+
     ''' <summary>
     ''' 以 700 ms 为刷新间隔的 SMTC 时间线更新
     ''' </summary>
@@ -405,7 +410,7 @@ Public Module ModMusic
             MusicRefreshUI()
             '停止条件：播放完毕或变化
             Dim PreviousVolume = 0
-            SMTCTimelineUpdater(CurrentWave, Reader)
+            SMTCTimelineUpdater(CurrentWave, Reader) '启动 SMTC 时间轴更新
             While CurrentWave.Equals(MusicNAudio) AndAlso Not CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Stopped
                 If Setup.Get("UiMusicVolume") <> PreviousVolume Then
                     '更新音量
