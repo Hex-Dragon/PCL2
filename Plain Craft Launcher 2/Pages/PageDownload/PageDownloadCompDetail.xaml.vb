@@ -79,7 +79,7 @@
 
         'UI 化筛选器
         PanFilter.Children.Clear()
-        If VersionFilters.Count <= 2 Then
+        If VersionFilters.Count < 2 Then
             CardFilter.Visibility = Visibility.Collapsed
             VersionFilter = Nothing
         Else
