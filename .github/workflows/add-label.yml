@@ -1,0 +1,27 @@
+name: PR Auto Label and Reviewer
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  add-label-and-reviewer:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Check Label
+    - name: Authenticate GitHub CLI
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+    - name: Add Label
+      run: gh pr edit ${{ github.event.pull_request.number }} --add-label "新提交"
+
+    - name: Add Reviewer
+      run: gh pr edit ${{ github.event.pull_request.number }} --add-reviewer LTCatt
