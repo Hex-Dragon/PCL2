@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>PCL</RootNamespace>
     <AssemblyName>Plain Craft Launcher 2</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <MyType>Custom</MyType>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile>
