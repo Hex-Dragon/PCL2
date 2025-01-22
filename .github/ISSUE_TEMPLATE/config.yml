@@ -1,4 +1,4 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
   - name: 新功能请求 / 优化建议
     url:  https://github.com/Hex-Dragon/PCL2/issues
