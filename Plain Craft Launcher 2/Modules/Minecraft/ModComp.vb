@@ -434,7 +434,10 @@
         Public Function ToCompItem(ShowMcVersionDesc As Boolean, ShowLoaderDesc As Boolean) As MyCompItem
             '获取版本描述
             Dim GameVersionDescription As String
-            If GameVersions Is Nothing OrElse Not GameVersions.Any() Then
+            Dim AllSnapshot As Boolean = GameVersions.All(Function(v) RegexCheck(v, "[0-9]{2}w[0-9]{2}[a-z]{1}"))
+            If AllSnapshot Then
+                GameVersionDescription = "仅快照版本"
+            ElseIf GameVersions Is Nothing OrElse Not GameVersions.Any() Then
                 GameVersionDescription = "未知"
             Else
                 Dim SpaVersions As New List(Of String)
@@ -493,10 +496,17 @@
                     ModLoaderDescriptionFull = "仅 " & ModLoadersForDesc.Single.ToString
                     ModLoaderDescriptionPart = ModLoadersForDesc.Single.ToString
                 Case Else
-                    If ModLoaders.Contains(CompModLoaderType.Forge) AndAlso
+                    If ModLoaders.Contains(CompModLoaderType.Forge) AndAlso Not AllSnapshot AndAlso
                        (GameVersions.Max < 14 OrElse ModLoaders.Contains(CompModLoaderType.Fabric)) AndAlso
                        (GameVersions.Max < 20 OrElse ModLoaders.Contains(CompModLoaderType.NeoForge)) AndAlso
                        (GameVersions.Max < 14 OrElse ModLoaders.Contains(CompModLoaderType.Quilt) OrElse Setup.Get("ToolDownloadIgnoreQuilt")) Then
+                        ModLoaderDescriptionFull = "任意"
+                        ModLoaderDescriptionPart = ""
+                    ElseIf AllSnapshot AndAlso
+                        ModLoaders.Contains(CompModLoaderType.Forge) AndAlso
+                        ModLoaders.Contains(CompModLoaderType.Fabric) AndAlso
+                        ModLoaders.Contains(CompModLoaderType.NeoForge) AndAlso
+                        (ModLoaders.Contains(CompModLoaderType.Quilt) OrElse Setup.Get("ToolDownloadIgnoreQuilt")) Then
                         ModLoaderDescriptionFull = "任意"
                         ModLoaderDescriptionPart = ""
                     Else
@@ -1481,7 +1491,9 @@ Retry:
         If Deps.Any Then
             For Each DepProject In Deps.Where(Function(id) CompProjectCache.ContainsKey(id)).Select(Function(id) CompProjectCache(id))
                 For Each File In CompFilesCache(ProjectId)
-                    If File.RawDependencies.Contains(DepProject.Id) AndAlso DepProject.Id <> ProjectId Then
+                    If File.RawDependencies.Contains(DepProject.Id) AndAlso
+                    DepProject.Id <> ProjectId AndAlso 
+                    Not File.Dependencies.Contains(DepProject.Id) Then
                         File.Dependencies.Add(DepProject.Id)
                     End If
                 Next
