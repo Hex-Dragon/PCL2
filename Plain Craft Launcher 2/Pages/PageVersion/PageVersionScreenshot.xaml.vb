@@ -5,26 +5,25 @@ Public Class PageVersionScreenshot
     Private Sub RefreshSelf() Implements IRefreshable.Refresh
         Refresh()
     End Sub
-    Public Shared Sub Refresh()
-        If FrmVersionScreenshot IsNot Nothing Then FrmVersionScreenshot.Reload()
+    Public Shared Async Sub Refresh()
+        If FrmVersionScreenshot IsNot Nothing Then Await FrmVersionScreenshot.Reload()
         FrmVersionLeft.ItemScreenshot.Checked = True
     End Sub
 
     Private IsLoad As Boolean = False
-    Private Sub PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+    Private Async Function PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) As Tasks.Task Handles Me.Loaded
 
         '重复加载部分
         PanBack.ScrollToHome()
         ScreenshotPath = PageVersionLeft.Version.PathIndie + "screenshots\"
         If Not Directory.Exists(ScreenshotPath) Then Directory.CreateDirectory(ScreenshotPath)
-        Reload()
-
+        Await Reload()
 
         '非重复加载部分
-        If IsLoad Then Exit Sub
+        If IsLoad Then Return
         IsLoad = True
 
-    End Sub
+    End Function
 
     Dim FileList As List(Of String) = New List(Of String)
     Dim ScreenshotPath As String
@@ -32,35 +31,57 @@ Public Class PageVersionScreenshot
     ''' <summary>
     ''' 确保当前页面上的信息已正确显示。
     ''' </summary>
-    Public Sub Reload()
+    Public Async Function Reload() As Tasks.Task
         AniControlEnabled += 1
         PanBack.ScrollToHome()
-        LoadFileList()
+        Await LoadFileList()
         AniControlEnabled -= 1
-    End Sub
+    End Function
 
-    Private Sub RefreshUI()
+    Private Sub RefreshTip()
         If FileList.Count.Equals(0) Then
             PanNoPic.Visibility = Visibility.Visible
             PanContent.Visibility = Visibility.Collapsed
-            PanNoPic.UpdateLayout()
         Else
             PanNoPic.Visibility = Visibility.Collapsed
             PanContent.Visibility = Visibility.Visible
-            PanContent.UpdateLayout()
         End If
     End Sub
 
-    Private Sub LoadFileList()
+    Private Async Function LoadFileList() As Tasks.Task
         Log("[Screenshot] 刷新截图文件")
         FileList.Clear()
         If Directory.Exists(ScreenshotPath) Then FileList = Directory.EnumerateFiles(ScreenshotPath, "*", SearchOption.TopDirectoryOnly).ToList()
         Dim AllowedSuffix As String() = {".png", ".jpg", ".jpeg", ".bmp", ".webp", ".tiff"}
         FileList = FileList.Where(Function(e) AllowedSuffix.Contains(New FileInfo(e).Extension.ToLower())).ToList()
         PanList.Children.Clear()
+        RefreshTip()
         FileList = FileList.Where(Function(e) Not e.ContainsF("\debug\")).ToList() ' 排除资源包调试输出
         Log("[Screenshot] 共发现 " & FileList.Count & " 个截图文件")
-        For Each i In FileList
+        Await ListAppend(20, 0)
+    End Function
+
+    Private Async Function RequireAppend() As Tasks.Task Handles PanBack.ScrollChanged
+        If (Not _AppendLock) AndAlso PanBack.VerticalOffset + PanBack.ViewportHeight >= PanBack.ExtentHeight Then
+            Await ListAppend()
+        End If
+    End Function
+
+    Private _AppendLock As Boolean = False
+    Private _Offset As Integer = 0
+    Private Async Function ListAppend(Optional Count As Integer = 20, Optional Offset As Integer = -1) As Tasks.Task
+        _AppendLock = True
+        If Offset = -1 Then
+            If _Offset * Count > FileList.Count Then Return
+            Offset = _Offset + 1
+            _Offset += 1
+        Else
+            _Offset = Offset
+        End If
+        If Count * Offset > FileList.Count Then Return
+        For j = Count * Offset To Count * (Offset + 1) - 1
+            If j >= FileList.Count Then Exit For
+            Dim i = FileList.ElementAt(j)
             Try
                 If Not File.Exists(i) Then Continue For ' 文件在加载途中消失了
                 If File.GetAttributes(i).HasFlag(FileAttributes.Hidden) Then Continue For ' 隐藏文件
@@ -81,17 +102,19 @@ Public Class PageVersionScreenshot
 
                 '图片
                 Dim image As New Image
-                Dim bitmapImage As New BitmapImage()
-                Using fs As New FileStream(i, FileMode.Open, FileAccess.Read)
-                    bitmapImage.BeginInit()
-                    bitmapImage.DecodePixelHeight = 200
-                    bitmapImage.DecodePixelWidth = 400
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad
-                    bitmapImage.StreamSource = fs
-                    bitmapImage.EndInit()
-                    bitmapImage.Freeze()
-                End Using
-                image.Source = bitmapImage
+                image.Source = Await Tasks.Task.Run(Function()
+                                                        Dim bitmapImage As New BitmapImage()
+                                                        Using fs As New FileStream(i, FileMode.Open, FileAccess.Read)
+                                                            bitmapImage.BeginInit()
+                                                            bitmapImage.DecodePixelHeight = 200
+                                                            bitmapImage.DecodePixelWidth = 400
+                                                            bitmapImage.CacheOption = BitmapCacheOption.OnLoad
+                                                            bitmapImage.StreamSource = fs
+                                                            bitmapImage.EndInit()
+                                                            bitmapImage.Freeze()
+                                                        End Using
+                                                        Return bitmapImage
+                                                    End Function)
                 image.Stretch = Stretch.Uniform ' 使图片自适应控件大小
                 Grid.SetRow(image, 1)
                 grid.Children.Add(image)
@@ -136,8 +159,8 @@ Public Class PageVersionScreenshot
                 Log(ex, $"[Screenshot] 创建 {i} 截图预览失败，图像可能损坏")
             End Try
         Next
-        RefreshUI()
-    End Sub
+        _AppendLock = False
+    End Function
 
     Private Sub RemoveItem(Path As String)
         Try
