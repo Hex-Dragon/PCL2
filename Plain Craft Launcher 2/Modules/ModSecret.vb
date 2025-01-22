@@ -315,11 +315,8 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                                LatestVersion = LatestReleaseInfoJson("tag_name").ToString
                                If Not LatestVersion = VersionBaseName Then
                                    If Not Environment.OSVersion.Version.ToString().Substring(0, 4) = "10.0" AndAlso Not LatestVersion.Substring(0, 4) = "2.9." Then
-                                       If MyMsgBox($"发现了启动器更新（版本 {LatestVersion}），但是由于你的 Windows 版本过低，不满足新版本要求。{vbCrLf}你需要更新到 Windows 10 1607 或更高版本才可以继续更新。", "启动器更新 - 系统版本过低", "升级到 Windows 10", "取消", IsWarn:=True, ForceWait:=True) = 1 Then
-                                           OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
-                                       Else
-                                           Exit Sub
-                                       End If
+                                       If MyMsgBox($"发现了启动器更新（版本 {LatestVersion}），但是由于你的 Windows 版本过低，不满足新版本要求。{vbCrLf}你需要更新到 Windows 10 1607 或更高版本才可以继续更新。", "启动器更新 - 系统版本过低", "升级到 Windows 10", "取消", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
+                                       Exit Sub
                                    End If
                                    If MyMsgBox($"发现了启动器更新（版本 {LatestVersion}），是否更新？", "启动器更新", "更新", "取消") = 1 Then
                                        UpdateStart(LatestVersion, False)
