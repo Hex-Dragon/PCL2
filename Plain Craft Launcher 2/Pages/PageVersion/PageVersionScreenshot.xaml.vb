@@ -82,8 +82,8 @@ Public Class PageVersionScreenshot
         If Count * Offset > FileList.Count Then Return
         For j = Count * Offset To Count * (Offset + 1) - 1
             If j >= FileList.Count Then Exit For
+            Dim i = FileList.ElementAt(j)
             Try
-                Dim i = FileList.ElementAt(j)
                 If Not File.Exists(i) Then Continue For ' 文件在加载途中消失了
                 If File.GetAttributes(i).HasFlag(FileAttributes.Hidden) Then Continue For ' 隐藏文件
                 If New FileInfo(i).Length = 0 Then Continue For ' 空文件
