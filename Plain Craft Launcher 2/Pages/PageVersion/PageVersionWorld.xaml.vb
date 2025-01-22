@@ -57,40 +57,44 @@ Public Class PageVersionWorld
         If ModeDebug Then Log("[World] 共发现 " & FileList.Count & " 个存档文件夹", LogLevel.Debug)
         PanList.Children.Clear()
         For Each i In FileList
-            Dim SaveLogo = i + "\icon.png"
-            If Not File.Exists(SaveLogo) Then SaveLogo = PathImage & "Icons/NoIcon.png"
-            Dim worldItem As MyListItem = New MyListItem With {
+            Try
+                Dim SaveLogo = i + "\icon.png"
+                If Not File.Exists(SaveLogo) Then SaveLogo = PathImage & "Icons/NoIcon.png"
+                Dim worldItem As MyListItem = New MyListItem With {
             .Logo = SaveLogo,
             .Title = GetFolderNameFromPath(i),
             .Info = $"创建时间：{ Directory.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}，最后修改时间：{Directory.GetLastWriteTime(i).ToString("yyyy'/'MM'/'dd")}",
             .Tag = i
             }
-            Dim BtnOpen As MyIconButton = New MyIconButton With {
+                Dim BtnOpen As MyIconButton = New MyIconButton With {
                 .Logo = Logo.IconButtonOpen,
                 .ToolTip = "打开",
                 .Tag = i
             }
-            AddHandler BtnOpen.Click, AddressOf BtnOpen_Click
-            Dim BtnDelete As MyIconButton = New MyIconButton With {
+                AddHandler BtnOpen.Click, AddressOf BtnOpen_Click
+                Dim BtnDelete As MyIconButton = New MyIconButton With {
                 .Logo = Logo.IconButtonDelete,
                 .ToolTip = "删除",
                 .Tag = i
             }
-            AddHandler BtnDelete.Click, AddressOf BtnDelete_Click
-            Dim BtnCopy As MyIconButton = New MyIconButton With {
+                AddHandler BtnDelete.Click, AddressOf BtnDelete_Click
+                Dim BtnCopy As MyIconButton = New MyIconButton With {
                 .Logo = Logo.IconButtonCopy,
                 .ToolTip = "复制",
                 .Tag = i
             }
-            AddHandler BtnCopy.Click, AddressOf BtnCopy_Click
-            Dim BtnInfo As MyIconButton = New MyIconButton With {
+                AddHandler BtnCopy.Click, AddressOf BtnCopy_Click
+                Dim BtnInfo As MyIconButton = New MyIconButton With {
                 .Logo = Logo.IconButtonInfo,
                 .ToolTip = "详情",
                 .Tag = i
             }
-            AddHandler BtnInfo.Click, AddressOf BtnInfo_Click
-            worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy, BtnInfo}
-            PanList.Children.Add(worldItem)
+                AddHandler BtnInfo.Click, AddressOf BtnInfo_Click
+                worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy, BtnInfo}
+                PanList.Children.Add(worldItem)
+            Catch ex As Exception
+                Log(ex, $"[World] 读取 {i} 数据错误", LogLevel.Hint)
+            End Try
         Next
         RefreshUI()
     End Sub

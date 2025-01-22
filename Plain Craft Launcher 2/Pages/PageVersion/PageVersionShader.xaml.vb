@@ -58,31 +58,35 @@ Public Class PageVersionShader
         If ModeDebug Then Log("[Shader] 共发现 " & FileList.Count & " 个光影包文件", LogLevel.Debug)
         PanList.Children.Clear()
         For Each i In FileList
-            Dim worldItem As MyListItem = New MyListItem With {
+            Try
+                Dim worldItem As MyListItem = New MyListItem With {
             .Title = GetFileNameWithoutExtentionFromPath(i),
             .Info = $"引入时间：{ File.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}",
             .Tag = i
             }
-            Dim BtnOpen As MyIconButton = New MyIconButton With {
-                .Logo = Logo.IconButtonOpen,
-                .ToolTip = "打开",
-                .Tag = i
-            }
-            AddHandler BtnOpen.Click, AddressOf BtnOpen_Click
-            Dim BtnDelete As MyIconButton = New MyIconButton With {
-                .Logo = Logo.IconButtonDelete,
-                .ToolTip = "删除",
-                .Tag = i
-            }
-            AddHandler BtnDelete.Click, AddressOf BtnDelete_Click
-            Dim BtnCopy As MyIconButton = New MyIconButton With {
-                .Logo = Logo.IconButtonCopy,
-                .ToolTip = "复制",
-                .Tag = i
-            }
-            AddHandler BtnCopy.Click, AddressOf BtnCopy_Click
-            worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy}
-            PanList.Children.Add(worldItem)
+                Dim BtnOpen As MyIconButton = New MyIconButton With {
+                    .Logo = Logo.IconButtonOpen,
+                    .ToolTip = "打开",
+                    .Tag = i
+                }
+                AddHandler BtnOpen.Click, AddressOf BtnOpen_Click
+                Dim BtnDelete As MyIconButton = New MyIconButton With {
+                    .Logo = Logo.IconButtonDelete,
+                    .ToolTip = "删除",
+                    .Tag = i
+                }
+                AddHandler BtnDelete.Click, AddressOf BtnDelete_Click
+                Dim BtnCopy As MyIconButton = New MyIconButton With {
+                    .Logo = Logo.IconButtonCopy,
+                    .ToolTip = "复制",
+                    .Tag = i
+                }
+                AddHandler BtnCopy.Click, AddressOf BtnCopy_Click
+                worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy}
+                PanList.Children.Add(worldItem)
+            Catch ex As Exception
+                Log(ex, $"[Shader] 读取 {i} 数据错误", LogLevel.Hint)
+            End Try
         Next
         RefreshUI()
     End Sub
