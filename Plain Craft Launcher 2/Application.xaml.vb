@@ -31,13 +31,13 @@ Public Class Application
         '依照选择语言切换字体
         Dim LaunchFont As FontFamily
         Select Case Lang
-            Case "zh_TW", "zh_HK", "lzh", "zh_MARS"
+            Case "zh-TW", "zh-HK", "lzh", "zh-MARS"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft JhengHei UI")
-            Case "ja_JP"
+            Case "ja-JP"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Yu Gothic UI, Microsoft YaHei UI")
-            Case "ko_KR"
+            Case "ko-KR"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Malgun Gothic, Microsoft YaHei UI")
-            Case "en_US", "en_GB", "zh_CN", "zh_MEME"
+            Case "en-US", "en-GB", "zh-CN", "zh-MEME"
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft YaHei UI")
             Case Else '非英语的其他西欧语言统一使用 Segoe UI
                 LaunchFont = New FontFamily(New Uri("pack://application:,,,/"), "Segoe UI, ./Resources/#PCL English, Microsoft YaHei UI")

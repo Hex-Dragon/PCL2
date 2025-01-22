@@ -32,7 +32,7 @@ Module Modi18n
     ''' <param name="Word">中文文本</param>
     ''' <returns>对应语言的译文</returns>
     Public Function GetLangByWord(Word As String) As String
-        If Lang = "zh_CN" Then Return Word '语言设置为中文时不需要处理，直接返回以节约处理时间
+        If Lang = "zh-CN" Then Return Word '语言设置为中文时不需要处理，直接返回以节约处理时间
         Select Case Word
             Case "正式版"
                 Return GetLang("LangDownloadRelease")
@@ -57,9 +57,9 @@ Module Modi18n
     ''' <returns>当前地区的时间格式字符串</returns>
     Public Function GetLocalTimeFormat(Time As DateTime) As String
         Select Case Lang
-            Case "ja_JP", "ko_KR", "lzh", "zh_CN", "zh_HK", "zh_MARS", "zh_MEME", "zh_TW" '2024/08/16 11:47
+            Case "ja-JP", "ko-KR", "lzh", "zh-CN", "zh-HK", "zh-MARS", "zh-MEME", "zh-TW" '2024/08/16 11:47
                 Return Time.ToString("yyyy'/'MM'/'dd HH':'mm")
-            Case "en_US" '11:47 08/16/2024
+            Case "en-US" '11:47 08/16/2024
                 Return Time.ToString("MM'/'dd'/'yyyy HH':'mm")
             Case Else '11:47 16/08/2024
                 Return Time.ToString("dd'/'MM'/'yyyy HH':'mm")
@@ -106,17 +106,17 @@ Module Modi18n
     ''' <summary>
     ''' 获取当前系统的默认语言
     ''' </summary>
-    ''' <returns>返回类似于 zh_CN 这样形式的文本</returns>
+    ''' <returns>返回类似于 zh-CN 这样形式的文本</returns>
     Public Function GetDefaultLang() As String
         Dim CurrentCulture As String = CultureInfo.CurrentCulture.Name
         Dim PrefixMap As New Dictionary(Of String, String) From {
-            {"el-", "el_GR"},
-            {"es-", "es_ES"},
-            {"fr-", "fr_FR"},
-            {"ja-", "ja_JP"},
-            {"ko-", "ko_KR"},
-            {"ru-", "ru_RU"},
-            {"sk-", "sk_SK"}
+            {"el-", "el-GR"},
+            {"es-", "es-ES"},
+            {"fr-", "fr-FR"},
+            {"ja-", "ja-JP"},
+            {"ko-", "ko-KR"},
+            {"ru-", "ru-RU"},
+            {"sk-", "sk-SK"}
         }
 
         For Each prefixPair In PrefixMap
@@ -127,16 +127,16 @@ Module Modi18n
 
         Select Case CurrentCulture '部分需要特殊匹配的语言
             Case "en-GB", "en-NZ", "en-AU", "en-CA"
-                Return "en_GB"
+                Return "en-GB"
             Case "zh-CN", "zh-SG", "zh-Hans"
-                Return "zh_CN"
+                Return "zh-CN"
             Case "zh-HK", "zh-MO"
-                Return "zh_HK"
+                Return "zh-HK"
             Case "zh-TW", "zh-Hant"
-                Return "zh_TW"
+                Return "zh-TW"
         End Select
 
-        Return "en_US" '无匹配则返回 en_us
+        Return "en-US" '无匹配则返回 en_us
     End Function
 
     ''' <summary>
@@ -146,11 +146,11 @@ Module Modi18n
     ''' <returns>11 Million、2 万等这样的表示</returns>
     Public Function GetLocationNum(Num As Int32) As String
         Select Case Lang
-            Case "ja_JP", "ko_KR", "lzh", "zh_CN", "zh_HK", "zh_MARS", "zh_MEME", "zh_TW"
+            Case "ja-JP", "ko-KR", "lzh", "zh-CN", "zh-HK", "zh-MARS", "zh-MEME", "zh-TW"
                 Return If(Num > 1000000000000, Math.Round(Num / 1000000000000, 2) & " " & GetLang("LangModCompModDigit3"), '兆
                 If(Num > 100000000, Math.Round(Num / 100000000, 2) & " " & GetLang("LangModCompModDigit2"), '亿
                 If(Num > 100000, Math.Round(Num / 10000, 0) & " " & GetLang("LangModCompModDigit1"), Num.ToString("N0") & " "))) '万
-            Case Else 'en_US, en_GB, fr_FR etc.
+            Case Else 'en-US, en-GB, fr-FR etc.
                 Return If(Num > 1000000000, Math.Round(Num / 1000000000, 2) & GetLang("LangModCompModDigit3"), 'Billion
                 If(Num > 1000000, Math.Round(Num / 1000000, 2) & GetLang("LangModCompModDigit2"), 'Million
                 If(Num > 10000, Math.Round(Num / 1000, 0) & GetLang("LangModCompModDigit1"), Num.ToString("N0")))) 'Thousand(K)

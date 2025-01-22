@@ -1851,7 +1851,7 @@ NextVersion:
             Dim RequiredLang As String = CurrentLang.ToLower
             If CurrentLang = "none" OrElse String.IsNullOrWhiteSpace(CurrentLang) OrElse Not Directory.Exists(McVersionCurrent.PathIndie & "saves") Then '#3844，整合包可能已经自带了 options.txt
                 If Setup.Get("ToolHelpLanguage") Then
-                    RequiredLang = Lang.ToLower
+                    RequiredLang = Lang.ToLower.Replace("-", "_")
                 End If
             End If
             If McVersionCurrent.Version.McCodeMain < 15 And RequiredLang.Equals("lzh") Then '1.15 之前的版本不支持 lzh

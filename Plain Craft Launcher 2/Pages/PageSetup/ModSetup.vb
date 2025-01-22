@@ -565,7 +565,7 @@
                 FrmSetupUI.PanCustomPreset.Visibility = Visibility.Visible
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
-                If Lang.Equals("zh_CN") Then
+                If Lang.Equals("zh-CN") Then
                     FrmSetupUI.HintCustom.Visibility = Visibility.Collapsed
                 Else
                     FrmSetupUI.HintCustom.Visibility = Visibility.Visible

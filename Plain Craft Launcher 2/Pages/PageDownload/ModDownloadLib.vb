@@ -335,7 +335,7 @@ pause"
         '本地化
         Dim subLocation As String = ""
         Select Case Lang
-            Case "zh_CN", "zh_HK", "zh_TW"
+            Case "zh-CN", "zh-HK", "zh-TW"
                 subLocation = "zh."
                 If Id = "3d shareware v1.34" Then
                     WikiName = "3D_Shareware_v1.34"
@@ -461,7 +461,7 @@ pause"
                 For Each key In keyWord.Keys
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
-            Case "en_US", "en_GB"
+            Case "en-US", "en-GB"
                 subLocation = ""
                 If Id = "3d shareware v1.34" Then
                     WikiName = "Java_Edition_3D_Shareware_v1.34"
@@ -521,7 +521,7 @@ pause"
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
                 WikiName = FormatWikiNameEndDigit(WikiName)
-            Case "ko_KR"
+            Case "ko-KR"
                 subLocation = "ko."
                 If Id = "3d shareware v1.34" Then
                     WikiName = "Java_Edition_3D_Shareware_v1.34"
@@ -581,7 +581,7 @@ pause"
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
                 WikiName = FormatWikiNameEndDigit(WikiName)
-            Case "ja_JP"
+            Case "ja-JP"
                 subLocation = "ja."
                 If Id = "3d shareware v1.34" Then
                     WikiName = "Java_Edition_3D_Shareware_v1.34"
@@ -641,7 +641,7 @@ pause"
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
                 WikiName = FormatWikiNameEndDigit(WikiName)
-            Case "ru_RU"
+            Case "ru-RU"
                 subLocation = "ru."
                 If Id = "3d shareware v1.34" Then
                     WikiName = "3D_Shareware_v1.34_(Java_Edition)"
@@ -706,7 +706,7 @@ pause"
                 Next
                 WikiName = FormatWikiNameEndDigit(WikiName)
                 If Not WikiName.EndsWithF("_(Java_Edition)") Then WikiName += "_(Java_Edition)"
-            Case "fr_FR"
+            Case "fr-FR"
                 subLocation = "fr."
                 If Id = "3d shareware v1.34" Then
                     WikiName = "Édition_Java_3D_Shareware_v1.34"
@@ -767,7 +767,7 @@ pause"
                     WikiName = WikiName.Replace(key, keyWord(key))
                 Next
                 WikiName = FormatWikiNameEndDigit(WikiName)
-            Case "es_ES"
+            Case "es-ES"
                 subLocation = "es."
                 If Id = "3d shareware v1.34" Then
                     WikiName = "3D_Shareware_v1.34_(Java_Edition)"

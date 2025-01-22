@@ -10,8 +10,8 @@
             
             <!-- 本地化 -->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Resources/Language/zh_CN.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/Resources/Language/zh_CN.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Language/zh-CN.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Resources/Language/zh-CN.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <!--字体-->
