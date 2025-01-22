@@ -54,7 +54,9 @@ Public Class PageVersionScreenshot
     Private Sub LoadFileList()
         Log("[Screenshot] 刷新截图文件")
         FileList.Clear()
-        If Directory.Exists(ScreenshotPath) Then FileList = Directory.EnumerateFiles(ScreenshotPath, "*.png", SearchOption.AllDirectories).ToList()
+        If Directory.Exists(ScreenshotPath) Then FileList = Directory.EnumerateFiles(ScreenshotPath, "*", SearchOption.TopDirectoryOnly).ToList()
+        Dim AllowedSuffix As String() = {".png", ".jpg", ".jpeg", ".bmp", ".webp", ".tiff"}
+        FileList = FileList.Where(Function(e) AllowedSuffix.Contains(New FileInfo(e).Extension.ToLower())).ToList()
         PanList.Children.Clear()
         FileList = FileList.Where(Function(e) Not e.ContainsF("\debug\")).ToList() ' 排除资源包调试输出
         Log("[Screenshot] 共发现 " & FileList.Count & " 个截图文件")
@@ -82,6 +84,8 @@ Public Class PageVersionScreenshot
                 Dim bitmapImage As New BitmapImage()
                 Using fs As New FileStream(i, FileMode.Open, FileAccess.Read)
                     bitmapImage.BeginInit()
+                    bitmapImage.DecodePixelHeight = 200
+                    bitmapImage.DecodePixelWidth = 400
                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad
                     bitmapImage.StreamSource = fs
                     bitmapImage.EndInit()
