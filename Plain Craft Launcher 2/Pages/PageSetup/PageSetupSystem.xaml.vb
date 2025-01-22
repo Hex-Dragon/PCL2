@@ -30,8 +30,6 @@
         SliderDownloadThread.Value = Setup.Get("ToolDownloadThread")
         SliderDownloadSpeed.Value = Setup.Get("ToolDownloadSpeed")
         ComboDownloadVersion.SelectedIndex = Setup.Get("ToolDownloadVersion")
-        CheckDownloadCert.Checked = Setup.Get("ToolDownloadCert")
-        TextSystemHttpProxy.Text = Setup.Get("SystemHttpProxy")
 
         'Mod 与整合包
         ComboDownloadTranslate.SelectedIndex = Setup.Get("ToolDownloadTranslate")
@@ -50,6 +48,11 @@
         ComboSystemUpdate.SelectedIndex = Setup.Get("SystemSystemUpdate")
         ComboSystemActivity.SelectedIndex = Setup.Get("SystemSystemActivity")
         TextSystemCache.Text = Setup.Get("SystemSystemCache")
+        CheckSystemDisableHardwareAcceleration.Checked = Setup.Get("SystemDisableHardwareAcceleration")
+
+        '网络
+        TextSystemHttpProxy.Text = Setup.Get("SystemHttpProxy")
+        CheckDownloadCert.Checked = Setup.Get("ToolDownloadCert")
 
         '调试选项
         CheckDebugMode.Checked = Setup.Get("SystemDebugMode")
@@ -67,7 +70,6 @@
             Setup.Reset("ToolDownloadVersion")
             Setup.Reset("ToolDownloadTranslate")
             Setup.Reset("ToolDownloadIgnoreQuilt")
-            Setup.Reset("ToolDownloadCert")
             Setup.Reset("ToolDownloadMod")
             Setup.Reset("ToolModLocalNameStyle")
             Setup.Reset("ToolUpdateRelease")
@@ -80,6 +82,9 @@
             Setup.Reset("SystemSystemCache")
             Setup.Reset("SystemSystemUpdate")
             Setup.Reset("SystemSystemActivity")
+            Setup.Reset("SystemDisableHardwareAcceleration")
+            Setup.Reset("SystemHttpProxy")
+            Setup.Reset("ToolDownloadCert")
 
             Log("[Setup] 已初始化启动器页设置")
             Hint("已初始化启动器页设置！", HintType.Finish, False)
@@ -91,7 +96,7 @@
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckSystemDisableHardwareAcceleration.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change
@@ -129,6 +134,11 @@
             MyMsgBox("如果设置过多的下载线程，可能会导致下载时出现非常严重的卡顿。" & vbCrLf &
                      "一般设置 64 线程即可满足大多数下载需求，除非你知道你在干什么，否则不建议设置更多的线程数！", "警告", "我知道了", IsWarn:=True)
         End If
+    End Sub
+
+    '硬件加速
+    Private Sub Check_DisableHardwareAcceleration(sender As Object, user As Boolean) Handles CheckSystemDisableHardwareAcceleration.Change
+        Hint("此项变更将在重启 PCL 后生效")
     End Sub
 
     '识别码/解锁码替代入口

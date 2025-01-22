@@ -38,6 +38,7 @@
         {"SystemSystemUpdate", New SetupEntry(0)},
         {"SystemSystemActivity", New SetupEntry(0)},
         {"SystemHttpProxy", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"SystemDisableHardwareAcceleration", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"CacheSavedPageUrl", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageVersion", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheMsOAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
