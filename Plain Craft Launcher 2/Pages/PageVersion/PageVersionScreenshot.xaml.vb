@@ -54,75 +54,87 @@ Public Class PageVersionScreenshot
     Private Sub LoadFileList()
         Log("[Screenshot] 刷新截图文件")
         FileList.Clear()
-        If Directory.Exists(ScreenshotPath) Then FileList = Directory.EnumerateFiles(ScreenshotPath, "*.png", SearchOption.AllDirectories).ToList()
+        If Directory.Exists(ScreenshotPath) Then FileList = Directory.EnumerateFiles(ScreenshotPath, "*", SearchOption.TopDirectoryOnly).ToList()
+        Dim AllowedSuffix As String() = {".png", ".jpg", ".jpeg", ".bmp", ".webp", ".tiff"}
+        FileList = FileList.Where(Function(e) AllowedSuffix.Contains(New FileInfo(e).Extension.ToLower())).ToList()
         PanList.Children.Clear()
         FileList = FileList.Where(Function(e) Not e.ContainsF("\debug\")).ToList() ' 排除资源包调试输出
-        If ModeDebug Then Log("[Screenshot] 共发现 " & FileList.Count & " 个截图文件", LogLevel.Debug)
+        Log("[Screenshot] 共发现 " & FileList.Count & " 个截图文件")
         For Each i In FileList
-            Dim myCard As New MyCard With {
-            .Height = Double.NaN, ' 允许高度自适应
-            .Width = Double.NaN,  ' 允许宽度自适应
-            .Margin = New Thickness(7),
-            .Tag = i,
-            .ToolTip = i.Replace(ScreenshotPath, "") '适配高清截图模组
-            }
-            Dim grid As New Grid
-            myCard.Children.Add(grid)
+            Try
+                If Not File.Exists(i) Then Continue For ' 文件在加载途中消失了
+                If File.GetAttributes(i).HasFlag(FileAttributes.Hidden) Then Continue For ' 隐藏文件
+                If New FileInfo(i).Length = 0 Then Continue For ' 空文件
+                Dim myCard As New MyCard With {
+                .Height = Double.NaN, ' 允许高度自适应
+                .Width = Double.NaN,  ' 允许宽度自适应
+                .Margin = New Thickness(7),
+                .Tag = i,
+                .ToolTip = i.Replace(ScreenshotPath, "") '适配高清截图模组
+                }
+                Dim grid As New Grid
+                myCard.Children.Add(grid)
 
-            grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(9)})
-            grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(120)})
-            grid.RowDefinitions.Add(New RowDefinition)
+                grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(9)})
+                grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(120)})
+                grid.RowDefinitions.Add(New RowDefinition)
 
-            '图片
-            Dim image As New Image
-            Dim bitmapImage As New BitmapImage()
-            bitmapImage.BeginInit()
-            bitmapImage.UriSource = New Uri(i) ' 直接使用文件路径加载图片
-            bitmapImage.CacheOption = BitmapCacheOption.OnLoad ' 立即加载并释放文件流
-            bitmapImage.EndInit()
-            bitmapImage.Freeze() ' 冻结图像以提高性能
-            image.Source = bitmapImage
-            image.Stretch = Stretch.Uniform ' 使图片自适应控件大小
-            Grid.SetRow(image, 1)
-            grid.Children.Add(image)
+                '图片
+                Dim image As New Image
+                Dim bitmapImage As New BitmapImage()
+                Using fs As New FileStream(i, FileMode.Open, FileAccess.Read)
+                    bitmapImage.BeginInit()
+                    bitmapImage.DecodePixelHeight = 200
+                    bitmapImage.DecodePixelWidth = 400
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad
+                    bitmapImage.StreamSource = fs
+                    bitmapImage.EndInit()
+                    bitmapImage.Freeze()
+                End Using
+                image.Source = bitmapImage
+                image.Stretch = Stretch.Uniform ' 使图片自适应控件大小
+                Grid.SetRow(image, 1)
+                grid.Children.Add(image)
 
-            '按钮
-            Dim stackPanel As New StackPanel
-            stackPanel.Orientation = Orientation.Horizontal
-            stackPanel.HorizontalAlignment = HorizontalAlignment.Center
-            stackPanel.Margin = New Thickness(3, 5, 3, 5)
-            Grid.SetRow(stackPanel, 2)
-            grid.Children.Add(stackPanel)
+                '按钮
+                Dim stackPanel As New StackPanel
+                stackPanel.Orientation = Orientation.Horizontal
+                stackPanel.HorizontalAlignment = HorizontalAlignment.Center
+                stackPanel.Margin = New Thickness(3, 5, 3, 5)
+                Grid.SetRow(stackPanel, 2)
+                grid.Children.Add(stackPanel)
 
-            Dim btnOpen As New MyIconTextButton With {
-                .Name = "BtnOpen",
-                .Text = "打开",
+                Dim btnOpen As New MyIconTextButton With {
+                    .Name = "BtnOpen",
+                    .Text = "打开",
+                    .LogoScale = 0.8,
+                    .Logo = Logo.IconButtonOpen,
+                    .Tag = i
+                }
+                AddHandler btnOpen.Click, AddressOf btnOpen_Click
+                stackPanel.Children.Add(btnOpen)
+                Dim btnDelete As New MyIconTextButton With {
+                    .Name = "BtnDelete",
+                    .Text = "删除",
+                    .LogoScale = 0.8,
+                    .Logo = Logo.IconButtonDelete,
+                    .Tag = i
+                }
+                AddHandler btnDelete.Click, AddressOf btnDelete_Click
+                stackPanel.Children.Add(btnDelete)
+                Dim btnCopy As New MyIconTextButton With {
+                .Name = "BtnCopy",
+                .Text = "复制",
                 .LogoScale = 0.8,
-                .Logo = Logo.IconButtonOpen,
-                .Tag = i
-            }
-            AddHandler btnOpen.Click, AddressOf btnOpen_Click
-            stackPanel.Children.Add(btnOpen)
-            Dim btnDelete As New MyIconTextButton With {
-                .Name = "BtnDelete",
-                .Text = "删除",
-                .LogoScale = 0.8,
-                .Logo = Logo.IconButtonDelete,
-                .Tag = i
-            }
-            AddHandler btnDelete.Click, AddressOf btnDelete_Click
-            stackPanel.Children.Add(btnDelete)
-            Dim btnCopy As New MyIconTextButton With {
-            .Name = "BtnCopy",
-            .Text = "复制",
-            .LogoScale = 0.8,
-            .Logo = Logo.IconButtonCopy,
-                .Tag = i
-            }
-            AddHandler btnCopy.Click, AddressOf btnCopy_Click
-            stackPanel.Children.Add(btnCopy)
-
-            PanList.Children.Add(myCard)
+                .Logo = Logo.IconButtonCopy,
+                    .Tag = i
+                }
+                AddHandler btnCopy.Click, AddressOf btnCopy_Click
+                stackPanel.Children.Add(btnCopy)
+                PanList.Children.Add(myCard)
+            Catch ex As Exception
+                Log(ex, $"[Screenshot] 创建 {i} 截图预览失败，图像可能损坏")
+            End Try
         Next
         RefreshUI()
     End Sub
