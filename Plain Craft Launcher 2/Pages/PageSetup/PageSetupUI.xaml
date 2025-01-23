@@ -75,7 +75,7 @@
                     <Border Background="#DDDDDDDD" Margin="-8,23,-5,28" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed">
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock Text="嗯？你想换主题？那你应该使用官方的快照版，这里不提供换主题服务 Orz" FontSize="13" Margin="0,0,0,0" TextWrapping="Wrap"/>
-                            <local:MyButton Height="32" x:Name="BtnLauncherDonate" MinWidth="140" Text="获取官方预览版" Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0" ColorType="Highlight" />
+                            <local:MyButton Height="32" x:Name="BtnLauncherDonate" MinWidth="140" Text="获取官方快照版" Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0" ColorType="Highlight" />
                         </StackPanel>
                     </Border>
                 </Grid>
