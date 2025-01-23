@@ -1,7 +1,5 @@
 ﻿Imports System.IO.Compression
 Imports System.Linq.Expressions
-Imports NAudio.Wave.SampleProviders
-Imports PCL.ModLoader
 
 Public Module ModModpack
 
@@ -1011,6 +1009,7 @@ Retry:
             Log($"[Export] 导出整合包（Modrinth）：{Version.Path} -> {DestPath}，额外版本文件 {Additional.Count} 个")
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
             Log($"[Export] 缓存文件夹：{tempDir}")
+            DeleteDirectory(tempDir)
             Directory.CreateDirectory(tempDir)
 
 #Region "0.04-0.40：从 Modrinth 获取 Mod 工程信息，得到 URL"
@@ -1074,7 +1073,7 @@ Retry:
 #End Region
 
 JumpMod:
-#Region "0.80-0.90：合并下载链接，写入 Json 文件"
+#Region "0.80-0.90：合并下载链接，复制 Logo，写入 Json 文件"
             '获取作为检查目标的加载器和版本
             Dim ModLoaders = GetTargetModLoaders()
             Dim McVersion = Version.Version.McName
@@ -1111,7 +1110,12 @@ JumpMod:
                     })
                 End If
             Next
-            Task.Progress = 0.87
+            Task.Progress = 0.86
+            'If Not String.IsNullOrEmpty(Logo) Then
+            '    Dim LogoObj As New MyBitmap(Logo)
+            '    LogoObj.Save(tempDir & "Logo.png")
+            'End If
+            'Task.Progress = 0.88
 
             Dim depend As New JObject From {{"minecraft", McVersion}}
             If Version.Version.HasForge Then depend.Add("forge", Version.Version.ForgeVersion)
@@ -1127,6 +1131,7 @@ JumpMod:
                 {"files", files},
                 {"dependencies", depend}
             }
+            'If Not String.IsNullOrEmpty(Logo) Then json.Add("logo", tempDir & "Logo.png")
 
             File.WriteAllText(tempDir & "modrinth.index.json", json.ToString)
             Task.Progress = 0.9

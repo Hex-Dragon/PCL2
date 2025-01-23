@@ -16,7 +16,7 @@
 
             TbExportName.Text = ""
             TbExportVersion.Text = ""
-            ComboDisplayLogo.SelectedIndex = 0
+            'ComboDisplayLogo.SelectedIndex = 0
             CustomLogoVal = Nothing
             TbExportDesc.Text = ""
         End If
@@ -270,17 +270,17 @@
         End Set
     End Property
 
-    Private Sub ComboDisplayLogo_SelectionChanged(sender As MyComboBox, e As SelectionChangedEventArgs) Handles ComboDisplayLogo.SelectionChanged
-        If Not AniControlEnabled = 0 Then Exit Sub
-        '选择 自定义 时修改图片
-        If ComboDisplayLogo.SelectedItem Is ItemDisplayLogoCustom Then
-            Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif)|*.png;*.jpg;*.gif", "选择图片")
-            If String.IsNullOrWhiteSpace(FileName) Then Exit Sub
-            CustomLogo = FileName
-        Else
-            CustomLogo = sender.SelectedItem.Tag
-        End If
-    End Sub
+    'Private Sub ComboDisplayLogo_SelectionChanged(sender As MyComboBox, e As SelectionChangedEventArgs) Handles ComboDisplayLogo.SelectionChanged
+    '    If Not AniControlEnabled = 0 Then Exit Sub
+    '    '选择 自定义 时修改图片
+    '    If ComboDisplayLogo.SelectedItem Is ItemDisplayLogoCustom Then
+    '        Dim FileName As String = SelectFile("常用图片文件(*.png;*.jpg;*.gif)|*.png;*.jpg;*.gif", "选择图片")
+    '        If String.IsNullOrWhiteSpace(FileName) Then Exit Sub
+    '        CustomLogo = FileName
+    '    Else
+    '        CustomLogo = sender.SelectedItem.Tag
+    '    End If
+    'End Sub
 #End Region
 
 #Region "基本信息"

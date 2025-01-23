@@ -7,6 +7,7 @@
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="25,10">
+            <local:MyHint Margin="0,10,0,0" IsWarn="False" Text="当前页面导出的整合包是 Modrinth 格式（.mrpack）。" />
 
             <local:MyCard Margin="0,15" Title="导出预览">
                 <StackPanel Margin="25,38,15,15">
@@ -29,8 +30,8 @@
                             <RowDefinition Height="28" />
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
-                            <RowDefinition Height="9" />
-                            <RowDefinition Height="28" />
+                            <!--<RowDefinition Height="9" />
+                            <RowDefinition Height="28" />-->
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
                         </Grid.RowDefinitions>
@@ -38,7 +39,7 @@
                         <local:MyTextBox Grid.Row="0" x:Name="TbExportName" Grid.ColumnSpan="2" Grid.Column="1" MaxLength="100" ShowValidateResult="True" />
                         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="整合包版本" Margin="0,0,25,0" />
                         <local:MyTextBox Grid.Row="2" x:Name="TbExportVersion" HintText="1.0.0" Grid.ColumnSpan="2" Tag="VersionArgumentTitle" Grid.Column="1" MaxLength="100" />
-                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="图标" Margin="0,0,25,0"  />
+                        <!--<TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="图标" Margin="0,0,25,0"  />
                         <local:MyComboBox x:Name="ComboDisplayLogo" Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="1">
                             <local:MyComboBoxItem Content="自动" IsSelected="True" Tag="" />
                             <local:MyComboBoxItem x:Name="ItemDisplayLogoCustom" Content="自定义..." />
@@ -54,9 +55,9 @@
                             <local:MyComboBoxItem Content="鸡蛋" Tag="pack://application:,,,/images/Blocks/Egg.png" />
                             <local:MyComboBoxItem Content="布料（Fabric）" Tag="pack://application:,,,/images/Blocks/Fabric.png" />
                             <local:MyComboBoxItem Content="狐狸（NeoForge）" Tag="pack://application:,,,/images/Blocks/NeoForge.png" />
-                        </local:MyComboBox>
-                        <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="描述" Margin="0,0,25,0" />
-                        <local:MyTextBox Grid.Row="6" x:Name="TbExportDesc" Grid.ColumnSpan="2" Grid.Column="1" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="0,5" />
+                        </local:MyComboBox>-->
+                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="描述" Margin="0,0,25,0" />
+                        <local:MyTextBox Grid.Row="4" x:Name="TbExportDesc" Grid.ColumnSpan="2" Grid.Column="1" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="0,5" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
