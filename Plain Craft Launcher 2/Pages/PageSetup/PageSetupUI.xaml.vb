@@ -38,8 +38,8 @@
         PanLauncherHide.Visibility = Visibility.Visible
 
         '设置解锁
-        If Not RadioLauncherTheme8.IsEnabled Then LabLauncherTheme8Copy.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。" & vbCrLf & "右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！"
-        RadioLauncherTheme8.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁"
+        If Not RadioLauncherTheme8.IsEnabled Then LabLauncherTheme8Copy.ToolTip = "社区版不包含主题功能，请使用官方快照版"
+        RadioLauncherTheme8.ToolTip = "社区版不包含主题功能，请使用官方快照版"
         If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "社区版不包含主题功能，请使用官方快照版"
         RadioLauncherTheme9.ToolTip = "社区版不包含主题功能，请使用官方快照版"
         '极客蓝的处理在 ThemeCheck 中
