@@ -168,6 +168,7 @@
         {"UiHiddenOtherVote", New SetupEntry(False)},
         {"UiHiddenOtherAbout", New SetupEntry(False)},
         {"UiHiddenOtherTest", New SetupEntry(False)},
+        {"UiAniFPS", New SetupEntry(59, Source:=SetupSource.Registry)},
         {"VersionAdvanceJvm", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceGame", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceAssets", New SetupEntry(0, Source:=SetupSource.Version)},

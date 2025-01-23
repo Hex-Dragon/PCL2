@@ -49,6 +49,7 @@
         ComboSystemActivity.SelectedIndex = Setup.Get("SystemSystemActivity")
         TextSystemCache.Text = Setup.Get("SystemSystemCache")
         CheckSystemDisableHardwareAcceleration.Checked = Setup.Get("SystemDisableHardwareAcceleration")
+        SliderAniFPS.Value = Setup.Get("UiAniFPS")
 
         '网络
         TextSystemHttpProxy.Text = Setup.Get("SystemHttpProxy")
@@ -85,6 +86,7 @@
             Setup.Reset("SystemDisableHardwareAcceleration")
             Setup.Reset("SystemHttpProxy")
             Setup.Reset("ToolDownloadCert")
+            Setup.Reset("UiAniFPS")
 
             Log("[Setup] 已初始化启动器页设置")
             Hint("已初始化启动器页设置！", HintType.Finish, False)
@@ -99,7 +101,7 @@
     Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckSystemDisableHardwareAcceleration.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
-    Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change
+    Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change, SliderAniFPS.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslate.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboDownloadMod.SelectionChanged
@@ -126,6 +128,10 @@
             End Select
         End Function
         SliderDebugAnim.GetHintText = Function(v) If(v > 29, "关闭", (v / 10 + 0.1) & "x")
+        SliderAniFPS.GetHintText =
+            Function(v)
+                Return $"{v + 1} FPS"
+            End Function
     End Sub
     Private Sub SliderDownloadThread_PreviewChange(sender As Object, e As RouteEventArgs) Handles SliderDownloadThread.PreviewChange
         If SliderDownloadThread.Value < 100 Then Exit Sub
