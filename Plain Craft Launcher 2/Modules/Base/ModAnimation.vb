@@ -804,7 +804,7 @@ Public Module ModAnimation
                                                End Sub)
 Sleeper:
                                    '控制 FPS
-                                   Thread.Sleep(1000 / (Val(Setup.Get("UiAniFPS")) + 1))
+                                   Thread.Sleep(1000 / ((Val(Setup.Get("UiAniFPS")) + 1) * 2))
                                Loop
                            Catch ex As Exception
                                Log(ex, "动画帧执行失败", LogLevel.Assert)
