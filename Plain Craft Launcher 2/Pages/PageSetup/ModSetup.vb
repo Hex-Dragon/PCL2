@@ -116,6 +116,7 @@
         {"ToolDownloadVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolDownloadTranslate", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolDownloadIgnoreQuilt", New SetupEntry(True, Source:=SetupSource.Registry)},
+        {"ToolDownloadClipboard", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadCert", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadMod", New SetupEntry(1, Source:=SetupSource.Registry)},
         {"ToolModLocalNameStyle", New SetupEntry(0, Source:=SetupSource.Registry)},
