@@ -339,6 +339,9 @@
     <Compile Include="Pages\PageOther\PageOtherFeedback.xaml.vb">
       <DependentUpon>PageOtherFeedback.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageVersion\PageVersionInstall.xaml.vb">
+      <DependentUpon>PageVersionInstall.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageVersion\PageVersionLeft.xaml.vb">
       <DependentUpon>PageVersionLeft.xaml</DependentUpon>
     </Compile>
@@ -642,6 +645,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\PageLink\PageLinkLeft.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageVersion\PageVersionInstall.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

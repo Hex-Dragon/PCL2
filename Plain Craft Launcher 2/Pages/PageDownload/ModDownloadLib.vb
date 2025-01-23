@@ -2221,9 +2221,9 @@ Retry:
     ''' <summary>
     ''' 进行合并安装。返回是否已经开始安装（例如如果没有安装 Java 则会进行提示并返回 False）
     ''' </summary>
-    Public Function McInstall(Request As McInstallRequest) As Boolean
+    Public Function McInstall(Request As McInstallRequest, Optional IgnoreDump As Boolean = False) As Boolean
         Try
-            Dim SubLoaders = McInstallLoader(Request)
+            Dim SubLoaders = McInstallLoader(Request, IgnoreDump:=IgnoreDump)
             If SubLoaders Is Nothing Then Return False
             Dim Loader As New LoaderCombo(Of String)(Request.TargetVersionName & " 安装", SubLoaders) With {.OnStateChanged = AddressOf McInstallState}
 
@@ -2245,7 +2245,7 @@ Retry:
     ''' 获取合并安装加载器列表，并进行前期的缓存清理与 Java 检查工作。
     ''' </summary>
     ''' <exception cref="CancelledException" />
-    Public Function McInstallLoader(Request As McInstallRequest, Optional DontFixLibraries As Boolean = False) As List(Of LoaderBase)
+    Public Function McInstallLoader(Request As McInstallRequest, Optional DontFixLibraries As Boolean = False, Optional IgnoreDump As Boolean = False) As List(Of LoaderBase)
         '获取缓存目录
         Dim PathInstallTemp As String
         If PathTemp.Contains(" ") AndAlso (Request.OptiFineEntry IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing OrElse Request.NeoForgeEntry IsNot Nothing) Then
@@ -2316,7 +2316,7 @@ Retry:
         Log("[Download] 对应的原版版本：" & Request.MinecraftName)
 
         '重复版本检查
-        If File.Exists(OutputFolder & Request.TargetVersionName & ".json") Then
+        If File.Exists(OutputFolder & Request.TargetVersionName & ".json") AndAlso Not IgnoreDump Then
             Hint("版本 " & Request.TargetVersionName & " 已经存在！", HintType.Critical)
             Throw New CancelledException
         End If

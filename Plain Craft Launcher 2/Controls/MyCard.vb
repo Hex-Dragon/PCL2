@@ -166,6 +166,9 @@
                     Stack.Children.Add(NeoForgeDownloadListItem(Data, AddressOf NeoForgeSave_Click, True))
                 Case 14
                     Stack.Children.Add(QuiltDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Quilt_Selected))
+                Case 15 'VersionInstall
+                    '不能使用 AddressOf，这导致了 #535，原因完全不明，疑似是编译器 Bug
+                    Stack.Children.Add(McDownloadListItem(Data, Sub(sender, e) FrmVersionInstall.MinecraftSelected(sender, e), False))
                 Case Else
                     Log("未知的虚拟化种类：" & Type, LogLevel.Feedback)
             End Select
