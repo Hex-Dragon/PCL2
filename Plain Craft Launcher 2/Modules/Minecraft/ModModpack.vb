@@ -998,6 +998,7 @@ Retry:
     End Function
 
 #End Region
+
 #Region "不同类型整合包的导出方法"
     Private Function ExportModrinth(Task As LoaderTask(Of ExportOptions, Boolean)) As Boolean
         Try
@@ -1005,6 +1006,7 @@ Retry:
             Dim DestPath = Task.Input.Dest
             Dim Additional = Task.Input.Additional
             Dim Name = Task.Input.Name
+            Dim Description = Task.Input.Desc
             Dim VerID = Task.Input.VerID
             Log($"[Export] 导出整合包（Modrinth）：{Version.Path} -> {DestPath}，额外版本文件 {Additional.Count} 个")
             Dim tempDir As String = $"{ExpTempDir}{GetUuid()}\"
@@ -1121,7 +1123,7 @@ JumpMod:
                 {"formatVersion", 1},
                 {"versionId", VerID},
                 {"name", If(String.IsNullOrEmpty(Name), Version.Name, Name)},
-                {"summary", Version.Info},
+                {"summary", Description},
                 {"files", files},
                 {"dependencies", depend}
             }

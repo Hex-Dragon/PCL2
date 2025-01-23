@@ -9,10 +9,16 @@
         AniControlEnabled += 1
 
         If CurrentVer <> PageVersionLeft.Version.Path Then
-            '说明切换到另一个版本了，所有的绝对路径都要重置，否则爆炸
+            '说明切换到另一个版本了，所有的设置都要重置
             CurrentPath = ""
             Selected = New List(Of String)
             CurrentVer = PageVersionLeft.Version.Path
+
+            TbExportName.Text = ""
+            TbExportVersion.Text = ""
+            ComboDisplayLogo.SelectedIndex = 0
+            CustomLogoVal = Nothing
+            TbExportDesc.Text = ""
         End If
 
         TbExportName.ShowValidateResult = True
@@ -216,11 +222,10 @@
     '复选框与高级选项同步
     Private Sub PanCommonFiles_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles PanCommonFiles.MouseLeftButtonUp
         For Each c In PanCommonFiles.Children
-            If TypeOf c IsNot MyCheckBox Then Continue For
             If String.IsNullOrEmpty(c.Tag) Then Continue For
             For Each l In PanFileList.Children
                 If TypeOf l Is MyListItem Then
-                    If l.Tag.Replace("\", "") = c.Tag Then
+                    If If(l.Tag.EndsWith("\"), GetFolderNameFromPath(l.Tag), GetFileNameFromPath(l.Tag)) = c.Tag Then
                         l.Checked = c.Checked
                         SelectedChange(c.Checked, PageVersionLeft.Version.Path & c.Tag)
                     End If
@@ -331,7 +336,8 @@
         End Sub)
         Dim Combo = New LoaderCombo(Of ExportOptions)($"导出整合包 {PageVersionLeft.Version.Name}", {Loader})
         Combo.Start(New ExportOptions(PageVersionLeft.Version, savePath, CheckIncludePCL.Checked, contains.Distinct.ToArray,
-                                       PCLSetupGlobal:=CheckIncludeSetup.Checked, Name:=TbExportName.Text, VerID:=TbExportVersion.Text))
+                                       PCLSetupGlobal:=CheckIncludeSetup.Checked, Name:=TbExportName.Text, Desc:=TbExportDesc.Text,
+                                       VerID:=TbExportVersion.Text))
         LoaderTaskbarAdd(Combo)
     End Sub
 
