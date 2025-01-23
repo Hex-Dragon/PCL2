@@ -39,12 +39,12 @@
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
                 NewCard.IsSwaped = True
-                NewCard.InstallMethod = Function(c As DlOptiFineListEntry)
-                                            Return OptiFineDownloadListItem(c, AddressOf OptiFineSave_Click, True)
-                                        End Function
-                NewCard.SortMethod = Function(c)
-                                         Return Sort(CType(c, List(Of DlOptiFineListEntry)), Function(a, b) VersionSortBoolean(a.NameDisplay, b.NameDisplay))
-                                     End Function
+                NewCard.InstallMethod = Sub(Stack As StackPanel)
+                                            Stack.Tag = Sort(CType(Stack.Tag, List(Of DlOptiFineListEntry)), Function(a, b) VersionSortBoolean(a.NameDisplay, b.NameDisplay))
+                                            For Each item In Stack.Tag
+                                                Stack.Children.Add(OptiFineDownloadListItem(item, AddressOf OptiFineSave_Click, True))
+                                            Next
+                                        End Sub
                 PanMain.Children.Add(NewCard)
             Next
         Catch ex As Exception

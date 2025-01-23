@@ -170,15 +170,24 @@
             For Each Pair As KeyValuePair(Of String, List(Of CompFile)) In Dict
                 If Not Pair.Value.Any() Then Continue For
                 '增加卡片
-                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(Project.Type = CompType.ModPack, 9, 8)} 'FUTURE: Res
+                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15)} 'FUTURE: Res
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
                 NewCard.Children.Add(NewStack)
+                NewCard.InstallMethod = Sub(Stack As StackPanel)
+                                            Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
+                                            If Project.Type <> CompType.ModPack Then CompFilesCardPreload(Stack, Stack.Tag)
+                                            Dim DisplayBadName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
+                                            '存在重复的名称（#1344）
+                                            For Each item In Stack.Tag
+                                                Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=DisplayBadName))
+                                            Next
+                                        End Sub
                 NewCard.SwapControl = NewStack
                 PanResults.Children.Add(NewCard)
                 '确定卡片是否展开
                 If Pair.Key = TargetCardName OrElse
-                   (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
-                   CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
+                (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
+                CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
                     MyCard.StackInstall(NewStack, If(Project.Type = CompType.ModPack, 9, 8), Pair.Key) 'FUTURE: Res
                 Else
                     NewCard.IsSwaped = True
