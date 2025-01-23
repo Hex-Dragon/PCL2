@@ -34,11 +34,17 @@
             For Each Pair As KeyValuePair(Of String, List(Of DlOptiFineListEntry)) In Dict
                 If Not Pair.Value.Any() Then Continue For
                 '增加卡片
-                Dim NewCard As New MyCard With {.Title = Pair.Key & " (" & Pair.Value.Count & ")", .Margin = New Thickness(0, 0, 0, 15), .SwapType = 3}
+                Dim NewCard As New MyCard With {.Title = Pair.Key & " (" & Pair.Value.Count & ")", .Margin = New Thickness(0, 0, 0, 15)}
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
                 NewCard.IsSwaped = True
+                NewCard.InstallMethod = Function(c As DlOptiFineListEntry)
+                                            Return OptiFineDownloadListItem(c, AddressOf OptiFineSave_Click, True)
+                                        End Function
+                NewCard.SortMethod = Function(c)
+                                         Return Sort(CType(c, List(Of DlOptiFineListEntry)), Function(a, b) VersionSortBoolean(a.NameDisplay, b.NameDisplay))
+                                     End Function
                 PanMain.Children.Add(NewCard)
             Next
         Catch ex As Exception

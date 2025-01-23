@@ -87,8 +87,23 @@
         End If
     End Sub
     Public Sub StackInstall()
+        If InstallMethod IsNot Nothing Then
+            PutStack(SwapControl, InstallMethod, SortMethod)
+            Exit Sub
+        End If
         StackInstall(SwapControl, SwapType, Title)
         TriggerForceResize()
+    End Sub
+    Public Shared Sub PutStack(ByRef Stack As StackPanel, InstallMethod As Func(Of Object, MyListItem), Optional SortMethod As Func(Of Object, Object) = Nothing)
+        If Stack.Tag Is Nothing Then Exit Sub
+        If SortMethod IsNot Nothing Then
+            Stack.Tag = SortMethod(Stack.Tag)
+        End If
+        For Each Item In Stack.Tag
+            Stack.Children.Add(InstallMethod(Item))
+        Next
+        Stack.Children.Add(New FrameworkElement With {.Height = 18}) '下边距，同时适应折叠
+        Stack.Tag = Nothing
     End Sub
     Public Shared Sub StackInstall(ByRef Stack As StackPanel, Type As Integer, Optional CardTitle As String = "")
         '这一部分的代码是好几年前留下的究极屎坑，当时还不知道该咋正确调用这种方法，就写了这么一坨屎
@@ -97,8 +112,6 @@
         If IsNothing(Stack.Tag) Then Exit Sub
         '排序
         Select Case Type
-            Case 3
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlOptiFineListEntry)), Function(a, b) VersionSortBoolean(a.NameDisplay, b.NameDisplay))
             Case 4, 10
                 Stack.Tag = Sort(CType(Stack.Tag, List(Of DlLiteLoaderListEntry)), Function(a, b) VersionSortBoolean(a.Inherit, b.Inherit))
             Case 6
@@ -128,8 +141,6 @@
                     Stack.Children.Add(PageSelectRight.McVersionListItem(Data))
                 Case 2
                     Stack.Children.Add(McDownloadListItem(Data, AddressOf McDownloadMenuSave, True))
-                Case 3
-                    Stack.Children.Add(OptiFineDownloadListItem(Data, AddressOf OptiFineSave_Click, True))
                 Case 4
                     Stack.Children.Add(LiteLoaderDownloadListItem(Data, AddressOf FrmDownloadLiteLoader.DownloadStart, False))
                 Case 5
@@ -265,6 +276,12 @@
     ''' </summary>
     Public Property SwapType As Integer
     ''' <summary>
+    ''' 数据转为列表项的转换方法
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property InstallMethod As Func(Of Object, MyListItem)
+    Public Property SortMethod As Func(Of Object, Object)
+    ''' <summary>
     ''' 是否已被折叠。
     ''' </summary>
     Public Property IsSwaped As Boolean
@@ -276,7 +293,13 @@
             _IsSwaped = value
             If SwapControl Is Nothing Then Exit Property
             '展开
-            If Not IsSwaped AndAlso TypeOf SwapControl Is StackPanel Then StackInstall(SwapControl, SwapType, Title)
+            If Not IsSwaped AndAlso TypeOf SwapControl Is StackPanel Then
+                If InstallMethod Is Nothing Then
+                    StackInstall(SwapControl, SwapType, Title)
+                Else
+                    PutStack(SwapControl, InstallMethod, SortMethod)
+                End If
+            End If
             '若尚未加载，会在 Loaded 事件中触发无动画的折叠，不需要在这里进行
             If Not IsLoaded Then Exit Property
             '更新高度
