@@ -114,7 +114,6 @@
                         <RowDefinition Height="28" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="28" />
-                        <RowDefinition Height="5" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -138,11 +137,11 @@
                             <local:ValidateFolderPath UseMinecraftCharCheck="False" />
                         </local:MyTextBox.ValidateRules>
                     </local:MyTextBox>
-                    <local:MyCheckBox Grid.Row="6" Text="禁用硬件加速" x:Name="CheckSystemDisableHardwareAcceleration" Tag="SystemDisableHardwareAcceleration"/>
-                    <TextBlock Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Left" Text="最高动画帧率" Margin="0,0,25,0" />
-                    <local:MySlider x:Name="SliderAniFPS" Grid.Row="8" Tag="UiAniFPS" MaxValue="59" Value="59" Grid.Column="1"
-                ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧率以防止过多的资源占用" />
-                    <Grid Height="35" Grid.Row="10" Grid.ColumnSpan="5" Margin="0,12,0,0">
+                    <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="最高动画帧率" Margin="0,0,25,0" />
+                    <local:MySlider x:Name="SliderAniFPS" Grid.Row="6" Tag="UiAniFPS" MaxValue="59" Value="59" Grid.Column="1"
+ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧率以防止过多的资源占用" />
+                    <local:MyCheckBox Grid.Row="8" Text="禁用硬件加速" x:Name="CheckSystemDisableHardwareAcceleration" Tag="SystemDisableHardwareAcceleration"/>
+                    <Grid Height="35" Grid.Row="9" Grid.ColumnSpan="5" Margin="0,12,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
@@ -152,7 +151,7 @@
                         <local:MyButton Grid.Column="1" x:Name="BtnSystemSettingExp" MinWidth="140" Text="导出设置" Padding="13,0" Margin="0,0,20,0" />
                         <local:MyButton Grid.Column="2" x:Name="BtnSystemSettingImp" MinWidth="140" Text="导入设置" Padding="13,0" Margin="0,0,20,0" />
                     </Grid>
-                    <Grid Height="35" Grid.Row="11" Grid.ColumnSpan="5" Margin="0,12,0,0" x:Name="PanDonate">
+                    <Grid Height="35" Grid.Row="10" Grid.ColumnSpan="5" Margin="0,12,0,0" x:Name="PanDonate">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
