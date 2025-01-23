@@ -108,7 +108,7 @@
 
     Private Sub StartClipboardListening() Handles CheckDownloadClipboard.Change
         If CheckDownloadClipboard.Checked Then
-            RunInNewThread(Sub() Watcher.ClipboardListening())
+            RunInNewThread(Sub() CompClipboard.ClipboardListening())
         End If
     End Sub
 
