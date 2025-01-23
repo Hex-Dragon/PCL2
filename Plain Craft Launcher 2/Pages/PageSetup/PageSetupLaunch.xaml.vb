@@ -39,6 +39,7 @@
             TextArgumentWindowWidth.Text = Setup.Get("LaunchArgumentWindowWidth")
             TextArgumentWindowHeight.Text = Setup.Get("LaunchArgumentWindowHeight")
             CheckArgumentRam.Checked = Setup.Get("LaunchArgumentRam")
+            CheckArgumentJavaTraversal.Checked = Setup.Get("LaunchArgumentJavaTraversal")
             RefreshJavaComboBox()
 
             '游戏内存
@@ -73,6 +74,7 @@
             Setup.Reset("LaunchArgumentWindowHeight")
             Setup.Reset("LaunchArgumentPriority")
             Setup.Reset("LaunchArgumentRam")
+            Setup.Reset("LaunchArgumentJavaTraversal")
             Setup.Reset("LaunchRamType")
             Setup.Reset("LaunchRamCustom")
             Setup.Reset("LaunchSkinType")
@@ -508,6 +510,15 @@ PreFin:
                 Hint("已找到 " & JavaList.Count & " 个 Java，请检查下拉框查看列表！", HintType.Finish)
             End If
         End Sub)
+    End Sub
+
+    'Java 细致搜索
+    Private Sub CheckArgumentJavaTraversal_Click() Handles CheckArgumentJavaTraversal.Change
+        If CheckArgumentJavaTraversal.Checked Then
+            Setup.Set("LaunchArgumentJavaTraversal", True)
+        Else
+            Setup.Set("LaunchArgumentJavaTraversal", False)
+        End If
     End Sub
 
 #End Region
