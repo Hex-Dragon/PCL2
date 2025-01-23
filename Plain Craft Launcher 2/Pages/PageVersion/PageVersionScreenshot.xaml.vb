@@ -173,6 +173,10 @@ Public Class PageVersionScreenshot
                 AddHandler btnCopy.Click, AddressOf btnCopy_Click
                 stackPanel.Children.Add(btnCopy)
                 PanList.Children.Add(myCard)
+                myCard.Opacity = 0
+                AniStart({
+                         AaOpacity(myCard, 1, 200)
+                         })
             Catch ex As Exception
                 Log(ex, $"[Screenshot] 创建 {i} 截图预览失败，图像可能损坏")
             End Try
