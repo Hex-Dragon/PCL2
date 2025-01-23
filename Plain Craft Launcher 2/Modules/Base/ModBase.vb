@@ -597,13 +597,13 @@ Public Module ModBase
         parentKey.DeleteSubKeyTree(subKeyName, False)
     End Sub
     ''' <summary>
-    ''' 读取程序所属注册表。
+    ''' 读取注册表，默认为程序所属。
     ''' </summary>
-    Public Function ReadReg(Key As String, Optional DefaultValue As String = "") As String
+    Public Function ReadReg(Key As String, Optional DefaultValue As String = "", Optional Path As String = "") As String
         Try
             Dim parentKey As Microsoft.Win32.RegistryKey, softKey As Microsoft.Win32.RegistryKey
             parentKey = My.Computer.Registry.CurrentUser
-            softKey = parentKey.OpenSubKey("Software\" & RegFolder, True)
+            softKey = parentKey.OpenSubKey("Software\" & If(Path = "", RegFolder, Path), True)
             If softKey Is Nothing Then
                 ReadReg = DefaultValue '不存在则返回默认值
             Else
@@ -618,14 +618,14 @@ Public Module ModBase
         End Try
     End Function
     ''' <summary>
-    ''' 写入程序所属注册表。
+    ''' 写入注册表，默认为程序所属。
     ''' </summary>
-    Public Sub WriteReg(Key As String, Value As String, Optional ShowException As Boolean = False)
+    Public Sub WriteReg(Key As String, Value As String, Optional ShowException As Boolean = False, Optional Path As String = "")
         Try
             Dim parentKey As Microsoft.Win32.RegistryKey, softKey As Microsoft.Win32.RegistryKey
             parentKey = My.Computer.Registry.CurrentUser
-            softKey = parentKey.OpenSubKey("Software\" & RegFolder, True)
-            If softKey Is Nothing Then softKey = parentKey.CreateSubKey("Software\" & RegFolder) '如果不存在就创建  
+            softKey = parentKey.OpenSubKey("Software\" & If(Path = "", RegFolder, Path), True)
+            If softKey Is Nothing Then softKey = parentKey.CreateSubKey("Software\" & If(Path = "", RegFolder, Path)) '如果不存在就创建  
             softKey.SetValue(Key, Value)
         Catch ex As Exception
             Log(ex, "写入注册表出错：" & Key, If(ShowException, LogLevel.Hint, LogLevel.Developer))
