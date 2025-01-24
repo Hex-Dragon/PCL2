@@ -87,92 +87,16 @@
         End If
     End Sub
     Public Sub StackInstall()
-        StackInstall(SwapControl, SwapType, Title)
+        StackInstall(SwapControl, InstallMethod)
         TriggerForceResize()
     End Sub
-    Public Shared Sub StackInstall(ByRef Stack As StackPanel, Type As Integer, Optional CardTitle As String = "")
-        '这一部分的代码是好几年前留下的究极屎坑，当时还不知道该咋正确调用这种方法，就写了这么一坨屎
-        '但是现在……反正勉强能用……懒得改了就这样吧.jpg
-        '别骂了别骂了.jpg
-        If IsNothing(Stack.Tag) Then Exit Sub
-        '排序
-        Select Case Type
-            Case 3
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlOptiFineListEntry)), Function(a, b) VersionSortBoolean(a.NameDisplay, b.NameDisplay))
-            Case 4, 10
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlLiteLoaderListEntry)), Function(a, b) VersionSortBoolean(a.Inherit, b.Inherit))
-            Case 6
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlForgeVersionEntry)), Function(a, b) a.Version > b.Version)
-            Case 8, 9
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
-        End Select
-        '控件转换
-        Select Case Type
-            Case 5
-                Dim LoadingPickaxe As New MyLoading With {.Text = "正在获取版本列表", .Margin = New Thickness(5)}
-                Dim Loader = New LoaderTask(Of String, List(Of DlForgeVersionEntry))("DlForgeVersion Main", AddressOf DlForgeVersionMain)
-                LoadingPickaxe.State = Loader
-                Loader.Start(Stack.Tag)
-                AddHandler LoadingPickaxe.StateChanged, AddressOf FrmDownloadForge.Forge_StateChanged
-                AddHandler LoadingPickaxe.Click, AddressOf FrmDownloadForge.Forge_Click
-                Stack.Children.Add(LoadingPickaxe)
-            Case 6
-                ForgeDownloadListItemPreload(Stack, Stack.Tag, AddressOf ForgeSave_Click, True)
-            Case 8
-                CompFilesCardPreload(Stack, Stack.Tag)
-        End Select
-        '实现控件虚拟化
-        For Each Data As Object In Stack.Tag
-            Select Case Type
-                Case 0
-                    Stack.Children.Add(PageSelectRight.McVersionListItem(Data))
-                Case 2
-                    Stack.Children.Add(McDownloadListItem(Data, AddressOf McDownloadMenuSave, True))
-                Case 3
-                    Stack.Children.Add(OptiFineDownloadListItem(Data, AddressOf OptiFineSave_Click, True))
-                Case 4
-                    Stack.Children.Add(LiteLoaderDownloadListItem(Data, AddressOf FrmDownloadLiteLoader.DownloadStart, False))
-                Case 5
-                Case 6
-                    Stack.Children.Add(ForgeDownloadListItem(Data, AddressOf ForgeSave_Click, True))
-                Case 7
-                    '不能使用 AddressOf，这导致了 #535，原因完全不明，疑似是编译器 Bug
-                    Stack.Children.Add(McDownloadListItem(Data, Sub(sender, e) FrmDownloadInstall.MinecraftSelected(sender, e), False))
-                Case 8
-                    If CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <>
-                       CType(Stack.Tag, List(Of CompFile)).Count Then
-                        '存在重复的名称（#1344）
-                        Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=True))
-                    Else
-                        '不存在重复的名称，正常加载
-                        Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click))
-                    End If
-                Case 9
-                    If CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <>
-                       CType(Stack.Tag, List(Of CompFile)).Count Then
-                        '存在重复的名称（#1344）
-                        Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=True))
-                    Else
-                        '不存在重复的名称，正常加载
-                        Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click))
-                    End If
-                Case 10
-                    Stack.Children.Add(LiteLoaderDownloadListItem(Data, AddressOf LiteLoaderSave_Click, True))
-                Case 11
-                    Stack.Children.Add(CType(Data, HelpEntry).ToListItem)
-                Case 12
-                    Stack.Children.Add(FabricDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Fabric_Selected))
-                Case 13
-                    Stack.Children.Add(NeoForgeDownloadListItem(Data, AddressOf NeoForgeSave_Click, True))
-                Case 14
-                    Stack.Children.Add(QuiltDownloadListItem(CType(Data, JObject), AddressOf FrmDownloadInstall.Quilt_Selected))
-                Case 15 'VersionInstall
-                    '不能使用 AddressOf，这导致了 #535，原因完全不明，疑似是编译器 Bug
-                    Stack.Children.Add(McDownloadListItem(Data, Sub(sender, e) FrmVersionInstall.MinecraftSelected(sender, e), False))
-                Case Else
-                    Log("未知的虚拟化种类：" & Type, LogLevel.Feedback)
-            End Select
-        Next
+    Public Shared Sub StackInstall(ByRef Stack As StackPanel, InstallMethod As Action(Of StackPanel))
+        If Stack.Tag Is Nothing Then Exit Sub
+        Try
+            InstallMethod(Stack)
+        Catch ex As Exception
+            Log(ex, "[MyCard] InstallMethod 调用失败")
+        End Try
         Stack.Children.Add(New FrameworkElement With {.Height = 18}) '下边距，同时适应折叠
         Stack.Tag = Nothing
     End Sub
@@ -263,10 +187,13 @@
     '这是因为不能直接在 XAML 中设置 SwapControl
     Public SwapControl As Object
     Public Property CanSwap As Boolean = False
+
     ''' <summary>
-    ''' 被折叠的种类，用于控件虚拟化。
+    ''' 数据转为列表项的转换方法
     ''' </summary>
-    Public Property SwapType As Integer
+    ''' <returns></returns>
+    Public Property InstallMethod As Action(Of StackPanel)
+
     ''' <summary>
     ''' 是否已被折叠。
     ''' </summary>
@@ -279,7 +206,7 @@
             _IsSwaped = value
             If SwapControl Is Nothing Then Exit Property
             '展开
-            If Not IsSwaped AndAlso TypeOf SwapControl Is StackPanel Then StackInstall(SwapControl, SwapType, Title)
+            If Not IsSwaped AndAlso TypeOf SwapControl Is StackPanel Then StackInstall(SwapControl, InstallMethod)
             '若尚未加载，会在 Loaded 事件中触发无动画的折叠，不需要在这里进行
             If Not IsLoaded Then Exit Property
             '更新高度

@@ -10,6 +10,15 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If RELEASE Then
+        If LastVersion < 354 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持识别剪贴板资源链接并提示跳转"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "允许禁用 Java Wrapper"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复版本设置查看截图可能崩溃的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复本体更新可能失败的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "添加 Java 细致搜索开关"))
+            FeatureCount += 7
+            BugCount += 4
+        End If
         If LastVersion < 353 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "放弃对 Windows 10 1607 以下版本系统的支持 - 前期准备"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化关于页面，查看源代码按钮可以精确到具体提交了"))
@@ -115,6 +124,15 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 354 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持识别剪贴板资源链接并提示跳转"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "允许禁用 Java Wrapper"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复版本设置查看截图可能崩溃的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复本体更新可能失败的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "添加 Java 细致搜索开关"))
+            FeatureCount += 7
+            BugCount += 4
+        End If
         If LastVersion < 353 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "放弃对 Windows 10 1607 以下版本系统的支持 - 前期准备"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化关于页面，查看源代码按钮可以精确到具体提交了"))
