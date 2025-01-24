@@ -36,6 +36,7 @@
                 NewCard.SwapControl = NewStack
                 NewCard.IsSwaped = True
                 NewCard.InstallMethod = Sub(Stack As StackPanel)
+                                            Stack.Tag = Sort(CType(Stack.Tag, List(Of DlLiteLoaderListEntry)), Function(a, b) VersionSortBoolean(a.Inherit, b.Inherit))
                                             For Each item In Stack.Tag
                                                 Stack.Children.Add(LiteLoaderDownloadListItem(item, AddressOf LiteLoaderSave_Click, True))
                                             Next

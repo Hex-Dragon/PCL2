@@ -188,7 +188,21 @@
                 If Pair.Key = TargetCardName OrElse
                 (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
                 CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
-                    MyCard.StackInstall(NewStack, If(Project.Type = CompType.ModPack, 9, 8), Pair.Key) 'FUTURE: Res
+                    MyCard.PutStack(NewStack, Sub(Stack As StackPanel)
+                                                  Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
+                                                  If Project.Type = CompType.ModPack Then
+                                                      Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
+                                                      For Each item In Stack.Tag
+                                                          Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
+                                                      Next
+                                                  Else
+                                                      CompFilesCardPreload(Stack, Stack.Tag)
+                                                      Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
+                                                      For Each item In Stack.Tag
+                                                          Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
+                                                      Next
+                                                  End If
+                                              End Sub)
                 Else
                     NewCard.IsSwaped = True
                 End If

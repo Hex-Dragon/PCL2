@@ -96,39 +96,6 @@
         Stack.Children.Add(New FrameworkElement With {.Height = 18}) '下边距，同时适应折叠
         Stack.Tag = Nothing
     End Sub
-    Public Shared Sub StackInstall(ByRef Stack As StackPanel, Type As Integer, Optional CardTitle As String = "")
-        '这一部分的代码是好几年前留下的究极屎坑，当时还不知道该咋正确调用这种方法，就写了这么一坨屎
-        '但是现在……反正勉强能用……懒得改了就这样吧.jpg
-        '别骂了别骂了.jpg
-        If IsNothing(Stack.Tag) Then Exit Sub
-        '排序
-        Select Case Type
-            Case 4, 10
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlLiteLoaderListEntry)), Function(a, b) VersionSortBoolean(a.Inherit, b.Inherit))
-        End Select
-        '控件转换
-        Select Case Type
-        End Select
-        '实现控件虚拟化
-        For Each Data As Object In Stack.Tag
-            Select Case Type
-                Case 9
-                    If CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <>
-                       CType(Stack.Tag, List(Of CompFile)).Count Then
-                        '存在重复的名称（#1344）
-                        Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=True))
-                    Else
-                        '不存在重复的名称，正常加载
-                        Stack.Children.Add(CType(Data, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click))
-                    End If
-                Case 10
-                Case Else
-                    Log("未知的虚拟化种类：" & Type, LogLevel.Feedback)
-            End Select
-        Next
-        Stack.Children.Add(New FrameworkElement With {.Height = 18}) '下边距，同时适应折叠
-        Stack.Tag = Nothing
-    End Sub
 
     '事件
     Public Property HasMouseAnimation As Boolean = True
