@@ -2605,12 +2605,12 @@ Retry:
             Dim IsInitSuccess As Boolean = True
             Try
                 For i = 4 To 1 Step -1
-                    If File.Exists(Path & "PCL\Log" & i & ".txt") Then
-                        If File.Exists(Path & "PCL\Log" & (i + 1) & ".txt") Then File.Delete(Path & "PCL\Log" & (i + 1) & ".txt")
-                        CopyFile(Path & "PCL\Log" & i & ".txt", Path & "PCL\Log" & (i + 1) & ".txt")
+                    If File.Exists(Path & "PCL\Log-CE" & i & ".log") Then
+                        If File.Exists(Path & "PCL\Log-CE" & (i + 1) & ".log") Then File.Delete(Path & "PCL\Log-CE" & (i + 1) & ".log")
+                        CopyFile(Path & "PCL\Log-CE" & i & ".log", Path & "PCL\Log-CE" & (i + 1) & ".log")
                     End If
                 Next
-                File.Create(Path & "PCL\Log1.txt").Dispose()
+                File.Create(Path & "PCL\Log-CE1.log").Dispose()
             Catch ex As IOException
                 IsInitSuccess = False
                 Hint("可能同时开启了多个 PCL，程序可能会出现未知问题！", HintType.Critical)
@@ -2620,7 +2620,7 @@ Retry:
                 Log(ex, "日志初始化失败", LogLevel.Hint)
             End Try
             Try
-                LogWritter = New StreamWriter(Path & "PCL\Log1.txt", True) With {.AutoFlush = True}
+                LogWritter = New StreamWriter(Path & "PCL\Log-CE1.log", True) With {.AutoFlush = True}
             Catch ex As Exception
                 LogWritter = Nothing
                 Log(ex, "日志写入失败", LogLevel.Hint)
