@@ -771,7 +771,7 @@ Public Class PageDownloadInstall
             '清空当前
             PanMinecraft.Children.Clear()
             '添加最新版本
-            Dim CardInfo As New MyCard With {.Title = "最新版本", .Margin = New Thickness(0, 15, 0, 15), .SwapType = 2}
+            Dim CardInfo As New MyCard With {.Title = "最新版本", .Margin = New Thickness(0, 15, 0, 15)}
             Dim TopestVersions As New List(Of JObject)
             Dim Release As JObject = Dict("正式版")(0).DeepClone()
             Release("lore") = "最新正式版，发布于 " & Release("releaseTime").Value(Of Date).ToString("yyyy'/'MM'/'dd HH':'mm")
@@ -782,17 +782,24 @@ Public Class PageDownloadInstall
                 TopestVersions.Add(Snapshot)
             End If
             Dim PanInfo As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = TopestVersions}
-            MyCard.StackInstall(PanInfo, 7)
+            Dim StackInstall = Sub(Stack As StackPanel)
+                               For Each item In Stack.Tag
+                                   Stack.Children.Add(McDownloadListItem(item, Sub(sender, e) FrmDownloadInstall.MinecraftSelected(sender, e), False))
+                               Next
+                           End Sub
+            MyCard.StackInstall(PanInfo, StackInstall)
             CardInfo.Children.Add(PanInfo)
             PanMinecraft.Children.Insert(0, CardInfo)
             '添加其他版本
             For Each Pair As KeyValuePair(Of String, List(Of JObject)) In Dict
                 If Not Pair.Value.Any() Then Continue For
                 '增加卡片
-                Dim NewCard As New MyCard With {.Title = Pair.Key & " (" & Pair.Value.Count & ")", .Margin = New Thickness(0, 0, 0, 15), .SwapType = 7}
+                Dim NewCard As New MyCard With {.Title = Pair.Key & " (" & Pair.Value.Count & ")", .Margin = New Thickness(0, 0, 0, 15)}
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
+                '不能使用 AddressOf，这导致了 #535，原因完全不明，疑似是编译器 Bug
+                NewCard.InstallMethod = StackInstall
                 NewCard.IsSwaped = True
                 PanMinecraft.Children.Add(NewCard)
             Next
@@ -1168,7 +1175,11 @@ Public Class PageDownloadInstall
             PanFabric.Children.Clear()
             PanFabric.Tag = Versions
             CardFabric.SwapControl = PanFabric
-            CardFabric.SwapType = 12
+            CardFabric.InstallMethod = Sub(Stack As StackPanel)
+                                           For Each item In Stack.Tag
+                                               Stack.Children.Add(FabricDownloadListItem(CType(item, JObject), AddressOf FrmDownloadInstall.Fabric_Selected))
+                                           Next
+                                       End Sub
         Catch ex As Exception
             Log(ex, "可视化 Fabric 安装版本列表出错", LogLevel.Feedback)
         End Try
@@ -1351,7 +1362,11 @@ Public Class PageDownloadInstall
             PanQuilt.Children.Clear()
             PanQuilt.Tag = Versions
             CardQuilt.SwapControl = PanQuilt
-            CardQuilt.SwapType = 14
+            CardQuilt.InstallMethod = Sub(Stack As StackPanel)
+                                          For Each item In Stack.Tag
+                                              Stack.Children.Add(QuiltDownloadListItem(CType(item, JObject), AddressOf FrmDownloadInstall.Quilt_Selected))
+                                          Next
+                                      End Sub
         Catch ex As Exception
             Log(ex, "可视化 Quilt 安装版本列表出错", LogLevel.Feedback)
         End Try

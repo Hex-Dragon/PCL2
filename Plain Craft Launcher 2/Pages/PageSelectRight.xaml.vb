@@ -78,16 +78,22 @@
 #End Region
                 '建立控件
                 Dim CardTitle As String = CardName & If(CardName = "收藏夹", "", " (" & Card.Value.Count & ")")
-                Dim NewCard As New MyCard With {.Title = CardTitle, .Margin = New Thickness(0, 0, 0, 15), .SwapType = 0}
+                Dim NewCard As New MyCard With {.Title = CardTitle, .Margin = New Thickness(0, 0, 0, 15)}
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Card.Value}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
                 PanMain.Children.Add(NewCard)
                 '确定卡片是否展开
+                Dim PutMethod = Sub(Stack As StackPanel)
+                                    For Each item In Stack.Tag
+                                        Stack.Children.Add(McVersionListItem(item))
+                                    Next
+                                End Sub
                 If Card.Key = McVersionCardType.Rubbish OrElse Card.Key = McVersionCardType.Error OrElse Card.Key = McVersionCardType.Fool Then
-                    NewCard.IsSwaped = True
+                                        NewCard.IsSwaped = True
+                    NewCard.InstallMethod = PutMethod
                 Else
-                    MyCard.StackInstall(NewStack, 0, CardTitle)
+                    MyCard.StackInstall(NewStack, PutMethod)
                 End If
             Next
 
