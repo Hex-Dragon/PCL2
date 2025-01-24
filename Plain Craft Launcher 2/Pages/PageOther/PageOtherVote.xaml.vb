@@ -55,7 +55,7 @@ Public Class PageOtherVote
             If SingleMatch.Success Then
                 ' 输出匹配到的href和文本内容
                 item.Title = SingleMatch.Groups(2).Value.Trim()
-                item.Url = "https://github.com/" & SingleMatch.Groups(1).Value
+                item.Url = "https://github.com" & SingleMatch.Groups(1).Value
             End If
             ' 抓取时间
             pattern = "<relative-time datetime=""(.*?)"" class=""no-wrap"""

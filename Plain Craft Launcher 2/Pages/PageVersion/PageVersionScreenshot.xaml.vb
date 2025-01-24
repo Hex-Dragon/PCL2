@@ -1,30 +1,30 @@
 ﻿Imports System.Security.Principal
+Imports Imazen.WebP.Extern
 
 Public Class PageVersionScreenshot
     Implements IRefreshable
     Private Sub RefreshSelf() Implements IRefreshable.Refresh
         Refresh()
     End Sub
-    Public Shared Sub Refresh()
-        If FrmVersionScreenshot IsNot Nothing Then FrmVersionScreenshot.Reload()
+    Public Shared Async Sub Refresh()
+        If FrmVersionScreenshot IsNot Nothing Then Await FrmVersionScreenshot.Reload()
         FrmVersionLeft.ItemScreenshot.Checked = True
     End Sub
 
     Private IsLoad As Boolean = False
-    Private Sub PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
+    Private Async Function PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) As Tasks.Task Handles Me.Loaded
 
         '重复加载部分
         PanBack.ScrollToHome()
         ScreenshotPath = PageVersionLeft.Version.PathIndie + "screenshots\"
         If Not Directory.Exists(ScreenshotPath) Then Directory.CreateDirectory(ScreenshotPath)
-        Reload()
-
+        Await Reload()
 
         '非重复加载部分
-        If IsLoad Then Exit Sub
+        If IsLoad Then Return
         IsLoad = True
 
-    End Sub
+    End Function
 
     Dim FileList As List(Of String) = New List(Of String)
     Dim ScreenshotPath As String
@@ -32,100 +32,157 @@ Public Class PageVersionScreenshot
     ''' <summary>
     ''' 确保当前页面上的信息已正确显示。
     ''' </summary>
-    Public Sub Reload()
+    Public Async Function Reload() As Tasks.Task
         AniControlEnabled += 1
         PanBack.ScrollToHome()
-        LoadFileList()
+        Await LoadFileList()
         AniControlEnabled -= 1
-    End Sub
+    End Function
 
-    Private Sub RefreshUI()
+    Private Sub RefreshTip()
         If FileList.Count.Equals(0) Then
             PanNoPic.Visibility = Visibility.Visible
             PanContent.Visibility = Visibility.Collapsed
-            PanNoPic.UpdateLayout()
         Else
             PanNoPic.Visibility = Visibility.Collapsed
             PanContent.Visibility = Visibility.Visible
-            PanContent.UpdateLayout()
         End If
     End Sub
 
-    Private Sub LoadFileList()
+    Private Async Function LoadFileList() As Tasks.Task
         Log("[Screenshot] 刷新截图文件")
         FileList.Clear()
-        If Directory.Exists(ScreenshotPath) Then FileList = Directory.EnumerateFiles(ScreenshotPath, "*.png", SearchOption.AllDirectories).ToList()
+        If Directory.Exists(ScreenshotPath) Then FileList = Directory.EnumerateFiles(ScreenshotPath, "*", SearchOption.TopDirectoryOnly).ToList()
+        Dim AllowedSuffix As String() = {".png", ".jpg", ".jpeg", ".bmp", ".webp", ".tiff"}
+        FileList = FileList.Where(Function(e) AllowedSuffix.Contains(New FileInfo(e).Extension.ToLower())).ToList()
         PanList.Children.Clear()
+        RefreshTip()
         FileList = FileList.Where(Function(e) Not e.ContainsF("\debug\")).ToList() ' 排除资源包调试输出
-        If ModeDebug Then Log("[Screenshot] 共发现 " & FileList.Count & " 个截图文件", LogLevel.Debug)
-        For Each i In FileList
-            Dim myCard As New MyCard With {
-            .Height = Double.NaN, ' 允许高度自适应
-            .Width = Double.NaN,  ' 允许宽度自适应
-            .Margin = New Thickness(7),
-            .Tag = i,
-            .ToolTip = i.Replace(ScreenshotPath, "") '适配高清截图模组
-            }
-            Dim grid As New Grid
-            myCard.Children.Add(grid)
+        Log("[Screenshot] 共发现 " & FileList.Count & " 个截图文件")
+        If FileList.Count = 0 Then Return
+        Await ListAppend(20, 0)
+    End Function
 
-            grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(9)})
-            grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(120)})
-            grid.RowDefinitions.Add(New RowDefinition)
+    Private Async Function RequireAppend() As Tasks.Task Handles PanBack.ScrollChanged
+        If (Not _AppendLock) AndAlso PanBack.VerticalOffset + PanBack.ViewportHeight >= PanBack.ExtentHeight Then
+            Await ListAppend()
+        End If
+    End Function
 
-            '图片
-            Dim image As New Image
-            Dim bitmapImage As New BitmapImage()
-            bitmapImage.BeginInit()
-            bitmapImage.UriSource = New Uri(i) ' 直接使用文件路径加载图片
-            bitmapImage.CacheOption = BitmapCacheOption.OnLoad ' 立即加载并释放文件流
-            bitmapImage.EndInit()
-            bitmapImage.Freeze() ' 冻结图像以提高性能
-            image.Source = bitmapImage
-            image.Stretch = Stretch.Uniform ' 使图片自适应控件大小
-            Grid.SetRow(image, 1)
-            grid.Children.Add(image)
+    Private _AppendLock As Boolean = False
+    Private _Offset As Integer = 0
+    Private Async Function ListAppend(Optional Count As Integer = 20, Optional Offset As Integer = -1) As Tasks.Task
+        _AppendLock = True
+        If Offset = -1 Then
+            If _Offset * Count > FileList.Count Then Return
+            Offset = _Offset + 1
+            _Offset += 1
+        Else
+            _Offset = Offset
+        End If
+        If Count * Offset > FileList.Count Then Return
+        For j = Count * Offset To Count * (Offset + 1) - 1
+            If j >= FileList.Count Then Exit For
+            Dim i = FileList.ElementAt(j)
+            Try
+                If Not File.Exists(i) Then Continue For ' 文件在加载途中消失了
+                If File.GetAttributes(i).HasFlag(FileAttributes.Hidden) Then Continue For ' 隐藏文件
+                If New FileInfo(i).Length = 0 Then Continue For ' 空文件
+                Dim myCard As New MyCard With {
+                .Height = Double.NaN, ' 允许高度自适应
+                .Width = Double.NaN,  ' 允许宽度自适应
+                .Margin = New Thickness(7),
+                .Tag = i,
+                .ToolTip = i.Replace(ScreenshotPath, "") '适配高清截图模组
+                }
+                Dim grid As New Grid
+                myCard.Children.Add(grid)
 
-            '按钮
-            Dim stackPanel As New StackPanel
-            stackPanel.Orientation = Orientation.Horizontal
-            stackPanel.HorizontalAlignment = HorizontalAlignment.Center
-            stackPanel.Margin = New Thickness(3, 5, 3, 5)
-            Grid.SetRow(stackPanel, 2)
-            grid.Children.Add(stackPanel)
+                grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(9)})
+                grid.RowDefinitions.Add(New RowDefinition With {.Height = New GridLength(120)})
+                grid.RowDefinitions.Add(New RowDefinition)
 
-            Dim btnOpen As New MyIconTextButton With {
-                .Name = "BtnOpen",
-                .Text = "打开",
+                '图片
+                Dim image As New Image
+                image.Source = Await Tasks.Task.Run(Function()
+                                                        Dim bitmapImage As New BitmapImage()
+                                                        Dim loadSource As String = i
+                                                        Using fs As New FileStream(i, FileMode.Open, FileAccess.Read)
+                                                            Dim Header(1) As Byte
+                                                            fs.Read(Header, 0, 2)
+                                                            fs.Seek(0, SeekOrigin.Begin)
+                                                            If Header(0) = 82 AndAlso Header(1) = 73 Then
+                                                                'WebP 格式，需要转换
+                                                                Dim FileBytes(fs.Length - 1) As Byte
+                                                                fs.Read(FileBytes, 0, FileBytes.Length)
+                                                                Dim Pic = MyBitmap.WebPDecoder.DecodeFromBytes(FileBytes)
+                                                                Dim picTempPath = PathTemp & "Screenshot\"
+                                                                Directory.CreateDirectory(picTempPath)
+                                                                loadSource = picTempPath & GetHash(i) & ".png"
+                                                                Pic.Save(loadSource)
+                                                            End If
+                                                        End Using
+                                                        Using fs As New FileStream(loadSource, FileMode.Open, FileAccess.Read)
+                                                            bitmapImage.BeginInit()
+                                                            bitmapImage.DecodePixelHeight = 200
+                                                            bitmapImage.DecodePixelWidth = 400
+                                                            bitmapImage.CacheOption = BitmapCacheOption.OnLoad
+                                                            bitmapImage.StreamSource = fs
+                                                            bitmapImage.EndInit()
+                                                            bitmapImage.Freeze()
+                                                        End Using
+                                                        Return bitmapImage
+                                                    End Function)
+                image.Stretch = Stretch.Uniform ' 使图片自适应控件大小
+                Grid.SetRow(image, 1)
+                grid.Children.Add(image)
+
+                '按钮
+                Dim stackPanel As New StackPanel
+                stackPanel.Orientation = Orientation.Horizontal
+                stackPanel.HorizontalAlignment = HorizontalAlignment.Center
+                stackPanel.Margin = New Thickness(3, 5, 3, 5)
+                Grid.SetRow(stackPanel, 2)
+                grid.Children.Add(stackPanel)
+
+                Dim btnOpen As New MyIconTextButton With {
+                    .Name = "BtnOpen",
+                    .Text = "打开",
+                    .LogoScale = 0.8,
+                    .Logo = Logo.IconButtonOpen,
+                    .Tag = i
+                }
+                AddHandler btnOpen.Click, AddressOf btnOpen_Click
+                stackPanel.Children.Add(btnOpen)
+                Dim btnDelete As New MyIconTextButton With {
+                    .Name = "BtnDelete",
+                    .Text = "删除",
+                    .LogoScale = 0.8,
+                    .Logo = Logo.IconButtonDelete,
+                    .Tag = i
+                }
+                AddHandler btnDelete.Click, AddressOf btnDelete_Click
+                stackPanel.Children.Add(btnDelete)
+                Dim btnCopy As New MyIconTextButton With {
+                .Name = "BtnCopy",
+                .Text = "复制",
                 .LogoScale = 0.8,
-                .Logo = Logo.IconButtonOpen,
-                .Tag = i
-            }
-            AddHandler btnOpen.Click, AddressOf btnOpen_Click
-            stackPanel.Children.Add(btnOpen)
-            Dim btnDelete As New MyIconTextButton With {
-                .Name = "BtnDelete",
-                .Text = "删除",
-                .LogoScale = 0.8,
-                .Logo = Logo.IconButtonDelete,
-                .Tag = i
-            }
-            AddHandler btnDelete.Click, AddressOf btnDelete_Click
-            stackPanel.Children.Add(btnDelete)
-            Dim btnCopy As New MyIconTextButton With {
-            .Name = "BtnCopy",
-            .Text = "复制",
-            .LogoScale = 0.8,
-            .Logo = Logo.IconButtonCopy,
-                .Tag = i
-            }
-            AddHandler btnCopy.Click, AddressOf btnCopy_Click
-            stackPanel.Children.Add(btnCopy)
-
-            PanList.Children.Add(myCard)
+                .Logo = Logo.IconButtonCopy,
+                    .Tag = i
+                }
+                AddHandler btnCopy.Click, AddressOf btnCopy_Click
+                stackPanel.Children.Add(btnCopy)
+                PanList.Children.Add(myCard)
+                myCard.Opacity = 0
+                AniStart({
+                         AaOpacity(myCard, 1, 200)
+                         })
+            Catch ex As Exception
+                Log(ex, $"[Screenshot] 创建 {i} 截图预览失败，图像可能损坏")
+            End Try
         Next
-        RefreshUI()
-    End Sub
+        _AppendLock = False
+    End Function
 
     Private Sub RemoveItem(Path As String)
         Try
@@ -175,7 +232,7 @@ Public Class PageVersionScreenshot
             End While
             Hint("截图复制失败！", HintType.Critical)
         Else
-                Hint("截图文件不存在！")
+            Hint("截图文件不存在！")
         End If
     End Sub
 

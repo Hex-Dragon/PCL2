@@ -75,6 +75,7 @@
             End If
             CheckAdvanceAssetsV2.Checked = Setup.Get("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
             CheckAdvanceJava.Checked = Setup.Get("VersionAdvanceJava", Version:=PageVersionLeft.Version)
+            CheckAdvanceDisableJlw.Checked = Setup.Get("VersionAdvanceDisableJlw", Version:=PageVersionLeft.Version)
 
         Catch ex As Exception
             Log(ex, "重载版本独立设置时出错", LogLevel.Feedback)
@@ -102,6 +103,7 @@
             Setup.Reset("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceJava", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionAdvanceDisableJlw", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRun", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRunWait", Version:=PageVersionLeft.Version)
 

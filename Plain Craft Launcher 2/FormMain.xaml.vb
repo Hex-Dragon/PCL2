@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.Windows.Interop
 
 Public Class FormMain
 
@@ -10,8 +11,28 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If RELEASE Then
+        If LastVersion < 354 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持识别剪贴板资源链接并提示跳转"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "允许禁用 Java Wrapper"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复版本设置查看截图可能崩溃的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复本体更新可能失败的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "添加 Java 细致搜索开关"))
+            FeatureCount += 7
+            BugCount += 4
+        End If
+        If LastVersion < 353 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "放弃对 Windows 10 1607 以下版本系统的支持 - 前期准备"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化关于页面，查看源代码按钮可以精确到具体提交了"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "允许指定 HTTP 代理"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "百宝箱支持清理游戏垃圾"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "标题栏添加社区版标识"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "反馈链接修改为社区版仓库链接"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复语言标头未遵循规范的问题"))
+            FeatureCount += 4
+            BugCount += 2
+        End If
         If LastVersion < 352 Then 'Release 2.9.3
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "完整支持 LittleSkin OAuh 登录"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "完整支持 LittleSkin OAuth 登录"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "恢复了百宝箱的部分内容"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了 WebP 图片无法加载问题"))
             FeatureCount += 6
@@ -104,6 +125,26 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 354 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持识别剪贴板资源链接并提示跳转"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "允许禁用 Java Wrapper"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复版本设置查看截图可能崩溃的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复本体更新可能失败的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "添加 Java 细致搜索开关"))
+            FeatureCount += 7
+            BugCount += 4
+        End If
+        If LastVersion < 353 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "放弃对 Windows 10 1607 以下版本系统的支持 - 前期准备"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "优化关于页面，查看源代码按钮可以精确到具体提交了"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "允许指定 HTTP 代理"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "百宝箱支持清理游戏垃圾"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "标题栏添加社区版标识"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "反馈链接修改为社区版仓库链接"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复语言标头未遵循规范的问题"))
+            FeatureCount += 4
+            BugCount += 2
+        End If
         If LastVersion < 352 Then 'Snapshot 2.9.3
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "完整支持 LittleSkin OAuh 登录"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "恢复了百宝箱的部分内容"))
@@ -246,7 +287,7 @@ Public Class FormMain
         RunInNewThread(
         Sub()
             If MyMsgBox(Content, "PCL 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
-                OpenWebsite("https://afdian.com/a/LTCat?tab=feed")
+                OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases")
             End If
         End Sub, "UpdateLog Output")
     End Sub
@@ -493,6 +534,17 @@ Public Class FormMain
 #End Region
 
 #Region "自定义窗口"
+
+    '硬件加速
+    Protected Overrides Sub OnSourceInitialized(e As EventArgs)
+        If Setup.Get("SystemDisableHardwareAcceleration") Then
+            Dim hwndSource As HwndSource = TryCast(PresentationSource.FromVisual(Me), HwndSource)
+            If hwndSource IsNot Nothing Then
+                hwndSource.CompositionTarget.RenderMode = RenderMode.SoftwareOnly
+            End If
+        End If
+        MyBase.OnSourceInitialized(e)
+    End Sub
 
     '关闭
     Private Sub FormMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
@@ -820,6 +872,41 @@ Public Class FormMain
             End If
             '安装 Mod
             If PageVersionMod.InstallMods(FilePathList) Then Exit Sub
+            '处理资源安装
+            If PageCurrent = PageType.VersionSetup AndAlso {"zip"}.Any(Function(i) i = Extension) Then
+                Select Case PageCurrentSub
+                    Case PageSubType.VersionWorld
+                        Dim DestFolder = PageVersionLeft.Version.PathIndie + "saves\" + GetFileNameWithoutExtentionFromPath(FilePath)
+                        If Directory.Exists(DestFolder) Then
+                            Hint("发现同名文件夹，无法粘贴：" + DestFolder, HintType.Critical)
+                            Exit Sub
+                        End If
+                        ExtractFile(FilePath, DestFolder)
+                        Hint($"已导入 {GetFileNameWithoutExtentionFromPath(FilePath)}", HintType.Finish)
+                        If FrmVersionWorld IsNot Nothing Then RunInUi(Sub() FrmVersionWorld.Reload())
+                        Exit Sub
+                    Case PageSubType.VersionResourcePack
+                        Dim DestFile = PageVersionLeft.Version.PathIndie + "resourcepacks\" + GetFileNameFromPath(FilePath)
+                        If File.Exists(DestFile) Then
+                            Hint("已存在同名文件：" + DestFile, HintType.Critical)
+                            Exit Sub
+                        End If
+                        CopyFile(FilePath, DestFile)
+                        Hint($"已导入 {GetFileNameFromPath(FilePath)}", HintType.Finish)
+                        If FrmVersionResourcePack IsNot Nothing Then RunInUi(Sub() FrmVersionResourcePack.Reload())
+                        Exit Sub
+                    Case PageSubType.VersionShader
+                        Dim DestFile = PageVersionLeft.Version.PathIndie + "shaderpacks\" + GetFileNameFromPath(FilePath)
+                        If File.Exists(DestFile) Then
+                            Hint("已存在同名文件：" + DestFile, HintType.Critical)
+                            Exit Sub
+                        End If
+                        CopyFile(FilePath, DestFile)
+                        Hint($"已导入 {GetFileNameFromPath(FilePath)}", HintType.Finish)
+                        If FrmVersionShader IsNot Nothing Then RunInUi(Sub() FrmVersionShader.Reload())
+                        Exit Sub
+                End Select
+            End If
             '安装整合包
             If {"zip", "rar", "mrpack"}.Any(Function(t) t = Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
                 Log("[System] 文件为压缩包，尝试作为整合包安装")

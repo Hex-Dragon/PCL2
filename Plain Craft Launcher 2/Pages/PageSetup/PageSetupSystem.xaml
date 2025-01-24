@@ -76,6 +76,8 @@
                         </local:MyComboBox>
                         <local:MyCheckBox Margin="0,2,0,4" Text="显示 Mod 加载器时忽略 Quilt" Grid.Row="6" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" />
+                        <local:MyCheckBox Margin="240,2,0,4" Text="自动识别剪贴板中的资源链接" Grid.Row="6" Height="22" Grid.ColumnSpan="2"
+                                          x:Name="CheckDownloadClipboard" Tag="ToolDownloadClipboard" ToolTip="开启此选项后，PCL 将会读取你的剪贴板并识别其中的资源链接，并询问你是否要跳转到详情页面。"/>
                     </Grid>
                 </StackPanel>
             </local:MyCard>
@@ -111,6 +113,9 @@
                         <RowDefinition Height="9" />
                         <RowDefinition Height="28" />
                         <RowDefinition Height="5" />
+                        <RowDefinition Height="28" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="28" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -134,7 +139,11 @@
                             <local:ValidateFolderPath UseMinecraftCharCheck="False" />
                         </local:MyTextBox.ValidateRules>
                     </local:MyTextBox>
-                    <Grid Height="35" Grid.Row="6" Grid.ColumnSpan="5" Margin="0,12,0,0">
+                    <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="最高动画帧率" Margin="0,0,25,0" />
+                    <local:MySlider x:Name="SliderAniFPS" Grid.Row="6" Tag="UiAniFPS" MaxValue="59" Value="59" Grid.Column="1"
+ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧率以防止过多的资源占用" />
+                    <local:MyCheckBox Grid.Row="8" Text="禁用硬件加速" x:Name="CheckSystemDisableHardwareAcceleration" Tag="SystemDisableHardwareAcceleration"/>
+                    <Grid Height="35" Grid.Row="9" Grid.ColumnSpan="5" Margin="0,12,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
@@ -144,7 +153,7 @@
                         <local:MyButton Grid.Column="1" x:Name="BtnSystemSettingExp" MinWidth="140" Text="导出设置" Padding="13,0" Margin="0,0,20,0" />
                         <local:MyButton Grid.Column="2" x:Name="BtnSystemSettingImp" MinWidth="140" Text="导入设置" Padding="13,0" Margin="0,0,20,0" />
                     </Grid>
-                    <Grid Height="35" Grid.Row="7" Grid.ColumnSpan="5" Margin="0,12,0,0" x:Name="PanDonate">
+                    <Grid Height="35" Grid.Row="10" Grid.ColumnSpan="5" Margin="0,12,0,0" x:Name="PanDonate">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
