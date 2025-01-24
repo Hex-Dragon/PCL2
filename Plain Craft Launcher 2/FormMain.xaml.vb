@@ -542,7 +542,7 @@ Public Class FormMain
                 FeedbackInfo()
                 Log("请在 https://github.com/Hex-Dragon/PCL2/issues 提交错误报告，以便于作者解决此问题！")
                 IsLogShown = True
-                ShellOnly("notepad" & Path & "PCL\Log1.txt")
+                ShellOnly(Path & "PCL\Log1.txt")
             End If
             Thread.Sleep(500) '防止 PCL 在记事本打开前就被掐掉
         End If
