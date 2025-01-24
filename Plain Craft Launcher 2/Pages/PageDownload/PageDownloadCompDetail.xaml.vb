@@ -430,5 +430,9 @@
         End If
         CompFavorites.Save()
     End Sub
+    Private Sub BtnIntroLinkCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroLinkCopy.Click
+        CompClipboard.CurrentText = Project.Website
+        ClipboardSet(Project.Website)
+    End Sub
 
 End Class
