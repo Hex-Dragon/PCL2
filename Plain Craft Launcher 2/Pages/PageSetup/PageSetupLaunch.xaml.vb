@@ -112,7 +112,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboArgumentVisibie.SelectionChanged, ComboArgumentWindowType.SelectionChanged, ComboArgumentPriority.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change, CheckArgumentJavaTraversal.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
 
@@ -510,15 +510,6 @@ PreFin:
                 Hint("已找到 " & JavaList.Count & " 个 Java，请检查下拉框查看列表！", HintType.Finish)
             End If
         End Sub)
-    End Sub
-
-    'Java 细致搜索
-    Private Sub CheckArgumentJavaTraversal_Click() Handles CheckArgumentJavaTraversal.Change
-        If CheckArgumentJavaTraversal.Checked Then
-            Setup.Set("LaunchArgumentJavaTraversal", True)
-        Else
-            Setup.Set("LaunchArgumentJavaTraversal", False)
-        End If
     End Sub
 
 #End Region
