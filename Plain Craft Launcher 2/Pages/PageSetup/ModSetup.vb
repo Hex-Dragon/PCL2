@@ -154,6 +154,7 @@
         {"UiMusicStop", New SetupEntry(False)},
         {"UiMusicStart", New SetupEntry(False)},
         {"UiMusicRandom", New SetupEntry(True)},
+        {"UiMusicSMTC", New SetupEntry(True)},
         {"UiMusicAuto", New SetupEntry(True)},
         {"UiHiddenPageDownload", New SetupEntry(False)},
         {"UiHiddenPageLink", New SetupEntry(False)},
