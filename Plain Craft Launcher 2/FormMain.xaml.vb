@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.Windows.Interop
 
 Public Class FormMain
 
@@ -533,6 +534,17 @@ Public Class FormMain
 #End Region
 
 #Region "自定义窗口"
+
+    '硬件加速
+    Protected Overrides Sub OnSourceInitialized(e As EventArgs)
+        If Setup.Get("SystemDisableHardwareAcceleration") Then
+            Dim hwndSource As HwndSource = TryCast(PresentationSource.FromVisual(Me), HwndSource)
+            If hwndSource IsNot Nothing Then
+                hwndSource.CompositionTarget.RenderMode = RenderMode.SoftwareOnly
+            End If
+        End If
+        MyBase.OnSourceInitialized(e)
+    End Sub
 
     '关闭
     Private Sub FormMain_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
