@@ -520,14 +520,20 @@ NoUserJava:
                 '粗略检查有效性
                 If File.Exists(PathInEnv & "javaw.exe") Then JavaPreList(PathInEnv) = False
             Next
-            '查找磁盘中的 Java
-            For Each Disk As DriveInfo In DriveInfo.GetDrives()
-                If Disk.DriveType = DriveType.Network Then Continue For '跳过网络驱动器（#3705）
-                JavaSearchFolder(Disk.Name, JavaPreList, False)
-            Next
-            '查找 APPDATA 文件夹中的 Java
-            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\", JavaPreList, False)
-            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\", JavaPreList, False)
+            '细致搜索
+            If Setup.Get("LaunchArgumentJavaTraversal") Then
+                '查找磁盘中的 Java
+                For Each Disk As DriveInfo In DriveInfo.GetDrives()
+                    If Disk.DriveType = DriveType.Network Then Continue For '跳过网络驱动器（#3705）
+                    JavaSearchFolder(Disk.Name, JavaPreList, False)
+                Next
+
+                '查找 AppData 文件夹中的 Java
+                JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\", JavaPreList, False)
+                JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) & "\", JavaPreList, False)
+            End If
+            '查找 AppData 中 .minecraft 目录下的 Java
+            JavaSearchFolder(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\", JavaPreList, False)
             '查找启动器目录中的 Java
             JavaSearchFolder(Path, JavaPreList, False, IsFullSearch:=True)
             '查找所选 Minecraft 文件夹中的 Java
