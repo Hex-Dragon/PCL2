@@ -387,10 +387,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                 If File.Exists(OriginalPath) Then
                     File.Delete(OriginalPath)
                 End If
-                If File.Exists(TempPath) Then
-                    File.Delete(TempPath)
-                End If
-                If Not File.Exists(OriginalPath) AndAlso Not File.Exists(TempPath) Then
+                If Not File.Exists(OriginalPath) Then
                     Exit Try
                 End If
                 Thread.Sleep(2000)
@@ -399,9 +396,9 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             End Try
             num += 1
         Loop While num <= 4
-        If Not File.Exists(OriginalPath) AndAlso Not File.Exists(TempPath) Then
+        If (Not File.Exists(OriginalPath)) AndAlso File.Exists(TempPath) Then
             Try
-                CopyFile(OriginalPath, TempPath)
+                CopyFile(TempPath, OriginalPath)
             Catch ex4 As UnauthorizedAccessException
                 MsgBox("PCL 更新失败：权限不足。请手动复制 PCL 文件夹下的新版本程序。" & vbCrLf & "若 PCL 位于桌面或 C 盘，你可以尝试将其挪到其他文件夹，这可能可以解决权限问题。" & vbCrLf + GetExceptionSummary(ex4), MsgBoxStyle.Critical, "更新失败")
             Catch ex5 As Exception
@@ -410,7 +407,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             End Try
             If TriggerRestart Then
                 Try
-                    Process.Start(TempPath)
+                    Process.Start(OriginalPath)
                 Catch ex6 As Exception
                     MsgBox("PCL 更新失败：无法重新启动。" & vbCrLf + GetExceptionSummary(ex6), MsgBoxStyle.Critical, "更新失败")
                 End Try
