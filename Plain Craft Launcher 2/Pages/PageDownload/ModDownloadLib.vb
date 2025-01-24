@@ -2206,7 +2206,7 @@ Retry:
             Thread.Sleep(1000) '防止存在尚未完全释放的文件，导致清理失败（例如整合包安装）
             If Loader.State = LoadState.Failed OrElse Loader.State = LoadState.Aborted Then
                 '删除版本文件夹
-                If Directory.Exists(Loader.Input & "saves\") OrElse Directory.Exists(Loader.Input & "versions\") Then
+                If Directory.Exists(Loader.Input & "saves\") OrElse Directory.Exists(Loader.Input & "versions\") OrElse Directory.Exists(Loader.Input & "mods\") OrElse File.Exists(Loader.Input & "server.dat") Then
                     Log("[Download] 由于版本已被独立启动，不清理版本文件夹：" & Loader.Input, LogLevel.Developer)
                 Else
                     Log("[Download] 由于下载失败或取消，清理版本文件夹：" & Loader.Input, LogLevel.Developer)
