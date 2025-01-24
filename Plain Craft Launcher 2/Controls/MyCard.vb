@@ -92,7 +92,11 @@
     End Sub
     Public Shared Sub StackInstall(ByRef Stack As StackPanel, InstallMethod As Action(Of StackPanel))
         If Stack.Tag Is Nothing Then Exit Sub
-        InstallMethod(Stack)
+        Try
+            InstallMethod(Stack)
+        Catch ex As Exception
+            Log(ex, "[MyCard] InstallMethod 调用失败")
+        End Try
         Stack.Children.Add(New FrameworkElement With {.Height = 18}) '下边距，同时适应折叠
         Stack.Tag = Nothing
     End Sub
