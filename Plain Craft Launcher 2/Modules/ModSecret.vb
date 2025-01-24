@@ -235,7 +235,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public ThemeDontClick As Integer = 0
 
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
-        Hint("该版本中不包含主题功能……")
+        'Hint("该版本中不包含主题功能……")
     End Sub
     Public Sub ThemeRefreshMain()
         RunInUi(
