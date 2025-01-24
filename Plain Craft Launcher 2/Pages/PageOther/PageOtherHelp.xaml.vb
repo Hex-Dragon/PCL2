@@ -59,7 +59,7 @@
                                 End Sub
                 NewCard.InstallMethod = PutMethod
                 If Type = "指南" Then
-                    MyCard.PutStack(NewStack, PutMethod)
+                    MyCard.StackInstall(NewStack, PutMethod)
                 Else
                     NewCard.IsSwaped = True
                 End If

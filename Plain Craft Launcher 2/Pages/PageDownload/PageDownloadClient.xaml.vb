@@ -83,7 +83,7 @@
                                     Stack.Children.Add(McDownloadListItem(item, AddressOf McDownloadMenuSave, True))
                                 Next
                             End Sub
-            MyCard.PutStack(PanInfo, PutMethod)
+            MyCard.StackInstall(PanInfo, PutMethod)
             CardInfo.Children.Add(PanInfo)
             PanMain.Children.Add(CardInfo)
             '添加其他版本

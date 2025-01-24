@@ -93,7 +93,7 @@
                                         NewCard.IsSwaped = True
                     NewCard.InstallMethod = PutMethod
                 Else
-                    MyCard.PutStack(NewStack, PutMethod)
+                    MyCard.StackInstall(NewStack, PutMethod)
                 End If
             Next
 

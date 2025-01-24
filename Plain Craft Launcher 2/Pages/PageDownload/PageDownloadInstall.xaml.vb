@@ -782,12 +782,12 @@ Public Class PageDownloadInstall
                 TopestVersions.Add(Snapshot)
             End If
             Dim PanInfo As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = TopestVersions}
-            Dim PutStack = Sub(Stack As StackPanel)
+            Dim StackInstall = Sub(Stack As StackPanel)
                                For Each item In Stack.Tag
                                    Stack.Children.Add(McDownloadListItem(item, Sub(sender, e) FrmDownloadInstall.MinecraftSelected(sender, e), False))
                                Next
                            End Sub
-            MyCard.PutStack(PanInfo, PutStack)
+            MyCard.StackInstall(PanInfo, StackInstall)
             CardInfo.Children.Add(PanInfo)
             PanMinecraft.Children.Insert(0, CardInfo)
             '添加其他版本
@@ -799,7 +799,7 @@ Public Class PageDownloadInstall
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
                 '不能使用 AddressOf，这导致了 #535，原因完全不明，疑似是编译器 Bug
-                NewCard.InstallMethod = PutStack
+                NewCard.InstallMethod = StackInstall
                 NewCard.IsSwaped = True
                 PanMinecraft.Children.Add(NewCard)
             Next

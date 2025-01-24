@@ -87,10 +87,10 @@
         End If
     End Sub
     Public Sub StackInstall()
-        PutStack(SwapControl, InstallMethod)
+        StackInstall(SwapControl, InstallMethod)
         TriggerForceResize()
     End Sub
-    Public Shared Sub PutStack(ByRef Stack As StackPanel, InstallMethod As Action(Of StackPanel))
+    Public Shared Sub StackInstall(ByRef Stack As StackPanel, InstallMethod As Action(Of StackPanel))
         If Stack.Tag Is Nothing Then Exit Sub
         InstallMethod(Stack)
         Stack.Children.Add(New FrameworkElement With {.Height = 18}) '下边距，同时适应折叠
@@ -202,7 +202,7 @@
             _IsSwaped = value
             If SwapControl Is Nothing Then Exit Property
             '展开
-            If Not IsSwaped AndAlso TypeOf SwapControl Is StackPanel Then PutStack(SwapControl, InstallMethod)
+            If Not IsSwaped AndAlso TypeOf SwapControl Is StackPanel Then StackInstall(SwapControl, InstallMethod)
             '若尚未加载，会在 Loaded 事件中触发无动画的折叠，不需要在这里进行
             If Not IsLoaded Then Exit Property
             '更新高度
