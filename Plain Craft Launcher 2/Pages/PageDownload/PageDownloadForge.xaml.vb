@@ -17,10 +17,19 @@
             '转化为 UI
             For Each Version As String In Versions
                 '增加卡片
-                Dim NewCard As New MyCard With {.Title = Version.Replace("_p", " P"), .Margin = New Thickness(0, 0, 0, 15), .SwapType = 5}
+                Dim NewCard As New MyCard With {.Title = Version.Replace("_p", " P"), .Margin = New Thickness(0, 0, 0, 15)}
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Version}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
+                NewCard.InstallMethod = Sub(Stack As StackPanel)
+                                            Dim LoadingPickaxe As New MyLoading With {.Text = "正在获取版本列表", .Margin = New Thickness(5)}
+                                            Dim Loader = New LoaderTask(Of String, List(Of DlForgeVersionEntry))("DlForgeVersion Main", AddressOf DlForgeVersionMain)
+                                            LoadingPickaxe.State = Loader
+                                            Loader.Start(Stack.Tag)
+                                            AddHandler LoadingPickaxe.StateChanged, AddressOf FrmDownloadForge.Forge_StateChanged
+                                            AddHandler LoadingPickaxe.Click, AddressOf FrmDownloadForge.Forge_Click
+                                            Stack.Children.Add(LoadingPickaxe)
+                                        End Sub
                 NewCard.IsSwaped = True
                 PanMain.Children.Add(NewCard)
             Next
@@ -51,7 +60,13 @@
         '载入列表
         Card.SwapControl.Children.Clear()
         Card.SwapControl.Tag = Loader.Output
-        Card.SwapType = 6
+        Card.InstallMethod = Sub(Stack As StackPanel)
+                                 Stack.Tag = Sort(CType(Stack.Tag, List(Of DlForgeVersionEntry)), Function(a, b) a.Version > b.Version)
+                                 ForgeDownloadListItemPreload(Stack, Stack.Tag, AddressOf ForgeSave_Click, True)
+                                 For Each item In Stack.Tag
+                                     Stack.Children.Add(ForgeDownloadListItem(item, AddressOf ForgeSave_Click, True))
+                                 Next
+                             End Sub
         Card.StackInstall()
     End Sub
 

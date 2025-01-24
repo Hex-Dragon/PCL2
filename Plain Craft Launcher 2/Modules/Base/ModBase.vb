@@ -12,15 +12,15 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.9.4" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.9.4." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.9.5" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.9.5." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "native" 'Commit Hash，由 GitHub Workflow 自动替换
     Public CommitHashShort As String = If(CommitHash = "native", "native", CommitHash.Substring(0, 7)) 'Commit Hash，取前 7 位
     Public Const UpstreamVersion As String = "2.8.12" '上游版本
 #If RELEASE Then
-    Public Const VersionCode As Integer = 353 'Release
+    Public Const VersionCode As Integer = 354 'Release
 #Else
-    Public Const VersionCode As Integer = 353 'Snapshot
+    Public Const VersionCode As Integer = 354 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -2605,12 +2605,12 @@ Retry:
             Dim IsInitSuccess As Boolean = True
             Try
                 For i = 4 To 1 Step -1
-                    If File.Exists(Path & "PCL\Log" & i & ".txt") Then
-                        If File.Exists(Path & "PCL\Log" & (i + 1) & ".txt") Then File.Delete(Path & "PCL\Log" & (i + 1) & ".txt")
-                        CopyFile(Path & "PCL\Log" & i & ".txt", Path & "PCL\Log" & (i + 1) & ".txt")
+                    If File.Exists(Path & "PCL\Log-CE" & i & ".log") Then
+                        If File.Exists(Path & "PCL\Log-CE" & (i + 1) & ".log") Then File.Delete(Path & "PCL\Log-CE" & (i + 1) & ".log")
+                        CopyFile(Path & "PCL\Log-CE" & i & ".log", Path & "PCL\Log-CE" & (i + 1) & ".log")
                     End If
                 Next
-                File.Create(Path & "PCL\Log1.txt").Dispose()
+                File.Create(Path & "PCL\Log-CE1.log").Dispose()
             Catch ex As IOException
                 IsInitSuccess = False
                 Hint("可能同时开启了多个 PCL，程序可能会出现未知问题！", HintType.Critical)
@@ -2620,7 +2620,7 @@ Retry:
                 Log(ex, "日志初始化失败", LogLevel.Hint)
             End Try
             Try
-                LogWritter = New StreamWriter(Path & "PCL\Log1.txt", True) With {.AutoFlush = True}
+                LogWritter = New StreamWriter(Path & "PCL\Log-CE1.log", True) With {.AutoFlush = True}
             Catch ex As Exception
                 LogWritter = Nothing
                 Log(ex, "日志写入失败", LogLevel.Hint)

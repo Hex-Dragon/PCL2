@@ -36,6 +36,7 @@
         ComboDownloadMod.SelectedIndex = Setup.Get("ToolDownloadMod")
         ComboModLocalNameStyle.SelectedIndex = Setup.Get("ToolModLocalNameStyle")
         CheckDownloadIgnoreQuilt.Checked = Setup.Get("ToolDownloadIgnoreQuilt")
+        CheckDownloadClipboard.Checked = Setup.Get("ToolDownloadClipboard")
 
         'Minecraft 更新提示
         CheckUpdateRelease.Checked = Setup.Get("ToolUpdateRelease")
@@ -71,6 +72,7 @@
             Setup.Reset("ToolDownloadVersion")
             Setup.Reset("ToolDownloadTranslate")
             Setup.Reset("ToolDownloadIgnoreQuilt")
+            Setup.Reset("ToolDownloadClipboard")
             Setup.Reset("ToolDownloadMod")
             Setup.Reset("ToolModLocalNameStyle")
             Setup.Reset("ToolUpdateRelease")
@@ -98,7 +100,7 @@
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckSystemDisableHardwareAcceleration.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckDebugMode.Change, CheckDebugDelay.Change, CheckDebugSkipCopy.Change, CheckUpdateRelease.Change, CheckUpdateSnapshot.Change, CheckHelpChinese.Change, CheckDownloadIgnoreQuilt.Change, CheckDownloadCert.Change, CheckDownloadClipboard.Change, CheckSystemDisableHardwareAcceleration.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change, SliderAniFPS.Change
@@ -109,6 +111,12 @@
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged, TextSystemHttpProxy.TextChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Text)
+    End Sub
+
+    Private Sub StartClipboardListening() Handles CheckDownloadClipboard.Change
+        If CheckDownloadClipboard.Checked Then
+            RunInNewThread(Sub() CompClipboard.ClipboardListening())
+        End If
     End Sub
 
     '滑动条

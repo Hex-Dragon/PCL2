@@ -75,8 +75,8 @@ Public Class Application
             Dim ShouldWaitForExit As Boolean = e.Args.Length > 0 AndAlso e.Args(0) = "--wait" '要求等待已有的 PCL 退出
             Dim WaitRetryCount As Integer = 0
 WaitRetry:
-            Dim WindowHwnd As IntPtr = FindWindow(Nothing, "Plain Craft Launcher　")
-            If WindowHwnd = IntPtr.Zero Then FindWindow(Nothing, "Plain Craft Launcher 2　")
+            Dim WindowHwnd As IntPtr = FindWindow(Nothing, "Plain Craft Launcher Community Edition ")
+            If WindowHwnd = IntPtr.Zero Then FindWindow(Nothing, "Plain Craft Launcher 2 Community Edition ")
             If WindowHwnd <> IntPtr.Zero Then
                 If ShouldWaitForExit AndAlso WaitRetryCount < 20 Then '至多等待 10 秒
                     WaitRetryCount += 1
@@ -170,7 +170,7 @@ WaitRetry:
            ExceptionString.Contains("MS.Internal.AppModel.ITaskbarList.HrInit") OrElse
            ExceptionString.Contains(".NET Framework") OrElse ' “自动错误判断” 的结果分析
            ExceptionString.Contains("未能加载文件或程序集") Then
-            OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net462-offline-installer")
+            OpenWebsite("https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/thank-you/net48-offline-installer")
             MsgBox("你的 .NET Framework 版本过低或损坏，请下载并重新安装 .NET Framework 4.8！", MsgBoxStyle.Information, "运行环境错误")
             FormMain.EndProgramForce(Result.Cancel)
         Else
