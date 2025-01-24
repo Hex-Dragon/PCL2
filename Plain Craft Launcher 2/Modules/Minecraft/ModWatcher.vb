@@ -378,7 +378,6 @@
                 Log(ex, "强制结束 Minecraft 进程失败", LogLevel.Hint)
             End Try
         End Sub
-
     End Class
 
 End Module
