@@ -272,6 +272,10 @@ Public Module ModMusic
             Log("[SMTC] 当前系统不支持 SMTC 控件，不进行 SMTC 控件初始化")
             Exit Sub
         End If
+        If Not Setup.Get("UiMusicSMTC") Then
+            Log("[SMTC] 用户已关闭 SMTC 支持，不进行初始化")
+            Exit Sub
+        End If
         Log("[SMTC] 初始化 SMTC 支持")
         '初始化
         _player.CommandManager.IsEnabled = False
@@ -295,6 +299,7 @@ Public Module ModMusic
         If _smtc IsNot Nothing AndAlso _smtc.IsEnabled Then
             Log("[SMTC] 移除 SMTC 信息源")
             _smtc.IsEnabled = False
+            _smtc = Nothing
         Else
             Log("[SMTC] 未添加 SMTC 信息，无需移除")
         End If
@@ -362,13 +367,13 @@ Public Module ModMusic
     ''' <param name="CurrentTime">当前播放进度</param>
     ''' <param name="TotalTime">曲目全长</param>
     Public Sub UpdateSMTCTimeline(CurrentTime As TimeSpan, TotalTime As TimeSpan)
-        Dim Properties = New SystemMediaTransportControlsTimelineProperties
-
-        Properties.StartTime = TimeSpan.FromSeconds(0)
-        Properties.MinSeekTime = TimeSpan.FromSeconds(0)
-        Properties.Position = CurrentTime
-        Properties.MaxSeekTime = CurrentTime
-        Properties.EndTime = TotalTime
+        Dim Properties = New SystemMediaTransportControlsTimelineProperties With {
+            .StartTime = TimeSpan.FromSeconds(0),
+            .MinSeekTime = TimeSpan.FromSeconds(0),
+            .Position = CurrentTime,
+            .MaxSeekTime = CurrentTime,
+            .EndTime = TotalTime
+        }
 
         _smtc.UpdateTimelineProperties(Properties)
     End Sub
@@ -379,13 +384,14 @@ Public Module ModMusic
     Public Sub SMTCTimelineUpdater(CurrentWave As NAudio.Wave.WaveOut, Reader As NAudio.Wave.WaveStream)
         If _smtc Is Nothing Then Exit Sub
         RunInNewThread(Sub()
-                           While CurrentWave.Equals(MusicNAudio) AndAlso CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Playing
+                           While CurrentWave.Equals(MusicNAudio) AndAlso CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Playing AndAlso _smtc IsNot Nothing
                                RunInNewThread(Sub() UpdateSMTCTimeline(Reader.CurrentTime, Reader.TotalTime))
                                Thread.Sleep(700)
                            End While
-                           While CurrentWave.Equals(MusicNAudio) AndAlso CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Paused
+                           While CurrentWave.Equals(MusicNAudio) AndAlso CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Paused AndAlso _smtc IsNot Nothing
                                Thread.Sleep(700)
                            End While
+                           If Not CurrentWave.Equals(MusicNAudio) Then Exit Sub
                            SMTCTimelineUpdater(CurrentWave, Reader)
                        End Sub)
     End Sub
@@ -412,13 +418,13 @@ Public Module ModMusic
             Reader = New NAudio.Wave.AudioFileReader(MusicCurrent)
             CurrentWave.Init(Reader)
             CurrentWave.Play()
-            SetSMTCStatus()
             '第一次打开的暂停
             If IsFirstLoad AndAlso Not Setup.Get("UiMusicAuto") Then
                 CurrentWave.Pause()
                 EnableSMTCSupport() '启用 SMTC 支持
                 UpdateSMTCInfo() '更新 SMTC 媒体信息
             End If
+            SetSMTCStatus()
             MusicRefreshUI()
             '停止条件：播放完毕或变化
             Dim PreviousVolume = 0
@@ -432,6 +438,14 @@ Public Module ModMusic
                 '更新进度条
                 Dim Percent = Reader.CurrentTime.TotalMilliseconds / Reader.TotalTime.TotalMilliseconds
                 RunInUi(Sub() FrmMain.BtnExtraMusic.Progress = Percent)
+                '检查 SMTC 状态
+                If Setup.Get("UiMusicSMTC") AndAlso _smtc Is Nothing Then
+                    EnableSMTCSupport()
+                    UpdateSMTCInfo()
+                    SetSMTCStatus()
+                    SMTCTimelineUpdater(CurrentWave, Reader)
+                End If
+                If Not Setup.Get("UiMusicSMTC") AndAlso _smtc IsNot Nothing Then DisableSMTCSupport()
                 Thread.Sleep(100)
             End While
             '当前音乐已播放结束，继续下一曲
