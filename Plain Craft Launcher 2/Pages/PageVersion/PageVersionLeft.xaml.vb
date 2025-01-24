@@ -25,7 +25,7 @@ Public Class PageVersionLeft
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemScreenshot.Check, ItemWorld.Check, ItemResourcePack.Check, ItemShader.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemScreenshot.Check, ItemWorld.Check, ItemResourcePack.Check, ItemShader.Check, ItemInstall.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -58,6 +58,9 @@ Public Class PageVersionLeft
             Case FormMain.PageSubType.VersionShader
                 If FrmVersionShader Is Nothing Then FrmVersionShader = New PageVersionShader
                 Return FrmVersionShader
+            Case FormMain.PageSubType.VersionInstall
+                If FrmVersionInstall Is Nothing Then FrmVersionInstall = New PageVersionInstall
+                Return FrmVersionInstall
             Case Else
                 Throw New Exception("未知的版本设置子页面种类：" & ID)
         End Select
@@ -99,6 +102,12 @@ Public Class PageVersionLeft
 
 #End Region
 
+    '点击返回
+    Private Sub ItemInstall_Click(sender As Object, e As MouseButtonEventArgs) Handles ItemInstall.Click
+        If Not ItemInstall.Checked Then Exit Sub
+        FrmDownloadInstall.ExitSelectPage()
+    End Sub
+
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
         Select Case Val(sender.Tag)
             Case FormMain.PageSubType.VersionMod
@@ -111,6 +120,8 @@ Public Class PageVersionLeft
                 PageVersionResourcePack.Refresh()
             Case FormMain.PageSubType.VersionShader
                 PageVersionShader.Refresh()
+            Case FormMain.PageSubType.VersionInstall
+                PageVersionInstall.Refresh()
         End Select
     End Sub
 
