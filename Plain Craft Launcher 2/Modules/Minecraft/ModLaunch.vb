@@ -1355,6 +1355,10 @@ Retry:
             If Task.IsAborted Then Exit Sub
             If McLaunchJavaSelected IsNot Nothing Then
                 McLaunchLog("选择的 Java：" & McLaunchJavaSelected.ToString)
+                '指定 Java 使用高性能显卡
+                If Not ReadReg(McLaunchJavaSelected.PathJavaw, "GpuPreference=0;", Path:="Microsoft\DirectX\UserGpuPreferences") = "GpuPreference=2;" Then
+                    WriteReg(McLaunchJavaSelected.PathJavaw, "GpuPreference=2;", Path:="Microsoft\DirectX\UserGpuPreferences")
+                End If
                 Exit Sub
             End If
 
@@ -1403,6 +1407,10 @@ Retry:
             If Task.IsAborted Then Exit Sub
             If McLaunchJavaSelected IsNot Nothing Then
                 McLaunchLog("选择的 Java：" & McLaunchJavaSelected.ToString)
+                '指定 Java 使用高性能显卡
+                If Not ReadReg(McLaunchJavaSelected.PathJavaw, "GpuPreference=0;", Path:="Microsoft\DirectX\UserGpuPreferences") = "GpuPreference=2;" Then
+                    WriteReg(McLaunchJavaSelected.PathJavaw, "GpuPreference=2;", Path:="Microsoft\DirectX\UserGpuPreferences")
+                End If
             Else
                 Hint("没有可用的 Java，已取消启动！", HintType.Critical)
                 Throw New Exception("$$")
