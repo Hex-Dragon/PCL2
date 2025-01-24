@@ -2338,7 +2338,7 @@ NextElement:
     ''' </summary>
     Public Sub OpenExplorer(Argument As String)
         Try
-            ShellOnly("explorer.exe", Argument)
+            ShellOnly(Argument)
         Catch ex As Exception
             Log(ex, "打开资源管理器失败，请尝试关闭安全软件（如 360 安全卫士）", LogLevel.Msgbox)
         End Try
