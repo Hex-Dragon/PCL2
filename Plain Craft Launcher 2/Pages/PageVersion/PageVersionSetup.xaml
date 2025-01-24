@@ -221,8 +221,10 @@
                     <StackPanel Margin="0,10,0,0" Orientation="Horizontal" Grid.Row="6" Grid.ColumnSpan="2">
                         <local:MyCheckBox Text="忽略 Java 兼容性警告" x:Name="CheckAdvanceJava" Tag="VersionAdvanceJava" Margin="0,0,60,0"
                                         ToolTip="如果在设置中手动选择了与当前版本不兼容的 Java，则自动跳过兼容性警告弹窗，强制使用手动选择的 Java。" />
-                        <local:MyCheckBox Text="关闭文件校验" x:Name="CheckAdvanceAssetsV2" Tag="VersionAdvanceAssetsV2"
+                        <local:MyCheckBox Text="关闭文件校验" x:Name="CheckAdvanceAssetsV2" Tag="VersionAdvanceAssetsV2" Margin="0,0,60,0"
                                         ToolTip="完全不更改 Assets；不校验 Libraries、第三方登录库与版本主 Jar 文件是否被修改。&#xa;如果你没有修改相关文件，请勿勾选此项。" />
+                        <local:MyCheckBox Text="禁用 Java Wrapper" x:Name="CheckAdvanceDisableJlw" Tag="VersionAdvanceDisableJlw"
+                                        ToolTip="在启动游戏时不使用 Java Wrapper 进行包装，仅建议在有特殊需要时勾选。" />
                     </StackPanel>
                 </Grid>
             </local:MyCard>
