@@ -40,14 +40,16 @@
                         Dim IsForgeExists As Boolean = False
                         Dim IsNeoForgeExists As Boolean = False
                         Dim IsFabricExists As Boolean = False
+                        Dim IsQuiltExists As Boolean = False
                         Dim IsLiteExists As Boolean = False
                         For Each Version As McVersion In Card.Value
                             If Version.Version.HasFabric Then IsFabricExists = True
+                            If Version.Version.HasQuilt Then IsQuiltExists = True
                             If Version.Version.HasLiteLoader Then IsLiteExists = True
                             If Version.Version.HasForge Then IsForgeExists = True
                             If Version.Version.HasNeoForge Then IsNeoForgeExists = True
                         Next
-                        If If(IsLiteExists, 1, 0) + If(IsForgeExists, 1, 0) + If(IsFabricExists, 1, 0) + If(IsNeoForgeExists, 1, 0) > 1 Then
+                        If If(IsLiteExists, 1, 0) + If(IsForgeExists, 1, 0) + If(IsFabricExists, 1, 0) + If(IsNeoForgeExists, 1, 0) + If(IsQuiltExists, 1, 0) > 1 Then
                             CardName = "可安装 Mod"
                         ElseIf IsForgeExists Then
                             CardName = "Forge 版本"
@@ -55,6 +57,8 @@
                             CardName = "NeoForge 版本"
                         ElseIf IsLiteExists Then
                             CardName = "LiteLoader 版本"
+                        ElseIf IsQuiltExists Then
+                            CardName = "Quilt 版本"
                         Else
                             CardName = "Fabric 版本"
                         End If
@@ -74,16 +78,22 @@
 #End Region
                 '建立控件
                 Dim CardTitle As String = CardName & If(CardName = "收藏夹", "", " (" & Card.Value.Count & ")")
-                Dim NewCard As New MyCard With {.Title = CardTitle, .Margin = New Thickness(0, 0, 0, 15), .SwapType = 0}
+                Dim NewCard As New MyCard With {.Title = CardTitle, .Margin = New Thickness(0, 0, 0, 15)}
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Card.Value}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
                 PanMain.Children.Add(NewCard)
                 '确定卡片是否展开
+                Dim PutMethod = Sub(Stack As StackPanel)
+                                    For Each item In Stack.Tag
+                                        Stack.Children.Add(McVersionListItem(item))
+                                    Next
+                                End Sub
                 If Card.Key = McVersionCardType.Rubbish OrElse Card.Key = McVersionCardType.Error OrElse Card.Key = McVersionCardType.Fool Then
-                    NewCard.IsSwaped = True
+                                        NewCard.IsSwaped = True
+                    NewCard.InstallMethod = PutMethod
                 Else
-                    MyCard.StackInstall(NewStack, 0, CardTitle)
+                    MyCard.StackInstall(NewStack, PutMethod)
                 End If
             Next
 

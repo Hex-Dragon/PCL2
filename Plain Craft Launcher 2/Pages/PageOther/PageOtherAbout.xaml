@@ -18,7 +18,7 @@
                         <ColumnDefinition Width="150" />
                     </Grid.ColumnDefinitions>
                     <local:MyListItem IsHitTestVisible="False" Title="龙腾猫跃" Margin="-5,0,15,0" Info="Plain Craft Launcher 的作者！" Grid.Row="0" Grid.Column="1" />
-                    <local:MyListItem IsHitTestVisible="False" Title="Plain Craft Launcher 2" Margin="-5,0,15,0" Info="当前版本：%VERSION%（%VERSIONCODE%.%BRANCH%）" Grid.Row="1" Grid.Column="1" x:Name="ItemAboutPcl" />
+                    <local:MyListItem IsHitTestVisible="False" Title="Plain Craft Launcher 2" Margin="-5,0,15,0" Info="当前版本: %BRANCH% %VERSION% (%VERSIONCODE%+build.%COMMIT_HASH%, 基于 %UPSTREAM_VERSION%)" Grid.Row="1" Grid.Column="1" x:Name="ItemAboutPcl" />
                     <Image Source="/Plain Craft Launcher 2;component/Images/Heads/Logo.png" Grid.Row="1" Margin="3">
                         <Image.Clip>
                             <EllipseGeometry Center="17 17" RadiusX="17" RadiusY="17" />
@@ -30,7 +30,7 @@
                         </Image.Clip>
                     </Image>
                     <local:MyButton Text="赞助作者" Grid.Column="2" Grid.Row="0" Height="35" EventType="打开网页" EventData="https://afdian.com/a/LTCat" />
-                    <local:MyButton Text="查看源代码" Grid.Column="2" Grid.Row="1" Height="35" EventType="打开网页" EventData="https://github.com/Hex-Dragon/PCL2" />
+                    <local:MyButton Text="查看源代码" Grid.Column="2" Grid.Row="1" Height="35" EventType="打开网页" EventData="https://github.com/PCL-Community/PCL2-CE" />
                 </Grid>
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="特别鸣谢">
@@ -268,6 +268,8 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="60" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="60" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Java Launch Wrapper" TextWrapping="Wrap" FontWeight="Bold" />
                     <TextBlock Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Text="Copyright © 2022 00ll00&#xa;Licensed under the MIT License." TextWrapping="Wrap" />
@@ -316,6 +318,12 @@
                     <local:MyButton Grid.Row="13" Grid.Column="2" MinWidth="140" Text="查看原网站" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
                                     EventType="打开网页" EventData="https://www.iconfont.cn/" />
 
+                    <TextBlock Grid.Row="14" Grid.Column="0" Text="Fody" TextWrapping="Wrap" FontWeight="Bold" />
+                    <TextBlock Grid.Row="14" Grid.Column="2" Grid.ColumnSpan="2" Text="Copyright (c) Simon Cropp" TextWrapping="Wrap" />
+                    <local:MyButton Grid.Row="15" Grid.Column="2" MinWidth="140" Text="查看原网站" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+                EventType="打开网页" EventData="https://github.com/Fody/Fody" />
+                    <local:MyButton Grid.Row="15" Grid.Column="3" MinWidth="140" Text="查看许可文档" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+                                    EventType="打开网页" EventData="https://github.com/Fody/Fody/blob/master/License.txt" />
                 </Grid>
             </local:MyCard>
         </StackPanel>

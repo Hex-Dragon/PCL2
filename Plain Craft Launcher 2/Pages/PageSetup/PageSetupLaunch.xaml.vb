@@ -39,6 +39,7 @@
             TextArgumentWindowWidth.Text = Setup.Get("LaunchArgumentWindowWidth")
             TextArgumentWindowHeight.Text = Setup.Get("LaunchArgumentWindowHeight")
             CheckArgumentRam.Checked = Setup.Get("LaunchArgumentRam")
+            CheckArgumentJavaTraversal.Checked = Setup.Get("LaunchArgumentJavaTraversal")
             RefreshJavaComboBox()
 
             '游戏内存
@@ -52,6 +53,7 @@
             CheckAdvanceRunWait.Checked = Setup.Get("LaunchAdvanceRunWait")
             CheckAdvanceAssets.Checked = Setup.Get("LaunchAdvanceAssets")
             CheckAdvanceJava.Checked = Setup.Get("LaunchAdvanceJava")
+            CheckAdvanceDisableJlw.Checked = Setup.Get("LaunchAdvanceDisableJlw")
 
         Catch ex As NullReferenceException
             Log(ex, "启动设置项存在异常，已被自动重置", LogLevel.Msgbox)
@@ -73,6 +75,7 @@
             Setup.Reset("LaunchArgumentWindowHeight")
             Setup.Reset("LaunchArgumentPriority")
             Setup.Reset("LaunchArgumentRam")
+            Setup.Reset("LaunchArgumentJavaTraversal")
             Setup.Reset("LaunchRamType")
             Setup.Reset("LaunchRamCustom")
             Setup.Reset("LaunchSkinType")
@@ -110,7 +113,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboArgumentVisibie.SelectionChanged, ComboArgumentWindowType.SelectionChanged, ComboArgumentPriority.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change, CheckAdvanceDisableJlw.Change, CheckArgumentJavaTraversal.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
 

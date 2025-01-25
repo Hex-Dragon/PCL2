@@ -27,8 +27,8 @@
             Case LoadState.Failed
                 Dim ErrorMessage As String = ""
                 If CompFileLoader.Error IsNot Nothing Then ErrorMessage = CompFileLoader.Error.Message
-                If ErrorMessage.Contains("不是有效的 json 文件") Then
-                    Log("[Comp] 下载的文件 json 列表损坏，已自动重试", LogLevel.Debug)
+                If ErrorMessage.Contains("不是有效的 Json 文件") Then
+                    Log("[Comp] 下载的文件 Json 列表损坏，已自动重试", LogLevel.Debug)
                     PageLoaderRestart()
                 End If
         End Select
@@ -170,16 +170,39 @@
             For Each Pair As KeyValuePair(Of String, List(Of CompFile)) In Dict
                 If Not Pair.Value.Any() Then Continue For
                 '增加卡片
-                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(Project.Type = CompType.ModPack, 9, 8)} 'FUTURE: Res
+                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15)} 'FUTURE: Res
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
                 NewCard.Children.Add(NewStack)
+                NewCard.InstallMethod = Sub(Stack As StackPanel)
+                                            Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
+                                            If Project.Type <> CompType.ModPack Then CompFilesCardPreload(Stack, Stack.Tag)
+                                            Dim DisplayBadName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
+                                            '存在重复的名称（#1344）
+                                            For Each item In Stack.Tag
+                                                Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=DisplayBadName))
+                                            Next
+                                        End Sub
                 NewCard.SwapControl = NewStack
                 PanResults.Children.Add(NewCard)
                 '确定卡片是否展开
                 If Pair.Key = TargetCardName OrElse
-                   (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
-                   CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
-                    MyCard.StackInstall(NewStack, If(Project.Type = CompType.ModPack, 9, 8), Pair.Key) 'FUTURE: Res
+                (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
+                CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
+                    MyCard.StackInstall(NewStack, Sub(Stack As StackPanel)
+                                                      Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
+                                                      If Project.Type = CompType.ModPack Then
+                                                          Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
+                                                          For Each item In Stack.Tag
+                                                              Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
+                                                          Next
+                                                      Else
+                                                          CompFilesCardPreload(Stack, Stack.Tag)
+                                                          Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
+                                                          For Each item In Stack.Tag
+                                                              Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
+                                                          Next
+                                                      End If
+                                                  End Sub)
                 Else
                     NewCard.IsSwaped = True
                 End If
@@ -215,7 +238,7 @@
         AniControlEnabled += 1
         Project = FrmMain.PageCurrent.Additional(0)
         PanBack.ScrollToHome()
-
+        BtnFavorites.Text = If(CompFavorites.FavoritesList.Contains(Project.Id), "取消收藏", "收藏")
         '重启加载器
         If IsFirstInit Then
             '在 Me.Initialized 已经初始化了加载器，不再重复初始化
@@ -290,9 +313,22 @@
         RunInNewThread(
         Sub()
             Try
-                Dim Desc As String = If(Project.Type = CompType.ModPack, "整合包", If(Project.Type = CompType.Mod, "Mod ", "资源包"))
+                Dim Desc As String = "资源"
+                Select Case Project.Type
+                    Case CompType.ModPack : Desc = "整合包"
+                    Case CompType.Mod : Desc = "Mod "
+                    Case CompType.ResourcePack : Desc = "资源包"
+                    Case CompType.Shader : Desc = "光影包"
+                End Select
                 '确认默认保存位置
                 Dim DefaultFolder As String = Nothing
+                Dim ResourceName As String = ""
+                Select Case Project.Type
+                    Case CompType.Mod : ResourceName = "mods"
+                    Case CompType.ResourcePack : ResourceName = "resourcepacks"
+                    Case CompType.Shader : ResourceName = "shaderpacks"
+                End Select
+                Dim IsVersionSuitable As Func(Of McVersion, Boolean)
                 If Project.Type = CompType.Mod Then
                     '获取 Mod 所需的加载器种类
                     Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing
@@ -308,8 +344,8 @@
                         AllowForge = Nothing : AllowFabric = Nothing
                     End If
                     Log("[Comp] 允许 Forge：" & If(AllowForge, "未知") & "，允许 Fabric：" & If(AllowFabric, "未知"))
-                    '判断某个版本是否符合要求
-                    Dim IsVersionSuitable As Func(Of McVersion, Boolean) =
+                    '判断某个版本是否符合 Mod 要求
+                    IsVersionSuitable =
                     Function(Version)
                         If Not Version.IsLoaded Then Version.Load()
                         If Not Version.Modable Then Return False
@@ -320,14 +356,24 @@
                         If AllowFabric AndAlso Version.Version.HasFabric Then Return True
                         Return False
                     End Function
-                    '获取 Mod 默认下载位置
+                ElseIf {CompType.ResourcePack, CompType.Shader}.Contains(Project.Type) Then
+                    '判断某个版本是否符合资源包和光影要求
+                    IsVersionSuitable =
+                    Function(Version)
+                        If Not Version.IsLoaded Then Version.Load()
+                        If File.GameVersions.Any(Function(v) v.Contains(".") AndAlso v = Version.Version.McName) Then Return True
+                        Return False
+                    End Function
+                End If
+                If Not String.IsNullOrWhiteSpace(ResourceName) AndAlso IsVersionSuitable IsNot Nothing Then
+                    '获取常规资源默认下载位置
                     If CachedFolder IsNot Nothing Then
                         DefaultFolder = CachedFolder
                         Log("[Comp] 使用上次下载时的文件夹作为默认下载位置")
                     ElseIf McVersionCurrent IsNot Nothing AndAlso IsVersionSuitable(McVersionCurrent) Then
-                        DefaultFolder = McVersionCurrent.PathIndie & "mods\"
+                        DefaultFolder = McVersionCurrent.PathIndie & $"{ResourceName}\"
                         Directory.CreateDirectory(DefaultFolder)
-                        Log("[Comp] 使用当前版本的 mods 文件夹作为默认下载位置（" & McVersionCurrent.Name & "）")
+                        Log($"[Comp] 使用当前版本的 {ResourceName} 文件夹作为默认下载位置（{McVersionCurrent.Name}）")
                     Else
                         Dim NeedLoad As Boolean = McVersionListLoader.State <> LoadState.Finished
                         If NeedLoad Then
@@ -341,17 +387,17 @@
                         If Not SuitableVersions.Any() Then
                             DefaultFolder = PathMcFolder
                             If NeedLoad Then
-                                Hint("当前 MC 文件夹中没有找到适合这个 Mod 的版本！")
+                                Hint("当前 MC 文件夹中没有找到适合此资源文件的版本！")
                             Else
                                 Log("[Comp] 由于当前版本不兼容，使用当前的 MC 文件夹作为默认下载位置")
                             End If
-                        Else '选择 Mod 数量最多的版本
+                        Else '选择资源数量最多的版本
                             Dim SelectedVersion = SuitableVersions.OrderBy(
                             Function(v)
-                                Dim Info As New DirectoryInfo(v.PathIndie & "mods\")
+                                Dim Info As New DirectoryInfo(v.PathIndie & $"{ResourceName}\")
                                 Return If(Info.Exists, Info.GetFiles().Length, -1)
                             End Function).LastOrDefault()
-                            DefaultFolder = SelectedVersion.PathIndie & "mods\"
+                            DefaultFolder = SelectedVersion.PathIndie & $"{ResourceName}\"
                             Directory.CreateDirectory(DefaultFolder)
                             Log("[Comp] 使用适合的游戏版本作为默认下载位置（" & SelectedVersion.Name & "）")
                         End If
@@ -411,6 +457,22 @@
     End Sub
     Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
         ClipboardSet(CompItem.LabTitle.Text)
+    End Sub
+    Private Sub BtnFavorites_Click(sender As Object, e As EventArgs) Handles BtnFavorites.Click
+        If CompFavorites.FavoritesList.Contains(Project.Id) Then
+            CompFavorites.FavoritesList.Remove(Project.Id)
+            Hint($"已取消收藏 {Project.TranslatedName}！", HintType.Finish)
+            BtnFavorites.Text = "收藏"
+        Else
+            CompFavorites.FavoritesList.Add(Project.Id)
+            Hint($"已收藏 {Project.TranslatedName}！", HintType.Finish)
+            BtnFavorites.Text = "取消收藏"
+        End If
+        CompFavorites.Save()
+    End Sub
+    Private Sub BtnIntroLinkCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroLinkCopy.Click
+        CompClipboard.CurrentText = Project.Website
+        ClipboardSet(Project.Website)
     End Sub
 
 End Class

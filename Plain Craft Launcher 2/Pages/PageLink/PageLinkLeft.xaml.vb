@@ -7,7 +7,7 @@
         IsLoad = True
         '切换默认页面
         If IsPageSwitched Then Exit Sub
-        ItemHiper.SetChecked(True, False, False)
+        ItemLobby.SetChecked(True, False, False)
     End Sub
     Private Sub PageOtherLeft_Unloaded(sender As Object, e As RoutedEventArgs) Handles Me.Unloaded
         IsPageSwitched = False
@@ -18,12 +18,12 @@
     ''' <summary>
     ''' 当前页面的编号。
     ''' </summary>
-    Public PageID As FormMain.PageSubType = FormMain.PageSubType.LinkHiper
+    Public PageID As FormMain.PageSubType = FormMain.PageSubType.LinkLobby
 
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemHiper.Check, ItemIoi.Check, ItemSetup.Check, ItemHelp.Check, ItemFeedback.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemLobby.Check, ItemIoi.Check, ItemSetup.Check, ItemHelp.Check, ItemFeedback.Check, ItemNetStatus.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -32,9 +32,9 @@
     Public Function PageGet(Optional ID As FormMain.PageSubType = -1)
         If ID = -1 Then ID = PageID
         Select Case ID
-            Case 0, FormMain.PageSubType.LinkHiper
-                If FrmLinkHiper Is Nothing Then FrmLinkHiper = New PageLinkHiper
-                Return FrmLinkHiper
+            Case 0, FormMain.PageSubType.LinkLobby
+                If FrmLinkLobby Is Nothing Then FrmLinkLobby = New PageLinkLobby
+                Return FrmLinkLobby
             Case FormMain.PageSubType.LinkIoi
                 If FrmLinkIoi Is Nothing Then FrmLinkIoi = New PageLinkIoi
                 Return FrmLinkIoi
@@ -42,11 +42,30 @@
                 If FrmSetupLink Is Nothing Then FrmSetupLink = New PageSetupLink
                 Return FrmSetupLink
             Case FormMain.PageSubType.LinkHelp
-                If FrmLinkHelp Is Nothing Then FrmLinkHelp = PageOtherHelp.GetHelpPage(PathTemp & "Help\启动器\联机.json")
+                Dim page = New PageOtherHelpDetail
+                Dim panel = New StackPanel With {
+                    .Orientation = Orientation.Vertical
+                }
+                Dim card = New MyCard With {
+                    .Height = 200
+                }
+                panel.Children.Add(card)
+                Dim textblock As New TextBlock With {
+                    .Text = "暂时没写好 qwq",
+                    .FontSize = 20,
+                    .HorizontalAlignment = HorizontalAlignment.Center,
+                    .VerticalAlignment = VerticalAlignment.Center
+                }
+                card.Children.Add(textblock)
+                page.PanCustom.Children.Add(panel)
+                If FrmLinkHelp Is Nothing Then FrmLinkHelp = page
                 Return FrmLinkHelp
             Case FormMain.PageSubType.LinkFeedback
                 If FrmLinkFeedback Is Nothing Then FrmLinkFeedback = New PageLinkFeedback
                 Return FrmLinkFeedback
+            Case FormMain.PageSubType.LinkNetStatus
+                If FrmLinkNetStatus Is Nothing Then FrmLinkNetStatus = New PageLinkNetStatus
+                Return FrmLinkNetStatus
             Case Else
                 Throw New Exception("未知的更多子页面种类：" & ID)
         End Select
@@ -97,16 +116,12 @@
         End If
     End Sub
 
-    Private Sub BtnHiperStop_Loaded(sender As Object, e As RoutedEventArgs)
-        sender.Visibility = If(PageLinkHiper.HiperState = LoadState.Finished OrElse PageLinkHiper.HiperState = LoadState.Loading, Visibility.Visible, Visibility.Collapsed)
+    Public Sub Recheck(sender As Object, e As EventArgs)
+        Hint("正在重新检测网络环境，请稍后...")
+        FrmLinkNetStatus.NetStatusTest()
     End Sub
-    Private Sub BtnHiperStop_Click(sender As Object, e As EventArgs)
-        PageLinkHiper.ModuleStopManually()
-    End Sub
-    Private Sub BtnIoiStop_Loaded(sender As Object, e As RoutedEventArgs)
-    End Sub
-    Private Sub BtnIoiStop_Click(sender As Object, e As EventArgs)
-        PageLinkIoi.ModuleStopManually()
+    Public Sub NetStatusUpdate(Status As String)
+        ItemNetStatus.Title = Status
     End Sub
 
 End Class

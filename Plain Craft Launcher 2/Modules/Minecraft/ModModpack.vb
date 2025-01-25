@@ -183,6 +183,7 @@ Retry:
         Dim ForgeVersion As String = Nothing
         Dim NeoForgeVersion As String = Nothing
         Dim FabricVersion As String = Nothing
+        Dim QuiltVersion As String = Nothing
         For Each Entry In If(Json("minecraft")("modLoaders"), {})
             Dim Id As String = If(Entry("id"), "").ToString.ToLower
             If Id.StartsWithF("forge-") Then
@@ -196,10 +197,22 @@ Retry:
                 NeoForgeVersion = Id.Replace("neoforge-", "")
             ElseIf Id.StartsWithF("fabric-") Then
                 'Fabric 指定
-                Log("[ModPack] 整合包 Fabric 版本：" & Id)
-                FabricVersion = Id.Replace("fabric-", "")
-            Else
-                Log("[ModPack] 未知 Mod 加载器：" & Id)
+                Try
+                    Log("[ModPack] 整合包 Fabric 版本：" & Id)
+                    FabricVersion = Id.Replace("fabric-", "")
+                    Exit For
+                Catch ex As Exception
+                    Log(ex, "读取整合包 Fabric 版本失败：" & Id)
+                End Try
+            ElseIf Id.StartsWithF("quilt-") Then
+                'Quilt 指定
+                Try
+                    Log("[ModPack] 整合包 Quilt 版本：" & Id)
+                    QuiltVersion = Id.Replace("quilt-", "")
+                    Exit For
+                Catch ex As Exception
+                    Log(ex, "读取整合包 Quilt 版本失败：" & Id)
+                End Try
             End If
         Next
         '解压与配置文件
@@ -217,7 +230,7 @@ Retry:
                     CopyDirectory(OverridePath, PathMcFolder & "versions\" & VersionName, Sub(Delta) Task.Progress += Delta * 0.35)
                     Log($"[ModPack] 整合包 override 复制：{OverridePath} -> {PathMcFolder & "versions\" & VersionName}")
                 Else
-                    Log($"[ModPack] 整合包中未找到 override 文件夹：{OverridePath}")
+                    Log($"[ModPack] 整合包中未找到 overrides 文件夹：{OverridePath}")
                 End If
                 Task.Progress = 0.95
                 '开启版本隔离
@@ -298,7 +311,8 @@ Retry:
             .MinecraftName = Json("minecraft")("version").ToString,
             .ForgeVersion = ForgeVersion,
             .NeoForgeVersion = NeoForgeVersion,
-            .FabricVersion = FabricVersion
+            .FabricVersion = FabricVersion,
+            .QuiltVersion = QuiltVersion
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
         '构造 Libraries 加载器
@@ -361,6 +375,7 @@ Retry:
         Dim ForgeVersion As String = Nothing
         Dim NeoForgeVersion As String = Nothing
         Dim FabricVersion As String = Nothing
+        Dim QuiltVersion As String = Nothing
         For Each Entry As JProperty In If(Json("dependencies"), {})
             Select Case Entry.Name.ToLower
                 Case "minecraft"
@@ -374,12 +389,11 @@ Retry:
                 Case "fabric-loader" 'eg. 0.14.14
                     FabricVersion = Entry.Value.ToString
                     Log("[ModPack] 整合包 Fabric 版本：" & FabricVersion)
-                Case "quilt-loader" 'eg. 1.0.0
-                    Hint("PCL 暂不支持安装需要 Quilt 的整合包！", HintType.Critical)
-                    Throw New CancelledException
+                Case "quilt-loader" 'eg. 0.26.0
+                    QuiltVersion = Entry.Value.ToString
+                    Log("[ModPack] 整合包 Quilt 版本：" & QuiltVersion)
                 Case Else
-                    Hint($"无法安装整合包，其中出现了未知的 Mod 加载器 {Entry.Value}！", HintType.Critical)
-                    Throw New CancelledException
+                    Hint($"无法安装整合包，其中出现了未知的 Mod 加载器 {Entry.Name}（版本为 {Entry.Value.ToString}）！", HintType.Critical)
             End Select
         Next
         '获取版本名
@@ -446,7 +460,8 @@ Retry:
             .MinecraftName = MinecraftVersion,
             .ForgeVersion = ForgeVersion,
             .NeoForgeVersion = NeoForgeVersion,
-            .FabricVersion = FabricVersion
+            .FabricVersion = FabricVersion,
+            .QuiltVersion = QuiltVersion
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
         '构造 Libraries 加载器
@@ -519,7 +534,7 @@ Retry:
             If Directory.Exists(InstallTemp & ArchiveBaseFolder & "minecraft") Then
                 CopyDirectory(InstallTemp & ArchiveBaseFolder & "minecraft", PathMcFolder & "versions\" & VersionName, Sub(Delta) Task.Progress += Delta * 0.35)
             Else
-                Log("[ModPack] 整合包中未找到 minecraft override 目录，已跳过")
+                Log("[ModPack] 整合包中未找到 minecraft overrides 目录，已跳过")
             End If
             Task.Progress = 0.95
             '开启版本隔离
@@ -603,7 +618,7 @@ Retry:
             If Directory.Exists(InstallTemp & ArchiveBaseFolder & ".minecraft") Then
                 CopyDirectory(InstallTemp & ArchiveBaseFolder & ".minecraft", PathMcFolder & "versions\" & VersionName, Sub(Delta) Task.Progress += Delta * 0.35)
             Else
-                Log("[ModPack] 整合包中未找到 override .minecraft 目录，已跳过")
+                Log("[ModPack] 整合包中未找到 overrides .minecraft 目录，已跳过")
             End If
             Task.Progress = 0.95
             '开启版本隔离
@@ -662,9 +677,8 @@ Retry:
                     Request.NeoForgeVersion = Component("version")
                 Case "net.fabricmc.fabric-loader"
                     Request.FabricVersion = Component("version")
-                Case "org.quiltmc.quilt-loader" 'eg. 1.0.0
-                    Hint("PCL 暂不支持安装需要 Quilt 的整合包！", HintType.Critical)
-                    Throw New CancelledException
+                Case "org.quiltmc.quilt-loader"
+                    Request.QuiltVersion = Component("version")
             End Select
         Next
         '构造加载器
@@ -738,10 +752,9 @@ Retry:
         For Each Entry In Json("addons")
             Addons.Add(Entry("id"), Entry("version"))
         Next
-        If Not Addons.ContainsKey("game") Then Throw New Exception("该 MCBBS 整合包未提供游戏版本信息，无法安装！")
-        If Addons.ContainsKey("quilt") Then
-            Hint("PCL 暂不支持安装需要 Quilt 的整合包！", HintType.Critical)
-            Throw New CancelledException
+        If Not Addons.ContainsKey("game") Then
+            Hint("该整合包未提供游戏版本信息，无法安装！", HintType.Critical)
+            Return Nothing
         End If
         Dim Request As New McInstallRequest With {
             .TargetVersionName = VersionName,
@@ -750,7 +763,8 @@ Retry:
             .OptiFineVersion = If(Addons.ContainsKey("optifine"), Addons("optifine"), Nothing),
             .ForgeVersion = If(Addons.ContainsKey("forge"), Addons("forge"), Nothing),
             .NeoForgeVersion = If(Addons.ContainsKey("neoforge"), Addons("neoforge"), Nothing),
-            .FabricVersion = If(Addons.ContainsKey("fabric"), Addons("fabric"), Nothing)
+            .FabricVersion = If(Addons.ContainsKey("fabric"), Addons("fabric"), Nothing),
+            .QuiltVersion = If(Addons.ContainsKey("quilt"), Addons("quilt"), Nothing)
         }
         Dim MergeLoaders As List(Of LoaderBase) = McInstallLoader(Request, True)
         '构造 Libraries 加载器
