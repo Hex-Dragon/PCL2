@@ -389,7 +389,7 @@ pause"
                     Exit Sub
                 End If
         End Select
-        OpenWebsite("https://zh.minecraft.wiki/w/Special:%E6%90%9C%E7%B4%A2?search=" & WikiName.Replace("_experimental-snapshot-", "-exp"))
+        OpenWebsite("https://zh.minecraft.wiki/w/Special:Search?search=" & WikiName.Replace("_experimental-snapshot-", "-exp"))
     End Sub
 
 #End Region
