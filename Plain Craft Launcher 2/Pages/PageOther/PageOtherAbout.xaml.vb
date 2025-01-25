@@ -10,7 +10,7 @@
         If IsLoaded Then Exit Sub
         IsLoaded = True
 
-        ItemAboutPcl.Info = ItemAboutPcl.Info.Replace("%VERSION%", VersionDisplayName).Replace("%VERSIONCODE%", VersionCode).Replace("%BRANCH%", VersionBranchCode)
+        ItemAboutPcl.Info = ItemAboutPcl.Info.Replace("%VERSION%", VersionBaseName).Replace("%VERSIONCODE%", VersionCode).Replace("%BRANCH%", VersionBranchName).Replace("%COMMIT_HASH%", CommitHashShort).Replace("%UPSTREAM_VERSION%", UpstreamVersion)
 #If DEBUG Then
         BtnDonateDonate.Visibility = Visibility.Collapsed
         BtnDonateOutput.Visibility = Visibility.Visible

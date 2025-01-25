@@ -3,6 +3,24 @@
 Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
+    Private Property _Proxy As WebProxy
+    ''' <summary>
+    ''' 获取 Proxy 代理
+    ''' </summary>
+    ''' <returns>返回 WebProxy 或者 Nothing</returns>
+    Public Function GetProxy()
+        Dim proxy As String = Setup.Get("SystemHttpProxy")
+        If _Proxy IsNot Nothing AndAlso _Proxy.Address.AbsoluteUri = proxy Then
+            Return _Proxy
+        End If
+        If Not String.IsNullOrWhiteSpace(proxy) Then
+            _Proxy = New WebProxy(proxy)
+            Log($"[Net] 使用 Proxy 代理")
+            Return _Proxy
+        End If
+        Return Nothing
+    End Function
+
     ''' <summary>
     ''' 测试 Ping。失败则返回 -1。
     ''' </summary>
@@ -185,7 +203,7 @@ RequestFinished:
     Public Function NetGetCodeByRequestOnce(Url As String, Optional Encode As Encoding = Nothing, Optional Timeout As Integer = 30000, Optional IsJson As Boolean = False, Optional Accept As String = "", Optional UseBrowserUserAgent As Boolean = False)
         If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
         Url = SecretCdnSign(Url)
-        Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 json", "")}")
+        Log($"[Net] 获取网络结果：{Url}，超时 {Timeout}ms{If(IsJson, "，要求 Json", "")}")
         Dim Request As HttpWebRequest = WebRequest.Create(Url)
         Dim Result As New List(Of Byte)
         Try
@@ -373,17 +391,21 @@ RequestFinished:
         If RunInUi() AndAlso Not Url.Contains("//127.") Then Throw New Exception("在 UI 线程执行了网络请求")
         Url = SecretCdnSign(Url)
         If MakeLog Then Log("[Net] 发起网络请求（" & Method & "，" & Url & "），最大超时 " & Timeout)
-        Dim DataStream As Stream = Nothing
-        Dim Resp As WebResponse = Nothing
         Dim Req As HttpWebRequest
+        Dim Res As String = ""
         Try
             Req = WebRequest.Create(Url)
+            Req.Proxy = GetProxy()
             Req.Method = Method
-            Dim SendData As Byte()
-            If TypeOf Data Is Byte() Then
-                SendData = Data
-            Else
-                SendData = New UTF8Encoding(False).GetBytes(Data.ToString)
+            Dim SendData As Byte() = Nothing
+            If Not IsNothing(Data) Then
+                If TypeOf Data Is Byte() Then
+                    SendData = DirectCast(Data, Byte())
+                ElseIf TypeOf Data Is String Then
+                    SendData = New UTF8Encoding(False).GetBytes(DirectCast(Data, String))
+                Else
+                    Throw New ArgumentException("Data 参数类型不支持")
+                End If
             End If
             If Headers IsNot Nothing Then
                 For Each Pair In Headers
@@ -393,55 +415,57 @@ RequestFinished:
             Req.ContentType = ContentType
             Req.Timeout = Timeout
             SecretHeadersSign(Url, Req, UseBrowserUserAgent)
-            If Url.StartsWithF("https", True) Then Req.ProtocolVersion = HttpVersion.Version11
+            If Url.StartsWith("https", StringComparison.OrdinalIgnoreCase) Then Req.ProtocolVersion = HttpVersion.Version11
             If Method = "POST" OrElse Method = "PUT" Then
-                Req.ContentLength = SendData.Length
-                DataStream = Req.GetRequestStream()
-                DataStream.WriteTimeout = Timeout
-                DataStream.ReadTimeout = Timeout
-                DataStream.Write(SendData, 0, SendData.Length)
-                DataStream.Close()
+                If Not IsNothing(SendData) Then
+                    Req.ContentLength = SendData.Length
+                    Using DataStream As Stream = Req.GetRequestStream()
+                        DataStream.WriteTimeout = Timeout
+                        DataStream.ReadTimeout = Timeout
+                        DataStream.Write(SendData, 0, SendData.Length)
+                    End Using
+                End If
             End If
-            Resp = Req.GetResponse()
-            DataStream = Resp.GetResponseStream()
-            DataStream.WriteTimeout = Timeout
-            DataStream.ReadTimeout = Timeout
-            Using Reader As New StreamReader(DataStream)
-                Return Reader.ReadToEnd()
-            End Using
-        Catch ex As ThreadInterruptedException
-            Throw
-        Catch ex As WebException
-            If ex.Status = WebExceptionStatus.Timeout Then
-                ex = New WebException($"连接服务器超时，请检查你的网络环境是否良好（{ex.Message}，{Url}）", ex)
-            Else
-                '获取请求失败的返回
-                Dim Res As String = ""
-                Try
-                    If ex.Response Is Nothing Then Exit Try
-                    DataStream = ex.Response.GetResponseStream()
+            Using Resp As WebResponse = Req.GetResponse()
+                Using DataStream As Stream = Resp.GetResponseStream()
                     DataStream.WriteTimeout = Timeout
                     DataStream.ReadTimeout = Timeout
                     Using Reader As New StreamReader(DataStream)
                         Res = Reader.ReadToEnd()
                     End Using
+                End Using
+            End Using
+            Return Res
+        Catch ex As ThreadInterruptedException
+            Throw
+        Catch ex As WebException
+            If ex.Status = WebExceptionStatus.Timeout Then
+                Throw New WebException($"连接服务器超时，请检查你的网络环境是否良好（{ex.Message}，{Url}）", ex)
+            Else
+                Dim RespStream As Stream = Nothing
+                Try
+                    If ex.Response IsNot Nothing Then
+                        RespStream = ex.Response.GetResponseStream()
+                        If RespStream IsNot Nothing Then
+                            Using Reader As New StreamReader(RespStream)
+                                Res = Reader.ReadToEnd()
+                            End Using
+                        End If
+                    End If
                 Catch
+                Finally
+                    If RespStream IsNot Nothing Then RespStream.Dispose()
                 End Try
-                If Res = "" Then
-                    ex = New WebException($"网络请求失败（{ex.Status}，{ex.Message}，{Url}）", ex)
+                If String.IsNullOrEmpty(Res) Then
+                    Throw New WebException($"网络请求失败（{ex.Status}，{ex.Message}，{Url}）", ex)
                 Else
-                    ex = New ResponsedWebException($"服务器返回错误（{ex.Status}，{ex.Message}，{Url}）{vbCrLf}{Res}", Res, ex)
+                    Throw New ResponsedWebException($"服务器返回错误（{ex.Status}，{ex.Message}，{Url}）{vbCrLf}{Res}", Res, ex)
                 End If
             End If
-            If MakeLog Then Log(ex, "NetRequestOnce 失败", LogLevel.Developer)
-            Throw ex
         Catch ex As Exception
-            ex = New WebException("网络请求失败（" & Url & "）", ex)
-            If MakeLog Then Log(ex, "NetRequestOnce 失败", LogLevel.Developer)
-            Throw ex
-        Finally
-            If DataStream IsNot Nothing Then DataStream.Dispose()
-            If Resp IsNot Nothing Then Resp.Dispose()
+            Dim nx = New WebException("网络请求失败（" & Url & "）", ex)
+            If MakeLog AndAlso Not String.IsNullOrEmpty(Res) Then Log(nx, "NetRequestOnce 请求失败", LogLevel.Developer)
+            Throw nx
         End Try
     End Function
     Public Class ResponsedWebException
@@ -1039,7 +1063,7 @@ StartThread:
                 '请求头
                 HttpRequest = WebRequest.Create(Info.Source.Url)
                 If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
-                'HttpRequest.Proxy = Nothing 'new WebProxy(Ip, Port)
+                HttpRequest.Proxy = GetProxy()
                 HttpRequest.Timeout = Timeout
                 HttpRequest.AddRange(Info.DownloadStart)
                 SecretHeadersSign(Info.Source.Url, HttpRequest, UseBrowserUserAgent)

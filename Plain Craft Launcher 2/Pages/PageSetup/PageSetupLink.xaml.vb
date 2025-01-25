@@ -18,14 +18,12 @@
     End Sub
     Public Sub Reload()
         TextLinkName.Text = Setup.Get("LinkName")
-        CheckHiperCertWarn.Checked = Setup.Get("LinkHiperCertWarn")
     End Sub
 
     '初始化
     Public Sub Reset()
         Try
             Setup.Reset("LinkName")
-            Setup.Reset("LinkHiperCertWarn")
 
             Log("[Setup] 已初始化联机页设置")
             Hint("已初始化联机页设置！", HintType.Finish, False)
@@ -39,17 +37,6 @@
     '将控件改变路由到设置改变
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextLinkName.ValidatedTextChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Text)
-    End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckHiperCertWarn.Change
-        If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
-    End Sub
-
-    Private Sub BtnHiperLog_Click(sender As Object, e As EventArgs) Handles BtnHiperLog.Click
-        If File.Exists(PageLinkHiper.PathHiper & "logs\hiper.log") Then
-            OpenExplorer("/select,""" & PageLinkHiper.PathHiper & "logs\hiper.log""")
-        Else
-            Hint("没有找到 HiPer 联机模块的日志！")
-        End If
     End Sub
 
 End Class

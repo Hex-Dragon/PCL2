@@ -1,0 +1,58 @@
+﻿<local:MyPageRight
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:System="clr-namespace:System;assembly=mscorlib" 
+    mc:Ignorable="d" x:Class="PageVersionScreenshot"
+    PanScroll="{Binding ElementName=PanBack}" Grid.IsSharedSizeScope="True">
+    <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
+        <Grid>
+            <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40" x:Name="PanNoPic">
+                <Grid Margin="20,17">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="4" Margin="0,0,0,9" HorizontalAlignment="Center" Text="暂时没有截图文件" FontSize="19" UseLayoutRounding="True" SnapsToDevicePixels="True" Foreground="{DynamicResource ColorBrush3}" />
+                    <Rectangle Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" Height="2" Fill="{DynamicResource ColorBrush3}" />
+                    <TextBlock Grid.Row="2" Grid.ColumnSpan="4" Margin="10,15,10,5" Text="在游戏内按下截图键（默认为 F2）后，可在此处查看保存的截图" TextWrapping="Wrap" />
+                    <local:MyButton Grid.Row="3" Grid.Column="1" Height="35" HorizontalAlignment="Center" Click="BtnOpenFolder_Click" MinWidth="140" Text="打开截图文件夹" Margin="10,10,10,0" Padding="13,0" ColorType="Highlight" />
+                </Grid>
+            </local:MyCard>
+            <StackPanel Orientation="Vertical" Margin="10,25,10,10" x:Name="PanContent">
+                <local:MyCard Margin="15,0,15,15" Title="快捷操作">
+                    <Grid Height="35" Margin="25,40,15,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                        </Grid.ColumnDefinitions>
+                        <local:MyButton Grid.Column="0" MinWidth="140" Text="打开截图文件夹" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" Click="BtnOpenFolder_Click" ColorType="Highlight"/>
+                    </Grid>
+                </local:MyCard>
+                <WrapPanel Margin="8,0,8,25" Name="PanList" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <!--<local:MyCard Height="220" Width="120" Margin="7" Tag="Path">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="180"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Image Grid.Row="0"/>
+                <StackPanel Grid.Row="1">
+                    <local:MyIconTextButton x:Name="BtnOpen" Text="打开"
+                    LogoScale="0.8" Logo="M127.52 735.616a32 32 0 0 1-63.04-10.944l54.624-314.144C127.904 359.936 174.784 320 225.76 320h668.864c55.36 0 93.92 46.72 84.384 101.472l-72.32 416C897.824 888.064 850.976 928 800 928H160a32 32 0 0 1 0-64h640c19.712 0 40.096-17.376 43.616-37.472l72.32-416c2.784-15.904-5.984-26.528-21.312-26.528H225.76c-19.68 0-40.096 17.376-43.584 37.472l-54.656 314.144z" />
+                </StackPanel>
+            </Grid>
+        </local:MyCard>-->
+                </WrapPanel>
+            </StackPanel>
+        </Grid>
+    </local:MyScrollViewer>
+</local:MyPageRight>
