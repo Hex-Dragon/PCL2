@@ -42,8 +42,8 @@
         '设置解锁
         If Not RadioLauncherTheme8.IsEnabled Then LabLauncherTheme8Copy.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。" & vbCrLf & "右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！"
         RadioLauncherTheme8.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁"
-        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）" & vbCrLf & "· 提交一个 Pull Request，在合并后回复识别码要求解锁"
-        RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁" & vbCrLf & "· 提交一个 Pull Request，在合并后回复识别码要求解锁"
+        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）" & vbCrLf & "· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁"
+        RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁" & vbCrLf & "· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁"
         '极客蓝的处理在 ThemeCheck 中
 
     End Sub
@@ -452,10 +452,10 @@ Refresh:
             End If
         End If
     End Sub
-    Private Sub LabLauncherTheme8Copy_MouseRightButtonUp() Handles LabLauncherTheme8Copy.MouseRightButtonUp
+    Private Sub LabLauncherTheme8Copy_MouseRightButtonUp() Handles LabLauncherTheme8Copy.MouseRightButtonUp, RadioLauncherTheme8.MouseRightButtonUp
         OpenWebsite("https://afdian.com/a/LTCat")
     End Sub
-    Private Sub LabLauncherTheme9Copy_MouseRightButtonUp() Handles LabLauncherTheme9Copy.MouseRightButtonUp
+    Private Sub LabLauncherTheme9Copy_MouseRightButtonUp() Handles LabLauncherTheme9Copy.MouseRightButtonUp, RadioLauncherTheme9.MouseRightButtonUp
         PageOtherLeft.TryFeedback()
     End Sub
 
@@ -675,24 +675,26 @@ Refresh:
         SliderLauncherOpacity.GetHintText = Function(v) Math.Round(40 + v * 0.1) & "%"
         SliderLauncherHue.GetHintText = Function(v) v & "°"
         SliderLauncherSat.GetHintText = Function(v) v & "%"
-        SliderLauncherDelta.GetHintText = Function(Value As Integer)
-                                              If Value > 90 Then
-                                                  Return "+" & (Value - 90)
-                                              ElseIf Value = 90 Then
-                                                  Return 0
-                                              Else
-                                                  Return Value - 90
-                                              End If
-                                          End Function
-        SliderLauncherLight.GetHintText = Function(Value As Integer)
-                                              If Value > 20 Then
-                                                  Return "+" & (Value - 20)
-                                              ElseIf Value = 20 Then
-                                                  Return 0
-                                              Else
-                                                  Return Value - 20
-                                              End If
-                                          End Function
+        SliderLauncherDelta.GetHintText =
+        Function(Value As Integer)
+            If Value > 90 Then
+                Return "+" & (Value - 90)
+            ElseIf Value = 90 Then
+                Return 0
+            Else
+                Return Value - 90
+            End If
+        End Function
+        SliderLauncherLight.GetHintText =
+        Function(Value As Integer)
+            If Value > 20 Then
+                Return "+" & (Value - 20)
+            ElseIf Value = 20 Then
+                Return 0
+            Else
+                Return Value - 20
+            End If
+        End Function
         SliderBackgroundOpacity.GetHintText = Function(v) Math.Round(v * 0.1) & "%"
         SliderBackgroundBlur.GetHintText = Function(v) v & " 像素"
     End Sub

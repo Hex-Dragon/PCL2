@@ -72,10 +72,10 @@
                         </Grid>
                         <local:MyCheckBox Text="打开启动器时显示 PCL 图标" Margin="-1,0,0,1" Height="22" x:Name="CheckLauncherLogo" Tag="UiLauncherLogo" />
                     </StackPanel>
-                    <Border Background="#CCCCCCCC" Margin="-5,22,-5,-5" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed">
+                    <Border Background="#DDDDDDDD" Margin="-8,23,-5,28" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed">
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <TextBlock Text="需要小小赞助一下作者，才能修改主题颜色（悲）……" FontSize="15" Margin="0,2,0,0" />
-                            <local:MyButton Height="35" x:Name="BtnLauncherDonate" MinWidth="150" Text="支持作者" Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0" ColorType="Highlight" />
+                            <TextBlock Text="如果可以小小赞助一下 PCL，就能解锁主题颜色更换功能啦……&#xa;多亏了大家的支持，PCL 才能在免费、无任何广告的情况下维持数年的更新（磕头）！" FontSize="13" Margin="0,0,0,0" />
+                            <local:MyButton Height="32" x:Name="BtnLauncherDonate" MinWidth="140" Text="支持 PCL 开发！" Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0" ColorType="Highlight" />
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -225,6 +225,7 @@
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="下载地址" Margin="0,0,25,0" />
                         <local:MyTextBox x:Name="TextCustomNet" Tag="UiCustomNet" Grid.Column="1" MaxHeight="28">
                             <local:MyTextBox.ValidateRules>
+                                <local:ValidateNullable />
                                 <local:ValidateHttp />
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
@@ -244,9 +245,10 @@
                             <local:MyComboBoxItem Content="Minecraft 皮肤推荐（作者：wkea）" />
                             <local:MyComboBoxItem Content="OpenBMCLAPI 仪表盘 Lite（作者：Silverteal、Mxmilu666）" />
                             <local:MyComboBoxItem Content="PCL 主页市场（作者：凌云）" />
-                            <local:MyComboBoxItem Content="PCL 更新日志（作者：Joker2184）" />
+                            <local:MyComboBoxItem Content="PCL 新闻速报（作者：Joker2184）" />
                             <local:MyComboBoxItem Content="PCL 新功能说明书（作者：WForst-Breeze）" />
                             <local:MyComboBoxItem Content="OpenMCIM 仪表盘（作者：SALTWOOD）" />
+                            <local:MyComboBoxItem Content="杂志主页（作者：CreeperIsASpy）" />
                         </local:MyComboBox>
                     </Grid>
                 </StackPanel>
@@ -261,7 +263,7 @@
                             <ColumnDefinition Width="0.8*" />
                             <ColumnDefinition Width="0.9*" />
                             <ColumnDefinition Width="0.8*" />
-                            <ColumnDefinition Width="0.6*" />
+                            <ColumnDefinition Width="0.8*" />
                             <ColumnDefinition Width="1.0*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>

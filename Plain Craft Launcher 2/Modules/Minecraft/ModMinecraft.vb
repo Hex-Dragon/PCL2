@@ -85,7 +85,7 @@ Public Module ModMinecraft
                     Next
                     If Not Renamed Then CacheMcFolderList.Add(New McFolder With {.Name = Name, .Path = Path, .Type = McFolderType.Custom})
                 Else
-                    Hint("无效的 Minecraft 文件夹：" & Path, HintType.Critical)
+                    Hint("无法访问 Minecraft 文件夹：" & Path, HintType.Critical)
                 End If
             Next
 
@@ -2045,8 +2045,12 @@ OnLoaded:
             If Checker.Check(Token.LocalPath) Is Nothing Then Continue For
             '文件不符合，添加下载
             Dim Urls As New List(Of String)
+            If Token.Url Is Nothing AndAlso Token.Name = "net.minecraftforge:forge:universal" Then
+                '特判修复 Forge 部分 universal 文件缺失 URL（#5455）
+                Token.Url = "https://maven.minecraftforge.net" & Token.LocalPath.Replace(If(Token.IsJumpLoader, JumpLoaderFolder, CustomMcFolder) & "libraries", "").Replace("\", "/")
+            End If
             If Token.Url IsNot Nothing Then
-                '获取 Url 的真实地址
+                '获取 URL 的真实地址
                 Urls.Add(Token.Url)
                 If Token.Url.Contains("launcher.mojang.com/v1/objects") OrElse Token.Url.Contains("client.txt") OrElse
                    Token.Url.Contains(".tsrg") Then
@@ -2088,10 +2092,14 @@ OnLoaded:
         McLibGet = If(WithHead, CustomMcFolder & "libraries\", "") &
                    Splited(0).Replace(".", "\") & "\" & Splited(1) & "\" & Splited(2) & "\" & Splited(1) & "-" & Splited(2) & ".jar"
         '判断 OptiFine 是否应该使用 installer
-        If McLibGet.Contains("optifine\OptiFine\1.12") AndAlso '仅在 1.12 OptiFine 可重现
-           File.Exists(CustomMcFolder & "libraries\" & Splited(0).Replace(".", "\") & "\" & Splited(1) & "\" & Splited(2) & "\" & Splited(1) & "-" & Splited(2) & "-installer.jar") Then
-            Log("[Launch] 已将 " & Original & " 特判替换为对应的 Installer 文件", LogLevel.Debug)
-            McLibGet = McLibGet.Replace(".jar", "-installer.jar")
+        If McLibGet.Contains("optifine\OptiFine\1.") AndAlso Splited(2).Split(".").Count > 1 Then
+            Dim MajorVersion As Integer = Val(Splited(2).Split(".")(1))
+            Dim MinorVersion As Integer = If(Splited(2).Split(".").Count > 1, Val(Splited(2).Split(".")(2).BeforeFirst("_")), 0)
+            If (MajorVersion = 12 OrElse (MajorVersion = 20 AndAlso MinorVersion >= 4) OrElse MajorVersion >= 21) AndAlso '仅在 1.12 (无法追溯) 和 1.20.4+ (#5376) 遇到此问题
+                File.Exists($"{CustomMcFolder}libraries\{Splited(0).Replace(".", "\")}\{Splited(1)}\{Splited(2)}\{Splited(1)}-{Splited(2)}-installer.jar") Then
+                McLaunchLog("已将 " & Original & " 替换为对应的 Installer 文件")
+                McLibGet = McLibGet.Replace(".jar", "-installer.jar")
+            End If
         End If
     End Function
 
@@ -2316,8 +2324,8 @@ OnLoaded:
         End If
         Left = Left.ToLowerInvariant
         Right = Right.ToLowerInvariant
-        Dim Lefts = RegexSearch(Left.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
-        Dim Rights = RegexSearch(Right.Replace("快照", "snapshot"), "[a-z]+|[0-9]+")
+        Dim Lefts = RegexSearch(Left.Replace("快照", "snapshot").Replace("预览版", "pre"), "[a-z]+|[0-9]+")
+        Dim Rights = RegexSearch(Right.Replace("快照", "snapshot").Replace("预览版", "pre"), "[a-z]+|[0-9]+")
         Dim i As Integer = 0
         While True
             '两边均缺失，感觉是一个东西
@@ -2366,15 +2374,11 @@ NextEntry:
     ''' <summary>
     ''' 比较两个版本名的排序器。
     ''' </summary>
-    Public Class VersionSorter
+    Public Class VersionComparer
         Implements IComparer(Of String)
-        Public IsDecreased As Boolean = True
         Public Function Compare(x As String, y As String) As Integer Implements IComparer(Of String).Compare
-            Return VersionSortInteger(x, y) * If(IsDecreased, -1, 1)
+            Return VersionSortInteger(x, y)
         End Function
-        Public Sub New(Optional IsDecreased As Boolean = True)
-            Me.IsDecreased = IsDecreased
-        End Sub
     End Class
 
     ''' <summary>

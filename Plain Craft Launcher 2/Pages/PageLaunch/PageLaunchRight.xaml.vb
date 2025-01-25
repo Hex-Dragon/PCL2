@@ -105,15 +105,15 @@ Download:
                         GoTo Download
                     Case 6
                         Log("[Page] 主页预设：OpenBMCLAPI 仪表盘 Lite")
-                        Url = "https://pcl-bmcl.milulu.xyz/"
+                        Url = "https://pcl-bmcl.milu.ink/"
                         GoTo Download
                     Case 7
                         Log("[Page] 主页预设：主页市场")
-                        Url = "https://homepage-market.pages.dev/Custom.xaml"
+                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/JingHai-Lingyun/Custom.xaml"
                         GoTo Download
                     Case 8
                         Log("[Page] 主页预设：更新日志")
-                        Url = "https://updatehomepage.pages.dev/UpdateHomepage.xaml"
+                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Joker2184/UpdateHomepage.xaml"
                         GoTo Download
                     Case 9
                         Log("[Page] 主页预设：PCL 新功能说明书")
@@ -122,6 +122,10 @@ Download:
                     Case 10
                         Log("[Page] 主页预设：OpenMCIM Dashboard")
                         Url = "https://files.mcimirror.top/PCL"
+                        GoTo Download
+                    Case 11
+                        Log("[Page] 主页预设：杂志主页")
+                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Ext1nguisher/Custom.xaml"
                         GoTo Download
                 End Select
         End Select

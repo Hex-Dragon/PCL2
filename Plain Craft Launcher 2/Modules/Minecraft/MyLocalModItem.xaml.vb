@@ -137,13 +137,14 @@ Public Class MyLocalModItem
             Exit Sub
         End If
         '计算滑动范围
-        Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
-        SwipeStart = Math.Min(SwipeStart, Index)
-        SwipeEnd = Math.Max(SwipeEnd, Index)
+        Dim Elements = CType(Parent, StackPanel).Children
+        Dim Index As Integer = Elements.IndexOf(Me)
+        SwipeStart = MathClamp(Math.Min(SwipeStart, Index), 0, Elements.Count - 1)
+        SwipeEnd = MathClamp(Math.Max(SwipeEnd, Index), 0, Elements.Count - 1)
         '勾选所有范围中的项
         If SwipeStart = SwipeEnd Then Exit Sub
         For i = SwipeStart To SwipeEnd
-            Dim Item As MyLocalModItem = CType(Parent, StackPanel).Children(i)
+            Dim Item As MyLocalModItem = Elements(i)
             Item.InitLate(Item, e)
             Item.Checked = SwipToState
         Next
@@ -303,30 +304,33 @@ Public Class MyLocalModItem
 
 #End Region
 
+    Private Function GetUpdateCompareDescription() As String
+        Dim CurrentName = Entry.CompFile.FileName.Replace(".jar", "")
+        Dim NewestName = Entry.UpdateFile.FileName.Replace(".jar", "")
+        '简化名称对比
+        Dim CurrentSegs = CurrentName.Split("-"c).ToList()
+        Dim NewestSegs = NewestName.Split("-"c).ToList()
+        Dim Shortened As Boolean = False
+        For Each Seg In CurrentSegs.ToList()
+            If Not NewestSegs.Contains(Seg) Then Continue For
+            CurrentSegs.Remove(Seg)
+            NewestSegs.Remove(Seg)
+            Shortened = True
+        Next
+        If Shortened AndAlso CurrentSegs.Any() AndAlso NewestSegs.Any() Then
+            CurrentName = Join(CurrentSegs, "-")
+            NewestName = Join(NewestSegs, "-")
+            Entry._Version = CurrentName '使用网络信息作为显示的版本号
+        End If
+        Return $"当前版本：{CurrentName}（{GetTimeSpanString(Entry.CompFile.ReleaseDate - Date.Now, False)}）{vbCrLf}最新版本：{NewestName}（{GetTimeSpanString(Entry.UpdateFile.ReleaseDate - Date.Now, False)}）"
+    End Function
     Public Sub Refresh() Handles Me.Loaded
         RunInUi(
         Sub()
             '更新
             If Entry.CanUpdate Then
                 BtnUpdate.Visibility = Visibility.Visible
-                Dim CurrentName = Entry.CompFile.FileName.Replace(".jar", "")
-                Dim NewestName = Entry.UpdateFile.FileName.Replace(".jar", "")
-                '简化名称对比
-                Dim CurrentSegs = CurrentName.Split("-"c).ToList()
-                Dim NewestSegs = NewestName.Split("-"c).ToList()
-                Dim Shortened As Boolean = False
-                For Each Seg In CurrentSegs.ToList()
-                    If Not NewestSegs.Contains(Seg) Then Continue For
-                    CurrentSegs.Remove(Seg)
-                    NewestSegs.Remove(Seg)
-                    Shortened = True
-                Next
-                If Shortened AndAlso CurrentSegs.Any() AndAlso NewestSegs.Any() Then
-                    CurrentName = Join(CurrentSegs, "-")
-                    NewestName = Join(NewestSegs, "-")
-                    Entry._Version = CurrentName '使用网络信息作为显示的版本号
-                End If
-                BtnUpdate.ToolTip = $"当前版本：{CurrentName} ({Entry.CompFile.ReleaseDate:yyyy/MM/dd HH:mm:ss}){vbCrLf}最新版本：{NewestName} ({Entry.UpdateFile.ReleaseDate:yyyy/MM/dd HH:mm:ss}){vbCrLf}点击以更新，右键查看更新日志。"
+                BtnUpdate.ToolTip = $"{GetUpdateCompareDescription()}{vbCrLf}点击以更新，右键查看更新日志。"
             Else
                 BtnUpdate.Visibility = Visibility.Collapsed
             End If
@@ -458,8 +462,11 @@ Public Class MyLocalModItem
     End Sub
 
     '显示更新日志
-    Private Sub ShowUpdateLog(sender As Object, e As MouseButtonEventArgs) Handles BtnUpdate.PreviewMouseRightButtonUp
+    Private Sub BtnUpdate_PreviewMouseRightButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnUpdate.PreviewMouseRightButtonUp
         e.Handled = True
+        ShowUpdateLog()
+    End Sub
+    Private Sub ShowUpdateLog()
         Dim CurseForgeUrl As String = Entry.ChangelogUrls.FirstOrDefault(Function(x) x.Contains("curseforge.com"))
         Dim ModrinthUrl As String = Entry.ChangelogUrls.FirstOrDefault(Function(x) x.Contains("modrinth.com"))
         If CurseForgeUrl Is Nothing OrElse ModrinthUrl Is Nothing Then
@@ -476,20 +483,62 @@ Public Class MyLocalModItem
 
     '触发更新
     Private Sub BtnUpdate_Click(sender As Object, e As EventArgs) Handles BtnUpdate.Click
-        FrmVersionMod.UpdateMods({Entry})
+        Select Case MyMsgBox($"是否要更新 {Entry.Name}？{vbCrLf}{vbCrLf}{GetUpdateCompareDescription()}", "Mod 更新确认", "更新", "查看更新日志", "取消")
+            Case 1 '更新
+                FrmVersionMod.UpdateMods({Entry})
+            Case 2 '查看更新日志
+                ShowUpdateLog()
+            Case 3 '取消
+        End Select
     End Sub
 
     '自适应（#4465）
-    Private Sub PanTitle_SizeChanged(sender As Object, e As SizeChangedEventArgs) Handles PanTitle.SizeChanged
-        If ColumnExtend.Width.IsStar AndAlso ColumnExtend.ActualWidth < 0.5 Then
-            '压缩 Subtitle
-            ColumnSubtitle.Width = New GridLength(1, GridUnitType.Star)
-            ColumnExtend.Width = New GridLength(0, GridUnitType.Pixel)
-        ElseIf Not ColumnExtend.Width.IsStar AndAlso Not LabSubtitle.IsTextTrimmed Then
-            '向右展开 Subtitle
-            ColumnSubtitle.Width = GridLength.Auto
-            ColumnExtend.Width = New GridLength(1, GridUnitType.Star)
-        End If
+    Private Sub PanTitle_SizeChanged() Handles PanTitle.SizeChanged
+        '0：全部舒展：Auto - Auto - (Auto) - 1*
+        '1：压缩 Subtitle：Auto - 1* - (Auto) - 0
+        '2：继续压缩 Title：1* - 0 - (Auto) - 0
+        Dim CurrentCompressLevel As Integer =
+            If(ColumnExtend.Width.IsStar, 0, If(ColumnTitle.Width.IsStar, 2, 1)) 'Subtitle 可能是 Collapsed
+        Dim NewCompressLevel As Integer
+        Select Case CurrentCompressLevel
+            Case 0
+                If ColumnExtend.ActualWidth < 0.5 Then
+                    NewCompressLevel = If(LabSubtitle.Visibility = Visibility.Collapsed, 2, 1)
+                Else
+                    Return
+                End If
+            Case 1
+                If ColumnSubtitle.ActualWidth < 0.5 Then
+                    NewCompressLevel = 2
+                ElseIf Not LabSubtitle.IsTextTrimmed Then
+                    NewCompressLevel = 0
+                Else
+                    Return
+                End If
+            Case 2
+                If Not LabTitle.IsTextTrimmed Then
+                    NewCompressLevel = If(LabSubtitle.Visibility = Visibility.Collapsed, 0, 1)
+                Else
+                    Return
+                End If
+        End Select
+        Select Case NewCompressLevel
+            Case 0
+                '全部舒展：Auto - Auto - (Auto) - 1*
+                ColumnTitle.Width = GridLength.Auto
+                ColumnSubtitle.Width = GridLength.Auto
+                ColumnExtend.Width = New GridLength(1, GridUnitType.Star)
+            Case 1
+                '压缩 Subtitle：Auto - 1* - (Auto) - 0
+                ColumnTitle.Width = GridLength.Auto
+                ColumnSubtitle.Width = New GridLength(1, GridUnitType.Star)
+                ColumnExtend.Width = New GridLength(0, GridUnitType.Pixel)
+            Case 2
+                '继续压缩 Title：1* - 0 - (Auto) - 0
+                ColumnTitle.Width = New GridLength(1, GridUnitType.Star)
+                ColumnSubtitle.Width = New GridLength(0, GridUnitType.Pixel)
+                ColumnExtend.Width = New GridLength(0, GridUnitType.Pixel)
+        End Select
     End Sub
 
 End Class

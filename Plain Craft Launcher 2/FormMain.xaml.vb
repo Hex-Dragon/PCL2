@@ -10,6 +10,14 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If BETA Then
+        If LastVersion < 347 Then 'Release 2.8.12
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面添加下载 Mod、安装 Mod 选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 详情页面支持按加载器、游戏版本进行分类和筛选"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持安装同时包含 modpack 文件和启动器的懒人包"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "优化整合包导入流程"))
+            FeatureCount += 43
+            BugCount += 37
+        End If
         If LastVersion < 342 Then 'Release 2.8.9
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "支持下载原版服务端"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "本地 Mod 的标题支持选择显示 Mod 原始文件名"))
@@ -82,8 +90,23 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 346 Then 'Snapshot 2.8.13
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化网络环境不佳时，Mod、整合包页面的加载速度"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复部分电脑无法打开程序的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复可能无法识别、更新 Mod 的 Bug"))
+            FeatureCount += 6
+            BugCount += 14
+        End If
+        If LastVersion < 346 Then 'Snapshot 2.8.12
+            If LastVersion = 345 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复帮助页面报错的 Bug"))
+        End If
+        If LastVersion < 345 Then 'Snapshot 2.8.11
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 管理页面添加下载 Mod、安装 Mod 选项"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 详情页面支持按加载器、游戏版本进行分类和筛选"))
+            FeatureCount += 23
+            BugCount += 21
+        End If
         If LastVersion < 343 Then 'Snapshot 2.8.10
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Mod 详情页面会按 Mod 加载器分类卡片"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "支持安装同时包含 modpack 文件和启动器的懒人包"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "优化整合包导入流程"))
             FeatureCount += 20
@@ -295,10 +318,10 @@ Public Class FormMain
             Height = MinHeight + 100
             Width = MinWidth + 100
         End Try
-#If DEBUG Then
-        MinHeight = 50
-        MinWidth = 50
-#End If
+        '#If DEBUG Then
+        '        MinHeight = 50
+        '        MinWidth = 50
+        '#End If
         Topmost = False
         If FrmStart IsNot Nothing Then FrmStart.Close(New TimeSpan(0, 0, 0, 0, 400 / AniSpeed))
         '更改窗口
@@ -329,7 +352,7 @@ Public Class FormMain
             'EULA 提示
             If Not Setup.Get("SystemEula") Then
                 Select Case MyMsgBox("在使用 PCL 前，请同意 PCL 的用户协议与免责声明。", "协议授权", "同意", "拒绝", "查看用户协议与免责声明",
-                                   Button3Action:=Sub() OpenWebsite("https://shimo.im/docs/rGrd8pY8xWkt6ryW"))
+                        Button3Action:=Sub() OpenWebsite("https://shimo.im/docs/rGrd8pY8xWkt6ryW"))
                     Case 1
                         Setup.Set("SystemEula", True)
                     Case 2
@@ -782,47 +805,8 @@ Public Class FormMain
                 End Sub)
                 Exit Sub
             End If
-            'Mod 安装
-            If {"jar", "litemod", "disabled", "old"}.Any(Function(t) t = Extension) Then
-                Log("[System] 文件为 jar/litemod 格式，尝试作为 Mod 安装")
-                '检查回收站：回收站中的文件有错误的文件名
-                If FilePathList.First.Contains(":\$RECYCLE.BIN\") Then
-                    Hint("请先将文件从回收站还原，再拖入 PCL！", HintType.Critical)
-                    Exit Sub
-                End If
-                '获取并检查目标版本
-                Dim TargetVersion As McVersion = McVersionCurrent
-                If PageCurrent = PageType.VersionSetup Then TargetVersion = PageVersionLeft.Version
-                If PageCurrent = PageType.VersionSelect OrElse TargetVersion Is Nothing OrElse Not TargetVersion.Modable Then
-                    '正在选择版本，或当前版本不能安装 Mod
-                    Hint("若要安装 Mod，请先选择一个可以安装 Mod 的版本！")
-                ElseIf Not (PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod) Then
-                    '未处于 Mod 管理页面
-                    If MyMsgBox($"是否要将这{If(FilePathList.Count = 1, "个", "些")}文件作为 Mod 安装到 {TargetVersion.Name}？", "Mod 安装确认", "确定", "取消") = 1 Then GoTo Install
-                Else
-                    '处于 Mod 管理页面
-Install:
-                    Try
-                        For Each ModFile In FilePathList
-                            Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "")
-                            If Not NewFileName.Contains(".") Then NewFileName += ".jar" '#4227
-                            CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & NewFileName)
-                        Next
-                        If FilePathList.Count = 1 Then
-                            Hint($"已安装 {GetFileNameFromPath(FilePathList.First).Replace(".disabled", "")}！", HintType.Finish)
-                        Else
-                            Hint($"已安装 {FilePathList.Count} 个 Mod！", HintType.Finish)
-                        End If
-                        '刷新列表
-                        If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
-                            LoaderFolderRun(McModLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
-                        End If
-                    Catch ex As Exception
-                        Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
-                    End Try
-                End If
-                Exit Sub
-            End If
+            '安装 Mod
+            If PageVersionMod.InstallMods(FilePathList) Then Exit Sub
             '安装整合包
             If {"zip", "rar", "mrpack"}.Any(Function(t) t = Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
                 Log("[System] 文件为压缩包，尝试作为整合包安装")
@@ -1063,9 +1047,6 @@ Install:
                 Case PageType.Download
                     If FrmDownloadLeft Is Nothing Then FrmDownloadLeft = New PageDownloadLeft
                     Return FrmDownloadLeft.PageID
-                Case PageType.Link
-                    If FrmLinkLeft Is Nothing Then FrmLinkLeft = New PageLinkLeft
-                    Return FrmLinkLeft.PageID
                 Case PageType.Setup
                     If FrmSetupLeft Is Nothing Then FrmSetupLeft = New PageSetupLeft
                     Return FrmSetupLeft.PageID
@@ -1134,9 +1115,6 @@ Install:
             CType(PanTitleSelect.Children(Stack), MyRadioButton).SetChecked(True, True, PageNameGet(PageCurrent) = "")
             IsChangingPage = False
             Select Case Stack.Page
-                Case PageType.Link
-                    If FrmLinkLeft Is Nothing Then FrmLinkLeft = New PageLinkLeft
-                    CType(FrmLinkLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
                 Case PageType.Download
                     If FrmDownloadLeft Is Nothing Then FrmDownloadLeft = New PageDownloadLeft
                     CType(FrmDownloadLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
@@ -1164,14 +1142,6 @@ Install:
     Private Sub BtnTitleSelect_Click(sender As MyRadioButton, raiseByMouse As Boolean) Handles BtnTitleSelect0.Check, BtnTitleSelect1.Check, BtnTitleSelect2.Check, BtnTitleSelect3.Check, BtnTitleSelect4.Check
         If IsChangingPage Then Exit Sub
         PageChangeActual(Val(sender.Tag))
-    End Sub
-    Private Sub CancelLink(sender As Object, e As RouteEventArgs) Handles BtnTitleSelect2.PreviewClick
-        If MyMsgBox("由于联机提供商要求新联机强制付费，且高度商业化，PCL 将暂时关闭联机功能，不再使用该联机模块。" & vbCrLf &
-                    "PCL、HMCL、BakaXL 将合作开发新的跨启动器联机功能，在开发结束后将同步开放，请各位多多理解。",
-                    "联机功能已暂时关闭", "查看详情", "确定") = 1 Then
-            OpenWebsite("https://www.bilibili.com/read/cv19845645")
-        End If
-        e.Handled = True
     End Sub
     ''' <summary>
     ''' 通过点击返回按钮或手动触发返回来改变页面。
@@ -1203,9 +1173,9 @@ Install:
                 If PageStack.Any Then
                     '子页面 → 另一个子页面，更新
                     AniStart({
-                             AaOpacity(LabTitleInner, -LabTitleInner.Opacity, 130),
-                             AaCode(Sub() LabTitleInner.Text = PageName,, True),
-                             AaOpacity(LabTitleInner, 1, 150, 30)
+                        AaOpacity(LabTitleInner, -LabTitleInner.Opacity, 130),
+                        AaCode(Sub() LabTitleInner.Text = PageName,, True),
+                        AaOpacity(LabTitleInner, 1, 150, 30)
                     }, "FrmMain Titlebar SubLayer")
                     If PageStack.Contains(Stack) Then
                         '返回到更上层的子页面
@@ -1299,37 +1269,41 @@ Install:
         AniControlEnabled -= 1
         '执行动画
         AniStart({
-            AaCode(Sub()
-                       AniControlEnabled += 1
-                       '把新页面添加进容器
-                       PanMainLeft.Child = PageLeft
-                       PageLeft.Opacity = 0
-                       PanMainLeft.Background = Nothing
-                       AniControlEnabled -= 1
-                       RunInUi(Sub() PanMainLeft_Resize(PanMainLeft.ActualWidth), True)
-                   End Sub, 130),
-            AaCode(Sub()
-                       '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
-                       PageLeft.Opacity = 1
-                       PageLeft.TriggerShowAnimation()
-                   End Sub, 30, True)
+            AaCode(
+            Sub()
+                AniControlEnabled += 1
+                '把新页面添加进容器
+                PanMainLeft.Child = PageLeft
+                PageLeft.Opacity = 0
+                PanMainLeft.Background = Nothing
+                AniControlEnabled -= 1
+                RunInUi(Sub() PanMainLeft_Resize(PanMainLeft.ActualWidth), True)
+            End Sub, 130),
+            AaCode(
+            Sub()
+                '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
+                PageLeft.Opacity = 1
+                PageLeft.TriggerShowAnimation()
+            End Sub, 30, True)
             }, "FrmMain PageChangeLeft")
         AniStart({
-            AaCode(Sub()
-                       AniControlEnabled += 1
-                       CType(PanMainRight.Child, MyPageRight).PageOnForceExit()
-                       '把新页面添加进容器
-                       PanMainRight.Child = PageRight
-                       PageRight.Opacity = 0
-                       PanMainRight.Background = Nothing
-                       AniControlEnabled -= 1
-                       RunInUi(Sub() BtnExtraBack.ShowRefresh(), True)
-                   End Sub, 130),
-            AaCode(Sub()
-                       '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
-                       PageRight.Opacity = 1
-                       PageRight.PageOnEnter()
-                   End Sub, 30, True)
+            AaCode(
+            Sub()
+                AniControlEnabled += 1
+                CType(PanMainRight.Child, MyPageRight).PageOnForceExit()
+                '把新页面添加进容器
+                PanMainRight.Child = PageRight
+                PageRight.Opacity = 0
+                PanMainRight.Background = Nothing
+                AniControlEnabled -= 1
+                RunInUi(Sub() BtnExtraBack.ShowRefresh(), True)
+            End Sub, 130),
+            AaCode(
+            Sub()
+                '延迟触发页面通用动画，以使得在 Loaded 事件中加载的控件得以处理
+                PageRight.Opacity = 1
+                PageRight.PageOnEnter()
+            End Sub, 30, True)
             }, "FrmMain PageChangeRight")
     End Sub
     ''' <summary>
@@ -1342,12 +1316,12 @@ Install:
             PanTitleMain.IsHitTestVisible = True
             PanTitleInner.IsHitTestVisible = False
             AniStart({
-                         AaOpacity(PanTitleInner, -PanTitleInner.Opacity, 150),
-                         AaX(PanTitleInner, -18 - PanTitleInner.Margin.Left, 150,, New AniEaseInFluent),
-                         AaOpacity(PanTitleMain, 1 - PanTitleMain.Opacity, 150, 200),
-                         AaX(PanTitleMain, -PanTitleMain.Margin.Left, 350, 200, New AniEaseOutBack(AniEasePower.Weak)),
-                         AaCode(Sub() PanTitleInner.Visibility = Visibility.Collapsed,, True)
-                }, "FrmMain Titlebar FirstLayer")
+                AaOpacity(PanTitleInner, -PanTitleInner.Opacity, 150),
+                AaX(PanTitleInner, -18 - PanTitleInner.Margin.Left, 150,, New AniEaseInFluent),
+                AaOpacity(PanTitleMain, 1 - PanTitleMain.Opacity, 150, 200),
+                AaX(PanTitleMain, -PanTitleMain.Margin.Left, 350, 200, New AniEaseOutBack(AniEasePower.Weak)),
+                AaCode(Sub() PanTitleInner.Visibility = Visibility.Collapsed,, True)
+            }, "FrmMain Titlebar FirstLayer")
             PageStack.Clear()
         Else
             '主页面 → 主页面，无事发生
@@ -1366,16 +1340,16 @@ Install:
             If NewWidth > 0 Then
                 '宽度足够，显示
                 AniStart({
-                     AaWidth(RectLeftBackground, NewWidth - RectLeftBackground.Width, 400,, New AniEaseOutFluent(AniEasePower.ExtraStrong)),
-                     AaOpacity(RectLeftShadow, 1 - RectLeftShadow.Opacity, 200),
-                     AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 250)
+                    AaWidth(RectLeftBackground, NewWidth - RectLeftBackground.Width, 400,, New AniEaseOutFluent(AniEasePower.ExtraStrong)),
+                    AaOpacity(RectLeftShadow, 1 - RectLeftShadow.Opacity, 200),
+                    AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 250)
                 }, "FrmMain LeftChange", True)
             Else
                 '宽度不足，隐藏
                 AniStart({
-                     AaWidth(RectLeftBackground, -RectLeftBackground.Width, 200,, New AniEaseOutFluent),
-                     AaOpacity(RectLeftShadow, -RectLeftShadow.Opacity, 200),
-                     AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 170)
+                    AaWidth(RectLeftBackground, -RectLeftBackground.Width, 200,, New AniEaseOutFluent),
+                    AaOpacity(RectLeftShadow, -RectLeftShadow.Opacity, 200),
+                    AaCode(Sub() PanMainLeft.IsHitTestVisible = True, 170)
                 }, "FrmMain LeftChange", True)
             End If
         Else
