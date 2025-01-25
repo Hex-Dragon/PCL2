@@ -47,12 +47,21 @@
     End Property
     Public Shared ReadOnly TitleProperty As DependencyProperty = DependencyProperty.Register("Title", GetType(String), GetType(MyCard), New PropertyMetadata(""))
 
+    Private Sub _ThemeChanged(sender As Object, e As Boolean)
+        If e Then
+            MainBorder.Background = New SolidColorBrush(Color.FromArgb(205, 43, 43, 43))
+        Else
+            MainBorder.Background = New SolidColorBrush(Color.FromArgb(205, 255, 255, 255))
+        End If
+    End Sub
+
     'UI 建立
     Public Sub New()
+        AddHandler ModSecret.ThemeChanged, AddressOf _ThemeChanged
         MainChrome = New SystemDropShadowChrome With {.Margin = New Thickness(-9.5, -9, 0.5, -0.5), .Opacity = 0.1, .CornerRadius = New CornerRadius(6)}
         MainChrome.SetResourceReference(SystemDropShadowChrome.ColorProperty, "ColorObject1")
         Children.Insert(0, MainChrome)
-        MainBorder = New Border With {.Background = New SolidColorBrush(Color.FromArgb(205, 255, 255, 255)), .CornerRadius = New CornerRadius(6), .IsHitTestVisible = False}
+        MainBorder = New Border With {.Background = New SolidColorBrush(Color.FromArgb(205, IIf(IsDarkMode, 43, 255), IIf(IsDarkMode, 43, 255), IIf(IsDarkMode, 43, 255))), .CornerRadius = New CornerRadius(6), .IsHitTestVisible = False}
         Children.Insert(1, MainBorder)
         MainGrid = New Grid
         Children.Add(MainGrid)
@@ -110,7 +119,7 @@
         If Not IsNothing(MainSwap) Then AniList.Add(AaColor(MainSwap, Shapes.Path.FillProperty, "ColorBrush2", 150))
         AniList.AddRange({
                          AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject2", 180),
-                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(230, 255, 255, 255) - MainBorder.Background, 180),
+                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(230, IIf(IsDarkMode, 48, 255), IIf(IsDarkMode, 48, 255), IIf(IsDarkMode, 48, 255)) - MainBorder.Background, 180),
                          AaOpacity(MainChrome, 0.3 - MainChrome.Opacity, 180)
                      })
         AniStart(AniList, "MyCard Mouse " & Uuid)
@@ -122,7 +131,7 @@
         If Not IsNothing(MainSwap) Then AniList.Add(AaColor(MainSwap, Shapes.Path.FillProperty, "ColorBrush1", 250))
         AniList.AddRange({
                          AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject1", 300),
-                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, 255, 255, 255) - MainBorder.Background, 300),
+                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, IIf(IsDarkMode, 43, 255), IIf(IsDarkMode, 43, 255), IIf(IsDarkMode, 43, 255)) - MainBorder.Background, 300),
                          AaOpacity(MainChrome, 0.1 - MainChrome.Opacity, 300)
                      })
         AniStart(AniList, "MyCard Mouse " & Uuid)
