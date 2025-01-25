@@ -168,7 +168,9 @@ Public Class PageOtherTest
                 Finally
                     RunInUiWait(
                         Sub()
-                            FrmOtherTest.BtnClear.IsEnabled = True
+                            If Not IsNothing(FrmOtherTest) AndAlso Not IsNothing(FrmOtherTest.BtnClear) Then
+                                FrmOtherTest.BtnClear.IsEnabled = True
+                            End If
                         End Sub)
                 End Try
             End Sub, "Rubbish Clear")
