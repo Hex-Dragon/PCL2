@@ -152,7 +152,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <Border Loaded="TooltipLoaded" Unloaded="TooltipUnloaded" BorderBrush="{DynamicResource ColorBrush1}" BorderThickness="1" CornerRadius="3" Background="White" Margin="0,0,4,4" SnapsToDevicePixels="True">
+                            <Border Loaded="TooltipLoaded" Unloaded="TooltipUnloaded" BorderBrush="{DynamicResource ColorBrush1}" BorderThickness="1" CornerRadius="3" Background="{DynamicResource ColorBrushToolTip}" Margin="0,0,4,4" SnapsToDevicePixels="True">
                                 <TextBlock Text="{TemplateBinding ContentControl.Content}" TextWrapping="Wrap" Foreground="{DynamicResource ColorBrush1}" Margin="7,5" FontSize="12"/>
                             </Border>
                         </ControlTemplate>
@@ -549,6 +549,10 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+            </Style>
+            <!--Calendar-->
+            <Style TargetType="Calendar">
+                <Setter Property="Background" Value="{DynamicResource ColorBrush8}"/>
             </Style>
             
         </ResourceDictionary>
