@@ -27,8 +27,8 @@
                     <local:MyButton Grid.Row="3" Grid.Column="1" Height="35" HorizontalAlignment="Center" Click="BtnOpenFolder_Click" MinWidth="140" Text="打开截图文件夹" Margin="10,10,10,0" Padding="13,0" ColorType="Highlight" />
                 </Grid>
             </local:MyCard>
-            <StackPanel Orientation="Vertical" Margin="10,25,10,10" x:Name="PanContent">
-                <local:MyCard Margin="15,0,15,15" Title="快捷操作">
+            <StackPanel Orientation="Vertical" Margin="10,25,10,10">
+                <local:MyCard Margin="15,0,15,15" Title="快捷操作" x:Name="PanAlways">
                     <Grid Height="35" Margin="25,40,15,20">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
@@ -37,21 +37,35 @@
                         <local:MyButton Grid.Column="0" MinWidth="140" Text="打开截图文件夹" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" Click="BtnOpenFolder_Click" ColorType="Highlight"/>
                     </Grid>
                 </local:MyCard>
-                <WrapPanel Margin="8,0,8,25" Name="PanList" HorizontalAlignment="Center" Orientation="Horizontal">
-                    <!--<local:MyCard Height="220" Width="120" Margin="7" Tag="Path">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="180"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Image Grid.Row="0"/>
-                <StackPanel Grid.Row="1">
-                    <local:MyIconTextButton x:Name="BtnOpen" Text="打开"
-                    LogoScale="0.8" Logo="M127.52 735.616a32 32 0 0 1-63.04-10.944l54.624-314.144C127.904 359.936 174.784 320 225.76 320h668.864c55.36 0 93.92 46.72 84.384 101.472l-72.32 416C897.824 888.064 850.976 928 800 928H160a32 32 0 0 1 0-64h640c19.712 0 40.096-17.376 43.616-37.472l72.32-416c2.784-15.904-5.984-26.528-21.312-26.528H225.76c-19.68 0-40.096 17.376-43.584 37.472l-54.656 314.144z" />
+                <StackPanel Orientation="Vertical" Name="PanContent">
+                    <WrapPanel Margin="8,0,8,25" Name="PanList" HorizontalAlignment="Center" Orientation="Horizontal">
+                        <!--<local:MyCard Height="220" Width="120" Margin="7" Tag="Path">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="180"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Image Grid.Row="0"/>
+        <StackPanel Grid.Row="1">
+            <local:MyIconTextButton x:Name="BtnOpen" Text="打开"
+            LogoScale="0.8" Logo="M127.52 735.616a32 32 0 0 1-63.04-10.944l54.624-314.144C127.904 359.936 174.784 320 225.76 320h668.864c55.36 0 93.92 46.72 84.384 101.472l-72.32 416C897.824 888.064 850.976 928 800 928H160a32 32 0 0 1 0-64h640c19.712 0 40.096-17.376 43.616-37.472l72.32-416c2.784-15.904-5.984-26.528-21.312-26.528H225.76c-19.68 0-40.096 17.376-43.584 37.472l-54.656 314.144z" />
+        </StackPanel>
+    </Grid>
+</local:MyCard>-->
+                    </WrapPanel>
+                    <local:MyCard x:Name="CardPages" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Height="23" Margin="10,7">
+                            <local:MyIconButton x:Name="BtnPageLeft" Margin="0,0,5,0"
+Logo="M650.752 278.357333l-241.322667 241.365334 241.322667 241.365333a42.666667 42.666667 0 1 1-60.330667 60.330667l-271.530666-271.530667a42.453333 42.453333 0 0 1-11.818667-22.613333l-0.597333-5.034667v-5.034667a42.496 42.496 0 0 1 12.416-27.648l271.530666-271.530666a42.666667 42.666667 0 0 1 60.330667 60.330666z" />
+                            <StackPanel Orientation="Horizontal" x:Name="CardPageBtns"/>
+                            <local:MyIconButton x:Name="BtnPageRight" Margin="0,0,5,0"
+Logo="M404.309333 278.357333l241.322667 241.365334-241.322667 241.365333a42.666667 42.666667 0 1 0 60.330667 60.330667l271.530667-271.530667a42.453333 42.453333 0 0 0 11.818666-22.613333l0.597334-5.034667v-5.034667a42.496 42.496 0 0 0-12.416-27.648L464.64 218.026667a42.666667 42.666667 0 0 0-60.330667 60.330666z" />
+                        </StackPanel>
+                    </local:MyCard>
                 </StackPanel>
-            </Grid>
-        </local:MyCard>-->
-                </WrapPanel>
+                <local:MyCard x:Name="PanLoad" HorizontalAlignment="Center">
+                    <local:MyLoading x:Name="Load" Text="加载截图中……" Margin="16"/>
+                </local:MyCard>
             </StackPanel>
         </Grid>
     </local:MyScrollViewer>
