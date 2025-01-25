@@ -86,7 +86,7 @@ Public Class PageOtherTest
     Public Shared Sub RubbishClear()
         RunInUi(
             Sub()
-                If Not IsNothing(FrmOtherTest) And Not IsNothing(FrmOtherTest.BtnClear) Then
+                If Not IsNothing(FrmOtherTest) AndAlso Not IsNothing(FrmOtherTest.BtnClear) Then
                     FrmOtherTest.BtnClear.IsEnabled = False
                 End If
             End Sub)
