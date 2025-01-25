@@ -2184,8 +2184,9 @@ Retry:
             Case LoadState.Loading
                 Exit Sub '不重新加载版本列表
         End Select
-        If Directory.Exists(Loader.Input & "PCLInstallBackups\") Then '版本修改失败回滚
+        If Not Loader.State = LoadState.Finished AndAlso Directory.Exists(Loader.Input & "PCLInstallBackups\") Then '版本修改失败回滚
             CopyDirectory(Loader.Input & "PCLInstallBackups\", Loader.Input)
+            File.Delete(Loader.Input & ".pclignore")
         Else
             McInstallFailedClearFolder(Loader)
         End If
