@@ -121,7 +121,18 @@ Public Class PageVersionLeft
             Case FormMain.PageSubType.VersionShader
                 PageVersionShader.Refresh()
             Case FormMain.PageSubType.VersionInstall
-                PageVersionInstall.Refresh()
+                DlClientListLoader.Start(IsForceRestart:=True)
+                DlOptiFineListLoader.Start(IsForceRestart:=True)
+                DlForgeListLoader.Start(IsForceRestart:=True)
+                DlNeoForgeListLoader.Start(IsForceRestart:=True)
+                DlLiteLoaderListLoader.Start(IsForceRestart:=True)
+                DlFabricListLoader.Start(IsForceRestart:=True)
+                DlFabricApiLoader.Start(IsForceRestart:=True)
+                DlQuiltListLoader.Start(IsForceRestart:=True)
+                DlQSLLoader.Start(IsForceRestart:=True)
+                DlOptiFabricLoader.Start(IsForceRestart:=True)
+                ItemInstall.Checked = True
+                FrmVersionInstall.GetCurrentInfo()
         End Select
     End Sub
 

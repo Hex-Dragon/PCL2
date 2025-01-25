@@ -17,7 +17,8 @@
                         <TranslateTransform X="40" />
                     </StackPanel.RenderTransform>
                     <local:MyCard Title="安装预览" Margin="0,15,0,0" UseAnimation="False">
-                        <StackPanel Margin="25,37,25,15">
+                        <StackPanel Margin="25,37,25,5">
+                            <local:MyHint Text="在修改版本之后，请手动确认 Fabric API 或 QSL / QFAPI 的安装情况，重复安装会导致游戏崩溃。" Margin="0,1,0,7" x:Name="HintEdit" IsWarn="False" />
                             <local:MyHint Text="你尚未选择安装 Fabric API，这会导致大多数 Mod 无法使用！" Margin="0,1,0,7" x:Name="HintFabricAPI" IsWarn="True" />
                             <local:MyHint Text="你尚未选择安装 QFAPI / QSL，这会导致大多数 Mod 无法使用！如果 QFAPI / QSL 无可用版本，你可以选择安装 Fabric API。" Margin="0,1,0,7" x:Name="HintQSL" IsWarn="True" />
                             <local:MyHint Text="你选择了在 Quilt 中安装 Fabric API，而当前存在适配的 QFAPI / QSL 可供安装。请优先考虑安装 QFAPI / QSL。" Margin="0,1,0,7" x:Name="HintQuiltFabricAPI" IsWarn="False" />
@@ -31,14 +32,6 @@
                                 </Grid.ColumnDefinitions>
                                 <local:MyListItem Grid.Column="0" x:Name="ItemSelect" IsHitTestVisible="False" Margin="-7,0,0,0" Height="42" SnapsToDevicePixels="True" Type="None" />
                                 <local:MyButton Grid.Column="1" HorizontalAlignment="Right" ColorType="Highlight" Text="开始安装" Margin="0,2,0,0" x:Name="BtnSelectStart" MinWidth="140" Padding="13,0" Height="35" VerticalAlignment="Center" />
-                            </Grid>
-                            <Grid Margin="0,0,0,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
-                                    <ColumnDefinition />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock VerticalAlignment="Top" HorizontalAlignment="Left" Text="版本名称" Margin="0,5,25,0" />
-                                <local:MyTextBox Grid.Column="1" x:Name="TextSelectName" MinHeight="28" />
                             </Grid>
                         </StackPanel>
                     </local:MyCard>

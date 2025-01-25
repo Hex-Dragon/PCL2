@@ -597,6 +597,10 @@ Finish:
     End Sub
     '启动按钮
     Public Sub LaunchButtonClick() Handles BtnLaunch.Click
+        If File.Exists(McVersionCurrent.Path + ".pclignore") Then
+            Hint("当前版本正在安装，无法启动！", HintType.Critical)
+            Exit Sub
+        End If
         If McLaunchLoader.State = LoadState.Loading OrElse Not BtnLaunch.IsEnabled OrElse
             （FrmMain.PageRight IsNot Nothing AndAlso FrmMain.PageRight.PageState <> MyPageRight.PageStates.ContentStay AndAlso FrmMain.PageRight.PageState <> MyPageRight.PageStates.ContentEnter） Then Exit Sub
         '愚人节处理
@@ -698,6 +702,10 @@ ExitRefresh:
         If McLaunchLoader.State = LoadState.Loading Then Exit Sub
         McVersionCurrent.Load()
         PageVersionLeft.Version = McVersionCurrent
+        If File.Exists(McVersionCurrent.Path + ".pclignore") Then
+            Hint("当前版本正在安装，暂无法进行版本设置！", HintType.Critical)
+            Exit Sub
+        End If
         FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
     End Sub
     ''' <summary>

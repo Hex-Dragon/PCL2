@@ -18,8 +18,6 @@ Public Class PageVersionInstall
         DlNeoForgeListLoader.Start()
 
         '重载预览
-        TextSelectName.ValidateRules = New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions", IgnoreSameName:=True)}
-        TextSelectName.Validate()
         SelectReload()
 
         '非重复加载部分
@@ -36,13 +34,6 @@ Public Class PageVersionInstall
         LoadQSL.State = DlQSLLoader
         LoadNeoForge.State = DlNeoForgeListLoader
         LoadOptiFabric.State = DlOptiFabricLoader
-    End Sub
-
-    Public Shared Sub Refresh()
-        If FrmVersionInstall IsNot Nothing Then
-            FrmVersionInstall.Init()
-        End If
-        FrmVersionLeft.ItemInstall.Checked = True
     End Sub
 
 #Region "页面切换"
@@ -104,7 +95,6 @@ Public Class PageVersionInstall
             AaCode(
             Sub()
                 PanBack.ScrollToHome()
-                TextSelectName.Validate()
                 OptiFine_Loaded()
                 LiteLoader_Loaded()
                 Forge_Loaded()
@@ -135,7 +125,7 @@ Public Class PageVersionInstall
                 BtnQSLClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardQSL.MainTextBlock, .Mode = BindingMode.OneWay})
                 BtnOptiFabricClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardOptiFabric.MainTextBlock, .Mode = BindingMode.OneWay})
             End Sub,, True)
-        }, "FrmDownloadInstall SelectPageSwitch", True)
+        }, "FrmVersionInstall SelectPageSwitch", True)
     End Sub
     Public Sub ExitSelectPage()
         If Not IsInSelectPage Then Exit Sub
@@ -160,7 +150,7 @@ Public Class PageVersionInstall
                        PanSelect.Visibility = Visibility.Collapsed
                        PanBack.IsHitTestVisible = True
                    End Sub,, True)
-        }, "FrmDownloadInstall SelectPageSwitch")
+        }, "FrmVersionInstall SelectPageSwitch")
     End Sub
 
     '页面切换触发
@@ -379,8 +369,7 @@ Public Class PageVersionInstall
         If SelectedMinecraftId Is Nothing OrElse IsReloading Then Exit Sub
         IsReloading = True
         '主预览
-        'SelectNameUpdate()
-        ItemSelect.Title = TextSelectName.Text
+        ItemSelect.Title = PageVersionLeft.Version.Name
         ItemSelect.Info = GetSelectInfo()
         ItemSelect.Logo = GetSelectLogo()
         'Minecraft
@@ -705,41 +694,35 @@ Public Class PageVersionInstall
     '版本名处理
     Private IsSelectNameEdited As Boolean = False
     Private IsSelectNameChanging As Boolean = False
-    Private Sub SelectNameUpdate()
-        If IsSelectNameEdited OrElse IsSelectNameChanging Then Exit Sub
-        IsSelectNameChanging = True
-        TextSelectName.Text = GetSelectName()
-        IsSelectNameChanging = False
-
-    End Sub
-    Private Sub TextSelectName_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextSelectName.TextChanged
-        If IsSelectNameChanging Then Exit Sub
-        IsSelectNameEdited = True
-        SelectReload()
-    End Sub
-    Private Sub TextSelectName_ValidateChanged(sender As Object, e As EventArgs) Handles TextSelectName.ValidateChanged
-        BtnSelectStart.IsEnabled = TextSelectName.ValidateResult = ""
-    End Sub
 
     '当前信息获取
-    Private Sub GetCurrentInfo()
+    Public Sub GetCurrentInfo()
+        SelectClear()
+        BtnSelectStart.IsEnabled = True
         Dim CurrentVersion = PageVersionLeft.Version.Version
         SelectedMinecraftId = CurrentVersion.McName
         If CurrentVersion.HasLiteLoader Then SelectedLiteLoader = New DlLiteLoaderListEntry
         If CurrentVersion.HasOptiFine Then SelectedOptiFine = New DlOptiFineListEntry
         If CurrentVersion.HasForge Then
+            SelectedLoaderName = "Forge"
             SelectedForge = New DlForgeVersionEntry(CurrentVersion.ForgeVersion, "", CurrentVersion.McName)
         ElseIf CurrentVersion.HasFabric Then
+            SelectedLoaderName = "Fabric"
             SelectedFabric = CurrentVersion.FabricVersion
             SelectedFabricApi = Nothing 'TODO: 检测已有 Fabric API
         ElseIf CurrentVersion.HasNeoForge Then
+            SelectedLoaderName = "NeoForge"
             SelectedNeoForge = New DlNeoForgeListEntry(CurrentVersion.NeoForgeVersion)
         ElseIf CurrentVersion.HasQuilt Then
+            SelectedLoaderName = "Quilt"
             SelectedQuilt = CurrentVersion.QuiltVersion
             SelectedQSL = Nothing 'TODO: 检测已有 QSL
+            SelectedFabricApi = Nothing 'TODO: 检测已有 Fabric API
+        End If
+        If (CurrentVersion.HasFabric OrElse CurrentVersion.HasQuilt) AndAlso CurrentVersion.HasOptiFine Then
+            SelectedOptiFabric = Nothing 'TODO: 检测已有 OptiFabric
         End If
         SelectedMinecraftIcon = "pack://application:,,,/images/Blocks/Grass.png" 'TODO: 需要判断 Icon
-        TextSelectName.Text = PageVersionLeft.Version.Path.Split("\")(PageVersionLeft.Version.Path.Split("\").Length - 2)
         EnterSelectPage()
     End Sub
 
@@ -821,7 +804,7 @@ Public Class PageVersionInstall
             Dim PanInfo As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = TopestVersions}
             Dim StackInstall = Sub(Stack As StackPanel)
                                    For Each item In Stack.Tag
-                                       Stack.Children.Add(McDownloadListItem(item, Sub(sender, e) FrmDownloadInstall.MinecraftSelected(sender, e), False))
+                                       Stack.Children.Add(McDownloadListItem(item, Sub(sender, e) FrmVersionInstall.MinecraftSelected(sender, e), False))
                                    Next
                                End Sub
             MyCard.StackInstall(PanInfo, StackInstall)
@@ -835,6 +818,8 @@ Public Class PageVersionInstall
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack
+                '不能使用 AddressOf，这导致了 #535，原因完全不明，疑似是编译器 Bug
+                NewCard.InstallMethod = StackInstall
                 NewCard.IsSwaped = True
                 PanMinecraft.Children.Add(NewCard)
             Next
@@ -1212,7 +1197,7 @@ Public Class PageVersionInstall
             CardFabric.SwapControl = PanFabric
             CardFabric.InstallMethod = Sub(Stack As StackPanel)
                                            For Each item In Stack.Tag
-                                               Stack.Children.Add(FabricDownloadListItem(CType(item, JObject), AddressOf FrmDownloadInstall.Fabric_Selected))
+                                               Stack.Children.Add(FabricDownloadListItem(CType(item, JObject), AddressOf FrmVersionInstall.Fabric_Selected))
                                            Next
                                        End Sub
         Catch ex As Exception
@@ -1399,7 +1384,7 @@ Public Class PageVersionInstall
             CardQuilt.SwapControl = PanQuilt
             CardQuilt.InstallMethod = Sub(Stack As StackPanel)
                                           For Each item In Stack.Tag
-                                              Stack.Children.Add(QuiltDownloadListItem(CType(item, JObject), AddressOf FrmDownloadInstall.Quilt_Selected))
+                                              Stack.Children.Add(QuiltDownloadListItem(CType(item, JObject), AddressOf FrmVersionInstall.Quilt_Selected))
                                           Next
                                       End Sub
         Catch ex As Exception
@@ -1620,12 +1605,9 @@ Public Class PageVersionInstall
 
 #Region "安装"
 
-    Private Sub TextSelectName_KeyDown(sender As Object, e As KeyEventArgs) Handles TextSelectName.KeyDown
-        If e.Key = Key.Enter AndAlso BtnSelectStart.IsEnabled Then BtnSelectStart_Click()
-    End Sub
     Private Sub BtnSelectStart_Click() Handles BtnSelectStart.Click
         '确认版本隔离
-        If (SelectedForge IsNot Nothing OrElse SelectedNeoForge IsNot Nothing OrElse SelectedFabric IsNot Nothing) AndAlso
+        If (SelectedForge IsNot Nothing OrElse SelectedNeoForge IsNot Nothing OrElse SelectedFabric IsNot Nothing OrElse SelectedQuilt IsNot Nothing) AndAlso
            (Setup.Get("LaunchArgumentIndie") = 0 OrElse Setup.Get("LaunchArgumentIndie") = 2) Then
             If MyMsgBox("你尚未开启版本隔离，这会导致多个 MC 共用同一个 Mod 文件夹。" & vbCrLf &
                         "因此在切换 MC 版本时，MC 会因为读取到与当前版本不符的 Mod 而崩溃。" & vbCrLf &
@@ -1635,8 +1617,8 @@ Public Class PageVersionInstall
         End If
         '提交安装申请
         Dim Request As New McInstallRequest With {
-            .TargetVersionName = TextSelectName.Text,
-            .TargetVersionFolder = $"{PathMcFolder}versions\{TextSelectName.Text}\",
+            .TargetVersionName = PageVersionLeft.Version.Name,
+            .TargetVersionFolder = $"{PathMcFolder}versions\{PageVersionLeft.Version.Name}\",
             .MinecraftJson = SelectedMinecraftJsonUrl,
             .MinecraftName = SelectedMinecraftId,
             .OptiFineEntry = SelectedOptiFine,
@@ -1649,9 +1631,9 @@ Public Class PageVersionInstall
             .OptiFabric = SelectedOptiFabric,
             .LiteLoaderEntry = SelectedLiteLoader
         }
+        BtnSelectStart.IsEnabled = False
         If Not McInstall(Request, True) Then Exit Sub
-        '返回，这样在再次进入安装页面时这个版本就会显示文件夹已重复
-        ExitSelectPage()
+        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.Launch})
     End Sub
 
 #End Region
