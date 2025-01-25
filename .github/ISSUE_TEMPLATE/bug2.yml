@@ -1,6 +1,7 @@
 name: "下载或登录时卡住或失败"
 description: "下载游戏、Mod 或整合包，或登录正版账号时出现问题"
 labels: [· Bug]
+type: "Bug"
 body:
 - type: checkboxes
   id: "yml-1"

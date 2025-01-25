@@ -1,6 +1,7 @@
 name: "综合 Bug 反馈"
 description: "遇见了没有细分选项的其他 Bug"
 labels: [· Bug]
+type: "Bug"
 body:
 - type: checkboxes
   id: "yml-1"
