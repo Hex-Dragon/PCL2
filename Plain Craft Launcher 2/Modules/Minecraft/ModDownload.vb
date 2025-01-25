@@ -201,13 +201,12 @@
         Try
             Dim Versions As JArray = Json("versions")
             If Versions.Count < 200 Then Throw New Exception("获取到的版本列表长度不足（" & Json.ToString & "）")
+            '添加 UVMC 项
             Dim CacheFilePath As String = PathTemp & "Cache\uvmc-download.json"
             If Not File.Exists(CacheFilePath) Then
                 Try
-                    '下载未列出的版本文件
                     Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://zkitefly.github.io/unlisted-versions-of-minecraft/version_manifest.json", IsJson:=True)
                     For Each versionuvmc As JObject In UnlistedJson("versions")
-                        '替换 "pending" 和 "release" 为 "snapshot"
                         If versionuvmc("type").ToString() = "pending" OrElse versionuvmc("type").ToString() = "release" Then
                             versionuvmc("type") = "snapshot"
                         End If
@@ -215,12 +214,11 @@
                             versionuvmc("type") = "old_beta"
                         End If
                     Next
-                    '将下载的内容保存至缓存文件
                     File.WriteAllText(CacheFilePath, UnlistedJson.ToString())
                 Catch ex As Exception
                     Log("[Download] 未列出的版本官方源下载失败: " & ex.Message)
                 End Try
-            Else '如果缓存文件存在，则将其读取并合并到版本列表中
+            Else
                 Dim CachedJson As JObject = GetJson(ReadFile(CacheFilePath))
                 Versions.Merge(CachedJson("versions"))
             End If
@@ -257,9 +255,7 @@
             Dim CacheFilePath As String = PathTemp & "Cache\uvmc-download.json"
             If Not File.Exists(CacheFilePath) Then
                 Try
-                    '下载未列出的版本文件
                     Dim UnlistedJson As JObject = NetGetCodeByRequestRetry("https://vip.123pan.cn/1821946486/unlisted-versions-of-minecraft/version_manifest.json", IsJson:=True)
-                    '替换 "pending" 和 "release" 为 "snapshot"
                     For Each versionuvmc As JObject In UnlistedJson("versions")
                         If versionuvmc("type").ToString() = "pending" OrElse versionuvmc("type").ToString() = "release" Then
                             versionuvmc("type") = "snapshot"
@@ -268,14 +264,14 @@
                             versionuvmc("type") = "old_beta"
                         End If
                     Next
-                    '将下载的内容保存至缓存文件
                     File.WriteAllText(CacheFilePath, UnlistedJson.ToString())
                 Catch ex As Exception
                     Log("[Download] 未列出的版本镜像源下载失败: " & ex.Message)
                 End Try
-            Else '如果缓存文件存在，则将其读取并合并到版本列表中
+            Else
                 Dim CachedJson As JObject = GetJson(ReadFile(CacheFilePath))
                 Versions.Merge(CachedJson("versions"))
+            End If
             '检查是否有要求的版本（#5195）
             If Not String.IsNullOrEmpty(Loader.Input) Then
                 Dim Id = Loader.Input
