@@ -102,12 +102,6 @@ Public Class PageVersionLeft
 
 #End Region
 
-    '点击返回
-    Private Sub ItemInstall_Click(sender As Object, e As MouseButtonEventArgs) Handles ItemInstall.Click
-        If Not ItemInstall.Checked Then Exit Sub
-        FrmDownloadInstall.ExitSelectPage()
-    End Sub
-
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
         Select Case Val(sender.Tag)
             Case FormMain.PageSubType.VersionMod

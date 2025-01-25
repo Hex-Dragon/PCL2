@@ -701,8 +701,8 @@ Public Class PageVersionInstall
         BtnSelectStart.IsEnabled = True
         Dim CurrentVersion = PageVersionLeft.Version.Version
         SelectedMinecraftId = CurrentVersion.McName
-        If CurrentVersion.HasLiteLoader Then SelectedLiteLoader = New DlLiteLoaderListEntry
-        If CurrentVersion.HasOptiFine Then SelectedOptiFine = New DlOptiFineListEntry
+        If CurrentVersion.HasLiteLoader Then SelectedLiteLoader = New DlLiteLoaderListEntry With {.Inherit = CurrentVersion.McName}
+        If CurrentVersion.HasOptiFine Then SelectedOptiFine = New DlOptiFineListEntry With {.NameDisplay = CurrentVersion.McName + " " + CurrentVersion.OptiFineVersion}
         If CurrentVersion.HasForge Then
             SelectedLoaderName = "Forge"
             SelectedForge = New DlForgeVersionEntry(CurrentVersion.ForgeVersion, "", CurrentVersion.McName)
