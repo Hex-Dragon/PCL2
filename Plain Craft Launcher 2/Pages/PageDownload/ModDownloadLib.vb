@@ -2175,6 +2175,7 @@ Retry:
         Select Case Loader.State
             Case LoadState.Finished
                 WriteIni(PathMcFolder & "PCL.ini", "VersionCache", "") '清空缓存（合并安装会先生成文件夹，这会在刷新时误判为可以使用缓存）
+                DeleteDirectory(Loader.Input & "PCLInstallBackups\")
                 Hint(Loader.Name & "成功！", HintType.Finish)
             Case LoadState.Failed
                 Hint(Loader.Name & "失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
@@ -2183,7 +2184,11 @@ Retry:
             Case LoadState.Loading
                 Exit Sub '不重新加载版本列表
         End Select
-        McInstallFailedClearFolder(Loader)
+        If Directory.Exists(Loader.Input & "PCLInstallBackups\") Then '版本修改失败回滚
+            CopyDirectory(Loader.Input & "PCLInstallBackups\", Loader.Input)
+        Else
+            McInstallFailedClearFolder(Loader)
+        End If
         LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
     End Sub
     ''' <summary>
