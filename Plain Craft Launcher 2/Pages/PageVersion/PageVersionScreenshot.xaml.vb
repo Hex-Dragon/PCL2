@@ -65,6 +65,7 @@
         PanList.Children.Clear()
         If FileList.Count > 0 Then
             SetPageButton()
+            PanContent.Visibility = Visibility.Collapsed '龙猫别删这行
             ScreenshotLoader.Start()
         End If
 
@@ -78,7 +79,31 @@
         Dim res As New List(Of MyCard)
         For i = StartIndex To EndIndex
             Dim card As MyCard = Nothing
-            RunInUiWait(Sub() card = BuildImageCard(FileList.ElementAt(i)))
+            Dim FilePath = FileList.ElementAt(i)
+            Dim loadSource = FilePath
+            Using fs As New FileStream(FilePath, FileMode.Open, FileAccess.Read)
+                Dim Header(1) As Byte
+                fs.Read(Header, 0, 2)
+                fs.Seek(0, SeekOrigin.Begin)
+                If Header(0) = 82 AndAlso Header(1) = 73 Then
+                    'WebP 格式，需要转换
+                    Dim FileBytes(fs.Length - 1) As Byte
+                    fs.Read(FileBytes, 0, FileBytes.Length)
+                    Dim Pic = MyBitmap.WebPDecoder.DecodeFromBytes(FileBytes)
+                    Dim picTempPath = PathTemp & "Screenshot\"
+                    Directory.CreateDirectory(picTempPath)
+                    loadSource = picTempPath & GetHash(i) & ".png"
+                    Pic.Save(loadSource)
+                End If
+            End Using
+            Dim buildTask As New Tasks.Task(Of MyCard)(Function()
+                                                           Dim out As MyCard = Nothing
+                                                           RunInUiWait(Sub() out = BuildImageCard(loadSource))
+                                                           Return out
+                                                       End Function)
+            buildTask.Start()
+            buildTask.Wait()
+            card = buildTask.Result
             If card IsNot Nothing Then
                 res.Add(card)
             End If
@@ -115,6 +140,7 @@
             Hint("再怎么翻也没有了呀……")
             Exit Sub
         End If
+        PanScroll.ScrollToTop()
         ScreenshotLoader.Start(IsForceRestart:=True)
     End Sub
 
@@ -139,6 +165,8 @@
         PanList.Children.Clear()
         For Each item In ScreenshotLoader.Output
             PanList.Children.Add(item)
+            item.Opacity = 0
+            AniStart({AaOpacity(item, 1)})
         Next
         SetPageButton()
     End Sub
