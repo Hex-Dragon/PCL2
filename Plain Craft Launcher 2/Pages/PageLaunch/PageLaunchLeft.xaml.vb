@@ -597,10 +597,6 @@ Finish:
     End Sub
     '启动按钮
     Public Sub LaunchButtonClick() Handles BtnLaunch.Click
-        If File.Exists(McVersionCurrent.Path + ".pclignore") Then
-            Hint("当前版本正在安装，无法启动！", HintType.Critical)
-            Exit Sub
-        End If
         If McLaunchLoader.State = LoadState.Loading OrElse Not BtnLaunch.IsEnabled OrElse
             （FrmMain.PageRight IsNot Nothing AndAlso FrmMain.PageRight.PageState <> MyPageRight.PageStates.ContentStay AndAlso FrmMain.PageRight.PageState <> MyPageRight.PageStates.ContentEnter） Then Exit Sub
         '愚人节处理
@@ -615,6 +611,10 @@ Finish:
         End If
         '实际的启动
         If BtnLaunch.Text = "启动游戏" Then
+            If File.Exists(McVersionCurrent.Path + ".pclignore") Then
+                Hint("当前版本正在安装，无法启动！", HintType.Critical)
+                Exit Sub
+            End If
             McLaunchStart()
         ElseIf BtnLaunch.Text = "下载游戏" Then
             FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
