@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.Runtime.InteropServices
 Imports System.Windows.Interop
 
 Public Class FormMain
@@ -371,7 +372,17 @@ Public Class FormMain
             ShapeTitleLogo.Data = New GeometryConverter().ConvertFromString("M26,29 v-25 h5 a7,7 180 0 1 0,14 h-5 M80,6.5 a10,11.5 180 1 0 0,18   M47,2.5 v24.5 h12   M98,2 v27   M107,2 v27")
         End If
         '加载窗口
-        ThemeRefreshMain()
+        Dim dark As Int32 = Setup.Get("UiDarkMode")
+        Select Case dark
+            Case 0
+                IsDarkMode = False
+            Case 1
+                IsDarkMode = True
+            Case 2
+                IsDarkMode = IsSystemInDarkMode()
+        End Select
+
+        ThemeRefresh()
         Try
             Height = Setup.Get("WindowHeight")
             Width = Setup.Get("WindowWidth")
@@ -961,7 +972,16 @@ Public Class FormMain
             End If
             ShowWindowToTop()
             handled = True
+        ElseIf msg = 26 Then 'WM_SETTINGCHANGE
+            If Marshal.PtrToStringAuto(lParam) = "ImmersiveColorSet" Then
+                Log($"[System] 系统主题更改，深色模式：{IsSystemInDarkMode()}")
+                If Setup.Get("UiDarkMode") = 2 And IsDarkMode <> IsSystemInDarkMode() Then
+                    IsDarkMode = IsSystemInDarkMode()
+                    ThemeRefresh()
+                End If
+            End If
         End If
+
         Return IntPtr.Zero
     End Function
 
