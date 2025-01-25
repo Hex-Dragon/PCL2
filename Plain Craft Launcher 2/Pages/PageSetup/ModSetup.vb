@@ -144,6 +144,7 @@
         {"UiCustomType", New SetupEntry(0)},
         {"UiCustomPreset", New SetupEntry(0)},
         {"UiCustomNet", New SetupEntry("")},
+        {"UiDarkMode", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"UiLogoType", New SetupEntry(1)},
         {"UiLogoText", New SetupEntry("")},
         {"UiLogoLeft", New SetupEntry(False)},
@@ -571,7 +572,17 @@
         End Select
         FrmSetupUI.CardCustom.TriggerForceResize()
     End Sub
-
+    '颜色模式
+    Public Sub UiDarkMode(Value As Integer)
+        If Value = 0 Then
+            IsDarkMode = False
+        ElseIf Value = 1 Then
+            IsDarkMode = True
+        Else
+            IsDarkMode = IsSystemInDarkMode()
+        End If
+        ThemeRefresh()
+    End Sub
     '顶部栏
     Public Sub UiLogoType(Value As Integer)
         Select Case Value

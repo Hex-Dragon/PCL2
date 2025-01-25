@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.Runtime.InteropServices
 
 Public Class FormMain
 
@@ -876,7 +877,16 @@ Public Class FormMain
             End If
             ShowWindowToTop()
             handled = True
+        ElseIf msg = 26 Then 'WM_SETTINGCHANGE
+            If Marshal.PtrToStringAuto(lParam) = "ImmersiveColorSet" Then
+                Log($"[System] 系统主题更改，深色模式：{IsSystemInDarkMode()}")
+                If Setup.Get("UiDarkMode") = 2 And IsDarkMode <> IsSystemInDarkMode() Then
+                    IsDarkMode = IsSystemInDarkMode()
+                    ThemeRefresh()
+                End If
+            End If
         End If
+
         Return IntPtr.Zero
     End Function
 
