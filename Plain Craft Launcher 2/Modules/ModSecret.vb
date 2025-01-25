@@ -260,7 +260,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
         RaiseThemeChanged(IsDarkMode)
-                    
+
         If IsDarkMode Then
             ColorHue = 200
             ColorSat = 100
@@ -350,7 +350,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                 Brush.GradientStops.Add(New GradientStop With {.Offset = 1.1, .Color = New MyColor().FromHSL2(ColorHue + 20, Math.Min(60, ColorSat) * 0.5, GetDarkThemeLight(80))})
                 FrmMain.PanForm.Background = Brush
             Else
-                FrmMain.PanForm.Background = New MyColor(20, 20, 20)
+                FrmMain.PanForm.Background = New MyColor(IIf(IsDarkMode, 20, 245), IIf(IsDarkMode, 20, 245), IIf(IsDarkMode, 20, 245))
             End If
             FrmMain.PanForm.Background.Freeze()
         End Sub)

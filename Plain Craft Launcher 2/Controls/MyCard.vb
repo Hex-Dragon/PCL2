@@ -1,10 +1,13 @@
-﻿Public Class MyCard
+﻿Imports System.Threading.Tasks
+
+Public Class MyCard
 
     '控件
     Inherits Grid
     Private ReadOnly MainGrid As Grid
     Private ReadOnly MainChrome As SystemDropShadowChrome
     Private ReadOnly MainBorder As Border
+    Private IsThemeChanging As Boolean = False
     Public Property BorderChild As UIElement
         Get
             Return MainBorder.Child
@@ -47,11 +50,18 @@
     End Property
     Public Shared ReadOnly TitleProperty As DependencyProperty = DependencyProperty.Register("Title", GetType(String), GetType(MyCard), New PropertyMetadata(""))
 
-    Private Sub _ThemeChanged(sender As Object, e As Boolean)
+    Private Async Sub _ThemeChanged(sender As Object, e As Boolean)
         If e Then
-            MainBorder.Background = New SolidColorBrush(Color.FromArgb(205, 43, 43, 43))
+            IsThemeChanging = True
+            AniStart({AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, 43, 43, 43) - MainBorder.Background, 300)}, "MyCard Theme " & Uuid)
+            Await Task.Delay(300)
+            IsThemeChanging = False
         Else
-            MainBorder.Background = New SolidColorBrush(Color.FromArgb(205, 255, 255, 255))
+            IsThemeChanging = True
+            AniStart({AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, 255, 255, 255) - MainBorder.Background, 300)}, "MyCard Theme " & Uuid)
+            Await Task.Delay(300)
+            IsThemeChanging = False
+
         End If
     End Sub
 
@@ -122,7 +132,7 @@
                          AaColor(MainBorder, Border.BackgroundProperty, New MyColor(230, IIf(IsDarkMode, 48, 255), IIf(IsDarkMode, 48, 255), IIf(IsDarkMode, 48, 255)) - MainBorder.Background, 180),
                          AaOpacity(MainChrome, 0.3 - MainChrome.Opacity, 180)
                      })
-        AniStart(AniList, "MyCard Mouse " & Uuid)
+        If Not IsThemeChanging Then AniStart(AniList, "MyCard Mouse " & Uuid)
     End Sub
     Private Sub MyCard_MouseLeave(sender As Object, e As MouseEventArgs) Handles Me.MouseLeave
         If Not HasMouseAnimation Then Exit Sub
@@ -134,7 +144,7 @@
                          AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, IIf(IsDarkMode, 43, 255), IIf(IsDarkMode, 43, 255), IIf(IsDarkMode, 43, 255)) - MainBorder.Background, 300),
                          AaOpacity(MainChrome, 0.1 - MainChrome.Opacity, 300)
                      })
-        AniStart(AniList, "MyCard Mouse " & Uuid)
+        If Not IsThemeChanging Then AniStart(AniList, "MyCard Mouse " & Uuid)
     End Sub
 
 #Region "高度改变动画"
