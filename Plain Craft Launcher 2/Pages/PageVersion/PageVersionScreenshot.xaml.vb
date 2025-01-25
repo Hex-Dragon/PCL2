@@ -61,7 +61,7 @@
         Log("[Screenshot] 筛选后得到 " & FileList.Count & " 个截图文件")
         RefreshTip()
         Page = 1
-        MaxPage = FileList.Count / SingleLoadCount + If(FileList.Count Mod SingleLoadCount > 0, 1, 0)
+        MaxPage = Math.Ceiling(FileList.Count / SingleLoadCount)
         PanList.Children.Clear()
         If FileList.Count > 0 Then
             SetPageButton()
