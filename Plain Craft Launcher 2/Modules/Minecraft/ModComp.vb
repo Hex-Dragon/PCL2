@@ -518,11 +518,8 @@
         Public Function ToCompItem(ShowMcVersionDesc As Boolean, ShowLoaderDesc As Boolean) As MyCompItem
             '获取版本描述
             Dim GameVersionDescription As String
-            Dim AllSnapshot As Boolean = GameVersions.All(Function(v) RegexCheck(v, "[0-9]{2}w[0-9]{2}[a-z]{1}"))
-            If AllSnapshot Then
-                GameVersionDescription = "仅快照版本"
-            ElseIf GameVersions Is Nothing OrElse Not GameVersions.Any() Then
-                GameVersionDescription = "未知"
+            If GameVersions Is Nothing OrElse Not GameVersions.Any() Then
+                GameVersionDescription = "仅快照版本" '#5412
             Else
                 Dim SpaVersions As New List(Of String)
                 Dim IsOld As Boolean = False
@@ -580,17 +577,11 @@
                     ModLoaderDescriptionFull = "仅 " & ModLoadersForDesc.Single.ToString
                     ModLoaderDescriptionPart = ModLoadersForDesc.Single.ToString
                 Case Else
-                    If ModLoaders.Contains(CompModLoaderType.Forge) AndAlso Not AllSnapshot AndAlso
-                       (GameVersions.Max < 14 OrElse ModLoaders.Contains(CompModLoaderType.Fabric)) AndAlso
-                       (GameVersions.Max < 20 OrElse ModLoaders.Contains(CompModLoaderType.NeoForge)) AndAlso
-                       (GameVersions.Max < 14 OrElse ModLoaders.Contains(CompModLoaderType.Quilt) OrElse Setup.Get("ToolDownloadIgnoreQuilt")) Then
-                        ModLoaderDescriptionFull = "任意"
-                        ModLoaderDescriptionPart = ""
-                    ElseIf AllSnapshot AndAlso
-                        ModLoaders.Contains(CompModLoaderType.Forge) AndAlso
-                        ModLoaders.Contains(CompModLoaderType.Fabric) AndAlso
-                        ModLoaders.Contains(CompModLoaderType.NeoForge) AndAlso
-                        (ModLoaders.Contains(CompModLoaderType.Quilt) OrElse Setup.Get("ToolDownloadIgnoreQuilt")) Then
+                    Dim MaxVersion As Integer = If(GameVersions.Any, GameVersions.Max, 99)
+                    If ModLoaders.Contains(CompModLoaderType.Forge) AndAlso
+                       (MaxVersion < 14 OrElse ModLoaders.Contains(CompModLoaderType.Fabric)) AndAlso
+                       (MaxVersion < 20 OrElse ModLoaders.Contains(CompModLoaderType.NeoForge)) AndAlso
+                       (MaxVersion < 14 OrElse ModLoaders.Contains(CompModLoaderType.Quilt) OrElse Setup.Get("ToolDownloadIgnoreQuilt")) Then
                         ModLoaderDescriptionFull = "任意"
                         ModLoaderDescriptionPart = ""
                     Else
@@ -1178,7 +1169,7 @@ Retry:
 
         If RealResults.Count + Storage.Results.Count < Task.Input.TargetResultCount Then
             Log($"[Comp] 总结果数需求最少 {Task.Input.TargetResultCount} 个，仅获得了 {RealResults.Count + Storage.Results.Count} 个")
-            If Task.Input.CanContinue Then
+            If Task.Input.CanContinue AndAlso [Error] Is Nothing Then '如果有下载源失败则不再重试，这时候重试可能导致无限循环
                 Log("[Comp] 将继续尝试加载下一页")
                 GoTo Retry
             Else
@@ -1586,10 +1577,8 @@ Retry:
         If Deps.Any Then
             For Each DepProject In Deps.Where(Function(id) CompProjectCache.ContainsKey(id)).Select(Function(id) CompProjectCache(id))
                 For Each File In CompFilesCache(ProjectId)
-                    If File.RawDependencies.Contains(DepProject.Id) AndAlso
-                    DepProject.Id <> ProjectId AndAlso 
-                    Not File.Dependencies.Contains(DepProject.Id) Then
-                        File.Dependencies.Add(DepProject.Id)
+                    If File.RawDependencies.Contains(DepProject.Id) AndAlso DepProject.Id <> ProjectId Then
+                        If Not File.Dependencies.Contains(DepProject.Id) Then File.Dependencies.Add(DepProject.Id)
                     End If
                 Next
             Next

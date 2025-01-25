@@ -50,31 +50,29 @@
                             <RowDefinition Height="7" />
                             <RowDefinition Height="28" />
                             <RowDefinition Height="7" />
-                            <RowDefinition Height="28" />
-                            <RowDefinition Height="7" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="下载源" Margin="0,0,25,0" />
+                        <!--<TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="下载源" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboDownloadMod" Grid.Row="0" Grid.ColumnSpan="2" Tag="ToolDownloadMod" Grid.Column="1">
                             <local:MyComboBoxItem Content="尽量使用镜像源（暂时无效）" />
                             <local:MyComboBoxItem Content="仅在官方源加载缓慢时改用镜像源" />
                             <local:MyComboBoxItem Content="尽量使用官方源" IsSelected="True" />
-                        </local:MyComboBox>
-                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="下载文件名" Margin="0,0,25,0" />
-                        <local:MyComboBox Grid.Row="2" x:Name="ComboDownloadTranslate" Grid.ColumnSpan="2" Tag="ToolDownloadTranslate" Grid.Column="1" 
+                        </local:MyComboBox>-->
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="下载文件名" Margin="0,0,25,0" />
+                        <local:MyComboBox Grid.Row="0" x:Name="ComboDownloadTranslate" Grid.ColumnSpan="2" Tag="ToolDownloadTranslate" Grid.Column="1" 
                                           ToolTip="下载 Mod 时，Mod 的默认文件名中，中文译名应该放在哪个位置">
                             <local:MyComboBoxItem Content="译名位于文件名开头：[遗物] relics-0.1.14" IsSelected="True" />
                             <local:MyComboBoxItem Content="译名位于文件名开头：遗物-relics-0.1.14" />
                             <local:MyComboBoxItem Content="译名位于文件名末尾：relics-0.1.14-遗物" />
                             <local:MyComboBoxItem Content="不添加中文译名：relics-0.1.14" />
                         </local:MyComboBox>
-                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Mod 管理样式" Margin="0,0,25,0" />
-                        <local:MyComboBox Grid.Row="4" x:Name="ComboModLocalNameStyle" Grid.ColumnSpan="2" Tag="ToolModLocalNameStyle" Grid.Column="1" 
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Mod 管理样式" Margin="0,0,25,0" />
+                        <local:MyComboBox Grid.Row="2" x:Name="ComboModLocalNameStyle" Grid.ColumnSpan="2" Tag="ToolModLocalNameStyle" Grid.Column="1" 
                                           ToolTip="在 Mod 管理页面中，Mod 项的显示方式">
                             <local:MyComboBoxItem Content="标题显示译名，详情显示文件名" IsSelected="True" />
                             <local:MyComboBoxItem Content="标题显示文件名，详情显示译名" />
                         </local:MyComboBox>
-                        <local:MyCheckBox Margin="0,2,0,4" Text="显示 Mod 加载器时忽略 Quilt" Grid.Row="6" Height="22" Grid.ColumnSpan="2"
+                        <local:MyCheckBox Margin="0,2,0,4" Text="显示 Mod 加载器时忽略 Quilt" Grid.Row="4" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" />
                     </Grid>
                 </StackPanel>
