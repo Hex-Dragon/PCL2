@@ -12,15 +12,15 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.9.3" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.9.3." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.9.5" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.9.5." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "native" 'Commit Hash，由 GitHub Workflow 自动替换
     Public CommitHashShort As String = If(CommitHash = "native", "native", CommitHash.Substring(0, 7)) 'Commit Hash，取前 7 位
     Public Const UpstreamVersion As String = "2.8.12" '上游版本
 #If RELEASE Then
-    Public Const VersionCode As Integer = 352 'Release
+    Public Const VersionCode As Integer = 354 'Release
 #Else
-    Public Const VersionCode As Integer = 352 'Snapshot
+    Public Const VersionCode As Integer = 354 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -597,13 +597,13 @@ Public Module ModBase
         parentKey.DeleteSubKeyTree(subKeyName, False)
     End Sub
     ''' <summary>
-    ''' 读取程序所属注册表。
+    ''' 读取注册表，默认为程序所属。
     ''' </summary>
-    Public Function ReadReg(Key As String, Optional DefaultValue As String = "") As String
+    Public Function ReadReg(Key As String, Optional DefaultValue As String = "", Optional Path As String = "") As String
         Try
             Dim parentKey As Microsoft.Win32.RegistryKey, softKey As Microsoft.Win32.RegistryKey
             parentKey = My.Computer.Registry.CurrentUser
-            softKey = parentKey.OpenSubKey("Software\" & RegFolder, True)
+            softKey = parentKey.OpenSubKey("Software\" & If(Path = "", RegFolder, Path), True)
             If softKey Is Nothing Then
                 ReadReg = DefaultValue '不存在则返回默认值
             Else
@@ -618,14 +618,14 @@ Public Module ModBase
         End Try
     End Function
     ''' <summary>
-    ''' 写入程序所属注册表。
+    ''' 写入注册表，默认为程序所属。
     ''' </summary>
-    Public Sub WriteReg(Key As String, Value As String, Optional ShowException As Boolean = False)
+    Public Sub WriteReg(Key As String, Value As String, Optional ShowException As Boolean = False, Optional Path As String = "")
         Try
             Dim parentKey As Microsoft.Win32.RegistryKey, softKey As Microsoft.Win32.RegistryKey
             parentKey = My.Computer.Registry.CurrentUser
-            softKey = parentKey.OpenSubKey("Software\" & RegFolder, True)
-            If softKey Is Nothing Then softKey = parentKey.CreateSubKey("Software\" & RegFolder) '如果不存在就创建  
+            softKey = parentKey.OpenSubKey("Software\" & If(Path = "", RegFolder, Path), True)
+            If softKey Is Nothing Then softKey = parentKey.CreateSubKey("Software\" & If(Path = "", RegFolder, Path)) '如果不存在就创建  
             softKey.SetValue(Key, Value)
         Catch ex As Exception
             Log(ex, "写入注册表出错：" & Key, If(ShowException, LogLevel.Hint, LogLevel.Developer))
@@ -1391,6 +1391,8 @@ RetryDir:
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
                 "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
             CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
+        ElseIf TypeOf InnerEx Is PlatformNotSupportedException Then
+            CommonReason = "你当前的 Windows 版本过低，无法运行当前版本的 PCL。请升级到 Windows 10 或更高版本后再试。"
         End If
 
         '获取错误类型
@@ -1439,6 +1441,8 @@ RetryDir:
         ElseIf {"远程主机强迫关闭了", "远程方已关闭传输流", "未能解析此远程名称", "由于目标计算机积极拒绝",
                 "操作已超时", "操作超时", "服务器超时", "连接超时"}.Any(Function(s) Desc.Contains(s)) Then
             CommonReason = "你的网络环境不佳，导致难以连接到服务器。请检查网络，多重试几次，或尝试使用 VPN。"
+        ElseIf TypeOf InnerEx Is PlatformNotSupportedException Then
+            CommonReason = "你当前的 Windows 版本过低，无法运行当前版本的 PCL。请升级到 Windows 10 或更高版本后再试。"
         End If
 
         '构造输出信息
@@ -1981,10 +1985,10 @@ RetryDir:
     End Function
 
     ''' <summary>
-    ''' 判断当前系统语言是否为中文。
+    ''' 判断当前系统语言是否为 zh-CN。
     ''' </summary>
     Public Function IsSystemLanguageChinese() As Boolean
-        Return CultureInfo.CurrentCulture.TwoLetterISOLanguageName = "zh" OrElse CultureInfo.CurrentUICulture.TwoLetterISOLanguageName = "zh"
+        Return CultureInfo.CurrentCulture.Name = "zh-CN" OrElse CultureInfo.CurrentUICulture.Name = "zh-CN"
     End Function
 
     Private Uuid As Integer = 1
@@ -2616,12 +2620,12 @@ Retry:
             Dim IsInitSuccess As Boolean = True
             Try
                 For i = 4 To 1 Step -1
-                    If File.Exists(Path & "PCL\Log" & i & ".txt") Then
-                        If File.Exists(Path & "PCL\Log" & (i + 1) & ".txt") Then File.Delete(Path & "PCL\Log" & (i + 1) & ".txt")
-                        CopyFile(Path & "PCL\Log" & i & ".txt", Path & "PCL\Log" & (i + 1) & ".txt")
+                    If File.Exists(Path & "PCL\Log-CE" & i & ".log") Then
+                        If File.Exists(Path & "PCL\Log-CE" & (i + 1) & ".log") Then File.Delete(Path & "PCL\Log-CE" & (i + 1) & ".log")
+                        CopyFile(Path & "PCL\Log-CE" & i & ".log", Path & "PCL\Log-CE" & (i + 1) & ".log")
                     End If
                 Next
-                File.Create(Path & "PCL\Log1.txt").Dispose()
+                File.Create(Path & "PCL\Log-CE1.log").Dispose()
             Catch ex As IOException
                 IsInitSuccess = False
                 Hint("可能同时开启了多个 PCL，程序可能会出现未知问题！", HintType.Critical)
@@ -2631,7 +2635,7 @@ Retry:
                 Log(ex, "日志初始化失败", LogLevel.Hint)
             End Try
             Try
-                LogWritter = New StreamWriter(Path & "PCL\Log1.txt", True) With {.AutoFlush = True}
+                LogWritter = New StreamWriter(Path & "PCL\Log-CE1.log", True) With {.AutoFlush = True}
             Catch ex As Exception
                 LogWritter = Nothing
                 Log(ex, "日志写入失败", LogLevel.Hint)
@@ -2812,7 +2816,7 @@ Retry:
         If ForceOpenLog OrElse (ShowMsgbox AndAlso MyMsgBox("若你在汇报一个 Bug，请点击 打开文件夹 按钮，并上传 Log(1~5).txt 中包含错误信息的文件。" & vbCrLf & "游戏崩溃一般与启动器无关，请不要因为游戏崩溃而提交反馈。", "反馈提交提醒", "打开文件夹", "不需要") = 1) Then
             OpenExplorer("""" & Path & "PCL\""")
         End If
-        OpenWebsite("https://github.com/Hex-Dragon/PCL2/issues/")
+        OpenWebsite("https://github.com/PCL-Community/PCL2-CE/issues/")
     End Sub
     Public Function CanFeedback(ShowHint As Boolean) As Boolean
         If False.Equals(PageSetupSystem.IsLauncherNewest) Then

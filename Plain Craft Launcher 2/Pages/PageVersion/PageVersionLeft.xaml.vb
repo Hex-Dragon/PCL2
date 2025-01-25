@@ -1,5 +1,3 @@
-﻿Imports PCL.PageLinkHiper
-
 Public Class PageVersionLeft
 
     ''' <summary>

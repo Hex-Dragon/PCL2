@@ -6,9 +6,9 @@
         PanScroll = PanBack '不知道为啥不能在 XAML 设置
         PanLog.Visibility = If(ModeDebug, Visibility.Visible, Visibility.Collapsed)
         '社区版提示
-        PanHint.Visibility = If(ThemeCheckGold(), Visibility.Collapsed, Visibility.Visible)
-        LabHint1.Text = "社区版包含尚未在官方主线版本发布的测试功能，仅用于尝鲜。请不要向官方仓库反馈社区版的问题哦！"
-        LabHint2.Text = $"若要永久隐藏此提示，请自行 Clone 代码并删除此提示相关内容。"
+        PanHint.Visibility = If(Setup.Get("UiLauncherCEHint"), Visibility.Visible, Visibility.Collapsed)
+        LabHint1.Text = "社区版包含未在官方主线版本发布的功能，仅用于尝鲜。请不要向官方仓库反馈社区版的问题哦！"
+        LabHint2.Text = $"若要永久隐藏此提示，请自行查阅代码中的相关部分。"
     End Sub
 
     '暂时关闭快照版提示
@@ -105,11 +105,11 @@ Download:
                         GoTo Download
                     Case 7
                         Log("[Page] 主页预设：主页市场")
-                        Url = "https://homepage-market.pages.dev/Custom.xaml"
+                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/JingHai-Lingyun/Custom.xaml"
                         GoTo Download
                     Case 8
                         Log("[Page] 主页预设：更新日志")
-                        Url = "https://updatehomepage.pages.dev/UpdateHomepage.xaml"
+                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Joker2184/UpdateHomepage.xaml"
                         GoTo Download
                     Case 9
                         Log("[Page] 主页预设：PCL 新功能说明书")
@@ -121,7 +121,7 @@ Download:
                         GoTo Download
                     Case 11
                         Log("[Page] 主页预设：杂志主页")
-                        Url = "http://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Ext1nguisher/Custom.xaml"
+                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Ext1nguisher/Custom.xaml"
                         GoTo Download
                 End Select
         End Select

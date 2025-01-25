@@ -37,6 +37,8 @@
         {"SystemSystemCache", New SetupEntry("", Source:=SetupSource.Registry)},
         {"SystemSystemUpdate", New SetupEntry(0)},
         {"SystemSystemActivity", New SetupEntry(0)},
+        {"SystemHttpProxy", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"SystemDisableHardwareAcceleration", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"CacheSavedPageUrl", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageVersion", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheMsOAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
@@ -98,27 +100,27 @@
         {"LaunchArgumentWindowHeight", New SetupEntry(480)},
         {"LaunchArgumentWindowType", New SetupEntry(1)},
         {"LaunchArgumentRam", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"LaunchArgumentJavaTraversal", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"LaunchAdvanceJvm", New SetupEntry("-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Djdk.lang.Process.allowAmbiguousCommands=true -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true")},
         {"LaunchAdvanceGame", New SetupEntry("")},
         {"LaunchAdvanceRun", New SetupEntry("")},
         {"LaunchAdvanceRunWait", New SetupEntry(True)},
         {"LaunchAdvanceAssets", New SetupEntry(False)},
         {"LaunchAdvanceJava", New SetupEntry(False)},
+        {"LaunchAdvanceDisableJlw", New SetupEntry(False)},
         {"LaunchRamType", New SetupEntry(0)},
         {"LaunchRamCustom", New SetupEntry(15)},
         {"LinkEula", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"LinkName", New SetupEntry("", Source:=SetupSource.Registry)},
-        {"LinkHiperCertLast", New SetupEntry("", Source:=SetupSource.Registry)},
-        {"LinkHiperCertTime", New SetupEntry("", Source:=SetupSource.Registry)},
-        {"LinkHiperCertWarn", New SetupEntry(True, Source:=SetupSource.Registry)},
-        {"LinkIoiVersion", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
+        {"LinkFirstTimeNetTest", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolHelpChinese", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadThread", New SetupEntry(63, Source:=SetupSource.Registry)},
         {"ToolDownloadSpeed", New SetupEntry(42, Source:=SetupSource.Registry)},
         {"ToolDownloadVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolDownloadTranslate", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolDownloadIgnoreQuilt", New SetupEntry(True, Source:=SetupSource.Registry)},
-        {"ToolDownloadCert", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"ToolDownloadClipboard", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"ToolDownloadCert", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadMod", New SetupEntry(1, Source:=SetupSource.Registry)},
         {"ToolModLocalNameStyle", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolUpdateAlpha", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
@@ -137,6 +139,7 @@
         {"UiLauncherThemeHide2", New SetupEntry("0|1|2|3|4", Source:=SetupSource.Registry, Encoded:=True)},
         {"UiLauncherLogo", New SetupEntry(True)},
         {"UiLauncherEmail", New SetupEntry(False)},
+        {"UiLauncherCEHint", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"UiBackgroundColorful", New SetupEntry(True)},
         {"UiBackgroundOpacity", New SetupEntry(1000)},
         {"UiBackgroundBlur", New SetupEntry(0)},
@@ -152,6 +155,7 @@
         {"UiMusicStop", New SetupEntry(False)},
         {"UiMusicStart", New SetupEntry(False)},
         {"UiMusicRandom", New SetupEntry(True)},
+        {"UiMusicSMTC", New SetupEntry(True)},
         {"UiMusicAuto", New SetupEntry(True)},
         {"UiHiddenPageDownload", New SetupEntry(False)},
         {"UiHiddenPageLink", New SetupEntry(False)},
@@ -169,11 +173,13 @@
         {"UiHiddenOtherVote", New SetupEntry(False)},
         {"UiHiddenOtherAbout", New SetupEntry(False)},
         {"UiHiddenOtherTest", New SetupEntry(False)},
+        {"UiAniFPS", New SetupEntry(59, Source:=SetupSource.Registry)},
         {"VersionAdvanceJvm", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceGame", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceAssets", New SetupEntry(0, Source:=SetupSource.Version)},
         {"VersionAdvanceAssetsV2", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceJava", New SetupEntry(False, Source:=SetupSource.Version)},
+        {"VersionAdvanceDisableJlw", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceRun", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceRunWait", New SetupEntry(True, Source:=SetupSource.Version)},
         {"VersionRamType", New SetupEntry(2, Source:=SetupSource.Version)},
@@ -368,8 +374,8 @@
 #If BETA Then
         If Key = "UiLauncherTheme" Then Return "0"
 #End If
-        If Key = "UiHiddenPageLink" Then Return True
-        If Key = "UiHiddenSetupLink" Then Return True
+        If Key = "UiHiddenPageLink" Then Return False
+        If Key = "UiHiddenSetupLink" Then Return False
         Return Nothing
     End Function
 

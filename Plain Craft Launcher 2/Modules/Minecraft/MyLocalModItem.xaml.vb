@@ -137,13 +137,14 @@ Public Class MyLocalModItem
             Exit Sub
         End If
         '计算滑动范围
-        Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
-        SwipeStart = Math.Min(SwipeStart, Index)
-        SwipeEnd = Math.Max(SwipeEnd, Index)
+        Dim Elements = CType(Parent, StackPanel).Children
+        Dim Index As Integer = Elements.IndexOf(Me)
+        SwipeStart = MathClamp(Math.Min(SwipeStart, Index), 0, Elements.Count - 1)
+        SwipeEnd = MathClamp(Math.Max(SwipeEnd, Index), 0, Elements.Count - 1)
         '勾选所有范围中的项
         If SwipeStart = SwipeEnd Then Exit Sub
         For i = SwipeStart To SwipeEnd
-            Dim Item As MyLocalModItem = CType(Parent, StackPanel).Children(i)
+            Dim Item As MyLocalModItem = Elements(i)
             Item.InitLate(Item, e)
             Item.Checked = SwipToState
         Next
@@ -461,8 +462,11 @@ Public Class MyLocalModItem
     End Sub
 
     '显示更新日志
-    Private Sub ShowUpdateLog(sender As Object, e As MouseButtonEventArgs) Handles BtnUpdate.PreviewMouseRightButtonUp
+    Private Sub BtnUpdate_PreviewMouseRightButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnUpdate.PreviewMouseRightButtonUp
         e.Handled = True
+        ShowUpdateLog()
+    End Sub
+    Private Sub ShowUpdateLog()
         Dim CurseForgeUrl As String = Entry.ChangelogUrls.FirstOrDefault(Function(x) x.Contains("curseforge.com"))
         Dim ModrinthUrl As String = Entry.ChangelogUrls.FirstOrDefault(Function(x) x.Contains("modrinth.com"))
         If CurseForgeUrl Is Nothing OrElse ModrinthUrl Is Nothing Then
@@ -479,8 +483,13 @@ Public Class MyLocalModItem
 
     '触发更新
     Private Sub BtnUpdate_Click(sender As Object, e As EventArgs) Handles BtnUpdate.Click
-        If MyMsgBox($"是否要更新 {Entry.Name}？{vbCrLf}{vbCrLf}{GetUpdateCompareDescription()}", "Mod 更新确认", "更新", "取消") = 2 Then Return
-        FrmVersionMod.UpdateMods({Entry})
+        Select Case MyMsgBox($"是否要更新 {Entry.Name}？{vbCrLf}{vbCrLf}{GetUpdateCompareDescription()}", "Mod 更新确认", "更新", "查看更新日志", "取消")
+            Case 1 '更新
+                FrmVersionMod.UpdateMods({Entry})
+            Case 2 '查看更新日志
+                ShowUpdateLog()
+            Case 3 '取消
+        End Select
     End Sub
 
     '自适应（#4465）

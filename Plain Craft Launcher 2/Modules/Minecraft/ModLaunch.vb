@@ -236,15 +236,18 @@ NextInner:
         '正版购买提示
         If Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
             If IsSystemLanguageChinese() Then
-                Select Case Setup.Get("SystemLaunchCount")
-                    Case 3, 8, 15, 30, 50, 70, 90, 110, 130, 180, 220, 280, 330, 380, 450, 550, 660, 750, 880, 950, 1100, 1300, 1500, 1700, 1900
-                        If MyMsgBox("你已经启动了 " & Setup.Get("SystemLaunchCount") & " 次 Minecraft 啦！" & vbCrLf &
-                                    "如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易……不要一直白嫖啦。" & vbCrLf & vbCrLf &
-                                    "在登录一次正版账号后，就不会再出现这个提示了！",
-                                    "考虑一下正版？", "支持正版游戏！", "下次一定") = 1 Then
-                            OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
-                        End If
-                End Select
+                RunInNewThread(
+                Sub()
+                    Select Case Setup.Get("SystemLaunchCount")
+                        Case 3, 8, 15, 30, 50, 70, 90, 110, 130, 180, 220, 280, 330, 380, 450, 550, 660, 750, 880, 950, 1100, 1300, 1500, 1700, 1900
+                            If MyMsgBox("你已经启动了 " & Setup.Get("SystemLaunchCount") & " 次 Minecraft 啦！" & vbCrLf &
+                                "如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易……不要一直白嫖啦。" & vbCrLf & vbCrLf &
+                                "在登录一次正版账号后，就不会再出现这个提示了！",
+                                "考虑一下正版？", "支持正版游戏！", "下次一定") = 1 Then
+                                OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
+                            End If
+                    End Select
+                End Sub, "Buy Minecraft")
             ElseIf Setup.Get("LoginType") = McLoginType.Legacy Then
                 Select Case MyMsgBox("你必须先登录正版账号，才能进行离线登录！", "正版验证", "购买正版", "试玩", "返回",
                     Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
@@ -684,7 +687,7 @@ LoginFinish:
             Url:=Data.Input.BaseUrl & "/validate",
             Method:="POST",
             Data:=RequestData.ToString(0),
-            Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+            Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
             ContentType:="application/json; charset=utf-8") '没有返回值的
         '将登录结果输出
         Data.Output.AccessToken = AccessToken
@@ -716,7 +719,7 @@ LoginFinish:
                 Url:="https://open.littleskin.cn/oauth/token",
                 Method:="POST",
                 Data:=RefreshData,
-                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                 ContentType:="application/json; charset=utf-8"))
             AccessToken = LoginJson("access_token").ToString(0)
             RefreshToken = LoginJson("refresh_token").ToString(0)
@@ -742,7 +745,7 @@ LoginFinish:
                    ""name"":""" & Setup.Get("Cache" & Data.Input.Token & "Name") & """},", "") & "
                ""accessToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Access") & """,
                ""clientToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Client") & """}",
-               Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+               Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                ContentType:="application/json; charset=utf-8"))
         '将登录结果输出
         If LoginJson("selectedProfile") Is Nothing Then Throw New Exception("选择的角色 " & Setup.Get("Cache" & Data.Input.Token & "Name") & " 无效！")
@@ -803,14 +806,14 @@ LoginFinish:
                 Url:="https://open.littleskin.cn/oauth/device_code",
                 Method:="POST",
                 Data:=RequestData.ToString(0),
-                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                 ContentType:="application/json; charset=utf-8"))
             Else
                 LoginJson = GetJson(NetRequestRetry(
                 Url:=Data.Input.BaseUrl & "/authenticate",
                 Method:="POST",
                 Data:=RequestData.ToString(0),
-                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                 ContentType:="application/json; charset=utf-8"))
 
 
@@ -1355,6 +1358,10 @@ Retry:
             If Task.IsAborted Then Exit Sub
             If McLaunchJavaSelected IsNot Nothing Then
                 McLaunchLog("选择的 Java：" & McLaunchJavaSelected.ToString)
+                '指定 Java 使用高性能显卡
+                If Not ReadReg(McLaunchJavaSelected.PathJavaw, "GpuPreference=0;", Path:="Microsoft\DirectX\UserGpuPreferences") = "GpuPreference=2;" Then
+                    WriteReg(McLaunchJavaSelected.PathJavaw, "GpuPreference=2;", Path:="Microsoft\DirectX\UserGpuPreferences")
+                End If
                 Exit Sub
             End If
 
@@ -1403,6 +1410,10 @@ Retry:
             If Task.IsAborted Then Exit Sub
             If McLaunchJavaSelected IsNot Nothing Then
                 McLaunchLog("选择的 Java：" & McLaunchJavaSelected.ToString)
+                '指定 Java 使用高性能显卡
+                If Not ReadReg(McLaunchJavaSelected.PathJavaw, "GpuPreference=0;", Path:="Microsoft\DirectX\UserGpuPreferences") = "GpuPreference=2;" Then
+                    WriteReg(McLaunchJavaSelected.PathJavaw, "GpuPreference=2;", Path:="Microsoft\DirectX\UserGpuPreferences")
+                End If
             Else
                 Hint("没有可用的 Java，已取消启动！", HintType.Critical)
                 Throw New Exception("$$")
@@ -1546,7 +1557,7 @@ Retry:
         'Authlib-Injector
         If McLoginLoader.Output.Type = "Auth" Then
             Dim Server As String = If(McLoginLoader.Input.Type = McLoginType.Legacy,
-                "http://hiperauth.tech/api/yggdrasil-hiper/", 'HiPer 登录
+                "http://todo.lobby/link", '联机登录
                 Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent))
             Try
                 Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
@@ -1613,7 +1624,7 @@ NextVersion:
         'Authlib-Injector
         If McLoginLoader.Output.Type = "Auth" Then
             Dim Server As String = If(McLoginLoader.Input.Type = McLoginType.Legacy,
-                "http://hiperauth.tech/api/yggdrasil-hiper/", 'HiPer 登录
+                "http://todo.lobby/link", '联机登录
                 Setup.Get("VersionServerAuthServer", Version:=McVersionCurrent))
             Try
                 Dim Response As String = NetGetCodeByRequestRetry(Server, Encoding.UTF8)
@@ -1627,8 +1638,10 @@ NextVersion:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
-        DataList.Add("-jar """ & ExtractJavaWrapper() & """")
+        If Not Setup.Get("LaunchAdvanceDisableJlw") AndAlso Not Setup.Get("VersionAdvanceDisableJlw", Version) Then '检查禁用 Java Wrapper 设置项
+            DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
+            DataList.Add("-jar """ & ExtractJavaWrapper() & """")
+        End If
 
         '将 "-XXX" 与后面 "XXX" 合并到一起
         '如果不合并，会导致 Forge 1.17 启动无效，它有两个 --add-exports，进一步导致其中一个在后面被去重
@@ -2192,8 +2205,8 @@ IgnoreCustomSkin:
                 "@echo off" & vbCrLf &
                 "title 启动 - " & McVersionCurrent.Name & vbCrLf &
                 "echo 游戏正在启动，请稍候。" & vbCrLf &
-                "set APPDATA=""" & PathMcFolder & """" & vbCrLf &
-                "cd /D """ & PathMcFolder & """" & vbCrLf &
+                "set APPDATA=""" & McVersionCurrent.PathIndie & """" & vbCrLf &
+                "cd /D """ & McVersionCurrent.PathIndie & """" & vbCrLf &
                 CustomCommandGlobal & vbCrLf &
                 CustomCommandVersion & vbCrLf &
                 """" & McLaunchJavaSelected.PathJava & """ " & McLaunchArgument & vbCrLf &
@@ -2414,7 +2427,7 @@ IgnoreCustomSkin:
         End If
         Select Case McLoginLoader.Input.Type
             Case McLoginType.Legacy
-                If PageLinkHiper.HiperState = LoadState.Finished Then
+                If PageLinkLobby.HiperState = LoadState.Finished Then
                     Raw = Raw.Replace("{login}", "联机离线")
                 Else
                     Raw = Raw.Replace("{login}", "离线")
