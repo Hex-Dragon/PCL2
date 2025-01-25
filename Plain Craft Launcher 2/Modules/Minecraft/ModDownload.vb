@@ -1176,39 +1176,27 @@
     ''' 调用 NetGetCodeByRequest。
     ''' </summary>
     Public Function DlModRequest(Url As String, Optional IsJson As Boolean = False) As Object
-        Dim McimUrl As String = DlSourceModGet(Url)
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
-        If McimUrl <> Url Then
-            Select Case Setup.Get("ToolDownloadMod")
-                'TODO: 在 MCIM 源稳定后回调
-                Case 0
-                    If ModeDebug Then
-                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 20))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
-                    Else
-                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
-                    End If
-                Case 1
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
-                Case Else
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
-            End Select
-        End If
+        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        'Dim McimUrl As String = DlSourceModGet(Url)
+        'If McimUrl <> Url Then
+        '    Select Case Setup.Get("ToolDownloadMod")
+        '        Case 0
+        '            Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
+        '            Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+        '            Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        '        Case 1
+        '            Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+        '            Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
+        '            Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        '            Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+        '        Case Else
+        '            Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+        '            Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        '            Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+        '    End Select
+        'End If
         Dim Exs As String = ""
         For Each Source In Urls
             Try
@@ -1225,39 +1213,27 @@
     ''' 调用 NetRequest。
     ''' </summary>
     Public Function DlModRequest(Url As String, Method As String, Data As String, ContentType As String) As String
-        Dim McimUrl As String = DlSourceModGet(Url)
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
-        If McimUrl <> Url Then
-            Select Case Setup.Get("ToolDownloadMod")
-                'TODO: 在 MCIM 源稳定后回调
-                Case 0
-                    If ModeDebug Then
-                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 20))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
-                    Else
-                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
-                        Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
-                    End If
-                Case 1
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 30))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
-                Case Else
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 30))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(Url, 60))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
-                    Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 60))
-            End Select
-        End If
+        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        'Dim McimUrl As String = DlSourceModGet(Url)
+        'If McimUrl <> Url Then
+        '   Select Case Setup.Get("ToolDownloadMod")
+        '       Case 0
+        '           Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
+        '           Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+        '           Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        '       Case 1
+        '           Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+        '           Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 5))
+        '           Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        '           Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+        '       Case Else
+        '           Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
+        '           Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        '           Urls.Add(New KeyValuePair(Of String, Integer)(McimUrl, 10))
+        '   End Select
+        'End If
         Dim Exs As String = ""
         For Each Source In Urls
             Try
@@ -1285,28 +1261,42 @@
     End Function
 
     Public Function DlSourceLibraryGet(Original As String) As String()
-        Return {
-            Original.
-                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").
-                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").
-                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
-            Original.
-                Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
-                Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
-                Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
-            Original
-        }
+        If {"minecraftforge", "fabricmc", "neoforged"}.Any(Function(k) Original.Contains(k)) Then '不添加原版源
+            Return {
+                Original.
+                    Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").
+                    Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").
+                    Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
+                Original.
+                    Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
+                    Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
+                    Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries")
+            }
+        Else
+            Return {
+                Original.
+                    Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/maven").
+                    Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/maven").
+                    Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/maven"),
+                Original.
+                    Replace("https://piston-data.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
+                    Replace("https://piston-meta.mojang.com", "https://bmclapi2.bangbang93.com/libraries").
+                    Replace("https://libraries.minecraft.net", "https://bmclapi2.bangbang93.com/libraries"),
+                Original
+            }
+        End If
     End Function
 
     Public Function DlSourceModGet(Original As String) As String
-        Return Original.
-            Replace("api.modrinth.com", "mod.mcimirror.top/modrinth").
-            Replace("staging-api.modrinth.com", "mod.mcimirror.top/modrinth").
-            Replace("cdn.modrinth.com", "mod.mcimirror.top").
-            Replace("api.curseforge.com", "mod.mcimirror.top/curseforge").
-            Replace("edge.forgecdn.net", "mod.mcimirror.top").
-            Replace("mediafilez.forgecdn.net", "mod.mcimirror.top").
-            Replace("media.forgecdn.net", "mod.mcimirror.top")
+        Return Original
+        'Return Original.
+        '    Replace("api.modrinth.com", "mod.mcimirror.top/modrinth").
+        '    Replace("staging-api.modrinth.com", "mod.mcimirror.top/modrinth").
+        '    Replace("cdn.modrinth.com", "mod.mcimirror.top").
+        '    Replace("api.curseforge.com", "mod.mcimirror.top/curseforge").
+        '    Replace("edge.forgecdn.net", "mod.mcimirror.top").
+        '    Replace("mediafilez.forgecdn.net", "mod.mcimirror.top").
+        '    Replace("media.forgecdn.net", "mod.mcimirror.top")
     End Function
 
     Public Function DlSourceLauncherOrMetaGet(Original As String) As String()

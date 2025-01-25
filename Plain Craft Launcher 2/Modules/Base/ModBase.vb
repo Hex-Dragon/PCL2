@@ -1985,10 +1985,10 @@ RetryDir:
     End Function
 
     ''' <summary>
-    ''' 判断当前系统语言是否为中文。
+    ''' 判断当前系统语言是否为 zh-CN。
     ''' </summary>
     Public Function IsSystemLanguageChinese() As Boolean
-        Return CultureInfo.CurrentCulture.TwoLetterISOLanguageName = "zh" OrElse CultureInfo.CurrentUICulture.TwoLetterISOLanguageName = "zh"
+        Return CultureInfo.CurrentCulture.Name = "zh-CN" OrElse CultureInfo.CurrentUICulture.Name = "zh-CN"
     End Function
 
     Private Uuid As Integer = 1

@@ -38,6 +38,7 @@
         PanLauncherHide.Visibility = Visibility.Visible
 
         '设置解锁
+
         If Not RadioLauncherTheme8.IsEnabled Then LabLauncherTheme8Copy.ToolTip = "社区版不包含主题功能，请使用官方快照版"
         RadioLauncherTheme8.ToolTip = "社区版不包含主题功能，请使用官方快照版"
         If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "社区版不包含主题功能，请使用官方快照版"
