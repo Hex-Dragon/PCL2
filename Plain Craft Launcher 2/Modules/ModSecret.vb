@@ -235,7 +235,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public ThemeDontClick As Integer = 0
 
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
-        Hint("该版本中不包含主题功能……")
+        'Hint("该版本中不包含主题功能……")
     End Sub
     Public Sub ThemeRefreshMain()
         RunInUi(
@@ -358,7 +358,8 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         IsUpdateWaitingRestart = True
         Try
             Dim fileName As String = Path + "PCL\Plain Craft Launcher 2.exe"
-            Dim text As String = String.Concat(New String() {"--update ", Process.GetCurrentProcess().Id, " """, AppDomain.CurrentDomain.SetupInformation.ApplicationName, """ """, AppDomain.CurrentDomain.SetupInformation.ApplicationName, """ ", TriggerRestartAndByEnd})
+            ' id old new restart
+            Dim text As String = String.Concat(New String() {"--update ", Process.GetCurrentProcess().Id, " """, PathWithName, """ """, fileName, """ ", TriggerRestartAndByEnd})
             Log("[System] 更新程序启动，参数：" + text, LogLevel.Normal, "出现错误")
             Process.Start(New ProcessStartInfo(fileName) With {.WindowStyle = ProcessWindowStyle.Hidden, .CreateNoWindow = True, .Arguments = text})
             If TriggerRestartAndByEnd Then
@@ -374,33 +375,32 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     End Sub
     Public Sub UpdateReplace(ProcessId As Integer, OldFileName As String, NewFileName As String, TriggerRestart As Boolean)
         Try
-            Process.GetProcessById(ProcessId).Kill()
+            Dim ps = Process.GetProcessById(ProcessId)
+            If Not ps.HasExited Then
+                ps.Kill()
+            End If
         Catch ex As Exception
         End Try
-        Dim OriginalPath As String = Strings.Mid(Path, 1, Path.Length - 4) + GetFileNameFromPath(OldFileName)
-        Dim TempPath As String = Strings.Mid(Path, 1, Path.Length - 4) + GetFileNameFromPath(NewFileName)
         Dim ex2 As Exception = Nothing
         Dim num As Integer = 0
         Do
             Try
-                If File.Exists(OriginalPath) Then
-                    File.Delete(OriginalPath)
+                If File.Exists(OldFileName) Then
+                    File.Delete(OldFileName)
                 End If
-                If File.Exists(TempPath) Then
-                    File.Delete(TempPath)
-                End If
-                If Not File.Exists(OriginalPath) AndAlso Not File.Exists(TempPath) Then
+                If Not File.Exists(OldFileName) Then
                     Exit Try
                 End If
-                Thread.Sleep(2000)
             Catch ex3 As Exception
                 ex2 = ex3
+            Finally
+                Thread.Sleep(500)
             End Try
             num += 1
         Loop While num <= 4
-        If Not File.Exists(OriginalPath) AndAlso Not File.Exists(TempPath) Then
+        If (Not File.Exists(OldFileName)) AndAlso File.Exists(NewFileName) Then
             Try
-                CopyFile(OriginalPath, TempPath)
+                CopyFile(NewFileName, OldFileName)
             Catch ex4 As UnauthorizedAccessException
                 MsgBox("PCL 更新失败：权限不足。请手动复制 PCL 文件夹下的新版本程序。" & vbCrLf & "若 PCL 位于桌面或 C 盘，你可以尝试将其挪到其他文件夹，这可能可以解决权限问题。" & vbCrLf + GetExceptionSummary(ex4), MsgBoxStyle.Critical, "更新失败")
             Catch ex5 As Exception
@@ -409,7 +409,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             End Try
             If TriggerRestart Then
                 Try
-                    Process.Start(TempPath)
+                    Process.Start(OldFileName)
                 Catch ex6 As Exception
                     MsgBox("PCL 更新失败：无法重新启动。" & vbCrLf + GetExceptionSummary(ex6), MsgBoxStyle.Critical, "更新失败")
                 End Try
@@ -417,7 +417,13 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             Return
         End If
         If TypeOf ex2 Is UnauthorizedAccessException Then
-            MsgBox(String.Concat(New String() {"由于权限不足，PCL 无法完成更新。请尝试：" & vbCrLf, If((TempPath.StartsWithF(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), False) OrElse TempPath.StartsWithF(Environment.GetFolderPath(Environment.SpecialFolder.Personal), False)), " - 将 PCL 文件移动到桌面、文档以外的文件夹（这或许可以一劳永逸地解决权限问题）" & vbCrLf, ""), If(TempPath.StartsWithF("C", True), " - 将 PCL 文件移动到 C 盘以外的文件夹（这或许可以一劳永逸地解决权限问题）" & vbCrLf, ""), " - 右键以管理员身份运行 PCL" & vbCrLf & " - 手动复制已下载到 PCL 文件夹下的新版本程序，覆盖原程序" & vbCrLf & vbCrLf, GetExceptionSummary(ex2)}), MsgBoxStyle.Critical, "更新失败")
+            MsgBox(String.Concat(New String() {"由于权限不足，PCL 无法完成更新。请尝试：" & vbCrLf,
+                                 If((Path.StartsWithF(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), False) OrElse Path.StartsWithF(Environment.GetFolderPath(Environment.SpecialFolder.Personal), False)),
+                                 " - 将 PCL 文件移动到桌面、文档以外的文件夹（这或许可以一劳永逸地解决权限问题）" & vbCrLf, ""),
+                                 If(Path.StartsWithF("C", True),
+                                 " - 将 PCL 文件移动到 C 盘以外的文件夹（这或许可以一劳永逸地解决权限问题）" & vbCrLf, ""),
+                                 " - 右键以管理员身份运行 PCL" & vbCrLf & " - 手动复制已下载到 PCL 文件夹下的新版本程序，覆盖原程序" & vbCrLf & vbCrLf,
+                                 GetExceptionSummary(ex2)}), MsgBoxStyle.Critical, "更新失败")
             Return
         End If
         MsgBox("PCL 更新失败：无法删除原文件。请手动复制已下载到 PCL 文件夹下的新版本程序覆盖原程序。" & vbCrLf + GetExceptionSummary(ex2), MsgBoxStyle.Critical, "更新失败")

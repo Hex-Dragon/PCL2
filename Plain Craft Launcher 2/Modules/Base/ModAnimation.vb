@@ -778,7 +778,11 @@ Public Module ModAnimation
                                Do While True
                                    '两帧之间的间隔时间
                                    Dim DeltaTime As Long = MathClamp(GetTimeTick() - AniLastTick, 0, 100000)
-                                   If DeltaTime < 3 Then GoTo Sleeper
+                                   If DeltaTime < 1000 / ((Val(Setup.Get("UiAniFPS")) + 1) * 2) Then
+                                       '限制 FPS
+                                       Thread.Sleep(1)
+                                       Continue Do
+                                   End If
                                    AniLastTick = GetTimeTick()
                                    '记录 FPS
                                    If ModeDebug Then
@@ -802,9 +806,6 @@ Public Module ModAnimation
                                                        Log("[Report] FPS " & AniFPS & ", 动画 " & AniCount & ", 下载中 " & NetManager.FileRemain & "（" & GetString(NetManager.Speed) & "/s）")
                                                    End If
                                                End Sub)
-Sleeper:
-                                   '控制 FPS
-                                   Thread.Sleep(1)
                                Loop
                            Catch ex As Exception
                                Log(ex, "动画帧执行失败", LogLevel.Assert)
