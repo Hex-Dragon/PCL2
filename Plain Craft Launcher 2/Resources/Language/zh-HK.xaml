@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">已取消！</s:String>
     <s:String x:Key="LangDialogBtnOK">確認</s:String>
     <s:String x:Key="LangDialogBtnCancel">取消</s:String>
@@ -629,6 +629,8 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">紫色愛心披風</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">追隨者披風</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15 周年披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">村民救援披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">無披風</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">實例選擇</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">實例設定</s:String>
@@ -688,6 +690,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">玩家名不能為空！</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">玩家名不能包含英文引號！</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">啟動設定已被禁用！</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">自 1.20.3 起，玩家名至多只能包含 16 个字符！</s:String>
     <s:String x:Key="LangPageLoginMsLogin">登入</s:String>
     <s:String x:Key="LangPageLoginMsBuy">»  購買正版</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">»  前往官網</s:String>
@@ -1466,6 +1469,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">錯誤的模組檔案路徑（{0}）</s:String>
     <s:String x:Key="LangModModExceptionFileNotFound">未找到模組檔案（{0}）</s:String>
     <s:String x:Key="LangModModExceptionUnauthorizedAccess">沒有存取此檔案的權限，請嘗試右鍵以系統管理員身分執行 PCL</s:String>
+    <s:String x:Key="LangModCompVersionSnapshotOnly">仅快照版本</s:String>
     <s:String x:Key="LangModCompVersionUnknown">未知</s:String>
     <s:String x:Key="LangModCompVersionAll">全版本</s:String>
     <s:String x:Key="LangModCompVersionAny">任意</s:String>

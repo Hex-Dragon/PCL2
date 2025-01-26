@@ -100,10 +100,10 @@
     <s:String x:Key="LangThemeUnlockCopyTip8">累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。
 右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！</s:String>
     <s:String x:Key="LangThemeUnlockTip8">累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· 反馈一个 Bug，在 Issue 标记为 [已完成] 后回复 Issue 要求解锁（右键打开反馈页面）
-· 向帮助库提交 Pull Request，在龙猫合并后解锁</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· 反馈一个 Bug，在反馈标记为 [完成] 后回复 Issue 要求解锁
-· 向帮助库提交 Pull Request，在龙猫合并后解锁</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip9">· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）
+· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁</s:String>
+    <s:String x:Key="LangThemeUnlockTip9">· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁
+· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">个性化设置项存在异常，已被自动重置</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">重载个性化设置时出错</s:String>
     <s:String x:Key="LangHintThemeSetInit">已初始化个性化设置</s:String>
@@ -259,7 +259,7 @@
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 皮肤推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 仪表盘 Lite（作者：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageH">PCL 主页市场（作者：凌云）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageI">PCL 更新日志（作者：Joker2184）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">PCL 新闻速报（作者：Joker2184）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
@@ -652,6 +652,8 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">紫色心形披风</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">追随者披风</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15 周年披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">村民救援披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">无披风</s:String>
     <!--PageLaunchLeft-->
     <s:String x:Key="LangLaunchLeftInstanceChoose">版本选择</s:String>
@@ -716,6 +718,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">玩家名不能为空！</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">玩家名不能包含英文引号！</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">启动设置已被禁用！</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">自 1.20.3 起，玩家名至多只能包含 16 个字符！</s:String>
     <!--PageLoginMs-->
     <s:String x:Key="LangPageLoginMsLogin">登录</s:String>
     <s:String x:Key="LangPageLoginMsBuy">»  购买正版</s:String>
@@ -800,7 +803,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 11 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 12 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">赞助作者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -1525,6 +1528,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModModExceptionFileNotFound">未找到 Mod 文件（{0}）</s:String>
     <s:String x:Key="LangModModExceptionUnauthorizedAccess">没有读取此文件的权限，请尝试右键以管理员身份运行 PCL</s:String>
     <!--ModComp-->
+    <s:String x:Key="LangModCompVersionSnapshotOnly">仅快照版本</s:String>
     <s:String x:Key="LangModCompVersionUnknown">未知</s:String>
     <s:String x:Key="LangModCompVersionAll">全版本</s:String>
     <s:String x:Key="LangModCompVersionAny">任意</s:String>

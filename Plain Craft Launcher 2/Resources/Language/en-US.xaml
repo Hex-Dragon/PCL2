@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Canceled!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
@@ -629,6 +629,8 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">Purple Heart</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">Follower's</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15th Year</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">村民救援披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">None</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">Selection</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Properties</s:String>
@@ -688,6 +690,7 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">Username cannot be empty!</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">Username cannot contain quotation marks!</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">The launch options have been disabled!</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">自 1.20.3 起，玩家名至多只能包含 16 个字符！</s:String>
     <s:String x:Key="LangPageLoginMsLogin">Login</s:String>
     <s:String x:Key="LangPageLoginMsBuy">» Purchase</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">» Website</s:String>
@@ -1463,6 +1466,7 @@ Latest Version: {2} ({3})</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">Incorrect mod file path. ({0})</s:String>
     <s:String x:Key="LangModModExceptionFileNotFound">Mod file not found. ({0})</s:String>
     <s:String x:Key="LangModModExceptionUnauthorizedAccess">No permission to read this file. Please right-click on PCL and try to run as administrator.</s:String>
+    <s:String x:Key="LangModCompVersionSnapshotOnly">仅快照版本</s:String>
     <s:String x:Key="LangModCompVersionUnknown">Unknown</s:String>
     <s:String x:Key="LangModCompVersionAll">All Versions</s:String>
     <s:String x:Key="LangModCompVersionAny">Any</s:String>

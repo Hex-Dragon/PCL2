@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Annulé!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Annuler</s:String>
@@ -624,6 +624,8 @@ Cette page fournit le téléchargement de l'installateur NeoForge. Après le té
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">Cape Cœur Violet</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">Cape de Suiveur</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">Cape du 15ème Anniversaire MCC</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">村民救援披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">Aucune</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">Sélection</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Propriétés</s:String>
@@ -683,6 +685,7 @@ Cette page fournit le téléchargement de l'installateur NeoForge. Après le té
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">Le nom d'utilisateur ne peut pas être vide !</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">Le nom d'utilisateur ne peut pas contenir de guillemets !</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">Les options de lancement ont été désactivées !</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">自 1.20.3 起，玩家名至多只能包含 16 个字符！</s:String>
     <s:String x:Key="LangPageLoginMsLogin">Connexion</s:String>
     <s:String x:Key="LangPageLoginMsBuy">» Acheter</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">» Site Web</s:String>
@@ -1460,6 +1463,7 @@ Cliquez pour mettre à jour, clic droit pour voir les journaux de modifications.
     <s:String x:Key="LangModModExceptionIncorrectPath">Chemin de fichier mod incorrect. ({0})</s:String>
     <s:String x:Key="LangModModExceptionFileNotFound">Fichier mod introuvable. ({0})</s:String>
     <s:String x:Key="LangModModExceptionUnauthorizedAccess">Aucune permission pour lire ce fichier, veuillez faire un clic droit et essayer d'exécuter PCL en tant qu'administrateur.</s:String>
+    <s:String x:Key="LangModCompVersionSnapshotOnly">仅快照版本</s:String>
     <s:String x:Key="LangModCompVersionUnknown">Inconnu</s:String>
     <s:String x:Key="LangModCompVersionAll">Toutes les versions</s:String>
     <s:String x:Key="LangModCompVersionAny">N'importe quelle</s:String>

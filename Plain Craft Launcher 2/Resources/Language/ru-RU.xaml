@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Отменено!</s:String>
     <s:String x:Key="LangDialogBtnOK">ОК</s:String>
     <s:String x:Key="LangDialogBtnCancel">Отмена</s:String>
@@ -629,6 +629,8 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">Плащ Purple Heart</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">Плащ Follower's</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">Плащ 15-летия MCC</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">村民救援披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">Нет</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">Выбор</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Свойства</s:String>
@@ -688,6 +690,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">Имя пользователя не может быть пустым!</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">Имя пользователя не может содержать кавычки!</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">Настройки запуска отключены!</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">自 1.20.3 起，玩家名至多只能包含 16 个字符！</s:String>
     <s:String x:Key="LangPageLoginMsLogin">Вход</s:String>
     <s:String x:Key="LangPageLoginMsBuy">» Купить</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">» Сайт</s:String>
@@ -1465,6 +1468,7 @@ URL: {0}</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">Неверный путь к файлу мода. ({0})</s:String>
     <s:String x:Key="LangModModExceptionFileNotFound">Файл мода не найден. ({0})</s:String>
     <s:String x:Key="LangModModExceptionUnauthorizedAccess">Нет разрешения на чтение этого файла, пожалуйста, щелкните правой кнопкой мыши и попробуйте запустить PCL от имени администратора.</s:String>
+    <s:String x:Key="LangModCompVersionSnapshotOnly">仅快照版本</s:String>
     <s:String x:Key="LangModCompVersionUnknown">Неизвестно</s:String>
     <s:String x:Key="LangModCompVersionAll">Все версии</s:String>
     <s:String x:Key="LangModCompVersionAny">Любая</s:String>

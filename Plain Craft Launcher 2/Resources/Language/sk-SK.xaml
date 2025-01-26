@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Zrušené!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Zrušiť</s:String>
@@ -629,6 +629,8 @@ Prosím, skontrolujte internet a potom sa znovu pokúste.</s:String>
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">Plášť Purpurového srdca</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">Plášť Nasledovníka</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">Plášť MCC 15. roka</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">村民救援披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">Žiadny</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">Výber</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Vlastnosti</s:String>
@@ -688,6 +690,7 @@ Prosím, skontrolujte internet a potom sa znovu pokúste.</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">Užívateľské meno nemôže byť prázdne!</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">Užívateľské meno nemôže obsahovať úvodzovky!</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">Možnosti spustenia boli deaktivované!</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">自 1.20.3 起，玩家名至多只能包含 16 个字符！</s:String>
     <s:String x:Key="LangPageLoginMsLogin">Prihlásenie</s:String>
     <s:String x:Key="LangPageLoginMsBuy">» Kúpiť</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">» Webová stránka</s:String>
@@ -1465,6 +1468,7 @@ Kliknite na aktualizáciu, kliknite pravým tlačidlom na zobrazenie záznamov z
     <s:String x:Key="LangModModExceptionIncorrectPath">Nesprávna cesta k súboru modifikácie. ({0})</s:String>
     <s:String x:Key="LangModModExceptionFileNotFound">Súbor modifikácie sa nenašiel. ({0})</s:String>
     <s:String x:Key="LangModModExceptionUnauthorizedAccess">Nemáte oprávnenie čítať tento súbor, prosím, kliknite pravým tlačidlom a skúste spustiť PCL ako administrátor.</s:String>
+    <s:String x:Key="LangModCompVersionSnapshotOnly">仅快照版本</s:String>
     <s:String x:Key="LangModCompVersionUnknown">Neznáma</s:String>
     <s:String x:Key="LangModCompVersionAll">Všetky verzie</s:String>
     <s:String x:Key="LangModCompVersionAny">Ľubovolná</s:String>
@@ -1642,7 +1646,7 @@ Ak táto možnosť nie je dostupná, prosím, vyberte "Nastaviť heslo", a prihl
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">Preimenovanie JSON súboru inštancie (Stranný načítavateľ)</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">Inštalácia modpacku HMCL: </s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">Inštalácia modpacku MMC: </s:String>
-    <s:String x:Key="LangModModpackNoAddons">Tento integračný balík MCBBS neposkytuje dodatočné informácie o verzii hry, a preto sa nedá nainštalovať!</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">该 MCBBS 整合包未提供游戏版本附加信息，无法安装！</s:String>
     <s:String x:Key="LangModModpackHMCLNoGameInfo">Tento integračný balík HMCL neposkytuje informácie o verzii hry, a preto sa nedá nainštalovať!</s:String>
     <s:String x:Key="LangModModpackMMCNoGameInfo">Tento integračný balík MMC neposkytuje informácie o verzii hry, a preto sa nedá nainštalovať!</s:String>
     <s:String x:Key="LangModModpackMCBBSNoGameInfo">Tento integračný balík MCBBS neposkytuje informácie o verzii hry, a preto sa nedá nainštalovať!</s:String>
@@ -1654,7 +1658,7 @@ Ak táto možnosť nie je dostupná, prosím, vyberte "Nastaviť heslo", a prihl
     <s:String x:Key="LangModModpackSelectInstallFolder">Vyberte cieľovú priečinku inštalácie (musí to byť prázdny priečinok)</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Cesty priečinkov Minecraft nemôžu obsahovať vykričníky (!) alebo bodkočiarky (;)!</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">Prosím, vyberte prázdny priečinok ako cieľovú priečinku inštalácie!</s:String>
-    <s:String x:Key="LangModModpackExtractArchive">Rozbalenie archívu</s:String>
+    <s:String x:Key="LangModModpackTaskExtractArchive">解压压缩包</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">Pridané do zoznamu priečinkov: {0}</s:String>
     <s:String x:Key="LangModModpackExceptionManualInstallFail">Manuálna inštalácia integračného balíka zlyhala.</s:String>
     <s:String x:Key="LangModModpackExceptionOpenFileFail">Otváranie súboru integračného balíka zlyhalo.</s:String>
