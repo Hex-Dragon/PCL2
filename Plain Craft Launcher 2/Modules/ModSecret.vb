@@ -139,11 +139,11 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         If Url.Contains("baidupcs.com") OrElse Url.Contains("baidu.com") Then
             Client.Headers("User-Agent") = "LogStatistic" '#4951
         ElseIf UseBrowserUserAgent Then
-            Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+            Client.Headers("User-Agent") = "PCL2/" & UpstreamVersion & "." & VersionBranchCode & " PCLCE/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
         Else
-            Client.Headers("User-Agent") = "PCL2/" & VersionStandardCode
+            Client.Headers("User-Agent") = "PCL2/" & UpstreamVersion & "." & VersionBranchCode & " PCLCE/" & VersionStandardCode
         End If
-        Client.Headers("Referer") = "http://" & VersionCode & ".pcl2.open.server/"
+        Client.Headers("Referer") = "http://" & VersionCode & ".ce.open.pcl2.server/"
         If Url.Contains("api.curseforge.com") Then Client.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
     ''' <summary>
@@ -153,11 +153,11 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         If Url.Contains("baidupcs.com") OrElse Url.Contains("baidu.com") Then
             Request.UserAgent = "LogStatistic" '#4951
         ElseIf UseBrowserUserAgent Then
-            Request.UserAgent = "PCL2/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
+            Request.UserAgent = "PCL2/" & UpstreamVersion & "." & VersionBranchCode & " PCLCE/" & VersionStandardCode & " Mozilla/5.0 AppleWebKit/537.36 Chrome/63.0.3239.132 Safari/537.36"
         Else
-            Request.UserAgent = "PCL2/" & VersionStandardCode
+            Request.UserAgent = "PCL2/" & UpstreamVersion & "." & VersionBranchCode & " PCLCE/" & VersionStandardCode
         End If
-        Request.Referer = "http://" & VersionCode & ".pcl2.open.server/"
+        Request.Referer = "http://" & VersionCode & ".ce.open.pcl2.server/"
         If Url.Contains("api.curseforge.com") Then Request.Headers("x-api-key") = CurseForgeAPIKey
     End Sub
 
