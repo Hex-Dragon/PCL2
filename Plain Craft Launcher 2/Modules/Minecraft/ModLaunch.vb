@@ -707,7 +707,7 @@ LoginFinish:
         Dim LoginJson As JObject = GetJson(NetRequestRetry(
                Url:=Data.Input.BaseUrl & "/refresh",
                Method:="POST",
-               Data:=RequestInfo.ToString(0),
+               Data:=RefreshInfo.ToString(0),
                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                ContentType:="application/json; charset=utf-8"))
         '将登录结果输出
