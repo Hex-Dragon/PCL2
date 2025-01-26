@@ -71,7 +71,7 @@ Public Class MyLocalModItem
                 "<Border xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
                          Background=""#0C000000"" Padding=""3,1"" CornerRadius=""3"" Margin=""0,0,3,0"" 
                          SnapsToDevicePixels=""True"" UseLayoutRounding=""False"">
-                   <TextBlock Text=""" & TagText & """ Foreground=""#88000000"" FontSize=""11"" />
+                   <TextBlock Text=""" & TagText & """ Foreground=""" & IIf(IsDarkMode, "#88FFFFFF", "#88000000") & """ FontSize=""11"" />
                 </Border>")
                 PanTags.Children.Add(NewTag)
             Next
