@@ -75,22 +75,31 @@ Public Class PageVersionResourcePack
 
             '提取资源
             Try
+                Dim GetResourcepackDesc =
+                    Function(Json As JObject)
+                        If Json?("pack")?("description").Type = JTokenType.String Then
+                            Return Json("pack")("description").ToString()
+                        Else
+                            Return Json("pack")("description")("fallback").ToString()
+                        End If
+                    End Function
                 If isFile Then '文件类型的资源包
-                    Dim Archive = New ZipArchive(New FileStream(i, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    Dim pack = Archive.GetEntry("pack.png")
-                    Dim desc = Archive.GetEntry("pack.mcmeta")
-                    If pack Is Nothing Then
-                        ResTempIconFile = PathImage & "Icons/NoIcon.png"
-                    Else
-                        pack.ExtractToFile(ResTempIconFile)
-                    End If
-                    If desc IsNot Nothing Then
-                        desc.ExtractToFile(ResTempDescFile)
-                        ResDesc = GetJson(File.ReadAllText(ResTempDescFile, Encoding.UTF8))?("pack")?("description")
-                    End If
+                    Using Archive As New ZipArchive(New FileStream(i, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                        Dim pack = Archive.GetEntry("pack.png")
+                        Dim desc = Archive.GetEntry("pack.mcmeta")
+                        If pack Is Nothing Then
+                            ResTempIconFile = PathImage & "Icons/NoIcon.png"
+                        Else
+                            pack.ExtractToFile(ResTempIconFile)
+                        End If
+                        If desc IsNot Nothing Then
+                            desc.ExtractToFile(ResTempDescFile)
+                            ResDesc = GetResourcepackDesc(GetJson(File.ReadAllText(ResTempDescFile, Encoding.UTF8)))
+                        End If
+                    End Using
                 Else '文件夹型资源包
                     ResTempIconFile = i + "\pack.png"
-                    ResDesc = GetJson(File.ReadAllText(i & "\pack.mcmeta", Encoding.UTF8))?("pack")?("description")
+                    ResDesc = GetResourcepackDesc(GetJson(File.ReadAllText(i & "\pack.mcmeta", Encoding.UTF8)))
                 End If
             Catch ex As Exception
                 Log(ex, "[Resourcepack] 提取资源包信息失败！")
@@ -184,48 +193,10 @@ Public Class PageVersionResourcePack
         OpenExplorer("""" & ResourcepacksPath & """")
     End Sub
     Private Sub BtnOpen_Click(sender As Object, e As MouseButtonEventArgs)
-        OpenExplorer("""" & sender.Tag & """")
+        OpenExplorerAndSelect(sender.Tag)
     End Sub
     Private Sub BtnPaste_Click(sender As Object, e As MouseButtonEventArgs)
-        Try
-            Dim files As Specialized.StringCollection = Clipboard.GetFileDropList()
-            If files.Count.Equals(0) Then
-                Hint("剪贴板内无文件可粘贴")
-                Exit Sub
-            End If
-            Dim CopiedFiles = 0
-            Dim CopiedFolders = 0
-            For Each i In files
-                If File.Exists(i) Then
-                    Try
-                        If File.Exists(ResourcepacksPath & GetFileNameFromPath(i)) Then
-                            Hint("已存在同名文件：" & GetFileNameWithoutExtentionFromPath(i))
-                        Else
-                            File.Copy(i, ResourcepacksPath & GetFileNameFromPath(i))
-                            CopiedFiles += 1
-                        End If
-                    Catch ex As Exception
-                        Log(ex, "[Reourcepack] 复制文件时出错")
-                        Continue For
-                    End Try
-                Else
-                    Try
-                        If Directory.Exists(ResourcepacksPath & GetFolderNameFromPath(i)) Then
-                            Hint("已存在同名文件夹：" & GetFolderNameFromPath(i))
-                        Else
-                            CopyDirectory(i, ResourcepacksPath & GetFolderNameFromPath(i))
-                            CopiedFolders += 1
-                        End If
-                    Catch ex As Exception
-                        Log(ex, "[Resourcepack] 复制文件时出错")
-                        Continue For
-                    End Try
-                End If
-            Next
-            Hint("已粘贴 " & CopiedFiles & " 个文件和 " & CopiedFolders & " 个文件夹")
-            LoadFileList()
-        Catch ex As Exception
-            Log(ex, "粘贴资源包文件失败", LogLevel.Hint)
-        End Try
+        PasteFileFromClipboard(ResourcepacksPath)
+        RefreshUI()
     End Sub
 End Class
