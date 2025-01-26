@@ -213,7 +213,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public IsDarkMode As Boolean = False
 
     Public ColorDark1 As New MyColor(235, 235, 235)
-    'Public ColorDark2 As New MyColor(102, 204, 255)
+    Public ColorDark2 As New MyColor(102, 204, 255)
     'Public ColorDark3 As New MyColor(51, 187, 255)
     Public ColorDark6 As New MyColor(93, 101, 103)
     Public ColorDark7 As New MyColor(69, 75, 79)
