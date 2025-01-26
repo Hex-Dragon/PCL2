@@ -698,16 +698,16 @@ LoginFinish:
     End Sub
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
 
-        Dim RequestInfo As JObject = New JObject
+        Dim RefreshInfo As JObject = New JObject
 
-        RequestInfo.Add(New JProperty("accessToken", Setup.Get($"Cache{Data.Input.Token}Access")))
-        RequestInfo.Add(New JProperty("requestUser", True))
+        RefreshInfo.Add(New JProperty("accessToken", Setup.Get($"Cache{Data.Input.Token}Access")))
+        RefreshInfo.Add(New JProperty("requestUser", True))
 
         McLaunchLog("刷新登录开始（Refresh, " & Data.Input.Token & "）")
         Dim LoginJson As JObject = GetJson(NetRequestRetry(
                Url:=Data.Input.BaseUrl & "/refresh",
                Method:="POST",
-               Data:=RequestInfo,
+               Data:=RequestInfo.ToString(0),
                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                ContentType:="application/json; charset=utf-8"))
         '将登录结果输出
