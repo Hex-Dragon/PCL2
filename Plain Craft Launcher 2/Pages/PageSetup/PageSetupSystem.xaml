@@ -54,31 +54,29 @@
                             <RowDefinition Height="7" />
                             <RowDefinition Height="28" />
                             <RowDefinition Height="7" />
-                            <RowDefinition Height="28" />
-                            <RowDefinition Height="7" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadModListSource}" Margin="0,0,25,0" />
+                        <!--<TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadModListSource}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboDownloadMod" Grid.Row="0" Grid.ColumnSpan="2" Tag="ToolDownloadMod" Grid.Column="1">
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModListSourceA}" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModListSourceB}" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModListSourceC}" IsSelected="True" />
-                        </local:MyComboBox>
-                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadModFileName}" Margin="0,0,25,0" />
-                        <local:MyComboBox Grid.Row="2" x:Name="ComboDownloadTranslate" Grid.ColumnSpan="2" Tag="ToolDownloadTranslate" Grid.Column="1" 
+                        </local:MyComboBox>-->
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadModFileName}" Margin="0,0,25,0" />
+                        <local:MyComboBox Grid.Row="0" x:Name="ComboDownloadTranslate" Grid.ColumnSpan="2" Tag="ToolDownloadTranslate" Grid.Column="1" 
                                           ToolTip="{StaticResource LangPageSetupSystemDownloadModFileNameToolTip}">
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameA}" IsSelected="True" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameB}" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameC}" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameD}" />
                         </local:MyComboBox>
-                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadModManageStyle}" Margin="0,0,25,0" />
-                        <local:MyComboBox Grid.Row="4" x:Name="ComboModLocalNameStyle" Grid.ColumnSpan="2" Tag="ToolModLocalNameStyle" Grid.Column="1" 
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadModManageStyle}" Margin="0,0,25,0" />
+                        <local:MyComboBox Grid.Row="2" x:Name="ComboModLocalNameStyle" Grid.ColumnSpan="2" Tag="ToolModLocalNameStyle" Grid.Column="1" 
                                           ToolTip="{StaticResource LangPageSetupSystemDownloadModManageStyleToolTip}">
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModManageStyleA}" IsSelected="True" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModManageStyleB}" />
                         </local:MyComboBox>
-                        <local:MyCheckBox Margin="0,2,0,4" Text="{StaticResource LangPageSetupSystemDownloadIgnoreQuiltDisplay}" Grid.Row="6" Height="22" Grid.ColumnSpan="2"
+                        <local:MyCheckBox Margin="0,2,0,4" Text="{StaticResource LangPageSetupSystemDownloadIgnoreQuiltDisplay}" Grid.Row="4" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" />
                     </Grid>
                 </StackPanel>

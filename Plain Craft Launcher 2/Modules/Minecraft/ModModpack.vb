@@ -241,9 +241,7 @@ Retry:
             '获取 Mod 下载信息
             ModDownloadLoaders.Add(New LoaderTask(Of Integer, JArray)(GetLang("LangModModpackTaskGetModDownloadInfo"),
             Sub(Task As LoaderTask(Of Integer, JArray))
-                '由于 MCIM 缺少下载信息，只使用官方源获取列表
-                'TODO: 在 MCIM 源稳定后回调回 DlModRequest
-                Task.Output = GetJson(NetRequestRetry("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(ModList, ",") & "]}", "application/json"))("data")
+                Task.Output = GetJson(DlModRequest("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(ModList, ",") & "]}", "application/json"))("data")
                 '如果文件已被删除，则 API 会跳过那一项
                 If ModList.Count > Task.Output.Count Then Throw New Exception(GetLang("LangModModpackExceptionOnlineModDeleted"))
             End Sub) With {.ProgressWeight = ModList.Count / 10}) '每 10 Mod 需要 1s
@@ -798,14 +796,18 @@ Retry:
                 Thread.Sleep(400) '避免文件争用
                 '查找解压后的 exe 文件
                 Dim Launcher As String = Nothing
-                For Each ExeFile In Directory.GetFiles(TargetFolder, "*.exe", SearchOption.AllDirectories)
+                For Each ExeFile In Directory.GetFiles(TargetFolder, "*.exe", SearchOption.TopDirectoryOnly)
                     Dim Info = FileVersionInfo.GetVersionInfo(ExeFile)
                     Log($"[Modpack] 文件 {ExeFile} 的产品名标识为 {Info.ProductName}")
                     If Info.ProductName = "Plain Craft Launcher" Then
                         Launcher = ExeFile
-                    ElseIf (Info.ProductName.ContainsF("Launcher", True) OrElse Info.ProductName.ContainsF("启动器", True)) AndAlso
+                        Log($"[Modpack] 发现整合包附带的 PCL 启动器：{ExeFile}")
+                    ElseIf (Info.ProductName.ContainsF("Launcher", True) OrElse Info.ProductName.ContainsF("启动", True)) AndAlso
                         Not Info.ProductName = "Plain Craft Launcher Admin Manager" Then
-                        If Launcher Is Nothing Then Launcher = ExeFile
+                        If Launcher Is Nothing Then
+                            Launcher = ExeFile
+                            Log($"[Modpack] 发现整合包附带的疑似第三方启动器：{ExeFile}")
+                        End If
                     End If
                 Next
                 Task.Progress = 0.95

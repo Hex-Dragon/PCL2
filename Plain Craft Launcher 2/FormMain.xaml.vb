@@ -90,6 +90,13 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 346 Then 'Snapshot 2.8.13
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化网络环境不佳时，Mod、整合包页面的加载速度"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复部分电脑无法打开程序的 Bug"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复可能无法识别、更新 Mod 的 Bug"))
+            FeatureCount += 6
+            BugCount += 14
+        End If
         If LastVersion < 346 Then 'Snapshot 2.8.12
             If LastVersion = 345 Then FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复帮助页面报错的 Bug"))
         End If

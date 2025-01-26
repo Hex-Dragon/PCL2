@@ -362,12 +362,12 @@
 Install:
             Try
                 For Each ModFile In FilePathList
-                    Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "")
+                    Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "").Replace(".old", "")
                     If Not NewFileName.Contains(".") Then NewFileName += ".jar" '#4227
                     CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & NewFileName)
                 Next
                 If FilePathList.Count = 1 Then
-                    Hint(GetLang("LangHintInstallModSuccessA", GetFileNameFromPath(FilePathList.First).Replace(".disabled", "")), HintType.Finish)
+                    Hint(GetLang("LangHintInstallModSuccessA", GetFileNameFromPath(FilePathList.First).Replace(".disabled", "").Replace(".old", "")), HintType.Finish)
                 Else
                     Hint(GetLang("LangHintInstallModSuccessB", FilePathList.Count), HintType.Finish)
                 End If
@@ -394,7 +394,7 @@ Install:
 
 #Region "选择"
 
-    '选择的 Mod 的路径（不含 .disabled）
+    '选择的 Mod 的路径（不含 .disabled 和 .old）
     Public SelectedMods As New List(Of String)
 
     '单项切换选择状态

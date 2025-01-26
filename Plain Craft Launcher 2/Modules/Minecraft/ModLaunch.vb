@@ -231,18 +231,21 @@ NextInner:
         End Sub, "Donate")
 #End If
         '正版购买提示
-        If String.IsNullOrEmpty(PageLoginMs.GetLoginData().OAuthRefreshToken) AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
-            If IsLocationZH() Then
-                Select Case Setup.Get("SystemLaunchCount")
-                    Case 3, 8, 15, 30, 50, 70, 90, 110, 130, 180, 220, 280, 330, 380, 450, 550, 660, 750, 880, 950, 1100, 1300, 1500, 1700, 1900
-                        If MyMsgBox(GetLang("LangModLaunchDialogContentBuyMc", Setup.Get("SystemLaunchCount")),
-                                    GetLang("LangModLaunchDialogTitleBuyMc"), GetLang("LangModLaunchDialogBtn1BuyMc"), GetLang("LangModLaunchDialogBtn2BuyMc")) = 1 Then
-                            OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
-                        End If
-                End Select
-            Else '限制使用离线登录（包括第三方登录）
+        If Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
+            If IsSystemLanguageChinese() Then
+                RunInNewThread(
+                Sub()
+                    Select Case Setup.Get("SystemLaunchCount")
+                        Case 3, 8, 15, 30, 50, 70, 90, 110, 130, 180, 220, 280, 330, 380, 450, 550, 660, 750, 880, 950, 1100, 1300, 1500, 1700, 1900
+                            If MyMsgBox(GetLang("LangModLaunchDialogContentBuyMc", Setup.Get("SystemLaunchCount"),
+                                GetLang("LangModLaunchDialogTitleBuyMc"), GetLang("LangModLaunchDialogBtn1BuyMc"), GetLang("LangModLaunchDialogBtn2BuyMc"))) = 1 Then
+                                OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
+                            End If
+                    End Select
+                End Sub, "Buy Minecraft")
+            ElseIf Setup.Get("LoginType") = McLoginType.Legacy Then
                 Select Case MyMsgBox(GetLang("LangModLaunchDialogContentMsLoginRequire"), GetLang("LangModLaunchDialogTitleMsLoginRequire"), GetLang("LangModLaunchDialogBtn1MsLoginRequire"), GetLang("LangModLaunchDialogBtn2MsLoginRequire"), GetLang("LangModLaunchDialogBtn3MsLoginRequire"),
-                    Button1Action:=Sub() OpenWebsite("https://www.xbox.com/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
+                    Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
                     Case 2
                         Hint(GetLang("LangModLaunchHintPlayInDemo"), HintType.Critical)
                         CurrentLaunchOptions.ExtraArgs.Add("--demo")
@@ -678,7 +681,7 @@ LoginFinish:
             Url:=Data.Input.BaseUrl & "/validate",
             Method:="POST",
             Data:=RequestData.ToString(0),
-            Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+            Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
             ContentType:="application/json; charset=utf-8") '没有返回值的
         '将登录结果输出
         Data.Output.AccessToken = AccessToken
@@ -702,7 +705,7 @@ LoginFinish:
                    ""name"":""" & Setup.Get("Cache" & Data.Input.Token & "Name") & """},", "") & "
                ""accessToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Access") & """,
                ""clientToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Client") & """}",
-               Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+               Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                ContentType:="application/json; charset=utf-8"))
         '将登录结果输出
         If LoginJson("selectedProfile") Is Nothing Then Throw New Exception(GetLang("LangModLaunchExceptionInvalidSelectedRole", Setup.Get("Cache" & Data.Input.Token & "Name")))
@@ -733,7 +736,7 @@ LoginFinish:
                 Url:=Data.Input.BaseUrl & "/authenticate",
                 Method:="POST",
                 Data:=RequestData.ToString(0),
-                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh_CN"}},
+                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                 ContentType:="application/json; charset=utf-8"))
             '检查登录结果
             If LoginJson("availableProfiles").Count = 0 Then
@@ -2048,8 +2051,8 @@ IgnoreCustomSkin:
                 "@echo off" & vbCrLf &
                 "title 启动 - " & McVersionCurrent.Name & vbCrLf &
                 "echo 游戏正在启动，请稍候。" & vbCrLf &
-                "set APPDATA=""" & PathMcFolder & """" & vbCrLf &
-                "cd /D """ & PathMcFolder & """" & vbCrLf &
+                "set APPDATA=""" & McVersionCurrent.PathIndie & """" & vbCrLf &
+                "cd /D """ & McVersionCurrent.PathIndie & """" & vbCrLf &
                 CustomCommandGlobal & vbCrLf &
                 CustomCommandVersion & vbCrLf &
                 """" & McLaunchJavaSelected.PathJava & """ " & McLaunchArgument & vbCrLf &
