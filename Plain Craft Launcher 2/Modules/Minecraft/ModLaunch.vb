@@ -1,5 +1,4 @@
-Imports System.IO.Compression
-
+﻿Imports System.IO.Compression
 Public Module ModLaunch
 
 #Region "开始"
@@ -698,18 +697,17 @@ LoginFinish:
         McLaunchLog("验证登录成功（Validate, " & Data.Input.Token & "）")
     End Sub
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
+
+        Dim RequestInfo As JObject = New JObject
+
+        RequestInfo.Add(New JProperty("accessToken", Setup.Get($"Cache{Data.Input.Token}Access")))
+        RequestInfo.Add(New JProperty("requestUser", True))
+
         McLaunchLog("刷新登录开始（Refresh, " & Data.Input.Token & "）")
         Dim LoginJson As JObject = GetJson(NetRequestRetry(
                Url:=Data.Input.BaseUrl & "/refresh",
                Method:="POST",
-               Data:="{" &
-               If(RequestUser, "
-               ""requestUser"": true,
-               ""selectedProfile"": {
-                   ""id"":""" & Setup.Get("Cache" & Data.Input.Token & "Uuid") & """,
-                   ""name"":""" & Setup.Get("Cache" & Data.Input.Token & "Name") & """},", "") & "
-               ""accessToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Access") & """,
-               ""clientToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Client") & """}",
+               Data:=RequestInfo,
                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                ContentType:="application/json; charset=utf-8"))
         '将登录结果输出
@@ -2295,3 +2293,4 @@ IgnoreCustomSkin:
 #End Region
 
 End Module
+
