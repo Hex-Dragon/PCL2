@@ -1,8 +1,5 @@
 blank_issues_enabled: true
 contact_links:
-  - name: 新功能请求 / 优化建议
-    url:  https://github.com/Hex-Dragon/PCL2/issues
-    about: 为了更好地处理已有的问题并保持与原版最大程度的兼容性，PCL CE 不直接接收新功能请求和优化建议，请到主仓库提交 Issue
   - name: 主页预设反馈
     url: https://github.com/Hex-Dragon/PCL2/discussions/categories/自定义主页
     about: 提交与预设的主页（设置 → 个性化 → 主页预设）中的具体内容相关的反馈
