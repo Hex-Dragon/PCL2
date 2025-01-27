@@ -95,10 +95,10 @@ You can change the login method in "Properties → Settings → Server".</s:Stri
     <s:String x:Key="LangThemeUnlockCopyTip8">When the sponsorship amount reaches ¥23.33, send the term "解锁码" (Unlock Code) to the developer on Afdian to unlock.
 Right-click to open the sponsorship page, and support PCL with a donation if you appreciate our work =w=!</s:String>
     <s:String x:Key="LangThemeUnlockTip8">When the sponsorship amount reaches ¥23.33, send the term "解锁码" (Unlock Code) to the developer on Afdian to unlock.</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug and request an unlock by replying in the issue thread once it is marked as resolved. (Right-click to open the feedback page.)
-· Submit a Pull Request to the Help Center repository and receive an unlock once it is merged.</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· Report a bug and request an unlock by replying in the issue thread once it is marked as resolved.
-· Submit a Pull Request to the Help Center repository and receive an unlock once it is merged.</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip9">· Report a bug, and after marking it as [Completed], reply with the identification code to request unlocking (right-click to open the feedback page)
+· Submit a Pull Request or homepage preset, and after marking it as [Completed], reply with the identification code to request unlocking</s:String>
+    <s:String x:Key="LangThemeUnlockTip9">· Report a bug, and after marking it as [Completed], reply with the identification code to request unlocking
+· Submit a Pull Request or homepage preset, and after marking it as [Completed], reply with the identification code to request unlocking</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">There is an exception in the personalization settings and it has been automatically reset.</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">Error while loading the personalization settings.</s:String>
     <s:String x:Key="LangHintThemeSetInit">The personalization settings have been initialized.</s:String>
@@ -253,7 +253,7 @@ If you have created a stable online homepage, you can click this tip to submit i
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft Skin Recommendation (Author: wkea)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI Dashboard Lite (Authors: Silverteal, Mxmilu666)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageH">PCL Homepage Market (Author: Lingyun)</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageI">PCL Update Log (Author: Joker2184)</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">PCL News Bulletin (Author: Joker2184)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL New Feature Manual (Author: WForst-Breeze)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM Dashboard (Author: SALTWOOD)</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">Magazine Homepage (Author: CreeperIsASpy)</s:String>
@@ -629,8 +629,8 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">Purple Heart</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">Follower's</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15th Year</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">村民救援披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">Villager Rescue Cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang Office</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">None</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">Selection</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Properties</s:String>
@@ -690,7 +690,7 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">Username cannot be empty!</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">Username cannot contain quotation marks!</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">The launch options have been disabled!</s:String>
-    <s:String x:Key="LangPageLoginLegacyLengthLimit">自 1.20.3 起，玩家名至多只能包含 16 个字符！</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">Starting from version 1.20.3, player names can contain a maximum of 16 characters!</s:String>
     <s:String x:Key="LangPageLoginMsLogin">Login</s:String>
     <s:String x:Key="LangPageLoginMsBuy">» Purchase</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">» Website</s:String>
@@ -766,7 +766,7 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">Everyone in PCL QQ Groups</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">Thanks to all members of the groups for their support and encouragement for me and PCL!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">Sponsors</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from November 2024! Thanks for your support for PCL!</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from December 2024! Thanks for your support for PCL!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">Generate Unlock Code</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">Sponsor</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">Copy Identify Code</s:String>
@@ -1466,7 +1466,7 @@ Latest Version: {2} ({3})</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">Incorrect mod file path. ({0})</s:String>
     <s:String x:Key="LangModModExceptionFileNotFound">Mod file not found. ({0})</s:String>
     <s:String x:Key="LangModModExceptionUnauthorizedAccess">No permission to read this file. Please right-click on PCL and try to run as administrator.</s:String>
-    <s:String x:Key="LangModCompVersionSnapshotOnly">仅快照版本</s:String>
+    <s:String x:Key="LangModCompVersionSnapshotOnly">Snapshot only</s:String>
     <s:String x:Key="LangModCompVersionUnknown">Unknown</s:String>
     <s:String x:Key="LangModCompVersionAll">All Versions</s:String>
     <s:String x:Key="LangModCompVersionAny">Any</s:String>
