@@ -196,7 +196,12 @@ Public Class PageVersionResourcePack
         OpenExplorerAndSelect(sender.Tag)
     End Sub
     Private Sub BtnPaste_Click(sender As Object, e As MouseButtonEventArgs)
-        PasteFileFromClipboard(ResourcepacksPath)
-        RefreshUI()
+        Dim count = PasteFileFromClipboard(ResourcepacksPath)
+        If count > 0 Then
+            Hint($"已成功粘贴 {count} 个资源包文件（夹）！")
+            RefreshUI()
+        Else
+            Hint("没有资源包文件（夹）可供粘贴！")
+        End If
     End Sub
 End Class
