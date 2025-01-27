@@ -612,19 +612,13 @@ Retry:
             Try
                 Dim MMCSetupFile As String = InstallTemp & ArchiveBaseFolder & "instance.cfg"
                 If File.Exists(MMCSetupFile) Then
-                    '将其中的等号替换为冒号，以符合 ini 文件格式
-                    '旧代码
-                    'WriteFile(MMCSetupFile, ReadFile(MMCSetupFile).Replace("=", ":"))
-                    '问题+解决：（龙猫不要嫌我啰嗦，想解释一下，删掉就好...）
-                    '首先写了一个把JvmArgs加到JVM参数里头的东西，安装包后启动会崩
-                    '找了半天原因最后发现是PCL把instance.cfg当成了.ini读取，为了适配.ini的格式（ini格式就是value:xxx）PCL在读取之前把所有等号都替换成为冒号了
-                    '按说是没问题的，但新写的JvmArgs就是一个例外，后面的参数有等号，因此也被错误的替换了
-                    '解决办法：写一个排除项，遇到JvmArgs则等号以后（参数部分）不替换
+                    '部分等号替换为冒号，以符合 ini 文件格式
+                    '为JvmArgs添加排除项，防止参数中的等号被错误的替换
                     Dim MMCSetupFileLines() As String = File.ReadAllLines(MMCSetupFile)
                     For i As Integer = 0 To MMCSetupFileLines.Length - 1
-                        '检查开头是不是"JvmArgs="
+                        '按行读取，检查开头是否为"JvmArgs="
                         If MMCSetupFileLines(i).StartsWith("JvmArgs=") Then
-                            '有则替换这一个等号，忽略后面的参数部分
+                            '有则只替换这个等号，忽略参数部分
                             MMCSetupFileLines(i) = "JvmArgs:" & MMCSetupFileLines(i).Substring("JvmArgs=".Length)
                         Else
                             '无则全部替换
@@ -633,7 +627,6 @@ Retry:
                     Next
                     '修改后写回文件
                     File.WriteAllLines(MMCSetupFile, MMCSetupFileLines)
-                    '芜湖，欧了
                     If ReadIni(MMCSetupFile, "OverrideCommands", False) Then
                         Dim PreLaunchCommand As String = ReadIni(MMCSetupFile, "PreLaunchCommand")
                         If PreLaunchCommand <> "" Then
