@@ -9,7 +9,22 @@
             <Grid x:Name="PanContent">
                 <StackPanel Orientation="Vertical" Margin="25">
                     <StackPanel>
-                        <local:MySearchBox HintText="搜索收藏夹内容" x:Name="PanSearchBox" Margin="0,0,0,15"/>
+                        <Grid Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <local:MySearchBox HintText="搜索收藏夹内容" x:Name="PanSearchBox" Grid.Column="0"/>
+                            <local:MyCard Margin="15,0,0,0" Height="40" CanSwap="False" Grid.Column="1">
+                                <StackPanel Orientation="Horizontal">
+                                    <local:MyButton Text="删除当前收藏夹" Margin="8,0,4,0" VerticalAlignment="Center" Padding="5" ColorType="Highlight" />
+                                    <local:MyComboBox Margin="4,0,8,0" VerticalAlignment="Center" Height="27">
+                                        <local:MyComboBoxItem Content="默认" Tag="Default" IsSelected="True"/>
+                                        <local:MyComboBoxItem Content="添加……" Tag="Add"/>
+                                    </local:MyComboBox>
+                                </StackPanel>
+                            </local:MyCard>
+                        </Grid>
                         <local:MyHint Text="部分资源在线信息获取失败，当前收藏夹内容可能不齐全。" IsWarn="True" Margin="0,0,0,15" x:Name="HintGetFail" Visibility="Collapsed"/>
                         <StackPanel  x:Name="PanContentList">
                             

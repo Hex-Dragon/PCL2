@@ -57,6 +57,8 @@
             .CompType = Type
             }
             Select Case Type
+                Case -2
+                    NewItem.Title = "获取失败 ({0})" ' 获取失败
                 Case -1
                     NewItem.Title = "搜索结果 ({0})" ' 搜索结果
                 Case CompType.Mod
@@ -85,34 +87,11 @@
             PanSearchBox.Text = String.Empty
             AllowSearch = True
             CompItemList.Clear()
-            HintGetFail.Visibility = If(Loader.Input.Count = Loader.Output.Count, Visibility.Collapsed, Visibility.Visible)
+            Dim SomeGetFail As Boolean = Loader.Input.Count <> Loader.Output.Count
+            HintGetFail.Visibility = If(SomeGetFail, Visibility.Visible, Visibility.Collapsed)
             For Each item In Loader.Output
                 Dim CompItem = item.ToListItem()
-
-                CompItem.Type = MyListItem.CheckType.CheckBox
-                '----添加按钮----
-                '删除按钮
-                Dim Btn_Delete As New MyIconButton
-                Btn_Delete.Logo = Logo.IconButtonLikeFill
-                Btn_Delete.ToolTip = "取消收藏"
-                ToolTipService.SetPlacement(Btn_Delete, Primitives.PlacementMode.Center)
-                ToolTipService.SetVerticalOffset(Btn_Delete, 30)
-                ToolTipService.SetHorizontalOffset(Btn_Delete, 2)
-                AddHandler Btn_Delete.Click, Sub(sender As Object, e As EventArgs)
-                                                 Items_CancelFavorites(CompItem)
-                                                 RefreshContent()
-                                                 RefreshCardTitle()
-                                                 RefreshBar()
-                                             End Sub
-                CompItem.Buttons = {Btn_Delete}
-                '---操作逻辑---
-                '右键查看详细信息界面
-                AddHandler CompItem.MouseRightButtonUp, Sub(sender As Object, e As EventArgs)
-                                                            FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
-                   .Additional = {CompItem.Tag, New List(Of String), String.Empty, CompModLoaderType.Any}})
-                                                        End Sub
-                '---其它事件---
-                AddHandler CompItem.Changed, AddressOf ItemCheckStatusChanged
+                ListItemBuild(CompItem)
                 CompItemList.Add(CompItem)
             Next
             If CompItemList.Any() Then '有收藏
@@ -127,11 +106,56 @@
                 CardNoContent.Visibility = Visibility.Visible
             End If
 
+            If SomeGetFail Then
+                Dim FailList As New List(Of MyListItem)
+                Dim FailIds = Loader.Input.Except(Loader.Output.Select(Function(e) e.Id))
+                For Each Id In FailIds
+                    Dim FailItem As New MyListItem
+                    FailItem.Title = $"{Id}"
+                    FailItem.Info = "此资源获取失败，可能在线资源被删除或者未获取成功"
+                    FailItem.Tag = Id
+
+                    ListItemBuild(FailItem)
+
+                    FailList.Add(FailItem)
+                Next
+                CompItemList.AddRange(FailList)
+            End If
+
             RefreshContent()
             RefreshCardTitle()
         Catch ex As Exception
             Log(ex, "可视化收藏夹列表出错", LogLevel.Feedback)
         End Try
+    End Sub
+
+    Private Sub ListItemBuild(CompItem As MyListItem)
+        CompItem.Type = MyListItem.CheckType.CheckBox
+        '----添加按钮----
+        '删除按钮
+        Dim Btn_Delete As New MyIconButton
+        Btn_Delete.Logo = Logo.IconButtonLikeFill
+        Btn_Delete.ToolTip = "取消收藏"
+        ToolTipService.SetPlacement(Btn_Delete, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(Btn_Delete, 30)
+        ToolTipService.SetHorizontalOffset(Btn_Delete, 2)
+        AddHandler Btn_Delete.Click, Sub(sender As Object, e As EventArgs)
+                                         Items_CancelFavorites(CompItem)
+                                         RefreshContent()
+                                         RefreshCardTitle()
+                                         RefreshBar()
+                                     End Sub
+        CompItem.Buttons = {Btn_Delete}
+        '---操作逻辑---
+        '右键查看详细信息界面
+        If TypeOf (CompItem.Tag) Is CompProject Then
+            AddHandler CompItem.MouseRightButtonUp, Sub(sender As Object, e As EventArgs)
+                                                        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
+           .Additional = {CompItem.Tag, New List(Of String), String.Empty, CompModLoaderType.Any}})
+                                                    End Sub
+        End If
+        '---其它事件---
+        AddHandler CompItem.Changed, AddressOf ItemCheckStatusChanged
     End Sub
 
     Private Sub RefreshContent()
@@ -141,7 +165,11 @@
         PanContentList.Children.Clear()
         Dim DataSource As List(Of MyListItem) = If(IsSearching, SearchResult, CompItemList)
         For Each item As MyListItem In DataSource
-            GetSuitListContainer(If(IsSearching, -1, CType(item.Tag, CompProject).Type)).ContentList.Children.Add(item)
+            If TypeOf item.Tag Is CompProject Then
+                GetSuitListContainer(If(IsSearching, -1, CType(item.Tag, CompProject).Type)).ContentList.Children.Add(item)
+            Else
+                GetSuitListContainer(-2).ContentList.Children.Add(item)
+            End If
         Next
         For Each item In ItemList
             If item.ContentList.Children.Count = 0 Then Continue For
@@ -151,7 +179,13 @@
 
     Private Sub RefreshCardTitle()
         For Each item In ItemList
-            item.Card.Title = String.Format(item.Title, CompItemList.Where(Function(e) CType(e.Tag, CompProject).Type = item.CompType).Count())
+            item.Card.Title = String.Format(item.Title, CompItemList.Where(Function(e)
+                                                                               If TypeOf e.Tag Is CompProject Then
+                                                                                   Return CType(e.Tag, CompProject).Type = item.CompType
+                                                                               Else
+                                                                                   Return True
+                                                                               End If
+                                                                           End Function).Count())
         Next
         If Not ItemList.Any(Function(e) e.CompType.Equals(-1)) Then Return
         Dim SearchItem = ItemList.First(Function(e) e.CompType.Equals(-1))
@@ -269,7 +303,11 @@
         CompItemList.Remove(Item)
         If SelectedItemList.Contains(Item) Then SelectedItemList.Remove(Item)
         If SearchResult.Contains(Item) Then SearchResult.Remove(Item)
-        CompFavorites.FavoritesList.Remove(Item.Tag.Id)
+        If TypeOf Item.Tag Is CompProject Then
+            CompFavorites.FavoritesList.Remove(Item.Tag.Id)
+        Else
+            CompFavorites.FavoritesList.Remove(Item.Tag)
+        End If
         CompFavorites.Save()
     End Sub
 
@@ -293,6 +331,7 @@
             '构造请求
             Dim QueryList As New List(Of SearchEntry(Of MyListItem))
             For Each Item As MyListItem In CompItemList
+                If TypeOf Item.Tag IsNot CompProject Then Continue For
                 Dim Entry As CompProject = Item.Tag
                 Dim SearchSource As New List(Of KeyValuePair(Of String, Double))
                 SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.RawName, 1))
