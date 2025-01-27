@@ -46,18 +46,18 @@
         Black
         Highlight
     End Enum
-    Private _ColorType As ColorState = ColorState.Black
     Public Property ColorType As ColorState
         Get
-            Return _ColorType
+            Return GetValue(ColorTypeProperty)
         End Get
         Set(value As ColorState)
-            _ColorType = value
+            If ColorType = value Then Return
+            SetValue(ColorTypeProperty, value)
             RefreshColor()
         End Set
     End Property '颜色类别
     Public Shared ReadOnly ColorTypeProperty As DependencyProperty =
-        DependencyProperty.Register("ColorType", GetType(ColorState), GetType(MyIconTextButton), New PropertyMetadata())
+        DependencyProperty.Register("ColorType", GetType(ColorState), GetType(MyIconTextButton), New PropertyMetadata(ColorState.Black))
 
     '点击事件
 

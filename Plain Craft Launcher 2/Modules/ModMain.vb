@@ -69,14 +69,14 @@ Public Module ModMain
                 Dim Percent As Double = 0.3
                 Select Case CurrentHint.Type
                     Case HintType.Info
-                        TargetColor0 = New MyColor(37, 155, 252)
-                        TargetColor1 = New MyColor(10, 142, 252)
+                        TargetColor0 = New MyColor(215, 37, 155, 252)
+                        TargetColor1 = New MyColor(215, 10, 142, 252)
                     Case HintType.Finish
-                        TargetColor0 = New MyColor(33, 177, 33)
-                        TargetColor1 = New MyColor(29, 160, 29)
+                        TargetColor0 = New MyColor(215, 33, 177, 33)
+                        TargetColor1 = New MyColor(215, 29, 160, 29)
                     Case Else 'HintType.Critical
-                        TargetColor0 = New MyColor(255, 53, 11)
-                        TargetColor1 = New MyColor(255, 43, 0)
+                        TargetColor0 = New MyColor(215, 255, 53, 11)
+                        TargetColor1 = New MyColor(215, 255, 43, 0)
                 End Select
                 If Not IsNothing(DoubleStack) Then
                     '有重复提示，且该提示的进入动画已播放
@@ -176,15 +176,17 @@ EndHint:
         Public Title As String
         Public Text As String
         ''' <summary>
-        ''' 输入框模式：文本框的文本；选择模式：需要放进去的 List(Of MyListItem)。
+        ''' 输入模式：文本框的文本。
+        ''' 选择模式：需要放进去的 List(Of MyListItem)。
+        ''' 登录模式：登录步骤 1 中返回的 JSON。
         ''' </summary>
         Public Content As Object
         ''' <summary>
-        ''' 仅输入框模式：输入验证规则。
+        ''' 输入模式：输入验证规则。
         ''' </summary>
         Public ValidateRules As ObjectModel.Collection(Of Validate)
         ''' <summary>
-        ''' 仅输入框模式：提示文本。
+        ''' 输入模式：提示文本。
         ''' </summary>
         Public HintText As String = ""
         ''' <summary>
@@ -214,7 +216,9 @@ EndHint:
         ''' </summary>
         Public IsExited As Boolean = False
         ''' <summary>
-        ''' 点击的按钮编号或输入的文本。若输入弹窗点击了非第一个按钮，则为 Nothing。
+        ''' 输入模式：输入的文本。若点击了 非 第一个按钮，则为 Nothing。
+        ''' 选择模式：点击的按钮编号，从 1 开始。
+        ''' 登录模式：字符串数组 {AccessToken, RefreshToken} 或一个 Exception。
         ''' </summary>
         Public Result As Object
     End Class
@@ -222,6 +226,7 @@ EndHint:
         Text
         [Select]
         Input
+        Login
     End Enum
 
     ''' <summary>
@@ -352,6 +357,8 @@ EndHint:
                         FrmMain.PanMsg.Children.Add(New MyMsgSelect(WaitingMyMsgBox(0)))
                     Case MyMsgBoxType.Text
                         FrmMain.PanMsg.Children.Add(New MyMsgText(WaitingMyMsgBox(0)))
+                    Case MyMsgBoxType.Login
+                        FrmMain.PanMsg.Children.Add(New MyMsgLogin(WaitingMyMsgBox(0)))
                 End Select
                 WaitingMyMsgBox.RemoveAt(0)
             Else
@@ -436,6 +443,10 @@ EndHint:
 #Region "帮助"
 
     Public Class HelpEntry
+        ''' <summary>
+        ''' 原始信息路径。用于刷新。
+        ''' </summary>
+        Public RawPath As String
 
         '基础
 
@@ -494,6 +505,7 @@ EndHint:
         ''' 从文件初始化 HelpEntry 对象，失败会抛出异常。
         ''' </summary>
         Public Sub New(FilePath As String)
+            RawPath = FilePath
             Dim JsonData As JObject = GetJson(HelpArgumentReplace(ReadFile(FilePath)))
             If JsonData Is Nothing Then Throw New FileNotFoundException("未找到帮助文件：" & FilePath, FilePath)
             '加载常规信息
@@ -591,7 +603,7 @@ EndHint:
                                     '加载忽略列表
                                     Log("[Help] 发现 .helpignore 文件：" & File.FullName)
                                     For Each Line In ReadFile(File.FullName).Split(vbCrLf.ToCharArray)
-                                        Dim RealString As String = Line.Before("#").Trim
+                                        Dim RealString As String = Line.BeforeFirst("#").Trim
                                         If String.IsNullOrWhiteSpace(RealString) Then Continue For
                                         IgnoreList.Add(RealString)
                                         If ModeDebug Then Log("[Help]  > " & RealString)

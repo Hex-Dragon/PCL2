@@ -1,5 +1,5 @@
 ﻿Public Module ModJava
-    Public JavaListCacheVersion As Integer = 6
+    Public JavaListCacheVersion As Integer = 7
 
     ''' <summary>
     ''' 目前所有可用的 Java。
@@ -216,10 +216,12 @@
 
             '添加特定的 Java
             Dim JavaPreList As New Dictionary(Of String, Boolean)
-            If PathMcFolder.Split("\").Count > 3 Then
-                JavaSearchFolder(GetPathFromFullPath(PathMcFolder), JavaPreList, False, True) 'Minecraft 文件夹的父文件夹（如果不是根目录的话）
+            If PathMcFolder.Split("\").Count > 3 AndAlso Not PathMcFolder.Contains("AppData\Roaming") Then
+                JavaSearchFolder(GetPathFromFullPath(PathMcFolder), JavaPreList, False, True) 'Minecraft 文件夹的父文件夹（如果不是根目录或 %APPDATA% 的话）
             End If
             JavaSearchFolder(PathMcFolder, JavaPreList, False, True) 'Minecraft 文件夹
+            JavaPreList = JavaPreList.Where(Function(j) Not j.Key.Contains(".minecraft\runtime")).
+                ToDictionary(Function(j) j.Key, Function(j) j.Value) '排除官启自带 Java（#4286）
             If RelatedVersion IsNot Nothing Then JavaSearchFolder(RelatedVersion.Path, JavaPreList, False, True) '所选版本文件夹
             Dim TargetJavaList As New List(Of JavaEntry)
             For Each Entry In JavaPreList
@@ -487,16 +489,18 @@ NoUserJava:
     Public JavaSearchLoader As New LoaderTask(Of Integer, Integer)("查找 Java", AddressOf JavaSearchLoaderSub) With {.ProgressWeight = 2}
     Private Sub JavaSearchLoaderSub(Loader As LoaderTask(Of Integer, Integer))
         If FrmSetupLaunch IsNot Nothing Then
-            RunInUiWait(Sub()
-                            FrmSetupLaunch.ComboArgumentJava.Items.Clear()
-                            FrmSetupLaunch.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = "加载中……", .IsSelected = True})
-                        End Sub)
+            RunInUiWait(
+            Sub()
+                FrmSetupLaunch.ComboArgumentJava.Items.Clear()
+                FrmSetupLaunch.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = "加载中……", .IsSelected = True})
+            End Sub)
         End If
         If FrmVersionSetup IsNot Nothing Then
-            RunInUiWait(Sub()
-                            FrmVersionSetup.ComboArgumentJava.Items.Clear()
-                            FrmVersionSetup.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = "加载中……", .IsSelected = True})
-                        End Sub)
+            RunInUiWait(
+            Sub()
+                FrmVersionSetup.ComboArgumentJava.Items.Clear()
+                FrmVersionSetup.ComboArgumentJava.Items.Add(New ComboBoxItem With {.Content = "加载中……", .IsSelected = True})
+            End Sub)
         End If
 
         Try
@@ -518,6 +522,7 @@ NoUserJava:
             Next
             '查找磁盘中的 Java
             For Each Disk As DriveInfo In DriveInfo.GetDrives()
+                If Disk.DriveType = DriveType.Network Then Continue For '跳过网络驱动器（#3705）
                 JavaSearchFolder(Disk.Name, JavaPreList, False)
             Next
             '查找 APPDATA 文件夹中的 Java
@@ -550,7 +555,7 @@ NoUserJava:
             '若不全为特殊引用，则清除特殊引用的地址
             Dim JavaWithoutInherit As New Dictionary(Of String, Boolean)
             For Each Pair In JavaPreList
-                If Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") Then
+                If Pair.Key.Contains("java8path_target_") OrElse Pair.Key.Contains("javapath_target_") OrElse Pair.Key.Contains("javatmp") Then
                     Log("[Java] 位于 " & Pair.Key & " 的 Java 包含特殊引用")
                 Else
                     Log("[Java] 位于 " & Pair.Key & " 的 Java 不含特殊引用")
@@ -679,8 +684,8 @@ Wait:
             For Each FolderInfo As DirectoryInfo In OriginalPath.EnumerateDirectories
                 If FolderInfo.Attributes.HasFlag(FileAttributes.ReparsePoint) Then Continue For '跳过符号链接
                 Dim SearchEntry = GetFolderNameFromPath(FolderInfo.Name).ToLower '用于搜索的字符串
-                If IsFullSearch OrElse FolderInfo.Parent.Name.ToLower = "users" OrElse
-                   Keywords.Any(Function(w) SearchEntry.Contains(w)) OrElse SearchEntry = "bin" Then
+                If IsFullSearch OrElse
+                   FolderInfo.Parent.Name.ToLower = "users" OrElse Val(SearchEntry) > 0 OrElse Keywords.Any(Function(w) SearchEntry.Contains(w)) OrElse SearchEntry = "bin" Then
                     JavaSearchFolder(FolderInfo, Results, Source)
                 End If
             Next
