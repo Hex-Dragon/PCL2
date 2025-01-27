@@ -214,19 +214,21 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 
     Public ColorDark1 As New MyColor(235, 235, 235)
     Public ColorDark2 As New MyColor(102, 204, 255)
-    Public ColorDark3 As New MyColor(51, 187, 255)
+    'Public ColorDark3 As New MyColor(51, 187, 255)
     Public ColorDark6 As New MyColor(93, 101, 103)
     Public ColorDark7 As New MyColor(69, 75, 79)
     Public ColorDark8 As New MyColor(59, 64, 65)
     Public ColorLight1 As New MyColor(52, 61, 74)
-    Public ColorLight2 As New MyColor(11, 91, 203)
-    Public ColorLight3 As New MyColor(19, 112, 243)
+    'Public ColorLight2 As New MyColor(11, 91, 203)
+    'Public ColorLight3 As New MyColor(19, 112, 243)
     Public ColorLight6 As New MyColor(213, 230, 253)
     Public ColorLight7 As New MyColor(222, 236, 253)
     Public ColorLight8 As New MyColor(234, 242, 254)
     Public Color1 As MyColor = IIf(IsDarkMode, ColorDark1, ColorLight1)
-    Public Color2 As MyColor = IIf(IsDarkMode, ColorDark2, ColorLight2)
-    Public Color3 As MyColor = IIf(IsDarkMode, ColorDark3, ColorLight3)
+    'Public Color2 As MyColor = IIf(IsDarkMode, ColorDark2, ColorLight2)
+    'Public Color3 As MyColor = IIf(IsDarkMode, ColorDark3, ColorLight3)
+    Public Color2 As New MyColor(11, 91, 203)
+    Public Color3 As New MyColor(19, 112, 243)
     Public Color4 As New MyColor(72, 144, 245)
     Public Color5 As New MyColor(150, 192, 249)
     Public Color6 As MyColor = IIf(IsDarkMode, ColorDark6, ColorLight6)
@@ -261,7 +263,8 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public ColorSemiTransparent As New MyColor(1, Color8)
 
     Public ThemeNow As Integer = -1
-    Public ColorHue As Integer = IIf(IsDarkMode, 200, 210), ColorSat As Integer = IIf(IsDarkMode, 100, 85), ColorLightAdjust As Integer = IIf(IsDarkMode, 15, 0), ColorHueTopbarDelta As Object = 0
+    'Public ColorHue As Integer = IIf(IsDarkMode, 200, 210), ColorSat As Integer = IIf(IsDarkMode, 100, 85), ColorLightAdjust As Integer = IIf(IsDarkMode, 15, 0), ColorHueTopbarDelta As Object = 0
+    Public ColorHue As Integer = 210, ColorSat As Integer = 85, ColorLightAdjust As Integer = 0, ColorHueTopbarDelta As Object = 0
     Public ThemeDontClick As Integer = 0
 
     '深色模式事件
@@ -278,13 +281,9 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         RaiseThemeChanged(IsDarkMode)
 
         If IsDarkMode Then
-            ColorHue = 200
-            ColorSat = 100
-            ColorLightAdjust = 15
-
             Application.Current.Resources("ColorBrush1") = New SolidColorBrush(ColorDark1)
-            Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorDark2)
-            Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorDark3)
+            'Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorDark2)
+            'Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorDark3)
             Application.Current.Resources("ColorBrush6") = New SolidColorBrush(ColorDark6)
             Application.Current.Resources("ColorBrush7") = New SolidColorBrush(ColorDark7)
             Application.Current.Resources("ColorBrush8") = New SolidColorBrush(ColorDark8)
@@ -299,20 +298,16 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             Application.Current.Resources("ColorBrushHalfWhite") = New SolidColorBrush(Color.FromArgb(85, 90, 90, 90))
             Application.Current.Resources("ColorBrushBg0") = New SolidColorBrush(ColorDark2)
             Application.Current.Resources("ColorBrushBg1") = New SolidColorBrush(Color.FromArgb(190, 90, 90, 90))
-            Application.Current.Resources("ColorBrushBackgroundTransparentSidebar") = New SolidColorBrush(Color.FromArgb(210, 43, 43, 43))
+            Application.Current.Resources("ColorBrushBackgroundTransparentSidebar") = New SolidColorBrush(Color.FromArgb(240, 43, 43, 43))
             Application.Current.Resources("ColorBrushToolTip") = New SolidColorBrush(Color.FromArgb(229, 90, 90, 90))
             Application.Current.Resources("ColorBrushWhite") = New SolidColorBrush(Color.FromRgb(43, 43, 43))
             Application.Current.Resources("ColorBrushMsgBox") = New SolidColorBrush(Color.FromRgb(43, 43, 43))
             Application.Current.Resources("ColorBrushMsgBoxText") = New SolidColorBrush(ColorDark1)
             Application.Current.Resources("ColorBrushMemory") = New SolidColorBrush(Color.FromRgb(255, 255, 255))
         Else
-            ColorHue = 210
-            ColorSat = 85
-            ColorLightAdjust = 0
-
             Application.Current.Resources("ColorBrush1") = New SolidColorBrush(ColorLight1)
-            Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorLight2)
-            Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorLight3)
+            'Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorLight2)
+            'Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorLight3)
             Application.Current.Resources("ColorBrush6") = New SolidColorBrush(ColorLight6)
             Application.Current.Resources("ColorBrush7") = New SolidColorBrush(ColorLight7)
             Application.Current.Resources("ColorBrush8") = New SolidColorBrush(ColorLight8)
