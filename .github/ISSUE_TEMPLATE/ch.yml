@@ -1,7 +1,6 @@
 name: "优化建议"
 description: "对已有功能的小幅度优化或改进建议。但根据情况，社区版很可能不会处理这个 Issue，而是会将其转交给官方版进一步评估。"
-labels: [· 优化]
-type: "Feature"
+type: "优化"
 body:
 - type: checkboxes
   id: "yml-1"

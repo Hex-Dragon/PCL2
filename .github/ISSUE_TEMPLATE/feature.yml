@@ -1,7 +1,6 @@
 name: "新功能提案"
 description: "对已有功能的大幅度修改，或添加一个新内容或选项。但根据情况，社区版很可能不会处理这个 Issue，而是会将其转交给官方版进一步评估。"
-labels: [· 新功能]
-type: "Task"
+type: "新功能"
 body:
 - type: checkboxes
   id: "yml-1"
