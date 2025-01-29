@@ -16,7 +16,14 @@
     End Sub
 
     Private Shared Function LoaderInput() As List(Of String)
-        Return CompFavorites.FavoritesList.Clone() '复制而不是直接引用！
+        Dim TargetList As List(Of String)
+        Try
+            TargetList = CompFavorites.FavoritesList.First(Function(e) e.Id = FrmDownloadCompFavorites.ComboTargetFav.SelectedItem.Tag).Favs
+        Catch ex As Exception
+            Log(ex, "[Favorites] 加载收藏夹列表时出错")
+        End Try
+        If TargetList Is Nothing Then TargetList = New List(Of String)
+        Return TargetList.Clone() '复制而不是直接引用！
     End Function
     Private Shared Sub CompFavoritesGet(Task As LoaderTask(Of List(Of String), List(Of CompProject)))
         Task.Output = CompRequest.GetCompProjectsByIds(Task.Input)
@@ -25,6 +32,7 @@
 
     Private CompItemList As New List(Of MyListItem)
     Private SelectedItemList As New List(Of MyListItem)
+    Private FavouritesTab As String = "Default"
 
 #Region "UI 化"
     Class CompListItemContainer ' 用来存储自动依据类型生成的卡片及其相关信息

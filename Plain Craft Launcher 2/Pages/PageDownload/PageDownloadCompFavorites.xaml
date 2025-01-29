@@ -18,7 +18,7 @@
                             <local:MyCard Margin="15,0,0,0" Height="40" CanSwap="False" Grid.Column="1">
                                 <StackPanel Orientation="Horizontal">
                                     <local:MyButton Text="删除当前收藏夹" Margin="8,0,4,0" VerticalAlignment="Center" Padding="5" ColorType="Highlight" />
-                                    <local:MyComboBox Margin="4,0,8,0" VerticalAlignment="Center" Height="27">
+                                    <local:MyComboBox Margin="4,0,8,0" VerticalAlignment="Center" Height="27" x:Name="ComboTargetFav">
                                         <local:MyComboBoxItem Content="默认" Tag="Default" IsSelected="True"/>
                                         <local:MyComboBoxItem Content="添加……" Tag="Add"/>
                                     </local:MyComboBox>

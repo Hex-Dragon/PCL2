@@ -1614,16 +1614,34 @@ Retry:
 #End Region
     Class CompFavorites
 
+        Public Class FavData
+            Property Name As String
+            Property Id As String ' Guid or "Default"
+            Property Favs As New List(Of String)
+        End Class
+
         ''' <summary>
         ''' 收藏的工程列表
         ''' </summary>
-        Private Shared _FavoritesList As List(Of String) = Nothing
-        Public Shared Property FavoritesList As List(Of String)
+        Private Shared _FavoritesList As List(Of FavData)
+        Public Shared Property FavoritesList As List(Of FavData)
             Get
                 If _FavoritesList Is Nothing Then
                     Dim RawData As String = Setup.Get("CompFavorites")
-                    Dim RawList As JArray = JArray.Parse(RawData)
-                    _FavoritesList = RawList.ToObject(Of List(Of String))()
+                    Dim RawList As List(Of FavData) = Nothing
+                    If RawData = "" Then
+                        RawList = New List(Of FavData)
+                        RawList.Add(New FavData() With {.Name = "默认", .Id = "Default"})
+                    Else
+                        Dim Migrate = JObject.Parse(RawData)
+                        If Migrate.Type = JTokenType.Array AndAlso Migrate(0).Type = JTokenType.String Then
+                            RawList = New List(Of FavData)
+                            RawList.Add(New FavData() With {.Name = "默认", .Id = "Default", .Favs = Migrate.ToObject(Of List(Of String))})
+                        Else
+                            RawList = JArray.Parse(RawData).ToObject(Of List(Of FavData))
+                        End If
+                    End If
+                    _FavoritesList = RawList
                 End If
                 Return _FavoritesList
             End Get
