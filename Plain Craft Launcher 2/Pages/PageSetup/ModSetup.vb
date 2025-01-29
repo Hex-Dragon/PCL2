@@ -38,6 +38,7 @@
         {"SystemSystemUpdate", New SetupEntry(0)},
         {"SystemSystemActivity", New SetupEntry(0)},
         {"SystemHttpProxy", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"SystemDisableHardwareAcceleration", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"CacheSavedPageUrl", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageVersion", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheMsOAuthRefresh", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
@@ -99,12 +100,14 @@
         {"LaunchArgumentWindowHeight", New SetupEntry(480)},
         {"LaunchArgumentWindowType", New SetupEntry(1)},
         {"LaunchArgumentRam", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"LaunchArgumentJavaTraversal", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"LaunchAdvanceJvm", New SetupEntry("-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Djdk.lang.Process.allowAmbiguousCommands=true -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true")},
         {"LaunchAdvanceGame", New SetupEntry("")},
         {"LaunchAdvanceRun", New SetupEntry("")},
         {"LaunchAdvanceRunWait", New SetupEntry(True)},
         {"LaunchAdvanceAssets", New SetupEntry(False)},
         {"LaunchAdvanceJava", New SetupEntry(False)},
+        {"LaunchAdvanceDisableJlw", New SetupEntry(False)},
         {"LaunchRamType", New SetupEntry(0)},
         {"LaunchRamCustom", New SetupEntry(15)},
         {"LinkEula", New SetupEntry(False, Source:=SetupSource.Registry)},
@@ -116,7 +119,8 @@
         {"ToolDownloadVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolDownloadTranslate", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolDownloadIgnoreQuilt", New SetupEntry(True, Source:=SetupSource.Registry)},
-        {"ToolDownloadCert", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"ToolDownloadClipboard", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"ToolDownloadCert", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadMod", New SetupEntry(1, Source:=SetupSource.Registry)},
         {"ToolModLocalNameStyle", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolUpdateAlpha", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
@@ -135,7 +139,7 @@
         {"UiLauncherThemeHide2", New SetupEntry("0|1|2|3|4", Source:=SetupSource.Registry, Encoded:=True)},
         {"UiLauncherLogo", New SetupEntry(True)},
         {"UiLauncherEmail", New SetupEntry(False)},
-        {"UiLauncherCEHint", New SetupEntry(True)},
+        {"UiLauncherCEHint", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"UiBackgroundColorful", New SetupEntry(True)},
         {"UiBackgroundOpacity", New SetupEntry(1000)},
         {"UiBackgroundBlur", New SetupEntry(0)},
@@ -143,6 +147,7 @@
         {"UiCustomType", New SetupEntry(0)},
         {"UiCustomPreset", New SetupEntry(0)},
         {"UiCustomNet", New SetupEntry("")},
+        {"UiDarkMode", New SetupEntry(2, Source:=SetupSource.Registry)},
         {"UiLogoType", New SetupEntry(1)},
         {"UiLogoText", New SetupEntry("")},
         {"UiLogoLeft", New SetupEntry(False)},
@@ -150,6 +155,7 @@
         {"UiMusicStop", New SetupEntry(False)},
         {"UiMusicStart", New SetupEntry(False)},
         {"UiMusicRandom", New SetupEntry(True)},
+        {"UiMusicSMTC", New SetupEntry(True)},
         {"UiMusicAuto", New SetupEntry(True)},
         {"UiHiddenPageDownload", New SetupEntry(False)},
         {"UiHiddenPageLink", New SetupEntry(False)},
@@ -167,11 +173,13 @@
         {"UiHiddenOtherVote", New SetupEntry(False)},
         {"UiHiddenOtherAbout", New SetupEntry(False)},
         {"UiHiddenOtherTest", New SetupEntry(False)},
+        {"UiAniFPS", New SetupEntry(59, Source:=SetupSource.Registry)},
         {"VersionAdvanceJvm", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceGame", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceAssets", New SetupEntry(0, Source:=SetupSource.Version)},
         {"VersionAdvanceAssetsV2", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceJava", New SetupEntry(False, Source:=SetupSource.Version)},
+        {"VersionAdvanceDisableJlw", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceRun", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceRunWait", New SetupEntry(True, Source:=SetupSource.Version)},
         {"VersionRamType", New SetupEntry(2, Source:=SetupSource.Version)},
@@ -570,7 +578,17 @@
         End Select
         FrmSetupUI.CardCustom.TriggerForceResize()
     End Sub
-
+    '颜色模式
+    Public Sub UiDarkMode(Value As Integer)
+        If Value = 0 Then
+            IsDarkMode = False
+        ElseIf Value = 1 Then
+            IsDarkMode = True
+        Else
+            IsDarkMode = IsSystemInDarkMode()
+        End If
+        ThemeRefresh()
+    End Sub
     '顶部栏
     Public Sub UiLogoType(Value As Integer)
         Select Case Value

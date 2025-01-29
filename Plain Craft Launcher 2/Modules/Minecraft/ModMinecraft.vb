@@ -311,7 +311,7 @@ Public Module ModMinecraft
                             Else
                                 ReleaseTime = JsonObject("releaseTime").ToObject(Of Date)
                             End If
-                            If ReleaseTime.Year > 2000 AndAlso ReleaseTime.Year < 2013 Then
+                            If ReleaseTime.Year > 2000 AndAlso ReleaseTime <= New DateTime(2011, 11, 16) Then ' 2000 年到 2011 年 11 月 16 日之间
                                 _Version.McName = "Old"
                                 GoTo VersionSearchFinish
                             End If
@@ -1059,8 +1059,16 @@ ExitDataLoad:
     ''' </summary>
     Public Function GetMcFoolName(Name As String) As String
         Name = Name.ToLower
-        If Name.StartsWithF("2.0") Then
-            Return "2013 | 这个秘密计划了两年的更新将游戏推向了一个新高度！"
+        If Name.StartsWithF("2.0") OrElse Name.StartsWithF("2point0") Then
+            Dim Tag = ""
+            If Name.EndsWith("red") Then
+                Tag = "（红色版本）"
+            ElseIf Name.EndsWith("blue") Then
+                Tag = "（蓝色版本）"
+            ElseIf Name.EndsWith("purple") Then
+                Tag = "（紫色版本）"
+            End If
+            Return "2013 | 这个秘密计划了两年的更新将游戏推向了一个新高度！" & Tag
         ElseIf Name = "15w14a" Then
             Return "2015 | 作为一款全年龄向的游戏，我们需要和平，需要爱与拥抱。"
         ElseIf Name = "1.rv-pre1" Then
@@ -2067,8 +2075,12 @@ OnLoaded:
             If Checker.Check(Token.LocalPath) Is Nothing Then Continue For
             '文件不符合，添加下载
             Dim Urls As New List(Of String)
+            If Token.Url Is Nothing AndAlso Token.Name = "net.minecraftforge:forge:universal" Then
+                '特判修复 Forge 部分 universal 文件缺失 URL（#5455）
+                Token.Url = "https://maven.minecraftforge.net" & Token.LocalPath.Replace(If(Token.IsJumpLoader, JumpLoaderFolder, CustomMcFolder) & "libraries", "").Replace("\", "/")
+            End If
             If Token.Url IsNot Nothing Then
-                '获取 Url 的真实地址
+                '获取 URL 的真实地址
                 Urls.Add(Token.Url)
                 If Token.Url.Contains("launcher.mojang.com/v1/objects") OrElse Token.Url.Contains("client.txt") OrElse
                    Token.Url.Contains(".tsrg") Then
@@ -2110,10 +2122,14 @@ OnLoaded:
         McLibGet = If(WithHead, CustomMcFolder & "libraries\", "") &
                    Splited(0).Replace(".", "\") & "\" & Splited(1) & "\" & Splited(2) & "\" & Splited(1) & "-" & Splited(2) & ".jar"
         '判断 OptiFine 是否应该使用 installer
-        If McLibGet.Contains("optifine\OptiFine\1.12") AndAlso '仅在 1.12 OptiFine 可重现
-           File.Exists(CustomMcFolder & "libraries\" & Splited(0).Replace(".", "\") & "\" & Splited(1) & "\" & Splited(2) & "\" & Splited(1) & "-" & Splited(2) & "-installer.jar") Then
-            Log("[Launch] 已将 " & Original & " 特判替换为对应的 Installer 文件", LogLevel.Debug)
-            McLibGet = McLibGet.Replace(".jar", "-installer.jar")
+        If McLibGet.Contains("optifine\OptiFine\1.") AndAlso Splited(2).Split(".").Count > 1 Then
+            Dim MajorVersion As Integer = Val(Splited(2).Split(".")(1))
+            Dim MinorVersion As Integer = If(Splited(2).Split(".").Count > 1, Val(Splited(2).Split(".")(2).BeforeFirst("_")), 0)
+            If (MajorVersion = 12 OrElse (MajorVersion = 20 AndAlso MinorVersion >= 4) OrElse MajorVersion >= 21) AndAlso '仅在 1.12 (无法追溯) 和 1.20.4+ (#5376) 遇到此问题
+                File.Exists($"{CustomMcFolder}libraries\{Splited(0).Replace(".", "\")}\{Splited(1)}\{Splited(2)}\{Splited(1)}-{Splited(2)}-installer.jar") Then
+                McLaunchLog("已将 " & Original & " 替换为对应的 Installer 文件")
+                McLibGet = McLibGet.Replace(".jar", "-installer.jar")
+            End If
         End If
     End Function
 

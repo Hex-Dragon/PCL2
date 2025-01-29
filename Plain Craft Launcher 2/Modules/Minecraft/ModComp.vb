@@ -519,7 +519,7 @@
             '获取版本描述
             Dim GameVersionDescription As String
             If GameVersions Is Nothing OrElse Not GameVersions.Any() Then
-                GameVersionDescription = "未知"
+                GameVersionDescription = "仅快照版本" '#5412
             Else
                 Dim SpaVersions As New List(Of String)
                 Dim IsOld As Boolean = False
@@ -577,10 +577,11 @@
                     ModLoaderDescriptionFull = "仅 " & ModLoadersForDesc.Single.ToString
                     ModLoaderDescriptionPart = ModLoadersForDesc.Single.ToString
                 Case Else
+                    Dim MaxVersion As Integer = If(GameVersions.Any, GameVersions.Max, 99)
                     If ModLoaders.Contains(CompModLoaderType.Forge) AndAlso
-                       (GameVersions.Max < 14 OrElse ModLoaders.Contains(CompModLoaderType.Fabric)) AndAlso
-                       (GameVersions.Max < 20 OrElse ModLoaders.Contains(CompModLoaderType.NeoForge)) AndAlso
-                       (GameVersions.Max < 14 OrElse ModLoaders.Contains(CompModLoaderType.Quilt) OrElse Setup.Get("ToolDownloadIgnoreQuilt")) Then
+                       (MaxVersion < 14 OrElse ModLoaders.Contains(CompModLoaderType.Fabric)) AndAlso
+                       (MaxVersion < 20 OrElse ModLoaders.Contains(CompModLoaderType.NeoForge)) AndAlso
+                       (MaxVersion < 14 OrElse ModLoaders.Contains(CompModLoaderType.Quilt) OrElse Setup.Get("ToolDownloadIgnoreQuilt")) Then
                         ModLoaderDescriptionFull = "任意"
                         ModLoaderDescriptionPart = ""
                     Else
@@ -1168,7 +1169,7 @@ Retry:
 
         If RealResults.Count + Storage.Results.Count < Task.Input.TargetResultCount Then
             Log($"[Comp] 总结果数需求最少 {Task.Input.TargetResultCount} 个，仅获得了 {RealResults.Count + Storage.Results.Count} 个")
-            If Task.Input.CanContinue Then
+            If Task.Input.CanContinue AndAlso [Error] Is Nothing Then '如果有下载源失败则不再重试，这时候重试可能导致无限循环
                 Log("[Comp] 将继续尝试加载下一页")
                 GoTo Retry
             Else
@@ -1577,7 +1578,7 @@ Retry:
             For Each DepProject In Deps.Where(Function(id) CompProjectCache.ContainsKey(id)).Select(Function(id) CompProjectCache(id))
                 For Each File In CompFilesCache(ProjectId)
                     If File.RawDependencies.Contains(DepProject.Id) AndAlso DepProject.Id <> ProjectId Then
-                        File.Dependencies.Add(DepProject.Id)
+                        If Not File.Dependencies.Contains(DepProject.Id) Then File.Dependencies.Add(DepProject.Id)
                     End If
                 Next
             Next
@@ -1723,5 +1724,55 @@ Retry:
             Loop
             Return Res
         End Function
+    End Class
+
+    Class CompClipboard
+        '剪贴板已读取内容
+        Public Shared CurrentText As String = Nothing
+        '识别剪贴板内容
+        Public Shared Sub ClipboardListening()
+            While Setup.Get("ToolDownloadClipboard")
+                Dim Text As String = Nothing
+                Dim Slug As String = Nothing
+                Dim ProjectId As String = Nothing
+                RunInUiWait(Sub()
+                                Text = My.Computer.Clipboard.GetText().Replace("https://", "").Replace("http://", "")
+                            End Sub)
+                If Text = CurrentText Then Continue While
+                CurrentText = Text
+
+                If Text.Contains("curseforge.com/") Then 'e.g. www.curseforge.com/minecraft/mc-mods/jei
+                    Try
+                        Slug = Text.Split("/")(3)
+                        ProjectId = DlModRequest("https://api.curseforge.com/v1/mods/search?gameId=432&slug=" + Slug, IsJson:=True)("data")(0)("id")
+                    Catch ex As Exception
+                        Log("[Clipboard] 获取剪贴板 CurseForge 资源链接 ID 失败: " + ex.ToString(), LogLevel.Normal)
+                        Continue While
+                    End Try
+                ElseIf Text.Contains("modrinth.com/") Then 'e.g. modrinth.com/mod/fabric-api
+                    Try
+                        Slug = Text.Split("/")(2)
+                        ProjectId = DlModRequest("https://api.modrinth.com/v2/project/" + Slug, IsJson:=True)("id")
+                    Catch ex As Exception
+                        Log("[Clipboard] 获取剪贴板 Modrinth 资源链接 ID 失败: " + ex.ToString(), LogLevel.Normal)
+                        Continue While
+                    End Try
+                Else
+                    Continue While
+                End If
+
+                Log("[Clipboard] 剪贴板资源 ProjectId: " + ProjectId)
+
+                If MyMsgBox("PCL 在剪贴板中识别到了资源链接，是否要跳转到该资源的详细信息页面？", "识别到剪贴板资源", "确定", "取消", ForceWait:=True) = 1 Then
+                    Hint("正在获取资源信息，请稍等...")
+                    Dim Ids As New List(Of String)({ProjectId})
+                    Dim CompProjects = CompRequest.GetCompProjectsByIds(Ids)
+                    RunInUi(Sub() FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
+                               .Additional = {CompProjects.First(), New List(Of String), String.Empty, CompModLoaderType.Any}}))
+                End If
+
+                Thread.Sleep(700)
+            End While
+        End Sub
     End Class
 End Module

@@ -75,6 +75,7 @@
             End If
             CheckAdvanceAssetsV2.Checked = Setup.Get("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
             CheckAdvanceJava.Checked = Setup.Get("VersionAdvanceJava", Version:=PageVersionLeft.Version)
+            CheckAdvanceDisableJlw.Checked = Setup.Get("VersionAdvanceDisableJlw", Version:=PageVersionLeft.Version)
 
         Catch ex As Exception
             Log(ex, "重载版本独立设置时出错", LogLevel.Feedback)
@@ -102,6 +103,7 @@
             Setup.Reset("VersionAdvanceAssets", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceJava", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionAdvanceDisableJlw", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRun", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRunWait", Version:=PageVersionLeft.Version)
 
@@ -393,18 +395,25 @@ PreFin:
         TextServerAuthServer.Visibility = If(Type = 4, Visibility.Visible, Visibility.Collapsed)
         BtnServerAuthLittle.Visibility = If(Type = 4, Visibility.Visible, Visibility.Collapsed)
         CardServer.TriggerForceResize()
-        '显然只有 Authlib-Injector 才允许自定义验证服务器的 Uri
+        '避免微软登录、离线登录和第三方登录：统一通行证出现此提示
         If Not Type = 4 Then
-            LabServerAuthServerIsStartsWithHttp.Visibility = Visibility.Collapsed
-            LabServerAuthServerIsStartsWithHttpCL.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurity.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Collapsed
             ' 如果开头为 http:// 给予警告
+        ElseIf TextServerAuthServer.Text.StartsWithF("https://") AndAlso Setup.Get("ToolDownloadCert") = "False" Then
+            LabServerAuthServerSecurity.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Visible
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Visible
         ElseIf TextServerAuthServer.Text.StartsWithF("http://") Then
-            LabServerAuthServerIsStartsWithHttp.Visibility = Visibility.Visible
-            LabServerAuthServerIsStartsWithHttpCL.Visibility = Visibility.Visible
-            ' 当不以 http:// 开头时隐藏警告
+            LabServerAuthServerSecurity.Visibility = Visibility.Visible
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Visible
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Collapsed
+
         Else
-            LabServerAuthServerIsStartsWithHttp.Visibility = Visibility.Collapsed
-            LabServerAuthServerIsStartsWithHttpCL.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurity.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityVerify.Visibility = Visibility.Collapsed
+            LabServerAuthServerSecurityCL.Visibility = Visibility.Collapsed
         End If
     End Sub
 

@@ -50,32 +50,32 @@
                             <RowDefinition Height="7" />
                             <RowDefinition Height="28" />
                             <RowDefinition Height="7" />
-                            <RowDefinition Height="28" />
-                            <RowDefinition Height="7" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="下载源" Margin="0,0,25,0" />
+                        <!--<TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="下载源" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboDownloadMod" Grid.Row="0" Grid.ColumnSpan="2" Tag="ToolDownloadMod" Grid.Column="1">
                             <local:MyComboBoxItem Content="尽量使用镜像源（暂时无效）" />
                             <local:MyComboBoxItem Content="仅在官方源加载缓慢时改用镜像源" />
                             <local:MyComboBoxItem Content="尽量使用官方源" IsSelected="True" />
-                        </local:MyComboBox>
-                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="下载文件名" Margin="0,0,25,0" />
-                        <local:MyComboBox Grid.Row="2" x:Name="ComboDownloadTranslate" Grid.ColumnSpan="2" Tag="ToolDownloadTranslate" Grid.Column="1" 
+                        </local:MyComboBox>-->
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="下载文件名" Margin="0,0,25,0" />
+                        <local:MyComboBox Grid.Row="0" x:Name="ComboDownloadTranslate" Grid.ColumnSpan="2" Tag="ToolDownloadTranslate" Grid.Column="1" 
                                           ToolTip="下载 Mod 时，Mod 的默认文件名中，中文译名应该放在哪个位置">
                             <local:MyComboBoxItem Content="译名位于文件名开头：[遗物] relics-0.1.14" IsSelected="True" />
                             <local:MyComboBoxItem Content="译名位于文件名开头：遗物-relics-0.1.14" />
                             <local:MyComboBoxItem Content="译名位于文件名末尾：relics-0.1.14-遗物" />
                             <local:MyComboBoxItem Content="不添加中文译名：relics-0.1.14" />
                         </local:MyComboBox>
-                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Mod 管理样式" Margin="0,0,25,0" />
-                        <local:MyComboBox Grid.Row="4" x:Name="ComboModLocalNameStyle" Grid.ColumnSpan="2" Tag="ToolModLocalNameStyle" Grid.Column="1" 
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Mod 管理样式" Margin="0,0,25,0" />
+                        <local:MyComboBox Grid.Row="2" x:Name="ComboModLocalNameStyle" Grid.ColumnSpan="2" Tag="ToolModLocalNameStyle" Grid.Column="1" 
                                           ToolTip="在 Mod 管理页面中，Mod 项的显示方式">
                             <local:MyComboBoxItem Content="标题显示译名，详情显示文件名" IsSelected="True" />
                             <local:MyComboBoxItem Content="标题显示文件名，详情显示译名" />
                         </local:MyComboBox>
-                        <local:MyCheckBox Margin="0,2,0,4" Text="显示 Mod 加载器时忽略 Quilt" Grid.Row="6" Height="22" Grid.ColumnSpan="2"
+                        <local:MyCheckBox Margin="0,2,0,4" Text="显示 Mod 加载器时忽略 Quilt" Grid.Row="4" Height="22" Grid.ColumnSpan="2"
                                           x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" />
+                        <local:MyCheckBox Margin="240,2,0,4" Text="自动识别剪贴板中的资源链接" Grid.Row="6" Height="22" Grid.ColumnSpan="2"
+                                          x:Name="CheckDownloadClipboard" Tag="ToolDownloadClipboard" ToolTip="开启此选项后，PCL 将会读取你的剪贴板并识别其中的资源链接，并询问你是否要跳转到详情页面。"/>
                     </Grid>
                 </StackPanel>
             </local:MyCard>
@@ -111,6 +111,9 @@
                         <RowDefinition Height="9" />
                         <RowDefinition Height="28" />
                         <RowDefinition Height="5" />
+                        <RowDefinition Height="28" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="28" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -134,7 +137,11 @@
                             <local:ValidateFolderPath UseMinecraftCharCheck="False" />
                         </local:MyTextBox.ValidateRules>
                     </local:MyTextBox>
-                    <Grid Height="35" Grid.Row="6" Grid.ColumnSpan="5" Margin="0,12,0,0">
+                    <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="最高动画帧率" Margin="0,0,25,0" />
+                    <local:MySlider x:Name="SliderAniFPS" Grid.Row="6" Tag="UiAniFPS" MaxValue="59" Value="59" Grid.Column="1"
+ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧率以防止过多的资源占用" />
+                    <local:MyCheckBox Grid.Row="8" Text="禁用硬件加速" x:Name="CheckSystemDisableHardwareAcceleration" Tag="SystemDisableHardwareAcceleration"/>
+                    <Grid Height="35" Grid.Row="9" Grid.ColumnSpan="5" Margin="0,12,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
@@ -144,7 +151,7 @@
                         <local:MyButton Grid.Column="1" x:Name="BtnSystemSettingExp" MinWidth="140" Text="导出设置" Padding="13,0" Margin="0,0,20,0" />
                         <local:MyButton Grid.Column="2" x:Name="BtnSystemSettingImp" MinWidth="140" Text="导入设置" Padding="13,0" Margin="0,0,20,0" />
                     </Grid>
-                    <Grid Height="35" Grid.Row="7" Grid.ColumnSpan="5" Margin="0,12,0,0" x:Name="PanDonate">
+                    <Grid Height="35" Grid.Row="10" Grid.ColumnSpan="5" Margin="0,12,0,0" x:Name="PanDonate">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />

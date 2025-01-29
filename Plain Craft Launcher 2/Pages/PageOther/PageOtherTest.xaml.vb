@@ -86,7 +86,9 @@ Public Class PageOtherTest
     Public Shared Sub RubbishClear()
         RunInUi(
             Sub()
-                FrmOtherTest.BtnClear.IsEnabled = False
+                If Not IsNothing(FrmOtherTest) AndAlso Not IsNothing(FrmOtherTest.BtnClear) Then
+                    FrmOtherTest.BtnClear.IsEnabled = False
+                End If
             End Sub)
         RunInNewThread(
             Sub()
@@ -166,7 +168,9 @@ Public Class PageOtherTest
                 Finally
                     RunInUiWait(
                         Sub()
-                            FrmOtherTest.BtnClear.IsEnabled = True
+                            If Not IsNothing(FrmOtherTest) AndAlso Not IsNothing(FrmOtherTest.BtnClear) Then
+                                FrmOtherTest.BtnClear.IsEnabled = True
+                            End If
                         End Sub)
                 End Try
             End Sub, "Rubbish Clear")
