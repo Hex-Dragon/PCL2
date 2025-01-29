@@ -3,6 +3,9 @@ Imports System.Text.RegularExpressions
 Imports Open.Nat
 Imports System.Net
 Imports System.Net.Sockets
+Imports Makaretu.Nat
+Imports STUN
+Imports System.Net.NetworkInformation
 
 Public Class ModLink
 
@@ -195,10 +198,17 @@ Public Class ModLink
 #End Region
 
 #Region "UPnP 映射"
+
+    Public Enum UPnPStatusType
+        Disabled
+        Enabled
+        Unsupported
+        Failed
+    End Enum
     ''' <summary>
     ''' UPnP 状态，可能值："Disabled", "Enabled", "Unsupported", "Failed"
     ''' </summary>
-    Public Shared UPnPStatus As String = "Disabled"
+    Public Shared UPnPStatus As UPnPStatusType = Nothing
     Public Shared UPnPMappingName As String = "PCL2 CE Link Lobby"
     Public Shared UPnPDevice = Nothing
     Public Shared CurrentUPnPMapping As Mapping = Nothing
@@ -220,13 +230,15 @@ Public Class ModLink
             Await UPnPDevice.CreatePortMapAsync(CurrentUPnPMapping)
 
             Await UPnPDevice.CreatePortMapAsync(New Mapping(Protocol.Tcp, LocalPort, PublicPort, "PCL2 Link Lobby"))
+
+            UPnPStatus = UPnPStatusType.Enabled
             Hint("UPnP 映射已创建")
         Catch NotFoundEx As NatDeviceNotFoundException
-            UPnPStatus = "Unsupported"
+            UPnPStatus = UPnPStatusType.Unsupported
             CurrentUPnPMapping = Nothing
             Log("[UPnP] 找不到可用的 UPnP 设备")
         Catch ex As Exception
-            UPnPStatus = "Failed"
+            UPnPStatus = UPnPStatusType.Failed
             CurrentUPnPMapping = Nothing
             Log("[UPnP] UPnP 映射创建失败: " + ex.ToString())
         End Try
@@ -241,11 +253,11 @@ Public Class ModLink
         Try
             Await UPnPDevice.DeletePortMapAsync(CurrentUPnPMapping)
 
-            UPnPStatus = "Disabled"
+            UPnPStatus = UPnPStatusType.Disabled
             CurrentUPnPMapping = Nothing
             Log("[UPnP] UPnP 映射移除成功")
         Catch ex As Exception
-            UPnPStatus = "Failed"
+            UPnPStatus = UPnPStatusType.Failed
             CurrentUPnPMapping = Nothing
             Log("[UPnP] UPnP 映射移除失败: " + ex.ToString())
         End Try
@@ -294,6 +306,45 @@ Public Class ModLink
         End Try
         Return res
     End Function
+#End Region
+
+#Region "NAT 穿透"
+    Public Shared NATEndpoints As List(Of LeasedEndpoint) = Nothing
+    ''' <summary>
+    ''' 尝试进行 NAT 映射
+    ''' </summary>
+    ''' <param name="localPort">本地端口</param>
+    Public Shared Async Sub CreateNATTranversal(LocalPort As String)
+        Log($"开始尝试进行 NAT 穿透，本地端口 {LocalPort}")
+        Try
+            NATEndpoints = New List(Of LeasedEndpoint) '寻找 NAT 设备
+            For Each nat In NatDiscovery.GetNats()
+                Dim lease = Await nat.CreatePublicEndpointAsync(ProtocolType.Tcp, LocalPort)
+                Dim endpoint = New LeasedEndpoint(lease)
+                NATEndpoints.Add(endpoint)
+                PageLinkLobby.PublicIPPort = endpoint.ToString()
+                Log($"NAT 穿透完成，公网地址: {endpoint}")
+            Next
+        Catch ex As Exception
+            Log("尝试进行 NAT 穿透失败: " + ex.ToString())
+        End Try
+
+    End Sub
+
+    ''' <summary>
+    ''' 移除 NAT 映射
+    ''' </summary>
+    Public Shared Sub RemoveNATTranversal()
+        Log("开始尝试移除 NAT 映射")
+        Try
+            For Each endpoint In NATEndpoints
+                endpoint.Dispose()
+            Next
+            Log("NAT 映射已移除")
+        Catch ex As Exception
+            Log("尝试移除 NAT 映射失败: " + ex.ToString())
+        End Try
+    End Sub
 #End Region
 
 End Class

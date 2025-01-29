@@ -270,6 +270,14 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="60" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="60" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="60" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="60" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="60" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Java Launch Wrapper" TextWrapping="Wrap" FontWeight="Bold" />
                     <TextBlock Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Text="Copyright © 2022 00ll00&#xa;Licensed under the MIT License." TextWrapping="Wrap" />
@@ -319,11 +327,39 @@
                                     EventType="打开网页" EventData="https://www.iconfont.cn/" />
 
                     <TextBlock Grid.Row="14" Grid.Column="0" Text="Fody" TextWrapping="Wrap" FontWeight="Bold" />
-                    <TextBlock Grid.Row="14" Grid.Column="2" Grid.ColumnSpan="2" Text="Copyright (c) Simon Cropp" TextWrapping="Wrap" />
+                    <TextBlock Grid.Row="14" Grid.Column="2" Grid.ColumnSpan="2" Text="Copyright © Simon Cropp" TextWrapping="Wrap" />
                     <local:MyButton Grid.Row="15" Grid.Column="2" MinWidth="140" Text="查看原网站" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
                 EventType="打开网页" EventData="https://github.com/Fody/Fody" />
                     <local:MyButton Grid.Row="15" Grid.Column="3" MinWidth="140" Text="查看许可文档" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
                                     EventType="打开网页" EventData="https://github.com/Fody/Fody/blob/master/License.txt" />
+
+                    <TextBlock Grid.Row="16" Grid.Column="0" Text="Makaretu.Nat" TextWrapping="Wrap" FontWeight="Bold" />
+                    <TextBlock Grid.Row="16" Grid.Column="2" Grid.ColumnSpan="2" Text="Copyright © 2018 Richard Schneider" TextWrapping="Wrap" />
+                    <local:MyButton Grid.Row="17" Grid.Column="2" MinWidth="140" Text="查看来源网站" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+                                    EventType="打开网页" EventData="https://github.com/richardschneider/net-nat" />
+                    <local:MyButton Grid.Row="17" Grid.Column="3" MinWidth="140" Text="查看许可文档" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+                    EventType="打开网页" EventData="https://github.com/richardschneider/net-nat/blob/master/LICENSE" />
+
+                    <TextBlock Grid.Row="18" Grid.Column="0" Text="IPNetwork" TextWrapping="Wrap" FontWeight="Bold" />
+                    <TextBlock Grid.Row="18" Grid.Column="2" Grid.ColumnSpan="2" Text="Copyright © 2015, lduchosal" TextWrapping="Wrap" />
+                    <local:MyButton Grid.Row="19" Grid.Column="2" MinWidth="140" Text="查看来源网站" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+                                    EventType="打开网页" EventData="https://github.com/lduchosal/ipnetwork" />
+                    <local:MyButton Grid.Row="19" Grid.Column="3" MinWidth="140" Text="查看许可文档" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+                    EventType="打开网页" EventData="https://github.com/lduchosal/ipnetwork/blob/master/LICENSE" />
+
+                    <TextBlock Grid.Row="20" Grid.Column="0" Text="STUN" TextWrapping="Wrap" FontWeight="Bold" />
+                    <TextBlock Grid.Row="20" Grid.Column="2" Grid.ColumnSpan="2" Text="Copyright © 2019 Moien007" TextWrapping="Wrap" />
+                    <local:MyButton Grid.Row="21" Grid.Column="2" MinWidth="140" Text="查看来源网站" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+                EventType="打开网页" EventData="https://github.com/moien007/stun" />
+                    <local:MyButton Grid.Row="21" Grid.Column="3" MinWidth="140" Text="查看许可文档" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+EventType="打开网页" EventData="https://github.com/moien007/STUN/blob/master/LICENSE" />
+
+                    <TextBlock Grid.Row="22" Grid.Column="0" Text="Open.NAT" TextWrapping="Wrap" FontWeight="Bold" />
+                    <TextBlock Grid.Row="22" Grid.Column="2" Grid.ColumnSpan="2" Text="Copyright © 2006 Alan McGovern&#xa;Copyright © 2007 Ben Motmans&#xa;Copyright © 2014 Lucas Ontivero" TextWrapping="Wrap" />
+                    <local:MyButton Grid.Row="23" Grid.Column="2" MinWidth="140" Text="查看来源网站" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+                EventType="打开网页" EventData="https://github.com/lontivero/Open.NAT" />
+                    <local:MyButton Grid.Row="23" Grid.Column="3" MinWidth="140" Text="查看许可文档" Padding="13,0" Margin="0,7,20,18" HorizontalAlignment="Left"
+EventType="打开网页" EventData="https://github.com/lontivero/Open.NAT/blob/master/LICENSE" />
                 </Grid>
             </local:MyCard>
         </StackPanel>

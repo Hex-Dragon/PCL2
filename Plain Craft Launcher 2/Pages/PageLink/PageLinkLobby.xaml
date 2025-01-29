@@ -5,7 +5,7 @@
              mc:Ignorable="d" x:Class="PageLinkLobby"
              d:DesignWidth="800" d:DesignHeight="800">
     <Grid>
-        <Grid x:Name="PanLoad">
+        <Grid x:Name="PanLoad" Visibility="Collapsed">
             <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="CardLoad">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -48,7 +48,7 @@
             </local:MyCard>
         </Grid>
         <Grid x:Name="PanContent">
-            <Grid x:Name="PanSelect" Visibility="Collapsed">
+            <Grid x:Name="PanSelect" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="480" />
@@ -92,6 +92,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="30" />
                             <ColumnDefinition Width="1*" />
+
                         </Grid.ColumnDefinitions>
                         <Path Stretch="Uniform" Fill="{DynamicResource ColorBrush3}" Margin="0,25,0,12"
                             Data="M896 64H544c-17.7 0-32 14.3-32 32s14.3 32 32 32h352c35.3 0 64 28.7 64 64v640c0 35.3-28.7 64-64 64H544c-17.7 0-32 14.3-32 32s14.3 32 32 32h352c70.7 0 128-57.3 128-128V192c0-70.7-57.3-128-128-128z M821.3 488.3L458.9 160.7c-41.2-37.2-106.9-8-106.9 47.5V339c0 4.4-3.6 8-8 8H32c-17.7 0-32 14.3-32 32v266c0 17.7 14.3 32 32 32h312c4.4 0 8 3.6 8 8v130.9c0 55.5 65.8 84.7 106.9 47.5l362.4-327.6c14.1-12.8 14.1-34.8 0-47.5zM64 597V427c0-8.8 7.2-16 16-16h304c17.7 0 32-14.3 32-32V244.9c0-13.9 16.4-21.2 26.7-11.9L746 506.1c3.5 3.2 3.5 8.7 0 11.9L442.7 791c-10.3 9.3-26.7 2-26.7-11.9V645c0-17.7-14.3-32-32-32H80c-8.8 0-16-7.2-16-16z" />

@@ -17,7 +17,7 @@
 
     End Sub
     Public Sub Reload()
-        TextLinkName.Text = Setup.Get("LinkName")
+        TextLinkRelay.Text = Setup.Get("LinkName")
     End Sub
 
     '初始化
@@ -35,7 +35,7 @@
     End Sub
 
     '将控件改变路由到设置改变
-    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextLinkName.ValidatedTextChanged
+    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextLinkRelay.ValidatedTextChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Text)
     End Sub
 
