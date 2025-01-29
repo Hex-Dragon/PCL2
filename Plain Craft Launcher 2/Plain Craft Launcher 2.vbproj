@@ -1,5 +1,4 @@
 ﻿<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Costura.Fody.6.0.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.6.0.0\build\Costura.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>PCL</RootNamespace>
     <AssemblyName>Plain Craft Launcher 2</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
     <MyType>Custom</MyType>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile>
@@ -147,9 +146,6 @@
     <Reference Include="Imazen.WebP, Version=10.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Imazen.WebP.10.0.1\lib\net45\Imazen.WebP.dll</HintPath>
     </Reference>
-    <Reference Include="Makaretu.Nat, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Makaretu.Nat.0.2.0\lib\net45\Makaretu.Nat.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Win32.Registry, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Registry.5.0.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
@@ -195,9 +191,6 @@
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
-    <Reference Include="System.Net.IPNetwork, Version=3.0.667.0, Culture=neutral, PublicKeyToken=717343cc2c25edcf, processorArchitecture=MSIL">
-      <HintPath>..\packages\IPNetwork2.3.0.667\lib\net48\System.Net.IPNetwork.dll</HintPath>
-    </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Security" />
     <Reference Include="System.Security.AccessControl, Version=6.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -625,7 +618,6 @@
       <SubType>Designer</SubType>
     </Page>
     <None Include="app.manifest" />
-    <None Include="packages.config" />
     <None Include="Resources\Custom.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1025,15 +1017,47 @@
   <ItemGroup>
     <None Include="Resources\libwebp64.dll" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Costura.Fody">
+      <Version>6.0.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Fody">
+      <Version>6.9.1</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Imazen.WebP">
+      <Version>10.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="IPNetwork2">
+      <Version>3.0.667</Version>
+    </PackageReference>
+    <PackageReference Include="Makaretu.Nat">
+      <Version>0.2.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Win32.Registry">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="NAudio">
+      <Version>2.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="Ookii.Dialogs.Wpf">
+      <Version>5.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Open.NAT">
+      <Version>2.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="STUN">
+      <Version>0.5.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Security.AccessControl">
+      <Version>6.0.1</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Costura.Fody.6.0.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.6.0.0\build\Costura.Fody.props'))" />
-    <Error Condition="!Exists('..\packages\Costura.Fody.6.0.0\build\Costura.Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.6.0.0\build\Costura.Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\Fody.6.9.1\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.9.1\build\Fody.targets'))" />
-  </Target>
-  <Import Project="..\packages\Costura.Fody.6.0.0\build\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.6.0.0\build\Costura.Fody.targets')" />
-  <Import Project="..\packages\Fody.6.9.1\build\Fody.targets" Condition="Exists('..\packages\Fody.6.9.1\build\Fody.targets')" />
 </Project>
