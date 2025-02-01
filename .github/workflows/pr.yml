@@ -1,0 +1,51 @@
+name: Auto Label and Close PRs
+
+on:
+  pull_request:
+    types: [closed, labeled]
+
+jobs:
+
+  label_on_merge:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Add "👌 完成" label on merge
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: "👌 完成"
+          repo-token: ${{ secrets.BOT }}
+
+  close_pr_on_specific_labels:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'labeled'
+    steps:
+      - name: Check for specific labels and close PR
+        id: check_label
+        run: |
+          case "${{ github.event.label.name }}" in
+            "❌ 忽略"|"❌ 拒绝"|"❌ 暂无计划"|"❌ 第三方"|"❌ 重复"|"😂 移交上游")
+              echo "::set-output name=should_close::true"
+              ;;
+            *)
+              echo "::set-output name=should_close::false"
+              ;;
+          esac
+      - name: Debugging Information
+        if: steps.check_label.outputs.should_close == 'true'
+        env:
+          BOT_TOKEN: ${{ secrets.BOT }}
+        run: |
+          echo "Repository: ${{ github.repository }}"
+          echo "Pull Request Number: ${{ github.event.pull_number }}"
+      - name: Close PR
+        if: steps.check_label.outputs.should_close == 'true'
+        env:
+          BOT_TOKEN: ${{ secrets.BOT }}
+        run: |
+          curl -X PATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token $BOT_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_number }} \
+            -d '{"state": "closed"}' \
+            --verbose
