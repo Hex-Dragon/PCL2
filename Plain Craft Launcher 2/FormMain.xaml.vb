@@ -449,6 +449,8 @@ Public Class FormMain
                 Log(ex, "清理自动更新文件失败")
             End Try
         End Sub, "Start Loader", ThreadPriority.Lowest)
+        '剪贴板识别
+        If Setup.Get("ToolDownloadClipboard") Then RunInNewThread(Sub() CompClipboard.ClipboardListening(), "Clipboard Listener", ThreadPriority.Lowest)
 
         Log("[Start] 第三阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
     End Sub
@@ -1139,8 +1141,10 @@ Public Class FormMain
                         Return "整合包下载 - " & Project.TranslatedName
                     Case CompType.ResourcePack
                         Return "资源包下载 - " & Project.TranslatedName
-                    Case Else 'CompType.Shader
+                    Case CompType.Shader
                         Return "光影包下载 - " & Project.TranslatedName
+                    Case Else
+                        Return "资源下载 - " & Project.TranslatedName
                 End Select
             Case PageType.HelpDetail
                 Dim Entry As HelpEntry = Stack.Additional(0)
