@@ -347,4 +347,49 @@ Public Class ModLink
     End Sub
 #End Region
 
+#Region "EasyTier"
+
+    Public Shared ETProcess As New Process
+    Public Shared ETNetworkName As String = "PCLCELobby"
+    Public Shared ETNetworkSecret As String = "PCLCELobbyDefault"
+    Public Shared ETServer As String = "tcp://public.easytier.cn:11010"
+
+    Public Shared Sub LaunchEasyTier(IsHost As Boolean, Optional Name As String = "PCLCELobby", Optional Secret As String = "PCLCELobbyDefault")
+        Try
+            ETProcess.StartInfo.FileName = "E:\Code\PCL2-CE-Pigeon\Plain Craft Launcher 2\bin\PCL\EasyTier\easytier-core.exe"
+            If IsHost Then
+                Log($"[Link] 本机作为创建者创建大厅，EasyTier 网络名称: {ETNetworkName}, 是否自定义网络密钥: {Secret = "PCLCELobbyDefault"}")
+                ETProcess.StartInfo.Arguments = $"-i 10.114.51.41 --network-name {ETNetworkName} --network-secret {ETNetworkSecret} -p {ETServer}" '创建者
+            Else
+                ETProcess.StartInfo.Arguments = $"-d --network-name {ETNetworkName} --network-secret {ETNetworkSecret} -p {ETServer}" '加入者
+            End If
+            ETProcess.StartInfo.ErrorDialog = False
+            'ETProcess.StartInfo.UseShellExecute = False
+            ETProcess.StartInfo.CreateNoWindow = True
+            ETProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
+            ETProcess.StartInfo.RedirectStandardOutput = True
+            ETProcess.StartInfo.RedirectStandardError = True
+            ETProcess.StartInfo.RedirectStandardInput = True
+            ETProcess.EnableRaisingEvents = True
+            'AddHandler ETProcess.Exited, AddressOf LaunchEasyTier
+            ETProcess.Start()
+            If ETProcess.ExitCode = 0 Then
+                Log("[Link] EasyTier 进程已结束，正常退出")
+            End If
+        Catch ex As Exception
+            Log("[Link] 尝试启动 EasyTier 遇到问题: " + ex.ToString())
+        End Try
+    End Sub
+
+    Public Shared Sub ExitEasyTier()
+        Try
+            ETProcess.Kill()
+            ETProcess.Close()
+        Catch ex As Exception
+            Log("[Link] 尝试停止 EasyTier 进程时遇到问题: " + ex.ToString())
+        End Try
+    End Sub
+
+#End Region
+
 End Class
