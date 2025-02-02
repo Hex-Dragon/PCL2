@@ -7,7 +7,7 @@
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10">
             <local:MyCard Margin="0,15" Title="基础" x:Name="CardLauncher">
-                <Grid Margin="25,40,25,17">
+                <Grid Margin="25,40,25,10">
                     <StackPanel>
                         <Grid Margin="0,0,0,6">
                             <Grid.ColumnDefinitions>
@@ -77,7 +77,7 @@
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="模式" Margin="0,0,25,0" />
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="深浅" Margin="0,0,25,0" />
                             <local:MyComboBox x:Name="ComboDarkMode" Tag="UiDarkMode" Grid.Column="1">
                                 <local:MyComboBoxItem Content="浅色" IsSelected="True"/>
                                 <local:MyComboBoxItem Content="深色"/>
@@ -88,7 +88,7 @@
                     <Border Background="{DynamicResource ColorBrushToolTip}" Margin="-8,23,-5,72" CornerRadius="4" Name="PanLauncherHide" Visibility="Collapsed">
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                             <TextBlock Text="嗯？你想换主题？那你应该使用官方的快照版，这里不提供换主题服务 Orz" FontSize="13" Margin="0,0,0,0" TextWrapping="Wrap"/>
-                            <local:MyButton Height="32" x:Name="BtnLauncherDonate" MinWidth="140" Text="获取官方快照版" Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0" ColorType="Highlight" />
+                            <local:MyButton Height="35" x:Name="BtnLauncherDonate" MinWidth="140" Text="获取官方快照版" Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0" ColorType="Highlight" />
                         </StackPanel>
                     </Border>
                 </Grid>
