@@ -108,8 +108,8 @@
         If Type = HintType.Note Then
             If IsWarn Then
                 BorderBrush = New MyColor("#CCFF4444")
-                Gradient1.Color = New MyColor(CType(IIf(IsDarkMode, "#BBFF8888", "#BBFFBBBB"), String))
-                Gradient2.Color = New MyColor(CType(IIf(IsDarkMode, "#BBFF6666", "#BBFF8888"), String))
+                Gradient1.Color = New MyColor(CType(If(IsDarkMode, "#BBFF8888", "#BBFFBBBB"), String))
+                Gradient2.Color = New MyColor(CType(If(IsDarkMode, "#BBFF6666", "#BBFF8888"), String))
                 Path.Fill = New MyColor("#BF0000")
                 LabText.Foreground = New MyColor("#BF0000")
                 BtnClose.Foreground = New MyColor("#BF0000")
@@ -139,8 +139,8 @@
                 Return
             Case HintType.Caution
                 BorderBrush = New MyColor("#CCFF4444")
-                Gradient1.Color = New MyColor(CType(IIf(IsDarkMode, "#BBFF8888", "#BBFFBBBB"), String))
-                Gradient2.Color = New MyColor(CType(IIf(IsDarkMode, "#BBFF6666", "#BBFF8888"), String))
+                Gradient1.Color = New MyColor(CType(If(IsDarkMode, "#BBFF8888", "#BBFFBBBB"), String))
+                Gradient2.Color = New MyColor(CType(If(IsDarkMode, "#BBFF6666", "#BBFF8888"), String))
                 Path.Fill = New MyColor("#BF0000")
                 LabText.Foreground = New MyColor("#BF0000")
                 BtnClose.Foreground = New MyColor("#BF0000")
