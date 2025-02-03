@@ -1,52 +1,48 @@
-name: Add labels based on issue closure reason
+name: Manage Labels on Issue Close
 
 on:
   issues:
     types: [closed]
 
 jobs:
-  add-labels:
+  manage-labels:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if the issue was closed as completed and add label
+      - name: Handle labels based on close reason
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.BOT }}
           script: |
-            if (context.payload.issue.state_reason === 'completed') {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.issue.number,
-                labels: ['👌 完成']
-              });
+            const { issue, repository } = context.payload;
+            const labelsToRemove = ['⭕ 等待处理', '🚧 正在处理'];
+            const closedReason = issue.state_reason;
+
+            // 移除旧标签
+            for (const label of labelsToRemove) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: repository.owner.login,
+                  repo: repository.name,
+                  issue_number: issue.number,
+                  name: label
+                });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+              }
             }
 
-      - name: Check if the issue was closed as duplicate and add label
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.BOT }}
-          script: |
-            if (context.payload.issue.state_reason === 'duplicate') {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.issue.number,
-                labels: ['❌ 重复']
-              });
-            }
-        
-      - name: Check if the issue was closed as not planned and add label
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.BOT }}
-          script: |
-            if (context.payload.issue.state_reason === 'not_planned') {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: context.payload.issue.number,
-                labels: ['❌ 忽略']
-              });
-            }
+            // 根据关闭原因添加新标签
+            const reasonMapping = {
+              'completed': '👌 完成',
+              'not_planned': '❌ 忽略',
+              'duplicate': '❌ 重复'
+            };
 
+            if (reasonMapping[closedReason]) {
+              await github.rest.issues.addLabels({
+                owner: repository.owner.login,
+                repo: repository.name,
+                issue_number: issue.number,
+                labels: [reasonMapping[closedReason]]
+              });
+            }
