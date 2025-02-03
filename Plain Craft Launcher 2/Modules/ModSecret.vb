@@ -280,6 +280,15 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
         RaiseThemeChanged(IsDarkMode)
 
+        ColorGray1 = IIf(IsDarkMode, ColorGrayDark1, ColorGrayLight1)
+        ColorGray2 = IIf(IsDarkMode, ColorGrayDark2, ColorGrayLight2)
+        ColorGray3 = IIf(IsDarkMode, ColorGrayDark3, ColorGrayLight3)
+        ColorGray4 = IIf(IsDarkMode, ColorGrayDark4, ColorGrayLight4)
+        ColorGray5 = IIf(IsDarkMode, ColorGrayDark5, ColorGrayLight5)
+        ColorGray6 = IIf(IsDarkMode, ColorGrayDark6, ColorGrayLight6)
+        ColorGray7 = IIf(IsDarkMode, ColorGrayDark7, ColorGrayLight7)
+        ColorGray8 = IIf(IsDarkMode, ColorGrayDark8, ColorGrayLight8)
+
         If IsDarkMode Then
             Application.Current.Resources("ColorBrush1") = New SolidColorBrush(ColorDark1)
             'Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorDark2)
