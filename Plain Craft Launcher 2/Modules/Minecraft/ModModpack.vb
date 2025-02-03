@@ -958,39 +958,36 @@ Retry:
     End Function
 
 #Region "冗余"
-    Private VersionRedundant As String() = {"screenshots", "backups", "command_history\.txt", '个人文件
-        ".*-natives", "server-resource-packs", "user.*cache\.json", "\.optifine", "\.fabric", "\.mixin\.out", '缓存
-        ".*\.jar", "downloads", "realms_persistence.json", "\$\{natives_directory\}", "essential", '可联网更新
-        "logs", "crash-reports", ".*\.log", "debug", '日志
-        ".*\.dat_old", ".*\.old", '备份
-        "\$\{quickPlayPath\}", '服务器
-        "\.replay_cache", "replay_recordings", "replay_videos", 'ReplayMod
-        "irisUpdateInfo\.json", 'Iris
-        "modernfix", 'ModernFix 模组
-        "modtranslations", 'Mod 翻译
-        "schematics", 'schematics 模组
-        ".*\.BakaCoreInfo", 'BakaXL 配置
-        "hmclversion\.cfg", "log4j2\.xml", 'HMCL 配置
-        "assets", "libraries", "\$natives", "launcher_profiles\.json", "versions" '开启版本隔离时排除的文件
+    Private VersionRedundant As String() = {"^screenshots", "^backups", "^command_history\.txt$", '个人文件
+        "^.*-natives", "^server-resource-packs", "^user.*cache\.json$", "^\.optifine", "^\.fabric", "^\.mixin\.out", '缓存
+        "^.*\.jar$", "^downloads", "^realms_persistence.json$", "^\$\{natives_directory\}", "^essential", '可联网更新
+        "^logs", "^crash-reports", ".*\.log$", "^debug", '日志
+        ".*\.dat_old$", ".*\.old$", '备份
+        "^\$\{quickPlayPath\}", '服务器
+        "^\.replay_cache", "^replay_recordings", "^replay_videos", 'ReplayMod
+        "^irisUpdateInfo\.json$", 'Iris
+        "^modernfix", 'ModernFix 模组
+        "^modtranslations", 'Mod 翻译
+        "^schematics", 'schematics 模组
+        "^journeymap\\data", 'JourneyMap 模组
+        "^mods\\\.connector", '信雅互联
+        "^.*\.BakaCoreInfo$", 'BakaXL 配置
+        "^hmclversion\.cfg$", "^log4j2\.xml$", 'HMCL 配置
+        "^assets$", "^libraries$", "^\$natives$", "^launcher_profiles\.json$", "^versions$" '开启版本隔离时排除的文件
     }
-    Public Function IsVerRedundant(FilePath As String) As Boolean
+    Public Function IsVerRedundant(FilePath As String, PathIndie As String) As Boolean
         FilePath = FilePath.Replace("/", "\")
         For Each regex In VersionRedundant
-            If RegexCheck(GetFileNameFromPath(FilePath), regex, RegularExpressions.RegexOptions.IgnoreCase) Then Return True
-            If FilePath.EndsWithF("\journeymap\data\") OrElse
-                FilePath.EndsWithF("\journeymap\data") OrElse
-                FilePath.EndsWithF("\mods\.connector") Then
-                Return True
-            End If
+            If RegexCheck(FilePath.Replace(PathIndie, ""), regex, RegularExpressions.RegexOptions.IgnoreCase) Then Return True
         Next
         Return False
     End Function
     Private MustExport As String() = {
         "mods", "PCL", ".*\.json"
     }
-    Public Function IsMustExport(FilePath As String) As Boolean
+    Public Function IsMustExport(FilePath As String, PathIndie As String) As Boolean
         For Each regex In MustExport
-            If RegexCheck(GetFileNameFromPath(FilePath), regex, RegularExpressions.RegexOptions.IgnoreCase) Then Return True
+            If RegexCheck(FilePath.Replace(PathIndie, ""), regex, RegularExpressions.RegexOptions.IgnoreCase) AndAlso Not (FilePath.EndsWithF(".zip") OrElse FilePath.EndsWithF("\")) Then Return True
         Next
         Return False
     End Function
@@ -1148,11 +1145,26 @@ JumpMod:
                 If String.IsNullOrWhiteSpace(p) Then Continue For '传空字串进去会直接把整个版本文件夹拷过去
                 If Not p.StartsWithF(GetPathFromFullPath(GetPathFromFullPath(Version.Path)), IgnoreCase:=True) Then Continue For
                 Dim relative As String = p.Replace(Version.Path, "").Replace(GetPathFromFullPath(GetPathFromFullPath(Version.Path)), "")
-                If File.Exists(p) AndAlso Not IsVerRedundant(p) Then
+                If File.Exists(p) AndAlso Not IsVerRedundant(p, Version.PathIndie) Then
                     CopyFile(p, $"{tempDir}overrides\{relative}")
                 End If
             Next
-            Task.Progress = 0.99
+            Task.Progress = 0.96
+
+            '如果 resourcepacks shaderpacks 文件夹中有文件夹格式的包，则先将文件夹压缩成 Zip 文件后再打包入对应位置
+            '这可以避免安装时出现路径长度限制而出错
+            If Directory.Exists($"{tempDir}overrides\resourcepacks\") Then
+                For Each d In Directory.EnumerateDirectories($"{tempDir}overrides\resourcepacks\")
+                    If Not File.Exists(d + ".zip") Then ZipFile.CreateFromDirectory(d, d + ".zip")
+                    DeleteDirectory(d)
+                Next
+            End If
+            If Directory.Exists($"{tempDir}overrides\shaderpacks\") Then
+                For Each d In Directory.EnumerateDirectories($"{tempDir}overrides\shaderpacks\")
+                    If Not File.Exists(d + ".zip") Then ZipFile.CreateFromDirectory(d, d + ".zip")
+                    DeleteDirectory(d)
+                Next
+            End If
 #End Region
 
             If File.Exists(DestPath) Then File.Delete(DestPath) '选择文件的时候已经确认了要替换

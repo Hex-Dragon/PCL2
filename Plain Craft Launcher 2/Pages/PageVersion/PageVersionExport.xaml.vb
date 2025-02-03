@@ -75,7 +75,7 @@
 
         For Each d In directories
             If Directory.EnumerateFileSystemEntries(d).Count = 0 Then Continue For
-            If IsVerRedundant(d) OrElse IsMustExport(d) Then Continue For
+            If IsVerRedundant(d, PageVersionLeft.Version.PathIndie) OrElse IsMustExport(d, PageVersionLeft.Version.PathIndie) Then Continue For
             Dim title As String = ""
             Dim listItem As New MyListItem
             If Titles.TryGetValue(GetFolderNameFromPath(d), title) Then 'title 作为引用类型传入
@@ -107,7 +107,7 @@
         Next
 
         For Each f In files
-            If IsVerRedundant(f) OrElse IsMustExport(f) Then Continue For
+            If IsVerRedundant(f, PageVersionLeft.Version.PathIndie) OrElse IsMustExport(f, PageVersionLeft.Version.PathIndie) Then Continue For
             Dim title As String = ""
             Dim listItem As New MyListItem
             If Titles.TryGetValue(f, title) Then 'title 作为引用类型传入
