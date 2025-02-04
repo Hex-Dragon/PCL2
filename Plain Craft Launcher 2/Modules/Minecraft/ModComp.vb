@@ -1619,6 +1619,8 @@ Retry:
     End Sub
 
 #End Region
+
+#Region "CompFavorites | 收藏"
     Class CompFavorites
 
         ''' <summary>
@@ -1732,23 +1734,27 @@ Retry:
             Return Res
         End Function
     End Class
+#End Region
 
+#Region "CompClipboard | 剪贴板识别"
     Class CompClipboard
         '剪贴板已读取内容
         Public Shared CurrentText As String = Nothing
         '识别剪贴板内容
         Public Shared Sub ClipboardListening()
             While Setup.Get("ToolDownloadClipboard")
+                Thread.Sleep(700)
                 Dim Text As String = Nothing
                 Dim Slug As String = Nothing
                 Dim ProjectId As String = Nothing
                 Dim CategoryURL As String = Nothing
                 Dim ReturnData = Nothing
                 RunInUiWait(Sub()
-                                Text = My.Computer.Clipboard.GetText().Replace("https://", "").Replace("http://", "")
+                                Text = My.Computer.Clipboard.GetText()
                             End Sub)
                 If Text = CurrentText Then Continue While
                 CurrentText = Text
+                Text = Text.Replace("https://", "").Replace("http://", "")
 
                 If Text.Contains("curseforge.com/minecraft/") Then 'e.g. www.curseforge.com/minecraft/mc-mods/jei
                     Dim ClassIds As List(Of String) = New List(Of String) From {"6", "4471", "12", "6552"}
@@ -1805,9 +1811,8 @@ Retry:
                     RunInUi(Sub() FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
                                .Additional = {CompProjects.First(), New List(Of String), String.Empty, CompModLoaderType.Any}}))
                 End If
-
-                Thread.Sleep(700)
             End While
         End Sub
     End Class
+#End Region
 End Module
