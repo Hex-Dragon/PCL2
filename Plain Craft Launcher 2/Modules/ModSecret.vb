@@ -12,7 +12,7 @@ Friend Module ModSecret
 
 #Region "杂项"
 
-    '在开源版的注册表与常规版的注册表隔离，以防数据冲突
+    '在社区版的注册表与常规版的注册表隔离，以防数据冲突
     Public Const RegFolder As String = "PCLCE"
     '用于微软登录的 ClientId
     Public Const OAuthClientId As String = ""
@@ -68,8 +68,9 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' 获取设备标识码。
     ''' </summary>
     Friend Function SecretGetUniqueAddress() As String
-        Dim code As String = "PCL2-CECE-GOOD-2024"
-        Dim rawCode As String = "4202-DOOG-ECEC-2LCP"
+        ' 彩蛋（你居然会无聊到翻源代码）
+        Dim code As String = "PCL2-CECE-GOOD-2025"
+        Dim rawCode As String = "5202-DOOG-ECEC-2LCP"
         Try
             Dim searcher As New ManagementObjectSearcher("select ProcessorId from Win32_Processor") ' 获取 CPU 序列号
             For Each obj As ManagementObject In searcher.Get()
