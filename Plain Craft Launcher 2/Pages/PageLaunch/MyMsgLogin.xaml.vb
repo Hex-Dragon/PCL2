@@ -134,7 +134,7 @@
                 Dim ResultJson As JObject = GetJson(Result)
                 McLaunchLog($"令牌过期时间：{ResultJson("expires_in")} 秒")
                 Hint("网页登录成功！", HintType.Finish)
-                Finished(ResultJson)
+                Finished({ResultJson("access_token").ToString, ResultJson("refresh_token").ToString})
                 Return
             Catch ex As Exception
                 If ex.Message.Contains("authorization_declined") Or ex.Message.Contains("access_denied") Then
