@@ -103,6 +103,16 @@ Namespace My.Resources
         '''<summary>
         '''  查找 System.Byte[] 类型的本地化资源。
         '''</summary>
+        Friend ReadOnly Property Imazen_WebP() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("Imazen_WebP", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找 System.Byte[] 类型的本地化资源。
+        '''</summary>
         Friend ReadOnly Property JavaWrapper() As Byte()
             Get
                 Dim obj As Object = ResourceManager.GetObject("JavaWrapper", resourceCulture)
@@ -116,6 +126,16 @@ Namespace My.Resources
         Friend ReadOnly Property Json() As Byte()
             Get
                 Dim obj As Object = ResourceManager.GetObject("Json", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  查找 System.Byte[] 类型的本地化资源。
+        '''</summary>
+        Friend ReadOnly Property libwebp64() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("libwebp64", resourceCulture)
                 Return CType(obj,Byte())
             End Get
         End Property

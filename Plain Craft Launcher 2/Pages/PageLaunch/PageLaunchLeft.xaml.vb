@@ -21,19 +21,21 @@
         '加载版本
         RunInNewThread(
         Sub()
-            ''自动整合包安装：准备
-            'Dim PackInstallPath As String = Nothing
-            'If File.Exists(Path & "modpack.zip") Then PackInstallPath = Path & "modpack.zip"
-            'If File.Exists(Path & "modpack.mrpack") Then PackInstallPath = Path & "modpack.mrpack"
-            'If PackInstallPath IsNot Nothing Then
-            '    Log("[Launch] 需自动安装整合包：" & PackInstallPath, LogLevel.Debug)
-            '    If Not Directory.Exists(Path & ".minecraft\") Then
-            '        Directory.CreateDirectory(Path & ".minecraft\")
-            '        Directory.CreateDirectory(Path & ".minecraft\versions\")
-            '        McFolderLauncherProfilesJsonCreate(Path & ".minecraft\")
-            '    End If
-            '    Setup.Set("LaunchFolderSelect", "$.minecraft\")
-            'End If
+            '自动整合包安装：准备
+            Dim PackInstallPath As String = Nothing
+            If File.Exists(Path & "modpack.zip") Then PackInstallPath = Path & "modpack.zip"
+            If File.Exists(Path & "modpack.mrpack") Then PackInstallPath = Path & "modpack.mrpack"
+            If PackInstallPath IsNot Nothing Then
+                Log("[Launch] 需自动安装整合包：" & PackInstallPath, LogLevel.Debug)
+                Setup.Set("LaunchFolderSelect", "$.minecraft\")
+                If Not Directory.Exists(Path & ".minecraft\") Then
+                    Directory.CreateDirectory(Path & ".minecraft\")
+                    Directory.CreateDirectory(Path & ".minecraft\versions\")
+                    McFolderLauncherProfilesJsonCreate(Path & ".minecraft\")
+                End If
+                PageSelectLeft.AddFolder(Path & ".minecraft\", GetFolderNameFromPath(Path), False)
+                McFolderListLoader.WaitForExit()
+            End If
             '确认 Minecraft 文件夹存在
             PathMcFolder = Setup.Get("LaunchFolderSelect").ToString.Replace("$", Path)
             If PathMcFolder = "" OrElse Not Directory.Exists(PathMcFolder) Then
@@ -48,21 +50,28 @@
             End If
             Log("[Launch] Minecraft 文件夹：" & PathMcFolder)
             If Setup.Get("SystemDebugDelay") Then Thread.Sleep(RandomInteger(500, 3000))
-            ''自动整合包安装
-            'If PackInstallPath IsNot Nothing Then
-            '    If ModpackInstall(PackInstallPath) Then
-            '        Log("[Launch] 自动安装整合包成功：" & PackInstallPath)
-            '        File.Delete(PackInstallPath)
-            '    Else
-            '        Log("[Launch] 自动安装整合包失败：" & PackInstallPath)
-            '    End If
-            'End If
+            '自动整合包安装
+            If PackInstallPath IsNot Nothing Then
+                Try
+                    Dim InstallLoader = ModpackInstall(PackInstallPath, GetFolderNameFromPath(Path))
+                    Log("[Launch] 自动安装整合包已开始：" & PackInstallPath)
+                    InstallLoader.WaitForExit()
+                    If InstallLoader.State = LoadState.Finished Then
+                        Log("[Launch] 自动安装整合包成功，删除安装包：" & PackInstallPath)
+                        File.Delete(PackInstallPath)
+                    End If
+                Catch ex As CancelledException
+                    Log(ex, "自动安装整合包被用户取消：" & PackInstallPath)
+                Catch ex As Exception
+                    Log(ex, "自动安装整合包失败：" & PackInstallPath, LogLevel.Msgbox)
+                End Try
+            End If
             '确认 Minecraft 版本存在
             Dim Selection As String = Setup.Get("LaunchVersionSelect")
             Dim Version As McVersion = If(Selection = "", Nothing, New McVersion(Selection))
-            If Version Is Nothing OrElse Not (Version.Path.StartsWith(PathMcFolder) AndAlso Version.Check) Then
+            If Version Is Nothing OrElse Not Version.Path.StartsWithF(PathMcFolder) OrElse Not Version.Check() Then
                 '无效的版本
-                Log("[Launch] Minecraft 版本无效" & If(Version Is Nothing, "，没有有效版本", "：" & Version.Path), If(IsNothing(Version), LogLevel.Normal, LogLevel.Debug))
+                Log("[Launch] 当前选择的 Minecraft 版本无效：" & If(Version Is Nothing, "null", Version.Path), If(IsNothing(Version), LogLevel.Normal, LogLevel.Debug))
                 If Not McVersionListLoader.State = LoadState.Finished Then LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\", WaitForExit:=True)
                 If Not McVersionList.Any() OrElse McVersionList.First.Value(0).Logo.Contains("RedstoneBlock") Then
                     Version = Nothing
@@ -116,7 +125,7 @@
         '初始化页面
         LabLaunchingName.Text = McVersionCurrent.Name
         LabLaunchingStage.Text = "初始化"
-        LabLaunchingTitle.Text = If(McLaunchLoader.Input Is Nothing OrElse McLaunchLoader.Input.SaveBatch Is Nothing, "正在启动游戏", "正在导出启动脚本")
+        LabLaunchingTitle.Text = If(CurrentLaunchOptions?.SaveBatch Is Nothing, "正在启动游戏", "正在导出启动脚本")
         LabLaunchingProgress.Text = "0.00 %"
         LabLaunchingProgress.Opacity = 1
         LabLaunchingDownload.Visibility = Visibility.Visible
@@ -282,7 +291,7 @@
             Case 0 '正版或离线
 UnknownType:
                 If RadioLoginType5.Checked Then
-                    If Setup.Get("CacheMsAccess") = "" Then
+                    If Setup.Get("CacheMsV2Access") = "" Then
                         Type = PageType.Ms
                     Else
                         Type = PageType.MsSkin
@@ -297,7 +306,7 @@ UnknownType:
                 RadioLoginType5.Visibility = Visibility.Visible
                 RadioLoginType0.Visibility = Visibility.Visible
             Case 1 '仅正版
-                If Setup.Get("CacheMsAccess") = "" Then
+                If Setup.Get("CacheMsV2Access") = "" Then
                     Type = PageType.Ms
                 Else
                     Type = PageType.MsSkin
@@ -361,7 +370,7 @@ UnknownType:
     Public Shared SkinMs As New LoaderTask(Of EqualableList(Of String), String)("Loader Skin Ms", AddressOf SkinMsLoad, AddressOf SkinMsInput, ThreadPriority.AboveNormal)
     Private Shared Function SkinMsInput() As EqualableList(Of String)
         '获取名称
-        Return New EqualableList(Of String) From {Setup.Get("CacheMsName"), Setup.Get("CacheMsUuid")}
+        Return New EqualableList(Of String) From {Setup.Get("CacheMsV2Name"), Setup.Get("CacheMsV2Uuid")}
     End Function
     Private Shared Sub SkinMsLoad(Data As LoaderTask(Of EqualableList(Of String), String))
         '清空已有皮肤
@@ -417,7 +426,7 @@ Finish:
                 ElseIf Setup.Get("LoginLegacyName") = "" Then
                     Return New EqualableList(Of String) From {0, ""}
                 Else
-                    Return New EqualableList(Of String) From {0, If(Setup.Get("LoginLegacyName").ToString.Before("¨"), "")}
+                    Return New EqualableList(Of String) From {0, If(Setup.Get("LoginLegacyName").ToString.BeforeFirst("¨"), "")}
                 End If
             Case 3
                 Return New EqualableList(Of String) From {3, Setup.Get("LaunchSkinID")}
@@ -719,7 +728,7 @@ ExitRefresh:
             If ActualProgress <= ShowProgress Then ShowProgress = ActualProgress '原来或处理后变得比实际进度高，直接回退
             If IsLaunched Then ShowProgress = 1 '如果已经完成了，就不卖关子了
             '文本
-            LabLaunchingTitle.Text = If(IsLaunched, "已启动游戏", If(McLaunchLoader.Input.SaveBatch Is Nothing, "正在启动游戏", "正在导出启动脚本"))
+            LabLaunchingTitle.Text = If(IsLaunched, "已启动游戏", If(CurrentLaunchOptions.SaveBatch Is Nothing, "正在启动游戏", "正在导出启动脚本"))
             LabLaunchingProgress.Text = StrFillNum(ShowProgress * 100, 2) & " %"
             Dim HasLaunchDownloader As Boolean = False
             Try

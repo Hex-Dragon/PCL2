@@ -31,7 +31,4 @@ Public Function McLoginLegacyUuid(Name As String)
 End Function
 ```
 
-## 杂项
-根据 PCL 的使用许可，本修改版本不提供可用的二进制文件，请自行编译源代码。
-
 [使用效果展示](https://github.com/PCL-Community/PCL2-Uuid-Fix/blob/Silverteal-commits/TRIVIAS.md)

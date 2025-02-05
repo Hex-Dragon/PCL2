@@ -111,8 +111,6 @@ Public Class PageLinkIoi
     End Sub
     '复制联机码
     Public Shared Sub BtnLeftCopy_Click() Handles BtnLeftCopy.Click
-        ClipboardSet(IoiId.Substring(4) & SecretEncrypt(GetPlayerName), False)
-        Hint("已复制联机码！", HintType.Finish)
     End Sub
 
 #End Region
@@ -419,75 +417,6 @@ Public Class PageLinkIoi
 
     '获取数据包
     Public Shared Sub ReceiveJson(JsonData As JObject, Optional NewSocket As Socket = Nothing)
-        '获取数据
-        Dim Id As String = JsonData("id"), Type As String = JsonData("type")
-        Select Case Type
-            Case "connect"
-                Dim DisplayName As String = JsonData("name")
-                Dim User As New LinkUserIoi(Id, DisplayName, NewSocket)
-                '如果发生了双向连接
-                If UserList.ContainsKey(Id) Then
-                    If Id > IoiId Then
-                        Log("[IOI] 双向连接，应当抛弃当前用户（" & DisplayName & "）")
-                        For Each Pair In UserList(User.Id).Ports.ToList
-                            User.Ports(Pair.Key) = Pair.Value
-                        Next
-                        UserList(Id).Dispose()
-                    Else
-                        '应当保留当前用户
-                        Log("[IOI] 双向连接，应当保留当前用户（" & DisplayName & "）")
-                        NewSocket.Dispose()
-                        Exit Sub
-                    End If
-                End If
-                '加入列表
-                UserList.Add(Id, User)
-                '返回请求
-                User.RelativeThread = RunInNewThread(Sub()
-                                                         SendPortsubBack(User, JsonData("version").ToObject(Of Integer))
-                                                     End Sub, "Link Connect " & DisplayName)
-                '更新时间
-                User.LastReceive = Date.Now
-            Case "update"
-                If Not UserList.ContainsKey(Id) Then Throw New Exception("未在列表中的用户发送了更新请求：" & Id)
-                Dim User = UserList(Id)
-                '拉满进度（该请求也作为反向连接回应出现，用于向正向连接方传达连接已完成信号）
-                User.Progress = 1
-                '更新名称
-                Dim DisplayName As String = JsonData("name")
-                User.DisplayName = DisplayName
-                '更新房间列表
-                If JsonData("rooms") IsNot Nothing Then
-                    User.Rooms = New List(Of RoomEntry)
-                    For Each RoomObject In JsonData("rooms")
-                        User.Rooms.Add(New RoomEntry(RoomObject("port"), RoomObject("name"), User))
-                    Next
-                End If
-                '更新 Ping
-                Dim Stage As Integer = JsonData("stage"), Unique As Long = JsonData("unique")
-                If Stage > 1 Then
-                    User.PingRecord.Enqueue((Date.Now - User.PingPending(Unique)).TotalMilliseconds / 2)
-                    If User.PingRecord.Count > 5 Then User.PingRecord.Dequeue()
-                    User.PingPending.Remove(Unique)
-                End If
-                '返回请求
-                If Stage > 0 AndAlso Stage < 3 Then RunInNewThread(Sub()
-                                                                       Try
-                                                                           SendUpdateRequest(User, Stage + 1, Unique)
-                                                                       Catch ex As Exception
-                                                                           Log(ex, "发送回程请求失败")
-                                                                       End Try
-                                                                   End Sub, "Link Update " & DisplayName)
-                '更新时间
-                User.LastReceive = Date.Now
-            Case "disconnect"
-                '断开连接
-                If Not UserList.ContainsKey(Id) Then Exit Sub
-                UserRemove(UserList(Id), ShowLeaveMessage:=JsonData("message") Is Nothing)
-                If JsonData("message") IsNot Nothing Then Hint(JsonData("message").ToString, If(JsonData("isError").ToObject(Of Boolean), HintType.Critical, HintType.Info))
-            Case Else
-                Throw New Exception("未知的操作种类：" & Type)
-        End Select
     End Sub
     ''' <summary>
     ''' 从用户列表中移除一位用户。提示信息视作该用户主动离开。
