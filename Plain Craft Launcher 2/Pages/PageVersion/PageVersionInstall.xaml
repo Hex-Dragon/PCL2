@@ -48,7 +48,7 @@
                             </Grid.ColumnDefinitions>
                             <Image x:Name="ImgMinecraft" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" />
                             <TextBlock x:Name="LabMinecraft" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
-                            <Path Data="M574.95 47.82C606.86 15.93 645.37 -0.01 690.48 0C735.59 0 774.1 15.96 805.99 47.87C837.89 79.77 853.83 118.28 853.82 163.39C853.81 208.51 837.86 247.01 805.95 278.91L785.98 298.87L554.98 67.88L574.95 47.82ZM494.65 128.21L55.61 567.16C49.56 573.25 45.69 580.5 44.01 588.92L1 802.26C-2.04 817.2 1.82 830.08 12.59 840.88C23.36 851.69 36.22 855.59 51.18 852.6L264.85 809.94C273.28 808.23 280.54 804.34 286.61 798.25L725.65 359.21L494.65 128.21Z" Height="6" Width="10" Stretch="Uniform" VerticalAlignment="Center"
+                            <Path Data="M7.736 1.56a1.914 1.914 0 0 1 2.707 2.708l-.234.234l-2.707-2.707zm-.941.942L1.65 7.646a.5.5 0 0 0-.136.255l-.504 2.5a.5.5 0 0 0 .588.59l2.504-.5a.5.5 0 0 0 .255-.137l5.145-5.145z" Height="12" Width="12" Stretch="Uniform" VerticalAlignment="Center"
                                   Grid.Column="2" Fill="{StaticResource ColorBrushGray4}" Margin="0,1,6,0" RenderTransformOrigin="0.5,0.5">
                             </Path>
                             <TextBlock VerticalAlignment="Center" Text="修改" Grid.Column="3" Foreground="{StaticResource ColorBrushGray4}" />
