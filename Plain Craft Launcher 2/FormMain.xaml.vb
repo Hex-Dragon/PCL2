@@ -12,6 +12,10 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If RELEASE Then
+        If LastVersion < 356 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复正版验证无法正常进行的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "深色模式优化"))
+        End If
         If LastVersion < 355 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "同步官方版 2.8.13 代码，详情查阅龙猫专栏"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "已有版本支持自动安装修改"))
@@ -70,6 +74,12 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 356 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复正版验证无法正常进行的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "深色模式优化"))
+            FeatureCount += 1
+            BugCount += 1
+        End If
         If LastVersion < 355 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "同步官方版 2.8.13 代码，详情查阅龙猫专栏"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "已有版本支持自动安装修改"))
