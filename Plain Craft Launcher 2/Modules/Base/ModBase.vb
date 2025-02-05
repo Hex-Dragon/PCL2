@@ -12,15 +12,15 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.9.5" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.9.5." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.10.1" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.10.1." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "native" 'Commit Hash，由 GitHub Workflow 自动替换
     Public CommitHashShort As String = If(CommitHash = "native", "native", CommitHash.Substring(0, 7)) 'Commit Hash，取前 7 位
-    Public Const UpstreamVersion As String = "2.8.12" '上游版本
+    Public Const UpstreamVersion As String = "2.8.13" '上游版本
 #If RELEASE Then
-    Public Const VersionCode As Integer = 354 'Release
+    Public Const VersionCode As Integer = 356 'Release
 #Else
-    Public Const VersionCode As Integer = 354 'Snapshot
+    Public Const VersionCode As Integer = 356 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -2353,6 +2353,10 @@ NextElement:
         End Try
     End Sub
 
+    Public Sub OpenExplorerAndSelect(Path As String)
+        OpenExplorer("/select,""" & Path & """")
+    End Sub
+
     ''' <summary>
     ''' 设置剪贴板。将在另一线程运行，且不会抛出异常。
     ''' </summary>
@@ -2379,6 +2383,59 @@ Retry:
             If ShowSuccessHint Then Hint("已成功复制！", HintType.Finish)
         End Sub)
     End Sub
+
+    ''' <summary>
+    ''' 从剪切板粘贴文件或文件夹
+    ''' </summary>
+    ''' <param name="dest">目标文件夹</param>
+    ''' <param name="copyFile">是否粘贴文件</param>
+    ''' <param name="copyDir">是否粘贴文件夹</param>
+    ''' <returns>总共粘贴的数量</returns>
+    Public Function PasteFileFromClipboard(dest As String, Optional copyFile As Boolean = True, Optional copyDir As Boolean = True) As Integer
+        Log("[System] 从剪贴板粘贴文件到：" & dest)
+        Try
+            Dim files As Specialized.StringCollection = Clipboard.GetFileDropList()
+            If files.Count.Equals(0) Then
+                Log("[System] 剪贴板内无文件可粘贴")
+                Return 0
+            End If
+            Dim CopiedFiles = 0
+            Dim CopiedFolders = 0
+            For Each i In files
+                If copyFile AndAlso File.Exists(i) Then '文件
+                    Try
+                        Dim thisDest = dest & GetFileNameFromPath(i)
+                        If File.Exists(thisDest) Then
+                            Log("[System] 已存在同名文件：" & thisDest)
+                        Else
+                            File.Copy(i, thisDest)
+                            CopiedFiles += 1
+                        End If
+                    Catch ex As Exception
+                        Log(ex, "[System] 复制文件时出错")
+                        Continue For
+                    End Try
+                End If
+                If copyDir AndAlso Directory.Exists(i) Then '文件夹
+                    Try
+                        Dim thisDest = dest & GetFolderNameFromPath(i)
+                        If Directory.Exists(thisDest) Then
+                            Log("[System] 已存在同名文件夹：" & thisDest)
+                        Else
+                            CopyDirectory(i, thisDest)
+                            CopiedFolders += 1
+                        End If
+                    Catch ex As Exception
+                        Log(ex, "[System] 复制文件时出错")
+                        Continue For
+                    End Try
+                End If
+            Next
+            Hint("[System] 已粘贴 " & CopiedFiles & " 个文件和 " & CopiedFolders & " 个文件夹")
+        Catch ex As Exception
+            Log(ex, "[System] 从剪切板粘贴文件失败", LogLevel.Hint)
+        End Try
+    End Function
 
     ''' <summary>
     ''' 以 Byte() 形式获取程序中的资源。

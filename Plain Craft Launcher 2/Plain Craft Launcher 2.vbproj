@@ -297,6 +297,9 @@
     <Compile Include="Pages\PageOther\PageOtherFeedback.xaml.vb">
       <DependentUpon>PageOtherFeedback.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageVersion\PageVersionInstall.xaml.vb">
+      <DependentUpon>PageVersionInstall.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageVersion\PageVersionLeft.xaml.vb">
       <DependentUpon>PageVersionLeft.xaml</DependentUpon>
     </Compile>
@@ -603,6 +606,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\PageVersion\PageVersionInstall.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\PageVersion\PageVersionShader.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -799,9 +806,9 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
+  </ItemGroup>-->
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8.1">
       <Visible>False</Visible>

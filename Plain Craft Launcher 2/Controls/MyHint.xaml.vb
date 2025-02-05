@@ -108,11 +108,11 @@
         If Type = HintType.Note Then
             If IsWarn Then
                 BorderBrush = New MyColor("#CCFF4444")
-                Gradient1.Color = New MyColor(CType(IIf(IsDarkMode, "#BBFF8888", "#BBFFBBBB"), String))
-                Gradient2.Color = New MyColor(CType(IIf(IsDarkMode, "#BBFF6666", "#BBFF8888"), String))
-                Path.Fill = New MyColor("#BF0000")
-                LabText.Foreground = New MyColor("#BF0000")
-                BtnClose.Foreground = New MyColor("#BF0000")
+                Gradient1.Color = New MyColor(CType(If(IsDarkMode, "#BBFF8888", "#BBFF9999"), String))
+                Gradient2.Color = New MyColor(CType(If(IsDarkMode, "#BBFF6666", "#BBFF7777"), String))
+                Path.Fill = New MyColor(CType(If(IsDarkMode, "#BB980606", "#BBFF0000"), String))
+                LabText.Foreground = New MyColor(CType(If(IsDarkMode, "#BB980606", "#BBFF0000"), String))
+                BtnClose.Foreground = New MyColor(CType(If(IsDarkMode, "#BB980606", "#BBFF0000"), String))
                 Path.Data = (New GeometryConverter).ConvertFromString("F1 M 58.5832,55.4172L 17.4169,55.4171C 15.5619,53.5621 15.5619,50.5546 17.4168,48.6996L 35.201,15.8402C 37.056,13.9852 40.0635,13.9852 41.9185,15.8402L 58.5832,48.6997C 60.4382,50.5546 60.4382,53.5622 58.5832,55.4172 Z M 34.0417,25.7292L 36.0208,41.9584L 39.9791,41.9583L 41.9583,25.7292L 34.0417,25.7292 Z M 38,44.3333C 36.2511,44.3333 34.8333,45.7511 34.8333,47.5C 34.8333,49.2489 36.2511,50.6667 38,50.6667C 39.7489,50.6667 41.1666,49.2489 41.1666,47.5C 41.1666,45.7511 39.7489,44.3333 38,44.3333 Z ")
                 Return
             Else
@@ -139,11 +139,11 @@
                 Return
             Case HintType.Caution
                 BorderBrush = New MyColor("#CCFF4444")
-                Gradient1.Color = New MyColor(CType(IIf(IsDarkMode, "#BBFF8888", "#BBFFBBBB"), String))
-                Gradient2.Color = New MyColor(CType(IIf(IsDarkMode, "#BBFF6666", "#BBFF8888"), String))
-                Path.Fill = New MyColor("#BF0000")
-                LabText.Foreground = New MyColor("#BF0000")
-                BtnClose.Foreground = New MyColor("#BF0000")
+                Gradient1.Color = New MyColor(CType(If(IsDarkMode, "#BBFF8888", "#BBFF9999"), String))
+                Gradient2.Color = New MyColor(CType(If(IsDarkMode, "#BBFF6666", "#BBFF7777"), String))
+                Path.Fill = New MyColor(CType(If(IsDarkMode, "#BB980606", "#BBFF0000"), String))
+                LabText.Foreground = New MyColor(CType(If(IsDarkMode, "#BB980606", "#BBFF0000"), String))
+                BtnClose.Foreground = New MyColor(CType(If(IsDarkMode, "#BB980606", "#BBFF0000"), String))
                 Path.Data = (New GeometryConverter).ConvertFromString("F1 M1024,1024z M0,0z M512,0C229.23,0 0,229.23 0,512 0,794.77 229.23,1024 512,1024 794.768,1024 1024,794.77 1024,512 1024,229.23 794.77,0 512,0z M746.76,656.252C754.568,664.06,754.566,676.724,746.762,684.536L684.534,746.76C676.726,754.568,664.064,754.574,656.248,746.762L512,602.51 367.75,746.76C359.94,754.572,347.276,754.568,339.466,746.76L277.24,684.536C269.43,676.728,269.428,664.064,277.24,656.252L421.492,512 277.242,367.75C269.432,359.942,269.432,347.276,277.242,339.466L339.468,277.242C347.278,269.43,359.942,269.432,367.752,277.242L512,421.49 656.252,277.24C664.058,269.428,676.722,269.43,684.534,277.24L746.76,339.464C754.566,347.276,754.568,359.938,746.76,367.748L602.51,512 746.76,656.252z")
                 Return
             Case Else

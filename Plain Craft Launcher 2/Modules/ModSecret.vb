@@ -12,7 +12,7 @@ Friend Module ModSecret
 
 #Region "杂项"
 
-    '在开源版的注册表与常规版的注册表隔离，以防数据冲突
+    '在社区版的注册表与常规版的注册表隔离，以防数据冲突
     Public Const RegFolder As String = "PCLCE"
     '用于微软登录的 ClientId
     Public Const OAuthClientId As String = ""
@@ -68,8 +68,9 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' 获取设备标识码。
     ''' </summary>
     Friend Function SecretGetUniqueAddress() As String
-        Dim code As String = "PCL2-CECE-GOOD-2024"
-        Dim rawCode As String = "4202-DOOG-ECEC-2LCP"
+        ' 彩蛋（你居然会无聊到翻源代码）
+        Dim code As String = "PCL2-CECE-GOOD-2025"
+        Dim rawCode As String = "5202-DOOG-ECEC-2LCP"
         Try
             Dim searcher As New ManagementObjectSearcher("select ProcessorId from Win32_Processor") ' 获取 CPU 序列号
             For Each obj As ManagementObject In searcher.Get()
@@ -214,24 +215,26 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 
     Public ColorDark1 As New MyColor(235, 235, 235)
     Public ColorDark2 As New MyColor(102, 204, 255)
-    Public ColorDark3 As New MyColor(51, 187, 255)
+    'Public ColorDark3 As New MyColor(51, 187, 255)
     Public ColorDark6 As New MyColor(93, 101, 103)
     Public ColorDark7 As New MyColor(69, 75, 79)
     Public ColorDark8 As New MyColor(59, 64, 65)
     Public ColorLight1 As New MyColor(52, 61, 74)
-    Public ColorLight2 As New MyColor(11, 91, 203)
-    Public ColorLight3 As New MyColor(19, 112, 243)
+    'Public ColorLight2 As New MyColor(11, 91, 203)
+    'Public ColorLight3 As New MyColor(19, 112, 243)
     Public ColorLight6 As New MyColor(213, 230, 253)
     Public ColorLight7 As New MyColor(222, 236, 253)
     Public ColorLight8 As New MyColor(234, 242, 254)
-    Public Color1 As MyColor = IIf(IsDarkMode, ColorDark1, ColorLight1)
-    Public Color2 As MyColor = IIf(IsDarkMode, ColorDark2, ColorLight2)
-    Public Color3 As MyColor = IIf(IsDarkMode, ColorDark3, ColorLight3)
+    Public Color1 As MyColor = If(IsDarkMode, ColorDark1, ColorLight1)
+    'Public Color2 As MyColor = If(IsDarkMode, ColorDark2, ColorLight2)
+    'Public Color3 As MyColor = If(IsDarkMode, ColorDark3, ColorLight3)
+    Public Color2 As New MyColor(11, 91, 203)
+    Public Color3 As New MyColor(19, 112, 243)
     Public Color4 As New MyColor(72, 144, 245)
     Public Color5 As New MyColor(150, 192, 249)
-    Public Color6 As MyColor = IIf(IsDarkMode, ColorDark6, ColorLight6)
-    Public Color7 As MyColor = IIf(IsDarkMode, ColorDark7, ColorLight7)
-    Public Color8 As MyColor = IIf(IsDarkMode, ColorDark8, ColorLight8)
+    Public Color6 As MyColor = If(IsDarkMode, ColorDark6, ColorLight6)
+    Public Color7 As MyColor = If(IsDarkMode, ColorDark7, ColorLight7)
+    Public Color8 As MyColor = If(IsDarkMode, ColorDark8, ColorLight8)
     Public ColorBg0 As New MyColor(150, 192, 249)
     Public ColorBg1 As New MyColor(190, Color7)
     Public ColorGrayDark1 As New MyColor(245, 245, 245)
@@ -250,18 +253,19 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public ColorGrayLight6 As New MyColor(235, 235, 235)
     Public ColorGrayLight7 As New MyColor(240, 240, 240)
     Public ColorGrayLight8 As New MyColor(245, 245, 245)
-    Public ColorGray1 As MyColor = IIf(IsDarkMode, ColorGrayDark1, ColorGrayLight1)
-    Public ColorGray2 As MyColor = IIf(IsDarkMode, ColorGrayDark2, ColorGrayLight2)
-    Public ColorGray3 As MyColor = IIf(IsDarkMode, ColorGrayDark3, ColorGrayLight3)
-    Public ColorGray4 As MyColor = IIf(IsDarkMode, ColorGrayDark4, ColorGrayLight4)
-    Public ColorGray5 As MyColor = IIf(IsDarkMode, ColorGrayDark5, ColorGrayLight5)
-    Public ColorGray6 As MyColor = IIf(IsDarkMode, ColorGrayDark6, ColorGrayLight6)
-    Public ColorGray7 As MyColor = IIf(IsDarkMode, ColorGrayDark7, ColorGrayLight7)
-    Public ColorGray8 As MyColor = IIf(IsDarkMode, ColorGrayDark8, ColorGrayLight8)
+    Public ColorGray1 As MyColor = If(IsDarkMode, ColorGrayDark1, ColorGrayLight1)
+    Public ColorGray2 As MyColor = If(IsDarkMode, ColorGrayDark2, ColorGrayLight2)
+    Public ColorGray3 As MyColor = If(IsDarkMode, ColorGrayDark3, ColorGrayLight3)
+    Public ColorGray4 As MyColor = If(IsDarkMode, ColorGrayDark4, ColorGrayLight4)
+    Public ColorGray5 As MyColor = If(IsDarkMode, ColorGrayDark5, ColorGrayLight5)
+    Public ColorGray6 As MyColor = If(IsDarkMode, ColorGrayDark6, ColorGrayLight6)
+    Public ColorGray7 As MyColor = If(IsDarkMode, ColorGrayDark7, ColorGrayLight7)
+    Public ColorGray8 As MyColor = If(IsDarkMode, ColorGrayDark8, ColorGrayLight8)
     Public ColorSemiTransparent As New MyColor(1, Color8)
 
     Public ThemeNow As Integer = -1
-    Public ColorHue As Integer = IIf(IsDarkMode, 200, 210), ColorSat As Integer = IIf(IsDarkMode, 100, 85), ColorLightAdjust As Integer = IIf(IsDarkMode, 15, 0), ColorHueTopbarDelta As Object = 0
+    'Public ColorHue As Integer = If(IsDarkMode, 200, 210), ColorSat As Integer = If(IsDarkMode, 100, 85), ColorLightAdjust As Integer = If(IsDarkMode, 15, 0), ColorHueTopbarDelta As Object = 0
+    Public ColorHue As Integer = 210, ColorSat As Integer = 85, ColorLightAdjust As Integer = 0, ColorHueTopbarDelta As Object = 0
     Public ThemeDontClick As Integer = 0
 
     '深色模式事件
@@ -277,14 +281,19 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
         RaiseThemeChanged(IsDarkMode)
 
-        If IsDarkMode Then
-            ColorHue = 200
-            ColorSat = 100
-            ColorLightAdjust = 15
+        ColorGray1 = If(IsDarkMode, ColorGrayDark1, ColorGrayLight1)
+        ColorGray2 = If(IsDarkMode, ColorGrayDark2, ColorGrayLight2)
+        ColorGray3 = If(IsDarkMode, ColorGrayDark3, ColorGrayLight3)
+        ColorGray4 = If(IsDarkMode, ColorGrayDark4, ColorGrayLight4)
+        ColorGray5 = If(IsDarkMode, ColorGrayDark5, ColorGrayLight5)
+        ColorGray6 = If(IsDarkMode, ColorGrayDark6, ColorGrayLight6)
+        ColorGray7 = If(IsDarkMode, ColorGrayDark7, ColorGrayLight7)
+        ColorGray8 = If(IsDarkMode, ColorGrayDark8, ColorGrayLight8)
 
+        If IsDarkMode Then
             Application.Current.Resources("ColorBrush1") = New SolidColorBrush(ColorDark1)
-            Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorDark2)
-            Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorDark3)
+            'Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorDark2)
+            'Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorDark3)
             Application.Current.Resources("ColorBrush6") = New SolidColorBrush(ColorDark6)
             Application.Current.Resources("ColorBrush7") = New SolidColorBrush(ColorDark7)
             Application.Current.Resources("ColorBrush8") = New SolidColorBrush(ColorDark8)
@@ -299,20 +308,16 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             Application.Current.Resources("ColorBrushHalfWhite") = New SolidColorBrush(Color.FromArgb(85, 90, 90, 90))
             Application.Current.Resources("ColorBrushBg0") = New SolidColorBrush(ColorDark2)
             Application.Current.Resources("ColorBrushBg1") = New SolidColorBrush(Color.FromArgb(190, 90, 90, 90))
-            Application.Current.Resources("ColorBrushBackgroundTransparentSidebar") = New SolidColorBrush(Color.FromArgb(210, 43, 43, 43))
+            Application.Current.Resources("ColorBrushBackgroundTransparentSidebar") = New SolidColorBrush(Color.FromArgb(235, 43, 43, 43))
             Application.Current.Resources("ColorBrushToolTip") = New SolidColorBrush(Color.FromArgb(229, 90, 90, 90))
             Application.Current.Resources("ColorBrushWhite") = New SolidColorBrush(Color.FromRgb(43, 43, 43))
             Application.Current.Resources("ColorBrushMsgBox") = New SolidColorBrush(Color.FromRgb(43, 43, 43))
             Application.Current.Resources("ColorBrushMsgBoxText") = New SolidColorBrush(ColorDark1)
             Application.Current.Resources("ColorBrushMemory") = New SolidColorBrush(Color.FromRgb(255, 255, 255))
         Else
-            ColorHue = 210
-            ColorSat = 85
-            ColorLightAdjust = 0
-
             Application.Current.Resources("ColorBrush1") = New SolidColorBrush(ColorLight1)
-            Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorLight2)
-            Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorLight3)
+            'Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorLight2)
+            'Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorLight3)
             Application.Current.Resources("ColorBrush6") = New SolidColorBrush(ColorLight6)
             Application.Current.Resources("ColorBrush7") = New SolidColorBrush(ColorLight7)
             Application.Current.Resources("ColorBrush8") = New SolidColorBrush(ColorLight8)
@@ -382,7 +387,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                 Brush.GradientStops.Add(New GradientStop With {.Offset = 1.1, .Color = New MyColor().FromHSL2(ColorHue + 20, Math.Min(60, ColorSat) * 0.5, GetDarkThemeLight(80))})
                 FrmMain.PanForm.Background = Brush
             Else
-                FrmMain.PanForm.Background = New MyColor(IIf(IsDarkMode, 20, 245), IIf(IsDarkMode, 20, 245), IIf(IsDarkMode, 20, 245))
+                FrmMain.PanForm.Background = New MyColor(If(IsDarkMode, 20, 245), If(IsDarkMode, 20, 245), If(IsDarkMode, 20, 245))
             End If
             FrmMain.PanForm.Background.Freeze()
         End Sub)

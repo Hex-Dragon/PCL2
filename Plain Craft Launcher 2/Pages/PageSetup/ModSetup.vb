@@ -147,7 +147,7 @@
         {"UiCustomType", New SetupEntry(0)},
         {"UiCustomPreset", New SetupEntry(0)},
         {"UiCustomNet", New SetupEntry("")},
-        {"UiDarkMode", New SetupEntry(0, Source:=SetupSource.Registry)},
+        {"UiDarkMode", New SetupEntry(2, Source:=SetupSource.Registry)},
         {"UiLogoType", New SetupEntry(1)},
         {"UiLogoText", New SetupEntry("")},
         {"UiLogoLeft", New SetupEntry(False)},

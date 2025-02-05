@@ -53,7 +53,7 @@ Public Class MyCard
     Private Async Sub _ThemeChanged(sender As Object, e As Boolean)
         If e Then
             IsThemeChanging = True
-            AniStart({AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, 43, 43, 43) - MainBorder.Background, 300)}, "MyCard Theme " & Uuid)
+            AniStart({AaColor(MainBorder, Border.BackgroundProperty, New MyColor(235, 43, 43, 43) - MainBorder.Background, 300)}, "MyCard Theme " & Uuid)
             Await Task.Delay(300)
             IsThemeChanging = False
         Else
@@ -71,7 +71,7 @@ Public Class MyCard
         MainChrome = New SystemDropShadowChrome With {.Margin = New Thickness(-9.5, -9, 0.5, -0.5), .Opacity = 0.1, .CornerRadius = New CornerRadius(6)}
         MainChrome.SetResourceReference(SystemDropShadowChrome.ColorProperty, "ColorObject1")
         Children.Insert(0, MainChrome)
-        MainBorder = New Border With {.Background = New SolidColorBrush(Color.FromArgb(205, IIf(IsDarkMode, 43, 255), IIf(IsDarkMode, 43, 255), IIf(IsDarkMode, 43, 255))), .CornerRadius = New CornerRadius(6), .IsHitTestVisible = False}
+        MainBorder = New Border With {.Background = New SolidColorBrush(Color.FromArgb(If(IsDarkMode, 235, 205), If(IsDarkMode, 43, 255), If(IsDarkMode, 43, 255), If(IsDarkMode, 43, 255))), .CornerRadius = New CornerRadius(6), .IsHitTestVisible = False}
         Children.Insert(1, MainBorder)
         MainGrid = New Grid
         Children.Add(MainGrid)
@@ -129,7 +129,7 @@ Public Class MyCard
         If Not IsNothing(MainSwap) Then AniList.Add(AaColor(MainSwap, Shapes.Path.FillProperty, "ColorBrush2", 150))
         AniList.AddRange({
                          AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject2", 180),
-                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(230, IIf(IsDarkMode, 48, 255), IIf(IsDarkMode, 48, 255), IIf(IsDarkMode, 48, 255)) - MainBorder.Background, 180),
+                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(If(IsDarkMode, 245, 230), If(IsDarkMode, 48, 255), If(IsDarkMode, 48, 255), If(IsDarkMode, 48, 255)) - MainBorder.Background, 180),
                          AaOpacity(MainChrome, 0.3 - MainChrome.Opacity, 180)
                      })
         If Not IsThemeChanging Then AniStart(AniList, "MyCard Mouse " & Uuid)
@@ -141,7 +141,7 @@ Public Class MyCard
         If Not IsNothing(MainSwap) Then AniList.Add(AaColor(MainSwap, Shapes.Path.FillProperty, "ColorBrush1", 250))
         AniList.AddRange({
                          AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject1", 300),
-                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, IIf(IsDarkMode, 43, 255), IIf(IsDarkMode, 43, 255), IIf(IsDarkMode, 43, 255)) - MainBorder.Background, 300),
+                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(If(IsDarkMode, 235, 205), If(IsDarkMode, 43, 255), If(IsDarkMode, 43, 255), If(IsDarkMode, 43, 255)) - MainBorder.Background, 300),
                          AaOpacity(MainChrome, 0.1 - MainChrome.Opacity, 300)
                      })
         If Not IsThemeChanging Then AniStart(AniList, "MyCard Mouse " & Uuid)

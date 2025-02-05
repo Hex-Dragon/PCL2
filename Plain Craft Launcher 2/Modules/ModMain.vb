@@ -448,6 +448,7 @@ EndHint:
     Public FrmVersionShader As PageVersionShader
     Public FrmVersionResourcePack As PageVersionResourcePack
     Public FrmVersionSetup As PageVersionSetup
+    Public FrmVersionInstall As PageVersionInstall
 
     '资源信息分页声明
     Public FrmDownloadCompDetail As PageDownloadCompDetail
