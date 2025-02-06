@@ -700,13 +700,13 @@ LoginFinish:
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
         McLaunchLog("刷新登录开始（Refresh, " & Data.Input.Token & "）")
         
-Dim RefreshInfo As JObject = New JObject
-Dim SelectProfile As JObject = New JObject()
-SelectProfile.Add(New JProperty("name", Setup.Get("Cache" & Data.Input.Token & "Name")))
-SelectProfile.Add(New JProperty("id", Setup.Get("Cache" & Data.Input.Token & "Uuid")))
-RefreshInfo.Add("selectedProfile", SelectProfile)
-RefreshInfo.Add(New JProperty("accessToken", Setup.Get("Cache" & Data.Input.Token & "Access")))
-RefreshInfo.Add(New JProperty("requestUser", True))
+        Dim RefreshInfo As JObject = New JObject
+        Dim SelectProfile As JObject = New JObject()
+        SelectProfile.Add(New JProperty("name", Setup.Get("Cache" & Data.Input.Token & "Name")))
+        SelectProfile.Add(New JProperty("id", Setup.Get("Cache" & Data.Input.Token & "Uuid")))
+        RefreshInfo.Add("selectedProfile", SelectProfile)
+        RefreshInfo.Add(New JProperty("accessToken", Setup.Get("Cache" & Data.Input.Token & "Access")))
+        RefreshInfo.Add(New JProperty("requestUser", True))
 
         Dim LoginJson As JObject = GetJson(NetRequestRetry(
                Url:=Data.Input.BaseUrl & "/refresh",
