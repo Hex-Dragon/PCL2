@@ -17,11 +17,14 @@ jobs:
     strategy:  
        matrix:  
          configuration: [Debug, Release]
+
     steps:
+
     - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+
     - name: Set Describe
       shell: bash
       run: |
@@ -52,6 +55,7 @@ jobs:
         
     - name: Build
       run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
+      
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
