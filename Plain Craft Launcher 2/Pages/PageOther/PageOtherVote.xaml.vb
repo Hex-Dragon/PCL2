@@ -79,7 +79,7 @@ Public Class PageOtherVote
     Public Sub LoadList()
         PanList.Children.Clear()
         For Each item In Loader.Output
-            Dim ele As MyListItem = New MyListItem With {.Type = MyListItem.CheckType.Clickable, .Title = item.Vote & " | " & item.Title, .Info = item.Time.ToString()}
+            Dim ele As MyListItem = New MyListItem With {.Type = MyListItem.CheckType.Clickable, .Title = item.Vote & " 票 | " & item.Title, .Info = item.Time.ToString()}
             AddHandler ele.Click, Sub()
                                       OpenWebsite(item.Url)
                                   End Sub

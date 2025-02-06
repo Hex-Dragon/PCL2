@@ -1,12 +1,16 @@
-Public Class PageDownloadInstall
+Public Class PageVersionInstall
 
     Private Sub LoaderInit() Handles Me.Initialized
-        PageLoaderInit(LoadMinecraft, PanLoad, PanBack, Nothing, DlClientListLoader, AddressOf LoadMinecraft_OnFinish)
+        'PageLoaderInit(LoadMinecraft, PanLoad, PanBack, Nothing, DlClientListLoader, AddressOf LoadMinecraft_OnFinish)
+        PageLoaderInit(LoadMinecraft, PanLoad, PanBack, Nothing, DlClientListLoader, AddressOf GetCurrentInfo)
     End Sub
 
     Private IsLoad As Boolean = False
     Private Sub Init() Handles Me.Loaded
         PanBack.ScrollToHome()
+
+        GetCurrentInfo()
+
         DlOptiFineListLoader.Start()
         DlLiteLoaderListLoader.Start()
         DlFabricListLoader.Start()
@@ -14,8 +18,6 @@ Public Class PageDownloadInstall
         DlNeoForgeListLoader.Start()
 
         '重载预览
-        TextSelectName.ValidateRules = New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions")}
-        TextSelectName.Validate()
         SelectReload()
 
         '非重复加载部分
@@ -93,7 +95,6 @@ Public Class PageDownloadInstall
             AaCode(
             Sub()
                 PanBack.ScrollToHome()
-                TextSelectName.Validate()
                 OptiFine_Loaded()
                 LiteLoader_Loaded()
                 Forge_Loaded()
@@ -124,11 +125,13 @@ Public Class PageDownloadInstall
                 BtnQSLClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardQSL.MainTextBlock, .Mode = BindingMode.OneWay})
                 BtnOptiFabricClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardOptiFabric.MainTextBlock, .Mode = BindingMode.OneWay})
             End Sub,, True)
-        }, "FrmDownloadInstall SelectPageSwitch", True)
+        }, "FrmVersionInstall SelectPageSwitch", True)
     End Sub
     Public Sub ExitSelectPage()
         If Not IsInSelectPage Then Exit Sub
         IsInSelectPage = False
+
+        LoadMinecraft_OnFinish()
 
         SelectClear() '清除已选择项
         PanMinecraft.Visibility = Visibility.Visible
@@ -147,11 +150,12 @@ Public Class PageDownloadInstall
                        PanSelect.Visibility = Visibility.Collapsed
                        PanBack.IsHitTestVisible = True
                    End Sub,, True)
-        }, "FrmDownloadInstall SelectPageSwitch")
+        }, "FrmVersionInstall SelectPageSwitch")
     End Sub
 
     '页面切换触发
     Public Sub MinecraftSelected(sender As MyListItem, e As MouseButtonEventArgs)
+        SelectClear()
         SelectedMinecraftId = sender.Title
         SelectedMinecraftJsonUrl = sender.Tag("url").ToString
         SelectedMinecraftIcon = sender.Logo
@@ -365,8 +369,7 @@ Public Class PageDownloadInstall
         If SelectedMinecraftId Is Nothing OrElse IsReloading Then Exit Sub
         IsReloading = True
         '主预览
-        SelectNameUpdate()
-        ItemSelect.Title = TextSelectName.Text
+        ItemSelect.Title = PageVersionLeft.Version.Name
         ItemSelect.Info = GetSelectInfo()
         ItemSelect.Logo = GetSelectLogo()
         'Minecraft
@@ -691,19 +694,36 @@ Public Class PageDownloadInstall
     '版本名处理
     Private IsSelectNameEdited As Boolean = False
     Private IsSelectNameChanging As Boolean = False
-    Private Sub SelectNameUpdate()
-        If IsSelectNameEdited OrElse IsSelectNameChanging Then Exit Sub
-        IsSelectNameChanging = True
-        TextSelectName.Text = GetSelectName()
-        IsSelectNameChanging = False
-    End Sub
-    Private Sub TextSelectName_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextSelectName.TextChanged
-        If IsSelectNameChanging Then Exit Sub
-        IsSelectNameEdited = True
-        SelectReload()
-    End Sub
-    Private Sub TextSelectName_ValidateChanged(sender As Object, e As EventArgs) Handles TextSelectName.ValidateChanged
-        BtnSelectStart.IsEnabled = TextSelectName.ValidateResult = ""
+
+    '当前信息获取
+    Public Sub GetCurrentInfo()
+        SelectClear()
+        BtnSelectStart.IsEnabled = True
+        Dim CurrentVersion = PageVersionLeft.Version.Version
+        SelectedMinecraftId = CurrentVersion.McName
+        If CurrentVersion.HasLiteLoader Then SelectedLiteLoader = New DlLiteLoaderListEntry With {.Inherit = CurrentVersion.McName}
+        If CurrentVersion.HasOptiFine Then SelectedOptiFine = New DlOptiFineListEntry With {.NameDisplay = CurrentVersion.McName + " " + CurrentVersion.OptiFineVersion}
+        If CurrentVersion.HasForge Then
+            SelectedLoaderName = "Forge"
+            SelectedForge = New DlForgeVersionEntry(CurrentVersion.ForgeVersion, "", CurrentVersion.McName)
+        ElseIf CurrentVersion.HasFabric Then
+            SelectedLoaderName = "Fabric"
+            SelectedFabric = CurrentVersion.FabricVersion
+            SelectedFabricApi = Nothing 'TODO: 检测已有 Fabric API
+        ElseIf CurrentVersion.HasNeoForge Then
+            SelectedLoaderName = "NeoForge"
+            SelectedNeoForge = New DlNeoForgeListEntry(CurrentVersion.NeoForgeVersion)
+        ElseIf CurrentVersion.HasQuilt Then
+            SelectedLoaderName = "Quilt"
+            SelectedQuilt = CurrentVersion.QuiltVersion
+            SelectedQSL = Nothing 'TODO: 检测已有 QSL
+            SelectedFabricApi = Nothing 'TODO: 检测已有 Fabric API
+        End If
+        If (CurrentVersion.HasFabric OrElse CurrentVersion.HasQuilt) AndAlso CurrentVersion.HasOptiFine Then
+            SelectedOptiFabric = Nothing 'TODO: 检测已有 OptiFabric
+        End If
+        SelectedMinecraftIcon = "pack://application:,,,/images/Blocks/Grass.png" 'TODO: 需要判断 Icon
+        EnterSelectPage()
     End Sub
 
 #End Region
@@ -712,7 +732,7 @@ Public Class PageDownloadInstall
 
     '结果数据化
     Private Sub LoadMinecraft_OnFinish()
-        ExitSelectPage() '返回
+        'ExitSelectPage() '返回
         Try
             Dim Dict As New Dictionary(Of String, List(Of JObject)) From {
                 {"正式版", New List(Of JObject)}, {"预览版", New List(Of JObject)}, {"远古版", New List(Of JObject)}, {"愚人节版", New List(Of JObject)}
@@ -731,18 +751,12 @@ Public Class PageDownloadInstall
                             Not Version("id").ToString.ToLower.Contains("combat") AndAlso
                             Not Version("id").ToString.ToLower.Contains("rc") AndAlso
                             Not Version("id").ToString.ToLower.Contains("experimental") AndAlso
-                            Not Version("id").ToString.ToLower.Equals("1.2") AndAlso
                             Not Version("id").ToString.ToLower.Contains("pre") Then
                             Type = "正式版"
                             Version("type") = "release"
                         End If
                         '愚人节版本
                         Select Case Version("id").ToString.ToLower
-                            Case "2point0_blue", "2point0_red", "2point0_purple", "2.0_blue", "2.0_red", "2.0_purple", "2.0"
-                                Type = "愚人节版"
-                                Version("id") = Version("id").ToString().Replace("point", ".")
-                                Version("type") = "special"
-                                Version.Add("lore", GetMcFoolName(Version("id")))
                             Case "20w14infinite", "20w14∞"
                                 Type = "愚人节版"
                                 Version("id") = "20w14∞"
@@ -789,10 +803,10 @@ Public Class PageDownloadInstall
             End If
             Dim PanInfo As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = TopestVersions}
             Dim StackInstall = Sub(Stack As StackPanel)
-                               For Each item In Stack.Tag
-                                   Stack.Children.Add(McDownloadListItem(item, Sub(sender, e) FrmDownloadInstall.MinecraftSelected(sender, e), False))
-                               Next
-                           End Sub
+                                   For Each item In Stack.Tag
+                                       Stack.Children.Add(McDownloadListItem(item, Sub(sender, e) FrmVersionInstall.MinecraftSelected(sender, e), False))
+                                   Next
+                               End Sub
             MyCard.StackInstall(PanInfo, StackInstall)
             CardInfo.Children.Add(PanInfo)
             PanMinecraft.Children.Insert(0, CardInfo)
@@ -1183,7 +1197,7 @@ Public Class PageDownloadInstall
             CardFabric.SwapControl = PanFabric
             CardFabric.InstallMethod = Sub(Stack As StackPanel)
                                            For Each item In Stack.Tag
-                                               Stack.Children.Add(FabricDownloadListItem(CType(item, JObject), AddressOf FrmDownloadInstall.Fabric_Selected))
+                                               Stack.Children.Add(FabricDownloadListItem(CType(item, JObject), AddressOf FrmVersionInstall.Fabric_Selected))
                                            Next
                                        End Sub
         Catch ex As Exception
@@ -1370,7 +1384,7 @@ Public Class PageDownloadInstall
             CardQuilt.SwapControl = PanQuilt
             CardQuilt.InstallMethod = Sub(Stack As StackPanel)
                                           For Each item In Stack.Tag
-                                              Stack.Children.Add(QuiltDownloadListItem(CType(item, JObject), AddressOf FrmDownloadInstall.Quilt_Selected))
+                                              Stack.Children.Add(QuiltDownloadListItem(CType(item, JObject), AddressOf FrmVersionInstall.Quilt_Selected))
                                           Next
                                       End Sub
         Catch ex As Exception
@@ -1591,9 +1605,6 @@ Public Class PageDownloadInstall
 
 #Region "安装"
 
-    Private Sub TextSelectName_KeyDown(sender As Object, e As KeyEventArgs) Handles TextSelectName.KeyDown
-        If e.Key = Key.Enter AndAlso BtnSelectStart.IsEnabled Then BtnSelectStart_Click()
-    End Sub
     Private Sub BtnSelectStart_Click() Handles BtnSelectStart.Click
         '确认版本隔离
         If (SelectedForge IsNot Nothing OrElse SelectedNeoForge IsNot Nothing OrElse SelectedFabric IsNot Nothing OrElse SelectedQuilt IsNot Nothing) AndAlso
@@ -1604,10 +1615,13 @@ Public Class PageDownloadInstall
                 Exit Sub
             End If
         End If
+        '备份版本核心文件
+        CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".json", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".json")
+        CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".jar", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".jar")
         '提交安装申请
         Dim Request As New McInstallRequest With {
-            .TargetVersionName = TextSelectName.Text,
-            .TargetVersionFolder = $"{PathMcFolder}versions\{TextSelectName.Text}\",
+            .TargetVersionName = PageVersionLeft.Version.Name,
+            .TargetVersionFolder = $"{PathMcFolder}versions\{PageVersionLeft.Version.Name}\",
             .MinecraftJson = SelectedMinecraftJsonUrl,
             .MinecraftName = SelectedMinecraftId,
             .OptiFineEntry = SelectedOptiFine,
@@ -1620,9 +1634,9 @@ Public Class PageDownloadInstall
             .OptiFabric = SelectedOptiFabric,
             .LiteLoaderEntry = SelectedLiteLoader
         }
-        If Not McInstall(Request) Then Exit Sub
-        '返回，这样在再次进入安装页面时这个版本就会显示文件夹已重复
-        ExitSelectPage()
+        BtnSelectStart.IsEnabled = False
+        If Not McInstall(Request, True) Then Exit Sub
+        FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.Launch})
     End Sub
 
 #End Region

@@ -25,7 +25,7 @@ Public Class PageVersionLeft
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemScreenshot.Check, ItemWorld.Check, ItemResourcePack.Check, ItemShader.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemOverall.Check, ItemMod.Check, ItemModDisabled.Check, ItemSetup.Check, ItemScreenshot.Check, ItemWorld.Check, ItemResourcePack.Check, ItemShader.Check, ItemInstall.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -58,6 +58,9 @@ Public Class PageVersionLeft
             Case FormMain.PageSubType.VersionShader
                 If FrmVersionShader Is Nothing Then FrmVersionShader = New PageVersionShader
                 Return FrmVersionShader
+            Case FormMain.PageSubType.VersionInstall
+                If FrmVersionInstall Is Nothing Then FrmVersionInstall = New PageVersionInstall
+                Return FrmVersionInstall
             Case Else
                 Throw New Exception("未知的版本设置子页面种类：" & ID)
         End Select
@@ -111,6 +114,19 @@ Public Class PageVersionLeft
                 PageVersionResourcePack.Refresh()
             Case FormMain.PageSubType.VersionShader
                 PageVersionShader.Refresh()
+            Case FormMain.PageSubType.VersionInstall
+                DlClientListLoader.Start(IsForceRestart:=True)
+                DlOptiFineListLoader.Start(IsForceRestart:=True)
+                DlForgeListLoader.Start(IsForceRestart:=True)
+                DlNeoForgeListLoader.Start(IsForceRestart:=True)
+                DlLiteLoaderListLoader.Start(IsForceRestart:=True)
+                DlFabricListLoader.Start(IsForceRestart:=True)
+                DlFabricApiLoader.Start(IsForceRestart:=True)
+                DlQuiltListLoader.Start(IsForceRestart:=True)
+                DlQSLLoader.Start(IsForceRestart:=True)
+                DlOptiFabricLoader.Start(IsForceRestart:=True)
+                ItemInstall.Checked = True
+                FrmVersionInstall.GetCurrentInfo()
         End Select
     End Sub
 
