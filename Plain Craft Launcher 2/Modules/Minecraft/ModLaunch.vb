@@ -1,4 +1,4 @@
-﻿Imports System.IO.Compression
+Imports System.IO.Compression
 Public Module ModLaunch
 
 #Region "开始"
@@ -697,11 +697,14 @@ LoginFinish:
         McLaunchLog("验证登录成功（Validate, " & Data.Input.Token & "）")
     End Sub
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
-
         Dim RefreshInfo As JObject = New JObject
-
-        RefreshInfo.Add(New JProperty("accessToken", Setup.Get($"Cache{Data.Input.Token}Access")))
+        Dim SelectProfile As JObject = New JObject()
+        SelectProfile.Add(New JProperty("name", Setup.Get("Cache" & Data.Input.Token & "Name")))
+        SelectProfile.Add(New JProperty("id", Setup.Get("Cache" & Data.Input.Token & "Uuid")))
+        RefreshInfo.Add("selectedProfile", SelectProfile)
+        RefreshInfo.Add(New JProperty("accessToken", Setup.Get("Cache" & Data.Input.Token & "Access")))
         RefreshInfo.Add(New JProperty("requestUser", True))
+
 
         McLaunchLog("刷新登录开始（Refresh, " & Data.Input.Token & "）")
         Dim LoginJson As JObject = GetJson(NetRequestRetry(
