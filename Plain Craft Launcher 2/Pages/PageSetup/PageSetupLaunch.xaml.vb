@@ -86,6 +86,7 @@
             Setup.Reset("LaunchAdvanceAssets")
             Setup.Reset("LaunchAdvanceRun")
             Setup.Reset("LaunchAdvanceRunWait")
+            Setup.Reset("LaunchAdvanceDisableJlw")
 
             Setup.Reset("LaunchArgumentJavaAll")
             Setup.Reset("LaunchArgumentJavaSelect")
