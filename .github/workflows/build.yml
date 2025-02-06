@@ -35,8 +35,8 @@ jobs:
     
     - name: Update Help
       run:  |
-        Set-Location ../
-        git clone https://github.com/LTCatt/PCL2Help.git -b master
+        Set-Location ..
+        git clone https://github.com/mqingxue/PCL2Help.git -b master
         Set-Location PCL2Help
         Remove-Item -Path *.* -Recurse -Force
         Compress-Archive -Path .\* -DestinationPath .\Help.zip
