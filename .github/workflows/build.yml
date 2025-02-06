@@ -38,12 +38,19 @@ jobs:
     
     - name: Update Help
       run:  |
+        # 切换到上一级目录，免得混在一起
         Set-Location ..
+        # 检出远程仓库的 master 分支
         git clone https://github.com/LTCatt/PCL2Help.git -b master
+        # 切换到帮助库的目录
         Set-Location PCL2Help
+        # 删掉无用的文件
         Remove-Item -Path *.* -Recurse -Force
+        # 压缩
         Compress-Archive -Path .\* -DestinationPath .\Help.zip
+        # 覆盖文件
         Copy-Item -Path .\Help.zip -Destination "..\PCL2\Plain Craft Launcher 2\Resources\Help.zip" -Force
+        # 切换到原来的目录进行编译
         Set-Location ..\PCL2
 
 
@@ -55,7 +62,7 @@ jobs:
         
     - name: Build
       run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
-      
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
