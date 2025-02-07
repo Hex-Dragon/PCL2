@@ -18,21 +18,37 @@ jobs:
        matrix:  
          configuration: [Beta, Release]
     steps:
+
     - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+
     - name: Set Describe
       shell: bash
       run: |
           describe=`git describe --tags --always`
           echo "describe=$describe" >> $GITHUB_ENV
+
     - name: Restore NuGet Packages
       run: nuget restore "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -PackagesDirectory "packages"
+      
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
       with:
         msbuild-architecture: x64
+    
+    - name: Update Help
+      run:  |
+        Set-Location ..
+        git clone https://github.com/LTCatt/PCL2Help.git -b master --single-branch --depth 1
+        Set-Location PCL2Help
+        Remove-Item -Path *.* -Recurse -Force
+        Compress-Archive -Path .\* -DestinationPath .\Help.zip
+        Copy-Item -Path .\Help.zip -Destination "..\PCL2-CE\Plain Craft Launcher 2\Resources\Help.zip" -Force
+        Set-Location ..\PCL2-CE
+
+
     - name: Replace
       run: |
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const OAuthClientId As String = ""', 'Public Const OAuthClientId As String = "${{ secrets.CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
@@ -40,15 +56,9 @@ jobs:
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const LittleSkinClientId As String = ""', 'Public Const LittleSkinClientId As String = "${{ secrets.LITTLESKIN_CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
         (gc "Plain Craft Launcher 2\Modules\Base\ModBase.vb") -replace 'Public Const CommitHash As String = "native"', 'Public Const CommitHash As String = "${{ github.sha }}"' | Out-File "Plain Craft Launcher 2\Modules\Base\ModBase.vb"
         (gc "Plain Craft Launcher 2\Pages\PageOther\PageOtherAbout.xaml") -replace 'https://github.com/PCL-Community/PCL2-CE', 'https://github.com/PCL-Community/PCL2-CE/tree/${{ github.sha }}' | Out-File "Plain Craft Launcher 2\Pages\PageOther\PageOtherAbout.xaml"
-        rm "Plain Craft Launcher 2\Resources\Help.zip"
-        aria2c "--out=Plain Craft Launcher 2\Resources\Help.zip" "https://codeload.github.com/LTCatt/PCL2Help/zip/refs/heads/master"
-        7z x "Plain Craft Launcher 2\Resources\Help.zip" -o"Plain Craft Launcher 2\Resources"
-        rm "Plain Craft Launcher 2\Resources\Help.zip"
-        rm "Plain Craft Launcher 2\Resources\PCL2Help-master\*.*"
-        7z a "Plain Craft Launcher 2\Resources\Help.zip" ".\Plain Craft Launcher 2\Resources\PCL2Help-master\*"
-        rm "Plain Craft Launcher 2\Resources\PCL2Help-master\" -Recurse
     - name: Build
       run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:

@@ -611,6 +611,10 @@ Finish:
         End If
         '实际的启动
         If BtnLaunch.Text = "启动游戏" Then
+            If File.Exists(McVersionCurrent.Path + ".pclignore") Then
+                Hint("当前版本正在安装，无法启动！", HintType.Critical)
+                Exit Sub
+            End If
             McLaunchStart()
         ElseIf BtnLaunch.Text = "下载游戏" Then
             FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall)
@@ -698,6 +702,10 @@ ExitRefresh:
         If McLaunchLoader.State = LoadState.Loading Then Exit Sub
         McVersionCurrent.Load()
         PageVersionLeft.Version = McVersionCurrent
+        If File.Exists(McVersionCurrent.Path + ".pclignore") Then
+            Hint("当前版本正在安装，暂无法进行版本设置！", HintType.Critical)
+            Exit Sub
+        End If
         FrmMain.PageChange(FormMain.PageType.VersionSetup, 0)
     End Sub
     ''' <summary>

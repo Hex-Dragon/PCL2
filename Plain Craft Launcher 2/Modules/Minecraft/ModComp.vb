@@ -17,6 +17,10 @@
         ''' 光影包。
         ''' </summary>
         Shader = 3
+        ''' <summary>
+        ''' 其他。
+        ''' </summary>
+        Other = 4
     End Enum
     Public Enum CompModLoaderType
         'https://docs.curseforge.com/?http#tocS_ModLoaderType
@@ -285,8 +289,10 @@
                         Type = CompType.ModPack
                     ElseIf Website.Contains("/texture-packs/") Then
                         Type = CompType.ResourcePack
-                    Else 'Website.Contains("/shaders/")
+                    ElseIf Website.Contains("/shaders/") Then
                         Type = CompType.Shader
+                    Else
+                        Type = CompType.Other
                     End If
                     'Tags
                     Tags = New List(Of String)
@@ -384,6 +390,7 @@
                         Case "modpack" : Type = CompType.ModPack
                         Case "resourcepack" : Type = CompType.ResourcePack
                         Case "shader" : Type = CompType.Shader
+                        Case Else : Type = CompType.Other
                     End Select
                     'Tags & ModLoaders
                     Tags = New List(Of String)
@@ -1612,6 +1619,8 @@ Retry:
     End Sub
 
 #End Region
+
+#Region "CompFavorites | 收藏"
     Class CompFavorites
 
         ''' <summary>
@@ -1725,26 +1734,58 @@ Retry:
             Return Res
         End Function
     End Class
+#End Region
 
+#Region "CompClipboard | 剪贴板识别"
     Class CompClipboard
         '剪贴板已读取内容
         Public Shared CurrentText As String = Nothing
         '识别剪贴板内容
         Public Shared Sub ClipboardListening()
             While Setup.Get("ToolDownloadClipboard")
+                Thread.Sleep(700)
                 Dim Text As String = Nothing
                 Dim Slug As String = Nothing
                 Dim ProjectId As String = Nothing
+                Dim CategoryURL As String = Nothing
+                Dim ReturnData = Nothing
                 RunInUiWait(Sub()
-                                Text = My.Computer.Clipboard.GetText().Replace("https://", "").Replace("http://", "")
+                                Text = My.Computer.Clipboard.GetText()
                             End Sub)
                 If Text = CurrentText Then Continue While
                 CurrentText = Text
+                Text = Text.Replace("https://", "").Replace("http://", "")
 
-                If Text.Contains("curseforge.com/") Then 'e.g. www.curseforge.com/minecraft/mc-mods/jei
+                If Text.Contains("curseforge.com/minecraft/") Then 'e.g. www.curseforge.com/minecraft/mc-mods/jei
+                    Dim ClassIds As List(Of String) = New List(Of String) From {"6", "4471", "12", "6552"}
                     Try
+                        CategoryURL = Text.Split("/")(2)
                         Slug = Text.Split("/")(3)
-                        ProjectId = DlModRequest("https://api.curseforge.com/v1/mods/search?gameId=432&slug=" + Slug, IsJson:=True)("data")(0)("id")
+                        ReturnData = DlModRequest("https://api.curseforge.com/v1/mods/search?gameId=432&slug=" + Slug, IsJson:=True) '获取资源信息
+                        Dim ReceivedClassId As String = ReturnData("data")(0)("categories")(0)("classId") '获取资源的 ClassId
+
+                        '判断资源的分类是否匹配，不在支持的资源类型中的就直接显示
+                        Dim IsCategoryMatched As Boolean = True
+                        Dim ResClassId As String = Nothing
+                        If CategoryURL = "mc-mods" AndAlso Not ReceivedClassId = "6" Then
+                            IsCategoryMatched = False
+                            ResClassId = "6"
+                        ElseIf CategoryURL = "modpacks" AndAlso Not ReceivedClassId = "4471" Then
+                            IsCategoryMatched = False
+                            ResClassId = "4471"
+                        ElseIf CategoryURL = "texture-packs" AndAlso Not ReceivedClassId = "12" Then
+                            IsCategoryMatched = False
+                            ResClassId = "12"
+                        ElseIf CategoryURL = "shaders" AndAlso Not ReceivedClassId = "6552" Then
+                            IsCategoryMatched = False
+                            ResClassId = "6552"
+                        End If
+
+                        If Not IsCategoryMatched Then
+                            ReturnData = DlModRequest("https://api.curseforge.com/v1/mods/search?gameId=432&slug=" + Slug + "&classId=" + ResClassId, IsJson:=True)
+                        End If
+
+                        ProjectId = ReturnData("data")(0)("id")
                     Catch ex As Exception
                         Log("[Clipboard] 获取剪贴板 CurseForge 资源链接 ID 失败: " + ex.ToString(), LogLevel.Normal)
                         Continue While
@@ -1770,9 +1811,8 @@ Retry:
                     RunInUi(Sub() FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
                                .Additional = {CompProjects.First(), New List(Of String), String.Empty, CompModLoaderType.Any}}))
                 End If
-
-                Thread.Sleep(700)
             End While
         End Sub
     End Class
+#End Region
 End Module

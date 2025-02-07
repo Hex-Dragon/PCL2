@@ -8,7 +8,7 @@
         PageLoaderInit(Load, PanLoad, PanContent, Nothing, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
     End Sub
     Private Sub PageDownloadCompFavorites_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
-        SelectedItemList.Clear()
+        Items_SetSelectAll(False)
         RefreshBar()
         If Loader.Input IsNot Nothing AndAlso (Not Loader.Input.Count.Equals(CompFavorites.FavoritesList.Count) OrElse Loader.Input.Except(CompFavorites.FavoritesList).Any()) Then
             Loader.Start()
