@@ -16,26 +16,26 @@
                     <StackPanel.RenderTransform>
                         <TranslateTransform X="40" />
                     </StackPanel.RenderTransform>
-                    <local:MyCard Title="安装预览" Margin="0,15,0,0" UseAnimation="False">
+                    <local:MyCard Title="{StaticResource LangDownloadInstallReview}" Margin="0,15,0,0" UseAnimation="False">
                         <StackPanel Margin="25,37,25,15">
-                            <local:MyHint Text="你尚未选择安装 Fabric API，这会导致大多数 Mod 无法使用！" Margin="0,1,0,7" x:Name="HintFabricAPI" IsWarn="True" />
-                            <local:MyHint Text="你尚未选择安装 OptiFabric，这会导致 OptiFine 无法使用！" Margin="0,1,0,7" x:Name="HintOptiFabric" IsWarn="True" />
-                            <local:MyHint Text="安装结束后，请在 Mod 下载中搜索 OptiFabric Origins 并下载，否则 OptiFine 会无法使用！" Margin="0,1,0,7" x:Name="HintOptiFabricOld" IsWarn="False" />
-                            <local:MyHint Text="OptiFine 与一部分 Mod 的兼容性不佳，请谨慎安装。" Margin="0,1,0,7" x:Name="HintModOptiFine" IsWarn="False" />
+                            <local:MyHint Text="{StaticResource LangDownloadInstallFabricApi}" Margin="0,1,0,7" x:Name="HintFabricAPI" IsWarn="True" />
+                            <local:MyHint Text="{StaticResource LangDownloadInstallOptiFabric}" Margin="0,1,0,7" x:Name="HintOptiFabric" IsWarn="True" />
+                            <local:MyHint Text="{StaticResource LangDownloadInstallOldOptiFabric}" Margin="0,1,0,7" x:Name="HintOptiFabricOld" IsWarn="False" />
+                            <local:MyHint Text="{StaticResource LangDownloadInstallOptiFine}" Margin="0,1,0,7" x:Name="HintModOptiFine" IsWarn="False" />
                             <Grid Margin="0,0,0,11">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <local:MyListItem Grid.Column="0" x:Name="ItemSelect" IsHitTestVisible="False" Margin="-7,0,0,0" Height="42" SnapsToDevicePixels="True" Type="None" />
-                                <local:MyButton Grid.Column="1" HorizontalAlignment="Right" ColorType="Highlight" Text="开始安装" Margin="0,2,0,0" x:Name="BtnSelectStart" MinWidth="140" Padding="13,0" Height="35" VerticalAlignment="Center" />
+                                <local:MyButton Grid.Column="1" HorizontalAlignment="Right" ColorType="Highlight" Text="{StaticResource LangDownloadInstallStart}" Margin="0,2,0,0" x:Name="BtnSelectStart" MinWidth="140" Padding="13,0" Height="35" VerticalAlignment="Center" />
                             </Grid>
                             <Grid Margin="0,0,0,5">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
                                     <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock VerticalAlignment="Top" HorizontalAlignment="Left" Text="版本名称" Margin="0,5,25,0" />
+                                <TextBlock VerticalAlignment="Top" HorizontalAlignment="Left" Text="{StaticResource LangDownloadInstallVersionName}" Margin="0,5,25,0" />
                                 <local:MyTextBox Grid.Column="1" x:Name="TextSelectName" MinHeight="28" />
                             </Grid>
                         </StackPanel>
@@ -59,10 +59,10 @@
                                     <RotateTransform Angle="90" />
                                 </Path.RenderTransform>
                             </Path>
-                            <TextBlock VerticalAlignment="Center" Text="返回" Grid.Column="3" Foreground="{StaticResource ColorBrushGray4}" />
+                            <TextBlock VerticalAlignment="Center" Text="{StaticResource LangDownloadInstallBack}" Grid.Column="3" Foreground="{StaticResource ColorBrushGray4}" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="Forge" Height="40" Margin="0,15,0,0" x:Name="CardForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{StaticResource LangDownloadPageLeftForge}" Height="40" Margin="0,15,0,0" x:Name="CardForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanForge" />
                         <Grid x:Name="PanForgeInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
@@ -80,7 +80,7 @@
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="NeoForge" Height="40" Margin="0,15,0,0" x:Name="CardNeoForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{StaticResource LangDownloadPageLeftNeoForge}" Height="40" Margin="0,15,0,0" x:Name="CardNeoForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanNeoForge" />
                         <Grid x:Name="PanNeoForgeInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
@@ -98,7 +98,7 @@
                                   Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="Fabric" Height="40" Margin="0,15,0,0" x:Name="CardFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{StaticResource LangDownloadPageLeftFabric}" Height="40" Margin="0,15,0,0" x:Name="CardFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanFabric" />
                         <Grid x:Name="PanFabricInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
@@ -116,7 +116,7 @@
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="Fabric API" Height="40" Margin="0,15,0,0" x:Name="CardFabricApi" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{StaticResource LangDownloadPageLeftFabricAPI}" Height="40" Margin="0,15,0,0" x:Name="CardFabricApi" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanFabricApi" />
                         <Grid x:Name="PanFabricApiInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
@@ -134,7 +134,7 @@
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="OptiFine" Height="40" Margin="0,15,0,0" x:Name="CardOptiFine" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{StaticResource LangDownloadPageLeftOptiFine}" Height="40" Margin="0,15,0,0" x:Name="CardOptiFine" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top">
                             <StackPanel Name="PanOptiFine" />
                         </StackPanel>
@@ -154,7 +154,7 @@
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="OptiFabric" Height="40" Margin="0,15,0,0" x:Name="CardOptiFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{StaticResource LangDownloadPageLeftOptiFabric}" Height="40" Margin="0,15,0,0" x:Name="CardOptiFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanOptiFabric" />
                         <Grid x:Name="PanOptiFabricInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
@@ -172,7 +172,7 @@
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
-                    <local:MyCard Title="LiteLoader" Height="40" Margin="0,15,0,0" x:Name="CardLiteLoader" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                    <local:MyCard Title="{StaticResource LangDownloadPageLeftLiteLoader}" Height="40" Margin="0,15,0,0" x:Name="CardLiteLoader" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanLiteLoader" />
                         <Grid x:Name="PanLiteLoaderInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
@@ -194,7 +194,7 @@
             </Grid>
         </local:MyScrollViewer>
         <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,0" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False">
-            <local:MyLoading Text="正在获取版本列表" Margin="20,20,20,17" x:Name="LoadMinecraft" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <local:MyLoading Text="{StaticResource LangDownloadInstallGettingList}" Margin="20,20,20,17" x:Name="LoadMinecraft" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadOptiFine" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadForge" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadNeoForge" HasAnimation="False" />

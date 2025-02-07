@@ -170,16 +170,17 @@
     ''' 是否已经由用户输入过文本，若尚未输入过，则不显示输入检查的失败。
     ''' </summary>
     Private IsTextChanged As Boolean = False
-    Private _HintText As String = ""
     Public Property HintText As String
         Get
-            Return _HintText
+            Return GetValue(HintTextProperty)
         End Get
         Set(value As String)
-            _HintText = value
+            SetValue(HintTextProperty, value)
             If labHint IsNot Nothing Then labHint.Text = If(Text = "", HintText, "")
         End Set
     End Property
+    Public Shared ReadOnly HintTextProperty As DependencyProperty = DependencyProperty.Register("HintText", GetType(String), GetType(MyTextBox), New PropertyMetadata(""))
+
     Private Sub MyTextBox_TextChanged(sender As MyTextBox, e As TextChangedEventArgs) Handles Me.TextChanged
         Try
             '改变提示文本
