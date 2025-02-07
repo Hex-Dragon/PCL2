@@ -15,7 +15,7 @@ Public Class FormMain
         If LastVersion < 357 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复第三方登录无效会话问题"))
             BugCount += 1
-        End
+        End If
         If LastVersion < 356 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复正版验证无法正常进行的问题"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "深色模式优化"))
