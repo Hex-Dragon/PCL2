@@ -13,15 +13,21 @@ body:
       required: true
     - label: "我仍想要提交，是因为我确认这个 Issue 是官方版转交过来，或是希望由社区版处理的。"
       required: true
-- type: textarea
+- type: input
   id: "yml-2"
+  attributes:
+    label: "官方版原 Issue 编号"
+    description: "如果这个 Issue 是从官方版转交过来的，请将原 Issue 标题旁的**编号**输入到下方预设文本的`#`后，不要输入任何其他非数字字符。"
+    value: "- Hex-Dragon/PCL2#"
+- type: textarea
+  id: "yml-3"
   attributes:
     label: 描述
     description: "详细描述你想添加的功能具体是怎样的。"
   validations:
     required: true
 - type: textarea
-  id: "yml-3"
+  id: "yml-4"
   attributes:
     label: 原因
     description: "详细描述你为什么需要这项功能，这有助于开发者评估它的优先度。"
