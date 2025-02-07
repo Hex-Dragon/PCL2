@@ -31,7 +31,7 @@ body:
   id: "yml-4"
   attributes:
     label: 日志与附件
-    description: "上传 PCL 文件夹中的 Log1~5.txt。[日志在哪？](https://shimo.im/docs/qKPttVvXKqPD8YDC#anchor-fvZW)"
+    description: "上传 PCL 文件夹中的 Log-CE1~5.log。[日志在哪？](https://shimo.im/docs/qKPttVvXKqPD8YDC#anchor-fvZW)"
     placeholder: "先点击这个文本框，然后再将文件直接拖拽到文本框中以上传。"
   validations:
     required: true
