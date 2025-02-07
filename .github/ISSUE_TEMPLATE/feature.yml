@@ -17,7 +17,7 @@ body:
   id: "yml-2"
   attributes:
     label: "官方版原 Issue 编号"
-    description: "如果这个 Issue 是从官方版转交过来的，请将原 Issue 标题旁的**编号**输入到下方预设文本的`#`后，不要输入任何其他非数字字符。"
+    description: "如果这个 Issue 是从官方版转交过来的，请将原 Issue 标题旁的**编号**输入到下方预设文本的`#`后，不要输入任何其他非数字字符。若不是，请清空下方输入框。"
     value: "- Hex-Dragon/PCL2#"
 - type: textarea
   id: "yml-3"
