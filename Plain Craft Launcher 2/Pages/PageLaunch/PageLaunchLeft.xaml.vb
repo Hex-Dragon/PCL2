@@ -143,8 +143,6 @@
         PanLaunchingInfo.Width = Double.NaN '重置宽度改变动画
         McLaunchProcess = Nothing
         McLaunchWatcher = Nothing
-        '获取 “你知道吗” 提示
-        LabLaunchingHint.Text = PageOtherTest.GetRandomHint()
         '初始化其他页面
         PanInput.IsHitTestVisible = False
         PanLaunching.IsHitTestVisible = False
