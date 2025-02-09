@@ -25,13 +25,13 @@ Public Module ModBase
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
 #If RELEASE Then
-    Public Const VersionBranchName As String = "CE"
+    Public Const VersionBranchName As String = ""
     Public Const VersionBranchCode As String = "0"
 #ElseIf BETA Then
-    Public Const VersionBranchName As String = "CE Preview"
+    Public Const VersionBranchName As String = "Preview"
     Public Const VersionBranchCode As String = "50"
 #Else
-    Public Const VersionBranchName As String = "CE Debug"
+    Public Const VersionBranchName As String = "Debug"
     Public Const VersionBranchCode As String = "100"
 #End If
 
