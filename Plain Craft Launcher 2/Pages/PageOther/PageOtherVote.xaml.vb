@@ -24,13 +24,13 @@ Public Class PageOtherVote
         IsLoaded = True
 
     End Sub
-    Public Shared Loader As New LoaderTask(Of String, List(Of Vote))("VoteList", AddressOf VoteListGet, AddressOf LoaderInput)
+    Public Loader As New LoaderTask(Of Integer, List(Of Vote))("VoteList", AddressOf VoteListGet, AddressOf LoaderInput)
 
-    Private Shared Function LoaderInput() As String
-        Return "" ' awa?
+    Private Function LoaderInput() As Integer
+        Return 0 ' awa?
     End Function
 
-    Public Shared Sub VoteListGet(Task As LoaderTask(Of String, List(Of Vote)))
+    Public Sub VoteListGet(Task As LoaderTask(Of Integer, List(Of Vote)))
         Dim content = NetGetCodeByRequestRetry("https://github.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8?discussions_q=is%3Aopen+category%3A%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8+sort%3Atop", BackupUrl:="https://kkgithub.com/Hex-Dragon/PCL2/discussions/categories/%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8?discussions_q=is%3Aopen+category%3A%E5%8A%9F%E8%83%BD%E6%8A%95%E7%A5%A8+sort%3Atop", UseBrowserUserAgent:=True)
         If content Is Nothing Then Throw New Exception("空内容")
 
