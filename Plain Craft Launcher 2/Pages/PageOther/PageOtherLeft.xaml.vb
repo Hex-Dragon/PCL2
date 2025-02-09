@@ -121,6 +121,16 @@
             Case FormMain.PageSubType.OtherHelp
                 RefreshHelp()
                 ItemHelp.Checked = True
+            Case FormMain.PageSubType.OtherFeedback
+                If FrmOtherFeedback IsNot Nothing Then
+                    FrmOtherFeedback.Loader.Start(IsForceRestart:=True)
+                End If
+                ItemFeedback.Checked = True
+            Case FormMain.PageSubType.OtherVote
+                If FrmOtherVote IsNot Nothing Then
+                    FrmOtherVote.Loader.Start(IsForceRestart:=True)
+                End If
+                ItemVote.Checked = True
         End Select
         Hint("正在刷新……", Log:=False)
     End Sub
