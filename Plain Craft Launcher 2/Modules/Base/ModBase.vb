@@ -2435,6 +2435,7 @@ Retry:
         Catch ex As Exception
             Log(ex, "[System] 从剪切板粘贴文件失败", LogLevel.Hint)
         End Try
+        Return 0
     End Function
 
     ''' <summary>

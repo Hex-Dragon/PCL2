@@ -12,7 +12,7 @@ Public Class PageVersionScreenshot
     End Sub
 
     Private IsLoad As Boolean = False
-    Private Async Function PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) As Tasks.Task Handles Me.Loaded
+    Private Async Sub PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
 
         '重复加载部分
         PanBack.ScrollToHome()
@@ -24,7 +24,7 @@ Public Class PageVersionScreenshot
         If IsLoad Then Return
         IsLoad = True
 
-    End Function
+    End Sub
 
     Dim FileList As List(Of String) = New List(Of String)
     Dim ScreenshotPath As String
@@ -63,11 +63,11 @@ Public Class PageVersionScreenshot
         Await ListAppend(20, 0)
     End Function
 
-    Private Async Function RequireAppend() As Tasks.Task Handles PanBack.ScrollChanged
+    Private Async Sub RequireAppend() Handles PanBack.ScrollChanged
         If (Not _AppendLock) AndAlso PanBack.VerticalOffset + PanBack.ViewportHeight >= PanBack.ExtentHeight Then
             Await ListAppend()
         End If
-    End Function
+    End Sub
 
     Private _AppendLock As Boolean = False
     Private _Offset As Integer = 0
