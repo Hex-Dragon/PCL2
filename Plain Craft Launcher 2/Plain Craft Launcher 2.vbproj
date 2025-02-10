@@ -826,7 +826,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Font.ttf" />
-    <None Include="Resources\Help.zip" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Heads\LTCat.jpg" />
@@ -915,6 +914,7 @@
     <Resource Include="Images\Heads\Logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Help.zip" />
     <None Include="Resources\transformer.jar" />
   </ItemGroup>
   <ItemGroup>
