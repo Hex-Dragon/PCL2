@@ -28,7 +28,7 @@ Public Module ModBase
     Public Const VersionBranchName As String = "Release"
     Public Const VersionBranchCode As String = "0"
 #ElseIf BETA Then
-    Public Const VersionBranchName As String = "Preview"
+    Public Const VersionBranchName As String = "Beta"
     Public Const VersionBranchCode As String = "50"
 #Else
     Public Const VersionBranchName As String = "Debug"
