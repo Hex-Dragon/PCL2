@@ -8,6 +8,7 @@ Public Class PageVersionWorld
     Public Shared Sub Refresh()
         If FrmVersionWorld IsNot Nothing Then FrmVersionWorld.Reload()
         FrmVersionLeft.ItemWorld.Checked = True
+        Hint("正在刷新……", Log:=False)
     End Sub
     Private IsLoad As Boolean = False
     Private Sub PageSetupLaunch_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded

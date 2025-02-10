@@ -9,6 +9,7 @@ Public Class PageVersionScreenshot
     Public Shared Async Sub Refresh()
         If FrmVersionScreenshot IsNot Nothing Then Await FrmVersionScreenshot.Reload()
         FrmVersionLeft.ItemScreenshot.Checked = True
+        Hint("正在刷新……", Log:=False)
     End Sub
 
     Private IsLoad As Boolean = False

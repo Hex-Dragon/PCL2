@@ -9,6 +9,7 @@ Public Class PageVersionResourcePack
     Public Shared Sub Refresh()
         If FrmVersionResourcePack IsNot Nothing Then FrmVersionResourcePack.Reload()
         FrmVersionLeft.ItemResourcePack.Checked = True
+        Hint("正在刷新……", Log:=False)
     End Sub
 
     Private IsLoad As Boolean = False
