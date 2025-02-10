@@ -604,7 +604,7 @@ EndHint:
             Try
 
                 '解压内置文件
-                HelpTryExtract()
+                HelpExtract()
 
                 '遍历文件
                 Dim FileList As New List(Of String)
@@ -674,17 +674,14 @@ NextFile:
         End SyncLock
     End Sub
     ''' <summary>
-    ''' 尝试解压内置帮助文件。
+    ''' 解压内置帮助文件。
     ''' </summary>
-    Public Sub HelpTryExtract()
-        If Setup.Get("SystemHelpVersion") <> VersionCode OrElse Not File.Exists(PathTemp & "Help\启动器\备份设置.xaml") Then
-            DeleteDirectory(PathTemp & "Help")
-            Directory.CreateDirectory(PathTemp & "Help")
-            WriteFile(PathTemp & "Cache\Help.zip", GetResources("Help"))
-            ExtractFile(PathTemp & "Cache\Help.zip", PathTemp & "Help", Encoding.UTF8)
-            Setup.Set("SystemHelpVersion", VersionCode)
-            Log("[Help] 已解压内置帮助文件，目前状态：" & File.Exists(PathTemp & "Help\启动器\备份设置.xaml"), LogLevel.Debug)
-        End If
+    Public Sub HelpExtract()
+        DeleteDirectory(PathTemp & "Help")
+        Directory.CreateDirectory(PathTemp & "Help")
+        WriteFile(PathTemp & "Cache\Help.zip", GetResources("Help"))
+        ExtractFile(PathTemp & "Cache\Help.zip", PathTemp & "Help", Encoding.UTF8)
+        Log("[Help] 已解压内置帮助文件，目前状态：" & File.Exists(PathTemp & "Help\启动器\备份设置.xaml"), LogLevel.Debug)
     End Sub
     ''' <summary>
     ''' 对帮助文件约定的替换标记进行处理，如果遇到需要转义的字符会进行转义。

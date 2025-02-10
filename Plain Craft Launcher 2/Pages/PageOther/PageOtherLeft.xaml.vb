@@ -135,7 +135,6 @@
         Hint("正在刷新……", Log:=False)
     End Sub
     Public Shared Sub RefreshHelp()
-        Setup.Set("SystemHelpVersion", 0) '强制重新解压文件
         FrmOtherHelp.PageLoaderRestart()
         FrmOtherHelp.SearchBox.Text = ""
     End Sub
