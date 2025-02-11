@@ -1,4 +1,6 @@
-﻿Public Module ModComp
+﻿Imports System.Security.Cryptography
+
+Public Module ModComp
 
     Public Enum CompType
         ''' <summary>
@@ -211,6 +213,26 @@
                 Return If(DatabaseEntry Is Nothing OrElse DatabaseEntry.ChineseName = "", RawName, DatabaseEntry.ChineseName)
             End Get
         End Property
+        ''' <summary>
+        ''' 从MCIM获取中文描述。若没有则返回原描述。
+        ''' </summary>
+        Public ReadOnly Property TranslatedDescription As String
+            Get
+                Dim from = If(FromCurseForge, "curseforge", "modrinth")
+                Dim para = If(FromCurseForge, "modId", "project_id")
+                Try
+                    Dim jsonObject = NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}?{para}={Id}", Encode:=Encoding.UTF8, IsJson:=True)
+                    If jsonObject.ContainsKey("translated") Then
+                        Return jsonObject("translated")?.ToString()
+                    Else
+                        Return Description
+                    End If
+                Catch ex As Exception
+                    Log(ex, "获取中文描述时出现错误")
+                    Return Description
+                End Try
+            End Get
+        End Property
 
         '实例化
 
@@ -251,7 +273,8 @@
                     Id = Data("id")
                     Slug = Data("slug")
                     RawName = Data("name")
-                    Description = Data("summary")
+                    ''  Description = Data("summary")
+                    Description = TranslatedDescription
                     Website = Data("links")("websiteUrl").ToString.TrimEnd("/")
                     LastUpdate = Data("dateReleased") '#1194
                     DownloadCount = Data("downloadCount")
@@ -372,7 +395,8 @@
                     Id = If(Data("project_id"), Data("id")) '两个 API 会返回的 key 不一样
                     Slug = Data("slug")
                     RawName = Data("title")
-                    Description = Data("description")
+                    '' Description = Data("description")
+                    Description = TranslatedDescription
                     LastUpdate = Data("date_modified")
                     DownloadCount = Data("downloads")
                     LogoUrl = Data("icon_url")
