@@ -12,26 +12,26 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.10.0" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.10.0." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.10.2" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.10.2." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "native" 'Commit Hash，由 GitHub Workflow 自动替换
     Public CommitHashShort As String = If(CommitHash = "native", "native", CommitHash.Substring(0, 7)) 'Commit Hash，取前 7 位
     Public Const UpstreamVersion As String = "2.8.13" '上游版本
 #If RELEASE Then
-    Public Const VersionCode As Integer = 355 'Release
+    Public Const VersionCode As Integer = 357 'Release
 #Else
-    Public Const VersionCode As Integer = 355 'Snapshot
+    Public Const VersionCode As Integer = 357 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
 #If RELEASE Then
-    Public Const VersionBranchName As String = "CE"
+    Public Const VersionBranchName As String = "Release"
     Public Const VersionBranchCode As String = "0"
 #ElseIf BETA Then
-    Public Const VersionBranchName As String = "CE Preview"
+    Public Const VersionBranchName As String = "Beta"
     Public Const VersionBranchCode As String = "50"
 #Else
-    Public Const VersionBranchName As String = "CE Debug"
+    Public Const VersionBranchName As String = "Debug"
     Public Const VersionBranchCode As String = "100"
 #End If
 
@@ -2435,6 +2435,7 @@ Retry:
         Catch ex As Exception
             Log(ex, "[System] 从剪切板粘贴文件失败", LogLevel.Hint)
         End Try
+        Return 0
     End Function
 
     ''' <summary>
@@ -2870,13 +2871,13 @@ Retry:
     Public Sub Feedback(Optional ShowMsgbox As Boolean = True, Optional ForceOpenLog As Boolean = False)
         On Error Resume Next
         FeedbackInfo()
-        If ForceOpenLog OrElse (ShowMsgbox AndAlso MyMsgBox("若你在汇报一个 Bug，请点击 打开文件夹 按钮，并上传 Log(1~5).txt 中包含错误信息的文件。" & vbCrLf & "游戏崩溃一般与启动器无关，请不要因为游戏崩溃而提交反馈。", "反馈提交提醒", "打开文件夹", "不需要") = 1) Then
+        If ForceOpenLog OrElse (ShowMsgbox AndAlso MyMsgBox("若你在汇报一个 Bug，请点击 打开文件夹 按钮，并上传 Log-CE(1~5).txt 中包含错误信息的文件。" & vbCrLf & "游戏崩溃一般与启动器无关，请不要因为游戏崩溃而提交反馈。", "反馈提交提醒", "打开文件夹", "不需要") = 1) Then
             OpenExplorer("""" & Path & "PCL\""")
         End If
         OpenWebsite("https://github.com/PCL-Community/PCL2-CE/issues/")
     End Sub
     Public Function CanFeedback(ShowHint As Boolean) As Boolean
-        If False.Equals(PageSetupSystem.IsLauncherNewest) Then
+        If LatestVersion <> VersionBaseName Then
             If ShowHint Then
                 If MyMsgBox($"你的 PCL 不是最新版，因此无法提交反馈。{vbCrLf}请在更新后，确认该问题在最新版中依然存在，然后再提交反馈。", "无法提交反馈", "更新", "取消") = 1 Then
                     UpdateCheckByButton()

@@ -35,13 +35,13 @@
 
     End Sub
 
-    Public Shared Loader As New LoaderTask(Of String, List(Of Feedback))("FeedbackList", AddressOf FeedbackListGet, AddressOf LoaderInput)
+    Public Loader As New LoaderTask(Of Integer, List(Of Feedback))("FeedbackList", AddressOf FeedbackListGet, AddressOf LoaderInput)
 
-    Private Shared Function LoaderInput() As String
-        Return "" ' awa?
+    Private Function LoaderInput() As Integer
+        Return 0 ' awa?
     End Function
 
-    Public Shared Sub FeedbackListGet(Task As LoaderTask(Of String, List(Of Feedback)))
+    Public Sub FeedbackListGet(Task As LoaderTask(Of Integer, List(Of Feedback)))
         Dim list As JArray
         list = NetGetCodeByRequestRetry("https://api.github.com/repos/Hex-Dragon/PCL2/issues?state=all&sort=created&per_page=200", BackupUrl:="https://api.kkgithub.com/repos/Hex-Dragon/PCL2/issues?state=all&sort=created&per_page=200", IsJson:=True, UseBrowserUserAgent:=True) ' 获取近期 200 条数据就够了
         If list Is Nothing Then Throw New Exception("无法获取到内容")

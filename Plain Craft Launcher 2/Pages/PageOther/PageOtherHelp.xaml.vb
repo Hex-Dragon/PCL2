@@ -27,8 +27,6 @@
             '获取全部分类
             Dim Types As New List(Of String)
             For Each Item As HelpEntry In HelpItems
-                If Val(VersionBranchCode) = 50 AndAlso Not Item.ShowInPublic Then Continue For
-                If Val(VersionBranchCode) <> 50 AndAlso Not Item.ShowInSnapshot Then Continue For
                 For Each Type In Item.Types
                     If Not Types.Contains(Type) Then Types.Add(Type)
                 Next
@@ -43,8 +41,6 @@
                 '确认所属该分类的项目
                 Dim TypeItems As New List(Of HelpEntry)
                 For Each Item In HelpItems
-                    If Val(VersionBranchCode) = 50 AndAlso Not Item.ShowInPublic Then Continue For
-                    If Val(VersionBranchCode) <> 50 AndAlso Not Item.ShowInSnapshot Then Continue For
                     If Item.Types.Contains(Type) Then TypeItems.Add(Item)
                 Next
                 '增加卡片

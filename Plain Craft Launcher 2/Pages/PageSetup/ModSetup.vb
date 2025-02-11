@@ -29,7 +29,6 @@
         {"SystemHighestAlphaVersionReg", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
         {"SystemSetupVersionReg", New SetupEntry(VersionSetup, Source:=SetupSource.Registry)},
         {"SystemSetupVersionIni", New SetupEntry(VersionSetup)},
-        {"SystemHelpVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"SystemDebugMode", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"SystemDebugAnim", New SetupEntry(9, Source:=SetupSource.Registry)},
         {"SystemDebugDelay", New SetupEntry(False, Source:=SetupSource.Registry)},

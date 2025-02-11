@@ -1343,6 +1343,7 @@ Public Class PageDownloadInstall
         If LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadQuilt.State, Object).Error.Message
         For Each Version As JObject In DlQuiltListLoader.Output.Value("game")
             If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
+                If SelectedOptiFine IsNot Nothing Then Return "与 OptiFine 不兼容"
                 If SelectedLoaderName IsNot Nothing AndAlso SelectedLoaderName IsNot "Quilt" Then Return $"与 {SelectedLoaderName} 不兼容"
                 Return Nothing
             End If
