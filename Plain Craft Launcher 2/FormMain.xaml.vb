@@ -947,6 +947,10 @@ Public Class FormMain
         ''' 帮助详情。这是一个副页面。
         ''' </summary>
         HelpDetail = 9
+        ''' <summary>
+        ''' 游戏实时日志。这是一个副页面。
+        ''' </summary>
+        GameLog = 10
     End Enum
     ''' <summary>
     ''' 次要页面种类。其数值必须与 StackPanel 中的下标一致。
@@ -1234,6 +1238,10 @@ Public Class FormMain
                 Case PageType.Other '更多
                     If FrmOtherLeft Is Nothing Then FrmOtherLeft = New PageOtherLeft
                     PageChangeAnim(FrmOtherLeft, FrmOtherLeft.PageGet(SubType))
+                Case PageType.GameLog '实时日志
+                    If FrmLogLeft Is Nothing Then FrmLogLeft = New PageLogLeft
+                    If FrmLogLeft Is Nothing Then FrmLogRight = New PageLogRight
+                    PageChangeAnim(FrmOtherLeft, FrmOtherLeft.PageGet(SubType))
                 Case PageType.VersionSelect '版本选择
                     If FrmSelectLeft Is Nothing Then FrmSelectLeft = New PageSelectLeft
                     If FrmSelectRight Is Nothing Then FrmSelectRight = New PageSelectRight
@@ -1448,6 +1456,14 @@ Public Class FormMain
     End Sub
     Public Function BtnExtraShutdown_ShowCheck() As Boolean
         Return HasRunningMinecraft
+    End Function
+
+    '游戏日志
+    Public ShowGameLog As Boolean = False
+    Public Sub BtnExtraLog_Click() Handles BtnExtraLog.Click
+    End Sub
+    Public Function BtnExtraLog_ShowCheck() As Boolean
+        Return ShowGameLog
     End Function
 
     ''' <summary>
