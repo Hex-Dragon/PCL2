@@ -280,7 +280,17 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
         RaiseThemeChanged(IsDarkMode)
-
+        ThemeRefreshColor()
+        ThemeRefreshMain()
+    End Sub
+    Public Function GetDarkThemeLight(OriginalLight As Double) As Double
+        If IsDarkMode Then
+            Return OriginalLight * 0.1
+        Else
+            Return OriginalLight
+        End If
+    End Function
+    Public Sub ThemeRefreshColor()
         ColorGray1 = If(IsDarkMode, ColorGrayDark1, ColorGrayLight1)
         ColorGray2 = If(IsDarkMode, ColorGrayDark2, ColorGrayLight2)
         ColorGray3 = If(IsDarkMode, ColorGrayDark3, ColorGrayLight3)
@@ -309,6 +319,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             Application.Current.Resources("ColorBrushBg0") = New SolidColorBrush(ColorDark2)
             Application.Current.Resources("ColorBrushBg1") = New SolidColorBrush(Color.FromArgb(190, 90, 90, 90))
             Application.Current.Resources("ColorBrushBackgroundTransparentSidebar") = New SolidColorBrush(Color.FromArgb(235, 43, 43, 43))
+            Application.Current.Resources("ColorBrushTransparent") = New SolidColorBrush(Color.FromArgb(0, 43, 43, 43))
             Application.Current.Resources("ColorBrushToolTip") = New SolidColorBrush(Color.FromArgb(229, 90, 90, 90))
             Application.Current.Resources("ColorBrushWhite") = New SolidColorBrush(Color.FromRgb(43, 43, 43))
             Application.Current.Resources("ColorBrushMsgBox") = New SolidColorBrush(Color.FromRgb(43, 43, 43))
@@ -333,21 +344,14 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             Application.Current.Resources("ColorBrushBg0") = New SolidColorBrush(ColorBg0)
             Application.Current.Resources("ColorBrushBg1") = New SolidColorBrush(ColorBg1)
             Application.Current.Resources("ColorBrushBackgroundTransparentSidebar") = New SolidColorBrush(Color.FromArgb(210, 255, 255, 255))
+            Application.Current.Resources("ColorBrushTransparent") = New SolidColorBrush(Color.FromArgb(0, 255, 255, 255))
             Application.Current.Resources("ColorBrushToolTip") = New SolidColorBrush(Color.FromArgb(229, 255, 255, 255))
             Application.Current.Resources("ColorBrushWhite") = New SolidColorBrush(Color.FromRgb(255, 255, 255))
             Application.Current.Resources("ColorBrushMsgBox") = New SolidColorBrush(Color.FromRgb(251, 251, 251))
             Application.Current.Resources("ColorBrushMsgBoxText") = New SolidColorBrush(ColorLight1)
             Application.Current.Resources("ColorBrushMemory") = New SolidColorBrush(Color.FromRgb(0, 0, 0))
         End If
-        ThemeRefreshMain()
     End Sub
-    Public Function GetDarkThemeLight(OriginalLight As Double) As Double
-        If IsDarkMode Then
-            Return OriginalLight * 0.1
-        Else
-            Return OriginalLight
-        End If
-    End Function
     Public Sub ThemeRefreshMain()
         RunInUi(
         Sub()
