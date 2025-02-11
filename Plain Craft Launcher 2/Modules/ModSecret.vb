@@ -414,6 +414,9 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public IsUpdateStarted As Boolean = False
     Public IsUpdateWaitingRestart As Boolean = False
     Public LatestVersion As String = VersionBaseName
+    Public LatestVersionCode As Integer = VersionCode
+    Private RemoteFileName As String = "PCL2_CE.exe"
+    Private PysioServer As String = ""
     Public Sub UpdateCheckByButton()
         Hint("正在获取更新信息...")
         If IsUpdateStarted Then
@@ -432,24 +435,41 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public Sub UpdateLatestVersionInfo()
         Log("[System] 正在获取版本信息")
         Dim LatestReleaseInfoJson As JObject = Nothing
-        LatestReleaseInfoJson = GetJson(NetRequestRetry("https://api.github.com/repos/PCL-Community/PCL2-CE/releases/latest", "GET", "", "application/x-www-form-urlencoded"))
-        LatestVersion = LatestReleaseInfoJson("tag_name").ToString
+        Dim Server As String = Nothing
+        Dim IsBeta As Boolean = Setup.Get("SystemSystemUpdateBranch")
+        Log($"[System] 启动器为 Fast Ring：{IsBeta}")
+        If Setup.Get("SystemSystemServer") = 0 Then 'Pysio 源
+            Log("[System] 使用 Pysio 源获取版本信息")
+            Server = PysioServer + "update.json"
+        Else 'GitHub 源
+            Log("[System] 使用 GitHub 源获取版本信息")
+            Server = "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/update.json"
+        End If
+        LatestReleaseInfoJson = GetJson(NetRequestRetry(Server, "GET", "", "application/x-www-form-urlencoded"))
+        LatestVersion = LatestReleaseInfoJson(If(IsBeta, "latest-fast", "latest-slow")).ToString
+        LatestVersionCode = LatestReleaseInfoJson(If(IsBeta, "latest-fast-code", "latest-slow-code"))
+        RemoteFileName = LatestReleaseInfoJson(If(IsBeta, "fast-file", "slow-file")).ToString
     End Sub
-    Public Sub NoticeUserUpdate()
-        If LatestVersion <> VersionBaseName Then
-            If Not Environment.OSVersion.Version.ToString().Substring(0, 4) = "10.0" AndAlso Not LatestVersion.Substring(0, 4) = "2.9." Then
-                If MyMsgBox($"发现了启动器更新（版本 {LatestVersion}），但是由于你的 Windows 版本过低，不满足新版本要求。{vbCrLf}你需要更新到 Windows 10 20H2 或更高版本才可以继续更新。", "启动器更新 - 系统版本过低", "升级到 Windows 10", "取消", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
+    Public Sub NoticeUserUpdate(Optional Silent As Boolean = False)
+        If LatestVersionCode > VersionCode Then
+            If Not Val(Environment.OSVersion.Version.ToString().Split(".")(2)) >= 19042 AndAlso Not LatestVersion.StartsWithF("2.9.") Then
+                If MyMsgBox($"发现了启动器更新（版本 {LatestVersion}），但是由于你的 Windows 版本过低，不满足新版本要求。{vbCrLf}你需要更新到 Windows 10 20H2 或更高版本才可以继续更新。", "启动器更新 - 系统版本过低", "升级 Windows 10", "取消", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
                 Exit Sub
             End If
             If MyMsgBox($"启动器有新版本可用（｛VersionBaseName｝ -> {LatestVersion}），是否更新？", "启动器更新", "更新", "取消") = 1 Then
                 UpdateStart(LatestVersion, False)
             End If
         Else
-            Hint("启动器已是最新版 " + VersionBaseName + "，无须更新啦！", HintType.Finish)
+            If Not Silent Then Hint("启动器已是最新版 " + VersionBaseName + "，无须更新啦！", HintType.Finish)
         End If
     End Sub
     Public Sub UpdateStart(VersionStr As String, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
-        Dim DlLink As String = "https://github.com/PCL-Community/PCL2-CE/releases/download/" + VersionStr + "/PCL2_CE.exe"
+        Dim DlLink As String = Nothing
+        If Setup.Get("SystemSystemServer") = 0 Then 'Pysio 源
+            DlLink = PysioServer + RemoteFileName
+        Else 'GitHub 源
+            DlLink = "https://github.com/PCL-Community/PCL2-CE/releases/download/" + VersionStr + "/" + RemoteFileName
+        End If
         Dim DlTargetPath As String = Path + "PCL\Plain Craft Launcher 2.exe"
         RunInNewThread(Sub()
                            Try
@@ -571,7 +591,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
                 End If
             Case 1
                 UpdateLatestVersionInfo()
-                NoticeUserUpdate()
+                NoticeUserUpdate(True)
             Case 2, 3
                 Exit Sub
         End Select
