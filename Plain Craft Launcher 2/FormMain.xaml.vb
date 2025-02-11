@@ -139,7 +139,7 @@ Public Class FormMain
         '整理更新日志文本
         Dim ContentList As New List(Of String)
         Dim SortedFeatures = Sort(FeatureList, Function(Left, Right) Left.Key > Right.Key)
-        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("Pigeon0v0 忘记写更新日志啦！可以去提醒他一下……")
+        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("开发团队忘记写更新日志啦！可以去提醒一下……")
         For i = 0 To Math.Min(9, SortedFeatures.Count - 1) '最多取 10 项
             ContentList.Add(SortedFeatures(i).Value)
         Next
@@ -154,7 +154,7 @@ Public Class FormMain
         '输出更新日志
         RunInNewThread(
         Sub()
-            If MyMsgBox(Content, "PCL 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
+            If MyMsgBox(Content, "PCL 已更新至 " & VersionBaseName & If(VersionBranchName = "Fast Ring", "." + VersionCodeString, ""), "确定", "完整更新日志") = 2 Then
                 OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases")
             End If
         End Sub, "UpdateLog Output")
