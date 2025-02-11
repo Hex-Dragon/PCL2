@@ -145,6 +145,10 @@
         ''' </summary>
         Public ReadOnly Description As String
         ''' <summary>
+        ''' 中文描述。
+        ''' </summary>
+        Public ReadOnly ChineseDescription As String
+        ''' <summary>
         ''' 来源网站的工程页面网址。确保格式一定标准。
         ''' CurseForge：https://www.curseforge.com/minecraft/mc-mods/jei
         ''' Modrinth：https://modrinth.com/mod/technical-enchant
@@ -212,16 +216,16 @@
             End Get
         End Property
         ''' <summary>
-        ''' 从MCIM获取中文描述。若没有则返回原描述。
+        ''' 从MCIM获取中文描述。如果没有则返回原简介
         ''' </summary>
-        Public ReadOnly Property TranslatedDescription As String
+        Public ReadOnly Property TranslatedDescription
             Get
                 Dim from = If(FromCurseForge, "curseforge", "modrinth")
                 Dim para = If(FromCurseForge, "modId", "project_id")
                 Try
                     Dim jsonObject = NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}?{para}={Id}", Encode:=Encoding.UTF8, IsJson:=True)
-                    If jsonObject.ContainsKey("translated") Then
-                        Return jsonObject("translated")?.ToString()
+                    If jsonObject.ContainsKey("translated") And jsonObject("translated") IsNot Nothing Then
+                        Return jsonObject("translated").ToString()
                     Else
                         Return Description
                     End If
@@ -271,8 +275,8 @@
                     Id = Data("id")
                     Slug = Data("slug")
                     RawName = Data("name")
-                    ''  Description = Data("summary")
-                    Description = TranslatedDescription
+                    Description = Data("summary")
+                    ChineseDescription = TranslatedDescription
                     Website = Data("links")("websiteUrl").ToString.TrimEnd("/")
                     LastUpdate = Data("dateReleased") '#1194
                     DownloadCount = Data("downloadCount")
@@ -393,8 +397,8 @@
                     Id = If(Data("project_id"), Data("id")) '两个 API 会返回的 key 不一样
                     Slug = Data("slug")
                     RawName = Data("title")
-                    '' Description = Data("description")
-                    Description = TranslatedDescription
+                    Description = Data("description")
+                    ChineseDescription = TranslatedDescription
                     LastUpdate = Data("date_modified")
                     DownloadCount = Data("downloads")
                     LogoUrl = Data("icon_url")
@@ -628,7 +632,11 @@
                 NewItem.SubTitle = Title.Value
             End If
             NewItem.Tags = Tags
-            NewItem.Description = Description.Replace(vbCr, "").Replace(vbLf, "")
+            If PageDownloadMod.IsTranslated Then
+                NewItem.Description = ChineseDescription
+            Else
+                NewItem.Description = Description.Replace(vbCr, "").Replace(vbLf, "")
+            End If
             '下边栏
             If Not ShowMcVersionDesc AndAlso Not ShowLoaderDesc Then
                 '全部隐藏

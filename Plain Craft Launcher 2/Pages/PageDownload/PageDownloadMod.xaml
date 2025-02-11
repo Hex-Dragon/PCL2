@@ -89,9 +89,11 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                         </Grid.ColumnDefinitions>
                         <local:MyButton x:Name="BtnSearchRun" Text="搜索" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Highlight" />
                         <local:MyButton x:Name="BtnSearchReset" Text="重置条件" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" />
+                        <local:MyButton x:Name="BtnTranslate" Text="翻译简介" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="2" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
