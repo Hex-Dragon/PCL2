@@ -1623,34 +1623,88 @@ Retry:
 #Region "CompFavorites | 收藏"
     Class CompFavorites
 
+        ''' <summary>
+        ''' 显示收藏菜单。
+        ''' </summary>
+        ''' <param name="Project"></param>
+        ''' <param name="Pos"></param>
+        Public Shared Sub ShowMenu(Project As CompProject, Pos As UIElement)
+            Dim Body As New ContextMenu()
+            For Each i In FavoritesList
+                Dim Item As New MyMenuItem
+                Dim HasFavs As Boolean = i.Favs.Contains(Project.Id)
+                If HasFavs Then
+                    Item.Header = $"取消收藏 {i.Name}"
+                    Item.Icon = Logo.IconButtonLikeFill
+                Else
+                    Item.Header = $"收藏到 {i.Name}"
+                    Item.Icon = Logo.IconButtonLikeLine
+                End If
+                AddHandler Item.Click, Sub()
+                                           Try
+                                               If HasFavs Then
+                                                   i.Favs.Remove(Project.Id)
+                                                   Hint($"已将 {Project.TranslatedName} 从 {i.Name} 中删除", HintType.Finish)
+                                               Else
+                                                   i.Favs.Add(Project.Id)
+                                                   i.Favs.Distinct()
+                                                   Hint($"已将 {Project.TranslatedName} 添加到 {i.Name} 中", HintType.Finish)
+                                               End If
+                                               Save()
+                                           Catch ex As Exception
+                                               Log(ex, "[CompFavorites] 改变收藏项出错")
+                                           End Try
+                                       End Sub
+                Body.Items.Add(Item)
+            Next
+            Body.Placement = Primitives.PlacementMode.Bottom
+            Body.PlacementTarget = Pos
+            Body.IsOpen = True
+        End Sub
+
         Public Class FavData
+            ''' <summary>
+            ''' 收藏夹名称
+            ''' </summary>
+            ''' <returns></returns>
             Property Name As String
-            Property Id As String ' Guid or "Default"
+            ''' <summary>
+            ''' Guid
+            ''' </summary>
+            ''' <returns></returns>
+            Property Id As String
+            ''' <summary>
+            ''' 收藏的工程 ID 列表
+            ''' </summary>
+            ''' <returns></returns>
             Property Favs As New List(Of String)
         End Class
 
+        Private Shared _FavoritesList As List(Of FavData)
         ''' <summary>
         ''' 收藏的工程列表
         ''' </summary>
-        Private Shared _FavoritesList As List(Of FavData)
         Public Shared Property FavoritesList As List(Of FavData)
             Get
                 If _FavoritesList Is Nothing Then
                     Dim RawData As String = Setup.Get("CompFavorites")
                     Dim RawList As List(Of FavData) = Nothing
-                    If RawData = "" Then
+                    Dim Migrate As List(Of String) = Nothing
+                    Try
+                        Migrate = JArray.Parse(RawData).ToObject(Of List(Of String)) ' 从旧版本迁移
+                    Catch ex As Exception
+                    End Try
+                    If Migrate IsNot Nothing Then
                         RawList = New List(Of FavData)
-                        RawList.Add(New FavData() With {.Name = "默认", .Id = "Default"})
+                        RawList.Add(GetNewFav("默认", Migrate))
                     Else
-                        Dim Migrate = JObject.Parse(RawData)
-                        If Migrate.Type = JTokenType.Array AndAlso Migrate(0).Type = JTokenType.String Then
-                            RawList = New List(Of FavData)
-                            RawList.Add(New FavData() With {.Name = "默认", .Id = "Default", .Favs = Migrate.ToObject(Of List(Of String))})
-                        Else
-                            RawList = JArray.Parse(RawData).ToObject(Of List(Of FavData))
+                        RawList = JArray.Parse(RawData).ToObject(Of List(Of FavData))
+                        If RawList.Count = 0 Then
+                            RawList.Add(GetNewFav("默认", Nothing)) ' 确保无论如何都要至少有一个
                         End If
                     End If
                     _FavoritesList = RawList
+                    Save()
                 End If
                 Return _FavoritesList
             End Get
@@ -1661,9 +1715,28 @@ Retry:
             End Set
         End Property
 
+        ''' <summary>
+        ''' 保存收藏夹数据
+        ''' </summary>
         Public Shared Sub Save()
             FavoritesList = _FavoritesList
         End Sub
+
+        ''' <summary>
+        ''' 获取一个新的收藏夹
+        ''' </summary>
+        ''' <param name="Name"></param>
+        ''' <param name="FavList">没有传 Nothing</param>
+        ''' <returns></returns>
+        Public Shared Function GetNewFav(Name As String, FavList As List(Of String)) As FavData
+            Dim res As New FavData With {.Name = Name, .Id = Guid.NewGuid.ToString()}
+            If FavList Is Nothing Then
+                res.Favs = New List(Of String)
+            Else
+                res.Favs = FavList
+            End If
+            Return res
+        End Function
     End Class
 
     Class CompRequest

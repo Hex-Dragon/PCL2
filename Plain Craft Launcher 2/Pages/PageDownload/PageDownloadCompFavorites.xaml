@@ -17,15 +17,13 @@
                             <local:MySearchBox HintText="搜索收藏夹内容" x:Name="PanSearchBox" Grid.Column="0"/>
                             <local:MyCard Margin="15,0,0,0" Height="40" CanSwap="False" Grid.Column="1">
                                 <StackPanel Orientation="Horizontal">
-                                    <local:MyButton Text="删除当前收藏夹" Margin="8,0,4,0" VerticalAlignment="Center" Padding="5" ColorType="Highlight" />
+                                    <local:MyButton Text=" 管理 " Margin="8,0,4,0" VerticalAlignment="Center" Padding="5" ColorType="Highlight" Click="Manage_Click"/>
                                     <local:MyComboBox Margin="4,0,8,0" VerticalAlignment="Center" Height="27" x:Name="ComboTargetFav">
-                                        <local:MyComboBoxItem Content="默认" Tag="Default" IsSelected="True"/>
-                                        <local:MyComboBoxItem Content="添加……" Tag="Add"/>
                                     </local:MyComboBox>
                                 </StackPanel>
                             </local:MyCard>
                         </Grid>
-                        <local:MyHint Text="部分资源在线信息获取失败，当前收藏夹内容可能不齐全。" IsWarn="True" Margin="0,0,0,15" x:Name="HintGetFail" Visibility="Collapsed"/>
+                        <local:MyHint Text="部分资源在线信息获取失败，点此查看详情" IsWarn="True" Margin="0,0,0,15" x:Name="HintGetFail" Visibility="Collapsed"/>
                         <StackPanel  x:Name="PanContentList">
                             
                         </StackPanel>

@@ -2,39 +2,46 @@
 
 #Region "加载器信息"
     '加载器信息
-    Public Shared Loader As New LoaderTask(Of List(Of String), List(Of CompProject))("CompProject Favorites", AddressOf CompFavoritesGet, AddressOf LoaderInput)
+    Public Loader As New LoaderTask(Of List(Of String), List(Of CompProject))("CompProject Favorites", AddressOf CompFavoritesGet, AddressOf LoaderInput)
 
     Private Sub PageDownloadCompFavorites_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
+        RefreshFavTargets()
+        ComboTargetFav.SelectedIndex = 0 '默认选择第一个
         PageLoaderInit(Load, PanLoad, PanContent, Nothing, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
     End Sub
     Private Sub PageDownloadCompFavorites_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
         Items_SetSelectAll(False)
         RefreshBar()
         If Loader.Input IsNot Nothing AndAlso (Not Loader.Input.Count.Equals(CompFavorites.FavoritesList.Count) OrElse Loader.Input.Except(CompFavorites.FavoritesList).Any()) Then
-            Loader.Start()
+            RefreshFavTargets()
         End If
     End Sub
 
-    Private Shared Function LoaderInput() As List(Of String)
+    Private Function LoaderInput() As List(Of String)
         Dim TargetList As List(Of String)
         Try
-            TargetList = CompFavorites.FavoritesList.First(Function(e) e.Id = FrmDownloadCompFavorites.ComboTargetFav.SelectedItem.Tag).Favs
+            TargetList = CurrentFavTarget.Favs
         Catch ex As Exception
             Log(ex, "[Favorites] 加载收藏夹列表时出错")
         End Try
-        If TargetList Is Nothing Then TargetList = New List(Of String)
         Return TargetList.Clone() '复制而不是直接引用！
     End Function
-    Private Shared Sub CompFavoritesGet(Task As LoaderTask(Of List(Of String), List(Of CompProject)))
+    Private Sub CompFavoritesGet(Task As LoaderTask(Of List(Of String), List(Of CompProject)))
         Task.Output = CompRequest.GetCompProjectsByIds(Task.Input)
     End Sub
 #End Region
 
     Private CompItemList As New List(Of MyListItem)
     Private SelectedItemList As New List(Of MyListItem)
-    Private FavouritesTab As String = "Default"
+    Private ReadOnly Property CurrentFavTarget As CompFavorites.FavData
+        Get
+            Dim SelectedItem As MyComboBoxItem = ComboTargetFav.SelectedItem
+            If SelectedItem Is Nothing Then Return Nothing
+            Return CompFavorites.FavoritesList.Where(Function(e) e.Id = SelectedItem.Tag).First()
+        End Get
+    End Property
 
-#Region "UI 化"
+#Region "UI 化 - 自适应卡片"
     Class CompListItemContainer ' 用来存储自动依据类型生成的卡片及其相关信息
         Public Property Card As MyCard
         Public Property ContentList As StackPanel
@@ -43,6 +50,20 @@
     End Class
 
     Dim ItemList As New List(Of CompListItemContainer)
+
+    ''' <summary>
+    ''' 刷新收藏夹列表
+    ''' </summary>
+    Private Sub RefreshFavTargets()
+        ComboTargetFav.Items.Clear()
+        For Each Target In CompFavorites.FavoritesList
+            Dim Item As New MyComboBoxItem With {
+                .Content = Target.Name,
+                .Tag = Target.Id
+            }
+            ComboTargetFav.Items.Add(Item)
+        Next
+    End Sub
 
     ''' <summary>
     ''' 返回适合当前工程项目的卡片记录
@@ -65,8 +86,6 @@
             .CompType = Type
             }
             Select Case Type
-                Case -2
-                    NewItem.Title = "获取失败 ({0})" ' 获取失败
                 Case -1
                     NewItem.Title = "搜索结果 ({0})" ' 搜索结果
                 Case CompType.Mod
@@ -86,6 +105,36 @@
             Return NewItem
         End If
     End Function
+
+    Private Sub RefreshContent()
+        For Each item In ItemList ' 清除逻辑父子关系
+            item.ContentList.Children.Clear()
+        Next
+        PanContentList.Children.Clear()
+        Dim DataSource As List(Of MyListItem) = If(IsSearching, SearchResult, CompItemList)
+        For Each item As MyListItem In DataSource
+            GetSuitListContainer(If(IsSearching, -1, CType(item.Tag, CompProject).Type)).ContentList.Children.Add(item)
+        Next
+        For Each item In ItemList
+            If item.ContentList.Children.Count = 0 Then Continue For
+            PanContentList.Children.Add(item.Card)
+        Next
+    End Sub
+
+    Private Sub RefreshCardTitle()
+        For Each item In ItemList
+            item.Card.Title = String.Format(item.Title, CompItemList.Where(Function(e) CType(e.Tag, CompProject).Type = item.CompType).Count())
+        Next
+        If Not ItemList.Any(Function(e) e.CompType.Equals(-1)) Then Return
+        Dim SearchItem = ItemList.First(Function(e) e.CompType.Equals(-1))
+        If SearchItem IsNot Nothing Then
+            SearchItem.Card.Title = String.Format(SearchItem.Title, SearchResult.Count)
+        End If
+    End Sub
+
+#End Region
+
+#Region "UI 化 - 加载主逻辑"
 
     '结果 UI 化
     Private Sub Load_OnFinish()
@@ -114,21 +163,21 @@
                 CardNoContent.Visibility = Visibility.Visible
             End If
 
-            If SomeGetFail Then
-                Dim FailList As New List(Of MyListItem)
-                Dim FailIds = Loader.Input.Except(Loader.Output.Select(Function(e) e.Id))
-                For Each Id In FailIds
-                    Dim FailItem As New MyListItem
-                    FailItem.Title = $"{Id}"
-                    FailItem.Info = "此资源获取失败，可能在线资源被删除或者未获取成功"
-                    FailItem.Tag = Id
+            'If SomeGetFail Then
+            '    Dim FailList As New List(Of MyListItem)
+            '    Dim FailIds = Loader.Input.Except(Loader.Output.Select(Function(e) e.Id))
+            '    For Each Id In FailIds
+            '        Dim FailItem As New MyListItem
+            '        FailItem.Title = $"{Id}"
+            '        FailItem.Info = "此资源获取失败，可能在线资源被删除或者未获取成功"
+            '        FailItem.Tag = Id
 
-                    ListItemBuild(FailItem)
+            '        ListItemBuild(FailItem)
 
-                    FailList.Add(FailItem)
-                Next
-                CompItemList.AddRange(FailList)
-            End If
+            '        FailList.Add(FailItem)
+            '    Next
+            '    CompItemList.AddRange(FailList)
+            'End If
 
             RefreshContent()
             RefreshCardTitle()
@@ -166,41 +215,9 @@
         AddHandler CompItem.Changed, AddressOf ItemCheckStatusChanged
     End Sub
 
-    Private Sub RefreshContent()
-        For Each item In ItemList ' 清除逻辑父子关系
-            item.ContentList.Children.Clear()
-        Next
-        PanContentList.Children.Clear()
-        Dim DataSource As List(Of MyListItem) = If(IsSearching, SearchResult, CompItemList)
-        For Each item As MyListItem In DataSource
-            If TypeOf item.Tag Is CompProject Then
-                GetSuitListContainer(If(IsSearching, -1, CType(item.Tag, CompProject).Type)).ContentList.Children.Add(item)
-            Else
-                GetSuitListContainer(-2).ContentList.Children.Add(item)
-            End If
-        Next
-        For Each item In ItemList
-            If item.ContentList.Children.Count = 0 Then Continue For
-            PanContentList.Children.Add(item.Card)
-        Next
-    End Sub
+#End Region
 
-    Private Sub RefreshCardTitle()
-        For Each item In ItemList
-            item.Card.Title = String.Format(item.Title, CompItemList.Where(Function(e)
-                                                                               If TypeOf e.Tag Is CompProject Then
-                                                                                   Return CType(e.Tag, CompProject).Type = item.CompType
-                                                                               Else
-                                                                                   Return True
-                                                                               End If
-                                                                           End Function).Count())
-        Next
-        If Not ItemList.Any(Function(e) e.CompType.Equals(-1)) Then Return
-        Dim SearchItem = ItemList.First(Function(e) e.CompType.Equals(-1))
-        If SearchItem IsNot Nothing Then
-            SearchItem.Card.Title = String.Format(SearchItem.Title, SearchResult.Count)
-        End If
-    End Sub
+#Region "UI 化 - 选择操作"
 
     Private BottomBarShownCount As Integer = 0
 
@@ -255,6 +272,7 @@
 
 #End Region
 
+#Region "事件"
     '选中状态改变
     Private Sub ItemCheckStatusChanged(sender As Object, e As RouteEventArgs)
         Dim SenderItem As MyListItem = sender
@@ -308,20 +326,99 @@
     End Sub
 
     Private Sub Items_CancelFavorites(Item As MyListItem)
-        CompItemList.Remove(Item)
-        If SelectedItemList.Contains(Item) Then SelectedItemList.Remove(Item)
-        If SearchResult.Contains(Item) Then SearchResult.Remove(Item)
-        If TypeOf Item.Tag Is CompProject Then
-            CompFavorites.FavoritesList.Remove(Item.Tag.Id)
-        Else
-            CompFavorites.FavoritesList.Remove(Item.Tag)
-        End If
-        CompFavorites.Save()
+        Try
+            CompItemList.Remove(Item)
+            If SelectedItemList.Contains(Item) Then SelectedItemList.Remove(Item)
+            If SearchResult.Contains(Item) Then SearchResult.Remove(Item)
+            CurrentFavTarget.Favs.Remove(Item.Tag.Id)
+            CompFavorites.Save()
+        Catch ex As Exception
+            Log(ex, "[CompFavourites] 移除收藏时发生错误")
+        End Try
     End Sub
 
     Private Sub Page_KeyDown(sender As Object, e As KeyEventArgs) Handles Me.KeyDown
         If My.Computer.Keyboard.CtrlKeyDown AndAlso e.Key = Key.A Then Items_SetSelectAll(True)
     End Sub
+
+    Private Sub Manage_Click(sender As Object, e As MouseButtonEventArgs)
+        Dim Body As New ContextMenu()
+        Dim NewItem As New MyMenuItem With {
+            .Header = "分享当前收藏夹",
+            .Icon = Logo.IconButtonShare
+        }
+        AddHandler NewItem.Click, Sub()
+                                      Hint("努力开发中")
+                                  End Sub
+        Body.Items.Add(NewItem)
+        NewItem = New MyMenuItem With {
+            .Header = "新建收藏夹",
+            .Icon = Logo.IconButtonCreate
+        }
+        AddHandler NewItem.Click, Sub()
+                                      Dim NewFavName As String = MyMsgBoxInput("新建收藏夹", "请输入新收藏夹名称")
+                                      If String.IsNullOrWhiteSpace(NewFavName) Then Exit Sub
+                                      CompFavorites.FavoritesList.Add(CompFavorites.GetNewFav(NewFavName, Nothing))
+                                      CompFavorites.Save()
+                                      RefreshFavTargets()
+                                      ComboTargetFav.SelectedIndex = ComboTargetFav.Items.Count - 1 '默认选择第一个
+                                  End Sub
+        Body.Items.Add(NewItem)
+        NewItem = New MyMenuItem With {
+            .Header = "删除当前收藏夹",
+            .Icon = Logo.IconButtonDelete
+        }
+        AddHandler NewItem.Click, Sub()
+                                      If CompFavorites.FavoritesList.Count = 1 Then
+                                          Hint("您不能删除最后一个收藏夹")
+                                          Exit Sub
+                                      End If
+                                      Dim content = $"确认删除 {CurrentFavTarget.Name} 收藏夹？" & vbCrLf & vbCrLf
+                                      content &= $"此收藏夹有 {CurrentFavTarget.Favs.Count} 个收藏项目" & vbCrLf
+                                      content &= "收藏夹 ID 为 " & CurrentFavTarget.Id & vbCrLf
+                                      content &= "此操作不可逆！"
+                                      Dim res = MyMsgBox(content, "删除确认", IsWarn:=True, Button1:="否", Button2:="否", Button3:="是")
+                                      If res = 3 Then
+                                          CompFavorites.FavoritesList.Remove(CurrentFavTarget)
+                                          CompFavorites.Save()
+                                          Hint("已删除收藏夹", HintType.Finish)
+                                          RefreshFavTargets()
+                                          ComboTargetFav.SelectedIndex = 0
+                                      End If
+                                  End Sub
+        Body.Items.Add(NewItem)
+        Body.PlacementTarget = sender
+        Body.Placement = Primitives.PlacementMode.Bottom
+        Body.IsOpen = True
+    End Sub
+
+    Private Sub ComboTargetFav_Selected(sender As Object, e As RoutedEventArgs) Handles ComboTargetFav.SelectionChanged
+        If ComboTargetFav.SelectedItem Is Nothing Then Exit Sub
+        Loader.Start(IsForceRestart:=True)
+    End Sub
+
+    Private Sub HintGetFail_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles HintGetFail.MouseLeftButtonUp
+        Dim Content As String = "由于在线资源被删除或者网络问题等因素导致以下资源未获取成功（以资源的 ID 展示）" & vbCrLf & vbCrLf
+        Dim FailIds = Loader.Input.Except(Loader.Output.Select(Function(i) i.Id))
+        For Each Id In FailIds
+            Content &= $" - {Id}" & vbCrLf
+        Next
+        MyMsgBox(Content,
+                 "部分收藏项目获取失败",
+                 Button2:="复制这些 ID",
+                 Button3:="移除这些收藏",
+                 Button2Action:=Sub()
+                                    ClipboardSet(FailIds.Join(vbCrLf))
+                                End Sub,
+                 Button3Action:=Sub()
+                                    For Each Id In FailIds
+                                        CurrentFavTarget.Favs.Remove(Id)
+                                    Next
+                                    Hint("已移除相关收藏", HintType.Finish)
+                                End Sub)
+    End Sub
+
+#End Region
 
 #Region "搜索"
 
