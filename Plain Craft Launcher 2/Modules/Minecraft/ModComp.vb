@@ -1632,6 +1632,7 @@ Retry:
             Dim Body As New ContextMenu()
             For Each i In FavoritesList
                 Dim Item As New MyMenuItem
+                Item.MaxWidth = 240
                 Dim HasFavs As Boolean = i.Favs.Contains(Project.Id)
                 If HasFavs Then
                     Item.Header = $"取消收藏 {i.Name}"

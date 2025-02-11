@@ -18,7 +18,7 @@
                             <local:MyCard Margin="15,0,0,0" Height="40" CanSwap="False" Grid.Column="1">
                                 <StackPanel Orientation="Horizontal">
                                     <local:MyButton Text=" 管理 " Margin="8,0,4,0" VerticalAlignment="Center" Padding="5" ColorType="Highlight" Click="Manage_Click"/>
-                                    <local:MyComboBox Margin="4,0,8,0" VerticalAlignment="Center" Height="27" x:Name="ComboTargetFav">
+                                    <local:MyComboBox Margin="4,0,8,0" VerticalAlignment="Center" Height="27" x:Name="ComboTargetFav" MaxWidth="180" MinWidth="50">
                                     </local:MyComboBox>
                                 </StackPanel>
                             </local:MyCard>
