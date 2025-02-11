@@ -1,6 +1,4 @@
-﻿Imports System.Security.Cryptography
-
-Public Module ModComp
+﻿Public Module ModComp
 
     Public Enum CompType
         ''' <summary>
