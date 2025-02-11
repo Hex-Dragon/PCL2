@@ -415,7 +415,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     Public IsUpdateWaitingRestart As Boolean = False
     Public LatestVersion As String = VersionBaseName
     Public LatestVersionCode As Integer = VersionCode
-    Public Const PysioServer As String = ""
+    Public Const PysioServer As String = "https://minioapi.pysio.online/pcl2-ce/"
     Private RemoteFileName As String = "PCL2_CE.exe"
     Public Sub UpdateCheckByButton()
         Hint("正在获取更新信息...")
