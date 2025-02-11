@@ -224,7 +224,7 @@
                 Dim para = If(FromCurseForge, "modId", "project_id")
                 Try
                     Dim jsonObject = NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}?{para}={Id}", Encode:=Encoding.UTF8, IsJson:=True)
-                    If jsonObject.ContainsKey("translated") And jsonObject("translated") IsNot Nothing Then
+                    If jsonObject.ContainsKey("translated") Then
                         Return jsonObject("translated").ToString()
                     Else
                         Return Description
