@@ -78,6 +78,14 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 358 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了更新通道机制"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了国内本体更新和公告服务器，感谢 @pysio2007"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Authlib 验证可能失败"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "自动安装不提示 Quilt 与 OptiFine 不兼容"))
+            FeatureCount += 4
+            BugCount += 7
+        End If
         If LastVersion < 357 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复第三方登录无效会话问题"))
             BugCount += 1
@@ -139,7 +147,7 @@ Public Class FormMain
         '整理更新日志文本
         Dim ContentList As New List(Of String)
         Dim SortedFeatures = Sort(FeatureList, Function(Left, Right) Left.Key > Right.Key)
-        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("Pigeon0v0 忘记写更新日志啦！可以去提醒他一下……")
+        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("开发团队忘记写更新日志啦！可以去提醒一下……")
         For i = 0 To Math.Min(9, SortedFeatures.Count - 1) '最多取 10 项
             ContentList.Add(SortedFeatures(i).Value)
         Next
@@ -154,7 +162,7 @@ Public Class FormMain
         '输出更新日志
         RunInNewThread(
         Sub()
-            If MyMsgBox(Content, "PCL 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
+            If MyMsgBox(Content, "PCL 已更新至 " & VersionBaseName & If(VersionBranchName = "Fast Ring", "." + VersionCodeString, ""), "确定", "完整更新日志") = 2 Then
                 OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases")
             End If
         End Sub, "UpdateLog Output")

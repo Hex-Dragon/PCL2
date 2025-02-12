@@ -53,7 +53,13 @@
             CheckAdvanceRunWait.Checked = Setup.Get("LaunchAdvanceRunWait")
             CheckAdvanceAssets.Checked = Setup.Get("LaunchAdvanceAssets")
             CheckAdvanceJava.Checked = Setup.Get("LaunchAdvanceJava")
-            CheckAdvanceDisableJlw.Checked = Setup.Get("LaunchAdvanceDisableJlw")
+            If IsArm64System Then
+                CheckAdvanceDisableJlw.Checked = True
+                CheckAdvanceDisableJlw.IsEnabled = False
+                CheckAdvanceDisableJlw.ToolTip = "在启动游戏时不使用 Java Wrapper 进行包装。&#xa;由于系统为 ARM64 架构，Java Wrapper 已被强制禁用。"
+            Else
+                CheckAdvanceDisableJlw.Checked = Setup.Get("LaunchAdvanceDisableJlw")
+            End If
 
         Catch ex As NullReferenceException
             Log(ex, "启动设置项存在异常，已被自动重置", LogLevel.Msgbox)
