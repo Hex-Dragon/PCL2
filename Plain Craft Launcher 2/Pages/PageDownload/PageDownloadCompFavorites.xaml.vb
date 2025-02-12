@@ -6,7 +6,6 @@
 
     Private Sub PageDownloadCompFavorites_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         RefreshFavTargets()
-        ComboTargetFav.SelectedIndex = 0 '默认选择第一个
         PageLoaderInit(Load, PanLoad, PanContent, Nothing, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
     End Sub
     Private Sub PageDownloadCompFavorites_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
@@ -36,7 +35,10 @@
     Private ReadOnly Property CurrentFavTarget As CompFavorites.FavData
         Get
             Dim SelectedItem As MyComboBoxItem = ComboTargetFav.SelectedItem
-            If SelectedItem Is Nothing Then Return Nothing
+            If SelectedItem Is Nothing Then
+                Log("[Favorites] 异常：未选择收藏夹")
+                SelectedItem = ComboTargetFav.Items.GetItemAt(0)
+            End If
             Return CompFavorites.FavoritesList.Where(Function(e) e.Id = SelectedItem.Tag).First()
         End Get
     End Property
@@ -138,6 +140,9 @@
 
     '结果 UI 化
     Private Sub Load_OnFinish()
+        If ComboTargetFav.SelectedIndex = -1 Then
+            ComboTargetFav.SelectedIndex = 0 '默认选择第一个
+        End If
         ItemList.Clear()
         Try
             AllowSearch = False
@@ -346,6 +351,14 @@
         Dim NewItem As New MyMenuItem With {
             .Header = "分享当前收藏夹",
             .Icon = Logo.IconButtonShare
+        }
+        AddHandler NewItem.Click, Sub()
+                                      Hint("努力开发中")
+                                  End Sub
+        Body.Items.Add(NewItem)
+        NewItem = New MyMenuItem With {
+            .Header = "导入收藏",
+            .Icon = Logo.IconButtonAdd
         }
         AddHandler NewItem.Click, Sub()
                                       Hint("努力开发中")
