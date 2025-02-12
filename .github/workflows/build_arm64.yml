@@ -1,4 +1,4 @@
-name: Build
+name: Build on ARM64
 on:
   push:
     paths:
@@ -13,9 +13,9 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: windows-latest
-    strategy:
-       matrix:
+    runs-on: self-hosted
+    strategy:  
+       matrix:  
          configuration: [Beta, Release]
     steps:
 
