@@ -326,41 +326,104 @@
     End Sub
 
     Private Sub Btn_FavoritesDownload_Clicked(sender As Object, e As RouteEventArgs) Handles Btn_FavoritesDownload.Click
-        Dim ModLoaderCheck As New Dictionary(Of CompModLoaderType, Integer)
-        Dim HasMod As Boolean = False
-        For Each Item In SelectedItemList ' 获取共同支持的游戏版本和 ModLoader
-            Dim Proj As CompProject = Item.Tag
-            If Proj.Type = CompType.Mod Then
-                HasMod = True
-                For Each i In Proj.ModLoaders
-                    If ModLoaderCheck.ContainsKey(i) Then
-                        ModLoaderCheck(i) += 1
+        Try
+            If 1 <> MyMsgBox("批量下载容易导致超出预期的网络流量消耗，同时此功能仍旧处于测试状态，通常不建议使用批量下载功能。如果仍需使用，请三思而后行。", "下载前警告", Button1:="继续下载", Button2:="算了", IsWarn:=True) Then Exit Sub
+            If SelectedItemList.Count = 1 Then
+                Hint("要不……你直接进详情页里下载吧……")
+                Exit Sub
+            End If
+            Dim SupportedModLoader As New List(Of CompModLoaderType)
+            Dim LoaderFirstSet As Boolean = True
+            Dim HasMod As Boolean = False
+            For Each Item In SelectedItemList ' 获取共同支持的游戏版本和 ModLoader
+                Dim Proj As CompProject = Item.Tag
+                If Proj.Type = CompType.Mod Then
+                    HasMod = True
+                    If LoaderFirstSet Then
+                        LoaderFirstSet = False
+                        SupportedModLoader = Proj.ModLoaders
                     Else
-                        ModLoaderCheck.Add(i, 1)
+                        SupportedModLoader = SupportedModLoader.Intersect(Proj.ModLoaders).ToList()
                     End If
-                Next
+                End If
+            Next
+            ' 检查是否有共同支持的 ModLoader
+            If HasMod AndAlso SupportedModLoader.Count = 0 Then
+                Hint("所选模组不支持相同的加载器", HintType.Critical)
+                Exit Sub
             End If
-        Next
-        ' 检查是否有共同支持的 ModLoader
-        Dim SupportedModLoader As List(Of CompModLoaderType) = ModLoaderCheck.Where(Function(i) i.Value = SelectedItemList.Where(Function(j) CType(j.Tag, CompProject).Type = CompType.Mod).Count).Select(Function(i) i.Key).ToList()
-        If HasMod AndAlso SupportedModLoader.Count = 0 Then
-            Hint("所选模组不支持相同的加载器", HintType.Critical)
-            Exit Sub
-        End If
-        Dim DesiredModLoader As CompModLoaderType = CompModLoaderType.Any
-        If HasMod AndAlso SupportedModLoader.Count > 0 Then ' 要求选择版本
-            If SupportedModLoader.Count > 0 Then
-                Dim MSelection As New List(Of IMyRadio)
-                For Each i In SupportedModLoader
-                    MSelection.Add(New MyRadioBox() With {.Text = i.ToString()})
-                Next
-                Dim SelectedModLoaderStr = MyMsgBoxSelect(MSelection, "选择期望的加载器", Button2:="取消")
-                If SelectedModLoaderStr Is Nothing Then Exit Sub
-                DesiredModLoader = SupportedModLoader(SelectedModLoaderStr)
+            Dim DesiredModLoader As CompModLoaderType = CompModLoaderType.Any
+            If HasMod AndAlso SupportedModLoader.Count > 0 Then ' 要求选择版本
+                If SupportedModLoader.Count > 0 Then
+                    Dim MSelection As New List(Of IMyRadio)
+                    For Each i In SupportedModLoader
+                        MSelection.Add(New MyRadioBox() With {.Text = i.ToString()})
+                    Next
+                    Dim SelectedModLoaderStr = MyMsgBoxSelect(MSelection, "选择期望的加载器", Button2:="取消")
+                    If SelectedModLoaderStr Is Nothing Then Exit Sub
+                    DesiredModLoader = SupportedModLoader(SelectedModLoaderStr)
+                End If
             End If
-            'TODO: 获取详细文件信息查询支持的版本情况
-        End If
-        Items_SetSelectAll(False)
+            Hint("请稍后，正在查询详细版本支持中，这可能需要一段时间……")
+            ' 输入 Ids，输出合适版本
+            Dim GetInfoAndDownloadLoader As New List(Of LoaderBase)
+            GetInfoAndDownloadLoader.Add(New LoaderTask(Of List(Of String), List(Of NetFile))("查询资源信息",
+                                            Sub(Ts As LoaderTask(Of List(Of String), List(Of NetFile)))
+                                                Dim AllFiles As New List(Of List(Of CompFile))
+                                                Dim SuitVersion As New List(Of String)
+                                                Dim FirstSet As Boolean = True
+                                                Dim GetAllVersionList = Function(Ls As List(Of List(Of String))) As List(Of String)
+                                                                            Dim AllVersionList As New List(Of String)
+                                                                            For Each i In Ls
+                                                                                AllVersionList.AddRange(i)
+                                                                            Next
+                                                                            Return AllVersionList.Distinct().ToList()
+                                                                        End Function
+                                                For Each Item In Ts.Input
+                                                    Dim temp = ModComp.CompFilesGet(Item, CompRequest.IsFromCurseForge(Item)).Where(Function(i) i.Type <> CompType.Mod OrElse i.ModLoaders.Contains(DesiredModLoader)).ToList()
+                                                    If FirstSet Then
+                                                        FirstSet = False
+                                                        SuitVersion = GetAllVersionList(temp.Select(Function(i) i.GameVersions).ToList())
+                                                    Else
+                                                        SuitVersion = SuitVersion.Intersect(GetAllVersionList(temp.Select(Function(i) i.GameVersions).ToList())).ToList()
+                                                    End If
+                                                    AllFiles.Add(temp)
+                                                Next
+                                                Dim SelectedVersion = Nothing
+                                                RunInUiWait(Sub()
+                                                                If SuitVersion.Count = 0 Then
+                                                                    Hint("不存在指定加载器并且同版本的资源", HintType.Critical)
+                                                                    Ts.Abort()
+                                                                End If
+                                                                Dim Selection As New List(Of IMyRadio)
+                                                                For Each i In SuitVersion
+                                                                    Selection.Add(New MyRadioBox() With {.Text = i})
+                                                                Next
+                                                                SelectedVersion = MyMsgBoxSelect(Selection, "选择期望的游戏版本", Button2:="取消")
+                                                                If SelectedVersion Is Nothing Then Ts.Abort()
+                                                            End Sub)
+                                                Dim SelectedVersionStr = SuitVersion(SelectedVersion)
+                                                Hint($"已选择 {SelectedVersionStr} 版本，下面请选择保存位置")
+                                                Dim SaveFolder As String = SelectFolder()
+                                                If String.IsNullOrWhiteSpace(SaveFolder) Then Ts.Abort()
+                                                Dim Res As New List(Of NetFile)
+                                                For Each Target In AllFiles
+                                                    Dim FinalChoices = Target.Where(Function(i) i.GameVersions.Contains(SelectedVersionStr)).ToList()
+                                                    FinalChoices = FinalChoices.Sort(Function(a As CompFile, b As CompFile) a.ReleaseDate > b.ReleaseDate)
+                                                    Res.Add(New NetFile(FinalChoices.First.DownloadUrls, SaveFolder & FinalChoices.First.FileName))
+                                                Next
+                                                Ts.Output = Res
+                                            End Sub) With {.ProgressWeight = 12})
+            GetInfoAndDownloadLoader.Add(New LoaderDownload("批量下载合适资源", New List(Of NetFile)) With {.ProgressWeight = 8})
+            Dim CheckLoader As New LoaderCombo(Of List(Of String))($"批量下载资源({GetUuid()})", GetInfoAndDownloadLoader) With {.OnStateChanged = AddressOf DownloadStateSave}
+            CheckLoader.Start(SelectedItemList.Select(Function(i) CType(i.Tag, CompProject).Id).ToList())
+            LoaderTaskbarAdd(CheckLoader)
+            FrmMain.BtnExtraDownload.ShowRefresh()
+            FrmMain.BtnExtraDownload.Ribble()
+            Items_SetSelectAll(False)
+        Catch ex As Exception
+            Log(ex, "批量下载收藏时发生错误", LogLevel.Hint)
+        End Try
     End Sub
 
     Private Sub Items_SetSelectAll(TargetStatus As Boolean)
