@@ -313,7 +313,6 @@
     End Sub
 
     Private Sub Btn_SelectCancel_Clicked(sender As Object, e As RouteEventArgs) Handles Btn_SelectCancel.Click
-        SelectedItemList.Clear()
         Items_SetSelectAll(False)
     End Sub
 
@@ -324,6 +323,44 @@
         Catch ex As Exception
             Log(ex, "[CompFavourites] 分享收藏时发生错误", LogLevel.Hint)
         End Try
+    End Sub
+
+    Private Sub Btn_FavoritesDownload_Clicked(sender As Object, e As RouteEventArgs) Handles Btn_FavoritesDownload.Click
+        Dim ModLoaderCheck As New Dictionary(Of CompModLoaderType, Integer)
+        Dim HasMod As Boolean = False
+        For Each Item In SelectedItemList ' 获取共同支持的游戏版本和 ModLoader
+            Dim Proj As CompProject = Item.Tag
+            If Proj.Type = CompType.Mod Then
+                HasMod = True
+                For Each i In Proj.ModLoaders
+                    If ModLoaderCheck.ContainsKey(i) Then
+                        ModLoaderCheck(i) += 1
+                    Else
+                        ModLoaderCheck.Add(i, 1)
+                    End If
+                Next
+            End If
+        Next
+        ' 检查是否有共同支持的 ModLoader
+        Dim SupportedModLoader As List(Of CompModLoaderType) = ModLoaderCheck.Where(Function(i) i.Value = SelectedItemList.Where(Function(j) CType(j.Tag, CompProject).Type = CompType.Mod).Count).Select(Function(i) i.Key).ToList()
+        If HasMod AndAlso SupportedModLoader.Count = 0 Then
+            Hint("所选模组不支持相同的加载器", HintType.Critical)
+            Exit Sub
+        End If
+        Dim DesiredModLoader As CompModLoaderType = CompModLoaderType.Any
+        If HasMod AndAlso SupportedModLoader.Count > 0 Then ' 要求选择版本
+            If SupportedModLoader.Count > 0 Then
+                Dim MSelection As New List(Of IMyRadio)
+                For Each i In SupportedModLoader
+                    MSelection.Add(New MyRadioBox() With {.Text = i.ToString()})
+                Next
+                Dim SelectedModLoaderStr = MyMsgBoxSelect(MSelection, "选择期望的加载器", Button2:="取消")
+                If SelectedModLoaderStr Is Nothing Then Exit Sub
+                DesiredModLoader = SupportedModLoader(SelectedModLoaderStr)
+            End If
+            'TODO: 获取详细文件信息查询支持的版本情况
+        End If
+        Items_SetSelectAll(False)
     End Sub
 
     Private Sub Items_SetSelectAll(TargetStatus As Boolean)
