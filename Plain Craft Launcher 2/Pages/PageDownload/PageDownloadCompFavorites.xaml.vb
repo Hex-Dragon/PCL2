@@ -11,7 +11,7 @@
     Private Sub PageDownloadCompFavorites_Loaded(sender As Object, e As EventArgs) Handles Me.Loaded
         Items_SetSelectAll(False)
         RefreshBar()
-        If Loader.Input IsNot Nothing AndAlso (Not Loader.Input.Count.Equals(CompFavorites.FavoritesList.Count) OrElse Loader.Input.Except(CompFavorites.FavoritesList).Any()) Then
+        If Loader.Input IsNot Nothing AndAlso (Not Loader.Input.Count.Equals(CurrentFavTarget.Favs.Count)) Then
             RefreshFavTargets()
         End If
     End Sub
@@ -65,6 +65,9 @@
             }
             ComboTargetFav.Items.Add(Item)
         Next
+        If ComboTargetFav.SelectedIndex = -1 Then
+            ComboTargetFav.SelectedIndex = 0 '默认选择第一个
+        End If
     End Sub
 
     ''' <summary>
@@ -140,9 +143,6 @@
 
     '结果 UI 化
     Private Sub Load_OnFinish()
-        If ComboTargetFav.SelectedIndex = -1 Then
-            ComboTargetFav.SelectedIndex = 0 '默认选择第一个
-        End If
         ItemList.Clear()
         Try
             AllowSearch = False
