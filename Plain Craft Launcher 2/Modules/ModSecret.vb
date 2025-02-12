@@ -445,23 +445,24 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         If Setup.Get("SystemSystemServer") = 0 Then 'Pysio 源
             Log("[System] 使用 Pysio 源获取版本信息")
             If IsArm64System Then
-                Server = PysioServer + "updateARM.json"
+                Server = PysioServer + "updateARM_v2.json"
             Else
-                Server = PysioServer + "update.json"
+                Server = PysioServer + "update_v2.json"
             End If
         Else 'GitHub 源
             Log("[System] 使用 GitHub 源获取版本信息")
             If IsArm64System Then
-                Server = "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/updateARM.json"
+                Server = "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/updateARM_v2.json"
             Else
-                Server = "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/update.json"
+                Server = "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/update_v2.json"
             End If
         End If
         LatestReleaseInfoJson = GetJson(NetRequestRetry(Server, "GET", "", "application/x-www-form-urlencoded"))
-        LatestVersion = LatestReleaseInfoJson(If(IsBeta, "latest-fast", "latest-slow")).ToString
-        LatestVersionCode = LatestReleaseInfoJson(If(IsBeta, "latest-fast-code", "latest-slow-code"))
-        RemoteFileName = LatestReleaseInfoJson(If(IsBeta, "fast-file", "slow-file")).ToString
+        LatestVersion = LatestReleaseInfoJson("latests")(If(IsBeta, "fast", "slow"))("version").ToString()
+        LatestVersionCode = LatestReleaseInfoJson("latests")(If(IsBeta, "fast", "slow"))("code")
+        RemoteFileName = LatestReleaseInfoJson("latests")(If(IsBeta, "fast", "slow"))("file").ToString()
     End Sub
+
     Public Sub NoticeUserUpdate(Optional Silent As Boolean = False)
         If LatestVersionCode > VersionCode Then
             If Not Val(Environment.OSVersion.Version.ToString().Split(".")(2)) >= 19042 AndAlso Not LatestVersion.StartsWithF("2.9.") Then
@@ -598,7 +599,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         Select Case Setup.Get("SystemSystemUpdate")
             Case 0
                 UpdateLatestVersionInfo()
-                If VersionBaseName <> LatestVersion Then
+                If LatestVersionCode > VersionCode Then
                     UpdateStart(LatestVersion, True) '静默更新
                 End If
             Case 1
