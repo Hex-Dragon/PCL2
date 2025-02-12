@@ -360,6 +360,16 @@
                     'Tags & ModLoaders
                     Tags = New List(Of String)
                     ModLoaders = New List(Of CompModLoaderType)
+                    If Data?("loaders") IsNot Nothing Then
+                        For Each Category In Data("loaders").Select(Function(t) t.ToString)
+                            Select Case Category
+                                Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
+                                Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
+                                Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
+                                Case "neoforge" : ModLoaders.Add(CompModLoaderType.NeoForge)
+                            End Select
+                        Next
+                    End If
                     For Each Category In Data("categories").Select(Function(t) t.ToString)
                         Select Case Category
                             '加载器
