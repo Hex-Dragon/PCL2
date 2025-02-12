@@ -444,14 +444,14 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         Log($"[System] 启动器为 Fast Ring：{IsBeta}")
         If Setup.Get("SystemSystemServer") = 0 Then 'Pysio 源
             Log("[System] 使用 Pysio 源获取版本信息")
-            If Runtime.InteropServices.RuntimeInformation.OSArchitecture = Runtime.InteropServices.Architecture.Arm64 Then
+            If IsArm64System Then
                 Server = PysioServer + "updateARM.json"
             Else
                 Server = PysioServer + "update.json"
             End If
         Else 'GitHub 源
             Log("[System] 使用 GitHub 源获取版本信息")
-            If Runtime.InteropServices.RuntimeInformation.OSArchitecture = Runtime.InteropServices.Architecture.Arm64 Then
+            If IsArm64System Then
                 Server = "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/updateARM.json"
             Else
                 Server = "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/update.json"
