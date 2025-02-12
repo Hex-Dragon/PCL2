@@ -1623,6 +1623,24 @@ Retry:
 #Region "CompFavorites | 收藏"
     Class CompFavorites
 
+        Public Shared Function GetShareCode(Data As List(Of String)) As String
+            Try
+                Return New JArray(Data).ToString(Newtonsoft.Json.Formatting.None)
+            Catch ex As Exception
+                Log(ex, "[CompFavorites] 生成分享出错")
+            End Try
+            Return ""
+        End Function
+
+        Public Shared Function GetIdsByShareCode(Code As String) As List(Of String)
+            Try
+                Return JArray.Parse(Code).ToObject(Of List(Of String))()
+            Catch ex As Exception
+                Log(ex, "[CompFavorites] 通过分享获取 ID 出错")
+            End Try
+            Return New List(Of String)
+        End Function
+
         ''' <summary>
         ''' 显示收藏菜单。
         ''' </summary>

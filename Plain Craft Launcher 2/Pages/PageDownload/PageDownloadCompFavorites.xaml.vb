@@ -317,6 +317,15 @@
         Items_SetSelectAll(False)
     End Sub
 
+    Private Sub Btn_FavoritesShare_Clicked(sender As Object, e As RouteEventArgs) Handles Btn_FavoritesShare.Click
+        Try
+            ClipboardSet(CompFavorites.GetShareCode(SelectedItemList.Select(Function(i) CType(i.Tag, CompProject).Id).ToList()))
+            Items_SetSelectAll(False)
+        Catch ex As Exception
+            Log(ex, "[CompFavourites] 分享收藏时发生错误", LogLevel.Hint)
+        End Try
+    End Sub
+
     Private Sub Items_SetSelectAll(TargetStatus As Boolean)
         If IsSearching Then
             For Each Item As MyListItem In SearchResult
@@ -353,7 +362,11 @@
             .Icon = Logo.IconButtonShare
         }
         AddHandler NewItem.Click, Sub()
-                                      Hint("努力开发中")
+                                      Try
+                                          ClipboardSet(CompFavorites.GetShareCode(CompItemList.Select(Function(i) CType(i.Tag, CompProject).Id).ToList()))
+                                      Catch ex As Exception
+                                          Log(ex, "[Favourites] 分享收藏时发生错误", LogLevel.Hint)
+                                      End Try
                                   End Sub
         Body.Items.Add(NewItem)
         NewItem = New MyMenuItem With {
@@ -361,7 +374,34 @@
             .Icon = Logo.IconButtonAdd
         }
         AddHandler NewItem.Click, Sub()
-                                      Hint("努力开发中")
+                                      Try
+                                          Dim ClipData = MyMsgBoxInput("输入分享的收藏", HintText:="例如 [""23333""]")
+                                          If String.IsNullOrWhiteSpace(ClipData) Then Exit Sub
+                                          Dim NewFavs = CompFavorites.GetIdsByShareCode(ClipData)
+                                          If NewFavs.Count = 0 Then
+                                              Hint("分享了个寂寞啊！")
+                                              Exit Sub
+                                          End If
+                                          Dim UserWant = MyMsgBox("你希望将分享的收藏加入到当前收藏夹还是新的收藏夹中？",
+                                                                  Button1:="新的收藏夹",
+                                                                  Button2:="当前收藏夹")
+                                          Select Case UserWant
+                                              Case 1
+                                                  Dim NewFavName = MyMsgBoxInput("新收藏夹名称", "请输入新收藏夹名称")
+                                                  If String.IsNullOrWhiteSpace(NewFavName) Then Exit Sub
+                                                  CompFavorites.FavoritesList.Add(CompFavorites.GetNewFav(NewFavName, NewFavs))
+                                                  CompFavorites.Save()
+                                                  RefreshFavTargets()
+                                                  ComboTargetFav.SelectedIndex = ComboTargetFav.Items.Count - 1
+                                              Case 2
+                                                  CurrentFavTarget.Favs.AddRange(NewFavs)
+                                                  CurrentFavTarget.Favs.Distinct()
+                                                  CompFavorites.Save()
+                                                  Loader.Start(IsForceRestart:=True)
+                                          End Select
+                                      Catch ex As Exception
+                                          Log(ex, "解析分享数据失败", LogLevel.Hint)
+                                      End Try
                                   End Sub
         Body.Items.Add(NewItem)
         NewItem = New MyMenuItem With {
@@ -374,7 +414,7 @@
                                       CompFavorites.FavoritesList.Add(CompFavorites.GetNewFav(NewFavName, Nothing))
                                       CompFavorites.Save()
                                       RefreshFavTargets()
-                                      ComboTargetFav.SelectedIndex = ComboTargetFav.Items.Count - 1 '默认选择第一个
+                                      ComboTargetFav.SelectedIndex = ComboTargetFav.Items.Count - 1
                                   End Sub
         Body.Items.Add(NewItem)
         NewItem = New MyMenuItem With {
@@ -390,8 +430,8 @@
                                       content &= $"此收藏夹有 {CurrentFavTarget.Favs.Count} 个收藏项目" & vbCrLf
                                       content &= "收藏夹 ID 为 " & CurrentFavTarget.Id & vbCrLf
                                       content &= "此操作不可逆！"
-                                      Dim res = MyMsgBox(content, "删除确认", IsWarn:=True, Button1:="否", Button2:="否", Button3:="是")
-                                      If res = 3 Then
+                                      Dim res = MyMsgBox(content, "删除确认", IsWarn:=True, Button1:="否", Button2:="是", Button3:="否")
+                                      If res = 2 Then
                                           CompFavorites.FavoritesList.Remove(CurrentFavTarget)
                                           CompFavorites.Save()
                                           Hint("已删除收藏夹", HintType.Finish)
