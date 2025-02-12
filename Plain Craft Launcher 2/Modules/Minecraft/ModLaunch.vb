@@ -500,6 +500,7 @@ NextInner:
     End Sub
 
 #End Region
+
 #Region "分方式登录模块"
 
     '各个登录方式的主对象与输入构造
@@ -1486,7 +1487,8 @@ NextVersion:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        If Not IsArm64System AndAlso (Not Setup.Get("LaunchAdvanceDisableJlw") AndAlso Not Setup.Get("VersionAdvanceDisableJlw", Version)) Then '检查禁用 Java Wrapper 设置项
+        Dim JWLEnabled = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ANSICodePage = 65001 AndAlso Not (Setup.Get("LaunchAdvanceDisableJlw") Or Setup.Get("VersionAdvanceDisableJlw", Version))
+        If JWLEnabled Then '检查禁用 Java Wrapper 设置项
             DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
             DataList.Add("-jar """ & ExtractJavaWrapper() & """")
         End If
