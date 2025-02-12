@@ -44,10 +44,10 @@ jobs:
         Set-Location PCL2Help
         Remove-Item -Path *.* -Recurse -Force
         Compress-Archive -Path .\* -DestinationPath .\Help.zip
-        Copy-Item -Path .\Help.zip -Destination "$workpath\Plain Craft Launcher 2\Resources\Help.zip" -Force
+        Copy-Item -Path .\Help.zip -Destination "${{ GITHUB.WORKSPACE }}\Plain Craft Launcher 2\Resources\Help.zip" -Force
         Set-Location ..
         Remove-Item PCL2Help -Recurse -Force
-        Set-Location $workpath
+        Set-Location ${{ GITHUB.WORKSPACE }}
 
 
     - name: Replace
