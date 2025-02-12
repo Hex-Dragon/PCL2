@@ -38,13 +38,16 @@ jobs:
     
     - name: Update Help
       run:  |
+        $workpath = [System.Environment]::CurrentDirectory
         Set-Location ..
         git clone https://github.com/LTCatt/PCL2Help.git -b master --single-branch --depth 1
         Set-Location PCL2Help
         Remove-Item -Path *.* -Recurse -Force
         Compress-Archive -Path .\* -DestinationPath .\Help.zip
-        Copy-Item -Path .\Help.zip -Destination "..\PCL2\Plain Craft Launcher 2\Resources\Help.zip" -Force
-        Set-Location ..\PCL2
+        Copy-Item -Path .\Help.zip -Destination "${{ GITHUB.WORKSPACE }}\Plain Craft Launcher 2\Resources\Help.zip" -Force
+        Set-Location ..
+        Remove-Item PCL2Help -Recurse -Force
+        Set-Location ${{ GITHUB.WORKSPACE }}
 
 
     - name: Replace
