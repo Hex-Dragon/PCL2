@@ -36,7 +36,7 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
       with:
-        msbuild-architecture: x64
+        msbuild-architecture: arm64
     
     - name: Update Help
       run:  |
