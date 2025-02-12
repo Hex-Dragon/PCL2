@@ -44,7 +44,7 @@ jobs:
         Set-Location PCL2Help
         Remove-Item -Path *.* -Recurse -Force
         Compress-Archive -Path .\* -DestinationPath .\Help.zip
-        Copy-Item -Path .\Help.zip -Destination "..\PCL2\Plain Craft Launcher 2\Resources\Help.zip" -Force
+        Copy-Item -Path .\Help.zip -Destination $path + "\Plain Craft Launcher 2\Resources\Help.zip" -Force
         Set-Location $path
 
 
