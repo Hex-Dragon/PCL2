@@ -335,7 +335,7 @@
             Dim SupportedModLoader As New List(Of CompModLoaderType)
             Dim LoaderFirstSet As Boolean = True
             Dim HasMod As Boolean = False
-            For Each Item In SelectedItemList ' 获取共同支持的游戏版本和 ModLoader
+            For Each Item In SelectedItemList ' 获取共同支持的 ModLoader
                 Dim Proj As CompProject = Item.Tag
                 If Proj.Type = CompType.Mod Then
                     HasMod = True
@@ -352,8 +352,9 @@
                 Hint("所选模组不支持相同的加载器", HintType.Critical)
                 Exit Sub
             End If
+            ' 要求选择版本
             Dim DesiredModLoader As CompModLoaderType = CompModLoaderType.Any
-            If HasMod AndAlso SupportedModLoader.Count > 0 Then ' 要求选择版本
+            If HasMod AndAlso SupportedModLoader.Count > 0 Then
                 If SupportedModLoader.Count > 0 Then
                     Dim MSelection As New List(Of IMyRadio)
                     For Each i In SupportedModLoader
@@ -372,6 +373,7 @@
                                                 Dim AllFiles As New List(Of List(Of CompFile))
                                                 Dim SuitVersion As New List(Of String)
                                                 Dim FirstSet As Boolean = True
+                                                ' 工程支持的全部版本获取
                                                 Dim GetAllVersionList = Function(Ls As List(Of List(Of String))) As List(Of String)
                                                                             Dim AllVersionList As New List(Of String)
                                                                             For Each i In Ls
@@ -379,6 +381,7 @@
                                                                             Next
                                                                             Return AllVersionList.Distinct().ToList()
                                                                         End Function
+                                                ' 获取多个工程之间支持的版本的交集
                                                 For Each Item In Ts.Input
                                                     Dim temp = ModComp.CompFilesGet(Item, CompRequest.IsFromCurseForge(Item)).Where(Function(i) i.Type <> CompType.Mod OrElse i.ModLoaders.Contains(DesiredModLoader)).ToList()
                                                     If FirstSet Then
@@ -389,6 +392,7 @@
                                                     End If
                                                     AllFiles.Add(temp)
                                                 Next
+                                                ' 要求用户选择希望下载的版本
                                                 Dim SelectedVersion = Nothing
                                                 RunInUiWait(Sub()
                                                                 If SuitVersion.Count = 0 Then
