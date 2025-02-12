@@ -1730,7 +1730,7 @@ Retry:
             Set
                 _FavoritesList = Value
                 Dim RawList = JArray.FromObject(_FavoritesList)
-                Setup.Set("CompFavorites", RawList.ToString())
+                Setup.Set("CompFavorites", RawList.ToString(Newtonsoft.Json.Formatting.None))
             End Set
         End Property
 

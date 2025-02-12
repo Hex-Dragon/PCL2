@@ -363,7 +363,7 @@
         }
         AddHandler NewItem.Click, Sub()
                                       Try
-                                          ClipboardSet(CompFavorites.GetShareCode(CompItemList.Select(Function(i) CType(i.Tag, CompProject).Id).ToList()))
+                                          ClipboardSet(CompFavorites.GetShareCode(CurrentFavTarget.Favs))
                                       Catch ex As Exception
                                           Log(ex, "[Favourites] 分享收藏时发生错误", LogLevel.Hint)
                                       End Try
