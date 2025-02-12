@@ -249,6 +249,7 @@
                             <local:MyComboBoxItem Content="PCL 新功能说明书（作者：WForst-Breeze）" />
                             <local:MyComboBoxItem Content="OpenMCIM 仪表盘（作者：SALTWOOD）" />
                             <local:MyComboBoxItem Content="杂志主页（作者：CreeperIsASpy）" />
+                            <local:MyComboBoxItem Content="随机预设（每次启动随机选择一个预设）" />
                         </local:MyComboBox>
                     </Grid>
                 </StackPanel>
