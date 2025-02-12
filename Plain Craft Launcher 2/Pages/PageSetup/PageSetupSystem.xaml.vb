@@ -7,13 +7,6 @@
         '重复加载部分
         PanBack.ScrollToHome()
 
-#If RELEASE Then
-        PanDonate.Visibility = Visibility.Collapsed
-#Else
-        PanDonate.Visibility = Visibility.Visible
-        ItemSystemUpdateDownload.Content = "在有新版本时自动下载"
-#End If
-
         '非重复加载部分
         If IsLoaded Then Exit Sub
         IsLoaded = True
@@ -164,14 +157,6 @@
     '硬件加速
     Private Sub Check_DisableHardwareAcceleration(sender As Object, user As Boolean) Handles CheckSystemDisableHardwareAcceleration.Change
         Hint("此项变更将在重启 PCL 后生效")
-    End Sub
-
-    '识别码/解锁码替代入口
-    Private Sub BtnSystemIdentify_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemIdentify.Click
-        PageOtherAbout.CopyUniqueAddress()
-    End Sub
-    Private Sub BtnSystemUnlock_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemUnlock.Click
-        DonateCodeInput()
     End Sub
 
     '调试模式

@@ -80,7 +80,7 @@ Public Class FormMain
         '1：BUG-
         If LastVersion < 358 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了更新通道机制"))
-            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了国内本体更新和公告服务器，感谢 @Pysio2007"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了国内本体更新和公告服务器，感谢 @pysio2007"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Authlib 验证可能失败"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "自动安装不提示 Quilt 与 OptiFine 不兼容"))
             FeatureCount += 4
