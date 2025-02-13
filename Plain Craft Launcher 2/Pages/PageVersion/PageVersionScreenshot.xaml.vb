@@ -66,7 +66,7 @@
         If FileList.Count > 0 Then
             SetPageButton()
             PanContent.Visibility = Visibility.Collapsed '龙猫别删这行
-            ScreenshotLoader.Start()
+            ScreenshotLoader.Start(IsForceRestart:=True)
         End If
 
         AniControlEnabled -= 1
