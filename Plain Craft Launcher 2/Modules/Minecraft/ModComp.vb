@@ -218,6 +218,7 @@
         ''' <summary>
         ''' 从MCIM获取中文描述。如果没有则返回原简介
         ''' </summary>
+        ' 会导致一些滞后 TODO: 只有在按下翻译按钮时才获取译文
         Public ReadOnly Property TranslatedDescription
             Get
                 Dim from = If(FromCurseForge, "curseforge", "modrinth")
@@ -632,7 +633,7 @@
                 NewItem.SubTitle = Title.Value
             End If
             NewItem.Tags = Tags
-            If PageDownloadMod.IsTranslated Then
+            If PageDownloadCompDetail.IsTranslated Then
                 NewItem.Description = ChineseDescription
             Else
                 NewItem.Description = Description.Replace(vbCr, "").Replace(vbLf, "")

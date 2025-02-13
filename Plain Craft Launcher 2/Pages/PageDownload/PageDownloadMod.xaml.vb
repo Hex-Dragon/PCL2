@@ -11,9 +11,6 @@
     Public Shared Storage As New CompProjectStorage
     Public Shared Page As Integer = 0
     Private IsLoaderInited As Boolean = False
-
-    '是否翻译
-    Public Shared IsTranslated As Boolean = False
     Private Sub PageDownloadMod_Inited(sender As Object, e As EventArgs) Handles Me.Loaded
         '不知道从 Initialized 改成 Loaded 会不会有问题，但用 Initialized 会导致初始的筛选器修改被覆盖回默认值
         If TargetVersion IsNot Nothing Then
@@ -65,20 +62,6 @@
         End If
         Return Request
     End Function
-    ' 翻译简介
-    Private Sub BtnTranslate_Click(sender As Object, e As RoutedEventArgs) Handles BtnTranslate.Click
-        If IsTranslated Then
-            ' 已翻译
-            IsTranslated = False
-            BtnTranslate.Text = "翻译简介"
-        Else
-            ' 未翻译
-            IsTranslated = True
-            BtnTranslate.Text = "显示原文"
-        End If
-        ' 刷新
-        PageLoaderRestart()
-    End Sub
     '结果 UI 化
     Private Sub Load_OnFinish()
         Try
