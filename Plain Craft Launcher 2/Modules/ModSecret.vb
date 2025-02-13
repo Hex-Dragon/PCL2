@@ -12,8 +12,12 @@ Friend Module ModSecret
 
 #Region "杂项"
 
-    '在社区版的注册表与常规版的注册表隔离，以防数据冲突
-    Public Const RegFolder As String = "PCLCE"
+#If RELEASE Or BETA Then
+    Public Const RegFolder As String = "PCLCE" 'PCL 社区版的注册表与 PCL 的注册表隔离，以防数据冲突
+#Else
+    Public Const RegFolder As String = "PCLCEDebug" '社区开发版的注册表与社区常规版的注册表隔离，以防数据冲突
+#End If
+
     '用于微软登录的 ClientId
     Public Const OAuthClientId As String = ""
     'CurseForge API Key
