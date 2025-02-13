@@ -13,7 +13,8 @@
 
 ### 关于提交 Pull Request
 
-[!IMPORTANT] 除组织成员发版需要外，任何人提交 PR 时必须把 base branch 设成 dev！
+[!IMPORTANT]
+除组织成员发版需要外，任何人提交 PR 时必须把 base branch 设成 dev！
 
 ### 隐藏提示
 
