@@ -81,7 +81,7 @@ Public Module ModBase
     ''' <summary>
     ''' 是否为 ARM64 架构。
     ''' </summary>
-    Public IsArm64System As String = Runtime.InteropServices.RuntimeInformation.OSArchitecture = Runtime.InteropServices.Architecture.Arm64
+    Public IsArm64System As Boolean = Runtime.InteropServices.RuntimeInformation.OSArchitecture = Runtime.InteropServices.Architecture.Arm64
     ''' <summary>
     ''' 是否使用 GBK 编码。
     ''' </summary>
