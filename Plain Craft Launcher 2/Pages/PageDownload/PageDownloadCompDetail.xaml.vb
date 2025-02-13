@@ -464,8 +464,8 @@
         CompClipboard.CurrentText = Project.Website
         ClipboardSet(Project.Website)
     End Sub
-    ' 翻译简介
+    '翻译简介
     Private Sub BtnTranslate_Click(sender As Object, e As RoutedEventArgs) Handles BtnTranslate.Click
-        MyMsgBox($"原文:{Project.Description}，译文:{Project.ChineseDescription}")
+        MyMsgBox($"原文：{Project.Description}，译文：{Project.ChineseDescription}")
     End Sub
 End Class
