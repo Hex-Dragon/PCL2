@@ -394,7 +394,7 @@
                                                                        End Try
                                                                    End Sub)
                                                 Next
-                                                While FinishedTasks <> Ts.Output.Count
+                                                While FinishedTasks <> Ts.Input.Count
                                                     Thread.Sleep(200)
                                                 End While
                                                 ' 求取共同的版本
