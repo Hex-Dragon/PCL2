@@ -175,12 +175,18 @@
                 NewCard.Children.Add(NewStack)
                 NewCard.InstallMethod = Sub(Stack As StackPanel)
                                             Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
-                                            If Project.Type <> CompType.ModPack Then CompFilesCardPreload(Stack, Stack.Tag)
-                                            Dim DisplayBadName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
-                                            '存在重复的名称（#1344）
-                                            For Each item In Stack.Tag
-                                                Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=DisplayBadName))
-                                            Next
+                                            If Project.Type = CompType.ModPack Then
+                                                Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
+                                                For Each item In Stack.Tag
+                                                    Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
+                                                Next
+                                            Else
+                                                CompFilesCardPreload(Stack, Stack.Tag)
+                                                Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
+                                                For Each item In Stack.Tag
+                                                    Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
+                                                Next
+                                            End If
                                         End Sub
                 NewCard.SwapControl = NewStack
                 PanResults.Children.Add(NewCard)
@@ -188,21 +194,7 @@
                 If Pair.Key = TargetCardName OrElse
                 (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
                 CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
-                    MyCard.StackInstall(NewStack, Sub(Stack As StackPanel)
-                                                      Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
-                                                      If Project.Type = CompType.ModPack Then
-                                                          Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
-                                                          For Each item In Stack.Tag
-                                                              Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
-                                                          Next
-                                                      Else
-                                                          CompFilesCardPreload(Stack, Stack.Tag)
-                                                          Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
-                                                          For Each item In Stack.Tag
-                                                              Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
-                                                          Next
-                                                      End If
-                                                  End Sub)
+                    NewCard.StackInstall()
                 Else
                     NewCard.IsSwaped = True
                 End If

@@ -7,13 +7,6 @@
         '重复加载部分
         PanBack.ScrollToHome()
 
-#If RELEASE Then
-        PanDonate.Visibility = Visibility.Collapsed
-#Else
-        PanDonate.Visibility = Visibility.Visible
-        ItemSystemUpdateDownload.Content = "在有新版本时自动下载（更新快照版可能需要更新密钥）"
-#End If
-
         '非重复加载部分
         If IsLoaded Then Exit Sub
         IsLoaded = True
@@ -47,7 +40,17 @@
 
         '系统设置
         ComboSystemUpdate.SelectedIndex = Setup.Get("SystemSystemUpdate")
+        If Val(Environment.OSVersion.Version.ToString().Split(".")(2)) >= 19042 Then
+            ComboSystemUpdateBranch.SelectedIndex = Setup.Get("SystemSystemUpdateBranch")
+        Else '不满足系统要求
+            ComboSystemUpdateBranch.Items.Clear()
+            ComboSystemUpdateBranch.Items.Add("Legacy")
+            ComboSystemUpdateBranch.SelectedIndex = 0
+            ComboSystemUpdateBranch.ToolTip = "由于你的 Windows 版本过低，不满足新版本要求，只能获取 Legacy 分支的更新。&#xa;升级到 Windows 10 20H2 或以上版本以获取最新更新。"
+            ComboSystemUpdateBranch.IsEnabled = False
+        End If
         ComboSystemActivity.SelectedIndex = Setup.Get("SystemSystemActivity")
+        ComboSystemServer.SelectedIndex = Setup.Get("SystemSystemServer")
         TextSystemCache.Text = Setup.Get("SystemSystemCache")
         CheckSystemDisableHardwareAcceleration.Checked = Setup.Get("SystemDisableHardwareAcceleration")
         SliderAniFPS.Value = Setup.Get("UiAniFPS")
@@ -84,6 +87,7 @@
             Setup.Reset("SystemDebugSkipCopy")
             Setup.Reset("SystemSystemCache")
             Setup.Reset("SystemSystemUpdate")
+            Setup.Reset("SystemSystemServer")
             Setup.Reset("SystemSystemActivity")
             Setup.Reset("SystemDisableHardwareAcceleration")
             Setup.Reset("SystemHttpProxy")
@@ -106,7 +110,7 @@
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change, SliderAniFPS.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslate.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslate.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemUpdateBranch.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboSystemServer.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged, TextSystemHttpProxy.TextChanged
@@ -155,14 +159,6 @@
         Hint("此项变更将在重启 PCL 后生效")
     End Sub
 
-    '识别码/解锁码替代入口
-    Private Sub BtnSystemIdentify_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemIdentify.Click
-        PageOtherAbout.CopyUniqueAddress()
-    End Sub
-    Private Sub BtnSystemUnlock_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSystemUnlock.Click
-        DonateCodeInput()
-    End Sub
-
     '调试模式
     Private Sub CheckDebugMode_Change() Handles CheckDebugMode.Change
         If AniControlEnabled = 0 Then Hint("部分调试信息将在刷新或启动器重启后切换显示！",, False)
@@ -187,6 +183,18 @@
                     "一般选择 仅在有重大漏洞更新时显示提示 就可以让你尽量不受打扰了。" & vbCrLf &
                     "除非你在制作服务器整合包，或时常手动更新启动器，否则极度不推荐选择此项！", "警告", "我知道我在做什么", "取消", IsWarn:=True) = 2 Then
             ComboSystemUpdate.SelectedItem = e.RemovedItems(0)
+        End If
+    End Sub
+    Private Sub ComboSystemUpdateBranch_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboSystemUpdateBranch.SelectionChanged
+        If AniControlEnabled <> 0 Then Exit Sub
+        If ComboSystemUpdateBranch.SelectedIndex <> 1 Then Exit Sub
+        If MyMsgBox("你正在切换启动器更新通道到 Fast Ring。" & vbCrLf &
+                    "Fast Ring 可以提供下个版本更新内容的预览，但可能会包含未经充分测试的功能，稳定性欠佳。" & vbCrLf & vbCrLf &
+                    "在升级到 Fast Ring 版本后，如果你选择切换到 Slow Ring，需要等待下一个 Slow Ring 版本发布，在这期间不会提供更新。" & vbCrLf &
+                    "该选项仅推荐具有一定基础知识和能力的用户选择。如果你正在制作整合包，请使用 Slow Ring！", "继续之前...", "我已知晓", "取消", IsWarn:=True) = 2 Then
+            ComboSystemUpdateBranch.SelectedItem = e.RemovedItems(0)
+        Else
+            UpdateCheckByButton()
         End If
     End Sub
     Private Sub BtnSystemUpdate_Click(sender As Object, e As EventArgs) Handles BtnSystemUpdate.Click

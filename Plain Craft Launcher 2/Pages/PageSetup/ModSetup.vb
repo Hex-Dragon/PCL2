@@ -35,6 +35,8 @@
         {"SystemDebugSkipCopy", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"SystemSystemCache", New SetupEntry("", Source:=SetupSource.Registry)},
         {"SystemSystemUpdate", New SetupEntry(0)},
+        {"SystemSystemUpdateBranch", New SetupEntry(0)},
+        {"SystemSystemServer", New SetupEntry(0)},
         {"SystemSystemActivity", New SetupEntry(0)},
         {"SystemHttpProxy", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"SystemDisableHardwareAcceleration", New SetupEntry(False, Source:=SetupSource.Registry)},

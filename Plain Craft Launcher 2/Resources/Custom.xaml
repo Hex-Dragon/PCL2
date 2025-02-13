@@ -98,7 +98,7 @@
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="此外，PCL 会将文件中的 “花括号 path” 替换为 PCL 可执行文件所在文件夹（{path}），可以用于执行特定程序或加载图片。" />
         <local:MyButton Margin="0,4,0,10" Width="200" Height="35"
-                    Text="打开 PCL 日志" EventType="打开文件" EventData="Log1.txt" ToolTip="PCL 的日志文件就在 PCL 文件夹内，且名为 Log1.txt" />
+                    Text="打开 PCL-CE 日志" EventType="打开文件" EventData="Log-CE1.log" ToolTip="PCL 社区版的日志文件就在 PCL 文件夹内，且名为 Log-CE1.log" />
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="就像为游戏指定服务器 IP 一样，你也可以在 EventData 的竖线后为程序添加启动参数。" />
         <local:MyButton Margin="0,4,0,0" Width="200" Height="35"
