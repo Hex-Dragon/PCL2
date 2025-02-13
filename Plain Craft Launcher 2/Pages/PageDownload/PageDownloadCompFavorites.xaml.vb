@@ -331,7 +331,7 @@
                 Hint("要不……你直接进详情页里下载吧……")
                 Exit Sub
             End If
-            If 1 <> MyMsgBox("批量下载容易导致超出预期的网络流量消耗，同时此功能仍旧处于测试状态，通常不建议使用批量下载功能。如果仍需使用，请三思而后行。", "下载前警告", Button1:="继续下载", Button2:="算了", IsWarn:=True) Then Exit Sub
+            If 1 <> MyMsgBox($"批量下载功能仍旧处于测试状态{vbCrLf}使用此功能下载模组不会自动下载前置项。{vbCrLf}请在下载前仔细思考自己的需求，并仔细检查自己的选择，避免下载错误导致时间和网络流量的浪费。", "确定使用此功能？", Button1:="继续", Button2:="算了", IsWarn:=True) Then Exit Sub
             Dim SupportedModLoader As New List(Of CompModLoaderType)
             Dim LoaderFirstSet As Boolean = True
             Dim HasMod As Boolean = False
@@ -372,7 +372,7 @@
                                             Sub(Ts As LoaderTask(Of List(Of String), List(Of NetFile)))
                                                 Dim AllFiles As New List(Of List(Of CompFile))
                                                 Dim SuitVersion As New List(Of String)
-                                                Dim FirstSet As Boolean = True
+                                                Dim VersionFirstSet As Boolean = True
                                                 ' 工程支持的全部版本获取
                                                 Dim GetAllVersionList = Function(Ls As List(Of List(Of String))) As List(Of String)
                                                                             Dim AllVersionList As New List(Of String)
@@ -382,28 +382,30 @@
                                                                             Return AllVersionList.Distinct().ToList()
                                                                         End Function
                                                 ' 获取多个工程之间支持的版本的交集
-                                                Dim FinishedTask As Integer = 0
+                                                Dim FinishedTasks = 0
                                                 For Each Item In Ts.Input
                                                     RunInNewThread(Sub()
                                                                        Try
-                                                                           Dim temp = ModComp.CompFilesGet(Item, CompRequest.IsFromCurseForge(Item)).Where(Function(i) i.Type <> CompType.Mod OrElse i.ModLoaders.Contains(DesiredModLoader)).ToList()
-                                                                           If FirstSet Then
-                                                                               FirstSet = False
-                                                                               SuitVersion = GetAllVersionList(temp.Select(Function(i) i.GameVersions).ToList())
-                                                                           Else
-                                                                               SuitVersion = SuitVersion.Intersect(GetAllVersionList(temp.Select(Function(i) i.GameVersions).ToList())).ToList()
-                                                                           End If
-                                                                           AllFiles.Add(temp)
+                                                                           AllFiles.Add(ModComp.CompFilesGet(Item, CompRequest.IsFromCurseForge(Item)).Where(Function(i) i.Type <> CompType.Mod OrElse i.ModLoaders.Contains(DesiredModLoader)).ToList())
                                                                        Catch ex As Exception
-                                                                           Log(ex, $"[CompFavourites] 获取 {Item} 的详细资源数据失败")
+                                                                           Log(ex, $"[CompFavourites] 获取 {Item} 的下载信息失败")
                                                                        Finally
-                                                                           FinishedTask += 1
+                                                                           FinishedTasks += 1
                                                                        End Try
                                                                    End Sub)
                                                 Next
-                                                While FinishedTask <> Ts.Input.Count ' 等待任务并行完成
+                                                While FinishedTasks <> Ts.Output.Count
                                                     Thread.Sleep(200)
                                                 End While
+                                                ' 求取共同的版本
+                                                For Each Item In AllFiles
+                                                    If VersionFirstSet Then
+                                                        VersionFirstSet = False
+                                                        SuitVersion = GetAllVersionList(Item.Select(Function(i) i.GameVersions).ToList())
+                                                    Else
+                                                        SuitVersion = SuitVersion.Intersect(GetAllVersionList(Item.Select(Function(i) i.GameVersions).ToList())).ToList()
+                                                    End If
+                                                Next
                                                 ' 要求用户选择希望下载的版本
                                                 Dim SelectedVersion = Nothing
                                                 RunInUiWait(Sub()
@@ -424,8 +426,11 @@
                                                 If String.IsNullOrWhiteSpace(SaveFolder) Then Ts.Abort()
                                                 Dim Res As New List(Of NetFile)
                                                 For Each Target In AllFiles
+                                                    ' 获取有期望版本号的文件
                                                     Dim FinalChoices = Target.Where(Function(i) i.GameVersions.Contains(SelectedVersionStr)).ToList()
+                                                    ' 按照发布日期排序
                                                     FinalChoices = FinalChoices.Sort(Function(a As CompFile, b As CompFile) a.ReleaseDate > b.ReleaseDate)
+                                                    ' 选择最新版本进行下载
                                                     Res.Add(New NetFile(FinalChoices.First.DownloadUrls, SaveFolder & FinalChoices.First.FileName))
                                                 Next
                                                 Ts.Output = Res
