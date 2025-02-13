@@ -323,9 +323,9 @@
     '测试游戏
     Private Sub BtnManageTest_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageTest.Click
         Try
-            If McLaunchStart(New McLaunchOptions With
-                 {.Version = PageVersionLeft.Version, .Test = True}) Then
-            End If
+            McLaunchStart(New McLaunchOptions With
+                 {.Version = PageVersionLeft.Version, .Test = True})
+            FrmMain.PageChange(FormMain.PageType.Launch)
         Catch ex As Exception
             Log(ex, "测试游戏失败", LogLevel.Feedback)
         End Try

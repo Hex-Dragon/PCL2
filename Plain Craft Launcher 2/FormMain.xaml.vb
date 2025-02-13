@@ -223,6 +223,7 @@ Public Class FormMain
         BtnExtraBack.ShowCheck = AddressOf BtnExtraBack_ShowCheck
         BtnExtraApril.ShowCheck = AddressOf BtnExtraApril_ShowCheck
         BtnExtraShutdown.ShowCheck = AddressOf BtnExtraShutdown_ShowCheck
+        BtnExtraLog.ShowCheck = AddressOf BtnExtraLog_ShowCheck
         BtnExtraApril.ShowRefresh()
         '初始化尺寸改变
         Dim Resizer As New MyResizer(Me)
@@ -1004,6 +1005,8 @@ Public Class FormMain
                 Return "版本选择"
             Case PageType.DownloadManager
                 Return "下载管理"
+            Case PageType.GameLog
+                Return "实时日志"
             Case PageType.VersionSetup
                 Return "版本设置 - " & If(PageVersionLeft.Version Is Nothing, "未知版本", PageVersionLeft.Version.Name)
             Case PageType.CompDetail
@@ -1241,7 +1244,7 @@ Public Class FormMain
                 Case PageType.GameLog '实时日志
                     If FrmLogLeft Is Nothing Then FrmLogLeft = New PageLogLeft
                     If FrmLogLeft Is Nothing Then FrmLogRight = New PageLogRight
-                    PageChangeAnim(FrmOtherLeft, FrmOtherLeft.PageGet(SubType))
+                    PageChangeAnim(FrmLogLeft, FrmLogRight)
                 Case PageType.VersionSelect '版本选择
                     If FrmSelectLeft Is Nothing Then FrmSelectLeft = New PageSelectLeft
                     If FrmSelectRight Is Nothing Then FrmSelectRight = New PageSelectRight
@@ -1459,11 +1462,12 @@ Public Class FormMain
     End Function
 
     '游戏日志
-    Public ShowGameLog As Boolean = False
     Public Sub BtnExtraLog_Click() Handles BtnExtraLog.Click
+        PageChange(PageType.GameLog)
     End Sub
     Public Function BtnExtraLog_ShowCheck() As Boolean
-        Return ShowGameLog
+        If FrmLogLeft Is Nothing OrElse FrmLogRight Is Nothing Then Return False
+        Return FrmLogLeft.ShownLogs.Count > 0
     End Function
 
     ''' <summary>

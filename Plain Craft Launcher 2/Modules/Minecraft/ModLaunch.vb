@@ -2182,8 +2182,9 @@ IgnoreCustomSkin:
 
         '显示实时日志
         If CurrentLaunchOptions.Test Then
-            If FrmLogLeft Is Nothing Then FrmLogLeft = New PageLogLeft
-            FrmLogLeft.AddProcess(McLaunchProcess)
+            If FrmLogLeft Is Nothing Then RunInUiWait(Sub() FrmLogLeft = New PageLogLeft)
+            If FrmLogRight Is Nothing Then RunInUiWait(Sub() FrmLogRight = New PageLogRight)
+            FrmLogLeft.AddProcess(McVersionCurrent, McLaunchProcess)
             McLaunchLog("已显示游戏实时日志")
         End If
 
