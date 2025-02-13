@@ -62,6 +62,7 @@
         End If
         Return Request
     End Function
+
     '结果 UI 化
     Private Sub Load_OnFinish()
         Try

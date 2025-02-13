@@ -213,6 +213,9 @@ Public Module ModComp
                 Return If(DatabaseEntry Is Nothing OrElse DatabaseEntry.ChineseName = "", RawName, DatabaseEntry.ChineseName)
             End Get
         End Property
+        ''' <summary>
+        ''' 中文描述。若为 Nothing 则没有。
+        ''' </summary>
         Public ReadOnly Property ChineseDescription As Task(Of String)
             Get
                 Return GetChineseDescriptionAsync()
@@ -229,11 +232,11 @@ Public Module ModComp
                 If jsonObject.ContainsKey("translated") Then
                     result = jsonObject("translated").ToString()
                 Else
-                    Hint($"{TranslatedName}的简介暂无译文！", HintType.Critical)
+                    Hint($"{TranslatedName} 的简介暂无译文！", HintType.Critical)
                 End If
             Catch ex As Exception
-                Log(ex, "获取中文描述时出现错误")
-                Hint($"获取译文时出现错误,信息:{ex.Message}", HintType.Critical)
+                Log(ex, "获取中文描述时出现错误！")
+                Hint($"获取译文时出现错误，信息：{ex.Message}", HintType.Critical)
             End Try
 
             Return result
