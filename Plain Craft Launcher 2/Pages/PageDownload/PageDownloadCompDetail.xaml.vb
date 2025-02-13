@@ -466,6 +466,9 @@
     End Sub
     '翻译简介
     Private Sub BtnTranslate_Click(sender As Object, e As RoutedEventArgs) Handles BtnTranslate.Click
-        MyMsgBox($"原文：{Project.Description}，译文：{Project.ChineseDescription}")
+        Hint($"正在获取{Project.TranslatedName}的简介译文……")
+        Dim ChineseDescription = Project.ChineseDescription
+        If ChineseDescription Is Nothing Then Return
+        MyMsgBox($"原文：{Project.Description}{Environment.NewLine}译文：{ChineseDescription}")
     End Sub
 End Class

@@ -220,21 +220,22 @@
                 Dim para = If(FromCurseForge, "modId", "project_id")
                 Dim result
                 Dim translateThread As Thread
-                translateThread = RunInNewThread(Sub()
-                                                     Try
-                                                         Hint($"正在获取{TranslatedName}的简介译文……")
-                                                         Dim jsonObject = NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}?{para}={Id}", Encode:=Encoding.UTF8, IsJson:=True)
-                                                         If jsonObject.ContainsKey("translated") Then
-                                                             result = jsonObject("translated").ToString()
-                                                         Else
-                                                             result = "该项目简介暂无翻译"
-                                                         End If
-                                                     Catch ex As Exception
-                                                         Log(ex, "获取中文描述时出现错误")
-                                                         result = "出现错误," + ex.Message
-                                                     End Try
-                                                 End Sub)
-                '等待线程结束
+                translateThread = RunInNewThread(
+                    Sub()
+                        Try
+                            Dim jsonObject = NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}?{para}={Id}", Encode:=Encoding.UTF8, IsJson:=True)
+                            If jsonObject.ContainsKey("translated") Then
+                                result = jsonObject("translated").ToString()
+                            Else
+                                Hint($"{TranslatedName}的简介暂无译文！", HintType.Critical)
+                                result = Nothing
+                            End If
+                        Catch ex As Exception
+                            Log(ex, "获取中文描述时出现错误")
+                            Hint($"获取译文时出现错误,信息:{ex.Message}", HintType.Critical)
+                            result = Nothing
+                        End Try
+                    End Sub, "Translator")
                 If translateThread IsNot Nothing Then
                     translateThread.Join()
                     translateThread.Interrupt()
