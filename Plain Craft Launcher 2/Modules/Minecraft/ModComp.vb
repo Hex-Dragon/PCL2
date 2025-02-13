@@ -145,10 +145,6 @@
         ''' </summary>
         Public ReadOnly Description As String
         ''' <summary>
-        ''' 中文描述。
-        ''' </summary>
-        Public ReadOnly ChineseDescription As String
-        ''' <summary>
         ''' 来源网站的工程页面网址。确保格式一定标准。
         ''' CurseForge：https://www.curseforge.com/minecraft/mc-mods/jei
         ''' Modrinth：https://modrinth.com/mod/technical-enchant
@@ -216,24 +212,34 @@
             End Get
         End Property
         ''' <summary>
-        ''' 从MCIM获取中文描述。如果没有则返回原简介
+        ''' 从MCIM获取中文描述。
         ''' </summary>
-        ' 会导致一些滞后 TODO: 只有在按下翻译按钮时才获取译文
-        Public ReadOnly Property TranslatedDescription
+        Public ReadOnly Property ChineseDescription
             Get
                 Dim from = If(FromCurseForge, "curseforge", "modrinth")
                 Dim para = If(FromCurseForge, "modId", "project_id")
-                Try
-                    Dim jsonObject = NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}?{para}={Id}", Encode:=Encoding.UTF8, IsJson:=True)
-                    If jsonObject.ContainsKey("translated") Then
-                        Return jsonObject("translated").ToString()
-                    Else
-                        Return Description
-                    End If
-                Catch ex As Exception
-                    Log(ex, "获取中文描述时出现错误")
-                    Return Description
-                End Try
+                Dim result
+                Dim translateThread As Thread
+                translateThread = RunInNewThread(Sub()
+                                                     Try
+                                                         Hint($"正在获取{TranslatedName}的简介译文...")
+                                                         Dim jsonObject = NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}?{para}={Id}", Encode:=Encoding.UTF8, IsJson:=True)
+                                                         If jsonObject.ContainsKey("translated") Then
+                                                             result = jsonObject("translated").ToString()
+                                                         Else
+                                                             result = "该项目简介暂无翻译"
+                                                         End If
+                                                     Catch ex As Exception
+                                                         Log(ex, "获取中文描述时出现错误")
+                                                         result = "出现错误," + ex.Message
+                                                     End Try
+                                                 End Sub)
+                '等待线程结束
+                If translateThread IsNot Nothing Then
+                    translateThread.Join()
+                    translateThread.Interrupt()
+                End If
+                Return result
             End Get
         End Property
 
@@ -277,7 +283,6 @@
                     Slug = Data("slug")
                     RawName = Data("name")
                     Description = Data("summary")
-                    ChineseDescription = TranslatedDescription
                     Website = Data("links")("websiteUrl").ToString.TrimEnd("/")
                     LastUpdate = Data("dateReleased") '#1194
                     DownloadCount = Data("downloadCount")
@@ -399,7 +404,6 @@
                     Slug = Data("slug")
                     RawName = Data("title")
                     Description = Data("description")
-                    ChineseDescription = TranslatedDescription
                     LastUpdate = Data("date_modified")
                     DownloadCount = Data("downloads")
                     LogoUrl = Data("icon_url")
@@ -633,11 +637,7 @@
                 NewItem.SubTitle = Title.Value
             End If
             NewItem.Tags = Tags
-            If PageDownloadCompDetail.IsTranslated Then
-                NewItem.Description = ChineseDescription
-            Else
-                NewItem.Description = Description.Replace(vbCr, "").Replace(vbLf, "")
-            End If
+            NewItem.Description = Description.Replace(vbCr, "").Replace(vbLf, "")
             '下边栏
             If Not ShowMcVersionDesc AndAlso Not ShowLoaderDesc Then
                 '全部隐藏

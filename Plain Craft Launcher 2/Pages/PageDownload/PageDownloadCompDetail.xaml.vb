@@ -232,9 +232,7 @@
     End Function
 
 #End Region
-
     Private IsFirstInit As Boolean = True
-    Public Shared IsTranslated As Boolean = False
     Public Sub Init() Handles Me.PageEnter
         AniControlEnabled += 1
         Project = FrmMain.PageCurrent.Additional(0)
@@ -247,7 +245,6 @@
         Else
             PageLoaderRestart(IsForceRestart:=True)
         End If
-
         '放置当前工程
         If CompItem IsNot Nothing Then PanIntro.Children.Remove(CompItem)
         CompItem = Project.ToCompItem(True, True)
@@ -477,16 +474,6 @@
     End Sub
     ' 翻译简介
     Private Sub BtnTranslate_Click(sender As Object, e As RoutedEventArgs) Handles BtnTranslate.Click
-        If IsTranslated Then
-            ' 已翻译
-            IsTranslated = False
-            BtnTranslate.Text = "翻译简介"
-        Else
-            ' 未翻译
-            IsTranslated = True
-            BtnTranslate.Text = "显示原文"
-        End If
-        ' 刷新
-        PageLoaderRestart()
+        MyMsgBox($"原文:{Project.Description}，译文:{Project.ChineseDescription}")
     End Sub
 End Class
