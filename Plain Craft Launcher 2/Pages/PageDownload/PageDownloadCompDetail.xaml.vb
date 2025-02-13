@@ -224,7 +224,6 @@
     End Function
 
 #End Region
-
     Private IsFirstInit As Boolean = True
     Public Sub Init() Handles Me.PageEnter
         AniControlEnabled += 1
@@ -238,7 +237,6 @@
         Else
             PageLoaderRestart(IsForceRestart:=True)
         End If
-
         '放置当前工程
         If CompItem IsNot Nothing Then PanIntro.Children.Remove(CompItem)
         CompItem = Project.ToCompItem(True, True)
@@ -466,5 +464,11 @@
         CompClipboard.CurrentText = Project.Website
         ClipboardSet(Project.Website)
     End Sub
-
+    '翻译简介
+    Private Async Sub BtnTranslate_Click(sender As Object, e As RoutedEventArgs) Handles BtnTranslate.Click
+        Hint($"正在获取 {Project.TranslatedName} 的简介译文……")
+        Dim ChineseDescription = Await Project.ChineseDescription
+        If ChineseDescription Is Nothing Then Return
+        MyMsgBox($"原文：{Project.Description}{Environment.NewLine}译文：{ChineseDescription}")
+    End Sub
 End Class
