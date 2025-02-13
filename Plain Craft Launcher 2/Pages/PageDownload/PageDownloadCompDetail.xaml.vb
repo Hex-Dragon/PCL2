@@ -164,13 +164,27 @@
                 End If
             Next
         End If
+        '加载器图标
+        Dim LoaderIcons As New Dictionary(Of String, ImageSource) From {
+            {"Forge", New BitmapImage(New Uri("pack://application:,,,/images/Blocks/Forge.png", UriKind.Absolute))},
+            {"Fabric", New BitmapImage(New Uri("pack://application:,,,/images/Blocks/Fabric.png", UriKind.Absolute))},
+            {"Quilt", New BitmapImage(New Uri("pack://application:,,,/images/Blocks/Quilt.png", UriKind.Absolute))},
+            {"NeoForge", New BitmapImage(New Uri("pack://application:,,,/images/Blocks/NeoForge.png", UriKind.Absolute))}
+        }
         '转化为 UI
         Try
             PanResults.Children.Clear()
             For Each Pair As KeyValuePair(Of String, List(Of CompFile)) In Dict
                 If Not Pair.Value.Any() Then Continue For
+                Dim LoaderName As String = Pair.Key.Split(" "c)(0).Trim()
+                Dim NewCardIcon As ImageSource = Nothing
+                If LoaderIcons.ContainsKey(LoaderName) Then
+                    NewCardIcon = LoaderIcons(LoaderName)
+                Else
+                    NewCardIcon = New BitmapImage(New Uri("pack://application:,,,/images/Blocks/Egg.png", UriKind.Absolute))'暂时用蛋代替
+                End If
                 '增加卡片
-                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(Project.Type = CompType.ModPack, 9, 8)} 'FUTURE: Res
+                Dim NewCard As New MyCard With {.Title = Pair.Key, .Margin = New Thickness(0, 0, 0, 15), .SwapType = If(Project.Type = CompType.ModPack, 9, 8), .Icon = NewCardIcon} 'FUTURE: Res
                 Dim NewStack As New StackPanel With {.Margin = New Thickness(20, MyCard.SwapedHeight, 18, 0), .VerticalAlignment = VerticalAlignment.Top, .RenderTransform = New TranslateTransform(0, 0), .Tag = Pair.Value}
                 NewCard.Children.Add(NewStack)
                 NewCard.SwapControl = NewStack

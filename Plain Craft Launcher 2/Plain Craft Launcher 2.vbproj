@@ -914,7 +914,8 @@
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
   <ItemGroup>
-
+    <Resource Include="Images\Blocks\Forge.png" />
+    <Resource Include="Images\Blocks\Quilt.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\NeoForge.png" />
