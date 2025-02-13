@@ -222,7 +222,7 @@
                 Dim translateThread As Thread
                 translateThread = RunInNewThread(Sub()
                                                      Try
-                                                         Hint($"正在获取{TranslatedName}的简介译文...")
+                                                         Hint($"正在获取{TranslatedName}的简介译文……")
                                                          Dim jsonObject = NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}?{para}={Id}", Encode:=Encoding.UTF8, IsJson:=True)
                                                          If jsonObject.ContainsKey("translated") Then
                                                              result = jsonObject("translated").ToString()
