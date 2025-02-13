@@ -807,6 +807,41 @@ Public Class FormMain
             End If
             '安装 Mod
             If PageVersionMod.InstallMods(FilePathList) Then Exit Sub
+            '处理资源安装
+            If PageCurrent = PageType.VersionSetup AndAlso {"zip"}.Any(Function(i) i = Extension) Then
+                Select Case PageCurrentSub
+                    Case PageSubType.VersionWorld
+                        Dim DestFolder = PageVersionLeft.Version.PathIndie + "saves\" + GetFileNameWithoutExtentionFromPath(FilePath)
+                        If Directory.Exists(DestFolder) Then
+                            Hint("发现同名文件夹，无法粘贴：" + DestFolder, HintType.Critical)
+                            Exit Sub
+                        End If
+                        ExtractFile(FilePath, DestFolder)
+                        Hint($"已导入 {GetFileNameWithoutExtentionFromPath(FilePath)}", HintType.Finish)
+                        If FrmVersionWorld IsNot Nothing Then RunInUi(Sub() FrmVersionWorld.Reload())
+                        Exit Sub
+                    Case PageSubType.VersionResourcePack
+                        Dim DestFile = PageVersionLeft.Version.PathIndie + "resourcepacks\" + GetFileNameFromPath(FilePath)
+                        If File.Exists(DestFile) Then
+                            Hint("已存在同名文件：" + DestFile, HintType.Critical)
+                            Exit Sub
+                        End If
+                        CopyFile(FilePath, DestFile)
+                        Hint($"已导入 {GetFileNameFromPath(FilePath)}", HintType.Finish)
+                        If FrmVersionResourcePack IsNot Nothing Then RunInUi(Sub() FrmVersionResourcePack.Reload())
+                        Exit Sub
+                    Case PageSubType.VersionShader
+                        Dim DestFile = PageVersionLeft.Version.PathIndie + "shaderpacks\" + GetFileNameFromPath(FilePath)
+                        If File.Exists(DestFile) Then
+                            Hint("已存在同名文件：" + DestFile, HintType.Critical)
+                            Exit Sub
+                        End If
+                        CopyFile(FilePath, DestFile)
+                        Hint($"已导入 {GetFileNameFromPath(FilePath)}", HintType.Finish)
+                        If FrmVersionShader IsNot Nothing Then RunInUi(Sub() FrmVersionShader.Reload())
+                        Exit Sub
+                End Select
+            End If
             '安装整合包
             If {"zip", "rar", "mrpack"}.Any(Function(t) t = Extension) Then '部分压缩包是 zip 格式但后缀为 rar，总之试一试
                 Log("[System] 文件为压缩包，尝试作为整合包安装")
@@ -985,8 +1020,12 @@ Public Class FormMain
         OtherTest = 2
         VersionOverall = 0
         VersionSetup = 1
-        VersionMod = 2
-        VersionModDisabled = 3
+        VersionWorld = 3
+        VersionScreenshot = 4
+        VersionMod = 5
+        VersionModDisabled = 6
+        VersionResourcePack = 7
+        VersionShader = 8
     End Enum
     ''' <summary>
     ''' 获取次级页面的名称。若并非次级页面则返回空字符串，故可以以此判断是否为次级页面。
