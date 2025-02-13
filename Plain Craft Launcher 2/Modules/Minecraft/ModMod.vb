@@ -1137,7 +1137,7 @@ Finished:
         '刷新边栏
         RunInUi(Sub() FrmVersionMod?.RefreshBars())
     End Sub
-    Private Function GetTargetModLoaders() As List(Of CompModLoaderType)
+    Public Function GetTargetModLoaders() As List(Of CompModLoaderType)
         Dim ModLoaders As New List(Of CompModLoaderType)
         If PageVersionLeft.Version.Version.HasForge Then ModLoaders.Add(CompModLoaderType.Forge)
         If PageVersionLeft.Version.Version.HasNeoForge Then ModLoaders.Add(CompModLoaderType.NeoForge)
