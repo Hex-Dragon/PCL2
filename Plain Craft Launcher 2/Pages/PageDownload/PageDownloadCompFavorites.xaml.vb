@@ -327,11 +327,11 @@
 
     Private Sub Btn_FavoritesDownload_Clicked(sender As Object, e As RouteEventArgs) Handles Btn_FavoritesDownload.Click
         Try
-            If 1 <> MyMsgBox("批量下载容易导致超出预期的网络流量消耗，同时此功能仍旧处于测试状态，通常不建议使用批量下载功能。如果仍需使用，请三思而后行。", "下载前警告", Button1:="继续下载", Button2:="算了", IsWarn:=True) Then Exit Sub
             If SelectedItemList.Count = 1 Then
                 Hint("要不……你直接进详情页里下载吧……")
                 Exit Sub
             End If
+            If 1 <> MyMsgBox("批量下载容易导致超出预期的网络流量消耗，同时此功能仍旧处于测试状态，通常不建议使用批量下载功能。如果仍需使用，请三思而后行。", "下载前警告", Button1:="继续下载", Button2:="算了", IsWarn:=True) Then Exit Sub
             Dim SupportedModLoader As New List(Of CompModLoaderType)
             Dim LoaderFirstSet As Boolean = True
             Dim HasMod As Boolean = False
@@ -382,16 +382,28 @@
                                                                             Return AllVersionList.Distinct().ToList()
                                                                         End Function
                                                 ' 获取多个工程之间支持的版本的交集
+                                                Dim FinishedTask As Integer = 0
                                                 For Each Item In Ts.Input
-                                                    Dim temp = ModComp.CompFilesGet(Item, CompRequest.IsFromCurseForge(Item)).Where(Function(i) i.Type <> CompType.Mod OrElse i.ModLoaders.Contains(DesiredModLoader)).ToList()
-                                                    If FirstSet Then
-                                                        FirstSet = False
-                                                        SuitVersion = GetAllVersionList(temp.Select(Function(i) i.GameVersions).ToList())
-                                                    Else
-                                                        SuitVersion = SuitVersion.Intersect(GetAllVersionList(temp.Select(Function(i) i.GameVersions).ToList())).ToList()
-                                                    End If
-                                                    AllFiles.Add(temp)
+                                                    RunInNewThread(Sub()
+                                                                       Try
+                                                                           Dim temp = ModComp.CompFilesGet(Item, CompRequest.IsFromCurseForge(Item)).Where(Function(i) i.Type <> CompType.Mod OrElse i.ModLoaders.Contains(DesiredModLoader)).ToList()
+                                                                           If FirstSet Then
+                                                                               FirstSet = False
+                                                                               SuitVersion = GetAllVersionList(temp.Select(Function(i) i.GameVersions).ToList())
+                                                                           Else
+                                                                               SuitVersion = SuitVersion.Intersect(GetAllVersionList(temp.Select(Function(i) i.GameVersions).ToList())).ToList()
+                                                                           End If
+                                                                           AllFiles.Add(temp)
+                                                                       Catch ex As Exception
+                                                                           Log(ex, $"[CompFavourites] 获取 {Item} 的详细资源数据失败")
+                                                                       Finally
+                                                                           FinishedTask += 1
+                                                                       End Try
+                                                                   End Sub)
                                                 Next
+                                                While FinishedTask <> Ts.Input.Count ' 等待任务并行完成
+                                                    Thread.Sleep(200)
+                                                End While
                                                 ' 要求用户选择希望下载的版本
                                                 Dim SelectedVersion = Nothing
                                                 RunInUiWait(Sub()
@@ -417,7 +429,7 @@
                                                     Res.Add(New NetFile(FinalChoices.First.DownloadUrls, SaveFolder & FinalChoices.First.FileName))
                                                 Next
                                                 Ts.Output = Res
-                                            End Sub) With {.ProgressWeight = 12})
+                                            End Sub) With {.ProgressWeight = 2})
             GetInfoAndDownloadLoader.Add(New LoaderDownload("批量下载合适资源", New List(Of NetFile)) With {.ProgressWeight = 8})
             Dim CheckLoader As New LoaderCombo(Of List(Of String))($"批量下载资源({GetUuid()})", GetInfoAndDownloadLoader) With {.OnStateChanged = AddressOf DownloadStateSave}
             CheckLoader.Start(SelectedItemList.Select(Function(i) CType(i.Tag, CompProject).Id).ToList())
@@ -519,6 +531,18 @@
                                       CompFavorites.Save()
                                       RefreshFavTargets()
                                       ComboTargetFav.SelectedIndex = ComboTargetFav.Items.Count - 1
+                                  End Sub
+        Body.Items.Add(NewItem)
+        NewItem = New MyMenuItem With {
+            .Header = "重命名收藏夹名称",
+            .Icon = Logo.IconButtonEdit
+        }
+        AddHandler NewItem.Click, Sub()
+                                      Dim newName = MyMsgBoxInput("输入新名称", DefaultInput:=CurrentFavTarget.Name)
+                                      If String.IsNullOrWhiteSpace(newName) OrElse CurrentFavTarget.Name = newName Then Exit Sub
+                                      CurrentFavTarget.Name = newName
+                                      CompFavorites.Save()
+                                      RefreshFavTargets()
                                   End Sub
         Body.Items.Add(NewItem)
         NewItem = New MyMenuItem With {
