@@ -17,8 +17,8 @@ Public Module ModBase
     Public Const CommitHash As String = "native" 'Commit Hash，由 GitHub Workflow 自动替换
     Public CommitHashShort As String = If(CommitHash = "native", "native", CommitHash.Substring(0, 7)) 'Commit Hash，取前 7 位
     Public Const UpstreamVersion As String = "2.8.13" '上游版本
-    Public Const VersionCode As Integer = 359 '内部版本号
-    Public Const VersionCodeString As String = "359" '内部版本号的字符串形式
+    Public Const VersionCode As Integer = 360 '内部版本号
+    Public Const VersionCodeString As String = "360" '内部版本号的字符串形式
     '自动生成的版本信息
 #If RELEASE Then
     Public Const VersionBranchName As String = "Slow Ring"
