@@ -100,6 +100,7 @@
             Filter = FilterType.All
             SearchBox.Text = "" '这会触发结果刷新，所以需要在 ModItems 更新之后，详见 #3124 的视频
             RefreshUI()
+            SetSortMethod(SortMethod.FileName)
         Catch ex As Exception
             Log(ex, "加载 Mod 列表 UI 失败", LogLevel.Feedback)
         End Try
@@ -109,6 +110,7 @@
         Dim NewItem As New MyLocalModItem With {.SnapsToDevicePixels = True, .Entry = Entry,
             .ButtonHandler = AddressOf McModContent, .Checked = SelectedMods.Contains(Entry.RawFileName)}
         AddHandler Entry.OnCompUpdate, AddressOf NewItem.Refresh
+        'AddHandler Entry.OnCompUpdate, Sub() RunInUi(Sub() DoSort())
         NewItem.Refresh()
         AniControlEnabled -= 1
         Return NewItem
@@ -486,8 +488,101 @@ Install:
     Private Sub ChangeFilter(sender As MyRadioButton, raiseByMouse As Boolean) Handles BtnFilterAll.Check, BtnFilterCanUpdate.Check, BtnFilterDisabled.Check, BtnFilterEnabled.Check, BtnFilterError.Check
         Filter = sender.Tag
         RefreshUI()
+        DoSort()
     End Sub
 
+#End Region
+
+#Region "排序"
+    Private CurrentSortMethod As SortMethod = SortMethod.FileName
+
+    Private Sub SetSortMethod(Target As SortMethod)
+        CurrentSortMethod = Target
+        BtnSort.Text = $"排序：{GetSortName(Target)}"
+        RefreshUI()
+        DoSort()
+    End Sub
+
+    Private Enum SortMethod
+        FileName
+        ModName
+        TagNums
+        CreateTime
+    End Enum
+
+    Private Function GetSortName(Method As SortMethod) As String
+        Select Case Method
+            Case SortMethod.FileName : Return "文件名"
+            Case SortMethod.ModName : Return "模组名称"
+            Case SortMethod.TagNums : Return "标签数量"
+            Case SortMethod.CreateTime : Return "加入时间"
+        End Select
+        Return ""
+    End Function
+
+    Private Sub BtnSortClick(sender As Object, e As RouteEventArgs) Handles BtnSort.Click
+        Dim Body As New ContextMenu
+        For Each i As SortMethod In [Enum].GetValues(GetType(SortMethod))
+            Dim Item As New MyMenuItem
+            Item.Header = GetSortName(i)
+            AddHandler Item.Click, Sub()
+                                       SetSortMethod(i)
+                                   End Sub
+            Body.Items.Add(Item)
+        Next
+        Body.PlacementTarget = sender
+        Body.Placement = Primitives.PlacementMode.Bottom
+        Body.IsOpen = True
+    End Sub
+
+    Private ReadOnly SortLock As New Object
+    Private Sub DoSort()
+        SyncLock SortLock
+            If PanList Is Nothing Then Exit Sub
+            Dim Length As Integer = PanList.Children.Count
+            Dim MS = GetSortMethod(CurrentSortMethod)
+            For i As Integer = 0 To Length - 1
+                For j As Integer = 0 To Length - i - 2
+                    Dim Comp1 As MyLocalModItem = PanList.Children(j)
+                    Dim Comp2 As MyLocalModItem = PanList.Children(j + 1)
+
+                    If CurrentSortMethod = SortMethod.TagNums AndAlso (Comp1.Entry.Comp Is Nothing OrElse Comp2.Entry.Comp Is Nothing) Then
+                        Continue For
+                    End If
+                    If MS(Comp2.Entry, Comp1.Entry) Then
+                        ' 交换元素
+                        Dim temp1 As MyLocalModItem = PanList.Children(j)
+                        Dim temp2 As MyLocalModItem = PanList.Children(j + 1)
+                        PanList.Children.Remove(temp1)
+                        PanList.Children.Remove(temp2)
+                        PanList.Children.Insert(j, temp2)
+                        PanList.Children.Insert(j + 1, temp1)
+                    End If
+                Next
+            Next
+        End SyncLock
+    End Sub
+
+    Private Function GetSortMethod(Method As SortMethod) As Func(Of McMod, McMod, Boolean)
+        Select Case Method
+            Case SortMethod.FileName
+                Return Function(a As McMod, b As McMod) As Boolean
+                           Return StrComp(a.FileName, b.FileName) < 0
+                       End Function
+            Case SortMethod.ModName
+                Return Function(a As McMod, b As McMod) As Boolean
+                           Return StrComp(a.Name, b.Name) < 0
+                       End Function
+            Case SortMethod.TagNums
+                Return Function(a As McMod, b As McMod) As Boolean
+                           Return a.Comp.Tags.Count > b.Comp.Tags.Count
+                       End Function
+            Case SortMethod.CreateTime
+                Return Function(a As McMod, b As McMod) As Boolean
+                           Return (New FileInfo(a.Path)).CreationTime > (New FileInfo(b.Path)).CreationTime
+                       End Function
+        End Select
+    End Function
 #End Region
 
 #Region "下边栏"
