@@ -124,6 +124,7 @@ WaitRetry:
             Setup.Load("ToolDownloadThread")
             Setup.Load("ToolDownloadCert")
             '释放资源
+            Directory.CreateDirectory(PathPure & "CE")
             SetDllDirectory(PathPure & "CE")
             WriteFile(PathPure & "CE\" & "libwebp.dll", GetResources("libwebp64"))
             '网络配置初始化
