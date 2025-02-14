@@ -585,7 +585,7 @@
 
     Private Sub HintGetFail_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles HintGetFail.MouseLeftButtonDown
         Dim Content As String = "由于在线资源被删除或者网络问题等因素导致以下资源未获取成功（以资源的 ID 展示）" & vbCrLf & vbCrLf
-        Dim FailIds = Loader.Input.Except(Loader.Output.Select(Function(i) i.Id))
+        Dim FailIds As List(Of String) = Loader.Input.Except(Loader.Output.Select(Function(i) i.Id).ToList()).ToList()
         For Each Id In FailIds
             Content &= $" - {Id}" & vbCrLf
         Next
