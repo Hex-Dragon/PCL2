@@ -12,11 +12,9 @@
     End Sub
 
     '暂时关闭快照版提示
-#If Not BETA Then
     Private Sub BtnHintClose_Click(sender As Object, e As EventArgs) Handles BtnHintClose.Click
         AniDispose(PanHint, True)
     End Sub
-#End If
 
 #Region "自定义主页"
 

@@ -2,7 +2,6 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4499F2D2-18EF-4238-B1F0-7BD547AFF925}</ProjectGuid>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
     <OutputType>WinExe</OutputType>
@@ -31,7 +30,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -47,7 +46,7 @@
     <WarningLevel>1</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
@@ -99,7 +98,7 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Snapshot|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)' == 'Snapshot'">
     <OutputPath>.\bin\</OutputPath>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
     <Optimize>true</Optimize>
@@ -110,7 +109,7 @@
     <DefineConstants>SNAPSHOT</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BETA|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)' == 'BETA'">
     <OutputPath>.\bin\</OutputPath>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
     <Optimize>true</Optimize>
@@ -128,7 +127,7 @@
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseUpdate|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)' == 'ReleaseUpdate'">
     <OutputPath>.\bin\</OutputPath>
     <DefineConstants>RELEASE,BY_UPDATE</DefineConstants>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>

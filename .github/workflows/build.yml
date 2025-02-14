@@ -1,4 +1,5 @@
 name: Build
+
 on:
   push:
     paths:
@@ -12,55 +13,68 @@ on:
 
 jobs:
   build:
-    name: Build
-    runs-on: windows-latest
-    strategy:  
-       matrix:  
-         configuration: [Beta, Release]
-    steps:
+    name: Build ${{ matrix.configuration }}-${{ matrix.architecture }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - configuration: Beta
+            architecture: x64
+            os: windows-latest
+          - configuration: Release
+            architecture: x64
+            os: windows-latest
+          - configuration: Beta
+            architecture: ARM64
+            os: self-hosted
+          - configuration: Release
+            architecture: ARM64
+            os: self-hosted
+      fail-fast: false
 
+    steps:
     - name: Checkout
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
     - name: Set Describe
-      shell: bash
+      shell: powershell
       run: |
-          describe=`git describe --tags --always`
+          $describe = $(git describe --tags --always)
           echo "describe=$describe" >> $GITHUB_ENV
 
-    - name: Restore NuGet Packages
-      run: nuget restore "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -PackagesDirectory "packages"
-      
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
       with:
-        msbuild-architecture: x64
-    
+        msbuild-architecture: ${{ matrix.architecture }}
+
     - name: Update Help
-      run:  |
-        Set-Location ..
-        git clone https://github.com/PCL-Community/PCL2CEHelp.git -b master --single-branch --depth 1
-        Set-Location PCL2CEHelp
-        Remove-Item -Path *.* -Recurse -Force
+      run: |
+        cd ..
+        git clone https://github.com/PCL-Community/PCL2CEHelp -b master --single-branch --depth 1
+        cd PCL2CEHelp
+        rm -Force -r *.*
         Compress-Archive -Path .\* -DestinationPath .\Help.zip
-        Copy-Item -Path .\Help.zip -Destination "..\PCL2-CE\Plain Craft Launcher 2\Resources\Help.zip" -Force
-        Set-Location ..\PCL2-CE
+        Copy-Item -Path .\Help.zip -Destination "${{ github.workspace }}\Plain Craft Launcher 2\Resources\Help.zip" -Force
+        cd ..
+        rm -Force -r .\PCL2CEHelp
+        cd ${{ GITHUB.WORKSPACE }}
 
+    - name: Restore NuGet Packages
+      run: nuget restore "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -PackagesDirectory "packages"
 
-    - name: Replace
+    - name: Replace Secrets and Commit Hash
       run: |
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const OAuthClientId As String = ""', 'Public Const OAuthClientId As String = "${{ secrets.CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const CurseForgeAPIKey As String = ""', 'Public Const CurseForgeAPIKey As String = "${{ secrets.CURSEFORGE_API_KEY }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
         (gc "Plain Craft Launcher 2\Modules\ModSecret.vb") -replace 'Public Const LittleSkinClientId As String = ""', 'Public Const LittleSkinClientId As String = "${{ secrets.LITTLESKIN_CLIENT_ID }}"' | Out-File "Plain Craft Launcher 2\Modules\ModSecret.vb"
         (gc "Plain Craft Launcher 2\Modules\Base\ModBase.vb") -replace 'Public Const CommitHash As String = "native"', 'Public Const CommitHash As String = "${{ github.sha }}"' | Out-File "Plain Craft Launcher 2\Modules\Base\ModBase.vb"
         (gc "Plain Craft Launcher 2\Pages\PageOther\PageOtherAbout.xaml") -replace 'https://github.com/PCL-Community/PCL2-CE', 'https://github.com/PCL-Community/PCL2-CE/tree/${{ github.sha }}' | Out-File "Plain Craft Launcher 2\Pages\PageOther\PageOtherAbout.xaml"
+
     - name: Build
-      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }}
+      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }} -p:Platform=${{ matrix.architecture }}
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.configuration }} ${{ env.describe }}
-        path: Plain Craft Launcher 2\obj\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
+        name: ${{ matrix.configuration }}-${{ matrix.architecture }}
+        path: Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}\Plain Craft Launcher 2.exe

@@ -53,57 +53,61 @@ Public Class PageVersionShader
     End Sub
 
     Private Sub LoadFileList()
-        Log("[Shader] 刷新光影包文件")
-        FileList.Clear()
+        Try
+            Log("[Shader] 刷新光影包文件")
+            FileList.Clear()
 
-        ' 获取所有 .zip 文件
-        Dim zipFiles = Directory.EnumerateFiles(ShaderPath, "*.zip").ToList()
+            ' 获取所有 .zip 文件
+            Dim zipFiles = Directory.EnumerateFiles(ShaderPath, "*.zip").ToList()
 
-        ' 获取所有文件夹
-        Dim folders = Directory.EnumerateDirectories(ShaderPath).ToList()
+            ' 获取所有文件夹
+            Dim folders = Directory.EnumerateDirectories(ShaderPath).ToList()
 
-        ' 合并文件和文件夹列表
-        FileList = zipFiles.Concat(folders).ToList()
+            ' 合并文件和文件夹列表
+            FileList = zipFiles.Concat(folders).ToList()
 
-        If ModeDebug Then Log("[Shader] 共发现 " & FileList.Count & " 个光影包文件", LogLevel.Debug)
+            If ModeDebug Then Log("[Shader] 共发现 " & FileList.Count & " 个光影包文件", LogLevel.Debug)
 
-        PanList.Children.Clear()
+            PanList.Children.Clear()
 
-        For Each i In FileList
-            Dim worldItem As MyListItem = New MyListItem With {
-            .Title = If(Directory.Exists(i), GetFolderNameFromPath(i), GetFileNameFromPath(i)),
-            .Info = If(Directory.Exists(i),
-                       $"类型：文件夹 | 创建时间：{Directory.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}",
-                       $"类型：文件 | 引入时间：{File.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}"),
-            .Tag = i
-        }
+            For Each i In FileList
+                Dim worldItem As MyListItem = New MyListItem With {
+                .Title = If(Directory.Exists(i), GetFolderNameFromPath(i), GetFileNameFromPath(i)),
+                .Info = If(Directory.Exists(i),
+                           $"类型：文件夹 | 创建时间：{Directory.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}",
+                           $"类型：文件 | 引入时间：{File.GetCreationTime(i).ToString("yyyy'/'MM'/'dd")}"),
+                .Tag = i
+            }
 
-            Dim BtnOpen As MyIconButton = New MyIconButton With {
-            .Logo = Logo.IconButtonOpen,
-            .ToolTip = "打开",
-            .Tag = i
-        }
-            AddHandler BtnOpen.Click, AddressOf BtnOpen_Click
+                Dim BtnOpen As MyIconButton = New MyIconButton With {
+                .Logo = Logo.IconButtonOpen,
+                .ToolTip = "打开",
+                .Tag = i
+            }
+                AddHandler BtnOpen.Click, AddressOf BtnOpen_Click
 
-            Dim BtnDelete As MyIconButton = New MyIconButton With {
-            .Logo = Logo.IconButtonDelete,
-            .ToolTip = "删除",
-            .Tag = i
-        }
-            AddHandler BtnDelete.Click, AddressOf BtnDelete_Click
+                Dim BtnDelete As MyIconButton = New MyIconButton With {
+                .Logo = Logo.IconButtonDelete,
+                .ToolTip = "删除",
+                .Tag = i
+            }
+                AddHandler BtnDelete.Click, AddressOf BtnDelete_Click
 
-            Dim BtnCopy As MyIconButton = New MyIconButton With {
-            .Logo = Logo.IconButtonCopy,
-            .ToolTip = "复制",
-            .Tag = i
-        }
-            AddHandler BtnCopy.Click, AddressOf BtnCopy_Click
+                Dim BtnCopy As MyIconButton = New MyIconButton With {
+                .Logo = Logo.IconButtonCopy,
+                .ToolTip = "复制",
+                .Tag = i
+            }
+                AddHandler BtnCopy.Click, AddressOf BtnCopy_Click
 
-            worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy}
-            PanList.Children.Add(worldItem)
-        Next
+                worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy}
+                PanList.Children.Add(worldItem)
+            Next
 
-        RefreshUI()
+            RefreshUI()
+        Catch ex As Exception
+            Log(ex, "[Shader] 刷新光影包文件失败！", LogLevel.Msgbox)
+        End Try
     End Sub
 
     Private Function GetPathFromSender(sender As Object) As String
