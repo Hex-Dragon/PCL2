@@ -9,7 +9,7 @@
             <TranslateTransform x:Name="TransformPos" X="0" Y="40" />
         </TransformGroup>
     </Grid.RenderTransform>
-    <Border Name="PanBorder" CornerRadius="7" Background="#FBFBFB">
+    <Border Name="PanBorder" CornerRadius="7" Background="{DynamicResource ColorBrushMsgBox}">
         <Border.Effect>
             <DropShadowEffect Color="{DynamicResource ColorObject1}" BlurRadius="20" ShadowDepth="4" RenderingBias="Performance" Opacity="0.8" x:Name="EffectShadow" />
         </Border.Effect>

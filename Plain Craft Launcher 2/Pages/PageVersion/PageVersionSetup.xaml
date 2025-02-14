@@ -117,10 +117,10 @@
                         <TextBlock x:Name="LabRamUsedTitle" Text="已使用内存" Grid.ColumnSpan="3" Opacity="0.7" TextTrimming="None" Margin="2,0,0,5" FontSize="11" HorizontalAlignment="Left" />
                         <TextBlock x:Name="LabRamGameTitle" Text="游戏分配" Opacity="0.7" Grid.ColumnSpan="3" TextTrimming="None" Margin="2,0,0,5" FontSize="11" HorizontalAlignment="Left" />
                         <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="3" Margin="2,3,0,0" HorizontalAlignment="Left">
-                            <TextBlock x:Name="LabRamUsed" Text="4.7 GB" FontSize="16" Foreground="Black" TextTrimming="None" />
-                            <TextBlock x:Name="LabRamTotal" Text=" / 7.9 GB" FontSize="16" Foreground="Black" TextTrimming="None" />
+                            <TextBlock x:Name="LabRamUsed" Text="4.7 GB" FontSize="16" Foreground="{DynamicResource ColorBrushMemory}" TextTrimming="None" />
+                            <TextBlock x:Name="LabRamTotal" Text=" / 7.9 GB" FontSize="16" Foreground="{DynamicResource ColorBrushMemory}" TextTrimming="None" />
                         </StackPanel>
-                        <TextBlock Grid.Row="2" x:Name="LabRamGame" Text="2.5 GB" Grid.ColumnSpan="3" TextTrimming="None" Margin="2,3,0,0" FontSize="16" Foreground="Black" HorizontalAlignment="Left" />
+                        <TextBlock Grid.Row="2" x:Name="LabRamGame" Text="2.5 GB" Grid.ColumnSpan="3" TextTrimming="None" Margin="2,3,0,0" FontSize="16" Foreground="{DynamicResource ColorBrushMemory}" HorizontalAlignment="Left" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>

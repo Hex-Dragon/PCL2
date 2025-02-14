@@ -29,7 +29,7 @@
                     <TextBlock x:Name="LabLoadTitle" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Center" Text="正在创建联机房间" FontSize="19"
                                Margin="0,0,25,1" Foreground="{Binding Foreground, ElementName=Load}" IsHitTestVisible="False" />
                     <TextBlock x:Name="LabLoadDesc" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" VerticalAlignment="Center" Margin="0,5,10,-5" Text="下载联机模块中……" FontSize="14" 
-                               LineHeight="19" MaxWidth="400" MaxHeight="220" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray3}" IsHitTestVisible="False" />
+                               LineHeight="19" MaxWidth="400" MaxHeight="220" TextWrapping="Wrap" Foreground="{DynamicResource ColorBrushGray3}" IsHitTestVisible="False" />
                     <local:MyIconButton Grid.Column="5" Grid.Row="1" x:Name="BtnLoadCancel" Height="28" Width="28" VerticalAlignment="Top"
                                         Theme="Black" Opacity="0.5"
                                         ToolTip="取消" ToolTipService.Placement="Right" ToolTipService.InitialShowDelay="100"
@@ -75,7 +75,7 @@
                                    Text="输入索引码" FontSize="20" Foreground="{DynamicResource ColorBrush3}" />
                         <TextBlock Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Margin="0,10,0,6" 
                                    Text="你需要获取索引码才能使用 HiPer。&#xa;如果实在没有索引码，可以在左侧选择 IOI 方式联机。" x:Name="LabCertDesc"
-                                   FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
+                                   FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{DynamicResource ColorBrushGray2}" />
                         <local:MyTextBox x:Name="TextCert" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="3" 
                                          Margin="0,0,0,12" Width="400" MaxLength="100" Height="28">
                             <local:MyTextBox.ValidateRules>
@@ -156,44 +156,44 @@
                 </Grid.RowDefinitions>
                 <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20">
                     <StackPanel Orientation="Horizontal" Margin="3,0">
-                        <StackPanel x:Name="BtnFinishQuality" Orientation="Horizontal" Background="{StaticResource ColorBrushSemiTransparent}"
+                        <StackPanel x:Name="BtnFinishQuality" Orientation="Horizontal" Background="{DynamicResource ColorBrushSemiTransparent}"
                                     ToolTip="连接状况" ToolTipService.Placement="Center" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-35">
-                            <Path IsHitTestVisible="False" Height="14" Width="14" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" Margin="12,1,7,0"
+                            <Path IsHitTestVisible="False" Height="14" Width="14" Stretch="Uniform" Fill="{DynamicResource ColorBrushGray1}" Margin="12,1,7,0"
                               Data="M512 128c212.064 0 384 171.936 384 384s-173.632 384-384 384C299.936 896 128 724.064 128 512S299.936 128 512 128z m-126.4 575.968c-1.728 40.8 3.52 76.8 36.32 115.2 28.576 8.32 58.816 12.832 90.08 12.832 81.984 0 156.8-30.848 213.408-81.536-77.12 7.2-161.6-5.952-289.216-61.856-11.616 7.52-18.976 12.608-50.592 15.36z m-193.44-202.368c0 123.744 53.536 214.272 135.744 272.16-6.08-25.6-8.352-48.448-4.96-91.68-21.344-17.6-34.944-39.264-34.624-82.08-50.816-42.88-82.88-75.712-96.16-98.4zM544 448c-14.944 0-29.12-3.424-41.728-9.504-10.976 12.96-21.376 26.432-31.2 40.512-4.832 6.912-15.36 23.776-31.616 50.624a95.872 95.872 0 0 1 36.384 106.432c155.52 68.16 302.56 62.048 325.952 11.904 23.36-50.112-35.968-139.776-189.504-228.48A95.68 95.68 0 0 1 544 448z m-160 128a32 32 0 1 0 0 64 32 32 0 0 0 0-64z m-161.92-199.2c-16.576 35.52 16.96 99.68 94.08 163.2a95.936 95.936 0 0 1 59.616-27.648c19.936-35.008 30.72-52.736 42.88-70.08 10.944-15.648 22.528-30.656 38.432-49.44-5.696-12.128-8.96-25.6-9.088-39.872-118.176-30.4-206.88-16.96-225.92 23.84z m415.136-47.84c1.824 7.36 3.296 19.104 2.336 32.416 88.96 48.704 153.76 105.056 192.32 160.704 0-118.656-34.208-176.064-75.52-210.976-49.792-5.92-69.952-4.064-119.136 17.856zM544 320a32 32 0 1 0 0 64 32 32 0 0 0 0-64z m-32-128c-82.016 0-156.8 30.848-213.44 81.6 47.264-4.384 96-0.544 170.304 18.624A95.84 95.84 0 0 1 544 256c21.568 0 41.472 7.104 57.504 19.104 35.968-17.28 62.016-25.824 87.136-29.984A318.528 318.528 0 0 0 512 192z" />
-                            <TextBlock x:Name="LabFinishQuality" IsHitTestVisible="False" Text="优秀" VerticalAlignment="Center" Foreground="{StaticResource ColorBrushGray1}" Margin="0,0,12,0" />
+                            <TextBlock x:Name="LabFinishQuality" IsHitTestVisible="False" Text="优秀" VerticalAlignment="Center" Foreground="{DynamicResource ColorBrushGray1}" Margin="0,0,12,0" />
                         </StackPanel>
                         <TextBlock Text="|" Opacity="0.3" Margin="0,8.8,0,8" RenderTransformOrigin="0.5,0.5">
                             <TextBlock.RenderTransform>
                                 <ScaleTransform ScaleX="1" ScaleY="2.75" CenterX="0.5" CenterY="0.5" />
                             </TextBlock.RenderTransform>
                         </TextBlock>
-                        <StackPanel x:Name="BtnFinishPing" Orientation="Horizontal" Background="{StaticResource ColorBrushSemiTransparent}"
+                        <StackPanel x:Name="BtnFinishPing" Orientation="Horizontal" Background="{DynamicResource ColorBrushSemiTransparent}"
                                     ToolTip="与房主的延迟（点击刷新）" ToolTipService.Placement="Center" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-35">
-                            <Path IsHitTestVisible="False" Height="14" Width="14" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" Margin="12,0,7,0"
+                            <Path IsHitTestVisible="False" Height="14" Width="14" Stretch="Uniform" Fill="{DynamicResource ColorBrushGray1}" Margin="12,0,7,0"
                               Data="M512 409.6a102.4 102.4 0 0 0-51.2 190.464V1024h102.4v-423.936A102.4 102.4 0 0 0 512 409.6z M512 0a512 512 0 0 0-263.168 950.272l51.2-87.552a409.6 409.6 0 1 1 420.864 0l51.2 87.552A512 512 0 0 0 512 0z M819.2 512a307.2 307.2 0 1 0-464.896 263.168l51.2-88.064a204.8 204.8 0 1 1 209.92 0l51.2 88.064A307.2 307.2 0 0 0 819.2 512z" />
-                            <TextBlock x:Name="LabFinishPing" IsHitTestVisible="False" Text="15ms" VerticalAlignment="Center" Foreground="{StaticResource ColorBrushGray1}" Margin="0,0,12,0" />
+                            <TextBlock x:Name="LabFinishPing" IsHitTestVisible="False" Text="15ms" VerticalAlignment="Center" Foreground="{DynamicResource ColorBrushGray1}" Margin="0,0,12,0" />
                         </StackPanel>
                         <TextBlock Text="|" x:Name="LineFinishPing" Opacity="0.3" Margin="0,8.8,0,8" RenderTransformOrigin="0.5,0.5">
                             <TextBlock.RenderTransform>
                                 <ScaleTransform ScaleX="1" ScaleY="2.75" CenterX="0.5" CenterY="0.5" />
                             </TextBlock.RenderTransform>
                         </TextBlock>
-                        <StackPanel x:Name="BtnFinishIp" Orientation="Horizontal" Background="{StaticResource ColorBrushSemiTransparent}"
+                        <StackPanel x:Name="BtnFinishIp" Orientation="Horizontal" Background="{DynamicResource ColorBrushSemiTransparent}"
                                     ToolTip="服务器 IP 地址（点击复制）" ToolTipService.Placement="Center" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-35">
-                            <Path IsHitTestVisible="False" Height="11" Width="11" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" Margin="12,0,7,0"
+                            <Path IsHitTestVisible="False" Height="11" Width="11" Stretch="Uniform" Fill="{DynamicResource ColorBrushGray1}" Margin="12,0,7,0"
                               Data="M277.333333 853.333333H192V170.666667h85.333333z m341.333334-597.333333h-170.666667v256h170.666667a128 128 0 0 0 0-256m0-85.333333a213.333333 213.333333 0 0 1 0 426.666666h-170.666667v256h-85.333333V170.666667z" />
-                            <TextBlock x:Name="LabFinishIp" IsHitTestVisible="False" Text="6.0.0.1:12345" VerticalAlignment="Center" Foreground="{StaticResource ColorBrushGray1}" Margin="0,0,12,0" />
+                            <TextBlock x:Name="LabFinishIp" IsHitTestVisible="False" Text="6.0.0.1:12345" VerticalAlignment="Center" Foreground="{DynamicResource ColorBrushGray1}" Margin="0,0,12,0" />
                         </StackPanel>
                         <TextBlock Text="|" Opacity="0.3" Margin="0,8.8,0,8" RenderTransformOrigin="0.5,0.5">
                             <TextBlock.RenderTransform>
                                 <ScaleTransform ScaleX="1" ScaleY="2.75" CenterX="0.5" CenterY="0.5" />
                             </TextBlock.RenderTransform>
                         </TextBlock>
-                        <StackPanel Orientation="Horizontal" Background="{StaticResource ColorBrushSemiTransparent}"
+                        <StackPanel Orientation="Horizontal" Background="{DynamicResource ColorBrushSemiTransparent}"
                                     ToolTip="索引码剩余时间" ToolTipService.Placement="Center" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-35">
-                            <Path IsHitTestVisible="False" Height="13" Width="13" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" Margin="12,0,7,0"
+                            <Path IsHitTestVisible="False" Height="13" Width="13" Stretch="Uniform" Fill="{DynamicResource ColorBrushGray1}" Margin="12,0,7,0"
                               Data="M832 64H192c-35.2 0-64 28.8-64 64v192c0 14.532 4.918 27.965 13.158 38.739a63.808 63.808 0 0 0 5.94 6.869L293.49 512 147.098 658.392a63.808 63.808 0 0 0-5.94 6.869C132.918 676.035 128 689.468 128 704v192c0 35.2 28.8 64 64 64h640c35.2 0 64-28.8 64-64V704c0-14.532-4.918-27.965-13.158-38.739a63.808 63.808 0 0 0-5.94-6.869L730.51 512l146.392-146.392a63.808 63.808 0 0 0 5.94-6.869C891.082 347.965 896 334.532 896 320V128c0-35.2-28.8-64-64-64z m-32 244.49L640.098 466.392c-12.534 12.534-18.749 29.086-18.659 45.608-0.09 16.522 6.125 33.074 18.659 45.608L800 718.51V864H224V718.51l158.902-160.902c12.534-12.534 18.749-29.086 18.659-45.608 0.09-16.522-6.125-33.074-18.659-45.608L224 302.49V160h576v148.49z M476.33 457.292c15.631 17.517 42.263 57.543 8.75 100.373L297.608 745.137a31.809 31.809 0 0 0-2.275 2.536C290.757 753.211 288 760.299 288 768c0 17.6 14.4 32 32 32h384.001c17.6 0 32-14.4 32-32 0-7.701-2.757-14.789-7.333-20.327a32.004 32.004 0 0 0-2.275-2.536L545.71 564.454c-16.012-18.851-39.722-58.366-5.07-100.241l58.388-57.487c12.445-12.445 12.445-32.81 0-45.255a31.711 31.711 0 0 0-13.806-8.102A31.712 31.712 0 0 0 576 352H449c-1.287 0-2.553 0.086-3.801 0.235-7.385 0.548-14.612 3.621-20.227 9.236-12.445 12.445-12.445 32.81 0 45.255l51.358 50.566z" />
-                            <TextBlock x:Name="LabFinishTime" IsHitTestVisible="False" Text="2:21" VerticalAlignment="Center" Foreground="{StaticResource ColorBrushGray1}" Margin="0,0,12,0" />
+                            <TextBlock x:Name="LabFinishTime" IsHitTestVisible="False" Text="2:21" VerticalAlignment="Center" Foreground="{DynamicResource ColorBrushGray1}" Margin="0,0,12,0" />
                         </StackPanel>
                     </StackPanel>
                 </local:MyCard>
@@ -222,7 +222,7 @@
                                    Text="已加入 Herobrine 的房间" FontSize="20" Foreground="{DynamicResource ColorBrush3}" />
                         <TextBlock x:Name="LabFinishDesc" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Margin="0,10,0,12" 
                                    Text="描述文本。"
-                                   FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
+                                   FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{DynamicResource ColorBrushGray2}" />
                         <local:MyButton x:Name="BtnFinishCopy" Grid.Column="4" Grid.Row="3" Margin="0,0,15,0" Text="复制联机码" Padding="13,8" />
                         <local:MyButton x:Name="BtnFinishExit" Grid.Column="5" Grid.Row="3" Text="退出" Padding="13,8" />
                     </Grid>

@@ -68,7 +68,7 @@
                 Children.Add(Lab)
                 _LabInfo = Lab
                 '<TextBlock Grid.Row="2" SnapsToDevicePixels="False" UseLayoutRounding="False" HorizontalAlignment="Left" x:Name = "LabInfo" IsHitTestVisible="False" Grid.Column="2" 
-                'TextTrimming = "CharacterEllipsis" Visibility="Collapsed" FontSize="12" Foreground="{StaticResource ColorBrushGray2}" Margin="4,0,0,0" />
+                'TextTrimming = "CharacterEllipsis" Visibility="Collapsed" FontSize="12" Foreground="{DynamicResource ColorBrushGray2}" Margin="4,0,0,0" />
             End If
             Return _LabInfo
         End Get

@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PCL"
       mc:Ignorable="d" d:DesignWidth="297.6" Margin="0,19,0,5">
-    <Grid Margin="0,56,0,0" Background="{StaticResource ColorBrushSemiTransparent}" Name="PanData">
+    <Grid Margin="0,56,0,0" Background="{DynamicResource ColorBrushSemiTransparent}" Name="PanData">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="34" />
             <ColumnDefinition />

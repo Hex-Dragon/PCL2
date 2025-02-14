@@ -140,6 +140,7 @@
         {"UiCustomType", New SetupEntry(0)},
         {"UiCustomPreset", New SetupEntry(0)},
         {"UiCustomNet", New SetupEntry("")},
+        {"UiDarkMode", New SetupEntry(2, Source:=SetupSource.Registry)},
         {"UiLogoType", New SetupEntry(1)},
         {"UiLogoText", New SetupEntry("")},
         {"UiLogoLeft", New SetupEntry(False)},
@@ -568,6 +569,18 @@
                 FrmSetupUI.HintCustom.Visibility = Visibility.Collapsed
         End Select
         FrmSetupUI.CardCustom.TriggerForceResize()
+    End Sub
+
+    '颜色模式
+    Public Sub UiDarkMode(Value As Integer)
+        If Value = 0 Then
+            IsDarkMode = False
+        ElseIf Value = 1 Then
+            IsDarkMode = True
+        Else
+            IsDarkMode = IsSystemInDarkMode()
+        End If
+        ThemeRefresh()
     End Sub
 
     '顶部栏

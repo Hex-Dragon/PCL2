@@ -175,32 +175,145 @@ Friend Module ModSecret
 
 #Region "主题"
 
-    Public Color1 As New MyColor(52, 61, 74)
-    Public Color2 As New MyColor(11, 91, 203)
-    Public Color3 As New MyColor(19, 112, 243)
+    Public IsDarkMode As Boolean = False
+
+    Public ColorDark1 As New MyColor(235, 235, 235)
+    Public ColorDark2 As New MyColor(102, 204, 255)
+    Public ColorDark3 As New MyColor(51, 187, 255)
+    Public ColorDark6 As New MyColor(93, 101, 103)
+    Public ColorDark7 As New MyColor(69, 75, 79)
+    Public ColorDark8 As New MyColor(59, 64, 65)
+    Public ColorLight1 As New MyColor(52, 61, 74)
+    Public ColorLight2 As New MyColor(11, 91, 203)
+    Public ColorLight3 As New MyColor(19, 112, 243)
+    Public ColorLight6 As New MyColor(213, 230, 253)
+    Public ColorLight7 As New MyColor(222, 236, 253)
+    Public ColorLight8 As New MyColor(234, 242, 254)
+    Public Color1 As MyColor = If(IsDarkMode, ColorDark1, ColorLight1)
+    Public Color2 As MyColor = If(IsDarkMode, ColorDark2, ColorLight2)
+    Public Color3 As MyColor = If(IsDarkMode, ColorDark3, ColorLight3)
+    'Public Color2 As New MyColor(11, 91, 203)
+    'Public Color3 As New MyColor(19, 112, 243)
     Public Color4 As New MyColor(72, 144, 245)
     Public Color5 As New MyColor(150, 192, 249)
-    Public Color6 As New MyColor(213, 230, 253)
-    Public Color7 As New MyColor(222, 236, 253)
-    Public Color8 As New MyColor(234, 242, 254)
+    Public Color6 As MyColor = If(IsDarkMode, ColorDark6, ColorLight6)
+    Public Color7 As MyColor = If(IsDarkMode, ColorDark7, ColorLight7)
+    Public Color8 As MyColor = If(IsDarkMode, ColorDark8, ColorLight8)
     Public ColorBg0 As New MyColor(150, 192, 249)
     Public ColorBg1 As New MyColor(190, Color7)
-    Public ColorGray1 As New MyColor(64, 64, 64)
-    Public ColorGray2 As New MyColor(115, 115, 115)
-    Public ColorGray3 As New MyColor(140, 140, 140)
-    Public ColorGray4 As New MyColor(166, 166, 166)
-    Public ColorGray5 As New MyColor(204, 204, 204)
-    Public ColorGray6 As New MyColor(235, 235, 235)
-    Public ColorGray7 As New MyColor(240, 240, 240)
-    Public ColorGray8 As New MyColor(245, 245, 245)
+    Public ColorGrayDark1 As New MyColor(245, 245, 245)
+    Public ColorGrayDark2 As New MyColor(240, 240, 240)
+    Public ColorGrayDark3 As New MyColor(235, 235, 235)
+    Public ColorGrayDark4 As New MyColor(204, 204, 204)
+    Public ColorGrayDark5 As New MyColor(166, 166, 166)
+    Public ColorGrayDark6 As New MyColor(140, 140, 140)
+    Public ColorGrayDark7 As New MyColor(115, 115, 115)
+    Public ColorGrayDark8 As New MyColor(64, 64, 64)
+    Public ColorGrayLight1 As New MyColor(64, 64, 64)
+    Public ColorGrayLight2 As New MyColor(115, 115, 115)
+    Public ColorGrayLight3 As New MyColor(140, 140, 140)
+    Public ColorGrayLight4 As New MyColor(166, 166, 166)
+    Public ColorGrayLight5 As New MyColor(204, 204, 204)
+    Public ColorGrayLight6 As New MyColor(235, 235, 235)
+    Public ColorGrayLight7 As New MyColor(240, 240, 240)
+    Public ColorGrayLight8 As New MyColor(245, 245, 245)
+    Public ColorGray1 As MyColor = If(IsDarkMode, ColorGrayDark1, ColorGrayLight1)
+    Public ColorGray2 As MyColor = If(IsDarkMode, ColorGrayDark2, ColorGrayLight2)
+    Public ColorGray3 As MyColor = If(IsDarkMode, ColorGrayDark3, ColorGrayLight3)
+    Public ColorGray4 As MyColor = If(IsDarkMode, ColorGrayDark4, ColorGrayLight4)
+    Public ColorGray5 As MyColor = If(IsDarkMode, ColorGrayDark5, ColorGrayLight5)
+    Public ColorGray6 As MyColor = If(IsDarkMode, ColorGrayDark6, ColorGrayLight6)
+    Public ColorGray7 As MyColor = If(IsDarkMode, ColorGrayDark7, ColorGrayLight7)
+    Public ColorGray8 As MyColor = If(IsDarkMode, ColorGrayDark8, ColorGrayLight8)
     Public ColorSemiTransparent As New MyColor(1, Color8)
 
     Public ThemeNow As Integer = -1
     Public ColorHue As Integer = 210, ColorSat As Integer = 85, ColorLightAdjust As Integer = 0, ColorHueTopbarDelta As Object = 0
     Public ThemeDontClick As Integer = 0
 
+    '深色模式事件
+
+    ' 定义自定义事件
+    Public Event ThemeChanged As EventHandler(Of Boolean)
+
+    ' 触发事件的函数
+    Public Sub RaiseThemeChanged(isDarkMode As Boolean)
+        RaiseEvent ThemeChanged("", isDarkMode)
+    End Sub
+
     Public Sub ThemeRefresh(Optional NewTheme As Integer = -1)
-        Hint("该版本中不包含主题功能……")
+        RaiseThemeChanged(IsDarkMode)
+        ThemeRefreshColor()
+        ThemeRefreshMain()
+    End Sub
+    Public Function GetDarkThemeLight(OriginalLight As Double) As Double
+        If IsDarkMode Then
+            Return OriginalLight * 0.1
+        Else
+            Return OriginalLight
+        End If
+    End Function
+    Public Sub ThemeRefreshColor()
+        ColorGray1 = If(IsDarkMode, ColorGrayDark1, ColorGrayLight1)
+        ColorGray2 = If(IsDarkMode, ColorGrayDark2, ColorGrayLight2)
+        ColorGray3 = If(IsDarkMode, ColorGrayDark3, ColorGrayLight3)
+        ColorGray4 = If(IsDarkMode, ColorGrayDark4, ColorGrayLight4)
+        ColorGray5 = If(IsDarkMode, ColorGrayDark5, ColorGrayLight5)
+        ColorGray6 = If(IsDarkMode, ColorGrayDark6, ColorGrayLight6)
+        ColorGray7 = If(IsDarkMode, ColorGrayDark7, ColorGrayLight7)
+        ColorGray8 = If(IsDarkMode, ColorGrayDark8, ColorGrayLight8)
+
+        If IsDarkMode Then
+            Application.Current.Resources("ColorBrush1") = New SolidColorBrush(ColorDark1)
+            Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorDark2)
+            Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorDark3)
+            Application.Current.Resources("ColorBrush6") = New SolidColorBrush(ColorDark6)
+            Application.Current.Resources("ColorBrush7") = New SolidColorBrush(ColorDark7)
+            Application.Current.Resources("ColorBrush8") = New SolidColorBrush(ColorDark8)
+            Application.Current.Resources("ColorBrushGray1") = New SolidColorBrush(ColorGrayDark1)
+            Application.Current.Resources("ColorBrushGray2") = New SolidColorBrush(ColorGrayDark2)
+            Application.Current.Resources("ColorBrushGray3") = New SolidColorBrush(ColorGrayDark3)
+            Application.Current.Resources("ColorBrushGray4") = New SolidColorBrush(ColorGrayDark4)
+            Application.Current.Resources("ColorBrushGray5") = New SolidColorBrush(ColorGrayDark5)
+            Application.Current.Resources("ColorBrushGray6") = New SolidColorBrush(ColorGrayDark6)
+            Application.Current.Resources("ColorBrushGray7") = New SolidColorBrush(ColorGrayDark7)
+            Application.Current.Resources("ColorBrushGray8") = New SolidColorBrush(ColorGrayDark8)
+            Application.Current.Resources("ColorBrushHalfWhite") = New SolidColorBrush(Color.FromArgb(85, 90, 90, 90))
+            Application.Current.Resources("ColorBrushBg0") = New SolidColorBrush(ColorDark2)
+            Application.Current.Resources("ColorBrushBg1") = New SolidColorBrush(Color.FromArgb(190, 90, 90, 90))
+            Application.Current.Resources("ColorBrushBackgroundTransparentSidebar") = New SolidColorBrush(Color.FromArgb(235, 43, 43, 43))
+            Application.Current.Resources("ColorBrushTransparent") = New SolidColorBrush(Color.FromArgb(0, 43, 43, 43))
+            Application.Current.Resources("ColorBrushToolTip") = New SolidColorBrush(Color.FromArgb(229, 90, 90, 90))
+            Application.Current.Resources("ColorBrushWhite") = New SolidColorBrush(Color.FromRgb(43, 43, 43))
+            Application.Current.Resources("ColorBrushMsgBox") = New SolidColorBrush(Color.FromRgb(43, 43, 43))
+            Application.Current.Resources("ColorBrushMsgBoxText") = New SolidColorBrush(ColorDark1)
+            Application.Current.Resources("ColorBrushMemory") = New SolidColorBrush(Color.FromRgb(255, 255, 255))
+        Else
+            Application.Current.Resources("ColorBrush1") = New SolidColorBrush(ColorLight1)
+            Application.Current.Resources("ColorBrush2") = New SolidColorBrush(ColorLight2)
+            Application.Current.Resources("ColorBrush3") = New SolidColorBrush(ColorLight3)
+            Application.Current.Resources("ColorBrush6") = New SolidColorBrush(ColorLight6)
+            Application.Current.Resources("ColorBrush7") = New SolidColorBrush(ColorLight7)
+            Application.Current.Resources("ColorBrush8") = New SolidColorBrush(ColorLight8)
+            Application.Current.Resources("ColorBrushGray1") = New SolidColorBrush(ColorGrayLight1)
+            Application.Current.Resources("ColorBrushGray2") = New SolidColorBrush(ColorGrayLight2)
+            Application.Current.Resources("ColorBrushGray3") = New SolidColorBrush(ColorGrayLight3)
+            Application.Current.Resources("ColorBrushGray4") = New SolidColorBrush(ColorGrayLight4)
+            Application.Current.Resources("ColorBrushGray5") = New SolidColorBrush(ColorGrayLight5)
+            Application.Current.Resources("ColorBrushGray6") = New SolidColorBrush(ColorGrayLight6)
+            Application.Current.Resources("ColorBrushGray7") = New SolidColorBrush(ColorGrayLight7)
+            Application.Current.Resources("ColorBrushGray8") = New SolidColorBrush(ColorGrayLight8)
+            Application.Current.Resources("ColorBrushHalfWhite") = New SolidColorBrush(Color.FromArgb(85, 255, 255, 255))
+            Application.Current.Resources("ColorBrushBg0") = New SolidColorBrush(ColorBg0)
+            Application.Current.Resources("ColorBrushBg1") = New SolidColorBrush(ColorBg1)
+            Application.Current.Resources("ColorBrushBackgroundTransparentSidebar") = New SolidColorBrush(Color.FromArgb(210, 255, 255, 255))
+            Application.Current.Resources("ColorBrushTransparent") = New SolidColorBrush(Color.FromArgb(0, 255, 255, 255))
+            Application.Current.Resources("ColorBrushToolTip") = New SolidColorBrush(Color.FromArgb(229, 255, 255, 255))
+            Application.Current.Resources("ColorBrushWhite") = New SolidColorBrush(Color.FromRgb(255, 255, 255))
+            Application.Current.Resources("ColorBrushMsgBox") = New SolidColorBrush(Color.FromRgb(251, 251, 251))
+            Application.Current.Resources("ColorBrushMsgBoxText") = New SolidColorBrush(ColorLight1)
+            Application.Current.Resources("ColorBrushMemory") = New SolidColorBrush(Color.FromRgb(0, 0, 0))
+        End If
     End Sub
     Public Sub ThemeRefreshMain()
         RunInUi(
@@ -236,12 +349,12 @@ Friend Module ModSecret
             '主页面背景
             If Setup.Get("UiBackgroundColorful") Then
                 Brush = New LinearGradientBrush With {.EndPoint = New Point(0.1, 1), .StartPoint = New Point(0.9, 0)}
-                Brush.GradientStops.Add(New GradientStop With {.Offset = -0.1, .Color = New MyColor().FromHSL2(ColorHue - 20, Math.Min(60, ColorSat) * 0.5, 80)})
-                Brush.GradientStops.Add(New GradientStop With {.Offset = 0.4, .Color = New MyColor().FromHSL2(ColorHue, ColorSat * 0.9, 90)})
-                Brush.GradientStops.Add(New GradientStop With {.Offset = 1.1, .Color = New MyColor().FromHSL2(ColorHue + 20, Math.Min(60, ColorSat) * 0.5, 80)})
+                Brush.GradientStops.Add(New GradientStop With {.Offset = -0.1, .Color = New MyColor().FromHSL2(ColorHue - 20, Math.Min(60, ColorSat) * 0.5, GetDarkThemeLight(80))})
+                Brush.GradientStops.Add(New GradientStop With {.Offset = 0.4, .Color = New MyColor().FromHSL2(ColorHue, ColorSat * 0.9, GetDarkThemeLight(90))})
+                Brush.GradientStops.Add(New GradientStop With {.Offset = 1.1, .Color = New MyColor().FromHSL2(ColorHue + 20, Math.Min(60, ColorSat) * 0.5, GetDarkThemeLight(80))})
                 FrmMain.PanForm.Background = Brush
             Else
-                FrmMain.PanForm.Background = New MyColor(245, 245, 245)
+                FrmMain.PanForm.Background = New MyColor(If(IsDarkMode, 20, 245), If(IsDarkMode, 20, 245), If(IsDarkMode, 20, 245))
             End If
             FrmMain.PanForm.Background.Freeze()
         End Sub)
