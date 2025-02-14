@@ -600,6 +600,7 @@
                                     For Each Id In FailIds
                                         CurrentFavTarget.Favs.Remove(Id)
                                     Next
+                                    CompFavorites.Save()
                                     Hint("已移除相关收藏", HintType.Finish)
                                 End Sub)
     End Sub
