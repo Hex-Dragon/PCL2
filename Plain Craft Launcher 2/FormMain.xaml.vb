@@ -78,6 +78,11 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LatestVersion < 360 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持多收藏夹，允许批量下载和分享"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "更改 Java Wrapper 启用机制"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复无法启动游戏的问题"))
+        End If
         If LastVersion < 358 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了更新通道机制"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了国内本体更新和公告服务器，感谢 @pysio2007"))
