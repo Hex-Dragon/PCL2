@@ -50,7 +50,7 @@ jobs:
     - name: Update Help
       run: |
         cd ..
-        git clone https://gh.llkk.cc/https://github.com/PCL-Community/PCL2CEHelp -b master --single-branch --depth 1
+        git clone https://github.com/PCL-Community/PCL2CEHelp -b master --single-branch --depth 1
         cd PCL2CEHelp
         rm -Force -r *.*
         Compress-Archive -Path .\* -DestinationPath .\Help.zip
