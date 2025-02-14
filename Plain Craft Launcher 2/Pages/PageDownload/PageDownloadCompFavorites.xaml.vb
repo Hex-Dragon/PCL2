@@ -19,7 +19,7 @@
     Private Function LoaderInput() As List(Of String)
         Dim TargetList As List(Of String)
         Try
-            TargetList = CurrentFavTarget.Favs
+            TargetList = CurrentFavTarget.Favs.Distinct().ToList()
         Catch ex As Exception
             Log(ex, "[Favorites] 加载收藏夹列表时出错")
         End Try
