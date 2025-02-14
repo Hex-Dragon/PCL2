@@ -124,8 +124,8 @@ WaitRetry:
             Setup.Load("ToolDownloadThread")
             Setup.Load("ToolDownloadCert")
             '释放资源
-            SetDllDirectory(PathPure.TrimEnd("\"))
-            WriteFile(PathPure & "libwebp.dll", GetResources("libwebp64"))
+            SetDllDirectory(PathPure & "CE")
+            WriteFile(PathPure & "CE\" & "libwebp.dll", GetResources("libwebp64"))
             '网络配置初始化
             ServicePointManager.Expect100Continue = True
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 Or SecurityProtocolType.Tls Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls12
