@@ -57,89 +57,96 @@ Public Class PageVersionResourcePack
     End Sub
 
     Private Sub LoadFileList()
-        Log("[Resourcepack] 刷新资源包文件")
-        FileList.Clear()
-        Dim fileRes = Directory.EnumerateFiles(ResourcepacksPath, "*.zip").ToList()
-        FileList.AddRange(fileRes)
-        Dim FolderRes = Directory.EnumerateDirectories(ResourcepacksPath).ToList()
-        FileList.AddRange(FolderRes)
-        If ModeDebug Then Log($"[Resourcepack] 共发现 {FileList.Count} 个资源包文件（{fileRes.Count} 个文件，{FolderRes.Count} 个文件夹）", LogLevel.Debug)
-        PanList.Children.Clear()
-        Dim ResCachaPath = PageVersionLeft.Version.PathIndie & "PCL\Cache\resourcepacks\"
-        If Directory.Exists(ResCachaPath) Then Directory.Delete(ResCachaPath, True)
-        Directory.CreateDirectory(ResCachaPath)
-        For Each i In FileList
-            Dim ResTempIconFile = ResCachaPath & GetHash(i) & ".png"
-            Dim ResTempDescFile = ResCachaPath & GetHash(i) & ".json"
-            Dim ResDesc As String = ""
-            Dim isFile = File.Exists(i)
+        Try
+            Log("[Resourcepack] 刷新资源包文件")
+            FileList.Clear()
+            Dim fileRes = Directory.EnumerateFiles(ResourcepacksPath, "*.zip").ToList()
+            FileList.AddRange(fileRes)
+            Dim FolderRes = Directory.EnumerateDirectories(ResourcepacksPath).ToList()
+            FileList.AddRange(FolderRes)
+            If ModeDebug Then Log($"[Resourcepack] 共发现 {FileList.Count} 个资源包文件（{fileRes.Count} 个文件，{FolderRes.Count} 个文件夹）", LogLevel.Debug)
+            PanList.Children.Clear()
+            Dim ResCachaPath = PageVersionLeft.Version.PathIndie & "PCL\Cache\resourcepacks\"
+            If Directory.Exists(ResCachaPath) Then Directory.Delete(ResCachaPath, True)
+            Directory.CreateDirectory(ResCachaPath)
+            For Each i In FileList
+                Dim ResTempIconFile = ResCachaPath & GetHash(i) & ".png"
+                Dim ResTempDescFile = ResCachaPath & GetHash(i) & ".json"
+                Dim ResDesc As String = ""
+                Dim isFile = File.Exists(i)
 
-            '提取资源
-            Try
-                Dim GetResourcepackDesc =
-                    Function(Json As JObject)
+                '提取资源
+                Try
+                    Dim GetResourcepackDesc =
+                    Function(Json As JObject) As String
                         If Json?("pack")?("description").Type = JTokenType.String Then
                             Return Json("pack")("description").ToString()
-                        Else
+                        ElseIf Json?("pack")?("description")?("fallback") IsNot Nothing Then
                             Return Json("pack")("description")("fallback").ToString()
+                        ElseIf Json?("pack")?("description")?("text") IsNot Nothing Then
+                            Return Json("pack")("description")("text").ToString()
                         End If
+                        Return Nothing
                     End Function
-                If isFile Then '文件类型的资源包
-                    Using Archive As New ZipArchive(New FileStream(i, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                        Dim pack = Archive.GetEntry("pack.png")
-                        Dim desc = Archive.GetEntry("pack.mcmeta")
-                        If pack Is Nothing Then
-                            ResTempIconFile = PathImage & "Icons/NoIcon.png"
-                        Else
-                            pack.ExtractToFile(ResTempIconFile)
-                        End If
-                        If desc IsNot Nothing Then
-                            desc.ExtractToFile(ResTempDescFile)
-                            ResDesc = GetResourcepackDesc(GetJson(File.ReadAllText(ResTempDescFile, Encoding.UTF8)))
-                        End If
-                    End Using
-                Else '文件夹型资源包
-                    ResTempIconFile = i + "\pack.png"
-                    ResDesc = GetResourcepackDesc(GetJson(File.ReadAllText(i & "\pack.mcmeta", Encoding.UTF8)))
-                End If
-            Catch ex As Exception
-                Log(ex, "[Resourcepack] 提取资源包信息失败！")
-                ResTempIconFile = PathImage & "Icons/NoIcon.png"
-                ResDesc = $"引入时间：{ If(isFile, File.GetCreationTime(i), Directory.GetCreationTime(i)).ToString("yyyy'/'MM'/'dd")}"
-            End Try
+                    If isFile Then '文件类型的资源包
+                        Using Archive As New ZipArchive(New FileStream(i, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                            Dim pack = Archive.GetEntry("pack.png")
+                            Dim desc = Archive.GetEntry("pack.mcmeta")
+                            If pack Is Nothing Then
+                                ResTempIconFile = PathImage & "Icons/NoIcon.png"
+                            Else
+                                pack.ExtractToFile(ResTempIconFile)
+                            End If
+                            If desc IsNot Nothing Then
+                                desc.ExtractToFile(ResTempDescFile)
+                                ResDesc = GetResourcepackDesc(GetJson(File.ReadAllText(ResTempDescFile, Encoding.UTF8)))
+                            End If
+                        End Using
+                    Else '文件夹型资源包
+                        ResTempIconFile = i + "\pack.png"
+                        ResDesc = GetResourcepackDesc(GetJson(File.ReadAllText(i & "\pack.mcmeta", Encoding.UTF8)))
+                    End If
+                Catch ex As Exception
+                    Log(ex, "[Resourcepack] 提取资源包信息失败！")
+                    ResTempIconFile = PathImage & "Icons/NoIcon.png"
+                    ResDesc = $"引入时间：{ If(isFile, File.GetCreationTime(i), Directory.GetCreationTime(i)).ToString("yyyy'/'MM'/'dd")}"
+                End Try
 
-            '防止错误
-            If String.IsNullOrEmpty(ResDesc) Then ResDesc = $"引入时间：{ If(isFile, File.GetCreationTime(i), Directory.GetCreationTime(i)).ToString("yyyy'/'MM'/'dd")}"
-            If Not File.Exists(ResTempIconFile) Then ResTempIconFile = PathImage & "Icons/NoIcon.png"
+                '防止错误
+                If String.IsNullOrEmpty(ResDesc) Then ResDesc = $"引入时间：{ If(isFile, File.GetCreationTime(i), Directory.GetCreationTime(i)).ToString("yyyy'/'MM'/'dd")}"
+                If Not File.Exists(ResTempIconFile) Then ResTempIconFile = PathImage & "Icons/NoIcon.png"
 
-            Dim worldItem As MyListItem = New MyListItem With {
+                Dim worldItem As MyListItem = New MyListItem With {
                 .Title = If(isFile, GetFileNameWithoutExtentionFromPath(i), GetFolderNameFromPath(i)),
                 .Logo = ResTempIconFile,
                 .Info = ResDesc,
                 .Tag = i
             }
-            Dim BtnOpen As MyIconButton = New MyIconButton With {
+                Dim BtnOpen As MyIconButton = New MyIconButton With {
                 .Logo = Logo.IconButtonOpen,
                 .ToolTip = "打开",
                 .Tag = i
             }
-            AddHandler BtnOpen.Click, AddressOf BtnOpen_Click
-            Dim BtnDelete As MyIconButton = New MyIconButton With {
+                AddHandler BtnOpen.Click, AddressOf BtnOpen_Click
+                Dim BtnDelete As MyIconButton = New MyIconButton With {
                 .Logo = Logo.IconButtonDelete,
                 .ToolTip = "删除",
                 .Tag = i
             }
-            AddHandler BtnDelete.Click, AddressOf BtnDelete_Click
-            Dim BtnCopy As MyIconButton = New MyIconButton With {
+                AddHandler BtnDelete.Click, AddressOf BtnDelete_Click
+                Dim BtnCopy As MyIconButton = New MyIconButton With {
                 .Logo = Logo.IconButtonCopy,
                 .ToolTip = "复制",
                 .Tag = i
             }
-            AddHandler BtnCopy.Click, AddressOf BtnCopy_Click
-            worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy}
-            PanList.Children.Add(worldItem)
-        Next
-        RefreshUI()
+                AddHandler BtnCopy.Click, AddressOf BtnCopy_Click
+                worldItem.Buttons = {BtnOpen, BtnDelete, BtnCopy}
+                PanList.Children.Add(worldItem)
+            Next
+            RefreshUI()
+        Catch ex As Exception
+            Log(ex, "[Resourcepack] 刷新资源包文件失败！", LogLevel.Msgbox)
+        End Try
     End Sub
 
     Private Function GetPathFromSender(sender As Object) As String

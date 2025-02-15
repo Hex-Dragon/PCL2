@@ -1,4 +1,6 @@
-﻿Public Module ModComp
+﻿Imports System.Threading.Tasks
+
+Public Module ModComp
 
     Public Enum CompType
         ''' <summary>
@@ -211,6 +213,34 @@
                 Return If(DatabaseEntry Is Nothing OrElse DatabaseEntry.ChineseName = "", RawName, DatabaseEntry.ChineseName)
             End Get
         End Property
+        ''' <summary>
+        ''' 中文描述。若为 Nothing 则没有。
+        ''' </summary>
+        Public ReadOnly Property ChineseDescription As Task(Of String)
+            Get
+                Return GetChineseDescriptionAsync()
+            End Get
+        End Property
+
+        Private Async Function GetChineseDescriptionAsync() As Task(Of String)
+            Dim from = If(FromCurseForge, "curseforge", "modrinth")
+            Dim para = If(FromCurseForge, "modId", "project_id")
+            Dim result As String = Nothing
+
+            Try
+                Dim jsonObject = Await Task.Run(Function() NetGetCodeByRequestOnce($"https://mod.mcimirror.top/translate/{from}?{para}={Id}", Encode:=Encoding.UTF8, IsJson:=True))
+                If jsonObject.ContainsKey("translated") Then
+                    result = jsonObject("translated").ToString()
+                Else
+                    Hint($"{TranslatedName} 的简介暂无译文！", HintType.Critical)
+                End If
+            Catch ex As Exception
+                Log(ex, "获取中文描述时出现错误！")
+                Hint($"获取译文时出现错误，信息：{ex.Message}", HintType.Critical)
+            End Try
+
+            Return result
+        End Function
 
         '实例化
 
@@ -395,105 +425,115 @@
                     'Tags & ModLoaders
                     Tags = New List(Of String)
                     ModLoaders = New List(Of CompModLoaderType)
+                    If Data?("loaders") IsNot Nothing Then
+                        For Each Category In Data("loaders").Select(Function(t) t.ToString)
+                            Select Case Category
+                                Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
+                                Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
+                                Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
+                                Case "neoforge" : ModLoaders.Add(CompModLoaderType.NeoForge)
+                            End Select
+                        Next
+                    End If
                     For Each Category In Data("categories").Select(Function(t) t.ToString)
-                        Select Case Category
+                            Select Case Category
                             '加载器
-                            Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
-                            Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
-                            Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
-                            Case "neoforge" : ModLoaders.Add(CompModLoaderType.NeoForge)
+                                Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
+                                Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
+                                Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
+                                Case "neoforge" : ModLoaders.Add(CompModLoaderType.NeoForge)
                             'Mod
-                            Case "worldgen" : Tags.Add("世界元素")
-                            Case "technology" : Tags.Add("科技")
-                            Case "food" : Tags.Add("食物/烹饪")
-                            Case "game-mechanics" : Tags.Add("游戏机制")
-                            Case "transportation" : Tags.Add("运输")
-                            Case "storage" : Tags.Add("仓储")
-                            Case "magic" : Tags.Add("魔法")
-                            Case "adventure" : Tags.Add("冒险")
-                            Case "decoration" : Tags.Add("装饰")
-                            Case "mobs" : Tags.Add("生物")
-                            Case "equipment" : Tags.Add("装备")
-                            Case "optimization" : Tags.Add("性能优化")
-                            Case "social" : Tags.Add("服务器")
-                            Case "utility" : Tags.Add("改良")
-                            Case "library" : Tags.Add("支持库")
+                                Case "worldgen" : Tags.Add("世界元素")
+                                Case "technology" : Tags.Add("科技")
+                                Case "food" : Tags.Add("食物/烹饪")
+                                Case "game-mechanics" : Tags.Add("游戏机制")
+                                Case "transportation" : Tags.Add("运输")
+                                Case "storage" : Tags.Add("仓储")
+                                Case "magic" : Tags.Add("魔法")
+                                Case "adventure" : Tags.Add("冒险")
+                                Case "decoration" : Tags.Add("装饰")
+                                Case "mobs" : Tags.Add("生物")
+                                Case "equipment" : Tags.Add("装备")
+                                Case "optimization" : Tags.Add("性能优化")
+                                Case "social" : Tags.Add("服务器")
+                                Case "utility" : Tags.Add("改良")
+                                Case "library" : Tags.Add("支持库")
                             '整合包
-                            Case "multiplayer" : Tags.Add("多人")
-                            Case "optimization" : Tags.Add("性能优化")
-                            Case "challenging" : Tags.Add("硬核")
-                            Case "combat" : Tags.Add("战斗")
-                            Case "quests" : Tags.Add("任务")
-                            Case "technology" : Tags.Add("科技")
-                            Case "magic" : Tags.Add("魔法")
-                            Case "adventure" : Tags.Add("冒险")
-                            Case "kitchen-sink" : Tags.Add("大杂烩")
-                            Case "lightweight" : Tags.Add("轻量")
+                                Case "multiplayer" : Tags.Add("多人")
+                                Case "optimization" : Tags.Add("性能优化")
+                                Case "challenging" : Tags.Add("硬核")
+                                Case "combat" : Tags.Add("战斗")
+                                Case "quests" : Tags.Add("任务")
+                                Case "technology" : Tags.Add("科技")
+                                Case "magic" : Tags.Add("魔法")
+                                Case "adventure" : Tags.Add("冒险")
+                                Case "kitchen-sink" : Tags.Add("大杂烩")
+                                Case "lightweight" : Tags.Add("轻量")
                             '光影包
-                            Case "cartoon" : Tags.Add("卡通")
-                            Case "cursed" : Tags.Add("Cursed")
-                            Case "fantasy" : Tags.Add("幻想")
-                            Case "realistic" : Tags.Add("写实")
-                            Case "semi-realistic" : Tags.Add("半写实")
-                            Case "vanilla-like" : Tags.Add("原版风")
+                                Case "cartoon" : Tags.Add("卡通")
+                                Case "cursed" : Tags.Add("Cursed")
+                                Case "fantasy" : Tags.Add("幻想")
+                                Case "realistic" : Tags.Add("写实")
+                                Case "semi-realistic" : Tags.Add("半写实")
+                                Case "vanilla-like" : Tags.Add("原版风")
 
-                            Case "atmosphere" : Tags.Add("大气环境")
-                            Case "bloom" : Tags.Add("植被")
-                            Case "colored-lighting" : Tags.Add("光源着色")
-                            Case "foliage" : Tags.Add("树叶")
-                            Case "path-tracing" : Tags.Add("路径追踪")
-                            Case "pbr" : Tags.Add("PBR")
-                            Case "reflections" : Tags.Add("反射")
-                            Case "shadows" : Tags.Add("阴影")
+                                Case "atmosphere" : Tags.Add("大气环境")
+                                Case "bloom" : Tags.Add("植被")
+                                Case "colored-lighting" : Tags.Add("光源着色")
+                                Case "foliage" : Tags.Add("树叶")
+                                Case "path-tracing" : Tags.Add("路径追踪")
+                                Case "pbr" : Tags.Add("PBR")
+                                Case "reflections" : Tags.Add("反射")
+                                Case "shadows" : Tags.Add("阴影")
 
-                            Case "potato" : Tags.Add("土豆画质")
-                            Case "low" : Tags.Add("低性能影响")
-                            Case "medium" : Tags.Add("中性能影响")
-                            Case "high" : Tags.Add("高性能影响")
-                            Case "screenshot" : Tags.Add("极致画质")
+                                Case "potato" : Tags.Add("土豆画质")
+                                Case "low" : Tags.Add("低性能影响")
+                                Case "medium" : Tags.Add("中性能影响")
+                                Case "high" : Tags.Add("高性能影响")
+                                Case "screenshot" : Tags.Add("极致画质")
 
-                            Case "canvas" : Tags.Add("Canvas")
-                            Case "iris" : Tags.Add("Iris")
-                            Case "optifine" : Tags.Add("OptiFine")
-                            Case "vanilla" : Tags.Add("原版光影")
+                                Case "canvas" : Tags.Add("Canvas")
+                                Case "iris" : Tags.Add("Iris")
+                                Case "optifine" : Tags.Add("OptiFine")
+                                Case "vanilla" : Tags.Add("原版光影")
                             '资源包
-                            Case "8x-" : Tags.Add("8x-")
-                            Case "16x" : Tags.Add("16x")
-                            Case "32x" : Tags.Add("32x")
-                            Case "48x" : Tags.Add("48x")
-                            Case "64x" : Tags.Add("64x")
-                            Case "128x" : Tags.Add("128x")
-                            Case "256x" : Tags.Add("256x")
-                            Case "512x+" : Tags.Add("512x+")
-                            Case "audio" : Tags.Add("声音")
-                            Case "blocks" : Tags.Add("方块")
-                            Case "combat" : Tags.Add("战斗")
-                            Case "core-shaders" : Tags.Add("核心着色器")
-                            Case "cursed" : Tags.Add("Cursed")
-                            Case "decoration" : Tags.Add("装饰")
-                            Case "entities" : Tags.Add("实体")
-                            Case "environment" : Tags.Add("环境")
-                            Case "equipment" : Tags.Add("装备")
-                            Case "fonts" : Tags.Add("字体")
-                            Case "gui" : Tags.Add("GUI")
-                            Case "items" : Tags.Add("物品")
-                            Case "locale" : Tags.Add("本地化")
-                            Case "modded" : Tags.Add("Modded")
-                            Case "models" : Tags.Add("模型")
-                            Case "realistic" : Tags.Add("写实")
-                            Case "simplistic" : Tags.Add("扁平")
-                            Case "themed" : Tags.Add("主题")
-                            Case "tweaks" : Tags.Add("优化")
-                            Case "utility" : Tags.Add("实用")
-                            Case "vanilla-like" : Tags.Add("类原生")
-                        End Select
-                    Next
-                    If Not Tags.Any() Then Tags.Add("杂项")
-                    Tags.Sort()
-                    ModLoaders.Sort()
+                                Case "8x-" : Tags.Add("8x-")
+                                Case "16x" : Tags.Add("16x")
+                                Case "32x" : Tags.Add("32x")
+                                Case "48x" : Tags.Add("48x")
+                                Case "64x" : Tags.Add("64x")
+                                Case "128x" : Tags.Add("128x")
+                                Case "256x" : Tags.Add("256x")
+                                Case "512x+" : Tags.Add("512x+")
+                                Case "audio" : Tags.Add("声音")
+                                Case "blocks" : Tags.Add("方块")
+                                Case "combat" : Tags.Add("战斗")
+                                Case "core-shaders" : Tags.Add("核心着色器")
+                                Case "cursed" : Tags.Add("Cursed")
+                                Case "decoration" : Tags.Add("装饰")
+                                Case "entities" : Tags.Add("实体")
+                                Case "environment" : Tags.Add("环境")
+                                Case "equipment" : Tags.Add("装备")
+                                Case "fonts" : Tags.Add("字体")
+                                Case "gui" : Tags.Add("GUI")
+                                Case "items" : Tags.Add("物品")
+                                Case "locale" : Tags.Add("本地化")
+                                Case "modded" : Tags.Add("Modded")
+                                Case "models" : Tags.Add("模型")
+                                Case "realistic" : Tags.Add("写实")
+                                Case "simplistic" : Tags.Add("扁平")
+                                Case "themed" : Tags.Add("主题")
+                                Case "tweaks" : Tags.Add("优化")
+                                Case "utility" : Tags.Add("实用")
+                                Case "vanilla-like" : Tags.Add("类原生")
+                            End Select
+                        Next
+                        If Not Tags.Any() Then Tags.Add("杂项")
+                        Tags.Sort()
+                        ModLoaders.Sort()
 #End Region
+                    End If
                 End If
-            End If
             '保存缓存
             CompProjectCache(Id) = Me
         End Sub
@@ -1623,29 +1663,139 @@ Retry:
 #Region "CompFavorites | 收藏"
     Class CompFavorites
 
+        Public Shared Function GetShareCode(Data As List(Of String)) As String
+            Try
+                Return New JArray(Data).ToString(Newtonsoft.Json.Formatting.None)
+            Catch ex As Exception
+                Log(ex, "[CompFavorites] 生成分享出错")
+            End Try
+            Return ""
+        End Function
+
+        Public Shared Function GetIdsByShareCode(Code As String) As List(Of String)
+            Try
+                Return JArray.Parse(Code).ToObject(Of List(Of String))()
+            Catch ex As Exception
+                Log(ex, "[CompFavorites] 通过分享获取 ID 出错")
+            End Try
+            Return New List(Of String)
+        End Function
+
+        ''' <summary>
+        ''' 显示收藏菜单。
+        ''' </summary>
+        ''' <param name="Project"></param>
+        ''' <param name="Pos"></param>
+        Public Shared Sub ShowMenu(Project As CompProject, Pos As UIElement)
+            Dim Body As New ContextMenu()
+            For Each i In FavoritesList
+                Dim Item As New MyMenuItem
+                Item.MaxWidth = 240
+                Dim HasFavs As Boolean = i.Favs.Contains(Project.Id)
+                If HasFavs Then
+                    Item.Header = $"取消收藏 {i.Name}"
+                    Item.Icon = Logo.IconButtonLikeFill
+                Else
+                    Item.Header = $"收藏到 {i.Name}"
+                    Item.Icon = Logo.IconButtonLikeLine
+                End If
+                AddHandler Item.Click, Sub()
+                                           Try
+                                               If HasFavs Then
+                                                   i.Favs.Remove(Project.Id)
+                                                   Hint($"已将 {Project.TranslatedName} 从 {i.Name} 中删除", HintType.Finish)
+                                               Else
+                                                   i.Favs.Add(Project.Id)
+                                                   i.Favs.Distinct()
+                                                   Hint($"已将 {Project.TranslatedName} 添加到 {i.Name} 中", HintType.Finish)
+                                               End If
+                                               Save()
+                                           Catch ex As Exception
+                                               Log(ex, "[CompFavorites] 改变收藏项出错")
+                                           End Try
+                                       End Sub
+                Body.Items.Add(Item)
+            Next
+            Body.Placement = Primitives.PlacementMode.Bottom
+            Body.PlacementTarget = Pos
+            Body.IsOpen = True
+        End Sub
+
+        Public Class FavData
+            ''' <summary>
+            ''' 收藏夹名称
+            ''' </summary>
+            ''' <returns></returns>
+            Property Name As String
+            ''' <summary>
+            ''' Guid
+            ''' </summary>
+            ''' <returns></returns>
+            Property Id As String
+            ''' <summary>
+            ''' 收藏的工程 ID 列表
+            ''' </summary>
+            ''' <returns></returns>
+            Property Favs As New List(Of String)
+        End Class
+
+        Private Shared _FavoritesList As List(Of FavData)
         ''' <summary>
         ''' 收藏的工程列表
         ''' </summary>
-        Private Shared _FavoritesList As List(Of String) = Nothing
-        Public Shared Property FavoritesList As List(Of String)
+        Public Shared Property FavoritesList As List(Of FavData)
             Get
                 If _FavoritesList Is Nothing Then
                     Dim RawData As String = Setup.Get("CompFavorites")
-                    Dim RawList As JArray = JArray.Parse(RawData)
-                    _FavoritesList = RawList.ToObject(Of List(Of String))()
+                    Dim RawList As List(Of FavData) = Nothing
+                    Dim Migrate As List(Of String) = Nothing
+                    Try
+                        Migrate = JArray.Parse(RawData).ToObject(Of List(Of String)) ' 从旧版本迁移
+                    Catch ex As Exception
+                    End Try
+                    If Migrate IsNot Nothing Then
+                        RawList = New List(Of FavData)
+                        RawList.Add(GetNewFav("默认", Migrate))
+                    Else
+                        RawList = JArray.Parse(RawData).ToObject(Of List(Of FavData))
+                        If RawList.Count = 0 Then
+                            RawList.Add(GetNewFav("默认", Nothing)) ' 确保无论如何都要至少有一个
+                        End If
+                    End If
+                    _FavoritesList = RawList
+                    Save()
                 End If
                 Return _FavoritesList
             End Get
             Set
                 _FavoritesList = Value
                 Dim RawList = JArray.FromObject(_FavoritesList)
-                Setup.Set("CompFavorites", RawList.ToString())
+                Setup.Set("CompFavorites", RawList.ToString(Newtonsoft.Json.Formatting.None))
             End Set
         End Property
 
+        ''' <summary>
+        ''' 保存收藏夹数据
+        ''' </summary>
         Public Shared Sub Save()
             FavoritesList = _FavoritesList
         End Sub
+
+        ''' <summary>
+        ''' 获取一个新的收藏夹
+        ''' </summary>
+        ''' <param name="Name"></param>
+        ''' <param name="FavList">没有传 Nothing</param>
+        ''' <returns></returns>
+        Public Shared Function GetNewFav(Name As String, FavList As List(Of String)) As FavData
+            Dim res As New FavData With {.Name = Name, .Id = Guid.NewGuid.ToString()}
+            If FavList Is Nothing Then
+                res.Favs = New List(Of String)
+            Else
+                res.Favs = FavList
+            End If
+            Return res
+        End Function
     End Class
 
     Class CompRequest
