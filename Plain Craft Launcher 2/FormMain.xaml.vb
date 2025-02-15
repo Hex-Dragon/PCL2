@@ -1466,7 +1466,7 @@ Public Class FormMain
         PageChange(PageType.GameLog)
     End Sub
     Public Function BtnExtraLog_ShowCheck() As Boolean
-        If FrmLogLeft Is Nothing OrElse FrmLogRight Is Nothing Then Return False
+        If FrmLogLeft Is Nothing OrElse FrmLogRight Is Nothing OrElse PageCurrent = PageType.GameLog Then Return False
         Return FrmLogLeft.ShownLogs.Count > 0
     End Function
 

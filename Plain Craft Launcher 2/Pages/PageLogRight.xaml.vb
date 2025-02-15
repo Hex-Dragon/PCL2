@@ -1,34 +1,53 @@
 ﻿Public Class PageLogRight
     Public Sub Refresh()
         '初始化
-        PanLog.Background = If(IsDarkMode, New MyColor(6, 20, 35), New MyColor(197, 209, 233))
-        If FrmLogLeft.CurrentLog Is Nothing Then
-            PanAllBack.Visibility = Visibility.Collapsed
-            PanEmpty.Visibility = Visibility.Visible
-            CardOperation.Visibility = Visibility.Collapsed
-        Else
-            PanAllBack.Visibility = Visibility.Visible
-            PanEmpty.Visibility = Visibility.Collapsed
-            CardOperation.Visibility = Visibility.Visible
-            '绑定事件
-            AddHandler FrmLogLeft.CurrentLog.LogOutput, AddressOf OnLogOutput
+        If FrmLogLeft.CurrentLog Is Nothing OrElse FrmLogLeft.CurrentUuid <= 0 OrElse FrmLogLeft.ShownLogs.Count = 0 Then
+            FrmMain.PageChange(FrmMain.PageCurrent)
+            Return
         End If
+        PanAllBack.Visibility = Visibility.Visible
+        CardOperation.Visibility = Visibility.Visible
+        '绑定日志输出
+        PanLog.Document = FrmLogLeft.FlowDocuments(FrmLogLeft.CurrentUuid)
+        '绑定事件
+        AddHandler FrmLogLeft.CurrentLog.LogOutput, AddressOf OnLogOutput
+        '刷新计数器
+        LabFatal.Text = FrmLogLeft.CurrentLog.CountFatal
+        LabError.Text = FrmLogLeft.CurrentLog.CountError
+        LabWarn.Text = FrmLogLeft.CurrentLog.CountWarn
+        LabInfo.Text = FrmLogLeft.CurrentLog.CountInfo
+        LabDebug.Text = FrmLogLeft.CurrentLog.CountDebug
     End Sub
     Private Sub PageLogRight_Loaded(sender As Object, e As RoutedEventArgs) Handles Me.Loaded
         Refresh()
     End Sub
-    Private Sub OnLogOutput(sender As McGameLog, e As LogOutputEventArgs)
+    Private Sub OnLogOutput(sender As Watcher, e As LogOutputEventArgs)
         RunInUi(Sub()
-                    Dim paragraph As New Paragraph(New Run(e.LogText)) With {
-                        .Foreground = e.Color
-                    }
-                    PanLog.Document.Blocks.Add(paragraph)
-                    If CheckAutoScroll.Checked Then PanBack.ScrollToBottom()
-                    LabFatal.Text = FrmLogLeft.CurrentLog.CountFatal
-                    LabError.Text = FrmLogLeft.CurrentLog.CountError
-                    LabWarn.Text = FrmLogLeft.CurrentLog.CountWarn
-                    LabInfo.Text = FrmLogLeft.CurrentLog.CountInfo
-                    LabDebug.Text = FrmLogLeft.CurrentLog.CountDebug
+                    If FrmLogLeft.CurrentLog IsNot Nothing Then
+                        Thread.Sleep(1) '让对面 FrmLogLeft 执行完
+                        If CheckAutoScroll.Checked Then PanBack.ScrollToBottom()
+                        LabFatal.Text = FrmLogLeft.CurrentLog.CountFatal
+                        LabError.Text = FrmLogLeft.CurrentLog.CountError
+                        LabWarn.Text = FrmLogLeft.CurrentLog.CountWarn
+                        LabInfo.Text = FrmLogLeft.CurrentLog.CountInfo
+                        LabDebug.Text = FrmLogLeft.CurrentLog.CountDebug
+                    End If
                 End Sub)
     End Sub
+
+#Region "卡片按钮"
+    Private Sub BtnOperationClear_Click(sender As Object, e As RouteEventArgs) Handles BtnOperationClear.Click
+        FrmLogLeft.FlowDocuments(FrmLogLeft.CurrentUuid).Blocks.Clear()
+    End Sub
+
+    Private Sub BtnOperationExport_Click(sender As Object, e As RouteEventArgs) Handles BtnOperationExport.Click
+        SelectAs("选择导出位置", $"游戏日志 - {FrmLogLeft.CurrentLog.Version.Name}.log", "游戏日志(*.log)|*.log")
+    End Sub
+
+    Private Sub BtnOperationKill_Click(sender As Object, e As RouteEventArgs) Handles BtnOperationKill.Click
+        FrmLogLeft.CurrentLog.Kill()
+        Hint($"已关闭游戏 {FrmLogLeft.CurrentLog.Version.Name}", HintType.Finish)
+    End Sub
+#End Region
+
 End Class

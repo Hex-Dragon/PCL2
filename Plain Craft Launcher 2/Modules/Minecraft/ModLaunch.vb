@@ -2180,14 +2180,6 @@ IgnoreCustomSkin:
     End Sub
     Private Sub McLaunchWait(Loader As LoaderTask(Of Process, Integer))
 
-        '显示实时日志
-        If CurrentLaunchOptions.Test Then
-            If FrmLogLeft Is Nothing Then RunInUiWait(Sub() FrmLogLeft = New PageLogLeft)
-            If FrmLogRight Is Nothing Then RunInUiWait(Sub() FrmLogRight = New PageLogRight)
-            FrmLogLeft.AddProcess(McVersionCurrent, McLaunchProcess)
-            McLaunchLog("已显示游戏实时日志")
-        End If
-
         '输出信息
         McLaunchLog("")
         McLaunchLog("~ 基础参数 ~")
@@ -2218,8 +2210,16 @@ IgnoreCustomSkin:
         WindowTitle = ArgumentReplace(WindowTitle, False)
 
         '初始化等待
-        Dim Watcher As New Watcher(Loader, McVersionCurrent, WindowTitle)
+        Dim Watcher As New Watcher(Loader, McVersionCurrent, WindowTitle, CurrentLaunchOptions.Test)
         McLaunchWatcher = Watcher
+
+        '显示实时日志
+        If CurrentLaunchOptions.Test Then
+            If FrmLogLeft Is Nothing Then RunInUiWait(Sub() FrmLogLeft = New PageLogLeft)
+            If FrmLogRight Is Nothing Then RunInUiWait(Sub() FrmLogRight = New PageLogRight)
+            FrmLogLeft.Add(Watcher)
+            McLaunchLog("已显示游戏实时日志")
+        End If
 
         '等待
         Do While Watcher.State = Watcher.MinecraftState.Loading

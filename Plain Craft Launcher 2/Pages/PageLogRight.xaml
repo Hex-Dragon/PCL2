@@ -12,17 +12,18 @@
                      FontFamily="Consolas"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
-                     BorderThickness="0" />
+                     BorderThickness="0"
+                     Background="#061423" />
             </local:MyScrollViewer>
         </Grid>
 
-        <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40" x:Name="PanEmpty" UseAnimation="False">
+        <!--<local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40" x:Name="PanEmpty" UseAnimation="False">
             <StackPanel Margin="20,17">
                 <TextBlock Name="LabEmptyTitle" Margin="0,0,0,9" HorizontalAlignment="Center" Text="无实时日志" FontSize="19" UseLayoutRounding="True" SnapsToDevicePixels="True" Foreground="{DynamicResource ColorBrush3}" />
                 <Rectangle HorizontalAlignment="Stretch" Height="2" Fill="{DynamicResource ColorBrush3}" />
                 <TextBlock Name="LabEmptyContent" Margin="10,15,10,5" Text="请点击 版本设置 → 概览 → 测试游戏 以显示游戏的实时日志。" TextWrapping="Wrap" />
             </StackPanel>
-        </local:MyCard>
+        </local:MyCard>-->
         
         <local:MyCard x:Name="CardOperation" Visibility="Visible" Opacity="0" Height="100"
                       HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="25,25,25,10" UseAnimation="False" HasMouseAnimation="True">
