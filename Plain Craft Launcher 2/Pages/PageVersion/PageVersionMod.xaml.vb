@@ -538,48 +538,51 @@ Install:
     Private ReadOnly SortLock As New Object
     Private Sub DoSort()
         SyncLock SortLock
-            If PanList Is Nothing Then Exit Sub
-            Dim Length As Integer = PanList.Children.Count
-            Dim MS = GetSortMethod(CurrentSortMethod)
-            For i As Integer = 0 To Length - 1
-                For j As Integer = 0 To Length - i - 2
-                    Dim Comp1 As MyLocalModItem = PanList.Children(j)
-                    Dim Comp2 As MyLocalModItem = PanList.Children(j + 1)
+            If PanList Is Nothing OrElse PanList.Children.Count < 2 Then Exit Sub
 
-                    If CurrentSortMethod = SortMethod.TagNums AndAlso (Comp1.Entry.Comp Is Nothing OrElse Comp2.Entry.Comp Is Nothing) Then
-                        Continue For
-                    End If
-                    If MS(Comp2.Entry, Comp1.Entry) Then
-                        ' 交换元素
-                        Dim temp1 As MyLocalModItem = PanList.Children(j)
-                        Dim temp2 As MyLocalModItem = PanList.Children(j + 1)
-                        PanList.Children.Remove(temp1)
-                        PanList.Children.Remove(temp2)
-                        PanList.Children.Insert(j, temp2)
-                        PanList.Children.Insert(j + 1, temp1)
-                    End If
-                Next
-            Next
+            ' 将子元素转换为可排序的列表
+            Dim items = PanList.Children.OfType(Of MyLocalModItem)().ToList()
+            Dim Method = GetSortMethod(CurrentSortMethod)
+
+            ' 根据排序类型处理特殊逻辑
+            If CurrentSortMethod = SortMethod.TagNums Then
+                ' 分离有效和无效项（保持原始相对顺序）
+                Dim valid = items.Where(Function(i) i.Entry.Comp IsNot Nothing).ToList()
+                Dim invalid = items.Except(valid).ToList()
+
+                ' 仅对有效项进行排序
+                valid.Sort(Function(x, y) Method(y.Entry, x.Entry))
+
+                ' 合并保持无效项的原始顺序
+                items = valid.Concat(invalid).ToList()
+            Else
+                ' 直接进行高效排序
+                items.Sort(Function(x, y) Method(y.Entry, x.Entry))
+            End If
+
+            ' 批量更新UI元素
+            PanList.Children.Clear()
+            items.ForEach(Sub(i) PanList.Children.Add(i))
         End SyncLock
     End Sub
 
-    Private Function GetSortMethod(Method As SortMethod) As Func(Of McMod, McMod, Boolean)
+    Private Function GetSortMethod(Method As SortMethod) As Func(Of McMod, McMod, Integer)
         Select Case Method
             Case SortMethod.FileName
-                Return Function(a As McMod, b As McMod) As Boolean
-                           Return StrComp(a.FileName, b.FileName) < 0
+                Return Function(a As McMod, b As McMod) As Integer
+                           Return StrComp(a.FileName, b.FileName)
                        End Function
             Case SortMethod.ModName
-                Return Function(a As McMod, b As McMod) As Boolean
-                           Return StrComp(a.Name, b.Name) < 0
+                Return Function(a As McMod, b As McMod) As Integer
+                           Return StrComp(a.Name, b.Name)
                        End Function
             Case SortMethod.TagNums
-                Return Function(a As McMod, b As McMod) As Boolean
-                           Return a.Comp.Tags.Count > b.Comp.Tags.Count
+                Return Function(a As McMod, b As McMod) As Integer
+                           Return a.Comp.Tags.Count - b.Comp.Tags.Count
                        End Function
             Case SortMethod.CreateTime
-                Return Function(a As McMod, b As McMod) As Boolean
-                           Return (New FileInfo(a.Path)).CreationTime > (New FileInfo(b.Path)).CreationTime
+                Return Function(a As McMod, b As McMod) As Integer
+                           Return If((New FileInfo(a.Path)).CreationTime > (New FileInfo(b.Path)).CreationTime, 1, -1)
                        End Function
         End Select
     End Function
