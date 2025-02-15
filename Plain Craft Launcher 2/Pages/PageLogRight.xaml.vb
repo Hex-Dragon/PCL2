@@ -41,7 +41,10 @@
     End Sub
 
     Private Sub BtnOperationExport_Click(sender As Object, e As RouteEventArgs) Handles BtnOperationExport.Click
-        SelectAs("选择导出位置", $"游戏日志 - {FrmLogLeft.CurrentLog.Version.Name}.log", "游戏日志(*.log)|*.log")
+        Dim SavePath As String = SelectAs("选择导出位置", $"游戏日志 - {FrmLogLeft.CurrentLog.Version.Name}.log", "游戏日志(*.log)|*.log")
+        File.WriteAllLines(SavePath, FrmLogLeft.CurrentLog.FullLog)
+        Hint("日志已导出！", HintType.Finish)
+        OpenExplorer($"/select,""{SavePath}""")
     End Sub
 
     Private Sub BtnOperationKill_Click(sender As Object, e As RouteEventArgs) Handles BtnOperationKill.Click

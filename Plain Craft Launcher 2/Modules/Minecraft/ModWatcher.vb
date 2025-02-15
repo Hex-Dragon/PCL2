@@ -114,7 +114,7 @@
             Me.Loader = Loader
             Me.Version = Version
             Me.WindowTitle = WindowTitle
-            Me.OutputRealTime = OutputRealTime
+            Me.RealTime = OutputRealTime
             Me.PID = Loader.Input.Id
             WatcherLog("开始 Minecraft 日志监控")
             If Me.WindowTitle <> "" Then WatcherLog("要求窗口标题：" & WindowTitle)
@@ -187,12 +187,19 @@
             SyncLock WaitingLogLock
                 WaitingLog.Add(e.Data)
             End SyncLock
-            If OutputRealTime Then LogRealTime(e.Data, LastLevel)
+            If RealTime Then
+                LogRealTime(e.Data, LastLevel)
+                If e.Data IsNot Nothing Then FullLog.Add(e.Data)
+            End If
         End Sub
         ''' <summary>
         ''' 是否处理实时日志。
         ''' </summary>
-        Private OutputRealTime As Boolean
+        Private RealTime As Boolean
+        ''' <summary>
+        ''' 游戏的所有日志输出，只有处理实时日志的情况下才会记录。
+        ''' </summary>
+        Public FullLog As New List(Of String)
         ''' <summary>
         ''' 上一行日志级别。
         ''' </summary>
@@ -247,7 +254,7 @@
                 If GameProcess.HasExited Then
                     WatcherLog("Minecraft 已退出，返回值：" & GameProcess.ExitCode)
                     '实时日志输出
-                    If OutputRealTime Then LogRealTime($"Minecraft 已退出，返回值：{GameProcess.ExitCode}", GameLogLevel.Info)
+                    If RealTime Then LogRealTime($"Minecraft 已退出，返回值：{GameProcess.ExitCode}", GameLogLevel.Info)
                     'If Process.ExitCode = 1 Then
                     '    '返回值为 1，考虑是任务管理器结束
                     '    WatcherLog("Minecraft 返回值为 1，考虑为任务管理器结束") '并不，崩了照样是 1
@@ -467,7 +474,7 @@
             Try
                 If Not GameProcess.HasExited Then GameProcess.Kill()
                 WatcherLog("已强制结束 Minecraft 进程")
-                If OutputRealTime Then LogRealTime($"Minecraft 已退出，返回值：{GameProcess.ExitCode}", GameLogLevel.Info)
+                If RealTime Then LogRealTime($"Minecraft 已退出，返回值：{GameProcess.ExitCode}", GameLogLevel.Info)
             Catch ex As Exception
                 Log(ex, "强制结束 Minecraft 进程失败", LogLevel.Hint)
             End Try
