@@ -12,6 +12,15 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If RELEASE Then
+        If LastVersion < 360 Then '2.10.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持多收藏夹，允许批量下载和分享"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了更新通道机制"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了国内本体更新和公告服务器，感谢 @pysio2007"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "更改 Java Wrapper 启用机制"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复 Authlib 验证可能失败的问题"))
+            FeatureCount += 5
+            BugCount += 7
+        End If
         If LastVersion < 357 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复第三方登录无效会话问题"))
             BugCount += 1
