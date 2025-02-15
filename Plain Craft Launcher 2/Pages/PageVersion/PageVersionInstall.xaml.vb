@@ -368,10 +368,17 @@ Public Class PageVersionInstall
     Private Sub SelectReload() Handles CardOptiFine.Swap, LoadOptiFine.StateChanged, CardForge.Swap, LoadForge.StateChanged, CardNeoForge.Swap, LoadNeoForge.StateChanged, CardFabric.Swap, LoadFabric.StateChanged, CardFabricApi.Swap, LoadFabricApi.StateChanged, CardOptiFabric.Swap, LoadOptiFabric.StateChanged, CardLiteLoader.Swap, LoadLiteLoader.StateChanged, LoadQuilt.StateChanged, CardQuilt.Swap, LoadQSL.StateChanged, CardQSL.Swap
         If SelectedMinecraftId Is Nothing OrElse IsReloading Then Exit Sub
         IsReloading = True
+        Dim SelectedInfo As String = GetSelectInfo()
         '主预览
         ItemSelect.Title = PageVersionLeft.Version.Name
-        ItemSelect.Info = GetSelectInfo()
         ItemSelect.Logo = GetSelectLogo()
+        If SelectedInfo = CurrentInfo Then
+            ItemSelect.Info = SelectedInfo
+            BtnSelectStart.IsEnabled = False
+        Else
+            ItemSelect.Info = CurrentInfo + " → " + SelectedInfo
+            BtnSelectStart.IsEnabled = True
+        End If
         'Minecraft
         LabMinecraft.Text = SelectedMinecraftId
         ImgMinecraft.Source = New MyBitmap(SelectedMinecraftIcon)
@@ -649,6 +656,7 @@ Public Class PageVersionInstall
     ''' </summary>
     Private Function GetSelectInfo() As String
         Dim Info As String = ""
+        Info += SelectedMinecraftId
         If SelectedFabric IsNot Nothing Then
             Info += ", Fabric " & SelectedFabric.Replace("+build", "")
         End If
@@ -667,7 +675,7 @@ Public Class PageVersionInstall
         If SelectedOptiFine IsNot Nothing Then
             Info += ", OptiFine " & SelectedOptiFine.NameDisplay.Replace(SelectedMinecraftId & " ", "")
         End If
-        If Info = "" Then Info = ", 无附加安装"
+        If Info = SelectedMinecraftId Then Info += ", 无附加安装"
         Return Info.TrimStart(", ".ToCharArray())
     End Function
     ''' <summary>
@@ -701,8 +709,12 @@ Public Class PageVersionInstall
         BtnSelectStart.IsEnabled = True
         Dim CurrentVersion = PageVersionLeft.Version.Version
         SelectedMinecraftId = CurrentVersion.McName
-        If CurrentVersion.HasLiteLoader Then SelectedLiteLoader = New DlLiteLoaderListEntry With {.Inherit = CurrentVersion.McName}
-        If CurrentVersion.HasOptiFine Then SelectedOptiFine = New DlOptiFineListEntry With {.NameDisplay = CurrentVersion.McName + " " + CurrentVersion.OptiFineVersion}
+        If CurrentVersion.HasLiteLoader Then
+            SelectedLiteLoader = New DlLiteLoaderListEntry With {.Inherit = CurrentVersion.McName}
+        End If
+        If CurrentVersion.HasOptiFine Then
+            SelectedOptiFine = New DlOptiFineListEntry With {.NameDisplay = CurrentVersion.McName + " " + CurrentVersion.OptiFineVersion}
+        End If
         If CurrentVersion.HasForge Then
             SelectedLoaderName = "Forge"
             SelectedForge = New DlForgeVersionEntry(CurrentVersion.ForgeVersion, "", CurrentVersion.McName)
@@ -723,8 +735,10 @@ Public Class PageVersionInstall
             SelectedOptiFabric = Nothing 'TODO: 检测已有 OptiFabric
         End If
         SelectedMinecraftIcon = "pack://application:,,,/images/Blocks/Grass.png" 'TODO: 需要判断 Icon
+        CurrentInfo = GetSelectInfo()
         EnterSelectPage()
     End Sub
+    Private CurrentInfo As String = Nothing
 
 #End Region
 
@@ -732,7 +746,6 @@ Public Class PageVersionInstall
 
     '结果数据化
     Private Sub LoadMinecraft_OnFinish()
-        'ExitSelectPage() '返回
         Try
             Dim Dict As New Dictionary(Of String, List(Of JObject)) From {
                 {"正式版", New List(Of JObject)}, {"预览版", New List(Of JObject)}, {"远古版", New List(Of JObject)}, {"愚人节版", New List(Of JObject)}
@@ -1636,7 +1649,7 @@ Public Class PageVersionInstall
             .LiteLoaderEntry = SelectedLiteLoader
         }
         BtnSelectStart.IsEnabled = False
-        If Not McInstall(Request, True) Then Exit Sub
+        If Not McInstall(Request, "修改") Then Exit Sub
         FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.Launch})
     End Sub
 

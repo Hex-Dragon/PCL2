@@ -2232,11 +2232,11 @@ Retry:
     ''' <summary>
     ''' 进行合并安装。返回是否已经开始安装（例如如果没有安装 Java 则会进行提示并返回 False）
     ''' </summary>
-    Public Function McInstall(Request As McInstallRequest, Optional IsEdit As Boolean = False) As Boolean
+    Public Function McInstall(Request As McInstallRequest, Optional Type As String = "安装") As Boolean
         Try
-            Dim SubLoaders = McInstallLoader(Request, IgnoreDump:=IsEdit)
+            Dim SubLoaders = McInstallLoader(Request, IgnoreDump:=Type <> "安装")
             If SubLoaders Is Nothing Then Return False
-            Dim Loader As New LoaderCombo(Of String)(Request.TargetVersionName & If(IsEdit, " 修改", " 安装"), SubLoaders) With {.OnStateChanged = AddressOf McInstallState}
+            Dim Loader As New LoaderCombo(Of String)(Request.TargetVersionName & " " & Type, SubLoaders) With {.OnStateChanged = AddressOf McInstallState}
 
             '启动
             Loader.Start(Request.TargetVersionFolder)
