@@ -100,7 +100,7 @@
             Filter = FilterType.All
             SearchBox.Text = "" '这会触发结果刷新，所以需要在 ModItems 更新之后，详见 #3124 的视频
             RefreshUI()
-            SetSortMethod(SortMethod.FileName)
+            SetSortMethod(SortMethod.ModName)
         Catch ex As Exception
             Log(ex, "加载 Mod 列表 UI 失败", LogLevel.Feedback)
         End Try
@@ -570,11 +570,11 @@ Install:
         Select Case Method
             Case SortMethod.FileName
                 Return Function(a As McMod, b As McMod) As Integer
-                           Return StrComp(a.FileName, b.FileName)
+                           Return -StrComp(a.FileName, b.FileName)
                        End Function
             Case SortMethod.ModName
                 Return Function(a As McMod, b As McMod) As Integer
-                           Return StrComp(a.Name, b.Name)
+                           Return -StrComp(a.Name, b.Name)
                        End Function
             Case SortMethod.TagNums
                 Return Function(a As McMod, b As McMod) As Integer
