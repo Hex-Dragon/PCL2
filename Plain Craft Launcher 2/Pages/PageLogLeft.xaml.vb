@@ -103,6 +103,11 @@
                 Else
                     SelectionChange(ShownLogs({{i, ShownLogs.Count - 1}.Min, 0}.Max).Key)
                 End If
+            Else
+                RunInUi(Sub()
+                            FrmLogRight.Refresh()
+                            Refresh()
+                        End Sub)
             End If
             Exit For
         Next
