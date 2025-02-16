@@ -507,6 +507,7 @@ Install:
         ModName
         TagNums
         CreateTime
+        ModFileSize
     End Enum
 
     Private Function GetSortName(Method As SortMethod) As String
@@ -515,6 +516,8 @@ Install:
             Case SortMethod.ModName : Return "模组名称"
             Case SortMethod.TagNums : Return "标签数量"
             Case SortMethod.CreateTime : Return "加入时间"
+            Case SortMethod.ModFileSize : Return "模组文件大小"
+            Case Else : Return "模组名称"
         End Select
         Return ""
     End Function
@@ -582,6 +585,14 @@ Install:
             Case SortMethod.CreateTime
                 Return Function(a As McMod, b As McMod) As Integer
                            Return If((New FileInfo(a.Path)).CreationTime > (New FileInfo(b.Path)).CreationTime, 1, -1)
+                       End Function
+            Case SortMethod.ModFileSize
+                Return Function(a As McMod, b As McMod) As Integer
+                           Return (New FileInfo(a.Path)).Length - (New FileInfo(b.Path)).Length
+                       End Function
+            Case Else
+                Return Function(a As McMod, b As McMod) As Integer
+                           Return -StrComp(a.Name, b.Name)
                        End Function
         End Select
     End Function
