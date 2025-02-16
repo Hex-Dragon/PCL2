@@ -161,6 +161,10 @@
         End Sub
 
         '状态
+        ''' <summary>
+        ''' 游戏退出时触发。
+        ''' </summary>
+        Public Event GameExit()
         Private _State As MinecraftState = MinecraftState.Loading
         Public Property State As MinecraftState
             Get
@@ -255,6 +259,7 @@
                     WatcherLog("Minecraft 已退出，返回值：" & GameProcess.ExitCode)
                     '实时日志输出
                     If RealTime Then LogRealTime($"Minecraft 已退出，返回值：{GameProcess.ExitCode}", GameLogLevel.Info)
+                    RaiseEvent GameExit()
                     'If Process.ExitCode = 1 Then
                     '    '返回值为 1，考虑是任务管理器结束
                     '    WatcherLog("Minecraft 返回值为 1，考虑为任务管理器结束") '并不，崩了照样是 1
@@ -475,6 +480,7 @@
                 If Not GameProcess.HasExited Then GameProcess.Kill()
                 WatcherLog("已强制结束 Minecraft 进程")
                 If RealTime Then LogRealTime($"Minecraft 已退出，返回值：{GameProcess.ExitCode}", GameLogLevel.Info)
+                RaiseEvent GameExit()
             Catch ex As Exception
                 Log(ex, "强制结束 Minecraft 进程失败", LogLevel.Hint)
             End Try

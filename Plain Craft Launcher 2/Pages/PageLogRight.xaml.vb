@@ -7,10 +7,12 @@
         End If
         PanAllBack.Visibility = Visibility.Visible
         CardOperation.Visibility = Visibility.Visible
+        BtnOperationKill.IsEnabled = Not FrmLogLeft.CurrentLog.GameProcess.HasExited
         '绑定日志输出
         PanLog.Document = FrmLogLeft.FlowDocuments(FrmLogLeft.CurrentUuid)
         '绑定事件
         AddHandler FrmLogLeft.CurrentLog.LogOutput, AddressOf OnLogOutput
+        AddHandler FrmLogLeft.CurrentLog.GameExit, AddressOf OnGameExit
         '刷新计数器
         LabFatal.Text = FrmLogLeft.CurrentLog.CountFatal
         LabError.Text = FrmLogLeft.CurrentLog.CountError
@@ -48,8 +50,14 @@
     End Sub
 
     Private Sub BtnOperationKill_Click(sender As Object, e As RouteEventArgs) Handles BtnOperationKill.Click
-        FrmLogLeft.CurrentLog.Kill()
-        Hint($"已关闭游戏 {FrmLogLeft.CurrentLog.Version.Name}", HintType.Finish)
+        If FrmLogLeft.CurrentLog.State <= Watcher.MinecraftState.Running Then
+            FrmLogLeft.CurrentLog.Kill()
+            Hint($"已关闭游戏 {FrmLogLeft.CurrentLog.Version.Name}！", HintType.Finish)
+        End If
+    End Sub
+
+    Private Sub OnGameExit()
+        RunInUi(Sub() BtnOperationKill.IsEnabled = False)
     End Sub
 #End Region
 
