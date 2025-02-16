@@ -18,8 +18,15 @@
                 Return
             End If
             IsLoading += 1
+
+            '创建 UI
             FrmLogLeft.PanList.Children.Clear()
+
+            '测试核心列表
+            'TODO(i18n): 文本 @ PageLog 左侧 - 列表标题
+            FrmLogLeft.PanList.Children.Add(New TextBlock With {.Text = "测试版本列表", .Margin = New Thickness(13, 18, 5, 4), .Opacity = 0.6, .FontSize = 12})
             For Each item In ShownLogs
+                '添加控件
                 Dim Uuid As Integer = item.Key
                 Dim Version As McVersion = item.Value.Version
                 Dim Proc As Process = item.Value.GameProcess
@@ -42,8 +49,14 @@
         For Each item In ShownLogs
             If item.Value.GameProcess.Id = sender.GameProcess.Id Then
                 Dim uuid As Integer = item.Key
+                Dim margin As Thickness
+                If item.Value.GameProcess.HasExited Then
+                    margin = New Thickness(0, 12, 0, 0)
+                Else
+                    margin = New Thickness(0)
+                End If
                 RunInUi(Sub()
-                            Dim paragraph As New Paragraph(New Run(e.LogText)) With {.Foreground = e.Color}
+                            Dim paragraph As New Paragraph(New Run(e.LogText)) With {.Foreground = e.Color, .Margin = margin}
                             FlowDocuments(uuid).Blocks.Add(paragraph)
                         End Sub)
                 Return
