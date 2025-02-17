@@ -176,7 +176,7 @@ Public Class FormMain
         '输出更新日志
         RunInNewThread(
         Sub()
-            If MyMsgBox(Content, "PCL 已更新至 " & VersionBaseName & If(VersionBranchName = "Fast Ring", "." + VersionCodeString, ""), "确定", "完整更新日志") = 2 Then
+            If MyMsgBox(Content, "PCL CE 已更新至 " & VersionBaseName & If(VersionBranchName = "Fast Ring", "." + VersionCodeString, ""), "确定", "完整更新日志") = 2 Then
                 OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases")
             End If
         End Sub, "UpdateLog Output")
