@@ -690,7 +690,7 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">Username cannot be empty!</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">Username cannot contain quotation marks!</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">The launch options have been disabled!</s:String>
-    <s:String x:Key="LangPageLoginLegacyLengthLimit">Starting from version 1.20.3, player names can contain a maximum of 16 characters!</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">Since the version 1.20.3, username can contain a maximum of 16 characters!</s:String>
     <s:String x:Key="LangPageLoginMsLogin">Login</s:String>
     <s:String x:Key="LangPageLoginMsBuy">» Purchase</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">» Website</s:String>
