@@ -236,15 +236,18 @@ NextInner:
         '正版购买提示
         If Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
             If IsSystemLanguageChinese() Then
-                Select Case Setup.Get("SystemLaunchCount")
-                    Case 3, 8, 15, 30, 50, 70, 90, 110, 130, 180, 220, 280, 330, 380, 450, 550, 660, 750, 880, 950, 1100, 1300, 1500, 1700, 1900
-                        If MyMsgBox("你已经启动了 " & Setup.Get("SystemLaunchCount") & " 次 Minecraft 啦！" & vbCrLf &
-                                    "如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易……不要一直白嫖啦。" & vbCrLf & vbCrLf &
-                                    "在登录一次正版账号后，就不会再出现这个提示了！",
-                                    "考虑一下正版？", "支持正版游戏！", "下次一定") = 1 Then
-                            OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
-                        End If
-                End Select
+                RunInNewThread(
+                Sub()
+                    Select Case Setup.Get("SystemLaunchCount")
+                        Case 3, 8, 15, 30, 50, 70, 90, 110, 130, 180, 220, 280, 330, 380, 450, 550, 660, 750, 880, 950, 1100, 1300, 1500, 1700, 1900
+                            If MyMsgBox("你已经启动了 " & Setup.Get("SystemLaunchCount") & " 次 Minecraft 啦！" & vbCrLf &
+                                "如果觉得 Minecraft 还不错，可以购买正版支持一下，毕竟开发游戏也真的很不容易……不要一直白嫖啦。" & vbCrLf & vbCrLf &
+                                "在登录一次正版账号后，就不会再出现这个提示了！",
+                                "考虑一下正版？", "支持正版游戏！", "下次一定") = 1 Then
+                                OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj")
+                            End If
+                    End Select
+                End Sub, "Buy Minecraft")
             ElseIf Setup.Get("LoginType") = McLoginType.Legacy Then
                 Select Case MyMsgBox("你必须先登录正版账号，才能进行离线登录！", "正版验证", "购买正版", "试玩", "返回",
                     Button1Action:=Sub() OpenWebsite("https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj"))
@@ -696,17 +699,19 @@ LoginFinish:
     End Sub
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
         McLaunchLog("刷新登录开始（Refresh, " & Data.Input.Token & "）")
+        
+        Dim RefreshInfo As JObject = New JObject
+        Dim SelectProfile As JObject = New JObject()
+        SelectProfile.Add(New JProperty("name", Setup.Get("Cache" & Data.Input.Token & "Name")))
+        SelectProfile.Add(New JProperty("id", Setup.Get("Cache" & Data.Input.Token & "Uuid")))
+        RefreshInfo.Add("selectedProfile", SelectProfile)
+        RefreshInfo.Add(New JProperty("accessToken", Setup.Get("Cache" & Data.Input.Token & "Access")))
+        RefreshInfo.Add(New JProperty("requestUser", True))
+
         Dim LoginJson As JObject = GetJson(NetRequestRetry(
                Url:=Data.Input.BaseUrl & "/refresh",
                Method:="POST",
-               Data:="{" &
-               If(RequestUser, "
-               ""requestUser"": true,
-               ""selectedProfile"": {
-                   ""id"":""" & Setup.Get("Cache" & Data.Input.Token & "Uuid") & """,
-                   ""name"":""" & Setup.Get("Cache" & Data.Input.Token & "Name") & """},", "") & "
-               ""accessToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Access") & """,
-               ""clientToken"":""" & Setup.Get("Cache" & Data.Input.Token & "Client") & """}",
+               Data:=RefreshInfo.ToString(0),
                Headers:=New Dictionary(Of String, String) From {{"Accept-Language", "zh-CN"}},
                ContentType:="application/json; charset=utf-8"))
         '将登录结果输出
@@ -2045,8 +2050,8 @@ IgnoreCustomSkin:
                 "@echo off" & vbCrLf &
                 "title 启动 - " & McVersionCurrent.Name & vbCrLf &
                 "echo 游戏正在启动，请稍候。" & vbCrLf &
-                "set APPDATA=""" & PathMcFolder & """" & vbCrLf &
-                "cd /D """ & PathMcFolder & """" & vbCrLf &
+                "set APPDATA=""" & McVersionCurrent.PathIndie & """" & vbCrLf &
+                "cd /D """ & McVersionCurrent.PathIndie & """" & vbCrLf &
                 CustomCommandGlobal & vbCrLf &
                 CustomCommandVersion & vbCrLf &
                 """" & McLaunchJavaSelected.PathJava & """ " & McLaunchArgument & vbCrLf &

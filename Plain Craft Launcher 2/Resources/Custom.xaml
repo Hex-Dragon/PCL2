@@ -192,7 +192,7 @@
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/GoldBlock.png"/>
             <!-- 草方块 -->
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Grass.png"/>
-            <!-- 草径 -->
+            <!-- 土径 -->
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/GrassPath.png"/>
             <!-- 铁砧 -->
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Anvil.png"/>
