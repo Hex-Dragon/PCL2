@@ -936,9 +936,9 @@ Install:
                 '跳转到 Mod 下载页面
                 FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
                     .Additional = {ModEntry.Comp, New List(Of String), PageVersionLeft.Version.Version.McName,
-                        If(PageVersionLeft.Version.Version.HasForge, CompModLoaderType.Forge,
-                        If(PageVersionLeft.Version.Version.HasNeoForge, CompModLoaderType.NeoForge,
-                        If(PageVersionLeft.Version.Version.HasFabric, CompModLoaderType.Fabric, CompModLoaderType.Any)))}})
+                        If(PageVersionLeft.Version.Version.HasForge, CompLoaderType.Forge,
+                        If(PageVersionLeft.Version.Version.HasNeoForge, CompLoaderType.NeoForge,
+                        If(PageVersionLeft.Version.Version.HasFabric, CompLoaderType.Fabric, CompLoaderType.Any)))}})
             Else
                 '获取信息
                 Dim ContentLines As New List(Of String)

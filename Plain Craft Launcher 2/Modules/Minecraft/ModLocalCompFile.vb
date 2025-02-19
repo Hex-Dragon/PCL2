@@ -1135,13 +1135,13 @@ Finished:
         '刷新边栏
         RunInUi(Sub() FrmVersionMod?.RefreshBars())
     End Sub
-    Private Function GetTargetModLoaders() As List(Of CompModLoaderType)
-        Dim ModLoaders As New List(Of CompModLoaderType)
-        If PageVersionLeft.Version.Version.HasForge Then ModLoaders.Add(CompModLoaderType.Forge)
-        If PageVersionLeft.Version.Version.HasNeoForge Then ModLoaders.Add(CompModLoaderType.NeoForge)
-        If PageVersionLeft.Version.Version.HasFabric Then ModLoaders.Add(CompModLoaderType.Fabric)
-        If PageVersionLeft.Version.Version.HasLiteLoader Then ModLoaders.Add(CompModLoaderType.LiteLoader)
-        If Not ModLoaders.Any() Then ModLoaders.AddRange({CompModLoaderType.Forge, CompModLoaderType.NeoForge, CompModLoaderType.Fabric, CompModLoaderType.LiteLoader, CompModLoaderType.Quilt})
+    Private Function GetTargetModLoaders() As List(Of CompLoaderType)
+        Dim ModLoaders As New List(Of CompLoaderType)
+        If PageVersionLeft.Version.Version.HasForge Then ModLoaders.Add(CompLoaderType.Forge)
+        If PageVersionLeft.Version.Version.HasNeoForge Then ModLoaders.Add(CompLoaderType.NeoForge)
+        If PageVersionLeft.Version.Version.HasFabric Then ModLoaders.Add(CompLoaderType.Fabric)
+        If PageVersionLeft.Version.Version.HasLiteLoader Then ModLoaders.Add(CompLoaderType.LiteLoader)
+        If Not ModLoaders.Any() Then ModLoaders.AddRange({CompLoaderType.Forge, CompLoaderType.NeoForge, CompLoaderType.Fabric, CompLoaderType.LiteLoader, CompLoaderType.Quilt})
         Return ModLoaders
     End Function
 
