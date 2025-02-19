@@ -2,13 +2,13 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    mc:Ignorable="d" x:Class="PageVersionMod"
+    mc:Ignorable="d" x:Class="PageVersionCompResource"
     PanScroll="{Binding ElementName=PanBack}">
     <Grid>
         <Grid x:Name="PanAllBack">
             <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
                 <StackPanel x:Name="PanMain" Margin="25,10,25,10" Grid.IsSharedSizeScope="True"> <!-- 若显示多选模块则为 92 -->
-                    <local:MySearchBox Margin="0,15" HintText="搜索 Mod 名称 / 描述 / 标签" x:Name="SearchBox" />
+                    <local:MySearchBox Margin="0,15" HintText="搜索资源 名称 / 描述 / 标签" x:Name="SearchBox" />
                     <local:MyCard Grid.Row="0" Margin="0,0,0,15" x:Name="PanManage">
                         <Grid Margin="15,15,0,15" Height="35">
                             <Grid.ColumnDefinitions>
@@ -53,13 +53,13 @@
                         </Grid.ColumnDefinitions>
                         <local:MyButton Height="35" HorizontalAlignment="Center" Grid.Column="0" x:Name="BtnHintDownload" MinWidth="140" Text="下载 Mod" Margin="0,0,17,0" Padding="13,0" ColorType="Highlight" />
                         <local:MyButton Height="35" HorizontalAlignment="Center" Grid.Column="1" x:Name="BtnHintInstall" MinWidth="140" Text="从文件安装 Mod" Margin="0,0,17,0" Padding="13,0" />
-                        <local:MyButton Height="35" HorizontalAlignment="Center" Grid.Column="2" x:Name="BtnHintOpen" MinWidth="140" Text="打开 Mod 文件夹" Margin="0,0,17,0" Padding="13,0" />
+                        <local:MyButton Height="35" HorizontalAlignment="Center" Grid.Column="2" x:Name="BtnHintOpen" MinWidth="140" Text="打开文件夹" Margin="0,0,17,0" Padding="13,0" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
         </Grid>
         <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,0" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False">
-            <local:MyLoading Text="正在加载 Mod 列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <local:MyLoading Text="正在加载资源列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
         </local:MyCard>
         <local:MyCard x:Name="CardSelect" Visibility="Collapsed" Opacity="0"
                       HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="25,25,25,0" UseAnimation="False" HasMouseAnimation="False">

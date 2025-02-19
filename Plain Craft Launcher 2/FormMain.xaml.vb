@@ -641,7 +641,7 @@ Public Class FormMain
         Try
             If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
                 'Mod 管理自动刷新
-                FrmVersionMod.ReloadModList()
+                FrmVersionMod.ReloadCompFileList()
             ElseIf PageCurrent = PageType.VersionSelect Then
                 '版本选择自动刷新
                 LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.RunOnUpdated, MaxDepth:=1, ExtraPath:="versions\")
@@ -775,7 +775,7 @@ Public Class FormMain
                 Exit Sub
             End If
             '安装 Mod
-            If PageVersionMod.InstallMods(FilePathList) Then Exit Sub
+            If PageVersionCompResource.InstallMods(FilePathList) Then Exit Sub
             '处理资源安装
             If PageCurrent = PageType.VersionSetup AndAlso {"zip"}.Any(Function(i) i = Extension) Then
                 Select Case PageCurrentSub
@@ -797,7 +797,7 @@ Public Class FormMain
                         End If
                         CopyFile(FilePath, DestFile)
                         Hint($"已导入 {GetFileNameFromPath(FilePath)}", HintType.Finish)
-                        If FrmVersionResourcePack IsNot Nothing Then RunInUi(Sub() FrmVersionResourcePack.Reload())
+                        If FrmVersionResourcePack IsNot Nothing Then RunInUi(Sub() FrmVersionResourcePack.ReloadCompFileList())
                         Exit Sub
                     Case PageSubType.VersionShader
                         Dim DestFile = PageVersionLeft.Version.PathIndie + "shaderpacks\" + GetFileNameFromPath(FilePath)
@@ -807,7 +807,7 @@ Public Class FormMain
                         End If
                         CopyFile(FilePath, DestFile)
                         Hint($"已导入 {GetFileNameFromPath(FilePath)}", HintType.Finish)
-                        If FrmVersionShader IsNot Nothing Then RunInUi(Sub() FrmVersionShader.Reload())
+                        If FrmVersionShader IsNot Nothing Then RunInUi(Sub() FrmVersionShader.ReloadCompFileList())
                         Exit Sub
                 End Select
             End If

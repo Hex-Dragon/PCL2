@@ -441,12 +441,12 @@ EndHint:
     '版本设置页面声明
     Public FrmVersionLeft As PageVersionLeft
     Public FrmVersionOverall As PageVersionOverall
-    Public FrmVersionMod As PageVersionMod
+    Public FrmVersionMod As PageVersionCompResource
     Public FrmVersionModDisabled As PageVersionModDisabled
     Public FrmVersionScreenshot As PageVersionScreenshot
     Public FrmVersionWorld As PageVersionWorld
-    Public FrmVersionShader As PageVersionShader
-    Public FrmVersionResourcePack As PageVersionResourcePack
+    Public FrmVersionShader As PageVersionCompResource
+    Public FrmVersionResourcePack As PageVersionCompResource
     Public FrmVersionSetup As PageVersionSetup
     Public FrmVersionInstall As PageVersionInstall
 
