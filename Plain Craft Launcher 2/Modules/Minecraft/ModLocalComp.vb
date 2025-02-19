@@ -1,6 +1,6 @@
 ﻿Imports System.IO.Compression
 
-Public Module ModLocalCompMod
+Public Module ModLocalComp
     Private Const LocalModCacheVersion As Integer = 7
 
     Public Class LocalCompFile
