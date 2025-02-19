@@ -13,8 +13,6 @@
         ' 在 InitializeComponent() 调用之后添加任何初始化。
 
         If {CompType.Shader, CompType.ResourcePack}.Contains(CurrentCompType) Then
-            BtnManageDownload.Visibility = Visibility.Collapsed
-            BtnManageInstall.Visibility = Visibility.Collapsed
             BtnSelectEnable.Visibility = Visibility.Collapsed
             BtnSelectDisable.Visibility = Visibility.Collapsed
         End If
@@ -85,16 +83,16 @@
     End Sub
 
     Private Sub LoaderInit() Handles Me.Initialized
-        PageLoaderInit(Load, PanLoad, PanAllBack, Nothing, CompModLoader, AddressOf LoadUIFromLoaderOutput, AutoRun:=False)
+        PageLoaderInit(Load, PanLoad, PanAllBack, Nothing, CompResourceLoader, AddressOf LoadUIFromLoaderOutput, AutoRun:=False)
     End Sub
     Private Sub Load_Click(sender As Object, e As MouseButtonEventArgs) Handles Load.Click
-        If CompModLoader.State = LoadState.Failed Then
+        If CompResourceLoader.State = LoadState.Failed Then
             LoaderRun(LoaderFolderRunType.ForceRun)
         End If
     End Sub
     Public Function LoaderRun(Type As LoaderFolderRunType) As Boolean
         Dim CompResourcePath As String = PageVersionLeft.Version.PathIndie & GetPathNameByCompType(CurrentCompType) & "\"
-        Return LoaderFolderRun(CompModLoader, CompResourcePath, Type)
+        Return LoaderFolderRun(CompResourceLoader, CompResourcePath, Type)
     End Function
 
 #End Region
@@ -111,7 +109,7 @@
     Private Sub LoadUIFromLoaderOutput()
         Try
             '判断应该显示哪一个页面
-            If CompModLoader.Output.Any() Then
+            If CompResourceLoader.Output.Any() Then
                 PanBack.Visibility = Visibility.Visible
                 PanEmpty.Visibility = Visibility.Collapsed
             Else
@@ -121,7 +119,7 @@
             End If
             '修改缓存
             ModItems.Clear()
-            For Each ModEntity As ModLocalComp In CompModLoader.Output
+            For Each ModEntity As LocalCompFile In CompResourceLoader.Output
                 ModItems(ModEntity.RawFileName) = BuildLocalCompItem(ModEntity)
             Next
             '显示结果
@@ -133,7 +131,7 @@
             Log(ex, $"加载 {CurrentCompType} 列表 UI 失败", LogLevel.Feedback)
         End Try
     End Sub
-    Private Function BuildLocalCompItem(Entry As ModLocalComp) As MyLocalModItem
+    Private Function BuildLocalCompItem(Entry As LocalCompFile) As MyLocalModItem
         AniControlEnabled += 1
         Dim NewItem As New MyLocalModItem With {.SnapsToDevicePixels = True, .Entry = Entry,
             .ButtonHandler = AddressOf BuildLocalCompItemBtnHandler, .Checked = SelectedMods.Contains(Entry.RawFileName)}
@@ -167,15 +165,15 @@
         ToolTipService.SetVerticalOffset(BtnDelete, 30)
         ToolTipService.SetHorizontalOffset(BtnDelete, 2)
         AddHandler BtnDelete.Click, AddressOf Delete_Click
-        Dim BtnED As New MyIconButton With {.LogoScale = 1, .Logo = If(sender.Entry.State = ModLocalComp.McModState.Fine, Logo.IconButtonStop, Logo.IconButtonCheck), .Tag = sender}
-        BtnED.ToolTip = If(sender.Entry.State = ModLocalComp.McModState.Fine, "禁用", "启用")
-        ToolTipService.SetPlacement(BtnED, Primitives.PlacementMode.Center)
-        ToolTipService.SetVerticalOffset(BtnED, 30)
-        ToolTipService.SetHorizontalOffset(BtnED, 2)
-        AddHandler BtnED.Click, AddressOf ED_Click
-        If sender.Entry.State = ModLocalComp.McModState.Unavailable Then
+        If CurrentCompType <> CompType.Mod OrElse sender.Entry.State = LocalCompFile.LocalFileStatus.Unavailable Then
             sender.Buttons = {BtnCont, BtnOpen, BtnDelete}
         Else
+            Dim BtnED As New MyIconButton With {.LogoScale = 1, .Logo = If(sender.Entry.State = LocalCompFile.LocalFileStatus.Fine, Logo.IconButtonStop, Logo.IconButtonCheck), .Tag = sender}
+            BtnED.ToolTip = If(sender.Entry.State = LocalCompFile.LocalFileStatus.Fine, "禁用", "启用")
+            ToolTipService.SetPlacement(BtnED, Primitives.PlacementMode.Center)
+            ToolTipService.SetVerticalOffset(BtnED, 30)
+            ToolTipService.SetHorizontalOffset(BtnED, 2)
+            AddHandler BtnED.Click, AddressOf ED_Click
             sender.Buttons = {BtnCont, BtnOpen, BtnED, BtnDelete}
         End If
     End Sub
@@ -185,7 +183,7 @@
     ''' </summary>
     Public Sub RefreshUI()
         If PanList Is Nothing Then Exit Sub
-        Dim ShowingMods = If(IsSearching, SearchResult, If(CompModLoader.Output, New List(Of ModLocalComp))).Where(Function(m) CanPassFilter(m)).ToList
+        Dim ShowingMods = If(IsSearching, SearchResult, If(CompResourceLoader.Output, New List(Of LocalCompFile))).Where(Function(m) CanPassFilter(m)).ToList
         '重新列出列表
         AniControlEnabled += 1
         If ShowingMods.Any() Then
@@ -218,12 +216,12 @@
         Dim DisabledCount As Integer = 0
         Dim UpdateCount As Integer = 0
         Dim UnavalialeCount As Integer = 0
-        For Each ModItem In If(IsSearching, SearchResult, If(CompModLoader.Output, New List(Of ModLocalComp)))
+        For Each ModItem In If(IsSearching, SearchResult, If(CompResourceLoader.Output, New List(Of LocalCompFile)))
             AnyCount += 1
             If ModItem.CanUpdate Then UpdateCount += 1
-            If ModItem.State.Equals(ModLocalComp.McModState.Fine) Then EnabledCount += 1
-            If ModItem.State.Equals(ModLocalComp.McModState.Disabled) Then DisabledCount += 1
-            If ModItem.State.Equals(ModLocalComp.McModState.Unavailable) Then UnavalialeCount += 1
+            If ModItem.State.Equals(LocalCompFile.LocalFileStatus.Fine) Then EnabledCount += 1
+            If ModItem.State.Equals(LocalCompFile.LocalFileStatus.Disabled) Then DisabledCount += 1
+            If ModItem.State.Equals(LocalCompFile.LocalFileStatus.Unavailable) Then UnavalialeCount += 1
         Next
         '显示
         BtnFilterAll.Text = If(IsSearching, "搜索结果", "全部") & $" ({AnyCount})"
@@ -249,12 +247,12 @@
             Dim HasUpdate As Boolean = False
             Dim HasEnabled As Boolean = False
             Dim HasDisabled As Boolean = False
-            For Each ModEntity In CompModLoader.Output
+            For Each ModEntity In CompResourceLoader.Output
                 If SelectedMods.Contains(ModEntity.RawFileName) Then
                     If ModEntity.CanUpdate Then HasUpdate = True
-                    If ModEntity.State = ModLocalComp.McModState.Fine Then
+                    If ModEntity.State = LocalCompFile.LocalFileStatus.Fine Then
                         HasEnabled = True
-                    ElseIf ModEntity.State = ModLocalComp.McModState.Disabled Then
+                    ElseIf ModEntity.State = LocalCompFile.LocalFileStatus.Disabled Then
                         HasDisabled = True
                     End If
                 End If
@@ -355,8 +353,13 @@
     ''' 安装 Mod。
     ''' </summary>
     Private Sub BtnManageInstall_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageInstall.Click, BtnHintInstall.Click
-        Dim FileList = SelectFiles("Mod 文件(*.jar;*.litemod;*.disabled;*.old)|*.jar;*.litemod;*.disabled;*.old", "选择要安装的 Mod")
-        If Not FileList.Any Then Return
+        Dim FileList As String() = Nothing
+        Select Case CurrentCompType
+            Case CompType.Mod : FileList = SelectFiles("Mod 文件(*.jar;*.litemod;*.disabled;*.old)|*.jar;*.litemod;*.disabled;*.old", "选择要安装的 Mod")
+            Case CompType.ResourcePack : FileList = SelectFiles("资源包文件(*.zip)|*.zip", "选择要安装的资源包")
+            Case CompType.Shader : FileList = SelectFiles("光影包文件(*.zip)|*.zip", "选择要安装的光影包")
+        End Select
+        If FileList Is Nothing OrElse Not FileList.Any Then Exit Sub
         InstallMods(FileList)
     End Sub
     ''' <summary>
@@ -398,7 +401,7 @@ Install:
                 End If
                 '刷新列表
                 If FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.VersionMod Then
-                    LoaderFolderRun(CompModLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
+                    LoaderFolderRun(CompResourceLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
                 End If
             Catch ex As Exception
                 Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
@@ -412,7 +415,11 @@ Install:
     ''' </summary>
     Private Sub BtnManageDownload_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageDownload.Click, BtnHintDownload.Click
         PageDownloadMod.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
-        FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadMod)
+        Select Case CurrentCompType
+            Case CompType.Mod : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadMod)
+            Case CompType.ResourcePack : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadResourcePack)
+            Case CompType.Shader : FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadShader)
+        End Select
     End Sub
 
 #End Region
@@ -496,18 +503,18 @@ Install:
     ''' <summary>
     ''' 检查该 Mod 项是否符合当前筛选的类别。
     ''' </summary>
-    Private Function CanPassFilter(CheckingMod As ModLocalComp) As Boolean
+    Private Function CanPassFilter(CheckingMod As LocalCompFile) As Boolean
         Select Case Filter
             Case FilterType.All
                 Return True
             Case FilterType.Enabled
-                Return CheckingMod.State = ModLocalComp.McModState.Fine
+                Return CheckingMod.State = LocalCompFile.LocalFileStatus.Fine
             Case FilterType.Disabled
-                Return CheckingMod.State = ModLocalComp.McModState.Disabled
+                Return CheckingMod.State = LocalCompFile.LocalFileStatus.Disabled
             Case FilterType.CanUpdate
                 Return CheckingMod.CanUpdate
             Case FilterType.Unavailable
-                Return CheckingMod.State = ModLocalComp.McModState.Unavailable
+                Return CheckingMod.State = LocalCompFile.LocalFileStatus.Unavailable
             Case Else
                 Return False
         End Select
@@ -598,30 +605,30 @@ Install:
         End SyncLock
     End Sub
 
-    Private Function GetSortMethod(Method As SortMethod) As Func(Of ModLocalComp, ModLocalComp, Integer)
+    Private Function GetSortMethod(Method As SortMethod) As Func(Of LocalCompFile, LocalCompFile, Integer)
         Select Case Method
             Case SortMethod.FileName
-                Return Function(a As ModLocalComp, b As ModLocalComp) As Integer
+                Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
                            Return -StrComp(a.FileName, b.FileName)
                        End Function
             Case SortMethod.ModName
-                Return Function(a As ModLocalComp, b As ModLocalComp) As Integer
+                Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
                            Return -StrComp(a.Name, b.Name)
                        End Function
             Case SortMethod.TagNums
-                Return Function(a As ModLocalComp, b As ModLocalComp) As Integer
+                Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
                            Return a.Comp.Tags.Count - b.Comp.Tags.Count
                        End Function
             Case SortMethod.CreateTime
-                Return Function(a As ModLocalComp, b As ModLocalComp) As Integer
+                Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
                            Return If((New FileInfo(a.Path)).CreationTime > (New FileInfo(b.Path)).CreationTime, 1, -1)
                        End Function
             Case SortMethod.ModFileSize
-                Return Function(a As ModLocalComp, b As ModLocalComp) As Integer
+                Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
                            Return (New FileInfo(a.Path)).Length - (New FileInfo(b.Path)).Length
                        End Function
             Case Else
-                Return Function(a As ModLocalComp, b As ModLocalComp) As Integer
+                Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
                            Return -StrComp(a.Name, b.Name)
                        End Function
         End Select
@@ -632,19 +639,19 @@ Install:
 
     '启用 / 禁用
     Private Sub BtnSelectED_Click(sender As MyIconTextButton, e As RouteEventArgs) Handles BtnSelectEnable.Click, BtnSelectDisable.Click
-        EDMods(CompModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)),
+        EDMods(CompResourceLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)),
                Not sender.Equals(BtnSelectDisable))
         ChangeAllSelected(False)
     End Sub
-    Private Sub EDMods(ModList As IEnumerable(Of ModLocalComp), IsEnable As Boolean)
+    Private Sub EDMods(ModList As IEnumerable(Of LocalCompFile), IsEnable As Boolean)
         Dim IsSuccessful As Boolean = True
         For Each ModE In ModList.ToList
             Dim ModEntity = ModE '仅用于去除迭代变量无法修改的限制
             Dim NewPath As String = Nothing
-            If ModEntity.State = ModLocalComp.McModState.Fine AndAlso Not IsEnable Then
+            If ModEntity.State = LocalCompFile.LocalFileStatus.Fine AndAlso Not IsEnable Then
                 '禁用
                 NewPath = ModEntity.Path & If(File.Exists(ModEntity.Path & ".old"), ".old", ".disabled")
-            ElseIf ModEntity.State = ModLocalComp.McModState.Disabled AndAlso IsEnable Then
+            ElseIf ModEntity.State = LocalCompFile.LocalFileStatus.Disabled AndAlso IsEnable Then
                 '启用
                 NewPath = ModEntity.RawPath
             Else
@@ -676,12 +683,12 @@ Install:
                 IsSuccessful = False
             End Try
             '更改 Loader 中的列表
-            Dim NewModEntity As New ModLocalComp(NewPath, CurrentCompType)
+            Dim NewModEntity As New LocalCompFile(NewPath, CurrentCompType)
             NewModEntity.FromJson(ModEntity.ToJson)
-            If CompModLoader.Output.Contains(ModEntity) Then
-                Dim IndexOfLoader As Integer = CompModLoader.Output.IndexOf(ModEntity)
-                CompModLoader.Output.RemoveAt(IndexOfLoader)
-                CompModLoader.Output.Insert(IndexOfLoader, NewModEntity)
+            If CompResourceLoader.Output.Contains(ModEntity) Then
+                Dim IndexOfLoader As Integer = CompResourceLoader.Output.IndexOf(ModEntity)
+                CompResourceLoader.Output.RemoveAt(IndexOfLoader)
+                CompResourceLoader.Output.Insert(IndexOfLoader, NewModEntity)
             End If
             If SearchResult IsNot Nothing AndAlso SearchResult.Contains(ModEntity) Then '#4862
                 Dim IndexOfResult As Integer = SearchResult.IndexOf(ModEntity)
@@ -707,7 +714,7 @@ Install:
 
     '更新
     Private Sub BtnSelectUpdate_Click() Handles BtnSelectUpdate.Click
-        Dim UpdateList As List(Of ModLocalComp) = CompModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.CanUpdate).ToList()
+        Dim UpdateList As List(Of LocalCompFile) = CompResourceLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.CanUpdate).ToList()
         If Not UpdateList.Any() Then Return
         UpdateResource(UpdateList)
         ChangeAllSelected(False)
@@ -716,7 +723,7 @@ Install:
     ''' 记录正在进行 Mod 更新的 mods 文件夹路径。
     ''' </summary>
     Public Shared UpdatingVersions As New List(Of String)
-    Public Sub UpdateResource(ModList As IEnumerable(Of ModLocalComp))
+    Public Sub UpdateResource(ModList As IEnumerable(Of LocalCompFile))
         '更新前警告
         If CurrentCompType = CompType.Mod AndAlso ((Not Setup.Get("HintUpdateMod")) OrElse ModList.Count >= 15) Then
             If MyMsgBox($"新版本 Mod 可能不兼容旧存档或者其他 Mod，这可能导致游戏崩溃，甚至永久损坏存档！{vbCrLf}如果你在游玩整合包，请千万不要自行更新 Mod！{vbCrLf}{vbCrLf}在更新前，请先备份存档，并检查 Mod 的更新日志。{vbCrLf}如果更新后出现问题，你也可以在回收站找回更新前的 Mod。", "Mod 更新警告", "我已了解风险，继续更新", "取消", IsWarn:=True) = 1 Then
@@ -730,7 +737,7 @@ Install:
             ModList = ModList.ToList() '防止刷新影响迭代器
             Dim FileList As New List(Of NetFile)
             Dim FileCopyList As New Dictionary(Of String, String)
-            For Each Entry As ModLocalComp In ModList
+            For Each Entry As LocalCompFile In ModList
                 Dim File As CompFile = Entry.UpdateFile
                 If Not File.Available Then Continue For
                 '确认更新后的文件名
@@ -762,7 +769,7 @@ Install:
             InstallLoaders.Add(New LoaderTask(Of Integer, Integer)("替换旧版资源文件",
             Sub()
                 Try
-                    For Each Entry As ModLocalComp In ModList
+                    For Each Entry As LocalCompFile In ModList
                         If File.Exists(Entry.Path) Then
                             My.Computer.FileSystem.DeleteFile(Entry.Path, FileIO.UIOption.OnlyErrorDialogs, FileIO.RecycleOption.SendToRecycleBin)
                         Else
@@ -786,7 +793,7 @@ Install:
                 End Try
             End Sub))
             '结束处理
-            Dim Loader As New LoaderCombo(Of IEnumerable(Of ModLocalComp))("资源更新：" & PageVersionLeft.Version.Name, InstallLoaders)
+            Dim Loader As New LoaderCombo(Of IEnumerable(Of LocalCompFile))("资源更新：" & PageVersionLeft.Version.Name, InstallLoaders)
             Dim PathMods As String = PageVersionLeft.Version.PathIndie & GetPathNameByCompType(CurrentCompType) & "\"
             Loader.OnStateChanged =
             Sub()
@@ -837,22 +844,22 @@ Install:
 
     '删除
     Private Sub BtnSelectDelete_Click() Handles BtnSelectDelete.Click
-        DeleteMods(CompModLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)))
+        DeleteMods(CompResourceLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)))
         ChangeAllSelected(False)
     End Sub
-    Private Sub DeleteMods(ModList As IEnumerable(Of ModLocalComp))
+    Private Sub DeleteMods(ModList As IEnumerable(Of LocalCompFile))
         Try
             Dim IsSuccessful As Boolean = True
             Dim IsShiftPressed As Boolean = My.Computer.Keyboard.ShiftKeyDown
             '确认需要删除的文件
             ModList = ModList.SelectMany(
-            Function(Target As ModLocalComp)
-                If Target.State = ModLocalComp.McModState.Fine Then
+            Function(Target As LocalCompFile)
+                If Target.State = LocalCompFile.LocalFileStatus.Fine Then
                     Return {Target.Path, Target.Path & If(File.Exists(Target.Path & ".old"), ".old", ".disabled")}
                 Else
                     Return {Target.Path, Target.RawPath}
                 End If
-            End Function).Distinct.Where(Function(m) File.Exists(m)).Select(Function(m) New ModLocalComp(m, CurrentCompType)).ToList()
+            End Function).Distinct.Where(Function(m) File.Exists(m)).Select(Function(m) New LocalCompFile(m, CurrentCompType)).ToList()
             '实际删除文件
             For Each ModEntity In ModList
                 '删除
@@ -873,7 +880,7 @@ Install:
                 '取消选中
                 SelectedMods.Remove(ModEntity.RawFileName)
                 '更改 Loader 和 UI 中的列表
-                CompModLoader.Output.Remove(ModEntity)
+                CompResourceLoader.Output.Remove(ModEntity)
                 SearchResult?.Remove(ModEntity)
                 ModItems.Remove(ModEntity.RawFileName)
                 Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
@@ -920,15 +927,15 @@ Install:
 
 #End Region
 
-#Region "单个 Mod 项"
+#Region "单个资源项"
 
     '详情
     Public Sub Info_Click(sender As Object, e As EventArgs)
         Try
 
-            Dim ModEntry As ModLocalComp = CType(If(TypeOf sender Is MyIconButton, sender.Tag, sender), MyLocalModItem).Entry
+            Dim ModEntry As LocalCompFile = CType(If(TypeOf sender Is MyIconButton, sender.Tag, sender), MyLocalModItem).Entry
             '加载失败信息
-            If ModEntry.State = ModLocalComp.McModState.Unavailable Then
+            If ModEntry.State = LocalCompFile.LocalFileStatus.Unavailable Then
                 MyMsgBox("无法读取此 Mod 的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "Mod 读取失败")
                 Return
             End If
@@ -1010,7 +1017,7 @@ Install:
     '启用 / 禁用
     Public Sub ED_Click(sender As MyIconButton, e As EventArgs)
         Dim ListItem As MyLocalModItem = sender.Tag
-        EDMods({ListItem.Entry}, ListItem.Entry.State = ModLocalComp.McModState.Disabled)
+        EDMods({ListItem.Entry}, ListItem.Entry.State = LocalCompFile.LocalFileStatus.Disabled)
     End Sub
 
 #End Region
@@ -1022,13 +1029,13 @@ Install:
             Return Not String.IsNullOrWhiteSpace(SearchBox.Text)
         End Get
     End Property
-    Private SearchResult As List(Of ModLocalComp)
+    Private SearchResult As List(Of LocalCompFile)
 
     Public Sub SearchRun() Handles SearchBox.TextChanged
         If IsSearching Then
             '构造请求
-            Dim QueryList As New List(Of SearchEntry(Of ModLocalComp))
-            For Each Entry As ModLocalComp In CompModLoader.Output
+            Dim QueryList As New List(Of SearchEntry(Of LocalCompFile))
+            For Each Entry As LocalCompFile In CompResourceLoader.Output
                 Dim SearchSource As New List(Of KeyValuePair(Of String, Double))
                 SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Name, 1))
                 SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.FileName, 1))
@@ -1044,7 +1051,7 @@ Install:
                     If Entry.Comp.Description <> Entry.Description Then SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Comp.Description, 0.4))
                     SearchSource.Add(New KeyValuePair(Of String, Double)(String.Join("", Entry.Comp.Tags), 0.2))
                 End If
-                QueryList.Add(New SearchEntry(Of ModLocalComp) With {.Item = Entry, .SearchSource = SearchSource})
+                QueryList.Add(New SearchEntry(Of LocalCompFile) With {.Item = Entry, .SearchSource = SearchSource})
             Next
             '进行搜索
             SearchResult = Search(QueryList, SearchBox.Text, MaxBlurCount:=6, MinBlurSimilarity:=0.35).Select(Function(r) r.Item).ToList
