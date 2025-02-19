@@ -181,7 +181,7 @@
     </Compile>
     <Compile Include="Modules\Minecraft\ModComp.vb" />
     <Compile Include="Modules\Minecraft\ModJava.vb" />
-    <Compile Include="Modules\Minecraft\LocalModComp.vb" />
+    <Compile Include="Modules\Minecraft\LocalCompFile.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
     <Compile Include="Modules\Minecraft\MyLocalCompItem.xaml.vb">
       <DependentUpon>MyLocalCompItem.xaml</DependentUpon>
