@@ -817,8 +817,8 @@ Finished:
         End Sub
 
         '加载资源列表
-        Public CompResourceListLoader As New LoaderTask(Of String, List(Of LocalCompFile))("Comp Resource List Loader", AddressOf CompLocalResourceLoad)
-        Private Sub CompLocalResourceLoad(Loader As LoaderTask(Of String, List(Of LocalCompFile)))
+        Public CompResourceListLoader As New LoaderTask(Of String, List(Of LocalCompFile))("Comp Resource List Loader", AddressOf CompResourceListLoad)
+        Private Sub CompResourceListLoad(Loader As LoaderTask(Of String, List(Of LocalCompFile)))
             Try
                 RunInUiWait(Sub() If _Frm IsNot Nothing Then _Frm.Load.ShowProgress = False)
 
@@ -936,8 +936,8 @@ Finished:
             End Try
         End Sub
         '联网加载 Mod 详情
-        Public CompUpdateDetailLoader As New LoaderTask(Of KeyValuePair(Of List(Of LocalCompFile), JObject), Integer)("Comp List Detail Loader", AddressOf McModDetailLoad)
-        Private Sub McModDetailLoad(Loader As LoaderTask(Of KeyValuePair(Of List(Of LocalCompFile), JObject), Integer))
+        Public CompUpdateDetailLoader As New LoaderTask(Of KeyValuePair(Of List(Of LocalCompFile), JObject), Integer)("Comp List Detail Loader", AddressOf CompUpdateDetailLoad)
+        Private Sub CompUpdateDetailLoad(Loader As LoaderTask(Of KeyValuePair(Of List(Of LocalCompFile), JObject), Integer))
             Dim Mods As List(Of LocalCompFile) = Loader.Input.Key
             Dim Cache As JObject = Loader.Input.Value
             '获取作为检查目标的加载器和版本
