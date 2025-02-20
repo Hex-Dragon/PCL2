@@ -6,6 +6,8 @@
 
     Private CurrentLoader As CurrentLoader
 
+    Private CurrentSwipSelect As MyLocalCompItem.SwipeSelect
+
     Public Sub New(LoadCompType As CompType)
         CurrentCompType = LoadCompType
         Dim RequireLoaders As List(Of CompLoaderType)
@@ -18,6 +20,8 @@
                 RequireLoaders = {CompLoaderType.OptiFine, CompLoaderType.Iris, CompLoaderType.Vanilla, CompLoaderType.Canvas}.ToList()
         End Select
         CurrentLoader = New CurrentLoader(Me, PageVersionLeft.Version.Version.McName, RequireLoaders)
+
+        CurrentSwipSelect = New MyLocalCompItem.SwipeSelect()
 
         ' 此调用是设计器所必需的。
         InitializeComponent()
@@ -114,7 +118,7 @@
     ''' <summary>
     ''' 已加载的 Mod UI 缓存，不确保按显示顺序排列。Key 为 Mod 的 RawFileName。
     ''' </summary>
-    Public ModItems As New Dictionary(Of String, MyLocalModItem)
+    Public ModItems As New Dictionary(Of String, MyLocalCompItem)
     ''' <summary>
     ''' 将加载器结果的 Mod 列表加载为 UI。
     ''' </summary>
@@ -143,20 +147,21 @@
             Log(ex, $"加载 {CurrentCompType} 列表 UI 失败", LogLevel.Feedback)
         End Try
     End Sub
-    Private Function BuildLocalCompItem(Entry As LocalCompFile) As MyLocalModItem
+    Private Function BuildLocalCompItem(Entry As LocalCompFile) As MyLocalCompItem
         AniControlEnabled += 1
-        Dim NewItem As New MyLocalModItem With {.SnapsToDevicePixels = True, .Entry = Entry,
+        Dim NewItem As New MyLocalCompItem With {.SnapsToDevicePixels = True, .Entry = Entry,
             .ButtonHandler = AddressOf BuildLocalCompItemBtnHandler, .Checked = SelectedMods.Contains(Entry.RawFileName)}
+        NewItem.CurrentSwipe = CurrentSwipSelect
         AddHandler Entry.OnCompUpdate, AddressOf NewItem.Refresh
         'AddHandler Entry.OnCompUpdate, Sub() RunInUi(Sub() DoSort())
         NewItem.Refresh()
         AniControlEnabled -= 1
         Return NewItem
     End Function
-    Private Sub BuildLocalCompItemBtnHandler(sender As MyLocalModItem, e As EventArgs)
+    Private Sub BuildLocalCompItemBtnHandler(sender As MyLocalCompItem, e As EventArgs)
         '点击事件
         AddHandler sender.Changed, AddressOf CheckChanged
-        AddHandler sender.Click, Sub(ss As MyLocalModItem, ee As EventArgs) ss.Checked = Not ss.Checked
+        AddHandler sender.Click, Sub(ss As MyLocalCompItem, ee As EventArgs) ss.Checked = Not ss.Checked
         '图标按钮
         Dim BtnOpen As New MyIconButton With {.LogoScale = 1.05, .Logo = Logo.IconButtonOpen, .Tag = sender}
         BtnOpen.ToolTip = "打开文件位置"
@@ -202,7 +207,7 @@
             PanList.Visibility = Visibility.Visible
             PanList.Children.Clear()
             For Each TargetMod In ShowingMods
-                Dim Item As MyLocalModItem = ModItems(TargetMod.RawFileName)
+                Dim Item As MyLocalCompItem = ModItems(TargetMod.RawFileName)
                 Item.Checked = SelectedMods.Contains(TargetMod.RawFileName) '更新选中状态
                 PanList.Children.Add(Item)
             Next
@@ -442,7 +447,7 @@ Install:
     Public SelectedMods As New List(Of String)
 
     '单项切换选择状态
-    Public Sub CheckChanged(sender As MyLocalModItem, e As RouteEventArgs)
+    Public Sub CheckChanged(sender As MyLocalCompItem, e As RouteEventArgs)
         If AniControlEnabled <> 0 Then Return
         '更新选择了的内容
         Dim SelectedKey As String = sender.Entry.RawFileName
@@ -458,7 +463,7 @@ Install:
     Private Sub ChangeAllSelected(Value As Boolean)
         AniControlEnabled += 1
         SelectedMods.Clear()
-        For Each Item As MyLocalModItem In ModItems.Values
+        For Each Item As MyLocalCompItem In ModItems.Values
             '#4992，Mod 从过滤器看可能不应在列表中，但因为刚切换状态所以依然保留在列表中，所以应该从列表 UI 判断，而非从过滤器判断
             Dim ShouldSelected As Boolean = Value AndAlso PanList.Children.Contains(Item)
             Item.Checked = ShouldSelected
@@ -592,7 +597,7 @@ Install:
             If PanList Is Nothing OrElse PanList.Children.Count < 2 Then Exit Sub
 
             ' 将子元素转换为可排序的列表
-            Dim items = PanList.Children.OfType(Of MyLocalModItem)().ToList()
+            Dim items = PanList.Children.OfType(Of MyLocalCompItem)().ToList()
             Dim Method = GetSortMethod(CurrentSortMethod)
 
             ' 根据排序类型处理特殊逻辑
@@ -708,9 +713,9 @@ Install:
                 SearchResult.Insert(IndexOfResult, NewModEntity)
             End If
             '更改 UI 中的列表
-            Dim NewItem As MyLocalModItem = BuildLocalCompItem(NewModEntity)
+            Dim NewItem As MyLocalCompItem = BuildLocalCompItem(NewModEntity)
             ModItems(ModEntity.RawFileName) = NewItem
-            Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry Is ModEntity))
+            Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalCompItem).FirstOrDefault(Function(i) i.Entry Is ModEntity))
             If IndexOfUi = -1 Then Continue For '因为未知原因 Mod 的状态已经切换完了
             PanList.Children.RemoveAt(IndexOfUi)
             PanList.Children.Insert(IndexOfUi, NewItem)
@@ -895,7 +900,7 @@ Install:
                 CurrentLoader.CompResourceListLoader.Output.Remove(ModEntity)
                 SearchResult?.Remove(ModEntity)
                 ModItems.Remove(ModEntity.RawFileName)
-                Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalModItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
+                Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalCompItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
                 If IndexOfUi >= 0 Then PanList.Children.RemoveAt(IndexOfUi)
             Next
             RefreshBars()
@@ -945,7 +950,7 @@ Install:
     Public Sub Info_Click(sender As Object, e As EventArgs)
         Try
 
-            Dim ModEntry As LocalCompFile = CType(If(TypeOf sender Is MyIconButton, sender.Tag, sender), MyLocalModItem).Entry
+            Dim ModEntry As LocalCompFile = CType(If(TypeOf sender Is MyIconButton, sender.Tag, sender), MyLocalCompItem).Entry
             '加载失败信息
             If ModEntry.State = LocalCompFile.LocalFileStatus.Unavailable Then
                 MyMsgBox("无法读取此 Mod 的信息。" & vbCrLf & vbCrLf & "详细的错误信息：" & GetExceptionDetail(ModEntry.FileUnavailableReason), "Mod 读取失败")
@@ -1014,7 +1019,7 @@ Install:
     Public Sub Open_Click(sender As MyIconButton, e As EventArgs)
         Try
 
-            Dim ListItem As MyLocalModItem = sender.Tag
+            Dim ListItem As MyLocalCompItem = sender.Tag
             OpenExplorer("/select,""" & ListItem.Entry.Path & """")
 
         Catch ex As Exception
@@ -1023,12 +1028,12 @@ Install:
     End Sub
     '删除
     Public Sub Delete_Click(sender As MyIconButton, e As EventArgs)
-        Dim ListItem As MyLocalModItem = sender.Tag
+        Dim ListItem As MyLocalCompItem = sender.Tag
         DeleteMods({ListItem.Entry})
     End Sub
     '启用 / 禁用
     Public Sub ED_Click(sender As MyIconButton, e As EventArgs)
-        Dim ListItem As MyLocalModItem = sender.Tag
+        Dim ListItem As MyLocalCompItem = sender.Tag
         EDMods({ListItem.Entry}, ListItem.Entry.State = LocalCompFile.LocalFileStatus.Disabled)
     End Sub
 

@@ -1,6 +1,6 @@
 ﻿Imports System.Windows.Forms
 
-Public Class MyLocalModItem
+Public Class MyLocalCompItem
 
 #Region "基础属性"
     Public Uuid As Integer = GetUuid()
@@ -114,41 +114,47 @@ Public Class MyLocalModItem
         If ButtonStack IsNot Nothing Then ButtonStack.IsHitTestVisible = True
     End Sub
 
-    ''滑动选中（等待重构）
-    'Private Shared SwipeStart As Integer, SwipeEnd As Integer
-    'Private Shared Swiping As Boolean = False
-    'Private Shared SwipToState As Boolean '被滑动到的目标应将 Checked 改为此值
-    'Private Sub Button_MouseSwipeStart(sender As Object, e As Object) Handles Me.MouseLeftButtonDown
-    '    If Parent Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
-    '    '开始滑动
-    '    Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
-    '    SwipeStart = Index
-    '    SwipeEnd = Index
-    '    Swiping = True
-    '    SwipToState = Not Checked
-    '    FrmVersionMod.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
-    'End Sub
-    'Private Sub Button_MouseSwipe(sender As Object, e As Object) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonUp
-    '    If Parent Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
-    '    '结束滑动
-    '    If Mouse.LeftButton <> MouseButtonState.Pressed OrElse Not Swiping Then
-    '        Swiping = False
-    '        FrmVersionMod.CardSelect.IsHitTestVisible = True
-    '        Exit Sub
-    '    End If
-    '    '计算滑动范围
-    '    Dim Elements = CType(Parent, StackPanel).Children
-    '    Dim Index As Integer = Elements.IndexOf(Me)
-    '    SwipeStart = MathClamp(Math.Min(SwipeStart, Index), 0, Elements.Count - 1)
-    '    SwipeEnd = MathClamp(Math.Max(SwipeEnd, Index), 0, Elements.Count - 1)
-    '    '勾选所有范围中的项
-    '    If SwipeStart = SwipeEnd Then Exit Sub
-    '    For i = SwipeStart To SwipeEnd
-    '        Dim Item As MyLocalModItem = Elements(i)
-    '        Item.InitLate(Item, e)
-    '        Item.Checked = SwipToState
-    '    Next
-    'End Sub
+    Public Class SwipeSelect
+        Public Property Start As Integer
+        Public Property [End] As Integer
+        Public Property Swiping As Boolean
+        Public Property SwipeToState As Boolean
+    End Class
+
+    Public Property CurrentSwipe As SwipeSelect
+
+    '滑动选中（等待重构）
+    Private Sub Button_MouseSwipeStart(sender As Object, e As Object) Handles Me.MouseLeftButtonDown
+        If Parent Is Nothing OrElse CurrentSwipe Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
+        '开始滑动
+        Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
+        CurrentSwipe.Start = Index
+        CurrentSwipe.End = Index
+        CurrentSwipe.Swiping = True
+        CurrentSwipe.SwipeToState = Not Checked
+        FrmVersionMod.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
+    End Sub
+    Private Sub Button_MouseSwipe(sender As Object, e As Object) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonUp
+        If Parent Is Nothing OrElse CurrentSwipe Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
+        '结束滑动
+        If Mouse.LeftButton <> MouseButtonState.Pressed OrElse Not CurrentSwipe.Swiping Then
+            CurrentSwipe.Swiping = False
+            FrmVersionMod.CardSelect.IsHitTestVisible = True
+            Exit Sub
+        End If
+        '计算滑动范围
+        Dim Elements = CType(Parent, StackPanel).Children
+        Dim Index As Integer = Elements.IndexOf(Me)
+        CurrentSwipe.Start = MathClamp(Math.Min(CurrentSwipe.Start, Index), 0, Elements.Count - 1)
+        CurrentSwipe.End = MathClamp(Math.Max(CurrentSwipe.End, Index), 0, Elements.Count - 1)
+        '勾选所有范围中的项
+        If CurrentSwipe.Start = CurrentSwipe.End Then Exit Sub
+        For i = CurrentSwipe.Start To CurrentSwipe.End
+            Dim Item As MyLocalCompItem = Elements(i)
+            Item.InitLate(Item, e)
+            Item.Checked = CurrentSwipe.SwipeToState
+        Next
+    End Sub
 
     '勾选状态
     Public Event Check(sender As Object, e As RouteEventArgs)
@@ -196,7 +202,7 @@ Public Class MyLocalModItem
                         RectCheck.VerticalAlignment = VerticalAlignment.Center
                         Anim.Add(AaColor(LabTitle, TextBlock.ForegroundProperty, If(LabTitle.TextDecorations Is Nothing, "ColorBrush1", "ColorBrushGray4"), 120))
                     End If
-                    AniStart(Anim, "MyLocalModItem Checked " & Uuid)
+                    AniStart(Anim, "MyLocalCompItem Checked " & Uuid)
                 Else
                     '不在窗口上时直接设置
                     RectCheck.VerticalAlignment = VerticalAlignment.Center
@@ -210,7 +216,7 @@ Public Class MyLocalModItem
                         RectCheck.Opacity = 0
                         LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = LocalCompFile.LocalFileStatus.Fine, "ColorBrush1", "ColorBrushGray4"))
                     End If
-                    AniStop("MyLocalModItem Checked " & Uuid)
+                    AniStop("MyLocalCompItem Checked " & Uuid)
                 End If
             Catch ex As Exception
                 Log(ex, "设置 Checked 失败")
@@ -256,7 +262,7 @@ Public Class MyLocalModItem
     End Property
 
     '按钮
-    Public ButtonHandler As Action(Of MyLocalModItem, EventArgs)
+    Public ButtonHandler As Action(Of MyLocalCompItem, EventArgs)
     Public ButtonStack As FrameworkElement
     Private _Buttons As IEnumerable(Of MyIconButton)
     Public Property Buttons As IEnumerable(Of MyIconButton)
