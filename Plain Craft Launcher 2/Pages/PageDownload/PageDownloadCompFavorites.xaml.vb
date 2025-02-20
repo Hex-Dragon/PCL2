@@ -213,7 +213,7 @@
         If TypeOf (CompItem.Tag) Is CompProject Then
             AddHandler CompItem.MouseRightButtonUp, Sub(sender As Object, e As EventArgs)
                                                         FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
-           .Additional = {CompItem.Tag, New List(Of String), String.Empty, CompModLoaderType.Any}})
+           .Additional = {CompItem.Tag, New List(Of String), String.Empty, CompLoaderType.Any}})
                                                     End Sub
         End If
         '---其它事件---
@@ -332,7 +332,7 @@
                 Exit Sub
             End If
             If 1 <> MyMsgBox($"批量下载功能仍旧处于测试状态{vbCrLf}使用此功能下载模组不会自动下载前置项。{vbCrLf}请在下载前仔细思考自己的需求，并仔细检查自己的选择，避免下载错误导致时间和网络流量的浪费。", "确定使用此功能？", Button1:="继续", Button2:="算了", IsWarn:=True) Then Exit Sub
-            Dim SupportedModLoader As New List(Of CompModLoaderType)
+            Dim SupportedModLoader As New List(Of CompLoaderType)
             Dim LoaderFirstSet As Boolean = True
             Dim HasMod As Boolean = False
             For Each Item In SelectedItemList ' 获取共同支持的 ModLoader
@@ -353,7 +353,7 @@
                 Exit Sub
             End If
             ' 要求选择版本
-            Dim DesiredModLoader As CompModLoaderType = CompModLoaderType.Any
+            Dim DesiredModLoader As CompLoaderType = CompLoaderType.Any
             If HasMod AndAlso SupportedModLoader.Count > 0 Then
                 If SupportedModLoader.Count > 0 Then
                     Dim MSelection As New List(Of IMyRadio)

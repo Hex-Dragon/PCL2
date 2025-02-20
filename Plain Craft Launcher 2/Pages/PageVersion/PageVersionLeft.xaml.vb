@@ -38,7 +38,7 @@ Public Class PageVersionLeft
                 If FrmVersionOverall Is Nothing Then FrmVersionOverall = New PageVersionOverall
                 Return FrmVersionOverall
             Case FormMain.PageSubType.VersionMod
-                If FrmVersionMod Is Nothing Then FrmVersionMod = New PageVersionMod
+                If FrmVersionMod Is Nothing Then FrmVersionMod = New PageVersionCompResource(CompType.Mod)
                 Return FrmVersionMod
             Case FormMain.PageSubType.VersionModDisabled
                 If FrmVersionModDisabled Is Nothing Then FrmVersionModDisabled = New PageVersionModDisabled
@@ -53,10 +53,10 @@ Public Class PageVersionLeft
                 If FrmVersionScreenshot Is Nothing Then FrmVersionScreenshot = New PageVersionScreenshot
                 Return FrmVersionScreenshot
             Case FormMain.PageSubType.VersionResourcePack
-                If FrmVersionResourcePack Is Nothing Then FrmVersionResourcePack = New PageVersionResourcePack
+                If FrmVersionResourcePack Is Nothing Then FrmVersionResourcePack = New PageVersionCompResource(CompType.ResourcePack)
                 Return FrmVersionResourcePack
             Case FormMain.PageSubType.VersionShader
-                If FrmVersionShader Is Nothing Then FrmVersionShader = New PageVersionShader
+                If FrmVersionShader Is Nothing Then FrmVersionShader = New PageVersionCompResource(CompType.Shader)
                 Return FrmVersionShader
             Case FormMain.PageSubType.VersionInstall
                 If FrmVersionInstall Is Nothing Then FrmVersionInstall = New PageVersionInstall
@@ -105,15 +105,15 @@ Public Class PageVersionLeft
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
         Select Case Val(sender.Tag)
             Case FormMain.PageSubType.VersionMod
-                PageVersionMod.Refresh()
+                PageVersionCompResource.Refresh(CompType.Mod)
             Case FormMain.PageSubType.VersionScreenshot
                 PageVersionScreenshot.Refresh()
             Case FormMain.PageSubType.VersionWorld
                 PageVersionWorld.Refresh()
             Case FormMain.PageSubType.VersionResourcePack
-                PageVersionResourcePack.Refresh()
+                PageVersionCompResource.Refresh(CompType.ResourcePack)
             Case FormMain.PageSubType.VersionShader
-                PageVersionShader.Refresh()
+                PageVersionCompResource.Refresh(CompType.Shader)
             Case FormMain.PageSubType.VersionInstall
                 DlClientListLoader.Start(IsForceRestart:=True)
                 DlOptiFineListLoader.Start(IsForceRestart:=True)
