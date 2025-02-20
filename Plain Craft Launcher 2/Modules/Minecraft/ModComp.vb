@@ -53,23 +53,23 @@ Public Module ModComp
         ''' <summary>
         ''' 材质包
         ''' </summary>
-        Minecraft = 7
+        Minecraft = 0
         ''' <summary>
         ''' 光影包
         ''' </summary>
-        Canvas = 8
+        Canvas = 0
         ''' <summary>
         ''' 光影包
         ''' </summary>
-        Iris = 9
+        Iris = 0
         ''' <summary>
         ''' 光影包
         ''' </summary>
-        OptiFine = 10
+        OptiFine = 0
         ''' <summary>
         ''' 光影包
         ''' </summary>
-        Vanilla = 11
+        Vanilla = 0
     End Enum
     <Flags> Public Enum CompSourceType
         CurseForge = 1
