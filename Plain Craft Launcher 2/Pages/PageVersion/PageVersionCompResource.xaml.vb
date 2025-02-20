@@ -774,7 +774,7 @@ Install:
                     NewestReplaceName = Join(NewestSegs, "-")
                 End If
                 '添加到下载列表
-                Dim TempAddress As String = PathTemp & "DownloadedCompResource\" & Entry.FileName.Replace(CurrentReplaceName, NewestReplaceName)
+                Dim TempAddress As String = PathTemp & "DownloadedComp\" & Entry.FileName.Replace(CurrentReplaceName, NewestReplaceName)
                 Dim RealAddress As String = GetPathFromFullPath(Entry.Path) & Entry.FileName.Replace(CurrentReplaceName, NewestReplaceName)
                 FileList.Add(File.ToNetFile(TempAddress))
                 FileCopyList(TempAddress) = RealAddress
