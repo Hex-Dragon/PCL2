@@ -124,7 +124,7 @@ Public Class MyLocalCompItem
 
     Public Property CurrentSwipe As SwipeSelect
 
-    '滑动选中（等待重构）
+    '滑动选中
     Private Sub Button_MouseSwipeStart(sender As Object, e As Object) Handles Me.MouseLeftButtonDown
         If Parent Is Nothing OrElse CurrentSwipe Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
         '开始滑动
