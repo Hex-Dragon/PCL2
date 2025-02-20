@@ -1152,6 +1152,7 @@ Finished:
         If PageVersionLeft.Version.Version.HasForge Then ModLoaders.Add(CompLoaderType.Forge)
         If PageVersionLeft.Version.Version.HasNeoForge Then ModLoaders.Add(CompLoaderType.NeoForge)
         If PageVersionLeft.Version.Version.HasFabric Then ModLoaders.Add(CompLoaderType.Fabric)
+        If PageVersionLeft.Version.Version.HasQuilt Then ModLoaders.AddRange({CompModLoaderType.Fabric, CompModLoaderType.Quilt})
         If PageVersionLeft.Version.Version.HasLiteLoader Then ModLoaders.Add(CompLoaderType.LiteLoader)
         If Not ModLoaders.Any() Then ModLoaders.AddRange({CompLoaderType.Forge, CompLoaderType.NeoForge, CompLoaderType.Fabric, CompLoaderType.LiteLoader, CompLoaderType.Quilt})
         Return ModLoaders

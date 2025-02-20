@@ -10,7 +10,7 @@
         <StackPanel x:Name="PanMain" Margin="25,25,25,25">
             <local:MyCard Title="参与投票" x:Name="PanInfo">
                 <StackPanel Orientation="Vertical" Margin="20,40,18,22">
-                    <TextBlock Text="新功能？我全都要！参与投票，催催你想加入的新功能。（为 PCL 伟大的咕咕咕事业咕咕咕）" TextWrapping="Wrap"/>
+                    <TextBlock Text="新功能？我全都要！参与投票，催催你想加入的新功能。（为 PCL 伟大的咕咕咕事业咕咕咕）&#xa;注意：此页面未展示所有的投票，如需查看更多投票，请前往 GitHub。" TextWrapping="Wrap"/>
                     <Grid Margin="0,15,0,0" Height="35">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
