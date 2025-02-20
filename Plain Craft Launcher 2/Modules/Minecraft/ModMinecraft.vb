@@ -2086,7 +2086,7 @@ OnLoaded:
         '判断 OptiFine 是否应该使用 installer
         If McLibGet.Contains("optifine\OptiFine\1.") AndAlso Splited(2).Split(".").Count > 1 Then
             Dim MajorVersion As Integer = Val(Splited(2).Split(".")(1))
-            Dim MinorVersion As Integer = If(Splited(2).Split(".").Count > 1, Val(Splited(2).Split(".")(2).BeforeFirst("_")), 0)
+            Dim MinorVersion As Integer = If(Splited(2).Split(".").Count > 1, Val(Splited(2).Split(".").Last.BeforeFirst("_")), 0)
             If (MajorVersion = 12 OrElse (MajorVersion = 20 AndAlso MinorVersion >= 4) OrElse MajorVersion >= 21) AndAlso '仅在 1.12 (无法追溯) 和 1.20.4+ (#5376) 遇到此问题
                 File.Exists($"{CustomMcFolder}libraries\{Splited(0).Replace(".", "\")}\{Splited(1)}\{Splited(2)}\{Splited(1)}-{Splited(2)}-installer.jar") Then
                 McLaunchLog("已将 " & Original & " 替换为对应的 Installer 文件")
