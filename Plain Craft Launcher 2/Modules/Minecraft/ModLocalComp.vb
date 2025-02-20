@@ -11,7 +11,7 @@ Public Module ModLocalComp
         ''' 资源的文件的地址。
         ''' </summary>
         Public ReadOnly Path As String
-        Public Sub New(Path As String, Type As CompType)
+        Public Sub New(Path As String)
             Me.Path = If(Path, "")
         End Sub
         ''' <summary>
@@ -872,7 +872,7 @@ Finished:
                 Loader.Progress += 0.94 / ModFileList.Count
                 If Loader.IsAborted Then Exit Sub
                 '加载 McMod 对象
-                Dim ModEntry As New LocalCompFile(ModFile.FullName, CompType.Mod)
+                Dim ModEntry As New LocalCompFile(ModFile.FullName)
                 ModEntry.Load()
                 Dim DumpMod As LocalCompFile = ModList.FirstOrDefault(Function(m) m.RawFileName = ModEntry.RawFileName)
                 If DumpMod IsNot Nothing Then

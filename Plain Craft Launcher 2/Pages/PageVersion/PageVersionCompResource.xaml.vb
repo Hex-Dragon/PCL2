@@ -683,7 +683,7 @@ Install:
                 IsSuccessful = False
             End Try
             '更改 Loader 中的列表
-            Dim NewModEntity As New LocalCompFile(NewPath, CurrentCompType)
+            Dim NewModEntity As New LocalCompFile(NewPath)
             NewModEntity.FromJson(ModEntity.ToJson)
             If CompResourceLoader.Output.Contains(ModEntity) Then
                 Dim IndexOfLoader As Integer = CompResourceLoader.Output.IndexOf(ModEntity)
@@ -859,7 +859,7 @@ Install:
                 Else
                     Return {Target.Path, Target.RawPath}
                 End If
-            End Function).Distinct.Where(Function(m) File.Exists(m)).Select(Function(m) New LocalCompFile(m, CurrentCompType)).ToList()
+            End Function).Distinct.Where(Function(m) File.Exists(m)).Select(Function(m) New LocalCompFile(m)).ToList()
             '实际删除文件
             For Each ModEntity In ModList
                 '删除
