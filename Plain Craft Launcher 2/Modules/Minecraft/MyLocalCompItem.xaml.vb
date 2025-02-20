@@ -1,6 +1,6 @@
 ﻿Imports System.Windows.Forms
 
-Public Class MyLocalModItem
+Public Class MyLocalCompItem
 
 #Region "基础属性"
     Public Uuid As Integer = GetUuid()
@@ -24,11 +24,11 @@ Public Class MyLocalModItem
         Set(value As String)
             Dim RawValue = value
             Select Case Entry.State
-                Case McMod.McModState.Fine
+                Case LocalCompFile.LocalFileStatus.Fine
                     LabTitle.TextDecorations = Nothing
-                Case McMod.McModState.Disabled
+                Case LocalCompFile.LocalFileStatus.Disabled
                     LabTitle.TextDecorations = TextDecorations.Strikethrough
-                Case McMod.McModState.Unavailable
+                Case LocalCompFile.LocalFileStatus.Unavailable
                     LabTitle.TextDecorations = TextDecorations.Strikethrough
                     value &= " [错误]"
             End Select
@@ -79,11 +79,11 @@ Public Class MyLocalModItem
     End Property
 
     '相关联的 Mod
-    Public Property Entry As McMod
+    Public Property Entry As LocalCompFile
         Get
             Return Tag
         End Get
-        Set(value As McMod)
+        Set(value As LocalCompFile)
             Tag = value
         End Set
     End Property
@@ -114,43 +114,46 @@ Public Class MyLocalModItem
         If ButtonStack IsNot Nothing Then ButtonStack.IsHitTestVisible = True
     End Sub
 
+    Public Class SwipeSelect
+        Public Property Start As Integer
+        Public Property [End] As Integer
+        Public Property Swiping As Boolean
+        Public Property SwipeToState As Boolean
+        Public Property TargetFrm As PageVersionCompResource
+    End Class
+
+    Public Property CurrentSwipe As SwipeSelect
+
     '滑动选中
-    Private Shared SwipeStart As Integer, SwipeEnd As Integer
-    Private Shared Swiping As Boolean = False
-    Private Shared SwipToState As Boolean '被滑动到的目标应将 Checked 改为此值
     Private Sub Button_MouseSwipeStart(sender As Object, e As Object) Handles Me.MouseLeftButtonDown
-        If Parent Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
+        If Parent Is Nothing OrElse CurrentSwipe Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
         '开始滑动
         Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
-        SwipeStart = Index
-        SwipeEnd = Index
-        Swiping = True
-        SwipToState = Not Checked
-        FrmVersionMod.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
+        CurrentSwipe.Start = Index
+        CurrentSwipe.End = Index
+        CurrentSwipe.Swiping = True
+        CurrentSwipe.SwipeToState = Not Checked
+        CurrentSwipe.TargetFrm.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
     End Sub
     Private Sub Button_MouseSwipe(sender As Object, e As Object) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonUp
-        If Parent Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
+        If Parent Is Nothing OrElse CurrentSwipe Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
         '结束滑动
-        If Mouse.LeftButton <> MouseButtonState.Pressed OrElse Not Swiping Then
-            Swiping = False
-            FrmVersionMod.CardSelect.IsHitTestVisible = True
+        If Mouse.LeftButton <> MouseButtonState.Pressed OrElse Not CurrentSwipe.Swiping Then
+            CurrentSwipe.Swiping = False
+            CurrentSwipe.TargetFrm.CardSelect.IsHitTestVisible = True
             Exit Sub
         End If
         '计算滑动范围
-        Dim Index = CType(Parent, StackPanel).Children.IndexOf(Me)
-        If Index < 0 OrElse Index >= CType(Parent, StackPanel).Children.Count Then Exit Sub
-        SwipeStart = Math.Min(SwipeStart, Index)
-        SwipeEnd = Math.Max(SwipeEnd, Index)
-        If SwipeStart < 0 Then SwipeStart = 0
-        If SwipeEnd < 0 Then SwipeEnd = 0
-        If SwipeStart >= CType(Parent, StackPanel).Children.Count Then SwipeStart = CType(Parent, StackPanel).Children.Count - 1
-        If SwipeEnd >= CType(Parent, StackPanel).Children.Count Then SwipeEnd = CType(Parent, StackPanel).Children.Count - 1
+        Dim Elements = CType(Parent, StackPanel).Children
+        Dim Index As Integer = Elements.IndexOf(Me)
+        CurrentSwipe.Start = MathClamp(Math.Min(CurrentSwipe.Start, Index), 0, Elements.Count - 1)
+        CurrentSwipe.End = MathClamp(Math.Max(CurrentSwipe.End, Index), 0, Elements.Count - 1)
         '勾选所有范围中的项
-        If SwipeStart = SwipeEnd Then Exit Sub
-        For i = SwipeStart To SwipeEnd
-            Dim Item As MyLocalModItem = CType(Parent, StackPanel).Children(i)
+        If CurrentSwipe.Start = CurrentSwipe.End Then Exit Sub
+        For i = CurrentSwipe.Start To CurrentSwipe.End
+            Dim Item As MyLocalCompItem = Elements(i)
             Item.InitLate(Item, e)
-            Item.Checked = SwipToState
+            Item.Checked = CurrentSwipe.SwipeToState
         Next
     End Sub
 
@@ -192,7 +195,7 @@ Public Class MyLocalModItem
                         Anim.Add(AaOpacity(RectCheck, 1 - RectCheck.Opacity, 30))
                         RectCheck.VerticalAlignment = VerticalAlignment.Center
                         RectCheck.Margin = New Thickness(-3, 0, 0, 0)
-                        Anim.Add(AaColor(LabTitle, TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush2", "ColorBrush5"), 200))
+                        Anim.Add(AaColor(LabTitle, TextBlock.ForegroundProperty, If(Entry.State = LocalCompFile.LocalFileStatus.Fine, "ColorBrush2", "ColorBrush5"), 200))
                     Else
                         '由有变无
                         Anim.Add(AaHeight(RectCheck, -RectCheck.ActualHeight, 120,, New AniEaseInFluent(AniEasePower.Weak)))
@@ -208,11 +211,11 @@ Public Class MyLocalModItem
                     If Checked Then
                         RectCheck.Height = 32
                         RectCheck.Opacity = 1
-                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush2", "ColorBrush5"))
+                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = LocalCompFile.LocalFileStatus.Fine, "ColorBrush2", "ColorBrush5"))
                     Else
                         RectCheck.Height = 0
                         RectCheck.Opacity = 0
-                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush1", "ColorBrushGray4"))
+                        LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = LocalCompFile.LocalFileStatus.Fine, "ColorBrush1", "ColorBrushGray4"))
                     End If
                     AniStop("MyLocalModItem Checked " & Uuid)
                 End If
@@ -260,7 +263,7 @@ Public Class MyLocalModItem
     End Property
 
     '按钮
-    Public ButtonHandler As Action(Of MyLocalModItem, EventArgs)
+    Public ButtonHandler As Action(Of MyLocalCompItem, EventArgs)
     Public ButtonStack As FrameworkElement
     Private _Buttons As IEnumerable(Of MyIconButton)
     Public Property Buttons As IEnumerable(Of MyIconButton)
@@ -341,9 +344,9 @@ Public Class MyLocalModItem
             '标题与描述
             Dim DescFileName As String
             Select Case Entry.State
-                Case McMod.McModState.Fine
+                Case LocalCompFile.LocalFileStatus.Fine
                     DescFileName = GetFileNameWithoutExtentionFromPath(Entry.Path)
-                Case McMod.McModState.Disabled
+                Case LocalCompFile.LocalFileStatus.Disabled
                     DescFileName = GetFileNameWithoutExtentionFromPath(Entry.Path.Replace(".disabled", "").Replace(".old", ""))
                 Case Else 'McMod.McModState.Unavailable
                     DescFileName = GetFileNameFromPath(Entry.Path)
@@ -386,14 +389,14 @@ Public Class MyLocalModItem
             End If
             Description = NewDescription
             If Checked Then
-                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush2", "ColorBrush5"))
+                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = LocalCompFile.LocalFileStatus.Fine, "ColorBrush2", "ColorBrush5"))
             Else
-                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = McMod.McModState.Fine, "ColorBrush1", "ColorBrushGray4"))
+                LabTitle.SetResourceReference(TextBlock.ForegroundProperty, If(Entry.State = LocalCompFile.LocalFileStatus.Fine, "ColorBrush1", "ColorBrushGray4"))
             End If
             '主 Logo
             Logo = If(Entry.Comp Is Nothing, PathImage & "Icons/NoIcon.png", Entry.Comp.GetControlLogo())
             '图标右下角的 Logo
-            If Entry.State = McMod.McModState.Fine Then
+            If Entry.State = LocalCompFile.LocalFileStatus.Fine Then
                 If ImgState IsNot Nothing Then
                     Children.Remove(ImgState)
                     ImgState = Nothing
@@ -484,8 +487,12 @@ Public Class MyLocalModItem
 
     '触发更新
     Private Sub BtnUpdate_Click(sender As Object, e As EventArgs) Handles BtnUpdate.Click
-        If MyMsgBox($"是否要更新 {Entry.Name}？{vbCrLf}{vbCrLf}{GetUpdateCompareDescription()}", "Mod 更新确认", "更新", "取消") = 2 Then Return
-        FrmVersionMod.UpdateMods({Entry})
+        If MyMsgBox($"是否要更新 {Entry.Name}？{vbCrLf}{vbCrLf}{GetUpdateCompareDescription()}", "更新确认", "更新", "取消") = 2 Then Return
+        Select Case Entry.Comp.Type
+            Case CompType.Mod : FrmVersionMod.UpdateResource({Entry})
+            Case CompType.ResourcePack : FrmVersionResourcePack.UpdateResource({Entry})
+            Case CompType.Shader : FrmVersionShader.UpdateResource({Entry})
+        End Select
     End Sub
 
     '自适应（#4465）
