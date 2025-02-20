@@ -64,6 +64,11 @@
             <SolidColorBrush x:Key="ColorBrushMsgBox">#fbfbfb</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushMsgBoxText">#5c5c5c</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushMemory">#000000</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushFatal">#c23616</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushError">#e74c3c</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushWarn">#f39c12</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushInfo">#ffffff</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushDebug">#95a5a6</SolidColorBrush>
 
 
             <!-- Window -->

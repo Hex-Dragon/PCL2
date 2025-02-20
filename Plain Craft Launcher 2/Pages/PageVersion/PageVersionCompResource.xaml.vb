@@ -542,6 +542,7 @@ Install:
         Filter = sender.Tag
         RefreshUI()
         DoSort()
+        DoSort()
     End Sub
 
 #End Region
