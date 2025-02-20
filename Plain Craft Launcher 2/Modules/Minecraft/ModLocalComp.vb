@@ -805,7 +805,7 @@ Finished:
 
     End Class
 
-    Public Class CurrentLoader
+    Public Class CompLocalLoader
         Private _GameVersion As String
         Private _Loaders As List(Of CompLoaderType)
         Private _Frm As PageVersionCompResource

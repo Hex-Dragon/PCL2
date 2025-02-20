@@ -4,7 +4,7 @@
 
     Private CurrentCompType As CompType = CompType.Mod
 
-    Private CurrentLoader As CurrentLoader
+    Private CurrentLoader As CompLocalLoader
 
     Private CurrentSwipSelect As MyLocalCompItem.SwipeSelect
 
@@ -19,9 +19,9 @@
             Case CompType.Shader
                 RequireLoaders = {CompLoaderType.OptiFine, CompLoaderType.Iris, CompLoaderType.Vanilla, CompLoaderType.Canvas}.ToList()
         End Select
-        CurrentLoader = New CurrentLoader(Me, PageVersionLeft.Version.Version.McName, RequireLoaders)
+        CurrentLoader = New CompLocalLoader(Me, PageVersionLeft.Version.Version.McName, RequireLoaders)
 
-        CurrentSwipSelect = New MyLocalCompItem.SwipeSelect()
+        CurrentSwipSelect = New MyLocalCompItem.SwipeSelect() With {.TargetFrm = Me}
 
         ' 此调用是设计器所必需的。
         InitializeComponent()

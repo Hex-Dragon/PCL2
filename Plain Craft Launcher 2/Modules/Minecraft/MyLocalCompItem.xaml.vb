@@ -119,6 +119,7 @@ Public Class MyLocalCompItem
         Public Property [End] As Integer
         Public Property Swiping As Boolean
         Public Property SwipeToState As Boolean
+        Public Property TargetFrm As PageVersionCompResource
     End Class
 
     Public Property CurrentSwipe As SwipeSelect
@@ -132,14 +133,14 @@ Public Class MyLocalCompItem
         CurrentSwipe.End = Index
         CurrentSwipe.Swiping = True
         CurrentSwipe.SwipeToState = Not Checked
-        FrmVersionMod.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
+        CurrentSwipe.TargetFrm.CardSelect.IsHitTestVisible = False '暂时禁用下边栏
     End Sub
     Private Sub Button_MouseSwipe(sender As Object, e As Object) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonUp
         If Parent Is Nothing OrElse CurrentSwipe Is Nothing Then Exit Sub 'Mod 可能已被删除（#3824）
         '结束滑动
         If Mouse.LeftButton <> MouseButtonState.Pressed OrElse Not CurrentSwipe.Swiping Then
             CurrentSwipe.Swiping = False
-            FrmVersionMod.CardSelect.IsHitTestVisible = True
+            CurrentSwipe.TargetFrm.CardSelect.IsHitTestVisible = True
             Exit Sub
         End If
         '计算滑动范围
