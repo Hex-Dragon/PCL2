@@ -140,6 +140,8 @@
                 Throw ex
             Catch ex As ThreadInterruptedException
                 Throw ex
+            Catch ex As System.ComponentModel.Win32Exception
+                Throw New ApplicationException($"与系统交互时出现错误，错误代码：{ex.ErrorCode}", ex)
             Catch ex As Exception
                 Log("[Java] 检查失败的 Java 输出：" & PathFolder & "java.exe" & vbCrLf & If(Output, "无程序输出"))
                 Throw New Exception("检查 Java 失败（" & If(PathJavaw, "Nothing") & "）", ex)
