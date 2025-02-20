@@ -83,7 +83,7 @@
     End Sub
 
     Private Sub LoaderInit() Handles Me.Initialized
-        PageLoaderInit(Load, PanLoad, PanAllBack, Nothing, CompResourceLoader, AddressOf LoadUIFromLoaderOutput, AutoRun:=False)
+        PageLoaderInit(Load, PanLoad, PanAllBack, Nothing, CompResourceLoader, AddressOf LoadUIFromLoaderOutput, Function() CurrentCompType, AutoRun:=False)
     End Sub
     Private Sub Load_Click(sender As Object, e As MouseButtonEventArgs) Handles Load.Click
         If CompResourceLoader.State = LoadState.Failed Then

@@ -809,21 +809,35 @@ Finished:
     Public CompResourceLoader As New LoaderTask(Of String, List(Of LocalCompFile))("Comp Resource List Loader", AddressOf CompLocalResourceLoad)
     Private Sub CompLocalResourceLoad(Loader As LoaderTask(Of String, List(Of LocalCompFile)))
         Try
-            RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.ShowProgress = False)
+            Dim TargetFrm As PageVersionCompResource
+            Dim TargetComp As CompType
+            Select Case GetFolderNameFromPath(Loader.Input).ToLower
+                Case "mods"
+                    TargetFrm = FrmVersionMod
+                    TargetComp = CompType.Mod
+                Case "resourcepacks"
+                    TargetFrm = FrmVersionResourcePack
+                    TargetComp = CompType.ResourcePack
+                Case "shaderpacks"
+                    TargetFrm = FrmVersionShader
+                    TargetComp = CompType.Shader
+            End Select
+            If TargetFrm Is Nothing Then Exit Sub
+            RunInUiWait(Sub() If TargetFrm IsNot Nothing Then TargetFrm.Load.ShowProgress = False)
 
             '等待 Mod 更新完成
             If PageVersionCompResource.UpdatingVersions.Contains(Loader.Input) Then
                 Log($"[Mod] 等待资源更新完成后才能继续加载资源列表：" & Loader.Input)
                 Try
-                    RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = "正在更新资源")
+                    RunInUiWait(Sub() If TargetFrm IsNot Nothing Then TargetFrm.Load.Text = "正在更新资源")
                     Do Until Not PageVersionCompResource.UpdatingVersions.Contains(Loader.Input)
                         If Loader.IsAborted Then Exit Sub
                         Thread.Sleep(100)
                     Loop
                 Finally
-                    RunInUiWait(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.Text = "正在加载资源列表")
+                    RunInUiWait(Sub() If TargetFrm IsNot Nothing Then TargetFrm.Load.Text = "正在加载资源列表")
                 End Try
-                FrmVersionMod.LoaderRun(LoaderFolderRunType.UpdateOnly)
+                TargetFrm.LoaderRun(LoaderFolderRunType.UpdateOnly)
             End If
 
             '获取 Mod 文件夹下的可用文件列表
@@ -845,7 +859,7 @@ Finished:
 
             '确定是否显示进度
             Loader.Progress = 0.05
-            If ModFileList.Count > 50 Then RunInUi(Sub() If FrmVersionMod IsNot Nothing Then FrmVersionMod.Load.ShowProgress = True)
+            If ModFileList.Count > 50 Then RunInUi(Sub() If TargetFrm IsNot Nothing Then TargetFrm.Load.ShowProgress = True)
 
             '获取本地文件缓存
             Dim CachePath As String = PathTemp & "Cache\LocalComp.json"
@@ -916,7 +930,19 @@ Finished:
             '开始联网加载
             If ModUpdateList.Any() Then
                 'TODO: 添加信息获取中提示
-                McModDetailLoader.Start(New KeyValuePair(Of List(Of LocalCompFile), JObject)(ModUpdateList, Cache), IsForceRestart:=True)
+                Dim query As New UpdateQuery With {
+                    .RequireGameVersion = PageVersionLeft.Version.Version.McName,
+                    .Data = New KeyValuePair(Of List(Of LocalCompFile), JObject)(ModUpdateList, Cache)
+                }
+                Select Case TargetComp
+                    Case CompType.Mod
+                        query.RequireLoader = GetTargetModLoaders()
+                    Case CompType.ResourcePack
+                        query.RequireLoader = {CompLoaderType.Minecraft}.ToList()
+                    Case CompType.Shader
+                        query.RequireLoader = {CompLoaderType.OptiFine, CompLoaderType.Iris, CompLoaderType.Canvas, CompLoaderType.Vanilla}.ToList()
+                End Select
+                CompUpdateDetailLoader.Start(query, IsForceRestart:=True)
             End If
 
         Catch ex As Exception
@@ -925,14 +951,18 @@ Finished:
         End Try
     End Sub
     '联网加载 Mod 详情
-    Public McModDetailLoader As New LoaderTask(Of KeyValuePair(Of List(Of LocalCompFile), JObject), Integer)("Mod List Detail Loader", AddressOf McModDetailLoad)
-    Private Sub McModDetailLoad(Loader As LoaderTask(Of KeyValuePair(Of List(Of LocalCompFile), JObject), Integer))
-        Dim Mods As List(Of LocalCompFile) = Loader.Input.Key
-        Dim Cache As JObject = Loader.Input.Value
+    Public Class UpdateQuery
+        Public Property RequireLoader As List(Of CompLoaderType)
+        Public Property RequireGameVersion As String
+        Public Property Data As KeyValuePair(Of List(Of LocalCompFile), JObject)
+    End Class
+    Public CompUpdateDetailLoader As New LoaderTask(Of UpdateQuery, Integer)("Comp List Detail Loader", AddressOf McModDetailLoad)
+    Private Sub McModDetailLoad(Loader As LoaderTask(Of UpdateQuery, Integer))
+        Dim Mods As List(Of LocalCompFile) = Loader.Input.Data.Key
+        Dim Cache As JObject = Loader.Input.Data.Value
         '获取作为检查目标的加载器和版本
-        Dim TargetMcVersion As McVersionInfo = PageVersionLeft.Version.Version
-        Dim ModLoaders = GetTargetModLoaders()
-        Dim McVersion = TargetMcVersion.McName
+        Dim ModLoaders = Loader.Input.RequireLoader
+        Dim McVersion = Loader.Input.RequireGameVersion
         '暂不向下扩展检查的 MC 小版本
         '例如：Mod 在更新 1.16.5 后，对早期的 1.16.2 版本发布了修补补丁，这会导致 PCL 将 1.16.5 版本的 Mod 降级到 1.16.2
         'If TargetMcVersion.McCodeMain > 0 AndAlso TargetMcVersion.McCodeMain < 99 Then
@@ -1133,7 +1163,11 @@ Finished:
         Next
         WriteFile(PathTemp & "Cache\LocalComp.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))
         '刷新边栏
-        RunInUi(Sub() FrmVersionMod?.RefreshBars())
+        RunInUi(Sub()
+                    FrmVersionMod?.RefreshBars()
+                    FrmVersionResourcePack?.RefreshBars()
+                    FrmVersionShader?.RefreshBars()
+                End Sub)
     End Sub
     Private Function GetTargetModLoaders() As List(Of CompLoaderType)
         Dim ModLoaders As New List(Of CompLoaderType)
