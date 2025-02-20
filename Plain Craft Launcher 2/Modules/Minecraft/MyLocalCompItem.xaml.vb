@@ -483,9 +483,13 @@ Public Class MyLocalModItem
 
     '触发更新
     Private Sub BtnUpdate_Click(sender As Object, e As EventArgs) Handles BtnUpdate.Click
-        Select Case MyMsgBox($"是否要更新 {Entry.Name}？{vbCrLf}{vbCrLf}{GetUpdateCompareDescription()}", "Mod 更新确认", "更新", "查看更新日志", "取消")
+        Select Case MyMsgBox($"是否要更新 {Entry.Name}？{vbCrLf}{vbCrLf}{GetUpdateCompareDescription()}", "更新确认", "更新", "查看更新日志", "取消")
             Case 1 '更新
-                FrmVersionMod.UpdateResource({Entry})
+                Select Case Entry.Comp.Type
+                    Case CompType.Mod : FrmVersionMod.UpdateResource({Entry})
+                    Case CompType.ResourcePack : FrmVersionResourcePack.UpdateResource({Entry})
+                    Case CompType.Shader : FrmVersionShader.UpdateResource({Entry})
+                End Select
             Case 2 '查看更新日志
                 ShowUpdateLog()
             Case 3 '取消
