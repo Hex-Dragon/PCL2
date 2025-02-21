@@ -104,13 +104,13 @@
         End If
         '打开详情页
         Dim TargetVersion As String
-        Dim TargetLoader As CompModLoaderType
+        Dim TargetLoader As CompLoaderType
         If FrmMain.PageCurrent.Page = FormMain.PageType.CompDetail Then
             TargetVersion = FrmMain.PageCurrent.Additional(2)
             TargetLoader = FrmMain.PageCurrent.Additional(3)
         ElseIf FrmMain.PageCurrent.Page = FormMain.PageType.Download AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.DownloadCompFavorites Then
             TargetVersion = ""
-            TargetLoader = CompModLoaderType.Any
+            TargetLoader = CompLoaderType.Any
         Else
             Select Case CType(sender.Tag, CompProject).Type
                 Case CompType.Mod
@@ -125,7 +125,7 @@
                     TargetVersion = "" 'If(PageDownloadResource.Loader.Input.GameVersion, "")
             End Select
         End If
-        If CType(sender.Tag, CompProject).Type <> CompType.Mod Then TargetLoader = CompModLoaderType.Any
+        If CType(sender.Tag, CompProject).Type <> CompType.Mod Then TargetLoader = CompLoaderType.Any
         FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.CompDetail,
                            .Additional = {sender.Tag, New List(Of String), TargetVersion, TargetLoader}})
     End Sub

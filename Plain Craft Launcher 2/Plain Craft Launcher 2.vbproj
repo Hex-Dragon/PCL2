@@ -181,10 +181,10 @@
     </Compile>
     <Compile Include="Modules\Minecraft\ModComp.vb" />
     <Compile Include="Modules\Minecraft\ModJava.vb" />
-    <Compile Include="Modules\Minecraft\ModMod.vb" />
+    <Compile Include="Modules\Minecraft\ModLocalComp.vb" />
     <Compile Include="Modules\Minecraft\ModModpack.vb" />
-    <Compile Include="Modules\Minecraft\MyLocalModItem.xaml.vb">
-      <DependentUpon>MyLocalModItem.xaml</DependentUpon>
+    <Compile Include="Modules\Minecraft\MyLocalCompItem.xaml.vb">
+      <DependentUpon>MyLocalCompItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modules\ModEvent.vb" />
     <Compile Include="Controls\MyExtraButton.xaml.vb">
@@ -284,6 +284,9 @@
     <Compile Include="Pages\PageLink\PageLinkLobby.xaml.vb">
       <DependentUpon>PageLinkLobby.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageLogLeft.xaml.vb">
+      <DependentUpon>PageLogLeft.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageOther\PageOtherVote.xaml.vb">
       <DependentUpon>PageOtherVote.xaml</DependentUpon>
     </Compile>
@@ -296,23 +299,20 @@
     <Compile Include="Pages\PageOther\PageOtherFeedback.xaml.vb">
       <DependentUpon>PageOtherFeedback.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageLogRight.xaml.vb">
+      <DependentUpon>PageLogRight.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageVersion\PageVersionInstall.xaml.vb">
       <DependentUpon>PageVersionInstall.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageVersion\PageVersionLeft.xaml.vb">
       <DependentUpon>PageVersionLeft.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\PageVersion\PageVersionMod.xaml.vb">
-      <DependentUpon>PageVersionMod.xaml</DependentUpon>
+    <Compile Include="Pages\PageVersion\PageVersionCompResource.xaml.vb">
+      <DependentUpon>PageVersionCompResource.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageVersion\PageVersionModDisabled.xaml.vb">
       <DependentUpon>PageVersionModDisabled.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PageVersion\PageVersionShader.xaml.vb">
-      <DependentUpon>PageVersionShader.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\PageVersion\PageVersionResourcePack.xaml.vb">
-      <DependentUpon>PageVersionResourcePack.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageVersion\PageVersionWorld.xaml.vb">
       <DependentUpon>PageVersionWorld.xaml</DependentUpon>
@@ -500,7 +500,7 @@
       <DependentUpon>FormMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Modules\Minecraft\MyLocalModItem.xaml">
+    <Page Include="Modules\Minecraft\MyLocalCompItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -593,6 +593,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\PageLogLeft.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\PageOther\PageOtherVote.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -605,15 +609,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Pages\PageLogRight.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\PageVersion\PageVersionInstall.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\PageVersion\PageVersionShader.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\PageVersion\PageVersionResourcePack.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -733,7 +733,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\PageVersion\PageVersionMod.xaml">
+    <Page Include="Pages\PageVersion\PageVersionCompResource.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

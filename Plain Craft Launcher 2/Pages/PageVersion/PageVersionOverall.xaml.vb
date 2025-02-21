@@ -352,6 +352,16 @@
         Catch ex As Exception
             Log(ex, "重置版本 " & PageVersionLeft.Version.Name & " 失败", LogLevel.Msgbox)
         End Try
+                                                                                      
+    '测试游戏
+    Private Sub BtnManageTest_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageTest.Click
+        Try
+            McLaunchStart(New McLaunchOptions With
+                 {.Version = PageVersionLeft.Version, .Test = True})
+            FrmMain.PageChange(FormMain.PageType.Launch)
+        Catch ex As Exception
+            Log(ex, "测试游戏失败", LogLevel.Feedback)
+        End Try
     End Sub
 
     '删除版本
