@@ -186,6 +186,9 @@
     <Compile Include="Controls\MyComboBox.vb" />
     <Compile Include="Controls\MyComboBoxItem.vb" />
     <Compile Include="Controls\MyCard.vb" />
+    <Compile Include="Controls\MyExtraTextButton.xaml.vb">
+      <DependentUpon>MyExtraTextButton.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MyImage.vb" />
     <Compile Include="Controls\MyPageRight.vb" />
     <Compile Include="Controls\MyPageLeft.vb" />
@@ -385,6 +388,10 @@
     <Compile Include="Pages\PageSpeedRight.xaml.vb">
       <DependentUpon>PageSpeedRight.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\MyExtraTextButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\MyExtraButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -479,10 +486,10 @@
       <DependentUpon>MyRadioButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="FormMain.xaml.vb">
-
       <DependentUpon>FormMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+
     <Page Include="Modules\Minecraft\MyLocalModItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -565,8 +572,8 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Pages\PageVersion\PageVersionExport.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\Language\en_US.xaml">
       <SubType>Designer</SubType>
@@ -917,11 +924,11 @@
     <Resource Include="Images\Icons\Disabled.png" />
     <Resource Include="Images\Icons\Unavailable.png" />
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
   <ItemGroup>
+
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\NeoForge.png" />

@@ -622,7 +622,7 @@
     Public Sub DlForgeVersionOfficialMain(Loader As LoaderTask(Of String, List(Of DlForgeVersionEntry)))
         Dim Result As String
         Try
-            Result = NetGetCodeByDownload("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_" &
+            Result = NetGetCodeByLoader("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_" &
                                           Loader.Input.Replace("-", "_") & '兼容 Forge 1.7.10-pre4，#4057
                                           ".html", UseBrowserUserAgent:=True)
         Catch ex As Exception
@@ -829,8 +829,8 @@
     Public DlNeoForgeListOfficialLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Official", AddressOf DlNeoForgeListOfficialMain)
     Private Sub DlNeoForgeListOfficialMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
         '获取版本列表 JSON
-        Dim ResultLatest As String = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
-        Dim ResultLegacy As String = NetGetCodeByDownload("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/forge", UseBrowserUserAgent:=True, IsJson:=True)
+        Dim ResultLatest As String = NetGetCodeByLoader("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
+        Dim ResultLegacy As String = NetGetCodeByLoader("https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/forge", UseBrowserUserAgent:=True, IsJson:=True)
         If ResultLatest.Length < 100 OrElse ResultLegacy.Length < 100 Then Throw New Exception("获取到的版本列表长度不足（" & ResultLatest & "）")
         '解析
         Try
@@ -847,8 +847,8 @@
     Public DlNeoForgeListBmclapiLoader As New LoaderTask(Of Integer, DlNeoForgeListResult)("DlNeoForgeList Bmclapi", AddressOf DlNeoForgeListBmclapiMain)
     Public Sub DlNeoForgeListBmclapiMain(Loader As LoaderTask(Of Integer, DlNeoForgeListResult))
         '获取版本列表 JSON
-        Dim ResultLatest As String = NetGetCodeByDownload("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
-        Dim ResultLegacy As String = NetGetCodeByDownload("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/forge", UseBrowserUserAgent:=True, IsJson:=True)
+        Dim ResultLatest As String = NetGetCodeByLoader("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/neoforge", UseBrowserUserAgent:=True, IsJson:=True)
+        Dim ResultLegacy As String = NetGetCodeByLoader("https://bmclapi2.bangbang93.com/neoforge/meta/api/maven/details/releases/net/neoforged/forge", UseBrowserUserAgent:=True, IsJson:=True)
         If ResultLatest.Length < 100 OrElse ResultLegacy.Length < 100 Then Throw New Exception("获取到的版本列表长度不足（" & ResultLatest & "）")
         '解析
         Try
@@ -1095,12 +1095,12 @@
 
     ''' <summary>
     ''' 对可能涉及 Mod 镜像源的请求进行处理，返回字符串或 JObject。
-    ''' 调用 NetGetCodeByRequest。
+    ''' 调用 NetGetCodeByRequest，会进行重试。
     ''' </summary>
     Public Function DlModRequest(Url As String, Optional IsJson As Boolean = False) As Object
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
         'Dim McimUrl As String = DlSourceModGet(Url)
         'If McimUrl <> Url Then
         '    Select Case Setup.Get("ToolDownloadMod")
@@ -1132,12 +1132,12 @@
 
     ''' <summary>
     ''' 对可能涉及 Mod 镜像源的请求进行处理。
-    ''' 调用 NetRequest。
+    ''' 调用 NetRequest，会进行重试。
     ''' </summary>
     Public Function DlModRequest(Url As String, Method As String, Data As String, ContentType As String) As String
         Dim Urls As New List(Of KeyValuePair(Of String, Integer))
         Urls.Add(New KeyValuePair(Of String, Integer)(Url, 5))
-        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 15))
+        Urls.Add(New KeyValuePair(Of String, Integer)(Url, 20))
         'Dim McimUrl As String = DlSourceModGet(Url)
         'If McimUrl <> Url Then
         '   Select Case Setup.Get("ToolDownloadMod")

@@ -1,4 +1,7 @@
-﻿Public Class MyListItem
+﻿Imports System.Windows.Markup
+
+<ContentProperty("Inlines")>
+Public Class MyListItem
     Implements IMyRadio
 
     Public Event Click(sender As Object, e As MouseButtonEventArgs)
@@ -161,6 +164,11 @@
     End Property
 
     '标题
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return LabTitle.Inlines
+        End Get
+    End Property
     Public Property Title As String
         Get
             Return GetValue(TitleProperty)
@@ -337,16 +345,7 @@
             Return _Checked
         End Get
         Set(value As Boolean)
-            SetChecked(value, False, True, _Half)
-        End Set
-    End Property
-    Private _Half As Boolean = False
-    Public Property Half As Boolean
-        Get
-            Return _Half
-        End Get
-        Set(value As Boolean)
-            SetChecked(_Checked, False, True, value)
+            SetChecked(value, False, True)
         End Set
     End Property
     ''' <summary>
@@ -355,8 +354,7 @@
     ''' <param name="value">新的 Checked 属性。</param>
     ''' <param name="user">是否由用户引发。</param>
     ''' <param name="anime">是否执行动画。</param>
-    ''' <param name="half">是否为部分选中。</param>
-    Public Sub SetChecked(value As Boolean, user As Boolean, anime As Boolean, Optional half As Boolean = False)
+    Public Sub SetChecked(value As Boolean, user As Boolean, anime As Boolean)
         Try
 
             '自定义属性基础
@@ -374,9 +372,8 @@
                 End If
                 _Checked = value
             Else
-                If value = _Checked AndAlso half = _Half Then Exit Sub
+                If value = _Checked Then Exit Sub
                 _Checked = value
-                _Half = half
                 If IsInitialized Then
                     RaiseEvent Changed(Me, ChangedEventArgs)
                     If ChangedEventArgs.Handled Then
@@ -440,9 +437,9 @@
                     '由无变有
                     If Not IsNothing(RectCheck) Then
                         Dim Delta = ActualHeight - RectCheck.ActualHeight - 12
-                        Anim.Add(AaHeight(RectCheck, Delta * If(half, 0.2, 0.4), 200,, New AniEaseOutFluent(AniEasePower.Weak)))
-                        Anim.Add(AaHeight(RectCheck, Delta * If(half, 0.3, 0.6), 300,, New AniEaseOutBack(AniEasePower.Weak)))
-                        Anim.Add(AaOpacity(RectCheck, If(half, 0.5, 1) - RectCheck.Opacity, 30))
+                        Anim.Add(AaHeight(RectCheck, Delta * 0.4, 200,, New AniEaseOutFluent(AniEasePower.Weak)))
+                        Anim.Add(AaHeight(RectCheck, Delta * 0.6, 300,, New AniEaseOutBack(AniEasePower.Weak)))
+                        Anim.Add(AaOpacity(RectCheck, 1 - RectCheck.Opacity, 30))
                         RectCheck.VerticalAlignment = VerticalAlignment.Center
                         RectCheck.Margin = New Thickness(-1, 0, 0, 0)
                     End If
@@ -461,17 +458,12 @@
             Else
                 '不使用动画
                 AniStop("MyListItem Checked " & Uuid)
-
-                If Checked OrElse half Then
+                If Checked Then
                     If Not IsNothing(RectCheck) Then
                         RectCheck.Height = Double.NaN
                         RectCheck.Margin = New Thickness(-1, 6, 0, 6)
                         RectCheck.Opacity = 1
                         RectCheck.VerticalAlignment = VerticalAlignment.Stretch
-                        If half Then
-                            RectCheck.Height = Height * 0.4
-                            RectCheck.Opacity = 0.5
-                        End If
                     End If
                     SetResourceReference(ForegroundProperty, If(Height < 40, "ColorBrush3", "ColorBrush2"))
                 Else

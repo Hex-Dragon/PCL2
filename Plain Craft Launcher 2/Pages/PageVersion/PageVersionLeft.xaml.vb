@@ -1,4 +1,5 @@
 ﻿Public Class PageVersionLeft
+    Implements IRefreshable
 
     ''' <summary>
     ''' 当前显示设置的 MC 版本。
@@ -91,7 +92,20 @@
 #End Region
 
     Public Sub Refresh(sender As Object, e As EventArgs) '由边栏按钮匿名调用
-        PageVersionMod.Refresh()
+        Refresh(Val(sender.Tag))
+    End Sub
+    Public Sub Refresh() Implements IRefreshable.Refresh
+        Refresh(FrmMain.PageCurrentSub)
+    End Sub
+    Public Sub Refresh(SubType As FormMain.PageSubType)
+        Select Case SubType
+            Case FormMain.PageSubType.VersionMod
+                PageVersionMod.Refresh()
+                ItemMod.Checked = True
+            Case FormMain.PageSubType.VersionExport
+                If FrmVersionExport IsNot Nothing Then FrmVersionExport.RefreshAll()
+                ItemExport.Checked = True
+        End Select
     End Sub
 
     Public Sub Reset(sender As Object, e As EventArgs)
