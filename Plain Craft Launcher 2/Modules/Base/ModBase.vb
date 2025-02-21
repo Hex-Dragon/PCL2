@@ -4,6 +4,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
 Imports System.Text.RegularExpressions
+Imports System.Threading.Tasks
 Imports System.Windows.Markup
 Imports Newtonsoft.Json
 
@@ -2194,28 +2195,41 @@ NextElement:
     ''' <param name="Timeout">等待该程序结束的最长时间（毫秒）。超时会抛出错误。</param>
     Public Function ShellAndGetOutput(FileName As String, Optional Arguments As String = "", Optional Timeout As Integer = 1000000, Optional WorkingDirectory As String = Nothing) As String
         Dim Info = New ProcessStartInfo With {
-            .Arguments = Arguments,
-            .FileName = FileName,
-            .UseShellExecute = False,
-            .CreateNoWindow = True,
-            .RedirectStandardError = True,
-            .RedirectStandardOutput = True,
-            .WorkingDirectory = If(WorkingDirectory, Path.TrimEnd("\"c))
+        .FileName = FileName,
+        .Arguments = Arguments,
+        .UseShellExecute = False,
+        .CreateNoWindow = True,
+        .RedirectStandardOutput = True,
+        .RedirectStandardError = True
         }
-        If WorkingDirectory IsNot Nothing Then
-            If Info.EnvironmentVariables.ContainsKey("appdata") Then
-                Info.EnvironmentVariables("appdata") = WorkingDirectory
-            Else
-                Info.EnvironmentVariables.Add("appdata", WorkingDirectory)
-            End If
+
+        ' 设置工作目录（如果提供）
+        If Not String.IsNullOrEmpty(WorkingDirectory) Then
+            Info.WorkingDirectory = WorkingDirectory.TrimEnd("\")
         End If
+
         Log("[System] 执行外部命令并等待返回结果：" & FileName & " " & Arguments)
+
         Using Program As New Process() With {.StartInfo = Info}
             Program.Start()
-            Dim Result As String = Program.StandardOutput.ReadToEnd & Program.StandardError.ReadToEnd
-            Program.WaitForExit(Timeout)
-            If Not Program.HasExited Then Program.Kill()
-            Return Result
+
+            ' 异步读取输出和错误流
+            Dim outputTask = Program.StandardOutput.ReadToEndAsync()
+            Dim errorTask = Program.StandardError.ReadToEndAsync()
+
+            ' 等待进程退出或超时
+            If Program.WaitForExit(Timeout) Then
+                ' 确保异步读取完成
+                Task.WaitAll(outputTask, errorTask)
+            Else
+                ' 超时后终止进程
+                Program.Kill()
+                ' 仍然尝试获取已输出的内容
+                Task.WaitAll(outputTask, errorTask)
+            End If
+
+            ' 合并结果并返回
+            Return outputTask.Result & errorTask.Result
         End Using
     End Function
 
