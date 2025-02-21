@@ -352,7 +352,8 @@
         Catch ex As Exception
             Log(ex, "重置版本 " & PageVersionLeft.Version.Name & " 失败", LogLevel.Msgbox)
         End Try
-                                                                                      
+    End Sub
+
     '测试游戏
     Private Sub BtnManageTest_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageTest.Click
         Try
