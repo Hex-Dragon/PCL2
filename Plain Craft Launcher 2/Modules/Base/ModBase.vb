@@ -2303,16 +2303,30 @@ NextElement:
     ''' </summary>
     ''' <param name="SortRule">传入两个对象，若第一个对象应该排在前面，则返回 True。</param>
     <Extension> Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart(Of T)) As List(Of T)
-        Dim NewList As New List(Of T)
-        While List.Any
-            Dim Highest = List(0)
-            For i = 1 To List.Count - 1
-                If SortRule(List(i), Highest) Then Highest = List(i)
+        ' 创建原列表的副本以避免修改原始列表
+        Dim tempList As New List(Of T)(List)
+        Dim n As Integer = tempList.Count
+
+        For i As Integer = 0 To n - 1
+            ' 初始化当前最小/最大索引
+            Dim targetIndex As Integer = i
+
+            ' 在未排序部分中寻找最符合排序规则的元素
+            For j As Integer = i + 1 To n - 1
+                If SortRule(tempList(j), tempList(targetIndex)) Then
+                    targetIndex = j
+                End If
             Next
-            List.Remove(Highest)
-            NewList.Add(Highest)
-        End While
-        Return NewList
+
+            ' 将找到的元素交换到正确位置
+            If targetIndex <> i Then
+                Dim swap As T = tempList(i)
+                tempList(i) = tempList(targetIndex)
+                tempList(targetIndex) = swap
+            End If
+        Next
+
+        Return tempList
     End Function
     Public Delegate Function CompareThreadStart(Of T)(Left As T, Right As T) As Boolean
 
