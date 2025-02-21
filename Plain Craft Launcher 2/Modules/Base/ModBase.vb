@@ -2299,35 +2299,68 @@ NextElement:
     End Sub
 
     ''' <summary>
-    ''' 按照既定的函数进行选择排序。
+    ''' 使用优化的归并排序算法进行稳定排序。
     ''' </summary>
     ''' <param name="SortRule">传入两个对象，若第一个对象应该排在前面，则返回 True。</param>
-    <Extension> Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart(Of T)) As List(Of T)
+    <Extension>
+    Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart(Of T)) As List(Of T)
         ' 创建原列表的副本以避免修改原始列表
         Dim tempList As New List(Of T)(List)
-        Dim n As Integer = tempList.Count
+        If tempList.Count <= 1 Then Return tempList
 
-        For i As Integer = 0 To n - 1
-            ' 初始化当前最小/最大索引
-            Dim targetIndex As Integer = i
-
-            ' 在未排序部分中寻找最符合排序规则的元素
-            For j As Integer = i + 1 To n - 1
-                If SortRule(tempList(j), tempList(targetIndex)) Then
-                    targetIndex = j
-                End If
-            Next
-
-            ' 将找到的元素交换到正确位置
-            If targetIndex <> i Then
-                Dim swap As T = tempList(i)
-                tempList(i) = tempList(targetIndex)
-                tempList(targetIndex) = swap
-            End If
-        Next
-
+        ' 使用归并排序核心算法
+        MergeSort_Sort(tempList, 0, tempList.Count - 1, SortRule)
         Return tempList
     End Function
+
+    Private Sub MergeSort_Sort(Of T)(ByRef array As List(Of T), left As Integer, right As Integer, comparator As CompareThreadStart(Of T))
+        If left >= right Then Return
+
+        Dim mid As Integer = (left + right) \ 2
+        MergeSort_Sort(array, left, mid, comparator)
+        MergeSort_Sort(array, mid + 1, right, comparator)
+        MergeSort_Merge(array, left, mid, right, comparator)
+    End Sub
+
+    Private Sub MergeSort_Merge(Of T)(ByRef array As List(Of T), left As Integer, mid As Integer, right As Integer, comparator As CompareThreadStart(Of T))
+        Dim leftArray As New List(Of T)
+        Dim rightArray As New List(Of T)
+
+        For i As Integer = left To mid
+            leftArray.Add(array(i))
+        Next
+
+        For j As Integer = mid + 1 To right
+            rightArray.Add(array(j))
+        Next
+
+        Dim leftPtr = 0, rightPtr = 0, current = left
+
+        While leftPtr < leftArray.Count AndAlso rightPtr < rightArray.Count
+            ' 保持稳定性的关键比较逻辑：当相等时优先取左数组元素
+            If comparator(leftArray(leftPtr), rightArray(rightPtr)) Then
+                array(current) = leftArray(leftPtr)
+                leftPtr += 1
+            Else
+                array(current) = rightArray(rightPtr)
+                rightPtr += 1
+            End If
+            current += 1
+        End While
+
+        While leftPtr < leftArray.Count
+            array(current) = leftArray(leftPtr)
+            leftPtr += 1
+            current += 1
+        End While
+
+        While rightPtr < rightArray.Count
+            array(current) = rightArray(rightPtr)
+            rightPtr += 1
+            current += 1
+        End While
+    End Sub
+
     Public Delegate Function CompareThreadStart(Of T)(Left As T, Right As T) As Boolean
 
     ''' <summary>
