@@ -54,12 +54,12 @@
                             <Image x:Name="ImgMinecraft" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" />
                             <TextBlock x:Name="LabMinecraft" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
                             <Path Data="M2,4 l-2,2 10,10 10,-10 -2,-2 -8,8 -8,-8 z" Height="6" Width="10" Stretch="Uniform" VerticalAlignment="Center"
-                                  Grid.Column="2" Fill="{StaticResource ColorBrushGray4}" Margin="0,1,6,0" RenderTransformOrigin="0.5,0.5">
+                                  Grid.Column="2" Fill="{DynamicResource ColorBrushGray4}" Margin="0,1,6,0" RenderTransformOrigin="0.5,0.5">
                                 <Path.RenderTransform>
                                     <RotateTransform Angle="90" />
                                 </Path.RenderTransform>
                             </Path>
-                            <TextBlock VerticalAlignment="Center" Text="返回" Grid.Column="3" Foreground="{StaticResource ColorBrushGray4}" />
+                            <TextBlock VerticalAlignment="Center" Text="返回" Grid.Column="3" Foreground="{DynamicResource ColorBrushGray4}" />
                         </Grid>
                     </local:MyCard>
                     <local:MyCard Title="Forge" Height="40" Margin="0,15,0,0" x:Name="CardForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
@@ -75,8 +75,8 @@
                             <Image x:Name="ImgForge" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/Anvil.png" />
                             <TextBlock x:Name="LabForge" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
                         </Grid>
-                        <Grid x:Name="BtnForgeClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
-                            <Path x:Name="BtnForgeClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <Grid x:Name="BtnForgeClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{DynamicResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnForgeClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{DynamicResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
@@ -93,8 +93,8 @@
                             <Image x:Name="ImgNeoForge" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/NeoForge.png" />
                             <TextBlock x:Name="LabNeoForge" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
                         </Grid>
-                        <Grid x:Name="BtnNeoForgeClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
-                            <Path x:Name="BtnNeoForgeClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <Grid x:Name="BtnNeoForgeClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{DynamicResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnNeoForgeClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{DynamicResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                   Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
@@ -111,8 +111,8 @@
                             <Image x:Name="ImgFabric" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/Fabric.png" />
                             <TextBlock x:Name="LabFabric" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
                         </Grid>
-                        <Grid x:Name="BtnFabricClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
-                            <Path x:Name="BtnFabricClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <Grid x:Name="BtnFabricClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{DynamicResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnFabricClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{DynamicResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
@@ -129,8 +129,8 @@
                             <Image x:Name="ImgFabricApi" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/Fabric.png" />
                             <TextBlock x:Name="LabFabricApi" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
                         </Grid>
-                        <Grid x:Name="BtnFabricApiClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
-                            <Path x:Name="BtnFabricApiClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <Grid x:Name="BtnFabricApiClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{DynamicResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnFabricApiClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{DynamicResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
@@ -149,8 +149,8 @@
                             <Image x:Name="ImgOptiFine" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/GrassPath.png" />
                             <TextBlock x:Name="LabOptiFine" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
                         </Grid>
-                        <Grid x:Name="BtnOptiFineClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
-                            <Path x:Name="BtnOptiFineClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <Grid x:Name="BtnOptiFineClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{DynamicResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnOptiFineClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{DynamicResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
@@ -167,8 +167,8 @@
                             <Image x:Name="ImgOptiFabric" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="HighQuality" Source="pack://application:,,,/images/Blocks/OptiFabric.png" />
                             <TextBlock x:Name="LabOptiFabric" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
                         </Grid>
-                        <Grid x:Name="BtnOptiFabricClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
-                            <Path x:Name="BtnOptiFabricClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <Grid x:Name="BtnOptiFabricClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{DynamicResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnOptiFabricClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{DynamicResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
@@ -185,8 +185,8 @@
                             <Image x:Name="ImgLiteLoader" Margin="-1,0,6,0" SnapsToDevicePixels="True" Height="20" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/Egg.png" />
                             <TextBlock x:Name="LabLiteLoader" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
                         </Grid>
-                        <Grid x:Name="BtnLiteLoaderClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
-                            <Path x:Name="BtnLiteLoaderClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        <Grid x:Name="BtnLiteLoaderClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{DynamicResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnLiteLoaderClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{DynamicResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>

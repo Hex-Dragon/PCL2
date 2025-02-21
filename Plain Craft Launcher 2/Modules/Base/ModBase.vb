@@ -2557,6 +2557,16 @@ Retry:
         Control.Measure(New Size(Double.MaxValue, Double.MaxValue))
         Return Control.DesiredSize.Width > Control.ActualWidth
     End Function
+    ''' <summary>
+    ''' 获取系统是否是深色模式。
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function IsSystemInDarkMode() As Boolean
+        Dim RegistryKey As Microsoft.Win32.RegistryKey = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("Software\Microsoft\Windows\CurrentVersion\Themes\Personalize")
+        If RegistryKey Is Nothing Then Return False
+        Dim Value As Object = RegistryKey.GetValue("AppsUseLightTheme")
+        Return Value IsNot Nothing AndAlso Value.ToString = "0"
+    End Function
 
 #End Region
 

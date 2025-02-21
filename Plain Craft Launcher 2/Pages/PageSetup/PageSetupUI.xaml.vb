@@ -59,6 +59,7 @@
             If Setup.Get("UiLauncherTheme") <= 14 Then CType(FindName("RadioLauncherTheme" & Setup.Get("UiLauncherTheme")), MyRadioBox).Checked = True
             CheckLauncherLogo.Checked = Setup.Get("UiLauncherLogo")
             CheckLauncherEmail.Checked = Setup.Get("UiLauncherEmail")
+            ComboDarkMode.SelectedIndex = Setup.Get("UiDarkMode")
 
             '背景图片
             SliderBackgroundOpacity.Value = Setup.Get("UiBackgroundOpacity")
@@ -133,6 +134,7 @@
             Setup.Reset("UiBackgroundOpacity")
             Setup.Reset("UiBackgroundBlur")
             Setup.Reset("UiBackgroundSuit")
+            Setup.Reset("UiDarkMode")
             Setup.Reset("UiLogoType")
             Setup.Reset("UiLogoText")
             Setup.Reset("UiLogoLeft")
@@ -174,7 +176,7 @@
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderBackgroundOpacity.Change, SliderBackgroundBlur.Change, SliderLauncherOpacity.Change, SliderMusicVolume.Change, SliderLauncherHue.Change, SliderLauncherLight.Change, SliderLauncherSat.Change, SliderLauncherDelta.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboBackgroundSuit.SelectionChanged, ComboCustomPreset.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboBackgroundSuit.SelectionChanged, ComboDarkMode.SelectionChanged, ComboCustomPreset.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
     Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckMusicStop.Change, CheckMusicRandom.Change, CheckMusicAuto.Change, CheckBackgroundColorful.Change, CheckLogoLeft.Change, CheckLauncherLogo.Change, CheckHiddenFunctionHidden.Change, CheckHiddenFunctionSelect.Change, CheckHiddenFunctionModUpdate.Change, CheckHiddenPageDownload.Change, CheckHiddenPageLink.Change, CheckHiddenPageOther.Change, CheckHiddenPageSetup.Change, CheckHiddenSetupLaunch.Change, CheckHiddenSetupSystem.Change, CheckHiddenSetupLink.Change, CheckHiddenSetupUI.Change, CheckHiddenOtherAbout.Change, CheckHiddenOtherFeedback.Change, CheckHiddenOtherVote.Change, CheckHiddenOtherHelp.Change, CheckHiddenOtherTest.Change, CheckMusicStart.Change, CheckLauncherEmail.Change
