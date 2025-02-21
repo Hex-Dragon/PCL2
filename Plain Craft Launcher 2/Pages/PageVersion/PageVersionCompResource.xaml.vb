@@ -943,6 +943,12 @@ Install:
         ChangeAllSelected(False)
     End Sub
 
+    Private Sub BtnSelectShare_Click() Handles BtnSelectShare.Click
+        Dim ShareList As List(Of String) = CurrentLoader.CompResourceListLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.Comp IsNot Nothing).Select(Function(i) i.Comp.Id).ToList()
+        ClipboardSet(CompFavorites.GetShareCode(ShareList))
+        ChangeAllSelected(False)
+    End Sub
+
 #End Region
 
 #Region "单个资源项"
