@@ -434,6 +434,7 @@ EndHint:
     Public FrmVersionMod As PageVersionMod
     Public FrmVersionModDisabled As PageVersionModDisabled
     Public FrmVersionSetup As PageVersionSetup
+    Public FrmVersionExport As PageVersionExport
 
     '资源信息分页声明
     Public FrmDownloadCompDetail As PageDownloadCompDetail

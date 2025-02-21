@@ -987,6 +987,7 @@ Public Class FormMain
         VersionSetup = 1
         VersionMod = 2
         VersionModDisabled = 3
+        VersionExport = 4
     End Enum
     ''' <summary>
     ''' 获取次级页面的名称。若并非次级页面则返回空字符串，故可以以此判断是否为次级页面。
