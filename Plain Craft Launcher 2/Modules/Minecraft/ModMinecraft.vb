@@ -832,16 +832,16 @@ ExitDataLoad:
             Select Case State
                 Case McVersionState.Snapshot
                     If Version.McName.ContainsF("pre", True) Then
-                        Info = "预发布版 " & Version.McName
+                        Info = GetLang("LangModMinecraftVersionPre") & " " & Version.McName
                     ElseIf Version.McName.ContainsF("rc", True) Then
-                        Info = "发布候选 " & Version.McName
+                        Info = GetLang("LangModMinecraftVersionRC") & " " & Version.McName
                     ElseIf Version.McName.Contains("experimental") OrElse Version.McName = "pending" Then
-                        Info = "实验性快照"
+                        Info = GetLang("LangModMinecraftVersionExperimental")
                     Else
-                        Info = "快照 " & Version.McName
+                        Info = GetLang("LangModMinecraftVersionSnapshot") & " " & Version.McName
                     End If
                 Case McVersionState.Old
-                    Info = "远古版本"
+                    Info = GetLang("LangModMinecraftVersionOld")
                 Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.OptiFine, McVersionState.LiteLoader
                     Info = Version.ToString
                 Case McVersionState.Fool
@@ -849,12 +849,12 @@ ExitDataLoad:
                 Case McVersionState.Error
                     Return Me.Info '已有错误信息
                 Case Else
-                    Info = "发生了未知错误，请向作者反馈此问题"
+                    Info = GetLang("LangModMinecraftUnknownError")
             End Select
             If Not State = McVersionState.Error Then
                 If HasJumpLoader Then Info += ", JumpLoader"
-                If Setup.Get("VersionServerLogin", Version:=Me) = 3 Then Info += ", 统一通行证验证"
-                If Setup.Get("VersionServerLogin", Version:=Me) = 4 Then Info += ", Authlib 验证"
+                If Setup.Get("VersionServerLogin", Version:=Me) = 3 Then Info += ", " & GetLang("LangModMinecraftNideAuth")
+                If Setup.Get("VersionServerLogin", Version:=Me) = 4 Then Info += ", " & GetLang("LangModMinecraftAuthlibAuth")
             End If
             Return Info
         End Function
