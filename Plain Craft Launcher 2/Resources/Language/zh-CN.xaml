@@ -597,7 +597,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangDownloadModpackTypeTech">科技</s:String>
     <s:String x:Key="LangDownloadModpackTypeMagic">魔法</s:String>
     <s:String x:Key="LangDownloadModpackTypeAdventure">冒险</s:String>
-    <s:String x:Key="LangDownloadModpackTypeCook">大杂烩</s:String>
+    <s:String x:Key="LangDownloadModpackTypeCook">水槽包/大杂烩</s:String>
     <s:String x:Key="LangDownloadModpackTypeExplore">探索</s:String>
     <s:String x:Key="LangDownloadModpackTypeGame">小游戏</s:String>
     <s:String x:Key="LangDownloadModpackTypeScienceFiction">科幻</s:String>
@@ -803,7 +803,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 12 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 1 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">赞助作者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -1156,7 +1156,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageVersionOverallIconCommandBlock">命令方块</s:String>
     <s:String x:Key="LangPageVersionOverallIconGoldBlock">金块</s:String>
     <s:String x:Key="LangPageVersionOverallIconGrass">草方块</s:String>
-    <s:String x:Key="LangPageVersionOverallIconGrassPath">草径</s:String>
+    <s:String x:Key="LangPageVersionOverallIconGrassPath">土径</s:String>
     <s:String x:Key="LangPageVersionOverallIconAnvil">铁砧</s:String>
     <s:String x:Key="LangPageVersionOverallIconRedstoneBlock">红石块</s:String>
     <s:String x:Key="LangPageVersionOverallIconRedstoneLampOn">红石灯（开）</s:String>
@@ -1365,7 +1365,11 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">下载</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">更新日志</s:String>
     <s:String x:Key="LangModMinecraftVersionVanilla">原版</s:String>
-    <s:String x:Key="LangModMinecraftInvalidMcFolder">无法访问 Minecraft 文件夹：{0}</s:String>
+    <s:String x:Key="LangModMinecraftInvalidMcFolder">失效的 Minecraft 文件夹：
+{0}
+
+{1}</s:String>
+    <s:String x:Key="LangModMinecraftDialogTitleInvalidMcFolder">Minecraft 文件夹失效</s:String>
     <s:String x:Key="LangModMinecraftNotLoaded">该版本未被加载，请向作者反馈此问题</s:String>
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL 无法识别该版本的 MC 版本号</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">无法识别：{0}</s:String>
@@ -1692,7 +1696,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModModpackTaskGetModDownloadInfo">获取 Mod 下载信息</s:String>
     <s:String x:Key="LangModModpackExceptionOnlineModDeleted">整合包中的部分 Mod 版本已被 Mod 作者删除，所以没法继续安装了，请向整合包作者反馈该问题</s:String>
     <s:String x:Key="LangModModpackTaskInitModDownloadInfo">构造 Mod 下载信息</s:String>
-    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">是否要下载整合包中的可选文件 {0}？</s:String>
+    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">是否要下载可选文件 {0}？</s:String>
     <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">下载可选文件</s:String>
     <s:String x:Key="LangModModpackTaskDownloadMod">下载 Mod</s:String>
     <s:String x:Key="LangModModpackTaskDownloadModMainLoader">下载 Mod（主加载器）</s:String>
@@ -1736,9 +1740,10 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModModpackExceptionMMCModpackError">MMC 整合包安装信息存在问题</s:String>
     <s:String x:Key="LangModModpackExceptionMCBBSModpackError">MCBBS 整合包安装信息存在问题</s:String>
     <s:String x:Key="LangModModpackDialogTitleAnotherLauncher">换用整合包启动器？</s:String>
-    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">整合包中似乎自带了启动器，是否换用它继续安装？
-通常推荐这样做，以获得最佳体验。
+    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">整合包里似乎自带了启动器，是否换用它继续安装？
 即将打开：{0}</s:String>
+    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher1">换用</s:String>
+    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher2">不换用</s:String>
     <s:String x:Key="LangModModpackExceptionNoModpackFound">未能找到适合的文件结构，这可能不是一个 MC 压缩包</s:String>
     <!--ModWatcher-->
     <s:String x:Key="LangModWatcherMcCrashed">检测到 Minecraft 出现错误，错误分析已开始……</s:String>

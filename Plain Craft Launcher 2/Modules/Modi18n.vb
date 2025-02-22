@@ -162,13 +162,12 @@ Module Modi18n
     ''' </summary>
     ''' <param name="Count">数量</param>
     ''' <param name="Key">调用的键名</param>
-    ''' <param name="Param">字段中对应要展示的内容</param>
     ''' <returns>对应单复数形式的译文</returns>
-    Public Function GetLangByNumIsPlural(Count As Int32, Key As String, ParamArray Param As String()) As String
+    Public Function GetLangByNumIsPlural(Count As Int32, Key As String) As String
         If Count <= 1 Then
-            Return GetLang(Key, Param)
+            Return GetLang(Key)
         Else
-            Return GetLang(Key & "P", Param)
+            Return GetLang(Key & "P")
         End If
     End Function
 

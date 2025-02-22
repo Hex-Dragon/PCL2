@@ -1354,10 +1354,10 @@ Please check whether the event type is filled in correctly and whether the PCL i
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">Assets Index for this instance does not exist.</s:String>
     <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Assets Index not found.</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">Unexpected result ({0})</s:String>
-    <s:String x:Key="LangModCompModDependentCount">{0} dependency</s:String>
-    <s:String x:Key="LangModCompModDependentCountP">{0} dependencies</s:String>
-    <s:String x:Key="LangModCompModDownload">{0} download</s:String>
-    <s:String x:Key="LangModCompModDownloadP">{0} downloads</s:String>
+    <s:String x:Key="LangModCompModDependentCount">dependency</s:String>
+    <s:String x:Key="LangModCompModDependentCountP">dependencies</s:String>
+    <s:String x:Key="LangModCompModDownload">download</s:String>
+    <s:String x:Key="LangModCompModDownloadP">downloads</s:String>
     <s:String x:Key="LangModCompModGameVersion">game version</s:String>
     <s:String x:Key="LangModCompModUpdateTime">updated {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">Save as</s:String>
