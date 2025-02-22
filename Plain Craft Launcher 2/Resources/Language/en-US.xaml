@@ -191,7 +191,8 @@ Initial Clue: </s:String>
     <s:String x:Key="LangSetThemeNameCustom">Custom</s:String>
     <s:String x:Key="LangSetThemeNameCustomToolTip">You need to unlock at least five hidden themes.</s:String>
     <s:String x:Key="LangSetThemeShowLogoOnStart">Display PCL logo while opening the launcher</s:String>
-    <s:String x:Key="LangSetThemeSponsorship">A small donation to the author is required to modify the theme color... :(</s:String>
+    <s:String x:Key="LangSetThemeSponsorship">A small donation to the author is required to modify the theme color... :(
+Thanks to everyone's support, PCL has been able to maintain years of updates for free and without any ads (bows deeply)!</s:String>
     <s:String x:Key="LangSetThemeSupport">Support the development of PCL!</s:String>
     <s:String x:Key="LangSetBackgroundPic">Backgrounds</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptive">Adaptive</s:String>
@@ -861,8 +862,7 @@ Opening PCL with the parameter "--memory" will execute memory optimization silen
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">Game Allocated</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">Advanced Launch Options</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM Parameter Header</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Additional JVM parameters to use when launching Minecraft. Do not attempt to edit if you are not sure.
-You can restore the settings to default by clicking the "Initialize" button on the left tab.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Additional JVM parameters to use when launching Minecraft. Do not attempt to edit if you are not sure.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">Reset</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM Parameter Tail</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">Contents in the text fields will be added directly at the end of the launch parameter.
@@ -1075,10 +1075,9 @@ Delete or rename one of the files to continue.</s:String>
     <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">Failed to switch the mod status due to occupation. Please try again after closing the game.</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModContent">Newer versions may not be compatible with older versions or other mods, which can cause crashes or even save corruption!
 Do not update mods in the modpack unless the author requests it!
-Please back up saves and check the changelog of the mod first!
-Older versions will be moved to the recycle bin in case exceptions occur.
 
-Please read the warning above carefully before continuing!</s:String>
+Please back up your saves and check mods' changelog before updating.
+If any issues occur after the update, you can also recover the previous version of mods from the recycle bin.</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModTitle">Mods Update Warning</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModBtnConfirm">I have acknowledged, continue</s:String>
     <s:String x:Key="LangPageVersionModTaskDownloadNewMod">Download Newer Version</s:String>
@@ -1176,7 +1175,7 @@ Since "Instance Isolation" is enabled for this instance, the corresponding saves
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Failed to initialize the instance settings.</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">You are about to override the third-party login settings with LittleSkin.
 Do not continue unless you are the server owner or have been asked to by the server owner.
-  
+
 Are you sure you want to override the current settings?</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinTitle">Override Confirmation</s:String>
     <s:String x:Key="LangPageVersionSetupLittleSkinLogin">LittleSkin</s:String>
@@ -1361,10 +1360,10 @@ Please check whether the event type is filled in correctly and whether the PCL i
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">Assets Index for this instance does not exist.</s:String>
     <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">Assets Index not found.</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">Unexpected result ({0})</s:String>
-    <s:String x:Key="LangModCompModDependentCount">dependency</s:String>
-    <s:String x:Key="LangModCompModDependentCountP">dependencies</s:String>
-    <s:String x:Key="LangModCompModDownload">download</s:String>
-    <s:String x:Key="LangModCompModDownloadP">downloads</s:String>
+    <s:String x:Key="LangModCompModDependentCount">{0} dependency</s:String>
+    <s:String x:Key="LangModCompModDependentCountP">{0} dependencies</s:String>
+    <s:String x:Key="LangModCompModDownload">{0} download</s:String>
+    <s:String x:Key="LangModCompModDownloadP">{0} downloads</s:String>
     <s:String x:Key="LangModCompModGameVersion">game version</s:String>
     <s:String x:Key="LangModCompModUpdateTime">updated {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">Save as</s:String>
@@ -1551,7 +1550,7 @@ If you have already installed {1}, please import it manually in "Settings → La
     <s:String x:Key="LangModLaunchDialogContentSponsorship">PCL has launched the game {0} times for you!
 If you find PCL easy to use, we hope you will consider sponsoring the developer... Any amount would be greatly appreciated!
 To be honest, developing alone is not easy... </s:String>
-    <s:String x:Key="LangModLaunchDialogTitleSponsorship">Buy Me a Coffee...</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleSponsorship">{0} launches!</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">Sponsor Now!</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2Sponsorship">But I Decline</s:String>
     <s:String x:Key="LangModLaunchDialogContentBuyMc">You have launched Minecraft {0} times!
@@ -1562,7 +1561,8 @@ This hint will not appear again after logging in with your Microsoft account onc
     <s:String x:Key="LangModLaunchDialogBtn2BuyMc">Nah, maybe next time</s:String>
     <s:String x:Key="LangModLaunchUnknownLoginMethod">Unknown Login Method</s:String>
     <s:String x:Key="LangModLaunchLogin">Login</s:String>
-    <s:String x:Key="LangModLaunchDialogContentThemeUnlockMojang">Thank you for supporting the game! The hidden theme "Delay Red" has been unlocked!</s:String>
+    <s:String x:Key="LangModLaunchDialogContentThemeUnlockMojang">Thank you for supporting the game!
+The hidden theme "Delay Red" has been unlocked!</s:String>
     <s:String x:Key="LangModLaunchExceptionInvalidSelectedRole">The selected profile {0} is invalid!</s:String>
     <s:String x:Key="LangModLaunchHintNoRoleChangeRole">You have not created a profile yet, unable to switch!</s:String>
     <s:String x:Key="LangModLaunchHintNoRole">You have not created a profile yet, please try again after creating one!</s:String>
@@ -1584,11 +1584,11 @@ If the network environment is poor, it may fail to load. Please check your inter
     <s:String x:Key="LangModLaunchDialogContentUnableReachMicrosoft">The country or region where your network is located cannot login to Microsoft accounts.
 Please try to use a VPN.</s:String>
     <s:String x:Key="LangModLaunchDialogBtnIDK">I Don't Know</s:String>
-    <s:String x:Key="LangModLaunchDialogContentAgeLimit">This account is underage. You must change the date of birth before logging in.  
+    <s:String x:Key="LangModLaunchDialogContentAgeLimit">This account is underage. You must change the date of birth before logging in.
 Is the age set to 13 or older?</s:String>
     <s:String x:Key="LangModLaunchDialogBtnAgeGreater13">13 or Older</s:String>
     <s:String x:Key="LangModLaunchDialogBtnAgeLess12">Under 13</s:String>
-    <s:String x:Key="LangModLaunchDialogContentChangeAgeA">Please change the account's date of birth to at least 18 years old on the opened website.  
+    <s:String x:Key="LangModLaunchDialogContentChangeAgeA">Please change the account's date of birth to at least 18 years old on the opened website.
 After making the change, wait for a minute, then return to PCL, and you should be able to log in normally!</s:String>
     <s:String x:Key="LangModLaunchDialogContentChangeAgeB">Please follow the instructions on the opened website to change the account's date of birth to at least 18 years old.
 After making the change, wait for a minute, then return to PCL, and you should be able to log in normally!</s:String>
@@ -1676,7 +1676,7 @@ If that option is not available, please select "Set password", and log in after 
     <s:String x:Key="LangModModpackExceptionMMCModpackError">An error occurred in the MultiMC modpack installation information.</s:String>
     <s:String x:Key="LangModModpackExceptionMCBBSModpackError">An error occurred in the MCBBS modpack installation information.</s:String>
     <s:String x:Key="LangModModpackDialogTitleAnotherLauncher">Use the Modpack's Launcher?</s:String>
-    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">The modpack appears to include a launcher. Would you like to switch to it to continue the installation?  
+    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">The modpack appears to include a launcher. Would you like to switch to it to continue the installation?
 About to open: {0}</s:String>
     <s:String x:Key="LangModModpackDialogBtnAnotherLauncher1">Switch</s:String>
     <s:String x:Key="LangModModpackDialogBtnAnotherLauncher2">Do Not Switch</s:String>
@@ -1782,15 +1782,15 @@ This will override the JSON and the JAR file, but will not affect the instance i
     <s:String x:Key="LangModCrashCrashReasonNoReason">Sorry, PCL cannot determine the cause of the crash.</s:String>
     <s:String x:Key="LangModCrashCrashReasonHelpTip">Sorry, your game encountered some problems...
 If you are seeking assistance, please export the crash report instead of taking a screenshot of this window and send it to others.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAA">The game crashed because the mod files were extracted.  
+    <s:String x:Key="LangModCrashCrashReasonReasonAA">The game crashed because the mod files were extracted.
 Simply place the mod files into the folder without extracting them; otherwise, the game will crash.
 
 Launch the game once you have dealt with the mod files.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAB">The game crashed because Minecraft has exhausted its allocated memory.  
+    <s:String x:Key="LangModCrashCrashReasonReasonAB">The game crashed because Minecraft has exhausted its allocated memory.
 This is likely due to insufficient system memory, inadequate memory allocation, or excessively high performance requirements.
 
-Consider running "Memory Optimization" under "More → Utilities," then relaunch the game.  
-If the issue persists, consider increasing the memory allocated to the game in the launch settings, or remove textures, mods, and shaders with high performance requirements.  
+Consider running "Memory Optimization" under "More → Utilities," then relaunch the game.
+If the issue persists, consider increasing the memory allocated to the game in the launch settings, or remove textures, mods, and shaders with high performance requirements.
 If the problem continues, consider closing other applications before launching the game, or... perhaps using a different computer?</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAC">The game crashed due to the use of Open J9.
 Switch to a non-OpenJ9 Java version in "Settings → Launch → Java" and relaunch the game.</s:String>
@@ -1941,20 +1941,17 @@ If no information is provided, consider reviewing the crash reports to identify 
 {0}
 
 Please take appropriate actions based on the information provided.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBX">The mod loader may have provided error information. Please take appropriate actions based on the logs and crash reports.
-If no information is provided, consider reviewing the crash reports to identify the issues.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBX">The mod loader may have provided error information. Please take appropriate actions based on the logs and crash reports.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBY">Fabric provided the following solutions:
 {0}
 
 Please take appropriate actions based on the information provided.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric may have provided solutions. Please take appropriate actions based on the logs and crash reports.
-If no solution is provided, you can view the crash reports to understand how the error occurred.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric may have provided solutions. Please take appropriate actions based on the logs and crash reports.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCA">Forge provided the following error information:
 {0}
 
 Please take appropriate actions based on the information provided.</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge may have provided solutions. Please take appropriate actions based on the logs and crash reports.
-If no solution is provided, you can view the crash reports to understand how the error occurred.</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge may have provided solutions. Please take appropriate actions based on the logs and crash reports.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCC">The game crashed, but analysis is not possible because PCL was unable to locate the related log files.</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCD">The game crashed because some mods failed to inject.
 This typically indicates an incompatibility with other mods or the current environment, or it could be caused by a bug.
@@ -2004,7 +2001,7 @@ Alternatively, you can access {1} on another device and enter the code.</s:Strin
     <s:String x:Key="LangPageVersionExportGameProfileDesc">Command history, saved hotbars...</s:String>
     <s:String x:Key="LangPageVersionExportOptiFineSettings">OptiFine settings</s:String>
     <s:String x:Key="LangPageVersionExportMod">Mods</s:String>
-    <s:String x:Key="LangPageVersionExportModDesc"></s:String>
+    <s:String x:Key="LangPageVersionExportModDesc"> </s:String>
     <s:String x:Key="LangPageVersionExportModDisabled">Disabled mods</s:String>
     <s:String x:Key="LangPageVersionExportPackAddons">Important data</s:String>
     <s:String x:Key="LangPageVersionExportPackAddonsDesc">Script files, built-in resource packs, data packs...</s:String>
