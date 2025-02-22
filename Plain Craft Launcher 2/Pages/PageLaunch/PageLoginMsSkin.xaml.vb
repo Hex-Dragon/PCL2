@@ -113,6 +113,7 @@ Retry:
                 '获取新皮肤地址
                 Log("[Skin] 皮肤修改返回值：" & vbCrLf & Result)
                 Dim ResultJson As JObject = GetJson(Result)
+                If ResultJson.ContainsKey("errorMessage") Then Throw New Exception(ResultJson("errorMessage").ToString) '#5309
                 For Each Skin As JObject In ResultJson("skins")
                     If Skin("state").ToString = "ACTIVE" Then
                         MySkin.ReloadCache(Skin("url"))

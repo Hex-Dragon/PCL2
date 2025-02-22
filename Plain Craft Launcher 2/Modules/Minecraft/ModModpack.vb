@@ -1,5 +1,4 @@
 ﻿Imports System.IO.Compression
-Imports System.Linq.Expressions
 
 Public Module ModModpack
 
@@ -30,6 +29,9 @@ Public Module ModModpack
         Dim Archive As ZipArchive = Nothing
         Dim ArchiveBaseFolder As String = ""
         Try
+            '字符校验
+            Dim TargetFolder As String = $"{PathMcFolder}versions\{VersionName}\"
+            If TargetFolder.Contains("!") OrElse TargetFolder.Contains(";") Then Hint("游戏路径中不能含有感叹号或分号：" & TargetFolder, HintType.Critical) : Throw New CancelledException
             '获取整合包种类与关键 Json
             Dim PackType As Integer = -1
             Try
@@ -107,29 +109,7 @@ Public Module ModModpack
         End Try
     End Function
 
-    '整合包缓存清理
-    Private IsInstallCacheCleared As Boolean = False
-    Private IsInstallCacheClearing As Boolean = False
     Private Sub ExtractModpackFiles(InstallTemp As String, FileAddress As String, Loader As LoaderBase, LoaderProgressDelta As Double)
-        '清理缓存文件夹
-        If Not IsInstallCacheCleared Then
-            IsInstallCacheCleared = True
-            IsInstallCacheClearing = True
-            Try
-                Log("[ModPack] 开始清理整合包安装缓存")
-                DeleteDirectory(PathTemp & "PackInstall\")
-                Log("[ModPack] 已清理整合包安装缓存")
-            Catch ex As Exception
-                Log(ex, "清理整合包安装缓存失败")
-            Finally
-                IsInstallCacheClearing = False
-            End Try
-        ElseIf IsInstallCacheClearing Then
-            '等待另一个整合包安装的清理步骤完成
-            Do While IsInstallCacheClearing
-                Thread.Sleep(1)
-            Loop
-        End If
         '解压文件
         Dim RetryCount As Integer = 1
         Dim Encode = Encoding.GetEncoding("GB18030")
@@ -203,7 +183,7 @@ Retry:
             End If
         Next
         '解压与配置文件
-        Dim InstallTemp As String = PathTemp & "PackInstall\" & RandomInteger(0, 100000) & "\"
+        Dim InstallTemp As String = RequestTaskTempFolder()
         Dim InstallLoaders As New List(Of LoaderBase)
         Dim OverrideHome As String = If(Json("overrides"), "")
         If OverrideHome <> "" Then
@@ -211,13 +191,15 @@ Retry:
             Sub(Task As LoaderTask(Of String, Integer))
                 ExtractModpackFiles(InstallTemp, FileAddress, Task, 0.6)
                 Task.Progress = 0.6
-                Dim OverridePath As String = InstallTemp & ArchiveBaseFolder & OverrideHome
                 '复制结果
-                If Directory.Exists(OverridePath) Then
-                    CopyDirectory(OverridePath, PathMcFolder & "versions\" & VersionName, Sub(Delta) Task.Progress += Delta * 0.35)
-                    Log($"[ModPack] 整合包 override 复制：{OverridePath} -> {PathMcFolder & "versions\" & VersionName}")
+                Log("[ModPack] 整合包 override 目标：" & OverrideHome)
+                Dim OverrideRoot = InstallTemp & ArchiveBaseFolder & If(OverrideHome = "." OrElse OverrideHome = "./", "", OverrideHome) '#5613
+                If Directory.Exists(OverrideRoot) Then
+                    Dim CopyTarget = $"{PathMcFolder}versions\{VersionName}"
+                    CopyDirectory(OverrideRoot, CopyTarget, Sub(Delta) Task.Progress += Delta * 0.35)
+                    Log($"[ModPack] 整合包 override 复制：{OverrideRoot} -> {CopyTarget}")
                 Else
-                    Log($"[ModPack] 整合包中未找到 override 文件夹：{OverridePath}")
+                    Log($"[ModPack] 整合包中未找到 override 文件夹：{OverrideRoot}")
                 End If
                 Task.Progress = 0.95
                 '开启版本隔离
@@ -313,7 +295,7 @@ Retry:
         Loaders.Add(New LoaderTask(Of String, String)(GetLang("LangModModpackTaskOrganizeFiles"),
         Sub(Task As LoaderTask(Of String, String))
             '设置图标
-            Dim VersionFolder As String = PathMcFolder & "versions\" & VersionName & "\"
+            Dim VersionFolder As String = $"{PathMcFolder}versions\{VersionName}\"
             If Logo IsNot Nothing AndAlso File.Exists(Logo) Then
                 File.Copy(Logo, VersionFolder & "PCL\Logo.png", True)
                 WriteIni(VersionFolder & "PCL\Setup.ini", "Logo", "PCL\Logo.png")
@@ -327,6 +309,10 @@ Retry:
                     File.Delete(Target)
                 End If
             Next
+            If File.Exists(FileAddress) AndAlso GetFileNameWithoutExtentionFromPath(FileAddress) = "modpack" Then
+                Log("[ModPack] 删除安装整合包文件：" & FileAddress)
+                File.Delete(FileAddress)
+            End If
         End Sub) With {.ProgressWeight = 0.1, .Show = False})
 
         '重复任务检查
@@ -391,7 +377,7 @@ Retry:
             If String.IsNullOrEmpty(VersionName) Then Throw New CancelledException
         End If
         '解压和配置文件
-        Dim InstallTemp As String = PathTemp & "PackInstall\" & RandomInteger(0, 100000) & "\"
+        Dim InstallTemp As String = RequestTaskTempFolder()
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)(GetLang("LangModModpackTaskExtraModpack"),
         Sub(Task As LoaderTask(Of String, Integer))
@@ -475,6 +461,10 @@ Retry:
                     File.Delete(Target)
                 End If
             Next
+            If File.Exists(FileAddress) AndAlso GetFileNameWithoutExtentionFromPath(FileAddress) = "modpack" Then
+                Log("[ModPack] 删除安装整合包文件：" & FileAddress)
+                File.Delete(FileAddress)
+            End If
         End Sub) With {.ProgressWeight = 0.1, .Show = False})
 
         '重复任务检查
@@ -509,7 +499,7 @@ Retry:
         If VersionName = "" Then VersionName = MyMsgBoxInput(GetLang("LangModModpackInputInstanceName"), "", "", New ObjectModel.Collection(Of Validate) From {Validate})
         If String.IsNullOrEmpty(VersionName) Then Throw New CancelledException
         '解压与配置文件
-        Dim InstallTemp As String = PathTemp & "PackInstall\" & RandomInteger(0, 100000) & "\"
+        Dim InstallTemp As String = RequestTaskTempFolder()
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)(GetLang("LangModModpackTaskExtraModpack"),
         Sub(Task As LoaderTask(Of String, Integer))
@@ -592,7 +582,7 @@ Retry:
         If VersionName = "" Then VersionName = MyMsgBoxInput(GetLang("LangModModpackInputInstanceName"), "", "", New ObjectModel.Collection(Of Validate) From {Validate})
         If String.IsNullOrEmpty(VersionName) Then Throw New CancelledException
         '解压、配置设置文件
-        Dim InstallTemp As String = $"{PathTemp}PackInstall\{RandomInteger(0, 100000)}\"
+        Dim InstallTemp As String = RequestTaskTempFolder()
         Dim SetupFile As String = $"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini"
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)(GetLang("LangModModpackTaskExtraModpack"),
@@ -613,7 +603,13 @@ Retry:
                 Dim MMCSetupFile As String = InstallTemp & ArchiveBaseFolder & "instance.cfg"
                 If File.Exists(MMCSetupFile) Then
                     '将其中的等号替换为冒号，以符合 ini 文件格式
-                    WriteFile(MMCSetupFile, ReadFile(MMCSetupFile).Replace("=", ":"))
+                    Dim Lines As New List(Of String)
+                    For Each Line In ReadFile(MMCSetupFile).Split({vbCr, vbLf}, StringSplitOptions.RemoveEmptyEntries)
+                        If Not Line.Contains("=") Then Continue For
+                        Lines.Add(Line.BeforeFirst("=") & ":" & Line.AfterFirst("="))
+                    Next
+                    WriteFile(MMCSetupFile, Join(Lines, vbCrLf))
+                    '读取文件
                     If ReadIni(MMCSetupFile, "OverrideCommands", False) Then
                         Dim PreLaunchCommand As String = ReadIni(MMCSetupFile, "PreLaunchCommand")
                         If PreLaunchCommand <> "" Then
@@ -641,6 +637,18 @@ Retry:
                         WriteIni(SetupFile, "Logo", "PCL\Logo.png")
                         CopyFile($"{InstallTemp}{ArchiveBaseFolder}{Logo}.png", $"{PathMcFolder}versions\{VersionName}\PCL\Logo.png")
                         Log($"[ModPack] 迁移 MultiMC 版本独立设置：版本图标（{Logo}.png）")
+                    End If
+                    'JVM 参数
+                    Dim JvmArgs As String = ReadIni(MMCSetupFile, "JvmArgs", "")
+                    If JvmArgs <> "" Then
+                        If ReadIni(MMCSetupFile, "OverrideJavaArgs", False) Then
+                            WriteIni(SetupFile, "VersionAdvanceJvm", JvmArgs)
+                            Log("[ModPack] 迁移 MultiMC 版本独立设置：JVM 参数（覆盖）：" & JvmArgs)
+                        Else
+                            JvmArgs += " " & Setup.Get("LaunchAdvanceJvm")
+                            WriteIni(SetupFile, "VersionAdvanceJvm", JvmArgs)
+                            Log("[ModPack] 迁移 MultiMC 版本独立设置：JVM 参数（追加）：" & JvmArgs)
+                        End If
                     End If
                 End If
             Catch ex As Exception
@@ -715,7 +723,7 @@ Retry:
             If String.IsNullOrEmpty(VersionName) Then Throw New CancelledException
         End If
         '解压与配置文件
-        Dim InstallTemp As String = PathTemp & "PackInstall\" & RandomInteger(0, 100000) & "\"
+        Dim InstallTemp As String = RequestTaskTempFolder()
         Dim InstallLoaders As New List(Of LoaderBase)
         InstallLoaders.Add(New LoaderTask(Of String, Integer)(GetLang("LangModModpackTaskExtraModpack"),
         Sub(Task As LoaderTask(Of String, Integer))
@@ -786,7 +794,6 @@ Retry:
         MyMsgBox(GetLang("LangModModpackDialogContentInstallTip"), GetLang("LangModModpackDialogTitleInstall"), GetLang("LangDialogBtnContinue"), ForceWait:=True)
         Dim TargetFolder As String = SelectFolder(GetLang("LangModModpackSelectInstallFolder"))
         If String.IsNullOrEmpty(TargetFolder) Then Throw New CancelledException
-        If TargetFolder.Contains("!") OrElse TargetFolder.Contains(";") Then Hint(GetLang("LangModModpackFolderNoExclamationOrSemicolon"), HintType.Critical) : Throw New CancelledException
         If Directory.GetFileSystemEntries(TargetFolder).Length > 0 Then Hint(GetLang("LangModModpackFolderShouldBeEmpty"), HintType.Critical) : Throw New CancelledException
         '解压
         Dim Loader As New LoaderCombo(Of String)(GetLang("LangModModpackTaskExtractArchive"), {
@@ -814,8 +821,9 @@ Retry:
                 '尝试使用附带的启动器打开
                 If Launcher IsNot Nothing Then
                     Log("[Modpack] 找到压缩包中附带的启动器：" & Launcher)
-                    If MyMsgBox(GetLang("LangModModpackDialogContentAnotherLauncher", Launcher), GetLang("LangModModpackDialogTitleAnotherLauncher"), GetLang("LangDialogBtnContinue"), GetLang("LangDialogBtnCancel")) = 1 Then
-                        ShellOnly(Launcher, "--wait")
+                    If MyMsgBox(GetLang("LangModModpackDialogContentAnotherLauncher", Launcher), GetLang("LangModModpackDialogTitleAnotherLauncher"), GetLang("LangModModpackDialogBtnAnotherLauncher1"), GetLang("LangModModpackDialogBtnAnotherLauncher2")) = 1 Then
+                        OpenExplorer(TargetFolder)
+                        ShellOnly(Launcher, "--wait") '要求等待已有的 PCL 退出
                         Log("[Modpack] 为换用整合包中的启动器启动，强制结束程序")
                         FrmMain.EndProgram(False)
                         Return
@@ -823,15 +831,17 @@ Retry:
                 Else
                     Log("[Modpack] 未找到压缩包中附带的启动器")
                 End If
+                OpenExplorer(TargetFolder)
                 '加入文件夹列表
                 Dim VersionName As String = GetFolderNameFromPath(TargetFolder)
+                Directory.CreateDirectory(TargetFolder & ".minecraft\")
                 PageSelectLeft.AddFolder(
-                    TargetFolder & ArchiveBaseFolder.Replace("/", "\").TrimStart("\"), '格式例如：包裹文件夹\.minecraft\（最短为空字符串）
+                    TargetFolder & ".minecraft\" & ArchiveBaseFolder.Replace("/", "\").TrimStart("\"), '格式例如：包裹文件夹\.minecraft\（最短为空字符串）
                     VersionName, False)
                 '调用 modpack 文件进行安装
                 Dim ModpackFile = Directory.GetFiles(TargetFolder, "modpack.*", SearchOption.AllDirectories).First
                 Log("[Modpack] 调用 modpack 文件继续安装：" & ModpackFile)
-                ModpackInstall(ModpackFile, VersionName)
+                ModpackInstall(ModpackFile)
             End Sub)
         })
         Loader.Start(TargetFolder)

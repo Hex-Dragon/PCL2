@@ -289,7 +289,7 @@
     Private Sub BtnManageOpen_Click(sender As Object, e As EventArgs) Handles BtnManageOpen.Click, BtnHintOpen.Click
         Try
             Directory.CreateDirectory(PageVersionLeft.Version.PathIndie & "mods\")
-            OpenExplorer("""" & PageVersionLeft.Version.PathIndie & "mods\""")
+            OpenExplorer(PageVersionLeft.Version.PathIndie & "mods\")
         Catch ex As Exception
             Log(ex, "打开 Mods 文件夹失败", LogLevel.Msgbox)
         End Try
@@ -862,10 +862,8 @@ Install:
     '打开文件所在的位置
     Public Sub Open_Click(sender As MyIconButton, e As EventArgs)
         Try
-
             Dim ListItem As MyLocalModItem = sender.Tag
-            OpenExplorer("/select,""" & ListItem.Entry.Path & """")
-
+            OpenExplorer(ListItem.Entry.Path)
         Catch ex As Exception
             Log(ex, "打开 Mod 文件位置失败", LogLevel.Feedback)
         End Try

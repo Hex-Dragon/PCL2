@@ -13,6 +13,12 @@
                 <ResourceDictionary Source="pack://application:,,,/Resources/Language/zh-CN.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Resources/Language/zh-CN.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Converter -->
+            <local:AdditionConverter x:Key="AdditionConverter"/>
+            <local:MultiplicationConverter x:Key="MultiplicationConverter"/>
+            <local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+            <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
 
             <!--字体-->
             <FontFamily x:Key="LaunchFontFamily"/>
