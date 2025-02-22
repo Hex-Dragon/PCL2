@@ -55,12 +55,16 @@
         Dim Loaders As New List(Of LoaderBase)
 
 #Region "下载支持库文件"
-        Dim LoadersLib As New List(Of LoaderBase) From {
-            New LoaderTask(Of String, List(Of NetFile))("分析缺失支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(Version)) With {.ProgressWeight = 1},
-            New LoaderDownload("下载支持库文件", New List(Of NetFile)) With {.ProgressWeight = 15}
-        }
-        '构造加载器
-        Loaders.Add(New LoaderCombo(Of String)("下载支持库文件（主加载器）", LoadersLib) With {.Block = False, .Show = False, .ProgressWeight = 16})
+        If ShouldIgnoreFileCheck(Version) Then
+            Log("[Download] 已跳过所有 Libraries 检查")
+        Else
+            Dim LoadersLib As New List(Of LoaderBase) From {
+                New LoaderTask(Of String, List(Of NetFile))("分析缺失支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(Version)) With {.ProgressWeight = 1},
+                New LoaderDownload("下载支持库文件", New List(Of NetFile)) With {.ProgressWeight = 15}
+}
+            '构造加载器
+            Loaders.Add(New LoaderCombo(Of String)("下载支持库文件（主加载器）", LoadersLib) With {.Block = False, .Show = False, .ProgressWeight = 16})
+        End If
 #End Region
 
 #Region "下载资源文件"
