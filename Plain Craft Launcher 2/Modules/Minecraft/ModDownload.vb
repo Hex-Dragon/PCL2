@@ -279,9 +279,13 @@
             '检查是否有要求的版本（#5195）
             If Not String.IsNullOrEmpty(Loader.Input) Then
                 Dim Id = Loader.Input
-                If Not DlClientListLoader.Output.Value("versions").Any(Function(v) v("id") = Id) Then
-                    Throw New Exception("BMCLAPI 源未包含目标版本 " & Id)
-                End If
+                Try
+                    If Not DlClientListLoader.Output.Value("versions").Any(Function(v) v("id") = Id) Then
+                        Throw New Exception("BMCLAPI 源未包含目标版本 " & Id)
+                    End If
+                Catch ex As Exception
+                    Log("检查 BMCLAPI 包含版本失败: " & ex.ToString())
+                End Try
             End If
             '返回
             Loader.Output = New DlClientListResult With {.IsOfficial = False, .SourceName = "BMCLAPI", .Value = Json}

@@ -320,6 +320,41 @@
         End Try
     End Sub
 
+    '重置
+    Private Sub BtnManageRestore_Click(sender As Object, e As EventArgs) Handles BtnManageRestore.Click
+        Try
+            Dim CurrentVersion = PageVersionLeft.Version.Version
+            If Not CurrentVersion.McCodeMain = 99 AndAlso VersionSortInteger(CurrentVersion.McName, "1.5.2") = -1 AndAlso CurrentVersion.HasForge Then
+                Hint("该版本暂不支持重置！", HintType.Info)
+                Exit Sub
+            End If
+            '确认操作
+            If MyMsgBox("你确定要重置版本 " & PageVersionLeft.Version.Name & " 吗？" & vbCrLf & "PCL 将会尝试重新从互联网获取此版本的资源文件信息，并重新执行自动安装。" & vbCrLf & vbCrLf & "本功能尚处于测试阶段，可能不稳定。", "版本重置确认", "确认", "取消") = 2 Then Exit Sub
+
+            '备份版本核心文件
+            CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".json", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".json")
+            CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".jar", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".jar")
+            '提交安装申请
+            Dim Request As New McInstallRequest With {
+                .TargetVersionName = PageVersionLeft.Version.Name,
+                .TargetVersionFolder = $"{PathMcFolder}versions\{PageVersionLeft.Version.Name}\",
+                .MinecraftName = CurrentVersion.McName,
+                .OptiFineEntry = If(CurrentVersion.HasOptiFine, New DlOptiFineListEntry With {.Inherit = CurrentVersion.McName, .NameDisplay = CurrentVersion.McName + " " + CurrentVersion.OptiFineVersion}, Nothing),
+                .ForgeEntry = If(CurrentVersion.HasForge, New DlForgeVersionEntry(CurrentVersion.ForgeVersion, Nothing, Inherit:=CurrentVersion.McName) With {.Category = "installer"}, Nothing),
+                .NeoForgeEntry = If(CurrentVersion.HasNeoForge, New DlNeoForgeListEntry(CurrentVersion.NeoForgeVersion) With {.ForgeType = 1, .VersionName = CurrentVersion.NeoForgeVersion, .Inherit = CurrentVersion.McName}, Nothing),
+                .CleanroomEntry = If(CurrentVersion.HasCleanroom, New DlCleanroomListEntry(CurrentVersion.CleanroomVersion) With {.ForgeType = 2, .VersionName = CurrentVersion.CleanroomVersion, .Inherit = CurrentVersion.McName}, Nothing),
+                .FabricVersion = If(CurrentVersion.HasFabric, CurrentVersion.FabricVersion, Nothing),
+                .QuiltVersion = If(CurrentVersion.HasQuilt, CurrentVersion.QuiltVersion, Nothing),
+                .LiteLoaderEntry = If(CurrentVersion.HasLiteLoader, New DlLiteLoaderListEntry With {.Inherit = CurrentVersion.McName}, Nothing)
+            }
+            '.MinecraftJson = CurrentVersion.McName,
+            If Not McInstall(Request, "重置") Then Exit Sub
+            FrmMain.PageChange(New FormMain.PageStackData With {.Page = FormMain.PageType.Launch})
+        Catch ex As Exception
+            Log(ex, "重置版本 " & PageVersionLeft.Version.Name & " 失败", LogLevel.Msgbox)
+        End Try
+    End Sub
+
     '测试游戏
     Private Sub BtnManageTest_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageTest.Click
         Try

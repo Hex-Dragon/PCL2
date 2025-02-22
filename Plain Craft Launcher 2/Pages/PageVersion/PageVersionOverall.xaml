@@ -83,7 +83,8 @@
                         <local:MyButton x:Name="BtnManageScript" Text="导出启动脚本" MinWidth="140" Padding="13,0" Margin="0,7,20,0" Height="35"/>
                         <local:MyButton x:Name="BtnManageTest" Text="测试游戏" MinWidth="140" Padding="13,0" Margin="0,7,20,0" Grid.Column="1" Height="35"/>
                         <local:MyButton x:Name="BtnManageCheck" Text="补全文件" MinWidth="140" Padding="13,0" Margin="0,7,20,0" Grid.Column="2" ToolTip="校验版本依赖文件是否完整，并重新下载 Assets 索引与缺失、校验失败的文件。&#xa;若游戏缺失音效，请尝试此项。" Height="35"/>
-                        <local:MyButton x:Name="BtnManageDelete" Text="删除版本" MinWidth="140" Padding="13,0" Margin="0,7,20,0" Grid.Column="3" ColorType="Red" Height="35"/>
+                        <local:MyButton x:Name="BtnManageRestore" Text="重置" MinWidth="140" Padding="13,0" Margin="0,7,20,0" Grid.Column="3" ToolTip="重新从互联网获取此版本的安装信息，并执行自动安装。&#xa;你的存档、Mod、资源包等信息不会丢失。&#xa;若游戏因 Libraries 等资源缺失无法启动，请尝试此项。" Height="35"/>
+                        <local:MyButton x:Name="BtnManageDelete" Text="删除版本" MinWidth="140" Padding="13,0" Margin="0,7,20,0" Grid.Column="4" ColorType="Red" Height="35"/>
                     </WrapPanel>
                 </StackPanel>
             </local:MyCard>
