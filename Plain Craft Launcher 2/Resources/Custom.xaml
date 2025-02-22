@@ -210,6 +210,8 @@
             <Image Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Quilt.png"/>
             <!-- 狐狸（NeoForge 图标） -->
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/NeoForge.png"/>
+			<!-- Cleanroom 图标 -->
+			<local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Cleanroom.png"/>
         </StackPanel>
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="使用时，将上方对应行的 Source 复制到 MyListItem 的 Logo 属性处即可。"/>

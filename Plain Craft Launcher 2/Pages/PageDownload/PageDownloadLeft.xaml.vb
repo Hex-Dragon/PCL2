@@ -11,7 +11,7 @@
     ''' <summary>
     ''' 勾选事件改变页面。
     ''' </summary>
-    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemInstall.Check, ItemClient.Check, ItemOptiFine.Check, ItemForge.Check, ItemNeoForge.Check, ItemLiteLoader.Check, ItemMod.Check, ItemFabric.Check, ItemQuilt.Check, ItemPack.Check, ItemResourcePack.Check, ItemShader.Check, ItemFavorites.Check
+    Private Sub PageCheck(sender As MyListItem, e As RouteEventArgs) Handles ItemInstall.Check, ItemClient.Check, ItemOptiFine.Check, ItemForge.Check, ItemNeoForge.Check, ItemLiteLoader.Check, ItemMod.Check, ItemFabric.Check, ItemQuilt.Check, ItemPack.Check, ItemResourcePack.Check, ItemShader.Check, ItemFavorites.Check, ItemCleanroom.Check
         '尚未初始化控件属性时，sender.Tag 为 Nothing，会导致切换到页面 0
         '若使用 IsLoaded，则会导致模拟点击不被执行（模拟点击切换页面时，控件的 IsLoaded 为 False）
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
@@ -35,6 +35,9 @@
             Case FormMain.PageSubType.DownloadNeoForge
                 If FrmDownloadNeoForge Is Nothing Then FrmDownloadNeoForge = New PageDownloadNeoForge
                 Return FrmDownloadNeoForge
+            Case FormMain.PageSubType.DownloadCleanroom
+                If FrmDownloadCleanroom Is Nothing Then FrmDownloadCleanroom = New PageDownloadCleanroom
+                Return FrmDownloadCleanroom
             Case FormMain.PageSubType.DownloadLiteLoader
                 If FrmDownloadLiteLoader Is Nothing Then FrmDownloadLiteLoader = New PageDownloadLiteLoader
                 Return FrmDownloadLiteLoader
@@ -116,6 +119,7 @@
                 DlOptiFineListLoader.Start(IsForceRestart:=True)
                 DlForgeListLoader.Start(IsForceRestart:=True)
                 DlNeoForgeListLoader.Start(IsForceRestart:=True)
+                DlCleanroomListLoader.Start(IsForceRestart:=True)
                 DlLiteLoaderListLoader.Start(IsForceRestart:=True)
                 DlFabricListLoader.Start(IsForceRestart:=True)
                 DlFabricApiLoader.Start(IsForceRestart:=True)
@@ -161,6 +165,9 @@
             Case FormMain.PageSubType.DownloadNeoForge
                 DlNeoForgeListLoader.Start(IsForceRestart:=True)
                 ItemNeoForge.Checked = True
+            Case FormMain.PageSubType.DownloadCleanroom
+                DlCleanroomListLoader.Start(IsForceRestart:=True)
+                ItemCleanroom.Checked = True
             Case FormMain.PageSubType.DownloadLiteLoader
                 DlLiteLoaderListLoader.Start(IsForceRestart:=True)
                 ItemLiteLoader.Checked = True
@@ -206,6 +213,7 @@
         ItemQuilt.Visibility = Visibility.Visible
         ItemForge.Visibility = Visibility.Visible
         ItemNeoForge.Visibility = Visibility.Visible
+        ItemCleanroom.Visibility = Visibility.Visible
         ItemLiteLoader.Visibility = Visibility.Visible
         RunInThread(
         Sub()
@@ -224,6 +232,7 @@
         ItemClient.Visibility = Visibility.Collapsed
         ItemOptiFine.Visibility = Visibility.Collapsed
         ItemNeoForge.Visibility = Visibility.Collapsed
+        ItemCleanroom.Visibility = Visibility.Collapsed
         ItemFabric.Visibility = Visibility.Collapsed
         ItemQuilt.Visibility = Visibility.Collapsed
         ItemForge.Visibility = Visibility.Collapsed
