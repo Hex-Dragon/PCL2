@@ -64,9 +64,11 @@
         End If
 
         '如果在选择页面按了刷新键，选择页的东西可能会由于动画被隐藏，但不会由于加载结束而再次显示，因此这里需要手动恢复
-        For Each Card In GetAllAnimControls(PanSelect)
-            Card.Opacity = 1
-            Card.RenderTransform = New TranslateTransform
+        For Each Control In GetAllAnimControls(PanSelect)
+            Control.Opacity = 1
+            If Control.RenderTransform Is Nothing OrElse TypeOf Control.RenderTransform Is TranslateTransform Then
+                Control.RenderTransform = New TranslateTransform
+            End If
         Next
 
         '启动 Forge 加载
