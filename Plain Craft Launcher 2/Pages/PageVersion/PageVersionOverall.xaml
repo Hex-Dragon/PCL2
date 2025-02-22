@@ -39,6 +39,7 @@
                             <local:MyComboBoxItem Content="布料（Fabric）" Tag="pack://application:,,,/images/Blocks/Fabric.png" />
                             <local:MyComboBoxItem Content="方格（Quilt）" Tag="pack://application:,,,/images/Blocks/Quilt.png" />
                             <local:MyComboBoxItem Content="狐狸（NeoForge）" Tag="pack://application:,,,/images/Blocks/NeoForge.png" />
+                            <local:MyComboBoxItem Content="Cleanroom" Tag="pack://application:,,,/images/Blocks/Cleanroom.png" />
                         </local:MyComboBox>
                         <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="分类" Margin="0,0,25,0" />
                         <local:MyComboBox Grid.Column="1" Grid.Row="2" x:Name="ComboDisplayType">

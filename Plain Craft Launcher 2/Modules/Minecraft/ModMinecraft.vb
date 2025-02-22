@@ -736,6 +736,10 @@ Recheck:
                             State = McVersionState.Quilt
                             Version.HasQuilt = True
                             Version.QuiltVersion = If(RegexSeek(RealJson, "(?<=(org.quiltmc:quilt-loader:))[0-9\.]+(\+build.[0-9]+)?((-beta.)[0-9]([0-9]?))"), "未知版本").Replace("+build", "")
+                        ElseIf RealJson.Contains("com.cleanroommc:cleanroom:") Then
+                            State = McVersionState.Cleanroom
+                            Version.HasCleanroom = True
+                            Version.CleanroomVersion = If(RegexSeek(RealJson, "(?<=(com.cleanroommc:cleanroom:))[0-9\.]+(\+build.[0-9]+)?(-alpha)?"), "未知版本").Replace("+build", "")
                         ElseIf RealJson.Contains("minecraftforge") AndAlso Not RealJson.Contains("net.neoforge") Then
                             State = McVersionState.Forge
                             Version.HasForge = True
@@ -767,6 +771,8 @@ ExitDataLoad:
                             Logo = PathImage & "Blocks/Anvil.png"
                         Case McVersionState.NeoForge
                             Logo = PathImage & "Blocks/NeoForge.png"
+                        Case McVersionState.Cleanroom
+                            Logo = PathImage & "Blocks/Cleanroom.png"
                         Case McVersionState.Fabric
                             Logo = PathImage & "Blocks/Fabric.png"
                         Case McVersionState.Quilt
@@ -797,7 +803,7 @@ ExitDataLoad:
                             End If
                         Case McVersionState.Old
                             Info = "远古版本"
-                        Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.Quilt, McVersionState.OptiFine, McVersionState.LiteLoader
+                        Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.Quilt, McVersionState.OptiFine, McVersionState.LiteLoader, McVersionState.Cleanroom
                             Info = Version.ToString
                         Case McVersionState.Fool
                             Info = GetMcFoolName(Version.McName)
@@ -832,6 +838,7 @@ ExitDataLoad:
                     WriteIni(Path & "PCL\Setup.ini", "VersionLiteLoader", Version.HasLiteLoader)
                     WriteIni(Path & "PCL\Setup.ini", "VersionForge", Version.ForgeVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionNeoForge", Version.NeoForgeVersion)
+                    WriteIni(Path & "PCL\Setup.ini", "VersionCleanroom", Version.CleanroomVersion)
                     WriteIni(Path & "PCL\Setup.ini", "VersionApiCode", Version.SortCode)
                     WriteIni(Path & "PCL\Setup.ini", "VersionOriginal", Version.McName)
                     WriteIni(Path & "PCL\Setup.ini", "VersionOriginalMain", Version.McCodeMain)
@@ -875,6 +882,7 @@ ExitDataLoad:
         LiteLoader
         Fabric
         Quilt
+        Cleanroom
     End Enum
 
     ''' <summary>
@@ -935,6 +943,17 @@ ExitDataLoad:
         ''' </summary>
         Public NeoForgeVersion As String = ""
 
+        'Cleanroom
+
+        ''' <summary>
+        ''' 该版本是否安装了 Cleanroom。
+        ''' </summary>
+        Public HasCleanroom As Boolean = False
+        ''' <summary>
+        ''' Cleanroom 版本号，如 0.2.4-alpha。
+        ''' </summary>
+        Public CleanroomVersion As String = ""
+
         'Fabric
 
         ''' <summary>
@@ -973,6 +992,7 @@ ExitDataLoad:
             ToString = ""
             If HasForge Then ToString += ", Forge" & If(ForgeVersion = "未知版本", "", " " & ForgeVersion)
             If HasNeoForge Then ToString += ", NeoForge" & If(NeoForgeVersion = "未知版本", "", " " & NeoForgeVersion)
+            If HasCleanroom Then ToString += ", Cleanroom" & If(CleanroomVersion = "未知版本", "", " " & CleanroomVersion)
             If HasFabric Then ToString += ", Fabric" & If(FabricVersion = "未知版本", "", " " & FabricVersion)
             If HasQuilt Then ToString += ", Quilt" & If(QuiltVersion = "未知版本", "", " " & QuiltVersion)
             If HasOptiFine Then ToString += ", OptiFine" & If(OptiFineVersion = "未知版本", "", " " & OptiFineVersion)
@@ -1002,11 +1022,21 @@ ExitDataLoad:
                             End If
                         ElseIf HasQuilt Then
                             If QuiltVersion = "未知版本" Then Return 0
-                            Dim SubVersions = QuiltVersion.Split(".")
+                            Dim IsBeta As Boolean = QuiltVersion.Contains("-beta")
+                            Dim SubVersions = QuiltVersion.Replace("-beta", "").Split(".")
                             If SubVersions.Length >= 3 Then
-                                _SortCode = Val(SubVersions(0)) * 10000 + Val(SubVersions(1)) * 100 + Val(SubVersions(2))
+                                _SortCode = Val(SubVersions(0)) * 10000 + Val(SubVersions(1)) * 100 + Val(SubVersions(2)) + IsBeta
                             Else
                                 Throw New Exception("无效的 Quilt 版本：" & QuiltVersion)
+                            End If
+                        ElseIf HasCleanroom Then
+                            If CleanroomVersion = "未知版本" Then Return 0
+                            Dim IsAlpha As Boolean = CleanroomVersion.Contains("-alpha")
+                            Dim SubVersions = CleanroomVersion.Replace("-alpha", "").Split(".")
+                            If SubVersions.Length >= 3 Then
+                                _SortCode = Val(SubVersions(0)) * 10000 + Val(SubVersions(1)) * 100 + Val(SubVersions(2)) + IsAlpha
+                            Else
+                                Throw New Exception("无效的 Cleanroom 版本：" & CleanroomVersion)
                             End If
                         ElseIf HasForge OrElse HasNeoForge Then
                             If ForgeVersion = "未知版本" AndAlso NeoForgeVersion = "未知版本" Then Return 0
@@ -1340,7 +1370,7 @@ OnLoaded:
             McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Fool}, McVersionCardType.Fool)
 
             '筛选 API 版本
-            McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Forge, McVersionState.NeoForge, McVersionState.LiteLoader, McVersionState.Fabric, McVersionState.Quilt}, McVersionCardType.API)
+            McVersionFilter(VersionList, VersionListOriginal, {McVersionState.Forge, McVersionState.NeoForge, McVersionState.LiteLoader, McVersionState.Fabric, McVersionState.Quilt, McVersionState.Cleanroom}, McVersionCardType.API)
 
             '将老版本预先分类入不常用，只剩余原版、快照、OptiFine
             Dim VersionUseful As New List(Of McVersion)

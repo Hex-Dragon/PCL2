@@ -12,6 +12,7 @@ Public Class PageDownloadInstall
         DlFabricListLoader.Start()
         DlQuiltListLoader.Start()
         DlNeoForgeListLoader.Start()
+        DlCleanroomListLoader.Start()
 
         '重载预览
         TextSelectName.ValidateRules = New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions")}
@@ -31,6 +32,7 @@ Public Class PageDownloadInstall
         LoadQuilt.State = DlQuiltListLoader
         LoadQSL.State = DlQSLLoader
         LoadNeoForge.State = DlNeoForgeListLoader
+        LoadCleanroom.State = DlCleanroomListLoader
         LoadOptiFabric.State = DlOptiFabricLoader
     End Sub
 
@@ -58,6 +60,7 @@ Public Class PageDownloadInstall
         CardLiteLoader.IsSwaped = True
         CardForge.IsSwaped = True
         CardNeoForge.IsSwaped = True
+        CardCleanroom.IsSwaped = True
         CardFabric.IsSwaped = True
         CardFabricApi.IsSwaped = True
         CardQuilt.IsSwaped = True
@@ -98,6 +101,7 @@ Public Class PageDownloadInstall
                 LiteLoader_Loaded()
                 Forge_Loaded()
                 NeoForge_Loaded()
+                Cleanroom_Loaded()
                 Fabric_Loaded()
                 FabricApi_Loaded()
                 Quilt_Loaded()
@@ -118,6 +122,7 @@ Public Class PageDownloadInstall
                 BtnLiteLoaderClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardLiteLoader.MainTextBlock, .Mode = BindingMode.OneWay})
                 BtnForgeClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardForge.MainTextBlock, .Mode = BindingMode.OneWay})
                 BtnNeoForgeClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardNeoForge.MainTextBlock, .Mode = BindingMode.OneWay})
+                BtnCleanroomClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardCleanroom.MainTextBlock, .Mode = BindingMode.OneWay})
                 BtnFabricClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardFabric.MainTextBlock, .Mode = BindingMode.OneWay})
                 BtnFabricApiClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardFabricApi.MainTextBlock, .Mode = BindingMode.OneWay})
                 BtnQuiltClearInner.SetBinding(Shapes.Path.FillProperty, New Binding("Foreground") With {.Source = CardQuilt.MainTextBlock, .Mode = BindingMode.OneWay})
@@ -191,7 +196,7 @@ Public Class PageDownloadInstall
         End If
     End Sub
 
-    'Mod Loader 统一判断，内容应为 Forge / NeoForge / Fabric / Quilt
+    'Mod Loader 统一判断，内容应为 Forge / NeoForge / Fabric / Quilt / Cleanroom
     Private SelectedLoaderName As String = Nothing
 
     'Mod Loader API 统一判断，内容应为 Fabric API 或 QFAPI / QSL
@@ -234,6 +239,26 @@ Public Class PageDownloadInstall
                 AaTranslateY(PanForgeInfo, 6 - CType(PanForgeInfo.RenderTransform, TranslateTransform).Y, 200),
                 AaOpacity(PanForgeInfo, -PanForgeInfo.Opacity, 100)
             }, "SetForgeInfoShow")
+        End If
+    End Sub
+
+    'Cleanroom
+    Private SelectedCleanroom As DlCleanroomListEntry = Nothing
+    Private Sub SetCleanroomInfoShow(IsShow As String)
+        If PanCleanroomInfo.Tag = IsShow Then Exit Sub
+        PanCleanroomInfo.Tag = IsShow
+        If IsShow = "True" Then
+            '显示信息栏
+            AniStart({
+                AaTranslateY(PanCleanroomInfo, -CType(PanCleanroomInfo.RenderTransform, TranslateTransform).Y, 270, 100, Ease:=New AniEaseOutBack),
+                AaOpacity(PanCleanroomInfo, 1 - PanCleanroomInfo.Opacity, 100, 90)
+            }, "SetCleanroomInfoShow")
+        Else
+            '隐藏信息栏
+            AniStart({
+                AaTranslateY(PanCleanroomInfo, 6 - CType(PanCleanroomInfo.RenderTransform, TranslateTransform).Y, 200),
+                AaOpacity(PanCleanroomInfo, -PanCleanroomInfo.Opacity, 100)
+            }, "SetCleanroomInfoShow")
         End If
     End Sub
 
@@ -361,7 +386,7 @@ Public Class PageDownloadInstall
     ''' <summary>
     ''' 重载已选择的项目的显示。
     ''' </summary>
-    Private Sub SelectReload() Handles CardOptiFine.Swap, LoadOptiFine.StateChanged, CardForge.Swap, LoadForge.StateChanged, CardNeoForge.Swap, LoadNeoForge.StateChanged, CardFabric.Swap, LoadFabric.StateChanged, CardFabricApi.Swap, LoadFabricApi.StateChanged, CardOptiFabric.Swap, LoadOptiFabric.StateChanged, CardLiteLoader.Swap, LoadLiteLoader.StateChanged, LoadQuilt.StateChanged, CardQuilt.Swap, LoadQSL.StateChanged, CardQSL.Swap
+    Private Sub SelectReload() Handles CardOptiFine.Swap, LoadOptiFine.StateChanged, CardForge.Swap, LoadForge.StateChanged, CardNeoForge.Swap, LoadNeoForge.StateChanged, CardFabric.Swap, LoadFabric.StateChanged, CardFabricApi.Swap, LoadFabricApi.StateChanged, CardOptiFabric.Swap, LoadOptiFabric.StateChanged, CardLiteLoader.Swap, LoadLiteLoader.StateChanged, LoadQuilt.StateChanged, CardQuilt.Swap, LoadQSL.StateChanged, CardQSL.Swap, LoadCleanroom.StateChanged, CardCleanroom.Swap
         If SelectedMinecraftId Is Nothing OrElse IsReloading Then Exit Sub
         IsReloading = True
         '主预览
@@ -424,6 +449,27 @@ Public Class PageDownloadInstall
             ImgForge.Visibility = Visibility.Visible
             LabForge.Text = SelectedForge.VersionName
             LabForge.Foreground = ColorGray1
+        End If
+        'Cleanroom
+        If SelectedMinecraftId = "1.12.2" Then
+            CardCleanroom.Visibility = Visibility.Visible
+            Dim CleanroomError As String = LoadCleanroomGetError()
+            CardCleanroom.MainSwap.Visibility = If(CleanroomError Is Nothing, Visibility.Visible, Visibility.Collapsed)
+            If CleanroomError IsNot Nothing Then CardCleanroom.IsSwaped = True
+            SetCleanroomInfoShow(CardCleanroom.IsSwaped)
+            If SelectedCleanroom Is Nothing Then
+                BtnCleanroomClear.Visibility = Visibility.Collapsed
+                ImgCleanroom.Visibility = Visibility.Collapsed
+                LabCleanroom.Text = If(CleanroomError, "点击选择")
+                LabCleanroom.Foreground = ColorGray4
+            Else
+                BtnCleanroomClear.Visibility = Visibility.Visible
+                ImgCleanroom.Visibility = Visibility.Visible
+                LabCleanroom.Text = SelectedCleanroom.VersionName
+                LabCleanroom.Foreground = ColorGray1
+            End If
+        Else
+            CardCleanroom.Visibility = Visibility.Collapsed
         End If
         'NeoForge
         If Not SelectedMinecraftId.Contains("1.") OrElse Val(SelectedMinecraftId.Split(".")(1)) <= 19 Then
@@ -608,6 +654,7 @@ Public Class PageDownloadInstall
         SelectedAPIName = Nothing
         SelectedForge = Nothing
         SelectedNeoForge = Nothing
+        SelectedCleanroom = Nothing
         SelectedFabric = Nothing
         SelectedFabricApi = Nothing
         SelectedQuilt = Nothing
@@ -632,6 +679,9 @@ Public Class PageDownloadInstall
         End If
         If SelectedNeoForge IsNot Nothing Then
             Name += "-NeoForge_" & SelectedNeoForge.VersionName
+        End If
+        If SelectedCleanroom IsNot Nothing Then
+            Name += "-Cleanroom_" & SelectedCleanroom.VersionName
         End If
         If SelectedLiteLoader IsNot Nothing Then
             Name += "-LiteLoader"
@@ -658,6 +708,9 @@ Public Class PageDownloadInstall
         If SelectedNeoForge IsNot Nothing Then
             Info += ", NeoForge " & SelectedNeoForge.VersionName
         End If
+        If SelectedCleanroom IsNot Nothing Then
+            Info += ", Cleanroom " & SelectedCleanroom.VersionName
+        End If
         If SelectedLiteLoader IsNot Nothing Then
             Info += ", LiteLoader"
         End If
@@ -679,6 +732,8 @@ Public Class PageDownloadInstall
             Return "pack://application:,,,/images/Blocks/Anvil.png"
         ElseIf SelectedNeoForge IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/NeoForge.png"
+        ElseIf SelectedCleanroom IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/Cleanroom.png"
         ElseIf SelectedLiteLoader IsNot Nothing Then
             Return "pack://application:,,,/images/Blocks/Egg.png"
         ElseIf SelectedOptiFine IsNot Nothing Then
@@ -1139,6 +1194,69 @@ Public Class PageDownloadInstall
         SelectedNeoForge = Nothing
         SelectedLoaderName = Nothing
         CardNeoForge.IsSwaped = True
+        e.Handled = True
+        OptiFine_Loaded()
+        SelectReload()
+    End Sub
+
+#End Region
+
+#Region "Cleanroom 列表"
+
+    ''' <summary>
+    ''' 获取 Cleanroom 的加载异常信息。若正常则返回 Nothing。
+    ''' </summary>
+    Private Function LoadCleanroomGetError() As String
+        If Not SelectedMinecraftId.StartsWith("1.") Then Return "没有可用版本"
+        If SelectedOptiFine IsNot Nothing Then Return "与 OptiFine 不兼容"
+        If SelectedLoaderName IsNot Nothing AndAlso SelectedLoaderName IsNot "Cleanroom" Then Return $"与 {SelectedLoaderName} 不兼容"
+        If LoadCleanroom Is Nothing OrElse LoadCleanroom.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
+        If LoadCleanroom.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadCleanroom.State, Object).Error.Message
+        Return Nothing
+        'If DlCleanroomListLoader.Output.Value.Any(Function(v) v.Inherit = SelectedMinecraftId) Then
+        '    Return Nothing
+        'Else
+        '    Return "没有可用版本"
+        'End If
+    End Function
+
+    '限制展开
+    Private Sub CardCleanroom_PreviewSwap(sender As Object, e As RouteEventArgs) Handles CardCleanroom.PreviewSwap
+        If LoadCleanroomGetError() IsNot Nothing Then e.Handled = True
+    End Sub
+
+    ''' <summary>
+    ''' 尝试重新可视化 Cleanroom 版本列表。
+    ''' </summary>
+    Private Sub Cleanroom_Loaded() Handles LoadCleanroom.StateChanged
+        Try
+            '获取版本列表
+            If DlCleanroomListLoader.State <> LoadState.Finished Then Exit Sub
+            Dim Versions = DlCleanroomListLoader.Output.Value.Where(Function(v) v.Inherit = SelectedMinecraftId).ToList
+            If Not Versions.Any() Then Exit Sub
+            '可视化
+            PanCleanroom.Children.Clear()
+            CleanroomDownloadListItemPreload(PanCleanroom, Versions, AddressOf Cleanroom_Selected, False)
+            For Each Version In Versions
+                PanCleanroom.Children.Add(CleanroomDownloadListItem(Version, AddressOf Cleanroom_Selected, False))
+            Next
+        Catch ex As Exception
+            Log(ex, "可视化 Cleanroom 安装版本列表出错", LogLevel.Feedback)
+        End Try
+    End Sub
+
+    '选择与清除
+    Private Sub Cleanroom_Selected(sender As MyListItem, e As EventArgs)
+        SelectedCleanroom = sender.Tag
+        SelectedLoaderName = "Cleanroom"
+        CardCleanroom.IsSwaped = True
+        OptiFine_Loaded()
+        SelectReload()
+    End Sub
+    Private Sub Cleanroom_Clear(sender As Object, e As MouseButtonEventArgs) Handles BtnCleanroomClear.MouseLeftButtonUp
+        SelectedCleanroom = Nothing
+        SelectedLoaderName = Nothing
+        CardCleanroom.IsSwaped = True
         e.Handled = True
         OptiFine_Loaded()
         SelectReload()
@@ -1614,6 +1732,7 @@ Public Class PageDownloadInstall
             .OptiFineEntry = SelectedOptiFine,
             .ForgeEntry = SelectedForge,
             .NeoForgeEntry = SelectedNeoForge,
+            .CleanroomEntry = SelectedCleanroom,
             .FabricVersion = SelectedFabric,
             .FabricApi = SelectedFabricApi,
             .QuiltVersion = SelectedQuilt,

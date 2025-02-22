@@ -55,12 +55,16 @@
         Dim Loaders As New List(Of LoaderBase)
 
 #Region "下载支持库文件"
-        Dim LoadersLib As New List(Of LoaderBase) From {
-            New LoaderTask(Of String, List(Of NetFile))("分析缺失支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(Version)) With {.ProgressWeight = 1},
-            New LoaderDownload("下载支持库文件", New List(Of NetFile)) With {.ProgressWeight = 15}
-        }
-        '构造加载器
-        Loaders.Add(New LoaderCombo(Of String)("下载支持库文件（主加载器）", LoadersLib) With {.Block = False, .Show = False, .ProgressWeight = 16})
+        If ShouldIgnoreFileCheck(Version) Then
+            Log("[Download] 已跳过所有 Libraries 检查")
+        Else
+            Dim LoadersLib As New List(Of LoaderBase) From {
+                New LoaderTask(Of String, List(Of NetFile))("分析缺失支持库文件", Sub(Task As LoaderTask(Of String, List(Of NetFile))) Task.Output = McLibFix(Version)) With {.ProgressWeight = 1},
+                New LoaderDownload("下载支持库文件", New List(Of NetFile)) With {.ProgressWeight = 15}
+}
+            '构造加载器
+            Loaders.Add(New LoaderCombo(Of String)("下载支持库文件（主加载器）", LoadersLib) With {.Block = False, .Show = False, .ProgressWeight = 16})
+        End If
 #End Region
 
 #Region "下载资源文件"
@@ -545,13 +549,21 @@
 #Region "DlForgeVersion | Forge 版本列表"
 
     Public MustInherit Class DlForgelikeEntry
-        Public IsNeoForge As Boolean
+        ''' <summary>
+        ''' Forgelike 种类。Forge、NeoForge、Cleanroom。
+        ''' </summary>
+        Public ForgeType As ForgelikeType
+        Public Enum ForgelikeType
+            Forge
+            NeoForge
+            Cleanroom
+        End Enum
         ''' <summary>
         ''' 加载器名称。Forge 或 NeoForge。
         ''' </summary>
         Public ReadOnly Property LoaderName As String
             Get
-                Return If(IsNeoForge, "NeoForge", "Forge")
+                Return If(ForgeType = 1, "NeoForge", "Forge")
             End Get
         End Property
         ''' <summary>
@@ -559,19 +571,22 @@
         ''' </summary>
         Public ReadOnly Property FileExtension As String
             Get
-                If IsNeoForge Then
-                    Return "jar"
-                Else
+                If ForgeType = 0 Then
                     Return If(CType(Me, DlForgeVersionEntry).Category = "installer", "jar", "zip")
+                Else
+                    Return "jar"
                 End If
             End Get
         End Property
         ''' <summary>
         ''' Forge：MC 版本是否小于 1.13。
         ''' NeoForge：MC 版本是否为 1.20.1。
+        ''' Cleanroom：固定为 False。
         ''' </summary>
         Public ReadOnly Property IsLegacy As Boolean
             Get
+                'Cleanroom 始终为 False
+                If ForgeType = 2 Then Return False
                 '虽然很抽象，但确实可以这样判断
                 'Forge：1.13+ 的版本号首位都大于 20
                 'NeoForge：1.20.1 的版本号首位人为规定为 19 开头
@@ -583,12 +598,14 @@
         ''' 格式：Major.Minor.Build.Revision
         ''' Forge：如 “50.1.9.0”（最后一位固定为 0）、“14.22.1.2478”（Legacy）。
         ''' NeoForge：如 “20.4.30.0”（最后一位固定为 0）、“19.47.1.99”（Legacy：第一位固定为 19）。
+        ''' Cleanroom：如 “0.2.4.1”（Alpha：最后一位固定为 1）。
         ''' </summary>
         Public Version As Version
         ''' <summary>
         ''' 可对玩家显示的非格式化版本名。
         ''' Forge：如 “50.1.9”、“14.22.1.2478”（Legacy）。
         ''' NeoForge：如 “20.4.30-beta”、“47.1.99”（Legacy）。
+        ''' Cleanroom：如 “0.2.4-alpha”。
         ''' </summary>
         Public VersionName As String
         ''' <summary>
@@ -625,7 +642,7 @@
             If Version = "11.15.1.2318" OrElse Version = "11.15.1.1902" OrElse Version = "11.15.1.1890" Then Branch = "1.8.9"
             If Branch Is Nothing AndAlso Inherit = "1.7.10" AndAlso Version.Split(".")(3) >= 1300 Then Branch = "1.7.10"
             '为 DlForgelikeEntry 提供所有信息
-            IsNeoForge = False
+            ForgeType = 0
             VersionName = Version
             Me.Version = New Version(Version)
             Me.Inherit = Inherit
@@ -826,7 +843,7 @@
         End Property
 
         Public Sub New(ApiName As String)
-            IsNeoForge = True
+            ForgeType = 1
             Me.ApiName = ApiName
             IsBeta = ApiName.Contains("beta")
             If ApiName.Contains("1.20.1") Then '1.20.1-47.1.99
@@ -907,6 +924,103 @@
         Dim Versions = VersionNames.
             Where(Function(name) name <> "47.1.82"). '这个版本虽然在版本列表中，但不能下载
             Select(Function(name) New DlNeoForgeListEntry(name)).ToList
+        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        Versions = Versions.OrderByDescending(Function(a) a.Version).ToList
+        Return Versions
+    End Function
+
+#End Region
+
+#Region "DlCleanroomList | Cleanroom 版本列表"
+
+    Public Structure DlCleanroomListResult
+        ''' <summary>
+        ''' 数据来源名称，如“Official”，“BMCLAPI”。
+        ''' </summary>
+        Public SourceName As String
+        ''' <summary>
+        ''' 是否为官方的实时数据。
+        ''' </summary>
+        Public IsOfficial As Boolean
+        ''' <summary>
+        ''' 所有版本的列表。已经按从新到老排序。
+        ''' </summary>
+        Public Value As List(Of DlCleanroomListEntry)
+    End Structure
+
+    Public Class DlCleanroomListEntry
+        Inherits DlForgelikeEntry
+        ''' <summary>
+        ''' 是否是 Beta 版。
+        ''' </summary>
+        Public IsBeta As Boolean
+        ''' <summary>
+        ''' API 使用的原始版本字符串，如 “0.2.4-alpha”。
+        ''' </summary>
+        Public ApiName As String
+        ''' <summary>
+        ''' 文件在官网的基础地址，不包含后缀。
+        ''' </summary>
+        Public ReadOnly Property UrlBase As String
+            Get
+                Return $"https://github.com/CleanroomMC/Cleanroom/releases/download/{ApiName}/cleanroom-{ApiName}"
+            End Get
+        End Property
+
+        Public Sub New(ApiName As String)
+            ForgeType = 1
+            Me.ApiName = ApiName
+            IsBeta = ApiName.Contains("alpha")
+            VersionName = ApiName
+            Version = New Version(ApiName.BeforeFirst("-"))
+            Inherit = "1.12.2"
+        End Sub
+    End Class
+
+    ''' <summary>
+    ''' Cleanroom 版本列表，主加载器。
+    ''' </summary>
+    Public DlCleanroomListLoader As New LoaderTask(Of Integer, DlCleanroomListResult)("DlCleanroomList Main", AddressOf DlCleanroomListMain)
+    Private Sub DlCleanroomListMain(Loader As LoaderTask(Of Integer, DlCleanroomListResult))
+        Select Case Setup.Get("ToolDownloadVersion")
+            Case 0
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlCleanroomListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlCleanroomListResult), Integer)(DlCleanroomListOfficialLoader, 30)
+                }, Loader.IsForceRestarting)
+            Case 1
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlCleanroomListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlCleanroomListResult), Integer)(DlCleanroomListOfficialLoader, 5)
+                }, Loader.IsForceRestarting)
+            Case Else
+                DlSourceLoader(Loader, New List(Of KeyValuePair(Of LoaderTask(Of Integer, DlCleanroomListResult), Integer)) From {
+                    New KeyValuePair(Of LoaderTask(Of Integer, DlCleanroomListResult), Integer)(DlCleanroomListOfficialLoader, 60)
+                }, Loader.IsForceRestarting)
+        End Select
+    End Sub
+
+    ''' <summary>
+    ''' Cleanroom 版本列表，官方源。
+    ''' </summary>
+    Public DlCleanroomListOfficialLoader As New LoaderTask(Of Integer, DlCleanroomListResult)("DlCleanroomList Official", AddressOf DlCleanroomListOfficialMain)
+    Private Sub DlCleanroomListOfficialMain(Loader As LoaderTask(Of Integer, DlCleanroomListResult))
+        '获取版本列表 JSON
+        Dim ResultLatest As String = NetGetCodeByDownload("https://api.github.com/repos/CleanroomMC/Cleanroom/releases", UseBrowserUserAgent:=True, IsJson:=True)
+        If ResultLatest.Length < 100 Then Throw New Exception("获取到的版本列表长度不足（" & ResultLatest & "）")
+        '解析
+        Try
+            Loader.Output = New DlCleanroomListResult With {.IsOfficial = True, .SourceName = "Cleanroom 官方源",
+                .Value = GetCleanroomEntries(ResultLatest)}
+        Catch ex As Exception
+            Throw New Exception("Cleanroom 官方源版本列表解析失败（" & ResultLatest & "）", ex)
+        End Try
+    End Sub
+
+    Private Function GetCleanroomEntries(LatestJson As String) As List(Of DlCleanroomListEntry)
+        Dim Versions As New List(Of DlCleanroomListEntry)
+        Dim Json As JArray = JArray.Parse(LatestJson)
+        For Each Token As JObject In Json
+            Versions.Add(New DlCleanroomListEntry(Token("tag_name").ToString) With {.ForgeType = 2})
+        Next
         If Not Versions.Any() Then Throw New Exception("没有可用版本")
         Versions = Versions.OrderByDescending(Function(a) a.Version).ToList
         Return Versions

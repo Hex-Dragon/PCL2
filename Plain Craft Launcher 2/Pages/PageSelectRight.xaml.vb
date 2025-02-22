@@ -42,19 +42,23 @@
                         Dim IsFabricExists As Boolean = False
                         Dim IsQuiltExists As Boolean = False
                         Dim IsLiteExists As Boolean = False
+                        Dim IsCleanroomExists As Boolean = False
                         For Each Version As McVersion In Card.Value
                             If Version.Version.HasFabric Then IsFabricExists = True
                             If Version.Version.HasQuilt Then IsQuiltExists = True
                             If Version.Version.HasLiteLoader Then IsLiteExists = True
                             If Version.Version.HasForge Then IsForgeExists = True
                             If Version.Version.HasNeoForge Then IsNeoForgeExists = True
+                            If Version.Version.HasCleanroom Then IsCleanroomExists = True
                         Next
-                        If If(IsLiteExists, 1, 0) + If(IsForgeExists, 1, 0) + If(IsFabricExists, 1, 0) + If(IsNeoForgeExists, 1, 0) + If(IsQuiltExists, 1, 0) > 1 Then
+                        If If(IsLiteExists, 1, 0) + If(IsForgeExists, 1, 0) + If(IsFabricExists, 1, 0) + If(IsNeoForgeExists, 1, 0) + If(IsQuiltExists, 1, 0) + If(IsCleanroomExists, 1, 0) > 1 Then
                             CardName = "可安装 Mod"
                         ElseIf IsForgeExists Then
                             CardName = "Forge 版本"
                         ElseIf IsNeoForgeExists Then
                             CardName = "NeoForge 版本"
+                        ElseIf IsCleanroomExists Then
+                            CardName = "Cleanroom 版本"
                         ElseIf IsLiteExists Then
                             CardName = "LiteLoader 版本"
                         ElseIf IsQuiltExists Then

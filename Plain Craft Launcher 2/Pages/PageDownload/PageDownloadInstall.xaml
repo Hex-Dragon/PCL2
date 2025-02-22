@@ -82,6 +82,24 @@
                                         Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
                         </Grid>
                     </local:MyCard>
+                    <local:MyCard Title="Cleanroom" Height="40" Margin="0,15,0,0" x:Name="CardCleanroom" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
+                        <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanCleanroom" />
+                        <Grid x:Name="PanCleanroomInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid.RenderTransform>
+                                <TranslateTransform />
+                            </Grid.RenderTransform>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <Image x:Name="ImgCleanroom" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" Source="pack://application:,,,/images/Blocks/Cleanroom.png" />
+                            <TextBlock x:Name="LabCleanroom" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
+                        </Grid>
+                        <Grid x:Name="BtnCleanroomClear" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,32,0" Background="{StaticResource ColorBrushSemiTransparent}">
+                            <Path x:Name="BtnCleanroomClearInner" Height="10" Width="10" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Data="F1 M2,0 L0,2 8,10 0,18 2,20 10,12 18,20 20,18 12,10 20,2 18,0 10,8 2,0Z" />
+                        </Grid>
+                    </local:MyCard>
                     <local:MyCard Title="NeoForge" Height="40" Margin="0,15,0,0" x:Name="CardNeoForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanNeoForge" />
                         <Grid x:Name="PanNeoForgeInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
@@ -236,6 +254,7 @@
             <local:MyLoading Visibility="Collapsed" x:Name="LoadOptiFine" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadForge" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadNeoForge" HasAnimation="False" />
+            <local:MyLoading Visibility="Collapsed" x:Name="LoadCleanroom" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadLiteLoader" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadFabric" HasAnimation="False" />
             <local:MyLoading Visibility="Collapsed" x:Name="LoadFabricApi" HasAnimation="False" />
