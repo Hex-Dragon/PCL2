@@ -87,6 +87,12 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 361 Then '2.10.4 @ 2025.02.22 23:50
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Cleanroom 自动安装与相关支持"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了始终校验 Libraries 的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "支持检查 Quilt Mod 更新"))
+            FeatureCount += 2
+        End If
         If LastVersion < 360 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持多收藏夹，允许批量下载和分享"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "更改 Java Wrapper 启用机制"))
