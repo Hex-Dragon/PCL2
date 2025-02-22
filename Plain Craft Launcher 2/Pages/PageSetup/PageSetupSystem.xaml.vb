@@ -56,6 +56,9 @@
         CheckDebugDelay.Checked = Setup.Get("SystemDebugDelay")
         CheckDebugSkipCopy.Checked = Setup.Get("SystemDebugSkipCopy")
 
+        '网络
+        TextSystemHttpProxy.Text = Setup.Get("SystemHttpProxy")
+        CheckDownloadCert.Checked = Setup.Get("ToolDownloadCert")
     End Sub
 
     '初始化
@@ -66,7 +69,6 @@
             Setup.Reset("ToolDownloadVersion")
             Setup.Reset("ToolDownloadTranslate")
             Setup.Reset("ToolDownloadIgnoreQuilt")
-            Setup.Reset("ToolDownloadCert")
             Setup.Reset("ToolDownloadMod")
             Setup.Reset("ToolModLocalNameStyle")
             Setup.Reset("ToolUpdateRelease")
@@ -79,6 +81,8 @@
             Setup.Reset("SystemSystemCache")
             Setup.Reset("SystemSystemUpdate")
             Setup.Reset("SystemSystemActivity")
+            Setup.Reset("SystemHttpProxy")
+            Setup.Reset("ToolDownloadCert")
 
             Log("[Setup] 已初始化启动器页设置")
             Hint("已初始化启动器页设置！", HintType.Finish, False)
@@ -99,7 +103,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslate.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemActivity.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged
+    Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged, TextSystemHttpProxy.TextChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Text)
     End Sub
 
