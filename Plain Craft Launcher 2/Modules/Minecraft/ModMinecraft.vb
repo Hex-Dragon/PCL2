@@ -772,7 +772,7 @@ ExitDataLoad:
                         Case McVersionState.NeoForge
                             Logo = PathImage & "Blocks/NeoForge.png"
                         Case McVersionState.Cleanroom
-                            Logo = PathImage & "Blocks/Anvil.png"
+                            Logo = PathImage & "Blocks/Cleanroom.png"
                         Case McVersionState.Fabric
                             Logo = PathImage & "Blocks/Fabric.png"
                         Case McVersionState.Quilt

@@ -950,6 +950,7 @@ Public Class FormMain
         DownloadOptiFine = 5
         DownloadForge = 6
         DownloadNeoForge = 7
+        DownloadCleanroom = 16
         DownloadFabric = 8
         DownloadQuilt = 10
         DownloadLiteLoader = 9
