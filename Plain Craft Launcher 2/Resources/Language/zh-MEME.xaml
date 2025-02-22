@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">已取消！</s:String>
     <s:String x:Key="LangDialogBtnOK">好的</s:String>
     <s:String x:Key="LangDialogBtnCancel">算了</s:String>
@@ -98,10 +98,10 @@
     <s:String x:Key="LangThemeUnlockCopyTip8">累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。
 右键打开赞助页面，如果觉得平原合成发射台做得还不错就给龙猫打点钱吧 =w=！</s:String>
     <s:String x:Key="LangThemeUnlockTip8">累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· 反馈一个 Bug，在 Issue 标记为 [已完成] 后回复 Issue 要求解锁（右键打开反馈页面）
-· 向帮助库提交 Pull Request，在龙猫合并后解锁</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· 反馈一个 Bug，在反馈标记为 [完成] 后回复 Issue 要求解锁
-· 向帮助库提交 Pull Request，在龙猫合并后解锁</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip9">· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）
+· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁</s:String>
+    <s:String x:Key="LangThemeUnlockTip9">· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁
+· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">个性化设置项存在异常，已被自动重置</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">重载个性化设置时出错</s:String>
     <s:String x:Key="LangHintThemeSetInit">已初始化个性化设置</s:String>
@@ -257,7 +257,7 @@
     <s:String x:Key="LangSetHomePagePresetPageF">麦恩克拉夫特外壳推荐（作者：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 仪表盘 Lite（作者：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageH">PCL 主页市场（作者：凌云）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageI">PCL 更新日志（作者：Joker2184）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">PCL 新闻速报（作者：Joker2184）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
@@ -579,7 +579,7 @@
     <s:String x:Key="LangDownloadModpackTypeTech">科技</s:String>
     <s:String x:Key="LangDownloadModpackTypeMagic">魔法</s:String>
     <s:String x:Key="LangDownloadModpackTypeAdventure">冒险</s:String>
-    <s:String x:Key="LangDownloadModpackTypeCook">大雜燴</s:String>
+    <s:String x:Key="LangDownloadModpackTypeCook">水槽包/大杂烩</s:String>
     <s:String x:Key="LangDownloadModpackTypeExplore">探索</s:String>
     <s:String x:Key="LangDownloadModpackTypeGame">小游戏</s:String>
     <s:String x:Key="LangDownloadModpackTypeScienceFiction">科幻</s:String>
@@ -633,8 +633,8 @@
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">紫色心形海角</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">追随者海角</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15 周年海角</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">村民救援披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">刌民救援海角</s:String>
+    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室海角</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">莫得海角</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">想玩哪个</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">版本设置</s:String>
@@ -694,7 +694,7 @@
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">运动员名不能为空！</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">运动员名不能包含英文引号！</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">发射设置已被禁用！</s:String>
-    <s:String x:Key="LangPageLoginLegacyLengthLimit">自 1.20.3 起，玩家名至多只能包含 16 个字符！</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">你难道不知道，自 1.20.3 起，玩家名至多只能包含 16 个字符吗？</s:String>
     <s:String x:Key="LangPageLoginMsLogin">登录</s:String>
     <s:String x:Key="LangPageLoginMsBuy">»  购买正版</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">»  前往官网</s:String>
@@ -772,7 +772,7 @@
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">平原合成发射台内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和平原合成发射台的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2024 年 11 月的高级赞助者们！感谢各位对平原合成发射台和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 1 月的高级赞助者们！感谢各位对平原合成发射台和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">V 作者 50</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -1320,7 +1320,10 @@
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">下崽</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">更新日志</s:String>
     <s:String x:Key="LangModMinecraftVersionVanilla">香草</s:String>
-    <s:String x:Key="LangModMinecraftInvalidMcFolder">麦恩克拉夫特文件夹子不让访问：{0}</s:String>
+    <s:String x:Key="LangModMinecraftInvalidMcFolder">失效的麦恩克拉夫特文件夹子：
+{0}
+
+{1}</s:String>
     <s:String x:Key="LangModMinecraftDialogTitleInvalidMcFolder">Minecraft 文件夹失效</s:String>
     <s:String x:Key="LangModMinecraftNotLoaded">该版本未被加载，请向作者反馈此问题</s:String>
     <s:String x:Key="LangModMinecraftUnableGetVersion">平原合成发射台没办法识别该版本的安慕希版本号</s:String>
@@ -1632,7 +1635,7 @@
     <s:String x:Key="LangModModpackTaskGetModDownloadInfo">获取模组下崽信息</s:String>
     <s:String x:Key="LangModModpackExceptionOnlineModDeleted">整活包中的部分模组版本已被模组作者删除，所以安装不下去了，请向整合包作者反馈该问题</s:String>
     <s:String x:Key="LangModModpackTaskInitModDownloadInfo">构造模组下崽信息</s:String>
-    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">你是不是要下崽整活包中的可选文件 {0}？</s:String>
+    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">你是不是要下崽可选文件 {0}？</s:String>
     <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">下崽可选文件</s:String>
     <s:String x:Key="LangModModpackTaskDownloadMod">下崽模组</s:String>
     <s:String x:Key="LangModModpackTaskDownloadModMainLoader">下崽模组（主加载器）</s:String>
@@ -1676,8 +1679,7 @@
     <s:String x:Key="LangModModpackExceptionMMCModpackError">MMC 整活包安装信息存在问题</s:String>
     <s:String x:Key="LangModModpackExceptionMCBBSModpackError">Minecraft 中文论坛整活包安装信息存在问题</s:String>
     <s:String x:Key="LangModModpackDialogTitleAnotherLauncher">换用整活包里提供的发射器？</s:String>
-    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">整活包中似乎自带了发射器，是否换用它继续安装？
-通常推荐这样做，以获得最佳体验。
+    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">整活包里似乎自带了发射器，是否换用它继续安装？
 即将打开：{0}</s:String>
     <s:String x:Key="LangModModpackDialogBtnAnotherLauncher1">换用</s:String>
     <s:String x:Key="LangModModpackDialogBtnAnotherLauncher2">不换用</s:String>
@@ -1831,9 +1833,9 @@
 如果你知道哪个关键词对应哪个 Mod，八成就是它搞的鬼，不然你也可以去瞅瞅错误报告找找原因。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAO">PCL 怀疑名为 {0} 的 Mod 导致了游戏出错，但不能完全确定。
 你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAP">平原合成发射台怀疑以下 Mod 是捣乱的元凶，但也不敢打包票：
+    <s:String x:Key="LangModCrashCrashReasonReasonAP">平原合成发射台怀疑以下 Mod 是捣乱的元凶，但也不敢打包票。
  - {0}
-        
+
 你可以试着一个一个禁用这些 Mod，看看游戏还会不会直接炸裂。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAQ">名为 {0} 的 Mod 导致了游戏出错。
 你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
