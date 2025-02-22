@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Canceled!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
@@ -10,7 +10,7 @@
     <s:String x:Key="LangColon">: </s:String>
     <s:String x:Key="LangSaveAs">Select Save Location</s:String>
     <s:String x:Key="LangSaveAsFile">File</s:String>
-    <s:String x:Key="LangReset">重置</s:String>
+    <s:String x:Key="LangReset">Reset</s:String>
     <s:String x:Key="LangRefresh">Refresh</s:String>
     <s:String x:Key="LangRefreshing">Refreshing...</s:String>
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL does not have access permission to {0}</s:String>
@@ -632,8 +632,8 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">Purple Heart</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">Follower's</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15th Year</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">Villager Rescue Cape</s:String>
-    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang Office</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">MC Experience Cape</s:String>
+    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang Office Cape</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">None</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">Selection</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Properties</s:String>
@@ -693,7 +693,7 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">Username cannot be empty!</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">Username cannot contain quotation marks!</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">The launch options have been disabled!</s:String>
-    <s:String x:Key="LangPageLoginLegacyLengthLimit">Since the version 1.20.3, username can contain a maximum of 16 characters!</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">Starting from version 1.20.3, username can contain a maximum of 16 characters!</s:String>
     <s:String x:Key="LangPageLoginMsLogin">Login</s:String>
     <s:String x:Key="LangPageLoginMsBuy">» Purchase</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">» Website</s:String>
@@ -769,7 +769,7 @@ Original error message: </s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">Everyone in PCL QQ Groups</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">Thanks to all members of the groups for their support and encouragement for me and PCL!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">Sponsors</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from December 2024! Thanks for your support for PCL!</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">The following are the senior sponsors from January 2025! Thanks for your support for PCL!</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">Generate Unlock Code</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">Sponsor</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">Copy Identify Code</s:String>
@@ -1318,8 +1318,11 @@ Please check whether the event type is filled in correctly and whether the PCL i
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">Download</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">Changelog</s:String>
     <s:String x:Key="LangModMinecraftVersionVanilla">Vanilla</s:String>
-    <s:String x:Key="LangModMinecraftInvalidMcFolder">Invalid Minecraft folder: {0}</s:String>
-    <s:String x:Key="LangModMinecraftDialogTitleInvalidMcFolder">Minecraft 文件夹失效</s:String>
+    <s:String x:Key="LangModMinecraftInvalidMcFolder">Invalid Minecraft folder: 
+{0}
+
+{1}</s:String>
+    <s:String x:Key="LangModMinecraftDialogTitleInvalidMcFolder">Minecraft folder is invalid.</s:String>
     <s:String x:Key="LangModMinecraftNotLoaded">This instance has not been loaded. Please report this issue to the developer.</s:String>
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL is unable to identify the Minecraft version number of this instance.</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">Unable to identify: {0}</s:String>
@@ -1329,7 +1332,7 @@ Please check whether the event type is filled in correctly and whether the PCL i
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">Failed to initialize the instance JSON. ({0})</s:String>
     <s:String x:Key="LangModMinecraftVersionPre">Pre-release</s:String>
     <s:String x:Key="LangModMinecraftVersionRC">Release Candidate</s:String>
-    <s:String x:Key="LangModMinecraftVersionSnapshot">快照</s:String>
+    <s:String x:Key="LangModMinecraftVersionSnapshot">Snapshot</s:String>
     <s:String x:Key="LangModMinecraftVersionExperimental">Experimental Snapshot</s:String>
     <s:String x:Key="LangModMinecraftVersionOld">Before Release</s:String>
     <s:String x:Key="LangModMinecraftUnknownError">An unknown error occurred. Please report this issue to the developer.</s:String>
@@ -1629,7 +1632,7 @@ If that option is not available, please select "Set password", and log in after 
     <s:String x:Key="LangModModpackTaskGetModDownloadInfo">Obtain Mods Download Information</s:String>
     <s:String x:Key="LangModModpackExceptionOnlineModDeleted">Unable to install the modpack because some required mods have been removed by the author. Please contact the modpack author to update the mods in the modpack.</s:String>
     <s:String x:Key="LangModModpackTaskInitModDownloadInfo">Prepare Mods Download Information</s:String>
-    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">Do you want to download optional files {0} from the modpack?</s:String>
+    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">Do you want to download optional files {0}?</s:String>
     <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">Download Optional Files</s:String>
     <s:String x:Key="LangModModpackTaskDownloadMod">Download Mods</s:String>
     <s:String x:Key="LangModModpackTaskDownloadModMainLoader">Download Mods (Main Loader)</s:String>
@@ -1674,10 +1677,9 @@ If that option is not available, please select "Set password", and log in after 
     <s:String x:Key="LangModModpackExceptionMCBBSModpackError">An error occurred in the MCBBS modpack installation information.</s:String>
     <s:String x:Key="LangModModpackDialogTitleAnotherLauncher">Use the Modpack's Launcher?</s:String>
     <s:String x:Key="LangModModpackDialogContentAnotherLauncher">The modpack appears to include a launcher. Would you like to switch to it to continue the installation?  
-This is usually recommended for the best experience.  
 About to open: {0}</s:String>
-    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher1">换用</s:String>
-    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher2">不换用</s:String>
+    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher1">Switch</s:String>
+    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher2">Do Not Switch</s:String>
     <s:String x:Key="LangModModpackExceptionNoModpackFound">Unable to find a valid file structure. This may not be a Minecraft archive file.</s:String>
     <s:String x:Key="LangModWatcherMcCrashed">Minecraft crash detected, analyzing the error...</s:String>
     <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">Renaming a subkey that contains subkeys is unsupported: {0}.</s:String>
@@ -1993,86 +1995,90 @@ Alternatively, you can access {1} on another device and enter the code.</s:Strin
     <s:String x:Key="LangModExceptionRequestFailed">Failed to request network. ({0})</s:String>
     <s:String x:Key="LangModExceptionReturnErrorCode">Error return from server.（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknownFileStatus">Unknown file status: {0}</s:String>
-    <s:String x:Key="LangPageVersionExportPackName">Pack Name</s:String>
-    <s:String x:Key="LangPageVersionExportPackVersion">Pack Version</s:String>
-    <s:String x:Key="LangPageVersionExportGameInstance">Game Instance</s:String>
-    <s:String x:Key="LangPageVersionExportGameSettings">Game Instance Settings</s:String>
-    <s:String x:Key="LangPageVersionExportGameSettingsDesc">Key bindings, volume, video settings, etc.</s:String>
-    <s:String x:Key="LangPageVersionExportGameProfile">Game Instance Personal Information</s:String>
-    <s:String x:Key="LangPageVersionExportGameProfileDesc">Command history, saved quickbars, etc.</s:String>
-    <s:String x:Key="LangPageVersionExportOptiFineSettings">OptiFine Settings</s:String>
-    <s:String x:Key="LangPageVersionExportMod">Mod</s:String>
-    <s:String x:Key="LangPageVersionExportModDesc">Mod</s:String>
-    <s:String x:Key="LangPageVersionExportModDisabled">Disabled Mods</s:String>
-    <s:String x:Key="LangPageVersionExportPackAddons">Pack Important Data</s:String>
-    <s:String x:Key="LangPageVersionExportPackAddonsDesc">Script files, built-in resource packs, data packs, etc.</s:String>
-    <s:String x:Key="LangPageVersionExportModSettings">Mod Settings</s:String>
-    <s:String x:Key="LangPageVersionExportMapRecord">Mapped Records</s:String>
-    <s:String x:Key="LangPageVersionExportMapRecordDesc">For map mods, existing records in single-player archives, server records, waypoints, etc.</s:String>
-    <s:String x:Key="LangPageVersionExportJEIProfile">JEI Personal Information</s:String>
-    <s:String x:Key="LangPageVersionExportJEIProfileDesc">Item favorites, etc.</s:String>
-    <s:String x:Key="LangPageVersionExportEMIProfile">EMI Personal Information</s:String>
-    <s:String x:Key="LangPageVersionExportEMIProfileDesc">Item favorites, default recipes, synthesis history records, etc.</s:String>
-    <s:String x:Key="LangPageVersionExportPatchouliProfile">Patchouli Handbook Personal Information</s:String>
-    <s:String x:Key="LangPageVersionExportPatchouliProfileDesc">Tutorial book reading records, bookmarks, reading history records, etc.</s:String>
-    <s:String x:Key="LangPageVersionExportResourcepacks">Resource Packs</s:String>
-    <s:String x:Key="LangPageVersionExportResourcepacksDesc">Texture packs/material packs</s:String>
-    <s:String x:Key="LangPageVersionExportShaderpacks">Shader Packs</s:String>
+    <s:String x:Key="LangPageVersionExportPackName">Modpack name</s:String>
+    <s:String x:Key="LangPageVersionExportPackVersion">Modpack version</s:String>
+    <s:String x:Key="LangPageVersionExportGameInstance">Game instance</s:String>
+    <s:String x:Key="LangPageVersionExportGameSettings">Game settings</s:String>
+    <s:String x:Key="LangPageVersionExportGameSettingsDesc">Key bindings, volume, video settings...</s:String>
+    <s:String x:Key="LangPageVersionExportGameProfile">Personal information</s:String>
+    <s:String x:Key="LangPageVersionExportGameProfileDesc">Command history, saved hotbars...</s:String>
+    <s:String x:Key="LangPageVersionExportOptiFineSettings">OptiFine settings</s:String>
+    <s:String x:Key="LangPageVersionExportMod">Mods</s:String>
+    <s:String x:Key="LangPageVersionExportModDesc"></s:String>
+    <s:String x:Key="LangPageVersionExportModDisabled">Disabled mods</s:String>
+    <s:String x:Key="LangPageVersionExportPackAddons">Important data</s:String>
+    <s:String x:Key="LangPageVersionExportPackAddonsDesc">Script files, built-in resource packs, data packs...</s:String>
+    <s:String x:Key="LangPageVersionExportModSettings">Mod configs</s:String>
+    <s:String x:Key="LangPageVersionExportMapRecord">Map records</s:String>
+    <s:String x:Key="LangPageVersionExportMapRecordDesc">Map mods's saved maps and waypoints for saves and servers...</s:String>
+    <s:String x:Key="LangPageVersionExportJEIProfile">JEI personal information</s:String>
+    <s:String x:Key="LangPageVersionExportJEIProfileDesc">Item favorites...</s:String>
+    <s:String x:Key="LangPageVersionExportEMIProfile">EMI personal information</s:String>
+    <s:String x:Key="LangPageVersionExportEMIProfileDesc">Item favorites, default recipes, crafting histories...</s:String>
+    <s:String x:Key="LangPageVersionExportPatchouliProfile">Patchouli personal information</s:String>
+    <s:String x:Key="LangPageVersionExportPatchouliProfileDesc">Reading records, bookmarks, history records...</s:String>
+    <s:String x:Key="LangPageVersionExportResourcepacks">Resource packs</s:String>
+    <s:String x:Key="LangPageVersionExportResourcepacksDesc">Texture packs</s:String>
+    <s:String x:Key="LangPageVersionExportShaderpacks">Shader packs</s:String>
     <s:String x:Key="LangPageVersionExportScreenshot">Screenshots</s:String>
-    <s:String x:Key="LangPageVersionExportSchematics">Exported Structures</s:String>
-    <s:String x:Key="LangPageVersionExportSchematicsDesc">schematics folder</s:String>
+    <s:String x:Key="LangPageVersionExportSchematics">Exported structures</s:String>
+    <s:String x:Key="LangPageVersionExportSchematicsDesc">Schematics folder</s:String>
     <s:String x:Key="LangPageVersionExportReplay">Replay</s:String>
-    <s:String x:Key="LangPageVersionExportReplayDesc">Replay Mod video files</s:String>
-    <s:String x:Key="LangPageVersionExportWorld">Single-player Game Archives</s:String>
-    <s:String x:Key="LangPageVersionExportWorldDesc">Worlds/Maps</s:String>
-    <s:String x:Key="LangPageVersionExportServerList">Multiplayer Game Server List</s:String>
-    <s:String x:Key="LangPageVersionExportPCL">PCL Launcher Program</s:String>
-    <s:String x:Key="LangPageVersionExportPCLDesc">Pack the official version of PCL to allow players without a launcher to install the pack</s:String>
-    <s:String x:Key="LangPageVersionExportPCLProfile">PCL Personal Content</s:String>
-    <s:String x:Key="LangPageVersionExportPCLProfileDesc">Function hiding settings, homepage, background music and images, etc.</s:String>
-    <s:String x:Key="LangPageVersionExportNoOptifine">Due to Modrinth pack specifications, OptiFine is not included in the exported pack.</s:String>
+    <s:String x:Key="LangPageVersionExportReplayDesc">Replay Mod videos</s:String>
+    <s:String x:Key="LangPageVersionExportWorld">Saves</s:String>
+    <s:String x:Key="LangPageVersionExportWorldDesc">Worlds / Maps</s:String>
+    <s:String x:Key="LangPageVersionExportServerList">Server List</s:String>
+    <s:String x:Key="LangPageVersionExportPCL">PCL Launcher Executable</s:String>
+    <s:String x:Key="LangPageVersionExportPCLDesc">Package the PCL release to allow players without a launcher to install</s:String>
+    <s:String x:Key="LangPageVersionExportPCLProfile">Personalization Content</s:String>
+    <s:String x:Key="LangPageVersionExportPCLProfileDesc">Feature hiding settings, homepage, music and background</s:String>
+    <s:String x:Key="LangPageVersionExportNoOptifine">Due to Modrinth modpack specifications, the exported modpack currently does not include OptiFine.</s:String>
     <s:String x:Key="LangPageVersionExportAdvancedOptions">Advanced Options</s:String>
-    <s:String x:Key="LangPageVersionExportArchiveMode">Pack resource files to avoid downloading when importing</s:String>
-    <s:String x:Key="LangPageVersionExportArchiveModeDesc">Place Mod, resource pack, and shader pack files directly into the pack so they don't need to be downloaded online when imported. It is recommended to only check this option if you cannot stably connect to CurseForge or Modrinth.</s:String>
-    <s:String x:Key="LangPageVersionExportArchiveModeHint">It is recommended to only pack resource files if you cannot stably connect to CurseForge or Modrinth. Secondary distribution may violate the terms of use, so please do not publicly release packs containing resource files!</s:String>
-    <s:String x:Key="LangPageVersionExportModrinthStandard">Modrinth Upload Mode</s:String>
-    <s:String x:Key="LangPageVersionExportModrinthStandardDesc">If you want to pack and upload to Modrinth, checking this option will generate a pack file that fully complies with Modrinth requirements. Due to Modrinth requirements, resources that can only be downloaded from CurseForge will not be downloadable online and will be placed directly into the pack. Additionally, PCL launcher files cannot be included in the pack after checking this option.</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigDesc">Through the configuration file, you can precisely control the scope of the exported content or save the current configuration for later use.</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigRead">Read Configuration</s:String>
+    <s:String x:Key="LangPageVersionExportArchiveMode">Package resource files to avoid downloading</s:String>
+    <s:String x:Key="LangPageVersionExportArchiveModeDesc">Package the files of mods, resource packs, and shader packs directly in the modpack, so they do not need to be downloaded online during import.
+It is recommended to select this option only if you cannot stably connect to CurseForge or Modrinth.</s:String>
+    <s:String x:Key="LangPageVersionExportArchiveModeHint">It is recommended to package resource files only when you cannot stably connect to CurseForge or Modrinth.
+Redistribution may violate the usage agreement. Please avoid publicly releasing modpacks that contain resource files!</s:String>
+    <s:String x:Key="LangPageVersionExportModrinthStandard">Modrinth mode</s:String>
+    <s:String x:Key="LangPageVersionExportModrinthStandardDesc">If you want to package and upload to Modrinth, selecting this option will generate a modpack file that fully meets Modrinth's requirements.
+Due to Modrinth's policies, resources that can only be downloaded from CurseForge will not be downloaded online and will be directly included in the modpack.
+Additionally, when this option is selected, PCL launcher files cannot be included in the modpack.</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigDesc">With the configuration file, you can precisely control the scope of the export or save the current configuration for future use.</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigRead">Load Configuration</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigSave">Save Configuration</s:String>
-    <s:String x:Key="LangPageVersionExportModpackGuide">Pack Creation Guide</s:String>
-    <s:String x:Key="LangPageVersionExportStart">Start Export</s:String>
+    <s:String x:Key="LangPageVersionExportModpackGuide">Creation Guide</s:String>
+    <s:String x:Key="LangPageVersionExportStart">Export</s:String>
     <s:String x:Key="LangPageVersionExportContentTitle">Export Content List</s:String>
-    <s:String x:Key="LangPageVersionExportContentTitleReadFromFile">Read from configuration file</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigSaveAsFormat">Pack Export Configuration (*.txt)|*.txt</s:String>
-    <s:String x:Key="LangPageVersionExportHintSavedExportConfig">Saved configuration file: {0}</s:String>
-    <s:String x:Key="LangPageVersionExportSaveExportConfigFail">Failed to save configuration</s:String>
-    <s:String x:Key="LangPageVersionExportSelectConfigSave">Save Configuration File</s:String>
-    <s:String x:Key="LangPageVersionExportSelectSavedConfig">Select Configuration File</s:String>
-    <s:String x:Key="LangPageVersionExportSelectConfigSaveAsFormat">Pack Export Configuration (*.txt)|*.txt</s:String>
-    <s:String x:Key="LangPageVersionExportHintReadExportConfig">Read configuration file: {0}</s:String>
-    <s:String x:Key="LangPageVersionExportReadExportConfigFail">Failed to read configuration</s:String>
-    <s:String x:Key="LangPageVersionExportTaskName">Export Pack: {0}</s:String>
-    <s:String x:Key="LangPageVersionExportDialogTitleConfigInvalid">Cannot use the export path specified in the configuration file</s:String>
+    <s:String x:Key="LangPageVersionExportContentTitleReadFromFile">Load from the configuration file</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigSaveAsFormat">Modpack Export Configuration (*.txt)|*.txt</s:String>
+    <s:String x:Key="LangPageVersionExportHintSavedExportConfig">Configuration file saved: {0}</s:String>
+    <s:String x:Key="LangPageVersionExportSaveExportConfigFail">Failed to save the configuration.</s:String>
+    <s:String x:Key="LangPageVersionExportSelectConfigSave">Save configuration file</s:String>
+    <s:String x:Key="LangPageVersionExportSelectSavedConfig">Select configuration file</s:String>
+    <s:String x:Key="LangPageVersionExportSelectConfigSaveAsFormat">Modpack Export Configuration (*.txt)|*.txt</s:String>
+    <s:String x:Key="LangPageVersionExportHintReadExportConfig">Configuration file loaded: {0}</s:String>
+    <s:String x:Key="LangPageVersionExportReadExportConfigFail">Failed to read the configuration.</s:String>
+    <s:String x:Key="LangPageVersionExportTaskName">Export Modpack: {0}</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleConfigInvalid">Unable to use the export path specified in the configuration file.</s:String>
     <s:String x:Key="LangPageVersionExportDialogContentConfigInvalid">Specified path: {0}
 
 {1}</s:String>
-    <s:String x:Key="LangPageVersionExportSelectExportPath">Select Export Location</s:String>
-    <s:String x:Key="LangPageVersionExportSelectExportPathSaveAsFormat">Pack File (*{0})|*{1}</s:String>
-    <s:String x:Key="LangPageVersionExportTaskDownloadPCL">Download PCL Official Version</s:String>
-    <s:String x:Key="LangPageVersionExportTaskCopyFiles">Copy Export Content</s:String>
-    <s:String x:Key="LangPageVersionExportHintFolderInConfigNotFound">Folder specified in the configuration file not found: {0}</s:String>
-    <s:String x:Key="LangPageVersionExportHintFileInConfigNotFound">File specified in the configuration file not found: {0}</s:String>
-    <s:String x:Key="LangPageVersionExportTaskGetOnlineFileInfo">Get Online File Information</s:String>
-    <s:String x:Key="LangPageVersionExportDialogContentSomeGetFail">Failed to obtain online information for some files, do you want to continue exporting?
+    <s:String x:Key="LangPageVersionExportSelectExportPath">Select export location</s:String>
+    <s:String x:Key="LangPageVersionExportSelectExportPathSaveAsFormat">Modpack File (*{0})|*{1}</s:String>
+    <s:String x:Key="LangPageVersionExportTaskDownloadPCL">Download PCL Official</s:String>
+    <s:String x:Key="LangPageVersionExportTaskCopyFiles">Copy Export Contents</s:String>
+    <s:String x:Key="LangPageVersionExportHintFolderInConfigNotFound">The specified folder in the configuration file was not found: {0}</s:String>
+    <s:String x:Key="LangPageVersionExportHintFileInConfigNotFound">The specified single file in the configuration file was not found: {0}</s:String>
+    <s:String x:Key="LangPageVersionExportTaskGetOnlineFileInfo">Obtain Online File Information</s:String>
+    <s:String x:Key="LangPageVersionExportDialogContentSomeGetFail">Failed to obtain some file information online. Do you want to continue exporting?
 
-If you continue, files that cannot be obtained will be packed directly.
-Since secondary distribution may violate the terms of use, please do not publicly release the exported pack!</s:String>
-    <s:String x:Key="LangPageVersionExportDialogTitleSomeGetFail">Failed to obtain some file information</s:String>
-    <s:String x:Key="LangPageVersionExportDialogContentAllGetFail">Failed to obtain online information for some files, do you want to continue exporting?
+If continue, files with unavailable information will be directly packaged.
+Since redistribution may violate the license, please avoid publicly sharing the exported modpack!</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleSomeGetFail">Failed to obtain some file information.</s:String>
+    <s:String x:Key="LangPageVersionExportDialogContentAllGetFail">Failed to obtain some file information online. Do you want to continue exporting?
 
-If you continue, all files will be packed directly.
-Since secondary distribution may violate the terms of use, please do not publicly release the exported pack!</s:String>
-    <s:String x:Key="LangPageVersionExportDialogTitleAllGetFail">Failed to obtain file information</s:String>
+If continue, all files will be directly packaged.
+Since redistribution may violate the license, please avoid publicly sharing the exported modpack!</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleAllGetFail">Failed to obtain file information.</s:String>
     <s:String x:Key="LangPageVersionExportGenerateArchive">Generate Archive</s:String>
 </ResourceDictionary>
