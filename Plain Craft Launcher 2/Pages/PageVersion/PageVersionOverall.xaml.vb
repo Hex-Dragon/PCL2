@@ -329,7 +329,7 @@
                 Exit Sub
             End If
             '确认操作
-            If MyMsgBox("你确定要重置版本 " & PageVersionLeft.Version.Name & " 吗？" & vbCrLf & "PCL 将会尝试重新从互联网获取此版本的资源文件信息，并重新执行自动安装。", "版本重置确认", "确认", "取消") = 2 Then Exit Sub
+            If MyMsgBox("你确定要重置版本 " & PageVersionLeft.Version.Name & " 吗？" & vbCrLf & "PCL 将会尝试重新从互联网获取此版本的资源文件信息，并重新执行自动安装。" & vbCrLf & vbCrLf & "本功能尚处于测试阶段，可能不稳定。", "版本重置确认", "确认", "取消") = 2 Then Exit Sub
 
             '备份版本核心文件
             CopyFile(PageVersionLeft.Version.Path + PageVersionLeft.Version.Name + ".json", PageVersionLeft.Version.Path + "PCLInstallBackups\" + PageVersionLeft.Version.Name + ".json")
@@ -341,7 +341,8 @@
                 .MinecraftName = CurrentVersion.McName,
                 .OptiFineEntry = If(CurrentVersion.HasOptiFine, New DlOptiFineListEntry With {.Inherit = CurrentVersion.McName, .NameDisplay = CurrentVersion.McName + " " + CurrentVersion.OptiFineVersion}, Nothing),
                 .ForgeEntry = If(CurrentVersion.HasForge, New DlForgeVersionEntry(CurrentVersion.ForgeVersion, Nothing, Inherit:=CurrentVersion.McName) With {.Category = "installer"}, Nothing),
-                .NeoForgeEntry = If(CurrentVersion.HasNeoForge, New DlNeoForgeListEntry(CurrentVersion.NeoForgeVersion) With {.IsNeoForge = True, .VersionName = CurrentVersion.NeoForgeVersion, .Inherit = CurrentVersion.McName}, Nothing),
+                .NeoForgeEntry = If(CurrentVersion.HasNeoForge, New DlNeoForgeListEntry(CurrentVersion.NeoForgeVersion) With {.ForgeType = 1, .VersionName = CurrentVersion.NeoForgeVersion, .Inherit = CurrentVersion.McName}, Nothing),
+                .CleanroomEntry = If(CurrentVersion.HasCleanroom, New DlCleanroomListEntry(CurrentVersion.CleanroomVersion) With {.ForgeType = 2, .VersionName = CurrentVersion.CleanroomVersion, .Inherit = CurrentVersion.McName}, Nothing),
                 .FabricVersion = If(CurrentVersion.HasFabric, CurrentVersion.FabricVersion, Nothing),
                 .QuiltVersion = If(CurrentVersion.HasQuilt, CurrentVersion.QuiltVersion, Nothing),
                 .LiteLoaderEntry = If(CurrentVersion.HasLiteLoader, New DlLiteLoaderListEntry With {.Inherit = CurrentVersion.McName}, Nothing)
