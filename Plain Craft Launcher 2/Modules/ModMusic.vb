@@ -1,4 +1,7 @@
-﻿Public Module ModMusic
+﻿Imports NAudio.CoreAudioApi
+Imports NAudio.CoreAudioApi.Interfaces
+
+Public Module ModMusic
 
 #Region "播放列表"
 
@@ -66,44 +69,44 @@
     ''' </summary>
     Private Sub MusicRefreshUI()
         RunInUi(
-        Sub()
-            Try
+            Sub()
+                Try
 
-                If Not MusicAllList.Any() Then
-                    '无背景音乐
-                    FrmMain.BtnExtraMusic.Show = False
-                Else
-                    '有背景音乐
-                    FrmMain.BtnExtraMusic.Show = True
-                    Dim ToolTipText As String
-                    If MusicState = MusicStates.Pause Then
-                        FrmMain.BtnExtraMusic.Logo = Logo.IconPlay
-                        FrmMain.BtnExtraMusic.LogoScale = 0.8
-                        ToolTipText = "已暂停：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
-                        If MusicAllList.Count > 1 Then
-                            ToolTipText += vbCrLf & "左键恢复播放，右键播放下一曲。"
-                        Else
-                            ToolTipText += vbCrLf & "左键恢复播放，右键重新从头播放。"
-                        End If
+                    If Not MusicAllList.Any() Then
+                        '无背景音乐
+                        FrmMain.BtnExtraMusic.Show = False
                     Else
-                        FrmMain.BtnExtraMusic.Logo = Logo.IconMusic
-                        FrmMain.BtnExtraMusic.LogoScale = 1
-                        ToolTipText = "正在播放：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
-                        If MusicAllList.Count > 1 Then
-                            ToolTipText += vbCrLf & "左键暂停，右键播放下一曲。"
+                        '有背景音乐
+                        FrmMain.BtnExtraMusic.Show = True
+                        Dim ToolTipText As String
+                        If MusicState = MusicStates.Pause Then
+                            FrmMain.BtnExtraMusic.Logo = Logo.IconPlay
+                            FrmMain.BtnExtraMusic.LogoScale = 0.8
+                            ToolTipText = "已暂停：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
+                            If MusicAllList.Count > 1 Then
+                                ToolTipText += vbCrLf & "左键恢复播放，右键播放下一曲。"
+                            Else
+                                ToolTipText += vbCrLf & "左键恢复播放，右键重新从头播放。"
+                            End If
                         Else
-                            ToolTipText += vbCrLf & "左键暂停，右键重新从头播放。"
+                            FrmMain.BtnExtraMusic.Logo = Logo.IconMusic
+                            FrmMain.BtnExtraMusic.LogoScale = 1
+                            ToolTipText = "正在播放：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
+                            If MusicAllList.Count > 1 Then
+                                ToolTipText += vbCrLf & "左键暂停，右键播放下一曲。"
+                            Else
+                                ToolTipText += vbCrLf & "左键暂停，右键重新从头播放。"
+                            End If
                         End If
+                        FrmMain.BtnExtraMusic.ToolTip = ToolTipText
+                        ToolTipService.SetVerticalOffset(FrmMain.BtnExtraMusic, If(ToolTipText.Contains(vbLf), 10, 16))
                     End If
-                    FrmMain.BtnExtraMusic.ToolTip = ToolTipText
-                    ToolTipService.SetVerticalOffset(FrmMain.BtnExtraMusic, If(ToolTipText.Contains(vbLf), 10, 16))
-                End If
-                If FrmSetupUI IsNot Nothing Then FrmSetupUI.MusicRefreshUI()
+                    If FrmSetupUI IsNot Nothing Then FrmSetupUI.MusicRefreshUI()
 
-            Catch ex As Exception
-                Log(ex, "刷新背景音乐 UI 失败", LogLevel.Feedback)
-            End Try
-        End Sub)
+                Catch ex As Exception
+                    Log(ex, "刷新背景音乐 UI 失败", LogLevel.Feedback)
+                End Try
+            End Sub)
     End Sub
 
     ''' <summary>
@@ -223,11 +226,11 @@
     Public Function MusicPause() As Boolean
         If MusicState = MusicStates.Play Then
             RunInThread(
-            Sub()
-                Log("[Music] 已暂停播放")
-                MusicNAudio?.Pause()
-                MusicRefreshUI()
-            End Sub)
+                Sub()
+                    Log("[Music] 已暂停播放")
+                    MusicNAudio?.Pause()
+                    MusicRefreshUI()
+                End Sub)
             Return True
         Else
             Log($"[Music] 无需暂停播放，当前状态为 {MusicState}")
@@ -243,11 +246,11 @@
             Return False
         Else
             RunInThread(
-            Sub()
-                Log("[Music] 已恢复播放")
-                MusicNAudio?.Play()
-                MusicRefreshUI()
-            End Sub)
+                Sub()
+                    Log("[Music] 已恢复播放")
+                    MusicNAudio?.Play()
+                    MusicRefreshUI()
+                End Sub)
             Return True
         End If
     End Function
@@ -262,6 +265,8 @@
     ''' 当前播放的音乐地址。
     ''' </summary>
     Private MusicCurrent As String = ""
+
+    Dim deviceHandler As New AudioDeviceChangeHandler
 
     ''' <summary>
     ''' 在 MusicUuid 不变的前提下，持续播放某地址的音乐，且在播放结束后随机播放下一曲。
@@ -303,7 +308,7 @@
             If ex.Message.Contains("Got a frame at sample rate") OrElse ex.Message.Contains("does not support changes to") Then
                 Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL 不支持播放音频属性在中途发生变化的音乐", HintType.Critical)
             ElseIf Not (MusicCurrent.EndsWithF(".wav", True) OrElse MusicCurrent.EndsWithF(".mp3", True) OrElse MusicCurrent.EndsWithF(".flac", True)) OrElse
-                ex.Message.Contains("0xC00D36C4") Then '#5096：不支持给定的 URL 的字节流类型。 (异常来自 HRESULT:0xC00D36C4)
+                    ex.Message.Contains("0xC00D36C4") Then '#5096：不支持给定的 URL 的字节流类型。 (异常来自 HRESULT:0xC00D36C4)
                 Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试", HintType.Critical)
             Else
                 Log(ex, "播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）", LogLevel.Hint)
@@ -325,5 +330,85 @@
             MusicRefreshUI()
         End Try
     End Sub
+
+    Public Class AudioDeviceChangeHandler
+        Implements Interfaces.IMMNotificationClient
+        Private deviceWatcher As MMDeviceEnumerator
+        Private callback As IMMNotificationClient
+
+        Public Sub New()
+            ' 初始化音频设备枚举器
+            deviceWatcher = New MMDeviceEnumerator()
+            ' 创建设备通知回调对象
+            callback = New DeviceNotificationClient(Me)
+            ' 注册回调以接收音频设备更改通知
+            deviceWatcher.RegisterEndpointNotificationCallback(callback)
+        End Sub
+
+        ' 实现IMMNotificationClient接口的方法以处理设备更改事件
+        Public Sub OnDefaultDeviceChanged(dataFlow As DataFlow, role As Role, defaultDeviceId As String) Implements IMMNotificationClient.OnDefaultDeviceChanged
+            ' 处理默认音频设备更改事件
+            If MusicNAudio Is Nothing Then Exit Sub
+            CType(MusicNAudio, NAudio.Wave.WaveOut).DeviceNumber = 0
+        End Sub
+
+        Public Sub OnDeviceAdded(deviceId As String) Implements IMMNotificationClient.OnDeviceAdded
+            ' 处理音频设备添加事件
+            If MusicNAudio Is Nothing Then Exit Sub
+            CType(MusicNAudio, NAudio.Wave.WaveOut).DeviceNumber = 0
+        End Sub
+
+        Public Sub OnDeviceRemoved(deviceId As String) Implements IMMNotificationClient.OnDeviceRemoved
+            ' 处理音频设备移除事件
+            If MusicNAudio Is Nothing Then Exit Sub
+            CType(MusicNAudio, NAudio.Wave.WaveOut).DeviceNumber = 0
+        End Sub
+
+        Public Sub OnDeviceStateChanged(deviceId As String, newState As DeviceState) Implements IMMNotificationClient.OnDeviceStateChanged
+            ' 处理音频设备状态更改事件
+        End Sub
+
+        Public Sub OnPropertyValueChanged(deviceId As String, key As PropertyKey) Implements IMMNotificationClient.OnPropertyValueChanged
+            ' 处理音频设备属性值更改事件
+        End Sub
+    End Class
+
+    ' 实现IMMNotificationClient接口的类
+    Friend Class DeviceNotificationClient
+        Implements IMMNotificationClient
+
+        Private container As AudioDeviceChangeHandler
+
+        Public Sub New(container As AudioDeviceChangeHandler)
+            Me.container = container
+        End Sub
+
+        Public Sub OnDefaultDeviceChanged(dataFlow As DataFlow, role As Role, defaultDeviceId As String) Implements IMMNotificationClient.OnDefaultDeviceChanged
+            container.OnDefaultDeviceChanged(dataFlow, role, defaultDeviceId)
+            ' 切换到系统默认输出设备
+            If MusicNAudio IsNot Nothing Then
+                Dim target As NAudio.Wave.WaveOut = MusicNAudio
+                target.Stop()
+                target.DeviceNumber = 0
+                target.Resume()
+            End If
+        End Sub
+
+        Public Sub OnDeviceAdded(deviceId As String) Implements IMMNotificationClient.OnDeviceAdded
+            container.OnDeviceAdded(deviceId)
+        End Sub
+
+        Public Sub OnDeviceRemoved(deviceId As String) Implements IMMNotificationClient.OnDeviceRemoved
+            container.OnDeviceRemoved(deviceId)
+        End Sub
+
+        Public Sub OnDeviceStateChanged(deviceId As String, newState As DeviceState) Implements IMMNotificationClient.OnDeviceStateChanged
+            container.OnDeviceStateChanged(deviceId, newState)
+        End Sub
+
+        Public Sub OnPropertyValueChanged(deviceId As String, key As PropertyKey) Implements IMMNotificationClient.OnPropertyValueChanged
+            container.OnPropertyValueChanged(deviceId, key)
+        End Sub
+    End Class
 
 End Module
