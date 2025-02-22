@@ -4,6 +4,7 @@ Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
 Imports System.Text.RegularExpressions
+Imports System.Threading.Tasks
 Imports System.Windows.Markup
 Imports Newtonsoft.Json
 
@@ -12,27 +13,26 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.10.1" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.10.1." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.10.3" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.10.3." & VersionCodeString '标准格式的四段式版本号
     Public Const CommitHash As String = "native" 'Commit Hash，由 GitHub Workflow 自动替换
     Public CommitHashShort As String = If(CommitHash = "native", "native", CommitHash.Substring(0, 7)) 'Commit Hash，取前 7 位
     Public Const UpstreamVersion As String = "2.8.13" '上游版本
-#If RELEASE Then
-    Public Const VersionCode As Integer = 356 'Release
-#Else
-    Public Const VersionCode As Integer = 356 'Snapshot
-#End If
+    Public Const VersionCode As Integer = 360 '内部版本号
+    Public Const VersionCodeString As String = "360" '内部版本号的字符串形式
     '自动生成的版本信息
-    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
 #If RELEASE Then
-    Public Const VersionBranchName As String = "CE"
+    Public Const VersionBranchName As String = "Slow Ring"
     Public Const VersionBranchCode As String = "0"
+    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
 #ElseIf BETA Then
-    Public Const VersionBranchName As String = "CE Preview"
+    Public Const VersionBranchName As String = "Fast Ring"
     Public Const VersionBranchCode As String = "50"
+    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName & "." & VersionCodeString
 #Else
-    Public Const VersionBranchName As String = "CE Debug"
+    Public Const VersionBranchName As String = "Debug"
     Public Const VersionBranchCode As String = "100"
+    Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName & "." & VersionCodeString
 #End If
 
     ''' <summary>
@@ -79,6 +79,10 @@ Public Module ModBase
     ''' 是否为 32 位系统。
     ''' </summary>
     Public Is32BitSystem As Boolean = Not Environment.Is64BitOperatingSystem
+    ''' <summary>
+    ''' 是否为 ARM64 架构。
+    ''' </summary>
+    Public IsArm64System As Boolean = Runtime.InteropServices.RuntimeInformation.OSArchitecture = Runtime.InteropServices.Architecture.Arm64
     ''' <summary>
     ''' 是否使用 GBK 编码。
     ''' </summary>
@@ -193,6 +197,18 @@ Public Module ModBase
         ''' 图标，播放，0.8x
         ''' </summary>
         Public Const IconPlay As String = "M803.904 463.936a55.168 55.168 0 0 1 0 96.128l-463.616 264.448C302.848 845.888 256 819.136 256 776.448V247.616c0-42.752 46.848-69.44 84.288-48.064l463.616 264.384z"
+        ''' <summary>
+        ''' 图标，创建，0.9x
+        ''' </summary>
+        Public Const IconButtonCreate As String = "M103.331925 384.978025l25.805736 0L129.137661 161.847132c0-18.313088 14.905478-33.718963 33.718963-33.718963l0.969071 0 253.006318 0c10.82044 0 20.218484 4.797259 26.500561 12.257162l117.579929 126.753869 297.819966 0c18.297738 0 33.736359 15.179724 33.736359 33.977859l0 0.952698 0 82.909292 25.547863 0c18.538215 0 34.187637 15.179724 34.187637 33.977859 0 2.163269-0.469698 3.617387-0.469698 5.539156l-54.437843 432.971086c-1.210571 10.382465-7.007601 19.056008-14.968923 24.352641-6.249331 5.765307-14.680351 9.624195-23.595394 9.624195l-0.969071 0-694.906773 0c-9.155521 0-17.344017-3.858888-23.626094-9.155521-8.67252-5.765307-14.453177-14.939247-15.389502-25.758664L69.597613 423.040922c-2.165316-18.313088 10.868535-35.414581 29.665647-38.062897L103.331925 384.978025 103.331925 384.978025zM196.576609 384.978025 196.576609 384.978025l627.938546 0 0-49.625234L546.461371 335.352791l0 0c-9.400091 0-18.329461-4.117784-25.048489-11.110035L402.363486 196.067514 196.576609 196.067514 196.576609 384.978025 196.576609 384.978025zM879.469767 452.916347 879.469767 452.916347l-20.267603 0-0.469698 0-0.969071 0-694.906773 0-0.984421 0-20.218484 0 45.781696 366.728382 646.218888 0L879.469767 452.916347 879.469767 452.916347z"
+        ''' <summary>
+        ''' 图标，分享，1x
+        ''' </summary>
+        Public Const IconButtonShare As String = "M768.704 703.616c-35.648 0-67.904 14.72-91.136 38.304l-309.152-171.712c9.056-17.568 14.688-37.184 14.688-58.272 0-12.576-2.368-24.48-5.76-35.936l304.608-189.152c22.688 20.416 52.384 33.184 85.216 33.184 70.592 0 128-57.408 128-128s-57.408-128-128-128-128 57.408-128 128c0 14.56 2.976 28.352 7.456 41.408l-301.824 187.392c-23.136-22.784-54.784-36.928-89.728-36.928-70.592 0-128 57.408-128 128 0 70.592 57.408 128 128 128 25.664 0 49.504-7.744 69.568-20.8l321.216 178.4c-3.04 10.944-5.184 22.208-5.184 34.08 0 70.592 57.408 128 128 128s128-57.408 128-128S839.328 703.616 768.704 703.616zM767.2 128.032c35.296 0 64 28.704 64 64s-28.704 64-64 64-64-28.704-64-64S731.904 128.032 767.2 128.032zM191.136 511.936c0-35.296 28.704-64 64-64s64 28.704 64 64c0 35.296-28.704 64-64 64S191.136 547.232 191.136 511.936zM768.704 895.616c-35.296 0-64-28.704-64-64s28.704-64 64-64 64 28.704 64 64S804 895.616 768.704 895.616z"
+        ''' <summary>
+        ''' 图标，添加，1x
+        ''' </summary>
+        Public Const IconButtonAdd As String = "M512.277 954.412c-118.89 0-230.659-46.078-314.73-129.73S67.12 629.666 67.12 511.222s46.327-229.744 130.398-313.427 195.82-129.73 314.73-129.73 230.659 46.078 314.72 129.73S957.397 392.81 957.397 511.183 911.078 740.96 826.97 824.642s-195.8 129.77-314.692 129.77z m0-822.784c-101.972 0-197.809 39.494-269.865 111.222s-111.7 166.997-111.7 268.373 39.653 196.695 111.67 268.335S410.246 890.78 512.248 890.78s197.809-39.484 269.865-111.222 111.7-166.998 111.67-268.374c-0.03-101.375-39.654-196.665-111.67-268.303S614.22 131.628 512.277 131.628z m222.585 347.8H544.073V288.64c-0.76-17.561-15.613-31.18-33.173-30.419-16.495 0.714-29.704 13.924-30.419 30.419v190.787H289.703c-17.56 0.761-31.179 15.614-30.419 33.174 0.715 16.494 13.924 29.703 30.42 30.418H480.48v190.788c0.761 17.56 15.614 31.179 33.174 30.419 16.494-0.715 29.703-13.925 30.418-30.42V543.02h190.788c17.56 0.762 32.413-12.857 33.173-30.418 0.762-17.561-12.858-32.414-30.419-33.174a31.683 31.683 0 0 0-2.753 0z"
     End Class
 
 #End Region
@@ -2179,28 +2195,41 @@ NextElement:
     ''' <param name="Timeout">等待该程序结束的最长时间（毫秒）。超时会抛出错误。</param>
     Public Function ShellAndGetOutput(FileName As String, Optional Arguments As String = "", Optional Timeout As Integer = 1000000, Optional WorkingDirectory As String = Nothing) As String
         Dim Info = New ProcessStartInfo With {
-            .Arguments = Arguments,
-            .FileName = FileName,
-            .UseShellExecute = False,
-            .CreateNoWindow = True,
-            .RedirectStandardError = True,
-            .RedirectStandardOutput = True,
-            .WorkingDirectory = If(WorkingDirectory, Path.TrimEnd("\"c))
+        .FileName = FileName,
+        .Arguments = Arguments,
+        .UseShellExecute = False,
+        .CreateNoWindow = True,
+        .RedirectStandardOutput = True,
+        .RedirectStandardError = True
         }
-        If WorkingDirectory IsNot Nothing Then
-            If Info.EnvironmentVariables.ContainsKey("appdata") Then
-                Info.EnvironmentVariables("appdata") = WorkingDirectory
-            Else
-                Info.EnvironmentVariables.Add("appdata", WorkingDirectory)
-            End If
+
+        ' 设置工作目录（如果提供）
+        If Not String.IsNullOrEmpty(WorkingDirectory) Then
+            Info.WorkingDirectory = WorkingDirectory.TrimEnd("\")
         End If
+
         Log("[System] 执行外部命令并等待返回结果：" & FileName & " " & Arguments)
+
         Using Program As New Process() With {.StartInfo = Info}
             Program.Start()
-            Dim Result As String = Program.StandardOutput.ReadToEnd & Program.StandardError.ReadToEnd
-            Program.WaitForExit(Timeout)
-            If Not Program.HasExited Then Program.Kill()
-            Return Result
+
+            ' 异步读取输出和错误流
+            Dim outputTask = Program.StandardOutput.ReadToEndAsync()
+            Dim errorTask = Program.StandardError.ReadToEndAsync()
+
+            ' 等待进程退出或超时
+            If Program.WaitForExit(Timeout) Then
+                ' 确保异步读取完成
+                Task.WaitAll(outputTask, errorTask)
+            Else
+                ' 超时后终止进程
+                Program.Kill()
+                ' 仍然尝试获取已输出的内容
+                Task.WaitAll(outputTask, errorTask)
+            End If
+
+            ' 合并结果并返回
+            Return outputTask.Result & errorTask.Result
         End Using
     End Function
 
@@ -2270,21 +2299,68 @@ NextElement:
     End Sub
 
     ''' <summary>
-    ''' 按照既定的函数进行选择排序。
+    ''' 使用优化的归并排序算法进行稳定排序。
     ''' </summary>
     ''' <param name="SortRule">传入两个对象，若第一个对象应该排在前面，则返回 True。</param>
-    <Extension> Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart(Of T)) As List(Of T)
-        Dim NewList As New List(Of T)
-        While List.Any
-            Dim Highest = List(0)
-            For i = 1 To List.Count - 1
-                If SortRule(List(i), Highest) Then Highest = List(i)
-            Next
-            List.Remove(Highest)
-            NewList.Add(Highest)
-        End While
-        Return NewList
+    <Extension>
+    Public Function Sort(Of T)(List As IList(Of T), SortRule As CompareThreadStart(Of T)) As List(Of T)
+        ' 创建原列表的副本以避免修改原始列表
+        Dim tempList As New List(Of T)(List)
+        If tempList.Count <= 1 Then Return tempList
+
+        ' 使用归并排序核心算法
+        MergeSort_Sort(tempList, 0, tempList.Count - 1, SortRule)
+        Return tempList
     End Function
+
+    Private Sub MergeSort_Sort(Of T)(ByRef array As List(Of T), left As Integer, right As Integer, comparator As CompareThreadStart(Of T))
+        If left >= right Then Return
+
+        Dim mid As Integer = (left + right) \ 2
+        MergeSort_Sort(array, left, mid, comparator)
+        MergeSort_Sort(array, mid + 1, right, comparator)
+        MergeSort_Merge(array, left, mid, right, comparator)
+    End Sub
+
+    Private Sub MergeSort_Merge(Of T)(ByRef array As List(Of T), left As Integer, mid As Integer, right As Integer, comparator As CompareThreadStart(Of T))
+        Dim leftArray As New List(Of T)
+        Dim rightArray As New List(Of T)
+
+        For i As Integer = left To mid
+            leftArray.Add(array(i))
+        Next
+
+        For j As Integer = mid + 1 To right
+            rightArray.Add(array(j))
+        Next
+
+        Dim leftPtr = 0, rightPtr = 0, current = left
+
+        While leftPtr < leftArray.Count AndAlso rightPtr < rightArray.Count
+            ' 保持稳定性的关键比较逻辑：当相等时优先取左数组元素
+            If comparator(leftArray(leftPtr), rightArray(rightPtr)) Then
+                array(current) = leftArray(leftPtr)
+                leftPtr += 1
+            Else
+                array(current) = rightArray(rightPtr)
+                rightPtr += 1
+            End If
+            current += 1
+        End While
+
+        While leftPtr < leftArray.Count
+            array(current) = leftArray(leftPtr)
+            leftPtr += 1
+            current += 1
+        End While
+
+        While rightPtr < rightArray.Count
+            array(current) = rightArray(rightPtr)
+            rightPtr += 1
+            current += 1
+        End While
+    End Sub
+
     Public Delegate Function CompareThreadStart(Of T)(Left As T, Right As T) As Boolean
 
     ''' <summary>
@@ -2435,6 +2511,7 @@ Retry:
         Catch ex As Exception
             Log(ex, "[System] 从剪切板粘贴文件失败", LogLevel.Hint)
         End Try
+        Return 0
     End Function
 
     ''' <summary>
@@ -2870,13 +2947,13 @@ Retry:
     Public Sub Feedback(Optional ShowMsgbox As Boolean = True, Optional ForceOpenLog As Boolean = False)
         On Error Resume Next
         FeedbackInfo()
-        If ForceOpenLog OrElse (ShowMsgbox AndAlso MyMsgBox("若你在汇报一个 Bug，请点击 打开文件夹 按钮，并上传 Log(1~5).txt 中包含错误信息的文件。" & vbCrLf & "游戏崩溃一般与启动器无关，请不要因为游戏崩溃而提交反馈。", "反馈提交提醒", "打开文件夹", "不需要") = 1) Then
+        If ForceOpenLog OrElse (ShowMsgbox AndAlso MyMsgBox("若你在汇报一个 Bug，请点击 打开文件夹 按钮，并上传 Log-CE(1~5).txt 中包含错误信息的文件。" & vbCrLf & "游戏崩溃一般与启动器无关，请不要因为游戏崩溃而提交反馈。", "反馈提交提醒", "打开文件夹", "不需要") = 1) Then
             OpenExplorer("""" & Path & "PCL\""")
         End If
         OpenWebsite("https://github.com/PCL-Community/PCL2-CE/issues/")
     End Sub
     Public Function CanFeedback(ShowHint As Boolean) As Boolean
-        If False.Equals(PageSetupSystem.IsLauncherNewest) Then
+        If LatestVersion <> VersionBaseName Then
             If ShowHint Then
                 If MyMsgBox($"你的 PCL 不是最新版，因此无法提交反馈。{vbCrLf}请在更新后，确认该问题在最新版中依然存在，然后再提交反馈。", "无法提交反馈", "更新", "取消") = 1 Then
                     UpdateCheckByButton()

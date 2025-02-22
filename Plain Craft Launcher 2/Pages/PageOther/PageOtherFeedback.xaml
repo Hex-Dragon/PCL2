@@ -10,7 +10,7 @@
         <StackPanel x:Name="PanMain" Margin="25,25,25,25">
             <local:MyCard Title="提交反馈" x:Name="PanInfo">
                 <StackPanel Orientation="Vertical" Margin="20,40,18,22">
-                    <TextBlock Text="在提交反馈之前，先查找一下是否存在重复反馈，如果有重复反馈，那么请不要再次提交反馈，这样会加剧维护者的负担……" TextWrapping="Wrap"/>
+                    <TextBlock Text="在提交反馈之前，先查找一下是否存在重复反馈，如果有重复反馈，那么请不要再次提交反馈，这样会加剧维护者的负担……&#xa;注意：此页面未展示所有的反馈，如需查看更多反馈，请前往 GitHub。" TextWrapping="Wrap"/>
                     <Grid Margin="0,15,0,0" Height="35">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />

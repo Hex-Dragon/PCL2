@@ -75,7 +75,13 @@
             End If
             CheckAdvanceAssetsV2.Checked = Setup.Get("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
             CheckAdvanceJava.Checked = Setup.Get("VersionAdvanceJava", Version:=PageVersionLeft.Version)
-            CheckAdvanceDisableJlw.Checked = Setup.Get("VersionAdvanceDisableJlw", Version:=PageVersionLeft.Version)
+            If IsArm64System Then
+                CheckAdvanceDisableJlw.Checked = True
+                CheckAdvanceDisableJlw.IsEnabled = False
+                CheckAdvanceDisableJlw.ToolTip = "在启动游戏时不使用 Java Wrapper 进行包装。&#xa;由于系统为 ARM64 架构，Java Wrapper 已被强制禁用。"
+            Else
+                CheckAdvanceDisableJlw.Checked = Setup.Get("VersionAdvanceDisableJlw", Version:=PageVersionLeft.Version)
+            End If
 
         Catch ex As Exception
             Log(ex, "重载版本独立设置时出错", LogLevel.Feedback)
@@ -137,7 +143,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboRamOptimize.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex, Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change, CheckAdvanceDisableJlw.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked, Version:=PageVersionLeft.Version)
     End Sub
 

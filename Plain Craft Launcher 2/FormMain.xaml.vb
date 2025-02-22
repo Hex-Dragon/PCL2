@@ -12,6 +12,19 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If RELEASE Then
+        If LastVersion < 360 Then '2.10.3
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持多收藏夹，允许批量下载和分享"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了更新通道机制"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了国内本体更新和公告服务器，感谢 @pysio2007"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "更改 Java Wrapper 启用机制"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复 Authlib 验证可能失败的问题"))
+            FeatureCount += 5
+            BugCount += 7
+        End If
+        If LastVersion < 357 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复第三方登录无效会话问题"))
+            BugCount += 1
+        End If
         If LastVersion < 356 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复正版验证无法正常进行的问题"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "深色模式优化"))
@@ -74,6 +87,23 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 360 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持多收藏夹，允许批量下载和分享"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "更改 Java Wrapper 启用机制"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复无法启动游戏的问题"))
+        End If
+        If LastVersion < 358 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了更新通道机制"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "添加了国内本体更新和公告服务器，感谢 @pysio2007"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Authlib 验证可能失败"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "自动安装不提示 Quilt 与 OptiFine 不兼容"))
+            FeatureCount += 4
+            BugCount += 7
+        End If
+        If LastVersion < 357 Then
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(1, "修复第三方登录无效会话问题"))
+            BugCount += 1
+        End If
         If LastVersion < 356 Then
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复正版验证无法正常进行的问题"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "深色模式优化"))
@@ -131,7 +161,7 @@ Public Class FormMain
         '整理更新日志文本
         Dim ContentList As New List(Of String)
         Dim SortedFeatures = Sort(FeatureList, Function(Left, Right) Left.Key > Right.Key)
-        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("Pigeon0v0 忘记写更新日志啦！可以去提醒他一下……")
+        If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("开发团队忘记写更新日志啦！可以去提醒一下……")
         For i = 0 To Math.Min(9, SortedFeatures.Count - 1) '最多取 10 项
             ContentList.Add(SortedFeatures(i).Value)
         Next
@@ -146,7 +176,7 @@ Public Class FormMain
         '输出更新日志
         RunInNewThread(
         Sub()
-            If MyMsgBox(Content, "PCL 已更新至 " & VersionDisplayName, "确定", "完整更新日志") = 2 Then
+            If MyMsgBox(Content, "PCL CE 已更新至 " & VersionBaseName & If(VersionBranchName = "Fast Ring", "." + VersionCodeString, ""), "确定", "完整更新日志") = 2 Then
                 OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases")
             End If
         End Sub, "UpdateLog Output")
@@ -215,6 +245,7 @@ Public Class FormMain
         BtnExtraBack.ShowCheck = AddressOf BtnExtraBack_ShowCheck
         BtnExtraApril.ShowCheck = AddressOf BtnExtraApril_ShowCheck
         BtnExtraShutdown.ShowCheck = AddressOf BtnExtraShutdown_ShowCheck
+        BtnExtraLog.ShowCheck = AddressOf BtnExtraLog_ShowCheck
         BtnExtraApril.ShowRefresh()
         '初始化尺寸改变
         Dim Resizer As New MyResizer(Me)
@@ -486,7 +517,7 @@ Public Class FormMain
                 FeedbackInfo()
                 Log("请在 https://github.com/PCL-Community/PCL2-CE/issues 提交错误报告，以便于社区解决此问题！（这也有可能是原版 PCL 的问题）")
                 IsLogShown = True
-                ShellOnly(Path & "PCL\Log1.txt")
+                ShellOnly(Path & "PCL\Log-CE1.log")
             End If
             Thread.Sleep(500) '防止 PCL 在记事本打开前就被掐掉
         End If
@@ -611,7 +642,7 @@ Public Class FormMain
         Try
             If PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionMod Then
                 'Mod 管理自动刷新
-                FrmVersionMod.ReloadModList()
+                FrmVersionMod.ReloadCompFileList()
             ElseIf PageCurrent = PageType.VersionSelect Then
                 '版本选择自动刷新
                 LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.RunOnUpdated, MaxDepth:=1, ExtraPath:="versions\")
@@ -745,7 +776,7 @@ Public Class FormMain
                 Exit Sub
             End If
             '安装 Mod
-            If PageVersionMod.InstallMods(FilePathList) Then Exit Sub
+            If PageVersionCompResource.InstallMods(FilePathList) Then Exit Sub
             '处理资源安装
             If PageCurrent = PageType.VersionSetup AndAlso {"zip"}.Any(Function(i) i = Extension) Then
                 Select Case PageCurrentSub
@@ -767,7 +798,7 @@ Public Class FormMain
                         End If
                         CopyFile(FilePath, DestFile)
                         Hint($"已导入 {GetFileNameFromPath(FilePath)}", HintType.Finish)
-                        If FrmVersionResourcePack IsNot Nothing Then RunInUi(Sub() FrmVersionResourcePack.Reload())
+                        If FrmVersionResourcePack IsNot Nothing Then RunInUi(Sub() FrmVersionResourcePack.ReloadCompFileList())
                         Exit Sub
                     Case PageSubType.VersionShader
                         Dim DestFile = PageVersionLeft.Version.PathIndie + "shaderpacks\" + GetFileNameFromPath(FilePath)
@@ -777,7 +808,7 @@ Public Class FormMain
                         End If
                         CopyFile(FilePath, DestFile)
                         Hint($"已导入 {GetFileNameFromPath(FilePath)}", HintType.Finish)
-                        If FrmVersionShader IsNot Nothing Then RunInUi(Sub() FrmVersionShader.Reload())
+                        If FrmVersionShader IsNot Nothing Then RunInUi(Sub() FrmVersionShader.ReloadCompFileList())
                         Exit Sub
                 End Select
             End If
@@ -939,6 +970,10 @@ Public Class FormMain
         ''' 帮助详情。这是一个副页面。
         ''' </summary>
         HelpDetail = 9
+        ''' <summary>
+        ''' 游戏实时日志。这是一个副页面。
+        ''' </summary>
+        GameLog = 10
     End Enum
     ''' <summary>
     ''' 次要页面种类。其数值必须与 StackPanel 中的下标一致。
@@ -993,6 +1028,8 @@ Public Class FormMain
                 Return "版本选择"
             Case PageType.DownloadManager
                 Return "下载管理"
+            Case PageType.GameLog
+                Return "实时日志"
             Case PageType.VersionSetup
                 Return "版本设置 - " & If(PageVersionLeft.Version Is Nothing, "未知版本", PageVersionLeft.Version.Name)
             Case PageType.CompDetail
@@ -1227,6 +1264,10 @@ Public Class FormMain
                 Case PageType.Other '更多
                     If FrmOtherLeft Is Nothing Then FrmOtherLeft = New PageOtherLeft
                     PageChangeAnim(FrmOtherLeft, FrmOtherLeft.PageGet(SubType))
+                Case PageType.GameLog '实时日志
+                    If FrmLogLeft Is Nothing Then FrmLogLeft = New PageLogLeft
+                    If FrmLogLeft Is Nothing Then FrmLogRight = New PageLogRight
+                    PageChangeAnim(FrmLogLeft, FrmLogRight)
                 Case PageType.VersionSelect '版本选择
                     If FrmSelectLeft Is Nothing Then FrmSelectLeft = New PageSelectLeft
                     If FrmSelectRight Is Nothing Then FrmSelectRight = New PageSelectRight
@@ -1441,6 +1482,15 @@ Public Class FormMain
     End Sub
     Public Function BtnExtraShutdown_ShowCheck() As Boolean
         Return HasRunningMinecraft
+    End Function
+
+    '游戏日志
+    Public Sub BtnExtraLog_Click() Handles BtnExtraLog.Click
+        PageChange(PageType.GameLog)
+    End Sub
+    Public Function BtnExtraLog_ShowCheck() As Boolean
+        If FrmLogLeft Is Nothing OrElse FrmLogRight Is Nothing OrElse PageCurrent = PageType.GameLog Then Return False
+        Return FrmLogLeft.ShownLogs.Count > 0
     End Function
 
     ''' <summary>

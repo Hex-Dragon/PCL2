@@ -20,7 +20,7 @@
         TargetLoader = FrmMain.PageCurrent.Additional(3)
     End Sub
     Private Project As CompProject
-    Private TargetVersion As String, TargetLoader As CompModLoaderType
+    Private TargetVersion As String, TargetLoader As CompLoaderType
     '自动重试
     Private Sub Load_State(sender As Object, state As MyLoading.MyLoadingState, oldState As MyLoading.MyLoadingState) Handles Load.StateChanged
         Select Case CompFileLoader.State
@@ -119,12 +119,12 @@
         UpdateFilterResult()
     End Sub
     Private Sub UpdateFilterResult()
-        Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompModLoaderType.Any,
-            $"所选版本：{If(TargetLoader <> CompModLoaderType.Any, TargetLoader.ToString & " ", "")}{TargetVersion}", "")
+        Dim TargetCardName As String = If(TargetVersion <> "" OrElse TargetLoader <> CompLoaderType.Any,
+            $"所选版本：{If(TargetLoader <> CompLoaderType.Any, TargetLoader.ToString & " ", "")}{TargetVersion}", "")
         '归类到卡片下
         Dim Dict As New SortedDictionary(Of String, List(Of CompFile))(New CardSorter(TargetCardName))
         Dict.Add("其他版本", New List(Of CompFile))
-        Dim SupportedLoaders As New List(Of Integer)([Enum].GetValues(GetType(CompModLoaderType)))
+        Dim SupportedLoaders As New List(Of Integer)([Enum].GetValues(GetType(CompLoaderType)))
         For Each Version As CompFile In CompFileLoader.Output
             For Each GameVersion In Version.GameVersions
                 '检查是否符合版本筛选器
@@ -138,7 +138,7 @@
                     Project.Type = CompType.Mod AndAlso '是 Mod
                     Ver.StartsWith("1.") Then '不是 “快照版本” 之类的
                     For Each Loader In Version.ModLoaders
-                        If Loader = CompModLoaderType.Quilt AndAlso Setup.Get("ToolDownloadIgnoreQuilt") Then Continue For
+                        If Loader = CompLoaderType.Quilt AndAlso Setup.Get("ToolDownloadIgnoreQuilt") Then Continue For
                         If SupportedLoaders.Contains(Loader) Then Loaders.Add(Loader.ToString & " ")
                     Next
                 End If
@@ -156,7 +156,7 @@
             Dict.Add(TargetCardName, New List(Of CompFile))
             For Each Version As CompFile In CompFileLoader.Output
                 If Version.GameVersions.Contains(TargetVersion) AndAlso
-                   (TargetLoader = CompModLoaderType.Any OrElse Version.ModLoaders.Contains(TargetLoader)) Then
+                   (TargetLoader = CompLoaderType.Any OrElse Version.ModLoaders.Contains(TargetLoader)) Then
                     '检查是否符合版本筛选器
                     If VersionFilter IsNot Nothing AndAlso
                         Not Version.GameVersions.Any(Function(v) GetGroupedVersionName(v, IsMajorVersionFilter, True) = VersionFilter) Then Continue For
@@ -175,12 +175,18 @@
                 NewCard.Children.Add(NewStack)
                 NewCard.InstallMethod = Sub(Stack As StackPanel)
                                             Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
-                                            If Project.Type <> CompType.ModPack Then CompFilesCardPreload(Stack, Stack.Tag)
-                                            Dim DisplayBadName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
-                                            '存在重复的名称（#1344）
-                                            For Each item In Stack.Tag
-                                                Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=DisplayBadName))
-                                            Next
+                                            If Project.Type = CompType.ModPack Then
+                                                Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
+                                                For Each item In Stack.Tag
+                                                    Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
+                                                Next
+                                            Else
+                                                CompFilesCardPreload(Stack, Stack.Tag)
+                                                Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
+                                                For Each item In Stack.Tag
+                                                    Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
+                                                Next
+                                            End If
                                         End Sub
                 NewCard.SwapControl = NewStack
                 PanResults.Children.Add(NewCard)
@@ -188,21 +194,7 @@
                 If Pair.Key = TargetCardName OrElse
                 (FrmMain.PageCurrent.Additional IsNot Nothing AndAlso '#2761
                 CType(FrmMain.PageCurrent.Additional(1), List(Of String)).Contains(NewCard.Title)) Then
-                    MyCard.StackInstall(NewStack, Sub(Stack As StackPanel)
-                                                      Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
-                                                      If Project.Type = CompType.ModPack Then
-                                                          Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
-                                                          For Each item In Stack.Tag
-                                                              Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Install_Click, AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
-                                                          Next
-                                                      Else
-                                                          CompFilesCardPreload(Stack, Stack.Tag)
-                                                          Dim BadDisplayName = CType(Stack.Tag, List(Of CompFile)).Distinct(Function(a, b) a.DisplayName = b.DisplayName).Count <> CType(Stack.Tag, List(Of CompFile)).Count
-                                                          For Each item In Stack.Tag
-                                                              Stack.Children.Add(CType(item, CompFile).ToListItem(AddressOf FrmDownloadCompDetail.Save_Click, BadDisplayName:=BadDisplayName))
-                                                          Next
-                                                      End If
-                                                  End Sub)
+                    NewCard.StackInstall()
                 Else
                     NewCard.IsSwaped = True
                 End If
@@ -232,13 +224,11 @@
     End Function
 
 #End Region
-
     Private IsFirstInit As Boolean = True
     Public Sub Init() Handles Me.PageEnter
         AniControlEnabled += 1
         Project = FrmMain.PageCurrent.Additional(0)
         PanBack.ScrollToHome()
-        BtnFavorites.Text = If(CompFavorites.FavoritesList.Contains(Project.Id), "取消收藏", "收藏")
         '重启加载器
         If IsFirstInit Then
             '在 Me.Initialized 已经初始化了加载器，不再重复初始化
@@ -246,7 +236,6 @@
         Else
             PageLoaderRestart(IsForceRestart:=True)
         End If
-
         '放置当前工程
         If CompItem IsNot Nothing Then PanIntro.Children.Remove(CompItem)
         CompItem = Project.ToCompItem(True, True)
@@ -333,11 +322,11 @@
                     '获取 Mod 所需的加载器种类
                     Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing
                     If File.ModLoaders.Any Then '从文件中获取
-                        AllowForge = File.ModLoaders.Contains(CompModLoaderType.Forge) OrElse File.ModLoaders.Contains(CompModLoaderType.NeoForge)
-                        AllowFabric = File.ModLoaders.Contains(CompModLoaderType.Fabric)
+                        AllowForge = File.ModLoaders.Contains(CompLoaderType.Forge) OrElse File.ModLoaders.Contains(CompLoaderType.NeoForge)
+                        AllowFabric = File.ModLoaders.Contains(CompLoaderType.Fabric)
                     ElseIf Project.ModLoaders.Any Then '从工程中获取
-                        AllowForge = Project.ModLoaders.Contains(CompModLoaderType.Forge) OrElse File.ModLoaders.Contains(CompModLoaderType.NeoForge)
-                        AllowFabric = Project.ModLoaders.Contains(CompModLoaderType.Fabric)
+                        AllowForge = Project.ModLoaders.Contains(CompLoaderType.Forge) OrElse File.ModLoaders.Contains(CompLoaderType.NeoForge)
+                        AllowFabric = Project.ModLoaders.Contains(CompLoaderType.Fabric)
                     End If
                     If AllowForge IsNot Nothing AndAlso Not AllowForge AndAlso
                        AllowFabric IsNot Nothing AndAlso Not AllowFabric Then
@@ -459,20 +448,17 @@
         ClipboardSet(CompItem.LabTitle.Text)
     End Sub
     Private Sub BtnFavorites_Click(sender As Object, e As EventArgs) Handles BtnFavorites.Click
-        If CompFavorites.FavoritesList.Contains(Project.Id) Then
-            CompFavorites.FavoritesList.Remove(Project.Id)
-            Hint($"已取消收藏 {Project.TranslatedName}！", HintType.Finish)
-            BtnFavorites.Text = "收藏"
-        Else
-            CompFavorites.FavoritesList.Add(Project.Id)
-            Hint($"已收藏 {Project.TranslatedName}！", HintType.Finish)
-            BtnFavorites.Text = "取消收藏"
-        End If
-        CompFavorites.Save()
+        CompFavorites.ShowMenu(Project, sender)
     End Sub
     Private Sub BtnIntroLinkCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroLinkCopy.Click
         CompClipboard.CurrentText = Project.Website
         ClipboardSet(Project.Website)
     End Sub
-
+    '翻译简介
+    Private Async Sub BtnTranslate_Click(sender As Object, e As RoutedEventArgs) Handles BtnTranslate.Click
+        Hint($"正在获取 {Project.TranslatedName} 的简介译文……")
+        Dim ChineseDescription = Await Project.ChineseDescription
+        If ChineseDescription Is Nothing Then Return
+        MyMsgBox($"原文：{Project.Description}{Environment.NewLine}译文：{ChineseDescription}")
+    End Sub
 End Class

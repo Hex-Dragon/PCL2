@@ -110,10 +110,13 @@
                         <RowDefinition Height="28" />
                         <RowDefinition Height="9" />
                         <RowDefinition Height="28" />
-                        <RowDefinition Height="5" />
+                        <RowDefinition Height="9" />
+                        <RowDefinition Height="28" />
+                        <RowDefinition Height="9" />
                         <RowDefinition Height="28" />
                         <RowDefinition Height="5" />
                         <RowDefinition Height="28" />
+                        <RowDefinition Height="32" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -124,24 +127,36 @@
                         <local:MyComboBoxItem Content="仅在有重大漏洞更新时显示提示" />
                         <local:MyComboBoxItem Content="关闭更新提示" />
                     </local:MyComboBox>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="启动器公告" Margin="0,0,25,0" Grid.Row="2" />
-                    <local:MyComboBox x:Name="ComboSystemActivity" Tag="SystemSystemActivity" Grid.Column="1" Grid.Row="2">
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="启动器更新通道" Margin="0,0,25,0" Grid.Row="2"/>
+                    <local:MyComboBox x:Name="ComboSystemUpdateBranch" Tag="SystemSystemUpdateBranch" Grid.Column="1" Grid.Row="2" 
+                        ToolTip="PCL2 社区版提供了两种更新通道：&#xa;Slow Ring：较为稳定，功能通常已经过测试。&#xa;Fast Ring：更新较快，但可能包含未经充分测试的功能，可能不稳定。&#xa;&#xa;Fast Ring 仅推荐具有一定基础知识和能力的用户使用，且不适合用于制作整合包。&#xa;在升级到 Fast Ring 版本后，只能通过手动重新下载启动器切换回 Slow Ring。&#xa;&#xa;如果你不知道你在干什么，请选择 Slow Ring。">
+                        <local:MyComboBoxItem Content="Slow Ring" x:Name="ItemSystemUpdateBranch" />
+                        <local:MyComboBoxItem Content="Fast Ring" />
+                    </local:MyComboBox>
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="启动器公告" Margin="0,0,25,0" Grid.Row="4" />
+                    <local:MyComboBox x:Name="ComboSystemActivity" Tag="SystemSystemActivity" Grid.Column="1" Grid.Row="4">
                         <local:MyComboBoxItem Content="显示所有公告" ToolTip="显示包括启动器功能调查、活动等在内的全部公告" />
                         <local:MyComboBoxItem Content="仅在有重要通知时显示公告" />
                         <local:MyComboBoxItem Content="关闭所有公告" />
                     </local:MyComboBox>
-                    <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="缓存文件夹" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextSystemCache" Grid.Row="4" Grid.ColumnSpan="2" Tag="SystemSystemCache" Grid.Column="1" ToolTip="PCL 的下载、皮肤等缓存文件的存储位置。&#xa;不推荐路径中带有空格。&#xa;留空即为默认值，重启 PCL 后生效。" HintText="默认">
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="更新和公告服务器" Margin="0,0,25,0" Grid.Row="6" />
+                    <local:MyComboBox x:Name="ComboSystemServer" Tag="SystemSystemServer" Grid.Column="1" Grid.Row="6" 
+                        ToolTip="选择启动器的更新和公告服务器。&#xa;一般情况下，Pysio 服务器可以提供较为快速和稳定的服务。&#xa;如果出现问题，你可以尝试切换到 GitHub 服务器。&#xa;&#xa;如果你不知道你在干什么，请选择 Pysio。">
+                        <local:MyComboBoxItem Content="Pysio" />
+                        <local:MyComboBoxItem Content="GitHub" />
+                    </local:MyComboBox>
+                    <TextBlock Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Left" Text="缓存文件夹" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextSystemCache" Grid.Row="8" Grid.ColumnSpan="2" Tag="SystemSystemCache" Grid.Column="1" ToolTip="PCL 的下载、皮肤等缓存文件的存储位置。&#xa;不推荐路径中带有空格。&#xa;留空即为默认值，重启 PCL 后生效。" HintText="默认">
                         <local:MyTextBox.ValidateRules>
                             <local:ValidateNullable />
                             <local:ValidateFolderPath UseMinecraftCharCheck="False" />
                         </local:MyTextBox.ValidateRules>
                     </local:MyTextBox>
-                    <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="最高动画帧率" Margin="0,0,25,0" />
-                    <local:MySlider x:Name="SliderAniFPS" Grid.Row="6" Tag="UiAniFPS" MaxValue="59" Value="59" Grid.Column="1"
+                    <TextBlock Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Left" Text="最高动画帧率" Margin="0,0,25,0" />
+                    <local:MySlider x:Name="SliderAniFPS" Grid.Row="10" Tag="UiAniFPS" MaxValue="59" Value="59" Grid.Column="1"
 ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧率以防止过多的资源占用" />
-                    <local:MyCheckBox Grid.Row="8" Text="禁用硬件加速" x:Name="CheckSystemDisableHardwareAcceleration" Tag="SystemDisableHardwareAcceleration"/>
-                    <Grid Height="35" Grid.Row="9" Grid.ColumnSpan="5" Margin="0,12,0,0">
+                    <local:MyCheckBox Grid.Row="11" Text="禁用硬件加速" x:Name="CheckSystemDisableHardwareAcceleration" Tag="SystemDisableHardwareAcceleration"/>
+                    <Grid Height="35" Grid.Row="12" Grid.ColumnSpan="5" Margin="0,8,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
@@ -150,14 +165,6 @@ ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧�
                         <local:MyButton Grid.Column="0" x:Name="BtnSystemUpdate" MinWidth="140" Text="检查更新" Padding="13,0" Margin="0,0,20,0" />
                         <local:MyButton Grid.Column="1" x:Name="BtnSystemSettingExp" MinWidth="140" Text="导出设置" Padding="13,0" Margin="0,0,20,0" />
                         <local:MyButton Grid.Column="2" x:Name="BtnSystemSettingImp" MinWidth="140" Text="导入设置" Padding="13,0" Margin="0,0,20,0" />
-                    </Grid>
-                    <Grid Height="35" Grid.Row="10" Grid.ColumnSpan="5" Margin="0,12,0,0" x:Name="PanDonate">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                        </Grid.ColumnDefinitions>
-                        <local:MyButton Grid.Column="0" x:Name="BtnSystemIdentify" MinWidth="140" Text="复制识别码" Padding="13,0" Margin="0,0,20,0" />
-                        <local:MyButton Grid.Column="1" x:Name="BtnSystemUnlock" MinWidth="140" Text="输入解锁码" Padding="13,0" Margin="0,0,20,0" />
                     </Grid>
                 </Grid>
             </local:MyCard>
@@ -193,8 +200,8 @@ ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧�
                         <RowDefinition Height="28" />
                     </Grid.RowDefinitions>
                     <local:MyHint Grid.Row="0" Grid.ColumnSpan="2" Text="如果您不确定以下内容的含义，PCL 不建议您对其进行修改" IsWarn="True"/>
-                    <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="HTTP Proxy" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextSystemHttpProxy" Grid.Row="2" Grid.ColumnSpan="2" Tag="SystemHttpProxy" Grid.Column="1" HintText="比如 127.0.0.1:8888" ToolTip="不正确的 Proxy 地址会导致 PCL 网络错误，因使用代理导致的网络错误不在 Issue 受理范围内。&#xa;请勿填写不信任的 Proxy 地址，这可能会导致你的账号信息泄漏，甚至账号被盗。"/>
+                    <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="HTTP 代理" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextSystemHttpProxy" Grid.Row="2" Grid.ColumnSpan="2" Tag="SystemHttpProxy" Grid.Column="1" HintText="比如 127.0.0.1:8888" ToolTip="不正确的代理服务器地址会导致 PCL 网络错误，因使用代理导致的网络错误不在 Issue 受理范围内。&#xa;请勿填写不信任的代理服务器地址，这可能会导致你的账号信息泄露，甚至账号被盗。"/>
                     <local:MyCheckBox Margin="0,2,0,4" Text="验证 SSL 证书" Grid.Row="4" Height="22" Grid.ColumnSpan="2"
                   x:Name="CheckDownloadCert" Tag="ToolDownloadCert" 
                   ToolTip="开启验证会提高安全性、降低盗号风险（见 #2767），但也可能导致正版登录失败（见 #3018）。" />

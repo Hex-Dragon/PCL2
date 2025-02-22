@@ -48,13 +48,10 @@
                             </Grid.ColumnDefinitions>
                             <Image x:Name="ImgMinecraft" Margin="0,0,7,0" SnapsToDevicePixels="True" Height="18" RenderOptions.BitmapScalingMode="Linear" />
                             <TextBlock x:Name="LabMinecraft" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Grid.Column="1" />
-                            <Path Data="M2,4 l-2,2 10,10 10,-10 -2,-2 -8,8 -8,-8 z" Height="6" Width="10" Stretch="Uniform" VerticalAlignment="Center"
+                            <Path Data="M7.736 1.56a1.914 1.914 0 0 1 2.707 2.708l-.234.234l-2.707-2.707zm-.941.942L1.65 7.646a.5.5 0 0 0-.136.255l-.504 2.5a.5.5 0 0 0 .588.59l2.504-.5a.5.5 0 0 0 .255-.137l5.145-5.145z" Height="12" Width="12" Stretch="Uniform" VerticalAlignment="Center"
                                   Grid.Column="2" Fill="{StaticResource ColorBrushGray4}" Margin="0,1,6,0" RenderTransformOrigin="0.5,0.5">
-                                <Path.RenderTransform>
-                                    <RotateTransform Angle="90" />
-                                </Path.RenderTransform>
                             </Path>
-                            <TextBlock VerticalAlignment="Center" Text="返回" Grid.Column="3" Foreground="{StaticResource ColorBrushGray4}" />
+                            <TextBlock VerticalAlignment="Center" Text="修改" Grid.Column="3" Foreground="{StaticResource ColorBrushGray4}" />
                         </Grid>
                     </local:MyCard>
                     <local:MyCard Title="Forge" Height="40" Margin="0,15,0,0" x:Name="CardForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">

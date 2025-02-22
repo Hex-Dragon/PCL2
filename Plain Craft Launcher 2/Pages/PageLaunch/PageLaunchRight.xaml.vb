@@ -8,15 +8,13 @@
         '社区版提示
         PanHint.Visibility = If(Setup.Get("UiLauncherCEHint"), Visibility.Visible, Visibility.Collapsed)
         LabHint1.Text = "社区版包含未在官方主线版本发布的功能，仅用于尝鲜。请不要向官方仓库反馈社区版的问题哦！"
-        LabHint2.Text = $"若要永久隐藏此提示，请自行查阅代码中的相关部分。"
+        LabHint2.Text = $"若要永久隐藏此提示，请参阅 README。"
     End Sub
 
     '暂时关闭快照版提示
-#If Not BETA Then
     Private Sub BtnHintClose_Click(sender As Object, e As EventArgs) Handles BtnHintClose.Click
         AniDispose(PanHint, True)
     End Sub
-#End If
 
 #Region "自定义主页"
 

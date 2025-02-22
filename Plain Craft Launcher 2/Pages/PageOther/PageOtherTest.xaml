@@ -1,4 +1,4 @@
-﻿<local:MyPageRight x:Class="PageOtherTest"
+<local:MyPageRight x:Class="PageOtherTest"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,12 +9,10 @@
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
         <StackPanel x:Name="PanMain" Margin="25,10" Grid.IsSharedSizeScope="True">
             <local:MyCard Margin="0,15" Title="百宝箱">
-                <Grid Margin="25,40,21,20">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="35" />
-                    </Grid.RowDefinitions>
-                    <local:MyButton x:Name="BtnClear" Grid.Column="0" MinWidth="140" Text="清理游戏垃圾" ToolTip="清理 PCL 的缓存与 MC 的日志、崩溃报告等垃圾文件" Padding="13,0" Margin="0,0,20,0" HorizontalAlignment="Left" Click="BtnClear_Click"/>
-                </Grid>
+                <WrapPanel Margin="25,40,21,20" ItemHeight="35">
+                    <local:MyButton x:Name="BtnMemory" MinWidth="140" Text="内存优化" ToolTip="内存优化为 PCL2 CE 特供版，效果加强！&#xa;&#xa;将物理内存占用降低约 1/3，不仅限于 MC！&#xa;如果使用机械硬盘，这可能会导致一小段时间的严重卡顿。&#xa;使用 --memory 参数启动 PCL 可以静默执行内存优化。" Margin="0,0,15,0" Click="BtnMemory_Click"/>
+                    <local:MyButton x:Name="BtnClear" MinWidth="140" Text="清理游戏垃圾" ToolTip="清理 PCL 的缓存与 MC 的日志、崩溃报告等垃圾文件" Margin="0,0,15,0" Click="BtnClear_Click"/>
+                </WrapPanel>
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="下载自定义文件">
                 <StackPanel Orientation="Vertical" Margin="25,40,25,20">

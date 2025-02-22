@@ -114,7 +114,7 @@
                             <local:MyTextButton x:Name="BtnArgumentJavaSelect" Margin="17,0,0,0" Padding="24.5,10,5,5" Text="手动导入" Grid.Row="5" Grid.Column="1" VerticalContentAlignment="Top" HorizontalAlignment="Left" />
                             <local:MyCheckBox Grid.Row="5" Grid.Column="1" Text="Java 细致搜索" Height="22" x:Name="CheckArgumentJavaTraversal" Tag="LaunchArgumentJavaTraversal" Margin="120,5,0,0"
                                                 ToolTipService.Placement="Left" ToolTipService.HorizontalOffset="600" ToolTipService.VerticalOffset="-10"
-                                                ToolTip="授权 PCL 遍历您计算机磁盘上的文件夹以寻找可能无法通过普通搜索查找到的 Java。&#xa;PCL 不会以任何形式保留您的磁盘内容索引，仅会记录获取到的 Java 信息。" />
+                                                ToolTip="授权 PCL 遍历您计算机磁盘上的文件夹以寻找可能无法通过普通搜索查找到的 Java。&#xa;PCL 不会以任何形式保留您的磁盘内容索引，仅会记录获取到的 Java 信息。&#xa;注意：关闭此选项后可能会无法搜索到某些 Java。" />
                         </Grid>
                     </Grid>
                 </StackPanel>

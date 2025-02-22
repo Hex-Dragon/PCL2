@@ -1,4 +1,4 @@
-﻿Imports System.IO.Compression
+Imports System.IO.Compression
 Public Module ModLaunch
 
 #Region "开始"
@@ -24,6 +24,11 @@ Public Module ModLaunch
         ''' 额外的启动参数。
         ''' </summary>
         Public ExtraArgs As New List(Of String)
+        ''' <summary>
+        ''' 是否为 “测试游戏” 按钮启动的游戏。
+        ''' 如果是，则显示游戏实时日志。
+        ''' </summary>
+        Public Test As Boolean = False
     End Class
     ''' <summary>
     ''' 尝试启动 Minecraft。必须在 UI 线程调用。
@@ -500,6 +505,7 @@ NextInner:
     End Sub
 
 #End Region
+
 #Region "分方式登录模块"
 
     '各个登录方式的主对象与输入构造
@@ -697,11 +703,14 @@ LoginFinish:
         McLaunchLog("验证登录成功（Validate, " & Data.Input.Token & "）")
     End Sub
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
-
         Dim RefreshInfo As JObject = New JObject
-
-        RefreshInfo.Add(New JProperty("accessToken", Setup.Get($"Cache{Data.Input.Token}Access")))
+        Dim SelectProfile As JObject = New JObject()
+        SelectProfile.Add(New JProperty("name", Setup.Get("Cache" & Data.Input.Token & "Name")))
+        SelectProfile.Add(New JProperty("id", Setup.Get("Cache" & Data.Input.Token & "Uuid")))
+        RefreshInfo.Add("selectedProfile", SelectProfile)
+        RefreshInfo.Add(New JProperty("accessToken", Setup.Get("Cache" & Data.Input.Token & "Access")))
         RefreshInfo.Add(New JProperty("requestUser", True))
+
 
         McLaunchLog("刷新登录开始（Refresh, " & Data.Input.Token & "）")
         Dim LoginJson As JObject = GetJson(NetRequestRetry(
@@ -1420,8 +1429,10 @@ Retry:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
-        DataList.Add("-jar """ & ExtractJavaWrapper() & """")
+        If Not IsArm64System AndAlso (Not Setup.Get("LaunchAdvanceDisableJlw") AndAlso Not Setup.Get("VersionAdvanceDisableJlw", Version)) Then '检查禁用 Java Wrapper 设置项
+            DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
+            DataList.Add("-jar """ & ExtractJavaWrapper() & """")
+        End If
 
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
@@ -1487,8 +1498,11 @@ NextVersion:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
-        DataList.Add("-jar """ & ExtractJavaWrapper() & """")
+        Dim JWLEnabled = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ANSICodePage = 65001 AndAlso Not (Setup.Get("LaunchAdvanceDisableJlw") Or Setup.Get("VersionAdvanceDisableJlw", Version))
+        If JWLEnabled Then '检查禁用 Java Wrapper 设置项
+            DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
+            DataList.Add("-jar """ & ExtractJavaWrapper() & """")
+        End If
 
         '将 "-XXX" 与后面 "XXX" 合并到一起
         '如果不合并，会导致 Forge 1.17 启动无效，它有两个 --add-exports，进一步导致其中一个在后面被去重
@@ -2164,7 +2178,6 @@ IgnoreCustomSkin:
         End If
         Loader.Output = GameProcess
         McLaunchProcess = GameProcess
-
         '进程优先级处理
         Try
             GameProcess.PriorityBoostEnabled = True
@@ -2212,8 +2225,16 @@ IgnoreCustomSkin:
         WindowTitle = ArgumentReplace(WindowTitle, False)
 
         '初始化等待
-        Dim Watcher As New Watcher(Loader, McVersionCurrent, WindowTitle)
+        Dim Watcher As New Watcher(Loader, McVersionCurrent, WindowTitle, CurrentLaunchOptions.Test)
         McLaunchWatcher = Watcher
+
+        '显示实时日志
+        If CurrentLaunchOptions.Test Then
+            If FrmLogLeft Is Nothing Then RunInUiWait(Sub() FrmLogLeft = New PageLogLeft)
+            If FrmLogRight Is Nothing Then RunInUiWait(Sub() FrmLogRight = New PageLogRight)
+            FrmLogLeft.Add(Watcher)
+            McLaunchLog("已显示游戏实时日志")
+        End If
 
         '等待
         Do While Watcher.State = Watcher.MinecraftState.Loading

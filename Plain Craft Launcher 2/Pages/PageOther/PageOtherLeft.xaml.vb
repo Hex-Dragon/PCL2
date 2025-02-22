@@ -121,11 +121,20 @@
             Case FormMain.PageSubType.OtherHelp
                 RefreshHelp()
                 ItemHelp.Checked = True
+            Case FormMain.PageSubType.OtherFeedback
+                If FrmOtherFeedback IsNot Nothing Then
+                    FrmOtherFeedback.Loader.Start(IsForceRestart:=True)
+                End If
+                ItemFeedback.Checked = True
+            Case FormMain.PageSubType.OtherVote
+                If FrmOtherVote IsNot Nothing Then
+                    FrmOtherVote.Loader.Start(IsForceRestart:=True)
+                End If
+                ItemVote.Checked = True
         End Select
         Hint("正在刷新……", Log:=False)
     End Sub
     Public Shared Sub RefreshHelp()
-        Setup.Set("SystemHelpVersion", 0) '强制重新解压文件
         FrmOtherHelp.PageLoaderRestart()
         FrmOtherHelp.SearchBox.Text = ""
     End Sub
