@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Annulé!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Annuler</s:String>
@@ -10,6 +10,9 @@
     <s:String x:Key="LangColon">: </s:String>
     <s:String x:Key="LangSaveAs">Sélectionner l'emplacement de sauvegarde</s:String>
     <s:String x:Key="LangSaveAsFile">文件</s:String>
+    <s:String x:Key="LangReset">重置</s:String>
+    <s:String x:Key="LangRefresh">Rafraîchir</s:String>
+    <s:String x:Key="LangRefreshing">Rafraîchissement...</s:String>
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL n'a pas les permissions d'accès à {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleCacheFolderUnavailable">Le dossier de cache est indisponible</s:String>
     <s:String x:Key="LangApplicationDialogContentCacheFolderUnavailable">“PCL ne peut pas accéder au dossier de cache, ce qui peut entraîner un fonctionnement incorrect de PCL.
@@ -1030,8 +1033,7 @@ En général, choisissez "Afficher un indice lorsqu'il y a un correctif de vuln�
     <s:String x:Key="LangPageVersionLeftOverview">Aperçu</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">Paramètres</s:String>
     <s:String x:Key="LangPageVersionLeftModManagement">Mods</s:String>
-    <s:String x:Key="LangPageVersionLeftModManagementRefresh">Rafraîchir</s:String>
-    <s:String x:Key="LangPageVersionLeftModManagementRefreshing">Rafraîchissement...</s:String>
+    <s:String x:Key="LangPageVersionLeftInstanceExport">导出</s:String>
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetContent">Voulez-vous initialiser les paramètres pour cette instance ? Cette opération est irrévocable.</s:String>
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetTitle">Confirmation d'initialisation</s:String>
     <s:String x:Key="LangPageVersionModSearchTip">Rechercher des noms / descriptions / tags</s:String>
@@ -1313,6 +1315,7 @@ Veuillez vérifier si le type d'événement est correctement rempli, si le PCL e
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">Voir le journal des modifications</s:String>
     <s:String x:Key="LangModMinecraftVersionVanilla">Vanille</s:String>
     <s:String x:Key="LangModMinecraftInvalidMcFolder">Dossier Minecraft invalide : {0}</s:String>
+    <s:String x:Key="LangModMinecraftDialogTitleInvalidMcFolder">Minecraft 文件夹失效</s:String>
     <s:String x:Key="LangModMinecraftNotLoaded">Cette instance n'a pas été chargée, veuillez signaler ce problème à l'auteur.</s:String>
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL est incapable d'identifier le numéro de cette version.</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">Impossible d'identifier : {0}</s:String>
@@ -1322,6 +1325,7 @@ Veuillez vérifier si le type d'événement est correctement rempli, si le PCL e
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">Le JSON de version n'est pas standard. ({0})</s:String>
     <s:String x:Key="LangModMinecraftVersionPre">Pré-version</s:String>
     <s:String x:Key="LangModMinecraftVersionRC">Candidat à la publication</s:String>
+    <s:String x:Key="LangModMinecraftVersionSnapshot">快照</s:String>
     <s:String x:Key="LangModMinecraftVersionExperimental">Instantané expérimental</s:String>
     <s:String x:Key="LangModMinecraftVersionOld">Avant la publication</s:String>
     <s:String x:Key="LangModMinecraftUnknownError">Une erreur inconnue s'est produite, veuillez signaler ce problème à l'auteur.</s:String>
@@ -1660,6 +1664,8 @@ Si cette option n'est pas disponible, sélectionnez « Définir un mot de passe 
     <s:String x:Key="LangModModpackDialogContentAnotherLauncher">整合包中似乎自带了启动器，是否换用它继续安装？
 通常推荐这样做，以获得最佳体验。
 即将打开：{0}</s:String>
+    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher1">换用</s:String>
+    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher2">不换用</s:String>
     <s:String x:Key="LangModModpackExceptionNoModpackFound">未能找到适合的文件结构，这可能不是一个 MC 压缩包</s:String>
     <s:String x:Key="LangModWatcherMcCrashed">Crash de Minecraft détecté, l'analyse des erreurs a commencé...</s:String>
     <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">Renommer une sous-clé contenant des sous-clés n'est pas pris en charge : {0}.</s:String>
@@ -1974,4 +1980,90 @@ Vous pouvez également accéder à {1} sur un autre appareil et saisir le code.<
     <s:String x:Key="LangModExceptionRequestFailed">网络请求失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionReturnErrorCode">服务器返回错误（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknownFileStatus">文件状态未知：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportPackName">整合包名称</s:String>
+    <s:String x:Key="LangPageVersionExportPackVersion">整合包版本</s:String>
+    <s:String x:Key="LangPageVersionExportGameInstance">游戏本体</s:String>
+    <s:String x:Key="LangPageVersionExportGameSettings">游戏本体设置</s:String>
+    <s:String x:Key="LangPageVersionExportGameSettingsDesc">键位、音量、视频设置等</s:String>
+    <s:String x:Key="LangPageVersionExportGameProfile">游戏本体个人信息</s:String>
+    <s:String x:Key="LangPageVersionExportGameProfileDesc">命令历史、已保存的快捷栏</s:String>
+    <s:String x:Key="LangPageVersionExportOptiFineSettings">OptiFine 设置</s:String>
+    <s:String x:Key="LangPageVersionExportMod">Mod</s:String>
+    <s:String x:Key="LangPageVersionExportModDesc">模组</s:String>
+    <s:String x:Key="LangPageVersionExportModDisabled">已禁用的 Mod</s:String>
+    <s:String x:Key="LangPageVersionExportPackAddons">整合包重要数据</s:String>
+    <s:String x:Key="LangPageVersionExportPackAddonsDesc">脚本文件、内置资源包、数据包等</s:String>
+    <s:String x:Key="LangPageVersionExportModSettings">Mod 设置</s:String>
+    <s:String x:Key="LangPageVersionExportMapRecord">已绘制的地图</s:String>
+    <s:String x:Key="LangPageVersionExportMapRecordDesc">地图类 Mod 为现有的存档、服务器记录的地图、路标点等</s:String>
+    <s:String x:Key="LangPageVersionExportJEIProfile">JEI 个人信息</s:String>
+    <s:String x:Key="LangPageVersionExportJEIProfileDesc">物品收藏夹等</s:String>
+    <s:String x:Key="LangPageVersionExportEMIProfile">EMI 个人信息</s:String>
+    <s:String x:Key="LangPageVersionExportEMIProfileDesc">物品收藏夹、默认配方、合成历史记录等</s:String>
+    <s:String x:Key="LangPageVersionExportPatchouliProfile">帕秋莉手册个人信息</s:String>
+    <s:String x:Key="LangPageVersionExportPatchouliProfileDesc">教程书的已读记录、书签、阅读历史记录等</s:String>
+    <s:String x:Key="LangPageVersionExportResourcepacks">资源包</s:String>
+    <s:String x:Key="LangPageVersionExportResourcepacksDesc">纹理包/材质包</s:String>
+    <s:String x:Key="LangPageVersionExportShaderpacks">光影包</s:String>
+    <s:String x:Key="LangPageVersionExportScreenshot">截图</s:String>
+    <s:String x:Key="LangPageVersionExportSchematics">导出的结构</s:String>
+    <s:String x:Key="LangPageVersionExportSchematicsDesc">schematics 文件夹</s:String>
+    <s:String x:Key="LangPageVersionExportReplay">录像回放</s:String>
+    <s:String x:Key="LangPageVersionExportReplayDesc">Replay Mod 的录像文件</s:String>
+    <s:String x:Key="LangPageVersionExportWorld">单人游戏存档</s:String>
+    <s:String x:Key="LangPageVersionExportWorldDesc">世界/地图</s:String>
+    <s:String x:Key="LangPageVersionExportServerList">多人游戏服务器列表</s:String>
+    <s:String x:Key="LangPageVersionExportPCL">PCL 启动器程序</s:String>
+    <s:String x:Key="LangPageVersionExportPCLDesc">打包正式版 PCL，以便没有启动器的玩家安装整合包</s:String>
+    <s:String x:Key="LangPageVersionExportPCLProfile">PCL 个性化内容</s:String>
+    <s:String x:Key="LangPageVersionExportPCLProfileDesc">功能隐藏设置、主页、背景音乐和图片等</s:String>
+    <s:String x:Key="LangPageVersionExportNoOptifine">受 Modrinth 整合包规范限制，导出的整合包中暂不包含 OptiFine。</s:String>
+    <s:String x:Key="LangPageVersionExportAdvancedOptions">高级选项</s:String>
+    <s:String x:Key="LangPageVersionExportArchiveMode">打包资源文件，以避免在导入时下载</s:String>
+    <s:String x:Key="LangPageVersionExportArchiveModeDesc">将 Mod、资源包、光影包的文件直接放入整合包中，这样在导入时就无需联网下载它们。
+建议仅在无法稳定连接 CurseForge 或 Modrinth 时才考虑勾选。</s:String>
+    <s:String x:Key="LangPageVersionExportArchiveModeHint">建议仅在无法稳定连接 CurseForge 或 Modrinth 时才打包资源文件。
+二次分发可能违反使用协议，请尽量不要公开发布包含资源文件的整合包！</s:String>
+    <s:String x:Key="LangPageVersionExportModrinthStandard">Modrinth 上传模式</s:String>
+    <s:String x:Key="LangPageVersionExportModrinthStandardDesc">如果你想要打包上传到 Modrinth，勾选此项会生成完全符合 Modrinth 要求的整合包文件。
+由于 Modrinth 要求，只能从 CurseForge 下载的资源将无法联网下载，会被直接放入整合包中。
+此外，勾选后也不能在整合包中包含 PCL 启动器文件。</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigDesc">通过配置文件，你可以精准地控制导出内容的范围，或是保存当前的配置以便之后使用。</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigRead">读取配置</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigSave">保存配置</s:String>
+    <s:String x:Key="LangPageVersionExportModpackGuide">整合包制作指南</s:String>
+    <s:String x:Key="LangPageVersionExportStart">开始导出</s:String>
+    <s:String x:Key="LangPageVersionExportContentTitle">导出内容列表</s:String>
+    <s:String x:Key="LangPageVersionExportContentTitleReadFromFile">从配置文件中读取</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigSaveAsFormat">整合包导出配置(*.txt)|*.txt</s:String>
+    <s:String x:Key="LangPageVersionExportHintSavedExportConfig">已保存配置文件：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportSaveExportConfigFail">保存配置失败</s:String>
+    <s:String x:Key="LangPageVersionExportSelectConfigSave">保存配置文件</s:String>
+    <s:String x:Key="LangPageVersionExportSelectSavedConfig">选择配置文件</s:String>
+    <s:String x:Key="LangPageVersionExportSelectConfigSaveAsFormat">整合包导出配置(*.txt)|*.txt</s:String>
+    <s:String x:Key="LangPageVersionExportHintReadExportConfig">已读取配置文件：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportReadExportConfigFail">读取配置失败</s:String>
+    <s:String x:Key="LangPageVersionExportTaskName">导出整合包：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleConfigInvalid">无法使用配置文件中指定的导出路径</s:String>
+    <s:String x:Key="LangPageVersionExportDialogContentConfigInvalid">指定的路径：{0}
+
+{1}</s:String>
+    <s:String x:Key="LangPageVersionExportSelectExportPath">选择导出位置</s:String>
+    <s:String x:Key="LangPageVersionExportSelectExportPathSaveAsFormat">整合包文件(*{0})|*{1}</s:String>
+    <s:String x:Key="LangPageVersionExportTaskDownloadPCL">下载 PCL 正式版</s:String>
+    <s:String x:Key="LangPageVersionExportTaskCopyFiles">复制导出内容</s:String>
+    <s:String x:Key="LangPageVersionExportHintFolderInConfigNotFound">未找到配置文件中指定的文件夹：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportHintFileInConfigNotFound">未找到配置文件中指定的单个文件：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportTaskGetOnlineFileInfo">联网获取文件信息</s:String>
+    <s:String x:Key="LangPageVersionExportDialogContentSomeGetFail">联网获取部分文件信息失败，是否继续导出？
+
+若继续，无法获取信息的文件将被直接打包。
+由于二次分发可能违反使用协议，请尽量不要公开发布导出的整合包！</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleSomeGetFail">部分文件信息获取失败</s:String>
+    <s:String x:Key="LangPageVersionExportDialogContentAllGetFail">联网获取部分文件信息失败，是否继续导出？
+
+若继续，所有文件都将被直接打包。
+由于二次分发可能违反使用协议，请尽量不要公开发布导出的整合包！</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleAllGetFail">文件信息获取失败</s:String>
+    <s:String x:Key="LangPageVersionExportGenerateArchive">生成压缩包</s:String>
 </ResourceDictionary>
