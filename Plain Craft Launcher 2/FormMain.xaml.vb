@@ -1019,6 +1019,7 @@ Public Class FormMain
         OtherVote = 4
         VersionOverall = 0
         VersionSetup = 1
+        VersionExport = 2
         VersionWorld = 3
         VersionScreenshot = 4
         VersionMod = 5
@@ -1026,7 +1027,6 @@ Public Class FormMain
         VersionResourcePack = 7
         VersionShader = 8
         VersionInstall = 9
-        VersionExport = 10
     End Enum
     ''' <summary>
     ''' 获取次级页面的名称。若并非次级页面则返回空字符串，故可以以此判断是否为次级页面。
@@ -1182,7 +1182,12 @@ Public Class FormMain
             Select Case Stack.Page
                 Case PageType.VersionSetup
                     If FrmVersionLeft Is Nothing Then FrmVersionLeft = New PageVersionLeft
-                    CType(FrmVersionLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                    For Each item In FrmVersionLeft.PanItem.Children
+                        If item.GetType() Is GetType(MyListItem) AndAlso Val(item.tag) = SubType Then
+                            CType(item, MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                            Exit For
+                        End If
+                    Next
             End Select
             PageChangeActual(Stack, SubType)
         End If
