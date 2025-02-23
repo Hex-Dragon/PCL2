@@ -94,7 +94,6 @@ Public Class PageVersionInstall
 
         AniStart({
             AaOpacity(PanMinecraft, -PanMinecraft.Opacity, 100, 10),
-            AaTranslateX(PanMinecraft, -50 - CType(PanMinecraft.RenderTransform, TranslateTransform).X, 110, 10),
             AaCode(
             Sub()
                 PanBack.ScrollToHome()
@@ -111,7 +110,6 @@ Public Class PageVersionInstall
                 SelectReload()
             End Sub, After:=True),
             AaOpacity(PanSelect, 1 - PanSelect.Opacity, 250, 150),
-            AaTranslateX(PanSelect, -CType(PanSelect.RenderTransform, TranslateTransform).X, 500, 150, Ease:=New AniEaseOutBack(AniEasePower.Weak)),
             AaCode(
             Sub()
                 PanMinecraft.Visibility = Visibility.Collapsed
@@ -147,10 +145,8 @@ Public Class PageVersionInstall
 
         AniStart({
             AaOpacity(PanSelect, -PanSelect.Opacity, 90, 10),
-            AaTranslateX(PanSelect, 50 - CType(PanSelect.RenderTransform, TranslateTransform).X, 100, 10),
             AaCode(Sub() PanBack.ScrollToHome(), After:=True),
             AaOpacity(PanMinecraft, 1 - PanMinecraft.Opacity, 150, 100),
-            AaTranslateX(PanMinecraft, -CType(PanMinecraft.RenderTransform, TranslateTransform).X, 400, 100, Ease:=New AniEaseOutBack(AniEasePower.Weak)),
             AaCode(Sub()
                        PanSelect.Visibility = Visibility.Collapsed
                        PanBack.IsHitTestVisible = True

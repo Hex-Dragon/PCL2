@@ -14,7 +14,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" x:Name="PanSelect" Visibility="Visible" Opacity="0" IsHitTestVisible="False">
                     <StackPanel.RenderTransform>
-                        <TranslateTransform X="40" />
+                        <TranslateTransform />
                     </StackPanel.RenderTransform>
                     <local:MyCard Title="安装预览" Margin="0,15,0,0" UseAnimation="False">
                         <StackPanel Margin="25,37,25,5">
