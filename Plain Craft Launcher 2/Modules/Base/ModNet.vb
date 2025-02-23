@@ -14,7 +14,7 @@ Public Module ModNet
             Return _Proxy
         End If
         If Not String.IsNullOrWhiteSpace(proxy) Then
-            _Proxy = New WebProxy(proxy)
+            _Proxy = New WebProxy(proxy, True)
             Log($"[Net] 使用 Proxy 代理")
             Return _Proxy
         End If
