@@ -1,7 +1,7 @@
 ﻿Public Class PageDownloadCleanroom
 
     Private Sub LoaderInit() Handles Me.Initialized
-        PageLoaderInit(Load, PanLoad, PanMain, CardTip, DlForgeListLoader, AddressOf Load_OnFinish)
+        PageLoaderInit(Load, PanLoad, PanMain, CardTip, DlCleanroomListLoader, AddressOf Load_OnFinish)
     End Sub
     Private Sub Init() Handles Me.Loaded
         PanBack.ScrollToHome()

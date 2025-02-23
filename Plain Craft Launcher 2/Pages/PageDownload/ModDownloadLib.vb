@@ -91,7 +91,7 @@ Public Module ModDownloadLib
             Loaders.Add(New LoaderDownload("下载核心 Jar 文件", New List(Of NetFile)) With {.ProgressWeight = 5})
 
             '启动
-            Dim Loader As New LoaderCombo(Of String)("Minecraft " & Id & " 下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+            Dim Loader As New LoaderCombo(Of String)("Minecraft " & Id & " 下载", Loaders) With {.OnStateChanged = AddressOf LoaderStateChangedHintOnly}
             Loader.Start(Id)
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()
@@ -2085,7 +2085,7 @@ Retry:
             Dim Url As String = DownloadInfo("url").ToString
             Dim FileName As String = GetFileNameFromPath(Url)
             Dim Version As String = GetFileNameFromPath(DownloadInfo("version").ToString)
-            Dim Target As String = SelectAs("选择保存位置", FileName, "Quilt 安装器 (*.jar)|*.jar")
+            Dim Target As String = SelectSaveFile("选择保存位置", FileName, "Quilt 安装器 (*.jar)|*.jar")
             If Not Target.Contains("\") Then Exit Sub
 
             '重复任务检查
@@ -2103,7 +2103,7 @@ Retry:
             Address.Add(Url)
             Loaders.Add(New LoaderDownload("下载主文件", New List(Of NetFile) From {New NetFile(Address.ToArray, Target, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
             '启动
-            Dim Loader As New LoaderCombo(Of JObject)("Quilt " & Version & " 安装器下载", Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+            Dim Loader As New LoaderCombo(Of JObject)("Quilt " & Version & " 安装器下载", Loaders) With {.OnStateChanged = AddressOf LoaderStateChangedHintOnly}
             Loader.Start(DownloadInfo)
             LoaderTaskbarAdd(Loader)
             FrmMain.BtnExtraDownload.ShowRefresh()

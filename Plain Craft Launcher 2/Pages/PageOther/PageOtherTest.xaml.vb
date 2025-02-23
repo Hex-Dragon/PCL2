@@ -53,7 +53,7 @@ Public Class PageOtherTest
     Public Shared Sub StartCustomDownload(Url As String, FileName As String, Optional Folder As String = Nothing)
         Try
             If String.IsNullOrWhiteSpace(Folder) Then
-                Folder = SelectAs("选择文件保存位置", FileName, Nothing, Nothing)
+                Folder = SelectSaveFile("选择文件保存位置", FileName, Nothing, Nothing)
                 If Not Folder.Contains("\") Then
                     Return
                 End If

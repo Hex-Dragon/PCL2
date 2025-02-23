@@ -854,7 +854,7 @@ ExitDataLoad:
                     End If
                 Case McVersionState.Old
                     Info = "远古版本"
-                Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.OptiFine, McVersionState.LiteLoader
+                Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.Quilt, McVersionState.OptiFine, McVersionState.LiteLoader, McVersionState.Cleanroom
                     Info = Version.ToString
                 Case McVersionState.Fool
                     Info = GetMcFoolName(Version.McName)

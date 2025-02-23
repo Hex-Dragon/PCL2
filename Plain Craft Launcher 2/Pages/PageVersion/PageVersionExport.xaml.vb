@@ -458,9 +458,9 @@ Public Class PageVersionExport
 
 #Region "复制文件"
 
-        Loaders.Add(New LoaderTask(Of Integer, List(Of McMod))("复制导出内容",
-        Sub(Loader As LoaderTask(Of Integer, List(Of McMod)))
-            Loader.Output = New List(Of McMod)
+        Loaders.Add(New LoaderTask(Of Integer, List(Of LocalCompFile))("复制导出内容",
+        Sub(Loader As LoaderTask(Of Integer, List(Of LocalCompFile)))
+            Loader.Output = New List(Of LocalCompFile)
             '复制版本文件
             Dim Progress As Integer = 0
             Dim SearchFolder As Action(Of DirectoryInfo)
@@ -489,7 +489,7 @@ Public Class PageVersionExport
                     If CheckHostedAssets AndAlso
                        {".zip", ".rar", ".jar", ".disabled", ".old"}.Contains(Entry.Extension.ToLower) AndAlso
                        {"mods", "packs", "openloader", "resource"}.Any(Function(s) RelativePath.Contains(s)) Then
-                        Dim ModFile As New McMod(TargetPath)
+                        Dim ModFile As New LocalCompFile(TargetPath)
                         Dim Unused = ModFile.ModrinthHash '提前计算 Hash
                         Unused = ModFile.CurseForgeHash
                         Loader.Output.Add(ModFile)
@@ -545,9 +545,9 @@ Public Class PageVersionExport
 
 #Region "联网检查"
 
-        Loaders.Add(New LoaderTask(Of List(Of McMod), Dictionary(Of McMod, List(Of String)))("联网获取文件信息",
-        Sub(Loader As LoaderTask(Of List(Of McMod), Dictionary(Of McMod, List(Of String))))
-            Loader.Output = New Dictionary(Of McMod, List(Of String))
+        Loaders.Add(New LoaderTask(Of List(Of LocalCompFile), Dictionary(Of LocalCompFile, List(Of String)))("联网获取文件信息",
+        Sub(Loader As LoaderTask(Of List(Of LocalCompFile), Dictionary(Of LocalCompFile, List(Of String))))
+            Loader.Output = New Dictionary(Of LocalCompFile, List(Of String))
             If Not CheckHostedAssets Then Log($"[Export] 要求跳过联网获取步骤") : Return
             If Not Loader.Input.Any Then Log($"[Export] 没有需要联网检查的文件，跳过联网获取步骤") : Return
 
@@ -591,7 +591,7 @@ Public Class PageVersionExport
                         Dim File As JObject = ResultJson("file")
                         If String.IsNullOrEmpty(File("downloadUrl")) Then Continue For
                         '查找对应的文件
-                        Dim ModFile As McMod = Loader.Input.FirstOrDefault(Function(m) m.CurseForgeHash = File("fileFingerprint").ToObject(Of UInteger))
+                        Dim ModFile As LocalCompFile = Loader.Input.FirstOrDefault(Function(m) m.CurseForgeHash = File("fileFingerprint").ToObject(Of UInteger))
                         If ModFile Is Nothing Then Continue For
                         '写入下载地址
                         For Each Address In CompFile.HandleCurseForgeDownloadUrls(File("downloadUrl").ToString)
@@ -632,12 +632,12 @@ Public Class PageVersionExport
 
 #Region "生成压缩包"
 
-        Loaders.Add(New LoaderTask(Of Dictionary(Of McMod, List(Of String)), Integer)("生成压缩包",
-        Sub(Loader As LoaderTask(Of Dictionary(Of McMod, List(Of String)), Integer))
+        Loaders.Add(New LoaderTask(Of Dictionary(Of LocalCompFile, List(Of String)), Integer)("生成压缩包",
+        Sub(Loader As LoaderTask(Of Dictionary(Of LocalCompFile, List(Of String)), Integer))
             '整理文件列表
             Dim Files As New JArray
             For Each Pair In Loader.Input
-                Dim ModFile As McMod = Pair.Key
+                Dim ModFile As LocalCompFile = Pair.Key
                 Files.Add(New JObject From {
                     {"path", ModFile.Path.AfterFirst(OverridesFolder).Replace("\", "/")},
                     {"hashes", New JObject From {{"sha1", ModFile.ModrinthHash}, {"sha512", GetFileSHA512(ModFile.Path)}}},

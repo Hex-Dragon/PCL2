@@ -1004,7 +1004,7 @@
     Public DlCleanroomListOfficialLoader As New LoaderTask(Of Integer, DlCleanroomListResult)("DlCleanroomList Official", AddressOf DlCleanroomListOfficialMain)
     Private Sub DlCleanroomListOfficialMain(Loader As LoaderTask(Of Integer, DlCleanroomListResult))
         '获取版本列表 JSON
-        Dim ResultLatest As String = NetGetCodeByDownload("https://api.github.com/repos/CleanroomMC/Cleanroom/releases", UseBrowserUserAgent:=True, IsJson:=True)
+        Dim ResultLatest As String = NetGetCodeByRequestRetry("https://api.github.com/repos/CleanroomMC/Cleanroom/releases", UseBrowserUserAgent:=True)
         If ResultLatest.Length < 100 Then Throw New Exception("获取到的版本列表长度不足（" & ResultLatest & "）")
         '解析
         Try

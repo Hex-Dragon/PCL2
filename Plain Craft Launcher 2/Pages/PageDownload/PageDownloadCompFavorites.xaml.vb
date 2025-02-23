@@ -436,7 +436,7 @@
                                                 Ts.Output = Res
                                             End Sub) With {.ProgressWeight = 2})
             GetInfoAndDownloadLoader.Add(New LoaderDownload("批量下载合适资源", New List(Of NetFile)) With {.ProgressWeight = 8})
-            Dim CheckLoader As New LoaderCombo(Of List(Of String))($"批量下载资源({GetUuid()})", GetInfoAndDownloadLoader) With {.OnStateChanged = AddressOf DownloadStateSave}
+            Dim CheckLoader As New LoaderCombo(Of List(Of String))($"批量下载资源({GetUuid()})", GetInfoAndDownloadLoader) With {.OnStateChanged = AddressOf LoaderStateChangedHintOnly}
             CheckLoader.Start(SelectedItemList.Select(Function(i) CType(i.Tag, CompProject).Id).ToList())
             LoaderTaskbarAdd(CheckLoader)
             FrmMain.BtnExtraDownload.ShowRefresh()

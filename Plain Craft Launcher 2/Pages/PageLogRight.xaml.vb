@@ -44,7 +44,7 @@
 
     Private Sub BtnOperationExport_Click(sender As Object, e As RouteEventArgs) Handles BtnOperationExport.Click
         'TODO(i18n): 文本 @ 文件选择弹窗 - 窗口标题 & 类型选择器选项
-        Dim SavePath As String = SelectAs("选择导出位置", $"游戏日志 - {FrmLogLeft.CurrentLog.Version.Name}.log", "游戏日志(*.log)|*.log")
+        Dim SavePath As String = SelectSaveFile("选择导出位置", $"游戏日志 - {FrmLogLeft.CurrentLog.Version.Name}.log", "游戏日志(*.log)|*.log")
         If SavePath.Length < 3 Then Exit Sub
         File.WriteAllLines(SavePath, FrmLogLeft.CurrentLog.FullLog)
         'TODO(i18n): 文本 @ 左下角提示 - 导出成功提示
