@@ -1,4 +1,7 @@
-﻿Public Class MyHint
+﻿Imports System.Windows.Markup
+
+<ContentProperty("Inlines")>
+Public Class MyHint
 
     Public Uuid As Integer = GetUuid()
 
@@ -30,6 +33,11 @@
         End Set
     End Property
 
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return LabText.Inlines
+        End Get
+    End Property
     Public Property Text As String
         Get
             Return LabText.Text

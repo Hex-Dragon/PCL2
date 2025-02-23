@@ -194,7 +194,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="标题栏文本" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextLogoText" Tag="UiLogoText" Grid.Column="1" MaxLength="30" />
+                        <local:MyTextBox x:Name="TextLogoText" Tag="UiLogoText" Grid.Column="1" MaxLength="100" />
                     </Grid>
                     <Grid x:Name="PanLogoChange" Margin="0,14,0,5" Height="35" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
@@ -262,7 +262,7 @@
                             <local:MyComboBoxItem Content="PCL 主页市场（作者：凌云）" />
                             <local:MyComboBoxItem Content="PCL 新闻速报（作者：Joker2184）" />
                             <local:MyComboBoxItem Content="PCL 新功能说明书（作者：WForst-Breeze）" />
-                            <local:MyComboBoxItem Content="OpenMCIM 仪表盘（作者：SALTWOOD）" />
+                            <local:MyComboBoxItem Content="OpenMCIM 仪表盘（作者：SALTWOOD）" Visibility="Collapsed" />
                             <local:MyComboBoxItem Content="杂志主页（作者：CreeperIsASpy）" />
                         </local:MyComboBox>
                     </Grid>

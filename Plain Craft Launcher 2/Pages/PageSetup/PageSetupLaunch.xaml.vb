@@ -175,7 +175,7 @@
     Private Sub BtnSkinDelete_Click(sender As Object, e As EventArgs) Handles BtnSkinDelete.Click
         Try
             File.Delete(PathAppdata & "CustomSkin.png")
-            RadioSkinType0.SetChecked(True, True, True)
+            RadioSkinType0.SetChecked(True, True)
             Hint("离线皮肤已清空！", HintType.Finish)
         Catch ex As Exception
             Log(ex, "清空离线皮肤失败", LogLevel.Msgbox)
@@ -204,11 +204,11 @@
         If LabRamGame Is Nothing OrElse LabRamUsed Is Nothing OrElse FrmMain.PageCurrent <> FormMain.PageType.Setup OrElse FrmSetupLeft.PageID <> FormMain.PageSubType.SetupLaunch Then Exit Sub
         '获取内存情况
         Dim RamGame As Double = GetRam(McVersionCurrent, False)
-        Dim RamTotal As Double = Math.Round(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024 / 1024 * 10) / 10
-        Dim RamAvailable As Double = Math.Round(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024 / 1024 * 10) / 10
-        Dim RamGameActual As Double = Math.Min(RamGame, RamAvailable)
-        Dim RamUsed As Double = RamTotal - RamAvailable
-        Dim RamEmpty As Double = Math.Round(MathClamp(RamTotal - RamUsed - RamGame, 0, 1000) * 10) / 10
+        Dim RamTotal As Double = Math.Round(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024 / 1024, 1)
+        Dim RamAvailable As Double = Math.Round(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024 / 1024, 1)
+        Dim RamGameActual As Double = Math.Round(Math.Min(RamGame, RamAvailable), 5)
+        Dim RamUsed As Double = Math.Round(RamTotal - RamAvailable, 5)
+        Dim RamEmpty As Double = Math.Round(MathClamp(RamTotal - RamUsed - RamGame, 0, 1000), 1)
         '设置最大可用内存
         If RamTotal <= 1.5 Then
             SliderRamCustom.MaxValue = Math.Max(Math.Floor((RamTotal - 0.3) / 0.1), 1)

@@ -353,6 +353,10 @@
                 If Control.RenderTransform IsNot Nothing AndAlso TypeOf Control.RenderTransform Is TranslateTransform Then Control.RenderTransform = Nothing
             Next
             For Each Control As FrameworkElement In GetAllAnimControls(Element)
+                If TypeOf Control Is MyExtraTextButton Then
+                    CType(Control, MyExtraTextButton).Show = True
+                    Continue For
+                End If
                 Control.Opacity = 0
                 Control.RenderTransform = New TranslateTransform(0, -16)
                 AniList.Add(AaOpacity(Control, 1, 150, Delay, New AniEaseOutFluent(AniEasePower.Weak)))
@@ -379,6 +383,10 @@
         Dim Delay As Integer = 0
         For Each Element In RealElements
             For Each Control As FrameworkElement In GetAllAnimControls(Element)
+                If TypeOf Control Is MyExtraTextButton Then
+                    CType(Control, MyExtraTextButton).Show = False
+                    Continue For
+                End If
                 Control.IsHitTestVisible = False
                 AniList.Add(AaOpacity(Control, -1, 90, Delay))
                 AniList.Add(AaTranslateY(Control, -6, 90, Delay))
@@ -392,12 +400,13 @@
             AniList.Add(AaTranslateX(Scroll, 10 - CType(Scroll.RenderTransform, TranslateTransform).X, 90, 0, New AniEaseInFluent))
         End If
         '结束
-        AniList.Add(AaCode(Sub()
-                               For Each Element In RealElements
-                                   Element.Visibility = Visibility.Collapsed
-                               Next
-                               PageOnExitAnimationFinished()
-                           End Sub,, True))
+        AniList.Add(AaCode(
+        Sub()
+            For Each Element In RealElements
+                Element.Visibility = Visibility.Collapsed
+            Next
+            PageOnExitAnimationFinished()
+        End Sub,, True))
         AniStart(AniList, "PageRight PageChange " & PageUuid)
     End Sub
 
@@ -409,7 +418,7 @@
     End Function
     Private Sub GetAllAnimControls(Element As FrameworkElement, ByRef AllControls As List(Of FrameworkElement), IgnoreInvisibility As Boolean)
         If Not IgnoreInvisibility AndAlso Element.Visibility = Visibility.Collapsed Then Exit Sub
-        If TypeOf Element Is MyCard OrElse TypeOf Element Is MyHint OrElse TypeOf Element Is TextBlock OrElse TypeOf Element Is MyTextButton Then
+        If TypeOf Element Is MyCard OrElse TypeOf Element Is MyHint OrElse TypeOf Element Is MyExtraTextButton OrElse TypeOf Element Is TextBlock OrElse TypeOf Element Is MyTextButton Then
             AllControls.Add(Element)
         ElseIf TypeOf Element Is ContentControl Then
             Dim Content = CType(Element, ContentControl).Content

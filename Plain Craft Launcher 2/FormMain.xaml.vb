@@ -335,6 +335,7 @@ Public Class FormMain
                 DlClientListMojangLoader.Start(1)
                 RunCountSub()
                 ServerLoader.Start(1)
+                RunInNewThread(AddressOf TryClearTaskTemp, "TryClearTaskTemp", ThreadPriority.BelowNormal)
             Catch ex As Exception
                 Log(ex, "初始化加载池运行失败", LogLevel.Feedback)
             End Try
@@ -431,7 +432,7 @@ Public Class FormMain
             Log("[Start] 已从老版本迁移微软登录结果")
         End If
         '输出更新日志
-        If LastVersionCode = 0 Then Exit Sub
+        If LastVersionCode <= 0 Then Exit Sub
         If LowerVersionCode >= VersionCode Then Exit Sub
         ShowUpdateLog(LowerVersionCode)
     End Sub
@@ -631,6 +632,7 @@ Public Class FormMain
     End Sub
     Private Sub FormMain_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseDown
         '鼠标侧键返回上一级
+        If FrmMain.PanMsg.Children.Count > 0 OrElse WaitingMyMsgBox.Any Then Exit Sub '弹窗中（#5513）
         If e.ChangedButton = MouseButton.XButton1 OrElse e.ChangedButton = MouseButton.XButton2 Then TriggerPageBack()
     End Sub
     Private Sub TriggerPageBack()
@@ -1024,6 +1026,7 @@ Public Class FormMain
         VersionResourcePack = 7
         VersionShader = 8
         VersionInstall = 9
+        VersionExport = 10
     End Enum
     ''' <summary>
     ''' 获取次级页面的名称。若并非次级页面则返回空字符串，故可以以此判断是否为次级页面。

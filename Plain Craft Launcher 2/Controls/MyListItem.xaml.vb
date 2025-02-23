@@ -1,4 +1,7 @@
-﻿Public Class MyListItem
+﻿Imports System.Windows.Markup
+
+<ContentProperty("Inlines")>
+Public Class MyListItem
     Implements IMyRadio
 
     Public Event Click(sender As Object, e As MouseButtonEventArgs)
@@ -217,6 +220,11 @@
     End Property
 
     '标题
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return LabTitle.Inlines
+        End Get
+    End Property
     Public Property Title As String
         Get
             Return GetValue(TitleProperty)

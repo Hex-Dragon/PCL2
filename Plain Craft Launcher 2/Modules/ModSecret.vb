@@ -400,18 +400,18 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             FrmMain.PanForm.Background.Freeze()
         End Sub)
     End Sub
-    Public Sub ThemeCheckAll(EffectSetup As Boolean)
+    Friend Sub ThemeCheckAll(EffectSetup As Boolean)
     End Sub
-    Public Function ThemeCheckOne(Id As Integer) As Boolean
+    Friend Function ThemeCheckOne(Id As Integer) As Boolean
         Return True
     End Function
     Friend Function ThemeUnlock(Id As Integer, Optional ShowDoubleHint As Boolean = True, Optional UnlockHint As String = Nothing) As Boolean
         Return False
     End Function
-    Public Function ThemeCheckGold(Optional Code As String = Nothing) As Boolean
+    Friend Function ThemeCheckGold(Optional Code As String = Nothing) As Boolean
         Return False
     End Function
-    Public Function DonateCodeInput() As Boolean?
+    Friend Function DonateCodeInput() As Boolean?
         Return Nothing
     End Function
 
@@ -591,6 +591,13 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             Return
         End If
         MsgBox("PCL 更新失败：无法删除原文件。请手动复制已下载到 PCL 文件夹下的新版本程序覆盖原程序。" & vbCrLf + GetExceptionSummary(ex2), MsgBoxStyle.Critical, "更新失败")
+    End Sub
+    ''' <summary>
+    ''' 确保 PathTemp 下的 Latest.exe 是最新正式版的 PCL，它会被用于整合包打包。
+    ''' 如果不是，则下载一个。
+    ''' </summary>
+    Friend Sub DownloadLatestPCL(Optional LoaderToSyncProgress As LoaderBase = Nothing)
+        '注意：如果要自行实现这个功能，请换用另一个文件路径，以免与官方版本冲突
     End Sub
 
 #End Region

@@ -505,7 +505,7 @@ Public Module ModComp
                             Case "technology" : Tags.Add("科技")
                             Case "magic" : Tags.Add("魔法")
                             Case "adventure" : Tags.Add("冒险")
-                            Case "kitchen-sink" : Tags.Add("大杂烩")
+                            Case "kitchen-sink" : Tags.Add("水槽包/大杂烩")
                             Case "lightweight" : Tags.Add("轻量")
                             '光影包
                             Case "cartoon" : Tags.Add("卡通")
@@ -1444,10 +1444,7 @@ Retry:
                     Dim Url = Data("downloadUrl").ToString
                     If Url = "" Then Url = $"https://media.forgecdn.net/files/{CInt(Id.ToString.Substring(0, 4))}/{CInt(Id.ToString.Substring(4))}/{FileName}"
                     Url = Url.Replace(FileName, Net.WebUtility.UrlEncode(FileName)) '对文件名进行编码
-                    DownloadUrls = (New List(Of String) From {Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://media"),
-                                       Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
-                                       Url.Replace("://edge", "://media"),
-                                       Url}).Distinct.ToList '对脑残 CurseForge 的下载地址进行多种修正
+                    DownloadUrls = HandleCurseForgeDownloadUrls(Url) '对脑残 CurseForge 的下载地址进行多种修正
                     DownloadUrls.AddRange(DownloadUrls.Select(Function(u) DlSourceModGet(u)).ToList) '添加镜像源，这个写法是为了让镜像源排在后面
                     DownloadUrls = DownloadUrls.Distinct.ToList '最终去重
                     'Dependencies
@@ -1522,6 +1519,19 @@ Retry:
                 End If
             End If
         End Sub
+
+        ''' <summary>
+        ''' 重新整理 CurseForge 的下载地址。
+        ''' </summary>
+        Public Shared Function HandleCurseForgeDownloadUrls(Url As String) As List(Of String)
+            Return {
+                Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://media"),
+                Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
+                Url.Replace("://edge", "://media"),
+                Url
+            }.Distinct.ToList
+        End Function
+
         ''' <summary>
         ''' 将当前实例转为可用于保存缓存的 Json。
         ''' </summary>

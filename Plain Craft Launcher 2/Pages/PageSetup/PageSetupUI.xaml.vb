@@ -192,7 +192,7 @@
 
     '背景图片
     Private Sub BtnUIBgOpen_Click(sender As Object, e As EventArgs) Handles BtnBackgroundOpen.Click
-        OpenExplorer("""" & Path & "PCL\Pictures""")
+        OpenExplorer(Path & "PCL\Pictures\")
     End Sub
     Private Sub BtnBackgroundRefresh_Click(sender As Object, e As EventArgs) Handles BtnBackgroundRefresh.Click
         BackgroundRefresh(True, True)
@@ -338,7 +338,7 @@ Refresh:
     Private Sub BtnLogoDelete_Click(sender As Object, e As EventArgs) Handles BtnLogoDelete.Click
         Try
             File.Delete(Path & "PCL\Logo.png")
-            RadioLogoType1.SetChecked(True, True, True)
+            RadioLogoType1.SetChecked(True, True)
             Hint("标题栏图片已清空！", HintType.Finish)
         Catch ex As Exception
             Log(ex, "清空标题栏图片失败", LogLevel.Msgbox)
@@ -347,7 +347,7 @@ Refresh:
 
     '背景音乐
     Private Sub BtnMusicOpen_Click(sender As Object, e As EventArgs) Handles BtnMusicOpen.Click
-        OpenExplorer("""" & Path & "PCL\Musics""")
+        OpenExplorer(Path & "PCL\Musics\")
     End Sub
     Private Sub BtnMusicRefresh_Click(sender As Object, e As EventArgs) Handles BtnMusicRefresh.Click
         MusicRefreshPlay(True)
@@ -411,7 +411,7 @@ Refresh:
             End If
             WriteFile(Path & "PCL\Custom.xaml", GetResources("Custom"))
             Hint("教学文件已生成！", HintType.Finish)
-            OpenExplorer("/select,""" & Path & "PCL\Custom.xaml""")
+            OpenExplorer(Path & "PCL\Custom.xaml")
         Catch ex As Exception
             Log(ex, "生成教学文件失败", LogLevel.Feedback)
         End Try

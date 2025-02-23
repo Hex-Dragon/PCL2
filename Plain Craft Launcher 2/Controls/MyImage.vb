@@ -139,7 +139,7 @@ RetryStart:
                 ElseIf EnableCache Then
                     '保存缓存并显示
                     If File.Exists(TempPath) Then File.Delete(TempPath)
-                    Rename(TempDownloadingPath, TempPath)
+                    FileSystem.Rename(TempDownloadingPath, TempPath)
                     RunInUi(Sub() ActualSource = TempPath)
                 Else
                     '直接显示

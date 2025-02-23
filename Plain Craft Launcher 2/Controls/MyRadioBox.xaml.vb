@@ -1,4 +1,7 @@
-﻿Public Class MyRadioBox
+﻿Imports System.Windows.Markup
+
+<ContentProperty("Inlines")>
+Public Class MyRadioBox
     Implements IMyRadio
 
     '基础
@@ -10,27 +13,29 @@
     Public Event Changed(sender As Object, e As RouteEventArgs) Implements IMyRadio.Changed
 
     '自定义属性
-
-    Private _Checked As Boolean = False '是否选中
     Public Property Checked As Boolean
         Get
-            Return _Checked
+            Return GetValue(CheckedProperty)
         End Get
         Set(value As Boolean)
-            SetChecked(value, False, True)
+            SetChecked(value, False)
         End Set
     End Property
+    Public Shared ReadOnly CheckedProperty As DependencyProperty =
+        DependencyProperty.Register("Checked", GetType(Boolean), GetType(MyRadioBox), New PropertyMetadata(False,
+        Sub(d As MyRadioBox, e As DependencyPropertyChangedEventArgs)
+            '在使用 XAML 设置 Checked 属性时，不会触发 Checked_Set 方法，所以需要在这里手动触发 UI 改变
+            If Not d.IsLoaded Then d.SyncUI()
+        End Sub))
+
     ''' <summary>
     ''' 手动设置 Checked 属性。
     ''' </summary>
     ''' <param name="value">新的 Checked 属性。</param>
     ''' <param name="user">是否由用户引发。</param>
-    ''' <param name="anime">是否执行动画。</param>
-    Public Sub SetChecked(value As Boolean, user As Boolean, anime As Boolean)
+    Public Sub SetChecked(value As Boolean, user As Boolean)
         Try
-
             'Preview 事件
-
             If value AndAlso user Then
                 Dim e = New RouteEventArgs(user)
                 RaiseEvent PreviewCheck(Me, e)
@@ -41,28 +46,24 @@
             End If
 
             '自定义属性基础
-
             Dim IsChanged As Boolean = False
-            If IsLoaded AndAlso Not value = _Checked Then RaiseEvent PreviewChange(Me, New RouteEventArgs(user))
-            If Not value = _Checked Then
-                _Checked = value
+            If IsLoaded AndAlso Not value = Checked Then RaiseEvent PreviewChange(Me, New RouteEventArgs(user))
+            If Not value = Checked Then
+                SetValue(CheckedProperty, value)
                 IsChanged = True
             End If
 
             '保证只有一个单选框选中
-
             If Parent Is Nothing Then Exit Sub
             Dim RadioboxList As New List(Of MyRadioBox)
             Dim CheckedCount As Integer = 0
-            '收集控件列表与选中个数
-            For Each Control In CType(Parent, Object).Children
+            For Each Control In CType(Parent, Object).Children '收集控件列表与选中个数
                 If TypeOf Control Is MyRadioBox Then
                     RadioboxList.Add(Control)
                     If Control.Checked Then CheckedCount += 1
                 End If
             Next
-            '判断选中情况
-            Select Case CheckedCount
+            Select Case CheckedCount '判断选中情况
                 Case 0
                     '没有任何单选框被选中，选择第一个
                     RadioboxList(0).Checked = True
@@ -87,67 +88,74 @@
                         Next
                     End If
             End Select
-            'End If
-
-            '更改动画
-
-            If Not IsChanged Then Exit Sub
-            If IsLoaded AndAlso AniControlEnabled = 0 AndAlso anime Then '防止默认属性变更触发动画
-                If Checked Then
-                    '由无变有
-                    If ShapeDot.Opacity < 0.01 Then ShapeDot.Opacity = 1
-                    AniStart({
-                              AaScale(ShapeBorder, 10 - ShapeBorder.Width, AnimationTimeOfCheck, , New AniEaseOutFluent(AniEasePower.Weak), , True),
-                              AaScale(ShapeBorder, 8, AnimationTimeOfCheck * 2, AnimationTimeOfCheck * 0.6, New AniEaseOutBack, , True)
-                         }, "MyRadioBox Border " & Uuid)
-                    AniStart({
-                              AaScale(ShapeDot, 9 - ShapeDot.Width, AnimationTimeOfCheck * 2.6,, New AniEaseOutBack(AniEasePower.Weak), , True),
-                              AaOpacity(ShapeDot, 1 - ShapeDot.Opacity, AnimationTimeOfCheck * 0.5, AnimationTimeOfCheck * 0.6)
-                         }, "MyRadioBox Dot " & Uuid)
-                    AniStart({
-                              AaColor(ShapeBorder, Ellipse.StrokeProperty, If(IsMouseOver, "ColorBrush3", If(IsEnabled, "ColorBrush2", "ColorBrushGray4")), AnimationTimeOfCheck)
-                         }, "MyRadioBox BorderColor " & Uuid)
-                Else
-                    '由有变无
-                    AniStart({
-                              AaScale(ShapeBorder, 18 - ShapeBorder.Width, AnimationTimeOfCheck, , New AniEaseOutFluent, , True)
-                         }, "MyRadioBox Border " & Uuid)
-                    AniStart({
-                              AaScale(ShapeDot, -ShapeDot.Width, AnimationTimeOfCheck, , New AniEaseInFluent, , True),
-                              AaOpacity(ShapeDot, -ShapeDot.Opacity, AnimationTimeOfCheck * 0.5, AnimationTimeOfCheck * 0.2)
-                         }, "MyRadioBox Dot " & Uuid)
-                    AniStart({
-                              AaColor(ShapeBorder, Ellipse.StrokeProperty, If(IsMouseOver, "ColorBrush3", If(IsEnabled, "ColorBrush1", "ColorBrushGray4")), AnimationTimeOfCheck)
-                         }, "MyRadioBox BorderColor " & Uuid)
-                End If
-            Else
-                '不使用动画
-                AniStop("MyRadioBox Border " & Uuid)
-                AniStop("MyRadioBox Dot " & Uuid)
-                AniStop("MyRadioBox BorderColor " & Uuid)
-                If Checked Then
-                    ShapeDot.Width = 9
-                    ShapeDot.Height = 9
-                    ShapeDot.Opacity = 1
-                    ShapeDot.Margin = New Thickness(5.5, 0, 0, 0)
-                    ShapeBorder.SetResourceReference(Ellipse.StrokeProperty, If(IsEnabled, "ColorBrush2", "ColorBrushGray4"))
-                Else
-                    ShapeDot.Width = 0
-                    ShapeDot.Height = 0
-                    ShapeDot.Opacity = 0
-                    ShapeDot.Margin = New Thickness(10, 0, 0, 0)
-                    ShapeBorder.SetResourceReference(Ellipse.StrokeProperty, If(IsEnabled, "ColorBrush1", "ColorBrushGray4"))
-                End If
-            End If
 
             '触发事件
-            If Checked Then RaiseEvent Check(Me, New RouteEventArgs(user))
-            RaiseEvent Changed(Me, New RouteEventArgs(user))
+            If IsChanged Then
+                If Checked Then RaiseEvent Check(Me, New RouteEventArgs(user))
+                RaiseEvent Changed(Me, New RouteEventArgs(user))
+            End If
 
+            '更改动画
+            SyncUI()
         Catch ex As Exception
             Log(ex, "单选框勾选改变错误", LogLevel.Hint)
         End Try
     End Sub
+    Private Sub SyncUI()
+        If AniControlEnabled = 0 AndAlso IsLoaded Then '防止默认属性变更触发动画
+            If Checked Then
+                '由无变有
+                If ShapeDot.Opacity < 0.01 Then ShapeDot.Opacity = 1
+                AniStart({
+                          AaScale(ShapeBorder, 10 - ShapeBorder.Width, AnimationTimeOfCheck, , New AniEaseOutFluent(AniEasePower.Weak), , True),
+                          AaScale(ShapeBorder, 8, AnimationTimeOfCheck * 2, AnimationTimeOfCheck * 0.6, New AniEaseOutBack, , True)
+                     }, "MyRadioBox Border " & Uuid)
+                AniStart({
+                          AaScale(ShapeDot, 9 - ShapeDot.Width, AnimationTimeOfCheck * 2.6,, New AniEaseOutBack(AniEasePower.Weak), , True),
+                          AaOpacity(ShapeDot, 1 - ShapeDot.Opacity, AnimationTimeOfCheck * 0.5, AnimationTimeOfCheck * 0.6)
+                     }, "MyRadioBox Dot " & Uuid)
+                AniStart({
+                          AaColor(ShapeBorder, Ellipse.StrokeProperty, If(IsMouseOver, "ColorBrush3", If(IsEnabled, "ColorBrush2", "ColorBrushGray4")), AnimationTimeOfCheck)
+                     }, "MyRadioBox BorderColor " & Uuid)
+            Else
+                '由有变无
+                AniStart({
+                          AaScale(ShapeBorder, 18 - ShapeBorder.Width, AnimationTimeOfCheck, , New AniEaseOutFluent, , True)
+                     }, "MyRadioBox Border " & Uuid)
+                AniStart({
+                          AaScale(ShapeDot, -ShapeDot.Width, AnimationTimeOfCheck, , New AniEaseInFluent, , True),
+                          AaOpacity(ShapeDot, -ShapeDot.Opacity, AnimationTimeOfCheck * 0.5, AnimationTimeOfCheck * 0.2)
+                     }, "MyRadioBox Dot " & Uuid)
+                AniStart({
+                          AaColor(ShapeBorder, Ellipse.StrokeProperty, If(IsMouseOver, "ColorBrush3", If(IsEnabled, "ColorBrush1", "ColorBrushGray4")), AnimationTimeOfCheck)
+                     }, "MyRadioBox BorderColor " & Uuid)
+            End If
+        Else
+            '不使用动画
+            AniStop("MyRadioBox Border " & Uuid)
+            AniStop("MyRadioBox Dot " & Uuid)
+            AniStop("MyRadioBox BorderColor " & Uuid)
+            If Checked Then
+                ShapeDot.Width = 9
+                ShapeDot.Height = 9
+                ShapeDot.Opacity = 1
+                ShapeDot.Margin = New Thickness(5.5, 0, 0, 0)
+                ShapeBorder.SetResourceReference(Ellipse.StrokeProperty, If(IsEnabled, "ColorBrush2", "ColorBrushGray4"))
+            Else
+                ShapeDot.Width = 0
+                ShapeDot.Height = 0
+                ShapeDot.Opacity = 0
+                ShapeDot.Margin = New Thickness(10, 0, 0, 0)
+                ShapeBorder.SetResourceReference(Ellipse.StrokeProperty, If(IsEnabled, "ColorBrush1", "ColorBrushGray4"))
+            End If
+        End If
+    End Sub
+
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return LabText.Inlines
+        End Get
+    End Property
     Public Property Text As String
         Get
             Return GetValue(TextProperty)
@@ -165,9 +173,9 @@
     Private AllowMouseDown As Boolean = True
     Private Sub Radiobox_MouseUp() Handles Me.MouseLeftButtonUp
         If Not MouseDowned Then Exit Sub
-        MouseDowned = False
         Log("[Control] 按下单选框：" & Text)
-        SetChecked(True, True, True)
+        SetChecked(True, True)
+        MouseDowned = False
         AniStart(AaColor(ShapeBorder, Ellipse.FillProperty, "ColorBrushHalfWhite", 100), "MyRadioBox Background " & Uuid)
     End Sub
     Private Sub Radiobox_MouseDown() Handles Me.MouseLeftButtonDown

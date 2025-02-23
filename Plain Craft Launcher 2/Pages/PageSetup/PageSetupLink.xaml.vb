@@ -38,5 +38,11 @@
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextLinkName.ValidatedTextChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Text)
     End Sub
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckHiperCertWarn.Change
+        If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
+    End Sub
+
+    Private Sub BtnHiperLog_Click(sender As Object, e As EventArgs) Handles BtnHiperLog.Click
+    End Sub
 
 End Class

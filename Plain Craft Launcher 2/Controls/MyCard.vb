@@ -39,6 +39,11 @@ Public Class MyCard
 
     '属性
     Public Uuid As Integer = GetUuid()
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return MainTextBlock.Inlines
+        End Get
+    End Property
     Public Property Title As String
         Get
             Return GetValue(TitleProperty)
@@ -81,7 +86,7 @@ Public Class MyCard
         If IsLoad Then Exit Sub
         IsLoad = True
         '初次加载限定
-        If Title <> "" AndAlso MainTextBlock Is Nothing Then
+        If MainTextBlock Is Nothing Then
             MainTextBlock = New TextBlock With {.HorizontalAlignment = HorizontalAlignment.Left, .VerticalAlignment = VerticalAlignment.Top, .Margin = New Thickness(15, 12, 0, 0), .FontWeight = FontWeights.Bold, .FontSize = 13, .IsHitTestVisible = False}
             MainTextBlock.SetResourceReference(TextBlock.ForegroundProperty, "ColorBrush1")
             MainTextBlock.SetBinding(TextBlock.TextProperty, New Binding("Title") With {.Source = Me, .Mode = BindingMode.OneWay})
@@ -170,20 +175,21 @@ Public Class MyCard
             '高度增加较大，使用弹起动画
             Dim Delta As Double = MathClamp(Math.Abs(DeltaHeight) * 0.05, 3, 10) * Math.Sign(DeltaHeight)
             AnimList.AddRange({
-                     AaHeight(Me, DeltaHeight + Delta, 300, If(IsLoadAnimation, 30, 0), If(DeltaHeight > FrmMain.Height, New AniEaseInFluent(AniEasePower.ExtraStrong), New AniEaseOutFluent(AniEasePower.ExtraStrong))),
-                     AaHeight(Me, -Delta, 150, 260, Ease:=New AniEaseOutFluent(AniEasePower.Strong))
-                })
+                AaHeight(Me, DeltaHeight + Delta, 300, If(IsLoadAnimation, 30, 0), If(DeltaHeight > FrmMain.Height, New AniEaseInFluent(AniEasePower.ExtraStrong), New AniEaseOutFluent(AniEasePower.ExtraStrong))),
+                AaHeight(Me, -Delta, 150, 260, Ease:=New AniEaseOutFluent(AniEasePower.Strong))
+            })
         Else
             '普通的改变就行啦
             AnimList.AddRange({
-                         AaHeight(Me, DeltaHeight, MathClamp(Math.Abs(DeltaHeight) * 4, 150, 250),, New AniEaseOutFluent)
-                    })
+                AaHeight(Me, DeltaHeight, MathClamp(Math.Abs(DeltaHeight) * 4, 150, 250),, New AniEaseOutFluent)
+            })
         End If
-        AnimList.Add(AaCode(Sub()
-                                IsHeightAnimating = False
-                                Height = ActualUsedHeight
-                                If IsSwaped Then SwapControl.Visibility = Visibility.Collapsed
-                            End Sub,, True))
+        AnimList.Add(AaCode(
+        Sub()
+            IsHeightAnimating = False
+            Height = ActualUsedHeight
+            If IsSwaped Then SwapControl.Visibility = Visibility.Collapsed
+        End Sub,, True))
         AniStart(AnimList, "MyCard Height " & Uuid)
 
         IsHeightAnimating = True
@@ -201,7 +207,8 @@ Public Class MyCard
 
 #End Region
 
-    '折叠
+#Region "折叠"
+
     '若设置了 CanSwap，或 SwapControl 不为空，则判定为会进行折叠
     '这是因为不能直接在 XAML 中设置 SwapControl
     Public SwapControl As Object
@@ -245,7 +252,7 @@ Public Class MyCard
     Private Sub MyCard_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseLeftButtonDown
         Dim Pos As Double = Mouse.GetPosition(Me).Y
         If Not IsSwaped AndAlso
-            (SwapControl Is Nothing OrElse Pos > SwapedHeight OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
+            (SwapControl Is Nothing OrElse Pos > If(IsSwaped, SwapedHeight, SwapedHeight - 6) OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
         IsMouseDown = True
     End Sub
     Private Sub MyCard_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles Me.MouseLeftButtonUp
@@ -254,7 +261,7 @@ Public Class MyCard
 
         Dim Pos As Double = Mouse.GetPosition(Me).Y
         If Not IsSwaped AndAlso
-            (SwapControl Is Nothing OrElse Pos > SwapedHeight OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
+            (SwapControl Is Nothing OrElse Pos > If(IsSwaped, SwapedHeight, SwapedHeight - 6) OrElse (Pos = 0 AndAlso Not IsMouseDirectlyOver)) Then Exit Sub '检测点击位置；或已经不在可视树上的误判
 
         Dim ee = New RouteEventArgs(True)
         RaiseEvent PreviewSwap(Me, ee)
@@ -270,6 +277,8 @@ Public Class MyCard
     Private Sub MyCard_MouseLeave_Swap(sender As Object, e As MouseEventArgs) Handles Me.MouseLeave
         IsMouseDown = False
     End Sub
+
+#End Region
 
 End Class
 Partial Public Module ModAnimation

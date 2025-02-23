@@ -52,7 +52,7 @@
             Exit Sub
         End If
         Try
-            Dim FileAddress As String = SelectAs("选取保存皮肤的位置", GetFileNameFromPath(Address), "皮肤图片文件(*.png)|*.png")
+            Dim FileAddress As String = SelectSaveFile("选取保存皮肤的位置", GetFileNameFromPath(Address), "皮肤图片文件(*.png)|*.png")
             If FileAddress.Contains("\") Then
                 File.Delete(FileAddress)
                 If Address.StartsWith(PathImage) Then

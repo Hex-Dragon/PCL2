@@ -33,6 +33,7 @@ jobs:
       fail-fast: false
 
     steps:
+
     - name: Checkout
       uses: actions/checkout@v4
 
@@ -41,6 +42,7 @@ jobs:
       run: |
           $describe = $(git describe --tags --always)
           echo "describe=$describe" >> $GITHUB_ENV
+
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
