@@ -42,8 +42,8 @@
         '设置解锁
         If Not RadioLauncherTheme8.IsEnabled Then LabLauncherTheme8Copy.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁。" & vbCrLf & "右键打开赞助页面，如果觉得 PCL 做得还不错就支持一下吧 =w=！"
         RadioLauncherTheme8.ToolTip = "累积赞助达到 ¥23.33 后，在爱发电私信发送【解锁码】以解锁"
-        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）" & vbCrLf & "· 提交一个 Pull Request，在合并后回复识别码要求解锁"
-        RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁" & vbCrLf & "· 提交一个 Pull Request，在合并后回复识别码要求解锁"
+        If Not RadioLauncherTheme9.IsEnabled Then LabLauncherTheme9Copy.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁（右键打开反馈页面）" & vbCrLf & "· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁"
+        RadioLauncherTheme9.ToolTip = "· 反馈一个 Bug，在标记为 [完成] 后回复识别码要求解锁" & vbCrLf & "· 提交一个 Pull Request 或主页预设，在标记为 [完成] 后回复识别码要求解锁"
         '极客蓝的处理在 ThemeCheck 中
 
     End Sub
@@ -189,7 +189,7 @@
 
     '背景图片
     Private Sub BtnUIBgOpen_Click(sender As Object, e As EventArgs) Handles BtnBackgroundOpen.Click
-        OpenExplorer("""" & Path & "PCL\Pictures""")
+        OpenExplorer(Path & "PCL\Pictures\")
     End Sub
     Private Sub BtnBackgroundRefresh_Click(sender As Object, e As EventArgs) Handles BtnBackgroundRefresh.Click
         BackgroundRefresh(True, True)
@@ -335,7 +335,7 @@ Refresh:
     Private Sub BtnLogoDelete_Click(sender As Object, e As EventArgs) Handles BtnLogoDelete.Click
         Try
             File.Delete(Path & "PCL\Logo.png")
-            RadioLogoType1.SetChecked(True, True, True)
+            RadioLogoType1.SetChecked(True, True)
             Hint("标题栏图片已清空！", HintType.Finish)
         Catch ex As Exception
             Log(ex, "清空标题栏图片失败", LogLevel.Msgbox)
@@ -344,7 +344,7 @@ Refresh:
 
     '背景音乐
     Private Sub BtnMusicOpen_Click(sender As Object, e As EventArgs) Handles BtnMusicOpen.Click
-        OpenExplorer("""" & Path & "PCL\Musics""")
+        OpenExplorer(Path & "PCL\Musics\")
     End Sub
     Private Sub BtnMusicRefresh_Click(sender As Object, e As EventArgs) Handles BtnMusicRefresh.Click
         MusicRefreshPlay(True)
@@ -407,7 +407,7 @@ Refresh:
             End If
             WriteFile(Path & "PCL\Custom.xaml", GetResources("Custom"))
             Hint("教学文件已生成！", HintType.Finish)
-            OpenExplorer("/select,""" & Path & "PCL\Custom.xaml""")
+            OpenExplorer(Path & "PCL\Custom.xaml")
         Catch ex As Exception
             Log(ex, "生成教学文件失败", LogLevel.Feedback)
         End Try

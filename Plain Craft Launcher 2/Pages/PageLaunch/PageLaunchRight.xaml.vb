@@ -109,11 +109,11 @@ Download:
                         GoTo Download
                     Case 7
                         Log("[Page] 主页预设：主页市场")
-                        Url = "https://homepage-market.pages.dev/Custom.xaml"
+                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/JingHai-Lingyun/Custom.xaml"
                         GoTo Download
                     Case 8
                         Log("[Page] 主页预设：更新日志")
-                        Url = "https://updatehomepage.pages.dev/UpdateHomepage.xaml"
+                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Joker2184/UpdateHomepage.xaml"
                         GoTo Download
                     Case 9
                         Log("[Page] 主页预设：PCL 新功能说明书")
@@ -125,7 +125,7 @@ Download:
                         GoTo Download
                     Case 11
                         Log("[Page] 主页预设：杂志主页")
-                        Url = "http://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Ext1nguisher/Custom.xaml"
+                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Ext1nguisher/Custom.xaml"
                         GoTo Download
                 End Select
         End Select
@@ -234,7 +234,7 @@ Download:
                 PanCustom.Children.Add(GetObjectFromXML(Content))
             Catch ex As Exception
                 Log("[Page] 加载失败的自定义主页内容：" & vbCrLf & Content)
-                If MyMsgBox($"自定义主页内容编写有误，请根据下列错误信息进行检查：{vbCrLf}{ex.Message}", "加载自定义主页失败", "重试", "取消") = 1 Then
+                If MyMsgBox($"自定义主页内容编写有误，请根据下列错误信息进行检查：{vbCrLf}{GetExceptionSummary(ex)}", "加载自定义主页失败", "重试", "取消") = 1 Then
                     GoTo Refresh '防止 SyncLock 死锁
                 End If
             End Try

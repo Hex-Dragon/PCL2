@@ -79,7 +79,7 @@
 
         'UI 化筛选器
         PanFilter.Children.Clear()
-        If VersionFilters.Count <= 2 Then
+        If VersionFilters.Count < 2 Then
             CardFilter.Visibility = Visibility.Collapsed
             VersionFilter = Nothing
         Else
@@ -92,7 +92,6 @@
                 NewButton.LabText.Margin = New Thickness(-2, 0, 8, 0)
                 AddHandler NewButton.Check,
                 Sub(sender As MyRadioButton, raiseByMouse As Boolean)
-                    PanScroll.ScrollToHome()
                     VersionFilter = If(sender.Text = "全部", Nothing, sender.Text)
                     UpdateFilterResult()
                 End Sub
@@ -393,7 +392,7 @@
                 Sub()
                     '弹窗要求选择保存位置
                     Dim Target As String
-                    Target = SelectAs("选择保存位置", FileName,
+                    Target = SelectSaveFile("选择保存位置", FileName,
                         Desc & "文件|" &
                         If(Project.Type = CompType.Mod,
                             If(File.FileName.EndsWith(".litemod"), "*.litemod", "*.jar"),
@@ -405,7 +404,7 @@
                     Dim Loaders As New List(Of LoaderBase)
                     Loaders.Add(New LoaderDownload("下载文件", New List(Of NetFile) From {File.ToNetFile(Target)}) With {.ProgressWeight = 6, .Block = True})
                     '启动
-                    Dim Loader As New LoaderCombo(Of Integer)(LoaderName, Loaders) With {.OnStateChanged = AddressOf DownloadStateSave}
+                    Dim Loader As New LoaderCombo(Of Integer)(LoaderName, Loaders) With {.OnStateChanged = AddressOf LoaderStateChangedHintOnly}
                     Loader.Start(1)
                     LoaderTaskbarAdd(Loader)
                     FrmMain.BtnExtraDownload.ShowRefresh()
@@ -424,7 +423,7 @@
         OpenWebsite("https://www.mcmod.cn/class/" & Project.WikiId & ".html")
     End Sub
     Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
-        ClipboardSet(CompItem.LabTitle.Text)
+        ClipboardSet(CompItem.LabTitle.Text & CompItem.LabTitleRaw.Text)
     End Sub
 
 End Class

@@ -171,6 +171,9 @@
             Log(ex, "添加文件夹失败（" & NewFolder & "）", LogLevel.Feedback)
         End Try
     End Sub
+    ''' <summary>
+    ''' 将指定文件夹添加到 Minecraft 文件夹列表，并选中它。
+    ''' </summary>
     Public Shared Sub AddFolder(FolderPath As String, DisplayName As String, ShowHint As Boolean)
         RunInThread(
         Sub()
@@ -328,23 +331,24 @@
             Next
             Setup.Set("LaunchFolders", If(Not Folders.Any(), "", Join(Folders.ToArray, "|")))
         End If
-        RunInNewThread(Sub()
-                           '删除文件夹
-                           Try
-                               Hint("正在" & DeleteText & "文件夹 " & Folder.Name & "！", HintType.Info)
-                               DeleteDirectory(Folder.Path)
-                               If DeleteText = "清空" Then Directory.CreateDirectory(Folder.Path)
-                               Hint("已" & DeleteText & "文件夹 " & Folder.Name & "！", HintType.Finish)
-                           Catch ex As Exception
-                               Log(ex, DeleteText & "文件夹 " & Folder.Name & " 失败", LogLevel.Hint)
-                           Finally
-                               '刷新列表
-                               McFolderListLoader.Start(IsForceRestart:=True)
-                           End Try
-                       End Sub, "Folder Delete " & GetUuid(), ThreadPriority.BelowNormal)
+        RunInNewThread(
+        Sub()
+            '删除文件夹
+            Try
+                Hint("正在" & DeleteText & "文件夹 " & Folder.Name & "！", HintType.Info)
+                DeleteDirectory(Folder.Path)
+                If DeleteText = "清空" Then Directory.CreateDirectory(Folder.Path)
+                Hint("已" & DeleteText & "文件夹 " & Folder.Name & "！", HintType.Finish)
+            Catch ex As Exception
+                Log(ex, DeleteText & "文件夹 " & Folder.Name & " 失败", LogLevel.Hint)
+            Finally
+                '刷新列表
+                McFolderListLoader.Start(IsForceRestart:=True)
+            End Try
+        End Sub, "Folder Delete " & GetUuid(), ThreadPriority.BelowNormal)
     End Sub
     Public Sub Open_Click(sender As Object, e As RoutedEventArgs)
-        OpenExplorer("""" & CType(CType(CType(sender.Parent, ContextMenu).Parent, Primitives.Popup).PlacementTarget, MyListItem).Info & """")
+        OpenExplorer(CType(CType(CType(sender.Parent, ContextMenu).Parent, Primitives.Popup).PlacementTarget, MyListItem).Info)
     End Sub
     Public Sub Refresh_Click(sender As Object, e As RoutedEventArgs)
         Dim Data As McFolder = CType(CType(CType(sender.Parent, ContextMenu).Parent, Primitives.Popup).PlacementTarget, MyListItem).Tag

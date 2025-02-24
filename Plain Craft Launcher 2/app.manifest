@@ -48,13 +48,17 @@
        自动缩放。Windows Presentation Foundation (WPF)应用程序自动感知 DPI，无需
        选择加入。选择加入此设置的 Windows 窗体应用程序(目标设定为 .NET Framework 4.6 )还应
        在其 app.config 中将 "EnableWindowsFormsHighDpiAutoResizing" 设置设置为 "true"。-->
-  <!--
+  <!-- 更改原因见 #5337 -->
   <application xmlns="urn:schemas-microsoft-com:asm.v3">
-    <windowsSettings>
-      <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</dpiAware>
-    </windowsSettings>
+  	<windowsSettings>
+		<longPathAware xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">true</longPathAware> <!-- 长路径支持 -->
+		<!-- The combination of below two tags have the following effect : 
+		    1. Per-Monitor for >= Windows 10 Anniversary Update
+		    2. System < Windows 10 Anniversary Update -->
+		<dpiAwareness xmlns="http://schemas.microsoft.com/SMI/2016/WindowsSettings">PerMonitorV2</dpiAwareness>
+		<dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">true</dpiAware>
+  	</windowsSettings>
   </application>
-  -->
 
   <!-- 启用 Windows 公共控件和对话框的主题(Windows XP 和更高版本) -->
   <dependency>

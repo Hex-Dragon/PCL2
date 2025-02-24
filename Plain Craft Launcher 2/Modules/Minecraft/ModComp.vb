@@ -360,6 +360,16 @@
                     'Tags & ModLoaders
                     Tags = New List(Of String)
                     ModLoaders = New List(Of CompModLoaderType)
+                    If Data.ContainsKey("loaders") Then
+                        For Each Category In Data("loaders").Select(Function(t) t.ToString)
+                            Select Case Category
+                                Case "forge" : ModLoaders.Add(CompModLoaderType.Forge)
+                                Case "fabric" : ModLoaders.Add(CompModLoaderType.Fabric)
+                                Case "quilt" : ModLoaders.Add(CompModLoaderType.Quilt)
+                                Case "neoforge" : ModLoaders.Add(CompModLoaderType.NeoForge)
+                            End Select
+                        Next
+                    End If
                     For Each Category In Data("categories").Select(Function(t) t.ToString)
                         Select Case Category
                             '加载器
@@ -392,7 +402,7 @@
                             Case "technology" : Tags.Add("科技")
                             Case "magic" : Tags.Add("魔法")
                             Case "adventure" : Tags.Add("冒险")
-                            Case "kitchen-sink" : Tags.Add("大杂烩")
+                            Case "kitchen-sink" : Tags.Add("水槽包/大杂烩")
                             Case "lightweight" : Tags.Add("轻量")
                                 'FUTURE: Res
                         End Select
@@ -435,7 +445,7 @@
             '获取版本描述
             Dim GameVersionDescription As String
             If GameVersions Is Nothing OrElse Not GameVersions.Any() Then
-                GameVersionDescription = "未知"
+                GameVersionDescription = "仅快照版本" '#5412
             Else
                 Dim SpaVersions As New List(Of String)
                 Dim IsOld As Boolean = False
@@ -493,10 +503,11 @@
                     ModLoaderDescriptionFull = "仅 " & ModLoadersForDesc.Single.ToString
                     ModLoaderDescriptionPart = ModLoadersForDesc.Single.ToString
                 Case Else
+                    Dim MaxVersion As Integer = If(GameVersions.Any, GameVersions.Max, 99)
                     If ModLoaders.Contains(CompModLoaderType.Forge) AndAlso
-                       (GameVersions.Max < 14 OrElse ModLoaders.Contains(CompModLoaderType.Fabric)) AndAlso
-                       (GameVersions.Max < 20 OrElse ModLoaders.Contains(CompModLoaderType.NeoForge)) AndAlso
-                       (GameVersions.Max < 14 OrElse ModLoaders.Contains(CompModLoaderType.Quilt) OrElse Setup.Get("ToolDownloadIgnoreQuilt")) Then
+                       (MaxVersion < 14 OrElse ModLoaders.Contains(CompModLoaderType.Fabric)) AndAlso
+                       (MaxVersion < 20 OrElse ModLoaders.Contains(CompModLoaderType.NeoForge)) AndAlso
+                       (MaxVersion < 14 OrElse ModLoaders.Contains(CompModLoaderType.Quilt) OrElse Setup.Get("ToolDownloadIgnoreQuilt")) Then
                         ModLoaderDescriptionFull = "任意"
                         ModLoaderDescriptionPart = ""
                     Else
@@ -1073,7 +1084,7 @@ Retry:
 
         If RealResults.Count + Storage.Results.Count < Task.Input.TargetResultCount Then
             Log($"[Comp] 总结果数需求最少 {Task.Input.TargetResultCount} 个，仅获得了 {RealResults.Count + Storage.Results.Count} 个")
-            If Task.Input.CanContinue Then
+            If Task.Input.CanContinue AndAlso [Error] Is Nothing Then '如果有下载源失败则不再重试，这时候重试可能导致无限循环
                 Log("[Comp] 将继续尝试加载下一页")
                 GoTo Retry
             Else
@@ -1263,10 +1274,7 @@ Retry:
                     Dim Url = Data("downloadUrl").ToString
                     If Url = "" Then Url = $"https://media.forgecdn.net/files/{CInt(Id.ToString.Substring(0, 4))}/{CInt(Id.ToString.Substring(4))}/{FileName}"
                     Url = Url.Replace(FileName, Net.WebUtility.UrlEncode(FileName)) '对文件名进行编码
-                    DownloadUrls = (New List(Of String) From {Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://media"),
-                                       Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
-                                       Url.Replace("://edge", "://media"),
-                                       Url}).Distinct.ToList '对脑残 CurseForge 的下载地址进行多种修正
+                    DownloadUrls = HandleCurseForgeDownloadUrls(Url) '对脑残 CurseForge 的下载地址进行多种修正
                     DownloadUrls.AddRange(DownloadUrls.Select(Function(u) DlSourceModGet(u)).ToList) '添加镜像源，这个写法是为了让镜像源排在后面
                     DownloadUrls = DownloadUrls.Distinct.ToList '最终去重
                     'Dependencies
@@ -1341,6 +1349,19 @@ Retry:
                 End If
             End If
         End Sub
+
+        ''' <summary>
+        ''' 重新整理 CurseForge 的下载地址。
+        ''' </summary>
+        Public Shared Function HandleCurseForgeDownloadUrls(Url As String) As List(Of String)
+            Return {
+                Url.Replace("-service.overwolf.wtf", ".forgecdn.net").Replace("://edge", "://media"),
+                Url.Replace("-service.overwolf.wtf", ".forgecdn.net"),
+                Url.Replace("://edge", "://media"),
+                Url
+            }.Distinct.ToList
+        End Function
+
         ''' <summary>
         ''' 将当前实例转为可用于保存缓存的 Json。
         ''' </summary>
@@ -1482,7 +1503,7 @@ Retry:
             For Each DepProject In Deps.Where(Function(id) CompProjectCache.ContainsKey(id)).Select(Function(id) CompProjectCache(id))
                 For Each File In CompFilesCache(ProjectId)
                     If File.RawDependencies.Contains(DepProject.Id) AndAlso DepProject.Id <> ProjectId Then
-                        File.Dependencies.Add(DepProject.Id)
+                        If Not File.Dependencies.Contains(DepProject.Id) Then File.Dependencies.Add(DepProject.Id)
                     End If
                 Next
             Next

@@ -87,22 +87,22 @@
     </StackPanel>
 </local:MyCard>
 
-<local:MyCard Title="事件 3：打开文件" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
+<local:MyCard Title="事件 3：执行命令" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
     <StackPanel Margin="25,40,23,15">
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
-                    Text="将 EventType 设置为 打开文件，EventData 设置为文件路径，即可点击打开特定文件或启动程序。" />
+                    Text="将 EventType 设置为 执行命令（或 打开文件），EventData 设置为文件路径，即可点击打开特定文件或启动程序。" />
         <local:MyButton Margin="0,4,0,8" Width="200" Height="35"
-                    Text="打开记事本" EventType="打开文件" EventData="notepad.exe" />
+                    Text="打开记事本" EventType="执行命令" EventData="notepad.exe" />
         <TextBlock TextWrapping="Wrap" Margin="0,4,0,0"
                     Text="如果能在 PCL 文件夹中找到该文件，则会优先打开 PCL 文件夹中的文件。当然，你可以使用例如 C:\ 开头的绝对路径。" />
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="此外，PCL 会将文件中的 “花括号 path” 替换为 PCL 可执行文件所在文件夹（{path}），可以用于执行特定程序或加载图片。" />
         <local:MyButton Margin="0,4,0,10" Width="200" Height="35"
-                    Text="打开 PCL 日志" EventType="打开文件" EventData="Log1.txt" ToolTip="PCL 的日志文件就在 PCL 文件夹内，且名为 Log1.txt" />
+                    Text="打开 PCL 日志" EventType="执行命令" EventData="Log1.txt" ToolTip="PCL 的日志文件就在 PCL 文件夹内，且名为 Log1.txt" />
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,4"
                     Text="就像为游戏指定服务器 IP 一样，你也可以在 EventData 的竖线后为程序添加启动参数。" />
         <local:MyButton Margin="0,4,0,0" Width="200" Height="35"
-                    Text="定位游戏启动脚本" EventType="打开文件" EventData="explorer.exe|/select,LatestLaunch.bat" ToolTip="PCL 会将上一次启动 MC 的脚本保存在 PCL 文件夹内，且名为 LatestLaunch.bat。&#xA;点击按钮会打开文件管理器，并且借助参数要求它选中这个文件。" />
+                    Text="定位游戏启动脚本" EventType="执行命令" EventData="explorer.exe|/select,LatestLaunch.bat" ToolTip="PCL 会将上一次启动 MC 的脚本保存在 PCL 文件夹内，且名为 LatestLaunch.bat。&#xA;点击按钮会打开文件管理器，并且借助参数要求它选中这个文件。" />
     </StackPanel>
 </local:MyCard>
 
@@ -192,7 +192,7 @@
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/GoldBlock.png"/>
             <!-- 草方块 -->
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Grass.png"/>
-            <!-- 草径 -->
+            <!-- 土径 -->
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/GrassPath.png"/>
             <!-- 铁砧 -->
             <local:MyImage Width="30" Margin="5,0,0,0" Source="pack://application:,,,/images/Blocks/Anvil.png"/>
