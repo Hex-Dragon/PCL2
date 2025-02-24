@@ -1699,6 +1699,8 @@ Otvorenie: {0}</s:String>
     <s:String x:Key="LangModBaseExceptionEmptyFile">Súbor čítaný je prázdny</s:String>
     <s:String x:Key="LangModBaseExceptionInvalidJson">Nie je platný JSON súbor.</s:String>
     <s:String x:Key="LangModBaseNoExceptionDetail">Nie je dostupná žiadna informácia o chybe!</s:String>
+    <s:String x:Key="LangModBaseExceptionType">错误类型：</s:String>
+    <s:String x:Key="LangModBaseExceptionInfoDetail">详细错误信息：</s:String>
     <s:String x:Key="LangModMyLoadingLoading">Načítava sa...</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">Načítanie zlyhalo</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">Neznáma chyba</s:String>

@@ -1412,7 +1412,7 @@ RetryDir:
                     End If
                 Next
             End If
-            If Ex.GetType.FullName <> "System.Exception" Then DescList.Add("   错误类型：" & Ex.GetType.FullName)
+            If Ex.GetType.FullName <> "System.Exception" Then DescList.Add("   " & GetLang("LangModBaseExceptionType") & Ex.GetType.FullName)
             Ex = Ex.InnerException
             IsInner = True
         Loop
@@ -1436,7 +1436,7 @@ RetryDir:
         If CommonReason Is Nothing Then
             Return DescList.Join(vbCrLf)
         Else
-            Return CommonReason & vbCrLf & vbCrLf & "————————————" & vbCrLf & "详细错误信息：" & vbCrLf & DescList.Join(vbCrLf)
+            Return CommonReason & vbCrLf & vbCrLf & "————————————" & vbCrLf & GetLang("LangModBaseExceptionInfoDetail") & vbCrLf & DescList.Join(vbCrLf)
         End If
     End Function
     ''' <summary>
@@ -2808,11 +2808,13 @@ Retry:
         On Error Resume Next
         If TypeOf Ex Is ThreadInterruptedException Then Exit Sub
 
+        If Title = "出现错误" Then Title = GetLang("LangModBaseDialogFeedbackTitle")
+
         '获取错误信息
-        Dim ExFull As String = Desc & "：" & GetExceptionDetail(Ex)
+        Dim ExFull As String = Desc & GetLang("LangColon") & GetExceptionDetail(Ex)
 
         '输出日志
-        Dim AppendText As String = "[" & GetTimeNow() & "] " & Desc & "：" & GetExceptionDetail(Ex, True) & vbCrLf '减轻同步锁占用
+        Dim AppendText As String = "[" & GetTimeNow() & "] " & Desc & GetLang("LangColon") & GetExceptionDetail(Ex, True) & vbCrLf '减轻同步锁占用
         If ModeDebug Then
             SyncLock LogListLock
                 LogList.Append(AppendText)
@@ -2830,19 +2832,19 @@ Retry:
             Case LogLevel.Normal
 #If DEBUG Then
             Case LogLevel.Developer
-                Dim ExLine As String = Desc & "：" & GetExceptionSummary(Ex)
+                Dim ExLine As String = Desc & GetLang("LangColon") & GetExceptionSummary(Ex)
                 Hint("[开发者模式] " & ExLine, HintType.Info, False)
             Case LogLevel.Debug
-                Dim ExLine As String = Desc & "：" & GetExceptionSummary(Ex)
+                Dim ExLine As String = Desc & GetLang("LangColon") & GetExceptionSummary(Ex)
                 Hint("[调试模式] " & ExLine, HintType.Info, False)
 #Else
             Case LogLevel.Developer
             Case LogLevel.Debug
-                Dim ExLine As String = Desc & "：" & GetExceptionSummary(Ex)
+                Dim ExLine As String = Desc & GetLang("LangColon") & GetExceptionSummary(Ex)
                 If ModeDebug Then Hint("[调试模式] " & ExLine, HintType.Info, False)
 #End If
             Case LogLevel.Hint
-                Dim ExLine As String = Desc & "：" & GetExceptionSummary(Ex)
+                Dim ExLine As String = Desc & GetLang("LangColon") & GetExceptionSummary(Ex)
                 Hint(ExLine, HintType.Critical, False)
             Case LogLevel.Msgbox
                 MyMsgBox(ExFull, Title, IsWarn:=True)

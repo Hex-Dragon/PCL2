@@ -1692,6 +1692,8 @@ Si esa opción no está disponible, seleccione "Establecer contraseña" e inicie
     <s:String x:Key="LangModBaseExceptionEmptyFile">El archivo leído está vacío</s:String>
     <s:String x:Key="LangModBaseExceptionInvalidJson">No es un archivo JSON válido.</s:String>
     <s:String x:Key="LangModBaseNoExceptionDetail">¡No hay información de error disponible!</s:String>
+    <s:String x:Key="LangModBaseExceptionType">错误类型：</s:String>
+    <s:String x:Key="LangModBaseExceptionInfoDetail">详细错误信息：</s:String>
     <s:String x:Key="LangModMyLoadingLoading">Cargando...</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">Error al Cargar</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">Error Desconocido</s:String>

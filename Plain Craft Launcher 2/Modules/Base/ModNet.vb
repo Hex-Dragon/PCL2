@@ -209,7 +209,7 @@ RequestFinished:
             If TypeOf ex Is WebException AndAlso CType(ex, WebException).Status = WebExceptionStatus.Timeout Then
                 Throw New TimeoutException(GetLang("LangModExceptionTimeOut", $"{CType(ex, WebException).Status}，{ex.Message}，{Url}"), ex)
             Else
-                Throw New WebException(GetLang("LangModExceptionFailedToGet", $"{If(TypeOf ex Is WebException, CType(ex, WebException).Status & "，", "")}{ex.Message}，{Url}"), ex)
+                Throw New WebException(GetLang("LangModExceptionFailedToGet", $"{If(TypeOf ex Is WebException, CType(ex, WebException).Status & GetLang("LangComma"), "")}{ex.Message}，{Url}"), ex)
             End If
         Finally
             Request.Abort()
