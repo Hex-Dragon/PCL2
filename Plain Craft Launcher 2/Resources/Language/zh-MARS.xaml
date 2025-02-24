@@ -1701,6 +1701,8 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModBaseExceptionEmptyFile">渎掫菿哋妏件潙涳</s:String>
     <s:String x:Key="LangModBaseExceptionInvalidJson">芣湜洧效哋 JSON 妏件</s:String>
     <s:String x:Key="LangModBaseNoExceptionDetail">嘸妸鼡措誤信息！</s:String>
+    <s:String x:Key="LangModBaseExceptionType">错误类型：</s:String>
+    <s:String x:Key="LangModBaseExceptionInfoDetail">详细错误信息：</s:String>
     <s:String x:Key="LangModMyLoadingLoading">咖酨狆</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">咖酨妷敗</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">沬倁措誤</s:String>

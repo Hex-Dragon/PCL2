@@ -1699,6 +1699,8 @@ URL: {0}</s:String>
     <s:String x:Key="LangModBaseExceptionEmptyFile">Το αρχείο που διαβάστηκε είναι κενό</s:String>
     <s:String x:Key="LangModBaseExceptionInvalidJson">Δεν είναι έγκυρο αρχείο JSON.</s:String>
     <s:String x:Key="LangModBaseNoExceptionDetail">Δεν υπάρχουν διαθέσιμες πληροφορίες σφάλματος!</s:String>
+    <s:String x:Key="LangModBaseExceptionType">错误类型：</s:String>
+    <s:String x:Key="LangModBaseExceptionInfoDetail">详细错误信息：</s:String>
     <s:String x:Key="LangModMyLoadingLoading">Φόρτωση...</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">Απέτυχε η φόρτωση</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">Άγνωστο σφάλμα</s:String>

@@ -108,7 +108,7 @@ Module Modi18n
     ''' </summary>
     ''' <returns>返回类似于 zh-CN 这样形式的文本</returns>
     Public Function GetDefaultLang() As String
-        Dim CurrentCulture As String = CultureInfo.CurrentCulture.Name
+        Dim CurrentCulture As String = CultureInfo.CurrentUICulture.Name
         Dim PrefixMap As New Dictionary(Of String, String) From {
             {"el-", "el-GR"},
             {"es-", "es-ES"},

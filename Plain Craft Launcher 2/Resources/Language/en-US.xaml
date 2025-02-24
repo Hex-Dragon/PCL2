@@ -1699,6 +1699,8 @@ About to open: {0}</s:String>
     <s:String x:Key="LangModBaseExceptionEmptyFile">The file read is empty</s:String>
     <s:String x:Key="LangModBaseExceptionInvalidJson">Not a valid JSON file.</s:String>
     <s:String x:Key="LangModBaseNoExceptionDetail">No error information available!</s:String>
+    <s:String x:Key="LangModBaseExceptionType">Exception type: </s:String>
+    <s:String x:Key="LangModBaseExceptionInfoDetail">Detailed exception information: </s:String>
     <s:String x:Key="LangModMyLoadingLoading">Loading...</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">Failed to Load</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">Unknown Error</s:String>

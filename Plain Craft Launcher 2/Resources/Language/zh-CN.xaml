@@ -1701,6 +1701,8 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModBaseExceptionEmptyFile">读取到的文件为空</s:String>
     <s:String x:Key="LangModBaseExceptionInvalidJson">不是有效的 JSON 文件</s:String>
     <s:String x:Key="LangModBaseNoExceptionDetail">无可用错误信息！</s:String>
+    <s:String x:Key="LangModBaseExceptionType">错误类型：</s:String>
+    <s:String x:Key="LangModBaseExceptionInfoDetail">详细错误信息：</s:String>
     <s:String x:Key="LangModMyLoadingLoading">加载中</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">加载失败</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">未知错误</s:String>
