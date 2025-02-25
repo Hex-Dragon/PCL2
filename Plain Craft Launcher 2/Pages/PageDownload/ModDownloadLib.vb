@@ -402,8 +402,7 @@ pause"
             Case Else
                 If Id.StartsWith("1.0.0-rc2") Then
                     WikiName = "Java版RC2"
-                End If
-                If Id.StartsWith("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWith("1_19_deep_dark_experimental_snapshot-") Then
+                ElseIf Id.StartsWith("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWith("1_19_deep_dark_experimental_snapshot-") Then
                     WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Java版Deep_Dark_Experimental_Snapshot_")
                 ElseIf Id.Contains("b1.9") Then
                     WikiName = "Java版" & Id.Replace("b", "Beta_").Replace("-pre", "_Prerelease_")
