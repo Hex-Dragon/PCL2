@@ -404,6 +404,20 @@ pause"
             Case Else
                 If Id.StartsWith("1.0.0-rc2") Then
                     WikiName = "Java版RC2"
+                ElseIf Id.StartsWith("b1.8-pre1") Then
+                    WikiName = "Java版Beta_1.8-pre1"
+                ElseIf Id.StartsWith("b1.1-") Then
+                    WikiName = "Java版Beta_1.1"
+                ElseIf Id.StartsWith("a1.2.2") Then
+                    WikiName = "Java版Alpha_v1.2.2"
+                ElseIf Id.StartsWith("a1.1.0") Then
+                    WikiName = "Java版Alpha_v1.1.0"
+                ElseIf Id.StartsWith("a1.0.14") Then
+                    WikiName = "Java版Alpha_v1.0.14"
+                ElseIf Id.StartsWith("a1.0.13_01") Then
+                    WikiName = "Java版Alpha_v1.0.13_01"
+                ElseIf Id.StartsWith("inf-20100630") Then
+                    WikiName = "Java版Infdev_20100630"
                 ElseIf Id.StartsWith("1.19_deep_dark_experimental_snapshot-") OrElse Id.StartsWith("1_19_deep_dark_experimental_snapshot-") Then
                     WikiName = Id.Replace("1_19", "1.19").Replace("1.19_deep_dark_experimental_snapshot-", "Java版Deep_Dark_Experimental_Snapshot_")
                 ElseIf Id.Contains("b1.9") Then
