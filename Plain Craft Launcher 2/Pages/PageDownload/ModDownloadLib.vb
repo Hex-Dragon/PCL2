@@ -399,6 +399,8 @@ pause"
                 WikiName = "Java版Combat_Test_8b"
             Case "combat test 8c", "1.16_combat-6"
                 WikiName = "Java版Combat_Test_8c"
+            Case "1.0.0-rc1"
+                WikiName = "Java版RC1"
             Case Else
                 If Id.StartsWith("1.0.0-rc2") Then
                     WikiName = "Java版RC2"
