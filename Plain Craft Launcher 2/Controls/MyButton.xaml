@@ -7,7 +7,7 @@
         <Border.RenderTransform>
             <ScaleTransform />
         </Border.RenderTransform>
-        <TextBlock TextOptions.TextFormattingMode="Display" SnapsToDevicePixels="True" TextTrimming="None" Text="Button" HorizontalAlignment="Center" x:Name="LabText" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Foreground="{Binding Parent.BorderBrush, RelativeSource={RelativeSource Self}}" FontSize="13" IsHitTestVisible="False">
+        <TextBlock TextOptions.TextFormattingMode="Display" SnapsToDevicePixels="True" TextTrimming="None" HorizontalAlignment="Center" x:Name="LabText" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Foreground="{Binding Parent.BorderBrush, RelativeSource={RelativeSource Self}}" FontSize="13" IsHitTestVisible="False">
             <TextBlock.RenderTransform>
                 <ScaleTransform />
             </TextBlock.RenderTransform>
