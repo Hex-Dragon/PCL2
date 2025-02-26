@@ -106,7 +106,7 @@ WaitRetry:
             LogStart()
             '添加日志
             Log($"[Start] 程序版本：{VersionBaseName} ({VersionBranchName}, {VersionCode}{If(CommitHash = "", "", $"，#{CommitHash}")})")
-            Log($"[Start] 识别码：{UniqueAddress}{If(ThemeCheckOne(9), "，已解锁反馈主题", "")}")
+            Log($"[Start] 识别码：{UniqueAddress}{If(ThemeCheckOne(9), "", "")}")
             Log($"[Start] 程序路径：{PathWithName}")
             Log($"[Start] 系统版本：{Environment.OSVersion.Version}, 架构：{Runtime.InteropServices.RuntimeInformation.OSArchitecture}")
             Log($"[Start] 系统编码：{Encoding.Default.HeaderName} ({Encoding.Default.CodePage}, GBK={IsGBKEncoding})")
