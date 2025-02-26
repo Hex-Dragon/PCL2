@@ -113,9 +113,12 @@
             ele.Info = item.User & " | " & item.Time
             ele.Tags = StatusDesc
             AddHandler ele.Click, Sub()
-                                      MyMsgBox($"提交者：{item.User}（{GetTimeSpanString(item.Time - DateTime.Now, False)}）{vbCrLf}状态：{StatusDesc}{vbCrLf}{vbCrLf}{item.Content}", "#" & item.ID & " " & item.Title, Button2:="查看详情", Button2Action:=Sub()
-                                                                                                                                                                                                                                                    OpenWebsite(item.Url)
-                                                                                                                                                                                                                                                End Sub)
+                                      Select Case MyMsgBox($"提交者：{item.User}（{GetTimeSpanString(item.Time - DateTime.Now, False)}）{vbCrLf}状态：{StatusDesc}{vbCrLf}{vbCrLf}{item.Content}",
+                                               "#" & item.ID & " " & item.Title,
+                                               Button2:="查看详情")
+                                          Case 2
+                                              OpenWebsite(item.Url)
+                                      End Select
                                   End Sub
             If StatusDesc.StartsWithF("处理中") Then
                 PanListProcessing.Children.Add(ele)
