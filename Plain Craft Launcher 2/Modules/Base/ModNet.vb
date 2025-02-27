@@ -15,7 +15,7 @@ Public Module ModNet
         End If
         If Not String.IsNullOrWhiteSpace(proxy) Then
             _Proxy = New WebProxy(proxy, True)
-            Dim ProxyUri As New Uri(_Proxy)
+            Dim ProxyUri As New Uri(_Proxy.ToString)
             Try
                 If ProxyUri.IsLoopBack() Or 
                 ProxyUri.Host.StartsWithF("192.168.") Or
