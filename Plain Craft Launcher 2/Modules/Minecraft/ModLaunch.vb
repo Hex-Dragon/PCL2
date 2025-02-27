@@ -744,8 +744,8 @@ LoginFinish:
                     Caption:=$"当前正在使用不安全的 HTTP 协议，这将增加账号被盗的风险!{vbCrLf}如果没有特殊需求，建议使用更安全的 HTTPS 协议。",
                     Title:="账号安全警告",
                     IsWarn:=True,
-                    Button2:="不再显示",
                     Button1:="取消登录",
+                    Button2:="不再显示",
                     Button3:="取消登录")
 
                     Case 1
