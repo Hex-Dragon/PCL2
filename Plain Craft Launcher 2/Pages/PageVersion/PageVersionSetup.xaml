@@ -126,9 +126,6 @@
             </local:MyCard>
             <local:MyCard x:Name="CardServer" Margin="0,0,0,15" Title="服务器">
                 <StackPanel Margin="25,42,25,18">
-                    <local:MyHint x:Name="LabServerAuthServerSecurityVerify" Text="未启用 SSL 证书验证可能导致登录密码面临被第三方截获的安全风险。&#xA;如果没有特殊需求，请始终考虑启用 SSL 证书验证！" IsWarn="False" Visibility="Collapsed"/>
-                    <local:MyHint x:Name="LabServerAuthServerSecurity" Text="使用 HTTP 协议进行登录操作可能面临登录密码在未加密的情况下被明文传输的安全风险。&#xA;如果没有特殊需求，请始终考虑使用 HTTPS 协议！" Visibility="Collapsed"/>
-                    <TextBlock Name="LabServerAuthServerSecurityCL" Text="&#xA;" Visibility="Collapsed"/>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
