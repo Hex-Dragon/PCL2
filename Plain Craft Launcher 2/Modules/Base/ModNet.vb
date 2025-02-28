@@ -11,22 +11,25 @@ Public Module ModNet
     Public Function GetProxy()
         Dim proxy As String = Setup.Get("SystemHttpProxy")
         If _Proxy IsNot Nothing AndAlso _Proxy.Address.AbsoluteUri = proxy Then
+            Log("[Net] 当前代理状态：跟随系统代理设置")
             Return _Proxy
         End If
         If Not String.IsNullOrWhiteSpace(proxy) Then
             _Proxy = New WebProxy(proxy, True)
+            Log("[Net] 当前代理状态：自定义")
             Dim ProxyUri As New Uri(_Proxy.ToString)
             Try
-                If ProxyUri.IsLoopBack() Or 
-                ProxyUri.Host.StartsWithF("192.168.") Or
-                ProxyUri.Host.StartsWithF("10.") Or
-                ProxyUri.Host.StartswithF("fe80") Or
+                If ProxyUri.IsLoopBack() OrElse
+                ProxyUri.Host.StartsWithF("192.168.") OrElse
+                ProxyUri.Host.StartsWithF("10.") OrElse
+                ProxyUri.Host.StartswithF("fe80") OrElse
                 (ProxyUri.Host.Split(".")(1) > 16 AndAlso ProxyUri.Host.Split(".")(1) < 31 AndAlso ProxyUri.Host.StartsWithF("172.")) Then Log($"[Net] 使用 {_Proxy} 作为网络代理")
             '视作非本地地址
             Catch
             End Try
             Return _Proxy
         End If
+        Log("[Net] 当前代理状态：禁用")
         Return Nothing
     End Function
 
