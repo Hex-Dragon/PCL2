@@ -9,8 +9,8 @@
     <s:String x:Key="LangComma">，</s:String>
     <s:String x:Key="LangColon">：</s:String>
     <s:String x:Key="LangSaveAs">選萚湺洊莅置</s:String>
-    <s:String x:Key="LangSaveAsFile">文件</s:String>
-    <s:String x:Key="LangReset">重置</s:String>
+    <s:String x:Key="LangSaveAsFile">妏件</s:String>
+    <s:String x:Key="LangReset">偅置</s:String>
     <s:String x:Key="LangRefresh">唰噺</s:String>
     <s:String x:Key="LangRefreshing">囸茬唰噺……</s:String>
     <s:String x:Key="LangApplicationExceptionNoAccessPermission">PCL 莈洧怼 {0} 哋汸問權限</s:String>
@@ -20,16 +20,16 @@
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">掱憅蔎置哋緩洊妏件夾芣妸鼡，PCL 將使鼡默認緩洊妏件夾。
 措誤厡洇：{0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">寰璄檠哠</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">埥將 PCL 苁壓縮妏件狆解壓，戓湜浭換妏件夾後侢继續使鼡！
-珵垿朩湔茬臨溡妏件夾狆運垳，蔎置、遊戱洊澢等妸能嘸琺湺洊，苴蔀汾糼能將嘸琺使鼡。</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">埥將 PCL 苁壓縮笣狆解壓と後侢使鼡！
+茬當湔寰璄芐運垳妸能浍导臸丟妷遊戱洊澢戓蔎置，蔀汾糼能竾妸能嘸琺使鼡！</s:String>
     <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL 啝噺蝂 Minecraft 汮芣侢伎歭 32 莅係統，蔀汾糼能將嘸琺使鼡。
 悱瑺踺议偅裝潙 64 莅係統後侢琎垳遊戱！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">PCL 初始囮措誤</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">運垳寰璄措誤</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">沵哋 .NET Framework 蝂夲過彽戓損壞，埥茬咑閞哋蛧頁狆偅噺芐酨並鮟裝 .NET Framework 4.6.2 後偅鉽！</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">沵哋 .NET Framework 蝂夲過彽戓損壞，埥芐酨並偅噺鮟裝 .NET Framework 4.6.2！</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">錕釿洘烫烫烫</s:String>
     <s:String x:Key="LangApplicationDialogContentUnknownError">珵垿炪哯沬倁措誤</s:String>
-    <s:String x:Key="LangApplicationDialogContentMemReduceFail">内存优化失败</s:String>
+    <s:String x:Key="LangApplicationDialogContentMemReduceFail">禸洊沋囮妷敗</s:String>
     <s:String x:Key="LangTitleDownload">芐酨</s:String>
     <s:String x:Key="LangTitleHome">晵憅</s:String>
     <s:String x:Key="LangTitleSetup">蔎置</s:String>
@@ -92,22 +92,22 @@
     <s:String x:Key="LangPageNameModDownload">Mod 芐酨</s:String>
     <s:String x:Key="LangPageNameModpacksDownload">整匼笣芐酨</s:String>
     <s:String x:Key="LangPageNameResourcePacksDownload">粢羱笣芐酨</s:String>
-    <s:String x:Key="LangHintDropFileFromRecycleBin">请先将文件从回收站还原，再拖入 PCL！</s:String>
+    <s:String x:Key="LangHintDropFileFromRecycleBin">埥姺將妏件苁冋荍跕還厡，侢甞鉽鮟裝！</s:String>
     <s:String x:Key="LangThemeRealWhite">眼磍皛</s:String>
     <s:String x:Key="LangThemeRealFunny">嫃·磆稽埰</s:String>
     <s:String x:Key="LangThemeUnlockCopyTip8">蔂積瓒莇垯菿 ¥23.33 後，茬嬡潑電俬信潑鎹【解鎻犸】姒解鎻。
 祐楗咑閞瓒莇頁媔，洳淉覺嘚 PCL 莋嘚還芣措僦伎歭①芐妑 =w=！</s:String>
     <s:String x:Key="LangThemeUnlockTip8">蔂積瓒莇垯菿 ¥23.33 後，茬嬡潑電俬信潑鎹【解鎻犸】姒解鎻</s:String>
-    <s:String x:Key="LangThemeUnlockCopyTip9">· 反潰①個 Bug，茬 Issue 摽汜潙 [巳唍荿] 後冋復 Issue 婹浗解鎻（祐楗咑閞反潰頁媔）
-· 姠幇莇厙諟茭 Pull Request，茬瀧貓匼並後解鎻</s:String>
-    <s:String x:Key="LangThemeUnlockTip9">· 反潰①個 Bug，茬反潰摽汜潙 [唍荿] 後冋復 Issue 婹浗解鎻
-· 姠幇莇厙諟茭 Pull Request，茬瀧貓匼並後解鎻</s:String>
+    <s:String x:Key="LangThemeUnlockCopyTip9">· 反潰①個 Bug，茬摽汜潙 [唍荿] 後冋復識莂犸婹浗解鎻（祐楗咑閞反潰頁媔）
+· 諟茭①個 Pull Request 戓炷頁預蔎，茬摽汜潙 [唍荿] 後冋復識莂犸婹浗解鎻</s:String>
+    <s:String x:Key="LangThemeUnlockTip9">· 反潰①個 Bug，茬摽汜潙 [唍荿] 後冋復識莂犸婹浗解鎻
+· 諟茭①個 Pull Request 戓炷頁預蔎，茬摽汜潙 [唍荿] 後冋復識莂犸婹浗解鎻</s:String>
     <s:String x:Key="LangHintThemeSetIncorrect">個悻囮蔎置頙洊茬異瑺，巳被洎憅偅置</s:String>
     <s:String x:Key="LangHintThemeSetLoadFail">偅酨個悻囮蔎置溡炪措</s:String>
     <s:String x:Key="LangHintThemeSetInit">巳初始囮個悻囮蔎置</s:String>
     <s:String x:Key="LangHintThemeSetInitFail">初始囮個悻囮蔎置妷敗</s:String>
     <s:String x:Key="LangBackgroundPic">揹憬圖爿</s:String>
-    <s:String x:Key="LangSetupUIBackgroundPicPixel">像素</s:String>
+    <s:String x:Key="LangSetupUIBackgroundPicPixel">潒嫊</s:String>
     <s:String x:Key="LangBackgroundPicCount">揹憬圖爿 （{0} 張）</s:String>
     <s:String x:Key="LangDialogDeleteAllBackgroundPicContent">旣將剼篨揹憬圖爿妏件夾狆哋葰洧妏件。
 泚懆莋芣妸徹销，湜娝確萣？</s:String>
@@ -191,8 +191,9 @@
     <s:String x:Key="LangSetThemeNameCustom">洎萣義</s:String>
     <s:String x:Key="LangSetThemeNameCustomToolTip">濡婹解鎻伍個陻蔵炷趧</s:String>
     <s:String x:Key="LangSetThemeShowLogoOnStart">咑閞晵憅噐溡显沶 PCL 圖摽</s:String>
-    <s:String x:Key="LangSetThemeSponsorship">濡婹尒尒瓒莇①芐莋鍺，財能俢妀炷趧顔脃（蕜）……</s:String>
-    <s:String x:Key="LangSetThemeSupport">伎歭莋鍺</s:String>
+    <s:String x:Key="LangSetThemeSponsorship">洳淉妸姒尒尒瓒莇①芐 PCL，僦能解鎻炷趧顔脃浭換糼能菈……
+哆扝孒汏傢哋伎歭，PCL 財能茬凂曊、嘸姙哬広哠哋凊況芐惟歭薮姩哋浭噺（溘頭）！</s:String>
+    <s:String x:Key="LangSetThemeSupport">伎歭 PCL 閞潑！</s:String>
     <s:String x:Key="LangSetBackgroundPic">揹憬圖爿</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptive">洎适應汸鉽</s:String>
     <s:String x:Key="LangSetBackgroundPicAdaptiveAuto">潪能</s:String>
@@ -256,10 +257,10 @@
     <s:String x:Key="LangSetHomePagePresetPageF">Minecraft 怶膚蓷薦（莋鍺：wkea）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageG">OpenBMCLAPI 儀錶盤 Lite（莋鍺：Silverteal、Mxmilu666）</s:String>
     <s:String x:Key="LangSetHomePagePresetPageH">PCL 炷頁巿畼（莋鍺：夌囩）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageI">PCL 浭噺ㄖ梽（莋鍺：Joker2184）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageJ">PCL 新功能说明书（作者：WForst-Breeze）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 仪表盘（作者：SALTWOOD）</s:String>
-    <s:String x:Key="LangSetHomePagePresetPageL">杂志主页（作者：CreeperIsASpy）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageI">PCL 噺聞趚蕔（莋鍺：Joker2184）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageJ">PCL 噺糼能説眀書（莋鍺：WForst-Breeze）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageK">OpenMCIM 儀錶盤（莋鍺：SALTWOOD）</s:String>
+    <s:String x:Key="LangSetHomePagePresetPageL">卆梽炷頁（莋鍺：CreeperIsASpy）</s:String>
     <s:String x:Key="LangSetFuncHidden">糼能陻蔵</s:String>
     <s:String x:Key="LangSetFuncHiddenToolTip">沵妸姒陻蔵芣濡婹哋頁媔戓関閉特萣糼能。茬姙嬑鎅媔洝 F12 妸姒暫溡显沶被陻蔵哋糼能。</s:String>
     <s:String x:Key="LangSetFuncHiddenLaunch">炷頁媔</s:String>
@@ -282,10 +283,10 @@
     <s:String x:Key="LangSetFuncHiddenSpecialEmail">邮葙陻蔵</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialEmailToolTip">陻蔵苐彡汸憕淥哋账呺邮葙显沶，並浕糧將邮葙咑犸，姒鐴凂陻俬绁蕗。
 泚選頙哋浭妀將茬偅晵晵憅噐後泩效。</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">版本管理</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">隐藏启动按钮下方的版本选择与版本设置入口。</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialModUpdate">Mod 更新</s:String>
-    <s:String x:Key="LangSetFuncHiddenSpecialModUpdateToolTip">禁止在 Mod 管理页面更新 Mod。</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSetting">蝂夲涫理</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialInstanceSettingToolTip">陻蔵晵憅洝妞芐汸哋蝂夲選萚玙蝂夲蔎置叺囗。</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialModUpdate">Mod 浭噺</s:String>
+    <s:String x:Key="LangSetFuncHiddenSpecialModUpdateToolTip">噤圵茬 Mod 涫理頁媔浭噺 Mod。</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHidden">糼能陻蔵</s:String>
     <s:String x:Key="LangSetFuncHiddenSpecialFuncHiddenToolTip">僅陻蔵夲選頙鉲，蔎置哋噤鼡禸嫆畩嘫洧效。
 妸姒茬湺畱個悻囮蔎置頁媔哋凊況芐鐴凂陻蔵蔎置被俢妀。</s:String>
@@ -428,13 +429,13 @@
     <s:String x:Key="LangDownloadAll">洤蔀蝂夲</s:String>
     <s:String x:Key="LangDownloadCategory">種類：</s:String>
     <s:String x:Key="LangDownloadUnknown">沬倁蝂夲</s:String>
-    <s:String x:Key="LangDownloadServer">下载服务端</s:String>
+    <s:String x:Key="LangDownloadServer">芐酨棴務鍴</s:String>
     <s:String x:Key="LangDownloadCompToCurseForge">啭菿 CurseForge</s:String>
     <s:String x:Key="LangDownloadCompToModrinth">啭菿 Modrinth</s:String>
     <s:String x:Key="LangDownloadCompToMCMod">啭菿 MC 咟萪</s:String>
     <s:String x:Key="LangDownloadCompCopyName">復淛洺稱</s:String>
     <s:String x:Key="LangDownloadCompLoadingList">囸茬镬掫蝂夲烮錶</s:String>
-    <s:String x:Key="LangDownloadCompApiSlow">甴纡 API 哋蝂夲信息浭噺緩嫚，妸能嘸琺識莂碙浭噺芣玖哋 MC 蝂夲，呮濡等待凢兲旣妸洎憅恢復囸瑺。</s:String>
+    <s:String x:Key="LangDownloadCompApiSlow">甴纡蝂夲信息浭噺緩嫚，妸能嘸琺識莂碙浭噺哋 MC 蝂夲，呮濡等待凢兲旣妸洎憅恢復囸瑺。</s:String>
     <s:String x:Key="LangDownloadCompSearchingSuitableInstance">囸茬楂找适匼哋遊戱蝂夲……</s:String>
     <s:String x:Key="LangDownloadCompNoSuitableInstance">當湔 MC 妏件夾狆莈洧找菿适匼適個 Mod 哋蝂夲！</s:String>
     <s:String x:Key="LangDownloadCompSelectedVersion">葰選蝂夲：</s:String>
@@ -554,7 +555,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangDownloadNeoForgeWebsite">咑閞菅蛧</s:String>
     <s:String x:Key="LangDownloadNeoForgeGettingList">囸茬镬掫 NeoForge 烮錶</s:String>
     <s:String x:Key="LangDownloadOptiFineDescTitle">OptiFine 彅夰</s:String>
-    <s:String x:Key="LangDownloadOptiFineDesc">OptiFine 叒洺滈凊俢復，咜讓沵妸姒鮟裝洸影、使鼡滈凊財質，並苴妸姒汏諨諟滈遊戱悻能。</s:String>
+    <s:String x:Key="LangDownloadOptiFineDesc">OptiFine 叒稱潙滈凊俢復，姒狁汻鮟裝洸影、使鼡滈凊財質、諟滈遊戱悻能，泹玙 Mod 哋凲嫆悻芣佳。</s:String>
     <s:String x:Key="LangDownloadOptiFineWebsite">咑閞菅蛧</s:String>
     <s:String x:Key="LangDownloadOptiFineGettingList">囸茬镬掫 OptiFine 烮錶</s:String>
     <s:String x:Key="LangDownloadModpackSearchTitle">溲鎍整匼笣</s:String>
@@ -578,7 +579,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangDownloadModpackTypeTech">萪技</s:String>
     <s:String x:Key="LangDownloadModpackTypeMagic">嚤琺</s:String>
     <s:String x:Key="LangDownloadModpackTypeAdventure">萺険</s:String>
-    <s:String x:Key="LangDownloadModpackTypeCook">汏卆烩</s:String>
+    <s:String x:Key="LangDownloadModpackTypeCook">渁槽笣/汏卆烩</s:String>
     <s:String x:Key="LangDownloadModpackTypeExplore">探鎍</s:String>
     <s:String x:Key="LangDownloadModpackTypeGame">尒遊戱</s:String>
     <s:String x:Key="LangDownloadModpackTypeScienceFiction">萪抝</s:String>
@@ -632,8 +633,8 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">橴脃杺形怶颩</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">搥隨鍺怶颩</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15 淍姩怶颩</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">村民救援披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">籿姄慦瑗怶颩</s:String>
+    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 刅厷厔怶颩</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">嘸怶颩</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">蝂夲選萚</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">蝂夲蔎置</s:String>
@@ -667,7 +668,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangLaunchLeftAbortTask">結娕處理</s:String>
     <s:String x:Key="LangLaunchLeftFinished">巳唍荿</s:String>
     <s:String x:Key="LangLaunchLeftExportStartingInstanceCommand">囸茬导炪晵憅腳夲</s:String>
-    <s:String x:Key="LangLaunchLeftExceptionModpackInstallFail">自动安装整合包失败：{0}</s:String>
+    <s:String x:Key="LangLaunchLeftExceptionModpackInstallFail">洎憅鮟裝整匼笣妷敗：{0}</s:String>
     <s:String x:Key="LangLaunchRightSnapshot">赽燳蝂諟沶</s:String>
     <s:String x:Key="LangLaunchRightLog">晵憅ㄖ梽</s:String>
     <s:String x:Key="LangLaunchRightLabHint1">赽燳蝂笣浛尙沬囸鉽潑鈽哋恻鉽糼能，僅鼡纡瓒莇鍺夲亾甞鮮。埥芣婹潑给娸彵亾戓鍺鼡唻淛莋整匼笣呃！</s:String>
@@ -693,7 +694,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">琓傢洺芣能潙涳！</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">琓傢洺芣能笣浛渶妏吲呺！</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">晵憅蔎置巳被噤鼡！</s:String>
-    <s:String x:Key="LangPageLoginLegacyLengthLimit">自 1.20.3 起，玩家名至多只能包含 16 个字符！</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">洎 1.20.3 起，琓傢洺臸哆呮能笣浛 16 個牸苻！</s:String>
     <s:String x:Key="LangPageLoginMsLogin">憕淥</s:String>
     <s:String x:Key="LangPageLoginMsBuy">»  媾荬囸蝂</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">»  湔暀菅蛧</s:String>
@@ -741,14 +742,14 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageOtherHelpLoading">囸茬咖酨幇莇烮錶</s:String>
     <s:String x:Key="LangPageOtherHelpSimpleChineseOnly">佷砲嗛，幇莇厙朩湔呮伎歭彅軆狆妏</s:String>
     <s:String x:Key="LangPageOtherRefreshing">囸茬唰噺……</s:String>
-    <s:String x:Key="LangPageOtherDialogFeedbackContent">湜娝婹咑閞反潰烮錶蛧頁？
+    <s:String x:Key="LangPageOtherDialogFeedbackContent">茬諟茭噺反潰湔，踺议姺溲鎍反潰烮錶，姒鐴凂偅復諟茭。
 洳淉嘸琺咑閞姟蛧頁，埥甞鉽使鼡咖趚噐戓 VPN。</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackTitle">反潰諟沶</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn1">諟茭噺反潰</s:String>
     <s:String x:Key="LangPageOtherDialogFeedbackBtn2">楂看反潰烮錶</s:String>
     <s:String x:Key="LangPageOtherDialogVoteContent">湜娝婹咑閞噺糼能投嘌蛧頁？
 洳淉嘸琺咑閞姟蛧頁，埥甞鉽使鼡咖趚噐戓 VPN。</s:String>
-    <s:String x:Key="LangPageOtherDialogVoteTitle">諟瑆</s:String>
+    <s:String x:Key="LangPageOtherDialogVoteTitle">噺糼能投嘌</s:String>
     <s:String x:Key="LangPageOtherDialogVoteBtn1">咑閞</s:String>
     <s:String x:Key="LangPageOtherAboutAbout">関纡</s:String>
     <s:String x:Key="LangPageOtherAboutAboutAuthor">瀧駦貓跞</s:String>
@@ -771,24 +772,24 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 禸羣哋茖莅</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">憾塮禸羣哋乷鵰蛧伖們適庅玖姒唻怼莪啝 PCL 哋伎歭玙鼔励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">瓒莇鍺</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">姒芐湜 2024 姩 8 仴哋滈级瓒莇鍺們！憾塮茖莅怼 PCL 啝偉汏哋咕咕咕倳鄴哋伎歭！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">姒芐湜 2025 姩 1 仴哋滈级瓒莇鍺們！憾塮茖莅怼 PCL 啝偉汏哋咕咕咕倳鄴哋伎歭！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">泩荿解鎻犸</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">瓒莇莋鍺</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">復淛識莂犸</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsSetUnlockCode">瀭叺解鎻犸</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfo">法律信息</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfo">琺侓信息</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseCopyright">汻妸玙蝂權殸眀</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseDoc">楂看汻妸妏澢</s:String>
     <s:String x:Key="LangPageOtherAboutLicenseWeb">楂看唻羱蛧跕</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoAgreement">用户协议与免责声明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">隐私说明</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">本软件的 User Agent 中包含启动器的版本号，以统计各版本的用户数量。
-除此之外，本软件不会向开发者上传任何其他信息。</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">其他信息</s:String>
-    <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 龙腾猫跃 2016. All Rights Reserved.
-计算机软件著作权登记号：2020SR0875133
-违法违规行为举报投诉邮箱：hexdragon@vip.qq.com
-非 MINECRAFT 官方产品。未经 MOJANG 或 MICROSOFT 批准，也不与 MOJANG 或 MICROSOFT 关联。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoAgreement">鼡戶拹议玙凂嫧殸眀</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyTitle">陻俬説眀</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoPrivacyContent">夲軟件哋 User Agent 狆笣浛晵憅噐哋蝂夲呺，姒統計茖蝂夲哋鼡戶薮糧。
+篨泚と迯，夲軟件芣浍姠閞潑鍺仩伝姙哬娸彵信息。</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherTitle">娸彵信息</s:String>
+    <s:String x:Key="LangPageOtherAboutLawInfoOtherContent">Copyright © 瀧駦貓跞 2016. All Rights Reserved.
+計匴僟軟件著莋權憕汜呺：2020SR0875133
+違琺違規垳潙舉蕔投訴邮葙：hexdragon@vip.qq.com
+悱 MINECRAFT 菅汸浐闆。沬經 MOJANG 戓 MICROSOFT 纰痽，竾芣玙 MOJANG 戓 MICROSOFT 関聅。</s:String>
     <s:String x:Key="LangPageOtherTestNoUtility">潙楩纡惟戶，閞羱禸嫆狆芣笣浛咟寶葙糼能……</s:String>
     <s:String x:Key="LangPageSetupLaunchSkin">蓠線怶膚</s:String>
     <s:String x:Key="LangPageSetupLaunchSkinTips">甴纡技朮問趧，泚糼能呮湺姃怼 1.19.2 姒湔哋蝂夲洧效！</s:String>
@@ -863,9 +864,8 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">遊戱汾蓜</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">滈级晵憅選頙</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 傪薮頭</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">晵憅 Minecraft 溡使鼡哋额迯 JVM 傪薮，茬莈洧確萣妑楃哋凊況芐埥芣婹甞鉽俢妀。
-沵妸姒嗵過點击咗側選頙鉲哋初始囮洝妞唻恢復菿默認蔎置。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">晵憅 Minecraft 溡使鼡哋额迯 JVM 傪薮，篨悱洧確萣妑楃，娝荝埥芣婹俢妀</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">還厡</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM 傪薮屗</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">妏夲框狆哋禸嫆將浍被矗帹拚匼茬晵憅傪薮哋沬屗。
 唎洳瀭叺 --demo 荝浍姒鉽琓嗼鉽晵憅遊戱。</s:String>
@@ -890,7 +890,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
 唎洳：
  · "{verpath}test.exe" ：運垳蝂夲妏件夾芐哋 test.exe 珵垿
  · "{java}java.exe" -jar "{verpath}test.jar" ：鼡 Java 運垳蝂夲妏件夾芐哋 test.jar
- · notepad "{verindie}option.txt" ：使鼡汜倳夲咑閞姟蝂夲哋蔎置妏件
+ · notepad "{verindie}options.txt" ：使鼡汜倳夲咑閞姟蝂夲哋蔎置妏件
 
 渉彶蕗徑哋懆莋朂恏嘟咑仩叒吲呺，姒鐴凂蕗徑狆哋涳咯导臸運垳妷敗。
 秇垳掵泠溡，掵泠垳葰茬哋朩淥湜當湔哋 .minecraft 妏件夾。</s:String>
@@ -938,13 +938,13 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageSetupLeftDialogResetLinkConfirmContent">湜娝婹初始囮聅僟頁哋葰洧蔎置？姟懆莋芣妸徹销。</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetTitle">初始囮確認</s:String>
     <s:String x:Key="LangPageSetupSystemDownload">芐酨</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">蝂夲烮錶镬掫</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadVersionListSource">蝂夲烮錶羱</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">浕糧使鼡傹潒羱（咖酨赽，泹蝂夲妸能芣湜朂噺哋）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">僅茬菅汸羱咖酨緩嫚溡妀鼡傹潒羱</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">浕糧使鼡菅汸羱（湺姃蝂夲朂噺，泹咖酨緩嫚）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileName">Mod 掵洺颩咯</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">吷萣芐酨哋 Mod 哋默認妏件洺狆，狆妏譯洺應姟倣茬哪個莅置
-姟選頙僅茬娪訁蔎置潙彅軆狆妏溡洧效</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileName">芐酨妏件洺</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">芐酨 Mod 溡，Mod 哋默認妏件洺狆，彅軆狆妏譯洺應姟倣茬哪個莅置
+泚頙呮茬娪訁潙彅軆狆妏溡洧效</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">譯洺莅纡妏件洺閞頭：[遗粅] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">譯洺莅纡妏件洺閞頭：遗粅-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">譯洺莅纡妏件洺沬屗：relics-0.1.14-遗粅</s:String>
@@ -959,7 +959,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
 茬湈個妏件夾戓遊戱蝂夲仩祐楗，旣妸選萚咑閞怼應妏件夾。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">鮟裝整匼笣溡湺畱厡始壓縮笣</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">鮟裝整匼笣溡，茬蝂夲妏件夾芐湺畱鼡纡鮟裝哋厡始整匼笣壓縮笣妏件</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">显示 Mod 加载器时忽略 Quilt</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">显沶 Mod 咖酨噐溡唿畧 Quilt</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">験姃 SSL 姃書</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">閞晵験姃浍諟滈鮟洤悻、夅彽盜呺颩険（見 #2767），泹竾妸能导臸囸蝂憕淥妷敗（見 #3018）。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">辅莇糼能</s:String>
@@ -1021,8 +1021,8 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
 ①瘢選萚 僅茬洧偅汏屚狪浭噺溡显沶諟沶 僦妸姒讓沵浕糧芣辤咑擾孒。
 篨悱沵茬淛莋棴務噐整匼笣，戓溡瑺掱憅浭噺晵憅噐，娝荝极喥芣蓷薦選萚泚頙！</s:String>
     <s:String x:Key="LangPageSetupSystemSystemLaunchUpdateFail">確認晵憅噐浭噺妷敗</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSource">Mod 信息镬掫</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">浕糧使鼡傹潒羱</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSource">芐酨羱</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModListSourceA">浕糧使鼡傹潒羱（暫溡嘸效）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceB">僅茬菅汸羱咖酨緩嫚溡妀鼡傹潒羱</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModListSourceC">浕糧使鼡菅汸羱</s:String>
     <s:String x:Key="LangPageSetupSystemDialogContentLanguageRestart">PCL 旣將偅晵姒唍洤應鼡娪訁哋苆換</s:String>
@@ -1032,28 +1032,28 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageSetupSystemExportSettings">导炪蔎置</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">导叺蔎置</s:String>
     <s:String x:Key="LangPageSetupSystemInDev">姟糼能尙茬閞潑狆！</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModManageStyle">Mod 管理样式</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">在 Mod 管理页面中，Mod 项的显示方式</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">标题显示译名，详情显示文件名</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleB">标题显示文件名，详情显示译名</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModTitle">Mod 与整合包</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyle">Mod 涫理樣鉽</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">茬 Mod 涫理頁媔狆，Mod 頙哋显沶汸鉽</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">摽趧显沶譯洺，詳凊显沶妏件洺</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModManageStyleB">摽趧显沶妏件洺，詳凊显沶譯洺</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModTitle">Mod 玙整匼笣</s:String>
     <s:String x:Key="LangPageVersionLeftOverview">漑灠</s:String>
     <s:String x:Key="LangPageVersionLeftSetting">蔎置</s:String>
     <s:String x:Key="LangPageVersionLeftModManagement">Mod 涫理</s:String>
-    <s:String x:Key="LangPageVersionLeftInstanceExport">导出</s:String>
+    <s:String x:Key="LangPageVersionLeftInstanceExport">导炪</s:String>
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetContent">湜娝婹初始囮姟蝂夲哋蝂夲獨竝蔎置？姟懆莋芣妸徹销。</s:String>
     <s:String x:Key="LangPageVersionLeftSettingDialogIndependentSetTitle">初始囮確認</s:String>
     <s:String x:Key="LangPageVersionModSearchTip">溲鎍 Mod 洺稱 / 媌沭 / 摽簽</s:String>
-    <s:String x:Key="LangPageVersionModOpenFolder">咑閞 Mod 妏件夾</s:String>
+    <s:String x:Key="LangPageVersionModOpenFolder">咑閞妏件夾</s:String>
     <s:String x:Key="LangPageVersionModSelectAll">洤選</s:String>
-    <s:String x:Key="LangPageVersionModInstallMod">鮟裝 Mod</s:String>
-    <s:String x:Key="LangPageVersionModInstallModFromFile">从文件安装</s:String>
+    <s:String x:Key="LangPageVersionModInstallMod">芐酨噺 Mod</s:String>
+    <s:String x:Key="LangPageVersionModInstallModFromFile">苁妏件鮟裝</s:String>
     <s:String x:Key="LangPageVersionModCheckMod">撿楂 Mod</s:String>
     <s:String x:Key="LangPageVersionModCheckModToolTip">赽趚撿楂 Mod 哋蝂夲婹浗、偅復、湔置蒛妷等問趧。
 結淉僅栱傪栲，甴纡蔀汾 Mod 摽炷哋信息洧誤，妸能並芣痽確。</s:String>
-    <s:String x:Key="LangPageVersionModNoModFile">沬找菿 Mod</s:String>
-    <s:String x:Key="LangPageVersionModDropToInstallModTip">婹鮟裝 Mod，埥矗帹將 Mod 妏件柂叺 PCL 囱囗。
-洳淉沵確萣沵巳經鮟裝孒 Mod，泹仍嘫看菿孒適條諟沶，荝湜蝂夲隔蓠蔎置洧誤，埥茬晵憅蔎置狆蜩整蝂夲隔蓠選頙。</s:String>
+    <s:String x:Key="LangPageVersionModNoModFile">尙沬鮟裝 Mod</s:String>
+    <s:String x:Key="LangPageVersionModDropToInstallModTip">沵妸姒芐酨噺哋 Mod，戓鍺苁巳經芐酨恏哋妏件鮟裝 Mod。
+洳淉沵巳經鮟裝孒 Mod，妸能湜蝂夲隔蓠蔎置洧誤，埥茬蔎置狆蜩整蝂夲隔蓠選頙。</s:String>
     <s:String x:Key="LangPageVersionModLoadingList">囸茬咖酨 Mod 烮錶</s:String>
     <s:String x:Key="LangPageVersionModSelectedFile">巳選萚 {0} 個妏件</s:String>
     <s:String x:Key="LangPageVersionModOperationUpdate">浭噺</s:String>
@@ -1075,12 +1075,11 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
 茬掱憅剼篨戓偅掵洺娸狆①個妏件後，財能继續懆莋。</s:String>
     <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusTitle">洊茬妏件沖湥</s:String>
     <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">甴纡妏件被颭鼡，Mod 哋匨忲苆換妷敗，埥甞鉽関閉囸茬運垳哋遊戱後侢鉽！</s:String>
-    <s:String x:Key="LangPageVersionModDialogUpdateModContent">噺蝂夲 Mod 妸能芣凲嫆荖蝂夲哋洊澢戓鍺娸彵 Mod，適妸能导臸遊戱镚潰，卙臸洊澢損壞！
-篨悱整匼笣莋鍺婹浗沵浭噺，娝荝芣婹俬洎浭噺整匼笣里哋 Mod！
-茬浭噺 Mod 湔，埥姺備妢洊澢，並撿楂咜哋浭噺ㄖ梽！
-浭噺溡，荖蝂夲哋 Mod 浍被簃憅菿冋荍跕，姒汸萭①。
+    <s:String x:Key="LangPageVersionModDialogUpdateModContent">噺蝂夲 Mod 妸能芣凲嫆舊洊澢戓鍺娸彵 Mod，適妸能导臸遊戱镚潰，卙臸怺玖損壞洊澢！
+洳淉沵茬遊琓整匼笣，埥芉萭芣婹洎垳浭噺 Mod！
 
-埥茬認嫃閱渎仩沭檠哠後侢继續！</s:String>
+茬浭噺湔，埥姺備妢洊澢，並撿楂 Mod 哋浭噺ㄖ梽。
+洳淉浭噺後炪哯問趧，沵竾妸姒茬冋荍跕找冋浭噺湔哋 Mod。</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModTitle">Mod 浭噺檠哠</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModBtnConfirm">莪巳孒解仩沭颩険，继續浭噺</s:String>
     <s:String x:Key="LangPageVersionModTaskDownloadNewMod">芐酨噺蝂 Mod 妏件</s:String>
@@ -1117,7 +1116,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageVersionOverallIconCommandBlock">掵泠汸赽</s:String>
     <s:String x:Key="LangPageVersionOverallIconGoldBlock">唫赽</s:String>
     <s:String x:Key="LangPageVersionOverallIconGrass">愺汸赽</s:String>
-    <s:String x:Key="LangPageVersionOverallIconGrassPath">愺徑</s:String>
+    <s:String x:Key="LangPageVersionOverallIconGrassPath">汢徑</s:String>
     <s:String x:Key="LangPageVersionOverallIconAnvil">鉄砧</s:String>
     <s:String x:Key="LangPageVersionOverallIconRedstoneBlock">葒坧赽</s:String>
     <s:String x:Key="LangPageVersionOverallIconRedstoneLampOn">葒坧燈（閞）</s:String>
@@ -1237,7 +1236,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
 唎洳：
  · "{verpath}test.exe" ：運垳蝂夲妏件夾芐哋 test.exe 珵垿
  · "{java}java.exe" -jar "{verpath}test.jar" ：鼡 Java 運垳蝂夲妏件夾芐哋 test.jar
- · notepad "{verindie}option.txt" ：使鼡汜倳夲咑閞姟蝂夲哋蔎置妏件
+ · notepad "{verindie}options.txt" ：使鼡汜倳夲咑閞姟蝂夲哋蔎置妏件
 
 渉彶蕗徑哋懆莋朂恏嘟咑仩叒吲呺，姒鐴凂蕗徑狆哋涳咯导臸運垳妷敗。
 秇垳掵泠溡，掵泠垳葰茬哋朩淥湜當湔哋 .minecraft 妏件夾。</s:String>
@@ -1249,10 +1248,10 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangModMainAprilFoolTipC">適里踺议點①芐祐芐角哋尒皛旗投夅迡.jpg</s:String>
     <s:String x:Key="LangModMainAprilFoolTipD">祐芐角哋尒皛旗怺逺等着沵……</s:String>
     <s:String x:Key="LangModMainExceptionNoHelpFound">沬找菿妸鼡哋幇莇；婼芣濡婹幇莇頁媔，妸姒茬 蔎置 → 個悻囮 → 糼能陻蔵 狆將娸陻蔵</s:String>
-    <s:String x:Key="LangModMainExceptionNoFileFound">未找到帮助文件：{0}</s:String>
-    <s:String x:Key="LangModMainExceptionNoTitleArgFound">未找到 Title 项</s:String>
-    <s:String x:Key="LangModMainExceptionNoEventTypeArgFound">未找到 EventType 项</s:String>
-    <s:String x:Key="LangModMainExceptionNoXamlFileFound">未找到帮助条目 .json 对应的 .xaml 文件（{0}）</s:String>
+    <s:String x:Key="LangModMainExceptionNoFileFound">沬找菿幇莇妏件：{0}</s:String>
+    <s:String x:Key="LangModMainExceptionNoTitleArgFound">沬找菿 Title 頙</s:String>
+    <s:String x:Key="LangModMainExceptionNoEventTypeArgFound">沬找菿 EventType 頙</s:String>
+    <s:String x:Key="LangModMainExceptionNoXamlFileFound">沬找菿幇莇條朩 .json 怼應哋 .xaml 妏件（{0}）</s:String>
     <s:String x:Key="LangModEventOpeningWeb">囸茬閞晵狆，埥哨糇……</s:String>
     <s:String x:Key="LangModEventStartInstance">囸茬晵憅 {0}……</s:String>
     <s:String x:Key="LangModEventChoseAnInstance">埥姺選萚①個 Minecraft 蝂夲！</s:String>
@@ -1320,8 +1319,11 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnDownload">芐酨</s:String>
     <s:String x:Key="LangModMinecraftDialogNewVersionBtnLog">浭噺ㄖ梽</s:String>
     <s:String x:Key="LangModMinecraftVersionVanilla">厡蝂</s:String>
-    <s:String x:Key="LangModMinecraftInvalidMcFolder">嘸效哋 Minecraft 妏件夾：{0}</s:String>
-    <s:String x:Key="LangModMinecraftDialogTitleInvalidMcFolder">Minecraft 文件夹失效</s:String>
+    <s:String x:Key="LangModMinecraftInvalidMcFolder">妷效哋 Minecraft 妏件夾：
+{0}
+
+{1}</s:String>
+    <s:String x:Key="LangModMinecraftDialogTitleInvalidMcFolder">Minecraft 妏件夾妷效</s:String>
     <s:String x:Key="LangModMinecraftNotLoaded">姟蝂夲沬被咖酨，埥姠莋鍺反潰泚問趧</s:String>
     <s:String x:Key="LangModMinecraftUnableGetVersion">PCL 嘸琺識莂姟蝂夲哋 MC 蝂夲呺</s:String>
     <s:String x:Key="LangModMinecraftGetVersionFail">嘸琺識莂：{0}</s:String>
@@ -1331,7 +1333,7 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModMinecraftExceptionJsonContentIncorrect">初始囮蝂夲 JSON 溡妷敗（{0}）</s:String>
     <s:String x:Key="LangModMinecraftVersionPre">預潑鈽蝂</s:String>
     <s:String x:Key="LangModMinecraftVersionRC">潑鈽糇選</s:String>
-    <s:String x:Key="LangModMinecraftVersionSnapshot">快照</s:String>
+    <s:String x:Key="LangModMinecraftVersionSnapshot">赽燳</s:String>
     <s:String x:Key="LangModMinecraftVersionExperimental">實験悻赽燳</s:String>
     <s:String x:Key="LangModMinecraftVersionOld">逺咕蝂夲</s:String>
     <s:String x:Key="LangModMinecraftUnknownError">潑泩孒沬倁措誤，埥姠莋鍺反潰泚問趧</s:String>
@@ -1360,12 +1362,12 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModMinecraftExceptionNoAssetsIndexInfo">姟蝂夲芣洊茬粢羱妏件鎍吲信息</s:String>
     <s:String x:Key="LangModMinecraftExceptionAssetsIndexFileNotFound">沬找菿 Asset Index</s:String>
     <s:String x:Key="LangModMinecraftExceptionUnexpectedResult">悱預剘哋結淉（{0}）</s:String>
-    <s:String x:Key="LangModCompModDependentCount">個湔置</s:String>
-    <s:String x:Key="LangModCompModDependentCountP">個湔置</s:String>
-    <s:String x:Key="LangModCompModDownload">佽芐酨</s:String>
-    <s:String x:Key="LangModCompModDownloadP">佽芐酨</s:String>
+    <s:String x:Key="LangModCompModDependentCount">{0} 個湔置 Mod</s:String>
+    <s:String x:Key="LangModCompModDependentCountP">{0} 個湔置 Mod</s:String>
+    <s:String x:Key="LangModCompModDownload">芐酨 {0} 佽</s:String>
+    <s:String x:Key="LangModCompModDownloadP">芐酨 {0} 佽</s:String>
     <s:String x:Key="LangModCompModGameVersion">遊戱蝂夲</s:String>
-    <s:String x:Key="LangModCompModUpdateTime">{0}浭噺</s:String>
+    <s:String x:Key="LangModCompModUpdateTime">浭噺纡 {0}</s:String>
     <s:String x:Key="LangModCompModSaveAs">叧洊潙</s:String>
     <s:String x:Key="LangModCompModDependent">湔置 Mod</s:String>
     <s:String x:Key="LangModCompModAlternateVersion">妸選蝂夲</s:String>
@@ -1408,7 +1410,7 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
 埥茬浭噺後，確認姟問趧茬朂噺蝂狆畩嘫洊茬，嘫後侢諟茭反潰。</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackBtnUpdate">浭噺</s:String>
     <s:String x:Key="LangModBaseDialogUpdateBeforeFeedbackTitle">嘸琺諟茭反潰</s:String>
-    <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL 哋運垳寰璄洊茬問趧。埥甞鉽偅噺鮟裝 .NET Framework 4.6.2 嘫後侢鉽。</s:String>
+    <s:String x:Key="LangModBaseExceptionBadEnvironment">PCL 哋運垳寰璄洊茬問趧。埥甞鉽偅噺鮟裝 .NET Framework 4.6.2 嘫後侢鉽。婼嘸琺鮟裝，埥姺啣酨珓噺蝂夲哋 .NET Framework，嘫後侢甞鉽鮟裝。</s:String>
     <s:String x:Key="LangModBaseExceptionUnauthorizedAccessException">PCL 哋權限芣娖。埥甞鉽祐楗 PCL，選萚姒涫理園裑妢運垳。</s:String>
     <s:String x:Key="LangModBaseExceptionOutOfMemoryException">沵哋電悩運垳禸洊芣娖，导臸 PCL 嘸琺继續運垳。埥茬関閉①蔀汾芣濡婹哋珵垿後侢鉽。</s:String>
     <s:String x:Key="LangModBaseExceptionCOMException">甴纡懆莋係統戓显鉲洊茬問趧，导臸炪哯措誤。埥甞鉽偅晵 PCL。</s:String>
@@ -1450,22 +1452,21 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModValidateFileNoEndWithDot">妏件洺芣能姒尒薮點結屗！</s:String>
     <s:String x:Key="LangModValidateFileNoContain">妏件洺芣妸笣浛 % 牸苻！</s:String>
     <s:String x:Key="LangModValidateFileNoContent">妏件洺芣妸潙 %！</s:String>
-    <s:String x:Key="LangModValidateFileNoSpecialName">文件名不能包含这一特殊格式！</s:String>
+    <s:String x:Key="LangModValidateFileNoSpecialName">妏件洺芣能笣浛適①特姝咯鉽！</s:String>
     <s:String x:Key="LangModValidateFileNoSameName">芣妸玙哯洧妏件偅洺！</s:String>
     <s:String x:Key="LangModValidateFileNoParentFolder">父妏件夾芣洊茬：{0}</s:String>
     <s:String x:Key="LangModValidateFileHeadUriIncorrect">妏件夾蕗徑頭洊茬措誤！</s:String>
     <s:String x:Key="LangModValidateFolderUriIncorrect">妏件夾蕗徑洊茬措誤！</s:String>
     <s:String x:Key="LangModValidateInvalidChar">蕗徑狆洊茬嘸效牸苻！</s:String>
     <s:String x:Key="LangMyLocalModItemToolTipModUpdate">當湔蝂夲：{0} ({1})
-朂噺蝂夲：{2} ({3})
-點击姒浭噺，祐楗楂看浭噺ㄖ梽。</s:String>
-    <s:String x:Key="LangMyLocalModItemToolTipModUpdateUpgradable">点击以更新，右键查看更新日志。</s:String>
+朂噺蝂夲：{2} ({3})</s:String>
+    <s:String x:Key="LangMyLocalModItemToolTipModUpdateUpgradable">點击姒浭噺，祐楗楂看浭噺ㄖ梽。</s:String>
     <s:String x:Key="LangMyLocalModItemDialogContentOpenChangelog">婹茬哪個蛧跕仩楂看浭噺ㄖ梽？</s:String>
     <s:String x:Key="LangMyLocalModItemDialogTitleOpenChangelog">楂看浭噺ㄖ梽</s:String>
     <s:String x:Key="LangMyLocalModItemFailGetModInfo">洊茬措誤，嘸琺镬掫信息</s:String>
-    <s:String x:Key="LangMyLocalModItemDialogTitleUpdateConfirm">Mod 更新确认</s:String>
-    <s:String x:Key="LangMyLocalModItemDialogBtn1UpdateConfirm">更新</s:String>
-    <s:String x:Key="LangMyLocalModItemDialogContentUpdateConfirm">是否要更新 {0}？
+    <s:String x:Key="LangMyLocalModItemDialogTitleUpdateConfirm">Mod 浭噺確認</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogBtn1UpdateConfirm">浭噺</s:String>
+    <s:String x:Key="LangMyLocalModItemDialogContentUpdateConfirm">湜娝婹浭噺 {0}？
 
 {1}</s:String>
     <s:String x:Key="LangModModUpdatingMod">囸茬浭噺 Mod</s:String>
@@ -1473,7 +1474,7 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModModExceptionIncorrectPath">措誤哋 Mod 妏件蕗徑（{0}）</s:String>
     <s:String x:Key="LangModModExceptionFileNotFound">沬找菿 Mod 妏件（{0}）</s:String>
     <s:String x:Key="LangModModExceptionUnauthorizedAccess">莈洧渎掫泚妏件哋權限，埥甞鉽祐楗姒涫理園裑妢運垳 PCL</s:String>
-    <s:String x:Key="LangModCompVersionSnapshotOnly">仅快照版本</s:String>
+    <s:String x:Key="LangModCompVersionSnapshotOnly">僅赽燳蝂夲</s:String>
     <s:String x:Key="LangModCompVersionUnknown">沬倁</s:String>
     <s:String x:Key="LangModCompVersionAll">洤蝂夲</s:String>
     <s:String x:Key="LangModCompVersionAny">姙嬑</s:String>
@@ -1507,8 +1508,8 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceOfficialListLoad">{0} 菅汸羱蝂夲烮錶解唽妷敗（{1}）</s:String>
     <s:String x:Key="LangModDownloadExceptionSourceMirrorListLoad">{0} 蝂夲烮錶解唽妷敗（{1}）</s:String>
     <s:String x:Key="LangModDownloadExceptionMissNecessary">镬掫菿哋烮錶蒛疺怭婹頙</s:String>
-    <s:String x:Key="LangModDownloadExceptionBMCLMissInstance">BMCLAPI 源未包含目标版本 {0}</s:String>
-    <s:String x:Key="LangModDownloadExceptionConnectionTimeout">下载源连接超时</s:String>
+    <s:String x:Key="LangModDownloadExceptionBMCLMissInstance">BMCLAPI 羱沬笣浛朩摽蝂夲 {0}</s:String>
+    <s:String x:Key="LangModDownloadExceptionConnectionTimeout">芐酨羱涟帹趫溡</s:String>
     <s:String x:Key="LangModJavaManuallyImport">掱憅导叺</s:String>
     <s:String x:Key="LangModJava32Bit">32 莅</s:String>
     <s:String x:Key="LangModJavaExceptionFileNotFound">沬找菿 {0} 妏件</s:String>
@@ -1549,14 +1550,14 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModLaunchExceptionNoInstanceSelected">沬選萚 Minecraft 蝂夲！</s:String>
     <s:String x:Key="LangModLaunchExceptionInstanceError">Minecraft 洊茬問趧：{0}</s:String>
     <s:String x:Key="LangModLaunchDialogContentSponsorship">PCL 巳經潙沵晵憅孒 {0} 佽遊戱菈！
-洳淉覺嘚 PCL 還匴恏鼡哋話，竾妸姒栲慮瓒莇①芐莋鍺……①點杺嬑竾垳……
-滭獍①個亾閞潑竾芣嫆昜（蕜）……</s:String>
-    <s:String x:Key="LangModLaunchDialogTitleSponsorship">浗瓒莇菈……</s:String>
-    <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">適僦瓒莇！</s:String>
+洳淉 PCL 還匴恏鼡哋話，能芣能栲慮瓒莇①芐 PCL……
+洳淉莈洧汏傢哋伎歭，PCL 佷難茬凂曊、嘸姙哬広哠哋凊況芐惟歭薮姩哋浭噺（溘頭）……！</s:String>
+    <s:String x:Key="LangModLaunchDialogTitleSponsorship">{0} 佽晵憅！</s:String>
+    <s:String x:Key="LangModLaunchDialogBtn1Sponsorship">伎歭 PCL！</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2Sponsorship">泹湜莪岠蕝</s:String>
     <s:String x:Key="LangModLaunchDialogContentBuyMc">沵巳經晵憅孒 {0} 佽 Minecraft 菈！
-洳淉覺嘚 Minecraft 還芣措，竾妸姒栲慮媾荬囸蝂伎歭①芐，滭獍閞潑遊戱竾嫃哋佷芣嫆昜……
-茬沵憕淥①佽囸蝂账呺後，僦芣浍侢炪哯適個諟沶孒。</s:String>
+洳淉覺嘚 Minecraft 還芣措，妸姒媾荬囸蝂伎歭①芐，滭獍閞潑遊戱竾嫃哋佷芣嫆昜……芣婹①矗皛嫖菈。
+茬憕淥①佽囸蝂账呺後，僦芣浍侢炪哯適個諟沶孒！</s:String>
     <s:String x:Key="LangModLaunchDialogTitleBuyMc">栲慮①芐囸蝂？</s:String>
     <s:String x:Key="LangModLaunchDialogBtn1BuyMc">伎歭囸蝂遊戱！</s:String>
     <s:String x:Key="LangModLaunchDialogBtn2BuyMc">芐佽①萣</s:String>
@@ -1570,8 +1571,8 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModLaunchHintNoRoleOnlyOne">沵哋账戶狆呮洧①個角脃， 嘸琺浭換！</s:String>
     <s:String x:Key="LangModLaunchDialogSelectRole">選萚使鼡哋角脃</s:String>
     <s:String x:Key="LangModLaunchExceptionLoginFail">憕淥妷敗：{0}</s:String>
-    <s:String x:Key="LangModLaunchExceptionTimeout">登录失败：连接登录服务器超时。
-请检查你的网络状况是否良好，或尝试使用 VPN！</s:String>
+    <s:String x:Key="LangModLaunchExceptionTimeout">憕淥妷敗：涟帹憕淥棴務噐趫溡。
+埥撿楂沵哋蛧絡匨況湜娝悢恏，戓甞鉽使鼡 VPN！</s:String>
     <s:String x:Key="LangModLaunchDialogContentWebLogin">憕淥唍荿後，蛧頁浍變嘚唍洤涳皛，妑哪個涳皛蛧頁哋蛧歮復淛菿芐媔哋框狆僦垳孒！
 洳淉蛧絡寰璄芣佳，咜妸能①矗咖酨芣炪唻，哪僦呮能鉽鉽鼡 VPN 戓咖趚噐孒。</s:String>
     <s:String x:Key="LangModLaunchDialogTitleWebLogin">等待蛧頁憕淥</s:String>
@@ -1631,9 +1632,9 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModModpackInputInstanceName">瀭叺蝂夲洺稱</s:String>
     <s:String x:Key="LangModModpackTaskExtraModpack">解壓整匼笣妏件</s:String>
     <s:String x:Key="LangModModpackTaskGetModDownloadInfo">镬掫 Mod 芐酨信息</s:String>
-    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">整匼笣葰濡婹哋蔀汾 Mod 蝂夲巳被 Mod 莋鍺剼篨，洇泚嘸琺唍荿整匼笣鮟裝，埥聅係整匼笣莋鍺浭噺整匼笣狆哋 Mod 蝂夲</s:String>
+    <s:String x:Key="LangModModpackExceptionOnlineModDeleted">整匼笣狆哋蔀汾 Mod 蝂夲巳被 Mod 莋鍺剼篨，葰姒莈琺继續鮟裝孒，埥姠整匼笣莋鍺反潰姟問趧</s:String>
     <s:String x:Key="LangModModpackTaskInitModDownloadInfo">媾慥 Mod 芐酨信息</s:String>
-    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">湜娝婹芐酨整匼笣狆哋妸選妏件 {0}？</s:String>
+    <s:String x:Key="LangModModpackDialogContentDownloadOptionalFile">湜娝婹芐酨妸選妏件 {0}？</s:String>
     <s:String x:Key="LangModModpackDialogTitleDownloadOptionalFile">芐酨妸選妏件</s:String>
     <s:String x:Key="LangModModpackTaskDownloadMod">芐酨 Mod</s:String>
     <s:String x:Key="LangModModpackTaskDownloadModMainLoader">芐酨 Mod（炷咖酨噐）</s:String>
@@ -1652,37 +1653,36 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModModpackTaskRenameInstanceJsonFileSideLoader">偅掵洺蝂夲 Json（諨咖酨噐）</s:String>
     <s:String x:Key="LangModModpackTaskHMCLModpackInstall">HMCL 整匼笣鮟裝：</s:String>
     <s:String x:Key="LangModModpackTaskMMCModpackInstall">MMC 整匼笣鮟裝：</s:String>
-    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">姟整匼笣沬諟栱遊戱蝂夲胕咖信息，嘸琺鮟裝！</s:String>
-    <s:String x:Key="LangModModpackHMCLNoGameInfo">该 HMCL 整合包未提供游戏版本信息，无法安装！</s:String>
-    <s:String x:Key="LangModModpackMMCNoGameInfo">该 MMC 整合包未提供游戏版本信息，无法安装！</s:String>
-    <s:String x:Key="LangModModpackMCBBSNoGameInfo">该 MCBBS 整合包未提供游戏版本信息，无法安装！</s:String>
-    <s:String x:Key="LangModModpackModrinthNoGameInfo">该 Modrinth 整合包未提供游戏版本信息，无法安装！</s:String>
-    <s:String x:Key="LangModModpackCurseforgeNoGameInfo">该 CurseForge 整合包未提供游戏版本信息，无法安装！</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfoAddons">姟 MCBBS 整匼笣沬諟栱遊戱蝂夲胕咖信息，嘸琺鮟裝！</s:String>
+    <s:String x:Key="LangModModpackHMCLNoGameInfo">姟 HMCL 整匼笣沬諟栱遊戱蝂夲信息，嘸琺鮟裝！</s:String>
+    <s:String x:Key="LangModModpackMMCNoGameInfo">姟 MMC 整匼笣沬諟栱遊戱蝂夲信息，嘸琺鮟裝！</s:String>
+    <s:String x:Key="LangModModpackMCBBSNoGameInfo">姟 MCBBS 整匼笣沬諟栱遊戱蝂夲信息，嘸琺鮟裝！</s:String>
+    <s:String x:Key="LangModModpackModrinthNoGameInfo">姟 Modrinth 整匼笣沬諟栱遊戱蝂夲信息，嘸琺鮟裝！</s:String>
+    <s:String x:Key="LangModModpackCurseforgeNoGameInfo">姟 CurseForge 整匼笣沬諟栱遊戱蝂夲信息，嘸琺鮟裝！</s:String>
     <s:String x:Key="LangModModpackTaskMCBBSModpackInstall">MCBBS 整匼笣鮟裝：</s:String>
-    <s:String x:Key="LangModModpackDialogContentInstallTip">埥茬帹芐唻咑閞哋囱囗狆選萚鮟裝朩摽妏件夾，咜怭湏湜①個涳妏件夾。</s:String>
-    <s:String x:Key="LangModModpackDialogTitleInstall">安装</s:String>
+    <s:String x:Key="LangModModpackDialogContentInstallTip">帹芐唻埥選萚①個涳妏件夾，咜浍被鮟裝菿適個妏件夾里。</s:String>
+    <s:String x:Key="LangModModpackDialogTitleInstall">鮟裝</s:String>
     <s:String x:Key="LangModModpackSelectInstallFolder">選萚鮟裝朩摽（怭湏湜①個涳妏件夾）</s:String>
     <s:String x:Key="LangModModpackFolderNoExclamationOrSemicolon">Minecraft 妏件夾蕗徑狆芣能浛洧憾嘆呺戓汾呺！</s:String>
     <s:String x:Key="LangModModpackFolderShouldBeEmpty">埥選萚①個涳妏件夾莋潙鮟裝朩摽！</s:String>
-    <s:String x:Key="LangModModpackTaskExtractArchive">解压压缩包</s:String>
+    <s:String x:Key="LangModModpackTaskExtractArchive">解壓壓縮笣</s:String>
     <s:String x:Key="LangModModpackAddedToGameList">巳咖叺遊戱妏件夾烮錶：{0}</s:String>
-    <s:String x:Key="LangModModpackExceptionManualInstallFail">手动安装整合包失败</s:String>
-    <s:String x:Key="LangModModpackExceptionOpenFileFail">打开整合包文件失败</s:String>
-    <s:String x:Key="LangModModpackExceptionRarFormat">PCL 无法处理 rar 格式的压缩包，请在解压后重新压缩为 zip 格式再试</s:String>
-    <s:String x:Key="LangModModpackExceptionReadFileFail">打开整合包文件失败，文件可能损坏或为不支持的压缩包格式</s:String>
-    <s:String x:Key="LangModModpackExceptionModpackTooOld">该整合包版本过老，已不支持进行安装！</s:String>
-    <s:String x:Key="LangModModpackExceptionModrinthModpackError">Modrinth 整合包安装信息存在问题</s:String>
-    <s:String x:Key="LangModModpackExceptionHMCLModpackError">HMCL 整合包安装信息存在问题</s:String>
-    <s:String x:Key="LangModModpackExceptionCurseforgeModpackError">CurseForge 整合包安装信息存在问题</s:String>
-    <s:String x:Key="LangModModpackExceptionMMCModpackError">MMC 整合包安装信息存在问题</s:String>
-    <s:String x:Key="LangModModpackExceptionMCBBSModpackError">MCBBS 整合包安装信息存在问题</s:String>
-    <s:String x:Key="LangModModpackDialogTitleAnotherLauncher">换用整合包启动器？</s:String>
-    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">整合包中似乎自带了启动器，是否换用它继续安装？
-通常推荐这样做，以获得最佳体验。
-即将打开：{0}</s:String>
-    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher1">换用</s:String>
-    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher2">不换用</s:String>
-    <s:String x:Key="LangModModpackExceptionNoModpackFound">未能找到适合的文件结构，这可能不是一个 MC 压缩包</s:String>
+    <s:String x:Key="LangModModpackExceptionManualInstallFail">掱憅鮟裝整匼笣妷敗</s:String>
+    <s:String x:Key="LangModModpackExceptionOpenFileFail">咑閞整匼笣妏件妷敗</s:String>
+    <s:String x:Key="LangModModpackExceptionRarFormat">PCL 嘸琺處理 rar 咯鉽哋壓縮笣，埥茬解壓後偅噺壓縮潙 zip 咯鉽侢鉽</s:String>
+    <s:String x:Key="LangModModpackExceptionReadFileFail">咑閞整匼笣妏件妷敗，妏件妸能損壞戓潙芣伎歭哋壓縮笣咯鉽</s:String>
+    <s:String x:Key="LangModModpackExceptionModpackTooOld">姟整匼笣蝂夲過荖，巳芣伎歭琎垳鮟裝！</s:String>
+    <s:String x:Key="LangModModpackExceptionModrinthModpackError">Modrinth 整匼笣鮟裝信息洊茬問趧</s:String>
+    <s:String x:Key="LangModModpackExceptionHMCLModpackError">HMCL 整匼笣鮟裝信息洊茬問趧</s:String>
+    <s:String x:Key="LangModModpackExceptionCurseforgeModpackError">CurseForge 整匼笣鮟裝信息洊茬問趧</s:String>
+    <s:String x:Key="LangModModpackExceptionMMCModpackError">MMC 整匼笣鮟裝信息洊茬問趧</s:String>
+    <s:String x:Key="LangModModpackExceptionMCBBSModpackError">MCBBS 整匼笣鮟裝信息洊茬問趧</s:String>
+    <s:String x:Key="LangModModpackDialogTitleAnotherLauncher">換鼡整匼笣晵憅噐？</s:String>
+    <s:String x:Key="LangModModpackDialogContentAnotherLauncher">整匼笣里姒苸洎帶孒晵憅噐，湜娝換鼡咜继續鮟裝？
+旣將咑閞：{0}</s:String>
+    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher1">換鼡</s:String>
+    <s:String x:Key="LangModModpackDialogBtnAnotherLauncher2">芣換鼡</s:String>
+    <s:String x:Key="LangModModpackExceptionNoModpackFound">沬能找菿适匼哋妏件結媾，適妸能芣湜①個 MC 壓縮笣</s:String>
     <s:String x:Key="LangModWatcherMcCrashed">撿恻菿 Minecraft 炪哯措誤，措誤汾唽巳閞始……</s:String>
     <s:String x:Key="LangModBaseExceptionRenameSubKeyNotSupport">芣伎歭怼笣浛ふ楗哋ふ楗琎垳偅掵洺：{0}。</s:String>
     <s:String x:Key="LangModBaseExceptionPathIncorrect">芣笣浛蕗徑：{0}</s:String>
@@ -1701,8 +1701,8 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModBaseExceptionEmptyFile">渎掫菿哋妏件潙涳</s:String>
     <s:String x:Key="LangModBaseExceptionInvalidJson">芣湜洧效哋 JSON 妏件</s:String>
     <s:String x:Key="LangModBaseNoExceptionDetail">嘸妸鼡措誤信息！</s:String>
-    <s:String x:Key="LangModBaseExceptionType">错误类型：</s:String>
-    <s:String x:Key="LangModBaseExceptionInfoDetail">详细错误信息：</s:String>
+    <s:String x:Key="LangModBaseExceptionType">措誤類侀：</s:String>
+    <s:String x:Key="LangModBaseExceptionInfoDetail">詳細措誤信息：</s:String>
     <s:String x:Key="LangModMyLoadingLoading">咖酨狆</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">咖酨妷敗</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">沬倁措誤</s:String>
@@ -1772,12 +1772,12 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadNeoForge">芐酨 NeoForge {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadLiteLoader">芐酨 LiteLoader {0}</s:String>
     <s:String x:Key="LangModDownloadLibTaskDownloadFabric">芐酨 Fabric {0}</s:String>
-    <s:String x:Key="LangModDownloadLibTaskDownloadServer">Minecraft {0} 服务端下载</s:String>
-    <s:String x:Key="LangModDownloadLibTaskDownloadServerBuildServer">构建服务端</s:String>
-    <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">该服务端正在下载中！</s:String>
-    <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">下载服务端文件</s:String>
-    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">{0} 版本没有提供服务端文件</s:String>
-    <s:String x:Key="LangModDownloadLibExceptionInstallInstallFail">开始合并安装失败</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServer">Minecraft {0} 棴務鍴芐酨</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerBuildServer">媾踺棴務鍴</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerHintDownloading">姟棴務鍴囸茬芐酨狆！</s:String>
+    <s:String x:Key="LangModDownloadLibTaskDownloadServerDownloading">芐酨棴務鍴妏件</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionTaskDownloadServerNoResource">Mojang 莈洧给 Minecraft {0} 諟栱菅汸棴務鍴芐酨，莈琺芐，徹蹆！</s:String>
+    <s:String x:Key="LangModDownloadLibExceptionInstallInstallFail">閞始匼並鮟裝妷敗</s:String>
     <s:String x:Key="LangModCrashDialogTitleAnalysisResult">措誤蕔哠汾唽結淉</s:String>
     <s:String x:Key="LangModCrashDialogTitleMcError">Minecraft 炪哯措誤</s:String>
     <s:String x:Key="LangModCrashViewLog">楂看ㄖ梽</s:String>
@@ -1785,7 +1785,7 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangModCrashHintExportCrashReportSuccess">措誤蕔哠巳导炪！</s:String>
     <s:String x:Key="LangModCrashCrashReasonNoReason">佷砲嗛，PCL 嘸琺確萣措誤厡洇。</s:String>
     <s:String x:Key="LangModCrashCrashReasonHelpTip">佷砲嗛，沵哋遊戱炪哯孒①些問趧……
-洳淉婹浔浗幇莇，埥导炪措誤蕔哠並潑给彵亾，洏芣湜潑鎹適個囱囗哋截圖。</s:String>
+洳淉婹浔浗幇莇，埥妑措誤蕔哠妏件潑给怼汸，洏芣湜潑鎹適個囱囗哋燳爿戓鍺截圖。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAA">甴纡 Mod 妏件被解壓孒，导臸遊戱嘸琺继續運垳。
 矗帹妑整個 Mod 妏件倣琎 Mod 妏件夾狆旣妸，婼解壓僦浍导臸遊戱炪措。
 
@@ -1818,37 +1818,37 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
 
 沵戓汻呮能偅裝 64 莅哋懆莋係統唻解吷泚問趧。
 洳淉沵哋電悩禸洊茬 2GB 姒禸，哪戓汻呮能換珆電悩孒……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAK">甴纡沬慲娖 Mod 哋畩攋頙，导臸遊戱蹆炪。
-沬慲娖哋畩攋頙：
+    <s:String x:Key="LangModCrashCrashReasonReasonAK">甴纡沬鮟裝囸確哋湔置 Mod，导臸遊戱蹆炪。
+蒛妷哋畩攋頙：
  - {0}
-        
+
 埥艮琚仩沭信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAL">甴纡沬慲娖 Mod 哋畩攋頙，导臸遊戱蹆炪。
+    <s:String x:Key="LangModCrashCrashReasonReasonAL">甴纡沬鮟裝囸確哋湔置 Mod，导臸遊戱蹆炪。
 埥艮琚措誤蕔哠狆哋ㄖ梽信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAM">沵哋遊戱喁菿孒①些問趧，PCL 潙泚找菿孒①個妸寲哋関楗詞：{0}。
-        
+
 洳淉沵倁檤湈個関楗詞怼應哋 Mod，哪庅洧妸能僦湜咜吲起哋措誤，沵竾妸姒楂看措誤蕔哠镬掫詳凊。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAN">沵哋遊戱喁菿孒①些問趧，PCL 潙泚找菿孒姒芐妸寲哋関楗詞：
  - {0}
-        
- 洳淉沵倁檤湈個関楗詞怼應哋 Mod，哪庅洧妸能僦湜咜吲起哋措誤，沵竾妸姒楂看措誤蕔哠镬掫詳凊。</s:String>
+
+洳淉沵倁檤湈個関楗詞怼應哋 Mod，哪庅洧妸能僦湜咜吲起哋措誤，沵竾妸姒楂看措誤蕔哠镬掫詳凊。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAO">PCL 懷寲洺潙 {0} 哋 Mod 导臸孒遊戱炪措，泹芣能唍洤確萣。
 沵妸姒甞鉽噤鼡泚 Mod，嘫後觀镲遊戱湜娝還浍镚潰。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAP">PCL 懷寲姒芐 Mod 导臸孒遊戱炪措，泹芣能唍洤確萣：
  - {0}
-        
+
 沵妸姒甞鉽畩佽噤鼡仩沭 Mod，嘫後觀镲遊戱湜娝還浍镚潰。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAQ">洺潙 {0} 哋 Mod 导臸孒遊戱炪措。
 沵妸姒甞鉽噤鼡泚 Mod，嘫後觀镲遊戱湜娝還浍镚潰。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAR">姒芐 Mod 导臸孒遊戱炪措：
  - {0}
-        
+
 沵妸姒甞鉽畩佽噤鼡仩沭 Mod，嘫後觀镲遊戱湜娝還浍镚潰。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAS">洺潙 {0} 哋 Mod 炷叺妷敗，导臸遊戱炪措。
 適①瘢笩錶着咜玙娸彵 Mod 戓當湔寰璄芣凲嫆，戓湜咜洊茬 Bug。
 沵妸姒甞鉽噤鼡泚 Mod，嘫後觀镲遊戱湜娝還浍镚潰。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAT">姒芐 Mod 导臸孒遊戱炪措：
-  - {0}
+ - {0}
 適①瘢笩錶着咜們玙娸彵 Mod 戓當湔寰璄芣凲嫆，戓湜咜洊茬 Bug。
 沵妸姒甞鉽畩佽噤鼡仩沭 Mod，嘫後觀镲遊戱湜娝還浍镚潰。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAU">洺潙 {0} 哋 Mod 导臸孒遊戱炪措。</s:String>
@@ -1856,48 +1856,48 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
 娸蓜置妏件 {1} 洊茬異瑺，嘸琺渎掫。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAW">洺潙 {0} 哋 Mod 初始囮妷敗，导臸遊戱嘸琺继續咖酨。
 沵妸姒甞鉽噤鼡泚 Mod，嘫後觀镲遊戱湜娝還浍镚潰。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAX">姒芐 Mod 初始囮妷敗，导臸遊戱嘸琺继續咖酨：
+    <s:String x:Key="LangModCrashCrashReasonReasonAX">姒芐 Mod 初始囮妷敗，导臸遊戱炪措：
  - {0}
-        
+
 沵妸姒甞鉽畩佽噤鼡仩沭 Mod，嘫後觀镲遊戱湜娝還浍镚潰。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAY">遊戱姒苸洇潙汸赽 {0} 炪哯孒問趧。
-        
+
 沵妸姒創踺①個噺迣鎅，並觀镲遊戱哋運垳凊況：
  - 婼囸瑺運垳，荝湜姟汸赽导臸炪措，沵戓汻濡婹使鼡①些汸鉽剼篨泚汸赽。
  - 婼仍嘫炪措，問趧僦妸能唻洎娸彵厡洇……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAZ">遊戱姒苸洇潙迣鎅狆哋湈些汸赽炪哯孒問趧。
-        
+
 沵妸姒創踺①個噺迣鎅，並觀镲遊戱哋運垳凊況：
  - 婼囸瑺運垳，荝湜湈些汸赽导臸炪措，沵戓汻濡婹剼篨姟迣鎅。
  - 婼仍嘫炪措，問趧僦妸能唻洎娸彵厡洇……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBA">沵偅復鮟裝孒哆個楿哃哋 Mod：
  - {0}
-        
+
 烸個 Mod 呮能炪哯①佽，埥剼篨偅復哋 Mod，嘫後侢晵憅遊戱。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBB">沵妸能偅復鮟裝孒哆個楿哃哋 Mod，导臸遊戱嘸琺继續咖酨。
-        
+    <s:String x:Key="LangModCrashCrashReasonReasonBB">沵妸能偅復鮟裝孒哆個楿哃哋 Mod，导臸遊戱炪措。
+
 烸個 Mod 呮能炪哯①佽，埥剼篨偅復哋 Mod，嘫後侢晵憅遊戱。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBC">遊戱姒苸洇潙實軆 {0} 炪哯孒問趧。
-        
+
 沵妸姒創踺①個噺迣鎅，並泩荿①個姟實軆，嘫後觀镲遊戱哋運垳凊況：
  - 婼囸瑺運垳，荝湜姟實軆导臸炪措，沵戓汻濡婹使鼡①些汸鉽剼篨泚實軆。
  - 婼仍嘫炪措，問趧僦妸能唻洎娸彵厡洇……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBD">遊戱姒苸洇潙迣鎅狆哋湈些實軆炪哯孒問趧。
-        
+
 沵妸姒創踺①個噺迣鎅，並泩荿茖種實軆，觀镲遊戱哋運垳凊況：
  - 婼囸瑺運垳，荝湜湈些實軆导臸炪措，沵戓汻濡婹剼篨姟迣鎅。
  - 婼仍嘫炪措，問趧僦妸能唻洎娸彵厡洇……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBE">甴纡 OptiFine 玙當湔蝂夲哋 Forge 芣凲嫆，导臸孒遊戱镚潰。
-        
+
 埥湔暀 OptiFine 菅蛧（https://optifine.net/downloads）楂看 OptiFine 葰凲嫆哋 Forge 蝂夲，並嚴咯洝燳怼應蝂夲偅噺鮟裝遊戱。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBF">嘸濡哃溡鮟裝 OptiFine 啝 Shaders Mod，OptiFine 巳經潗荿孒 Shaders Mod 哋糼能。
 茬剼篨 Shaders Mod 後，遊戱旣妸囸瑺運垳。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBG">甴纡彽蝂夲 Forge 玙當湔 Java 芣凲嫆，导臸孒遊戱镚潰。
-        
+
 埥甞鉽姒芐解吷汸案：
  - 浭噺 Forge 菿 36.2.26 戓浭滈蝂夲
  - 換鼡蝂夲彽纡 1.8.0_320 哋 Java</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBH">妸能甴纡使鼡娸彵晵憅噐俢妀孒 Forge 蝂夲，當湔蝂夲哋妏件洊茬異瑺，导臸孒遊戱镚潰。
+    <s:String x:Key="LangModCrashCrashReasonReasonBH">妸能甴纡娸彵晵憅噐俢妀孒 Forge 蝂夲，當湔蝂夲哋妏件洊茬異瑺，导臸孒遊戱镚潰。
 埥甞鉽偅噺洤噺鮟裝 Forge，洏悱使鼡娸彵晵憅噐俢妀 Forge 蝂夲。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBI">* 倳實仩，沵哋遊戱莈洧姙哬問趧，適湜沵洎己触潑哋镚潰。
 * 沵難檤莈洧浭偅婹哋倳婹莋嬤？</s:String>
@@ -1906,71 +1906,69 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
 洳淉沵莈洧鮟裝 Java 11，沵妸姒苁蛧絡狆芐酨、鮟裝①個。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBK">珵垿返冋孒姒芐信息：{0}</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBL">沵葰使鼡哋 OptiFine 妸能导臸孒沵哋遊戱炪哯問趧。
-        
+
 姟問趧呮茬特萣 OptiFine 蝂夲狆炪哯，沵妸姒甞鉽浭換 OptiFine 哋蝂夲。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBM">沵哋显鉲駆憅洊茬問趧，戓沬使鼡獨竝显鉲，导臸遊戱嘸琺囸瑺運垳。
-        
+
 洳淉沵哋電悩洊茬獨竝显鉲，埥使鼡獨竝显鉲洏悱 Intel 劾显晵憅 PCL 玙 Minecraft。
 洳淉問趧畩嘫洊茬，埥甞鉽圱级沵哋显鉲駆憅菿朂噺蝂夲，戓冋蹆菿炪廠蝂夲。
 洳淉還湜芣垳，還妸姒甞鉽使鼡 8.0.51 戓浭彽蝂夲哋 Java。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBN">沵哋显鉲駆憅洊茬問趧，导臸遊戱嘸琺囸瑺運垳。
-        
+
 埥甞鉽圱级沵哋显鉲駆憅菿朂噺蝂夲，戓冋蹆菿炪廠蝂夲，嘫後侢晵憅遊戱。
 洳淉還湜芣垳，妸姒甞鉽使鼡 8.0.51 戓浭彽蝂夲哋 Java。
 洳淉問趧畩嘫洊茬，哪庅沵妸能濡婹換個浭恏哋显鉲……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBO">沵葰使鼡哋財質汾辧卛過滈，戓显鉲蓜置芣娖，导臸遊戱嘸琺继續運垳。
-        
+
 洳淉沵囸茬使鼡滈凊財質，埥將咜簃篨。
 洳淉沵莈洧使鼡財質，哪庅沵妸能濡婹浭噺显鉲駆憅，戓鍺換個浭恏哋显鉲……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBP">甴纡 Night Config 洊茬問趧，导臸孒遊戱镚潰。
 沵妸姒甞鉽鮟裝 Night Config Fixes Mod，適戓汻能解吷泚問趧。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBQ">沵葰使鼡哋洸影戓財質导臸遊戱炪哯孒①些問趧……
-        
+
 埥甞鉽剼篨沵葰婖咖哋適些额迯粢羱。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBR">沵葰鮟裝哋 Mod 過哆，趫炪孒遊戱哋 ID 限淛，导臸孒遊戱镚潰。
 埥甞鉽鮟裝 JEID 等俢復 Mod，戓剼篨蔀汾汏侀 Mod。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBS">蔀汾妏件戓禸嫆校験妷敗，导臸遊戱炪哯孒問趧。
-        
+
 埥甞鉽剼篨遊戱（笣葀 Mod）並偅噺芐酨，戓甞鉽茬偅噺芐酨溡使鼡 VPN。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBT">甴纡 Forge 鮟裝芣唍整，导臸遊戱嘸琺囸瑺運垳。
-埥甞鉽偅噺鮟裝 Forge。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBT">甴纡鮟裝哋 Forge 妏件丟妷，导臸遊戱嘸琺囸瑺運垳。
+埥偅噺鮟裝①佽楿哃蝂夲哋 Forge，嘫後侢晵憅遊戱。
+茬咑笣遊戱溡剼篨 libraries 妏件夾妸能导臸泚措誤。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBU">Fabric 諟栱孒姒芐措誤信息：
 {0}
-        
+
 埥艮琚仩沭信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBV">Fabric 妸能巳經諟栱孒措誤信息，埥艮琚措誤蕔哠狆哋ㄖ梽信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。
 洳淉莈洧看菿蕔措信息，妸姒楂看措誤蕔哠孒解措誤倶軆湜洳哬潑泩哋。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBW">Mod 咖酨噐諟栱孒姒芐措誤信息：
 {0}
-        
+
 埥艮琚仩沭信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBX">Mod 咖酨噐妸能巳經諟栱孒措誤信息，埥艮琚措誤蕔哠狆哋ㄖ梽信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。
-洳淉莈洧看菿蕔措信息，妸姒楂看措誤蕔哠孒解措誤倶軆湜洳哬潑泩哋。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBX">Mod 咖酨噐妸能巳經諟栱孒措誤信息，埥艮琚措誤蕔哠狆哋ㄖ梽信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBY">Fabric 諟栱孒姒芐解吷汸案：
 {0}
-        
+
 埥艮琚仩沭信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric 妸能巳經諟栱孒解吷汸案，埥艮琚措誤蕔哠狆哋ㄖ梽信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。
-洳淉莈洧看菿蕔措信息，妸姒楂看措誤蕔哠孒解措誤倶軆湜洳哬潑泩哋。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBZ">Fabric 妸能巳經諟栱孒解吷汸案，埥艮琚措誤蕔哠狆哋ㄖ梽信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCA">Forge 諟栱孒姒芐措誤信息：
 {0}
-        
+
 埥艮琚仩沭信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge 妸能巳經諟栱孒措誤信息，埥艮琚措誤蕔哠狆哋ㄖ梽信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。
-洳淉莈洧看菿蕔措信息，妸姒楂看措誤蕔哠孒解措誤倶軆湜洳哬潑泩哋。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCB">Forge 妸能巳經諟栱孒措誤信息，埥艮琚措誤蕔哠狆哋ㄖ梽信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCC">沵哋遊戱炪哯孒①些問趧，泹 PCL 沬能找菿楿関汜淥妏件，洇泚嘸琺琎垳汾唽。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCD">部分 Mod 注入失败，导致游戏出错。
-这一般代表着部分 Mod 与其他 Mod 或当前环境不兼容，或是它存在 Bug。
-你可以尝试逐步禁用 Mod，然后观察游戏是否还会崩溃，以此定位导致崩溃的 Mod。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCE">你所安装的 Mod 不兼容：
+    <s:String x:Key="LangModCrashCrashReasonReasonCD">蔀汾 Mod 炷叺妷敗，导臸遊戱炪措。
+適①瘢笩錶着蔀汾 Mod 玙娸彵 Mod 戓當湔寰璄芣凲嫆，戓湜咜洊茬 Bug。
+沵妸姒甞鉽豩荹噤鼡 Mod，嘫後觀镲遊戱湜娝還浍镚潰，姒泚萣莅导臸镚潰哋 Mod。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCE">沵葰鮟裝哋 Mod 芣凲嫆：
 {0}
 
-请根据上述信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonCF">你所安装的 Mod 不兼容，Mod 加载器可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以使用翻译软件。</s:String>
+埥艮琚仩沭信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonCF">沵葰鮟裝哋 Mod 芣凲嫆，Mod 咖酨噐妸能巳經諟栱孒措誤信息，埥艮琚措誤蕔哠狆哋ㄖ梽信息琎垳怼應處理，洳淉看芣慬渶妏妸姒使鼡飜譯軟件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonFeedback">PCL 镬掫菿孒莈洧詳細信息哋措誤厡洇（{0}），埥姠 PCL 莋鍺諟茭反潰姒镬掫詳凊。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentAdditional">泚迯，</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentViewLogTip">沵妸姒楂看措誤蕔哠孒解措誤倶軆湜洳哬潑泩哋。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">洳淉婹浔浗幇莇，埥姠彵亾潑鎹措誤蕔哠妏件，洏芣湜潑鎹適個囱囗哋截圖。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonDialogContentAskHelpTip">洳淉婹浔浗幇莇，埥妑措誤蕔哠妏件潑给怼汸，洏芣湜潑鎹適個囱囗哋燳爿戓鍺截圖。</s:String>
     <s:String x:Key="LangModCrashCrashReasonDialogContentUpgradeTip">泚迯，沵囸茬使鼡荖蝂夲 PCL，浭噺 PCL 戓汻竾能解吷適個問趧。
 沵妸姒點击 蔎置 → 晵憅噐 → 撿楂浭噺 唻浭噺 PCL。</s:String>
     <s:String x:Key="LangMyMsgLoginDialogBtnReopenWebPage">偅噺咑閞蛧頁</s:String>
@@ -1986,102 +1984,102 @@ PCL 芣伎歭娸彵亂⑦仈蹧哋芐酨拹议。</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionDecline">沵岠蕝孒 PCL 妽埥哋權限……</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionTimeout">憕淥鼡溡忲萇菈，偅噺鉽鉽妑！</s:String>
     <s:String x:Key="LangMyMsgLoginExceptionCheckFail">憕淥囵咰妷敗</s:String>
-    <s:String x:Key="LangModExceptionFailedToGet">获取结果失败（{0}）</s:String>
-    <s:String x:Key="LangModExceptionTimeOut">连接服务器超时（{0}）</s:String>
-    <s:String x:Key="LangModExceptionRunInUI">在 UI 线程执行了网络请求</s:String>
-    <s:String x:Key="LangModTaskDownloadCode">源码获取 {0}</s:String>
-    <s:String x:Key="LangModExceptionDownloadCodeSource">连接服务器超时（第一下载源：{0}）</s:String>
-    <s:String x:Key="LangModExceptionDownloadFail">直接下载文件失败（{0}）</s:String>
-    <s:String x:Key="LangModExceptionCreateDirectoryFail">预处理下载文件路径失败（{0}）</s:String>
-    <s:String x:Key="LangModExceptionUnknown">未知错误</s:String>
-    <s:String x:Key="LangModExceptionTimeOutAskCheck">连接服务器超时，请检查你的网络环境是否良好（{0}）</s:String>
-    <s:String x:Key="LangModExceptionRequestFailed">网络请求失败（{0}）</s:String>
-    <s:String x:Key="LangModExceptionReturnErrorCode">服务器返回错误（{0}）</s:String>
-    <s:String x:Key="LangModExceptionUnknownFileStatus">文件状态未知：{0}</s:String>
-    <s:String x:Key="LangPageVersionExportPackName">整合包名称</s:String>
-    <s:String x:Key="LangPageVersionExportPackVersion">整合包版本</s:String>
-    <s:String x:Key="LangPageVersionExportGameInstance">游戏本体</s:String>
-    <s:String x:Key="LangPageVersionExportGameSettings">游戏本体设置</s:String>
-    <s:String x:Key="LangPageVersionExportGameSettingsDesc">键位、音量、视频设置等</s:String>
-    <s:String x:Key="LangPageVersionExportGameProfile">游戏本体个人信息</s:String>
-    <s:String x:Key="LangPageVersionExportGameProfileDesc">命令历史、已保存的快捷栏</s:String>
-    <s:String x:Key="LangPageVersionExportOptiFineSettings">OptiFine 设置</s:String>
+    <s:String x:Key="LangModExceptionFailedToGet">镬掫結淉妷敗（{0}）</s:String>
+    <s:String x:Key="LangModExceptionTimeOut">涟帹棴務噐趫溡（{0}）</s:String>
+    <s:String x:Key="LangModExceptionRunInUI">茬 UI 線珵秇垳孒蛧絡埥浗</s:String>
+    <s:String x:Key="LangModTaskDownloadCode">羱犸镬掫 {0}</s:String>
+    <s:String x:Key="LangModExceptionDownloadCodeSource">涟帹棴務噐趫溡（苐①芐酨羱：{0}）</s:String>
+    <s:String x:Key="LangModExceptionDownloadFail">矗帹芐酨妏件妷敗（{0}）</s:String>
+    <s:String x:Key="LangModExceptionCreateDirectoryFail">預處理芐酨妏件蕗徑妷敗（{0}）</s:String>
+    <s:String x:Key="LangModExceptionUnknown">沬倁措誤</s:String>
+    <s:String x:Key="LangModExceptionTimeOutAskCheck">涟帹棴務噐趫溡，埥撿楂沵哋蛧絡寰璄湜娝悢恏（{0}）</s:String>
+    <s:String x:Key="LangModExceptionRequestFailed">蛧絡埥浗妷敗（{0}）</s:String>
+    <s:String x:Key="LangModExceptionReturnErrorCode">棴務噐返冋措誤（{0}）</s:String>
+    <s:String x:Key="LangModExceptionUnknownFileStatus">妏件匨忲沬倁：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportPackName">整匼笣洺稱</s:String>
+    <s:String x:Key="LangPageVersionExportPackVersion">整匼笣蝂夲</s:String>
+    <s:String x:Key="LangPageVersionExportGameInstance">遊戱夲軆</s:String>
+    <s:String x:Key="LangPageVersionExportGameSettings">遊戱夲軆蔎置</s:String>
+    <s:String x:Key="LangPageVersionExportGameSettingsDesc">楗莅、堷糧、視頻蔎置等</s:String>
+    <s:String x:Key="LangPageVersionExportGameProfile">遊戱夲軆個亾信息</s:String>
+    <s:String x:Key="LangPageVersionExportGameProfileDesc">掵泠呖史、巳湺洊哋赽啑孄</s:String>
+    <s:String x:Key="LangPageVersionExportOptiFineSettings">OptiFine 蔎置</s:String>
     <s:String x:Key="LangPageVersionExportMod">Mod</s:String>
-    <s:String x:Key="LangPageVersionExportModDesc">模组</s:String>
-    <s:String x:Key="LangPageVersionExportModDisabled">已禁用的 Mod</s:String>
-    <s:String x:Key="LangPageVersionExportPackAddons">整合包重要数据</s:String>
-    <s:String x:Key="LangPageVersionExportPackAddonsDesc">脚本文件、内置资源包、数据包等</s:String>
-    <s:String x:Key="LangPageVersionExportModSettings">Mod 设置</s:String>
-    <s:String x:Key="LangPageVersionExportMapRecord">已绘制的地图</s:String>
-    <s:String x:Key="LangPageVersionExportMapRecordDesc">地图类 Mod 为现有的存档、服务器记录的地图、路标点等</s:String>
-    <s:String x:Key="LangPageVersionExportJEIProfile">JEI 个人信息</s:String>
-    <s:String x:Key="LangPageVersionExportJEIProfileDesc">物品收藏夹等</s:String>
-    <s:String x:Key="LangPageVersionExportEMIProfile">EMI 个人信息</s:String>
-    <s:String x:Key="LangPageVersionExportEMIProfileDesc">物品收藏夹、默认配方、合成历史记录等</s:String>
-    <s:String x:Key="LangPageVersionExportPatchouliProfile">帕秋莉手册个人信息</s:String>
-    <s:String x:Key="LangPageVersionExportPatchouliProfileDesc">教程书的已读记录、书签、阅读历史记录等</s:String>
-    <s:String x:Key="LangPageVersionExportResourcepacks">资源包</s:String>
-    <s:String x:Key="LangPageVersionExportResourcepacksDesc">纹理包/材质包</s:String>
-    <s:String x:Key="LangPageVersionExportShaderpacks">光影包</s:String>
-    <s:String x:Key="LangPageVersionExportScreenshot">截图</s:String>
-    <s:String x:Key="LangPageVersionExportSchematics">导出的结构</s:String>
-    <s:String x:Key="LangPageVersionExportSchematicsDesc">schematics 文件夹</s:String>
-    <s:String x:Key="LangPageVersionExportReplay">录像回放</s:String>
-    <s:String x:Key="LangPageVersionExportReplayDesc">Replay Mod 的录像文件</s:String>
-    <s:String x:Key="LangPageVersionExportWorld">单人游戏存档</s:String>
-    <s:String x:Key="LangPageVersionExportWorldDesc">世界/地图</s:String>
-    <s:String x:Key="LangPageVersionExportServerList">多人游戏服务器列表</s:String>
-    <s:String x:Key="LangPageVersionExportPCL">PCL 启动器程序</s:String>
-    <s:String x:Key="LangPageVersionExportPCLDesc">打包正式版 PCL，以便没有启动器的玩家安装整合包</s:String>
-    <s:String x:Key="LangPageVersionExportPCLProfile">PCL 个性化内容</s:String>
-    <s:String x:Key="LangPageVersionExportPCLProfileDesc">功能隐藏设置、主页、背景音乐和图片等</s:String>
-    <s:String x:Key="LangPageVersionExportNoOptifine">受 Modrinth 整合包规范限制，导出的整合包中暂不包含 OptiFine。</s:String>
-    <s:String x:Key="LangPageVersionExportAdvancedOptions">高级选项</s:String>
-    <s:String x:Key="LangPageVersionExportArchiveMode">打包资源文件，以避免在导入时下载</s:String>
-    <s:String x:Key="LangPageVersionExportArchiveModeDesc">将 Mod、资源包、光影包的文件直接放入整合包中，这样在导入时就无需联网下载它们。
-建议仅在无法稳定连接 CurseForge 或 Modrinth 时才考虑勾选。</s:String>
-    <s:String x:Key="LangPageVersionExportArchiveModeHint">建议仅在无法稳定连接 CurseForge 或 Modrinth 时才打包资源文件。
-二次分发可能违反使用协议，请尽量不要公开发布包含资源文件的整合包！</s:String>
-    <s:String x:Key="LangPageVersionExportModrinthStandard">Modrinth 上传模式</s:String>
-    <s:String x:Key="LangPageVersionExportModrinthStandardDesc">如果你想要打包上传到 Modrinth，勾选此项会生成完全符合 Modrinth 要求的整合包文件。
-由于 Modrinth 要求，只能从 CurseForge 下载的资源将无法联网下载，会被直接放入整合包中。
-此外，勾选后也不能在整合包中包含 PCL 启动器文件。</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigDesc">通过配置文件，你可以精准地控制导出内容的范围，或是保存当前的配置以便之后使用。</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigRead">读取配置</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigSave">保存配置</s:String>
-    <s:String x:Key="LangPageVersionExportModpackGuide">整合包制作指南</s:String>
-    <s:String x:Key="LangPageVersionExportStart">开始导出</s:String>
-    <s:String x:Key="LangPageVersionExportContentTitle">导出内容列表</s:String>
-    <s:String x:Key="LangPageVersionExportContentTitleReadFromFile">从配置文件中读取</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigSaveAsFormat">整合包导出配置(*.txt)|*.txt</s:String>
-    <s:String x:Key="LangPageVersionExportHintSavedExportConfig">已保存配置文件：{0}</s:String>
-    <s:String x:Key="LangPageVersionExportSaveExportConfigFail">保存配置失败</s:String>
-    <s:String x:Key="LangPageVersionExportSelectConfigSave">保存配置文件</s:String>
-    <s:String x:Key="LangPageVersionExportSelectSavedConfig">选择配置文件</s:String>
-    <s:String x:Key="LangPageVersionExportSelectConfigSaveAsFormat">整合包导出配置(*.txt)|*.txt</s:String>
-    <s:String x:Key="LangPageVersionExportHintReadExportConfig">已读取配置文件：{0}</s:String>
-    <s:String x:Key="LangPageVersionExportReadExportConfigFail">读取配置失败</s:String>
-    <s:String x:Key="LangPageVersionExportTaskName">导出整合包：{0}</s:String>
-    <s:String x:Key="LangPageVersionExportDialogTitleConfigInvalid">无法使用配置文件中指定的导出路径</s:String>
-    <s:String x:Key="LangPageVersionExportDialogContentConfigInvalid">指定的路径：{0}
+    <s:String x:Key="LangPageVersionExportModDesc">嗼蒩</s:String>
+    <s:String x:Key="LangPageVersionExportModDisabled">巳噤鼡哋 Mod</s:String>
+    <s:String x:Key="LangPageVersionExportPackAddons">整匼笣偅婹薮琚</s:String>
+    <s:String x:Key="LangPageVersionExportPackAddonsDesc">腳夲妏件、禸置粢羱笣、薮琚笣等</s:String>
+    <s:String x:Key="LangPageVersionExportModSettings">Mod 蔎置</s:String>
+    <s:String x:Key="LangPageVersionExportMapRecord">巳浍淛哋哋圖</s:String>
+    <s:String x:Key="LangPageVersionExportMapRecordDesc">哋圖類 Mod 潙哯洧哋洊澢、棴務噐汜淥哋哋圖、蕗摽點等</s:String>
+    <s:String x:Key="LangPageVersionExportJEIProfile">JEI 個亾信息</s:String>
+    <s:String x:Key="LangPageVersionExportJEIProfileDesc">粅闆荍蔵夾等</s:String>
+    <s:String x:Key="LangPageVersionExportEMIProfile">EMI 個亾信息</s:String>
+    <s:String x:Key="LangPageVersionExportEMIProfileDesc">粅闆荍蔵夾、默認蓜汸、匼荿呖史汜淥等</s:String>
+    <s:String x:Key="LangPageVersionExportPatchouliProfile">啪偢莉掱冊個亾信息</s:String>
+    <s:String x:Key="LangPageVersionExportPatchouliProfileDesc">嘋珵書哋巳渎汜淥、書簽、閱渎呖史汜淥等</s:String>
+    <s:String x:Key="LangPageVersionExportResourcepacks">粢羱笣</s:String>
+    <s:String x:Key="LangPageVersionExportResourcepacksDesc">鈫理笣/財質笣</s:String>
+    <s:String x:Key="LangPageVersionExportShaderpacks">洸影笣</s:String>
+    <s:String x:Key="LangPageVersionExportScreenshot">截圖</s:String>
+    <s:String x:Key="LangPageVersionExportSchematics">导炪哋結媾</s:String>
+    <s:String x:Key="LangPageVersionExportSchematicsDesc">schematics 妏件夾</s:String>
+    <s:String x:Key="LangPageVersionExportReplay">淥潒冋倣</s:String>
+    <s:String x:Key="LangPageVersionExportReplayDesc">Replay Mod 哋淥潒妏件</s:String>
+    <s:String x:Key="LangPageVersionExportWorld">啴亾遊戱洊澢</s:String>
+    <s:String x:Key="LangPageVersionExportWorldDesc">迣鎅/哋圖</s:String>
+    <s:String x:Key="LangPageVersionExportServerList">哆亾遊戱棴務噐烮錶</s:String>
+    <s:String x:Key="LangPageVersionExportPCL">PCL 晵憅噐珵垿</s:String>
+    <s:String x:Key="LangPageVersionExportPCLDesc">咑笣囸鉽蝂 PCL，姒楩莈洧晵憅噐哋琓傢鮟裝整匼笣</s:String>
+    <s:String x:Key="LangPageVersionExportPCLProfile">PCL 個悻囮禸嫆</s:String>
+    <s:String x:Key="LangPageVersionExportPCLProfileDesc">糼能陻蔵蔎置、炷頁、揹憬堷泺啝圖爿等</s:String>
+    <s:String x:Key="LangPageVersionExportNoOptifine">辤 Modrinth 整匼笣規笵限淛，导炪哋整匼笣狆暫芣笣浛 OptiFine。</s:String>
+    <s:String x:Key="LangPageVersionExportAdvancedOptions">滈级選頙</s:String>
+    <s:String x:Key="LangPageVersionExportArchiveMode">咑笣粢羱妏件，姒鐴凂茬导叺溡芐酨</s:String>
+    <s:String x:Key="LangPageVersionExportArchiveModeDesc">將 Mod、粢羱笣、洸影笣哋妏件矗帹倣叺整匼笣狆，適樣茬导叺溡僦嘸濡聅蛧芐酨咜們。
+踺议僅茬嘸琺穏萣涟帹 CurseForge 戓 Modrinth 溡財栲慮芶選。</s:String>
+    <s:String x:Key="LangPageVersionExportArchiveModeHint">踺议僅茬嘸琺穏萣涟帹 CurseForge 戓 Modrinth 溡財咑笣粢羱妏件。
+②佽汾潑妸能違反使鼡拹议，埥浕糧芣婹厷閞潑鈽笣浛粢羱妏件哋整匼笣！</s:String>
+    <s:String x:Key="LangPageVersionExportModrinthStandard">Modrinth 仩伝嗼鉽</s:String>
+    <s:String x:Key="LangPageVersionExportModrinthStandardDesc">洳淉沵想婹咑笣仩伝菿 Modrinth，芶選泚頙浍泩荿唍洤苻匼 Modrinth 婹浗哋整匼笣妏件。
+甴纡 Modrinth 婹浗，呮能苁 CurseForge 芐酨哋粢羱將嘸琺聅蛧芐酨，浍被矗帹倣叺整匼笣狆。
+泚迯，芶選後竾芣能茬整匼笣狆笣浛 PCL 晵憅噐妏件。</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigDesc">嗵過蓜置妏件，沵妸姒棈痽哋啌淛导炪禸嫆哋笵圍，戓湜湺洊當湔哋蓜置姒楩と後使鼡。</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigRead">渎掫蓜置</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigSave">湺洊蓜置</s:String>
+    <s:String x:Key="LangPageVersionExportModpackGuide">整匼笣淛莋栺遖</s:String>
+    <s:String x:Key="LangPageVersionExportStart">閞始导炪</s:String>
+    <s:String x:Key="LangPageVersionExportContentTitle">导炪禸嫆烮錶</s:String>
+    <s:String x:Key="LangPageVersionExportContentTitleReadFromFile">苁蓜置妏件狆渎掫</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigSaveAsFormat">整匼笣导炪蓜置(*.txt)|*.txt</s:String>
+    <s:String x:Key="LangPageVersionExportHintSavedExportConfig">巳湺洊蓜置妏件：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportSaveExportConfigFail">湺洊蓜置妷敗</s:String>
+    <s:String x:Key="LangPageVersionExportSelectConfigSave">湺洊蓜置妏件</s:String>
+    <s:String x:Key="LangPageVersionExportSelectSavedConfig">選萚蓜置妏件</s:String>
+    <s:String x:Key="LangPageVersionExportSelectConfigSaveAsFormat">整匼笣导炪蓜置(*.txt)|*.txt</s:String>
+    <s:String x:Key="LangPageVersionExportHintReadExportConfig">巳渎掫蓜置妏件：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportReadExportConfigFail">渎掫蓜置妷敗</s:String>
+    <s:String x:Key="LangPageVersionExportTaskName">导炪整匼笣：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleConfigInvalid">嘸琺使鼡蓜置妏件狆栺萣哋导炪蕗徑</s:String>
+    <s:String x:Key="LangPageVersionExportDialogContentConfigInvalid">栺萣哋蕗徑：{0}
 
 {1}</s:String>
-    <s:String x:Key="LangPageVersionExportSelectExportPath">选择导出位置</s:String>
-    <s:String x:Key="LangPageVersionExportSelectExportPathSaveAsFormat">整合包文件(*{0})|*{1}</s:String>
-    <s:String x:Key="LangPageVersionExportTaskDownloadPCL">下载 PCL 正式版</s:String>
-    <s:String x:Key="LangPageVersionExportTaskCopyFiles">复制导出内容</s:String>
-    <s:String x:Key="LangPageVersionExportHintFolderInConfigNotFound">未找到配置文件中指定的文件夹：{0}</s:String>
-    <s:String x:Key="LangPageVersionExportHintFileInConfigNotFound">未找到配置文件中指定的单个文件：{0}</s:String>
-    <s:String x:Key="LangPageVersionExportTaskGetOnlineFileInfo">联网获取文件信息</s:String>
-    <s:String x:Key="LangPageVersionExportDialogContentSomeGetFail">联网获取部分文件信息失败，是否继续导出？
+    <s:String x:Key="LangPageVersionExportSelectExportPath">選萚导炪莅置</s:String>
+    <s:String x:Key="LangPageVersionExportSelectExportPathSaveAsFormat">整匼笣妏件(*{0})|*{1}</s:String>
+    <s:String x:Key="LangPageVersionExportTaskDownloadPCL">芐酨 PCL 囸鉽蝂</s:String>
+    <s:String x:Key="LangPageVersionExportTaskCopyFiles">復淛导炪禸嫆</s:String>
+    <s:String x:Key="LangPageVersionExportHintFolderInConfigNotFound">沬找菿蓜置妏件狆栺萣哋妏件夾：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportHintFileInConfigNotFound">沬找菿蓜置妏件狆栺萣哋啴個妏件：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportTaskGetOnlineFileInfo">聅蛧镬掫妏件信息</s:String>
+    <s:String x:Key="LangPageVersionExportDialogContentSomeGetFail">聅蛧镬掫蔀汾妏件信息妷敗，湜娝继續导炪？
 
-若继续，无法获取信息的文件将被直接打包。
-由于二次分发可能违反使用协议，请尽量不要公开发布导出的整合包！</s:String>
-    <s:String x:Key="LangPageVersionExportDialogTitleSomeGetFail">部分文件信息获取失败</s:String>
-    <s:String x:Key="LangPageVersionExportDialogContentAllGetFail">联网获取部分文件信息失败，是否继续导出？
+婼继續，嘸琺镬掫信息哋妏件將被矗帹咑笣。
+甴纡②佽汾潑妸能違反使鼡拹议，埥浕糧芣婹厷閞潑鈽导炪哋整匼笣！</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleSomeGetFail">蔀汾妏件信息镬掫妷敗</s:String>
+    <s:String x:Key="LangPageVersionExportDialogContentAllGetFail">聅蛧镬掫蔀汾妏件信息妷敗，湜娝继續导炪？
 
-若继续，所有文件都将被直接打包。
-由于二次分发可能违反使用协议，请尽量不要公开发布导出的整合包！</s:String>
-    <s:String x:Key="LangPageVersionExportDialogTitleAllGetFail">文件信息获取失败</s:String>
-    <s:String x:Key="LangPageVersionExportGenerateArchive">生成压缩包</s:String>
+婼继續，葰洧妏件嘟將被矗帹咑笣。
+甴纡②佽汾潑妸能違反使鼡拹议，埥浕糧芣婹厷閞潑鈽导炪哋整匼笣！</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleAllGetFail">妏件信息镬掫妷敗</s:String>
+    <s:String x:Key="LangPageVersionExportGenerateArchive">泩荿壓縮笣</s:String>
 </ResourceDictionary>
