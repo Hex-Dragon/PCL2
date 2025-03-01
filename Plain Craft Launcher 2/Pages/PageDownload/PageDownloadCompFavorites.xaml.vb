@@ -388,7 +388,7 @@
                                                                        Try
                                                                            AllFiles.Add(ModComp.CompFilesGet(Item, CompRequest.IsFromCurseForge(Item)).Where(Function(i) i.Type <> CompType.Mod OrElse i.ModLoaders.Contains(DesiredModLoader)).ToList())
                                                                        Catch ex As Exception
-                                                                           Log(ex, $"[CompFavourites] 获取 {Item} 的下载信息失败")
+                                                                           Log(ex, $"获取 {Item} 的下载信息失败", LogLevel.Hint)
                                                                        Finally
                                                                            FinishedTasks += 1
                                                                        End Try
@@ -412,18 +412,25 @@
                                                                 If SuitVersion.Count = 0 Then
                                                                     Hint("不存在指定加载器并且同版本的资源", HintType.Critical)
                                                                     Ts.Abort()
+                                                                    Exit Sub
                                                                 End If
                                                                 Dim Selection As New List(Of IMyRadio)
                                                                 For Each i In SuitVersion
                                                                     Selection.Add(New MyRadioBox() With {.Text = i})
                                                                 Next
                                                                 SelectedVersion = MyMsgBoxSelect(Selection, "选择期望的游戏版本", Button2:="取消")
-                                                                If SelectedVersion Is Nothing Then Ts.Abort()
+                                                                If SelectedVersion Is Nothing Then
+                                                                    Ts.Abort()
+                                                                    Exit Sub
+                                                                End If
                                                             End Sub)
                                                 Dim SelectedVersionStr = SuitVersion(SelectedVersion)
                                                 Hint($"已选择 {SelectedVersionStr} 版本，下面请选择保存位置")
                                                 Dim SaveFolder As String = SelectFolder()
-                                                If String.IsNullOrWhiteSpace(SaveFolder) Then Ts.Abort()
+                                                If String.IsNullOrWhiteSpace(SaveFolder) Then
+                                                    Ts.Abort()
+                                                    Exit Sub
+                                                End If
                                                 Dim Res As New List(Of NetFile)
                                                 For Each Target In AllFiles
                                                     ' 获取有期望版本号的文件
