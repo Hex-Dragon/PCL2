@@ -1785,6 +1785,11 @@ Retry:
             ''' </summary>
             ''' <returns></returns>
             Property Favs As New List(Of String)
+            ''' <summary>
+            ''' 备注
+            ''' </summary>
+            ''' <returns></returns>
+            Property Notes As New Dictionary(Of String, String)
         End Class
 
         Private Shared _FavoritesList As List(Of FavData)
@@ -1817,6 +1822,9 @@ Retry:
             End Get
             Set
                 _FavoritesList = Value
+                For Each item In _FavoritesList
+                    item.Notes = item.Notes.Where(Function(n) Not String.IsNullOrWhiteSpace(n.Value)).ToDictionary(Function(n) n.Key, Function(n) n.Value)
+                Next
                 Dim RawList = JArray.FromObject(_FavoritesList)
                 Setup.Set("CompFavorites", RawList.ToString(Newtonsoft.Json.Formatting.None))
             End Set

@@ -54,13 +54,13 @@ Friend Module ModSecret
                 MsgBoxStyle.Critical, "运行环境错误")
             Environment.[Exit](Result.Cancel)
         End If
-        '开源版本提示
+        '社区版提示
         If Setup.Get("UiLauncherCEHint") Then
             MyMsgBox($"你正在使用来自 PCL-Community 的 PCL2 社区版本，遇到问题请不要向官方仓库反馈！
 PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的使用做担保。
 
 该版本中暂时无法使用以下特性：
-- 更新与联网通知：在做了在做了.jpg
+- 联网通知：在做了在做了.jpg
 - 主题切换：这是需要赞助解锁的纪念性质的功能，社区版不会制作
 
 该版本中的以下特性与原版有所区别：
