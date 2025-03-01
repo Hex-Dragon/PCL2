@@ -233,7 +233,8 @@
         Dim DisabledCount As Integer = 0
         Dim UpdateCount As Integer = 0
         Dim UnavalialeCount As Integer = 0
-        For Each ModItem In If(IsSearching, SearchResult, If(CurrentLoader.CompResourceListLoader.Output, New List(Of LocalCompFile)))
+        Dim ItemSource = If(IsSearching, SearchResult, If(CurrentLoader.CompResourceListLoader.Output, New List(Of LocalCompFile)))
+        For Each ModItem In ItemSource
             AnyCount += 1
             If ModItem.CanUpdate Then UpdateCount += 1
             If ModItem.State.Equals(LocalCompFile.LocalFileStatus.Fine) Then EnabledCount += 1
@@ -250,6 +251,16 @@
         BtnFilterDisabled.Visibility = If(Filter = FilterType.Disabled OrElse DisabledCount > 0, Visibility.Visible, Visibility.Collapsed)
         BtnFilterError.Text = $"错误 ({UnavalialeCount})"
         BtnFilterError.Visibility = If(Filter = FilterType.Unavailable OrElse UnavalialeCount > 0, Visibility.Visible, Visibility.Collapsed)
+        '查找重复项目
+        Dim DuplicateItems = ItemSource.GroupBy(Function(m)
+                                                    If m.Comp Is Nothing Then
+                                                        Return ":Nothing:"
+                                                    Else
+                                                        Return m.Comp.Id
+                                                    End If
+                                                End Function).Where(Function(g) g.Count > 1 AndAlso g.First.Comp IsNot Nothing).SelectMany(Function(g) g).ToList()
+        BtnFilterDuplicate.Text = $"重复 ({DuplicateItems.Count})"
+        BtnFilterDuplicate.Visibility = If(Filter = FilterType.Duplicate OrElse DuplicateItems.Any, Visibility.Visible, Visibility.Collapsed)
 
         '-----------------
         ' 底部栏
@@ -503,6 +514,8 @@ Install:
                     BtnFilterDisabled.Checked = True
                 Case FilterType.CanUpdate
                     BtnFilterCanUpdate.Checked = True
+                Case FilterType.Duplicate
+                    BtnFilterDuplicate.Checked = True
                 Case Else
                     BtnFilterError.Checked = True
             End Select
@@ -515,6 +528,7 @@ Install:
         Disabled = 2
         CanUpdate = 3
         Unavailable = 4
+        Duplicate = 5
     End Enum
 
     ''' <summary>
@@ -532,16 +546,18 @@ Install:
                 Return CheckingMod.CanUpdate
             Case FilterType.Unavailable
                 Return CheckingMod.State = LocalCompFile.LocalFileStatus.Unavailable
+            Case FilterType.Duplicate
+                Dim ItemSource = If(IsSearching, SearchResult, If(CurrentLoader.CompResourceListLoader.Output, New List(Of LocalCompFile)))
+                Return ItemSource IsNot Nothing AndAlso ItemSource.Where(Function(m) CheckingMod.Comp IsNot Nothing AndAlso m.Comp IsNot Nothing AndAlso CheckingMod.Comp.Id = m.Comp.Id).Count > 1
             Case Else
                 Return False
         End Select
     End Function
 
     '点击筛选项触发的改变
-    Private Sub ChangeFilter(sender As MyRadioButton, raiseByMouse As Boolean) Handles BtnFilterAll.Check, BtnFilterCanUpdate.Check, BtnFilterDisabled.Check, BtnFilterEnabled.Check, BtnFilterError.Check
+    Private Sub ChangeFilter(sender As MyRadioButton, raiseByMouse As Boolean) Handles BtnFilterAll.Check, BtnFilterCanUpdate.Check, BtnFilterDisabled.Check, BtnFilterEnabled.Check, BtnFilterError.Check, BtnFilterDuplicate.Check
         Filter = sender.Tag
         RefreshUI()
-        DoSort()
         DoSort()
     End Sub
 
