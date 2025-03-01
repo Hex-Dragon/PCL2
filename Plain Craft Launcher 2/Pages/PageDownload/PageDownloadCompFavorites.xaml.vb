@@ -193,7 +193,30 @@
 
     Private Sub ListItemBuild(CompItem As MyListItem)
         CompItem.Type = MyListItem.CheckType.CheckBox
+        Dim CompId = CType(CompItem.Tag, CompProject).Id
+        '----备注----
+        Dim Notes As String = ""
+        CurrentFavTarget.Notes.TryGetValue(CompId, Notes)
+        Dim NoteItem As New Run With {.Foreground = New SolidColorBrush(Color.FromRgb(0, 184, 148))}
+        If Not String.IsNullOrWhiteSpace(Notes) Then
+            NoteItem.Text = $" ({Notes})"
+        End If
+        CompItem.LabTitle.Inlines.Add(NoteItem)
         '----添加按钮----
+        '修改备注按钮
+        Dim Btn_EditNote As New MyIconButton
+        Btn_EditNote.Logo = Logo.IconButtonEdit
+        Btn_EditNote.ToolTip = "修改备注"
+        ToolTipService.SetPlacement(Btn_EditNote, Primitives.PlacementMode.Center)
+        ToolTipService.SetVerticalOffset(Btn_EditNote, 30)
+        ToolTipService.SetHorizontalOffset(Btn_EditNote, 2)
+        AddHandler Btn_EditNote.Click, Sub(sender As Object, e As EventArgs)
+                                           CurrentFavTarget.Notes.TryGetValue(CompId, Notes)
+                                           Dim DesiredNote = MyMsgBoxInput("修改备注", DefaultInput:=Notes)
+                                           CurrentFavTarget.Notes(CompId) = DesiredNote
+                                           NoteItem.Text = If(String.IsNullOrWhiteSpace(DesiredNote), "", $" ({DesiredNote})")
+                                           CompFavorites.Save()
+                                       End Sub
         '删除按钮
         Dim Btn_Delete As New MyIconButton
         Btn_Delete.Logo = Logo.IconButtonLikeFill
@@ -207,7 +230,7 @@
                                          RefreshCardTitle()
                                          RefreshBar()
                                      End Sub
-        CompItem.Buttons = {Btn_Delete}
+        CompItem.Buttons = {Btn_EditNote, Btn_Delete}
         '---操作逻辑---
         '右键查看详细信息界面
         If TypeOf (CompItem.Tag) Is CompProject Then
