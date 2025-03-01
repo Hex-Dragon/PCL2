@@ -1045,5 +1045,8 @@
   <ItemGroup>
     <Resource Include="Images\Heads\Logo-CE.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Heads\Pysio.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
