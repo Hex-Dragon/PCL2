@@ -1846,6 +1846,9 @@ Retry:
         End Function
     End Class
 
+#End Region
+#Region "CompProject | 项目信息"
+
     Class CompRequest
         ''' <summary>
         ''' 通过项目 Id 判断是否来自 CurseForge

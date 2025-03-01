@@ -399,21 +399,24 @@
                                                 End While
                                                 ' 求取共同的版本
                                                 For Each Item In AllFiles
+                                                    Dim Current = GetAllVersionList(Item.Select(Function(i) i.GameVersions).ToList())
+                                                    'Log(Current.Join(","))
                                                     If VersionFirstSet Then
                                                         VersionFirstSet = False
-                                                        SuitVersion = GetAllVersionList(Item.Select(Function(i) i.GameVersions).ToList())
+                                                        SuitVersion = Current
                                                     Else
-                                                        SuitVersion = SuitVersion.Intersect(GetAllVersionList(Item.Select(Function(i) i.GameVersions).ToList())).ToList()
+                                                        SuitVersion = SuitVersion.Intersect(Current).ToList()
+                                                    End If
+                                                    'Log(SuitVersion.Join(","))
+                                                    If SuitVersion.Count = 0 Then
+                                                        Hint("不存在指定加载器并且同版本的资源", HintType.Critical)
+                                                        Ts.Abort()
+                                                        Exit Sub
                                                     End If
                                                 Next
                                                 ' 要求用户选择希望下载的版本
                                                 Dim SelectedVersion = Nothing
                                                 RunInUiWait(Sub()
-                                                                If SuitVersion.Count = 0 Then
-                                                                    Hint("不存在指定加载器并且同版本的资源", HintType.Critical)
-                                                                    Ts.Abort()
-                                                                    Exit Sub
-                                                                End If
                                                                 Dim Selection As New List(Of IMyRadio)
                                                                 For Each i In SuitVersion
                                                                     Selection.Add(New MyRadioBox() With {.Text = i})
