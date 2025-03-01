@@ -48,6 +48,7 @@
                         <RowDefinition Height="45" />
                         <RowDefinition Height="45" />
                         <RowDefinition Height="45" />
+                        <RowDefinition Height="45" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="40" />
@@ -62,8 +63,9 @@
                     <local:MyListItem Title="z0z0r4" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="提供了 MCIM 中国 Mod 下载镜像源和帮助库图床！" Grid.Row="3" Grid.Column="1" />
                     <local:MyListItem Title="Patrick" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="设计并制作了 PCL 图标，让我从做图标的水深火热中得到了解脱……" Grid.Row="4" Grid.Column="1" />
                     <local:MyListItem Title="Hao_Tian" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="在内测中找出了一大堆没人想得到的诡异 Bug，有非同寻常的 Bug 体质" Grid.Row="5" Grid.Column="1" />
-                    <local:MyListItem Title="Minecraft 中文论坛" Margin="-5,0,15,0" IsHitTestVisible="False" Info="虽然已经关站了，但感谢此前提供了 MCBBS 镜像源……" Grid.Row="6" Grid.Column="1" />
-                    <local:MyListItem Title="PCL 内群的各位" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！" Grid.Row="7" Grid.Column="1" />
+                    <local:MyListItem Title="Pysio" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="提供了社区版本的更新服务器" Grid.Row="6" Grid.Column="1" />
+                    <local:MyListItem Title="Minecraft 中文论坛" Margin="-5,0,15,0" IsHitTestVisible="False" Info="虽然已经关站了，但感谢此前提供了 MCBBS 镜像源……" Grid.Row="7" Grid.Column="1" />
+                    <local:MyListItem Title="PCL 内群的各位" Margin="-5,0,0,0" IsHitTestVisible="False" Grid.ColumnSpan="2" Info="感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！" Grid.Row="8" Grid.Column="1" />
                     <Image Source="/Plain Craft Launcher 2;component/Images/Heads/bangbang93.png" Grid.Row="0" Margin="3">
                         <Image.Clip>
                             <EllipseGeometry Center="17 17" RadiusX="17" RadiusY="17" />
@@ -94,12 +96,17 @@
                             <EllipseGeometry Center="17 17" RadiusX="17" RadiusY="17" />
                         </Image.Clip>
                     </Image>
-                    <Image Source="/Plain Craft Launcher 2;component/Images/Heads/MCBBS.png" Grid.Row="6" Margin="3">
+                    <Image Source="/Plain Craft Launcher 2;component/Images/Heads/Pysio.jpg" Grid.Row="6" Margin="3">
                         <Image.Clip>
                             <EllipseGeometry Center="17 17" RadiusX="17" RadiusY="17" />
                         </Image.Clip>
                     </Image>
-                    <Image Source="/Plain Craft Launcher 2;component/Images/Heads/PCL2.png" Grid.Row="7" Margin="3">
+                    <Image Source="/Plain Craft Launcher 2;component/Images/Heads/MCBBS.png" Grid.Row="7" Margin="3">
+                        <Image.Clip>
+                            <EllipseGeometry Center="17 17" RadiusX="17" RadiusY="17" />
+                        </Image.Clip>
+                    </Image>
+                    <Image Source="/Plain Craft Launcher 2;component/Images/Heads/PCL2.png" Grid.Row="8" Margin="3">
                         <Image.Clip>
                             <EllipseGeometry Center="17 17" RadiusX="17" RadiusY="17" />
                         </Image.Clip>
