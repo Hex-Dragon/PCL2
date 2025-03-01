@@ -621,7 +621,7 @@ NoUserJava:
                     End If
                 Next
             Catch ex As Exception
-                Log(ex, "Java 列表已损坏了，无法获取原有 Java 启用情况", LogLevel.Feedback)
+                Log(ex, "Java 列表已损坏，无法获取原有 Java 启用情况", LogLevel.Feedback)
                 Setup.Set("LaunchArgumentJavaAll", "[]")
             End Try
 #End Region

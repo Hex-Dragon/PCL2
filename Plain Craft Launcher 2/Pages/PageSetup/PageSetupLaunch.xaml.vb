@@ -448,7 +448,7 @@ PreFin:
                                                 Java.IsEnabled = Not Java.IsEnabled
                                                 TargetJava.IsEnabled = Java.IsEnabled
                                                 BtnJavaED.Logo = If(TargetJava.IsEnabled, Logo.IconButtonStop, Logo.IconButtonCheck)
-                                                BtnJavaED.ToolTip = If(TargetJava.IsEnabled, "禁用"， "启用")
+                                                BtnJavaED.ToolTip = If(TargetJava.IsEnabled, "禁用", "启用")
                                                 Dim NewJavaList As New JArray
                                                 For Each Item In JavaList
                                                     NewJavaList.Add(Item.ToJson)
