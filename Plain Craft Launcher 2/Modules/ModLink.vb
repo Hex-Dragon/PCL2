@@ -353,40 +353,69 @@ Public Class ModLink
     Public Shared ETNetworkName As String = "PCLCELobby"
     Public Shared ETNetworkSecret As String = "PCLCELobbyDefault"
     Public Shared ETServer As String = "tcp://public.easytier.cn:11010"
+    Public Shared ETPath As String = Path + "PCL\EasyTier"
 
     Public Shared Sub LaunchEasyTier(IsHost As Boolean, Optional Name As String = "PCLCELobby", Optional Secret As String = "PCLCELobbyDefault")
         Try
-            ETProcess.StartInfo.FileName = "E:\Code\PCL2-CE-Pigeon\Plain Craft Launcher 2\bin\PCL\EasyTier\easytier-core.exe"
-            If IsHost Then
-                Log($"[Link] 本机作为创建者创建大厅，EasyTier 网络名称: {ETNetworkName}, 是否自定义网络密钥: {Secret = "PCLCELobbyDefault"}")
-                ETProcess.StartInfo.Arguments = $"-i 10.114.51.41 --network-name {ETNetworkName} --network-secret {ETNetworkSecret} -p {ETServer}" '创建者
-            Else
-                ETProcess.StartInfo.Arguments = $"-d --network-name {ETNetworkName} --network-secret {ETNetworkSecret} -p {ETServer}" '加入者
-            End If
-            ETProcess.StartInfo.ErrorDialog = False
-            'ETProcess.StartInfo.UseShellExecute = False
-            ETProcess.StartInfo.CreateNoWindow = True
-            ETProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden
-            ETProcess.StartInfo.RedirectStandardOutput = True
-            ETProcess.StartInfo.RedirectStandardError = True
-            ETProcess.StartInfo.RedirectStandardInput = True
+            ETProcess.StartInfo = New ProcessStartInfo With {
+                .FileName = $"{ETPath}\easytier-core.exe",
+                .WorkingDirectory = ETPath,
+                .Arguments = ETProcess.StartInfo.Arguments,
+                .ErrorDialog = False,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True,
+                .RedirectStandardError = True,
+                .RedirectStandardInput = True}
             ETProcess.EnableRaisingEvents = True
-            'AddHandler ETProcess.Exited, AddressOf LaunchEasyTier
-            ETProcess.Start()
-            If ETProcess.ExitCode = 0 Then
-                Log("[Link] EasyTier 进程已结束，正常退出")
+            Log($"[Link] EasyTier 路径: {ETPath}\easytier-core.exe")
+            Log($"[Link] EasyTier 是否存在: {File.Exists(ETProcess.StartInfo.FileName)}")
+
+            If IsHost Then
+                For index = 1 To 8 '生成 8 位随机编号
+                    ETNetworkName += RandomInteger(0, 9).ToString()
+                Next
+                Log($"[Link] 本机作为创建者创建大厅，EasyTier 网络名称: {ETNetworkName}, 是否自定义网络密钥: {Not Secret = "PCLCELobbyDefault"}")
+                ETProcess.StartInfo.Arguments = $"-i 10.114.51.41 --network-name {ETNetworkName} --network-secret {ETNetworkSecret} -p {ETServer} --no-tun" '创建者
+            Else
+                ETNetworkName += Name
+                Log($"[Link] 本机作为加入者加入大厅，EasyTier 网络名称: {ETNetworkName}")
+                ETProcess.StartInfo.Arguments = $"-d --network-name {ETNetworkName} --network-secret {ETNetworkSecret} -p {ETServer}" '加入者
+                ETProcess.StartInfo.Verb = "runas"
             End If
+
+            '创建防火墙规则
+            'Dim FirewallProcess As New Process With {
+            '    .StartInfo = New ProcessStartInfo With {
+            '        .Verb = "runas",
+            '        .FileName = "cmd",
+            '        .Arguments = $"/c netsh advfirewall firewall add rule name=""PCLCE Lobby - EasyTier"" dir=in action=allow program=""{ETPath}\easytier-core.exe"" protocol=tcp localport={FrmLinkLobby.LocalPort}"
+            '    }
+            '}
+
+            ETProcess.StartInfo.Arguments += $" --enable-kcp-proxy --latency-first --use-smoltcp"
+            'AddHandler ETProcess.Exited, AddressOf LaunchEasyTier
+            Log("[Link] 启动 EasyTier")
+            ETProcess.Start()
+            'If ETProcess.ExitCode = 0 Then
+            '    Log("[Link] EasyTier 进程已结束，正常退出")
+            'End If
         Catch ex As Exception
-            Log("[Link] 尝试启动 EasyTier 遇到问题: " + ex.ToString())
+            Log("[Link] 尝试启动 EasyTier 时遇到问题: " + ex.ToString())
+            ETProcess = Nothing
         End Try
     End Sub
 
     Public Shared Sub ExitEasyTier()
         Try
+            Log("[Link] 停止 EasyTier")
             ETProcess.Kill()
             ETProcess.Close()
+            ETProcess = Nothing
         Catch ex As Exception
             Log("[Link] 尝试停止 EasyTier 进程时遇到问题: " + ex.ToString())
+            ETProcess = Nothing
         End Try
     End Sub
 

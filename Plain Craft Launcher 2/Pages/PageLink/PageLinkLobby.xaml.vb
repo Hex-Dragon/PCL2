@@ -21,7 +21,7 @@ Public Class PageLinkLobby
         If IsLoad Then Exit Sub
         IsLoad = True
         '启动监视线程
-        If Not IsWatcherStarted Then RunInNewThread(AddressOf WatcherThread, "Hiper Watcher")
+        'If Not IsWatcherStarted Then RunInNewThread(AddressOf WatcherThread, "Hiper Watcher")
     End Sub
 
 #End Region
@@ -72,28 +72,55 @@ Public Class PageLinkLobby
 
     '主 Timer 线程
     Private IsWatcherStarted As Boolean = False
-    Private Sub WatcherThread()
-        Dim Sec15 As Integer = 0
-        Do While True
-            Try
-                For i = 1 To 5
-                    Thread.Sleep(200)
-                    If InitLoader.State = LoadState.Loading Then
-                        RunInUi(AddressOf UpdateProgress)
-                    End If
-                Next
-                Thread.Sleep(1000)
-                Sec15 += 1
-                WatcherTimer1()
-                If Sec15 = 15 Then
-                    Sec15 = 0
-                    WatcherTimer15()
-                End If
-            Catch ex As Exception
-                Log(ex, "联机模块主时钟出错", LogLevel.Feedback)
-                Thread.Sleep(20000)
-            End Try
-        Loop
+    Private Sub StartWatcherThread()
+        RunInNewThread(Sub()
+                           While ETProcess IsNot Nothing
+                               Log("[Link] 启动 EasyTier 监视")
+                               Dim ETCliProcess As New Process With {
+                                   .StartInfo = New ProcessStartInfo With {
+                                       .FileName = $"{ETPath}\easytier-cli.exe",
+                                       .WorkingDirectory = ETPath,
+                                       .Arguments = ETProcess.StartInfo.Arguments,
+                                       .ErrorDialog = False,
+                                       .CreateNoWindow = True,
+                                       .WindowStyle = ProcessWindowStyle.Hidden,
+                                       .UseShellExecute = False,
+                                       .RedirectStandardOutput = True,
+                                       .RedirectStandardError = True,
+                                       .RedirectStandardInput = True,
+                                       .StandardOutputEncoding = Encoding.UTF8},
+                                   .EnableRaisingEvents = True
+                               }
+                               Dim ETCliOutput As String = Nothing
+                               Dim Ping As String = Nothing
+                               If IsHost Then
+                                   RunInUi(Sub()
+                                               SplitLineBeforePing.Visibility = Visibility.Collapsed
+                                               BtnFinishPing.Visibility = Visibility.Collapsed
+                                           End Sub)
+                               Else
+                                   ETCliProcess.StartInfo.Arguments = "peer"
+                                   ETCliProcess.Start()
+                                   ETCliOutput = ETCliProcess.StandardOutput.ReadToEnd()
+                                   Log($"[Link] 获取到 EasyTier Cli 信息: {vbCrLf}" + ETCliOutput)
+                                   If Not ETCliOutput.Contains("10.114.51.41/24") Then
+                                       Log("[Link] 未找到大厅创建者 IP, 判定该大厅未被创建")
+                                       Hint("该大厅不存在", HintType.Critical)
+                                       'ExitEasyTier()
+                                       'CurrentSubpage = Subpages.PanSelect
+                                       Exit Sub
+                                   End If
+                                   Ping = ETCliOutput.Split("│ 10.114.51.41/24 │")(1).Split("│")(2).Trim().Split(".")(0)
+                                   Log($"[Link] 与大厅创建者之间的 Ping 值: {Ping}ms")
+                                   RunInUi(Sub()
+                                                   SplitLineBeforePing.Visibility = Visibility.Visible
+                                                   BtnFinishPing.Visibility = Visibility.Visible
+                                                   LabFinishPing.Text = Ping + "ms"
+                                               End Sub)
+                                   End If
+                                   Thread.Sleep(5000)
+                           End While
+                       End Sub, "EasyTier Status Watcher", ThreadPriority.BelowNormal)
     End Sub
 
     '每 1 秒执行的 Timer
@@ -139,10 +166,14 @@ Public Class PageLinkLobby
     Private Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
         LocalPort = MyMsgBoxInput("输入端口号", HintText:="例如：25565")
         If LocalPort = Nothing Then Exit Sub
+        IsHost = True
         RunInNewThread(Sub()
                            'CreateNATTranversal(LocalPort)
                            LaunchEasyTier(True)
+                           Thread.Sleep(1000)
+                           StartWatcherThread()
                        End Sub)
+        If ETProcess IsNot Nothing Then LabFinishIp.Text = ETNetworkName.Replace("PCLCELobby", "")
         'ModLink.CreateUPnPMapping(LocalPort)
         CurrentSubpage = Subpages.PanFinish
     End Sub
@@ -153,9 +184,18 @@ Public Class PageLinkLobby
         InitLoader.Start(IsForceRestart:=True)
     End Sub
 
+    Public JoinedLobbyId As String = Nothing
     '加入房间
     Private Sub BtnSelectJoin_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectJoin.MouseLeftButtonUp
-        MyMsgBoxInput("输入大厅编号", HintText:="例如：01509230")
+        JoinedLobbyId = MyMsgBoxInput("输入大厅编号", HintText:="例如：01509230")
+        If JoinedLobbyId = Nothing Then Exit Sub
+        RunInNewThread(Sub()
+                           LaunchEasyTier(False, JoinedLobbyId)
+                           Thread.Sleep(1000)
+                           StartWatcherThread()
+                       End Sub)
+        CurrentSubpage = Subpages.PanFinish
+        If ETProcess IsNot Nothing Then LabFinishIp.Text = ETNetworkName.Replace("PCLCELobby", "")
     End Sub
     Private Sub RoomJoin(Ip As String, Port As Integer)
         '记录信息
@@ -232,7 +272,7 @@ Public Class PageLinkLobby
 
     '退出
     Private Sub BtnFinishExit_Click(sender As Object, e As EventArgs) Handles BtnFinishExit.Click
-        If MyMsgBox("你确定要关闭联机房间吗？", "确认退出", "确定", "取消", IsWarn:=True) = 1 Then
+        If MyMsgBox("你确定要退出大厅吗？", "确认退出", "确定", "取消", IsWarn:=True) = 1 Then
             ExitEasyTier()
             'RemoveNATTranversal()
             'ModLink.RemoveUPnPMapping()
@@ -244,7 +284,7 @@ Public Class PageLinkLobby
 
     '复制联机码
     Private Sub BtnFinishCopy_Click(sender As Object, e As EventArgs) Handles BtnFinishCopy.Click
-        ClipboardSet(PublicIPPort)
+        ClipboardSet(ETNetworkName.Replace("PCLCELobby", ""))
     End Sub
 
     'Ping 房主
@@ -274,7 +314,7 @@ Public Class PageLinkLobby
         Set(value As Subpages)
             If _CurrentSubpage = value Then Exit Property
             _CurrentSubpage = value
-            Log("[Hiper] 子页面更改为 " & GetStringFromEnum(value))
+            Log("[Link] 子页面更改为 " & GetStringFromEnum(value))
             PageOnContentExit()
         End Set
     End Property
