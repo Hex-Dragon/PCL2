@@ -431,7 +431,7 @@
                                                     ' 按照发布日期排序
                                                     FinalChoices = FinalChoices.Sort(Function(a As CompFile, b As CompFile) a.ReleaseDate > b.ReleaseDate)
                                                     ' 选择最新版本进行下载
-                                                    Res.Add(New NetFile(FinalChoices.First.DownloadUrls, SaveFolder & FinalChoices.First.FileName))
+                                                    Res.Add(FinalChoices.First.ToNetFile(SaveFolder & FinalChoices.First.FileName))
                                                 Next
                                                 Ts.Output = Res
                                             End Sub) With {.ProgressWeight = 2})
