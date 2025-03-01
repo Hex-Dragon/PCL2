@@ -54,7 +54,7 @@ Friend Module ModSecret
                 MsgBoxStyle.Critical, "运行环境错误")
             Environment.[Exit](Result.Cancel)
         End If
-        '开源版本提示
+        '社区版提示
         If Setup.Get("UiLauncherCEHint") Then
             MyMsgBox($"你正在使用来自 PCL-Community 的 PCL2 社区版本，遇到问题请不要向官方仓库反馈！
 PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的使用做担保。
