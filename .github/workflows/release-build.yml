@@ -1,33 +1,22 @@
-name: Build
+name: Release Build
 
 on:
-  push:
-    branches:
-      - dev
-
-    paths:
-      - 'Plain Craft Launcher 2/**'
-      - '.github/workflows/**'
-
-  pull_request:
-    paths:
-      - 'Plain Craft Launcher 2/**'
-      - '.github/workflows/**'
-
-  workflow_dispatch:
+  release:
+    types: [released]
 
 jobs:
   build:
     name: Build ${{ matrix.configuration }}-${{ matrix.architecture }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+
     strategy:
       matrix:
         include:
-          - configuration: Beta
+          - configuration: Release
             architecture: x64
             os: windows-latest
 
-          - configuration: Beta
+          - configuration: Release
             architecture: ARM64
             os: self-hosted
 
@@ -37,12 +26,6 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v4
-
-    - name: Set Describe
-      shell: powershell
-      run: |
-          $describe = $(git describe --tags --always)
-          echo "describe=$describe" >> $GITHUB_ENV
 
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
@@ -75,8 +58,23 @@ jobs:
     - name: Build
       run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }} -p:Platform=${{ matrix.architecture }}
 
-    - name: Upload a Build Artifact
+    - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.configuration }}-${{ matrix.architecture }}
         path: Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}\Plain Craft Launcher 2.exe
+
+    - name: Rename binaries
+      run: |
+        cd "Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}"
+        mv "Plain Craft Launcher 2.exe" "PCL2_CE_${{ matrix.architecture }}.exe"
+
+    - name: Upload binary to Release
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: Plain Craft Launcher 2\obj\${{ matrix.architecture }}\${{ matrix.configuration }}\PCL2_CE_${{ matrix.architecture }}.exe
+        asset_name: PCL2_CE_${{ matrix.architecture }}.exe
+        asset_content_type: application/octet-stream
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
