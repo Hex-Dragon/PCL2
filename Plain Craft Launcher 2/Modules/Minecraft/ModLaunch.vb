@@ -739,7 +739,7 @@ LoginFinish:
                 Setup.Set($"DisableAuthHttpWarning", False)
                 Setup.Set("DisableCertCheckWarning", False)
             End If
-            If Data.Input.BaseUrl.StartsWithF("http://") AndAlso Setup.Get($"Disable{Data.Input.Token}HttpWarning") = "False" Then
+            If Data.Input.BaseUrl.StartsWithF("http://") AndAlso Setup.Get($"DisableAuthHttpWarning") = "False" Then
                 Select Case MyMsgBox(
                     Caption:=$"当前正在使用不安全的 HTTP 协议，这将增加账号被盗的风险!{vbCrLf}如果没有特殊需求，建议使用更安全的 HTTPS 协议。",
                     Title:="账号安全警告",
