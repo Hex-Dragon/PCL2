@@ -1,4 +1,5 @@
-﻿Imports PCL.ModLink
+﻿Imports System.Net.NetworkInformation
+Imports PCL.ModLink
 Public Class PageLinkLobby
     Public Const RequestVersion As Char = "2"
 
@@ -74,8 +75,20 @@ Public Class PageLinkLobby
     Private IsWatcherStarted As Boolean = False
     Private Sub StartWatcherThread()
         RunInNewThread(Sub()
+                           If IsHost Then
+                               Log($"[Link] 本机角色：大厅创建者，隐藏 Ping 信息和连接类型信息")
+                               RunInUi(Sub()
+                                           SplitLineBeforePing.Visibility = Visibility.Collapsed
+                                           BtnFinishPing.Visibility = Visibility.Collapsed
+                                           SplitLineBeforeType.Visibility = Visibility.Collapsed
+                                           BtnConnectType.Visibility = Visibility.Collapsed
+                                       End Sub)
+                               Exit Sub
+                           End If
+                           Log("[Link] 本机角色：加入者，开始获取 Ping 信息和连接类型信息")
+                           Log("[Link] 启动 EasyTier 监视")
+                           IsWatcherStarted = True
                            While ETProcess IsNot Nothing
-                               Log("[Link] 启动 EasyTier 监视")
                                Dim ETCliProcess As New Process With {
                                    .StartInfo = New ProcessStartInfo With {
                                        .FileName = $"{ETPath}\easytier-cli.exe",
@@ -93,33 +106,60 @@ Public Class PageLinkLobby
                                }
                                Dim ETCliOutput As String = Nothing
                                Dim Ping As String = Nothing
-                               If IsHost Then
-                                   RunInUi(Sub()
-                                               SplitLineBeforePing.Visibility = Visibility.Collapsed
-                                               BtnFinishPing.Visibility = Visibility.Collapsed
-                                           End Sub)
+                               Dim ConnectType As String = Nothing
+                               Dim ConnectTypeOriginal As String = Nothing
+
+                               ETCliProcess.StartInfo.Arguments = "peer"
+                               ETCliProcess.Start()
+                               ETCliOutput = ETCliProcess.StandardOutput.ReadToEnd()
+                               'Log($"[Link] 获取到 EasyTier Cli 信息: {vbCrLf}" + ETCliOutput)
+                               If Not ETCliOutput.Contains("10.114.51.41/24") Then
+                                   Log("[Link] 未找到大厅创建者 IP, 判定该大厅未被创建")
+                                   Hint("该大厅不存在", HintType.Critical)
+                                   RunInUi(Sub() CurrentSubpage = Subpages.PanSelect)
+                                   ExitEasyTier()
+                                   Exit Sub
+                               End If
+
+                               Ping = ETCliOutput.Split("│ 10.114.51.41/24 │")(1).Split("│")(2).Trim().Split(".")(0)
+                               Dim PingSender = New Ping()
+                               Dim PingReplied As PingReply = Nothing
+                               Dim PingRtt As String = Nothing
+                               Try
+                                   PingReplied = PingSender.Send("10.114.51.41")
+                                   If PingReplied.Status = IPStatus.Success Then
+                                       PingRtt = PingReplied.RoundtripTime
+                                   End If
+                               Catch ex As Exception
+                                   Log("[Ping] 进行 Ping 测试失败: " + ex.ToString())
+                               End Try
+                               'Log($"[Link] 与大厅创建者之间的 Ping 值: {PingRtt} ms")
+
+                               ConnectTypeOriginal = ETCliOutput.Split("│ 10.114.51.41/24 │")(1).Split("│")(1).Trim()
+                               If ConnectTypeOriginal.Contains("peer") OrElse ConnectTypeOriginal.Contains("p2p") Then
+                                   ConnectType = "P2P"
+                               ElseIf ConnectTypeOriginal.Contains("relay") Then
+                                   ConnectType = "中继"
+                               ElseIf ConnectTypeOriginal.Contains("Local") Then
+                                   ConnectType = "本机"
+                                   'Log("[Link] 与大厅创建者的连接类型为... 本机？你是怎么做到的.jpg")
                                Else
-                                   ETCliProcess.StartInfo.Arguments = "peer"
-                                   ETCliProcess.Start()
-                                   ETCliOutput = ETCliProcess.StandardOutput.ReadToEnd()
-                                   Log($"[Link] 获取到 EasyTier Cli 信息: {vbCrLf}" + ETCliOutput)
-                                   If Not ETCliOutput.Contains("10.114.51.41/24") Then
-                                       Log("[Link] 未找到大厅创建者 IP, 判定该大厅未被创建")
-                                       Hint("该大厅不存在", HintType.Critical)
-                                       'ExitEasyTier()
-                                       'CurrentSubpage = Subpages.PanSelect
-                                       Exit Sub
-                                   End If
-                                   Ping = ETCliOutput.Split("│ 10.114.51.41/24 │")(1).Split("│")(2).Trim().Split(".")(0)
-                                   Log($"[Link] 与大厅创建者之间的 Ping 值: {Ping}ms")
-                                   RunInUi(Sub()
-                                                   SplitLineBeforePing.Visibility = Visibility.Visible
-                                                   BtnFinishPing.Visibility = Visibility.Visible
-                                                   LabFinishPing.Text = Ping + "ms"
-                                               End Sub)
-                                   End If
-                                   Thread.Sleep(5000)
+                                   ConnectType = "未知"
+                               End If
+                               'Log($"[Link] 与大厅创建者的连接类型原始输出: {ConnectTypeOriginal}, 判定为类型: {ConnectType}")
+                               RunInUi(Sub()
+                                           LabFinishPing.Text = PingRtt + "ms"
+                                           SplitLineBeforePing.Visibility = Visibility.Visible
+                                           BtnFinishPing.Visibility = Visibility.Visible
+                                           LabConnectType.Text = ConnectType
+                                           SplitLineBeforeType.Visibility = Visibility.Visible
+                                           BtnConnectType.Visibility = Visibility.Visible
+                                       End Sub)
+                               'ETCliProcess.Kill()
+                               Thread.Sleep(15000)
                            End While
+                           Log("[Link] EasyTier 监视线程已退出")
+                           IsWatcherStarted = False
                        End Sub, "EasyTier Status Watcher", ThreadPriority.BelowNormal)
     End Sub
 
@@ -173,7 +213,7 @@ Public Class PageLinkLobby
                            Thread.Sleep(1000)
                            StartWatcherThread()
                        End Sub)
-        If ETProcess IsNot Nothing Then LabFinishIp.Text = ETNetworkName.Replace("PCLCELobby", "")
+        'If ETProcess IsNot Nothing Then LabFinishId.Text = ETNetworkName.Replace("PCLCELobby", "")
         'ModLink.CreateUPnPMapping(LocalPort)
         CurrentSubpage = Subpages.PanFinish
     End Sub
@@ -187,6 +227,10 @@ Public Class PageLinkLobby
     Public JoinedLobbyId As String = Nothing
     '加入房间
     Private Sub BtnSelectJoin_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectJoin.MouseLeftButtonUp
+        If Not IsAdmin() Then
+            MyMsgBox($"现阶段如果作为加入方加入大厅，需要以管理员身份启动 PCL。{vbCrLf}请退出启动器，然后右键点击程序，选择 ⌈以管理员身份运行⌋，然后继续操作。", "需要管理员权限", "我知道了", ForceWait:=True)
+            Exit Sub
+        End If
         JoinedLobbyId = MyMsgBoxInput("输入大厅编号", HintText:="例如：01509230")
         If JoinedLobbyId = Nothing Then Exit Sub
         RunInNewThread(Sub()
@@ -195,7 +239,7 @@ Public Class PageLinkLobby
                            StartWatcherThread()
                        End Sub)
         CurrentSubpage = Subpages.PanFinish
-        If ETProcess IsNot Nothing Then LabFinishIp.Text = ETNetworkName.Replace("PCLCELobby", "")
+        'If ETProcess IsNot Nothing Then LabFinishId.Text = ETNetworkName.Replace("PCLCELobby", "")
     End Sub
     Private Sub RoomJoin(Ip As String, Port As Integer)
         '记录信息
@@ -266,18 +310,18 @@ Public Class PageLinkLobby
     Public Shared PublicIPPort As String = Nothing
 
     '复制 IP
-    Private Sub BtnFinishIp_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnFinishIp.MouseLeftButtonUp
-        ClipboardSet(LabFinishIp.Text)
+    Private Sub BtnFinishId_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnFinishId.MouseLeftButtonUp
+        ClipboardSet(LabFinishId.Text)
     End Sub
 
     '退出
     Private Sub BtnFinishExit_Click(sender As Object, e As EventArgs) Handles BtnFinishExit.Click
         If MyMsgBox("你确定要退出大厅吗？", "确认退出", "确定", "取消", IsWarn:=True) = 1 Then
+            CurrentSubpage = Subpages.PanSelect
             ExitEasyTier()
             'RemoveNATTranversal()
             'ModLink.RemoveUPnPMapping()
             'LocalPort = Nothing
-            CurrentSubpage = Subpages.PanSelect
             Exit Sub
         End If
     End Sub
@@ -288,7 +332,7 @@ Public Class PageLinkLobby
     End Sub
 
     'Ping 房主
-    Private Sub BtnFinishPing_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnFinishPing.MouseLeftButtonUp
+    Private Sub BtnFinishPing_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) 'Handles BtnFinishPing.MouseLeftButtonUp
         LabFinishPing.Text = "检测中"
         If TaskPingHost.State = LoadState.Loading Then Exit Sub
         TaskPingHost.Start(True, IsForceRestart:=True)
