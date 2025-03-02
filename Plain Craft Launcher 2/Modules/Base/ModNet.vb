@@ -16,7 +16,6 @@ Public Module ModNet
         End If
         If Not String.IsNullOrWhiteSpace(proxy) Then
             _Proxy = New WebProxy(proxy, True)
-            Log($"[Net] 使用 Proxy 代理")
             Log("[Net] 当前代理状态：自定义")
             Dim ProxyUri As New Uri(_Proxy.ToString)
             Try
