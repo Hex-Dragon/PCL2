@@ -19,7 +19,7 @@ Public Module ModNet
             Log("[Net] 当前代理状态：自定义")
             Dim ProxyUri As New Uri(_Proxy.ToString)
             Try
-                If ProxyUri.IsLoopBack() OrElse
+                If ProxyUri.IsLoopBack OrElse
                 ProxyUri.Host.StartsWithF("192.168.") OrElse
                 ProxyUri.Host.StartsWithF("10.") OrElse
                 ProxyUri.Host.StartswithF("fe80") OrElse
