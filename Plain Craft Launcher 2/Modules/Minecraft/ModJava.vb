@@ -77,14 +77,14 @@
                                New JProperty("IsJre", IsJre),
                                New JProperty("Is64Bit", Is64Bit),
                                New JProperty("IsUserImport", IsUserImport),
-                               New JProperty("IsEnable", IsEnabled)})
+                               New JProperty("IsEnabled", IsEnabled)})
         End Function
         Public Shared Function FromJson(Data As JObject) As JavaEntry
             Return New JavaEntry(Data("Path"),
                                  Data("IsUserImport")) With {.Version = New Version(Data("VersionString")),
                                  .IsJre = Data("IsJre"),
                                  .Is64Bit = Data("Is64Bit"),
-                                 .IsEnabled = If(Data("IsEnable"), True)}
+                                 .IsEnabled = If(Data("IsEnabled"), True)}
         End Function
         ''' <summary>
         ''' 转化为用户友好的字符串输出。
