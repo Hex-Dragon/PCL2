@@ -54,7 +54,7 @@ Public Module ModMinecraft
             End Try
             '扫描官启文件夹
             Dim MojangPath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\.minecraft\"
-            If Not Directory.Exist(MojangPath)
+            If Not Setup.Get("SystemCreateMojangPath") AndAlso Not Directory.Exists(MojangPath) Then
                 Try
                     Directory.CreateDirectory(MojangPath)
                     Directory.CreateDirectory($"{MojangPath}\versions\")
@@ -63,6 +63,7 @@ Public Module ModMinecraft
                 Catch ex As Exception
                     Log(ex, "[Minecraft] 自动创建官方启动器文件夹失败")
                 End Try
+                    Setup.Set("SystemCreateMojangPath", True)
             End If
             If (Not CacheMcFolderList.Any OrElse MojangPath <> CacheMcFolderList(0).Path) AndAlso '当前文件夹不是官启文件夹
                 Directory.Exists(MojangPath & "versions\") Then '具有权限且存在 versions 文件夹
