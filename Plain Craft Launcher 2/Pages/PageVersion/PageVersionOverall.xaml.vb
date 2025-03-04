@@ -108,6 +108,7 @@
             '确认输入的新名称
             Dim OldName As String = PageVersionLeft.Version.Name
             Dim OldPath As String = PageVersionLeft.Version.Path
+ReType:
             '修改此部分的同时修改快速安装的版本名检测*
             Dim NewName As String = MyMsgBoxInput("重命名版本", "", OldName, New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions", IgnoreCase:=False)})
             If String.IsNullOrWhiteSpace(NewName) Then Exit Sub
