@@ -216,8 +216,6 @@ Public Class ValidateFolderName
     End Sub
     Public Overrides Function Validate(Str As String) As String
         Try
-            '检查是否已存在
-            If Not Str = "" AndAlso Directory.Exists($"{Path}\{Str}") Then Return "指定的名称已存在"
             '检查是否为空
             Dim LengthCheck As String = New ValidateNullOrWhiteSpace().Validate(Str)
             If Not LengthCheck = "" Then Return LengthCheck
