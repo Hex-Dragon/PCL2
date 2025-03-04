@@ -372,7 +372,7 @@ ExitUserJavaCheck:
             For Each Java In AllowedJavaList
                 '如果在官启文件夹启动，会将官启自带 Java 错误视作 MC 文件夹指定 Java，导致了 #2054 的第二例
                 If Java.PathFolder.Contains(".minecraft\cache\java") Then Continue For
-                '#5780，可能存在误操作导致 Java 被解压到此路径，然后被 PCL 优先选择
+                '#5780
                 If Java.PathFolder.Contains("PCL\MyDownload") Then Continue For
                 If TargetJavaList.Contains(Java) Then
                     '直接使用指定的 Java
