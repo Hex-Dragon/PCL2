@@ -21,6 +21,11 @@
         OpenWebsite("https://www.mcmod.cn")
     End Sub
 
+    Private Sub ImgPCLCommunity_Click(sender As Object, e As MouseButtonEventArgs) Handles ImgPCLCommunity.MouseLeftButtonDown
+        AniStart({
+                 AaRotateTransform(sender, 360)})
+    End Sub
+
     '彩蛋
     Private ClickCount As Integer = 0
     Private Sub ImgPCLLogo_Click(sender As Object, e As MouseButtonEventArgs) Handles ImgPCLLogo.MouseLeftButtonDown
