@@ -735,45 +735,6 @@ LoginFinish:
         Try
             Dim NeedRefresh As Boolean = False
             McLaunchLog("登录开始（Login, " & Data.Input.Token & "）")
-            If Not Data.Input.BaseUrl = Setup.Get("DisableAuthWarningBaseUrl") Then
-                Setup.Set($"DisableAuthHttpWarning", False)
-                Setup.Set("DisableCertCheckWarning", False)
-            End If
-            If Data.Input.BaseUrl.StartsWithF("http://") AndAlso Setup.Get($"Disable{Data.Input.Token}HttpWarning") = "False" Then
-                Select Case MyMsgBox(
-                    Caption:=$"当前正在使用不安全的 HTTP 协议，这将增加账号被盗的风险!{vbCrLf}如果没有特殊需求，建议使用更安全的 HTTPS 协议。",
-                    Title:="账号安全警告",
-                    IsWarn:=True,
-                    Button2:="不再显示",
-                    Button1:="取消登录",
-                    Button3:="取消登录")
-
-                    Case 1
-                        RunInUi(AddressOf PageLoginAuthSkin.ExitLogin)
-                        Return False
-                    Case 2
-                        Setup.Set($"DisableAuthHttpWarning", True)
-                        Setup.Set($"DisableAuthWarningBaseUrl", Data.Input.BaseUrl)
-                    Case 3
-                        RunInUi(AddressOf PageLoginAuthSkin.ExitLogin)
-                        Return False
-                End Select
-            ElseIf Data.Input.BaseUrl.StartsWithF("https://") AndAlso
-                Setup.Get("DisableCertCheckWarning") = False AndAlso
-                Setup.Get("ToolDownloadCert") = False Then
-                Select Case MyMsgBox(
-                    Caption:=$"本次登录未启用 SSL 证书校验，这将增加账号被盗的风险!{vbCrLf}如果没有特殊需求，建议始终启用 SSL 证书校验。{vbCrLf}可在 [设置 → 启动器] 中勾选 [验证 SSL 证书]",
-                    Title:="账号安全提示",
-                    IsWarn:=False,
-                    Button1:="不再显示",
-                    Button2:="取消登录")
-                    Case 1
-                        Setup.Set("DisableCertCheckWarning", True)
-                    Case 2
-                        RunInUi(AddressOf PageLoginAuthSkin.ExitLogin)
-                        Return False
-                End Select
-            End If
             Dim RequestData As New JObject(
                 New JProperty("agent", New JObject(New JProperty("name", "Minecraft"), New JProperty("version", 1))),
                 New JProperty("username", Data.Input.UserName),
