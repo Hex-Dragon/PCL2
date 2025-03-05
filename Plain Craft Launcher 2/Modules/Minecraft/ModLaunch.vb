@@ -1425,7 +1425,6 @@ Retry:
             DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
             DataList.Add("-jar """ & ExtractJavaWrapper() & """")
         End If
-        Log(DataList.ToString, LogLevel.Normal)
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
             Throw New Exception("版本 json 中没有 mainClass 项！")
