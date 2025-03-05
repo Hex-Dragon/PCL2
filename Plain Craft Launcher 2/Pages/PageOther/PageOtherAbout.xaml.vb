@@ -26,11 +26,9 @@
     Private Sub ImgPCLLogo_Click(sender As Object, e As MouseButtonEventArgs) Handles ImgPCLLogo.MouseLeftButtonDown
         If ClickCount < 200 Then
             ClickCount += 1
-            Select Case ClickCount
-                Case 1
-                    Hint("恭喜你发现了社区版的彩蛋！")
+            Select Case ClickCount '没见过直接告诉用户我是彩蛋的 =。=
                 Case 5
-                    Hint("不过……点这个很好玩么？")
+                    Hint("点这个很好玩么……")
                 Case 15
                     Hint("还点？")
                 Case 25
@@ -68,11 +66,16 @@
                     ImgPCLLogo.IsHitTestVisible = False
                     Exit Sub
             End Select
+            Dim rand = New Random()
+            Dim mx = rand.Next(-1, 1)
+            If mx = 0 Then mx = 1
+            Dim my = rand.Next(-1, 1)
+            If my = 0 Then my = 1
             AniStart({
-                 AaTranslateX(sender, 1, Time:=0),
-                 AaTranslateY(sender, 1, Time:=0),
-                 AaTranslateX(sender, -1, Time:=0, Delay:=100),
-                 AaTranslateY(sender, -1, Time:=0, Delay:=100)
+                 AaTranslateX(sender, mx, Time:=0),
+                 AaTranslateY(sender, my, Time:=0),
+                 AaTranslateX(sender, -mx, Time:=0, Delay:=100),
+                 AaTranslateY(sender, -my, Time:=0, Delay:=100)
                  })
         End If
     End Sub
