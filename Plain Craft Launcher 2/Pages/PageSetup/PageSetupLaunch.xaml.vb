@@ -52,6 +52,7 @@
             CheckAdvanceRunWait.Checked = Setup.Get("LaunchAdvanceRunWait")
             CheckAdvanceAssets.Checked = Setup.Get("LaunchAdvanceAssets")
             CheckAdvanceJava.Checked = Setup.Get("LaunchAdvanceJava")
+            CheckAdvanceUseLaunchWrapper.Checked = Setup.Get("LaunchAdvanceUseLaunchWrapper")
 
         Catch ex As NullReferenceException
             Log(ex, "启动设置项存在异常，已被自动重置", LogLevel.Msgbox)
@@ -78,6 +79,7 @@
             Setup.Reset("LaunchSkinType")
             Setup.Reset("LaunchSkinID")
             Setup.Reset("LaunchAdvanceJvm")
+            Setup.Reset("LaunchAdvanceUseLaunchWrapper")
             Setup.Reset("LaunchAdvanceGame")
             Setup.Reset("LaunchAdvanceJava")
             Setup.Reset("LaunchAdvanceAssets")
@@ -110,7 +112,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboArgumentVisibie.SelectionChanged, ComboArgumentWindowType.SelectionChanged, ComboArgumentPriority.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change, CheckAdvanceUseLaunchWrapper.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
 
