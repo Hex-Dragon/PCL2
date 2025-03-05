@@ -186,6 +186,9 @@
     <Compile Include="Controls\MyComboBox.vb" />
     <Compile Include="Controls\MyComboBoxItem.vb" />
     <Compile Include="Controls\MyCard.vb" />
+    <Compile Include="Controls\MyDlEntry.xaml.vb">
+      <DependentUpon>MyDlEntry.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\MyExtraTextButton.xaml.vb">
       <DependentUpon>MyExtraTextButton.xaml</DependentUpon>
     </Compile>
@@ -195,9 +198,6 @@
     <Compile Include="Controls\MyIconTextButton.xaml.vb">
       <DependentUpon>MyIconTextButton.xaml</DependentUpon>
     </Compile>
-
-
-
     <Compile Include="Modules\Minecraft\ModComp.vb" />
     <Compile Include="Modules\Minecraft\ModJava.vb" />
     <Compile Include="Modules\Minecraft\ModMod.vb" />
@@ -388,6 +388,10 @@
     <Compile Include="Pages\PageSpeedRight.xaml.vb">
       <DependentUpon>PageSpeedRight.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\MyDlEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MyExtraTextButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -489,7 +493,6 @@
       <DependentUpon>FormMain.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-
     <Page Include="Modules\Minecraft\MyLocalModItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -928,7 +931,6 @@
     <Resource Include="Images\Heads\MCBBS.png" />
   </ItemGroup>
   <ItemGroup>
-
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Blocks\NeoForge.png" />

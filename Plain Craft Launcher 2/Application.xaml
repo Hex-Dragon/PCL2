@@ -19,6 +19,7 @@
             <local:MultiplicationConverter x:Key="MultiplicationConverter"/>
             <local:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
             <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <local:DlStateConveter x:Key="DlStateConverter" />
 
             <!-- 颜色表 -->
             <SolidColorBrush x:Key="ColorBrush1">#343d4a</SolidColorBrush>
