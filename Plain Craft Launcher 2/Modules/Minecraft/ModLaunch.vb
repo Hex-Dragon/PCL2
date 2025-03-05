@@ -1460,7 +1460,7 @@ Retry:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        If Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version) OrElse Setup.Get("LaunchAdvanceUseLaunchWrapper") Then
+        If Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version) AndAlso Setup.Get("LaunchAdvanceUseLaunchWrapper") Then
             DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
             DataList.Add("-jar """ & ExtractJavaWrapper() & """")
         End If
@@ -1529,7 +1529,7 @@ NextVersion:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        If Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version) OrElse Setup.Get("LaunchAdvanceUseLaunchWrapper") Then
+        If Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version) AndAlso Setup.Get("LaunchAdvanceUseLaunchWrapper") Then
             DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
             DataList.Add("-jar """ & ExtractJavaWrapper() & """")
         End If
