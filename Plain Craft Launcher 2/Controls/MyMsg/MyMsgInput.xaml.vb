@@ -85,7 +85,7 @@
     End Sub
 
     Public Sub Btn3_Click() Handles Btn3.Click
-        If MyConverter.Button2Action IsNot Nothing Then MyConverter.Button2Action()
+        If MyConverter.Button3Action IsNot Nothing Then MyConverter.Button3Action()
         If MyConverter.IsExited Then Exit Sub
         MyConverter.IsExited = True
         MyConverter.Result = Nothing
