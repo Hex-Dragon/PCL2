@@ -23,10 +23,9 @@
             End If
             Btn2.Text = Converter.Button2
             Btn2.Visibility = If(Converter.Button2 = "", Visibility.Collapsed, Visibility.Visible)
-            Log($"Btn3 文本{Converter.Button3}")
-            ShapeLine.StrokeThickness = GetWPFSize(1)
             Btn3.Text = Converter.Button3
             Btn3.Visibility = If(Converter.Button3 = "", Visibility.Collapsed, Visibility.Visible)
+            ShapeLine.StrokeThickness = GetWPFSize(1)
         Catch ex As Exception
             Log(ex, "输入弹窗初始化失败", LogLevel.Hint)
         End Try
@@ -86,7 +85,7 @@
     End Sub
 
     Public Sub Btn3_Click() Handles Btn3.Click
-        If MyConverter.Button3Action IsNot Nothing Then MyConverter.Button3Action()
+        If MyConverter.Button2Action IsNot Nothing Then MyConverter.Button2Action()
         If MyConverter.IsExited Then Exit Sub
         MyConverter.IsExited = True
         MyConverter.Result = Nothing
