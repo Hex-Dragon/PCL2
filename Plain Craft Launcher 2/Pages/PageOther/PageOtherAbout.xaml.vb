@@ -21,15 +21,16 @@
         OpenWebsite("https://www.mcmod.cn")
     End Sub
 
-
+    '彩蛋
     Private ClickCount As Integer = 0
-
     Private Sub ImgPCLLogo_Click(sender As Object, e As MouseButtonEventArgs) Handles ImgPCLLogo.MouseLeftButtonDown
         If ClickCount < 200 Then
             ClickCount += 1
             Select Case ClickCount
+                Case 1
+                    Hint("恭喜你发现了社区版的彩蛋！")
                 Case 5
-                    Hint("点这个很好玩么……")
+                    Hint("不过……点这个很好玩么？")
                 Case 15
                     Hint("还点？")
                 Case 25
@@ -40,12 +41,12 @@
                 Case 50
                     Hint("嗯，加油吧，嗯……")
                 Case 75
-                    Hint("隐藏主题 混乱黄 已……嗯不对，这是 PCL2，应该没有这玩意……")
-                Case 95
+                    Hint("隐藏主题 混乱黄 已……嗯不对，这是 PCL2 社区版，应该没有这玩意……")
+                Case 100
                     Hint("你咋还这么无聊啊？")
                 Case 130
                     Hint("后面什么都没有了哦！")
-                Case 155
+                Case 150
                     Select Case MyMsgBox("你真的不累么？", "温馨提示", "累死了", "真的不累")
                         Case 1
                             Hint("那你就别点了喂……后面真的真的真的什么都没有了！")
