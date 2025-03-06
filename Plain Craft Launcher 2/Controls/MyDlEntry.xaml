@@ -15,7 +15,7 @@
                         <ColumnDefinition Width="50" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <ContentPresenter Grid.Column="0" Content="{Binding LoaderState, Converter={StaticResource DlStateConverter}}" />
+                    <ContentPresenter Grid.Column="0" Content="{Binding LoaderStateUIElement, Mode=OneWay}" />
                     <TextBlock Grid.Column="1" Text="{Binding Descreption, Mode=OneWay}" TextWrapping="Wrap" HorizontalAlignment="Left" VerticalAlignment="Top" />
                 </Grid>
             </DataTemplate>

@@ -25,7 +25,7 @@ Public Class MyDlEntry
         Public Sub SyncValuesToUI()
             If (Not Loader.State = _LoaderState) Then
                 _LoaderState = Loader.State
-                RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("LoaderState"))
+                RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("LoaderStateUIElement"))
             End If
             If (Not Loader.Progress = _Progress) Then
                 _Progress = Loader.Progress
@@ -36,9 +36,54 @@ Public Class MyDlEntry
         Public Loader As LoaderBase
 
         Private _LoaderState As LoadState
-        Public ReadOnly Property LoaderState As LoadState
+        ''' <summary>
+        ''' 把LoaderState转换为UI元素显示到前端
+        ''' </summary>
+        Public ReadOnly Property LoaderStateUIElement As FrameworkElement
             Get
-                Return _LoaderState
+                Select Case _LoaderState
+                    Case LoadState.Waiting
+                        Dim Ret As New Shapes.Path With {
+                            .Stretch = Stretch.Uniform,
+                            .Tag = "Waiting",
+                            .Data = Geometry.Parse("F1 M5,0 a5,5 360 1 0 0,0.0001 m15,0 a5,5 360 1 0 0,0.0001 m15,0 a5,5 360 1 0 0,0.0001 Z"),
+                            .Width = 18, .Height = 6,
+                            .HorizontalAlignment = HorizontalAlignment.Center, .VerticalAlignment = VerticalAlignment.Top,
+                            .Margin = New Thickness(0, 7, 0, 0)
+                        }
+                        Ret.SetResourceReference(Shape.FillProperty, "ColorBrush3")
+                        Return Ret
+                    Case LoadState.Loading
+                        Dim Ret As New TextBlock With {
+                            .Tag = "Loading",
+                            .HorizontalAlignment = HorizontalAlignment.Center
+                        }
+                        Ret.SetResourceReference(TextBlock.ForegroundProperty, "ColorBrush3")
+                        Ret.SetBinding(TextBlock.TextProperty, New Binding("PercentStr") With {.Mode = BindingMode.OneWay})
+                        Return Ret
+                    Case LoadState.Finished
+                        Dim Ret As New Shapes.Path With {
+                            .Stretch = Stretch.Uniform,
+                            .Tag = "Finished",
+                            .Data = Geometry.Parse("F1 M 23.7501,33.25L 34.8334,44.3333L 52.2499,22.1668L 56.9999,26.9168L 34.8334,53.8333L 19.0001,38L 23.7501,33.25 Z"),
+                            .Width = 16, .Height = 15,
+                            .HorizontalAlignment = HorizontalAlignment.Center, .VerticalAlignment = VerticalAlignment.Top,
+                            .Margin = New Thickness(0, 3, 0, 0)
+                        }
+                        Ret.SetResourceReference(Shape.FillProperty, "ColorBrush3")
+                        Return Ret
+                    Case Else 'Failed, Aborted
+                        Dim Ret As New Shapes.Path With {
+                            .Stretch = Stretch.Uniform,
+                            .Tag = "Failed",
+                            .Data = Geometry.Parse("F1 M2.5,0 L0,2.5 7.5,10 0,17.5 2.5,20 10,12.5 17.5,20 20,17.5 12.5,10 20,2.5 17.5,0 10,7.5 2.5,0Z"),
+                            .Width = 15, .Height = 15,
+                            .HorizontalAlignment = HorizontalAlignment.Center, .VerticalAlignment = VerticalAlignment.Top,
+                            .Margin = New Thickness(0, 1, 0, 0)
+                        }
+                        Ret.SetResourceReference(Shape.FillProperty, "ColorBrush3")
+                        Return Ret
+                End Select
             End Get
         End Property
 
