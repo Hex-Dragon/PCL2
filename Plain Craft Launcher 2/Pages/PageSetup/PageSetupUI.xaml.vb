@@ -360,9 +360,8 @@ Refresh:
             Dim validMusicCount As Integer = 0
             For Each File In EnumerateFiles(Path & "PCL\Musics\")
                 Try
-                    Using reader As New AudioFileReader(File.FullName)
-                        validMusicCount += 1
-                    End Using
+                    If {".ini", ".jpg", ".txt", ".cfg", ".lrc", ".db", ".png"}.Contains(File.Extension.ToLower) Then Continue For
+                    validMusicCount += 1
                 Catch ex As Exception
                 End Try
             Next
