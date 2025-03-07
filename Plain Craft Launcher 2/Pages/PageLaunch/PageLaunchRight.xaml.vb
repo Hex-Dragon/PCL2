@@ -64,7 +64,7 @@ Download:
                     Hint("正在加载主页……")
                     RunInUiWait(Sub() LoadContent("")) '在加载结束前清空页面
                     Setup.Set("CacheSavedPageVersion", "")
-                    OnlineLoader.Start(Url) '下载完成后将会再次触发更新
+                    OnlineLoader.Start(Url,IsForceRestart:=True) '下载完成后将会再次触发更新
                     Exit Sub
                 End If
             Case 3
