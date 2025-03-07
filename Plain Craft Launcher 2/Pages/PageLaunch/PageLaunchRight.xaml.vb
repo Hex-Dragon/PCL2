@@ -57,7 +57,7 @@ Download:
                     Log("[Page] 主页自定义数据来源：联网缓存文件")
                     Content = ReadFile(PathTemp & "Cache\Custom.xaml")
                     '后台更新缓存
-                    OnlineLoader.Start(Url)
+                    OnlineLoader.Start(Url,IsForceRestart:=True)
                 Else
                     '缓存不可用
                     Log("[Page] 主页自定义数据来源：联网全新下载")
