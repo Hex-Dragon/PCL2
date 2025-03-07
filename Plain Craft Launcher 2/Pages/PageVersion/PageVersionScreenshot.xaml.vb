@@ -58,6 +58,7 @@
                                If Not AllowedSuffix.Contains(info.Extension.ToLower()) Then Return True '只允许指定后缀的文件
                                Return False
                            End Function)
+        FileList = FileList.Sort(Function(a, b) New FileInfo(a).CreationTime > New FileInfo(b).CreationTime)
         Log("[Screenshot] 筛选后得到 " & FileList.Count & " 个截图文件")
         RefreshTip()
         Page = 1
