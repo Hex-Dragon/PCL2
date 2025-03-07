@@ -2131,7 +2131,7 @@ NextElement:
                 GetTimeSpanString = TotalYears & " " & GetLangByNumIsPlural(TotalYears, "LangModBaseDateYear") & If(RemainMonths > 0, " " & RemainMonths & " " & GetLangByNumIsPlural(RemainMonths, "LangModBaseDateMonthA"), "")
             ElseIf TotalMonths >= 4 Then
                 '4~11 月，“5 个月”
-                GetTimeSpanString = TotalMonths & " 个" & GetLangByNumIsPlural(TotalMonths, "LangModBaseDateMonthA")
+                GetTimeSpanString = TotalMonths & " " & GetLangByNumIsPlural(TotalMonths, "LangModBaseDateMonthA")
             ElseIf TotalMonths >= 1 Then
                 '1~4 月，“2 个月 13 天”
                 GetTimeSpanString = TotalMonths & " " & GetLangByNumIsPlural(TotalMonths, "LangModBaseDateMonthA") & If(RemainDays > 0, " " & RemainDays & " " & GetLangByNumIsPlural(RemainDays, "LangModBaseDateDay"), "")
