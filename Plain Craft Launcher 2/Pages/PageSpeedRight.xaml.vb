@@ -41,10 +41,12 @@
                 If TaskCard IsNot Nothing Then
                     TaskCard.RefreshSubTasks(Loader)
                 Else
+                    Log($"[UI] 任务列表页面添加卡片：{Loader.Name}")
                     PanMain.Children.Add(New MyTaskCard(Loader) With {.Margin = New Thickness(0, 0, 0, 15)})
                 End If
             Case LoadState.Finished, LoadState.Aborted
                 If TaskCard IsNot Nothing Then
+                    Log($"[UI] 任务列表页面监控到任务已结束或中止，删除卡片：{Loader.Name}")
                     AniDispose(TaskCard, True, AddressOf TryReturnToHome)
                 End If
         End Select
@@ -58,16 +60,18 @@
             Sub()
                 For Each Card In PanMain.Children
                     If TypeOf Card IsNot MyTaskCard OrElse CType(Card, MyTaskCard).LoaderUuid <> Loader.Uuid Then Continue For
+                    Log($"[UI] 任务列表页面删除卡片：{Loader.Name}")
                     PanMain.Children.Remove(Card)
                 Next
             End Sub)
     End Sub
 
     ''' <summary>
-    ''' 若没有任务，返回主页
+    ''' 若没有任务，返回上一页
     ''' </summary>
     Public Sub TryReturnToHome()
         If FrmSpeedRight.PanMain.Children.Count = 0 AndAlso FrmMain.PageCurrent = FormMain.PageType.DownloadManager Then
+            Log("[UI] 任务列表页面无内容，返回上一页")
             FrmMain.PageBack()
         End If
     End Sub

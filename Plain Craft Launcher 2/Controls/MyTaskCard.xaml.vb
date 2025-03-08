@@ -172,6 +172,7 @@ Public Class MyTaskCard
     ''' 点击取消按钮之后播放关闭动画、中止Loader
     ''' </summary>
     Private Sub Cancel(sender As MyIconButton, e As EventArgs) Handles BtnCancel.Click
+        Log($"[UI] 通过任务列表页面点击按钮中止任务：{Title}")
         AniDispose(sender, False)
         AniDispose(Me, True, Sub() FrmSpeedRight?.TryReturnToHome())
         RunInThread(

@@ -22,6 +22,7 @@ Public Class PageSpeedLeft
                     FrmSpeedRight?.Watcher()
                 End If
             End Sub
+        Log("[UI] 任务列表页面监控定时器启动")
         timer.Start()
 
         '非调试模式隐藏线程数
@@ -37,10 +38,7 @@ Public Class PageSpeedLeft
     '定时器任务
     Private ReadOnly RightCards As New Dictionary(Of String, MyCard)
     Private Sub Watcher()
-        If Not FrmMain.PageCurrent = FormMain.PageType.DownloadManager Then Exit Sub
         Try
-
-#Region "更新左边栏"
             If Not LoaderTaskbar.Any() Then
                 '无任务
                 LabProgress.Text = "100 %"
@@ -56,8 +54,6 @@ Public Class PageSpeedLeft
                 LabFile.Text = If(NetManager.FileRemain < 0, "0*", NetManager.FileRemain)
                 LabThread.Text = NetTaskThreadCount & " / " & NetTaskThreadLimit
             End If
-#End Region
-
         Catch ex As Exception
             Log(ex, "下载管理左栏监视出错", LogLevel.Feedback)
         End Try
