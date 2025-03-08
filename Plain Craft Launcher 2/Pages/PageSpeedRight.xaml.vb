@@ -25,7 +25,7 @@
     ''' </summary>
     Private Function FindTaskCard(Loader As LoaderBase) As MyTaskCard
         For Each Card In PanMain.Children
-            If TypeOf Card Is MyTaskCard AndAlso CType(Card, MyTaskCard).Loader Is Loader Then Return Card
+            If TypeOf Card Is MyTaskCard AndAlso CType(Card, MyTaskCard).LoaderUuid = Loader.Uuid Then Return Card
         Next
         Return Nothing
     End Function
@@ -39,7 +39,7 @@
         Select Case Loader.State
             Case LoadState.Failed, LoadState.Loading, LoadState.Waiting
                 If TaskCard IsNot Nothing Then
-                    TaskCard.RefreshSubTasks()
+                    TaskCard.RefreshSubTasks(Loader)
                 Else
                     PanMain.Children.Add(New MyTaskCard(Loader) With {.Margin = New Thickness(0, 0, 0, 15)})
                 End If
@@ -53,11 +53,11 @@
     ''' <summary>
     ''' 删除对应这个Loader的下载卡片
     ''' </summary>
-    Public Sub TaskRemove(Loader As Object)
+    Public Sub TaskRemove(Loader As LoaderBase)
         RunInUiWait(
             Sub()
                 For Each Card In PanMain.Children
-                    If TypeOf Card IsNot MyTaskCard OrElse CType(Card, MyTaskCard).Loader IsNot Loader Then Continue For
+                    If TypeOf Card IsNot MyTaskCard OrElse CType(Card, MyTaskCard).LoaderUuid <> Loader.Uuid Then Continue For
                     PanMain.Children.Remove(Card)
                 Next
             End Sub)

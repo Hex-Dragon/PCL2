@@ -13,7 +13,7 @@ Public Class MyTaskCard
         Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
 
         Public Sub New(Loader As LoaderBase)
-            Me.Loader = Loader
+            LoaderUuid = Loader.Uuid
             _LoaderState = Loader.State
             _Progress = Loader.Progress
             _Descreption = Loader.Name
@@ -22,7 +22,7 @@ Public Class MyTaskCard
         ''' <summary>
         ''' 检查值有无改变以及通知前端
         ''' </summary>
-        Public Sub SyncValuesToUI()
+        Public Sub SyncValuesToUI(Loader As LoaderBase)
             If (Not Loader.State = _LoaderState) Then
                 _LoaderState = Loader.State
                 RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("LoaderStateUIElement"))
@@ -33,7 +33,10 @@ Public Class MyTaskCard
             End If
         End Sub
 
-        Public Loader As LoaderBase
+        ''' <summary>
+        ''' 使用Loader的Uuid作为唯一标识符
+        ''' </summary>
+        Public LoaderUuid As Integer
 
         Private _LoaderState As LoadState
         ''' <summary>
@@ -107,61 +110,48 @@ Public Class MyTaskCard
     ''' </summary>
     Public ReadOnly Property TaskEntries As New ObservableCollection(Of MySubTaskEntry)
 
-    Public Loader As LoaderBase
+    ''' <summary>
+    ''' 使用LoaderCombo的Uuid作为唯一标识符
+    ''' </summary>
+    Public LoaderUuid As Integer
 
     ''' <summary>
     ''' 获取所有子下载任务
     ''' </summary>
-    Private ReadOnly Property SubTasks As List(Of LoaderBase)
-        Get
-            Return CType(Loader, Object).GetLoaderList()
-        End Get
-    End Property
+    Private Function GetSubTasks(Loader As Object) As List(Of LoaderBase)
+        Return Loader.GetLoaderList()
+    End Function
 
-    Private _Failed As Boolean
     ''' <summary>
-    ''' 是否已经失败，值发生改变时切换显示内容
+    ''' 是否已经失败
     ''' </summary>
-    Private Property Failed
-        Get
-            Return _Failed
-        End Get
-        Set(value)
-            If value = _Failed Then Exit Property
-            _Failed = value
-            If value Then
-                ExceptionHint.Text = GetExceptionDetail(Loader.Error)
-                ExceptionHint.Visibility = Visibility.Visible
-                TaskListBox.Visibility = Visibility.Collapsed
-            Else '应该不会进到这个case里
-                ExceptionHint.Visibility = Visibility.Collapsed
-                TaskListBox.Visibility = Visibility.Visible
-            End If
-        End Set
-    End Property
+    Private IsFailed As Boolean
 
     Public Sub New(Loader As LoaderBase)
         InitializeComponent()
-        Me.Loader = Loader
+        LoaderUuid = Loader.Uuid
         Title = Loader.Name
-        RefreshSubTasks()
+        RefreshSubTasks(Loader)
     End Sub
 
     ''' <summary>
     ''' 同步前端状态（是否已失败、初次调用时添加子任务显示条目、刷新子任务显示条目的信息）
     ''' </summary>
-    Public Sub RefreshSubTasks()
-        If Failed Then Exit Sub
+    Public Sub RefreshSubTasks(Loader As LoaderBase)
+        If IsFailed Then Exit Sub
         Try
             If Loader.State = LoadState.Failed Then
-                Failed = True
+                IsFailed = True
+                ExceptionHint.Text = GetExceptionDetail(Loader.Error)
+                ExceptionHint.Visibility = Visibility.Visible
+                TaskListBox.Visibility = Visibility.Collapsed
             Else
-                For Each SubTask As LoaderBase In SubTasks
-                    Dim TaskEntry = TaskEntries.FirstOrDefault(Function(t) t.Loader Is SubTask)
+                For Each SubTask As LoaderBase In GetSubTasks(Loader)
+                    Dim TaskEntry = TaskEntries.FirstOrDefault(Function(t) t.LoaderUuid = SubTask.Uuid)
                     If TaskEntry Is Nothing Then '除了第一次调用之外不会进入这个case，因为LoaderCombo的子加载任务不会增加
                         TaskEntries.Add(New MySubTaskEntry(SubTask))
                     Else
-                        TaskEntry.SyncValuesToUI()
+                        TaskEntry.SyncValuesToUI(SubTask)
                     End If
                 Next
             End If
@@ -184,8 +174,13 @@ Public Class MyTaskCard
     Private Sub Cancel(sender As MyIconButton, e As EventArgs) Handles BtnCancel.Click
         AniDispose(sender, False)
         AniDispose(Me, True, Sub() FrmSpeedRight?.TryReturnToHome())
-        RunInThread(Sub() Loader.Abort())
-        LoaderTaskbar.Remove(Loader)
+        RunInThread(
+            Sub()
+                For Each Loader As LoaderBase In LoaderTaskbar.Where(Function(lo) LoaderUuid = lo.Uuid).ToList()
+                    Loader.Abort()
+                    LoaderTaskbar.Remove(Loader)
+                Next
+            End Sub)
     End Sub
 
 End Class
