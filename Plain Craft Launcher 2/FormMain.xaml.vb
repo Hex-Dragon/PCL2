@@ -87,6 +87,17 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 362 Then '2.10.4 @ 2025.03.08 20:05
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "同步上游 2.9.1 更新内容"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "新功能 - 支持简单的 Mod 等资源查重"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "新功能 - 允许给收藏夹内的项目添加备注"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "其他 - 加了个彩蛋"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复 - 切换了收藏夹依然保留了选中状态"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "修复 - 部分 MC 版本的显示更新日志按钮不正常工作"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(2, "优化 - 砍掉了版本修改的动画"))
+            FeatureCount += 5
+            BugCount += 2
+        End If
         If LastVersion < 361 Then '2.10.4 @ 2025.02.22 23:50
             FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "Cleanroom 自动安装与相关支持"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了始终校验 Libraries 的问题"))
@@ -182,7 +193,7 @@ Public Class FormMain
         '输出更新日志
         RunInNewThread(
         Sub()
-            If MyMsgBox(Content, "PCL CE 已更新至 " & VersionBaseName & If(VersionBranchName = "Fast Ring", "." + VersionCodeString, ""), "确定", "完整更新日志") = 2 Then
+            If MyMsgBox(Content, "PCL CE 已更新至 " & VersionBaseName & If(Not VersionBranchName = "Slow Ring", "." + VersionCodeString, ""), "确定", "完整更新日志") = 2 Then
                 OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases")
             End If
         End Sub, "UpdateLog Output")
