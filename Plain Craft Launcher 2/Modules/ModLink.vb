@@ -352,7 +352,7 @@ Public Class ModLink
     Public Shared ETProcess As New Process
     Public Shared ETNetworkName As String = "PCLCELobby"
     Public Shared ETNetworkSecret As String = "PCLCELobbyDefault"
-    Public Shared ETServer As String = "tcp://public.easytier.cn:11010"
+    Public Shared ETServer As String = Nothing '"tcp://public.easytier.cn:11010"
     Public Shared ETPath As String = PathTemp + "EasyTier\easytier-windows-x86_64"
     Public Shared IsETRunning As Boolean = False
 
