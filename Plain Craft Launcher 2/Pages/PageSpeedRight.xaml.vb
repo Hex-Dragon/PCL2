@@ -43,7 +43,7 @@
                 Else
                     PanMain.Children.Add(New MyDlEntry(Loader) With {.Margin = New Thickness(0, 0, 0, 15)})
                 End If
-            Case LoadState.Finished
+            Case LoadState.Finished, LoadState.Aborted
                 If DlCard IsNot Nothing Then
                     AniDispose(DlCard, True, AddressOf TryReturnToHome)
                 End If
