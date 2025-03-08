@@ -425,9 +425,36 @@ PreFin:
         Dim SelectedBySetup As String = Setup.Get("LaunchArgumentJavaSelect")
         Try
             For Each Java In Sort(JavaList.Clone(), Function(l, r) l.VersionCode < r.VersionCode)
-                Dim ListItem = New MyComboBoxItem With {.Content = Java.ToString, .ToolTip = Java.PathFolder, .Tag = Java}
+                Dim ItemGrid As New Grid
+                ItemGrid.Children.Add(New TextBlock With {
+                                      .Text = Java.ToString,
+                                      .VerticalAlignment = VerticalAlignment.Center,
+                                      .HorizontalAlignment = HorizontalAlignment.Left})
+                Dim BtnJavaED = New MyIconButton With {
+                                      .Logo = If(Java.IsEnabled, Logo.IconButtonStop, Logo.IconButtonCheck),
+                                      .LogoScale = 1.2,
+                                      .ToolTip = If(Java.IsEnabled, "禁用"， "启用"),
+                                      .MaxHeight = 20,
+                                      .VerticalAlignment = VerticalAlignment.Center,
+                                      .HorizontalAlignment = HorizontalAlignment.Right}
+                ItemGrid.Children.Add(BtnJavaED)
+                Dim ListItem = New MyComboBoxItem With {.Content = ItemGrid, .ToolTip = Java.PathFolder, .Tag = Java}
+                ToolTipService.SetHorizontalOffset(BtnJavaED, 20)
                 ToolTipService.SetHorizontalOffset(ListItem, 400)
                 ComboArgumentJava.Items.Add(ListItem)
+                AddHandler BtnJavaED.Click, Sub()
+                                                Dim TargetJava = JavaList.Find(Function(j) j.PathFolder = Java.PathFolder)
+                                                If TargetJava Is Nothing Then Exit Sub
+                                                Java.IsEnabled = Not Java.IsEnabled
+                                                TargetJava.IsEnabled = Java.IsEnabled
+                                                BtnJavaED.Logo = If(TargetJava.IsEnabled, Logo.IconButtonStop, Logo.IconButtonCheck)
+                                                BtnJavaED.ToolTip = If(TargetJava.IsEnabled, "禁用", "启用")
+                                                Dim NewJavaList As New JArray
+                                                For Each Item In JavaList
+                                                    NewJavaList.Add(Item.ToJson)
+                                                Next
+                                                Setup.Set("LaunchArgumentJavaAll", NewJavaList.ToString(Newtonsoft.Json.Formatting.None))
+                                            End Sub
                 '判断人为选中
                 If SelectedBySetup = "" Then Continue For
                 If JavaEntry.FromJson(GetJson(SelectedBySetup)).PathFolder = Java.PathFolder Then SelectedItem = ListItem
