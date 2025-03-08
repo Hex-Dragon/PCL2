@@ -34,7 +34,7 @@ Public Class PageSpeedLeft
     '定时器任务
     Private ReadOnly RightCards As New Dictionary(Of String, MyCard)
     Private Sub Watcher()
-        If Not FrmMain.PageCurrent = FormMain.PageType.DownloadManager Then Exit Sub
+        If Not FrmMain.PageCurrent = FormMain.PageType.TaskList Then Exit Sub
         Try
 
 #Region "更新左边栏"
@@ -191,7 +191,7 @@ Public Class PageSpeedLeft
                     AddHandler Cancel.Click,
                     Sub(sender As MyIconButton, e As EventArgs)
                         AniDispose(sender, False)
-                        AniDispose(Card, True, Sub() If FrmSpeedRight.PanMain.Children.Count = 0 AndAlso FrmMain.PageCurrent = FormMain.PageType.DownloadManager Then FrmMain.PageBack())
+                        AniDispose(Card, True, Sub() If FrmSpeedRight.PanMain.Children.Count = 0 AndAlso FrmMain.PageCurrent = FormMain.PageType.TaskList Then FrmMain.PageBack())
                         RightCards.Remove(Loader.Name)
                         LoaderTaskbar.Remove(Loader)
                         Log($"[Taskbar] 关闭下载管理卡片：{Loader.Name}，且移出任务列表")
@@ -228,7 +228,7 @@ Public Class PageSpeedLeft
     ''' 若没有任务，尝试返回主页。
     ''' </summary>
     Private Sub TryReturnToHome()
-        If FrmSpeedRight.PanMain.Children.Count = 0 AndAlso FrmMain.PageCurrent = FormMain.PageType.DownloadManager Then
+        If FrmSpeedRight.PanMain.Children.Count = 0 AndAlso FrmMain.PageCurrent = FormMain.PageType.TaskList Then
             FrmMain.PageBack()
         End If
     End Sub
