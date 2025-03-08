@@ -3,6 +3,9 @@ Imports System.Text.RegularExpressions
 Imports Open.Nat
 Imports System.Net
 Imports System.Net.Sockets
+Imports Makaretu.Nat
+Imports STUN
+Imports System.Net.NetworkInformation
 
 Public Class ModLink
 
@@ -195,10 +198,17 @@ Public Class ModLink
 #End Region
 
 #Region "UPnP 映射"
+
+    Public Enum UPnPStatusType
+        Disabled
+        Enabled
+        Unsupported
+        Failed
+    End Enum
     ''' <summary>
     ''' UPnP 状态，可能值："Disabled", "Enabled", "Unsupported", "Failed"
     ''' </summary>
-    Public Shared UPnPStatus As String = "Disabled"
+    Public Shared UPnPStatus As UPnPStatusType = Nothing
     Public Shared UPnPMappingName As String = "PCL2 CE Link Lobby"
     Public Shared UPnPDevice = Nothing
     Public Shared CurrentUPnPMapping As Mapping = Nothing
@@ -220,13 +230,15 @@ Public Class ModLink
             Await UPnPDevice.CreatePortMapAsync(CurrentUPnPMapping)
 
             Await UPnPDevice.CreatePortMapAsync(New Mapping(Protocol.Tcp, LocalPort, PublicPort, "PCL2 Link Lobby"))
+
+            UPnPStatus = UPnPStatusType.Enabled
             Hint("UPnP 映射已创建")
         Catch NotFoundEx As NatDeviceNotFoundException
-            UPnPStatus = "Unsupported"
+            UPnPStatus = UPnPStatusType.Unsupported
             CurrentUPnPMapping = Nothing
             Log("[UPnP] 找不到可用的 UPnP 设备")
         Catch ex As Exception
-            UPnPStatus = "Failed"
+            UPnPStatus = UPnPStatusType.Failed
             CurrentUPnPMapping = Nothing
             Log("[UPnP] UPnP 映射创建失败: " + ex.ToString())
         End Try
@@ -241,11 +253,11 @@ Public Class ModLink
         Try
             Await UPnPDevice.DeletePortMapAsync(CurrentUPnPMapping)
 
-            UPnPStatus = "Disabled"
+            UPnPStatus = UPnPStatusType.Disabled
             CurrentUPnPMapping = Nothing
             Log("[UPnP] UPnP 映射移除成功")
         Catch ex As Exception
-            UPnPStatus = "Failed"
+            UPnPStatus = UPnPStatusType.Failed
             CurrentUPnPMapping = Nothing
             Log("[UPnP] UPnP 映射移除失败: " + ex.ToString())
         End Try
@@ -294,6 +306,162 @@ Public Class ModLink
         End Try
         Return res
     End Function
+#End Region
+
+#Region "NAT 穿透"
+    Public Shared NATEndpoints As List(Of LeasedEndpoint) = Nothing
+    ''' <summary>
+    ''' 尝试进行 NAT 映射
+    ''' </summary>
+    ''' <param name="localPort">本地端口</param>
+    Public Shared Async Sub CreateNATTranversal(LocalPort As String)
+        Log($"开始尝试进行 NAT 穿透，本地端口 {LocalPort}")
+        Try
+            NATEndpoints = New List(Of LeasedEndpoint) '寻找 NAT 设备
+            For Each nat In NatDiscovery.GetNats()
+                Dim lease = Await nat.CreatePublicEndpointAsync(ProtocolType.Tcp, LocalPort)
+                Dim endpoint = New LeasedEndpoint(lease)
+                NATEndpoints.Add(endpoint)
+                PageLinkLobby.PublicIPPort = endpoint.ToString()
+                Log($"NAT 穿透完成，公网地址: {endpoint}")
+            Next
+        Catch ex As Exception
+            Log("尝试进行 NAT 穿透失败: " + ex.ToString())
+        End Try
+
+    End Sub
+
+    ''' <summary>
+    ''' 移除 NAT 映射
+    ''' </summary>
+    Public Shared Sub RemoveNATTranversal()
+        Log("开始尝试移除 NAT 映射")
+        Try
+            For Each endpoint In NATEndpoints
+                endpoint.Dispose()
+            Next
+            Log("NAT 映射已移除")
+        Catch ex As Exception
+            Log("尝试移除 NAT 映射失败: " + ex.ToString())
+        End Try
+    End Sub
+#End Region
+
+#Region "EasyTier"
+
+    Public Shared ETProcess As New Process
+    Public Shared ETNetworkName As String = "PCLCELobby"
+    Public Shared ETNetworkSecret As String = "PCLCELobbyDefault"
+    Public Shared ETServer As String = "tcp://public.easytier.cn:11010"
+    Public Shared ETPath As String = PathTemp + "EasyTier\easytier-windows-x86_64"
+    Public Shared IsETRunning As Boolean = False
+
+    Public Shared Sub LaunchEasyTier(IsHost As Boolean, Optional Name As String = "PCLCELobby", Optional Secret As String = "PCLCELobbyDefault")
+        Try
+            ETProcess = New Process
+            ETProcess.StartInfo = New ProcessStartInfo With {
+                .FileName = $"{ETPath}\easytier-core.exe",
+                .WorkingDirectory = ETPath,
+                .Arguments = ETProcess.StartInfo.Arguments,
+                .ErrorDialog = False,
+                .CreateNoWindow = True,
+                .WindowStyle = ProcessWindowStyle.Hidden,
+                .UseShellExecute = False,
+                .RedirectStandardOutput = True,
+                .RedirectStandardError = True,
+                .RedirectStandardInput = True}
+            ETProcess.EnableRaisingEvents = True
+            If Not File.Exists(ETProcess.StartInfo.FileName) Then
+                Log("[Link] EasyTier 不存在，开始下载")
+                DownloadEasyTier(True, IsHost, Name, Secret)
+            End If
+            Log($"[Link] EasyTier 路径: {ETProcess.StartInfo.FileName}")
+
+            If IsHost Then
+                ETNetworkName = "PCLCELobby"
+                For index = 1 To 8 '生成 8 位随机编号
+                    ETNetworkName += RandomInteger(0, 9).ToString()
+                Next
+                Log($"[Link] 本机作为创建者创建大厅，EasyTier 网络名称: {ETNetworkName}, 是否自定义网络密钥: {Not Secret = "PCLCELobbyDefault"}")
+                ETProcess.StartInfo.Arguments = $"-i 10.114.51.41 --network-name {ETNetworkName} --network-secret {ETNetworkSecret} -p {ETServer} --no-tun" '创建者
+            Else
+                ETNetworkName = "PCLCELobby" + Name
+                Log($"[Link] 本机作为加入者加入大厅，EasyTier 网络名称: {ETNetworkName}")
+                ETProcess.StartInfo.Arguments = $"-d --network-name {ETNetworkName} --network-secret {ETNetworkSecret} -p {ETServer}" '加入者
+                ETProcess.StartInfo.Verb = "runas"
+            End If
+
+            '创建防火墙规则
+            'Dim FirewallProcess As New Process With {
+            '    .StartInfo = New ProcessStartInfo With {
+            '        .Verb = "runas",
+            '        .FileName = "cmd",
+            '        .Arguments = $"/c netsh advfirewall firewall add rule name=""PCLCE Lobby - EasyTier"" dir=in action=allow program=""{ETPath}\easytier-core.exe"" protocol=tcp localport={FrmLinkLobby.LocalPort}"
+            '    }
+            '}
+
+            ETProcess.StartInfo.Arguments += $" --enable-kcp-proxy --latency-first --use-smoltcp"
+            'AddHandler ETProcess.Exited, AddressOf LaunchEasyTier
+            Log($"[Link] 启动 EasyTier")
+            'Log($"[Link] 启动 EasyTier, 参数: {ETProcess.StartInfo.Arguments}")
+            RunInUi(Sub() FrmLinkLobby.LabFinishId.Text = ETNetworkName.Replace("PCLCELobby", ""))
+            ETProcess.Start()
+            IsETRunning = True
+            Thread.Sleep(2000)
+            'Log(ETProcess.StandardOutput.ReadToEnd())
+            'Log(ETProcess.StandardError.ReadToEnd())
+            'If ETProcess.ExitCode = 0 Then
+            '    Log("[Link] EasyTier 进程已结束，正常退出")
+            'End If
+
+        Catch ex As Exception
+            Log("[Link] 尝试启动 EasyTier 时遇到问题: " + ex.ToString())
+            ETProcess = Nothing
+        End Try
+    End Sub
+
+    Public Shared Sub DownloadEasyTier(Optional LaunchAfterDownload As Boolean = False, Optional IsHost As Boolean = False, Optional Name As String = "PCLCELobby", Optional Secret As String = "PCLCELobbyDefault")
+        Dim DlTargetPath As String = PathTemp + "EasyTier\EasyTier.zip"
+        RunInNewThread(Sub()
+                           Try
+                               '构造步骤加载器
+                               Dim Loaders As New List(Of LoaderBase)
+                               '下载
+                               Dim Address As New List(Of String)
+                               Address.Add("https://ghfast.top/https://github.com/EasyTier/EasyTier/releases/download/v2.2.2/easytier-windows-x86_64-v2.2.2.zip")
+                               Address.Add("https://github.com/EasyTier/EasyTier/releases/download/v2.2.2/easytier-windows-x86_64-v2.2.2.zip")
+
+                               Loaders.Add(New LoaderDownload("下载 EasyTier", New List(Of NetFile) From {New NetFile(Address.ToArray, DlTargetPath, New FileChecker(MinSize:=1024 * 64))}) With {.ProgressWeight = 15})
+                               Loaders.Add(New LoaderTask(Of Integer, Integer)("解压文件", Sub() ExtractFile(DlTargetPath, PathTemp + "EasyTier")))
+                               Loaders.Add(New LoaderTask(Of Integer, Integer)("清理文件", Sub() File.Delete(DlTargetPath)))
+                               If LaunchAfterDownload Then
+                                   Loaders.Add(New LoaderTask(Of Integer, Integer)("启动 EasyTier", Sub() LaunchEasyTier(IsHost, Name, Secret)))
+                               End If
+                               '启动
+                               Dim Loader As New LoaderCombo(Of JObject)("EasyTier 下载", Loaders)
+                               Loader.Start()
+                               'LoaderTaskbarAdd(Loader)
+                               'FrmMain.BtnExtraDownload.ShowRefresh()
+                               'FrmMain.BtnExtraDownload.Ribble()
+                           Catch ex As Exception
+                               Log(ex, "[Link] 下载 EasyTier 依赖文件失败", LogLevel.Hint)
+                               Hint("下载 EasyTier 依赖文件失败，请检查网络连接", HintType.Critical)
+                           End Try
+                       End Sub)
+    End Sub
+
+    Public Shared Sub ExitEasyTier()
+        Try
+            Log("[Link] 停止 EasyTier")
+            ETProcess.Kill()
+            IsETRunning = False
+            ETProcess = Nothing
+        Catch ex As Exception
+            Log("[Link] 尝试停止 EasyTier 进程时遇到问题: " + ex.ToString())
+            ETProcess = Nothing
+        End Try
+    End Sub
+
 #End Region
 
 End Class

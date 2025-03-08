@@ -5,7 +5,7 @@
              mc:Ignorable="d" x:Class="PageLinkLobby"
              d:DesignWidth="800" d:DesignHeight="800">
     <Grid>
-        <Grid x:Name="PanLoad">
+        <Grid x:Name="PanLoad" Visibility="Collapsed">
             <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="CardLoad">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -48,7 +48,7 @@
             </local:MyCard>
         </Grid>
         <Grid x:Name="PanContent">
-            <Grid x:Name="PanSelect" Visibility="Collapsed">
+            <Grid x:Name="PanSelect" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="480" />
@@ -79,7 +79,7 @@
                             Data="M904.479163 416.014006c-41.499044-0.199995-78.198199 20.799521-99.797701 52.698786-4.499896 6.699846-13.299694 9.09979-20.499527 5.399876L398.590818 280.017139c-6.999839-3.499919-10.39976-11.69973-7.999816-19.199557 6.099859-19.199558 9.399783-39.599088 9.399783-60.7986C399.990785 88.721546 308.092902-1.676371 196.795466 0.023589 87.797977 1.72355 0 90.621502 0 200.018982c0 92.597867 62.898551 170.396075 148.196586 193.195549 6.999839 1.899956 11.799728 8.199811 11.799728 15.399646v253.994148c0 7.199834-4.799889 13.399691-11.599733 15.399646C81.198129 697.007533 31.999263 758.806109 31.999263 832.004423c0 88.597959 71.998341 160.296307 160.5963 159.996314 88.09797-0.299993 159.396328-71.798346 159.396328-159.996314v-1.399968c-0.099998-6.099859 3.399922-11.69973 8.799797-14.399668l425.990187-214.495059c6.999839-3.499919 15.499643-1.499965 20.099537 4.79989 21.799498 29.999309 57.198682 49.598857 97.197761 49.598857 66.898459 0 120.997213-54.69874 119.997235-121.797194-1.099975-65.198498-54.498745-118.097279-119.597245-118.297275zM103.797609 296.216766C78.198199 270.517358 63.998526 236.318146 63.998526 200.018982c0-36.299164 14.199673-70.498376 39.799083-96.197784C129.497017 78.12179 163.696229 64.022115 199.995393 64.022115s70.498376 14.099675 96.197784 39.799083c25.699408 25.699408 39.799083 59.798622 39.799083 96.197784 0 15.499643-2.59994 30.499297-7.499828 44.69897-6.599848 19.199558-17.599595 36.699155-32.399253 51.498814-0.899979 0.899979-1.799959 1.699961-2.59994 2.59994-19.499551 18.399576-43.498998 30.499297-69.498399 35.099192-7.79982 1.399968-15.899634 2.099952-23.999447 2.099951-13.799682 0-27.199373-1.999954-39.999079-5.999862-20.999516-6.399853-40.199074-17.899588-56.198705-33.799221z m181.595816 557.887148c-9.99977 42.299026-48.098892 73.898298-93.397848 73.898298-52.898781 0-95.997788-43.099007-95.997789-95.997789 0-41.699039 26.799383-77.298219 63.998526-90.497915 9.99977-3.599917 20.799521-5.499873 31.999263-5.499873s21.999493 1.899956 31.999263 5.499873c22.699477 7.999816 41.499044 24.399438 52.698786 45.398954 7.199834 13.499689 11.29974 28.799337 11.299739 45.098961 0 7.599825-0.899979 14.999654-2.59994 22.099491z m41.299049-108.597498c-20.799521-32.399254-52.998779-56.698694-90.897906-67.498445-6.899841-1.999954-11.799728-8.199811-11.799728-15.399646V412.314091c0-7.699823 5.499873-14.299671 12.9997-15.699638 42.299026-7.899818 79.898159-29.09933 108.297505-59.098638 4.799889-5.099883 12.499712-6.399853 18.69957-3.199927l377.291308 189.995623c11.69973 5.899864 11.69973 22.699477 0 28.599342l-393.990924 198.395429c-7.299832 3.699915-16.199627 1.199972-20.599525-5.799866zM903.979175 592.009952c-19.699546 0-37.099145-10.299763-47.098915-25.699408-5.599871-8.6998-8.899795-19.09956-8.899795-30.299302 0-9.499781 2.399945-18.499574 6.599848-26.399392C863.980096 492.012255 882.579668 480.012532 903.979175 480.012532c30.899288 0 55.99871 25.099422 55.99871 55.99871s-25.099422 55.99871-55.99871 55.99871z" />
                         <TextBlock Grid.Row="1" Text="创建大厅" Margin="0,0,0,25" FontSize="20" Foreground="{DynamicResource ColorBrush3}" HorizontalAlignment="Center" />
                         <TextBlock Grid.RowSpan="2" Grid.Column="2" LineHeight="23" FontSize="14" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,7,0,0"
-                                   Text="1、打开游戏，在暂停画面选择【对局域网开放】&#xa;2、点击这里，并输入游戏显示的端口号&#xa;3、将联机码发送给你的朋友" />
+                                   Text="1、打开游戏，在暂停画面选择【对局域网开放】&#xa;2、点击这里，并输入游戏显示的端口号&#xa;3、将大厅编号发送给你的朋友" />
                     </Grid>
                 </local:MyCard>
                 <local:MyCard x:Name="BtnSelectJoin" Grid.Column="1" Grid.Row="3">
@@ -92,12 +92,13 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="30" />
                             <ColumnDefinition Width="1*" />
+
                         </Grid.ColumnDefinitions>
                         <Path Stretch="Uniform" Fill="{DynamicResource ColorBrush3}" Margin="0,25,0,12"
                             Data="M896 64H544c-17.7 0-32 14.3-32 32s14.3 32 32 32h352c35.3 0 64 28.7 64 64v640c0 35.3-28.7 64-64 64H544c-17.7 0-32 14.3-32 32s14.3 32 32 32h352c70.7 0 128-57.3 128-128V192c0-70.7-57.3-128-128-128z M821.3 488.3L458.9 160.7c-41.2-37.2-106.9-8-106.9 47.5V339c0 4.4-3.6 8-8 8H32c-17.7 0-32 14.3-32 32v266c0 17.7 14.3 32 32 32h312c4.4 0 8 3.6 8 8v130.9c0 55.5 65.8 84.7 106.9 47.5l362.4-327.6c14.1-12.8 14.1-34.8 0-47.5zM64 597V427c0-8.8 7.2-16 16-16h304c17.7 0 32-14.3 32-32V244.9c0-13.9 16.4-21.2 26.7-11.9L746 506.1c3.5 3.2 3.5 8.7 0 11.9L442.7 791c-10.3 9.3-26.7 2-26.7-11.9V645c0-17.7-14.3-32-32-32H80c-8.8 0-16-7.2-16-16z" />
                         <TextBlock Grid.Row="1" Text="加入大厅" Margin="0,0,0,25" FontSize="20" Foreground="{DynamicResource ColorBrush3}" HorizontalAlignment="Center" />
                         <TextBlock Grid.RowSpan="2" Grid.Column="2" LineHeight="23" FontSize="14" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,7,10,0" HorizontalAlignment="Center"
-                                   Text="点击这里，然后输入朋友发送给你的联机码" />
+                                   Text="点击这里，然后输入朋友发送给你的大厅编号" />
                     </Grid>
                 </local:MyCard>
             </Grid>
@@ -114,13 +115,13 @@
                               Data="M512 128c212.064 0 384 171.936 384 384s-173.632 384-384 384C299.936 896 128 724.064 128 512S299.936 128 512 128z m-126.4 575.968c-1.728 40.8 3.52 76.8 36.32 115.2 28.576 8.32 58.816 12.832 90.08 12.832 81.984 0 156.8-30.848 213.408-81.536-77.12 7.2-161.6-5.952-289.216-61.856-11.616 7.52-18.976 12.608-50.592 15.36z m-193.44-202.368c0 123.744 53.536 214.272 135.744 272.16-6.08-25.6-8.352-48.448-4.96-91.68-21.344-17.6-34.944-39.264-34.624-82.08-50.816-42.88-82.88-75.712-96.16-98.4zM544 448c-14.944 0-29.12-3.424-41.728-9.504-10.976 12.96-21.376 26.432-31.2 40.512-4.832 6.912-15.36 23.776-31.616 50.624a95.872 95.872 0 0 1 36.384 106.432c155.52 68.16 302.56 62.048 325.952 11.904 23.36-50.112-35.968-139.776-189.504-228.48A95.68 95.68 0 0 1 544 448z m-160 128a32 32 0 1 0 0 64 32 32 0 0 0 0-64z m-161.92-199.2c-16.576 35.52 16.96 99.68 94.08 163.2a95.936 95.936 0 0 1 59.616-27.648c19.936-35.008 30.72-52.736 42.88-70.08 10.944-15.648 22.528-30.656 38.432-49.44-5.696-12.128-8.96-25.6-9.088-39.872-118.176-30.4-206.88-16.96-225.92 23.84z m415.136-47.84c1.824 7.36 3.296 19.104 2.336 32.416 88.96 48.704 153.76 105.056 192.32 160.704 0-118.656-34.208-176.064-75.52-210.976-49.792-5.92-69.952-4.064-119.136 17.856zM544 320a32 32 0 1 0 0 64 32 32 0 0 0 0-64z m-32-128c-82.016 0-156.8 30.848-213.44 81.6 47.264-4.384 96-0.544 170.304 18.624A95.84 95.84 0 0 1 544 256c21.568 0 41.472 7.104 57.504 19.104 35.968-17.28 62.016-25.824 87.136-29.984A318.528 318.528 0 0 0 512 192z" />
                             <TextBlock x:Name="LabFinishQuality" IsHitTestVisible="False" Text="优秀" VerticalAlignment="Center" Foreground="{StaticResource ColorBrushGray1}" Margin="0,0,12,0" />
                         </StackPanel>
-                        <TextBlock Text="|" Opacity="0.3" Margin="0,8.8,0,8" RenderTransformOrigin="0.5,0.5">
+                        <TextBlock x:Name="SplitLineBeforePing" Text="|" Opacity="0.3" Margin="0,8.8,0,8" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
                             <TextBlock.RenderTransform>
                                 <ScaleTransform ScaleX="1" ScaleY="2.75" CenterX="0.5" CenterY="0.5" />
                             </TextBlock.RenderTransform>
                         </TextBlock>
-                        <StackPanel x:Name="BtnFinishPing" Orientation="Horizontal" Background="{StaticResource ColorBrushSemiTransparent}"
-                                    ToolTip="与房主的延迟（点击刷新）" ToolTipService.Placement="Center" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-35">
+                        <StackPanel x:Name="BtnFinishPing" Orientation="Horizontal" Background="{StaticResource ColorBrushSemiTransparent}" Visibility="Collapsed"
+                                    ToolTip="与大厅创建者的延迟" ToolTipService.Placement="Center" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-35">
                             <Path IsHitTestVisible="False" Height="14" Width="14" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" Margin="12,0,7,0"
                               Data="M512 409.6a102.4 102.4 0 0 0-51.2 190.464V1024h102.4v-423.936A102.4 102.4 0 0 0 512 409.6z M512 0a512 512 0 0 0-263.168 950.272l51.2-87.552a409.6 409.6 0 1 1 420.864 0l51.2 87.552A512 512 0 0 0 512 0z M819.2 512a307.2 307.2 0 1 0-464.896 263.168l51.2-88.064a204.8 204.8 0 1 1 209.92 0l51.2 88.064A307.2 307.2 0 0 0 819.2 512z" />
                             <TextBlock x:Name="LabFinishPing" IsHitTestVisible="False" Text="15ms" VerticalAlignment="Center" Foreground="{StaticResource ColorBrushGray1}" Margin="0,0,12,0" />
@@ -130,22 +131,22 @@
                                 <ScaleTransform ScaleX="1" ScaleY="2.75" CenterX="0.5" CenterY="0.5" />
                             </TextBlock.RenderTransform>
                         </TextBlock>
-                        <StackPanel x:Name="BtnFinishIp" Orientation="Horizontal" Background="{StaticResource ColorBrushSemiTransparent}"
-                                    ToolTip="服务器 IP 地址（点击复制）" ToolTipService.Placement="Center" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-35">
+                        <StackPanel x:Name="BtnFinishId" Orientation="Horizontal" Background="{StaticResource ColorBrushSemiTransparent}"
+                                    ToolTip="大厅编号（点击复制）" ToolTipService.Placement="Center" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-35">
                             <Path IsHitTestVisible="False" Height="11" Width="11" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" Margin="12,0,7,0"
                               Data="M277.333333 853.333333H192V170.666667h85.333333z m341.333334-597.333333h-170.666667v256h170.666667a128 128 0 0 0 0-256m0-85.333333a213.333333 213.333333 0 0 1 0 426.666666h-170.666667v256h-85.333333V170.666667z" />
-                            <TextBlock x:Name="LabFinishIp" IsHitTestVisible="False" Text="6.0.0.1:12345" VerticalAlignment="Center" Foreground="{StaticResource ColorBrushGray1}" Margin="0,0,12,0" />
+                            <TextBlock x:Name="LabFinishId" IsHitTestVisible="False" Text="10.114.51.41:9198" VerticalAlignment="Center" Foreground="{StaticResource ColorBrushGray1}" Margin="0,0,12,0" />
                         </StackPanel>
-                        <TextBlock Text="|" Opacity="0.3" Margin="0,8.8,0,8" RenderTransformOrigin="0.5,0.5">
+                        <TextBlock x:Name="SplitLineBeforeType" Text="|" Opacity="0.3" Margin="0,8.8,0,8" RenderTransformOrigin="0.5,0.5" Visibility="Collapsed">
                             <TextBlock.RenderTransform>
                                 <ScaleTransform ScaleX="1" ScaleY="2.75" CenterX="0.5" CenterY="0.5" />
                             </TextBlock.RenderTransform>
                         </TextBlock>
-                        <StackPanel Orientation="Horizontal" Background="{StaticResource ColorBrushSemiTransparent}"
-                                    ToolTip="索引码剩余时间" ToolTipService.Placement="Center" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-35">
+                        <StackPanel x:Name="BtnConnectType" Orientation="Horizontal" Background="{StaticResource ColorBrushSemiTransparent}" Visibility="Collapsed"
+                                    ToolTip="连接方式" ToolTipService.Placement="Center" ToolTipService.InitialShowDelay="100" ToolTipService.VerticalOffset="-35">
                             <Path IsHitTestVisible="False" Height="13" Width="13" Stretch="Uniform" Fill="{StaticResource ColorBrushGray1}" Margin="12,0,7,0"
                               Data="M832 64H192c-35.2 0-64 28.8-64 64v192c0 14.532 4.918 27.965 13.158 38.739a63.808 63.808 0 0 0 5.94 6.869L293.49 512 147.098 658.392a63.808 63.808 0 0 0-5.94 6.869C132.918 676.035 128 689.468 128 704v192c0 35.2 28.8 64 64 64h640c35.2 0 64-28.8 64-64V704c0-14.532-4.918-27.965-13.158-38.739a63.808 63.808 0 0 0-5.94-6.869L730.51 512l146.392-146.392a63.808 63.808 0 0 0 5.94-6.869C891.082 347.965 896 334.532 896 320V128c0-35.2-28.8-64-64-64z m-32 244.49L640.098 466.392c-12.534 12.534-18.749 29.086-18.659 45.608-0.09 16.522 6.125 33.074 18.659 45.608L800 718.51V864H224V718.51l158.902-160.902c12.534-12.534 18.749-29.086 18.659-45.608 0.09-16.522-6.125-33.074-18.659-45.608L224 302.49V160h576v148.49z M476.33 457.292c15.631 17.517 42.263 57.543 8.75 100.373L297.608 745.137a31.809 31.809 0 0 0-2.275 2.536C290.757 753.211 288 760.299 288 768c0 17.6 14.4 32 32 32h384.001c17.6 0 32-14.4 32-32 0-7.701-2.757-14.789-7.333-20.327a32.004 32.004 0 0 0-2.275-2.536L545.71 564.454c-16.012-18.851-39.722-58.366-5.07-100.241l58.388-57.487c12.445-12.445 12.445-32.81 0-45.255a31.711 31.711 0 0 0-13.806-8.102A31.712 31.712 0 0 0 576 352H449c-1.287 0-2.553 0.086-3.801 0.235-7.385 0.548-14.612 3.621-20.227 9.236-12.445 12.445-12.445 32.81 0 45.255l51.358 50.566z" />
-                            <TextBlock x:Name="LabFinishTime" IsHitTestVisible="False" Text="2:21" VerticalAlignment="Center" Foreground="{StaticResource ColorBrushGray1}" Margin="0,0,12,0" />
+                            <TextBlock x:Name="LabConnectType" IsHitTestVisible="False" Text="P2P" VerticalAlignment="Center" Foreground="{StaticResource ColorBrushGray1}" Margin="0,0,12,0" />
                         </StackPanel>
                     </StackPanel>
                 </local:MyCard>
@@ -175,14 +176,14 @@
                         <TextBlock x:Name="LabFinishDesc" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="2" Margin="0,10,0,12" 
                                    Text="描述文本。"
                                    FontSize="14" LineHeight="19" MaxWidth="400" TextWrapping="Wrap" Foreground="{StaticResource ColorBrushGray2}" />
-                        <local:MyButton x:Name="BtnFinishCopy" Grid.Column="4" Grid.Row="3" Margin="0,0,15,0" Text="复制联机码" Padding="13,8" />
+                        <local:MyButton x:Name="BtnFinishCopy" Grid.Column="4" Grid.Row="3" Margin="0,0,15,0" Text="复制大厅编号" Padding="13,8" />
                         <local:MyButton x:Name="BtnFinishExit" Grid.Column="5" Grid.Row="3" Text="退出" Padding="13,8" />
                     </Grid>
                 </local:MyCard>
             </Grid>
         </Grid>
         <Grid x:Name="PanAlways" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" Opacity="0.5">
-            <local:MyTextButton Text="联机服务由 PCL-Community 提供" EventType="打开网页" EventData="https://github.com/PCL-Community/PCL2-CE" />
+            <local:MyTextButton Text="联机服务由 EasyTier 提供" EventType="打开网页" EventData="https://easytier.cn" />
         </Grid>
     </Grid>
 </local:MyPageRight>

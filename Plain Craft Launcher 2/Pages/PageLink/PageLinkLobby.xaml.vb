@@ -1,10 +1,11 @@
-﻿Public Class PageLinkLobby
+﻿Imports System.Net.NetworkInformation
+Imports PCL.ModLink
+Public Class PageLinkLobby
     Public Const RequestVersion As Char = "2"
 
     '记录的启动情况
-    Public Shared IsServerSide As Boolean
-    Private Shared HostIp As String
-    Private Shared HostPort As Integer
+    Public Shared IsHost As Boolean = Nothing
+    Public Shared LobbyServerLink As String = Nothing
 
 #Region "初始化"
 
@@ -21,7 +22,7 @@
         If IsLoad Then Exit Sub
         IsLoad = True
         '启动监视线程
-        If Not IsWatcherStarted Then RunInNewThread(AddressOf WatcherThread, "Hiper Watcher")
+        'If Not IsWatcherStarted Then RunInNewThread(AddressOf WatcherThread, "Hiper Watcher")
     End Sub
 
 #End Region
@@ -33,11 +34,6 @@
     })
     Private Shared Sub InitCheck(Task As LoaderTask(Of Integer, Integer))
     End Sub
-    '启动联机模块
-    Private Shared Sub InitLaunch()
-        ModLink.MCInstanceFinding()
-    End Sub
-    Private Shared PingNodes As Integer, AllNodes As List(Of String)
 
 #End Region
 
@@ -77,28 +73,94 @@
 
     '主 Timer 线程
     Private IsWatcherStarted As Boolean = False
-    Private Sub WatcherThread()
-        Dim Sec15 As Integer = 0
-        Do While True
-            Try
-                For i = 1 To 5
-                    Thread.Sleep(200)
-                    If InitLoader.State = LoadState.Loading Then
-                        RunInUi(AddressOf UpdateProgress)
-                    End If
-                Next
-                Thread.Sleep(1000)
-                Sec15 += 1
-                WatcherTimer1()
-                If Sec15 = 15 Then
-                    Sec15 = 0
-                    WatcherTimer15()
-                End If
-            Catch ex As Exception
-                Log(ex, "联机模块主时钟出错", LogLevel.Feedback)
-                Thread.Sleep(20000)
-            End Try
-        Loop
+    Private Sub StartWatcherThread()
+        RunInNewThread(Sub()
+                           If IsHost Then
+                               Log($"[Link] 本机角色：大厅创建者，隐藏 Ping 信息和连接类型信息")
+                               RunInUi(Sub()
+                                           SplitLineBeforePing.Visibility = Visibility.Collapsed
+                                           BtnFinishPing.Visibility = Visibility.Collapsed
+                                           SplitLineBeforeType.Visibility = Visibility.Collapsed
+                                           BtnConnectType.Visibility = Visibility.Collapsed
+                                       End Sub)
+                               Exit Sub
+                           End If
+                           Log("[Link] 本机角色：加入者，开始获取 Ping 信息和连接类型信息")
+                           Log("[Link] 启动 EasyTier 监视")
+                           IsWatcherStarted = True
+                           While ETProcess IsNot Nothing
+                               Dim ETCliProcess As New Process With {
+                                   .StartInfo = New ProcessStartInfo With {
+                                       .FileName = $"{ETPath}\easytier-cli.exe",
+                                       .WorkingDirectory = ETPath,
+                                       .Arguments = ETProcess.StartInfo.Arguments,
+                                       .ErrorDialog = False,
+                                       .CreateNoWindow = True,
+                                       .WindowStyle = ProcessWindowStyle.Hidden,
+                                       .UseShellExecute = False,
+                                       .RedirectStandardOutput = True,
+                                       .RedirectStandardError = True,
+                                       .RedirectStandardInput = True,
+                                       .StandardOutputEncoding = Encoding.UTF8},
+                                   .EnableRaisingEvents = True
+                               }
+                               Dim ETCliOutput As String = Nothing
+                               Dim Ping As String = Nothing
+                               Dim ConnectType As String = Nothing
+                               Dim ConnectTypeOriginal As String = Nothing
+
+                               ETCliProcess.StartInfo.Arguments = "peer"
+                               ETCliProcess.Start()
+                               ETCliOutput = ETCliProcess.StandardOutput.ReadToEnd()
+                               'Log($"[Link] 获取到 EasyTier Cli 信息: {vbCrLf}" + ETCliOutput)
+                               If Not ETCliOutput.Contains("10.114.51.41/24") Then
+                                   Log("[Link] 未找到大厅创建者 IP, 判定该大厅未被创建")
+                                   Hint("该大厅不存在", HintType.Critical)
+                                   RunInUi(Sub() CurrentSubpage = Subpages.PanSelect)
+                                   ExitEasyTier()
+                                   Exit Sub
+                               End If
+
+                               Ping = ETCliOutput.Split("│ 10.114.51.41/24 │")(1).Split("│")(2).Trim().Split(".")(0)
+                               Dim PingSender = New Ping()
+                               Dim PingReplied As PingReply = Nothing
+                               Dim PingRtt As String = Nothing
+                               Try
+                                   PingReplied = PingSender.Send("10.114.51.41")
+                                   If PingReplied.Status = IPStatus.Success Then
+                                       PingRtt = PingReplied.RoundtripTime
+                                   End If
+                               Catch ex As Exception
+                                   Log("[Ping] 进行 Ping 测试失败: " + ex.ToString())
+                               End Try
+                               'Log($"[Link] 与大厅创建者之间的 Ping 值: {PingRtt} ms")
+
+                               ConnectTypeOriginal = ETCliOutput.Split("│ 10.114.51.41/24 │")(1).Split("│")(1).Trim()
+                               If ConnectTypeOriginal.Contains("peer") OrElse ConnectTypeOriginal.Contains("p2p") Then
+                                   ConnectType = "P2P"
+                               ElseIf ConnectTypeOriginal.Contains("relay") Then
+                                   ConnectType = "中继"
+                               ElseIf ConnectTypeOriginal.Contains("Local") Then
+                                   ConnectType = "本机"
+                                   'Log("[Link] 与大厅创建者的连接类型为... 本机？你是怎么做到的.jpg")
+                               Else
+                                   ConnectType = "未知"
+                               End If
+                               'Log($"[Link] 与大厅创建者的连接类型原始输出: {ConnectTypeOriginal}, 判定为类型: {ConnectType}")
+                               RunInUi(Sub()
+                                           LabFinishPing.Text = PingRtt + "ms"
+                                           SplitLineBeforePing.Visibility = Visibility.Visible
+                                           BtnFinishPing.Visibility = Visibility.Visible
+                                           LabConnectType.Text = ConnectType
+                                           SplitLineBeforeType.Visibility = Visibility.Visible
+                                           BtnConnectType.Visibility = Visibility.Visible
+                                       End Sub)
+                               'ETCliProcess.Kill()
+                               Thread.Sleep(15000)
+                           End While
+                           Log("[Link] EasyTier 监视线程已退出")
+                           IsWatcherStarted = False
+                       End Sub, "EasyTier Status Watcher", ThreadPriority.BelowNormal)
     End Sub
 
     '每 1 秒执行的 Timer
@@ -107,7 +169,7 @@
         RunInUi(Sub()
                     '网络质量
                     Dim QualityScore As Integer = 0
-                    QualityScore -= Math.Ceiling((Math.Min(0, 600) + Math.Min(PingNodes, 600)) / 80)
+                    'QualityScore -= Math.Ceiling((Math.Min(0, 600) + Math.Min(PingNodes, 600)) / 80)
                     Select Case QualityScore
                         Case Is >= -1
                             LabFinishQuality.Text = "优秀"
@@ -144,26 +206,44 @@
     Private Sub BtnSelectCreate_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectCreate.MouseLeftButtonUp
         LocalPort = MyMsgBoxInput("输入端口号", HintText:="例如：25565")
         If LocalPort = Nothing Then Exit Sub
-        ModLink.CreateUPnPMapping(LocalPort)
+        IsHost = True
+        RunInNewThread(Sub()
+                           'CreateNATTranversal(LocalPort)
+                           LaunchEasyTier(True)
+                           Thread.Sleep(1000)
+                           StartWatcherThread()
+                       End Sub)
+        'If ETProcess IsNot Nothing Then LabFinishId.Text = ETNetworkName.Replace("PCLCELobby", "")
+        'ModLink.CreateUPnPMapping(LocalPort)
         CurrentSubpage = Subpages.PanFinish
-        InitLaunch()
     End Sub
     Private Sub RoomCreate(Port As Integer)
         '记录信息
-        HostIp = Nothing : HostPort = Port
-        IsServerSide = True
+        IsHost = True
         '启动
         InitLoader.Start(IsForceRestart:=True)
     End Sub
 
+    Public JoinedLobbyId As String = Nothing
     '加入房间
     Private Sub BtnSelectJoin_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnSelectJoin.MouseLeftButtonUp
-        MyMsgBoxInput("输入大厅编号", HintText:="例如：01509230")
+        If Not IsAdmin() Then
+            MyMsgBox($"现阶段如果作为加入方加入大厅，需要以管理员身份启动 PCL。{vbCrLf}请退出启动器，然后右键点击程序，选择 ⌈以管理员身份运行⌋，然后继续操作。", "需要管理员权限", "我知道了", ForceWait:=True)
+            Exit Sub
+        End If
+        JoinedLobbyId = MyMsgBoxInput("输入大厅编号", HintText:="例如：01509230")
+        If JoinedLobbyId = Nothing Then Exit Sub
+        RunInNewThread(Sub()
+                           LaunchEasyTier(False, JoinedLobbyId)
+                           Thread.Sleep(1000)
+                           StartWatcherThread()
+                       End Sub)
+        CurrentSubpage = Subpages.PanFinish
+        'If ETProcess IsNot Nothing Then LabFinishId.Text = ETNetworkName.Replace("PCLCELobby", "")
     End Sub
     Private Sub RoomJoin(Ip As String, Port As Integer)
         '记录信息
-        HostIp = Ip : HostPort = Port
-        IsServerSide = False
+        IsHost = False
         '启动
         InitLoader.Start(IsForceRestart:=True)
     End Sub
@@ -227,27 +307,32 @@
 
 #Region "PanFinish | 加载完成页面"
 
+    Public Shared PublicIPPort As String = Nothing
+
     '复制 IP
-    Private Sub BtnFinishIp_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnFinishIp.MouseLeftButtonUp
-        ClipboardSet(LabFinishIp.Text)
+    Private Sub BtnFinishId_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnFinishId.MouseLeftButtonUp
+        ClipboardSet(LabFinishId.Text)
     End Sub
 
     '退出
     Private Sub BtnFinishExit_Click(sender As Object, e As EventArgs) Handles BtnFinishExit.Click
-        If MyMsgBox("你确定要关闭联机房间吗？", "确认退出", "确定", "取消", IsWarn:=True) = 1 Then
-            ModLink.RemoveUPnPMapping()
-            LocalPort = Nothing
+        If MyMsgBox("你确定要退出大厅吗？", "确认退出", "确定", "取消", IsWarn:=True) = 1 Then
             CurrentSubpage = Subpages.PanSelect
+            ExitEasyTier()
+            'RemoveNATTranversal()
+            'ModLink.RemoveUPnPMapping()
+            'LocalPort = Nothing
             Exit Sub
         End If
     End Sub
 
     '复制联机码
     Private Sub BtnFinishCopy_Click(sender As Object, e As EventArgs) Handles BtnFinishCopy.Click
+        ClipboardSet(ETNetworkName.Replace("PCLCELobby", ""))
     End Sub
 
     'Ping 房主
-    Private Sub BtnFinishPing_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) Handles BtnFinishPing.MouseLeftButtonUp
+    Private Sub BtnFinishPing_MouseLeftButtonUp(sender As Object, e As MouseButtonEventArgs) 'Handles BtnFinishPing.MouseLeftButtonUp
         LabFinishPing.Text = "检测中"
         If TaskPingHost.State = LoadState.Loading Then Exit Sub
         TaskPingHost.Start(True, IsForceRestart:=True)
@@ -255,7 +340,6 @@
     Private Shared TaskPingHost As New LoaderTask(Of Boolean, Integer)("HiPer Ping Host",
     Sub(Task As LoaderTask(Of Boolean, Integer))
         HostPing = -1
-        HostPing = Ping(HostIp, 5000, Task.Input)
     End Sub)
 
 #End Region
@@ -274,7 +358,7 @@
         Set(value As Subpages)
             If _CurrentSubpage = value Then Exit Property
             _CurrentSubpage = value
-            Log("[Hiper] 子页面更改为 " & GetStringFromEnum(value))
+            Log("[Link] 子页面更改为 " & GetStringFromEnum(value))
             PageOnContentExit()
         End Set
     End Property

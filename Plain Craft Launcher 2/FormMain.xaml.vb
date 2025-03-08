@@ -492,6 +492,8 @@ Public Class FormMain
                 Exit Sub
             End If
         End If
+        '关闭 EasyTier 联机
+        If ModLink.IsETRunning Then ModLink.ExitEasyTier()
         '关闭
         RunInUiWait(
         Sub()
@@ -527,6 +529,8 @@ Public Class FormMain
     Private Shared IsLogShown As Boolean = False
     Public Shared Sub EndProgramForce(Optional ReturnCode As Result = Result.Success)
         On Error Resume Next
+        '关闭 EasyTier 联机
+        If ModLink.IsETRunning Then ModLink.ExitEasyTier()
         IsProgramEnded = True
         AniControlEnabled += 1
         If IsUpdateWaitingRestart Then UpdateRestart(False)

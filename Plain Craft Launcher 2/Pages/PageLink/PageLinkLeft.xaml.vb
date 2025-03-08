@@ -117,8 +117,10 @@
     End Sub
 
     Public Sub Recheck(sender As Object, e As EventArgs)
+        If IsNothing(FrmLinkNetStatus) Then FrmLinkNetStatus = New PageLinkNetStatus
         Hint("正在重新检测网络环境，请稍后...")
         FrmLinkNetStatus.NetStatusTest()
+        ItemNetStatus.Checked = True
     End Sub
     Public Sub NetStatusUpdate(Status As String)
         ItemNetStatus.Title = Status

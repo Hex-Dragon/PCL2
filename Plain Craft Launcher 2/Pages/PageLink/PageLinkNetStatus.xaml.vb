@@ -3,6 +3,8 @@ Imports System.Net.NetworkInformation
 Imports System.Net.Sockets
 Imports STUN
 Imports STUN.Attributes
+Imports Makaretu.Nat
+Imports PCL.ModLink
 Public Class PageLinkNetStatus
     Public NetQualityCounter As Integer = 0
 
@@ -10,9 +12,14 @@ Public Class PageLinkNetStatus
     Public NATTypeFriendly As String = Nothing
     Public UPnPStatusFriendly As String = Nothing
 
-    Public IPv4Status As String = Nothing
+    Public Enum IPSupportStatus
+        Open
+        Supported
+        Unsupported
+    End Enum
+    Public IPv4Status As IPSupportStatus = Nothing
     Public IPv4StatusFriendly As String = Nothing
-    Public IPv6Status As String = Nothing
+    Public IPv6Status As IPSupportStatus = Nothing
     Public IPv6StatusFriendly As String = Nothing
 
     Public Shared PublicIPv4Address As String = Nothing
@@ -77,16 +84,16 @@ Public Class PageLinkNetStatus
         End Try
 
         'UPnP 映射测试
-        ModLink.CreateUPnPMapping()
+        CreateUPnPMapping()
         Thread.Sleep(500) '因为异步不会处理直接硬等 0.5s
-        If ModLink.UPnPStatus = "Enabled" Then
+        If UPnPStatus = UPnPStatusType.Enabled Then
             UPnPStatusFriendly = "已启用"
-            ModLink.RemoveUPnPMapping()
+            RemoveUPnPMapping()
             Thread.Sleep(500)
-            If ModLink.UPnPStatus = "Failed" Then
+            If UPnPStatus = UPnPStatusType.Failed Then
                 UPnPStatusFriendly = "异常"
             End If
-        ElseIf ModLink.UPnPStatus = "Unsupported" Then
+        ElseIf UPnPStatus = UPnPStatusType.Unsupported Then
             UPnPStatusFriendly = "不兼容"
         Else
             UPnPStatusFriendly = "异常"
@@ -129,75 +136,62 @@ Public Class PageLinkNetStatus
     Public Sub IPTest()
         'IP 检测
         Log("[IP] 开始进行 IP 检测")
-        '获取本地 IP 地址
-        Dim LocalIPAddresses = Dns.GetHostAddresses(Dns.GetHostName())
+        Dim TaskCompleted As Boolean = False
 
-        Dim TaskTotal = 0
-        Dim TaskCompleted = 0
-
-        TaskTotal += 1
         RunInNewThread(Sub()
-                           Try
-                               For Each IP In LocalIPAddresses
-                                   If Sockets.AddressFamily.InterNetwork.Equals(IP.AddressFamily) Then 'IPv4
-                                       Dim PublicIPv4Address As String = NetRequestOnce("http://4.ipw.cn", "GET", "", "application/x-www-form-urlencoded", 4000)
+                           Dim V4PubDetected As Boolean = Nothing
+                           Dim V6PubDetected As Boolean = Nothing
 
-                                       If IP.ToString() = PublicIPv4Address Then '判断是否是公网地址
-                                           IPv4Status = "Public"
+                           Try
+                               For Each ip In NatDiscovery.GetIPAddresses()
+                                   If Not V4PubDetected AndAlso ip.AddressFamily() = AddressFamily.InterNetwork Then 'IPv4
+                                       If ip.IsPublic() Then
+                                           Hint("Public v4: " + ip.ToString())
+                                           IPv4Status = IPSupportStatus.Open
                                            Log("[IP] 检测到 IPv4 公网地址")
-                                           Exit For
-                                       ElseIf IP.ToString().StartsWithF("169.254.") Then '判断是否是本地回环地址
+                                           V4PubDetected = True
+                                           Continue For
+                                       ElseIf ip.IsPrivate() Then
+                                           IPv4Status = IPSupportStatus.Supported
+                                           Log("[IP] 检测到 IPv4 支持")
+                                           Continue For
+                                       Else
                                            Continue For
                                        End If
-
-                                       IPv4Status = "Supported"
-                                       Log("[IP] 检测到 IPv4 支持")
-                                       Exit For
                                    End If
-                               Next
-                           Catch ex As Exception
-                               Log("[IP] IPv4 检测失败: " + ex.ToString())
-                               IPv4Status = "Unsupported"
-                           Finally
-                               TaskCompleted += 1
-                           End Try
-                       End Sub, "NetStatus V4")
 
-        TaskTotal += 1
-        RunInNewThread(Sub()
-                           Try
-                               For Each IP In LocalIPAddresses
-                                   If Sockets.AddressFamily.InterNetworkV6.Equals(IP.AddressFamily) Then 'IPv6
-                                       Dim PublicIPv6Address As String = NetRequestOnce("http://6.ipw.cn", "GET", "", "application/x-www-form-urlencoded", 4000)
-
-                                       If IP.ToString() = PublicIPv6Address Then '判断是否是公网地址
-                                           IPv6Status = "Public"
+                                   If Not V6PubDetected AndAlso ip.AddressFamily() = AddressFamily.InterNetworkV6 Then 'IPv6
+                                       If ip.IsPublic() Then
+                                           IPv6Status = IPSupportStatus.Open
                                            Log("[IP] 检测到 IPv6 公网地址")
-                                           Exit For
-                                       ElseIf IP.ToString().StartsWithF("fe80") Then '判断是否是本地回环地址
+                                           V6PubDetected = True
+                                           Continue For
+                                       ElseIf ip.IsPrivate() Then
+                                           IPv6Status = IPSupportStatus.Supported
+                                           Log("[IP] 检测到 IPv6 支持")
+                                           Continue For
+                                       ElseIf ip.IsIPv6LinkLocal() OrElse ip.IsIPv6SiteLocal() OrElse ip.IsIPv6Teredo() OrElse ip.IsIPv4MappedToIPv6() Then
                                            Continue For
                                        End If
-
-                                       IPv6Status = "Supported"
-                                       Log("[IP] 检测到 IPv6 地址")
                                    End If
                                Next
-                           Catch ex As Exception
-                               Log("[IP] IPv6 检测失败: " + ex.ToString())
-                               IPv6Status = "Unsupported"
-                           Finally
-                               TaskCompleted += 1
-                           End Try
-                       End Sub, "NetStatus V6")
 
-        While TaskCompleted <> TaskTotal
+                               If IPv4Status = Nothing Then IPv4Status = IPSupportStatus.Unsupported '致敬每一位勇士
+                               If IPv6Status = Nothing Then IPv6Status = IPSupportStatus.Unsupported '如果轮了一圈出来还是没 IPv6 地址，那就是没有
+
+                               Log($"[IP] IP 检测完成，IPv4 支持情况: {IPv4Status}，IPv6 支持情况: {IPv6Status}")
+                           Catch ex As Exception
+                               Log("[IP] 检测 IP 版本支持失败: " + ex.ToString())
+                           Finally
+                               TaskCompleted = True
+                           End Try
+                       End Sub, "IPStatus")
+
+        While Not TaskCompleted
             Thread.Sleep(200)
         End While
 
-        If IPv4Status Is Nothing Then IPv4Status = "Unsupported" '致敬每一位勇士
-        If IPv6Status Is Nothing Then IPv6Status = "Unsupported" '如果轮了一圈出来还是没 IPv6 地址，那就是没有
-
-        Log($"[IP] IP 检测完成，IPv4 支持情况: {IPv4Status}，IPv6 支持情况: {IPv6Status}")
+        Log($"[IP] IP 检测完成，IPv4 支持情况: {IPv4Status.ToString()}，IPv6 支持情况: {IPv6Status.ToString()}")
 
         RunInUi(Sub()
                     ChangeIPText()
@@ -264,35 +258,35 @@ Public Class PageLinkNetStatus
     End Sub
     Public Sub ChangeIPText()
         Select Case IPv4Status
-            Case = "Public"
+            Case = IPSupportStatus.Open
                 IPv4StatusFriendly = "公网"
                 NetQualityCounter += 2
-            Case = "Supported"
+            Case = IPSupportStatus.Supported
                 IPv4StatusFriendly = "支持"
-            Case = "Unsupported"
+            Case = IPSupportStatus.Unsupported
                 IPv4StatusFriendly = "不支持"
         End Select
 
         Select Case IPv6Status
-            Case = "Public"
+            Case = IPSupportStatus.Open
                 IPv6StatusFriendly = "公网"
                 NetQualityCounter += 2
-            Case = "Supported"
+            Case = IPSupportStatus.Supported
                 IPv6StatusFriendly = "支持"
                 NetQualityCounter += 1
-            Case = "Unsupported"
+            Case = IPSupportStatus.Unsupported
                 IPv6StatusFriendly = "不支持"
         End Select
 
         Dim IPStatusTitle As String = Nothing
         Dim IPStatusDesc As String = Nothing
-        If Not IPv6Status = "Unsupported" AndAlso Not IPv4Status = "Unsupported" Then
+        If Not IPv6Status = IPSupportStatus.Unsupported AndAlso Not IPv4Status = IPSupportStatus.Unsupported Then
             IPStatusTitle = "IPv6 优先"
             IPStatusDesc = "你的网络环境支持 IPv6，这会让连接更加顺利。"
-        ElseIf IPv6Status = "Unsupported" AndAlso Not IPv4Status = "Unsupported" Then
+        ElseIf IPv6Status = IPSupportStatus.Unsupported AndAlso Not IPv4Status = IPSupportStatus.Unsupported Then
             IPStatusTitle = "仅 IPv4"
             IPStatusDesc = "支持 IPv6 很可能会让连接更加顺利。你可以尝试调整光猫和路由器设置以获取 IPv6 地址。"
-        ElseIf IPv6Status = "Unsupported" AndAlso IPv4Status = "Unsupported" Then
+        ElseIf Not IPv6Status = IPSupportStatus.Unsupported AndAlso IPv4Status = IPSupportStatus.Unsupported Then
             IPStatusTitle = "仅 IPv6"
             IPStatusDesc = "你的网络环境仅支持 IPv6，你可真勇敢..."
         Else
