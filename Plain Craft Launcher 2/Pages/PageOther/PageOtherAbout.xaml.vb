@@ -31,7 +31,7 @@
     Private Sub ImgPCLLogo_Click(sender As Object, e As MouseButtonEventArgs) Handles ImgPCLLogo.MouseLeftButtonDown
         If ClickCount < 200 Then
             ClickCount += 1
-            Select Case ClickCount '没见过直接告诉用户我是彩蛋的 =。=
+            Select Case ClickCount
                 Case 5
                     Hint("点这个很好玩么……")
                 Case 15
