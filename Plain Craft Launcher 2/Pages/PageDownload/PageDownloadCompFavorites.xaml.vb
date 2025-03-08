@@ -613,6 +613,7 @@
 
     Private Sub ComboTargetFav_Selected(sender As Object, e As RoutedEventArgs) Handles ComboTargetFav.SelectionChanged
         If ComboTargetFav.SelectedItem Is Nothing Then Exit Sub
+        Items_SetSelectAll(False)
         Loader.Start(IsForceRestart:=True)
     End Sub
 
