@@ -42,6 +42,7 @@
     Private Sub RefreshReal()
         Dim Content As String = ""
         Dim Url As String
+        OnlineLoader.Input = Nothing
         Select Case Setup.Get("UiCustomType")
             Case 1
                 '加载本地文件
@@ -57,14 +58,14 @@ Download:
                     Log("[Page] 主页自定义数据来源：联网缓存文件")
                     Content = ReadFile(PathTemp & "Cache\Custom.xaml")
                     '后台更新缓存
-                    OnlineLoader.Start(Url,IsForceRestart:=True)
+                    OnlineLoader.Start(Url)
                 Else
                     '缓存不可用
                     Log("[Page] 主页自定义数据来源：联网全新下载")
                     Hint("正在加载主页……")
                     RunInUiWait(Sub() LoadContent("")) '在加载结束前清空页面
                     Setup.Set("CacheSavedPageVersion", "")
-                    OnlineLoader.Start(Url,IsForceRestart:=True) '下载完成后将会再次触发更新
+                    OnlineLoader.Start(Url) '下载完成后将会再次触发更新
                     Exit Sub
                 End If
             Case 3
