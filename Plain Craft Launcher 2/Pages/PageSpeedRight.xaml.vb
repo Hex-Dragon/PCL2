@@ -23,9 +23,9 @@
     ''' <summary>
     ''' 寻找对应这个Loader的下载卡片，找不到返回Nothing
     ''' </summary>
-    Private Function FindDlCard(Loader As LoaderBase) As MyDlEntry
+    Private Function FindTaskCard(Loader As LoaderBase) As MyTaskCard
         For Each Card In PanMain.Children
-            If TypeOf Card Is MyDlEntry AndAlso CType(Card, MyDlEntry).Loader Is Loader Then Return Card
+            If TypeOf Card Is MyTaskCard AndAlso CType(Card, MyTaskCard).Loader Is Loader Then Return Card
         Next
         Return Nothing
     End Function
@@ -35,17 +35,17 @@
     ''' </summary>
     Public Sub TaskRefresh(Loader As LoaderBase)
         If Loader Is Nothing OrElse Not Loader.Show Then Exit Sub
-        Dim DlCard As MyDlEntry = FindDlCard(Loader)
+        Dim TaskCard As MyTaskCard = FindTaskCard(Loader)
         Select Case Loader.State
             Case LoadState.Failed, LoadState.Loading, LoadState.Waiting
-                If DlCard IsNot Nothing Then
-                    DlCard.RefreshSubTasks()
+                If TaskCard IsNot Nothing Then
+                    TaskCard.RefreshSubTasks()
                 Else
-                    PanMain.Children.Add(New MyDlEntry(Loader) With {.Margin = New Thickness(0, 0, 0, 15)})
+                    PanMain.Children.Add(New MyTaskCard(Loader) With {.Margin = New Thickness(0, 0, 0, 15)})
                 End If
             Case LoadState.Finished, LoadState.Aborted
-                If DlCard IsNot Nothing Then
-                    AniDispose(DlCard, True, AddressOf TryReturnToHome)
+                If TaskCard IsNot Nothing Then
+                    AniDispose(TaskCard, True, AddressOf TryReturnToHome)
                 End If
         End Select
     End Sub
@@ -57,7 +57,7 @@
         RunInUiWait(
             Sub()
                 For Each Card In PanMain.Children
-                    If TypeOf Card IsNot MyDlEntry OrElse CType(Card, MyDlEntry).Loader IsNot Loader Then Continue For
+                    If TypeOf Card IsNot MyTaskCard OrElse CType(Card, MyTaskCard).Loader IsNot Loader Then Continue For
                     PanMain.Children.Remove(Card)
                 Next
             End Sub)

@@ -1,13 +1,13 @@
 ﻿Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 
-Public Class MyDlEntry
+Public Class MyTaskCard
     Inherits MyCard
 
     ''' <summary>
     ''' 卡片中每一条子下载任务的数据模型，将Loader作为唯一标识符
     ''' </summary>
-    Public Class MyDlTaskEntry
+    Public Class MySubTaskEntry
         Implements INotifyPropertyChanged
 
         Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
@@ -105,14 +105,14 @@ Public Class MyDlEntry
     ''' <summary>
     ''' TaskListBox的数据源
     ''' </summary>
-    Public ReadOnly Property TaskEntries As New ObservableCollection(Of MyDlTaskEntry)
+    Public ReadOnly Property TaskEntries As New ObservableCollection(Of MySubTaskEntry)
 
     Public Loader As LoaderBase
 
     ''' <summary>
     ''' 获取所有子下载任务
     ''' </summary>
-    Private ReadOnly Property SubDlTasks As List(Of LoaderBase)
+    Private ReadOnly Property SubTasks As List(Of LoaderBase)
         Get
             Return CType(Loader, Object).GetLoaderList()
         End Get
@@ -156,10 +156,10 @@ Public Class MyDlEntry
             If Loader.State = LoadState.Failed Then
                 Failed = True
             Else
-                For Each DlTask As LoaderBase In SubDlTasks
-                    Dim TaskEntry = TaskEntries.FirstOrDefault(Function(t) t.Loader Is DlTask)
+                For Each SubTask As LoaderBase In SubTasks
+                    Dim TaskEntry = TaskEntries.FirstOrDefault(Function(t) t.Loader Is SubTask)
                     If TaskEntry Is Nothing Then '除了第一次调用之外不会进入这个case，因为LoaderCombo的子加载任务不会增加
-                        TaskEntries.Add(New MyDlTaskEntry(DlTask))
+                        TaskEntries.Add(New MySubTaskEntry(SubTask))
                     Else
                         TaskEntry.SyncValuesToUI()
                     End If
