@@ -42,7 +42,6 @@
     Private Sub RefreshReal()
         Dim Content As String = ""
         Dim Url As String
-        OnlineLoader.Input = Nothing
         Select Case Setup.Get("UiCustomType")
             Case 1
                 '加载本地文件
@@ -51,22 +50,29 @@
             Case 2
                 Url = Setup.Get("UiCustomNet")
 Download:
-                '加载联网文件
                 If String.IsNullOrWhiteSpace(Url) Then Exit Select
-                If Url = Setup.Get("CacheSavedPageUrl") AndAlso File.Exists(PathTemp & "Cache\Custom.xaml") Then
-                    '缓存可用
-                    Log("[Page] 主页自定义数据来源：联网缓存文件")
-                    Content = ReadFile(PathTemp & "Cache\Custom.xaml")
-                    '后台更新缓存
-                    OnlineLoader.Start(Url)
-                Else
-                    '缓存不可用
+                If Url <> Setup.Get("CacheSavedPageUrl") Then
+                    'Url 变更，重新下载
                     Log("[Page] 主页自定义数据来源：联网全新下载")
                     Hint("正在加载主页……")
                     RunInUiWait(Sub() LoadContent("")) '在加载结束前清空页面
                     Setup.Set("CacheSavedPageVersion", "")
-                    OnlineLoader.Start(Url) '下载完成后将会再次触发更新
-                    Exit Sub
+                    OnlineLoader.Start(Url)
+                    Exit Sub '下载完成后将会再次触发更新
+                ElseIf File.Exists(PathTemp & "Cache\Custom.xaml") Then
+                    '缓存存在且有效
+                    Log("[Page] 主页自定义数据来源：联网缓存文件")
+                    Content = ReadFile(PathTemp & "Cache\Custom.xaml")
+                    '后台更新缓存
+                    OnlineLoader.Start(Url,IsForceRestart:=True)
+                Else
+                    '缓存不存在但输入Url相同 (#5057)
+                    Log("[Page] 主页缓存丢失，重新联网下载")
+                    Hint("正在加载主页……")
+                    RunInUiWait(Sub() LoadContent("")) '在加载结束前清空页面
+                    Setup.Set("CacheSavedPageVersion", "")
+                    OnlineLoader.Start(Url, IsForceRestart:=True) '强制加载器启动，否则Loader会因为检测到输入Url相同而误认为无需启动
+                    Exit Sub '下载完成后将会再次触发更新
                 End If
             Case 3
                 Select Case Setup.Get("UiCustomPreset")
