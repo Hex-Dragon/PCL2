@@ -169,7 +169,7 @@ Public Class PageLaunchRight
         Dim Address = Task.Input.Item1
         Try
             '联网获取版本，不加IsForceRestart:=True以允许Loader自动使用缓存
-            MainpageVersionGetterLoader.Start(Address)
+            MainpageVersionGetterLoader.WaitForExit(Address)
             Dim VersionOnline As String = MainpageVersionGetterLoader.Output
             '进行版本检查
             Dim VersionCached = Setup.Get("CacheSavedPageVersion")
