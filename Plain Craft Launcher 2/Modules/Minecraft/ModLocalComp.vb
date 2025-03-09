@@ -899,7 +899,7 @@ Finished:
                     ModList.Add(ModEntry)
                     '读取 Comp 缓存
                     If ModEntry.State = LocalCompFile.LocalFileStatus.Unavailable Then Continue For
-                    Dim CacheKey = ModEntry.ModrinthHash & PageVersionLeft.Version.Version.McName & GetCurrentVersionModLoader().Join("")
+                    Dim CacheKey = ModEntry.ModrinthHash & _GameVersion & _Loaders.Join("")
                     If Cache.ContainsKey(CacheKey) Then
                         ModEntry.FromJson(Cache(CacheKey))
                         '如果缓存中的信息在 6 小时以内更新过，则无需重新获取
