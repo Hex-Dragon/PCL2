@@ -39,39 +39,27 @@
             End Try
         End Sub, $"刷新自定义主页 #{GetUuid()}")
     End Sub
-    Private Sub RefreshReal()
-        Dim Content As String = ""
-        Dim Url As String
+
+    ''' <summary>
+    ''' 获取自定义主页的内容；在需要从网络获取主页信息时返回Url且GetOnline将为真
+    ''' </summary>
+    Private Function GetCustomMainpageTarget(ByRef GetOnline As Boolean)
         Select Case Setup.Get("UiCustomType")
             Case 1
-                '加载本地文件
                 Log("[Page] 主页自定义数据来源：本地文件")
-                Content = ReadFile(Path & "PCL\Custom.xaml") 'ReadFile 会进行存在检测
+                GetOnline = False
+                Return ReadFile(Path & "PCL\Custom.xaml") 'ReadFile 会进行存在检测
             Case 2
-                Url = Setup.Get("UiCustomNet")
-Download:
-                '加载联网文件
-                If String.IsNullOrWhiteSpace(Url) Then Exit Select
-                If Url = Setup.Get("CacheSavedPageUrl") AndAlso File.Exists(PathTemp & "Cache\Custom.xaml") Then
-                    '缓存可用
-                    Log("[Page] 主页自定义数据来源：联网缓存文件")
-                    Content = ReadFile(PathTemp & "Cache\Custom.xaml")
-                    '后台更新缓存
-                    OnlineLoader.Start(Url)
-                Else
-                    '缓存不可用
-                    Log("[Page] 主页自定义数据来源：联网全新下载")
-                    Hint("正在加载主页……")
-                    RunInUiWait(Sub() LoadContent("")) '在加载结束前清空页面
-                    Setup.Set("CacheSavedPageVersion", "")
-                    OnlineLoader.Start(Url) '下载完成后将会再次触发更新
-                    Exit Sub
-                End If
+                GetOnline = True
+                Return Setup.Get("UiCustomNet")
             Case 3
-                Select Case Setup.Get("UiCustomPreset")
+                Dim UiCustomPreset As Integer = Setup.Get("UiCustomPreset")
+                GetOnline = True
+                Select Case UiCustomPreset
                     Case 0
                         Log("[Page] 主页预设：你知道吗")
-                        Content = "
+                        GetOnline = False
+                        Return "
                             <local:MyCard Title=""你知道吗？"" Margin=""0,0,0,15"">
                                 <TextBlock Margin=""25,38,23,15"" FontSize=""13.5"" IsHitTestVisible=""False"" Text=""{hint}"" TextWrapping=""Wrap"" Foreground=""{DynamicResource ColorBrush1}"" />
                                 <local:MyIconButton Height=""22"" Width=""22"" Margin=""9"" VerticalAlignment=""Top"" HorizontalAlignment=""Right"" 
@@ -80,7 +68,8 @@ Download:
                             </local:MyCard>"
                     Case 1
                         Log("[Page] 主页预设：回声洞")
-                        Content = "
+                        GetOnline = False
+                        Return "
                             <local:MyCard Title=""回声洞"" Margin=""0,0,0,15"">
                                 <TextBlock Margin=""25,38,23,15"" FontSize=""13.5"" IsHitTestVisible=""False"" Text=""{cave}"" TextWrapping=""Wrap"" Foreground=""{DynamicResource ColorBrush1}"" />
                                 <local:MyIconButton Height=""22"" Width=""22"" Margin=""9"" VerticalAlignment=""Top"" HorizontalAlignment=""Right"" 
@@ -89,98 +78,140 @@ Download:
                             </local:MyCard>"
                     Case 2
                         Log("[Page] 主页预设：Minecraft 新闻")
-                        Url = "http://pcl.mcnews.thestack.top"
-                        GoTo Download
+                        Return "http://pcl.mcnews.thestack.top"
                     Case 3
                         Log("[Page] 主页预设：简单主页")
-                        Url = "https://raw.gitcode.com/mfn233/PCL-Mainpage/raw/main/Custom.xaml"
-                        GoTo Download
+                        Return "https://raw.gitcode.com/mfn233/PCL-Mainpage/raw/main/Custom.xaml"
                     Case 4
                         Log("[Page] 主页预设：每日整合包推荐")
-                        Url = "https://pclsub.sodamc.com/"
-                        GoTo Download
+                        Return "https://pclsub.sodamc.com/"
                     Case 5
                         Log("[Page] 主页预设：Minecraft 皮肤推荐")
-                        Url = "https://forgepixel.com/pcl_sub_file"
-                        GoTo Download
+                        Return "https://forgepixel.com/pcl_sub_file"
                     Case 6
                         Log("[Page] 主页预设：OpenBMCLAPI 仪表盘 Lite")
-                        Url = "https://pcl-bmcl.milu.ink/"
-                        GoTo Download
+                        Return "https://pcl-bmcl.milu.ink/"
                     Case 7
                         Log("[Page] 主页预设：主页市场")
-                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/JingHai-Lingyun/Custom.xaml"
-                        GoTo Download
+                        Return "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/JingHai-Lingyun/Custom.xaml"
                     Case 8
                         Log("[Page] 主页预设：更新日志")
-                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Joker2184/UpdateHomepage.xaml"
-                        GoTo Download
+                        Return "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Joker2184/UpdateHomepage.xaml"
                     Case 9
                         Log("[Page] 主页预设：PCL 新功能说明书")
-                        Url = "https://raw.gitcode.com/WForst-Breeze/WhatsNewPCL/raw/main/Custom.xaml"
-                        GoTo Download
+                        Return "https://raw.gitcode.com/WForst-Breeze/WhatsNewPCL/raw/main/Custom.xaml"
                     Case 10
                         Log("[Page] 主页预设：OpenMCIM Dashboard")
-                        Url = "https://files.mcimirror.top/PCL"
-                        GoTo Download
+                        Return "https://files.mcimirror.top/PCL"
                     Case 11
                         Log("[Page] 主页预设：杂志主页")
-                        Url = "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Ext1nguisher/Custom.xaml"
-                        GoTo Download
+                        Return "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Ext1nguisher/Custom.xaml"
+                    Case Else
+                        Hint($"[Page] 主页预设：未知的预设主页类型：{UiCustomPreset}", HintType.Critical)
+                        Setup.Set("UiCustomPreset", 0)
+                        Setup.Set("UiCustomType", 0)
+                        GetOnline = False
+                        Return ""
                 End Select
+            Case Else
+                GetOnline = False
+                Return ""
         End Select
-        RunInUi(Sub() LoadContent(Content))
+    End Function
+
+    Private Sub RefreshReal()
+        Dim GetOnline As Boolean
+        Dim Target As String = GetCustomMainpageTarget(GetOnline)
+        If Not GetOnline Then
+            RunInUi(Sub() LoadContent(Target))
+        Else '需要从网络上获取主页内容
+            MainpageLoader.Start(Target, IsForceRestart:=True) '强制启动，以免被不智能的LoaderTask#ShouldStart掐掉，我自己来判断是否无需重新获取
+        End If
     End Sub
     Private RefreshLock As New Object
 
-    '联网获取自定义主页文件
-    Private OnlineLoader As New LoaderTask(Of String, Integer)("自定义主页获取", AddressOf OnlineLoaderSub) With {.ReloadTimeout = 10 * 60 * 1000}
-    Private Sub OnlineLoaderSub(Task As LoaderTask(Of String, Integer))
-        Dim Address As String = Task.Input '#3721 中连续触发两次导致内容变化
+    ''' <summary>
+    ''' 开始联网获取主页，几乎立刻就能刷新一次主页内容的Loader。
+    ''' Input - 目标Url；
+    ''' Output - 现在应当被显示的主页内容。
+    ''' </summary>
+    Private MainpageLoader As New LoaderTask(Of String, String)("自定义主页获取", AddressOf MainpageLoaderSub) With {
+        .OnStateChanged = Sub(Loader As LoaderTask(Of String, String)) If Loader.State = LoadState.Finished Then LoadContent(Loader.Output) '如果运行成功刷新主页
+    }
+    Private Sub MainpageLoaderSub(Task As LoaderTask(Of String, String))
+        '这个Loader应当尽快结束，不做任何联网操作，因为急着结束后触发UI更改（New LoaderTask的时候挂进去的那个钩子），需要联网的时候调用别的Loader再调用回来
+        Dim Target As String = Task.Input '#3721 中连续触发两次导致内容变化 '修 #5057 的时候直接挪过来了，需不需要有待论证
+        If Target <> Setup.Get("CacheSavedPageUrl") OrElse Not File.Exists(PathTemp & "Cache\Custom.xaml") Then
+            '缓存无效
+            Log("[Page] 主页自定义数据来源：联网全新下载")
+            Hint("正在加载主页……")
+            Task.Output = "" '清空主页内容
+            MainpageDownloaderLoader.Start(New Tuple(Of String, Boolean)(Target, True), IsForceRestart:=True) '它运行结束后会调用回来，预计进入下一个case
+        Else
+            '缓存有效
+            Log("[Page] 主页自定义数据来源：本地缓存文件")
+            Task.Output = ReadFile(PathTemp & "Cache\Custom.xaml")
+            MainpageDownloaderLoader.Start(New Tuple(Of String, Boolean)(Target, False), IsForceRestart:=True) '检查版本
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' 从网上下载主页用的Loader，可选是否进行版本检查。
+    ''' Input1 - 目标Url；
+    ''' Input2 - 是否跳过版本检查，如果为假则判断版本与远程相同时不会下载；
+    ''' Output - 获取到的内容。
+    ''' 如果没被版本检查掐掉，结束后会更新缓存并调用MainpageLoader。
+    ''' </summary>
+    Private MainpageDownloaderLoader As New LoaderTask(Of Tuple(Of String, Boolean), String)("自定义主页联网下载", AddressOf MainpageDownloaderLoaderSub)
+    Private Sub MainpageDownloaderLoaderSub(Task As LoaderTask(Of Tuple(Of String, Boolean), String))
+        Dim Address = Task.Input.Item1
         Try
-            '获取版本校验地址
-            Dim VersionAddress As String
-            If Address.Contains(".xaml") Then
-                VersionAddress = Address.Replace(".xaml", ".xaml.ini")
-            Else
-                VersionAddress = Address.BeforeFirst("?")
-                If Not VersionAddress.EndsWith("/") Then VersionAddress += "/"
-                VersionAddress += "version"
-                If Address.Contains("?") Then VersionAddress += Address.AfterLast("?")
-            End If
-            '校验版本
-            Dim Version As String = ""
-            Dim NeedDownload As Boolean = True
+            Dim VersionOnline As String
+            Dim VersionCheckFailed = False
+            '联网获取版本信息
             Try
-                Version = NetGetCodeByRequestOnce(VersionAddress, Timeout:=10000)
-                If Version.Length > 1000 Then Throw New Exception($"获取的自定义主页版本过长（{Version.Length} 字符）")
-                Dim CurrentVersion As String = Setup.Get("CacheSavedPageVersion")
-                If Version <> "" AndAlso CurrentVersion <> "" AndAlso Version = CurrentVersion Then
-                    Log($"[Page] 当前缓存的自定义主页已为最新，当前版本：{Version}，检查源：{VersionAddress}")
-                    NeedDownload = False
+                Log($"开始从 {Address} 获取自定义主页版本信息")
+                '制作版本校验地址
+                Dim VersionAddress As String
+                If Address.Contains(".xaml") Then
+                    VersionAddress = Address.Replace(".xaml", ".xaml.ini")
                 Else
-                    Log($"[Page] 需要下载联网自定义主页，当前版本：{Version}，检查源：{VersionAddress}")
+                    VersionAddress = Address.BeforeFirst("?")
+                    If Not VersionAddress.EndsWith("/") Then VersionAddress += "/"
+                    VersionAddress += "version"
+                    If Address.Contains("?") Then VersionAddress += Address.AfterLast("?")
                 End If
-            Catch exx As Exception
-                Log(exx, $"联网获取自定义主页版本失败", LogLevel.Developer)
-                Log($"[Page] 无法检查联网自定义主页版本，将直接下载，检查源：{VersionAddress}")
+                '连接网站
+                VersionOnline = NetGetCodeByRequestOnce(VersionAddress, Timeout:=10000)
+                If VersionOnline.Length > 1000 Then Throw New Exception($"获取的自定义主页版本过长（{VersionOnline.Length} 字符）")
+            Catch ex As Exception
+                VersionCheckFailed = True
+                VersionOnline = "未成功获取版本信息"
+                Hint($"对自定义主页网站'{Address}'的版本获取失败", HintType.Critical)
+                Log(ex, $"对自定义主页网站'{Address}'的版本获取失败") '我想既让调试模式能看见异常，又对普通用户有个不影响使用的提示
             End Try
-            '实际下载
-            If NeedDownload Then
+            '进行版本检查
+            Dim VersionCached = Setup.Get("CacheSavedPageVersion")
+            Log($"[Page] 自定义主页版本检查：本地缓存'{VersionCached}'，联网获取'{VersionOnline}'，检查源：{Address}") '输出的日志中本地缓存和联网获取的版本号不一定来自同一个网站
+            If Task.Input.Item2 OrElse VersionCheckFailed OrElse (VersionCached <> VersionOnline) Then
+                '开始下载主页
+                Log($"[Page] 开始联网下载主页，源：{Address}")
                 Dim FileContent As String = NetGetCodeByRequestRetry(Address)
-                Log($"[Page] 已联网下载自定义主页，内容长度：{FileContent.Length}，来源：{Address}")
+                Log($"[Page] 成功联网下载自定义主页，内容长度：{FileContent.Length}，来源：{Address}")
+                '写入缓存
                 Setup.Set("CacheSavedPageUrl", Address)
-                Setup.Set("CacheSavedPageVersion", Version)
+                If Not VersionCheckFailed Then
+                    Setup.Set("CacheSavedPageVersion", VersionOnline)
+                End If
                 WriteFile(PathTemp & "Cache\Custom.xaml", FileContent)
-            End If
-            '要求刷新
-            Refresh()
-        Catch ex As Exception
-            If Setup.Get("CacheSavedPageVersion") = "" Then
-                Log(ex, $"联网下载自定义主页失败（{Address}）", LogLevel.Msgbox)
+                '运行完成。并call一下MainpageLoader，应该不会再call回这个方法来
+                Task.Output = FileContent
+                MainpageLoader.Start(Address, IsForceRestart:=True)
             Else
-                Log(ex, $"联网下载自定义主页失败（{Address}）")
+                Log($"[Page] 自定义主页版本已是最新，跳过下载")
             End If
+        Catch ex As Exception
+            Log(ex, $"加载自定义主页'{Address}'内容失败，请检查以下错误信息：", LogLevel.Msgbox, "自定义主页加载失败")
         End Try
     End Sub
 
@@ -205,7 +236,6 @@ Download:
     ''' </summary>
     Private Sub ClearCache()
         LoadedContentHash = -1
-        OnlineLoader.Input = ""
         Setup.Set("CacheSavedPageUrl", "")
         Setup.Set("CacheSavedPageVersion", "")
         Log("[Page] 已清空自定义主页缓存")
