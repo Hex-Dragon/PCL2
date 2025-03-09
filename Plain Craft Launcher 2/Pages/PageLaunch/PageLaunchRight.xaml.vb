@@ -40,9 +40,6 @@
         End Sub, $"刷新自定义主页 #{GetUuid()}")
     End Sub
 
-    ''' <summary>
-    ''' 获取自定义主页的内容；在需要从网络获取主页信息时返回Url且GetOnline将为真
-    ''' </summary>
     Private Function GetCustomMainpageTarget(ByRef GetOnline As Boolean)
         Select Case Setup.Get("UiCustomType")
             Case 1
@@ -119,6 +116,9 @@
         End Select
     End Function
 
+    ''' <summary>
+    ''' 获取自定义主页的内容；在需要从网络获取主页信息时返回Url且GetOnline将为真
+    ''' </summary>
     Private Sub RefreshReal()
         Dim GetOnline As Boolean
         Dim Target As String = GetCustomMainpageTarget(GetOnline)
