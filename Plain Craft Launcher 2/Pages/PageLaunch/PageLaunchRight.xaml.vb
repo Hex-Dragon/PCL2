@@ -170,21 +170,18 @@ Public Class PageLaunchRight
         Try
             '联网获取版本，不加IsForceRestart:=True以允许Loader自动使用缓存
             MainpageVersionGetterLoader.Start(Address)
-            Dim VersionCheckFailed = MainpageVersionGetterLoader.State <> LoadState.Finished
-            Dim VersionOnline As String = If(Not VersionCheckFailed, MainpageVersionGetterLoader.Output, "版本获取失败")
+            Dim VersionOnline As String = MainpageVersionGetterLoader.Output
             '进行版本检查
             Dim VersionCached = Setup.Get("CacheSavedPageVersion")
             Log($"[Page] 自定义主页版本检查：本地缓存'{VersionCached}'，联网获取'{VersionOnline}'，检查源：{Address}") '输出的日志中本地缓存和联网获取的版本号不一定来自同一个网站
-            If Task.Input.Item2 OrElse VersionCheckFailed OrElse (VersionCached <> VersionOnline) Then
+            If Task.Input.Item2 OrElse (VersionCached <> VersionOnline) Then
                 '开始下载主页
                 Log($"[Page] 开始联网下载主页，源：{Address}")
                 Dim FileContent As String = NetGetCodeByRequestRetry(Address)
                 Log($"[Page] 成功联网下载自定义主页，内容长度：{FileContent.Length}，来源：{Address}")
                 '写入缓存
                 Setup.Set("CacheSavedPageUrl", Address)
-                If Not VersionCheckFailed Then
-                    Setup.Set("CacheSavedPageVersion", VersionOnline)
-                End If
+                Setup.Set("CacheSavedPageVersion", VersionOnline)
                 WriteFile(PathTemp & "Cache\Custom.xaml", FileContent)
                 '运行完成。并call一下MainpageLoader，应该不会再call回这个方法来
                 Task.Output = FileContent
@@ -224,7 +221,7 @@ Public Class PageLaunchRight
         Catch ex As Exception
             Hint($"对自定义主页网站'{Address}'的版本获取失败", HintType.Critical)
             Log(ex, $"对自定义主页网站'{Address}'的版本获取失败") '我想既让调试模式能看见异常，又对普通用户有个不影响使用的提示
-            Throw '直接抛出去，让外层处理LoaderState的改变
+            Task.Output = $"<{Address}版本获取失败>"
         End Try
     End Sub
 
@@ -251,6 +248,7 @@ Public Class PageLaunchRight
         LoadedContentHash = -1
         Setup.Set("CacheSavedPageUrl", "")
         Setup.Set("CacheSavedPageVersion", "")
+        MainpageVersionGetterLoader.Input = ""
         Log("[Page] 已清空自定义主页缓存")
     End Sub
 
