@@ -1317,15 +1317,15 @@ Retry:
         McLaunchLog("开始获取 Minecraft 启动参数")
         '获取基准字符串与参数信息
         Dim Arguments As String
-        Arguments = If(McLaunchJavaSelected.VersionCode > 8, "-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8", Nothing) '#4700
+        Arguments = If(McLaunchJavaSelected.VersionCode > 8, "-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 ", Nothing) '#4700
         If McVersionCurrent.JsonObject("arguments") IsNot Nothing AndAlso McVersionCurrent.JsonObject("arguments")("jvm") IsNot Nothing Then
             McLaunchLog("获取新版 JVM 参数")
-            Arguments += " " & McLaunchArgumentsJvmNew(McVersionCurrent)
+            Arguments += McLaunchArgumentsJvmNew(McVersionCurrent)
             McLaunchLog("新版 JVM 参数获取成功：")
             McLaunchLog(Arguments)
         Else
             McLaunchLog("获取旧版 JVM 参数")
-            Arguments += " " & McLaunchArgumentsJvmOld(McVersionCurrent)
+            Arguments += McLaunchArgumentsJvmOld(McVersionCurrent)
             McLaunchLog("旧版 JVM 参数获取成功：")
             McLaunchLog(Arguments)
         End If
