@@ -90,7 +90,11 @@
             Case GameLogLevel.Debug
                 Return GetColorBrush("ColorBrushDebug")
             Case GameLogLevel.Info
-                Return GetColorBrush("ColorBrushInfo")
+                If IsDarkMode Then
+                    Return GetColorBrush("ColorBrushInfoDark")
+                Else
+                    Return GetColorBrush("ColorBrushInfo")
+                End If
             Case GameLogLevel.Warn
                 Return GetColorBrush("ColorBrushWarn")
             Case GameLogLevel.Error
