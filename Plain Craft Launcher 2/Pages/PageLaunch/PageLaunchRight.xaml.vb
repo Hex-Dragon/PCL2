@@ -1,6 +1,4 @@
-﻿Imports System.Net
-
-Public Class PageLaunchRight
+﻿Public Class PageLaunchRight
     Implements IRefreshable
 
     Private Sub Init() Handles Me.Loaded
@@ -133,7 +131,7 @@ Public Class PageLaunchRight
     Private RefreshLock As New Object
 
     ''' <summary>
-    ''' 开始联网获取主页，几乎立刻就能刷新一次主页内容的Loader。
+    ''' 获取来自网络的主页内容，负责判断缓存是否可用，几乎立刻就能刷新一次主页内容。
     ''' Input - 目标Url；
     ''' Output - 现在应当被显示的主页内容。
     ''' </summary>
@@ -151,18 +149,18 @@ Public Class PageLaunchRight
             MainpageDownloaderLoader.Start(New Tuple(Of String, Boolean)(Target, True), IsForceRestart:=True) '它运行结束后会调用回来，预计进入下一个case
         Else
             '缓存有效
-            Log("[Page] 主页自定义数据来源：本地缓存文件")
+            Log("[Page] 主页自定义数据来源：联网缓存文件")
             Task.Output = ReadFile(PathTemp & "Cache\Custom.xaml")
-            MainpageDownloaderLoader.Start(New Tuple(Of String, Boolean)(Target, False), IsForceRestart:=True) '检查版本
+            MainpageDownloaderLoader.Start(New Tuple(Of String, Boolean)(Target, False), IsForceRestart:=True) '检查版本，如果版本不同还会更新缓存并调用回来
         End If
     End Sub
 
     ''' <summary>
-    ''' 从网上下载主页用的Loader，可选是否进行版本检查。
+    ''' 从网上下载主页，可选是否进行版本检查。
     ''' Input1 - 目标Url；
     ''' Input2 - 是否跳过版本检查，如果为假则判断版本与远程相同时不会下载；
     ''' Output - 获取到的内容。
-    ''' 如果没被版本检查掐掉，结束后会更新缓存并调用MainpageLoader。
+    ''' 如果没被版本检查掐掉，会联网下载主页内容，更新缓存并调用MainpageLoader。
     ''' </summary>
     Private MainpageDownloaderLoader As New LoaderTask(Of Tuple(Of String, Boolean), String)("自定义主页联网下载", AddressOf MainpageDownloaderLoaderSub)
     Private Sub MainpageDownloaderLoaderSub(Task As LoaderTask(Of Tuple(Of String, Boolean), String))
@@ -173,39 +171,37 @@ Public Class PageLaunchRight
             Dim VersionOnline As String = MainpageVersionGetterLoader.Output
             '进行版本检查
             Dim VersionCached = Setup.Get("CacheSavedPageVersion")
-            Log($"[Page] 自定义主页版本检查：本地缓存'{VersionCached}'，联网获取'{VersionOnline}'，检查源：{Address}") '输出的日志中本地缓存和联网获取的版本号不一定来自同一个网站
+            Log($"本地缓存的主页版本信息：'{VersionCached}'")
             If Task.Input.Item2 OrElse (VersionCached <> VersionOnline) Then
                 '开始下载主页
-                Log($"[Page] 开始联网下载主页，源：{Address}")
                 Dim FileContent As String = NetGetCodeByRequestRetry(Address)
                 Log($"[Page] 成功联网下载自定义主页，内容长度：{FileContent.Length}，来源：{Address}")
                 '写入缓存
                 Setup.Set("CacheSavedPageUrl", Address)
                 Setup.Set("CacheSavedPageVersion", VersionOnline)
                 WriteFile(PathTemp & "Cache\Custom.xaml", FileContent)
-                '运行完成。并call一下MainpageLoader，应该不会再call回这个方法来
+                '运行完成。call一下MainpageLoader，再调用回来的时候预计不会进入这个case
                 Task.Output = FileContent
                 MainpageLoader.Start(Address, IsForceRestart:=True)
             Else
                 Log($"[Page] 自定义主页版本已是最新，跳过下载")
             End If
         Catch ex As Exception
-            Log(ex, $"加载自定义主页'{Address}'内容失败，请检查以下错误信息：", LogLevel.Msgbox, "自定义主页加载失败")
+            Log(ex, $"联网下载自定义主页失败（{Address}）", LogLevel.Msgbox)
         End Try
     End Sub
 
     ''' <summary>
-    ''' 获取自定义主页版本用的Loader。
+    ''' 获取联网自定义主页版本。
     ''' Input - 目标Url；
     ''' Output - 获取到的版本信息。
     ''' </summary>
     Private MainpageVersionGetterLoader As New LoaderTask(Of String, String)("自定义主页版本获取", AddressOf MainpageVersionGetterLoaderSub) With {.ReloadTimeout = 10 * 60 * 1000}
     Private Sub MainpageVersionGetterLoaderSub(Task As LoaderTask(Of String, String))
         Dim Address = Task.Input
+        Dim VersionAddress As String = ""
         Try
-            Log($"开始从 {Address} 获取自定义主页版本信息")
             '制作版本校验地址
-            Dim VersionAddress As String
             If Address.Contains(".xaml") Then
                 VersionAddress = Address.Replace(".xaml", ".xaml.ini")
             Else
@@ -214,13 +210,15 @@ Public Class PageLaunchRight
                 VersionAddress += "version"
                 If Address.Contains("?") Then VersionAddress += Address.AfterLast("?")
             End If
+            Log($"[Page] 连接至'{VersionAddress}'获取自定义主页版本信息")
             '连接网站
             Dim Result = NetGetCodeByRequestOnce(VersionAddress, Timeout:=10000)
             If Result.Length > 1000 Then Throw New Exception($"获取的自定义主页版本过长（{Result.Length} 字符）")
+            Log($"[Page] 成功从主页'{Address}'获取到版本信息：'{Result}'")
             Task.Output = Result
         Catch ex As Exception
-            Hint($"对自定义主页网站'{Address}'的版本获取失败", HintType.Critical)
-            Log(ex, $"对自定义主页网站'{Address}'的版本获取失败") '我想既让调试模式能看见异常，又对普通用户有个不影响使用的提示
+            Log(ex, $"联网获取自定义主页版本失败", LogLevel.Developer)
+            Log($"[Page] 无法检查联网自定义主页版本，将直接下载，检查源：{VersionAddress}")
             Task.Output = $"<{Address}版本获取失败>"
         End Try
     End Sub
