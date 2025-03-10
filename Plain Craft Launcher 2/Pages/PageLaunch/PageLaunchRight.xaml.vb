@@ -43,7 +43,7 @@
     ''' <summary>
     ''' 获取自定义主页的内容；在需要从网络获取主页信息时返回Url且GetOnline将为真
     ''' </summary>
-    Private Function GetCustomMainpageTarget(ByRef GetOnline As Boolean)
+    Private Function GetCustomMainpageTarget(ByRef GetOnline As Boolean) As String
         Select Case Setup.Get("UiCustomType")
             Case 1
                 Log("[Page] 主页自定义数据来源：本地文件")
