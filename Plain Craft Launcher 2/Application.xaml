@@ -73,7 +73,8 @@
             <SolidColorBrush x:Key="ColorBrushFatal">#c23616</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushError">#e74c3c</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushWarn">#f39c12</SolidColorBrush>
-            <SolidColorBrush x:Key="ColorBrushInfo">#ffffff</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushInfoDark">#ffffff</SolidColorBrush>
+            <SolidColorBrush x:Key="ColorBrushInfo">#000000</SolidColorBrush>
             <SolidColorBrush x:Key="ColorBrushDebug">#95a5a6</SolidColorBrush>
 
 
