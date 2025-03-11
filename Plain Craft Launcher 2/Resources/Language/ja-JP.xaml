@@ -1698,8 +1698,8 @@ VPNや加速器を使用している場合は、それらをオフにするか�
     <s:String x:Key="LangModBaseExceptionEmptyFile">読み取ったファイルが空です</s:String>
     <s:String x:Key="LangModBaseExceptionInvalidJson">有効な JSON ファイルではありません</s:String>
     <s:String x:Key="LangModBaseNoExceptionDetail">利用可能なエラーメッセージがありません！</s:String>
-    <s:String x:Key="LangModBaseExceptionType">错误类型：</s:String>
-    <s:String x:Key="LangModBaseExceptionInfoDetail">详细错误信息：</s:String>
+    <s:String x:Key="LangModBaseExceptionType">エラーの種類：</s:String>
+    <s:String x:Key="LangModBaseExceptionInfoDetail">詳細なエラータイプ：</s:String>
     <s:String x:Key="LangModMyLoadingLoading">読み込み中</s:String>
     <s:String x:Key="LangModMyLoadingLoadFail">読み込み失敗</s:String>
     <s:String x:Key="LangModMyLoadingUnknownError">不明なエラー</s:String>

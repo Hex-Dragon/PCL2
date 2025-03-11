@@ -1996,22 +1996,22 @@
     <s:String x:Key="LangModExceptionRequestFailed">网络请求失败（{0}）</s:String>
     <s:String x:Key="LangModExceptionReturnErrorCode">服务器返回错误（{0}）</s:String>
     <s:String x:Key="LangModExceptionUnknownFileStatus">文件状态未知：{0}</s:String>
-    <s:String x:Key="LangPageVersionExportPackName">整合包名称</s:String>
-    <s:String x:Key="LangPageVersionExportPackVersion">整合包版本</s:String>
+    <s:String x:Key="LangPageVersionExportPackName">整活包名称</s:String>
+    <s:String x:Key="LangPageVersionExportPackVersion">整活包版本</s:String>
     <s:String x:Key="LangPageVersionExportGameInstance">游戏本体</s:String>
     <s:String x:Key="LangPageVersionExportGameSettings">游戏本体设置</s:String>
     <s:String x:Key="LangPageVersionExportGameSettingsDesc">键位、音量、视频设置等</s:String>
     <s:String x:Key="LangPageVersionExportGameProfile">游戏本体个人信息</s:String>
     <s:String x:Key="LangPageVersionExportGameProfileDesc">命令历史、已保存的快捷栏</s:String>
-    <s:String x:Key="LangPageVersionExportOptiFineSettings">OptiFine 设置</s:String>
-    <s:String x:Key="LangPageVersionExportMod">Mod</s:String>
+    <s:String x:Key="LangPageVersionExportOptiFineSettings">高清不修复设置</s:String>
+    <s:String x:Key="LangPageVersionExportMod">模组</s:String>
     <s:String x:Key="LangPageVersionExportModDesc">模组</s:String>
-    <s:String x:Key="LangPageVersionExportModDisabled">已禁用的 Mod</s:String>
-    <s:String x:Key="LangPageVersionExportPackAddons">整合包重要数据</s:String>
+    <s:String x:Key="LangPageVersionExportModDisabled">已禁用的模组</s:String>
+    <s:String x:Key="LangPageVersionExportPackAddons">整活包重要数据</s:String>
     <s:String x:Key="LangPageVersionExportPackAddonsDesc">脚本文件、内置资源包、数据包等</s:String>
-    <s:String x:Key="LangPageVersionExportModSettings">Mod 设置</s:String>
+    <s:String x:Key="LangPageVersionExportModSettings">模组设置</s:String>
     <s:String x:Key="LangPageVersionExportMapRecord">已绘制的地图</s:String>
-    <s:String x:Key="LangPageVersionExportMapRecordDesc">地图类 Mod 为现有的存档、服务器记录的地图、路标点等</s:String>
+    <s:String x:Key="LangPageVersionExportMapRecordDesc">地图类模组为现有的存档、服务器记录的地图、路标点等</s:String>
     <s:String x:Key="LangPageVersionExportJEIProfile">JEI 个人信息</s:String>
     <s:String x:Key="LangPageVersionExportJEIProfileDesc">物品收藏夹等</s:String>
     <s:String x:Key="LangPageVersionExportEMIProfile">EMI 个人信息</s:String>
@@ -2029,57 +2029,57 @@
     <s:String x:Key="LangPageVersionExportWorld">单人游戏存档</s:String>
     <s:String x:Key="LangPageVersionExportWorldDesc">世界/地图</s:String>
     <s:String x:Key="LangPageVersionExportServerList">多人游戏服务器列表</s:String>
-    <s:String x:Key="LangPageVersionExportPCL">PCL 启动器程序</s:String>
-    <s:String x:Key="LangPageVersionExportPCLDesc">打包正式版 PCL，以便没有启动器的玩家安装整合包</s:String>
-    <s:String x:Key="LangPageVersionExportPCLProfile">PCL 个性化内容</s:String>
+    <s:String x:Key="LangPageVersionExportPCL">平原合成发射台程序</s:String>
+    <s:String x:Key="LangPageVersionExportPCLDesc">打包正式版平原合成发射台，以便没有启动器的玩家安装整合包</s:String>
+    <s:String x:Key="LangPageVersionExportPCLProfile">平原合成发射台个性化内容</s:String>
     <s:String x:Key="LangPageVersionExportPCLProfileDesc">功能隐藏设置、主页、背景音乐和图片等</s:String>
-    <s:String x:Key="LangPageVersionExportNoOptifine">受 Modrinth 整合包规范限制，导出的整合包中暂不包含 OptiFine。</s:String>
+    <s:String x:Key="LangPageVersionExportNoOptifine">受 Modrinth 整合包规范限制，导出的整合包中暂不包含高清不修复。</s:String>
     <s:String x:Key="LangPageVersionExportAdvancedOptions">高级选项</s:String>
     <s:String x:Key="LangPageVersionExportArchiveMode">打包资源文件，以避免在导入时下载</s:String>
-    <s:String x:Key="LangPageVersionExportArchiveModeDesc">将 Mod、资源包、光影包的文件直接放入整合包中，这样在导入时就无需联网下载它们。
+    <s:String x:Key="LangPageVersionExportArchiveModeDesc">将模组、资源包、光影包的文件直接放入整活包中，这样在导入时就无需联网下载它们。
 建议仅在无法稳定连接 CurseForge 或 Modrinth 时才考虑勾选。</s:String>
     <s:String x:Key="LangPageVersionExportArchiveModeHint">建议仅在无法稳定连接 CurseForge 或 Modrinth 时才打包资源文件。
-二次分发可能违反使用协议，请尽量不要公开发布包含资源文件的整合包！</s:String>
+二次分发可能违反使用协议，请尽量不要公开发布包含资源文件的整活包！</s:String>
     <s:String x:Key="LangPageVersionExportModrinthStandard">Modrinth 上传模式</s:String>
-    <s:String x:Key="LangPageVersionExportModrinthStandardDesc">如果你想要打包上传到 Modrinth，勾选此项会生成完全符合 Modrinth 要求的整合包文件。
-由于 Modrinth 要求，只能从 CurseForge 下载的资源将无法联网下载，会被直接放入整合包中。
-此外，勾选后也不能在整合包中包含 PCL 启动器文件。</s:String>
+    <s:String x:Key="LangPageVersionExportModrinthStandardDesc">如果你想要打包上传到 Modrinth，勾选此项会生成完全符合 Modrinth 要求的整活包文件。
+由于 Modrinth 要求，只能从 CurseForge 下载的资源将无法联网下载，会被直接放入整活包中。
+此外，勾选后也不能在整活包中包含平原合成发射台文件。</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigDesc">通过配置文件，你可以精准地控制导出内容的范围，或是保存当前的配置以便之后使用。</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigRead">读取配置</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigSave">保存配置</s:String>
-    <s:String x:Key="LangPageVersionExportModpackGuide">整合包制作指南</s:String>
+    <s:String x:Key="LangPageVersionExportModpackGuide">整活包制作指南</s:String>
     <s:String x:Key="LangPageVersionExportStart">开始导出</s:String>
     <s:String x:Key="LangPageVersionExportContentTitle">导出内容列表</s:String>
     <s:String x:Key="LangPageVersionExportContentTitleReadFromFile">从配置文件中读取</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigSaveAsFormat">整合包导出配置(*.txt)|*.txt</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigSaveAsFormat">整活包导出配置(*.txt)|*.txt</s:String>
     <s:String x:Key="LangPageVersionExportHintSavedExportConfig">已保存配置文件：{0}</s:String>
-    <s:String x:Key="LangPageVersionExportSaveExportConfigFail">保存配置失败</s:String>
+    <s:String x:Key="LangPageVersionExportSaveExportConfigFail">保存配置不成功</s:String>
     <s:String x:Key="LangPageVersionExportSelectConfigSave">保存配置文件</s:String>
     <s:String x:Key="LangPageVersionExportSelectSavedConfig">选择配置文件</s:String>
-    <s:String x:Key="LangPageVersionExportSelectConfigSaveAsFormat">整合包导出配置(*.txt)|*.txt</s:String>
+    <s:String x:Key="LangPageVersionExportSelectConfigSaveAsFormat">整活包导出配置(*.txt)|*.txt</s:String>
     <s:String x:Key="LangPageVersionExportHintReadExportConfig">已读取配置文件：{0}</s:String>
-    <s:String x:Key="LangPageVersionExportReadExportConfigFail">读取配置失败</s:String>
-    <s:String x:Key="LangPageVersionExportTaskName">导出整合包：{0}</s:String>
-    <s:String x:Key="LangPageVersionExportDialogTitleConfigInvalid">无法使用配置文件中指定的导出路径</s:String>
+    <s:String x:Key="LangPageVersionExportReadExportConfigFail">读取配置不成功</s:String>
+    <s:String x:Key="LangPageVersionExportTaskName">导出整活包：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleConfigInvalid">莫得办法使用配置文件中指定的导出路径</s:String>
     <s:String x:Key="LangPageVersionExportDialogContentConfigInvalid">指定的路径：{0}
 
 {1}</s:String>
     <s:String x:Key="LangPageVersionExportSelectExportPath">选择导出位置</s:String>
-    <s:String x:Key="LangPageVersionExportSelectExportPathSaveAsFormat">整合包文件(*{0})|*{1}</s:String>
-    <s:String x:Key="LangPageVersionExportTaskDownloadPCL">下载 PCL 正式版</s:String>
+    <s:String x:Key="LangPageVersionExportSelectExportPathSaveAsFormat">整活包文件(*{0})|*{1}</s:String>
+    <s:String x:Key="LangPageVersionExportTaskDownloadPCL">下载平原合成发射台正式版</s:String>
     <s:String x:Key="LangPageVersionExportTaskCopyFiles">复制导出内容</s:String>
-    <s:String x:Key="LangPageVersionExportHintFolderInConfigNotFound">未找到配置文件中指定的文件夹：{0}</s:String>
+    <s:String x:Key="LangPageVersionExportHintFolderInConfigNotFound">未找到配置文件中指定的文件夹子：{0}</s:String>
     <s:String x:Key="LangPageVersionExportHintFileInConfigNotFound">未找到配置文件中指定的单个文件：{0}</s:String>
     <s:String x:Key="LangPageVersionExportTaskGetOnlineFileInfo">联网获取文件信息</s:String>
-    <s:String x:Key="LangPageVersionExportDialogContentSomeGetFail">联网获取部分文件信息失败，是否继续导出？
+    <s:String x:Key="LangPageVersionExportDialogContentSomeGetFail">联网获取部分文件信息不成功，是否继续导出？
 
-若继续，无法获取信息的文件将被直接打包。
-由于二次分发可能违反使用协议，请尽量不要公开发布导出的整合包！</s:String>
-    <s:String x:Key="LangPageVersionExportDialogTitleSomeGetFail">部分文件信息获取失败</s:String>
-    <s:String x:Key="LangPageVersionExportDialogContentAllGetFail">联网获取部分文件信息失败，是否继续导出？
+若继续，莫得办法获取信息的文件将被直接打包。
+由于二次分发可能违反使用协议，请尽量不要公开发布导出的整活包！</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleSomeGetFail">部分文件信息获取不成功</s:String>
+    <s:String x:Key="LangPageVersionExportDialogContentAllGetFail">联网获取部分文件信息不成功，是否继续导出？
 
 若继续，所有文件都将被直接打包。
-由于二次分发可能违反使用协议，请尽量不要公开发布导出的整合包！</s:String>
-    <s:String x:Key="LangPageVersionExportDialogTitleAllGetFail">文件信息获取失败</s:String>
+由于二次分发可能违反使用协议，请尽量不要公开发布导出的整活包！</s:String>
+    <s:String x:Key="LangPageVersionExportDialogTitleAllGetFail">文件信息获取不成功</s:String>
     <s:String x:Key="LangPageVersionExportGenerateArchive">生成压缩包</s:String>
 </ResourceDictionary>
