@@ -20,8 +20,8 @@
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">手动设置的缓存文件夹子不可用，平原合成发射台将使用默认缓存文件夹子。
 错误原因：{0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">环境不对劲</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">请将平原合成发射台从压缩文件中解压，或是更换文件夹子后再继续使用！
-程序目前在临时文件夹子中运行，设置、游戏存档等可能无法保存，且部分功能将莫得法使用。</s:String>
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">请将平原合成发射台从压缩包中解压之后再使用！
+在当前环境下运行可能会导致丢失游戏存档或设置，部分功能也可能莫得法使用！</s:String>
     <s:String x:Key="LangApplicationDialogContent32BitWarn">平原合成发射台和新版麦恩克拉夫特均不再支持 32 位系统，部分功能将无法使用。
 非常建议重装为 64 位系统后再进行游戏！</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">平原合成发射台初始化不成功</s:String>
@@ -943,8 +943,8 @@
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本最新，但加载缓慢）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileName">下崽文件名</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">决定下崽的模组的默认文件名中，简体中文译名应该放在哪个位置
-你不会觉得我们有功夫给模组译名搞简体吧？</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">下崽模组时，模组的默认文件名中，简体中文译名应该放在哪个位置
+此项只在语言为简体中文时有效</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">译名位于文件名开头：[遗物] relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">译名位于文件名开头：遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">译名位于文件名末尾：relics-0.1.14-遗物</s:String>
@@ -1032,7 +1032,7 @@
     <s:String x:Key="LangPageSetupSystemHintFinishDownloadTaskBeforeChangeLanguage">你先别急，等下载任务结束再换语言也不迟……</s:String>
     <s:String x:Key="LangPageSetupSystemExportSettings">导出设置</s:String>
     <s:String x:Key="LangPageSetupSystemImportSettings">导入设置</s:String>
-    <s:String x:Key="LangPageSetupSystemInDev">功能已在画饼，你先别急，让我先急。</s:String>
+    <s:String x:Key="LangPageSetupSystemInDev">功能已在画饼，我知道你很急，但你先别急，让我先急。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModManageStyle">Mod 管理样式</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModManageStyleToolTip">在 Mod 管理页面中，Mod 项的显示方式</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModManageStyleA">标题显示译名，详情显示文件名</s:String>
@@ -1074,7 +1074,7 @@
 注意，这两个文件的内容不！一！样！
 
 在手动删除或改名换姓其中一个文件后，才能继续。</s:String>
-    <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusTitle">文件冲突辣！</s:String>
+    <s:String x:Key="LangPageVersionModDialogSameModFileInDiffStatusTitle">喜报：文件冲突辣！</s:String>
     <s:String x:Key="LangPageVersionModHintFileOccupyWhenChangeStatus">由于文件被占用，模组的状态切换不成功，请尝试关掉正在运行的游戏后再试！</s:String>
     <s:String x:Key="LangPageVersionModDialogUpdateModContent">哥们，没什么事别乱更新模组，新版本模组可不保证不会炸游戏炸存档哦！
 如果你尝试更新整活包里的模组，那我劝你赶紧停手，会炸！
