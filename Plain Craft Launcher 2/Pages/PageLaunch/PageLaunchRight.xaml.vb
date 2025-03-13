@@ -108,8 +108,8 @@
                         Return "https://pclhomeplazaoss.lingyunawa.top:26994/d/Homepages/Ext1nguisher/Custom.xaml"
                     Case Else
                         Hint($"[Page] 主页预设：未知的预设主页类型：{UiCustomPreset}", HintType.Critical)
-                        Setup.Set("UiCustomPreset", 0)
-                        Setup.Set("UiCustomType", 0)
+                        Setup.Reset("UiCustomPreset")
+                        Setup.Reset("UiCustomType")
                         GetOnline = False
                         Return ""
                 End Select
