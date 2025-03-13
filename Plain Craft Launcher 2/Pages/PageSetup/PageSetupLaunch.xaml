@@ -170,13 +170,6 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-			<local:MyCard Margin="0,0,0,15" Title="显示卡" CanSwap="True" IsSwaped="True">
-				<StackPanel Margin="25,40,25,15">
-					<local:MyHint Text="此选项对应 Windows 设置中的“系统 > 屏幕 > 显示卡”页面，只在部分设备上有实际效果。" IsWarn="False" Margin="0,0,0,10" />
-					<local:MyCheckBox Text="启动前调整图形设置" x:Name="CheckAdvanceGraphicSetup" Tag="LaunchGraphicSetup"
-                                      ToolTip="启动前将 Java 的显示卡设置调整为“高性能”。若游戏运行时 GPU 占用过低，或在使用 OBS 捕捉时遇到黑屏问题，可尝试此功能。" />
-				</StackPanel>
-			</local:MyCard>
             <local:MyCard x:Name="CardSkin" Margin="0,0,0,15" Title="离线皮肤" CanSwap="True" IsSwaped="True">
                 <StackPanel Margin="25,40,25,15">
                     <local:MyHint Text="由于技术问题，此功能只保证对 1.19.2 以前的版本有效！" IsWarn="True" Margin="0,0,0,10" />
