@@ -1422,9 +1422,10 @@ Retry:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
-        DataList.Add("-jar """ & ExtractJavaWrapper() & """")
-
+        If Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version) AndAlso Setup.Get("LaunchAdvanceUseLaunchWrapper") Then
+            DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
+            DataList.Add("-jar """ & ExtractJavaWrapper() & """")
+        End If
         '添加 MainClass
         If Version.JsonObject("mainClass") Is Nothing Then
             Throw New Exception("版本 json 中没有 mainClass 项！")
@@ -1489,9 +1490,10 @@ NextVersion:
 
         '添加 Java Wrapper 作为主 Jar
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
-        DataList.Add("-jar """ & ExtractJavaWrapper() & """")
-
+        If Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version) AndAlso Setup.Get("LaunchAdvanceUseLaunchWrapper") Then
+            DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
+            DataList.Add("-jar """ & ExtractJavaWrapper() & """")
+        End If
         '将 "-XXX" 与后面 "XXX" 合并到一起
         '如果不合并，会导致 Forge 1.17 启动无效，它有两个 --add-exports，进一步导致其中一个在后面被去重
         Dim DeDuplicateDataList As New List(Of String)
