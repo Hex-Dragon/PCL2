@@ -353,20 +353,20 @@ Public Module ModMusic
             Log($"音频默认输出设备切换到 {defaultDeviceId}")
             Dim target As NAudio.Wave.WaveOut = MusicNAudio
             target.Stop()
-            target.DeviceNumber = 0
+            target.DeviceNumber = -1
             target.Resume()
         End Sub
 
         Public Sub OnDeviceAdded(deviceId As String) Implements IMMNotificationClient.OnDeviceAdded
             ' 处理音频设备添加事件
             If MusicNAudio Is Nothing Then Exit Sub
-            CType(MusicNAudio, NAudio.Wave.WaveOut).DeviceNumber = 0
+            CType(MusicNAudio, NAudio.Wave.WaveOut).DeviceNumber = -1
         End Sub
 
         Public Sub OnDeviceRemoved(deviceId As String) Implements IMMNotificationClient.OnDeviceRemoved
             ' 处理音频设备移除事件
             If MusicNAudio Is Nothing Then Exit Sub
-            CType(MusicNAudio, NAudio.Wave.WaveOut).DeviceNumber = 0
+            CType(MusicNAudio, NAudio.Wave.WaveOut).DeviceNumber = -1
         End Sub
 
         Public Sub OnDeviceStateChanged(deviceId As String, newState As DeviceState) Implements IMMNotificationClient.OnDeviceStateChanged
