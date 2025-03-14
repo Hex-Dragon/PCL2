@@ -143,7 +143,7 @@
 
     '页面切换触发
     Public Sub MinecraftSelected(sender As MyListItem, e As MouseButtonEventArgs)
-        SelectedMinecraftId = sender.Title
+        SelectedMinecraftId = sender.Title '不应该在这里判断一次IsInSelectPage吗？
         SelectedMinecraftJsonUrl = sender.Tag("url").ToString
         SelectedMinecraftIcon = sender.Logo
         EnterSelectPage()
@@ -687,12 +687,14 @@
         If McVersionWaitingForSelect IsNot Nothing Then
             RunInNewThread(
                 Sub()
-                    While PageState <> PageStates.ContentStay
+                    If IsInSelectPage Then GoTo SubEnd '这里或许应该改成退出现在正打开的安装预览页面？感觉两种各有坏处
+                    While PageState <> PageStates.ContentStay '等内容进入完毕了再打开指定版本的安装预览，否则掉帧会更严重
                         Thread.Sleep(100)
+                        If FrmMain.PageCurrent.Page <> FormMain.PageType.Download Then GoTo SubEnd
                     End While
                     Dim Version = VersionListDict.SelectMany(Function(pair) pair.Value).FirstOrDefault(Function(json) json("id").ToString() = McVersionWaitingForSelect)
                     If Version Is Nothing Then
-                        Hint($"找不到名为'{McVersionWaitingForSelect}的版本'", HintType.Critical)
+                        Hint($"找不到名为'{McVersionWaitingForSelect}'的版本", HintType.Critical)
                     Else
                         RunInUi(Sub()
                                     Dim Item = McDownloadListItem(Version, Sub()
@@ -700,6 +702,7 @@
                                     MinecraftSelected(Item, Nothing)
                                 End Sub)
                     End If
+SubEnd:
                     McVersionWaitingForSelect = Nothing
                 End Sub)
         End If
