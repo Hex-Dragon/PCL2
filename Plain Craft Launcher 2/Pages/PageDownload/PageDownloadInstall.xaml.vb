@@ -671,6 +671,18 @@
                 NewCard.IsSwaped = True
                 PanMinecraft.Children.Add(NewCard)
             Next
+            '自动选择版本
+            If McVersionWaitingForSelect IsNot Nothing Then
+                Log("[Download] 自动选择 MC 版本：" & McVersionWaitingForSelect)
+                Dim Version = Dict.SelectMany(Function(pair) pair.Value).FirstOrDefault(Function(json) json("id").ToString() = McVersionWaitingForSelect)
+                If Version Is Nothing Then
+                    Hint($"找不到名为'{McVersionWaitingForSelect}'的版本", HintType.Critical)
+                Else
+                    MinecraftSelected(McDownloadListItem(Version, Sub()
+                                                                  End Sub, False), Nothing)
+                End If
+                McVersionWaitingForSelect = Nothing
+            End If
         Catch ex As Exception
             Log(ex, "可视化安装版本列表出错", LogLevel.Feedback)
         End Try
@@ -686,33 +698,25 @@
     ''' 处理McVersionWaitingForSelect相关逻辑
     ''' </summary>
     Private Sub SelectSpecifiedMcVersion() Handles Me.PageEnter
-        If McVersionWaitingForSelect IsNot Nothing Then
-            RunInNewThread(
-                Sub()
-                    SyncLock SelectSpecifiedMcVersionLock
-                        If IsInSelectPage Then GoTo SubEnd
-                        While PageState <> PageStates.ContentStay '等内容进入完毕了再打开指定版本的安装预览，否则掉帧会更严重
-                            Thread.Sleep(100)
-                            If FrmMain.PageCurrent.Page <> FormMain.PageType.Download Then GoTo SubEnd
-                        End While
-                        Dim Version = VersionListDict.SelectMany(Function(pair) pair.Value).FirstOrDefault(Function(json) json("id").ToString() = McVersionWaitingForSelect)
-                        If Version Is Nothing Then
-                            Hint($"找不到名为'{McVersionWaitingForSelect}'的版本", HintType.Critical)
-                        Else
-                            Log($"[Page] 自动切换至 {McVersionWaitingForSelect} 安装预览")
-                            RunInUi(Sub()
-                                        Dim Item = McDownloadListItem(Version, Sub()
-                                                                               End Sub, False)
-                                        MinecraftSelected(Item, Nothing)
-                                    End Sub)
-                        End If
-SubEnd:
-                        McVersionWaitingForSelect = Nothing
-                    End SyncLock
-                End Sub, "AutoSelectSpecifiedMcVersion")
+        If McVersionWaitingForSelect Is Nothing Then Exit Sub
+        Log("[Download] 自动选择 MC 版本：" & McVersionWaitingForSelect)
+        If IsInSelectPage Then
+            Hint($"已经打开了一个 MC 安装预览页面，要安装 {McVersionWaitingForSelect} 需先退出当前预览。")
+            McVersionWaitingForSelect = Nothing
+            Exit Sub
+        End If
+        If DlClientListLoader.State = LoadState.Finished Then '如果正在加载的话也不需要在这处理
+            Dim Version = VersionListDict.SelectMany(Function(pair) pair.Value).FirstOrDefault(Function(json) json("id").ToString() = McVersionWaitingForSelect)
+            If Version Is Nothing Then
+                Log("[Download] 现有列表中没找到对应的 MC 版本，将重新从网络获取版本列表：" & McVersionWaitingForSelect)
+                DlClientListLoader.Start(IsForceRestart:=True) '重启一下联网获取的Loader，它结束后也会处理McVersionWaitingForSelect
+            Else
+                McVersionWaitingForSelect = Nothing
+                MinecraftSelected(McDownloadListItem(Version, Sub()
+                                                              End Sub, False), Nothing)
+            End If
         End If
     End Sub
-    Private ReadOnly SelectSpecifiedMcVersionLock As New Object
 
 #End Region
 
