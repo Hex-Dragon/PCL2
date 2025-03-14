@@ -143,7 +143,7 @@
 
     '页面切换触发
     Public Sub MinecraftSelected(sender As MyListItem, e As MouseButtonEventArgs)
-        SelectedMinecraftId = sender.Title '不应该在这里判断一次IsInSelectPage吗？
+        SelectedMinecraftId = sender.Title
         SelectedMinecraftJsonUrl = sender.Tag("url").ToString
         SelectedMinecraftIcon = sender.Logo
         EnterSelectPage()
@@ -680,14 +680,16 @@
     ''' </summary>
     Public Shared McVersionWaitingForSelect As String = Nothing
 
-    '或许这东西应该让DlClientListResult持有？
     Private VersionListDict As New Dictionary(Of String, List(Of JObject))
 
+    ''' <summary>
+    ''' 处理McVersionWaitingForSelect相关逻辑
+    ''' </summary>
     Private Sub SelectSpecifiedMcVersion() Handles Me.PageEnter
         If McVersionWaitingForSelect IsNot Nothing Then
             RunInNewThread(
                 Sub()
-                    If IsInSelectPage Then GoTo SubEnd '这里或许应该改成退出现在正打开的安装预览页面？感觉两种各有坏处
+                    If IsInSelectPage Then GoTo SubEnd
                     While PageState <> PageStates.ContentStay '等内容进入完毕了再打开指定版本的安装预览，否则掉帧会更严重
                         Thread.Sleep(100)
                         If FrmMain.PageCurrent.Page <> FormMain.PageType.Download Then GoTo SubEnd
@@ -696,6 +698,7 @@
                     If Version Is Nothing Then
                         Hint($"找不到名为'{McVersionWaitingForSelect}'的版本", HintType.Critical)
                     Else
+                        Log($"[Page] 自动切换至 {McVersionWaitingForSelect} 安装预览")
                         RunInUi(Sub()
                                     Dim Item = McDownloadListItem(Version, Sub()
                                                                            End Sub, False)
@@ -704,7 +707,7 @@
                     End If
 SubEnd:
                     McVersionWaitingForSelect = Nothing
-                End Sub)
+                End Sub, "AutoSelectSpecifiedMcVersion")
         End If
     End Sub
 
