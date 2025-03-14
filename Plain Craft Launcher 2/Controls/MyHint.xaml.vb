@@ -40,12 +40,15 @@ Public Class MyHint
     End Property
     Public Property Text As String
         Get
-            Return LabText.Text
+            Return GetValue(TextProperty)
         End Get
         Set(value As String)
             LabText.Text = value
+            SetValue(TextProperty, value)
         End Set
     End Property
+
+    Public Shared ReadOnly TextProperty As DependencyProperty = DependencyProperty.Register("Text", GetType(String), GetType(MyHint), New PropertyMetadata("Tips"))
 
     Public Property CanClose As Boolean
         Get

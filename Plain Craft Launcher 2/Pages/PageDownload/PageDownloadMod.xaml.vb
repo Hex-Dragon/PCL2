@@ -46,7 +46,7 @@
         Dim Request As New CompProjectRequest(CompType.Mod, Storage, (Page + 1) * PageSize)
         If FrmDownloadMod IsNot Nothing Then
             Dim ModLoader As CompModLoaderType = Val(FrmDownloadMod.ComboSearchLoader.SelectedItem.Tag)
-            Dim GameVersion As String = If(FrmDownloadMod.TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
+            Dim GameVersion As String = If(FrmDownloadMod.TextSearchVersion.Text = GetLang("LangDownloadModSearchVersionAll"), Nothing,
                     If(FrmDownloadMod.TextSearchVersion.Text.Contains(".") OrElse FrmDownloadMod.TextSearchVersion.Text.Contains("w"), FrmDownloadMod.TextSearchVersion.Text, Nothing))
             If GameVersion IsNot Nothing AndAlso GameVersion.Contains(".") AndAlso Val(GameVersion.Split(".")(1)) < 14 AndAlso '1.14-
                 ModLoader = CompModLoaderType.Forge Then '选择了 Forge
@@ -152,7 +152,7 @@
     '重置按钮
     Private Sub ResetFilter() Handles BtnSearchReset.Click
         TextSearchName.Text = ""
-        TextSearchVersion.Text = "全部 (也可自行输入)"
+        TextSearchVersion.Text = GetLang("LangDownloadModSearchVersionAll")
         TextSearchVersion.SelectedIndex = 0
         ComboSearchSource.SelectedIndex = 0
         ComboSearchTag.SelectedIndex = 0
