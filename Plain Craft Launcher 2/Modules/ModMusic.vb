@@ -349,7 +349,12 @@ Public Module ModMusic
         Public Sub OnDefaultDeviceChanged(dataFlow As DataFlow, role As Role, defaultDeviceId As String) Implements IMMNotificationClient.OnDefaultDeviceChanged
             ' 处理默认音频设备更改事件
             If MusicNAudio Is Nothing Then Exit Sub
-            CType(MusicNAudio, NAudio.Wave.WaveOut).DeviceNumber = 0
+            ' 切换到系统默认输出设备
+            Log($"音频默认输出设备切换到 {defaultDeviceId}")
+            Dim target As NAudio.Wave.WaveOut = MusicNAudio
+            target.Stop()
+            target.DeviceNumber = 0
+            target.Resume()
         End Sub
 
         Public Sub OnDeviceAdded(deviceId As String) Implements IMMNotificationClient.OnDeviceAdded
@@ -385,13 +390,6 @@ Public Module ModMusic
 
         Public Sub OnDefaultDeviceChanged(dataFlow As DataFlow, role As Role, defaultDeviceId As String) Implements IMMNotificationClient.OnDefaultDeviceChanged
             container.OnDefaultDeviceChanged(dataFlow, role, defaultDeviceId)
-            ' 切换到系统默认输出设备
-            If MusicNAudio IsNot Nothing Then
-                Dim target As NAudio.Wave.WaveOut = MusicNAudio
-                target.Stop()
-                target.DeviceNumber = 0
-                target.Resume()
-            End If
         End Sub
 
         Public Sub OnDeviceAdded(deviceId As String) Implements IMMNotificationClient.OnDeviceAdded
