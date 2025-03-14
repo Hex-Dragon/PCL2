@@ -689,27 +689,30 @@
         If McVersionWaitingForSelect IsNot Nothing Then
             RunInNewThread(
                 Sub()
-                    If IsInSelectPage Then GoTo SubEnd
-                    While PageState <> PageStates.ContentStay '等内容进入完毕了再打开指定版本的安装预览，否则掉帧会更严重
-                        Thread.Sleep(100)
-                        If FrmMain.PageCurrent.Page <> FormMain.PageType.Download Then GoTo SubEnd
-                    End While
-                    Dim Version = VersionListDict.SelectMany(Function(pair) pair.Value).FirstOrDefault(Function(json) json("id").ToString() = McVersionWaitingForSelect)
-                    If Version Is Nothing Then
-                        Hint($"找不到名为'{McVersionWaitingForSelect}'的版本", HintType.Critical)
-                    Else
-                        Log($"[Page] 自动切换至 {McVersionWaitingForSelect} 安装预览")
-                        RunInUi(Sub()
-                                    Dim Item = McDownloadListItem(Version, Sub()
-                                                                           End Sub, False)
-                                    MinecraftSelected(Item, Nothing)
-                                End Sub)
-                    End If
+                    SyncLock SelectSpecifiedMcVersionLock
+                        If IsInSelectPage Then GoTo SubEnd
+                        While PageState <> PageStates.ContentStay '等内容进入完毕了再打开指定版本的安装预览，否则掉帧会更严重
+                            Thread.Sleep(100)
+                            If FrmMain.PageCurrent.Page <> FormMain.PageType.Download Then GoTo SubEnd
+                        End While
+                        Dim Version = VersionListDict.SelectMany(Function(pair) pair.Value).FirstOrDefault(Function(json) json("id").ToString() = McVersionWaitingForSelect)
+                        If Version Is Nothing Then
+                            Hint($"找不到名为'{McVersionWaitingForSelect}'的版本", HintType.Critical)
+                        Else
+                            Log($"[Page] 自动切换至 {McVersionWaitingForSelect} 安装预览")
+                            RunInUi(Sub()
+                                        Dim Item = McDownloadListItem(Version, Sub()
+                                                                               End Sub, False)
+                                        MinecraftSelected(Item, Nothing)
+                                    End Sub)
+                        End If
 SubEnd:
-                    McVersionWaitingForSelect = Nothing
+                        McVersionWaitingForSelect = Nothing
+                    End SyncLock
                 End Sub, "AutoSelectSpecifiedMcVersion")
         End If
     End Sub
+    Private ReadOnly SelectSpecifiedMcVersionLock As New Object
 
 #End Region
 
