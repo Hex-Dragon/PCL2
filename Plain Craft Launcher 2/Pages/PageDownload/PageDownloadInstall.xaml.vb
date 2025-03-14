@@ -591,6 +591,7 @@
             Dim Dict As New Dictionary(Of String, List(Of JObject)) From {
                 {"正式版", New List(Of JObject)}, {"预览版", New List(Of JObject)}, {"远古版", New List(Of JObject)}, {"愚人节版", New List(Of JObject)}
             }
+            VersionListDict = Dict
             Dim Versions As JArray = DlClientListLoader.Output.Value("versions")
             For Each Version As JObject In Versions
                 '确定分类
@@ -670,15 +671,6 @@
                 NewCard.IsSwaped = True
                 PanMinecraft.Children.Add(NewCard)
             Next
-            '自动选择版本
-            If McVersionWaitingForSelect Is Nothing Then Exit Try
-            Log("[Download] 自动选择 MC 版本：" & McVersionWaitingForSelect)
-            For Each Version As JObject In Versions
-                If Version("id").ToString <> McVersionWaitingForSelect Then Continue For
-                Dim Item = McDownloadListItem(Version, Sub()
-                                                       End Sub, False)
-                MinecraftSelected(Item, Nothing)
-            Next
         Catch ex As Exception
             Log(ex, "可视化安装版本列表出错", LogLevel.Feedback)
         End Try
@@ -687,6 +679,31 @@
     ''' 当 MC 版本列表加载完时，立即自动选择的版本。用于外部调用。
     ''' </summary>
     Public Shared McVersionWaitingForSelect As String = Nothing
+
+    '或许这东西应该让DlClientListResult持有？
+    Private VersionListDict As New Dictionary(Of String, List(Of JObject))
+
+    Private Sub SelectSpecifiedMcVersion() Handles Me.PageEnter
+        If McVersionWaitingForSelect IsNot Nothing Then
+            RunInNewThread(
+                Sub()
+                    While PageState <> PageStates.ContentStay
+                        Thread.Sleep(100)
+                    End While
+                    Dim Version = VersionListDict.SelectMany(Function(pair) pair.Value).FirstOrDefault(Function(json) json("id").ToString() = McVersionWaitingForSelect)
+                    If Version Is Nothing Then
+                        Hint($"找不到名为'{McVersionWaitingForSelect}的版本'", HintType.Critical)
+                    Else
+                        RunInUi(Sub()
+                                    Dim Item = McDownloadListItem(Version, Sub()
+                                                                           End Sub, False)
+                                    MinecraftSelected(Item, Nothing)
+                                End Sub)
+                    End If
+                    McVersionWaitingForSelect = Nothing
+                End Sub)
+        End If
+    End Sub
 
 #End Region
 
