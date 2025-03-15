@@ -5,23 +5,10 @@
 
     Private CurrentCompType As CompType = CompType.Mod
 
-    Private CurrentLoader As CompLocalLoader
-
     Private CurrentSwipSelect As MyLocalCompItem.SwipeSelect
 
     Public Sub New(LoadCompType As CompType)
         CurrentCompType = LoadCompType
-        Dim RequireLoaders As List(Of CompLoaderType)
-        Select Case CurrentCompType
-            Case CompType.Mod
-                RequireLoaders = GetCurrentVersionModLoader()
-            Case CompType.ResourcePack
-                RequireLoaders = {CompLoaderType.Minecraft}.ToList()
-            Case CompType.Shader
-                RequireLoaders = {CompLoaderType.OptiFine, CompLoaderType.Iris, CompLoaderType.Vanilla, CompLoaderType.Canvas}.ToList()
-        End Select
-        CurrentLoader = New CompLocalLoader(Me, PageVersionLeft.Version.Version.McName, RequireLoaders)
-
         CurrentSwipSelect = New MyLocalCompItem.SwipeSelect() With {.TargetFrm = Me}
 
         ' 此调用是设计器所必需的。
@@ -35,6 +22,24 @@
         End If
 
     End Sub
+
+    Private Function GetRequireLoaderData() As CompLocalLoaderData
+        Dim res As New CompLocalLoaderData
+        res.GameVersion = PageVersionLeft.Version
+        res.Frm = Me
+        Dim RequireLoaders As New List(Of CompLoaderType)
+        Select Case CurrentCompType
+            Case CompType.Mod
+                RequireLoaders = GetCurrentVersionModLoader()
+            Case CompType.ResourcePack
+                RequireLoaders = {CompLoaderType.Minecraft}.ToList()
+            Case CompType.Shader
+                RequireLoaders = {CompLoaderType.OptiFine, CompLoaderType.Iris, CompLoaderType.Vanilla, CompLoaderType.Canvas}.ToList()
+        End Select
+        res.Loaders = RequireLoaders
+        res.CompPath = PageVersionLeft.Version.PathIndie & GetPathNameByCompType(CurrentCompType) & "\"
+        Return res
+    End Function
 
     Private IsLoad As Boolean = False
     Public Sub PageOther_Loaded() Handles Me.Loaded
@@ -100,16 +105,16 @@
     End Sub
 
     Private Sub LoaderInit() Handles Me.Initialized
-        PageLoaderInit(Load, PanLoad, PanAllBack, Nothing, CurrentLoader.CompResourceListLoader, AddressOf LoadUIFromLoaderOutput, Function() CurrentCompType, AutoRun:=False)
+        PageLoaderInit(Load, PanLoad, PanAllBack, Nothing, CompResourceListLoader, AddressOf LoadUIFromLoaderOutput, Function() CurrentCompType, AutoRun:=False)
     End Sub
     Private Sub Load_Click(sender As Object, e As MouseButtonEventArgs) Handles Load.Click
-        If CurrentLoader.CompResourceListLoader.State = LoadState.Failed Then
+        If CompResourceListLoader.State = LoadState.Failed Then
             LoaderRun(LoaderFolderRunType.ForceRun)
         End If
     End Sub
     Public Function LoaderRun(Type As LoaderFolderRunType) As Boolean
         Dim CompResourcePath As String = PageVersionLeft.Version.PathIndie & GetPathNameByCompType(CurrentCompType) & "\"
-        Return LoaderFolderRun(CurrentLoader.CompResourceListLoader, CompResourcePath, Type)
+        Return LoaderFolderRun(CompResourceListLoader, CompResourcePath, Type, LoaderInput:=GetRequireLoaderData())
     End Function
 
 #End Region
@@ -126,7 +131,7 @@
     Private Sub LoadUIFromLoaderOutput()
         Try
             '判断应该显示哪一个页面
-            If CurrentLoader.CompResourceListLoader.Output.Any() Then
+            If CompResourceListLoader.Output.Any() Then
                 PanBack.Visibility = Visibility.Visible
                 PanEmpty.Visibility = Visibility.Collapsed
             Else
@@ -136,7 +141,7 @@
             End If
             '修改缓存
             ModItems.Clear()
-            For Each ModEntity As LocalCompFile In CurrentLoader.CompResourceListLoader.Output
+            For Each ModEntity As LocalCompFile In CompResourceListLoader.Output
                 ModItems(ModEntity.RawFileName) = BuildLocalCompItem(ModEntity)
             Next
             '显示结果
@@ -199,7 +204,7 @@
     ''' </summary>
     Public Sub RefreshUI()
         If PanList Is Nothing Then Exit Sub
-        Dim ShowingMods = If(IsSearching, SearchResult, If(CurrentLoader.CompResourceListLoader.Output, New List(Of LocalCompFile))).Where(Function(m) CanPassFilter(m)).ToList
+        Dim ShowingMods = If(IsSearching, SearchResult, If(CompResourceListLoader.Output, New List(Of LocalCompFile))).Where(Function(m) CanPassFilter(m)).ToList
         '重新列出列表
         AniControlEnabled += 1
         If ShowingMods.Any() Then
@@ -232,7 +237,7 @@
         Dim DisabledCount As Integer = 0
         Dim UpdateCount As Integer = 0
         Dim UnavalialeCount As Integer = 0
-        For Each ModItem In If(IsSearching, SearchResult, If(CurrentLoader.CompResourceListLoader.Output, New List(Of LocalCompFile)))
+        For Each ModItem In If(IsSearching, SearchResult, If(CompResourceListLoader.Output, New List(Of LocalCompFile)))
             AnyCount += 1
             If ModItem.CanUpdate Then UpdateCount += 1
             If ModItem.State.Equals(LocalCompFile.LocalFileStatus.Fine) Then EnabledCount += 1
@@ -263,7 +268,7 @@
             Dim HasUpdate As Boolean = False
             Dim HasEnabled As Boolean = False
             Dim HasDisabled As Boolean = False
-            For Each ModEntity In CurrentLoader.CompResourceListLoader.Output
+            For Each ModEntity In CompResourceListLoader.Output
                 If SelectedMods.Contains(ModEntity.RawFileName) Then
                     If ModEntity.CanUpdate Then HasUpdate = True
                     If ModEntity.State = LocalCompFile.LocalFileStatus.Fine Then
@@ -417,7 +422,7 @@ Install:
                 End If
                 '刷新列表
                 If FrmMain.PageCurrent = FormMain.PageType.VersionSetup AndAlso FrmMain.PageCurrentSub = FormMain.PageSubType.VersionMod Then
-                    LoaderFolderRun(FrmVersionMod?.CurrentLoader.CompResourceListLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun)
+                    LoaderFolderRun(CompResourceListLoader, TargetVersion.PathIndie & "mods\", LoaderFolderRunType.ForceRun, LoaderInput:=FrmVersionMod?.GetRequireLoaderData())
                 End If
             Catch ex As Exception
                 Log(ex, "复制 Mod 文件失败", LogLevel.Msgbox)
@@ -547,7 +552,7 @@ Install:
 
     '启用 / 禁用
     Private Sub BtnSelectED_Click(sender As MyIconTextButton, e As RouteEventArgs) Handles BtnSelectEnable.Click, BtnSelectDisable.Click
-        EDMods(CurrentLoader.CompResourceListLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)),
+        EDMods(CompResourceListLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)),
                Not sender.Equals(BtnSelectDisable))
         ChangeAllSelected(False)
     End Sub
@@ -593,10 +598,10 @@ Install:
             '更改 Loader 中的列表
             Dim NewModEntity As New LocalCompFile(NewPath)
             NewModEntity.FromJson(ModEntity.ToJson)
-            If CurrentLoader.CompResourceListLoader.Output.Contains(ModEntity) Then
-                Dim IndexOfLoader As Integer = CurrentLoader.CompResourceListLoader.Output.IndexOf(ModEntity)
-                CurrentLoader.CompResourceListLoader.Output.RemoveAt(IndexOfLoader)
-                CurrentLoader.CompResourceListLoader.Output.Insert(IndexOfLoader, NewModEntity)
+            If CompResourceListLoader.Output.Contains(ModEntity) Then
+                Dim IndexOfLoader As Integer = CompResourceListLoader.Output.IndexOf(ModEntity)
+                CompResourceListLoader.Output.RemoveAt(IndexOfLoader)
+                CompResourceListLoader.Output.Insert(IndexOfLoader, NewModEntity)
             End If
             If SearchResult IsNot Nothing AndAlso SearchResult.Contains(ModEntity) Then '#4862
                 Dim IndexOfResult As Integer = SearchResult.IndexOf(ModEntity)
@@ -622,7 +627,7 @@ Install:
 
     '更新
     Private Sub BtnSelectUpdate_Click() Handles BtnSelectUpdate.Click
-        Dim UpdateList As List(Of LocalCompFile) = CurrentLoader.CompResourceListLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.CanUpdate).ToList()
+        Dim UpdateList As List(Of LocalCompFile) = CompResourceListLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName) AndAlso m.CanUpdate).ToList()
         If Not UpdateList.Any() Then Return
         UpdateResource(UpdateList)
         ChangeAllSelected(False)
@@ -752,7 +757,7 @@ Install:
 
     '删除
     Private Sub BtnSelectDelete_Click() Handles BtnSelectDelete.Click
-        DeleteMods(CurrentLoader.CompResourceListLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)))
+        DeleteMods(CompResourceListLoader.Output.Where(Function(m) SelectedMods.Contains(m.RawFileName)))
         ChangeAllSelected(False)
     End Sub
     Private Sub DeleteMods(ModList As IEnumerable(Of LocalCompFile))
@@ -788,7 +793,7 @@ Install:
                 '取消选中
                 SelectedMods.Remove(ModEntity.RawFileName)
                 '更改 Loader 和 UI 中的列表
-                CurrentLoader.CompResourceListLoader.Output.Remove(ModEntity)
+                CompResourceListLoader.Output.Remove(ModEntity)
                 SearchResult?.Remove(ModEntity)
                 ModItems.Remove(ModEntity.RawFileName)
                 Dim IndexOfUi As Integer = PanList.Children.IndexOf(PanList.Children.OfType(Of MyLocalCompItem).FirstOrDefault(Function(i) i.Entry.Equals(ModEntity)))
@@ -943,7 +948,7 @@ Install:
         If IsSearching Then
             '构造请求
             Dim QueryList As New List(Of SearchEntry(Of LocalCompFile))
-            For Each Entry As LocalCompFile In CurrentLoader.CompResourceListLoader.Output
+            For Each Entry As LocalCompFile In CompResourceListLoader.Output
                 Dim SearchSource As New List(Of KeyValuePair(Of String, Double))
                 SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.Name, 1))
                 SearchSource.Add(New KeyValuePair(Of String, Double)(Entry.FileName, 1))
