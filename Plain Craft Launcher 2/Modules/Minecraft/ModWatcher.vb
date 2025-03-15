@@ -1,4 +1,4 @@
-﻿Public Module ModWatcher
+Public Module ModWatcher
 
     '对全体的监视
     Public McWatcherList As New List(Of Watcher)
@@ -289,6 +289,19 @@
                                 Log(ex, "最大化 Minecraft 窗口时出现错误")
                             End Try
                         End Sub, "MinecraftWindowMaximize")
+                    End If
+                    '最小化
+                    If Setup.Get("LaunchArgumentWindowType") = 5 Then
+                        RunInNewThread(
+                        Sub()
+                            Try
+                                Thread.Sleep(2000)
+                                ShowWindow(WindowHandle, 2)
+                                WatcherLog($"已最小化 Minecraft 窗口：{MinecraftWindowHandle.ToInt64}")
+                            Catch ex As Exception
+                                Log(ex, "最小化 Minecraft 窗口时出现错误")
+                            End Try
+                        End Sub, "MinecraftWindowMinimize")
                     End If
                 ElseIf Not IsWindowAppeared Then
                     '已找到 FML 窗口

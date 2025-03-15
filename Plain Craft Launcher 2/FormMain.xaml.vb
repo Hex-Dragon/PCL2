@@ -1,4 +1,4 @@
-﻿Imports System.ComponentModel
+Imports System.ComponentModel
 
 Public Class FormMain
 
@@ -328,8 +328,6 @@ Public Class FormMain
             Log("[Start] 最高版本号从 " & LowerVersionCode & " 升高到 " & VersionCode)
         End If
 #End If
-        '被移除的窗口设置选项
-        If Setup.Get("LaunchArgumentWindowType") = 5 Then Setup.Set("LaunchArgumentWindowType", 1)
         '修改主题设置项名称
         If LowerVersionCode <= 207 Then
             Dim UnlockedTheme As New List(Of String) From {"2"}
