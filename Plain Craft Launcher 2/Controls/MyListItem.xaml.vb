@@ -507,7 +507,7 @@ Public Class MyListItem
         If e.Handled Then Exit Sub
         '触发自定义事件
         If Not String.IsNullOrEmpty(EventType) Then
-            ModEvent.TryStartEvent(EventType, EventData)
+            ModEvent.ProcessCustomEvents(EventType, EventData, _CustomEvents)
             e.Handled = True
         End If
         If e.Handled Then Exit Sub
@@ -556,6 +556,18 @@ Public Class MyListItem
         End Set
     End Property
     Public Shared ReadOnly EventDataProperty As DependencyProperty = DependencyProperty.Register("EventData", GetType(String), GetType(MyListItem), New PropertyMetadata(Nothing))
+    Public Property CustomEvents As CustomEventCollection
+        Get
+            If _CustomEvents Is Nothing Then
+                _CustomEvents = New CustomEventCollection
+            End If
+            Return _CustomEvents
+        End Get
+        Set(value As CustomEventCollection)
+            _CustomEvents = value
+        End Set
+    End Property
+    Private _CustomEvents As CustomEventCollection = Nothing
 
 #End Region
 
