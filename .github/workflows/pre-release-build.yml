@@ -1,9 +1,8 @@
 name: Pre-Release Build
 
 on:
-  push:
-    branches:
-      - beta
+  release:
+    types: [published]
 
 jobs:
   build:
