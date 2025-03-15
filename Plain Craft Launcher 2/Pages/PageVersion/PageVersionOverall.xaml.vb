@@ -108,6 +108,7 @@
             '确认输入的新名称
             Dim OldName As String = PageVersionLeft.Version.Name
             Dim OldPath As String = PageVersionLeft.Version.Path
+ReType:
             '修改此部分的同时修改快速安装的版本名检测*
             Dim NewName As String = MyMsgBoxInput("重命名版本", "", OldName, New ObjectModel.Collection(Of Validate) From {New ValidateFolderName(PathMcFolder & "versions", IgnoreCase:=False)})
             If String.IsNullOrWhiteSpace(NewName) Then Exit Sub
@@ -124,6 +125,17 @@
                 Log(ex, "重命名读取 json 时失败")
                 JsonObject = PageVersionLeft.Version.JsonObject
             End Try
+            If Directory.Exists(NewPath) OrElse Directory.Exists(TempName) Then
+                Select Case MyMsgBox("当前文件夹已存在此名称，请重新输入一个有效的名称。", "重命名失败", Button1:="确定", Button2:="取消")
+                    Case 1
+                        GoTo ReType
+                    Case 2
+                        Exit Sub
+                End Select
+            ElseIf Not Directory.Exists($"{PathMcFolder}\versions") Then
+                MyMsgBox("当前版本文件夹无效，请检查版本文件夹。", "重命名失败")
+                Exit Sub
+            End If
             '重命名主文件夹
             My.Computer.FileSystem.RenameDirectory(OldPath, TempName)
             My.Computer.FileSystem.RenameDirectory(TempPath, NewName)
