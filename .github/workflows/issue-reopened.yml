@@ -1,0 +1,15 @@
+name: Issue Closed
+
+on:
+  issues:
+    types: [reopened]
+
+jobs:
+  issue-closed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reopen
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'remove-labels'
+          labels: '👌 完成,❌ 忽略,❌ 拒绝 / 放弃,❌ 拒绝 / 放弃,❌ 第三方,❌ 重复,❌ 重复'
