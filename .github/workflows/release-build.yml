@@ -1,8 +1,9 @@
 name: Release Build
 
 on:
-  release:
-    types: [released]
+  push:
+    branches:
+      - main
 
 jobs:
   build:
