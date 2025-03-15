@@ -575,6 +575,8 @@ Public Class FormMain
     Private Sub TriggerPageBack()
         If PageCurrent = PageType.Download AndAlso PageCurrentSub = PageSubType.DownloadInstall AndAlso FrmDownloadInstall.IsInSelectPage Then
             FrmDownloadInstall.ExitSelectPage()
+        ElseIf PageCurrent = PageType.VersionSetup AndAlso PageCurrentSub = PageSubType.VersionInstall AndAlso FrmVersionInstall.IsInSelectPage Then
+            FrmVersionInstall.ExitSelectPage()
         Else
             PageBack()
         End If
@@ -901,6 +903,7 @@ Public Class FormMain
         VersionMod = 2
         VersionModDisabled = 3
         VersionExport = 4
+        VersionInstall = 9
     End Enum
     ''' <summary>
     ''' 获取次级页面的名称。若并非次级页面则返回空字符串，故可以以此判断是否为次级页面。
