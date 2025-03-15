@@ -3,6 +3,36 @@
 Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
+    Private Property _Proxy As WebProxy
+    ''' <summary>
+    ''' 获取 Proxy 代理
+    ''' </summary>
+    ''' <returns>返回 WebProxy 或者 Nothing</returns>
+    Public Function GetProxy()
+        Dim proxy As String = Setup.Get("SystemHttpProxy")
+        If _Proxy IsNot Nothing AndAlso _Proxy.Address.AbsoluteUri = proxy Then
+            Log("[Net] 当前代理状态：跟随系统代理设置")
+            Return _Proxy
+        End If
+        If Not String.IsNullOrWhiteSpace(proxy) Then
+            _Proxy = New WebProxy(proxy, True)
+            Log("[Net] 当前代理状态：自定义")
+            Dim ProxyUri As New Uri(_Proxy.ToString)
+            Try
+                If ProxyUri.IsLoopBack OrElse
+                ProxyUri.Host.StartsWithF("192.168.") OrElse
+                ProxyUri.Host.StartsWithF("10.") OrElse
+                ProxyUri.Host.StartswithF("fe80") OrElse
+                (ProxyUri.Host.Split(".")(1) > 16 AndAlso ProxyUri.Host.Split(".")(1) < 31 AndAlso ProxyUri.Host.StartsWithF("172.")) Then Log($"[Net] 使用 {_Proxy} 作为网络代理")
+            '视作非本地地址
+            Catch
+            End Try
+            Return _Proxy
+        End If
+        Log("[Net] 当前代理状态：禁用")
+        Return Nothing
+    End Function
+
     ''' <summary>
     ''' 测试 Ping。失败则返回 -1。
     ''' </summary>
@@ -407,6 +437,7 @@ RequestFinished:
         Dim Req As HttpWebRequest
         Try
             Req = WebRequest.Create(Url)
+            Req.Proxy = GetProxy()
             Req.Method = Method
             Dim SendData As Byte()
             If TypeOf Data Is Byte() Then
@@ -1068,7 +1099,7 @@ StartThread:
                 '请求头
                 HttpRequest = WebRequest.Create(Info.Source.Url)
                 If Info.Source.Url.StartsWithF("https", True) Then HttpRequest.ProtocolVersion = HttpVersion.Version11
-                'HttpRequest.Proxy = Nothing 'new WebProxy(Ip, Port)
+                HttpRequest.Proxy = GetProxy()
                 HttpRequest.Timeout = Timeout
                 HttpRequest.AddRange(Info.DownloadStart)
                 SecretHeadersSign(Info.Source.Url, HttpRequest, UseBrowserUserAgent)

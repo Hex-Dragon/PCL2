@@ -39,6 +39,7 @@
         {"SystemSystemCache", New SetupEntry("", Source:=SetupSource.Registry)},
         {"SystemSystemUpdate", New SetupEntry(0)},
         {"SystemSystemActivity", New SetupEntry(0)},
+        {"SystemHttpProxy", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
         {"CacheExportConfig", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageUrl", New SetupEntry("", Source:=SetupSource.Registry)},
         {"CacheSavedPageVersion", New SetupEntry("", Source:=SetupSource.Registry)},
