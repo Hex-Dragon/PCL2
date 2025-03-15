@@ -896,6 +896,8 @@ Public Class FormMain
         OtherHelp = 0
         OtherAbout = 1
         OtherTest = 2
+        OtherFeedback = 3
+        OtherVote = 4
         VersionOverall = 0
         VersionSetup = 1
         VersionMod = 2
@@ -1023,11 +1025,8 @@ Public Class FormMain
     ''' </summary>
     Public Sub PageChange(Stack As PageStackData, Optional SubType As PageSubType = PageSubType.Default)
         If PageNameGet(Stack) = "" Then
-            '切换到主页面
-            PageChangeExit()
-            IsChangingPage = True '防止下面的勾选直接触发了 PageChangeActual
-            CType(PanTitleSelect.Children(Stack), MyRadioButton).SetChecked(True, True, PageNameGet(PageCurrent) = "")
-            IsChangingPage = False
+            '在Select块中判断是否应该执行切换回主页面并修改正在选中的RadioButton的逻辑
+            Dim ShouldChangePage As Boolean = True
             Select Case Stack.Page
                 Case PageType.Download
                     If FrmDownloadLeft Is Nothing Then FrmDownloadLeft = New PageDownloadLeft
@@ -1036,10 +1035,23 @@ Public Class FormMain
                     If FrmSetupLeft Is Nothing Then FrmSetupLeft = New PageSetupLeft
                     CType(FrmSetupLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
                 Case PageType.Other
-                    If FrmOtherLeft Is Nothing Then FrmOtherLeft = New PageOtherLeft
-                    CType(FrmOtherLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                    '当是反馈/投票时子页面只是一个弹窗，此时不应该切换页面 (#5766)
+                    If PageOtherLeft.IsSubPageMsgBox(SubType) Then
+                        ShouldChangePage = False
+                        PageOtherLeft.OpenMsgSubPage(SubType)
+                    Else
+                        If FrmOtherLeft Is Nothing Then FrmOtherLeft = New PageOtherLeft
+                        CType(FrmOtherLeft.PanItem.Children(SubType), MyListItem).SetChecked(True, True, Stack = PageCurrent)
+                    End If
             End Select
-            PageChangeActual(Stack, SubType)
+            If ShouldChangePage Then
+                '切换到主页面
+                PageChangeExit()
+                IsChangingPage = True '防止下面的勾选直接触发了 PageChangeActual
+                CType(PanTitleSelect.Children(Stack), MyRadioButton).SetChecked(True, True, PageNameGet(PageCurrent) = "")
+                IsChangingPage = False
+                PageChangeActual(Stack, SubType)
+            End If
         Else
             '切换到次页面
             Select Case Stack.Page
