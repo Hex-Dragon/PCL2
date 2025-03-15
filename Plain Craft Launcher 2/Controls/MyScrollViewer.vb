@@ -21,7 +21,11 @@
         PerformVerticalOffsetDelta(-e.Delta)
         '关闭 Tooltip (#2552)
         For Each TooltipBorder In Application.ShowingTooltips
-            AniStart(AaOpacity(TooltipBorder, -1, 100), $"Hide Tooltip {GetUuid()}")
+            '以正确的方式关闭 Tooltip 而不是降低 Border 不透明度 (#5744)
+            Dim Tooltip As ToolTip = TryCast(VisualTreeHelper.GetParent(TooltipBorder), ToolTip)
+            If Tooltip IsNot Nothing Then
+                Tooltip.IsOpen = False
+            End If
         Next
     End Sub
     Public Sub PerformVerticalOffsetDelta(Delta As Double)
