@@ -1,4 +1,4 @@
-﻿Public Class PageDownloadCompDetail
+Public Class PageDownloadCompDetail
     Private CompItem As MyCompItem = Nothing
 
 #Region "加载器"
@@ -367,8 +367,10 @@
                         Case 0
                             FileName = $"[{ChineseName}] {File.FileName}"
                         Case 1
-                            FileName = $"{ChineseName}-{File.FileName}"
+                            FileName = $"【{ChineseName}】{File.FileName}"
                         Case 2
+                            FileName = $"{ChineseName}-{File.FileName}"
+                        Case 3
                             FileName = $"{File.FileName}-{ChineseName}"
                         Case Else
                             FileName = File.FileName
