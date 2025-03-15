@@ -6,7 +6,6 @@ on:
 
 jobs:
   issue-labeled:
-    if: github.actor != github.event.issue.user.login
     runs-on: ubuntu-latest
     steps:
       - name: Close as completed
