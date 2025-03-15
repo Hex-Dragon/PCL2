@@ -1,0 +1,23 @@
+name: Issue Closed
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  issue-closed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close as completed
+        if: github.event.issue.state_reason == 'completed'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'add-labels'
+          labels: '👌 完成'
+
+      - name: Close as duplicate
+        if: github.event.issue.state_reason == 'duplicate'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'add-labels'
+          labels: '❌ 重复'
