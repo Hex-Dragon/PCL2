@@ -854,9 +854,9 @@ Public Class FormMain
         ''' </summary>
         VersionSelect = 5
         ''' <summary>
-        ''' 下载管理。这是一个副页面。
+        ''' 任务列表。这是一个副页面。
         ''' </summary>
-        DownloadManager = 6
+        TaskList = 6
         ''' <summary>
         ''' 版本设置。这是一个副页面。
         ''' </summary>
@@ -909,8 +909,8 @@ Public Class FormMain
         Select Case Stack.Page
             Case PageType.VersionSelect
                 Return "版本选择"
-            Case PageType.DownloadManager
-                Return "下载管理"
+            Case PageType.TaskList
+                Return "任务列表"
             Case PageType.VersionSetup
                 Return "版本设置 - " & If(PageVersionLeft.Version Is Nothing, "未知版本", PageVersionLeft.Version.Name)
             Case PageType.CompDetail
@@ -1141,7 +1141,7 @@ Public Class FormMain
                     If FrmSelectLeft Is Nothing Then FrmSelectLeft = New PageSelectLeft
                     If FrmSelectRight Is Nothing Then FrmSelectRight = New PageSelectRight
                     PageChangeAnim(FrmSelectLeft, FrmSelectRight)
-                Case PageType.DownloadManager '下载管理
+                Case PageType.TaskList '任务列表
                     If FrmSpeedLeft Is Nothing Then FrmSpeedLeft = New PageSpeedLeft
                     If FrmSpeedRight Is Nothing Then FrmSpeedRight = New PageSpeedRight
                     PageChangeAnim(FrmSpeedLeft, FrmSpeedRight)
@@ -1317,10 +1317,10 @@ Public Class FormMain
 
     '下载管理
     Private Sub BtnExtraDownload_Click(sender As Object, e As EventArgs) Handles BtnExtraDownload.Click
-        PageChange(PageType.DownloadManager)
+        PageChange(PageType.TaskList)
     End Sub
     Private Function BtnExtraDownload_ShowCheck() As Boolean
-        Return HasDownloadingTask() AndAlso Not PageCurrent = PageType.DownloadManager
+        Return HasDownloadingTask() AndAlso Not PageCurrent = PageType.TaskList
     End Function
 
     '投降

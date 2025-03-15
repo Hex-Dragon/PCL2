@@ -400,7 +400,7 @@ Public Class PageVersionExport
         Dim LoaderName As String = $"导出整合包：" & PackName
         For Each OngoingLoader In LoaderTaskbar
             If OngoingLoader.Name <> LoaderName Then Continue For
-            FrmMain.PageChange(FormMain.PageType.DownloadManager)
+            FrmMain.PageChange(FormMain.PageType.TaskList)
             Return
         Next
 
@@ -691,7 +691,7 @@ Public Class PageVersionExport
         LoaderTaskbarAdd(MainLoader)
         FrmMain.BtnExtraDownload.ShowRefresh()
         FrmMain.BtnExtraDownload.Ribble()
-        FrmMain.PageChange(FormMain.PageType.DownloadManager)
+        FrmMain.PageChange(FormMain.PageType.TaskList)
     End Sub
 
 #End Region
