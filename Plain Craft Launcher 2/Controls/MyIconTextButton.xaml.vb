@@ -76,7 +76,7 @@ Public Class MyIconTextButton
         Log("[Control] 按下带图标按钮：" & Text)
         IsMouseDown = False
         RaiseEvent Click(Me, New RouteEventArgs(True))
-        ModEvent.TryStartEvent(EventType, EventData)
+        ModEvent.ProcessCustomEvents(EventType, EventData, CustomEvents)
         RefreshColor()
     End Sub
     Private Sub MyIconTextButton_MouseDown() Handles Me.MouseLeftButtonDown
@@ -105,6 +105,15 @@ Public Class MyIconTextButton
         End Set
     End Property
     Public Shared ReadOnly EventDataProperty As DependencyProperty = DependencyProperty.Register("EventData", GetType(String), GetType(MyIconTextButton), New PropertyMetadata(Nothing))
+    Public Property CustomEvents As CustomEventCollection
+        Get
+            Return GetValue(CustomEventsProperty)
+        End Get
+        Set(value As CustomEventCollection)
+            SetValue(CustomEventsProperty, value)
+        End Set
+    End Property
+    Public Shared ReadOnly CustomEventsProperty As DependencyProperty = DependencyProperty.Register("CustomEvents", GetType(CustomEventCollection), GetType(MyIconTextButton), New PropertyMetadata(Nothing))
 
     '动画
 

@@ -47,7 +47,7 @@
             IsMouseDown = False
             Log("[Control] 按下文本按钮：" & Text)
             RaiseEvent Click(Me, Nothing)
-            ModEvent.TryStartEvent(EventType, EventData)
+            ModEvent.ProcessCustomEvents(EventType, EventData, CustomEvents)
             e.Handled = True
         End If
     End Sub
@@ -106,5 +106,14 @@
     End Property
     Public Shared ReadOnly EventDataProperty As DependencyProperty = DependencyProperty.Register(
         "EventData", GetType(String), GetType(MyTextButton), New PropertyMetadata(Nothing))
+    Public Property CustomEvents As CustomEventCollection
+        Get
+            Return GetValue(CustomEventsProperty)
+        End Get
+        Set(value As CustomEventCollection)
+            SetValue(CustomEventsProperty, value)
+        End Set
+    End Property
+    Public Shared ReadOnly CustomEventsProperty As DependencyProperty = DependencyProperty.Register("CustomEvents", GetType(CustomEventCollection), GetType(MyTextButton), New PropertyMetadata(Nothing))
 
 End Class

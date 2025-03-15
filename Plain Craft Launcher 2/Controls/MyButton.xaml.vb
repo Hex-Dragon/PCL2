@@ -150,7 +150,7 @@ Public Class MyButton
                 Hint("主页自定义按钮语法已更新，且不再兼容老版本语法，请查看新的自定义示例！")
             End If
         End If
-        ModEvent.TryStartEvent(EventType, EventData)
+        ModEvent.ProcessCustomEvents(EventType, EventData, CustomEvents)
     End Sub
     Public Property EventType As String
         Get
@@ -170,6 +170,15 @@ Public Class MyButton
         End Set
     End Property
     Public Shared ReadOnly EventDataProperty As DependencyProperty = DependencyProperty.Register("EventData", GetType(String), GetType(MyButton), New PropertyMetadata(Nothing))
+    Public Property CustomEvents As CustomEventCollection
+        Get
+            Return GetValue(CustomEventsProperty)
+        End Get
+        Set(value As CustomEventCollection)
+            SetValue(CustomEventsProperty, value)
+        End Set
+    End Property
+    Public Shared ReadOnly CustomEventsProperty As DependencyProperty = DependencyProperty.Register("CustomEvents", GetType(CustomEventCollection), GetType(MyButton), New PropertyMetadata(Nothing))
 
     '鼠标点击判定（务必放在点击事件之后，以使得 Button_MouseUp 先于 Button_MouseLeave 执行）
     Private IsMouseDown As Boolean = False
