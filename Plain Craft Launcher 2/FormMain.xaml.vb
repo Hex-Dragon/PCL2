@@ -12,7 +12,7 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If RELEASE Then
-        If LatestVersion < 363 Then '2.10.4
+        If LastVersion < 363 Then '2.10.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "统一了模组、资源包和光影的管理界面"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了未使用 Java 高性能选项的问题"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了实时日志部分颜色不正确的问题"))
