@@ -1426,7 +1426,7 @@ Retry:
         DataList.Add("-jar """ & ExtractJavaWrapper() & """")
 
         '走系统代理（Java 9+）
-        If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("-Djava.net.useSystemProxies=true
+        If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("-Djava.net.useSystemProxies=true")
         '是否使用 Java Wrapper
         If Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version) AndAlso Setup.Get("LaunchAdvanceUseLaunchWrapper") Then
             DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
