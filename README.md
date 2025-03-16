@@ -7,7 +7,7 @@
 [![Issues](https://img.shields.io/github/issues/PCL-Community/PCL2-CE?style=flat&label=Issues&labelColor=444444&color=1F883D&logo=github)](https://github.com/PCL-Community/PCL2-CE/issues)
 [![Pull requests](https://img.shields.io/github/issues-pr/PCL-Community/PCL2-CE?style=flat&label=Pull%20requests&labelColor=444444&color=1F883D&logo=github)](https://github.com/PCL-Community/PCL2-CE/issues)
 [![哔哩哔哩](https://img.shields.io/badge/动态-BiliBili-00A4DB?style=flat&labelColor=444444&logo=bilibili)](https://space.bilibili.com/3546847192811755/dynamic) <br />
-[社区版官网](https://pcl2ce.pclcommunity.us.kg) |
+[社区版官网](https://pcl-community.github.io/PCL2-CE-Web) |
 [社区版下载](https://github.com/PCL-Community/PCL2-CE/releases) |
 [官方存储库](https://github.com/Hex-Dragon/PCL2) |
 [帮助文档库](https://github.com/PCL-Community/PCL2CEHelp)
