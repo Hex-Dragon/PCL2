@@ -838,16 +838,16 @@ Public Module ModBase
         '确保目录存在
         Directory.CreateDirectory(GetPathFromFullPath(FilePath))
         '写入文件
-        If File.Exists(FilePath) Then
-            '如果文件存在，刷新目前文件
-            Using writer As New StreamWriter(FilePath, Append, If(Encoding, GetEncoding(ReadFileBytes(FilePath))))
+        If Append Then
+            '追加目前文件
+            Using writer As New StreamWriter(FilePath, True, If(Encoding, GetEncoding(ReadFileBytes(FilePath))))
                 writer.Write(Text)
                 writer.Flush()
                 writer.Close()
             End Using
         Else
-            '如果文件不存在，则新建并写入
-            File.WriteAllText(FilePath, Text, If(Encoding, New UTF8Encoding(False)))
+            '直接写入字节集
+            File.WriteAllBytes(FilePath, If(Encoding Is Nothing, Encoding.UTF8.GetBytes(Text), Encoding.GetBytes(Text)))
         End If
     End Sub
     ''' <summary>
