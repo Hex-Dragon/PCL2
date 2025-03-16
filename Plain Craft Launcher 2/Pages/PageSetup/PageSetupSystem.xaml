@@ -182,7 +182,7 @@
                         <RowDefinition Height="9" />
                         <RowDefinition Height="28" />
                     </Grid.RowDefinitions>
-                    <local:MyHint Grid.Row="0" Grid.ColumnSpan="2" Text="如果你不确定以下设置的作用，请保持默认" IsWarn="True"/>
+                    <local:MyHint Grid.Row="0" Grid.ColumnSpan="2" Text="如果你不确定以下设置的作用，请保持默认。" IsWarn="True"/>
                     <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="HTTP 代理" Margin="0,0,25,0" />
                     <local:MyTextBox x:Name="TextSystemHttpProxy" Grid.Row="2" Grid.ColumnSpan="2" Tag="SystemHttpProxy" Grid.Column="1" HintText="比如 127.0.0.1:8888" ToolTip="不正确的代理服务器地址会导致无法连接网络，因使用代理导致的网络问题不予处理。&#xa;请勿填写不信任的代理服务器地址，这可能会导致你的账号信息泄露，甚至账号被盗。"/>
                     <local:MyCheckBox Margin="10,2,0,4" Text="使用系统代理" Grid.Row="4" Height="22" Grid.Column="2"
