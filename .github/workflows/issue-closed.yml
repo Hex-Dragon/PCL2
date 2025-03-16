@@ -8,51 +8,29 @@ jobs:
   process-closed-issue:
     runs-on: ubuntu-latest
     steps:
-      - name: Validate and handle completed issue
-        if: github.event.issue.state_reason == 'completed'
+      - name: Handle completed issue
+        if: |
+          github.event.issue.state_reason == 'completed' &&
+          github.event.sender.login != 'PCL-Community-Bot'
         env:
           BOT_TOKEN: ${{ secrets.BOT }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.repository.split('/')[1] }}
-          SENDER: ${{ github.event.sender.login }}
+          REMOVE_LABELS: '["❌ 忽略","❌ 拒绝 / 放弃","❌ 暂无计划","❌ 第三方","❌ 重复","⭕ 等待处理","😂 移交上游","🚧 正在处理"]'
+          ADD_LABEL: '👌 完成'
         run: |
-          MEMBER_CHECK=$(curl -s -o /dev/null -w "%{http_code}" \
+          curl -f -X DELETE \
             -H "Authorization: token $BOT_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/orgs/PCL-Community/members/$SENDER")
-
-          if [ "$MEMBER_CHECK" -ne 204 ]; then
-            curl -X PATCH \
-              -H "Authorization: token $BOT_TOKEN" \
-              -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER" \
-              -d '{"state_reason":"not_planned"}'
-
-            curl -f -X DELETE \
-              -H "Authorization: token $BOT_TOKEN" \
-              -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
-              -d '["❌ 拒绝 / 放弃","❌ 暂无计划","❌ 第三方","❌ 重复","⭕ 等待处理","😂 移交上游","🚧 正在处理"]'
-
-            curl -f -X POST \
-              -H "Authorization: token $BOT_TOKEN" \
-              -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
-              -d '{"labels":["❌ 忽略"]}'
-          else
-            curl -f -X DELETE \
-              -H "Authorization: token $BOT_TOKEN" \
-              -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
-              -d '["❌ 忽略","❌ 拒绝 / 放弃","❌ 暂无计划","❌ 第三方","❌ 重复","⭕ 等待处理","😂 移交上游","🚧 正在处理"]'
-
-            curl -f -X POST \
-              -H "Authorization: token $BOT_TOKEN" \
-              -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
-              -d '{"labels":["👌 完成"]}'
-          fi
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
+            -d "$REMOVE_LABELS" || echo "标签移除失败或被跳过"
+          
+          curl -f -X POST \
+            -H "Authorization: token $BOT_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
+            -d "{\"labels\":[\"$ADD_LABEL\"]}" || echo "标签添加失败"
 
       - name: Handle duplicate issue
         if: |
@@ -63,15 +41,17 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.repository.split('/')[1] }}
+          REMOVE_LABELS: '["❌ 忽略","❌ 拒绝 / 放弃","❌ 暂无计划","❌ 第三方","👌 完成","⭕ 等待处理","😂 移交上游","🚧 正在处理"]'
+          ADD_LABEL: '❌ 重复'
         run: |
           curl -f -X DELETE \
             -H "Authorization: token $BOT_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
-            -d '["❌ 忽略","❌ 拒绝 / 放弃","❌ 暂无计划","❌ 第三方","👌 完成","⭕ 等待处理","😂 移交上游","🚧 正在处理"]'
-
+            -d "$REMOVE_LABELS" || echo "标签移除失败或被跳过"
+          
           curl -f -X POST \
             -H "Authorization: token $BOT_TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
-            -d '{"labels":["❌ 重复"]}'
+            -d "{\"labels\":[\"$ADD_LABEL\"]}" || echo "标签添加失败"
