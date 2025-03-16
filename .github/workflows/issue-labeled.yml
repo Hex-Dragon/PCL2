@@ -8,38 +8,25 @@ jobs:
   issue-labeled:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if triggered by PCL-Community-Bot
-        id: check_trigger
-        run: |
-          if [ "${{ github.actor }}" == "PCL-Community-Bot" ]; then
-            echo "::set-output name=skip::true"
-          else
-            echo "::set-output name=skip::false"
-          fi
-
       - name: Close as completed
-        if: steps.check_trigger.outputs.skip == 'false' && github.event.label.name == '👌 完成'
-        run: |
-          curl -X PATCH \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.BOT }}" \
-            https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }} \
-            -d '{"state": "closed", "state_reason": "completed"}'
+        if: github.event.label.name == '👌 完成'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issue'
+          close-reason: 'completed'
 
       - name: Close as not planned
-        if: steps.check_trigger.outputs.skip == 'false' && (github.event.label.name == '❌ 忽略' || github.event.label.name == '❌ 拒绝 / 放弃' || github.event.label.name == '❌ 暂无计划' || github.event.label.name == '❌ 第三方' || github.event.label.name == '😂 移交上游')
-        run: |
-          curl -X PATCH \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.BOT }}" \
-            https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }} \
-            -d '{"state": "closed", "state_reason": "not_planned"}'
+        if: github.event.label.name == '❌ 忽略' || github.event.label.name == '❌ 拒绝 / 放弃' || github.event.label.name == '❌ 暂无计划' || github.event.label.name == '❌ 第三方' || github.event.label.name == '😂 移交上游'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'close-issue'
+          close-reason: 'not_planned'
 
       - name: Report to upstream
-        if: steps.check_trigger.outputs.skip == 'false' && github.event.label.name == '😂 移交上游'
-        run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.BOT }}" \
-            https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments \
-            -d '{"body": "@${{ github.event.issue.user.login }} 该提议不应由 CE 解决，请前往上游仓库提交。\n感谢您的反馈。"}'
+        if: github.event.label.name == '😂 移交上游'
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          body: |
+            @${{ github.event.issue.user.login }} 该提议不应由 CE 解决，请前往上游仓库提交。
+            感谢您的反馈。
