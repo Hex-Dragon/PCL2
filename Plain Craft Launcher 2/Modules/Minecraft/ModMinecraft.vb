@@ -1193,7 +1193,7 @@ OnLoaded:
                 For Each Folder As String In ReadIni(Path & "PCL.ini", "CardValue" & (i + 1), ":").Split(":")
                     If Folder = "" Then Continue For
                     Dim VersionFolder As String = $"{Path}versions\{Folder}\"
-                    If File.Exists(VersionFolder & ".pclignore") Then
+                    If File.Exists(VersionFolder & ".pclignore") OrElse Not File.Exists(VersionFolder & Folder & ".jar") Then
                         If IsFirstMcVersionListLoad Then
                             Log("[Minecraft] 清理残留的忽略项目：" & VersionFolder) '#2781
                             File.Delete(VersionFolder & ".pclignore")
