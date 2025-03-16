@@ -9,8 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate and handle completed issue
-        if: github.event.issue.state_reason == 'completed' &&
-          github.event.sender.login != 'PCL-Community-Bot'
+        if: github.event.issue.state_reason == 'completed'
         env:
           BOT_TOKEN: ${{ secrets.BOT }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
