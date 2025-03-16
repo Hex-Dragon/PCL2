@@ -5,19 +5,53 @@ on:
     types: [closed]
 
 jobs:
-  issue-closed:
+  process-closed-issue:
     runs-on: ubuntu-latest
     steps:
-      - name: Close as completed
-        if: github.event.issue.state_reason == 'completed'
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: 'add-labels'
-          labels: '👌 完成'
+      - name: Handle completed issue
+        if: |
+          github.event.issue.state_reason == 'completed' &&
+          github.event.sender.login != 'PCL-Community-Bot'
+        env:
+          BOT_TOKEN: ${{ secrets.BOT }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.repository.split('/')[1] }}
+          REMOVE_LABELS: '["❌ 忽略","❌ 拒绝 / 放弃","❌ 暂无计划","❌ 第三方","❌ 重复","⭕ 等待处理","😂 移交上游","🚧 正在处理"]'
+          ADD_LABEL: '👌 完成'
+        run: |
+          curl -f -X DELETE \
+            -H "Authorization: token $BOT_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
+            -d "$REMOVE_LABELS" || echo "标签移除失败或被跳过"
+          
+          curl -f -X POST \
+            -H "Authorization: token $BOT_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
+            -d "{\"labels\":[\"$ADD_LABEL\"]}" || echo "标签添加失败"
 
-      - name: Close as duplicate
-        if: github.event.issue.state_reason == 'duplicate'
-        uses: actions-cool/issues-helper@v3
-        with:
-          actions: 'add-labels'
-          labels: '❌ 重复'
+      - name: Handle duplicate issue
+        if: |
+          github.event.issue.state_reason == 'duplicate' &&
+          github.event.sender.login != 'PCL-Community-Bot'
+        env:
+          BOT_TOKEN: ${{ secrets.BOT }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPO_OWNER: ${{ github.repository_owner }}
+          REPO_NAME: ${{ github.repository.split('/')[1] }}
+          REMOVE_LABELS: '["❌ 忽略","❌ 拒绝 / 放弃","❌ 暂无计划","❌ 第三方","👌 完成","⭕ 等待处理","😂 移交上游","🚧 正在处理"]'
+          ADD_LABEL: '❌ 重复'
+        run: |
+          curl -f -X DELETE \
+            -H "Authorization: token $BOT_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
+            -d "$REMOVE_LABELS" || echo "标签移除失败或被跳过"
+          
+          curl -f -X POST \
+            -H "Authorization: token $BOT_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUMBER/labels" \
+            -d "{\"labels\":[\"$ADD_LABEL\"]}" || echo "标签添加失败"
