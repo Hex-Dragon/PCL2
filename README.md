@@ -25,4 +25,4 @@
 
 ### 隐藏提示
 
-在注册表项中添加 "UiLauncherCEHint" 字符串值，值设置为 False 即可
+在注册表项中添加 `UiLauncherCEHint` 字符串值，值设置为 False 即可
