@@ -75,6 +75,7 @@
             End If
             CheckAdvanceAssetsV2.Checked = Setup.Get("VersionAdvanceAssetsV2", Version:=PageVersionLeft.Version)
             CheckAdvanceUseLaunchWrapperV2.Checked = Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version:=PageVersionLeft.Version)
+            CheckAdvanceUseProxyV2.Checked = Setup.Get("VersionAdvanceUseProxyV2", Version:=PageVersionLeft.Version)
             CheckAdvanceJava.Checked = Setup.Get("VersionAdvanceJava", Version:=PageVersionLeft.Version)
 
         Catch ex As Exception
@@ -106,6 +107,7 @@
             Setup.Reset("VersionAdvanceRun", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceRunWait", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionAdvanceUseLaunchWrapperV2", Version:=PageVersionLeft.Version)
+            Setup.Reset("VersionAdvanceUseProxyV2", Version:=PageVersionLeft.Version)
             Setup.Reset("VersionArgumentJavaSelect", Version:=PageVersionLeft.Version)
             JavaSearchLoader.Start(IsForceRestart:=True)
 
@@ -136,7 +138,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboRamOptimize.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex, Version:=PageVersionLeft.Version)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change, CheckAdvanceUseLaunchWrapperV2.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckAdvanceAssetsV2.Change, CheckAdvanceJava.Change, CheckAdvanceUseLaunchWrapperV2.Change, CheckAdvanceUseProxyV2.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked, Version:=PageVersionLeft.Version)
     End Sub
 
@@ -171,7 +173,7 @@
         End If
         '设置文本
         LabRamGame.Text = If(RamGame = Math.Floor(RamGame), RamGame & ".0", RamGame) & " GB" &
-                          If(RamGame <> RamGameActual, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
+                          If(Math.Abs(RamGame - RamGameActual) > 0.05, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
         LabRamUsed.Text = If(RamUsed = Math.Floor(RamUsed), RamUsed & ".0", RamUsed) & " GB"
         LabRamTotal.Text = " / " & If(RamTotal = Math.Floor(RamTotal), RamTotal & ".0", RamTotal) & " GB"
         LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaIs64Bit(PageVersionLeft.Version) AndAlso Not Is32BitSystem AndAlso JavaList.Any, Visibility.Visible, Visibility.Collapsed)

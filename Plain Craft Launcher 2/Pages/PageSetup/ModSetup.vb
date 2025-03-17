@@ -178,6 +178,7 @@ Public Class ModSetup
         {"VersionAdvanceAssetsV2", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceUseLaunchWrapperV2", New SetupEntry(True, Source:=SetupSource.Version)},
         {"VersionAdvanceJava", New SetupEntry(False, Source:=SetupSource.Version)},
+        {"VersionAdvanceUseProxyV2", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceRun", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceRunWait", New SetupEntry(True, Source:=SetupSource.Version)},
         {"VersionRamType", New SetupEntry(2, Source:=SetupSource.Version)},

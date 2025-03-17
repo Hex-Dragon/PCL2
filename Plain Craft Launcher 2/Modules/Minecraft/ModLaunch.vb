@@ -1420,13 +1420,13 @@ Retry:
             End Try
         End If
 
-        '添加 Java Wrapper 作为主 Jar
-        If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
-        DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
-        DataList.Add("-jar """ & ExtractJavaWrapper() & """")
 
-        '走系统代理（Java 9+）
-        If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("-Djava.net.useSystemProxies=true")
+        '设置代理
+        If Setup.Get("VersionUseProxyV2", Version:=McVersionCurrent) IsNot Nothing Then
+            Dim ProxyAddress As New Uri(Setup.Get("SystemHttpProxy"))
+            DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyHost={ProxyAddress.AbsoluteUri}")
+            DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyPort={ProxyAddress.Port}")
+        End If
         '是否使用 Java Wrapper
         If Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version) AndAlso Setup.Get("LaunchAdvanceUseLaunchWrapper") Then
             DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
@@ -1494,11 +1494,16 @@ NextVersion:
             End Try
         End If
 
-        '添加 Java Wrapper 作为主 Jar
+
         If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
 
-        '走系统代理（Java 9+）
-        If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("-Djava.net.useSystemProxies=true")
+        '设置代理
+        If Setup.Get("VersionUseProxyV2", Version:=McVersionCurrent) IsNot Nothing Then
+            Dim ProxyAddress As New Uri(Setup.Get("SystemHttpProxy"))
+            DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyHost={ProxyAddress.AbsoluteUri}")
+            DataList.Add($"-D{If(ProxyAddress.Scheme.ToString.StartsWithF("https:"), "https", "http")}.proxyPort={ProxyAddress.Port}")
+        End If
+        '是否使用 Java Wrapper
         If Setup.Get("VersionAdvanceUseLaunchWrapperV2", Version) AndAlso Setup.Get("LaunchAdvanceUseLaunchWrapper") Then
             DataList.Add("-Doolloo.jlw.tmpdir=""" & PathPure.TrimEnd("\") & """")
             DataList.Add("-jar """ & ExtractJavaWrapper() & """")
