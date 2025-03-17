@@ -5,26 +5,26 @@ Public Module ModNet
 
     Private Property _Proxy As WebProxy
     ''' <summary>
-    ''' 获取 Proxy 代理
+    ''' 确定是否使用代理
     ''' </summary>
     ''' <returns>返回 WebProxy 或者 Nothing</returns>
     Public Function GetProxy()
         Dim proxy As String = Setup.Get("SystemHttpProxy")
-        If _Proxy IsNot Nothing AndAlso _Proxy.Address.AbsoluteUri = proxy Then
+        If _Proxy IsNot Nothing AndAlso Setup.Get("SystemUseDefaultProxy") Then
             Log("[Net] 当前代理状态：跟随系统代理设置")
             Return _Proxy
         End If
-        If Not String.IsNullOrWhiteSpace(proxy) Then
+        If Not String.IsNullOrWhiteSpace(proxy) AndAlso Not Setup.Get("SystemUseDefaultProxy") Then
             _Proxy = New WebProxy(proxy, True)
             Log("[Net] 当前代理状态：自定义")
             Dim ProxyUri As New Uri(_Proxy.ToString)
             Try
-                If ProxyUri.IsLoopBack OrElse
+                If ProxyUri.IsLoopback OrElse
                 ProxyUri.Host.StartsWithF("192.168.") OrElse
                 ProxyUri.Host.StartsWithF("10.") OrElse
-                ProxyUri.Host.StartswithF("fe80") OrElse
+                ProxyUri.Host.StartsWithF("fe80") OrElse
                 (ProxyUri.Host.Split(".")(1) > 16 AndAlso ProxyUri.Host.Split(".")(1) < 31 AndAlso ProxyUri.Host.StartsWithF("172.")) Then Log($"[Net] 使用 {_Proxy} 作为网络代理")
-            '视作非本地地址
+                '视作非本地地址
             Catch
             End Try
             Return _Proxy
