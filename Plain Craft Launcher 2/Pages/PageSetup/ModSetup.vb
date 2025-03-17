@@ -104,6 +104,7 @@
         {"LaunchAdvanceAssets", New SetupEntry(False)},
         {"LaunchAdvanceUseLaunchWrapper", New SetupEntry(True)},
         {"LaunchAdvanceJava", New SetupEntry(False)},
+        {"LaunchGraphicSetup", New SetupEntry(False)},
         {"LaunchRamType", New SetupEntry(0)},
         {"LaunchRamCustom", New SetupEntry(15)},
         {"LinkEula", New SetupEntry(False, Source:=SetupSource.Registry)},
