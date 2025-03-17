@@ -125,17 +125,6 @@ ReType:
                 Log(ex, "重命名读取 json 时失败")
                 JsonObject = PageVersionLeft.Version.JsonObject
             End Try
-            If Directory.Exists(NewPath) OrElse Directory.Exists(TempName) Then
-                Select Case MyMsgBox("当前文件夹已存在此名称，请重新输入一个有效的名称。", "重命名失败", Button1:="确定", Button2:="取消")
-                    Case 1
-                        GoTo ReType
-                    Case 2
-                        Exit Sub
-                End Select
-            ElseIf Not Directory.Exists($"{PathMcFolder}\versions") Then
-                MyMsgBox("当前版本文件夹无效，请检查版本文件夹。", "重命名失败")
-                Exit Sub
-            End If
             '重命名主文件夹
             My.Computer.FileSystem.RenameDirectory(OldPath, TempName)
             My.Computer.FileSystem.RenameDirectory(TempPath, NewName)
