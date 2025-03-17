@@ -128,6 +128,10 @@ Public Module ModLaunch
                     Loaders.Insert(3, New LoaderTask(Of Integer, Integer)("内存优化", AddressOf McLaunchMemoryOptimize) With {.ProgressWeight = 30})
                 Case 2 '关闭
             End Select
+            '显示设置
+            If Setup.Get("LaunchGraphicSetup") Then
+                Loaders.Insert(3, New LoaderTask(Of Integer, Integer)("检查显示设置", AddressOf McLaunchCheckGraphicSettings) With {.ProgressWeight = 2})
+            End If
             Dim LaunchLoader As New LoaderCombo(Of Object)("Minecraft 启动", Loaders) With {.Show = False}
             If McLoginLoader.State = LoadState.Finished Then McLoginLoader.State = LoadState.Waiting '要求重启登录主加载器，它会自行决定是否启动副加载器
             '等待加载器执行并更新 UI
@@ -199,6 +203,48 @@ NextInner:
             End If
             Thread.Sleep(100)
         Loop
+    End Sub
+
+#End Region
+
+#Region "显示设置"
+
+    Private Sub McLaunchCheckGraphicSettings(Loader As LoaderTask(Of Integer, Integer))
+        Const GPU_KEY As String = "Software\Microsoft\DirectX\UserGpuPreferences"
+        Const TARGET_SETUP As String = "GpuPreference=2;"
+        Dim javaPath As String = McLaunchJavaSelected.PathJavaw
+
+        McLaunchLog("显示设置开始")
+        '读取现行设置
+        Try
+            Dim parentKey As Microsoft.Win32.RegistryKey = My.Computer.Registry.CurrentUser
+            Dim regKey As Microsoft.Win32.RegistryKey = parentKey.OpenSubKey(GPU_KEY, False)
+            If regKey IsNot Nothing Then
+                Dim currentSetting As Object = regKey.GetValue(javaPath)
+                If currentSetting IsNot Nothing And TARGET_SETUP.Equals(currentSetting.ToString()) Then
+                    McLaunchLog("不需要调整显示设置")
+                    Exit Sub
+                End If
+                regKey.Close()
+            End If
+        Catch ex As Exception
+            McLaunchLog("无法读取注册表，跳过显示设置")
+            Exit Sub
+        End Try
+        '更新设置
+        Try
+            If Not IsAdmin() Then RunAsAdmin("")
+            Dim parentKey As Microsoft.Win32.RegistryKey = My.Computer.Registry.CurrentUser
+            Dim regKey As Microsoft.Win32.RegistryKey = parentKey.OpenSubKey(GPU_KEY, True)
+            If regKey Is Nothing Then
+                regKey = parentKey.CreateSubKey(GPU_KEY)
+            End If
+            regKey.SetValue(javaPath, TARGET_SETUP)
+        Catch ex As Exception
+            McLaunchLog("无法写入显示设置")
+            Exit Sub
+        End Try
+        McLaunchLog("已修改显示设置")
     End Sub
 
 #End Region
