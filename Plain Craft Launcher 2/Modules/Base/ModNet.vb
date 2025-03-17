@@ -1073,7 +1073,7 @@ StartThread:
                 If SourcesOnce.Contains(Info.Source) AndAlso Not Info.Equals(Info.Source.Thread) Then GoTo SourceBreak
                 '使用变量记录 Url 以方便重定向
                 Dim RequestUrl As String = Info.Source.Url
-
+                Dim RedirectHistory As New SafeList(Of String)
                 '请求头
 Redirect:
                 HttpRequest = WebRequest.Create(RequestUrl)
@@ -1105,7 +1105,9 @@ Redirect:
                         If RedirectUrl.StartsWithF("/") Then
                             RedirectUrl = New Uri(New Uri(RequestUrl), RedirectUrl).AbsoluteUri
                         End If
-                        If ModeDebug Then Log($"[Download] {LocalName} {Info.Uuid}#：重定向至 {RedirectUrl}")
+                        '把主控也记录进去
+                        If RequestUrl.ContainsF("bmclapi2.bangbang93.com") Then RedirectHistory.Add(RequestUrl)
+                        RedirectHistory.Add(RedirectUrl)
                         RequestUrl = RedirectUrl
                         Redirect += 1
                         GoTo Redirect
@@ -1274,6 +1276,7 @@ SourceBreak:
                 Dim IsTimeout As Boolean = IsTimeoutString.Contains("由于连接方在一段时间后没有正确答复或连接的主机没有反应") OrElse
                                            IsTimeoutString.Contains("超时") OrElse IsTimeoutString.Contains("timeout") OrElse IsTimeoutString.Contains("timedout")
                 Log("[Download] " & LocalName & " " & Info.Uuid & If(IsTimeout, "#：超时（" & (Timeout * 0.001) & "s）", "#：出错，" & GetExceptionDetail(ex)))
+                If RedirectHistory.Count > 0 Then Log($"[Download] 重定向记录：{Join(RedirectHistory, " → ")}")
                 Info.State = NetState.Error
                 ''使用该下载源的线程是否没有速度
                 ''下载超时也会导致没有速度，容易误判下载失败，所以已弃用此方法
