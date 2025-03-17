@@ -1064,6 +1064,7 @@ StartThread:
             Dim ResultStream As Stream = Nothing
             '计算重定向次数
             Dim Redirect As Integer = 0
+            Dim RedirectHistory As New SafeList(Of String)
             '部分下载源真的特别慢，并且只需要一个请求，例如 Ping 为 20s，如果增长太慢，就会造成类似 2.5s 5s 7.5s 10s 12.5s... 的极大延迟
             '延迟过长会导致某些特别慢的链接迟迟不被掐死
             Dim Timeout As Integer = Math.Min(Math.Max(ConnectAverage, 6000) * (1 + Info.Source.FailCount), 30000)
@@ -1073,7 +1074,6 @@ StartThread:
                 If SourcesOnce.Contains(Info.Source) AndAlso Not Info.Equals(Info.Source.Thread) Then GoTo SourceBreak
                 '使用变量记录 Url 以方便重定向
                 Dim RequestUrl As String = Info.Source.Url
-                Dim RedirectHistory As New SafeList(Of String)
                 '请求头
 Redirect:
                 HttpRequest = WebRequest.Create(RequestUrl)
