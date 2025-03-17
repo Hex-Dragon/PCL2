@@ -1420,7 +1420,7 @@ Retry:
             End Try
         End If
 
-
+        If McLaunchJavaSelected.VersionCode >= 9 Then DataList.Add("--add-exports cpw.mods.bootstraplauncher/cpw.mods.bootstraplauncher=ALL-UNNAMED")
         '设置代理
         If Setup.Get("VersionUseProxyV2", Version:=McVersionCurrent) IsNot Nothing Then
             Dim ProxyAddress As New Uri(Setup.Get("SystemHttpProxy"))
