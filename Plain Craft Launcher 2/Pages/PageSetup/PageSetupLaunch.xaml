@@ -170,6 +170,13 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
+			<local:MyCard Margin="0,0,0,15" Title="显示卡" CanSwap="True" IsSwaped="True">
+				<StackPanel Margin="25,40,25,15">
+					<local:MyHint Text="此选项对应 Windows 设置中的“系统 > 屏幕 > 显示卡”页面，只在部分设备上有实际效果。" IsWarn="False" Margin="0,0,0,10" />
+					<local:MyCheckBox Text="启动前调整图形设置" x:Name="CheckAdvanceGraphicSetup" Tag="LaunchGraphicSetup"
+                                      ToolTip="启动前将 Java 的显示卡设置调整为“高性能”。若游戏运行时 GPU 占用过低，或在使用 OBS 捕捉时遇到黑屏问题，可尝试此功能。" />
+				</StackPanel>
+			</local:MyCard>
             <local:MyCard x:Name="CardSkin" Margin="0,0,0,15" Title="离线皮肤" CanSwap="True" IsSwaped="True">
                 <StackPanel Margin="25,40,25,15">
                     <local:MyHint Text="由于技术问题，此功能只保证对 1.19.2 以前的版本有效！" IsWarn="True" Margin="0,0,0,10" />
@@ -252,6 +259,8 @@
                                         ToolTip="警告：强烈推荐在版本设置中关闭特定版本的警告，而不是在这里关闭所有版本的警告！&#xa;如果在设置中手动选择了与当前版本不兼容的 Java，则自动跳过兼容性警告弹窗，强制使用手动选择的 Java。" />
                         <local:MyCheckBox Text="关闭文件校验" x:Name="CheckAdvanceAssets" Tag="LaunchAdvanceAssets"
                                         ToolTip="警告：强烈推荐在版本设置中关闭特定版本的校验，而不是在这里关闭所有版本的校验！&#xa;完全不更改 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。&#xa;如果你没有修改相关文件，请勿勾选此项。" />
+                        <local:MyCheckBox Text="使用 JLW" x:Name="CheckAdvanceUseLaunchWrapper" Tag="LaunchAdvanceUseLaunchWrapper" Margin="50,0,0,0"
+                                        ToolTip="警告：强烈推荐在版本设置中设置特定版本是否使用 JLW，而不是在这里设置全部版本是否使用 JLW！&#xa;在启动时额外加载 JLW 来处理中文目录。&#xa;如果服务器没有使用反作弊，请勿取消勾选此项。" />
                     </StackPanel>
                 </Grid>
             </local:MyCard>
