@@ -1996,6 +1996,7 @@ Retry:
         Select Case Loader.State
             Case LoadState.Finished
                 WriteIni(PathMcFolder & "PCL.ini", "VersionCache", "") '清空缓存（合并安装会先生成文件夹，这会在刷新时误判为可以使用缓存）
+                DeleteDirectory(Loader.Input & "PCLInstallBackups\")
                 Hint(Loader.Name & "成功！", HintType.Finish)
             Case LoadState.Failed
                 Hint(Loader.Name & "失败：" & GetExceptionSummary(Loader.Error), HintType.Critical)
@@ -2004,7 +2005,12 @@ Retry:
             Case LoadState.Loading
                 Exit Sub '不重新加载版本列表
         End Select
-        McInstallFailedClearFolder(Loader)
+        If Not Loader.State = LoadState.Finished AndAlso Directory.Exists(Loader.Input & "PCLInstallBackups\") Then '版本修改失败回滚
+            CopyDirectory(Loader.Input & "PCLInstallBackups\", Loader.Input)
+            File.Delete(Loader.Input & ".pclignore")
+        Else
+            McInstallFailedClearFolder(Loader)
+        End If
         LoaderFolderRun(McVersionListLoader, PathMcFolder, LoaderFolderRunType.ForceRun, MaxDepth:=1, ExtraPath:="versions\")
     End Sub
     Public Sub McInstallFailedClearFolder(Loader)
@@ -2012,7 +2018,7 @@ Retry:
             Thread.Sleep(1000) '防止存在尚未完全释放的文件，导致清理失败（例如整合包安装）
             If Loader.State = LoadState.Failed OrElse Loader.State = LoadState.Aborted Then
                 '删除版本文件夹
-                If Directory.Exists(Loader.Input & "saves\") OrElse Directory.Exists(Loader.Input & "versions\") Then
+                If Directory.Exists(Loader.Input & "saves\") OrElse Directory.Exists(Loader.Input & "versions\") OrElse Directory.Exists(Loader.Input & "mods\") OrElse File.Exists(Loader.Input & "server.dat") Then
                     Log("[Download] 由于版本已被独立启动，不清理版本文件夹：" & Loader.Input, LogLevel.Developer)
                 Else
                     Log("[Download] 由于下载失败或取消，清理版本文件夹：" & Loader.Input, LogLevel.Developer)
@@ -2027,11 +2033,11 @@ Retry:
     ''' <summary>
     ''' 进行合并安装。返回是否已经开始安装（例如如果没有安装 Java 则会进行提示并返回 False）
     ''' </summary>
-    Public Function McInstall(Request As McInstallRequest) As Boolean
+    Public Function McInstall(Request As McInstallRequest, Optional IsEdit As Boolean = False) As Boolean
         Try
-            Dim SubLoaders = McInstallLoader(Request)
+            Dim SubLoaders = McInstallLoader(Request, IgnoreDump:=IsEdit)
             If SubLoaders Is Nothing Then Return False
-            Dim Loader As New LoaderCombo(Of String)(Request.TargetVersionName & " 安装", SubLoaders) With {.OnStateChanged = AddressOf McInstallState}
+            Dim Loader As New LoaderCombo(Of String)(Request.TargetVersionName & If(IsEdit, " 修改", " 安装"), SubLoaders) With {.OnStateChanged = AddressOf McInstallState}
 
             '启动
             Loader.Start(Request.TargetVersionFolder)
@@ -2051,7 +2057,7 @@ Retry:
     ''' 获取合并安装加载器列表，并进行前期的缓存清理与 Java 检查工作。
     ''' </summary>
     ''' <exception cref="CancelledException" />
-    Public Function McInstallLoader(Request As McInstallRequest, Optional DontFixLibraries As Boolean = False) As List(Of LoaderBase)
+    Public Function McInstallLoader(Request As McInstallRequest, Optional DontFixLibraries As Boolean = False, Optional IgnoreDump As Boolean = False) As List(Of LoaderBase)
         '获取缓存目录
         Dim TempMcFolder As String = RequestTaskTempFolder(
             PathTemp.Contains(" ") AndAlso '要求路径不包含空格
@@ -2105,7 +2111,7 @@ Retry:
         Log("[Download] 对应的原版版本：" & Request.MinecraftName)
 
         '重复版本检查
-        If File.Exists(OutputFolder & Request.TargetVersionName & ".json") Then
+        If File.Exists(OutputFolder & Request.TargetVersionName & ".json") AndAlso Not IgnoreDump Then
             Hint("版本 " & Request.TargetVersionName & " 已经存在！", HintType.Critical)
             Throw New CancelledException
         End If
