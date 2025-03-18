@@ -2087,8 +2087,8 @@ Retry:
         '判断 OptiFine 是否作为 Mod 进行下载
         Dim MinecraftCode As Integer = If(Request.MinecraftName.Contains("."), Val(Request.MinecraftName.Split(".")(1)), 0)
         Dim OptiFineAsMod As Boolean = Request.OptiFineEntry IsNot Nothing AndAlso '1. 选择了 OptiFine
-            (Request.FabricVersion IsNot Nothing OrElse '2. 选择了 Fabric...
-            (Request.ForgeEntry IsNot Nothing AndAlso MinecraftCode >= 14 AndAlso MinecraftCode <= 15)) '...或者 Forge 1.14~15（#4134）
+            Request.FabricVersion IsNot Nothing OrElse '2. 选择了 Mod 加载器
+            Request.ForgeEntry IsNot Nothing
         Dim ModsFolder As String = New McVersion(OutputFolder).GetPathIndie(True) & "mods\"
 
         If OptiFineAsMod Then
