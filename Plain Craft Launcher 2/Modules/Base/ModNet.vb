@@ -1103,8 +1103,9 @@ Redirect:
                         '可能导致循环重定向
                         If RedirectUrl Is Nothing OrElse RedirectUrl = RequestUrl Then Throw New Exception($"{RequestUrl} 未提供有效的重定向响应。")
                         '处理相对路径的重定向
-                        If RedirectUrl.StartsWithF("/") Then
-                            RedirectUrl = New Uri(New Uri(RequestUrl), RedirectUrl).AbsoluteUri
+                        If RedirectUrl.StartsWithF("/") OrElse RedirectUrl.StartsWithF("./") Then
+                            Dim ParseUrl As New Uri(RequestUrl)
+                            RedirectUrl = New Uri(New Uri(If(RedirectUrl.StartsWithF("/"), $"{ParseUrl.Scheme}://{ParseUrl.Host}", RequestUrl)), RedirectUrl).AbsoluteUri
                             '同理
                             If RedirectUrl = RequestUrl Then Throw New Exception($"{RequestUrl} 未提供有效的重定向响应。")
                         End If
