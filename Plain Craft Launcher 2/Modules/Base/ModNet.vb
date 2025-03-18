@@ -1,6 +1,7 @@
 ﻿Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
+
     ''' <summary>
     ''' 测试 Ping。失败则返回 -1。
     ''' </summary>
@@ -404,6 +405,8 @@ RequestFinished:
         Dim DataStream As Stream = Nothing
         Dim Resp As WebResponse = Nothing
         Dim Req As HttpWebRequest
+        Dim Res = ""
+
         Try
             Req = WebRequest.Create(Url)
             Req.Method = Method
@@ -434,9 +437,11 @@ RequestFinished:
             DataStream = Resp.GetResponseStream()
             DataStream.WriteTimeout = Timeout
             DataStream.ReadTimeout = Timeout
+            Dim Status As Integer = CType(Resp, HttpWebResponse).StatusCode
             Using Reader As New StreamReader(DataStream)
-                Return Reader.ReadToEnd()
+                Res = Reader.ReadToEnd()
             End Using
+            Return Res
         Catch ex As ThreadInterruptedException
             Throw
         Catch ex As WebException
@@ -444,7 +449,6 @@ RequestFinished:
                 ex = New WebException($"连接服务器超时，请检查你的网络环境是否良好（{ex.Message}，{Url}）", ex)
             Else
                 '获取请求失败的返回
-                Dim Res As String = ""
                 Try
                     If ex.Response Is Nothing Then Exit Try
                     DataStream = ex.Response.GetResponseStream()
@@ -457,6 +461,7 @@ RequestFinished:
                 End Try
                 If Res = "" Then
                     ex = New WebException($"网络请求失败（{ex.Status}，{ex.Message}，{Url}）", ex)
+                    Throw ex
                 Else
                     ex = New ResponsedWebException($"服务器返回错误（{ex.Status}，{ex.Message}，{Url}）{vbCrLf}{Res}", Res, ex)
                 End If
@@ -471,6 +476,7 @@ RequestFinished:
             If DataStream IsNot Nothing Then DataStream.Dispose()
             If Resp IsNot Nothing Then Resp.Dispose()
         End Try
+        Return Res
     End Function
     Public Class ResponsedWebException
         Inherits WebException
