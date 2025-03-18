@@ -1058,7 +1058,7 @@ StartThread:
         ''' <summary>
         ''' 每个下载线程执行的代码。
         ''' </summary>
-                Private Sub Thread(Info As NetThread)
+        Private Sub Thread(Info As NetThread)
             If ModeDebug OrElse Info.DownloadStart = 0 Then Log("[Download] " & LocalName & " " & Info.Uuid & "#：开始，起始点 " & Info.DownloadStart & "，" & Info.Source.Url)
             Dim HttpRequest As HttpWebRequest
             Dim ResultStream As Stream = Nothing
