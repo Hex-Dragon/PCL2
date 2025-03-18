@@ -1841,56 +1841,56 @@
 你可以试着一个一个禁用这些 Mod，看看游戏还会不会直接炸裂。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAQ">名为 {0} 的 Mod 导致了游戏出错。
 你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAR">以下 Mod 导致了游戏出错：
+    <s:String x:Key="LangModCrashCrashReasonReasonAR">以下模组导致了游戏爆炸：
  - {0}
-        
-你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
+
+你可以尝试依次禁用上述模组，然后观察游戏是否还会爆炸。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAS">名为 {0} 的 Mod 注入失败，导致游戏出错。
 这一般代表着它与其他 Mod 或当前环境不兼容，或是它存在 Bug。
 你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAT">以下 Mod 导致了游戏出错：
-  - {0}
-这一般代表着它们与其他 Mod 或当前环境不兼容，或是它存在 Bug。
-你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonAT">以下模组导致了游戏爆炸：
+ - {0}
+这一般代表着它们与其他模组或当前环境不兼容，或是它存在虫子。
+你可以尝试依次禁用上述模组，然后观察游戏是否还会爆炸。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAU">名为 {0} 的 Mod 导致了游戏出错。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAV">名为 {0} 的 Mod 导致了游戏出错：
 其配置文件 {1} 存在异常，无法读取。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAW">名为 {0} 的 Mod 初始化失败，导致游戏无法继续加载。
 你可以尝试禁用此 Mod，然后观察游戏是否还会崩溃。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonAX">以下 Mod 初始化失败，导致游戏无法继续加载：
+    <s:String x:Key="LangModCrashCrashReasonReasonAX">以下模组初始化失败，导致游戏爆炸：
  - {0}
-        
-你可以尝试依次禁用上述 Mod，然后观察游戏是否还会崩溃。</s:String>
+
+你可以尝试依次禁用上述模组，然后观察游戏是否还会爆炸。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAY">游戏似乎因为方块 {0} 出现了问题。
-        
+
 你可以创建一个新世界，并观察游戏的运行情况：
  - 若正常运行，则是该方块导致出错，你或许需要使用一些方式删除此方块。
  - 若仍然出错，问题就可能来自其他原因……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonAZ">游戏似乎因为世界中的某些方块出现了问题。
-        
+
 你可以创建一个新世界，并观察游戏的运行情况：
  - 若正常运行，则是某些方块导致出错，你或许需要删除该世界。
  - 若仍然出错，问题就可能来自其他原因……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBA">你重复安装了多个相同的 Mod：
+    <s:String x:Key="LangModCrashCrashReasonReasonBA">你重复安装了多个相同的模组：
  - {0}
-        
-每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBB">你可能重复安装了多个相同的 Mod，导致游戏无法继续加载。
-        
-每个 Mod 只能出现一次，请删除重复的 Mod，然后再启动游戏。</s:String>
+
+每个模组只能出现一次，请删除重复的模组，然后再启动游戏。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBB">你可能重复安装了多个相同的模组，导致游戏爆炸。
+
+每个模组只能出现一次，请删除重复的模组，然后再启动游戏。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBC">游戏似乎因为实体 {0} 出现了问题。
-        
+
 你可以创建一个新世界，并生成一个该实体，然后观察游戏的运行情况：
  - 若正常运行，则是该实体导致出错，你或许需要使用一些方式删除此实体。
  - 若仍然出错，问题就可能来自其他原因……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBD">游戏似乎因为世界中的某些实体出现了问题。
-        
+
 你可以创建一个新世界，并生成各种实体，观察游戏的运行情况：
  - 若正常运行，则是某些实体导致出错，你或许需要删除该世界。
  - 若仍然出错，问题就可能来自其他原因……</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBE">由于 OptiFine 与当前版本的 Forge 不兼容，导致了游戏崩溃。
-        
-请前往 OptiFine 官网（https://optifine.net/downloads）查看 OptiFine 所兼容的 Forge 版本，并严格按照对应版本重新安装游戏。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBE">由于高清不修复与当前版本的锻造不兼容，导致了游戏崩溃。
+
+请前往高清不修复官网（https://optifine.net/downloads）查看高清不修复所兼容的锻造版本，并严格按照对应版本重新安装游戏。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBF">无需同时安装 OptiFine 和 Shaders Mod，OptiFine 已经集成了 Shaders Mod 的功能。
 在删除 Shaders Mod 后，游戏即可正常运行。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBG">由于低版本 Forge 与当前 Java 不兼容，导致了游戏崩溃。
