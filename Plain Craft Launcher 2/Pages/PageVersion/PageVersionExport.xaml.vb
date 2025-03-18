@@ -33,6 +33,7 @@ Public Class PageVersionExport
         TextExportName.HintText = PageVersionLeft.Version.Name
         TextExportVersion.Text = ""
         TextExportVersion.HintText = "1.0.0"
+        CheckAdvancedModrinth.Checked = False
         GetExportOption(CheckOptionsBasic).Description = PageVersionLeft.Version.GetDefaultDescription()
         ResetConfigOverrides()
         ReloadAllSubOptions()
