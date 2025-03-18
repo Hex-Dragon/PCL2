@@ -45,6 +45,9 @@
             CType(FindName("RadioRamType" & Setup.Load("LaunchRamType")), MyRadioBox).Checked = True
             SliderRamCustom.Value = Setup.Get("LaunchRamCustom")
 
+            '显示卡
+            CheckAdvanceGraphicSetup.Checked = Setup.Get("LaunchGraphicSetup")
+
             '高级设置
             TextAdvanceJvm.Text = Setup.Get("LaunchAdvanceJvm")
             TextAdvanceGame.Text = Setup.Get("LaunchAdvanceGame")
@@ -52,6 +55,7 @@
             CheckAdvanceRunWait.Checked = Setup.Get("LaunchAdvanceRunWait")
             CheckAdvanceAssets.Checked = Setup.Get("LaunchAdvanceAssets")
             CheckAdvanceJava.Checked = Setup.Get("LaunchAdvanceJava")
+            CheckAdvanceUseLaunchWrapper.Checked = Setup.Get("LaunchAdvanceUseLaunchWrapper")
 
         Catch ex As NullReferenceException
             Log(ex, "启动设置项存在异常，已被自动重置", LogLevel.Msgbox)
@@ -78,11 +82,13 @@
             Setup.Reset("LaunchSkinType")
             Setup.Reset("LaunchSkinID")
             Setup.Reset("LaunchAdvanceJvm")
+            Setup.Reset("LaunchAdvanceUseLaunchWrapper")
             Setup.Reset("LaunchAdvanceGame")
             Setup.Reset("LaunchAdvanceJava")
             Setup.Reset("LaunchAdvanceAssets")
             Setup.Reset("LaunchAdvanceRun")
             Setup.Reset("LaunchAdvanceRunWait")
+            Setup.Reset("LaunchGraphicSetup")
 
             Setup.Reset("LaunchArgumentJavaAll")
             Setup.Reset("LaunchArgumentJavaSelect")
@@ -110,7 +116,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboArgumentVisibie.SelectionChanged, ComboArgumentWindowType.SelectionChanged, ComboArgumentPriority.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change, CheckAdvanceUseLaunchWrapper.Change, CheckAdvanceGraphicSetup.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
 
@@ -211,7 +217,7 @@
         End If
         '设置文本
         LabRamGame.Text = If(RamGame = Math.Floor(RamGame), RamGame & ".0", RamGame) & " GB" &
-                          If(RamGame <> RamGameActual, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
+                          If(Math.Abs(RamGame - RamGameActual) > 0.05, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
         LabRamUsed.Text = If(RamUsed = Math.Floor(RamUsed), RamUsed & ".0", RamUsed) & " GB"
         LabRamTotal.Text = " / " & If(RamTotal = Math.Floor(RamTotal), RamTotal & ".0", RamTotal) & " GB"
         LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaIs64Bit() AndAlso Not Is32BitSystem AndAlso JavaList.Any, Visibility.Visible, Visibility.Collapsed)
