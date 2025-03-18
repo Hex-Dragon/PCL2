@@ -1,7 +1,4 @@
-﻿Imports NAudio.CoreAudioApi
-Imports NAudio.CoreAudioApi.Interfaces
-
-Public Module ModMusic
+﻿Public Module ModMusic
 
 #Region "播放列表"
 
@@ -69,44 +66,44 @@ Public Module ModMusic
     ''' </summary>
     Private Sub MusicRefreshUI()
         RunInUi(
-            Sub()
-                Try
+        Sub()
+            Try
 
-                    If Not MusicAllList.Any() Then
-                        '无背景音乐
-                        FrmMain.BtnExtraMusic.Show = False
-                    Else
-                        '有背景音乐
-                        FrmMain.BtnExtraMusic.Show = True
-                        Dim ToolTipText As String
-                        If MusicState = MusicStates.Pause Then
-                            FrmMain.BtnExtraMusic.Logo = Logo.IconPlay
-                            FrmMain.BtnExtraMusic.LogoScale = 0.8
-                            ToolTipText = "已暂停：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
-                            If MusicAllList.Count > 1 Then
-                                ToolTipText += vbCrLf & "左键恢复播放，右键播放下一曲。"
-                            Else
-                                ToolTipText += vbCrLf & "左键恢复播放，右键重新从头播放。"
-                            End If
+                If Not MusicAllList.Any() Then
+                    '无背景音乐
+                    FrmMain.BtnExtraMusic.Show = False
+                Else
+                    '有背景音乐
+                    FrmMain.BtnExtraMusic.Show = True
+                    Dim ToolTipText As String
+                    If MusicState = MusicStates.Pause Then
+                        FrmMain.BtnExtraMusic.Logo = Logo.IconPlay
+                        FrmMain.BtnExtraMusic.LogoScale = 0.8
+                        ToolTipText = "已暂停：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
+                        If MusicAllList.Count > 1 Then
+                            ToolTipText += vbCrLf & "左键恢复播放，右键播放下一曲。"
                         Else
-                            FrmMain.BtnExtraMusic.Logo = Logo.IconMusic
-                            FrmMain.BtnExtraMusic.LogoScale = 1
-                            ToolTipText = "正在播放：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
-                            If MusicAllList.Count > 1 Then
-                                ToolTipText += vbCrLf & "左键暂停，右键播放下一曲。"
-                            Else
-                                ToolTipText += vbCrLf & "左键暂停，右键重新从头播放。"
-                            End If
+                            ToolTipText += vbCrLf & "左键恢复播放，右键重新从头播放。"
                         End If
-                        FrmMain.BtnExtraMusic.ToolTip = ToolTipText
-                        ToolTipService.SetVerticalOffset(FrmMain.BtnExtraMusic, If(ToolTipText.Contains(vbLf), 10, 16))
+                    Else
+                        FrmMain.BtnExtraMusic.Logo = Logo.IconMusic
+                        FrmMain.BtnExtraMusic.LogoScale = 1
+                        ToolTipText = "正在播放：" & GetFileNameWithoutExtentionFromPath(MusicCurrent)
+                        If MusicAllList.Count > 1 Then
+                            ToolTipText += vbCrLf & "左键暂停，右键播放下一曲。"
+                        Else
+                            ToolTipText += vbCrLf & "左键暂停，右键重新从头播放。"
+                        End If
                     End If
-                    If FrmSetupUI IsNot Nothing Then FrmSetupUI.MusicRefreshUI()
+                    FrmMain.BtnExtraMusic.ToolTip = ToolTipText
+                    ToolTipService.SetVerticalOffset(FrmMain.BtnExtraMusic, If(ToolTipText.Contains(vbLf), 10, 16))
+                End If
+                If FrmSetupUI IsNot Nothing Then FrmSetupUI.MusicRefreshUI()
 
-                Catch ex As Exception
-                    Log(ex, "刷新背景音乐 UI 失败", LogLevel.Feedback)
-                End Try
-            End Sub)
+            Catch ex As Exception
+                Log(ex, "刷新背景音乐 UI 失败", LogLevel.Feedback)
+            End Try
+        End Sub)
     End Sub
 
     ''' <summary>
@@ -226,11 +223,11 @@ Public Module ModMusic
     Public Function MusicPause() As Boolean
         If MusicState = MusicStates.Play Then
             RunInThread(
-                Sub()
-                    Log("[Music] 已暂停播放")
-                    MusicNAudio?.Pause()
-                    MusicRefreshUI()
-                End Sub)
+            Sub()
+                Log("[Music] 已暂停播放")
+                MusicNAudio?.Pause()
+                MusicRefreshUI()
+            End Sub)
             Return True
         Else
             Log($"[Music] 无需暂停播放，当前状态为 {MusicState}")
@@ -246,11 +243,11 @@ Public Module ModMusic
             Return False
         Else
             RunInThread(
-                Sub()
-                    Log("[Music] 已恢复播放")
-                    MusicNAudio?.Play()
-                    MusicRefreshUI()
-                End Sub)
+            Sub()
+                Log("[Music] 已恢复播放")
+                MusicNAudio?.Play()
+                MusicRefreshUI()
+            End Sub)
             Return True
         End If
     End Function
@@ -276,7 +273,6 @@ Public Module ModMusic
             '开始播放
             CurrentWave = New NAudio.Wave.WaveOutEvent()
             MusicNAudio = CurrentWave
-            CurrentWave.DeviceNumber = -1
             Reader = New NAudio.Wave.AudioFileReader(MusicCurrent)
             CurrentWave.Init(Reader)
             CurrentWave.Play()
@@ -300,6 +296,10 @@ Public Module ModMusic
             If CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Stopped AndAlso MusicAllList.Any Then MusicStartPlay(DequeueNextMusicAddress)
         Catch ex As Exception
             Log(ex, "播放音乐出现内部错误（" & MusicCurrent & "）", LogLevel.Developer)
+            If TypeOf ex Is NAudio.MmException AndAlso ex.Message.Contains("AlreadyAllocated") Then
+                Hint("你的音频设备正被其他程序占用。请在关闭占用的程序后重启 PCL，才能恢复音乐播放功能！", HintType.Critical)
+                Thread.Sleep(1000000000)
+            End If
             If TypeOf ex Is NAudio.MmException AndAlso (ex.Message.Contains("NoDriver") OrElse ex.Message.Contains("BadDeviceId")) Then
                 Hint("由于音频设备变更，音乐播放功能在重启 PCL 后才能恢复！", HintType.Critical)
                 Thread.Sleep(1000000000)
@@ -307,7 +307,7 @@ Public Module ModMusic
             If ex.Message.Contains("Got a frame at sample rate") OrElse ex.Message.Contains("does not support changes to") Then
                 Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL 不支持播放音频属性在中途发生变化的音乐", HintType.Critical)
             ElseIf Not (MusicCurrent.EndsWithF(".wav", True) OrElse MusicCurrent.EndsWithF(".mp3", True) OrElse MusicCurrent.EndsWithF(".flac", True)) OrElse
-                    ex.Message.Contains("0xC00D36C4") Then '#5096：不支持给定的 URL 的字节流类型。 (异常来自 HRESULT:0xC00D36C4)
+                ex.Message.Contains("0xC00D36C4") Then '#5096：不支持给定的 URL 的字节流类型。 (异常来自 HRESULT:0xC00D36C4)
                 Hint("播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）：PCL 可能不支持此音乐格式，请将格式转换为 .wav、.mp3 或 .flac 后再试", HintType.Critical)
             Else
                 Log(ex, "播放音乐失败（" & GetFileNameFromPath(MusicCurrent) & "）", LogLevel.Hint)

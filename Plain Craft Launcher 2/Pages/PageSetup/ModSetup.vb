@@ -21,7 +21,9 @@
         {"HintClearRubbish", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"HintUpdateMod", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"HintCustomCommand", New SetupEntry(False, Source:=SetupSource.Registry)},
-        {"TestSetupReader", New SetupEntry("", Source:=SetupSource.Registry, Encoded:=True)},
+        {"HintMoreAdvancedSetup", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"HintIndieSetup", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"HintExportConfig", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"SystemEula", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"SystemCount", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
         {"SystemLaunchCount", New SetupEntry(0, Source:=SetupSource.Registry, Encoded:=True)},
@@ -91,20 +93,19 @@
         {"LaunchArgumentJavaSelect", New SetupEntry("", Source:=SetupSource.Registry)},
         {"LaunchArgumentJavaAll", New SetupEntry("[]", Source:=SetupSource.Registry)},
         {"LaunchArgumentIndie", New SetupEntry(0)},
+        {"LaunchArgumentIndieV2", New SetupEntry(4)},
         {"LaunchArgumentVisible", New SetupEntry(5, Source:=SetupSource.Registry)},
         {"LaunchArgumentPriority", New SetupEntry(1, Source:=SetupSource.Registry)},
         {"LaunchArgumentWindowWidth", New SetupEntry(854)},
         {"LaunchArgumentWindowHeight", New SetupEntry(480)},
         {"LaunchArgumentWindowType", New SetupEntry(1)},
         {"LaunchArgumentRam", New SetupEntry(False, Source:=SetupSource.Registry)},
-        {"LaunchAdvanceJvm", New SetupEntry("-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Djdk.lang.Process.allowAmbiguousCommands=true -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true")},
+        {"LaunchAdvanceJvm", New SetupEntry("-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Djdk.lang.Process.allowAmbiguousCommands=true -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true")},
         {"LaunchAdvanceGame", New SetupEntry("")},
         {"LaunchAdvanceRun", New SetupEntry("")},
         {"LaunchAdvanceRunWait", New SetupEntry(True)},
-        {"LaunchAdvanceAssets", New SetupEntry(False)},
-        {"LaunchAdvanceUseLaunchWrapper", New SetupEntry(True)},
-        {"LaunchAdvanceJava", New SetupEntry(False)},
-        {"LaunchGraphicSetup", New SetupEntry(False)},
+        {"LaunchAdvanceDisableJLW", New SetupEntry(False)},
+        {"LaunchAdvanceGraphicCard", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"LaunchRamType", New SetupEntry(0)},
         {"LaunchRamCustom", New SetupEntry(15)},
         {"LinkEula", New SetupEntry(False, Source:=SetupSource.Registry)},
@@ -118,6 +119,7 @@
         {"ToolDownloadSpeed", New SetupEntry(42, Source:=SetupSource.Registry)},
         {"ToolDownloadVersion", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"ToolDownloadTranslate", New SetupEntry(0, Source:=SetupSource.Registry)},
+        {"ToolDownloadTranslateV2", New SetupEntry(1, Source:=SetupSource.Registry)},
         {"ToolDownloadIgnoreQuilt", New SetupEntry(True, Source:=SetupSource.Registry)},
         {"ToolDownloadCert", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"ToolDownloadMod", New SetupEntry(1, Source:=SetupSource.Registry)},
@@ -173,16 +175,17 @@
         {"VersionAdvanceGame", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceAssets", New SetupEntry(0, Source:=SetupSource.Version)},
         {"VersionAdvanceAssetsV2", New SetupEntry(False, Source:=SetupSource.Version)},
-        {"VersionAdvanceUseLaunchWrapperV2", New SetupEntry(True, Source:=SetupSource.Version)},
         {"VersionAdvanceJava", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionAdvanceRun", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionAdvanceRunWait", New SetupEntry(True, Source:=SetupSource.Version)},
+        {"VersionAdvanceDisableJLW", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionRamType", New SetupEntry(2, Source:=SetupSource.Version)},
         {"VersionRamCustom", New SetupEntry(15, Source:=SetupSource.Version)},
         {"VersionRamOptimize", New SetupEntry(0, Source:=SetupSource.Version)},
         {"VersionArgumentTitle", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionArgumentInfo", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionArgumentIndie", New SetupEntry(-1, Source:=SetupSource.Version)},
+        {"VersionArgumentIndieV2", New SetupEntry(False, Source:=SetupSource.Version)},
         {"VersionArgumentJavaSelect", New SetupEntry("使用全局设置", Source:=SetupSource.Version)},
         {"VersionServerEnter", New SetupEntry("", Source:=SetupSource.Version)},
         {"VersionServerLogin", New SetupEntry(0, Source:=SetupSource.Version)},
@@ -207,7 +210,10 @@
         Public Value
         Public Source As SetupSource
 
-        '加载状态：0/未读取  1/已读取未处理  2/已处理
+        ''' <summary>
+        ''' 加载状态：0/未读取  1/已读取未处理  2/已处理
+        ''' 我也不知道当年写这坨的时候为啥没用 Enum……
+        ''' </summary>
         Public State As Byte = 0
         Public Type As Type
 
@@ -260,11 +266,8 @@
                 Case SetupSource.Registry
                     WriteReg(Key, Value)
                 Case SetupSource.Version
-                    If Version Is Nothing Then
-                        Throw New Exception("更改版本设置 " & Key & " 时未提供目标版本")
-                    Else
-                        WriteIni(Version.Path & "PCL\Setup.ini", Key, Value)
-                    End If
+                    If Version Is Nothing Then Throw New Exception($"更改版本设置 {Key} 时未提供目标版本")
+                    WriteIni(Version.Path & "PCL\Setup.ini", Key, Value)
             End Select
             '应用
             '例如 VersionServerLogin 要求在设置之后再引发事件
@@ -322,6 +325,15 @@
     Public Sub Reset(Key As String, Optional ForceReload As Boolean = False, Optional Version As McVersion = Nothing)
         Dim E As SetupEntry = SetupDict(Key)
         [Set](Key, E.DefaultValue, E, ForceReload, Version)
+        Select Case SetupDict(Key).Source
+            Case SetupSource.Normal
+                DeleteIniKey("Setup", Key)
+            Case SetupSource.Registry
+                DeleteReg(Key)
+            Case Else 'SetupSource.Version
+                If Version Is Nothing Then Throw New Exception($"重置版本设置 {Key} 时未提供目标版本")
+                DeleteIniKey(Version.Path & "PCL\Setup.ini", Key)
+        End Select
     End Sub
     ''' <summary>
     ''' 获取某个设置项的默认值。
@@ -329,17 +341,34 @@
     Public Function GetDefault(Key As String) As String
         Return SetupDict(Key).DefaultValue
     End Function
+    ''' <summary>
+    ''' 某个设置项是否从未被设置过。
+    ''' </summary>
+    Public Function IsUnset(Key As String, Optional Version As McVersion = Nothing) As Boolean
+        Select Case SetupDict(Key).Source
+            Case SetupSource.Normal
+                Return Not HasIniKey("Setup", Key)
+            Case SetupSource.Registry
+                Return Not HasReg(Key)
+            Case Else 'SetupSource.Version
+                If Version Is Nothing Then Throw New Exception($"判断版本设置 {Key} 是否存在时未提供目标版本")
+                Return Not HasIniKey(Version.Path & "PCL\Setup.ini", Key)
+        End Select
+    End Function
 
+    ''' <summary>
+    ''' 读取设置。
+    ''' </summary>
     Private Sub Read(Key As String, ByRef E As SetupEntry, Version As McVersion)
         Try
             If Not E.State = 0 Then Exit Sub
-            Dim SourceValue As String '先用 String 储存，避免类型转换
+            Dim SourceValue As String = Nothing '先用 String 储存，避免类型转换
             Select Case E.Source
                 Case SetupSource.Normal
                     SourceValue = ReadIni("Setup", Key, E.DefaultValueEncoded)
                 Case SetupSource.Registry
                     SourceValue = ReadReg(Key, E.DefaultValueEncoded)
-                Case Else 'SetupSource.Version
+                Case SetupSource.Version
                     If Version Is Nothing Then
                         Throw New Exception("读取版本设置 " & Key & " 时未提供目标版本")
                     Else
@@ -428,8 +457,20 @@
         NetTaskThreadLimit = Value + 1
     End Sub
     Public Sub ToolDownloadCert(Value As Boolean)
-        Net.ServicePointManager.ServerCertificateValidationCallback =
-            If(Value, Nothing, New Net.Security.RemoteCertificateValidationCallback(Function() True))
+        ServicePointManager.ServerCertificateValidationCallback =
+        Function(Sender, Certificate, Chain, Failure)
+            Dim Request As HttpWebRequest = TryCast(Sender, HttpWebRequest)
+            If Failure = Net.Security.SslPolicyErrors.None Then Return True '已通过验证
+            '基于 #3018 和 #5879，只在访问正版登录 API 时跳过证书验证
+            Log($"[System] 未通过 SSL 证书验证（{Failure}），提供的证书为 {Certificate?.Subject}，URL：{Request?.Address}", LogLevel.Debug)
+            If Request Is Nothing Then
+                Return Not Value
+            ElseIf Request.Address.Host.Contains("xboxlive") OrElse Request.Address.Host.Contains("minecraftservices") Then
+                Return Not Value '根据设置决定是否忽略错误
+            Else
+                Return False
+            End If
+        End Function
     End Sub
     Public Sub ToolDownloadSpeed(Value As Integer)
         If Value <= 14 Then

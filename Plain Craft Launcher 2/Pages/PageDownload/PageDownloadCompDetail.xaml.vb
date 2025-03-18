@@ -1,4 +1,4 @@
-Public Class PageDownloadCompDetail
+﻿Public Class PageDownloadCompDetail
     Private CompItem As MyCompItem = Nothing
 
 #Region "加载器"
@@ -363,11 +363,11 @@ Public Class PageDownloadCompDetail
                 Else
                     Dim ChineseName As String = Project.TranslatedName.BeforeFirst(" (").BeforeFirst(" - ").
                         Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")
-                    Select Case Setup.Get("ToolDownloadTranslate")
+                    Select Case Setup.Get("ToolDownloadTranslateV2")
                         Case 0
-                            FileName = $"[{ChineseName}] {File.FileName}"
-                        Case 1
                             FileName = $"【{ChineseName}】{File.FileName}"
+                        Case 1
+                            FileName = $"[{ChineseName}] {File.FileName}"
                         Case 2
                             FileName = $"{ChineseName}-{File.FileName}"
                         Case 3
