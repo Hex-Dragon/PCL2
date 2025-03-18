@@ -1,4 +1,7 @@
-﻿Public Class MyRadioButton
+﻿Imports System.Windows.Markup
+
+<ContentProperty("Inlines")>
+Public Class MyRadioButton
 
     '基础
 
@@ -108,6 +111,12 @@
             Log(ex, "单选按钮勾选改变错误", LogLevel.Hint)
         End Try
     End Sub
+
+    Public ReadOnly Property Inlines As InlineCollection
+        Get
+            Return LabText.Inlines
+        End Get
+    End Property
     Public Property Text As String
         Get
             Return GetValue(TextProperty)

@@ -221,12 +221,12 @@ RequestFinished:
     ''' 以多线程下载网页文件的方式获取网页源代码。
     ''' </summary>
     ''' <param name="Url">网页的 Url。</param>
-    Public Function NetGetCodeByDownload(Url As String, Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
+    Public Function NetGetCodeByLoader(Url As String, Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
         Dim Temp As String = PathTemp & "Cache\Code\" & Url.GetHashCode() & "_" & GetUuid()
         Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile({Url}, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
             NewTask.WaitForExitTime(Timeout, TimeoutMessage:="连接服务器超时（" & Url & "）")
-            NetGetCodeByDownload = ReadFile(Temp)
+            NetGetCodeByLoader = ReadFile(Temp)
             File.Delete(Temp)
         Finally
             NewTask.Abort()
@@ -236,12 +236,12 @@ RequestFinished:
     ''' 以多线程下载网页文件的方式获取网页源代码。
     ''' </summary>
     ''' <param name="Urls">网页的 Url 列表。</param>
-    Public Function NetGetCodeByDownload(Urls As IEnumerable(Of String), Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
+    Public Function NetGetCodeByLoader(Urls As IEnumerable(Of String), Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
         Dim Temp As String = PathTemp & "Cache\Code\" & Urls.First.GetHashCode() & "_" & GetUuid()
         Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile(Urls, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
             NewTask.WaitForExitTime(Timeout, TimeoutMessage:="连接服务器超时（第一下载源：" & Urls.First & "）")
-            NetGetCodeByDownload = ReadFile(Temp)
+            NetGetCodeByLoader = ReadFile(Temp)
             File.Delete(Temp)
         Finally
             NewTask.Abort()
@@ -249,13 +249,12 @@ RequestFinished:
     End Function
 
     ''' <summary>
-    ''' 从网络中直接下载文件。这不能下载 CDN 中的文件。
+    ''' 使用 WebClient 从网络中下载文件。这不能下载 CDN 中的文件。
     ''' </summary>
     ''' <param name="Url">网络 Url。</param>
     ''' <param name="LocalFile">下载的本地地址。</param>
-    Public Sub NetDownload(Url As String, LocalFile As String, Optional UseBrowserUserAgent As Boolean = False)
+    Public Sub NetDownloadByClient(Url As String, LocalFile As String, Optional UseBrowserUserAgent As Boolean = False)
         Log("[Net] 直接下载文件：" & Url)
-
         '初始化
         Try
             '建立目录
@@ -263,9 +262,8 @@ RequestFinished:
             '尝试删除原文件
             File.Delete(LocalFile)
         Catch ex As Exception
-            Throw New WebException("预处理下载文件路径失败（" & LocalFile & "）。", ex)
+            Throw New WebException($"预处理下载文件路径失败（{LocalFile}）", ex)
         End Try
-
         '下载
         Using Client As New WebClient
             Try
@@ -273,10 +271,41 @@ RequestFinished:
                 Client.DownloadFile(Url, LocalFile)
             Catch ex As Exception
                 File.Delete(LocalFile)
-                Throw New WebException("直接下载文件失败（" & Url & "）。", ex)
+                Throw New WebException($"直接下载文件失败（{Url}）", ex)
             End Try
         End Using
+    End Sub
 
+    ''' <summary>
+    ''' 简单的多线程下载文件。可以下载 CDN 中的文件。
+    ''' </summary>
+    ''' <param name="Url">文件的 Url。</param>
+    ''' <param name="LocalFile">下载的本地地址。</param>
+    Public Sub NetDownloadByLoader(Url As String, LocalFile As String, Optional LoaderToSyncProgress As LoaderBase = Nothing, Optional Check As FileChecker = Nothing, Optional UseBrowserUserAgent As Boolean = False)
+        Dim NewTask As New LoaderDownload("文件下载 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile({Url}, LocalFile, Check, UseBrowserUserAgent)})
+        Try
+            NewTask.WaitForExit(LoaderToSyncProgress:=LoaderToSyncProgress)
+        Catch ex As Exception
+            Throw New WebException($"多线程直接下载文件失败（{Url}）", ex)
+        Finally
+            NewTask.Abort()
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' 简单的多线程下载文件。可以下载 CDN 中的文件。
+    ''' </summary>
+    ''' <param name="Urls">文件的 Url 列表。</param>
+    ''' <param name="LocalFile">下载的本地地址。</param>
+    Public Sub NetDownloadByLoader(Urls As IEnumerable(Of String), LocalFile As String, Optional LoaderToSyncProgress As LoaderBase = Nothing, Optional Check As FileChecker = Nothing, Optional UseBrowserUserAgent As Boolean = False)
+        Dim NewTask As New LoaderDownload("文件下载 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile(Urls, LocalFile, Check, UseBrowserUserAgent)})
+        Try
+            NewTask.WaitForExit(LoaderToSyncProgress:=LoaderToSyncProgress)
+        Catch ex As Exception
+            Throw New WebException($"多线程直接下载文件失败（第一下载源：" & Urls.First() & "）", ex)
+        Finally
+            NewTask.Abort()
+        End Try
     End Sub
 
     ''' <summary>
@@ -1825,6 +1854,7 @@ Retry:
         Private Sub RefreshStat()
             Try
                 Dim DeltaTime As Long = GetTimeTick() - RefreshStatLast
+                If DeltaTime = 0 Then Return
                 RefreshStatLast += DeltaTime
 #Region "刷新整体速度"
                 '计算瞬时速度
@@ -1890,7 +1920,7 @@ Retry:
                         For Each File As NetFile In WaitingFiles
                             If NetTaskThreadCount >= NetTaskThreadLimit Then Continue While '最大线程数检查
                             Dim NewThread = File.TryBeginThread()
-                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi") Then Thread.Sleep(70) '减少 BMCLAPI 请求频率，避免 Too Many Requests
+                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi") Then Thread.Sleep(30) '减少 BMCLAPI 请求频率（目前每分钟限制 4000 次）
                         Next
                         '为进行中的文件追加线程
                         If Speed >= NetTaskSpeedLimitLow Then Continue While '下载速度足够，无需新增
@@ -1910,7 +1940,7 @@ Retry:
                             '新增线程
                             If PreparingCount > DownloadingCount Then Continue For '准备中的线程已多于下载中的线程，不再新增
                             Dim NewThread = File.TryBeginThread()
-                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi") Then Thread.Sleep(70) '减少 BMCLAPI 请求频率，避免 Too Many Requests
+                            If NewThread IsNot Nothing AndAlso NewThread.Source.Url.Contains("bmclapi") Then Thread.Sleep(30) '减少 BMCLAPI 请求频率（目前每分钟限制 4000 次）
                         Next
                     End While
                 Catch ex As Exception

@@ -289,7 +289,7 @@
     Private Sub BtnManageOpen_Click(sender As Object, e As EventArgs) Handles BtnManageOpen.Click, BtnHintOpen.Click
         Try
             Directory.CreateDirectory(PageVersionLeft.Version.PathIndie & "mods\")
-            OpenExplorer("""" & PageVersionLeft.Version.PathIndie & "mods\""")
+            OpenExplorer(PageVersionLeft.Version.PathIndie & "mods\")
         Catch ex As Exception
             Log(ex, "打开 Mods 文件夹失败", LogLevel.Msgbox)
         End Try
@@ -356,12 +356,12 @@
 Install:
             Try
                 For Each ModFile In FilePathList
-                    Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "")
+                    Dim NewFileName = GetFileNameFromPath(ModFile).Replace(".disabled", "").Replace(".old", "")
                     If Not NewFileName.Contains(".") Then NewFileName += ".jar" '#4227
                     CopyFile(ModFile, TargetVersion.PathIndie & "mods\" & NewFileName)
                 Next
                 If FilePathList.Count = 1 Then
-                    Hint($"已安装 {GetFileNameFromPath(FilePathList.First).Replace(".disabled", "")}！", HintType.Finish)
+                    Hint($"已安装 {GetFileNameFromPath(FilePathList.First).Replace(".disabled", "").Replace(".old", "")}！", HintType.Finish)
                 Else
                     Hint($"已安装 {FilePathList.Count} 个 Mod！", HintType.Finish)
                 End If
@@ -388,7 +388,7 @@ Install:
 
 #Region "选择"
 
-    '选择的 Mod 的路径（不含 .disabled）
+    '选择的 Mod 的路径（不含 .disabled 和 .old）
     Public SelectedMods As New List(Of String)
 
     '单项切换选择状态
@@ -856,10 +856,8 @@ Install:
     '打开文件所在的位置
     Public Sub Open_Click(sender As MyIconButton, e As EventArgs)
         Try
-
             Dim ListItem As MyLocalModItem = sender.Tag
-            OpenExplorer("/select,""" & ListItem.Entry.Path & """")
-
+            OpenExplorer(ListItem.Entry.Path)
         Catch ex As Exception
             Log(ex, "打开 Mod 文件位置失败", LogLevel.Feedback)
         End Try

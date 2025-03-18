@@ -45,6 +45,9 @@
             CType(FindName("RadioRamType" & Setup.Load("LaunchRamType")), MyRadioBox).Checked = True
             SliderRamCustom.Value = Setup.Get("LaunchRamCustom")
 
+            '显示卡
+            CheckAdvanceGraphicSetup.Checked = Setup.Get("LaunchGraphicSetup")
+
             '高级设置
             TextAdvanceJvm.Text = Setup.Get("LaunchAdvanceJvm")
             TextAdvanceGame.Text = Setup.Get("LaunchAdvanceGame")
@@ -52,6 +55,7 @@
             CheckAdvanceRunWait.Checked = Setup.Get("LaunchAdvanceRunWait")
             CheckAdvanceAssets.Checked = Setup.Get("LaunchAdvanceAssets")
             CheckAdvanceJava.Checked = Setup.Get("LaunchAdvanceJava")
+            CheckAdvanceUseLaunchWrapper.Checked = Setup.Get("LaunchAdvanceUseLaunchWrapper")
 
         Catch ex As NullReferenceException
             Log(ex, "启动设置项存在异常，已被自动重置", LogLevel.Msgbox)
@@ -78,11 +82,13 @@
             Setup.Reset("LaunchSkinType")
             Setup.Reset("LaunchSkinID")
             Setup.Reset("LaunchAdvanceJvm")
+            Setup.Reset("LaunchAdvanceUseLaunchWrapper")
             Setup.Reset("LaunchAdvanceGame")
             Setup.Reset("LaunchAdvanceJava")
             Setup.Reset("LaunchAdvanceAssets")
             Setup.Reset("LaunchAdvanceRun")
             Setup.Reset("LaunchAdvanceRunWait")
+            Setup.Reset("LaunchGraphicSetup")
 
             Setup.Reset("LaunchArgumentJavaAll")
             Setup.Reset("LaunchArgumentJavaSelect")
@@ -110,7 +116,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboArgumentVisibie.SelectionChanged, ComboArgumentWindowType.SelectionChanged, ComboArgumentPriority.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change, CheckAdvanceUseLaunchWrapper.Change, CheckAdvanceGraphicSetup.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
 
@@ -165,7 +171,7 @@
     Private Sub BtnSkinDelete_Click(sender As Object, e As EventArgs) Handles BtnSkinDelete.Click
         Try
             File.Delete(PathAppdata & "CustomSkin.png")
-            RadioSkinType0.SetChecked(True, True, True)
+            RadioSkinType0.SetChecked(True, True)
             Hint("离线皮肤已清空！", HintType.Finish)
         Catch ex As Exception
             Log(ex, "清空离线皮肤失败", LogLevel.Msgbox)
@@ -194,11 +200,11 @@
         If LabRamGame Is Nothing OrElse LabRamUsed Is Nothing OrElse FrmMain.PageCurrent <> FormMain.PageType.Setup OrElse FrmSetupLeft.PageID <> FormMain.PageSubType.SetupLaunch Then Exit Sub
         '获取内存情况
         Dim RamGame As Double = GetRam(McVersionCurrent, False)
-        Dim RamTotal As Double = Math.Round(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024 / 1024 * 10) / 10
-        Dim RamAvailable As Double = Math.Round(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024 / 1024 * 10) / 10
-        Dim RamGameActual As Double = Math.Min(RamGame, RamAvailable)
-        Dim RamUsed As Double = RamTotal - RamAvailable
-        Dim RamEmpty As Double = Math.Round(MathClamp(RamTotal - RamUsed - RamGame, 0, 1000) * 10) / 10
+        Dim RamTotal As Double = Math.Round(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024 / 1024, 1)
+        Dim RamAvailable As Double = Math.Round(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024 / 1024, 1)
+        Dim RamGameActual As Double = Math.Round(Math.Min(RamGame, RamAvailable), 5)
+        Dim RamUsed As Double = Math.Round(RamTotal - RamAvailable, 5)
+        Dim RamEmpty As Double = Math.Round(MathClamp(RamTotal - RamUsed - RamGame, 0, 1000), 1)
         '设置最大可用内存
         If RamTotal <= 1.5 Then
             SliderRamCustom.MaxValue = Math.Max(Math.Floor((RamTotal - 0.3) / 0.1), 1)
@@ -211,7 +217,7 @@
         End If
         '设置文本
         LabRamGame.Text = If(RamGame = Math.Floor(RamGame), RamGame & ".0", RamGame) & " GB" &
-                          If(RamGame <> RamGameActual, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
+                          If(Math.Abs(RamGame - RamGameActual) > 0.05, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
         LabRamUsed.Text = If(RamUsed = Math.Floor(RamUsed), RamUsed & ".0", RamUsed) & " GB"
         LabRamTotal.Text = " / " & If(RamTotal = Math.Floor(RamTotal), RamTotal & ".0", RamTotal) & " GB"
         LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaIs64Bit() AndAlso Not Is32BitSystem AndAlso JavaList.Any, Visibility.Visible, Visibility.Collapsed)

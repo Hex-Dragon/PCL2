@@ -437,6 +437,7 @@ EndHint:
     Public FrmVersionMod As PageVersionMod
     Public FrmVersionModDisabled As PageVersionModDisabled
     Public FrmVersionSetup As PageVersionSetup
+    Public FrmVersionExport As PageVersionExport
 
     '资源信息分页声明
     Public FrmDownloadCompDetail As PageDownloadCompDetail
@@ -812,6 +813,54 @@ NextFile:
     Public Declare Function FindWindow Lib "user32" Alias "FindWindowA" (ClassName As String, WindowName As String) As IntPtr
     Public Declare Function SetForegroundWindow Lib "user32" (hWnd As IntPtr) As Integer
     Private Declare Function PostMessage Lib "user32" Alias "PostMessageA" (hWnd As IntPtr, msg As UInteger, wParam As Long, lParam As Long) As Boolean
+
+#End Region
+
+#Region "任务缓存"
+
+    Private IsTaskTempCleared As Boolean = False
+    Private IsTaskTempClearing As Boolean = False
+
+    ''' <summary>
+    ''' 尝试清理任务缓存文件夹。
+    ''' 在整次运行中只会实际清理一次。
+    ''' </summary>
+    Public Sub TryClearTaskTemp()
+        If Not IsTaskTempCleared Then
+            IsTaskTempCleared = True
+            IsTaskTempClearing = True
+            Try
+                Log("[System] 开始清理任务缓存文件夹")
+                DeleteDirectory($"{OsDrive}ProgramData\PCL\TaskTemp\")
+                DeleteDirectory($"{PathTemp}TaskTemp\")
+                Log("[System] 已清理任务缓存文件夹")
+            Catch ex As Exception
+                Log(ex, "清理任务缓存文件夹失败")
+            Finally
+                IsTaskTempClearing = False
+            End Try
+        ElseIf IsTaskTempClearing Then
+            '等待另一个清理步骤完成
+            Do While IsTaskTempClearing
+                Thread.Sleep(1)
+            Loop
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' 申请一个可用于任务缓存的临时文件夹，以 \ 结尾。
+    ''' 这些文件夹无需进行后续清理。
+    ''' </summary>
+    ''' <param name="RequireNonSpace">是否要求路径不包含空格。</param>
+    Public Function RequestTaskTempFolder(Optional RequireNonSpace As Boolean = False) As String
+        TryClearTaskTemp()
+        If RequireNonSpace Then
+            RequestTaskTempFolder = $"{OsDrive}ProgramData\PCL\Install\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+        Else
+            RequestTaskTempFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+        End If
+        Directory.CreateDirectory(RequestTaskTempFolder)
+    End Function
 
 #End Region
 
