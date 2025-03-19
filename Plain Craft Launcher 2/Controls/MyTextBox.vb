@@ -3,8 +3,18 @@
 
     '自定义属性
 
-    Public Property HasAnimation As Boolean = True
+    Public Property HasBackground As Boolean = True
     Public Property ShowValidateResult As Boolean = True
+    Public Property CornerRadius As CornerRadius
+        Get
+            Return GetValue(CornerRadiusProperty)
+        End Get
+        Set(value As CornerRadius)
+            SetValue(CornerRadiusProperty, value)
+        End Set
+    End Property
+    Public Shared ReadOnly CornerRadiusProperty As DependencyProperty =
+        DependencyProperty.Register("CornerRadius", GetType(CornerRadius), GetType(MyTextBox), New PropertyMetadata(New CornerRadius(3)))
 
     '额外控件初始化
 
@@ -62,7 +72,24 @@
             SetValue(ValidateResultProperty, value)
         End Set
     End Property
-    Public Shared ReadOnly ValidateResultProperty As DependencyProperty = DependencyProperty.Register("ValidateResult", GetType(String), GetType(MyTextBox), New PropertyMetadata(""))
+    Public Shared ReadOnly ValidateResultProperty As DependencyProperty =
+        DependencyProperty.Register("ValidateResult", GetType(String), GetType(MyTextBox), New PropertyMetadata("",
+        Sub(d As MyTextBox, e As DependencyPropertyChangedEventArgs)
+            d.SetValue(IsValidatedPropertyKey, String.IsNullOrEmpty(e.NewValue))
+        End Sub))
+
+    ''' <summary>
+    ''' 是否通过了输入验证。
+    ''' </summary>
+    Public ReadOnly Property IsValidated As Boolean
+        Get
+            Return GetValue(IsValidatedProperty)
+        End Get
+    End Property
+    Private Shared ReadOnly IsValidatedPropertyKey As DependencyPropertyKey =
+        DependencyProperty.RegisterReadOnly("IsValidated", GetType(Boolean), GetType(MyTextBox), New PropertyMetadata(True))
+    Public Shared ReadOnly IsValidatedProperty As DependencyProperty = IsValidatedPropertyKey.DependencyProperty
+
     ''' <summary>
     ''' 输入验证的规则。
     ''' </summary>
@@ -81,50 +108,49 @@
     ''' </summary>
     Public Sub Validate() Handles Me.Loaded
         '执行输入验证
-        ValidateResult = ""
-        For Each ValidateRule As Validate In ValidateRules
-            ValidateResult = ValidateRule.Validate(Text)
-            If IsNothing(ValidateResult) OrElse Not ValidateResult = "" Then Exit For
-        Next
-        Dim IsSuccessful As Boolean = ValidateResult = ""
+        ValidateResult = ModValidate.Validate(Text, ValidateRules)
         '根据结果改变样式
-        If ShownValidateResult <> If(IsSuccessful, ValidateState.Success, ValidateState.FailedAndShowDetail) Then
+        If ShownValidateResult <> If(IsValidated, ValidateState.Success, ValidateState.FailedAndShowDetail) Then
             If IsLoaded AndAlso labWrong IsNot Nothing Then
-                ChangeValidateResult(IsSuccessful, True)
+                ChangeValidateResult(IsValidated, True)
             Else
-                RunInNewThread(Sub()
-                                   Thread.Sleep(30)
-                                   RunInUi(Sub() ChangeValidateResult(IsSuccessful, False))
-                               End Sub, "DelayedValidate Change")
+                RunInNewThread(
+                Sub()
+                    Thread.Sleep(30)
+                    RunInUi(Sub() ChangeValidateResult(IsValidated, False))
+                End Sub, "DelayedValidate Change")
             End If
         End If
         '更新错误信息
-        If ShowValidateResult AndAlso Not ValidateResult = "" Then
+        If ShowValidateResult AndAlso Not IsValidated Then
             If IsLoaded AndAlso labWrong IsNot Nothing Then
                 labWrong.Text = ValidateResult
             Else
-                RunInNewThread(Sub()
-                                   Dim IsFinished As Boolean = False
-                                   Do Until IsFinished
-                                       Thread.Sleep(20)
-                                       RunInUiWait(Sub()
-                                                       If labWrong IsNot Nothing Then
-                                                           labWrong.Text = ValidateResult
-                                                           IsFinished = True
-                                                       End If
-                                                       If Not IsLoaded Then IsFinished = True
-                                                   End Sub)
-                                   Loop
-                               End Sub, "DelayedValidate Text")
+                RunInNewThread(
+                Sub()
+                    Dim IsFinished As Boolean = False
+                    Do Until IsFinished
+                        Thread.Sleep(20)
+                        RunInUiWait(
+                        Sub()
+                            If labWrong IsNot Nothing Then
+                                labWrong.Text = ValidateResult
+                                IsFinished = True
+                            End If
+                            If Not IsLoaded Then IsFinished = True
+                        End Sub)
+                    Loop
+                End Sub, "DelayedValidate Text")
             End If
         End If
     End Sub
+
     ''' <summary>
     ''' 强制显示结果为正常，类似尚未输入过文本的状态。不影响实际的检查结果。
     ''' </summary>
     Public Sub ForceShowAsSuccess()
         IsTextChanged = False
-        ChangeValidateResult(ValidateResult = "", True)
+        ChangeValidateResult(IsValidated, True)
     End Sub
     Private ShownValidateResult As ValidateState = ValidateState.NotInited
     Private Sub ChangeValidateResult(IsSuccessful As Boolean, IsLoaded As Boolean)
@@ -133,18 +159,18 @@
                 '变为正确
                 ShownValidateResult = If(IsSuccessful, ValidateState.Success, ValidateState.FailedButTextNotChanged)
                 AniStart({
-                         AaOpacity(labWrong, -labWrong.Opacity, 150),
-                         AaHeight(labWrong, -labWrong.Height, 150,, New AniEaseOutFluent),
-                         AaCode(Sub() labWrong.Visibility = Visibility.Collapsed,, True)
-                    }, "MyTextBox Validate " & Uuid)
+                     AaOpacity(labWrong, -labWrong.Opacity, 150),
+                     AaHeight(labWrong, -labWrong.Height, 150,, New AniEaseOutFluent),
+                     AaCode(Sub() labWrong.Visibility = Visibility.Collapsed,, True)
+                }, "MyTextBox Validate " & Uuid)
             ElseIf ShowValidateResult Then
                 '变为错误
                 ShownValidateResult = ValidateState.FailedAndShowDetail
                 labWrong.Visibility = Visibility.Visible
                 AniStart({
-                         AaOpacity(labWrong, 1 - labWrong.Opacity, 170),
-                         AaHeight(labWrong, 21 - labWrong.Height, 300,, New AniEaseOutBack(AniEasePower.Weak))
-                    }, "MyTextBox Validate " & Uuid)
+                     AaOpacity(labWrong, 1 - labWrong.Opacity, 150),
+                     AaHeight(labWrong, 21 - labWrong.Height, 150,, New AniEaseOutFluent)
+                }, "MyTextBox Validate " & Uuid)
             Else
                 '变为错误，但不显示文本
                 ShownValidateResult = ValidateState.FailedAndHideDetail
@@ -170,16 +196,19 @@
     ''' 是否已经由用户输入过文本，若尚未输入过，则不显示输入检查的失败。
     ''' </summary>
     Private IsTextChanged As Boolean = False
-    Private _HintText As String = ""
     Public Property HintText As String
         Get
-            Return _HintText
+            Return GetValue(HintTextProperty)
         End Get
         Set(value As String)
-            _HintText = value
-            If labHint IsNot Nothing Then labHint.Text = If(Text = "", HintText, "")
+            SetValue(HintTextProperty, value)
         End Set
     End Property
+    Public Shared ReadOnly HintTextProperty As DependencyProperty =
+        DependencyProperty.Register("HintText", GetType(String), GetType(MyTextBox), New PropertyMetadata("",
+        Sub(t As MyTextBox, e As DependencyPropertyChangedEventArgs)
+            If t.labHint IsNot Nothing Then t.labHint.Text = If(t.Text = "", t.HintText, "")
+        End Sub))
     Private Sub MyTextBox_TextChanged(sender As MyTextBox, e As TextChangedEventArgs) Handles Me.TextChanged
         Try
             '改变提示文本
@@ -188,7 +217,7 @@
             IsTextChanged = IsLoaded
             '进行输入验证
             Validate()
-            If Not ValidateResult = "" Then Exit Sub
+            If Not IsValidated Then Exit Sub
             '改变文本
             RaiseEvent ValidatedTextChanged(sender, e)
         Catch ex As Exception
@@ -200,15 +229,13 @@
 
     Private Sub RefreshColor() Handles Me.IsEnabledChanged, Me.MouseEnter, Me.MouseLeave, Me.GotFocus, Me.LostFocus
         Try
-            '手动关闭动画
-            If Not HasAnimation Then Exit Sub
             '不对 ComboBox 从属进行动画
             If TemplatedParent IsNot Nothing AndAlso TypeOf TemplatedParent Is MyComboBox Then Exit Sub
             '判断当前颜色
             Dim ForeColorName As String, BackColorName As String
             Dim AnimationTime As Integer
             If IsEnabled Then
-                If ValidateResult = "" OrElse Not IsTextChanged Then
+                If IsValidated OrElse Not IsTextChanged Then
                     If IsFocused Then
                         ForeColorName = "ColorBrush3"
                         BackColorName = "ColorBrush7"
@@ -232,6 +259,7 @@
                 BackColorName = "ColorBrushGray6"
                 AnimationTime = 200
             End If
+            If Not HasBackground Then BackColorName = "ColorBrushTransparent"
             '触发颜色动画
             If IsLoaded AndAlso AniControlEnabled = 0 Then '防止默认属性变更触发动画
                 '有动画
