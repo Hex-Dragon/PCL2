@@ -56,6 +56,20 @@
             LabInfo.ToolTip = Nothing
         End If
     End Sub
+
+    Private Sub LabInfo_MouseClick(sender As Object, e As MouseButtonEventArgs) Handles LabInfo.MouseLeftButtonDown
+        If Not CanInteraction Then
+            ClipboardSet(LabInfo.Text, True)
+        End If
+    End Sub
+
+    Private Sub LabTitleRaw_MouseClick(sender As Object, e As MouseButtonEventArgs) Handles PanTitles.MouseLeftButtonDown
+        If Not CanInteraction Then
+            ClipboardSet(LabTitle.Text & LabTitleRaw.Text, True)
+        End If
+
+    End Sub
+
     Private Function IsTextTrimmed(textBlock As TextBlock) As Boolean
         Dim typeface As New Typeface(textBlock.FontFamily, textBlock.FontStyle, textBlock.FontWeight, textBlock.FontStretch)
         Dim formattedText As New FormattedText(textBlock.Text, Thread.CurrentThread.CurrentCulture, textBlock.FlowDirection, typeface, textBlock.FontSize, textBlock.Foreground, DPI)
