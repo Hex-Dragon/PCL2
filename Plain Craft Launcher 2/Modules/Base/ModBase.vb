@@ -2512,10 +2512,6 @@ NextElement:
         End Try
     End Sub
 
-    Public Sub OpenExplorerAndSelect(Path As String)
-        OpenExplorer("/select,""" & Path & """")
-    End Sub
-
     ''' <summary>
     ''' 设置剪贴板。将在另一线程运行，且不会抛出异常。
     ''' </summary>

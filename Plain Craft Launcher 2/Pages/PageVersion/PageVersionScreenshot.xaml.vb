@@ -204,7 +204,7 @@ Public Class PageVersionScreenshot
     End Function
 
     Private Sub btnOpen_Click(sender As MyIconTextButton, e As EventArgs)
-        OpenExplorerAndSelect(GetPathFromSender(sender))
+        OpenExplorer(GetPathFromSender(sender))
     End Sub
     Private Sub btnDelete_Click(sender As MyIconTextButton, e As EventArgs)
         Path = GetPathFromSender(sender)
