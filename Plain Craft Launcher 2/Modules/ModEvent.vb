@@ -146,12 +146,11 @@
                                     " - https://www.baidu.com/test.xaml（同时也需要包含这个文件）", ex)
             End Try
             '下载文件
-            Dim LocalTemp1 As String = PathTemp & "CustomEvent\" & RawFileName
-            Dim LocalTemp2 As String = PathTemp & "CustomEvent\" & RawFileName.Replace(".json", ".xaml")
-            Log("[Event] 转换网络资源：" & RelativeUrl & " -> " & LocalTemp1)
+            Dim LocalTemp As String = RequestTaskTempFolder() & RawFileName
+            Log("[Event] 转换网络资源：" & RelativeUrl & " -> " & LocalTemp)
             Try
-                NetDownloadByClient(RelativeUrl, LocalTemp1)
-                NetDownloadByClient(RelativeUrl.Replace(".json", ".xaml"), LocalTemp1.Replace(".json", ".xaml"))
+                NetDownloadByClient(RelativeUrl, LocalTemp)
+                NetDownloadByClient(RelativeUrl.Replace(".json", ".xaml"), LocalTemp.Replace(".json", ".xaml"))
             Catch ex As Exception
                 Throw New Exception("下载指定的文件失败！" & vbCrLf &
                                     "注意，联网帮助页面须指向一个帮助 JSON 文件，并在同路径下包含相应 XAML 文件！" & vbCrLf &
@@ -159,7 +158,7 @@
                                     " - https://www.baidu.com/test.json（填写这个路径）" & vbCrLf &
                                     " - https://www.baidu.com/test.xaml（同时也需要包含这个文件）", ex)
             End Try
-            RelativeUrl = LocalTemp1
+            RelativeUrl = LocalTemp
         End If
         RelativeUrl = RelativeUrl.Replace("/", "\").ToLower.TrimStart("\")
 

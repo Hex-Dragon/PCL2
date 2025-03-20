@@ -3,7 +3,7 @@
     '控件
     Inherits Grid
     Private ReadOnly MainGrid As Grid
-    Private ReadOnly MainChrome As SystemDropShadowChrome
+    Public ReadOnly Property MainChrome As SystemDropShadowChrome
     Private ReadOnly MainBorder As Border
     Public Property BorderChild As UIElement
         Get
@@ -40,6 +40,15 @@
         Get
             Return MainTextBlock.Inlines
         End Get
+    End Property
+    Public Property CornerRadius As CornerRadius
+        Get
+            Return MainChrome.CornerRadius
+        End Get
+        Set(value As CornerRadius)
+            MainChrome.CornerRadius = value
+            MainBorder.CornerRadius = value
+        End Set
     End Property
     Public Property Title As String
         Get
@@ -103,13 +112,13 @@
         '排序
         Select Case Type
             Case 3
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlOptiFineListEntry)), Function(a, b) VersionSortBoolean(a.NameDisplay, b.NameDisplay))
+                Stack.Tag = CType(Stack.Tag, List(Of DlOptiFineListEntry)).Sort(Function(a, b) VersionSortBoolean(a.NameDisplay, b.NameDisplay))
             Case 4, 10
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlLiteLoaderListEntry)), Function(a, b) VersionSortBoolean(a.Inherit, b.Inherit))
+                Stack.Tag = CType(Stack.Tag, List(Of DlLiteLoaderListEntry)).Sort(Function(a, b) VersionSortBoolean(a.Inherit, b.Inherit))
             Case 6
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of DlForgeVersionEntry)), Function(a, b) a.Version > b.Version)
+                Stack.Tag = CType(Stack.Tag, List(Of DlForgeVersionEntry)).Sort(Function(a, b) a.Version > b.Version)
             Case 8, 9
-                Stack.Tag = Sort(CType(Stack.Tag, List(Of CompFile)), Function(a, b) a.ReleaseDate > b.ReleaseDate)
+                Stack.Tag = CType(Stack.Tag, List(Of CompFile)).Sort(Function(a, b) a.ReleaseDate > b.ReleaseDate)
         End Select
         '控件转换
         Select Case Type
@@ -185,10 +194,10 @@
         If Not IsNothing(MainTextBlock) Then AniList.Add(AaColor(MainTextBlock, TextBlock.ForegroundProperty, "ColorBrush2", 150))
         If Not IsNothing(MainSwap) Then AniList.Add(AaColor(MainSwap, Shapes.Path.FillProperty, "ColorBrush2", 150))
         AniList.AddRange({
-                         AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject2", 180),
-                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(230, 255, 255, 255) - MainBorder.Background, 180),
-                         AaOpacity(MainChrome, 0.3 - MainChrome.Opacity, 180)
-                     })
+            AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject2", 180),
+            AaColor(MainBorder, Border.BackgroundProperty, New MyColor(230, 255, 255, 255) - MainBorder.Background, 180),
+            AaOpacity(MainChrome, 0.3 - MainChrome.Opacity, 180)
+        })
         AniStart(AniList, "MyCard Mouse " & Uuid)
     End Sub
     Private Sub MyCard_MouseLeave(sender As Object, e As MouseEventArgs) Handles Me.MouseLeave
@@ -197,10 +206,10 @@
         If Not IsNothing(MainTextBlock) Then AniList.Add(AaColor(MainTextBlock, TextBlock.ForegroundProperty, "ColorBrush1", 250))
         If Not IsNothing(MainSwap) Then AniList.Add(AaColor(MainSwap, Shapes.Path.FillProperty, "ColorBrush1", 250))
         AniList.AddRange({
-                         AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject1", 300),
-                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, 255, 255, 255) - MainBorder.Background, 300),
-                         AaOpacity(MainChrome, 0.1 - MainChrome.Opacity, 300)
-                     })
+            AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject1", 300),
+            AaColor(MainBorder, Border.BackgroundProperty, New MyColor(205, 255, 255, 255) - MainBorder.Background, 300),
+            AaOpacity(MainChrome, 0.1 - MainChrome.Opacity, 300)
+        })
         AniStart(AniList, "MyCard Mouse " & Uuid)
     End Sub
 
@@ -335,18 +344,19 @@ Partial Public Module ModAnimation
         If Control.IsHitTestVisible Then
             Control.IsHitTestVisible = False
             AniStart({
-                     AaScaleTransform(Control, -0.08, 200,, New AniEaseInFluent),
-                     AaOpacity(Control, -1, 200,, New AniEaseOutFluent),
-                     AaHeight(Control, -Control.ActualHeight, 150, 100, New AniEaseOutFluent),
-                     AaCode(Sub()
-                                If RemoveFromChildren Then
-                                    If Control.Parent Is Nothing Then Exit Sub
-                                    CType(Control.Parent, Object).Children.Remove(Control)
-                                Else
-                                    Control.Visibility = Visibility.Collapsed
-                                End If
-                                If CallBack IsNot Nothing Then CallBack(Control)
-                            End Sub,, True)
+                AaScaleTransform(Control, -0.08, 200,, New AniEaseInFluent),
+                AaOpacity(Control, -1, 200,, New AniEaseOutFluent),
+                AaHeight(Control, -Control.ActualHeight, 150, 100, New AniEaseOutFluent),
+                AaCode(
+                Sub()
+                    If RemoveFromChildren Then
+                        If Control.Parent Is Nothing Then Exit Sub
+                        CType(Control.Parent, Object).Children.Remove(Control)
+                    Else
+                        Control.Visibility = Visibility.Collapsed
+                    End If
+                    If CallBack IsNot Nothing Then CallBack(Control)
+                End Sub,, True)
             }, "MyCard Dispose " & Control.Uuid)
         Else
             If RemoveFromChildren Then
