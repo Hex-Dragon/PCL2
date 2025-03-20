@@ -7,6 +7,11 @@
         '重复加载部分
         PanBack.ScrollToHome()
         RefreshRam(False)
+        If McVersionCurrent Is Nothing Then
+            BtnSwitch.Visibility = Visibility.Collapsed
+        Else
+            BtnSwitch.Visibility = Visibility.Visible
+        End If
 
         '非重复加载部分
         If IsLoad Then Exit Sub
@@ -32,7 +37,7 @@
             '启动参数
             TextArgumentTitle.Text = Setup.Get("LaunchArgumentTitle")
             TextArgumentInfo.Text = Setup.Get("LaunchArgumentInfo")
-            ComboArgumentIndie.SelectedIndex = Setup.Get("LaunchArgumentIndie")
+            ComboArgumentIndieV2.SelectedIndex = Setup.Get("LaunchArgumentIndieV2")
             ComboArgumentVisibie.SelectedIndex = Setup.Get("LaunchArgumentVisible")
             ComboArgumentPriority.SelectedIndex = Setup.Get("LaunchArgumentPriority")
             ComboArgumentWindowType.SelectedIndex = Setup.Get("LaunchArgumentWindowType")
@@ -50,9 +55,8 @@
             TextAdvanceGame.Text = Setup.Get("LaunchAdvanceGame")
             TextAdvanceRun.Text = Setup.Get("LaunchAdvanceRun")
             CheckAdvanceRunWait.Checked = Setup.Get("LaunchAdvanceRunWait")
-            CheckAdvanceAssets.Checked = Setup.Get("LaunchAdvanceAssets")
-            CheckAdvanceJava.Checked = Setup.Get("LaunchAdvanceJava")
-            CheckAdvanceUseLaunchWrapper.Checked = Setup.Get("LaunchAdvanceUseLaunchWrapper")
+            CheckAdvanceDisableJLW.Checked = Setup.Get("LaunchAdvanceDisableJLW")
+            CheckAdvanceGraphicCard.Checked = Setup.Get("LaunchAdvanceGraphicCard")
 
         Catch ex As NullReferenceException
             Log(ex, "启动设置项存在异常，已被自动重置", LogLevel.Msgbox)
@@ -67,7 +71,7 @@
         Try
             Setup.Reset("LaunchArgumentTitle")
             Setup.Reset("LaunchArgumentInfo")
-            Setup.Reset("LaunchArgumentIndie")
+            Setup.Reset("LaunchArgumentIndieV2")
             Setup.Reset("LaunchArgumentVisible")
             Setup.Reset("LaunchArgumentWindowType")
             Setup.Reset("LaunchArgumentWindowWidth")
@@ -79,13 +83,11 @@
             Setup.Reset("LaunchSkinType")
             Setup.Reset("LaunchSkinID")
             Setup.Reset("LaunchAdvanceJvm")
-            Setup.Reset("LaunchAdvanceUseLaunchWrapper")
             Setup.Reset("LaunchAdvanceGame")
-            Setup.Reset("LaunchAdvanceJava")
-            Setup.Reset("LaunchAdvanceAssets")
             Setup.Reset("LaunchAdvanceRun")
             Setup.Reset("LaunchAdvanceRunWait")
-
+            Setup.Reset("LaunchAdvanceDisableJLW")
+            Setup.Reset("LaunchAdvanceGraphicCard")
             Setup.Reset("LaunchArgumentJavaAll")
             Setup.Reset("LaunchArgumentJavaSelect")
             JavaSearchLoader.Start(IsForceRestart:=True)
@@ -109,10 +111,10 @@
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderRamCustom.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndie.SelectionChanged, ComboArgumentVisibie.SelectionChanged, ComboArgumentWindowType.SelectionChanged, ComboArgumentPriority.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboArgumentIndieV2.SelectionChanged, ComboArgumentVisibie.SelectionChanged, ComboArgumentWindowType.SelectionChanged, ComboArgumentPriority.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceAssets.Change, CheckAdvanceJava.Change, CheckAdvanceRunWait.Change, CheckArgumentRam.Change, CheckAdvanceUseLaunchWrapper.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckAdvanceRunWait.Change, CheckArgumentRam.Change, CheckAdvanceDisableJLW.Change, CheckAdvanceGraphicCard.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
 
@@ -195,7 +197,7 @@
     Public Sub RefreshRam(ShowAnim As Boolean)
         If LabRamGame Is Nothing OrElse LabRamUsed Is Nothing OrElse FrmMain.PageCurrent <> FormMain.PageType.Setup OrElse FrmSetupLeft.PageID <> FormMain.PageSubType.SetupLaunch Then Exit Sub
         '获取内存情况
-        Dim RamGame As Double = GetRam(McVersionCurrent, False)
+        Dim RamGame As Double = Math.Round(GetRam(McVersionCurrent, False), 5)
         Dim RamTotal As Double = Math.Round(My.Computer.Info.TotalPhysicalMemory / 1024 / 1024 / 1024, 1)
         Dim RamAvailable As Double = Math.Round(My.Computer.Info.AvailablePhysicalMemory / 1024 / 1024 / 1024, 1)
         Dim RamGameActual As Double = Math.Round(Math.Min(RamGame, RamAvailable), 5)
@@ -209,11 +211,11 @@
         ElseIf RamTotal <= 16 Then
             SliderRamCustom.MaxValue = Math.Floor((RamTotal - 8) / 1) + 25
         Else
-            SliderRamCustom.MaxValue = Math.Min(Math.Floor((RamTotal - 16) / 2) + 33, 41)
+            SliderRamCustom.MaxValue = Math.Floor((RamTotal - 16) / 2) + 33
         End If
         '设置文本
         LabRamGame.Text = If(RamGame = Math.Floor(RamGame), RamGame & ".0", RamGame) & " GB" &
-                          If(Math.Abs(RamGame - RamGameActual) > 0.05, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
+                          If(RamGame <> RamGameActual, " (可用 " & If(RamGameActual = Math.Floor(RamGameActual), RamGameActual & ".0", RamGameActual) & " GB)", "")
         LabRamUsed.Text = If(RamUsed = Math.Floor(RamUsed), RamUsed & ".0", RamUsed) & " GB"
         LabRamTotal.Text = " / " & If(RamTotal = Math.Floor(RamTotal), RamTotal & ".0", RamTotal) & " GB"
         LabRamWarn.Visibility = If(RamGame = 1 AndAlso Not JavaIs64Bit() AndAlso Not Is32BitSystem AndAlso JavaList.Any, Visibility.Visible, Visibility.Collapsed)
@@ -398,8 +400,7 @@ PreFin:
         End If
         '若使用 32 位 Java，则限制为 1G
         If If(Is32BitJava, Not JavaIs64Bit(If(UseVersionJavaSetup, Version, Nothing))) Then RamGive = Math.Min(1, RamGive)
-        '封顶 32G
-        Return Math.Min(32, RamGive)
+        Return RamGive
     End Function
 
 #End Region
@@ -416,7 +417,7 @@ PreFin:
         Dim SelectedItem As MyComboBoxItem = Nothing
         Dim SelectedBySetup As String = Setup.Get("LaunchArgumentJavaSelect")
         Try
-            For Each Java In Sort(JavaList.Clone(), Function(l, r) l.VersionCode < r.VersionCode)
+            For Each Java In JavaList.Clone().OrderByDescending(Function(v) v.VersionCode)
                 Dim ListItem = New MyComboBoxItem With {.Content = Java.ToString, .ToolTip = Java.PathFolder, .Tag = Java}
                 ToolTipService.SetHorizontalOffset(ListItem, 400)
                 ComboArgumentJava.Items.Add(ListItem)
@@ -552,19 +553,10 @@ PreFin:
         End If
     End Sub
 
-    '版本隔离警告
-    Private IsReverting As Boolean = False
-    Private Sub ComboArgumentIndie_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboArgumentIndie.SelectionChanged
+    '版本隔离提示
+    Private Sub ComboArgumentIndie_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboArgumentIndieV2.SelectionChanged
         If AniControlEnabled <> 0 Then Exit Sub
-        If IsReverting Then Exit Sub
-        If MyMsgBox("调整版本隔离后，你可能得把游戏存档、Mod 等文件手动迁移到新的游戏文件夹中。" & vbCrLf &
-                    "如果修改后发现存档消失，把这项设置改回来就能恢复。" & vbCrLf &
-                    "如果你不会迁移存档，不建议修改这项设置！",
-                    "警告", "我知道我在做什么", "取消", IsWarn:=True) = 2 Then
-            IsReverting = True
-            ComboArgumentIndie.SelectedItem = e.RemovedItems(0)
-            IsReverting = False
-        End If
+        MyMsgBox("默认策略只会对今后新安装的版本生效。" & vbCrLf & "已有版本的隔离策略需要在它的版本设置中调整。")
     End Sub
 
 #End Region
@@ -585,5 +577,12 @@ PreFin:
     End Sub
 
 #End Region
+
+    '切换到版本独立设置
+    Private Sub BtnSwitch_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnSwitch.Click
+        McVersionCurrent.Load()
+        PageVersionLeft.Version = McVersionCurrent
+        FrmMain.PageChange(FormMain.PageType.VersionSetup, FormMain.PageSubType.VersionSetup)
+    End Sub
 
 End Class
