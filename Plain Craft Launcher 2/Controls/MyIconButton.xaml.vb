@@ -55,7 +55,7 @@
         RaiseEvent Click(sender, e)
         e.Handled = True
         Button_MouseUp()
-        ModEvent.TryStartEvent(EventType, EventData)
+        ModEvent.ProcessCustomEvents(EventType, EventData, CustomEvents)
     End Sub
     Public Property EventType As String
         Get
@@ -75,6 +75,15 @@
         End Set
     End Property
     Public Shared ReadOnly EventDataProperty As DependencyProperty = DependencyProperty.Register("EventData", GetType(String), GetType(MyIconButton), New PropertyMetadata(Nothing))
+    Public Property CustomEvents As CustomEventCollection
+        Get
+            Return GetValue(CustomEventsProperty)
+        End Get
+        Set(value As CustomEventCollection)
+            SetValue(CustomEventsProperty, value)
+        End Set
+    End Property
+    Public Shared ReadOnly CustomEventsProperty As DependencyProperty = DependencyProperty.Register("CustomEvents", GetType(CustomEventCollection), GetType(MyIconButton), New PropertyMetadata(Nothing))
 
     '鼠标点击判定（务必放在点击事件之后，以使得 Button_MouseUp 先于 Button_MouseLeave 执行）
     Private IsMouseDown As Boolean = False
