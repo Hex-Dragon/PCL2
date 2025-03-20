@@ -282,7 +282,7 @@
                         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="设置 子页面" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="2" Text="游戏" x:Name="CheckHiddenSetupLaunch" Tag="UiHiddenSetupLaunch" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="3" Text="个性化" x:Name="CheckHiddenSetupUI" Tag="UiHiddenSetupUi" />
-                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="4" Text="启动器" x:Name="CheckHiddenSetupSystem" Tag="UiHiddenSetupSystem" />
+                        <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="4" Text="其他" x:Name="CheckHiddenSetupSystem" Tag="UiHiddenSetupSystem" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="2" Grid.Column="5" Text="联机" x:Name="CheckHiddenSetupLink" Tag="UiHiddenSetupLink" Visibility="Collapsed" />
                         <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Text="更多 子页面" />
                         <local:MyCheckBox Height="22" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" Text="帮助" x:Name="CheckHiddenOtherHelp" Tag="UiHiddenOtherHelp" />
