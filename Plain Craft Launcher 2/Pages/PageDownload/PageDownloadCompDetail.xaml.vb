@@ -214,7 +214,6 @@
         AniControlEnabled += 1
         Project = FrmMain.PageCurrent.Additional(0)
         PanBack.ScrollToHome()
-
         '重启加载器
         If IsFirstInit Then
             '在 Me.Initialized 已经初始化了加载器，不再重复初始化
@@ -412,6 +411,9 @@
     End Sub
     Private Sub BtnIntroCopy_Click(sender As Object, e As EventArgs) Handles BtnIntroCopy.Click
         ClipboardSet(CompItem.LabTitle.Text & CompItem.LabTitleRaw.Text)
+    End Sub
+    Private Sub BtnFavorites_Click(sender As Object, e As EventArgs) Handles BtnFavorites.Click
+        CompFavorites.ShowMenu(Project, sender)
     End Sub
 
 End Class

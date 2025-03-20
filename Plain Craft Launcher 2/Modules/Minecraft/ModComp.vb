@@ -558,6 +558,15 @@
                     If(DownloadCount > 100000, Math.Floor(DownloadCount / 10000) & " 万", DownloadCount))
             Return NewItem
         End Function
+        Public Function ToListItem() As MyListItem
+            Dim Result As New MyListItem()
+            Result.Title = TranslatedName
+            Result.Info = Description.Replace(vbCr, "").Replace(vbLf, "")
+            Result.Logo = LogoUrl
+            Result.Tags = Tags
+            Result.Tag = Me
+            Return Result
+        End Function
         Public Function GetControlLogo() As String
             If String.IsNullOrEmpty(LogoUrl) Then
                 Return PathImage & "Icons/NoIcon.png"
@@ -1544,4 +1553,229 @@ Retry:
 
 #End Region
 
+#Region "CompFavorites | 收藏"
+    Class CompFavorites
+
+        Public Shared Function GetShareCode(Data As List(Of String)) As String
+            Try
+                Return New JArray(Data).ToString(Newtonsoft.Json.Formatting.None)
+            Catch ex As Exception
+                Log(ex, "[CompFavorites] 生成分享出错")
+            End Try
+            Return ""
+        End Function
+
+        Public Shared Function GetIdsByShareCode(Code As String) As List(Of String)
+            Try
+                Return JArray.Parse(Code).ToObject(Of List(Of String))()
+            Catch ex As Exception
+                Log(ex, "[CompFavorites] 通过分享获取 ID 出错")
+            End Try
+            Return New List(Of String)
+        End Function
+
+        ''' <summary>
+        ''' 显示收藏菜单。
+        ''' </summary>
+        ''' <param name="Project"></param>
+        ''' <param name="Pos"></param>
+        Public Shared Sub ShowMenu(Project As CompProject, Pos As UIElement)
+            Dim Body As New ContextMenu()
+            For Each i In FavoritesList
+                Dim Item As New MyMenuItem
+                Item.MaxWidth = 240
+                Dim HasFavs As Boolean = i.Favs.Contains(Project.Id)
+                If HasFavs Then
+                    Item.Header = $"取消收藏 {i.Name}"
+                    Item.Icon = Logo.IconButtonLikeFill
+                Else
+                    Item.Header = $"收藏到 {i.Name}"
+                    Item.Icon = Logo.IconButtonLikeLine
+                End If
+                AddHandler Item.Click, Sub()
+                                           Try
+                                               If HasFavs Then
+                                                   i.Favs.Remove(Project.Id)
+                                                   Hint($"已将 {Project.TranslatedName} 从 {i.Name} 中删除", HintType.Finish)
+                                               Else
+                                                   i.Favs.Add(Project.Id)
+                                                   i.Favs.Distinct()
+                                                   Hint($"已将 {Project.TranslatedName} 添加到 {i.Name} 中", HintType.Finish)
+                                               End If
+                                               Save()
+                                           Catch ex As Exception
+                                               Log(ex, "[CompFavorites] 改变收藏项出错")
+                                           End Try
+                                       End Sub
+                Body.Items.Add(Item)
+            Next
+            Body.Placement = Primitives.PlacementMode.Bottom
+            Body.PlacementTarget = Pos
+            Body.IsOpen = True
+        End Sub
+
+        Public Class FavData
+            ''' <summary>
+            ''' 收藏夹名称
+            ''' </summary>
+            ''' <returns></returns>
+            Property Name As String
+            ''' <summary>
+            ''' Guid
+            ''' </summary>
+            ''' <returns></returns>
+            Property Id As String
+            ''' <summary>
+            ''' 收藏的工程 ID 列表
+            ''' </summary>
+            ''' <returns></returns>
+            Property Favs As New List(Of String)
+        End Class
+
+        Private Shared _FavoritesList As List(Of FavData)
+        ''' <summary>
+        ''' 收藏的工程列表
+        ''' </summary>
+        Public Shared Property FavoritesList As List(Of FavData)
+            Get
+                If _FavoritesList Is Nothing Then
+                    Dim RawData As String = Setup.Get("CompFavorites")
+                    Dim RawList As List(Of FavData) = Nothing
+                    Dim Migrate As List(Of String) = Nothing
+                    Try
+                        Migrate = JArray.Parse(RawData).ToObject(Of List(Of String)) ' 从旧版本迁移
+                    Catch ex As Exception
+                    End Try
+                    If Migrate IsNot Nothing Then
+                        RawList = New List(Of FavData)
+                        RawList.Add(GetNewFav("默认", Migrate))
+                    Else
+                        RawList = JArray.Parse(RawData).ToObject(Of List(Of FavData))
+                        If RawList.Count = 0 Then
+                            RawList.Add(GetNewFav("默认", Nothing)) ' 确保无论如何都要至少有一个
+                        End If
+                    End If
+                    _FavoritesList = RawList
+                    Save()
+                End If
+                Return _FavoritesList
+            End Get
+            Set
+                _FavoritesList = Value
+                Dim RawList = JArray.FromObject(_FavoritesList)
+                Setup.Set("CompFavorites", RawList.ToString(Newtonsoft.Json.Formatting.None))
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' 保存收藏夹数据
+        ''' </summary>
+        Public Shared Sub Save()
+            FavoritesList = _FavoritesList
+        End Sub
+
+        ''' <summary>
+        ''' 获取一个新的收藏夹
+        ''' </summary>
+        ''' <param name="Name"></param>
+        ''' <param name="FavList">没有传 Nothing</param>
+        ''' <returns></returns>
+        Public Shared Function GetNewFav(Name As String, FavList As List(Of String)) As FavData
+            Dim res As New FavData With {.Name = Name, .Id = Guid.NewGuid.ToString()}
+            If FavList Is Nothing Then
+                res.Favs = New List(Of String)
+            Else
+                res.Favs = FavList
+            End If
+            Return res
+        End Function
+    End Class
+
+    Class CompRequest
+        ''' <summary>
+        ''' 通过项目 Id 判断是否来自 CurseForge
+        ''' </summary>
+        ''' <param name="Id"></param>
+        ''' <returns></returns>
+        Public Shared Function IsFromCurseForge(Id As String) As Boolean
+            Dim res As Integer = 0
+            Return Integer.TryParse(Id, res) 'CurseForge 数字 ID Modrinth 乱序 ID
+        End Function
+
+        ''' <summary>
+        ''' 通过一堆 ID 从 Modrinth 那获取项目信息 
+        ''' </summary>
+        ''' <param name="Ids"></param>
+        ''' <returns></returns>
+        Public Shared Function GetListByIdsFromModrinth(Ids As List(Of String)) As List(Of CompProject)
+            Dim Res As New List(Of CompProject)
+            Dim RawProjectsData = DlModRequest($"https://api.modrinth.com/v2/projects?ids=[""{Ids.Join(""",""")}""]", IsJson:=True)
+            For Each RawData In RawProjectsData
+                Res.Add(New CompProject(RawData))
+            Next
+            Return Res
+        End Function
+
+        ''' <summary>
+        ''' 通过一堆 ID 从 CurseForge 那获取项目信息 
+        ''' </summary>
+        ''' <param name="Ids"></param>
+        ''' <returns></returns>
+        Public Shared Function GetListByIdsFromCurseforge(Ids As List(Of String)) As List(Of CompProject)
+            Dim Res As New List(Of CompProject)
+            Dim RawProjectsData = GetJson(DlModRequest("https://api.curseforge.com/v1/mods",
+                                       "POST", "{""modIds"": [" & Ids.Join(",") & "]}", "application/json"))("data")
+            For Each RawData In RawProjectsData
+                Res.Add(New CompProject(RawData))
+            Next
+            Return Res
+        End Function
+
+        Public Shared Function GetCompProjectsByIds(Input As List(Of String)) As List(Of CompProject)
+            If Not Input.Any() Then Return New List(Of CompProject)
+            Dim RawList As List(Of String) = Input
+            Dim ModrinthProjectIds As New List(Of String)
+            Dim CurseForgeProjectIds As New List(Of String)
+            Dim Res As List(Of CompProject) = New List(Of CompProject)
+            For Each Id In RawList
+                If IsFromCurseForge(Id) Then
+                    CurseForgeProjectIds.Add(Id)
+                Else
+                    ModrinthProjectIds.Add(Id)
+                End If
+            Next
+            '在线信息获取
+            Dim FinishedTask = 0
+            Dim NeedCompleteTask = 0
+            If CurseForgeProjectIds.Any() Then
+                NeedCompleteTask += 1
+                RunInNewThread(Sub()
+                                   Try
+                                       Res.AddRange(CompRequest.GetListByIdsFromCurseforge(CurseForgeProjectIds))
+                                   Catch ex As Exception
+                                       Log(ex, "[Favorites] 获取 CurseForge 数据失败", LogLevel.Hint)
+                                   Finally
+                                       FinishedTask += 1
+                                   End Try
+                               End Sub, "Favorites CurseForge")
+            End If
+            If ModrinthProjectIds.Any() Then
+                NeedCompleteTask += 1
+                RunInNewThread(Sub()
+                                   Try
+                                       Res.AddRange(CompRequest.GetListByIdsFromModrinth(ModrinthProjectIds))
+                                   Catch ex As Exception
+                                       Log(ex, "[Favorites] 获取 Modrinth 数据失败", LogLevel.Hint)
+                                   Finally
+                                       FinishedTask += 1
+                                   End Try
+                               End Sub, "Favorites Modrinth")
+            End If
+            Do Until FinishedTask = NeedCompleteTask
+                Thread.Sleep(50)
+            Loop
+            Return Res
+        End Function
+    End Class
+#End Region
 End Module
