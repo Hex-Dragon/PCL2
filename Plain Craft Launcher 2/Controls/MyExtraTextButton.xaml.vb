@@ -82,7 +82,7 @@ Public Class MyExtraTextButton
     '触发点击事件
     Private Sub Button_LeftMouseUp(sender As Object, e As MouseButtonEventArgs) Handles PanClick.MouseLeftButtonUp
         If IsLeftMouseHeld Then
-            Log("[Control] 按下附加按钮" & If(ToolTip = "", "", "：" & ToolTip.ToString))
+            Log("[Control] 按下附加图标按钮：" & Text)
             RaiseEvent Click(sender, e)
             e.Handled = True
             Button_LeftMouseUp()
@@ -94,33 +94,33 @@ Public Class MyExtraTextButton
     Private Sub Button_LeftMouseDown(sender As Object, e As MouseButtonEventArgs) Handles PanClick.MouseLeftButtonDown
         If Not IsLeftMouseHeld Then
             AniStart({
-                     AaScaleTransform(PanScale, 0.85 - CType(PanScale.RenderTransform, ScaleTransform).ScaleX, 800,, New AniEaseOutFluent(AniEasePower.Strong)),
-                     AaScaleTransform(PanScale, -0.05, 60,, New AniEaseOutFluent)
-                     }, "MyExtraTextButton Scale " & Uuid)
+                AaScaleTransform(PanScale, 0.85 - CType(PanScale.RenderTransform, ScaleTransform).ScaleX, 800,, New AniEaseOutFluent(AniEasePower.Strong)),
+                AaScaleTransform(PanScale, -0.05, 60,, New AniEaseOutFluent)
+            }, "MyExtraTextButton Scale " & Uuid)
         End If
         IsLeftMouseHeld = True
         Focus()
     End Sub
     Private Sub Button_LeftMouseUp() Handles PanClick.MouseLeftButtonUp
         AniStart({
-                     AaScaleTransform(PanScale, 1 - CType(PanScale.RenderTransform, ScaleTransform).ScaleX, 300,, New AniEaseOutBack)
-                 }, "MyExtraTextButton Scale " & Uuid)
+            AaScaleTransform(PanScale, 1 - CType(PanScale.RenderTransform, ScaleTransform).ScaleX, 300,, New AniEaseOutBack)
+        }, "MyExtraTextButton Scale " & Uuid)
         IsLeftMouseHeld = False
         RefreshColor() '直接刷新颜色以判断是否已触发 MouseLeave
     End Sub
     Private Sub Button_RightMouseUp() Handles PanClick.MouseRightButtonUp
         If Not IsLeftMouseHeld Then
             AniStart({
-                         AaScaleTransform(PanScale, 1 - CType(PanScale.RenderTransform, ScaleTransform).ScaleX, 300,, New AniEaseOutBack)
-                     }, "MyExtraTextButton Scale " & Uuid)
+                AaScaleTransform(PanScale, 1 - CType(PanScale.RenderTransform, ScaleTransform).ScaleX, 300,, New AniEaseOutBack)
+            }, "MyExtraTextButton Scale " & Uuid)
         End If
         RefreshColor() '直接刷新颜色以判断是否已触发 MouseLeave
     End Sub
     Private Sub Button_MouseLeave() Handles PanClick.MouseLeave
         IsLeftMouseHeld = False
         AniStart({
-                     AaScaleTransform(PanScale, 1 - CType(PanScale.RenderTransform, ScaleTransform).ScaleX, 500,, New AniEaseOutFluent)
-                 }, "MyExtraTextButton Scale " & Uuid)
+            AaScaleTransform(PanScale, 1 - CType(PanScale.RenderTransform, ScaleTransform).ScaleX, 500,, New AniEaseOutFluent)
+        }, "MyExtraTextButton Scale " & Uuid)
         RefreshColor() '直接刷新颜色以判断是否已触发 MouseLeave
     End Sub
 
@@ -128,11 +128,14 @@ Public Class MyExtraTextButton
     '务必放在 IsMouseDown 更新之后
     Private Const AnimationColorIn As Integer = 120
     Private Const AnimationColorOut As Integer = 150
-    Public Sub RefreshColor() Handles PanClick.MouseEnter, PanClick.MouseLeave, Me.Loaded
+    Public Sub RefreshColor() Handles PanClick.MouseEnter, PanClick.MouseLeave, Me.Loaded, Me.IsEnabledChanged
         Try
             If IsLoaded AndAlso AniControlEnabled = 0 Then '防止默认属性变更触发动画
 
-                If IsMouseOver Then
+                If Not IsEnabled Then
+                    '禁用
+                    AniStart(AaColor(PanColor, BackgroundProperty, "ColorBrushGray4", AnimationColorIn), "MyExtraTextButton Color " & Uuid)
+                ElseIf IsMouseOver Then
                     '指向
                     AniStart(AaColor(PanColor, BackgroundProperty, "ColorBrush4", AnimationColorIn), "MyExtraTextButton Color " & Uuid)
                 Else
@@ -143,7 +146,9 @@ Public Class MyExtraTextButton
             Else
 
                 AniStop("MyExtraTextButton Color " & Uuid)
-                If IsMouseOver Then
+                If Not IsEnabled Then
+                    PanColor.SetResourceReference(BackgroundProperty, "ColorBrushGray4")
+                ElseIf IsMouseOver Then
                     PanColor.SetResourceReference(BackgroundProperty, "ColorBrush4")
                 Else
                     PanColor.SetResourceReference(BackgroundProperty, "ColorBrush3")
@@ -151,7 +156,7 @@ Public Class MyExtraTextButton
 
             End If
         Catch ex As Exception
-            Log(ex, "刷新图标按钮颜色出错")
+            Log(ex, "刷新附加图标按钮颜色出错")
         End Try
     End Sub
 

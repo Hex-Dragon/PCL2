@@ -4,7 +4,7 @@
     xmlns:local="clr-namespace:PCL"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     x:Name="PanBack" mc:Ignorable="d" x:Class="MyExtraTextButton"
-    RenderTransformOrigin="0.5,0.5" ToolTipService.Placement="Left" ToolTipService.VerticalOffset="16" ToolTipService.HorizontalOffset="-8" Height="52">
+    RenderTransformOrigin="0.5,0.5" ToolTipService.Placement="Left" Height="52" Margin="20">
     <Grid.RenderTransform>
         <ScaleTransform ScaleX="0" ScaleY="0" />
     </Grid.RenderTransform>
@@ -20,14 +20,14 @@
                 <DropShadowEffect ShadowDepth="0" BlurRadius="10" Opacity="0.2" />
             </Border.Effect>
         </Border>
-        <StackPanel Orientation="Horizontal" Margin="24,0" SnapsToDevicePixels="False" UseLayoutRounding="False">
-            <Path x:Name="Path" Stretch="Uniform" Margin="0,12" Fill="{DynamicResource ColorBrush8}" RenderTransformOrigin="0.5,0.5">
+        <StackPanel Orientation="Horizontal" Margin="20,0" SnapsToDevicePixels="False" UseLayoutRounding="False">
+            <Path x:Name="Path" Stretch="Uniform" Margin="2,12,0,12" Fill="{DynamicResource ColorBrush8}" RenderTransformOrigin="0.5,0.5">
                 <Path.RenderTransform>
                     <ScaleTransform />
                 </Path.RenderTransform>
             </Path>
             <TextBlock x:Name="LabText" VerticalAlignment="Center" Foreground="{DynamicResource ColorBrush8}" FontSize="16" 
-                       Margin="11,0,-2,1.2" />
+                       Margin="12,0,0,0.8" />
         </StackPanel>
     </Grid>
 </Grid>

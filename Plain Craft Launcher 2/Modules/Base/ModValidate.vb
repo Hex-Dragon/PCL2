@@ -1,4 +1,20 @@
 ﻿'提供不同的输入验证方法，名称以 Validate 开头
+Public Module ModValidate
+
+    ''' <summary>
+    ''' 进行输入验证，并返回错误原因。
+    ''' 如果没有错误则返回空字符串。
+    ''' </summary>
+    Public Function Validate(Text As String, ValidateRules As IEnumerable(Of Validate)) As String
+        Dim Result As String = ""
+        For Each ValidateRule As Validate In ValidateRules
+            Result = ValidateRule.Validate(Text)
+            If Result <> "" Then Return Result
+        Next
+        Return Result
+    End Function
+
+End Module
 
 ''' <summary>
 ''' 输入验证规则基类。要查看所有的输入验证规则，可在输入 Validate 后查看自动补全。

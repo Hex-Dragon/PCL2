@@ -174,7 +174,7 @@ Public Class MyListItem
             Return GetValue(TitleProperty)
         End Get
         Set(value As String)
-            SetValue(TitleProperty, value)
+            SetValue(TitleProperty, value.Replace(vbCr, "").Replace(vbLf, ""))
         End Set
     End Property
     Public Shared ReadOnly TitleProperty As DependencyProperty = DependencyProperty.Register("Title", GetType(String), GetType(MyListItem))
