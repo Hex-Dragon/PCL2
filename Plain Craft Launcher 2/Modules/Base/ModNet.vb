@@ -1100,14 +1100,14 @@ Redirect:
                         '避免循环重定向浪费资源
                         If Redirect > Info.AllowMaxRedirect Then Throw New Exception($"{Info.Source.Url} 重定向的次数过多。")
                         Dim RedirectUrl As String = HttpResponse.GetResponseHeader("location")
-                        '可能导致循环重定向
-                        If RedirectUrl Is Nothing OrElse RedirectUrl = RequestUrl Then Throw New Exception($"{RequestUrl} 未提供有效的重定向响应。")
+                        
+                        If RedirectUrl Is Nothing Then Throw New Exception($"{RequestUrl} 未提供有效的重定向响应。")
                         '处理相对路径的重定向
                         If RedirectUrl.StartsWithF("/") OrElse RedirectUrl.StartsWithF("./") Then
                             Dim ParseUrl As New Uri(RequestUrl)
                             RedirectUrl = New Uri(New Uri(If(RedirectUrl.StartsWithF("/"), $"{ParseUrl.Scheme}://{ParseUrl.Host}", RequestUrl)), RedirectUrl).AbsoluteUri
-                            '同理
-                            If RedirectUrl = RequestUrl Then Throw New Exception($"{RequestUrl} 未提供有效的重定向响应。")
+                        '可能导致循环重定向
+                        If RedirectUrl = RequestUrl Then Throw New Exception($"{RequestUrl} 未提供有效的重定向响应。")
                         End If
                         '把主控也记录进去
                         If RequestUrl.ContainsF("bmclapi2.bangbang93.com") Then RedirectHistory.Add(RequestUrl)
