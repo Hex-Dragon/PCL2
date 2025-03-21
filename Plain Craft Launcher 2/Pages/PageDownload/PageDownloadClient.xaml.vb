@@ -24,11 +24,7 @@
                     Case "snapshot"
                         Type = "预览版"
                         'Mojang 误分类
-                        If Version("id").ToString.StartsWith("1.") AndAlso
-                            Not Version("id").ToString.ToLower.Contains("combat") AndAlso
-                            Not Version("id").ToString.ToLower.Contains("rc") AndAlso
-                            Not Version("id").ToString.ToLower.Contains("experimental") AndAlso
-                            Not Version("id").ToString.ToLower.Contains("pre") Then
+                        If Version("id").ToString = "1.5" Then
                             Type = "正式版"
                             Version("type") = "release"
                         End If
