@@ -643,7 +643,7 @@ Public Module ModBase
     ''' <summary>
     ''' 写入注册表，默认为程序所属。
     ''' </summary>
-    Public Sub WriteReg(Key As String, Value As String, Optional ShowException As Boolean = False, Optional Path As String = "")
+    Public Sub WriteReg(Key As String, Value As String, Optional ShowException As Boolean = False, Optional Path As String = "", Optional ThrowException As Boolean = False)
         Try
             Dim parentKey As Microsoft.Win32.RegistryKey, softKey As Microsoft.Win32.RegistryKey
             parentKey = My.Computer.Registry.CurrentUser

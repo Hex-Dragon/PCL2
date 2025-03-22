@@ -381,7 +381,7 @@ Public Module ModMusic
     ''' <summary>
     ''' 以 700 ms 为刷新间隔的 SMTC 时间线更新
     ''' </summary>
-    Public Sub SMTCTimelineUpdater(CurrentWave As NAudio.Wave.WaveOut, Reader As NAudio.Wave.WaveStream)
+    Public Sub SMTCTimelineUpdater(CurrentWave As NAudio.Wave.WaveOutEvent, Reader As NAudio.Wave.WaveStream)
         If _smtc Is Nothing Then Exit Sub
         RunInNewThread(Sub()
                            While CurrentWave.Equals(MusicNAudio) AndAlso CurrentWave.PlaybackState = NAudio.Wave.PlaybackState.Playing AndAlso _smtc IsNot Nothing

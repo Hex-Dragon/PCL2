@@ -163,7 +163,7 @@ Public Class PageOtherTest
                         MyMsgBox(String.Format("清理了 {0} 个文件！", num) + vbCrLf & "PCL 即将自动重启……", "缓存已清理", "确定", "", "", False, True, True, Nothing, Nothing, Nothing)
 
                         Process.Start(New ProcessStartInfo(PathWithName))
-                        FormMain.EndProgramForce(Result.Success)
+                        FormMain.EndProgramForce(ProcessReturnValues.Success)
                     End If
                     Hint("请先关闭所有运行中的游戏……")
                 Catch ex As Exception

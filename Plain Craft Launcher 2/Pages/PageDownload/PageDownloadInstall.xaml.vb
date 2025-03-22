@@ -460,7 +460,7 @@ Public Class PageDownloadInstall
             If SelectedCleanroom Is Nothing Then
                 BtnCleanroomClear.Visibility = Visibility.Collapsed
                 ImgCleanroom.Visibility = Visibility.Collapsed
-                LabCleanroom.Text = If(CleanroomError, "点击选择")
+                LabCleanroom.Text = If(CleanroomError, "可以添加")
                 LabCleanroom.Foreground = ColorGray4
             Else
                 BtnCleanroomClear.Visibility = Visibility.Visible
@@ -1416,7 +1416,7 @@ Public Class PageDownloadInstall
     ''' 获取 Quilt 的加载异常信息。若正常则返回 Nothing。
     ''' </summary>
     Private Function LoadQuiltGetError() As String
-        If LoadQuilt Is Nothing OrElse LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "正在获取版本列表……"
+        If LoadQuilt Is Nothing OrElse LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "加载中……"
         If LoadQuilt.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadQuilt.State, Object).Error.Message
         For Each Version As JObject In DlQuiltListLoader.Output.Value("game")
             If Version("version").ToString = SelectedMinecraftId.Replace("∞", "infinite").Replace("Combat Test 7c", "1.16_combat-3") Then
@@ -1425,7 +1425,7 @@ Public Class PageDownloadInstall
                 Return Nothing
             End If
         Next
-        Return "没有可用版本"
+        Return "不可用"
     End Function
 
     '限制展开
