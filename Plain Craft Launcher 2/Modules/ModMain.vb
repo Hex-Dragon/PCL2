@@ -880,17 +880,10 @@ NextFile:
     ''' <param name="RequireSlash">是否要求路径包含斜杠。</param>
     Public Function RequestTaskTempFolder(Optional RequireNonSpace As Boolean = False, Optional RequireSlash As Boolean = True) As String
         TryClearTaskTemp()
-        If RequireSlash Then
-            RequestTaskTempFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
-            If RequireNonSpace AndAlso RequestTaskTempFolder.Contains(" ") Then
-                RequestTaskTempFolder = $"{OsDrive}ProgramData\PCL\TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
-            End If
-        Else
-            RequestTaskTempFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}"
-            If RequireNonSpace AndAlso RequestTaskTempFolder.Contains(" ") Then
-                RequestTaskTempFolder = $"{OsDrive}ProgramData\PCL\TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}"
-            End If
-        End If
+        Dim RequestTaskTempFolderWithoutSlash As String = If(RequireNonSpace AndAlso $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}".Contains(" "), 
+                                  $"{OsDrive}ProgramData\PCL\TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}", 
+                                  $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}")
+        RequestTaskTempFolder = If(RequireSlash, $"{RequestTaskTempFolderWithoutSlash}\", RequestTaskTempFolderWithoutSlash)
         Directory.CreateDirectory(RequestTaskTempFolder)
     End Function
 
