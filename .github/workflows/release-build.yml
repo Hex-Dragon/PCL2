@@ -2,11 +2,12 @@ name: Release Build
 
 on:
   release:
-    types: [released,published]
+    types: [published]
 
 jobs:
   build:
     name: Build ${{ matrix.configuration }}-${{ matrix.architecture }} on ${{ matrix.os }}
+    if: ${{ !github.event.release.prerelease }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -17,6 +18,14 @@ jobs:
             os: windows-latest
 
           - configuration: Release
+            architecture: ARM64
+            os: self-hosted
+
+          - configuration: Beta
+            architecture: x64
+            os: windows-latest
+
+          - configuration: Beta
             architecture: ARM64
             os: self-hosted
 

@@ -2,11 +2,12 @@ name: Pre-Release Build
 
 on:
   release:
-    types: [published,prereleased]
+    types: [published]
 
 jobs:
   build:
     name: Build ${{ matrix.configuration }}-${{ matrix.architecture }} on ${{ matrix.os }}
+    if: ${{ github.event.release.prerelease }}
     runs-on: ${{ matrix.os }}
 
     strategy:
