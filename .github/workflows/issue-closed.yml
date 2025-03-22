@@ -15,6 +15,12 @@ jobs:
           actions: 'add-labels'
           labels: '👌 完成'
 
+      - name: Remove labels
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'remove-labels'
+          labels: '⭕ 等待处理,🚧 正在处理,🕑 等待合并,🕑 等待前置'
+
   close-as-duplicate:
     if: github.event.issue.state_reason == 'duplicate'
     runs-on: ubuntu-latest
@@ -24,3 +30,9 @@ jobs:
         with:
           actions: 'add-labels'
           labels: '❌ 重复'
+
+      - name: Remove labels
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'remove-labels'
+          labels: '❌ 忽略,❌ 拒绝 / 放弃,❌ 暂无计划,❌ 第三方,⭕ 等待处理'
