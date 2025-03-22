@@ -545,7 +545,7 @@ pause"
         Dim VersionFolder As String = McFolder & "versions\" & Id & "\"
         Dim IsNewVersion As Boolean = DownloadInfo.Inherit.Contains("w") OrElse Val(DownloadInfo.Inherit.Split(".")(1)) >= 14
         Dim Target As String = If(IsNewVersion,
-            RequestTaskTempFolder(),
+            RequestTaskTempFolder() & "temp",
             McFolder & "libraries\optifine\OptiFine\" & DownloadInfo.NameFile.Replace("OptiFine_", "").Replace(".jar", "").Replace("preview_", "") & "\" & DownloadInfo.NameFile.Replace("OptiFine_", "OptiFine-").Replace("preview_", ""))
         Dim Loaders As New List(Of LoaderBase)
 
@@ -613,8 +613,8 @@ pause"
             Log("[Download] 检测为新版 OptiFine：" & DownloadInfo.Inherit)
             Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("安装 OptiFine（方式 A）",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
-                Dim BaseMcFolderHome As String = RequestTaskTempFolder()
-                Dim BaseMcFolder As String = BaseMcFolderHome & ".minecraft\"
+                Dim BaseMcFolderHome As String = RequestTaskTempFolder(False, False)
+                Dim BaseMcFolder As String = BaseMcFolderHome & "\.minecraft\"
                 Try
                     '准备安装环境
                     If Directory.Exists(BaseMcFolder & "versions\" & DownloadInfo.Inherit) Then

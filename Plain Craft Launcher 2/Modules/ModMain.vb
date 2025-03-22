@@ -873,15 +873,23 @@ NextFile:
     End Sub
 
     ''' <summary>
-    ''' 申请一个可用于任务缓存的临时文件夹，以 \ 结尾。
+    ''' 申请一个可用于任务缓存的临时文件夹。
     ''' 这些文件夹无需进行后续清理。
     ''' </summary>
     ''' <param name="RequireNonSpace">是否要求路径不包含空格。</param>
-    Public Function RequestTaskTempFolder(Optional RequireNonSpace As Boolean = False) As String
+    ''' <param name="RequireSlash">是否要求路径斜杠。</param>
+    Public Function RequestTaskTempFolder(Optional RequireNonSpace As Boolean = False, Optional RequireSlash As Boolean = True) As String
         TryClearTaskTemp()
-        RequestTaskTempFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
-        If RequireNonSpace AndAlso RequestTaskTempFolder.Contains(" ") Then
-            RequestTaskTempFolder = $"{OsDrive}ProgramData\PCL\TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+        If RequireSlash Then
+            RequestTaskTempFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+            If RequireNonSpace AndAlso RequestTaskTempFolder.Contains(" ") Then
+                RequestTaskTempFolder = $"{OsDrive}ProgramData\PCL\TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+            End If
+        Else
+            RequestTaskTempFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}"
+            If RequireNonSpace AndAlso RequestTaskTempFolder.Contains(" ") Then
+                RequestTaskTempFolder = $"{OsDrive}ProgramData\PCL\TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}"
+            End If
         End If
         Directory.CreateDirectory(RequestTaskTempFolder)
     End Function
