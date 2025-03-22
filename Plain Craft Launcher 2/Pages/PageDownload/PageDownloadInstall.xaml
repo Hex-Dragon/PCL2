@@ -49,7 +49,7 @@
                     </local:MyCard>
                     <local:MyCard Title="Cleanroom" Height="40" Margin="0,15,0,0" x:Name="CardCleanroom" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanCleanroom" />
-                        <Grid x:Name="PanCleanroomInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid x:Name="PanCleanroomInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>

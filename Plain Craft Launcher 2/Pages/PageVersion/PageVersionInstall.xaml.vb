@@ -16,7 +16,6 @@ Public Class PageVersionInstall
         DlLiteLoaderListLoader.Start()
         DlFabricListLoader.Start()
         DlQuiltListLoader.Start()
-        DlForgeListLoader.Start()
         DlNeoForgeListLoader.Start()
         DlCleanroomListLoader.Start()
 
@@ -36,7 +35,6 @@ Public Class PageVersionInstall
         LoadQuilt.State = DlQuiltListLoader
         LoadQSL.State = DlQSLLoader
         LoadNeoForge.State = DlNeoForgeListLoader
-        LoadForge.State = DlForgeListLoader
         LoadCleanroom.State = DlCleanroomListLoader
         LoadOptiFabric.State = DlOptiFabricLoader
     End Sub
@@ -47,17 +45,6 @@ Public Class PageVersionInstall
     Public IsInSelectPage As Boolean = False
     Private IsFirstLoaded As Boolean = False
     Private Sub EnterSelectPage()
-        '重置加载状态避免修改核心时加载器不刷新 #173
-        DlOptiFineListLoader.State = LoadState.Waiting
-        DlLiteLoaderListLoader.State = LoadState.Waiting
-        DlFabricListLoader.State = LoadState.Waiting
-        DlFabricApiLoader.State = LoadState.Waiting
-        DlQuiltListLoader.State = LoadState.Waiting
-        DlQSLLoader.State = LoadState.Waiting
-        DlNeoForgeListLoader.State = LoadState.Waiting
-        DlCleanroomListLoader.State = LoadState.Waiting
-        DlOptiFabricLoader.State = LoadState.Waiting
-
         If IsInSelectPage Then Exit Sub
         IsInSelectPage = True
 

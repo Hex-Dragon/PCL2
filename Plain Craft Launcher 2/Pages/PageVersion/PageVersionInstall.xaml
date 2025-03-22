@@ -7,7 +7,7 @@
     <Grid>
         <Grid x:Name="PanAllBack">
             <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
-                <Grid Margin="25,10,25,25">
+                <Grid Margin="25,10,25,75">
                     <StackPanel Grid.Row="1" Name="PanMinecraft" Grid.IsSharedSizeScope="True" Margin="0,0,0,-10" Visibility="Collapsed">
                         <StackPanel.RenderTransform>
                             <TranslateTransform />
@@ -30,7 +30,7 @@
                             </StackPanel>
                         </local:MyCard>
                         <local:MyCard Title="Minecraft" Height="40" Margin="0,15,0,0" x:Name="CardMinecraft">
-                        <Grid x:Name="PanMinecraftInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top">
+                            <Grid x:Name="PanMinecraftInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>
@@ -50,7 +50,7 @@
                     </local:MyCard>
                     <local:MyCard Title="Forge" Height="40" Margin="0,15,0,0" x:Name="CardForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanForge" />
-                        <Grid x:Name="PanForgeInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid x:Name="PanForgeInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>
@@ -68,7 +68,7 @@
                     </local:MyCard>
                     <local:MyCard Title="Cleanroom" Height="40" Margin="0,15,0,0" x:Name="CardCleanroom" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanCleanroom" />
-                        <Grid x:Name="PanCleanroomInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid x:Name="PanCleanroomInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>
@@ -86,7 +86,7 @@
                     </local:MyCard>
                     <local:MyCard Title="NeoForge" Height="40" Margin="0,15,0,0" x:Name="CardNeoForge" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanNeoForge" />
-                        <Grid x:Name="PanNeoForgeInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid x:Name="PanNeoForgeInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>
@@ -104,7 +104,7 @@
                     </local:MyCard>
                     <local:MyCard Title="Fabric" Height="40" Margin="0,15,0,0" x:Name="CardFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanFabric" />
-                        <Grid x:Name="PanFabricInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid x:Name="PanFabricInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>
@@ -122,7 +122,7 @@
                     </local:MyCard>
                     <local:MyCard Title="Fabric API" Height="40" Margin="0,15,0,0" x:Name="CardFabricApi" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanFabricApi" />
-                        <Grid x:Name="PanFabricApiInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid x:Name="PanFabricApiInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>
@@ -140,7 +140,7 @@
                     </local:MyCard>
                     <local:MyCard Title="Quilt" Height="40" Margin="0,15,0,0" x:Name="CardQuilt" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanQuilt" />
-                        <Grid x:Name="PanQuiltInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid x:Name="PanQuiltInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>
@@ -158,7 +158,7 @@
                     </local:MyCard>
                     <local:MyCard Title="QFAPI / QSL" Height="40" Margin="0,15,0,0" x:Name="CardQSL" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanQSL" />
-                        <Grid x:Name="PanQSLInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid x:Name="PanQSLInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>
@@ -178,7 +178,7 @@
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top">
                             <StackPanel Name="PanOptiFine" />
                         </StackPanel>
-                        <Grid x:Name="PanOptiFineInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid x:Name="PanOptiFineInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>
@@ -196,7 +196,7 @@
                     </local:MyCard>
                     <local:MyCard Title="OptiFabric" Height="40" Margin="0,15,0,0" x:Name="CardOptiFabric" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanOptiFabric" />
-                        <Grid x:Name="PanOptiFabricInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid x:Name="PanOptiFabricInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>
@@ -214,7 +214,7 @@
                     </local:MyCard>
                     <local:MyCard Title="LiteLoader" Height="40" Margin="0,15,0,0" x:Name="CardLiteLoader" IsSwaped="True" CanSwap="True" SwapLogoRight="True">
                         <StackPanel Margin="20,40,18,15" VerticalAlignment="Top" Name="PanLiteLoader" />
-                        <Grid x:Name="PanLiteLoaderInfo" Height="18" Margin="175,11,15,0" VerticalAlignment="Top" Tag="True">
+                            <Grid x:Name="PanLiteLoaderInfo" Height="18" Margin="132,11,15,0" VerticalAlignment="Top" Tag="True">
                             <Grid.RenderTransform>
                                 <TranslateTransform />
                             </Grid.RenderTransform>
