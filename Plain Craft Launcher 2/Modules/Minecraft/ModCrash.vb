@@ -857,6 +857,7 @@ NextStack:
             "确定", If(IsHandAnalyze OrElse DirectFile Is Nothing, "", "查看日志"), If(IsHandAnalyze, "", "导出错误报告"),
             Button2Action:=If(IsHandAnalyze OrElse DirectFile Is Nothing, Nothing,
             Sub()
+            Try
                 '弹窗选择：查看日志
                 If File.Exists(DirectFile.Value.Key) Then
                     ShellOnly(DirectFile.Value.Key)
@@ -865,6 +866,9 @@ NextStack:
                     WriteFile(FilePath, Join(DirectFile.Value.Value, vbCrLf))
                     ShellOnly(FilePath)
                 End If
+            Catch ex As Exception
+                Log(ex,"尝试打开文件失败",LogLevel.Hint)
+            End Try
             End Sub))
             Case 3
                 '弹窗选择：导出错误报告
