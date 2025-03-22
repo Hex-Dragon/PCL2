@@ -830,13 +830,11 @@ Retry:
                         OpenExplorer(TargetFolder)
                         Try
                             ShellOnly(Launcher, "--wait") '要求等待已有的 PCL 退出
+                            Log("[Modpack] 为换用整合包中的启动器启动，强制结束程序")
+                            FrmMain.EndProgram(False)
                         Catch ex As Exception
-                            Log(ex,"打开文件失败",LogLevel.MsgBox)
-                        Finally
-                            Return
+                            Log(ex, "打开文件失败", LogLevel.Msgbox)
                         End Try
-                        Log("[Modpack] 为换用整合包中的启动器启动，强制结束程序")
-                        FrmMain.EndProgram(False)
                         Return
                     End If
                 Else
