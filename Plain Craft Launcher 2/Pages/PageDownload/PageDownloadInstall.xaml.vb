@@ -857,6 +857,8 @@ Public Class PageDownloadInstall
         If SelectedLoaderName = "NeoForge" OrElse SelectedLoaderName = "Quilt" Then Return $"与 {SelectedLoaderName} 不兼容"
         If LoadOptiFine Is Nothing OrElse LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Run Then Return "加载中……"
         If LoadOptiFine.State.LoadingState = MyLoading.MyLoadingState.Error Then Return "获取版本列表失败：" & CType(LoadOptiFine.State, Object).Error.Message
+        '是否有 Cleanroom
+        If SelectedCleanroom IsNot Nothing Then Return "与 Cleanroom 不兼容"
         '检查 Forge 1.13 - 1.14.3：全部不兼容
         If SelectedLoaderName = "Forge" AndAlso
             VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then
