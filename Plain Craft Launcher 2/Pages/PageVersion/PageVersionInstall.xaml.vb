@@ -1,8 +1,9 @@
 Public Class PageVersionInstall
 
     Private Sub LoaderInit() Handles Me.Initialized
+        DisabledPageAnimControls.Add(BtnSelectStart)
         'PageLoaderInit(LoadMinecraft, PanLoad, PanBack, Nothing, DlClientListLoader, AddressOf LoadMinecraft_OnFinish)
-        PageLoaderInit(LoadMinecraft, PanLoad, PanBack, Nothing, DlClientListLoader, AddressOf GetCurrentInfo)
+        PageLoaderInit(LoadMinecraft, PanLoad, PanAllBack, Nothing, DlClientListLoader, AddressOf GetCurrentInfo)
     End Sub
 
     Private IsLoad As Boolean = False
@@ -15,6 +16,7 @@ Public Class PageVersionInstall
         DlLiteLoaderListLoader.Start()
         DlFabricListLoader.Start()
         DlQuiltListLoader.Start()
+        DlForgeListLoader.Start()
         DlNeoForgeListLoader.Start()
         DlCleanroomListLoader.Start()
 
@@ -34,6 +36,7 @@ Public Class PageVersionInstall
         LoadQuilt.State = DlQuiltListLoader
         LoadQSL.State = DlQSLLoader
         LoadNeoForge.State = DlNeoForgeListLoader
+        LoadForge.State = DlForgeListLoader
         LoadCleanroom.State = DlCleanroomListLoader
         LoadOptiFabric.State = DlOptiFabricLoader
     End Sub
@@ -58,6 +61,8 @@ Public Class PageVersionInstall
         If IsInSelectPage Then Exit Sub
         IsInSelectPage = True
 
+        DisabledPageAnimControls.Remove(BtnSelectStart)
+        BtnSelectStart.Show = True
         AutoSelectedFabricApi = False
         AutoSelectedQSL = False
         AutoSelectedOptiFabric = False
@@ -146,6 +151,9 @@ Public Class PageVersionInstall
         IsInSelectPage = False
 
         LoadMinecraft_OnFinish()
+
+        DisabledPageAnimControls.Add(BtnSelectStart)
+        BtnSelectStart.Show = False
 
         SelectClear() '清除已选择项
         PanMinecraft.Visibility = Visibility.Visible
