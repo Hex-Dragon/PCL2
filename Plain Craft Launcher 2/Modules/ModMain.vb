@@ -877,7 +877,7 @@ NextFile:
     ''' 这些文件夹无需进行后续清理。
     ''' </summary>
     ''' <param name="RequireNonSpace">是否要求路径不包含空格。</param>
-    ''' <param name="RequireSlash">是否要求路径斜杠。</param>
+    ''' <param name="RequireSlash">是否要求路径包含斜杠。</param>
     Public Function RequestTaskTempFolder(Optional RequireNonSpace As Boolean = False, Optional RequireSlash As Boolean = True) As String
         TryClearTaskTemp()
         If RequireSlash Then
