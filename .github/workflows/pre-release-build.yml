@@ -22,6 +22,9 @@ jobs:
 
       fail-fast: false
 
+    env:
+      LANG: en_US.UTF-8
+
     steps:
 
     - name: Checkout
@@ -56,7 +59,11 @@ jobs:
         (gc "Plain Craft Launcher 2\Pages\PageOther\PageOtherAbout.xaml") -replace 'https://github.com/PCL-Community/PCL2-CE', 'https://github.com/PCL-Community/PCL2-CE/tree/${{ github.sha }}' | Out-File "Plain Craft Launcher 2\Pages\PageOther\PageOtherAbout.xaml"
 
     - name: Build
-      run: msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }} -p:Platform=${{ matrix.architecture }}
+      run: |
+        chcp 65001
+        $PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
+        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+        msbuild "Plain Craft Launcher 2\Plain Craft Launcher 2.vbproj" -p:Configuration=${{ matrix.configuration }} -p:Platform=${{ matrix.architecture }}
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
