@@ -30,7 +30,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -46,7 +46,7 @@
     <WarningLevel>1</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>none</DebugType>
     <DebugSymbols>false</DebugSymbols>
@@ -98,7 +98,7 @@
   <PropertyGroup>
     <SignManifests>false</SignManifests>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Snapshot'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Snapshot|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
     <Optimize>true</Optimize>
@@ -109,7 +109,7 @@
     <DefineConstants>SNAPSHOT</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'BETA'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'BETA|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
     <Optimize>true</Optimize>
@@ -127,7 +127,7 @@
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'ReleaseUpdate'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseUpdate|AnyCPU' ">
     <OutputPath>.\bin\</OutputPath>
     <DefineConstants>RELEASE,BY_UPDATE</DefineConstants>
     <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
@@ -137,6 +137,56 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM64\Debug\</OutputPath>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM64'">
+    <OutputPath>bin\ARM64\Release\</OutputPath>
+    <DefineConstants>RELEASE</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Snapshot|ARM64'">
+    <OutputPath>bin\ARM64\Snapshot\</OutputPath>
+    <DefineConstants>SNAPSHOT</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BETA|ARM64'">
+    <OutputPath>bin\ARM64\BETA\</OutputPath>
+    <DefineConstants>BETA</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseUpdate|ARM64'">
+    <OutputPath>bin\ARM64\ReleaseUpdate\</OutputPath>
+    <DefineConstants>RELEASE,BY_UPDATE</DefineConstants>
+    <DocumentationFile>Plain Craft Launcher 2.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <PlatformTarget>ARM64</PlatformTarget>
+    <CodeAnalysisRuleSet>BasicDesignGuidelineRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Core" />
