@@ -234,7 +234,7 @@
             </Grid>
         </local:MyScrollViewer>
         <local:MyExtraTextButton x:Name="BtnSelectStart" Text="开始修改"
-            HorizontalAlignment="Center" VerticalAlignment="Bottom"
+            HorizontalAlignment="Center" VerticalAlignment="Bottom" IsEnabled="False"
             LogoScale="0.95" Logo="M955 610h-59c-15 0-29 13-29 29v196c0 15-13 29-29 29h-649c-15 0-29-13-29-29v-196c0-15-13-29-29-29h-59c-15 0-29 13-29 29V905c0 43 35 78 78 78h787c43 0 78-35 78-78V640c0-15-13-29-29-29zM492 740c11 11 29 11 41 0l265-265c11-11 11-29 0-41l-41-41c-11-11-29-11-41 0l-110 110c-11 11-33 3-33-13V68C571 53 555 39 541 39h-59c-15 0-29 13-29 29v417c0 17-21 25-33 13l-110-110c-11-11-29-11-41 0L226 433c-11 11-11 29 0 41L492 740z" />
     </Grid>
     <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,0" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False">
