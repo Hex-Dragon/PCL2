@@ -692,8 +692,8 @@ NextFile:
     ''' </summary>
     Public Function HelpArgumentReplace(Xaml As String) As String
         Dim Result = Xaml.Replace("{path}", EscapeXML(Path))
-        Result = RegexReplaceEach(Result, Function() EscapeXML(PageOtherTest.GetRandomHint()), "\{hint\}")
-        Result = RegexReplaceEach(Result, Function() EscapeXML(PageOtherTest.GetRandomCave()), "\{cave\}")
+        Result = Result.RegexReplaceEach("\{hint\}", Function() EscapeXML(PageOtherTest.GetRandomHint()))
+        Result = Result.RegexReplaceEach("\{cave\}", Function() EscapeXML(PageOtherTest.GetRandomCave()))
         Return Result
     End Function
 
@@ -826,6 +826,34 @@ NextFile:
     Public Declare Function SetForegroundWindow Lib "user32" (hWnd As IntPtr) As Integer
     Private Declare Function PostMessage Lib "user32" Alias "PostMessageA" (hWnd As IntPtr, msg As UInteger, wParam As Long, lParam As Long) As Boolean
 
+    ''' <summary>
+    ''' 将特定程序设置为使用高性能显卡启动。
+    ''' 如果失败，则抛出异常。
+    ''' </summary>
+    Public Sub SetGPUPreference(Executeable As String)
+        Const REG_KEY As String = "Software\Microsoft\DirectX\UserGpuPreferences"
+        Const REG_VALUE As String = "GpuPreference=2;"
+        '查看现有设置
+        Using ReadOnlyKey = My.Computer.Registry.CurrentUser.OpenSubKey(REG_KEY, False)
+            If ReadOnlyKey IsNot Nothing Then
+                Dim CurrentValue = ReadOnlyKey.GetValue(Executeable)
+                If REG_VALUE = CurrentValue?.ToString() Then
+                    Log($"[System] 无需调整显卡设置：{Executeable}")
+                    Return
+                End If
+            Else
+                '创建父级键
+                Log($"[System] 需要创建显卡设置的父级键")
+                My.Computer.Registry.CurrentUser.CreateSubKey(REG_KEY)
+            End If
+        End Using
+        '写入新设置
+        Using WriteKey = My.Computer.Registry.CurrentUser.OpenSubKey(REG_KEY, True)
+            WriteKey.SetValue(Executeable, REG_VALUE)
+            Log($"[System] 已调整显卡设置：{Executeable}")
+        End Using
+    End Sub
+
 #End Region
 
 #Region "任务缓存"
@@ -866,10 +894,9 @@ NextFile:
     ''' <param name="RequireNonSpace">是否要求路径不包含空格。</param>
     Public Function RequestTaskTempFolder(Optional RequireNonSpace As Boolean = False) As String
         TryClearTaskTemp()
-        If RequireNonSpace Then
-            RequestTaskTempFolder = $"{OsDrive}ProgramData\PCL\Install\{GetUuid()}-{RandomInteger(0, 1000000)}\"
-        Else
-            RequestTaskTempFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+        RequestTaskTempFolder = $"{PathTemp}TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
+        If RequireNonSpace AndAlso RequestTaskTempFolder.Contains(" ") Then
+            RequestTaskTempFolder = $"{OsDrive}ProgramData\PCL\TaskTemp\{GetUuid()}-{RandomInteger(0, 1000000)}\"
         End If
         Directory.CreateDirectory(RequestTaskTempFolder)
     End Function

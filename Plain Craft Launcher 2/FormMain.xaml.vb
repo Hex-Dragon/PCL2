@@ -92,6 +92,10 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 364 Then '2.10.5 364
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "同步上游 2.9.2 更新内容"))
+            FeatureCount += 1
+        End If
         If LastVersion < 362 Then '2.10.4 @ 2025.03.08 20:05
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "同步上游 2.9.1 更新内容"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "新功能 - 支持简单的 Mod 等资源查重"))
@@ -182,7 +186,7 @@ Public Class FormMain
 #End If
         '整理更新日志文本
         Dim ContentList As New List(Of String)
-        Dim SortedFeatures = Sort(FeatureList, Function(Left, Right) Left.Key > Right.Key)
+        Dim SortedFeatures = FeatureList.OrderByDescending(Function(f) f.Key).ToList
         If Not SortedFeatures.Any() AndAlso FeatureCount = 0 AndAlso BugCount = 0 Then ContentList.Add("开发团队忘记写更新日志啦！可以去提醒一下……")
         For i = 0 To Math.Min(9, SortedFeatures.Count - 1) '最多取 10 项
             ContentList.Add(SortedFeatures(i).Value)
@@ -220,6 +224,19 @@ Public Class FormMain
         ElseIf LastVersion > VersionCode Then
             '触发降级
             DowngradeSub(LastVersion)
+        End If
+        '版本隔离设置迁移
+        If Setup.IsUnset("LaunchArgumentIndieV2") Then
+            If Not Setup.IsUnset("LaunchArgumentIndie") Then
+                Log("[Start] 从老 PCL 迁移版本隔离")
+                Setup.Set("LaunchArgumentIndieV2", Setup.Get("LaunchArgumentIndie"))
+            ElseIf Not Setup.IsUnset("WindowHeight") Then
+                Log("[Start] 从老 PCL 升级，但此前未调整版本隔离，使用老的版本隔离默认值")
+                Setup.Set("LaunchArgumentIndieV2", Setup.GetDefault("LaunchArgumentIndie"))
+            Else
+                Log("[Start] 全新的 PCL，使用新的版本隔离默认值")
+                Setup.Set("LaunchArgumentIndieV2", Setup.GetDefault("LaunchArgumentIndieV2"))
+            End If
         End If
         '刷新主题
         ThemeCheckAll(False)
@@ -447,6 +464,11 @@ Public Class FormMain
             Setup.Set("CacheMsV2Name", Setup.Get("CacheMsName"))
             Log("[Start] 已从老版本迁移微软登录结果")
         End If
+        'Mod 命名设置迁移
+        If Not Setup.IsUnset("ToolDownloadTranslate") AndAlso Setup.IsUnset("ToolDownloadTranslateV2") Then
+            Setup.Set("ToolDownloadTranslateV2", Setup.Get("ToolDownloadTranslate") + 1)
+            Log("[Start] 已从老版本迁移 Mod 命名设置")
+        End If
         '输出更新日志
         If LastVersionCode <= 0 Then Exit Sub
         If LowerVersionCode >= VersionCode Then Exit Sub
@@ -532,14 +554,14 @@ Public Class FormMain
         End Sub)
     End Sub
     Private Shared IsLogShown As Boolean = False
-    Public Shared Sub EndProgramForce(Optional ReturnCode As Result = Result.Success)
+    Public Shared Sub EndProgramForce(Optional ReturnCode As ProcessReturnValues = ProcessReturnValues.Success)
         On Error Resume Next
         '关闭 EasyTier 联机
         If ModLink.IsETRunning Then ModLink.ExitEasyTier()
         IsProgramEnded = True
         AniControlEnabled += 1
         If IsUpdateWaitingRestart Then UpdateRestart(False)
-        If ReturnCode = Result.Exception Then
+        If ReturnCode = ProcessReturnValues.Exception Then
             If Not IsLogShown Then
                 FeedbackInfo()
                 Log("请在 https://github.com/PCL-Community/PCL2-CE/issues 提交错误报告，以便于社区解决此问题！（这也有可能是原版 PCL 的问题）")
@@ -550,7 +572,7 @@ Public Class FormMain
         End If
         Log("[System] 程序已退出，返回值：" & GetStringFromEnum(CType(ReturnCode, [Enum])))
         LogFlush()
-        If ReturnCode = Result.Success Then
+        If ReturnCode = ProcessReturnValues.Success Then
             Process.GetCurrentProcess.Kill()
         Else
             Environment.Exit(ReturnCode)

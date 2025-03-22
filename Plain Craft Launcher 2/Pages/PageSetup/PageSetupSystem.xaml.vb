@@ -25,7 +25,7 @@
         ComboDownloadVersion.SelectedIndex = Setup.Get("ToolDownloadVersion")
 
         'Mod 与整合包
-        ComboDownloadTranslate.SelectedIndex = Setup.Get("ToolDownloadTranslate")
+        ComboDownloadTranslateV2.SelectedIndex = Setup.Get("ToolDownloadTranslateV2")
         'ComboDownloadMod.SelectedIndex = Setup.Get("ToolDownloadMod")
         ComboModLocalNameStyle.SelectedIndex = Setup.Get("ToolModLocalNameStyle")
         CheckDownloadIgnoreQuilt.Checked = Setup.Get("ToolDownloadIgnoreQuilt")
@@ -73,7 +73,7 @@
             Setup.Reset("ToolDownloadThread")
             Setup.Reset("ToolDownloadSpeed")
             Setup.Reset("ToolDownloadVersion")
-            Setup.Reset("ToolDownloadTranslate")
+            Setup.Reset("ToolDownloadTranslateV2")
             Setup.Reset("ToolDownloadIgnoreQuilt")
             Setup.Reset("ToolDownloadClipboard")
             Setup.Reset("ToolDownloadMod")
@@ -110,7 +110,7 @@
     Private Shared Sub SliderChange(sender As MySlider, e As Object) Handles SliderDebugAnim.Change, SliderDownloadThread.Change, SliderDownloadSpeed.Change, SliderAniFPS.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Value)
     End Sub
-    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslate.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemUpdateBranch.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboSystemServer.SelectionChanged
+    Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboDownloadVersion.SelectionChanged, ComboModLocalNameStyle.SelectionChanged, ComboDownloadTranslateV2.SelectionChanged, ComboSystemUpdate.SelectionChanged, ComboSystemUpdateBranch.SelectionChanged, ComboSystemActivity.SelectionChanged, ComboSystemServer.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextSystemCache.ValidatedTextChanged, TextSystemHttpProxy.TextChanged

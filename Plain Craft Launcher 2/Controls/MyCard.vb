@@ -5,7 +5,7 @@ Public Class MyCard
     '控件
     Inherits Grid
     Private ReadOnly MainGrid As Grid
-    Private ReadOnly MainChrome As SystemDropShadowChrome
+    Public ReadOnly Property MainChrome As SystemDropShadowChrome
     Private ReadOnly MainBorder As Border
     Private IsThemeChanging As Boolean = False
     Public Property BorderChild As UIElement
@@ -43,6 +43,15 @@ Public Class MyCard
         Get
             Return MainTextBlock.Inlines
         End Get
+    End Property
+    Public Property CornerRadius As CornerRadius
+        Get
+            Return MainChrome.CornerRadius
+        End Get
+        Set(value As CornerRadius)
+            MainChrome.CornerRadius = value
+            MainBorder.CornerRadius = value
+        End Set
     End Property
     Public Property Title As String
         Get
@@ -133,10 +142,10 @@ Public Class MyCard
         If Not IsNothing(MainTextBlock) Then AniList.Add(AaColor(MainTextBlock, TextBlock.ForegroundProperty, "ColorBrush2", 150))
         If Not IsNothing(MainSwap) Then AniList.Add(AaColor(MainSwap, Shapes.Path.FillProperty, "ColorBrush2", 150))
         AniList.AddRange({
-                         AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject2", 180),
-                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(If(IsDarkMode, 245, 230), If(IsDarkMode, 48, 255), If(IsDarkMode, 48, 255), If(IsDarkMode, 48, 255)) - MainBorder.Background, 180),
-                         AaOpacity(MainChrome, 0.3 - MainChrome.Opacity, 180)
-                     })
+            AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject2", 180),
+            AaColor(MainBorder, Border.BackgroundProperty, New MyColor(If(IsDarkMode, 245, 230), If(IsDarkMode, 48, 255), If(IsDarkMode, 48, 255), If(IsDarkMode, 48, 255)) - MainBorder.Background, 180),
+            AaOpacity(MainChrome, 0.3 - MainChrome.Opacity, 180)
+        })
         If Not IsThemeChanging Then AniStart(AniList, "MyCard Mouse " & Uuid)
     End Sub
     Private Sub MyCard_MouseLeave(sender As Object, e As MouseEventArgs) Handles Me.MouseLeave
@@ -145,10 +154,10 @@ Public Class MyCard
         If Not IsNothing(MainTextBlock) Then AniList.Add(AaColor(MainTextBlock, TextBlock.ForegroundProperty, "ColorBrush1", 250))
         If Not IsNothing(MainSwap) Then AniList.Add(AaColor(MainSwap, Shapes.Path.FillProperty, "ColorBrush1", 250))
         AniList.AddRange({
-                         AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject1", 300),
-                         AaColor(MainBorder, Border.BackgroundProperty, New MyColor(If(IsDarkMode, 235, 205), If(IsDarkMode, 43, 255), If(IsDarkMode, 43, 255), If(IsDarkMode, 43, 255)) - MainBorder.Background, 300),
-                         AaOpacity(MainChrome, 0.1 - MainChrome.Opacity, 300)
-                     })
+            AaColor(MainChrome, SystemDropShadowChrome.ColorProperty, "ColorObject1", 300),
+            AaColor(MainBorder, Border.BackgroundProperty, New MyColor(If(IsDarkMode, 235, 205), If(IsDarkMode, 43, 255), If(IsDarkMode, 43, 255), If(IsDarkMode, 43, 255)) - MainBorder.Background, 300),
+            AaOpacity(MainChrome, 0.1 - MainChrome.Opacity, 300)
+        })
         If Not IsThemeChanging Then AniStart(AniList, "MyCard Mouse " & Uuid)
     End Sub
 
@@ -286,18 +295,19 @@ Partial Public Module ModAnimation
         If Control.IsHitTestVisible Then
             Control.IsHitTestVisible = False
             AniStart({
-                     AaScaleTransform(Control, -0.08, 200,, New AniEaseInFluent),
-                     AaOpacity(Control, -1, 200,, New AniEaseOutFluent),
-                     AaHeight(Control, -Control.ActualHeight, 150, 100, New AniEaseOutFluent),
-                     AaCode(Sub()
-                                If RemoveFromChildren Then
-                                    If Control.Parent Is Nothing Then Exit Sub
-                                    CType(Control.Parent, Object).Children.Remove(Control)
-                                Else
-                                    Control.Visibility = Visibility.Collapsed
-                                End If
-                                If CallBack IsNot Nothing Then CallBack(Control)
-                            End Sub,, True)
+                AaScaleTransform(Control, -0.08, 200,, New AniEaseInFluent),
+                AaOpacity(Control, -1, 200,, New AniEaseOutFluent),
+                AaHeight(Control, -Control.ActualHeight, 150, 100, New AniEaseOutFluent),
+                AaCode(
+                Sub()
+                    If RemoveFromChildren Then
+                        If Control.Parent Is Nothing Then Exit Sub
+                        CType(Control.Parent, Object).Children.Remove(Control)
+                    Else
+                        Control.Visibility = Visibility.Collapsed
+                    End If
+                    If CallBack IsNot Nothing Then CallBack(Control)
+                End Sub,, True)
             }, "MyCard Dispose " & Control.Uuid)
         Else
             If RemoveFromChildren Then

@@ -398,12 +398,14 @@
                 Else
                     Dim ChineseName As String = Project.TranslatedName.BeforeFirst(" (").BeforeFirst(" - ").
                         Replace("\", "＼").Replace("/", "／").Replace("|", "｜").Replace(":", "：").Replace("<", "＜").Replace(">", "＞").Replace("*", "＊").Replace("?", "？").Replace("""", "").Replace("： ", "：")
-                    Select Case Setup.Get("ToolDownloadTranslate")
+                    Select Case Setup.Get("ToolDownloadTranslateV2")
                         Case 0
-                            FileName = $"[{ChineseName}] {File.FileName}"
+                            FileName = $"【{ChineseName}】{File.FileName}"
                         Case 1
-                            FileName = $"{ChineseName}-{File.FileName}"
+                            FileName = $"[{ChineseName}] {File.FileName}"
                         Case 2
+                            FileName = $"{ChineseName}-{File.FileName}"
+                        Case 3
                             FileName = $"{File.FileName}-{ChineseName}"
                         Case Else
                             FileName = File.FileName

@@ -67,8 +67,7 @@
             Next
             '排序
             For i = 0 To Dict.Keys.Count - 1
-                Dict(Dict.Keys(i)) = Sort(Dict.Values(i),
-                    Function(a, b) a("releaseTime").Value(Of Date) > b("releaseTime").Value(Of Date))
+                Dict(Dict.Keys(i)) = Dict.Values(i).OrderByDescending(Function(v) v("releaseTime").Value(Of Date)).ToList
             Next
             '清空当前
             PanMain.Children.Clear()

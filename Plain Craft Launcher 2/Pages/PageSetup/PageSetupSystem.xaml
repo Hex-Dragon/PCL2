@@ -58,13 +58,14 @@
                             <local:MyComboBoxItem Content="仅在官方源加载缓慢时改用镜像源" />
                             <local:MyComboBoxItem Content="尽量使用官方源" IsSelected="True" />
                         </local:MyComboBox>-->
-                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="下载文件名" Margin="0,0,25,0" />
-                        <local:MyComboBox Grid.Row="0" x:Name="ComboDownloadTranslate" Grid.ColumnSpan="2" Tag="ToolDownloadTranslate" Grid.Column="1" 
-                                          ToolTip="下载 Mod 时，Mod 的默认文件名中，中文译名应该放在哪个位置">
-                            <local:MyComboBoxItem Content="译名位于文件名开头：[遗物] relics-0.1.14" IsSelected="True" />
-                            <local:MyComboBoxItem Content="译名位于文件名开头：遗物-relics-0.1.14" />
-                            <local:MyComboBoxItem Content="译名位于文件名末尾：relics-0.1.14-遗物" />
-                            <local:MyComboBoxItem Content="不添加中文译名：relics-0.1.14" />
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="文件名格式" Margin="0,0,25,0" />
+                        <local:MyComboBox Grid.Row="0" x:Name="ComboDownloadTranslateV2" Grid.ColumnSpan="2" Tag="ToolDownloadTranslateV2" Grid.Column="1" 
+                                          ToolTip="下载 Mod 时，Mod 的默认文件名格式">
+                            <local:MyComboBoxItem Content="【遗物】relics-0.1.14" />
+                            <local:MyComboBoxItem Content="[遗物] relics-0.1.14" IsSelected="True" />
+                            <local:MyComboBoxItem Content="遗物-relics-0.1.14" />
+                            <local:MyComboBoxItem Content="relics-0.1.14-遗物" />
+                            <local:MyComboBoxItem Content="relics-0.1.14" />
                         </local:MyComboBox>
                         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Mod 管理样式" Margin="0,0,25,0" />
                         <local:MyComboBox Grid.Row="2" x:Name="ComboModLocalNameStyle" Grid.ColumnSpan="2" Tag="ToolModLocalNameStyle" Grid.Column="1" 
@@ -202,9 +203,9 @@ ToolTip="如果你禁用了硬件加速，那么建议你调低最高动画帧�
                     <local:MyHint Grid.Row="0" Grid.ColumnSpan="2" Text="如果您不确定以下内容的含义，PCL 不建议您对其进行修改" IsWarn="True"/>
                     <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="HTTP 代理" Margin="0,0,25,0" />
                     <local:MyTextBox x:Name="TextSystemHttpProxy" Grid.Row="2" Grid.ColumnSpan="2" Tag="SystemHttpProxy" Grid.Column="1" HintText="比如 127.0.0.1:8888" ToolTip="不正确的代理服务器地址会导致 PCL 网络错误，因使用代理导致的网络错误不在 Issue 受理范围内。&#xa;请勿填写不信任的代理服务器地址，这可能会导致你的账号信息泄露，甚至账号被盗。"/>
-                    <local:MyCheckBox Margin="0,2,0,4" Text="验证 SSL 证书" Grid.Row="4" Height="22" Grid.ColumnSpan="2"
+                    <local:MyCheckBox Margin="0,2,0,4" Text="在正版登录时验证 SSL 证书" Grid.Row="4" Height="22" Grid.ColumnSpan="2"
                   x:Name="CheckDownloadCert" Tag="ToolDownloadCert" 
-                  ToolTip="开启验证会提高安全性、降低盗号风险（见 #2767），但也可能导致正版登录失败（见 #3018）。" />
+                  ToolTip="开启验证可以提高安全性，但可能会导致正版登录失败（见 #3018）。&#xa;若登录因为 “未能为 SSL/TLS 安全通道建立信任关系” 失败，请考虑关闭此选项。" />
                 </Grid>
             </local:MyCard>
 

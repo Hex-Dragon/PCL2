@@ -44,7 +44,7 @@ Friend Module ModSecret
                   "2. 删除当前目录中的 PCL 文件夹，然后再试。" & vbCrLf &
                   "3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。",
                 MsgBoxStyle.Critical, "运行环境错误")
-            Environment.[Exit](Result.Cancel)
+            Environment.[Exit](ProcessReturnValues.Cancel)
         End Try
         If Not CheckPermission(Path & "PCL") Then
             MsgBox("PCL 没有对当前文件夹的写入权限，请尝试：" & vbCrLf &
@@ -52,7 +52,7 @@ Friend Module ModSecret
                   "2. 删除当前目录中的 PCL 文件夹，然后再试。" & vbCrLf &
                   "3. 右键 PCL 选择属性，打开 兼容性 中的 以管理员身份运行此程序。",
                 MsgBoxStyle.Critical, "运行环境错误")
-            Environment.[Exit](Result.Cancel)
+            Environment.[Exit](ProcessReturnValues.Cancel)
         End If
         '社区版提示
         If Setup.Get("UiLauncherCEHint") Then

@@ -177,7 +177,7 @@
     ''' <summary>
     ''' 是否允许交互。目前仅用于 PageDownloadCompDetail 的顶部栏展示：若关闭碰撞检测，则无法展开 Tooltip。
     ''' </summary>
-    Public CanInteraction As Boolean = True
+    Public Property CanInteraction As Boolean = True
     Public Sub RefreshColor(sender As Object, e As EventArgs) Handles Me.MouseEnter, Me.MouseLeave, Me.MouseLeftButtonDown, Me.MouseLeftButtonUp
         If Not CanInteraction Then Exit Sub
         '判断当前颜色

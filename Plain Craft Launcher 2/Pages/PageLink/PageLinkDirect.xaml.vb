@@ -21,7 +21,7 @@ Public Class PageLinkDirect
 
     Private IsLoad As Boolean = False
     Private Sub OnLoaded() Handles Me.Loaded
-        'FormMain.EndProgramForce(Result.Aborted)
+        'FormMain.EndProgramForce(ProcessReturnValues.Aborted)
         If IsLoad Then Exit Sub
         IsLoad = True
         '启动监视线程
