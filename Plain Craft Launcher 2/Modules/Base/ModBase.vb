@@ -2333,10 +2333,14 @@ NextElement:
     Public Sub ShellOnly(FileName As String, Optional Arguments As String = "")
         FileName = ShortenPath(FileName)
         Using Program As New Process
-            Program.StartInfo.Arguments = Arguments
-            Program.StartInfo.FileName = FileName
-            Log("[System] 执行外部命令：" & FileName & " " & Arguments)
-            Program.Start()
+            Try
+                Program.StartInfo.Arguments = Arguments
+                Program.StartInfo.FileName = FileName
+                Log("[System] 执行外部命令：" & FileName & " " & Arguments)
+                Program.Start()
+            Catch ex As Exception
+                Log(ex, "执行外部命令失败", LogLevel.Msgbox)
+            End Try
         End Using
     End Sub
     ''' <summary>
