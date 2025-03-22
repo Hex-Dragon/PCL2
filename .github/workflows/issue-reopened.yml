@@ -5,10 +5,10 @@ on:
     types: [reopened]
 
 jobs:
-  issue-closed:
+  issue-reopened:
     runs-on: ubuntu-latest
     steps:
-      - name: Reopen
+      - name: Remove labels
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'remove-labels'
