@@ -454,7 +454,6 @@ Táto stránka ponúka stiahnutie inštalátorov Fabric. Po stiahnutí musíte m
     <s:String x:Key="LangDownloadForgeDesc">Forge je načítavací mod. Musíte najprv nainštalovať Forge, aby ste mohli nainštalovať rôzne Forge moduly.</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">Oficiálna webstránka</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">Získavanie zoznamu Forge...</s:String>
-    <s:String x:Key="LangDownloadInstallReview">Náhľad inštalácie</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">Väčšina módov bude nepoužiteľná, ak nie je vybraný Fabric API!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">OptiFine bude nepoužiteľný, ak nie je vybraný OptiFabric!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFine">OptiFine má slabú kompatibilitu s niektorými módmi, inštalujte ho rozumně.</s:String>
@@ -466,9 +465,9 @@ Táto stránka ponúka stiahnutie inštalátorov Fabric. Po stiahnutí musíte m
     <s:String x:Key="LangDownloadInstallHintBackTip">Kliknite na dlaždici Minecraft, aby ste sa vrátili!</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">Kliknite na výber</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">Nekompatibilný s Forge</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">Nekompatibilný s Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">Nekompatibilný s OptiFine</s:String>
-    <s:String x:Key="LangDownloadInstallForgeNeed">Závisí od Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">Závisí od Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineNeed">Závisí od OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">Závisí od OptiFine &amp; Fabric</s:String>
@@ -482,7 +481,6 @@ Táto stránka ponúka stiahnutie inštalátorov Fabric. Po stiahnutí musíte m
 Preto, pri prechode medzi inštanciami, Minecraft sa zhrúti, pretože číta mody, ktoré sa nezhodujú s aktuálnou verziou alebo loaderom.
 PCL odporúča aktivovať "Izoláciu inštancie" v "Nastavenia → Izolácia inštancie" pred inštaláciou!</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">Zrušiť</s:String>
-    <s:String x:Key="LangDownloadInstallNoAdd">Žiadne ďalšie inštalácie</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">Nekompatibilný s NeoForge</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Nekompatibilný s staršími verziemi Fabric, prosím, stiahnite OptiFabric Origins manuálne.</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">Obnoviť</s:String>
@@ -815,6 +813,8 @@ Podporuje nasledujúce alternatívne značky:
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">Vlastné informácie</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">Tieto informácie sa zobrazia na úvodnej obrazovke a v debugovacej obrazovke.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">Izolácia inštancie</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
+若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">Vypnúť</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">Všetky inštancie používajú rovnaký profil a zdieľajú uložené, módov, zdrojové balíky atď.
 Ak sú nainštalované viaceré inštancie s nainštalovanými módmi, môže to spôsobiť konflikty módov.</s:String>
@@ -860,6 +860,7 @@ Spustenie PCL s parametrom "--memory" vykoná optimalizáciu pamäti ticho.</s:S
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">Použitá pamäť</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">Pamäť pridelená hre</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">Pokročilé možnosti spustenia</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">Hlava parametrov JVM</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Dodatočné parametre JVM používané pri spustení Minecraftu, nepokúšajte sa meniť bez určitého rozhodnutia.
 Môžete obnoviť predvolené nastavenia kliknutím na tlačidlo "Inicializovať" na ľavom paneli.</s:String>
@@ -900,6 +901,13 @@ Ak je v nastaveniach manuálne vybratá Java, ktorá nie je kompatibilná s aktu
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">Varovanie: Silne sa odporúča, aby sa overenie deaktivovalo individuálne namiesto celkovej deaktivácie!
 Toto nastavenie nezmění žiadne aktíva, ani nepreverí, či boli modifikované alebo nie súborov knižníc, tretie strany, prihlasovacích knižníc a hlavných JAR súborov verzie.
 Nepoužívajte to, ak nie sú relevantné súbory modifikované.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
+如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
+如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
+    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">V nastaveniach spustenia nastala chyba a boli automaticky resetované.</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">Pri znovunačítaní nastavení spustenia nastala chyba.</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">Nastavenia spustenia boli inicializované!</s:String>
@@ -947,6 +955,7 @@ Táto možnosť platí len vtedy, ak je jazyk nastavený na zjednodušený čín
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">Pred: relikty-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">Za: relics-0.1.14-relikty</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">Žiadne: relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">Maximálny počet vlákien</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">Rýchlosť stiahnutia sa zvyšuje s počtom vlákien, ale príliš mnoho vlákien spôsobí veľmi vážne oneskorenie pri stiahnutí.
 Všeobecne sú 64 vlákna dostatočné na zabezpečenie rýchlosti stiahnutia.</s:String>
@@ -1171,7 +1180,6 @@ Keďže je pre túto inštanciu povolená "Izolácia inštancií", pri vymazaní
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">Inštancia {0} bola vymazaná do koša!</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">Inštancia {0} bola trvalo vymazaná!</s:String>
     <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Prosím, zatvorte možnosť "Nastavenia → Pokročilé spustenie → Zakázať overovanie súborov" pred pokusom o opravu súborov!</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Prosím, zatvorte možnosť "Nastavenia → Pokročilé spustenie → Zakázať overovanie súborov" pred pokusom o opravu súborov!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">Nastavenia inštancie boli inicializované!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Nepodarilo sa inicializovať nastavenia inštancie.</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">Chystáte sa prepísať možnosť tretieho stranického prihlásenia ako prihlásenie LittleSkin.
@@ -1185,9 +1193,27 @@ Môžete tiež upraviť globálne nastavenia, ktoré sú platné pre všetky in�
     <s:String x:Key="LangPageVersionSetupUseGlobal">Použiť globálne nastavenia</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">Povoliť</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">Zakázať</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自定义StaticResource，若留空则跟随全局设置的值。
+支持以下替换标记：
+ · {user}：玩家名字
+ · {login}：玩家的登录方式
+ · {name}：游戏版本名
+ · {date}、{time}：当前的系统时间
+ · {version}：游戏对应的原版版本号</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">版本隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、Mod 等文件相互独立，互不干涉。
+这会使你无法跨版本共享存档，但可以规避 Mod 冲突问题。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieDisable">Používať rovnaký profil ako iné inštancie, pričom je možnosť "Izolácia inštancií" vypnutá, a úlohy, modifikácie, zdrojové balíčky a pod. sa sdílejí.
 Môžu sa objaviť nepredvídateľné problémy, pretože sa môžu vyskytnúť rozdiely medzi verziou načítavateľa modifikácií a konfliktnými modifikáciami.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
+若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">Urobiť profil inštancie, ako sú úlohy a modifikácie, nezávislé od iných inštancií.</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会被直接拼合在启动参数的末尾。
+例如输入 --demo 则会以试玩模式启动游戏。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全局设置</s:String>
     <s:String x:Key="LangPageVersionSetupServer">Server</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">Metóda prihlásenia</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">Microsoft alebo Offline</s:String>

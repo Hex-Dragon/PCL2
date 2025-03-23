@@ -454,7 +454,6 @@
     <s:String x:Key="LangDownloadForgeDesc">Forge 乃改囊載器也，汝須先安之，方可裝諸 Forge 改囊。</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">開官網</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">方取 Forge 目</s:String>
-    <s:String x:Key="LangDownloadInstallReview">安裝之預覽</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">汝未選安 Fabric API，此將致多數改囊不能用！</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">汝未選安 OptiFabric，此將致 OptiFine 不能用！</s:String>
     <s:String x:Key="LangDownloadInstallOptiFine">OptiFine 與諸改囊相容不佳，慎安之。</s:String>
@@ -466,9 +465,9 @@
     <s:String x:Key="LangDownloadInstallHintBackTip">點 Minecraft 項即可返遊戲主版選頁！</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">點而選之</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">與 Forge 不相容</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">與 Fabric 不相容</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">與 OptiFine 不相容</s:String>
-    <s:String x:Key="LangDownloadInstallForgeNeed">需 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">需 Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineNeed">需 OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">需 OptiFine 與 Fabric</s:String>
@@ -482,7 +481,6 @@
 故切 MC 版時，MC 將因讀不符當前版之改囊而崩。
 PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">止下載</s:String>
-    <s:String x:Key="LangDownloadInstallNoAdd">無附加安裝</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">與 NeoForge 不相容</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">不相容舊版 Fabric，請手下 OptiFabric Origins</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">更新</s:String>
@@ -817,6 +815,8 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">自定信息</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">於遊戲主頁之左下角，與 F3 調試之頁之左上角展示</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">版之隔</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
+若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">關</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">版本共用同一檔案，存檔、改囊、資囊等公用。
 若存多個裝改囊之版，或致改囊衝突。</s:String>
@@ -862,6 +862,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">已用之記憶體</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">已用之記憶體</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">高級始遊戲之項</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 參之頭</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">始 Minecraft 時用外加之 JVM 參，若汝不知其用途，請勿易之。
 汝可擊左之初始化鈕以復默認設置。</s:String>
@@ -902,6 +903,13 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：強烈推薦在版本設置中關閉特定版本的校驗，而不是在這裡關閉所有版本的校驗！
 完全不更改 assets；不校驗 libraries、第三方登錄庫與版本主 JAR 文件是否被修改。
 如果你沒有修改相關文件，請勿勾選此項。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
+如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
+如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
+    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">啟動設置項存在異常，已被自動重置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">重載啟動設置時出錯</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">已初始化啟動設置！</s:String>
@@ -949,6 +957,7 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">譯名位於文件名開頭：遺物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">譯名位於文件名末尾：relics-0.1.14-遺物</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">不添加中文譯名：relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">最大線程數</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">線程數越多，限速的文件下載越快，但過高的線程數會造成下載時非常嚴重的卡頓。
 一般而言，64 線程已可以保證足夠的下載速度。</s:String>
@@ -1173,7 +1182,6 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">版本 {0} 已刪除到回收站！</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">版本 {0} 已永久刪除！</s:String>
     <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">請先關閉 [版本設定 → 設定 → 高級啟動選項 → 關閉檔案驗證]，然後再嘗試補全檔案！</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">請先關閉 [設定 → 高級啟動選項 → 關閉檔案驗證]，然後再嘗試補全檔案！</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">已初始化版本獨立設置！</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">初始化版本獨立設置失敗</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">即將把第三方登錄設置覆蓋為 LittleSkin 登錄。
@@ -1187,9 +1195,27 @@ PCL 薦汝始下載前，於 設置 → 版本隔離 中開版本隔離選！</s
     <s:String x:Key="LangPageVersionSetupUseGlobal">使用全局設置</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">開啟</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">關閉</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自定义StaticResource，若留空则跟随全局设置的值。
+支持以下替换标记：
+ · {user}：玩家名字
+ · {login}：玩家的登录方式
+ · {name}：游戏版本名
+ · {date}、{time}：当前的系统时间
+ · {version}：游戏对应的原版版本号</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">版本隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、Mod 等文件相互独立，互不干涉。
+这会使你无法跨版本共享存档，但可以规避 Mod 冲突问题。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieDisable">與其餘未開啟隔離的版本均使用同一檔案，存檔、改囊等均為公用。
 若存在不同版本的 Forge 或 Fabric，可能會由於改囊與版本衝突導致未知問題。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
+若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">讓這個版本與其他版本的存檔、改囊等檔案相互獨立，互不干涉</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会被直接拼合在启动参数的末尾。
+例如输入 --demo 则会以试玩模式启动游戏。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全局设置</s:String>
     <s:String x:Key="LangPageVersionSetupServer">服務器</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">登錄方式</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">正版登錄或離線登錄</s:String>

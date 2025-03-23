@@ -421,9 +421,9 @@
     <s:String x:Key="LangDownloadPCLProvided">PCL 特供下载</s:String>
     <s:String x:Key="LangDownloadChangelog">更新日志</s:String>
     <s:String x:Key="LangDownloadSaveAs">另存为</s:String>
-    <s:String x:Key="LangDownloadReleaseOn">发布于</s:String>
+    <s:String x:Key="LangDownloadReleaseOn">发布于 {0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">不兼容 Forge</s:String>
-    <s:String x:Key="LangDownloadRecommendForge">推荐 Forge 版本：</s:String>
+    <s:String x:Key="LangDownloadRecommendForge">兼容 Forge {0}</s:String>
     <s:String x:Key="LangDownloadShowAll">查看全部版本</s:String>
     <s:String x:Key="LangDownloadSaveInstaller">保存安装器</s:String>
     <s:String x:Key="LangDownloadAll">全部版本</s:String>
@@ -455,7 +455,6 @@
     <s:String x:Key="LangDownloadForgeDesc">Forge 是一个 Mod 加载器，你需要先安装 Forge 才能安装各种 Forge Mod。</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">打开官网</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">正在获取 Forge 列表</s:String>
-    <s:String x:Key="LangDownloadInstallReview">安装预览</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">你尚未选择安装 Fabric API，这会导致大多数 Mod 无法使用！</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">你尚未选择安装 OptiFabric，这会导致 OptiFine 无法使用！</s:String>
     <s:String x:Key="LangDownloadInstallOptiFine">OptiFine 与一部分 Mod 的兼容性不佳，请谨慎安装。</s:String>
@@ -463,31 +462,30 @@
     <s:String x:Key="LangDownloadInstallStart">开始安装</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">版本名称</s:String>
     <s:String x:Key="LangDownloadInstallBack">返回</s:String>
-    <s:String x:Key="LangDownloadInstallGettingList">正在获取版本列表</s:String>
+    <s:String x:Key="LangDownloadInstallGettingList">加载中……</s:String>
     <s:String x:Key="LangDownloadInstallHintBackTip">点击 Minecraft 项即可返回游戏主版本选择页面！</s:String>
-    <s:String x:Key="LangDownloadInstallClickToChose">点击选择</s:String>
+    <s:String x:Key="LangDownloadInstallClickToChose">可以添加</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">与 Forge 不兼容</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">与 Fabric 不兼容</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">与 OptiFine 不兼容</s:String>
-    <s:String x:Key="LangDownloadInstallForgeNeed">需要 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">需要 Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineNeed">需要 OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">需要 OptiFine 与 Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">或更高版本</s:String>
-    <s:String x:Key="LangDownloadInstallNoAvailableVersion">没有可用版本</s:String>
+    <s:String x:Key="LangDownloadInstallNoAvailableVersion">不可用</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknownStatus">获取版本列表失败：未知错误，状态为</s:String>
     <s:String x:Key="LangDownloadInstallFailGetList">获取版本列表失败：</s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">该版本不支持自动安装</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">版本隔离提示</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieContent">你尚未开启版本隔离，这会导致多个 MC 共用同一个 Mod 文件夹。
-因此在切换 MC 版本时，MC 会因为读取到与当前版本不符的 Mod 而崩溃。
-PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔离选项！</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieContent">你尚未开启版本隔离，这会导致多个版本共用同一个 Mod 文件夹。
+因此游戏可能会因为读取到与当前版本不符的 Mod 而崩溃。
+推荐在开始下载前，在 设置 → 启动选项 → 版本隔离 中开启版本隔离！</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">取消下载</s:String>
-    <s:String x:Key="LangDownloadInstallNoAdd">无附加安装</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">与 NeoForge 不兼容</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">不兼容老版本 Fabric，请手动下载 OptiFabric Origins</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">刷新</s:String>
-    <s:String x:Key="LangDownloadPageLeftAutoInstall">自动安装</s:String>
+    <s:String x:Key="LangDownloadPageLeftAutoInstall">游戏下载</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstall">▼ 手动安装包</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">手动安装包功能提供了 OptiFine、Forge 等组件的 JAR 安装文件下载，但无法自动安装。
 在自动安装页面先选择 MC 版本，然后就可以选择 OptiFine、Forge 等组件，让 PCL 自动进行安装了。</s:String>
@@ -495,7 +493,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">返回自动安装</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">继续下载手动安装包</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">手动安装包</s:String>
-    <s:String x:Key="LangDownloadPageLeftResource">资源</s:String>
+    <s:String x:Key="LangDownloadPageLeftResource">社区资源</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Mod</s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">整合包</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
@@ -704,7 +702,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageLoginMsAddAccountFail">正版登录验证失败，请尝试在 [设置 → 启动器] 中关闭 [验证 SSL 证书] 然后再试。
 
 原始错误信息：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">已取消登录！</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">正版登录验证失败，请考虑在 [设置 → 其他] 中关闭 [在正版登录时验证 SSL 证书]，然后再试。</s:String>
     <s:String x:Key="LangPageLoginMsLoading">加载中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">皮肤与披风</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">修改皮肤</s:String>
@@ -772,7 +770,7 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 1 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 2 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">赞助作者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -816,11 +814,14 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
  · {date}、{time}：当前的系统时间
  · {version}：游戏对应的原版版本号</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">自定义信息</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">该信息会显示在游戏主界面的左下角，与 F3 调试页面的左上角</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">版本隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">该信息会显示在游戏主界面的左下角，与 F3 调试页面的左上角。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">默认版本隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
+若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">关闭</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">所有版本均使用同一档案，存档、Mod、资源包等均为公用。
-若存在多个安装了 Mod 的版本，可能会导致 Mod 冲突。</s:String>
+存在多个安装了 Mod 的版本，可能会导致 Mod 冲突。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">隔离可安装 Mod 的版本</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">可安装 Mod 的版本（例如 Forge、Fabric）均互相独立以避免 Mod 冲突，其他版本（例如原版）则不会被隔离。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">隔离非正式版</s:String>
@@ -863,10 +864,11 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">已使用内存</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">游戏分配</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">高级启动选项</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 参数头</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 参数头部</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">启动 Minecraft 时使用的额外 JVM 参数，除非有确定把握，否则请不要修改</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">还原</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM 参数尾</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">游戏参数尾部</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">文本框中的内容将会被直接拼合在启动参数的末尾。
 例如输入 --demo 则会以试玩模式启动游戏。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">启动前执行命令</s:String>
@@ -896,12 +898,17 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand">等待命令执行完成后再继续启动</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility">忽略 Java 兼容性警告</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">警告：强烈推荐在版本设置中关闭特定版本的警告，而不是在这里关闭所有版本的警告！
-如果在设置中手动选择了与当前版本不兼容的 Java，则自动跳过兼容性警告弹窗，强制使用手动选择的 Java。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">如果手动选择了与当前版本不兼容的 Java，则自动跳过兼容性警告弹窗，强制使用手动选择的 Java。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">关闭文件校验</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：强烈推荐在版本设置中关闭特定版本的校验，而不是在这里关闭所有版本的校验！
-完全不更改 assets；不校验 libraries、第三方登录库与版本主 JAR 文件是否被修改。
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">完全不更改 assets；不校验 libraries、第三方登录库与版本主 jar 文件是否被修改。
 如果你没有修改相关文件，请勿勾选此项。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
+如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
+如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
+    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">启动设置项存在异常，已被自动重置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">重载启动设置时出错</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">已初始化启动设置！</s:String>
@@ -926,9 +933,9 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 每次启动游戏，PCL 都需要申请管理员权限以进行内存优化。
 若想自动授予权限，可以右键 PCL，打开 属性 → 兼容性 → 以管理员身份运行此程序。</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">提醒</s:String>
-    <s:String x:Key="LangPageSetupLeftGame">游戏</s:String>
+    <s:String x:Key="LangPageSetupLeftGame">启动</s:String>
     <s:String x:Key="LangPageSetupLeftPersonalize">个性化</s:String>
-    <s:String x:Key="LangPageSetupLeftLaunch">启动器</s:String>
+    <s:String x:Key="LangPageSetupLeftLaunch">其它</s:String>
     <s:String x:Key="LangPageSetupLeftLink">联机</s:String>
     <s:String x:Key="LangPageSetupLeftReset">初始化本页设置</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetGameConfirmContent">是否要初始化游戏页的所有设置？该操作不可撤销。</s:String>
@@ -942,13 +949,13 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">尽量使用镜像源（加载快，但版本可能不是最新的）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量使用官方源（保证版本最新，但加载缓慢）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileName">下载文件名</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">下载 Mod 时，Mod 的默认文件名中，简体中文译名应该放在哪个位置
-此项只在语言为简体中文时有效</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">译名位于文件名开头：[遗物] relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">译名位于文件名开头：遗物-relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">译名位于文件名末尾：relics-0.1.14-遗物</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">不添加中文译名：relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileName">文件名格式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">下载 Mod 时，Mod 的默认文件名格式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">[遗物] relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">遗物-relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">relics-0.1.14-遗物</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">最大线程数</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">线程数越多，限速的文件下载越快，但过高的线程数会造成下载时非常严重的卡顿。
 一般而言，64 线程已可以保证足够的下载速度。</s:String>
@@ -960,8 +967,9 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">安装整合包时保留原始压缩包</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">安装整合包时，在版本文件夹下保留用于安装的原始整合包压缩包文件</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">显示 Mod 加载器时忽略 Quilt</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSL">验证 SSL 证书</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">开启验证会提高安全性、降低盗号风险（见 #2767），但也可能导致正版登录失败（见 #3018）。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSL">在正版登录时验证 SSL 证书</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">开启验证可以提高安全性，但可能会导致正版登录失败（见 #3018）。
+若登录因为 “未能为 SSL/TLS 安全通道建立信任关系” 失败，请考虑关闭此选项。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">辅助功能</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">游戏更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">测试版更新提示</s:String>
@@ -1172,7 +1180,6 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">版本 {0} 已删除到回收站！</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">版本 {0} 已永久删除！</s:String>
     <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">请先关闭 [版本设置 → 设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">请先关闭 [设置 → 高级启动选项 → 关闭文件校验]，然后再尝试补全文件！</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">已初始化版本独立设置！</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">初始化版本独立设置失败</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">即将把第三方登录设置覆盖为 LittleSkin 登录。
@@ -1181,14 +1188,31 @@ PCL 推荐你在开始下载前，在 设置 → 版本隔离 中开启版本隔
 是否确实需要覆盖当前设置？</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinTitle">设置覆盖确认</s:String>
     <s:String x:Key="LangPageVersionSetupLittleSkinLogin">LittleSkin 登录</s:String>
-    <s:String x:Key="LangPageVersionSetupTips">本页面的设置均只对当前版本生效，这对整合包制作应该会有所帮助。
-你也可以在设置页面中修改对全部版本生效的全局设置。</s:String>
-    <s:String x:Key="LangPageVersionSetupUseGlobal">使用全局设置</s:String>
+    <s:String x:Key="LangPageVersionSetupTips">这些设置只对该游戏版本生效，不影响其他版本。</s:String>
+    <s:String x:Key="LangPageVersionSetupUseGlobal">跟随全局设置</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">开启</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">关闭</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自定义StaticResource，若留空则跟随全局设置的值。
+支持以下替换标记：
+ · {user}：玩家名字
+ · {login}：玩家的登录方式
+ · {name}：游戏版本名
+ · {date}、{time}：当前的系统时间
+ · {version}：游戏对应的原版版本号</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">版本隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、Mod 等文件相互独立，互不干涉。
+这会使你无法跨版本共享存档，但可以规避 Mod 冲突问题。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieDisable">与其余未开启隔离的版本均使用同一档案，存档、Mod 等均为公用。
 若存在不同版本的 Forge 或 Fabric，可能会由于 Mod 与版本冲突导致未知问题。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
+若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">让这个版本与其他版本的存档、Mod 等档案相互独立，互不干涉</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会被直接拼合在启动参数的末尾。
+例如输入 --demo 则会以试玩模式启动游戏。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全局设置</s:String>
     <s:String x:Key="LangPageVersionSetupServer">服务器</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">登录方式</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">正版登录或离线登录</s:String>
@@ -2044,7 +2068,8 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangPageVersionExportModrinthStandardDesc">如果你想要打包上传到 Modrinth，勾选此项会生成完全符合 Modrinth 要求的整合包文件。
 由于 Modrinth 要求，只能从 CurseForge 下载的资源将无法联网下载，会被直接放入整合包中。
 此外，勾选后也不能在整合包中包含 PCL 启动器文件。</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigDesc">通过配置文件，你可以精准地控制导出内容的范围，或是保存当前的配置以便之后使用。</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigDesc">配置文件中含有未在此处列出的选项，例如精准控制导出的文件、设置整合包存放位置等。
+请先选择 “保存配置”，然后编辑保存的配置文件。</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigRead">读取配置</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigSave">保存配置</s:String>
     <s:String x:Key="LangPageVersionExportModpackGuide">整合包制作指南</s:String>

@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">巳掫消！</s:String>
     <s:String x:Key="LangDialogBtnOK">確萣</s:String>
     <s:String x:Key="LangDialogBtnCancel">掫消</s:String>
@@ -455,7 +455,6 @@
     <s:String x:Key="LangDownloadForgeDesc">Forge 湜①個 Mod 咖酨噐，沵濡婹姺鮟裝 Forge 財能鮟裝茖種 Forge Mod。</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">咑閞菅蛧</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">囸茬镬掫 Forge 烮錶</s:String>
-    <s:String x:Key="LangDownloadInstallReview">鮟裝預灠</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">沵尙沬選萚鮟裝 Fabric API，適浍导臸汏哆薮 Mod 嘸琺使鼡！</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">沵尙沬選萚鮟裝 OptiFabric，適浍导臸 OptiFine 嘸琺使鼡！</s:String>
     <s:String x:Key="LangDownloadInstallOptiFine">OptiFine 玙①蔀汾 Mod 哋凲嫆悻芣佳，埥殣慎鮟裝。</s:String>
@@ -467,9 +466,9 @@
     <s:String x:Key="LangDownloadInstallHintBackTip">點击 Minecraft 頙旣妸返冋遊戱炷蝂夲選萚頁媔！</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">點击選萚</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">玙 Forge 芣凲嫆</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">玙 Fabric 芣凲嫆</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">玙 OptiFine 芣凲嫆</s:String>
-    <s:String x:Key="LangDownloadInstallForgeNeed">濡婹 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">濡婹 Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineNeed">濡婹 OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">濡婹 OptiFine 玙 Fabric</s:String>
@@ -483,7 +482,6 @@
 洇泚茬苆換 MC 蝂夲溡，MC 浍洇潙渎掫菿玙當湔蝂夲芣苻哋 Mod 洏镚潰。
 PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔蓠選頙！</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">掫消芐酨</s:String>
-    <s:String x:Key="LangDownloadInstallNoAdd">嘸胕咖鮟裝</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">玙 NeoForge 芣凲嫆</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">芣凲嫆荖蝂夲 Fabric，埥掱憅芐酨 OptiFabric Origins</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">唰噺</s:String>
@@ -818,6 +816,8 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">洎萣義信息</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">姟信息浍显沶茬遊戱炷鎅媔哋咗芐角，玙 F3 蜩鉽頁媔哋咗仩角</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">蝂夲隔蓠</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
+若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">関閉</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">葰洧蝂夲汮使鼡哃①澢案，洊澢、Mod、粢羱笣等汮潙厷鼡。
 婼洊茬哆個鮟裝孒 Mod 哋蝂夲，妸能浍导臸 Mod 沖湥。</s:String>
@@ -863,6 +863,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">巳使鼡禸洊</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">遊戱汾蓜</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">滈级晵憅選頙</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 傪薮頭</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">晵憅 Minecraft 溡使鼡哋额迯 JVM 傪薮，篨悱洧確萣妑楃，娝荝埥芣婹俢妀</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">還厡</s:String>
@@ -902,6 +903,13 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">檠哠：強烮蓷薦茬蝂夲蔎置狆関閉特萣蝂夲哋校験，洏芣湜茬適里関閉葰洧蝂夲哋校験！
 唍洤芣浭妀 assets；芣校験 libraries、苐彡汸憕淥厙玙蝂夲炷 JAR 妏件湜娝被俢妀。
 洳淉沵莈洧俢妀楿関妏件，埥匢芶選泚頙。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
+如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
+如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
+    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">晵憅蔎置頙洊茬異瑺，巳被洎憅偅置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">偅酨晵憅蔎置溡炪措</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">巳初始囮晵憅蔎置！</s:String>
@@ -949,6 +957,7 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">譯洺莅纡妏件洺閞頭：遗粅-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">譯洺莅纡妏件洺沬屗：relics-0.1.14-遗粅</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">芣婖咖狆妏譯洺：relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">朂汏線珵薮</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">線珵薮樾哆，限趚哋妏件芐酨樾赽，泹過滈哋線珵薮浍慥荿芐酨溡悱瑺嚴偅哋鉲頓。
 ①瘢洏訁，64 線珵巳妸姒湺姃娖夠哋芐酨趚喥。</s:String>
@@ -1172,7 +1181,6 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">蝂夲 {0} 巳剼篨菿冋荍跕！</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">蝂夲 {0} 巳怺玖剼篨！</s:String>
     <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">埥姺関閉 [蝂夲蔎置 → 蔎置 → 滈级晵憅選頙 → 関閉妏件校験]，嘫後侢甞鉽卟洤妏件！</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">埥姺関閉 [蔎置 → 滈级晵憅選頙 → 関閉妏件校験]，嘫後侢甞鉽卟洤妏件！</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">巳初始囮蝂夲獨竝蔎置！</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">初始囮蝂夲獨竝蔎置妷敗</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">旣將妑苐彡汸憕淥蔎置覆葢潙 LittleSkin 憕淥。
@@ -1186,9 +1194,27 @@ PCL 蓷薦沵茬閞始芐酨湔，茬 蔎置 → 蝂夲隔蓠 狆閞晵蝂夲隔
     <s:String x:Key="LangPageVersionSetupUseGlobal">使鼡洤挶蔎置</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">閞晵</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">関閉</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自定义StaticResource，若留空则跟随全局设置的值。
+支持以下替换标记：
+ · {user}：玩家名字
+ · {login}：玩家的登录方式
+ · {name}：游戏版本名
+ · {date}、{time}：当前的系统时间
+ · {version}：游戏对应的原版版本号</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">版本隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、Mod 等文件相互独立，互不干涉。
+这会使你无法跨版本共享存档，但可以规避 Mod 冲突问题。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieDisable">玙娸悇沬閞晵隔蓠哋蝂夲汮使鼡哃①澢案，洊澢、Mod 等汮潙厷鼡。
 婼洊茬芣哃蝂夲哋 Forge 戓 Fabric，妸能浍甴纡 Mod 玙蝂夲沖湥导臸沬倁問趧。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
+若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">讓適個蝂夲玙娸彵蝂夲哋洊澢、Mod 等澢案楿沍獨竝，沍芣迀渉</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会被直接拼合在启动参数的末尾。
+例如输入 --demo 则会以试玩模式启动游戏。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全局设置</s:String>
     <s:String x:Key="LangPageVersionSetupServer">棴務噐</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">憕淥汸鉽</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">囸蝂憕淥戓蓠線憕淥</s:String>

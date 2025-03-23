@@ -454,7 +454,6 @@
     <s:String x:Key="LangDownloadForgeDesc">Forge — это загрузчик модов. Вам нужно установить Forge перед тем, как сможете установить различные моды Forge.</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">Официальный сайт</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">Получение списка Forge...</s:String>
-    <s:String x:Key="LangDownloadInstallReview">Предварительный просмотр установки</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">Большинство модов будут неиспользуемыми, если не выбрать Fabric API!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">OptiFabric будет неиспользуемым, если не выбрать OptiFabric!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFine">OptiFine имеет плохую совместимость с некоторыми модами, устанавливайте его осмотрительно.</s:String>
@@ -466,9 +465,9 @@
     <s:String x:Key="LangDownloadInstallHintBackTip">Нажмите плитку Minecraft, чтобы вернуться!</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">Щёлкните для выбора</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">Не совместимо с Forge</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">Не совместимо с Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">Не совместимо с OptiFine</s:String>
-    <s:String x:Key="LangDownloadInstallForgeNeed">Зависит от Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">Зависит от Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineNeed">Зависит от OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">Зависит от OptiFine &amp; Fabric</s:String>
@@ -482,7 +481,6 @@
 Поэтому, при переключении экземпляров Minecraft будет падать, так как он читает моды, не соответствующие текущей версии или загрузчику.
 PCL рекомендует включить опцию "Изоляция экземпляров" в "Настройки → Изоляция экземпляров" перед установкой!</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">Отменить загрузку</s:String>
-    <s:String x:Key="LangDownloadInstallNoAdd">Нет дополнительной установки</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">Не совместимо с NeoForge</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Не совместимо с более ранними версиями Fabric, пожалуйста, скачайте OptiFabric Origins вручную.</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">Обновить</s:String>
@@ -815,6 +813,8 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">Собственный текст</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">Эта информация будет отображаться на экране заголовка и экране отладки.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">Изоляция экземпляров</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
+若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">Отключить</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">Все экземпляры используют один профиль, и сохранения, моды, ресурс-паки и т.д. разделяются.
 Если есть несколько экземпляров с установленными модами, это может привести к конфликтам модов.</s:String>
@@ -860,6 +860,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">Используемая память</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">Выделенная память для игры</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">Дополнительные параметры запуска</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">Заголовок параметра</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Дополнительные параметры JVM для использования при запуске Minecraft, не пытайтесь изменять без решимости.
 Вы можете восстановить настройки по умолчанию, нажав кнопку "Initialize" на вкладке слева.</s:String>
@@ -900,6 +901,13 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">Предупреждение: Рекомендуется отключать проверку индивидуально, а не глобально!
 Не изменит ресурсы вовсе, не проверит, были ли изменены библиотеки, библиотеки для входа сторонних разработчиков и файлы основного JAR-файла версии.
 Не открывайте это, если соответствующие файлы не были изменены.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
+如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
+如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
+    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">В параметрах запуска произошла ошибка, и они были автоматически сброшены.</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">Произошла ошибка при перезагрузке параметров запуска.</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">Параметры запуска инициализированы!</s:String>
@@ -947,6 +955,7 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">Перед: 遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">Сзади: relics-0.1.14-遗物</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">Нет: relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">Максимальное количество потоков</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">Скорость загрузки увеличивается с количеством потоков, но слишком много потоков вызовет серьезные задержки в процессе загрузки.
 Обычно, 64 потока достаточно для обеспечения скорости загрузки.</s:String>
@@ -1171,7 +1180,6 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">Экземпляр {0} перемещен в корзину!</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">Экземпляр {0} удален навсегда!</s:String>
     <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Перед тем, как пытаться восстановить файлы, закройте параметр «Свойства → Настройки → Дополнительные параметры запуска → Отключить проверку файлов»!</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Перед попыткой восстановления файлов закройте параметр «Настройки → Дополнительные параметры запуска → Отключить проверку файлов»!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">Настройки экземпляра инициализированы!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Не удалось инициализировать настройки экземпляра.</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">Вы собираетесь заменить параметры третьестороннего входа на вход LittleSkin.
@@ -1185,9 +1193,27 @@ PCL рекомендует включить опцию "Изоляция экз�
     <s:String x:Key="LangPageVersionSetupUseGlobal">Использовать глобальные настройки</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">Включить</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">Отключить</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自定义StaticResource，若留空则跟随全局设置的值。
+支持以下替换标记：
+ · {user}：玩家名字
+ · {login}：玩家的登录方式
+ · {name}：游戏版本名
+ · {date}、{time}：当前的系统时间
+ · {version}：游戏对应的原版版本号</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">版本隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、Mod 等文件相互独立，互不干涉。
+这会使你无法跨版本共享存档，但可以规避 Mod 冲突问题。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieDisable">Использовать тот же профиль, что и другие экземпляры, при отключенной опции "Изоляция экземпляра", и совместно использовать сохранения, моды, ресурс-паки и т.д.
 Из-за разных версий загрузчиков модов и конфликтующих модов могут возникнуть непредсказуемые проблемы.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
+若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">Сделать профиль экземпляра, включая сохранения и моды, независимым от других экземпляров.</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会被直接拼合在启动参数的末尾。
+例如输入 --demo 则会以试玩模式启动游戏。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全局设置</s:String>
     <s:String x:Key="LangPageVersionSetupServer">Сервер</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">Метод входа</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">Microsoft или Оффлайн</s:String>

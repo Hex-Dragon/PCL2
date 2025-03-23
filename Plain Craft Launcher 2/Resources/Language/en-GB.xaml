@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">Cancelled!</s:String>
     <s:String x:Key="LangDialogBtnOK">OK</s:String>
     <s:String x:Key="LangDialogBtnCancel">Cancel</s:String>
@@ -454,7 +454,6 @@ This page offers the Fabric installer for download. After downloading, you need 
     <s:String x:Key="LangDownloadForgeDesc">Forge is a mod loader. You must install it before using any Forge mods.</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">Official Website</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">Getting Forge List...</s:String>
-    <s:String x:Key="LangDownloadInstallReview">Installation Preview</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">Most of the mods will be unable to run if Fabric API is not installed!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">OptiFine will be unable to run if OptiFabric is not installed!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFine">OptiFine has poor compatibility with some mods. Please install it cautiously.</s:String>
@@ -466,9 +465,9 @@ This page offers the Fabric installer for download. After downloading, you need 
     <s:String x:Key="LangDownloadInstallHintBackTip">Click the Minecraft tile to return!</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">Click to Select</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">Incompatible with Forge</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">Incompatible with Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">Incompatible with OptiFine</s:String>
-    <s:String x:Key="LangDownloadInstallForgeNeed">Requires Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">Requires Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineNeed">Requires OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">Requires OptiFine &amp; Fabric</s:String>
@@ -482,7 +481,6 @@ This page offers the Fabric installer for download. After downloading, you need 
 Therefore, when switching instances, Minecraft will crash because it reads mods that do not match the current version or the loader.
 PCL recommends to turn on the 'Instance Isolation' option in 'Settings → Instance Isolation' before the installation!</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">Cancel</s:String>
-    <s:String x:Key="LangDownloadInstallNoAdd">No Additional Components</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">Incompatible with NeoForge</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Incompatible with older versions of Fabric, please download OptiFabric Origins manually.</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">Refresh</s:String>
@@ -815,6 +813,8 @@ The following alternate tags are supported:
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">Custom Text</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">This text will be displayed in the title screen and the debug screen.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">Instance Isolation</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
+若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">Disable</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">All instances use the same profile. Saves, mods, resource packs and other files are shared.
 If there are multiple instances with mods installed, it may cause mod conflicts.</s:String>
@@ -860,6 +860,7 @@ Opening PCL with the parameter '--memory' will execute memory optimisation silen
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">Memory Used</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">Game Allocated</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">Advanced Launch Options</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM Parameter Header</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Additional JVM parameters to use when launching Minecraft. Do not attempt to edit if you are not sure.
 You can restore the settings to default by clicking the 'Initialise' button on the left tab.</s:String>
@@ -900,6 +901,13 @@ If the target Java is incompatible with the game, compatibility warnings will st
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">Warning: It is highly recommended to disable the verification individually instead of globally!
 This will not change the assets at all, nor verify the libraries, third-party login libraries, and version main JAR files whether they are modified or not.
 Do not enable this unless the relevant files are modified.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
+如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
+如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
+    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">There is an exception in the launch options and have been automatically reset.</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">An error occurred whilst reloading the launch options.</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">The launch options have been initialised!</s:String>
@@ -947,6 +955,7 @@ This option is only valid when the language is set to Simplified Chinese.</s:Str
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">Front: 遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">Back: relics-0.1.14-遗物</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">None: relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">Maximum Threads</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">The download speed increases with the number of threads, but too many threads will cause very serious lags in the download process.
 In general, 64 threads are sufficient to ensure download speed.</s:String>
@@ -1171,7 +1180,6 @@ Since 'Instance Isolation' is enabled for this instance, the corresponding saves
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">The instance {0} has been deleted to the recycle bin!</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">The instance {0} has been permanently deleted!</s:String>
     <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Please disable the 'Properties → Settings → Advanced Launch Options → Disable File Verification' option before attempting to repair the files!</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Please disable the 'Settings → Advanced Launch Options → Disable File Verification' option before attempting to repair the files!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">The instance settings have been initialised!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Failed to initialise the instance settings.</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">You are about to override the third-party login settings with LittleSkin.
@@ -1185,9 +1193,27 @@ You can also modify the global settings to apply to all instances on the 'Settin
     <s:String x:Key="LangPageVersionSetupUseGlobal">Use the global settings</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">Enabled</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">Disabled</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自定义StaticResource，若留空则跟随全局设置的值。
+支持以下替换标记：
+ · {user}：玩家名字
+ · {login}：玩家的登录方式
+ · {name}：游戏版本名
+ · {date}、{time}：当前的系统时间
+ · {version}：游戏对应的原版版本号</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">版本隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、Mod 等文件相互独立，互不干涉。
+这会使你无法跨版本共享存档，但可以规避 Mod 冲突问题。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieDisable">Use the same profile with other instances that have 'Instance Isolation' disabled. The saves, mods, resource packs, and other files are shared.
 Unpredictable problems may occur due to different mod loader versions and conflicting mods.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
+若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">Make the profile of the instance, like saves and mods, independent from other instances.</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会被直接拼合在启动参数的末尾。
+例如输入 --demo 则会以试玩模式启动游戏。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全局设置</s:String>
     <s:String x:Key="LangPageVersionSetupServer">Server</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">Login Method</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">Microsoft or Offline</s:String>

@@ -451,7 +451,6 @@ F11을 다시 눌러 숨겨진 버전 보기 모드를 종료하세요.</s:Strin
     <s:String x:Key="LangDownloadForgeDesc">Forge는 Mod 로더로, 다양한 Forge 모드를 설치하려면 먼저 Forge를 설치해야 합니다.</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">공식 웹사이트 열기</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">Forge 목록을 가져오는 중입니다</s:String>
-    <s:String x:Key="LangDownloadInstallReview">설치 미리보기</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">Fabric API를 설치하지 않으면 대부분의 Mod가 작동하지 않습니다!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">OptiFabric를 설치하지 않으면 OptiFine이 작동하지 않습니다!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFine">OptiFine은 일부 Mod와 호환성이 좋지 않으니 주의하여 설치하세요.</s:String>
@@ -463,9 +462,9 @@ F11을 다시 눌러 숨겨진 버전 보기 모드를 종료하세요.</s:Strin
     <s:String x:Key="LangDownloadInstallHintBackTip">Minecraft 항목을 클릭하면 게임의 주 버전 선택 페이지로 돌아갑니다!</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">클릭하여 선택</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">Forge와 호환되지 않음</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">Fabric과 호환되지 않음</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">OptiFine과 호환되지 않음</s:String>
-    <s:String x:Key="LangDownloadInstallForgeNeed">Forge 필요</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">Fabric 필요</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineNeed">OptiFine 필요</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">OptiFine과 Fabric 필요</s:String>
@@ -479,7 +478,6 @@ F11을 다시 눌러 숨겨진 버전 보기 모드를 종료하세요.</s:Strin
 따라서 MC 버전을 전환할 때 현재 버전과 일치하지 않는 Mod를 읽어들여 MC가 충돌할 수 있습니다.
 PCL은 다운로드를 시작하기 전에 설정 → 버전 격리에서 버전 격리 옵션을 활성화할 것을 권장합니다!</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">다운로드 취소</s:String>
-    <s:String x:Key="LangDownloadInstallNoAdd">추가 설치 없음</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">NeoForge와 호환되지 않음</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">구버전 Fabric과 호환되지 않으므로 OptiFabric Origins를 수동으로 다운로드하세요</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">새로 고침</s:String>
@@ -811,6 +809,8 @@ PCL은 다운로드를 시작하기 전에 설정 → 버전 격리에서 버전
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">사용자 정의 정보</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">이 정보는 게임 메인 화면의 왼쪽 하단과 F3 디버그 페이지의 왼쪽 상단에 표시됩니다</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">버전 격리</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
+若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">닫기</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">모든 버전이 동일한 파일을 사용하며, 저장, 모드, 리소스 팩 등이 공유됩니다.
 모드가 설치된 여러 버전이 있을 경우 모드 충돌이 발생할 수 있습니다.</s:String>
@@ -856,6 +856,7 @@ PCL은 다운로드를 시작하기 전에 설정 → 버전 격리에서 버전
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">사용된 메모리</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">게임에 할당된 메모리</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">고급 시작 옵션</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 매개변수 헤드</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Minecraft를 시작할 때 사용하는 추가 JVM 매개변수이며, 확신이 없을 경우 수정하지 마십시오. 
 왼쪽 탭의 초기화 버튼을 클릭하여 기본 설정으로 복원할 수 있습니다.</s:String>
@@ -896,6 +897,13 @@ PCL은 다운로드를 시작하기 전에 설정 → 버전 격리에서 버전
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">경고: 특정 버전의 검증을 여기서 모두 끄는 것보다 버전 설정에서 끄는 것이 강력히 권장됩니다! 
 assets를 완전히 변경하지 않으며, libraries, 제3자 로그인 라이브러리 및 버전 주 JAR 파일이 수정되었는지 검증하지 않습니다. 
 관련 파일을 수정하지 않았다면 이 항목을 선택하지 마십시오.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
+如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
+如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
+    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">시작 설정 항목에 예외가 발생하여 자동으로 재설정되었습니다.</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">시작 설정을 다시 로드하는 중 오류가 발생했습니다.</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">시작 설정이 초기화되었습니다!</s:String>
@@ -943,6 +951,7 @@ assets를 완전히 변경하지 않으며, libraries, 제3자 로그인 라이�
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">번역 이름이 파일 이름의 시작 부분에 위치: 유물-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">번역 이름이 파일 이름의 끝 부분에 위치: relics-0.1.14-유물</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">중국어 번역 이름을 추가하지 않음: relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">최대 스레드 수</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">스레드 수가 많을수록 속도 제한이 있는 파일 다운로드가 빨라지지만, 너무 많은 스레드는 다운로드 중 심각한 지연을 초래할 수 있습니다.
 일반적으로 64 스레드면 충분한 다운로드 속도를 보장합니다.</s:String>
@@ -1160,7 +1169,6 @@ Mod를 업데이트하기 전에 저장 파일을 백업하고 업데이트 로�
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">버전 {0}이(가) 휴지통으로 삭제되었습니다!</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">버전 {0}이(가) 영구 삭제되었습니다!</s:String>
     <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">파일을 완성하려면 먼저 [버전 설정 → 설정 → 고급 시작 옵션 → 파일 검증 해제]를 해제하세요!</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">파일을 완성하려면 먼저 [설정 → 고급 시작 옵션 → 파일 검증 해제]를 해제하세요!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">버전 독립 설정이 초기화되었습니다!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">버전 독립 설정 초기화 실패</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">타사 로그인 설정을 LittleSkin 로그인으로 덮어쓰려 합니다.
@@ -1174,9 +1182,27 @@ Mod를 업데이트하기 전에 저장 파일을 백업하고 업데이트 로�
     <s:String x:Key="LangPageVersionSetupUseGlobal">전역 설정 사용</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">켜기</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">끄기</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自定义StaticResource，若留空则跟随全局设置的值。
+支持以下替换标记：
+ · {user}：玩家名字
+ · {login}：玩家的登录方式
+ · {name}：游戏版本名
+ · {date}、{time}：当前的系统时间
+ · {version}：游戏对应的原版版本号</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">版本隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、Mod 等文件相互独立，互不干涉。
+这会使你无法跨版本共享存档，但可以规避 Mod 冲突问题。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieDisable">나머지 비격리 버전과 동일한 파일을 사용하며, 저장, Mod 등은 공유됩니다.
 다른 버전의 Forge 또는 Fabric이 존재할 경우, Mod와 버전 간의 충돌로 인해 알 수 없는 문제가 발생할 수 있습니다.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
+若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">이 버전이 다른 버전의 저장, Mod 등과 독립적으로 상호작용하지 않도록 설정합니다.</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会被直接拼合在启动参数的末尾。
+例如输入 --demo 则会以试玩模式启动游戏。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全局设置</s:String>
     <s:String x:Key="LangPageVersionSetupServer">서버</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">로그인 방식</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">정품 로그인 또는 오프라인 로그인</s:String>

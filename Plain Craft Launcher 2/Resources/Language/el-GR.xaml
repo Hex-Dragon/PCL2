@@ -454,7 +454,6 @@
     <s:String x:Key="LangDownloadForgeDesc">Το Forge είναι ένα πρόγραμμα φόρτωσης mod. Πρέπει πρώτα να εγκαταστήσετε το Forge για να εγκαταστήσετε διάφορα mods Forge.</s:String>
     <s:String x:Key="LangDownloadForgeWebsite">Επίσημος Ιστότοπος</s:String>
     <s:String x:Key="LangDownloadForgeGettingList">Λήψη Λίστας Forge...</s:String>
-    <s:String x:Key="LangDownloadInstallReview">Προεπισκόπηση Εγκατάστασης</s:String>
     <s:String x:Key="LangDownloadInstallFabricApi">Τα περισσότερα από τα mods δεν θα μπορούν να χρησιμοποιηθούν εάν δεν επιλεγεί το Fabric API!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabric">Το OptiFine δεν θα μπορεί να χρησιμοποιηθεί εάν δεν επιλεγεί το OptiFabric!</s:String>
     <s:String x:Key="LangDownloadInstallOptiFine">Το OptiFine έχει κακή συμβατότητα με ορισμένα mod, εγκαταστήστε το με σύνεση.</s:String>
@@ -466,9 +465,9 @@
     <s:String x:Key="LangDownloadInstallHintBackTip">Κάντε κλικ στο πλακίδιο Minecraft για να επιστρέψετε!</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">Κάντε Κλικ για Επιλογή</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">Μη συμβατό με Forge</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">Μη συμβατό με Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">Μη συμβατό με OptiFine</s:String>
-    <s:String x:Key="LangDownloadInstallForgeNeed">Εξαρτήστε από το Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">Εξαρτάται από το Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineNeed">Εξαρτήστε από το OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">Εξαρτήστε από το OptiFine &amp; Fabric</s:String>
@@ -482,7 +481,6 @@
 Επομένως, κατά την εναλλαγή παρουσιών, το Minecraft θα διακοπεί επειδή διαβάζει mods που δεν ταιριάζουν με την τρέχουσα έκδοση ή το πρόγραμμα φόρτωσης.
 Το PCL προτείνει να ενεργοποιήσετε την επιλογή «Απομόνωση Παρουσίας» στις «Ρυθμίσεις → Απομόνωση Παρουσίας» πριν από την εγκατάσταση!</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">Ακύρωση</s:String>
-    <s:String x:Key="LangDownloadInstallNoAdd">Χωρίς Πρόσθετη Εγκατάσταση</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">Μη συμβατό με NeoForge</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Μη συμβατό με παλαιότερες εκδόσεις του Fabric, πραγματοποιήστε λήψη του OptiFabric Origins με μη αυτόματο τρόπο.</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">Ανανέωση</s:String>
@@ -815,6 +813,8 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">Προσαρμοσμένο Κείμενο</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">Αυτές οι πληροφορίες θα εμφανίζονται στην οθόνη τίτλου και στην οθόνη εντοπισμού σφαλμάτων.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">Απομόνωση Παρουσίας</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
+若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">Απενεργοποίηση</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">Όλες οι παρουσίες χρησιμοποιούν το ίδιο προφίλ και κοινοποιούνται οι αποθηκευτικές ρυθμίσεις, οι τροποποιήσεις, τα πακέτα πόρων κ.λπ.
 Εάν υπάρχουν πολλές παρουσίες με εγκατεστημένα mods, ενδέχεται να προκληθούν διενέξεις mod.</s:String>
@@ -860,6 +860,7 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">Μνήμη που Χρησιμοποιείται</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">Το Παιχνίδι έχει Εκχωρηθεί</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">Σύνθετες Επιλογές Εκκίνησης</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">Κεφαλίδα Παραμέτρου</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Πρόσθετες παράμετροι JVM που θα χρησιμοποιηθούν κατά την εκκίνηση του Minecraft, μην επιχειρήσετε να τις τροποποιήσετε χωρίς τον καθορισμό.
 Μπορείτε να επαναφέρετε τις προεπιλεγμένες ρυθμίσεις κάνοντας κλικ στο κουμπί «Αρχικοποίηση» στην αριστερή καρτέλα.</s:String>
@@ -900,6 +901,13 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">Προειδοποίηση: Συνιστάται ιδιαίτερα η απενεργοποίηση της επαλήθευσης μεμονωμένα αντί καθολικά!
 Δεν θα αλλάξει καθόλου τα στοιχεία, ούτε θα επαληθευτεί ότι οι βιβλιοθήκες, οι βιβλιοθήκες σύνδεσης τρίτων και τα κύρια αρχεία JAR της έκδοσης έχουν τροποποιηθεί ή όχι.
 Μην ανοίξετε αυτό εκτός εάν τροποποιηθούν τα σχετικά αρχεία.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
+如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
+如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
+    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">Υπάρχει εξαίρεση στις επιλογές εκκίνησης και έχει γίνει αυτόματη επαναφορά.</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">Παρουσιάστηκε σφάλμα κατά την επαναφόρτωση των επιλογών εκκίνησης.</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">Οι επιλογές εκκίνησης έχουν προετοιμαστεί!</s:String>
@@ -947,6 +955,7 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">Εμπρός: 遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">Πίσω: relics-0.1.14-遗物</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">Κανένα: relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">Μέγιστο Νήμα</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">Η ταχύτητα λήψης αυξάνεται με τον αριθμό των νημάτων, αλλά πάρα πολλά νήματα θα προκαλέσουν πολύ σοβαρές καθυστερήσεις στη διαδικασία λήψης.
 Γενικά, 64 νήματα επαρκούν για να διασφαλιστεί η ταχύτητα λήψης.</s:String>
@@ -1171,7 +1180,6 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageVersionOverallHintDeleteSuccess">Η παρουσία {0} έχει διαγραφεί στον κάδο ανακύκλωσης!</s:String>
     <s:String x:Key="LangPageVersionOverallHintPermanentDeleteSuccess">Η παρουσία {0} έχει διαγραφεί οριστικά!</s:String>
     <s:String x:Key="LangPageVersionOverallHintEnableInstanceAssetsCheck">Κλείστε πρώτα την επιλογή «Ιδιότητες → Ρυθμίσεις → Σύνθετες Επιλογές Εκκίνησης → Απενεργοποίηση Επαλήθευσης Αρχείου» πριν επιχειρήσετε να επιδιορθώσετε τα αρχεία!</s:String>
-    <s:String x:Key="LangPageVersionOverallHintEnableAssetsCheck">Κλείστε πρώτα την επιλογή «Ρυθμίσεις → Σύνθετες Επιλογές Εκκίνησης → Απενεργοποίηση Επαλήθευσης Αρχείου» πριν επιχειρήσετε να επιδιορθώσετε τα αρχεία!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetSuccess">Οι ρυθμίσεις της παρουσίας έχουν αρχικοποιηθεί!</s:String>
     <s:String x:Key="LangPageVersionSetupHintIndependentSetResetFail">Απέτυχε η προετοιμασία των ρυθμίσεων παρουσίας.</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinContent">Πρόκειται να παρακάμψετε την επιλογή σύνδεσης τρίτου μέρους ως σύνδεση στο LittleSkin.
@@ -1185,9 +1193,27 @@ Email για Αναφορά Παράνομης και Παράτυπης Συμ�
     <s:String x:Key="LangPageVersionSetupUseGlobal">Καθολικός Συγχρονισμός</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">Ενεργοποίηση</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">Απενεργοποίηση</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自定义StaticResource，若留空则跟随全局设置的值。
+支持以下替换标记：
+ · {user}：玩家名字
+ · {login}：玩家的登录方式
+ · {name}：游戏版本名
+ · {date}、{time}：当前的系统时间
+ · {version}：游戏对应的原版版本号</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">版本隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、Mod 等文件相互独立，互不干涉。
+这会使你无法跨版本共享存档，但可以规避 Mod 冲突问题。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieDisable">Χρησιμοποιήστε το ίδιο προφίλ με άλλες περιπτώσεις όπου η επιλογή «Απομόνωση Παρουσίας» είναι κλειστή και κοινοποιούνται οι αποθηκευτικές ρυθμίσεις, οι τροποποιήσεις, τα πακέτα πόρων κ.λπ.
 Ενδέχεται να εμφανιστούν απρόβλεπτα προβλήματα λόγω διαφορετικής έκδοσης φόρτωσης mod και τροποποιήσεων σε διένεξη.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
+若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">Κάντε το προφίλ του στιγμιότυπου όπως οι αποθηκευμένες και οι τροποποιήσεις ανεξάρτητο από άλλες παρουσίες.</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会被直接拼合在启动参数的末尾。
+例如输入 --demo 则会以试玩模式启动游戏。
+若留空，则跟随全局设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全局设置</s:String>
     <s:String x:Key="LangPageVersionSetupServer">Διακομιστής</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">Μέθοδος Σύνδεσης</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">Microsoft ή Εκτός Σύνδεσης</s:String>

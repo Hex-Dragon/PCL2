@@ -54,7 +54,7 @@
                                 </local:ValidateExcept>
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="启动器可见性" Margin="0,0,25,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchVisibility}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboArgumentVisibie" Grid.Row="6" Grid.ColumnSpan="2" Tag="LaunchArgumentVisible" Grid.Column="1">
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVisibilityCloseOnGameStart}" />
                             <local:MyComboBoxItem Content="" IsEnabled="False" Visibility="Collapsed" />
