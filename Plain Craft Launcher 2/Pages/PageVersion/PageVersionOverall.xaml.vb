@@ -285,11 +285,7 @@
         Try
             '忽略文件检查提示
             If ShouldIgnoreFileCheck(PageVersionLeft.Version) Then
-                If Setup.Get("LaunchAdvanceAssets") Then
-                    Hint(GetLang("LangPageVersionOverallHintEnableAssetsCheck"), HintType.Info)
-                Else
-                    Hint(GetLang("LangPageVersionOverallHintEnableInstanceAssetsCheck"), HintType.Info)
-                End If
+                Hint(GetLang("LangPageVersionOverallHintEnableInstanceAssetsCheck"), HintType.Info)
                 Exit Sub
             End If
             '重复任务检查

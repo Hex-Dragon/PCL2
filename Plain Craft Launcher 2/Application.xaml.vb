@@ -1,5 +1,4 @@
-﻿Imports System.Net
-Imports System.Reflection
+﻿Imports System.Reflection
 Imports System.Windows.Threading
 
 Public Class Application
@@ -51,7 +50,15 @@ Public Class Application
                 If e.Args(0) = "--update" Then
                     '自动更新
                     UpdateReplace(e.Args(1), e.Args(2).Trim(""""), e.Args(3).Trim(""""), e.Args(4))
-                    Environment.Exit(Result.Cancel)
+                    Environment.Exit(ProcessReturnValues.TaskDone)
+                ElseIf e.Args(0) = "--gpu" Then
+                    '调整显卡设置
+                    Try
+                        SetGPUPreference(e.Args(1).Trim(""""))
+                        Environment.Exit(ProcessReturnValues.TaskDone)
+                    Catch ex As Exception
+                        Environment.Exit(ProcessReturnValues.Fail)
+                    End Try
                 ElseIf e.Args(0).StartsWithF("--memory") Then
                     '内存优化
                     Dim Ram = My.Computer.Info.AvailablePhysicalMemory
@@ -70,10 +77,10 @@ Public Class Application
                     '制作更新包
                 ElseIf e.Args(0) = "--edit1" Then
                     ExeEdit(e.Args(1), True)
-                    Environment.Exit(Result.Cancel)
+                    Environment.Exit(ProcessReturnValues.TaskDone)
                 ElseIf e.Args(0) = "--edit2" Then
                     ExeEdit(e.Args(1), False)
-                    Environment.Exit(Result.Cancel)
+                    Environment.Exit(ProcessReturnValues.TaskDone)
 #End If
                 End If
             End If
@@ -112,7 +119,7 @@ WaitRetry:
                 ShowWindowToTop(WindowHwnd)
                 '播放提示音并退出
                 Beep()
-                Environment.[Exit](Result.Cancel)
+                Environment.[Exit](ProcessReturnValues.Cancel)
             End If
 #End If
             '设置 ToolTipService 默认值
@@ -170,7 +177,7 @@ WaitRetry:
             Catch
             End Try
             MsgBox(GetExceptionDetail(ex, True) & vbCrLf & "PCL 所在路径：" & If(String.IsNullOrEmpty(FilePath), "获取失败", FilePath), MsgBoxStyle.Critical, GetLang("LangApplicationDialogTitleInitError"))
-            FormMain.EndProgramForce(Result.Exception)
+            FormMain.EndProgramForce(ProcessReturnValues.Exception)
         End Try
     End Sub
 
@@ -187,7 +194,7 @@ WaitRetry:
         If IsProgramEnded Then Exit Sub
         If IsCritErrored Then
             '在汇报错误后继续引发错误，知道这次压不住了
-            FormMain.EndProgramForce(Result.Exception)
+            FormMain.EndProgramForce(ProcessReturnValues.Exception)
             Exit Sub
         End If
         IsCritErrored = True
@@ -198,7 +205,7 @@ WaitRetry:
            ExceptionString.Contains("未能加载文件或程序集") Then
             OpenWebsite("https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net462-offline-installer")
             MsgBox(GetLang("LangApplicationDialogContentNETWarn"), MsgBoxStyle.Information, GetLang("LangApplicationDialogTitleNETWarn"))
-            FormMain.EndProgramForce(Result.Cancel)
+            FormMain.EndProgramForce(ProcessReturnValues.Cancel)
         Else
             FeedbackInfo()
             Log(e.Exception, GetLang("LangApplicationDialogContentUnknownError"), LogLevel.Assert, GetLang("LangApplicationDialogTitleUnknownError"))

@@ -63,12 +63,13 @@
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModListSourceC}" IsSelected="True" />
                         </local:MyComboBox>-->
                         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadModFileName}" Margin="0,0,25,0" />
-                        <local:MyComboBox Grid.Row="0" x:Name="ComboDownloadTranslate" Grid.ColumnSpan="2" Tag="ToolDownloadTranslate" Grid.Column="1" 
+                        <local:MyComboBox Grid.Row="0" x:Name="ComboDownloadTranslateV2" Grid.ColumnSpan="2" Tag="ToolDownloadTranslateV2" Grid.Column="1" 
                                           ToolTip="{StaticResource LangPageSetupSystemDownloadModFileNameToolTip}">
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameE}" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameA}" IsSelected="True" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameB}" />
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameC}" />
-                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameD}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupSystemDownloadModFileNameD} />
                         </local:MyComboBox>
                         <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupSystemDownloadModManageStyle}" Margin="0,0,25,0" />
                         <local:MyComboBox Grid.Row="2" x:Name="ComboModLocalNameStyle" Grid.ColumnSpan="2" Tag="ToolModLocalNameStyle" Grid.Column="1" 

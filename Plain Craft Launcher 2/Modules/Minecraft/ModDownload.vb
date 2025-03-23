@@ -865,7 +865,7 @@
         Dim Versions = VersionNames.
             Where(Function(name) name <> "47.1.82"). '这个版本虽然在版本列表中，但不能下载
             Select(Function(name) New DlNeoForgeListEntry(name)).ToList
-        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("不可用")
         Versions = Versions.OrderByDescending(Function(a) a.Version).ToList
         Return Versions
     End Function

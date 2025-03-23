@@ -131,7 +131,7 @@
                     Version = New Version(1, Version.Major, Version.Build, Version.Revision)
                 End If
                 Is64Bit = Output.Contains("64-bit")
-                If Version.Minor <= 4 OrElse Version.Minor >= 25 Then Throw New ApplicationException(GetLang("LangModJavaExceptionGetDetailInfoFail", Version.ToString()))
+                If Version.Minor <= 4 OrElse Version.Minor >= 100 Then Throw New ApplicationException(GetLang("LangModJavaExceptionGetDetailInfoFail", Version.ToString()))
                 '基于 #3649，在 64 位系统上禁用 32 位 Java
                 If Not Is64Bit AndAlso Not Is32BitSystem Then Throw New Exception(GetLang("LangModJavaExceptionNeed64Bit"))
                 '基于 #2249 发现 JRE 17 似乎也导致了 Forge 安装失败，干脆禁用更多版本的 JRE
@@ -342,7 +342,7 @@ RetryGet:
                 Requirement = GetLang("LangModJavaRequireVersion", If(Left = Right, Left, Left & " ~ " & Right))
             End If
             Dim JavaCurrent As String = UserJava.VersionCode & If(ShowRevision, "." & UserJava.Version.MajorRevision & "." & UserJava.Version.MinorRevision, "")
-            If Setup.Get("LaunchAdvanceJava") OrElse (RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionAdvanceJava", RelatedVersion)) Then
+            If RelatedVersion IsNot Nothing AndAlso Setup.Get("VersionAdvanceJava", RelatedVersion) Then
                 '直接跳过弹窗
                 Log("[Java] 设置中指定了使用 Java " & JavaCurrent & "，但当前版本" & Requirement & "，这可能会导致游戏崩溃！", LogLevel.Debug)
                 AllowedJavaList = New List(Of JavaEntry) From {UserJava}
@@ -378,7 +378,7 @@ ExitUserJavaCheck:
 UserPass:
 
             '对适合的 Java 进行排序
-            AllowedJavaList = Sort(AllowedJavaList, AddressOf JavaSorter)
+            AllowedJavaList = AllowedJavaList.Sort(AddressOf JavaSorter)
             Log($"[Java] 排序后的 Java 优先顺序：")
             For Each Java In AllowedJavaList
                 Log($"[Java]  - {Java}")
@@ -582,7 +582,7 @@ NoUserJava:
             For Each Entry In JavaPreList.Distinct(Function(a, b) a.Key.ToLower = b.Key.ToLower) '#794
                 NewJavaList.Add(New JavaEntry(Entry.Key, Entry.Value))
             Next
-            NewJavaList = Sort(JavaCheckList(NewJavaList), AddressOf JavaSorter)
+            NewJavaList = JavaCheckList(NewJavaList).Sort(AddressOf JavaSorter)
 
             '修改设置项
             Dim AllList As New JArray
@@ -681,7 +681,7 @@ Wait:
                 If FolderInfo.Attributes.HasFlag(FileAttributes.ReparsePoint) Then Continue For '跳过符号链接
                 Dim SearchEntry = GetFolderNameFromPath(FolderInfo.Name).ToLower '用于搜索的字符串
                 If IsFullSearch OrElse
-                   FolderInfo.Parent.Name.ToLower = "users" OrElse Val(SearchEntry) > 0 OrElse Keywords.Any(Function(w) SearchEntry.Contains(w)) OrElse SearchEntry = "bin" Then
+                   OriginalPath.Name.ToLower = "users" OrElse Val(SearchEntry) > 0 OrElse Keywords.Any(Function(w) SearchEntry.Contains(w)) OrElse SearchEntry = "bin" Then
                     JavaSearchFolder(FolderInfo, Results, Source)
                 End If
             Next

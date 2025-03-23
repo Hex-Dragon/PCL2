@@ -1,7 +1,8 @@
 ﻿Public Class PageDownloadInstall
 
     Private Sub LoaderInit() Handles Me.Initialized
-        PageLoaderInit(LoadMinecraft, PanLoad, PanBack, Nothing, DlClientListLoader, AddressOf LoadMinecraft_OnFinish)
+        DisabledPageAnimControls.Add(BtnStart)
+        PageLoaderInit(LoadMinecraft, PanLoad, PanAllBack, Nothing, DlClientListLoader, AddressOf LoadMinecraft_OnFinish)
     End Sub
 
     Private IsLoad As Boolean = False
@@ -40,6 +41,8 @@
         If IsInSelectPage Then Exit Sub
         IsInSelectPage = True
 
+        PanInner.Margin = New Thickness(25, 10, 25, 40)
+
         AutoSelectedFabricApi = False
         AutoSelectedOptiFabric = False
         IsSelectNameEdited = False
@@ -49,7 +52,8 @@
         PanBack.IsHitTestVisible = False
         PanBack.ScrollToHome()
 
-        CardMinecraft.IsSwaped = True
+        DisabledPageAnimControls.Remove(BtnStart)
+        BtnStart.Show = True
         CardOptiFine.IsSwaped = True
         CardLiteLoader.IsSwaped = True
         CardForge.IsSwaped = True
@@ -83,8 +87,8 @@
         DlOptiFabricLoader.Start()
 
         AniStart({
-            AaOpacity(PanMinecraft, -PanMinecraft.Opacity, 100, 10),
-            AaTranslateX(PanMinecraft, -50 - CType(PanMinecraft.RenderTransform, TranslateTransform).X, 110, 10),
+            AaOpacity(PanMinecraft, -PanMinecraft.Opacity, 90, 10),
+            AaTranslateX(PanMinecraft, -50 - CType(PanMinecraft.RenderTransform, TranslateTransform).X, 100, 10),
             AaCode(
             Sub()
                 PanBack.ScrollToHome()
@@ -98,8 +102,8 @@
                 OptiFabric_Loaded()
                 SelectReload()
             End Sub, After:=True),
-            AaOpacity(PanSelect, 1 - PanSelect.Opacity, 250, 150),
-            AaTranslateX(PanSelect, -CType(PanSelect.RenderTransform, TranslateTransform).X, 500, 150, Ease:=New AniEaseOutBack(AniEasePower.Weak)),
+            AaOpacity(PanSelect, 1 - PanSelect.Opacity, 90, 100),
+            AaTranslateX(PanSelect, -CType(PanSelect.RenderTransform, TranslateTransform).X, 200, 100, Ease:=New AniEaseOutFluent(AniEasePower.ExtraStrong)),
             AaCode(
             Sub()
                 PanMinecraft.Visibility = Visibility.Collapsed
@@ -117,10 +121,14 @@
             End Sub,, True)
         }, "FrmDownloadInstall SelectPageSwitch", True)
     End Sub
-    Public Sub ExitSelectPage()
+    Public Sub ExitSelectPage() Handles BtnBack.Click
         If Not IsInSelectPage Then Exit Sub
         IsInSelectPage = False
 
+        PanInner.Margin = New Thickness(25, 10, 25, 25)
+
+        DisabledPageAnimControls.Add(BtnStart)
+        BtnStart.Show = False
         SelectClear() '清除已选择项
         PanMinecraft.Visibility = Visibility.Visible
         PanSelect.IsHitTestVisible = False
@@ -132,25 +140,20 @@
             AaOpacity(PanSelect, -PanSelect.Opacity, 90, 10),
             AaTranslateX(PanSelect, 50 - CType(PanSelect.RenderTransform, TranslateTransform).X, 100, 10),
             AaCode(Sub() PanBack.ScrollToHome(), After:=True),
-            AaOpacity(PanMinecraft, 1 - PanMinecraft.Opacity, 150, 100),
-            AaTranslateX(PanMinecraft, -CType(PanMinecraft.RenderTransform, TranslateTransform).X, 400, 100, Ease:=New AniEaseOutBack(AniEasePower.Weak)),
-            AaCode(Sub()
-                       PanSelect.Visibility = Visibility.Collapsed
-                       PanBack.IsHitTestVisible = True
-                   End Sub,, True)
+            AaOpacity(PanMinecraft, 1 - PanMinecraft.Opacity, 90, 100),
+            AaTranslateX(PanMinecraft, -CType(PanMinecraft.RenderTransform, TranslateTransform).X, 200, 100, Ease:=New AniEaseOutFluent(AniEasePower.ExtraStrong)),
+            AaCode(
+            Sub()
+                PanSelect.Visibility = Visibility.Collapsed
+                PanBack.IsHitTestVisible = True
+            End Sub,, True)
         }, "FrmDownloadInstall SelectPageSwitch")
     End Sub
-
-    '页面切换触发
     Public Sub MinecraftSelected(sender As MyListItem, e As MouseButtonEventArgs)
         SelectedMinecraftId = sender.Title
         SelectedMinecraftJsonUrl = sender.Tag("url").ToString
         SelectedMinecraftIcon = sender.Logo
         EnterSelectPage()
-    End Sub
-    Private Sub CardMinecraft_PreviewSwap(sender As Object, e As RouteEventArgs) Handles CardMinecraft.PreviewSwap
-        ExitSelectPage()
-        e.Handled = True
     End Sub
 
 #End Region
@@ -311,12 +314,7 @@
         IsReloading = True
         '主预览
         SelectNameUpdate()
-        ItemSelect.Title = TextSelectName.Text
-        ItemSelect.Info = GetSelectInfo()
-        ItemSelect.Logo = GetSelectLogo()
-        'Minecraft
-        LabMinecraft.Text = SelectedMinecraftId
-        ImgMinecraft.Source = New MyBitmap(SelectedMinecraftIcon)
+        ImgLogo.Source = GetSelectLogo()
         'OptiFine
         Dim OptiFineError As String = LoadOptiFineGetError()
         CardOptiFine.MainSwap.Visibility = If(OptiFineError Is Nothing, Visibility.Visible, Visibility.Collapsed)
@@ -497,7 +495,26 @@
         SelectedOptiFabric = Nothing
     End Sub
 
-    '显示信息获取
+    ''' <summary>
+    ''' 获取版本图标。
+    ''' </summary>
+    Private Function GetSelectLogo() As String
+        If SelectedFabric IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/Fabric.png"
+        ElseIf SelectedForge IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/Anvil.png"
+        ElseIf SelectedNeoForge IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/NeoForge.png"
+        ElseIf SelectedLiteLoader IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/Egg.png"
+        ElseIf SelectedOptiFine IsNot Nothing Then
+            Return "pack://application:,,,/images/Blocks/GrassPath.png"
+        Else
+            Return SelectedMinecraftIcon
+        End If
+    End Function
+
+    '版本名处理
     ''' <summary>
     ''' 获取默认版本名。
     ''' </summary>
@@ -520,49 +537,6 @@
         End If
         Return Name
     End Function
-    ''' <summary>
-    ''' 获取版本描述信息。
-    ''' </summary>
-    Private Function GetSelectInfo() As String
-        Dim Info As String = ""
-        If SelectedFabric IsNot Nothing Then
-            Info += ", Fabric " & SelectedFabric.Replace("+build", "")
-        End If
-        If SelectedForge IsNot Nothing Then
-            Info += ", Forge " & SelectedForge.VersionName
-        End If
-        If SelectedNeoForge IsNot Nothing Then
-            Info += ", NeoForge " & SelectedNeoForge.VersionName
-        End If
-        If SelectedLiteLoader IsNot Nothing Then
-            Info += ", LiteLoader"
-        End If
-        If SelectedOptiFine IsNot Nothing Then
-            Info += ", OptiFine " & SelectedOptiFine.NameDisplay.Replace(SelectedMinecraftId & " ", "")
-        End If
-        If Info = "" Then Info = "," & GetLang("LangDownloadInstallNoAdd")
-        Return Info.TrimStart(", ".ToCharArray())
-    End Function
-    ''' <summary>
-    ''' 获取版本图标。
-    ''' </summary>
-    Private Function GetSelectLogo() As String
-        If SelectedFabric IsNot Nothing Then
-            Return "pack://application:,,,/images/Blocks/Fabric.png"
-        ElseIf SelectedForge IsNot Nothing Then
-            Return "pack://application:,,,/images/Blocks/Anvil.png"
-        ElseIf SelectedNeoForge IsNot Nothing Then
-            Return "pack://application:,,,/images/Blocks/NeoForge.png"
-        ElseIf SelectedLiteLoader IsNot Nothing Then
-            Return "pack://application:,,,/images/Blocks/Egg.png"
-        ElseIf SelectedOptiFine IsNot Nothing Then
-            Return "pack://application:,,,/images/Blocks/GrassPath.png"
-        Else
-            Return SelectedMinecraftIcon
-        End If
-    End Function
-
-    '版本名处理
     Private IsSelectNameEdited As Boolean = False
     Private IsSelectNameChanging As Boolean = False
     Private Sub SelectNameUpdate()
@@ -577,7 +551,7 @@
         SelectReload()
     End Sub
     Private Sub TextSelectName_ValidateChanged(sender As Object, e As EventArgs) Handles TextSelectName.ValidateChanged
-        BtnSelectStart.IsEnabled = TextSelectName.ValidateResult = ""
+        BtnStart.IsEnabled = TextSelectName.IsValidated
     End Sub
 
 #End Region
@@ -637,10 +611,8 @@
                 Dict(Type).Add(Version)
             Next
             '排序
-            For i = 0 To Dict.Keys.Count - 1
-                Dict(Dict.Keys(i)) = Sort(Dict.Values(i), Function(Left As JObject, Right As JObject) As Boolean
-                                                              Return Left("releaseTime").Value(Of Date) > Right("releaseTime").Value(Of Date)
-                                                          End Function)
+            For Each Pair In Dict.ToList
+                Dict(Pair.Key) = Pair.Value.OrderByDescending(Function(j) j("releaseTime").Value(Of Date)).ToList
             Next
             '清空当前
             PanMinecraft.Children.Clear()
@@ -704,39 +676,34 @@
             VersionSortInteger(SelectedMinecraftId, "1.13") >= 0 AndAlso VersionSortInteger("1.14.3", SelectedMinecraftId) >= 0 Then
             Return GetLang("LangDownloadInstallForgeIncompatible")
         End If
-        '检查最低 Forge 版本
-        Dim MinimalForgeVersion As String = "9999.9999"
-        Dim NotSuitForForge As Boolean = False
+        '检查 Forge 版本
+        Dim HasAny As Boolean = False
+        Dim HasRequiredVersion As Boolean = False
         For Each OptiFineVersion As DlOptiFineListEntry In DlOptiFineListLoader.Output.Value
             If Not OptiFineVersion.NameDisplay.StartsWith(SelectedMinecraftId & " ") Then Continue For '不是同一个大版本
-            If SelectedForge Is Nothing Then Return Nothing '该版本可用
-            If IsOptiFineSuitForForge(OptiFineVersion, SelectedForge) Then
-                Return Nothing '该版本可用
-            Else
-                NotSuitForForge = True
-                If OptiFineVersion.RequiredForgeVersion IsNot Nothing Then
-                    '设置用于显示的最低允许的 Forge 版本
-                    MinimalForgeVersion = If(VersionSortBoolean(MinimalForgeVersion, OptiFineVersion.RequiredForgeVersion),
-                                          OptiFineVersion.RequiredForgeVersion, MinimalForgeVersion)
-                End If
-            End If
+            HasAny = True
+            If SelectedForge Is Nothing Then Return Nothing '未选择 Forge
+            If IsOptiFineSuitForForge(OptiFineVersion, SelectedForge) Then Return Nothing '该版本可用
+            If OptiFineVersion.RequiredForgeVersion IsNot Nothing Then HasRequiredVersion = True
         Next
-        If MinimalForgeVersion = "9999.9999" Then
-            Return If(NotSuitForForge, GetLang("LangDownloadInstallForgeIncompatible"), GetLang("LangDownloadInstallNoAvailableVersion"))
+        If Not HasAny Then
+            Return GetLang("LangDownloadInstallNoAvailableVersion")
+        ElseIf HasRequiredVersion Then
+            Return GetLang("LangDownloadInstallForgeCompatibleTargetVersion")
         Else
-            Return GetLang("LangDownloadInstallForgeNeed") & " " & If(MinimalForgeVersion.Contains("."), "", "#") & MinimalForgeVersion & " " & GetLang("LangDownloadInstallOrHigherVersion")
+            Return GetLang("LangDownloadInstallForgeIncompatible")
         End If
     End Function
 
-    '检查某个 OptiFine 是否与某个 Forge 兼容（最低 Forge 版本是否达到需求）
+    '检查某个 OptiFine 是否与某个 Forge 兼容
     Private Function IsOptiFineSuitForForge(OptiFine As DlOptiFineListEntry, Forge As DlForgeVersionEntry)
         If Forge.Inherit <> OptiFine.Inherit Then Return False '不是同一个大版本
         If OptiFine.RequiredForgeVersion Is Nothing Then Return False '不兼容 Forge
         If String.IsNullOrWhiteSpace(OptiFine.RequiredForgeVersion) Then Return True '#4183
         If OptiFine.RequiredForgeVersion.Contains(".") Then 'XX.X.XXX
-            Return VersionSortInteger(Forge.Version.ToString, OptiFine.RequiredForgeVersion) >= 0
+            Return VersionSortInteger(Forge.Version.ToString, OptiFine.RequiredForgeVersion) = 0
         Else 'XXXX
-            Return Forge.Version.Revision >= OptiFine.RequiredForgeVersion
+            Return Forge.Version.Revision = OptiFine.RequiredForgeVersion
         End If
     End Function
 
@@ -760,7 +727,7 @@
             Next
             If Not Versions.Any() Then Exit Sub
             '排序
-            Versions = Sort(Versions,
+            Versions = Versions.Sort(
             Function(Left As DlOptiFineListEntry, Right As DlOptiFineListEntry) As Boolean
                 If Not Left.IsPreview AndAlso Right.IsPreview Then Return True
                 If Left.IsPreview AndAlso Not Right.IsPreview Then Return False
@@ -868,7 +835,7 @@
         If Loader.State = LoadState.Loading Then Return GetLang("LangDownloadInstallGettingList")
         If Loader.State = LoadState.Failed Then
             Dim ErrorMessage As String = Loader.Error.Message
-            If ErrorMessage.Contains("没有可用版本") Then
+            If ErrorMessage.Contains(GetLang("LangDownloadInstallNoAvailableVersion")) Then
                 Return GetLang("LangDownloadInstallNoAvailableVersion")
             Else
                 Return GetLang("LangDownloadInstallFailGetList") & ErrorMessage
@@ -911,12 +878,12 @@
             Dim Versions = Loader.Output.ToList '复制数组，以免 Output 在实例化后变空
             If Not Loader.Output.Any() Then Exit Sub
             PanForge.Children.Clear()
-            Versions = Sort(Versions, Function(a, b) a.Version > b.Version).Where(
+            Versions = Versions.Where(
             Function(v)
                 If v.Category = "universal" OrElse v.Category = "client" Then Return False '跳过无法自动安装的版本
                 If SelectedOptiFine IsNot Nothing AndAlso Not IsOptiFineSuitForForge(SelectedOptiFine, v) Then Return False
                 Return True
-            End Function).ToList()
+            End Function).OrderByDescending(Function(v) v.Version).ToList()
             ForgeDownloadListItemPreload(PanForge, Versions, AddressOf Forge_Selected, False)
             For Each Version In Versions
                 PanForge.Children.Add(ForgeDownloadListItem(Version, AddressOf Forge_Selected, False))
@@ -1150,7 +1117,7 @@
                 End If
             Next
             If Not Versions.Any() Then Exit Sub
-            Versions = Sort(Versions, Function(a, b) a.ReleaseDate > b.ReleaseDate)
+            Versions = Versions.OrderByDescending(Function(v) v.ReleaseDate).ToList
             '可视化
             PanFabricApi.Children.Clear()
             For Each Version In Versions
@@ -1241,7 +1208,7 @@
             Next
             If Not Versions.Any() Then Exit Sub
             '排序
-            Versions = Sort(Versions, Function(a, b) a.ReleaseDate > b.ReleaseDate)
+            Versions = Versions.OrderByDescending(Function(v) v.ReleaseDate).ToList
             '可视化
             PanOptiFabric.Children.Clear()
             For Each Version In Versions
@@ -1278,20 +1245,23 @@
 #Region "安装"
 
     Private Sub TextSelectName_KeyDown(sender As Object, e As KeyEventArgs) Handles TextSelectName.KeyDown
-        If e.Key = Key.Enter AndAlso BtnSelectStart.IsEnabled Then BtnSelectStart_Click()
+        If e.Key = Key.Enter AndAlso BtnStart.IsEnabled Then BtnStart_Click()
     End Sub
-    Private Sub BtnSelectStart_Click() Handles BtnSelectStart.Click
+    Private Sub BtnStart_Click() Handles BtnStart.Click
         '确认版本隔离
         If (SelectedForge IsNot Nothing OrElse SelectedNeoForge IsNot Nothing OrElse SelectedFabric IsNot Nothing) AndAlso
-           (Setup.Get("LaunchArgumentIndie") = 0 OrElse Setup.Get("LaunchArgumentIndie") = 2) Then
-            If MyMsgBox(GetLang("LangDownloadInstallDialogIndieContent"), GetLang("LangDownloadInstallDialogIndieTitle"), GetLang("LangDownloadInstallCancelDownload"), GetLang("LangDialogBtnContinue")) = 1 Then
+           (Setup.Get("LaunchArgumentIndieV2") = 0 OrElse Setup.Get("LaunchArgumentIndieV2") = 2) Then
+            If MyMsgBox("你尚未开启版本隔离，这会导致多个版本共用同一个 Mod 文件夹。" & vbCrLf &
+                        "因此游戏可能会因为读取到与当前版本不符的 Mod 而崩溃。" & vbCrLf &
+                        "推荐在开始下载前，在 设置 → 启动选项 → 版本隔离 中开启版本隔离！", "版本隔离提示", "取消下载", "继续") = 1 Then
                 Exit Sub
             End If
         End If
         '提交安装申请
+        Dim VersionName As String = TextSelectName.Text
         Dim Request As New McInstallRequest With {
-            .TargetVersionName = TextSelectName.Text,
-            .TargetVersionFolder = $"{PathMcFolder}versions\{TextSelectName.Text}\",
+            .TargetVersionName = VersionName,
+            .TargetVersionFolder = $"{PathMcFolder}versions\{VersionName}\",
             .MinecraftJson = SelectedMinecraftJsonUrl,
             .MinecraftName = SelectedMinecraftId,
             .OptiFineEntry = SelectedOptiFine,

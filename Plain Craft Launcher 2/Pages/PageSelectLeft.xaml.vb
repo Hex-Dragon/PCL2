@@ -227,7 +227,7 @@
                 '提示
                 If IsReplace Then Exit Sub
                 If ShowHint Then Hint(GetLang("LangSelectFolderAdded", DisplayName), HintType.Finish)
-                '自动关闭版本隔离
+                '检查是否为根目录整合包，自动关闭版本隔离
                 '1. 根目录中存在数个 Mod
                 Dim ModFolder As New DirectoryInfo(FolderPath & "mods\")
                 If Not (ModFolder.Exists AndAlso ModFolder.EnumerateFiles.Count >= 3) Then Exit Sub
@@ -244,6 +244,7 @@
                     If ModIndieFolder.Exists AndAlso ModIndieFolder.EnumerateFiles.Any Then Exit Sub
                     '满足以上全部条件则视为根目录整合包
                     Setup.Set("VersionArgumentIndie", 2, Version:=Version)
+                    Setup.Set("VersionArgumentIndieV2", False, Version:=Version)
                     Log("[Setup] 已自动关闭单版本隔离：" & Version.Name, LogLevel.Debug)
                 Next
             Catch ex As Exception

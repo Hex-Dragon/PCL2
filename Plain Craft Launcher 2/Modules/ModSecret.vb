@@ -31,12 +31,12 @@ Friend Module ModSecret
         Catch ex As Exception
             MsgBox(GetLang("LangModSecretPermissionA", Path, If(Path.StartsWithF("C:", True), GetLang("LangModSecretPermissionAddition"), "")),
                 MsgBoxStyle.Critical, GetLang("LangModSecretPermissionError"))
-            Environment.[Exit](Result.Cancel)
+            Environment.[Exit](ProcessReturnValues.Cancel)
         End Try
         If Not CheckPermission(Path & "PCL") Then
             MsgBox(GetLang("LangModSecretPermissionB", If(Path.StartsWithF("C:", True), GetLang("LangModSecretPermissionAddition"), "")),
                 MsgBoxStyle.Critical, GetLang("LangModSecretPermissionError"))
-            Environment.[Exit](Result.Cancel)
+            Environment.[Exit](ProcessReturnValues.Cancel)
         End If
         '开源版本提示
         MyMsgBox(GetLang("LangModSecretDialogOpenSourceVersionContent"), GetLang("LangModSecretDialogOpenSourceVersionTitle"))

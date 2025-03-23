@@ -665,6 +665,9 @@ NoSubtitle:
             If ModLoaders.Count <> Project.ModLoaders.Count OrElse ModLoaders.Except(Project.ModLoaders).Any() Then Return False
             'MC 版本一致
             If GameVersions.Count <> Project.GameVersions.Count OrElse GameVersions.Except(Project.GameVersions).Any() Then Return False
+            '最近更新时间差距在一周以内
+            If LastUpdate IsNot Nothing AndAlso Project.LastUpdate IsNot Nothing AndAlso
+               Math.Abs((LastUpdate - Project.LastUpdate).Value.TotalDays) > 7 Then Return False
             'MCMOD 翻译名 / 原名 / 描述文本 / Slug 的英文部分相同
             If TranslatedName = Project.TranslatedName OrElse
                RawName = Project.RawName OrElse Description = Project.Description OrElse
@@ -919,7 +922,7 @@ NoSubtitle:
         End If
 
         '驼峰英文请求关键字处理
-        Dim SpacedKeywords = RegexReplace(Task.Input.SearchText, "$& ", "([A-Z]+|[a-z]+?)(?=[A-Z]+[a-z]+[a-z ]*)")
+        Dim SpacedKeywords = Task.Input.SearchText.RegexReplace("([A-Z]+|[a-z]+?)(?=[A-Z]+[a-z]+[a-z ]*)", "$& ")
         Dim ConnectedKeywords = Task.Input.SearchText.Replace(" ", "")
         Dim AllPossibleKeywords = (SpacedKeywords & " " & If(IsChineseSearch, Task.Input.SearchText, ConnectedKeywords & " " & RawFilter)).ToLower
 
@@ -1066,7 +1069,7 @@ Retry:
 #Region "提取非重复项，存储于 RealResults"
 
         '将 Modrinth 排在 CurseForge 的前面，避免加载结束顺序不同导致排名不同
-        '这样做的话，去重后将优先保留 CurseForge 内容（考虑到 CurseForge 热度更高）
+        '这样做的话，去重后将优先保留 CurseForge 内容
         RawResults = RawResults.Where(Function(x) Not x.FromCurseForge).Concat(RawResults.Where(Function(x) x.FromCurseForge)).ToList
         'RawResults 去重
         RawResults = RawResults.Distinct(Function(a, b) a.IsLike(b))
@@ -1099,7 +1102,7 @@ Retry:
         If String.IsNullOrEmpty(Task.Input.SearchText) Then
             '如果没有搜索文本，按下载量将结果排序
             For Each Result As CompProject In RealResults
-                Scores.Add(Result, Result.DownloadCount * If(Result.FromCurseForge, 1, 10))
+                Scores.Add(Result, Result.DownloadCount * If(Result.FromCurseForge, 1, 5))
             Next
         Else
             '如果有搜索文本，按关联度将结果排序
@@ -1107,7 +1110,7 @@ Retry:
             Dim Entry As New List(Of SearchEntry(Of CompProject))
             For Each Result As CompProject In RealResults
                 Scores.Add(Result, If(Result.WikiId > 0, 0.2, 0) +
-                           Math.Log10(Math.Max(Result.DownloadCount, 1) * If(Result.FromCurseForge, 1, 10)) / 9)
+                           Math.Log10(Math.Max(Result.DownloadCount, 1) * If(Result.FromCurseForge, 1, 5)) / 9)
                 Entry.Add(New SearchEntry(Of CompProject) With {.Item = Result, .SearchSource = New List(Of KeyValuePair(Of String, Double)) From {
                           New KeyValuePair(Of String, Double)(If(IsChineseSearch, Result.TranslatedName, Result.RawName), 1),
                           New KeyValuePair(Of String, Double)(Result.Description, 0.05)}})
@@ -1119,7 +1122,7 @@ Retry:
         End If
         '根据排序分得出结果并添加
         Storage.Results.AddRange(
-            Sort(Scores.ToList, Function(a, b) a.Value > b.Value).Select(Function(r) r.Key).ToList)
+            Scores.OrderByDescending(Function(s) s.Value).Select(Function(r) r.Key))
 
 #End Region
 
@@ -1287,7 +1290,7 @@ Retry:
                     Dim RawVersions As List(Of String) = Data("gameVersions").Select(Function(t) t.ToString.Trim.ToLower).ToList
                     GameVersions = RawVersions.Where(Function(v) v.StartsWithF("1.")).Select(Function(v) v.Replace("-snapshot", " " & GetLang("LangModCompVersionSnapshot"))).ToList
                     If GameVersions.Count > 1 Then
-                        GameVersions = Sort(GameVersions, AddressOf VersionSortBoolean).ToList
+                        GameVersions = GameVersions.Sort(AddressOf VersionSortBoolean).ToList
                         If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)}
                     ElseIf GameVersions.Count = 1 Then
                         GameVersions = GameVersions.ToList
@@ -1328,7 +1331,7 @@ Retry:
                     GameVersions = RawVersions.Where(Function(v) v.StartsWithF("1.") OrElse v.StartsWithF("b1.")).
                                                Select(Function(v) If(v.Contains("-"), v.BeforeFirst("-") & " " & GetLang("LangModCompVersionSnapshot"), If(v.StartsWithF("b1."), GetLang("LangDownloadAncientVersion"), v))).ToList
                     If GameVersions.Count > 1 Then
-                        GameVersions = Sort(GameVersions, AddressOf VersionSortBoolean).ToList
+                        GameVersions = GameVersions.Sort(AddressOf VersionSortBoolean).ToList
                         If Type = CompType.ModPack Then GameVersions = New List(Of String) From {GameVersions(0)}
                     ElseIf GameVersions.Count = 1 Then
                         '无需处理
@@ -1467,11 +1470,14 @@ Retry:
             Dim ResultJsonArray As JArray
             If FromCurseForge Then
                 'CurseForge
-                If TargetProject.Type = CompType.Mod Then 'Mod 使用每个版本最新的文件
-                    ResultJsonArray = GetJson(DlModRequest("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(TargetProject.CurseForgeFileIds, ",") & "]}", "application/json"))("data")
-                Else '否则使用全部文件
-                    ResultJsonArray = DlModRequest($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=999", IsJson:=True)("data")
-                End If
+                'HMCL 一次性请求了 10000 个文件，虽然不知道会不会出问题但先这样吧……（#5522）
+                ResultJsonArray = DlModRequest($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=10000", IsJson:=True)("data")
+                '之前只请求一部分文件的方法备份如下：
+                'If TargetProject.Type = CompType.Mod Then 'Mod 使用每个版本最新的文件
+                '    ResultJsonArray = GetJson(DlModRequest("https://api.curseforge.com/v1/mods/files", "POST", "{""fileIds"": [" & Join(TargetProject.CurseForgeFileIds, ",") & "]}", "application/json"))("data")
+                'Else '否则使用全部文件
+                '    ResultJsonArray = DlModRequest($"https://api.curseforge.com/v1/mods/{ProjectId}/files?pageSize=999", IsJson:=True)("data")
+                'End If
             Else
                 'Modrinth
                 ResultJsonArray = DlModRequest($"https://api.modrinth.com/v2/project/{ProjectId}/version", IsJson:=True)

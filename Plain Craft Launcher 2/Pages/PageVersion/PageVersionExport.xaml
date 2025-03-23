@@ -5,9 +5,6 @@
     xmlns:System="clr-namespace:System;assembly=mscorlib" 
     mc:Ignorable="d" x:Class="PageVersionExport"
     PanScroll="{Binding ElementName=PanBack}">
-    <local:MyPageRight.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    </local:MyPageRight.Resources>
     <Grid x:Name="PanAllBack">
         <Grid.Resources>
             <Style TargetType="local:MyCheckBox">
@@ -241,14 +238,13 @@
                 <local:MyCard Title="{StaticResource LangPageVersionExportAdvancedOptions}" Margin="0,0,0,15" CanSwap="True" IsSwaped="True">
                     <StackPanel Margin="25,37,23,20">
                         <local:MyHint Text="{StaticResource LangPageVersionExportArchiveModeHint}"
-                                      IsWarn="False" Margin="0,0,0,4"
-                                      Visibility="{Binding Checked, ElementName=CheckAdvancedInclude, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                      IsWarn="False" Margin="0,0,0,4" Visibility="{Binding Checked, ElementName=CheckAdvancedInclude, Converter={StaticResource BooleanToVisibilityConverter}}" />
                         <local:MyCheckBox Text="{StaticResource LangPageVersionExportArchiveMode}" x:Name="CheckAdvancedInclude"
                                           ToolTip="{StaticResource LangPageVersionExportArchiveModeDesc}" />
                         <local:MyCheckBox Text="{StaticResource LangPageVersionExportModrinthStandard}" x:Name="CheckAdvancedModrinth"
                                           ToolTip="{StaticResource LangPageVersionExportModrinthStandardDesc}" />
-                        <Rectangle Height="1" Fill="{StaticResource ColorBrushGray5}" Margin="0,15,0,15" />
-                        <TextBlock Text="{StaticResource LangPageVersionExportExportConfigDesc}" TextWrapping="WrapWithOverflow" />
+                        <local:MyHint IsWarn="False" RelativeSetup="HintExportConfig" CanClose="True" Margin="0,20,0,0"
+                                      Text="{StaticResource LangPageVersionExportExportConfigDesc}" />
                         <Grid Height="35" Margin="0,12,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
@@ -264,8 +260,8 @@
                 </local:MyCard>
             </StackPanel>
         </local:MyScrollViewer>
-        <local:MyExtraTextButton HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="20"
+        <local:MyExtraTextButton HorizontalAlignment="Center" VerticalAlignment="Bottom"
             x:Name="BtnExport" Text="{StaticResource LangPageVersionExportStart}"
-            LogoScale="1.1" Logo="M511.488 995.328a128.654222 128.654222 0 0 1-57.116444-13.112889L70.769778 791.808a126.833778 126.833778 0 0 1-70.769778-113.777778V311.608889a126.179556 126.179556 0 0 1 15.36-60.103111V248.604444c1.479111-2.901333 3.356444-5.603556 5.518222-8.021333a127.630222 127.630222 0 0 1 49.891556-42.325333L454.371556 13.368889a128.739556 128.739556 0 0 1 112.981333 0l383.601778 190.407111a126.862222 126.862222 0 0 1 72.049777 113.379556v360.874666a126.805333 126.805333 0 0 1-70.769777 115.939556L568.604444 984.32c-17.92 7.964444-37.461333 11.747556-57.116444 11.008z m42.638222-470.897778v370.204445l360.192-178.545778c14.449778-7.253333 23.552-21.987556 23.438222-38.087111v-335.928889L554.097778 524.430222zM85.248 330.666667v347.335111a42.268444 42.268444 0 0 0 23.438222 38.087111l360.192 178.545778V523.576889L85.248 330.666667zM135.537778 260.835556l375.950222 189.952 137.671111-65.564445L286.435556 188.074667 135.537778 260.864z m245.105778-118.471112l363.576888 197.973334 150.897778-71.480889-365.283555-180.224a42.922667 42.922667 0 0 0-37.518223 0l-111.672888 53.731555z" />
+            LogoScale="1.1" Logo="M511 995a128 128 0 0 1-57-13L70 791a126 126 0 0 1-70-113V311a126 126 0 0 1 15-60V248c1-2 3-5 5-8a127 127 0 0 1 49-42L454 13a128 128 0 0 1 112 0l383 190a126 126 0 0 1 72 113v360a126 126 0 0 1-70 115L568 984c-17 7-37 11-57 11z m42-470v370l360-178c14-7 23-21 23-38v-335L554 524zM85 330v347a42 42 0 0 0 23 38l360 178V523L85 330zM135 260l375 189 137-65L286 188 135 260z m245-118l363 197 150-71-365-180a42 42 0 0 0-37 0l-111 53z" />
     </Grid>
 </local:MyPageRight>

@@ -92,7 +92,7 @@
                 ElseIf ex.Message.StartsWith("$") Then
                     Hint(ex.Message.TrimStart("$"), HintType.Critical)
                 ElseIf TypeOf ex Is Security.Authentication.AuthenticationException AndAlso ex.Message.ContainsF("SSL/TLS") Then
-                    Log(ex, GetLang("LangPageLoginMsAddAccountFailBySSL"), LogLevel.Msgbox)
+                    Log(ex, GetLang("LangPageLoginMsAddAccountFailBySSL") & vbCrLf & vbCrLf & "原始错误信息：", LogLevel.Msgbox)
                 Else
                     Log(ex, GetLang("LangPageLoginMsAddAccountFail"), LogLevel.Msgbox)
                 End If

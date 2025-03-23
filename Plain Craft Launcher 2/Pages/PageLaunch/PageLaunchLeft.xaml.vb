@@ -57,9 +57,9 @@
                     Dim InstallLoader = ModpackInstall(PackInstallPath)
                     Log("[Launch] 自动安装整合包已开始：" & PackInstallPath)
                     InstallLoader.WaitForExit()
-                    If InstallLoader.State = LoadState.Finished AndAlso File.Exists(PackInstallPath) Then
-                        Log("[Launch] 自动安装整合包成功，删除安装包：" & PackInstallPath)
-                        File.Delete(PackInstallPath)
+                    If InstallLoader.State = LoadState.Finished Then
+                        Log("[Launch] 自动安装整合包成功，清理安装包：" & PackInstallPath)
+                        If File.Exists(PackInstallPath) Then File.Delete(PackInstallPath)
                     End If
                 Catch ex As CancelledException
                     Log(ex, "自动安装整合包被用户取消：" & PackInstallPath)

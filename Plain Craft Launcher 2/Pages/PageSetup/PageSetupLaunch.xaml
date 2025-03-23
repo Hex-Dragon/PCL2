@@ -6,8 +6,8 @@
     mc:Ignorable="d" x:Class="PageSetupLaunch"
     PanScroll="{Binding ElementName=PanBack}">
     <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
-        <StackPanel x:Name="PanMain" Margin="25,10">
-            <local:MyCard x:Name="CardArgument" Margin="0,15" Title="{StaticResource LangPageSetupLaunchLaunchOptions}">
+        <StackPanel x:Name="PanMain" Margin="25,25,25,10">
+            <local:MyCard x:Name="CardArgument" Margin="0,0,0,15" Title="{StaticResource LangPageSetupLaunchLaunchOptions}">
                 <StackPanel Margin="25,40,25,15">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -31,10 +31,19 @@
                             <RowDefinition Height="28" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchWindowTitle}" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextArgumentTitle" Grid.Row="0" Grid.ColumnSpan="2" Tag="LaunchArgumentTitle" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchWindowTitleToolTip}" HintText="{StaticResource LangSetDefault}" MaxLength="100" />
-                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchCustomInfo}" Margin="0,0,25,0" />
-                        <local:MyTextBox x:Name="TextArgumentInfo" Grid.Row="2" Grid.ColumnSpan="2" Tag="LaunchArgumentInfo" Text="PCL" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchCustomInfoToolTip}">
+                        <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchVersionIsolation}" Margin="0,0,25,0" />
+                        <local:MyComboBox x:Name="ComboArgumentIndieV2" Grid.Row="0" Grid.ColumnSpan="2" Tag="LaunchArgumentIndieV2" Grid.Column="1"
+                                      ToolTip="{StaticResource LangPageSetupLaunchLaunchVersionIsolationToolTip}">
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVersionIsolationClose}" ToolTip="{StaticResource LangPageSetupLaunchLaunchVersionIsolationCloseToolTip}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVersionIsolationModOnly}" IsSelected="True" ToolTip="{StaticResource LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVersionIsolationBetaOnly}" ToolTip="{StaticResource LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVersionIsolationBetaAndMod}" />
+                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVersionIsolationAll}" ToolTip="{StaticResource LangPageSetupLaunchLaunchVersionIsolationAllToolTip}" />
+                        </local:MyComboBox>
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchWindowTitle}" Margin="0,0,25,0" />
+                        <local:MyTextBox x:Name="TextArgumentTitle" Grid.Row="2" Grid.ColumnSpan="2" Tag="LaunchArgumentTitle" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchWindowTitleToolTip}" HintText="{StaticResource LangSetDefault}" MaxLength="100" />
+                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchCustomInfo}" Margin="0,0,25,0" />
+                        <local:MyTextBox x:Name="TextArgumentInfo" Grid.Row="4" Grid.ColumnSpan="2" Tag="LaunchArgumentInfo" Text="PCL" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchCustomInfoToolTip}">
                             <local:MyTextBox.ValidateRules>
                                 <local:ValidateExcept>
                                     <local:ValidateExcept.Excepts>
@@ -45,15 +54,7 @@
                                 </local:ValidateExcept>
                             </local:MyTextBox.ValidateRules>
                         </local:MyTextBox>
-                        <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchVersionIsolation}" Margin="0,0,25,0" />
-                        <local:MyComboBox x:Name="ComboArgumentIndie" Grid.Row="4" Grid.ColumnSpan="2" Tag="LaunchArgumentIndie" Grid.Column="1">
-                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVersionIsolationClose}" ToolTip="{StaticResource LangPageSetupLaunchLaunchVersionIsolationCloseToolTip}" />
-                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVersionIsolationModOnly}" IsSelected="True" ToolTip="{StaticResource LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip}" />
-                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVersionIsolationBetaOnly}" ToolTip="{StaticResource LangPageSetupLaunchLaunchVersionIsolationBetaOnlyToolTip}" />
-                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVersionIsolationBetaAndMod}" />
-                            <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVersionIsolationAll}" ToolTip="{StaticResource LangPageSetupLaunchLaunchVersionIsolationAllToolTip}" />
-                        </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchVisibility}" Margin="0,0,25,0" />
+                        <TextBlock VerticalAlignment="Center" Grid.Row="6" HorizontalAlignment="Left" Text="启动器可见性" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboArgumentVisibie" Grid.Row="6" Grid.ColumnSpan="2" Tag="LaunchArgumentVisible" Grid.Column="1">
                             <local:MyComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchVisibilityCloseOnGameStart}" />
                             <local:MyComboBoxItem Content="" IsEnabled="False" Visibility="Collapsed" />
@@ -90,7 +91,7 @@
                             </local:MyTextBox>
                             <TextBlock x:Name="LabArgumentWindowMiddle" Visibility="Collapsed" Grid.Column="2" Text=" × " VerticalAlignment="Center" FontSize="18" />
                             <local:MyTextBox Padding="0,0,5,0" Visibility="Collapsed" Grid.Column="3" Width="60" HorizontalContentAlignment="Center" x:Name="TextArgumentWindowHeight" Tag="LaunchArgumentWindowHeight" Text="480"
-                                              ToolTip="{StaticResource LangPageSetupLaunchLaunchWindowSizeCustomToolTip}" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5">
+                                          ToolTip="{StaticResource LangPageSetupLaunchLaunchWindowSizeCustomToolTip}" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5">
                                 <local:MyTextBox.ValidateRules>
                                     <local:ValidateInteger Min="1" Max="9999" />
                                 </local:MyTextBox.ValidateRules>
@@ -98,7 +99,7 @@
                         </Grid>
                         <TextBlock VerticalAlignment="Center" Grid.Row="12" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchJava}" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboArgumentJava" Grid.ColumnSpan="2" Grid.Row="12" Grid.Column="1" MaxDropDownHeight="240"
-                                          ToolTip="{StaticResource LangPageSetupLaunchLaunchJavaToolTip}">
+                                      ToolTip="{StaticResource LangPageSetupLaunchLaunchJavaToolTip}">
                             <ComboBoxItem Content="{StaticResource LangPageSetupLaunchLaunchJavaLoading}" IsSelected="True" />
                             <!--<local:MyComboBoxItem Content="Java 8 (1.8.0_171)，64 位：C:\Program Files (x86)\Common Files\Oracle\Java\javapath\javaw.exe" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="5" IsSelected="True" ToolTip="C:\Program Files (x86)\Common Files\Oracle\Java\javapath\javaw.exe" />-->
                         </local:MyComboBox>
@@ -131,12 +132,12 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <local:MyRadioBox Text="{StaticResource LangPageSetupLaunchLaunchMemAutoAdjust}" Width="110" Checked="True" x:Name="RadioRamType0" Tag="LaunchRamType/0" Margin="0,0,20,0" 
-                                          ToolTip="{StaticResource LangPageSetupLaunchLaunchMemAutoAdjustToolTip}" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="-10" ToolTipService.VerticalOffset="-3" />
+                                      ToolTip="{StaticResource LangPageSetupLaunchLaunchMemAutoAdjustToolTip}" ToolTipService.Placement="Right" ToolTipService.HorizontalOffset="-10" ToolTipService.VerticalOffset="-3" />
                         <local:MyRadioBox Grid.Row="2" Text="{StaticResource LangPageSetupLaunchLaunchMemCustom}" x:Name="RadioRamType1" Tag="LaunchRamType/1" Margin="0,0,20,0" />
                         <local:MySlider Grid.Row="2" Grid.Column="1" IsEnabled="False" x:Name="SliderRamCustom" Tag="LaunchRamCustom" MaxValue="49" Value="13" />
                         <local:MyCheckBox Grid.Row="4" Grid.ColumnSpan="3" Text="{StaticResource LangPageSetupLaunchLaunchMemReduceMemBeforeLaunch}" Height="22" x:Name="CheckArgumentRam" Tag="LaunchArgumentRam"
-                                          ToolTipService.Placement="Left" ToolTipService.HorizontalOffset="525" ToolTipService.VerticalOffset="-30"
-                                          ToolTip="{StaticResource LangPageSetupLaunchLaunchMemReduceMemBeforeLaunchToolTip}" />
+                                      ToolTipService.Placement="Left" ToolTipService.HorizontalOffset="525" ToolTipService.VerticalOffset="-30"
+                                      ToolTip="{StaticResource LangPageSetupLaunchLaunchMemReduceMemBeforeLaunchToolTip}" />
                         <!--<local:MyTextBox Grid.Row="2" Grid.Column="3" Width="100" VerticalAlignment="Center" Margin="30,0,0,0" Text="2048 MB" />-->
                     </Grid>
                     <Grid x:Name="PanRamDisplay" Margin="0,11,2,0" SnapsToDevicePixels="True" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="1">
@@ -225,6 +226,7 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="9" />
                         <RowDefinition Height="28" />
                         <RowDefinition Height="9" />
@@ -232,29 +234,34 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,25,0">
+                    <local:MyHint Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsHintTip}" Margin="0,2,0,12" IsWarn="False" Grid.ColumnSpan="2"
+                                  CanClose="True" RelativeSetup="HintMoreAdvancedSetup" />
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,25,0">
                         <TextBlock Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMHead}" VerticalAlignment="Center" />
                         <local:MyIconButton Height="23" Margin="0,1,0,0" x:Name="BtnAdvanceJvmReset" VerticalAlignment="Center" 
-                                            ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset}" ToolTipService.Placement="Right" ToolTipService.InitialShowDelay="200" ToolTipService.VerticalOffset="-1"
-                                            Logo="M530 0c287 0 521 229 521 511s-233 511-521 511c-233 0-436-151-500-368a63 63 0 0 1 44-79 65 65 0 0 1 80 43c48 162 200 276 375 276 215 0 390-171 390-383s-174-383-390-383c-103 0-199 39-270 106l21-5a63 63 0 0 1 33 123l-157 42a65 65 0 0 1-90-42l-49-183a65 65 0 1 1 126-33l6 26A524 524 0 0 1 530 0z" LogoScale="0.9" />
+                                        ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset}" ToolTipService.Placement="Right" ToolTipService.InitialShowDelay="200" ToolTipService.VerticalOffset="-1"
+                                        Logo="M530 0c287 0 521 229 521 511s-233 511-521 511c-233 0-436-151-500-368a63 63 0 0 1 44-79 65 65 0 0 1 80 43c48 162 200 276 375 276 215 0 390-171 390-383s-174-383-390-383c-103 0-199 39-270 106l21-5a63 63 0 0 1 33 123l-157 42a65 65 0 0 1-90-42l-49-183a65 65 0 1 1 126-33l6 26A524 524 0 0 1 530 0z" LogoScale="0.9" />
                     </StackPanel>
-                    <local:MyTextBox x:Name="TextAdvanceJvm" Grid.Row="0" Grid.ColumnSpan="2" Tag="LaunchAdvanceJvm" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops}" MaxLength="4000"
-                                     Height="57" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="0,5" />
-                    <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMTail}" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextAdvanceGame" Grid.Row="2" Grid.ColumnSpan="2" Tag="LaunchAdvanceGame" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip}" />
-                    <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart}" Margin="0,0,25,0" />
-                    <local:MyTextBox x:Name="TextAdvanceRun" Grid.Row="4" Grid.ColumnSpan="2" Tag="LaunchAdvanceRun" Grid.Column="1" HintText=""
-                                     ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip}" />
-                    <local:MyCheckBox Grid.Row="5" Grid.Column="1" x:Name="CheckAdvanceRunWait" Tag="LaunchAdvanceRunWait" Visibility="Collapsed"
-                                      Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand}" Margin="0,8,0,7" />
-                    <StackPanel Margin="0,12,0,4" Orientation="Horizontal" Grid.Row="6" Grid.ColumnSpan="2">
-                        <local:MyCheckBox Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility}" x:Name="CheckAdvanceJava" Tag="LaunchAdvanceJava" Margin="0,0,60,0"
-                                        ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip}" />
-                        <local:MyCheckBox Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification}" x:Name="CheckAdvanceAssets" Tag="LaunchAdvanceAssets"
-                                        ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip}" />
+                    <local:MyTextBox x:Name="TextAdvanceJvm" Grid.Row="1" Grid.ColumnSpan="2" Tag="LaunchAdvanceJvm" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops}" MaxLength="4000"
+                                 Height="100" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top" Padding="0,5" VerticalScrollBarVisibility="Auto" />
+                    <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMTail}" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextAdvanceGame" Grid.Row="3" Grid.ColumnSpan="2" Tag="LaunchAdvanceGame" Grid.Column="1" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip}" />
+                    <TextBlock Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart}" Margin="0,0,25,0" />
+                    <local:MyTextBox x:Name="TextAdvanceRun" Grid.Row="5" Grid.ColumnSpan="2" Tag="LaunchAdvanceRun" Grid.Column="1" HintText=""
+                                 ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStartTip}" />
+                    <local:MyCheckBox Grid.Row="6" Grid.Column="1" x:Name="CheckAdvanceRunWait" Tag="LaunchAdvanceRunWait" Visibility="Collapsed"
+                                  Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand}" Margin="0,8,0,7" />
+                    <StackPanel Margin="0,12,0,4" Grid.Row="7" Grid.ColumnSpan="2" HorizontalAlignment="Left">
+                        <local:MyCheckBox Height="28" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW}" x:Name="CheckAdvanceDisableJLW" Tag="LaunchAdvanceDisableJLW"
+                            ToolTipService.Placement="Right" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip}" />
+                        <local:MyCheckBox Height="28" Text="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence}" x:Name="CheckAdvanceGraphicCard" Tag="LaunchAdvanceGraphicCard"
+                            ToolTipService.Placement="Right" ToolTip="{StaticResource LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip}" />
                     </StackPanel>
                 </Grid>
             </local:MyCard>
+            <local:MyExtraTextButton HorizontalAlignment="Center" Margin="0,-5,0,15"
+                x:Name="BtnSwitch" Text="{StaticResource LangPageSetupLaunchGotoVersionSetting}"
+                LogoScale="0.9" Logo="M73 584L920 584 608 896C579 925 579 972 608 1001 637 1030 683 1030 712 1001L1149 565C1164 550 1170 531 1170 511 1170 492 1164 472 1149 457L712 21C683-7 637-7 608 21 579 50 579 97 608 126L920 438 73 438C33 438 0 471 0 511 0 551 33 584 73 584Z" />
         </StackPanel>
     </local:MyScrollViewer>
 </local:MyPageRight>
