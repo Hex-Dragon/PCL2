@@ -427,11 +427,11 @@ PreFin:
         Try
             For Each Java In JavaList.Clone().OrderByDescending(Function(v) v.VersionCode)
                 Dim ItemGrid As New Grid
-                ItemGrid.IsHitTestVisible = False
                 ItemGrid.Children.Add(New TextBlock With {
                                       .Text = Java.ToString,
                                       .VerticalAlignment = VerticalAlignment.Center,
-                                      .HorizontalAlignment = HorizontalAlignment.Left})
+                                      .HorizontalAlignment = HorizontalAlignment.Left,
+                                      .IsHitTestVisible = False})
                 Dim BtnJavaED = New MyIconButton With {
                                       .Logo = If(Java.IsEnabled, Logo.IconButtonStop, Logo.IconButtonCheck),
                                       .LogoScale = 1.2,

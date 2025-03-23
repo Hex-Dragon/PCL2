@@ -1,4 +1,5 @@
-﻿Imports System.Reflection
+﻿Imports System.Drawing
+Imports System.Reflection
 Imports System.Windows.Threading
 
 Public Class Application
@@ -138,6 +139,21 @@ WaitRetry:
             ServicePointManager.Expect100Continue = True
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 Or SecurityProtocolType.Tls Or SecurityProtocolType.Tls11 Or SecurityProtocolType.Tls12
             ServicePointManager.DefaultConnectionLimit = 1024
+            '设置字体
+            Dim TargetFont As String = Setup.Get("UiFont")
+            If Not String.IsNullOrEmpty(TargetFont) Then
+                Try
+                    Dim Font = Fonts.SystemFontFamilies.FirstOrDefault(Function(x) x.FamilyNames.Values.Contains(TargetFont))
+                    If Font Is Nothing Then
+                        Setup.Reset("UiFont")
+                    Else
+                        SetLaunchFont(TargetFont)
+                    End If
+                Catch ex As Exception
+                    Log(ex, "字体加载失败", LogLevel.Hint)
+                    Setup.Reset("UiFont")
+                End Try
+            End If
             '计时
             Log("[Start] 第一阶段加载用时：" & GetTimeTick() - ApplicationStartTick & " ms")
             ApplicationStartTick = GetTimeTick()

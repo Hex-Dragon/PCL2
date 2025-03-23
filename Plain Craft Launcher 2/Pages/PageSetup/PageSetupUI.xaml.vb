@@ -59,6 +59,32 @@
             CheckLauncherLogo.Checked = Setup.Get("UiLauncherLogo")
             CheckLauncherEmail.Checked = Setup.Get("UiLauncherEmail")
             ComboDarkMode.SelectedIndex = Setup.Get("UiDarkMode")
+            ComboUiFont.Items.Clear()
+            ComboUiFont.Items.Add(New MyComboBoxItem With {
+                .Content = New TextBlock With {
+                                  .Text = "默认",
+                                  .FontFamily = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft YaHei UI"),
+                                  .IsHitTestVisible = False,
+                                  .HorizontalAlignment = HorizontalAlignment.Left
+                                  },
+                .Tag = ""
+            })
+            For Each Font In Fonts.SystemFontFamilies
+                ComboUiFont.Items.Add(New MyComboBoxItem With {
+                    .Content = New TextBlock With {
+                                      .Text = Font.Source,
+                                      .FontFamily = New FontFamily(Font.Source),
+                                      .IsHitTestVisible = False,
+                                      .HorizontalAlignment = HorizontalAlignment.Left
+                                      },
+                    .Tag = Font.Source
+                })
+            Next
+            If String.IsNullOrWhiteSpace(Setup.Get("UiFont")) Then
+                ComboUiFont.SelectedIndex = 0
+            Else
+                ComboUiFont.SelectedIndex = ComboUiFont.Items.IndexOf(ComboUiFont.Items.Cast(Of MyComboBoxItem).Where(Function(x) x.Tag = Setup.Get("UiFont")).FirstOrDefault)
+            End If
 
             '背景图片
             SliderBackgroundOpacity.Value = Setup.Get("UiBackgroundOpacity")
@@ -135,6 +161,7 @@
             Setup.Reset("UiBackgroundBlur")
             Setup.Reset("UiBackgroundSuit")
             Setup.Reset("UiDarkMode")
+            Setup.Reset("UiFont")
             Setup.Reset("UiLogoType")
             Setup.Reset("UiLogoText")
             Setup.Reset("UiLogoLeft")
@@ -188,6 +215,18 @@
     End Sub
     Private Shared Sub RadioBoxChange(sender As MyRadioBox, e As Object) Handles RadioLogoType0.Check, RadioLogoType1.Check, RadioLogoType2.Check, RadioLogoType3.Check, RadioLauncherTheme0.Check, RadioLauncherTheme1.Check, RadioLauncherTheme2.Check, RadioLauncherTheme3.Check, RadioLauncherTheme4.Check, RadioLauncherTheme5.Check, RadioLauncherTheme6.Check, RadioLauncherTheme7.Check, RadioLauncherTheme8.Check, RadioLauncherTheme9.Check, RadioLauncherTheme10.Check, RadioLauncherTheme11.Check, RadioLauncherTheme12.Check, RadioLauncherTheme13.Check, RadioLauncherTheme14.Check, RadioCustomType0.Check, RadioCustomType1.Check, RadioCustomType2.Check, RadioCustomType3.Check
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag.ToString.Split("/")(0), Val(sender.Tag.ToString.Split("/")(1)))
+    End Sub
+
+    Private Sub ComboFontChange(sender As MyComboBox, e As Object) Handles ComboUiFont.SelectionChanged
+        If AniControlEnabled = 0 Then
+            If sender.SelectedIndex = 0 Then
+                Setup.Set("UiFont", "")
+                SetLaunchFont()
+            Else
+                Setup.Set("UiFont", sender.SelectedItem.Tag)
+                SetLaunchFont(sender.SelectedItem.Tag)
+            End If
+        End If
     End Sub
 
     '背景图片

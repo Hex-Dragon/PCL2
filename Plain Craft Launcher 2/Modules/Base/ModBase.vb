@@ -2780,6 +2780,20 @@ Retry:
 
 #Region "UI"
 
+    Public Sub SetLaunchFont(Optional FontName As String = Nothing)
+        Try
+            Dim TargetFont As FontFamily
+            If FontName Is Nothing Then
+                TargetFont = New FontFamily(New Uri("pack://application:,,,/"), "./Resources/#PCL English, Segoe UI, Microsoft YaHei UI")
+            Else
+                TargetFont = New FontFamily($"{FontName}, Segoe UI, Microsoft YaHei UI")
+            End If
+            Application.Current.Resources("LaunchFontFamily") = TargetFont
+        Catch ex As Exception
+            Log(ex, "设置字体失败", LogLevel.Hint)
+        End Try
+    End Sub
+
     '边距改变
     ''' <summary>
     ''' 相对增减控件的左边距。
