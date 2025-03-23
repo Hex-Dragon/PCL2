@@ -7,7 +7,7 @@ on:
 
 jobs:
   close-as-completed:
-    if: github.event.label.name == '👌 完成'
+    if: github.actor != 'PCL-Community-Bot' && github.event.label.name == '👌 完成'
     runs-on: ubuntu-latest
     steps:
       - name: Close as completed
@@ -25,7 +25,7 @@ jobs:
           labels: '⭕ 等待处理,🚧 正在处理,🕑 等待合并,🕑 等待前置,❌ 忽略,❌ 拒绝 / 放弃,❌ 暂无计划'
 
   close-as-not-planned:
-    if: github.event.label.name == '❌ 忽略' || github.event.label.name == '❌ 拒绝 / 放弃' || github.event.label.name == '❌ 暂无计划' || github.event.label.name == '❌ 第三方' || github.event.label.name == '😂 移交上游'
+    if: github.actor != 'PCL-Community-Bot' && (github.event.label.name == '❌ 忽略' || github.event.label.name == '❌ 拒绝 / 放弃' || github.event.label.name == '❌ 暂无计划' || github.event.label.name == '❌ 第三方' || github.event.label.name == '😂 移交上游')
     runs-on: ubuntu-latest
     steps:
       - name: Close as not planned
