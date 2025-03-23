@@ -19,7 +19,7 @@ jobs:
 
           - configuration: Beta
             architecture: ARM64
-            os: self-hosted
+            os: windows-latest
 
       fail-fast: false
 
