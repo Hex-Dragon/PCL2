@@ -12,4 +12,5 @@ jobs:
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'remove-labels'
+          token: '${{ secrets.BOT }}'
           labels: '👌 完成,❌ 忽略,❌ 拒绝 / 放弃,❌ 暂无计划,❌ 第三方,❌ 重复'

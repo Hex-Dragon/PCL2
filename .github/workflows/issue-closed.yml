@@ -13,12 +13,14 @@ jobs:
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'add-labels'
+          token: '${{ secrets.BOT }}'
           labels: '👌 完成'
 
       - name: Remove labels
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'remove-labels'
+          token: '${{ secrets.BOT }}'
           labels: '⭕ 等待处理,🚧 正在处理,🕑 等待合并,🕑 等待前置'
 
   close-as-duplicate:
@@ -29,12 +31,14 @@ jobs:
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'add-labels'
+          token: '${{ secrets.BOT }}'
           labels: '❌ 重复'
 
       - name: Remove labels
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'remove-labels'
+          token: '${{ secrets.BOT }}'
           labels: '❌ 忽略,❌ 拒绝 / 放弃,❌ 暂无计划,❌ 第三方,⭕ 等待处理'
 
   close-as-not-planned:
@@ -44,5 +48,6 @@ jobs:
       - name: Add labels
         uses: actions-cool/issues-helper@v3
         with:
-          actions: add-labels
+          actions: 'add-labels'
+          token: '${{ secrets.BOT }}'
           labels: '❌ 忽略'

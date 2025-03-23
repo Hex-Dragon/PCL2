@@ -13,12 +13,14 @@ jobs:
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'close-issue'
+          token: '${{ secrets.BOT }}'
           close-reason: 'completed'
 
       - name: Add labels
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'add-labels'
+          token: '${{ secrets.BOT }}'
           labels: '⭕ 等待处理,🚧 正在处理,🕑 等待合并,🕑 等待前置,❌ 忽略,❌ 拒绝 / 放弃,❌ 暂无计划'
 
   close-as-not-planned:
@@ -29,12 +31,14 @@ jobs:
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'close-issue'
+          token: '${{ secrets.BOT }}'
           close-reason: 'not_planned'
       
       - name: Add labels
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'add-labels'
+          token: '${{ secrets.BOT }}'
           labels: '⭕ 等待处理,🚧 正在处理,🕑 等待合并,🕑 等待前置'
 
   report-to-upstream:
@@ -45,6 +49,7 @@ jobs:
         uses: actions-cool/issues-helper@v3
         with:
           actions: 'create-comment'
+          token: '${{ secrets.BOT }}'
           body: |
             @${{ github.event.issue.user.login }} 该提议不应由 CE 解决，请前往上游仓库提交。
             感谢您的反馈。
