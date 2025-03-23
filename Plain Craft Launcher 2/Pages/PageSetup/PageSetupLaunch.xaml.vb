@@ -427,6 +427,7 @@ PreFin:
         Try
             For Each Java In JavaList.Clone().OrderByDescending(Function(v) v.VersionCode)
                 Dim ItemGrid As New Grid
+                ItemGrid.IsHitTestVisible = False
                 ItemGrid.Children.Add(New TextBlock With {
                                       .Text = Java.ToString,
                                       .VerticalAlignment = VerticalAlignment.Center,
