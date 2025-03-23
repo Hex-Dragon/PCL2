@@ -1899,6 +1899,7 @@ NextVersion:
             '1.6 ~ 10 ：zh_CN 时正常，zh_cn 时自动切换为英文
             '1.11 ~ 12：zh_cn 时正常，zh_CN 时虽然显示了中文但语言设置会错误地显示选择英文
             '1.13+    ：zh_cn 时正常，zh_CN 时自动切换为英文
+            IniClearCache(SetupFileAddress) '清除缓存（#2294）
             Dim CurrentLang As String = ReadIni(SetupFileAddress, "lang", "none")
             Dim RequiredLang As String = If(CurrentLang = "none" OrElse Not Directory.Exists(McVersionCurrent.PathIndie & "saves"), '#3844，整合包可能已经自带了 options.txt
                 If(Setup.Get("ToolHelpChinese"), "zh_cn", "en_us"), CurrentLang.ToLower)
