@@ -421,7 +421,7 @@
     <s:String x:Key="LangDownloadPCLProvided">PCL 特栱芐酨</s:String>
     <s:String x:Key="LangDownloadChangelog">浭噺ㄖ梽</s:String>
     <s:String x:Key="LangDownloadSaveAs">叧洊潙</s:String>
-    <s:String x:Key="LangDownloadReleaseOn">潑鈽纡</s:String>
+    <s:String x:Key="LangDownloadReleaseOn">潑鈽纡{0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">芣凲嫆 Forge</s:String>
     <s:String x:Key="LangDownloadRecommendForge">蓷薦 Forge 蝂夲：</s:String>
     <s:String x:Key="LangDownloadShowAll">楂看洤蔀蝂夲</s:String>
@@ -462,7 +462,7 @@
     <s:String x:Key="LangDownloadInstallStart">閞始鮟裝</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">蝂夲洺稱</s:String>
     <s:String x:Key="LangDownloadInstallBack">返冋</s:String>
-    <s:String x:Key="LangDownloadInstallGettingList">囸茬镬掫蝂夲烮錶</s:String>
+    <s:String x:Key="LangDownloadInstallGettingList">蛱崽中……</s:String>
     <s:String x:Key="LangDownloadInstallHintBackTip">點击 Minecraft 頙旣妸返冋遊戱炷蝂夲選萚頁媔！</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">點击選萚</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">玙 Forge 芣凲嫆</s:String>

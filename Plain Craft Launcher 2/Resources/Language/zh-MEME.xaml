@@ -421,9 +421,9 @@
     <s:String x:Key="LangDownloadPCLProvided">平原合成发射台特供下崽</s:String>
     <s:String x:Key="LangDownloadChangelog">更新日志</s:String>
     <s:String x:Key="LangDownloadSaveAs">另救为</s:String>
-    <s:String x:Key="LangDownloadReleaseOn">发布于</s:String>
+    <s:String x:Key="LangDownloadReleaseOn">发布于{0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">不兼容锻造</s:String>
-    <s:String x:Key="LangDownloadRecommendForge">推荐锻造版本：</s:String>
+    <s:String x:Key="LangDownloadRecommendForge">兼容锻造{0}</s:String>
     <s:String x:Key="LangDownloadShowAll">看看全部版本</s:String>
     <s:String x:Key="LangDownloadSaveInstaller">拯救安装器</s:String>
     <s:String x:Key="LangDownloadAll">全部版本</s:String>
@@ -462,9 +462,9 @@
     <s:String x:Key="LangDownloadInstallStart">开始安装</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">版本名字</s:String>
     <s:String x:Key="LangDownloadInstallBack">回去</s:String>
-    <s:String x:Key="LangDownloadInstallGettingList">正在获取版本名单</s:String>
+    <s:String x:Key="LangDownloadInstallGettingList">在加载了（run……</s:String>
     <s:String x:Key="LangDownloadInstallHintBackTip">点击麦恩克拉夫特项即可滚回游戏主版本选择页面！</s:String>
-    <s:String x:Key="LangDownloadInstallClickToChose">点击选择</s:String>
+    <s:String x:Key="LangDownloadInstallClickToChose">想加就加</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">与锻造不兼容</s:String>
     <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">与布料不兼容</s:String>
@@ -473,19 +473,19 @@
     <s:String x:Key="LangDownloadInstallOptiFineNeed">需要高清不修复</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">需要高清不修复与布料</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">或更高版本</s:String>
-    <s:String x:Key="LangDownloadInstallNoAvailableVersion">莫得能用版本</s:String>
+    <s:String x:Key="LangDownloadInstallNoAvailableVersion">不阔以用</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknownStatus">获取版本名单不成功：未知错误，状态为</s:String>
     <s:String x:Key="LangDownloadInstallFailGetList">获取版本名单不成功：</s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">该版本不支持自动帮你安装</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">版本隔离提示</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieContent">你还没打开版本隔离，这会导致多个安慕希共用同一个模组文件夹子。
-因此在切换安慕希版本时，安慕希会因为阅读到与当前版本不符的模组而原地螺旋升天爆炸。
-平原合成发射台推荐你在开始下崽前，在 设置 → 版本隔离 中打开版本隔离选项！</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieContent">你还没打开版本隔离，这会导致多个版本共用同一个模组文件夹子。
+因此安慕希阔能会因为阅读到与当前版本不合适的模组而原地螺旋升天爆炸。
+推荐你在开始下崽前，在 设置 → 启动选项 → 版本隔离 中打开版本隔离选项！</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">取消下崽</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">和新锻造不兼容</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">不兼容老版本布料，请手动下崽高清布料 Origins</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">刷亲斤</s:String>
-    <s:String x:Key="LangDownloadPageLeftAutoInstall">自动帮你安装</s:String>
+    <s:String x:Key="LangDownloadPageLeftAutoInstall">游戏下崽</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstall">▼ 自己装安装包</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">自己装安装包特性提供了高清不修复、锻造等组件的罐子安装文件下崽，但没办法自动帮你安装。
 在自动帮你安装页面先选择麦恩克拉夫特版本，然后就可以选择高清不修复、锻造等组件，让平原合成发射台自动帮你进行安装了。</s:String>
@@ -493,7 +493,7 @@
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">滚回自动帮你安装</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">继续下崽自己装安装包</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">自己装安装包</s:String>
-    <s:String x:Key="LangDownloadPageLeftResource">资源</s:String>
+    <s:String x:Key="LangDownloadPageLeftResource">社♂区资源</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">模组</s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">整活包</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">麦恩克拉夫特</s:String>
@@ -702,7 +702,7 @@
     <s:String x:Key="LangPageLoginMsAddAccountFail">正版登陆验证不成功，请尝试在 [设置 → 发射台] 中关掉 [验证安全套接层证书] 然后再试。
 
 原始错误信息：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">已取消登陆！</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">正版登录验证失败，请考虑在 [设置 → 其他] 中关闭 [在正版登录时验证 SSL 证书]，然后再试。</s:String>
     <s:String x:Key="LangPageLoginMsLoading">加载中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">外壳与海角</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">修改外壳</s:String>
@@ -770,7 +770,7 @@
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">平原合成发射台内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和平原合成发射台的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 1 月的高级赞助者们！感谢各位对平原合成发射台和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 2 月的高级赞助者们！感谢各位对平原合成发射台和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">V 作者 50</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -814,13 +814,14 @@
  · {date}、{time}：当前的系统时间
  · {version}：游戏对应的香草版本号</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">自定义信息</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">该信息会展示在游戏主界面的左下角，与 F3 调教页面的左上角</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">版本隔离</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">该信息会展示在游戏主界面的左下角，与 F3 调教页面的左上角
+要是不填，就会跟从全球设置的值</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">默认版本隔离</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
 若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">关掉</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">所有版本均食用同一档案，存档、模组、亮目害眼包等均为公用。
-若存在多个安装了模组的版本，可能会导致模组冲突。</s:String>
+存在多个安装了模组的版本，可能会导致模组冲突。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnly">隔离可安装模组的版本</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationModOnlyToolTip">可安装模组的版本（例如锻造、布料）均互相独立以避免模组冲突，其他版本（例如香草）则不会被隔离。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationBetaOnly">隔离非正式版</s:String>
@@ -864,10 +865,10 @@
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">游戏分配</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">高级发射选项</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">爪哇虚拟机参数头</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">爪哇虚拟机参数头部</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">发射麦恩克拉夫特时食用的额外爪哇虚拟机参数，除非你很勇，不然别乱动</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">玩炸了，回滚</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">爪哇虚拟机参数尾</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">游戏参数尾部</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">作文框中的内容将会被直接拼合在发射参数的末尾。
 例如输入 --demo 则会以白嫖模式发射游戏。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">发射前执行命令</s:String>
@@ -897,18 +898,16 @@
 执行命令时，命令行所在的目录是当前的 .minecraft 文件夹子。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand">等待命令执行完成后再继续发射</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility">忽略爪哇兼容性警告</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">警告：强烈推荐在版本设置中关掉特定版本的警告，而不是在这里关掉所有版本的警告！
-如果在设置中手动选择了与当前版本不兼容的爪哇，则自动帮你跳过兼容性警告弹窗，强制食用手动选择的爪哇。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">如果在手动选择了与当前版本不兼容的爪哇，则自动帮你跳过兼容性警告弹窗，强制食用手动选择的爪哇。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">关掉文件校验</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：强烈推荐在版本设置中关掉特定版本的校验，而不是在这里关掉所有版本的校验！
-完全不更改 assets；不校验 libraries、第三派对登陆库与版本主罐子文件是否被修改。
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">完全不更改 assets；不校验 libraries、第三派对登陆库与版本主罐子文件是否被修改。
 如果你莫得修改相关文件，别瞎勾选此项。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
 如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
-如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求爪哇食用高性能显卡</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 窗户设置 → 系统 → 屏幕 → 显示卡 中将爪哇改为使用高性能显卡。
+如果电脑同时有集显和独显，这能确保安慕希使用独显进行渲染，以大幅提高性能。</s:String>
     <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">发射设置项存在异常，已被自动重置</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">重载发射设置时出错</s:String>
@@ -934,9 +933,9 @@
 每次发射游戏，平原合成发射台都需要申请管理员权限以进行内存优化。
 若想自动授予权限，可以右键平原合成发射台，打开 属性 → 兼容性 → 以管理员身份运行此程序。</s:String>
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">提醒</s:String>
-    <s:String x:Key="LangPageSetupLeftGame">游戏</s:String>
+    <s:String x:Key="LangPageSetupLeftGame">启动！</s:String>
     <s:String x:Key="LangPageSetupLeftPersonalize">个性化</s:String>
-    <s:String x:Key="LangPageSetupLeftLaunch">发射台</s:String>
+    <s:String x:Key="LangPageSetupLeftLaunch">其它</s:String>
     <s:String x:Key="LangPageSetupLeftLink">联♂机</s:String>
     <s:String x:Key="LangPageSetupLeftReset">初始化本页设置</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetGameConfirmContent">你是不是要初始化游戏页的所有设置？莫得后悔药哦。</s:String>
@@ -950,13 +949,12 @@
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">尽量食用镜像源（加载很快嗷，但版本可能不是最新的）</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">仅在官方源加载缓慢时改用镜像源</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">尽量食用官方源（保证版本最新，但加载缓慢）</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileName">下崽文件名</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">下崽模组时，模组的缺省文件名中，简体中文译名应该放在哪个地点
-此项只在文A为简体中文时有效</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">译名位于文件名开头：[遗物] relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">译名位于文件名开头：遗物-relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">译名位于文件名末尾：relics-0.1.14-遗物</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">我英语很好：relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileName">文件名格式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">下崽模组时，模组的默认文件名格式</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">[遗物] relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">遗物-relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">relics-0.1.14-遗物</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">最大线程数</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">线程数越多，限速的文件下崽越快，但过高的线程数会造成下崽时非常严重的卡顿。
@@ -969,8 +967,8 @@
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">安装整活包时保留原始压缩包</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">安装整活包时，在版本文件夹子下保留用于安装的原始整活包压缩包文件</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">展示模组装载机时忽略被子</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSL">验证安全套接层证书</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">打开验证会提高安全性、降低盗号风险（见 #2767），但也可能导致正版登陆不成功（见 #3018）。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSL">在正版登陆时验证安全套接层证书</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">打开验证阔以提高安全性，但阔能导致正版登陆不成功（见 #3018）。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">辅助特性</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">游戏更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">测试版更新提示</s:String>
@@ -1192,7 +1190,7 @@
     <s:String x:Key="LangPageVersionSetupLittleSkinLogin">小皮肤登陆</s:String>
     <s:String x:Key="LangPageVersionSetupTips">本页面的设置均只对当前版本生效，这对整活包制作应该会有用。
 你也可以在设置页面中修改对全部版本生效的全局设置。</s:String>
-    <s:String x:Key="LangPageVersionSetupUseGlobal">食用全局设置</s:String>
+    <s:String x:Key="LangPageVersionSetupUseGlobal">跟从全球设置</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">打开</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">关掉</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自定义StaticResource，若留空则跟随全局设置的值。
@@ -1210,12 +1208,12 @@
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
 若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">让这个版本与其他版本的存档、模组等档案相互独立，互不干涉</s:String>
-    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
-若留空，则跟随全局设置的值。</s:String>
-    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会被直接拼合在启动参数的末尾。
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动安慕希时使用的额外爪哇虚拟机参数，在没有确定把握的情况下请不要尝试修改。
+若留空，则跟随全球设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会直接长在启动参数的末尾。
 例如输入 --demo 则会以试玩模式启动游戏。
-若留空，则跟随全局设置的值。</s:String>
-    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全局设置</s:String>
+若留空，则跟随全球设置的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全球设置</s:String>
     <s:String x:Key="LangPageVersionSetupServer">服务器</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">登陆方式</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">正版登陆或离线登陆</s:String>
