@@ -125,7 +125,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             McLoginLoader.Output.Uuid = McLoginLoader.Output.AccessToken Then 'UUID 和 AccessToken 一样则不打码
             Return Raw
         Else
-            Return Raw.Replace(AccessToken, Left(AccessToken, 5) & New String(FilterChar, AccessToken.Length - 10) & Right(AccessToken, 5))
+            Return Raw.Replace(AccessToken, Strings.Left(AccessToken, 5) & New String(FilterChar, AccessToken.Length - 10) & Strings.Right(AccessToken, 5))
         End If
     End Function
 
@@ -419,17 +419,36 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 
 #Region "更新"
 
+    Public Class SelfUpdateInfo
+        Public Property server As String
+
+        Public Property latests As SelfUpdateAssest
+    End Class
+
+    Public Class SelfUpdateAssest
+        Public Property slow As SelfUpdateChannelInfo
+        Public Property fast As SelfUpdateChannelInfo
+        Public Property legacy As SelfUpdateChannelInfo
+    End Class
+
+    Public Class SelfUpdateChannelInfo
+        Public Property version As String
+        Public Property code As Integer
+        Public Property file As String
+        Public Property sha256 As String
+    End Class
+
+    Public RemoteVersionData As SelfUpdateInfo = Nothing
     Public IsUpdateStarted As Boolean = False
     Public IsUpdateWaitingRestart As Boolean = False
-    Public LatestVersion As String = VersionBaseName
-    Public LatestVersionCode As Integer = VersionCode
     Public Const PysioServer As String = "https://s3.pysio.online/pcl2-ce/"
-    Private RemoteFileName As String = "PCL2_CE.exe"
+
     Public Sub UpdateCheckByButton()
-        Hint("正在获取更新信息...")
         If IsUpdateStarted Then
+            Hint("正在检查更新中，请稍后再试……")
             Exit Sub
         End If
+        Hint("正在获取更新信息...")
         RunInNewThread(Sub()
                            Try
                                UpdateLatestVersionInfo()
@@ -462,19 +481,33 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
             End If
         End If
         LatestReleaseInfoJson = GetJson(NetRequestRetry(Server, "GET", "", "application/x-www-form-urlencoded"))
-        LatestVersion = LatestReleaseInfoJson("latests")(If(IsBeta, "fast", "slow"))("version").ToString()
-        LatestVersionCode = LatestReleaseInfoJson("latests")(If(IsBeta, "fast", "slow"))("code")
-        RemoteFileName = LatestReleaseInfoJson("latests")(If(IsBeta, "fast", "slow"))("file").ToString()
+        RemoteVersionData = LatestReleaseInfoJson.ToObject(Of SelfUpdateInfo)()
     End Sub
 
+    Public Function GetCurrentUpdateChannelInfo() As SelfUpdateChannelInfo
+        If RemoteVersionData Is Nothing Then
+            Log("[Update] 未获取到远程版本信息，尝试重新获取")
+            UpdateLatestVersionInfo()
+        End If
+        Dim targetChannel As SelfUpdateChannelInfo = Nothing
+        Dim IsBeta As Boolean = Setup.Get("SystemSystemUpdateBranch")
+        If IsBeta Then
+            targetChannel = RemoteVersionData.latests.fast
+        Else
+            targetChannel = RemoteVersionData.latests.slow
+        End If
+        Return targetChannel
+    End Function
+
     Public Sub NoticeUserUpdate(Optional Silent As Boolean = False)
-        If LatestVersionCode > VersionCode Then
-            If Not Val(Environment.OSVersion.Version.ToString().Split(".")(2)) >= 19042 AndAlso Not LatestVersion.StartsWithF("2.9.") Then
-                If MyMsgBox($"发现了启动器更新（版本 {LatestVersion}），但是由于你的 Windows 版本过低，不满足新版本要求。{vbCrLf}你需要更新到 Windows 10 20H2 或更高版本才可以继续更新。", "启动器更新 - 系统版本过低", "升级 Windows 10", "取消", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
+        Dim LatestVersion = GetCurrentUpdateChannelInfo()
+        If LatestVersion.code > VersionCode Then
+            If Not Val(Environment.OSVersion.Version.ToString().Split(".")(2)) >= 19042 AndAlso Not LatestVersion.version.StartsWithF("2.9.") Then
+                If MyMsgBox($"发现了启动器更新（版本 {LatestVersion.version}），但是由于你的 Windows 版本过低，不满足新版本要求。{vbCrLf}你需要更新到 Windows 10 20H2 或更高版本才可以继续更新。", "启动器更新 - 系统版本过低", "升级 Windows 10", "取消", IsWarn:=True, ForceWait:=True) = 1 Then OpenWebsite("https://www.microsoft.com/zh-cn/software-download/windows10")
                 Exit Sub
             End If
-            If MyMsgBox($"启动器有新版本可用（｛VersionBaseName｝ -> {LatestVersion}），是否更新？", "启动器更新", "更新", "取消") = 1 Then
-                UpdateStart(LatestVersion, False)
+            If MyMsgBox($"启动器有新版本可用（｛VersionBaseName｝ -> {LatestVersion.version}），是否更新？", "启动器更新", "更新", "取消") = 1 Then
+                UpdateStart(LatestVersion.version, False)
             End If
         Else
             If Not Silent Then Hint("启动器已是最新版 " + VersionBaseName + "，无须更新啦！", HintType.Finish)
@@ -482,11 +515,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     End Sub
     Public Sub UpdateStart(VersionStr As String, Slient As Boolean, Optional ReceivedKey As String = Nothing, Optional ForceValidated As Boolean = False)
         Dim DlLink As String = Nothing
-        If Setup.Get("SystemSystemServer") = 0 Then 'Pysio 源
-            DlLink = PysioServer + RemoteFileName
-        Else 'GitHub 源
-            DlLink = "https://github.com/PCL-Community/PCL2-CE/releases/download/" + VersionStr + "/" + RemoteFileName
-        End If
+        DlLink = GetUpdateServerSource(VersionStr)
         Dim DlTargetPath As String = Path + "PCL\Plain Craft Launcher 2.exe"
         RunInNewThread(Sub()
                            Try
@@ -593,11 +622,28 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         MsgBox("PCL 更新失败：无法删除原文件。请手动复制已下载到 PCL 文件夹下的新版本程序覆盖原程序。" & vbCrLf + GetExceptionSummary(ex2), MsgBoxStyle.Critical, "更新失败")
     End Sub
     ''' <summary>
+    ''' 获取更新文件的下载地址。
+    ''' </summary>
+    ''' <param name="VersionStr"></param>
+    ''' <returns></returns>
+    Private Function GetUpdateServerSource() As String
+        Dim LatestVersion As SelfUpdateChannelInfo = RemoteVersionData.latests.slow
+        Dim DlLink As String = Nothing
+        If Setup.Get("SystemSystemServer") = 0 Then 'Pysio 源
+            DlLink = PysioServer + LatestVersion.file
+        Else 'GitHub 源
+            DlLink = "https://github.com/PCL-Community/PCL2-CE/releases/download/" + LatestVersion.version + "/" + LatestVersion.file
+        End If
+        Return DlLink
+    End Function
+    ''' <summary>
     ''' 确保 PathTemp 下的 Latest.exe 是最新正式版的 PCL，它会被用于整合包打包。
     ''' 如果不是，则下载一个。
     ''' </summary>
     Friend Sub DownloadLatestPCL(Optional LoaderToSyncProgress As LoaderBase = Nothing)
         '注意：如果要自行实现这个功能，请换用另一个文件路径，以免与官方版本冲突
+        Dim LatestPCLPath As String = PathTemp & "CE-Latest.exe"
+        NetDownloadByLoader(GetUpdateServerSource(), LatestPCLPath, LoaderToSyncProgress)
     End Sub
 
 #End Region
@@ -610,8 +656,9 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         Select Case Setup.Get("SystemSystemUpdate")
             Case 0
                 UpdateLatestVersionInfo()
-                If LatestVersionCode > VersionCode Then
-                    UpdateStart(LatestVersion, True) '静默更新
+                Dim LatestVersion = GetCurrentUpdateChannelInfo()
+                If LatestVersion.code > VersionCode Then
+                    UpdateStart(LatestVersion.version, True) '静默更新
                 End If
             Case 1
                 UpdateLatestVersionInfo()
