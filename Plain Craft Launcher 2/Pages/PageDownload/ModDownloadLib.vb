@@ -2092,7 +2092,7 @@ Retry:
         'Dim MinecraftCode As Integer = If(Request.MinecraftName.Contains("."), Val(Request.MinecraftName.Split(".")(1)), 0)
         Dim OptiFineAsMod As Boolean = Request.OptiFineEntry IsNot Nothing AndAlso
             (Request.FabricVersion IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing) '选择了 OptiFine 与任意 Mod 加载器
-        Dim ModsFolder As String = New McVersion(OutputFolder).GetPathIndie(True) & "mods\"
+        Dim ModsFolder As String = New McVersion(OutputFolder).GetPathIndie(Request.FabricVersion IsNot Nothing OrElse Request.ForgeEntry IsNot Nothing OrElse Request.NeoForgeEntry IsNot Nothing OrElse Request.LiteLoaderEntry IsNot Nothing) & "mods\"
 
         If OptiFineAsMod Then
             Log("[Download] OptiFine 将作为 Mod 进行下载")
