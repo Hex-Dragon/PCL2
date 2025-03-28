@@ -889,7 +889,7 @@ Retry:
 
         Dim Result As String
         Try
-            Result = NetRequestMultiple("https://login.live.com/oauth20_token.srf", "POST",
+            Result = NetRequestMultiple("https://login.microsoftonline.com/consumers/oauth2/v2.0/token", "POST",
                 $"client_id={OAuthClientId}&refresh_token={Uri.EscapeDataString(Code)}&grant_type=refresh_token&scope=XboxLive.signin%20offline_access",
                 "application/x-www-form-urlencoded", 2)
         Catch ex As Exception
