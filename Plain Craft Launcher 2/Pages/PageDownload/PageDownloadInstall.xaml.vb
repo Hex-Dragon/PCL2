@@ -106,7 +106,7 @@
             AaTranslateX(PanSelect, -CType(PanSelect.RenderTransform, TranslateTransform).X, 200, 100, Ease:=New AniEaseOutFluent(AniEasePower.ExtraStrong)),
             AaCode(
             Sub()
-                PanMinecraft.Visibility = Visibility.Collapsed
+                'PanMinecraft.Visibility = Visibility.Collapsed
                 PanBack.IsHitTestVisible = True
                 '初始化 Binding
                 If IsFirstLoaded Then Exit Sub
@@ -130,7 +130,7 @@
         DisabledPageAnimControls.Add(BtnStart)
         BtnStart.Show = False
         SelectClear() '清除已选择项
-        PanMinecraft.Visibility = Visibility.Visible
+        'PanMinecraft.Visibility = Visibility.Visible
         PanSelect.IsHitTestVisible = False
         PanMinecraft.IsHitTestVisible = True
         PanBack.IsHitTestVisible = False
