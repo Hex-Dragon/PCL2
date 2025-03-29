@@ -470,9 +470,9 @@ Install:
 
             Case 2 'CSV
                 Dim ExportContent As New List(Of String)
-                ExportContent.Add("文件名,Mod ID,Mod 名称,Mod 版本,Mod 文件大小,Mod 文件路径")
+                ExportContent.Add("文件名,Mod 中文名称,Mod 版本,Mod 平台工程 ID,Mod 文件大小（字节）,Mod 文件路径")
                 For Each ModEntity In CompResourceListLoader.Output
-                    ExportContent.Add($"{ModEntity.FileName},{ModEntity.Comp?.Id},{ModEntity.Comp?.TranslatedName},{ModEntity.Version},{New FileInfo(ModEntity.Path).Length},{ModEntity.Path}")
+                    ExportContent.Add($"{ModEntity.FileName},{ModEntity.Comp?.TranslatedName},{ModEntity.Version},{ModEntity.Comp?.Id},{New FileInfo(ModEntity.Path).Length},{ModEntity.Path}")
                 Next
                 ExportText(Join(ExportContent, vbCrLf), PageVersionLeft.Version.Name & "已安装的模组信息.csv")
 
