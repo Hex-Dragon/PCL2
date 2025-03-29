@@ -772,13 +772,16 @@ Public Module ModAnimation
         AniFPSTimer = AniLastTick
         AniRunning = True '标记动画执行开始
 
+        Dim MinFrameGap As Double = 1000 / ((Val(Setup.Get("UiAniFPS")) + 1) * 2)
+
+
         RunInNewThread(Sub()
                            Try
                                Log("[Animation] 动画线程开始")
                                Do While True
                                    '两帧之间的间隔时间
                                    Dim DeltaTime As Long = MathClamp(GetTimeTick() - AniLastTick, 0, 100000)
-                                   If DeltaTime < 1000 / ((Val(Setup.Get("UiAniFPS")) + 1) * 2) Then
+                                   If DeltaTime < MinFrameGap Then
                                        '限制 FPS
                                        Thread.Sleep(1)
                                        Continue Do
