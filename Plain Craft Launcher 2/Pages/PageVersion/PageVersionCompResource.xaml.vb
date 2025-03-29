@@ -443,6 +443,42 @@ Install:
         Return True
     End Function
 
+    Private Sub BtnManageInfoExport_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageInfoExport.Click
+        Dim Choice = MyMsgBox("TXT 格式：仅导出当前的模组文件名称信息，通常足够他人获取已安装的模组信息" & vbCrLf &
+                              "CSV 格式：导出详细的模组信息，包括其文件名，Mod ID，文件内版本信息等详细信息",
+                                Title:="选择导出模式",
+                                Button1:="TXT 格式",
+                                Button2:="CSV 格式",
+                                Button3:="取消")
+        Dim ExportText = Sub(Content As String, FileName As String)
+                             Try
+                                 Dim savePath = SelectSaveFile("选择保存位置", FileName, "文本文件(*.txt)|*.txt|CSV 文件(*.csv)|*.csv")
+                                 If String.IsNullOrWhiteSpace(savePath) Then Exit Sub
+                                 File.WriteAllText(savePath, Content, Encoding.UTF8)
+                                 OpenExplorer(savePath)
+                             Catch ex As Exception
+                                 Log(ex, "导出模组信息失败", LogLevel.Msgbox)
+                             End Try
+                         End Sub
+        Select Case Choice
+            Case 1 'TXT
+                Dim ExportContent As New List(Of String)
+                For Each ModEntity In CompResourceListLoader.Output
+                    ExportContent.Add(ModEntity.FileName)
+                Next
+                ExportText(Join(ExportContent, vbCrLf), PageVersionLeft.Version.Name & "已安装的模组信息.txt")
+
+            Case 2 'CSV
+                Dim ExportContent As New List(Of String)
+                ExportContent.Add("文件名,Mod 中文名称,Mod 版本,Mod 平台工程 ID,Mod 文件大小（字节）,Mod 文件路径")
+                For Each ModEntity In CompResourceListLoader.Output
+                    ExportContent.Add($"{ModEntity.FileName},{ModEntity.Comp?.TranslatedName},{ModEntity.Version},{ModEntity.Comp?.Id},{New FileInfo(ModEntity.Path).Length},{ModEntity.Path}")
+                Next
+                ExportText(Join(ExportContent, vbCrLf), PageVersionLeft.Version.Name & "已安装的模组信息.csv")
+
+        End Select
+    End Sub
+
     ''' <summary>
     ''' 下载 Mod。
     ''' </summary>
