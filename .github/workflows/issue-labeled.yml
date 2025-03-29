@@ -17,10 +17,10 @@ jobs:
           token: '${{ secrets.BOT }}'
           close-reason: 'completed'
 
-      - name: Add labels
+      - name: Remove labels
         uses: actions-cool/issues-helper@v3
         with:
-          actions: 'add-labels'
+          actions: 'remove-labels'
           token: '${{ secrets.BOT }}'
           labels: '⭕ 等待处理,🚧 正在处理,🕑 等待合并,🕑 等待前置,❌ 忽略,❌ 拒绝 / 放弃,❌ 暂无计划'
 
@@ -35,10 +35,10 @@ jobs:
           token: '${{ secrets.BOT }}'
           close-reason: 'not_planned'
       
-      - name: Add labels
+      - name: Remove labels
         uses: actions-cool/issues-helper@v3
         with:
-          actions: 'add-labels'
+          actions: 'remove-labels'
           token: '${{ secrets.BOT }}'
           labels: '⭕ 等待处理,🚧 正在处理,🕑 等待合并,🕑 等待前置'
 
