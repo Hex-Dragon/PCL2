@@ -684,11 +684,11 @@ Install:
         Select Case Method
             Case SortMethod.FileName
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
-                           Return -StrComp(a.FileName, b.FileName)
+                           Return String.Compare(a.FileName, b.FileName, StringComparison.OrdinalIgnoreCase)
                        End Function
             Case SortMethod.ModName
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
-                           Return -StrComp(a.Name, b.Name)
+                           Return String.Compare(a.Name, b.Name, StringComparison.OrdinalIgnoreCase)
                        End Function
             Case SortMethod.TagNums
                 Return Function(a As LocalCompFile, b As LocalCompFile) As Integer
