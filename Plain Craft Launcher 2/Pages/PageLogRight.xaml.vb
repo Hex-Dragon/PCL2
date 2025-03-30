@@ -26,7 +26,6 @@
     Private Sub OnLogOutput(sender As Watcher, e As LogOutputEventArgs)
         RunInUi(Sub()
                     If FrmLogLeft.CurrentLog IsNot Nothing Then
-                        Thread.Sleep(1) '让对面 FrmLogLeft 执行完
                         If CheckAutoScroll.Checked Then PanBack.ScrollToBottom()
                         LabFatal.Text = FrmLogLeft.CurrentLog.CountFatal
                         LabError.Text = FrmLogLeft.CurrentLog.CountError
