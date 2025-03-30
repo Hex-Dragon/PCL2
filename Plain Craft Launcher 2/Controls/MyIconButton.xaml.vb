@@ -116,7 +116,11 @@
                         Case Themes.Red
                             Path.Fill = New MyColor(160, 255, 76, 76)
                         Case Themes.Black
-                            Path.Fill = New MyColor(160, 0, 0, 0)
+                            If IsDarkMode Then
+                                Path.Fill = New MyColor(160, 255, 255, 255)
+                            Else
+                                Path.Fill = New MyColor(160, 0, 0, 0)
+                            End If
                         Case Themes.Custom
                             Path.Fill = New MyColor(160, Foreground)
                     End Select
@@ -132,7 +136,7 @@
                         Case Themes.Red
                             AnimList.Add(AaColor(Path, Shape.FillProperty, New MyColor(255, 76, 76) - Path.Fill, AnimationColorIn))
                         Case Themes.Black
-                            AnimList.Add(AaColor(Path, Shape.FillProperty, New MyColor(230, 0, 0, 0) - Path.Fill, AnimationColorIn))
+                            AnimList.Add(AaColor(Path, Shape.FillProperty, If(IsDarkMode, New MyColor(230, 255, 255, 255), New MyColor(230, 0, 0, 0)) - Path.Fill, AnimationColorIn))
                         Case Themes.Custom
                             AnimList.Add(AaColor(Path, Shape.FillProperty, New MyColor(255, Foreground) - Path.Fill, AnimationColorIn))
                     End Select
@@ -151,7 +155,7 @@
                             AnimList.Add(AaColor(Path, Shape.FillProperty, New MyColor(160, 255, 76, 76) - Path.Fill, AnimationColorOut))
                             PanBack.Background = New MyColor(0, 255, 255, 255)
                         Case Themes.Black
-                            AnimList.Add(AaColor(Path, Shape.FillProperty, New MyColor(160, 0, 0, 0) - Path.Fill, AnimationColorOut))
+                            AnimList.Add(AaColor(Path, Shape.FillProperty, If(IsDarkMode, New MyColor(160, 255, 255, 255), New MyColor(160, 0, 0, 0)) - Path.Fill, AnimationColorOut))
                             PanBack.Background = New MyColor(0, 255, 255, 255)
                         Case Themes.Custom
                             AnimList.Add(AaColor(Path, Shape.FillProperty, New MyColor(160, Foreground) - Path.Fill, AnimationColorOut))
@@ -171,7 +175,11 @@
                     Case Themes.Red
                         Path.Fill = New MyColor(160, 255, 76, 76)
                     Case Themes.Black
-                        Path.Fill = New MyColor(160, 0, 0, 0)
+                        If IsDarkMode Then
+                            Path.Fill = New MyColor(160, 255, 255, 255)
+                        Else
+                            Path.Fill = New MyColor(160, 0, 0, 0)
+                        End If
                     Case Themes.Custom
                         Path.Fill = New MyColor(160, Foreground)
                 End Select
