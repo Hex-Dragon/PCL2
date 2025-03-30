@@ -155,10 +155,10 @@ Public Class PageVersionWorld
         End Try
     End Sub
     Private Sub BtnOpenFolder_Click(sender As Object, e As MouseButtonEventArgs)
-        OpenExplorer("""" & WorldPath & """")
+        OpenExplorer(WorldPath)
     End Sub
     Private Sub BtnOpen_Click(sender As Object, e As MouseButtonEventArgs)
-        OpenExplorer("""" & sender.Tag & """")
+        OpenExplorer(sender.Tag)
     End Sub
     Private Sub BtnPaste_Click(sender As Object, e As MouseButtonEventArgs)
         Dim files As Specialized.StringCollection = Clipboard.GetFileDropList()

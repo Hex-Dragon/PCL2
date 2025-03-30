@@ -240,6 +240,6 @@ Public Class PageVersionScreenshot
 
     Private Sub BtnOpenFolder_Click(sender As Object, e As MouseButtonEventArgs)
         If Not Directory.Exists(ScreenshotPath) Then Directory.CreateDirectory(ScreenshotPath)
-        OpenExplorer("""" & ScreenshotPath & """")
+        OpenExplorer(ScreenshotPath)
     End Sub
 End Class

@@ -48,7 +48,7 @@
         File.WriteAllLines(SavePath, FrmLogLeft.CurrentLog.FullLog)
         'TODO(i18n): 文本 @ 左下角提示 - 导出成功提示
         Hint("日志已导出！", HintType.Finish)
-        OpenExplorer($"/select,""{SavePath}""")
+        OpenExplorer(SavePath)
     End Sub
 
     Private Sub BtnOperationKill_Click(sender As Object, e As RouteEventArgs) Handles BtnOperationKill.Click
