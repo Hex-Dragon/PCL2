@@ -12,6 +12,20 @@ Public Class FormMain
         Dim FeatureList As New List(Of KeyValuePair(Of Integer, String))
         '统计更新日志条目
 #If RELEASE Then
+        If LastVersion < 365 Then '2.10.5
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持导出资源列表信息"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了深色模式下部分 UI 表现错误的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了实时日志大量内容会假死的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了导出整合包没有下载正式版 CE 的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "同步上游 2.9.2 更新内容"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持切换字体"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(4, "统一修改页面与下载页面的 UI"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了 Mod 更新到错误版本的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了 Java 下拉框滑动问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了版本修改功能无法使用的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "Cleanroom 错误提示可添加 OptiFine"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "更新日志写错"))
+        End If
         If LastVersion < 363 Then '2.10.4
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "统一了模组、资源包和光影的管理界面"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了未使用 Java 高性能选项的问题"))
@@ -92,6 +106,12 @@ Public Class FormMain
         '3：BUG+ IMP* FEAT-
         '2：BUG* IMP-
         '1：BUG-
+        If LastVersion < 365 Then '2.10.5 365
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持导出资源列表信息"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了深色模式下部分 UI 表现错误的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了实时日志大量内容会假死的问题"))
+            FeatureList.Add(New KeyValuePair(Of Integer, String)(3, "修复了导出整合包没有下载正式版 CE 的问题"))
+        End If
         If LastVersion < 364 Then '2.10.5 364
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "同步上游 2.9.2 更新内容"))
             FeatureList.Add(New KeyValuePair(Of Integer, String)(5, "支持切换字体"))
