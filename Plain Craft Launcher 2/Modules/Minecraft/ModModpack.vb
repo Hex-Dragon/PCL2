@@ -203,7 +203,8 @@ Retry:
                 End If
                 Task.Progress = 0.95
                 '开启版本隔离
-                WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+                WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndie", 1)
+                WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndieV2", True)
             End Sub) With {
             .ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         End If
@@ -397,7 +398,8 @@ Retry:
             End If
             Task.Progress = 0.95
             '开启版本隔离
-            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndieV2", True)
         End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         '获取下载文件列表
         Dim FileList As New List(Of NetFile)
@@ -513,7 +515,8 @@ Retry:
             End If
             Task.Progress = 0.95
             '开启版本隔离
-            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndieV2", True)
         End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         '构造加载器
         If Json("gameVersion") Is Nothing Then Throw New Exception("该 HMCL 整合包未提供游戏版本信息，无法安装！")
@@ -598,6 +601,7 @@ Retry:
             Task.Progress = 0.95
             '开启版本隔离
             WriteIni(SetupFile, "VersionArgumentIndie", 1)
+            WriteIni(SetupFile, "VersionArgumentIndieV2", True)
             '读取 MMC 设置文件（#2655）
             Try
                 Dim MMCSetupFile As String = InstallTemp & ArchiveBaseFolder & "instance.cfg"
@@ -738,7 +742,8 @@ Retry:
             End If
             Task.Progress = 0.95
             '开启版本隔离
-            WriteIni(PathMcFolder & "versions\" & VersionName & "\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndie", 1)
+            WriteIni($"{PathMcFolder}versions\{VersionName}\PCL\Setup.ini", "VersionArgumentIndieV2", True)
         End Sub) With {.ProgressWeight = New FileInfo(FileAddress).Length / 1024 / 1024 / 6, .Block = False}) '每 6M 需要 1s
         '构造加载器
         If Json("addons") Is Nothing Then Throw New Exception("该 MCBBS 整合包未提供游戏版本附加信息，无法安装！")

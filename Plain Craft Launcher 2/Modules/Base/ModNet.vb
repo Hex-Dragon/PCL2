@@ -1,6 +1,4 @@
-﻿Imports System.Net
-
-Public Module ModNet
+﻿Public Module ModNet
     Public Const NetDownloadEnd As String = ".PCLDownloading"
 
     ''' <summary>
@@ -146,14 +144,15 @@ Retry:
         Dim RequestEx As Exception = Nothing
         Dim FailCount As Integer = 0
         For i = 1 To 4
-            Dim th As New Thread(Sub()
-                                     Try
-                                         RequestResult = NetGetCodeByRequestOnce(Url, Encode, 30000, IsJson, Accept)
-                                     Catch ex As Exception
-                                         FailCount += 1
-                                         RequestEx = ex
-                                     End Try
-                                 End Sub)
+            Dim th As New Thread(
+            Sub()
+                Try
+                    RequestResult = NetGetCodeByRequestOnce(Url, Encode, 30000, IsJson, Accept)
+                Catch ex As Exception
+                    FailCount += 1
+                    RequestEx = ex
+                End Try
+            End Sub)
             th.Start()
             Threads.Add(th)
             Thread.Sleep(i * 250)
@@ -221,7 +220,7 @@ RequestFinished:
     ''' </summary>
     ''' <param name="Url">网页的 Url。</param>
     Public Function NetGetCodeByLoader(Url As String, Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
-        Dim Temp As String = PathTemp & "Cache\Code\" & Url.GetHashCode() & "_" & GetUuid()
+        Dim Temp As String = RequestTaskTempFolder() & "download.txt"
         Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile({Url}, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
             NewTask.WaitForExitTime(Timeout, TimeoutMessage:="连接服务器超时（" & Url & "）")
@@ -236,7 +235,7 @@ RequestFinished:
     ''' </summary>
     ''' <param name="Urls">网页的 Url 列表。</param>
     Public Function NetGetCodeByLoader(Urls As IEnumerable(Of String), Optional Timeout As Integer = 45000, Optional IsJson As Boolean = False, Optional UseBrowserUserAgent As Boolean = False) As String
-        Dim Temp As String = PathTemp & "Cache\Code\" & Urls.First.GetHashCode() & "_" & GetUuid()
+        Dim Temp As String = RequestTaskTempFolder() & "download.txt"
         Dim NewTask As New LoaderDownload("源码获取 " & GetUuid() & "#", New List(Of NetFile) From {New NetFile(Urls, Temp, New FileChecker With {.IsJson = IsJson}, UseBrowserUserAgent)})
         Try
             NewTask.WaitForExitTime(Timeout, TimeoutMessage:="连接服务器超时（第一下载源：" & Urls.First & "）")
@@ -734,7 +733,7 @@ RequestFinished:
         ''' <summary>
         ''' 所有下载源。
         ''' </summary>
-        Public Sources As NetSource()
+        Public Sources As SafeList(Of NetSource)
         ''' <summary>
         ''' 用于在第一个线程出错时切换下载源。
         ''' </summary>
@@ -742,7 +741,7 @@ RequestFinished:
         ''' <summary>
         ''' 所有已经被标记为失败的，但未完整尝试过的，不允许断点续传的下载源。
         ''' </summary>
-        Public SourcesOnce As New List(Of NetSource)
+        Public SourcesOnce As New SafeList(Of NetSource)
         ''' <summary>
         ''' 获取从某个源开始，第一个可用的源。
         ''' </summary>
@@ -943,7 +942,7 @@ RequestFinished:
                 Sources.Add(New NetSource With {.FailCount = 0, .Url = SecretCdnSign(Source.Replace(vbCr, "").Replace(vbLf, "").Trim), .Id = Count, .IsFailed = False, .Ex = Nothing})
                 Count += 1
             Next
-            Me.Sources = Sources.ToArray
+            Me.Sources = Sources
             Me.LocalPath = LocalPath
             Me.Check = Check
             Me.UseBrowserUserAgent = UseBrowserUserAgent
@@ -1003,7 +1002,7 @@ Capture:
                     Next
                     '是否禁用多线程，以及规定碎片大小
                     Dim TargetUrl As String = GetSource().Url
-                    If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("mcimirror") OrElse TargetUrl.Contains("github.com") OrElse
+                    If TargetUrl.Contains("pcl2-server") OrElse TargetUrl.Contains("bmclapi") OrElse TargetUrl.Contains("github.com") OrElse
                        TargetUrl.Contains("optifine.net") OrElse TargetUrl.Contains("modrinth") Then Return Nothing
                     '寻找最大碎片
                     'FUTURE: 下载引擎重做，计算下载源平均链接时间和线程下载速度，按最高时间节省来开启多线程
@@ -1151,7 +1150,7 @@ NotSupportRange:
                         Info.Temp = Nothing
                         SmailFileCache = New Queue(Of Byte)
                     Else
-                        Info.Temp = PathTemp & "Download\" & Uuid & "_" & Info.Uuid & "_" & RandomInteger(0, 999999) & ".tmp"
+                        Info.Temp = $"{PathTemp}Download\{Uuid}_{Info.Uuid}_{RandomInteger(0, 999999)}.tmp"
                         ResultStream = New FileStream(Info.Temp, FileMode.Create, FileAccess.Write, FileShare.Read)
                     End If
                     '开始下载
@@ -1567,9 +1566,8 @@ FinishExCatch:
                     TotalProgress += 1
                 End If
             Next
-            If TotalProgress > 0 Then NewProgress /= TotalProgress
+            If TotalProgress > 0 AndAlso Not Double.IsNaN(TotalProgress) Then NewProgress /= TotalProgress
             '刷新进度
-            If NewProgress < 1 AndAlso NewProgress > 0 Then NewProgress = 2 * (NewProgress ^ 3) - 3 * (NewProgress ^ 2) + 2 * NewProgress '2x^3-3x^2+2x，模拟开头和结尾更慢的情况
             _Progress = NewProgress
         End Sub
 
