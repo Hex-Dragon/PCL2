@@ -473,7 +473,7 @@ This page offers the Fabric installer for download. After downloading, you need 
     <s:String x:Key="LangDownloadInstallOptiFineNeed">Requires OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">Requires OptiFine &amp; Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">or higher</s:String>
-    <s:String x:Key="LangDownloadInstallNoAvailableVersion">No Version Available</s:String>
+    <s:String x:Key="LangDownloadInstallNoAvailableVersion">Not Available</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknownStatus">Failed to get version list: Unknown error, status is</s:String>
     <s:String x:Key="LangDownloadInstallFailGetList">Failed to get version list: </s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">Automatic installation unavailable</s:String>
@@ -814,8 +814,8 @@ The following alternate tags are supported:
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">Custom Text</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">This text will be displayed in the title screen and the debug screen.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">Instance Isolation</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
-若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">When installing a new instance, the isolation options for the new instance will be automatically set accordingly.
+To adjust the isolation policy for an existing instance, please go to instance settings.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">Disable</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">All instances use the same profile. Saves, Mods, resource packs and other files are shared.
 If there are multiple instances with mods installed, it may cause mod conflicts.</s:String>
@@ -861,11 +861,11 @@ Opening PCL with the parameter "--memory" will execute memory optimization silen
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">Memory Used</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">Game Allocated</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">Advanced Launch Options</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">You can find more advanced launch options in the instance settings.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM Parameter Header</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">Additional JVM parameters to use when launching Minecraft. Do not attempt to edit if you are not sure.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">Reset</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">JVM Parameter Tail</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTail">Game Parameter Tail</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMTailTip">Contents in the text fields will be added directly at the end of the launch parameter.
 For example, typing "--demo" will launch the game in demo mode.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandBeforeStart">Pre-launch Command</s:String>
@@ -895,19 +895,18 @@ It is best to put quotation marks (") around operations involving paths to avoid
 When executing a command, the directory where the Command Prompt is located is the current .minecraft folder.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsCommandStartWaitForCommand">Wait for Complete</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibility">Ignore Java Compatibility Warnings</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">Warning: It is highly recommended to disable the warnings individually instead of globally!
-If the target Java is incompatible with the game, compatibility warnings will still be skipped automatically and force to use the target Java.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsIgnoreJavaCompatibilityToolTip">If you manually selected a Java which incompatible with the current instance, the compatibility warning dialog will be automatically skipped, and the manually chosen Java will be forcibly used.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">Disable File Verification</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">Warning: It is highly recommended to disable the verification individually instead of globally!
 This will not change the assets at all, nor verify the libraries, third-party login libraries, and version main JAR files whether they are modified or not.
 Do not enable this unless the relevant files are modified.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">Disable Java Launch Wrapper</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL will use Java Launch Wrapper to fix the issue of older versions of Java not being able to launch in Chinese paths.
-If this is intercepted by anti cheating or encounters other issues, it can also be closed.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL will use Java Launch Wrapper to fix the issue of older versions of Java not being able to launch in paths that contains Chinese characters.
+If this is intercepted by anti cheating or encounters other issues, you can choose to disable it.</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">Require Java to use high-performance graphics cards</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
-如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
-    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">Automatically sets Java to use the high-performance GPU in Windows Settings → System → Display → Graphics.
+For computer with both integrated and dedicated graphics, this ensures Minecraft utilizes the dedicated GPU for rendering, significantly boosting performance.</s:String>
+    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">Instance settings</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">There is an exception in the launch options and have been automatically reset.</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">An error occurred while reloading the launch options.</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">The launch options have been initialized!</s:String>
@@ -934,7 +933,7 @@ To automatically grant, right-click PCL and go to "Properties → Compatibility 
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">Hint</s:String>
     <s:String x:Key="LangPageSetupLeftGame">Game</s:String>
     <s:String x:Key="LangPageSetupLeftPersonalize">Personalization</s:String>
-    <s:String x:Key="LangPageSetupLeftLaunch">Launcher</s:String>
+    <s:String x:Key="LangPageSetupLeftLaunch">Misc</s:String>
     <s:String x:Key="LangPageSetupLeftLink">Hosting</s:String>
     <s:String x:Key="LangPageSetupLeftReset">Initialize This Page</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetGameConfirmContent">Do you want to initialize all the settings at the "Game" page? This operation is irrevocable.</s:String>
@@ -948,13 +947,13 @@ To automatically grant, right-click PCL and go to "Properties → Compatibility 
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceA">Mirror (Versions may delay)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceB">Balanced (Switch to mirror when the official source is slow)</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadVersionListSourceC">Official (Versions are newest)</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileName">File Naming</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">Determine the location and the style of the Simplified Chinese Translation for the mod that will be downloaded.
+    <s:String x:Key="LangPageSetupSystemDownloadModFileName">Filename format</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameToolTip">The default filename style when downloading mods.
 This option is only valid when the language is set to Simplified Chinese.</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">Front: [遗物] relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">Front: 遗物-relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">Back: relics-0.1.14-遗物</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">None: relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameA">[遗物] relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">遗物-relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">relics-0.1.14-遗物</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">Maximum Threads</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">The download speed increases with the number of threads, but too many threads will cause very serious lags in the download process.
@@ -967,7 +966,7 @@ Right-click a folder or instance to open the corresponding folder.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchive">Keep the Original Modpack File</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">Keep the modpack file in the instance folder when installing.</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">Ignore Quilt while displaying mod loaders</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSL">Verify SSL Certificates</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSL">Verify SSL Certificates for Microsoft Authentication</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">Enabling verification will enhance security and reduce the risk of account theft (see #2767), but it may also cause Microsoft login failures (see #3018).</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">Accessibility</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">Game Update Reminder</s:String>
@@ -1187,32 +1186,31 @@ Do not continue unless you are the server owner or have been asked to by the ser
 Are you sure you want to override the current settings?</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinTitle">Override Confirmation</s:String>
     <s:String x:Key="LangPageVersionSetupLittleSkinLogin">LittleSkin</s:String>
-    <s:String x:Key="LangPageVersionSetupTips">The settings on this page will only be applied to the current instance, which should be helpful for making modpacks.
-You can also modify the global settings to apply to all instances on the "Settings → Game" page.</s:String>
+    <s:String x:Key="LangPageVersionSetupTips">The settings on this page will only be applied to the current instance.</s:String>
     <s:String x:Key="LangPageVersionSetupUseGlobal">Use the global settings</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">Enabled</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">Disabled</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自定义StaticResource，若留空则跟随全局设置的值。
-支持以下替换标记：
- · {user}：玩家名字
- · {login}：玩家的登录方式
- · {name}：游戏版本名
- · {date}、{time}：当前的系统时间
- · {version}：游戏对应的原版版本号</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">版本隔离</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、Mod 等文件相互独立，互不干涉。
-这会使你无法跨版本共享存档，但可以规避 Mod 冲突问题。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">Customize the title of the game window. Leave it blank to use Global settings.
+The following alternate tags are supported:
+ · {user}: Username
+ · {login}: Login Method
+ · {name}: Instance Name
+ · {date}, {time}: System Time
+ · {version}: Vanilla Game Version</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">Instance isolation</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">Saves, mods and other files are isolated from other instance with no interference.
+While this prevents cross-instance save sharing, it effectively avoids mod conflicts.</s:String>
     <s:String x:Key="LangPageVersionSetupIndieDisable">Use the same profile with other instances that have "Instance Isolation" disabled. The saves, mods, resource packs, and other files are shared.
 Unpredictable problems may occur due to different mod loader versions and conflicting mods.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
-若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">Share saves, mods, and other files with other non-isolated instance.
+If multiple instances with installed mods exist, mod conflicts may cause crashes.</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">Make the profile of the instance, like saves and mods, independent from other instances.</s:String>
-    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
-若留空，则跟随全局设置的值。</s:String>
-    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会被直接拼合在启动参数的末尾。
-例如输入 --demo 则会以试玩模式启动游戏。
-若留空，则跟随全局设置的值。</s:String>
-    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全局设置</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">Launch Minecraft with extra JVM paramters, please DO NOT modify it unless you have confidence.
+Leave it blank to use global settings.</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">The content in the text box will be directly appended to the end of the launch arguments.
+For example, add "--demo" paramter will launch the game in demo mode.
+Leave it blank to use global setting.</s:String>
+    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">Global settings</s:String>
     <s:String x:Key="LangPageVersionSetupServer">Server</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">Login Method</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">Microsoft or Offline</s:String>
@@ -2068,7 +2066,8 @@ Redistribution may violate the usage agreement. Please avoid publicly releasing 
     <s:String x:Key="LangPageVersionExportModrinthStandardDesc">If you want to package and upload to Modrinth, selecting this option will generate a modpack file that fully meets Modrinth's requirements.
 Due to Modrinth's policies, resources that can only be downloaded from CurseForge will not be downloaded online and will be directly included in the modpack.
 Additionally, when this option is selected, PCL launcher files cannot be included in the modpack.</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigDesc">With the configuration file, you can precisely control the scope of the export or save the current configuration for future use.</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigDesc">The configuration file contains additional options not listed here, such as precisely controlling exported files or setting the storage location of modpacks.
+Please first select "Save Configuration" and then edit the saved configuration file.</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigRead">Load Configuration</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigSave">Save Configuration</s:String>
     <s:String x:Key="LangPageVersionExportModpackGuide">Creation Guide</s:String>
