@@ -7,9 +7,9 @@
     Public Shared TargetVersion As McVersion = Nothing
 
     '加载器信息
-    Public Shared Loader As New LoaderTask(Of CompProjectRequest, Integer)("CompProject Mod", AddressOf CompProjectsGet, AddressOf LoaderInput) With {.ReloadTimeout = 60 * 1000}
-    Public Shared Storage As New CompProjectStorage
-    Public Shared Page As Integer = 0
+    Public Loader As New LoaderTask(Of CompProjectRequest, Integer)("CompProject Mod", AddressOf CompProjectsGet, AddressOf LoaderInput) With {.ReloadTimeout = 60 * 1000}
+    Public Storage As New CompProjectStorage
+    Public Page As Integer = 0
     Private IsLoaderInited As Boolean = False
     Private Sub PageDownloadMod_Inited(sender As Object, e As EventArgs) Handles Me.Loaded
         '不知道从 Initialized 改成 Loaded 会不会有问题，但用 Initialized 会导致初始的筛选器修改被覆盖回默认值
@@ -17,19 +17,12 @@
             '设置目标
             ResetFilter() '重置筛选器
             TextSearchVersion.Text = TargetVersion.Version.McName
-            Dim GetTargetItemByName =
-            Function(Name As String) As MyComboBoxItem
-                For Each Item As MyComboBoxItem In ComboSearchLoader.Items
-                    If Item.Content = Name Then Return Item
-                Next
-                Return ComboSearchLoader.Items(0)
-            End Function
             If TargetVersion.Version.HasForge Then
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("Forge")
+                ComboSearchLoader.SelectedValue = CType(CompModLoaderType.Forge, Integer).ToString()
             ElseIf TargetVersion.Version.HasFabric Then
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("Fabric")
+                ComboSearchLoader.SelectedValue = CType(CompModLoaderType.Fabric, Integer).ToString()
             ElseIf TargetVersion.Version.HasNeoForge Then
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("NeoForge")
+                ComboSearchLoader.SelectedValue = CType(CompModLoaderType.NeoForge, Integer).ToString()
             End If
             TargetVersion = Nothing
             '如果已经完成请求，则重新开始
@@ -42,25 +35,23 @@
         PageLoaderInit(Load, PanLoad, PanContent, PanAlways, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
         If McVersionHighest = -1 Then McVersionHighest = Math.Max(McVersionHighest, Integer.Parse(CType(TextSearchVersion.Items(1), MyComboBoxItem).Content.ToString.Split(".")(1)))
     End Sub
-    Private Shared Function LoaderInput() As CompProjectRequest
-        Dim Request As New CompProjectRequest(CompType.Mod, Storage, (Page + 1) * PageSize)
-        If FrmDownloadMod IsNot Nothing Then
-            Dim ModLoader As CompModLoaderType = Val(FrmDownloadMod.ComboSearchLoader.SelectedItem.Tag)
-            Dim GameVersion As String = If(FrmDownloadMod.TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
-                    If(FrmDownloadMod.TextSearchVersion.Text.Contains(".") OrElse FrmDownloadMod.TextSearchVersion.Text.Contains("w"), FrmDownloadMod.TextSearchVersion.Text, Nothing))
-            If GameVersion IsNot Nothing AndAlso GameVersion.Contains(".") AndAlso Val(GameVersion.Split(".")(1)) < 14 AndAlso '1.14-
-                ModLoader = CompModLoaderType.Forge Then '选择了 Forge
-                ModLoader = CompModLoaderType.Any '此时，视作没有筛选 Mod Loader（因为部分老 Mod 没有设置自己支持的加载器）
+    Private Function LoaderInput() As CompProjectRequest
+        Dim ModLoader As CompModLoaderType = ComboSearchLoader.SelectedValue
+        Dim GameVersion As String = Nothing
+        If TextSearchVersion.Text.Contains(".") OrElse TextSearchVersion.Text.Contains("w") Then
+            GameVersion = TextSearchVersion.Text
+            Dim Spl = GameVersion.Split(".")
+            If Spl.Length > 1 AndAlso Val(Spl(1)) < 14 AndAlso ModLoader = CompModLoaderType.Forge Then
+                ModLoader = CompModLoaderType.Any
             End If
-            With Request
-                .SearchText = FrmDownloadMod.TextSearchName.Text
-                .GameVersion = GameVersion
-                .Tag = FrmDownloadMod.ComboSearchTag.SelectedItem.Tag
-                .ModLoader = ModLoader
-                .Source = CType(Val(FrmDownloadMod.ComboSearchSource.SelectedItem.Tag), CompSourceType)
-            End With
         End If
-        Return Request
+        Return New CompProjectRequest(CompType.Mod, Storage, (Page + 1) * PageSize) With {
+            .SearchText = TextSearchName.Text,
+            .GameVersion = GameVersion,
+            .Tag = ComboSearchTag.SelectedItem.Tag,
+            .ModLoader = ModLoader,
+            .Source = ComboSearchSource.SelectedValue
+        }
     End Function
 
     '结果 UI 化
@@ -87,12 +78,7 @@
             BtnPageRight.IsEnabled = IsRightEnabled
             BtnPageRight.Opacity = If(IsRightEnabled, 1, 0.2)
             '错误信息
-            If Storage.ErrorMessage Is Nothing Then
-                HintError.Visibility = Visibility.Collapsed
-            Else
-                HintError.Visibility = Visibility.Visible
-                HintError.Text = Storage.ErrorMessage
-            End If
+            HintError.Text = If(Storage.ErrorMessage, "")
             '强制返回顶部
             PanBack.ScrollToTop()
         Catch ex As Exception
@@ -102,15 +88,10 @@
 
     '自动重试
     Private Sub Load_State(sender As Object, state As MyLoading.MyLoadingState, oldState As MyLoading.MyLoadingState) Handles Load.StateChanged
-        Select Case Loader.State
-            Case LoadState.Failed
-                Dim ErrorMessage As String = ""
-                If Loader.Error IsNot Nothing Then ErrorMessage = Loader.Error.Message
-                If ErrorMessage.Contains("不是有效的 json 文件") Then
-                    Log("[Download] 下载的 Mod 列表 json 文件损坏，已自动重试", LogLevel.Debug)
-                    PageLoaderRestart()
-                End If
-        End Select
+        If Loader.State = LoadState.Failed AndAlso Loader.Error?.Message?.Contains("不是有效的 json 文件") Then
+            Log("[Download] 下载的 Mod 列表 json 文件损坏，已自动重试", LogLevel.Debug)
+            PageLoaderRestart()
+        End If
     End Sub
 
     '切换页码
@@ -152,7 +133,6 @@
     '重置按钮
     Private Sub ResetFilter() Handles BtnSearchReset.Click
         TextSearchName.Text = ""
-        TextSearchVersion.Text = "全部 (也可自行输入)"
         TextSearchVersion.SelectedIndex = 0
         ComboSearchSource.SelectedIndex = 0
         ComboSearchTag.SelectedIndex = 0
@@ -168,10 +148,8 @@
     Private Sub UpdateSearchLoaderVisibility() Handles TextSearchVersion.DropDownClosed
         If TextSearchVersion.Text.Contains(".") OrElse TextSearchVersion.Text.Contains("w") Then
             ComboSearchLoader.Visibility = Visibility.Visible
-            Grid.SetColumnSpan(TextSearchVersion, 1)
         Else
             ComboSearchLoader.Visibility = Visibility.Collapsed
-            Grid.SetColumnSpan(TextSearchVersion, 2)
             ComboSearchLoader.SelectedIndex = 0
         End If
     End Sub

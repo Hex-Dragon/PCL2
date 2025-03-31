@@ -4,16 +4,15 @@
     xmlns:local="clr-namespace:PCL" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d" x:Class="PageDownloadMod"
     PanScroll="{Binding ElementName=PanBack}">
-    <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
-        <StackPanel Orientation="Vertical" Margin="25">
-            <local:MyCard Title="搜索 Mod" Margin="0,0,0,15" x:Name="PanAlways">
+    <local:MyScrollViewer x:Name="PanBack" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="25">
+            <!--搜索卡片-->
+            <local:MyCard x:Name="PanAlways" Title="搜索 Mod" Margin="0,0,0,15">
                 <StackPanel Margin="25,40,25,15">
-                    <Grid Margin="0,0,0,11" HorizontalAlignment="Stretch">
+                    <Grid Margin="0,0,0,11">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="1.3*" />
-                            <ColumnDefinition Width="1.2*" />
-                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="2.5*" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
@@ -22,42 +21,68 @@
                             <RowDefinition Height="9" />
                             <RowDefinition Height="28" />
                         </Grid.RowDefinitions>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="名称" Margin="0,0,18,0" />
-                        <local:MyTextBox x:Name="TextSearchName" Grid.Column="1" Grid.ColumnSpan="2" />
-                        <TextBlock VerticalAlignment="Center" Grid.Column="4" HorizontalAlignment="Left" Text="来源" Margin="0,0,18,0" />
-                        <local:MyComboBox x:Name="ComboSearchSource" Grid.Column="5">
-                            <local:MyComboBoxItem Content="全部" Tag="3" IsSelected="True" />
+                        <!--名称-->
+                        <TextBlock Text="名称" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,18,0" />
+                        <local:MyTextBox x:Name="TextSearchName" Grid.Column="1" />
+                        <!--来源-->
+                        <TextBlock Text="来源" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50,0,18,0" />
+                        <local:MyComboBox x:Name="ComboSearchSource" Grid.Column="3" SelectedValuePath="Tag" SelectedIndex="0">
+                            <!--Tag => Enum CompSourceType-->
+                            <local:MyComboBoxItem Content="全部" Tag="3" />
                             <local:MyComboBoxItem Content="CurseForge" Tag="1" />
                             <local:MyComboBoxItem Content="Modrinth" Tag="2" />
                         </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="版本" Margin="0,0,18,0" />
-                        <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" IsEditable="True" MaxDropDownHeight="320">
-                            <local:MyComboBoxItem Content="全部 (也可自行输入)" IsSelected="True" />
-                            <local:MyComboBoxItem Content="1.21.4" />
-                            <local:MyComboBoxItem Content="1.21.1" />
-                            <local:MyComboBoxItem Content="1.20.6" />
-                            <local:MyComboBoxItem Content="1.20.1" />
-                            <local:MyComboBoxItem Content="1.19.4" />
-                            <local:MyComboBoxItem Content="1.19.2" />
-                            <local:MyComboBoxItem Content="1.18.2" />
-                            <local:MyComboBoxItem Content="1.17.1" />
-                            <local:MyComboBoxItem Content="1.16.5" />
-                            <local:MyComboBoxItem Content="1.14.4" />
-                            <local:MyComboBoxItem Content="1.12.2" />
-                            <local:MyComboBoxItem Content="1.10.2" />
-                            <local:MyComboBoxItem Content="1.8.9" />
-                            <local:MyComboBoxItem Content="1.7.10" />
-                        </local:MyComboBox>
-                        <local:MyComboBox x:Name="ComboSearchLoader" Visibility="Collapsed" Grid.Row="2" Grid.Column="2" MaxDropDownHeight="320" Margin="10,0,0,0">
-                            <local:MyComboBoxItem Content="任意 Mod 加载器" IsSelected="True" Tag="0" />
-                            <local:MyComboBoxItem Content="Forge" Tag="1" />
-                            <local:MyComboBoxItem Content="Fabric" Tag="4" />
-                            <local:MyComboBoxItem Content="Quilt" Tag="5" />
-                            <local:MyComboBoxItem Content="NeoForge" Tag="6" />
-                        </local:MyComboBox>
-                        <TextBlock VerticalAlignment="Center" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Left" Text="类型" Margin="0,0,18,0" />
-                        <local:MyComboBox x:Name="ComboSearchTag" Grid.Column="5" Grid.Row="2" MaxDropDownHeight="320">
-                            <local:MyComboBoxItem Content="全部" Tag="" IsSelected="True" />
+                        <!--版本-->
+                        <TextBlock Text="版本" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,18,0" />
+                        <Grid Grid.Row="2" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.3*" />
+                                <ColumnDefinition Width="1.2*" />
+                            </Grid.ColumnDefinitions>
+                            <!--游戏版本-->
+                            <!--IsEditable为真时会自动应用一个ItemTemplate，把它覆盖掉-->
+                            <local:MyComboBox x:Name="TextSearchVersion" IsEditable="True" SelectedIndex="0" MaxDropDownHeight="320" ItemTemplate="{x:Null}">
+                                <local:MyComboBox.Style>
+                                    <Style TargetType="local:MyComboBox" BasedOn="{StaticResource {x:Type local:MyComboBox}}">
+                                        <Style.Triggers>
+                                            <!--右边的选模组加载器的下拉框不可见时占满整行-->
+                                            <DataTrigger Binding="{Binding ElementName=ComboSearchLoader, Path=Visibility}" Value="Collapsed">
+                                                <Setter Property="Grid.ColumnSpan" Value="2" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </local:MyComboBox.Style>
+                                <local:MyComboBoxItem Content="全部 (也可自行输入)" />
+                                <local:MyComboBoxItem Content="1.21.4" />
+                                <local:MyComboBoxItem Content="1.21.1" />
+                                <local:MyComboBoxItem Content="1.20.6" />
+                                <local:MyComboBoxItem Content="1.20.1" />
+                                <local:MyComboBoxItem Content="1.19.4" />
+                                <local:MyComboBoxItem Content="1.19.2" />
+                                <local:MyComboBoxItem Content="1.18.2" />
+                                <local:MyComboBoxItem Content="1.17.1" />
+                                <local:MyComboBoxItem Content="1.16.5" />
+                                <local:MyComboBoxItem Content="1.14.4" />
+                                <local:MyComboBoxItem Content="1.12.2" />
+                                <local:MyComboBoxItem Content="1.10.2" />
+                                <local:MyComboBoxItem Content="1.8.9" />
+                                <local:MyComboBoxItem Content="1.7.10" />
+                            </local:MyComboBox>
+                            <!--模组加载器-->
+                            <local:MyComboBox x:Name="ComboSearchLoader" Grid.Column="1" SelectedValuePath="Tag" SelectedIndex="0" Visibility="Collapsed" Margin="10,0,0,0">
+                                <!--Tag => Enum CompModLoaderType-->
+                                <local:MyComboBoxItem Content="任意 Mod 加载器" Tag="0" />
+                                <local:MyComboBoxItem Content="Forge" Tag="1" />
+                                <local:MyComboBoxItem Content="Fabric" Tag="4" />
+                                <local:MyComboBoxItem Content="Quilt" Tag="5" />
+                                <local:MyComboBoxItem Content="NeoForge" Tag="6" />
+                            </local:MyComboBox>
+                        </Grid>
+                        <!--类型-->
+                        <TextBlock Text="类型" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50,0,18,0" />
+                        <local:MyComboBox x:Name="ComboSearchTag" Grid.Row="2" Grid.Column="3" SelectedValuePath="Tag" SelectedIndex="0" MaxDropDownHeight="320">
+                            <!--Tag => CompProjectRequest::Tag-->
+                            <local:MyComboBoxItem Content="全部" Tag="" />
                             <local:MyComboBoxItem Content="世界元素" Tag="406/worldgen" />
                             <local:MyComboBoxItem Content="生物群系" Tag="407/" Margin="15,0,0,0" />
                             <local:MyComboBoxItem Content="维度" Tag="410/" Margin="15,0,0,0" />
@@ -85,36 +110,56 @@
                             <local:MyComboBoxItem Content="支持库" Tag="421/library" />
                         </local:MyComboBox>
                     </Grid>
-                    <Grid Margin="0,4,0,6" Height="35">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                        </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnSearchRun" Text="搜索" MinWidth="140" Padding="13,0" Margin="0,0,20,0" ColorType="Highlight" />
-                        <local:MyButton x:Name="BtnSearchReset" Text="重置条件" MinWidth="140" Padding="13,0" Margin="0,0,20,0" Grid.Column="1" />
-                    </Grid>
+                    <!--下边的两个按钮-->
+                    <WrapPanel Margin="0,4,-20,-6">
+                        <WrapPanel.Resources>
+                            <Style TargetType="local:MyButton">
+                                <Setter Property="MinWidth" Value="140" />
+                                <Setter Property="Height" Value="35" />
+                                <Setter Property="Padding" Value="13,0" />
+                                <Setter Property="Margin" Value="0,0,20,12" />
+                            </Style>
+                        </WrapPanel.Resources>
+                        <local:MyButton x:Name="BtnSearchRun" Text="搜索" ColorType="Highlight" />
+                        <local:MyButton x:Name="BtnSearchReset" Text="重置条件" />
+                    </WrapPanel>
                 </StackPanel>
             </local:MyCard>
+            <!--内容-->
             <StackPanel x:Name="PanContent">
-                <local:MyHint x:Name="HintError" Text="无法连接到 Modrinth，所以目前仅显示了来自 CurseForge 的内容，结果可能不全。&#xa;请尝试使用 VPN 或加速器以改善网络。" IsWarn="True" Margin="0,0,0,15" />
+                <!--错误提示-->
+                <local:MyHint x:Name="HintError" IsWarn="True" Margin="0,0,0,15">
+                    <local:MyHint.Style>
+                        <Style TargetType="local:MyHint">
+                            <Style.Triggers>
+                                <!--内容为空则不显示-->
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </local:MyHint.Style>
+                </local:MyHint>
+                <!--内容条目-->
                 <local:MyCard x:Name="CardProjects" UseAnimation="False">
                     <StackPanel x:Name="PanProjects" Margin="12" />
                 </local:MyCard>
-                <local:MyCard Margin="0,15,0,0" x:Name="CardPages" HorizontalAlignment="Center">
-                    <StackPanel Orientation="Horizontal" Height="23" Margin="10,7">
-                        <local:MyIconButton x:Name="BtnPageFirst" IsEnabled="False" Opacity="0.2" Margin="0,0.5,5,0.5"
-                            Logo="M496.213333 329.856L315.306667 510.848l180.992 181.077333a42.666667 42.666667 0 1 1-60.330667 60.330667l-211.2-211.2a42.453333 42.453333 0 0 1-11.818667-22.613333l-0.597333-5.034667v-5.034667a42.496 42.496 0 0 1 12.373333-27.648l211.2-211.2a42.666667 42.666667 0 0 1 60.373334 60.330667z m298.666667 0l-180.949333 180.992 180.992 181.077333a42.666667 42.666667 0 1 1-60.330667 60.330667l-211.2-211.2a42.453333 42.453333 0 0 1-11.818667-22.613333l-0.597333-5.034667v-5.034667a42.496 42.496 0 0 1 12.373333-27.648l211.2-211.2a42.666667 42.666667 0 0 1 60.373334 60.330667z" />
-                        <local:MyIconButton x:Name="BtnPageLeft" IsEnabled="False" Opacity="0.2" Margin="0,0,5,0"
-                            Logo="M650.752 278.357333l-241.322667 241.365334 241.322667 241.365333a42.666667 42.666667 0 1 1-60.330667 60.330667l-271.530666-271.530667a42.453333 42.453333 0 0 1-11.818667-22.613333l-0.597333-5.034667v-5.034667a42.496 42.496 0 0 1 12.416-27.648l271.530666-271.530666a42.666667 42.666667 0 0 1 60.330667 60.330666z" />
-                        <TextBlock x:Name="LabPage" Text="1" 
-                                   Margin="8,0,13,0" FontSize="15" VerticalAlignment="Center" Foreground="{DynamicResource ColorBrush3}" />
-                        <local:MyIconButton x:Name="BtnPageRight" Margin="0,0,30,0"
-                            Logo="M404.309333 278.357333l241.322667 241.365334-241.322667 241.365333a42.666667 42.666667 0 1 0 60.330667 60.330667l271.530667-271.530667a42.453333 42.453333 0 0 0 11.818666-22.613333l0.597334-5.034667v-5.034667a42.496 42.496 0 0 0-12.416-27.648L464.64 218.026667a42.666667 42.666667 0 0 0-60.330667 60.330666z" />
-                    </StackPanel>
+                <!--翻页按钮-->
+                <local:MyCard x:Name="CardPages" HorizontalAlignment="Center" Margin="0,15,0,0">
+                    <UniformGrid Columns="5" Height="23" Margin="10,7">
+                        <local:MyIconButton x:Name="BtnPageFirst" IsEnabled="False" Opacity="0.2" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                            Logo="M496.213333 329.856L315.306667 510.848l180.992 181.077333a42.666667 42.666667 0 1 1-60.330667 60.330667l-211.2-211.2a42.453333 42.453333 0 0 1-11.818667-22.613333l-0.597333-5.034667v-5.034667a42.496 42.496 0 0 1 12.373333-27.648l211.2-211.2a42.666667 42.666667 0 0 1 60.373334 60.330667z m298.666667 0l-180.949333 180.992 180.992 181.077333a42.666667 42.666667 0 1 1-60.330667 60.330667l-211.2-211.2a42.453333 42.453333 0 0 1-11.818667-22.613333l-0.597333-5.034667v-5.034667a42.496 42.496 0 0 1 12.373333-27.648l211.2-211.2a42.666667 42.666667 0 0 1 60.373334 60.330667z" />
+                        <local:MyIconButton x:Name="BtnPageLeft" IsEnabled="False" Opacity="0.2" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                            Logo="M650.752 278.357333l-241.322667 241.365334 241.322667 241.365333a42.666667 42.666667 0 1 1-60.330667 60.330667l-271.530666-271.530667a42.453333 42.453333 0 0 1-11.818667-22.613333l-0.597333-5.034667v-5.034667a42.496 42.496 0 0 1 12.416-27.648l271.530666-271.530666a42.666667 42.666667 0 0 1 60.330667 60.330666z" />
+                        <TextBlock x:Name="LabPage" Text="1" FontSize="15" Foreground="{DynamicResource ColorBrush3}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <local:MyIconButton x:Name="BtnPageRight" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                            Logo="M404.309333 278.357333l241.322667 241.365334-241.322667 241.365333a42.666667 42.666667 0 1 0 60.330667 60.330667l271.530667-271.530667a42.453333 42.453333 0 0 0 11.818666-22.613333l0.597334-5.034667v-5.034667a42.496 42.496 0 0 0-12.416-27.648L464.64 218.026667a42.666667 42.666667 0 0 0-60.330667 60.330666z" />
+                    </UniformGrid>
                 </local:MyCard>
             </StackPanel>
-            <local:MyCard HorizontalAlignment="Center" VerticalAlignment="Center" SnapsToDevicePixels="True" x:Name="PanLoad" UseAnimation="False" Margin="40,50">
-                <local:MyLoading Text="正在获取 Mod 列表" Margin="20,20,20,17" x:Name="Load" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <!--加载环-->
+            <local:MyCard x:Name="PanLoad" UseAnimation="False" VerticalAlignment="Center" HorizontalAlignment="Center" SnapsToDevicePixels="True" Margin="40,50">
+                <local:MyLoading x:Name="Load" Text="正在获取 Mod 列表" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,20,20,17" />
             </local:MyCard>
         </StackPanel>
     </local:MyScrollViewer>
