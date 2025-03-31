@@ -466,7 +466,7 @@
     <s:String x:Key="LangDownloadInstallHintBackTip">点击麦恩克拉夫特项即可滚回游戏主版本选择页面！</s:String>
     <s:String x:Key="LangDownloadInstallClickToChose">想加就加</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">与锻造不兼容</s:String>
-    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的锻造</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">与布料不兼容</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">与高清不修复不兼容</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">需要布料</s:String>
@@ -702,7 +702,7 @@
     <s:String x:Key="LangPageLoginMsAddAccountFail">正版登陆验证不成功，请尝试在 [设置 → 发射台] 中关掉 [验证安全套接层证书] 然后再试。
 
 原始错误信息：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">正版登录验证失败，请考虑在 [设置 → 其他] 中关闭 [在正版登录时验证 SSL 证书]，然后再试。</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">正版登录验证失败，请考虑在 [设置 → 发射台] 中关闭 [在正版登录时验证安全套接层证书]，然后再试。</s:String>
     <s:String x:Key="LangPageLoginMsLoading">加载中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">外壳与海角</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">修改外壳</s:String>
@@ -814,7 +814,7 @@
  · {date}、{time}：当前的系统时间
  · {version}：游戏对应的香草版本号</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">自定义信息</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">该信息会展示在游戏主界面的左下角，与 F3 调教页面的左上角
+    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">该信息会展示在游戏主界面的左下角，与 F3 调教页面的左上角。
 要是不填，就会跟从全球设置的值</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">默认版本隔离</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
@@ -902,8 +902,8 @@
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerification">关掉文件校验</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">完全不更改 assets；不校验 libraries、第三派对登陆库与版本主罐子文件是否被修改。
 如果你莫得修改相关文件，别瞎勾选此项。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用爪哇启动包装器</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">平原合成发射台会使用爪哇启动包装器来修复老版本爪哇在中文路径下无法发射的问题。
 如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求爪哇食用高性能显卡</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 窗户设置 → 系统 → 屏幕 → 显示卡 中将爪哇改为使用高性能显卡。
@@ -968,7 +968,8 @@
     <s:String x:Key="LangPageSetupSystemDownloadKeepModpackArchiveToolTip">安装整活包时，在版本文件夹子下保留用于安装的原始整活包压缩包文件</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadIgnoreQuiltDisplay">展示模组装载机时忽略被子</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadSSL">在正版登陆时验证安全套接层证书</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">打开验证阔以提高安全性，但阔能导致正版登陆不成功（见 #3018）。</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadSSLToolTip">开启验证阔以提高安全性，但阔能会导致正版登录失败（见 #3018）。
+若登录因为 “未能为 SSL/TLS 安全通道建立信任关系” 失败，请考虑关闭此选项。</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibility">辅助特性</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdate">游戏更新提示</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadAccessibilityRemindGameUpdateBeta">测试版更新提示</s:String>
@@ -1188,8 +1189,7 @@
 真的要覆盖当前设置吗？</s:String>
     <s:String x:Key="LangPageVersionSetupDialogLittleSkinTitle">设置覆盖确认</s:String>
     <s:String x:Key="LangPageVersionSetupLittleSkinLogin">小皮肤登陆</s:String>
-    <s:String x:Key="LangPageVersionSetupTips">本页面的设置均只对当前版本生效，这对整活包制作应该会有用。
-你也可以在设置页面中修改对全部版本生效的全局设置。</s:String>
+    <s:String x:Key="LangPageVersionSetupTips">这些设置只对该游戏版本生效，不影响其他版本。</s:String>
     <s:String x:Key="LangPageVersionSetupUseGlobal">跟从全球设置</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">打开</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">关掉</s:String>
@@ -1201,12 +1201,12 @@
  · {date}、{time}：当前的系统时间
  · {version}：游戏对应的原版版本号</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">版本隔离</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、Mod 等文件相互独立，互不干涉。
-这会使你无法跨版本共享存档，但可以规避 Mod 冲突问题。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、模组等文件相互独立，互不干涉。
+这会使你无法跨版本共享存档，但可以规避模组冲突问题。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieDisable">与别的未打开隔离的版本均食用同一档案，存档、模组等均为公用。
 如果有别的版本的锻造或布料，可能会由于模组与版本冲突导致其他虫子。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
-若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、模组等文件。
+若存在多个安装模组了的版本，可能会由于模组冲突而导致游戏爆炸。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">让这个版本与其他版本的存档、模组等档案相互独立，互不干涉</s:String>
     <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动安慕希时使用的额外爪哇虚拟机参数，在没有确定把握的情况下请不要尝试修改。
 若留空，则跟随全球设置的值。</s:String>
@@ -2068,7 +2068,8 @@
     <s:String x:Key="LangPageVersionExportModrinthStandardDesc">如果你想要打包上传到模组迷宫，勾选此项会生成完全符合模组迷宫要求的整活包文件。
 由于模组迷宫要求，只能从诅咒锻造下崽的资源将无法联网下崽，会被直接放入整活包中。
 此外，勾选后也不能在整活包中包含平原合成发射台文件。</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigDesc">通过配置文件，你可以精准地控制导出来内容的范围，或是保存当前的配置以便之后食用。</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigDesc">配置文件中含有未在此处列出的选项，例如精准控制导出的文件、设置整活包存放位置等。
+请先选择 “保存配置”，然后编辑保存的配置文件。</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigRead">阅读配置</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigSave">保存配置</s:String>
     <s:String x:Key="LangPageVersionExportModpackGuide">整活包制作指南</s:String>
