@@ -119,11 +119,13 @@
                 End If
                 ItemMod.Checked = True
             Case FormMain.PageSubType.DownloadPack
-                PageDownloadPack.Storage = New CompProjectStorage
-                PageDownloadPack.Page = 0
                 CompProjectCache.Clear()
                 CompFilesCache.Clear()
-                If FrmDownloadPack IsNot Nothing Then FrmDownloadPack.PageLoaderRestart()
+                If FrmDownloadPack IsNot Nothing Then
+                    FrmDownloadPack.Storage = New CompProjectStorage
+                    FrmDownloadPack.Page = 0
+                    FrmDownloadPack.PageLoaderRestart()
+                End If
                 ItemPack.Checked = True
             Case FormMain.PageSubType.DownloadClient
                 DlClientListLoader.Start(IsForceRestart:=True)

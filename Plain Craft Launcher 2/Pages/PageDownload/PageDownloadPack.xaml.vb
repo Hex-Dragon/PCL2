@@ -3,25 +3,20 @@
     Public Const PageSize = 40
 
     '加载器信息
-    Public Shared Loader As New LoaderTask(Of CompProjectRequest, Integer)("CompProject ModPack", AddressOf CompProjectsGet, AddressOf LoaderInput) With {.ReloadTimeout = 60 * 1000}
-    Public Shared Storage As New CompProjectStorage
-    Public Shared Page As Integer = 0
+    Public Loader As New LoaderTask(Of CompProjectRequest, Integer)("CompProject ModPack", AddressOf CompProjectsGet, AddressOf LoaderInput) With {.ReloadTimeout = 60 * 1000}
+    Public Storage As New CompProjectStorage
+    Public Page As Integer = 0
     Private Sub PageDownloadPack_Inited(sender As Object, e As EventArgs) Handles Me.Initialized
         PageLoaderInit(Load, PanLoad, PanContent, PanAlways, Loader, AddressOf Load_OnFinish, AddressOf LoaderInput)
         If McVersionHighest = -1 Then McVersionHighest = Math.Max(McVersionHighest, Integer.Parse(CType(TextSearchVersion.Items(1), MyComboBoxItem).Content.ToString.Split(".")(1)))
     End Sub
-    Private Shared Function LoaderInput() As CompProjectRequest
-        Dim Request As New CompProjectRequest(CompType.ModPack, Storage, (Page + 1) * PageSize)
-        If FrmDownloadPack IsNot Nothing Then
-            With Request
-                .SearchText = FrmDownloadPack.TextSearchName.Text
-                .GameVersion = If(FrmDownloadPack.TextSearchVersion.Text = "全部 (也可自行输入)", Nothing,
-                    If(FrmDownloadPack.TextSearchVersion.Text.Contains(".") OrElse FrmDownloadPack.TextSearchVersion.Text.Contains("w"), FrmDownloadPack.TextSearchVersion.Text, Nothing))
-                .Tag = FrmDownloadPack.ComboSearchTag.SelectedItem.Tag
-                .Source = CType(Val(FrmDownloadPack.ComboSearchSource.SelectedItem.Tag), CompSourceType)
-            End With
-        End If
-        Return Request
+    Private Function LoaderInput() As CompProjectRequest
+        Return New CompProjectRequest(CompType.ModPack, Storage, (Page + 1) * PageSize) With {
+            .SearchText = TextSearchName.Text,
+            .GameVersion = If(TextSearchVersion.Text.Contains(".") OrElse TextSearchVersion.Text.Contains("w"), TextSearchVersion.Text, Nothing),
+            .Tag = ComboSearchTag.SelectedValue,
+            .Source = ComboSearchSource.SelectedValue
+        }
     End Function
 
     '结果 UI 化
@@ -48,12 +43,7 @@
             BtnPageRight.IsEnabled = IsRightEnabled
             BtnPageRight.Opacity = If(IsRightEnabled, 1, 0.2)
             '错误信息
-            If Storage.ErrorMessage Is Nothing Then
-                HintError.Visibility = Visibility.Collapsed
-            Else
-                HintError.Visibility = Visibility.Visible
-                HintError.Text = Storage.ErrorMessage
-            End If
+            HintError.Text = If(Storage.ErrorMessage, "")
             '强制返回顶部
             PanBack.ScrollToTop()
         Catch ex As Exception
@@ -63,15 +53,10 @@
 
     '自动重试
     Private Sub Load_State(sender As Object, state As MyLoading.MyLoadingState, oldState As MyLoading.MyLoadingState) Handles Load.StateChanged
-        Select Case Loader.State
-            Case LoadState.Failed
-                Dim ErrorMessage As String = ""
-                If Loader.Error IsNot Nothing Then ErrorMessage = Loader.Error.Message
-                If ErrorMessage.Contains("不是有效的 json 文件") Then
-                    Log("[Download] 下载的整合包列表 json 文件损坏，已自动重试", LogLevel.Debug)
-                    PageLoaderRestart()
-                End If
-        End Select
+        If Loader.State = LoadState.Failed AndAlso Loader.Error?.Message?.Contains("不是有效的 json 文件") Then
+            Log("[Download] 下载的 Mod 列表 json 文件损坏，已自动重试", LogLevel.Debug)
+            PageLoaderRestart()
+        End If
     End Sub
 
     '切换页码
@@ -116,7 +101,6 @@
     '重置按钮
     Private Sub BtnSearchReset_Click(sender As Object, e As EventArgs) Handles BtnSearchReset.Click
         TextSearchName.Text = ""
-        TextSearchVersion.Text = "全部 (也可自行输入)"
         TextSearchVersion.SelectedIndex = 0
         ComboSearchSource.SelectedIndex = 0
         ComboSearchTag.SelectedIndex = 0
