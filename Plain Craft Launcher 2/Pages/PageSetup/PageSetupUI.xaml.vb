@@ -93,6 +93,7 @@
             TextCustomNet.Text = Setup.Get("UiCustomNet")
 
             '功能隐藏
+            CheckDisableAprilFools.Checked = Setup.Get("UiDisableAprilFools")
             CheckHiddenPageDownload.Checked = Setup.Get("UiHiddenPageDownload")
             CheckHiddenPageLink.Checked = Setup.Get("UiHiddenPageLink")
             CheckHiddenPageSetup.Checked = Setup.Get("UiHiddenPageSetup")
@@ -160,6 +161,7 @@
             Setup.Reset("UiHiddenOtherVote")
             Setup.Reset("UiHiddenOtherHelp")
             Setup.Reset("UiHiddenOtherTest")
+            Setup.Reset("UiDisableAprilFools")
 
             Log("[Setup] 已初始化个性化设置！")
             Hint("已初始化个性化设置", HintType.Finish, False)
@@ -177,7 +179,7 @@
     Private Shared Sub ComboChange(sender As MyComboBox, e As Object) Handles ComboBackgroundSuit.SelectionChanged, ComboCustomPreset.SelectionChanged
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.SelectedIndex)
     End Sub
-    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckMusicStop.Change, CheckMusicRandom.Change, CheckMusicAuto.Change, CheckBackgroundColorful.Change, CheckLogoLeft.Change, CheckLauncherLogo.Change, CheckHiddenFunctionHidden.Change, CheckHiddenFunctionSelect.Change, CheckHiddenFunctionModUpdate.Change, CheckHiddenPageDownload.Change, CheckHiddenPageLink.Change, CheckHiddenPageOther.Change, CheckHiddenPageSetup.Change, CheckHiddenSetupLaunch.Change, CheckHiddenSetupSystem.Change, CheckHiddenSetupLink.Change, CheckHiddenSetupUI.Change, CheckHiddenOtherAbout.Change, CheckHiddenOtherFeedback.Change, CheckHiddenOtherVote.Change, CheckHiddenOtherHelp.Change, CheckHiddenOtherTest.Change, CheckMusicStart.Change, CheckLauncherEmail.Change
+    Private Shared Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckMusicStop.Change, CheckMusicRandom.Change, CheckMusicAuto.Change, CheckBackgroundColorful.Change, CheckLogoLeft.Change, CheckLauncherLogo.Change, CheckHiddenFunctionHidden.Change, CheckHiddenFunctionSelect.Change, CheckHiddenFunctionModUpdate.Change, CheckHiddenPageDownload.Change, CheckHiddenPageLink.Change, CheckHiddenPageOther.Change, CheckHiddenPageSetup.Change, CheckHiddenSetupLaunch.Change, CheckHiddenSetupSystem.Change, CheckHiddenSetupLink.Change, CheckHiddenSetupUI.Change, CheckHiddenOtherAbout.Change, CheckHiddenOtherFeedback.Change, CheckHiddenOtherVote.Change, CheckHiddenOtherHelp.Change, CheckHiddenOtherTest.Change, CheckMusicStart.Change, CheckLauncherEmail.Change, CheckDisableAprilFools.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
     Private Shared Sub TextBoxChange(sender As MyTextBox, e As Object) Handles TextLogoText.ValidatedTextChanged, TextCustomNet.ValidatedTextChanged

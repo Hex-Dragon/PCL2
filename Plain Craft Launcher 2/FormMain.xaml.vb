@@ -1361,6 +1361,7 @@ Public Class FormMain
         End If
     End Sub
     Public Function BtnExtraApril_ShowCheck() As Boolean
+        If Setup.Get("UiDisableAprilFools") Then Return False '在设置中禁用愚人节玩笑后主界面更新不及时
         Return IsAprilEnabled AndAlso Not IsAprilGiveup AndAlso PageCurrent = PageType.Launch
     End Function
 

@@ -686,7 +686,7 @@ NextFile:
 
 #Region "愚人节"
 
-    Public IsAprilEnabled As Boolean = Date.Now.Month = 4 AndAlso Date.Now.Day = 1
+    Public IsAprilEnabled As Boolean = Date.Now.Month = 4 AndAlso Date.Now.Day = 1 AndAlso Not Setup.Get("UiDisableAprilFools")
     Public IsAprilGiveup As Boolean = False
     Private AprilSpeed As New Vector(0, 0)
     Private AprilIdieCount As Integer = 0, AprilMousePosLast As New Point(0, 0)
