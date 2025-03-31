@@ -57,6 +57,7 @@
             Log("[Download] 下载的 Mod 列表 json 文件损坏，已自动重试", LogLevel.Debug)
             PageLoaderRestart()
         End If
+        CardPages.IsEnabled = Loader.State = LoadState.Finished
     End Sub
 
     '切换页码
@@ -77,7 +78,6 @@
         Log($"[Download] 整合包切换到第 {Page + 1} 页")
         RunInThread(Sub()
                         Thread.Sleep(100) '等待向上滚的动画结束
-                        RunInUi(Sub() CardPages.IsEnabled = True)
                         Loader.Start()
                     End Sub)
     End Sub
