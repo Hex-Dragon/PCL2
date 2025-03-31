@@ -421,9 +421,9 @@ Press "F11" again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadPCLProvided">Provided by PCL</s:String>
     <s:String x:Key="LangDownloadChangelog">Changelog</s:String>
     <s:String x:Key="LangDownloadSaveAs">Save as</s:String>
-    <s:String x:Key="LangDownloadReleaseOn">Released on</s:String>
+    <s:String x:Key="LangDownloadReleaseOn">Released on {0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Incompatible with Forge</s:String>
-    <s:String x:Key="LangDownloadRecommendForge">Recommended Forge Version: </s:String>
+    <s:String x:Key="LangDownloadRecommendForge">Recommended Forge Version:  {0}</s:String>
     <s:String x:Key="LangDownloadShowAll">Show All Versions</s:String>
     <s:String x:Key="LangDownloadSaveInstaller">Save Installer</s:String>
     <s:String x:Key="LangDownloadAll">All Versions</s:String>
@@ -462,11 +462,11 @@ This page offers the Fabric installer for download. After downloading, you need 
     <s:String x:Key="LangDownloadInstallStart">Install</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">Name</s:String>
     <s:String x:Key="LangDownloadInstallBack">Back</s:String>
-    <s:String x:Key="LangDownloadInstallGettingList">Getting Version List...</s:String>
+    <s:String x:Key="LangDownloadInstallGettingList">Loading Version List...</s:String>
     <s:String x:Key="LangDownloadInstallHintBackTip">Click the Minecraft tile to return!</s:String>
-    <s:String x:Key="LangDownloadInstallClickToChose">Click to Select</s:String>
+    <s:String x:Key="LangDownloadInstallClickToChose">You Can Click to Select</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">Incompatible with Forge</s:String>
-    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">Only Compatible Specific Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">Incompatible with Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">Incompatible with OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">Requires Fabric</s:String>
@@ -478,14 +478,14 @@ This page offers the Fabric installer for download. After downloading, you need 
     <s:String x:Key="LangDownloadInstallFailGetList">Failed to get version list: </s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">Automatic installation unavailable</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">Instance Isolation Hint</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieContent">"Instance Isolation" has not been enabled yet, which will let multiple instances share the same mods folder.
-Therefore, when switching instances, Minecraft will crash because it reads mods that do not match the current version or the loader.
-PCL recommends to turn on the "Instance Isolation" option in "Settings → Instance Isolation" before the installation!</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieContent">You have not enabled version isolation, which may result in multiple MC versions sharing the same Mod folder.
+Therefore, when switching between MC versions, MC games may crash due to reading mods that do not match the current version.
+PCL recommends that you enable version isolation in Settings → Startup Options → Version Isolation before starting the download!</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">Cancel</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">Incompatible with NeoForge</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Incompatible with older versions of Fabric, please download OptiFabric Origins manually.</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">Refresh</s:String>
-    <s:String x:Key="LangDownloadPageLeftAutoInstall">Installation</s:String>
+    <s:String x:Key="LangDownloadPageLeftAutoInstall">Game Auto Installation</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstall">▼ Packages</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">The "Packages" allows you to download a JAR installation file for components like OptiFine and Forge, but cannot be installed automatically.
 To install, first select your Minecraft version on the "Installation" page, then choose OptiFine, Forge, or any other components. PCL will then handle the installation.</s:String>
@@ -702,7 +702,7 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangPageLoginMsAddAccountFail">Microsoft login authentication failed. Please try to disable the "Verify SSL Certificates" option in "Settings → Launcher" and try again.
 
 Original error message: </s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">The login process has been canceled!</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">The login process has been canceled! You can in the Settings→Others to closs the"Validate SSL certificate during genuine login", Then try again</s:String>
     <s:String x:Key="LangPageLoginMsLoading">Loading...</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">Skins and Capes</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">Change Skin</s:String>
@@ -901,10 +901,10 @@ If the target Java is incompatible with the game, compatibility warnings will st
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">Warning: It is highly recommended to disable the verification individually instead of globally!
 This will not change the assets at all, nor verify the libraries, third-party login libraries, and version main JAR files whether they are modified or not.
 Do not enable this unless the relevant files are modified.</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
-如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">Disable Java Launch Wrapper</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL will use Java Launch Wrapper to fix the issue of older versions of Java not being able to launch in Chinese paths.
+If this is intercepted by anti cheating or encounters other issues, it can also be closed.</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">Require Java to use high-performance graphics cards</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
 如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
     <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
