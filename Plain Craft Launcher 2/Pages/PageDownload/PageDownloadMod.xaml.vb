@@ -64,19 +64,12 @@
                 PanProjects.Children.Add(Storage.Results(i).ToCompItem(Loader.Input.GameVersion Is Nothing, Loader.Input.ModLoader = CompModLoaderType.Any))
             Next
             '页码
-            CardPages.Visibility = If(Storage.Results.Count > 40 OrElse
-                                      Storage.CurseForgeOffset < Storage.CurseForgeTotal OrElse Storage.ModrinthOffset < Storage.ModrinthTotal,
-                                      Visibility.Visible, Visibility.Collapsed)
+            ShouldCardPagesExit = False
             LabPage.Text = Page + 1
             BtnPageFirst.IsEnabled = Page > 1
-            BtnPageFirst.Opacity = If(Page > 1, 1, 0.2)
             BtnPageLeft.IsEnabled = Page > 0
-            BtnPageLeft.Opacity = If(Page > 0, 1, 0.2)
-            Dim IsRightEnabled As Boolean = '由于 WPF 的未知 bug，读取到的 IsEnabled 可能是错误的值（#3319）
-                Storage.Results.Count > PageSize * (Page + 1) OrElse
-                Storage.CurseForgeOffset < Storage.CurseForgeTotal OrElse Storage.ModrinthOffset < Storage.ModrinthTotal
-            BtnPageRight.IsEnabled = IsRightEnabled
-            BtnPageRight.Opacity = If(IsRightEnabled, 1, 0.2)
+            BtnPageRight.IsEnabled = Storage.Results.Count > PageSize * (Page + 1) OrElse
+                                     Storage.CurseForgeOffset < Storage.CurseForgeTotal OrElse Storage.ModrinthOffset < Storage.ModrinthTotal
             '错误信息
             HintError.Text = If(Storage.ErrorMessage, "")
             '强制返回顶部
@@ -92,22 +85,46 @@
             Log("[Download] 下载的 Mod 列表 json 文件损坏，已自动重试", LogLevel.Debug)
             PageLoaderRestart()
         End If
-        CardPages.IsEnabled = Loader.State = LoadState.Finished
+    End Sub
+
+    ''' <summary>
+    ''' 翻页卡片是否应该在下一次刷新时触发退出动画
+    ''' </summary>
+    Public ShouldCardPagesExit As Boolean = False
+
+    '添加翻页卡片的动画
+    Private Sub HideControlOnForceExit() Handles Me.HideControlsOnForceExit
+        CardPages.Visibility = Visibility.Collapsed
+    End Sub
+    Private Sub ModifyEnterAnimControl(ControlList As List(Of FrameworkElement)) Handles Me.ModifyEnterAnimControls
+        If PageState = PageStates.ContentEnter AndAlso CardPages.Visibility <> Visibility.Visible Then
+            ControlList.Add(CardPages)
+        End If
+    End Sub
+    Private Sub ModifyExitAnimControl(ControlList As List(Of FrameworkElement)) Handles Me.ModifyExitAnimControls
+        If ShouldCardPagesExit AndAlso PageState = PageStates.ContentExit Then
+            ShouldCardPagesExit = False
+            ControlList.Add(CardPages)
+        ElseIf PageState = PageStates.PageExit Then
+            ControlList.Add(CardPages)
+        End If
     End Sub
 
     '切换页码
 
     Private Sub BtnPageFirst_Click(sender As Object, e As RoutedEventArgs) Handles BtnPageFirst.Click
+        If PageState <> PageStates.ContentStay OrElse Loader.State <> LoadState.Finished Then Exit Sub
         ChangePage(0)
     End Sub
     Private Sub BtnPageLeft_Click(sender As Object, e As RoutedEventArgs) Handles BtnPageLeft.Click
+        If PageState <> PageStates.ContentStay OrElse Loader.State <> LoadState.Finished Then Exit Sub
         ChangePage(Page - 1)
     End Sub
     Private Sub BtnPageRight_Click(sender As Object, e As RoutedEventArgs) Handles BtnPageRight.Click
+        If PageState <> PageStates.ContentStay OrElse Loader.State <> LoadState.Finished Then Exit Sub
         ChangePage(Page + 1)
     End Sub
     Private Sub ChangePage(NewPage As Integer)
-        CardPages.IsEnabled = False
         Page = NewPage
         FrmMain.BackToTop()
         Log($"[Download] Mod 切换到第 {Page + 1} 页")
@@ -123,7 +140,10 @@
     '搜索按钮
     Private Sub StartNewSearch() Handles BtnSearchRun.Click
         Page = 0
-        If Loader.ShouldStart(LoaderInput()) Then Storage = New CompProjectStorage '避免连续搜索两次使得 CompProjectStorage 引用丢失（#1311）
+        If Loader.ShouldStart(LoaderInput()) Then
+            ShouldCardPagesExit = True
+            Storage = New CompProjectStorage '避免连续搜索两次使得 CompProjectStorage 引用丢失（#1311）
+        End If
         Loader.Start()
     End Sub
     Private Sub EnterTrigger(sender As Object, e As KeyEventArgs) Handles TextSearchName.KeyDown, TextSearchVersion.KeyDown

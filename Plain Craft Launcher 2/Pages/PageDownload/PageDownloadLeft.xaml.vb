@@ -115,6 +115,7 @@
                 If FrmDownloadMod IsNot Nothing Then
                     FrmDownloadMod.Storage = New CompProjectStorage
                     FrmDownloadMod.Page = 0
+                    FrmDownloadMod.ShouldCardPagesExit = True
                     FrmDownloadMod.PageLoaderRestart()
                 End If
                 ItemMod.Checked = True
@@ -124,6 +125,7 @@
                 If FrmDownloadPack IsNot Nothing Then
                     FrmDownloadPack.Storage = New CompProjectStorage
                     FrmDownloadPack.Page = 0
+                    FrmDownloadPack.ShouldCardPagesExit = True
                     FrmDownloadPack.PageLoaderRestart()
                 End If
                 ItemPack.Checked = True
