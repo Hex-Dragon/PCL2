@@ -31,6 +31,8 @@
             '页码
             ShouldCardPagesExit = False
             LabPage.Text = Page + 1
+            BtnPageLeft.Tag = Page - 1
+            BtnPageRight.Tag = Page + 1
             BtnPageFirst.IsEnabled = Page > 1
             BtnPageLeft.IsEnabled = Page > 0
             BtnPageRight.IsEnabled = Storage.Results.Count > PageSize * (Page + 1) OrElse
@@ -76,20 +78,16 @@
     End Sub
 
     '切换页码
-
-    Private Sub BtnPageFirst_Click(sender As Object, e As RoutedEventArgs) Handles BtnPageFirst.Click
-        If PageState <> PageStates.ContentStay OrElse Loader.State <> LoadState.Finished Then Exit Sub
-        ChangePage(0)
-    End Sub
-    Private Sub BtnPageLeft_Click(sender As Object, e As RoutedEventArgs) Handles BtnPageLeft.Click
-        If PageState <> PageStates.ContentStay OrElse Loader.State <> LoadState.Finished Then Exit Sub
-        ChangePage(Page - 1)
-    End Sub
-    Private Sub BtnPageRight_Click(sender As Object, e As RoutedEventArgs) Handles BtnPageRight.Click
-        If PageState <> PageStates.ContentStay OrElse Loader.State <> LoadState.Finished Then Exit Sub
-        ChangePage(Page + 1)
-    End Sub
-    Private Sub ChangePage(NewPage As Integer)
+    Private Sub ChangePageOnClickButton(sender As Object, e As EventArgs) Handles BtnPageFirst.Click, BtnPageLeft.Click, BtnPageRight.Click
+        If Loader.State <> LoadState.Finished Then Exit Sub
+        Dim NewPage As Integer
+        Try
+            NewPage = CType(sender, FrameworkElement).Tag
+        Catch ex As Exception
+            Log(ex, "整合包下载页面翻页按钮点击处理失败", LogLevel.Feedback)
+            Exit Sub
+        End Try
+        If NewPage = Page Then Exit Sub
         Page = NewPage
         FrmMain.BackToTop()
         Log($"[Download] 整合包切换到第 {Page + 1} 页")
