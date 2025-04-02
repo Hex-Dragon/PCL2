@@ -738,7 +738,7 @@ Recheck:
                     Case Else '根据 API 进行筛选
                         Dim RealJson As String = If(JsonObject, JsonText).ToString
                         '愚人节与快照版本
-                        If If(JsonObject("type"), "").ToString = "fool" OrElse GetMcFoolName(Version.McName) <> "" Then
+                        If If(JsonObject("type"), "").ToString = "fool" OrElse GetMcFoolName(Version.McName, Me.ReleaseTime.ToString.Split(" ")(0)) <> "" Then
                             State = McVersionState.Fool
                         ElseIf Version.McName.ContainsF("w", True) OrElse Name.ContainsF("combat", True) OrElse Version.McName.ContainsF("rc", True) OrElse Version.McName.ContainsF("pre", True) OrElse Version.McName.ContainsF("experimental", True) OrElse If(JsonObject("type"), "").ToString = "snapshot" OrElse If(JsonObject("type"), "").ToString = "pending" Then
                             State = McVersionState.Snapshot
@@ -859,7 +859,7 @@ ExitDataLoad:
                 Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.OptiFine, McVersionState.LiteLoader
                     Info = Version.ToString
                 Case McVersionState.Fool
-                    Info = GetMcFoolName(Version.McName)
+                    Info = GetMcFoolName(Version.McName, Me.ReleaseTime.ToString.Split(" ")(0))
                 Case McVersionState.Error
                     Return Me.Info '已有错误信息
                 Case Else
@@ -1080,6 +1080,10 @@ ExitDataLoad:
             Return "2023 | 研究表明：玩家喜欢作出选择——越多越好！"
         ElseIf Name = "24w14potato" Then
             Return "2024 | 毒马铃薯一直都被大家忽视和低估，于是我们超级加强了它！"
+        ElseIf ReleaseTime IsNot Nothing Then
+            Dim Time = ReleaseTime.Split("-")
+            If Time(1) = "04" AndAlso Time(2) = "01" Then Return $"{Time(0)} | 愚人节版本"
+            Return ""
         Else
             Return ""
         End If
