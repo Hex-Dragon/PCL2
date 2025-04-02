@@ -1080,6 +1080,8 @@ ExitDataLoad:
             Return "2023 | 研究表明：玩家喜欢作出选择——越多越好！"
         ElseIf Name = "24w14potato" Then
             Return "2024 | 毒马铃薯一直都被大家忽视和低估，于是我们超级加强了它！"
+        ElseIf Name = "25w14craftmine" Then
+            Return "2025 | 扼杀创造力并不是一件好事，所以我们决定给你机会来创造一切！"
         Else
             Return ""
         End If
