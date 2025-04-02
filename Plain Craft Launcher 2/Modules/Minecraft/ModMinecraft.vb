@@ -738,7 +738,7 @@ Recheck:
                     Case Else '根据 API 进行筛选
                         Dim RealJson As String = If(JsonObject, JsonText).ToString
                         '愚人节与快照版本
-                        If If(JsonObject("type"), "").ToString = "fool" OrElse GetMcFoolName(Version.McName, Me.ReleaseTime.ToString.Split(" ")(0)) <> "" Then
+                        If If(JsonObject("type"), "").ToString = "fool" OrElse GetMcFoolName(Version.McName, Me.ReleaseTime.ToString("yyyy/M/d")) <> "" Then
                             State = McVersionState.Fool
                         ElseIf Version.McName.ContainsF("w", True) OrElse Name.ContainsF("combat", True) OrElse Version.McName.ContainsF("rc", True) OrElse Version.McName.ContainsF("pre", True) OrElse Version.McName.ContainsF("experimental", True) OrElse If(JsonObject("type"), "").ToString = "snapshot" OrElse If(JsonObject("type"), "").ToString = "pending" Then
                             State = McVersionState.Snapshot
