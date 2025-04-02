@@ -627,7 +627,7 @@
                                           ".html", UseBrowserUserAgent:=True)
         Catch ex As Exception
             If GetExceptionSummary(ex).Contains("(404)") Then
-                Throw New Exception("没有可用版本")
+                Throw New Exception("不可用")
             Else
                 Throw
             End If
@@ -685,7 +685,7 @@
         Catch ex As Exception
             Throw New Exception("Forge 官方源版本列表解析失败（" & Result & "）", ex)
         End Try
-        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("不可用")
         Loader.Output = Versions
     End Sub
 
@@ -740,7 +740,7 @@
         Catch ex As Exception
             Throw New Exception("Forge BMCLAPI 版本列表解析失败（" & Json.ToString & "）", ex)
         End Try
-        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("不可用")
         Loader.Output = Versions
     End Sub
 
@@ -865,7 +865,7 @@
         Dim Versions = VersionNames.
             Where(Function(name) name <> "47.1.82"). '这个版本虽然在版本列表中，但不能下载
             Select(Function(name) New DlNeoForgeListEntry(name)).ToList
-        If Not Versions.Any() Then Throw New Exception("没有可用版本")
+        If Not Versions.Any() Then Throw New Exception("不可用")
         Versions = Versions.OrderByDescending(Function(a) a.Version).ToList
         Return Versions
     End Function
@@ -1276,7 +1276,7 @@
                     For ii = 0 To LoaderList.Count - 1
                         LoaderList(ii).Key.Input = Nothing '重置输入，以免以同样的输入“重试加载”时直接失败
                         If LoaderList(ii).Key.Error IsNot Nothing Then
-                            If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains("没有可用版本") Then
+                            If ErrorInfo Is Nothing OrElse LoaderList(ii).Key.Error.Message.Contains("不可用") Then
                                 ErrorInfo = LoaderList(ii).Key.Error
                             End If
                         End If
