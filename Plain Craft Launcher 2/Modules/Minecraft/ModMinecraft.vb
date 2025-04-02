@@ -1062,7 +1062,7 @@ ExitDataLoad:
     ''' <summary>
     ''' 根据版本名获取对应的愚人节版本描述。非愚人节版本会返回空字符串。
     ''' </summary>
-    Public Function GetMcFoolName(Name As String) As String
+    Public Function GetMcFoolName(Name As String, Optional ReleaseTime As String = Nothing) As String
         Name = Name.ToLower
         If Name.StartsWithF("2.0") Then
             Return "2013 | 这个秘密计划了两年的更新将游戏推向了一个新高度！"
