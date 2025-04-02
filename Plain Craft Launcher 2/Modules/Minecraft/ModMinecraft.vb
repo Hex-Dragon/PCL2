@@ -1080,10 +1080,8 @@ ExitDataLoad:
             Return "2023 | 研究表明：玩家喜欢作出选择——越多越好！"
         ElseIf Name = "24w14potato" Then
             Return "2024 | 毒马铃薯一直都被大家忽视和低估，于是我们超级加强了它！"
-        ElseIf ReleaseTime IsNot Nothing Then
-            Dim Time = ReleaseTime.Split("-")
-            If Time(1) = "04" AndAlso Time(2) = "01" Then Return $"{Time(0)} | 愚人节版本"
-            Return ""
+        ElseIf ReleaseTime?.Contains("/4/1") Then
+            Return $"{ReleaseTime.Split("/4/1")(0)} | 愚人节版本"
         Else
             Return ""
         End If
