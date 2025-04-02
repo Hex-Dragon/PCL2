@@ -859,7 +859,7 @@ ExitDataLoad:
                 Case McVersionState.Original, McVersionState.Forge, McVersionState.NeoForge, McVersionState.Fabric, McVersionState.OptiFine, McVersionState.LiteLoader
                     Info = Version.ToString
                 Case McVersionState.Fool
-                    Info = GetMcFoolName(Version.McName, Me.ReleaseTime.ToString.Split(" ")(0))
+                    Info = GetMcFoolName(Version.McName, Me.ReleaseTime.ToString("yyyy/M/d"))
                 Case McVersionState.Error
                     Return Me.Info '已有错误信息
                 Case Else
