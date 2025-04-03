@@ -613,7 +613,7 @@ pause"
             Log("[Download] 检测为新版 OptiFine：" & DownloadInfo.Inherit)
             Loaders.Add(New LoaderTask(Of List(Of NetFile), Boolean)("安装 OptiFine（方式 A）",
             Sub(Task As LoaderTask(Of List(Of NetFile), Boolean))
-                Dim BaseMcFolderHome As String = BaseMcFolderHome.TrimEnd("\")
+                Dim BaseMcFolderHome As String = RequestTaskTempFolder().TrimEnd("\")
                 Dim BaseMcFolder As String = BaseMcFolderHome & "\.minecraft\"
                 Try
                     '准备安装环境
