@@ -5,6 +5,20 @@
     Private ReadOnly MainGrid As Grid
     Public ReadOnly Property MainChrome As SystemDropShadowChrome
     Private ReadOnly MainBorder As Border
+    '图标
+    Private _icon As ImageSource
+    Public Property Icon As ImageSource
+        Get
+            Return _icon
+        End Get
+        Set(value As ImageSource)
+            _icon = value
+            If _iconImage IsNot Nothing Then
+                _iconImage.Source = value
+            End If
+        End Set
+    End Property
+    Private _iconImage As Image
     Public Property BorderChild As UIElement
         Get
             Return MainBorder.Child
@@ -75,9 +89,21 @@
     Private Sub Init() Handles Me.Loaded
         If IsLoad Then Exit Sub
         IsLoad = True
+        '图标
+        If Icon IsNot Nothing Then
+            _iconImage = New Image() With {
+                .Source = Icon,
+                .HorizontalAlignment = HorizontalAlignment.Left,
+                .VerticalAlignment = VerticalAlignment.Top,
+                .Margin = New Thickness(15, 12, 5, 0),
+                .Width = 16,
+                .Height = 16
+            }
+            MainGrid.Children.Add(_iconImage)
+        End If
         '初次加载限定
         If MainTextBlock Is Nothing Then
-            MainTextBlock = New TextBlock With {.HorizontalAlignment = HorizontalAlignment.Left, .VerticalAlignment = VerticalAlignment.Top, .Margin = New Thickness(15, 12, 0, 0), .FontWeight = FontWeights.Bold, .FontSize = 13, .IsHitTestVisible = False}
+            MainTextBlock = New TextBlock With {.HorizontalAlignment = HorizontalAlignment.Left, .VerticalAlignment = VerticalAlignment.Top, .Margin = New Thickness(35, 12, 0, 0), .FontWeight = FontWeights.Bold, .FontSize = 13, .IsHitTestVisible = False}
             MainTextBlock.SetResourceReference(TextBlock.ForegroundProperty, "ColorBrush1")
             MainTextBlock.SetBinding(TextBlock.TextProperty, New Binding("Title") With {.Source = Me, .Mode = BindingMode.OneWay})
             MainGrid.Children.Add(MainTextBlock)
