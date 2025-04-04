@@ -1,0 +1,73 @@
+name: PR Automation
+
+on:
+  pull_request:
+    types: [closed, reopened, opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  handle_pr_events:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update labels on merge
+        if: github.event.action == 'closed' && github.event.pull_request.merged
+        uses: actions/github-script@v7
+        env:
+          BOT_TOKEN: ${{ secrets.BOT }}
+        with:
+          script: |
+            const labelsToRemove = ['⭕ 等待处理', '🚧 正在处理', '🕑 等待合并', '🕑 等待前置'];
+            for (const label of labelsToRemove) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  name: label
+                });
+              } catch (error) {}
+            }
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['👌 完成']
+            });
+
+      - name: Clean labels on reopen
+        if: github.event.action == 'reopened'
+        uses: actions/github-script@v7
+        env:
+          BOT_TOKEN: ${{ secrets.BOT }}
+        with:
+          script: |
+            const labelsToRemove = ['❌ 忽略','❌ 拒绝 / 放弃','❌ 暂无计划','❌ 第三方','⭕ 等待处理','❌ 重复'];
+            for (const label of labelsToRemove) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  name: label
+                });
+              } catch (error) {}
+            }
+
+      - name: Request team review
+        if: github.event.action == 'opened'
+        uses: actions/github-script@v7
+        env:
+          BOT_TOKEN: ${{ secrets.BOT }}
+        with:
+          script: |
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.issue.number,
+                team_reviewers: ['developers']
+              });
+            } catch (error) {}
