@@ -58,6 +58,7 @@
             End If
             If TargetName IsNot Nothing Then
                 FrmDownloadMod.TextSearchName.Text = TargetName
+                TargetName = Nothing
             End If
             With Request
                 .SearchText = FrmDownloadMod.TextSearchName.Text
