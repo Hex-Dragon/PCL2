@@ -90,11 +90,7 @@
             Case GameLogLevel.Debug
                 Return GetColorBrush("ColorBrushDebug")
             Case GameLogLevel.Info
-                If IsDarkMode Then
-                    Return GetColorBrush("ColorBrushInfoDark")
-                Else
-                    Return GetColorBrush("ColorBrushInfo")
-                End If
+                GetColorBrush(If(IsDarkMode, "ColorBrushInfoDark", "ColorBrushInfo"))
             Case GameLogLevel.Warn
                 Return GetColorBrush("ColorBrushWarn")
             Case GameLogLevel.Error
@@ -102,7 +98,7 @@
             Case GameLogLevel.Fatal
                 Return GetColorBrush("ColorBrushFatal")
         End Select
-        Return GetColorBrush("ColorBrushInfo")
+        Return GetColorBrush(If(IsDarkMode, "ColorBrushInfoDark", "ColorBrushInfo"))
     End Function
 
     '对单个进程的监视
