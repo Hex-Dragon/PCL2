@@ -5,6 +5,10 @@
     ''' 在切换到该页面时自动设置的目标版本。
     ''' </summary>
     Public Shared TargetVersion As McVersion = Nothing
+    ''' <summary>
+    ''' 在切换到该页面时自动设置的搜索框内的内容。
+    ''' </summary>
+    Public Shared TargetName As String = Nothing
 
     '加载器信息
     Public Shared Loader As New LoaderTask(Of CompProjectRequest, Integer)("CompProject Mod", AddressOf CompProjectsGet, AddressOf LoaderInput) With {.ReloadTimeout = 60 * 1000}
@@ -51,6 +55,9 @@
             If GameVersion IsNot Nothing AndAlso GameVersion.Contains(".") AndAlso Val(GameVersion.Split(".")(1)) < 14 AndAlso '1.14-
                 ModLoader = CompModLoaderType.Forge Then '选择了 Forge
                 ModLoader = CompModLoaderType.Any '此时，视作没有筛选 Mod Loader（因为部分老 Mod 没有设置自己支持的加载器）
+            End If
+            If TargetName IsNot Nothing Then
+                FrmDownloadMod.TextSearchName.Text = TargetName
             End If
             With Request
                 .SearchText = FrmDownloadMod.TextSearchName.Text
