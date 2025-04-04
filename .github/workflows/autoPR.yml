@@ -4,10 +4,6 @@ on:
   pull_request:
     types: [closed, reopened, opened]
 
-permissions:
-  issues: write
-  pull-requests: write
-
 jobs:
   handle_pr_events:
     runs-on: ubuntu-latest
