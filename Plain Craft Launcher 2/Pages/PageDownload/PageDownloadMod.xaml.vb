@@ -36,6 +36,11 @@
                 ComboSearchLoader.SelectedItem = GetTargetItemByName("NeoForge")
             End If
             TargetVersion = Nothing
+            If TargetName IsNot Nothing Then
+                '设置搜索框内容
+                TextSearchName.Text = TargetName
+                TargetName = Nothing
+            End If
             '如果已经完成请求，则重新开始
             If IsLoaderInited Then StartNewSearch()
             PanScroll.ScrollToHome()
