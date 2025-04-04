@@ -532,6 +532,8 @@ Public Class FormMain
         End If
         '关闭 EasyTier 联机
         If ModLink.IsETRunning Then ModLink.ExitEasyTier()
+        '存储上次使用的档案编号
+        PageLoginProfile.WriteProfileJson()
         '关闭
         RunInUiWait(
         Sub()

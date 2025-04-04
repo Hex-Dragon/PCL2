@@ -8,16 +8,16 @@
         CheckRemember.Checked = Setup.Get("LoginRemember")
         If KeepInput AndAlso Not IsFirstLoad Then '避免第一次就以 KeepInput 的方式加载，导致文本框里没东西
             '保留输入，只刷新下拉框列表
-            Dim Input As String = ComboName.Text
-            ComboName.ItemsSource = If(Setup.Get("LoginAuthEmail") = "", Nothing, Setup.Get("LoginAuthEmail").ToString.Split("¨"))
-            ComboName.Text = Input
+            Dim Input As String = TextName.Text
+            TextName.Text = If(Setup.Get("LoginAuthEmail") = "", Nothing, Setup.Get("LoginAuthEmail").ToString.Split("¨")(0))
+            TextName.Text = Input
         Else
             '不保留输入，刷新列表后自动选择第一项
             If Setup.Get("LoginAuthEmail") = "" Then
-                ComboName.ItemsSource = Nothing
+                TextName.Text = Nothing
             Else
-                ComboName.ItemsSource = Setup.Get("LoginAuthEmail").ToString.Split("¨")
-                ComboName.Text = Setup.Get("LoginAuthEmail").ToString.BeforeFirst("¨")
+                TextName.Text = Setup.Get("LoginAuthEmail").ToString.Split("¨")(0)
+                TextName.Text = Setup.Get("LoginAuthEmail").ToString.BeforeFirst("¨")
                 If Setup.Get("LoginRemember") Then TextPass.Password = Setup.Get("LoginAuthPass").ToString.BeforeFirst("¨").Trim
             End If
         End If
@@ -31,7 +31,7 @@
         If FrmLoginAuth Is Nothing Then
             Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = Server, .UserName = "", .Password = "", .Description = "Authlib-Injector", .Type = McLoginType.Auth}
         Else
-            Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = Server, .UserName = FrmLoginAuth.ComboName.Text.Replace("¨", "").Trim, .Password = FrmLoginAuth.TextPass.Password.Replace("¨", "").Trim, .Description = "Authlib-Injector", .Type = McLoginType.Auth}
+            Return New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = Server, .UserName = FrmLoginAuth.TextName.Text.Replace("¨", "").Trim, .Password = FrmLoginAuth.TextPass.Password.Replace("¨", "").Trim, .Description = "Authlib-Injector", .Type = McLoginType.Auth}
         End If
     End Function
     ''' <summary>
@@ -48,27 +48,58 @@
     End Function
 
     '保存输入信息
-    Private Sub ComboName_TextChanged(sender As Object, e As TextChangedEventArgs) Handles ComboName.TextChanged
+    Private Sub TextName_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextName.TextChanged
         If sender.Text = "" Then TextPass.Password = ""
         If AniControlEnabled = 0 Then Setup.Set("CacheAuthAccess", "")  '迫使其不进行 Validate
     End Sub
     Private Sub TextPass_PasswordChanged(sender As Object, e As RoutedEventArgs) Handles TextPass.PasswordChanged
         If AniControlEnabled = 0 Then Setup.Set("CacheAuthAccess", "")
     End Sub
-    Private Sub ComboName_SelectionChanged(sender As MyComboBox, e As SelectionChangedEventArgs) Handles ComboName.SelectionChanged
-        If sender.SelectedIndex = -1 OrElse Not Setup.Get("LoginRemember") Then
-            TextPass.Password = ""
-        Else
-            TextPass.Password = Setup.Get("LoginAuthPass").ToString.Split("¨")(sender.SelectedIndex).Trim
-        End If
-    End Sub
     Private Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckRemember.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
-
+    Private Sub BtnLogin_Click(sender As Object, e As EventArgs) Handles BtnLogin.Click
+        BtnLogin.IsEnabled = False
+        Dim LoginData As New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = If(TextServer.Text.EndsWithF("/"), TextServer.Text & "authserver", TextServer.Text & "/authserver"), .UserName = TextName.Text, .Password = TextPass.Password, .Description = "Authlib-Injector", .Type = McLoginType.Auth}
+        RunInNewThread(Sub()
+                           Try
+                               McLoginAuthLoader.Start(LoginData, IsForceRestart:=True)
+                               Do While McLoginAuthLoader.State = LoadState.Loading
+                                   RunInUi(Sub() BtnLogin.Text = Math.Round(McLoginAuthLoader.Progress * 100) & "%")
+                                   Thread.Sleep(50)
+                               Loop
+                               If McLoginAuthLoader.State = LoadState.Finished Then
+                                   RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
+                               ElseIf McLoginAuthLoader.State = LoadState.Aborted Then
+                                   Throw New ThreadInterruptedException
+                               ElseIf McLoginAuthLoader.Error Is Nothing Then
+                                   Throw New Exception("未知错误！")
+                               Else
+                                   Throw New Exception(McLoginAuthLoader.Error.Message, McLoginAuthLoader.Error)
+                               End If
+                           Catch ex As ThreadInterruptedException
+                               Hint("已取消登录！")
+                           Catch ex As Exception
+                               If ex.Message = "$$" Then
+                               ElseIf ex.Message.StartsWith("$") Then
+                                   Hint(ex.Message.TrimStart("$"), HintType.Critical)
+                               ElseIf TypeOf ex Is Security.Authentication.AuthenticationException AndAlso ex.Message.ContainsF("SSL/TLS") Then
+                                   Log(ex, "第三方登录验证失败，请考虑在 [设置 → 其他] 中关闭 [在正版登录时验证 SSL 证书]，然后再试。" & vbCrLf & vbCrLf & "原始错误信息：", LogLevel.Msgbox)
+                               Else
+                                   Log(ex, "第三方登录尝试失败", LogLevel.Msgbox)
+                               End If
+                           Finally
+                               RunInUi(
+                               Sub()
+                                   BtnLogin.IsEnabled = True
+                                   BtnLogin.Text = "登录"
+                               End Sub)
+                           End Try
+                       End Sub)
+    End Sub
     '链接处理
-    Private Sub ComboName_TextChanged() Handles ComboName.TextChanged
-        BtnLink.Content = If(ComboName.Text = "", "注册账号", "找回密码")
+    Private Sub ComboName_TextChanged() Handles TextName.TextChanged
+        BtnLink.Content = If(TextName.Text = "", "注册账号", "找回密码")
     End Sub
     Private Sub Btn_Click(sender As Object, e As EventArgs) Handles BtnLink.Click
         If BtnLink.Content = "注册账号" Then
@@ -83,5 +114,4 @@
         Dim Address As String = If(McVersionCurrent IsNot Nothing, Setup.Get("VersionServerAuthRegister", Version:=McVersionCurrent), Setup.Get("CacheAuthServerRegister"))
         BtnLink.Visibility = If(String.IsNullOrEmpty(New ValidateHttp().Validate(Address)), Visibility.Visible, Visibility.Collapsed)
     End Sub
-
 End Class

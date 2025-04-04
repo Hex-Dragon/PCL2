@@ -26,29 +26,7 @@
             <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
                 Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
                 Logo="pack://application:,,,/images/Blocks/Grass.png" />
-            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
-    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
-    Logo="pack://application:,,,/images/Blocks/Grass.png" />
-            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
-    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
-    Logo="pack://application:,,,/images/Blocks/Grass.png" />
-            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
-    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
-    Logo="pack://application:,,,/images/Blocks/Grass.png" />
-            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
-    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
-    Logo="pack://application:,,,/images/Blocks/Grass.png" />
-            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
-    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
-    Logo="pack://application:,,,/images/Blocks/Grass.png" />
-            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
-    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
-    Logo="pack://application:,,,/images/Blocks/Grass.png" />
-            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
-    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
-    Logo="pack://application:,,,/images/Blocks/Grass.png" />
         </StackPanel>
     </local:MyScrollViewer>
-    <local:MyButton x:Name="BtnTestRefresh" Grid.Row="2" Margin="0,12,0,0" Text="刷新" Height="28" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-    <local:MyButton x:Name="BtnNew" Grid.Row="3" Margin="0,12,0,0" Text="新增" Height="28" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+    <local:MyButton x:Name="BtnNew" Grid.Row="2" Margin="0,12,0,0" Text="新增" Height="28" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 </Grid>

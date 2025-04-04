@@ -362,14 +362,15 @@ UnknownType:
                 LabTypeOne.Text = If(McVersionCurrent Is Nothing, Setup.Get("CacheAuthServerName"), Setup.Get("VersionServerAuthName", Version:=McVersionCurrent))
                 If LabTypeOne.Text = "" Then LabTypeOne.Text = "第三方登录"
             Case 5 '档案
-                If Not PageLoginProfile.LastUsedProfile = Nothing Then
+                If PageLoginProfile.SelectedProfile IsNot Nothing Then
                     Type = PageType.ProfileSkin
+                    PanTypeOne.Visibility = Visibility.Hidden
                 Else
                     Type = PageType.Profile
+                    PanTypeOne.Visibility = Visibility.Visible
                 End If
                 PanType.Visibility = Visibility.Collapsed
-                PanTypeOne.Visibility = Visibility.Collapsed
-                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonCard)
+                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonUser)
                 LabTypeOne.Text = "档案管理"
             Case Else
                 Log("[Control] 未知的登录页面：" & LoginPageType, LogLevel.Hint)

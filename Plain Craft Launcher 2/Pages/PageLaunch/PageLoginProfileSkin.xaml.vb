@@ -1,7 +1,7 @@
 ﻿Class PageLoginProfileSkin
     Public Sub New()
         InitializeComponent()
-        Skin.Loader = PageLaunchLeft.SkinLegacy
+        'Skin.Loader = PageLaunchLeft.SkinLegacy
     End Sub
     Private Sub PageLoginProfile_Loaded() Handles Me.Loaded
         Skin.Loader.Start()
@@ -11,19 +11,26 @@
     ''' 刷新页面显示的所有信息。
     ''' </summary>
     Public Sub Reload(KeepInput As Boolean)
+        Log("[Profile] 刷新档案界面")
         SelectedProfile = PageLoginProfile.SelectedProfile
         If SelectedProfile("type").ToString = "offline" Then
+            Log("[Profile] 使用离线皮肤加载器")
             Skin.Loader = PageLaunchLeft.SkinLegacy
         ElseIf SelectedProfile("type").ToString = "microsoft" Then
+            Log("[Profile] 使用正版皮肤加载器")
             Skin.Loader = PageLaunchLeft.SkinMs
         ElseIf SelectedProfile("type").ToString = "authlib" Then
+            Log("[Profile] 使用 Authlib 皮肤加载器")
             Skin.Loader = PageLaunchLeft.SkinAuth
         Else
+            Log("[Profile] 使用离线皮肤加载器")
             Skin.Loader = PageLaunchLeft.SkinLegacy
         End If
+        Skin.Loader.WaitForExit(IsForceRestart:=True)
         TextName.Text = SelectedProfile("username").ToString
         TextType.Text = GetProfileInfo(SelectedProfile("type").ToString)
-        PageLoginProfile_Loaded()
+        Skin.Clear()
+        Skin.Loader.Start()
     End Sub
     Public Shared Function GetProfileInfo(Type As String, Optional Desc As String = Nothing)
         Dim Info As String = Nothing
@@ -39,6 +46,8 @@
     Private Sub ChangeProfile(sender As Object, e As EventArgs) Handles BtnSelect.Click
         '选择档案
         PageLoginProfile.IsProfileSelected = False
+        PageLoginProfile.SelectedProfile = Nothing
+        PageLoginProfile.LastUsedProfile = Nothing
         RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
     End Sub
     Private Sub PageLoginProfile_MouseEnter(sender As Object, e As MouseEventArgs) Handles PanData.MouseEnter

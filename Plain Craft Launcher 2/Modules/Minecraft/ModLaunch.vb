@@ -1,5 +1,4 @@
 Imports System.IO.Compression
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel
 Public Module ModLaunch
 
 #Region "开始"
@@ -524,6 +523,7 @@ NextInner:
     Private Sub McLoginMsStart(Data As LoaderTask(Of McLoginMs, McLoginResult))
         Dim Input As McLoginMs = Data.Input
         Dim LogUsername As String = Input.UserName
+        Dim IsNewProfile As String = True
         McLaunchLog("登录方式：正版（" & If(LogUsername = "", "尚未登录", LogUsername) & "）")
         Data.Progress = 0.05
         '检查是否已经登录完成
@@ -538,10 +538,12 @@ NextInner:
         Dim OAuthTokens As String()
         If Input.OAuthRefreshToken = "" Then
             '无 RefreshToken
+            IsNewProfile = True
 Relogin:
             OAuthTokens = MsLoginStep1New(Data)
         Else
             '有 RefreshToken
+            IsNewProfile = False
             OAuthTokens = MsLoginStep1Refresh(Input.OAuthRefreshToken)
             If OAuthTokens(0) = "Relogin" Then GoTo Relogin '要求重新打开登录网页认证
         End If
@@ -565,7 +567,8 @@ Relogin:
         Dim Result = MsLoginStep6(AccessToken)
         Data.Progress = 0.98
         '输出登录结果
-        Dim NewProfile = New JObject From {
+        If IsNewProfile Then
+            Dim NewProfile = New JObject From {
             {"type", "microsoft"},
             {"uuid", Result(0)},
             {"username", Result(1)},
@@ -573,8 +576,14 @@ Relogin:
             {"refreshToken", OAuthRefreshToken},
             {"expires", 114514},
             {"desc", ""}
-            }
-        PageLoginProfile.ProfileList.Add(NewProfile)
+        }
+            PageLoginProfile.ProfileList.Add(NewProfile)
+        Else
+            Dim ProfileIndex = PageLoginProfile.ProfileList.IndexOf(PageLoginProfile.SelectedProfile)
+            PageLoginProfile.ProfileList(ProfileIndex)("username") = Result(1)
+            PageLoginProfile.ProfileList(ProfileIndex)("accessToken") = AccessToken
+            PageLoginProfile.ProfileList(ProfileIndex)("refreshToken") = OAuthRefreshToken
+        End If
         PageLoginProfile.WriteProfileJson()
         Setup.Set("CacheMsV2OAuthRefresh", OAuthRefreshToken)
         Setup.Set("CacheMsV2Access", AccessToken)
@@ -722,12 +731,13 @@ LoginFinish:
         McLaunchLog("验证登录成功（Validate, " & Data.Input.Token & "）")
     End Sub
     Private Sub McLoginRequestRefresh(ByRef Data As LoaderTask(Of McLoginServer, McLoginResult), RequestUser As Boolean)
-        Dim RefreshInfo As JObject = New JObject
-        Dim SelectProfile As JObject = New JObject()
-        SelectProfile.Add(New JProperty("name", Setup.Get("Cache" & Data.Input.Token & "Name")))
-        SelectProfile.Add(New JProperty("id", Setup.Get("Cache" & Data.Input.Token & "Uuid")))
+        Dim RefreshInfo As New JObject
+        Dim SelectProfile As New JObject From {
+            {"name", PageLoginProfile.SelectedProfile("username")},
+            {"id", PageLoginProfile.SelectedProfile("uuid")}
+        }
         RefreshInfo.Add("selectedProfile", SelectProfile)
-        RefreshInfo.Add(New JProperty("accessToken", Setup.Get("Cache" & Data.Input.Token & "Access")))
+        RefreshInfo.Add(New JProperty("accessToken", PageLoginProfile.SelectedProfile("accessToken")))
         RefreshInfo.Add(New JProperty("requestUser", True))
 
 
@@ -746,6 +756,9 @@ LoginFinish:
         Data.Output.Name = LoginJson("selectedProfile")("name").ToString
         Data.Output.Type = Data.Input.Token
         '保存缓存
+        Dim ProfileIndex = PageLoginProfile.ProfileList.IndexOf(PageLoginProfile.SelectedProfile)
+        PageLoginProfile.ProfileList(ProfileIndex)("username") = Data.Output.Name
+        PageLoginProfile.ProfileList(ProfileIndex)("accessToken") = Data.Output.AccessToken
         Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
         Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
         Setup.Set("Cache" & Data.Input.Token & "Uuid", Data.Output.Uuid)
@@ -793,17 +806,18 @@ LoginFinish:
                 If SelectedName Is Nothing Then
                     McLaunchLog("要求玩家选择角色")
                     RunInUiWait(
-                    Sub()
-                        Dim SelectionControl As New List(Of IMyRadio)
-                        Dim SelectionJson As New List(Of JToken)
-                        For Each Profile In LoginJson("availableProfiles")
-                            SelectionControl.Add(New MyRadioBox With {.Text = Profile("name").ToString})
-                            SelectionJson.Add(Profile)
-                        Next
-                        Dim SelectedIndex As Integer = MyMsgBoxSelect(SelectionControl, "选择使用的角色")
-                        SelectedName = SelectionJson(SelectedIndex)("name").ToString
-                        SelectedId = SelectionJson(SelectedIndex)("id").ToString
-                    End Sub)
+                                            Sub()
+                                                Dim SelectionControl As New List(Of IMyRadio)
+                                                Dim SelectionJson As New List(Of JToken)
+                                                For Each Profile In LoginJson("availableProfiles")
+                                                    SelectionControl.Add(New MyRadioBox With {.Text = Profile("name").ToString})
+                                                    SelectionJson.Add(Profile)
+                                                Next
+                                                Dim SelectedIndex As Integer = MyMsgBoxSelect(SelectionControl, "选择使用的角色")
+                                                SelectedName = SelectionJson(SelectedIndex)("name").ToString
+                                                SelectedId = SelectionJson(SelectedIndex)("id").ToString
+                                            End Sub)
+
                     McLaunchLog("玩家选择的角色：" & SelectedName)
                 End If
             Else
@@ -816,7 +830,26 @@ LoginFinish:
             Data.Output.Name = SelectedName
             Data.Output.Uuid = SelectedId
             Data.Output.Type = Data.Input.Token
+            '获取服务器信息
+            Dim Response As String = NetGetCodeByRequestRetry(Data.Input.BaseUrl.Replace("/authserver", ""), Encoding.UTF8)
+            Dim ServerName As String = JObject.Parse(Response)("meta")("serverName").ToString()
             '保存缓存
+            Dim NewProfile As New JObject From {
+                {"type", "authlib"},
+                {"uuid", Data.Output.Uuid},
+                {"username", Data.Output.Name},
+                {"server", Data.Input.BaseUrl},
+                {"serverName", ServerName},
+                {"name", Data.Input.UserName},
+                {"password", Data.Input.Password},
+                {"accessToken", Data.Output.AccessToken},
+                {"clientToken", Data.Output.ClientToken},
+                {"expires", 114514},
+                {"desc", ""}
+            }
+            PageLoginProfile.ProfileList.Add(NewProfile)
+            PageLoginProfile.SelectedProfile = NewProfile
+            PageLoginProfile.WriteProfileJson()
             Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
             Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
             Setup.Set("Cache" & Data.Input.Token & "Uuid", Data.Output.Uuid)

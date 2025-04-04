@@ -247,8 +247,8 @@ WaitRetry:
                         FrmLoginNide.ComboName.Text = If(Dict.Keys.Any, Dict.Keys(0), "")
                         FrmLoginNide.TextPass.Password = If(Dict.Values.Any, Dict.Values(0), "")
                     Case "Auth"
-                        FrmLoginAuth.ComboName.ItemsSource = Dict.Keys
-                        FrmLoginAuth.ComboName.Text = If(Dict.Keys.Any, Dict.Keys(0), "")
+                        FrmLoginAuth.TextName.Text = Dict.Keys(0)
+                        FrmLoginAuth.TextName.Text = If(Dict.Keys.Any, Dict.Keys(0), "")
                         FrmLoginAuth.TextPass.Password = If(Dict.Values.Any, Dict.Values(0), "")
                 End Select
         End Select
