@@ -23,6 +23,10 @@
 同时需注意，社区版的版本号与主线并非严格对应关系。<br />
 欢迎大家来用用看！
 
-### 隐藏提示
+### ✨ 隐藏提示
 
 在注册表项中添加 `UiLauncherCEHint` 字符串值，值设置为 False 即可
+
+## ❤️ 贡献者
+
+[![](https://contrib.rocks/image?repo=PCL-Community/PCL2-CE)](https://github.com/PCL-Community/PCL2-CE/graphs/contributors)
