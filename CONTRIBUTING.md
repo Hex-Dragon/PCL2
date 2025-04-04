@@ -145,3 +145,7 @@ revert:<type>(<scope>): <subject>
 
 <footer>
 ```
+
+## 提交上游
+
+若你要将他人在 CE 中实现的功能或修复提交到上游，请用 Co-authored 来指明原始贡献者
