@@ -361,6 +361,12 @@
     <Compile Include="Pages\PageLaunch\MyMsgLogin.xaml.vb">
       <DependentUpon>MyMsgLogin.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\PageLaunch\PageLoginProfileSkin.xaml.vb">
+      <DependentUpon>PageLoginProfileSkin.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageLaunch\PageLoginProfile.xaml.vb">
+      <DependentUpon>PageLoginProfile.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PageLaunch\PageLoginAuth.xaml.vb">
       <DependentUpon>PageLoginAuth.xaml</DependentUpon>
     </Compile>
@@ -666,6 +672,14 @@
     <Page Include="Pages\PageLaunch\MyMsgLogin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageLaunch\PageLoginProfileSkin.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PageLaunch\PageLoginProfile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\PageLaunch\PageLoginAuth.xaml">
       <Generator>MSBuild:Compile</Generator>

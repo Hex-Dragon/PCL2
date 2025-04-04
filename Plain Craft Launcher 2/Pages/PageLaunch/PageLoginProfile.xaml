@@ -1,0 +1,54 @@
+﻿<Grid x:Class="PageLoginProfile" Tag="False"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PCL"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="10" />
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <local:MyScrollViewer MaxHeight="296" Margin="10,0,10,0">
+        <StackPanel x:Name="StackProfile">
+            <local:MyListItem Title="LTCat" Info="离线验证 / 当前选择"
+                Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
+                Logo="pack://application:,,,/images/Blocks/Grass.png" />
+            <local:MyListItem Title="PigeonA0v0" Info="正版验证"
+                Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
+                Logo="pack://application:,,,/images/Blocks/Grass.png" />
+            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
+                Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
+                Logo="pack://application:,,,/images/Blocks/Grass.png" />
+            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
+    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
+    Logo="pack://application:,,,/images/Blocks/Grass.png" />
+            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
+    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
+    Logo="pack://application:,,,/images/Blocks/Grass.png" />
+            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
+    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
+    Logo="pack://application:,,,/images/Blocks/Grass.png" />
+            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
+    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
+    Logo="pack://application:,,,/images/Blocks/Grass.png" />
+            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
+    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
+    Logo="pack://application:,,,/images/Blocks/Grass.png" />
+            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
+    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
+    Logo="pack://application:,,,/images/Blocks/Grass.png" />
+            <local:MyListItem Title="wuliaodexiaoluo" Info="第三方验证 / LittleSkin"
+    Type="Clickable" EventType="打开网页" EventData="https://www.bilibili.com/video/BV1GJ411x7h7"
+    Logo="pack://application:,,,/images/Blocks/Grass.png" />
+        </StackPanel>
+    </local:MyScrollViewer>
+    <local:MyButton x:Name="BtnTestRefresh" Grid.Row="2" Margin="0,12,0,0" Text="刷新" Height="28" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+    <local:MyButton x:Name="BtnNew" Grid.Row="3" Margin="0,12,0,0" Text="新增" Height="28" Width="100" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+</Grid>

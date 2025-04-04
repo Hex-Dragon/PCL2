@@ -186,6 +186,8 @@
         AuthSkin
         Ms
         MsSkin
+        Profile
+        ProfileSkin
     End Enum
     ''' <summary>
     ''' 当前页面的种类。
@@ -215,6 +217,12 @@
             Case PageType.MsSkin
                 If IsNothing(FrmLoginMsSkin) Then FrmLoginMsSkin = New PageLoginMsSkin
                 Return FrmLoginMsSkin
+            Case PageType.Profile
+                If IsNothing(FrmLoginProfile) Then FrmLoginProfile = New PageLoginProfile
+                Return FrmLoginProfile
+            Case PageType.ProfileSkin
+                If IsNothing(FrmLoginProfileSkin) Then FrmLoginProfileSkin = New PageLoginProfileSkin
+                Return FrmLoginProfileSkin
             Case Else
                 Throw New ArgumentOutOfRangeException("Type", "即将切换的登录分页编号越界")
         End Select
@@ -272,7 +280,16 @@
     ''' <summary>
     ''' 确认当前显示的子页面正确，并刷新该页面。
     ''' </summary>
-    Public Sub RefreshPage(KeepInput As Boolean, Anim As Boolean)
+    Public Sub RefreshPage(KeepInput As Boolean, Anim As Boolean, Optional IsLogin As Boolean = False, Optional TargetLoginType As String = Nothing)
+        If IsLogin Then
+            Dim TargetLoginPage As PageType
+            If TargetLoginType = "microsoft" Then TargetLoginPage = PageType.Ms
+            If TargetLoginType = "authlib" Then TargetLoginPage = PageType.Auth
+            If TargetLoginType = "offline" Then TargetLoginPage = PageType.Legacy
+            If PageCurrent = TargetLoginPage Then Exit Sub
+            PageChange(TargetLoginPage, Anim).Reload(KeepInput)
+            Exit Sub
+        End If
         '获取页面的可用种类并回写缓存
         Dim Type As PageType
         Dim LoginPageType As Integer
@@ -344,6 +361,16 @@ UnknownType:
                 PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonCard)
                 LabTypeOne.Text = If(McVersionCurrent Is Nothing, Setup.Get("CacheAuthServerName"), Setup.Get("VersionServerAuthName", Version:=McVersionCurrent))
                 If LabTypeOne.Text = "" Then LabTypeOne.Text = "第三方登录"
+            Case 5 '档案
+                If Not PageLoginProfile.LastUsedProfile = Nothing Then
+                    Type = PageType.ProfileSkin
+                Else
+                    Type = PageType.Profile
+                End If
+                PanType.Visibility = Visibility.Collapsed
+                PanTypeOne.Visibility = Visibility.Collapsed
+                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonCard)
+                LabTypeOne.Text = "档案管理"
             Case Else
                 Log("[Control] 未知的登录页面：" & LoginPageType, LogLevel.Hint)
                 GoTo UnknownType
@@ -375,6 +402,10 @@ UnknownType:
         '获取 Url
         Dim UserName As String = Data.Input(0)
         Dim Uuid As String = Data.Input(1)
+        If PageLoginProfileSkin.SelectedProfile IsNot Nothing Then
+            UserName = PageLoginProfileSkin.SelectedProfile("username").ToString
+            Uuid = PageLoginProfileSkin.SelectedProfile("uuid").ToString
+        End If
         If UserName = "" Then
             Data.Output = PathImage & "Skins/" & McSkinSex(McLoginLegacyUuid(UserName)) & ".png"
             Log("[Minecraft] 获取微软正版皮肤失败，ID 为空")
@@ -405,6 +436,8 @@ Finish:
         '刷新显示
         If FrmLoginMsSkin IsNot Nothing Then
             RunInUi(AddressOf FrmLoginMsSkin.Skin.Load)
+        ElseIf FrmLoginProfileSkin IsNot Nothing Then
+            RunInUi(AddressOf FrmLoginProfileSkin.Skin.Load)
         ElseIf Not Data.IsAborted Then '如果已经中断，Input 也被清空，就不会再次刷新
             Data.Input = Nothing '清空输入，因为皮肤实际上没有被渲染，如果不清空切换到页面的 Start 会由于输入相同而不渲染
         End If
@@ -479,6 +512,8 @@ UseDefault:
         '刷新显示
         If FrmLoginLegacy IsNot Nothing Then
             RunInUi(AddressOf FrmLoginLegacy.Skin.Load)
+        ElseIf FrmLoginProfileSkin IsNot Nothing Then
+            RunInUi(AddressOf FrmLoginProfileSkin.Skin.Load)
         ElseIf Not Data.IsAborted Then '如果已经中断，Input 也被清空，就不会再次刷新
             Data.Input = Nothing '清空输入，因为皮肤实际上没有被渲染，如果不清空切换到页面的 Start 会由于输入相同而不渲染
         End If
@@ -575,6 +610,8 @@ Finish:
         '刷新显示
         If FrmLoginAuthSkin IsNot Nothing Then
             RunInUi(AddressOf FrmLoginAuthSkin.Skin.Load)
+        ElseIf FrmLoginProfileSkin IsNot Nothing Then
+            RunInUi(AddressOf FrmLoginProfileSkin.Skin.Load)
         ElseIf Not Data.IsAborted Then '如果已经中断，Input 也被清空，就不会再次刷新
             Data.Input = Nothing '清空输入，因为皮肤实际上没有被渲染，如果不清空切换到页面的 Start 会由于输入相同而不渲染
         End If

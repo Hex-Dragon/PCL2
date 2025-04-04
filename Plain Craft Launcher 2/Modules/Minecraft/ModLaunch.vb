@@ -1,4 +1,5 @@
 Imports System.IO.Compression
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel
 Public Module ModLaunch
 
 #Region "开始"
@@ -453,28 +454,32 @@ NextInner:
         Dim LoginData As McLoginData = Nothing
         Dim LoginType As McLoginType = Setup.Get("LoginType")
         Try
-            Select Case LoginType
-                Case McLoginType.Legacy
-                    LoginData = PageLoginLegacy.GetLoginData()
-                Case McLoginType.Ms
-                    If Setup.Get("CacheMsV2OAuthRefresh") = "" Then
-                        LoginData = PageLoginMs.GetLoginData()
-                    Else
-                        LoginData = PageLoginMsSkin.GetLoginData()
-                    End If
-                Case McLoginType.Nide
-                    If Setup.Get("CacheNideAccess") = "" Then
-                        LoginData = PageLoginNide.GetLoginData()
-                    Else
-                        LoginData = PageLoginNideSkin.GetLoginData()
-                    End If
-                Case McLoginType.Auth
-                    If Setup.Get("CacheAuthAccess") = "" Then
-                        LoginData = PageLoginAuth.GetLoginData()
-                    Else
-                        LoginData = PageLoginAuthSkin.GetLoginData()
-                    End If
-            End Select
+            If Setup.Get("VersionServerLogin", McVersionCurrent) = 5 Then
+                LoginData = PageLoginProfileSkin.GetLoginData()
+            Else
+                Select Case LoginType
+                    Case McLoginType.Legacy
+                        LoginData = PageLoginLegacy.GetLoginData()
+                    Case McLoginType.Ms
+                        If Setup.Get("CacheMsV2OAuthRefresh") = "" Then
+                            LoginData = PageLoginMs.GetLoginData()
+                        Else
+                            LoginData = PageLoginMsSkin.GetLoginData()
+                        End If
+                    Case McLoginType.Nide
+                        If Setup.Get("CacheNideAccess") = "" Then
+                            LoginData = PageLoginNide.GetLoginData()
+                        Else
+                            LoginData = PageLoginNideSkin.GetLoginData()
+                        End If
+                    Case McLoginType.Auth
+                        If Setup.Get("CacheAuthAccess") = "" Then
+                            LoginData = PageLoginAuth.GetLoginData()
+                        Else
+                            LoginData = PageLoginAuthSkin.GetLoginData()
+                        End If
+                End Select
+            End If
         Catch ex As Exception
             Log(ex, "获取登录输入信息失败（" & GetStringFromEnum(LoginType) & "）", LogLevel.Feedback)
         End Try
@@ -560,6 +565,17 @@ Relogin:
         Dim Result = MsLoginStep6(AccessToken)
         Data.Progress = 0.98
         '输出登录结果
+        Dim NewProfile = New JObject From {
+            {"type", "microsoft"},
+            {"uuid", Result(0)},
+            {"username", Result(1)},
+            {"accessToken", AccessToken},
+            {"refreshToken", OAuthRefreshToken},
+            {"expires", 114514},
+            {"desc", ""}
+            }
+        PageLoginProfile.ProfileList.Add(NewProfile)
+        PageLoginProfile.WriteProfileJson()
         Setup.Set("CacheMsV2OAuthRefresh", OAuthRefreshToken)
         Setup.Set("CacheMsV2Access", AccessToken)
         Setup.Set("CacheMsV2Uuid", Result(0))
