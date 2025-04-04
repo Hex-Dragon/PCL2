@@ -26,3 +26,7 @@
 ### 隐藏提示
 
 在注册表项中添加 `UiLauncherCEHint` 字符串值，值设置为 False 即可
+
+## 贡献者
+
+[![](https://contrib.rocks/image?repo=PCL-Community/PCL2-CE)](https://github.com/PCL-Community/PCL2-CE/graphs/contributors)
