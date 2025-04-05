@@ -150,6 +150,15 @@ Public Class MyLocalModItem
         Next
     End Sub
 
+    '在鼠标离开整个ModItem列表视图（即不悬停在任何一个ModItem上）时，取消划过状态以及启用CardSelect的命中 #5665
+    Private Sub Button_MouseLeaveModItems(sender As Object, e As Object) Handles Me.MouseLeave
+        If Parent Is Nothing Then Exit Sub
+        If Swiping AndAlso TypeOf Mouse.DirectlyOver IsNot MyLocalModItem Then
+            Swiping = False
+            FrmVersionMod.CardSelect.IsHitTestVisible = True
+        End If
+    End Sub
+
     '勾选状态
     Public Event Check(sender As Object, e As RouteEventArgs)
     Public Event Changed(sender As Object, e As RouteEventArgs)
