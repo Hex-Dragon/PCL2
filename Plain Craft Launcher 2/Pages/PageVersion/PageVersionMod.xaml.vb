@@ -381,6 +381,7 @@ Install:
     ''' </summary>
     Private Sub BtnManageDownload_Click(sender As Object, e As MouseButtonEventArgs) Handles BtnManageDownload.Click, BtnHintDownload.Click
         PageDownloadMod.TargetVersion = PageVersionLeft.Version '将当前版本设置为筛选器
+        PageDownloadMod.TargetName = SearchBox.Text '将当前搜索框内容设置为筛选器
         FrmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadMod)
     End Sub
 
