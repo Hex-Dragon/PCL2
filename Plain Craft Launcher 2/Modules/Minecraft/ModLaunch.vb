@@ -586,17 +586,23 @@ Relogin:
         Dim Result = MsLoginStep6(AccessToken)
         If Result(2) = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.98
+        For Each Profile In PageLoginProfile.ProfileList
+            If Profile("type") = "microsoft" AndAlso Profile("username") = Result(1) AndAlso Profile("uuid") = Result(0) Then
+                MyMsgBox("已经存在该档案，无需再次创建了哦.....", "档案已存在")
+                GoTo SkipLogin
+            End If
+        Next
         '输出登录结果
         If IsNewProfile Then
             Dim NewProfile = New JObject From {
-            {"type", "microsoft"},
-            {"uuid", Result(0)},
-            {"username", Result(1)},
-            {"accessToken", AccessToken},
-            {"refreshToken", OAuthRefreshToken},
-            {"expires", 114514},
-            {"desc", ""}
-        }
+                {"type", "microsoft"},
+                {"uuid", Result(0)},
+                {"username", Result(1)},
+                {"accessToken", AccessToken},
+                {"refreshToken", OAuthRefreshToken},
+                {"expires", 114514},
+                {"desc", ""}
+            }
             PageLoginProfile.ProfileList.Add(NewProfile)
         Else
             Dim ProfileIndex = PageLoginProfile.ProfileList.IndexOf(PageLoginProfile.SelectedProfile)
