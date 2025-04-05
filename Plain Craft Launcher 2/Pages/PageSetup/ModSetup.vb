@@ -234,7 +234,7 @@
                 Me.Value = Value
                 Me.Source = Source
                 Me.Type = If(Value, New Object).GetType
-                Me.DefaultValueEncoded = If(Encoded, SecretEncrypt(Value, "PCL" & UniqueAddress), Value)
+                Me.DefaultValueEncoded = If(Encoded, SecretEncrypt(Value), Value)
             Catch ex As Exception
                 Log(ex, "初始化 SetupEntry 失败", LogLevel.Feedback) '#5095 的 fallback
             End Try
@@ -265,7 +265,7 @@
             If E.Encoded Then
                 Try
                     If Value Is Nothing Then Value = ""
-                    Value = SecretEncrypt(Value, "PCL" & UniqueAddress)
+                    Value = SecretEncrypt(Value)
                 Catch ex As Exception
                     Log(ex, "加密设置失败：" & Key, LogLevel.Developer)
                 End Try
@@ -390,7 +390,7 @@
                     SourceValue = E.DefaultValue
                 Else
                     Try
-                        SourceValue = SecretDecrypt(SourceValue, "PCL" & UniqueAddress)
+                        SourceValue = SecretDecrypt(SourceValue)
                     Catch ex As Exception
                         Log(ex, "解密设置失败：" & Key, LogLevel.Developer)
                         SourceValue = E.DefaultValue
