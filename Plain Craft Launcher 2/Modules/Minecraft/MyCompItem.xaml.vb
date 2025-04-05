@@ -111,10 +111,10 @@
         Else
             Select Case CType(sender.Tag, CompProject).Type
                 Case CompType.Mod
-                    TargetVersion = If(PageDownloadMod.Loader.Input.GameVersion, "")
-                    TargetLoader = PageDownloadMod.Loader.Input.ModLoader
+                    TargetVersion = If(FrmDownloadMod?.Loader?.Input?.GameVersion, "")
+                    TargetLoader = If(FrmDownloadMod?.Loader?.Input?.ModLoader, CompModLoaderType.Any)
                 Case CompType.ModPack
-                    TargetVersion = If(PageDownloadPack.Loader.Input.GameVersion, "")
+                    TargetVersion = If(FrmDownloadPack?.Loader?.Input?.GameVersion, "")
                 Case Else 'CompType.ResourcePack
                     'FUTURE: Res
                     TargetVersion = "" 'If(PageDownloadResource.Loader.Input.GameVersion, "")

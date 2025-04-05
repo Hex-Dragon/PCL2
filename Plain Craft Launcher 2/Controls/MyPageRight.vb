@@ -183,6 +183,10 @@
     End Sub
     Public Event PageExit()
     ''' <summary>
+    ''' 在强制退出页面需要隐藏内容及加载器控件时调用
+    ''' </summary>
+    Protected Event HideControlsOnForceExit As Action
+    ''' <summary>
     ''' 即将切换到其他页面，需要强制完成页面状态清理。
     ''' 需要立即切换至 Empty。
     ''' </summary>
@@ -192,6 +196,7 @@
         PageState = PageStates.Empty
         AniStop("PageRight PageChange " & PageUuid)
         '由于动画会被强制中止，所以需要手动进行隐藏
+        RaiseEvent HideControlsOnForceExit()
         If PageLoader Is Nothing Then
             Child.Visibility = Visibility.Collapsed
         Else
@@ -337,13 +342,38 @@
 
 #Region "动画"
 
+    ''' <summary>
+    ''' 如果非空，将被当作控件在播放进入动画时的动画组名称（而不是使用PageRight PageChange ${PageUuid}）;
+    ''' 这可以解决PanAlways这样并非每次进入都会随之播放动画的控件的进入动画被打断后显示不正确的问题
+    ''' </summary>
+    Public Shared ReadOnly NonUnionAnimGroupProperty As DependencyProperty =
+        DependencyProperty.RegisterAttached("NonUnionAnimGroup", GetType(String), GetType(MyPageRight), New PropertyMetadata(Nothing))
+    Public Shared Function GetNonUnionAnimGroup(obj As DependencyObject) As String
+        Return obj.GetValue(NonUnionAnimGroupProperty)
+    End Function
+    Public Shared Sub SetNonUnionAnimGroup(obj As DependencyObject, value As String)
+        obj.SetValue(NonUnionAnimGroupProperty, value)
+    End Sub
+
+
+    ''' <summary>
+    ''' 获取需要播放进入动画的控件时调用
+    ''' </summary>
+    Protected Event ModifyEnterAnimControls As Action(Of List(Of FrameworkElement))
+    ''' <summary>
+    ''' 获取需要播放退出动画的控件时调用
+    ''' </summary>
+    Protected Event ModifyExitAnimControls As Action(Of List(Of FrameworkElement))
+
     '逐个进入动画
     Public Sub TriggerEnterAnimation(ParamArray Elements As FrameworkElement())
-        Dim RealElements = Elements.Where(Function(e) e IsNot Nothing)
+        Dim RealElements = Elements.Where(Function(e) e IsNot Nothing).ToList()
+        RaiseEvent ModifyEnterAnimControls(RealElements)
         For Each Element In RealElements
             Element.Visibility = Visibility.Visible '页面均处于默认的隐藏状态
         Next
         Dim AniList As New List(Of AniData)
+        Dim NonUnionAniGroups As Dictionary(Of String, List(Of AniData)) = Nothing
         Dim Delay As Integer = 0
         '基础动画
         For Each Element In RealElements
@@ -358,9 +388,20 @@
                 Else
                     Control.Opacity = 0
                     Control.RenderTransform = New TranslateTransform(0, -16)
-                    AniList.Add(AaOpacity(Control, 1, 150, Delay, New AniEaseOutFluent(AniEasePower.Weak)))
-                    AniList.Add(AaTranslateY(Control, 5, 250, Delay, New AniEaseOutFluent))
-                    AniList.Add(AaTranslateY(Control, 11, 350, Delay, New AniEaseOutBack))
+                    If GetNonUnionAnimGroup(Control) IsNot Nothing Then
+                        If NonUnionAniGroups Is Nothing Then
+                            NonUnionAniGroups = New Dictionary(Of String, List(Of AniData))
+                        End If
+                        NonUnionAniGroups.Add(GetNonUnionAnimGroup(Control), New List(Of AniData) From {
+                            AaOpacity(Control, 1, 150, Delay, New AniEaseOutFluent(AniEasePower.Weak)),
+                            AaTranslateY(Control, 5, 250, Delay, New AniEaseOutFluent),
+                            AaTranslateY(Control, 11, 350, Delay, New AniEaseOutBack)
+                        })
+                    Else
+                        AniList.Add(AaOpacity(Control, 1, 150, Delay, New AniEaseOutFluent(AniEasePower.Weak)))
+                        AniList.Add(AaTranslateY(Control, 5, 250, Delay, New AniEaseOutFluent))
+                        AniList.Add(AaTranslateY(Control, 11, 350, Delay, New AniEaseOutBack))
+                    End If
                     Delay += 40
                 End If
             Next
@@ -374,11 +415,17 @@
         '结束
         AniList.Add(AaCode(Sub() PageOnEnterAnimationFinished(),, True))
         AniStart(AniList, "PageRight PageChange " & PageUuid)
+        If NonUnionAniGroups IsNot Nothing Then
+            For Each NonUnionAniGroup In NonUnionAniGroups
+                AniStart(NonUnionAniGroup.Value, NonUnionAniGroup.Key)
+            Next
+        End If
     End Sub
 
     '逐个退出动画
     Public Sub TriggerExitAnimation(ParamArray Elements As FrameworkElement())
-        Dim RealElements = Elements.Where(Function(e) e IsNot Nothing)
+        Dim RealElements = Elements.Where(Function(e) e IsNot Nothing).ToList()
+        RaiseEvent ModifyExitAnimControls(RealElements)
         Dim AniList As New List(Of AniData)
         Dim Delay As Integer = 0
         For Each Element In RealElements
