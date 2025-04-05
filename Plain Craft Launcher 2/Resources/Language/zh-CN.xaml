@@ -247,6 +247,7 @@
     <s:String x:Key="LangSetHomePageRefresh">刷新主页</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">生成教学文件</s:String>
     <s:String x:Key="LangSetHomePageSeeDoc">查看教程</s:String>
+    <s:String x:Key="LangSetHomePageCustomWarn">在使用陌生人提供的主页前请务必谨慎，恶意的主页可能会造成损害！</s:String>
     <s:String x:Key="LangSetHomePageDownload">下载地址</s:String>
     <s:String x:Key="LangSetHomePagePresetPage">主页预设</s:String>
     <s:String x:Key="LangSetHomePagePresetPageA">你知道吗？</s:String>
@@ -633,6 +634,8 @@
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15 周年披风</s:String>
     <s:String x:Key="LangMySkinCapeNameMinecraftExperience">村民救援披风</s:String>
     <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameHome">家园披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMenace">入侵披风</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">无披风</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">版本选择</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">版本设置</s:String>
@@ -770,7 +773,7 @@
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和 PCL 的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 2 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 3 月的高级赞助者们！感谢各位对 PCL 和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">赞助作者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -1366,6 +1369,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModMinecraftInvalidFabricVersion">无效的 Fabric 版本：{0}</s:String>
     <s:String x:Key="LangModMinecraftInvalidForgeVersion">无效的 Neo/Forge 版本：{0}</s:String>
     <s:String x:Key="LangModMinecraftFoolName24w14potato">毒马铃薯一直都被大家忽视和低估，于是我们超级加强了它！</s:String>
+    <s:String x:Key="LangModMinecraftFoolName25w14craftmine">你可以合成任何东西——包括合成你的世界！</s:String>
     <s:String x:Key="LangModMinecraftFoolName23w13ab">研究表明：玩家喜欢作出选择——越多越好！</s:String>
     <s:String x:Key="LangModMinecraftFoolName22w13oneblockatatime">一次一个方块更新！迎接全新的挖掘、合成与骑乘玩法吧！</s:String>
     <s:String x:Key="LangModMinecraftFoolName20w14inf">我们加入了 20 亿个新的维度，让无限的想象变成了现实！</s:String>
@@ -1469,7 +1473,7 @@ PCL 不支持其他乱七八糟的下载协议。</s:String>
     <s:String x:Key="LangModValidateLen">长度必须为 {0} 个字符！</s:String>
     <s:String x:Key="LangModValidateLenMax">长度最长为 {0} 个字符！</s:String>
     <s:String x:Key="LangModValidateLenMin">长度至少需 {0} 个字符！</s:String>
-    <s:String x:Key="LangModValidateNoContain">输入内容不能包含 %！</s:String>
+    <s:String x:Key="LangModValidateNoContain">输入内容不能包含 %</s:String>
     <s:String x:Key="LangModValidateNoContent">输入内容不能为 %！</s:String>
     <s:String x:Key="LangModValidateFileNoStartWithSpace">文件名不能以空格开头！</s:String>
     <s:String x:Key="LangModValidateFileNoEndWithSpace">文件名不能以空格结尾！</s:String>

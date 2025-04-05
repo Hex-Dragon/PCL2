@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">已取消！</s:String>
     <s:String x:Key="LangDialogBtnOK">確認</s:String>
     <s:String x:Key="LangDialogBtnCancel">取消</s:String>
@@ -247,6 +247,7 @@
     <s:String x:Key="LangSetHomePageRefresh">重新整理首頁</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">生成教學檔案</s:String>
     <s:String x:Key="LangSetHomePageSeeDoc">檢視教學</s:String>
+    <s:String x:Key="LangSetHomePageCustomWarn">在使用陌生人提供的主页前请务必谨慎，恶意的主页可能会造成损害！</s:String>
     <s:String x:Key="LangSetHomePageDownload">下載連結</s:String>
     <s:String x:Key="LangSetHomePagePresetPage">首頁預設</s:String>
     <s:String x:Key="LangSetHomePagePresetPageA">你知道嗎？</s:String>
@@ -633,6 +634,8 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15 週年披風</s:String>
     <s:String x:Key="LangMySkinCapeNameMinecraftExperience">Minecraft Experience 披風</s:String>
     <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang Office 披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameHome">家园披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMenace">入侵披风</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">無披風</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">實例選擇</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">實例設定</s:String>
@@ -1368,6 +1371,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftInvalidFabricVersion">無效的 Fabric 版本：{0}</s:String>
     <s:String x:Key="LangModMinecraftInvalidForgeVersion">無效的 Neo/Forge 版本：{0}</s:String>
     <s:String x:Key="LangModMinecraftFoolName24w14potato">毒馬鈴薯一直都被大家忽視和低估，於是我們超級加強了它！</s:String>
+    <s:String x:Key="LangModMinecraftFoolName25w14craftmine">你可以合成任何东西——包括合成你的世界！</s:String>
     <s:String x:Key="LangModMinecraftFoolName23w13ab">研究表明：玩家喜歡做出選擇——越多越好！</s:String>
     <s:String x:Key="LangModMinecraftFoolName22w13oneblockatatime">一次一個方塊更新！迎接全新的挖掘、合成與騎乘玩法吧！</s:String>
     <s:String x:Key="LangModMinecraftFoolName20w14inf">我們加入了 20 億個新的維度，讓無限的想像變成了現實！</s:String>

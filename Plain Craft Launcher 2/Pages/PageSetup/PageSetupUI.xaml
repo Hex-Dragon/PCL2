@@ -206,7 +206,7 @@
                         <local:MyRadioBox Text="{StaticResource LangSetHomePageLocal}" x:Name="RadioCustomType1" Height="22" Tag="UiCustomType/1" Grid.Column="2" />
                         <local:MyRadioBox Text="{StaticResource LangSetHomePageOnline}" x:Name="RadioCustomType2" Height="22" Tag="UiCustomType/2" Grid.Column="3" />
                     </Grid>
-                    <local:MyHint Margin="0,15,0,-9" Text="在使用陌生人提供的主页前请务必谨慎，恶意的主页可能会造成损害！" IsWarn="True" x:Name="HintCustomWarn" 
+                    <local:MyHint Margin="0,15,0,-9" Text="{StaticResource LangSetHomePageCustomWarn}" IsWarn="True" x:Name="HintCustomWarn" 
                                   CanClose="True" RelativeSetup="HintCustomWarn" />
                     <local:MyHint Margin="0,15,0,1" Text="在 ModSetup 里改这段文字……" IsWarn="False" x:Name="HintCustom" />
                     <Grid Height="35" x:Name="PanCustomLocal" Visibility="Collapsed" Margin="0,10,0,5">
