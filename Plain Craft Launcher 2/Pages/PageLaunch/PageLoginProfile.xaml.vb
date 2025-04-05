@@ -81,13 +81,13 @@ Class PageLoginProfile
         }
         Dim NewProfile As JObject = Nothing
         Dim SelectedAuthType As String = Nothing '验证类型
-        Dim SelectedAuthTypeNum As Integer = Nothing '验证类型序号
+        Dim SelectedAuthTypeNum As Integer? = Nothing '验证类型序号
         Dim UserName As String = Nothing '玩家 ID
         Dim UserUuid As String = Nothing 'UUID
         Dim AuthName As String = Nothing '验证使用的用户名（离线验证为空）
         Dim AuthPassword As String = Nothing '验证使用的密码（离线验证为空）
         RunInUiWait(Sub() SelectedAuthTypeNum = MyMsgBoxSelect(AuthTypeList, "新建档案 - 选择验证类型", "继续", "取消") + 1)
-        If SelectedAuthTypeNum = Nothing Then Exit Sub
+        If SelectedAuthTypeNum Is Nothing Then Exit Sub
         If SelectedAuthTypeNum = 1 Then '离线验证
             SelectedAuthType = "offline"
             UserName = MyMsgBoxInput("新建档案 - 输入档案名称", HintText:="只可以使用英文字母、数字与下划线", Button1:="继续", Button2:="取消")
