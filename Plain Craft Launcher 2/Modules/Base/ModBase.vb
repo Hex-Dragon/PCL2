@@ -1,10 +1,11 @@
 Imports System.Globalization
 Imports System.IO.Compression
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 Imports System.Security.Cryptography
 Imports System.Security.Principal
 Imports System.Text.RegularExpressions
-Imports System.Windows.Markup
+Imports System.Xaml
 Imports Newtonsoft.Json
 
 Public Module ModBase
@@ -12,13 +13,13 @@ Public Module ModBase
 #Region "声明"
 
     '下列版本信息由更新器自动修改
-    Public Const VersionBaseName As String = "2.9.2" '不含分支前缀的显示用版本名
-    Public Const VersionStandardCode As String = "2.9.2." & VersionBranchCode '标准格式的四段式版本号
+    Public Const VersionBaseName As String = "2.9.3" '不含分支前缀的显示用版本名
+    Public Const VersionStandardCode As String = "2.9.3." & VersionBranchCode '标准格式的四段式版本号
     Public Const CommitHash As String = "" 'Commit Hash，由 GitHub Workflow 自动替换
 #If BETA Then
-    Public Const VersionCode As Integer = 352 'Release
+    Public Const VersionCode As Integer = 355 'Release
 #Else
-    Public Const VersionCode As Integer = 353 'Snapshot
+    Public Const VersionCode As Integer = 354 'Snapshot
 #End If
     '自动生成的版本信息
     Public Const VersionDisplayName As String = VersionBranchName & " " & VersionBaseName
@@ -1697,6 +1698,7 @@ RetryDir:
     End Function
     ''' <summary>
     ''' 获取处于两个子字符串之间的部分，裁切尽可能多的内容。
+    ''' 等效于 AfterLast 后接 BeforeFirst。
     ''' 如果未找到子字符串则不裁切。
     ''' </summary>
     <Extension> Public Function Between(Str As String, After As String, Before As String, Optional IgnoreCase As Boolean = False) As String
@@ -2747,13 +2749,27 @@ Retry:
     ''' <summary>
     ''' 将 XML 转换为对应 UI 对象。
     ''' </summary>
-    Public Function GetObjectFromXML(Str As String)
-        Using Stream As New MemoryStream
+    Public Function GetObjectFromXML(Str As String) As Object
+        Using Stream As New MemoryStream(Encoding.UTF8.GetBytes(Str))
+            '类型检查
+            Using Reader As New XamlXmlReader(Stream)
+                While Reader.Read()
+                    For Each BlackListType In {GetType(WebBrowser), GetType(Frame), GetType(MediaElement), GetType(ObjectDataProvider), GetType(XamlReader), GetType(Window), GetType(XmlDataProvider)}
+                        If Reader.Type IsNot Nothing AndAlso BlackListType.IsAssignableFrom(Reader.Type.UnderlyingType) Then Throw New UnauthorizedAccessException($"不允许使用 {BlackListType.Name} 类型。")
+                        If Reader.Value IsNot Nothing AndAlso Reader.Value = BlackListType.Name Then Throw New UnauthorizedAccessException($"不允许使用 {BlackListType.Name} 值。")
+                    Next
+                    For Each BlackListMember In {"Code", "FactoryMethod", "Static"}
+                        If Reader.Member IsNot Nothing AndAlso Reader.Member.Name = BlackListMember Then Throw New UnauthorizedAccessException($"不允许使用 {BlackListMember} 成员。")
+                    Next
+                End While
+            End Using
+            '实际的加载
+            Stream.Position = 0
             Using Writer As New StreamWriter(Stream)
                 Writer.Write(Str)
                 Writer.Flush()
                 Stream.Position = 0
-                Return XamlReader.Load(Stream)
+                Return Markup.XamlReader.Load(Stream)
             End Using
         End Using
     End Function
