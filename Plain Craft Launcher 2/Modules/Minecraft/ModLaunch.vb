@@ -220,18 +220,21 @@ NextInner:
         If CheckResult <> "" Then Throw New ArgumentException(CheckResult)
 #If BETA Then
         '求赞助
-        RunInNewThread(
-        Sub()
-            Select Case Setup.Get("SystemLaunchCount")
-                Case 10, 20, 40, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
-                    If MyMsgBox(GetLang("LangModLaunchDialogContentSponsorship", Setup.Get("SystemLaunchCount")),GetLang("LangModLaunchDialogTitleSponsorship", Setup.Get("SystemLaunchCount")), GetLang("LangModLaunchDialogBtn1Sponsorship"), GetLang("LangModLaunchDialogBtn2Sponsorship")) = 1 Then
-                        OpenWebsite("https://afdian.com/a/LTCat")
-                    End If
-            End Select
-        End Sub, "Donate")
+        If CurrentLaunchOptions?.SaveBatch Is Nothing Then '保存脚本时不提示
+            RunInNewThread(
+            Sub()
+                Select Case Setup.Get("SystemLaunchCount")
+                    Case 10, 20, 40, 60, 80, 100, 120, 150, 200, 250, 300, 350, 400, 500, 600, 700, 800, 900, 1000, 1200, 1400, 1600, 1800, 2000
+                        If MyMsgBox(GetLang("LangModLaunchDialogContentSponsorship", Setup.Get("SystemLaunchCount")),GetLang("LangModLaunchDialogTitleSponsorship", Setup.Get("SystemLaunchCount")), GetLang("LangModLaunchDialogBtn1Sponsorship"), GetLang("LangModLaunchDialogBtn2Sponsorship")) = 1 Then
+                            OpenWebsite("https://afdian.com/a/LTCat")
+                        End If
+                End Select
+            End Sub, "Donate")
+        End If
 #End If
         '正版购买提示
-        If Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
+        If CurrentLaunchOptions?.SaveBatch Is Nothing AndAlso '保存脚本时不提示
+           Not Setup.Get("HintBuy") AndAlso Setup.Get("LoginType") <> McLoginType.Ms Then
             If IsSystemLanguageChinese() Then
                 RunInNewThread(
                 Sub()
@@ -1338,6 +1341,12 @@ Retry:
             McLaunchLog("获取新版 Game 参数")
             Arguments += " " & McLaunchArgumentsGameNew(McVersionCurrent)
             McLaunchLog("新版 Game 参数获取成功")
+        End If
+        '编码参数（#5818、#5892）
+        If McLaunchJavaSelected.VersionCode > 8 Then
+            If Not Arguments.Contains("-Dfile.encoding=") Then Arguments += " -Dfile.encoding=UTF-8"
+            If Not Arguments.Contains("-Dstdout.encoding=") Then Arguments += " -Dstdout.encoding=UTF-8"
+            If Not Arguments.Contains("-Dstderr.encoding=") Then Arguments += " -Dstderr.encoding=UTF-8"
         End If
         '替换参数
         Dim ReplaceArguments = McLaunchArgumentsReplace(McVersionCurrent, Loader)

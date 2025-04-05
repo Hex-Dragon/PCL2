@@ -21,6 +21,7 @@
         {"HintClearRubbish", New SetupEntry(0, Source:=SetupSource.Registry)},
         {"HintUpdateMod", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"HintCustomCommand", New SetupEntry(False, Source:=SetupSource.Registry)},
+        {"HintCustomWarn", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"HintMoreAdvancedSetup", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"HintIndieSetup", New SetupEntry(False, Source:=SetupSource.Registry)},
         {"HintExportConfig", New SetupEntry(False, Source:=SetupSource.Registry)},
@@ -100,7 +101,7 @@
         {"LaunchArgumentWindowHeight", New SetupEntry(480)},
         {"LaunchArgumentWindowType", New SetupEntry(1)},
         {"LaunchArgumentRam", New SetupEntry(False, Source:=SetupSource.Registry)},
-        {"LaunchAdvanceJvm", New SetupEntry("-Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Djdk.lang.Process.allowAmbiguousCommands=true -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true")},
+        {"LaunchAdvanceJvm", New SetupEntry("-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Djdk.lang.Process.allowAmbiguousCommands=true -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true")},
         {"LaunchAdvanceGame", New SetupEntry("")},
         {"LaunchAdvanceRun", New SetupEntry("")},
         {"LaunchAdvanceRunWait", New SetupEntry(True)},
@@ -592,11 +593,13 @@
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
                 FrmSetupUI.HintCustom.Visibility = Visibility.Collapsed
+                FrmSetupUI.HintCustomWarn.Visibility = Visibility.Collapsed
             Case 1 '本地
                 FrmSetupUI.PanCustomPreset.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Visible
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Collapsed
                 FrmSetupUI.HintCustom.Visibility = Visibility.Visible
+                FrmSetupUI.HintCustomWarn.Visibility = If(Setup.Get("HintCustomWarn"), Visibility.Collapsed, Visibility.Visible)
                 FrmSetupUI.HintCustom.Text = GetLang("LangSetHomePageTipLocal")
                 FrmSetupUI.HintCustom.EventType = ""
                 FrmSetupUI.HintCustom.EventData = ""
@@ -605,6 +608,7 @@
                 FrmSetupUI.PanCustomLocal.Visibility = Visibility.Collapsed
                 FrmSetupUI.PanCustomNet.Visibility = Visibility.Visible
                 FrmSetupUI.HintCustom.Visibility = Visibility.Visible
+                FrmSetupUI.HintCustomWarn.Visibility = If(Setup.Get("HintCustomWarn"), Visibility.Collapsed, Visibility.Visible)
                 FrmSetupUI.HintCustom.Text = GetLang("LangSetHomePageTipOnline")
                 FrmSetupUI.HintCustom.EventType = "打开网页"
                 FrmSetupUI.HintCustom.EventData = "https://github.com/Hex-Dragon/PCL2/discussions/2528"
@@ -620,6 +624,7 @@
                     FrmSetupUI.HintCustom.EventType = ""
                     FrmSetupUI.HintCustom.EventData = ""
                 End If
+                FrmSetupUI.HintCustomWarn.Visibility = Visibility.Collapsed
         End Select
         FrmSetupUI.CardCustom.TriggerForceResize()
     End Sub

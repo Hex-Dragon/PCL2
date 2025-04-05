@@ -153,13 +153,13 @@ Public Class ValidateExcept
     Public Sub New()
         ErrorMessage = GetLang("LangModValidateNoContain")
     End Sub '用于 XAML 初始化
-    Public Sub New(Excepts As ObjectModel.Collection(Of String), Optional ErrorMessage As String = "输入内容不能包含 %！")
-        If ErrorMessage.Equals("输入内容不能包含 %！") Then ErrorMessage = GetLang("LangModValidateNoContain")
+    Public Sub New(Excepts As ObjectModel.Collection(Of String), Optional ErrorMessage As String = "输入内容不能包含 %")
+        If ErrorMessage.Equals("输入内容不能包含 %") Then ErrorMessage = GetLang("LangModValidateNoContain")
         Me.Excepts = Excepts
         Me.ErrorMessage = ErrorMessage
     End Sub
-    Public Sub New(Excepts As IEnumerable, Optional ErrorMessage As String = "输入内容不能包含 %！")
-        If ErrorMessage.Equals("输入内容不能包含 %！") Then ErrorMessage = GetLang("LangModValidateNoContain")
+    Public Sub New(Excepts As IEnumerable, Optional ErrorMessage As String = "输入内容不能包含 %")
+        If ErrorMessage.Equals("输入内容不能包含 %") Then ErrorMessage = GetLang("LangModValidateNoContain")
         Me.Excepts = New ObjectModel.Collection(Of String)
         Me.ErrorMessage = ErrorMessage
         For Each Data As String In Excepts
@@ -188,14 +188,14 @@ Public Class ValidateExceptSame
     Public Property IgnoreCase As Boolean = False
     Public Sub New()
     End Sub
-    Public Sub New(Excepts As ObjectModel.Collection(Of String), Optional ErrorMessage As String = "输入内容不能为 %！", Optional IgnoreCase As Boolean = False)
-        If ErrorMessage.Equals("输入内容不能为 %！") Then ErrorMessage = GetLang("LangModValidateNoContent")
+    Public Sub New(Excepts As ObjectModel.Collection(Of String), Optional ErrorMessage As String = "输入内容不能为 %", Optional IgnoreCase As Boolean = False)
+        If ErrorMessage.Equals("输入内容不能为 %") Then ErrorMessage = GetLang("LangModValidateNoContent")
         Me.Excepts = Excepts
         Me.ErrorMessage = ErrorMessage
         Me.IgnoreCase = IgnoreCase
     End Sub
-    Public Sub New(Excepts As IEnumerable, Optional ErrorMessage As String = "输入内容不能为 %！", Optional IgnoreCase As Boolean = False)
-        If ErrorMessage.Equals("输入内容不能为 %！") Then ErrorMessage = GetLang("LangModValidateNoContent")
+    Public Sub New(Excepts As IEnumerable, Optional ErrorMessage As String = "输入内容不能为 %", Optional IgnoreCase As Boolean = False)
+        If ErrorMessage.Equals("输入内容不能为 %") Then ErrorMessage = GetLang("LangModValidateNoContent")
         Me.Excepts = New ObjectModel.Collection(Of String)
         For Each Data As String In Excepts
             Me.Excepts.Add(Data)
