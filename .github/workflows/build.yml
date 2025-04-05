@@ -29,8 +29,16 @@ jobs:
 
           - configuration: Beta
             architecture: ARM64
+            os: self-hosted
+
+          - configuration: Release
+            architecture: x64
             os: windows-latest
-          
+
+          - configuration: Release
+            architecture: ARM64
+            os: self-hosted
+
       fail-fast: false
 
     env:
