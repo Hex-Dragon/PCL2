@@ -90,8 +90,8 @@
             Try
 Retry:
                 If McLoginMsLoader.State = LoadState.Loading Then McLoginMsLoader.WaitForExit() '等待登录结束
-                Dim AccessToken As String = Setup.Get("CacheMsV2Access")
-                Dim Uuid As String = Setup.Get("CacheMsV2Uuid")
+                Dim AccessToken As String = sender("accessToken")
+                Dim Uuid As String = sender("uuid")
 
                 Dim Client As New Net.Http.HttpClient With {.Timeout = New TimeSpan(0, 0, 30)}
                 Client.DefaultRequestHeaders.Authorization = New Net.Http.Headers.AuthenticationHeaderValue("Bearer", AccessToken)

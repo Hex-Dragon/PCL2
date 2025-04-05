@@ -181,12 +181,16 @@ Class PageLoginProfile
         If sender.Tag("type") = "offline" Then
             sender.Buttons = {BtnUUID, BtnDelete}
         ElseIf sender.Tag("type") = "authlib" Then
+            'sender.Buttons = {BtnDelete}
             sender.Buttons = {BtnChangeRole, BtnDelete}
         Else
             sender.Buttons = {BtnDelete}
         End If
     End Sub
     Private Sub ChangeRole(sender As Object, e As EventArgs)
+        If FrmLoginAuthSkin Is Nothing Then FrmLoginAuthSkin = New PageLoginAuthSkin
+        FrmLoginAuthSkin.BtnEdit_Click(sender, e)
+        Exit Sub
         Dim ProfileIndex = ProfileList.IndexOf(sender.Tag)
         RunInUi(Sub()
                     If McLoginLoader.State = LoadState.Loading Then

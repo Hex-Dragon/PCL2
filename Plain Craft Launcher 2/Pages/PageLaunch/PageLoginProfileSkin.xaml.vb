@@ -145,7 +145,8 @@ Class PageLoginProfileSkin
     End Function
     Private Sub Skin_Click(sender As Object, e As RoutedEventArgs) Handles Skin.Click
         If SelectedProfile("type") = "microsoft" Then
-            OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
+            If FrmLoginMsSkin Is Nothing Then FrmLoginMsSkin = New PageLoginMsSkin
+            FrmLoginMsSkin.BtnSkinEdit_Click(SelectedProfile, e)
         ElseIf SelectedProfile("type") = "authlib" Then
             Dim Server As String = SelectedProfile("server")
             OpenWebsite(Server.ToString.Replace("/api/yggdrasil/authserver" + If(Server.EndsWithF("/"), "/", ""), "/user/closet"))

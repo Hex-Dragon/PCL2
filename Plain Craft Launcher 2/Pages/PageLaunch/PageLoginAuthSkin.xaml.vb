@@ -1,4 +1,6 @@
-﻿Public Class PageLoginAuthSkin
+﻿Imports System.Runtime.Remoting.Channels
+
+Public Class PageLoginAuthSkin
 
     Public Sub New()
         InitializeComponent()
@@ -43,8 +45,7 @@
                  AaHeight(BtnExit, 14 - BtnExit.Height, 120,, New AniEaseInFluent)
         }, "PageLoginAuthSkin Button")
     End Sub
-
-    Private Sub BtnEdit_Click(sender As Object, e As EventArgs) Handles BtnEdit.Click
+    Public Sub BtnEdit_Click(sender As Object, e As EventArgs) Handles BtnEdit.Click
         If McLoginLoader.State = LoadState.Loading Then
             Log("[Launch] 要求更换角色，但登录加载器繁忙", LogLevel.Debug)
             If CType(McLoginLoader.Input, McLoginServer).ForceReselectProfile Then
@@ -61,8 +62,15 @@
         RunInThread(
         Sub()
             Try
-                Dim Data As McLoginServer = GetLoginData()
-                Data.ForceReselectProfile = True
+                Dim Data As New McLoginServer(McLoginType.Auth) With {
+                    .Token = "Auth",
+                    .BaseUrl = sender.Tag("server"),
+                    .UserName = sender.Tag("name"),
+                    .Password = sender.Tag("password"),
+                    .Description = "Authlib-Injector",
+                    .Type = McLoginType.Auth,
+                    .ForceReselectProfile = True
+                }
                 McLoginLoader.WaitForExit(Data, IsForceRestart:=True)
                 RunInUi(Sub() Reload(True))
             Catch ex As Exception
