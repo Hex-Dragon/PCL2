@@ -392,9 +392,19 @@
                     Try
                         SourceValue = SecretDecrypt(SourceValue)
                     Catch ex As Exception
-                        Log(ex, "解密设置失败：" & Key, LogLevel.Developer)
-                        SourceValue = E.DefaultValue
-                        Setup.Set(Key, E.DefaultValue, True)
+                        Dim OldValue As String = Nothing
+                        Try
+                            OldValue = SecretDecrptyOld(SourceValue)
+                        Catch
+                        End Try
+                        If OldValue IsNot Nothing Then
+                            SourceValue = OldValue
+                            Setup.Set(Key, OldValue, True)
+                        Else
+                            Log(ex, "解密设置失败：" & Key, LogLevel.Developer)
+                            SourceValue = E.DefaultValue
+                            Setup.Set(Key, E.DefaultValue, True)
+                        End If
                     End Try
                 End If
             End If

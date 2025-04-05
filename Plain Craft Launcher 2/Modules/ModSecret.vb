@@ -201,7 +201,18 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
 #Region "字符串加解密"
 
     Friend Function SecretDecrptyOld(SourceString As String) As String
-        Return ""
+        Dim Key = "00000000"
+        Dim btKey As Byte() = Encoding.UTF8.GetBytes(Key)
+        Dim btIV As Byte() = Encoding.UTF8.GetBytes("87160295")
+        Dim des As New DESCryptoServiceProvider
+        Using MS As New MemoryStream
+            Dim inData As Byte() = Convert.FromBase64String(SourceString)
+            Using cs As New CryptoStream(MS, des.CreateDecryptor(btKey, btIV), CryptoStreamMode.Write)
+                cs.Write(inData, 0, inData.Length)
+                cs.FlushFinalBlock()
+                Return Encoding.UTF8.GetString(MS.ToArray())
+            End Using
+        End Using
     End Function
 
     ''' <summary>
