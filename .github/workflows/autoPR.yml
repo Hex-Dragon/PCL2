@@ -7,51 +7,42 @@ on:
 jobs:
   handle_pr_events:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
-      - name: Update labels on merge
+      
+      - name: Remove old labels on merge
         if: github.event.action == 'closed' && github.event.pull_request.merged
-        uses: actions/github-script@v7
-        env:
-          BOT_TOKEN: ${{ secrets.BOT }}
+        uses: actions-ecosystem/action-remove-labels@v1
         with:
-          script: |
-            const labelsToRemove = ['⭕ 等待处理', '🚧 正在处理', '🕑 等待合并', '🕑 等待前置'];
-            for (const label of labelsToRemove) {
-              try {
-                await github.rest.issues.removeLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  name: label
-                });
-              } catch (error) {}
-            }
-            await github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              labels: ['👌 完成']
-            });
+          github_token: ${{ secrets.BOT }}
+          labels: |
+            ⭕ 等待处理
+            🚧 正在处理
+            🕑 等待合并
+            🕑 等待前置
 
+      - name: Add completed label
+        if: github.event.action == 'closed' && github.event.pull_request.merged
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          github_token: ${{ secrets.BOT }}
+          labels: 👌 完成
+
+      
       - name: Clean labels on reopen
         if: github.event.action == 'reopened'
-        uses: actions/github-script@v7
-        env:
-          BOT_TOKEN: ${{ secrets.BOT }}
+        uses: actions-ecosystem/action-remove-labels@v1
         with:
-          script: |
-            const labelsToRemove = ['❌ 忽略','❌ 拒绝 / 放弃','❌ 暂无计划','❌ 第三方','⭕ 等待处理','❌ 重复'];
-            for (const label of labelsToRemove) {
-              try {
-                await github.rest.issues.removeLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  name: label
-                });
-              } catch (error) {}
-            }
-
+          github_token: ${{ secrets.BOT }}
+          labels: |
+            ❌ 忽略
+            ❌ 拒绝 / 放弃
+            ❌ 暂无计划
+            ❌ 第三方
+            ⭕ 等待处理
+            ❌ 重复
       - name: Request team review
         if: github.event.action == 'opened'
         uses: actions/github-script@v7
