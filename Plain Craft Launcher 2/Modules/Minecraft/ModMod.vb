@@ -1127,7 +1127,11 @@ Finished:
         Next
         WriteFile(PathTemp & "Cache\LocalMod.json", Cache.ToString(If(ModeDebug, Newtonsoft.Json.Formatting.Indented, Newtonsoft.Json.Formatting.None)))
         '刷新边栏
-        RunInUi(Sub() FrmVersionMod?.RefreshBars())
+        If FrmVersionMod?.CurrentViewNeedSyncOnModDetailLoaded() Then
+            RunInUi(Sub() FrmVersionMod?.RefreshUI()) '调用RefreshUI而不是RefreshBars以同步可更新模组列表视图 (#4677)
+        Else
+            RunInUi(Sub() FrmVersionMod?.RefreshBars())
+        End If
     End Sub
     Public Function GetTargetModLoaders() As List(Of CompModLoaderType)
         Dim ModLoaders As New List(Of CompModLoaderType)
