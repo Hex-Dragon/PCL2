@@ -1,10 +1,12 @@
-﻿Class PageLoginProfileSkin
+﻿Imports PCL.ModLaunch
+
+Class PageLoginProfileSkin
     Public Sub New()
         InitializeComponent()
         'Skin.Loader = PageLaunchLeft.SkinLegacy
     End Sub
     Private Sub PageLoginProfile_Loaded() Handles Me.Loaded
-        Skin.Loader.Start()
+        'Skin.Loader.Start()
     End Sub
     Public Shared SelectedProfile As JObject = Nothing
     ''' <summary>
@@ -27,10 +29,10 @@
             Skin.Loader = PageLaunchLeft.SkinLegacy
         End If
         Skin.Loader.WaitForExit(IsForceRestart:=True)
+        Skin.Clear()
+        RunInNewThread(Sub() Skin.Loader.Start())
         TextName.Text = SelectedProfile("username").ToString
         TextType.Text = GetProfileInfo(SelectedProfile("type").ToString)
-        Skin.Clear()
-        Skin.Loader.Start()
     End Sub
     Public Shared Function GetProfileInfo(Type As String, Optional Desc As String = Nothing)
         Dim Info As String = Nothing
@@ -115,7 +117,9 @@
                 .UserName = SelectedProfile("name"),
                 .Password = SelectedProfile("password"),
                 .Description = "Authlib-Injector",
-                .Type = McLoginType.Auth}
+                .Type = McLoginType.Auth,
+                .IsExist = True
+            }
         ElseIf LoginType = "microsoft" Then
             Return New McLoginMs With {.OAuthRefreshToken = SelectedProfile("refreshToken"),
                 .UserName = SelectedProfile("username"),
@@ -123,8 +127,30 @@
                 .Uuid = SelectedProfile("uuid")
             }
         Else
-            Return New McLoginLegacy With {.UserName = SelectedProfile("username")}
+            Return New McLoginLegacy With {.UserName = SelectedProfile("username"), .Uuid = SelectedProfile("uuid")}
         End If
         Return Nothing
     End Function
+    Public Shared Function IsVaild() As String
+        If SelectedProfile("type").ToString = "offline" Then
+            If SelectedProfile("username").ToString.Trim = "" Then Return "玩家名不能为空！"
+            If SelectedProfile("username").ToString.Contains("""") Then Return "玩家名不能包含英文引号！"
+            If McVersionCurrent IsNot Nothing AndAlso
+               ((McVersionCurrent.Version.McCodeMain = 20 AndAlso McVersionCurrent.Version.McCodeSub >= 3) OrElse McVersionCurrent.Version.McCodeMain > 20) AndAlso
+               SelectedProfile("username").ToString.Trim.Length > 16 Then
+                Return "自 1.20.3 起，玩家名至多只能包含 16 个字符！"
+            End If
+        End If
+        Return ""
+    End Function
+    Private Sub Skin_Click(sender As Object, e As RoutedEventArgs) Handles Skin.Click
+        If SelectedProfile("type") = "microsoft" Then
+            OpenWebsite("https://www.minecraft.net/zh-hans/msaprofile/mygames/editprofile")
+        ElseIf SelectedProfile("type") = "authlib" Then
+            Dim Server As String = SelectedProfile("server")
+            OpenWebsite(Server.ToString.Replace("/api/yggdrasil/authserver" + If(Server.EndsWithF("/"), "/", ""), "/user/closet"))
+        Else
+            Hint("当前档案不支持修改皮肤！")
+        End If
+    End Sub
 End Class

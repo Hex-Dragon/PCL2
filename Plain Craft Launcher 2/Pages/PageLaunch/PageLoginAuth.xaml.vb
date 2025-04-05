@@ -58,8 +58,12 @@
     Private Sub CheckBoxChange(sender As MyCheckBox, e As Object) Handles CheckRemember.Change
         If AniControlEnabled = 0 Then Setup.Set(sender.Tag, sender.Checked)
     End Sub
+    Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles BtnBack.Click
+        RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
+    End Sub
     Private Sub BtnLogin_Click(sender As Object, e As EventArgs) Handles BtnLogin.Click
         BtnLogin.IsEnabled = False
+        BtnBack.IsEnabled = False
         Dim LoginData As New McLoginServer(McLoginType.Auth) With {.Token = "Auth", .BaseUrl = If(TextServer.Text.EndsWithF("/"), TextServer.Text & "authserver", TextServer.Text & "/authserver"), .UserName = TextName.Text, .Password = TextPass.Password, .Description = "Authlib-Injector", .Type = McLoginType.Auth}
         RunInNewThread(Sub()
                            Try
@@ -92,6 +96,7 @@
                                RunInUi(
                                Sub()
                                    BtnLogin.IsEnabled = True
+                                   BtnBack.IsEnabled = True
                                    BtnLogin.Text = "登录"
                                End Sub)
                            End Try

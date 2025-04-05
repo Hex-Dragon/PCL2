@@ -3,6 +3,7 @@ Public Module ModLaunch
 
 #Region "开始"
 
+    Public IsLaunching As Boolean = False
     Public CurrentLaunchOptions As McLaunchOptions = Nothing
     Public Class McLaunchOptions
         ''' <summary>
@@ -35,11 +36,13 @@ Public Module ModLaunch
     ''' 返回是否实际开始了启动（如果没有，则一定弹出了错误提示）。
     ''' </summary>
     Public Function McLaunchStart(Optional Options As McLaunchOptions = Nothing) As Boolean
+        IsLaunching = True
         CurrentLaunchOptions = If(Options, New McLaunchOptions)
         '预检查
         If Not RunInUi() Then Throw New Exception("McLaunchStart 必须在 UI 线程调用！")
         If McLaunchLoader.State = LoadState.Loading Then
             Hint("已有游戏正在启动中！", HintType.Critical)
+            IsLaunching = False
             Return False
         End If
         '强制切换需要启动的版本
@@ -49,6 +52,7 @@ Public Module ModLaunch
             CurrentLaunchOptions.Version.Load()
             If CurrentLaunchOptions.Version.State = McVersionState.Error Then
                 Hint("无法启动 Minecraft：" & CurrentLaunchOptions.Version.Info, HintType.Critical)
+                IsLaunching = False
                 Return False
             End If
             '切换版本
@@ -160,6 +164,7 @@ Public Module ModLaunch
                 Case Else
                     Throw New Exception("错误的状态改变：" & GetStringFromEnum(CType(LaunchLoader.State, [Enum])))
             End Select
+            IsLaunching = False
         Catch ex As Exception
             Dim CurrentEx = ex
 NextInner:
@@ -314,6 +319,10 @@ NextInner:
         ''' 是否在本次登录中强制要求玩家重新选择角色，目前仅对 Authlib-Injector 生效。
         ''' </summary>
         Public ForceReselectProfile As Boolean = False
+        ''' <summary>
+        ''' 是否已经存在该验证信息，用于判断是否为新增档案。
+        ''' </summary>
+        Public IsExist As Boolean = False
 
         Public Sub New(Type As McLoginType)
             Me.Type = Type
@@ -356,6 +365,10 @@ NextInner:
         ''' 若采用正版皮肤，则为该皮肤名。
         ''' </summary>
         Public SkinName As String
+        ''' <summary>
+        ''' UUID。
+        ''' </summary>
+        Public Uuid As String
 
         Public Sub New()
             Type = McLoginType.Legacy
@@ -404,6 +417,7 @@ NextInner:
     ''' 当前是否可以进行登录。若不可以则会返回错误原因。
     ''' </summary>
     Public Function McLoginAble() As String
+        Return PageLoginProfileSkin.IsVaild()
         Select Case Setup.Get("LoginType")
             Case McLoginType.Ms
                 If Setup.Get("CacheMsV2OAuthRefresh") = "" Then
@@ -535,6 +549,7 @@ NextInner:
             GoTo SkipLogin
         End If
         '尝试登录
+        Dim IsSkipAuth As Boolean = False
         Dim OAuthTokens As String()
         If Input.OAuthRefreshToken = "" Then
             '无 RefreshToken
@@ -546,6 +561,7 @@ Relogin:
             IsNewProfile = False
             OAuthTokens = MsLoginStep1Refresh(Input.OAuthRefreshToken)
             If OAuthTokens(0) = "Relogin" Then GoTo Relogin '要求重新打开登录网页认证
+            If OAuthTokens(1) = "Ignore" Then GoTo SkipLogin
         End If
         If Data.IsAborted Then Throw New ThreadInterruptedException
         Data.Progress = 0.25
@@ -553,18 +569,22 @@ Relogin:
         Dim OAuthAccessToken As String = OAuthTokens(0)
         Dim OAuthRefreshToken As String = OAuthTokens(1)
         Dim XBLToken As String = MsLoginStep2(OAuthAccessToken)
+        If XBLToken = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.4
         If Data.IsAborted Then Throw New ThreadInterruptedException
         Dim Tokens = MsLoginStep3(XBLToken)
+        If Tokens(1) = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.55
         If Data.IsAborted Then Throw New ThreadInterruptedException
         Dim AccessToken As String = MsLoginStep4(Tokens)
+        If AccessToken = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.7
         If Data.IsAborted Then Throw New ThreadInterruptedException
         MsLoginStep5(AccessToken)
         Data.Progress = 0.85
         If Data.IsAborted Then Throw New ThreadInterruptedException
         Dim Result = MsLoginStep6(AccessToken)
+        If Result(2) = "Ignore" Then GoTo SkipLogin
         Data.Progress = 0.98
         '输出登录结果
         If IsNewProfile Then
@@ -601,6 +621,13 @@ Relogin:
 SkipLogin:
         Setup.Set("HintBuy", True) '关闭正版购买提示
         If ThemeUnlock(10, False) Then MyMsgBox("感谢你对正版游戏的支持！" & vbCrLf & "隐藏主题 跳票红 已解锁！", "提示")
+        If IsSkipAuth Then
+            Data.Progress = 0.99
+            Data.Output = New McLoginResult With {.AccessToken = PageLoginProfile.SelectedProfile("accessToken"),
+                    .Name = PageLoginProfile.SelectedProfile("username"), .Uuid = PageLoginProfile.SelectedProfile("uuid"),
+                    .Type = "Microsoft"}
+            Exit Sub
+        End If
     End Sub
     Private Sub McLoginServerStart(Data As LoaderTask(Of McLoginServer, McLoginResult))
         Dim Input As McLoginServer = Data.Input
@@ -690,7 +717,7 @@ LoginFinish:
         Data.Progress = 0.1
         With Data.Output
             .Name = Input.UserName
-            .Uuid = McLoginLegacyUuidWithCustomSkin(Input.UserName, Input.SkinType, Input.SkinName)
+            .Uuid = PageLoginProfile.SelectedProfile("uuid")
             .Type = "Legacy"
         End With
         '将结果扩展到所有项目中
@@ -794,7 +821,7 @@ LoginFinish:
             If (LoginJson("selectedProfile") Is Nothing OrElse Data.Input.ForceReselectProfile) AndAlso LoginJson("availableProfiles").Count > 1 Then
                 '要求选择档案；优先从缓存读取
                 NeedRefresh = True
-                Dim CacheId As String = Setup.Get("Cache" & Data.Input.Token & "Uuid")
+                Dim CacheId As String = PageLoginProfile.SelectedProfile("uuid").ToString
                 For Each Profile In LoginJson("availableProfiles")
                     If Profile("id").ToString = CacheId Then
                         SelectedName = Profile("name").ToString
@@ -834,21 +861,30 @@ LoginFinish:
             Dim Response As String = NetGetCodeByRequestRetry(Data.Input.BaseUrl.Replace("/authserver", ""), Encoding.UTF8)
             Dim ServerName As String = JObject.Parse(Response)("meta")("serverName").ToString()
             '保存缓存
-            Dim NewProfile As New JObject From {
-                {"type", "authlib"},
-                {"uuid", Data.Output.Uuid},
-                {"username", Data.Output.Name},
-                {"server", Data.Input.BaseUrl},
-                {"serverName", ServerName},
-                {"name", Data.Input.UserName},
-                {"password", Data.Input.Password},
-                {"accessToken", Data.Output.AccessToken},
-                {"clientToken", Data.Output.ClientToken},
-                {"expires", 114514},
-                {"desc", ""}
-            }
-            PageLoginProfile.ProfileList.Add(NewProfile)
-            PageLoginProfile.SelectedProfile = NewProfile
+            If Data.Input.IsExist Then
+                Dim ProfileIndex = PageLoginProfile.ProfileList.IndexOf(PageLoginProfile.SelectedProfile)
+                PageLoginProfile.ProfileList(ProfileIndex)("username") = Data.Output.Name
+                PageLoginProfile.ProfileList(ProfileIndex)("uuid") = Data.Output.Uuid
+                PageLoginProfile.ProfileList(ProfileIndex)("serverName") = ServerName
+                PageLoginProfile.ProfileList(ProfileIndex)("accessToken") = Data.Output.AccessToken
+                PageLoginProfile.ProfileList(ProfileIndex)("clientToken") = Data.Output.ClientToken
+            Else
+                Dim NewProfile As New JObject From {
+                    {"type", "authlib"},
+                    {"uuid", Data.Output.Uuid},
+                    {"username", Data.Output.Name},
+                    {"server", Data.Input.BaseUrl},
+                    {"serverName", ServerName},
+                    {"name", Data.Input.UserName},
+                    {"password", Data.Input.Password},
+                    {"accessToken", Data.Output.AccessToken},
+                    {"clientToken", Data.Output.ClientToken},
+                    {"expires", 114514},
+                    {"desc", ""}
+                }
+                PageLoginProfile.ProfileList.Add(NewProfile)
+                PageLoginProfile.SelectedProfile = NewProfile
+            End If
             PageLoginProfile.WriteProfileJson()
             Setup.Set("Cache" & Data.Input.Token & "Access", Data.Output.AccessToken)
             Setup.Set("Cache" & Data.Input.Token & "Client", Data.Output.ClientToken)
@@ -953,10 +989,18 @@ Retry:
                (ex.Message.Contains("refresh_token") AndAlso ex.Message.Contains("is not valid")) Then '#269
                 Return {"Relogin", ""}
             Else
+                Dim IsIgnore As Boolean = False
+                RunInUiWait(Sub()
+                                If Not IsLaunching Then Exit Sub
+                                If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
+                            End Sub)
+                If IsIgnore Then
+                    Return {PageLoginProfile.SelectedProfile("accessToken"), "Ignore"}
+                    Exit Function
+                End If
                 Throw
             End If
         End Try
-
         Dim ResultJson As JObject = GetJson(Result)
         Dim AccessToken As String = ResultJson("access_token").ToString
         Dim RefreshToken As String = ResultJson("refresh_token").ToString
@@ -975,7 +1019,20 @@ Retry:
            ""RelyingParty"": ""http://auth.xboxlive.com"",
            ""TokenType"": ""JWT""
         }"
-        Dim Result As String = NetRequestMultiple("https://user.auth.xboxlive.com/user/authenticate", "POST", Request, "application/json", 3)
+        Dim Result As String = Nothing
+        Try
+            Result = NetRequestMultiple("https://user.auth.xboxlive.com/user/authenticate", "POST", Request, "application/json", 3)
+        Catch ex As Exception
+            Dim IsIgnore As Boolean = False
+            RunInUiWait(Sub()
+                            If Not IsLaunching Then Exit Sub
+                            If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
+                        End Sub)
+            If IsIgnore Then
+                Return "Ignore"
+                Exit Function
+            End If
+        End Try
 
         Dim ResultJson As JObject = GetJson(Result)
         Dim XBLToken As String = ResultJson("Token").ToString
@@ -1024,6 +1081,15 @@ Retry:
                 End If
                 Throw New Exception("$$")
             Else
+                Dim IsIgnore As Boolean = False
+                RunInUiWait(Sub()
+                                If Not IsLaunching Then Exit Sub
+                                If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
+                            End Sub)
+                If IsIgnore Then
+                    Return {PageLoginProfile.SelectedProfile("accessToken"), "Ignore"}
+                    Exit Function
+                End If
                 Throw
             End If
         End Try
@@ -1050,6 +1116,15 @@ Retry:
                 Log(ex, "微软登录第 5 步汇报 403")
                 Throw New Exception("$当前 IP 的登录尝试异常。" & vbCrLf & "如果你使用了 VPN 或加速器，请把它们关掉或更换节点后再试！")
             Else
+                Dim IsIgnore As Boolean = False
+                RunInUiWait(Sub()
+                                If Not IsLaunching Then Exit Sub
+                                If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
+                            End Sub)
+                If IsIgnore Then
+                    Return "Ignore"
+                    Exit Function
+                End If
                 Throw
             End If
         End Try
@@ -1100,6 +1175,15 @@ Retry:
                 End Sub, "Login Failed: Create Profile")
                 Throw New Exception("$$")
             Else
+                Dim IsIgnore As Boolean = False
+                RunInUiWait(Sub()
+                                If Not IsLaunching Then Exit Sub
+                                If MyMsgBox($"启动器在尝试刷新账号信息时遇到了网络错误。{vbCrLf}你可以选择取消，检查网络后再次启动，也可以选择忽略错误继续启动，但可能无法游玩部分服务器。", "账号信息获取失败", "继续", "取消") = 1 Then IsIgnore = True
+                            End Sub)
+                If IsIgnore Then
+                    Return {PageLoginProfile.SelectedProfile("uuid"), PageLoginProfile.SelectedProfile("username"), "Ignore"}
+                    Exit Function
+                End If
                 Throw
             End If
         End Try

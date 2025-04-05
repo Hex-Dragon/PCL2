@@ -292,14 +292,14 @@
         End If
         '获取页面的可用种类并回写缓存
         Dim Type As PageType
-        Dim LoginPageType As Integer
-        If McVersionCurrent IsNot Nothing Then
-            LoginPageType = Setup.Get("VersionServerLogin", Version:=McVersionCurrent)
-            '缓存当前版本的页面种类，下一次打开 McVersionCurrent 为空时才能加载出正确的页面
-            Setup.Set("LoginPageType", LoginPageType)
-        Else
-            LoginPageType = Setup.Get("LoginPageType")
-        End If
+        Dim LoginPageType As Integer = 5
+        'If McVersionCurrent IsNot Nothing Then
+        '    LoginPageType = Setup.Get("VersionServerLogin", Version:=McVersionCurrent)
+        '    '缓存当前版本的页面种类，下一次打开 McVersionCurrent 为空时才能加载出正确的页面
+        '    Setup.Set("LoginPageType", LoginPageType)
+        'Else
+        '    LoginPageType = Setup.Get("LoginPageType")
+        'End If
         Select Case LoginPageType
             Case 0 '正版或离线
 UnknownType:
@@ -572,7 +572,7 @@ Finish:
     Public Shared SkinAuth As New LoaderTask(Of EqualableList(Of String), String)("Loader Skin Auth", AddressOf SkinAuthLoad, AddressOf SkinAuthInput, ThreadPriority.AboveNormal)
     Private Shared Function SkinAuthInput() As EqualableList(Of String)
         '获取名称
-        Return New EqualableList(Of String) From {Setup.Get("CacheAuthName"), Setup.Get("CacheAuthUuid")}
+        Return New EqualableList(Of String) From {PageLoginProfile.SelectedProfile("username"), PageLoginProfile.SelectedProfile("uuid")}
     End Function
     Private Shared Sub SkinAuthLoad(Data As LoaderTask(Of EqualableList(Of String), String))
         '清空已有皮肤

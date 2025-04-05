@@ -63,10 +63,13 @@
     Public Function IsVaild() As String
         Return IsVaild(GetLoginData())
     End Function
-
+    Private Sub BtnBack_Click(sender As Object, e As EventArgs) Handles BtnBack.Click
+        RunInUi(Sub() FrmLaunchLeft.RefreshPage(False, True))
+    End Sub
     Private Sub BtnLogin_Click(sender As Object, e As EventArgs) Handles BtnLogin.Click
         ComboAccounts.IsEnabled = False
         BtnLogin.IsEnabled = False
+        BtnBack.IsEnabled = False
         BtnLogin.Text = "0%"
         RunInNewThread(
         Sub()
@@ -101,6 +104,7 @@
                 Sub()
                     ComboAccounts.IsEnabled = True
                     BtnLogin.IsEnabled = True
+                    BtnBack.IsEnabled = True
                     BtnLogin.Text = "登录"
                 End Sub)
             End Try
