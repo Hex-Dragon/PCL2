@@ -55,6 +55,28 @@
         If sender.Tag IsNot Nothing Then PageChange(Val(sender.Tag))
     End Sub
 
+    ''' <returns>
+    ''' True - 当传入的值对应的子页面仅为一个MsgBox
+    ''' </returns>
+    Public Shared Function IsSubPageMsgBox(Optional ID As FormMain.PageSubType = -1) As Boolean
+        If ID = FormMain.PageSubType.OtherFeedback OrElse ID = FormMain.PageSubType.OtherVote Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Shared Sub OpenMsgSubPage(ID As FormMain.PageSubType)
+        Select Case ID
+            Case FormMain.PageSubType.OtherFeedback
+                TryFeedback()
+            Case FormMain.PageSubType.OtherVote
+                TryVote()
+            Case Else
+                Throw New Exception("未知的更多子页面种类（消息框）：" & ID)
+        End Select
+    End Sub
+
     Public Function PageGet(Optional ID As FormMain.PageSubType = -1)
         If ID = -1 Then ID = PageID
         Select Case ID
