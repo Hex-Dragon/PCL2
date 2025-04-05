@@ -134,6 +134,10 @@
                     Text="切换到下载页面" EventType="切换页面" EventData="1|1"/>
         <local:MyButton Margin="0,5,0,6" Width="250" Height="35"
                     Text="切换到启动器设置" EventType="切换页面" EventData="3|2"/>
+        <TextBlock Margin="0,4,0,4"
+                    Text="· 下载版本：切换到下载 EventData 对应的 Minecraft 版本的页面"/>
+        <local:MyButton Margin="0,5,0,6" Width="250" Height="35"
+                    Text="下载 Minecraft 1.12.2" EventType="下载版本" EventData="1.12.2"/>
     </StackPanel>
 </local:MyCard>
 

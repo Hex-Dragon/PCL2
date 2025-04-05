@@ -565,6 +565,7 @@
             Dim Dict As New Dictionary(Of String, List(Of JObject)) From {
                 {"正式版", New List(Of JObject)}, {"预览版", New List(Of JObject)}, {"远古版", New List(Of JObject)}, {"愚人节版", New List(Of JObject)}
             }
+            VersionListDict = Dict
             Dim Versions As JArray = DlClientListLoader.Output.Value("versions")
             For Each Version As JObject In Versions
                 '确定分类
@@ -643,14 +644,17 @@
                 PanMinecraft.Children.Add(NewCard)
             Next
             '自动选择版本
-            If McVersionWaitingForSelect Is Nothing Then Exit Try
-            Log("[Download] 自动选择 MC 版本：" & McVersionWaitingForSelect)
-            For Each Version As JObject In Versions
-                If Version("id").ToString <> McVersionWaitingForSelect Then Continue For
-                Dim Item = McDownloadListItem(Version, Sub()
-                                                       End Sub, False)
-                MinecraftSelected(Item, Nothing)
-            Next
+            If McVersionWaitingForSelect IsNot Nothing Then
+                Log("[Download] 自动选择 MC 版本：" & McVersionWaitingForSelect)
+                Dim Version = Dict.SelectMany(Function(pair) pair.Value).FirstOrDefault(Function(json) json("id").ToString() = McVersionWaitingForSelect)
+                If Version Is Nothing Then
+                    Hint($"找不到名为'{McVersionWaitingForSelect}'的版本", HintType.Critical)
+                Else
+                    MinecraftSelected(McDownloadListItem(Version, Sub()
+                                                                  End Sub, False), Nothing)
+                End If
+                McVersionWaitingForSelect = Nothing
+            End If
         Catch ex As Exception
             Log(ex, "可视化安装版本列表出错", LogLevel.Feedback)
         End Try
@@ -659,6 +663,32 @@
     ''' 当 MC 版本列表加载完时，立即自动选择的版本。用于外部调用。
     ''' </summary>
     Public Shared McVersionWaitingForSelect As String = Nothing
+
+    Private VersionListDict As New Dictionary(Of String, List(Of JObject))
+
+    ''' <summary>
+    ''' 处理McVersionWaitingForSelect相关逻辑
+    ''' </summary>
+    Private Sub SelectSpecifiedMcVersion() Handles Me.PageEnter
+        If McVersionWaitingForSelect Is Nothing Then Exit Sub
+        Log("[Download] 自动选择 MC 版本：" & McVersionWaitingForSelect)
+        If IsInSelectPage Then
+            Hint($"已经打开了一个 MC 安装预览页面，要安装 {McVersionWaitingForSelect} 需先退出当前预览。")
+            McVersionWaitingForSelect = Nothing
+            Exit Sub
+        End If
+        If DlClientListLoader.State = LoadState.Finished Then '如果正在加载的话也不需要在这处理
+            Dim Version = VersionListDict.SelectMany(Function(pair) pair.Value).FirstOrDefault(Function(json) json("id").ToString() = McVersionWaitingForSelect)
+            If Version Is Nothing Then
+                Log("[Download] 现有列表中没找到对应的 MC 版本，将重新从网络获取版本列表：" & McVersionWaitingForSelect)
+                DlClientListLoader.Start(IsForceRestart:=True) '重启一下联网获取的Loader，它结束后也会处理McVersionWaitingForSelect
+            Else
+                McVersionWaitingForSelect = Nothing
+                MinecraftSelected(McDownloadListItem(Version, Sub()
+                                                              End Sub, False), Nothing)
+            End If
+        End If
+    End Sub
 
 #End Region
 
