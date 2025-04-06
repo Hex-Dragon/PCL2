@@ -292,7 +292,7 @@
         End If
         '获取页面的可用种类并回写缓存
         Dim Type As PageType
-        Dim LoginPageType As Integer = 5
+        Dim LoginPageType As Integer = 0
         'If McVersionCurrent IsNot Nothing Then
         '    LoginPageType = Setup.Get("VersionServerLogin", Version:=McVersionCurrent)
         '    '缓存当前版本的页面种类，下一次打开 McVersionCurrent 为空时才能加载出正确的页面
@@ -301,23 +301,34 @@
         '    LoginPageType = Setup.Get("LoginPageType")
         'End If
         Select Case LoginPageType
-            Case 0 '正版或离线
+            Case 0 '档案
 UnknownType:
-                If RadioLoginType5.Checked Then
-                    If Setup.Get("CacheMsV2Access") = "" Then
-                        Type = PageType.Ms
-                    Else
-                        Type = PageType.MsSkin
-                    End If
-                    Setup.Set("LoginType", McLoginType.Ms)
+                If PageLoginProfile.SelectedProfile IsNot Nothing Then
+                    Type = PageType.ProfileSkin
+                    PanTypeOne.Visibility = Visibility.Hidden
                 Else
-                    Type = PageType.Legacy
-                    Setup.Set("LoginType", McLoginType.Legacy)
+                    Type = PageType.Profile
+                    PanTypeOne.Visibility = Visibility.Visible
                 End If
-                PanType.Visibility = Visibility.Visible
-                PanTypeOne.Visibility = Visibility.Collapsed
-                RadioLoginType5.Visibility = Visibility.Visible
-                RadioLoginType0.Visibility = Visibility.Visible
+                PanType.Visibility = Visibility.Collapsed
+                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonUser)
+                LabTypeOne.Text = "档案管理"
+            'Case 0 '正版或离线
+            '    If RadioLoginType5.Checked Then
+            '        If Setup.Get("CacheMsV2Access") = "" Then
+            '            Type = PageType.Ms
+            '        Else
+            '            Type = PageType.MsSkin
+            '        End If
+            '        Setup.Set("LoginType", McLoginType.Ms)
+            '    Else
+            '        Type = PageType.Legacy
+            '        Setup.Set("LoginType", McLoginType.Legacy)
+            '    End If
+            '    PanType.Visibility = Visibility.Visible
+            '    PanTypeOne.Visibility = Visibility.Collapsed
+            '    RadioLoginType5.Visibility = Visibility.Visible
+            '    RadioLoginType0.Visibility = Visibility.Visible
             Case 1 '仅正版
                 If Setup.Get("CacheMsV2Access") = "" Then
                     Type = PageType.Ms
@@ -361,17 +372,6 @@ UnknownType:
                 PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonCard)
                 LabTypeOne.Text = If(McVersionCurrent Is Nothing, Setup.Get("CacheAuthServerName"), Setup.Get("VersionServerAuthName", Version:=McVersionCurrent))
                 If LabTypeOne.Text = "" Then LabTypeOne.Text = "第三方登录"
-            Case 5 '档案
-                If PageLoginProfile.SelectedProfile IsNot Nothing Then
-                    Type = PageType.ProfileSkin
-                    PanTypeOne.Visibility = Visibility.Hidden
-                Else
-                    Type = PageType.Profile
-                    PanTypeOne.Visibility = Visibility.Visible
-                End If
-                PanType.Visibility = Visibility.Collapsed
-                PathTypeOne.Data = (New GeometryConverter).ConvertFromString(Logo.IconButtonUser)
-                LabTypeOne.Text = "档案管理"
             Case Else
                 Log("[Control] 未知的登录页面：" & LoginPageType, LogLevel.Hint)
                 GoTo UnknownType

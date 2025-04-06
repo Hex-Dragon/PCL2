@@ -181,8 +181,8 @@ Class PageLoginProfile
         If sender.Tag("type") = "offline" Then
             sender.Buttons = {BtnUUID, BtnDelete}
         ElseIf sender.Tag("type") = "authlib" Then
-            'sender.Buttons = {BtnDelete}
-            sender.Buttons = {BtnChangeRole, BtnDelete}
+            sender.Buttons = {BtnDelete}
+            'sender.Buttons = {BtnChangeRole, BtnDelete}
         Else
             sender.Buttons = {BtnDelete}
         End If
@@ -242,6 +242,109 @@ Class PageLoginProfile
         WriteProfileJson()
         Hint("档案删除成功！", HintType.Finish)
         RefreshProfileList()
+    End Sub
+    Private Sub MigrateProfile() Handles BtnPort.Click
+        Dim Type As Integer = 3
+        RunInUiWait(Sub() Type = MyMsgBox($"PCL CE 支持导入 HMCL 的全局账户列表，抑或是导出 PCL 的档案列表至 HMCL 全局账户列表。{vbCrLf}你想要...？", "导入 / 导出档案", "导入", "导出", "取消", ForceWait:=True))
+        If Type = 3 Then Exit Sub
+        Dim OutsidePath As String = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\.hmcl\accounts.json"
+        If Type = 1 Then
+            RunInNewThread(Sub()
+                               Dim ImportList As JArray = JArray.Parse(ReadFile(OutsidePath))
+                               Dim OutputList As JArray = New JArray
+                               For Each Profile In ImportList
+                                   Dim NewProfile As JObject = Nothing
+                                   If Profile("type") = "microsoft" Then
+                                       NewProfile = New JObject From {
+                                           {"type", "microsoft"},
+                                           {"uuid", Profile("uuid")},
+                                           {"username", Profile("displayName")},
+                                           {"accessToken", ""},
+                                           {"refreshToken", ""},
+                                           {"expires", 1743779140286},
+                                           {"desc", ""}
+                                       }
+                                       OutputList.Add(NewProfile)
+                                   ElseIf Profile("type") = "authlibInjector" Then
+                                       NewProfile = New JObject From {
+                                           {"type", "authlib"},
+                                           {"uuid", Profile("uuid")},
+                                           {"username", Profile("displayName")},
+                                           {"server", Profile("serverBaseURL")},
+                                           {"serverName", ""},
+                                           {"name", Profile("username")},
+                                           {"password", ""},
+                                           {"accessToken", ""},
+                                           {"refreshToken", ""},
+                                           {"expires", 1743779140286},
+                                           {"desc", ""}
+                                       }
+                                       Dim Response As String = NetGetCodeByRequestRetry(NewProfile("server").ToString.Replace("/authserver", ""), Encoding.UTF8)
+                                       Dim ServerName As String = JObject.Parse(Response)("meta")("serverName").ToString()
+                                       NewProfile("serverName") = ServerName
+                                       OutputList.Add(NewProfile)
+                                   Else
+                                       NewProfile = New JObject From {
+                                           {"type", "offline"},
+                                           {"uuid", Profile("uuid")},
+                                           {"username", Profile("username")},
+                                           {"desc", ""}
+                                       }
+                                       OutputList.Add(NewProfile)
+                                   End If
+                               Next
+                               For Each Profile In OutputList
+                                   ProfileList.Add(Profile)
+                               Next
+                               WriteProfileJson()
+                               RunInUi(Sub() RefreshProfileList())
+                           End Sub)
+            Hint("档案导入成功，部分档案可能需要重新验证密码！", HintType.Finish)
+        Else
+            RunInNewThread(Sub()
+                               Dim ExistList As JArray = JArray.Parse(ReadFile(OutsidePath))
+                               Dim OutputList As JArray = New JArray
+                               For Each Profile In ProfileList
+                                   Dim NewProfile As JObject = Nothing
+                                   If Profile("type") = "microsoft" Then
+                                       NewProfile = New JObject From {
+                                           {"uuid", Profile("uuid")},
+                                           {"displayName", Profile("username")},
+                                           {"tokenType", "Bearer"},
+                                           {"accessToken", ""},
+                                           {"refreshToken", ""},
+                                           {"notAfter", 1743779140286},
+                                           {"userid", ""},
+                                           {"type", "microsoft"}
+                                       }
+                                       OutputList.Add(NewProfile)
+                                   ElseIf Profile("type") = "authlibInjector" Then
+                                       NewProfile = New JObject From {
+                                           {"serverBaseURL", Profile("server")},
+                                           {"clientToken", ""},
+                                           {"displayName", Profile("username")},
+                                           {"accessToken", ""},
+                                           {"type", "authlibInjector"},
+                                           {"uuid", Profile("uuid")},
+                                           {"username", Profile("name")}
+                                       }
+                                       OutputList.Add(NewProfile)
+                                   Else
+                                       NewProfile = New JObject From {
+                                           {"uuid", Profile("uuid")},
+                                           {"username", Profile("username")},
+                                           {"type", "offline"}
+                                       }
+                                       OutputList.Add(NewProfile)
+                                   End If
+                               Next
+                               For Each Profile In OutputList
+                                   ExistList.Add(Profile)
+                               Next
+                               WriteFile(OutsidePath, ExistList.ToString())
+                           End Sub)
+            Hint("档案导出成功，部分档案可能需要重新验证密码！", HintType.Finish)
+        End If
     End Sub
     ''' <summary>
     ''' 以当前的档案列表写入配置文件

@@ -600,7 +600,7 @@ Relogin:
                 {"username", Result(1)},
                 {"accessToken", AccessToken},
                 {"refreshToken", OAuthRefreshToken},
-                {"expires", 114514},
+                {"expires", 1743779140286},
                 {"desc", ""}
             }
             PageLoginProfile.ProfileList.Add(NewProfile)
@@ -885,7 +885,7 @@ LoginFinish:
                     {"password", Data.Input.Password},
                     {"accessToken", Data.Output.AccessToken},
                     {"clientToken", Data.Output.ClientToken},
-                    {"expires", 114514},
+                    {"expires", 1743779140286},
                     {"desc", ""}
                 }
                 PageLoginProfile.ProfileList.Add(NewProfile)

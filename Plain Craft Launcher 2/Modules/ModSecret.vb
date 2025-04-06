@@ -624,8 +624,6 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
     ''' <summary>
     ''' 获取更新文件的下载地址。
     ''' </summary>
-    ''' <param name="VersionStr"></param>
-    ''' <returns></returns>
     Private Function GetUpdateServerSource() As String
         Dim LatestVersion As SelfUpdateChannelInfo = RemoteVersionData.latests.slow
         Dim DlLink As String = Nothing

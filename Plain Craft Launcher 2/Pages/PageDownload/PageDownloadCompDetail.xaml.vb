@@ -316,7 +316,7 @@
                     Case CompType.ResourcePack : ResourceName = "resourcepacks"
                     Case CompType.Shader : ResourceName = "shaderpacks"
                 End Select
-                Dim IsVersionSuitable As Func(Of McVersion, Boolean)
+                Dim IsVersionSuitable As Func(Of McVersion, Boolean) = Nothing
                 If Project.Type = CompType.Mod Then
                     '获取 Mod 所需的加载器种类
                     Dim AllowForge As Boolean? = Nothing, AllowFabric As Boolean? = Nothing

@@ -17,7 +17,7 @@
     End Sub
 
     Private Function LoaderInput() As List(Of String)
-        Dim TargetList As List(Of String)
+        Dim TargetList As List(Of String) = Nothing
         Try
             TargetList = CurrentFavTarget.Favs.Distinct().ToList()
         Catch ex As Exception

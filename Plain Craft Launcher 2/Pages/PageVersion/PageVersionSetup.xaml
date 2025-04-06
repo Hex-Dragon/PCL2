@@ -146,12 +146,11 @@
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="登录方式" Margin="0,0,25,0" />
                         <local:MyComboBox x:Name="ComboServerLogin" Grid.Row="0" Grid.ColumnSpan="2" Tag="VersionServerLogin" Grid.Column="1" IsEnabled="False">
-                            <local:MyComboBoxItem Content="正版登录或离线登录" />
+                            <local:MyComboBoxItem Content="档案管理" IsSelected="True"/>
                             <local:MyComboBoxItem Content="仅正版登录" />
                             <local:MyComboBoxItem Content="仅离线登录" />
                             <local:MyComboBoxItem Content="第三方登录：统一通行证" />
                             <local:MyComboBoxItem Content="第三方登录：Authlib Injector 或 LittleSkin" />
-                            <local:MyComboBoxItem Content="档案管理" IsSelected="True"/>
                         </local:MyComboBox>
                         <TextBlock Name="LabServerNide" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Text="服务器 ID（必填）" Margin="0,8,25,0" Visibility="Collapsed" />
                         <local:MyTextBox x:Name="TextServerNide" Grid.Row="1" Grid.ColumnSpan="2" ShowValidateResult="False" Tag="VersionServerNide" Grid.Column="1" Margin="0,8,0,0" Visibility="Collapsed" HintText="服主后台 → 集成说明 中提供的服务器 ID">

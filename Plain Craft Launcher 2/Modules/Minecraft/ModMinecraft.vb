@@ -182,17 +182,17 @@ Public Module ModMinecraft
                 Setup.Set("CacheNideServer", Setup.Get("VersionServerNide", Version:=value))
             End If
             'Authlib-Injector 重判
-            If AniControlEnabled = 0 AndAlso
-               Setup.Get("VersionServerAuthServer", Version:=value) <> Setup.Get("CacheAuthServerServer") AndAlso
-               Setup.Get("VersionServerLogin", Version:=value) = 4 Then
-                Setup.Set("CacheAuthAccess", "")
-                Log("[Launch] 服务器改变，要求重新登录 Authlib-Injector")
-            End If
-            If Setup.Get("VersionServerLogin", Version:=value) = 4 Then
-                Setup.Set("CacheAuthServerServer", Setup.Get("VersionServerAuthServer", Version:=value))
-                Setup.Set("CacheAuthServerName", Setup.Get("VersionServerAuthName", Version:=value))
-                Setup.Set("CacheAuthServerRegister", Setup.Get("VersionServerAuthRegister", Version:=value))
-            End If
+            'If AniControlEnabled = 0 AndAlso
+            '   Setup.Get("VersionServerAuthServer", Version:=value) <> Setup.Get("CacheAuthServerServer") AndAlso
+            '   Setup.Get("VersionServerLogin", Version:=value) = 4 Then
+            '    Setup.Set("CacheAuthAccess", "")
+            '    Log("[Launch] 服务器改变，要求重新登录 Authlib-Injector")
+            'End If
+            'If Setup.Get("VersionServerLogin", Version:=value) = 4 Then
+            '    Setup.Set("CacheAuthServerServer", Setup.Get("VersionServerAuthServer", Version:=value))
+            '    Setup.Set("CacheAuthServerName", Setup.Get("VersionServerAuthName", Version:=value))
+            '    Setup.Set("CacheAuthServerRegister", Setup.Get("VersionServerAuthRegister", Version:=value))
+            'End If
         End Set
     End Property
 
@@ -879,8 +879,6 @@ ExitDataLoad:
             End Select
             If Not State = McVersionState.Error Then
                 If HasJumpLoader Then Info += ", JumpLoader"
-                If Setup.Get("VersionServerLogin", Version:=Me) = 3 Then Info += ", 统一通行证验证"
-                If Setup.Get("VersionServerLogin", Version:=Me) = 4 Then Info += ", Authlib 验证"
             End If
             Return Info
         End Function
@@ -2079,32 +2077,30 @@ OnLoaded:
         End If
 
         'Authlib-Injector 文件
-        If Setup.Get("VersionServerLogin", Version:=Version) = 4 Then
-            Dim TargetFile = PathPure & "\authlib-injector.jar"
-            Dim DownloadInfo As JObject = Nothing
-            '获取下载信息
-            Try
-                Log("[Minecraft] 开始获取 Authlib-Injector 下载信息")
-                DownloadInfo = GetJson(NetGetCodeByLoader({
+        Dim AuthlibTargetFile = PathPure & "\authlib-injector.jar"
+        Dim AuthlibDownloadInfo As JObject = Nothing
+        '获取下载信息
+        Try
+            Log("[Minecraft] 开始获取 Authlib-Injector 下载信息")
+            AuthlibDownloadInfo = GetJson(NetGetCodeByLoader({
                         "https://authlib-injector.yushi.moe/artifact/latest.json",
                         "https://bmclapi2.bangbang93.com/mirrors/authlib-injector/artifact/latest.json"
                     }, IsJson:=True))
-            Catch ex As Exception
-                Log(ex, "获取 Authlib-Injector 下载信息失败")
-            End Try
-            '校验文件
-            If DownloadInfo IsNot Nothing Then
-                Dim Checker As New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)
-                If Checker.Check(TargetFile) IsNot Nothing Then
-                    '开始下载
-                    Dim DownloadAddress As String = DownloadInfo("download_url").ToString.
+        Catch ex As Exception
+            Log(ex, "获取 Authlib-Injector 下载信息失败")
+        End Try
+        '校验文件
+        If AuthlibDownloadInfo IsNot Nothing Then
+            Dim Checker As New FileChecker(Hash:=AuthlibDownloadInfo("checksums")("sha256").ToString)
+            If Checker.Check(AuthlibTargetFile) IsNot Nothing Then
+                '开始下载
+                Dim DownloadAddress As String = AuthlibDownloadInfo("download_url").ToString.
                             Replace("bmclapi2.bangbang93.com/mirrors/authlib-injector", "authlib-injector.yushi.moe")
-                    Log("[Minecraft] Authlib-Injector 需要更新：" & DownloadAddress, LogLevel.Developer)
-                    Result.Add(New NetFile({
+                Log("[Minecraft] Authlib-Injector 需要更新：" & DownloadAddress, LogLevel.Developer)
+                Result.Add(New NetFile({
                         DownloadAddress,
                         DownloadAddress.Replace("authlib-injector.yushi.moe", "bmclapi2.bangbang93.com/mirrors/authlib-injector")
-                    }, TargetFile, New FileChecker(Hash:=DownloadInfo("checksums")("sha256").ToString)))
-                End If
+                    }, AuthlibTargetFile, New FileChecker(Hash:=AuthlibDownloadInfo("checksums")("sha256").ToString)))
             End If
         End If
 
