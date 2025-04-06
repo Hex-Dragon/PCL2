@@ -2,14 +2,12 @@ name: PR Automation
 
 on:
   pull_request:
-    types: [closed, reopened, opened]
+    types: [closed, reopened]
 
 jobs:
   handle_pr_events:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      pull-requests: write
+    
     steps:
       
       - name: Remove old labels on merge
@@ -43,18 +41,3 @@ jobs:
             ❌ 第三方
             ⭕ 等待处理
             ❌ 重复
-      - name: Request team review
-        if: github.event.action == 'opened'
-        uses: actions/github-script@v7
-        env:
-          BOT_TOKEN: ${{ secrets.BOT }}
-        with:
-          script: |
-            try {
-              await github.rest.pulls.requestReviewers({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.issue.number,
-                team_reviewers: ['developers']
-              });
-            } catch (error) {}
