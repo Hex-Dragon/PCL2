@@ -96,6 +96,7 @@
                 ImgFore.Source = Nothing : ImgBack.Source = Nothing
                 Throw New Exception("图片大小不足，长为 " & Image.Pic.Height & "，宽为 " & Image.Pic.Width)
             End If
+            Dim SkinHead As MyBitmap = Nothing
             '头发层（附加层）
             If Image.Pic.Width >= 64 AndAlso Image.Pic.Height >= 32 Then
                 If (Image.Pic.GetPixel(1, 1).A = 0 OrElse '如果图片中有任何透明像素（避免纯色白底）
@@ -105,6 +106,7 @@
                     Image.Pic.GetPixel(Image.Pic.Width - 1, Image.Pic.Height - 1) <> Image.Pic.GetPixel(Scale * 41, Scale * 9) AndAlso
                     Image.Pic.GetPixel(Image.Pic.Width - 2, Image.Pic.Height / 2 - 2) <> Image.Pic.GetPixel(Scale * 41, Scale * 9)) Then
                     ImgFore.Source = Image.Clip(Scale * 40, Scale * 8, Scale * 8, Scale * 8)
+                    SkinHead = Image.Clip(Scale * 40, Scale * 8, Scale * 8, Scale * 8)
                 Else
                     ImgFore.Source = Nothing
                 End If
@@ -113,6 +115,22 @@
             End If
             '脸层
             ImgBack.Source = Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8)
+            Dim CachePath As String = PathTemp & $"Cache\Skin\Head\{PageLoginProfile.SelectedProfile("type")}_{PageLoginProfile.SelectedProfile("username")}_{PageLoginProfile.SelectedProfile("uuid")}.png"
+            WriteFile(CachePath, "")
+            'If SkinHead Is Nothing Then
+            '    SkinHead.Pic = Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8)
+            'Else
+            '    Dim SkinHair As MyBitmap = Image.Clip(Scale * 40, Scale * 8, Scale * 8, Scale * 8)
+            '    SkinHead.Save(CachePath)
+            '    For i = 1 To 7
+            '        For j = 1 To 7
+            '            SkinHead.Pic.SetPixel(i + 4, j + 4, Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8).Pic.GetPixel(i, j))
+            '            SkinHead.Pic.SetPixel(i + 4, j + 4, SkinHair.Pic.GetPixel(i, j))
+            '        Next
+            '    Next
+            'End If
+            SkinHead.Pic = Image.Clip(Scale * 8, Scale * 8, Scale * 8, Scale * 8)
+            SkinHead.Save(CachePath)
             Log("[Skin] 载入头像成功：" & Loader.Name)
         Catch ex As Exception
             Log(ex, "载入头像失败（" & If(Address, "null") & "," & Loader.Name & "）", LogLevel.Hint)

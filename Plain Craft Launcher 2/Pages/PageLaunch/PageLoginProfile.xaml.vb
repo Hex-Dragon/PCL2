@@ -151,11 +151,18 @@ Class PageLoginProfile
 #End Region
 
     Public Function ProfileListItem(Json As JObject, OnClick As MyListItem.ClickEventHandler)
+        Dim LogoPath As String = Nothing
+        If File.Exists(PathTemp & $"Cache\Skin\Head\{Json("type")}_{Json("username")}_{Json("uuid")}.png") Then
+            'Log($"[Profile] 档案 {Json("username")} ({Json("type")}) 存在可用头像文件")
+            LogoPath = PathTemp & $"Cache\Skin\Head\{Json("type")}_{Json("username")}_{Json("uuid")}.png"
+        Else
+            LogoPath = Logo.IconButtonUser
+        End If
         Dim NewItem As New MyListItem With {
                 .Title = Json("username").ToString,
                 .Info = GetProfileInfo(Json("type").ToString, Desc:=Json("desc").ToString, ServerName:=If(Json("type").ToString = "authlib", Json("serverName").ToString, Nothing)),
                 .Type = MyListItem.CheckType.Clickable,
-                .Logo = "pack://application:,,,/images/Blocks/Grass.png",
+                .Logo = LogoPath,
                 .Tag = Json
         }
         AddHandler NewItem.Click, OnClick
