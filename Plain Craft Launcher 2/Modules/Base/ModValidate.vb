@@ -221,14 +221,16 @@ Public Class ValidateFolderName
     Public Property UseMinecraftCharCheck As Boolean = True
     Public Property IgnoreCase As Boolean = True
     Private ReadOnly PathIgnore As IEnumerable(Of DirectoryInfo)
+    Public Property IgnoreFolderName As String = Nothing
     Public Sub New()
     End Sub
-    Public Sub New(Path As String, Optional UseMinecraftCharCheck As Boolean = True, Optional IgnoreCase As Boolean = True)
+    Public Sub New(Path As String, Optional UseMinecraftCharCheck As Boolean = True, Optional IgnoreCase As Boolean = True, Optional IgnoreFolderName As String = Nothing)
         Me.Path = Path
         Me.IgnoreCase = IgnoreCase
         Me.UseMinecraftCharCheck = UseMinecraftCharCheck
         On Error Resume Next
         PathIgnore = New DirectoryInfo(Path).EnumerateDirectories
+        Me.IgnoreFolderName = IgnoreFolderName
     End Sub
     Public Overrides Function Validate(Str As String) As String
         Try
@@ -255,7 +257,9 @@ Public Class ValidateFolderName
             Dim Arr As New List(Of String)
             If PathIgnore IsNot Nothing Then
                 For Each Folder As DirectoryInfo In PathIgnore
-                    Arr.Add(Folder.Name)
+                    If IgnoreFolderName Is Nothing OrElse Not Folder.Name.ToLower = IgnoreFolderName.ToLower Then
+                        Arr.Add(Folder.Name)
+                    End If
                 Next
             End If
             Dim SameNameCheck = New ValidateExceptSame(Arr, "不可与现有文件夹重名！", IgnoreCase).Validate(Str)
