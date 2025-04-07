@@ -20,16 +20,16 @@ Error Cause: {0}</s:String>
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">The manually set cache folder is unavailable, PCL will use the default one instead.
 Error Cause: {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Environment Warning</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">Please extract PCL from the compressed file or change the folder before continuing to use!
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">Please extract PCL from the ZIP file or change the folder before use!
 The programme is currently running in a temporary folder, which may prevent the saving of settings, game saves, and other data. Also, some functions may not be available.</s:String>
     <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL and newer versions of Minecraft no longer support 32-bit systems, and some features are unavailable.
-It is strongly recommended to switch to a 64-bit system before continuing!</s:String>
+We strongly recommended to switch to a 64-bit system.</s:String>
     <s:String x:Key="LangApplicationDialogTitleInitError">Initialisation Error</s:String>
     <s:String x:Key="LangApplicationDialogTitleNETWarn">Runtime Error</s:String>
-    <s:String x:Key="LangApplicationDialogContentNETWarn">The installed .NET Framework is outdated or corrupted. Please download and install .NET Framework 4.6.2 from the opening website and try again!</s:String>
+    <s:String x:Key="LangApplicationDialogContentNETWarn">The '.NET Framework' is outdated or corrupted. Please download and install '.NET Framework 4.6.2' and try again!</s:String>
     <s:String x:Key="LangApplicationDialogTitleUnknownError">Unknown Error</s:String>
-    <s:String x:Key="LangApplicationDialogContentUnknownError">An unknown error occurred in the programme.</s:String>
-    <s:String x:Key="LangApplicationDialogContentMemReduceFail">Failed to optimise memory.</s:String>
+    <s:String x:Key="LangApplicationDialogContentUnknownError">An unknown error has occurred.</s:String>
+    <s:String x:Key="LangApplicationDialogContentMemReduceFail">Memory optimization failed！</s:String>
     <s:String x:Key="LangTitleDownload">Download</s:String>
     <s:String x:Key="LangTitleHome">Launch</s:String>
     <s:String x:Key="LangTitleSetup">Settings</s:String>
@@ -39,24 +39,24 @@ It is strongly recommended to switch to a 64-bit system before continuing!</s:St
     <s:String x:Key="LangToolTipDownload">Downloads</s:String>
     <s:String x:Key="LangToolTipSurrender">Surrender</s:String>
     <s:String x:Key="LangToolTipCloseMinecraft">Close Minecraft</s:String>
-    <s:String x:Key="LangDialogBtnUpdateFullLog">Full Changelog</s:String>
+    <s:String x:Key="LangDialogBtnUpdateFullLog">Full Update log</s:String>
     <s:String x:Key="LangDialogUpdateTo">PCL {0} Updated</s:String>
-    <s:String x:Key="LangDialogPolicyContent">Before using PCL, please review and agree to the Terms of Service and Disclaimer.</s:String>
+    <s:String x:Key="LangDialogPolicyContent">Before using PCL, please view and agree to the Terms of Service and Disclaimer.</s:String>
     <s:String x:Key="LangDialogPolicyTitle">Agreement Authorisation</s:String>
     <s:String x:Key="LangDialogBtnAgree">Agree</s:String>
-    <s:String x:Key="LangDialogBtnDeny">Decline</s:String>
-    <s:String x:Key="LangDialogBtnPolicyContent">ToS &amp; Disclaimer</s:String>
+    <s:String x:Key="LangDialogBtnDeny">Disagree</s:String>
+    <s:String x:Key="LangDialogBtnPolicyContent">View the terms of use and Disclaimer</s:String>
     <s:String x:Key="LangHintDebugWarning">[Debug Mode] PCL is running in debug mode, which may cause performance degradation. Please do NOT enable it unless necessary!</s:String>
     <s:String x:Key="LangDialogTitleTip">Hint</s:String>
     <s:String x:Key="LangDialogHardcoreFanTheme">Yay! You have used PCL 99 times. Thank you for your long-term support!
 The hidden theme 'Hardcore Fans' has been unlocked!</s:String>
-    <s:String x:Key="LangDialogCloseOnDownloading">There is a download task in progress. Are you sure you want to quit?</s:String>
+    <s:String x:Key="LangDialogCloseOnDownloading">There are still download tasks unfinished. Are you sure you want to exit?</s:String>
     <s:String x:Key="LangHintHideModeOn">The 'Feature Hiding' setting has been re-enabled!</s:String>
     <s:String x:Key="LangHintHideModeOff">The 'Feature Hiding' setting has been temporarily disabled!</s:String>
     <s:String x:Key="LangHintIJustWantToStart">Muda!</s:String>
     <s:String x:Key="LangHintAuthlibUrlIncorrect">The Authlib authentication server does not match the URL format ({0})!</s:String>
-    <s:String x:Key="LangHintAuthlibDownloadGame">Please download the game first before setting up the third-party login!</s:String>
-    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">Do you want to log in using LittleSkin in the instance {0}?
+    <s:String x:Key="LangHintAuthlibDownloadGame">Please download the game before setting up the third-party login!</s:String>
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">Do you want to log in using LittleSkin in Version {0}?
 You can modify the login method in 'Properties → Settings → Server'.</s:String>
     <s:String x:Key="LangDialogTitleAuthlibEnableLittleSkin">Third-party Login Confirmation</s:String>
     <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">Do you want to login using LittleSkin in the instance {0}?
@@ -423,7 +423,7 @@ Press 'F11' again to exit the hidden instance viewing mode.</s:String>
     <s:String x:Key="LangDownloadSaveAs">Save as</s:String>
     <s:String x:Key="LangDownloadReleaseOn">Released on</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">Incompatible with Forge</s:String>
-    <s:String x:Key="LangDownloadRecommendForge">Recommended Forge Version: </s:String>
+    <s:String x:Key="LangDownloadRecommendForge">Compatible Forge Version: {0}</s:String>
     <s:String x:Key="LangDownloadShowAll">Show All Versions</s:String>
     <s:String x:Key="LangDownloadSaveInstaller">Save Installer</s:String>
     <s:String x:Key="LangDownloadAll">All Versions</s:String>
@@ -462,30 +462,30 @@ This page offers the Fabric installer for download. After downloading, you need 
     <s:String x:Key="LangDownloadInstallStart">Install</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">Name</s:String>
     <s:String x:Key="LangDownloadInstallBack">Back</s:String>
-    <s:String x:Key="LangDownloadInstallGettingList">Getting Version List...</s:String>
+    <s:String x:Key="LangDownloadInstallGettingList">Loading...</s:String>
     <s:String x:Key="LangDownloadInstallHintBackTip">Click the Minecraft tile to return!</s:String>
-    <s:String x:Key="LangDownloadInstallClickToChose">Click to Select</s:String>
+    <s:String x:Key="LangDownloadInstallClickToChose">Add</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">Incompatible with Forge</s:String>
-    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">Compatible only with certain versions of Forge.</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">Incompatible with Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">Incompatible with OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">Requires Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineNeed">Requires OptiFine</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineFabricNeed">Requires OptiFine &amp; Fabric</s:String>
     <s:String x:Key="LangDownloadInstallOrHigherVersion">or higher</s:String>
-    <s:String x:Key="LangDownloadInstallNoAvailableVersion">No Version Available</s:String>
+    <s:String x:Key="LangDownloadInstallNoAvailableVersion">Not Available</s:String>
     <s:String x:Key="LangDownloadInstallFailGetListUnknownStatus">Failed to get version list: Unknown error, status is</s:String>
     <s:String x:Key="LangDownloadInstallFailGetList">Failed to get version list: </s:String>
     <s:String x:Key="LangDownloadInstallNoAutoInstall">Automatic installation unavailable</s:String>
     <s:String x:Key="LangDownloadInstallDialogIndieTitle">Instance Isolation Hint</s:String>
-    <s:String x:Key="LangDownloadInstallDialogIndieContent">'Instance Isolation' has not been enabled yet, which will let multiple instances share the same mods folder.
-Therefore, when switching instances, Minecraft will crash because it reads mods that do not match the current version or the loader.
-PCL recommends to turn on the 'Instance Isolation' option in 'Settings → Instance Isolation' before the installation!</s:String>
+    <s:String x:Key="LangDownloadInstallDialogIndieContent">Version isolation has not been enabled yet, which will let multiple Version share the same mods folder.
+Therefore, the game may crash because it reads mods that do not match the current version or the loader.
+PCL recommends to turn on the 'Version Isolation' in 'Settings → Instance Isolation' before the installation!</s:String>
     <s:String x:Key="LangDownloadInstallCancelDownload">Cancel</s:String>
     <s:String x:Key="LangDownloadInstallNeoForgeIncompatible">Incompatible with NeoForge</s:String>
     <s:String x:Key="LangDownloadInstallOptiFabricManually">Incompatible with older versions of Fabric, please download OptiFabric Origins manually.</s:String>
     <s:String x:Key="LangDownloadPageLeftRefresh">Refresh</s:String>
-    <s:String x:Key="LangDownloadPageLeftAutoInstall">Installation</s:String>
+    <s:String x:Key="LangDownloadPageLeftAutoInstall">Download</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstall">▼ Packages</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallContent">The 'Packages' allows you to download a JAR installation file for components like OptiFine and Forge, but cannot be installed automatically.
 To install, first select your Minecraft version on the 'Installation' page, then choose OptiFine, Forge, or any other components. PCL will then handle the installation.</s:String>
@@ -493,7 +493,7 @@ To install, first select your Minecraft version on the 'Installation' page, then
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">Installation Page</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">Continue</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">Packages</s:String>
-    <s:String x:Key="LangDownloadPageLeftResource">Resources</s:String>
+    <s:String x:Key="LangDownloadPageLeftResource">Community Resources</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Mods</s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">Modpacks</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
@@ -577,7 +577,7 @@ This page offers the NeoForge installer for download. After downloading, you nee
     <s:String x:Key="LangDownloadModpackTypeTech">Technology</s:String>
     <s:String x:Key="LangDownloadModpackTypeMagic">Magic</s:String>
     <s:String x:Key="LangDownloadModpackTypeAdventure">Adventure</s:String>
-    <s:String x:Key="LangDownloadModpackTypeCook">Kitchen Sink</s:String>
+    <s:String x:Key="LangDownloadModpackTypeCook">Other</s:String>
     <s:String x:Key="LangDownloadModpackTypeExplore">Exploration</s:String>
     <s:String x:Key="LangDownloadModpackTypeGame">Mini Games</s:String>
     <s:String x:Key="LangDownloadModpackTypeScienceFiction">Sci-Fi</s:String>
@@ -631,10 +631,10 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangMySkinCapeNamePurpleHeart">Purple Heart</s:String>
     <s:String x:Key="LangMySkinCapeNameFollower's">Follower's</s:String>
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15th Year</s:String>
-    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">村民救援披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang 办公室披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameHome">家园披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMenace">入侵披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameMinecraftExperience">Minecraft Experience</s:String>
+    <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang Office</s:String>
+    <s:String x:Key="LangMySkinCapeNameHome">Home</s:String>
+    <s:String x:Key="LangMySkinCapeNameMenace">Menace</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">None</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">Selection</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">Properties</s:String>
@@ -694,7 +694,7 @@ Please check your internet and try again.</s:String>
     <s:String x:Key="LangPageLoginLegacyNoEmptyID">Username cannot be empty!</s:String>
     <s:String x:Key="LangPageLoginLegacyNoQuotationInID">Username cannot contain quotation marks!</s:String>
     <s:String x:Key="LangPageLoginLegacyConfigHidden">The launch options have been disabled!</s:String>
-    <s:String x:Key="LangPageLoginLegacyLengthLimit">自 1.20.3 起，玩家名至多只能包含 16 个字符！</s:String>
+    <s:String x:Key="LangPageLoginLegacyLengthLimit">Since version 1.20.3, player names can contain morethen 16 characters!</s:String>
     <s:String x:Key="LangPageLoginMsLogin">Login</s:String>
     <s:String x:Key="LangPageLoginMsBuy">» Purchase</s:String>
     <s:String x:Key="LangPageLoginMsWebsite">» Website</s:String>
