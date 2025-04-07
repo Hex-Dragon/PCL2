@@ -1,4 +1,4 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xml:space="preserve">
     <s:String x:Key="LangTaskAbort">已取消！</s:String>
     <s:String x:Key="LangDialogBtnOK">確認</s:String>
     <s:String x:Key="LangDialogBtnCancel">取消</s:String>
@@ -247,7 +247,7 @@
     <s:String x:Key="LangSetHomePageRefresh">重新整理首頁</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">生成教學檔案</s:String>
     <s:String x:Key="LangSetHomePageSeeDoc">檢視教學</s:String>
-    <s:String x:Key="LangSetHomePageCustomWarn">在使用陌生人提供的主页前请务必谨慎，恶意的主页可能会造成损害！</s:String>
+    <s:String x:Key="LangSetHomePageCustomWarn">在使用陌生人提供的首頁前請務必謹慎，惡意的首頁可能會造成損害！</s:String>
     <s:String x:Key="LangSetHomePageDownload">下載連結</s:String>
     <s:String x:Key="LangSetHomePagePresetPage">首頁預設</s:String>
     <s:String x:Key="LangSetHomePagePresetPageA">你知道嗎？</s:String>
@@ -422,9 +422,9 @@
     <s:String x:Key="LangDownloadPCLProvided">由 PCL 提供</s:String>
     <s:String x:Key="LangDownloadChangelog">更新日誌</s:String>
     <s:String x:Key="LangDownloadSaveAs">另存新檔</s:String>
-    <s:String x:Key="LangDownloadReleaseOn">發布於</s:String>
+    <s:String x:Key="LangDownloadReleaseOn">發布於 {0}</s:String>
     <s:String x:Key="LangDownloadForgeIncompatible">與 Forge 不相容</s:String>
-    <s:String x:Key="LangDownloadRecommendForge">推薦 Forge 版本：</s:String>
+    <s:String x:Key="LangDownloadRecommendForge">推薦 Forge 版本 {0}</s:String>
     <s:String x:Key="LangDownloadShowAll">檢視全部版本</s:String>
     <s:String x:Key="LangDownloadSaveInstaller">儲存安裝器</s:String>
     <s:String x:Key="LangDownloadAll">全部版本</s:String>
@@ -463,11 +463,11 @@
     <s:String x:Key="LangDownloadInstallStart">開始安裝</s:String>
     <s:String x:Key="LangDownloadInstallVersionName">版本名稱</s:String>
     <s:String x:Key="LangDownloadInstallBack">返回</s:String>
-    <s:String x:Key="LangDownloadInstallGettingList">正在獲取版本清單</s:String>
+    <s:String x:Key="LangDownloadInstallGettingList">載入中……</s:String>
     <s:String x:Key="LangDownloadInstallHintBackTip">點擊 Minecraft 項即可返回遊戲主版本選擇畫面！</s:String>
-    <s:String x:Key="LangDownloadInstallClickToChose">點擊選擇</s:String>
+    <s:String x:Key="LangDownloadInstallClickToChose">可選新增</s:String>
     <s:String x:Key="LangDownloadInstallForgeIncompatible">與 Forge 不相容</s:String>
-    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">仅兼容特定版本的 Forge</s:String>
+    <s:String x:Key="LangDownloadInstallForgeCompatibleTargetVersion">僅相容特定版本的 Forge</s:String>
     <s:String x:Key="LangDownloadInstallFabricIncompatible">與 Fabric 不相容</s:String>
     <s:String x:Key="LangDownloadInstallOptiFineIncompatible">與 OptiFine 不相容</s:String>
     <s:String x:Key="LangDownloadInstallFabricNeed">需要 Fabric</s:String>
@@ -634,8 +634,8 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15 週年披風</s:String>
     <s:String x:Key="LangMySkinCapeNameMinecraftExperience">Minecraft Experience 披風</s:String>
     <s:String x:Key="LangMySkinCapeNameMojangOffice">Mojang Office 披風</s:String>
-    <s:String x:Key="LangMySkinCapeNameHome">家园披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMenace">入侵披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameHome">家園披風</s:String>
+    <s:String x:Key="LangMySkinCapeNameMenace">入侵披風</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">無披風</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">實例選擇</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">實例設定</s:String>
@@ -705,7 +705,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageLoginMsAddAccountFail">正版登入驗證失敗，請嘗試在「設定 → 啟動器」中關閉「驗證 SSL 認證」然後再試。
 
 原始錯誤資訊：</s:String>
-    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">已取消登入！</s:String>
+    <s:String x:Key="LangPageLoginMsAddAccountFailBySSL">正版登入驗證失敗，請考慮在 [設定 → 其他] 中關閉 [在正版登入時驗證 SSL 憑證]，然後再試。</s:String>
     <s:String x:Key="LangPageLoginMsLoading">載入中</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkin">外觀與披風</s:String>
     <s:String x:Key="LangPageLoginMsSkinSkinChange">修改外觀</s:String>
@@ -773,7 +773,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">PCL 內群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感謝內群的沙雕網友們這麼久以來對我和 PCL 的支援與鼓勵！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">贊助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 1 月的進階贊助者們！感謝各位對 PCL 和偉大的咕咕咕事業的支援！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 3 月的進階贊助者們！感謝各位對 PCL 和偉大的咕咕咕事業的支援！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解鎖碼</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">贊助開發者</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">複製識別碼</s:String>
@@ -817,10 +817,11 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
  · {date}、{time}：目前的系統時間
  · {version}：實例對應的遊戲版本號</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">自訂訊息</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">該訊息會顯示在遊戲主選單的左下角，與 F3 除錯畫面的左上角</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">該訊息會顯示在遊戲主選單的左下角，與 F3 除錯畫面的左上角。
+若留空白，則跟隨全域設定的值。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">實例隔離</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
-若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">當安裝新版本時，據此自動設定新版本的隔離選項。
+若想調整已有版本的隔離策略，請前往它的版本設定。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationClose">關閉</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationCloseToolTip">所有實例均使用同一檔案，存檔、模組、資源包等均為公用。
 若存在多個安裝了模組的實例，可能會導致模組衝突。</s:String>
@@ -866,7 +867,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchLaunchMemUsedMem">已使用記憶體</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchMemMemForGame">遊戲分配</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptions">進階啟動選項</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本独立设置中找到更多高级启动选项。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsHintTip">你可以在版本獨立設定中找到更多進階啟動選項。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHead">JVM 參數頭</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadTops">啟動 Minecraft 時使用的額外 JVM 參數，除非有確定把握，否則請不要修改</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsJVMHeadReset">還原</s:String>
@@ -906,13 +907,13 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableFileVerificationToolTip">警告：強烈推薦在實例設定中關閉特定實例的校驗，而不是在這裡關閉所有實例的校驗！
 完全不更改 assets；不校驗 libraries、第三方登入庫與實例主 JAR 檔案是否被修改。
 如果你沒有修改相關檔案，請勿勾選此項。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">禁用 Java Launch Wrapper</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 会使用 Java Launch Wrapper 来修复老版本 Java 在中文路径下无法启动的问题。
-如果这被反作弊拦截，或遇到其他问题，也可以将其关闭。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能显卡</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自动在 Windows 设置 → 系统 → 屏幕 → 显示卡 中将 Java 改为使用高性能显卡。
-如果电脑同时有集显和独显，这能确保 MC 使用独显进行渲染，以大幅提高性能。</s:String>
-    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本独立设置</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLW">停用 Java Launch Wrapper</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsDisableJLWToolTip">PCL 會使用 Java Launch Wrapper 來修復老版本 Java 在中文路徑下無法啟動的問題。
+如果這被反作弊攔截，或遇到其他問題，也可以將其關閉。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfence">要求 Java 使用高性能顯示卡</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchAdvanceOptionsGPUPerfenceToolTip">自動在 Windows 設定 → 系統 → 螢幕 → 顯示卡 中將 Java 改為使用高性能顯示卡。
+如果電腦同時有內顯和獨顯，這能確保 MC 使用獨顯進行渲染，以大幅提高效能。</s:String>
+    <s:String x:Key="LangPageSetupLaunchGotoVersionSetting">版本獨立設定</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadByError">啟動設定項存在異常，已被自動重設</s:String>
     <s:String x:Key="LangPageSetupLaunchReloadFail">重載啟動設定時出錯</s:String>
     <s:String x:Key="LangPageSetupLaunchInit">已初始化啟動設定！</s:String>
@@ -939,7 +940,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupLaunchMemReduceDialogEnableTitle">提醒</s:String>
     <s:String x:Key="LangPageSetupLeftGame">遊戲</s:String>
     <s:String x:Key="LangPageSetupLeftPersonalize">個人化</s:String>
-    <s:String x:Key="LangPageSetupLeftLaunch">啟動器</s:String>
+    <s:String x:Key="LangPageSetupLeftLaunch">其它</s:String>
     <s:String x:Key="LangPageSetupLeftLink">連線</s:String>
     <s:String x:Key="LangPageSetupLeftReset">初始化本頁設定</s:String>
     <s:String x:Key="LangPageSetupLeftDialogResetGameConfirmContent">是否要初始化遊戲頁的所有設定？該操作不可復原。</s:String>
@@ -960,7 +961,7 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameB">譯名位於檔案名開頭：遗物-relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameC">譯名位於檔案名末尾：relics-0.1.14-遗物</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadModFileNameD">不添加中文譯名：relics-0.1.14</s:String>
-    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遗物】relics-0.1.14</s:String>
+    <s:String x:Key="LangPageSetupSystemDownloadModFileNameE">【遺物】relics-0.1.14</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThread">最大執行緒數</s:String>
     <s:String x:Key="LangPageSetupSystemDownloadThreadToolTip">執行緒數越多，限速的檔案下載越快，但過高的執行緒數會造成下載時非常嚴重的卡頓。
 一般而言，64 執行緒已可以保證足夠的下載速度。</s:String>
@@ -1197,27 +1198,27 @@ PCL 推薦你在開始下載前，在「設定 → 實例隔離」中開啟實�
     <s:String x:Key="LangPageVersionSetupUseGlobal">使用全域設定</s:String>
     <s:String x:Key="LangPageVersionSetupEnable">開啟</s:String>
     <s:String x:Key="LangPageVersionSetupDisable">關閉</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自定义StaticResource，若留空则跟随全局设置的值。
-支持以下替换标记：
- · {user}：玩家名字
- · {login}：玩家的登录方式
- · {name}：游戏版本名
- · {date}、{time}：当前的系统时间
- · {version}：游戏对应的原版版本号</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">版本隔离</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">与其他版本的存档、Mod 等文件相互独立，互不干涉。
-这会使你无法跨版本共享存档，但可以规避 Mod 冲突问题。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchWindowTitleInstanceToolTip">自訂StaticResource，若留空則跟隨全域設定的值。
+支援以下替換標記：
+· {user}：玩家名字
+· {login}：玩家的登入方式
+· {name}：遊戲版本名
+· {date}、{time}：當前的系統時間
+· {version}：遊戲對應的原版版本號</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstance">實例(版本)隔離</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceEnableToolTip">與其他版本的存檔、Mod 等檔案相互獨立，互不干涉。
+這會使你無法跨版本共享存檔，但可以規避 Mod 衝突問題。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieDisable">與其餘未開啟隔離的實例均使用同一檔案，存檔、模組等均為公用。
 若存在不同版本的 Forge 或 Fabric，可能會由於模組與遊戲實例衝突導致未知問題。</s:String>
-    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">与其余关闭隔离的版本共享存档、Mod 等文件。
-若存在多个安装了 Mod 的版本，可能会由于 Mod 冲突而导致崩溃。</s:String>
+    <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationInstanceDisableToolTip">與其餘關閉隔離的版本共享存檔、Mod 等檔案。
+若存在多個安裝了 Mod 的版本，可能會由於 Mod 衝突而導致崩潰。</s:String>
     <s:String x:Key="LangPageVersionSetupIndieEnable">讓這個實例與其他實例的存檔、模組等檔案相互獨立，互不干涉</s:String>
-    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">启动 Minecraft 时使用的额外 JVM 参数，在没有确定把握的情况下请不要尝试修改。
-若留空，则跟随全局设置的值。</s:String>
-    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文本框中的内容将会被直接拼合在启动参数的末尾。
-例如输入 --demo 则会以试玩模式启动游戏。
-若留空，则跟随全局设置的值。</s:String>
-    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全局设置</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMHeadToolTip">啟動 Minecraft 時使用的額外 JVM 參數，在沒有確定把握的情況下請不要嘗試修改。
+若留空，則跟隨全域設定的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupAdvanceOptionsJVMTailToolTip">文字框中的內容將會被直接拼合在啟動參數的末尾。
+例如輸入 --demo 則會以試玩模式啟動遊戲。
+若留空白，則跟隨全域設定的值。</s:String>
+    <s:String x:Key="LangPageVersionSetupGotoGlobalSetting">全域設定</s:String>
     <s:String x:Key="LangPageVersionSetupServer">伺服器</s:String>
     <s:String x:Key="LangPageVersionSetupServerLogin">登入方式</s:String>
     <s:String x:Key="LangPageVersionSetupServerLoginOnlineOrOffline">正版登入或離線登入</s:String>
@@ -1371,7 +1372,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModMinecraftInvalidFabricVersion">無效的 Fabric 版本：{0}</s:String>
     <s:String x:Key="LangModMinecraftInvalidForgeVersion">無效的 Neo/Forge 版本：{0}</s:String>
     <s:String x:Key="LangModMinecraftFoolName24w14potato">毒馬鈴薯一直都被大家忽視和低估，於是我們超級加強了它！</s:String>
-    <s:String x:Key="LangModMinecraftFoolName25w14craftmine">你可以合成任何东西——包括合成你的世界！</s:String>
+    <s:String x:Key="LangModMinecraftFoolName25w14craftmine">你可以合成任何東西——包括合成你的世界！</s:String>
     <s:String x:Key="LangModMinecraftFoolName23w13ab">研究表明：玩家喜歡做出選擇——越多越好！</s:String>
     <s:String x:Key="LangModMinecraftFoolName22w13oneblockatatime">一次一個方塊更新！迎接全新的挖掘、合成與騎乘玩法吧！</s:String>
     <s:String x:Key="LangModMinecraftFoolName20w14inf">我們加入了 20 億個新的維度，讓無限的想像變成了現實！</s:String>
@@ -1475,7 +1476,7 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangModValidateLen">長度必須為 {0} 個字元！</s:String>
     <s:String x:Key="LangModValidateLenMax">長度最長為 {0} 個字元！</s:String>
     <s:String x:Key="LangModValidateLenMin">長度至少需 {0} 個字元！</s:String>
-    <s:String x:Key="LangModValidateNoContain">輸入內容不能包含 %！</s:String>
+    <s:String x:Key="LangModValidateNoContain">輸入內容不能包含 %</s:String>
     <s:String x:Key="LangModValidateNoContent">輸入內容不能為 %！</s:String>
     <s:String x:Key="LangModValidateFileNoStartWithSpace">檔案名不能以空格開頭！</s:String>
     <s:String x:Key="LangModValidateFileNoEndWithSpace">檔案名不能以空格結尾！</s:String>
@@ -2074,7 +2075,8 @@ PCL 不支援其他亂七八糟的下載協議。</s:String>
     <s:String x:Key="LangPageVersionExportModrinthStandardDesc">如果你想要打包上傳到 Modrinth，勾選此項會生成完全符合 Modrinth 要求的模組包檔案。
 由於 Modrinth 要求，只能從 CurseForge 下載的資源將無法聯網下載，會被直接放入模組包中。
 此外，勾選後也不能在模組包中包含 PCL 啟動器文件。</s:String>
-    <s:String x:Key="LangPageVersionExportExportConfigDesc">透過配置檔案，你可以精準地控制匯出內容的範圍，或是儲存目前的配置以便之後使用。</s:String>
+    <s:String x:Key="LangPageVersionExportExportConfigDesc">設定檔中含有未在此處列出的選項，例如精準控制匯出的檔案、設定整合包存放位置等。
+請先選擇 "儲存設定"，然後編輯儲存的設定檔。</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigRead">讀取配置</s:String>
     <s:String x:Key="LangPageVersionExportExportConfigSave">儲存配置</s:String>
     <s:String x:Key="LangPageVersionExportModpackGuide">模組包製作指南</s:String>
