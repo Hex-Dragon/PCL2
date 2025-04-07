@@ -482,6 +482,7 @@ PCL-Community 及其成员与龙腾猫跃无从属关系，且均不会为您的
         End If
         LatestReleaseInfoJson = GetJson(NetRequestRetry(Server, "GET", "", "application/x-www-form-urlencoded"))
         RemoteVersionData = LatestReleaseInfoJson.ToObject(Of SelfUpdateInfo)()
+        Log($"[System] 已获取到更新信息：{LatestReleaseInfoJson.ToString(Newtonsoft.Json.Formatting.None)}")
     End Sub
 
     Public Function GetCurrentUpdateChannelInfo() As SelfUpdateChannelInfo
