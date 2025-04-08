@@ -257,7 +257,7 @@ Public Class ValidateFolderName
             Dim Arr As New List(Of String)
             If PathIgnore IsNot Nothing Then
                 For Each Folder As DirectoryInfo In PathIgnore
-                    If IgnoreFolderName Is Nothing OrElse Not Folder.Name.ToLower = IgnoreFolderName.ToLower Then
+                    If IgnoreFolderName Is Nothing OrElse Not Folder.Name.ToLower = IgnoreFolderName.ToLower OrElse Folder.Name = Str Then
                         Arr.Add(Folder.Name)
                     End If
                 Next
