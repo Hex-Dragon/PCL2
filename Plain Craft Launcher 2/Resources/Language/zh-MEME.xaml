@@ -634,8 +634,8 @@
     <s:String x:Key="LangMySkinCapeNameMCC15thYear">MCC 15 周年海角</s:String>
     <s:String x:Key="LangMySkinCapeNameMinecraftExperience">刌民救援海角</s:String>
     <s:String x:Key="LangMySkinCapeNameMojangOffice">Bugjump 办公室海角</s:String>
-    <s:String x:Key="LangMySkinCapeNameHome">家园披风</s:String>
-    <s:String x:Key="LangMySkinCapeNameMenace">入侵披风</s:String>
+    <s:String x:Key="LangMySkinCapeNameHome">家园海角</s:String>
+    <s:String x:Key="LangMySkinCapeNameMenace">入侵海角</s:String>
     <s:String x:Key="LangMySkinCapeNameNone">莫得海角</s:String>
     <s:String x:Key="LangLaunchLeftInstanceChoose">想玩哪个</s:String>
     <s:String x:Key="LangLaunchLeftInstanceConfig">版本设置</s:String>
@@ -773,7 +773,7 @@
     <s:String x:Key="LangPageOtherAboutThanksUsersTitle">平原合成发射台内群的各位</s:String>
     <s:String x:Key="LangPageOtherAboutThanksUsers">感谢内群的沙雕网友们这么久以来对我和平原合成发射台的支持与鼓励！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsors">赞助者</s:String>
-    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 2 月的高级赞助者们！感谢各位对平原合成发射台和伟大的咕咕咕事业的支持！</s:String>
+    <s:String x:Key="LangPageOtherAboutSponsorsSubtitle">以下是 2025 年 3 月的高级赞助者们！感谢各位对平原合成发射台和伟大的咕咕咕事业的支持！</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCreateUnlockCode">生成解锁码</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsDonate">V 作者 50</s:String>
     <s:String x:Key="LangPageOtherAboutSponsorsCopyUUID">复制识别码</s:String>
@@ -818,7 +818,7 @@
  · {version}：游戏对应的香草版本号</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfo">自定义信息</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchCustomInfoToolTip">该信息会展示在游戏主界面的左下角，与 F3 调教页面的左上角。
-要是不填，就会跟从全球设置的值</s:String>
+要是不填，就会跟从全球设置的值。</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolation">默认版本隔离</s:String>
     <s:String x:Key="LangPageSetupLaunchLaunchVersionIsolationToolTip">当安装新版本时，据此自动设置新版本的隔离选项。
 若想调整已有版本的隔离策略，请前往它的版本设置。</s:String>
@@ -1474,7 +1474,7 @@
     <s:String x:Key="LangModValidateLen">长度必须为 {0} 个字符！</s:String>
     <s:String x:Key="LangModValidateLenMax">长度最长为 {0} 个字符！</s:String>
     <s:String x:Key="LangModValidateLenMin">长度至少需 {0} 个字符！</s:String>
-    <s:String x:Key="LangModValidateNoContain">输入内容不能包含 %！</s:String>
+    <s:String x:Key="LangModValidateNoContain">输入内容不能包含 %</s:String>
     <s:String x:Key="LangModValidateNoContent">输入内容不能为 %！</s:String>
     <s:String x:Key="LangModValidateFileNoStartWithSpace">文件名不能以空格开头！</s:String>
     <s:String x:Key="LangModValidateFileNoEndWithSpace">文件名不能以空格结尾！</s:String>
@@ -1919,10 +1919,10 @@
     <s:String x:Key="LangModCrashCrashReasonReasonBE">由于高清不修复与当前版本的锻造不兼容，导致了游戏炸掉。
 
 请前往高清不修复官网（https://optifine.net/downloads）看看高清不修复所兼容的锻造版本，并严格按照对应版本重新安装游戏。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBF">无需同时安装 OptiFine 和 Shaders模组，OptiFine 已经集成了 Shaders模组的特性。
-在削除 Shaders模组后，游戏即可正常运行。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBF">无需同时安装 OptiFine 和 Shaders 模组，OptiFine 已经集成了 Shaders 模组的特性。
+在削除 Shaders 模组后，游戏即可正常运行。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBG">由于低版本锻造与当前爪哇不兼容，导致了游戏炸掉。
-        
+
 请尝试以下解决方案：
  - 更新锻造到 36.2.26 或更高版本
  - 换用版本低于 1.8.0_320 的爪哇</s:String>
@@ -1934,54 +1934,55 @@
 请在发射设置的爪哇选择一项中改用爪哇 11，然后再发射游戏。
 如果你没有安装爪哇 11，你可以从网络中下崽、安装一个。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBK">程序滚回了以下信息：{0}</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBL">你所食用的 OptiFine 可能导致了你的游戏出现问题。
-        
-该问题只在特定 OptiFine 版本中出现，你可以尝试更换 OptiFine 的版本。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBL">你所食用的高清不修复可能导致了你的游戏出现问题。
+
+该问题只在特定高清不修复版本中出现，你可以尝试更换高清不修复的版本。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBM">你的显卡驱动存在问题，或未食用独立显卡，导致游戏无法正常运行。
-        
+
 如果你的电脑存在独立显卡，请食用独立显卡而非 Intel 核显发射平原合成发射台与麦恩克拉夫特。
 如果问题依然存在，请尝试升级你的显卡驱动到最新版本，或回退到出厂版本。
 如果还是不行，还可以尝试食用 8.0.51 或更低版本的爪哇。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBN">你的显卡驱动存在问题，导致游戏无法正常运行。
-        
+
 请尝试升级你的显卡驱动到最新版本，或回退到出厂版本，然后再发射游戏。
 如果还是不行，可以尝试食用 8.0.51 或更低版本的爪哇。
 如果问题依然存在，那么你可能需要换个更好的显卡……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBO">你所食用的材质分辨率过高，或显卡配置不足，导致游戏无法继续运行。
-        
+
 如果你正在食用高清材质，请将它移除。
 如果你没有食用材质，那么你可能需要更新显卡驱动，或者换个更好的显卡……</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBP">由于 Night Config 存在问题，导致了游戏炸掉。
 你可以尝试安装 Night Config Fixes 模组，这或许能解决此问题。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBQ">你所食用的光影或材质导致游戏出现了一些问题……
-        
+
 请尝试削除你所添加的这些额外资源。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBR">你所安装的模组过多，超出了游戏的身份标识号限制，导致了游戏炸掉。
 请尝试安装 JEID 等修复模组，或削除部分大型模组。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBS">部分文件或内容校验不成功，导致游戏出现了问题。
-        
+
 请尝试削除游戏（包括模组）并重新下崽，或尝试在重新下崽时食用 VPN。</s:String>
-    <s:String x:Key="LangModCrashCrashReasonReasonBT">由于锻造安装不完整，导致游戏无法正常运行。
-请尝试重新安装锻造。</s:String>
+    <s:String x:Key="LangModCrashCrashReasonReasonBT">由于安装的锻造文件丢失，导致游戏炸掉。
+请重新安装一次相同版本的锻造，然后再启动游戏。
+在打包游戏时删除 libraries 文件夹可能导致此错误。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBU">布料提供了以下错误信息：
 {0}
-        
+
 请根据上述信息进行对应处理，如果看不懂英文可以食用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBV">布料可能已经提供了错误信息，请根据错误报告中的日志信息进行对应处理，如果看不懂英文可以食用翻译软件。
 如果没有看到报错信息，可以看看错误报告了解错误具体是如何发生的。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBW">模组装载机提供了以下错误信息：
 {0}
-        
+
 请根据上述信息进行对应处理，如果看不懂英文可以食用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBX">模组装载机可能已经提供了错误信息，请根据错误报告中的原木信息进行对应处理，如果看不懂英文可以食用生草软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBY">布料提供了以下解决方案：
 {0}
-        
+
 请根据上述信息进行对应处理，如果看不懂英文可以食用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonBZ">布料可能已经提供了解决方案，请根据错误报告中的原木信息进行对应处理，如果看不懂英文可以食用生草软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCA">锻造提供了以下错误信息：
 {0}
-        
+ 
 请根据上述信息进行对应处理，如果看不懂英文可以食用翻译软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCB">锻造可能已经提供了错误信息，请根据错误报告中的原木信息进行对应处理，如果看不懂英文可以食用生草软件。</s:String>
     <s:String x:Key="LangModCrashCrashReasonReasonCC">你的游戏出现了一些问题，但平原合成发射台未能找到相关记录文件，因此无法进行分析。</s:String>
