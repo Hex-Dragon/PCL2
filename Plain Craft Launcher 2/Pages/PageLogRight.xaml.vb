@@ -6,7 +6,7 @@
         LabDebug = New Run("0 Debug") With {.Foreground = Application.Current.Resources("ColorBrushDebug")}
         PanLogCard.Inlines.Add(LabDebug)
         PanLogCard.Inlines.Add(New Run(" | "))
-        LabInfo = New Run("0 Info") With {.Foreground = Application.Current.Resources(If(IsDarkMode, "ColorBrushInfoDark", "ColorBrushInfo"))}
+        LabInfo = New Run("0 Info") With {.Foreground = Application.Current.Resources("ColorBrushInfo")}
         PanLogCard.Inlines.Add(LabInfo)
         PanLogCard.Inlines.Add(New Run(" | "))
         LabWarn = New Run("0 Warn") With {.Foreground = Application.Current.Resources("ColorBrushWarn")}
