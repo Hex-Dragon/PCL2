@@ -247,7 +247,7 @@ If you have created a stable online homepage, you can click this tip to submit i
     <s:String x:Key="LangSetHomePageRefresh">Refresh</s:String>
     <s:String x:Key="LangSetHomePageReleaseTeachFile">Generate Documentations</s:String>
     <s:String x:Key="LangSetHomePageSeeDoc">Tutorials</s:String>
-    <s:String x:Key="LangSetHomePageCustomWarn">在使用陌生人提供的主页前请务必谨慎，恶意的主页可能会造成损害！</s:String>
+    <s:String x:Key="LangSetHomePageCustomWarn">Please exercise caution when using homepages provided by strangers. Malicious websites may cause harm!</s:String>
     <s:String x:Key="LangSetHomePageDownload">URL</s:String>
     <s:String x:Key="LangSetHomePagePresetPage">Homepage Presets</s:String>
     <s:String x:Key="LangSetHomePagePresetPageA">Trivia</s:String>
@@ -494,7 +494,7 @@ To install, first select your Minecraft version on the "Installation" page, then
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn1">Installation Page</s:String>
     <s:String x:Key="LangDownloadPageLeftDialogManualInstallBtn2">Continue</s:String>
     <s:String x:Key="LangDownloadPageLeftManualInstallFold">Packages</s:String>
-    <s:String x:Key="LangDownloadPageLeftResource">Community Resources</s:String>
+    <s:String x:Key="LangDownloadPageLeftResource">Resources</s:String>
     <s:String x:Key="LangDownloadPageLeftMods">Mods</s:String>
     <s:String x:Key="LangDownloadPageLeftModpack">Modpacks</s:String>
     <s:String x:Key="LangDownloadPageLeftMinecraft">Minecraft</s:String>
@@ -1478,7 +1478,7 @@ Please confirm that the issue persists in the latest version after updating, and
     <s:String x:Key="LangModValidateFileNoEndWithDot">The file name cannot end with a dot(.)!</s:String>
     <s:String x:Key="LangModValidateFileNoContain">The file name cannot contain "%"!</s:String>
     <s:String x:Key="LangModValidateFileNoContent">The file name cannot be "%"!</s:String>
-    <s:String x:Key="LangModValidateFileNoSpecialName">The file name cannot contain special format!</s:String>
+    <s:String x:Key="LangModValidateFileNoSpecialName">The file name cannot contain this special format!</s:String>
     <s:String x:Key="LangModValidateFileNoSameName">This file name already exists!</s:String>
     <s:String x:Key="LangModValidateFileNoParentFolder">The parent folder does not exist: {0}</s:String>
     <s:String x:Key="LangModValidateFileHeadUriIncorrect">Incorrect folder path header!</s:String>

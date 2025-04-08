@@ -20,7 +20,7 @@ Error Cause: {0}</s:String>
     <s:String x:Key="LangApplicationDialogContentCustomCacheFolderUnavailable">The manually set cache folder is unavailable, PCL will use the default one instead.
 Error Cause: {0}</s:String>
     <s:String x:Key="LangApplicationDialogTitleRunInTemp">Environment Warning</s:String>
-    <s:String x:Key="LangApplicationDialogContentRunInTemp">Please extract PCL from the ZIP file or change the folder before use!
+    <s:String x:Key="LangApplicationDialogContentRunInTemp">Please extract PCL from the compressed file or change the folder before continuing to use!
 The programme is currently running in a temporary folder, which may prevent the saving of settings, game saves, and other data. Also, some functions may not be available.</s:String>
     <s:String x:Key="LangApplicationDialogContent32BitWarn">PCL and newer versions of Minecraft no longer support 32-bit systems, and some features are unavailable.
 We strongly recommended to switch to a 64-bit system.</s:String>
@@ -39,13 +39,13 @@ We strongly recommended to switch to a 64-bit system.</s:String>
     <s:String x:Key="LangToolTipDownload">Downloads</s:String>
     <s:String x:Key="LangToolTipSurrender">Surrender</s:String>
     <s:String x:Key="LangToolTipCloseMinecraft">Close Minecraft</s:String>
-    <s:String x:Key="LangDialogBtnUpdateFullLog">Full Update log</s:String>
+    <s:String x:Key="LangDialogBtnUpdateFullLog">Full Changelog</s:String>
     <s:String x:Key="LangDialogUpdateTo">PCL {0} Updated</s:String>
-    <s:String x:Key="LangDialogPolicyContent">Before using PCL, please view and agree to the Terms of Service and Disclaimer.</s:String>
+    <s:String x:Key="LangDialogPolicyContent">Before using PCL, please review and agree to the Terms of Service and Disclaimer.</s:String>
     <s:String x:Key="LangDialogPolicyTitle">Agreement Authorisation</s:String>
     <s:String x:Key="LangDialogBtnAgree">Agree</s:String>
-    <s:String x:Key="LangDialogBtnDeny">Disagree</s:String>
-    <s:String x:Key="LangDialogBtnPolicyContent">View the terms of use and Disclaimer</s:String>
+    <s:String x:Key="LangDialogBtnDeny">Decline</s:String>
+    <s:String x:Key="LangDialogBtnPolicyContent">ToS &amp; Disclaimer</s:String>
     <s:String x:Key="LangHintDebugWarning">[Debug Mode] PCL is running in debug mode, which may cause performance degradation. Please do NOT enable it unless necessary!</s:String>
     <s:String x:Key="LangDialogTitleTip">Hint</s:String>
     <s:String x:Key="LangDialogHardcoreFanTheme">Yay! You have used PCL 99 times. Thank you for your long-term support!
@@ -55,8 +55,8 @@ The hidden theme 'Hardcore Fans' has been unlocked!</s:String>
     <s:String x:Key="LangHintHideModeOff">The 'Feature Hiding' setting has been temporarily disabled!</s:String>
     <s:String x:Key="LangHintIJustWantToStart">Muda!</s:String>
     <s:String x:Key="LangHintAuthlibUrlIncorrect">The Authlib authentication server does not match the URL format ({0})!</s:String>
-    <s:String x:Key="LangHintAuthlibDownloadGame">Please download the game before setting up the third-party login!</s:String>
-    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">Do you want to log in using LittleSkin in Version {0}?
+    <s:String x:Key="LangHintAuthlibDownloadGame">Please download the game first before setting up the third-party login!</s:String>
+    <s:String x:Key="LangDialogAuthlibEnableLittleSkin">Do you want to log in using LittleSkin in the instance {0}?
 You can modify the login method in 'Properties → Settings → Server'.</s:String>
     <s:String x:Key="LangDialogTitleAuthlibEnableLittleSkin">Third-party Login Confirmation</s:String>
     <s:String x:Key="LangDialogAuthlibEnableLittleSkinServer">Do you want to login using LittleSkin in the instance {0}?
